@@ -44,11 +44,14 @@
 #include <swmodule.hxx>
 #include <tabfrm.hxx>
 #include <numrule.hxx>
+#include <redline.hxx>
 #include <SwGrammarMarkUp.hxx>
 
 #include <EnhancedPDFExportHelper.hxx>
 
 #include <IDocumentStylePoolAccess.hxx>
+
+#include <comphelper/lok.hxx>
 
 #define REDLINE_DISTANCE 567/4
 #define REDLINE_MINDIST  567/10
@@ -401,6 +404,20 @@ void SwTextFrame::PaintExtraData( const SwRect &rRect ) const
     }
 
     const_cast<SwRect&>(rRect) = rOldRect;
+
+    // Inform LOK clients about change in position of redlines (if any)
+    if(bRedLine && comphelper::LibreOfficeKit::isActive())
+    {
+        const SwRedlineTable& rTable = rTextNode.getIDocumentRedlineAccess().GetRedlineTable();
+        for (SwRedlineTable::size_type nRedlnPos = 0; nRedlnPos < rTable.size(); ++nRedlnPos)
+        {
+            SwRangeRedline* pRedln = rTable[nRedlnPos];
+            if (rTextNode.GetIndex() == pRedln->GetPoint()->nNode.GetNode().GetIndex())
+            {
+                pRedln->MaybeNotifyRedlinePositionModification(getFrameArea().Top());
+            }
+        }
+    }
 
 }
 

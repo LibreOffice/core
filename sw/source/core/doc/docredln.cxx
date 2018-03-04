@@ -1083,6 +1083,25 @@ void MaybeNotifyRedlineModification(SwRangeRedline* pRedline, SwDoc* pDoc)
     }
 }
 
+void SwRangeRedline::MaybeNotifyRedlinePositionModification(long nYPos)
+{
+    if (!comphelper::LibreOfficeKit::isActive())
+        return;
+
+    if(!m_oLOKLastNodeYPos || *m_oLOKLastNodeYPos != nYPos)
+    {
+        m_oLOKLastNodeYPos = nYPos;
+        bool bTiledPainting = comphelper::LibreOfficeKit::isTiledPainting();
+        if (bTiledPainting)
+            comphelper::LibreOfficeKit::setTiledPainting(false);
+
+        SwRedlineTable::LOKRedlineNotification(RedlineNotification::Modify, this);
+
+        if (bTiledPainting)
+            comphelper::LibreOfficeKit::setTiledPainting(true);
+    }
+}
+
 void SwRangeRedline::SetStart( const SwPosition& rPos, SwPosition* pSttPtr )
 {
     if( !pSttPtr ) pSttPtr = Start();

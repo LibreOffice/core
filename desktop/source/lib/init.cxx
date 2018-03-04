@@ -689,14 +689,16 @@ void CallbackFlushHandler::queue(const int type, const char* data)
             type != LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR &&
             type != LOK_CALLBACK_CURSOR_VISIBLE &&
             type != LOK_CALLBACK_VIEW_CURSOR_VISIBLE &&
-            type != LOK_CALLBACK_TEXT_SELECTION)
+            type != LOK_CALLBACK_TEXT_SELECTION &&
+            type != LOK_CALLBACK_REDLINE_TABLE_ENTRY_MODIFIED)
         {
             SAL_INFO("lok", "Skipping while painting [" << type << "]: [" << payload << "].");
             return;
         }
 
         // In Writer we drop all notifications during painting.
-        if (doc_getDocumentType(m_pDocument) == LOK_DOCTYPE_TEXT)
+        if (doc_getDocumentType(m_pDocument) == LOK_DOCTYPE_TEXT &&
+                type != LOK_CALLBACK_REDLINE_TABLE_ENTRY_MODIFIED)
             return;
     }
 
