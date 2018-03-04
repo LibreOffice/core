@@ -732,10 +732,10 @@ elsif ( $platform =~ m/cygwin/ )
 	      die "Unsupported value for COMEX variable.\n";
 	  }
       }
-	  print "Setting W32 build with bash shell specific values... ";
-	  # No speacial treatment for CC an CXX anymore.
-	  $FLIPCMD        = "slfl.pl";
-	  $PATH_SEPERATOR = ';';
+      print "Setting W32 build with bash shell specific values... ";
+      # No special treatment for CC and CXX anymore.
+      $FLIPCMD        = "slfl.pl";
+      $PATH_SEPERATOR = ';';
   }
 }
 elsif ( $platform =~ m/os2/ ) 
