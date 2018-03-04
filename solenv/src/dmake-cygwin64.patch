@@ -41,7 +41,7 @@ diff -Nur sysintf.c sysintf.c
        char *tmp;
 -      int err = cygwin_conv_to_win32_path(src, buf);
 -      if (err)
-+      int err = cygwin_conv_path(CCP_WIN_A_TO_POSIX, src, buf, PATH_MAX);
++      int err = cygwin_conv_path(CCP_POSIX_TO_WIN_A, src, buf, PATH_MAX);
 +      if (err < 0)
  	 Fatal( "error converting \"%s\" - %s\n",
  		src, strerror (errno));
