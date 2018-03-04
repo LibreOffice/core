@@ -127,7 +127,7 @@ private:
     VclPtr<PushButton>         m_pTSAURLsPB;
 
     SvtSecurityOptions*         mpSecOptions;
-    VclPtr<svx::SecurityOptionsDialog> mpSecOptDlg;
+    std::unique_ptr<svx::SecurityOptionsDialog> m_xSecOptDlg;
 
     VclPtr<CertPathDialog> mpCertPathDlg;
 

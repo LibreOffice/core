@@ -19,48 +19,52 @@
 #ifndef INCLUDED_CUI_SOURCE_OPTIONS_SECURITYOPTIONS_HXX
 #define INCLUDED_CUI_SOURCE_OPTIONS_SECURITYOPTIONS_HXX
 
-#include <vcl/button.hxx>
-#include <vcl/dialog.hxx>
-#include <vcl/fixed.hxx>
-
+#include <vcl/weld.hxx>
 
 class SvtSecurityOptions;
-
 
 namespace svx
 {
 
-    class SecurityOptionsDialog : public ModalDialog
+    class SecurityOptionsDialog
     {
     private:
-        VclPtr<CheckBox> m_pSaveOrSendDocsCB;
-        VclPtr<CheckBox> m_pSignDocsCB;
-        VclPtr<CheckBox> m_pPrintDocsCB;
-        VclPtr<CheckBox> m_pCreatePdfCB;
+        std::unique_ptr<weld::Builder> m_xBuilder;
+        std::unique_ptr<weld::Dialog> m_xDialog;
 
-        VclPtr<CheckBox> m_pRemovePersInfoCB;
-        VclPtr<CheckBox> m_pRecommPasswdCB;
-        VclPtr<CheckBox> m_pCtrlHyperlinkCB;
-        VclPtr<CheckBox> m_pBlockUntrustedRefererLinksCB;
+        std::unique_ptr<weld::CheckButton> m_xSaveOrSendDocsCB;
+        std::unique_ptr<weld::Widget> m_xSaveOrSendDocsImg;
+        std::unique_ptr<weld::CheckButton> m_xSignDocsCB;
+        std::unique_ptr<weld::Widget> m_xSignDocsImg;
+        std::unique_ptr<weld::CheckButton> m_xPrintDocsCB;
+        std::unique_ptr<weld::Widget> m_xPrintDocsImg;
+        std::unique_ptr<weld::CheckButton> m_xCreatePdfCB;
+        std::unique_ptr<weld::Widget> m_xCreatePdfImg;
+
+        std::unique_ptr<weld::CheckButton> m_xRemovePersInfoCB;
+        std::unique_ptr<weld::Widget> m_xRemovePersInfoImg;
+        std::unique_ptr<weld::CheckButton> m_xRecommPasswdCB;
+        std::unique_ptr<weld::Widget> m_xRecommPasswdImg;
+        std::unique_ptr<weld::CheckButton> m_xCtrlHyperlinkCB;
+        std::unique_ptr<weld::Widget> m_xCtrlHyperlinkImg;
+        std::unique_ptr<weld::CheckButton> m_xBlockUntrustedRefererLinksCB;
+        std::unique_ptr<weld::Widget> m_xBlockUntrustedRefererLinksImg;
 
     public:
-        SecurityOptionsDialog( vcl::Window* pParent, SvtSecurityOptions const * pOptions );
-        virtual ~SecurityOptionsDialog() override;
-        virtual void dispose() override;
+        SecurityOptionsDialog(weld::Window* pParent, SvtSecurityOptions const * pOptions);
 
-        bool IsSaveOrSendDocsChecked() const { return m_pSaveOrSendDocsCB->IsChecked(); }
-        bool IsSignDocsChecked() const { return m_pSignDocsCB->IsChecked(); }
-        bool IsPrintDocsChecked() const { return m_pPrintDocsCB->IsChecked(); }
-        bool IsCreatePdfChecked() const { return m_pCreatePdfCB->IsChecked(); }
-        bool IsRemovePersInfoChecked() const { return m_pRemovePersInfoCB->IsChecked(); }
-        bool IsRecommPasswdChecked() const { return m_pRecommPasswdCB->IsChecked(); }
-        bool IsCtrlHyperlinkChecked() const { return m_pCtrlHyperlinkCB->IsChecked(); }
-        bool IsBlockUntrustedRefererLinksChecked() const { return m_pBlockUntrustedRefererLinksCB->IsChecked(); }
+        short run() { return m_xDialog->run(); }
+
+        bool IsSaveOrSendDocsChecked() const { return m_xSaveOrSendDocsCB->get_active(); }
+        bool IsSignDocsChecked() const { return m_xSignDocsCB->get_active(); }
+        bool IsPrintDocsChecked() const { return m_xPrintDocsCB->get_active(); }
+        bool IsCreatePdfChecked() const { return m_xCreatePdfCB->get_active(); }
+        bool IsRemovePersInfoChecked() const { return m_xRemovePersInfoCB->get_active(); }
+        bool IsRecommPasswdChecked() const { return m_xRecommPasswdCB->get_active(); }
+        bool IsCtrlHyperlinkChecked() const { return m_xCtrlHyperlinkCB->get_active(); }
+        bool IsBlockUntrustedRefererLinksChecked() const { return m_xBlockUntrustedRefererLinksCB->get_active(); }
     };
-
-
 }
-
 
 #endif // INCLUDED_CUI_SOURCE_OPTIONS_SECURITYOPTIONS_HXX
 
