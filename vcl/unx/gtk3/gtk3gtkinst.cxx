@@ -1900,6 +1900,11 @@ public:
         gtk_editable_select_region(GTK_EDITABLE(m_pEntry), nStartPos, nEndPos);
     }
 
+    virtual void set_position(int nCursorPos) override
+    {
+        gtk_editable_set_position(GTK_EDITABLE(m_pEntry), nCursorPos);
+    }
+
     virtual ~GtkInstanceEntry() override
     {
         g_signal_handler_disconnect(m_pEntry, m_nInsertTextSignalId);

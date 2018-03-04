@@ -265,14 +265,14 @@ IMPL_LINK(TemplateLocalView, ContextMenuSelectHdl, Menu*, pMenu, bool)
         break;
     case MNI_RENAME:
     {
-        ScopedVclPtrInstance< InputDialog > m_pTitleEditDlg( SfxResId(STR_RENAME_TEMPLATE), this);
+        InputDialog aTitleEditDlg(GetFrameWeld(), SfxResId(STR_RENAME_TEMPLATE));
         OUString sOldTitle = maSelectedItem->getTitle();
-        m_pTitleEditDlg->SetEntryText( sOldTitle );
-        m_pTitleEditDlg->HideHelpBtn();
+        aTitleEditDlg.SetEntryText(sOldTitle);
+        aTitleEditDlg.HideHelpBtn();
 
-        if(!m_pTitleEditDlg->Execute())
+        if (!aTitleEditDlg.run())
             break;
-        OUString sNewTitle = comphelper::string::strip( m_pTitleEditDlg->GetEntryText(), ' ');
+        OUString sNewTitle = comphelper::string::strip(aTitleEditDlg.GetEntryText(), ' ');
 
         if ( !sNewTitle.isEmpty() && sNewTitle != sOldTitle )
         {
