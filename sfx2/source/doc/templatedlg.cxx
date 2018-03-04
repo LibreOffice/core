@@ -1114,13 +1114,13 @@ void SfxTemplateManagerDlg::OnTemplateOpen ()
 
 void SfxTemplateManagerDlg::OnCategoryNew()
 {
-    ScopedVclPtrInstance< InputDialog > dlg(SfxResId(STR_INPUT_NEW),this);
+    InputDialog dlg(GetFrameWeld(), SfxResId(STR_INPUT_NEW));
 
-    int ret = dlg->Execute();
+    int ret = dlg.run();
 
     if (ret)
     {
-        OUString aName = dlg->GetEntryText();
+        OUString aName = dlg.GetEntryText();
 
         if(mpLocalView->createRegion(aName))
             mpCBFolder->InsertEntry(aName);
@@ -1137,14 +1137,14 @@ void SfxTemplateManagerDlg::OnCategoryNew()
 void SfxTemplateManagerDlg::OnCategoryRename()
 {
     OUString sCategory = mpCBFolder->GetSelectedEntry();
-    ScopedVclPtrInstance< InputDialog > dlg(SfxResId(STR_INPUT_NEW),this);
+    InputDialog dlg(GetFrameWeld(), SfxResId(STR_INPUT_NEW));
 
-    dlg->SetEntryText(sCategory);
-    int ret = dlg->Execute();
+    dlg.SetEntryText(sCategory);
+    int ret = dlg.run();
 
     if (ret)
     {
-        OUString aName = dlg->GetEntryText();
+        OUString aName = dlg.GetEntryText();
 
         if(mpLocalView->renameRegion(sCategory, aName))
         {

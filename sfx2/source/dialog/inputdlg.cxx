@@ -8,59 +8,33 @@
  */
 
 #include <sfx2/inputdlg.hxx>
-
 #include <sfx2/sfxresid.hxx>
-#include <vcl/button.hxx>
-#include <vcl/edit.hxx>
-#include <vcl/fixed.hxx>
+#include <vcl/svapp.hxx>
 
-InputDialog::InputDialog(const OUString &rLabelText, vcl::Window *pParent)
-    : ModalDialog(pParent, "InputDialog", "sfx/ui/inputdialog.ui")
+InputDialog::InputDialog(weld::Window* pParent, const OUString &rLabelText)
+    : m_xBuilder(Application::CreateBuilder(pParent, "sfx/ui/inputdialog.ui"))
+    , m_xDialog(m_xBuilder->weld_dialog("InputDialog"))
+    , m_xEntry(m_xBuilder->weld_entry("entry"))
+    , m_xLabel(m_xBuilder->weld_label("label"))
+    , m_xHelp(m_xBuilder->weld_button("help"))
 {
-    get(m_pEntry, "entry");
-    get(m_pLabel, "label");
-    get(m_pOK, "ok");
-    get(m_pCancel, "cancel");
-    get(m_pHelp, "help");
-    m_pLabel->SetText(rLabelText);
-    m_pOK->SetClickHdl(LINK(this,InputDialog,ClickHdl));
-    m_pCancel->SetClickHdl(LINK(this,InputDialog,ClickHdl));
-}
-
-InputDialog::~InputDialog()
-{
-    disposeOnce();
-}
-
-void InputDialog::dispose()
-{
-    m_pEntry.clear();
-    m_pLabel.clear();
-    m_pOK.clear();
-    m_pCancel.clear();
-    m_pHelp.clear();
-    ModalDialog::dispose();
+    m_xLabel->set_label(rLabelText);
 }
 
 void InputDialog::HideHelpBtn()
 {
-    m_pHelp->Hide();
+    m_xHelp->hide();
 }
 
 OUString InputDialog::GetEntryText() const
 {
-    return m_pEntry->GetText();
+    return m_xEntry->get_text();
 }
 
-void InputDialog::SetEntryText( OUString const & sStr)
+void InputDialog::SetEntryText(const OUString& rStr)
 {
-    m_pEntry->SetText(sStr);
-    m_pEntry->SetCursorAtLast();
-}
-
-IMPL_LINK(InputDialog,ClickHdl, Button*, pButton, void)
-{
-    EndDialog(pButton == m_pOK ? RET_OK : RET_CANCEL);
+    m_xEntry->set_text(rStr);
+    m_xEntry->set_position(-1);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -782,6 +782,14 @@ public:
         m_xEntry->SetSelection(Selection(nStartPos, nEndPos < 0 ? SELECTION_MAX : nEndPos));
     }
 
+    virtual void set_position(int nCursorPos) override
+    {
+        if (nCursorPos < 0)
+            m_xEntry->SetCursorAtLast();
+        else
+            m_xEntry->SetSelection(Selection(nCursorPos, nCursorPos));
+    }
+
     virtual ~SalInstanceEntry() override
     {
         m_xEntry->SetTextFilter(nullptr);

@@ -806,14 +806,14 @@ void SvxJavaParameterDlg::EditParameter()
 
     if ( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
-        ScopedVclPtrInstance< InputDialog > pParamEditDlg(CuiResId(RID_SVXSTR_JAVA_START_PARAM), this);
+        InputDialog aParamEditDlg(GetFrameWeld(), CuiResId(RID_SVXSTR_JAVA_START_PARAM));
         OUString editableClassPath = m_pAssignedList->GetSelectedEntry();
-        pParamEditDlg->SetEntryText( editableClassPath );
-        pParamEditDlg->HideHelpBtn();
+        aParamEditDlg.SetEntryText(editableClassPath);
+        aParamEditDlg.HideHelpBtn();
 
-        if(!pParamEditDlg->Execute())
+        if (!aParamEditDlg.run())
             return;
-        OUString editedClassPath = comphelper::string::strip( pParamEditDlg->GetEntryText(), ' ');
+        OUString editedClassPath = comphelper::string::strip(aParamEditDlg.GetEntryText(), ' ');
 
         if ( !editedClassPath.isEmpty() && editableClassPath != editedClassPath )
         {

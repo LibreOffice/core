@@ -286,6 +286,7 @@ public:
     virtual OUString get_text() const = 0;
     virtual void set_width_chars(int nChars) = 0;
     virtual void select_region(int nStartPos, int nEndPos) = 0;
+    virtual void set_position(int nCursorPos) = 0;
 
     void connect_changed(const Link<Entry&, void>& rLink) { m_aChangeHdl = rLink; }
 

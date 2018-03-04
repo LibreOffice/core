@@ -10,35 +10,24 @@
 #ifndef INCLUDED_SFX2_SOURCE_INC_INPUTDLG_HXX
 #define INCLUDED_SFX2_SOURCE_INC_INPUTDLG_HXX
 
-#include <vcl/dialog.hxx>
 #include <sfx2/dllapi.h>
+#include <vcl/weld.hxx>
 
-class Edit;
-class FixedText;
-class PushButton;
-class Button;
-
-class SFX2_DLLPUBLIC InputDialog : public ModalDialog
+class SFX2_DLLPUBLIC InputDialog
 {
+private:
+    std::unique_ptr<weld::Builder> m_xBuilder;
+    std::unique_ptr<weld::Dialog> m_xDialog;
+    std::unique_ptr<weld::Entry> m_xEntry;
+    std::unique_ptr<weld::Label> m_xLabel;
+    std::unique_ptr<weld::Button> m_xHelp;
+
 public:
-    InputDialog (const OUString &labelText, vcl::Window *pParent);
-    OUString GetEntryText () const;
-    void SetEntryText( OUString const & sStr );
+    InputDialog(weld::Window* pParent, const OUString &rLabelText);
+    short run() { return m_xDialog->run(); }
+    OUString GetEntryText() const;
+    void SetEntryText(const OUString& rStr);
     void HideHelpBtn();
-    virtual ~InputDialog() override;
-    virtual void dispose() override;
-
-private:
-
-    DECL_LINK(ClickHdl, Button*, void);
-
-private:
-
-    VclPtr<Edit>       m_pEntry;
-    VclPtr<FixedText>  m_pLabel;
-    VclPtr<PushButton> m_pOK;
-    VclPtr<PushButton> m_pCancel;
-    VclPtr<PushButton> m_pHelp;
 };
 
 #endif // INCLUDED_SFX2_SOURCE_INC_INPUTDLG_HXX
