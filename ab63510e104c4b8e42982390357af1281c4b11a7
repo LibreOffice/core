@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba2be162_723425de",
+        "filename": "sc/source/ui/docshell/impex.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1280,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-03-05T11:27:40Z",
+      "side": 0,
+      "message": "Removing this portion of code is completely wrong. It signals a possible cell content overflow if data doesn\u0027t fit into a cell.",
+      "range": {
+        "startLine": 1250,
+        "startChar": 0,
+        "endLine": 1280,
+        "endChar": 5
+      },
+      "revId": "ab63510e104c4b8e42982390357af1281c4b11a7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

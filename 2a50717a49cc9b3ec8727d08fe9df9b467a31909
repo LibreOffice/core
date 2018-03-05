@@ -1,0 +1,283 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba2be162_d22a317e",
+        "filename": "sc/source/ui/dbgui/csvgrid.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-03-05T11:27:40Z",
+      "side": 1,
+      "message": "Please do not sprinkle these #TWNDCODFTools0001# comments all over. Nobody knows what it is, can\u0027t look it up anywhere, and it\u0027s unnecessary.",
+      "range": {
+        "startLine": 80,
+        "startChar": 30,
+        "endLine": 80,
+        "endChar": 47
+      },
+      "revId": "2a50717a49cc9b3ec8727d08fe9df9b467a31909",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba2be162_f21f3559",
+        "filename": "sc/source/ui/dbgui/csvtablebox.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 254,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-03-05T11:27:40Z",
+      "side": 1,
+      "message": "Having a static variable as a flag that is modified back and forth during runtime usually is not a good idea.. unless it is guarded by a mutex. Also, its name shouldn\u0027t be prefixed like a member variable then.",
+      "revId": "2a50717a49cc9b3ec8727d08fe9df9b467a31909",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba2be162_1225a9aa",
+        "filename": "sc/source/ui/dbgui/csvtablebox.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 274,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-03-05T11:27:40Z",
+      "side": 1,
+      "message": "Please set your editor to produce blanks instead of tabs.\nBut as said in another comment already, these comment \"tags\" should be avoided. Rather explain in a comment what is done and why.",
+      "range": {
+        "startLine": 274,
+        "startChar": 0,
+        "endLine": 274,
+        "endChar": 2
+      },
+      "revId": "2a50717a49cc9b3ec8727d08fe9df9b467a31909",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba2be162_323aadce",
+        "filename": "sc/source/ui/dbgui/csvtablebox.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 275,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-03-05T11:27:40Z",
+      "side": 1,
+      "message": "So this static mbModeSplit is set to false here. Where is it set to true? Wy would it be needed at all?",
+      "revId": "2a50717a49cc9b3ec8727d08fe9df9b467a31909",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba2be162_523e41b9",
+        "filename": "sc/source/ui/docshell/impex.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1243,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-03-05T11:27:40Z",
+      "side": 1,
+      "message": "All this code seems to be only necessary for Chinese characters. It should be executed only then, as otherwise it imposes unnecessary performance overhead and the simple line length can be used as it was before.",
+      "revId": "2a50717a49cc9b3ec8727d08fe9df9b467a31909",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba2be162_3241cd3a",
+        "filename": "sc/source/ui/docshell/impex.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1247,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-03-05T11:27:40Z",
+      "side": 1,
+      "message": "Length of rLine can be arbitrary, multiplying it needs to check if the result would overflow.",
+      "revId": "2a50717a49cc9b3ec8727d08fe9df9b467a31909",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba2be162_724b455a",
+        "filename": "sc/source/ui/docshell/impex.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1251,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-03-05T11:27:40Z",
+      "side": 1,
+      "message": "Nitpick: please follow keywords with one blank, so\n\n for (...\n\n if (...\n\n while (...",
+      "range": {
+        "startLine": 1251,
+        "startChar": 4,
+        "endLine": 1251,
+        "endChar": 8
+      },
+      "revId": "2a50717a49cc9b3ec8727d08fe9df9b467a31909",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba2be162_52ac81ed",
+        "filename": "sc/source/ui/docshell/impex.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1265,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-03-05T11:27:40Z",
+      "side": 1,
+      "message": "Nitpick: can we please have some blanks for readability.. so\n\n     for (nCurPos \u003d nStart; nCurPos \u003c nNewLength \u0026\u0026 nCurPos \u003c nRealSize-1 \u0026\u0026 map[nCurPos] \u003c rLine.getLength(); )",
+      "range": {
+        "startLine": 1265,
+        "startChar": 0,
+        "endLine": 1265,
+        "endChar": 105
+      },
+      "revId": "2a50717a49cc9b3ec8727d08fe9df9b467a31909",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba2be162_b2813d50",
+        "filename": "sc/source/ui/docshell/impex.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1267,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-03-05T11:27:40Z",
+      "side": 1,
+      "message": "Copying one UTF-16 code point will not work with non-BMP Unicode characters.",
+      "revId": "2a50717a49cc9b3ec8727d08fe9df9b467a31909",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba2be162_f27bb579",
+        "filename": "sc/source/ui/docshell/impex.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1281,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-03-05T11:27:40Z",
+      "side": 1,
+      "message": "Um.. how could this had ended up with a greater length first hand? Shouldn\u0027t that be handled in the loop above instead?",
+      "revId": "2a50717a49cc9b3ec8727d08fe9df9b467a31909",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba2be162_928d197e",
+        "filename": "sc/source/ui/docshell/impex.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1286,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-03-05T11:27:40Z",
+      "side": 1,
+      "message": "Copying each UTF-16 code point to a new string and converting that to UTF-8 to determine whether it is a blank character.. um...really?!?",
+      "revId": "2a50717a49cc9b3ec8727d08fe9df9b467a31909",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba2be162_f2a49509",
+        "filename": "sc/source/ui/inc/csvgrid.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-03-05T11:27:40Z",
+      "side": 1,
+      "message": "This should be declared at the same place with the other member variables. And probably not be public.",
+      "revId": "2a50717a49cc9b3ec8727d08fe9df9b467a31909",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba2be162_526561df",
+        "filename": "sc/source/ui/inc/impex.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-03-05T11:27:40Z",
+      "side": 1,
+      "message": "What is this charRealLen() supposed to really return? Why does it convert to UTF8 just to determine whether that length is \u003e 1 and return 2 if it is?",
+      "revId": "2a50717a49cc9b3ec8727d08fe9df9b467a31909",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba2be162_925fd90d",
+        "filename": "sc/source/ui/inc/impex.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-03-05T11:27:40Z",
+      "side": 1,
+      "message": "Instead of copying one character to a new string, it could pass the character position instead. Btw, this will not work with non-BMP Unicode characters.\n\nWhat is charMonitorLen() actually trying to determine?",
+      "revId": "2a50717a49cc9b3ec8727d08fe9df9b467a31909",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba2be162_9248b95d",
+        "filename": "sc/source/ui/inc/impex.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-03-05T11:27:40Z",
+      "side": 1,
+      "message": "Please only declare the functions here in the .hxx and move implementation to the .cxx if it doesn\u0027t just return a member variable.",
+      "revId": "2a50717a49cc9b3ec8727d08fe9df9b467a31909",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
