@@ -28,6 +28,7 @@
 #include <IDocumentRedlineAccess.hxx>
 
 #include <vector>
+#include <boost/optional.hpp>
 
 class SfxItemSet;
 class SwView;
@@ -173,6 +174,8 @@ class SW_DLLPUBLIC SwRangeRedline : public SwPaM
     bool bIsVisible : 1;
     sal_uInt32 m_nId;
 
+    boost::optional<long> m_oLOKLastNodeTop;
+
     void MoveToSection();
     void CopyToSection();
     void DelCopyOfSection(size_t nMyPos);
@@ -271,6 +274,8 @@ public:
 
     bool operator<( const SwRangeRedline& ) const;
     void dumpAsXml(struct _xmlTextWriter* pWriter) const;
+
+    void MaybeNotifyRedlinePositionModification(long nTop);
 };
 
 SW_DLLPUBLIC void MaybeNotifyRedlineModification(SwRangeRedline* pRedline, SwDoc* pDoc);

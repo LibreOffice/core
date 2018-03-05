@@ -277,7 +277,7 @@ protected:
     SwPageFrame *InsertPage( SwPageFrame *pSibling, bool bFootnote );
     void PrepareMake(vcl::RenderContext* pRenderContext);
     void OptPrepareMake();
-    void MakePos();
+    virtual void MakePos();
     // Format next frame of table frame to assure keeping attributes.
     // In case of nested tables method <SwFrame::MakeAll()> is called to
     // avoid formatting of superior table frame.

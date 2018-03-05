@@ -1074,6 +1074,18 @@ void MaybeNotifyRedlineModification(SwRangeRedline* pRedline, SwDoc* pDoc)
     }
 }
 
+void SwRangeRedline::MaybeNotifyRedlinePositionModification(long nTop)
+{
+    if (!comphelper::LibreOfficeKit::isActive())
+        return;
+
+    if(!m_oLOKLastNodeTop || *m_oLOKLastNodeTop != nTop)
+    {
+        m_oLOKLastNodeTop = nTop;
+        SwRedlineTable::LOKRedlineNotification(RedlineNotification::Modify, this);
+    }
+}
+
 void SwRangeRedline::SetStart( const SwPosition& rPos, SwPosition* pSttPtr )
 {
     if( !pSttPtr ) pSttPtr = Start();
