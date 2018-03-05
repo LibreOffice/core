@@ -265,7 +265,7 @@ namespace connectivity
                     if ( !sIanaName.isEmpty() )
                     {
                         ::dbtools::OCharsetMap aLookupIanaName;
-                        ::dbtools::OCharsetMap::const_iterator aLookup = aLookupIanaName.find(sIanaName, ::dbtools::OCharsetMap::IANA());
+                        ::dbtools::OCharsetMap::const_iterator aLookup = aLookupIanaName.findIanaName(sIanaName);
                         if (aLookup != aLookupIanaName.end() )
                         {
                             OUString sAdd;

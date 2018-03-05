@@ -63,7 +63,7 @@ namespace dbaui
 
     OCharsetDisplay::const_iterator OCharsetDisplay::findIanaName(const OUString& _rIanaName) const
     {
-        OCharsetMap::const_iterator aBaseIter = OCharsetMap::find(_rIanaName, OCharsetMap::IANA());
+        OCharsetMap::const_iterator aBaseIter = OCharsetMap::findIanaName(_rIanaName);
         return const_iterator( this, aBaseIter );
     }
 
