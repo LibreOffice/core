@@ -97,7 +97,7 @@
 #include <com/sun/star/document/XDocumentProperties.hpp>
 
 #include <guisaveas.hxx>
-#include <sfx2/saveastemplatedlg.hxx>
+#include <saveastemplatedlg.hxx>
 #include <memory>
 #include <cppuhelper/implbase.hxx>
 #include <unotools/ucbstreamhelper.hxx>
@@ -795,9 +795,8 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
         case SID_DOCTEMPLATE:
         {
             // save as document templates
-            ScopedVclPtrInstance<SfxSaveAsTemplateDialog> aDlg;
-            aDlg->setDocumentModel(GetModel());
-            aDlg->Execute();
+            SfxSaveAsTemplateDialog aDlg(rReq.GetFrameWeld(), GetModel());
+            aDlg.run();
             break;
         }
 

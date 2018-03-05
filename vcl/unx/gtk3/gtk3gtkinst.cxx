@@ -2106,6 +2106,15 @@ public:
         return (nRowHeight * nRows) + (nVerticalSeparator * (nRows + 1));
     }
 
+    virtual void set_size_request(int nWidth, int nHeight) override
+    {
+        GtkWidget* pParent = gtk_widget_get_parent(m_pWidget);
+        if (GTK_IS_SCROLLED_WINDOW(pParent))
+            gtk_widget_set_size_request(pParent, nWidth, nHeight);
+        else
+            gtk_widget_set_size_request(m_pWidget, nWidth, nHeight);
+    }
+
     virtual ~GtkInstanceTreeView() override
     {
         g_signal_handler_disconnect(gtk_tree_view_get_selection(m_pTreeView), m_nChangedSignalId);
