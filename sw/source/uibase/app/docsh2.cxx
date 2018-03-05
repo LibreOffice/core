@@ -1185,9 +1185,8 @@ void SwDocShell::Execute(SfxRequest& rReq)
                 {
                     SfxViewShell* pViewShell = GetView()? GetView(): SfxViewShell::Current();
                     SfxBindings& rBindings( pViewShell->GetViewFrame()->GetBindings() );
-                    ScopedVclPtr<SwWatermarkDialog> pDlg( VclPtr<SwWatermarkDialog>::Create( nullptr, rBindings ) );
-                    pDlg->Execute();
-                    pDlg.disposeAndClear();
+                    VclPtr<SwWatermarkDialog> pDlg(VclPtr<SwWatermarkDialog>::Create(&GetView()->GetViewFrame()->GetWindow(), rBindings));
+                    pDlg->StartExecuteAsync([](sal_Int32 /*nResult*/){});
                 }
             }
         }
