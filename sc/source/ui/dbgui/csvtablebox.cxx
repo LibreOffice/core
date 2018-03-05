@@ -251,6 +251,7 @@ void ScCsvTableBox::DataChanged( const DataChangedEvent& rDCEvt )
     ScCsvControl::DataChanged( rDCEvt );
 }
 
+static bool mbModeSplit = false;
 IMPL_LINK( ScCsvTableBox, CsvCmdHdl, ScCsvControl&, rCtrl, void )
 {
     const ScCsvCmd& rCmd = rCtrl.GetCmd();
@@ -264,10 +265,14 @@ IMPL_LINK( ScCsvTableBox, CsvCmdHdl, ScCsvControl&, rCtrl, void )
         case CSVCMD_REPAINT:
             if( !IsNoRepaint() )
             {
+                maGrid->mbModeSplit = mbFixedMode;
                 maGrid->ImplRedraw();
                 maRuler->ImplRedraw();
                 InitHScrollBar();
                 InitVScrollBar();
+
+                mbModeSplit = false;
+                maGrid->mbModeSplit = mbModeSplit;
             }
         break;
         case CSVCMD_MAKEPOSVISIBLE:
@@ -383,7 +388,9 @@ IMPL_LINK( ScCsvTableBox, CsvCmdHdl, ScCsvControl&, rCtrl, void )
     {
         DisableRepaint();
         maRuler->ApplyLayout( aOldData );
+        maGrid->mbModeSplit = mbFixedMode;
         maGrid->ApplyLayout( aOldData );
+        maGrid->mbModeSplit = false;
         EnableRepaint();
     }
 }
