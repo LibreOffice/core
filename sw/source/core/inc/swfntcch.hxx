@@ -49,8 +49,8 @@ class SwFontObj : public SwCacheObj
     friend class SwFontAccess;
 
 private:
-    SwFont aSwFont;
-    const SfxPoolItem* pDefaultArray[ NUM_DEFAULT_VALUES ];
+    SwFont m_aSwFont;
+    const SfxPoolItem* m_pDefaultArray[ NUM_DEFAULT_VALUES ];
 
 public:
     DECL_FIXEDMEMPOOL_NEWDEL(SwFontObj)
@@ -59,14 +59,14 @@ public:
 
     virtual ~SwFontObj() override;
 
-    SwFont& GetFont()        { return aSwFont; }
-    const SwFont& GetFont() const  { return aSwFont; }
-    const SfxPoolItem** GetDefault() { return pDefaultArray; }
+    SwFont& GetFont()        { return m_aSwFont; }
+    const SwFont& GetFont() const  { return m_aSwFont; }
+    const SfxPoolItem** GetDefault() { return m_pDefaultArray; }
 };
 
 class SwFontAccess : public SwCacheAccess
 {
-    SwViewShell *pShell;
+    SwViewShell *m_pShell;
 protected:
     virtual SwCacheObj *NewObj( ) override;
 

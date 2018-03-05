@@ -170,10 +170,10 @@ public:
 
 class SW_DLLPUBLIC SwRangeRedline : public SwPaM
 {
-    SwRedlineData* pRedlineData;
-    SwNodeIndex* pContentSect;
-    bool bDelLastPara : 1;
-    bool bIsVisible : 1;
+    SwRedlineData* m_pRedlineData;
+    SwNodeIndex* m_pContentSect;
+    bool m_bDelLastPara : 1;
+    bool m_bIsVisible : 1;
     sal_uInt32 m_nId;
 
     void MoveToSection();
@@ -190,19 +190,19 @@ public:
     // For sw3io: pData is taken over!
     SwRangeRedline(SwRedlineData* pData, const SwPosition& rPos,
                bool bDelLP) :
-        SwPaM( rPos ), pRedlineData( pData ), pContentSect( nullptr ),
-        bDelLastPara( bDelLP ), bIsVisible( true ), m_nId( m_nLastId++ )
+        SwPaM( rPos ), m_pRedlineData( pData ), m_pContentSect( nullptr ),
+        m_bDelLastPara( bDelLP ), m_bIsVisible( true ), m_nId( m_nLastId++ )
     {}
     SwRangeRedline( const SwRangeRedline& );
     virtual ~SwRangeRedline() override;
 
     sal_uInt32 GetId() const { return m_nId; }
-    SwNodeIndex* GetContentIdx() const { return pContentSect; }
+    SwNodeIndex* GetContentIdx() const { return m_pContentSect; }
     // For Undo.
     void SetContentIdx( const SwNodeIndex* );
 
-    bool IsVisible() const { return bIsVisible; }
-    bool IsDelLastPara() const { return bDelLastPara; }
+    bool IsVisible() const { return m_bIsVisible; }
+    bool IsDelLastPara() const { return m_bDelLastPara; }
 
     void SetStart( const SwPosition& rPos, SwPosition* pSttPtr = nullptr );
     void SetEnd( const SwPosition& rPos, SwPosition* pEndPtr = nullptr );
@@ -212,8 +212,8 @@ public:
 
     const SwRedlineData& GetRedlineData(sal_uInt16 nPos = 0) const;
     bool operator!=( const SwRedlineData& rCmp ) const
-        { return *pRedlineData != rCmp; }
-    void SetAutoFormatFlag()               { pRedlineData->SetAutoFormatFlag(); }
+        { return *m_pRedlineData != rCmp; }
+    void SetAutoFormatFlag()               { m_pRedlineData->SetAutoFormatFlag(); }
 
     sal_uInt16 GetStackCount() const;
     std::size_t GetAuthor( sal_uInt16 nPos = 0) const;
@@ -224,20 +224,20 @@ public:
         { return static_cast<RedlineType_t>(GetRealType( nPos ) & nsRedlineType_t::REDLINE_NO_FLAG_MASK); }
     const OUString& GetComment( sal_uInt16 nPos = 0 ) const;
 
-    void SetComment( const OUString& rS ) { pRedlineData->SetComment( rS ); }
+    void SetComment( const OUString& rS ) { m_pRedlineData->SetComment( rS ); }
 
     /** ExtraData gets copied, the pointer is therefore not taken over by
      *  the RedLineObject.*/
     void SetExtraData( const SwRedlineExtraData* pData )
-        { pRedlineData->SetExtraData( pData ); }
+        { m_pRedlineData->SetExtraData( pData ); }
     const SwRedlineExtraData* GetExtraData() const
-        { return pRedlineData->GetExtraData(); }
+        { return m_pRedlineData->GetExtraData(); }
 
     // For UI-side pooling of Redline-actions.
     // At the moment only used for Autoformat with Redline.
     // Value != 0 means there can be others!
-    sal_uInt16 GetSeqNo() const             { return pRedlineData->GetSeqNo(); }
-    void SetSeqNo( sal_uInt16 nNo )         { pRedlineData->SetSeqNo( nNo ); }
+    sal_uInt16 GetSeqNo() const             { return m_pRedlineData->GetSeqNo(); }
+    void SetSeqNo( sal_uInt16 nNo )         { m_pRedlineData->SetSeqNo( nNo ); }
 
     // At Hide/ShowOriginal the list is traversed two times in order to
     // hide the Del-Redlines via Copy and Delete.
