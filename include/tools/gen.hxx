@@ -79,9 +79,6 @@ public:
     long                X() const { return nA; }
     long                Y() const { return nB; }
 
-    long&               X() { return nA; }
-    long&               Y() { return nB; }
-
     void                Move( long nHorzMove, long nVertMove );
     void                Move( Size const & s );
     long                AdjustX( long nHorzMove ) { nA += nHorzMove; return nA; }
