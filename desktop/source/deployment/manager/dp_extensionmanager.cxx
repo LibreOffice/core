@@ -89,12 +89,11 @@ OUString CompIdentifiers::getName(std::vector<Reference<css::deployment::XPackag
     OSL_ASSERT(a.size() == 3);
     //get the first non-null reference
     Reference<css::deployment::XPackage>  extension;
-    std::vector<Reference<css::deployment::XPackage> >::const_iterator it = a.begin();
-    for (; it != a.end(); ++it)
+    for (auto const& elem : a)
     {
-        if (it->is())
+        if (elem.is())
         {
-            extension = *it;
+            extension = elem;
             break;
         }
     }
@@ -1104,20 +1103,17 @@ uno::Sequence< uno::Sequence<Reference<css::deployment::XPackage> > >
         //copy the values of the map to a vector for sorting
         std::vector< std::vector<Reference<css::deployment::XPackage> > >
               vecExtensions;
-        id2extensions::const_iterator mapIt = mapExt.begin();
-        for (;mapIt != mapExt.end(); ++mapIt)
-            vecExtensions.push_back(mapIt->second);
+        for (auto const& elem : mapExt)
+            vecExtensions.push_back(elem.second);
 
         //sort the element according to the identifier
         std::sort(vecExtensions.begin(), vecExtensions.end(), CompIdentifiers());
 
-        std::vector< std::vector<Reference<css::deployment::XPackage> > >::const_iterator
-              citVecVec = vecExtensions.begin();
         sal_Int32 j = 0;
         uno::Sequence< uno::Sequence<Reference<css::deployment::XPackage> > > seqSeq(vecExtensions.size());
-        for (;citVecVec != vecExtensions.end(); ++citVecVec, j++)
+        for (auto const& elem : vecExtensions)
         {
-            seqSeq[j] = comphelper::containerToSequence(*citVecVec);
+            seqSeq[j++] = comphelper::containerToSequence(elem);
         }
         return seqSeq;
 

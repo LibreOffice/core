@@ -88,13 +88,13 @@ void getOwnUpdateInfos(
         bool & out_allFound)
 {
     bool bAllHaveOwnUpdateInformation = true;
-    for (UpdateInfoMap::iterator i = inout_map.begin(); i != inout_map.end(); ++i)
+    for (auto & inout : inout_map)
     {
-        OSL_ASSERT(i->second.extension.is());
-        Sequence<OUString> urls(i->second.extension->getUpdateInformationURLs());
+        OSL_ASSERT(inout.second.extension.is());
+        Sequence<OUString> urls(inout.second.extension->getUpdateInformationURLs());
         if (urls.getLength())
         {
-            const OUString search_id = dp_misc::getIdentifier(i->second.extension);
+            const OUString search_id = dp_misc::getIdentifier(inout.second.extension);
             SAL_INFO( "extensions.update", "Searching update for " << search_id );
             uno::Any anyError;
             //It is unclear from the idl if there can be a null reference returned.
@@ -102,7 +102,7 @@ void getOwnUpdateInfos(
             Sequence<Reference< xml::dom::XElement > >
                 infos(getUpdateInformation(updateInformation, urls, search_id, anyError));
             if (anyError.hasValue())
-                out_errors.emplace_back(i->second.extension, anyError);
+                out_errors.emplace_back(inout.second.extension, anyError);
 
             for (sal_Int32 j = 0; j < infos.getLength(); ++j)
             {
@@ -118,8 +118,8 @@ void getOwnUpdateInfos(
                           << infoset.getVersion() << " for " << *result_id );
                 if (*result_id != search_id)
                     continue;
-                i->second.version = infoset.getVersion();
-                i->second.info.set(infos[j], UNO_QUERY_THROW);
+                inout.second.version = infoset.getVersion();
+                inout.second.info.set(infos[j], UNO_QUERY_THROW);
                 break;
             }
         }
@@ -192,13 +192,14 @@ bool onlyBundledExtensions(
     bool bOnlyBundled = true;
     if (extensionList)
     {
-        typedef std::vector<Reference<deployment::XPackage > >::const_iterator CIT;
-        for (CIT i(extensionList->begin()), aEnd(extensionList->end()); bOnlyBundled && i != aEnd; ++i)
+        for (auto const& elem : *extensionList)
         {
             Sequence<Reference<deployment::XPackage> > seqExt = xExtMgr->getExtensionsWithSameIdentifier(
-                dp_misc::getIdentifier(*i), (*i)->getName(), Reference<ucb::XCommandEnvironment>());
+                dp_misc::getIdentifier(elem), elem->getName(), Reference<ucb::XCommandEnvironment>());
 
             bOnlyBundled = containsBundledOnly(seqExt);
+            if (!bOnlyBundled)
+                break;
         }
     }
     else
@@ -367,12 +368,11 @@ UpdateInfoMap getOnlineUpdateInfos(
     }
     else
     {
-        typedef std::vector<Reference<deployment::XPackage > >::const_iterator CIT;
-        for (CIT i = extensionList->begin(); i != extensionList->end(); ++i)
+        for (auto const& elem : *extensionList)
         {
-            OSL_ASSERT(i->is());
+            OSL_ASSERT(elem.is());
             std::pair<UpdateInfoMap::iterator, bool> insertRet = infoMap.emplace(
-                    dp_misc::getIdentifier(*i), UpdateInfo(*i));
+                    dp_misc::getIdentifier(elem), UpdateInfo(elem));
             OSL_ASSERT(insertRet.second);
         }
     }

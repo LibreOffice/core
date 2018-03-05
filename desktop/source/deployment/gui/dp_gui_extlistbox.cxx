@@ -243,12 +243,10 @@ void ExtensionBox_Impl::dispose()
 
     m_bInDelete = true;
 
-    typedef std::vector< TEntry_Impl >::iterator ITER;
-
-    for ( ITER iIndex = m_vEntries.begin(); iIndex < m_vEntries.end(); ++iIndex )
+    for (auto const& entry : m_vEntries)
     {
-        (*iIndex)->m_pPublisher.disposeAndClear();
-        (*iIndex)->m_xPackage->removeEventListener( m_xRemoveListener.get() );
+        entry->m_pPublisher.disposeAndClear();
+        entry->m_xPackage->removeEventListener( m_xRemoveListener.get() );
     }
 
     m_vEntries.clear();
@@ -351,11 +349,9 @@ void ExtensionBox_Impl::DeleteRemoved()
 
     if ( ! m_vRemovedEntries.empty() )
     {
-        typedef std::vector< TEntry_Impl >::iterator ITER;
-
-        for ( ITER iIndex = m_vRemovedEntries.begin(); iIndex < m_vRemovedEntries.end(); ++iIndex )
+        for (auto const& removedEntry : m_vRemovedEntries)
         {
-            (*iIndex)->m_pPublisher.disposeAndClear();
+            removedEntry->m_pPublisher.disposeAndClear();
         }
 
         m_vRemovedEntries.clear();
@@ -688,12 +684,11 @@ void ExtensionBox_Impl::Paint(vcl::RenderContext& rRenderContext, const tools::R
 
     const ::osl::MutexGuard aGuard( m_entriesMutex );
 
-    typedef std::vector< TEntry_Impl >::iterator ITER;
-    for (ITER iIndex = m_vEntries.begin(); iIndex < m_vEntries.end(); ++iIndex)
+    for (auto const& entry : m_vEntries)
     {
-        aSize.setHeight( (*iIndex)->m_bActive ? m_nActiveHeight : m_nStdHeight );
+        aSize.setHeight( entry->m_bActive ? m_nActiveHeight : m_nStdHeight );
         tools::Rectangle aEntryRect( aStart, aSize );
-        DrawRow(rRenderContext, aEntryRect, *iIndex);
+        DrawRow(rRenderContext, aEntryRect, entry);
         aStart.AdjustY(aSize.Height() );
     }
 }
@@ -887,8 +882,7 @@ bool ExtensionBox_Impl::FindEntryPos( const TEntry_Impl& rEntry, const long nSta
 
 void ExtensionBox_Impl::cleanVecListenerAdded()
 {
-    typedef std::vector<uno::WeakReference<deployment::XPackage> >::iterator IT;
-    IT i = m_vListenerAdded.begin();
+    auto i = m_vListenerAdded.begin();
     while( i != m_vListenerAdded.end())
     {
         const uno::Reference<deployment::XPackage> hardRef(*i);
@@ -967,25 +961,24 @@ void ExtensionBox_Impl::addEntry( const uno::Reference< deployment::XPackage > &
 
 void ExtensionBox_Impl::updateEntry( const uno::Reference< deployment::XPackage > &xPackage )
 {
-    typedef std::vector< TEntry_Impl >::iterator ITER;
-    for ( ITER iIndex = m_vEntries.begin(); iIndex < m_vEntries.end(); ++iIndex )
+    for (auto const& entry : m_vEntries)
     {
-        if ( (*iIndex)->m_xPackage == xPackage )
+        if ( entry->m_xPackage == xPackage )
         {
             PackageState eState = TheExtensionManager::getPackageState( xPackage );
-            (*iIndex)->m_bHasOptions = m_pManager->supportsOptions( xPackage );
-            (*iIndex)->m_eState = eState;
-            (*iIndex)->m_sTitle = xPackage->getDisplayName();
-            (*iIndex)->m_sVersion = xPackage->getVersion();
-            (*iIndex)->m_sDescription = xPackage->getDescription();
+            entry->m_bHasOptions = m_pManager->supportsOptions( xPackage );
+            entry->m_eState = eState;
+            entry->m_sTitle = xPackage->getDisplayName();
+            entry->m_sVersion = xPackage->getVersion();
+            entry->m_sDescription = xPackage->getDescription();
 
             if ( eState == REGISTERED )
-                (*iIndex)->m_bMissingLic = false;
+                entry->m_bMissingLic = false;
 
             if ( eState == AMBIGUOUS )
-                (*iIndex)->m_sErrorText = DpResId( RID_STR_ERROR_UNKNOWN_STATUS );
-            else if ( ! (*iIndex)->m_bMissingLic )
-                (*iIndex)->m_sErrorText.clear();
+                entry->m_sErrorText = DpResId( RID_STR_ERROR_UNKNOWN_STATUS );
+            else if ( ! entry->m_bMissingLic )
+                entry->m_sErrorText.clear();
 
             if ( IsReallyVisible() )
                 Invalidate();
@@ -1007,9 +1000,7 @@ void ExtensionBox_Impl::removeEntry( const uno::Reference< deployment::XPackage 
         {
             ::osl::ClearableMutexGuard aGuard( m_entriesMutex );
 
-            typedef std::vector< TEntry_Impl >::iterator ITER;
-
-            for ( ITER iIndex = m_vEntries.begin(); iIndex < m_vEntries.end(); ++iIndex )
+            for ( auto iIndex = m_vEntries.begin(); iIndex != m_vEntries.end(); ++iIndex )
             {
                 if ( (*iIndex)->m_xPackage == xPackage )
                 {
@@ -1065,14 +1056,12 @@ void ExtensionBox_Impl::RemoveUnlocked()
 
         ::osl::ClearableMutexGuard aGuard( m_entriesMutex );
 
-        typedef std::vector< TEntry_Impl >::iterator ITER;
-
-        for ( ITER iIndex = m_vEntries.begin(); iIndex < m_vEntries.end(); ++iIndex )
+        for (auto const& entry : m_vEntries)
         {
-            if ( !(*iIndex)->m_bLocked )
+            if ( !entry->m_bLocked )
             {
                 bAllRemoved = false;
-                uno::Reference< deployment::XPackage> xPackage = (*iIndex)->m_xPackage;
+                uno::Reference< deployment::XPackage> xPackage = entry->m_xPackage;
                 aGuard.clear();
                 removeEntry( xPackage );
                 break;
@@ -1085,11 +1074,10 @@ void ExtensionBox_Impl::RemoveUnlocked()
 void ExtensionBox_Impl::prepareChecking()
 {
     m_bInCheckMode = true;
-    typedef std::vector< TEntry_Impl >::iterator ITER;
-    for ( ITER iIndex = m_vEntries.begin(); iIndex < m_vEntries.end(); ++iIndex )
+    for (auto const& entry : m_vEntries)
     {
-        (*iIndex)->m_bChecked = false;
-        (*iIndex)->m_bNew = false;
+        entry->m_bChecked = false;
+        entry->m_bNew = false;
     }
 }
 
@@ -1102,9 +1090,8 @@ void ExtensionBox_Impl::checkEntries()
     bool bNeedsUpdate = false;
 
     ::osl::ClearableMutexGuard guard(m_entriesMutex);
-    typedef std::vector< TEntry_Impl >::iterator ITER;
-    ITER iIndex = m_vEntries.begin();
-    while ( iIndex < m_vEntries.end() )
+    auto iIndex = m_vEntries.begin();
+    while ( iIndex != m_vEntries.end() )
     {
         if ( !(*iIndex)->m_bChecked )
         {
@@ -1136,8 +1123,7 @@ void ExtensionBox_Impl::checkEntries()
                     m_bHasActive = false;
                 }
                 m_vRemovedEntries.push_back( *iIndex );
-                m_vEntries.erase( iIndex );
-                iIndex = m_vEntries.begin() + nPos;
+                iIndex = m_vEntries.erase( iIndex );
             }
         }
         else

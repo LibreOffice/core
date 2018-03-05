@@ -350,16 +350,13 @@ void UpdateInstallDialog::Thread::downloadExtensions()
 
 
         sal_uInt16 count = 0;
-        typedef std::vector<UpdateData>::iterator It;
-        for (It i = m_aVecUpdateData.begin(); i != m_aVecUpdateData.end(); ++i)
+        for (auto & updateData : m_aVecUpdateData)
         {
-            UpdateData & curData = *i;
-
-            if (!curData.aUpdateInfo.is() || curData.aUpdateSource.is())
+            if (!updateData.aUpdateInfo.is() || updateData.aUpdateSource.is())
                 continue;
             //We assume that m_aVecUpdateData contains only information about extensions which
             //can be downloaded directly.
-            OSL_ASSERT(curData.sWebsiteURL.isEmpty());
+            OSL_ASSERT(updateData.sWebsiteURL.isEmpty());
 
             //update the name of the extension which is to be downloaded
             {
@@ -367,12 +364,12 @@ void UpdateInstallDialog::Thread::downloadExtensions()
                 if (m_stop) {
                     return;
                 }
-                m_dialog.m_pFt_extension_name->SetText(curData.aInstalledPackage->getDisplayName());
+                m_dialog.m_pFt_extension_name->SetText(updateData.aInstalledPackage->getDisplayName());
                 sal_uInt16 prog = (sal::static_int_cast<sal_uInt16>(100) * ++count) /
                     sal::static_int_cast<sal_uInt16>(m_aVecUpdateData.size());
                 m_dialog.m_pStatusbar->SetValue(prog);
             }
-            dp_misc::DescriptionInfoset info(m_xComponentContext, curData.aUpdateInfo);
+            dp_misc::DescriptionInfoset info(m_xComponentContext, updateData.aUpdateInfo);
             //remember occurring exceptions in case we need to print out error information
             std::vector< std::pair<OUString, cssu::Exception> > vecExceptions;
             cssu::Sequence<OUString> seqDownloadURLs = info.getUpdateDownloadUrls();
@@ -382,8 +379,8 @@ void UpdateInstallDialog::Thread::downloadExtensions()
                 try
                 {
                     OSL_ENSURE(!seqDownloadURLs[j].isEmpty(), "Download URL is empty!");
-                    bool bCancelled = download(seqDownloadURLs[j], curData);
-                    if (bCancelled || !curData.sLocalURL.isEmpty())
+                    bool bCancelled = download(seqDownloadURLs[j], updateData);
+                    if (bCancelled || !updateData.sLocalURL.isEmpty())
                         break;
                 }
                 catch ( cssu::Exception & e )
@@ -401,21 +398,22 @@ void UpdateInstallDialog::Thread::downloadExtensions()
                 if (m_stop) {
                     return;
                 }
-                if (curData.sLocalURL.isEmpty())
+                if (updateData.sLocalURL.isEmpty())
                 {
                     //Construct a string of all messages contained in the exceptions plus the respective download URLs
                     OUStringBuffer buf(256);
-                    typedef std::vector< std::pair<OUString, cssu::Exception > >::const_iterator CIT;
-                    for (CIT j = vecExceptions.begin(); j != vecExceptions.end(); ++j)
+                    size_t nPos = 0;
+                    for (auto const& elem : vecExceptions)
                     {
-                        if (j != vecExceptions.begin())
+                        if (nPos)
                             buf.append("\n");
                         buf.append("Could not download ");
-                        buf.append(j->first);
+                        buf.append(elem.first);
                         buf.append(". ");
-                        buf.append(j->second.Message);
+                        buf.append(elem.second.Message);
+                        ++nPos;
                     }
-                    m_dialog.setError(UpdateInstallDialog::ERROR_DOWNLOAD, curData.aInstalledPackage->getDisplayName(),
+                    m_dialog.setError(UpdateInstallDialog::ERROR_DOWNLOAD, updateData.aInstalledPackage->getDisplayName(),
                         buf.makeStringAndClear());
                 }
             }
@@ -445,8 +443,7 @@ void UpdateInstallDialog::Thread::installExtensions()
     }
 
     sal_uInt16 count = 0;
-    typedef std::vector<UpdateData>::iterator It;
-    for (It i = m_aVecUpdateData.begin(); i != m_aVecUpdateData.end(); ++i, ++count)
+    for (auto const& updateData : m_aVecUpdateData)
     {
         //update the name of the extension which is to be installed
         {
@@ -460,17 +457,16 @@ void UpdateInstallDialog::Thread::installExtensions()
                 (sal::static_int_cast<sal_uInt16>(100) * count) /
                 sal::static_int_cast<sal_uInt16>(m_aVecUpdateData.size()));
              }
-            m_dialog.m_pFt_extension_name->SetText(i->aInstalledPackage->getDisplayName());
+            m_dialog.m_pFt_extension_name->SetText(updateData.aInstalledPackage->getDisplayName());
         }
         bool bError = false;
         bool bLicenseDeclined = false;
         cssu::Reference<css::deployment::XPackage> xExtension;
-        UpdateData & curData = *i;
         cssu::Exception exc;
         try
         {
             cssu::Reference< css::task::XAbortChannel > xAbortChannel(
-                curData.aInstalledPackage->createAbortChannel() );
+                updateData.aInstalledPackage->createAbortChannel() );
             {
                 SolarMutexGuard g;
                 if (m_stop) {
@@ -478,33 +474,33 @@ void UpdateInstallDialog::Thread::installExtensions()
                 }
                 m_abort = xAbortChannel;
             }
-            if (!curData.aUpdateSource.is() && !curData.sLocalURL.isEmpty())
+            if (!updateData.aUpdateSource.is() && !updateData.sLocalURL.isEmpty())
             {
                 css::beans::NamedValue prop("EXTENSION_UPDATE", css::uno::makeAny(OUString("1")));
-                if (!curData.bIsShared)
+                if (!updateData.bIsShared)
                     xExtension = m_dialog.getExtensionManager()->addExtension(
-                        curData.sLocalURL, css::uno::Sequence<css::beans::NamedValue>(&prop, 1),
+                        updateData.sLocalURL, css::uno::Sequence<css::beans::NamedValue>(&prop, 1),
                         "user", xAbortChannel, m_updateCmdEnv.get());
                 else
                     xExtension = m_dialog.getExtensionManager()->addExtension(
-                        curData.sLocalURL, css::uno::Sequence<css::beans::NamedValue>(&prop, 1),
+                        updateData.sLocalURL, css::uno::Sequence<css::beans::NamedValue>(&prop, 1),
                         "shared", xAbortChannel, m_updateCmdEnv.get());
             }
-            else if (curData.aUpdateSource.is())
+            else if (updateData.aUpdateSource.is())
             {
-                OSL_ASSERT(curData.aUpdateSource.is());
+                OSL_ASSERT(updateData.aUpdateSource.is());
                 //I am not sure if we should obtain the install properties and pass them into
                 //add extension. Currently it contains only "SUPPRESS_LICENSE". So it could happen
                 //that a license is displayed when updating from the shared repository, although the
                 //shared extension was installed using "SUPPRESS_LICENSE".
                 css::beans::NamedValue prop("EXTENSION_UPDATE", css::uno::makeAny(OUString("1")));
-                if (!curData.bIsShared)
+                if (!updateData.bIsShared)
                     xExtension = m_dialog.getExtensionManager()->addExtension(
-                        curData.aUpdateSource->getURL(), css::uno::Sequence<css::beans::NamedValue>(&prop, 1),
+                        updateData.aUpdateSource->getURL(), css::uno::Sequence<css::beans::NamedValue>(&prop, 1),
                         "user", xAbortChannel, m_updateCmdEnv.get());
                 else
                     xExtension = m_dialog.getExtensionManager()->addExtension(
-                        curData.aUpdateSource->getURL(), css::uno::Sequence<css::beans::NamedValue>(&prop, 1),
+                        updateData.aUpdateSource->getURL(), css::uno::Sequence<css::beans::NamedValue>(&prop, 1),
                         "shared", xAbortChannel, m_updateCmdEnv.get());
             }
         }
@@ -533,7 +529,7 @@ void UpdateInstallDialog::Thread::installExtensions()
                 return;
             }
             m_dialog.setError(UpdateInstallDialog::ERROR_LICENSE_DECLINED,
-                curData.aInstalledPackage->getDisplayName(), OUString());
+                updateData.aInstalledPackage->getDisplayName(), OUString());
         }
         else if (!xExtension.is() || bError)
         {
@@ -542,8 +538,9 @@ void UpdateInstallDialog::Thread::installExtensions()
                 return;
             }
             m_dialog.setError(UpdateInstallDialog::ERROR_INSTALLATION,
-                curData.aInstalledPackage->getDisplayName(), exc.Message);
+                updateData.aInstalledPackage->getDisplayName(), exc.Message);
         }
+        ++count;
     }
     {
         SolarMutexGuard g;

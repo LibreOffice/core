@@ -62,10 +62,9 @@ std::vector< OUString > translateExternalUris(
     std::vector< OUString > const & input)
 {
     std::vector< OUString > t;
-    for (std::vector< OUString >::const_iterator i(input.begin());
-         i != input.end(); ++i)
+    for (auto const& elem : input)
     {
-        t.push_back(translateExternalUris(*i));
+        t.push_back(translateExternalUris(elem));
     }
     return t;
 }

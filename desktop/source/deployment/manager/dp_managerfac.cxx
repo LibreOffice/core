@@ -96,10 +96,8 @@ void PackageManagerFactoryImpl::disposing()
 {
     // dispose all managers:
     ::osl::MutexGuard guard( getMutex() );
-    t_string2weakref::const_iterator iPos( m_managers.begin() );
-    t_string2weakref::const_iterator const iEnd( m_managers.end() );
-    for ( ; iPos != iEnd; ++iPos )
-        try_dispose( iPos->second );
+    for (auto const& elem : m_managers)
+        try_dispose( elem.second );
     m_managers = t_string2weakref();
     // the below are already disposed:
     m_xUserMgr.clear();

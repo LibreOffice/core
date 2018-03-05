@@ -1090,10 +1090,9 @@ void restartOnMac(bool passArguments) {
         }
     }
     std::vector< char const * > argPtrs;
-    for (std::vector< OString >::iterator i(args.begin()); i != args.end();
-         ++i)
+    for (auto const& elem : args)
     {
-        argPtrs.push_back(i->getStr());
+        argPtrs.push_back(elem.getStr());
     }
     argPtrs.push_back(nullptr);
     execv(execPath8.getStr(), const_cast< char ** >(&argPtrs[0]));

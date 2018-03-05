@@ -906,14 +906,13 @@ void ExtensionCmdQueue::Thread::_checkForUpdates(
         // open the install dialog.
         std::vector< UpdateData > dataDownload;
         int countWebsiteDownload = 0;
-        typedef std::vector< dp_gui::UpdateData >::const_iterator cit;
 
-        for ( cit i = vData.begin(); i < vData.end(); ++i )
+        for (auto const& data : vData)
         {
-            if ( !i->sWebsiteURL.isEmpty() )
+            if ( !data.sWebsiteURL.isEmpty() )
                 countWebsiteDownload ++;
             else
-                dataDownload.push_back( *i );
+                dataDownload.push_back(data);
         }
 
         short nDialogResult = RET_OK;
@@ -928,10 +927,10 @@ void ExtensionCmdQueue::Thread::_checkForUpdates(
         //Now start the webbrowser and navigate to the websites where we get the updates
         if ( RET_OK == nDialogResult )
         {
-            for ( cit i = vData.begin(); i < vData.end(); ++i )
+            for (auto const& data : vData)
             {
-                if ( m_pDialogHelper && ( !i->sWebsiteURL.isEmpty() ) )
-                    m_pDialogHelper->openWebBrowser( i->sWebsiteURL, m_pDialogHelper->getWindow()->GetText() );
+                if ( m_pDialogHelper && ( !data.sWebsiteURL.isEmpty() ) )
+                    m_pDialogHelper->openWebBrowser( data.sWebsiteURL, m_pDialogHelper->getWindow()->GetText() );
             }
         }
     }

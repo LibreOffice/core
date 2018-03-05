@@ -713,13 +713,14 @@ uno::Sequence< OUString > ExtMgrDialog::raiseAddPicker()
     // All files at top:
     xFilePicker->appendFilter( StrAllFiles::get(), "*.*" );
     // then supported ones:
-    t_string2string::const_iterator iPos( title2filter.begin() );
-    const t_string2string::const_iterator iEnd( title2filter.end() );
-    for ( ; iPos != iEnd; ++iPos ) {
-        try {
-            xFilePicker->appendFilter( iPos->first, iPos->second );
+    for (auto const& elem : title2filter)
+    {
+        try
+        {
+            xFilePicker->appendFilter( elem.first, elem.second );
         }
-        catch (const lang::IllegalArgumentException & exc) {
+        catch (const lang::IllegalArgumentException & exc)
+        {
             SAL_WARN( "desktop", exc );
         }
     }
