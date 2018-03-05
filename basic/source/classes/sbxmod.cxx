@@ -55,6 +55,7 @@
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/asyncquithandler.hxx>
 #include <map>
 #include <com/sun/star/reflection/ProxyFactory.hpp>
 #include <com/sun/star/uno/XAggregation.hpp>
@@ -414,32 +415,6 @@ bool getDefaultVBAMode( StarBASIC* pb )
         return false;
     uno::Reference< vba::XVBACompatibility > xVBACompat = getVBACompatibility( xModel );
     return xVBACompat.is() && xVBACompat->getVBACompatibilityMode();
-}
-
-class AsyncQuitHandler
-{
-    AsyncQuitHandler() {}
-
-public:
-    AsyncQuitHandler(const AsyncQuitHandler&) = delete;
-    const AsyncQuitHandler& operator=(const AsyncQuitHandler&) = delete;
-    static AsyncQuitHandler& instance()
-    {
-        static AsyncQuitHandler dInst;
-        return dInst;
-    }
-
-    static void QuitApplication()
-    {
-        uno::Reference< frame::XDesktop2 > xDeskTop = frame::Desktop::create( comphelper::getProcessComponentContext() );
-        xDeskTop->terminate();
-    }
-    DECL_STATIC_LINK( AsyncQuitHandler, OnAsyncQuit, void*, void );
-};
-
-IMPL_STATIC_LINK_NOARG( AsyncQuitHandler, OnAsyncQuit, void*, void )
-{
-    QuitApplication();
 }
 
 // A Basic module has set EXTSEARCH, so that the elements, that the module contains,
