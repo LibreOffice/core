@@ -29,19 +29,10 @@ namespace
     OUString getMimeTypeForURL(const OUString& rString)
     {
         OUString sMimeType;
-        if (rString.startsWith("vnd.sun.star.GraphicObject"))
+        if (rString.startsWith("vnd.sun.star.Package"))
         {
-            sMimeType = comphelper::GraphicMimeTypeHelper::GetMimeTypeForImageUrl(rString);
-        }
-        else if (rString.startsWith("vnd.sun.star.Package"))
-        {
-            sMimeType
-                = comphelper::GraphicMimeTypeHelper::GetMimeTypeForExtension(OUStringToOString(
-                    rString.copy(rString.lastIndexOf(".") + 1), RTL_TEXTENCODING_ASCII_US));
-        }
-        else
-        {
-            SAL_WARN("xmloff", "Unknown image source: " << rString);
+            OString aExtension = OUStringToOString(rString.copy(rString.lastIndexOf(".") + 1), RTL_TEXTENCODING_ASCII_US);
+            sMimeType = comphelper::GraphicMimeTypeHelper::GetMimeTypeForExtension(aExtension);
         }
         return sMimeType;
     }
@@ -116,23 +107,22 @@ SvXMLImportContextRef MultiImageImportHelper::solveMultipleImages()
         {
             const SvXMLImportContext& rContext = *maImplContextVector[a].get();
 
-            sal_uInt32 nNewQuality = 0;
 
-            uno::Reference<graphic::XGraphic> xGraphic(getGraphicFromImportContext(rContext));
-            if (xGraphic.is())
+            OUString sMimeType;
+
+            const OUString aStreamURL(getGraphicPackageURLFromImportContext(rContext));
+            if (!aStreamURL.isEmpty())
             {
-                OUString sMimeType = comphelper::GraphicMimeTypeHelper::GetMimeTypeForXGraphic(xGraphic);
-                nNewQuality = getQualityIndex(sMimeType);
+                sMimeType = getMimeTypeForURL(aStreamURL);
             }
             else
             {
-                const OUString aStreamURL(getGraphicURLFromImportContext(rContext));
-                if (!aStreamURL.isEmpty())
-                {
-                    nNewQuality = getQualityIndex(getMimeTypeForURL(aStreamURL));
-        }
+                uno::Reference<graphic::XGraphic> xGraphic(getGraphicFromImportContext(rContext));
+                if (xGraphic.is())
+                    sMimeType = comphelper::GraphicMimeTypeHelper::GetMimeTypeForXGraphic(xGraphic);
             }
 
+            sal_uInt32 nNewQuality = getQualityIndex(sMimeType);
             if (nNewQuality > nBestQuality)
             {
                 nBestQuality = nNewQuality;
@@ -173,11 +163,6 @@ SvXMLImportContextRef MultiImageImportHelper::solveMultipleImages()
 void MultiImageImportHelper::addContent(const SvXMLImportContext& rSvXMLImportContext)
 {
     maImplContextVector.emplace_back(const_cast< SvXMLImportContext* >(&rSvXMLImportContext));
-}
-
-uno::Reference<graphic::XGraphic> MultiImageImportHelper::getGraphicFromImportContext(const SvXMLImportContext& /*rContext*/) const
-{
-    return uno::Reference<graphic::XGraphic>();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
