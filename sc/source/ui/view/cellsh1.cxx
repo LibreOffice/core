@@ -2470,7 +2470,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 aSet.Put( SvxFontItem( aCurFont.GetFamilyType(), aCurFont.GetFamilyName(), aCurFont.GetStyleName(), aCurFont.GetPitch(), aCurFont.GetCharSet(), GetPool().GetWhich(SID_ATTR_CHAR_FONT) ) );
 
                 ScopedVclPtr<SfxAbstractDialog> pDlg(pFact->CreateSfxDialog( pTabViewShell->GetDialogParent(), aSet,
-                    pTabViewShell->GetViewFrame()->GetFrame().GetFrameInterface(), RID_SVXDLG_CHARMAP ));
+                    pTabViewShell->GetViewFrame()->GetFrame().GetFrameInterface(), RID_SVXDLG_CHARMAP, true ));
 
                 if ( pDlg->Execute() == RET_OK )
                 {
