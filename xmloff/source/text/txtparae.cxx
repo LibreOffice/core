@@ -3103,84 +3103,100 @@ void XMLTextParagraphExport::_exportTextGraphic(
     // original content
     SvXMLElementExport aElem(GetExport(), XML_NAMESPACE_DRAW, XML_FRAME, false, true);
 
-    // replacement graphic for backwards compatibility, but
-    // only for SVG and metafiles currently
-    uno::Reference<graphic::XGraphic> xReplacementGraphic;
-    rPropSet->getPropertyValue("ReplacementGraphic") >>= xReplacementGraphic;
-
-    // xlink:href
-    OUString sOrigURL;
-    rPropSet->getPropertyValue("GraphicURL") >>= sOrigURL;
-    OUString sURL(GetExport().AddEmbeddedGraphicObject( sOrigURL ));
-
-    // If there still is no url, then graphic is empty
-    if( !sURL.isEmpty() )
     {
-        GetExport().AddAttribute(XML_NAMESPACE_XLINK, XML_HREF, sURL );
-        GetExport().AddAttribute( XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE );
-        GetExport().AddAttribute( XML_NAMESPACE_XLINK, XML_SHOW, XML_EMBED );
-        GetExport().AddAttribute( XML_NAMESPACE_XLINK, XML_ACTUATE,
-                                                       XML_ONLOAD );
-    }
+        // xlink:href
+        uno::Reference<graphic::XGraphic> xGraphic;
+        rPropSet->getPropertyValue("Graphic") >>= xGraphic;
 
-    // draw:filter-name
-    OUString sGrfFilter;
-    rPropSet->getPropertyValue( sGraphicFilter ) >>= sGrfFilter;
-    if( !sGrfFilter.isEmpty() )
-        GetExport().AddAttribute( XML_NAMESPACE_DRAW, XML_FILTER_NAME,
-                                  sGrfFilter );
+        OUString sInternalURL;
+        OUString sOutMimeType;
 
-    // Add mimetype to make it easier for readers to get the base64 image type right, tdf#109202
-    // do we have a hard export image filter set? then that's our mimetype
-    OUString aSourceMimeType = GetExport().GetImageFilterName();
-    // otherwise determine mimetype from graphic
-    if ( aSourceMimeType.isEmpty() )
-        aSourceMimeType = comphelper::GraphicMimeTypeHelper::GetMimeTypeForImageUrl(sOrigURL);
-    else //  !aSourceMimeType.isEmpty()
-    {
-        const OString aExt( OUStringToOString( aSourceMimeType, RTL_TEXTENCODING_ASCII_US ) );
-        aSourceMimeType = comphelper::GraphicMimeTypeHelper::GetMimeTypeForExtension( aExt );
-    }
-
-    if (GetExport().getDefaultVersion() > SvtSaveOptions::ODFVER_012)
-    {
-        GetExport().AddAttribute(XML_NAMESPACE_LO_EXT, "mime-type", aSourceMimeType);
-    }
-
-    {
-        SvXMLElementExport aElement( GetExport(), XML_NAMESPACE_DRAW,
-                                  XML_IMAGE, false, true );
-
-        // optional office:binary-data
-        GetExport().AddEmbeddedGraphicObjectAsBase64( sOrigURL );
-    }
-
-    //Resolves: fdo#62461 put preferred image first above, followed by
-    //fallback here
-    if (xReplacementGraphic.is())
-    {
-        OUString aMimeType;
-        const OUString sHref = GetExport().AddEmbeddedXGraphic(xReplacementGraphic, aMimeType);
-
-        if (aMimeType.isEmpty())
-            GetExport().GetGraphicMimeTypeFromStream(xReplacementGraphic, aMimeType);
-
-        // If there is no url, then graphic is empty
-        if (!sHref.isEmpty())
+        if (xGraphic.is())
         {
-            GetExport().AddAttribute(XML_NAMESPACE_XLINK, XML_HREF, sHref);
+            sInternalURL = GetExport().AddEmbeddedXGraphic(xGraphic, sOutMimeType);
+        }
+
+        // If there still is no url, then graphic is empty
+        if (!sInternalURL.isEmpty())
+        {
+            GetExport().AddAttribute(XML_NAMESPACE_XLINK, XML_HREF, sInternalURL);
             GetExport().AddAttribute(XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE);
             GetExport().AddAttribute(XML_NAMESPACE_XLINK, XML_SHOW, XML_EMBED);
             GetExport().AddAttribute(XML_NAMESPACE_XLINK, XML_ACTUATE, XML_ONLOAD);
         }
 
-        if (!aMimeType.isEmpty())
-            GetExport().AddAttribute(XML_NAMESPACE_LO_EXT, "mime-type", aMimeType);
+        // draw:filter-name
+        OUString sGrfFilter;
+        rPropSet->getPropertyValue( sGraphicFilter ) >>= sGrfFilter;
+        if( !sGrfFilter.isEmpty() )
+            GetExport().AddAttribute( XML_NAMESPACE_DRAW, XML_FILTER_NAME,
+                                      sGrfFilter );
 
-        SvXMLElementExport aElement(GetExport(), XML_NAMESPACE_DRAW, XML_IMAGE, true, true);
+        if (GetExport().getDefaultVersion() > SvtSaveOptions::ODFVER_012)
+        {
+            if (sOutMimeType.isEmpty())
+            {
+                GetExport().GetGraphicMimeTypeFromStream(xGraphic, sOutMimeType);
+            }
+            if (!sOutMimeType.isEmpty())
+            {
+                GetExport().AddAttribute(XML_NAMESPACE_LO_EXT, "mime-type", sOutMimeType);
+            }
+        }
+
 
         // optional office:binary-data
-        GetExport().AddEmbeddedXGraphicAsBase64(xReplacementGraphic);
+        if (xGraphic.is())
+        {
+            SvXMLElementExport aElement(GetExport(), XML_NAMESPACE_DRAW, XML_IMAGE, false, true );
+            GetExport().AddEmbeddedXGraphicAsBase64(xGraphic);
+        }
+    }
+
+    {
+        // replacement graphic for backwards compatibility, but
+        // only for SVG and metafiles currently
+        uno::Reference<graphic::XGraphic> xReplacementGraphic;
+        rPropSet->getPropertyValue("ReplacementGraphic") >>= xReplacementGraphic;
+
+        OUString sInternalURL;
+        OUString sOutMimeType;
+
+        //Resolves: fdo#62461 put preferred image first above, followed by
+        //fallback here
+        if (xReplacementGraphic.is())
+        {
+            sInternalURL = GetExport().AddEmbeddedXGraphic(xReplacementGraphic, sOutMimeType);
+        }
+
+        // If there is no url, then graphic is empty
+        if (!sInternalURL.isEmpty())
+        {
+            GetExport().AddAttribute(XML_NAMESPACE_XLINK, XML_HREF, sInternalURL);
+            GetExport().AddAttribute(XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE);
+            GetExport().AddAttribute(XML_NAMESPACE_XLINK, XML_SHOW, XML_EMBED);
+            GetExport().AddAttribute(XML_NAMESPACE_XLINK, XML_ACTUATE, XML_ONLOAD);
+        }
+
+        if (GetExport().getDefaultVersion() > SvtSaveOptions::ODFVER_012)
+        {
+            if (sOutMimeType.isEmpty())
+            {
+                GetExport().GetGraphicMimeTypeFromStream(xReplacementGraphic, sOutMimeType);
+            }
+            if (!sOutMimeType.isEmpty())
+            {
+                GetExport().AddAttribute(XML_NAMESPACE_LO_EXT, "mime-type", sOutMimeType);
+            }
+        }
+
+
+        // optional office:binary-data
+        if (xReplacementGraphic.is())
+        {
+            SvXMLElementExport aElement(GetExport(), XML_NAMESPACE_DRAW, XML_IMAGE, true, true);
+            GetExport().AddEmbeddedXGraphicAsBase64(xReplacementGraphic);
+        }
     }
 
     // script:events

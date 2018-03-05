@@ -83,6 +83,7 @@ $(eval $(call gb_CppunitTest_use_components,sw_odfimport,\
     ) \
 	$(if $(filter DESKTOP,$(BUILD_TYPE)),xmlhelp/util/ucpchelp1) \
     xmloff/util/xo \
+    svgio/svgio \
 ))
 
 $(eval $(call gb_CppunitTest_use_configuration,sw_odfimport))
