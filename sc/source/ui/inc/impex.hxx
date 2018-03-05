@@ -110,6 +110,22 @@ public:
     static  void    WriteUnicodeOrByteString( SvStream& rStrm, const OUString& rString, bool bZero = false );
     static  void    WriteUnicodeOrByteEndl( SvStream& rStrm );
 
+    // #TWNDCODFTools0001#
+    static inline sal_Int32 charRealLen(const OUString& rText)
+    {
+        OString aBuf = OUStringToOString(rText, RTL_TEXTENCODING_UTF8).getStr();
+       return aBuf.getLength() > 1 ? 2 : 1;
+    }
+    static inline sal_Int32 charMonitorLen(const OUString& rText)
+    {
+        sal_Int32 i;
+        sal_Int32 charLen = 0;
+
+        for(i=0; i<rText.getLength(); i++)
+            charLen += charRealLen( rText.copy(i, 1) );
+        return charLen;
+    }
+
     //! only if stream is only used in own (!) memory
     static  void    SetNoEndianSwap( SvStream& rStrm );
 

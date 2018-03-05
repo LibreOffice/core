@@ -251,6 +251,7 @@ void ScCsvTableBox::DataChanged( const DataChangedEvent& rDCEvt )
     ScCsvControl::DataChanged( rDCEvt );
 }
 
+static bool mbModeSplit = false;  // #TWNDCODFTools0001#
 IMPL_LINK( ScCsvTableBox, CsvCmdHdl, ScCsvControl&, rCtrl, void )
 {
     const ScCsvCmd& rCmd = rCtrl.GetCmd();
@@ -264,10 +265,15 @@ IMPL_LINK( ScCsvTableBox, CsvCmdHdl, ScCsvControl&, rCtrl, void )
         case CSVCMD_REPAINT:
             if( !IsNoRepaint() )
             {
+                maGrid->mbModeSplit = mbFixedMode;  // #TWNDCODFTools0001#
                 maGrid->ImplRedraw();
                 maRuler->ImplRedraw();
                 InitHScrollBar();
                 InitVScrollBar();
+
+		// #TWNDCODFTools0001#
+                mbModeSplit = false;
+                maGrid->mbModeSplit = mbModeSplit;
             }
         break;
         case CSVCMD_MAKEPOSVISIBLE:
@@ -383,7 +389,9 @@ IMPL_LINK( ScCsvTableBox, CsvCmdHdl, ScCsvControl&, rCtrl, void )
     {
         DisableRepaint();
         maRuler->ApplyLayout( aOldData );
+        maGrid->mbModeSplit = mbFixedMode;  // #TWNDCODFTools0001#
         maGrid->ApplyLayout( aOldData );
+        maGrid->mbModeSplit = false;  // #TWNDCODFTools0001#
         EnableRepaint();
     }
 }
