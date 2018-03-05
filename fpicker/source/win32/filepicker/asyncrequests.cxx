@@ -138,6 +138,7 @@ void AsyncRequests::triggerRequestThreadAware(const RequestRef& rRequest,
 {
     oslThreadIdentifier nOurThreadId    = getIdentifier();
     oslThreadIdentifier nCallerThreadId = ::osl::Thread::getCurrentIdentifier();
+    SolarMutexGuard aGuard;
     if (nOurThreadId == nCallerThreadId)
         triggerRequestDirectly(rRequest);
     else if (nWait == BLOCKED)
