@@ -4531,11 +4531,20 @@ sal_Int32 lcl_CompareMatrix2Query(
     bool bByString = rEntry.GetQueryItem().meType == ScQueryEntry::ByString;
     if (rMat.IsValue(i))
     {
+        const double nVal1 = rMat.GetDouble(i);
+        if (!rtl::math::isFinite(nVal1))
+        {
+            // XXX Querying for error values is not required, otherwise we'd
+            // need to check here.
+            return 1;   // error always greater than numeric or string
+        }
+
         if (bByString)
             return -1;  // numeric always less than string
 
-        const double nVal1 = rMat.GetDouble(i);
         const double nVal2 = rEntry.GetQueryItem().mfVal;
+        // XXX Querying for error values is not required, otherwise we'd need
+        // to check here and move that check before the bByString check.
         if (nVal1 == nVal2)
             return 0;
 
@@ -4775,6 +4784,10 @@ void ScInterpreter::ScMatch()
                     PushIllegalParameter();
                     return;
                 }
+
+                // Do not propagate errors from matrix while searching.
+                pMatSrc->SetErrorInterpreter( nullptr);
+
                 SCSIZE nMatCount = (nC == 1) ? nR : nC;
                 VectorMatrixAccessor aMatAcc(*pMatSrc, nC == 1);
 
@@ -6558,6 +6571,9 @@ void ScInterpreter::ScLookup()
         SCSIZE nC, nR;
         pDataMat->GetDimensions(nC, nR);
 
+        // Do not propagate errors from matrix while copying to vector.
+        pDataMat->SetErrorInterpreter( nullptr);
+
         // In case of non-vector matrix, only search the first row or column.
         ScMatrixRef pDataMat2;
         if (bVertical)
@@ -6580,6 +6596,9 @@ void ScInterpreter::ScLookup()
                     pTempMat->PutString(pDataMat->GetString(i, 0), i, 0);
             pDataMat2 = pTempMat;
         }
+
+        // Do not propagate errors from matrix while searching.
+        pDataMat2->SetErrorInterpreter( nullptr);
 
         VectorMatrixAccessor aMatAcc2(*pDataMat2, bVertical);
 
@@ -6703,7 +6722,9 @@ void ScInterpreter::ScLookup()
         }
         else
         {
-            // no result array.  Use the data array to get the final value from.
+            // No result array. Use the data array to get the final value from.
+            // Propagate errors from matrix again.
+            pDataMat->SetErrorInterpreter( this);
             if (bVertical)
             {
                 if (pDataMat->IsValue(nC-1, nDelta))
