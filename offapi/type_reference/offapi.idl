@@ -8306,8 +8306,10 @@ module com {
     published service LocaleData: ::com::sun::star::i18n::XLocaleData4;
     /** @deprecated */ published constants LocaleItem {
      const short COUNT = 17;
+     const short COUNT2 = 18;
      const short DATE_SEPARATOR = 0;
      const short DECIMAL_SEPARATOR = 2;
+     const short DECIMAL_SEPARATOR_ALTERNATIVE = 17;
      const short DOUBLE_QUOTATION_END = 9;
      const short DOUBLE_QUOTATION_START = 8;
      const short LIST_SEPARATOR = 5;
@@ -16857,6 +16859,7 @@ module com {
      published constants ExtendedFilePickerElementIds {
       const short CHECKBOX_AUTOEXTENSION = 100;
       const short CHECKBOX_FILTEROPTIONS = 102;
+      const short CHECKBOX_GPGENCRYPTION = 211;
       const short CHECKBOX_LINK = 104;
       const short CHECKBOX_PASSWORD = 101;
       const short CHECKBOX_PREVIEW = 105;
