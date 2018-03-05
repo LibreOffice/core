@@ -648,7 +648,7 @@ void IMapWindow::DoMacroAssign()
     aSet.Put( aMacroItem );
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-    ScopedVclPtr<SfxAbstractDialog> pMacroDlg(pFact->CreateSfxDialog( this, aSet, mxDocumentFrame, SID_EVENTCONFIG ));
+    ScopedVclPtr<SfxAbstractDialog> pMacroDlg(pFact->CreateSfxDialog( this, aSet, mxDocumentFrame, SID_EVENTCONFIG, false ));
 
     if ( pMacroDlg && pMacroDlg->Execute() == RET_OK )
     {

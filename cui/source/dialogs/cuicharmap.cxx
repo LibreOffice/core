@@ -43,6 +43,7 @@
 #include <sfx2/request.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <sfx2/app.hxx>
+#include <svx/svxids.hrc>
 #include <editeng/editids.hrc>
 #include <editeng/fontitem.hxx>
 #include <strings.hrc>
@@ -629,6 +630,20 @@ void SvxCharacterMap::insertCharToDoc(const OUString& sGlyph)
         aArgs[1].Name = "FontName";
         aArgs[1].Value <<= aFont.GetFamilyName();
         comphelper::dispatchCommand(".uno:InsertSymbol", aArgs);
+
+    } else {
+        SfxItemSet* pSet = GetOutputSetImpl();
+        if ( pSet )
+        {
+            sal_Int32 tmp = 0;
+            sal_UCS4 cChar = sGlyph.iterateCodePoints(&tmp);
+            const SfxItemPool* pPool = pSet->GetPool();
+            pSet->Put( SfxStringItem( pPool->GetWhich(SID_CHARMAP), sGlyph ) );
+            pSet->Put( SvxFontItem( aFont.GetFamilyType(), aFont.GetFamilyName(),
+                aFont.GetStyleName(), aFont.GetPitch(), aFont.GetCharSet(), pPool->GetWhich(SID_ATTR_CHAR_FONT) ) );
+            pSet->Put( SfxStringItem( pPool->GetWhich(SID_FONT_NAME), aFont.GetFamilyName() ) );
+            pSet->Put( SfxInt32Item( pPool->GetWhich(SID_ATTR_CHAR), cChar ) );
+        }
     }
 
     updateRecentCharacterList(sGlyph, aFont.GetFamilyName());
