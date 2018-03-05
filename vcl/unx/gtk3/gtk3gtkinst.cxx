@@ -1479,6 +1479,11 @@ namespace
     }
 }
 
+static OString MapToGtkAccelerator(const OUString &rStr)
+{
+    return OUStringToOString(rStr.replaceFirst("~", "_"), RTL_TEXTENCODING_UTF8);
+}
+
 class GtkInstanceDialog : public GtkInstanceWindow, public virtual weld::Dialog
 {
 private:
@@ -1550,7 +1555,7 @@ public:
 
     virtual void add_button(const OUString& rText, int nResponse) override
     {
-        gtk_dialog_add_button(m_pDialog, OUStringToOString(rText, RTL_TEXTENCODING_UTF8).getStr(), VclToGtk(nResponse));
+        gtk_dialog_add_button(m_pDialog, OUStringToOString(MapToGtkAccelerator(rText), RTL_TEXTENCODING_UTF8).getStr(), VclToGtk(nResponse));
     }
 
     virtual void set_default_response(int nResponse) override
@@ -1608,11 +1613,6 @@ public:
         return new GtkInstanceContainer(GTK_CONTAINER(gtk_message_dialog_get_message_area(m_pMessageDialog)), false);
     }
 };
-
-static OString MapToGtkAccelerator(const OUString &rStr)
-{
-    return OUStringToOString(rStr.replaceFirst("~", "_"), RTL_TEXTENCODING_UTF8);
-}
 
 class GtkInstanceFrame : public GtkInstanceContainer, public virtual weld::Frame
 {
