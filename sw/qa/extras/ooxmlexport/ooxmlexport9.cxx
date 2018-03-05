@@ -709,6 +709,13 @@ DECLARE_OOXMLEXPORT_TEST(testTdf112118_DOCX, "tdf112118.docx")
     }
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf115861, "tdf115861.docx")
+{
+    // Second item in the paragraph enumeration was a table, 2nd paragraph was
+    // lost.
+    CPPUNIT_ASSERT_EQUAL(OUString("(k)"), getParagraph(2)->getString());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
