@@ -347,7 +347,7 @@ void ScDrawShell::ExecuteMacroAssign( SdrObject* pObj, vcl::Window* pWin )
         xFrame = GetViewShell()->GetViewFrame()->GetFrame().GetFrameInterface();
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-    ScopedVclPtr<SfxAbstractDialog> pMacroDlg(pFact->CreateSfxDialog( pWin, *pItemSet, xFrame, SID_EVENTCONFIG ));
+    ScopedVclPtr<SfxAbstractDialog> pMacroDlg(pFact->CreateSfxDialog( pWin, *pItemSet, xFrame, SID_EVENTCONFIG, false ));
     if ( pMacroDlg && pMacroDlg->Execute() == RET_OK )
     {
         const SfxItemSet* pOutSet = pMacroDlg->GetOutputItemSet();
