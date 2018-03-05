@@ -29,8 +29,21 @@
 /* Grab __SIZEOFxxx constants from typesconfig tool on Unix */
 #if defined UNX
   #include <sal/typesizes.h>
-#elif defined(WNT) || defined(OS2)
+#elif defined(WNT)
   /* FIXME: autogeneration of type sizes on Win32/Win64? */
+  #define SAL_TYPES_ALIGNMENT2      1
+  #define SAL_TYPES_ALIGNMENT4      1
+  #define SAL_TYPES_ALIGNMENT8      1
+  #define SAL_TYPES_SIZEOFSHORT     2
+  #define SAL_TYPES_SIZEOFINT       4
+  #define SAL_TYPES_SIZEOFLONG      4
+  #define SAL_TYPES_SIZEOFLONGLONG      8
+  #if defined(_M_IX86)
+    #define SAL_TYPES_SIZEOFPOINTER     4
+  #elif defined(_M_AMD64)
+    #define SAL_TYPES_SIZEOFPOINTER     8
+  #endif
+#elif defined(OS2)
   #define SAL_TYPES_ALIGNMENT2      1
   #define SAL_TYPES_ALIGNMENT4      1
   #define SAL_TYPES_ALIGNMENT8      1

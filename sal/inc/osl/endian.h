@@ -35,6 +35,8 @@ extern "C" {
 #ifdef _WIN32
 #   if defined(_M_IX86)
 #       define _LITTLE_ENDIAN
+#   elif defined(_M_AMD64)
+#       define _LITTLE_ENDIAN
 #   elif defined(_M_MRX000)
 #       define _LITTLE_ENDIAN
 #   elif defined(_M_ALPHA)
