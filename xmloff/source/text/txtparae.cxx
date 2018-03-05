@@ -3109,18 +3109,23 @@ void XMLTextParagraphExport::_exportTextGraphic(
     rPropSet->getPropertyValue("ReplacementGraphic") >>= xReplacementGraphic;
 
     // xlink:href
-    OUString sOrigURL;
-    rPropSet->getPropertyValue("GraphicURL") >>= sOrigURL;
-    OUString sURL(GetExport().AddEmbeddedGraphicObject( sOrigURL ));
+    uno::Reference<graphic::XGraphic> xGraphic;
+    rPropSet->getPropertyValue("Graphic") >>= xGraphic;
+    OUString sInternalURL;
+    OUString sOutMimeType;
+
+    if (xGraphic.is())
+    {
+        sInternalURL = GetExport().AddEmbeddedXGraphic(xGraphic, sOutMimeType);
+    }
 
     // If there still is no url, then graphic is empty
-    if( !sURL.isEmpty() )
+    if (!sInternalURL.isEmpty())
     {
-        GetExport().AddAttribute(XML_NAMESPACE_XLINK, XML_HREF, sURL );
-        GetExport().AddAttribute( XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE );
-        GetExport().AddAttribute( XML_NAMESPACE_XLINK, XML_SHOW, XML_EMBED );
-        GetExport().AddAttribute( XML_NAMESPACE_XLINK, XML_ACTUATE,
-                                                       XML_ONLOAD );
+        GetExport().AddAttribute(XML_NAMESPACE_XLINK, XML_HREF, sInternalURL);
+        GetExport().AddAttribute(XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE);
+        GetExport().AddAttribute(XML_NAMESPACE_XLINK, XML_SHOW, XML_EMBED);
+        GetExport().AddAttribute(XML_NAMESPACE_XLINK, XML_ACTUATE, XML_ONLOAD);
     }
 
     // draw:filter-name
@@ -3130,29 +3135,26 @@ void XMLTextParagraphExport::_exportTextGraphic(
         GetExport().AddAttribute( XML_NAMESPACE_DRAW, XML_FILTER_NAME,
                                   sGrfFilter );
 
-    // Add mimetype to make it easier for readers to get the base64 image type right, tdf#109202
-    // do we have a hard export image filter set? then that's our mimetype
-    OUString aSourceMimeType = GetExport().GetImageFilterName();
-    // otherwise determine mimetype from graphic
-    if ( aSourceMimeType.isEmpty() )
-        aSourceMimeType = comphelper::GraphicMimeTypeHelper::GetMimeTypeForImageUrl(sOrigURL);
-    else //  !aSourceMimeType.isEmpty()
-    {
-        const OString aExt( OUStringToOString( aSourceMimeType, RTL_TEXTENCODING_ASCII_US ) );
-        aSourceMimeType = comphelper::GraphicMimeTypeHelper::GetMimeTypeForExtension( aExt );
-    }
-
     if (GetExport().getDefaultVersion() > SvtSaveOptions::ODFVER_012)
     {
-        GetExport().AddAttribute(XML_NAMESPACE_LO_EXT, "mime-type", aSourceMimeType);
+        if (sOutMimeType.isEmpty())
+        {
+            GetExport().GetGraphicMimeTypeFromStream(xGraphic, sOutMimeType);
+        }
+        if (!sOutMimeType.isEmpty())
+        {
+            GetExport().AddAttribute(XML_NAMESPACE_LO_EXT, "mime-type", sOutMimeType);
+        }
     }
 
     {
-        SvXMLElementExport aElement( GetExport(), XML_NAMESPACE_DRAW,
-                                  XML_IMAGE, false, true );
+        SvXMLElementExport aElement(GetExport(), XML_NAMESPACE_DRAW, XML_IMAGE, false, true );
 
         // optional office:binary-data
-        GetExport().AddEmbeddedGraphicObjectAsBase64( sOrigURL );
+        if (xGraphic.is())
+        {
+            GetExport().AddEmbeddedXGraphicAsBase64(xGraphic);
+        }
     }
 
     //Resolves: fdo#62461 put preferred image first above, followed by
@@ -3160,15 +3162,15 @@ void XMLTextParagraphExport::_exportTextGraphic(
     if (xReplacementGraphic.is())
     {
         OUString aMimeType;
-        const OUString sHref = GetExport().AddEmbeddedXGraphic(xReplacementGraphic, aMimeType);
+        const OUString sInternalURL = GetExport().AddEmbeddedXGraphic(xReplacementGraphic, aMimeType);
 
         if (aMimeType.isEmpty())
             GetExport().GetGraphicMimeTypeFromStream(xReplacementGraphic, aMimeType);
 
         // If there is no url, then graphic is empty
-        if (!sHref.isEmpty())
+        if (!sInternalURL.isEmpty())
         {
-            GetExport().AddAttribute(XML_NAMESPACE_XLINK, XML_HREF, sHref);
+            GetExport().AddAttribute(XML_NAMESPACE_XLINK, XML_HREF, sInternalURL);
             GetExport().AddAttribute(XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE);
             GetExport().AddAttribute(XML_NAMESPACE_XLINK, XML_SHOW, XML_EMBED);
             GetExport().AddAttribute(XML_NAMESPACE_XLINK, XML_ACTUATE, XML_ONLOAD);
@@ -3180,7 +3182,10 @@ void XMLTextParagraphExport::_exportTextGraphic(
         SvXMLElementExport aElement(GetExport(), XML_NAMESPACE_DRAW, XML_IMAGE, true, true);
 
         // optional office:binary-data
-        GetExport().AddEmbeddedXGraphicAsBase64(xReplacementGraphic);
+        if (xReplacementGraphic.is())
+        {
+            GetExport().AddEmbeddedXGraphicAsBase64(xReplacementGraphic);
+        }
     }
 
     // script:events

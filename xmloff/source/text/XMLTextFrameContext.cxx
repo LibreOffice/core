@@ -659,20 +659,19 @@ void XMLTextFrameContext_Impl::Create()
                     "neither URL nor base64 image data given" );
         rtl::Reference < XMLTextImportHelper > xTxtImport =
             GetImport().GetTextImport();
-        if( !sHRef.isEmpty() )
+        uno::Reference<graphic::XGraphic> xGraphic;
+        if (!sHRef.isEmpty())
         {
-            bool bForceLoad = xTxtImport->IsInsertMode() ||
-                                  xTxtImport->IsBlockMode() ||
-                                  xTxtImport->IsStylesOnlyMode() ||
-                                  xTxtImport->IsOrganizerMode();
-            sHRef = GetImport().ResolveGraphicObjectURL( sHRef, !bForceLoad );
+            xGraphic = GetImport().loadGraphicByURL(sHRef);
         }
-        else if( xBase64Stream.is() )
+        else if (xBase64Stream.is())
         {
-            sHRef = GetImport().ResolveGraphicObjectURLFromBase64( xBase64Stream );
+            xGraphic = GetImport().loadGraphicFromBase64(xBase64Stream);
             xBase64Stream = nullptr;
         }
-        xPropSet->setPropertyValue( "GraphicURL", Any(sHRef) );
+
+        if (xGraphic.is())
+            xPropSet->setPropertyValue("Graphic", Any(xGraphic));
 
         // filter name
         xPropSet->setPropertyValue( "GraphicFilter", Any(sFilterName) );
@@ -762,16 +761,39 @@ void XMLTextFrameContext::removeGraphicFromImportContext(const SvXMLImportContex
     }
 }
 
-OUString XMLTextFrameContext::getGraphicURLFromImportContext(const SvXMLImportContext& rContext) const
+OUString XMLTextFrameContext::getGraphicPackageURLFromImportContext(const SvXMLImportContext& rContext) const
 {
     const XMLTextFrameContext_Impl* pXMLTextFrameContext_Impl = dynamic_cast< const XMLTextFrameContext_Impl* >(&rContext);
 
     if(pXMLTextFrameContext_Impl)
     {
-        return pXMLTextFrameContext_Impl->GetHRef();
+        return "vnd.sun.star.Package:" + pXMLTextFrameContext_Impl->GetHRef();
     }
 
     return OUString();
+}
+
+css::uno::Reference<css::graphic::XGraphic> XMLTextFrameContext::getGraphicFromImportContext(const SvXMLImportContext& rContext) const
+{
+    uno::Reference<graphic::XGraphic> xGraphic;
+
+    const XMLTextFrameContext_Impl* pXMLTextFrameContext_Impl = dynamic_cast<const XMLTextFrameContext_Impl*>(&rContext);
+
+    if (pXMLTextFrameContext_Impl)
+    {
+        try
+        {
+            const uno::Reference<beans::XPropertySet>& xPropertySet = pXMLTextFrameContext_Impl->GetPropSet();
+
+            if (xPropertySet.is())
+            {
+                xPropertySet->getPropertyValue("Graphic") >>= xGraphic;
+            }
+        }
+        catch (uno::Exception&)
+        {}
+    }
+    return xGraphic;
 }
 
 bool XMLTextFrameContext_Impl::CreateIfNotThere()
