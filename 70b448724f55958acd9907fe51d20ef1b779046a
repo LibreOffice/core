@@ -16,6 +16,24 @@
       "revId": "70b448724f55958acd9907fe51d20ef1b779046a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba2be162_4f093e31",
+        "filename": "bin/gla11y",
+        "patchSetId": 3
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1001814
+      },
+      "writtenOn": "2018-03-05T09:52:08Z",
+      "side": 0,
+      "message": "Sure, I understand :)\n\nI\u0027m a bit afraid of adding yet more complexity to configure. This is not run for each UI file, but once per module, so it\u0027s not so bad.",
+      "parentUuid": "ba2be162_dd7b277a",
+      "revId": "70b448724f55958acd9907fe51d20ef1b779046a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
