@@ -36,6 +36,7 @@
 #include <editeng/eeitem.hxx>
 #include <vcl/settings.hxx>
 
+#include <editeng/scriptspaceitem.hxx>
 #include <editeng/colritem.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <editeng/fontitem.hxx>
@@ -75,7 +76,8 @@ ScCsvGrid::ScCsvGrid( ScCsvControl& rParent ) :
     mnFirstImpLine( 0 ),
     mnRecentSelCol( CSV_COLUMN_INVALID ),
     mnMTCurrCol( SAL_MAX_UINT32 ),
-    mbMTSelecting( false )
+    mbMTSelecting( false ),
+    mbModeSplit( false )  // #TWNDCODFTools0001#
 {
     mpEditEngine->SetRefDevice( mpBackgrDev.get() );
     mpEditEngine->SetRefMapMode( MapMode( MapUnit::MapPixel ) );
@@ -248,6 +250,9 @@ void ScCsvGrid::InitFonts()
     aDefSet.Put( aAsianItem );
     aDefSet.Put( aComplexItem );
 
+    // #TWNDCODFTools0001# ignore drawing for space character in ASIAN
+    aDefSet.Put( SvxScriptSpaceItem( false, EE_PARA_ASIANCJKSPACING ) );
+
     // set Asian/Complex font size to height of character in Latin font
     sal_uLong nFontHt = static_cast< sal_uLong >( maMonoFont.GetFontSize().Height() );
     aDefSet.Put( SvxFontHeightItem( nFontHt, 100, EE_CHAR_FONTHEIGHT_CJK ) );
@@ -295,8 +300,10 @@ void ScCsvGrid::InsertSplit( sal_Int32 nPos )
         Execute( CSVCMD_EXPORTCOLUMNTYPE );
         Execute( CSVCMD_UPDATECELLTEXTS );
         sal_uInt32 nColIx = GetColumnFromPos( nPos );
+        mbModeSplit = true;  // #TWNDCODFTools0001#
         ImplDrawColumn( nColIx - 1 );
         ImplDrawColumn( nColIx );
+        mbModeSplit = false;  // #TWNDCODFTools0001#
         ValidateGfx();  // performance: do not redraw all columns
         EnableRepaint();
     }
@@ -309,7 +316,9 @@ void ScCsvGrid::RemoveSplit( sal_Int32 nPos )
         DisableRepaint();
         Execute( CSVCMD_EXPORTCOLUMNTYPE );
         Execute( CSVCMD_UPDATECELLTEXTS );
+        mbModeSplit = true;
         ImplDrawColumn( GetColumnFromPos( nPos ) );
+        mbModeSplit = false;
         ValidateGfx();  // performance: do not redraw all columns
         EnableRepaint();
     }
@@ -321,6 +330,7 @@ void ScCsvGrid::MoveSplit( sal_Int32 nPos, sal_Int32 nNewPos )
     if( nColIx != CSV_COLUMN_INVALID )
     {
         DisableRepaint();
+        mbModeSplit = true;  // #TWNDCODFTools0001#
         if( (GetColumnPos( nColIx - 1 ) < nNewPos) && (nNewPos < GetColumnPos( nColIx + 1 )) )
         {
             // move a split in the range between 2 others -> keep selection state of both columns
@@ -339,6 +349,7 @@ void ScCsvGrid::MoveSplit( sal_Int32 nPos, sal_Int32 nNewPos )
             Execute( CSVCMD_EXPORTCOLUMNTYPE );
             Execute( CSVCMD_UPDATECELLTEXTS );
         }
+        mbModeSplit = false;  // #TWNDCODFTools0001#
         EnableRepaint();
     }
 }
@@ -760,7 +771,7 @@ void ScCsvGrid::ImplSetTextLineSep(
         /* TODO: signal overflow somewhere in UI */
 
         // update column width
-        sal_Int32 nWidth = std::max( CSV_MINCOLWIDTH, aCellText.getLength() + 1 );
+        sal_Int32 nWidth = std::max( CSV_MINCOLWIDTH, ScImportExport::charMonitorLen(aCellText) + 1 );  // #TWNDCODFTools0001#
         if( IsValidColumn( nColIx ) )
         {
             // expand existing column
@@ -797,7 +808,7 @@ void ScCsvGrid::ImplSetTextLineFix( sal_Int32 nLine, const OUString& rTextLine )
 {
     if( nLine < GetFirstVisLine() ) return;
 
-    sal_Int32 nChars = rTextLine.getLength();
+    sal_Int32 nChars = ScImportExport::charMonitorLen(rTextLine);      // #TWNDCODFTools0001#
     if( nChars > GetPosCount() )
         Execute( CSVCMD_SETPOSCOUNT, nChars );
 
@@ -808,13 +819,12 @@ void ScCsvGrid::ImplSetTextLineFix( sal_Int32 nLine, const OUString& rTextLine )
     std::vector<OUString>& rStrVec = maTexts[ nLineIx ];
     rStrVec.clear();
     sal_uInt32 nColCount = GetColumnCount();
-    sal_Int32 nStrLen = rTextLine.getLength();
+    sal_Int32 nStrLen = ScImportExport::charMonitorLen(rTextLine);     // #TWNDCODFTools0001#
     sal_Int32 nStrIx = 0;
     for( sal_uInt32 nColIx = 0; (nColIx < nColCount) && (nStrIx < nStrLen); ++nColIx )
     {
         sal_Int32 nColWidth = GetColumnWidth( nColIx );
-        sal_Int32 nLen = std::min( std::min( nColWidth, static_cast<sal_Int32>(CSV_MAXSTRLEN) ), nStrLen - nStrIx);
-        rStrVec.push_back( rTextLine.copy( nStrIx, nLen ) );
+        rStrVec.push_back( rTextLine );  // #TWNDCODFTools0001#
         nStrIx = nStrIx + nColWidth;
     }
     InvalidateGfx();
@@ -1086,15 +1096,30 @@ void ScCsvGrid::ImplDrawCellText( const Point& rPos, const OUString& rText )
         Complex font). Now we draw every non-space portion separately. */
     sal_Int32 nTokenCount = comphelper::string::getTokenCount(aPlainText, ' ');
     sal_Int32 nCharIxInt = 0;
+    sal_Int32 nCharOffset = 0;        // #TWNDCODFTools0001#
     for( sal_Int32 nToken = 0; nToken < nTokenCount; ++nToken )
     {
         sal_Int32 nBeginIx = nCharIxInt;
         OUString aToken = aPlainText.getToken( 0, ' ', nCharIxInt );
         if( !aToken.isEmpty() )
         {
-            sal_Int32 nX = rPos.X() + GetCharWidth() * nBeginIx;
+	    // #TWNDCODFTools0001#
+            sal_Int32 nX = rPos.X() + GetCharWidth() * ( nBeginIx + nCharOffset );
+
             mpEditEngine->SetText( aToken );
             mpEditEngine->Draw( mpBackgrDev.get(), Point( nX, rPos.Y() ) );
+
+	    // #TWNDCODFTools0001#
+            if( aToken.getLength() -
+                strlen( OUStringToOString( aToken, RTL_TEXTENCODING_UTF8 ).getStr() ) != 0 )
+            {
+                for( sal_Int32 i=0; i<aToken.getLength(); i++)
+                {
+                    if( aToken.copy(i,1).getLength() -
+                        strlen( OUStringToOString( aToken.copy(i, 1), RTL_TEXTENCODING_UTF8 ).getStr() ) != 0 )
+                        nCharOffset += aToken.copy(i,1).getLength();
+                }
+            }
         }
     }
 
@@ -1164,18 +1189,26 @@ void ScCsvGrid::ImplDrawColumnBackgr( sal_uInt32 nColIndex )
     size_t nLineCount = ::std::min( static_cast< size_t >( GetLastVisLine() - GetFirstVisLine() + 1 ), maTexts.size() );
     // #i67432# cut string to avoid edit engine performance problems with very large strings
     sal_Int32 nFirstVisPos = ::std::max( GetColumnPos( nColIndex ), GetFirstVisPos() );
-    sal_Int32 nLastVisPos = ::std::min( GetColumnPos( nColIndex + 1 ), GetLastVisPos() );
     sal_Int32 nStrPos = nFirstVisPos - GetColumnPos( nColIndex );
-    sal_Int32 nStrLen = nLastVisPos - nFirstVisPos + 1;
     sal_Int32 nStrX = GetX( nFirstVisPos );
     for( size_t nLine = 0; nLine < nLineCount; ++nLine )
     {
+        sal_Int32 nColWidth = 0;  // #TWNDCODFTools0001#
         std::vector<OUString>& rStrVec = maTexts[ nLine ];
         if( (nColIndex < rStrVec.size()) && (rStrVec[ nColIndex ].getLength() > nStrPos) )
         {
-            const OUString& rStr = rStrVec[ nColIndex ];
-            OUString aText = rStr.copy( nStrPos, ::std::min( nStrLen, rStr.getLength() - nStrPos) );
-            ImplDrawCellText( Point( nStrX, GetY( GetFirstVisLine() + nLine ) ), aText );
+            // #TWNDCODFTools0001#
+            if( nColIndex>0 )
+                for( sal_Int32 i=nColIndex; i>0; i--)
+                    nColWidth += GetColumnWidth( i-1 );
+
+            sal_Int32 nOffset = 0;
+            if ( mbModeSplit )
+                nOffset = nColWidth * GetCharWidth();
+            OUString aText( rStrVec[ nColIndex ]/*, nStrPos, nStrLen*/ );
+            ImplDrawCellText( Point( nStrX - nStrPos*GetCharWidth() - nOffset,
+                                     GetY( GetFirstVisLine() + nLine ) ),
+                              aText );
         }
     }
 
