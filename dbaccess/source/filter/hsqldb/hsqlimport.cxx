@@ -220,7 +220,7 @@ void HsqlImporter::processTree(HsqlBinaryNode& rNode, HsqlRowInputStream& rStrea
  *
  * Size is the size of <Row>;
  * Balance: ?
- * Left/Right/Parent: File postition of the Left/Right/Parent child
+ * Left/Right/Parent: File position of the Left/Right/Parent child
  */
 void HsqlImporter::parseTableRows(const IndexVector& rIndexes,
                                   const std::vector<sal_Int32>& rColTypes,

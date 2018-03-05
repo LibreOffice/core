@@ -2183,7 +2183,7 @@ void SwTiledRenderingTest::testSplitNodeRedlineCallback()
     Scheduler::ProcessEventsToIdle();
 
     // Assert that we get a notification about redline modification
-    // The redline after the inserted node gets a different vertical positon
+    // The redline after the inserted node gets a different vertical position
     CPPUNIT_ASSERT_EQUAL(1, m_nRedlineTableEntryModified);
 
     // 2. test case
@@ -2244,7 +2244,7 @@ void SwTiledRenderingTest::testDeleteNodeRedlineCallback()
     Scheduler::ProcessEventsToIdle();
 
     // Assert that we get a notification about redline modification
-    // The redline after the removed node gets a different vertical positon
+    // The redline after the removed node gets a different vertical position
     CPPUNIT_ASSERT_EQUAL(1, m_nRedlineTableEntryModified);
 
     // 2. test case
