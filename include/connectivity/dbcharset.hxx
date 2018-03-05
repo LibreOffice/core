@@ -67,8 +67,6 @@ namespace dbtools
         OCharsetMap();
         virtual ~OCharsetMap();
 
-        struct IANA { };
-
         /** find the given text encoding in the map.
             @return the <em>end</em> iterator if the encoding could not be found.
         */
@@ -76,7 +74,7 @@ namespace dbtools
         /** find the given IANA name in the map.
             @return the <em>end</em> iterator if the IANA name could not be found.
         */
-        CharsetIterator find(const OUString& _rIanaName, const IANA&) const;
+        CharsetIterator findIanaName(const OUString& _rIanaName) const;
 
         /// get access to the first element of the charset collection
         CharsetIterator begin() const;

@@ -92,7 +92,7 @@ namespace dbtools
     }
 
 
-    OCharsetMap::CharsetIterator    OCharsetMap::find(const OUString& _rIanaName, const IANA&) const
+    OCharsetMap::CharsetIterator    OCharsetMap::findIanaName(const OUString& _rIanaName) const
     {
         ensureConstructed( );
 
