@@ -456,7 +456,7 @@ public class AsciiReplaceFilter
 
                 // copy current buffer to the document model.
                 // Create a new paragraph for every line inside original file.
-                // May not all data could be readed - but that doesn't matter here.
+                // May not all data could be read - but that doesn't matter here.
                 // Reason: somewhere cancelled this function.
                 // But check for optional replace request before...
                 int nStart  =  0;

@@ -438,7 +438,7 @@ void FilterCache::setItem(      EItemType        eType ,
     aItem.validateUINames(m_sActLocale);
 
     // remove implicit properties as e.g. FINALIZED or MANDATORY
-    // They can't be saved here and must be readed on demand later, if they are needed.
+    // They can't be saved here and must be read on demand later, if they are needed.
     removeStatePropsFromItem(aItem);
 
     rList[sItem] = aItem;
@@ -950,7 +950,7 @@ void FilterCache::impl_validateAndOptimize()
     // SAFE ->
     ::osl::ResettableMutexGuard aLock(m_aLock);
 
-    // First check if any filter or type could be readed
+    // First check if any filter or type could be read
     // from the underlying configuration!
     bool bSomeTypesShouldExist   = ((m_eFillState & E_CONTAINS_STANDARD       ) == E_CONTAINS_STANDARD       );
     bool bAllFiltersShouldExist  = ((m_eFillState & E_CONTAINS_FILTERS        ) == E_CONTAINS_FILTERS        );
@@ -1364,7 +1364,7 @@ void FilterCache::impl_load(EFillState eRequiredState)
     // update fill state. Note: it's a bit field, which combines different parts.
     m_eFillState = static_cast<EFillState>(static_cast<sal_Int32>(m_eFillState) | static_cast<sal_Int32>(eRequiredState));
 
-    // any data readed?
+    // any data read?
     // yes! => validate it and update optimized structures.
     impl_validateAndOptimize();
 

@@ -432,7 +432,7 @@ SwFrameFormat* SwWW8ImplReader::ImportGraf1(WW8_PIC const & rPic, SvStream* pSt,
     if (!bOk)
     {
         delete pGraph;
-        return nullptr;                       // Graphic could not be readed correctly
+        return nullptr;                       // Graphic could not be read correctly
     }
 
     WW8PicDesc aPD( rPic );

@@ -1402,8 +1402,8 @@ css::uno::Reference< css::util::XStringSubstitution > PathSettings::fa_getSubsti
     if (! xSubst.is())
     {
         // create the needed substitution service.
-        // We must replace all used variables inside readed path values.
-        // In case we can't do so ... the whole office can't work really.
+        // We must replace all used variables inside read path values.
+        // In case we can't do so... the whole office can't work really.
         // That's why it seems to be OK to throw a RuntimeException then.
         xSubst = css::util::PathSubstitution::create(m_xContext);
 
