@@ -696,24 +696,24 @@ void AutoFormatPreview::DrawString(vcl::RenderContext& rRenderContext, size_t nC
     nRightX = cellRect.GetWidth() - aStrSize.Width() - FRAME_OFFSET;
 
     // vertical (always centering):
-    aPos.Y() += (nRowHeight - aStrSize.Height()) / 2;
+    aPos.AdjustY((nRowHeight - aStrSize.Height()) / 2);
 
     // horizontal
     if (mbRTL)
-        aPos.X() += nRightX;
+        aPos.AdjustX(nRightX);
     else if (aCurData.IsJustify())
     {
         const SvxAdjustItem& rAdj = aCurData.GetBoxFormat(nFormatIndex).GetAdjust();
         switch (rAdj.GetAdjust())
         {
             case SvxAdjust::Left:
-                aPos.X() += FRAME_OFFSET;
+                aPos.AdjustX(FRAME_OFFSET);
                 break;
             case SvxAdjust::Right:
-                aPos.X() += nRightX;
+                aPos.AdjustX(nRightX);
                 break;
             default:
-                aPos.X() += (cellRect.GetWidth() - aStrSize.Width()) / 2;
+                aPos.AdjustX((cellRect.GetWidth() - aStrSize.Width()) / 2);
                 break;
         }
     }
@@ -723,12 +723,12 @@ void AutoFormatPreview::DrawString(vcl::RenderContext& rRenderContext, size_t nC
         if (nCol == 0 || nIndex == 4)
         {
             // Text-Label left or sum left aligned
-            aPos.X() += FRAME_OFFSET;
+            aPos.AdjustX(FRAME_OFFSET);
         }
         else
         {
             // numbers/dates right aligned
-            aPos.X() += nRightX;
+            aPos.AdjustX(nRightX);
         }
     }
 
