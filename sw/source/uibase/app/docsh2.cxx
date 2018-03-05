@@ -1172,22 +1172,22 @@ void SwDocShell::Execute(SfxRequest& rReq)
         break;
         case SID_CLASSIFICATION_DIALOG:
         {
-            ScopedVclPtr<svx::ClassificationDialog> pDialog(VclPtr<svx::ClassificationDialog>::Create(nullptr, false));
+            VclPtr<svx::ClassificationDialog> pDialog(VclPtr<svx::ClassificationDialog>::Create(&GetView()->GetViewFrame()->GetWindow(), false));
 
             SwWrtShell* pShell = GetWrtShell();
             std::vector<svx::ClassificationResult> aInput = pShell->CollectAdvancedClassification();
             pDialog->setupValues(aInput);
 
-            if (RET_OK == pDialog->Execute())
-                pShell->ApplyAdvancedClassification(pDialog->getResult());
-
-            pDialog.disposeAndClear();
+            pDialog->StartExecuteAsync([pDialog, pShell](sal_Int32 nResult){
+                if (RET_OK == nResult)
+                    pShell->ApplyAdvancedClassification(pDialog->getResult());
+            });
         }
         break;
         case SID_PARAGRAPH_SIGN_CLASSIFY_DLG:
         {
             SwWrtShell* pShell = GetWrtShell();
-            ScopedVclPtr<svx::ClassificationDialog> pDialog(VclPtr<svx::ClassificationDialog>::Create(nullptr, true, [pShell]()
+            VclPtr<svx::ClassificationDialog> pDialog(VclPtr<svx::ClassificationDialog>::Create(&GetView()->GetViewFrame()->GetWindow(), true, [pShell]()
             {
                 pShell->SignParagraph();
             }));
@@ -1195,10 +1195,10 @@ void SwDocShell::Execute(SfxRequest& rReq)
             std::vector<svx::ClassificationResult> aInput = pShell->CollectParagraphClassification();
             pDialog->setupValues(aInput);
 
-            if (RET_OK == pDialog->Execute())
-                pShell->ApplyParagraphClassification(pDialog->getResult());
-
-            pDialog.disposeAndClear();
+            pDialog->StartExecuteAsync([pDialog, pShell](sal_Int32 nResult){
+                if (RET_OK == nResult)
+                    pShell->ApplyParagraphClassification(pDialog->getResult());
+            });
         }
         break;
         case SID_WATERMARK:
@@ -1226,9 +1226,8 @@ void SwDocShell::Execute(SfxRequest& rReq)
                 {
                     SfxViewShell* pViewShell = GetView()? GetView(): SfxViewShell::Current();
                     SfxBindings& rBindings( pViewShell->GetViewFrame()->GetBindings() );
-                    ScopedVclPtr<SwWatermarkDialog> pDlg( VclPtr<SwWatermarkDialog>::Create( nullptr, rBindings ) );
-                    pDlg->Execute();
-                    pDlg.disposeAndClear();
+                    VclPtr<SwWatermarkDialog> pDlg(VclPtr<SwWatermarkDialog>::Create(&GetView()->GetViewFrame()->GetWindow(), rBindings));
+                    pDlg->StartExecuteAsync([](sal_Int32 /*nResult*/){});
                 }
             }
         }
