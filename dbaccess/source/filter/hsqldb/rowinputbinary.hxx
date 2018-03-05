@@ -15,7 +15,6 @@
 #include <cppuhelper/implbase.hxx>
 
 #include <com/sun/star/io/XInputStream.hpp>
-#include <tools/stream.hxx>
 
 namespace dbahsql
 {
