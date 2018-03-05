@@ -471,7 +471,7 @@ public:
     virtual VclPtr<SfxAbstractDialog>    CreateSfxDialog( vcl::Window* pParent,
                                                              const SfxItemSet& rAttr,
                                                              const css::uno::Reference< css::frame::XFrame >& _rxFrame,
-                                                             sal_uInt32 nResId ) override;
+                                                             sal_uInt32 nResId, bool bInsert ) override;
     virtual VclPtr<VclAbstractDialog>    CreateFrameDialog( const css::uno::Reference< css::frame::XFrame >& rxFrame,
                                                            sal_uInt32 nResId,
                                                            const OUString& rParameter ) override;
