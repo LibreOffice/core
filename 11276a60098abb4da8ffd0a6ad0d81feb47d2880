@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba2be162_5248012e",
+        "filename": "connectivity/source/commontools/dbcharset.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-03-05T12:26:22Z",
+      "side": 1,
+      "message": "Do we really want to \"approve\" *some* associated MIME encoding for ~any text encoding, and not just a really matching one that is registered with IANA?\n\nI\u0027d rather make an exception for RTL_TEXTENCODING_MS_950 only, and as Stephan said probably best would be to add that to the virtual override function instead of this base function here.",
+      "revId": "11276a60098abb4da8ffd0a6ad0d81feb47d2880",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
