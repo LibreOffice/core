@@ -478,11 +478,11 @@ update_info parse_response(const std::string& rResponse)
     aUpdateInfo.aUpdateFile = parse_update_file(aUpdateNode);
 
     std::vector<orcus::pstring> aLanguages = aLanguageNode.keys();
-    for (auto itr = aLanguages.begin(), itrEnd = aLanguages.end(); itr != itrEnd; ++itr)
+    for (auto const& language : aLanguages)
     {
         language_file aLanguageFile;
-        auto aLangEntry = aLanguageNode.child(*itr);
-        aLanguageFile.aLangCode = toOUString(itr->str());
+        auto aLangEntry = aLanguageNode.child(language);
+        aLanguageFile.aLangCode = toOUString(language.str());
         aLanguageFile.aUpdateFile = parse_update_file(aLangEntry);
         aUpdateInfo.aLanguageFiles.push_back(aLanguageFile);
     }

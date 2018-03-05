@@ -231,16 +231,16 @@ void PersistentMap::flush()
     m_MapFile.write( PmapMagic, sizeof(PmapMagic), nBytesWritten);
 
     // write key value pairs
-    t_string2string_map::const_iterator it = m_entries.begin();
-    for(; it != m_entries.end(); ++it) {
+    for (auto const& entry : m_entries)
+    {
         // write line for key
-        const OString aKeyString = encodeString( (*it).first);
+        const OString aKeyString = encodeString( entry.first);
         const sal_Int32 nKeyLen = aKeyString.getLength();
         m_MapFile.write( aKeyString.getStr(), nKeyLen, nBytesWritten);
         OSL_ASSERT( nKeyLen == static_cast<sal_Int32>(nBytesWritten));
         m_MapFile.write( "\n", 1, nBytesWritten);
         // write line for value
-        const OString& rValString = encodeString( (*it).second);
+        const OString& rValString = encodeString( entry.second);
         const sal_Int32 nValLen = rValString.getLength();
         m_MapFile.write( rValString.getStr(), nValLen, nBytesWritten);
         OSL_ASSERT( nValLen == static_cast<sal_Int32>(nBytesWritten));

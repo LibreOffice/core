@@ -1011,16 +1011,14 @@ PackageManagerImpl::getDeployedPackages_(
 {
     std::vector< Reference<deployment::XPackage> > packages;
     ActivePackages::Entries id2temp( m_activePackagesDB->getEntries() );
-    ActivePackages::Entries::const_iterator iPos( id2temp.begin() );
-    ActivePackages::Entries::const_iterator const iEnd( id2temp.end() );
-    for ( ; iPos != iEnd; ++iPos )
+    for (auto const& elem : id2temp)
     {
-        if (! (iPos->second.failedPrerequisites == "0"))
+        if (! (elem.second.failedPrerequisites == "0"))
             continue;
         try {
             packages.push_back(
                 getDeployedPackage_(
-                    iPos->first, iPos->second, xCmdEnv,
+                    elem.first, elem.second, xCmdEnv,
                     true /* xxx todo: think of GUI:
                             ignore other platforms than the current one */ ) );
         }
@@ -1195,15 +1193,15 @@ bool PackageManagerImpl::synchronizeRemovedExtensions(
 
     bool bShared = (m_context == "shared");
 
-    for (auto i = id2temp.begin(); i != id2temp.end(); ++i)
+    for (auto const& elem : id2temp)
     {
         try
         {
             //Get the URL to the extensions folder, first make the url for the
             //shared repository including the temporary name
-            OUString url = makeURL(m_activePackages, i->second.temporaryName);
+            OUString url = makeURL(m_activePackages, elem.second.temporaryName);
             if (bShared)
-                url = makeURLAppendSysPathSegment( url + "_", i->second.fileName);
+                url = makeURLAppendSysPathSegment( url + "_", elem.second.fileName);
 
             bool bRemoved = false;
             //Check if the URL to the extension is still the same
@@ -1227,7 +1225,7 @@ bool PackageManagerImpl::synchronizeRemovedExtensions(
                 if (create_ucb_content(
                         &contentRemoved,
                         m_activePackages_expanded + "/" +
-                        i->second.temporaryName + "removed",
+                        elem.second.temporaryName + "removed",
                         Reference<XCommandEnvironment>(), false))
                 {
                     bRemoved = true;
@@ -1244,8 +1242,8 @@ bool PackageManagerImpl::synchronizeRemovedExtensions(
                            "must have an identifier and a version");
                 if (infoset.hasDescription() &&
                     infoset.getIdentifier() &&
-                    ( i->first != *(infoset.getIdentifier())
-                      || i->second.version != infoset.getVersion()))
+                    ( elem.first != *(infoset.getIdentifier())
+                      || elem.second.version != infoset.getVersion()))
                 {
                     bRemoved = true;
                 }
@@ -1254,7 +1252,7 @@ bool PackageManagerImpl::synchronizeRemovedExtensions(
             if (bRemoved)
             {
                 Reference<deployment::XPackage> xPackage = m_xRegistry->bindPackage(
-                    url, i->second.mediaType, true, i->first, xCmdEnv );
+                    url, elem.second.mediaType, true, elem.first, xCmdEnv );
                 OSL_ASSERT(xPackage.is()); //Even if the files are removed, we must get the object.
                 xPackage->revokePackage(true, xAbortChannel, xCmdEnv);
                 removePackage(xPackage->getIdentifier().Value, xPackage->getName(),
@@ -1434,13 +1432,12 @@ Sequence< Reference<deployment::XPackage> > PackageManagerImpl::getExtensionsWit
         // clean up activation layer, scan for zombie temp dirs:
         ActivePackages::Entries id2temp( m_activePackagesDB->getEntries() );
 
-        ActivePackages::Entries::const_iterator i = id2temp.begin();
         bool bShared = (m_context == "shared");
 
-        for (; i != id2temp.end(); ++i )
+        for (auto const& elem : id2temp)
         {
             //Get the database entry
-            ActivePackages::Data const & dbData = i->second;
+            ActivePackages::Data const & dbData = elem.second;
             sal_Int32 failedPrereq = dbData.failedPrerequisites.toInt32();
             //If the installation failed for other reason then the license then we
             //ignore it.
@@ -1448,9 +1445,9 @@ Sequence< Reference<deployment::XPackage> > PackageManagerImpl::getExtensionsWit
                 continue;
 
             //Prepare the URL to the extension
-            OUString url = makeURL(m_activePackages, i->second.temporaryName);
+            OUString url = makeURL(m_activePackages, elem.second.temporaryName);
             if (bShared)
-                url = makeURLAppendSysPathSegment( url + "_", i->second.fileName);
+                url = makeURLAppendSysPathSegment( url + "_", elem.second.fileName);
 
             Reference<deployment::XPackage> p = m_xRegistry->bindPackage(
                 url, OUString(), false, OUString(), xCmdEnv );

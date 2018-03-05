@@ -692,9 +692,9 @@ DescriptionInfoset::getLocalizedChild( const OUString & sParent) const
         {
             // Already tried full tag, continue with first fallback.
             const std::vector< OUString > aFallbacks( getOfficeLanguageTag().getFallbackStrings( false));
-            for (std::vector< OUString >::const_iterator it( aFallbacks.begin()); it != aFallbacks.end(); ++it)
+            for (auto const& fallback : aFallbacks)
             {
-                nodeMatch = matchLanguageTag(xParent, *it);
+                nodeMatch = matchLanguageTag(xParent, fallback);
                 if (nodeMatch.is())
                     break;
             }

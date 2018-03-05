@@ -191,9 +191,9 @@ PackageInformationProvider::isUpdateAvailable( const OUString& _sExtensionId )
     }
 
     int nCount = 0;
-    for (dp_misc::UpdateInfoMap::iterator i(updateInfoMap.begin()); i != updateInfoMap.end(); ++i)
+    for (auto const& updateInfo : updateInfoMap)
     {
-        dp_misc::UpdateInfo const & info = i->second;
+        dp_misc::UpdateInfo const & info = updateInfo.second;
 
         OUString sOnlineVersion;
         if (info.info.is())
@@ -250,7 +250,7 @@ PackageInformationProvider::isUpdateAvailable( const OUString& _sExtensionId )
         {
 
             OUString aNewEntry[2];
-            aNewEntry[0] = i->first;
+            aNewEntry[0] = updateInfo.first;
             aNewEntry[1] = updateVersion;
             aList.realloc( ++nCount );
             aList[ nCount-1 ] = ::uno::Sequence< OUString >( aNewEntry, 2 );

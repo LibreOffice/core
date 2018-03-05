@@ -117,8 +117,8 @@ void PackageRegistryBackend::check()
 void PackageRegistryBackend::disposing()
 {
     try {
-        for ( t_string2ref::const_iterator i = m_bound.begin(); i != m_bound.end(); ++i)
-            i->second->removeEventListener(this);
+        for (auto const& elem : m_bound)
+            elem.second->removeEventListener(this);
         m_bound.clear();
         m_xComponentContext.clear();
         WeakComponentImplHelperBase::disposing();

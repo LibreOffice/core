@@ -116,10 +116,9 @@ void Desktop::RegisterServices(Reference< XComponentContext > const & context)
         }
 
         std::vector< OUString > const & conDcp = rCmdLine.GetAccept();
-        for (std::vector< OUString >::const_iterator i(conDcp.begin());
-             i != conDcp.end(); ++i)
+        for (auto const& elem : conDcp)
         {
-            createAcceptor(*i);
+            createAcceptor(elem);
         }
 
         configureUcb();

@@ -278,14 +278,12 @@ void UpdateDialog::Thread::execute()
     dp_misc::UpdateInfoMap updateInfoMap = dp_misc::getOnlineUpdateInfos(
         m_context, extMgr, m_updateInformation, &m_vExtensionList, errors);
 
-    typedef std::vector<std::pair<uno::Reference<deployment::XPackage>,
-        uno::Any> >::const_iterator ITERROR;
-    for (ITERROR ite = errors.begin(); ite != errors.end(); ++ite )
-        handleSpecificError(ite->first, ite->second);
+    for (auto const& elem : errors)
+        handleSpecificError(elem.first, elem.second);
 
-    for (dp_misc::UpdateInfoMap::iterator i(updateInfoMap.begin()); i != updateInfoMap.end(); ++i)
+    for (auto const& updateInfo : updateInfoMap)
     {
-        dp_misc::UpdateInfo const & info = i->second;
+        dp_misc::UpdateInfo const & info = updateInfo.second;
         UpdateData updateData(info.extension);
         DisabledUpdate disableUpdate;
         //determine if online updates meet the requirements
@@ -547,13 +545,13 @@ void UpdateDialog::dispose()
 {
     storeIgnoredUpdates();
 
-    for ( std::vector< UpdateDialog::Index* >::iterator i( m_ListboxEntries.begin() ); i != m_ListboxEntries.end(); ++i )
+    for (auto const& listboxEntry : m_ListboxEntries)
     {
-        delete *i;
+        delete listboxEntry;
     }
-    for ( std::vector< UpdateDialog::IgnoredUpdate* >::iterator i( m_ignoredUpdates.begin() ); i != m_ignoredUpdates.end(); ++i )
+    for (auto const& ignoredUpdate : m_ignoredUpdates)
     {
-        delete *i;
+        delete ignoredUpdate;
     }
     m_pUpdates.disposeAndClear();
     m_pchecking.clear();
@@ -993,20 +991,20 @@ void UpdateDialog::storeIgnoredUpdates()
         uno::Reference< container::XNameContainer > xNameContainer( xConfig->createInstanceWithArguments(
             "com.sun.star.configuration.ConfigurationUpdateAccess", args ), uno::UNO_QUERY_THROW );
 
-        for ( std::vector< UpdateDialog::IgnoredUpdate* >::iterator i( m_ignoredUpdates.begin() ); i != m_ignoredUpdates.end(); ++i )
+        for (auto const& ignoredUpdate : m_ignoredUpdates)
         {
-            if ( xNameContainer->hasByName( (*i)->sExtensionID ) )
+            if ( xNameContainer->hasByName( ignoredUpdate->sExtensionID ) )
             {
-                if ( (*i)->bRemoved )
-                    xNameContainer->removeByName( (*i)->sExtensionID );
+                if ( ignoredUpdate->bRemoved )
+                    xNameContainer->removeByName( ignoredUpdate->sExtensionID );
                 else
-                    uno::Reference< beans::XPropertySet >( xNameContainer->getByName( (*i)->sExtensionID ), uno::UNO_QUERY_THROW )->setPropertyValue( PROPERTY_VERSION, uno::Any( (*i)->sVersion ) );
+                    uno::Reference< beans::XPropertySet >( xNameContainer->getByName( ignoredUpdate->sExtensionID ), uno::UNO_QUERY_THROW )->setPropertyValue( PROPERTY_VERSION, uno::Any( ignoredUpdate->sVersion ) );
             }
-            else if ( ! (*i)->bRemoved )
+            else if ( ! ignoredUpdate->bRemoved )
             {
                 uno::Reference< beans::XPropertySet > elem( uno::Reference< lang::XSingleServiceFactory >( xNameContainer, uno::UNO_QUERY_THROW )->createInstance(), uno::UNO_QUERY_THROW );
-                elem->setPropertyValue( PROPERTY_VERSION, uno::Any( (*i)->sVersion ) );
-                xNameContainer->insertByName( (*i)->sExtensionID, uno::Any( elem ) );
+                elem->setPropertyValue( PROPERTY_VERSION, uno::Any( ignoredUpdate->sVersion ) );
+                xNameContainer->insertByName( ignoredUpdate->sExtensionID, uno::Any( elem ) );
             }
         }
 
@@ -1044,17 +1042,17 @@ bool UpdateDialog::isIgnoredUpdate( UpdateDialog::Index * index )
             aVersion = aInfoset.getVersion();
         }
 
-        for ( std::vector< UpdateDialog::IgnoredUpdate* >::iterator i( m_ignoredUpdates.begin() ); i != m_ignoredUpdates.end(); ++i )
+        for (auto const& ignoredUpdate : m_ignoredUpdates)
         {
-            if ( (*i)->sExtensionID == aExtensionID )
+            if ( ignoredUpdate->sExtensionID == aExtensionID )
             {
-                if ( ( !(*i)->sVersion.isEmpty() ) || ( (*i)->sVersion == aVersion ) )
+                if ( ( !ignoredUpdate->sVersion.isEmpty() ) || ( ignoredUpdate->sVersion == aVersion ) )
                 {
                     bIsIgnored = true;
                     index->m_bIgnored = true;
                 }
                 else // when we find another update of an ignored version, we will remove the old one to keep the ignored list small
-                    (*i)->bRemoved = true;
+                    ignoredUpdate->bRemoved = true;
                 break;
             }
         }
@@ -1092,12 +1090,12 @@ void UpdateDialog::setIgnoredUpdate( UpdateDialog::Index const *pIndex, bool bIg
     if ( !aExtensionID.isEmpty() )
     {
         bool bFound = false;
-        for ( std::vector< UpdateDialog::IgnoredUpdate* >::iterator i( m_ignoredUpdates.begin() ); i != m_ignoredUpdates.end(); ++i )
+        for (auto const& ignoredUpdate : m_ignoredUpdates)
         {
-            if ( (*i)->sExtensionID == aExtensionID )
+            if ( ignoredUpdate->sExtensionID == aExtensionID )
             {
-                (*i)->sVersion = aVersion;
-                (*i)->bRemoved = !bIgnore;
+                ignoredUpdate->sVersion = aVersion;
+                ignoredUpdate->bRemoved = !bIgnore;
                 bFound = true;
                 break;
             }
@@ -1218,11 +1216,10 @@ IMPL_LINK_NOARG(UpdateDialog, allHandler, CheckBox&, void)
         m_pDescription->Enable();
         m_pDescriptions->Enable();
 
-        for (std::vector< UpdateDialog::Index* >::iterator i( m_ListboxEntries.begin() );
-             i != m_ListboxEntries.end(); ++i )
+        for (auto const& listboxEntry : m_ListboxEntries)
         {
-            if ( (*i)->m_bIgnored || ( (*i)->m_eKind != ENABLED_UPDATE ) )
-                insertItem( (*i), SvLBoxButtonKind::DisabledCheckbox );
+            if ( listboxEntry->m_bIgnored || ( listboxEntry->m_eKind != ENABLED_UPDATE ) )
+                insertItem( listboxEntry, SvLBoxButtonKind::DisabledCheckbox );
         }
     }
     else
@@ -1255,10 +1252,9 @@ IMPL_LINK_NOARG(UpdateDialog, okHandler, Button*, void)
 {
     //If users are going to update a shared extension then we need
     //to warn them
-    typedef std::vector<UpdateData>::const_iterator CIT;
-    for (CIT i = m_enabledUpdates.begin(); i < m_enabledUpdates.end(); ++i)
+    for (auto const& enableUpdate : m_enabledUpdates)
     {
-        OSL_ASSERT(i->aInstalledPackage.is());
+        OSL_ASSERT(enableUpdate.aInstalledPackage.is());
         //If the user has no write access to the shared folder then the update
         //for a shared extension is disable, that is it cannot be in m_enabledUpdates
     }
