@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba2be162_52c72145",
+        "filename": "sc/source/ui/docshell/docsh8.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2018-03-05T14:27:51Z",
+      "side": 1,
+      "message": "This code will only ever create a DBase connection (connectivity/source/drivers/dbase/ ; which in C++ terms inherits from File connectivity/source/drivers/file ), so the reference to ODBC, MySQL or any other driver makes no sense.\n\nIn the context of tdf#116171, only the extension to connectivity/source/drivers/file/FConnection.cxx and  \noffapi/c/s/s/FILEConnectionProperties.idl are relevant.\n\nWhether ODBC would benefit from a similar extension is a different question. In so far as no code ever puts an integer as the CharSet property of an ODBC connection, this patch creates dead code in connectivity/s/d/odbc/OConnection.cxx ; well, not really because user code (a Python / Basic / ... macro or a C++ extension) may now do it.",
+      "revId": "d81edec1276f99172adfcbaf121fec18f5324461",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
