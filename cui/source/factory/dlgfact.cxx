@@ -1207,8 +1207,7 @@ VclPtr<SfxAbstractTabDialog> AbstractDialogFactory_Impl::CreateSvxLineTabDialog(
 VclPtr<SfxAbstractDialog> AbstractDialogFactory_Impl::CreateSfxDialog( vcl::Window* pParent,
                                                                         const SfxItemSet& rAttr,
                                                                         const Reference< XFrame >& _rxDocumentFrame,
-                                                                        sal_uInt32 nResId
-                                                                        )
+                                                                        sal_uInt32 nResId, bool bInsert )
 {
     SfxModalDialog* pDlg=nullptr;
     switch ( nResId )
@@ -1217,7 +1216,7 @@ VclPtr<SfxAbstractDialog> AbstractDialogFactory_Impl::CreateSfxDialog( vcl::Wind
             pDlg = VclPtr<SfxMacroAssignDlg>::Create( pParent, _rxDocumentFrame, rAttr );
             break;
         case RID_SVXDLG_CHARMAP :
-            pDlg = VclPtr<SvxCharacterMap>::Create( pParent, &rAttr );
+            pDlg = VclPtr<SvxCharacterMap>::Create( pParent, &rAttr, bInsert );
             break;
         default:
             break;
