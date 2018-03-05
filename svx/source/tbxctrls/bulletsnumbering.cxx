@@ -181,8 +181,7 @@ void NumberingPopup::VSSelectHdl(void const * pControl)
     }
     else if ( getSelectedEntryId() == 1 )
     {
-        auto aArgs( comphelper::InitPropertySequence( { { "Page", css::uno::makeAny( OUString("customize") ) },
-                                                        { "DialogParent", css::uno::makeAny(VCLUnoHelper::GetInterface(GetParent())) } } ) );
+        auto aArgs( comphelper::InitPropertySequence( { { "Page", css::uno::makeAny( OUString("customize") ) } } ) );
         mrController.dispatchCommand( ".uno:OutlineBullet", aArgs );
     }
 }

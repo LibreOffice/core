@@ -41,10 +41,8 @@ class SfxViewFrame;
 struct SfxRequest_Impl;
 enum class SfxCallMode : sal_uInt16;
 
-namespace vcl
-{
-    class Window;
-}
+namespace vcl { class Window; }
+namespace weld { class Window; }
 
 class SFX2_DLLPUBLIC SfxRequest: public SfxHint
 {
@@ -66,7 +64,7 @@ public:
                         SfxRequest( sal_uInt16 nSlot, SfxCallMode nCallMode, SfxItemPool &rPool );
                         SfxRequest( const SfxSlot* pSlot, const css::uno::Sequence < css::beans::PropertyValue >& rArgs,
                                             SfxCallMode nCallMode, SfxItemPool &rPool );
-                        SfxRequest(sal_uInt16 nSlot, SfxCallMode nCallMode, const SfxAllItemSet& rSfxArgs, vcl::Window* pDialogParent = nullptr);
+                        SfxRequest(sal_uInt16 nSlot, SfxCallMode nCallMode, const SfxAllItemSet& rSfxArgs);
                         SfxRequest( sal_uInt16 nSlot, SfxCallMode nCallMode, const SfxAllItemSet& rSfxArgs, const SfxAllItemSet& rSfxInternalArgs );
                         SfxRequest( const SfxRequest& rOrig );
                         virtual ~SfxRequest() override;
@@ -95,10 +93,6 @@ public:
         return nullptr;
     }
 
-    /** Return the window that should be used as the parent for any dialogs this request creates
-    */
-    vcl::Window* GetDialogParent() const;
-
     void                ReleaseArgs();
     void                SetReturnValue(const SfxPoolItem &);
     const SfxPoolItem*  GetReturnValue() const;
@@ -122,6 +116,10 @@ public:
 
     void                ForgetAllArgs();
 
+    /** Return the window that should be used as the parent for any dialogs this request creates
+    */
+    vcl::Window* GetFrameWindow() const;
+    weld::Window* GetFrameWeld() const;
 private:
     const SfxRequest&   operator=(const SfxRequest &) = delete;
 };

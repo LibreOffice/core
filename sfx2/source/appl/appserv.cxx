@@ -271,7 +271,7 @@ static void showDocument( const char* pBaseName )
 
 namespace
 {
-    Reference<XFrame> GetRequestFrame(SfxRequest& rReq)
+    Reference<XFrame> GetRequestFrame(const SfxRequest& rReq)
     {
         const SfxItemSet* pArgs = rReq.GetInternalArgs_Impl();
         const SfxPoolItem* pItem = nullptr;
@@ -284,7 +284,7 @@ namespace
         return xFrame;
     }
 
-    weld::Window* getFrameWeld(const Reference<XFrame>& rFrame)
+    vcl::Window* getFrameWindow(const Reference<XFrame>& rFrame)
     {
         if (rFrame.is())
         {
@@ -292,8 +292,7 @@ namespace
             {
                 Reference< awt::XWindow > xContainerWindow(rFrame->getContainerWindow(), UNO_SET_THROW);
                 VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow(xContainerWindow);
-                if (pWindow)
-                    return pWindow->GetFrameWeld();
+                return pWindow;
             }
             catch (const Exception&)
             {
@@ -303,11 +302,6 @@ namespace
 
         SAL_WARN( "sfx.appl", "no parent for dialogs" );
         return nullptr;
-    }
-
-    weld::Window* GetRequestFrameWeld(SfxRequest& rReq)
-    {
-        return getFrameWeld(GetRequestFrame(rReq));
     }
 
     class LicenseDialog
@@ -360,6 +354,17 @@ namespace
             return nRet;
         }
     };
+}
+
+vcl::Window* SfxRequest::GetFrameWindow() const
+{
+    return getFrameWindow(GetRequestFrame(*this));
+}
+
+weld::Window* SfxRequest::GetFrameWeld() const
+{
+    vcl::Window* pWin = GetFrameWindow();
+    return pWin ? pWin->GetFrameWeld() : nullptr;
 }
 
 void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
@@ -566,7 +571,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
         }
         case SID_SHOW_LICENSE:
         {
-            LicenseDialog aDialog(GetRequestFrameWeld(rReq));
+            LicenseDialog aDialog(rReq.GetFrameWeld());
             aDialog.run();
             break;
         }
@@ -1030,7 +1035,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
         }
         case SID_SAFE_MODE:
         {
-            SafeModeQueryDialog aDialog(GetRequestFrameWeld(rReq));
+            SafeModeQueryDialog aDialog(rReq.GetFrameWeld());
             aDialog.run();
             break;
         }
