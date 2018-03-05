@@ -97,6 +97,8 @@ public:
     void testPageFooter();
     void testRedlineField();
     void testIMESupport();
+    void testSplitNodeRedlineCallback();
+    void testDeleteNodeRedlineCallback();
 
     CPPUNIT_TEST_SUITE(SwTiledRenderingTest);
     CPPUNIT_TEST(testRegisterCallback);
@@ -148,6 +150,8 @@ public:
     CPPUNIT_TEST(testPageFooter);
     CPPUNIT_TEST(testRedlineField);
     CPPUNIT_TEST(testIMESupport);
+    CPPUNIT_TEST(testSplitNodeRedlineCallback);
+    CPPUNIT_TEST(testDeleteNodeRedlineCallback);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -2093,6 +2097,128 @@ void SwTiledRenderingTest::testIMESupport()
 
     // content contains only the last IME composition, not all
     CPPUNIT_ASSERT_EQUAL(aInputs[aInputs.size() - 1].concat("Aaa bbb."), pShellCursor->GetPoint()->nNode.GetNode().GetTextNode()->GetText());
+
+    comphelper::LibreOfficeKit::setActive(false);
+}
+
+void SwTiledRenderingTest::testSplitNodeRedlineCallback()
+{
+    // Load a document.
+    comphelper::LibreOfficeKit::setActive();
+    SwXTextDocument* pXTextDocument = createDoc("splitnode_redline_callback.fodt");
+    SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
+    pWrtShell->GetSfxViewShell()->registerLibreOfficeKitViewCallback(&SwTiledRenderingTest::callback, this);
+
+    // 1. test case
+    // Move cursor between the two tracked changes
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_DOWN);
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_DOWN);
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_DOWN);
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_DOWN);
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_DOWN);
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_DOWN);
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_DOWN);
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_DOWN);
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_DOWN);
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_DOWN);
+    Scheduler::ProcessEventsToIdle();
+
+    // Add a new line
+    m_nRedlineTableEntryModified = 0;
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_RETURN);
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_RETURN);
+    Scheduler::ProcessEventsToIdle();
+
+    // Assert that we get a notification about redline modification
+    // The redline after the inserted node gets a different vertical positon
+    CPPUNIT_ASSERT_EQUAL(1, m_nRedlineTableEntryModified);
+
+    // 2. test case
+    // Move cursor back to the first line, so adding new line will affect both tracked changes
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_HOME | KEY_MOD1);
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_HOME | KEY_MOD1);
+    Scheduler::ProcessEventsToIdle();
+
+    // Add a new line
+    m_nRedlineTableEntryModified = 0;
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_RETURN);
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_RETURN);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(2, m_nRedlineTableEntryModified);
+
+    // 3. test case
+    // Move cursor to the end of the document, so adding a new line won't affect any tracked changes
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_END | KEY_MOD1);
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_END | KEY_MOD1);
+    Scheduler::ProcessEventsToIdle();
+
+    // Add a new line
+    m_nRedlineTableEntryModified = 0;
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_RETURN);
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_RETURN);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(0, m_nRedlineTableEntryModified);
+
+    comphelper::LibreOfficeKit::setActive(false);
+}
+
+void SwTiledRenderingTest::testDeleteNodeRedlineCallback()
+{
+    // Load a document.
+    comphelper::LibreOfficeKit::setActive();
+    SwXTextDocument* pXTextDocument = createDoc("removenode_redline_callback.fodt");
+    SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
+    pWrtShell->GetSfxViewShell()->registerLibreOfficeKitViewCallback(&SwTiledRenderingTest::callback, this);
+
+    // 1. test case
+    // Move cursor between the two tracked changes
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_DOWN);
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_DOWN);
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_DOWN);
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_DOWN);
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_DOWN);
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_DOWN);
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_DOWN);
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_DOWN);
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_DOWN);
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_DOWN);
+    Scheduler::ProcessEventsToIdle();
+
+    // Remove one (empty) line
+    m_nRedlineTableEntryModified = 0;
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_DELETE);
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_DELETE);
+    Scheduler::ProcessEventsToIdle();
+
+    // Assert that we get a notification about redline modification
+    // The redline after the removed node gets a different vertical positon
+    CPPUNIT_ASSERT_EQUAL(1, m_nRedlineTableEntryModified);
+
+    // 2. test case
+    // Move cursor back to the first line, so removing one line will affect both tracked changes
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_HOME | KEY_MOD1);
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_HOME | KEY_MOD1);
+    Scheduler::ProcessEventsToIdle();
+
+    // Remove a new line
+    m_nRedlineTableEntryModified = 0;
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_DELETE);
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_DELETE);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(2, m_nRedlineTableEntryModified);
+
+    // 3. test case
+    // Move cursor to the end of the document, so removing one line won't affect any tracked changes
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_END | KEY_MOD1);
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_END | KEY_MOD1);
+    Scheduler::ProcessEventsToIdle();
+
+    // Remove a line
+    m_nRedlineTableEntryModified = 0;
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_BACKSPACE);
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_BACKSPACE);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(0, m_nRedlineTableEntryModified);
 
     comphelper::LibreOfficeKit::setActive(false);
 }
