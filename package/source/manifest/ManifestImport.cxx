@@ -25,6 +25,7 @@
 #include <com/sun/star/xml/crypto/DigestID.hpp>
 #include <com/sun/star/xml/crypto/CipherID.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
+#include <comphelper/base64.hxx>
 #include <comphelper/sequence.hxx>
 
 using namespace com::sun::star::uno;
@@ -176,7 +177,7 @@ void ManifestImport::doEncryptedCipherValue()
     {
         aKeyInfoSequence[2].Name = "CipherValue";
         uno::Sequence < sal_Int8 > aDecodeBuffer;
-        ::sax::Converter::decodeBase64(aDecodeBuffer, aCurrentCharacters);
+        ::comphelper::Base64::decode(aDecodeBuffer, aCurrentCharacters);
         aKeyInfoSequence[2].Value <<= aDecodeBuffer;
         aCurrentCharacters = ""; // consumed
     }
@@ -190,7 +191,7 @@ void ManifestImport::doEncryptedKeyId()
     {
         aKeyInfoSequence[0].Name = "KeyId";
         uno::Sequence < sal_Int8 > aDecodeBuffer;
-        ::sax::Converter::decodeBase64(aDecodeBuffer, aCurrentCharacters);
+        ::comphelper::Base64::decode(aDecodeBuffer, aCurrentCharacters);
         aKeyInfoSequence[0].Value <<= aDecodeBuffer;
         aCurrentCharacters = ""; // consumed
     }
@@ -204,7 +205,7 @@ void ManifestImport::doEncryptedKeyPacket()
     {
         aKeyInfoSequence[1].Name = "KeyPacket";
         uno::Sequence < sal_Int8 > aDecodeBuffer;
-        ::sax::Converter::decodeBase64(aDecodeBuffer, aCurrentCharacters);
+        ::comphelper::Base64::decode(aDecodeBuffer, aCurrentCharacters);
         aKeyInfoSequence[1].Value <<= aDecodeBuffer;
         aCurrentCharacters = ""; // consumed
     }
@@ -231,7 +232,7 @@ void ManifestImport::doEncryptionData(StringHashMap &rConvertedAttribs)
         if ( !bIgnoreEncryptData ) {
             aString = rConvertedAttribs[sChecksumAttribute];
             uno::Sequence < sal_Int8 > aDecodeBuffer;
-            ::sax::Converter::decodeBase64(aDecodeBuffer, aString);
+            ::comphelper::Base64::decode(aDecodeBuffer, aString);
             aSequence[PKG_MNFST_DIGEST].Name = sDigestProperty;
             aSequence[PKG_MNFST_DIGEST].Value <<= aDecodeBuffer;
         }
@@ -266,7 +267,7 @@ void ManifestImport::doAlgorithm(StringHashMap &rConvertedAttribs)
         if ( !bIgnoreEncryptData ) {
             aString = rConvertedAttribs[sInitialisationVectorAttribute];
             uno::Sequence < sal_Int8 > aDecodeBuffer;
-            ::sax::Converter::decodeBase64(aDecodeBuffer, aString);
+            ::comphelper::Base64::decode(aDecodeBuffer, aString);
             aSequence[PKG_MNFST_INIVECTOR].Name = sInitialisationVectorProperty;
             aSequence[PKG_MNFST_INIVECTOR].Value <<= aDecodeBuffer;
         }
@@ -280,7 +281,7 @@ void ManifestImport::doKeyDerivation(StringHashMap &rConvertedAttribs)
         if ( aString == sPBKDF2_Name || aString == sPBKDF2_URL ) {
             aString = rConvertedAttribs[sSaltAttribute];
             uno::Sequence < sal_Int8 > aDecodeBuffer;
-            ::sax::Converter::decodeBase64(aDecodeBuffer, aString);
+            ::comphelper::Base64::decode(aDecodeBuffer, aString);
             aSequence[PKG_MNFST_SALT].Name = sSaltProperty;
             aSequence[PKG_MNFST_SALT].Value <<= aDecodeBuffer;
 

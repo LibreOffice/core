@@ -58,7 +58,6 @@ public:
     void testPercent();
     void testColor();
     void testNumber();
-    void testBase64();
 
     CPPUNIT_TEST_SUITE(ConverterTest);
     CPPUNIT_TEST(testDuration);
@@ -70,7 +69,6 @@ public:
     CPPUNIT_TEST(testPercent);
     CPPUNIT_TEST(testColor);
     CPPUNIT_TEST(testNumber);
-    CPPUNIT_TEST(testBase64);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -615,46 +613,6 @@ void ConverterTest::testNumber()
     doTestStringToNumber(-30, "7", -100, -30);
     doTestStringToNumber(0, "-0", 0, 1);
     doTestStringToNumber(0, "666", -0, 0);
-}
-
-void doTestEncodeBase64(char const*const pis, const uno::Sequence<sal_Int8>& aPass)
-{
-    OUString const is(OUString::createFromAscii(pis));
-    OUStringBuffer buf;
-    Converter::encodeBase64(buf, aPass);
-    SAL_INFO("sax.cppunit","" << buf.toString());
-    CPPUNIT_ASSERT_EQUAL(is, buf.makeStringAndClear());
-}
-
-void doTestDecodeBase64(const uno::Sequence<sal_Int8>& aPass, char const*const pis)
-{
-    OUString const is(OUString::createFromAscii(pis));
-    uno::Sequence< sal_Int8 > tempSequence;
-    Converter::decodeBase64(tempSequence, is);
-    SAL_INFO("sax.cppunit","" << is);
-    bool b = (tempSequence==aPass);
-    CPPUNIT_ASSERT(b);
-}
-
-void ConverterTest::testBase64()
-{
-    std::vector< sal_Int8 > tempSeq { 0, 0, 0, 0, 0, 1, 2, 3 };
-    uno::Sequence< sal_Int8 > tempSequence = comphelper::containerToSequence(tempSeq);
-    doTestEncodeBase64("AAAAAAABAgM=", tempSequence);
-    doTestDecodeBase64(tempSequence, "AAAAAAABAgM=");
-    tempSeq[0] = sal_Int8(5);
-    tempSeq[1] = sal_Int8(2);
-    tempSeq[2] = sal_Int8(3);
-    tempSequence = comphelper::containerToSequence(tempSeq);
-    doTestEncodeBase64("BQIDAAABAgM=", tempSequence);
-    doTestDecodeBase64(tempSequence, "BQIDAAABAgM=");
-    tempSeq[0] = sal_Int8(sal_uInt8(200));
-    tempSeq[1] = sal_Int8(31);
-    tempSeq[2] = sal_Int8(77);
-    tempSeq[3] = sal_Int8(111);
-    tempSequence = comphelper::containerToSequence(tempSeq);
-    doTestEncodeBase64("yB9NbwABAgM=", tempSequence);
-    doTestDecodeBase64(tempSequence, "yB9NbwABAgM=");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ConverterTest);

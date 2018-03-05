@@ -20,6 +20,7 @@
 #include <config_features.h>
 
 #include <comphelper/lok.hxx>
+#include <comphelper/base64.hxx>
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <unotools/historyoptions.hxx>
 #include <unotools/useroptions.hxx>
@@ -157,7 +158,7 @@ void SfxPickListImpl::AddDocumentToPickList( SfxObjectShell* pDocSh )
                 {
                     Sequence<sal_Int8> aSequence(static_cast<const sal_Int8*>(aStream.GetData()), aStream.Tell());
                     OUStringBuffer aBuffer;
-                    ::sax::Converter::encodeBase64(aBuffer, aSequence);
+                    ::comphelper::Base64::encode(aBuffer, aSequence);
                     aThumbnail = aBuffer.makeStringAndClear();
                 }
             }

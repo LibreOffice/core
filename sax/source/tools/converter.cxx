@@ -32,7 +32,6 @@
 #include <rtl/math.hxx>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
-#include <comphelper/base64.hxx>
 
 #include <algorithm>
 
@@ -1901,23 +1900,6 @@ sal_Int32 Converter::indexOfComma( const OUString& rStr,
     }
 
     return -1;
-}
-
-void Converter::encodeBase64(OUStringBuffer& aStrBuffer, const uno::Sequence<sal_Int8>& aPass)
-{
-    comphelper::Base64::encode(aStrBuffer, aPass);
-}
-
-void Converter::decodeBase64(uno::Sequence<sal_Int8>& aBuffer, const OUString& sBuffer)
-{
-    comphelper::Base64::decode(aBuffer, sBuffer);
-}
-
-sal_Int32 Converter::decodeBase64SomeChars(
-        uno::Sequence<sal_Int8>& rOutBuffer,
-        const OUString& rInBuffer)
-{
-    return comphelper::Base64::decodeSomeChars(rOutBuffer, rInBuffer);
 }
 
 double Converter::GetConversionFactor(OUStringBuffer& rUnit, sal_Int16 nSourceUnit, sal_Int16 nTargetUnit)

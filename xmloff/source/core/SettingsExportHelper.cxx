@@ -25,6 +25,7 @@
 #include <xmloff/xmltoken.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
+#include <comphelper/base64.hxx>
 #include <comphelper/extract.hxx>
 #include <comphelper/processfactory.hxx>
 
@@ -344,7 +345,7 @@ void XMLSettingsExportHelper::exportbase64Binary(
     if(nLength)
     {
         OUStringBuffer sBuffer;
-        ::sax::Converter::encodeBase64(sBuffer, aProps);
+        ::comphelper::Base64::encode(sBuffer, aProps);
         m_rContext.Characters( sBuffer.makeStringAndClear() );
     }
     m_rContext.EndElement( false );
