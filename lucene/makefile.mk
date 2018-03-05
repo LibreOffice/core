@@ -62,6 +62,8 @@ PATCH_FILES=lucene.patch
 PATCH_FILES+= long_path.patch
 .ENDIF
 
+PATCH_FILES+=lucene-java-version.patch
+
 BUILD_DIR=.
 BUILD_ACTION= ${ANT} -buildfile .$/contrib$/analyzers$/build.xml
 

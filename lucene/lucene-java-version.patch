@@ -1,0 +1,39 @@
+--- misc/build/lucene-2.9.4/common-build.xml	2018-03-05 06:13:00.041924900 +0200
++++ misc/build/lucene-2.9.4/common-build.xml	2018-03-05 06:34:48.448742000 +0200
+@@ -58,8 +58,8 @@
+ 
+   <property name="javac.deprecation" value="off"/>
+   <property name="javac.debug" value="on"/>
+-  <property name="javac.source" value="1.4"/>
+-  <property name="javac.target" value="1.4"/>
++  <property name="javac.source" value="1.6"/>
++  <property name="javac.target" value="1.6"/>
+ 
+   <property name="javadoc.link" value="http://java.sun.com/j2se/1.4/docs/api/"/>
+   <property name="javadoc.access" value="protected"/>
+--- misc/build/lucene-2.9.4/contrib/analyzers/common/build.xml	2010-11-28 02:22:13.000000000 +0200
++++ misc/build/lucene-2.9.4/contrib/analyzers/common/build.xml	2018-03-05 06:39:48.913151800 +0200
+@@ -23,8 +23,8 @@
+     Additional Analyzers
+   </description>
+ 
+-  <property name="javac.source" value="1.4" />
+-  <property name="javac.target" value="1.4" />
++  <property name="javac.source" value="1.6" />
++  <property name="javac.target" value="1.6" />
+ 	
+   <property name="build.dir" location="../../../build/contrib/analyzers/common" />
+   <property name="dist.dir" location="../../../dist/contrib/analyzers/common" />
+--- misc/build/lucene-2.9.4/contrib/analyzers/smartcn/build.xml	2010-11-28 02:22:11.000000000 +0200
++++ misc/build/lucene-2.9.4/contrib/analyzers/smartcn/build.xml	2018-03-05 06:41:07.207097100 +0200
+@@ -23,8 +23,8 @@
+     Smart Chinese Analyzer
+   </description>
+ 
+-  <property name="javac.source" value="1.4" />
+-  <property name="javac.target" value="1.4" />
++  <property name="javac.source" value="1.6" />
++  <property name="javac.target" value="1.6" />
+ 	
+   <property name="build.dir" location="../../../build/contrib/analyzers/smartcn" />
+   <property name="dist.dir" location="../../../dist/contrib/analyzers/smartcn" />
