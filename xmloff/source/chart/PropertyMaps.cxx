@@ -289,15 +289,20 @@ void XMLChartExportPropertyMapper::handleElementItem(
     {
         case XML_SCH_CONTEXT_SPECIAL_SYMBOL_IMAGE:
             {
-                OUString aURLStr;
-                rProperty.maValue >>= aURLStr;
+                uno::Reference<graphic::XGraphic> xGraphic;
+                rProperty.maValue >>= xGraphic;
 
+                OUString sInternalURL;
                 // export as XLink reference into the package
                 // if embedding is off
-                OUString sTempURL( mrExport.AddEmbeddedGraphicObject( aURLStr ));
-                if( !sTempURL.isEmpty() )
+                if (xGraphic.is())
                 {
-                    mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_HREF, sTempURL );
+                    OUString aOutMimeType;
+                    sInternalURL = mrExport.AddEmbeddedXGraphic(xGraphic, aOutMimeType);
+                }
+                if (!sInternalURL.isEmpty())
+                {
+                    mrExport.AddAttribute(XML_NAMESPACE_XLINK, XML_HREF, sInternalURL);
                 }
 
                 {
@@ -310,8 +315,8 @@ void XMLChartExportPropertyMapper::handleElementItem(
 
                     // export as Base64 embedded graphic
                     // if embedding is on
-                    if( !aURLStr.isEmpty())
-                        mrExport.AddEmbeddedGraphicObjectAsBase64( aURLStr );
+                    if (xGraphic.is())
+                        mrExport.AddEmbeddedXGraphicAsBase64(xGraphic);
                 }
             }
             break;
@@ -639,7 +644,7 @@ bool XMLChartImportPropertyMapper::handleSpecialItem(
 
             // deprecated from 6.0 beta on
             case XML_SCH_CONTEXT_SPECIAL_SYMBOL_IMAGE_NAME:
-                rProperty.maValue <<= mrImport.ResolveGraphicObjectURL( rValue, false );
+                rProperty.maValue <<= mrImport.loadGraphicByURL(rValue);
                 break;
 
             case XML_SCH_CONTEXT_SPECIAL_REGRESSION_TYPE:
