@@ -154,6 +154,8 @@ class SW_DLLPUBLIC SwTextFrame: public SwContentFrame
     // Formats the Follow and ensures disposing on orphans
     bool CalcFollow(  const sal_Int32 nTextOfst );
 
+    virtual void MakePos() override;
+
     // Corrects the position from which we need to format
     static sal_Int32 FindBrk(const OUString &rText, const sal_Int32 nStart,
                                        const sal_Int32 nEnd);
