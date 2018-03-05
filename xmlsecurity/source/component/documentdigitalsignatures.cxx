@@ -41,6 +41,7 @@
 #include <vcl/weld.hxx>
 #include <unotools/securityoptions.hxx>
 #include <com/sun/star/security/CertificateValidity.hpp>
+#include <comphelper/base64.hxx>
 #include <comphelper/documentconstants.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/sequence.hxx>
@@ -634,7 +635,7 @@ void DocumentDigitalSignatures::addAuthorToTrustedSources(
     aNewCert[ 1 ] = xmlsecurity::bigIntegerToNumericString( Author->getSerialNumber() );
 
     OUStringBuffer aStrBuffer;
-    ::sax::Converter::encodeBase64(aStrBuffer, Author->getEncoded());
+    ::comphelper::Base64::encode(aStrBuffer, Author->getEncoded());
     aNewCert[ 2 ] = aStrBuffer.makeStringAndClear();
 
 

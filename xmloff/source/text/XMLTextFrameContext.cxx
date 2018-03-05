@@ -19,6 +19,7 @@
 
 #include <o3tl/make_unique.hxx>
 #include <osl/diagnose.h>
+#include <comphelper/base64.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -1215,7 +1216,7 @@ void XMLTextFrameContext_Impl::Characters( const OUString& rChars )
                 }
                 Sequence< sal_Int8 > aBuffer( (sChars.getLength() / 4) * 3 );
                 sal_Int32 nCharsDecoded =
-                    ::sax::Converter::decodeBase64SomeChars( aBuffer, sChars );
+                    ::comphelper::Base64::decodeSomeChars( aBuffer, sChars );
                 xBase64Stream->writeBytes( aBuffer );
                 if( nCharsDecoded != sChars.getLength() )
                     sBase64CharsLeft = sChars.copy( nCharsDecoded );

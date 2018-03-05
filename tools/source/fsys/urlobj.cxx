@@ -45,6 +45,7 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <sax/tools/converter.hxx>
 #include <rtl/uri.hxx>
+#include <comphelper/base64.hxx>
 
 using namespace css;
 
@@ -615,7 +616,7 @@ std::unique_ptr<SvMemoryStream> INetURLObject::getData() const
         nCharactersSkipped += strlen(";base64,");
         OUString sBase64Data = sURLPath.copy( nCharactersSkipped );
         css::uno::Sequence< sal_Int8 > aDecodedData;
-        if (sax::Converter::decodeBase64SomeChars(aDecodedData, sBase64Data)
+        if (comphelper::Base64::decodeSomeChars(aDecodedData, sBase64Data)
             == sBase64Data.getLength())
         {
             return memoryStream(

@@ -34,6 +34,7 @@ $(eval $(call gb_Library_use_sdk_api,svgio))
 $(eval $(call gb_Library_use_libraries,svgio,\
     basegfx \
     drawinglayer \
+    comphelper \
     cppu \
     cppuhelper \
     sal \

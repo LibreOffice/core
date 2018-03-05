@@ -42,6 +42,7 @@
 #include <com/sun/star/text/ChapterFormat.hpp>
 
 #include <sax/tools/converter.hxx>
+#include <comphelper/base64.hxx>
 
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlnmspe.hxx>
@@ -397,7 +398,7 @@ void XMLSectionExport::ExportRegularSectionStart(
     if (aPassword.getLength() > 0)
     {
         OUStringBuffer aBuffer;
-        ::sax::Converter::encodeBase64(aBuffer, aPassword);
+        ::comphelper::Base64::encode(aBuffer, aPassword);
         // in ODF 1.0/1.1 the algorithm was left unspecified so we can write anything
         GetExport().AddAttribute(XML_NAMESPACE_TEXT, XML_PROTECTION_KEY,
                                  aBuffer.makeStringAndClear());

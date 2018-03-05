@@ -194,18 +194,6 @@ public:
     static sal_Int32 indexOfComma( const OUString& rStr,
                                    sal_Int32 nPos );
 
-    /** encodes the given byte sequence into Base64 */
-    static void encodeBase64(OUStringBuffer& aStrBuffer, const css::uno::Sequence<sal_Int8>& aPass);
-
-    // Decode a base 64 encoded string into a sequence of bytes. The first
-    // version can be used for attribute values only, because it does not
-    // return any chars left from conversion.
-    // For text submitted throgh the SAX characters call, the later method
-    // must be used!
-    static void decodeBase64(css::uno::Sequence<sal_Int8>& aPass, const OUString& sBuffer);
-
-    static sal_Int32 decodeBase64SomeChars(css::uno::Sequence<sal_Int8>& aPass, const OUString& sBuffer);
-
     static double GetConversionFactor(OUStringBuffer& rUnit, sal_Int16 nSourceUnit, sal_Int16 nTargetUnit);
     static sal_Int16 GetUnitFromString(const OUString& rString, sal_Int16 nDefaultUnit);
 

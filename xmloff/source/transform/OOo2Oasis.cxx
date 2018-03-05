@@ -20,6 +20,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <osl/diagnose.h>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <comphelper/base64.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <sax/tools/converter.hxx>
@@ -1414,7 +1415,7 @@ void XMLTrackedChangesOOoTContext_Impl::StartElement(
                     xPropSetInfo->hasPropertyByName( aPropName ) )
                 {
                     Sequence < sal_Int8 > aKey;
-                    ::sax::Converter::decodeBase64( aKey,
+                    ::comphelper::Base64::decode( aKey,
                                         rAttrList->getValueByIndex( i ) );
                     rPropSet->setPropertyValue( aPropName, makeAny( aKey ) );
                 }

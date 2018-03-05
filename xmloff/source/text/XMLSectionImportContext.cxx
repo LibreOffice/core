@@ -20,6 +20,7 @@
 #include "XMLSectionImportContext.hxx"
 #include "XMLSectionSourceImportContext.hxx"
 #include "XMLSectionSourceDDEImportContext.hxx"
+#include <comphelper/base64.hxx>
 #include <xmloff/xmlictxt.hxx>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/txtimp.hxx>
@@ -283,7 +284,7 @@ void XMLSectionImportContext::ProcessAttributes(
                 }
                 break;
             case XML_TOK_SECTION_PROTECTION_KEY:
-                ::sax::Converter::decodeBase64(aSequence, sAttr);
+                ::comphelper::Base64::decode(aSequence, sAttr);
                 bSequenceOK = true;
                 break;
             case XML_TOK_SECTION_PROTECT:

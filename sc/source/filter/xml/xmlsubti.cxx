@@ -39,6 +39,7 @@
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmlerror.hxx>
+#include <comphelper/base64.hxx>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 
@@ -200,7 +201,7 @@ void ScMyTables::DeleteTable()
     if (rImport.GetDocument() && maProtectionData.mbProtected)
     {
         uno::Sequence<sal_Int8> aHash;
-        ::sax::Converter::decodeBase64(aHash, maProtectionData.maPassword);
+        ::comphelper::Base64::decode(aHash, maProtectionData.maPassword);
 
         std::unique_ptr<ScTableProtection> pProtect(new ScTableProtection);
         pProtect->setProtected(maProtectionData.mbProtected);

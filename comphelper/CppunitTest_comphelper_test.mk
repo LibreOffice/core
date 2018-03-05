@@ -13,6 +13,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,comphelper_test, \
     comphelper/qa/string/test_string \
     comphelper/qa/container/testifcontainer \
     comphelper/qa/unit/test_hash \
+    comphelper/qa/unit/base64_test \
 ))
 
 $(eval $(call gb_CppunitTest_use_sdk_api,comphelper_test))

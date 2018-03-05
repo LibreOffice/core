@@ -111,6 +111,7 @@
 #include <rtl/math.hxx>
 #include <svl/zforlist.hxx>
 #include <svx/unoshape.hxx>
+#include <comphelper/base64.hxx>
 #include <comphelper/extract.hxx>
 #include <toolkit/helper/convert.hxx>
 #include <svx/svdobj.hxx>
@@ -1713,7 +1714,7 @@ void ScXMLExport::SetBodyAttributes()
                 eHashUsed = PASSHASH_XL;
             }
         }
-        ::sax::Converter::encodeBase64(aBuffer, aPassHash);
+        ::comphelper::Base64::encode(aBuffer, aPassHash);
         if (!aBuffer.isEmpty())
         {
             AddAttribute(XML_NAMESPACE_TABLE, XML_PROTECTION_KEY, aBuffer.makeStringAndClear());
@@ -2848,13 +2849,13 @@ void ScXMLExport::WriteTable(sal_Int32 nTable, const uno::Reference<sheet::XSpre
                 ScPasswordHash eHashUsed = PASSHASH_UNSPECIFIED;
                 if (pProtect->hasPasswordHash(PASSHASH_SHA1))
                 {
-                    ::sax::Converter::encodeBase64(aBuffer,
+                    ::comphelper::Base64::encode(aBuffer,
                         pProtect->getPasswordHash(PASSHASH_SHA1));
                     eHashUsed = PASSHASH_SHA1;
                 }
                 else if (pProtect->hasPasswordHash(PASSHASH_SHA256))
                 {
-                    ::sax::Converter::encodeBase64(aBuffer,
+                    ::comphelper::Base64::encode(aBuffer,
                         pProtect->getPasswordHash(PASSHASH_SHA256));
                     eHashUsed = PASSHASH_SHA256;
                 }
@@ -2862,7 +2863,7 @@ void ScXMLExport::WriteTable(sal_Int32 nTable, const uno::Reference<sheet::XSpre
                 {
                     // Double-hash this by SHA1 on top of the legacy xls hash.
                     uno::Sequence<sal_Int8> aHash = pProtect->getPasswordHash(PASSHASH_XL, PASSHASH_SHA1);
-                    ::sax::Converter::encodeBase64(aBuffer, aHash);
+                    ::comphelper::Base64::encode(aBuffer, aHash);
                     eHashUsed = PASSHASH_XL;
                 }
                 if (!aBuffer.isEmpty())
@@ -4906,7 +4907,7 @@ void ScXMLExport::GetConfigurationSettings(uno::Sequence<beans::PropertyValue>& 
             OUStringBuffer aTrackedChangesKey;
             if (GetDocument() && GetDocument()->GetChangeTrack() && GetDocument()->GetChangeTrack()->IsProtected())
             {
-                ::sax::Converter::encodeBase64(aTrackedChangesKey,
+                ::comphelper::Base64::encode(aTrackedChangesKey,
                         GetDocument()->GetChangeTrack()->GetProtection());
                 if (!aTrackedChangesKey.isEmpty())
                     ++nPropsToAdd;
