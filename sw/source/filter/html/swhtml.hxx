@@ -481,6 +481,8 @@ class SwHTMLParser : public SfxHTMLParser, public SwClient
 
     SfxViewFrame* m_pTempViewFrame;
 
+    bool m_bXHTML = false;
+
     void DeleteFormImpl();
 
     void DocumentDetected();

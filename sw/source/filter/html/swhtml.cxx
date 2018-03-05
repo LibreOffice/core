@@ -1383,6 +1383,11 @@ void SwHTMLParser::NextToken( HtmlTokenId nToken )
         break;
 
     case HtmlTokenId::OBJECT_ON:
+        if (m_bXHTML)
+        {
+            InsertEmbed();
+            break;
+        }
 #if HAVE_FEATURE_JAVA
         NewObject();
         m_bCallNextToken = m_pAppletImpl!=nullptr && m_pTable!=nullptr;
@@ -5549,7 +5554,10 @@ void SwHTMLParser::SetupFilterOptions()
     OUString aFilterOptions = pItem->GetValue();
     const OUString aXhtmlNsKey("xhtmlns=");
     if (aFilterOptions.startsWith(aXhtmlNsKey))
+    {
         SetNamespace(aFilterOptions.copy(aXhtmlNsKey.getLength()));
+        m_bXHTML = true;
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
