@@ -49,6 +49,7 @@
 #include <swerror.h>
 #include <ndole.hxx>
 #include <swtable.hxx>
+#include <docsh.hxx>
 #include "swhtml.hxx"
 #include "wrthtml.hxx"
 #include "htmlfly.hxx"
@@ -58,9 +59,12 @@
 #include <com/sun/star/embed/Aspects.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
+#include <com/sun/star/embed/ElementModes.hpp>
 
 #include <comphelper/embeddedobjectcontainer.hxx>
 #include <comphelper/classids.hxx>
+#include <rtl/uri.hxx>
+#include <comphelper/storagehelper.hxx>
 
 using namespace com::sun::star;
 
@@ -291,6 +295,7 @@ void SwHTMLParser::SetSpace( const Size& rPixSpace,
 void SwHTMLParser::InsertEmbed()
 {
     OUString aURL, aType, aName, aAlt, aId, aStyle, aClass;
+    OUString aData;
     Size aSize( USHRT_MAX, USHRT_MAX );
     Size aSpace( USHRT_MAX, USHRT_MAX );
     bool bPrcWidth = false, bPrcHeight = false, bHidden = false;
@@ -357,6 +362,10 @@ void SwHTMLParser::InsertEmbed()
             if( USHRT_MAX==aSpace.Height() )
                 aSpace.setHeight( static_cast<long>(rOption.GetNumber()) );
             break;
+        case HtmlOptionId::DATA:
+            if (m_bXHTML && aURL.isEmpty())
+                aData = rOption.GetString();
+            break;
         case HtmlOptionId::UNKNOWN:
             if (rOption.GetTokenString().equalsIgnoreAsciiCase(
                         OOO_STRING_SW_HTML_O_Hidden))
@@ -399,31 +408,60 @@ void SwHTMLParser::InsertEmbed()
                        URIHelper::SmartRel2Abs(
                            INetURLObject(m_sBaseURL), aURL,
                            URIHelper::GetMaybeFileHdl()) );
+    bool bHasData = !aData.isEmpty();
+    try
+    {
+        aURLObj.SetURL(rtl::Uri::convertRelToAbs(m_sBaseURL, aData));
+    }
+    catch (const rtl::MalformedUriException& /*rException*/)
+    {
+        bHasData = false;
+    }
 
     // do not insert plugin if it has neither URL nor type
     bool bHasType = !aType.isEmpty();
-    if( !bHasURL && !bHasType )
+    if( !bHasURL && !bHasType && !bHasData )
         return;
 
     // create the plug-in
     comphelper::EmbeddedObjectContainer aCnt;
     OUString aObjName;
-    uno::Reference < embed::XEmbeddedObject > xObj = aCnt.CreateEmbeddedObject( SvGlobalName( SO3_PLUGIN_CLASSID ).GetByteSequence(), aObjName );
-    if ( svt::EmbeddedObjectRef::TryRunningState( xObj ) )
+    uno::Reference < embed::XEmbeddedObject > xObj;
+    if (!bHasData)
     {
-        uno::Reference < beans::XPropertySet > xSet( xObj->getComponent(), uno::UNO_QUERY );
-        if ( xSet.is() )
+        xObj = aCnt.CreateEmbeddedObject( SvGlobalName( SO3_PLUGIN_CLASSID ).GetByteSequence(), aObjName );
+        if ( svt::EmbeddedObjectRef::TryRunningState( xObj ) )
         {
-            if( bHasURL )
-                xSet->setPropertyValue("PluginURL", uno::makeAny( aURL ) );
-            if( bHasType )
-                xSet->setPropertyValue("PluginMimeType", uno::makeAny( aType ) );
+            uno::Reference < beans::XPropertySet > xSet( xObj->getComponent(), uno::UNO_QUERY );
+            if ( xSet.is() )
+            {
+                if( bHasURL )
+                    xSet->setPropertyValue("PluginURL", uno::makeAny( aURL ) );
+                if( bHasType )
+                    xSet->setPropertyValue("PluginMimeType", uno::makeAny( aType ) );
 
-            uno::Sequence < beans::PropertyValue > aProps;
-            aCmdLst.FillSequence( aProps );
-            xSet->setPropertyValue("PluginCommands", uno::makeAny( aProps ) );
+                uno::Sequence < beans::PropertyValue > aProps;
+                aCmdLst.FillSequence( aProps );
+                xSet->setPropertyValue("PluginCommands", uno::makeAny( aProps ) );
 
+            }
         }
+    }
+    else if (SwDocShell* pDocSh = m_xDoc->GetDocShell())
+    {
+        // Has non-empty data attribute in XHTML: map that to an OLE object.
+        uno::Reference<embed::XStorage> xStorage = pDocSh->GetStorage();
+        aCnt.SwitchPersistence(xStorage);
+        aObjName = aCnt.CreateUniqueObjectName();
+        {
+            SvFileStream aFileStream(aURLObj.GetMainURL(INetURLObject::DecodeMechanism::NONE),
+                                     StreamMode::READ);
+            uno::Reference<io::XInputStream> xInStream(new utl::OStreamWrapper(aFileStream));
+            uno::Reference<io::XStream> xOutStream
+                = xStorage->openStreamElement(aObjName, embed::ElementModes::READWRITE);
+            comphelper::OStorageHelper::CopyInputToOutput(xInStream, xOutStream->getOutputStream());
+        }
+        xObj = aCnt.GetEmbeddedObject(aObjName);
     }
 
     SfxItemSet aFrameSet( m_xDoc->GetAttrPool(),
