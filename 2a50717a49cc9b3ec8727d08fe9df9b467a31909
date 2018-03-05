@@ -25,6 +25,46 @@
     },
     {
       "key": {
+        "uuid": "ba2be162_f240150a",
+        "filename": "sc/source/ui/dbgui/csvgrid.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1203,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-03-05T12:07:30Z",
+      "side": 1,
+      "message": "This loop is only necessary if mbModeSplit, so execute it only then.",
+      "range": {
+        "startLine": 1201,
+        "startChar": 0,
+        "endLine": 1203,
+        "endChar": 55
+      },
+      "revId": "2a50717a49cc9b3ec8727d08fe9df9b467a31909",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba2be162_12468923",
+        "filename": "sc/source/ui/dbgui/csvgrid.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1208,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-03-05T12:07:30Z",
+      "side": 1,
+      "message": "As said, attempting to draw the entire string is unnecessary if it exceeds the last visual position.",
+      "revId": "2a50717a49cc9b3ec8727d08fe9df9b467a31909",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ba2be162_f21f3559",
         "filename": "sc/source/ui/dbgui/csvtablebox.cxx",
         "patchSetId": 4

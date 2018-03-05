@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "ba2be162_d23b119b",
+        "filename": "sc/source/ui/dbgui/csvgrid.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1169,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-03-05T12:07:30Z",
+      "side": 0,
+      "message": "Don\u0027t simply remove this limitation. EditEngine does have its problems with virtually drawing tenthousands of characters, which in case of the dialog is unnecessary if they can\u0027t be seen anyway.",
+      "revId": "ab63510e104c4b8e42982390357af1281c4b11a7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ba2be162_723425de",
         "filename": "sc/source/ui/docshell/impex.cxx",
         "patchSetId": 4
