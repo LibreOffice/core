@@ -4773,6 +4773,25 @@ void Test::testFuncLOOKUP()
     m_pDoc->DeleteTab(0);
 }
 
+void Test::testFuncLOOKUParrayWithError()
+{
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true);
+    m_pDoc->InsertTab(0, "Test");
+
+    std::vector<std::vector<const char*>> aData = {
+        { "x", "y", "z" },
+        { "a", "b", "c" }
+    };
+    insertRangeData(m_pDoc, ScAddress(2,1,0), aData);               // C2:E3
+    m_pDoc->SetString(0,0,0, "=LOOKUP(2;1/(C2:E2<>\"\");C3:E3)");   // A1
+
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Should find match for last column.", OUString("c"), m_pDoc->GetString(0,0,0));
+    m_pDoc->SetString(4,1,0, "");                                   // E2
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Should find match for second last column.", OUString("b"), m_pDoc->GetString(0,0,0));
+
+    m_pDoc->DeleteTab(0);
+}
+
 void Test::testFuncVLOOKUP()
 {
     // VLOOKUP
