@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
 <interface domain="sw">
-  <requires lib="gtk+" version="3.0"/>
+  <requires lib="gtk+" version="3.18"/>
   <object class="GtkAdjustment" id="adjustment">
     <property name="lower">0.25</property>
     <property name="upper">9.9900000000000002</property>
