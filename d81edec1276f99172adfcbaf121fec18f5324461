@@ -16,6 +16,24 @@
       "revId": "d81edec1276f99172adfcbaf121fec18f5324461",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba2be162_92d8b91f",
+        "filename": "sc/source/ui/docshell/docsh8.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-03-05T14:47:31Z",
+      "side": 1,
+      "message": "\"This code will only ever create a DBase connection\"\n\nAh, right, there\u0027s even an explicit\n\n  OUString aConnUrl(\"sdbc:dbase:\");\n\njust a few lines above.  :)  I\u0027d failed to see that, and naively assumed that this sc code can connect to arbitrary database types, so had tried to make as many database connection implementations as possible cope with the new numeric CharSet property.",
+      "parentUuid": "ba2be162_52c72145",
+      "revId": "d81edec1276f99172adfcbaf121fec18f5324461",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
