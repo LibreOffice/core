@@ -124,26 +124,35 @@ namespace
         OUString aConnUrl("sdbc:dbase:");
         aConnUrl += aPath;
 
+        // When no IANA character set name exists for eCharSet, use the numeric rtl_TextEncoding
+        // value as fallback; at least some database connection types support that extension (see
+        // css.sdbc.FILEConnectionProperties and css.sdbc.ODBCConnectionProperties UNOIDL servcies),
+        // but others like ODriverDelegator::connect (connectivity/source/drivers/mysql/YDriver.cxx)
+        // don't, so still prefer using the textual representation where available:
+        css::uno::Any charset;
         ::std::vector< rtl_TextEncoding > aEncodings;
         svxform::charset_helper::getSupportedTextEncodings( aEncodings );
         ::std::vector< rtl_TextEncoding >::iterator aIter = ::std::find(aEncodings.begin(),aEncodings.end(), eCharSet);
         if ( aIter == aEncodings.end() )
         {
-            OSL_FAIL( "DBaseImport: dbtools::OCharsetMap doesn't know text encoding" );
-            return SCERR_IMPORT_CONNECT;
-        } // if ( aIter == aMap.end() )
-        OUString aCharSetStr;
-        if ( RTL_TEXTENCODING_DONTKNOW != *aIter )
-        {   // it's not the virtual "system charset"
-            const char* pIanaName = rtl_getMimeCharsetFromTextEncoding( *aIter );
-            OSL_ENSURE( pIanaName, "invalid mime name!" );
-            if ( pIanaName )
-                aCharSetStr = OUString::createFromAscii( pIanaName );
+            charset <<= eCharSet;
+        }
+        else
+        {
+            OUString aCharSetStr;
+            if ( RTL_TEXTENCODING_DONTKNOW != *aIter )
+            {   // it's not the virtual "system charset"
+                const char* pIanaName = rtl_getMimeCharsetFromTextEncoding( *aIter );
+                OSL_ENSURE( pIanaName, "invalid mime name!" );
+                if ( pIanaName )
+                    aCharSetStr = OUString::createFromAscii( pIanaName );
+            }
+            charset <<= aCharSetStr;
         }
 
         uno::Sequence<beans::PropertyValue> aProps( comphelper::InitPropertySequence({
                 { SC_DBPROP_EXTENSION, uno::Any(aExtension) },
-                { SC_DBPROP_CHARSET, uno::Any(aCharSetStr) }
+                { SC_DBPROP_CHARSET, charset }
             }));
 
         _rConnection = _rDrvMgr->getConnectionWithInfo( aConnUrl, aProps );

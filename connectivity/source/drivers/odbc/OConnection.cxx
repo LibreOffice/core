@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <o3tl/any.hxx>
 #include <odbc/OTools.hxx>
 #include <odbc/OConnection.hxx>
 #include <odbc/ODatabaseMetaData.hxx>
@@ -227,17 +230,24 @@ SQLRETURN OConnection::Construct(const OUString& url,const Sequence< PropertyVal
         }
         else if( pBegin->Name == "CharSet")
         {
-            OUString sIanaName;
-            OSL_VERIFY( pBegin->Value >>= sIanaName );
-
-            ::dbtools::OCharsetMap aLookupIanaName;
-            ::dbtools::OCharsetMap::const_iterator aLookup = aLookupIanaName.find(sIanaName, ::dbtools::OCharsetMap::IANA());
-            if (aLookup != aLookupIanaName.end())
-                m_nTextEncoding = (*aLookup).getEncoding();
+            if (auto const numeric = o3tl::tryAccess<sal_Int32>(pBegin->Value))
+            {
+                m_nTextEncoding = *numeric;
+            }
             else
-                m_nTextEncoding = RTL_TEXTENCODING_DONTKNOW;
-            if(m_nTextEncoding == RTL_TEXTENCODING_DONTKNOW)
-                m_nTextEncoding = osl_getThreadTextEncoding();
+            {
+                OUString sIanaName;
+                OSL_VERIFY( pBegin->Value >>= sIanaName );
+
+                ::dbtools::OCharsetMap aLookupIanaName;
+                ::dbtools::OCharsetMap::const_iterator aLookup = aLookupIanaName.find(sIanaName, ::dbtools::OCharsetMap::IANA());
+                if (aLookup != aLookupIanaName.end())
+                    m_nTextEncoding = (*aLookup).getEncoding();
+                else
+                    m_nTextEncoding = RTL_TEXTENCODING_DONTKNOW;
+                if(m_nTextEncoding == RTL_TEXTENCODING_DONTKNOW)
+                    m_nTextEncoding = osl_getThreadTextEncoding();
+            }
         }
     }
     m_sUser = aUID;
