@@ -107,11 +107,17 @@ EXCFLAGS="/EHa /Zc:wchar_t- /D "_CRT_SECURE_NO_DEPRECATE""
 EXCFLAGS="/EHsc /YX"
 .ENDIF
 
+.IF "$(CPUNAME)"=="INTEL"
+curl_MACHINE:="X86"
+.ELIF "$(CPUNAME)"=="X86_64"
+curl_MACHINE:="X64"
+.ENDIF
+
 BUILD_DIR=.$/lib
 .IF "$(debug)"==""
-BUILD_ACTION=nmake -f Makefile.vc9 cfg=release-dll EXCFLAGS=$(EXCFLAGS)
+BUILD_ACTION=nmake -f Makefile.vc9 cfg=release-dll EXCFLAGS=$(EXCFLAGS) MACHINE=$(curl_MACHINE)
 .ELSE
-BUILD_ACTION=nmake -f Makefile.vc9 cfg=debug-dll EXCFLAGS=$(EXCFLAGS)
+BUILD_ACTION=nmake -f Makefile.vc9 cfg=debug-dll EXCFLAGS=$(EXCFLAGS) MACHINE=$(curl_MACHINE)
 .ENDIF
 
 OUT2BIN=$(BUILD_DIR)$/libcurl.dll
