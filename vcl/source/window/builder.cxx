@@ -1566,11 +1566,16 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
         //d) remove the users of makeSvTreeViewBox
         extractModel(id, rMap);
         WinBits nWinStyle = WB_CLIPCHILDREN|WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_SIMPLEMODE;
-        OUString sBorder = BuilderUtils::extractCustomProperty(rMap);
-        if (!sBorder.isEmpty())
-            nWinStyle |= WB_BORDER;
+        if (m_bLegacy)
+        {
+            OUString sBorder = BuilderUtils::extractCustomProperty(rMap);
+            if (!sBorder.isEmpty())
+                nWinStyle |= WB_BORDER;
+        }
         //ListBox manages its own scrolling,
         vcl::Window *pRealParent = prepareWidgetOwnScrolling(pParent, nWinStyle);
+        if (pRealParent != pParent)
+            nWinStyle |= WB_BORDER;
         xWindow = VclPtr<ListBox>::Create(pRealParent, nWinStyle);
         if (pRealParent != pParent)
             cleanupWidgetOwnScrolling(pParent, xWindow, rMap);

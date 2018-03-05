@@ -13,23 +13,18 @@
 #include <sal/config.h>
 #include <sfx2/dllapi.h>
 #include <sfx2/doctempl.hxx>
-#include <vcl/dialog.hxx>
-#include <vcl/button.hxx>
-
-class Edit;
-class ListBox;
-class CheckBox;
+#include <vcl/weld.hxx>
 
 //  class SfxSaveAsTemplateDialog -------------------------------------------------------------------
-
-class SFX2_DLLPUBLIC SfxSaveAsTemplateDialog : public ModalDialog
+class SFX2_DLLPUBLIC SfxSaveAsTemplateDialog
 {
-
 private:
-    VclPtr<ListBox>         mpLBCategory;
-    VclPtr<CheckBox>        mpCBXDefault;
-    VclPtr<Edit>            mpTemplateNameEdit;
-    VclPtr<PushButton>      mpOKButton;
+    std::unique_ptr<weld::Builder> m_xBuilder;
+    std::unique_ptr<weld::Dialog> m_xDialog;
+    std::unique_ptr<weld::TreeView> m_xLBCategory;
+    std::unique_ptr<weld::CheckButton> m_xCBXDefault;
+    std::unique_ptr<weld::Entry> m_xTemplateNameEdit;
+    std::unique_ptr<weld::Button> m_xOKButton;
 
     OUString                msSelectedCategory;
     OUString                msTemplateName;
@@ -42,14 +37,12 @@ private:
     css::uno::Reference< css::frame::XModel > m_xModel;
 
 public:
-    DECL_LINK(OkClickHdl, Button*, void);
-    DECL_LINK(TemplateNameEditHdl, Edit&, void);
-    DECL_LINK(SelectCategoryHdl, ListBox&, void);
-
-    void setDocumentModel (const css::uno::Reference<css::frame::XModel> &rModel);
+    DECL_LINK(OkClickHdl, weld::Button&, void);
+    DECL_LINK(TemplateNameEditHdl, weld::Entry&, void);
+    DECL_LINK(SelectCategoryHdl, weld::TreeView&, void);
 
     void initialize();
-    void SetCategoryLBEntries(std::vector<OUString> names);
+    void SetCategoryLBEntries(const std::vector<OUString>& names);
 
     /*Check whether template name is unique or not in a region*/
     bool IsTemplateNameUnique();
@@ -57,11 +50,8 @@ public:
     bool SaveTemplate();
 
 public:
-
-    explicit SfxSaveAsTemplateDialog();
-
-    virtual ~SfxSaveAsTemplateDialog() override;
-    virtual void dispose() override;
+    SfxSaveAsTemplateDialog(weld::Window* pParent, const css::uno::Reference<css::frame::XModel> &rModel);
+    short run() { return m_xDialog->run(); }
 };
 
 #endif // INCLUDED_SFX2_INC_SAVEASTEMPLATEDLG_HXX
