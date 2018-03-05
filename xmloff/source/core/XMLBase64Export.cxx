@@ -23,6 +23,7 @@
 #include <com/sun/star/io/XInputStream.hpp>
 
 #include <sax/tools/converter.hxx>
+#include <comphelper/base64.hxx>
 
 #include <xmloff/xmlexp.hxx>
 #include <xmloff/xmlnmspe.hxx>
@@ -51,7 +52,7 @@ bool XMLBase64Export::exportXML( const Reference < XInputStream> & rIn )
             nRead = rIn->readBytes( aInBuff, INPUT_BUFFER_SIZE );
             if( nRead > 0 )
             {
-                ::sax::Converter::encodeBase64( aOutBuff, aInBuff );
+                ::comphelper::Base64::encode( aOutBuff, aInBuff );
                 GetExport().Characters( aOutBuff.makeStringAndClear() );
                 if( nRead == INPUT_BUFFER_SIZE )
                     GetExport().IgnorableWhitespace();

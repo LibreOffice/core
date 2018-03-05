@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <comphelper/base64.hxx>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <rtl/ustrbuf.hxx>
@@ -1498,7 +1499,7 @@ void XMLConfigItemTContext_Impl::EndElement()
                 xPropSetInfo->hasPropertyByName( aPropName ) )
             {
                 Sequence < sal_Int8 > aKey;
-                ::sax::Converter::decodeBase64( aKey, m_aContent );
+                ::comphelper::Base64::decode( aKey, m_aContent );
                 rPropSet->setPropertyValue( aPropName, makeAny( aKey ) );
             }
         }
@@ -1551,7 +1552,7 @@ void XMLTrackedChangesOASISTContext_Impl::StartElement(
             if( aKey.getLength() )
             {
                 OUStringBuffer aBuffer;
-                ::sax::Converter::encodeBase64( aBuffer, aKey );
+                ::comphelper::Base64::encode( aBuffer, aKey );
                 XMLMutableAttributeList *pMutableAttrList =
                     new XMLMutableAttributeList( xAttrList );
                 xAttrList = pMutableAttrList;

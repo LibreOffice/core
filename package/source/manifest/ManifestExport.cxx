@@ -32,6 +32,7 @@
 
 #include <osl/diagnose.h>
 #include <rtl/ustrbuf.hxx>
+#include <comphelper/base64.hxx>
 #include <comphelper/documentconstants.hxx>
 #include <comphelper/attributelist.hxx>
 
@@ -281,7 +282,7 @@ ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > con
                     xHandler->ignorableWhitespace ( sWhiteSpace );
 
                     xHandler->startElement( sPgpKeyIDElement, nullptr );
-                    ::sax::Converter::encodeBase64(aBuffer, aPgpKeyID);
+                    ::comphelper::Base64::encode(aBuffer, aPgpKeyID);
                     xHandler->characters( aBuffer.makeStringAndClear() );
                     xHandler->endElement( sPgpKeyIDElement );
                     xHandler->ignorableWhitespace ( sWhiteSpace );
@@ -290,7 +291,7 @@ ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > con
                     if (aPgpKeyPacket.hasElements())
                     {
                         xHandler->startElement( sPGPKeyPacketElement, nullptr );
-                        ::sax::Converter::encodeBase64(aBuffer, aPgpKeyPacket);
+                        ::comphelper::Base64::encode(aBuffer, aPgpKeyPacket);
                         xHandler->characters( aBuffer.makeStringAndClear() );
                         xHandler->endElement( sPGPKeyPacketElement );
                         xHandler->ignorableWhitespace ( sWhiteSpace );
@@ -306,7 +307,7 @@ ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > con
                     xHandler->ignorableWhitespace ( sWhiteSpace );
 
                     xHandler->startElement( sCipherValueElement, nullptr );
-                    ::sax::Converter::encodeBase64(aBuffer, aCipherValue);
+                    ::comphelper::Base64::encode(aBuffer, aCipherValue);
                     xHandler->characters( aBuffer.makeStringAndClear() );
                     xHandler->endElement( sCipherValueElement );
                     xHandler->ignorableWhitespace ( sWhiteSpace );
@@ -402,7 +403,7 @@ ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > con
 
             pNewAttrList->AddAttribute ( sChecksumTypeAttribute, sCdataAttribute, sChecksumType );
             *pDigest >>= aSequence;
-            ::sax::Converter::encodeBase64(aBuffer, aSequence);
+            ::comphelper::Base64::encode(aBuffer, aSequence);
             pNewAttrList->AddAttribute ( sChecksumAttribute, sCdataAttribute, aBuffer.makeStringAndClear() );
 
             xHandler->startElement( sEncryptionDataElement , xNewAttrList);
@@ -435,7 +436,7 @@ ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > con
             pNewAttrList->AddAttribute ( sAlgorithmNameAttribute, sCdataAttribute, sEncAlgName );
 
             *pVector >>= aSequence;
-            ::sax::Converter::encodeBase64(aBuffer, aSequence);
+            ::comphelper::Base64::encode(aBuffer, aSequence);
             pNewAttrList->AddAttribute ( sInitialisationVectorAttribute, sCdataAttribute, aBuffer.makeStringAndClear() );
 
             xHandler->ignorableWhitespace ( sWhiteSpace );
@@ -474,7 +475,7 @@ ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > con
                 pNewAttrList->AddAttribute ( sIterationCountAttribute, sCdataAttribute, aBuffer.makeStringAndClear() );
 
                 *pSalt >>= aSequence;
-                ::sax::Converter::encodeBase64(aBuffer, aSequence);
+                ::comphelper::Base64::encode(aBuffer, aSequence);
                 pNewAttrList->AddAttribute ( sSaltAttribute, sCdataAttribute, aBuffer.makeStringAndClear() );
             }
 

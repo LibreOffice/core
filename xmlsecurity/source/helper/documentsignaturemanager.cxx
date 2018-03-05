@@ -30,6 +30,7 @@
 #include <com/sun/star/xml/crypto/SEInitializer.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
+#include <comphelper/base64.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sax/tools/converter.hxx>
@@ -289,13 +290,13 @@ bool DocumentSignatureManager::add(
         nSecurityId = maSignatureHelper.GetNewSecurityId();
 
         OUStringBuffer aStrBuffer;
-        sax::Converter::encodeBase64(aStrBuffer, xCert->getEncoded());
+        comphelper::Base64::encode(aStrBuffer, xCert->getEncoded());
 
         OUString aKeyId;
         if (auto pCertificate = dynamic_cast<xmlsecurity::Certificate*>(xCert.get()))
         {
             OUStringBuffer aBuffer;
-            sax::Converter::encodeBase64(aBuffer, pCertificate->getSHA256Thumbprint());
+            comphelper::Base64::encode(aBuffer, pCertificate->getSHA256Thumbprint());
             aKeyId = aBuffer.makeStringAndClear();
         }
         else
@@ -334,13 +335,13 @@ bool DocumentSignatureManager::add(
         nSecurityId = maSignatureHelper.GetNewSecurityId();
 
         OUStringBuffer aStrBuffer;
-        sax::Converter::encodeBase64(aStrBuffer, xCert->getEncoded());
+        comphelper::Base64::encode(aStrBuffer, xCert->getEncoded());
 
         OUString aCertDigest;
         if (auto pCertificate = dynamic_cast<xmlsecurity::Certificate*>(xCert.get()))
         {
             OUStringBuffer aBuffer;
-            sax::Converter::encodeBase64(aBuffer, pCertificate->getSHA256Thumbprint());
+            comphelper::Base64::encode(aBuffer, pCertificate->getSHA256Thumbprint());
             aCertDigest = aBuffer.makeStringAndClear();
         }
         else
@@ -359,7 +360,7 @@ bool DocumentSignatureManager::add(
     OUStringBuffer aStrBuffer;
     for (int i = 0; i < nCnt; i++)
     {
-        sax::Converter::encodeBase64(aStrBuffer, pCertPath[i]->getEncoded());
+        comphelper::Base64::encode(aStrBuffer, pCertPath[i]->getEncoded());
         maSignatureHelper.AddEncapsulatedX509Certificate(aStrBuffer.makeStringAndClear());
     }
 

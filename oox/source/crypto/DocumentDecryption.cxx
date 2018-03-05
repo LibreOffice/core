@@ -10,6 +10,7 @@
 
 #include <oox/crypto/DocumentDecryption.hxx>
 
+#include <comphelper/base64.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <sax/tools/converter.hxx>
 #include <cppuhelper/implbase.hxx>
@@ -90,7 +91,7 @@ public:
                 if (localname(rAttribute.Name) == "saltValue")
                 {
                     Sequence<sal_Int8> keyDataSalt;
-                    ::sax::Converter::decodeBase64(keyDataSalt, rAttribute.Value);
+                    ::comphelper::Base64::decode(keyDataSalt, rAttribute.Value);
                     mInfo.keyDataSalt = convertToVector(keyDataSalt);
                 }
             }
@@ -135,25 +136,25 @@ public:
                 else if (rAttrLocalName == "saltValue")
                 {
                     Sequence<sal_Int8> saltValue;
-                    ::sax::Converter::decodeBase64(saltValue, rAttribute.Value);
+                    ::comphelper::Base64::decode(saltValue, rAttribute.Value);
                     mInfo.saltValue = convertToVector(saltValue);
                 }
                 else if (rAttrLocalName == "encryptedVerifierHashInput")
                 {
                     Sequence<sal_Int8> encryptedVerifierHashInput;
-                    ::sax::Converter::decodeBase64(encryptedVerifierHashInput, rAttribute.Value);
+                    ::comphelper::Base64::decode(encryptedVerifierHashInput, rAttribute.Value);
                     mInfo.encryptedVerifierHashInput = convertToVector(encryptedVerifierHashInput);
                 }
                 else if (rAttrLocalName == "encryptedVerifierHashValue")
                 {
                     Sequence<sal_Int8> encryptedVerifierHashValue;
-                    ::sax::Converter::decodeBase64(encryptedVerifierHashValue, rAttribute.Value);
+                    ::comphelper::Base64::decode(encryptedVerifierHashValue, rAttribute.Value);
                     mInfo.encryptedVerifierHashValue = convertToVector(encryptedVerifierHashValue);
                 }
                 else if (rAttrLocalName == "encryptedKeyValue")
                 {
                     Sequence<sal_Int8> encryptedKeyValue;
-                    ::sax::Converter::decodeBase64(encryptedKeyValue, rAttribute.Value);
+                    ::comphelper::Base64::decode(encryptedKeyValue, rAttribute.Value);
                     mInfo.encryptedKeyValue = convertToVector(encryptedKeyValue);
                 }
             }

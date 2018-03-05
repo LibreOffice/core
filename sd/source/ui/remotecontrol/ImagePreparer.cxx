@@ -19,6 +19,7 @@
 
 #include "ImagePreparer.hxx"
 
+#include <comphelper/base64.hxx>
 #include <comphelper/processfactory.hxx>
 #include <osl/file.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -88,7 +89,7 @@ void ImagePreparer::sendPreview( sal_uInt32 aSlideNumber )
         return;
 
     OUStringBuffer aStrBuffer;
-    ::sax::Converter::encodeBase64( aStrBuffer, aImageData );
+    ::comphelper::Base64::encode( aStrBuffer, aImageData );
 
     OString aEncodedShortString = OUStringToOString(
         aStrBuffer.makeStringAndClear(), RTL_TEXTENCODING_UTF8 );
