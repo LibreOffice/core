@@ -21,6 +21,7 @@
 #include "svgfontexport.hxx"
 #include "svgwriter.hxx"
 
+#include <comphelper/base64.hxx>
 #include <rtl/crc.h>
 #include <vcl/unohelp.hxx>
 #include <vcl/outdev.hxx>
@@ -2731,7 +2732,7 @@ void SVGActionWriter::ImplWriteBmp( const BitmapEx& rBmpEx,
                 Size                     aSz;
                 Sequence< sal_Int8 >     aSeq( static_cast<sal_Int8 const *>(aOStm.GetData()), aOStm.Tell() );
                 OUStringBuffer aBuffer( "data:image/png;base64," );
-                ::sax::Converter::encodeBase64( aBuffer, aSeq );
+                ::comphelper::Base64::encode( aBuffer, aSeq );
 
                 ImplMap( rPt, aPt );
                 ImplMap( rSz, aSz );

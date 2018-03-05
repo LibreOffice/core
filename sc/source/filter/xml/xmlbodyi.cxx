@@ -49,6 +49,7 @@
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/nmspmap.hxx>
 
+#include <comphelper/base64.hxx>
 #include <sax/tools/converter.hxx>
 #include <sal/types.h>
 
@@ -265,7 +266,7 @@ void SAL_CALL ScXMLBodyContext::endFastElement(sal_Int32 nElement)
             uno::Sequence<sal_Int8> aPass;
             if (!sPassword.isEmpty())
             {
-                ::sax::Converter::decodeBase64(aPass, sPassword);
+                ::comphelper::Base64::decode(aPass, sPassword);
                 pProtection->setPasswordHash(aPass, meHash1, meHash2);
             }
 

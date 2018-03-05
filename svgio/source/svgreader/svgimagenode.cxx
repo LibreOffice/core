@@ -32,6 +32,7 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <rtl/uri.hxx>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
+#include <comphelper/base64.hxx>
 
 namespace svgio
 {
@@ -212,7 +213,7 @@ namespace svgio
                     {
                         // use embedded base64 encoded data
                         css::uno::Sequence< sal_Int8 > aPass;
-                        ::sax::Converter::decodeBase64(aPass, maData);
+                        ::comphelper::Base64::decode(aPass, maData);
 
                         if(aPass.hasElements())
                         {

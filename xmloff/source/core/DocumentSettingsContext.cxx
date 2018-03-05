@@ -31,6 +31,7 @@
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/base64.hxx>
 
 #include <vector>
 #include <com/sun/star/i18n/XForbiddenCharacters.hpp>
@@ -498,7 +499,7 @@ void XMLConfigItemContext::Characters( const OUString& rChars )
             }
             uno::Sequence<sal_Int8> aBuffer((sChars.getLength() / 4) * 3 );
             sal_Int32 const nCharsDecoded =
-                ::sax::Converter::decodeBase64SomeChars( aBuffer, sChars );
+                ::comphelper::Base64::decodeSomeChars( aBuffer, sChars );
             sal_uInt32 nStartPos(maDecoded.getLength());
             sal_uInt32 nCount(aBuffer.getLength());
             maDecoded.realloc(nStartPos + nCount);

@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <comphelper/base64.hxx>
 #include <sax/tools/converter.hxx>
 #include <sfx2/recentdocsview.hxx>
 #include <sfx2/templatelocalview.hxx>
@@ -190,7 +191,7 @@ void RecentDocsView::Reload()
                 if (!aBase64.isEmpty())
                 {
                     Sequence<sal_Int8> aDecoded;
-                    sax::Converter::decodeBase64(aDecoded, aBase64);
+                    comphelper::Base64::decode(aDecoded, aBase64);
 
                     SvMemoryStream aStream(aDecoded.getArray(), aDecoded.getLength(), StreamMode::READ);
                     vcl::PNGReader aReader(aStream);

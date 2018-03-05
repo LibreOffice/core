@@ -33,6 +33,7 @@
 #include <sax/tools/converter.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/sharedstringpool.hxx>
+#include <comphelper/base64.hxx>
 #include <com/sun/star/text/XTextCursor.hpp>
 #include <com/sun/star/text/ControlCharacter.hpp>
 
@@ -375,7 +376,7 @@ ScXMLTrackedChangesContext::ScXMLTrackedChangesContext( ScXMLImport& rImport,
             if( !aIter.isEmpty() )
             {
                 uno::Sequence<sal_Int8> aPass;
-                ::sax::Converter::decodeBase64( aPass, aIter.toString() );
+                ::comphelper::Base64::decode( aPass, aIter.toString() );
                 pChangeTrackingImportHelper->SetProtection(aPass);
             }
         }

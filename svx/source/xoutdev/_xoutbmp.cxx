@@ -19,6 +19,7 @@
 
 #include <sal/config.h>
 
+#include <comphelper/base64.hxx>
 #include <tools/poly.hxx>
 #include <vcl/bitmapaccess.hxx>
 #include <vcl/virdev.hxx>
@@ -391,7 +392,7 @@ bool XOutBitmap::GraphicToBase64(const Graphic& rGraphic, OUString& rOUString)
     aOStm.Seek(STREAM_SEEK_TO_END);
     css::uno::Sequence<sal_Int8> aOStmSeq( static_cast<sal_Int8 const *>(aOStm.GetData()),aOStm.Tell() );
     OUStringBuffer aStrBuffer;
-    ::sax::Converter::encodeBase64(aStrBuffer,aOStmSeq);
+    ::comphelper::Base64::encode(aStrBuffer,aOStmSeq);
     OUString aEncodedBase64Image = aStrBuffer.makeStringAndClear();
     if( aLink.GetType() == GfxLinkType::NativeSvg )
     {
@@ -405,7 +406,7 @@ bool XOutBitmap::GraphicToBase64(const Graphic& rGraphic, OUString& rOUString)
         *pOutBuffer++ = pBuffer[ite];
         ite++;
       }
-      ::sax::Converter::encodeBase64(aStrBuffer, newTempSeq);
+      ::comphelper::Base64::encode(aStrBuffer, newTempSeq);
       aEncodedBase64Image = aStrBuffer.makeStringAndClear();
       sal_Int32 SVGFixLength = aEncodedBase64Image.getLength();
       aEncodedBase64Image = aEncodedBase64Image.replaceAt(SVGFixLength - 12, SVGFixLength, "") + "PC9zdmc+Cg=="; // removes rear 12 bits of garbage and adds svg closing tag in base64

@@ -77,6 +77,7 @@
 #include <unonames.hxx>
 #include <numformat.hxx>
 
+#include <comphelper/base64.hxx>
 #include <comphelper/extract.hxx>
 #include <comphelper/propertysequence.hxx>
 
@@ -1186,7 +1187,7 @@ void ScXMLImport::SetConfigurationSettings(const uno::Sequence<beans::PropertyVa
                     if (aConfigProps[i].Value >>= sKey)
                     {
                         uno::Sequence<sal_Int8> aPass;
-                        ::sax::Converter::decodeBase64(aPass, sKey);
+                        ::comphelper::Base64::decode(aPass, sKey);
                         if (aPass.getLength())
                         {
                             if (pDoc->GetChangeTrack())

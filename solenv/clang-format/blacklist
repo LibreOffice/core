@@ -1593,6 +1593,7 @@ comphelper/inc/pch/precompiled_comphelper.hxx
 comphelper/qa/container/comphelper_ifcontainer.cxx
 comphelper/qa/container/testifcontainer.cxx
 comphelper/qa/string/test_string.cxx
+comphelper/qa/unit/base64_test.cxx
 comphelper/qa/unit/syntaxhighlighttest.cxx
 comphelper/qa/unit/test_hash.cxx
 comphelper/qa/unit/threadpooltest.cxx

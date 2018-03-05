@@ -20,6 +20,7 @@
 #include <com/sun/star/io/XOutputStream.hpp>
 
 #include <sax/tools/converter.hxx>
+#include <comphelper/base64.hxx>
 
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/XMLBase64ImportContext.hxx>
@@ -65,7 +66,7 @@ void XMLBase64ImportContext::Characters( const OUString& rChars )
         }
         Sequence< sal_Int8 > aBuffer( (sChars.getLength() / 4) * 3 );
         sal_Int32 const nCharsDecoded =
-                ::sax::Converter::decodeBase64SomeChars( aBuffer, sChars );
+                ::comphelper::Base64::decodeSomeChars( aBuffer, sChars );
         xOut->writeBytes( aBuffer );
         if( nCharsDecoded != sChars.getLength() )
             sBase64CharsLeft = sChars.copy( nCharsDecoded );

@@ -30,6 +30,7 @@
 #include <package/Deflater.hxx>
 
 #include <cppuhelper/factory.hxx>
+#include <comphelper/base64.hxx>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/XInterface.hpp>
@@ -75,7 +76,7 @@ namespace XSLT
     void OleHandler::initRootStorageFromBase64(const OString& content)
     {
         Sequence<sal_Int8> oleData;
-        ::sax::Converter::decodeBase64(oleData, OStringToOUString(
+        ::comphelper::Base64::decode(oleData, OStringToOUString(
             content, RTL_TEXTENCODING_UTF8));
         m_rootStream = createTempFile();
         Reference<XOutputStream> xOutput = m_rootStream->getOutputStream();
@@ -142,7 +143,7 @@ namespace XSLT
         decompresser.reset();
         //return the base64 string of the uncompressed data
         OUStringBuffer buf(oleLength);
-        ::sax::Converter::encodeBase64(buf, result);
+        ::comphelper::Base64::encode(buf, result);
         return OUStringToOString(buf.toString(), RTL_TEXTENCODING_UTF8);
     }
 
@@ -175,7 +176,7 @@ namespace XSLT
             xInput->readBytes(oledata, oleLength);
             //return the base64 encoded string
             OUStringBuffer buf(oleLength);
-            ::sax::Converter::encodeBase64(buf, oledata);
+            ::comphelper::Base64::encode(buf, oledata);
             return OUStringToOString(buf.toString(), RTL_TEXTENCODING_UTF8);
         }
         return encodeSubStorage(streamName);
@@ -186,7 +187,7 @@ namespace XSLT
     {
         //decode the base64 string
         Sequence<sal_Int8> oledata;
-        ::sax::Converter::decodeBase64(oledata,
+        ::comphelper::Base64::decode(oledata,
                 OStringToOUString(content, RTL_TEXTENCODING_ASCII_US));
         //create a temp stream to write data to
         Reference<XStream> subStream = createTempFile();
