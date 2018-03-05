@@ -3387,7 +3387,7 @@ uno::Reference<graphic::XGraphic> SdXMLFrameShapeContext::getGraphicFromImportCo
     return xGraphic;
 }
 
-OUString SdXMLFrameShapeContext::getGraphicURLFromImportContext(const SvXMLImportContext& rContext) const
+OUString SdXMLFrameShapeContext::getGraphicPackageURLFromImportContext(const SvXMLImportContext& rContext) const
 {
     OUString aRetval;
     const SdXMLGraphicObjectShapeContext* pSdXMLGraphicObjectShapeContext = dynamic_cast< const SdXMLGraphicObjectShapeContext* >(&rContext);
@@ -3398,15 +3398,9 @@ OUString SdXMLFrameShapeContext::getGraphicURLFromImportContext(const SvXMLImpor
         {
             const uno::Reference< beans::XPropertySet > xPropSet(pSdXMLGraphicObjectShapeContext->getShape(), uno::UNO_QUERY_THROW);
 
-            if(xPropSet.is())
+            if (xPropSet.is())
             {
                 xPropSet->getPropertyValue("GraphicStreamURL") >>= aRetval;
-
-                if(!aRetval.getLength())
-                {
-                    // it maybe a link, try GraphicURL
-                    xPropSet->getPropertyValue("GraphicURL") >>= aRetval;
-                }
             }
         }
         catch( uno::Exception& )
