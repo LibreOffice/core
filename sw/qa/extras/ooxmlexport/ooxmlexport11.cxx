@@ -81,6 +81,13 @@ DECLARE_OOXMLEXPORT_TEST(testTdf112694, "tdf112694.docx")
     CPPUNIT_ASSERT(!getProperty<bool>(aPageStyle, "HeaderIsOn"));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf115861, "tdf115861.docx")
+{
+    // Second item in the paragraph enumeration was a table, 2nd paragraph was
+    // lost.
+    CPPUNIT_ASSERT_EQUAL(OUString("(k)"), getParagraph(2)->getString());
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf67207_MERGEFIELD, "mailmerge.docx")
 {
     uno::Reference<beans::XPropertySet> xTextField = getProperty< uno::Reference<beans::XPropertySet> >(getRun(getParagraph(1), 2), "TextField");

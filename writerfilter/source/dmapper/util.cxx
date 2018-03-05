@@ -34,7 +34,19 @@ std::string XTextRangeToString(uno::Reference< text::XTextRange > const & textRa
 #ifdef DEBUG_WRITERFILTER
     if (textRange.get())
     {
-        OUString aOUStr = textRange->getString();
+        OUString aOUStr;
+
+        try
+        {
+            aOUStr = textRange->getString();
+        }
+        catch (const uno::Exception& rException)
+        {
+            result += "(exception: ";
+            result += rException.Message.toUtf8().getStr();
+            result += ")";
+        }
+
         OString aOStr(aOUStr.getStr(), aOUStr.getLength(),  RTL_TEXTENCODING_ASCII_US );
 
         result = aOStr.getStr();
