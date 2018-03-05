@@ -45,6 +45,10 @@ service FILEConnectionProperties
 
         <p>See the <a href="http://www.iana.org/assignments/character-sets">IANA character set list</a>
         for a list of valid values.</p>
+
+        <p>For internal purposes (e.g., when using an encoding for which no IANA character set name
+        exists), this may also be an UNSIGNED SHORT value representing one of the rtl_TextEncoding
+        values in rtl/textenc.h.</p>
     */
     [optional, property] string CharSet;
 };

@@ -38,6 +38,7 @@
 #include <ucbhelper/content.hxx>
 #include <connectivity/dbcharset.hxx>
 #include <connectivity/dbexception.hxx>
+#include <o3tl/any.hxx>
 #include <osl/thread.h>
 #include <osl/nlsupport.h>
 #include <strings.hrc>
@@ -105,15 +106,22 @@ void OConnection::construct(const OUString& url,const Sequence< PropertyValue >&
             OSL_VERIFY( pIter->Value >>= aExt );
         else if( pIter->Name == "CharSet" )
         {
-            OUString sIanaName;
-            OSL_VERIFY( pIter->Value >>= sIanaName );
-
-            ::dbtools::OCharsetMap aLookupIanaName;
-            ::dbtools::OCharsetMap::const_iterator aLookup = aLookupIanaName.find(sIanaName, ::dbtools::OCharsetMap::IANA());
-            if (aLookup != aLookupIanaName.end())
-                m_nTextEncoding = (*aLookup).getEncoding();
+            if (auto const numeric = o3tl::tryAccess<sal_uInt16>(pIter->Value))
+            {
+                m_nTextEncoding = *numeric;
+            }
             else
-                m_nTextEncoding = RTL_TEXTENCODING_DONTKNOW;
+            {
+                OUString sIanaName;
+                OSL_VERIFY( pIter->Value >>= sIanaName );
+
+                ::dbtools::OCharsetMap aLookupIanaName;
+                ::dbtools::OCharsetMap::const_iterator aLookup = aLookupIanaName.find(sIanaName, ::dbtools::OCharsetMap::IANA());
+                if (aLookup != aLookupIanaName.end())
+                    m_nTextEncoding = (*aLookup).getEncoding();
+                else
+                    m_nTextEncoding = RTL_TEXTENCODING_DONTKNOW;
+            }
         }
         else if( pIter->Name == "ShowDeleted" )
         {
