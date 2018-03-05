@@ -750,11 +750,7 @@ SfxMailModel::SendMailResult SfxMailModel::Send( const css::uno::Reference< css:
                     OUString subject(
                         url.getBase(
                             INetURLObject::LAST_SEGMENT, false,
-#ifdef _WIN32
-                            INetURLObject::DecodeMechanism::NONE)); // MAPISendMail does not accept Unicode
-#else
                             INetURLObject::DecodeMechanism::WithCharset));
-#endif
                     if (subject.isEmpty()) {
                         subject = maAttachedDocuments[0];
                     }
