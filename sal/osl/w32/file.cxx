@@ -420,7 +420,7 @@ oslFileError FileHandle_Impl::readFileAt (
                 return osl_File_E_None;
             }
 
-            SIZE_T const bytes = std::min(m_buflen - bufpos, nBytesRequested);
+            SIZE_T const bytes = std::min(m_buflen - bufpos, (SIZE_T)nBytesRequested);
             memcpy (&(buffer[*pBytesRead]), &(m_buffer[bufpos]), bytes);
             nBytesRequested -= bytes, *pBytesRead += bytes, nOffset += bytes;
         }
@@ -490,7 +490,7 @@ oslFileError FileHandle_Impl::writeFileAt (
                 m_bufptr = bufptr, m_buflen = sal::static_int_cast< SIZE_T >(uDone);
             }
 
-            SIZE_T const bytes = std::min(m_bufsiz - bufpos, nBytesToWrite);
+            SIZE_T const bytes = std::min(m_bufsiz - bufpos, (SIZE_T)nBytesToWrite);
             memcpy (&(m_buffer[bufpos]), &(buffer[*pBytesWritten]), bytes);
             nBytesToWrite -= bytes, *pBytesWritten += bytes, nOffset += bytes;
 
