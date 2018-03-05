@@ -26,6 +26,7 @@
 #include <vcl/button.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/abstdlg.hxx>
+#include <vcl/weld.hxx>
 #include <sfx2/basedlgs.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -91,20 +92,20 @@ enum class InputDialogMode {
     RENAME        = 3,
 };
 
-class CuiInputDialog : public ModalDialog
+class CuiInputDialog
 {
 private:
-    VclPtr<Edit> m_pEdit;
+    std::unique_ptr<weld::Builder> m_xBuilder;
+    std::unique_ptr<weld::Dialog> m_xDialog;
+    std::unique_ptr<weld::Entry> m_xEdit;
 public:
-    CuiInputDialog(vcl::Window * pParent, InputDialogMode nMode);
-    virtual ~CuiInputDialog() override;
-    virtual void dispose() override;
-
-    OUString GetObjectName() const { return m_pEdit->GetText(); }
+    CuiInputDialog(weld::Window * pParent, InputDialogMode nMode);
+    short run() { return m_xDialog->run(); }
+    OUString GetObjectName() const { return m_xEdit->get_text(); }
     void SetObjectName(const OUString& rName)
     {
-        m_pEdit->SetText( rName );
-        m_pEdit->SetSelection( Selection( 0, rName.getLength() ) );
+        m_xEdit->set_text(rName);
+        m_xEdit->select_region(0, -1);
     }
 };
 
