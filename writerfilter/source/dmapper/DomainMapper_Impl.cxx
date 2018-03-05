@@ -388,6 +388,9 @@ void DomainMapper_Impl::AddDummyParaForTableInSection()
 
 void DomainMapper_Impl::RemoveLastParagraph( )
 {
+    if (m_bDiscardHeaderFooter)
+        return;
+
     if (m_aTextAppendStack.empty())
         return;
     uno::Reference< text::XTextAppend > xTextAppend = m_aTextAppendStack.top().xTextAppend;
@@ -1061,6 +1064,9 @@ void DomainMapper_Impl::CheckUnregisteredFrameConversion( )
 
 void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap )
 {
+    if (m_bDiscardHeaderFooter)
+        return;
+
 #ifdef DEBUG_WRITERFILTER
     TagLogger::getInstance().startElement("finishParagraph");
 #endif
