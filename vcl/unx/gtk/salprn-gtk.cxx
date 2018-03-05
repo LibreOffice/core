@@ -939,7 +939,7 @@ GtkPrintDialog::impl_readFromSettings()
         bChanged = true;
         m_xWrapper->print_settings_set_collate(pSettings, bCollate);
     }
-    // TODO: wth was this var. meant for?
+    // TODO: what was this variable meant for?
     (void) bChanged;
 
     m_xWrapper->print_unix_dialog_set_settings(GTK_PRINT_UNIX_DIALOG(m_pDialog), pSettings);

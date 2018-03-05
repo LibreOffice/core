@@ -87,11 +87,11 @@ class FilterCache : public BaseLock
 
             @descr      This cache supports a 2-step load mechanism.
                         First only types (and only some special properties of every type!)
-                        but no filters/frame loaders/content handlers will be readed.
+                        but no filters/frame loaders/content handlers will be read.
                         That should be enough to work with this cache e.g. for loading
                         the first document. After this first document was loaded successfully,
                         a special "load-on-demand-thread" will be started to fill this cache
-                        with ALL other information, which was not readed before.
+                        with ALL other information, which was not read before.
                         That's the second step. All operations on top of this cache will be
                         blocked then.
          */
@@ -112,7 +112,7 @@ class FilterCache : public BaseLock
 
 
         /** @short      regulate, which properties of a configured item
-                        will be readed.
+                        will be read.
 
             @descr      To perform reading of all configuration items,
                         only standard properties will be handled. At a second
@@ -304,7 +304,7 @@ class FilterCache : public BaseLock
         /** @short      force special fill state of this cache.
 
             @descr      This method checks, if all requested items/properties already
-                        exist. Only missing information will be readed.
+                        exist. Only missing information will be read.
                         Otherwise this method does nothing!
 
                         This method must be called from every user of this cache
@@ -663,7 +663,7 @@ class FilterCache : public BaseLock
                         expensive one.
 
             @param      sDirectKey
-                        the absolute configuration path, which should be readed.
+                        the absolute configuration path, which should be read.
 
             @return     [css::uno::Any]
                         the value of the requested key.
@@ -675,7 +675,7 @@ class FilterCache : public BaseLock
 
         /** @short      load the underlying configuration into this cache.
 
-            @descr      Which items should be readed can be regulate by the
+            @descr      Which items should be read can be regulate by the
                         parameter eRequiredState. That provides the possibility
                         to load standard values on startup only and update this
                         cache later on demand with all available information.
@@ -749,7 +749,7 @@ class FilterCache : public BaseLock
                     provides access to the configuration set, which includes all items.
 
             @param  eType
-                    specify, which container item type must be readed.
+                    specify, which container item type must be read.
 
             @param  sItem
                     means the internal name, which can be used to address the item

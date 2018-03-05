@@ -675,13 +675,13 @@ bool SvtModuleOptions_Impl::ClassifyFactoryByName( const OUString& sName, SvtMod
 /*-************************************************************************************************************
     @short      read factory configuration
     @descr      Give us a list of pure factory names (long names!) which can be used as
-                direct set node names ... and we read her property values and fill internal list.
+                direct set node names... and we read her property values and fill internal list.
                 These method can be used by initial reading at ctor and later updating by "Notify()".
 
     @seealso    ctor
     @seealso    method Notify()
 
-    @param      "lFactories" is the list of set node entries which should be readed.
+    @param      "lFactories" is the list of set node entries which should be read.
     @onerror    We do nothing.
     @threadsafe no
 *//*-*************************************************************************************************************/

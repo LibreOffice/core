@@ -38,7 +38,7 @@ public:
     // Decode a base 64 encoded string into a sequence of bytes. The first
     // version can be used for attribute values only, because it does not
     // return any chars left from conversion.
-    // For text submitted throgh the SAX characters call, the later method
+    // For text submitted through the SAX characters call, the later method
     // must be used!
     static void decode(css::uno::Sequence<sal_Int8>& aPass, const OUString& sBuffer);
 

@@ -144,7 +144,7 @@ class HelpOnStartup : public ::cppu::WeakImplHelper< css::lang::XServiceInfo,css
         /** @short  checks, if the help module should be shown automatically for the
                     currently opened office module.
 
-            @descr  This value is readed from the module configuration.
+            @descr  This value is read from the module configuration.
                     In case the help should be shown, this method returns
                     a help URL, which can be used to show the right help content.
 

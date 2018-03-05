@@ -547,7 +547,7 @@ private:
                 - which recovery entries may already exists
 
         @throw  [com.sun.star.uno.RuntimeException]
-                if config could not be opened or readed successfully!
+                if config could not be opened or read successfully!
 
         @threadsafe
       */
@@ -560,7 +560,7 @@ private:
                 E.g. the recovery list is not addressed here.
 
         @throw  [com.sun.star.uno.RuntimeException]
-                if config could not be opened or readed successfully!
+                if config could not be opened or read successfully!
 
         @threadsafe
       */

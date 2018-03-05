@@ -137,13 +137,13 @@ class JobData final
 
         /**
             the uno implementation name of this job.
-            It's readed from the configuration. Don't set it from outside!
+            It's read from the configuration. Don't set it from outside!
          */
         OUString m_sService;
 
         /**
             the module context list of this job.
-            It's readed from the configuration. Don't set it from outside!
+            It's read from the configuration. Don't set it from outside!
          */
         OUString m_sContext;
 
@@ -159,8 +159,8 @@ class JobData final
         OUString m_sEvent;
 
         /**
-            job specific configuration items ... unknown for us!
-            It's readed from the configuration. Don't set it from outside!
+            job specific configuration items... unknown for us!
+            It's read from the configuration. Don't set it from outside!
          */
         std::vector< css::beans::NamedValue > m_lArguments;
 

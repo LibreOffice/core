@@ -2535,7 +2535,7 @@ void ScCellRangesBase::GetOnePropertyValue( const SfxItemPropertySimpleEntry* pE
                 case SC_WID_UNO_TBLBORD:
                 case SC_WID_UNO_TBLBORD2:
                     {
-                        //! loop throgh all ranges
+                        //! loop through all ranges
                         if ( !aRanges.empty() )
                         {
                             const ScRange* pFirst = aRanges[ 0 ];
@@ -3439,7 +3439,7 @@ uno::Reference<sheet::XSheetCellRanges> SAL_CALL ScCellRangesBase::queryVisibleC
         while (nCol <= MAXCOL)
         {
             if (rDoc.ColHidden(nCol, nTab, nullptr, &nLastCol))
-                // hidden columns.  Unselect them.
+                // hidden columns.  Deselect them.
                 aMarkData.SetMultiMarkArea(ScRange(nCol, 0, nTab, nLastCol, MAXROW, nTab), false);
 
             nCol = nLastCol + 1;
@@ -3449,7 +3449,7 @@ uno::Reference<sheet::XSheetCellRanges> SAL_CALL ScCellRangesBase::queryVisibleC
         while (nRow <= MAXROW)
         {
             if (rDoc.RowHidden(nRow, nTab, nullptr, &nLastRow))
-                // These rows are hidden.  Unselect them.
+                // These rows are hidden.  Deselect them.
                 aMarkData.SetMultiMarkArea(ScRange(0, nRow, nTab, MAXCOL, nLastRow, nTab), false);
 
             nRow = nLastRow + 1;
