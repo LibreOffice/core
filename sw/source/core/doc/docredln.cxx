@@ -1011,60 +1011,60 @@ sal_uInt32 SwRangeRedline::m_nLastId = 1;
 
 SwRangeRedline::SwRangeRedline(RedlineType_t eTyp, const SwPaM& rPam )
     : SwPaM( *rPam.GetMark(), *rPam.GetPoint() ),
-    pRedlineData( new SwRedlineData( eTyp, GetDoc()->getIDocumentRedlineAccess().GetRedlineAuthor() ) ),
-    pContentSect( nullptr ),
+    m_pRedlineData( new SwRedlineData( eTyp, GetDoc()->getIDocumentRedlineAccess().GetRedlineAuthor() ) ),
+    m_pContentSect( nullptr ),
     m_nId( m_nLastId++ )
 {
-    bDelLastPara = false;
-    bIsVisible = true;
+    m_bDelLastPara = false;
+    m_bIsVisible = true;
     if( !rPam.HasMark() )
         DeleteMark();
 }
 
 SwRangeRedline::SwRangeRedline( const SwRedlineData& rData, const SwPaM& rPam )
     : SwPaM( *rPam.GetMark(), *rPam.GetPoint() ),
-    pRedlineData( new SwRedlineData( rData )),
-    pContentSect( nullptr ),
+    m_pRedlineData( new SwRedlineData( rData )),
+    m_pContentSect( nullptr ),
     m_nId( m_nLastId++ )
 {
-    bDelLastPara = false;
-    bIsVisible = true;
+    m_bDelLastPara = false;
+    m_bIsVisible = true;
     if( !rPam.HasMark() )
         DeleteMark();
 }
 
 SwRangeRedline::SwRangeRedline( const SwRedlineData& rData, const SwPosition& rPos )
     : SwPaM( rPos ),
-    pRedlineData( new SwRedlineData( rData )),
-    pContentSect( nullptr ),
+    m_pRedlineData( new SwRedlineData( rData )),
+    m_pContentSect( nullptr ),
     m_nId( m_nLastId++ )
 {
-    bDelLastPara = false;
-    bIsVisible = true;
+    m_bDelLastPara = false;
+    m_bIsVisible = true;
 }
 
 SwRangeRedline::SwRangeRedline( const SwRangeRedline& rCpy )
     : SwPaM( *rCpy.GetMark(), *rCpy.GetPoint() ),
-    pRedlineData( new SwRedlineData( *rCpy.pRedlineData )),
-    pContentSect( nullptr ),
+    m_pRedlineData( new SwRedlineData( *rCpy.m_pRedlineData )),
+    m_pContentSect( nullptr ),
     m_nId( rCpy.m_nId )
 {
-    bDelLastPara = false;
-    bIsVisible = true;
+    m_bDelLastPara = false;
+    m_bIsVisible = true;
     if( !rCpy.HasMark() )
         DeleteMark();
 }
 
 SwRangeRedline::~SwRangeRedline()
 {
-    if( pContentSect )
+    if( m_pContentSect )
     {
         // delete the ContentSection
         if( !GetDoc()->IsInDtor() )
-            GetDoc()->getIDocumentContentOperations().DeleteSection( &pContentSect->GetNode() );
-        delete pContentSect;
+            GetDoc()->getIDocumentContentOperations().DeleteSection( &m_pContentSect->GetNode() );
+        delete m_pContentSect;
     }
-    delete pRedlineData;
+    delete m_pRedlineData;
 }
 
 void MaybeNotifyRedlineModification(SwRangeRedline* pRedline, SwDoc* pDoc)
@@ -1150,12 +1150,12 @@ void SwRangeRedline::Show(sal_uInt16 nLoop, size_t nMyPos)
         switch( GetType() )
         {
         case nsRedlineType_t::REDLINE_INSERT:           // Content has been inserted
-            bIsVisible = true;
+            m_bIsVisible = true;
             MoveFromSection(nMyPos);
             break;
 
         case nsRedlineType_t::REDLINE_DELETE:           // Content has been deleted
-            bIsVisible = true;
+            m_bIsVisible = true;
             MoveFromSection(nMyPos);
             break;
 
@@ -1180,13 +1180,13 @@ void SwRangeRedline::Hide(sal_uInt16 nLoop, size_t nMyPos)
     switch( GetType() )
     {
     case nsRedlineType_t::REDLINE_INSERT:           // Content has been inserted
-        bIsVisible = true;
+        m_bIsVisible = true;
         if( 1 <= nLoop )
             MoveFromSection(nMyPos);
         break;
 
     case nsRedlineType_t::REDLINE_DELETE:           // Content has been deleted
-        bIsVisible = false;
+        m_bIsVisible = false;
         switch( nLoop )
         {
         case 0: MoveToSection();    break;
@@ -1216,13 +1216,13 @@ void SwRangeRedline::ShowOriginal(sal_uInt16 nLoop, size_t nMyPos)
     ::sw::UndoGuard const undoGuard(pDoc->GetIDocumentUndoRedo());
 
     // Determine the Type, it's the first on Stack
-    for( pCur = pRedlineData; pCur->pNext; )
+    for( pCur = m_pRedlineData; pCur->pNext; )
         pCur = pCur->pNext;
 
     switch( pCur->eType )
     {
     case nsRedlineType_t::REDLINE_INSERT:           // Content has been inserted
-        bIsVisible = false;
+        m_bIsVisible = false;
         switch( nLoop )
         {
         case 0: MoveToSection();    break;
@@ -1232,7 +1232,7 @@ void SwRangeRedline::ShowOriginal(sal_uInt16 nLoop, size_t nMyPos)
         break;
 
     case nsRedlineType_t::REDLINE_DELETE:           // Content has been deleted
-        bIsVisible = true;
+        m_bIsVisible = true;
         if( 1 <= nLoop )
             MoveFromSection(nMyPos);
         break;
@@ -1319,7 +1319,7 @@ void SwRangeRedline::CalcStartEnd( sal_uLong nNdIdx, sal_Int32& rStart, sal_Int3
 
 void SwRangeRedline::MoveToSection()
 {
-    if( !pContentSect )
+    if( !m_pContentSect )
     {
         const SwPosition* pStt = Start(),
                         * pEnd = pStt == GetPoint() ? GetMark() : GetPoint();
@@ -1364,7 +1364,7 @@ void SwRangeRedline::MoveToSection()
             else
             {
                 if( pCSttNd && !pCEndNd )
-                    bDelLastPara = true;
+                    m_bDelLastPara = true;
                 pDoc->getIDocumentContentOperations().MoveRange( aPam, aPos,
                     SwMoveFlags::DEFAULT );
             }
@@ -1377,7 +1377,7 @@ void SwRangeRedline::MoveToSection()
             pDoc->getIDocumentContentOperations().MoveRange( aPam, aPos,
                 SwMoveFlags::DEFAULT );
         }
-        pContentSect = new SwNodeIndex( *pSttNd );
+        m_pContentSect = new SwNodeIndex( *pSttNd );
 
         if( pStt == GetPoint() )
             Exchange();
@@ -1390,7 +1390,7 @@ void SwRangeRedline::MoveToSection()
 
 void SwRangeRedline::CopyToSection()
 {
-    if( pContentSect )
+    if( m_pContentSect )
         return;
 
     const SwPosition* pStt = Start(),
@@ -1458,7 +1458,7 @@ void SwRangeRedline::CopyToSection()
             pDoc->GetDocumentContentOperationsManager().CopyWithFlyInFly( aRg, 0, aInsPos );
         }
     }
-    pContentSect = new SwNodeIndex( *pSttNd );
+    m_pContentSect = new SwNodeIndex( *pSttNd );
 
     pDoc->SetCopyIsMove( bSaveCopyFlag );
     pDoc->getIDocumentRedlineAccess().SetRedlineMove( bSaveRdlMoveFlg );
@@ -1467,7 +1467,7 @@ void SwRangeRedline::CopyToSection()
 
 void SwRangeRedline::DelCopyOfSection(size_t nMyPos)
 {
-    if( pContentSect )
+    if( m_pContentSect )
     {
         const SwPosition* pStt = Start(),
                         * pEnd = pStt == GetPoint() ? GetMark() : GetPoint();
@@ -1499,10 +1499,10 @@ void SwRangeRedline::DelCopyOfSection(size_t nMyPos)
         else if( pCSttNd || pCEndNd )
         {
             if( pCSttNd && !pCEndNd )
-                bDelLastPara = true;
+                m_bDelLastPara = true;
             pDoc->getIDocumentContentOperations().DeleteRange( aPam );
 
-            if( bDelLastPara )
+            if( m_bDelLastPara )
             {
                 // To prevent dangling references to the paragraph to
                 // be deleted, redline that point into this paragraph should be
@@ -1552,7 +1552,7 @@ void SwRangeRedline::DelCopyOfSection(size_t nMyPos)
 
 void SwRangeRedline::MoveFromSection(size_t nMyPos)
 {
-    if( pContentSect )
+    if( m_pContentSect )
     {
         SwDoc* pDoc = GetDoc();
         const SwRedlineTable& rTable = pDoc->getIDocumentRedlineAccess().GetRedlineTable();
@@ -1594,11 +1594,11 @@ void SwRangeRedline::MoveFromSection(size_t nMyPos)
             }
         }
 
-        const SwNode* pKeptContentSectNode( &pContentSect->GetNode() ); // #i95711#
+        const SwNode* pKeptContentSectNode( &m_pContentSect->GetNode() ); // #i95711#
         {
-            SwPaM aPam( pContentSect->GetNode(),
-                        *pContentSect->GetNode().EndOfSectionNode(), 1,
-                        ( bDelLastPara ? -2 : -1 ) );
+            SwPaM aPam( m_pContentSect->GetNode(),
+                        *m_pContentSect->GetNode().EndOfSectionNode(), 1,
+                        ( m_bDelLastPara ? -2 : -1 ) );
             SwContentNode* pCNd = aPam.GetContentNode();
             if( pCNd )
                 aPam.GetPoint()->nContent.Assign( pCNd, pCNd->Len() );
@@ -1613,7 +1613,7 @@ void SwRangeRedline::MoveFromSection(size_t nMyPos)
             const sal_Int32 nPos = GetPoint()->nContent.GetIndex();
 
             SwPosition aPos( *GetPoint() );
-            if( bDelLastPara && *aPam.GetPoint() == *aPam.GetMark() )
+            if( m_bDelLastPara && *aPam.GetPoint() == *aPam.GetMark() )
             {
                 --aPos.nNode;
 
@@ -1631,11 +1631,11 @@ void SwRangeRedline::MoveFromSection(size_t nMyPos)
             pCNd = GetMark()->nNode.GetNode().GetContentNode();
             GetMark()->nContent.Assign( pCNd, nPos );
 
-            if( bDelLastPara )
+            if( m_bDelLastPara )
             {
                 ++GetPoint()->nNode;
                 GetPoint()->nContent.Assign( pCNd = GetContentNode(), 0 );
-                bDelLastPara = false;
+                m_bDelLastPara = false;
             }
             else if( pColl )
                 pCNd = GetContentNode();
@@ -1652,12 +1652,12 @@ void SwRangeRedline::MoveFromSection(size_t nMyPos)
         // by comparing it with the "indexed" <SwNode> instance copied before
         // perform the intrinsic move.
         // Note: Such condition is e.g. a "delete" change tracking only containing a table.
-        if ( &pContentSect->GetNode() == pKeptContentSectNode )
+        if ( &m_pContentSect->GetNode() == pKeptContentSectNode )
         {
-            pDoc->getIDocumentContentOperations().DeleteSection( &pContentSect->GetNode() );
+            pDoc->getIDocumentContentOperations().DeleteSection( &m_pContentSect->GetNode() );
         }
-        delete pContentSect;
-        pContentSect = nullptr;
+        delete m_pContentSect;
+        m_pContentSect = nullptr;
 
         // adjustment of redline table positions must take start and
         // end into account, not point and mark.
@@ -1673,16 +1673,16 @@ void SwRangeRedline::MoveFromSection(size_t nMyPos)
 // for Undo
 void SwRangeRedline::SetContentIdx( const SwNodeIndex* pIdx )
 {
-    if( pIdx && !pContentSect )
+    if( pIdx && !m_pContentSect )
     {
-        pContentSect = new SwNodeIndex( *pIdx );
-        bIsVisible = false;
+        m_pContentSect = new SwNodeIndex( *pIdx );
+        m_bIsVisible = false;
     }
-    else if( !pIdx && pContentSect )
+    else if( !pIdx && m_pContentSect )
     {
-        delete pContentSect;
-        pContentSect = nullptr;
-        bIsVisible = false;
+        delete m_pContentSect;
+        m_pContentSect = nullptr;
+        m_bIsVisible = false;
     }
     else
     {
@@ -1693,30 +1693,30 @@ void SwRangeRedline::SetContentIdx( const SwNodeIndex* pIdx )
 bool SwRangeRedline::CanCombine( const SwRangeRedline& rRedl ) const
 {
     return  IsVisible() && rRedl.IsVisible() &&
-            pRedlineData->CanCombine( *rRedl.pRedlineData );
+            m_pRedlineData->CanCombine( *rRedl.m_pRedlineData );
 }
 
 void SwRangeRedline::PushData( const SwRangeRedline& rRedl, bool bOwnAsNext )
 {
-    SwRedlineData* pNew = new SwRedlineData( *rRedl.pRedlineData, false );
+    SwRedlineData* pNew = new SwRedlineData( *rRedl.m_pRedlineData, false );
     if( bOwnAsNext )
     {
-        pNew->pNext = pRedlineData;
-        pRedlineData = pNew;
+        pNew->pNext = m_pRedlineData;
+        m_pRedlineData = pNew;
     }
     else
     {
-        pNew->pNext = pRedlineData->pNext;
-        pRedlineData->pNext = pNew;
+        pNew->pNext = m_pRedlineData->pNext;
+        m_pRedlineData->pNext = pNew;
     }
 }
 
 bool SwRangeRedline::PopData()
 {
-    if( !pRedlineData->pNext )
+    if( !m_pRedlineData->pNext )
         return false;
-    SwRedlineData* pCur = pRedlineData;
-    pRedlineData = pCur->pNext;
+    SwRedlineData* pCur = m_pRedlineData;
+    m_pRedlineData = pCur->pNext;
     pCur->pNext = nullptr;
     delete pCur;
     return true;
@@ -1725,7 +1725,7 @@ bool SwRangeRedline::PopData()
 sal_uInt16 SwRangeRedline::GetStackCount() const
 {
     sal_uInt16 nRet = 1;
-    for( SwRedlineData* pCur = pRedlineData; pCur->pNext; pCur = pCur->pNext )
+    for( SwRedlineData* pCur = m_pRedlineData; pCur->pNext; pCur = pCur->pNext )
         ++nRet;
     return nRet;
 }
@@ -1765,7 +1765,7 @@ bool SwRangeRedline::operator<( const SwRangeRedline& rCmp ) const
 
 const SwRedlineData & SwRangeRedline::GetRedlineData(const sal_uInt16 nPos) const
 {
-    SwRedlineData * pCur = pRedlineData;
+    SwRedlineData * pCur = m_pRedlineData;
 
     sal_uInt16 nP = nPos;
 
@@ -1790,14 +1790,14 @@ OUString SwRangeRedline::GetDescr()
     bool bDeletePaM = false;
 
     // if this redline is visible the content is in this PaM
-    if (nullptr == pContentSect)
+    if (nullptr == m_pContentSect)
     {
         pPaM = this;
     }
     else // otherwise it is saved in pContentSect
     {
-        SwNodeIndex aTmpIdx( *pContentSect->GetNode().EndOfSectionNode() );
-        pPaM = new SwPaM(*pContentSect, aTmpIdx );
+        SwNodeIndex aTmpIdx( *m_pContentSect->GetNode().EndOfSectionNode() );
+        pPaM = new SwPaM(*m_pContentSect, aTmpIdx );
         bDeletePaM = true;
     }
 
