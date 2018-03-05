@@ -1,4 +1,4 @@
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4; fill-column: 100 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -37,6 +37,7 @@
 #include <rtl/ref.hxx>
 #include <tools/datetime.hxx>
 #include <vcl/timer.hxx>
+#include <vcl/svapp.hxx>
 
 #include <basic/sbx.hxx>
 #include <basic/sbstar.hxx>
@@ -44,6 +45,8 @@
 #include <basic/sbmeth.hxx>
 #include <basic/sbmod.hxx>
 #include <basic/vbahelper.hxx>
+
+#include <comphelper/asyncquithandler.hxx>
 
 #include "vbacommandbars.hxx"
 
@@ -439,6 +442,15 @@ void VbaApplicationBase::Quit()
             if ( pBasic )
                 pBasic->QuitAndExitApplication();
         }
+    }
+    else
+    {
+        // This is the case of a call from an (OLE) Automation client.
+
+        // TODO: Probably we should just close any document windows open by the "application"
+        // (Writer or Calc) the call being handled is for. And only then, if no document windows
+        // are left open, quit the actual LibreOffice application.
+        Application::PostUserEvent( LINK( &AsyncQuitHandler::instance(), AsyncQuitHandler, OnAsyncQuit ) );
     }
 }
 
