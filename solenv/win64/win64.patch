@@ -1,0 +1,254 @@
+Index: configure.ac
+===================================================================
+--- configure.ac	(revision 1825802)
++++ configure.ac	(working copy)
+@@ -2116,18 +2116,27 @@
+ 		PATH="$MSPDB_PATH:$PATH"
+ 
+ 		AC_MSG_CHECKING([the Microsoft C/C++ Compiler])
+-   		if test -x "$with_cl_home/bin/cl.exe"; then
+-   			CC="$with_cl_home/bin/cl.exe"
+-   		else
+-   			AC_PATH_PROG(CC, cl.exe)
+-   		fi
+-  		if test -e "$CC"; then
++		case "$build_cpu" in
++		  i?86)
++		    cl_subdirectory="bin"
++		    ;;
++		  x86_64)
++		    cl_subdirectory="bin/amd64"
++		    ;;
++		  *)
++		    AC_MSG_ERROR([Unknown/unsupported CPU.])
++		    ;;
++		esac
++   		if test -x "$with_cl_home/$cl_subdirectory/cl.exe"; then
++   			CC="$with_cl_home/$cl_subdirectory/cl.exe"
++			COMPATH="$with_cl_home"
+ 			# This gives us a posix path with 8.3 filename restrictions
+ 			CC=`cygpath -d "$CC"`
+ 			CC=`cygpath -u "$CC"`
++			COMPATH=`cygpath -d "$COMPATH"`
++			COMPATH=`cygpath -u "$COMPATH"`
+ 			# Remove /cl.exe from CC case insensitive
+ 			AC_MSG_RESULT([found ($CC)])
+-			COMPATH=`echo $CC | $SED 's@\/[[Bb]][[Ii]][[Nn]]\/[[cC]][[lL]]\.[[eE]][[xX]][[eE]]@@'`
+ 			export INCLUDE=`cygpath -d "$COMPATH/Include"`
+ 			dnl  Check which Microsoft C/C++ compiler is found
+ 			AC_MSG_CHECKING([the Version of Microsoft C/C++ Compiler])
+@@ -2150,7 +2159,7 @@
+ 				AC_MSG_ERROR([Compiler too old. Use Microsoft C/C++ .NET 2008.])
+ 			fi
+ 		else
+-			AC_MSG_ERROR([Microsoft C/C++ Compiler not found. Use --with-cl-home or set path to cl.exe.])
++			AC_MSG_ERROR([Microsoft C/C++ Compiler not found. Use --with-cl-home.])
+ 		fi
+ 	else
+ 		AC_MSG_CHECKING([the Mingwin32 C++ Compiler])
+Index: set_soenv.in
+===================================================================
+--- set_soenv.in	(revision 1825825)
++++ set_soenv.in	(working copy)
+@@ -687,8 +687,6 @@
+       $USE_DIRECTX5   = "";
+       $FRAME_HOME     = PathFormat('@FRAME_HOME@');
+       $USE_NEW_SDK    = "TRUE";
+-      $CPUNAME        = "INTEL";
+-      $CPU            = "I";
+       $GUI            = "WNT";
+       $GUIBASE        = "WIN";
+       $GVER           = "NT351";
+@@ -706,20 +704,19 @@
+       $COMPATH        = PathFormat('@COMPATH@/bin');
+       $COMPATH        =~ s/\/bin$//i;
+       $COM            = "GCC";
++      $CPU            = "I";
++      $CPUNAME        = "INTEL";
+       $CVER           = "C341";
+       $OUTPATH        = "wntgcci";
+-      $INPATH         = $OUTPATH.$PROEXT;
+       $ATL_INCLUDE = '$SOLARVER'.$ds.'$INPATH'.$ds."inc".$ds."external".$ds."mingw".$ds."include".$ds."atl". " ".'$PSDK_HOME'.$ds."include".$ds."atl";
+   }
+   else # The MSVC section starts here
+-  {   $outfile        = "winenv.set";
++  {
+       $COMPATH        = PathFormat('@COMPATH@');
+       $CXX_X64_BINARY = PathFormat('@COMPATH@/bin/amd64/cl.exe');
+       $LINK_X64_BINARY = PathFormat('@COMPATH@/bin/amd64/link.exe');
+       $LIBMGR_X64_BINARY = PathFormat('@COMPATH@/bin/amd64/lib.exe');
+       $COM            = "MSC";
+-      $OUTPATH        = "wntmsci@COMEX@";
+-      $INPATH         = $OUTPATH.$PROEXT;
+       $COMEX          = '@COMEX@';
+       if ( "@COMEX@" eq "10" ) { # .NET 2003 needs M1310
+           $CVER        = "M1310";
+@@ -732,11 +729,27 @@
+ 	      die "Unsupported value for COMEX variable.\n";
+ 	  }
+       }
+-      print "Setting W32 build with bash shell specific values... ";
+       # No special treatment for CC and CXX anymore.
+       $FLIPCMD        = "slfl.pl";
+       $PATH_SEPERATOR = ';';
++      if ($platform =~ m/^i[3456]86/) {
++	  print "Setting Windows x86 build with bash shell specific values... ";
++	  $outfile    = "winenv.set";
++	  $CPU        = "I";
++	  $CPUNAME    = "INTEL";
++	  $OUTPATH    = "wntmsci@COMEX@";
++      } elsif ($platform =~ m/^x86_64/) {
++	  print "Setting Windows x86_64 build with bash shell specific values... ";
++	  $outfile    = "winAMD64Env.set";
++	  $CPU        = "X";
++	  $CPUNAME    = "X86_64";
++	  $OUTPATH    = "wntmscx@COMEX@";
++      } else {
++	  print "Unsupported Windows architecture: $platform \n";
++	  exit 1;
++      }
+   }
++  $INPATH = $OUTPATH.$PROEXT;
+ }
+ elsif ( $platform =~ m/os2/ ) 
+ { 
+@@ -1075,10 +1088,19 @@
+    # Mingw is different
+    if ( $COM eq "MSC" )
+    {  $ILIB       .=    $wps.$SOLARVER.$ds.$INPATH.$LIB.
+-                        $wps.$JAVA_HOME.$LIB.
+-                        $wps.$PSDK_HOME.$LIB.
++                        $wps.$JAVA_HOME.$LIB;
++      if ( $CPU eq "I" ) {
++         $ILIB    .=    $wps.$PSDK_HOME.$LIB.
+                         $wps.$FRAME_HOME.$LIB.
+                         $wps.$COMPATH.$LIB;
++      } elsif ( $CPU eq "X" ) {
++         $ILIB    .=    $wps.$PSDK_HOME.$LIB.$ds."x64".
++                        $wps.$FRAME_HOME.$LIB.
++                        $wps.$COMPATH.$LIB.$ds."amd64";
++      } else {
++         print "Unsupported Windows CPU: $CPU\n";
++         exit 1;
++      }
+       if ( '@ENABLE_DIRECTX@' ne "" ) {
+           # We may have DirectX but not DirectDraw
+           if ( '@ENABLE_DIRECT_DRAW@' ne "") {
+@@ -1167,12 +1189,19 @@
+ 	  }
+    }
+ 
+-   # Add path to compiler
+-   $tmppath = CygFormat($COMPATH).$BIN;
+-   $tmppath =~ s/^\/\//\//;
+-   $PATH .= $ps.$tmppath;
++   if ( $COM eq "MSC" ) {
++	   # Add path to compiler
++	   if ( $CPU eq "I" ) {
++		   $tmppath = CygFormat($COMPATH).$BIN;
++	   } elsif ( $CPU eq "X" ) {
++		   $tmppath = CygFormat($COMPATH).$BIN.$ds."amd64";
++	   } else {
++		   print "Unsupported Windows CPU: $CPU\n";
++		   exit 1;
++	   }
++	   $tmppath =~ s/^\/\//\//;
++	   $PATH .= $ps.$tmppath;
+ 
+-   if ( $COM eq "MSC" ) {
+        $tmppath = CygFormat($MSPDB_PATH);
+ 	   # for .NET to find mspdb71.dll (needed by CL.EXE C/C++ Compiler)
+ 	   if ( $PATH !~ /(?:[:]|\A)(?:$tmppath)(?:[:]|\Z)/ ) {
+@@ -1196,6 +1225,11 @@
+ 		   }
+ 	   }
+    } else { # Mingw is different
++	   # Add path to compiler
++	   $tmppath = CygFormat($COMPATH).$BIN;
++	   $tmppath =~ s/^\/\//\//;
++	   $PATH .= $ps.$tmppath;
++
+ 	   # Native installer needs some files if the Windows Installer SDK
+                $tmppath = CygFormat($PSDK_HOME);
+ 	   if ( $PATH !~ /(?:[:]|\A)(?:$tmppath\/bin)(?:[:]|\Z)/i ) {
+Index: solenv/gbuild/platform/windows.mk
+===================================================================
+--- solenv/gbuild/platform/windows.mk	(revision 1825802)
++++ solenv/gbuild/platform/windows.mk	(working copy)
+@@ -63,7 +63,12 @@
+ 	-DFULL_DESK \
+ 	-DM1500 \
+ 
++ifeq ($(CPUNAME),INTEL)
+ gb_CPUDEFS := -DINTEL -D_X86_=1
++endif
++ifeq ($(CPUNAME),X86_64)
++gb_CPUDEFS := -DX86_64 -D_AMD64_=1
++endif
+ 
+ gb_RCDEFS := \
+      -DWINVER=0x0400 \
+@@ -187,12 +192,21 @@
+ 
+ gb_NoexPrecompiledHeader_NOEXCEPTIONFLAGS := $(gb_LinkTarget_NOEXCEPTIONFLAGS)
+ 
++ifeq ($(CPUNAME),INTEL)
+ gb_LinkTarget_LDFLAGS := \
+ 	-MACHINE:IX86 \
+ 	-NODEFAULTLIB \
+ 	$(patsubst %,-LIBPATH:%,$(filter-out .,$(subst ;, ,$(subst \,/,$(ILIB))))) \
+-	
+ 
++endif
++ifeq ($(CPUNAME),X86_64)
++gb_LinkTarget_LDFLAGS := \
++	-MACHINE:X64 \
++	-NODEFAULTLIB \
++	$(patsubst %,-LIBPATH:%,$(filter-out .,$(subst ;, ,$(subst \,/,$(ILIB))))) \
++
++endif
++
+ gb_DEBUG_CFLAGS := -Zi
+ 
+ ifeq ($(gb_DEBUGGING),TRUE)
+@@ -437,7 +451,12 @@
+ # Library class
+ 
+ gb_Library_DEFS := -D_DLL_
++ifeq ($(CPUNAME),INTEL)
+ gb_Library_TARGETTYPEFLAGS := -DLL -OPT:NOREF -SAFESEH -NXCOMPAT -DYNAMICBASE
++endif
++ifeq ($(CPUNAME),X86_64)
++gb_Library_TARGETTYPEFLAGS := -DLL -OPT:NOREF -NXCOMPAT -DYNAMICBASE
++endif
+ gb_Library_get_rpath :=
+ 
+ gb_Library_SYSPRE := i
+@@ -608,7 +627,12 @@
+ # Executable class
+ 
+ gb_Executable_EXT := .exe
++ifeq ($(CPUNAME),INTEL)
+ gb_Executable_TARGETTYPEFLAGS := -RELEASE -BASE:0x1b000000 -OPT:NOREF -INCREMENTAL:NO -DEBUG -SAFESEH -NXCOMPAT -DYNAMICBASE
++endif
++ifeq ($(CPUNAME),X86_64)
++gb_Executable_TARGETTYPEFLAGS := -RELEASE -BASE:0x1b000000 -OPT:NOREF -INCREMENTAL:NO -DEBUG -NXCOMPAT -DYNAMICBASE
++endif
+ gb_Executable_get_rpath :=
+ gb_Executable_TARGETGUI := 
+ 
+Index: solenv/inc/wnt.mk
+===================================================================
+--- solenv/inc/wnt.mk	(revision 1825802)
++++ solenv/inc/wnt.mk	(working copy)
+@@ -39,6 +39,10 @@
+ .INCLUDE : wntgcci.mk
+ .ENDIF
+ 
++.IF "$(OS)$(COM)$(CPU)" == "WNTMSCX"
++.INCLUDE : wntmscx.mk
++.ENDIF
++
+ # --- changes for W32-tcsh - should move into settings.mk ---
+ JAVAC=javac
+ JAVA=java
