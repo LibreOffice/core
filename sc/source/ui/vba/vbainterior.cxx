@@ -41,7 +41,6 @@
 #include "vbapalette.hxx"
 #include <document.hxx>
 
-#define COLORMAST 0xFFFFFF
 typedef std::map< sal_Int32, sal_Int32 >  PatternMap;
 typedef std::pair< sal_Int32, sal_Int32 > PatternPair;
 using namespace ::com::sun::star;
@@ -82,7 +81,7 @@ static PatternMap aPatternMap( lcl_getPatternMap() );
 ScVbaInterior::ScVbaInterior( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< beans::XPropertySet >&  xProps, ScDocument* pScDoc ) : ScVbaInterior_BASE( xParent, xContext ), m_xProps(xProps), m_pScDoc( pScDoc )
 {
     // auto color
-    m_aPattColor = sal_uInt32(0x0);
+    m_aPattColor = Color(0);
     m_nPattern = 0;
     if ( !m_xProps.is() )
         throw lang::IllegalArgumentException("properties", uno::Reference< uno::XInterface >(), 2 );
@@ -120,18 +119,18 @@ ScVbaInterior::SetMixedColor()
     if( aPatternColor.hasValue() )
     {
         sal_uInt32 nPatternColor = GetAttributeData( aPatternColor );
-        m_aPattColor = nPatternColor;
+        m_aPattColor = Color(nPatternColor);
     }
-    sal_Int32 nPatternColor = m_aPattColor.GetColor();
+    Color nPatternColor = m_aPattColor;
     // back color
     Color aBackColor( GetBackColor() );
     // set mixed color
     Color aMixedColor;
     if( nPattern > 0 )
-        aMixedColor = GetPatternColor( Color(nPatternColor), aBackColor, static_cast<sal_uInt32>(nPattern) );
+        aMixedColor = GetPatternColor( nPatternColor, aBackColor, static_cast<sal_uInt32>(nPattern) );
     else
         aMixedColor = GetPatternColor( aBackColor, aBackColor, static_cast<sal_uInt32>(nPattern) );
-    sal_Int32 nMixedColor = aMixedColor.GetColor() & COLORMAST;
+    Color nMixedColor = aMixedColor.GetRGBColor();
     m_xProps->setPropertyValue( BACKCOLOR , uno::makeAny( nMixedColor ) );
 }
 
@@ -319,7 +318,7 @@ ScVbaInterior::GetBackColor()
     if( aColor.hasValue() )
     {
         nColor = GetAttributeData( aColor );
-        aBackColor = nColor;
+        aBackColor = Color(nColor);
     }
     else
     {
@@ -328,7 +327,7 @@ ScVbaInterior::GetBackColor()
         if( aAny >>= nColor )
         {
             nColor = XLRGBToOORGB( nColor );
-            aBackColor = nColor;
+            aBackColor = Color(nColor);
             SetUserDefinedAttributes( BACKCOLOR, SetAttributeData( nColor ) );
         }
     }
@@ -342,7 +341,7 @@ ScVbaInterior::getPatternColor()
     if( aPatternColor.hasValue() )
     {
         sal_uInt32 nPatternColor = GetAttributeData( aPatternColor );
-        return uno::makeAny( OORGBToXLRGB( nPatternColor ) );
+        return uno::makeAny( OORGBToXLRGB( Color(nPatternColor) ) );
     }
     return uno::makeAny( sal_Int32( 0 ) );
 }
@@ -374,7 +373,7 @@ ScVbaInterior::setPatternColorIndex( const uno::Any& _patterncolorindex )
 
     if( nColorIndex == 0 )
         return;
-    sal_Int32 nPattColor = 0;
+    Color nPattColor;
     GetIndexColor( nColorIndex ) >>= nPattColor;
     setPatternColor( uno::makeAny( OORGBToXLRGB( nPattColor ) ) );
 

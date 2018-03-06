@@ -57,14 +57,14 @@ public:
     void        SetDetectiveAuto( bool bNew )   { bDetectiveAuto = bNew; }
     bool        GetDetectiveAuto() const        { return bDetectiveAuto; }
 
-    void        SetTrackContentColor(sal_uInt32 nNew) { nTrackContentColor = nNew; }
-    sal_uInt32  GetTrackContentColor() const     { return nTrackContentColor; }
-    void        SetTrackInsertColor(sal_uInt32 nNew)  { nTrackInsertColor = nNew;  }
-    sal_uInt32  GetTrackInsertColor() const      { return nTrackInsertColor;  }
-    void        SetTrackDeleteColor(sal_uInt32 nNew)  { nTrackDeleteColor = nNew;  }
-    sal_uInt32  GetTrackDeleteColor() const      { return nTrackDeleteColor;  }
-    void        SetTrackMoveColor(sal_uInt32 nNew)    { nTrackMoveColor = nNew;    }
-    sal_uInt32  GetTrackMoveColor() const        { return nTrackMoveColor;    }
+    void        SetTrackContentColor(Color nNew) { nTrackContentColor = nNew; }
+    Color       GetTrackContentColor() const     { return nTrackContentColor; }
+    void        SetTrackInsertColor(Color nNew)  { nTrackInsertColor = nNew;  }
+    Color       GetTrackInsertColor() const      { return nTrackInsertColor;  }
+    void        SetTrackDeleteColor(Color nNew)  { nTrackDeleteColor = nNew;  }
+    Color       GetTrackDeleteColor() const      { return nTrackDeleteColor;  }
+    void        SetTrackMoveColor(Color nNew)    { nTrackMoveColor = nNew;    }
+    Color       GetTrackMoveColor() const        { return nTrackMoveColor;    }
 
     ScLkUpdMode GetLinkMode() const             { return eLinkMode ;}
     void        SetLinkMode( ScLkUpdMode nSet ) {   eLinkMode  = nSet;}
@@ -92,10 +92,10 @@ private:
     sal_uInt32      nStatusFunc;
     bool            bAutoComplete;
     bool            bDetectiveAuto;
-    sal_uInt32  nTrackContentColor;
-    sal_uInt32  nTrackInsertColor;
-    sal_uInt32  nTrackDeleteColor;
-    sal_uInt32  nTrackMoveColor;
+    Color           nTrackContentColor;
+    Color           nTrackInsertColor;
+    Color           nTrackDeleteColor;
+    Color           nTrackMoveColor;
     ScLkUpdMode eLinkMode;
     sal_Int32       nDefaultObjectSizeWidth;
     sal_Int32       nDefaultObjectSizeHeight;

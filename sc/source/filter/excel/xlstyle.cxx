@@ -36,10 +36,10 @@
 
 /** Standard EGA colors, bright. */
 #define EXC_PALETTE_EGA_COLORS_LIGHT \
-            0x000000, 0xFFFFFF, 0xFF0000, 0x00FF00, 0x0000FF, 0xFFFF00, 0xFF00FF, 0x00FFFF
+            Color(0x000000), Color(0xFFFFFF), Color(0xFF0000), Color(0x00FF00), Color(0x0000FF), Color(0xFFFF00), Color(0xFF00FF), Color(0x00FFFF)
 /** Standard EGA colors, dark. */
 #define EXC_PALETTE_EGA_COLORS_DARK \
-            0x800000, 0x008000, 0x000080, 0x808000, 0x800080, 0x008080, 0xC0C0C0, 0x808080
+            Color(0x800000), Color(0x008000), Color(0x000080), Color(0x808000), Color(0x800080), Color(0x008080), Color(0xC0C0C0), Color(0x808080)
 
 /** Default color table for BIFF2. */
 static const Color spnDefColorTable2[] =
@@ -61,11 +61,11 @@ static const Color spnDefColorTable5[] =
 /*  0 */    EXC_PALETTE_EGA_COLORS_LIGHT,
 /*  8 */    EXC_PALETTE_EGA_COLORS_LIGHT,
 /* 16 */    EXC_PALETTE_EGA_COLORS_DARK,
-/* 24 */    0x8080FF, 0x802060, 0xFFFFC0, 0xA0E0E0, 0x600080, 0xFF8080, 0x0080C0, 0xC0C0FF,
-/* 32 */    0x000080, 0xFF00FF, 0xFFFF00, 0x00FFFF, 0x800080, 0x800000, 0x008080, 0x0000FF,
-/* 40 */    0x00CFFF, 0x69FFFF, 0xE0FFE0, 0xFFFF80, 0xA6CAF0, 0xDD9CB3, 0xB38FEE, 0xE3E3E3,
-/* 48 */    0x2A6FF9, 0x3FB8CD, 0x488436, 0x958C41, 0x8E5E42, 0xA0627A, 0x624FAC, 0x969696,
-/* 56 */    0x1D2FBE, 0x286676, 0x004500, 0x453E01, 0x6A2813, 0x85396A, 0x4A3285, 0x424242
+/* 24 */    Color(0x8080FF), Color(0x802060), Color(0xFFFFC0), Color(0xA0E0E0), Color(0x600080), Color(0xFF8080), Color(0x0080C0), Color(0xC0C0FF),
+/* 32 */    Color(0x000080), Color(0xFF00FF), Color(0xFFFF00), Color(0x00FFFF), Color(0x800080), Color(0x800000), Color(0x008080), Color(0x0000FF),
+/* 40 */    Color(0x00CFFF), Color(0x69FFFF), Color(0xE0FFE0), Color(0xFFFF80), Color(0xA6CAF0), Color(0xDD9CB3), Color(0xB38FEE), Color(0xE3E3E3),
+/* 48 */    Color(0x2A6FF9), Color(0x3FB8CD), Color(0x488436), Color(0x958C41), Color(0x8E5E42), Color(0xA0627A), Color(0x624FAC), Color(0x969696),
+/* 56 */    Color(0x1D2FBE), Color(0x286676), Color(0x004500), Color(0x453E01), Color(0x6A2813), Color(0x85396A), Color(0x4A3285), Color(0x424242)
 };
 
 /** Default color table for BIFF8. */
@@ -74,11 +74,11 @@ static const Color spnDefColorTable8[] =
 /*  0 */    EXC_PALETTE_EGA_COLORS_LIGHT,
 /*  8 */    EXC_PALETTE_EGA_COLORS_LIGHT,
 /* 16 */    EXC_PALETTE_EGA_COLORS_DARK,
-/* 24 */    0x9999FF, 0x993366, 0xFFFFCC, 0xCCFFFF, 0x660066, 0xFF8080, 0x0066CC, 0xCCCCFF,
-/* 32 */    0x000080, 0xFF00FF, 0xFFFF00, 0x00FFFF, 0x800080, 0x800000, 0x008080, 0x0000FF,
-/* 40 */    0x00CCFF, 0xCCFFFF, 0xCCFFCC, 0xFFFF99, 0x99CCFF, 0xFF99CC, 0xCC99FF, 0xFFCC99,
-/* 48 */    0x3366FF, 0x33CCCC, 0x99CC00, 0xFFCC00, 0xFF9900, 0xFF6600, 0x666699, 0x969696,
-/* 56 */    0x003366, 0x339966, 0x003300, 0x333300, 0x993300, 0x993366, 0x333399, 0x333333
+/* 24 */    Color(0x9999FF), Color(0x993366), Color(0xFFFFCC), Color(0xCCFFFF), Color(0x660066), Color(0xFF8080), Color(0x0066CC), Color(0xCCCCFF),
+/* 32 */    Color(0x000080), Color(0xFF00FF), Color(0xFFFF00), Color(0x00FFFF), Color(0x800080), Color(0x800000), Color(0x008080), Color(0x0000FF),
+/* 40 */    Color(0x00CCFF), Color(0xCCFFFF), Color(0xCCFFCC), Color(0xFFFF99), Color(0x99CCFF), Color(0xFF99CC), Color(0xCC99FF), Color(0xFFCC99),
+/* 48 */    Color(0x3366FF), Color(0x33CCCC), Color(0x99CC00), Color(0xFFCC00), Color(0xFF9900), Color(0xFF6600), Color(0x666699), Color(0x969696),
+/* 56 */    Color(0x003366), Color(0x339966), Color(0x003300), Color(0x333300), Color(0x993300), Color(0x993366), Color(0x333399), Color(0x333333)
 };
 
 #undef EXC_PALETTE_EGA_COLORS_LIGHT
@@ -89,9 +89,9 @@ XclDefaultPalette::XclDefaultPalette( const XclRoot& rRoot ) :
     mnTableSize( 0 )
 {
     const StyleSettings& rSett = Application::GetSettings().GetStyleSettings();
-    mnWindowText = rSett.GetWindowTextColor().GetColor();
-    mnWindowBack = rSett.GetWindowColor().GetColor();
-    mnFaceColor = rSett.GetFaceColor().GetColor();
+    mnWindowText = rSett.GetWindowTextColor();
+    mnWindowBack = rSett.GetWindowColor();
+    mnFaceColor = rSett.GetFaceColor();
     // Don't use the system HelpBack and HelpText colours as it causes problems
     // with modern gnome. This is because mnNoteText and mnNoteBack are used
     // when colour indices ( instead of real colours ) are specified.
@@ -106,8 +106,8 @@ XclDefaultPalette::XclDefaultPalette( const XclRoot& rRoot ) :
     // ) lessens the chance of the one colour being an unsuitable combination
     // because by default the note text is black and the note background is
     // a light yellow colour ( very similar to Excel's normal defaults )
-    mnNoteText =  svtools::ColorConfig::GetDefaultColor( svtools::FONTCOLOR ).GetColor();
-    mnNoteBack =  svtools::ColorConfig::GetDefaultColor( svtools::CALCNOTESBACKGROUND ).GetColor();
+    mnNoteText =  svtools::ColorConfig::GetDefaultColor( svtools::FONTCOLOR );
+    mnNoteBack =  svtools::ColorConfig::GetDefaultColor( svtools::CALCNOTESBACKGROUND );
 
     // default colors
     switch( rRoot.GetBiff() )

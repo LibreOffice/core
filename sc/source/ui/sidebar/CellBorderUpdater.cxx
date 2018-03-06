@@ -45,7 +45,7 @@ void CellBorderUpdater::UpdateCellBorder(bool bTop, bool bBot, bool bLeft, bool 
     ScopedVclPtr<VirtualDevice> pVirDev(VclPtr<VirtualDevice>::Create());
     pVirDev->SetOutputSizePixel(aBmpSize);
     pVirDev->SetLineColor( ::Application::GetSettings().GetStyleSettings().GetFieldTextColor() ) ;
-    pVirDev->SetFillColor( COL_BLACK);
+    pVirDev->SetFillColor(COL_BLACK);
 
     Point aTL(2, 1), aTR(42,1), aBL(2, 41), aBR(42, 41), aHL(2,21), aHR(42, 21), aVT(22,1), aVB(22, 41);
     if(bLeft)

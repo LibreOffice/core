@@ -2210,7 +2210,7 @@ void XclImpCheckBoxObj::DoProcessControl( ScfPropertySet& rPropSet ) const
     // background color
     if( maFillData.IsFilled() )
     {
-        sal_Int32 nColor = static_cast< sal_Int32 >( GetSolidFillColor( maFillData ).GetColor() );
+        sal_Int32 nColor = static_cast< sal_Int32 >( GetSolidFillColor( maFillData ) );
         rPropSet.SetProperty( "BackgroundColor", nColor );
     }
 }

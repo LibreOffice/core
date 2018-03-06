@@ -251,7 +251,7 @@ public:
                             sal_uInt16& rnXclForeIx, sal_uInt16& rnXclBackIx, sal_uInt8& rnXclPattern,
                             sal_uInt32 nForeColorId, sal_uInt32 nBackColorId ) const;
 
-    /** Returns the RGB color data for a (non-zero-based) Excel palette entry.
+    /** Returns the RGB color for a (non-zero-based) Excel palette entry.
         @return  The color from current or default palette or COL_AUTO, if nothing else found. */
     Color               GetColor( sal_uInt16 nXclIndex ) const;
 
@@ -467,7 +467,7 @@ Color XclExpPaletteImpl::GetColor( sal_uInt16 nXclIndex ) const
     {
         sal_uInt32 nIdx = nXclIndex - EXC_COLOR_USEROFFSET;
         if( nIdx < maPalette.size() )
-            return maPalette[ nIdx ].maColor.GetColor();
+            return maPalette[ nIdx ].maColor;
     }
     return mrDefPal.GetDefColor( nXclIndex );
 }
@@ -541,7 +541,7 @@ XclListColor* XclExpPaletteImpl::SearchListEntry( const Color& rColor, sal_uInt3
         bFound = pEntry->GetColor() == rColor;
         if( !bFound )
         {
-            if( pEntry->GetColor().GetColor() < rColor.GetColor() )
+            if( pEntry->GetColor() < rColor )
                 nBegIdx = rnIndex + 1;
             else
                 nEndIdx = rnIndex;
@@ -946,7 +946,7 @@ namespace {
 sal_uInt32 lclCalcHash( const XclFontData& rFontData )
 {
     sal_uInt32 nHash = rFontData.maName.getLength();
-    nHash += rFontData.maColor.GetColor() * 2;
+    nHash += sal_uInt32(rFontData.maColor) * 2;
     nHash += rFontData.mnWeight * 3;
     nHash += rFontData.mnCharSet * 5;
     nHash += rFontData.mnFamily * 7;

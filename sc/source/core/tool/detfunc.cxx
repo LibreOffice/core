@@ -121,9 +121,9 @@ private:
     SfxItemSet          aCaptionSet;
 };
 
-Color ScDetectiveFunc::nArrowColor = 0;
-Color ScDetectiveFunc::nErrorColor = 0;
-Color ScDetectiveFunc::nCommentColor = 0;
+Color ScDetectiveFunc::nArrowColor = Color(0);
+Color ScDetectiveFunc::nErrorColor = Color(0);
+Color ScDetectiveFunc::nCommentColor = Color(0);
 bool ScDetectiveFunc::bColorsInitialized = false;
 
 static bool lcl_HasThickLine( const SdrObject& rObj )
@@ -1579,7 +1579,7 @@ ScDetectiveObjType ScDetectiveFunc::GetDetectiveObjectType( SdrObject* pObject, 
                     FindFrameForObject( pObject, rSource );     // modifies rSource
                 }
 
-                Color nObjColor = pObject->GetMergedItem(XATTR_LINECOLOR).GetColorValue().GetColor();
+                Color nObjColor = pObject->GetMergedItem(XATTR_LINECOLOR).GetColorValue();
                 if ( nObjColor == GetErrorColor() && nObjColor != GetArrowColor() )
                     rRedLine = true;
             }

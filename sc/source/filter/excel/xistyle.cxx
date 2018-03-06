@@ -168,7 +168,7 @@ void XclImpPalette::ReadPalette( XclImpStream& rStrm )
     for( sal_uInt16 nIndex = 0; nIndex < nCount; ++nIndex )
     {
         rStrm >> aColor;
-        maColorTable[ nIndex ] = aColor.GetColor();
+        maColorTable[ nIndex ] = aColor;
     }
     ExportPalette();
 }

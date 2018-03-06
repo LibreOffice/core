@@ -490,7 +490,7 @@ IMPL_LINK_NOARG(ScViewCfg, LayoutCommitHdl, ScLinkConfigItem&, void)
         switch(nProp)
         {
             case SCLAYOUTOPT_GRIDCOLOR:
-                pValues[nProp] <<= static_cast<sal_Int32>(GetGridColor().GetColor());
+                pValues[nProp] <<= GetGridColor();
                 break;
             case SCLAYOUTOPT_GRIDLINES:
                 pValues[nProp] <<= GetOption( VOPT_GRID );

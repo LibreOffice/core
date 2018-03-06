@@ -76,16 +76,16 @@ bool ScRedlineOptionsTabPage::FillItemSet( SfxItemSet* /* rSet */ )
 {
     ScAppOptions aAppOptions=SC_MOD()->GetAppOptions();
 
-    sal_uLong nNew = m_pContentColorLB->GetSelectEntryColor().GetColor();
+    Color nNew = m_pContentColorLB->GetSelectEntryColor();
     aAppOptions.SetTrackContentColor(nNew);
 
-    nNew = m_pMoveColorLB->GetSelectEntryColor().GetColor();
+    nNew = m_pMoveColorLB->GetSelectEntryColor();
     aAppOptions.SetTrackMoveColor(nNew);
 
-    nNew = m_pInsertColorLB->GetSelectEntryColor().GetColor();
+    nNew = m_pInsertColorLB->GetSelectEntryColor();
     aAppOptions.SetTrackInsertColor(nNew);
 
-    nNew = m_pRemoveColorLB->GetSelectEntryColor().GetColor();
+    nNew = m_pRemoveColorLB->GetSelectEntryColor();
     aAppOptions.SetTrackDeleteColor(nNew);
 
     SC_MOD()->SetAppOptions(aAppOptions);
@@ -103,17 +103,17 @@ void ScRedlineOptionsTabPage::Reset( const SfxItemSet* /* rSet */ )
 {
     ScAppOptions aAppOptions=SC_MOD()->GetAppOptions();
 
-    sal_uLong nColor = aAppOptions.GetTrackContentColor();
-    m_pContentColorLB->SelectEntry(Color(nColor));
+    Color nColor = aAppOptions.GetTrackContentColor();
+    m_pContentColorLB->SelectEntry(nColor);
 
     nColor = aAppOptions.GetTrackMoveColor();
-    m_pMoveColorLB->SelectEntry(Color(nColor));
+    m_pMoveColorLB->SelectEntry(nColor);
 
     nColor = aAppOptions.GetTrackInsertColor();
-    m_pInsertColorLB->SelectEntry(Color(nColor));
+    m_pInsertColorLB->SelectEntry(nColor);
 
     nColor = aAppOptions.GetTrackDeleteColor();
-    m_pRemoveColorLB->SelectEntry(Color(nColor));
+    m_pRemoveColorLB->SelectEntry(nColor);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

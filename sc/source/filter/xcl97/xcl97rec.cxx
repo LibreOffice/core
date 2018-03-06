@@ -531,7 +531,7 @@ static void lcl_FillProps( EscherPropertyContainer& rPropOpt, SdrObject* pCaptio
                 // be incorrect where user has chosen to use this colour explicitly.
                 Color aColor( static_cast<sal_uInt8>(nValue), static_cast<sal_uInt8>( nValue >> 8 ), static_cast<sal_uInt8>( nValue >> 16 ) );
                 const StyleSettings& rSett = Application::GetSettings().GetStyleSettings();
-                if( aColor == rSett.GetHelpColor().GetColor() )
+                if( aColor == rSett.GetHelpColor() )
                 {
                     rPropOpt.AddOpt( ESCHER_Prop_fillColor, 0x08000050 );
                     rPropOpt.AddOpt( ESCHER_Prop_fillBackColor, 0x08000050 );

@@ -344,14 +344,14 @@ sal_Int32 SAL_CALL ScAccessibleCsvRuler::getForeground(  )
 {
     SolarMutexGuard aGuard;
     ensureAlive();
-    return implGetRuler().GetSettings().GetStyleSettings().GetLabelTextColor().GetColor();
+    return sal_Int32(implGetRuler().GetSettings().GetStyleSettings().GetLabelTextColor());
 }
 
 sal_Int32 SAL_CALL ScAccessibleCsvRuler::getBackground(  )
 {
     SolarMutexGuard aGuard;
     ensureAlive();
-    return implGetRuler().GetSettings().GetStyleSettings().GetFaceColor().GetColor();
+    return sal_Int32(implGetRuler().GetSettings().GetStyleSettings().GetFaceColor());
 }
 
 // XAccessibleContext ---------------------------------------------------------
@@ -878,7 +878,7 @@ sal_Int32 SAL_CALL ScAccessibleCsvGrid::getForeground(  )
 {
     SolarMutexGuard aGuard;
     ensureAlive();
-    return implGetGrid().GetSettings().GetStyleSettings().GetButtonTextColor().GetColor();
+    return sal_Int32(implGetGrid().GetSettings().GetStyleSettings().GetButtonTextColor());
 }
 
 sal_Int32 SAL_CALL ScAccessibleCsvGrid::getBackground(  )
@@ -1395,7 +1395,7 @@ sal_Int32 SAL_CALL ScAccessibleCsvCell::getForeground(  )
 {
     SolarMutexGuard aGuard;
     ensureAlive();
-    return implGetGrid().GetSettings().GetStyleSettings().GetButtonTextColor().GetColor();
+    return sal_Int32(implGetGrid().GetSettings().GetStyleSettings().GetButtonTextColor());
 }
 
 sal_Int32 SAL_CALL ScAccessibleCsvCell::getBackground(  )

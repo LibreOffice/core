@@ -112,7 +112,7 @@ void ScDDComboBoxButton::ImpDrawArrow( const tools::Rectangle& rRect )
     tools::Rectangle aTempRect = aPixRect;
 
     const StyleSettings& rSett = Application::GetSettings().GetStyleSettings();
-    Color aColor( rSett.GetButtonTextColor().GetColor() );
+    Color aColor( rSett.GetButtonTextColor() );
     pOut->SetFillColor( aColor );
     pOut->SetLineColor( aColor );
 
