@@ -1387,7 +1387,7 @@ namespace emfio
 
             if( mnEndPos - mnStartPos )
             {
-               bool bEMFAvailable = false;
+                bool bEMFAvailable = false;
                 while( true )
                 {
                     mnCurrentAction++;
@@ -1404,6 +1404,15 @@ namespace emfio
 
                         break;
                     }
+
+                    const sal_uInt32 nAvailableBytes = mnEndPos - nPos;
+                    const sal_uInt32 nMaxPossibleRecordSize = nAvailableBytes/2;
+                    if (mnRecSize > nMaxPossibleRecordSize)
+                    {
+                        mpInputStream->SetError(SVSTREAM_FILEFORMAT_ERROR);
+                        break;
+                    }
+
                     if ( !bEMFAvailable )
                     {
                         if(   !maBmpSaveList.empty()
@@ -1448,16 +1457,8 @@ namespace emfio
                         }
                     }
 
-                    const sal_uInt32 nAvailableBytes = mnEndPos - nPos;
-                    const sal_uInt32 nMaxPossibleRecordSize = nAvailableBytes/2;
-
-                    if (mnRecSize <= nMaxPossibleRecordSize)
-                    {
-                        nPos += mnRecSize * 2;
-                        mpInputStream->Seek(nPos);
-                    }
-                    else
-                        mpInputStream->SetError( SVSTREAM_FILEFORMAT_ERROR );
+                    nPos += mnRecSize * 2;
+                    mpInputStream->Seek(nPos);
                 }
             }
             else
