@@ -340,9 +340,7 @@ static PyTypeObject PyUNOStructType =
     nullptr,
     nullptr,
     nullptr
-#if PY_VERSION_HEX >= 0x02060000
     , 0
-#endif
 #if PY_VERSION_HEX >= 0x03040000
     , nullptr
 #endif
