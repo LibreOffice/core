@@ -2659,7 +2659,7 @@ void WinSalFrame::UpdateSettings( AllSettings& rSettings )
     ImplSVData* pSVData = ImplGetSVData();
     pSVData->maNWFData.mnMenuFormatBorderX = 0;
     pSVData->maNWFData.mnMenuFormatBorderY = 0;
-    pSVData->maNWFData.maMenuBarHighlightTextColor = Color( COL_TRANSPARENT );
+    pSVData->maNWFData.maMenuBarHighlightTextColor = COL_TRANSPARENT );
     GetSalData()->mbThemeMenuSupport = false;
     if (officecfg::Office::Common::Accessibility::AutoDetectSystemHC::get())
     {
@@ -4554,7 +4554,7 @@ static int ImplDrawItem(HWND, WPARAM wParam, LPARAM lParam )
             // set transparent pixels to background color
             if( fDisabled )
                 colBackground = RGB(255,255,255);
-            aBitmap.Replace( Color( COL_LIGHTMAGENTA ),
+            aBitmap.Replace( COL_LIGHTMAGENTA ),
                 Color( GetRValue(colBackground),GetGValue(colBackground),GetBValue(colBackground) ));
 
             WinSalBitmap* pSalBmp = static_cast<WinSalBitmap*>(aBitmap.ImplGetImpBitmap()->ImplGetSalBitmap());

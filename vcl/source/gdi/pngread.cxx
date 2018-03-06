@@ -804,7 +804,7 @@ bool PNGReaderImpl::ImplReadTransparent()
             return false;
         mcOpaqueColor = BitmapColor( 0x00 );
         mcTranspColor = BitmapColor( 0xFF );
-        mpMaskAcc->Erase( 0x00 );
+        mpMaskAcc->Erase( Color(0,0,0) );
     }
 
     return true;

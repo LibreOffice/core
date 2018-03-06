@@ -484,7 +484,7 @@ void BitmapTest::testCRC()
 #endif
 
     // a 1x1 black & white checkerboard
-    aVDev->DrawCheckered(Point(), aVDev->GetOutputSizePixel(), 1, 1);
+    aVDev->DrawCheckered(Point(), aVDev->GetOutputSizePixel(), 1, Color(0, 0, 1));
     Bitmap aChecker = getAsBitmap(aVDev);
     checkAndInsert(aCRCs, aChecker, "checkerboard");
     aChecker.Invert();

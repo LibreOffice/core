@@ -2412,7 +2412,7 @@ BitmapChecksum GDIMetaFile::GetChecksum() const
                 BCToBCOA( pAct->GetBitmap().GetChecksum(), aBCOA );
                 nCrc = vcl_get_checksum( nCrc, aBCOA, BITMAP_CHECKSUM_SIZE );
 
-                UInt32ToSVBT32( pAct->GetColor().GetColor(), aBT32 );
+                UInt32ToSVBT32( sal_uInt32(pAct->GetColor()), aBT32 );
                 nCrc = vcl_get_checksum( nCrc, aBT32, 4 );
 
                 UInt32ToSVBT32( pAct->GetPoint().X(), aBT32 );
@@ -2433,7 +2433,7 @@ BitmapChecksum GDIMetaFile::GetChecksum() const
                 BCToBCOA( pAct->GetBitmap().GetChecksum(), aBCOA );
                 nCrc = vcl_get_checksum( nCrc, aBCOA, BITMAP_CHECKSUM_SIZE );
 
-                UInt32ToSVBT32( pAct->GetColor().GetColor(), aBT32 );
+                UInt32ToSVBT32( sal_uInt32(pAct->GetColor()), aBT32 );
                 nCrc = vcl_get_checksum( nCrc, aBT32, 4 );
 
                 UInt32ToSVBT32( pAct->GetPoint().X(), aBT32 );
@@ -2460,7 +2460,7 @@ BitmapChecksum GDIMetaFile::GetChecksum() const
                 BCToBCOA( pAct->GetBitmap().GetChecksum(), aBCOA );
                 nCrc = vcl_get_checksum( nCrc, aBCOA, BITMAP_CHECKSUM_SIZE );
 
-                UInt32ToSVBT32( pAct->GetColor().GetColor(), aBT32 );
+                UInt32ToSVBT32( sal_uInt32(pAct->GetColor()), aBT32 );
                 nCrc = vcl_get_checksum( nCrc, aBT32, 4 );
 
                 UInt32ToSVBT32( pAct->GetDestPoint().X(), aBT32 );
