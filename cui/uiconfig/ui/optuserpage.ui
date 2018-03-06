@@ -860,7 +860,7 @@
                     <property name="halign">end</property>
                     <property name="label" translatable="yes" context="optuserpage|signingkeylabel">OpenPGP signing key:</property>
                     <property name="use_underline">True</property>
-                    <property name="mnemonic_widget">encryptionkey</property>
+                    <property name="mnemonic_widget">signingkey</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
