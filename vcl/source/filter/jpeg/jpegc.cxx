@@ -72,7 +72,7 @@ extern "C" void outputMessage (j_common_ptr cinfo)
 
 static int GetWarningLimit()
 {
-    return utl::ConfigManager::IsFuzzing() ? 10 : 1000;
+    return utl::ConfigManager::IsFuzzing() ? 5 : 1000;
 }
 
 extern "C" void emitMessage (j_common_ptr cinfo, int msg_level)
