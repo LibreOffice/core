@@ -20,6 +20,7 @@
 #include <memory>
 #include <CommonSalLayout.hxx>
 
+#include <unotools/configmgr.hxx>
 #include <vcl/unohelp.hxx>
 #include <scrptrun.h>
 #include <com/sun/star/i18n/CharacterIteratorMode.hpp>
@@ -193,6 +194,7 @@ CommonSalLayout::CommonSalLayout(HDC hDC, WinFontInstance& rWinFontInstance, con
 ,   mrWinFontInstance(rWinFontInstance)
 ,   mnAveWidthFactor(1.0f)
 ,   mpVertGlyphs(nullptr)
+,   mbFuzzing(utl::ConfigManager::IsFuzzing())
 {
     mpHbFont = rWinFontFace.GetHbFont();
     if (!mpHbFont)
@@ -240,6 +242,7 @@ CommonSalLayout::CommonSalLayout(const CoreTextStyle& rCoreTextStyle)
 :   mrFontSelData(rCoreTextStyle.maFontSelData)
 ,   mrCoreTextStyle(rCoreTextStyle)
 ,   mpVertGlyphs(nullptr)
+,   mbFuzzing(utl::ConfigManager::IsFuzzing())
 {
     mpHbFont = rCoreTextStyle.GetHbFont();
     if (!mpHbFont)
@@ -283,6 +286,7 @@ CommonSalLayout::CommonSalLayout(const FontSelectPattern &rFSP,
     , mbUseQt5(bUseQt5)
     , mpQFont(pQt5Font)
     , mpVertGlyphs(nullptr)
+    , mbFuzzing(utl::ConfigManager::IsFuzzing())
 {
     if (mbUseQt5)
     {
@@ -321,6 +325,7 @@ CommonSalLayout::CommonSalLayout(FreetypeFont& rFreetypeFont)
     : mrFontSelData(rFreetypeFont.GetFontSelData())
     , mpFreetypeFont(&rFreetypeFont)
     , mpVertGlyphs(nullptr)
+    , mbFuzzing(utl::ConfigManager::IsFuzzing())
 {
     InitFromFreetypeFont();
 }
@@ -425,7 +430,7 @@ std::shared_ptr<vcl::TextLayoutCache> CommonSalLayout::CreateTextLayoutCache(OUS
 
 void CommonSalLayout::SetNeedFallback(ImplLayoutArgs& rArgs, sal_Int32 nCharPos, bool bRightToLeft)
 {
-    if (nCharPos < 0)
+    if (nCharPos < 0 || mbFuzzing)
         return;
 
     using namespace ::com::sun::star;
