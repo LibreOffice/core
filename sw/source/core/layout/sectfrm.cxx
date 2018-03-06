@@ -1749,7 +1749,7 @@ SwLayoutFrame *SwFrame::GetNextSctLeaf( MakePageType eMakePage )
                         pNxt = static_cast<SwSectionFrame*>(pTmp);
                     else
                     {
-                        OSL_ENSURE( pTmp->IsTabFrame(), "GetNextSctLeaf: Wrong Type" );
+                        assert(pTmp->IsTabFrame());
                         pNxt = static_cast<SwTabFrame*>(pTmp);
                     }
                     while( !pNxtContent && nullptr != ( pTmp = pTmp->GetNext() ) )
