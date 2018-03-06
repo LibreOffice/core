@@ -86,6 +86,7 @@ public:
                                             const css::uno::Reference<css::frame::XController>& rxController);
 
     const OUString& GetLastActiveDeck( const Context& rContext );
+    void SetLastActiveDeck( const Context& rContext, const OUString& rsDeckId );
 
     /** Remember the expansions state per panel and context.
     */

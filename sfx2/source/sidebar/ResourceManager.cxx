@@ -236,6 +236,11 @@ const OUString& ResourceManager::GetLastActiveDeck( const Context& rContext )
         return maLastActiveDecks[rContext.msApplication];
 }
 
+void ResourceManager::SetLastActiveDeck( const Context& rContext, const OUString &rsDeckId )
+{
+    maLastActiveDecks[rContext.msApplication] = rsDeckId;
+}
+
 void ResourceManager::ReadDeckList()
 {
     const utl::OConfigurationTreeRoot aDeckRootNode(

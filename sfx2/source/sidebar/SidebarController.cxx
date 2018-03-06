@@ -437,8 +437,12 @@ void SidebarController::UpdateConfigurations()
         || mnRequestedForceFlags!=SwitchFlag_NoForce)
     {
 
-        if (maCurrentContext.msApplication != "none")
+        if ((maCurrentContext.msApplication != "none") &&
+             !maCurrentContext.msApplication.isEmpty())
+        {
             mpResourceManager->SaveDecksSettings(maCurrentContext);
+            mpResourceManager->SetLastActiveDeck(maCurrentContext, msCurrentDeckId);
+        }
 
         // get last active deck for this application on first update
         if (!maRequestedContext.msApplication.isEmpty() &&
