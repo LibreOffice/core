@@ -248,11 +248,9 @@ void OCacheSet::fillParameters( const ORowSetRow& _rRow
             _rOrgValues.push_back(nCheckCount);
 
         }
-        std::vector< Reference<XNameAccess> >::const_iterator aIndexEnd = aAllIndexColumns.end();
-        for( std::vector< Reference<XNameAccess> >::const_iterator aIndexIter = aAllIndexColumns.begin();
-                aIndexIter != aIndexEnd;++aIndexIter)
+        for (auto const& indexColumn : aAllIndexColumns)
         {
-            if((*aIndexIter)->hasByName(aColumnName))
+            if(indexColumn->hasByName(aColumnName))
             {
                 _sCondition.append(::dbtools::quoteName( aQuote,aColumnName));
                 if(aIter->isNull())
@@ -306,10 +304,10 @@ void OCacheSet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetRow& _rOri
             ++i;
         }
     }
-    auto aOrgValueEnd = aOrgValues.cend();
-    for(auto aOrgValue = aOrgValues.cbegin(); aOrgValue != aOrgValueEnd;++aOrgValue,++i)
+    for (auto const& orgValue : aOrgValues)
     {
-        setParameter(i,xParameter,(_rOriginalRow->get())[*aOrgValue],m_xSetMetaData->getColumnType(i),m_xSetMetaData->getScale(i));
+        setParameter(i,xParameter,(_rOriginalRow->get())[orgValue],m_xSetMetaData->getColumnType(i),m_xSetMetaData->getScale(i));
+        ++i;
     }
 
      m_bUpdated = xPrep->executeUpdate() > 0;
@@ -357,10 +355,10 @@ void OCacheSet::deleteRow(const ORowSetRow& _rDeleteRow ,const connectivity::OSQ
     Reference< XPreparedStatement > xPrep(m_xConnection->prepareStatement(aSql.makeStringAndClear()));
     Reference< XParameters > xParameter(xPrep,UNO_QUERY);
     sal_Int32 i = 1;
-    auto aOrgValueEnd = aOrgValues.cend();
-    for(auto j = aOrgValues.cbegin(); j != aOrgValueEnd; ++j,++i)
+    for (auto const& orgValue : aOrgValues)
     {
-        setParameter(i,xParameter,(_rDeleteRow->get())[*j],m_xSetMetaData->getColumnType(i),m_xSetMetaData->getScale(i));
+        setParameter(i,xParameter,(_rDeleteRow->get())[orgValue],m_xSetMetaData->getColumnType(i),m_xSetMetaData->getScale(i));
+        ++i;
     }
 
     m_bDeleted = xPrep->executeUpdate() > 0;

@@ -803,19 +803,20 @@ void OKeySet::copyRowValue(const ORowSetRow& _rInsertRow, ORowSetRow const & _rK
     connectivity::ORowVector< ORowSetValue >::Vector::const_iterator aParaValuesIter = m_aParameterValueForCache->get().begin() +1;
 
     bool bChanged = false;
-    SelectColumnsMetaData::const_iterator aParaIter = (*m_pParameterNames).begin();
-    SelectColumnsMetaData::const_iterator aParaEnd = (*m_pParameterNames).end();
-    for(sal_Int32 i = 1;aParaIter != aParaEnd;++aParaIter,++aParaValuesIter,++i)
+    sal_Int32 i = 1;
+    for (auto const& parameterName : *m_pParameterNames)
     {
         ORowSetValue aValue(*aParaValuesIter);
-        aValue.setSigned(m_aSignedFlags[aParaIter->second.nPosition-1]);
-        if ( (_rInsertRow->get())[aParaIter->second.nPosition] != aValue )
+        aValue.setSigned(m_aSignedFlags[parameterName.second.nPosition-1]);
+        if ( (_rInsertRow->get())[parameterName.second.nPosition] != aValue )
         {
             rtl::Reference<ORowSetValueVector> aCopy(new ORowSetValueVector(*m_aParameterValueForCache.get()));
-            (aCopy->get())[i] = (_rInsertRow->get())[aParaIter->second.nPosition];
+            (aCopy->get())[i] = (_rInsertRow->get())[parameterName.second.nPosition];
             m_aUpdatedParameter[i_nBookmark] = aCopy;
             bChanged = true;
         }
+        ++aParaValuesIter;
+        ++i;
     }
     if ( !bChanged )
     {
@@ -825,11 +826,12 @@ void OKeySet::copyRowValue(const ORowSetRow& _rInsertRow, ORowSetRow const & _rK
     // update the key values
     SelectColumnsMetaData::const_iterator aPosIter = (*m_pKeyColumnNames).begin();
     const SelectColumnsMetaData::const_iterator aPosEnd = (*m_pKeyColumnNames).end();
-    for(;aPosIter != aPosEnd;++aPosIter,++aIter)
+    for (auto const& keyColumnName : *m_pKeyColumnNames)
     {
-        impl_convertValue_throw(_rInsertRow,aPosIter->second);
-        *aIter = (_rInsertRow->get())[aPosIter->second.nPosition];
-        aIter->setTypeKind(aPosIter->second.nType);
+        impl_convertValue_throw(_rInsertRow,keyColumnName.second);
+        *aIter = (_rInsertRow->get())[keyColumnName.second.nPosition];
+        aIter->setTypeKind(keyColumnName.second.nType);
+        ++aIter;
     }
 }
 

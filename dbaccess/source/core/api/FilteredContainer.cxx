@@ -85,11 +85,12 @@ sal_Int32 createWildCardVector(Sequence< OUString >& _rTableFilter, std::vector<
         // the table is allowed to "pass" if we had no filters at all or any of the non-wildcard filters matches
         if (!bFilterMatch && !_rWCSearch.empty())
         {   // or if one of the wildcard expression matches
-            for (   std::vector< WildCard >::const_iterator aLoop = _rWCSearch.begin();
-                    aLoop != _rWCSearch.end() && !bFilterMatch;
-                    ++aLoop
-                )
-                bFilterMatch = aLoop->Matches( _rName );
+            for (auto const& elem : _rWCSearch)
+            {
+                bFilterMatch = elem.Matches( _rName );
+                if (bFilterMatch)
+                    break;
+            }
         }
 
         return bFilterMatch;
@@ -184,15 +185,12 @@ sal_Int32 createWildCardVector(Sequence< OUString >& _rTableFilter, std::vector<
             TableInfos aUnfilteredTables( _unfilteredTables );
             aUnfilteredTables.reserve( nTableFilterCount + ( aWildCardTableFilter.size() * 10 ) );
 
-            for (   TableInfos::iterator table = aUnfilteredTables.begin();
-                    table != aUnfilteredTables.end();
-                    ++table
-                )
+            for (auto & unfilteredTable : aUnfilteredTables)
             {
-                lcl_ensureComposedName( *table, _metaData );
+                lcl_ensureComposedName(unfilteredTable, _metaData);
 
-                if ( lcl_isElementAllowed( *table->sComposedName, aNonWildCardTableFilter, aWildCardTableFilter ) )
-                    aFilteredTables.push_back( *table );
+                if ( lcl_isElementAllowed( *unfilteredTable.sComposedName, aNonWildCardTableFilter, aWildCardTableFilter ) )
+                    aFilteredTables.push_back(unfilteredTable);
             }
         }
 
@@ -209,27 +207,21 @@ sal_Int32 createWildCardVector(Sequence< OUString >& _rTableFilter, std::vector<
             const OUString* pTableTypeFilterBegin = _tableTypeFilter.getConstArray();
             const OUString* pTableTypeFilterEnd = pTableTypeFilterBegin + _tableTypeFilter.getLength();
 
-            for (   TableInfos::iterator table = aUnfilteredTables.begin();
-                    table != aUnfilteredTables.end();
-                    ++table
-                )
+            for (auto & unfilteredTable : aUnfilteredTables)
             {
                 // ensure that we know the table type
-                lcl_ensureType( *table, _metaData, _masterContainer );
+                lcl_ensureType( unfilteredTable, _metaData, _masterContainer );
 
-                if ( std::find( pTableTypeFilterBegin, pTableTypeFilterEnd, *table->sType ) != pTableTypeFilterEnd )
-                    aFilteredTables.push_back( *table );
+                if ( std::find( pTableTypeFilterBegin, pTableTypeFilterEnd, *unfilteredTable.sType ) != pTableTypeFilterEnd )
+                    aFilteredTables.push_back(unfilteredTable);
             }
         }
 
         ::std::vector< OUString> aReturn;
-        for (   TableInfos::iterator table = aFilteredTables.begin();
-                table != aFilteredTables.end();
-                ++table
-            )
+        for (auto & filteredTable : aFilteredTables)
         {
-            lcl_ensureComposedName( *table, _metaData );
-            aReturn.push_back( *table->sComposedName );
+            lcl_ensureComposedName(filteredTable, _metaData);
+            aReturn.push_back(*filteredTable.sComposedName);
         }
         return aReturn;
     }
