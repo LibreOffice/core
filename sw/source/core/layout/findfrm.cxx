@@ -750,7 +750,7 @@ SwFrame *SwFrame::FindNext_()
         SwLayoutFrame *pUp = pThis->GetUpper();
         while (pUp && !pUp->IsCellFrame())
             pUp = pUp->GetUpper();
-        SAL_WARN_IF(!pUp, "sw.core", "Content in table but not in cell.");
+        assert(pUp && "Content flag says it's in table but it's not in cell.");
         SwFrame* pNxt = pUp ? static_cast<SwCellFrame*>(pUp)->GetFollowCell() : nullptr;
         if ( pNxt )
             pNxt = static_cast<SwCellFrame*>(pNxt)->ContainsContent();
@@ -1108,7 +1108,7 @@ SwFrame *SwFrame::FindPrev_()
             SwLayoutFrame *pUp = pThis->GetUpper();
             while (pUp && !pUp->IsCellFrame())
                 pUp = pUp->GetUpper();
-            SAL_WARN_IF(!pUp, "sw.core", "Content in table but not in cell.");
+            assert(pUp && "Content flag says it's in table but it's not in cell.");
             if (pUp && pUp->IsAnLower(pPrvCnt))
                 return pPrvCnt;
         }
