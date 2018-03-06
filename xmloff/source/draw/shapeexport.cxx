@@ -2356,56 +2356,38 @@ void XMLShapeExport::ImpExportGraphicObjectShape(
 
     const bool bSaveBackwardsCompatible = bool( mrExport.getExportFlags() & SvXMLExportFlags::SAVEBACKWARDCOMPATIBLE );
 
-    OUString sImageURL;
-    uno::Reference<graphic::XGraphic> xGraphic;
-
-    if( !bIsEmptyPresObj || bSaveBackwardsCompatible )
+    if (!bIsEmptyPresObj || bSaveBackwardsCompatible)
     {
-        if( !bIsEmptyPresObj )
+        uno::Reference<graphic::XGraphic> xGraphic;
+        OUString sOutMimeType;
+
+        if (!bIsEmptyPresObj)
         {
             OUString aStreamURL;
             xPropSet->getPropertyValue("GraphicStreamURL") >>= aStreamURL;
-
             OUString sRequestedName = getNameFromStreamURL(aStreamURL);
 
-            xPropSet->getPropertyValue("GraphicURL") >>= sImageURL;
+            xPropSet->getPropertyValue("Graphic") >>= xGraphic;
 
-            uno::Any aGraphicAny = xPropSet->getPropertyValue("Graphic");
-            if (aGraphicAny.has<uno::Reference<graphic::XGraphic>>())
-                xGraphic = aGraphicAny.get<uno::Reference<graphic::XGraphic>>();
-
-            OUString aStoredURL;
+            OUString sInternalURL;
 
             if (xGraphic.is())
+                sInternalURL = mrExport.AddEmbeddedXGraphic(xGraphic, sOutMimeType, sRequestedName);
+
+            if (!sInternalURL.isEmpty())
             {
-                aStoredURL = mrExport.AddEmbeddedXGraphic(xGraphic, sRequestedName);
-            }
-            else
-            {
-                OUString aResolveURL(sImageURL);
-                if (!sRequestedName.isEmpty())
-                    aResolveURL += "?requestedName=" + sRequestedName;
-
-                aStoredURL = mrExport.AddEmbeddedGraphicObject(aResolveURL);
-            }
-
-            mrExport.AddAttribute(XML_NAMESPACE_XLINK, XML_HREF, aStoredURL);
-
-            if (!aStoredURL.isEmpty())
-            {
-                const OUString sPackageURL("vnd.sun.star.Package:");
-
                 // apply possible changed stream URL to embedded image object
                 if (!sRequestedName.isEmpty())
                 {
+                    const OUString sPackageURL("vnd.sun.star.Package:");
                     OUString newStreamURL = sPackageURL;
-                    if (aStoredURL[0] == '#')
+                    if (sInternalURL[0] == '#')
                     {
-                        newStreamURL += aStoredURL.copy(1, aStoredURL.getLength() - 1);
+                        newStreamURL += sInternalURL.copy(1, sInternalURL.getLength() - 1);
                     }
                     else
                     {
-                        newStreamURL += aStoredURL;
+                        newStreamURL += sInternalURL;
                     }
 
                     if (newStreamURL != aStreamURL)
@@ -2414,40 +2396,44 @@ void XMLShapeExport::ImpExportGraphicObjectShape(
                     }
                 }
 
-                mrExport.AddAttribute(XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE );
-                mrExport.AddAttribute(XML_NAMESPACE_XLINK, XML_SHOW, XML_EMBED );
-                mrExport.AddAttribute(XML_NAMESPACE_XLINK, XML_ACTUATE, XML_ONLOAD );
+                mrExport.AddAttribute(XML_NAMESPACE_XLINK, XML_HREF, sInternalURL);
+                mrExport.AddAttribute(XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE);
+                mrExport.AddAttribute(XML_NAMESPACE_XLINK, XML_SHOW, XML_EMBED);
+                mrExport.AddAttribute(XML_NAMESPACE_XLINK, XML_ACTUATE, XML_ONLOAD);
             }
         }
         else
         {
-            mrExport.AddAttribute(XML_NAMESPACE_XLINK, XML_HREF, OUString() );
-            mrExport.AddAttribute(XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE );
-            mrExport.AddAttribute(XML_NAMESPACE_XLINK, XML_SHOW, XML_EMBED );
-            mrExport.AddAttribute(XML_NAMESPACE_XLINK, XML_ACTUATE, XML_ONLOAD );
+            mrExport.AddAttribute(XML_NAMESPACE_XLINK, XML_HREF, OUString());
+            mrExport.AddAttribute(XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE);
+            mrExport.AddAttribute(XML_NAMESPACE_XLINK, XML_SHOW, XML_EMBED);
+            mrExport.AddAttribute(XML_NAMESPACE_XLINK, XML_ACTUATE, XML_ONLOAD);
         }
 
         {
-            // We can't guess the mimetype from sImageURL because the image type might be changed
-            // while creating the stream (by SvXMLGraphicInputStream). So we first need to create
-            // the stream, get the mime type and then write the stream.
-            uno::Reference<io::XInputStream> xInputStream(
-                mrExport.GetEmbeddedGraphicObjectStream(sImageURL));
-            OUString aMimeType(
-                comphelper::GraphicMimeTypeHelper::GetMimeTypeForImageStream(xInputStream));
-            if (!aMimeType.isEmpty())
-                GetExport().AddAttribute(XML_NAMESPACE_LO_EXT, "mime-type", aMimeType);
-
-            ImpExportSignatureLine( xShape );
-            SvXMLElementExport aOBJ(mrExport, XML_NAMESPACE_DRAW, XML_IMAGE, true, true);
-
-            if( !sImageURL.isEmpty() )
+            if (GetExport().getDefaultVersion() > SvtSaveOptions::ODFVER_012)
             {
-                // optional office:binary-data
-                mrExport.AddEmbeddedGraphicObjectAsBase64( sImageURL );
+                if (sOutMimeType.isEmpty())
+                {
+                    GetExport().GetGraphicMimeTypeFromStream(xGraphic, sOutMimeType);
+                }
+                if (!sOutMimeType.isEmpty())
+                {
+                    GetExport().AddAttribute(XML_NAMESPACE_LO_EXT, "mime-type", sOutMimeType);
+                }
             }
-            if( !bIsEmptyPresObj )
-                ImpExportText( xShape );
+
+            ImpExportSignatureLine(xShape);
+
+            SvXMLElementExport aElement(mrExport, XML_NAMESPACE_DRAW, XML_IMAGE, true, true);
+
+            // optional office:binary-data
+            if (xGraphic.is())
+            {
+                mrExport.AddEmbeddedXGraphicAsBase64(xGraphic);
+            }
+            if (!bIsEmptyPresObj)
+                ImpExportText(xShape);
         }
 
         //Resolves: fdo#62461 put preferred image first above, followed by
