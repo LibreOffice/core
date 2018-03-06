@@ -1021,7 +1021,7 @@ struct WW8TabBandDesc
     sal_uInt8 nOverrideSpacing[MAX_COL + 1];
     short nOverrideValues[MAX_COL + 1][4];
     WW8_SHD* pSHDs;
-    sal_uInt32* pNewSHDs;
+    Color* pNewSHDs;
     WW8_BRCVer9 aDefBrcs[6];
 
     bool bExist[MAX_COL];           // does this cell exist ?
@@ -1805,7 +1805,7 @@ public:     // really private, but can only be done public
     void Read_TextBackColor(sal_uInt16, const sal_uInt8* pData, short nLen);
     void Read_ParaBackColor(sal_uInt16, const sal_uInt8* pData, short nLen);
     void Read_ParaBiDi(sal_uInt16, const sal_uInt8* pData, short nLen);
-    static sal_uInt32 ExtractColour(const sal_uInt8* &rpData, bool bVer67);
+    static Color ExtractColour(const sal_uInt8* &rpData, bool bVer67);
 
     void Read_TextVerticalAdjustment(sal_uInt16, const sal_uInt8* pData, short nLen);
     void Read_UnderlineColor(sal_uInt16, const sal_uInt8* pData, short nLen);

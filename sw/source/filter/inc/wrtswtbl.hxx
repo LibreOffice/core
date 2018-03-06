@@ -222,7 +222,7 @@ protected:
     SwWriteTableCols m_aCols; // all columns
     SwWriteTableRows m_aRows; // all rows
 
-    sal_uInt32 m_nBorderColor;        // border color
+    Color      m_nBorderColor;        // border color
 
     sal_uInt16 m_nCellSpacing;        // thickness of the inner border
     sal_uInt16 m_nCellPadding;        // distance of border to content

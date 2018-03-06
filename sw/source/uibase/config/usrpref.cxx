@@ -559,7 +559,7 @@ void SwWebColorConfig::ImplCommit()
     {
         switch(nProp)
         {
-            case  0: pValues[nProp] <<= static_cast<sal_Int32>(rParent.GetRetoucheColor().GetColor());   break;// "Color",
+            case  0: pValues[nProp] <<= rParent.GetRetoucheColor();   break;// "Color",
         }
     }
     PutProperties(aPropNames, aValues);
@@ -581,7 +581,7 @@ void SwWebColorConfig::Load()
                 switch(nProp)
                 {
                     case  0:
-                        sal_Int32 nSet = 0;
+                        Color nSet;
                         pValues[nProp] >>= nSet; rParent.SetRetoucheColor(nSet);
                     break;// "Color",
                 }

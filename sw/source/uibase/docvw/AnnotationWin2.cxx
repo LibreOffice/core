@@ -324,7 +324,7 @@ void SwAnnotationWin::Draw(OutputDevice* pDev, const Point& rPt, const Size& rSz
 
     vcl::Font aFont( mpMetadataDate->GetSettings().GetStyleSettings().GetFieldFont() );
     mpMetadataDate->SetControlFont( aFont );
-    mpMetadataDate->SetControlBackground( 0xFFFFFF );
+    mpMetadataDate->SetControlBackground( Color(0xFFFFFF) );
     mpMetadataDate->SetText("...");
     mpMetadataDate->Draw(pDev, aPos, aSize, nInFlags);
 

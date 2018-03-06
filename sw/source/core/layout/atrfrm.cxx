@@ -2233,7 +2233,7 @@ bool SwTextGridItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
     switch( nMemberId & ~CONVERT_TWIPS )
     {
         case MID_GRID_COLOR:
-            rVal <<= GetColor().GetColor();
+            rVal <<= GetColor();
             break;
         case MID_GRID_LINES:
             rVal <<= GetLines();

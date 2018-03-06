@@ -1319,7 +1319,7 @@ void WW8AttributeOutput::CharUnderline( const SvxUnderlineItem& rUnderline )
     {
         m_rWW8Export.InsUInt16( NS_sprm::sprmCCvUl );
 
-        m_rWW8Export.InsUInt32( wwUtility::RGBToBGR( aColor.GetColor() ) );
+        m_rWW8Export.InsUInt32( wwUtility::RGBToBGR( aColor ) );
     }
 }
 
@@ -1535,9 +1535,9 @@ bool WW8Export::TransBrush(const Color& rCol, WW8_SHD& rShd)
     return !rCol.GetTransparency();
 }
 
-sal_uInt32 SuitableBGColor(sal_uInt32 nIn)
+sal_uInt32 SuitableBGColor(Color nIn)
 {
-    if (nIn == sal_uInt32(COL_AUTO))
+    if (nIn == COL_AUTO)
         return 0xFF000000;
     return wwUtility::RGBToBGR(nIn);
 }
@@ -1552,7 +1552,7 @@ void WW8AttributeOutput::CharColor( const SvxColorItem& rColor )
     if (nColor)
     {
         m_rWW8Export.InsUInt16( NS_sprm::sprmCCv );
-        m_rWW8Export.InsUInt32( wwUtility::RGBToBGR( rColor.GetValue().GetColor() ) );
+        m_rWW8Export.InsUInt32( wwUtility::RGBToBGR( rColor.GetValue() ) );
     }
 }
 
@@ -1570,7 +1570,7 @@ void WW8AttributeOutput::CharBackground( const SvxBrushItem& rBrush )
     m_rWW8Export.InsUInt16( NS_sprm::sprmCShd );
     m_rWW8Export.pO->push_back( 10 );
     m_rWW8Export.InsUInt32( 0xFF000000 );
-    m_rWW8Export.InsUInt32( SuitableBGColor( rBrush.GetColor().GetColor() ) );
+    m_rWW8Export.InsUInt32( SuitableBGColor( rBrush.GetColor() ) );
     m_rWW8Export.InsUInt16( 0x0000);
 }
 
@@ -4185,7 +4185,7 @@ void WW8AttributeOutput::FormatBackground( const SvxBrushItem& rBrush )
         m_rWW8Export.InsUInt16( 0xC64D );
         m_rWW8Export.pO->push_back( 10 );
         m_rWW8Export.InsUInt32( 0xFF000000 );
-        m_rWW8Export.InsUInt32( SuitableBGColor( rBrush.GetColor().GetColor() ) );
+        m_rWW8Export.InsUInt32( SuitableBGColor( rBrush.GetColor() ) );
         m_rWW8Export.InsUInt16( 0x0000 );
     }
 }
@@ -4283,7 +4283,7 @@ WW8_BRCVer9 WW8Export::TranslateBorderLine(const SvxBorderLine& rLine,
             nWidth = 1;                         // don't omit
 
         // BRC.cv
-        nColBGR = wwUtility::RGBToBGR(sal_uInt32(rLine.GetColor().GetRGBColor()));
+        nColBGR = wwUtility::RGBToBGR(rLine.GetColor().GetRGBColor());
     }
 
     // BRC.dptSpace
