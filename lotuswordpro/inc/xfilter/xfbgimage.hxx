@@ -83,7 +83,7 @@ public:
     void    SetImageData(sal_uInt8 const *buf, int len);
 
     /**
-     * @descr   Set the iamge position type.
+     * @descr   Set the image position type.
      */
     void    SetPosition(enumXFAlignType horiAlign = enumXFAlignCenter, enumXFAlignType vertAlign = enumXFAlignCenter);
 
