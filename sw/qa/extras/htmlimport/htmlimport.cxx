@@ -13,6 +13,7 @@
 #include <com/sun/star/graphic/GraphicType.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/BitmapMode.hpp>
+#include <com/sun/star/document/XEmbeddedObjectSupplier2.hpp>
 #include <tools/datetime.hxx>
 #include <unotools/datetime.hxx>
 #include <vcl/GraphicNativeTransform.hxx>
@@ -304,6 +305,17 @@ DECLARE_HTMLIMPORT_TEST(testReqIfOleData, "reqif-ole-data.xhtml")
                                                      uno::UNO_QUERY);
     // This was 0, <object> without URL was ignored.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), xObjects->getCount());
+}
+
+DECLARE_HTMLIMPORT_TEST(testReqIfOleImg, "reqif-ole-img.xhtml")
+{
+    uno::Reference<text::XTextEmbeddedObjectsSupplier> xSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xObjects(xSupplier->getEmbeddedObjects(),
+                                                     uno::UNO_QUERY);
+    uno::Reference<document::XEmbeddedObjectSupplier2> xObject(xObjects->getByIndex(0),
+                                                               uno::UNO_QUERY);
+    // This failed, OLE object had no replacement image.
+    CPPUNIT_ASSERT(xObject->getReplacementGraphic().is());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
