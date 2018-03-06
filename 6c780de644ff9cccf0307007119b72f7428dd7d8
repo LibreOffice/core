@@ -56,6 +56,24 @@
       "revId": "6c780de644ff9cccf0307007119b72f7428dd7d8",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba2be162_4523dd05",
+        "filename": "sc/source/core/data/validat.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 576,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-03-06T12:13:05Z",
+      "side": 1,
+      "message": "Looking up when this IsDataValid() can get called, this is absolutely not a good idea. This function MUST NOT modify the document content.",
+      "parentUuid": "ba2be162_253fc926",
+      "revId": "6c780de644ff9cccf0307007119b72f7428dd7d8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
