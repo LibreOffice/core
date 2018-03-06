@@ -54,10 +54,8 @@ using namespace ::ooo::vba;
 
 #define OFFICEVERSION "11.0"
 
-// ====VbaTimerInfo==================================
 typedef ::std::pair< OUString, ::std::pair< double, double > > VbaTimerInfo;
 
-// ====VbaTimer==================================
 class VbaTimer
 {
     Timer m_aTimer;
@@ -135,7 +133,6 @@ IMPL_LINK_NOARG(VbaTimer, MacroCallHdl, Timer *, void)
     {}
 }
 
-// ====VbaTimerInfoHash==================================
 struct VbaTimerInfoHash
 {
     size_t operator()( const VbaTimerInfo& rTimerInfo ) const
@@ -146,10 +143,8 @@ struct VbaTimerInfoHash
     }
 };
 
-// ====VbaTimerHashMap==================================
 typedef std::unordered_map< VbaTimerInfo, VbaTimer*, VbaTimerInfoHash > VbaTimerHashMap;
 
-// ====VbaApplicationBase_Impl==================================
 struct VbaApplicationBase_Impl final
 {
     VbaTimerHashMap m_aTimerHash;
@@ -170,7 +165,6 @@ struct VbaApplicationBase_Impl final
     }
 };
 
-// ====VbaApplicationBase==================================
 VbaApplicationBase::VbaApplicationBase( const uno::Reference< uno::XComponentContext >& xContext )
                     : ApplicationBase_BASE( uno::Reference< XHelperInterface >(), xContext )
                     , m_pImpl( new VbaApplicationBase_Impl )
