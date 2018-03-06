@@ -51,8 +51,15 @@ namespace formula
             propagated to subsequent operators and functions being part of a
             parameter of this function. Used with functions that treat
             references separately from arrays, but need the forced array
-            calculation of parameters that are not references.*/
-        ReferenceOrForceArray
+            calculation of parameters that are not references. */
+        ReferenceOrForceArray,
+
+        /** Same as ReferenceOrForceArray but suppressed / not inherited in the
+            compiler's ForceArray context to indicate that a result of
+            Reference in JumpMatrix context should use the result matrix
+            instead of the array of references. Never used as initial parameter
+            classification. */
+        SuppressedReferenceOrForceArray
     };
 }
 
