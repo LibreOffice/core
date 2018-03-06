@@ -2089,7 +2089,6 @@ void DrawingML::WriteParagraphNumbering(const Reference< XPropertySet >& rXPropS
     sal_Unicode aBulletChar = 0x2022; // a bullet
     awt::FontDescriptor aFontDesc;
     bool bHasFontDesc = false;
-    OUString aGraphicURL;
     uno::Reference<graphic::XGraphic> xGraphic;
     sal_Int16 nBulletRelSize = 0;
     sal_Int16 nStartWith = 1;
@@ -2152,11 +2151,6 @@ void DrawingML::WriteParagraphNumbering(const Reference< XPropertySet >& rXPropS
         {
             auto xBitmap = pPropValue[i].Value.get<uno::Reference<awt::XBitmap>>();
             xGraphic.set(xBitmap, uno::UNO_QUERY);
-        }
-        else if ( aPropName == "GraphicURL" )
-        {
-            aGraphicURL = *o3tl::doAccess<OUString>(pPropValue[i].Value);
-            SAL_INFO("oox.shape", "graphic url: " << aGraphicURL);
         }
         else if ( aPropName == "GraphicSize" )
         {

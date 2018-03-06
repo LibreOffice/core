@@ -1097,21 +1097,23 @@ void ShapeExport::WriteGraphicObjectShapePart( const Reference< XShape >& xShape
 
     SAL_INFO("oox.shape", "graphicObject without text");
 
-    OUString sGraphicURL;
     uno::Reference<graphic::XGraphic> xGraphic;
     OUString sMediaURL;
 
     Reference< XPropertySet > xShapeProps( xShape, UNO_QUERY );
 
-    bool bHasGraphicURL = xShapeProps.is() && xShapeProps->getPropertySetInfo()->hasPropertyByName("GraphicURL") && (xShapeProps->getPropertyValue("GraphicURL") >>= sGraphicURL);
-
-    if (xShapeProps.is() && xShapeProps->getPropertySetInfo()->hasPropertyByName("Graphic"))
+    if (pGraphic)
+    {
+        xGraphic.set(pGraphic->GetXGraphic());
+    }
+    else if (xShapeProps.is() && xShapeProps->getPropertySetInfo()->hasPropertyByName("Graphic"))
+    {
         xShapeProps->getPropertyValue("Graphic") >>= xGraphic;
+    }
 
-    bool bHasAnyGraphic = bHasGraphicURL || xGraphic.is();
     bool bHasMediaURL = xShapeProps.is() && xShapeProps->getPropertySetInfo()->hasPropertyByName("MediaURL") && (xShapeProps->getPropertyValue("MediaURL") >>= sMediaURL);
 
-    if (!pGraphic && !bHasAnyGraphic && !bHasMediaURL)
+    if (!xGraphic.is() && !bHasMediaURL)
     {
         SAL_INFO("oox.shape", "no graphic or media URL found");
         return;
@@ -1169,24 +1171,19 @@ void ShapeExport::WriteGraphicObjectShapePart( const Reference< XShape >& xShape
     {
         WriteXGraphicBlip(xShapeProps, xGraphic, false);
     }
-    else if (pGraphic || bHasGraphicURL)
-    {
-        WriteBlip(xShapeProps, sGraphicURL, false, pGraphic);
-    }
     else if (bHasMediaURL)
     {
-        Reference<graphic::XGraphic> rGraphic;
+        Reference<graphic::XGraphic> xFallbackGraphic;
         if (xShapeProps->getPropertySetInfo()->hasPropertyByName("FallbackGraphic"))
-            xShapeProps->getPropertyValue("FallbackGraphic") >>= rGraphic;
+            xShapeProps->getPropertyValue("FallbackGraphic") >>= xFallbackGraphic;
 
-        Graphic aGraphic(rGraphic);
-        WriteBlip(xShapeProps, sMediaURL, false, &aGraphic);
+        WriteXGraphicBlip(xShapeProps, xFallbackGraphic, false);
     }
 
-    if (bHasGraphicURL)
-        WriteSrcRect(xShapeProps, sGraphicURL);
-    else if (xGraphic.is())
+    if (xGraphic.is())
+    {
         WriteSrcRectXGraphic(xShapeProps, xGraphic);
+    }
 
     // now we stretch always when we get pGraphic (when changing that
     // behavior, test n#780830 for regression, where the OLE sheet might get tiled
