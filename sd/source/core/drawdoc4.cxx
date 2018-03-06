@@ -550,7 +550,7 @@ void SdDrawDocument::CreateDefaultCellStyles()
     XHatch    aNullHatch(aNullCol);
 
     rISet.Put(XFillStyleItem(drawing::FillStyle_SOLID));
-    rISet.Put(XFillColorItem(OUString(), 0x00ccccff));
+    rISet.Put(XFillColorItem(OUString(), Color(0x00ccccff)));
 
     vcl::Font aLatinFont, aCJKFont, aCTLFont;
 

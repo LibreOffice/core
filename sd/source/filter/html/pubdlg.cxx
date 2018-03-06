@@ -896,23 +896,23 @@ void SdPublishingDlg::GetParameterSequence( Sequence< PropertyValue >& rParams )
     if( pPage6_User->IsChecked() )
     {
         aValue.Name = "BackColor";
-        aValue.Value <<= static_cast<sal_Int32>(m_aBackColor.GetColor());
+        aValue.Value <<= m_aBackColor;
         aProps.push_back( aValue );
 
         aValue.Name = "TextColor";
-        aValue.Value <<= static_cast<sal_Int32>(m_aTextColor.GetColor());
+        aValue.Value <<= m_aTextColor;
         aProps.push_back( aValue );
 
         aValue.Name = "LinkColor";
-        aValue.Value <<= static_cast<sal_Int32>(m_aLinkColor.GetColor());
+        aValue.Value <<= m_aLinkColor;
         aProps.push_back( aValue );
 
         aValue.Name = "VLinkColor";
-        aValue.Value <<= static_cast<sal_Int32>(m_aVLinkColor.GetColor());
+        aValue.Value <<= m_aVLinkColor;
         aProps.push_back( aValue );
 
         aValue.Name = "ALinkColor";
-        aValue.Value <<= static_cast<sal_Int32>(m_aALinkColor.GetColor());
+        aValue.Value <<= m_aALinkColor;
         aProps.push_back( aValue );
     }
 

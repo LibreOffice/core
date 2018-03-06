@@ -765,7 +765,7 @@ css::uno::Any SAL_CALL SdXShape::getPropertyValue( const OUString& PropertyName 
             aRet <<= EffectMigration::GetSoundOn( mpShape );
             break;
         case WID_BLUESCREEN:
-            aRet <<= static_cast<sal_Int32>( pInfo?pInfo->maBlueScreen.GetColor():0x00ffffff );
+            aRet <<= pInfo ? pInfo->maBlueScreen : Color(0x00ffffff);
             break;
         case WID_VERB:
             aRet <<= static_cast<sal_Int32>( pInfo?pInfo->mnVerb:0 );

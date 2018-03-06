@@ -1413,7 +1413,7 @@ void SAL_CALL SlideshowImpl::blankScreen( sal_Int32 nColor )
 
     if( mpShowWindow && mpSlideController )
     {
-        if( mpShowWindow->SetBlankMode( mpSlideController->getCurrentSlideIndex(), nColor ) )
+        if( mpShowWindow->SetBlankMode( mpSlideController->getCurrentSlideIndex(), Color(nColor) ) )
         {
             pause();
         }
@@ -2105,7 +2105,7 @@ IMPL_LINK( SlideshowImpl, ContextMenuSelectHdl, Menu *, pMenu, bool )
         if (aColorDlg.Execute() )
         {
             aColor = aColorDlg.GetColor();
-            setPenColor(aColor.GetColor());
+            setPenColor(sal_Int32(aColor));
         }
         mbWasPaused = false;
     }

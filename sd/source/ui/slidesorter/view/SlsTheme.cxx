@@ -32,8 +32,8 @@
 
 namespace sd { namespace slidesorter { namespace view {
 
-const static Color Black = 0x000000;
-const static Color White = 0xffffff;
+const static Color Black = Color(0x000000);
+const static Color White = Color(0xffffff);
 
 Color ChangeLuminance (Color aColor, const int nValue)
 {
@@ -60,19 +60,19 @@ Color HGBAdapt (
 }
 
 Theme::Theme (const std::shared_ptr<controller::Properties>& rpProperties)
-    : maBackgroundColor(rpProperties->GetBackgroundColor().GetColor()),
+    : maBackgroundColor(rpProperties->GetBackgroundColor()),
       maGradients(),
       maIcons(),
       maColor()
 {
     maColor.resize(ColorType_Size_);
     maColor[Color_Background] = maBackgroundColor;
-    maColor[Color_PageNumberDefault] = 0x0808080;
-    maColor[Color_PageNumberHover] = 0x4c4c4c;
+    maColor[Color_PageNumberDefault] = Color(0x0808080);
+    maColor[Color_PageNumberHover] = Color(0x4c4c4c);
     maColor[Color_PageNumberHighContrast] = White;
-    maColor[Color_PageNumberBrightBackground] = 0x333333;
-    maColor[Color_PageNumberDarkBackground] = 0xcccccc;
-    maColor[Color_PreviewBorder] = 0x949599;
+    maColor[Color_PageNumberBrightBackground] = Color(0x333333);
+    maColor[Color_PageNumberDarkBackground] = Color(0xcccccc);
+    maColor[Color_PreviewBorder] = Color(0x949599);
 
     Update(rpProperties);
 }
@@ -80,7 +80,7 @@ Theme::Theme (const std::shared_ptr<controller::Properties>& rpProperties)
 void Theme::Update (const std::shared_ptr<controller::Properties>& rpProperties)
 {
     // Set up colors.
-    maBackgroundColor = rpProperties->GetBackgroundColor().GetColor();
+    maBackgroundColor = rpProperties->GetBackgroundColor();
 
     maColor[Color_Background] = maBackgroundColor;
 
@@ -164,7 +164,7 @@ Color Theme::GetColor (const ColorType eType)
     if (sal_uInt32(eType)<maColor.size())
         return maColor[eType];
     else
-        return 0;
+        return Color(0);
 }
 
 Color Theme::GetGradientColor (
@@ -180,7 +180,7 @@ Color Theme::GetGradientColor (
         case GradientColorClass::Fill1: return rDescriptor.maFillColor1;
         case GradientColorClass::Fill2: return rDescriptor.maFillColor2;
     }
-    return 0;
+    return Color(0);
 }
 
 void Theme::SetGradient (

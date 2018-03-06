@@ -205,7 +205,7 @@ ColorPropertyBox::ColorPropertyBox( sal_Int32 nControlType, vcl::Window* pParent
 
     sal_Int32 nColor = 0;
     rValue >>= nColor;
-    mpControl->SelectEntry(static_cast<Color>(nColor));
+    mpControl->SelectEntry(Color(nColor));
 }
 
 IMPL_LINK_NOARG(ColorPropertyBox, OnSelect, SvxColorListBox&, void)
@@ -226,13 +226,13 @@ void ColorPropertyBox::setValue( const Any& rValue, const OUString& )
         rValue >>= nColor;
 
         mpControl->SetNoSelection();
-        mpControl->SelectEntry(static_cast<Color>(nColor));
+        mpControl->SelectEntry(Color(nColor));
     }
 }
 
 Any ColorPropertyBox::getValue()
 {
-    return makeAny( static_cast<sal_Int32>(mpControl->GetSelectEntryColor().GetRGBColor()) );
+    return makeAny( sal_Int32(mpControl->GetSelectEntryColor().GetRGBColor()) );
 }
 
 Control* ColorPropertyBox::getControl()
@@ -1148,7 +1148,7 @@ CustomAnimationEffectTabPage::CustomAnimationEffectTabPage( vcl::Window* pParent
             {
                 sal_Int32 nColor = 0;
                 aDimColor >>= nColor;
-                Color aColor(nColor);
+                Color aColor = Color(nColor);
                 mpCLBDimColor->SelectEntry(aColor);
             }
             else
@@ -1381,7 +1381,7 @@ void CustomAnimationEffectTabPage::update( STLPropertySet* pSet )
         if( nPos == 1 )
         {
             Color aSelectedColor = mpCLBDimColor->GetSelectEntryColor();
-            aDimColor <<= static_cast<sal_Int32>(aSelectedColor.GetRGBColor());
+            aDimColor <<= aSelectedColor.GetRGBColor();
         }
 
         if( (mpSet->getPropertyState( nHandleDimColor ) == STLPropertyState::Ambiguous) ||

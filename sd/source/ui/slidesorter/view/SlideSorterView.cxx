@@ -633,9 +633,9 @@ void SlideSorterView::CompleteRedraw (
     gFrameTimeSum += gFrameTimes[gFrameTimeIndex];
     gFrameTimeIndex = (gFrameTimeIndex+1) % gFrameTimeCount;
 
-    mrSlideSorter.GetContentWindow()->SetFillColor(COL_BLUE);
+    mrSlideSorter.GetContentWindow()->SetFillCOL_BLUE);
     mrSlideSorter.GetContentWindow()->DrawRect(gFrameTimeBox);
-    mrSlideSorter.GetContentWindow()->SetTextColor(COL_WHITE);
+    mrSlideSorter.GetContentWindow()->SetTextCOL_WHITE);
     mrSlideSorter.GetContentWindow()->DrawText(
         gFrameTimeBox,
         OUString::number(1 / (gFrameTimeSum / gFrameTimeCount)),

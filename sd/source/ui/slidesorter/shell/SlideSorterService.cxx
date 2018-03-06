@@ -305,7 +305,7 @@ util::Color SAL_CALL SlideSorterService::getBackgroundColor()
         return util::Color();
     else
         return util::Color(
-            mpSlideSorter->GetProperties()->GetBackgroundColor().GetColor());
+            mpSlideSorter->GetProperties()->GetBackgroundColor());
 }
 
 void SAL_CALL SlideSorterService::setBackgroundColor (util::Color aBackgroundColor)
@@ -322,7 +322,7 @@ util::Color SAL_CALL SlideSorterService::getTextColor()
         return util::Color();
     else
         return util::Color(
-            mpSlideSorter->GetProperties()->GetTextColor().GetColor());
+            mpSlideSorter->GetProperties()->GetTextColor());
 }
 
 void SAL_CALL SlideSorterService::setTextColor (util::Color aTextColor)
@@ -339,7 +339,7 @@ util::Color SAL_CALL SlideSorterService::getSelectionColor()
         return util::Color();
     else
         return util::Color(
-            mpSlideSorter->GetProperties()->GetSelectionColor().GetColor());
+            mpSlideSorter->GetProperties()->GetSelectionColor());
 }
 
 void SAL_CALL SlideSorterService::setSelectionColor (util::Color aSelectionColor)
@@ -356,7 +356,7 @@ util::Color SAL_CALL SlideSorterService::getHighlightColor()
         return util::Color();
     else
         return util::Color(
-            mpSlideSorter->GetProperties()->GetHighlightColor().GetColor());
+            mpSlideSorter->GetProperties()->GetHighlightColor());
 }
 
 void SAL_CALL SlideSorterService::setHighlightColor (util::Color aHighlightColor)

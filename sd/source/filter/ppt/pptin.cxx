@@ -2622,7 +2622,7 @@ SdrObject* ImplSdPPTImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                                 if( pAnimation->HasEffect() )
                                 {
                                     // translate color to RGB
-                                    pAnimation->SetDimColor( MSO_CLR_ToColor(pAnimation->GetDimColor()).GetColor() );
+                                    pAnimation->SetDimColor( MSO_CLR_ToColor(pAnimation->GetDimColor()) );
                                     // translate sound bits to file url
                                     if( pAnimation->HasSoundEffect() )
                                         pAnimation->SetSoundFileUrl( ReadSound( pAnimation->GetSoundRef() ) );

@@ -750,7 +750,7 @@ bool AnimationImporter::convertAnimationValue( oox::ppt::MS_AttributeNames eAttr
                 aColor.SetRed( static_cast<sal_uInt8>(lcl_gethex( aString[1] ) * 16 + lcl_gethex( aString[2] )) );
                 aColor.SetGreen( static_cast<sal_uInt8>(lcl_gethex( aString[3] ) * 16 + lcl_gethex( aString[4] )) );
                 aColor.SetBlue( static_cast<sal_uInt8>(lcl_gethex( aString[5] ) * 16 + lcl_gethex( aString[6] )) );
-                rValue <<= static_cast<sal_Int32>(aColor.GetColor());
+                rValue <<= aColor;
                 bRet = true;
             }
             else if( aString.startsWith( "rgb(" ) )
@@ -761,7 +761,7 @@ bool AnimationImporter::convertAnimationValue( oox::ppt::MS_AttributeNames eAttr
                 aColor.SetRed( static_cast<sal_uInt8>(aString.getToken( 0, ',', index ).toInt32()) );
                 aColor.SetGreen( static_cast<sal_uInt8>(aString.getToken( 0, ',', index ).toInt32()) );
                 aColor.SetRed( static_cast<sal_uInt8>(aString.getToken( 0, ',', index ).toInt32()) );
-                rValue <<= static_cast<sal_Int32>(aColor.GetColor());
+                rValue <<= aColor;
                 bRet = true;
             }
             else if( aString.startsWith( "hsl(" ) )

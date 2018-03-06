@@ -993,11 +993,11 @@ void SdImportTest::testBnc584721_4()
     // Get first run of the paragraph
     uno::Reference<text::XTextRange> xRun( getRunFromParagraph (0, xParagraph ) );
     uno::Reference< beans::XPropertySet > xPropSet( xRun, uno::UNO_QUERY_THROW );
-    sal_Int32 nCharColor;
+    Color nCharColor;
     xPropSet->getPropertyValue( "CharColor" ) >>= nCharColor;
 
     // Color should be black
-    CPPUNIT_ASSERT_EQUAL( sal_Int32(COL_BLACK), nCharColor );
+    CPPUNIT_ASSERT_EQUAL( COL_BLACK, nCharColor );
 
     xDocShRef->DoClose();
 }
