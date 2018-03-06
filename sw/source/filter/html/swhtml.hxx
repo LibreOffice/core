@@ -35,6 +35,7 @@
 #include <memory>
 #include <vector>
 #include <deque>
+#include <stack>
 
 class SfxMedium;
 class SfxViewFrame;
@@ -482,6 +483,12 @@ class SwHTMLParser : public SfxHTMLParser, public SwClient
     SfxViewFrame* m_pTempViewFrame;
 
     bool m_bXHTML = false;
+
+    /**
+     * Non-owning pointers to already inserted OLE nodes, matching opened
+     * <object> XHTML elements.
+     */
+    std::stack<SwOLENode*> m_aEmbeds;
 
     void DeleteFormImpl();
 
