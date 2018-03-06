@@ -8019,14 +8019,14 @@ AC_SUBST(LIBXML_LIBS)
 AC_SUBST(XMLLINT)
 
 # =====================================================================
-# Checking for a Python interpreter with version >= 2.6.
-# Build and runtime requires Python 3 compatible version (>= 2.6).
+# Checking for a Python interpreter with version >= 2.7.
+# Build and runtime requires Python 3 compatible version (>= 2.7).
 # Optionally user can pass an option to configure, i. e.
 # ./configure PYTHON=/usr/bin/python
 # =====================================================================
 if test "$build_os" != "cygwin" -a "$enable_python" != fully-internal; then
     # This allows a lack of system python with no error, we use internal one in that case.
-    AM_PATH_PYTHON([2.6],, [:])
+    AM_PATH_PYTHON([2.7],, [:])
     # Clean PYTHON_VERSION checked below if cross-compiling
     PYTHON_VERSION=""
     if test "$PYTHON" != ":"; then
@@ -8205,11 +8205,11 @@ system)
 #include <Python.h>
 
 int main(int argc, char **argv) {
-   if ((PY_MAJOR_VERSION == 2 && PY_MINOR_VERSION >= 6) ||
+   if ((PY_MAJOR_VERSION == 2 && PY_MINOR_VERSION >= 7) ||
        (PY_MAJOR_VERSION == 3 && PY_MINOR_VERSION >= 3)) return 0;
    else return 1;
 }
-       ]])],[AC_MSG_RESULT([ok])],[AC_MSG_ERROR([Python >= 3.3 is needed when building with Python 3, or Python >= 2.6 when building with Python 2])],[AC_MSG_RESULT([skipped; cross-compiling])])
+       ]])],[AC_MSG_RESULT([ok])],[AC_MSG_ERROR([Python >= 3.3 is needed when building with Python 3, or Python >= 2.7 when building with Python 2])],[AC_MSG_RESULT([skipped; cross-compiling])])
     CFLAGS=$save_CFLAGS
     AC_LANG_POP(C)
 
