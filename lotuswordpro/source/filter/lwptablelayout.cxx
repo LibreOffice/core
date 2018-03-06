@@ -277,10 +277,10 @@ void LwpSuperTableLayout::ApplyShadow(XFTableStyle *pTableStyle)
  */
 void LwpSuperTableLayout::ApplyPatternFill(XFTableStyle* pTableStyle)
 {
-    XFBGImage* pXFBGImage = GetFillPattern();
-    if (pXFBGImage)
+    std::unique_ptr<XFBGImage> xXFBGImage(GetFillPattern());
+    if (xXFBGImage)
     {
-        pTableStyle->SetBackImage(pXFBGImage);
+        pTableStyle->SetBackImage(xXFBGImage);
     }
 }
 
@@ -321,10 +321,10 @@ void LwpSuperTableLayout::ApplyBackColor(XFTableStyle *pTableStyle)
  */
 void LwpSuperTableLayout::ApplyWatermark(XFTableStyle *pTableStyle)
 {
-    XFBGImage* pBGImage = GetXFBGImage();
-    if(pBGImage)
+    std::unique_ptr<XFBGImage> xBGImage(GetXFBGImage());
+    if (xBGImage)
     {
-        pTableStyle->SetBackImage(pBGImage);
+        pTableStyle->SetBackImage(xBGImage);
     }
 }
 /**

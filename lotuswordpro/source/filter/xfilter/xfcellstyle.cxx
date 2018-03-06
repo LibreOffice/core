@@ -66,7 +66,6 @@ XFCellStyle::XFCellStyle()
     : m_eHoriAlign(enumXFAlignNone)
     , m_eVertAlign(enumXFAlignNone)
     , m_fTextIndent(0)
-    , m_pBackImage(nullptr)
     , m_pBorders(nullptr)
     , m_bWrapText(false)
 {}
@@ -92,10 +91,9 @@ void    XFCellStyle::SetBackColor(XFColor const & color)
     m_aBackColor = color;
 }
 
-void    XFCellStyle::SetBackImage(XFBGImage *pImage)
+void    XFCellStyle::SetBackImage(std::unique_ptr<XFBGImage>& rImage)
 {
-    delete m_pBackImage;
-    m_pBackImage = pImage;
+    m_xBackImage = std::move(rImage);
 }
 
 void    XFCellStyle::SetBorders(XFBorders *pBorders)
@@ -175,16 +173,16 @@ bool    XFCellStyle::Equal(IXFStyle *pStyle)
         return false;
 
     //if there is backimage
-    if( m_pBackImage )
+    if (m_xBackImage)
     {
-        if( !pOther->m_pBackImage )
+        if( !pOther->m_xBackImage )
             return false;
-        if( !m_pBackImage->Equal(pOther) )
+        if( !m_xBackImage->Equal(pOther) )
             return false;
     }
     else
     {
-        if( pOther->m_pBackImage )
+        if( pOther->m_xBackImage )
             return false;
     }
 
@@ -243,7 +241,7 @@ void XFCellStyle::ToXml(IXFStream *pStrm)
         m_pBorders->ToXml(pStrm);
 
     //background color:
-    if( m_aBackColor.IsValid() && !m_pBackImage )
+    if( m_aBackColor.IsValid() && !m_xBackImage )
     {
         pAttrList->AddAttribute("fo:background-color", m_aBackColor.ToString() );
     }
@@ -253,8 +251,8 @@ void XFCellStyle::ToXml(IXFStream *pStrm)
 
     pStrm->StartElement("style:properties");
 
-    if( m_pBackImage )
-        m_pBackImage->ToXml(pStrm);
+    if( m_xBackImage )
+        m_xBackImage->ToXml(pStrm);
 
     pStrm->EndElement("style:properties");
 
