@@ -57,8 +57,6 @@ JAVABIN=bin
 ifeq "$(PLATFORM)" "windows"
 # Settings for Windows using Microsoft compiler/linker
 
-PROCTYPE := $(shell $(PRJ)/config.guess | cut -d"-" -f1 | sed -e 's/^i.86$$/i386/')
-
 OS=WIN
 PS=\\
 ICL=$$
@@ -121,14 +119,8 @@ SDK_JAVA_INCLUDES = -I"$(OO_SDK_JAVA_HOME)/include" -I"$(OO_SDK_JAVA_HOME)/inclu
 # define for used compiler necessary for UNO
 # -DCPPU_ENV=msci -- windows msvc 4.x - 7.x
 
-ifeq "$(PROCTYPE)" "i386"
 CC_DEFINES_JNI=-DWIN32 -DWNT -D_DLL -DCPPU_ENV=msci
 CC_DEFINES=-DWIN32 -DWNT -D_DLL -DCPPU_ENV=msci
-endif
-ifeq "$(PROCTYPE)" "x86_64"
-CC_DEFINES_JNI=-DWIN32 -DWNT -D_DLL -DCPPU_ENV=mscx
-CC_DEFINES=-DWIN32 -DWNT -D_DLL -DCPPU_ENV=mscx
-endif
 CC_OUTPUT_SWITCH=-Fo
 
 LIBRARY_LINK_FLAGS=/NODEFAULTLIB /DLL /DEBUGTYPE:cv
