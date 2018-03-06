@@ -360,7 +360,7 @@ public:
     virtual bool HonorProtection() override;
     virtual bool IsProtected() override;
     rtl::Reference<LwpVirtualLayout> GetWaterMarkLayout();
-    XFBGImage* GetXFBGImage();
+    std::unique_ptr<XFBGImage> GetXFBGImage();
     bool GetUsePrinterSettings();
 
     LwpLayoutScale* GetLayoutScale(){return dynamic_cast<LwpLayoutScale*>(m_LayScale.obj().get());}
@@ -378,7 +378,7 @@ public:
     LwpPoint GetOrigin();
 
     bool IsPatternFill();
-    XFBGImage* GetFillPattern();
+    std::unique_ptr<XFBGImage> GetFillPattern();
 
     //Check whether there are contents in the layout
     virtual bool HasContent() override;

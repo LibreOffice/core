@@ -107,7 +107,7 @@ public:
      */
     void    SetBorders(XFBorders *pBorders);
 
-    void    SetBackImage(XFBGImage *image);
+    void    SetBackImage(std::unique_ptr<XFBGImage>& rImage);
 
     /**
      * @descr   Set header background color.

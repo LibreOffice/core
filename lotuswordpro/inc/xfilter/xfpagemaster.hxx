@@ -96,7 +96,7 @@ public:
 
     void    SetBackColor(XFColor color);
 
-    void    SetBackImage(XFBGImage *image);
+    void    SetBackImage(std::unique_ptr<XFBGImage>& rImage);
 
     void    SetColumns(XFColumns *pColumns);
 

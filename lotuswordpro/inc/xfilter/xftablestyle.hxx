@@ -84,7 +84,7 @@ public:
 
     void    SetBackColor(XFColor const & color);
 
-    void    SetBackImage(XFBGImage *pImage);
+    void    SetBackImage(std::unique_ptr<XFBGImage>& rImage);
 
     virtual void    ToXml(IXFStream *pStrm) override;
 

@@ -162,10 +162,10 @@ void LwpPageLayout::ParseGeometry(XFPageMaster* pm1)
 */
 void LwpPageLayout::ParseWaterMark(XFPageMaster *pm1)
 {
-    XFBGImage* pXFBGImage = GetXFBGImage();
-    if(pXFBGImage)
+    std::unique_ptr<XFBGImage> xXFBGImage(GetXFBGImage());
+    if (xXFBGImage)
     {
-        pm1->SetBackImage(pXFBGImage);
+        pm1->SetBackImage(xXFBGImage);
     }
 }
 
@@ -214,10 +214,10 @@ void LwpPageLayout::ParseShadow(XFPageMaster *pm1)
 */
 void LwpPageLayout::ParsePatternFill(XFPageMaster* pm1)
 {
-    XFBGImage* pXFBGImage = GetFillPattern();
-    if (pXFBGImage)
+    std::unique_ptr<XFBGImage> xXFBGImage(GetFillPattern());
+    if (xXFBGImage)
     {
-        pm1->SetBackImage(pXFBGImage);
+        pm1->SetBackImage(xXFBGImage);
     }
 }
 /**
@@ -834,10 +834,10 @@ void LwpHeaderLayout::ParseShadow(XFHeaderStyle* pHeaderStyle)
 */
 void LwpHeaderLayout::ParsePatternFill(XFHeaderStyle* pHeaderStyle)
 {
-    XFBGImage* pXFBGImage = GetFillPattern();
-    if (pXFBGImage)
+    std::unique_ptr<XFBGImage> xXFBGImage(GetFillPattern());
+    if (xXFBGImage)
     {
-        pHeaderStyle->SetBackImage(pXFBGImage);
+        pHeaderStyle->SetBackImage(xXFBGImage);
     }
 }
 /**
@@ -867,10 +867,10 @@ void LwpHeaderLayout::ParseBackColor(XFHeaderStyle* pHeaderStyle)
 
 void LwpHeaderLayout::ParseWaterMark(XFHeaderStyle * pHeaderStyle)
 {
-    XFBGImage* pXFBGImage = GetXFBGImage();
-    if(pXFBGImage)
+    std::unique_ptr<XFBGImage> xXFBGImage(GetXFBGImage());
+    if (xXFBGImage)
     {
-        pHeaderStyle->SetBackImage(pXFBGImage);
+        pHeaderStyle->SetBackImage(xXFBGImage);
     }
 }
 //End by
@@ -995,10 +995,10 @@ void LwpFooterLayout::ParseShadow(XFFooterStyle* pFooterStyle)
 */
 void LwpFooterLayout::ParsePatternFill(XFFooterStyle* pFooterStyle)
 {
-    XFBGImage* pXFBGImage = GetFillPattern();
-    if (pXFBGImage)
+    std::unique_ptr<XFBGImage> xXFBGImage(GetFillPattern());
+    if (xXFBGImage)
     {
-        pFooterStyle->SetBackImage(pXFBGImage);
+        pFooterStyle->SetBackImage(xXFBGImage);
     }
 }
 /**
@@ -1053,10 +1053,10 @@ void LwpFooterLayout::RegisterStyle(XFMasterPage* mp1)
 
 void LwpFooterLayout::ParseWaterMark(XFFooterStyle * pFooterStyle)
 {
-    XFBGImage* pXFBGImage = GetXFBGImage();
-    if(pXFBGImage)
+    std::unique_ptr<XFBGImage> xXFBGImage(GetXFBGImage());
+    if (xXFBGImage)
     {
-        pFooterStyle->SetBackImage(pXFBGImage);
+        pFooterStyle->SetBackImage(xXFBGImage);
     }
 }
 

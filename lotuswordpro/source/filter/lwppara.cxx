@@ -409,8 +409,8 @@ void LwpPara::RegisterStyle()
                     {
                         if (rBGStuff.IsPatternFill())
                         {
-                            XFBGImage* pXFBGImage = rBGStuff.GetFillPattern();
-                            xOverStyle->SetBackImage(pXFBGImage);
+                            std::unique_ptr<XFBGImage> xXFBGImage(rBGStuff.GetFillPattern());
+                            xOverStyle->SetBackImage(xXFBGImage);
                         }
                         else
                         {

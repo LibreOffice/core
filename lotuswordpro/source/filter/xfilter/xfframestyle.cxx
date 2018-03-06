@@ -95,9 +95,9 @@ void    XFFrameStyle::SetShadow(XFShadow *pShadow)
     m_pShadow.reset(pShadow);
 }
 
-void    XFFrameStyle::SetBackImage(XFBGImage *image)
+void    XFFrameStyle::SetBackImage(std::unique_ptr<XFBGImage>& rImage)
 {
-    m_pBGImage.reset(image);
+    m_pBGImage = std::move(rImage);
 }
 
 enumXFStyle XFFrameStyle::GetStyleFamily()

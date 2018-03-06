@@ -1100,7 +1100,7 @@ bool LwpMiddleLayout::IsPatternFill()
 * @descr:   Get the fill pattern style. Data are saved in a XFBGImage object
 * @return:  the fill pattern style.
 */
-XFBGImage* LwpMiddleLayout::GetFillPattern()
+std::unique_ptr<XFBGImage> LwpMiddleLayout::GetFillPattern()
 {
     LwpBackgroundStuff* pBackgroundStuff = GetBackgroundStuff();
     if (pBackgroundStuff)
@@ -1108,8 +1108,7 @@ XFBGImage* LwpMiddleLayout::GetFillPattern()
         return pBackgroundStuff->GetFillPattern();
     }
 
-    return nullptr;
-
+    return std::unique_ptr<XFBGImage>();
 }
 
 /**
@@ -1360,8 +1359,10 @@ rtl::Reference<LwpVirtualLayout> LwpMiddleLayout::GetWaterMarkLayout()
 * @descr:   Create and reture xfbgimage object for watermark
 *
 */
-XFBGImage* LwpMiddleLayout::GetXFBGImage()
+std::unique_ptr<XFBGImage> LwpMiddleLayout::GetXFBGImage()
 {
+    std::unique_ptr<XFBGImage> xXFBGImage;
+
     rtl::Reference<LwpVirtualLayout> xWaterMarkLayout(GetWaterMarkLayout());
     LwpMiddleLayout* pLay = dynamic_cast<LwpMiddleLayout*>(xWaterMarkLayout.get());
     if(pLay)
@@ -1370,8 +1371,7 @@ XFBGImage* LwpMiddleLayout::GetXFBGImage()
         LwpGraphicObject* pGrfObj = dynamic_cast<LwpGraphicObject*>(pLay->GetContent().obj().get());
         if(pGrfObj)
         {
-            std::unique_ptr<XFBGImage> xXFBGImage(new XFBGImage);
-
+            xXFBGImage.reset(new XFBGImage);
             if(pGrfObj->IsLinked())
             {
                 //set file link
@@ -1405,10 +1405,9 @@ XFBGImage* LwpMiddleLayout::GetXFBGImage()
                     xXFBGImage->SetStretch();
                 }
             }
-            return xXFBGImage.release();
         }
     }
-    return nullptr;
+    return xXFBGImage;
 }
 
 /**

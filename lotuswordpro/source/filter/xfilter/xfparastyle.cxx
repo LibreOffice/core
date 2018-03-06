@@ -224,9 +224,9 @@ void    XFParaStyle::SetBackColor(XFColor const & color)
     m_nFlag |= XFPARA_FLAG_BACKCOLOR;
 }
 
-void    XFParaStyle::SetBackImage(XFBGImage *image)
+void    XFParaStyle::SetBackImage(std::unique_ptr<XFBGImage>& rImage)
 {
-    m_pBGImage.reset( image );
+    m_pBGImage = std::move(rImage);
 }
 
 void    XFParaStyle::SetBorders(XFBorders *pBorders)
