@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba2be162_4810544f",
+        "filename": "chart2/qa/extras/chart2import.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1479,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2018-03-06T14:08:08Z",
+      "side": 1,
+      "message": "Using a std::function here would be cleaner and more modern C++.",
+      "revId": "6cc814be6260b9dd09249daa66e786911ec9b7dc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
