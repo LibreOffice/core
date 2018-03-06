@@ -266,6 +266,15 @@ DECLARE_HTMLIMPORT_TEST(testReqIfOleImg, "reqif-ole-img.xhtml")
                                                                uno::UNO_QUERY);
     // This failed, OLE object had no replacement image.
     CPPUNIT_ASSERT(xObject->getReplacementGraphic().is());
+
+    uno::Reference<drawing::XShape> xShape(xObject, uno::UNO_QUERY);
+    OutputDevice* pDevice = Application::GetDefaultDevice();
+    Size aPixel(64, 64);
+    // Expected to be 1693.
+    Size aLogic(pDevice->PixelToLogic(aPixel, MapMode(MapUnit::Map100thMM)));
+    awt::Size aSize = xShape->getSize();
+    // This was only 1247, size was not set explicitly.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(aLogic.getWidth()), aSize.Width);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
