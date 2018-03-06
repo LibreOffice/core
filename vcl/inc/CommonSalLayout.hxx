@@ -75,6 +75,7 @@ class VCL_DLLPUBLIC CommonSalLayout : public GenericSalLayout
     void                    getScale(double* nXScale, double* nYScale);
 
     hb_set_t*               mpVertGlyphs;
+    bool                    mbFuzzing;
     bool                    HasVerticalAlternate(sal_UCS4 aChar, sal_UCS4 aNextChar);
 
     void                    SetNeedFallback(ImplLayoutArgs&, sal_Int32, bool);
