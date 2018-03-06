@@ -65,6 +65,7 @@
 #include <comphelper/classids.hxx>
 #include <rtl/uri.hxx>
 #include <comphelper/storagehelper.hxx>
+#include <vcl/graphicfilter.hxx>
 
 using namespace com::sun::star;
 
@@ -423,6 +424,19 @@ void SwHTMLParser::InsertEmbed()
     if( !bHasURL && !bHasType && !bHasData )
         return;
 
+    if (!m_aEmbeds.empty())
+    {
+        // Nested XHTML <object> element: points to replacement graphic.
+        SwOLENode* pOLENode = m_aEmbeds.top();
+        svt::EmbeddedObjectRef& rObj = pOLENode->GetOLEObj().GetObject();
+        Graphic aGraphic;
+        if (GraphicFilter::GetGraphicFilter().ImportGraphic(aGraphic, aURLObj) != ERRCODE_NONE)
+            return;
+
+        rObj.SetGraphic(aGraphic, OUString());
+        return;
+    }
+
     // create the plug-in
     comphelper::EmbeddedObjectContainer aCnt;
     OUString aObjName;
@@ -513,6 +527,15 @@ void SwHTMLParser::InsertEmbed()
         // character-bound frame, here we must create the frames by hand.
         RegisterFlyFrame( pFlyFormat );
     }
+
+    if (!bHasData)
+        return;
+
+    SwOLENode* pOLENode = pNoTextNd->GetOLENode();
+    if (!pOLENode)
+        return;
+
+    m_aEmbeds.push(pOLENode);
 }
 
 #if HAVE_FEATURE_JAVA

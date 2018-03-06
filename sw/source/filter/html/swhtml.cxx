@@ -1424,6 +1424,11 @@ void SwHTMLParser::NextToken( HtmlTokenId nToken )
 #endif
         break;
 
+    case HtmlTokenId::OBJECT_OFF:
+        if (!m_aEmbeds.empty())
+            m_aEmbeds.pop();
+        break;
+
     case HtmlTokenId::APPLET_ON:
 #if HAVE_FEATURE_JAVA
         InsertApplet();
