@@ -36,6 +36,24 @@
     },
     {
       "key": {
+        "uuid": "ba2be162_e8aae884",
+        "filename": "shell/source/win32/simplemail/senddoc.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 233,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-03-06T19:46:11Z",
+      "side": 1,
+      "message": "Yes - please see original lines 122-124",
+      "parentUuid": "ba2be162_88eeccea",
+      "revId": "35487d8e00d63b3303390c2cac3b25c11f3048b8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ba2be162_a8b9d0ee",
         "filename": "shell/source/win32/simplemail/smplmailclient.cxx",
         "patchSetId": 2
