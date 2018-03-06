@@ -2153,11 +2153,6 @@ void DrawingML::WriteParagraphNumbering(const Reference< XPropertySet >& rXPropS
             auto xBitmap = pPropValue[i].Value.get<uno::Reference<awt::XBitmap>>();
             xGraphic.set(xBitmap, uno::UNO_QUERY);
         }
-        else if ( aPropName == "GraphicURL" )
-        {
-            aGraphicURL = *o3tl::doAccess<OUString>(pPropValue[i].Value);
-            SAL_INFO("oox.shape", "graphic url: " << aGraphicURL);
-        }
         else if ( aPropName == "GraphicSize" )
         {
             aGraphicSize = *o3tl::doAccess<awt::Size>(pPropValue[i].Value);
