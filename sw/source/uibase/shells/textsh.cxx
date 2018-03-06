@@ -934,25 +934,8 @@ void SwTextShell::InsertSymbol( SfxRequest& rReq )
 
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
         ScopedVclPtr<SfxAbstractDialog> pDlg(pFact->CreateCharMapDialog( GetView().GetWindow(), aAllSet, true ));
-        if( RET_OK == pDlg->Execute() )
-        {
-            const SfxStringItem* pCItem = SfxItemSet::GetItem<SfxStringItem>(pDlg->GetOutputItemSet(), SID_CHARMAP, false);
-            const SvxFontItem* pFontItem = SfxItemSet::GetItem<SvxFontItem>(pDlg->GetOutputItemSet(), SID_ATTR_CHAR_FONT, false);
-            if ( pFontItem )
-            {
-                aNewFont.SetFamilyName( pFontItem->GetFamilyName() );
-                aNewFont.SetStyleName( pFontItem->GetStyleName() );
-                aNewFont.SetCharSet( pFontItem->GetCharSet() );
-                aNewFont.SetPitch( pFontItem->GetPitch() );
-            }
-
-            if ( pCItem )
-            {
-                aChars  = pCItem->GetValue();
-                aOpt.SetSymbolFont(aNewFont.GetFamilyName());
-                SW_MOD()->ApplyUsrPref(aOpt, &GetView());
-            }
-        }
+        pDlg->Execute();
+        return;
     }
 
     if( !aChars.isEmpty() )

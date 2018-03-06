@@ -339,16 +339,7 @@ bool ScViewUtil::ExecuteCharMap( const SvxFontItem& rOldFont,
         aSet.Put( SfxBoolItem( FN_PARAM_1, false ) );
         aSet.Put( SvxFontItem( rOldFont.GetFamily(), rOldFont.GetFamilyName(), rOldFont.GetStyleName(), rOldFont.GetPitch(), rOldFont.GetCharSet(), aSet.GetPool()->GetWhich( SID_ATTR_CHAR_FONT ) ) );
         ScopedVclPtr<SfxAbstractDialog> pDlg(pFact->CreateCharMapDialog( &rFrame.GetWindow(), aSet, true ));
-        if ( pDlg->Execute() == RET_OK )
-        {
-            const SfxStringItem* pItem = SfxItemSet::GetItem<SfxStringItem>(pDlg->GetOutputItemSet(), SID_CHARMAP, false);
-            const SvxFontItem* pFontItem = SfxItemSet::GetItem<SvxFontItem>(pDlg->GetOutputItemSet(), SID_ATTR_CHAR_FONT, false);
-            if ( pItem )
-                rString  = pItem->GetValue();
-            if ( pFontItem )
-                rNewFont = SvxFontItem( pFontItem->GetFamily(), pFontItem->GetFamilyName(), pFontItem->GetStyleName(), pFontItem->GetPitch(), pFontItem->GetCharSet(), rNewFont.Which() );
-            bRet = true;
-        }
+        pDlg->Execute();
     }
     return bRet;
 }
