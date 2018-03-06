@@ -223,7 +223,11 @@ void ColorConfig_Impl::Load(const OUString& rScheme)
     for(int i = 0; i < ColorConfigEntryCount && aColors.getLength() > nIndex; ++i)
     {
         if(pColors[nIndex].hasValue())
-            pColors[nIndex] >>= m_aConfigValues[i].nColor;
+        {
+            sal_Int32 nTmp;
+            pColors[nIndex] >>= nTmp;
+            m_aConfigValues[i].nColor = Color(nTmp);
+        }
         else
             m_aConfigValues[i].nColor = COL_AUTO;
         nIndex++;
@@ -353,8 +357,8 @@ void ColorConfig_Impl::ImplUpdateApplicationSettings()
     StyleSettings aStyleSettings( aSettings.GetStyleSettings() );
 
     ColorConfigValue aRet = GetColorConfigValue(svtools::FONTCOLOR);
-    if(aRet.nColor == COL_AUTO)
-        aRet.nColor = ColorConfig::GetDefaultColor(svtools::FONTCOLOR).GetColor();
+    if(COL_AUTO == aRet.nColor)
+        aRet.nColor = ColorConfig::GetDefaultColor(svtools::FONTCOLOR);
 
     Color aFontColor(aRet.nColor);
 
@@ -400,12 +404,12 @@ Color ColorConfig::GetDefaultColor(ColorConfigEntry eEntry)
     {
         COL_WHITE, // DOCCOLOR
         COL_LIGHTGRAY, // DOCBOUNDARIES
-        0xDFDFDE, // APPBACKGROUND
+        Color(0xDFDFDE), // APPBACKGROUND
         COL_LIGHTGRAY, // OBJECTBOUNDARIES
         COL_LIGHTGRAY, // TABLEBOUNDARIES
         COL_BLACK, // FONTCOLOR
         COL_BLUE, // LINKS
-        0x0000cc, // LINKSVISITED
+        Color(0x0000cc), // LINKSVISITED
         COL_LIGHTRED, // SPELL
         COL_LIGHTMAGENTA, // SMARTTAGS
         COL_GRAY, // SHADOWCOLOR
@@ -415,7 +419,7 @@ Color ColorConfig::GetDefaultColor(ColorConfigEntry eEntry)
         COL_BLACK, // WRITERDIRECTCURSOR
         COL_GREEN, //WRITERSCRIPTINDICATOR
         COL_LIGHTGRAY, //WRITERSECTIONBOUNDARIES
-        0x0369a3, //WRITERHEADERFOOTERMARK,
+        Color(0x0369a3), //WRITERHEADERFOOTERMARK,
         COL_BLUE, //WRITERPAGEBREAKS,
         COL_LIGHTBLUE, // HTMLSGML
         COL_LIGHTGREEN, // HTMLCOMMENT
@@ -423,12 +427,12 @@ Color ColorConfig::GetDefaultColor(ColorConfigEntry eEntry)
         COL_GRAY, // HTMLUNKNOWN
         COL_GRAY3, // CALCGRID
         COL_BLUE, //CALCPAGEBREAK
-        0x2300dc, //CALCPAGEBREAKMANUAL
+        Color(0x2300dc), //CALCPAGEBREAKMANUAL
         COL_GRAY7, //CALCPAGEBREAKAUTOMATIC
         COL_LIGHTBLUE, // CALCDETECTIVE
         COL_LIGHTRED, // CALCDETECTIVEERROR
-        0xef0fff, // CALCREFERENCE
-        0xffffc0, // CALCNOTESBACKGROUND
+        Color(0xef0fff), // CALCREFERENCE
+        Color(0xffffc0), // CALCNOTESBACKGROUND
         COL_LIGHTGRAY, // DRAWGRID
         COL_GREEN, // BASICIDENTIFIER,
         COL_GRAY, // BASICCOMMENT,
@@ -437,12 +441,12 @@ Color ColorConfig::GetDefaultColor(ColorConfigEntry eEntry)
         COL_BLUE, // BASICOPERATOR,
         COL_BLUE, // BASICKEYWORD,
         COL_RED, //BASICERROR
-        0x009900, // SQLIDENTIFIER
+        Color(0x009900), // SQLIDENTIFIER
         COL_BLACK, // SQLNUMBER
-        0xCE7B00, // SQLSTRING
+        Color(0xCE7B00), // SQLSTRING
         COL_BLACK, // SQLOPERATOR
-        0x0000E6, // SQLKEYWORD
-        0x259D9D, // SQLPARAMETER
+        Color(0x0000E6), // SQLKEYWORD
+        Color(0x259D9D), // SQLPARAMETER
         COL_GRAY, // SQLCOMMENT
     };
     Color aRet;
@@ -491,7 +495,7 @@ ColorConfigValue ColorConfig::GetColorValue(ColorConfigEntry eEntry, bool bSmart
     if (bSmart)
     {
         if(aRet.nColor == COL_AUTO)
-            aRet.nColor = ColorConfig::GetDefaultColor(eEntry).GetColor();
+            aRet.nColor = ColorConfig::GetDefaultColor(eEntry);
     }
 
     return aRet;

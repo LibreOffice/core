@@ -203,7 +203,7 @@ util::Color SAL_CALL SvNumberFormatterServiceObj::queryColorForNumber( sal_Int32
     Color* pColor = nullptr;
     pFormatter->GetOutputString(fValue, nKey, aStr, &pColor);
     if (pColor)
-        nRet = pColor->GetColor();
+        nRet = sal_uInt32(*pColor);
     // Else keep Default
 
     return nRet;
@@ -245,7 +245,7 @@ util::Color SAL_CALL SvNumberFormatterServiceObj::queryColorForString( sal_Int32
     pFormatter->GetOutputString(aString, nKey, aStr, &pColor);
     if (pColor)
     {
-        nRet = pColor->GetColor();
+        nRet = sal_uInt32(*pColor);
     }
     // Else keep Default
 
@@ -322,7 +322,7 @@ util::Color SAL_CALL SvNumberFormatterServiceObj::queryPreviewColorForNumber( co
         throw util::MalformedNumberFormatException();
 
     if (pColor)
-        nRet = pColor->GetColor();
+        nRet = sal_uInt32(*pColor);
     // Else keep Default
 
     return nRet;

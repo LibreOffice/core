@@ -702,7 +702,7 @@ namespace svt { namespace table
             ::std::vector< ::Color > aColors( aAPIColors.getLength() );
             for ( sal_Int32 i=0; i<aAPIColors.getLength(); ++i )
             {
-                aColors[i] = ::Color( aAPIColors[i] );
+                aColors[i] = Color(aAPIColors[i]);
             }
             m_pImpl->m_aRowColors.reset( aColors );
         }

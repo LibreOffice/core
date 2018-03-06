@@ -54,8 +54,8 @@ void lclGetSettingColors(Color& rBackgroundColor, Color& rTextColor)
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
     if (rStyleSettings.GetHighContrastMode())
     {
-        rBackgroundColor = rStyleSettings.GetFieldColor().GetColor();
-        rTextColor = rStyleSettings.GetFieldTextColor().GetColor();
+        rBackgroundColor = rStyleSettings.GetFieldColor();
+        rTextColor = rStyleSettings.GetFieldTextColor();
     }
     else
     {

@@ -353,7 +353,7 @@ void ExtendedColorConfig_Impl::FillComponentColors(uno::Sequence < OUString >& _
 
                     OSL_ENSURE(pColors[i].hasValue(),"Color config entry has NIL as color value set!");
                     OSL_ENSURE(pDefaultColors[i].hasValue(),"Color config entry has NIL as color value set!");
-                    sal_Int32 nColor = 0,nDefaultColor = 0;
+                    Color nColor, nDefaultColor;
                     pColors[i] >>= nColor;
                     if ( bDefaultColorFound )
                         pDefaultColors[i] >>= nDefaultColor;
