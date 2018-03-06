@@ -47,9 +47,11 @@ enum RestartReason {
     RESTART_REASON_ASSIGNING_FOLDERS,
         // "For the assigned folders and archives to take effect,
         // %PRODUCTNAME must be restarted."
-    RESTART_REASON_EXP_FEATURES
+    RESTART_REASON_EXP_FEATURES,
         // "For the modified experimental features to take effect,
         // %PRODUCTNAME must be restarted."
+    RESTART_REASON_NONE
+        // No particular reason
 };
 
 // Must be called with the solar mutex locked:

@@ -20,6 +20,8 @@
 #ifndef INCLUDED_CUI_SOURCE_INC_TREEOPT_HXX
 #define INCLUDED_CUI_SOURCE_INC_TREEOPT_HXX
 
+#include <sfx2/basedlgs.hxx>
+#include <svtools/restartdialog.hxx>
 #include <tools/resary.hxx>
 #include <vcl/fixed.hxx>
 
@@ -126,13 +128,15 @@ class SvxColorTabPage;
 class OfaTreeOptionsDialog : public SfxModalDialog
 {
 private:
-    SvTreeListEntry*    pCurrentPageEntry;
-
     VclPtr<OKButton>       pOkPB;
     VclPtr<PushButton>     pBackPB;
 
     VclPtr<SvTreeListBox>  pTreeLB;
     VclPtr<VclBox>         pTabBox;
+
+    VclPtr<vcl::Window>    m_pParent;
+
+    SvTreeListEntry*       pCurrentPageEntry;
 
     OUString               sTitle;
     OUString               sNotLoadedError;
@@ -146,6 +150,9 @@ private:
 
     // check "for the current document only" and set focus to "Western" languages box
     bool                   bIsForSetDocumentLanguage;
+
+    bool                   bNeedsRestart;
+    svtools::RestartReason eRestartReason;
 
     css::uno::Reference < css::awt::XContainerWindowProvider >
                     m_xContainerWinProvider;
@@ -194,6 +201,8 @@ public:
 
     // helper functions to call the language settings TabPage from the SpellDialog
     static void         ApplyLanguageOptions(const SfxItemSet& rSet);
+
+    void                SetNeedsRestart( svtools::RestartReason eReason );
 };
 
 // class OfaPageResource -------------------------------------------------
