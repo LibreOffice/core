@@ -20,6 +20,7 @@
 #define XMLOFF_COLORPROPERTYSET_HXX
 
 #include <cppuhelper/implbase.hxx>
+#include <tools/color.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
@@ -71,8 +72,8 @@ protected:
 private:
     css::uno::Reference< css::beans::XPropertySetInfo > m_xInfo;
     OUString  m_aColorPropName;
-    sal_Int32        m_nColor;
-    sal_Int32        m_nDefaultColor;
+    Color     m_nColor;
+    Color     m_nDefaultColor;
 };
 
 } //  namespace chart

@@ -190,7 +190,7 @@ public:
 class SvXMLNumFmtPropContext : public SvXMLImportContext
 {
     SvXMLNumFormatContext&  rParent;
-    sal_Int32               m_nColor;
+    Color                   m_nColor;
     bool                    bColSet;
 
 public:

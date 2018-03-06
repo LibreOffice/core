@@ -63,12 +63,9 @@ bool XMLShadowPropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue
         }
         else if( !bColorFound && aToken.startsWith("#") )
         {
-            sal_Int32 nColor(0);
-            bRet = ::sax::Converter::convertColor( nColor, aToken );
+            bRet = ::sax::Converter::convertColor( aColor, aToken );
             if( !bRet )
                 return false;
-
-            aColor = nColor;
             bColorFound = true;
         }
         else if( !bOffsetFound )
@@ -112,7 +109,7 @@ bool XMLShadowPropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue
     if( bRet && ( bColorFound || bOffsetFound ) )
     {
         aShadow.IsTransparent = aColor.GetTransparency() > 0;
-        aShadow.Color = aColor.GetColor();
+        aShadow.Color = sal_Int32(aColor);
         bRet = true;
     }
 

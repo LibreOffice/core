@@ -37,6 +37,7 @@
 #include <osl/diagnose.h>
 
 #include <tools/fontenum.hxx>
+#include <tools/color.hxx>
 
 #include <sax/tools/converter.hxx>
 
@@ -174,7 +175,7 @@ class SvxXMLListLevelStyleContext_Impl : public SvXMLImportContext
     sal_Unicode         cBullet;
 
     sal_Int16           nRelSize;
-    sal_Int32           m_nColor;
+    Color               m_nColor;
 
     sal_Int16           ePosAndSpaceMode;
     sal_Int16           eLabelFollowedBy;
@@ -188,7 +189,7 @@ class SvxXMLListLevelStyleContext_Impl : public SvXMLImportContext
     bool            bHasColor : 1;
 
     void SetRelSize( sal_Int16 nRel ) { nRelSize = nRel; }
-    void SetColor( sal_Int32 nColor )
+    void SetColor( Color nColor )
         { m_nColor = nColor; bHasColor = true; }
     void SetSpaceBefore( sal_Int32 nSet ) { nSpaceBefore = nSet; }
     void SetMinLabelWidth( sal_Int32 nSet ) { nMinLabelWidth = nSet; }
@@ -738,14 +739,14 @@ SvxXMLListLevelStyleAttrContext_Impl::SvxXMLListLevelStyleAttrContext_Impl(
                 sal_Int32 nColor(0);
                 if (::sax::Converter::convertColor( nColor, rValue ))
                 {
-                    rListLevel.SetColor( nColor );
+                    rListLevel.SetColor( Color(nColor) );
                 }
             }
             break;
         case XML_TOK_STYLE_ATTRIBUTES_ATTR_WINDOW_FONT_COLOR:
             {
                 if( IsXMLToken( rValue, XML_TRUE ) )
-                    rListLevel.SetColor( sal_Int32(0xffffffff) );
+                    rListLevel.SetColor( Color(0xffffffff) );
             }
             break;
         case XML_TOK_STYLE_ATTRIBUTES_ATTR_FONT_SIZE:
