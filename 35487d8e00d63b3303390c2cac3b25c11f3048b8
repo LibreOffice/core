@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba2be162_48e4d40c",
+        "filename": "shell/Library_smplmail.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-03-06T19:05:44Z",
+      "side": 1,
+      "message": "missing tabs",
+      "revId": "35487d8e00d63b3303390c2cac3b25c11f3048b8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba2be162_88eeccea",
+        "filename": "shell/source/win32/simplemail/senddoc.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 233,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-03-06T19:05:44Z",
+      "side": 1,
+      "message": "if the name is not passed, while MAPI do something useful with a empty string for a name?",
+      "revId": "35487d8e00d63b3303390c2cac3b25c11f3048b8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba2be162_a8b9d0ee",
+        "filename": "shell/source/win32/simplemail/smplmailclient.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 308,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-03-06T19:05:44Z",
+      "side": 1,
+      "message": "sDispalyName-\u003esDisplayName",
+      "revId": "35487d8e00d63b3303390c2cac3b25c11f3048b8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
