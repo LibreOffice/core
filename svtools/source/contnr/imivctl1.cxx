@@ -593,7 +593,7 @@ void SvxIconChoiceCtrl_Impl::Paint(vcl::RenderContext& rRenderContext, const too
 
 #if defined(OV_DRAWGRID)
     Color aOldColor (rRenderContext.GetLineColor());
-    Color aColor(COL_BLACK);
+    Color aCOL_BLACK);
     rRenderContext.SetLineColor( aColor );
     Point aOffs(rRenderContext.GetMapMode().GetOrigin());
     Size aXSize(GetOutputSizePixel());

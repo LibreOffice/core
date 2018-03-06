@@ -469,14 +469,14 @@ void SAL_CALL ValueSetAcc::grabFocus()
 sal_Int32 SAL_CALL ValueSetAcc::getForeground(  )
 {
     ThrowIfDisposed();
-    sal_uInt32 nColor = Application::GetSettings().GetStyleSettings().GetWindowTextColor().GetColor();
+    Color nColor = Application::GetSettings().GetStyleSettings().GetWindowTextColor();
     return static_cast<sal_Int32>(nColor);
 }
 
 sal_Int32 SAL_CALL ValueSetAcc::getBackground(  )
 {
     ThrowIfDisposed();
-    sal_uInt32 nColor = Application::GetSettings().GetStyleSettings().GetWindowColor().GetColor();
+    Color nColor = Application::GetSettings().GetStyleSettings().GetWindowColor();
     return static_cast<sal_Int32>(nColor);
 }
 
@@ -1010,17 +1010,17 @@ void SAL_CALL ValueItemAcc::grabFocus()
 
 sal_Int32 SAL_CALL ValueItemAcc::getForeground(  )
 {
-    sal_uInt32 nColor = Application::GetSettings().GetStyleSettings().GetWindowTextColor().GetColor();
+    Color nColor = Application::GetSettings().GetStyleSettings().GetWindowTextColor();
     return static_cast<sal_Int32>(nColor);
 }
 
 sal_Int32 SAL_CALL ValueItemAcc::getBackground(  )
 {
-    sal_uInt32 nColor;
+    Color nColor;
     if (mpParent && mpParent->meType == VALUESETITEM_COLOR)
-        nColor = mpParent->maColor.GetColor();
+        nColor = mpParent->maColor;
     else
-        nColor = Application::GetSettings().GetStyleSettings().GetWindowColor().GetColor();
+        nColor = Application::GetSettings().GetStyleSettings().GetWindowColor();
     return static_cast<sal_Int32>(nColor);
 }
 

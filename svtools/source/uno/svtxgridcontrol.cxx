@@ -461,7 +461,7 @@ namespace
         if ( !i_color )
             o_colorValue.clear();
         else
-            o_colorValue <<= i_color->GetColor();
+            o_colorValue <<= sal_Int32(*i_color);
     }
 }
 
@@ -547,7 +547,7 @@ Any SVTXGridControl::getProperty( const OUString& PropertyName )
             Sequence< css::util::Color > aAPIColors( aColors->size() );
             for ( size_t i=0; i<aColors->size(); ++i )
             {
-                aAPIColors[i] = aColors->at(i).GetColor();
+                aAPIColors[i] = sal_Int32(aColors->at(i));
             }
             aPropertyValue <<= aAPIColors;
         }

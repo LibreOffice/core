@@ -1736,7 +1736,7 @@ bool GraphicObject::ImplRenderTileRecursive( VirtualDevice& rVDev, int nExponent
             }
 
 #ifdef DBG_TEST
-//          rVDev.SetFillColor( COL_WHITE );
+//          rVDev.SetFillCOL_WHITE );
             rVDev.SetFillColor();
             rVDev.SetLineColor( Color( 255 * nExponent / nMSBFactor, 255 - 255 * nExponent / nMSBFactor, 128 - 255 * nExponent / nMSBFactor ) );
             rVDev.DrawEllipse( Rectangle(aTileInfo.aNextTileTopLeft.X(), aTileInfo.aTileTopLeft.Y(),
@@ -1820,7 +1820,7 @@ bool GraphicObject::ImplRenderTileRecursive( VirtualDevice& rVDev, int nExponent
     }
 
 #ifdef DBG_TEST
-//  rVDev.SetFillColor( COL_WHITE );
+//  rVDev.SetFillCOL_WHITE );
     rVDev.SetFillColor();
     rVDev.SetLineColor( Color( 255 * nExponent / nMSBFactor, 255 - 255 * nExponent / nMSBFactor, 128 - 255 * nExponent / nMSBFactor ) );
     rVDev.DrawRect( Rectangle((rTileInfo.aTileTopLeft.X())*rTileSizePixel.Width(),

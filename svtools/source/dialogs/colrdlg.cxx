@@ -74,7 +74,7 @@ short SvColorDialog::Execute()
 
         Sequence< PropertyValue > props( 2 );
         props[0].Name = sColor;
-        props[0].Value <<= static_cast<sal_Int32>(maColor.GetColor());
+        props[0].Value <<= maColor;
         props[1].Name = "Mode";
         props[1].Value <<= static_cast<sal_Int16>(meMode);
 
@@ -89,12 +89,7 @@ short SvColorDialog::Execute()
             {
                 if( props[n].Name == sColor )
                 {
-                    sal_Int32 nColor = 0;
-                    if( props[n].Value >>= nColor )
-                    {
-                        maColor = nColor;
-                    }
-
+                    props[n].Value >>= maColor;
                 }
             }
         }

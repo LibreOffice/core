@@ -332,7 +332,7 @@ bool getAnimationFromGraphic( VectorOfMtfAnimationFrames&   o_rFrames,
                 if(aMask.IsEmpty())
                 {
                     const tools::Rectangle aRect(rAnimBmp.aPosPix, aContent.GetSizePixel());
-                    pVDevMask->SetFillColor(COL_BLACK);
+                    pVDevMask->SetFillColor( COL_BLACK);
                     pVDevMask->SetLineColor();
                     pVDevMask->DrawRect(aRect);
                 }

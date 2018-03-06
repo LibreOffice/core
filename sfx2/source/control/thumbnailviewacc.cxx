@@ -394,14 +394,14 @@ void SAL_CALL ThumbnailViewAcc::grabFocus()
 sal_Int32 SAL_CALL ThumbnailViewAcc::getForeground(  )
 {
     ThrowIfDisposed();
-    sal_uInt32 nColor = Application::GetSettings().GetStyleSettings().GetWindowTextColor().GetColor();
+    Color nColor = Application::GetSettings().GetStyleSettings().GetWindowTextColor();
     return static_cast<sal_Int32>(nColor);
 }
 
 sal_Int32 SAL_CALL ThumbnailViewAcc::getBackground(  )
 {
     ThrowIfDisposed();
-    sal_uInt32 nColor = Application::GetSettings().GetStyleSettings().GetWindowColor().GetColor();
+    Color nColor = Application::GetSettings().GetStyleSettings().GetWindowColor();
     return static_cast<sal_Int32>(nColor);
 }
 
@@ -884,13 +884,13 @@ void SAL_CALL ThumbnailViewItemAcc::grabFocus()
 
 sal_Int32 SAL_CALL ThumbnailViewItemAcc::getForeground(  )
 {
-    sal_uInt32 nColor = Application::GetSettings().GetStyleSettings().GetWindowTextColor().GetColor();
+    Color nColor = Application::GetSettings().GetStyleSettings().GetWindowTextColor();
     return static_cast<sal_Int32>(nColor);
 }
 
 sal_Int32 SAL_CALL ThumbnailViewItemAcc::getBackground(  )
 {
-    return static_cast<sal_Int32>(Application::GetSettings().GetStyleSettings().GetWindowColor().GetColor());
+    return static_cast<sal_Int32>(Application::GetSettings().GetStyleSettings().GetWindowColor());
 }
 
 sal_Int64 SAL_CALL ThumbnailViewItemAcc::getSomething( const uno::Sequence< sal_Int8 >& rId )
