@@ -2606,9 +2606,11 @@ void FormulaCompiler::ForceArrayOperator( FormulaTokenRef const & rCurr )
     else if (eType == formula::ParamClass::ReferenceOrForceArray)
     {
         // Inherit further only if the return class of the nested function is
-        // not Reference.
+        // not Reference. Else flag as suppressed.
         if (GetForceArrayParameter( rCurr.get(), SAL_MAX_UINT16) != ParamClass::Reference)
             rCurr->SetInForceArray( eType);
+        else
+            rCurr->SetInForceArray( formula::ParamClass::SuppressedReferenceOrForceArray);
         return;
     }
 
@@ -2622,6 +2624,8 @@ void FormulaCompiler::ForceArrayOperator( FormulaTokenRef const & rCurr )
         {
             if (GetForceArrayParameter( rCurr.get(), SAL_MAX_UINT16) != ParamClass::Reference)
                 rCurr->SetInForceArray( eType);
+            else
+                rCurr->SetInForceArray( formula::ParamClass::SuppressedReferenceOrForceArray);
         }
     }
 }
