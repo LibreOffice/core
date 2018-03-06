@@ -51,6 +51,14 @@ LINK=$(WRAPCMD) "$(PSDK_HOME)$/Bin$/Win64$/LINK.EXE"
 .ENDIF
 
 SLOFILES=\
+        $(SLO)$/ResolveThunk.obj\
+        $(SLO)$/SHCreateItemFromParsingName.obj\
+        $(SLO)$/snprintf.obj\
+        $(SLO)$/snwprintf.obj
+
+
+.IF "$(CPUNAME)"=="INTEL"
+SLOFILES+=\
         $(SLO)$/CheckTokenMembership.obj\
         $(SLO)$/CommandLineToArgvW.obj\
         $(SLO)$/CopyFileExA.obj\
@@ -71,10 +79,7 @@ SLOFILES=\
         $(SLO)$/MoveFileExA.obj\
         $(SLO)$/MoveFileExW.obj\
         $(SLO)$/toolhelp.obj\
-        $(SLO)$/ResolveThunk.obj\
         $(SLO)$/ResolveUnicows.obj\
-        $(SLO)$/snprintf.obj\
-        $(SLO)$/snwprintf.obj\
         $(SLO)$/FindFirstVolumeA.obj\
         $(SLO)$/FindFirstVolumeW.obj\
         $(SLO)$/FindNextVolumeA.obj\
@@ -103,8 +108,8 @@ SLOFILES=\
         $(SLO)$/PathRemoveExtensionW.obj\
         $(SLO)$/PathRemoveFileSpecW.obj\
         $(SLO)$/PathSetDlgItemPathW.obj\
-        $(SLO)$/PathStripToRootW.obj\
-        $(SLO)$/SHCreateItemFromParsingName.obj
+        $(SLO)$/PathStripToRootW.obj
+.ENDIF
         
 SHL1TARGET=$(TARGET)
 SHL1IMPLIB=$(SHL1TARGET)
@@ -116,8 +121,12 @@ DEF1EXPORTFILE=\
     unicows_mingw.dxp
 .ELSE
 DEF1EXPORTFILE=\
+    $(SHL1TARGET)64.dxp
+.IF "$(CPUNAME)"=="INTEL"
+DEF1EXPORTFILE+=\
     $(SHL1TARGET).dxp\
     unicows.dxp
+.ENDIF
 .ENDIF
 DEF1DEPN=\
         $(DEF1EXPORTFILE)\

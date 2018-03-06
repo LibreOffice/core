@@ -26,4 +26,23 @@
 
 #include "macros.h"
 
-DEFINE_DEFAULT_THUNK( shell32, TRYLOAD, HRESULT, WINAPI, SHCreateItemFromParsingName, (PCWSTR pszPath, IBindCtx *pbc, REFIID riid, void **ppv) )
+static HRESULT WINAPI SHCreateItemFromParsingName_Failure (PCWSTR pszPath, IBindCtx *pbc, REFIID riid, void **ppv)
+{
+    return E_NOTIMPL;
+}
+
+extern HRESULT (WINAPI *pSHCreateItemFromParsingName)(PCWSTR pszPath, IBindCtx *pbc, REFIID riid, void **ppv);
+
+static HRESULT WINAPI SHCreateItemFromParsingName_Thunk (PCWSTR pszPath, IBindCtx *pbc, REFIID riid, void **ppv)
+{
+    ResolveThunk_TRYLOAD( (FARPROC*)&pSHCreateItemFromParsingName, "shell32.dll", "SHCreateItemFromParsingName", 0, (FARPROC)SHCreateItemFromParsingName_Failure);
+    return pSHCreateItemFromParsingName(pszPath, pbc, riid, ppv);
+}
+
+extern "C" HRESULT WINAPI SHCreateItemFromParsingName (PCWSTR pszPath, IBindCtx *pbc, REFIID riid, void **ppv)
+{
+    return pSHCreateItemFromParsingName(pszPath, pbc, riid, ppv);
+}
+
+HRESULT (WINAPI *pSHCreateItemFromParsingName)(PCWSTR pszPath, IBindCtx *pbc, REFIID riid, void **ppv) = SHCreateItemFromParsingName_Thunk;
+

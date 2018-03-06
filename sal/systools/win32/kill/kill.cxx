@@ -190,6 +190,7 @@ static BOOL RaiseSignalEx( HANDLE hProcess, int sig )
 
             if ( fSuccess )
             {
+#if defined(INTEL)
                 if ( sig )
                 {
                     DWORD   dwStackBuffer[] =
@@ -207,8 +208,28 @@ static BOOL RaiseSignalEx( HANDLE hProcess, int sig )
                 }
                 else
                 {
+                    // FIXME: why? Does AMD64 need it too?
                     aContext.Ecx = aContext.Eax = aContext.Ebx = aContext.Edx = aContext.Esi = aContext.Edi = 0;
                 }
+#elif defined(X86_64)
+                if ( sig )
+                {
+                    DWORD   dwStackBuffer[] =
+                    {
+                        (DWORD)(aContext.Rip >> 32),
+                        (DWORD)(aContext.Rip),
+                        SignalToExceptionCode( sig ),
+                        EXCEPTION_NONCONTINUABLE,
+                        0,
+                        0,
+                        0
+                    };
+
+                    aContext.Rsp -= sizeof(dwStackBuffer);
+                    WriteProcessMemory( hProcess, (LPVOID)aContext.Rsp, dwStackBuffer, sizeof(dwStackBuffer), NULL );
+                    aContext.Rip = (DWORD64) GetProcAddressEx( hProcess, GetModuleHandleA("KERNEL32"), "RaiseException" );
+                }
+#endif
 
                 fSuccess = SetThreadContext( hThread, &aContext );
             }
