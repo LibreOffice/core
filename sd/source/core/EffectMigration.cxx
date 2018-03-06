@@ -1019,7 +1019,7 @@ void EffectMigration::SetDimPrevious( SvxShape* pShape, bool bDimPrevious )
     Any aColor;
 
     if( bDimPrevious )
-        aColor <<= static_cast<sal_Int32>(COL_LIGHTGRAY);
+        aColor <<= COL_LIGHTGRAY;
 
     sd::MainSequencePtr pMainSequence = static_cast<SdPage*>(pObj->GetPage())->getMainSequence();
 

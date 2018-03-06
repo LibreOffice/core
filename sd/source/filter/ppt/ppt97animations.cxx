@@ -35,7 +35,9 @@ using namespace ::com::sun::star;
 
 void Ppt97AnimationInfoAtom::ReadStream( SvStream& rIn )
 {
-    rIn.ReadUInt32( nDimColor );
+    sal_uInt32 nTmp;
+    rIn.ReadUInt32( nTmp );
+    nDimColor = Color(nTmp);
     rIn.ReadUInt32( nFlags );
     rIn.ReadUInt32( nSoundRef );
     rIn.ReadInt32( nDelayTime );
@@ -154,7 +156,7 @@ bool Ppt97Animation::GetSpecialTextIterationDelay( double& rfTextIterationDelay 
     return bRet;
 }
 
-void Ppt97Animation::SetDimColor( sal_Int32 nDimColor )
+void Ppt97Animation::SetDimColor( Color nDimColor )
 {
     m_aAtom.nDimColor = nDimColor;
 }

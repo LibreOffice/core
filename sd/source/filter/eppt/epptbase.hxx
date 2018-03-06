@@ -229,7 +229,7 @@ struct PPTExCharLevel
     sal_uInt16      mnAsianOrComplexFont;
     sal_uInt16      mnFontHeight;
     sal_uInt16      mnEscapement;
-    sal_uInt32      mnFontColor;
+    Color           mnFontColor;
 };
 
 struct PPTExCharSheet

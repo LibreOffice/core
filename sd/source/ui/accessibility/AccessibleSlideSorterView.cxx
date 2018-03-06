@@ -487,8 +487,8 @@ sal_Int32 SAL_CALL AccessibleSlideSorterView::getForeground()
 sal_Int32 SAL_CALL AccessibleSlideSorterView::getBackground()
 {
     ThrowIfDisposed();
-    sal_uInt32 nColor = Application::GetSettings().GetStyleSettings().GetWindowColor().GetColor();
-    return static_cast<sal_Int32>(nColor);
+    Color nColor = Application::GetSettings().GetStyleSettings().GetWindowColor();
+    return sal_Int32(nColor);
 }
 
 //===== XAccessibleSelection ==================================================

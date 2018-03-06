@@ -332,7 +332,7 @@ MotionPathTag::MotionPathTag( CustomAnimationPane& rPane, ::sd::View& rView, con
     OUString aEmpty( "?" );
     mpPathObj->SetMergedItem( XLineDashItem( aEmpty, aDash ) );
     mpPathObj->SetMergedItem( XLineStyleItem( drawing::LineStyle_DASH ) );
-    mpPathObj->SetMergedItem( XLineColorItem(aEmpty, ::COL_GRAY) );
+    mpPathObj->SetMergedItem( XLineColorItem(aEmpty, COL_GRAY) );
     mpPathObj->SetMergedItem( XFillStyleItem( drawing::FillStyle_NONE ) );
 
     ::basegfx::B2DPolygon aStartArrow;

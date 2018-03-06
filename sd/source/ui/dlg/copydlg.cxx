@@ -100,10 +100,10 @@ void CopyDlg::dispose()
     rStr += OUString::number(m_pMtrFldHeight->GetValue());
     rStr += OUString( TOKEN );
 
-    rStr += OUString::number( m_pLbStartColor->GetSelectEntryColor().GetColor() );
+    rStr += OUString::number( sal_uInt32(m_pLbStartColor->GetSelectEntryColor()) );
     rStr += OUString( TOKEN );
 
-    rStr += OUString::number( m_pLbEndColor->GetSelectEntryColor().GetColor() );
+    rStr += OUString::number( sal_uInt32(m_pLbEndColor->GetSelectEntryColor()) );
 
     m_pNumFldCopies.clear();
     m_pBtnSetViewData.clear();
@@ -194,7 +194,7 @@ void CopyDlg::Reset()
     }
     else
     {
-        long nTmp;
+        sal_Int32 nTmp;
         nTmp = static_cast<long>(aStr.getToken( 0, TOKEN ).toInt32());
         m_pNumFldCopies->SetValue( nTmp );
 
