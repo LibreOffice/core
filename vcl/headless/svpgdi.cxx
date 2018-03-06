@@ -1200,39 +1200,8 @@ void SvpSalGraphics::copyBits( const SalTwoRect& rTR,
         cairo_surface_destroy(pCopy);
 }
 
-namespace
-{
-    bool isBlackWhite(const SalBitmap& rBitmap)
-    {
-        const SvpSalBitmap& rSrcBmp = static_cast<const SvpSalBitmap&>(rBitmap);
-        const BitmapBuffer * pSourceBuffer = rSrcBmp.GetBuffer();
-        const BitmapPalette & rPalette = pSourceBuffer->maPalette;
-
-        return (
-            rPalette.GetEntryCount() < 2 ||
-
-            (rPalette.GetEntryCount() == 2 &&
-            rPalette[0] == Color(COL_BLACK) &&
-            rPalette[1] == Color(COL_WHITE) ) ||
-
-            (rPalette.GetEntryCount() == 2 &&
-            rPalette[1] == Color(COL_BLACK) &&
-            rPalette[0] == Color(COL_WHITE) )
-            );
-    }
-}
-
 void SvpSalGraphics::drawBitmap(const SalTwoRect& rTR, const SalBitmap& rSourceBitmap)
 {
-    if (rSourceBitmap.GetBitCount() == 1 && isBlackWhite(rSourceBitmap))
-    {
-        // This way we draw only monochrome b/w bitmaps
-        MaskHelper aMask(rSourceBitmap);
-        cairo_surface_t* source = aMask.getMask();
-        copySource(rTR, source);
-        return;
-    }
-
     SourceHelper aSurface(rSourceBitmap);
     cairo_surface_t* source = aSurface.getSurface();
     copySource(rTR, source);
