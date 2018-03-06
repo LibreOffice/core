@@ -35,6 +35,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,icu,\
 	$(if $(filter-out ANDROID,$(OS)),external/icu/icu4c-icudata-stdlibs.patch.1) \
 	external/icu/icu4c-khmerbreakengine.patch.1 \
 	external/icu/icu4c-59-werror-shadow.patch.1 \
+	external/icu/ofz4860.patch.2 \
 ))
 
 $(eval $(call gb_UnpackedTarball_add_file,icu,source/data/brkitr/khmerdict.dict,external/icu/khmerdict.dict))
