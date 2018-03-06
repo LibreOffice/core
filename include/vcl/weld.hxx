@@ -99,8 +99,23 @@ protected:
 public:
     virtual void set_title(const OUString& rTitle) = 0;
     virtual OUString get_title() const = 0;
+    virtual void set_busy_cursor(bool bBusy) = 0;
 
     void connect_help(const Link<Widget&, bool>& rLink) { m_aHelpRequestHdl = rLink; }
+};
+
+class VCL_DLLPUBLIC WaitObject
+{
+private:
+    weld::Window* m_pWindow;
+
+public:
+    WaitObject(weld::Window* pWindow)
+        : m_pWindow(pWindow)
+    {
+        m_pWindow->set_busy_cursor(true);
+    }
+    ~WaitObject() { m_pWindow->set_busy_cursor(false); }
 };
 
 class VCL_DLLPUBLIC Dialog : virtual public Window
@@ -455,6 +470,20 @@ public:
     virtual void set_selection(const Selection&) = 0;
 };
 
+class VCL_DLLPUBLIC Expander : virtual public Container
+{
+protected:
+    Link<Expander&, void> m_aExpandedHdl;
+
+    void signal_expanded() { m_aExpandedHdl.Call(*this); }
+
+public:
+    virtual bool get_expanded() const = 0;
+    virtual void set_expanded(bool bExpand) = 0;
+
+    void connect_expanded(const Link<Expander&, void>& rLink) { m_aExpandedHdl = rLink; }
+};
+
 class VCL_DLLPUBLIC DrawingArea : virtual public Widget
 {
 protected:
@@ -500,6 +529,7 @@ public:
     virtual TreeView* weld_tree_view(const OString& id, bool bTakeOwnership = false) = 0;
     virtual Label* weld_label(const OString& id, bool bTakeOwnership = false) = 0;
     virtual TextView* weld_text_view(const OString& id, bool bTakeOwnership = false) = 0;
+    virtual Expander* weld_expander(const OString& id, bool bTakeOwnership = false) = 0;
     virtual Entry* weld_entry(const OString& id, bool bTakeOwnership = false) = 0;
     virtual DrawingArea* weld_drawing_area(const OString& id, bool bTakeOwnership = false) = 0;
     virtual ~Builder() {}

@@ -179,13 +179,13 @@ IMPL_LINK_NOARG(SdPresLayoutDlg, ClickLayoutHdl, ValueSet*, void)
  */
 IMPL_LINK_NOARG(SdPresLayoutDlg, ClickLoadHdl, Button*, void)
 {
-    VclPtrInstance< SfxNewFileDialog > pDlg(this, SfxNewFileDialogMode::Preview);
-    pDlg->SetText(SdResId(STR_LOAD_PRESENTATION_LAYOUT));
+    SfxNewFileDialog aDlg(GetFrameWeld(), SfxNewFileDialogMode::Preview);
+    aDlg.set_title(SdResId(STR_LOAD_PRESENTATION_LAYOUT));
 
     if(!IsReallyVisible())
         return;
 
-    sal_uInt16 nResult = pDlg->Execute();
+    sal_uInt16 nResult = aDlg.run();
     // Inserted update to force repaint
     Update();
 
@@ -195,9 +195,9 @@ IMPL_LINK_NOARG(SdPresLayoutDlg, ClickLoadHdl, Button*, void)
     {
         case RET_OK:
         {
-            if (pDlg->IsTemplate())
+            if (aDlg.IsTemplate())
             {
-                maName = pDlg->GetTemplateFileName();
+                maName = aDlg.GetTemplateFileName();
             }
             else
             {
@@ -210,7 +210,6 @@ IMPL_LINK_NOARG(SdPresLayoutDlg, ClickLoadHdl, Button*, void)
         default:
             bCancel = true;
     }
-    pDlg.reset();
 
     if( !bCancel )
     {
