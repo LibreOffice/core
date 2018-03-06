@@ -117,12 +117,12 @@ namespace toolkit
         {
             sal_Int32 nBackgroundColor = 0;
             _rColorValue >>= nBackgroundColor;
-            aStyleSettings.SetFaceColor( nBackgroundColor );
+            aStyleSettings.SetFaceColor( Color(nBackgroundColor) );
 
             // for the real background (everything except the buttons and the thumb),
             // use an average between the desired color and "white"
             Color aWhite( COL_WHITE );
-            Color aBackground( nBackgroundColor );
+            Color aBackground = Color( nBackgroundColor );
             aBackground.SetRed( ( aBackground.GetRed() + aWhite.GetRed() ) / 2 );
             aBackground.SetGreen( ( aBackground.GetGreen() + aWhite.GetGreen() ) / 2 );
             aBackground.SetBlue( ( aBackground.GetBlue() + aWhite.GetBlue() ) / 2 );
@@ -131,19 +131,19 @@ namespace toolkit
             sal_Int32 nBackgroundLuminance = Color( nBackgroundColor ).GetLuminance();
             sal_Int32 nWhiteLuminance = COL_WHITE.GetLuminance();
 
-            Color aLightShadow( nBackgroundColor );
+            Color aLightShadow = Color( nBackgroundColor );
             aLightShadow.IncreaseLuminance( static_cast<sal_uInt8>( ( nWhiteLuminance - nBackgroundLuminance ) * 2 / 3 ) );
             aStyleSettings.SetLightBorderColor( aLightShadow );
 
-            Color aLight( nBackgroundColor );
+            Color aLight = Color( nBackgroundColor );
             aLight.IncreaseLuminance( static_cast<sal_uInt8>( ( nWhiteLuminance - nBackgroundLuminance ) * 1 / 3 ) );
             aStyleSettings.SetLightColor( aLight );
 
-            Color aShadow( nBackgroundColor );
+            Color aShadow = Color( nBackgroundColor );
             aShadow.DecreaseLuminance( static_cast<sal_uInt8>( nBackgroundLuminance * 1 / 3 ) );
             aStyleSettings.SetShadowColor( aShadow );
 
-            Color aDarkShadow( nBackgroundColor );
+            Color aDarkShadow = Color( nBackgroundColor );
             aDarkShadow.DecreaseLuminance( static_cast<sal_uInt8>( nBackgroundLuminance * 2 / 3 ) );
             aStyleSettings.SetDarkShadowColor( aDarkShadow );
         }
@@ -154,8 +154,8 @@ namespace toolkit
 
     Any getButtonLikeFaceColor( const vcl::Window* _pWindow )
     {
-        sal_Int32 nBackgroundColor = _pWindow->GetSettings().GetStyleSettings().GetFaceColor().GetColor();
-        return makeAny( nBackgroundColor );
+        Color nBackgroundColor = _pWindow->GetSettings().GetStyleSettings().GetFaceColor();
+        return makeAny( sal_Int32(nBackgroundColor) );
     }
 
     static void adjustBooleanWindowStyle( const Any& _rValue, vcl::Window* _pWindow, WinBits _nBits, bool _bInverseSemantics )
@@ -2394,7 +2394,7 @@ void SAL_CALL VCLXDialog::setProperty(
                 }
                 else if ( bVoid || !xGraphic.is() )
                 {
-                    Color aColor = pDialog->GetControlBackground().GetColor();
+                    Color aColor = pDialog->GetControlBackground();
                     if ( aColor == COL_AUTO )
                         aColor = pDialog->GetSettings().GetStyleSettings().GetDialogColor();
 
@@ -2551,7 +2551,7 @@ void SAL_CALL VCLXMultiPage::setProperty(
                 }
                 else if ( bVoid || !xGraphic.is() )
                 {
-                    Color aColor = pTabControl->GetControlBackground().GetColor();
+                    Color aColor = pTabControl->GetControlBackground();
                     if ( aColor == COL_AUTO )
                         aColor = pTabControl->GetSettings().GetStyleSettings().GetDialogColor();
 
@@ -2776,7 +2776,7 @@ void SAL_CALL VCLXTabPage::setProperty(
                 }
                 else if ( bVoid || !xGraphic.is() )
                 {
-                    Color aColor = pTabPage->GetControlBackground().GetColor();
+                    Color aColor = pTabPage->GetControlBackground();
                     if ( aColor == COL_AUTO )
                         aColor = pTabPage->GetSettings().GetStyleSettings().GetDialogColor();
 
