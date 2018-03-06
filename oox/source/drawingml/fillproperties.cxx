@@ -598,7 +598,7 @@ void FillProperties::pushToPropMap( ShapePropertyMap& rPropMap,
 
             case XML_blipFill:
                 // do not start complex graphic transformation if property is not supported...
-                if( maBlipProps.mxGraphic.is() && rPropMap.supportsProperty( ShapeProperty::FillBitmapUrl ) )
+                if (maBlipProps.mxGraphic.is() && rPropMap.supportsProperty(ShapeProperty::FillBitmap))
                 {
                     Reference< XGraphic > xGraphic = lclCheckAndApplyDuotoneTransform( maBlipProps, maBlipProps.mxGraphic, rGraphicHelper, nPhClr );
                     uno::Reference<awt::XBitmap> xBitmap(xGraphic, uno::UNO_QUERY);
@@ -606,12 +606,12 @@ void FillProperties::pushToPropMap( ShapePropertyMap& rPropMap,
 
                     if (xGraphic.is())
                     {
-                        if (rPropMap.supportsProperty(ShapeProperty::FillBitmapNameFromUrl) &&
-                            rPropMap.setProperty(ShapeProperty::FillBitmapNameFromUrl, xGraphic))
+                        if (rPropMap.supportsProperty(ShapeProperty::FillBitmapName) &&
+                            rPropMap.setProperty(ShapeProperty::FillBitmapName, xGraphic))
                         {
                             eFillStyle = FillStyle_BITMAP;
                         }
-                        else if (rPropMap.setProperty(ShapeProperty::FillBitmapUrl, xGraphic))
+                        else if (rPropMap.setProperty(ShapeProperty::FillBitmap, xGraphic))
                         {
                             eFillStyle = FillStyle_BITMAP;
                         }
