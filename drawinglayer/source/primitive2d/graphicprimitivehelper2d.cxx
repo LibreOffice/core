@@ -271,7 +271,8 @@ namespace drawinglayer
                                 }
                                 else
                                 {
-                                    maVirtualDeviceMask->DrawBitmap(rAnimBitmap.aPosPix, aMask);
+                                    BitmapEx aExpandVisibilityMask = BitmapEx(aMask, aMask);
+                                    maVirtualDeviceMask->DrawBitmapEx(rAnimBitmap.aPosPix, aExpandVisibilityMask);
                                 }
 
                                 break;
@@ -279,7 +280,8 @@ namespace drawinglayer
                             case Disposal::Previous:
                             {
                                 maVirtualDevice->DrawBitmapEx(rAnimBitmap.aPosPix, rAnimBitmap.aBmpEx);
-                                maVirtualDeviceMask->DrawBitmap(rAnimBitmap.aPosPix, rAnimBitmap.aBmpEx.GetMask());
+                                BitmapEx aExpandVisibilityMask = BitmapEx(rAnimBitmap.aBmpEx.GetMask(), rAnimBitmap.aBmpEx.GetMask());
+                                maVirtualDeviceMask->DrawBitmapEx(rAnimBitmap.aPosPix, aExpandVisibilityMask);
                                 break;
                             }
                         }
