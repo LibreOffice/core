@@ -2756,15 +2756,15 @@ Image RadioButton::GetRadioImage( const AllSettings& rSettings, DrawButtonFlags 
 
     if ( pSVData->maCtrlData.maRadioImgList.empty() ||
          (pSVData->maCtrlData.mnRadioStyle != nStyle) ||
-         (pSVData->maCtrlData.mnLastRadioFColor != rStyleSettings.GetFaceColor().GetColor()) ||
-         (pSVData->maCtrlData.mnLastRadioWColor != rStyleSettings.GetWindowColor().GetColor()) ||
-         (pSVData->maCtrlData.mnLastRadioLColor != rStyleSettings.GetLightColor().GetColor()) )
+         (pSVData->maCtrlData.mnLastRadioFColor != rStyleSettings.GetFaceColor()) ||
+         (pSVData->maCtrlData.mnLastRadioWColor != rStyleSettings.GetWindowColor()) ||
+         (pSVData->maCtrlData.mnLastRadioLColor != rStyleSettings.GetLightColor()) )
     {
         pSVData->maCtrlData.maRadioImgList.clear();
 
-        pSVData->maCtrlData.mnLastRadioFColor = rStyleSettings.GetFaceColor().GetColor();
-        pSVData->maCtrlData.mnLastRadioWColor = rStyleSettings.GetWindowColor().GetColor();
-        pSVData->maCtrlData.mnLastRadioLColor = rStyleSettings.GetLightColor().GetColor();
+        pSVData->maCtrlData.mnLastRadioFColor = rStyleSettings.GetFaceColor();
+        pSVData->maCtrlData.mnLastRadioWColor = rStyleSettings.GetWindowColor();
+        pSVData->maCtrlData.mnLastRadioLColor = rStyleSettings.GetLightColor();
 
         std::vector<OUString> aResources;
         if (nStyle)
@@ -3580,15 +3580,15 @@ Image CheckBox::GetCheckImage( const AllSettings& rSettings, DrawButtonFlags nFl
 
     if ( pSVData->maCtrlData.maCheckImgList.empty() ||
          (pSVData->maCtrlData.mnCheckStyle != nStyle) ||
-         (pSVData->maCtrlData.mnLastCheckFColor != rStyleSettings.GetFaceColor().GetColor()) ||
-         (pSVData->maCtrlData.mnLastCheckWColor != rStyleSettings.GetWindowColor().GetColor()) ||
-         (pSVData->maCtrlData.mnLastCheckLColor != rStyleSettings.GetLightColor().GetColor()) )
+         (pSVData->maCtrlData.mnLastCheckFColor != rStyleSettings.GetFaceColor()) ||
+         (pSVData->maCtrlData.mnLastCheckWColor != rStyleSettings.GetWindowColor()) ||
+         (pSVData->maCtrlData.mnLastCheckLColor != rStyleSettings.GetLightColor()) )
     {
         pSVData->maCtrlData.maCheckImgList.clear();
 
-        pSVData->maCtrlData.mnLastCheckFColor = rStyleSettings.GetFaceColor().GetColor();
-        pSVData->maCtrlData.mnLastCheckWColor = rStyleSettings.GetWindowColor().GetColor();
-        pSVData->maCtrlData.mnLastCheckLColor = rStyleSettings.GetLightColor().GetColor();
+        pSVData->maCtrlData.mnLastCheckFColor = rStyleSettings.GetFaceColor();
+        pSVData->maCtrlData.mnLastCheckWColor = rStyleSettings.GetWindowColor();
+        pSVData->maCtrlData.mnLastCheckLColor = rStyleSettings.GetLightColor();
 
         std::vector<OUString> aResources;
         if (nStyle)

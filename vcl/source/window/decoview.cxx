@@ -438,7 +438,7 @@ void ImplDrawButton( OutputDevice *const pDev, tools::Rectangle aFillRect,
     if ( (nStyle & DrawButtonFlags::Mono) ||
          (rStyleSettings.GetOptions() & StyleSettingsOptions::Mono) )
     {
-        const Color aBlackColor( COL_BLACK );
+        const Color aBlackColor(COL_BLACK);
 
         if ( nStyle & DrawButtonFlags::Default )
         {
