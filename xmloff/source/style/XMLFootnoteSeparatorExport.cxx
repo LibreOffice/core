@@ -31,7 +31,6 @@
 #include <xmloff/PageMasterStyleMap.hxx>
 #include <com/sun/star/text/HorizontalAdjust.hpp>
 #include <rtl/ustrbuf.hxx>
-#include <o3tl/any.hxx>
 
 
 using namespace ::com::sun::star;
@@ -76,8 +75,12 @@ void XMLFootnoteSeparatorExport::exportXML(
         switch (rMapper->GetEntryContextId(rState.mnIndex))
         {
         case CTF_PM_FTN_LINE_ADJUST:
-            eLineAdjust = *o3tl::forceAccess<text::HorizontalAdjust>(rState.maValue);
+        {
+            sal_Int16 nTmp;
+            if (rState.maValue >>= nTmp)
+                eLineAdjust = static_cast<text::HorizontalAdjust>(nTmp);
             break;
+        }
         case CTF_PM_FTN_LINE_COLOR:
             rState.maValue >>= nLineColor;
             break;
