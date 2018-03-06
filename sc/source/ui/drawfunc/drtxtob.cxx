@@ -238,7 +238,7 @@ void ScDrawTextObjectBar::Execute( SfxRequest &rReq )
                         aNewItem = rItem;
                 }
                 else
-                    ScViewUtil::ExecuteCharMap( rItem, *pViewData->GetViewShell()->GetViewFrame(), aNewItem, aString );
+                    ScViewUtil::ExecuteCharMap( rItem, *pViewData->GetViewShell()->GetViewFrame() );
 
                 if ( !aString.isEmpty() )
                 {
