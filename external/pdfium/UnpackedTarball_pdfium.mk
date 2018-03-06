@@ -24,6 +24,10 @@ $(eval $(call gb_UnpackedTarball_add_patches,pdfium,\
     $(foreach patch,$(pdfium_patches),external/pdfium/$(patch)) \
 ))
 
+# Upstream build system generates this, but it's not really a generated file.
+# Stripped down version from <https://dxr.mozilla.org/mozilla-central/source/ipc/chromium/src/build/build_config.h>.
+$(eval $(call gb_UnpackedTarball_add_file,pdfium,build/build_config.h,external/pdfium/configs/build_config.h))
+
 $(eval $(call gb_UnpackedTarball_set_post_action,pdfium,\
     mv third_party/bigint/BigInteger.cc third_party/bigint/BigInteger.cpp && \
     mv third_party/bigint/BigIntegerUtils.cc third_party/bigint/BigIntegerUtils.cpp && \
