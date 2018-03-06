@@ -80,12 +80,10 @@ namespace migration
             }
 
             // iterate recursive over subfolders
-            TStringVector::const_iterator aI = aSubDirs.begin();
-            while ( aI != aSubDirs.end() )
+            for (auto const& subDir : aSubDirs)
             {
-                TStringVectorPtr aSubResult = getFiles( *aI );
+                TStringVectorPtr aSubResult = getFiles(subDir);
                 aResult->insert( aResult->end(), aSubResult->begin(), aSubResult->end() );
-                ++aI;
             }
         }
 
@@ -152,24 +150,22 @@ bool IsUserWordbook( const OUString& rFile )
         {
             sTargetDir += "/user/wordbook";
             TStringVectorPtr aFileList = getFiles( m_sSourceDir );
-            TStringVector::const_iterator aI = aFileList->begin();
-            while ( aI != aFileList->end() )
+            for (auto const& elem : *aFileList)
             {
-                if (IsUserWordbook(*aI) )
+                if (IsUserWordbook(elem) )
                 {
-                    OUString sSourceLocalName = aI->copy( m_sSourceDir.getLength() );
+                    OUString sSourceLocalName = elem.copy( m_sSourceDir.getLength() );
                     OUString sTargetName = sTargetDir + sSourceLocalName;
                     INetURLObject aURL( sTargetName );
                     aURL.removeSegment();
                     checkAndCreateDirectory( aURL );
-                    ::osl::FileBase::RC aResult = ::osl::File::copy( *aI, sTargetName );
+                    ::osl::FileBase::RC aResult = ::osl::File::copy( elem, sTargetName );
                     if ( aResult != ::osl::FileBase::E_None )
                     {
                         SAL_WARN( "desktop", "WordbookMigration::copyFiles: cannot copy "
-                                     << *aI << " to " << sTargetName);
+                                     << elem << " to " << sTargetName);
                     }
                 }
-                ++aI;
             }
         }
         else

@@ -316,12 +316,12 @@ void printf_packages(
     else
     {
         int index = 0;
-        for (auto i = allExtensions.begin(); i != allExtensions.end(); ++i, ++index)
+        for (auto const& extension : allExtensions)
         {
             if (vecUnaccepted[index])
-                printf_unaccepted_licenses(*i);
+                printf_unaccepted_licenses(extension);
             else
-                printf_package( *i, xCmdEnv, level );
+                printf_package( extension, xCmdEnv, level );
             dp_misc::writeConsole("\n");
         }
     }

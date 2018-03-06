@@ -518,13 +518,13 @@ install_info MigrationImpl::findInstallation(const strings_v& rVersions)
 #endif
 
     install_info aInfo;
-    strings_v::const_iterator i_ver = rVersions.begin();
-    while (i_ver != rVersions.end()) {
+    for (auto const& elem : rVersions)
+    {
         OUString aVersion, aProfileName;
-        sal_Int32 nSeparatorIndex = (*i_ver).indexOf('=');
+        sal_Int32 nSeparatorIndex = elem.indexOf('=');
         if ( nSeparatorIndex != -1 ) {
-            aVersion = (*i_ver).copy( 0, nSeparatorIndex );
-            aProfileName = (*i_ver).copy( nSeparatorIndex+1 );
+            aVersion = elem.copy( 0, nSeparatorIndex );
+            aProfileName = elem.copy( nSeparatorIndex+1 );
         }
 
         if ( !aVersion.isEmpty() && !aProfileName.isEmpty() &&
@@ -538,7 +538,6 @@ install_info MigrationImpl::findInstallation(const strings_v& rVersions)
                 setInstallInfoIfExist(aInfo, aPreXDGTopConfigDir + aProfileName, aVersion);
 #endif
         }
-        ++i_ver;
     }
 
     return aInfo;
@@ -549,16 +548,15 @@ sal_Int32 MigrationImpl::findPreferredMigrationProcess(const migrations_availabl
     sal_Int32    nIndex( -1 );
     sal_Int32    i( 0 );
 
-    migrations_available::const_iterator rIter = rAvailableMigrations.begin();
-    while ( rIter != rAvailableMigrations.end() ) {
-        install_info aInstallInfo = findInstallation(rIter->supported_versions);
+    for (auto const& availableMigration : rAvailableMigrations)
+    {
+        install_info aInstallInfo = findInstallation(availableMigration.supported_versions);
         if (!aInstallInfo.productname.isEmpty() ) {
             m_aInfo = aInstallInfo;
             nIndex  = i;
             break;
         }
         ++i;
-        ++rIter;
     }
 
     SAL_INFO( "desktop.migration", " preferred migration is from product '" << m_aInfo.productname << "'");
@@ -571,23 +569,20 @@ strings_vr MigrationImpl::applyPatterns(const strings_v& vSet, const strings_v& 
 {
     using namespace utl;
     strings_vr vrResult(new strings_v);
-    strings_v::const_iterator i_set;
-    strings_v::const_iterator i_pat = vPatterns.begin();
-    while (i_pat != vPatterns.end()) {
+    for (auto const& pattern : vPatterns)
+    {
         // find matches for this pattern in input set
         // and copy them to the result
-        SearchParam param(*i_pat, SearchParam::SearchType::Regexp);
+        SearchParam param(pattern, SearchParam::SearchType::Regexp);
         TextSearch ts(param, LANGUAGE_DONTKNOW);
-        i_set = vSet.begin();
         sal_Int32 start = 0;
         sal_Int32 end = 0;
-        while (i_set != vSet.end()) {
-            end = i_set->getLength();
-            if (ts.SearchForward(*i_set, &start, &end))
-                vrResult->push_back(*i_set);
-            ++i_set;
+        for (auto const& elem : vSet)
+        {
+            end = elem.getLength();
+            if (ts.SearchForward(elem, &start, &end))
+                vrResult->push_back(elem);
         }
-        ++i_pat;
     }
     return vrResult;
 }
@@ -615,11 +610,10 @@ strings_vr MigrationImpl::getAllFiles(const OUString& baseURL) const
         }
 
         // recurse subfolders
-        strings_v::const_iterator i = vSubDirs.begin();
-        while (i != vSubDirs.end()) {
-            vrSubResult = getAllFiles(*i);
+        for (auto const& subDir : vSubDirs)
+        {
+            vrSubResult = getAllFiles(subDir);
             vrResult->insert(vrResult->end(), vrSubResult->begin(), vrSubResult->end());
-            ++i;
         }
     }
     return vrResult;
@@ -655,13 +649,12 @@ strings_vr MigrationImpl::compileFileList()
     strings_vr vrFiles = getAllFiles(m_aInfo.userdata);
 
     // get a file list result for each migration step
-    migrations_v::const_iterator i_migr = m_vrMigrations->begin();
-    while (i_migr != m_vrMigrations->end()) {
-        vrInclude = applyPatterns(*vrFiles, i_migr->includeFiles);
-        vrExclude = applyPatterns(*vrFiles, i_migr->excludeFiles);
+    for (auto const& rMigration : *m_vrMigrations)
+    {
+        vrInclude = applyPatterns(*vrFiles, rMigration.includeFiles);
+        vrExclude = applyPatterns(*vrFiles, rMigration.excludeFiles);
         strings_v sub(subtract(*vrInclude, *vrExclude));
         vrResult->insert(vrResult->end(), sub.begin(), sub.end());
-        ++i_migr;
     }
     return vrResult;
 }
@@ -696,9 +689,9 @@ uno::Sequence< OUString > setToSeq(std::set< OUString > const & set)
     }
     uno::Sequence< OUString > seq(static_cast< sal_Int32 >(n));
     sal_Int32 i = 0;
-    for (std::set< OUString >::const_iterator j(set.begin());
-         j != set.end(); ++j) {
-        seq[i++] = *j;
+    for (auto const& elem : set)
+    {
+        seq[i++] = elem;
     }
     return seq;
 }
@@ -734,8 +727,9 @@ void MigrationImpl::copyConfig()
         regFile.close();
     }
 
-    for (Components::const_iterator i(comps.begin()); i != comps.end(); ++i) {
-        if (!i->second.includedPaths.empty()) {
+    for (auto const& comp : comps)
+    {
+        if (!comp.second.includedPaths.empty()) {
             if (!bRegistryModificationsXcuExists) {
                 // shared registrymodifications.xcu does not exists
                 // the configuration is split in many registry files
@@ -744,13 +738,13 @@ void MigrationImpl::copyConfig()
                 buf.append("/user/registry/data");
                 sal_Int32 n = 0;
                 do {
-                    OUString seg(i->first.getToken(0, '.', n));
+                    OUString seg(comp.first.getToken(0, '.', n));
                     OUString enc(
                         rtl::Uri::encode(
                             seg, rtl_UriCharClassPchar, rtl_UriEncodeStrict,
                             RTL_TEXTENCODING_UTF8));
                     if (enc.isEmpty() && !seg.isEmpty()) {
-                        SAL_INFO( "desktop.migration", "configuration migration component " << i->first << " ignored (cannot be encoded as file path)" );
+                        SAL_INFO( "desktop.migration", "configuration migration component " << comp.first << " ignored (cannot be encoded as file path)" );
                         goto next;
                     }
                     buf.append('/');
@@ -762,10 +756,10 @@ void MigrationImpl::copyConfig()
             configuration::Update::get(
                 comphelper::getProcessComponentContext())->
             insertModificationXcuFile(
-                regFilePath, setToSeq(i->second.includedPaths),
-                setToSeq(i->second.excludedPaths));
+                regFilePath, setToSeq(comp.second.includedPaths),
+                setToSeq(comp.second.excludedPaths));
         } else {
-            SAL_INFO( "desktop.migration", "configuration migration component " << i->first << " ignored (only excludes, no includes)" );
+            SAL_INFO( "desktop.migration", "configuration migration component " << comp.first << " ignored (only excludes, no includes)" );
         }
 next:
         ;
@@ -803,16 +797,16 @@ uno::Reference< XNameAccess > MigrationImpl::getConfigAccess(const sal_Char* pPa
 
 void MigrationImpl::copyFiles()
 {
-    strings_v::const_iterator i_file = m_vrFileList->begin();
     OUString localName;
     OUString destName;
     OUString userInstall;
     utl::Bootstrap::PathStatus aStatus;
     aStatus = utl::Bootstrap::locateUserInstallation(userInstall);
     if (aStatus == utl::Bootstrap::PATH_EXISTS) {
-        while (i_file != m_vrFileList->end()) {
+        for (auto const& rFile : *m_vrFileList)
+        {
             // remove installation prefix from file
-            localName = i_file->copy(m_aInfo.userdata.getLength());
+            localName = rFile.copy(m_aInfo.userdata.getLength());
             if (localName.endsWith( "/autocorr/acor_.dat")) {
                 // Previous versions used an empty language tag for
                 // LANGUAGE_DONTKNOW with the "[All]" autocorrection entry.
@@ -825,11 +819,10 @@ void MigrationImpl::copyFiles()
             // check whether destination directory exists
             aURL.removeSegment();
             _checkAndCreateDirectory(aURL);
-            FileBase::RC copyResult = File::copy(*i_file, destName);
+            FileBase::RC copyResult = File::copy(rFile, destName);
             if (copyResult != FileBase::E_None) {
-                SAL_WARN( "desktop", "Cannot copy " << *i_file <<  " to " << destName);
+                SAL_WARN( "desktop", "Cannot copy " << rFile <<  " to " << destName);
             }
-            ++i_file;
         }
     } else {
         OSL_FAIL("copyFiles: UserInstall does not exist");
@@ -851,22 +844,22 @@ void MigrationImpl::runServices()
     uno::Reference< XJob > xMigrationJob;
 
     uno::Reference< uno::XComponentContext > xContext(comphelper::getProcessComponentContext());
-    migrations_v::const_iterator i_mig  = m_vrMigrations->begin();
-    while (i_mig != m_vrMigrations->end()) {
-        if( !i_mig->service.isEmpty()) {
+    for (auto const& rMigration : *m_vrMigrations)
+    {
+        if( !rMigration.service.isEmpty()) {
 
             try {
                 // set black list for extension migration
                 uno::Sequence< OUString > seqExtBlackList;
-                sal_uInt32 nSize = i_mig->excludeExtensions.size();
+                sal_uInt32 nSize = rMigration.excludeExtensions.size();
                 if ( nSize > 0 )
                     seqExtBlackList = comphelper::arrayToSequence< OUString >(
-                                          &i_mig->excludeExtensions[0], nSize );
+                                          &rMigration.excludeExtensions[0], nSize );
                 seqArguments[2] <<= NamedValue("ExtensionBlackList",
                                                uno::makeAny( seqExtBlackList ));
 
                 xMigrationJob.set(
-                    xContext->getServiceManager()->createInstanceWithArgumentsAndContext(i_mig->service, seqArguments, xContext),
+                    xContext->getServiceManager()->createInstanceWithArgumentsAndContext(rMigration.service, seqArguments, xContext),
                     uno::UNO_QUERY_THROW);
 
                 xMigrationJob->execute(uno::Sequence< NamedValue >());
@@ -874,15 +867,14 @@ void MigrationImpl::runServices()
 
             } catch (const Exception& e) {
                 SAL_WARN( "desktop", "Execution of migration service failed (Exception caught).\nService: "
-                            << i_mig->service
+                            << rMigration.service
                             << "\nMessage: " << e);
             } catch (...) {
                 SAL_WARN( "desktop", "Execution of migration service failed (Exception caught).\nService: "
-                            << i_mig->service << "\nNo message available");
+                            << rMigration.service << "\nNo message available");
             }
 
         }
-        ++i_mig;
     }
 }
 
@@ -997,20 +989,19 @@ void MigrationImpl::compareOldAndNewConfig(const OUString& sParent,
         }
     }
 
-    std::vector< MigrationItem >::iterator it;
-
     OUString sSibling;
-    for (it = vOldItems.begin(); it!=vOldItems.end(); ++it) {
-        std::vector< MigrationItem >::iterator pFound = std::find(vNewItems.begin(), vNewItems.end(), *it);
-        if (pFound != vNewItems.end() && it->m_xPopupMenu.is()) {
+    for (auto const& oldItem : vOldItems)
+    {
+        std::vector< MigrationItem >::iterator pFound = std::find(vNewItems.begin(), vNewItems.end(), oldItem);
+        if (pFound != vNewItems.end() && oldItem.m_xPopupMenu.is()) {
             OUString sName;
             if (!sParent.isEmpty())
-                sName = sParent + MENU_SEPARATOR + it->m_sCommandURL;
+                sName = sParent + MENU_SEPARATOR + oldItem.m_sCommandURL;
             else
-                sName = it->m_sCommandURL;
-            compareOldAndNewConfig(sName, it->m_xPopupMenu, pFound->m_xPopupMenu, sResourceURL);
+                sName = oldItem.m_sCommandURL;
+            compareOldAndNewConfig(sName, oldItem.m_xPopupMenu, pFound->m_xPopupMenu, sResourceURL);
         } else if (pFound == vNewItems.end()) {
-            MigrationItem aMigrationItem(sParent, sSibling, it->m_sCommandURL, it->m_xPopupMenu);
+            MigrationItem aMigrationItem(sParent, sSibling, oldItem.m_sCommandURL, oldItem.m_xPopupMenu);
             if (m_aOldVersionItemsHashMap.find(sResourceURL)==m_aOldVersionItemsHashMap.end()) {
                 std::vector< MigrationItem > vMigrationItems;
                 m_aOldVersionItemsHashMap.emplace(sResourceURL, vMigrationItems);
@@ -1021,7 +1012,7 @@ void MigrationImpl::compareOldAndNewConfig(const OUString& sParent,
             }
         }
 
-        sSibling = it->m_sCommandURL;
+        sSibling = oldItem.m_sCommandURL;
     }
 }
 
@@ -1034,11 +1025,11 @@ void MigrationImpl::mergeOldToNewVersion(const uno::Reference< ui::XUIConfigurat
     if (pFound==m_aOldVersionItemsHashMap.end())
         return;
 
-    std::vector< MigrationItem >::iterator it;
-    for (it=pFound->second.begin(); it!=pFound->second.end(); ++it) {
+    for (auto const& elem : pFound->second)
+    {
         uno::Reference< container::XIndexContainer > xTemp = xIndexContainer;
 
-        OUString sParentNodeName = it->m_sParentNodeName;
+        OUString sParentNodeName = elem.m_sParentNodeName;
         sal_Int32 nIndex = 0;
         do {
             OUString sToken = sParentNodeName.getToken(0, '|', nIndex).trim();
@@ -1075,13 +1066,13 @@ void MigrationImpl::mergeOldToNewVersion(const uno::Reference< ui::XUIConfigurat
             uno::Sequence< beans::PropertyValue > aPropSeq(3);
 
             aPropSeq[0].Name = ITEM_DESCRIPTOR_COMMANDURL;
-            aPropSeq[0].Value <<= it->m_sCommandURL;
+            aPropSeq[0].Value <<= elem.m_sCommandURL;
             aPropSeq[1].Name = ITEM_DESCRIPTOR_LABEL;
-            aPropSeq[1].Value <<= retrieveLabelFromCommand(it->m_sCommandURL, sModuleIdentifier);
+            aPropSeq[1].Value <<= retrieveLabelFromCommand(elem.m_sCommandURL, sModuleIdentifier);
             aPropSeq[2].Name = ITEM_DESCRIPTOR_CONTAINER;
-            aPropSeq[2].Value <<= it->m_xPopupMenu;
+            aPropSeq[2].Value <<= elem.m_xPopupMenu;
 
-            if (it->m_sPrevSibling.isEmpty())
+            if (elem.m_sPrevSibling.isEmpty())
                 xTemp->insertByIndex(0, uno::makeAny(aPropSeq));
             else {
                 sal_Int32 nCount = xTemp->getCount();
@@ -1097,7 +1088,7 @@ void MigrationImpl::mergeOldToNewVersion(const uno::Reference< ui::XUIConfigurat
                         }
                     }
 
-                    if (sCmd == it->m_sPrevSibling)
+                    if (sCmd == elem.m_sPrevSibling)
                         break;
                 }
 
