@@ -500,11 +500,10 @@ void SwDocShell::Execute(SfxRequest& rReq)
                 if ( aFileName.isEmpty() )
                 {
                     SvtPathOptions aPathOpt;
-                    ScopedVclPtr<SfxNewFileDialog> pNewFileDlg(
-                        VclPtr<SfxNewFileDialog>::Create(&GetView()->GetViewFrame()->GetWindow(), SfxNewFileDialogMode::LoadTemplate));
-                    pNewFileDlg->SetTemplateFlags(nFlags);
+                    SfxNewFileDialog aNewFileDlg(GetView()->GetViewFrame()->GetWindow().GetFrameWeld(), SfxNewFileDialogMode::LoadTemplate);
+                    aNewFileDlg.SetTemplateFlags(nFlags);
 
-                    nRet = pNewFileDlg->Execute();
+                    nRet = aNewFileDlg.run();
                     if(RET_TEMPLATE_LOAD == nRet)
                     {
                         FileDialogHelper aDlgHelper(TemplateDescription::FILEOPEN_SIMPLE,
@@ -560,10 +559,10 @@ void SwDocShell::Execute(SfxRequest& rReq)
                     }
                     else if( RET_OK == nRet)
                     {
-                        aFileName = pNewFileDlg->GetTemplateFileName();
+                        aFileName = aNewFileDlg.GetTemplateFileName();
                     }
 
-                    nFlags = pNewFileDlg->GetTemplateFlags();
+                    nFlags = aNewFileDlg.GetTemplateFlags();
                     rReq.AppendItem( SfxStringItem( SID_TEMPLATE_NAME, aFileName ) );
                     rReq.AppendItem( SfxInt32Item( SID_TEMPLATE_LOAD, static_cast<long>(nFlags) ) );
                 }

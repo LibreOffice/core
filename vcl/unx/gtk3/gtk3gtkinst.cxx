@@ -1404,6 +1404,17 @@ public:
         const gchar* pStr = gtk_window_get_title(m_pWindow);
         return OUString(pStr, pStr ? strlen(pStr) : 0, RTL_TEXTENCODING_UTF8);
     }
+
+    virtual void set_busy_cursor(bool bBusy) override
+    {
+        gtk_widget_realize(m_pWidget);
+        GdkDisplay *pDisplay = gtk_widget_get_display(m_pWidget);
+        GdkCursor *pCursor = bBusy ? gdk_cursor_new_from_name(pDisplay, "progress") : nullptr;
+        gdk_window_set_cursor(gtk_widget_get_window(m_pWidget), pCursor);
+        gdk_display_flush(pDisplay);
+        if (pCursor)
+            g_object_unref(pCursor);
+    }
 };
 
 namespace
@@ -2027,6 +2038,7 @@ public:
 
     virtual void select(int pos) override
     {
+        assert(gtk_tree_view_get_model(m_pTreeView) && "don't select when frozen");
         if (pos != -1)
         {
             GtkTreePath* path = gtk_tree_path_new_from_indices(pos, -1);
@@ -2406,7 +2418,7 @@ public:
     GtkInstanceComboBoxText(GtkComboBoxText* pComboBoxText, bool bTakeOwnership)
         : GtkInstanceContainer(GTK_CONTAINER(pComboBoxText), bTakeOwnership)
         , m_pComboBoxText(pComboBoxText)
-        , m_nSignalId(g_signal_connect(pComboBoxText, "changed", G_CALLBACK(signalChanged), this))
+        , m_nSignalId(g_signal_connect(m_pComboBoxText, "changed", G_CALLBACK(signalChanged), this))
     {
     }
 
@@ -2524,6 +2536,42 @@ public:
     virtual ~GtkInstanceComboBoxText() override
     {
         g_signal_handler_disconnect(m_pComboBoxText, m_nSignalId);
+    }
+};
+
+class GtkInstanceExpander : public GtkInstanceContainer, public virtual weld::Expander
+{
+private:
+    GtkExpander* m_pExpander;
+    gulong m_nSignalId;
+
+    static void signalExpanded(GtkExpander*, GParamSpec *, gpointer widget)
+    {
+        GtkInstanceExpander* pThis = static_cast<GtkInstanceExpander*>(widget);
+        pThis->signal_expanded();
+    }
+
+public:
+    GtkInstanceExpander(GtkExpander* pExpander, bool bTakeOwnership)
+        : GtkInstanceContainer(GTK_CONTAINER(pExpander), bTakeOwnership)
+        , m_pExpander(pExpander)
+        , m_nSignalId(g_signal_connect(m_pExpander, "notify::expanded", G_CALLBACK(signalExpanded), this))
+    {
+    }
+
+    virtual bool get_expanded() const override
+    {
+        return gtk_expander_get_expanded(m_pExpander);
+    }
+
+    virtual void set_expanded(bool bExpand) override
+    {
+        gtk_expander_set_expanded(m_pExpander, bExpand);
+    }
+
+    virtual ~GtkInstanceExpander() override
+    {
+        g_signal_handler_disconnect(m_pExpander, m_nSignalId);
     }
 };
 
@@ -2808,6 +2856,15 @@ public:
             return nullptr;
         auto_add_parentless_widgets_to_container(GTK_WIDGET(pTextView));
         return new GtkInstanceTextView(pTextView, bTakeOwnership);
+    }
+
+    virtual weld::Expander* weld_expander(const OString &id, bool bTakeOwnership) override
+    {
+        GtkExpander* pExpander = GTK_EXPANDER(gtk_builder_get_object(m_pBuilder, id.getStr()));
+        if (!pExpander)
+            return nullptr;
+        auto_add_parentless_widgets_to_container(GTK_WIDGET(pExpander));
+        return new GtkInstanceExpander(pExpander, bTakeOwnership);
     }
 
     virtual weld::DrawingArea* weld_drawing_area(const OString &id, bool bTakeOwnership) override

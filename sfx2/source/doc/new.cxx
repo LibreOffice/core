@@ -39,31 +39,28 @@
 #include <sfx2/docfile.hxx>
 #include <preview.hxx>
 #include <sfx2/printer.hxx>
+#include <unotools/viewoptions.hxx>
 #include <vcl/waitobj.hxx>
 
-void SfxPreviewBase_Impl::SetObjectShell(SfxObjectShell const * pObj)
+void SfxPreviewWin_Impl::SetObjectShell(SfxObjectShell const * pObj)
 {
     std::shared_ptr<GDIMetaFile> xFile = pObj
         ? pObj->GetPreviewMetaFile()
         : std::shared_ptr<GDIMetaFile>();
     xMetaFile = xFile;
-    Invalidate();
+    m_xDrawingArea->queue_draw();
 }
 
-SfxPreviewBase_Impl::SfxPreviewBase_Impl(vcl::Window* pParent, WinBits nStyle)
-    : Window(pParent, nStyle)
-    , xMetaFile()
+SfxPreviewWin_Impl::SfxPreviewWin_Impl(weld::DrawingArea* pDrawingArea)
+    : m_xDrawingArea(pDrawingArea)
 {
+    m_xDrawingArea->connect_size_allocate(LINK(this, SfxPreviewWin_Impl, DoResize));
+    m_xDrawingArea->connect_draw(LINK(this, SfxPreviewWin_Impl, DoPaint));
 }
 
-void SfxPreviewBase_Impl::Resize()
+IMPL_LINK_NOARG(SfxPreviewWin_Impl, DoResize, const Size&, void)
 {
-    Invalidate();
-}
-
-Size SfxPreviewBase_Impl::GetOptimalSize() const
-{
-    return LogicToPixel(Size(127, 129), MapMode(MapUnit::MapAppFont));
+    m_xDrawingArea->queue_draw();
 }
 
 void SfxPreviewWin_Impl::ImpPaint(vcl::RenderContext& rRenderContext, GDIMetaFile* pFile)
@@ -108,84 +105,31 @@ void SfxPreviewWin_Impl::ImpPaint(vcl::RenderContext& rRenderContext, GDIMetaFil
     }
 }
 
-void SfxPreviewWin_Impl::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& /*rRect*/)
+IMPL_LINK(SfxPreviewWin_Impl, DoPaint, vcl::RenderContext&, rRenderContext, void)
 {
     ImpPaint(rRenderContext, xMetaFile.get());
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT void makeSfxPreviewWin(VclPtr<vcl::Window> & rRet, VclPtr<vcl::Window> & pParent, VclBuilder::stringmap &)
+IMPL_LINK_NOARG(SfxNewFileDialog, Update, Timer*, void)
 {
-    rRet = VclPtr<SfxPreviewWin_Impl>::Create(pParent, 0);
-}
-
-class SfxNewFileDialog_Impl
-{
-    VclPtr<ListBox>  m_pRegionLb;
-    VclPtr<ListBox>  m_pTemplateLb;
-
-    VclPtr<SfxPreviewWin_Impl> m_pPreviewWin;
-
-    VclPtr<CheckBox> m_pTextStyleCB;
-    VclPtr<CheckBox> m_pFrameStyleCB;
-    VclPtr<CheckBox> m_pPageStyleCB;
-    VclPtr<CheckBox> m_pNumStyleCB;
-    VclPtr<CheckBox> m_pMergeStyleCB;
-    VclPtr<PushButton> m_pLoadFilePB;
-
-    VclPtr<VclExpander> m_pMoreBt;
-    Idle aPrevIdle;
-    OUString aNone;
-    OUString sLoadTemplate;
-
-    SfxNewFileDialogMode nFlags;
-    SfxDocumentTemplates aTemplates;
-    SfxObjectShellLock xDocShell;
-    VclPtr<SfxNewFileDialog> pAntiImpl;
-
-    DECL_LINK( Update, Timer *, void );
-
-    DECL_LINK(RegionSelect, ListBox&, void);
-    DECL_LINK(TemplateSelect, ListBox&, void);
-    DECL_LINK(DoubleClick, ListBox&, void);
-    DECL_LINK(Expand, VclExpander&, void);
-    DECL_LINK(LoadFile, Button*, void);
-    sal_uInt16  GetSelectedTemplatePos() const;
-
-public:
-
-    SfxNewFileDialog_Impl(SfxNewFileDialog* pAntiImplP, SfxNewFileDialogMode nFlags);
-    ~SfxNewFileDialog_Impl();
-
-    // Returns sal_False if '- No -' is set as a template
-    // Template name can only be obtained if IsTemplate() is TRUE
-    bool IsTemplate() const;
-    OUString GetTemplateFileName() const;
-
-    SfxTemplateFlags GetTemplateFlags() const;
-    void             SetTemplateFlags(SfxTemplateFlags nSet);
-};
-
-IMPL_LINK_NOARG(SfxNewFileDialog_Impl, Update, Timer*, void)
-{
-    if (xDocShell.Is())
+    if (m_xDocShell.Is())
     {
-        if (xDocShell->GetProgress())
+        if (m_xDocShell->GetProgress())
             return;
-        xDocShell.Clear();
+        m_xDocShell.Clear();
     }
 
     const sal_uInt16 nEntry = GetSelectedTemplatePos();
     if (!nEntry)
     {
-        m_pPreviewWin->Invalidate();
-        m_pPreviewWin->SetObjectShell( nullptr);
+        m_xPreviewWin->queue_draw();
+        m_xPreviewWin->SetObjectShell(nullptr);
         return;
     }
 
-    if (m_pMoreBt->get_expanded() && (nFlags == SfxNewFileDialogMode::Preview))
+    if (m_xMoreBt->get_expanded() && (m_nFlags == SfxNewFileDialogMode::Preview))
     {
-
-        OUString aFileName = aTemplates.GetPath(m_pRegionLb->GetSelectedEntryPos(), nEntry - 1);
+        OUString aFileName = m_aTemplates.GetPath(m_xRegionLb->get_selected_index(), nEntry - 1);
         INetURLObject aTestObj(aFileName);
         if (aTestObj.GetProtocol() == INetProtocol::NotValid)
         {
@@ -204,254 +148,212 @@ IMPL_LINK_NOARG(SfxNewFileDialog_Impl, Update, Timer*, void)
                 // ??? HasName() MM
                 if (INetURLObject( pTmp->GetMedium()->GetName() ) == aObj)
                 {
-                    xDocShell = pTmp;
+                    m_xDocShell = pTmp;
                     break;
                 }
         }
 
-        if (!xDocShell.Is())
+        if (!m_xDocShell.Is())
         {
-            SfxErrorContext eEC(ERRCTX_SFX_LOADTEMPLATE, pAntiImpl->GetFrameWeld());
+            SfxErrorContext eEC(ERRCTX_SFX_LOADTEMPLATE, m_xDialog.get());
             SfxApplication *pSfxApp = SfxGetpApp();
             SfxItemSet* pSet = new SfxAllItemSet(pSfxApp->GetPool());
             pSet->Put(SfxBoolItem(SID_TEMPLATE, true));
             pSet->Put(SfxBoolItem(SID_PREVIEW, true));
-            ErrCode lErr = pSfxApp->LoadTemplate(xDocShell, aFileName, pSet);
+            ErrCode lErr = pSfxApp->LoadTemplate(m_xDocShell, aFileName, pSet);
             if (lErr)
                 ErrorHandler::HandleError(lErr);
-            if (!xDocShell.Is())
+            if (!m_xDocShell.Is())
             {
-                m_pPreviewWin->SetObjectShell(nullptr);
+                m_xPreviewWin->SetObjectShell(nullptr);
                 return;
             }
         }
 
-        m_pPreviewWin->SetObjectShell(xDocShell);
+        m_xPreviewWin->SetObjectShell(m_xDocShell);
     }
 }
 
-IMPL_LINK( SfxNewFileDialog_Impl, RegionSelect, ListBox&, rBox, void )
+IMPL_LINK( SfxNewFileDialog, RegionSelect, weld::TreeView&, rBox, void )
 {
-    if (xDocShell.Is() && xDocShell->GetProgress())
+    if (m_xDocShell.Is() && m_xDocShell->GetProgress())
         return;
 
-    const sal_uInt16 nRegion = rBox.GetSelectedEntryPos();
-    const sal_uInt16 nCount = aTemplates.GetRegionCount()? aTemplates.GetCount(nRegion): 0;
-    m_pTemplateLb->SetUpdateMode(false);
-    m_pTemplateLb->Clear();
-    OUString aSel = m_pRegionLb->GetSelectedEntry();
+    const sal_uInt16 nRegion = rBox.get_selected_index();
+    const sal_uInt16 nCount = m_aTemplates.GetRegionCount() ? m_aTemplates.GetCount(nRegion): 0;
+    m_xTemplateLb->freeze();
+    m_xTemplateLb->clear();
+    OUString aSel = m_xRegionLb->get_selected();
     sal_Int32 nc = aSel.indexOf('(');
     if (nc != -1 && nc != 0)
         aSel = aSel.replaceAt(nc-1, 1, "");
     if ( aSel.compareToIgnoreAsciiCase( SfxResId(STR_STANDARD) ) == 0 )
-        m_pTemplateLb->InsertEntry(aNone);
+        m_xTemplateLb->append(SfxResId(STR_NONE));
     for (sal_uInt16 i = 0; i < nCount; ++i)
-        m_pTemplateLb->InsertEntry(aTemplates.GetName(nRegion, i));
-    m_pTemplateLb->SelectEntryPos(0);
-    m_pTemplateLb->SetUpdateMode(true);
-    m_pTemplateLb->Invalidate();
-    m_pTemplateLb->Update();
-    TemplateSelect(*m_pTemplateLb);
+        m_xTemplateLb->append(m_aTemplates.GetName(nRegion, i));
+    m_xTemplateLb->thaw();
+    m_xTemplateLb->select(0);
 }
 
-IMPL_LINK_NOARG(SfxNewFileDialog_Impl, Expand, VclExpander&, void)
+IMPL_LINK_NOARG(SfxNewFileDialog, Expand, weld::Expander&, void)
 {
-    TemplateSelect(*m_pTemplateLb);
+    TemplateSelect(*m_xTemplateLb);
 }
 
-IMPL_LINK_NOARG(SfxNewFileDialog_Impl, TemplateSelect, ListBox&, void)
+IMPL_LINK_NOARG(SfxNewFileDialog, TemplateSelect, weld::TreeView&, void)
 {
     // Still loading
-    if ( xDocShell && xDocShell->GetProgress() )
+    if (m_xDocShell && m_xDocShell->GetProgress())
         return;
 
-    if (!m_pMoreBt->get_expanded())
+    if (!m_xMoreBt->get_expanded())
+    {
         // Dialog is not opened
         return;
+    }
 
-    aPrevIdle.Start();
+    m_aPrevIdle.Start();
 }
 
-IMPL_LINK_NOARG( SfxNewFileDialog_Impl, DoubleClick, ListBox&, void )
+IMPL_LINK_NOARG( SfxNewFileDialog, DoubleClick, weld::TreeView&, void )
 {
     // Still loading
-    if ( !xDocShell.Is() || !xDocShell->GetProgress() )
-        pAntiImpl->EndDialog(RET_OK);
+    if (!m_xDocShell.Is() || !m_xDocShell->GetProgress())
+        m_xDialog->response(RET_OK);
 }
 
-IMPL_LINK_NOARG(SfxNewFileDialog_Impl, LoadFile, Button*, void)
+sal_uInt16  SfxNewFileDialog::GetSelectedTemplatePos() const
 {
-    pAntiImpl->EndDialog(RET_TEMPLATE_LOAD);
-}
-
-sal_uInt16  SfxNewFileDialog_Impl::GetSelectedTemplatePos() const
-{
-    sal_uInt16 nEntry = m_pTemplateLb->GetSelectedEntryPos();
-    OUString aSel = m_pRegionLb->GetSelectedEntry();
+    int nEntry = m_xTemplateLb->get_selected_index();
+    if (nEntry == -1)
+        return 0;
+    OUString aSel = m_xRegionLb->get_selected();
     sal_Int32 nc = aSel.indexOf('(');
     if (nc != -1 && nc != 0)
         aSel = aSel.replaceAt(nc-1, 1, "");
     if ( aSel.compareToIgnoreAsciiCase(SfxResId(STR_STANDARD)) != 0 )
         nEntry++;
-    if (!m_pTemplateLb->GetSelectedEntryCount())
-        nEntry = 0;
     return nEntry;
 }
 
-bool SfxNewFileDialog_Impl::IsTemplate() const
+SfxNewFileDialog::SfxNewFileDialog(weld::Window *pParent, SfxNewFileDialogMode nFlags)
+    : m_xBuilder(Application::CreateBuilder(pParent, "sfx/ui/loadtemplatedialog.ui"))
+    , m_xDialog(m_xBuilder->weld_dialog("LoadTemplateDialog"))
+    , m_xRegionLb(m_xBuilder->weld_tree_view("categories"))
+    , m_xTemplateLb(m_xBuilder->weld_tree_view("templates"))
+    , m_xTextStyleCB(m_xBuilder->weld_check_button("text"))
+    , m_xFrameStyleCB(m_xBuilder->weld_check_button("frame"))
+    , m_xPageStyleCB(m_xBuilder->weld_check_button("pages"))
+    , m_xNumStyleCB(m_xBuilder->weld_check_button("numbering"))
+    , m_xMergeStyleCB(m_xBuilder->weld_check_button("overwrite"))
+    , m_xLoadFilePB(m_xBuilder->weld_button("fromfile"))
+    , m_xMoreBt(m_xBuilder->weld_expander("expander"))
+    , m_xPreviewWin(new SfxPreviewWin_Impl(m_xBuilder->weld_drawing_area("image")))
+    , m_xAltTitleFt(m_xBuilder->weld_label("alttitle"))
+    , m_sLoadTemplate(m_xAltTitleFt->get_label())
+    , m_nFlags(nFlags)
 {
-    return GetSelectedTemplatePos()!=0;
-
-}
-
-OUString SfxNewFileDialog_Impl::GetTemplateFileName() const
-{
-    if(!IsTemplate() || !aTemplates.GetRegionCount())
-        return OUString();
-    return aTemplates.GetPath(m_pRegionLb->GetSelectedEntryPos(),
-                              GetSelectedTemplatePos()-1);
-}
-
-SfxTemplateFlags  SfxNewFileDialog_Impl::GetTemplateFlags()const
-{
-    SfxTemplateFlags nRet = m_pTextStyleCB->IsChecked() ? SfxTemplateFlags::LOAD_TEXT_STYLES : SfxTemplateFlags::NONE;
-    if(m_pFrameStyleCB->IsChecked())
-        nRet |= SfxTemplateFlags::LOAD_FRAME_STYLES;
-    if(m_pPageStyleCB->IsChecked())
-        nRet |= SfxTemplateFlags::LOAD_PAGE_STYLES;
-    if(m_pNumStyleCB->IsChecked())
-        nRet |= SfxTemplateFlags::LOAD_NUM_STYLES;
-    if(m_pMergeStyleCB->IsChecked())
-        nRet |= SfxTemplateFlags::MERGE_STYLES;
-    return nRet;
-}
-
-void    SfxNewFileDialog_Impl::SetTemplateFlags(SfxTemplateFlags nSet)
-{
-    m_pTextStyleCB->Check(  bool(nSet & SfxTemplateFlags::LOAD_TEXT_STYLES ));
-    m_pFrameStyleCB->Check( bool(nSet & SfxTemplateFlags::LOAD_FRAME_STYLES));
-    m_pPageStyleCB->Check(  bool(nSet & SfxTemplateFlags::LOAD_PAGE_STYLES ));
-    m_pNumStyleCB->Check(   bool(nSet & SfxTemplateFlags::LOAD_NUM_STYLES  ));
-    m_pMergeStyleCB->Check( bool(nSet & SfxTemplateFlags::MERGE_STYLES     ));
-}
-
-
-SfxNewFileDialog_Impl::SfxNewFileDialog_Impl(
-    SfxNewFileDialog* pAntiImplP, SfxNewFileDialogMode nFl)
-    : aNone(SfxResId(STR_NONE))
-    , nFlags(nFl)
-    , pAntiImpl(pAntiImplP)
-{
-    pAntiImplP->get(m_pRegionLb, "categories");
-    pAntiImplP->get(m_pTemplateLb, "templates");
-
-    Size aSize(m_pRegionLb->LogicToPixel(Size(127, 72), MapMode(MapUnit::MapAppFont)));
-    m_pRegionLb->set_width_request(aSize.Width());
-    m_pRegionLb->set_height_request(aSize.Height());
-    m_pTemplateLb->set_width_request(aSize.Width());
-    m_pTemplateLb->set_height_request(aSize.Height());
-
-    pAntiImplP->get(m_pTextStyleCB, "text");
-    pAntiImplP->get(m_pFrameStyleCB, "frame");
-    pAntiImplP->get(m_pPageStyleCB, "pages");
-    pAntiImplP->get(m_pNumStyleCB, "numbering");
-    pAntiImplP->get(m_pMergeStyleCB, "overwrite");
-    pAntiImplP->get(m_pMoreBt, "expander");
-    pAntiImplP->get(m_pPreviewWin, "image");
-    pAntiImplP->get(m_pLoadFilePB, "fromfile");
-    sLoadTemplate = pAntiImplP->get<FixedText>("alttitle")->GetText();
+    const int nWidth = m_xRegionLb->get_approximate_char_width() * 32;
+    const int nHeight = m_xRegionLb->get_height_rows(8);
+    m_xRegionLb->set_size_request(nWidth, nHeight);
+    m_xTemplateLb->set_size_request(nWidth, nHeight);
+    m_xPreviewWin->set_size_request(nWidth, nWidth);
 
     if (nFlags == SfxNewFileDialogMode::NONE)
-        m_pMoreBt->Hide();
+        m_xMoreBt->hide();
     else if(SfxNewFileDialogMode::LoadTemplate == nFlags)
     {
-        m_pLoadFilePB->SetClickHdl(LINK(this, SfxNewFileDialog_Impl, LoadFile));
-        m_pLoadFilePB->Show();
-        m_pTextStyleCB->Show();
-        m_pFrameStyleCB->Show();
-        m_pPageStyleCB->Show();
-        m_pNumStyleCB->Show();
-        m_pMergeStyleCB->Show();
-        m_pMoreBt->Hide();
-        m_pTextStyleCB->Check();
-        pAntiImplP->SetText(sLoadTemplate);
+        m_xLoadFilePB->show();
+        m_xTextStyleCB->show();
+        m_xFrameStyleCB->show();
+        m_xPageStyleCB->show();
+        m_xNumStyleCB->show();
+        m_xMergeStyleCB->show();
+        m_xMoreBt->hide();
+        m_xTextStyleCB->set_active(true);
+        m_xDialog->set_title(m_sLoadTemplate);
     }
     else
     {
-        m_pMoreBt->SetExpandedHdl(LINK(this, SfxNewFileDialog_Impl, Expand));
-        m_pPreviewWin->Show();
+        m_xMoreBt->connect_expanded(LINK(this, SfxNewFileDialog, Expand));
+        m_xPreviewWin->show();
     }
 
-    OUString &rExtra = pAntiImplP->GetExtraData();
-    bool bExpand = !rExtra.isEmpty() && rExtra[0] == 'Y';
-    m_pMoreBt->set_expanded(bExpand && (nFlags != SfxNewFileDialogMode::NONE));
+    OUString sExtraData;
+    SvtViewOptions aDlgOpt(EViewType::Dialog, OStringToOUString(m_xDialog->get_help_id(), RTL_TEXTENCODING_UTF8));
+    if (aDlgOpt.Exists())
+    {
+        css::uno::Any aUserItem = aDlgOpt.GetUserItem("UserItem");
+        aUserItem >>= sExtraData;
+    }
 
-    m_pTemplateLb->SetSelectHdl(LINK(this, SfxNewFileDialog_Impl, TemplateSelect));
-    m_pTemplateLb->SetDoubleClickHdl(LINK(this, SfxNewFileDialog_Impl, DoubleClick));
+    bool bExpand = !sExtraData.isEmpty() && sExtraData[0] == 'Y';
+    m_xMoreBt->set_expanded(bExpand && (nFlags != SfxNewFileDialogMode::NONE));
+
+    m_xTemplateLb->connect_changed(LINK(this, SfxNewFileDialog, TemplateSelect));
+    m_xTemplateLb->connect_row_activated(LINK(this, SfxNewFileDialog, DoubleClick));
 
     // update the template configuration if necessary
     {
-        WaitObject aWaitCursor( pAntiImplP->GetParent() );
-        aTemplates.Update();
+        weld::WaitObject aWaitCursor(m_xDialog.get());
+        m_aTemplates.Update();
     }
     // fill the list boxes
-    const sal_uInt16 nCount = aTemplates.GetRegionCount();
+    const sal_uInt16 nCount = m_aTemplates.GetRegionCount();
     if (nCount)
     {
         for(sal_uInt16 i = 0; i < nCount; ++i)
-            m_pRegionLb->InsertEntry(aTemplates.GetFullRegionName(i));
-        m_pRegionLb->SetSelectHdl(LINK(this, SfxNewFileDialog_Impl, RegionSelect));
+            m_xRegionLb->append(m_aTemplates.GetFullRegionName(i));
+        m_xRegionLb->connect_changed(LINK(this, SfxNewFileDialog, RegionSelect));
     }
 
-    aPrevIdle.SetPriority( TaskPriority::LOWEST );
-    aPrevIdle.SetInvokeHandler( LINK( this, SfxNewFileDialog_Impl, Update));
+    m_aPrevIdle.SetPriority( TaskPriority::LOWEST );
+    m_aPrevIdle.SetInvokeHandler( LINK( this, SfxNewFileDialog, Update));
 
-    m_pRegionLb->SelectEntryPos(0);
-    RegionSelect(*m_pRegionLb);
-}
-
-SfxNewFileDialog_Impl::~SfxNewFileDialog_Impl()
-{
-    OUString &rExtra = pAntiImpl->GetExtraData();
-    rExtra = m_pMoreBt->get_expanded() ? OUString("Y") : OUString("N");
-}
-
-SfxNewFileDialog::SfxNewFileDialog(vcl::Window *pParent, SfxNewFileDialogMode nFlags)
-    : SfxModalDialog(pParent, "LoadTemplateDialog",
-        "sfx/ui/loadtemplatedialog.ui"),
-      pImpl( new SfxNewFileDialog_Impl(this, nFlags) )
-{
+    m_xRegionLb->select(0);
+    RegionSelect(*m_xRegionLb);
 }
 
 SfxNewFileDialog::~SfxNewFileDialog()
 {
-    disposeOnce();
-}
-
-void SfxNewFileDialog::dispose()
-{
-    pImpl.reset();
-    SfxModalDialog::dispose();
+    SvtViewOptions aDlgOpt(EViewType::Dialog, OStringToOUString(m_xDialog->get_help_id(), RTL_TEXTENCODING_UTF8));
+    aDlgOpt.SetUserItem("UserItem", css::uno::makeAny(m_xMoreBt->get_expanded() ? OUString("Y") : OUString("N")));
 }
 
 bool SfxNewFileDialog::IsTemplate() const
 {
-    return pImpl->IsTemplate();
+    return GetSelectedTemplatePos()!=0;
 }
 
 OUString SfxNewFileDialog::GetTemplateFileName() const
 {
-    return pImpl->GetTemplateFileName();
+    if (!IsTemplate() || !m_aTemplates.GetRegionCount())
+        return OUString();
+    return m_aTemplates.GetPath(m_xRegionLb->get_selected_index(),
+                              GetSelectedTemplatePos()-1);
 }
 
 SfxTemplateFlags SfxNewFileDialog::GetTemplateFlags()const
 {
-    return pImpl->GetTemplateFlags();
+    SfxTemplateFlags nRet = m_xTextStyleCB->get_active() ? SfxTemplateFlags::LOAD_TEXT_STYLES : SfxTemplateFlags::NONE;
+    if(m_xFrameStyleCB->get_active())
+        nRet |= SfxTemplateFlags::LOAD_FRAME_STYLES;
+    if(m_xPageStyleCB->get_active())
+        nRet |= SfxTemplateFlags::LOAD_PAGE_STYLES;
+    if(m_xNumStyleCB->get_active())
+        nRet |= SfxTemplateFlags::LOAD_NUM_STYLES;
+    if(m_xMergeStyleCB->get_active())
+        nRet |= SfxTemplateFlags::MERGE_STYLES;
+    return nRet;
 }
 
 void SfxNewFileDialog::SetTemplateFlags(SfxTemplateFlags nSet)
 {
-    pImpl->SetTemplateFlags(nSet);
+    m_xTextStyleCB->set_active(  bool(nSet & SfxTemplateFlags::LOAD_TEXT_STYLES ));
+    m_xFrameStyleCB->set_active( bool(nSet & SfxTemplateFlags::LOAD_FRAME_STYLES));
+    m_xPageStyleCB->set_active(  bool(nSet & SfxTemplateFlags::LOAD_PAGE_STYLES ));
+    m_xNumStyleCB->set_active(   bool(nSet & SfxTemplateFlags::LOAD_NUM_STYLES  ));
+    m_xMergeStyleCB->set_active( bool(nSet & SfxTemplateFlags::MERGE_STYLES     ));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

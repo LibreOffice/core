@@ -19,32 +19,24 @@
 #ifndef INCLUDED_SFX2_SOURCE_INC_PREVIEW_HXX
 #define INCLUDED_SFX2_SOURCE_INC_PREVIEW_HXX
 
-#include <sfx2/doctempl.hxx>
-#include <sfx2/basedlgs.hxx>
+#include <tools/link.hxx>
 
 class SfxObjectShell;
 class GDIMetaFile;
 
-class SfxPreviewBase_Impl : public vcl::Window
+class SfxPreviewWin_Impl
 {
 protected:
     std::shared_ptr<GDIMetaFile> xMetaFile;
+    std::unique_ptr<weld::DrawingArea> m_xDrawingArea;
 public:
-    SfxPreviewBase_Impl(vcl::Window* pParent, WinBits nStyle);
+    SfxPreviewWin_Impl(weld::DrawingArea* pArea);
     void            SetObjectShell( SfxObjectShell const * pObj );
-    virtual void    Resize() override;
-    virtual Size    GetOptimalSize() const override;
-};
-
-class SfxPreviewWin_Impl: public SfxPreviewBase_Impl
-{
-protected:
-    virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
-public:
-    SfxPreviewWin_Impl(vcl::Window* pParent, WinBits nStyle)
-        : SfxPreviewBase_Impl(pParent, nStyle)
-    {}
-
+    DECL_LINK(DoPaint, vcl::RenderContext&, void);
+    DECL_LINK(DoResize, const Size& rSize, void);
+    void queue_draw() { m_xDrawingArea->queue_draw(); }
+    void show() { m_xDrawingArea->show(); }
+    void set_size_request(int nWidth, int nHeight) { m_xDrawingArea->set_size_request(nWidth, nHeight); }
     static void ImpPaint(vcl::RenderContext& rRenderContext, GDIMetaFile* pFile);
 };
 
