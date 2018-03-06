@@ -25,6 +25,8 @@
 #include <com/sun/star/chart/MissingValueTreatment.hpp>
 #include <com/sun/star/chart2/TickmarkStyle.hpp>
 #include <com/sun/star/container/XNamed.hpp>
+#include <com/sun/star/chart2/data/XTextualDataSequence.hpp>
+#include <com/sun/star/text/XTextRange.hpp>
 
 #include <com/sun/star/util/Color.hpp>
 
@@ -106,6 +108,8 @@ public:
     void testTdf115107(); // import complex data point labels
     void testTdf115107_2(); // import complex data point labels in cobo charts with multiple data series
 
+    void testTdf116163();
+
     CPPUNIT_TEST_SUITE(Chart2ImportTest);
     CPPUNIT_TEST(Fdo60083);
     CPPUNIT_TEST(testSteppedLines);
@@ -167,6 +171,8 @@ public:
 
     CPPUNIT_TEST(testTdf115107);
     CPPUNIT_TEST(testTdf115107_2);
+
+    CPPUNIT_TEST(testTdf116163);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -1469,6 +1475,96 @@ void Chart2ImportTest::testTdf115107_2()
     CPPUNIT_ASSERT_EQUAL(chart2::DataPointCustomLabelFieldType::DataPointCustomLabelFieldType_SERIESNAME, aFields[2]->getFieldType());
     CPPUNIT_ASSERT_EQUAL(OUString("Line"), aFields[2]->getString());
 
+}
+
+uno::Reference<drawing::XShape> getShapeByName(const uno::Reference<drawing::XShapes>& rShapes, const OUString& rName, bool(*pCondition)(const uno::Reference<drawing::XShape>&) = nullptr)
+{
+    uno::Reference<container::XIndexAccess> XIndexAccess(rShapes, uno::UNO_QUERY);
+    for (sal_Int32 i = 0; i < XIndexAccess->getCount(); ++i)
+    {
+        uno::Reference<drawing::XShapes> xShapes(XIndexAccess->getByIndex(i), uno::UNO_QUERY);
+        if (xShapes.is())
+        {
+            uno::Reference<drawing::XShape> xRet = getShapeByName(xShapes, rName, pCondition);
+            if (xRet.is())
+                return xRet;
+        }
+        uno::Reference<container::XNamed> xNamedShape(XIndexAccess->getByIndex(i), uno::UNO_QUERY);
+        if (xNamedShape->getName() == rName)
+        {
+            uno::Reference<drawing::XShape> xShape(xNamedShape, uno::UNO_QUERY);
+            if (pCondition == nullptr || (*pCondition)(xShape))
+                return xShape;
+        }
+    }
+    return uno::Reference<drawing::XShape>();
+}
+
+void Chart2ImportTest::testTdf116163()
+{
+    load("/chart2/qa/extras/data/pptx/", "tdf116163.pptx");
+
+    Reference<chart2::XChartDocument> xChartDoc(getChartDocFromDrawImpress(0, 0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xChartDoc.is());
+
+    Reference<chart2::XAxis> xHAxis = getAxisFromDoc(xChartDoc, 0, 0, 0);
+    CPPUNIT_ASSERT(xHAxis.is());
+
+    chart2::ScaleData aScaleData = xHAxis->getScaleData();
+    CPPUNIT_ASSERT(aScaleData.Categories.is());
+
+    Reference<chart2::data::XLabeledDataSequence> xLabeledDataSequence = aScaleData.Categories;
+    CPPUNIT_ASSERT(xLabeledDataSequence.is());
+
+    Reference<chart2::data::XDataSequence> xDataSequence = xLabeledDataSequence->getValues();
+    CPPUNIT_ASSERT(xDataSequence.is());
+
+    Reference<chart2::data::XTextualDataSequence> xTextualDataSequence(xDataSequence, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xTextualDataSequence.is());
+
+    std::vector<OUString> aCategories;
+    Sequence<OUString> aTextData(xTextualDataSequence->getTextualData());
+    ::std::copy(aTextData.begin(), aTextData.end(),
+        ::std::back_inserter(aCategories));
+
+    CPPUNIT_ASSERT_EQUAL(OUString("Aaaa"), aCategories[0]);
+    CPPUNIT_ASSERT_EQUAL(OUString("Bbbbbbb"), aCategories[1]);
+    CPPUNIT_ASSERT_EQUAL(OUString("Ccc"), aCategories[2]);
+    CPPUNIT_ASSERT_EQUAL(OUString("Ddddddddddddd"), aCategories[3]);
+
+    // Check visible text
+
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(xChartDoc, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
+    uno::Reference<drawing::XShapes> xShapes(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xShapes.is());
+
+    const OUString sXAxisName = "CID/D=0:CS=0:Axis=0,0";
+    uno::Reference<drawing::XShape> xXAxis = getShapeByName(xShapes, sXAxisName,
+        // Axis occurs twice in chart xshape representation so need to get the one related to labels
+        [](const uno::Reference<drawing::XShape>& rXShape) -> bool
+    {
+        uno::Reference<drawing::XShapes> xAxisShapes(rXShape, uno::UNO_QUERY);
+        CPPUNIT_ASSERT(xAxisShapes.is());
+        uno::Reference<drawing::XShape> xChildShape(xAxisShapes->getByIndex(0), uno::UNO_QUERY);
+        uno::Reference< drawing::XShapeDescriptor > xShapeDescriptor(xChildShape, uno::UNO_QUERY_THROW);
+        return (xShapeDescriptor->getShapeType() == "com.sun.star.drawing.TextShape");
+    });
+    CPPUNIT_ASSERT(xXAxis.is());
+
+    uno::Reference<container::XIndexAccess> xIndexAccess(xXAxis, UNO_QUERY_THROW);
+    CPPUNIT_ASSERT(xIndexAccess.is());
+
+    // Check text
+    uno::Reference<text::XTextRange> xLabel0(xIndexAccess->getByIndex(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("Aaaa"), xLabel0->getString());
+    uno::Reference<text::XTextRange> xLabel1(xIndexAccess->getByIndex(1), uno::UNO_QUERY);
+    // If there is space for 3 chars only then don't show "..."
+    CPPUNIT_ASSERT_EQUAL(OUString("Bbb"), xLabel1->getString());
+    uno::Reference<text::XTextRange> xLabel2(xIndexAccess->getByIndex(2), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("Ccc"), xLabel2->getString());
+    uno::Reference<text::XTextRange> xLabel3(xIndexAccess->getByIndex(3), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("Dddd..."), xLabel3->getString());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Chart2ImportTest);
