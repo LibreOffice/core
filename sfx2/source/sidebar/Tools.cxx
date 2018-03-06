@@ -97,8 +97,8 @@ Gradient Tools::AwtToVclGradient (const css::awt::Gradient& rAwtGradient)
 {
     Gradient aVclGradient (
         GradientStyle(rAwtGradient.Style),
-        rAwtGradient.StartColor,
-        rAwtGradient.EndColor);
+        Color(rAwtGradient.StartColor),
+        Color(rAwtGradient.EndColor));
     aVclGradient.SetAngle(rAwtGradient.Angle);
     aVclGradient.SetBorder(rAwtGradient.Border);
     aVclGradient.SetOfsX(rAwtGradient.XOffset);

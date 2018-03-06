@@ -37,8 +37,8 @@ using namespace ::com::sun::star::uno   ;
 #define ROOTNODE_START                  "Office.Common/Drawinglayer"
 #define DEFAULT_OVERLAYBUFFER           true
 #define DEFAULT_PAINTBUFFER             true
-#define DEFAULT_STRIPE_COLOR_A          0
-#define DEFAULT_STRIPE_COLOR_B          16581375
+#define DEFAULT_STRIPE_COLOR_A          Color(0)
+#define DEFAULT_STRIPE_COLOR_B          Color(16581375)
 #define DEFAULT_STRIPE_LENGTH           4
 
 // #i73602#
@@ -261,8 +261,8 @@ SvtOptionsDrawinglayer_Impl::SvtOptionsDrawinglayer_Impl() :
     ConfigItem( ROOTNODE_START  ),
     m_bOverlayBuffer( DEFAULT_OVERLAYBUFFER ),
     m_bPaintBuffer( DEFAULT_PAINTBUFFER ),
-    m_bStripeColorA(Color(DEFAULT_STRIPE_COLOR_A)),
-    m_bStripeColorB(Color(DEFAULT_STRIPE_COLOR_B)),
+    m_bStripeColorA(DEFAULT_STRIPE_COLOR_A),
+    m_bStripeColorB(DEFAULT_STRIPE_COLOR_B),
     m_nStripeLength(DEFAULT_STRIPE_LENGTH),
 
     // #i73602#
@@ -334,7 +334,7 @@ SvtOptionsDrawinglayer_Impl::SvtOptionsDrawinglayer_Impl() :
                 DBG_ASSERT(!(seqValues[nProperty].getValueTypeClass()!=TypeClass_LONG), "SvtOptionsDrawinglayer_Impl::SvtOptionsDrawinglayer_Impl()\nWho has changed the value type of \"Office.Common\\Drawinglayer\\StripeColorA\"?" );
                 sal_Int32 nValue = 0;
                 seqValues[nProperty] >>= nValue;
-                m_bStripeColorA = nValue;
+                m_bStripeColorA = Color(nValue);
             }
             break;
 
@@ -343,7 +343,7 @@ SvtOptionsDrawinglayer_Impl::SvtOptionsDrawinglayer_Impl() :
                 DBG_ASSERT(!(seqValues[nProperty].getValueTypeClass()!=TypeClass_LONG), "SvtOptionsDrawinglayer_Impl::SvtOptionsDrawinglayer_Impl()\nWho has changed the value type of \"Office.Common\\Drawinglayer\\StripeColorB\"?" );
                 sal_Int32 nValue = 0;
                 seqValues[nProperty] >>= nValue;
-                m_bStripeColorB = nValue;
+                m_bStripeColorB = Color(nValue);
             }
             break;
 
@@ -543,11 +543,11 @@ void SvtOptionsDrawinglayer_Impl::ImplCommit()
             break;
 
             case PROPERTYHANDLE_STRIPE_COLOR_A:
-                aSeqValues[nProperty] <<= m_bStripeColorA.GetColor();
+                aSeqValues[nProperty] <<= m_bStripeColorA;
             break;
 
             case PROPERTYHANDLE_STRIPE_COLOR_B:
-                aSeqValues[nProperty] <<= m_bStripeColorB.GetColor();
+                aSeqValues[nProperty] <<= m_bStripeColorB;
             break;
 
             case PROPERTYHANDLE_STRIPE_LENGTH:

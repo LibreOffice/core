@@ -254,7 +254,7 @@ sal_Int32 SAL_CALL SmGraphicAccessible::getForeground()
 
     if (!pWin)
         throw RuntimeException();
-    return static_cast<sal_Int32>(pWin->GetTextColor().GetColor());
+    return static_cast<sal_Int32>(pWin->GetTextColor());
 }
 
 sal_Int32 SAL_CALL SmGraphicAccessible::getBackground()
@@ -266,9 +266,9 @@ sal_Int32 SAL_CALL SmGraphicAccessible::getBackground()
     Wallpaper aWall( pWin->GetDisplayBackground() );
     Color nCol;
     if (aWall.IsBitmap() || aWall.IsGradient())
-        nCol = pWin->GetSettings().GetStyleSettings().GetWindowColor().GetColor();
+        nCol = pWin->GetSettings().GetStyleSettings().GetWindowColor();
     else
-        nCol = aWall.GetColor().GetColor();
+        nCol = aWall.GetColor();
     return static_cast<sal_Int32>(nCol);
 }
 
@@ -356,7 +356,7 @@ Reference< XAccessibleStateSet > SAL_CALL SmGraphicAccessible::getAccessibleStat
             pStateSet->AddState( AccessibleStateType::SHOWING );
         if (pWin->IsReallyVisible())
             pStateSet->AddState( AccessibleStateType::VISIBLE );
-        if (COL_TRANSPARENT != pWin->GetBackground().GetColor().GetColor())
+        if (COL_TRANSPARENT != pWin->GetBackground().GetColor())
             pStateSet->AddState( AccessibleStateType::OPAQUE );
     }
 
@@ -1677,7 +1677,7 @@ sal_Int32 SAL_CALL SmEditAccessible::getForeground()
 
     if (!pWin)
         throw RuntimeException();
-    return static_cast<sal_Int32>(pWin->GetTextColor().GetColor());
+    return static_cast<sal_Int32>(pWin->GetTextColor());
 }
 
 sal_Int32 SAL_CALL SmEditAccessible::getBackground()
@@ -1689,9 +1689,9 @@ sal_Int32 SAL_CALL SmEditAccessible::getBackground()
     Wallpaper aWall( pWin->GetDisplayBackground() );
     Color nCol;
     if (aWall.IsBitmap() || aWall.IsGradient())
-        nCol = pWin->GetSettings().GetStyleSettings().GetWindowColor().GetColor();
+        nCol = pWin->GetSettings().GetStyleSettings().GetWindowColor();
     else
-        nCol = aWall.GetColor().GetColor();
+        nCol = aWall.GetColor();
     return static_cast<sal_Int32>(nCol);
 }
 
@@ -1784,7 +1784,7 @@ uno::Reference< XAccessibleStateSet > SAL_CALL SmEditAccessible::getAccessibleSt
             pStateSet->AddState( AccessibleStateType::SHOWING );
         if (pWin->IsReallyVisible())
             pStateSet->AddState( AccessibleStateType::VISIBLE );
-        if (COL_TRANSPARENT != pWin->GetBackground().GetColor().GetColor())
+        if (COL_TRANSPARENT != pWin->GetBackground().GetColor())
             pStateSet->AddState( AccessibleStateType::OPAQUE );
     }
 
