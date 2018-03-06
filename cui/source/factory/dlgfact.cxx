@@ -1204,27 +1204,20 @@ VclPtr<SfxAbstractTabDialog> AbstractDialogFactory_Impl::CreateSvxLineTabDialog(
     return VclPtr<CuiAbstractTabDialog_Impl>::Create( pDlg );
 }
 
-VclPtr<SfxAbstractDialog> AbstractDialogFactory_Impl::CreateSfxDialog( vcl::Window* pParent,
+VclPtr<SfxAbstractDialog> AbstractDialogFactory_Impl::CreateCharMapDialog( vcl::Window* pParent,
                                                                         const SfxItemSet& rAttr,
-                                                                        const Reference< XFrame >& _rxDocumentFrame,
-                                                                        sal_uInt32 nResId, bool bInsert )
+                                                                        bool bInsert )
 {
-    SfxModalDialog* pDlg=nullptr;
-    switch ( nResId )
-    {
-        case SID_EVENTCONFIG :
-            pDlg = VclPtr<SfxMacroAssignDlg>::Create( pParent, _rxDocumentFrame, rAttr );
-            break;
-        case RID_SVXDLG_CHARMAP :
-            pDlg = VclPtr<SvxCharacterMap>::Create( pParent, &rAttr, bInsert );
-            break;
-        default:
-            break;
-    }
+    SfxModalDialog* pDlg = VclPtr<SvxCharacterMap>::Create(pParent, &rAttr, bInsert);
+    return VclPtr<CuiAbstractSfxDialog_Impl>::Create(pDlg);
+}
 
-    if ( pDlg )
-        return VclPtr<CuiAbstractSfxDialog_Impl>::Create( pDlg );
-    return nullptr;
+VclPtr<SfxAbstractDialog> AbstractDialogFactory_Impl::CreateEventConfigDialog( vcl::Window* pParent,
+                                                                        const SfxItemSet& rAttr,
+                                                                        const Reference< XFrame >& _rxDocumentFrame)
+{
+    SfxModalDialog* pDlg = VclPtr<SfxMacroAssignDlg>::Create(pParent, _rxDocumentFrame, rAttr);
+    return VclPtr<CuiAbstractSfxDialog_Impl>::Create(pDlg);
 }
 
 VclPtr<SfxAbstractDialog> AbstractDialogFactory_Impl::CreateSfxDialog( vcl::Window* pParent,

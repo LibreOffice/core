@@ -468,10 +468,13 @@ public:
                                             const SfxItemSet& rAttr,
                                             const SdrView* pView,
                                             sal_uInt32 nResId ) override;
-    virtual VclPtr<SfxAbstractDialog>    CreateSfxDialog( vcl::Window* pParent,
+    virtual VclPtr<SfxAbstractDialog>    CreateCharMapDialog( vcl::Window* pParent,
                                                              const SfxItemSet& rAttr,
-                                                             const css::uno::Reference< css::frame::XFrame >& _rxFrame,
-                                                             sal_uInt32 nResId, bool bInsert ) override;
+                                                             bool bInsert ) override;
+    virtual VclPtr<SfxAbstractDialog>    CreateEventConfigDialog( vcl::Window* pParent,
+                                                             const SfxItemSet& rAttr,
+                                                             const css::uno::Reference< css::frame::XFrame >& _rxFrame
+                                                             ) override;
     virtual VclPtr<VclAbstractDialog>    CreateFrameDialog( const css::uno::Reference< css::frame::XFrame >& rxFrame,
                                                            sal_uInt32 nResId,
                                                            const OUString& rParameter ) override;
