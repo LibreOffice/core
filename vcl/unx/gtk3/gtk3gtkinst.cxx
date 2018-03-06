@@ -1952,7 +1952,7 @@ private:
         pThis->signal_changed();
     }
 
-    static void signalRowActivated(GtkTreeView*, gpointer widget)
+    static void signalRowActivated(GtkTreeView*, GtkTreePath*, GtkTreeViewColumn*, gpointer widget)
     {
         GtkInstanceTreeView* pThis = static_cast<GtkInstanceTreeView*>(widget);
         pThis->signal_row_activated();
