@@ -108,9 +108,9 @@ void    XFHeaderStyle::SetBorders(XFBorders *pBorders)
     m_pBorders.reset(pBorders);
 }
 
-void    XFHeaderStyle::SetBackImage(XFBGImage *image)
+void    XFHeaderStyle::SetBackImage(std::unique_ptr<XFBGImage>& rImage)
 {
-    m_pBGImage.reset( image );
+    m_pBGImage = std::move(rImage);
 }
 
 void    XFHeaderStyle::SetBackColor(XFColor color)

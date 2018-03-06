@@ -531,10 +531,10 @@ void LwpFrame::ApplyPosType(XFFrameStyle* pFrameStyle)
 */
 void LwpFrame::ApplyWatermark(XFFrameStyle *pFrameStyle)
 {
-    XFBGImage* pBGImage = m_pLayout->GetXFBGImage();
-    if(pBGImage)
+    std::unique_ptr<XFBGImage> xBGImage(m_pLayout->GetXFBGImage());
+    if (xBGImage)
     {
-        pFrameStyle->SetBackImage(pBGImage);
+        pFrameStyle->SetBackImage(xBGImage);
         //set watermark transparent
         rtl::Reference<LwpVirtualLayout> xWaterMarkLayout(m_pLayout->GetWaterMarkLayout());
         LwpMiddleLayout* pLay = dynamic_cast<LwpMiddleLayout*>(xWaterMarkLayout.get());
@@ -553,10 +553,10 @@ void LwpFrame::ApplyWatermark(XFFrameStyle *pFrameStyle)
  */
 void LwpFrame::ApplyPatternFill(XFFrameStyle* pFrameStyle)
 {
-    XFBGImage* pXFBGImage = m_pLayout->GetFillPattern();
-    if (pXFBGImage)
+    std::unique_ptr<XFBGImage> xXFBGImage(m_pLayout->GetFillPattern());
+    if (xXFBGImage)
     {
-        pFrameStyle->SetBackImage(pXFBGImage);
+        pFrameStyle->SetBackImage(xXFBGImage);
     }
 }
 
