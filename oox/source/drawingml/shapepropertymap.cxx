@@ -56,12 +56,12 @@ static const ShapePropertyIds spnDefaultShapeIds =
 ShapePropertyInfo ShapePropertyInfo::DEFAULT( spnDefaultShapeIds, true, false, false, false );
 
 ShapePropertyInfo::ShapePropertyInfo( const ShapePropertyIds& rnPropertyIds,
-        bool bNamedLineMarker, bool bNamedLineDash, bool bNamedFillGradient, bool bNamedFillBitmapUrl ) :
+        bool bNamedLineMarker, bool bNamedLineDash, bool bNamedFillGradient, bool bNamedFillBitmap ) :
     mrPropertyIds(rnPropertyIds),
     mbNamedLineMarker( bNamedLineMarker ),
     mbNamedLineDash( bNamedLineDash ),
     mbNamedFillGradient( bNamedFillGradient ),
-    mbNamedFillBitmapUrl( bNamedFillBitmapUrl )
+    mbNamedFillBitmap( bNamedFillBitmap )
 {
 }
 
@@ -103,11 +103,11 @@ bool ShapePropertyMap::setAnyProperty( ShapeProperty ePropId, const Any& rValue 
         case ShapeProperty::GradientTransparency:
             return setGradientTrans( nPropId, rValue );
 
-        case ShapeProperty::FillBitmapUrl:
-            return setFillBitmapUrl( nPropId, rValue );
+        case ShapeProperty::FillBitmap:
+            return setFillBitmap(nPropId, rValue);
 
-        case ShapeProperty::FillBitmapNameFromUrl:
-            return setFillBitmapNameFromUrl( rValue );
+        case ShapeProperty::FillBitmapName:
+            return setFillBitmapName(rValue);
 
         default:;   // suppress compiler warnings
     }
@@ -180,10 +180,10 @@ bool ShapePropertyMap::setGradientTrans( sal_Int32 nPropId, const Any& rValue )
     return false;
 }
 
-bool ShapePropertyMap::setFillBitmapUrl(sal_Int32 nPropId, const Any& rValue)
+bool ShapePropertyMap::setFillBitmap(sal_Int32 nPropId, const Any& rValue)
 {
     // push bitmap explicitly
-    if (!maShapePropInfo.mbNamedFillBitmapUrl)
+    if (!maShapePropInfo.mbNamedFillBitmap)
     {
         return setAnyProperty(nPropId, rValue);
     }
@@ -199,7 +199,7 @@ bool ShapePropertyMap::setFillBitmapUrl(sal_Int32 nPropId, const Any& rValue)
     return false;
 }
 
-bool ShapePropertyMap::setFillBitmapNameFromUrl(const Any& rValue)
+bool ShapePropertyMap::setFillBitmapName(const Any& rValue)
 {
     if (rValue.has<uno::Reference<graphic::XGraphic>>())
     {
