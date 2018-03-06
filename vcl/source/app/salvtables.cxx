@@ -399,6 +399,14 @@ public:
         return false;
     }
 
+    virtual void set_busy_cursor(bool bBusy) override
+    {
+        if (bBusy)
+            m_xWindow->EnterWait();
+        else
+            m_xWindow->LeaveWait();
+    }
+
     virtual ~SalInstanceWindow() override
     {
         clear_child_help(m_xWindow);
@@ -861,12 +869,12 @@ public:
 
     virtual void select(int pos) override
     {
+        assert(m_xTreeView->IsUpdateMode() && "don't select when frozen");
         if (pos == -1)
-        {
             m_xTreeView->SetNoSelection();
-            return;
-        }
-        m_xTreeView->SelectEntryPos(pos);
+        else
+            m_xTreeView->SelectEntryPos(pos);
+        m_xTreeView->Select();
     }
 
     virtual OUString get_selected() override
@@ -1062,6 +1070,42 @@ public:
         m_xTextView->SetSelection(rSelection);
     }
 };
+
+class SalInstanceExpander : public SalInstanceContainer, public virtual weld::Expander
+{
+private:
+    VclPtr<VclExpander> m_xExpander;
+
+    DECL_LINK(ExpandedHdl, VclExpander&, void);
+
+public:
+    SalInstanceExpander(VclExpander* pExpander, bool bTakeOwnership)
+        : SalInstanceContainer(pExpander, bTakeOwnership)
+        , m_xExpander(pExpander)
+    {
+        m_xExpander->SetExpandedHdl(LINK(this, SalInstanceExpander, ExpandedHdl));
+    }
+
+    virtual bool get_expanded() const override
+    {
+        return m_xExpander->get_expanded();
+    }
+
+    virtual void set_expanded(bool bExpand) override
+    {
+        m_xExpander->set_expanded(bExpand);
+    }
+
+    virtual ~SalInstanceExpander() override
+    {
+        m_xExpander->SetExpandedHdl(Link<VclExpander&, void>());
+    }
+};
+
+IMPL_LINK_NOARG(SalInstanceExpander, ExpandedHdl, VclExpander&, void)
+{
+    signal_expanded();
+}
 
 class SalInstanceDrawingArea : public SalInstanceWidget, public virtual weld::DrawingArea
 {
@@ -1363,6 +1407,12 @@ public:
     {
         VclMultiLineEdit* pTextView = m_xBuilder->get<VclMultiLineEdit>(id);
         return pTextView ? new SalInstanceTextView(pTextView, bTakeOwnership) : nullptr;
+    }
+
+    virtual weld::Expander* weld_expander(const OString &id, bool bTakeOwnership) override
+    {
+        VclExpander* pExpander = m_xBuilder->get<VclExpander>(id);
+        return pExpander ? new SalInstanceExpander(pExpander, bTakeOwnership) : nullptr;
     }
 
     virtual weld::DrawingArea* weld_drawing_area(const OString &id, bool bTakeOwnership) override

@@ -247,9 +247,6 @@
     <glade-widget-class title="Token Window" name="swuilo-SwTokenWindow"
                         generic-name="Token Window" parent="GtkDrawingArea"
                         icon-name="widget-gtk-drawingarea"/>
-    <glade-widget-class title="Template Preview Window" name="sfxlo-SfxPreviewWin"
-                        generic-name="Template Preview Window" parent="GtkDrawingArea"
-                        icon-name="widget-gtk-drawingarea"/>
     <glade-widget-class title="Template Local View" name="sfxlo-TemplateLocalView"
                         generic-name="Template Local View" parent="GtkDrawingArea"
                         icon-name="widget-gtk-drawingarea"/>

@@ -123,12 +123,12 @@ IMPL_LINK(SwMailMergeDocSelectPage, FileSelectHdl, Button*, pButton, void)
     if(bTemplate)
     {
         m_pLoadTemplateRB->Check();
-        VclPtrInstance< SfxNewFileDialog > pNewFileDlg(this, SfxNewFileDialogMode::NONE);
-        sal_uInt16 nRet = pNewFileDlg->Execute();
+        SfxNewFileDialog aNewFileDlg(GetFrameWeld(), SfxNewFileDialogMode::NONE);
+        sal_uInt16 nRet = aNewFileDlg.run();
         if(RET_TEMPLATE_LOAD == nRet)
             bTemplate = false;
         else if(RET_CANCEL != nRet)
-            m_sLoadTemplateName = pNewFileDlg->GetTemplateFileName();
+            m_sLoadTemplateName = aNewFileDlg.GetTemplateFileName();
     }
     else
         m_pLoadDocRB->Check();
