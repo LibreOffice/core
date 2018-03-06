@@ -720,12 +720,12 @@ sal_Int32 SAL_CALL VCLXAccessibleComponent::getForeground(  )
 {
     OExternalLockGuard aGuard( this );
 
-    sal_Int32 nColor = 0;
+    Color nColor;
     VclPtr<vcl::Window> pWindow = GetWindow();
     if ( pWindow )
     {
         if ( pWindow->IsControlForeground() )
-            nColor = pWindow->GetControlForeground().GetColor();
+            nColor = pWindow->GetControlForeground();
         else
         {
             vcl::Font aFont;
@@ -733,31 +733,31 @@ sal_Int32 SAL_CALL VCLXAccessibleComponent::getForeground(  )
                 aFont = pWindow->GetControlFont();
             else
                 aFont = pWindow->GetFont();
-            nColor = aFont.GetColor().GetColor();
+            nColor = aFont.GetColor();
             // COL_AUTO is not very meaningful for AT
-            if ( nColor == sal_Int32(COL_AUTO))
-                nColor = pWindow->GetTextColor().GetColor();
+            if ( nColor == COL_AUTO)
+                nColor = pWindow->GetTextColor();
         }
     }
 
-    return nColor;
+    return sal_Int32(nColor);
 }
 
 sal_Int32 SAL_CALL VCLXAccessibleComponent::getBackground(  )
 {
     OExternalLockGuard aGuard( this );
 
-    sal_Int32 nColor = 0;
+    Color nColor;
     VclPtr<vcl::Window> pWindow = GetWindow();
     if ( pWindow )
     {
         if ( pWindow->IsControlBackground() )
-            nColor = pWindow->GetControlBackground().GetColor();
+            nColor = pWindow->GetControlBackground();
         else
-            nColor = pWindow->GetBackground().GetColor().GetColor();
+            nColor = pWindow->GetBackground().GetColor();
     }
 
-    return nColor;
+    return sal_Int32(nColor);
 }
 
 // XAccessibleExtendedComponent
