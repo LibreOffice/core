@@ -1220,39 +1220,25 @@ void DrawingML::WriteBlipFill( const Reference< XPropertySet >& rXPropSet, const
 {
     if ( GetProperty( rXPropSet, sURLPropName ) )
     {
+        uno::Reference<graphic::XGraphic> xGraphic;
         if (mAny.has<uno::Reference<awt::XBitmap>>())
         {
             uno::Reference<awt::XBitmap> xBitmap;
             xBitmap = mAny.get<uno::Reference<awt::XBitmap>>();
-            uno::Reference<graphic::XGraphic> xGraphic(xBitmap, uno::UNO_QUERY);
-            if (xBitmap.is() && xGraphic.is())
-            {
-                bool bWriteMode = false;
-                if (sURLPropName == "FillBitmap" || sURLPropName == "BackGraphic")
-                    bWriteMode = true;
-                WriteXGraphicBlipFill(rXPropSet, xGraphic, nXmlNamespace, bWriteMode);
-            }
+            if (xBitmap.is())
+                xGraphic.set(xBitmap, uno::UNO_QUERY);
         }
         else if (mAny.has<uno::Reference<graphic::XGraphic>>())
         {
-            uno::Reference<graphic::XGraphic> xGraphic;
             xGraphic = mAny.get<uno::Reference<graphic::XGraphic>>();
-            if (xGraphic.is())
-            {
-                bool bWriteMode = false;
-                if (sURLPropName == "FillBitmap" || sURLPropName == "BackGraphic")
-                    bWriteMode = true;
-                WriteXGraphicBlipFill(rXPropSet, xGraphic, nXmlNamespace, bWriteMode);
-            }
         }
-        else
+
+        if (xGraphic.is())
         {
-            OUString aURL;
-            mAny >>= aURL;
             bool bWriteMode = false;
-            if( sURLPropName == "FillBitmapURL" || sURLPropName == "BackGraphicURL")
+            if (sURLPropName == "FillBitmap" || sURLPropName == "BackGraphic")
                 bWriteMode = true;
-            WriteBlipFill( rXPropSet, aURL, nXmlNamespace, bWriteMode );
+            WriteXGraphicBlipFill(rXPropSet, xGraphic, nXmlNamespace, bWriteMode);
         }
     }
 }
