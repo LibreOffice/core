@@ -993,7 +993,7 @@ void ScHTMLExport::WriteCell( SCCOL nCol, SCROW nRow, SCTAB nTab )
     bool bItalic        = ( ITALIC_NONE      != rPostureItem.GetPosture() );
     bool bUnderline     = ( LINESTYLE_NONE   != rUnderlineItem.GetLineStyle() );
     bool bCrossedOut    = ( STRIKEOUT_SINGLE <= rCrossedOutItem.GetStrikeout() );
-    bool bSetFontColor  = ( COL_AUTO         != rColorItem.GetValue().GetColor() );  // default is AUTO now
+    bool bSetFontColor  = ( COL_AUTO         != rColorItem.GetValue() );  // default is AUTO now
     bool bSetFontName   = ( aHTMLStyle.aFontFamilyName  != rFontItem.GetFamilyName() );
     sal_uInt16 nSetFontSizeNumber = 0;
     sal_uInt32 nFontHeight = rFontHeightItem.GetHeight();

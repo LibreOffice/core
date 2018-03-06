@@ -848,7 +848,7 @@ void HeaderFooterParser::convertFontColor( const OUString& rColor )
             static_cast< double >( rColor.copy( 2 ).toInt32() ) / 100.0 );
     else
         // RGB color: RRGGBB
-        maFontModel.maColor.setRgb( rColor.toUInt32( 16 ) );
+        maFontModel.maColor.setRgb( ::Color(rColor.toUInt32( 16 )) );
 }
 
 void HeaderFooterParser::finalizePortion()

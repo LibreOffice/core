@@ -36,9 +36,9 @@ public:
     virtual             ~ThemeBuffer() override;
 
     /** Returns the theme color with the specified token identifier. */
-    sal_Int32           getColorByToken( sal_Int32 nToken ) const;
+    ::Color             getColorByToken( sal_Int32 nToken ) const;
 
-    sal_Int32           getColorByIndex(size_t nIndex) const;
+    ::Color             getColorByIndex(size_t nIndex) const;
 
     /** Returns the default font data for the current file type. */
     const FontModel& getDefaultFontModel() const { return *mxDefFontModel; }

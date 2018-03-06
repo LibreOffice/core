@@ -164,7 +164,7 @@ public:
     {
         table::BorderLine aBorderLine;
         if ( getBorderLine( aBorderLine ) )
-            return uno::makeAny( OORGBToXLRGB( aBorderLine.Color ) );
+            return uno::makeAny( OORGBToXLRGB( Color(aBorderLine.Color) ) );
         throw uno::RuntimeException("No Implementation available" );
     }
     void SAL_CALL setColor( const uno::Any& _color ) override

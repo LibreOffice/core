@@ -72,10 +72,10 @@ void ScAppOptions::SetDefaults()
     pLRUList[4] = SC_OPCODE_IF;
     nLRUFuncCount = 5;
 
-    nTrackContentColor = sal_uInt32(COL_TRANSPARENT);
-    nTrackInsertColor  = sal_uInt32(COL_TRANSPARENT);
-    nTrackDeleteColor  = sal_uInt32(COL_TRANSPARENT);
-    nTrackMoveColor    = sal_uInt32(COL_TRANSPARENT);
+    nTrackContentColor = COL_TRANSPARENT;
+    nTrackInsertColor  = COL_TRANSPARENT;
+    nTrackDeleteColor  = COL_TRANSPARENT;
+    nTrackMoveColor    = COL_TRANSPARENT;
     eLinkMode          = LM_ON_DEMAND;
 
     nDefaultObjectSizeWidth = 8000;
@@ -426,16 +426,16 @@ ScAppCfg::ScAppCfg() :
                 switch(nProp)
                 {
                     case SCREVISOPT_CHANGE:
-                        if (pValues[nProp] >>= nIntVal) SetTrackContentColor( static_cast<sal_uInt32>(nIntVal) );
+                        if (pValues[nProp] >>= nIntVal) SetTrackContentColor( Color(nIntVal) );
                         break;
                     case SCREVISOPT_INSERTION:
-                        if (pValues[nProp] >>= nIntVal) SetTrackInsertColor( static_cast<sal_uInt32>(nIntVal) );
+                        if (pValues[nProp] >>= nIntVal) SetTrackInsertColor( Color(nIntVal) );
                         break;
                     case SCREVISOPT_DELETION:
-                        if (pValues[nProp] >>= nIntVal) SetTrackDeleteColor( static_cast<sal_uInt32>(nIntVal) );
+                        if (pValues[nProp] >>= nIntVal) SetTrackDeleteColor( Color(nIntVal) );
                         break;
                     case SCREVISOPT_MOVEDENTRY:
-                        if (pValues[nProp] >>= nIntVal) SetTrackMoveColor( static_cast<sal_uInt32>(nIntVal) );
+                        if (pValues[nProp] >>= nIntVal) SetTrackMoveColor( Color(nIntVal) );
                         break;
                 }
             }
@@ -608,16 +608,16 @@ IMPL_LINK_NOARG(ScAppCfg, RevisionCommitHdl, ScLinkConfigItem&, void)
         switch(nProp)
         {
             case SCREVISOPT_CHANGE:
-                pValues[nProp] <<= static_cast<sal_Int32>(GetTrackContentColor());
+                pValues[nProp] <<= GetTrackContentColor();
                 break;
             case SCREVISOPT_INSERTION:
-                pValues[nProp] <<= static_cast<sal_Int32>(GetTrackInsertColor());
+                pValues[nProp] <<= GetTrackInsertColor();
                 break;
             case SCREVISOPT_DELETION:
-                pValues[nProp] <<= static_cast<sal_Int32>(GetTrackDeleteColor());
+                pValues[nProp] <<= GetTrackDeleteColor();
                 break;
             case SCREVISOPT_MOVEDENTRY:
-                pValues[nProp] <<= static_cast<sal_Int32>(GetTrackMoveColor());
+                pValues[nProp] <<= GetTrackMoveColor();
                 break;
         }
     }

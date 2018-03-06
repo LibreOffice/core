@@ -75,7 +75,7 @@ struct SheetViewModel
     /** Returns the zoom in pagebreak preview (returns default, if current value is 0). */
     sal_Int32           getPageBreakZoom() const;
     /** Returns the grid color as RGB value. */
-    sal_Int32           getGridColor( const ::oox::core::FilterBase& rFilter ) const;
+    ::Color             getGridColor( const ::oox::core::FilterBase& rFilter ) const;
 
     /** Returns the selection data of the active pane. */
     const PaneSelectionModel* getActiveSelection() const;

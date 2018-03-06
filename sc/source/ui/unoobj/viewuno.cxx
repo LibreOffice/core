@@ -1828,7 +1828,7 @@ void SAL_CALL ScTabViewObj::setPropertyValue(
         }
         else if ( aPropertyName == SC_UNO_GRIDCOLOR )
         {
-            sal_Int32 nIntVal = 0;
+            Color nIntVal;
             if ( aValue >>= nIntVal )
                 aNewOpt.SetGridColor( nIntVal, OUString() );
         }
@@ -1908,7 +1908,7 @@ uno::Any SAL_CALL ScTabViewObj::getPropertyValue( const OUString& aPropertyName 
         else if ( aPropertyName == SC_UNO_SHOWOBJ )    aRet <<= static_cast<sal_Int16>( rOpt.GetObjMode( VOBJ_TYPE_OLE ) );
         else if ( aPropertyName == SC_UNO_SHOWCHARTS ) aRet <<= static_cast<sal_Int16>( rOpt.GetObjMode( VOBJ_TYPE_CHART ) );
         else if ( aPropertyName == SC_UNO_SHOWDRAW )   aRet <<= static_cast<sal_Int16>( rOpt.GetObjMode( VOBJ_TYPE_DRAW ) );
-        else if ( aPropertyName == SC_UNO_GRIDCOLOR )  aRet <<= static_cast<sal_Int32>( rOpt.GetGridColor().GetColor() );
+        else if ( aPropertyName == SC_UNO_GRIDCOLOR )  aRet <<= rOpt.GetGridColor();
         else if ( aPropertyName == SC_UNO_VISAREA ) aRet <<= GetVisArea();
         else if ( aPropertyName == SC_UNO_ZOOMTYPE ) aRet <<= GetZoomType();
         else if ( aPropertyName == SC_UNO_ZOOMVALUE ) aRet <<= GetZoom();

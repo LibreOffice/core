@@ -8366,7 +8366,7 @@ void ScTableSheetObj::GetOnePropertyValue( const SfxItemPropertySimpleEntry* pEn
                 ScScenarioFlags nFlags;
                 rDoc.GetScenarioData( nTab, aComment, aColor, nFlags );
 
-                rAny <<= static_cast<sal_Int32>(aColor.GetColor());
+                rAny <<= aColor;
             }
         }
         else if ( pEntry->nWID == SC_WID_UNO_PROTECT )
@@ -8443,7 +8443,7 @@ void ScTableSheetObj::GetOnePropertyValue( const SfxItemPropertySimpleEntry* pEn
         }
         else if ( pEntry->nWID == SC_WID_UNO_TABCOLOR )
         {
-            rAny <<= sal_Int32(rDoc.GetTabBgColor(nTab).GetColor());
+            rAny <<= rDoc.GetTabBgColor(nTab);
         }
         else if ( pEntry->nWID == SC_WID_UNO_CODENAME )
         {

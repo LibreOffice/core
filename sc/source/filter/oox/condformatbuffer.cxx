@@ -169,22 +169,11 @@ void ColorScaleRule::importCfvo( const AttributeList& rAttribs )
 
 namespace {
 
-::Color ARgbToARgbComponents( sal_uInt32 nRgb )
-{
-    // sal_Int32 ornA = 255 - ((nRgb >> 24) & 0xFF);
-    //
-    sal_Int32 ornR = (nRgb >> 16) & 0xFF;
-    sal_Int32 ornG = (nRgb >> 8) & 0xFF;
-    sal_Int32 ornB = nRgb & 0xFF;
-
-    return ::Color(/*ornA*/ 0, ornR, ornG, ornB);
-}
-
 ::Color importOOXColor(const AttributeList& rAttribs, const ThemeBuffer& rThemeBuffer, const GraphicHelper& rGraphicHelper)
 {
-    sal_uInt32 nColor = 0;
+    ::Color nColor;
     if( rAttribs.hasAttribute( XML_rgb ) )
-        nColor = rAttribs.getUnsignedHex( XML_rgb, UNSIGNED_RGB_TRANSPARENT );
+        nColor = ::Color(rAttribs.getUnsignedHex( XML_rgb, UNSIGNED_RGB_TRANSPARENT ));
     else if( rAttribs.hasAttribute( XML_theme ) )
     {
         sal_uInt32 nThemeIndex = rAttribs.getUnsigned( XML_theme, 0 );
@@ -212,7 +201,7 @@ namespace {
         aColor = aDMColor.getColor(rGraphicHelper);
     }
     else
-        aColor = ARgbToARgbComponents( nColor );
+        aColor = nColor.GetRGBColor();
 
     return aColor;
 }

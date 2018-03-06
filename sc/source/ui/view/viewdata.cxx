@@ -3325,7 +3325,7 @@ void ScViewData::WriteUserDataSequence(uno::Sequence <beans::PropertyValue>& rSe
             pSettings[SC_GRIDCOLOR].Name = SC_UNO_GRIDCOLOR;
             OUString aColorName;
             Color aColor = pOptions->GetGridColor(&aColorName);
-            pSettings[SC_GRIDCOLOR].Value <<= static_cast<sal_Int64>(aColor.GetColor());
+            pSettings[SC_GRIDCOLOR].Value <<= aColor;
             pSettings[SC_SHOWPAGEBR].Name = SC_UNO_SHOWPAGEBR;
             pSettings[SC_SHOWPAGEBR].Value <<= pOptions->GetOption( VOPT_PAGEBREAKS );
             pSettings[SC_COLROWHDR].Name = SC_UNO_COLROWHDR;
@@ -3454,10 +3454,9 @@ void ScViewData::ReadUserDataSequence(const uno::Sequence <beans::PropertyValue>
             pOptions->SetOption(VOPT_GRID, ScUnoHelpFunctions::GetBoolFromAny( rSettings[i].Value ) );
         else if ( sName == SC_UNO_GRIDCOLOR )
         {
-            sal_Int64 nColor = 0;
-            if (rSettings[i].Value >>= nColor)
+            Color aColor;
+            if (rSettings[i].Value >>= aColor)
             {
-                Color aColor(static_cast<sal_uInt32>(nColor));
                 // #i47435# set automatic grid color explicitly
                 if( aColor == COL_AUTO )
                     aColor = SC_STD_GRIDCOLOR;

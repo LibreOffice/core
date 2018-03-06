@@ -196,7 +196,7 @@ std::set<Color> ScDocument::GetDocColors()
             if (pItem == nullptr)
                 continue;
             Color aColor( pItem->GetValue() );
-            if (COL_AUTO != aColor.GetColor())
+            if (COL_AUTO != aColor)
                 aDocColors.insert(aColor);
         }
     }

@@ -2071,7 +2071,7 @@ void ScFormatShell::GetAttrState( SfxItemSet& rSet )
             case SID_FRAME_LINECOLOR:
             {
                 // handled together because both need the cell border information for decisions
-                Color aCol = 0;
+                Color aCol;
                 editeng::SvxBorderLine aLine(nullptr,0,SvxBorderLineStyle::SOLID);
                 bool bCol = false;
                 bool bColDisable = false, bStyleDisable = false;

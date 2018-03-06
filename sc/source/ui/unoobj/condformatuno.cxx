@@ -882,7 +882,7 @@ void setColorScaleEntry(ScColorScaleEntry* pEntry, uno::Reference<sheet::XColorS
         throw lang::IllegalArgumentException();
 
     pEntry->SetType(eType);
-    pEntry->SetColor(xEntry->getColor());
+    pEntry->SetColor(Color(xEntry->getColor()));
     switch (eType)
     {
         case COLORSCALE_FORMULA:
@@ -1011,7 +1011,7 @@ ScColorScaleEntry* ScColorScaleEntryObj::getCoreObject()
 util::Color ScColorScaleEntryObj::getColor()
 {
     Color aColor = getCoreObject()->GetColor();
-    return aColor.GetColor();
+    return sal_Int32(aColor);
 }
 
 void ScColorScaleEntryObj::setColor(util::Color aColor)
@@ -1318,22 +1318,19 @@ uno::Any SAL_CALL ScDataBarFormatObj::getPropertyValue( const OUString& aPropert
         break;
         case DataBar_Color:
         {
-            sal_Int32 nColor = getCoreObject()->GetDataBarData()->maPositiveColor.GetColor();
-            aAny <<= nColor;
+            aAny <<= getCoreObject()->GetDataBarData()->maPositiveColor;
         }
         break;
         case AxisColor:
         {
-            sal_Int32 nAxisColor = getCoreObject()->GetDataBarData()->maAxisColor.GetColor();
-            aAny <<= nAxisColor;
+            aAny <<= getCoreObject()->GetDataBarData()->maAxisColor;
         }
         break;
         case NegativeColor:
         {
             if (getCoreObject()->GetDataBarData()->mbNeg && getCoreObject()->GetDataBarData()->mpNegativeColor)
             {
-                sal_Int32 nNegativeColor = getCoreObject()->GetDataBarData()->mpNegativeColor->GetColor();
-                aAny <<= nNegativeColor;
+                aAny <<= *getCoreObject()->GetDataBarData()->mpNegativeColor;
             }
         }
         break;
