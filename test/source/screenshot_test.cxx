@@ -70,18 +70,18 @@ void ScreenshotTest::implSaveScreenshot(const Bitmap& rScreenshot, const OString
     aDirname = m_aScreenshotDirectory + "/" + aDirname +
                ( (maCurrentLanguage == "en-US") ? OUString() : "/" + maCurrentLanguage );
 
-    auto const path = m_directories.getURLFromWorkdir(aDirname);
-    auto const e = osl::Directory::createPath(path);
+    auto const dirUrl = m_directories.getURLFromWorkdir(aDirname);
+    auto const e = osl::Directory::createPath(dirUrl);
     if (e != osl::FileBase::E_EXIST) {
         CPPUNIT_ASSERT_EQUAL_MESSAGE(
             OUStringToOString(
-                "Failed to create " + path, RTL_TEXTENCODING_UTF8).getStr(),
+                "Failed to create " + dirUrl, RTL_TEXTENCODING_UTF8).getStr(),
             osl::FileBase::E_None, e);
     }
 
-    OUString aFullPath = m_directories.getPathFromWorkdir("/" + aDirname + "/" + aBasename + ".png");
-    SvFileStream aNew(aFullPath, StreamMode::WRITE | StreamMode::TRUNC);
-    CPPUNIT_ASSERT_MESSAGE(OUStringToOString("Failed to open <" + aFullPath + ">: " + OUString::number(sal_uInt32(aNew.GetErrorCode())), RTL_TEXTENCODING_UTF8).getStr(), aNew.IsOpen());
+    auto const pngUrl = OUString(dirUrl + "/" + aBasename + ".png");
+    SvFileStream aNew(pngUrl, StreamMode::WRITE | StreamMode::TRUNC);
+    CPPUNIT_ASSERT_MESSAGE(OUStringToOString("Failed to open <" + pngUrl + ">: " + OUString::number(sal_uInt32(aNew.GetErrorCode())), RTL_TEXTENCODING_UTF8).getStr(), aNew.IsOpen());
 
     vcl::PNGWriter aPNGWriter(rScreenshot);
     aPNGWriter.Write(aNew);
