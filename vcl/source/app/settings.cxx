@@ -2159,7 +2159,7 @@ static void setupPersonaHeaderFooter( WhichPersona eWhich, OUString& rHeaderFoot
         if ( nIndex > 0 )
         {
             OUString aColor = aPersonaSettings.getToken( 0, ';', ++nIndex );
-            rMenuBarTextColor = Color( aColor.toUInt64( 16 ) );
+            rMenuBarTextColor = Color( aColor.toUInt32( 16 ) );
         }
     }
 

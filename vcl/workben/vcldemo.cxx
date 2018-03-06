@@ -409,7 +409,7 @@ public:
 
             std::vector<OUString> aFontNames;
 
-            Color const nCols[] = {
+            static Color const nCols[] = {
                 COL_BLACK, COL_BLUE, COL_GREEN, COL_CYAN, COL_RED, COL_MAGENTA,
                 COL_BROWN, COL_GRAY, COL_LIGHTGRAY, COL_LIGHTBLUE, COL_LIGHTGREEN,
                 COL_LIGHTCYAN, COL_LIGHTRED, COL_LIGHTMAGENTA, COL_YELLOW, COL_WHITE
@@ -551,7 +551,7 @@ public:
             {
                 // Legend
                 vcl::Font aIndexFont("sans", Size(0,20));
-                aIndexFont.SetColor(COL_BLACK);
+                aIndexFont.SetColor( COL_BLACK);
                 tools::Rectangle aTextRect;
                 rDev.SetFont(aIndexFont);
                 OUString aText = OUString::number(i) + ".";
@@ -777,13 +777,13 @@ public:
             if (rCtx.meStyle == RENDER_EXPANDED)
             {
                 std::vector<tools::Rectangle> aRegions(DemoRenderer::partition(rCtx,5, 4));
-                Color nStartCols[] = {
+                static Color const nStartCols[] = {
                     COL_RED, COL_RED, COL_RED, COL_GREEN, COL_GREEN,
                     COL_BLUE, COL_BLUE, COL_BLUE, COL_CYAN, COL_CYAN,
                     COL_BLACK, COL_LIGHTGRAY, COL_WHITE, COL_BLUE, COL_CYAN,
                     COL_WHITE, COL_WHITE, COL_WHITE, COL_BLACK, COL_BLACK
                 };
-                Color nEndCols[] = {
+                static Color const nEndCols[] = {
                     COL_WHITE, COL_WHITE, COL_WHITE, COL_BLACK, COL_BLACK,
                     COL_RED, COL_RED, COL_RED, COL_GREEN, COL_GREEN,
                     COL_GRAY, COL_GRAY, COL_LIGHTGRAY, COL_LIGHTBLUE, COL_LIGHTCYAN,
@@ -2117,7 +2117,7 @@ namespace {
         {
             vcl::Font aFont(aFontName, Size(0,96));
 #if 0
-            aFont.SetColor(COL_BLACK);
+            aFont.SetCOL_BLACK);
             xDevice->SetFont(aFont);
             xDevice->Erase();
 
