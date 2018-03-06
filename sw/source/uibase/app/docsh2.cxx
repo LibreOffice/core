@@ -1218,7 +1218,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                     if ( pArgs->GetItemState( SID_WATERMARK_TRANSPARENCY, false, &pItem ) == SfxItemState::SET )
                         aItem.SetTransparency( static_cast<const SfxInt16Item*>( pItem )->GetValue() );
                     if ( pArgs->GetItemState( SID_WATERMARK_COLOR, false, &pItem ) == SfxItemState::SET )
-                        aItem.SetColor( static_cast<const SfxUInt32Item*>( pItem )->GetValue() );
+                        aItem.SetColor( Color(static_cast<const SfxUInt32Item*>( pItem )->GetValue()) );
 
                     pSh->SetWatermark( aItem );
                 }

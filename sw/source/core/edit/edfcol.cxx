@@ -1402,7 +1402,7 @@ SfxWatermarkItem SwEditShell::GetWatermark()
             SfxWatermarkItem aItem;
             uno::Reference<text::XTextRange> xTextRange(xWatermark, uno::UNO_QUERY);
             uno::Reference<beans::XPropertySet> xPropertySet(xWatermark, uno::UNO_QUERY);
-            sal_uInt32 nColor;
+            Color nColor;
             sal_Int16 nTransparency;
             OUString aFont;
             drawing::HomogenMatrix3 aMatrix;

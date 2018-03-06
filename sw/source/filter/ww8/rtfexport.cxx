@@ -423,7 +423,7 @@ void RtfExport::WriteMainText()
         std::vector<std::pair<OString, OString>> aProperties;
         aProperties.push_back(std::make_pair<OString, OString>("shapeType", "1"));
         aProperties.push_back(std::make_pair<OString, OString>(
-            "fillColor", OString::number(msfilter::util::BGRToRGB(oBrush->GetColor().GetColor()))));
+            "fillColor", OString::number(sal_uInt32(oBrush->GetColor()))));
         for (std::pair<OString, OString>& rPair : aProperties)
         {
             Strm().WriteCharPtr("{" OOO_STRING_SVTOOLS_RTF_SP "{");
@@ -1287,7 +1287,7 @@ void RtfExport::OutColorTable()
     for (std::size_t n = 0; n < m_aColTable.size(); ++n)
     {
         const Color& rCol = m_aColTable[n];
-        if (n || COL_AUTO != rCol.GetColor())
+        if (n || COL_AUTO != rCol)
         {
             Strm().WriteCharPtr(OOO_STRING_SVTOOLS_RTF_RED);
             OutULong(rCol.GetRed()).WriteCharPtr(OOO_STRING_SVTOOLS_RTF_GREEN);

@@ -191,10 +191,10 @@ const SvxBrushItem *SwWriteTable::GetLineBrush( const SwTableBox *pBox,
 void SwWriteTable::MergeBorders( const SvxBorderLine* pBorderLine,
                                    bool bTable )
 {
-    if( sal_uInt32(-1) == m_nBorderColor )
+    if( Color(-1) == m_nBorderColor )
     {
         if( !pBorderLine->GetColor().IsRGBEqual( COL_GRAY ) )
-            m_nBorderColor = pBorderLine->GetColor().GetColor();
+            m_nBorderColor = pBorderLine->GetColor();
     }
 
     if( !m_bCollectBorderWidth )

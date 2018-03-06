@@ -254,7 +254,7 @@ Color SwViewShellImp::GetRetoucheColor() const
     if ( rSh.GetWin() )
     {
         if ( rSh.GetViewOptions()->getBrowseMode() &&
-             COL_TRANSPARENT != rSh.GetViewOptions()->GetRetoucheColor().GetColor() )
+             COL_TRANSPARENT != rSh.GetViewOptions()->GetRetoucheColor() )
             aRet = rSh.GetViewOptions()->GetRetoucheColor();
         else if(rSh.GetViewOptions()->IsPagePreview()  &&
                     !SW_MOD()->GetAccessibilityOptions().GetIsForPagePreviews())

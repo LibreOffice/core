@@ -79,7 +79,7 @@ bool SwPageFootnoteInfoItem::QueryValue( Any& rVal, sal_uInt8 nMemberId ) const
     {
         case MID_FTN_HEIGHT        :     rVal <<= static_cast<sal_Int32>(convertTwipToMm100(aFootnoteInfo.GetHeight()));break;
         case MID_LINE_WEIGHT       :     rVal <<= static_cast<sal_Int16>(convertTwipToMm100(aFootnoteInfo.GetLineWidth()));break;
-        case MID_LINE_COLOR        :     rVal <<= static_cast<sal_Int32>(aFootnoteInfo.GetLineColor().GetColor());break;
+        case MID_LINE_COLOR        :     rVal <<= aFootnoteInfo.GetLineColor();break;
         case MID_LINE_RELWIDTH     :
         {
             Fraction aTmp( 100, 1 );
@@ -111,12 +111,13 @@ bool SwPageFootnoteInfoItem::QueryValue( Any& rVal, sal_uInt8 nMemberId ) const
 bool SwPageFootnoteInfoItem::PutValue(const Any& rVal, sal_uInt8 nMemberId)
 {
     sal_Int32 nSet32 = 0;
+    Color aColor;
     bool bRet = true;
     switch(nMemberId  & ~CONVERT_TWIPS)
     {
         case MID_LINE_COLOR        :
-            rVal >>= nSet32;
-            aFootnoteInfo.SetLineColor(nSet32);
+            rVal >>= aColor;
+            aFootnoteInfo.SetLineColor(aColor);
         break;
         case MID_FTN_HEIGHT:
         case MID_LINE_TEXT_DIST    :

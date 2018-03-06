@@ -2638,7 +2638,7 @@ void WW8AttributeOutput::TableBackgrounds( ww8::WW8TableNodeInfoInner::Pointer_t
             if ( aColor == COL_AUTO )
                 aSHD.setCvBack( 0xFF000000 );
             else
-                aSHD.setCvBack( wwUtility::RGBToBGR( aColor.GetColor() ) );
+                aSHD.setCvBack( wwUtility::RGBToBGR( aColor ) );
 
             aSHD.Write( m_rWW8Export );
         }

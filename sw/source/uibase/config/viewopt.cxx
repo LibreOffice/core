@@ -146,7 +146,7 @@ void SwViewOption::PaintPostIts( OutputDevice *pOut, const SwRect &rRect, bool b
         const Point aTopLeft(  rRect.Left()  + nPix, rRect.Top()    + nPix );
         const Point aBotRight( rRect.Right() - nPix, rRect.Bottom() - nPix );
         const SwRect aRect( aTopLeft, aBotRight );
-        DrawRect( pOut, aRect, m_aScriptIndicatorColor.GetColor() );
+        DrawRect( pOut, aRect, m_aScriptIndicatorColor );
     pOut->SetLineColor( aOldLineColor );
     }
 }
