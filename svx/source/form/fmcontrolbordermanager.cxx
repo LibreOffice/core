@@ -150,7 +150,7 @@ namespace svxform
     }
 
 
-    sal_Int32 ControlBorderManager::getControlColorByStatus( ControlStatus _nStatus )
+    Color ControlBorderManager::getControlColorByStatus( ControlStatus _nStatus )
     {
         // "invalid" is ranked highest
         if ( _nStatus & ControlStatus::Invalid )
@@ -165,7 +165,7 @@ namespace svxform
             return m_nMouseHoveColor;
 
         OSL_FAIL( "ControlBorderManager::getControlColorByStatus: invalid status!" );
-        return 0x00000000;
+        return Color(0);
     }
 
 
@@ -282,7 +282,7 @@ namespace svxform
     }
 
 
-    void ControlBorderManager::setStatusColor( ControlStatus _nStatus, sal_Int32 _nColor )
+    void ControlBorderManager::setStatusColor( ControlStatus _nStatus, Color _nColor )
     {
         switch ( _nStatus )
         {

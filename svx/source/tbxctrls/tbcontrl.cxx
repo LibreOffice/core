@@ -1553,7 +1553,7 @@ void SvxColorWindow::statusChanged( const css::frame::FeatureStateEvent& rEvent 
         {
             sal_Int32 nValue;
             if (rEvent.State >>= nValue)
-                aColor = nValue;
+                aColor = Color(nValue);
         }
 
         SelectEntry(aColor);
@@ -1631,9 +1631,8 @@ bool BorderColorStatus::statusChanged( const css::frame::FeatureStateEvent& rEve
 
     if ( rEvent.FeatureURL.Complete == ".uno:FrameLineColor" )
     {
-        sal_Int32 nValue;
-        if ( rEvent.IsEnabled && ( rEvent.State >>= nValue ) )
-            aColor = nValue;
+        if ( rEvent.IsEnabled )
+            rEvent.State >>= aColor;
 
         maColor = aColor;
         return true;
@@ -1642,7 +1641,7 @@ bool BorderColorStatus::statusChanged( const css::frame::FeatureStateEvent& rEve
     {
         css::table::BorderLine2 aTable;
         if ( rEvent.IsEnabled && ( rEvent.State >>= aTable ) )
-            aColor = aTable.Color;
+            aColor = Color(aTable.Color);
 
         if ( rEvent.FeatureURL.Complete == ".uno:BorderTLBR" )
         {
@@ -2902,9 +2901,7 @@ void SvxColorToolBoxControl::statusChanged( const css::frame::FeatureStateEvent&
         }
         else if ( rEvent.IsEnabled )
         {
-            sal_Int32 nValue;
-            if ( rEvent.State >>= nValue )
-                aColor = nValue;
+            rEvent.State >>= aColor;
         }
         m_xBtnUpdater->Update( aColor );
         if (m_xPaletteManager)
@@ -2940,7 +2937,7 @@ void SvxColorToolBoxControl::execute(sal_Int16 /*nSelectModifier*/)
     Color aColor = m_xPaletteManager->GetLastColor();
 
     auto aArgs( comphelper::InitPropertySequence( {
-        { m_aCommandURL.copy(5), css::uno::makeAny( m_xPaletteManager->GetLastColor().GetColor() ) }
+        { m_aCommandURL.copy(5), css::uno::makeAny( m_xPaletteManager->GetLastColor() ) }
     } ) );
     dispatchCommand( aCommand, aArgs );
 

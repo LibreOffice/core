@@ -135,7 +135,7 @@ SdrPageView::SdrPageView(SdrPage* pPage1, SdrView& rNewView)
 :   mrView(rNewView),
     // col_auto color lets the view takes the default SvxColorConfig entry
     maDocumentColor( COL_AUTO ),
-    maBackgroundColor(COL_AUTO ), // #i48367# also react on autocolor
+    maBackgroundColor( COL_AUTO ), // #i48367# also react on autocolor
     mpPreparedPageWindow(nullptr) // #i72752#
 {
     mpPage = pPage1;

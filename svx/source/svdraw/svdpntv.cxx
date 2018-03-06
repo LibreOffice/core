@@ -595,7 +595,7 @@ void SdrPaintView::CompleteRedraw(OutputDevice* pOut, const vcl::Region& rReg, s
 
                     //while(aOptimizedRepaintRegion.GetEnumRects(aRegionHandle, aRegionRectangle))
                     //{
-                    //  pWindow->SetLineColor(COL_LIGHTGREEN);
+                    //  pWindow->SetLineCOL_LIGHTGREEN);
                     //  pWindow->SetFillColor();
                     //  pWindow->DrawRect(aRegionRectangle);
                     //}

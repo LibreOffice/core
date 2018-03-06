@@ -114,7 +114,7 @@ void SAL_CALL SvxUnoColorTable::removeByName( const OUString& Name )
 // XNameReplace
 void SAL_CALL SvxUnoColorTable::replaceByName( const OUString& aName, const uno::Any& aElement )
 {
-    sal_Int32 nColor = 0;
+    Color nColor;
     if( !(aElement >>= nColor) )
         throw lang::IllegalArgumentException();
 
@@ -122,7 +122,7 @@ void SAL_CALL SvxUnoColorTable::replaceByName( const OUString& aName, const uno:
     if( nIndex == -1  )
         throw container::NoSuchElementException();
 
-    pList->Replace(nIndex, o3tl::make_unique<XColorEntry>(static_cast<Color>(nColor), aName ));
+    pList->Replace(nIndex, o3tl::make_unique<XColorEntry>(nColor, aName ));
 }
 
 // XNameAccess

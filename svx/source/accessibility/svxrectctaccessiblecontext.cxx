@@ -398,7 +398,7 @@ sal_Int32 SvxRectCtlAccessibleContext::getForeground(  )
     ::osl::MutexGuard   aGuard( m_aMutex );
     ThrowExceptionIfNotAlive();
 
-    return mpRepr->GetControlForeground().GetColor();
+    return sal_Int32(mpRepr->GetControlForeground());
 }
 sal_Int32 SvxRectCtlAccessibleContext::getBackground(  )
 {
@@ -406,7 +406,7 @@ sal_Int32 SvxRectCtlAccessibleContext::getBackground(  )
     ::osl::MutexGuard   aGuard( m_aMutex );
     ThrowExceptionIfNotAlive();
 
-    return mpRepr->GetControlBackground().GetColor();
+    return sal_Int32(mpRepr->GetControlBackground());
 }
 
 // XServiceInfo
@@ -708,7 +708,7 @@ sal_Int32 SvxRectCtlChildAccessibleContext::getForeground(  )
     ::SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard   aGuard( maMutex );
     ThrowExceptionIfNotAlive();
-    return mrParentWindow.GetControlForeground().GetColor();
+    return sal_Int32(mrParentWindow.GetControlForeground());
 }
 sal_Int32 SvxRectCtlChildAccessibleContext::getBackground(  )
 {
@@ -716,7 +716,7 @@ sal_Int32 SvxRectCtlChildAccessibleContext::getBackground(  )
     ::osl::MutexGuard   aGuard( maMutex );
 
     ThrowExceptionIfNotAlive();
-    return mrParentWindow.GetControlBackground().GetColor();
+    return sal_Int32(mrParentWindow.GetControlBackground());
 }
 
 // XAccessibleContext

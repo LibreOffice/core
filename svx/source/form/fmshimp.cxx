@@ -2259,7 +2259,7 @@ IMPL_LINK(FmXFormShell, OnFoundData_Lock, FmFoundRecordInformation&, rfriWhere, 
         Reference< XPropertySet> xModelSet(xControlModel, UNO_QUERY);
         DBG_ASSERT(xModelSet.is(), "FmXFormShell::OnFoundData : invalid control model (no property set) !");
         xModelSet->setPropertyValue( FM_PROP_ALWAYSSHOWCURSOR, makeAny( true ) );
-        xModelSet->setPropertyValue( FM_PROP_CURSORCOLOR, makeAny( sal_Int32( COL_LIGHTRED ) ) );
+        xModelSet->setPropertyValue( FM_PROP_CURSORCOLOR, makeAny( COL_LIGHTRED ) );
         m_xLastGridFound = xControlModel;
 
         if ( xGrid.is() )

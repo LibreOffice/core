@@ -685,7 +685,7 @@ sal_Int32 SAL_CALL AccessibleShape::getForeground()
 sal_Int32 SAL_CALL AccessibleShape::getBackground()
 {
     ThrowIfDisposed ();
-    sal_Int32 nColor (0);
+    Color nColor;
 
     try
     {
@@ -708,14 +708,14 @@ sal_Int32 SAL_CALL AccessibleShape::getBackground()
                 nTrans = short(256 - nTrans / 100. * 256);
                 crBk.SetTransparency(sal_uInt8(nTrans));
             }
-            nColor = crBk.GetColor();
+            nColor = crBk;
         }
     }
     catch (const css::beans::UnknownPropertyException &)
     {
         // Ignore exception and return default color.
     }
-    return nColor;
+    return sal_Int32(nColor);
 }
 
 // XAccessibleEventBroadcaster

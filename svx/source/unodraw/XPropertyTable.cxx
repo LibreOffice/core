@@ -257,7 +257,7 @@ uno::Reference< uno::XInterface > SvxUnoXColorTable_createInstance( XPropertyLis
 // SvxUnoXPropertyTable
 uno::Any SvxUnoXColorTable::getAny( const XPropertyEntry* pEntry ) const throw()
 {
-    return uno::Any( static_cast<sal_Int32>(static_cast<const XColorEntry*>(pEntry)->GetColor().GetColor()) );
+    return uno::Any( static_cast<sal_Int32>(static_cast<const XColorEntry*>(pEntry)->GetColor()) );
 }
 
 std::unique_ptr<XPropertyEntry> SvxUnoXColorTable::createEntry(const OUString& rName, const uno::Any& rAny) const
@@ -463,7 +463,7 @@ uno::Any SvxUnoXHatchTable::getAny( const XPropertyEntry* pEntry ) const throw()
     drawing::Hatch aUnoHatch;
 
     aUnoHatch.Style = aHatch.GetHatchStyle();
-    aUnoHatch.Color = aHatch.GetColor().GetColor();
+    aUnoHatch.Color = sal_Int32(aHatch.GetColor());
     aUnoHatch.Distance = aHatch.GetDistance();
     aUnoHatch.Angle = aHatch.GetAngle();
 
@@ -478,7 +478,7 @@ std::unique_ptr<XPropertyEntry> SvxUnoXHatchTable::createEntry(const OUString& r
 
     XHatch aXHatch;
     aXHatch.SetHatchStyle( aUnoHatch.Style );
-    aXHatch.SetColor( aUnoHatch.Color );
+    aXHatch.SetColor( Color(aUnoHatch.Color) );
     aXHatch.SetDistance( aUnoHatch.Distance );
     aXHatch.SetAngle( aUnoHatch.Angle );
 
@@ -534,8 +534,8 @@ uno::Any SvxUnoXGradientTable::getAny( const XPropertyEntry* pEntry ) const thro
     awt::Gradient aGradient;
 
     aGradient.Style = aXGradient.GetGradientStyle();
-    aGradient.StartColor = static_cast<sal_Int32>(aXGradient.GetStartColor().GetColor());
-    aGradient.EndColor = static_cast<sal_Int32>(aXGradient.GetEndColor().GetColor());
+    aGradient.StartColor = static_cast<sal_Int32>(aXGradient.GetStartColor());
+    aGradient.EndColor = static_cast<sal_Int32>(aXGradient.GetEndColor());
     aGradient.Angle = static_cast<short>(aXGradient.GetAngle());
     aGradient.Border = aXGradient.GetBorder();
     aGradient.XOffset = aXGradient.GetXOffset();
@@ -556,8 +556,8 @@ std::unique_ptr<XPropertyEntry> SvxUnoXGradientTable::createEntry(const OUString
     XGradient aXGradient;
 
     aXGradient.SetGradientStyle( aGradient.Style );
-    aXGradient.SetStartColor( aGradient.StartColor );
-    aXGradient.SetEndColor( aGradient.EndColor );
+    aXGradient.SetStartColor( Color(aGradient.StartColor) );
+    aXGradient.SetEndColor( Color(aGradient.EndColor) );
     aXGradient.SetAngle( aGradient.Angle );
     aXGradient.SetBorder( aGradient.Border );
     aXGradient.SetXOffset( aGradient.XOffset );

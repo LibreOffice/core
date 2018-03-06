@@ -93,7 +93,7 @@ namespace svx
 
         mbWasHiContrastMode = mpTbx->GetSettings().GetStyleSettings().GetHighContrastMode();
 
-        if ((COL_TRANSPARENT != aColor.GetColor()) && (maBmpSize.Width() == maBmpSize.Height()))
+        if ((COL_TRANSPARENT != aColor) && (maBmpSize.Width() == maBmpSize.Height()))
             pVirDev->SetLineColor(aColor);
         else if( mpTbx->GetBackground().GetColor().IsDark() )
             pVirDev->SetLineColor(COL_WHITE);

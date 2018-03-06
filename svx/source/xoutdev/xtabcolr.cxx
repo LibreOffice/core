@@ -99,7 +99,7 @@ bool XColorList::Create()
         SvxResId(RID_SVXSTR_COLOR_TURQUOISE),
         SvxResId(RID_SVXSTR_COLOR_GREEN),
         SvxResId(RID_SVXSTR_COLOR_YELLOWGREEN) };
-    const sal_uInt32 aStdCol[nNumColorsInGroup * nNumGroups] = {
+    static const sal_uInt32 aStdCol[nNumColorsInGroup * nNumGroups] = {
         0xffff99, 0xff6600, 0xff3333, 0xff00cc, 0xff33ff, 0x9900ff, 0x6666ff, 0x00ccff, 0x66ffff, 0x33ff99, 0x99ff66, 0xccff00,
         0xffff66, 0xffcc00, 0xff9999, 0xff66cc, 0xff99ff, 0xcc66ff, 0x9999ff, 0x9999ff, 0x99ffff, 0x66ff99, 0x99ff99, 0xccff66,
         0xffff00, 0xff9900, 0xff6666, 0xff3399, 0xff66ff, 0x9933ff, 0x3333ff, 0x3399ff, 0x00ffff, 0x00ff66, 0x66ff66, 0x99ff33,
@@ -121,7 +121,7 @@ bool XColorList::Create()
 
         for(b = 0; b < nNumColorsInGroup; b++)
         {
-            Insert( o3tl::make_unique<XColorEntry>( aStdCol[nOffset + b], aStrCol[b] + aSuffix ) );
+            Insert( o3tl::make_unique<XColorEntry>( Color(aStdCol[nOffset + b]), aStrCol[b] + aSuffix ) );
         }
     }
 

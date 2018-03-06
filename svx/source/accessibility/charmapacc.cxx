@@ -760,11 +760,11 @@ sal_Int32 SAL_CALL SvxShowCharSetVirtualAcc::getForeground(  )
 {
     OExternalLockGuard aGuard( this );
 
-    sal_Int32 nColor = 0;
+    Color nColor;
     if ( mpParent )
     {
         if ( mpParent->IsControlForeground() )
-            nColor = mpParent->GetControlForeground().GetColor();
+            nColor = mpParent->GetControlForeground();
         else
         {
             vcl::Font aFont;
@@ -772,26 +772,26 @@ sal_Int32 SAL_CALL SvxShowCharSetVirtualAcc::getForeground(  )
                 aFont = mpParent->GetControlFont();
             else
                 aFont = mpParent->GetFont();
-            nColor = aFont.GetColor().GetColor();
+            nColor = aFont.GetColor();
         }
     }
 
-    return nColor;
+    return sal_Int32(nColor);
 }
 
 sal_Int32 SAL_CALL SvxShowCharSetVirtualAcc::getBackground(  )
 {
     OExternalLockGuard aGuard( this  );
-    sal_Int32 nColor = 0;
+    Color nColor;
     if ( mpParent )
     {
         if ( mpParent->IsControlBackground() )
-            nColor = mpParent->GetControlBackground().GetColor();
+            nColor = mpParent->GetControlBackground();
         else
-            nColor = mpParent->GetBackground().GetColor().GetColor();
+            nColor = mpParent->GetBackground().GetColor();
     }
 
-    return nColor;
+    return sal_Int32(nColor);
 }
 
 sal_Int32 SAL_CALL SvxShowCharSetAcc::getForeground(  )

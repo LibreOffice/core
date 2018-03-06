@@ -26,6 +26,7 @@
 #include <com/sun/star/awt/XVclWindowPeer.hpp>
 #include <comphelper/stl_types.hxx>
 #include <o3tl/typed_flags_set.hxx>
+#include <tools/color.hxx>
 
 #include <set>
 
@@ -51,11 +52,10 @@ namespace svxform
     struct BorderDescriptor
     {
         sal_Int16   nBorderType;
-        sal_Int32   nBorderColor;
+        Color       nBorderColor;
 
         BorderDescriptor()
             :nBorderType( css::awt::VisualEffect::FLAT )
-            ,nBorderColor( 0x00000000 )
         {
         }
     };
@@ -63,15 +63,14 @@ namespace svxform
     struct UnderlineDescriptor
     {
         sal_Int16 nUnderlineType;
-        sal_Int32 nUnderlineColor;
+        Color     nUnderlineColor;
 
         UnderlineDescriptor()
             :nUnderlineType( css::awt::FontUnderline::NONE )
-            ,nUnderlineColor( 0x00000000 )
         {
         }
 
-        UnderlineDescriptor( sal_Int16 _nUnderlineType, sal_Int32 _nUnderlineColor )
+        UnderlineDescriptor( sal_Int16 _nUnderlineType, Color _nUnderlineColor )
             :nUnderlineType( _nUnderlineType )
             ,nUnderlineColor( _nUnderlineColor )
         {
@@ -124,9 +123,9 @@ namespace svxform
 
 
         // attributes
-        sal_Int32   m_nFocusColor;
-        sal_Int32   m_nMouseHoveColor;
-        sal_Int32   m_nInvalidColor;
+        Color       m_nFocusColor;
+        Color       m_nMouseHoveColor;
+        Color       m_nInvalidColor;
         bool        m_bDynamicBorderColors;
 
     public:
@@ -155,7 +154,7 @@ namespace svxform
             @param _nColor
                 the color to apply for the given status
         */
-        void    setStatusColor( ControlStatus _nStatus, sal_Int32 _nColor );
+        void    setStatusColor( ControlStatus _nStatus, Color _nColor );
 
         /** restores all colors of all controls where we possibly changed them
         */
@@ -195,7 +194,7 @@ namespace svxform
             @param _eStatus
                 the status of the control. Must not be <member>ControlStatus::none</member>
         */
-        sal_Int32       getControlColorByStatus( ControlStatus _eStatus );
+        Color       getControlColorByStatus( ControlStatus _eStatus );
 
         /** sets the border color for a given control, depending on its status
             @param _rxControl

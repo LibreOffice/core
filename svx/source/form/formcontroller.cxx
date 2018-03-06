@@ -1907,7 +1907,7 @@ void FormController::setModel(const Reference< XTabControllerModel > & Model)
                 else
                     m_aControlBorderManager.disableDynamicBorderColor();
 
-                sal_Int32 nColor = 0;
+                Color nColor;
                 if ( xModelProps->getPropertyValue( FM_PROP_CONTROL_BORDER_COLOR_FOCUS ) >>= nColor )
                     m_aControlBorderManager.setStatusColor( ControlStatus::Focused, nColor );
                 if ( xModelProps->getPropertyValue( FM_PROP_CONTROL_BORDER_COLOR_MOUSE ) >>= nColor )
