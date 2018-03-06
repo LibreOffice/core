@@ -63,7 +63,7 @@ private:
     ::std::set< OUString >      maURLSet;
 
     std::unordered_map<OUString, css::uno::Reference<css::graphic::XGraphic>> maGraphicObjects;
-    std::unordered_map<Graphic, OUString> maExportGraphics;
+    std::unordered_map<Graphic, std::pair<OUString, OUString>> maExportGraphics;
 
     SvXMLGraphicHelperMode      meCreateMode;
     OUString                    maOutputMimeType;
