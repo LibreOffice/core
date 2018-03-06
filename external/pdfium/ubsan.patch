@@ -1,14 +1,3 @@
---- core/fxcodec/lbmp/fx_bmp.h
-+++ core/fxcodec/lbmp/fx_bmp.h
-@@ -126,7 +126,7 @@ class BMPDecompressor {
- class CBmpContext : public CCodec_BmpModule::Context {
-  public:
-   CBmpContext(CCodec_BmpModule* pModule, CCodec_BmpModule::Delegate* pDelegate);
--  ~CBmpContext() override;
-+  ~CBmpContext() override {}
- 
-   BMPDecompressor m_Bmp;
-   UnownedPtr<CCodec_BmpModule> const m_pModule;
 --- core/fxcrt/string_data_template.h
 +++ core/fxcrt/string_data_template.h
 @@ -78,7 +78,8 @@
