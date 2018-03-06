@@ -800,12 +800,19 @@ bool ScInterpreter::JumpMatrix( short nStackLevel )
     }
     if ( !bCont )
     {   // We're done with it, throw away jump matrix, keep result.
-        // For an intermediate result of Reference use the array of references,
+        // For an intermediate result of Reference use the array of references
+        // if there are more than one reference and the current ForceArray
+        // context is not ForceArray or related, suppressed, ...,
         // else (also for a final result of Reference) use the matrix.
         // Treat the result of a jump command as final and use the matrix (see
         // tdf#115493 for why).
+        ParamClass eParamClass;
         if (!FormulaCompiler::IsOpCodeJumpCommand( pJumpMatrix->GetOpCode()) &&
+                pJumpMatrix->GetRefList().size() > 1 &&
                 ScParameterClassification::GetParameterType( pCur, SAL_MAX_UINT16) == ParamClass::Reference &&
+                (eParamClass = pCur->GetInForceArray()) != ParamClass::ForceArray &&
+                eParamClass != ParamClass::ReferenceOrForceArray &&
+                eParamClass != ParamClass::SuppressedReferenceOrForceArray &&
                 aCode.PeekNextOperator())
         {
             FormulaTokenRef xRef = new ScRefListToken(true);
