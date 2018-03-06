@@ -976,6 +976,21 @@ RegistryItem gid_Regitem_Openoffice_Writerwebdocument_1_Shell_Open_Command
     Styles = ();
 End
 
+RegistryItem gid_Regitem_WriterApplication
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Wrt_Bin;
+    Subkey = "Writer.Application\CLSID";
+    Value = "{82154421-0FBF-11d4-8313-005004526AB4}";
+    Styles = ();
+End
+
+RegistryItem gid_Regitem_Clsid__82154421_0FBF_11d4_8313_005004526AB4__Localserver32
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Wrt_Bin;
+    Subkey = "CLSID\{82154421-0FBF-11d4-8313-005004526AB4}\LocalServer32";
+    Value = "<progpath>\program\soffice.exe --nodefault --nologo";
+End
+
 // .fodt
 
 RegistryItem gid_Regitem__Fodt
