@@ -159,14 +159,11 @@ void DocumentStorageAccess::dispose()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    for (   NamedStorages::const_iterator loop = m_aExposedStorages.begin();
-            loop != m_aExposedStorages.end();
-            ++loop
-        )
+    for (auto const& exposedStorage : m_aExposedStorages)
     {
         try
         {
-            Reference< XTransactionBroadcaster > xBroadcaster( loop->second, UNO_QUERY );
+            Reference< XTransactionBroadcaster > xBroadcaster(exposedStorage.second, UNO_QUERY);
             if ( xBroadcaster.is() )
                 xBroadcaster->removeTransactionListener( this );
         }
@@ -217,15 +214,11 @@ void DocumentStorageAccess::disposeStorages()
 {
     m_bDisposingSubStorages = true;
 
-    NamedStorages::const_iterator aEnd = m_aExposedStorages.end();
-    for (   NamedStorages::iterator aIter = m_aExposedStorages.begin();
-            aIter != aEnd ;
-            ++aIter
-        )
+    for (auto & exposedStorage : m_aExposedStorages)
     {
         try
         {
-            ::comphelper::disposeComponent( aIter->second );
+            ::comphelper::disposeComponent( exposedStorage.second );
         }
         catch( const Exception& )
         {
@@ -241,12 +234,9 @@ void DocumentStorageAccess::commitStorages()
 {
     try
     {
-        for (   NamedStorages::const_iterator aIter = m_aExposedStorages.begin();
-                aIter != m_aExposedStorages.end();
-                ++aIter
-            )
+        for (auto const& exposedStorage : m_aExposedStorages)
         {
-            tools::stor::commitStorageIfWriteable( aIter->second );
+            tools::stor::commitStorageIfWriteable( exposedStorage.second );
         }
     }
     catch(const WrappedTargetException&)
@@ -502,22 +492,23 @@ namespace
     {
         bool bSomeDocHasMacros = false;
 
-        for (   ODefinitionContainer_Impl::const_iterator object = _rObjectDefinitions.begin();
-                ( object != _rObjectDefinitions.end() ) && !bSomeDocHasMacros;
-                ++object
-            )
+        for (auto const& objectDefinition : _rObjectDefinitions)
         {
-            const TContentPtr& rDefinition( object->second );
+            const TContentPtr& rDefinition( objectDefinition.second );
             const OUString& rPersistentName( rDefinition->m_aProps.sPersistentName );
 
             if ( rPersistentName.isEmpty() )
             {   // it's a logical sub folder used to organize the real objects
                 const ODefinitionContainer_Impl& rSubFoldersObjectDefinitions( dynamic_cast< const ODefinitionContainer_Impl& >( *rDefinition.get() ) );
                 bSomeDocHasMacros = lcl_hasObjectWithMacros_throw( rSubFoldersObjectDefinitions, _rxContainerStorage );
+                if (bSomeDocHasMacros)
+                    break;
                 continue;
             }
 
             bSomeDocHasMacros = ODatabaseModelImpl::objectHasMacros( _rxContainerStorage, rPersistentName );
+            if (bSomeDocHasMacros)
+                break;
         }
         return bSomeDocHasMacros;
     }
@@ -627,10 +618,9 @@ void ODatabaseModelImpl::clearConnections()
     aConnections.swap( m_aConnections );
 
     Reference< XConnection > xConn;
-    OWeakConnectionArray::const_iterator aEnd = aConnections.end();
-    for ( OWeakConnectionArray::const_iterator i = aConnections.begin(); aEnd != i; ++i )
+    for (auto const& connection : aConnections)
     {
-        xConn = *i;
+        xConn = connection;
         if ( xConn.is() )
         {
             try
@@ -666,12 +656,10 @@ void ODatabaseModelImpl::dispose()
     m_xDataSource = WeakReference<XDataSource>();
     m_xModel = WeakReference< XModel >();
 
-    std::vector<TContentPtr>::const_iterator aIter = m_aContainer.begin();
-    std::vector<TContentPtr>::const_iterator aEnd = m_aContainer.end();
-    for (;aIter != aEnd ; ++aIter)
+    for (auto const& elem : m_aContainer)
     {
-        if ( aIter->get() )
-            (*aIter)->m_pDataSource = nullptr;
+        if ( elem.get() )
+            elem->m_pDataSource = nullptr;
     }
     m_aContainer.clear();
 

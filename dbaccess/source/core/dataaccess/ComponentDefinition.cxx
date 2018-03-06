@@ -202,10 +202,8 @@ Reference< XNameAccess> OComponentDefinition::getColumns()
         const OComponentDefinition_Impl& rDefinition( getDefinition() );
         aNames.reserve( rDefinition.size() );
 
-        OComponentDefinition_Impl::const_iterator aIter = rDefinition.begin();
-        OComponentDefinition_Impl::const_iterator aEnd = rDefinition.end();
-        for ( ; aIter != aEnd; ++aIter )
-            aNames.push_back( aIter->first );
+        for (auto const& definition : rDefinition)
+            aNames.push_back(definition.first);
 
         m_xColumns = new OColumns( *this, m_aMutex, true, aNames, this, nullptr, true, false, false );
         m_xColumns->setParent( *this );

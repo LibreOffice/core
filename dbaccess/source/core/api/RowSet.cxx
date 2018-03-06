@@ -2182,10 +2182,9 @@ void ORowSet::notifyRowSetAndClonesRowDeleted( const Any& _rBookmark, sal_Int32 
     // notify ourself
     onDeletedRow( _rBookmark, _nPos );
     // notify the clones
-    connectivity::OWeakRefArray::const_iterator aEnd = m_aClones.end();
-    for (connectivity::OWeakRefArray::const_iterator i = m_aClones.begin(); aEnd != i; ++i)
+    for (auto const& clone : m_aClones)
     {
-        Reference< XUnoTunnel > xTunnel(i->get(),UNO_QUERY);
+        Reference< XUnoTunnel > xTunnel(clone.get(),UNO_QUERY);
         if(xTunnel.is())
         {
             ORowSetClone* pClone = reinterpret_cast<ORowSetClone*>(xTunnel->getSomething(ORowSetClone::getUnoTunnelImplementationId()));
