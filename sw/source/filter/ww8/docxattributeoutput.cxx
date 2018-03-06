@@ -2984,7 +2984,7 @@ static void impl_borderLine( FSHelperPtr const & pSerializer, sal_Int32 elementT
     // no need to write them.
     if( rStyleProps != nullptr && pBorderLine && !pBorderLine->isEmpty() &&
             pBorderLine->GetBorderLineStyle() == static_cast<SvxBorderLineStyle>(rStyleProps->LineStyle) &&
-            pBorderLine->GetColor() == rStyleProps->Color &&
+            pBorderLine->GetColor() == Color(rStyleProps->Color) &&
             pBorderLine->GetWidth() == convertMm100ToTwip( rStyleProps->LineWidth ) )
         return;
 

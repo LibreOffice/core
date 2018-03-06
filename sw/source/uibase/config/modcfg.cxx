@@ -308,7 +308,7 @@ void SwRevisionConfig::ImplCommit()
             case 4 : pValues[nProp] <<= lcl_ConvertAttrToCfg(aFormatAttr); break;
             case 5 : pValues[nProp] <<= aFormatAttr.m_nColor;   break;
             case 6 : pValues[nProp] <<= nMarkAlign;             break;
-            case 7 : pValues[nProp] <<= aMarkColor.GetColor();  break;
+            case 7 : pValues[nProp] <<= aMarkColor;             break;
             case 8 : pValues[nProp] <<= bShowInlineTooltip;     break;
         }
     }
@@ -356,13 +356,13 @@ void SwRevisionConfig::Load()
             switch (nProp)
             {
                 case 0 : lcl_ConvertCfgToAttr(nVal, aInsertAttr); break;
-                case 1 : aInsertAttr.m_nColor     = nVal; break;
+                case 1 : aInsertAttr.m_nColor     = Color(nVal); break;
                 case 2 : lcl_ConvertCfgToAttr(nVal, aDeletedAttr, true); break;
-                case 3 : aDeletedAttr.m_nColor    = nVal; break;
+                case 3 : aDeletedAttr.m_nColor    = Color(nVal); break;
                 case 4 : lcl_ConvertCfgToAttr(nVal, aFormatAttr); break;
-                case 5 : aFormatAttr.m_nColor     = nVal; break;
+                case 5 : aFormatAttr.m_nColor     = Color(nVal); break;
                 case 6 : nMarkAlign = sal::static_int_cast< sal_uInt16, sal_Int32>(nVal); break;
-                case 7 : aMarkColor = nVal; break;
+                case 7 : aMarkColor = Color(nVal); break;
                 case 8 : bShowInlineTooltip = *o3tl::doAccess<bool>(pValues[nProp]);
             }
         }

@@ -418,7 +418,7 @@ sal_Int32 SAL_CALL SwAccessibleCell::getBackground()
     SolarMutexGuard g;
 
     const SvxBrushItem &rBack = GetFrame()->GetAttrSet()->GetBackground();
-    sal_uInt32 crBack = rBack.GetColor().GetColor();
+    Color crBack = rBack.GetColor();
 
     if (COL_AUTO == crBack)
     {
@@ -428,11 +428,11 @@ sal_Int32 SAL_CALL SwAccessibleCell::getBackground()
             uno::Reference<XAccessibleComponent> xCompoentDoc(xAccDoc, uno::UNO_QUERY);
             if (xCompoentDoc.is())
             {
-                crBack = static_cast<sal_uInt32>(xCompoentDoc->getBackground());
+                crBack = Color(xCompoentDoc->getBackground());
             }
         }
     }
-    return crBack;
+    return sal_Int32(crBack);
 }
 
 // XAccessibleSelection

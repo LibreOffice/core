@@ -897,7 +897,7 @@ bool SvXMLExportItemMapper::QueryXMLValue(
                     else
                     {
                         ::sax::Converter::convertColor(aOut,
-                                rBrush.GetColor().GetColor());
+                                rBrush.GetColor());
                     }
                     bOk = true;
                     break;

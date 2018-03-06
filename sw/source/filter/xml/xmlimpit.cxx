@@ -374,12 +374,10 @@ bool SvXMLImportItemMapper::PutXMLValue(
                 }
                 else if( !bColorFound && aToken.startsWith("#") )
                 {
-                    sal_Int32 nColor(0);
-                    bOk = ::sax::Converter::convertColor( nColor, aToken );
+                    bOk = ::sax::Converter::convertColor( aColor, aToken );
                     if( !bOk )
                         return false;
 
-                    aColor = nColor;
                     bColorFound = true;
                 }
                 else if( !bOffsetFound )

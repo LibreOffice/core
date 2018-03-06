@@ -2321,7 +2321,7 @@ SwXTextColumns::SwXTextColumns(const SwFormatCol& rFormatCol) :
         nReference = USHRT_MAX;
 
     nSepLineWidth = rFormatCol.GetLineWidth();
-    nSepLineColor = rFormatCol.GetLineColor().GetColor();
+    nSepLineColor = rFormatCol.GetLineColor();
     nSepLineHeightRelative = rFormatCol.GetLineHeight();
     bSepLineIsOn = rFormatCol.GetLineAdj() != COLADJ_NONE;
     sal_Int8 nStyle = API_COL_LINE_NONE;

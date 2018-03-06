@@ -2474,11 +2474,11 @@ bool SwDrawTextInfo::ApplyAutoColor( vcl::Font* pFont )
 
     if( bPrt && GetShell() && GetShell()->GetViewOptions()->IsBlackFont() )
     {
-        if ( COL_BLACK != rFnt.GetColor().GetColor() )
+        if ( COL_BLACK != rFnt.GetColor() )
             bChgFntColor = true;
 
-        if ( (COL_BLACK != GetOut().GetLineColor().GetColor()) ||
-             (COL_BLACK != GetOut().GetOverlineColor().GetColor()) )
+        if ( (COL_BLACK != GetOut().GetLineColor()) ||
+             (COL_BLACK != GetOut().GetOverlineColor()) )
             bChgLineColor = true;
     }
     else
@@ -2491,14 +2491,14 @@ bool SwDrawTextInfo::ApplyAutoColor( vcl::Font* pFont )
         bChgLineColor = ! bPrt && GetShell() &&
                 GetShell()->GetAccessibilityOptions()->IsAlwaysAutoColor();
 
-        bChgFntColor = COL_AUTO == rFnt.GetColor().GetColor() || bChgLineColor;
+        bChgFntColor = COL_AUTO == rFnt.GetColor() || bChgLineColor;
 
         if ( bChgFntColor )
         {
             // check if current background has a user defined setting
             const Color* pCol = GetFont() ? GetFont()->GetBackColor() : nullptr;
             Color aColor;
-            if( ! pCol || COL_TRANSPARENT == pCol->GetColor() )
+            if( ! pCol || COL_TRANSPARENT == *pCol )
             {
                 const SvxBrushItem* pItem;
                 SwRect aOrigBackRect;
@@ -2547,7 +2547,7 @@ bool SwDrawTextInfo::ApplyAutoColor( vcl::Font* pFont )
                     nNewColor = COL_BLACK;
                 else
                     // we take the font color from the appearance page
-                    nNewColor = SwViewOption::GetFontColor().GetColor();
+                    nNewColor = SwViewOption::GetFontColor();
             }
 
             // change painting color depending of dark/bright background
