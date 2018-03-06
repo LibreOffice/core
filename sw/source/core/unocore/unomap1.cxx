@@ -58,7 +58,6 @@
 #include <com/sun/star/table/TableBorder2.hpp>
 #include <com/sun/star/table/TableBorderDistances.hpp>
 #include <com/sun/star/table/XCell.hpp>
-#include <com/sun/star/text/HorizontalAdjust.hpp>
 #include <com/sun/star/text/GraphicCrop.hpp>
 #include <com/sun/star/text/PageNumberType.hpp>
 #include <com/sun/star/text/SectionFileLink.hpp>
@@ -584,7 +583,7 @@ const SfxItemPropertyMapEntry*  SwUnoPropertyMapProvider::GetPageStylePropertyMa
         { OUString(UNO_NAME_FOOTNOTE_LINE_COLOR), FN_PARAM_FTN_INFO,        cppu::UnoType<sal_Int32>::get(),   PROPERTY_NONE ,     MID_LINE_COLOR},
         { OUString(UNO_NAME_FOOTNOTE_LINE_STYLE), FN_PARAM_FTN_INFO,        cppu::UnoType<sal_Int8>::get(),    PROPERTY_NONE , MID_FTN_LINE_STYLE},
         { OUString(UNO_NAME_FOOTNOTE_LINE_RELATIVE_WIDTH), FN_PARAM_FTN_INFO,       cppu::UnoType<sal_Int8>::get(),        PROPERTY_NONE ,     MID_LINE_RELWIDTH    },
-        { OUString(UNO_NAME_FOOTNOTE_LINE_ADJUST), FN_PARAM_FTN_INFO,       cppu::UnoType<css::text::HorizontalAdjust>::get(),   PROPERTY_NONE ,     MID_LINE_ADJUST     },
+        { OUString(UNO_NAME_FOOTNOTE_LINE_ADJUST), FN_PARAM_FTN_INFO,       cppu::UnoType<sal_Int16>::get(),   PROPERTY_NONE ,     MID_LINE_ADJUST     },
         { OUString(UNO_NAME_FOOTNOTE_LINE_TEXT_DISTANCE), FN_PARAM_FTN_INFO,        cppu::UnoType<sal_Int32>::get(),   PROPERTY_NONE ,     MID_LINE_TEXT_DIST   |CONVERT_TWIPS },
         { OUString(UNO_NAME_FOOTNOTE_LINE_DISTANCE), FN_PARAM_FTN_INFO,         cppu::UnoType<sal_Int32>::get(),   PROPERTY_NONE ,     MID_LINE_FOOTNOTE_DIST|CONVERT_TWIPS},
         { OUString(UNO_NAME_WRITING_MODE), RES_FRAMEDIR, cppu::UnoType<sal_Int16>::get(), PROPERTY_NONE, 0 },
