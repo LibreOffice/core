@@ -957,7 +957,7 @@ uno::Reference< drawing::XShape > SwHTMLParser::InsertControl(
             if( rColor != COL_TRANSPARENT )
             {
                 /// copy complete color with transparency
-                aTmp <<= static_cast<sal_Int32>(rColor.GetColor());
+                aTmp <<= rColor;
                 rFCompPropSet->setPropertyValue( sPropName, aTmp );
             }
 

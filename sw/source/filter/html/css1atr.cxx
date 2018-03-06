@@ -2211,8 +2211,8 @@ void SwHTMLWriter::OutCSS1_FrameFormatBackground( const SwFrameFormat& rFrameFor
         {
             SwViewShell *pVSh = pDoc->getIDocumentLayoutAccess().GetCurrentViewShell();
             if ( pVSh &&
-                 COL_TRANSPARENT != pVSh->GetViewOptions()->GetRetoucheColor().GetColor())
-                aColor = pVSh->GetViewOptions()->GetRetoucheColor().GetColor();
+                 COL_TRANSPARENT != pVSh->GetViewOptions()->GetRetoucheColor())
+                aColor = pVSh->GetViewOptions()->GetRetoucheColor();
         }
 
         OutCSS1_PropertyAscii(sCSS1_P_background, lclGetCSS1Color(aColor));
@@ -2387,7 +2387,7 @@ static Writer& OutCSS1_SvxColor( Writer& rWrt, const SfxPoolItem& rHt )
             "write color as Hint?" );
 
     Color aColor( static_cast<const SvxColorItem&>(rHt).GetValue() );
-    if( COL_AUTO == aColor.GetColor() )
+    if( COL_AUTO == aColor )
         aColor = COL_BLACK;
 
     rHTMLWrt.OutCSS1_PropertyAscii(sCSS1_P_color, lclGetCSS1Color(aColor));

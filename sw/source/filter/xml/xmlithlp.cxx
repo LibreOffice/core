@@ -112,9 +112,8 @@ bool sw_frmitems_parseXMLBorder( const OUString& rValue,
         {
             rHasStyle = true;
         }
-        else if (!rHasColor && ::sax::Converter::convertColor(nTemp, aToken))
+        else if (!rHasColor && ::sax::Converter::convertColor(rColor, aToken))
         {
-            rColor = nTemp;
             rHasColor = true;
         }
         else if( !rHasWidth &&

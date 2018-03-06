@@ -525,7 +525,7 @@ SwTextPaintInfo::SwTextPaintInfo( SwTextFrame *pFrame, const SwRect &rPaint )
 static bool lcl_IsDarkBackground( const SwTextPaintInfo& rInf )
 {
     const Color* pCol = rInf.GetFont()->GetBackColor();
-    if( ! pCol || COL_TRANSPARENT == pCol->GetColor() )
+    if( ! pCol || COL_TRANSPARENT == *pCol )
     {
         const SvxBrushItem* pItem;
         SwRect aOrigBackRect;
@@ -1094,7 +1094,7 @@ void SwTextPaintInfo::DrawBackground( const SwLinePortion &rPor ) const
         // For dark background we do not want to have a filled rectangle
         if ( GetVsh() && GetVsh()->GetWin() && lcl_IsDarkBackground( *this ) )
         {
-            pOut->SetLineColor( SwViewOption::GetFontColor().GetColor() );
+            pOut->SetLineColor( SwViewOption::GetFontColor() );
         }
         else
         {

@@ -1646,7 +1646,7 @@ void lcl_TextFrameShadow(std::vector<std::pair<OString, OString>>& rFlyPropertie
     const Color& rColor = aShadowItem.GetColor();
     // We in fact need RGB to BGR, but the transformation is symmetric.
     rFlyProperties.push_back(std::make_pair<OString, OString>(
-        "shadowColor", OString::number(msfilter::util::BGRToRGB(rColor.GetColor()))));
+        "shadowColor", OString::number(wwUtility::RGBToBGR(rColor))));
 
     // Twips -> points -> EMUs -- hacky, the intermediate step hides rounding errors on roundtrip.
     OString aShadowWidth = OString::number(sal_Int32(aShadowItem.GetWidth() / 20) * 12700);
@@ -3267,7 +3267,7 @@ void RtfAttributeOutput::FormatBackground(const SvxBrushItem& rBrush)
         const Color& rColor = rBrush.GetColor();
         // We in fact need RGB to BGR, but the transformation is symmetric.
         m_aFlyProperties.push_back(std::make_pair<OString, OString>(
-            "fillColor", OString::number(msfilter::util::BGRToRGB(rColor.GetColor()))));
+            "fillColor", OString::number(wwUtility::RGBToBGR(rColor))));
     }
     else if (!rBrush.GetColor().GetTransparency())
     {
@@ -3291,11 +3291,11 @@ void RtfAttributeOutput::FormatFillGradient(const XFillGradientItem& rFillGradie
         const XGradient& rGradient = rFillGradient.GetGradientValue();
         const Color& rStartColor = rGradient.GetStartColor();
         m_aFlyProperties.push_back(std::make_pair<OString, OString>(
-            "fillBackColor", OString::number(msfilter::util::BGRToRGB(rStartColor.GetColor()))));
+            "fillBackColor", OString::number(wwUtility::RGBToBGR(rStartColor))));
 
         const Color& rEndColor = rGradient.GetEndColor();
         m_aFlyProperties.push_back(std::make_pair<OString, OString>(
-            "fillColor", OString::number(msfilter::util::BGRToRGB(rEndColor.GetColor()))));
+            "fillColor", OString::number(wwUtility::RGBToBGR(rEndColor))));
 
         switch (rGradient.GetGradientStyle())
         {
@@ -3351,7 +3351,7 @@ void RtfAttributeOutput::FormatBox(const SvxBoxItem& rBox)
             const Color& rColor = pTop->GetColor();
             // We in fact need RGB to BGR, but the transformation is symmetric.
             m_aFlyProperties.push_back(std::make_pair<OString, OString>(
-                "lineColor", OString::number(msfilter::util::BGRToRGB(rColor.GetColor()))));
+                "lineColor", OString::number(wwUtility::RGBToBGR(rColor))));
 
             if (pTop->GetBorderLineStyle() != SvxBorderLineStyle::NONE)
             {

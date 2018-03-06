@@ -256,7 +256,7 @@ class SwXTextColumns : public cppu::WeakAggImplHelper4
 
     //separator line
     sal_Int32                   nSepLineWidth;
-    sal_Int32                   nSepLineColor;
+    Color                       nSepLineColor;
     sal_Int8                    nSepLineHeightRelative;
     css::style::VerticalAlignment nSepLineVertAlign;
     bool                        bSepLineIsOn;
@@ -295,7 +295,7 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     sal_Int32   GetSepLineWidth() const {return nSepLineWidth;}
-    sal_Int32   GetSepLineColor() const {return     nSepLineColor;}
+    Color       GetSepLineColor() const {return nSepLineColor;}
     sal_Int8    GetSepLineHeightRelative() const {return    nSepLineHeightRelative;}
     css::style::VerticalAlignment GetSepLineVertAlign() const {return nSepLineVertAlign;}
     bool        GetSepLineIsOn() const {return  bSepLineIsOn;}

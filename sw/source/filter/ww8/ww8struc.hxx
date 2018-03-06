@@ -27,6 +27,7 @@
 
 #include <editeng/borderline.hxx>
 #include <filter/msfilter/util.hxx>
+#include <tools/color.hxx>
 
 #ifdef _WIN32
 #   pragma pack(push, 2)
@@ -1076,7 +1077,11 @@ struct SEPr
 
 namespace wwUtility
 {
-    inline sal_uInt32 RGBToBGR(sal_uInt32 nColour) { return msfilter::util::BGRToRGB(nColour); }
+    inline sal_uInt32 RGBToBGR(::Color nColour)
+    {
+        // we can use this because the translation is symmetric
+        return msfilter::util::BGRToRGB(sal_uInt32(nColour));
+    }
 }
 
 /// [MS-OSHARED] FactoidType: one smart tag type.

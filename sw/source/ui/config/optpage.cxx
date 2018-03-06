@@ -1846,7 +1846,7 @@ bool SwRedlineOptionsTabPage::FillItemSet( SfxItemSet* )
         pAttr = static_cast<CharAttr *>(m_pInsertLB->GetEntryData(nPos));
         aInsertedAttr.m_nItemId = pAttr->nItemId;
         aInsertedAttr.m_nAttr = pAttr->nAttr;
-        aInsertedAttr.m_nColor = m_pInsertColorLB->GetSelectEntryColor().GetColor();
+        aInsertedAttr.m_nColor = m_pInsertColorLB->GetSelectEntryColor();
         pOpt->SetInsertAuthorAttr(aInsertedAttr);
     }
 
@@ -1856,7 +1856,7 @@ bool SwRedlineOptionsTabPage::FillItemSet( SfxItemSet* )
         pAttr = static_cast<CharAttr *>(m_pDeletedLB->GetEntryData(nPos));
         aDeletedAttr.m_nItemId = pAttr->nItemId;
         aDeletedAttr.m_nAttr = pAttr->nAttr;
-        aDeletedAttr.m_nColor = m_pDeletedColorLB->GetSelectEntryColor().GetColor();
+        aDeletedAttr.m_nColor = m_pDeletedColorLB->GetSelectEntryColor();
         pOpt->SetDeletedAuthorAttr(aDeletedAttr);
     }
 
@@ -1866,7 +1866,7 @@ bool SwRedlineOptionsTabPage::FillItemSet( SfxItemSet* )
         pAttr = static_cast<CharAttr *>(m_pChangedLB->GetEntryData(nPos));
         aChangedAttr.m_nItemId = pAttr->nItemId;
         aChangedAttr.m_nAttr = pAttr->nAttr;
-        aChangedAttr.m_nColor = m_pChangedColorLB->GetSelectEntryColor().GetColor();
+        aChangedAttr.m_nColor = m_pChangedColorLB->GetSelectEntryColor();
         pOpt->SetFormatAuthorAttr(aChangedAttr);
     }
 
@@ -1886,7 +1886,7 @@ bool SwRedlineOptionsTabPage::FillItemSet( SfxItemSet* )
     if (!(aInsertedAttr == aOldInsertAttr) ||
         !(aDeletedAttr == aOldDeletedAttr) ||
         !(aChangedAttr == aOldChangedAttr) ||
-       nOldMarkColor != pOpt->GetMarkAlignColor().GetColor() ||
+       nOldMarkColor != pOpt->GetMarkAlignColor() ||
        nOldMarkMode != pOpt->GetMarkAlignMode() ||
        bOldShowInlineTooltips != pOpt->IsShowInlineTooltip() )
     {
@@ -2130,7 +2130,7 @@ IMPL_LINK( SwRedlineOptionsTabPage, ColorHdl, SvxColorListBox&, rListBox, void )
 void SwRedlineOptionsTabPage::ChangedMaskPrev()
 {
     m_pMarkPreviewWN->SetMarkPos(m_pMarkPosLB->GetSelectedEntryPos());
-    m_pMarkPreviewWN->SetColor(m_pMarkColorLB->GetSelectEntryColor().GetColor());
+    m_pMarkPreviewWN->SetColor(m_pMarkColorLB->GetSelectEntryColor());
 
     m_pMarkPreviewWN->Invalidate();
 }

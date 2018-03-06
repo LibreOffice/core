@@ -1048,7 +1048,7 @@ sal_Int32 SAL_CALL SwAccessibleParagraph::getBackground()
 
     if ( lcl_GetBackgroundColor( aBackgroundCol, GetFrame(), GetCursorShell() ) )
     {
-        return aBackgroundCol.GetColor();
+        return sal_Int32(aBackgroundCol);
     }
 
     return SwAccessibleContext::getBackground();
@@ -2155,7 +2155,7 @@ void SwAccessibleParagraph::_correctValues( const sal_Int32 nIndex,
         {
             uno::Any &anyChar = rValue.Value;
             sal_uInt32 crBack = static_cast<sal_uInt32>( reinterpret_cast<sal_uIntPtr>(anyChar.pReserved));
-            if (COL_AUTO == crBack)
+            if (COL_AUTO == Color(crBack))
             {
                 uno::Reference<XAccessibleComponent> xComponent(this);
                 if (xComponent.is())
@@ -2171,11 +2171,11 @@ void SwAccessibleParagraph::_correctValues( const sal_Int32 nIndex,
         if (rValue.Name == UNO_NAME_CHAR_COLOR)
         {
             if( GetPortionData().IsInGrayPortion( nIndex ) )
-                 rValue.Value <<= SwViewOption::GetFieldShadingsColor().GetColor();
+                 rValue.Value <<= SwViewOption::GetFieldShadingsColor();
             uno::Any &anyChar = rValue.Value;
             sal_uInt32 crChar = static_cast<sal_uInt32>( reinterpret_cast<sal_uIntPtr>(anyChar.pReserved));
 
-            if( COL_AUTO == crChar )
+            if( COL_AUTO == Color(crChar) )
             {
                 uno::Reference<XAccessibleComponent> xComponent(this);
                 if (xComponent.is())
@@ -2231,7 +2231,7 @@ void SwAccessibleParagraph::_correctValues( const sal_Int32 nIndex,
 
             uno::Any &anyChar = rValue.Value;
             sal_uInt32 crUnderline = static_cast<sal_uInt32>( reinterpret_cast<sal_uIntPtr>(anyChar.pReserved));
-            if ( COL_AUTO == crUnderline )
+            if ( COL_AUTO == Color(crUnderline) )
             {
                 uno::Reference<XAccessibleComponent> xComponent(this);
                 if (xComponent.is())

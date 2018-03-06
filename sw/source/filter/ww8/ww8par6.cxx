@@ -3512,7 +3512,7 @@ void SwWW8ImplReader::Read_UnderlineColor(sal_uInt16, const sal_uInt8* pData, sh
                     = static_cast<SvxUnderlineItem *>(aSet.Get( RES_CHRATR_UNDERLINE, false ).Clone());
                 if (pUnderline && nLen >= 4)
                 {
-                    pUnderline->SetColor( Color( msfilter::util::BGRToRGB(SVBT32ToUInt32(pData)) ) );
+                    pUnderline->SetColor( msfilter::util::BGRToRGB(SVBT32ToUInt32(pData)) );
                     m_pCurrentColl->SetFormatAttr( *pUnderline );
                     delete pUnderline;
                 }
@@ -3526,7 +3526,7 @@ void SwWW8ImplReader::Read_UnderlineColor(sal_uInt16, const sal_uInt8* pData, sh
                     = static_cast<SvxUnderlineItem*>(m_xCurrentItemSet->Get(RES_CHRATR_UNDERLINE, false).Clone());
                 if (pUnderline && nLen >= 4)
                 {
-                    pUnderline->SetColor( Color( msfilter::util::BGRToRGB(SVBT32ToUInt32(pData)) ) );
+                    pUnderline->SetColor( msfilter::util::BGRToRGB(SVBT32ToUInt32(pData)) );
                     m_xCurrentItemSet->Put( *pUnderline );
                     delete pUnderline;
                 }
@@ -3536,7 +3536,7 @@ void SwWW8ImplReader::Read_UnderlineColor(sal_uInt16, const sal_uInt8* pData, sh
         {
             SvxUnderlineItem* pUnderlineAttr = const_cast<SvxUnderlineItem*>(static_cast<const SvxUnderlineItem*>(m_xCtrlStck->GetOpenStackAttr( *m_pPaM->GetPoint(), RES_CHRATR_UNDERLINE )));
             if (pUnderlineAttr && nLen >= 4)
-                pUnderlineAttr->SetColor( Color( msfilter::util::BGRToRGB(SVBT32ToUInt32( pData ))));
+                pUnderlineAttr->SetColor( msfilter::util::BGRToRGB(SVBT32ToUInt32( pData ) ));
         }
     }
 }
@@ -4802,27 +4802,27 @@ void SwWW8ImplReader::Read_ParaBackColor(sal_uInt16, const sal_uInt8* pData, sho
         OSL_ENSURE(nLen == 10, "Len of para back colour not 10!");
         if (nLen != 10)
             return;
-        NewAttr(SvxBrushItem(Color(ExtractColour(pData, m_bVer67)), RES_BACKGROUND));
+        NewAttr(SvxBrushItem(ExtractColour(pData, m_bVer67), RES_BACKGROUND));
     }
 }
 
-sal_uInt32 SwWW8ImplReader::ExtractColour(const sal_uInt8* &rpData, bool bVer67)
+Color SwWW8ImplReader::ExtractColour(const sal_uInt8* &rpData, bool bVer67)
 {
     OSL_ENSURE(!bVer67, "Impossible");
-    sal_uInt32 nFore = msfilter::util::BGRToRGB(SVBT32ToUInt32(rpData));
+    Color nFore = msfilter::util::BGRToRGB(SVBT32ToUInt32(rpData));
     rpData+=4;
-    sal_uInt32 nBack = msfilter::util::BGRToRGB(SVBT32ToUInt32(rpData));
+    Color nBack = msfilter::util::BGRToRGB(SVBT32ToUInt32(rpData));
     rpData+=4;
     sal_uInt16 nIndex = SVBT16ToShort(rpData);
     rpData+=2;
     //Being a transparent background colour doesn't actually show the page
     //background through, it merely acts like white
-    if (nBack == 0xFF000000)
-        nBack = sal_uInt32(COL_AUTO);
-    OSL_ENSURE(nBack == sal_uInt32(COL_AUTO) || !(nBack & 0xFF000000),
+    if (nBack == Color(0xFF000000))
+        nBack = COL_AUTO;
+    OSL_ENSURE(nBack == COL_AUTO || (nBack.GetTransparency() == 0),
         "ww8: don't know what to do with such a transparent bg colour, report");
     SwWW8Shade aShade(nFore, nBack, nIndex);
-    return aShade.aColor.GetColor();
+    return aShade.aColor;
 }
 
 void SwWW8ImplReader::Read_TextVerticalAdjustment( sal_uInt16, const sal_uInt8* pData, short nLen )
