@@ -189,9 +189,6 @@ void vcl::Cursor::ImplDoShow( bool bDrawDirect, bool bRestore )
                 mpData->mbCurVisible = false;
                 mpData->maTimer.SetInvokeHandler( LINK( this, Cursor, ImplTimerHdl ) );
                 mpData->maTimer.SetDebugName( "vcl ImplCursorData maTimer" );
-
-                // tell about "initial" coordinates
-                LOKNotify( pWindow, "cursor_invalidate" );
             }
 
             mpData->mpWindow    = pWindow;
@@ -206,6 +203,7 @@ void vcl::Cursor::ImplDoShow( bool bDrawDirect, bool bRestore )
                     mpData->maTimer.Start();
                 else if ( !mpData->mbCurVisible )
                     ImplDraw();
+                LOKNotify( pWindow, "cursor_invalidate" );
                 LOKNotify( pWindow, "cursor_visible" );
             }
         }
