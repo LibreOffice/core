@@ -165,7 +165,7 @@ namespace
 
         aVDev->SetOutputSizePixel(aSizePixel);
         aVDev->EnableMapMode(false);
-        aVDev->SetFillColor(COL_WHITE);
+        aVDev->SetFillColor( COL_WHITE);
         aVDev->SetLineColor();
 
         if(rBitmapEx.IsTransparent())
