@@ -70,9 +70,9 @@ XFTableStyle::~XFTableStyle()
 {
 }
 
-void    XFTableStyle::SetBackImage(XFBGImage *pImage)
+void    XFTableStyle::SetBackImage(std::unique_ptr<XFBGImage>& rImage)
 {
-    m_pBGImage.reset( pImage );
+    m_pBGImage = std::move(rImage);
 }
 
 enumXFStyle XFTableStyle::GetStyleFamily()

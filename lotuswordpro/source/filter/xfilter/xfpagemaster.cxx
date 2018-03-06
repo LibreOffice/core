@@ -125,9 +125,9 @@ void    XFPageMaster::SetBackColor(XFColor color)
     m_aBackColor = color;
 }
 
-void    XFPageMaster::SetBackImage(XFBGImage *image)
+void    XFPageMaster::SetBackImage(std::unique_ptr<XFBGImage>& rImage)
 {
-    m_pBGImage.reset( image );
+    m_pBGImage = std::move(rImage);
 }
 
 void    XFPageMaster::SetColumns(XFColumns *pColumns)

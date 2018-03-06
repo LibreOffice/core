@@ -101,12 +101,12 @@ LwpColor* LwpBackgroundStuff::GetFillColor()
     return &m_aFillColor;
 }
 
-XFBGImage* LwpBackgroundStuff::GetFillPattern()
+std::unique_ptr<XFBGImage> LwpBackgroundStuff::GetFillPattern()
 {
     // not pattern fill?
     if (!IsPatternFill())
     {
-        return nullptr;
+        return std::unique_ptr<XFBGImage>();
     }
 
     // get pattern array from pattern table
@@ -151,15 +151,15 @@ XFBGImage* LwpBackgroundStuff::GetFillPattern()
     memcpy(pImageBuff, aPicMemStream.GetData(), nSize);
 
     // create XFBGImage object.
-    XFBGImage* pXFBGImage = new XFBGImage();
-    pXFBGImage->SetImageData(pImageBuff, nSize);
+    std::unique_ptr<XFBGImage> xXFBGImage(new XFBGImage);
+    xXFBGImage->SetImageData(pImageBuff, nSize);
 
     delete [] pImageBuff;
     pImageBuff = nullptr;
 
-    pXFBGImage->SetRepeate();
+    xXFBGImage->SetRepeate();
 
-    return pXFBGImage;
+    return xXFBGImage;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -124,7 +124,7 @@ public:
     /**
      * descr:   set cell background image.
      */
-    void    SetBackImage(XFBGImage *pImage);
+    void    SetBackImage(std::unique_ptr<XFBGImage>& rImage);
 
     virtual enumXFStyle GetStyleFamily() override;
 
@@ -139,7 +139,7 @@ private:
 
     double      m_fTextIndent;
     XFColor     m_aBackColor;
-    XFBGImage   *m_pBackImage;
+    std::unique_ptr<XFBGImage> m_xBackImage;
     XFMargins   m_aMargin;
     XFPadding   m_aPadding;
     rtl::Reference<XFFont> m_pFont;

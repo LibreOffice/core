@@ -209,10 +209,10 @@ void LwpCellLayout::ApplyBorders(XFCellStyle *pCellStyle)
  */
 void LwpCellLayout::ApplyWatermark(XFCellStyle *pCellStyle)
 {
-    XFBGImage* pBGImage = GetXFBGImage();
-    if(pBGImage)
+    std::unique_ptr<XFBGImage> xBGImage(GetXFBGImage());
+    if (xBGImage)
     {
-        pCellStyle->SetBackImage(pBGImage);
+        pCellStyle->SetBackImage(xBGImage);
     }
 }
 
@@ -223,10 +223,10 @@ void LwpCellLayout::ApplyWatermark(XFCellStyle *pCellStyle)
  */
 void LwpCellLayout::ApplyPatternFill(XFCellStyle* pCellStyle)
 {
-    XFBGImage* pXFBGImage = GetFillPattern();
-    if (pXFBGImage)
+    std::unique_ptr<XFBGImage> xXFBGImage(GetFillPattern());
+    if (xXFBGImage)
     {
-        pCellStyle->SetBackImage(pXFBGImage);
+        pCellStyle->SetBackImage(xXFBGImage);
     }
 }
 

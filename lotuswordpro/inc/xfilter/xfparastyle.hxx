@@ -190,7 +190,7 @@ public:
      * @descr   Set background image of the paragraph.
      * @param   image the background image to set.
      */
-    void    SetBackImage(XFBGImage *image);
+    void    SetBackImage(std::unique_ptr<XFBGImage>& rImage);
 
     /**
      * descr    You can only set one break property for every para style object.

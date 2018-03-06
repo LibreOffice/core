@@ -150,7 +150,7 @@ private:
 public:
     void    Read(LwpObjectStream *pStrm);
     LwpColor* GetFillColor();
-    XFBGImage* GetFillPattern();
+    std::unique_ptr<XFBGImage> GetFillPattern();
 
     bool IsTransparent() { return (m_nID == BACK_TRANSPARENT); }
     bool IsPatternFill() { return (m_nID > 2 && m_nID < 72); }

@@ -115,7 +115,7 @@ public:
     /**
      * @descr:  set the background image of the frame.
      */
-    void    SetBackImage(XFBGImage *iamge);
+    void    SetBackImage(std::unique_ptr<XFBGImage>& rImage);
 
     /**
      * @descr:  set the background color of the frame.
