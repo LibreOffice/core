@@ -317,7 +317,7 @@ namespace sdr
                             *mpOutputBufferDevice.get());
 
                         // debug
-                        /*getOutputDevice().SetLineColor(COL_RED);
+                        /*getOutputDevice().SetLineCOL_RED);
                         getOutputDevice().SetFillColor();
                         getOutputDevice().DrawRect(Rectangle(aTopLeft, aSize));*/
 

@@ -353,14 +353,14 @@ sal_Int32 AccFrameSelector::getForeground(  )
 {
     SolarMutexGuard aGuard;
     IsValid();
-    return mpFrameSel->GetControlForeground().GetColor();
+    return sal_Int32(mpFrameSel->GetControlForeground());
 }
 
 sal_Int32 AccFrameSelector::getBackground(  )
 {
     SolarMutexGuard aGuard;
     IsValid();
-    return mpFrameSel->GetControlBackground().GetColor();
+    return sal_Int32(mpFrameSel->GetControlBackground());
 }
 
 void AccFrameSelector::addAccessibleEventListener( const Reference< XAccessibleEventListener >& xListener )

@@ -294,7 +294,7 @@ const Color& XColorItem::GetColorValue() const
 
 bool XColorItem::QueryValue( css::uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
 {
-    rVal <<= static_cast<sal_Int32>(GetColorValue().GetRGBColor());
+    rVal <<= GetColorValue().GetRGBColor();
     return true;
 }
 
@@ -302,7 +302,7 @@ bool XColorItem::PutValue( const css::uno::Any& rVal, sal_uInt8 /*nMemberId*/)
 {
     sal_Int32 nValue = 0;
     rVal >>= nValue;
-    SetColorValue( nValue );
+    SetColorValue( Color(nValue) );
 
     return true;
 }
@@ -946,7 +946,7 @@ bool XLineColorItem::GetPresentation
 
 bool XLineColorItem::QueryValue( css::uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
 {
-    rVal <<= static_cast<sal_Int32>(GetColorValue().GetRGBColor());
+    rVal <<= GetColorValue().GetRGBColor();
     return true;
 }
 
@@ -956,7 +956,7 @@ bool XLineColorItem::PutValue( const css::uno::Any& rVal, sal_uInt8 /*nMemberId*
     if(!(rVal >>= nValue))
         return false;
 
-    SetColorValue( nValue );
+    SetColorValue( Color(nValue) );
     return true;
 }
 
@@ -1868,7 +1868,7 @@ bool XFillColorItem::GetPresentation
 
 bool XFillColorItem::QueryValue( css::uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
 {
-    rVal <<= static_cast<sal_Int32>(GetColorValue().GetRGBColor());
+    rVal <<= GetColorValue().GetRGBColor();
 
     return true;
 }
@@ -1879,7 +1879,7 @@ bool XFillColorItem::PutValue( const css::uno::Any& rVal, sal_uInt8 /*nMemberId*
     if(!(rVal >>= nValue ))
         return false;
 
-    SetColorValue( nValue );
+    SetColorValue( Color(nValue) );
     return true;
 }
 
@@ -2046,8 +2046,8 @@ bool XFillGradientItem::QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId ) c
 
             const XGradient& aXGradient = GetGradientValue();
             aGradient2.Style = aXGradient.GetGradientStyle();
-            aGradient2.StartColor = static_cast<sal_Int32>(aXGradient.GetStartColor().GetColor());
-            aGradient2.EndColor = static_cast<sal_Int32>(aXGradient.GetEndColor().GetColor());
+            aGradient2.StartColor = static_cast<sal_Int32>(aXGradient.GetStartColor());
+            aGradient2.EndColor = static_cast<sal_Int32>(aXGradient.GetEndColor());
             aGradient2.Angle = static_cast<short>(aXGradient.GetAngle());
             aGradient2.Border = aXGradient.GetBorder();
             aGradient2.XOffset = aXGradient.GetXOffset();
@@ -2070,8 +2070,8 @@ bool XFillGradientItem::QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId ) c
             css::awt::Gradient aGradient2;
 
             aGradient2.Style = aXGradient.GetGradientStyle();
-            aGradient2.StartColor = static_cast<sal_Int32>(aXGradient.GetStartColor().GetColor());
-            aGradient2.EndColor = static_cast<sal_Int32>(aXGradient.GetEndColor().GetColor());
+            aGradient2.StartColor = static_cast<sal_Int32>(aXGradient.GetStartColor());
+            aGradient2.EndColor = static_cast<sal_Int32>(aXGradient.GetEndColor());
             aGradient2.Angle = static_cast<short>(aXGradient.GetAngle());
             aGradient2.Border = aXGradient.GetBorder();
             aGradient2.XOffset = aXGradient.GetXOffset();
@@ -2091,8 +2091,8 @@ bool XFillGradientItem::QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId ) c
         }
 
         case MID_GRADIENT_STYLE: rVal <<= static_cast<sal_Int16>(GetGradientValue().GetGradientStyle()); break;
-        case MID_GRADIENT_STARTCOLOR: rVal <<= static_cast<sal_Int32>(GetGradientValue().GetStartColor().GetColor()); break;
-        case MID_GRADIENT_ENDCOLOR: rVal <<= static_cast<sal_Int32>(GetGradientValue().GetEndColor().GetColor()); break;
+        case MID_GRADIENT_STARTCOLOR: rVal <<= GetGradientValue().GetStartColor(); break;
+        case MID_GRADIENT_ENDCOLOR: rVal <<= GetGradientValue().GetEndColor(); break;
         case MID_GRADIENT_ANGLE: rVal <<= static_cast<sal_Int16>(GetGradientValue().GetAngle()); break;
         case MID_GRADIENT_BORDER: rVal <<= GetGradientValue().GetBorder(); break;
         case MID_GRADIENT_XOFFSET: rVal <<= GetGradientValue().GetXOffset(); break;
@@ -2139,8 +2139,8 @@ bool XFillGradientItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId
                     XGradient aXGradient;
 
                     aXGradient.SetGradientStyle( aGradient2.Style );
-                    aXGradient.SetStartColor( aGradient2.StartColor );
-                    aXGradient.SetEndColor( aGradient2.EndColor );
+                    aXGradient.SetStartColor( Color(aGradient2.StartColor) );
+                    aXGradient.SetEndColor( Color(aGradient2.EndColor) );
                     aXGradient.SetAngle( aGradient2.Angle );
                     aXGradient.SetBorder( aGradient2.Border );
                     aXGradient.SetXOffset( aGradient2.XOffset );
@@ -2176,8 +2176,8 @@ bool XFillGradientItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId
             XGradient aXGradient;
 
             aXGradient.SetGradientStyle( aGradient2.Style );
-            aXGradient.SetStartColor( aGradient2.StartColor );
-            aXGradient.SetEndColor( aGradient2.EndColor );
+            aXGradient.SetStartColor( Color(aGradient2.StartColor) );
+            aXGradient.SetEndColor( Color(aGradient2.EndColor) );
             aXGradient.SetAngle( aGradient2.Angle );
             aXGradient.SetBorder( aGradient2.Border );
             aXGradient.SetXOffset( aGradient2.XOffset );
@@ -2200,9 +2200,9 @@ bool XFillGradientItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId
             XGradient aXGradient = GetGradientValue();
 
             if ( nMemberId == MID_GRADIENT_STARTCOLOR )
-                aXGradient.SetStartColor( nVal );
+                aXGradient.SetStartColor( Color(nVal) );
             else
-                aXGradient.SetEndColor( nVal );
+                aXGradient.SetEndColor( Color(nVal) );
             SetGradientValue( aXGradient );
             break;
         }
@@ -2463,7 +2463,7 @@ bool XFillHatchItem::QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId ) cons
             css::drawing::Hatch aUnoHatch;
 
             aUnoHatch.Style = aHatch.GetHatchStyle();
-            aUnoHatch.Color = aHatch.GetColor().GetColor();
+            aUnoHatch.Color = sal_Int32(aHatch.GetColor());
             aUnoHatch.Distance = aHatch.GetDistance();
             aUnoHatch.Angle = aHatch.GetAngle();
 
@@ -2480,7 +2480,7 @@ bool XFillHatchItem::QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId ) cons
             css::drawing::Hatch aUnoHatch;
 
             aUnoHatch.Style = aHatch.GetHatchStyle();
-            aUnoHatch.Color = aHatch.GetColor().GetColor();
+            aUnoHatch.Color = sal_Int32(aHatch.GetColor());
             aUnoHatch.Distance = aHatch.GetDistance();
             aUnoHatch.Angle = aHatch.GetAngle();
             rVal <<= aUnoHatch;
@@ -2496,7 +2496,7 @@ bool XFillHatchItem::QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId ) cons
         case MID_HATCH_STYLE:
             rVal <<= aHatch.GetHatchStyle(); break;
         case MID_HATCH_COLOR:
-            rVal <<= static_cast<sal_Int32>(aHatch.GetColor().GetColor()); break;
+            rVal <<= aHatch.GetColor(); break;
         case MID_HATCH_DISTANCE:
             rVal <<= aHatch.GetDistance(); break;
         case MID_HATCH_ANGLE:
@@ -2537,7 +2537,7 @@ bool XFillHatchItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId )
                 if ( bHatch )
                 {
                     aHatch.SetHatchStyle( aUnoHatch.Style );
-                    aHatch.SetColor( aUnoHatch.Color );
+                    aHatch.SetColor( Color(aUnoHatch.Color) );
                     aHatch.SetDistance( aUnoHatch.Distance );
                     aHatch.SetAngle( aUnoHatch.Angle );
                 }
@@ -2555,7 +2555,7 @@ bool XFillHatchItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId )
                 return false;
 
             aHatch.SetHatchStyle( aUnoHatch.Style );
-            aHatch.SetColor( aUnoHatch.Color );
+            aHatch.SetColor( Color(aUnoHatch.Color) );
             aHatch.SetDistance( aUnoHatch.Distance );
             aHatch.SetAngle( aUnoHatch.Angle );
             break;
@@ -2588,7 +2588,7 @@ bool XFillHatchItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId )
                 return false;
 
             if ( nMemberId == MID_HATCH_COLOR )
-                aHatch.SetColor( nVal );
+                aHatch.SetColor( Color(nVal) );
             else if ( nMemberId == MID_HATCH_DISTANCE )
                 aHatch.SetDistance( nVal );
             else

@@ -439,7 +439,7 @@ sal_Int32 SAL_CALL SvxGraphCtrlAccessibleContext::getForeground()
 
 sal_Int32 SAL_CALL SvxGraphCtrlAccessibleContext::getBackground()
 {
-    sal_uInt32 nColor = Application::GetSettings().GetStyleSettings().GetWindowColor().GetColor();
+    Color nColor = Application::GetSettings().GetStyleSettings().GetWindowColor();
     return static_cast<sal_Int32>(nColor);
 }
 

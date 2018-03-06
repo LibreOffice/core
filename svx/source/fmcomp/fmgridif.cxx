@@ -1821,7 +1821,7 @@ void FmXGridPeer::setProperty( const OUString& PropertyName, const Any& Value)
 
     if ( PropertyName == FM_PROP_TEXTLINECOLOR )
     {
-        ::Color aTextLineColor( bVoid ? COL_TRANSPARENT : ::comphelper::getINT32( Value ) );
+        ::Color aTextLineColor( bVoid ? COL_TRANSPARENT : ::Color(::comphelper::getINT32( Value )) );
         if (bVoid)
         {
             pGrid->SetTextLineColor();
@@ -2038,11 +2038,11 @@ Any FmXGridPeer::getProperty( const OUString& _rPropertyName )
         }
         else if ( _rPropertyName == FM_PROP_TEXTCOLOR )
         {
-            aProp <<= static_cast<sal_Int32>(pDataWindow->GetControlForeground().GetColor());
+            aProp <<= pDataWindow->GetControlForeground();
         }
         else if ( _rPropertyName == FM_PROP_BACKGROUNDCOLOR )
         {
-            aProp <<= static_cast<sal_Int32>(pDataWindow->GetControlBackground().GetColor());
+            aProp <<= pDataWindow->GetControlBackground();
         }
         else if ( _rPropertyName == FM_PROP_ROWHEIGHT )
         {
