@@ -615,7 +615,10 @@ bool ScViewFunc::AutoSum( const ScRange& rRange, bool bSubTotal, bool bSetCursor
     SCCOL nMarkEndCol = nEndCol;
     SCROW nMarkEndRow = nEndRow;
     ScAutoSum eSum = ScAutoSumNone;
-    ScRangeList aSumRangeList;
+    SCROW nColSums = 0;
+    SCCOL nRowSums = 0;
+    SCROW nColSumsStartRow = 0;
+    SCCOL nRowSumsStartCol = 0;
 
     if ( bRow )
     {
@@ -639,12 +642,15 @@ bool ScViewFunc::AutoSum( const ScRange& rRange, bool bSubTotal, bool bSetCursor
         {
             if ( !pDoc->IsBlockEmpty( nTab, nCol, nStartRow, nCol, nSumEndRow ) )
             {
+                ScRangeList aRangeList;
                 // Include the originally selected start row.
                 const ScRange aRange( nCol, rRange.aStart.Row(), nTab, nCol, nSumEndRow, nTab );
-                if ( (eSum = lcl_GetAutoSumForColumnRange( pDoc, aSumRangeList, aRange )) != ScAutoSumNone )
+                if ( (eSum = lcl_GetAutoSumForColumnRange( pDoc, aRangeList, aRange )) != ScAutoSumNone )
                 {
+                    if (++nRowSums == 1)
+                        nRowSumsStartCol = aRangeList[0]->aStart.Col();
                     const OUString aFormula = GetAutoSumFormula(
-                        aSumRangeList, bSubTotal, ScAddress(nCol, nInsRow, nTab));
+                        aRangeList, bSubTotal, ScAddress(nCol, nInsRow, nTab));
                     EnterData( nCol, nInsRow, nTab, aFormula );
                 }
             }
@@ -673,11 +679,14 @@ bool ScViewFunc::AutoSum( const ScRange& rRange, bool bSubTotal, bool bSetCursor
         {
             if ( !pDoc->IsBlockEmpty( nTab, nStartCol, nRow, nSumEndCol, nRow ) )
             {
+                ScRangeList aRangeList;
                 // Include the originally selected start column.
                 const ScRange aRange( rRange.aStart.Col(), nRow, nTab, nSumEndCol, nRow, nTab );
-                if ( (eSum = lcl_GetAutoSumForRowRange( pDoc, aSumRangeList, aRange )) != ScAutoSumNone )
+                if ( (eSum = lcl_GetAutoSumForRowRange( pDoc, aRangeList, aRange )) != ScAutoSumNone )
                 {
-                    const OUString aFormula = GetAutoSumFormula( aSumRangeList, bSubTotal, ScAddress(nInsCol, nRow, nTab) );
+                    if (++nColSums == 1)
+                        nColSumsStartRow = aRangeList[0]->aStart.Row();
+                    const OUString aFormula = GetAutoSumFormula( aRangeList, bSubTotal, ScAddress(nInsCol, nRow, nTab) );
                     EnterData( nInsCol, nRow, nTab, aFormula );
                 }
             }
@@ -690,10 +699,10 @@ bool ScViewFunc::AutoSum( const ScRange& rRange, bool bSubTotal, bool bSetCursor
     // original selection. All extended by end column/row where the sum is put.
     const ScRange aMarkRange(
             (eSum == ScAutoSumSum ?
-             (aSumRangeList.size() == 1 ? aSumRangeList[0]->aStart.Col() : nStartCol) :
+             (nRowSums == 1 ? nRowSumsStartCol : nStartCol) :
              rRange.aStart.Col()),
             (eSum == ScAutoSumSum ?
-             (aSumRangeList.size() == 1 ? aSumRangeList[0]->aStart.Row() : nStartRow) :
+             (nColSums == 1 ? nColSumsStartRow : nStartRow) :
              rRange.aStart.Row()),
             nTab, nMarkEndCol, nMarkEndRow, nTab );
     MarkRange( aMarkRange, false, bContinue );
