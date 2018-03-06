@@ -1,3 +1,5 @@
+Find bundled ICU in workdir and use debug .libs when needed
+
 diff -up win32/Makefile.msvc.dt win32/Makefile.msvc
 --- win32/Makefile.msvc.dt	2014-07-18 19:00:23.372103963 +0200
 +++ win32/Makefile.msvc	2014-07-18 19:01:39.347982929 +0200
@@ -18,15 +20,14 @@ diff -up win32/Makefile.msvc.dt win32/Makefile.msvc
  LIBS =
  !if "$(WITH_FTP)" == "1" || "$(WITH_HTTP)" == "1"
 @@ -78,7 +78,11 @@ LIBS = $(LIBS) wsock32.lib ws2_32.lib
- LIBS = $(LIBS) iconv.lib
- !endif 
- !if "$(WITH_ICU)" == "1"
--LIBS = $(LIBS) icu.lib
+ !if "$(STATIC)" == "1"
+ LIBS = $(LIBS) advapi32.lib sicuuc.lib sicuin.lib sicudt.lib
+ !else
 +!if "$(WITH_RUN_DEBUG)" == "1"
 +LIBS = $(LIBS) icuind.lib icuucd.lib icudtd.lib
 +!else
-+LIBS = $(LIBS) icuin.lib icuuc.lib icudt.lib
+ LIBS = $(LIBS) icuuc.lib icuin.lib icudt.lib
 +!endif
  !endif
+ !endif
  !if "$(WITH_ZLIB)" == "1"
- # could be named differently zdll or zlib
