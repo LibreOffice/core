@@ -264,15 +264,11 @@ OSingleSelectQueryComposer::OSingleSelectQueryComposer(const Reference< XNameAcc
 
 OSingleSelectQueryComposer::~OSingleSelectQueryComposer()
 {
-    std::vector<OPrivateColumns*>::const_iterator aColIter = m_aColumnsCollection.begin();
-    std::vector<OPrivateColumns*>::const_iterator aEnd = m_aColumnsCollection.end();
-    for(;aColIter != aEnd;++aColIter)
-        delete *aColIter;
+    for (auto const& columnCollection : m_aColumnsCollection)
+        delete columnCollection;
 
-    std::vector<OPrivateTables*>::const_iterator aTabIter = m_aTablesCollection.begin();
-    std::vector<OPrivateTables*>::const_iterator aTabEnd = m_aTablesCollection.end();
-    for(;aTabIter != aTabEnd;++aTabIter)
-        delete *aTabIter;
+    for (auto const& tableCollection : m_aTablesCollection)
+        delete tableCollection;
 }
 
 // OComponentHelper
@@ -728,9 +724,8 @@ Reference< XNameAccess > SAL_CALL OSingleSelectQueryComposer::getTables(  )
     {
         const OSQLTables& aTables = m_aSqlIterator.getTables();
         std::vector< OUString> aNames;
-        OSQLTables::const_iterator aEnd = aTables.end();
-        for(OSQLTables::const_iterator aIter = aTables.begin(); aIter != aEnd;++aIter)
-            aNames.push_back(aIter->first);
+        for (auto const& elem : aTables)
+            aNames.push_back(elem.first);
 
         m_pTables = new OPrivateTables(aTables,m_xMetaData->supportsMixedCaseQuotedIdentifiers(),*this,m_aMutex,aNames);
     }
@@ -1333,9 +1328,8 @@ Reference< XIndexAccess > SAL_CALL OSingleSelectQueryComposer::getParameters(  )
     {
         ::rtl::Reference< OSQLColumns> aCols = m_aSqlIterator.getParameters();
         std::vector< OUString> aNames;
-        OSQLColumns::Vector::const_iterator aEnd = aCols->get().end();
-        for(OSQLColumns::Vector::const_iterator aIter = aCols->get().begin(); aIter != aEnd;++aIter)
-            aNames.push_back(getString((*aIter)->getPropertyValue(PROPERTY_NAME)));
+        for (auto const& elem : aCols->get())
+            aNames.push_back(getString(elem->getPropertyValue(PROPERTY_NAME)));
         m_aCurrentColumns[ParameterColumns] = new OPrivateColumns(aCols,m_xMetaData->supportsMixedCaseQuotedIdentifiers(),*this,m_aMutex,aNames,true);
     }
 
@@ -1355,15 +1349,13 @@ void OSingleSelectQueryComposer::clearColumns( const EColumnType _eType )
 
 void OSingleSelectQueryComposer::clearCurrentCollections()
 {
-    std::vector<OPrivateColumns*>::iterator aIter = m_aCurrentColumns.begin();
-    std::vector<OPrivateColumns*>::const_iterator aEnd = m_aCurrentColumns.end();
-    for (;aIter != aEnd;++aIter)
+    for (auto & currentColumn : m_aCurrentColumns)
     {
-        if ( *aIter )
+        if (currentColumn)
         {
-            (*aIter)->disposing();
-            m_aColumnsCollection.push_back(*aIter);
-            *aIter = nullptr;
+            currentColumn->disposing();
+            m_aColumnsCollection.push_back(currentColumn);
+            currentColumn = nullptr;
         }
     }
 
@@ -1385,9 +1377,8 @@ Reference< XIndexAccess > OSingleSelectQueryComposer::setCurrentColumns( EColumn
     if ( !m_aCurrentColumns[_eType] )
     {
         std::vector< OUString> aNames;
-        OSQLColumns::Vector::const_iterator aEnd = _rCols->get().end();
-        for(OSQLColumns::Vector::const_iterator aIter = _rCols->get().begin(); aIter != aEnd;++aIter)
-            aNames.push_back(getString((*aIter)->getPropertyValue(PROPERTY_NAME)));
+        for (auto const& elem : _rCols->get())
+            aNames.push_back(getString(elem->getPropertyValue(PROPERTY_NAME)));
         m_aCurrentColumns[_eType] = new OPrivateColumns(_rCols,m_xMetaData->supportsMixedCaseQuotedIdentifiers(),*this,m_aMutex,aNames,true);
     }
 
@@ -1759,18 +1750,13 @@ Sequence< Sequence< PropertyValue > > OSingleSelectQueryComposer::getStructuredC
                 {
                     aFilterSeq.realloc(aFilters.size());
                     Sequence<PropertyValue>* pFilters = aFilterSeq.getArray();
-                    std::vector< std::vector < PropertyValue > >::const_iterator aEnd = aFilters.end();
-                    std::vector< std::vector < PropertyValue > >::const_iterator i = aFilters.begin();
-                    for ( ; i != aEnd ; ++i)
+                    for (auto const& filter : aFilters)
                     {
-                        const std::vector < PropertyValue >& rProperties = *i;
-                        pFilters->realloc(rProperties.size());
+                        pFilters->realloc(filter.size());
                         PropertyValue* pFilter = pFilters->getArray();
-                        std::vector < PropertyValue >::const_iterator j = rProperties.begin();
-                        std::vector < PropertyValue >::const_iterator aEnd2 = rProperties.end();
-                        for ( ; j != aEnd2 ; ++j)
+                        for (auto const& elem : filter)
                         {
-                            *pFilter = *j;
+                            *pFilter = elem;
                             ++pFilter;
                         }
                         ++pFilters;

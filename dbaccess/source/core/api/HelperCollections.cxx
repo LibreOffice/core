@@ -55,12 +55,9 @@ namespace dbaccess
         std::vector< OUString > aNames; aNames.reserve( _rColumns->get().size() );
 
         OUString sColumName;
-        for (   ::connectivity::OSQLColumns::Vector::const_iterator column = _rColumns->get().begin();
-                column != _rColumns->get().end();
-                ++column
-            )
+        for (auto const& column : _rColumns->get())
         {
-            Reference< XPropertySet > xColumn( *column, UNO_QUERY_THROW );
+            Reference< XPropertySet > xColumn(column, UNO_QUERY_THROW);
             xColumn->getPropertyValue( PROPERTY_NAME ) >>= sColumName;
             aNames.push_back( sColumName );
         }
