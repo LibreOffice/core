@@ -227,7 +227,7 @@ std::vector<Any> HsqlRowInputStream::readOneRow(const ColumnTypeVector& nColType
                 sal_Int32 nSize = 0;
                 m_pStream->ReadInt32(nSize);
 
-                Sequence<sal_uInt8> aBytes(nSize);
+                Sequence<sal_Int8> aBytes(nSize);
                 m_pStream->ReadBytes(aBytes.getArray(), nSize);
                 aData.push_back(makeAny(aBytes));
             }

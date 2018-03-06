@@ -122,28 +122,55 @@ void lcl_setParams(const RowVector& row, Reference<XParameters>& xParam,
             }
             break;
             case DataType::BIGINT:
-                break;
+            {
+                sal_Int64 nVal;
+                if (row.at(i) >>= nVal)
+                {
+                    xParam->setLong(i + 1, nVal);
+                }
+            }
+            break;
             case DataType::REAL:
             case DataType::FLOAT:
             case DataType::DOUBLE:
+            {
+                double nVal;
+                if (row.at(i) >>= nVal)
+                {
+                    xParam->setDouble(i + 1, nVal);
+                }
                 break;
+            }
             case DataType::NUMERIC:
             case DataType::DECIMAL:
+                // TODO
                 break;
             case DataType::DATE:
+                // TODO
                 break;
             case DataType::TIME:
+                // TODO
                 break;
             case DataType::TIMESTAMP:
+                // TODO
                 break;
             case DataType::BOOLEAN:
+                // TODO
                 break;
             case DataType::OTHER:
+                // TODO
                 break;
             case DataType::BINARY:
             case DataType::VARBINARY:
             case DataType::LONGVARBINARY:
+            {
+                Sequence<sal_Int8> nVal;
+                if (row.at(i) >>= nVal)
+                {
+                    xParam->setBytes(i + 1, nVal);
+                }
                 break;
+            }
             default:
                 throw WrongFormatException();
         }

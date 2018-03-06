@@ -157,7 +157,15 @@ sal_Int32 lcl_getDataTypeFromHsql(const OUString& sTypeName)
     assert(false);
     return -1;
 }
+
+void lcl_addDefaultParameters(std::vector<sal_Int32>& aParams, sal_Int32 eType)
+{
+    if (eType == DataType::CHAR || eType == DataType::BINARY || eType == DataType::VARBINARY
+        || eType == DataType::VARCHAR)
+        aParams.push_back(8000); // from SQL standard
 }
+
+} // unnamed namespace
 
 namespace dbahsql
 {
@@ -194,6 +202,10 @@ void CreateStmtParser::parseColumnPart(const OUString& sColumnPart)
             {
                 aParams.push_back(sParam.toInt32());
             }
+        }
+        else
+        {
+            lcl_addDefaultParameters(aParams, lcl_getDataTypeFromHsql(sTypeName));
         }
 
         ColumnDefinition aColDef(words[0], lcl_getDataTypeFromHsql(sTypeName), aParams,
