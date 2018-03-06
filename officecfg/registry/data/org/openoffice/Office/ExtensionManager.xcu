@@ -26,7 +26,7 @@
 <oor:component-data oor:name="ExtensionManager" oor:package="org.openoffice.Office" xmlns:oor="http://openoffice.org/2001/registry">
   <node oor:name="ExtensionRepositories">
     <prop oor:name="WebsiteLink">
-      <value>http://extensions.openoffice.org/getmore?cid=920794</value>
+      <value>https://extensions.openoffice.org/getmore?cid=920794</value>
     </prop>
   </node>
 </oor:component-data>
