@@ -67,7 +67,6 @@ $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
     UnpackedTarball/pdfium/fpdfsdk/fpdfeditpath \
     UnpackedTarball/pdfium/fpdfsdk/fpdfedittext \
     UnpackedTarball/pdfium/fpdfsdk/fpdfformfill \
-    UnpackedTarball/pdfium/fpdfsdk/fpdfppo \
     UnpackedTarball/pdfium/fpdfsdk/fpdfsave \
     UnpackedTarball/pdfium/fpdfsdk/fpdftext \
     UnpackedTarball/pdfium/fpdfsdk/fpdfview \
@@ -348,7 +347,7 @@ $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
     UnpackedTarball/pdfium/core/fxcodec/jbig2/JBig2_Segment \
     UnpackedTarball/pdfium/core/fxcodec/jbig2/JBig2_SymbolDict \
     UnpackedTarball/pdfium/core/fxcodec/jbig2/JBig2_TrdProc \
-    UnpackedTarball/pdfium/core/fxcodec/lbmp/fx_bmp \
+    UnpackedTarball/pdfium/core/fxcodec/bmp/fx_bmp \
     UnpackedTarball/pdfium/core/fxcodec/codec/ccodec_scanlinedecoder \
     UnpackedTarball/pdfium/core/fxcodec/gif/cfx_gif \
     UnpackedTarball/pdfium/core/fxcodec/gif/cfx_gifcontext \
@@ -378,7 +377,6 @@ $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
     UnpackedTarball/pdfium/core/fxcrt/css/cfx_csscolorvalue \
     UnpackedTarball/pdfium/core/fxcrt/css/cfx_csscomputedstyle \
     UnpackedTarball/pdfium/core/fxcrt/css/cfx_csscustomproperty \
-    UnpackedTarball/pdfium/core/fxcrt/css/cfx_cssdatatable \
     UnpackedTarball/pdfium/core/fxcrt/css/cfx_cssdeclaration \
     UnpackedTarball/pdfium/core/fxcrt/css/cfx_cssenumvalue \
     UnpackedTarball/pdfium/core/fxcrt/css/cfx_cssexttextbuf \
@@ -407,6 +405,7 @@ $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
     UnpackedTarball/pdfium/core/fxcrt/fx_string \
     UnpackedTarball/pdfium/core/fxcrt/widestring \
     UnpackedTarball/pdfium/core/fxcrt/cfx_seekablemultistream \
+    UnpackedTarball/pdfium/core/fxcrt/css/cfx_cssdata \
 ))
 
 # fxge
@@ -536,6 +535,11 @@ $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
     UnpackedTarball/pdfium/third_party/base/allocator/partition_allocator/page_allocator \
     UnpackedTarball/pdfium/third_party/base/allocator/partition_allocator/spin_lock \
     UnpackedTarball/pdfium/third_party/base/allocator/partition_allocator/partition_alloc \
+))
+
+# skia_shared
+$(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
+    UnpackedTarball/pdfium/third_party/skia_shared/SkFloatToDecimal \
 ))
 
 $(eval $(call gb_Library_use_externals,pdfium,\
