@@ -120,9 +120,8 @@ bool SwMacroAssignDlg::INetFormatDlg( vcl::Window* pParent, SwWrtShell& rSh,
     aSet.Put( AddEvents( MACASSGN_INETFMT ) );
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-    ScopedVclPtr<SfxAbstractDialog> pMacroDlg( pFact->CreateSfxDialog( pParent, aSet,
-        rSh.GetView().GetViewFrame()->GetFrame().GetFrameInterface(),
-        SID_EVENTCONFIG, false ) );
+    ScopedVclPtr<SfxAbstractDialog> pMacroDlg( pFact->CreateEventConfigDialog( pParent, aSet,
+        rSh.GetView().GetViewFrame()->GetFrame().GetFrameInterface() ) );
     if ( pMacroDlg && pMacroDlg->Execute() == RET_OK )
     {
         const SfxItemSet* pOutSet = pMacroDlg->GetOutputItemSet();

@@ -438,14 +438,13 @@ public:
     virtual VclPtr<SfxAbstractDialog>       CreateSfxDialog( vcl::Window* pParent,
                                                                         const SfxItemSet& rAttr,
                                                                         const SdrView* pView,
-                                                                        sal_uInt32 nResId
-                                                                        )=0;
-    virtual VclPtr<SfxAbstractDialog>       CreateSfxDialog( vcl::Window* pParent,
+                                                                        sal_uInt32 nResId )=0;
+    virtual VclPtr<SfxAbstractDialog>       CreateCharMapDialog( vcl::Window* pParent,
                                                                         const SfxItemSet& rAttr,
-                                    const css::uno::Reference< css::frame::XFrame >& _rxFrame,
-                                                                        sal_uInt32 nResId,
-                                                                        bool bInsert
-                                                                        )=0;
+                                                                        bool bInsert )=0;
+    virtual VclPtr<SfxAbstractDialog>       CreateEventConfigDialog( vcl::Window* pParent,
+                                                                        const SfxItemSet& rAttr,
+                                    const css::uno::Reference< css::frame::XFrame >& _rxFrame )=0;
     virtual VclPtr<AbstractSvxPostItDialog>    CreateSvxPostItDialog( vcl::Window* pParent,
                                                                         const SfxItemSet& rCoreSet,
                                                                         bool bPrevNext = false) = 0;
