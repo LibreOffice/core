@@ -1751,31 +1751,9 @@ void SwAnnotationShell::InsertSymbol(SfxRequest& rReq)
 
         // If character is selected then it can be shown.
         ScopedVclPtr<SfxAbstractDialog> pDlg(pFact->CreateCharMapDialog(rView.GetWindow(), aAllSet, true));
-
-        sal_uInt16 nResult = pDlg->Execute();
-        if( nResult == RET_OK )
-        {
-            const SfxStringItem* pCItem = SfxItemSet::GetItem<SfxStringItem>(pDlg->GetOutputItemSet(), SID_CHARMAP, false);
-            const SvxFontItem* pFontItem = SfxItemSet::GetItem<SvxFontItem>(pDlg->GetOutputItemSet(), SID_ATTR_CHAR_FONT, false);
-            if ( pFontItem )
-            {
-                aFont.SetFamilyName( pFontItem->GetFamilyName() );
-                aFont.SetStyleName( pFontItem->GetStyleName() );
-                aFont.SetCharSet( pFontItem->GetCharSet() );
-                aFont.SetPitch( pFontItem->GetPitch() );
-            }
-
-            if ( pCItem )
-            {
-                sSym  = pCItem->GetValue();
-                aOpt.SetSymbolFont(aFont.GetFamilyName());
-                SW_MOD()->ApplyUsrPref(aOpt, &rView);
-            }
-        }
-    }
-
-    if( sSym.isEmpty() )
+        pDlg->Execute();
         return;
+    }
 
     // do not flicker
     pOLV->HideCursor();

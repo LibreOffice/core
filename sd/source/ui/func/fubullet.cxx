@@ -198,22 +198,8 @@ void FuBullet::InsertSpecialCharacter( SfxRequest const & rReq )
         // If a character is selected, it can be shown
         // pDLg->SetFont( );
         // pDlg->SetChar( );
-        sal_uInt16 nResult = pDlg->Execute();
-        if( nResult == RET_OK )
-        {
-            const SfxStringItem* pCItem = SfxItemSet::GetItem<SfxStringItem>(pDlg->GetOutputItemSet(), SID_CHARMAP, false);
-            const SvxFontItem* pFItem = SfxItemSet::GetItem<SvxFontItem>(pDlg->GetOutputItemSet(), SID_ATTR_CHAR_FONT, false);
-            if ( pFItem )
-            {
-                aFont.SetFamilyName( pFItem->GetFamilyName() );
-                aFont.SetStyleName( pFItem->GetStyleName() );
-                aFont.SetCharSet( pFItem->GetCharSet() );
-                aFont.SetPitch( pFItem->GetPitch() );
-            }
-
-            if ( pCItem )
-                aChars  = pCItem->GetValue();
-        }
+        pDlg->Execute();
+        return;
     }
 
     if (!aChars.isEmpty())

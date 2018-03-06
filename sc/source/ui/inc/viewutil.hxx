@@ -44,9 +44,7 @@ class SC_DLLPUBLIC ScViewUtil
 {
 public:
     static bool ExecuteCharMap( const SvxFontItem&  rOldFont,
-                                SfxViewFrame&       rFrame,
-                                SvxFontItem&        rNewFont,
-                                OUString&           rString );
+                                SfxViewFrame&       rFrame );
 
     static bool IsActionShown( const ScChangeAction& rAction,
                                 const ScChangeViewSettings& rSettings,

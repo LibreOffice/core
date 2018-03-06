@@ -2470,23 +2470,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 aSet.Put( SvxFontItem( aCurFont.GetFamilyType(), aCurFont.GetFamilyName(), aCurFont.GetStyleName(), aCurFont.GetPitch(), aCurFont.GetCharSet(), GetPool().GetWhich(SID_ATTR_CHAR_FONT) ) );
 
                 ScopedVclPtr<SfxAbstractDialog> pDlg(pFact->CreateCharMapDialog( pTabViewShell->GetDialogParent(), aSet, true ));
-
-                if ( pDlg->Execute() == RET_OK )
-                {
-                    const SfxStringItem* pItem = SfxItemSet::GetItem<SfxStringItem>(pDlg->GetOutputItemSet(), SID_CHARMAP, false);
-                    const SvxFontItem* pFontItem = SfxItemSet::GetItem<SvxFontItem>(pDlg->GetOutputItemSet(), SID_ATTR_CHAR_FONT, false);
-
-                    if ( pItem && pFontItem )
-                    {
-                        vcl::Font aNewFont( pFontItem->GetFamilyName(), pFontItem->GetStyleName(), Size(1,1) );
-                        aNewFont.SetCharSet( pFontItem->GetCharSet() );
-                        aNewFont.SetPitch( pFontItem->GetPitch() );
-                        pTabViewShell->InsertSpecialChar( pItem->GetValue(), aNewFont );
-                        rReq.AppendItem( *pFontItem );
-                        rReq.AppendItem( *pItem );
-                        rReq.Done();
-                    }
-                }
+                pDlg->Execute();
             }
             break;
 
