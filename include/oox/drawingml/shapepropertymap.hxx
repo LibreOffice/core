@@ -64,7 +64,7 @@ enum class ShapeProperty
     FillTransparency,
     GradientTransparency,
     FillGradient,                 /// Explicit fill gradient or name of a fill gradient stored in a global container.
-    FillBitmapUrl,                /// Explicit fill bitmap URL or name of a fill bitmap URL stored in a global container.
+    FillBitmap,                   /// Explicit fill bitmap or name of a fill bitmap stored in a global container.
     FillBitmapMode,
     FillBitmapSizeX,
     FillBitmapSizeY,
@@ -73,7 +73,7 @@ enum class ShapeProperty
     FillBitmapRectanglePoint,
     FillHatch,
     ShadowXDistance,
-    FillBitmapNameFromUrl,
+    FillBitmapName,
     FillBackground,
     LAST = FillBackground
 };
@@ -86,13 +86,13 @@ struct OOX_DLLPUBLIC ShapePropertyInfo
     bool mbNamedLineMarker;      /// True = use named line marker instead of explicit line marker.
     bool mbNamedLineDash;        /// True = use named line dash instead of explicit line dash.
     bool mbNamedFillGradient;    /// True = use named fill gradient instead of explicit fill gradient.
-    bool mbNamedFillBitmapUrl;   /// True = use named fill bitmap URL instead of explicit fill bitmap URL.
+    bool mbNamedFillBitmap;      /// True = use named fill bitmap instead of explicit fill bitmap.
 
     static ShapePropertyInfo DEFAULT;           /// Default property info (used as default parameter of other methods).
 
     explicit ShapePropertyInfo(const ShapePropertyIds& rnPropertyIds,
                                bool bNamedLineMarker, bool bNamedLineDash,
-                               bool bNamedFillGradient, bool bNamedFillBitmapUrl);
+                               bool bNamedFillGradient, bool bNamedFillBitmap);
 
     bool has(ShapeProperty ePropId) const
     {
@@ -143,10 +143,10 @@ private:
     bool setFillGradient( sal_Int32 nPropId, const css::uno::Any& rValue );
     /** Creates a named transparency gradient. */
     bool setGradientTrans( sal_Int32 nPropId, const css::uno::Any& rValue );
-    /** Sets an explicit fill bitmap URL, or creates a named fill bitmap URL. */
-    bool setFillBitmapUrl( sal_Int32 nPropId, const css::uno::Any& rValue );
-    /** Sets an explicit fill bitmap URL and pushes the name to FillBitmapName */
-    bool setFillBitmapNameFromUrl( const css::uno::Any& rValue );
+    /** Sets an explicit fill bitmap, or creates a named fill bitmap. */
+    bool setFillBitmap( sal_Int32 nPropId, const css::uno::Any& rValue );
+    /** Sets an explicit fill bitmap and pushes the name to FillBitmapName */
+    bool setFillBitmapName( const css::uno::Any& rValue );
 
     // not implemented, to prevent implicit conversion from enum to int
     css::uno::Any& operator[]( ShapeProperty ePropId ) = delete;
