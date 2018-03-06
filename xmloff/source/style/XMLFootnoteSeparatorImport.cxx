@@ -159,7 +159,7 @@ void XMLFootnoteSeparatorImport::StartElement(
     sal_Int32 nIndex;
 
     nIndex = rMapper->FindEntryIndex(CTF_PM_FTN_LINE_ADJUST);
-    XMLPropertyState aLineAdjust( nIndex, uno::Any(eLineAdjust));
+    XMLPropertyState aLineAdjust( nIndex, uno::Any(sal_Int16(eLineAdjust)) );
     rProperties.push_back(aLineAdjust);
 
     nIndex = rMapper->FindEntryIndex(CTF_PM_FTN_LINE_COLOR);
