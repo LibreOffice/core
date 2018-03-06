@@ -49,6 +49,7 @@
 
 #include <algorithm>
 #include <memory>
+#include <utility>
 
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
@@ -1070,7 +1071,9 @@ OUString SvXMLGraphicHelper::implSaveGraphic(css::uno::Reference<css::graphic::X
     auto aIterator = maExportGraphics.find(aGraphic);
     if (aIterator != maExportGraphics.end())
     {
-        return aIterator->second;
+        auto const & aURLAndMimePair = aIterator->second;
+        rOutSavedMimeType = aURLAndMimePair.second;
+        return aURLAndMimePair.first;
     }
 
     GraphicObject aGraphicObject(aGraphic);
@@ -1275,7 +1278,7 @@ OUString SvXMLGraphicHelper::implSaveGraphic(css::uno::Reference<css::graphic::X
             aStoragePath += rPictureStreamName;
 
             // put into cache
-            maExportGraphics[aGraphic] = aStoragePath;
+            maExportGraphics[aGraphic] = std::make_pair(aStoragePath, rOutSavedMimeType);
 
             return aStoragePath;
         }
