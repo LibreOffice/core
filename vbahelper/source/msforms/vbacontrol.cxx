@@ -424,7 +424,7 @@ void SAL_CALL ScVbaControl::setTag( const OUString& aTag )
 
 ::sal_Int32 SAL_CALL ScVbaControl::getForeColor()
 {
-    sal_Int32 nForeColor = -1;
+    Color nForeColor;
     m_xProps->getPropertyValue( "TextColor" ) >>= nForeColor;
     return OORGBToXLRGB( nForeColor );
 }

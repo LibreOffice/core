@@ -304,6 +304,7 @@ OORGBToXLRGB( sal_Int32 nCol )
     sal_Int32 nRGB =  ( nAutoBits | (nBlue << 16) | (nGreen << 8) | nRed );
     return nRGB;
 }
+
 sal_Int32
 XLRGBToOORGB( sal_Int32 nCol )
 {
