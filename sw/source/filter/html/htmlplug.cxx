@@ -434,6 +434,28 @@ void SwHTMLParser::InsertEmbed()
             return;
 
         rObj.SetGraphic(aGraphic, OUString());
+
+        // Set the size of the OLE frame to the size of the graphic.
+        OutputDevice* pDevice = Application::GetDefaultDevice();
+        if (aSize.getHeight() == USHRT_MAX || aSize.getWidth() == USHRT_MAX)
+        {
+            Size aPixelSize = aGraphic.GetSizePixel(pDevice);
+            if (aSize.getWidth() == USHRT_MAX)
+                aSize.setWidth(aPixelSize.getWidth());
+            if (aSize.getHeight() == USHRT_MAX)
+                aSize.setHeight(aPixelSize.getHeight());
+        }
+
+        SwFrameFormat* pFormat = pOLENode->GetFlyFormat();
+        if (!pFormat)
+            return;
+
+        SwAttrSet aAttrSet(pFormat->GetAttrSet());
+        aAttrSet.ClearItem(RES_CNTNT);
+        Size aTwipSize(pDevice->PixelToLogic(aSize, MapMode(MapUnit::MapTwip)));
+        SwFormatFrameSize aFrameSize(ATT_FIX_SIZE, aTwipSize.Width(), aTwipSize.Height());
+        aAttrSet.Put(aFrameSize);
+        pOLENode->GetDoc()->SetFlyFrameAttr(*pFormat, aAttrSet);
         return;
     }
 
