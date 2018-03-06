@@ -291,7 +291,7 @@ void XMLTextMarkImportContext::EndElement()
                             m_rHelper.GetCursorAsRange()->getStart());
 
                         // check if beginning and end are in same XText
-                        if (xStartRange->getText() == xEndRange->getText())
+                        if (xStartRange.is() && xEndRange.is() && xStartRange->getText() == xEndRange->getText())
                         {
                             // create range for insertion
                             Reference<XTextCursor> xInsertionCursor =
