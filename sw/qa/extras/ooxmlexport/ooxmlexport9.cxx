@@ -394,6 +394,16 @@ DECLARE_OOXMLEXPORT_TEST(testUnbalancedColumns, "unbalanced-columns.docx")
     CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xTextSections->getByIndex(2), "DontBalanceTextColumns"));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf107035, "tdf107035.docx")
+{
+    // Select the second run containing the page number field
+    auto xPgNumRun = getRun(getParagraph(1), 2, "1");
+
+    // Check that the page number field colour is set to "automatic".
+    sal_Int32 nPgNumColour = getProperty<sal_Int32>(xPgNumRun, "CharColor");
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(COL_AUTO), nPgNumColour);
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf107889, "tdf107889.docx")
 {
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);

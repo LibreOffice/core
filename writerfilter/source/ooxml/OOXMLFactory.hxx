@@ -41,6 +41,7 @@ enum ResourceType_t {
     RT_Integer,
     RT_Properties,
     RT_Hex,
+    RT_HexColor,
     RT_String,
     RT_Shape,
     RT_Boolean,
