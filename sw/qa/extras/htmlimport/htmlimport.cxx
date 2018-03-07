@@ -14,6 +14,7 @@
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/BitmapMode.hpp>
 #include <com/sun/star/document/XEmbeddedObjectSupplier2.hpp>
+#include <com/sun/star/embed/ElementModes.hpp>
 #include <tools/datetime.hxx>
 #include <unotools/datetime.hxx>
 #include <vcl/GraphicNativeTransform.hxx>
@@ -315,7 +316,8 @@ DECLARE_HTMLIMPORT_TEST(testReqIfOleImg, "reqif-ole-img.xhtml")
     uno::Reference<document::XEmbeddedObjectSupplier2> xObject(xObjects->getByIndex(0),
                                                                uno::UNO_QUERY);
     // This failed, OLE object had no replacement image.
-    CPPUNIT_ASSERT(xObject->getReplacementGraphic().is());
+    uno::Reference<graphic::XGraphic> xGraphic = xObject->getReplacementGraphic();
+    CPPUNIT_ASSERT(xGraphic.is());
 
     uno::Reference<drawing::XShape> xShape(xObject, uno::UNO_QUERY);
     OutputDevice* pDevice = Application::GetDefaultDevice();
@@ -325,6 +327,17 @@ DECLARE_HTMLIMPORT_TEST(testReqIfOleImg, "reqif-ole-img.xhtml")
     awt::Size aSize = xShape->getSize();
     // This was only 1247, size was not set explicitly.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(aLogic.getWidth()), aSize.Width);
+
+    // Check mime/media types.
+    CPPUNIT_ASSERT_EQUAL(OUString("image/png"), getProperty<OUString>(xGraphic, "MimeType"));
+
+    uno::Reference<document::XStorageBasedDocument> xStorageProvider(mxComponent, uno::UNO_QUERY);
+    uno::Reference<embed::XStorage> xStorage = xStorageProvider->getDocumentStorage();
+    auto aStreamName = getProperty<OUString>(xObject, "StreamName");
+    uno::Reference<io::XStream> xStream
+        = xStorage->openStreamElement(aStreamName, embed::ElementModes::READ);
+    // This was empty.
+    CPPUNIT_ASSERT_EQUAL(OUString("text/rtf"), getProperty<OUString>(xStream, "MediaType"));
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

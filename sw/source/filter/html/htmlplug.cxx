@@ -433,7 +433,7 @@ void SwHTMLParser::InsertEmbed()
         if (GraphicFilter::GetGraphicFilter().ImportGraphic(aGraphic, aURLObj) != ERRCODE_NONE)
             return;
 
-        rObj.SetGraphic(aGraphic, OUString());
+        rObj.SetGraphic(aGraphic, aType);
 
         // Set the size of the OLE frame to the size of the graphic.
         OutputDevice* pDevice = Application::GetDefaultDevice();
@@ -496,6 +496,14 @@ void SwHTMLParser::InsertEmbed()
             uno::Reference<io::XStream> xOutStream
                 = xStorage->openStreamElement(aObjName, embed::ElementModes::READWRITE);
             comphelper::OStorageHelper::CopyInputToOutput(xInStream, xOutStream->getOutputStream());
+
+            if (!aType.isEmpty())
+            {
+                // Set media type of the native data.
+                uno::Reference<beans::XPropertySet> xOutStreamProps(xOutStream, uno::UNO_QUERY);
+                if (xOutStreamProps.is())
+                    xOutStreamProps->setPropertyValue("MediaType", uno::makeAny(aType));
+            }
         }
         xObj = aCnt.GetEmbeddedObject(aObjName);
     }
