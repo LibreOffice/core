@@ -537,7 +537,7 @@ static oslFileError create_dir_recursively_(
     oslFileError osl_error = create_dir_recursively_(
         dir_path, aDirectoryCreationCallbackFunc, pData);
 
-    if (osl_error != osl_File_E_None)
+    if (osl_error != osl_File_E_None && osl_error != osl_File_E_EXIST)
         return osl_error;
 
        dir_path[pos] = '/';
