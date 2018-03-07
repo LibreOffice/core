@@ -639,7 +639,7 @@ static DWORD create_dir_recursively_(
 
     dir_path->buffer[pos] = BACKSLASH; // restore
 
-    if (ERROR_SUCCESS != w32_error)
+    if (ERROR_SUCCESS != w32_error && ERROR_ALREADY_EXISTS != w32_error)
         return w32_error;
 
     return create_dir_recursively_(dir_path, aDirectoryCreationCallbackFunc, pData);
