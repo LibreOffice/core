@@ -392,12 +392,12 @@ sal_Int32 SAL_CALL AccessibleGridControlBase::getForeground(  )
 
     ensureIsAlive();
 
-    sal_Int32 nColor = 0;
+    Color nColor;
     vcl::Window* pInst = m_aTable.GetWindowInstance();
     if ( pInst )
     {
         if ( pInst->IsControlForeground() )
-            nColor = pInst->GetControlForeground().GetColor();
+            nColor = pInst->GetControlForeground();
     else
     {
         vcl::Font aFont;
@@ -405,10 +405,10 @@ sal_Int32 SAL_CALL AccessibleGridControlBase::getForeground(  )
             aFont = pInst->GetControlFont();
         else
             aFont = pInst->GetFont();
-        nColor = aFont.GetColor().GetColor();
+        nColor = aFont.GetColor();
     }
     }
-    return nColor;
+    return sal_Int32(nColor);
 }
 
 sal_Int32 SAL_CALL AccessibleGridControlBase::getBackground(  )
@@ -416,16 +416,16 @@ sal_Int32 SAL_CALL AccessibleGridControlBase::getBackground(  )
     SolarMutexGuard aSolarGuard;
 
     ensureIsAlive();
-    sal_Int32 nColor = 0;
+    Color nColor;
     vcl::Window* pInst = m_aTable.GetWindowInstance();
     if ( pInst )
     {
         if ( pInst->IsControlBackground() )
-            nColor = pInst->GetControlBackground().GetColor();
+            nColor = pInst->GetControlBackground();
     else
-            nColor = pInst->GetBackground().GetColor().GetColor();
+            nColor = pInst->GetBackground().GetColor();
     }
-    return nColor;
+    return sal_Int32(nColor);
 }
 
 

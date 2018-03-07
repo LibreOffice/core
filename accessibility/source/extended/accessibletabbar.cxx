@@ -414,11 +414,11 @@ namespace accessibility
     {
         OExternalLockGuard aGuard( this );
 
-        sal_Int32 nColor = 0;
+        Color nColor;
         if ( m_pTabBar )
         {
             if ( m_pTabBar->IsControlForeground() )
-                nColor = m_pTabBar->GetControlForeground().GetColor();
+                nColor = m_pTabBar->GetControlForeground();
             else
             {
                 vcl::Font aFont;
@@ -426,11 +426,11 @@ namespace accessibility
                     aFont = m_pTabBar->GetControlFont();
                 else
                     aFont = m_pTabBar->GetFont();
-                nColor = aFont.GetColor().GetColor();
+                nColor = aFont.GetColor();
             }
         }
 
-        return nColor;
+        return sal_Int32(nColor);
     }
 
 
@@ -438,16 +438,16 @@ namespace accessibility
     {
         OExternalLockGuard aGuard( this );
 
-        sal_Int32 nColor = 0;
+        Color nColor;
         if ( m_pTabBar )
         {
             if ( m_pTabBar->IsControlBackground() )
-                nColor = m_pTabBar->GetControlBackground().GetColor();
+                nColor = m_pTabBar->GetControlBackground();
             else
-                nColor = m_pTabBar->GetBackground().GetColor().GetColor();
+                nColor = m_pTabBar->GetBackground().GetColor();
         }
 
-        return nColor;
+        return sal_Int32(nColor);
     }
 
 

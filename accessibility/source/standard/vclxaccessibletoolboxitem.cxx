@@ -582,22 +582,22 @@ sal_Int32 SAL_CALL VCLXAccessibleToolBoxItem::getForeground(  )
 {
     OExternalLockGuard aGuard( this );
 
-    sal_Int32 nColor = 0;
+    Color nColor;
     if ( m_pToolBox )
-       nColor = m_pToolBox->GetControlForeground().GetColor();
+       nColor = m_pToolBox->GetControlForeground();
 
-    return nColor;
+    return sal_Int32(nColor);
 }
 
 sal_Int32 SAL_CALL VCLXAccessibleToolBoxItem::getBackground(  )
 {
     OExternalLockGuard aGuard( this );
 
-    sal_Int32 nColor = 0;
+    Color nColor;
     if ( m_pToolBox )
-       nColor = m_pToolBox->GetControlBackground().GetColor();
+       nColor = m_pToolBox->GetControlBackground();
 
-    return nColor;
+    return sal_Int32(nColor);
 }
 
 // XAccessibleExtendedComponent
