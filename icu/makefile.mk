@@ -197,7 +197,11 @@ ICU_BUILD_VERSION=Release
 ICU_BUILD_LIBPOST=
 .ENDIF
 
+.IF "$(CPUNAME)"=="INTEL"
 CONFIGURE_ACTION+= $(PERL) ..$/..$/..$/..$/..$/createmak.pl ..$/..$/..$/..$/..$/createmak.cfg .
+.ELIF "$(CPUNAME)"=="X86_64"
+CONFIGURE_ACTION+= $(PERL) ..$/..$/..$/..$/..$/createmak.pl ..$/..$/..$/..$/..$/createmakWin64.cfg .
+.ENDIF
 
 .IF "$(CCNUMVER)"<="001400000000"
 BUILD_ACTION=cd allinone && nmake /f all.mak EXFLAGS="-EHsc" && cd ..$/..
