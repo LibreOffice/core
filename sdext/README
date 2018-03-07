@@ -23,3 +23,8 @@ source/presenter/ - Impress / Presenter Console.
     canvas (e.g. cairo canvas), while the entire secondary screen
     uses a VCL-canvas that is created in
     sd::framework::FullScreenPane::CreateCanvas().
+
+    The secondary screen contains 3 "Panes" which each have
+    2 XWindows for the border area & the actual content,
+    and each content Pane is backed by a sd::presenter::PresenterCanvas
+    that wraps the FullScreenPane's canvas and does clipping.
