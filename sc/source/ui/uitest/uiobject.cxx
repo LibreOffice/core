@@ -131,7 +131,9 @@ void ScGridWinUIObject::execute(const OUString& rAction,
             auto itr = rParameters.find("TABLE");
             const OUString rStr = itr->second;
             sal_Int32 nTab = rStr.toUInt32();
-            mxGridWindow->getViewData()->SetTabNo(nTab);
+            ScTabView* pTabView = mxGridWindow->getViewData()->GetView();
+            if (pTabView)
+                pTabView->SetTabNo(nTab);
         }
         else if (rParameters.find("OBJECT") != rParameters.end())
         {
