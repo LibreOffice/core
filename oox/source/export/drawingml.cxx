@@ -1364,14 +1364,6 @@ void DrawingML::WriteGraphicCropProperties(uno::Reference<beans::XPropertySet> c
     }
 }
 
-void DrawingML::WriteSrcRect(const uno::Reference<beans::XPropertySet>& rxPropertySet, const OUString& rURL)
-{
-    GraphicObject aGraphicObject = GraphicObject::CreateGraphicObjectFromURL(rURL);
-    Size aOriginalSize = aGraphicObject.GetPrefSize();
-    const MapMode& rMapMode = aGraphicObject.GetPrefMapMode();
-    WriteGraphicCropProperties(rxPropertySet, aOriginalSize, rMapMode);
-}
-
 void DrawingML::WriteSrcRectXGraphic(uno::Reference<beans::XPropertySet> const & rxPropertySet,
                                      uno::Reference<graphic::XGraphic> const & rxGraphic)
 {

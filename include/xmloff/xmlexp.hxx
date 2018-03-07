@@ -467,11 +467,6 @@ public:
     bool AddEmbeddedXGraphicAsBase64(css::uno::Reference<css::graphic::XGraphic> const & rxGraphic);
     bool GetGraphicMimeTypeFromStream(css::uno::Reference<css::graphic::XGraphic> const & rxGraphic, OUString & rOutMimeType);
 
-    css::uno::Reference<css::io::XInputStream> GetEmbeddedGraphicObjectStream(
-        const OUString& rGraphicObjectURL);
-    bool AddEmbeddedGraphicObjectAsBase64(
-                            const OUString& rGraphicObjectURL );
-
     OUString AddEmbeddedObject(
                             const OUString& rEmbeddedObjectURL );
     bool AddEmbeddedObjectAsBase64(

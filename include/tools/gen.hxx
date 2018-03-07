@@ -745,10 +745,6 @@ inline SvStream& ReadPair( SvStream& rIStream, Point& v ) { return ReadPair(rISt
 inline SvStream& WritePair( SvStream& rOStream, const Point& v ) { return WritePair(rOStream, v.toPair()); }
 inline SvStream& ReadPair( SvStream& rIStream, Size& v ) { return ReadPair(rIStream, v.toPair()); }
 inline SvStream& WritePair( SvStream& rOStream, const Size& v ) { return WritePair(rOStream, v.toPair()); }
-inline SvStream& ReadPair( SvStream& rIStream, Range& v ) { return ReadPair(rIStream, v.toPair()); }
-inline SvStream& WritePair( SvStream& rOStream, const Range& v ) { return WritePair(rOStream, v.toPair()); }
-inline SvStream& ReadPair( SvStream& rIStream, Selection& v ) { return ReadPair(rIStream, v.toPair()); }
-inline SvStream& WritePair( SvStream& rOStream, const Selection& v ) { return WritePair(rOStream, v.toPair()); }
 
 #endif
 
