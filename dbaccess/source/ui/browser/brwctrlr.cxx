@@ -1826,7 +1826,7 @@ void SbaXDataBrowserController::ExecuteSearch()
     OSL_ENSURE(xModelSet.is(), "SbaXDataBrowserController::ExecuteSearch : no model set ?!");
     xModelSet->setPropertyValue("DisplayIsSynchron", css::uno::Any(false));
     xModelSet->setPropertyValue("AlwaysShowCursor", css::uno::Any(true));
-    xModelSet->setPropertyValue("CursorColor", makeAny(sal_Int32(COL_LIGHTRED)));
+    xModelSet->setPropertyValue("CursorColor", makeAny(COL_LIGHTRED));
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
     VclPtr<AbstractFmSearchDialog> pDialog;

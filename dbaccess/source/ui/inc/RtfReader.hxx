@@ -29,7 +29,7 @@ namespace dbaui
 {
     class ORTFReader final : public SvRTFParser , public ODatabaseExport
     {
-        std::vector<sal_Int32>    m_vecColor;
+        std::vector<Color>    m_vecColor;
 
         bool                    CreateTable(int nToken);
         virtual void            NextToken( int nToken ) override; // base class

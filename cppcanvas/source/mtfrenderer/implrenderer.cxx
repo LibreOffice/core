@@ -912,21 +912,21 @@ namespace cppcanvas
                 ::Color aTextColor = vcl::unotools::doubleSequenceToColor(
                     rState.textColor, xColorSpace );
 
-                aReliefColor = ::COL_LIGHTGRAY;
+                aReliefColor = COL_LIGHTGRAY;
 
                 // we don't have a automatic color, so black is always
                 // drawn on white (literally copied from
                 // vcl/source/gdi/outdev3.cxx)
                 if( aTextColor == COL_BLACK )
                 {
-                    aTextColor = ::COL_WHITE;
+                    aTextColor = COL_WHITE;
                     rParms.mrStates.getState().textColor =
                         vcl::unotools::colorToDoubleSequence(
                             aTextColor, xColorSpace );
                 }
 
                 if( aTextColor == COL_WHITE )
-                    aReliefColor = ::COL_BLACK;
+                    aReliefColor = COL_BLACK;
                 aReliefColor.SetTransparency( aTextColor.GetTransparency() );
             }
 

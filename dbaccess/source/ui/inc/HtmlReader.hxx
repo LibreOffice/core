@@ -41,7 +41,7 @@ namespace dbaui
                             getTypeSelectionPageFactory() override;
 
         void                TableDataOn(SvxCellHorJustify& eVal);
-        void                TableFontOn(css::awt::FontDescriptor& _rFont,sal_Int32 &_rTextColor);
+        void                TableFontOn(css::awt::FontDescriptor& _rFont, Color &_rTextColor);
         sal_Int16           GetWidthPixel( const HTMLOption& rOption );
         void                setTextEncoding();
         void                fetchOptions();

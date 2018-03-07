@@ -422,7 +422,7 @@ void ColorConfigWindow_Impl::Entry::ColorChanged (
     ColorConfigValue& rValue
 ) {
     Color aColor = m_pColorList->GetSelectEntryColor();
-    rValue.nColor = aColor.GetColor();
+    rValue.nColor = aColor;
 }
 
 // color of an extended entry has changed
@@ -430,7 +430,7 @@ void ColorConfigWindow_Impl::Entry::ColorChanged (
     ExtendedColorConfigValue& rValue
 ) {
     Color aColor = m_pColorList->GetSelectEntryColor();
-    rValue.setColor(aColor.GetColor());
+    rValue.setColor(aColor);
     if (aColor == COL_AUTO)
     {
         rValue.setColor(rValue.getDefaultColor());
