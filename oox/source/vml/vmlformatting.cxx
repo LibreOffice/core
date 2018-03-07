@@ -819,8 +819,8 @@ void FillModel::pushToPropMap( ShapePropertyMap& rPropMap, const GraphicHelper& 
             {
                 if( moBitmapPath.has() && !moBitmapPath.get().isEmpty() )
                 {
-                    aFillProps.maBlipProps.mxGraphic = rGraphicHelper.importEmbeddedGraphic( moBitmapPath.get() );
-                    if( aFillProps.maBlipProps.mxGraphic.is() )
+                    aFillProps.maBlipProps.mxFillGraphic = rGraphicHelper.importEmbeddedGraphic(moBitmapPath.get());
+                    if (aFillProps.maBlipProps.mxFillGraphic.is())
                     {
                         aFillProps.moFillType = XML_blipFill;
                         aFillProps.maBlipProps.moBitmapMode = (nFillType == XML_frame) ? XML_stretch : XML_tile;

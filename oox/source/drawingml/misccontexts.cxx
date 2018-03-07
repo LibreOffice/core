@@ -148,8 +148,8 @@ BlipContext::BlipContext( ContextHandler2Helper const & rParent,
     {
         // internal picture URL
         OUString aFragmentPath = getFragmentPathFromRelId( rAttribs.getString( R_TOKEN( embed ), OUString() ) );
-        if( !aFragmentPath.isEmpty() )
-            mrBlipProps.mxGraphic = getFilter().getGraphicHelper().importEmbeddedGraphic( aFragmentPath );
+        if (!aFragmentPath.isEmpty())
+            mrBlipProps.mxFillGraphic = getFilter().getGraphicHelper().importEmbeddedGraphic( aFragmentPath );
     }
     else if( rAttribs.hasAttribute( R_TOKEN( link ) ) )
     {
@@ -164,7 +164,7 @@ BlipContext::BlipContext( ContextHandler2Helper const & rParent,
         aMed.Download();
         Reference< io::XInputStream > xInStrm = aMed.GetInputStream();
         if ( xInStrm.is() )
-            mrBlipProps.mxGraphic = getFilter().getGraphicHelper().importGraphic( xInStrm );
+            mrBlipProps.mxFillGraphic = getFilter().getGraphicHelper().importGraphic( xInStrm );
     }
 }
 

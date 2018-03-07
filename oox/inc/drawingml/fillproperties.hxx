@@ -98,8 +98,7 @@ struct ArtisticEffectProperties
 
 struct BlipFillProperties
 {
-    css::uno::Reference< css::graphic::XGraphic >
-                          mxGraphic;              /// The fill graphic.
+    css::uno::Reference<css::graphic::XGraphic> mxFillGraphic; /// The fill graphic.
     OptValue< sal_Int32 > moBitmapMode;         /// Bitmap tile or stretch.
     OptValue< css::geometry::IntegerRectangle2D >
                           moFillRect;             /// Stretch fill offsets.
