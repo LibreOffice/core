@@ -61,6 +61,7 @@
 #include <oox/core/filterdetect.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/sequence.hxx>
+#include <comphelper/ofopxmlhelper.hxx>
 
 #include <oox/crypto/DocumentEncryption.hxx>
 #include <tools/date.hxx>
@@ -960,13 +961,6 @@ void XmlFilterBase::importCustomFragments(css::uno::Reference<css::embed::XStora
     Reference<XRelationshipAccess> xRelations(xDocumentStorage, UNO_QUERY);
     if (xRelations.is())
     {
-        // These are all the custom types we recognize and can preserve.
-        static const std::set<OUString> sCustomTypes = {
-                            "http://schemas.dell.com/ddp/2016/relationships/xenFile",
-                            "http://schemas.dell.com/ddp/2016/relationships/hmacFile",
-                            "http://schemas.dell.com/ddp/2016/relationships/metadataFile"
-                        };
-
         uno::Sequence<uno::Sequence<beans::StringPair>> aSeqs = xRelations->getAllRelationships();
 
         std::vector<StreamDataSequence> aCustomFragments;
@@ -986,7 +980,8 @@ void XmlFilterBase::importCustomFragments(css::uno::Reference<css::embed::XStora
                     sType = aPair.Second;
             }
 
-            if (sCustomTypes.find(sType) != sCustomTypes.end())
+            // Preserve non-standard (i.e. custom) entries.
+            if (!sType.match("http://schemas.openxmlformats.org"))
             {
                 StreamDataSequence aDataSeq;
                 if (importBinaryData(aDataSeq, sTarget))
@@ -1008,7 +1003,7 @@ void XmlFilterBase::importCustomFragments(css::uno::Reference<css::embed::XStora
         std::vector<uno::Reference<xml::dom::XDocument>> aCustomXmlDomPropsList;
         //FIXME: Ideally, we should get these the relations, but it seems that is not consistently set.
         // In some cases it's stored in the workbook relationships, which is unexpected. So we discover them directly.
-        for (int i = 1; i < 100; ++i)
+        for (int i = 1; ; ++i)
         {
             Reference<XDocument> xCustDoc = importFragment("customXml/item" + OUString::number(i) + ".xml");
             Reference<XDocument> xCustDocProps = importFragment("customXml/itemProps" + OUString::number(i) + ".xml");
@@ -1024,6 +1019,14 @@ void XmlFilterBase::importCustomFragments(css::uno::Reference<css::embed::XStora
         // Adding the saved custom xml DOM
         aGrabBagProperties["OOXCustomXml"] <<= comphelper::containerToSequence(aCustomXmlDomList);
         aGrabBagProperties["OOXCustomXmlProps"] <<= comphelper::containerToSequence(aCustomXmlDomPropsList);
+
+        // Save the [Content_Types].xml after parsing.
+        uno::Sequence<uno::Sequence<beans::StringPair>> aContentTypeInfo;
+        uno::Reference<io::XInputStream> xInputStream = openInputStream("[Content_Types].xml");
+        if (xInputStream.is())
+            aContentTypeInfo = comphelper::OFOPXMLHelper::ReadContentTypeSequence(xInputStream, getComponentContext());
+
+        aGrabBagProperties["OOXContentTypes"] <<= aContentTypeInfo;
 
         Reference<XComponent> xModel(getModel(), UNO_QUERY);
         oox::core::XmlFilterBase::putPropertiesToDocumentGrabBag(xModel, aGrabBagProperties);
@@ -1045,6 +1048,7 @@ void XmlFilterBase::exportCustomFragments()
     uno::Sequence<StreamDataSequence> customFragments;
     uno::Sequence<OUString> customFragmentTypes;
     uno::Sequence<OUString> customFragmentTargets;
+    uno::Sequence<uno::Sequence<beans::StringPair>> aContentTypes;
 
     uno::Sequence<beans::PropertyValue> propList;
     xPropSet->getPropertyValue(aName) >>= propList;
@@ -1070,6 +1074,10 @@ void XmlFilterBase::exportCustomFragments()
         else if (propName == "OOXCustomFragmentTargets")
         {
             propList[nProp].Value >>= customFragmentTargets;
+        }
+        else if (propName == "OOXContentTypes")
+        {
+            propList[nProp].Value >>= aContentTypes;
         }
     }
 
@@ -1110,10 +1118,16 @@ void XmlFilterBase::exportCustomFragments()
     for (sal_Int32 j = 0; j < customFragments.getLength(); j++)
     {
         addRelation(customFragmentTypes[j], customFragmentTargets[j]);
-        Reference<XOutputStream> xOutStream = openOutputStream(customFragmentTargets[j]);
+        const OUString aFilename = customFragmentTargets[j];
+        Reference<XOutputStream> xOutStream = openOutputStream(aFilename);
         xOutStream->writeBytes(customFragments[j]);
-        // BinaryXInputStream aInStrm(openOutputStream(customFragmentTargets[j]), true);
-        // aInStrm.copyToStream(xOutputStream);
+        uno::Reference<XPropertySet> xProps(xOutStream, uno::UNO_QUERY);
+        if (xProps.is())
+        {
+            const OUString aType = comphelper::OFOPXMLHelper::GetContentTypeByName(aContentTypes, aFilename);
+            const OUString aContentType = (aType.getLength() ? aType : OUString("application/octet-stream"));
+            xProps->setPropertyValue("MediaType", uno::makeAny(aContentType));
+        }
     }
 }
 
