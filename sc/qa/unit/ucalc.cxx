@@ -355,9 +355,9 @@ void Test::testRangeList()
     m_pDoc->InsertTab(0, "foo");
 
     ScRangeList aRL;
-    aRL.Append(ScRange(1,1,0,3,10,0));
+    aRL.push_back(ScRange(1,1,0,3,10,0));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("List should have one range.", size_t(1), aRL.size());
-    const ScRange* p = aRL[0];
+    const ScRange* p = &aRL[0];
     CPPUNIT_ASSERT_MESSAGE("Failed to get the range object.", p);
     CPPUNIT_ASSERT_MESSAGE("Wrong range.", p->aStart == ScAddress(1,1,0) && p->aEnd == ScAddress(3,10,0));
 
@@ -582,8 +582,8 @@ void Test::testSelectionFunction()
 
     // Select B2:B8 & D2:D8 disjoint region.
     ScRangeList aRanges;
-    aRanges.Append(ScRange(1,1,0,1,7,0)); // B2:B8
-    aRanges.Append(ScRange(3,1,0,3,7,0)); // D2:D8
+    aRanges.push_back(ScRange(1,1,0,1,7,0)); // B2:B8
+    aRanges.push_back(ScRange(3,1,0,3,7,0)); // D2:D8
     ScMarkData aMark;
     aMark.MarkFromRangeList(aRanges, true);
 
@@ -703,8 +703,8 @@ void Test::testSelectionFunction()
 
     // Mark B2 and C3 on first sheet.
     aRanges.RemoveAll();
-    aRanges.Append(ScRange(1,1,0)); // B2
-    aRanges.Append(ScRange(2,2,0)); // C3
+    aRanges.push_back(ScRange(1,1,0)); // B2
+    aRanges.push_back(ScRange(2,2,0)); // C3
     aMark.MarkFromRangeList(aRanges, true);
     // Additionally select third sheet.
     aMark.SelectTable(2, true);
@@ -3566,9 +3566,9 @@ void Test::testCopyPasteMultiRange()
     // Copy A2:B2, A4:B4, and A6:B6 to clipboard.
     ScDocument aClipDoc(SCDOCMODE_CLIP);
     ScClipParam aClipParam;
-    aClipParam.maRanges.Append(ScRange(0,1,0,1,1,0)); // A2:B2
-    aClipParam.maRanges.Append(ScRange(0,3,0,1,3,0)); // A4:B4
-    aClipParam.maRanges.Append(ScRange(0,5,0,1,5,0)); // A6:B6
+    aClipParam.maRanges.push_back(ScRange(0,1,0,1,1,0)); // A2:B2
+    aClipParam.maRanges.push_back(ScRange(0,3,0,1,3,0)); // A4:B4
+    aClipParam.maRanges.push_back(ScRange(0,5,0,1,5,0)); // A6:B6
     aClipParam.meDirection = ScClipParam::Row;
     m_pDoc->CopyToClip(aClipParam, &aClipDoc, &aMark, false, false);
 

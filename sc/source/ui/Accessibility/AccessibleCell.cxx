@@ -588,7 +588,7 @@ bool ScAccessibleCell::IsDropdown()
             SCTAB nRangeCount = aRanges.size();
             for (i=0; i<nRangeCount; i++)
             {
-                ScRange aRange = *aRanges[i];
+                ScRange aRange = aRanges[i];
                 mpDoc->ExtendTotalMerge( aRange );
                 bool bTextBelow = ( aRange.aStart.Row() == 0 );
                 // MT IA2: Not used: sal_Bool bIsInScen = sal_False;

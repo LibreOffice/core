@@ -324,7 +324,7 @@ namespace HelperNotifyChanges
             ScRangeList aChangeRanges;
             ScMarkData::iterator itr = rMark.begin(), itrEnd = rMark.end();
             for (; itr != itrEnd; ++itr)
-                aChangeRanges.Append( ScRange( nCol, nRow, *itr ) );
+                aChangeRanges.push_back( ScRange( nCol, nRow, *itr ) );
 
             HelperNotifyChanges::Notify(*pModelObj, aChangeRanges, "cell-change");
         }
@@ -1162,7 +1162,7 @@ void ScViewFunc::ApplySelectionPattern( const ScPatternAttr& rAttr, bool bCursor
             ScRange aChangeRange( aMarkRange );
             aChangeRange.aStart.SetTab( *itr );
             aChangeRange.aEnd.SetTab( *itr );
-            aChangeRanges.Append( aChangeRange );
+            aChangeRanges.push_back( aChangeRange );
         }
 
         SCCOL nStartCol = aMarkRange.aStart.Col();
@@ -1225,7 +1225,7 @@ void ScViewFunc::ApplySelectionPattern( const ScPatternAttr& rAttr, bool bCursor
             pNewEditData = pEditObj->Clone();
         }
 
-        aChangeRanges.Append(aPos);
+        aChangeRanges.push_back(aPos);
         std::unique_ptr<ScPatternAttr> pOldPat(new ScPatternAttr(*rDoc.GetPattern( nCol, nRow, nTab )));
 
         rDoc.ApplyPattern( nCol, nRow, nTab, rAttr );
@@ -1965,7 +1965,7 @@ void ScViewFunc::DeleteContents( InsertDeleteFlags nFlags )
         ScRangeList aChangeRanges;
         if ( bSimple )
         {
-            aChangeRanges.Append( aMarkRange );
+            aChangeRanges.push_back( aMarkRange );
         }
         else
         {
@@ -2291,7 +2291,7 @@ void ScViewFunc::SetWidthOrHeight(
                     SCCOL nEndCol   = rRange.mnEnd;
                     for ( SCCOL nCol = nStartCol; nCol <= nEndCol; ++nCol )
                     {
-                        aChangeRanges.Append( ScRange( nCol, 0, nTab ) );
+                        aChangeRanges.push_back( ScRange( nCol, 0, nTab ) );
                     }
                 }
             }

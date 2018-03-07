@@ -5270,7 +5270,7 @@ bool ScGridWindow::HasScenarioButton( const Point& rPosPixel, ScRange& rScenRang
         size_t nRangeCount = aRanges.size();
         for (size_t j=0;  j< nRangeCount; ++j)
         {
-            ScRange aRange = *aRanges[j];
+            ScRange aRange = aRanges[j];
             // Always extend scenario frame to merged cells where no new non-covered cells
             // are framed
             pDoc->ExtendTotalMerge( aRange );
@@ -5704,14 +5704,14 @@ void ScGridWindow::UpdateCopySourceOverlay()
     mpOOSelectionBorder.reset(new sdr::overlay::OverlayObjectList);
     for ( size_t i = 0; i < rClipParam.maRanges.size(); ++i )
     {
-        ScRange* p = rClipParam.maRanges[i];
-        if (p->aStart.Tab() != nCurTab)
+        ScRange const & r = rClipParam.maRanges[i];
+        if (r.aStart.Tab() != nCurTab)
             continue;
 
-        SCCOL nClipStartX = p->aStart.Col();
-        SCROW nClipStartY = p->aStart.Row();
-        SCCOL nClipEndX   = p->aEnd.Col();
-        SCROW nClipEndY   = p->aEnd.Row();
+        SCCOL nClipStartX = r.aStart.Col();
+        SCROW nClipStartY = r.aStart.Row();
+        SCCOL nClipEndX   = r.aEnd.Col();
+        SCROW nClipEndY   = r.aEnd.Row();
 
         Point aClipStartScrPos = pViewData->GetScrPos( nClipStartX, nClipStartY, eWhich );
         Point aClipEndScrPos   = pViewData->GetScrPos( nClipEndX + 1, nClipEndY + 1, eWhich );

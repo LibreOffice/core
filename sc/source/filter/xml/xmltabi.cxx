@@ -368,7 +368,7 @@ void SAL_CALL ScXMLTableContext::endFastElement(sal_Int32 /*nElement*/)
         size_t nCount = aRangeList.size();
         for (size_t i=0; i< nCount; i++ )
         {
-            pDoc->AddPrintRange( nCurTab, *aRangeList[i] );
+            pDoc->AddPrintRange( nCurTab, aRangeList[i] );
         }
     }
     else if (!bPrintEntireSheet)

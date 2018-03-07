@@ -60,7 +60,7 @@ namespace HelperNotifyChanges
 
             for (const auto & rOldValue : rOldValues)
             {
-                aChangeRanges.Append( ScRange(rPos.Col(), rPos.Row(), rOldValue.mnTab));
+                aChangeRanges.push_back( ScRange(rPos.Col(), rPos.Row(), rOldValue.mnTab));
             }
 
             Notify(*pModelObj, aChangeRanges, "cell-change");

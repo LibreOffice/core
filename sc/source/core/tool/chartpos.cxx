@@ -90,8 +90,7 @@ ScChartPositioner::~ScChartPositioner()
 
 void ScChartPositioner::SetRangeList( const ScRange& rRange )
 {
-    aRangeListRef = new ScRangeList;
-    aRangeListRef->Append( rRange );
+    aRangeListRef = new ScRangeList( rRange );
     InvalidateGlue();
 }
 
@@ -105,7 +104,7 @@ void ScChartPositioner::GlueState()
     {
         if (  !aRangeListRef->empty() )
         {
-            pR = aRangeListRef->front();
+            pR = &aRangeListRef->front();
             if ( pR->aStart.Tab() == pR->aEnd.Tab() )
                 eGlue = ScChartGlue::NONE;
             else
@@ -122,7 +121,7 @@ void ScChartPositioner::GlueState()
         return;
     }
 
-    pR = aRangeListRef->front();
+    pR = &aRangeListRef->front();
     nStartCol = pR->aStart.Col();
     nStartRow = pR->aStart.Row();
     SCCOL nMaxCols, nEndCol;
@@ -143,7 +142,7 @@ void ScChartPositioner::GlueState()
 
         // in last pass; i = nRanges so don't use at()
         if ( i < nRanges )
-            pR = (*aRangeListRef)[i];
+            pR = &(*aRangeListRef)[i];
     }
     SCCOL nC = nEndCol - nStartCol + 1;
     if ( nC == 1 )
@@ -176,7 +175,7 @@ void ScChartPositioner::GlueState()
     SCROW nRow, nRow1, nRow2;
     for ( size_t i = 0, nRanges = aRangeListRef->size(); i < nRanges; ++i )
     {   // mark selections as used in 2D
-        pR = (*aRangeListRef)[i];
+        pR = &(*aRangeListRef)[i];
         nCol1 = pR->aStart.Col() - nStartCol;
         nCol2 = pR->aEnd.Col() - nStartCol;
         nRow1 = pR->aStart.Row() - nStartRow;
@@ -274,7 +273,7 @@ void ScChartPositioner::CheckColRowHeaders()
     GlueState();
     if ( aRangeListRef->size() == 1 )
     {
-        aRangeListRef->front()->GetVars( nCol1, nRow1, nTab1, nCol2, nRow2, nTab2 );
+        aRangeListRef->front().GetVars( nCol1, nRow1, nTab1, nCol2, nRow2, nTab2 );
         if ( nCol1 > nCol2 || nRow1 > nRow2 )
             bColStrings = bRowStrings = false;
         else
@@ -299,8 +298,8 @@ void ScChartPositioner::CheckColRowHeaders()
               ++i
             )
         {
-            ScRange* pR = (*aRangeListRef)[i];
-            pR->GetVars( nCol1, nRow1, nTab1, nCol2, nRow2, nTab2 );
+            const ScRange & rR = (*aRangeListRef)[i];
+            rR.GetVars( nCol1, nRow1, nTab1, nCol2, nRow2, nTab2 );
             bool bTopRow = (nRow1 == nStartRow);
             if ( bRowStrings && (bVert || nCol1 == nStartCol) )
             {   // NONE or ROWS: RowStrings in every selection possible
@@ -362,8 +361,8 @@ void ScChartPositioner::CreatePositionMap()
     SCROW nNoGlueRow = 0;
     for ( size_t i = 0, nRanges = aRangeListRef->size(); i < nRanges; ++i )
     {
-        ScRange* pR = (*aRangeListRef)[i];
-        pR->GetVars( nCol1, nRow1, nTab1, nCol2, nRow2, nTab2 );
+        const ScRange & rR = (*aRangeListRef)[i];
+        rR.GetVars( nCol1, nRow1, nTab1, nCol2, nRow2, nTab2 );
         for ( nTab = nTab1; nTab <= nTab2; nTab++ )
         {
             // nTab in ColKey to allow to have the same col/row in another table

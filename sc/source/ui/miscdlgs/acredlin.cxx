@@ -244,8 +244,8 @@ void ScAcceptChgDlg::Init()
 
     if( !aChangeViewSet.GetTheRangeList().empty() )
     {
-        const ScRange* pRangeEntry = aChangeViewSet.GetTheRangeList().front();
-        OUString aRefStr(pRangeEntry->Format(ScRefFlags::RANGE_ABS_3D, pDoc));
+        const ScRange & rRangeEntry = aChangeViewSet.GetTheRangeList().front();
+        OUString aRefStr(rRangeEntry.Format(ScRefFlags::RANGE_ABS_3D, pDoc));
         pTPFilter->SetRange(aRefStr);
     }
 
@@ -338,8 +338,8 @@ bool ScAcceptChgDlg::IsValidAction(const ScChangeAction* pScChangeAction)
         {
             for ( size_t i = 0, nRanges = aRangeList.size(); i < nRanges; ++i )
             {
-                ScRange* pRangeEntry = aRangeList[ i ];
-                if (pRangeEntry->Intersects(aRef)) {
+                ScRange const & rRangeEntry = aRangeList[ i ];
+                if (rRangeEntry.Intersects(aRef)) {
                     bFlag = true;
                     break;
                 }
@@ -457,8 +457,8 @@ SvTreeListEntry* ScAcceptChgDlg::AppendChangeAction(
             {
                 for ( size_t i = 0, nRanges = aRangeList.size(); i < nRanges; ++i )
                 {
-                    ScRange* pRangeEntry = aRangeList[ i ];
-                    if( pRangeEntry->Intersects(aRef) )
+                    ScRange const & rRangeEntry = aRangeList[ i ];
+                    if( rRangeEntry.Intersects(aRef) )
                     {
                         bHasFilterEntry=true;
                         bFlag=true;
@@ -527,8 +527,8 @@ SvTreeListEntry* ScAcceptChgDlg::AppendFilteredAction(
         {
             for ( size_t i = 0, nRanges = aRangeList.size(); i < nRanges; ++i )
             {
-                ScRange* pRangeEntry=aRangeList[ i ];
-                if( pRangeEntry->Intersects(aRef) )
+                ScRange const & rRangeEntry=aRangeList[ i ];
+                if( rRangeEntry.Intersects(aRef) )
                 {
                     if( pScChangeAction->GetState()==eState )
                         bFlag = true;
@@ -647,8 +647,8 @@ SvTreeListEntry* ScAcceptChgDlg::InsertChangeActionContent(const ScChangeActionC
         {
             for ( size_t i = 0, nRanges = aRangeList.size(); i < nRanges; ++i )
             {
-                ScRange* pRangeEntry = aRangeList[ i ];
-                if( pRangeEntry->Intersects(aRef) )
+                ScRange const & rRangeEntry = aRangeList[ i ];
+                if( rRangeEntry.Intersects(aRef) )
                 {
                     bFlag=true;
                     break;

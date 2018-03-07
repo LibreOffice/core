@@ -1398,11 +1398,11 @@ void ScDBCollection::RefreshDirtyTableColumnNames()
 {
     for (size_t i=0; i < maNamedDBs.maDirtyTableColumnNames.size(); ++i)
     {
-        const ScRange* pRange = maNamedDBs.maDirtyTableColumnNames[i];
+        const ScRange & rRange = maNamedDBs.maDirtyTableColumnNames[i];
         for (auto const& it : maNamedDBs)
         {
             if (it->AreTableColumnNamesDirty())
-                it->RefreshTableColumnNames( &maNamedDBs.mrDoc, *pRange);
+                it->RefreshTableColumnNames( &maNamedDBs.mrDoc, rRange);
         }
     }
     maNamedDBs.maDirtyTableColumnNames.RemoveAll();

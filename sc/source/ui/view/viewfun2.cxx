@@ -330,7 +330,7 @@ static ScAutoSum lcl_GetAutoSumForColumnRange( ScDocument* pDoc, ScRangeList& rR
         bool bContinue = false;
         do
         {
-            rRangeList.Append( ScRange( nCol, nStartRow, nTab, nCol, nEndRow, nTab ) );
+            rRangeList.push_back( ScRange( nCol, nStartRow, nTab, nCol, nEndRow, nTab ) );
             nEndRow = static_cast< SCROW >( nExtend );
             bContinue = lcl_FindNextSumEntryInColumn( pDoc, nCol, nEndRow /*inout*/, nTab, nExtend /*out*/, aStart.Row() );
             if ( bContinue )
@@ -346,7 +346,7 @@ static ScAutoSum lcl_GetAutoSumForColumnRange( ScDocument* pDoc, ScRangeList& rR
         {
             --nStartRow;
         }
-        rRangeList.Append( ScRange( nCol, nStartRow, nTab, nCol, nEndRow, nTab ) );
+        rRangeList.push_back( ScRange( nCol, nStartRow, nTab, nCol, nEndRow, nTab ) );
         if (eSum == ScAutoSumNone)
             eSum = ScAutoSumData;
     }
@@ -375,7 +375,7 @@ static ScAutoSum lcl_GetAutoSumForRowRange( ScDocument* pDoc, ScRangeList& rRang
         bool bContinue = false;
         do
         {
-            rRangeList.Append( ScRange( nStartCol, nRow, nTab, nEndCol, nRow, nTab ) );
+            rRangeList.push_back( ScRange( nStartCol, nRow, nTab, nEndCol, nRow, nTab ) );
             nEndCol = static_cast< SCCOL >( nExtend );
             bContinue = lcl_FindNextSumEntryInRow( pDoc, nEndCol /*inout*/, nRow, nTab, nExtend /*out*/, aStart.Col() );
             if ( bContinue )
@@ -391,7 +391,7 @@ static ScAutoSum lcl_GetAutoSumForRowRange( ScDocument* pDoc, ScRangeList& rRang
         {
             --nStartCol;
         }
-        rRangeList.Append( ScRange( nStartCol, nRow, nTab, nEndCol, nRow, nTab ) );
+        rRangeList.push_back( ScRange( nStartCol, nRow, nTab, nEndCol, nRow, nTab ) );
         if (eSum == ScAutoSumNone)
             eSum = ScAutoSumData;
     }
@@ -476,7 +476,7 @@ bool ScViewFunc::GetAutoSumArea( ScRangeList& rRangeList )
                         --nStartCol;
                 }
             }
-            rRangeList.Append(
+            rRangeList.push_back(
                 ScRange( nStartCol, nStartRow, nTab, nEndCol, nEndRow, nTab ) );
             if ( eSum == ScAutoSumSum )
             {
@@ -665,7 +665,7 @@ bool ScViewFunc::AutoSum( const ScRange& rRange, bool bSubTotal, bool bSetCursor
                 if ( (eSum = lcl_GetAutoSumForColumnRange( pDoc, aRangeList, aRange )) != ScAutoSumNone )
                 {
                     if (++nRowSums == 1)
-                        nRowSumsStartCol = aRangeList[0]->aStart.Col();
+                        nRowSumsStartCol = aRangeList[0].aStart.Col();
                     const OUString aFormula = GetAutoSumFormula(
                         aRangeList, bSubTotal, ScAddress(nCol, nInsRow, nTab));
                     EnterData( nCol, nInsRow, nTab, aFormula );
@@ -702,7 +702,7 @@ bool ScViewFunc::AutoSum( const ScRange& rRange, bool bSubTotal, bool bSetCursor
                 if ( (eSum = lcl_GetAutoSumForRowRange( pDoc, aRangeList, aRange )) != ScAutoSumNone )
                 {
                     if (++nColSums == 1)
-                        nColSumsStartRow = aRangeList[0]->aStart.Row();
+                        nColSumsStartRow = aRangeList[0].aStart.Row();
                     const OUString aFormula = GetAutoSumFormula( aRangeList, bSubTotal, ScAddress(nInsCol, nRow, nTab) );
                     EnterData( nInsCol, nRow, nTab, aFormula );
                 }
@@ -749,15 +749,14 @@ OUString ScViewFunc::GetAutoSumFormula( const ScRangeList& rRangeList, bool bSub
     if(!rRangeList.empty())
     {
         ScRangeList aRangeList = rRangeList;
-        const ScRange* pFirst = aRangeList.front();
         size_t ListSize = aRangeList.size();
-        for ( size_t i = 0; i < ListSize; ++i )
+        for ( size_t i = 1; i < ListSize; ++i )
         {
-            const ScRange* p = aRangeList[i];
-            if (p != pFirst)
+            const ScRange & r = aRangeList[i];
+            if (i != 0)
                 pArray->AddOpCode(ocSep);
             ScComplexRefData aRef;
-            aRef.InitRangeRel(*p, rAddr);
+            aRef.InitRangeRel(r, rAddr);
             pArray->AddDoubleReference(aRef);
         }
     }
@@ -996,8 +995,8 @@ void ScViewFunc::SetPrintRanges( bool bEntireSheet, const OUString* pPrint,
                 rMark.FillRangeListWithMarks( pList.get(), false );
                 for (size_t i = 0, n = pList->size(); i < n; ++i)
                 {
-                    ScRange* pR = (*pList)[i];
-                    rDoc.AddPrintRange(nTab, *pR);
+                    const ScRange & rR = (*pList)[i];
+                    rDoc.AddPrintRange(nTab, rR);
                 }
             }
         }
@@ -1391,7 +1390,7 @@ void ScViewFunc::FillAuto( FillDir eDir, SCCOL nStartCol, SCROW nStartRow,
                 default:
                     break;
             }
-            aChangeRanges.Append( aChangeRange );
+            aChangeRanges.push_back( aChangeRange );
             HelperNotifyChanges::Notify(*pModelObj, aChangeRanges);
         }
     }
@@ -1863,7 +1862,7 @@ bool ScViewFunc::SearchAndReplace( const SvxSearchItem* pSearchItem,
                 rMark.ResetMark();
                 for (size_t i = 0, n = aMatchedRanges.size(); i < n; ++i)
                 {
-                    const ScRange& r = *aMatchedRanges[i];
+                    const ScRange& r = aMatchedRanges[i];
                     if (r.aStart.Tab() == nTab)
                         rMark.SetMultiMarkArea(r);
                 }
@@ -2762,7 +2761,7 @@ void ScViewFunc::MoveTable(
                 break;  // for
             }
             ScRange aRange( 0, 0, TheTabs[j], MAXCOL, MAXROW, TheTabs[j] );
-            aParam.maRanges.Append(aRange);
+            aParam.maRanges.push_back(aRange);
         }
         pDoc->SetClipParam(aParam);
         if ( nErrVal > 0 )

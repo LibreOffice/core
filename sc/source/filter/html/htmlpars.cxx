@@ -445,10 +445,10 @@ void ScHTMLLayoutParser::SkipLocked( ScEEParseEntry* pE, bool bJoin )
             bAgain = false;
             for ( size_t i =  0, nRanges = xLockedList->size(); i < nRanges; ++i )
             {
-                ScRange* pR = (*xLockedList)[i];
-                if ( pR->Intersects( aRange ) )
+                ScRange & rR = (*xLockedList)[i];
+                if ( rR.Intersects( aRange ) )
                 {
-                    pE->nCol = pR->aEnd.Col() + 1;
+                    pE->nCol = rR.aEnd.Col() + 1;
                     SCCOL nTmp = pE->nCol + pE->nColOverlap - 1;
                     if ( pE->nCol > MAXCOL || nTmp > MAXCOL )
                         bBadCol = true;
@@ -2428,7 +2428,7 @@ void ScHTMLTable::InsertNewCell( const ScHTMLSize& rSpanSize )
     }
     if( rSpanSize.mnRows > 1 )
     {
-        maVMergedCells.Append( aNewRange );
+        maVMergedCells.push_back( aNewRange );
         /*  Do not insert vertically merged ranges into maUsedCells yet,
             because they may be shrunken (see above). The final vertically
             merged ranges are inserted in FillEmptyCells(). */
@@ -2436,7 +2436,7 @@ void ScHTMLTable::InsertNewCell( const ScHTMLSize& rSpanSize )
     else
     {
         if( rSpanSize.mnCols > 1 )
-            maHMergedCells.Append( aNewRange );
+            maHMergedCells.push_back( aNewRange );
         /*  Insert horizontally merged ranges and single cells into
             maUsedCells, they will not be changed anymore. */
         maUsedCells.Join( aNewRange );
@@ -2589,8 +2589,8 @@ void ScHTMLTable::FillEmptyCells()
     // insert the final vertically merged ranges into maUsedCells
     for ( size_t i = 0, nRanges = maVMergedCells.size(); i < nRanges; ++i )
     {
-        ScRange* pRange = maVMergedCells[ i ];
-        maUsedCells.Join( *pRange );
+        ScRange & rRange = maVMergedCells[ i ];
+        maUsedCells.Join( rRange );
     }
 
     for( ScAddress aAddr; aAddr.Row() < maSize.mnRows; aAddr.IncRow() )

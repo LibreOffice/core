@@ -1499,7 +1499,7 @@ TokenToRangeListState lclProcessRef( ScRangeList& orRanges, const Any& rData, sa
         ScAddress aAddress;
         // ignore invalid addresses (with #REF! errors), but do not stop parsing
         if( lclConvertToCellAddress( aAddress, aSingleRef, nForbiddenFlags, nFilterBySheet ) )
-            orRanges.Append( ScRange(aAddress, aAddress) );
+            orRanges.push_back( ScRange(aAddress, aAddress) );
         return STATE_REF;
     }
     ComplexReference aComplexRef;
@@ -1508,7 +1508,7 @@ TokenToRangeListState lclProcessRef( ScRangeList& orRanges, const Any& rData, sa
         ScRange aRange;
         // ignore invalid ranges (with #REF! errors), but do not stop parsing
         if( lclConvertToCellRange( aRange, aComplexRef, nForbiddenFlags, nFilterBySheet ) )
-            orRanges.Append( aRange );
+            orRanges.push_back( aRange );
         return STATE_REF;
     }
     return STATE_ERROR;
@@ -1610,7 +1610,7 @@ bool FormulaProcessorBase::extractCellRange( ScRange& orRange,
     lclProcessRef( aRanges, extractReference( rTokens ), -1 );
     if( !aRanges.empty() )
     {
-        orRange = *aRanges.front();
+        orRange = aRanges.front();
         return true;
     }
     return false;

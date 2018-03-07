@@ -461,10 +461,10 @@ void ScTable::DeleteSelection( InsertDeleteFlags nDelFlag, const ScMarkData& rMa
 
     for (size_t i = 0; i < aRangeList.size(); ++i)
     {
-        ScRange* pRange = aRangeList[i];
+        const ScRange & rRange = aRangeList[i];
 
-        if((nDelFlag & InsertDeleteFlags::ATTRIB) && pRange && pRange->aStart.Tab() == nTab)
-            mpCondFormatList->DeleteArea( pRange->aStart.Col(), pRange->aStart.Row(), pRange->aEnd.Col(), pRange->aEnd.Row() );
+        if((nDelFlag & InsertDeleteFlags::ATTRIB) && rRange.aStart.Tab() == nTab)
+            mpCondFormatList->DeleteArea( rRange.aStart.Col(), rRange.aStart.Row(), rRange.aEnd.Col(), rRange.aEnd.Row() );
     }
 
         // Do not set protected cell in a protected sheet
@@ -535,9 +535,8 @@ void ScTable::CopyToClip(
 {
     for ( size_t i = 0, nListSize = rRanges.size(); i < nListSize; ++i )
     {
-        const ScRange* p = rRanges[ i ];
-        if (p)
-            CopyToClip( rCxt, p->aStart.Col(), p->aStart.Row(), p->aEnd.Col(), p->aEnd.Row(), pTable);
+        const ScRange & r = rRanges[ i ];
+        CopyToClip( rCxt, r.aStart.Col(), r.aStart.Row(), r.aEnd.Col(), r.aEnd.Row(), pTable);
     }
 }
 
@@ -579,7 +578,7 @@ bool CheckAndDeduplicateCondFormat(ScDocument* pDocument, ScConditionalFormat* p
         ScRangeList& rDstRangeList = pOldFormat->GetRangeList();
         for (size_t i = 0; i < rNewRangeList.size(); ++i)
         {
-            rDstRangeList.Join(*rNewRangeList[i]);
+            rDstRangeList.Join(rNewRangeList[i]);
         }
         pDocument->AddCondFormatData(pOldFormat->GetRange(), nTab, pOldFormat->GetKey());
         return true;
@@ -1365,8 +1364,8 @@ bool ScTable::HasScenarioRange( const ScRange& rRange ) const
     {
         for ( size_t j = 0, n = pList->size(); j < n; j++ )
         {
-            const ScRange* pR = (*pList)[j];
-            if ( pR->Intersects( aTabRange ) )
+            const ScRange & rR = (*pList)[j];
+            if ( rR.Intersects( aTabRange ) )
                 return true;
         }
     }
@@ -2430,8 +2429,8 @@ bool ScTable::IsSelectionEditable( const ScMarkData& rMark,
                 {
                     for (size_t i=0, nRange = aRanges.size(); (i < nRange) && bIsEditable; i++ )
                     {
-                        ScRange aRange = *aRanges[ i ];
-                        if(pDocument->HasScenarioRange(nScenTab, aRange))
+                        const ScRange & rRange = aRanges[ i ];
+                        if(pDocument->HasScenarioRange(nScenTab, rRange))
                         {
                             ScScenarioFlags nFlags;
                             pDocument->GetScenarioFlags(nScenTab,nFlags);
@@ -2459,8 +2458,8 @@ bool ScTable::IsSelectionEditable( const ScMarkData& rMark,
             rMark.FillRangeListWithMarks( &aRanges, false );
             for (size_t i = 0, nRange = aRanges.size(); (i < nRange) && bIsEditable; i++)
             {
-                ScRange aRange = *aRanges[ i ];
-                if(pDocument->HasScenarioRange(nTab, aRange))
+                const ScRange & rRange = aRanges[ i ];
+                if(pDocument->HasScenarioRange(nTab, rRange))
                 {
                     ScScenarioFlags nFlags;
                     pDocument->GetScenarioFlags(nTab,nFlags);
@@ -2575,16 +2574,16 @@ void ScTable::ApplyPatternIfNumberformatIncompatible( const ScRange& rRange,
     }
 }
 
-void ScTable::AddCondFormatData( const ScRangeList& rRange, sal_uInt32 nIndex )
+void ScTable::AddCondFormatData( const ScRangeList& rRangeList, sal_uInt32 nIndex )
 {
-    size_t n = rRange.size();
+    size_t n = rRangeList.size();
     for(size_t i = 0; i < n; ++i)
     {
-        const ScRange* pRange = rRange[i];
-        SCCOL nColStart = pRange->aStart.Col();
-        SCCOL nColEnd = pRange->aEnd.Col();
-        SCROW nRowStart = pRange->aStart.Row();
-        SCROW nRowEnd = pRange->aEnd.Row();
+        const ScRange & rRange = rRangeList[i];
+        SCCOL nColStart = rRange.aStart.Col();
+        SCCOL nColEnd = rRange.aEnd.Col();
+        SCROW nRowStart = rRange.aStart.Row();
+        SCROW nRowEnd = rRange.aEnd.Row();
         for(SCCOL nCol = nColStart; nCol <= nColEnd; ++nCol)
         {
             aCol[nCol].AddCondFormat(nRowStart, nRowEnd, nIndex);
@@ -2592,16 +2591,16 @@ void ScTable::AddCondFormatData( const ScRangeList& rRange, sal_uInt32 nIndex )
     }
 }
 
-void ScTable::RemoveCondFormatData( const ScRangeList& rRange, sal_uInt32 nIndex )
+void ScTable::RemoveCondFormatData( const ScRangeList& rRangeList, sal_uInt32 nIndex )
 {
-    size_t n = rRange.size();
+    size_t n = rRangeList.size();
     for(size_t i = 0; i < n; ++i)
     {
-        const ScRange* pRange = rRange[i];
-        SCCOL nColStart = pRange->aStart.Col();
-        SCCOL nColEnd = pRange->aEnd.Col();
-        SCROW nRowStart = pRange->aStart.Row();
-        SCROW nRowEnd = pRange->aEnd.Row();
+        const ScRange & rRange = rRangeList[i];
+        SCCOL nColStart = rRange.aStart.Col();
+        SCCOL nColEnd = rRange.aEnd.Col();
+        SCROW nRowStart = rRange.aStart.Row();
+        SCROW nRowEnd = rRange.aEnd.Row();
         for(SCCOL nCol = nColStart; nCol <= nColEnd; ++nCol)
         {
             aCol[nCol].RemoveCondFormat(nRowStart, nRowEnd, nIndex);

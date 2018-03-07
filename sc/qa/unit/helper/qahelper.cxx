@@ -53,7 +53,7 @@ std::ostream& operator<<(std::ostream& rStrm, const ScRangeList& rList)
 {
     rStrm << "ScRangeList: \n";
     for(size_t i = 0; i < rList.size(); ++i)
-        rStrm << *rList[i];
+        rStrm << rList[i];
     return rStrm;
 }
 
@@ -382,14 +382,14 @@ ScRangeList getChartRanges(ScDocument& rDoc, const SdrOle2Obj& rChartObj)
         ScRefFlags nRes = aRange.Parse(aRangeReps[i], &rDoc, rDoc.GetAddressConvention());
         if (nRes & ScRefFlags::VALID)
             // This is a range address.
-            aRanges.Append(aRange);
+            aRanges.push_back(aRange);
         else
         {
             // Parse it as a single cell address.
             ScAddress aAddr;
             nRes = aAddr.Parse(aRangeReps[i], &rDoc, rDoc.GetAddressConvention());
             CPPUNIT_ASSERT_MESSAGE("Failed to parse a range representation.", (nRes & ScRefFlags::VALID));
-            aRanges.Append(aAddr);
+            aRanges.push_back(aAddr);
         }
     }
 

@@ -163,7 +163,7 @@ void ScRefTokenHelper::getRangeListFromTokens(
     {
         ScRange aRange;
         getRangeFromToken(aRange, *itr, rPos);
-        rRangeList.Append(aRange);
+        rRangeList.push_back(aRange);
     }
 }
 
@@ -187,13 +187,9 @@ void ScRefTokenHelper::getTokensFromRangeList(vector<ScTokenRef>& pTokens, const
     aTokens.reserve(nCount);
     for (size_t i = 0; i < nCount; ++i)
     {
-        const ScRange* pRange = rRanges[i];
-        if (!pRange)
-            // failed.
-            return;
-
+        const ScRange & rRange = rRanges[i];
         ScTokenRef pToken;
-        ScRefTokenHelper::getTokenFromRange(pToken,* pRange);
+        ScRefTokenHelper::getTokenFromRange(pToken, rRange);
         aTokens.push_back(pToken);
     }
     pTokens.swap(aTokens);

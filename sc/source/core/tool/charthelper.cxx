@@ -76,21 +76,21 @@ bool lcl_AdjustRanges( ScRangeList& rRanges, SCTAB nSourceTab, SCTAB nDestTab, S
 
     for ( size_t i=0, nCount = rRanges.size(); i < nCount; i++ )
     {
-        ScRange* pRange = rRanges[ i ];
-        if ( pRange->aStart.Tab() == nSourceTab && pRange->aEnd.Tab() == nSourceTab )
+        ScRange & rRange = rRanges[ i ];
+        if ( rRange.aStart.Tab() == nSourceTab && rRange.aEnd.Tab() == nSourceTab )
         {
-            pRange->aStart.SetTab( nDestTab );
-            pRange->aEnd.SetTab( nDestTab );
+            rRange.aStart.SetTab( nDestTab );
+            rRange.aEnd.SetTab( nDestTab );
             bChanged = true;
         }
-        if ( pRange->aStart.Tab() >= nTabCount )
+        if ( rRange.aStart.Tab() >= nTabCount )
         {
-            pRange->aStart.SetTab( nTabCount > 0 ? ( nTabCount - 1 ) : 0 );
+            rRange.aStart.SetTab( nTabCount > 0 ? ( nTabCount - 1 ) : 0 );
             bChanged = true;
         }
-        if ( pRange->aEnd.Tab() >= nTabCount )
+        if ( rRange.aEnd.Tab() >= nTabCount )
         {
-            pRange->aEnd.SetTab( nTabCount > 0 ? ( nTabCount - 1 ) : 0 );
+            rRange.aEnd.SetTab( nTabCount > 0 ? ( nTabCount - 1 ) : 0 );
             bChanged = true;
         }
     }
@@ -417,8 +417,7 @@ void ScChartHelper::CreateProtectedChartListenersAndNotify( ScDocument* pDoc, co
                         {
                             tools::Rectangle aRectangle = pSdrOle2Obj->GetSnapRect();
                             ScRange aRange( pDoc->GetRange( nTab, aRectangle ) );
-                            ScRangeList aChangeRanges;
-                            aChangeRanges.Append( aRange );
+                            ScRangeList aChangeRanges( aRange );
 
                             uno::Sequence< beans::PropertyValue > aProperties( 1 );
                             aProperties[ 0 ].Name = "Name";

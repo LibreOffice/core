@@ -1423,7 +1423,7 @@ void ExcelToSc::GetAbsRefs( ScRangeList& rRangeList, XclImpStream& rStrm, std::s
                     nRow1 &= 0x3FFF;
                     nRow2 &= 0x3FFF;
                     if( GetAddressConverter().ConvertRange( aScRange, XclRange( nCol1, nRow1, nCol2, nRow2 ), nTab1, nTab2, true ) )
-                        rRangeList.Append( aScRange );
+                        rRangeList.push_back( aScRange );
                 }
                 break;
 

@@ -919,7 +919,7 @@ void ScUndoPaste::SetChangeTrack()
     {
         for (size_t i = 0, n = maBlockRanges.size(); i < n; ++i)
         {
-            pChangeTrack->AppendContentRange(*maBlockRanges[i], pUndoDoc,
+            pChangeTrack->AppendContentRange(maBlockRanges[i], pUndoDoc,
                 nStartChangeAction, nEndChangeAction, SC_CACM_PASTE );
         }
     }
@@ -963,7 +963,7 @@ void ScUndoPaste::DoChange(bool bUndo)
             bool bRowInfo = true;
             for (size_t i = 0, n = maBlockRanges.size(); i < n; ++i)
             {
-                const ScRange& r = *maBlockRanges[i];
+                const ScRange& r = maBlockRanges[i];
                 bColInfo &= (r.aStart.Row() == 0 && r.aEnd.Row() == MAXROW);
                 bRowInfo &= (r.aStart.Col() == 0 && r.aEnd.Col() == MAXCOL);
                 if (!bColInfo && !bRowInfo)
@@ -977,7 +977,7 @@ void ScUndoPaste::DoChange(bool bUndo)
         //  all sheets - CopyToDocument skips those that don't exist in pRedoDoc
         for (size_t i = 0, n = maBlockRanges.size(); i < n; ++i)
         {
-            ScRange aCopyRange = *maBlockRanges[i];
+            ScRange aCopyRange = maBlockRanges[i];
             aCopyRange.aStart.SetTab(0);
             aCopyRange.aEnd.SetTab(nTabCount-1);
             rDoc.CopyToDocument(aCopyRange, nUndoFlags, false, *pRedoDoc);
@@ -992,7 +992,7 @@ void ScUndoPaste::DoChange(bool bUndo)
     aMarkData.MarkToMulti();
     rDoc.DeleteSelection(nUndoFlags, aMarkData, false); // no broadcasting here
     for (size_t i = 0, n = maBlockRanges.size(); i < n; ++i)
-        rDoc.BroadcastCells(*maBlockRanges[i], SfxHintId::ScDataChanged);
+        rDoc.BroadcastCells(maBlockRanges[i], SfxHintId::ScDataChanged);
 
     aMarkData.MarkToSimple();
 
@@ -1002,7 +1002,7 @@ void ScUndoPaste::DoChange(bool bUndo)
     {
         for (size_t i = 0, n = maBlockRanges.size(); i < n; ++i)
         {
-            ScRange aRange = *maBlockRanges[i];
+            ScRange aRange = maBlockRanges[i];
             aRange.aStart.SetTab(nFirstSelected);
             aRange.aEnd.SetTab(nFirstSelected);
             pRedoDoc->UndoToDocument(aRange, nUndoFlags, false, rDoc);
@@ -1023,7 +1023,7 @@ void ScUndoPaste::DoChange(bool bUndo)
     {
         pWorkRefData->DoUndo( &rDoc, true );     // true = bSetChartRangeLists for SetChartListenerCollection
         if (!maBlockRanges.empty() &&
-            rDoc.RefreshAutoFilter(0, 0, MAXCOL, MAXROW, maBlockRanges[0]->aStart.Tab()))
+            rDoc.RefreshAutoFilter(0, 0, MAXCOL, MAXROW, maBlockRanges[0].aStart.Tab()))
             bPaintAll = true;
     }
 
@@ -1034,7 +1034,7 @@ void ScUndoPaste::DoChange(bool bUndo)
     {
         for (size_t i = 0, n = maBlockRanges.size(); i < n; ++i)
         {
-            ScRange aRange = *maBlockRanges[i];
+            ScRange aRange = maBlockRanges[i];
             ScMarkData::iterator itr = aMarkData.begin(), itrEnd = aMarkData.end();
             for (; itr != itrEnd && *itr < nTabCount; ++itr)
             {
@@ -1058,7 +1058,7 @@ void ScUndoPaste::DoChange(bool bUndo)
     PaintPartFlags nPaint = PaintPartFlags::Grid;
     for (size_t i = 0, n = aDrawRanges.size(); i < n; ++i)
     {
-        ScRange& rDrawRange = *aDrawRanges[i];
+        ScRange& rDrawRange = aDrawRanges[i];
         rDoc.ExtendMerge(rDrawRange, true);      // only needed for single sheet (text/rtf etc.)
         if (bPaintAll)
         {
@@ -1072,12 +1072,12 @@ void ScUndoPaste::DoChange(bool bUndo)
         }
         else
         {
-            if (maBlockRanges[i]->aStart.Row() == 0 && maBlockRanges[i]->aEnd.Row() == MAXROW) // whole column
+            if (maBlockRanges[i].aStart.Row() == 0 && maBlockRanges[i].aEnd.Row() == MAXROW) // whole column
             {
                 nPaint |= PaintPartFlags::Top;
                 rDrawRange.aEnd.SetCol(MAXCOL);
             }
-            if (maBlockRanges[i]->aStart.Col() == 0 && maBlockRanges[i]->aEnd.Col() == MAXCOL) // whole row
+            if (maBlockRanges[i].aStart.Col() == 0 && maBlockRanges[i].aEnd.Col() == MAXCOL) // whole row
             {
                 nPaint |= PaintPartFlags::Left;
                 rDrawRange.aEnd.SetRow(MAXROW);
@@ -1109,7 +1109,7 @@ void ScUndoPaste::Undo()
     BeginUndo();
     DoChange(true);
     if (!maBlockRanges.empty())
-        ShowTable(*maBlockRanges.front());
+        ShowTable(maBlockRanges.front());
     EndUndo();
     SfxGetpApp()->Broadcast( SfxHint( SfxHintId::ScAreaLinksChanged ) );
 }
@@ -1380,8 +1380,8 @@ void ScUndoDragDrop::Undo()
 
     for (size_t i = 0; i < maPaintRanges.size(); ++i)
     {
-        const ScRange* p = maPaintRanges[i];
-        PaintArea(*p, mnPaintExtFlags);
+        const ScRange& r = maPaintRanges[i];
+        PaintArea(r, mnPaintExtFlags);
     }
 
     EndUndo();
@@ -2339,16 +2339,16 @@ static ScRange lcl_TotalRange( const ScRangeList& rRanges )
     ScRange aTotal;
     if ( !rRanges.empty() )
     {
-        aTotal = *rRanges[ 0 ];
+        aTotal = rRanges[ 0 ];
         for ( size_t i = 1, nCount = rRanges.size(); i < nCount; ++i )
         {
-            ScRange aRange = *rRanges[ i ];
-            if (aRange.aStart.Col() < aTotal.aStart.Col()) aTotal.aStart.SetCol(aRange.aStart.Col());
-            if (aRange.aStart.Row() < aTotal.aStart.Row()) aTotal.aStart.SetRow(aRange.aStart.Row());
-            if (aRange.aStart.Tab() < aTotal.aStart.Tab()) aTotal.aStart.SetTab(aRange.aStart.Tab());
-            if (aRange.aEnd.Col()   > aTotal.aEnd.Col()  ) aTotal.aEnd.SetCol(  aRange.aEnd.Col()  );
-            if (aRange.aEnd.Row()   > aTotal.aEnd.Row()  ) aTotal.aEnd.SetRow(  aRange.aEnd.Row()  );
-            if (aRange.aEnd.Tab()   > aTotal.aEnd.Tab()  ) aTotal.aEnd.SetTab(aRange.aEnd.Tab()    );
+            ScRange const & rRange = rRanges[ i ];
+            if (rRange.aStart.Col() < aTotal.aStart.Col()) aTotal.aStart.SetCol(rRange.aStart.Col());
+            if (rRange.aStart.Row() < aTotal.aStart.Row()) aTotal.aStart.SetRow(rRange.aStart.Row());
+            if (rRange.aStart.Tab() < aTotal.aStart.Tab()) aTotal.aStart.SetTab(rRange.aStart.Tab());
+            if (rRange.aEnd.Col()   > aTotal.aEnd.Col()  ) aTotal.aEnd.SetCol(  rRange.aEnd.Col()  );
+            if (rRange.aEnd.Row()   > aTotal.aEnd.Row()  ) aTotal.aEnd.SetRow(  rRange.aEnd.Row()  );
+            if (rRange.aEnd.Tab()   > aTotal.aEnd.Tab()  ) aTotal.aEnd.SetTab(rRange.aEnd.Tab()    );
         }
     }
     return aTotal;
@@ -2391,17 +2391,17 @@ void ScUndoBorder::Redo()
     size_t nCount = xRanges->size();
     for (size_t i = 0; i < nCount; ++i )
     {
-        ScRange aRange = *(*xRanges)[i];
-        SCTAB nTab = aRange.aStart.Tab();
+        ScRange const & rRange = (*xRanges)[i];
+        SCTAB nTab = rRange.aStart.Tab();
 
         ScMarkData aMark;
-        aMark.SetMarkArea( aRange );
+        aMark.SetMarkArea( rRange );
         aMark.SelectTable( nTab, true );
 
         rDoc.ApplySelectionFrame(aMark, *xOuter, xInner.get());
     }
     for (size_t i = 0; i < nCount; ++i)
-        pDocShell->PostPaint( *(*xRanges)[i], PaintPartFlags::Grid, SC_PF_LINES | SC_PF_TESTMERGE );
+        pDocShell->PostPaint( (*xRanges)[i], PaintPartFlags::Grid, SC_PF_LINES | SC_PF_TESTMERGE );
 
     EndRedo();
 }

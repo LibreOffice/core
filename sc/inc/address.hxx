@@ -480,7 +480,7 @@ inline bool ValidAddress( const ScAddress& rAddress )
 }
 
 //  ScRange
-class SAL_WARN_UNUSED ScRange
+class SAL_WARN_UNUSED ScRange final
 {
 public:
     ScAddress aStart;

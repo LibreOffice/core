@@ -511,8 +511,8 @@ void XMLTableStyleContext::ApplyCondFormat( const uno::Sequence<table::CellRange
             size_t n = aRangeList.size();
             for(size_t i = 0; i < n; ++i)
             {
-                const ScRange* pRange = aRangeList[i];
-                rRangeList.Join(*pRange);
+                const ScRange & rRange = aRangeList[i];
+                rRangeList.Join(rRange);
             }
 
             pDoc->AddCondFormatData( aRangeList, nTab, nCondId );

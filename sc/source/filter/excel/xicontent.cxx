@@ -448,7 +448,6 @@ void XclImpLabelranges::ReadLabelranges( XclImpStream& rStrm )
     SCTAB nScTab = rRoot.GetCurrScTab();
     XclImpAddressConverter& rAddrConv = rRoot.GetAddressConverter();
     ScRangePairListRef xLabelRangesRef;
-    const ScRange* pScRange = nullptr;
 
     XclRangeList aRowXclRanges, aColXclRanges;
     rStrm >> aRowXclRanges >> aColXclRanges;
@@ -459,8 +458,8 @@ void XclImpLabelranges::ReadLabelranges( XclImpStream& rStrm )
     xLabelRangesRef = rDoc.GetRowNameRangesRef();
     for ( size_t i = 0, nRanges = aRowScRanges.size(); i < nRanges; ++i )
     {
-        pScRange = aRowScRanges[ i ];
-        ScRange aDataRange( *pScRange );
+        const ScRange & rScRange = aRowScRanges[ i ];
+        ScRange aDataRange( rScRange );
         if( aDataRange.aEnd.Col() < MAXCOL )
         {
             aDataRange.aStart.SetCol( aDataRange.aEnd.Col() + 1 );
@@ -471,7 +470,7 @@ void XclImpLabelranges::ReadLabelranges( XclImpStream& rStrm )
             aDataRange.aEnd.SetCol( aDataRange.aStart.Col() - 1 );
             aDataRange.aStart.SetCol( 0 );
         }
-        xLabelRangesRef->Append( ScRangePair( *pScRange, aDataRange ) );
+        xLabelRangesRef->Append( ScRangePair( rScRange, aDataRange ) );
     }
 
     // column label ranges
@@ -481,8 +480,8 @@ void XclImpLabelranges::ReadLabelranges( XclImpStream& rStrm )
 
     for ( size_t i = 0, nRanges = aColScRanges.size(); i < nRanges; ++i )
     {
-        pScRange = aColScRanges[ i ];
-        ScRange aDataRange( *pScRange );
+        const ScRange & rScRange = aColScRanges[ i ];
+        ScRange aDataRange( rScRange );
         if( aDataRange.aEnd.Row() < MAXROW )
         {
             aDataRange.aStart.SetRow( aDataRange.aEnd.Row() + 1 );
@@ -493,7 +492,7 @@ void XclImpLabelranges::ReadLabelranges( XclImpStream& rStrm )
             aDataRange.aEnd.SetRow( aDataRange.aStart.Row() - 1 );
             aDataRange.aStart.SetRow( 0 );
         }
-        xLabelRangesRef->Append( ScRangePair( *pScRange, aDataRange ) );
+        xLabelRangesRef->Append( ScRangePair( rScRange, aDataRange ) );
     }
 }
 
@@ -651,7 +650,7 @@ void XclImpCondFormat::ReadCF( XclImpStream& rStrm )
 
     // *** formulas ***
 
-    const ScAddress& rPos = maRanges.front()->aStart;    // assured above that maRanges is not empty
+    const ScAddress& rPos = maRanges.front().aStart;    // assured above that maRanges is not empty
     ExcelToSc& rFmlaConv = GetOldFmlaConverter();
 
     ::std::unique_ptr< ScTokenArray > xTokArr1;
@@ -690,7 +689,7 @@ void XclImpCondFormat::ReadCF( XclImpStream& rStrm )
     {
         mxScCondFmt.reset( new ScConditionalFormat( 0/*nKey*/, &GetDocRef() ) );
         if(maRanges.size() > 1)
-            maRanges.Join(*maRanges[0], true);
+            maRanges.Join(maRanges[0], true);
         mxScCondFmt->SetRange(maRanges);
     }
 
@@ -705,7 +704,7 @@ void XclImpCondFormat::Apply()
     {
         ScDocument& rDoc = GetDoc();
 
-        SCTAB nTab = maRanges.front()->aStart.Tab();
+        SCTAB nTab = maRanges.front().aStart.Tab();
         sal_uLong nKey = rDoc.AddCondFormat( mxScCondFmt->Clone(), nTab );
 
         rDoc.AddCondFormatData( maRanges, nTab, nKey );
@@ -888,7 +887,7 @@ void XclImpValidationManager::ReadDV( XclImpStream& rStrm )
         return;
 
     // first range for base address for relative references
-    const ScRange& rScRange = *aScRanges.front();    // aScRanges is not empty
+    const ScRange& rScRange = aScRanges.front();    // aScRanges is not empty
 
     // process string list of a list validity (convert to list of string tokens)
     if( xTokArr1.get() && (eValMode == SC_VALID_LIST) && ::get_flag( nFlags, EXC_DV_STRINGLIST ) )
@@ -938,9 +937,9 @@ void XclImpValidationManager::Apply()
         // apply all ranges
         for ( size_t i = 0, nRanges = rItem.maRanges.size(); i < nRanges; ++i )
         {
-            const ScRange* pScRange = rItem.maRanges[ i ];
-            rDoc.ApplyPatternAreaTab( pScRange->aStart.Col(), pScRange->aStart.Row(),
-                pScRange->aEnd.Col(), pScRange->aEnd.Row(), pScRange->aStart.Tab(), aPattern );
+            const ScRange & rScRange = rItem.maRanges[ i ];
+            rDoc.ApplyPatternAreaTab( rScRange.aStart.Col(), rScRange.aStart.Row(),
+                rScRange.aEnd.Col(), rScRange.aEnd.Row(), rScRange.aStart.Tab(), aPattern );
         }
     }
     maDVItems.clear();

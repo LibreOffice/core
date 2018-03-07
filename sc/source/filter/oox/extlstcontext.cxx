@@ -163,8 +163,8 @@ void ExtConditionalFormattingContext::onEndElement()
             SCTAB nTab = getSheetIndex();
             for (size_t i = 0; i < aRange.size(); ++i)
             {
-                aRange[i]->aStart.SetTab(nTab);
-                aRange[i]->aEnd.SetTab(nTab);
+                aRange[i].aStart.SetTab(nTab);
+                aRange[i].aEnd.SetTab(nTab);
             }
 
             std::vector< std::unique_ptr<ExtCfCondFormat> >& rExtFormats =  getCondFormats().importExtCondFormat();

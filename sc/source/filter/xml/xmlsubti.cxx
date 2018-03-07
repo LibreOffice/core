@@ -275,7 +275,7 @@ void ScMyTables::AddMatrixRange(
         nEndColumn, nEndRow, maCurrentCellPos.Tab()
     );
 
-    maMatrixRangeList.Append(aScRange);
+    maMatrixRangeList.push_back(aScRange);
 
     ScDocumentImport& rDoc = rImport.GetDoc();
     ScTokenArray aCode;

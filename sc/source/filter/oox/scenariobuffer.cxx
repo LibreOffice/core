@@ -108,7 +108,7 @@ void Scenario::finalizeImport()
     ScRangeList aRanges;
     for( ScenarioCellVector::iterator aIt = maCells.begin(), aEnd = maCells.end(); aIt != aEnd; ++aIt )
         if( !aIt->mbDeleted && rAddrConv.checkCellAddress( aIt->maPos, true ) )
-            aRanges.Append( ScRange(aIt->maPos, aIt->maPos) );
+            aRanges.push_back( ScRange(aIt->maPos, aIt->maPos) );
 
     if( !aRanges.empty() && !maModel.maName.isEmpty() ) try
     {

@@ -131,7 +131,7 @@ void XclImpAddressConverter::ConvertRangeList( ScRangeList& rScRanges,
     {
         ScRange aScRange( ScAddress::UNINITIALIZED );
         if( ConvertRange( aScRange, *aIt, nScTab, nScTab, bWarn ) )
-            rScRanges.Append( aScRange );
+            rScRanges.push_back( aScRange );
     }
 }
 

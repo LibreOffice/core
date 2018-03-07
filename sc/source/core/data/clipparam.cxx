@@ -32,7 +32,7 @@ ScClipParam::ScClipParam(const ScRange& rRange, bool bCutMode) :
     mbCutMode(bCutMode),
     mnSourceDocID(0)
 {
-    maRanges.Append(rRange);
+    maRanges.push_back(rRange);
 }
 
 bool ScClipParam::isMultiRange() const
@@ -52,15 +52,15 @@ SCCOL ScClipParam::getPasteColSize()
             SCCOL nColSize = 0;
             for ( size_t i = 0, nListSize = maRanges.size(); i < nListSize; ++i )
             {
-                ScRange* p = maRanges[ i ];
-                nColSize += p->aEnd.Col() - p->aStart.Col() + 1;
+                const ScRange& rRange = maRanges[ i ];
+                nColSize += rRange.aEnd.Col() - rRange.aStart.Col() + 1;
             }
             return nColSize;
         }
         case ScClipParam::Row:
         {
             // We assume that all ranges have identical column size.
-            const ScRange& rRange = *maRanges.front();
+            const ScRange& rRange = maRanges.front();
             return rRange.aEnd.Col() - rRange.aStart.Col() + 1;
         }
         case ScClipParam::Unspecified:
@@ -80,7 +80,7 @@ SCROW ScClipParam::getPasteRowSize()
         case ScClipParam::Column:
         {
             // We assume that all ranges have identical row size.
-            const ScRange& rRange = *maRanges.front();
+            const ScRange& rRange = maRanges.front();
             return rRange.aEnd.Row() - rRange.aStart.Row() + 1;
         }
         case ScClipParam::Row:
@@ -88,8 +88,8 @@ SCROW ScClipParam::getPasteRowSize()
             SCROW nRowSize = 0;
             for ( size_t i = 0, nListSize = maRanges.size(); i < nListSize; ++i )
             {
-                ScRange* p = maRanges[ i ];
-                nRowSize += p->aEnd.Row() - p->aStart.Row() + 1;
+                const ScRange& rRange = maRanges[ i ];
+                nRowSize += rRange.aEnd.Row() - rRange.aStart.Row() + 1;
             }
             return nRowSize;
         }
@@ -123,24 +123,24 @@ void ScClipParam::transpose()
     ScRangeList aNewRanges;
     if (!maRanges.empty())
     {
-        ScRange* p = maRanges.front();
-        SCCOL nColOrigin = p->aStart.Col();
-        SCROW nRowOrigin = p->aStart.Row();
+        const ScRange & rRange1 = maRanges.front();
+        SCCOL nColOrigin = rRange1.aStart.Col();
+        SCROW nRowOrigin = rRange1.aStart.Row();
 
         for ( size_t i = 0, n = maRanges.size(); i < n; ++i )
         {
-            p = maRanges[ i ];
-            SCCOL nColDelta = p->aStart.Col() - nColOrigin;
-            SCROW nRowDelta = p->aStart.Row() - nRowOrigin;
+            const ScRange & rRange = maRanges[ i ];
+            SCCOL nColDelta = rRange.aStart.Col() - nColOrigin;
+            SCROW nRowDelta = rRange.aStart.Row() - nRowOrigin;
             SCCOL nCol1 = 0;
-            SCCOL nCol2 = static_cast<SCCOL>(p->aEnd.Row() - p->aStart.Row());
+            SCCOL nCol2 = static_cast<SCCOL>(rRange.aEnd.Row() - rRange.aStart.Row());
             SCROW nRow1 = 0;
-            SCROW nRow2 = static_cast<SCROW>(p->aEnd.Col() - p->aStart.Col());
+            SCROW nRow2 = static_cast<SCROW>(rRange.aEnd.Col() - rRange.aStart.Col());
             nCol1 += static_cast<SCCOL>(nRowDelta);
             nCol2 += static_cast<SCCOL>(nRowDelta);
             nRow1 += static_cast<SCROW>(nColDelta);
             nRow2 += static_cast<SCROW>(nColDelta);
-            aNewRanges.push_back( new ScRange(nCol1, nRow1, p->aStart.Tab(), nCol2, nRow2, p->aStart.Tab() ) );
+            aNewRanges.push_back( ScRange(nCol1, nRow1, rRange.aStart.Tab(), nCol2, nRow2, rRange.aStart.Tab() ) );
         }
     }
     maRanges = aNewRanges;

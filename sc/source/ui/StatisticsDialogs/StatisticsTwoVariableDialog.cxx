@@ -256,7 +256,7 @@ IMPL_LINK_NOARG( ScStatisticsTwoVariableDialog, RefInputModifyHandler, Edit&, vo
         {
             ScRangeList aRangeList;
             bool bValid = ParseWithNames( aRangeList, mpVariable1RangeEdit->GetText(), mDocument);
-            const ScRange* pRange = (bValid && aRangeList.size() == 1) ? aRangeList[0] : nullptr;
+            const ScRange* pRange = (bValid && aRangeList.size() == 1) ? &aRangeList[0] : nullptr;
             if (pRange)
             {
                 mVariable1Range = *pRange;
@@ -272,7 +272,7 @@ IMPL_LINK_NOARG( ScStatisticsTwoVariableDialog, RefInputModifyHandler, Edit&, vo
         {
             ScRangeList aRangeList;
             bool bValid = ParseWithNames( aRangeList, mpVariable2RangeEdit->GetText(), mDocument);
-            const ScRange* pRange = (bValid && aRangeList.size() == 1) ? aRangeList[0] : nullptr;
+            const ScRange* pRange = (bValid && aRangeList.size() == 1) ? &aRangeList[0] : nullptr;
             if (pRange)
             {
                 mVariable2Range = *pRange;
@@ -288,7 +288,7 @@ IMPL_LINK_NOARG( ScStatisticsTwoVariableDialog, RefInputModifyHandler, Edit&, vo
         {
             ScRangeList aRangeList;
             bool bValid = ParseWithNames( aRangeList, mpOutputRangeEdit->GetText(), mDocument);
-            const ScRange* pRange = (bValid && aRangeList.size() == 1) ? aRangeList[0] : nullptr;
+            const ScRange* pRange = (bValid && aRangeList.size() == 1) ? &aRangeList[0] : nullptr;
             if (pRange)
             {
                 mOutputAddress = pRange->aStart;

@@ -28,20 +28,22 @@
 
 class ScDocument;
 
-class SC_DLLPUBLIC ScRangeList : public SvRefBase
+
+class SAL_WARN_UNUSED SC_DLLPUBLIC ScRangeList final : public SvRefBase
 {
 public:
     ScRangeList();
     ScRangeList( const ScRangeList& rList );
+    ScRangeList( const ScRangeList&& rList );
     ScRangeList( const ScRange& rRange );
     virtual ~ScRangeList() override;
 
     ScRangeList& operator=(const ScRangeList& rList);
-    void Append( const ScRange& rRange );
+    ScRangeList& operator=(ScRangeList&& rList);
 
-    ScRefFlags Parse( const OUString&, const ScDocument*,
-                      formula::FormulaGrammar::AddressConvention eConv = formula::FormulaGrammar::CONV_OOO,
-                      SCTAB nDefaultTab = 0, sal_Unicode cDelimiter = 0 );
+    ScRefFlags      Parse( const OUString&, const ScDocument*,
+                           formula::FormulaGrammar::AddressConvention eConv = formula::FormulaGrammar::CONV_OOO,
+                           SCTAB nDefaultTab = 0, sal_Unicode cDelimiter = 0 );
 
     void            Format( OUString&, ScRefFlags nFlags, ScDocument*,
                             formula::FormulaGrammar::AddressConvention eConv = formula::FormulaGrammar::CONV_OOO,
@@ -56,8 +58,8 @@ public:
                                      SCTAB nDz
                                    );
 
-    void InsertRow( SCTAB nTab, SCCOL nColStart, SCCOL nColEnd, SCROW nRowPos, SCSIZE nSize );
-    void InsertCol( SCTAB nTab, SCROW nRowStart, SCROW nRowEnd, SCCOL nColPos, SCSIZE nSize );
+    void            InsertRow( SCTAB nTab, SCCOL nColStart, SCCOL nColEnd, SCROW nRowPos, SCSIZE nSize );
+    void            InsertCol( SCTAB nTab, SCROW nRowStart, SCROW nRowEnd, SCCOL nColPos, SCSIZE nSize );
 
     /** For now this method assumes that nTab1 == nTab2
      * The algorithm will be much more complicated if nTab1 != nTab2
@@ -81,23 +83,23 @@ public:
 
     ScRange         Combine() const;
 
-    bool            empty() const;
-    size_t          size() const;
-    ScRange*        operator[](size_t idx);
-    const ScRange*  operator[](size_t idx) const;
-    ScRange*        front();
-    const ScRange*  front() const;
-    ScRange*        back();
-    const ScRange*  back() const;
-    void            push_back(ScRange* p);
+    bool            empty() const { return maRanges.empty(); }
+    size_t          size() const { return maRanges.size(); }
+    ScRange&        operator[](size_t idx) { return maRanges[idx]; }
+    const ScRange&  operator[](size_t idx) const { return maRanges[idx]; }
+    ScRange&        front() { return maRanges.front(); }
+    const ScRange&  front() const { return maRanges.front(); }
+    ScRange&        back() { return maRanges.back(); }
+    const ScRange&  back() const { return maRanges.back(); }
+    void            push_back(const ScRange & rRange);
 
     void swap( ScRangeList& r );
 
 private:
-    ::std::vector<ScRange*> maRanges;
+    ::std::vector<ScRange> maRanges;
     SCROW           mnMaxRowUsed;
-    typedef std::vector<ScRange*>::iterator iterator;
-    typedef std::vector<ScRange*>::const_iterator const_iterator;
+    typedef std::vector<ScRange>::iterator iterator;
+    typedef std::vector<ScRange>::const_iterator const_iterator;
 };
 typedef tools::SvRef<ScRangeList> ScRangeListRef;
 
@@ -110,7 +112,7 @@ inline std::basic_ostream<charT, traits> & operator <<(std::basic_ostream<charT,
     {
         if (i > 0)
             stream << ",";
-        stream << *(rRangeList[i]);
+        stream << rRangeList[i];
     }
     stream << ")";
 

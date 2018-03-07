@@ -100,13 +100,11 @@ void ScGridWindow::dumpCellProperties()
 
     for (size_t i = 0, n = aList.size(); i < n; ++i)
     {
-        ScRange* pRange = aList[i];
-        if (!pRange)
-            continue;
+        ScRange const & rRange = aList[i];
 
-        for (SCCOL nCol = pRange->aStart.Col(); nCol <= pRange->aEnd.Col(); ++nCol)
+        for (SCCOL nCol = rRange.aStart.Col(); nCol <= rRange.aEnd.Col(); ++nCol)
         {
-            for (SCROW nRow = pRange->aStart.Row(); nRow <= pRange->aEnd.Row(); ++nRow)
+            for (SCROW nRow = rRange.aStart.Row(); nRow <= rRange.aEnd.Row(); ++nRow)
             {
                 const ScPatternAttr* pPatternAttr = pDoc->GetPattern(nCol, nRow, nTab);
                 xmlTextWriterStartElement(writer, BAD_CAST("cell"));

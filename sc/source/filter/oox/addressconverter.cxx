@@ -421,7 +421,7 @@ bool AddressConverter::convertToCellRange( ScRange& orRange,
 void AddressConverter::validateCellRangeList( ScRangeList& orRanges, bool bTrackOverflow )
 {
     for( size_t nIndex = orRanges.size(); nIndex > 0; --nIndex )
-        if( !validateCellRange( *orRanges[ nIndex - 1 ], true, bTrackOverflow ) )
+        if( !validateCellRange( orRanges[ nIndex - 1 ], true, bTrackOverflow ) )
             orRanges.Remove( nIndex - 1 );
 }
 
@@ -435,7 +435,7 @@ void AddressConverter::convertToCellRangeList( ScRangeList& orRanges,
     {
         OUString aToken = rString.getToken( 0, ' ', nPos );
         if( !aToken.isEmpty() && convertToCellRange( aRange, aToken, nSheet, true, bTrackOverflow ) )
-            orRanges.Append(aRange);
+            orRanges.push_back(aRange);
     }
 }
 
@@ -445,7 +445,7 @@ void AddressConverter::convertToCellRangeList( ScRangeList& orRanges,
     ScRange aRange;
     for( ::std::vector< BinRange >::const_iterator aIt = rBinRanges.begin(), aEnd = rBinRanges.end(); aIt != aEnd; ++aIt )
         if( convertToCellRange( aRange, *aIt, nSheet, true, bTrackOverflow ) )
-            orRanges.Append( aRange );
+            orRanges.push_back( aRange );
 }
 
 Sequence<CellRangeAddress> AddressConverter::toApiSequence(const ScRangeList& orRanges)
@@ -455,7 +455,7 @@ Sequence<CellRangeAddress> AddressConverter::toApiSequence(const ScRangeList& or
     CellRangeAddress* pApiRanges = aRangeSequence.getArray();
     for (size_t i = 0; i < nSize; ++i)
     {
-        ScUnoConversion::FillApiRange(pApiRanges[i], *orRanges[i]);
+        ScUnoConversion::FillApiRange(pApiRanges[i], orRanges[i]);
     }
     return aRangeSequence;
 }
