@@ -75,8 +75,12 @@ void XMLFootnoteSeparatorExport::exportXML(
         switch (rMapper->GetEntryContextId(rState.mnIndex))
         {
         case CTF_PM_FTN_LINE_ADJUST:
-            rState.maValue >>= eLineAdjust;
+        {
+            sal_Int16 nTmp;
+            if (rState.maValue >>= nTmp)
+                eLineAdjust = static_cast<text::HorizontalAdjust>(nTmp);
             break;
+        }
         case CTF_PM_FTN_LINE_COLOR:
             rState.maValue >>= nLineColor;
             break;
