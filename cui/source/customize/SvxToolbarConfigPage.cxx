@@ -126,10 +126,8 @@ SvxToolbarConfigPage::SvxToolbarConfigPage(vcl::Window *pParent, const SfxItemSe
     m_pCommandCategoryListBox->SetSelectHdl(
         LINK( this, SvxToolbarConfigPage, SelectCategory ) );
 
-    m_pPlusBtn->SetClickHdl(
-        LINK( this, SvxToolbarConfigPage, AddToolbarHdl ) );
-    m_pMinusBtn->SetClickHdl(
-        LINK( this, SvxToolbarConfigPage, RemoveToolbarHdl ) );
+    m_pGearBtn->SetSelectHdl(
+        LINK( this, SvxToolbarConfigPage, GearHdl ) );
 
     m_pMoveUpButton->SetClickHdl ( LINK( this, SvxToolbarConfigPage, MoveHdl) );
     m_pMoveDownButton->SetClickHdl ( LINK( this, SvxToolbarConfigPage, MoveHdl) );
@@ -334,77 +332,119 @@ IMPL_LINK_NOARG( SvxToolbarConfigPage, SelectToolbarEntry, SvTreeListBox *, void
     UpdateButtonStates();
 }
 
-IMPL_LINK_NOARG( SvxToolbarConfigPage, AddToolbarHdl, Button *, void )
+IMPL_LINK( SvxToolbarConfigPage, GearHdl, MenuButton *, pButton, void )
 {
-    OUString prefix = CuiResId( RID_SVXSTR_NEW_TOOLBAR );
+    OString sIdent = pButton->GetCurItemIdent();
 
-    OUString aNewName =
-        SvxConfigPageHelper::generateCustomName( prefix, GetSaveInData()->GetEntries() );
-
-    OUString aNewURL =
-        SvxConfigPageHelper::generateCustomURL( GetSaveInData()->GetEntries() );
-
-    VclPtrInstance< SvxNewToolbarDialog > pNameDialog( nullptr, aNewName );
-
-    // Reflect the actual m_pSaveInListBox into the new toolbar dialog
-    for ( sal_Int32 i = 0; i < m_pSaveInListBox->GetEntryCount(); ++i )
+    if (sIdent == "gear_add")
     {
-        SaveInData* pData =
-            static_cast<SaveInData*>(m_pSaveInListBox->GetEntryData( i ));
+        OUString prefix = CuiResId( RID_SVXSTR_NEW_TOOLBAR );
 
-        const sal_Int32 nInsertPos =
-            pNameDialog->m_pSaveInListBox->InsertEntry( m_pSaveInListBox->GetEntry( i ) );
+        OUString aNewName =
+            SvxConfigPageHelper::generateCustomName( prefix, GetSaveInData()->GetEntries() );
 
-        pNameDialog->m_pSaveInListBox->SetEntryData( nInsertPos, pData );
-    }
+        OUString aNewURL =
+            SvxConfigPageHelper::generateCustomURL( GetSaveInData()->GetEntries() );
 
-    pNameDialog->m_pSaveInListBox->SelectEntryPos(
-        m_pSaveInListBox->GetSelectedEntryPos() );
+        VclPtrInstance< SvxNewToolbarDialog > pNameDialog( nullptr, aNewName );
 
-    if ( pNameDialog->Execute() == RET_OK )
-    {
-        aNewName = pNameDialog->GetName();
-
-        // Where to save the new toolbar? (i.e. Modulewise or documentwise)
-        sal_Int32 nInsertPos = pNameDialog->m_pSaveInListBox->GetSelectedEntryPos();
-
-        ToolbarSaveInData* pData =
-            static_cast<ToolbarSaveInData*>(
-                pNameDialog->m_pSaveInListBox->GetEntryData( nInsertPos ) );
-
-        if ( GetSaveInData() != pData )
+        // Reflect the actual m_pSaveInListBox into the new toolbar dialog
+        for ( sal_Int32 i = 0; i < m_pSaveInListBox->GetEntryCount(); ++i )
         {
-            m_pSaveInListBox->SelectEntryPos( nInsertPos );
-            m_pSaveInListBox->GetSelectHdl().Call(*m_pSaveInListBox);
+            SaveInData* pData =
+                static_cast<SaveInData*>(m_pSaveInListBox->GetEntryData( i ));
+
+            const sal_Int32 nInsertPos =
+                pNameDialog->m_pSaveInListBox->InsertEntry( m_pSaveInListBox->GetEntry( i ) );
+
+            pNameDialog->m_pSaveInListBox->SetEntryData( nInsertPos, pData );
         }
 
-        SvxConfigEntry* pToolbar =
-            new SvxConfigEntry( aNewName, aNewURL, true, /*bParentData*/false );
+        pNameDialog->m_pSaveInListBox->SelectEntryPos(
+            m_pSaveInListBox->GetSelectedEntryPos() );
 
-        pToolbar->SetUserDefined();
-        pToolbar->SetMain();
+        if ( pNameDialog->Execute() == RET_OK )
+        {
+            aNewName = pNameDialog->GetName();
 
-        pData->CreateToolbar( pToolbar );
+            // Where to save the new toolbar? (i.e. Modulewise or documentwise)
+            sal_Int32 nInsertPos = pNameDialog->m_pSaveInListBox->GetSelectedEntryPos();
 
-        nInsertPos = m_pTopLevelListBox->InsertEntry( pToolbar->GetName() );
-        m_pTopLevelListBox->SetEntryData( nInsertPos, pToolbar );
-        m_pTopLevelListBox->SelectEntryPos( nInsertPos );
-        m_pTopLevelListBox->GetSelectHdl().Call(*m_pTopLevelListBox);
+            ToolbarSaveInData* pData =
+                static_cast<ToolbarSaveInData*>(
+                    pNameDialog->m_pSaveInListBox->GetEntryData( nInsertPos ) );
 
-        pData->SetModified();
+            if ( GetSaveInData() != pData )
+            {
+                m_pSaveInListBox->SelectEntryPos( nInsertPos );
+                m_pSaveInListBox->GetSelectHdl().Call(*m_pSaveInListBox);
+            }
+
+            SvxConfigEntry* pToolbar =
+                new SvxConfigEntry( aNewName, aNewURL, true, false );
+
+            pToolbar->SetUserDefined();
+            pToolbar->SetMain();
+
+            pData->CreateToolbar( pToolbar );
+
+            nInsertPos = m_pTopLevelListBox->InsertEntry( pToolbar->GetName() );
+            m_pTopLevelListBox->SetEntryData( nInsertPos, pToolbar );
+            m_pTopLevelListBox->SelectEntryPos( nInsertPos );
+            m_pTopLevelListBox->GetSelectHdl().Call(*m_pTopLevelListBox);
+
+            pData->SetModified();
+        }
     }
-}
-
-IMPL_LINK_NOARG( SvxToolbarConfigPage, RemoveToolbarHdl, Button *, void )
-{
-    SvxConfigEntry* pToolbar = GetTopLevelSelection();
-
-    if ( pToolbar && pToolbar->IsDeletable() )
+    else if (sIdent == "gear_delete")
     {
-        DeleteSelectedTopLevel();
-        UpdateButtonStates();
-    }
+        SvxConfigEntry* pToolbar = GetTopLevelSelection();
 
+        if ( pToolbar && pToolbar->IsDeletable() )
+        {
+            DeleteSelectedTopLevel();
+            UpdateButtonStates();
+        }
+    }
+    else if (sIdent == "gear_rename")
+    {
+        sal_Int32 nSelectionPos = m_pTopLevelListBox->GetSelectedEntryPos();
+        SvxConfigEntry* pToolbar =
+            static_cast<SvxConfigEntry*>(m_pTopLevelListBox->GetEntryData( nSelectionPos ));
+        ToolbarSaveInData* pSaveInData = static_cast<ToolbarSaveInData*>( GetSaveInData() );
+
+        //Rename the toolbar
+        OUString sCurrentName( SvxConfigPageHelper::stripHotKey( pToolbar->GetName() ) );
+        OUString sDesc = CuiResId( RID_SVXSTR_LABEL_NEW_NAME );
+
+        SvxNameDialog aNameDialog( GetFrameWeld(), sCurrentName, sDesc );
+        aNameDialog.set_help_id( HID_SVX_CONFIG_RENAME_TOOLBAR );
+        aNameDialog.set_title( CuiResId( RID_SVXSTR_RENAME_TOOLBAR ) );
+
+        if ( aNameDialog.run() == RET_OK )
+        {
+            OUString sNewName = aNameDialog.GetName();
+
+            if (sCurrentName == sNewName)
+                return;
+
+            pToolbar->SetName( sNewName );
+            pSaveInData->ApplyToolbar( pToolbar );
+
+            // have to use remove and insert to change the name
+            m_pTopLevelListBox->RemoveEntry( nSelectionPos );
+            nSelectionPos =
+                    m_pTopLevelListBox->InsertEntry( sNewName, nSelectionPos );
+            m_pTopLevelListBox->SetEntryData( nSelectionPos, pToolbar );
+            m_pTopLevelListBox->SelectEntryPos( nSelectionPos );
+        }
+    }
+    else
+    {
+        //This block should never be reached
+        SAL_WARN("cui.customize", "Unknown gear menu option: " << sIdent);
+        return;
+    }
 }
 
 IMPL_LINK_NOARG( SvxToolbarConfigPage, SelectCategory, ListBox&, void )
@@ -697,6 +737,7 @@ IMPL_LINK_NOARG( SvxToolbarConfigPage, ResetToolbarHdl, Button *, void )
 
 void SvxToolbarConfigPage::UpdateButtonStates()
 {
+    SvxConfigEntry* pToolbar = GetTopLevelSelection();
     SvTreeListEntry* selection = m_pContentsListBox->GetCurEntry();
 
     bool  bIsSeparator =
@@ -710,6 +751,12 @@ void SvxToolbarConfigPage::UpdateButtonStates()
     m_pRemoveCommandButton->Enable( bIsValidSelection );
 
     m_pModifyBtn->Enable( bIsValidSelection && !bIsSeparator );
+
+    // Handle the gear button
+    PopupMenu* pPopup = m_pGearBtn->GetPopupMenu();
+    // "gear_add" option is always enabled
+    pPopup->EnableItem( "gear_delete", pToolbar && pToolbar->IsDeletable() );
+    pPopup->EnableItem( "gear_rename", pToolbar && pToolbar->IsRenamable() );
 }
 
 short SvxToolbarConfigPage::QueryReset()
@@ -735,8 +782,6 @@ IMPL_LINK_NOARG( SvxToolbarConfigPage, SelectToolbar, ListBox&, void )
     if ( pToolbar == nullptr )
     {
         //TODO: Disable related buttons
-        m_pPlusBtn->Enable( false );
-        m_pMinusBtn->Enable( false );
         m_pInsertBtn->Enable( false );
         m_pResetBtn->Enable( false );
 
@@ -744,8 +789,6 @@ IMPL_LINK_NOARG( SvxToolbarConfigPage, SelectToolbar, ListBox&, void )
     }
     else
     {
-        m_pPlusBtn->Enable();
-        m_pMinusBtn->Enable( pToolbar->IsDeletable() );
         m_pInsertBtn->Enable();
         m_pResetBtn->Enable();
     }
