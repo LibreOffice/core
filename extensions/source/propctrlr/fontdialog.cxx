@@ -241,7 +241,7 @@ namespace pcr
             SvxUnderlineItem    aUnderlineItem(eUnderline,CFID_UNDERLINE);
             aUnderlineItem.SetColor(Color(nTextLineColor));
 
-            SvxColorItem aSvxColorItem(nColor32,CFID_CHARCOLOR);
+            SvxColorItem aSvxColorItem(Color(nColor32),CFID_CHARCOLOR);
             SvxLanguageItem aLanguageItem(Application::GetSettings().GetUILanguageTag().getLanguageType(), CFID_LANGUAGE);
 
             // the 2 CJK props
@@ -372,10 +372,10 @@ namespace pcr
                 lcl_pushBackPropertyValue( _out_properties, PROPERTY_FONT_UNDERLINE,makeAny(nUnderline));
 
                 // the text line color is transported in this item, too
-                sal_Int32 nColor = rUnderlineItem.GetColor().GetColor();
+                Color nColor = rUnderlineItem.GetColor();
 
                 Any aUnoColor;
-                if (COL_AUTO != static_cast<sal_uInt32>(nColor))
+                if (COL_AUTO != nColor)
                     aUnoColor <<= nColor;
 
                 lcl_pushBackPropertyValue( _out_properties, PROPERTY_TEXTLINECOLOR, aUnoColor );
@@ -415,10 +415,10 @@ namespace pcr
                 const SvxColorItem& rColorItem =
                     static_cast<const SvxColorItem&>(_rSet.Get(CFID_CHARCOLOR));
 
-                sal_Int32 nColor = rColorItem.GetValue().GetColor();
+                Color nColor = rColorItem.GetValue();
 
                 Any aUnoColor;
-                if (COL_AUTO != static_cast<sal_uInt32>(nColor))
+                if (COL_AUTO != nColor)
                     aUnoColor <<= nColor;
 
                 lcl_pushBackPropertyValue( _out_properties, PROPERTY_TEXTCOLOR, aUnoColor );

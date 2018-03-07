@@ -342,12 +342,12 @@ sal_uInt32 EscherPropertyContainer::GetGradientColor(
         if ( nStartColor & 1 )
         {
             nIntensity = pGradient->StartIntensity;
-            aColor = pGradient->StartColor;
+            aColor = Color(pGradient->StartColor);
         }
         else
         {
             nIntensity = pGradient->EndIntensity;
-            aColor = pGradient->EndColor;
+            aColor = Color(pGradient->EndColor);
         }
     }
     sal_uInt32  nRed = ( aColor.GetRed() * nIntensity ) / 100;
@@ -1479,7 +1479,7 @@ bool EscherPropertyContainer::CreateGraphicProperties(const uno::Reference<beans
                 Color aBackColor;
                 if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, "FillColor" ) )
                 {
-                    aBackColor = ImplGetColor( *o3tl::doAccess<sal_uInt32>(aAny), false );
+                    aBackColor = Color(ImplGetColor( *o3tl::doAccess<sal_uInt32>(aAny), false ));
                 }
                 bool bFillBackground = false;
                 if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, "FillBackground", true ) )

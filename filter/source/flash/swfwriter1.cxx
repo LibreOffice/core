@@ -1290,7 +1290,7 @@ bool Writer::Impl_writePageField( Rectangle& rTextBounds )
     aBits.writeUB( 0, 1 );                  // UseOutlines
     mpTag->addBits( aBits );
 
-    Color aColor( COL_BLACK );
+    Color aCOL_BLACK );
     mpTag->addRGB( aColor );
     mpTag->addString( "PageNumber" );
     mpTag->addString( "XXX" );

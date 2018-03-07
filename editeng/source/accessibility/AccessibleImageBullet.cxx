@@ -334,12 +334,12 @@ namespace accessibility
     {
 
         // #104444# Added to XAccessibleComponent interface
-        Color aColor( Application::GetSettings().GetStyleSettings().GetWindowColor().GetColor() );
+        Color aColor( Application::GetSettings().GetStyleSettings().GetWindowColor() );
 
         // the background is transparent
         aColor.SetTransparency( 0xFF);
 
-        return static_cast<sal_Int32>( aColor.GetColor() );
+        return static_cast<sal_Int32>( aColor );
     }
 
     OUString SAL_CALL AccessibleImageBullet::getImplementationName()
