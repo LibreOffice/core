@@ -1750,6 +1750,7 @@ void CustomPropertiesWindow::CreateNewLine()
     pNewLine->m_aValueEdit->SetAccessibleName(m_pHeaderAccValue->GetText());
 
     sal_Int32 nPos = GetExistingLineCount() * GetLineHeight();
+    nPos += LogicToPixel(Size(0, 2), MapMode(MapUnit::MapAppFont)).Height();
     m_aCustomPropertiesLines.push_back( pNewLine );
 
     SetWidgetWidths(pNewLine);
