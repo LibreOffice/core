@@ -117,10 +117,12 @@ SvxMenuConfigPage::SvxMenuConfigPage(vcl::Window *pParent, const SfxItemSet& rSe
     m_pContentsListBox->SetSelectHdl(
         LINK( this, SvxMenuConfigPage, SelectMenuEntry ) );
 
-    m_pPlusBtn->SetClickHdl(
-        LINK( this, SvxMenuConfigPage, AddMenuHdl ) );
-    m_pMinusBtn->SetClickHdl(
-        LINK( this, SvxMenuConfigPage, RemoveMenuHdl ) );
+    /*m_pPlusBtn->SetClickHdl(
+        LINK( this, SvxMenuConfigPage, AddMenuHdl ) );*/
+    /*m_pMinusBtn->SetClickHdl(
+        LINK( this, SvxMenuConfigPage, RemoveMenuHdl ) );*/
+    m_pGearBtn->SetSelectHdl(
+        LINK( this, SvxMenuConfigPage, GearHdl ) );
 
     m_pCommandCategoryListBox->SetSelectHdl(
         LINK( this, SvxMenuConfigPage, SelectCategory ) );
@@ -150,15 +152,18 @@ SvxMenuConfigPage::SvxMenuConfigPage(vcl::Window *pParent, const SfxItemSet& rSe
         // Context menus cannot be added/removed
         // These height requests are needed to keep the height of
         // the top level list boxes consistent for all tabs
-        m_pTopLevelListBox->set_height_request(
-            m_pPlusBtn->GetOptimalSize().Height() );
-        m_pCommandCategoryListBox->set_height_request(
-            m_pPlusBtn->GetOptimalSize().Height() );
+        //m_pTopLevelListBox->set_height_request(
+            //m_pPlusBtn->GetOptimalSize().Height() );
+        //m_pCommandCategoryListBox->set_height_request(
+            //m_pPlusBtn->GetOptimalSize().Height() );
 
-        m_pPlusBtn->Disable();
-        m_pMinusBtn->Disable();
-        m_pPlusBtn->Hide();
-        m_pMinusBtn->Hide();
+        //m_pPlusBtn->Disable();
+        //m_pMinusBtn->Disable();
+        //m_pPlusBtn->Hide();
+        //m_pMinusBtn->Hide();
+
+        //TODO: Remove this when the gear button is implemented for context menus
+        m_pGearBtn->Disable();
     }
     else
     {
@@ -299,7 +304,8 @@ IMPL_LINK_NOARG( SvxMenuConfigPage, SelectMenu, ListBox&, void )
     if ( pMenuData )
     {
         // Built-in menus cannot be deleted
-        m_pMinusBtn->Enable( pMenuData->IsDeletable() );
+        //m_pMinusBtn->Enable( pMenuData->IsDeletable() );
+        m_pGearBtn->Enable( m_bIsMenuBar && pMenuData->IsRenamable());
 
         SvxEntries* pEntries = pMenuData->GetEntries();
         SvxEntries::const_iterator iter = pEntries->begin();
@@ -314,7 +320,7 @@ IMPL_LINK_NOARG( SvxMenuConfigPage, SelectMenu, ListBox&, void )
     UpdateButtonStates();
 }
 
-IMPL_LINK_NOARG( SvxMenuConfigPage, AddMenuHdl, Button *, void )
+/*IMPL_LINK_NOARG( SvxMenuConfigPage, AddMenuHdl, Button *, void )
 {
     VclPtrInstance<SvxMainMenuOrganizerDialog> pDialog(
         nullptr, GetSaveInData()->GetEntries(), nullptr, true );
@@ -325,11 +331,51 @@ IMPL_LINK_NOARG( SvxMenuConfigPage, AddMenuHdl, Button *, void )
         ReloadTopLevelListBox( pDialog->GetSelectedEntry() );
         GetSaveInData()->SetModified();
     }
-}
+}*/
 
-IMPL_LINK_NOARG( SvxMenuConfigPage, RemoveMenuHdl, Button *, void )
+/*IMPL_LINK_NOARG( SvxMenuConfigPage, RemoveMenuHdl, Button *, void )
 {
     DeleteSelectedTopLevel();
+}*/
+
+IMPL_LINK( SvxMenuConfigPage, GearHdl, MenuButton *, pButton, void )
+{
+    OString sIdent = pButton->GetCurItemIdent();
+
+    if (sIdent == "gear_rename")
+    {
+        SvxConfigEntry* pMenuData = GetTopLevelSelection();
+
+        OUString sCurrentName( SvxConfigPageHelper::stripHotKey( pMenuData->GetName() ) );
+        OUString sDesc = CuiResId( RID_SVXSTR_LABEL_NEW_NAME );
+
+        VclPtrInstance< SvxNameDialog > pNameDialog( this, sCurrentName, sDesc );
+        pNameDialog->SetHelpId(HID_SVX_CONFIG_RENAME_MENU);
+        pNameDialog->SetText( CuiResId( RID_SVXSTR_RENAME_MENU ) );
+
+        if ( pNameDialog->Execute() == RET_OK )
+        {
+            OUString sNewName;
+            pNameDialog->GetName( sNewName );
+
+            if ( sCurrentName == sNewName )
+                return;
+
+            pMenuData->SetName( sNewName );
+
+            ReloadTopLevelListBox();
+
+            GetSaveInData()->SetModified();
+        }
+    }
+    else
+    {
+        //This block should never be reached
+        SAL_WARN("cui.customize", "Unknown gear menu option: " << sIdent);
+        return;
+    }
+
+    UpdateButtonStates();
 }
 
 IMPL_LINK_NOARG( SvxMenuConfigPage, SelectCategory, ListBox&, void )

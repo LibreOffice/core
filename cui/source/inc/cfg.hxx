@@ -320,6 +320,7 @@ public:
     bool    IsModified() { return bIsModified; }
 
     bool    IsDeletable();
+    bool    IsRenamable();
 
     void    SetVisible( bool b ) { bIsVisible = b; }
     bool    IsVisible() const { return bIsVisible; }
@@ -390,8 +391,7 @@ protected:
     // menu or toolbar are displayed
     VclPtr<ListBox>                            m_pTopLevelListBox;
     // Used to add and remove toolbars/menus
-    VclPtr<PushButton>                         m_pPlusBtn;
-    VclPtr<PushButton>                         m_pMinusBtn;
+    VclPtr<MenuButton>                         m_pGearBtn;
     VclPtr<VclContainer>                       m_pEntries;
     VclPtr<SvTreeListBox>                      m_pContentsListBox;
 
