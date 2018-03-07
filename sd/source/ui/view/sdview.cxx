@@ -105,10 +105,11 @@ using namespace com::sun::star::uno;
 using namespace sdr::table;
 namespace sd {
 
-
-View::View(SdDrawDocument& rDrawDoc, OutputDevice* pOutDev,
-               ViewShell* pViewShell)
-  : FmFormView(&rDrawDoc, pOutDev),
+View::View(
+    SdDrawDocument& rDrawDoc,
+    OutputDevice* pOutDev,
+    ViewShell* pViewShell)
+:   FmFormView(rDrawDoc, pOutDev),
     mrDoc(rDrawDoc),
     mpDocSh(rDrawDoc.GetDocSh()),
     mpViewSh(pViewShell),

@@ -1012,7 +1012,9 @@ std::size_t XclImpGroupObj::DoGetProgressSize() const
 
 SdrObjectPtr XclImpGroupObj::DoCreateSdrObj( XclImpDffConverter& rDffConv, const tools::Rectangle& /*rAnchorRect*/ ) const
 {
-    std::unique_ptr<SdrObjGroup, SdrObjectFree> xSdrObj( new SdrObjGroup );
+    std::unique_ptr<SdrObjGroup, SdrObjectFree> xSdrObj(
+        new SdrObjGroup(
+            *GetDoc().GetDrawLayer()));
     // child objects in BIFF2-BIFF5 have absolute size, not needed to pass own anchor rectangle
     SdrObjList& rObjList = *xSdrObj->GetSubList();  // SdrObjGroup always returns existing sublist
     for( ::std::vector< XclImpDrawObjRef >::const_iterator aIt = maChildren.begin(), aEnd = maChildren.end(); aIt != aEnd; ++aIt )
@@ -1080,7 +1082,11 @@ SdrObjectPtr XclImpLineObj::DoCreateSdrObj( XclImpDffConverter& rDffConv, const 
             aB2DPolygon.append( ::basegfx::B2DPoint( rAnchorRect.Right(), rAnchorRect.Top() ) );
         break;
     }
-    SdrObjectPtr xSdrObj( new SdrPathObj( OBJ_LINE, ::basegfx::B2DPolyPolygon( aB2DPolygon ) ) );
+    SdrObjectPtr xSdrObj(
+        new SdrPathObj(
+            *GetDoc().GetDrawLayer(),
+            OBJ_LINE,
+            ::basegfx::B2DPolyPolygon(aB2DPolygon)));
     ConvertLineStyle( *xSdrObj, maLineData );
 
     // line ends
@@ -1195,7 +1201,10 @@ void XclImpRectObj::DoReadObj5( XclImpStream& rStrm, sal_uInt16 nNameLen, sal_uI
 
 SdrObjectPtr XclImpRectObj::DoCreateSdrObj( XclImpDffConverter& rDffConv, const tools::Rectangle& rAnchorRect ) const
 {
-    SdrObjectPtr xSdrObj( new SdrRectObj( rAnchorRect ) );
+    SdrObjectPtr xSdrObj(
+        new SdrRectObj(
+            *GetDoc().GetDrawLayer(),
+            rAnchorRect));
     ConvertRectStyle( *xSdrObj );
     rDffConv.Progress();
     return xSdrObj;
@@ -1208,7 +1217,11 @@ XclImpOvalObj::XclImpOvalObj( const XclImpRoot& rRoot ) :
 
 SdrObjectPtr XclImpOvalObj::DoCreateSdrObj( XclImpDffConverter& rDffConv, const tools::Rectangle& rAnchorRect ) const
 {
-    SdrObjectPtr xSdrObj( new SdrCircObj( OBJ_CIRC, rAnchorRect ) );
+    SdrObjectPtr xSdrObj(
+        new SdrCircObj(
+            *GetDoc().GetDrawLayer(),
+            OBJ_CIRC,
+            rAnchorRect));
     ConvertRectStyle( *xSdrObj );
     rDffConv.Progress();
     return xSdrObj;
@@ -1280,7 +1293,13 @@ SdrObjectPtr XclImpArcObj::DoCreateSdrObj( XclImpDffConverter& rDffConv, const t
         break;
     }
     SdrObjKind eObjKind = maFillData.IsFilled() ? OBJ_SECT : OBJ_CARC;
-    SdrObjectPtr xSdrObj( new SdrCircObj( eObjKind, aNewRect, nStartAngle, nEndAngle ) );
+    SdrObjectPtr xSdrObj(
+        new SdrCircObj(
+            *GetDoc().GetDrawLayer(),
+            eObjKind,
+            aNewRect,
+            nStartAngle,
+            nEndAngle));
     ConvertFillStyle( *xSdrObj, maFillData );
     ConvertLineStyle( *xSdrObj, maLineData );
     rDffConv.Progress();
@@ -1358,7 +1377,11 @@ SdrObjectPtr XclImpPolygonObj::DoCreateSdrObj( XclImpDffConverter& rDffConv, con
             aB2DPolygon.append( lclGetPolyPoint( rAnchorRect, maCoords.front() ) );
         // create the SdrObject
         SdrObjKind eObjKind = maFillData.IsFilled() ? OBJ_PATHPOLY : OBJ_PATHPLIN;
-        xSdrObj.reset( new SdrPathObj( eObjKind, ::basegfx::B2DPolyPolygon( aB2DPolygon ) ) );
+        xSdrObj.reset(
+            new SdrPathObj(
+                *GetDoc().GetDrawLayer(),
+                eObjKind,
+                ::basegfx::B2DPolyPolygon(aB2DPolygon)));
         ConvertRectStyle( *xSdrObj );
     }
     rDffConv.Progress();
@@ -1420,7 +1443,9 @@ void XclImpTextObj::DoReadObj5( XclImpStream& rStrm, sal_uInt16 nNameLen, sal_uI
 
 SdrObjectPtr XclImpTextObj::DoCreateSdrObj( XclImpDffConverter& rDffConv, const tools::Rectangle& rAnchorRect ) const
 {
-    std::unique_ptr<SdrObjCustomShape, SdrObjectFree> xSdrObj( new SdrObjCustomShape );
+    std::unique_ptr<SdrObjCustomShape, SdrObjectFree> xSdrObj(
+        new SdrObjCustomShape(
+            *GetDoc().GetDrawLayer()));
     xSdrObj->NbcSetSnapRect( rAnchorRect );
     OUString aRectType = "rectangle";
     xSdrObj->MergeDefaultAttributes( &aRectType );
@@ -1710,7 +1735,12 @@ SdrObjectPtr XclImpChartObj::DoCreateSdrObj( XclImpDffConverter& rDffConv, const
         // ChartHelper::AdaptDefaultsForChart( xEmbObj );
 
         // create the container OLE object
-        xSdrObj.reset( new SdrOle2Obj( svt::EmbeddedObjectRef( xEmbObj, nAspect ), aEmbObjName, rAnchorRect ) );
+        xSdrObj.reset(
+            new SdrOle2Obj(
+                *GetDoc().GetDrawLayer(),
+                svt::EmbeddedObjectRef(xEmbObj, nAspect),
+                aEmbObjName,
+                rAnchorRect));
     }
 
     return xSdrObj;
@@ -2953,7 +2983,11 @@ SdrObjectPtr XclImpPictureObj::DoCreateSdrObj( XclImpDffConverter& rDffConv, con
     // no OLE - create a plain picture from IMGDATA record data
     if( !xSdrObj && (maGraphic.GetType() != GraphicType::NONE) )
     {
-        xSdrObj.reset( new SdrGrafObj( maGraphic, rAnchorRect ) );
+        xSdrObj.reset(
+            new SdrGrafObj(
+                *GetDoc().GetDrawLayer(),
+                maGraphic,
+                rAnchorRect));
         ConvertRectStyle( *xSdrObj );
     }
 
@@ -3434,9 +3468,20 @@ SdrObjectPtr XclImpDffConverter::CreateSdrObject( const XclImpPictureObj& rPicOb
                     ErrCode nError = ERRCODE_NONE;
                     namespace cssea = ::com::sun::star::embed::Aspects;
                     sal_Int64 nAspects = rPicObj.IsSymbol() ? cssea::MSOLE_ICON : cssea::MSOLE_CONTENT;
-                    xSdrObj.reset( CreateSdrOLEFromStorage(
-                        aStrgName, xSrcStrg, pDocShell->GetStorage(), aGraphic,
-                        rAnchorRect, aVisArea, nullptr, nError, mnOleImpFlags, nAspects, GetRoot().GetMedium().GetBaseURL()) );
+                    xSdrObj.reset(
+                        CreateSdrOLEFromStorage(
+                            GetConvData().mrSdrModel,
+                            aStrgName,
+                            xSrcStrg,
+                            pDocShell->GetStorage(),
+                            aGraphic,
+                            rAnchorRect,
+                            aVisArea,
+                            nullptr,
+                            nError,
+                            mnOleImpFlags,
+                            nAspects,
+                            GetRoot().GetMedium().GetBaseURL()));
                 }
             }
         }

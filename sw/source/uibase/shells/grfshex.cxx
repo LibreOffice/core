@@ -131,7 +131,9 @@ bool SwTextShell::InsertMediaDlg( SfxRequest const & rReq )
                 if (!bRet) { return bRet; }
             }
 
-            SdrMediaObj* pObj = new SdrMediaObj( tools::Rectangle( aPos, aSize ) );
+            SdrMediaObj* pObj = new SdrMediaObj(
+                *rSh.GetDoc()->getIDocumentDrawModelAccess().GetDrawModel(),
+                tools::Rectangle(aPos, aSize));
 
             pObj->SetModel(rSh.GetDoc()->getIDocumentDrawModelAccess().GetDrawModel()); // set before setURL
             pObj->setURL( realURL, "" );

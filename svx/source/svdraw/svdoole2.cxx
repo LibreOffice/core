@@ -665,13 +665,20 @@ sdr::contact::ViewContact* SdrOle2Obj::CreateObjectSpecificViewContact()
     return new sdr::contact::ViewContactOfSdrOle2Obj(*this);
 }
 
-SdrOle2Obj::SdrOle2Obj( bool bFrame_ ) :
+SdrOle2Obj::SdrOle2Obj(
+    SdrModel& rSdrModel,
+    bool bFrame_)
+:   SdrRectObj(rSdrModel),
     mpImpl(new SdrOle2ObjImpl(bFrame_))
 {
 }
 
-SdrOle2Obj::SdrOle2Obj( const svt::EmbeddedObjectRef&  rNewObjRef, const OUString& rNewObjName, const tools::Rectangle& rNewRect) :
-    SdrRectObj(rNewRect),
+SdrOle2Obj::SdrOle2Obj(
+    SdrModel& rSdrModel,
+    const svt::EmbeddedObjectRef& rNewObjRef,
+    const OUString& rNewObjName,
+    const tools::Rectangle& rNewRect)
+:   SdrRectObj(rSdrModel, rNewRect),
     mpImpl(new SdrOle2ObjImpl(false/*bFrame_*/, rNewObjRef))
 {
     mpImpl->aPersistName = rNewObjName;
@@ -1124,7 +1131,9 @@ SdrObject* SdrOle2Obj::createSdrGrafObjReplacement(bool bAddText) const
     if(pOLEGraphic)
     {
         // #i118485# allow creating a SdrGrafObj representation
-        SdrGrafObj* pClone = new SdrGrafObj(*pOLEGraphic);
+        SdrGrafObj* pClone = new SdrGrafObj(
+            getSdrModelFromSdrObject(),
+            *pOLEGraphic);
         pClone->SetModel(GetModel());
 
         // copy transformation
@@ -1155,7 +1164,9 @@ SdrObject* SdrOle2Obj::createSdrGrafObjReplacement(bool bAddText) const
     {
         // #i100710# pOLEGraphic may be zero (no visualisation available),
         // so we need to use the OLE replacement graphic
-        SdrRectObj* pClone = new SdrRectObj(GetSnapRect());
+        SdrRectObj* pClone = new SdrRectObj(
+            getSdrModelFromSdrObject(),
+            GetSnapRect());
         pClone->SetModel(GetModel());
 
         // gray outline

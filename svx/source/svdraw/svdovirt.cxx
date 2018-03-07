@@ -42,8 +42,10 @@ sdr::contact::ViewContact* SdrVirtObj::CreateObjectSpecificViewContact()
     return new sdr::contact::ViewContactOfVirtObj(*this);
 }
 
-
-SdrVirtObj::SdrVirtObj(SdrObject& rNewObj):
+SdrVirtObj::SdrVirtObj(
+    SdrModel& rSdrModel,
+    SdrObject& rNewObj)
+:   SdrObject(rSdrModel),
     rRefObj(rNewObj)
 {
     bVirtObj=true; // this is only a virtual object
@@ -55,7 +57,6 @@ SdrVirtObj::~SdrVirtObj()
 {
     rRefObj.DelReference(*this);
 }
-
 
 const SdrObject& SdrVirtObj::GetReferencedObj() const
 {
@@ -130,7 +131,9 @@ void SdrVirtObj::RecalcBoundRect()
 
 SdrVirtObj* SdrVirtObj::Clone() const
 {
-    return new SdrVirtObj(rRefObj); // only a further reference
+    return new SdrVirtObj(
+        getSdrModelFromSdrObject(),
+        rRefObj); // only a further reference
 }
 
 SdrVirtObj& SdrVirtObj::operator=(const SdrVirtObj& rObj)
@@ -266,24 +269,11 @@ bool SdrVirtObj::supportsFullDrag() const
 
 SdrObject* SdrVirtObj::getFullDragClone() const
 {
-    static bool bSpecialHandling(false);
-    SdrObject* pRetval = nullptr;
-
-    if(bSpecialHandling)
-    {
-        // special handling for VirtObj. Do not create another
-        // reference to rRefObj, this would allow to change that
-        // one on drag. Instead, create a SdrGrafObj for drag containing
-        // the graphical representation
-        pRetval = new SdrGrafObj(SdrDragView::GetObjGraphic(GetModel(), this), GetLogicRect());
-    }
-    else
-    {
-        SdrObject& rReferencedObject = const_cast<SdrVirtObj*>(this)->ReferencedObj();
-        pRetval = new SdrGrafObj(SdrDragView::GetObjGraphic(GetModel(), &rReferencedObject), GetLogicRect());
-    }
-
-    return pRetval;
+    SdrObject& rReferencedObject = const_cast<SdrVirtObj*>(this)->ReferencedObj();
+    return new SdrGrafObj(
+        getSdrModelFromSdrObject(),
+        SdrDragView::GetObjGraphic(GetModel(), &rReferencedObject),
+        GetLogicRect());
 }
 
 bool SdrVirtObj::beginSpecialDrag(SdrDragStat& rDrag) const

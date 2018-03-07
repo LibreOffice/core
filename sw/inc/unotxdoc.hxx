@@ -206,6 +206,9 @@ private:
     using SfxBaseModel::removeEventListener;
 
 protected:
+    /** abstract SdrModel provider */
+    virtual SdrModel* getSdrModelFromUnoModel() const;
+
     virtual ~SwXTextDocument() override;
 public:
     SwXTextDocument(SwDocShell* pShell);

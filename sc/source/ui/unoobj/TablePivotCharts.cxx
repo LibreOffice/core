@@ -154,8 +154,11 @@ void SAL_CALL TablePivotCharts::addNewByName(OUString const & rName,
                 xReceiver->setArguments(aArgs);
             }
 
-            SdrOle2Obj* pObject = new SdrOle2Obj(svt::EmbeddedObjectRef(xObject, embed::Aspects::MSOLE_CONTENT),
-                                                 aName, aInsRect);
+            SdrOle2Obj* pObject = new SdrOle2Obj(
+                *pModel,
+                svt::EmbeddedObjectRef(xObject, embed::Aspects::MSOLE_CONTENT),
+                aName,
+                aInsRect);
 
             if (xObject.is())
                 xObject->setVisualAreaSize(nAspect, aAwtSize);

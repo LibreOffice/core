@@ -88,8 +88,10 @@ void SdrObjEditView::ImpClearVars()
     bTextEditOnlyOneView=false;
 }
 
-SdrObjEditView::SdrObjEditView(SdrModel* pModel1, OutputDevice* pOut):
-    SdrGlueEditView(pModel1,pOut),
+SdrObjEditView::SdrObjEditView(
+    SdrModel& rSdrModel,
+    OutputDevice* pOut)
+:   SdrGlueEditView(rSdrModel, pOut),
     mpOldTextEditUndoManager(nullptr)
 {
     ImpClearVars();

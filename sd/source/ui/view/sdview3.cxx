@@ -995,7 +995,11 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                     maDropPos.AdjustY( -(std::min( aSize.Height(), aMaxSize.Height() ) >> 1) );
 
                     ::tools::Rectangle       aRect( maDropPos, aSize );
-                    SdrOle2Obj*     pObj = new SdrOle2Obj( aObjRef, aName, aRect );
+                    SdrOle2Obj*     pObj = new SdrOle2Obj(
+                        getSdrModelFromSdrView(),
+                        aObjRef,
+                        aName,
+                        aRect);
                     SdrPageView*    pPV = GetSdrPageView();
                     SdrInsertFlags  nOptions = SdrInsertFlags::SETDEFLAYER;
 
@@ -1165,7 +1169,11 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                     maDropPos.AdjustY( -(std::min( aSize.Height(), aMaxSize.Height() ) >> 1) );
 
                     ::tools::Rectangle       aRect( maDropPos, aSize );
-                    SdrOle2Obj*     pObj = new SdrOle2Obj( aObjRef, aName, aRect );
+                    SdrOle2Obj*     pObj = new SdrOle2Obj(
+                        getSdrModelFromSdrView(),
+                        aObjRef,
+                        aName,
+                        aRect);
                     SdrPageView*    pPV = GetSdrPageView();
                     SdrInsertFlags  nOptions = SdrInsertFlags::SETDEFLAYER;
 

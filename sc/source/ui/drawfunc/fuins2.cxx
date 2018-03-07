@@ -351,7 +351,11 @@ FuInsertOLE::FuInsertOLE(ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawView*
             if ( rData.GetDocument()->IsNegativePage( rData.GetTabNo() ) )
                 aPnt.AdjustX( -(aSize.Width()) );      // move position to left edge
             tools::Rectangle aRect (aPnt, aSize);
-            SdrOle2Obj* pObj = new SdrOle2Obj( aObjRef, aName, aRect);
+            SdrOle2Obj* pObj = new SdrOle2Obj(
+                *pDoc, // TTTT shbe ref
+                aObjRef,
+                aName,
+                aRect);
             SdrPageView* pPV = pView->GetSdrPageView();
             pView->InsertObjectAtView(pObj, *pPV);
 
@@ -589,7 +593,11 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawV
     Point aStart = pViewSh->GetChartInsertPos( aSize, aPositionRange );
 
     tools::Rectangle aRect (aStart, aSize);
-    SdrOle2Obj* pObj = new SdrOle2Obj( svt::EmbeddedObjectRef( xObj, nAspect ), aName, aRect);
+    SdrOle2Obj* pObj = new SdrOle2Obj(
+        *pDoc, // TTTT shbe ref
+        svt::EmbeddedObjectRef(xObj, nAspect),
+        aName,
+        aRect);
     SdrPageView* pPV = pView->GetSdrPageView();
 
     // #i121334# This call will change the chart's default background fill from white to transparent.
@@ -748,7 +756,11 @@ FuInsertChartFromFile::FuInsertChartFromFile( ScTabViewShell* pViewSh, vcl::Wind
     ScRange aPositionRange = pViewSh->GetViewData().GetCurPos();
     Point aStart = pViewSh->GetChartInsertPos( aSize, aPositionRange );
     tools::Rectangle aRect (aStart, aSize);
-    SdrOle2Obj* pObj = new SdrOle2Obj( svt::EmbeddedObjectRef( xObj, nAspect ), aName, aRect);
+    SdrOle2Obj* pObj = new SdrOle2Obj(
+        *pDoc, // TTTT shbe ref
+        svt::EmbeddedObjectRef(xObj, nAspect),
+        aName,
+        aRect);
 
     SdrPageView* pPV = pView->GetSdrPageView();
 

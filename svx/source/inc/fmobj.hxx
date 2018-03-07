@@ -47,9 +47,10 @@ class SVX_DLLPUBLIC FmFormObj: public SdrUnoObj
                             // only to be used for comparison with the current ref device!
 
 public:
-    FmFormObj(const OUString& rModelName);
-    FmFormObj();
-
+    FmFormObj(
+        SdrModel& rSdrModel,
+        const OUString& rModelName);
+    FmFormObj(SdrModel& rSdrModel);
 
     SAL_DLLPRIVATE const css::uno::Reference< css::container::XIndexContainer>&
         GetOriginalParent() const { return m_xParent; }

@@ -532,10 +532,12 @@ struct OReportDefinitionImpl
 };
 
 OReportDefinition::OReportDefinition(uno::Reference< uno::XComponentContext > const & _xContext)
-: ReportDefinitionBase(m_aMutex)
-,ReportDefinitionPropertySet(_xContext,IMPLEMENTS_PROPERTY_SET,uno::Sequence< OUString >())
-,m_aProps(new OReportComponentProperties(_xContext))
-,m_pImpl(new OReportDefinitionImpl(m_aMutex))
+:   ::cppu::BaseMutex(),
+    ReportDefinitionBase(m_aMutex),
+    ReportDefinitionPropertySet(_xContext,IMPLEMENTS_PROPERTY_SET,uno::Sequence< OUString >()),
+    ::comphelper::IEmbeddedHelper(),
+    m_aProps(new OReportComponentProperties(_xContext)),
+    m_pImpl(new OReportDefinitionImpl(m_aMutex))
 {
     m_aProps->m_sName  = RptResId(RID_STR_REPORT);
     osl_atomic_increment(&m_refCount);
@@ -548,13 +550,16 @@ OReportDefinition::OReportDefinition(uno::Reference< uno::XComponentContext > co
     osl_atomic_decrement( &m_refCount );
 }
 
-OReportDefinition::OReportDefinition(uno::Reference< uno::XComponentContext > const & _xContext
-                                     ,const uno::Reference< lang::XMultiServiceFactory>& _xFactory
-                                     ,uno::Reference< drawing::XShape >& _xShape)
-: ReportDefinitionBase(m_aMutex)
-,ReportDefinitionPropertySet(_xContext,IMPLEMENTS_PROPERTY_SET,uno::Sequence< OUString >())
-,m_aProps(new OReportComponentProperties(_xContext))
-,m_pImpl(new OReportDefinitionImpl(m_aMutex))
+OReportDefinition::OReportDefinition(
+    uno::Reference< uno::XComponentContext > const & _xContext,
+    const uno::Reference< lang::XMultiServiceFactory>& _xFactory,
+    uno::Reference< drawing::XShape >& _xShape)
+:   ::cppu::BaseMutex(),
+    ReportDefinitionBase(m_aMutex),
+    ReportDefinitionPropertySet(_xContext,IMPLEMENTS_PROPERTY_SET,uno::Sequence< OUString >()),
+    ::comphelper::IEmbeddedHelper(),
+    m_aProps(new OReportComponentProperties(_xContext)),
+    m_pImpl(new OReportDefinitionImpl(m_aMutex))
 {
     m_aProps->m_sName  = RptResId(RID_STR_REPORT);
     m_aProps->m_xFactory = _xFactory;
@@ -2013,6 +2018,11 @@ std::shared_ptr<rptui::OReportModel> OReportDefinition::getSdrModel(const uno::R
                                xUT->getSomething( OReportDefinition::getUnoTunnelImplementationId()))
                         )->m_pImpl->m_pReportModel;
     return pReportModel;
+}
+
+SdrModel* OReportDefinition::getSdrModelFromUnoModel() const
+{
+    return m_pImpl->m_pReportModel.get();
 }
 
 uno::Reference< uno::XInterface > SAL_CALL OReportDefinition::createInstanceWithArguments( const OUString& aServiceSpecifier, const uno::Sequence< uno::Any >& _aArgs)

@@ -1248,7 +1248,7 @@ static void lcl_DoDragObject( ScDocShell* pSrcShell, const OUString& rName, ScCo
         SdrObject* pObject = pModel->GetNamedObject( rName, nDrawId, nTab );
         if (pObject)
         {
-            SdrView aEditView( pModel );
+            SdrView aEditView(*pModel);
             aEditView.ShowSdrPage(aEditView.GetModel()->GetPage(nTab));
             SdrPageView* pPV = aEditView.GetSdrPageView();
             aEditView.MarkObj(pObject, pPV);

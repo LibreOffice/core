@@ -187,8 +187,7 @@ protected:
     void ImpSetEdgeInfoToAttr(); // copying values from the aEdgeInfo to the pool
 
 public:
-
-    SdrEdgeObj();
+    SdrEdgeObj(SdrModel& rSdrModel);
     virtual ~SdrEdgeObj() override;
 
     SdrObjConnection& GetConnection(bool bTail1) { return *(bTail1 ? &aCon1 : &aCon2); }

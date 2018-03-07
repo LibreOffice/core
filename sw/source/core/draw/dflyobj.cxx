@@ -121,7 +121,8 @@ sdr::contact::ViewContact* SwFlyDrawObj::CreateObjectSpecificViewContact()
     return new sdr::contact::VCOfSwFlyDrawObj(*this);
 }
 
-SwFlyDrawObj::SwFlyDrawObj()
+SwFlyDrawObj::SwFlyDrawObj(SdrModel& rSdrModel)
+:   SdrObject(rSdrModel)
 {
 }
 
@@ -130,7 +131,6 @@ SwFlyDrawObj::~SwFlyDrawObj()
 }
 
 // SwFlyDrawObj - Factory-Methods
-
 SdrInventor SwFlyDrawObj::GetObjInventor() const
 {
     return SdrInventor::Swg;
@@ -142,7 +142,6 @@ sal_uInt16 SwFlyDrawObj::GetObjIdentifier() const
 }
 
 // TODO: Need own primitive to get the FlyFrame paint working
-
 namespace drawinglayer
 {
     namespace primitive2d
@@ -421,9 +420,12 @@ sdr::contact::ViewContact* SwVirtFlyDrawObj::CreateObjectSpecificViewContact()
     return new sdr::contact::VCOfSwVirtFlyDrawObj(*this);
 }
 
-SwVirtFlyDrawObj::SwVirtFlyDrawObj(SdrObject& rNew, SwFlyFrame* pFly) :
-    SdrVirtObj( rNew ),
-    m_pFlyFrame( pFly )
+SwVirtFlyDrawObj::SwVirtFlyDrawObj(
+    SdrModel& rSdrModel,
+    SdrObject& rNew,
+    SwFlyFrame* pFly)
+:   SdrVirtObj(rSdrModel, rNew),
+    m_pFlyFrame(pFly)
 {
     const SvxProtectItem &rP = m_pFlyFrame->GetFormat()->GetProtect();
     bMovProt = rP.IsPosProtected();

@@ -24,14 +24,14 @@
 #include <document.hxx>
 #include <pageuno.hxx>
 
-ScDrawPage::ScDrawPage(ScDrawLayer& rNewModel, bool bMasterPage) :
-    FmFormPage(rNewModel, bMasterPage)
+ScDrawPage::ScDrawPage(ScDrawLayer& rNewModel, bool bMasterPage)
+:   FmFormPage(rNewModel, bMasterPage)
 {
     SetSize( Size( LONG_MAX, LONG_MAX ) );
 }
 
 ScDrawPage::ScDrawPage(const ScDrawPage& rSrcPage)
-    : FmFormPage(rSrcPage)
+:   FmFormPage(rSrcPage)
 {
 }
 

@@ -62,8 +62,14 @@ private:
     ImpPathForDragAndCreate& impGetDAC() const;
 
 public:
-    SdrPathObj(SdrObjKind eNewKind);
-    SdrPathObj(SdrObjKind eNewKind, const basegfx::B2DPolyPolygon& rPathPoly);
+    SdrPathObj(
+        SdrModel& rSdrModel,
+        SdrObjKind eNewKind);
+    SdrPathObj(
+        SdrModel& rSdrModel,
+        SdrObjKind eNewKind,
+        const basegfx::B2DPolyPolygon& rPathPoly);
+
     virtual ~SdrPathObj() override;
 
     virtual void TakeObjInfo(SdrObjTransformInfoRec& rInfo) const override;

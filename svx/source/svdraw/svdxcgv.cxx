@@ -57,8 +57,10 @@
 
 using namespace com::sun::star;
 
-SdrExchangeView::SdrExchangeView(SdrModel* pModel1, OutputDevice* pOut):
-    SdrObjEditView(pModel1,pOut)
+SdrExchangeView::SdrExchangeView(
+    SdrModel& rSdrModel,
+    OutputDevice* pOut)
+:   SdrObjEditView(rSdrModel, pOut)
 {
 }
 
@@ -143,7 +145,10 @@ bool SdrExchangeView::Paste(const OUString& rStr, const Point& rPos, SdrObjList*
     if (pPage!=nullptr) {
         aTextRect.SetSize(pPage->GetSize());
     }
-    SdrRectObj* pObj=new SdrRectObj(OBJ_TEXT,aTextRect);
+    SdrRectObj* pObj = new SdrRectObj(
+        getSdrModelFromSdrView(),
+        OBJ_TEXT,
+        aTextRect);
     pObj->SetModel(mpModel);
     pObj->SetLayer(nLayer);
     pObj->NbcSetText(rStr); // SetText before SetAttr, else SetAttr doesn't work!
@@ -180,7 +185,10 @@ bool SdrExchangeView::Paste(SvStream& rInput, EETextFormat eFormat, const Point&
     if (pPage!=nullptr) {
         aTextRect.SetSize(pPage->GetSize());
     }
-    SdrRectObj* pObj=new SdrRectObj(OBJ_TEXT,aTextRect);
+    SdrRectObj* pObj = new SdrRectObj(
+        getSdrModelFromSdrView(),
+        OBJ_TEXT,
+        aTextRect);
     pObj->SetModel(mpModel);
     pObj->SetLayer(nLayer);
     if (mpDefaultStyleSheet!=nullptr) pObj->NbcSetStyleSheet(mpDefaultStyleSheet, false);
@@ -703,7 +711,6 @@ void SdrExchangeView::DrawMarkedObj(OutputDevice& rOut) const
     }
 }
 
-
 SdrModel* SdrExchangeView::GetMarkedObjModel() const
 {
     // Sorting the MarkList here might be problematic in the future, so
@@ -729,7 +736,10 @@ SdrModel* SdrExchangeView::GetMarkedObjModel() const
             {
                 // convert SdrPageObj's to a graphic representation, because
                 // virtual connection to referenced page gets lost in new model
-                pNewObj = new SdrGrafObj( GetObjGraphic( mpModel, pObj ), pObj->GetLogicRect() );
+                pNewObj = new SdrGrafObj(
+                    *pNeuMod,
+                    GetObjGraphic(mpModel, pObj),
+                    pObj->GetLogicRect());
                 pNewObj->SetPage( pNeuPag );
                 pNewObj->SetModel( pNeuMod );
             }
@@ -750,8 +760,8 @@ SdrModel* SdrExchangeView::GetMarkedObjModel() const
         // New mechanism to re-create the connections of cloned connectors
         aCloneList.CopyConnections();
     }
+
     return pNeuMod;
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -326,7 +326,7 @@ SdrObject* EnhancedCustomShape3d::Create3DObject(
         a3DDefaultAttr.SetDefaultLatheCharacterMode( true );
         a3DDefaultAttr.SetDefaultExtrudeCharacterMode( true );
 
-        E3dScene* pScene = new E3dScene;
+        E3dScene* pScene = new E3dScene(rSdrObjCustomShape.getSdrModelFromSdrObject());
 
         bool bSceneHasObjects ( false );
         bool bUseTwoFillStyles( false );
@@ -480,10 +480,15 @@ SdrObject* EnhancedCustomShape3d::Create3DObject(
                 aBoundRect2d.Union( aBoundRect );
 
                 // #i122777# depth 0 is okay for planes when using double-sided
-                E3dCompoundObject* p3DObj = new E3dExtrudeObj( a3DDefaultAttr, aPolyPoly, bUseTwoFillStyles ? 0 : fDepth );
+                E3dCompoundObject* p3DObj = new E3dExtrudeObj(
+                    rSdrObjCustomShape.getSdrModelFromSdrObject(),
+                    a3DDefaultAttr,
+                    aPolyPoly,
+                    bUseTwoFillStyles ? 0 : fDepth );
 
                 p3DObj->NbcSetLayer( pShape2d->GetLayer() );
                 p3DObj->SetMergedItemSet( aLocalSet );
+
                 if ( bIsPlaceholderObject )
                     aPlaceholderObjectList.push_back( p3DObj );
                 else if ( bUseTwoFillStyles )
@@ -530,7 +535,11 @@ SdrObject* EnhancedCustomShape3d::Create3DObject(
                         }
                     }
                     pScene->Insert3DObj( p3DObj );
-                    p3DObj = new E3dExtrudeObj( a3DDefaultAttr, aPolyPoly, fDepth );
+                    p3DObj = new E3dExtrudeObj(
+                        rSdrObjCustomShape.getSdrModelFromSdrObject(),
+                        a3DDefaultAttr,
+                        aPolyPoly,
+                        fDepth);
                     p3DObj->NbcSetLayer( pShape2d->GetLayer() );
                     p3DObj->SetMergedItemSet( aLocalSet );
                     if ( bUseExtrusionColor )
@@ -541,7 +550,11 @@ SdrObject* EnhancedCustomShape3d::Create3DObject(
                     pScene->Insert3DObj( p3DObj );
 
                     // #i122777# depth 0 is okay for planes when using double-sided
-                    p3DObj = new E3dExtrudeObj( a3DDefaultAttr, aPolyPoly, 0 );
+                    p3DObj = new E3dExtrudeObj(
+                        rSdrObjCustomShape.getSdrModelFromSdrObject(),
+                        a3DDefaultAttr,
+                        aPolyPoly,
+                        0);
 
                     p3DObj->NbcSetLayer( pShape2d->GetLayer() );
                     p3DObj->SetMergedItemSet( aLocalSet );

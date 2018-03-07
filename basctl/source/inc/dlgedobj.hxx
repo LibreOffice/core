@@ -58,9 +58,11 @@ private:
     DlgEditor& GetDialogEditor ();
 
 protected:
-    DlgEdObj();
-    DlgEdObj(const OUString& rModelName,
-             const css::uno::Reference< css::lang::XMultiServiceFactory >& rxSFac);
+    DlgEdObj(SdrModel& rSdrModel);
+    DlgEdObj(
+        SdrModel& rSdrModel,
+        const OUString& rModelName,
+        const css::uno::Reference< css::lang::XMultiServiceFactory >& rxSFac);
 
     virtual void NbcMove( const Size& rSize ) override;
     virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact) override;
@@ -153,7 +155,9 @@ private:
     mutable ::boost::optional< css::awt::DeviceInfo >   mpDeviceInfo;
 
 private:
-    explicit DlgEdForm (DlgEditor&);
+    explicit DlgEdForm(
+        SdrModel& rSdrModel,
+        DlgEditor&);
 
 protected:
     virtual void NbcMove( const Size& rSize ) override;

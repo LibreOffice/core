@@ -109,7 +109,10 @@ void FuConstructRectangle::DoExecute( SfxRequest& rReq )
                                            pCenterY->GetValue () - pAxisY->GetValue () / 2,
                                            pCenterX->GetValue () + pAxisX->GetValue () / 2,
                                            pCenterY->GetValue () + pAxisY->GetValue () / 2);
-                SdrCircObj  *pNewCircle = new SdrCircObj (OBJ_CIRC, aNewRectangle);
+                SdrCircObj  *pNewCircle = new SdrCircObj(
+                    mpView->getSdrModelFromSdrView(),
+                    OBJ_CIRC,
+                    aNewRectangle);
                 SdrPageView *pPV = mpView->GetSdrPageView();
 
                 mpView->InsertObjectAtView(pNewCircle, *pPV, SdrInsertFlags::SETDEFLAYER | SdrInsertFlags::SETDEFATTR);
@@ -127,7 +130,9 @@ void FuConstructRectangle::DoExecute( SfxRequest& rReq )
                                            pMouseStartY->GetValue (),
                                            pMouseEndX->GetValue (),
                                            pMouseEndY->GetValue ());
-                SdrRectObj  *pNewRect = new SdrRectObj (aNewRectangle);
+                SdrRectObj  *pNewRect = new SdrRectObj(
+                    mpView->getSdrModelFromSdrView(),
+                    aNewRectangle);
                 SdrPageView *pPV = mpView->GetSdrPageView();
 
                 mpView->InsertObjectAtView(pNewRect, *pPV, SdrInsertFlags::SETDEFLAYER | SdrInsertFlags::SETDEFATTR);
@@ -764,7 +769,9 @@ SdrObject* FuConstructRectangle::CreateDefaultObject(const sal_uInt16 nID, const
     // case SID_CONNECTOR_LINES_CIRCLES:
 
     SdrObject* pObj = SdrObjFactory::MakeNewObject(
-        mpView->GetCurrentObjInventor(), mpView->GetCurrentObjIdentifier(),
+        mpView->getSdrModelFromSdrView(),
+        mpView->GetCurrentObjInventor(),
+        mpView->GetCurrentObjIdentifier(),
         nullptr, mpDoc);
 
     if(pObj)

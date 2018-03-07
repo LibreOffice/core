@@ -35,16 +35,19 @@ private:
 
     virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact() override;
     virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties() override;
-    void SetDefaultAttributes(E3dDefaultAttributes& rDefault);
+    void SetDefaultAttributes(const E3dDefaultAttributes& rDefault);
 
 public:
-    E3dSphereObj(E3dDefaultAttributes& rDefault, const basegfx::B3DPoint& rCenter, const basegfx::B3DVector& r3DSize);
+    E3dSphereObj(
+        SdrModel& rSdrModel,
+        const E3dDefaultAttributes& rDefault,
+        const basegfx::B3DPoint& rCenter,
+        const basegfx::B3DVector& r3DSize);
 
     // FG: This constructor is only called from MakeObject from the 3d-Objectfactory
     //     when a document with a sphere is loaded.  This constructor does not call
     //     CreateSphere, or create any spheres.
-    enum Dummy { DUMMY };
-    E3dSphereObj(Dummy dummy);
+    E3dSphereObj(SdrModel& rSdrModel);
 
     // horizontal segments:
     sal_uInt32 GetHorizontalSegments() const

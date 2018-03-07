@@ -1628,14 +1628,21 @@ sdr::contact::ViewContact* SdrPathObj::CreateObjectSpecificViewContact()
 }
 
 
-SdrPathObj::SdrPathObj(SdrObjKind eNewKind)
-:   meKind(eNewKind)
+SdrPathObj::SdrPathObj(
+    SdrModel& rSdrModel,
+    SdrObjKind eNewKind)
+:   SdrTextObj(rSdrModel),
+    meKind(eNewKind)
 {
     bClosedObj = IsClosed();
 }
 
-SdrPathObj::SdrPathObj(SdrObjKind eNewKind, const basegfx::B2DPolyPolygon& rPathPoly)
-:   maPathPolygon(rPathPoly),
+SdrPathObj::SdrPathObj(
+    SdrModel& rSdrModel,
+    SdrObjKind eNewKind,
+    const basegfx::B2DPolyPolygon& rPathPoly)
+:   SdrTextObj(rSdrModel),
+    maPathPolygon(rPathPoly),
     meKind(eNewKind)
 {
     bClosedObj = IsClosed();

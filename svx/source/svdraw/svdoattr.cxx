@@ -80,7 +80,8 @@ sdr::properties::BaseProperties* SdrAttrObj::CreateObjectSpecificProperties()
 }
 
 
-SdrAttrObj::SdrAttrObj()
+SdrAttrObj::SdrAttrObj(SdrModel& rSdrModel)
+:   SdrObject(rSdrModel)
 {
 }
 

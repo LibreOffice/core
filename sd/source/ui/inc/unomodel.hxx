@@ -128,6 +128,10 @@ private:
 
     sd::DrawViewShell* GetViewShell();
 
+protected:
+    /** abstract SdrModel provider */
+    virtual SdrModel* getSdrModelFromUnoModel() const;
+
 public:
     SdXImpressDocument(::sd::DrawDocShell* pShell, bool bClipBoard);
     SdXImpressDocument(SdDrawDocument* pDoc, bool bClipBoard);

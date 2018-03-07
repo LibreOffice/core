@@ -852,7 +852,7 @@ void AnimationWindow::AddObj (::sd::View& rView )
             }
             else
             {
-                SdrObjGroup* pCloneGroup = new SdrObjGroup;
+                SdrObjGroup* pCloneGroup = new SdrObjGroup(rView.getSdrModelFromSdrView());
                 SdrObjList*  pObjList    = pCloneGroup->GetSubList();
 
                 for (size_t nObject= 0; nObject < nMarkCount; ++nObject)
@@ -1000,7 +1000,9 @@ void AnimationWindow::CreateAnimObj (::sd::View& rView )
             aAnimation.SetLoopCount( nLoopCount );
         }
 
-        SdrGrafObj* pGrafObj = new SdrGrafObj( Graphic( aAnimation ) );
+        SdrGrafObj* pGrafObj = new SdrGrafObj(
+            rView.getSdrModelFromSdrView(),
+            Graphic(aAnimation));
         const Point aOrg( aWindowCenter.X() - ( aMaxSizeLog.Width() >> 1 ), aWindowCenter.Y() - ( aMaxSizeLog.Height() >> 1 ) );
 
         pGrafObj->SetLogicRect( ::tools::Rectangle( aOrg, aMaxSizeLog ) );
@@ -1073,7 +1075,7 @@ void AnimationWindow::CreateAnimObj (::sd::View& rView )
         if(pTargetSdPage)
         {
             // create animation group
-            SdrObjGroup* pGroup   = new SdrObjGroup;
+            SdrObjGroup* pGroup   = new SdrObjGroup(rView.getSdrModelFromSdrView());
             SdrObjList*  pObjList = pGroup->GetSubList();
 
             for (size_t i = 0; i < nCount; ++i)

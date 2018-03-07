@@ -100,11 +100,38 @@ BitmapEx SVX_DLLPUBLIC convertMetafileToBitmapEx(
     const basegfx::B2DRange& rTargetRange,
     const sal_uInt32 nMaximumQuadraticPixels);
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+//
+//  SdrPaintView
+//      SdrSnapView
+//          SdrMarkView
+//              SdrEditView
+//                  SdrPolyEditView
+//                      SdrGlueEditView
+//                          SdrObjEditView
+//                              SdrExchangeView
+//                                  SdrDragView
+//                                      SdrCreateView
+//                                          SdrView
+//                                              DlgEdView
+//                                              GraphCtrlView
+//                                              E3dView
+//                                                  DrawViewWrapper
+//                                                  FmFormView
+//                                                      ScDrawView
+//                                                      sd::View (may have more?)
+//                                                          sd::DrawView
+//                                                      SwDrawView
+//                                              OSectionView
 
 class SVX_DLLPUBLIC SdrPaintView : public SfxListener, public SfxRepeatTarget, public SfxBroadcaster, public ::utl::ConfigurationListener
 {
+private:
     friend class                SdrPageView;
     friend class                SdrGrafObj;
+
+    // the SdrModel this view was created with, unchanged during lifetime
+    SdrModel&                   mrSdrModelFromSdrView;
 
     SdrPageView*                mpPageView;
 protected:
@@ -238,10 +265,13 @@ protected:
     virtual void ModelHasChanged();
 
     // #i71538# make constructors of SdrView sub-components protected to avoid incomplete incarnations which may get casted to SdrView
-    SdrPaintView(SdrModel* pModel1, OutputDevice* pOut);
+    // A SdrView always needs a SdrModel for lifetime (Pool, ...)
+    SdrPaintView(SdrModel& rSdrModel, OutputDevice* pOut);
     virtual ~SdrPaintView() override;
 
 public:
+    // SdrModel access on SdrView level
+    SdrModel& getSdrModelFromSdrView() const { return mrSdrModelFromSdrView; }
 
     virtual void ClearPageView();
     SdrModel* GetModel() const { return mpModel; }

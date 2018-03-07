@@ -186,7 +186,11 @@ void DrawViewShell::FuTable(SfxRequest& rReq)
             aRect = ::tools::Rectangle(aPos, aSize);
         }
 
-        sdr::table::SdrTableObj* pObj = new sdr::table::SdrTableObj( GetDoc(), aRect, nColumns, nRows );
+        sdr::table::SdrTableObj* pObj = new sdr::table::SdrTableObj(
+            *GetDoc(), // TTTT reference?
+            aRect,
+            nColumns,
+            nRows);
         pObj->NbcSetStyleSheet( GetDoc()->GetDefaultStyleSheet(), true );
         apply_table_style( pObj, GetDoc(), sTableStyle );
         SdrPageView* pPV = mpView->GetSdrPageView();
@@ -274,7 +278,11 @@ void CreateTableFromRTF( SvStream& rStream, SdDrawDocument* pModel )
         {
             Size aSize( 200, 200 );
             ::tools::Rectangle aRect (Point(), aSize);
-            sdr::table::SdrTableObj* pObj = new sdr::table::SdrTableObj( pModel, aRect, 1, 1 );
+            sdr::table::SdrTableObj* pObj = new sdr::table::SdrTableObj(
+                *pModel,
+                aRect,
+                1,
+                1);
             pObj->NbcSetStyleSheet( pModel->GetDefaultStyleSheet(), true );
             apply_table_style( pObj, pModel, OUString() );
 

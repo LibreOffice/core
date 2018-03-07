@@ -65,18 +65,20 @@ DlgEditor& DlgEdObj::GetDialogEditor ()
         return pDlgEdForm->GetDlgEditor();
 }
 
-DlgEdObj::DlgEdObj()
-          :SdrUnoObj(OUString())
-          ,bIsListening(false)
-          ,pDlgEdForm( nullptr )
+DlgEdObj::DlgEdObj(SdrModel& rSdrModel)
+:   SdrUnoObj(rSdrModel, OUString())
+    ,bIsListening(false)
+    ,pDlgEdForm( nullptr )
 {
 }
 
-DlgEdObj::DlgEdObj(const OUString& rModelName,
-                   const css::uno::Reference< css::lang::XMultiServiceFactory >& rxSFac)
-          :SdrUnoObj(rModelName, rxSFac)
-          ,bIsListening(false)
-          ,pDlgEdForm( nullptr )
+DlgEdObj::DlgEdObj(
+    SdrModel& rSdrModel,
+    const OUString& rModelName,
+    const css::uno::Reference< css::lang::XMultiServiceFactory >& rxSFac)
+:   SdrUnoObj(rSdrModel, rModelName, rxSFac)
+    ,bIsListening(false)
+    ,pDlgEdForm( nullptr )
 {
 }
 
@@ -900,7 +902,9 @@ SdrObject* DlgEdObj::getFullDragClone() const
 {
     // no need to really add the clone for dragging, it's a temporary
     // object
-    SdrObject* pObj = new SdrUnoObj(OUString());
+    SdrObject* pObj = new SdrUnoObj(
+        getSdrModelFromSdrObject(),
+        OUString());
     *pObj = *static_cast<const SdrUnoObj*>(this);
 
     return pObj;
@@ -1195,8 +1199,10 @@ void DlgEdObj::SetLayer(SdrLayerID nLayer)
     }
 }
 
-
-DlgEdForm::DlgEdForm (DlgEditor& rDlgEditor_) :
+DlgEdForm::DlgEdForm(
+    SdrModel& rSdrModel,
+    DlgEditor& rDlgEditor_)
+:   DlgEdObj(rSdrModel),
     rDlgEditor(rDlgEditor_)
 {
 }

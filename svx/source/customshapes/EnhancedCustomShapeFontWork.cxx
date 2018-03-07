@@ -853,13 +853,17 @@ SdrObject* CreateSdrObjectFromParagraphOutlines(
             ++aTextAreaIter;
         }
 
-        pRet = new SdrPathObj( OBJ_POLY, aPolyPoly );
+        pRet = new SdrPathObj(
+            rSdrObjCustomShape.getSdrModelFromSdrObject(),
+            OBJ_POLY,
+            aPolyPoly);
 
         SfxItemSet aSet(rSdrObjCustomShape.GetMergedItemSet());
         aSet.ClearItem( SDRATTR_TEXTDIRECTION );    //SJ: vertical writing is not required, by removing this item no outliner is created
         aSet.Put(makeSdrShadowItem(false)); // #i37011# NO shadow for FontWork geometry
         pRet->SetMergedItemSet( aSet );             // * otherwise we would crash, because the outliner tries to create a Paraobject, but there is no model
     }
+
     return pRet;
 }
 

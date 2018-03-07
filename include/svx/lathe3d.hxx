@@ -39,11 +39,14 @@ class SVX_DLLPUBLIC E3dLatheObj final : public E3dCompoundObject
 
     virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact() override;
     virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties() override;
-    void SetDefaultAttributes(E3dDefaultAttributes const & rDefault);
+    void SetDefaultAttributes(const E3dDefaultAttributes& rDefault);
 
 public:
-    E3dLatheObj(E3dDefaultAttributes const & rDefault, const basegfx::B2DPolyPolygon& rPoly2D);
-    E3dLatheObj();
+    E3dLatheObj(
+        SdrModel& rSdrModel,
+        const E3dDefaultAttributes& rDefault,
+        const basegfx::B2DPolyPolygon& rPoly2D);
+    E3dLatheObj(SdrModel& rSdrModel);
 
     // HorizontalSegments:
     sal_uInt32 GetHorizontalSegments() const

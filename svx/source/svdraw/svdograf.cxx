@@ -325,15 +325,14 @@ void SdrGrafObj::onGraphicChanged()
     }
 }
 
-
-SdrGrafObj::SdrGrafObj()
-    : SdrRectObj()
-    , mpGraphicObject(new GraphicObject)
-    , pGraphicLink(nullptr)
-    , bMirrored(false)
-    , mbIsSignatureLine(false)
-    , mbIsSignatureLineShowSignDate(true)
-    , mbIsSignatureLineCanAddComment(false)
+SdrGrafObj::SdrGrafObj(SdrModel& rSdrModel)
+:   SdrRectObj(rSdrModel)
+    ,mpGraphicObject(new GraphicObject)
+    ,pGraphicLink(nullptr)
+    ,bMirrored(false)
+    ,mbIsSignatureLine(false)
+    ,mbIsSignatureLineShowSignDate(true)
+    ,mbIsSignatureLineCanAddComment(false)
 {
     mpGraphicObject->SetSwapStreamHdl( LINK(this, SdrGrafObj, ImpSwapHdl) );
     onGraphicChanged();
@@ -352,14 +351,17 @@ SdrGrafObj::SdrGrafObj()
     mbSupportTextIndentingOnLineWidthChange = false;
 }
 
-SdrGrafObj::SdrGrafObj(const Graphic& rGraphic, const tools::Rectangle& rRect)
-    : SdrRectObj(rRect)
-    , mpGraphicObject(new GraphicObject(rGraphic))
-    , pGraphicLink(nullptr)
-    , bMirrored(false)
-    , mbIsSignatureLine(false)
-    , mbIsSignatureLineShowSignDate(true)
-    , mbIsSignatureLineCanAddComment(false)
+SdrGrafObj::SdrGrafObj(
+    SdrModel& rSdrModel,
+    const Graphic& rGraphic,
+    const tools::Rectangle& rRect)
+:   SdrRectObj(rSdrModel, rRect)
+    ,mpGraphicObject(new GraphicObject(rGraphic))
+    ,pGraphicLink(nullptr)
+    ,bMirrored(false)
+    ,mbIsSignatureLine(false)
+    ,mbIsSignatureLineShowSignDate(true)
+    ,mbIsSignatureLineCanAddComment(false)
 {
     mpGraphicObject->SetSwapStreamHdl( LINK(this, SdrGrafObj, ImpSwapHdl) );
     onGraphicChanged();
@@ -378,14 +380,16 @@ SdrGrafObj::SdrGrafObj(const Graphic& rGraphic, const tools::Rectangle& rRect)
     mbSupportTextIndentingOnLineWidthChange = false;
 }
 
-SdrGrafObj::SdrGrafObj(const Graphic& rGraphic)
-    : SdrRectObj()
-    , mpGraphicObject(new GraphicObject(rGraphic))
-    , pGraphicLink(nullptr)
-    , bMirrored(false)
-    , mbIsSignatureLine(false)
-    , mbIsSignatureLineShowSignDate(true)
-    , mbIsSignatureLineCanAddComment(false)
+SdrGrafObj::SdrGrafObj(
+    SdrModel& rSdrModel,
+    const Graphic& rGraphic)
+:   SdrRectObj(rSdrModel)
+    ,mpGraphicObject(new GraphicObject(rGraphic))
+    ,pGraphicLink(nullptr)
+    ,bMirrored(false)
+    ,mbIsSignatureLine(false)
+    ,mbIsSignatureLineShowSignDate(true)
+    ,mbIsSignatureLineCanAddComment(false)
 {
     mpGraphicObject->SetSwapStreamHdl( LINK(this, SdrGrafObj, ImpSwapHdl) );
     onGraphicChanged();
@@ -1133,7 +1137,7 @@ SdrObject* SdrGrafObj::DoConvertToPolyObj(bool bBezier, bool bAddText ) const
         {
             // Sort into group and return ONLY those objects that can be created from the MetaFile.
             ImpSdrGDIMetaFileImport aFilter(*GetModel(), GetLayer(), maRect);
-            SdrObjGroup* pGrp = new SdrObjGroup();
+            SdrObjGroup* pGrp = new SdrObjGroup(getSdrModelFromSdrObject());
 
             if(aFilter.DoImport(aMtf, *pGrp->GetSubList(), 0))
             {
@@ -1198,8 +1202,7 @@ SdrObject* SdrGrafObj::DoConvertToPolyObj(bool bBezier, bool bAddText ) const
 
                     if(!pGrp)
                     {
-                        pGrp = new SdrObjGroup();
-
+                        pGrp = new SdrObjGroup(getSdrModelFromSdrObject());
                         pGrp->NbcSetLayer(GetLayer());
                         pGrp->SetModel(GetModel());
                         pGrp->GetSubList()->NbcInsertObject(pRetval);

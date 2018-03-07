@@ -2714,6 +2714,11 @@ void SdXImpressDocument::initializeDocument()
     }
 }
 
+SdrModel* SdXImpressDocument::getSdrModelFromUnoModel() const
+{
+    return GetDoc();
+}
+
 void SAL_CALL SdXImpressDocument::dispose()
 {
     if( !mbDisposed )

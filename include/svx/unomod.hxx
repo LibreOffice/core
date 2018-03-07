@@ -32,6 +32,10 @@ SVX_DLLPUBLIC css::uno::Reference< css::container::XIndexReplace > SvxCreateNumR
 
 class SVX_DLLPUBLIC SvxUnoDrawMSFactory : public css::lang::XMultiServiceFactory
 {
+protected:
+    /** abstract SdrModel provider */
+    virtual SdrModel* getSdrModelFromUnoModel() const = 0; //TTTT make reference return
+
 public:
     SvxUnoDrawMSFactory() throw() {};
 

@@ -92,12 +92,12 @@ void Svx3DPreviewControl::Construct()
     mpModel->InsertPage( mpFmPage, 0 );
 
     // 3D View
-    mp3DView = new E3dView( mpModel, this );
+    mp3DView = new E3dView(*mpModel, this );
     mp3DView->SetBufferedOutputAllowed(true);
     mp3DView->SetBufferedOverlayAllowed(true);
 
     // 3D Scene
-    mpScene = new E3dScene;
+    mpScene = new E3dScene(*mpModel);
 
     // initially create object
     SetObjectType(SvxPreviewObjectType::SPHERE);
@@ -204,6 +204,7 @@ void Svx3DPreviewControl::SetObjectType(SvxPreviewObjectType nType)
             case SvxPreviewObjectType::SPHERE:
             {
                 mp3DObj = new E3dSphereObj(
+                    *mpModel,
                     mp3DView->Get3DDefaultAttributes(),
                     basegfx::B3DPoint( 0, 0, 0 ),
                     basegfx::B3DVector( 5000, 5000, 5000 ));
@@ -213,6 +214,7 @@ void Svx3DPreviewControl::SetObjectType(SvxPreviewObjectType nType)
             case SvxPreviewObjectType::CUBE:
             {
                 mp3DObj = new E3dCubeObj(
+                    *mpModel,
                     mp3DView->Get3DDefaultAttributes(),
                     basegfx::B3DPoint( -2500, -2500, -2500 ),
                     basegfx::B3DVector( 5000, 5000, 5000 ));
@@ -286,6 +288,7 @@ void Svx3DLightControl::Construct2()
         // create invisible expansion object
         const double fMaxExpansion(RADIUS_LAMP_BIG + RADIUS_LAMP_PREVIEW_SIZE);
         mpExpansionObject = new E3dCubeObj(
+            *mpModel,
             mp3DView->Get3DDefaultAttributes(),
             basegfx::B3DPoint(-fMaxExpansion, -fMaxExpansion, -fMaxExpansion),
             basegfx::B3DVector(2.0 * fMaxExpansion, 2.0 * fMaxExpansion, 2.0 * fMaxExpansion));
@@ -309,6 +312,7 @@ void Svx3DLightControl::Construct2()
 
         // create object for it
         mpLampBottomObject = new E3dPolygonObj(
+            *mpModel,
             basegfx::B3DPolyPolygon(a3DCircle));
         mpScene->Insert3DObj( mpLampBottomObject );
 
@@ -322,6 +326,7 @@ void Svx3DLightControl::Construct2()
 
         // create object for it
         mpLampShaftObject = new E3dPolygonObj(
+            *mpModel,
             basegfx::B3DPolyPolygon(a3DHalfCircle));
         mpScene->Insert3DObj( mpLampShaftObject );
 
@@ -383,6 +388,7 @@ void Svx3DLightControl::ConstructLightObjects()
 
             const double fLampSize(bIsSelectedLight ? RADIUS_LAMP_BIG : RADIUS_LAMP_SMALL);
             E3dObject* pNewLight = new E3dSphereObj(
+                *mpModel,
                 mp3DView->Get3DDefaultAttributes(),
                 basegfx::B3DPoint( 0, 0, 0 ),
                 basegfx::B3DVector( fLampSize, fLampSize, fLampSize));

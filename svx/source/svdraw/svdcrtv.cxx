@@ -197,8 +197,10 @@ void SdrCreateView::ImpClearVars()
     ImpClearConnectMarker();
 }
 
-SdrCreateView::SdrCreateView(SdrModel* pModel1, OutputDevice* pOut)
-:   SdrDragView(pModel1,pOut),
+SdrCreateView::SdrCreateView(
+    SdrModel& rSdrModel,
+    OutputDevice* pOut)
+:   SdrDragView(rSdrModel, pOut),
     mpCoMaOverlay(nullptr),
     mpCreateViewExtraData(new ImpSdrCreateViewExtraData())
 {
@@ -348,7 +350,7 @@ void SdrCreateView::SetCurrentObj(sal_uInt16 nIdent, SdrInventor nInvent)
         nAktInvent=nInvent;
         nAktIdent=nIdent;
         SdrObject * pObj = (nIdent == OBJ_NONE) ? nullptr :
-            SdrObjFactory::MakeNewObject(nInvent, nIdent, nullptr);
+            SdrObjFactory::MakeNewObject(*GetModel(), nInvent, nIdent, nullptr);
 
         if(pObj)
         {
@@ -414,7 +416,7 @@ bool SdrCreateView::ImpBegCreateObj(SdrInventor nInvent, sal_uInt16 nIdent, cons
             }
             else
             {
-                pCurrentCreate = SdrObjFactory::MakeNewObject(nInvent, nIdent, pCreatePV->GetPage(), mpModel);
+                pCurrentCreate = SdrObjFactory::MakeNewObject(*mpModel, nInvent, nIdent, pCreatePV->GetPage(), mpModel);
             }
 
             Point aPnt(rPnt);

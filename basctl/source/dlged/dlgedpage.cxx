@@ -27,14 +27,14 @@ namespace basctl
 
 
 DlgEdPage::DlgEdPage(DlgEdModel& rModel, bool bMasterPage)
-    : SdrPage(rModel, bMasterPage)
-    , pDlgEdForm(nullptr)
+:   SdrPage(rModel, bMasterPage)
+    ,pDlgEdForm(nullptr)
 {
 }
 
 DlgEdPage::DlgEdPage(const DlgEdPage& rSrcPage)
-    : SdrPage(rSrcPage)
-    , pDlgEdForm(nullptr)
+:   SdrPage(rSrcPage)
+    ,pDlgEdForm(nullptr)
 {
 }
 

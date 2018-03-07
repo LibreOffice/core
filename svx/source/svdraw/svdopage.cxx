@@ -64,9 +64,11 @@ void SdrPageObj::PageInDestruction(const SdrPage& rPage)
     }
 }
 
-
-SdrPageObj::SdrPageObj(SdrPage* pNewPage)
-:   mpShownPage(pNewPage)
+SdrPageObj::SdrPageObj(
+    SdrModel& rSdrModel,
+    SdrPage* pNewPage)
+:   SdrObject(rSdrModel),
+    mpShownPage(pNewPage)
 {
     if(mpShownPage)
     {
@@ -74,8 +76,12 @@ SdrPageObj::SdrPageObj(SdrPage* pNewPage)
     }
 }
 
-SdrPageObj::SdrPageObj(const tools::Rectangle& rRect, SdrPage* pNewPage)
-:   mpShownPage(pNewPage)
+SdrPageObj::SdrPageObj(
+    SdrModel& rSdrModel,
+    const tools::Rectangle& rRect,
+    SdrPage* pNewPage)
+:   SdrObject(rSdrModel),
+    mpShownPage(pNewPage)
 {
     if(mpShownPage)
     {

@@ -453,7 +453,9 @@ bool ScDetectiveFunc::InsertArrow( SCCOL nCol, SCROW nRow,
         // insert the rectangle before the arrow - this is relied on in FindFrameForObject
 
         tools::Rectangle aRect = GetDrawRect( nRefStartCol, nRefStartRow, nRefEndCol, nRefEndRow );
-        SdrRectObj* pBox = new SdrRectObj( aRect );
+        SdrRectObj* pBox = new SdrRectObj(
+            *pModel,
+            aRect);
 
         pBox->SetMergedItemSetAndBroadcast(rData.GetBoxSet());
 
@@ -494,7 +496,10 @@ bool ScDetectiveFunc::InsertArrow( SCCOL nCol, SCROW nRow,
     basegfx::B2DPolygon aTempPoly;
     aTempPoly.append(basegfx::B2DPoint(aStartPos.X(), aStartPos.Y()));
     aTempPoly.append(basegfx::B2DPoint(aEndPos.X(), aEndPos.Y()));
-    SdrPathObj* pArrow = new SdrPathObj(OBJ_LINE, basegfx::B2DPolyPolygon(aTempPoly));
+    SdrPathObj* pArrow = new SdrPathObj(
+        *pModel,
+        OBJ_LINE,
+        basegfx::B2DPolyPolygon(aTempPoly));
     pArrow->NbcSetLogicRect(tools::Rectangle(aStartPos,aEndPos));  //TODO: needed ???
     pArrow->SetMergedItemSetAndBroadcast(rAttrSet);
 
@@ -526,7 +531,9 @@ bool ScDetectiveFunc::InsertToOtherTab( SCCOL nStartCol, SCROW nStartRow,
     if (bArea)
     {
         tools::Rectangle aRect = GetDrawRect( nStartCol, nStartRow, nEndCol, nEndRow );
-        SdrRectObj* pBox = new SdrRectObj( aRect );
+        SdrRectObj* pBox = new SdrRectObj(
+            *pModel,
+            aRect);
 
         pBox->SetMergedItemSetAndBroadcast(rData.GetBoxSet());
 
@@ -559,7 +566,10 @@ bool ScDetectiveFunc::InsertToOtherTab( SCCOL nStartCol, SCROW nStartRow,
     basegfx::B2DPolygon aTempPoly;
     aTempPoly.append(basegfx::B2DPoint(aStartPos.X(), aStartPos.Y()));
     aTempPoly.append(basegfx::B2DPoint(aEndPos.X(), aEndPos.Y()));
-    SdrPathObj* pArrow = new SdrPathObj(OBJ_LINE, basegfx::B2DPolyPolygon(aTempPoly));
+    SdrPathObj* pArrow = new SdrPathObj(
+        *pModel,
+        OBJ_LINE,
+        basegfx::B2DPolyPolygon(aTempPoly));
     pArrow->NbcSetLogicRect(tools::Rectangle(aStartPos,aEndPos));  //TODO: needed ???
 
     pArrow->SetMergedItemSetAndBroadcast(rAttrSet);
@@ -625,7 +635,10 @@ void ScDetectiveFunc::DrawCircle( SCCOL nCol, SCROW nRow, ScDetectiveData& rData
     aRect.AdjustTop( -70 );
     aRect.AdjustBottom(70 );
 
-    SdrCircObj* pCircle = new SdrCircObj( OBJ_CIRC, aRect );
+    SdrCircObj* pCircle = new SdrCircObj(
+        *pModel,
+        OBJ_CIRC,
+        aRect);
     SfxItemSet& rAttrSet = rData.GetCircleSet();
 
     pCircle->SetMergedItemSetAndBroadcast(rAttrSet);

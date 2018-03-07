@@ -564,7 +564,10 @@ void ScPrintFunc::DrawToDev( ScDocument* pDoc, OutputDevice* pDev, double /* nPr
 
     if( pModel )
     {
-        pDrawView.reset(new FmFormView( pModel, pDev ));
+        pDrawView.reset(
+            new FmFormView(
+                *pModel,
+                pDev));
         pDrawView->ShowSdrPage(pDrawView->GetModel()->GetPage(nTab));
         pDrawView->SetPrintPreview();
         aOutputData.SetDrawView( pDrawView.get() );

@@ -65,13 +65,13 @@ public:
     void Reset();
 
     // Cube object
-    const basegfx::B3DPoint& GetDefaultCubePos() { return aDefaultCubePos; }
-    const basegfx::B3DVector& GetDefaultCubeSize() { return aDefaultCubeSize; }
+    const basegfx::B3DPoint& GetDefaultCubePos() const { return aDefaultCubePos; }
+    const basegfx::B3DVector& GetDefaultCubeSize() const { return aDefaultCubeSize; }
     bool GetDefaultCubePosIsCenter() const { return bDefaultCubePosIsCenter; }
 
     // Sphere object
-    const basegfx::B3DPoint& GetDefaultSphereCenter() { return aDefaultSphereCenter; }
-    const basegfx::B3DVector& GetDefaultSphereSize() { return aDefaultSphereSize; }
+    const basegfx::B3DPoint& GetDefaultSphereCenter() const { return aDefaultSphereCenter; }
+    const basegfx::B3DVector& GetDefaultSphereSize() const { return aDefaultSphereSize; }
 
     // Lathe object
     bool GetDefaultLatheSmoothed() const { return bDefaultLatheSmoothed; }

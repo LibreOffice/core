@@ -49,15 +49,15 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::frame;
 
-SwDPage::SwDPage(SwDrawModel& rNewModel, bool bMasterPage) :
-    FmFormPage(rNewModel, bMasterPage),
+SwDPage::SwDPage(SwDrawModel& rNewModel, bool bMasterPage)
+:   FmFormPage(rNewModel, bMasterPage),
     pGridLst( nullptr ),
     pDoc(&rNewModel.GetDoc())
 {
 }
 
-SwDPage::SwDPage(const SwDPage& rSrcPage) :
-    FmFormPage( rSrcPage ),
+SwDPage::SwDPage(const SwDPage& rSrcPage)
+:   FmFormPage(rSrcPage),
     pDoc( nullptr )
 {
     if ( rSrcPage.pGridLst )

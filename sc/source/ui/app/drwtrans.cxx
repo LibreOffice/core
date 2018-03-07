@@ -188,7 +188,7 @@ ScDrawTransferObj::ScDrawTransferObj( SdrModel* pClipModel, ScDocShell* pContain
 
     // #i71538# use complete SdrViews
     // SdrExchangeView aView(pModel);
-    SdrView aView(pModel);
+    SdrView aView(*pModel);
     SdrPageView* pPv = aView.ShowSdrPage(aView.GetModel()->GetPage(0));
     aView.MarkAllObj(pPv);
     aSrcSize = aView.GetAllMarkedRect().GetSize();
@@ -395,7 +395,7 @@ bool ScDrawTransferObj::GetData( const css::datatransfer::DataFlavor& rFlavor, c
         {
             // #i71538# use complete SdrViews
             // SdrExchangeView aView( pModel );
-            SdrView aView( pModel );
+            SdrView aView(*pModel);
             SdrPageView* pPv = aView.ShowSdrPage(aView.GetModel()->GetPage(0));
             OSL_ENSURE( pPv, "pPv not there..." );
             aView.MarkAllObj( pPv );
@@ -632,7 +632,7 @@ static void lcl_InitMarks( SdrMarkView& rDest, const SdrMarkView& rSource, SCTAB
 void ScDrawTransferObj::SetDragSource( const ScDrawView* pView )
 {
     DELETEZ( pDragSourceView );
-    pDragSourceView = new SdrView( pView->GetModel() );
+    pDragSourceView = new SdrView(pView->getSdrModelFromSdrView()); // TTTT pView shbe ref
     lcl_InitMarks( *pDragSourceView, *pView, pView->GetTab() );
 
     //! add as listener with document, delete pDragSourceView if document gone
@@ -641,7 +641,7 @@ void ScDrawTransferObj::SetDragSource( const ScDrawView* pView )
 void ScDrawTransferObj::SetDragSourceObj( SdrObject* pObj, SCTAB nTab )
 {
     DELETEZ( pDragSourceView );
-    pDragSourceView = new SdrView( pObj->GetModel() );
+    pDragSourceView = new SdrView(pObj->getSdrModelFromSdrObject()); // TTTT pObj shbe ref
     pDragSourceView->ShowSdrPage(pDragSourceView->GetModel()->GetPage(nTab));
     SdrPageView* pPV = pDragSourceView->GetSdrPageView();
     pDragSourceView->MarkObj(pObj, pPV);
@@ -719,7 +719,7 @@ void ScDrawTransferObj::InitDocShell()
         SdrModel* pDestModel = rDestDoc.GetDrawLayer();
         // #i71538# use complete SdrViews
         // SdrExchangeView aDestView( pDestModel );
-        SdrView aDestView( pDestModel );
+        SdrView aDestView(*pDestModel);
         aDestView.ShowSdrPage(aDestView.GetModel()->GetPage(0));
         aDestView.Paste(
             *pModel,
