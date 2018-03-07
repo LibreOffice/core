@@ -186,8 +186,8 @@ namespace sw
                 // actually un-merge in this case!
                 assert(m_pStart->m_pPrev != aDestRing.m_pStart);
                 assert(m_pStart != aDestRing.m_pStart->m_pPrev);
-                std::swap(*(&m_pStart->m_pPrev->m_pNext), *(&aDestRing.m_pStart->m_pPrev->m_pNext));
-                std::swap(*(&m_pStart->m_pPrev), *(&aDestRing.m_pStart->m_pPrev));
+                std::swap(m_pStart->m_pPrev->m_pNext, aDestRing.m_pStart->m_pPrev->m_pNext);
+                std::swap(m_pStart->m_pPrev, aDestRing.m_pStart->m_pPrev);
             }
     };
 
