@@ -119,7 +119,9 @@ enum class TransliterationFlags {
     /// transliterate Japanese normal sized character to small sized character
     largeToSmall_ja_JP             = int(css::i18n::TransliterationModules_largeToSmall_ja_JP),
 
+    /// Transliterate decomposing and removing diacritics, not only CTL, despite its name.
     IGNORE_DIACRITICS_CTL          = int(css::i18n::TransliterationModulesExtra::IGNORE_DIACRITICS_CTL),
+    /// Ignore Kashida mark.
     IGNORE_KASHIDA_CTL             = int(css::i18n::TransliterationModulesExtra::IGNORE_KASHIDA_CTL)
 };
 namespace o3tl {
