@@ -82,7 +82,7 @@ void SfxPreviewWin_Impl::ImpPaint(vcl::RenderContext& rRenderContext, GDIMetaFil
     if (nWidth <= 0 || nHeight <= 0)
         return;
 
-    double dRatio = double(aTmpSize.Width()) / aTmpSize.Height();
+    double dRatio = aTmpSize.Height() ? (double(aTmpSize.Width()) / aTmpSize.Height()) : 1;
     double dRatioPreV = double(nWidth) / nHeight;
     Size aSize;
     Point aPoint;
