@@ -1095,6 +1095,10 @@ void ScGridWindow::LaunchDataSelectMenu( SCCOL nCol, SCROW nRow )
     aPos.Y() += nSizeY - 1;
 
     mpFilterFloat.reset(VclPtr<ScFilterFloatingWindow>::Create(this, WinBits(WB_BORDER)));
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        mpFilterFloat->SetLOKNotifier(SfxViewShell::Current());
+    }
     mpFilterFloat->SetPopupModeEndHdl(LINK( this, ScGridWindow, PopupModeEndHdl));
     ScFilterBoxMode eFilterMode = SC_FILTERBOX_DATASELECT;
     mpFilterBox.reset(VclPtr<ScFilterListBox>::Create(mpFilterFloat.get(), this, nCol, nRow, eFilterMode));
@@ -1979,12 +1983,61 @@ void ScGridWindow::HandleMouseButtonDown( const MouseEvent& rMEvt, MouseEventSta
     }
 }
 
+void lcl_executeList( ScViewData* pViewData, ScModule* pScMod, ScMarkData& rMark )
+{
+    pViewData->GetView()->SelectionChanged();
+
+    SfxDispatcher* pDisp = pViewData->GetViewShell()->GetDispatcher();
+    bool bFormulaMode = pScMod->IsFormulaMode();
+    OSL_ENSURE( pDisp || bFormulaMode, "Cursor moved on inactive View ?" );
+
+    //  #i14927# execute SID_CURRENTCELL (for macro recording) only if there is no
+    //  multiple selection, so the argument string completely describes the selection,
+    //  and executing the slot won't change the existing selection (executing the slot
+    //  here and from a recorded macro is treated equally)
+    if ( pDisp && !bFormulaMode && !rMark.IsMultiMarked() )
+    {
+        OUString aAddr;                               // CurrentCell
+        if( rMark.IsMarked() )
+        {
+            ScRange aScRange;
+            rMark.GetMarkArea( aScRange );
+            aAddr = aScRange.Format(ScRefFlags::RANGE_ABS);
+            if ( aScRange.aStart == aScRange.aEnd )
+            {
+                //  make sure there is a range selection string even for a single cell
+                aAddr = aAddr + ":" + aAddr;
+            }
+
+            //! SID_MARKAREA does not exist anymore ???
+            //! What happens when selecting with the cursor ???
+        }
+        else                                        // only move cursor
+        {
+            ScAddress aScAddress( pViewData->GetCurX(), pViewData->GetCurY(), 0 );
+            aAddr = aScAddress.Format(ScRefFlags::ADDR_ABS);
+        }
+
+        SfxStringItem aPosItem( SID_CURRENTCELL, aAddr );
+        // We don't want to align to the cursor position because if the
+        // cell cursor isn't visible after making selection, it would jump
+        // back to the origin of the selection where the cell cursor is.
+        SfxBoolItem aAlignCursorItem( FN_PARAM_2, false );
+        pDisp->ExecuteList(SID_CURRENTCELL,
+                SfxCallMode::SLOT | SfxCallMode::RECORD,
+                { &aPosItem, &aAlignCursorItem });
+
+        pViewData->GetView()->InvalidateAttribs();
+
+    }
+    pViewData->GetViewShell()->SelectionChanged();
+}
+
 void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
 {
     aCurMousePos = rMEvt.GetPosPixel();
     ScDocument* pDoc = pViewData->GetDocument();
     ScMarkData& rMark = pViewData->GetMarkData();
-
     // #i41690# detect a MouseButtonUp call from within MouseButtonDown
     // (possible through Reschedule from storing an OLE object that is deselected)
 
@@ -2325,6 +2378,12 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
                 pTabView->SelectionChanged();
         }
 
+        if ( bIsTiledRendering && rMEvt.IsLeft() && pViewData->GetView()->GetSelEngine()->SelMouseButtonUp( rMEvt ) )
+        {
+            lcl_executeList( pViewData, pScMod, rMark);
+            return;
+        }
+
         return;
     }
 
@@ -2417,52 +2476,7 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
 
     if ( rMEvt.IsLeft() && pViewData->GetView()->GetSelEngine()->SelMouseButtonUp( rMEvt ) )
     {
-        pViewData->GetView()->SelectionChanged();
-
-        SfxDispatcher* pDisp = pViewData->GetViewShell()->GetDispatcher();
-        bool bFormulaMode = pScMod->IsFormulaMode();
-        OSL_ENSURE( pDisp || bFormulaMode, "Cursor moved on inactive View ?" );
-
-        //  #i14927# execute SID_CURRENTCELL (for macro recording) only if there is no
-        //  multiple selection, so the argument string completely describes the selection,
-        //  and executing the slot won't change the existing selection (executing the slot
-        //  here and from a recorded macro is treated equally)
-
-        if ( pDisp && !bFormulaMode && !rMark.IsMultiMarked() )
-        {
-            OUString aAddr;                               // CurrentCell
-            if( rMark.IsMarked() )
-            {
-                ScRange aScRange;
-                rMark.GetMarkArea( aScRange );
-                aAddr = aScRange.Format(ScRefFlags::RANGE_ABS);
-                if ( aScRange.aStart == aScRange.aEnd )
-                {
-                    //  make sure there is a range selection string even for a single cell
-                    aAddr = aAddr + ":" + aAddr;
-                }
-
-                //! SID_MARKAREA does not exist anymore ???
-                //! What happens when selecting with the cursor ???
-            }
-            else                                        // only move cursor
-            {
-                ScAddress aScAddress( pViewData->GetCurX(), pViewData->GetCurY(), 0 );
-                aAddr = aScAddress.Format(ScRefFlags::ADDR_ABS);
-            }
-
-            SfxStringItem aPosItem( SID_CURRENTCELL, aAddr );
-            // We don't want to align to the cursor position because if the
-            // cell cursor isn't visible after making selection, it would jump
-            // back to the origin of the selection where the cell cursor is.
-            SfxBoolItem aAlignCursorItem( FN_PARAM_2, false );
-            pDisp->ExecuteList(SID_CURRENTCELL,
-                    SfxCallMode::SLOT | SfxCallMode::RECORD,
-                    { &aPosItem, &aAlignCursorItem });
-
-            pViewData->GetView()->InvalidateAttribs();
-        }
-        pViewData->GetViewShell()->SelectionChanged();
+        lcl_executeList( pViewData, pScMod, rMark);
         return;
     }
 }
