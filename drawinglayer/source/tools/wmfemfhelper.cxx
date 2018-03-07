@@ -2464,7 +2464,7 @@ namespace wmfemfhelper
                 {
                     /** SIMPLE, DONE */
                     const MetaTextColorAction* pA = static_cast<const MetaTextColorAction*>(pAction);
-                    const bool bActivate(COL_TRANSPARENT != pA->GetColor().GetColor());
+                    const bool bActivate(COL_TRANSPARENT != pA->GetColor());
 
                     rPropertyHolders.Current().setTextColorActive(bActivate);
                     rPropertyHolders.Current().setTextColor(pA->GetColor().getBColor());
@@ -2482,7 +2482,7 @@ namespace wmfemfhelper
                         // emulate OutputDevice::SetTextFillColor(...) WITH argument
                         const Color& rFontFillColor = pA->GetColor();
                         rPropertyHolders.Current().setTextFillColor(rFontFillColor.getBColor());
-                        rPropertyHolders.Current().setTextFillColorActive(COL_TRANSPARENT != rFontFillColor.GetColor());
+                        rPropertyHolders.Current().setTextFillColorActive(COL_TRANSPARENT != rFontFillColor);
                     }
                     else
                     {
@@ -2594,7 +2594,7 @@ namespace wmfemfhelper
                     // older Metafiles have no MetaActionType::TEXTCOLOR which defines
                     // the FontColor now, so use the Font's color when not transparent
                     const Color& rFontColor = pA->GetFont().GetColor();
-                    const bool bActivate(COL_TRANSPARENT != rFontColor.GetColor());
+                    const bool bActivate(COL_TRANSPARENT != rFontColor);
 
                     if(bActivate)
                     {
@@ -2611,7 +2611,7 @@ namespace wmfemfhelper
                     {
                         const Color& rFontFillColor = pA->GetFont().GetFillColor();
                         rPropertyHolders.Current().setTextFillColor(rFontFillColor.getBColor());
-                        rPropertyHolders.Current().setTextFillColorActive(COL_TRANSPARENT != rFontFillColor.GetColor());
+                        rPropertyHolders.Current().setTextFillColorActive(COL_TRANSPARENT != rFontFillColor);
                     }
                     else
                     {

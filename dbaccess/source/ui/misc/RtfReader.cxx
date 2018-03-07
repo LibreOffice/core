@@ -122,7 +122,7 @@ void ORTFReader::NextToken( int nToken )
                             nTmpToken2 = GetNextToken();
                         }
                         while(aToken[0] != ';' && eState != SvParserState::Error && eState != SvParserState::Accepted);
-                        m_vecColor.push_back(sal_uInt32(aColor.GetRGBColor()));
+                        m_vecColor.push_back(aColor.GetRGBColor());
                         nTmpToken2 = GetNextToken();
                     }
                     while(nTmpToken2 == RTF_RED && eState != SvParserState::Error && eState != SvParserState::Accepted);

@@ -396,7 +396,7 @@ IMPL_LINK_NOARG(SvxColorTabPage, ClickAddHdl_Impl, Button*, void)
         sal_Int32 nSize = aCustomColorList.getLength();
         aCustomColorList.realloc( nSize + 1 );
         aCustomColorNameList.realloc( nSize + 1 );
-        aCustomColorList[nSize] = aCurrentColor.GetColor();
+        aCustomColorList[nSize] = sal_Int32(aCurrentColor);
         aCustomColorNameList[nSize] = aName;
         officecfg::Office::Common::UserColors::CustomColor::set(aCustomColorList, batch);
         officecfg::Office::Common::UserColors::CustomColorName::set(aCustomColorNameList, batch);
@@ -629,14 +629,14 @@ void SvxColorTabPage::UpdateColorValues( bool bUpdatePreset )
         m_pRcustom->SetValue( ColorToPercent_Impl( aCurrentColor.GetRed() ) );
         m_pGcustom->SetValue( ColorToPercent_Impl( aCurrentColor.GetGreen() ) );
         m_pBcustom->SetValue( ColorToPercent_Impl( aCurrentColor.GetBlue() ) );
-        m_pHexcustom->SetColor( aCurrentColor.GetColor() );
+        m_pHexcustom->SetColor( aCurrentColor );
 
         if( bUpdatePreset )
         {
             m_pRpreset->SetValue( ColorToPercent_Impl( aPreviousColor.GetRed() ) );
             m_pGpreset->SetValue( ColorToPercent_Impl( aPreviousColor.GetGreen() ) );
             m_pBpreset->SetValue( ColorToPercent_Impl( aPreviousColor.GetBlue() ) );
-            m_pHexpreset->SetColor( aPreviousColor.GetColor() );
+            m_pHexpreset->SetColor( aPreviousColor );
         }
     }
 }

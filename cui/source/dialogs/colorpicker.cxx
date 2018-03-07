@@ -436,7 +436,7 @@ void ColorFieldControl::ShowPosition( const Point& rPos, bool bUpdate )
         mdX = double(nX) / double(aSize.Width() - 1.0);
         mdY = double(aSize.Height() - 1.0 - nY) / double(aSize.Height() - 1.0);
 
-        maColor = mxBitmap->GetPixel(Point(nX, nY)).GetColor();
+        maColor = mxBitmap->GetPixel(Point(nX, nY));
     }
 }
 
@@ -807,7 +807,7 @@ void ColorSliderControl::SetValue(const Color& rColor, ColorMode eMode, double d
 class ColorPickerDialog : public ModalDialog
 {
 public:
-    ColorPickerDialog(vcl::Window* pParent, sal_Int32 nColor, sal_Int16 nMode);
+    ColorPickerDialog(vcl::Window* pParent, Color nColor, sal_Int16 nMode);
     virtual ~ColorPickerDialog() override
     {
         disposeOnce();
@@ -821,7 +821,7 @@ public:
     DECL_LINK(ColorModifyEditHdl, Edit&, void);
     DECL_LINK(ModeModifyHdl, RadioButton&, void);
 
-    sal_Int32 GetColor() const;
+    Color GetColor() const;
 
     void setColorComponent(ColorComponent nComp, double dValue);
 
@@ -865,7 +865,7 @@ private:
     VclPtr<MetricField>    mpMFKey;
 };
 
-ColorPickerDialog::ColorPickerDialog( vcl::Window* pParent, sal_Int32 nColor, sal_Int16 nMode )
+ColorPickerDialog::ColorPickerDialog( vcl::Window* pParent, Color nColor, sal_Int16 nMode )
 : ModalDialog( pParent, "ColorPicker", "cui/ui/colorpickerdialog.ui" )
 , mnDialogMode( nMode )
 , meMode( DefaultMode )
@@ -1001,9 +1001,9 @@ static int toInt( double dValue, double dRange )
     return static_cast< int >( std::floor((dValue * dRange) + 0.5 ) );
 }
 
-sal_Int32 ColorPickerDialog::GetColor() const
+Color ColorPickerDialog::GetColor() const
 {
-    return Color( toInt(mdRed,255.0), toInt(mdGreen,255.0), toInt(mdBlue,255.0) ).GetColor();
+    return Color( toInt(mdRed,255.0), toInt(mdGreen,255.0), toInt(mdBlue,255.0) );
 }
 
 void ColorPickerDialog::update_color( UpdateFlags n )
@@ -1088,7 +1088,7 @@ void ColorPickerDialog::update_color( UpdateFlags n )
 
     if (n & UpdateFlags::Hex) // update hex
     {
-        mpEDHex->SetColor(aColor.GetColor());
+        mpEDHex->SetColor(aColor);
     }
 
     {
@@ -1358,7 +1358,7 @@ private:
     OUString msTitle;
     const OUString msColorKey;
     const OUString msModeKey;
-    sal_Int32 mnColor;
+    Color mnColor;
     sal_Int16 mnMode;
     Reference<css::awt::XWindow> mxParent;
 };
