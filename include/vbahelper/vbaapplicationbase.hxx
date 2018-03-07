@@ -38,11 +38,6 @@ namespace com { namespace sun { namespace star {
     namespace uno { class XComponentContext; }
 } } }
 
-namespace ooo { namespace vba {
-    class XApplicationBase;
-    class XHelperInterface;
-} }
-
 typedef InheritedHelperInterfaceWeakImpl< ov::XApplicationBase > ApplicationBase_BASE;
 
 struct VbaApplicationBase_Impl;
