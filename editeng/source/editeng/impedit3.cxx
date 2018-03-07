@@ -3157,17 +3157,17 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, tools::Rectangle aClipRect, Po
 #if OSL_DEBUG_LEVEL > 2
                                 if ( rTextPortion.GetKind() == PORTIONKIND_HYPHENATOR )
                                 {
-                                    aTmpFont.SetFillCOL_LIGHTGRAY );
+                                    aTmpFont.SetFillColor( COL_LIGHTGRAY );
                                     aTmpFont.SetTransparent( sal_False );
                                 }
                                 if ( rTextPortion.GetRightToLeft()  )
                                 {
-                                    aTmpFont.SetFillCOL_LIGHTGRAY );
+                                    aTmpFont.SetFillColor( COL_LIGHTGRAY );
                                     aTmpFont.SetTransparent( sal_False );
                                 }
                                 else if ( GetI18NScriptType( EditPaM( pPortion->GetNode(), nIndex+1 ) ) == i18n::ScriptType::COMPLEX )
                                 {
-                                    aTmpFont.SetFillCOL_LIGHTCYAN );
+                                    aTmpFont.SetFillColor( COL_LIGHTCYAN );
                                     aTmpFont.SetTransparent( sal_False );
                                 }
 #endif
