@@ -478,12 +478,12 @@ sal_Int32 SAL_CALL AccessibleBrowseBoxBase::getForeground(  )
     SolarMethodGuard aGuard(getMutex());
     ensureIsAlive();
 
-    sal_Int32 nColor = 0;
+    Color nColor;
     vcl::Window* pInst = mpBrowseBox->GetWindowInstance();
     if ( pInst )
     {
         if ( pInst->IsControlForeground() )
-            nColor = pInst->GetControlForeground().GetColor();
+            nColor = pInst->GetControlForeground();
         else
         {
             vcl::Font aFont;
@@ -491,11 +491,11 @@ sal_Int32 SAL_CALL AccessibleBrowseBoxBase::getForeground(  )
                 aFont = pInst->GetControlFont();
             else
                 aFont = pInst->GetFont();
-            nColor = aFont.GetColor().GetColor();
+            nColor = aFont.GetColor();
         }
     }
 
-    return nColor;
+    return sal_Int32(nColor);
 }
 
 sal_Int32 SAL_CALL AccessibleBrowseBoxBase::getBackground(  )
@@ -503,17 +503,17 @@ sal_Int32 SAL_CALL AccessibleBrowseBoxBase::getBackground(  )
     SolarMethodGuard aGuard(getMutex());
     ensureIsAlive();
 
-    sal_Int32 nColor = 0;
+    Color nColor;
     vcl::Window* pInst = mpBrowseBox->GetWindowInstance();
     if ( pInst )
     {
         if ( pInst->IsControlBackground() )
-            nColor = pInst->GetControlBackground().GetColor();
+            nColor = pInst->GetControlBackground();
         else
-            nColor = pInst->GetBackground().GetColor().GetColor();
+            nColor = pInst->GetBackground().GetColor();
     }
 
-    return nColor;
+    return sal_Int32(nColor);
 }
 
 

@@ -336,7 +336,7 @@ Sequence< PropertyValue > VCLXAccessibleEdit::getCharacterAttributes( sal_Int32 
                 OutputDevice* pDev = Application::GetDefaultDevice();
                 if ( pDev )
                 {
-                    aValue.Value <<= static_cast< sal_Int32 >(pDev->GetSettings().GetStyleSettings().GetFieldTextColor().GetColor());
+                    aValue.Value <<= pDev->GetSettings().GetStyleSettings().GetFieldTextColor();
                 }
             }
             break;

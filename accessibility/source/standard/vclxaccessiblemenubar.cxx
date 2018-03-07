@@ -185,7 +185,7 @@ sal_Int32 VCLXAccessibleMenuBar::getBackground(  )
 {
     OExternalLockGuard aGuard( this );
 
-    return Application::GetSettings().GetStyleSettings().GetMenuBarColor().GetColor();
+    return sal_Int32(Application::GetSettings().GetStyleSettings().GetMenuBarColor());
 }
 
 
