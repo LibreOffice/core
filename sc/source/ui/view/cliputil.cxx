@@ -100,7 +100,7 @@ bool ScClipUtil::CheckDestRanges(
 {
     for (size_t i = 0, n = rDest.size(); i < n; ++i)
     {
-        ScRange aTest = *rDest[i];
+        ScRange aTest = rDest[i];
         // Check for filtered rows in all selected sheets.
         ScMarkData::const_iterator itrTab = rMark.begin(), itrTabEnd = rMark.end();
         for (; itrTab != itrTabEnd; ++itrTab)

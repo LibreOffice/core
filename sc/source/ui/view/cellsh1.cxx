@@ -1978,8 +1978,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 ScAddress aPos(pData->GetCurX(), pData->GetCurY(), pData->GetTabNo());
                 if(aRangeList.empty())
                 {
-                    ScRange* pRange = new ScRange(aPos);
-                    aRangeList.push_back(pRange);
+                    aRangeList.push_back(ScRange(aPos));
                 }
 
                 const ScConditionalFormat* pCondFormat = nullptr;
@@ -2290,12 +2289,12 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
 
                     for ( size_t i = 0; i < nRangeSize; ++i )
                     {
-                        const ScRange * pRange = aRanges[i];
-                        const SCROW nRow0 = pRange->aStart.Row();
-                        const SCROW nRow1 = pRange->aEnd.Row();
-                        const SCCOL nCol0 = pRange->aStart.Col();
-                        const SCCOL nCol1 = pRange->aEnd.Col();
-                        const SCTAB nRangeTab = pRange->aStart.Tab();
+                        const ScRange & rRange = aRanges[i];
+                        const SCROW nRow0 = rRange.aStart.Row();
+                        const SCROW nRow1 = rRange.aEnd.Row();
+                        const SCCOL nCol0 = rRange.aStart.Col();
+                        const SCCOL nCol1 = rRange.aEnd.Col();
+                        const SCTAB nRangeTab = rRange.aStart.Tab();
                         // Check by each cell
                         for ( SCROW nRow = nRow0; nRow <= nRow1; ++nRow )
                         {
@@ -2362,7 +2361,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                  std::vector<sc::NoteEntry> aNotes;
 
                  for (auto const& rTab : rMark.GetSelectedTabs())
-                     aRanges.Append(ScRange(0,0,rTab,MAXCOL,MAXROW,rTab));
+                     aRanges.push_back(ScRange(0,0,rTab,MAXCOL,MAXROW,rTab));
 
                  CommentCaptionState eState = pDoc->GetAllNoteCaptionsState( aRanges );
                  pDoc->GetNotesInRange(aRanges, aNotes);
@@ -2416,7 +2415,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
 
                 for (auto const& rTab : rMark.GetSelectedTabs())
                 {
-                    aRangeList.Append(ScRange(0,0,rTab,MAXCOL,MAXROW,rTab));
+                    aRangeList.push_back(ScRange(0,0,rTab,MAXCOL,MAXROW,rTab));
                 }
 
                 aNewMark.MarkFromRangeList( aRangeList, true );

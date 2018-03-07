@@ -824,8 +824,8 @@ void ScDocument::CopyScenario( SCTAB nSrcTab, SCTAB nDestTab, bool bNewScenario 
                 bool bTouched = false;
                 for ( size_t nR=0, nRangeCount = aRanges.size(); nR < nRangeCount && !bTouched; nR++ )
                 {
-                    const ScRange* pRange = aRanges[ nR ];
-                    if ( maTabs[nTab]->HasScenarioRange( *pRange ) )
+                    const ScRange& rRange = aRanges[ nR ];
+                    if ( maTabs[nTab]->HasScenarioRange( rRange ) )
                         bTouched = true;
                 }
                 if (bTouched)
@@ -1117,7 +1117,7 @@ void ScDocument::UpdateTranspose( const ScAddress& rDestPos, ScDocument* pClipDo
     ScRange aSource;
     ScClipParam& rClipParam = GetClipParam();
     if (!rClipParam.maRanges.empty())
-        aSource = *rClipParam.maRanges.front();
+        aSource = rClipParam.maRanges.front();
     ScAddress aDest = rDestPos;
 
     SCTAB nClipTab = 0;

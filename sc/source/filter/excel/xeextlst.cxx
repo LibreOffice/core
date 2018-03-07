@@ -308,7 +308,7 @@ XclExpExtConditionalFormatting::XclExpExtConditionalFormatting( const XclExpRoot
     XclExpRoot(rRoot),
     maRange(rRange)
 {
-    ScAddress aAddr = maRange.front()->aStart;
+    ScAddress aAddr = maRange.front().aStart;
     for (auto itr = rData.begin(), itrEnd = rData.end(); itr != itrEnd; ++itr)
     {
         const ScFormatEntry* pEntry = itr->pEntry;

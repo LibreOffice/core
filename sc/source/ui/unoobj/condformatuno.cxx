@@ -354,7 +354,7 @@ sal_Int32 ScCondFormatsObj::createByRange(const uno::Reference< sheet::XSheetCel
     if (aCoreRange.empty())
         throw lang::IllegalArgumentException();
 
-    SCTAB nTab = aCoreRange[0]->aStart.Tab();
+    SCTAB nTab = aCoreRange[0].aStart.Tab();
 
     ScConditionalFormat* pNewFormat = new ScConditionalFormat(0, &mpDocShell->GetDocument());
     pNewFormat->SetRange(aCoreRange);

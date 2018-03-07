@@ -98,7 +98,7 @@ void SAL_CALL ScCellCursorObj::collapseToCurrentRegion()
     SolarMutexGuard aGuard;
     const ScRangeList& rRanges = GetRangeList();
     OSL_ENSURE( rRanges.size() == 1, "Range? Ranges?" );
-    ScRange aOneRange( *rRanges[ 0 ] );
+    ScRange aOneRange( rRanges[ 0 ] );
 
     aOneRange.PutInOrder();
     ScDocShell* pDocSh = GetDocShell();
@@ -123,7 +123,7 @@ void SAL_CALL ScCellCursorObj::collapseToCurrentArray()
     SolarMutexGuard aGuard;
     const ScRangeList& rRanges = GetRangeList();
     OSL_ENSURE( rRanges.size() == 1, "Range? Ranges?" );
-    ScRange aOneRange( *rRanges[ 0 ] );
+    ScRange aOneRange( rRanges[ 0 ] );
 
     aOneRange.PutInOrder();
     ScAddress aCursor(aOneRange.aStart);        //  use the start address of the range
@@ -158,7 +158,7 @@ void SAL_CALL ScCellCursorObj::collapseToMergedArea()
     {
         const ScRangeList& rRanges = GetRangeList();
         OSL_ENSURE( rRanges.size() == 1, "Range? Ranges?" );
-        ScRange aNewRange( *rRanges[ 0 ] );
+        ScRange aNewRange( rRanges[ 0 ] );
 
         ScDocument& rDoc = pDocSh->GetDocument();
         rDoc.ExtendOverlapped( aNewRange );
@@ -173,7 +173,7 @@ void SAL_CALL ScCellCursorObj::expandToEntireColumns()
     SolarMutexGuard aGuard;
     const ScRangeList& rRanges = GetRangeList();
     OSL_ENSURE( rRanges.size() == 1, "Range? Ranges?" );
-    ScRange aNewRange( *rRanges[ 0 ] );
+    ScRange aNewRange( rRanges[ 0 ] );
 
     aNewRange.aStart.SetRow( 0 );
     aNewRange.aEnd.SetRow( MAXROW );
@@ -186,7 +186,7 @@ void SAL_CALL ScCellCursorObj::expandToEntireRows()
     SolarMutexGuard aGuard;
     const ScRangeList& rRanges = GetRangeList();
     OSL_ENSURE( rRanges.size() == 1, "Range? Ranges?" );
-    ScRange aNewRange( *rRanges[ 0 ] );
+    ScRange aNewRange( rRanges[ 0 ] );
 
     aNewRange.aStart.SetCol( 0 );
     aNewRange.aEnd.SetCol( MAXCOL );
@@ -206,7 +206,7 @@ void SAL_CALL ScCellCursorObj::collapseToSize( sal_Int32 nColumns, sal_Int32 nRo
     {
         const ScRangeList& rRanges = GetRangeList();
         OSL_ENSURE( rRanges.size() == 1, "Range? Ranges?" );
-        ScRange aNewRange( *rRanges[ 0 ] );
+        ScRange aNewRange( rRanges[ 0 ] );
 
         aNewRange.PutInOrder();    //! really?
 
@@ -237,7 +237,7 @@ void SAL_CALL ScCellCursorObj::gotoStartOfUsedArea(sal_Bool bExpand)
     {
         const ScRangeList& rRanges = GetRangeList();
         OSL_ENSURE( rRanges.size() == 1, "Range? Ranges?" );
-        ScRange aNewRange( *rRanges[0] );
+        ScRange aNewRange( rRanges[0] );
         SCTAB nTab = aNewRange.aStart.Tab();
 
         SCCOL nUsedX = 0;       // fetch the beginning
@@ -264,7 +264,7 @@ void SAL_CALL ScCellCursorObj::gotoEndOfUsedArea( sal_Bool bExpand )
     {
         const ScRangeList& rRanges = GetRangeList();
         OSL_ENSURE( rRanges.size() == 1, "Range? Ranges?" );
-        ScRange aNewRange( *rRanges[ 0 ]);
+        ScRange aNewRange( rRanges[ 0 ]);
         SCTAB nTab = aNewRange.aStart.Tab();
 
         SCCOL nUsedX = 0;       // fetch the end
@@ -293,7 +293,7 @@ void SAL_CALL ScCellCursorObj::gotoStart()
     SolarMutexGuard aGuard;
     const ScRangeList& rRanges = GetRangeList();
     OSL_ENSURE( rRanges.size() == 1, "Range? Ranges?" );
-    ScRange aOneRange( *rRanges[ 0 ]);
+    ScRange aOneRange( rRanges[ 0 ]);
 
     aOneRange.PutInOrder();
     ScDocShell* pDocSh = GetDocShell();
@@ -321,7 +321,7 @@ void SAL_CALL ScCellCursorObj::gotoEnd()
     SolarMutexGuard aGuard;
     const ScRangeList& rRanges = GetRangeList();
     OSL_ENSURE( rRanges.size() == 1, "Range? Ranges?" );
-    ScRange aOneRange( *rRanges[ 0 ] );
+    ScRange aOneRange( rRanges[ 0 ] );
 
     aOneRange.PutInOrder();
     ScDocShell* pDocSh = GetDocShell();
@@ -346,7 +346,7 @@ void SAL_CALL ScCellCursorObj::gotoNext()
     SolarMutexGuard aGuard;
     const ScRangeList& rRanges = GetRangeList();
     OSL_ENSURE( rRanges.size() == 1, "Range? Ranges?" );
-    ScRange aOneRange( *rRanges[ 0 ] );
+    ScRange aOneRange( rRanges[ 0 ] );
 
     aOneRange.PutInOrder();
     ScAddress aCursor(aOneRange.aStart);        //  always use start of block
@@ -368,7 +368,7 @@ void SAL_CALL ScCellCursorObj::gotoPrevious()
     SolarMutexGuard aGuard;
     const ScRangeList& rRanges = GetRangeList();
     OSL_ENSURE( rRanges.size() == 1, "Range? Ranges?" );
-    ScRange aOneRange( *rRanges[ 0 ] );
+    ScRange aOneRange( rRanges[ 0 ] );
 
     aOneRange.PutInOrder();
     ScAddress aCursor(aOneRange.aStart);        //  always use start of block
@@ -390,7 +390,7 @@ void SAL_CALL ScCellCursorObj::gotoOffset( sal_Int32 nColumnOffset, sal_Int32 nR
     SolarMutexGuard aGuard;
     const ScRangeList& rRanges = GetRangeList();
     OSL_ENSURE( rRanges.size() == 1, "Range? Ranges?" );
-    ScRange aOneRange( *rRanges[ 0 ] );
+    ScRange aOneRange( rRanges[ 0 ] );
     aOneRange.PutInOrder();
 
     if ( aOneRange.aStart.Col() + nColumnOffset >= 0 &&

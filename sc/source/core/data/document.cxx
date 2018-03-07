@@ -1151,7 +1151,7 @@ void ScDocument::LimitChartIfAll( ScRangeListRef& rRangeList )
     {
         for ( size_t i = 0, nCount = rRangeList->size(); i < nCount; i++ )
         {
-            ScRange aRange( *(*rRangeList)[i] );
+            ScRange aRange( (*rRangeList)[i] );
             if ( ( aRange.aStart.Col() == 0 && aRange.aEnd.Col() == MAXCOL ) ||
                  ( aRange.aStart.Row() == 0 && aRange.aEnd.Row() == MAXROW ) )
             {
@@ -1167,7 +1167,7 @@ void ScDocument::LimitChartIfAll( ScRangeListRef& rRangeList )
                 aRange.aEnd.SetCol( nEndCol );
                 aRange.aEnd.SetRow( nEndRow );
             }
-            aNew->Append(aRange);
+            aNew->push_back(aRange);
         }
     }
     else
@@ -2330,7 +2330,7 @@ void ScDocument::CopyTabToClip(SCCOL nCol1, SCROW nRow1,
         ScClipParam& rClipParam = pClipDoc->GetClipParam();
         pClipDoc->aDocName = aDocName;
         rClipParam.maRanges.RemoveAll();
-        rClipParam.maRanges.Append(ScRange(nCol1, nRow1, 0, nCol2, nRow2, 0));
+        rClipParam.maRanges.push_back(ScRange(nCol1, nRow1, 0, nCol2, nRow2, 0));
         pClipDoc->ResetClip( this, nTab );
 
         sc::CopyToClipContext aCxt(*pClipDoc, false);
@@ -2748,7 +2748,7 @@ void ScDocument::CopyNonFilteredFromClip(
     SCROW nSourceRow = rClipStartRow;
     SCROW nSourceEnd = 0;
     if (!rCxt.getClipDoc()->GetClipParam().maRanges.empty())
-        nSourceEnd = rCxt.getClipDoc()->GetClipParam().maRanges.front()->aEnd.Row();
+        nSourceEnd = rCxt.getClipDoc()->GetClipParam().maRanges.front().aEnd.Row();
     SCROW nDestRow = nRow1;
 
     while ( nSourceRow <= nSourceEnd && nDestRow <= nRow2 )
@@ -2885,7 +2885,7 @@ void ScDocument::CopyFromClip( const ScRange& rDestRange, const ScMarkData& rMar
     ScRangeList aLocalRangeList;
     if (!pDestRanges)
     {
-        aLocalRangeList.Append( rDestRange);
+        aLocalRangeList.push_back( rDestRange);
         pDestRanges = &aLocalRangeList;
     }
 
@@ -2898,11 +2898,11 @@ void ScDocument::CopyFromClip( const ScRange& rDestRange, const ScMarkData& rMar
     SCROW nClipEndRow = aClipRange.aEnd.Row();
     for ( size_t nRange = 0; nRange < pDestRanges->size(); ++nRange )
     {
-        const ScRange* pRange = (*pDestRanges)[nRange];
-        SCCOL nCol1 = pRange->aStart.Col();
-        SCROW nRow1 = pRange->aStart.Row();
-        SCCOL nCol2 = pRange->aEnd.Col();
-        SCROW nRow2 = pRange->aEnd.Row();
+        const ScRange & rRange = (*pDestRanges)[nRange];
+        SCCOL nCol1 = rRange.aStart.Col();
+        SCROW nRow1 = rRange.aStart.Row();
+        SCCOL nCol2 = rRange.aEnd.Col();
+        SCROW nRow2 = rRange.aEnd.Row();
 
         if (bSkipAttrForEmpty)
         {
@@ -3067,12 +3067,12 @@ void ScDocument::CopyMultiRangeFromClip(
 
     for (size_t i = 0, n = rClipParam.maRanges.size(); i < n; ++i)
     {
-        ScRange* p = rClipParam.maRanges[i];
+        const ScRange & rRange = rClipParam.maRanges[i];
 
-        SCROW nRowCount = p->aEnd.Row() - p->aStart.Row() + 1;
-        SCCOL nDx = static_cast<SCCOL>(nCol1 - p->aStart.Col());
-        SCROW nDy = static_cast<SCROW>(nRow1 - p->aStart.Row());
-        SCCOL nCol2 = nCol1 + p->aEnd.Col() - p->aStart.Col();
+        SCROW nRowCount = rRange.aEnd.Row() - rRange.aStart.Row() + 1;
+        SCCOL nDx = static_cast<SCCOL>(nCol1 - rRange.aStart.Col());
+        SCROW nDy = static_cast<SCROW>(nRow1 - rRange.aStart.Row());
+        SCCOL nCol2 = nCol1 + rRange.aEnd.Col() - rRange.aStart.Col();
         SCROW nEndRow = nRow1 + nRowCount - 1;
 
         CopyBlockFromClip(aCxt, nCol1, nRow1, nCol2, nEndRow, rMark, nDx, nDy);
@@ -3084,7 +3084,7 @@ void ScDocument::CopyMultiRangeFromClip(
                 nRow1 += nRowCount;
             break;
             case ScClipParam::Column:
-                nCol1 += p->aEnd.Col() - p->aStart.Col() + 1;
+                nCol1 += rRange.aEnd.Col() - rRange.aStart.Col() + 1;
             break;
             default:
                 ;
@@ -3119,7 +3119,7 @@ void ScDocument::SetClipArea( const ScRange& rArea, bool bCut )
     {
         ScClipParam& rClipParam = GetClipParam();
         rClipParam.maRanges.RemoveAll();
-        rClipParam.maRanges.Append(rArea);
+        rClipParam.maRanges.push_back(rArea);
         rClipParam.mbCutMode = bCut;
     }
     else
@@ -3141,22 +3141,22 @@ void ScDocument::GetClipArea(SCCOL& nClipX, SCROW& nClipY, bool bIncludeFiltered
         // No clip range.  Bail out.
         return;
 
-    ScRange* p = rClipRanges.front();
-    SCCOL nStartCol = p->aStart.Col();
-    SCCOL nEndCol   = p->aEnd.Col();
-    SCROW nStartRow = p->aStart.Row();
-    SCROW nEndRow   = p->aEnd.Row();
+    ScRange & rRange = rClipRanges.front();
+    SCCOL nStartCol = rRange.aStart.Col();
+    SCCOL nEndCol   = rRange.aEnd.Col();
+    SCROW nStartRow = rRange.aStart.Row();
+    SCROW nEndRow   = rRange.aEnd.Row();
     for ( size_t i = 1, n = rClipRanges.size(); i < n; ++i )
     {
-        p = rClipRanges[ i ];
-        if (p->aStart.Col() < nStartCol)
-            nStartCol = p->aStart.Col();
-        if (p->aStart.Row() < nStartRow)
-            nStartRow = p->aStart.Row();
-        if (p->aEnd.Col() > nEndCol)
-            nEndCol = p->aEnd.Col();
-        if (p->aEnd.Row() < nEndRow)
-            nEndRow = p->aEnd.Row();
+        rRange = rClipRanges[ i ];
+        if (rRange.aStart.Col() < nStartCol)
+            nStartCol = rRange.aStart.Col();
+        if (rRange.aStart.Row() < nStartRow)
+            nStartRow = rRange.aStart.Row();
+        if (rRange.aEnd.Col() > nEndCol)
+            nEndCol = rRange.aEnd.Col();
+        if (rRange.aEnd.Row() < nEndRow)
+            nEndRow = rRange.aEnd.Row();
     }
 
     nClipX = nEndCol - nStartCol;
@@ -3187,8 +3187,8 @@ void ScDocument::GetClipStart(SCCOL& nClipX, SCROW& nClipY)
         ScRangeList& rClipRanges = GetClipParam().maRanges;
         if ( !rClipRanges.empty() )
         {
-            nClipX = rClipRanges.front()->aStart.Col();
-            nClipY = rClipRanges.front()->aStart.Row();
+            nClipX = rClipRanges.front().aStart.Col();
+            nClipY = rClipRanges.front().aStart.Row();
         }
     }
     else
@@ -3210,8 +3210,8 @@ bool ScDocument::HasClipFilteredRows()
 
     for ( size_t i = 0, n = rClipRanges.size(); i < n; ++i )
     {
-        ScRange* p = rClipRanges[ i ];
-        bool bAnswer = maTabs[nCountTab]->HasFilteredRows(p->aStart.Row(), p->aEnd.Row());
+        ScRange & rRange = rClipRanges[ i ];
+        bool bAnswer = maTabs[nCountTab]->HasFilteredRows(rRange.aStart.Row(), rRange.aEnd.Row());
         if (bAnswer)
             return true;
     }
@@ -3910,7 +3910,7 @@ void ScDocument::InterpretDirtyCells( const ScRangeList& rRanges )
 
     for (size_t nPos=0, nRangeCount = rRanges.size(); nPos < nRangeCount; nPos++)
     {
-        const ScRange& rRange = *rRanges[nPos];
+        const ScRange& rRange = rRanges[nPos];
         for (SCTAB nTab = rRange.aStart.Tab(); nTab <= rRange.aEnd.Tab(); ++nTab)
         {
             ScTable* pTab = FetchTable(nTab);
@@ -5104,16 +5104,16 @@ void ScDocument::GetSelectionFrame( const ScMarkData& rMark,
         bool bMultipleRows = false, bMultipleCols = false;
         for( size_t nRangeIdx = 0; nRangeIdx < nRangeCount; ++nRangeIdx )
         {
-            const ScRange* pRange = aRangeList[ nRangeIdx ];
-            bMultipleRows = ( bMultipleRows || ( pRange->aStart.Row() != pRange->aEnd.Row() ) );
-            bMultipleCols = ( bMultipleCols || ( pRange->aStart.Col() != pRange->aEnd.Col() ) );
+            const ScRange rRange = aRangeList[ nRangeIdx ];
+            bMultipleRows = ( bMultipleRows || ( rRange.aStart.Row() != rRange.aEnd.Row() ) );
+            bMultipleCols = ( bMultipleCols || ( rRange.aStart.Col() != rRange.aEnd.Col() ) );
             SCTAB nMax = static_cast<SCTAB>(maTabs.size());
             ScMarkData::const_iterator itr = rMark.begin(), itrEnd = rMark.end();
             for (; itr != itrEnd && *itr < nMax; ++itr)
                 if (maTabs[*itr])
                     maTabs[*itr]->MergeBlockFrame( &rLineOuter, &rLineInner, aFlags,
-                                          pRange->aStart.Col(), pRange->aStart.Row(),
-                                          pRange->aEnd.Col(),   pRange->aEnd.Row() );
+                                          rRange.aStart.Col(), rRange.aStart.Row(),
+                                          rRange.aEnd.Col(),   rRange.aEnd.Row() );
         }
         rLineInner.EnableHor( bMultipleRows );
         rLineInner.EnableVer( bMultipleCols );
@@ -5725,10 +5725,10 @@ void ScDocument::ApplySelectionFrame( const ScMarkData& rMark,
         {
             for ( size_t j=0; j < nRangeCount; j++ )
             {
-                ScRange aRange = *aRangeList[ j ];
+                const ScRange & rRange = aRangeList[ j ];
                 maTabs[*itr]->ApplyBlockFrame( rLineOuter, pLineInner,
-                    aRange.aStart.Col(), aRange.aStart.Row(),
-                    aRange.aEnd.Col(),   aRange.aEnd.Row() );
+                    rRange.aStart.Col(), rRange.aStart.Row(),
+                    rRange.aEnd.Col(),   rRange.aEnd.Row() );
             }
         }
     }
@@ -5780,34 +5780,34 @@ void ScDocument::ApplySelectionFrame( const ScMarkData& rMark,
                 size_t nEnvelopeRangeCount = rRangeListTopEnvelope.size();
                 for ( size_t j=0; j < nEnvelopeRangeCount; j++ )
                 {
-                    const ScRange* pRange = rRangeListTopEnvelope[ j ];
+                    const ScRange & rRange = rRangeListTopEnvelope[ j ];
                     maTabs[*itr1]->ApplyBlockFrame( aTop, &aTopInfo,
-                                                    pRange->aStart.Col(), pRange->aStart.Row(),
-                                                    pRange->aEnd.Col(),   pRange->aEnd.Row() );
+                                                    rRange.aStart.Col(), rRange.aStart.Row(),
+                                                    rRange.aEnd.Col(),   rRange.aEnd.Row() );
                 }
                 nEnvelopeRangeCount = rRangeListBottomEnvelope.size();
                 for ( size_t j=0; j < nEnvelopeRangeCount; j++ )
                 {
-                    const ScRange* pRange = rRangeListBottomEnvelope[ j ];
+                    const ScRange & rRange = rRangeListBottomEnvelope[ j ];
                     maTabs[*itr1]->ApplyBlockFrame( aBottom, &aBottomInfo,
-                                                    pRange->aStart.Col(), pRange->aStart.Row(),
-                                                    pRange->aEnd.Col(),   pRange->aEnd.Row() );
+                                                    rRange.aStart.Col(), rRange.aStart.Row(),
+                                                    rRange.aEnd.Col(),   rRange.aEnd.Row() );
                 }
                 nEnvelopeRangeCount = rRangeListLeftEnvelope.size();
                 for ( size_t j=0; j < nEnvelopeRangeCount; j++ )
                 {
-                    const ScRange* pRange = rRangeListLeftEnvelope[ j ];
+                    const ScRange & rRange = rRangeListLeftEnvelope[ j ];
                     maTabs[*itr1]->ApplyBlockFrame( aLeft, &aLeftInfo,
-                                                    pRange->aStart.Col(), pRange->aStart.Row(),
-                                                    pRange->aEnd.Col(),   pRange->aEnd.Row() );
+                                                    rRange.aStart.Col(), rRange.aStart.Row(),
+                                                    rRange.aEnd.Col(),   rRange.aEnd.Row() );
                 }
                 nEnvelopeRangeCount = rRangeListRightEnvelope.size();
                 for ( size_t j=0; j < nEnvelopeRangeCount; j++ )
                 {
-                    const ScRange* pRange = rRangeListRightEnvelope[ j ];
+                    const ScRange & rRange = rRangeListRightEnvelope[ j ];
                     maTabs[*itr1]->ApplyBlockFrame( aRight, &aRightInfo,
-                                                    pRange->aStart.Col(), pRange->aStart.Row(),
-                                                    pRange->aEnd.Col(),   pRange->aEnd.Row() );
+                                                    rRange.aStart.Col(), rRange.aStart.Row(),
+                                                    rRange.aEnd.Col(),   rRange.aEnd.Row() );
                 }
             }
         }
@@ -5892,9 +5892,8 @@ void ScDocument::DeleteSelection( InsertDeleteFlags nDelFlag, const ScMarkData& 
         rMark.FillRangeListWithMarks( &aRangeList, false);
         for (size_t i = 0; i < aRangeList.size(); ++i)
         {
-            const ScRange* pRange = aRangeList[i];
-            if (pRange)
-                EndListeningIntersectedGroups( aCxt, *pRange, &aGroupPos);
+            const ScRange & rRange = aRangeList[i];
+            EndListeningIntersectedGroups( aCxt, rRange, &aGroupPos);
         }
         aCxt.purgeEmptyBroadcasters();
     }
@@ -5920,9 +5919,7 @@ void ScDocument::DeleteSelection( InsertDeleteFlags nDelFlag, const ScMarkData& 
             rMark.FillRangeListWithMarks( &aRangeList, false);
             for (size_t i = 0; i < aRangeList.size(); ++i)
             {
-                const ScRange* pRange = aRangeList[i];
-                if (pRange)
-                    SetDirty( *pRange, true);
+                SetDirty( aRangeList[i], true);
             }
             //Notify listeners on top and bottom of the group that has been split
             for (size_t i = 0; i < aGroupPos.size(); ++i) {
@@ -5953,10 +5950,10 @@ void ScDocument::DeleteSelectionTab(
             rMark.FillRangeListWithMarks( &aRangeList, false);
             for (size_t i = 0; i < aRangeList.size(); ++i)
             {
-                const ScRange* pRange = aRangeList[i];
-                if (pRange && pRange->aStart.Tab() <= nTab && nTab <= pRange->aEnd.Tab())
+                const ScRange & rRange = aRangeList[i];
+                if (rRange.aStart.Tab() <= nTab && nTab <= rRange.aEnd.Tab())
                 {
-                    ScRange aRange( *pRange);
+                    ScRange aRange( rRange);
                     aRange.aStart.SetTab( nTab);
                     aRange.aEnd.SetTab( nTab);
                     EndListeningIntersectedGroups( aCxt, aRange, &aGroupPos);
@@ -5982,10 +5979,10 @@ void ScDocument::DeleteSelectionTab(
                 rMark.FillRangeListWithMarks( &aRangeList, false);
                 for (size_t i = 0; i < aRangeList.size(); ++i)
                 {
-                    const ScRange* pRange = aRangeList[i];
-                    if (pRange && pRange->aStart.Tab() <= nTab && nTab <= pRange->aEnd.Tab())
+                    const ScRange & rRange = aRangeList[i];
+                    if (rRange.aStart.Tab() <= nTab && nTab <= rRange.aEnd.Tab())
                     {
-                        ScRange aRange( *pRange);
+                        ScRange aRange( rRange);
                         aRange.aStart.SetTab( nTab);
                         aRange.aEnd.SetTab( nTab);
                         SetDirty( aRange, true);
@@ -6575,9 +6572,9 @@ void ScDocument::ForgetNoteCaptions( const ScRangeList& rRanges, bool bPreserveD
 {
     for (size_t i = 0, n = rRanges.size(); i < n; ++i)
     {
-        const ScRange* p = rRanges[i];
-        const ScAddress& s = p->aStart;
-        const ScAddress& e = p->aEnd;
+        const ScRange & rRange = rRanges[i];
+        const ScAddress& s = rRange.aStart;
+        const ScAddress& e = rRange.aEnd;
         for (SCTAB nTab = s.Tab(); nTab <= e.Tab(); ++nTab)
         {
             ScTable* pTab = FetchTable(nTab);
@@ -6598,11 +6595,11 @@ CommentCaptionState ScDocument::GetAllNoteCaptionsState( const ScRangeList& rRan
 
     for (size_t i = 0, n = rRanges.size(); i < n; ++i)
     {
-        const ScRange* pRange = rRanges[i];
+        const ScRange & rRange = rRanges[i];
 
-        for( SCTAB nTab = pRange->aStart.Tab(); nTab <= pRange->aEnd.Tab(); ++nTab )
+        for( SCTAB nTab = rRange.aStart.Tab(); nTab <= rRange.aEnd.Tab(); ++nTab )
         {
-            aState = maTabs[nTab]->GetAllNoteCaptionsState( *pRange, aNotes );
+            aState = maTabs[nTab]->GetAllNoteCaptionsState( rRange, aNotes );
 
             if (aState == CommentCaptionState::MIXED)
                 return aState;
@@ -6706,14 +6703,14 @@ void ScDocument::GetAllNoteEntries( SCTAB nTab, std::vector<sc::NoteEntry>& rNot
     return pTab->GetAllNoteEntries( rNotes );
 }
 
-void ScDocument::GetNotesInRange( const ScRangeList& rRange, std::vector<sc::NoteEntry>& rNotes ) const
+void ScDocument::GetNotesInRange( const ScRangeList& rRangeList, std::vector<sc::NoteEntry>& rNotes ) const
 {
-    for( size_t i = 0; i < rRange.size(); ++i)
+    for( size_t i = 0; i < rRangeList.size(); ++i)
     {
-        const ScRange* pRange = rRange[i];
-        for( SCTAB nTab = pRange->aStart.Tab(); nTab <= pRange->aEnd.Tab(); ++nTab )
+        const ScRange & rRange = rRangeList[i];
+        for( SCTAB nTab = rRange.aStart.Tab(); nTab <= rRange.aEnd.Tab(); ++nTab )
         {
-            maTabs[nTab]->GetNotesInRange( *pRange, rNotes );
+            maTabs[nTab]->GetNotesInRange( rRange, rNotes );
         }
     }
 }
@@ -6723,14 +6720,14 @@ void ScDocument::GetUnprotectedCells( ScRangeList& rRangeList, SCTAB nTab ) cons
     maTabs[nTab]->GetUnprotectedCells( rRangeList );
 }
 
-bool ScDocument::ContainsNotesInRange( const ScRangeList& rRange ) const
+bool ScDocument::ContainsNotesInRange( const ScRangeList& rRangeList ) const
 {
-    for( size_t i = 0; i < rRange.size(); ++i)
+    for( size_t i = 0; i < rRangeList.size(); ++i)
     {
-        const ScRange* pRange = rRange[i];
-        for( SCTAB nTab = pRange->aStart.Tab(); nTab < pRange->aEnd.Tab(); ++nTab )
+        const ScRange & rRange = rRangeList[i];
+        for( SCTAB nTab = rRange.aStart.Tab(); nTab < rRange.aEnd.Tab(); ++nTab )
         {
-            bool bContainsNote = maTabs[nTab]->ContainsNotesInRange( *pRange );
+            bool bContainsNote = maTabs[nTab]->ContainsNotesInRange( rRange );
             if(bContainsNote)
                 return true;
         }

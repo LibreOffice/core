@@ -137,8 +137,7 @@ void ScDocument::UpdateChartArea( const OUString& rChartName,
             const ScRange& rNewArea, bool bColHeaders, bool bRowHeaders,
             bool bAdd )
 {
-    ScRangeListRef aRLR( new ScRangeList );
-    aRLR->Append( rNewArea );
+    ScRangeListRef aRLR( new ScRangeList(rNewArea) );
     UpdateChartArea( rChartName, aRLR, bColHeaders, bRowHeaders, bAdd );
 }
 
@@ -295,7 +294,7 @@ void ScDocument::UpdateChartArea( const OUString& rChartName,
                         aNewRanges->Parse( aRangesStr, this );
 
                         for ( size_t nAdd = 0, nAddCount = rNewList->size(); nAdd < nAddCount; ++nAdd )
-                            aNewRanges->Append( *(*rNewList)[nAdd] );
+                            aNewRanges->push_back( (*rNewList)[nAdd] );
                     }
                     else
                     {
@@ -388,7 +387,7 @@ void ScDocument::RestoreChartListener( const OUString& rName )
                 ScRange aRange;
                 ScAddress::Details aDetails(GetAddressConvention(), 0, 0);
                 if ( aRange.ParseAny( aRepresentations[i], this, aDetails ) & ScRefFlags::VALID )
-                    aRanges->Append( aRange );
+                    aRanges->push_back( aRange );
             }
 
             pChartListenerCollection->ChangeListening( rName, aRanges );
@@ -414,13 +413,13 @@ void ScDocument::UpdateChartRef( UpdateRefMode eUpdateRefMode,
         bool bDataChanged = false;
         for ( size_t i = 0, nListSize = aRLR->size(); i < nListSize; ++i )
         {
-            ScRange* pR = (*aRLR)[i];
-            SCCOL theCol1 = pR->aStart.Col();
-            SCROW theRow1 = pR->aStart.Row();
-            SCTAB theTab1 = pR->aStart.Tab();
-            SCCOL theCol2 = pR->aEnd.Col();
-            SCROW theRow2 = pR->aEnd.Row();
-            SCTAB theTab2 = pR->aEnd.Tab();
+            ScRange& rRange = (*aRLR)[i];
+            SCCOL theCol1 = rRange.aStart.Col();
+            SCROW theRow1 = rRange.aStart.Row();
+            SCTAB theTab1 = rRange.aStart.Tab();
+            SCCOL theCol2 = rRange.aEnd.Col();
+            SCROW theRow2 = rRange.aEnd.Row();
+            SCTAB theTab2 = rRange.aEnd.Tab();
             ScRefUpdateRes eRes = ScRefUpdate::Update(
                 this, eUpdateRefMode,
                 nCol1,nRow1,nTab1, nCol2,nRow2,nTab2,
@@ -430,24 +429,24 @@ void ScDocument::UpdateChartRef( UpdateRefMode eUpdateRefMode,
             if ( eRes != UR_NOTHING )
             {
                 bChanged = true;
-                aNewRLR->Append( ScRange(
+                aNewRLR->push_back( ScRange(
                     theCol1, theRow1, theTab1,
                     theCol2, theRow2, theTab2 ));
                 if ( eUpdateRefMode == URM_INSDEL
                     && !bDataChanged
                     && (eRes == UR_INVALID ||
-                        ((pR->aEnd.Col() - pR->aStart.Col()
+                        ((rRange.aEnd.Col() - rRange.aStart.Col()
                         != theCol2 - theCol1)
-                    || (pR->aEnd.Row() - pR->aStart.Row()
+                    || (rRange.aEnd.Row() - rRange.aStart.Row()
                         != theRow2 - theRow1)
-                    || (pR->aEnd.Tab() - pR->aStart.Tab()
+                    || (rRange.aEnd.Tab() - rRange.aStart.Tab()
                         != theTab2 - theTab1))) )
                 {
                     bDataChanged = true;
                 }
             }
             else
-                aNewRLR->Append( *pR );
+                aNewRLR->push_back( rRange );
         }
         if ( bChanged )
         {

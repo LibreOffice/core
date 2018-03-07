@@ -207,7 +207,7 @@ bool ScColumn::HasSelectionMatrixFragment(const ScMarkData& rMark) const
     ScRangeList aRanges = rMark.GetMarkedRanges();
     for (size_t i = 0, n = aRanges.size(); i < n; ++i)
     {
-        const ScRange& r = *aRanges[i];
+        const ScRange& r = aRanges[i];
         if (nTab < r.aStart.Tab() || r.aEnd.Tab() < nTab)
             continue;
 

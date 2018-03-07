@@ -322,11 +322,11 @@ bool ScTableLink::Refresh(const OUString& rNewFile, const OUString& rNewFilter,
 
                         for (size_t nPos=0; nPos < nRanges; nPos++)
                         {
-                            const ScRange* pRange = aErrorCells[ nPos ];
-                            SCCOL nStartCol = pRange->aStart.Col();
-                            SCROW nStartRow = pRange->aStart.Row();
-                            SCCOL nEndCol = pRange->aEnd.Col();
-                            SCROW nEndRow = pRange->aEnd.Row();
+                            const ScRange & rRange = aErrorCells[ nPos ];
+                            SCCOL nStartCol = rRange.aStart.Col();
+                            SCROW nStartRow = rRange.aStart.Row();
+                            SCCOL nEndCol = rRange.aEnd.Col();
+                            SCROW nEndRow = rRange.aEnd.Row();
                             for (SCROW nRow=nStartRow; nRow<=nEndRow; nRow++)
                                 for (SCCOL nCol=nStartCol; nCol<=nEndCol; nCol++)
                                 {

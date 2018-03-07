@@ -187,7 +187,7 @@ void Test::testCondFormatInsertDeleteSheets()
     // ... and its range is B2:B4.
     ScRangeList aCheckRange = pCheck->GetRange();
     CPPUNIT_ASSERT_EQUAL_MESSAGE("This should be a single range.", size_t(1), aCheckRange.size());
-    const ScRange* pRange = aCheckRange[0];
+    const ScRange* pRange = &aCheckRange[0];
     CPPUNIT_ASSERT(pRange);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Format should be applied to B2:B4.", ScRange(1,1,0,1,3,0), *pRange);
 
@@ -205,7 +205,7 @@ void Test::testCondFormatInsertDeleteSheets()
     // Make sure the range also got shifted.
     aCheckRange = pCheck->GetRange();
     CPPUNIT_ASSERT_EQUAL_MESSAGE("This should be a single range.", size_t(1), aCheckRange.size());
-    pRange = aCheckRange[0];
+    pRange = &aCheckRange[0];
     CPPUNIT_ASSERT(pRange);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Format should be applied to B2:B4 on the 2nd sheet after the sheet insertion.", ScRange(1,1,1,1,3,1), *pRange);
 
@@ -221,7 +221,7 @@ void Test::testCondFormatInsertDeleteSheets()
     // Make sure the range got shifted back.
     aCheckRange = pCheck->GetRange();
     CPPUNIT_ASSERT_EQUAL_MESSAGE("This should be a single range.", size_t(1), aCheckRange.size());
-    pRange = aCheckRange[0];
+    pRange = &aCheckRange[0];
     CPPUNIT_ASSERT(pRange);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Format should be applied to B2:B4 on the 1st sheet after the sheet removal.", ScRange(1,1,0,1,3,0), *pRange);
 
@@ -238,7 +238,7 @@ void Test::testCondFormatInsertDeleteSheets()
 
     aCheckRange = pCheck->GetRange();
     CPPUNIT_ASSERT_EQUAL_MESSAGE("This should be a single range.", size_t(1), aCheckRange.size());
-    pRange = aCheckRange[0];
+    pRange = &aCheckRange[0];
     CPPUNIT_ASSERT(pRange);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Format should be applied to B2:B4 on the 2nd sheet after the undo of the sheet removal.", ScRange(1,1,1,1,3,1), *pRange);
 

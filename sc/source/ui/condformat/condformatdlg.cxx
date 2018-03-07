@@ -542,8 +542,7 @@ ScCondFormatDlg::ScCondFormatDlg(SfxBindings* pB, SfxChildWindow* pCW,
         if(aRange.empty())
         {
             ScAddress aPos(mpViewData->GetCurX(), mpViewData->GetCurY(), mpViewData->GetTabNo());
-            ScRange* pRange = new ScRange(aPos);
-            aRange.push_back(pRange);
+            aRange.push_back(ScRange(aPos));
         }
         mnKey = 0;
     }

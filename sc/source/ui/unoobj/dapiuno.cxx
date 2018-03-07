@@ -1310,18 +1310,13 @@ void ScDataPilotTableObj::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
     else if ( dynamic_cast<const ScUpdateRefHint*>(&rHint) )
     {
         ScRange aRange( 0, 0, nTab );
-        ScRangeList aRanges;
-        aRanges.Append( aRange );
+        ScRangeList aRanges( aRange );
         const ScUpdateRefHint& rRef = static_cast< const ScUpdateRefHint& >( rHint );
         if ( aRanges.UpdateReference( rRef.GetMode(), &GetDocShell()->GetDocument(), rRef.GetRange(),
                  rRef.GetDx(), rRef.GetDy(), rRef.GetDz() ) &&
              aRanges.size() == 1 )
         {
-            const ScRange* pRange = aRanges.front();
-            if ( pRange )
-            {
-                nTab = pRange->aStart.Tab();
-            }
+            nTab = aRanges.front().aStart.Tab();
         }
     }
 

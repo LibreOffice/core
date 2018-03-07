@@ -331,7 +331,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                     if ( !aRangeListRef->empty() )
                     {
                         bMultiRange = true;
-                        aSingleRange = *aRangeListRef->front(); // for header
+                        aSingleRange = aRangeListRef->front(); // for header
                         bValid = true;
                     }
                     else

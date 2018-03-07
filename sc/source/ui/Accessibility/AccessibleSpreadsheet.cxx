@@ -54,16 +54,13 @@ ScMyAddress ScAccessibleSpreadsheet::CalcScAddressFromRangeList(ScRangeList *pMa
 {
     if (pMarkedRanges->size() <= 1)
     {
-        ScRange* pRange = pMarkedRanges->front();
-        if (pRange)
-        {
-            // MT IA2: Not used.
-            // const int nRowNum = pRange->aEnd.Row() - pRange->aStart.Row() + 1;
-            const int nColNum = pRange->aEnd.Col() - pRange->aStart.Col() + 1;
-            const int nCurCol = nSelectedChildIndex % nColNum;
-            const int nCurRow = (nSelectedChildIndex - nCurCol)/nColNum;
-            return ScMyAddress(static_cast<SCCOL>(pRange->aStart.Col() + nCurCol), pRange->aStart.Row() + nCurRow, maActiveCell.Tab());
-        }
+        ScRange const & rRange = pMarkedRanges->front();
+        // MT IA2: Not used.
+        // const int nRowNum = rRange.aEnd.Row() - rRange.aStart.Row() + 1;
+        const int nColNum = rRange.aEnd.Col() - rRange.aStart.Col() + 1;
+        const int nCurCol = nSelectedChildIndex % nColNum;
+        const int nCurRow = (nSelectedChildIndex - nCurCol)/nColNum;
+        return ScMyAddress(static_cast<SCCOL>(rRange.aStart.Col() + nCurCol), rRange.aStart.Row() + nCurRow, maActiveCell.Tab());
     }
     else
     {
@@ -73,24 +70,24 @@ ScMyAddress ScAccessibleSpreadsheet::CalcScAddressFromRangeList(ScRangeList *pMa
         size_t nSize = pMarkedRanges->size();
         for (size_t i = 0; i < nSize; ++i)
         {
-            ScRange* pRange = (*pMarkedRanges)[i];
-            if (pRange->aStart.Tab() != pRange->aEnd.Tab())
+            ScRange const & rRange = (*pMarkedRanges)[i];
+            if (rRange.aStart.Tab() != rRange.aEnd.Tab())
             {
-                if ((maActiveCell.Tab() >= pRange->aStart.Tab()) ||
-                    maActiveCell.Tab() <= pRange->aEnd.Tab())
+                if ((maActiveCell.Tab() >= rRange.aStart.Tab()) ||
+                    maActiveCell.Tab() <= rRange.aEnd.Tab())
                 {
-                    m_vecTempRange.push_back(pRange);
-                    nMinRow = std::min(pRange->aStart.Row(),nMinRow);
-                    nMaxRow = std::max(pRange->aEnd.Row(),nMaxRow);
+                    m_vecTempRange.push_back(rRange);
+                    nMinRow = std::min(rRange.aStart.Row(),nMinRow);
+                    nMaxRow = std::max(rRange.aEnd.Row(),nMaxRow);
                 }
                 else
                     SAL_WARN("sc", "Range of wrong table");
             }
-            else if(pRange->aStart.Tab() == maActiveCell.Tab())
+            else if(rRange.aStart.Tab() == maActiveCell.Tab())
             {
-                m_vecTempRange.push_back(pRange);
-                nMinRow = std::min(pRange->aStart.Row(),nMinRow);
-                nMaxRow = std::max(pRange->aEnd.Row(),nMaxRow);
+                m_vecTempRange.push_back(rRange);
+                nMinRow = std::min(rRange.aStart.Row(),nMinRow);
+                nMaxRow = std::max(rRange.aEnd.Row(),nMaxRow);
             }
             else
                 SAL_WARN("sc", "Range of wrong table");
@@ -103,10 +100,10 @@ ScMyAddress ScAccessibleSpreadsheet::CalcScAddressFromRangeList(ScRangeList *pMa
                 VEC_RANGE::const_iterator vi = m_vecTempRange.begin();
                 for (; vi < m_vecTempRange.end(); ++vi)
                 {
-                    ScRange *p = *vi;
-                    if ( row >= p->aStart.Row() && row <= p->aEnd.Row())
+                    ScRange const & r = *vi;
+                    if ( row >= r.aStart.Row() && row <= r.aEnd.Row())
                     {
-                        m_vecTempCol.emplace_back(p->aStart.Col(),p->aEnd.Col());
+                        m_vecTempCol.emplace_back(r.aStart.Col(),r.aEnd.Col());
                     }
                 }
             }
@@ -129,46 +126,46 @@ ScMyAddress ScAccessibleSpreadsheet::CalcScAddressFromRangeList(ScRangeList *pMa
     return ScMyAddress(0,0,maActiveCell.Tab());
 }
 
-bool ScAccessibleSpreadsheet::CalcScRangeDifferenceMax(const ScRange *pSrc, const ScRange *pDest, int nMax, VEC_MYADDR &vecRet, int &nSize)
+bool ScAccessibleSpreadsheet::CalcScRangeDifferenceMax(const ScRange & rSrc, const ScRange & rDest, int nMax, VEC_MYADDR &vecRet, int &nSize)
 {
     //Src Must be :Src > Dest
-    if (pDest->In(*pSrc))
+    if (rDest.In(rSrc))
     {//Here is Src In Dest,Src <= Dest
         return false;
     }
-    if (!pDest->Intersects(*pSrc))
+    if (!rDest.Intersects(rSrc))
     {
-        int nCellCount = sal_uInt32(pDest->aEnd.Col() - pDest->aStart.Col() + 1)
-            * sal_uInt32(pDest->aEnd.Row() - pDest->aStart.Row() + 1)
-            * sal_uInt32(pDest->aEnd.Tab() - pDest->aStart.Tab() + 1);
+        int nCellCount = sal_uInt32(rDest.aEnd.Col() - rDest.aStart.Col() + 1)
+            * sal_uInt32(rDest.aEnd.Row() - rDest.aStart.Row() + 1)
+            * sal_uInt32(rDest.aEnd.Tab() - rDest.aStart.Tab() + 1);
         if (nCellCount + nSize > nMax)
         {
             return true;
         }
         else if(nCellCount > 0)
         {
-            for (sal_Int32 row = pDest->aStart.Row(); row <=  pDest->aEnd.Row();++row)
+            for (sal_Int32 row = rDest.aStart.Row(); row <=  rDest.aEnd.Row();++row)
             {
-                for (sal_uInt16 col = pDest->aStart.Col(); col <=  pDest->aEnd.Col();++col)
+                for (sal_uInt16 col = rDest.aStart.Col(); col <=  rDest.aEnd.Col();++col)
                 {
-                    vecRet.emplace_back(col,row,pDest->aStart.Tab());
+                    vecRet.emplace_back(col,row,rDest.aStart.Tab());
                 }
             }
         }
         return false;
     }
-    sal_Int32 nMinRow = pSrc->aStart.Row();
-    sal_Int32 nMaxRow = pSrc->aEnd.Row();
+    sal_Int32 nMinRow = rSrc.aStart.Row();
+    sal_Int32 nMaxRow = rSrc.aEnd.Row();
     for (; nMinRow <= nMaxRow ; ++nMinRow,--nMaxRow)
     {
-        for (sal_uInt16 col = pSrc->aStart.Col(); col <=  pSrc->aEnd.Col();++col)
+        for (sal_uInt16 col = rSrc.aStart.Col(); col <=  rSrc.aEnd.Col();++col)
         {
             if (nSize > nMax)
             {
                 return true;
             }
-            ScMyAddress cell(col,nMinRow,pSrc->aStart.Tab());
-            if(!pDest->In(cell))
+            ScMyAddress cell(col,nMinRow,rSrc.aStart.Tab());
+            if(!rDest.In(cell))
             {//In Src ,Not In Dest
                 vecRet.push_back(cell);
                 ++nSize;
@@ -176,14 +173,14 @@ bool ScAccessibleSpreadsheet::CalcScRangeDifferenceMax(const ScRange *pSrc, cons
         }
         if (nMinRow != nMaxRow)
         {
-            for (sal_uInt16 col = pSrc->aStart.Col(); col <=  pSrc->aEnd.Col();++col)
+            for (sal_uInt16 col = rSrc.aStart.Col(); col <=  rSrc.aEnd.Col();++col)
             {
                 if (nSize > nMax)
                 {
                     return true;
                 }
-                ScMyAddress cell(col,nMaxRow,pSrc->aStart.Tab());
-                if(!pDest->In(cell))
+                ScMyAddress cell(col,nMaxRow,rSrc.aStart.Tab());
+                if(!rDest.In(cell))
                 {//In Src ,Not In Dest
                     vecRet.push_back(cell);
                     ++nSize;
@@ -213,12 +210,12 @@ bool ScAccessibleSpreadsheet::CalcScRangeListDifferenceMax(ScRangeList *pSrc,ScR
         size_t nSrcSize = pSrc->size();
         for (size_t i = 0; i < nSrcSize; ++i)
         {
-            ScRange* pRange = (*pSrc)[i];
-            for (sal_Int32 row = pRange->aStart.Row(); row <=  pRange->aEnd.Row();++row)
+            ScRange const & rRange = (*pSrc)[i];
+            for (sal_Int32 row = rRange.aStart.Row(); row <= rRange.aEnd.Row();++row)
             {
-                for (sal_uInt16 col = pRange->aStart.Col(); col <=  pRange->aEnd.Col();++col)
+                for (sal_uInt16 col = rRange.aStart.Col(); col <= rRange.aEnd.Col();++col)
                 {
-                    vecRet.emplace_back(col,row,pRange->aStart.Tab());
+                    vecRet.emplace_back(col,row, rRange.aStart.Tab());
                 }
             }
         }
@@ -229,12 +226,12 @@ bool ScAccessibleSpreadsheet::CalcScRangeListDifferenceMax(ScRangeList *pSrc,ScR
     size_t nSizeSrc = pSrc->size();
     for (size_t i = 0; i < nSizeSrc; ++i)
     {
-        ScRange* pRange = (*pSrc)[i];
+        ScRange const & rRange = (*pSrc)[i];
         size_t nSizeDest = pDest->size();
         for (size_t j = 0; j < nSizeDest; ++j)
         {
-            ScRange* pRangeDest = (*pDest)[j];
-            if (CalcScRangeDifferenceMax(pRange,pRangeDest,nMax,vecRet,nSize))
+            ScRange const & rRangeDest = (*pDest)[j];
+            if (CalcScRangeDifferenceMax(rRange,rRangeDest,nMax,vecRet,nSize))
             {
                 return true;
             }

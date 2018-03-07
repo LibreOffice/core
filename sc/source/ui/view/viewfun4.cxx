@@ -239,7 +239,7 @@ void ScViewFunc::DoRefConversion()
         SCTAB i = *itr;
         for (size_t j = 0; j < nCount; ++j)
         {
-            ScRange aRange = *(*xRanges)[j];
+            ScRange aRange = (*xRanges)[j];
             aRange.aStart.SetTab(i);
             aRange.aEnd.SetTab(i);
             ScCellIterator aIter( pDoc, aRange );

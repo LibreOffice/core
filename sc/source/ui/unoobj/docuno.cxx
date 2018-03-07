@@ -2952,14 +2952,14 @@ void ScModelObj::NotifyChanges( const OUString& rOperation, const ScRangeList& r
         {
             uno::Reference< table::XCellRange > xRangeObj;
 
-            ScRange aRange( *rRanges[ nIndex ] );
-            if ( aRange.aStart == aRange.aEnd )
+            ScRange const & rRange = rRanges[ nIndex ];
+            if ( rRange.aStart == rRange.aEnd )
             {
-                xRangeObj.set( new ScCellObj( pDocShell, aRange.aStart ) );
+                xRangeObj.set( new ScCellObj( pDocShell, rRange.aStart ) );
             }
             else
             {
-                xRangeObj.set( new ScCellRangeObj( pDocShell, aRange ) );
+                xRangeObj.set( new ScCellRangeObj( pDocShell, rRange ) );
             }
 
             util::ElementChange& rChange = aEvent.Changes[ static_cast< sal_Int32 >( nIndex ) ];
@@ -3003,9 +3003,9 @@ void ScModelObj::NotifyChanges( const OUString& rOperation, const ScRangeList& r
                     size_t nRangeCount = rRanges.size();
                     for ( size_t nIndex = 0; nIndex < nRangeCount; ++nIndex )
                     {
-                        ScRange aRange( *rRanges[ nIndex ] );
-                        if ( aRange.aStart.Tab() == nTab )
-                            aTabRanges.Append( aRange );
+                        ScRange const & rRange = rRanges[ nIndex ];
+                        if ( rRange.aStart.Tab() == nTab )
+                            aTabRanges.push_back( rRange );
                     }
                     size_t nTabRangeCount = aTabRanges.size();
                     if ( nTabRangeCount > 0 )
@@ -3013,11 +3013,11 @@ void ScModelObj::NotifyChanges( const OUString& rOperation, const ScRangeList& r
                         uno::Reference<uno::XInterface> xTarget;
                         if ( nTabRangeCount == 1 )
                         {
-                            ScRange aRange( *aTabRanges[ 0 ] );
-                            if ( aRange.aStart == aRange.aEnd )
-                                xTarget.set( static_cast<cppu::OWeakObject*>( new ScCellObj( pDocShell, aRange.aStart ) ) );
+                            ScRange const & rRange = aTabRanges[ 0 ];
+                            if ( rRange.aStart == rRange.aEnd )
+                                xTarget.set( static_cast<cppu::OWeakObject*>( new ScCellObj( pDocShell, rRange.aStart ) ) );
                             else
-                                xTarget.set( static_cast<cppu::OWeakObject*>( new ScCellRangeObj( pDocShell, aRange ) ) );
+                                xTarget.set( static_cast<cppu::OWeakObject*>( new ScCellRangeObj( pDocShell, rRange ) ) );
                         }
                         else
                             xTarget.set( static_cast<cppu::OWeakObject*>( new ScCellRangesObj( pDocShell, aTabRanges ) ) );
@@ -3633,9 +3633,8 @@ uno::Sequence < uno::Reference< table::XCellRange > > SAL_CALL ScTableSheetsObj:
     xRet.realloc(nCount);
     for( size_t nIndex = 0; nIndex < nCount; nIndex++ )
     {
-        const ScRange* pRange = aRangeList[ nIndex ];
-        if( pRange )
-            xRet[nIndex] = new ScCellRangeObj(pDocShell, *pRange);
+        const ScRange & rRange = aRangeList[ nIndex ];
+        xRet[nIndex] = new ScCellRangeObj(pDocShell, rRange);
     }
 
     return xRet;

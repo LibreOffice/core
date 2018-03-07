@@ -842,8 +842,7 @@ bool ScTable::SearchAndReplaceEmptyCells(
     GetFirstDataPos(nColStart, nRowStart);
     GetLastDataPos(nColEnd, nRowEnd);
 
-    ScRangeList aRanges;
-    aRanges.Append(ScRange(nColStart, nRowStart, nTab, nColEnd, nRowEnd, nTab));
+    ScRangeList aRanges(ScRange(nColStart, nRowStart, nTab, nColEnd, nRowEnd, nTab));
 
     if (rSearchItem.GetSelection())
     {
@@ -856,23 +855,23 @@ bool ScTable::SearchAndReplaceEmptyCells(
         rMark.FillRangeListWithMarks(&aMarkedRanges, true);
         for ( size_t i = 0, n = aMarkedRanges.size(); i < n; ++i )
         {
-            ScRange* p = aMarkedRanges[ i ];
-            if (p->aStart.Col() > nColEnd || p->aStart.Row() > nRowEnd || p->aEnd.Col() < nColStart || p->aEnd.Row() < nRowStart)
+            ScRange & rRange = aMarkedRanges[ i ];
+            if (rRange.aStart.Col() > nColEnd || rRange.aStart.Row() > nRowEnd || rRange.aEnd.Col() < nColStart || rRange.aEnd.Row() < nRowStart)
                 // This range is outside the data area.  Skip it.
                 continue;
 
             // Shrink the range into data area only.
-            if (p->aStart.Col() < nColStart)
-                p->aStart.SetCol(nColStart);
-            if (p->aStart.Row() < nRowStart)
-                p->aStart.SetRow(nRowStart);
+            if (rRange.aStart.Col() < nColStart)
+                rRange.aStart.SetCol(nColStart);
+            if (rRange.aStart.Row() < nRowStart)
+                rRange.aStart.SetRow(nRowStart);
 
-            if (p->aEnd.Col() > nColEnd)
-                p->aEnd.SetCol(nColEnd);
-            if (p->aEnd.Row() > nRowEnd)
-                p->aEnd.SetRow(nRowEnd);
+            if (rRange.aEnd.Col() > nColEnd)
+                rRange.aEnd.SetCol(nColEnd);
+            if (rRange.aEnd.Row() > nRowEnd)
+                rRange.aEnd.SetRow(nRowEnd);
 
-            aNewRanges.Append(*p);
+            aNewRanges.push_back(rRange);
         }
         aRanges = aNewRanges;
     }
@@ -884,8 +883,8 @@ bool ScTable::SearchAndReplaceEmptyCells(
         {
             for ( size_t i = aRanges.size(); i > 0; --i )
             {
-                ScRange* p = aRanges[ i - 1 ];
-                if (SearchRangeForEmptyCell(*p, rSearchItem, rCol, rRow, rUndoStr))
+                const ScRange & rRange = aRanges[ i - 1 ];
+                if (SearchRangeForEmptyCell(rRange, rSearchItem, rCol, rRow, rUndoStr))
                     return true;
             }
         }
@@ -893,8 +892,8 @@ bool ScTable::SearchAndReplaceEmptyCells(
         {
             for ( size_t i = 0, nListSize = aRanges.size(); i < nListSize; ++i )
             {
-                ScRange* p = aRanges[ i ];
-                if (SearchRangeForEmptyCell(*p, rSearchItem, rCol, rRow, rUndoStr))
+                const ScRange & rRange = aRanges[ i ];
+                if (SearchRangeForEmptyCell(rRange, rSearchItem, rCol, rRow, rUndoStr))
                     return true;
             }
         }
@@ -904,8 +903,8 @@ bool ScTable::SearchAndReplaceEmptyCells(
         bool bFound = false;
         for ( size_t i = 0, nListSize = aRanges.size(); i < nListSize; ++i )
         {
-            ScRange* p = aRanges[ i ];
-            bFound |= SearchRangeForAllEmptyCells(*p, rSearchItem, rMatchedRanges, rUndoStr, pUndoDoc);
+            ScRange const & rRange = aRanges[ i ];
+            bFound |= SearchRangeForAllEmptyCells(rRange, rSearchItem, rMatchedRanges, rUndoStr, pUndoDoc);
         }
         return bFound;
     }

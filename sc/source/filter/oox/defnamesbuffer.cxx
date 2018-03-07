@@ -378,7 +378,7 @@ void DefinedName::convertFormula( const css::uno::Sequence<css::sheet::ExternalL
                 const ScAddress& rMaxPos = getAddressConverter().getMaxAddress();
                 for (size_t i = 0, nSize = aTitleRanges.size(); i < nSize; ++i)
                 {
-                    const ScRange& rRange = *aTitleRanges[i];
+                    const ScRange& rRange = aTitleRanges[i];
                     bool bFullRow = (rRange.aStart.Col() == 0) && ( rRange.aEnd.Col() >= rMaxPos.Col() );
                     bool bFullCol = (rRange.aStart.Row() == 0) && ( rRange.aEnd.Row() >= rMaxPos.Row() );
                     if( !bHasRowTitles && bFullRow && !bFullCol )

@@ -489,7 +489,7 @@ bool ScTableProtectionImpl::isBlockEditable( const ScRange& rRange ) const
         if (!(*it).hasSecurityDescriptor() && (*it).maRangeList.is())
         {
             ScRangeList aList( (*it).maRangeList->GetIntersectedRange( rRange));
-            if (aList.size() == 1 && *aList[0] == rRange)
+            if (aList.size() == 1 && aList[0] == rRange)
             {
                 // Range is editable if no password is assigned.
                 if (!(*it).hasPassword())
@@ -516,13 +516,13 @@ bool ScTableProtectionImpl::isBlockEditable( const ScRange& rRange ) const
                 size_t nRanges = rRanges.size();
                 for (size_t i=0; i < nRanges; ++i)
                 {
-                    aRangeList.Append( *rRanges[i]);
+                    aRangeList.push_back( rRanges[i]);
                 }
             }
         }
     }
     ScRangeList aResultList( aRangeList.GetIntersectedRange( rRange));
-    return aResultList.size() == 1 && *aResultList[0] == rRange;
+    return aResultList.size() == 1 && aResultList[0] == rRange;
 }
 
 bool ScTableProtectionImpl::isSelectionEditable( const ScRangeList& rRangeList ) const
@@ -532,7 +532,7 @@ bool ScTableProtectionImpl::isSelectionEditable( const ScRangeList& rRangeList )
 
     for (size_t i=0, nRanges = rRangeList.size(); i < nRanges; ++i)
     {
-        if (!isBlockEditable( *rRangeList[i]))
+        if (!isBlockEditable( rRangeList[i]))
             return false;
     }
     return true;

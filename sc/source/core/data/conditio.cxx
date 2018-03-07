@@ -146,11 +146,8 @@ void start_listen_to(ScFormulaListener& rListener, const ScTokenArray* pTokens, 
     size_t n = rRangeList.size();
     for (size_t i = 0; i < n; ++i)
     {
-        const ScRange* pRange = rRangeList[i];
-        if (!pRange)
-            continue;
-
-        rListener.addTokenArray(pTokens, *pRange);
+        const ScRange & rRange = rRangeList[i];
+        rListener.addTokenArray(pTokens, rRange);
     }
 }
 
@@ -784,12 +781,12 @@ void ScConditionEntry::FillCache() const
         size_t nListCount = rRanges.size();
         for( size_t i = 0; i < nListCount; i++ )
         {
-            const ScRange *aRange = rRanges[i];
-            SCROW nRow = aRange->aEnd.Row();
-            SCCOL nCol = aRange->aEnd.Col();
-            SCCOL nColStart = aRange->aStart.Col();
-            SCROW nRowStart = aRange->aStart.Row();
-            SCTAB nTab = aRange->aStart.Tab();
+            const ScRange & rRange = rRanges[i];
+            SCROW nRow = rRange.aEnd.Row();
+            SCCOL nCol = rRange.aEnd.Col();
+            SCCOL nColStart = rRange.aStart.Col();
+            SCROW nRowStart = rRange.aStart.Row();
+            SCTAB nTab = rRange.aStart.Tab();
 
             // temporary fix to workaround slow duplicate entry
             // conditions, prevent to use a whole row
@@ -1899,15 +1896,15 @@ void ScConditionalFormat::UpdateInsertTab( sc::RefUpdateInsertTabContext& rCxt )
     for (size_t i = 0, n = maRanges.size(); i < n; ++i)
     {
         // We assume that the start and end sheet indices are equal.
-        ScRange* pRange = maRanges[i];
-        SCTAB nTab = pRange->aStart.Tab();
+        ScRange & rRange = maRanges[i];
+        SCTAB nTab = rRange.aStart.Tab();
 
         if (nTab < rCxt.mnInsertPos)
             // Unaffected.
             continue;
 
-        pRange->aStart.IncTab(rCxt.mnSheets);
-        pRange->aEnd.IncTab(rCxt.mnSheets);
+        rRange.aStart.IncTab(rCxt.mnSheets);
+        rRange.aEnd.IncTab(rCxt.mnSheets);
     }
 
     for (auto it = maEntries.cbegin(); it != maEntries.cend(); ++it)
@@ -1919,8 +1916,8 @@ void ScConditionalFormat::UpdateDeleteTab( sc::RefUpdateDeleteTabContext& rCxt )
     for (size_t i = 0, n = maRanges.size(); i < n; ++i)
     {
         // We assume that the start and end sheet indices are equal.
-        ScRange* pRange = maRanges[i];
-        SCTAB nTab = pRange->aStart.Tab();
+        ScRange & rRange = maRanges[i];
+        SCTAB nTab = rRange.aStart.Tab();
 
         if (nTab < rCxt.mnDeletePos)
             // Left of the deleted sheet(s).  Unaffected.
@@ -1929,14 +1926,14 @@ void ScConditionalFormat::UpdateDeleteTab( sc::RefUpdateDeleteTabContext& rCxt )
         if (nTab <= rCxt.mnDeletePos+rCxt.mnSheets-1)
         {
             // On the deleted sheet(s).
-            pRange->aStart.SetTab(-1);
-            pRange->aEnd.SetTab(-1);
+            rRange.aStart.SetTab(-1);
+            rRange.aEnd.SetTab(-1);
             continue;
         }
 
         // Right of the deleted sheet(s).  Adjust the sheet indices.
-        pRange->aStart.IncTab(-1*rCxt.mnSheets);
-        pRange->aEnd.IncTab(-1*rCxt.mnSheets);
+        rRange.aStart.IncTab(-1*rCxt.mnSheets);
+        rRange.aEnd.IncTab(-1*rCxt.mnSheets);
     }
 
     for (auto it = maEntries.cbegin(); it != maEntries.cend(); ++it)
@@ -1950,8 +1947,8 @@ void ScConditionalFormat::UpdateMoveTab( sc::RefUpdateMoveTabContext& rCxt )
     SCTAB nMaxTab = std::max<SCTAB>(rCxt.mnOldPos, rCxt.mnNewPos);
     for(size_t i = 0; i < n; ++i)
     {
-        ScRange* pRange = maRanges[i];
-        SCTAB nTab = pRange->aStart.Tab();
+        ScRange & rRange = maRanges[i];
+        SCTAB nTab = rRange.aStart.Tab();
         if(nTab < nMinTab || nTab > nMaxTab)
         {
             continue;
@@ -1959,20 +1956,20 @@ void ScConditionalFormat::UpdateMoveTab( sc::RefUpdateMoveTabContext& rCxt )
 
         if (nTab == rCxt.mnOldPos)
         {
-            pRange->aStart.SetTab(rCxt.mnNewPos);
-            pRange->aEnd.SetTab(rCxt.mnNewPos);
+            rRange.aStart.SetTab(rCxt.mnNewPos);
+            rRange.aEnd.SetTab(rCxt.mnNewPos);
             continue;
         }
 
         if (rCxt.mnNewPos < rCxt.mnOldPos)
         {
-            pRange->aStart.IncTab();
-            pRange->aEnd.IncTab();
+            rRange.aStart.IncTab();
+            rRange.aEnd.IncTab();
         }
         else
         {
-            pRange->aStart.IncTab(-1);
-            pRange->aEnd.IncTab(-1);
+            rRange.aStart.IncTab(-1);
+            rRange.aEnd.IncTab(-1);
         }
     }
 
@@ -1985,7 +1982,7 @@ void ScConditionalFormat::DeleteArea( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCR
     if (maRanges.empty())
         return;
 
-    SCTAB nTab = maRanges[0]->aStart.Tab();
+    SCTAB nTab = maRanges[0].aStart.Tab();
     maRanges.DeleteArea( nCol1, nRow1, nTab, nCol2, nRow2, nTab );
 }
 
@@ -2204,8 +2201,7 @@ ScRangeList ScConditionalFormatList::GetCombinedRange() const
         const ScRangeList& rRange = itr->GetRange();
         for (size_t i = 0, n = rRange.size(); i < n; ++i)
         {
-            if (rRange[i])
-                aRange.Join(*rRange[i]);
+            aRange.Join(rRange[i]);
         }
     }
     return aRange;
@@ -2228,7 +2224,7 @@ void ScConditionalFormatList::AddToDocument(ScDocument* pDoc) const
         if (rRange.empty())
             continue;
 
-        SCTAB nTab = rRange.front()->aStart.Tab();
+        SCTAB nTab = rRange.front().aStart.Tab();
         pDoc->AddCondFormatData(rRange, nTab, itr->GetKey());
     }
 }

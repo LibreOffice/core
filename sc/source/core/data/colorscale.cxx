@@ -393,13 +393,13 @@ std::vector<double>& ScColorFormat::getValues() const
         const ScRangeList& aRanges = GetRange();
         for(size_t i = 0; i < n; ++i)
         {
-            const ScRange* pRange = aRanges[i];
-            SCTAB nTab = pRange->aStart.Tab();
+            const ScRange & rRange = aRanges[i];
+            SCTAB nTab = rRange.aStart.Tab();
 
-            SCCOL nColStart = pRange->aStart.Col();
-            SCROW nRowStart = pRange->aStart.Row();
-            SCCOL nColEnd = pRange->aEnd.Col();
-            SCROW nRowEnd = pRange->aEnd.Row();
+            SCCOL nColStart = rRange.aStart.Col();
+            SCROW nRowStart = rRange.aStart.Row();
+            SCCOL nColEnd = rRange.aEnd.Col();
+            SCROW nRowEnd = rRange.aEnd.Row();
 
             if(nRowEnd == MAXROW)
             {

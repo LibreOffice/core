@@ -269,7 +269,7 @@ public:
     ScRange       m_aLastWithInMarkRange;
     OUString      m_strCurCellValue;
     ScRangeList   m_LastMarkedRanges;
-    typedef std::vector<ScRange*> VEC_RANGE;
+    typedef std::vector<ScRange> VEC_RANGE;
     VEC_RANGE     m_vecTempRange;
     typedef std::pair<sal_uInt16,sal_uInt16> PAIR_COL;
     typedef std::vector<PAIR_COL> VEC_COL;
@@ -280,7 +280,7 @@ public:
     bool IsScAddrFormulaSel (const ScAddress &addr) const;
     bool IsFormulaMode();
     ScMyAddress CalcScAddressFromRangeList(ScRangeList *pMarkedRanges,sal_Int32 nSelectedChildIndex);
-    static bool CalcScRangeDifferenceMax(const ScRange *pSrc, const ScRange *pDest,int nMax,VEC_MYADDR &vecRet,int &nSize);
+    static bool CalcScRangeDifferenceMax(const ScRange & rSrc, const ScRange & rDest,int nMax,VEC_MYADDR &vecRet,int &nSize);
     static bool CalcScRangeListDifferenceMax(ScRangeList *pSrc,ScRangeList *pDest,int nMax,VEC_MYADDR &vecRet);
 };
 

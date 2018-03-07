@@ -1109,7 +1109,7 @@ void ScCellShell::GetState(SfxItemSet &rSet)
                         if (pDoc->HasTabNotes( rTab ))
                         {
                             bHasNotes = true;
-                            aRanges.Append(ScRange(0,0,rTab,MAXCOL,MAXROW,rTab));
+                            aRanges.push_back(ScRange(0,0,rTab,MAXCOL,MAXROW,rTab));
                         }
                     }
 

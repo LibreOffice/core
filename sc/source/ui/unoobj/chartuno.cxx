@@ -166,7 +166,7 @@ void SAL_CALL ScChartsObj::addNewByName( const OUString& rName,
         {
             ScRange aRange( static_cast<SCCOL>(pAry[i].StartColumn), pAry[i].StartRow, pAry[i].Sheet,
                             static_cast<SCCOL>(pAry[i].EndColumn),   pAry[i].EndRow,   pAry[i].Sheet );
-            pList->Append( aRange );
+            pList->push_back( aRange );
         }
     }
     ScRangeListRef xNewRanges( pList );
@@ -531,7 +531,7 @@ void ScChartObj::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const uno:
                     {
                         ScRange aRange;
                         ScUnoConversion::FillScRange( aRange, aCellRange );
-                        rRangeList->Append( aRange );
+                        rRangeList->push_back( aRange );
                     }
                     if ( pDocShell )
                     {
@@ -576,9 +576,9 @@ void ScChartObj::getFastPropertyValue( uno::Any& rValue, sal_Int32 nHandle ) con
             table::CellRangeAddress* pCellRanges = aCellRanges.getArray();
             for (size_t i = 0; i < nCount; ++i)
             {
-                ScRange aRange(*(*rRangeList)[i]);
+                ScRange const & rRange = (*rRangeList)[i];
                 table::CellRangeAddress aCellRange;
-                ScUnoConversion::FillApiRange(aCellRange, aRange);
+                ScUnoConversion::FillApiRange(aCellRange, rRange);
                 pCellRanges[i] = aCellRange;
             }
             rValue <<= aCellRanges;
@@ -661,13 +661,13 @@ uno::Sequence<table::CellRangeAddress> SAL_CALL ScChartObj::getRanges()
         table::CellRangeAddress* pAry = aSeq.getArray();
         for (size_t i = 0; i < nCount; i++)
         {
-            ScRange aRange( *(*xRanges)[i] );
+            ScRange const & rRange = (*xRanges)[i];
 
-            aRangeAddress.Sheet       = aRange.aStart.Tab();
-            aRangeAddress.StartColumn = aRange.aStart.Col();
-            aRangeAddress.StartRow    = aRange.aStart.Row();
-            aRangeAddress.EndColumn   = aRange.aEnd.Col();
-            aRangeAddress.EndRow      = aRange.aEnd.Row();
+            aRangeAddress.Sheet       = rRange.aStart.Tab();
+            aRangeAddress.StartColumn = rRange.aStart.Col();
+            aRangeAddress.StartRow    = rRange.aStart.Row();
+            aRangeAddress.EndColumn   = rRange.aEnd.Col();
+            aRangeAddress.EndRow      = rRange.aEnd.Row();
 
             pAry[i] = aRangeAddress;
         }
@@ -694,7 +694,7 @@ void SAL_CALL ScChartObj::setRanges( const uno::Sequence<table::CellRangeAddress
         {
             ScRange aRange( static_cast<SCCOL>(pAry[i].StartColumn), pAry[i].StartRow, pAry[i].Sheet,
                             static_cast<SCCOL>(pAry[i].EndColumn),   pAry[i].EndRow,   pAry[i].Sheet );
-            pList->Append( aRange );
+            pList->push_back( aRange );
         }
     }
     ScRangeListRef xNewRanges( pList );

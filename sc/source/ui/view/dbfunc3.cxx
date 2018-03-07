@@ -713,12 +713,12 @@ void ScDBFunc::GetSelectedMemberList(ScDPUniqueStringSet& rEntries, long& rDimen
 
     for (size_t nRangePos=0; nRangePos < nRangeCount && bContinue; nRangePos++)
     {
-        ScRange aRange = *(*xRanges)[nRangePos];
-        SCCOL nStartCol = aRange.aStart.Col();
-        SCROW nStartRow = aRange.aStart.Row();
-        SCCOL nEndCol = aRange.aEnd.Col();
-        SCROW nEndRow = aRange.aEnd.Row();
-        SCTAB nTab = aRange.aStart.Tab();
+        ScRange const & rRange = (*xRanges)[nRangePos];
+        SCCOL nStartCol = rRange.aStart.Col();
+        SCROW nStartRow = rRange.aStart.Row();
+        SCCOL nEndCol = rRange.aEnd.Col();
+        SCROW nEndRow = rRange.aEnd.Row();
+        SCTAB nTab = rRange.aStart.Tab();
 
         for (SCROW nRow=nStartRow; nRow<=nEndRow && bContinue; nRow++)
             for (SCCOL nCol=nStartCol; nCol<=nEndCol && bContinue; nCol++)

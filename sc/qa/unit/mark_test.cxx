@@ -120,10 +120,10 @@ static void lcl_GetSortedRanges( const ScRangeList& rRangeList, ScRangeList& rRa
     size_t nSize = rRangeList.size();
     aRanges.reserve( nSize );
     for ( size_t nIdx = 0; nIdx < nSize; ++nIdx )
-        aRanges.push_back( *rRangeList[nIdx] );
+        aRanges.push_back( rRangeList[nIdx] );
     std::sort( aRanges.begin(), aRanges.end() );
     for ( size_t nIdx = 0; nIdx < nSize; ++nIdx )
-        rRangeListOut.Append( aRanges[nIdx] );
+        rRangeListOut.push_back( aRanges[nIdx] );
 }
 
 void Test::testSimpleMark( const ScRange& rRange, const ScRange& rSelectionCover,
@@ -544,25 +544,25 @@ void Test::testMultiMark_FourRanges()
     aData.aMarks.push_back( aSingle4 );
 
     aData.aSelectionCover = ScRange( 0, 0, 0, MAXCOL, MAXROW, 0 );
-    aData.aLeftEnvelope.Append( ScRange( 9, 5, 0, 9, 10, 0 ) );
-    aData.aLeftEnvelope.Append( ScRange( 24, 7, 0, 24, 15, 0 ) );
-    aData.aLeftEnvelope.Append( ScRange( 34, 0, 0, 34, 19, 0 ) );
-    aData.aLeftEnvelope.Append( ScRange( 34, 21, 0, 34, MAXROW, 0 ) );
+    aData.aLeftEnvelope.push_back( ScRange( 9, 5, 0, 9, 10, 0 ) );
+    aData.aLeftEnvelope.push_back( ScRange( 24, 7, 0, 24, 15, 0 ) );
+    aData.aLeftEnvelope.push_back( ScRange( 34, 0, 0, 34, 19, 0 ) );
+    aData.aLeftEnvelope.push_back( ScRange( 34, 21, 0, 34, MAXROW, 0 ) );
 
-    aData.aRightEnvelope.Append( ScRange( 21, 5, 0, 21, 10, 0 ) );
-    aData.aRightEnvelope.Append( ScRange( 31, 7, 0, 31, 15, 0 ) );
-    aData.aRightEnvelope.Append( ScRange( 36, 0, 0, 36, 19, 0 ) );
-    aData.aRightEnvelope.Append( ScRange( 36, 21, 0, 36, MAXROW, 0 ) );
+    aData.aRightEnvelope.push_back( ScRange( 21, 5, 0, 21, 10, 0 ) );
+    aData.aRightEnvelope.push_back( ScRange( 31, 7, 0, 31, 15, 0 ) );
+    aData.aRightEnvelope.push_back( ScRange( 36, 0, 0, 36, 19, 0 ) );
+    aData.aRightEnvelope.push_back( ScRange( 36, 21, 0, 36, MAXROW, 0 ) );
 
-    aData.aTopEnvelope.Append( ScRange( 10, 4, 0, 20, 4, 0 ) );
-    aData.aTopEnvelope.Append( ScRange( 25, 6, 0, 30, 6, 0 ) );
-    aData.aTopEnvelope.Append( ScRange( 0, 19, 0, 34, 19, 0 ) );
-    aData.aTopEnvelope.Append( ScRange( 36, 19, 0, MAXCOL, 19, 0 ) );
+    aData.aTopEnvelope.push_back( ScRange( 10, 4, 0, 20, 4, 0 ) );
+    aData.aTopEnvelope.push_back( ScRange( 25, 6, 0, 30, 6, 0 ) );
+    aData.aTopEnvelope.push_back( ScRange( 0, 19, 0, 34, 19, 0 ) );
+    aData.aTopEnvelope.push_back( ScRange( 36, 19, 0, MAXCOL, 19, 0 ) );
 
-    aData.aBottomEnvelope.Append( ScRange( 10, 11, 0, 20, 11, 0 ) );
-    aData.aBottomEnvelope.Append( ScRange( 25, 16, 0, 30, 16, 0 ) );
-    aData.aBottomEnvelope.Append( ScRange( 0, 21, 0, 34, 21, 0 ) );
-    aData.aBottomEnvelope.Append( ScRange( 36, 21, 0, MAXCOL, 21, 0 ) );
+    aData.aBottomEnvelope.push_back( ScRange( 10, 11, 0, 20, 11, 0 ) );
+    aData.aBottomEnvelope.push_back( ScRange( 25, 16, 0, 30, 16, 0 ) );
+    aData.aBottomEnvelope.push_back( ScRange( 0, 21, 0, 34, 21, 0 ) );
+    aData.aBottomEnvelope.push_back( ScRange( 36, 21, 0, MAXCOL, 21, 0 ) );
 
     MarkArrayTestData aMarkArrayTestData1;
     aMarkArrayTestData1.nCol = 5;
@@ -744,29 +744,29 @@ void Test::testMultiMark_NegativeMarking()
     aData.aMarks.push_back( aSingle5 );
 
     aData.aSelectionCover = ScRange( 0, 4, 0, MAXCOL, 21, 0 );
-    aData.aLeftEnvelope.Append( ScRange( 9, 8, 0, 9, 11, 0 ) );
-    aData.aLeftEnvelope.Append( ScRange( 9, 13, 0, 9, 20, 0 ) );
-    aData.aLeftEnvelope.Append( ScRange( 18, 10, 0, 18, 14, 0 ) );
-    aData.aLeftEnvelope.Append( ScRange( 20, 5, 0, 20, 5, 0 ) );
+    aData.aLeftEnvelope.push_back( ScRange( 9, 8, 0, 9, 11, 0 ) );
+    aData.aLeftEnvelope.push_back( ScRange( 9, 13, 0, 9, 20, 0 ) );
+    aData.aLeftEnvelope.push_back( ScRange( 18, 10, 0, 18, 14, 0 ) );
+    aData.aLeftEnvelope.push_back( ScRange( 20, 5, 0, 20, 5, 0 ) );
 
-    aData.aRightEnvelope.Append( ScRange( 17, 5, 0, 17, 5, 0 ) );
-    aData.aRightEnvelope.Append( ScRange( 15, 10, 0, 15, 14, 0 ) );
-    aData.aRightEnvelope.Append( ScRange( 26, 8, 0, 26, 11, 0 ) );
-    aData.aRightEnvelope.Append( ScRange( 26, 13, 0, 26, 20, 0 ) );
+    aData.aRightEnvelope.push_back( ScRange( 17, 5, 0, 17, 5, 0 ) );
+    aData.aRightEnvelope.push_back( ScRange( 15, 10, 0, 15, 14, 0 ) );
+    aData.aRightEnvelope.push_back( ScRange( 26, 8, 0, 26, 11, 0 ) );
+    aData.aRightEnvelope.push_back( ScRange( 26, 13, 0, 26, 20, 0 ) );
 
-    aData.aTopEnvelope.Append( ScRange( 0, 4, 0, 16, 4, 0 ) );
-    aData.aTopEnvelope.Append( ScRange( 21, 4, 0, MAXCOL, 4, 0 ) );
-    aData.aTopEnvelope.Append( ScRange( 10, 7, 0, 25, 7, 0 ) );
-    aData.aTopEnvelope.Append( ScRange( 0, 11, 0, 9, 11, 0 ) );
-    aData.aTopEnvelope.Append( ScRange( 26, 11, 0, MAXCOL, 11, 0 ) );
-    aData.aTopEnvelope.Append( ScRange( 15, 14, 0, 18, 14, 0 ) );
+    aData.aTopEnvelope.push_back( ScRange( 0, 4, 0, 16, 4, 0 ) );
+    aData.aTopEnvelope.push_back( ScRange( 21, 4, 0, MAXCOL, 4, 0 ) );
+    aData.aTopEnvelope.push_back( ScRange( 10, 7, 0, 25, 7, 0 ) );
+    aData.aTopEnvelope.push_back( ScRange( 0, 11, 0, 9, 11, 0 ) );
+    aData.aTopEnvelope.push_back( ScRange( 26, 11, 0, MAXCOL, 11, 0 ) );
+    aData.aTopEnvelope.push_back( ScRange( 15, 14, 0, 18, 14, 0 ) );
 
-    aData.aBottomEnvelope.Append( ScRange( 0, 6, 0, 16, 6, 0 ) );
-    aData.aBottomEnvelope.Append( ScRange( 21, 6, 0, MAXCOL, 6, 0 ) );
-    aData.aBottomEnvelope.Append( ScRange( 15, 10, 0, 18, 10, 0 ) );
-    aData.aBottomEnvelope.Append( ScRange( 0, 13, 0, 9, 13, 0 ) );
-    aData.aBottomEnvelope.Append( ScRange( 26, 13, 0, MAXCOL, 13, 0 ) );
-    aData.aBottomEnvelope.Append( ScRange( 10, 21, 0, 25, 21, 0 ) );
+    aData.aBottomEnvelope.push_back( ScRange( 0, 6, 0, 16, 6, 0 ) );
+    aData.aBottomEnvelope.push_back( ScRange( 21, 6, 0, MAXCOL, 6, 0 ) );
+    aData.aBottomEnvelope.push_back( ScRange( 15, 10, 0, 18, 10, 0 ) );
+    aData.aBottomEnvelope.push_back( ScRange( 0, 13, 0, 9, 13, 0 ) );
+    aData.aBottomEnvelope.push_back( ScRange( 26, 13, 0, MAXCOL, 13, 0 ) );
+    aData.aBottomEnvelope.push_back( ScRange( 10, 21, 0, 25, 21, 0 ) );
 
     aData.aColsWithOneMark.emplace_back( 19, 8, 0, 0, 20, 0 );
     aData.aColsWithOneMark.emplace_back( 20, 8, 0, 0, 20, 0 );

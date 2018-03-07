@@ -1676,7 +1676,7 @@ ScUndoChartData::ScUndoChartData( ScDocShell* pNewDocShell, const OUString& rNam
     bAddRange( bAdd )
 {
     aNewRangeListRef = new ScRangeList;
-    aNewRangeListRef->Append( rNew );
+    aNewRangeListRef->push_back( rNew );
 
     Init();
 }

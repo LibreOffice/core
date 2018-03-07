@@ -264,7 +264,7 @@ void SAL_CALL ScXMLConditionalFormatContext::endFastElement( sal_Int32 /*nElemen
             // conditions could be loosened, but I am too tired to think on that right now.)
             if (pFormat->size() == 1 &&
                 pFormat->GetRange().size() == 1 &&
-                pFormat->GetRange()[0]->aStart == aSrcPos &&
+                pFormat->GetRange()[0].aStart == aSrcPos &&
                 HasOneSingleFullyRelativeReference( pTokens, aOffsetForSingleRelRef ))
             {
                 bSingleRelativeReference = true;
@@ -327,7 +327,7 @@ void SAL_CALL ScXMLConditionalFormatContext::endFastElement( sal_Int32 /*nElemen
                     // Mark cache entry as fresh, do necessary mangling of it and just return
                     aCacheEntry.mnAge = 0;
                     for (size_t k = 0; k < pFormat->GetRange().size(); ++k)
-                        aCacheEntry.mpFormat->GetRangeList().Join(*(pFormat->GetRange()[k]));
+                        aCacheEntry.mpFormat->GetRangeList().Join(pFormat->GetRange()[k]);
                     return;
                 }
             }

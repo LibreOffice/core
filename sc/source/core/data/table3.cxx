@@ -1235,7 +1235,7 @@ void ScTable::SortReorderByRowRefUpdate(
         // could be anywhere in the sorted range after reordering.
         for (size_t i = 0, n = aTmp.size(); i < n; ++i)
         {
-            ScRange aRange = *aTmp[i];
+            ScRange aRange = aTmp[i];
             if (!aMoveRange.Intersects(aRange))
             {
                 // Doesn't overlap with the sorted range at all.

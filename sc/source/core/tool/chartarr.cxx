@@ -68,8 +68,8 @@ ScMemChart* ScChartArray::CreateMemChart()
         return CreateMemChartMulti();
     else if ( nCount == 1 )
     {
-        ScRange* pR = aRangeListRef->front();
-        if ( pR->aStart.Tab() != pR->aEnd.Tab() )
+        const ScRange & rR = aRangeListRef->front();
+        if ( rR.aStart.Tab() != rR.aEnd.Tab() )
             return CreateMemChartMulti();
         else
             return CreateMemChartSingle();
@@ -129,7 +129,7 @@ ScMemChart* ScChartArray::CreateMemChartSingle()
     SCROW nRow2;
     SCTAB nTab2;
     ScRangeListRef aRangeListRef(GetRangeList());
-    aRangeListRef->front()->GetVars( nCol1, nRow1, nTab1, nCol2, nRow2, nTab2 );
+    aRangeListRef->front().GetVars( nCol1, nRow1, nTab1, nCol2, nRow2, nTab2 );
 
     SCCOL nStrCol = nCol1; // remember for labeling
     SCROW nStrRow = nRow1;

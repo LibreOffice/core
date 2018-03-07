@@ -462,10 +462,10 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawV
             // get "total" range for positioning
             if ( !aRanges.empty() )
             {
-                aPositionRange = *aRanges[ 0 ];
+                aPositionRange = aRanges[ 0 ];
                 for ( size_t i = 1, nCount = aRanges.size(); i < nCount; ++i )
                 {
-                    aPositionRange.ExtendTo( *aRanges[ i ] );
+                    aPositionRange.ExtendTo( aRanges[ i ] );
                 }
             }
 

@@ -337,15 +337,15 @@ void SingleColumnSpanSet::scan(const ScRangeList& rRanges, SCTAB nTab, SCCOL nCo
 {
     for (size_t i = 0, n = rRanges.size(); i < n; ++i)
     {
-        const ScRange* p = rRanges[i];
-        if (nTab < p->aStart.Tab() || p->aEnd.Tab() < nTab)
+        const ScRange & rRange = rRanges[i];
+        if (nTab < rRange.aStart.Tab() || rRange.aEnd.Tab() < nTab)
             continue;
 
-        if (nCol < p->aStart.Col() || p->aEnd.Col() < nCol)
+        if (nCol < rRange.aStart.Col() || rRange.aEnd.Col() < nCol)
             // This column is not in this range. Skip it.
             continue;
 
-        maSpans.insert_back(p->aStart.Row(), p->aEnd.Row()+1, true);
+        maSpans.insert_back(rRange.aStart.Row(), rRange.aEnd.Row()+1, true);
     }
 }
 

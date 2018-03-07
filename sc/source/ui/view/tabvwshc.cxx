@@ -614,24 +614,21 @@ bool ScTabViewShell::UseSubTotal(ScRangeList* pRangeList)
     size_t nRangeIndex (0);
     while (!bSubTotal && nRangeIndex < nRangeCount)
     {
-        const ScRange* pRange = (*pRangeList)[nRangeIndex];
-        if( pRange )
+        const ScRange& rRange = (*pRangeList)[nRangeIndex];
+        SCTAB nTabEnd(rRange.aEnd.Tab());
+        SCTAB nTab(rRange.aStart.Tab());
+        while (!bSubTotal && nTab <= nTabEnd)
         {
-            SCTAB nTabEnd(pRange->aEnd.Tab());
-            SCTAB nTab(pRange->aStart.Tab());
-            while (!bSubTotal && nTab <= nTabEnd)
+            SCROW nRowEnd(rRange.aEnd.Row());
+            SCROW nRow(rRange.aStart.Row());
+            while (!bSubTotal && nRow <= nRowEnd)
             {
-                SCROW nRowEnd(pRange->aEnd.Row());
-                SCROW nRow(pRange->aStart.Row());
-                while (!bSubTotal && nRow <= nRowEnd)
-                {
-                    if (pDoc->RowFiltered(nRow, nTab))
-                        bSubTotal = true;
-                    else
-                        ++nRow;
-                }
-                ++nTab;
+                if (pDoc->RowFiltered(nRow, nTab))
+                    bSubTotal = true;
+                else
+                    ++nRow;
             }
+            ++nTab;
         }
         ++nRangeIndex;
     }
@@ -647,14 +644,11 @@ bool ScTabViewShell::UseSubTotal(ScRangeList* pRangeList)
         nRangeIndex = 0;
         while (!bSubTotal && nRangeIndex < nRangeCount)
         {
-            const ScRange* pRange = (*pRangeList)[nRangeIndex];
-            if( pRange )
-            {
-                ScRange aDBArea;
-                rDB.GetArea(aDBArea);
-                if (aDBArea.Intersects(*pRange))
-                    bSubTotal = true;
-            }
+            const ScRange & rRange = (*pRangeList)[nRangeIndex];
+            ScRange aDBArea;
+            rDB.GetArea(aDBArea);
+            if (aDBArea.Intersects(rRange))
+                bSubTotal = true;
             ++nRangeIndex;
         }
     }
@@ -677,10 +671,10 @@ const OUString ScTabViewShell::DoAutoSum(bool& rRangeFinder, bool& rSubTotal)
         const size_t nCount = aMarkRangeList.size();
         for ( size_t i = 0; i < nCount; ++i )
         {
-            const ScRange aRange( *aMarkRangeList[i] );
-            if ( pDoc->IsBlockEmpty( aRange.aStart.Tab(),
-                 aRange.aStart.Col(), aRange.aStart.Row(),
-                 aRange.aEnd.Col(), aRange.aEnd.Row() ) )
+            const ScRange & rRange( aMarkRangeList[i] );
+            if ( pDoc->IsBlockEmpty( rRange.aStart.Tab(),
+                 rRange.aStart.Col(), rRange.aStart.Row(),
+                 rRange.aEnd.Col(), rRange.aEnd.Row() ) )
             {
                 bEmpty = true;
                 break;
@@ -693,7 +687,7 @@ const OUString ScTabViewShell::DoAutoSum(bool& rRangeFinder, bool& rSubTotal)
             const bool bDataFound = GetAutoSumArea( aRangeList );
             if ( bDataFound )
             {
-                ScAddress aAddr = aRangeList.back()->aEnd;
+                ScAddress aAddr = aRangeList.back().aEnd;
                 aAddr.IncRow();
                 const bool bSubTotal( UseSubTotal( &aRangeList ) );
                 EnterAutoSum( aRangeList, bSubTotal, aAddr );
@@ -704,15 +698,15 @@ const OUString ScTabViewShell::DoAutoSum(bool& rRangeFinder, bool& rSubTotal)
             const bool bSubTotal( UseSubTotal( &aMarkRangeList ) );
             for ( size_t i = 0; i < nCount; ++i )
             {
-                const ScRange aRange( *aMarkRangeList[i] );
+                const ScRange & rRange = aMarkRangeList[i];
                 const bool bSetCursor = ( i == nCount - 1 );
                 const bool bContinue = ( i != 0 );
-                if ( !AutoSum( aRange, bSubTotal, bSetCursor, bContinue ) )
+                if ( !AutoSum( rRange, bSubTotal, bSetCursor, bContinue ) )
                 {
-                    MarkRange( aRange, false );
-                    SetCursor( aRange.aEnd.Col(), aRange.aEnd.Row() );
+                    MarkRange( rRange, false );
+                    SetCursor( rRange.aEnd.Col(), rRange.aEnd.Row() );
                     const ScRangeList aRangeList;
-                    ScAddress aAddr = aRange.aEnd;
+                    ScAddress aAddr = rRange.aEnd;
                     aAddr.IncRow();
                     aFormula = GetAutoSumFormula( aRangeList, bSubTotal, aAddr );
                     break;

@@ -1161,8 +1161,8 @@ bool isEditable(ScDocShell& rDocShell, const ScRangeList& rRanges, bool bApi)
 
     for (size_t i = 0, n = rRanges.size(); i < n; ++i)
     {
-        const ScRange* p = rRanges[i];
-        ScEditableTester aTester(&rDoc, *p);
+        const ScRange & r = rRanges[i];
+        ScEditableTester aTester(&rDoc, r);
         if (!aTester.IsEditable())
         {
             if (!bApi)
@@ -1254,8 +1254,8 @@ bool ScDBDocFunc::DataPilotUpdate( ScDPObject* pOldObj, const ScDPObject* pNewOb
     WaitObject aWait( ScDocShell::GetActiveDialogParent() );
 
     ScRangeList aRanges;
-    aRanges.Append(pOldObj->GetOutRange());
-    aRanges.Append(pNewObj->GetOutRange().aStart); // at least one cell in the output position must be editable.
+    aRanges.push_back(pOldObj->GetOutRange());
+    aRanges.push_back(pNewObj->GetOutRange().aStart); // at least one cell in the output position must be editable.
     if (!isEditable(rDocShell, aRanges, bApi))
         return false;
 

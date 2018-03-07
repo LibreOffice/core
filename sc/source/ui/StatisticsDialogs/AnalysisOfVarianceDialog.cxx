@@ -66,7 +66,7 @@ OUString lclCreateMultiParameterFormula(
     OUString aResult;
     for (size_t i = 0; i < aRangeList.size(); i++)
     {
-        OUString aRangeString(aRangeList[i]->Format(ScRefFlags::RANGE_ABS, pDocument, aAddressDetails));
+        OUString aRangeString(aRangeList[i].Format(ScRefFlags::RANGE_ABS, pDocument, aAddressDetails));
         OUString aFormulaString = aFormulaTemplate.replaceAll(aWildcard, aRangeString);
         aResult += aFormulaString;
         if(i != aRangeList.size() - 1) // Not Last
@@ -86,7 +86,7 @@ void lclMakeSubRangesList(ScRangeList& rRangeList, const ScRange& rInputRange, S
     for( ; pIterator->hasNext(); pIterator->next() )
     {
         ScRange aRange = pIterator->get();
-        rRangeList.Append(aRange);
+        rRangeList.push_back(aRange);
     }
 }
 
@@ -170,9 +170,9 @@ void ScAnalysisOfVarianceDialog::RowColumn(ScRangeList& rRangeList, AddressWalke
     {
         for (size_t i = 0; i < rRangeList.size(); i++)
         {
-            ScRange* pRange = rRangeList[i];
+            ScRange const & rRange = rRangeList[i];
             aTemplate.setTemplate(sFormula);
-            aTemplate.applyRange(strWildcardRange, *pRange);
+            aTemplate.applyRange(strWildcardRange, rRange);
             aOutput.writeFormula(aTemplate.getTemplate());
             if (pResultRange != nullptr)
                 pResultRange->aEnd = aOutput.current();
@@ -249,7 +249,7 @@ void ScAnalysisOfVarianceDialog::AnovaSingleFactor(AddressWalkerWriter& output, 
     }
     output.nextRow();
 
-    aTemplate.autoReplaceRange("%FIRST_COLUMN%", *aRangeList[0]);
+    aTemplate.autoReplaceRange("%FIRST_COLUMN%", aRangeList[0]);
 
     // Between Groups
     {
@@ -416,8 +416,8 @@ void ScAnalysisOfVarianceDialog::AnovaTwoFactor(AddressWalkerWriter& output, For
 
     // Setup auto-replace strings
     aTemplate.autoReplaceRange(strWildcardRange, mInputRange);
-    aTemplate.autoReplaceRange("%FIRST_COLUMN%", *aColumnRangeList[0]);
-    aTemplate.autoReplaceRange("%FIRST_ROW%",    *aRowRangeList[0]);
+    aTemplate.autoReplaceRange("%FIRST_COLUMN%", aColumnRangeList[0]);
+    aTemplate.autoReplaceRange("%FIRST_ROW%",    aRowRangeList[0]);
 
     // Rows
     {

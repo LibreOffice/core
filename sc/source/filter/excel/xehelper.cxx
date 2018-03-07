@@ -250,8 +250,8 @@ void XclExpAddressConverter::ValidateRangeList( ScRangeList& rScRanges, bool bWa
 {
     for ( size_t nRange = rScRanges.size(); nRange > 0; )
     {
-        ScRange* pScRange = rScRanges[ --nRange ];
-        if( !CheckRange( *pScRange, bWarn ) )
+        ScRange & rScRange = rScRanges[ --nRange ];
+        if( !CheckRange( rScRange, bWarn ) )
             rScRanges.Remove(nRange);
     }
 }
@@ -262,12 +262,10 @@ void XclExpAddressConverter::ConvertRangeList( XclRangeList& rXclRanges,
     rXclRanges.clear();
     for( size_t nPos = 0, nCount = rScRanges.size(); nPos < nCount; ++nPos )
     {
-        if( const ScRange* pScRange = rScRanges[ nPos ] )
-        {
-            XclRange aXclRange( ScAddress::UNINITIALIZED );
-            if( ConvertRange( aXclRange, *pScRange, bWarn ) )
-                rXclRanges.push_back( aXclRange );
-        }
+        const ScRange & rScRange = rScRanges[ nPos ];
+        XclRange aXclRange( ScAddress::UNINITIALIZED );
+        if( ConvertRange( aXclRange, rScRange, bWarn ) )
+            rXclRanges.push_back( aXclRange );
     }
 }
 

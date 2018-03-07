@@ -388,7 +388,7 @@ void ScMultiBlockUndo::ShowBlock()
         return;
 
     // Move to the sheet of the first range.
-    ScRange aRange = *maBlockRanges.front();
+    ScRange aRange = maBlockRanges.front();
     ShowTable(aRange);
     pViewShell->MoveCursorAbs(
         aRange.aStart.Col(), aRange.aStart.Row(), SC_FOLLOW_JUMP, false, false);
@@ -399,7 +399,7 @@ void ScMultiBlockUndo::ShowBlock()
 
     for (size_t i = 1, n = maBlockRanges.size(); i < n; ++i)
     {
-        aRange = *maBlockRanges[i];
+        aRange = maBlockRanges[i];
         aRange.aStart.SetTab(nTab);
         aRange.aEnd.SetTab(nTab);
         pViewShell->MarkRange(aRange, false, true);
