@@ -908,7 +908,7 @@ namespace canvas
             pCols[2] = rColor.GetBlue();
             pCols[3] = 255-rColor.GetTransparency();
 #else
-            *reinterpret_cast<sal_Int32*>(pCols) = rColor.GetColor();
+            *reinterpret_cast<sal_Int32*>(pCols) = sal_Int32(rColor);
 #endif
             return aRet;
         }

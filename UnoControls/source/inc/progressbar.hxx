@@ -138,8 +138,8 @@ private:
 
     bool            m_bHorizontal;   // orientation for steps            [true=horizontal/false=vertical]
     css::awt::Size  m_aBlockSize;   // width and height of a block      [>=0,0]
-    sal_Int32       m_nForegroundColor;   //                                  (alpha,r,g,b)
-    sal_Int32       m_nBackgroundColor;   //                                  (alpha,r,g,b)
+    Color           m_nForegroundColor;   //                                  (alpha,r,g,b)
+    Color           m_nBackgroundColor;   //                                  (alpha,r,g,b)
     sal_Int32       m_nMinRange;   // lowest value  =   0%             [long, <_nMaxRange]
     sal_Int32       m_nMaxRange;   // highest value = 100%             [long, >_nMinRange]
     double          m_nBlockValue;   // value for one block              [long, >0]

@@ -144,7 +144,7 @@ void SAL_CALL ProgressBar::setForegroundColor( sal_Int32 nColor )
     MutexGuard  aGuard (m_aMutex);
 
     // Safe color for later use.
-    m_nForegroundColor = nColor;
+    m_nForegroundColor = Color(nColor);
 
     // Repaint control
     impl_paint ( 0, 0, impl_getGraphicsPeer() );
@@ -158,7 +158,7 @@ void SAL_CALL ProgressBar::setBackgroundColor ( sal_Int32 nColor )
     MutexGuard  aGuard (m_aMutex);
 
     // Safe color for later use.
-    m_nBackgroundColor = nColor;
+    m_nBackgroundColor = Color(nColor);
 
     // Repaint control
     impl_paint ( 0, 0, impl_getGraphicsPeer() );
@@ -316,13 +316,13 @@ void ProgressBar::impl_paint ( sal_Int32 nX, sal_Int32 nY, const Reference< XGra
 
         // Clear background
         // (same color for line and fill)
-        rGraphics->setFillColor ( m_nBackgroundColor                        );
-        rGraphics->setLineColor ( m_nBackgroundColor                        );
+        rGraphics->setFillColor ( sal_Int32(m_nBackgroundColor) );
+        rGraphics->setLineColor ( sal_Int32(m_nBackgroundColor) );
         rGraphics->drawRect     ( nX, nY, impl_getWidth(), impl_getHeight() );
 
         // same color for line and fill for blocks
-        rGraphics->setFillColor ( m_nForegroundColor );
-        rGraphics->setLineColor ( m_nForegroundColor );
+        rGraphics->setFillColor ( sal_Int32(m_nForegroundColor) );
+        rGraphics->setLineColor ( sal_Int32(m_nForegroundColor) );
 
         sal_Int32   nBlockStart     =   0;   // = left site of new block
         sal_Int32   nBlockCount     =   m_nBlockValue!=0.00 ? static_cast<sal_Int32>((m_nValue-m_nMinRange)/m_nBlockValue) : 0;   // = number of next block
