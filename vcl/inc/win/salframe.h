@@ -82,6 +82,12 @@ public:
     bool                    mbPropertiesStored;     // has values stored in the window property store
 
     void updateScreenNumber();
+
+private:
+    void ImplSetParentFrame( HWND hNewParentWnd, bool bAsChild );
+    bool InitFrameGraphics( WinSalGraphics *pGraphics, HDC hDC, HWND hWnd );
+    bool ReleaseFrameGraphics( WinSalGraphics* pGraphics );
+
 public:
     WinSalFrame();
     virtual ~WinSalFrame() override;
