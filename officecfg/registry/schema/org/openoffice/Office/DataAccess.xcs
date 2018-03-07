@@ -954,9 +954,9 @@
       </prop>
       <prop oor:name="IsIgnoreDiacritics_CTL" oor:type="xs:boolean" oor:nillable="false">
         <info>
-          <desc>Specifies search with the use of CTL option.</desc>
+          <desc>Specifies search ignores diacritics, not only CTL though.</desc>
         </info>
-        <value>true</value>
+        <value>false</value>
       </prop>
       <prop oor:name="IsIgnoreKashida_CTL" oor:type="xs:boolean" oor:nillable="false">
         <info>
