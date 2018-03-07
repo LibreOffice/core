@@ -1080,7 +1080,7 @@ SfxViewShell::SfxViewShell
     rViewArr.push_back(this);
 
     if (comphelper::LibreOfficeKit::isActive())
-        pViewFrame->GetWindow().SetLOKNotifier(this, true);
+        pViewFrame->GetFrame().GetTopWindow_Impl()->SetLOKNotifier(this, true);
 }
 
 
