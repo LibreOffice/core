@@ -170,7 +170,7 @@ namespace {
 // senddoc process lifetime. So we use base temppath for the attachments,
 // and let the senddoc to do the cleanup if it was started successfully.
 // This function works like Desktop::CreateTemporaryDirectory()
-OUString&& InitBaseTempDirURL()
+OUString InitBaseTempDirURL()
 {
     // No need to intercept an exception here, since
     // Desktop::CreateTemporaryDirectory() has ensured that path manager is available
@@ -183,7 +183,7 @@ OUString&& InitBaseTempDirURL()
     if (aRetURL.endsWith("/"))
         aRetURL = aRetURL.copy(0, aRetURL.getLength() - 1);
 
-    return std::move(aRetURL);
+    return aRetURL;
 }
 
 const OUString& GetBaseTempDirURL()
