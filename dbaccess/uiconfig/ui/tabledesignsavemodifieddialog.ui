@@ -5,6 +5,7 @@
   <object class="GtkMessageDialog" id="TableDesignSaveModifiedDialog">
     <property name="can_focus">False</property>
     <property name="resizable">False</property>
+    <property name="modal">True</property>
     <property name="type_hint">dialog</property>
     <property name="skip_taskbar_hint">True</property>
     <property name="message_type">question</property>

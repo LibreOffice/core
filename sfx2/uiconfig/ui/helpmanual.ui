@@ -6,6 +6,7 @@
     <property name="can_focus">False</property>
     <property name="title" translatable="yes" context="helpmanual|onlinehelpmanual">%PRODUCTNAME Help Not Installed</property>
     <property name="resizable">False</property>
+    <property name="modal">True</property>
     <property name="type_hint">dialog</property>
     <property name="skip_taskbar_hint">True</property>
     <property name="text" translatable="yes" context="helpmanual|onlinehelpmanual">The %PRODUCTNAME built-in help for current UI language ($UILOCALE) is not installed on your computer.</property>
