@@ -261,7 +261,7 @@ Index: solenv/inc/tg_compv.mk
 ===================================================================
 --- solenv/inc/tg_compv.mk	(revision 1826001)
 +++ solenv/inc/tg_compv.mk	(working copy)
-@@ -72,7 +72,10 @@
+@@ -72,9 +72,13 @@
  .IF "$(COM)"=="MSC"
  .IF "$(CCNUMVER)">="001200000000"
  COMID=MSC
@@ -271,6 +271,9 @@ Index: solenv/inc/tg_compv.mk
 +COMNAME=mscx
  .ENDIF
  .ENDIF
++.ENDIF
+ 
+ .IF "$(COM)"=="GCC"
  
 Index: odk/settings/settings.mk
 ===================================================================
