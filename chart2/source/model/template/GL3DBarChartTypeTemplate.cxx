@@ -151,8 +151,7 @@ GL3DBarChartTypeTemplate::getChartTypeForNewSeries( const uno::Sequence<uno::Ref
 
     try
     {
-        rtl::Reference<GL3DBarChartType> chart(
-            new GL3DBarChartType(GetComponentContext()));
+        rtl::Reference<GL3DBarChartType> chart(new GL3DBarChartType());
         bool bVal = false;
         getFastPropertyValue(PROP_GL3DCHARTTYPE_ROUNDED_EDGE) >>= bVal;
         chart->setPropertyValue(CHART_UNONAME_ROUNDED_EDGE, uno::Any(bVal));

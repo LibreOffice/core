@@ -113,7 +113,6 @@ private:
     const SdrView*                          mpView;
     sal_uInt32                              mlOldWidth;
     sal_uInt32                              mlOldHeight;
-    Point                                   maAnchorPos;    //anchor position
     long                                    mlRotX;
     long                                    mlRotY;
     Fraction                                maUIScale;

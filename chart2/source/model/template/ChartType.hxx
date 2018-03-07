@@ -53,7 +53,7 @@ class ChartType :
     public ::property::OPropertySet
 {
 public:
-    explicit ChartType( css::uno::Reference< css::uno::XComponentContext > const & xContext );
+    explicit ChartType();
     virtual ~ChartType() override;
 
     /// merge XInterface implementations
@@ -123,9 +123,6 @@ private:
         const css::uno::Reference< css::chart2::XDataSeries >& aDataSeries );
 
 private:
-    css::uno::Reference< css::uno::XComponentContext >
-        const m_xContext;
-
     typedef
         std::vector< css::uno::Reference< css::chart2::XDataSeries > >  tDataSeriesContainerType;
 

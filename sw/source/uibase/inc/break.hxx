@@ -43,7 +43,6 @@ class SwBreakDlg
     std::unique_ptr<weld::SpinButton> m_xPageNumEdit;
     std::unique_ptr<weld::Button> m_xOkBtn;
 
-    OUString        aTemplate;
     sal_uInt16      nKind;
     ::boost::optional<sal_uInt16>      oPgNum;
 

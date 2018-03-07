@@ -81,9 +81,8 @@ static const OUStringLiteral our_sFDBLocation( "firebird.fdb" );
  */
 static const OUStringLiteral our_sFBKLocation( "firebird.fbk" );
 
-Connection::Connection(FirebirdDriver*    _pDriver)
+Connection::Connection()
     : Connection_BASE(m_aMutex)
-    , m_xDriver(_pDriver)
     , m_sConnectionURL()
     , m_sFirebirdURL()
     , m_bIsEmbedded(false)
@@ -923,7 +922,6 @@ void Connection::disposing()
     // TODO: write to storage again?
 
     cppu::WeakComponentImplHelperBase::disposing();
-    m_xDriver.clear();
 
     if (m_pDatabaseFileDir)
     {

@@ -121,9 +121,7 @@ struct StaticPieChartTypeInfo : public rtl::StaticAggregate< uno::Reference< bea
 namespace chart
 {
 
-PieChartType::PieChartType(
-    const uno::Reference< uno::XComponentContext > & xContext) :
-        ChartType( xContext )
+PieChartType::PieChartType()
 {
 }
 
@@ -234,10 +232,10 @@ css::uno::Sequence< OUString > SAL_CALL PieChartType::getSupportedServiceNames()
 } //  namespace chart
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
-com_sun_star_comp_chart_PieChartType_get_implementation(css::uno::XComponentContext *context,
+com_sun_star_comp_chart_PieChartType_get_implementation(css::uno::XComponentContext * /*context*/,
         css::uno::Sequence<css::uno::Any> const &)
 {
-    return cppu::acquire(new ::chart::PieChartType(context));
+    return cppu::acquire(new ::chart::PieChartType);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

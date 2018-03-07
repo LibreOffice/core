@@ -27,8 +27,7 @@ namespace chart
 class PieChartType final: public ChartType
 {
 public:
-    explicit PieChartType(
-        css::uno::Reference< css::uno::XComponentContext > const & xContext );
+    explicit PieChartType();
     virtual ~PieChartType() override;
 
     virtual OUString SAL_CALL

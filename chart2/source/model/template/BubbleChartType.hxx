@@ -28,8 +28,7 @@ namespace chart
 class BubbleChartType final : public ChartType
 {
 public:
-    explicit BubbleChartType(
-        css::uno::Reference< css::uno::XComponentContext > const & xContext );
+    explicit BubbleChartType();
     virtual ~BubbleChartType() override;
 
     virtual OUString SAL_CALL

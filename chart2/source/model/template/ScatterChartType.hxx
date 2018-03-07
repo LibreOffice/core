@@ -29,7 +29,6 @@ class ScatterChartType final : public ChartType
 {
 public:
     ScatterChartType(
-        css::uno::Reference< css::uno::XComponentContext > const & xContext,
         css::chart2::CurveStyle eCurveStyle =  css::chart2::CurveStyle_LINES,
         sal_Int32 nResolution = 20,
         sal_Int32 nOrder = 3 );

@@ -26,9 +26,7 @@ using namespace ::com::sun::star;
 namespace chart
 {
 
-BarChartType::BarChartType(
-    const uno::Reference< uno::XComponentContext > & xContext ) :
-        ChartType( xContext )
+BarChartType::BarChartType()
 {}
 
 BarChartType::BarChartType( const BarChartType & rOther ) :
@@ -80,10 +78,10 @@ css::uno::Sequence< OUString > SAL_CALL BarChartType::getSupportedServiceNames()
 } //  namespace chart
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
-com_sun_star_comp_chart_BarChartType_get_implementation(css::uno::XComponentContext *context,
+com_sun_star_comp_chart_BarChartType_get_implementation(css::uno::XComponentContext * /*context*/,
         css::uno::Sequence<css::uno::Any> const &)
 {
-    return cppu::acquire(new ::chart::BarChartType(context));
+    return cppu::acquire(new ::chart::BarChartType);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

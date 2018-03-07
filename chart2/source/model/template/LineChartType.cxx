@@ -131,9 +131,7 @@ struct StaticLineChartTypeInfo : public rtl::StaticAggregate< uno::Reference< be
 namespace chart
 {
 
-LineChartType::LineChartType(
-    const uno::Reference< uno::XComponentContext > & xContext ) :
-        ChartType( xContext )
+LineChartType::LineChartType()
 {
 }
 
@@ -199,10 +197,10 @@ css::uno::Sequence< OUString > SAL_CALL LineChartType::getSupportedServiceNames(
 } //  namespace chart
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
-com_sun_star_comp_chart_LineChartType_get_implementation(css::uno::XComponentContext *context,
+com_sun_star_comp_chart_LineChartType_get_implementation(css::uno::XComponentContext * /*context*/,
         css::uno::Sequence<css::uno::Any> const &)
 {
-    return cppu::acquire(new ::chart::LineChartType(context));
+    return cppu::acquire(new ::chart::LineChartType);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
