@@ -32,6 +32,7 @@ interface XApplicationBase
     [attribute] boolean DisplayStatusBar;
     [attribute] boolean Interactive;
     [attribute] boolean Visible;
+    [attribute] string Caption;
 
     [attribute, readonly] string Version;
     [attribute, readonly] any VBE;

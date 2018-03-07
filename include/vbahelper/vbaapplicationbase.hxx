@@ -64,6 +64,8 @@ public:
     virtual void SAL_CALL setInteractive( sal_Bool bInteractive ) override;
     virtual sal_Bool SAL_CALL getVisible() override;
     virtual void SAL_CALL setVisible( sal_Bool bVisible ) override;
+    virtual OUString SAL_CALL getCaption() override;
+    virtual void SAL_CALL setCaption( const OUString& sCaption ) override;
     virtual void SAL_CALL OnKey( const OUString& Key, const css::uno::Any& Procedure ) override;
     virtual css::uno::Any SAL_CALL CommandBars( const css::uno::Any& aIndex ) override;
     virtual OUString SAL_CALL getVersion() override;
