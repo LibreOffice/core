@@ -237,6 +237,11 @@ void DrawViewShell::ReadFrameViewData(FrameView* pView)
         mpDrawView->SetMarkHdlSizePixel( 9 );
 
     SdrPageView* pPageView = mpDrawView->GetSdrPageView();
+    OUString aBackgroundLayer = SdResID(STR_LAYER_BckGRND);
+    if (pPageView->IsLayerVisible(aBackgroundLayer)
+    {
+       pPageView->SetLayerVisible(aBackgroundLayer, false);
+    }
     if (pPageView)
     {
         if ( pPageView->GetVisibleLayers() != pView->GetVisibleLayers() )
