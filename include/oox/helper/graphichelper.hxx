@@ -143,14 +143,6 @@ public:
                             const css::uno::Reference< css::io::XInputStream >& rxInStrm,
                             const WmfExternal* pExtHeader ) const;
 
-    /** Creates a persistent graphic object from the passed binary memory block.
-        @return  The URL of the created and internally cached graphic object. */
-    OUString     importGraphicObject( const StreamDataSequence& rGraphicData ) const;
-
-    /** Imports a graphic object from the storage stream with the passed path and name.
-        @return  The URL of the created and internally cached graphic object. */
-    OUString     importEmbeddedGraphicObject( const OUString& rStreamName ) const;
-
     /** calculates the original size of a graphic which is necessary to be able to calculate cropping values
         @return The original Graphic size in 100thmm */
     css::awt::Size getOriginalSize( const css::uno::Reference< css::graphic::XGraphic >& rxGraphic ) const;

@@ -309,15 +309,6 @@ const SfxSlot* SfxSlotPool::NextSlot()
 // Query SlotName with help text
 
 
-SfxInterface* SfxSlotPool::FirstInterface()
-{
-    _nCurInterface = 0;
-    if ( _vInterfaces.empty() )
-        return nullptr;
-    return _pParentPool ? _pParentPool->FirstInterface() : _vInterfaces[0];
-}
-
-
 const SfxSlot* SfxSlotPool::GetUnoSlot( const OUString& rName ) const
 {
     const SfxSlot *pSlot = nullptr;

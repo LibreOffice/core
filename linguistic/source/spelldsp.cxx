@@ -186,14 +186,6 @@ SpellCheckerDispatcher::~SpellCheckerDispatcher()
 }
 
 
-void SpellCheckerDispatcher::ClearSvcList()
-{
-    // release memory for each table entry
-    SpellSvcByLangMap_t aTmp;
-    m_aSvcMap.swap( aTmp );
-}
-
-
 Sequence< Locale > SAL_CALL SpellCheckerDispatcher::getLocales()
 {
     MutexGuard  aGuard( GetLinguMutex() );

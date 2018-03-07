@@ -56,7 +56,7 @@ OUString test::Directories::getURLFromWorkdir( const OUString& rPath )
     return m_aWorkdirRootURL + rPath;
 }
 
-OUString test::Directories::getPathFromWorkdir( const OUString& rPath )
+UString test::Directories::getPathFromWorkdir( const OUString& rPath )
 {
     return m_aWorkdirRootPath + rPath;
 }

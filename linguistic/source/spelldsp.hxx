@@ -71,8 +71,6 @@ class SpellCheckerDispatcher :
     inline css::uno::Reference< css::linguistic2::XSearchableDictionaryList >
             GetDicList();
 
-    void    ClearSvcList();
-
     /// @throws css::uno::RuntimeException
     /// @throws css::lang::IllegalArgumentException
     bool    isValid_Impl(const OUString& aWord, LanguageType nLanguage,

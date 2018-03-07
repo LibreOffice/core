@@ -71,7 +71,6 @@ $(eval $(call gb_Library_add_exception_objects,lwpft,\
     lotuswordpro/source/filter/lwpcontent \
     lotuswordpro/source/filter/lwpdivinfo \
     lotuswordpro/source/filter/lwpdivopts \
-    lotuswordpro/source/filter/lwpdllist \
     lotuswordpro/source/filter/lwpdlvlist \
     lotuswordpro/source/filter/lwpdoc \
     lotuswordpro/source/filter/lwpdocdata \

@@ -204,7 +204,6 @@ public:
     void WriteGraphicCropProperties(css::uno::Reference<css::beans::XPropertySet> const & rxPropertySet,
                                     Size const & rOriginalSize, MapMode const & rMapMode);
 
-    void WriteSrcRect( const css::uno::Reference< css::beans::XPropertySet >&, const OUString& );
     void WriteSrcRectXGraphic(css::uno::Reference<css::beans::XPropertySet> const & rxPropertySet,
                               css::uno::Reference<css::graphic::XGraphic> const & rxGraphic);
 

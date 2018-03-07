@@ -50,8 +50,7 @@ private:
 
 public:
     SwNoteURL() {}
-    void InsertURLNote( const OUString& rURL, const OUString& rTarget,
-                 const SwRect& rRect );
+
     void FillImageMap( ImageMap* pMap, const Point& rPos, const MapMode& rMap );
 };
 
