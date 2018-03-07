@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba2be162_5e372ae3",
+        "filename": "fpicker/source/win32/filepicker/asyncrequests.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2018-03-07T14:46:53Z",
+      "side": 1,
+      "message": "i\u0027d put the SolarMutexGuard right above this to make it look properly ridiculous :) but oh well, whatever works...",
+      "revId": "7fb6fb7d1809f4b3349556f5fc64360ff6958f6f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
