@@ -126,12 +126,9 @@ sal_Unicode bestFitOpenSymbolToMSFont(sal_Unicode cChar,
 }
 
 
-OString ConvertColor( const Color & rColor, bool bAutoColor )
+OString ConvertColor( const Color &rColor )
 {
     OString color( "auto" );
-
-    if (bAutoColor && rColor == OOXML_COLOR_AUTO)
-        return color;
 
     if ( rColor != COL_AUTO )
     {
