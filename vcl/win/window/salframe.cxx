@@ -826,8 +826,8 @@ WinSalFrame::WinSalFrame()
     mhWnd               = nullptr;
     mhCursor            = LoadCursor( nullptr, IDC_ARROW );
     mhDefIMEContext     = nullptr;
-    mpGraphics          = nullptr;
-    mpGraphics2         = nullptr;
+    mpLocalGraphics     = nullptr;
+    mpThreadGraphics    = nullptr;
     mnShowState         = SW_SHOWNORMAL;
     mnWidth             = 0;
     mnHeight            = 0;
@@ -922,19 +922,19 @@ WinSalFrame::~WinSalFrame()
     mpNextFrame = nullptr;
 
     // Release Cache DC
-    if ( mpGraphics2 &&
-         mpGraphics2->getHDC() )
-        ReleaseGraphics( mpGraphics2 );
+    if ( mpThreadGraphics &&
+         mpThreadGraphics->getHDC() )
+        ReleaseGraphics( mpThreadGraphics );
 
     // destroy saved DC
-    if ( mpGraphics )
+    if ( mpLocalGraphics )
     {
-        if ( mpGraphics->getDefPal() )
-            SelectPalette( mpGraphics->getHDC(), mpGraphics->getDefPal(), TRUE );
-        mpGraphics->DeInitGraphics();
-        ReleaseDC( mhWnd, mpGraphics->getHDC() );
-        delete mpGraphics;
-        mpGraphics = nullptr;
+        if ( mpLocalGraphics->getDefPal() )
+            SelectPalette( mpLocalGraphics->getHDC(), mpLocalGraphics->getDefPal(), TRUE );
+        mpLocalGraphics->DeInitGraphics();
+        ReleaseDC( mhWnd, mpLocalGraphics->getHDC() );
+        delete mpLocalGraphics;
+        mpLocalGraphics = nullptr;
     }
 
     if ( mhWnd )
@@ -978,10 +978,10 @@ SalGraphics* WinSalFrame::AcquireGraphics()
         if ( pSalData->mnCacheDCInUse >= 3 )
             return nullptr;
 
-        if ( !mpGraphics2 )
+        if ( !mpThreadGraphics )
         {
-            mpGraphics2 = new WinSalGraphics(WinSalGraphics::WINDOW, true, mhWnd, this);
-            mpGraphics2->setHDC(nullptr);
+            mpThreadGraphics = new WinSalGraphics(WinSalGraphics::WINDOW, true, mhWnd, this);
+            mpThreadGraphics->setHDC(nullptr);
         }
 
         HDC hDC = reinterpret_cast<HDC>(static_cast<sal_IntPtr>(SendMessageW( pSalData->mpInstance->mhComWnd,
@@ -989,66 +989,66 @@ SalGraphics* WinSalFrame::AcquireGraphics()
                                         reinterpret_cast<WPARAM>(mhWnd), 0 )));
         if ( hDC )
         {
-            mpGraphics2->setHDC(hDC);
+            mpThreadGraphics->setHDC(hDC);
             if ( pSalData->mhDitherPal )
             {
-                mpGraphics2->setDefPal(SelectPalette( hDC, pSalData->mhDitherPal, TRUE ));
+                mpThreadGraphics->setDefPal(SelectPalette( hDC, pSalData->mhDitherPal, TRUE ));
                 RealizePalette( hDC );
             }
-            mpGraphics2->InitGraphics();
+            mpThreadGraphics->InitGraphics();
             mbGraphics = TRUE;
 
             pSalData->mnCacheDCInUse++;
-            return mpGraphics2;
+            return mpThreadGraphics;
         }
         else
             return nullptr;
     }
     else
     {
-        if ( !mpGraphics )
+        if ( !mpLocalGraphics )
         {
             HDC hDC = GetDC( mhWnd );
             if ( hDC )
             {
-                mpGraphics = new WinSalGraphics(WinSalGraphics::WINDOW, true, mhWnd, this);
-                mpGraphics->setHDC(hDC);
+                mpLocalGraphics = new WinSalGraphics(WinSalGraphics::WINDOW, true, mhWnd, this);
+                mpLocalGraphics->setHDC(hDC);
                 if ( pSalData->mhDitherPal )
                 {
-                    mpGraphics->setDefPal(SelectPalette( hDC, pSalData->mhDitherPal, TRUE ));
+                    mpLocalGraphics->setDefPal(SelectPalette( hDC, pSalData->mhDitherPal, TRUE ));
                     RealizePalette( hDC );
                 }
-                mpGraphics->InitGraphics();
+                mpLocalGraphics->InitGraphics();
                 mbGraphics = TRUE;
             }
         }
         else
             mbGraphics = TRUE;
 
-        return mpGraphics;
+        return mpLocalGraphics;
     }
 }
 
 void WinSalFrame::ReleaseGraphics( SalGraphics* pGraphics )
 {
-    if ( mpGraphics2 == pGraphics )
+    if ( mpThreadGraphics == pGraphics )
     {
-        if ( mpGraphics2->getHDC() )
+        if ( mpThreadGraphics->getHDC() )
         {
             SalData* pSalData = GetSalData();
-            if ( mpGraphics2->getDefPal() )
-                SelectPalette( mpGraphics2->getHDC(), mpGraphics2->getDefPal(), TRUE );
-            mpGraphics2->DeInitGraphics();
+            if ( mpThreadGraphics->getDefPal() )
+                SelectPalette( mpThreadGraphics->getHDC(), mpThreadGraphics->getDefPal(), TRUE );
+            mpThreadGraphics->DeInitGraphics();
             // we don't want to run the WinProc in the main thread directly
             // so we don't hit the mbNoYieldLock assert
             if ( !pSalData->mpInstance->IsMainThread() )
                 SendMessageW( pSalData->mpInstance->mhComWnd,
                               SAL_MSG_RELEASEDC,
                               reinterpret_cast<WPARAM>(mhWnd),
-                              reinterpret_cast<LPARAM>(mpGraphics2->getHDC()) );
+                              reinterpret_cast<LPARAM>(mpThreadGraphics->getHDC()) );
             else
-                ReleaseDC( mhWnd, mpGraphics2->getHDC() );
-            mpGraphics2->setHDC(nullptr);
+                ReleaseDC( mhWnd, mpThreadGraphics->getHDC() );
+            mpThreadGraphics->setHDC(nullptr);
             pSalData->mnCacheDCInUse--;
         }
     }
@@ -1479,26 +1479,26 @@ static void ImplSetParentFrame( WinSalFrame* pThis, HWND hNewParentWnd, bool bAs
     int oldCount = pSalData->mnCacheDCInUse;
 
     // Release Cache DC
-    if ( pThis->mpGraphics2 &&
-         pThis->mpGraphics2->getHDC() )
+    if ( pThis->mpThreadGraphics &&
+         pThis->mpThreadGraphics->getHDC() )
     {
         // save current gdi objects before hdc is gone
-        hFont   = static_cast<HFONT>(GetCurrentObject( pThis->mpGraphics2->getHDC(), OBJ_FONT));
-        hPen    = static_cast<HPEN>(GetCurrentObject( pThis->mpGraphics2->getHDC(), OBJ_PEN));
-        hBrush  = static_cast<HBRUSH>(GetCurrentObject( pThis->mpGraphics2->getHDC(), OBJ_BRUSH));
-        pThis->ReleaseGraphics( pThis->mpGraphics2 );
+        hFont   = static_cast<HFONT>(GetCurrentObject( pThis->mpThreadGraphics->getHDC(), OBJ_FONT));
+        hPen    = static_cast<HPEN>(GetCurrentObject( pThis->mpThreadGraphics->getHDC(), OBJ_PEN));
+        hBrush  = static_cast<HBRUSH>(GetCurrentObject( pThis->mpThreadGraphics->getHDC(), OBJ_BRUSH));
+        pThis->ReleaseGraphics( pThis->mpThreadGraphics );
 
         // recreate cache dc only if it was destroyed
         bNeedCacheDC  = TRUE;
     }
 
     // destroy saved DC
-    if ( pThis->mpGraphics )
+    if ( pThis->mpLocalGraphics )
     {
-        if ( pThis->mpGraphics->getDefPal() )
-            SelectPalette( pThis->mpGraphics->getHDC(), pThis->mpGraphics->getDefPal(), TRUE );
-        pThis->mpGraphics->DeInitGraphics();
-        ReleaseDC( pThis->mhWnd, pThis->mpGraphics->getHDC() );
+        if ( pThis->mpLocalGraphics->getDefPal() )
+            SelectPalette( pThis->mpLocalGraphics->getHDC(), pThis->mpLocalGraphics->getDefPal(), TRUE );
+        pThis->mpLocalGraphics->DeInitGraphics();
+        ReleaseDC( pThis->mhWnd, pThis->mpLocalGraphics->getHDC() );
     }
 
     // create a new hwnd with the same styles
@@ -1514,9 +1514,9 @@ static void ImplSetParentFrame( WinSalFrame* pThis, HWND hNewParentWnd, bool bAs
     // recreate DCs
     if( bNeedGraphics )
     {
-        if( pThis->mpGraphics2 )
+        if( pThis->mpThreadGraphics )
         {
-            pThis->mpGraphics2->setHWND(hWnd);
+            pThis->mpThreadGraphics->setHWND(hWnd);
 
             if( bNeedCacheDC )
             {
@@ -1526,13 +1526,13 @@ static void ImplSetParentFrame( WinSalFrame* pThis, HWND hNewParentWnd, bool bAs
                                                 reinterpret_cast<WPARAM>(hWnd), 0 )));
                 if ( hDC )
                 {
-                    pThis->mpGraphics2->setHDC(hDC);
+                    pThis->mpThreadGraphics->setHDC(hDC);
                     if ( pSalData->mhDitherPal )
                     {
-                        pThis->mpGraphics2->setDefPal(SelectPalette( hDC, pSalData->mhDitherPal, TRUE ));
+                        pThis->mpThreadGraphics->setDefPal(SelectPalette( hDC, pSalData->mhDitherPal, TRUE ));
                         RealizePalette( hDC );
                     }
-                    pThis->mpGraphics2->InitGraphics();
+                    pThis->mpThreadGraphics->InitGraphics();
 
                     // re-select saved gdi objects
                     if( hFont )
@@ -1551,17 +1551,17 @@ static void ImplSetParentFrame( WinSalFrame* pThis, HWND hNewParentWnd, bool bAs
             }
         }
 
-        if( pThis->mpGraphics )
+        if( pThis->mpLocalGraphics )
         {
             // re-create DC
-            pThis->mpGraphics->setHWND(hWnd);
-            pThis->mpGraphics->setHDC( GetDC( hWnd ) );
+            pThis->mpLocalGraphics->setHWND(hWnd);
+            pThis->mpLocalGraphics->setHDC( GetDC( hWnd ) );
             if ( GetSalData()->mhDitherPal )
             {
-                pThis->mpGraphics->setDefPal(SelectPalette( pThis->mpGraphics->getHDC(), GetSalData()->mhDitherPal, TRUE ));
-                RealizePalette( pThis->mpGraphics->getHDC() );
+                pThis->mpLocalGraphics->setDefPal(SelectPalette( pThis->mpLocalGraphics->getHDC(), GetSalData()->mhDitherPal, TRUE ));
+                RealizePalette( pThis->mpLocalGraphics->getHDC() );
             }
-            pThis->mpGraphics->InitGraphics();
+            pThis->mpLocalGraphics->InitGraphics();
             pThis->mbGraphics = TRUE;
         }
     }
@@ -3347,9 +3347,9 @@ static bool ImplHandleKeyMsg( HWND hWnd, UINT nMsg,
 
     // reset the background mode for each text input,
     // as some tools such as RichWin may have changed it
-    if ( pFrame->mpGraphics &&
-         pFrame->mpGraphics->getHDC() )
-        SetBkMode( pFrame->mpGraphics->getHDC(), TRANSPARENT );
+    if ( pFrame->mpLocalGraphics &&
+         pFrame->mpLocalGraphics->getHDC() )
+        SetBkMode( pFrame->mpLocalGraphics->getHDC(), TRANSPARENT );
 
     // determine modifiers
     if ( GetKeyState( VK_SHIFT ) & 0x8000 )
@@ -3774,9 +3774,9 @@ static bool ImplHandlePaintMsg( HWND hWnd )
     {
         // clip region must be set, as we don't get a proper
         // bounding rectangle otherwise
-        bool bHasClipRegion = pFrame->mpGraphics && pFrame->mpGraphics->getRegion();
+        bool bHasClipRegion = pFrame->mpLocalGraphics && pFrame->mpLocalGraphics->getRegion();
         if ( bHasClipRegion )
-            SelectClipRgn( pFrame->mpGraphics->getHDC(), nullptr );
+            SelectClipRgn( pFrame->mpLocalGraphics->getHDC(), nullptr );
 
         // according to Windows documentation one shall check first if
         // there really is a paint-region
@@ -3793,8 +3793,8 @@ static bool ImplHandlePaintMsg( HWND hWnd )
 
         // reset clip region
         if ( bHasClipRegion )
-            SelectClipRgn( pFrame->mpGraphics->getHDC(),
-                           pFrame->mpGraphics->getRegion() );
+            SelectClipRgn( pFrame->mpLocalGraphics->getHDC(),
+                           pFrame->mpLocalGraphics->getRegion() );
 
         // try painting
         if ( bHasPaintRegion )
@@ -4098,9 +4098,9 @@ static void ImplHandleForcePalette( HWND hWnd )
     if ( hPal )
     {
         WinSalFrame* pFrame = ProcessOrDeferMessage( hWnd, SAL_MSG_FORCEPALETTE );
-        if ( pFrame && pFrame->mpGraphics )
+        if ( pFrame && pFrame->mpLocalGraphics )
         {
-            WinSalGraphics* pGraphics = pFrame->mpGraphics;
+            WinSalGraphics* pGraphics = pFrame->mpLocalGraphics;
             if ( pGraphics && pGraphics->getDefPal() )
             {
                 SelectPalette( pGraphics->getHDC(), hPal, FALSE );
@@ -4181,7 +4181,7 @@ static LRESULT ImplHandlePalette( bool bFrame, HWND hWnd, UINT nMsg,
     pTempFrame = pSalData->mpFirstFrame;
     while ( pTempFrame )
     {
-        pGraphics = pTempFrame->mpGraphics;
+        pGraphics = pTempFrame->mpLocalGraphics;
         if ( pGraphics && pGraphics->getDefPal() )
         {
             SelectPalette( pGraphics->getHDC(),
@@ -4195,9 +4195,9 @@ static LRESULT ImplHandlePalette( bool bFrame, HWND hWnd, UINT nMsg,
     WinSalFrame* pFrame = nullptr;
     if ( bFrame )
         pFrame = GetWindowPtr( hWnd );
-    if ( pFrame && pFrame->mpGraphics )
+    if ( pFrame && pFrame->mpLocalGraphics )
     {
-        hDC = pFrame->mpGraphics->getHDC();
+        hDC = pFrame->mpLocalGraphics->getHDC();
         bStdDC = TRUE;
     }
     else
@@ -4232,7 +4232,7 @@ static LRESULT ImplHandlePalette( bool bFrame, HWND hWnd, UINT nMsg,
     {
         if ( pTempFrame != pFrame )
         {
-            pGraphics = pTempFrame->mpGraphics;
+            pGraphics = pTempFrame->mpLocalGraphics;
             if ( pGraphics && pGraphics->getDefPal() )
             {
                 SelectPalette( pGraphics->getHDC(), hPal, TRUE );
@@ -4249,7 +4249,7 @@ static LRESULT ImplHandlePalette( bool bFrame, HWND hWnd, UINT nMsg,
         pTempFrame = pSalData->mpFirstFrame;
         while ( pTempFrame )
         {
-            pGraphics = pTempFrame->mpGraphics;
+            pGraphics = pTempFrame->mpLocalGraphics;
             if ( pGraphics && pGraphics->getDefPal() )
             {
                 InvalidateRect( pTempFrame->mhWnd, nullptr, FALSE );
@@ -5096,9 +5096,9 @@ static bool ImplHandleIMEComposition( HWND hWnd, LPARAM lParam )
     {
         // reset the background mode for each text input,
         // as some tools such as RichWin may have changed it
-        if ( pFrame->mpGraphics &&
-             pFrame->mpGraphics->getHDC() )
-            SetBkMode( pFrame->mpGraphics->getHDC(), TRANSPARENT );
+        if ( pFrame->mpLocalGraphics &&
+             pFrame->mpLocalGraphics->getHDC() )
+            SetBkMode( pFrame->mpLocalGraphics->getHDC(), TRANSPARENT );
     }
 
     if ( pFrame && pFrame->mbHandleIME )
