@@ -16710,7 +16710,7 @@
       <value tokenid="ooxml:Value_ST_HexColorAuto_auto">auto</value>
     </resource>
     <resource name="ST_HexColorRGB" resource="Hex"/>
-    <resource name="ST_HexColor" resource="Hex"/>
+    <resource name="ST_HexColor" resource="HexColor"/>
     <resource name="CT_Color" resource="Properties">
       <attribute name="val" tokenid="ooxml:CT_Color_val"/>
       <attribute name="themeColor" tokenid="ooxml:CT_Color_themeColor"/>

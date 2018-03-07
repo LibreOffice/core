@@ -40,6 +40,7 @@ enum class ResourceType {
     Integer,
     Properties,
     Hex,
+    HexColor,
     String,
     Shape,
     Boolean,
