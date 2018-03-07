@@ -279,13 +279,8 @@ public:
     inline SwHTMLTableLayoutCell *GetCell( sal_uInt16 nRow, sal_uInt16 nCol ) const;
     inline void SetCell( std::unique_ptr<SwHTMLTableLayoutCell> pCell, sal_uInt16 nRow, sal_uInt16 nCol );
 
-    void SetLeftFillerBox( SwTableBox *pBox ) { m_pLeftFillerBox = pBox; }
-    void SetRightFillerBox( SwTableBox *pBox ) { m_pRightFillerBox = pBox; }
-
     sal_uLong GetMin() const { return m_nMin; }
     sal_uLong GetMax() const { return m_nMax; }
-    sal_uInt16 GetRelLeftFill() const { return m_nRelLeftFill; }
-    sal_uInt16 GetRelRightFill() const { return m_nRelRightFill; }
 
     inline long GetBrowseWidthMin() const;
 

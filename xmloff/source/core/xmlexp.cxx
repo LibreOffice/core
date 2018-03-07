@@ -1907,24 +1907,6 @@ OUString SvXMLExport::AddEmbeddedXGraphic(uno::Reference<graphic::XGraphic> cons
     return sURL;
 }
 
-Reference< XInputStream > SvXMLExport::GetEmbeddedGraphicObjectStream( const OUString& rGraphicObjectURL )
-{
-    if( (getExportFlags() & SvXMLExportFlags::EMBEDDED) &&
-        rGraphicObjectURL.startsWith( msGraphicObjectProtocol ) &&
-        mxGraphicResolver.is() )
-    {
-        Reference< XBinaryStreamResolver > xStmResolver( mxGraphicResolver, UNO_QUERY );
-
-        if( xStmResolver.is() )
-        {
-            Reference< XInputStream > xIn( xStmResolver->getInputStream( rGraphicObjectURL ) );
-            return xIn;
-        }
-    }
-
-    return nullptr;
-}
-
 bool SvXMLExport::GetGraphicMimeTypeFromStream(uno::Reference<graphic::XGraphic> const & rxGraphic, OUString & rOutMimeType)
 {
     if (mxGraphicResolver.is())
@@ -1964,31 +1946,6 @@ bool SvXMLExport::AddEmbeddedXGraphicAsBase64(uno::Reference<graphic::XGraphic> 
     }
 
     return false;
-}
-
-bool SvXMLExport::AddEmbeddedGraphicObjectAsBase64( const OUString& rGraphicObjectURL )
-{
-    bool bRet = false;
-
-    if( (getExportFlags() & SvXMLExportFlags::EMBEDDED) &&
-        rGraphicObjectURL.startsWith( msGraphicObjectProtocol ) &&
-        mxGraphicResolver.is() )
-    {
-        Reference< XBinaryStreamResolver > xStmResolver( mxGraphicResolver, UNO_QUERY );
-
-        if( xStmResolver.is() )
-        {
-            Reference< XInputStream > xIn( xStmResolver->getInputStream( rGraphicObjectURL ) );
-
-            if( xIn.is() )
-            {
-                XMLBase64Export aBase64Exp( *this );
-                bRet = aBase64Exp.exportOfficeBinaryDataElement( xIn );
-            }
-        }
-    }
-
-    return bRet;
 }
 
 OUString SvXMLExport::AddEmbeddedObject( const OUString& rEmbeddedObjectURL )

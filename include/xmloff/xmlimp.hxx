@@ -571,14 +571,6 @@ public:
     */
     sal_uInt16 getGeneratorVersion() const;
 
-    /** If true, the URL for graphic shapes may be stored as a package URL and
-        loaded later (on demand) by the application. Otherwise graphics are
-        loaded immediately and the graphic shape gets the graphic manager URL.
-
-        @see <member>mbIsGraphicLoadOnDemandSupported</member>
-     */
-    bool isGraphicLoadOnDemandSupported() const { return mbIsGraphicLoadOnDemandSupported;}
-
     /**
         Returns true if the embedded font document URL has already been processed.
         Otherwise returns false and consequent calls with the same URL will return true.

@@ -34,11 +34,6 @@ public:
     sal_Int32 getDataType() const { return m_eType; }
     bool isPrimaryKey() const { return m_bPrimaryKey; }
     bool isNullable() const { return m_bNullable; }
-    sal_Int32 getAutoIncrementDefault() const
-    {
-        assert(m_nAutoIncrement > 0);
-        return m_nAutoIncrement;
-    }
     bool isAutoIncremental() const { return m_nAutoIncrement >= 0; }
     const std::vector<sal_Int32> getParams() const { return m_aParams; }
 };

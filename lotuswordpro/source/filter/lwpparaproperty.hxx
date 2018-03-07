@@ -64,7 +64,6 @@
 #include <memory>
 #include <lwpobj.hxx>
 #include <lwpobjstrm.hxx>
-#include "lwpdllist.hxx"
 
 #include <lwpoverride.hxx>
 #include "lwppiece.hxx"

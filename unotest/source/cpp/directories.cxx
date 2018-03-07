@@ -56,9 +56,4 @@ OUString test::Directories::getURLFromWorkdir( const OUString& rPath )
     return m_aWorkdirRootURL + rPath;
 }
 
-OUString test::Directories::getPathFromWorkdir( const OUString& rPath )
-{
-    return m_aWorkdirRootPath + rPath;
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

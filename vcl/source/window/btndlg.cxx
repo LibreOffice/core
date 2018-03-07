@@ -342,19 +342,6 @@ void ButtonDialog::RemoveButton( sal_uInt16 nId )
     SAL_WARN( "vcl.window", "ButtonDialog::RemoveButton(): ButtonId invalid" );
 }
 
-void ButtonDialog::Clear()
-{
-    for (auto & it : m_ItemList)
-    {
-        it->mpPushButton->Hide();
-        if (it->mbOwnButton)
-            it->mpPushButton.disposeAndClear();
-    }
-
-    m_ItemList.clear();
-    mbFormat = true;
-}
-
 sal_uInt16 ButtonDialog::GetButtonId( sal_uInt16 nButton ) const
 {
     if ( nButton < m_ItemList.size() )
@@ -371,25 +358,6 @@ PushButton* ButtonDialog::GetPushButton( sal_uInt16 nId ) const
         return pItem->mpPushButton;
     else
         return nullptr;
-}
-
-void ButtonDialog::SetButtonText( sal_uInt16 nId, const OUString& rText )
-{
-    ImplBtnDlgItem* pItem = ImplGetItem( nId );
-
-    if ( pItem )
-    {
-        pItem->mpPushButton->SetText( rText );
-        mbFormat = true;
-    }
-}
-
-void ButtonDialog::SetButtonHelpText( sal_uInt16 nId, const OUString& rText )
-{
-    ImplBtnDlgItem* pItem = ImplGetItem( nId );
-
-    if ( pItem )
-        pItem->mpPushButton->SetHelpText( rText );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

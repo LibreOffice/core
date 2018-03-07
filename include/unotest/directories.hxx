@@ -38,9 +38,6 @@ public:
 
     // return a URL to a given path from the workdir directory
     OUString getURLFromWorkdir( const OUString &rPath );
-
-    // return a Path to a given path from the workdir directory
-    OUString getPathFromWorkdir( const OUString &rPath );
 };
 
 }

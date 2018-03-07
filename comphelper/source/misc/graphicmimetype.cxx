@@ -76,19 +76,6 @@ OUString GraphicMimeTypeHelper::GetMimeTypeForXGraphic(Reference<XGraphic> xGrap
     return OUString("");
 }
 
-OUString GraphicMimeTypeHelper::GetMimeTypeForImageUrl(const OUString& rImageUrl)
-{
-    // Create the graphic to retrieve the mimetype from it
-    Reference<XGraphicProvider> xProvider
-        = css::graphic::GraphicProvider::create(comphelper::getProcessComponentContext());
-    Sequence<PropertyValue> aMediaProperties(1);
-    aMediaProperties[0].Name = "URL";
-    aMediaProperties[0].Value <<= rImageUrl;
-    Reference<XGraphic> xGraphic(xProvider->queryGraphic(aMediaProperties));
-
-    return GetMimeTypeForXGraphic(xGraphic);
-}
-
 OUString GraphicMimeTypeHelper::GetMimeTypeForImageStream(Reference<XInputStream> xInputStream)
 {
     // Create the graphic to retrieve the mimetype from it
