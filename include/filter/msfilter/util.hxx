@@ -56,15 +56,12 @@ MSFILTER_DLLPUBLIC sal_Unicode bestFitOpenSymbolToMSFont(sal_Unicode cBullet,
     rtl_TextEncoding& r_ioChrSet, OUString& r_ioFontName);
 
 
-#define OOXML_COLOR_AUTO 0x0a
-
 /**
  * Converts tools Color to HTML color (without leading hashmark).
  *
  * @param rColor color to convert
- * @param bAutoColor if OOXML_COLOR_AUTO should be recognized as an auto color
  */
-MSFILTER_DLLPUBLIC OString ConvertColor( const Color &rColor, bool bAutoColor = false );
+MSFILTER_DLLPUBLIC OString ConvertColor( const Color &rColor );
 
 
 /** Paper size in 1/100 millimeters. */

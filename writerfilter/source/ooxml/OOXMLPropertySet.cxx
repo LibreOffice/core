@@ -23,6 +23,7 @@
 #include <ooxml/QNameToString.hxx>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <oox/token/tokens.hxx>
+#include <tools/color.hxx>
 
 namespace writerfilter {
 namespace ooxml
@@ -576,6 +577,21 @@ string OOXMLHexValue::toString() const
     return buffer;
 }
 #endif
+
+/*
+  class OOXMLHexColorValue
+*/
+OOXMLHexColorValue::OOXMLHexColorValue(const char * pValue)
+{
+    if (!strcmp(pValue, "auto"))
+    {
+        mnValue = sal_uInt32(COL_AUTO);
+    }
+    else
+    {
+        mnValue = rtl_str_toUInt32(pValue, 16);
+    }
+}
 
 // OOXMLUniversalMeasureValue
 // ECMA-376 5th ed. Part 1 , 22.9.2.15
