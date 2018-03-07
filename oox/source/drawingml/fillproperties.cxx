@@ -59,56 +59,46 @@ namespace drawingml {
 
 namespace {
 
-Reference< XGraphic > lclCheckAndApplyDuotoneTransform( const BlipFillProperties& aBlipProps, Reference< XGraphic > const & xGraphic,
-                                                        const GraphicHelper& rGraphicHelper, const ::Color nPhClr )
+Reference< XGraphic > lclCheckAndApplyDuotoneTransform(const BlipFillProperties& aBlipProps, uno::Reference<graphic::XGraphic> const & xGraphic,
+                                                       const GraphicHelper& rGraphicHelper, const ::Color nPhClr)
 {
-    if( aBlipProps.maDuotoneColors[0].isUsed() && aBlipProps.maDuotoneColors[1].isUsed() )
+    if (aBlipProps.maDuotoneColors[0].isUsed() && aBlipProps.maDuotoneColors[1].isUsed())
     {
         ::Color nColor1 = aBlipProps.maDuotoneColors[0].getColor( rGraphicHelper, nPhClr );
         ::Color nColor2 = aBlipProps.maDuotoneColors[1].getColor( rGraphicHelper, nPhClr );
-        try
-        {
-            Reference< XGraphicTransformer > xTransformer( aBlipProps.mxFillGraphic, UNO_QUERY_THROW );
-            return xTransformer->applyDuotone( xGraphic, sal_Int32(nColor1), sal_Int32(nColor2) );
-        }
-        catch( Exception& )
-        {
-        }
+
+        uno::Reference<graphic::XGraphicTransformer> xTransformer(aBlipProps.mxFillGraphic, uno::UNO_QUERY);
+        if (xTransformer.is())
+            return xTransformer->applyDuotone(xGraphic, sal_Int32(nColor1), sal_Int32(nColor2));
     }
     return xGraphic;
 }
 
-Reference< XGraphic > lclCheckAndApplyChangeColorTransform( const BlipFillProperties &aBlipProps, Reference< XGraphic >  const & xGraphic,
-                                                            const GraphicHelper& rGraphicHelper, const ::Color nPhClr )
+Reference< XGraphic > lclCheckAndApplyChangeColorTransform(const BlipFillProperties &aBlipProps, uno::Reference<graphic::XGraphic> const & xGraphic,
+                                                           const GraphicHelper& rGraphicHelper, const ::Color nPhClr)
 {
     if( aBlipProps.maColorChangeFrom.isUsed() && aBlipProps.maColorChangeTo.isUsed() )
     {
         ::Color nFromColor = aBlipProps.maColorChangeFrom.getColor( rGraphicHelper, nPhClr );
         ::Color nToColor = aBlipProps.maColorChangeTo.getColor( rGraphicHelper, nPhClr );
-        if ( (nFromColor != nToColor) || aBlipProps.maColorChangeTo.hasTransparency() ) try
+        if ( (nFromColor != nToColor) || aBlipProps.maColorChangeTo.hasTransparency() )
         {
             sal_Int16 nToTransparence = aBlipProps.maColorChangeTo.getTransparency();
             sal_Int8 nToAlpha = static_cast< sal_Int8 >( (100 - nToTransparence) * 2.55 );
-            Reference< XGraphicTransformer > xTransformer( aBlipProps.mxFillGraphic, UNO_QUERY_THROW );
-            return xTransformer->colorChange( xGraphic, sal_Int32(nFromColor), 9, sal_Int32(nToColor), nToAlpha );
-        }
-        catch( Exception& )
-        {
+
+            uno::Reference<graphic::XGraphicTransformer> xTransformer(aBlipProps.mxFillGraphic, uno::UNO_QUERY);
+            if (xTransformer.is())
+                return xTransformer->colorChange(xGraphic, sal_Int32(nFromColor), 9, sal_Int32(nToColor), nToAlpha);
         }
     }
     return xGraphic;
 }
 
-Reference< XGraphic > applyBrightnessContrast( Reference< XGraphic > const & xGraphic, sal_Int32 brightness, sal_Int32 contrast )
+uno::Reference<graphic::XGraphic> applyBrightnessContrast(uno::Reference<graphic::XGraphic> const & xGraphic, sal_Int32 brightness, sal_Int32 contrast)
 {
-    try
-        {
-            Reference< XGraphicTransformer > xTransformer( xGraphic, UNO_QUERY_THROW );
-            return xTransformer->applyBrightnessContrast( xGraphic, brightness, contrast, true );
-        }
-        catch( Exception& )
-        {
-        }
+    uno::Reference<graphic::XGraphicTransformer> xTransformer(xGraphic, uno::UNO_QUERY);
+    if (xTransformer.is())
+        return xTransformer->applyBrightnessContrast(xGraphic, brightness, contrast, true);
     return xGraphic;
 }
 
