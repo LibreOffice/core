@@ -3709,6 +3709,7 @@ void ScInterpreter::GetNumberSequenceArray( sal_uInt8 nParamCount, vector<double
     ScRange aRange;
     short nParam = nParamCount;
     size_t nRefInList = 0;
+    ReverseStack( nParamCount );
     while (nParam-- > 0)
     {
         const StackVar eStackType = GetStackType();
