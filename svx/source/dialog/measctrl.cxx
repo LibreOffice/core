@@ -42,8 +42,11 @@ SvxXMeasurePreview::SvxXMeasurePreview(vcl::Window* pParent, WinBits nStyle)
     Point aPt1 = Point(aSize.Width() / 5, static_cast<long>(aSize.Height() / 2));
     Point aPt2 = Point(aSize.Width() * 4 / 5, static_cast<long>(aSize.Height() / 2));
 
-    pMeasureObj = new SdrMeasureObj(aPt1, aPt2);
     pModel = new SdrModel();
+    pMeasureObj = new SdrMeasureObj(
+        *pModel,
+        aPt1,
+        aPt2);
     pMeasureObj->SetModel(pModel);
 
     bool bHighContrast = GetSettings().GetStyleSettings().GetHighContrastMode();

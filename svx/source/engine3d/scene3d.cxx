@@ -170,8 +170,8 @@ sdr::contact::ViewContact* E3dScene::CreateObjectSpecificViewContact()
 }
 
 
-E3dScene::E3dScene()
-:   E3dObject(),
+E3dScene::E3dScene(SdrModel& rSdrModel)
+:   E3dObject(rSdrModel),
     aCamera(basegfx::B3DPoint(0.0, 0.0, 4.0), basegfx::B3DPoint()),
     mp3DDepthRemapper(nullptr),
     bDrawOnlySelected(false),

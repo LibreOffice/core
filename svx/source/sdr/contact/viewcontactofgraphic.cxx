@@ -253,7 +253,7 @@ namespace sdr
                 // needed and can be deleted.
 
                 // create temp RectObj as TextObj and set needed attributes
-                SdrRectObj aRectObj(OBJ_TEXT);
+                SdrRectObj aRectObj(GetGrafObject().getSdrModelFromSdrObject(), OBJ_TEXT);
                 aRectObj.SetModel(GetGrafObject().GetModel());
                 aRectObj.NbcSetText(aDraftText);
                 aRectObj.SetMergedItem(SvxColorItem(COL_LIGHTRED, EE_CHAR_COLOR));

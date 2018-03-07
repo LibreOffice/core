@@ -61,12 +61,11 @@ using namespace ::com::sun::star::drawing;
 
 UNO3_GETIMPLEMENTATION_IMPL( SvxDrawPage );
 
-SvxDrawPage::SvxDrawPage(SdrPage* pInPage)
-    : mrBHelper(getMutex())
-    , mpPage(pInPage)
-    , mpModel(mpPage->GetModel())  // register at broadcaster
-    , mpView(new SdrView(mpModel)) // create (hidden) view
-
+SvxDrawPage::SvxDrawPage(SdrPage* pInPage) // TTTT shbe ref
+:   mrBHelper(getMutex())
+    ,mpPage(pInPage)
+    ,mpModel(&pInPage->getSdrModelFromSdrObjList())  // register at broadcaster
+    ,mpView(new SdrView(pInPage->getSdrModelFromSdrObjList())) // create (hidden) view
 {
     mpView->SetDesignMode();
 }
@@ -465,7 +464,7 @@ void SAL_CALL SvxDrawPage::ungroup( const Reference< drawing::XShapeGroup >& aGr
         mpModel->SetChanged();
 }
 
-SdrObject *SvxDrawPage::CreateSdrObject_(const Reference< drawing::XShape > & xShape)
+SdrObject* SvxDrawPage::CreateSdrObject_(const Reference< drawing::XShape > & xShape)
 {
     sal_uInt16 nType = 0;
     SdrInventor nInventor;
@@ -480,7 +479,13 @@ SdrObject *SvxDrawPage::CreateSdrObject_(const Reference< drawing::XShape > & xS
     awt::Point aPos = xShape->getPosition();
     tools::Rectangle aRect( Point( aPos.X, aPos.Y ), Size( aSize.Width, aSize.Height ) );
 
-    SdrObject* pNewObj = SdrObjFactory::MakeNewObject(nInventor, nType, aRect, mpPage);
+    SdrObject* pNewObj = SdrObjFactory::MakeNewObject(
+        *mpModel,
+        nInventor,
+        nType,
+        aRect,
+        mpPage);
+
     if (!pNewObj)
         return nullptr;
 
@@ -856,7 +861,7 @@ void SvxDrawPage::ChangeModel( SdrModel* pNewModel )
         if( mpView )
         {
             delete mpView;
-            mpView = new SdrView( mpModel );
+            mpView = new SdrView(*mpModel);
             mpView->SetDesignMode();
         }
     }

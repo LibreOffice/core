@@ -64,25 +64,20 @@
 
 using namespace com::sun::star;
 
-
 // BaseProperties section
-
 sdr::properties::BaseProperties* SdrTextObj::CreateObjectSpecificProperties()
 {
     return new sdr::properties::TextProperties(*this);
 }
 
-
 // DrawContact section
-
 sdr::contact::ViewContact* SdrTextObj::CreateObjectSpecificViewContact()
 {
     return new sdr::contact::ViewContactOfTextObj(*this);
 }
 
-
-SdrTextObj::SdrTextObj()
-:   SdrAttrObj(),
+SdrTextObj::SdrTextObj(SdrModel& rSdrModel)
+:   SdrAttrObj(rSdrModel),
     mpText(nullptr),
     pEdtOutl(nullptr),
     eTextKind(OBJ_TEXT)
@@ -102,8 +97,10 @@ SdrTextObj::SdrTextObj()
     mbInDownScale = false;
 }
 
-SdrTextObj::SdrTextObj(const tools::Rectangle& rNewRect)
-:   SdrAttrObj(),
+SdrTextObj::SdrTextObj(
+    SdrModel& rSdrModel,
+    const tools::Rectangle& rNewRect)
+:   SdrAttrObj(rSdrModel),
     maRect(rNewRect),
     mpText(nullptr),
     pEdtOutl(nullptr),
@@ -125,8 +122,10 @@ SdrTextObj::SdrTextObj(const tools::Rectangle& rNewRect)
     mbSupportTextIndentingOnLineWidthChange = true;
 }
 
-SdrTextObj::SdrTextObj(SdrObjKind eNewTextKind)
-:   SdrAttrObj(),
+SdrTextObj::SdrTextObj(
+    SdrModel& rSdrModel,
+    SdrObjKind eNewTextKind)
+:   SdrAttrObj(rSdrModel),
     mpText(nullptr),
     pEdtOutl(nullptr),
     eTextKind(eNewTextKind)
@@ -146,8 +145,11 @@ SdrTextObj::SdrTextObj(SdrObjKind eNewTextKind)
     mbSupportTextIndentingOnLineWidthChange = true;
 }
 
-SdrTextObj::SdrTextObj(SdrObjKind eNewTextKind, const tools::Rectangle& rNewRect)
-:   SdrAttrObj(),
+SdrTextObj::SdrTextObj(
+    SdrModel& rSdrModel,
+    SdrObjKind eNewTextKind,
+    const tools::Rectangle& rNewRect)
+:   SdrAttrObj(rSdrModel),
     maRect(rNewRect),
     mpText(nullptr),
     pEdtOutl(nullptr),

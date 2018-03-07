@@ -54,12 +54,15 @@ class SAL_WARN_UNUSED SVX_DLLPUBLIC E3dCubeObj final : public E3dCompoundObject
     // BOOLeans
     bool                                bPosIsCenter : 1;
 
-    void SetDefaultAttributes(E3dDefaultAttributes& rDefault);
+    void SetDefaultAttributes(const E3dDefaultAttributes& rDefault);
     virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact() override;
 
 public:
-    E3dCubeObj(E3dDefaultAttributes& rDefault, const basegfx::B3DPoint& aPos, const basegfx::B3DVector& r3DSize);
-    E3dCubeObj();
+    E3dCubeObj(SdrModel& rSdrModel,
+        const E3dDefaultAttributes& rDefault,
+        const basegfx::B3DPoint& aPos,
+        const basegfx::B3DVector& r3DSize);
+    E3dCubeObj(SdrModel& rSdrModel);
 
     virtual sal_uInt16 GetObjIdentifier() const override;
     virtual SdrObject* DoConvertToPolyObj(bool bBezier, bool bAddText) const override;

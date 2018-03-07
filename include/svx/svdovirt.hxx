@@ -47,8 +47,11 @@ protected:
     virtual void RestGeoData(const SdrObjGeoData& rGeo) override;
 
 public:
-    SdrVirtObj(SdrObject& rNewObj);
+    SdrVirtObj(
+        SdrModel& rSdrModel,
+        SdrObject& rNewObj);
     virtual ~SdrVirtObj() override;
+
     SdrObject& ReferencedObj();
     const SdrObject& GetReferencedObj() const;
     virtual void NbcSetAnchorPos(const Point& rAnchorPos) override;

@@ -421,13 +421,15 @@ VclPtr<VirtualDevice> GraphicExporter::CreatePageVDev( SdrPage* pPage, sal_uIntP
 
     if(bSuccess)
     {
-        std::unique_ptr<SdrView> pView(new SdrView(mpDoc, pVDev));
+        std::unique_ptr<SdrView> pView(new SdrView(*mpDoc, pVDev));
+
         pView->SetPageVisible( false );
         pView->SetBordVisible( false );
         pView->SetGridVisible( false );
         pView->SetHlplVisible( false );
         pView->SetGlueVisible( false );
         pView->ShowSdrPage(pPage);
+
         vcl::Region aRegion (tools::Rectangle( aPoint, aPageSize ) );
 
         ImplExportCheckVisisbilityRedirector aRedirector( mpCurrentPage );
@@ -631,7 +633,9 @@ bool GraphicExporter::GetGraphic( ExportSettings const & rSettings, Graphic& aGr
 
             if(pCorrectProperties)
             {
-                pTempBackgroundShape = new SdrRectObj(tools::Rectangle(Point(0,0), pPage->GetSize()));
+                pTempBackgroundShape = new SdrRectObj(
+                    *mpDoc,
+                    tools::Rectangle(Point(0,0), pPage->GetSize()));
                 pTempBackgroundShape->SetMergedItemSet(pCorrectProperties->GetItemSet());
                 pTempBackgroundShape->SetMergedItem(XLineStyleItem(drawing::LineStyle_NONE));
                 pTempBackgroundShape->NbcSetStyleSheet(pCorrectProperties->GetStyleSheet(), true);
@@ -683,13 +687,14 @@ bool GraphicExporter::GetGraphic( ExportSettings const & rSettings, Graphic& aGr
                 }
 
                 std::unique_ptr<SdrView> xLocalView;
+
                 if (FmFormModel* pFormModel = dynamic_cast<FmFormModel*>(mpDoc))
                 {
-                    xLocalView.reset(new FmFormView(pFormModel, aVDev) );
+                    xLocalView.reset(new FmFormView(*pFormModel, aVDev));
                 }
                 else
                 {
-                    xLocalView.reset(new SdrView(mpDoc, aVDev));
+                    xLocalView.reset(new SdrView(*mpDoc, aVDev));
                 }
 
                 ScopedVclPtr<VirtualDevice> pVDev(CreatePageVDev( pPage, nWidthPix, nHeightPix ));
@@ -715,13 +720,14 @@ bool GraphicExporter::GetGraphic( ExportSettings const & rSettings, Graphic& aGr
 
                 // create a view
                 std::unique_ptr< SdrView > pView;
+
                 if (FmFormModel *pFormModel = dynamic_cast<FmFormModel*>(mpDoc))
                 {
-                    pView.reset(new FmFormView(pFormModel, aVDev));
+                    pView.reset(new FmFormView(*pFormModel, aVDev));
                 }
                 else
                 {
-                    pView.reset(new SdrView( mpDoc, aVDev ));
+                    pView.reset(new SdrView(*mpDoc, aVDev));
                 }
 
                 pView->SetBordVisible( false );

@@ -173,7 +173,7 @@ void SvxXConnectionPreview::Construct()
                 // not yet one.
                 if(!pObjList)
                 {
-                    pObjList = new SdrObjList( pView->GetModel(), nullptr );
+                    pObjList = new SdrObjList( pView->getSdrModelFromSdrView(), nullptr );
                 }
 
                 if( pTmpObj1 )
@@ -182,19 +182,23 @@ void SvxXConnectionPreview::Construct()
                     pObjList->InsertObject( pObj1 );
                     pEdgeObj->ConnectToNode( true, pObj1 );
                 }
+
                 if( pTmpObj2 )
                 {
                     SdrObject* pObj2 = pTmpObj2->Clone();
                     pObjList->InsertObject( pObj2 );
                     pEdgeObj->ConnectToNode( false, pObj2 );
                 }
+
                 pObjList->InsertObject( pEdgeObj );
             }
         }
     }
 
     if( !pEdgeObj )
-        pEdgeObj = new SdrEdgeObj();
+    {
+        pEdgeObj = new SdrEdgeObj(pView->getSdrModelFromSdrView());
+    }
 
     AdaptSize();
 }

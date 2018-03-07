@@ -49,15 +49,15 @@ using com::sun::star::uno::UNO_QUERY;
 
 
 FmFormPage::FmFormPage(FmFormModel& rModel, bool bMasterPage)
-           :SdrPage(rModel, bMasterPage)
-           ,m_pImpl( new FmFormPageImpl( *this ) )
+:   SdrPage(rModel, bMasterPage)
+    ,m_pImpl( new FmFormPageImpl( *this ) )
 {
 }
 
 
 FmFormPage::FmFormPage(const FmFormPage& rPage)
-           :SdrPage(rPage)
-           ,m_pImpl(new FmFormPageImpl( *this ) )
+:   SdrPage(rPage)
+    ,m_pImpl(new FmFormPageImpl( *this ) )
 {
 }
 

@@ -78,7 +78,7 @@ public:
 class E3dObjList final : public SdrObjList
 {
 public:
-    E3dObjList();
+    E3dObjList(SdrModel& rSdrModel);
     SVX_DLLPUBLIC virtual ~E3dObjList() override;
 
     virtual void NbcInsertObject(SdrObject* pObj, size_t nPos=SAL_MAX_SIZE) override;
@@ -131,7 +131,7 @@ protected:
     // E3dObject is only a helper class (for E3DScene and E3DCompoundObject)
     // and no instances should be created from anyone, so i move the constructors
     // to protected area
-    E3dObject();
+    E3dObject(SdrModel& rSdrModel);
 
 public:
     virtual void RecalcSnapRect() override;
@@ -232,7 +232,7 @@ protected:
 
 public:
 
-    E3dCompoundObject();
+    E3dCompoundObject(SdrModel& rSdrModel);
     virtual ~E3dCompoundObject() override;
 
     virtual basegfx::B2DPolyPolygon TakeXorPoly() const override;

@@ -224,10 +224,12 @@ void Impl3DMirrorConstructOverlay::SetMirrorAxis(Point aMirrorAxisA, Point aMirr
     }
 }
 
-E3dView::E3dView(SdrModel* pModel, OutputDevice* pOut) :
-    SdrView(pModel, pOut)
+E3dView::E3dView(
+    SdrModel& rSdrModel,
+    OutputDevice* pOut)
+:   SdrView(rSdrModel, pOut)
 {
-    InitView ();
+    InitView();
 }
 
 // DrawMarkedObj override, since possibly only a single 3D object is to be
@@ -700,10 +702,15 @@ void E3dView::ImpCreateSingle3DObjectFlat(E3dScene* pScene, SdrObject* pObj, boo
     if(pPath)
     {
         E3dDefaultAttributes aDefault = Get3DDefaultAttributes();
+
         if(bExtrude)
+        {
             aDefault.SetDefaultExtrudeCharacterMode(true);
+        }
         else
+        {
             aDefault.SetDefaultLatheCharacterMode(true);
+        }
 
         // Get Itemset of the original object
         SfxItemSet aSet(pObj->GetMergedItemSet());
@@ -736,13 +743,13 @@ void E3dView::ImpCreateSingle3DObjectFlat(E3dScene* pScene, SdrObject* pObj, boo
         E3dObject* p3DObj = nullptr;
         if(bExtrude)
         {
-            p3DObj = new E3dExtrudeObj(aDefault, pPath->GetPathPoly(), fDepth);
+            p3DObj = new E3dExtrudeObj(pObj->getSdrModelFromSdrObject(), aDefault, pPath->GetPathPoly(), fDepth);
         }
         else
         {
             basegfx::B2DPolyPolygon aPolyPoly2D(pPath->GetPathPoly());
             aPolyPoly2D.transform(rLatheMat);
-            p3DObj = new E3dLatheObj(aDefault, aPolyPoly2D);
+            p3DObj = new E3dLatheObj(pObj->getSdrModelFromSdrObject(), aDefault, aPolyPoly2D);
         }
 
         // Set attribute
@@ -836,8 +843,10 @@ void E3dView::ConvertMarkedObjTo3D(bool bExtrude, const basegfx::B2DPoint& rPnt1
     else
         BegUndo(SvxResId(RID_SVX_3D_UNDO_LATHE));
 
+    SdrModel& rSdrModel(GetSdrMarkByIndex(0)->GetMarkedSdrObj()->getSdrModelFromSdrObject());
+
     // Create a new scene for the created 3D object
-    E3dScene* pScene = new E3dScene;
+    E3dScene* pScene = new E3dScene(rSdrModel);
 
     // Determine rectangle and possibly correct it
     tools::Rectangle aRect = GetAllMarkedRect();
@@ -1262,7 +1271,6 @@ bool E3dView::BegDragObj(const Point& rPnt, OutputDevice* pOut,
 }
 
 // Set current 3D drawing object, create the scene for this
-
 E3dScene* E3dView::SetCurrent3DObj(E3dObject* p3DObj)
 {
     DBG_ASSERT(p3DObj != nullptr, "Who puts in a NULL-pointer here");
@@ -1275,7 +1283,7 @@ E3dScene* E3dView::SetCurrent3DObj(E3dObject* p3DObj)
 
     tools::Rectangle aRect(0,0, static_cast<long>(fW), static_cast<long>(fH));
 
-    E3dScene* pScene = new E3dScene;
+    E3dScene* pScene = new E3dScene(p3DObj->getSdrModelFromSdrObject());
 
     InitScene(pScene, fW, fH, aVolume.getMaxZ() + ((fW + fH) / 4.0));
 

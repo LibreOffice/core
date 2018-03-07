@@ -59,7 +59,7 @@ protected:
     /// Detects when a stylesheet is changed
     virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) override;
 
-    SdrAttrObj();
+    SdrAttrObj(SdrModel& rSdrModel);
     virtual ~SdrAttrObj() override;
 
 public:

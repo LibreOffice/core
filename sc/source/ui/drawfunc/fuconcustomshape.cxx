@@ -132,8 +132,12 @@ void FuConstCustomShape::Deactivate()
 SdrObject* FuConstCustomShape::CreateDefaultObject(const sal_uInt16 /* nID */, const tools::Rectangle& rRectangle)
 {
     SdrObject* pObj = SdrObjFactory::MakeNewObject(
-        pView->GetCurrentObjInventor(), pView->GetCurrentObjIdentifier(),
-        nullptr, pDrDoc);
+        *pDrDoc,
+        pView->GetCurrentObjInventor(),
+        pView->GetCurrentObjIdentifier(),
+        nullptr,
+        pDrDoc);
+
     if( pObj )
     {
         tools::Rectangle aRectangle( rRectangle );
@@ -142,6 +146,7 @@ SdrObject* FuConstCustomShape::CreateDefaultObject(const sal_uInt16 /* nID */, c
             ImpForceQuadratic( aRectangle );
         pObj->SetLogicRect( aRectangle );
     }
+
     return pObj;
 }
 

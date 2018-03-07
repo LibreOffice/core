@@ -37,10 +37,12 @@ class SVX_DLLPUBLIC SdrMediaObj final : public SdrRectObj
 public:
 
 
-                                    SdrMediaObj();
-                                    SdrMediaObj( const tools::Rectangle& rRect );
+        SdrMediaObj(SdrModel& rSdrModel);
+        SdrMediaObj(
+                SdrModel& rSdrModel,
+                const tools::Rectangle& rRect);
 
-        virtual                     ~SdrMediaObj() override;
+        virtual ~SdrMediaObj() override;
 
         virtual bool                HasTextEdit() const override;
 

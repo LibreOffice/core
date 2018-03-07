@@ -98,10 +98,14 @@ class SVX_DLLPUBLIC SdrTableObj : public ::SdrTextObj
     friend class SdrTableObjImpl;
 
 public:
-    SdrTableObj(SdrModel* _pModel);
-    SdrTableObj(SdrModel* _pModel, const ::tools::Rectangle& rNewRect, sal_Int32 nColumns, sal_Int32 nRows);
-    virtual ~SdrTableObj() override;
+    SdrTableObj(SdrModel& rSdrModel);
+    SdrTableObj(
+        SdrModel& rSdrModel,
+        const ::tools::Rectangle& rNewRect,
+        sal_Int32 nColumns,
+        sal_Int32 nRows);
 
+    virtual ~SdrTableObj() override;
 
     // Table stuff
     SdrTableObj* CloneRange( const CellPos& rStartPos, const CellPos& rEndPos );

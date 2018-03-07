@@ -66,14 +66,22 @@ public:
      *
      * Constructor of a rectangular drawing object
      */
-    SdrRectObj();
-    SdrRectObj(const tools::Rectangle& rRect);
+    SdrRectObj(SdrModel& rSdrModel);
+    SdrRectObj(
+        SdrModel& rSdrModel,
+        const tools::Rectangle& rRect);
 
     SdrRectObj& operator=(const SdrRectObj& rCopy);
 
     // Constructor of a text frame
-    SdrRectObj(SdrObjKind eNewTextKind);
-    SdrRectObj(SdrObjKind eNewTextKind, const tools::Rectangle& rRect);
+    SdrRectObj(
+        SdrModel& rSdrModel,
+        SdrObjKind eNewTextKind);
+    SdrRectObj(
+        SdrModel& rSdrModel,
+        SdrObjKind eNewTextKind,
+        const tools::Rectangle& rRect);
+
     virtual ~SdrRectObj() override;
 
     virtual void TakeObjInfo(SdrObjTransformInfoRec& rInfo) const override;

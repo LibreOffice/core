@@ -1126,7 +1126,7 @@ void SdrEditView::MergeMarkedObjects(SdrMergeMode eMode)
     // #i73441# check insert list before taking actions
     if(pInsOL)
     {
-        SdrPathObj* pPath = new SdrPathObj(OBJ_PATHFILL, aMergePolyPolygonA);
+        SdrPathObj* pPath = new SdrPathObj(pAttrObj->getSdrModelFromSdrObject(), OBJ_PATHFILL, aMergePolyPolygonA);
         ImpCopyAttributes(pAttrObj, pPath);
         pInsOL->InsertObject(pPath, nInsPos);
         if( bUndo )
@@ -1355,7 +1355,7 @@ void SdrEditView::CombineMarkedObjects(bool bNoPolyPoly)
             }
         }
 
-        SdrPathObj* pPath = new SdrPathObj(eKind,aPolyPolygon);
+        SdrPathObj* pPath = new SdrPathObj(pAttrObj->getSdrModelFromSdrObject(), eKind, aPolyPolygon);
 
         // attributes of the lowest object
         ImpCopyAttributes(pAttrObj, pPath);
@@ -1522,7 +1522,10 @@ void SdrEditView::ImpDismantleOneObject(const SdrObject* pObj, SdrObjList& rOL, 
 
             if(!bMakeLines || nPointCount < 2)
             {
-                SdrPathObj* pPath = new SdrPathObj(static_cast<SdrObjKind>(pSrcPath->GetObjIdentifier()), basegfx::B2DPolyPolygon(rCandidate));
+                SdrPathObj* pPath = new SdrPathObj(
+                    pSrcPath->getSdrModelFromSdrObject(),
+                    static_cast<SdrObjKind>(pSrcPath->GetObjIdentifier()),
+                    basegfx::B2DPolyPolygon(rCandidate));
                 ImpCopyAttributes(pSrcPath, pPath);
                 pLast = pPath;
                 rOL.InsertObject(pPath, rPos);
@@ -1556,7 +1559,10 @@ void SdrEditView::ImpDismantleOneObject(const SdrObject* pObj, SdrObjList& rOL, 
                         aNewPolygon.append(rCandidate.getB2DPoint(nNextIndex));
                     }
 
-                    SdrPathObj* pPath = new SdrPathObj(eKind, basegfx::B2DPolyPolygon(aNewPolygon));
+                    SdrPathObj* pPath = new SdrPathObj(
+                        pSrcPath->getSdrModelFromSdrObject(),
+                        eKind,
+                        basegfx::B2DPolyPolygon(aNewPolygon));
                     ImpCopyAttributes(pSrcPath, pPath);
                     pLast = pPath;
                     rOL.InsertObject(pPath, rPos);
@@ -1603,7 +1609,11 @@ void SdrEditView::ImpDismantleOneObject(const SdrObject* pObj, SdrObjList& rOL, 
                 {
                     // #i37011# also create a text object and add at rPos + 1
                     SdrObject* pTextObj = SdrObjFactory::MakeNewObject(
-                        pCustomShape->GetObjInventor(), OBJ_TEXT, nullptr, pCustomShape->GetModel());
+                        pCustomShape->getSdrModelFromSdrObject(),
+                        pCustomShape->GetObjInventor(),
+                        OBJ_TEXT,
+                        nullptr,
+                        pCustomShape->GetModel());
 
                     // Copy text content
                     OutlinerParaObject* pParaObj = pCustomShape->GetOutlinerParaObject();
@@ -1756,8 +1766,11 @@ void SdrEditView::GroupMarked()
                 {
                     if (pGrp==nullptr)
                     {
-                        if (pGrp==nullptr)
-                            pGrp=new SdrObjGroup;
+                        if(nullptr == pGrp)
+                        {
+                            pGrp = new SdrObjGroup(pSrcLst->getSdrModelFromSdrObjList());
+                        }
+
                         pDstLst=pGrp->GetSubList();
                         DBG_ASSERT(pDstLst!=nullptr,"Alleged group object doesn't return object list.");
                     }

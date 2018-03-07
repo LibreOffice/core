@@ -61,8 +61,12 @@ private:
 
 public:
 
-    explicit SdrUnoObj(const OUString& rModelName);
-    SdrUnoObj(const OUString& rModelName,
+    explicit SdrUnoObj(
+        SdrModel& rSdrModel,
+        const OUString& rModelName);
+    SdrUnoObj(
+        SdrModel& rSdrModel,
+        const OUString& rModelName,
         const css::uno::Reference< css::lang::XMultiServiceFactory >& rxSFac);
     virtual ~SdrUnoObj() override;
 
@@ -76,10 +80,6 @@ public:
 
     // SpecialDrag support
     virtual bool hasSpecialDrag() const override;
-
-    // FullDrag support
-    virtual bool supportsFullDrag() const override;
-    virtual SdrObject* getFullDragClone() const override;
 
     virtual OUString TakeObjNameSingul() const override;
     virtual OUString TakeObjNamePlural() const override;

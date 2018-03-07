@@ -51,7 +51,7 @@ using namespace ::std;
 namespace sd {
 
 FrameView::FrameView(SdDrawDocument* pDrawDoc, FrameView* pFrameView /* = NULK */)
-  : SdrView(pDrawDoc, nullptr),
+:   SdrView(*pDrawDoc, nullptr), // TTTT SdDrawDocument* -> reference?
     mnRefCount(0),
     mnPresViewShellId(SID_VIEWSHELL0),
     mbIsNavigatorShowingAllShapes(false)

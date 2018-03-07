@@ -85,8 +85,11 @@ protected:
     virtual void RestGeoData(const SdrObjGeoData& rGeo) override;
 
 public:
-    SdrMeasureObj();
-    SdrMeasureObj(const Point& rPt1, const Point& rPt2);
+    SdrMeasureObj(SdrModel& rSdrModel);
+    SdrMeasureObj(
+        SdrModel& rSdrModel,
+        const Point& rPt1,
+        const Point& rPt2);
     virtual ~SdrMeasureObj() override;
 
     virtual void TakeObjInfo(SdrObjTransformInfoRec& rInfo) const override;

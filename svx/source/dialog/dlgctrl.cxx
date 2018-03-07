@@ -1468,13 +1468,13 @@ SvxXLinePreview::SvxXLinePreview(vcl::Window* pParent)
 {
     InitSettings( true, true );
 
-    mpLineObjA = new SdrPathObj(OBJ_LINE);
+    mpLineObjA = new SdrPathObj(getModel(), OBJ_LINE);
     mpLineObjA->SetModel(&getModel());
 
-    mpLineObjB = new SdrPathObj(OBJ_PLIN);
+    mpLineObjB = new SdrPathObj(getModel(), OBJ_PLIN);
     mpLineObjB->SetModel(&getModel());
 
-    mpLineObjC = new SdrPathObj(OBJ_PLIN);
+    mpLineObjC = new SdrPathObj(getModel(), OBJ_PLIN);
     mpLineObjC->SetModel(&getModel());
 }
 
@@ -1563,14 +1563,16 @@ void SvxXLinePreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rec
 }
 
 SvxXRectPreview::SvxXRectPreview(vcl::Window* pParent)
-    : SvxPreviewBase(pParent)
-    , mpRectangleObject(nullptr)
+:   SvxPreviewBase(pParent)
+    ,mpRectangleObject(nullptr)
 {
     InitSettings(true, true);
 
     // create RectangleObject
     const tools::Rectangle aObjectSize(Point(), GetOutputSize());
-    mpRectangleObject = new SdrRectObj(aObjectSize);
+    mpRectangleObject = new SdrRectObj(
+        getModel(),
+        aObjectSize);
     mpRectangleObject->SetModel(&getModel());
 }
 
@@ -1580,7 +1582,9 @@ void SvxXRectPreview::Resize()
     SdrObject *pOrigObject = mpRectangleObject;
     if (pOrigObject)
     {
-        mpRectangleObject = new SdrRectObj(aObjectSize);
+        mpRectangleObject = new SdrRectObj(
+            getModel(),
+            aObjectSize);
         mpRectangleObject->SetModel(&getModel());
         SetAttributes(pOrigObject->GetMergedItemSet());
         SdrObject::Free(pOrigObject);
@@ -1637,12 +1641,16 @@ SvxXShadowPreview::SvxXShadowPreview( vcl::Window* pParent )
 
     // create RectangleObject
     const tools::Rectangle aObjectSize( Point( aSize.Width(), aSize.Height() ), aSize );
-    mpRectangleObject = new SdrRectObj(aObjectSize);
+    mpRectangleObject = new SdrRectObj(
+        getModel(),
+        aObjectSize);
     mpRectangleObject->SetModel(&getModel());
 
     // create ShadowObject
     const tools::Rectangle aShadowSize( Point( aSize.Width(), aSize.Height() ), aSize );
-    mpRectangleShadow = new SdrRectObj(aShadowSize);
+    mpRectangleShadow = new SdrRectObj(
+        getModel(),
+        aShadowSize);
     mpRectangleShadow->SetModel(&getModel());
 }
 

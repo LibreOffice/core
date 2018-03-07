@@ -279,7 +279,7 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, bool bVertical, const ::t
     {
         case PRESOBJ_TITLE:
         {
-            pSdrObj = new SdrRectObj(OBJ_TITLETEXT);
+            pSdrObj = new SdrRectObj(getSdrModelFromSdrObjList(), OBJ_TITLETEXT);
 
             if (mbMaster)
             {
@@ -290,7 +290,7 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, bool bVertical, const ::t
 
         case PRESOBJ_OUTLINE:
         {
-            pSdrObj = new SdrRectObj(OBJ_OUTLINETEXT);
+            pSdrObj = new SdrRectObj(getSdrModelFromSdrObjList(), OBJ_OUTLINETEXT);
 
             if (mbMaster)
             {
@@ -301,7 +301,7 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, bool bVertical, const ::t
 
         case PRESOBJ_NOTES:
         {
-            pSdrObj = new SdrRectObj(OBJ_TEXT);
+            pSdrObj = new SdrRectObj(getSdrModelFromSdrObjList(), OBJ_TEXT);
 
             if (mbMaster)
             {
@@ -312,7 +312,7 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, bool bVertical, const ::t
 
         case PRESOBJ_TEXT:
         {
-            pSdrObj = new SdrRectObj(OBJ_TEXT);
+            pSdrObj = new SdrRectObj(getSdrModelFromSdrObjList(), OBJ_TEXT);
         }
         break;
 
@@ -330,7 +330,7 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, bool bVertical, const ::t
             Size aSize = aOutDev.PixelToLogic(aSizePix);
             Point aPnt (0, 0);
             ::tools::Rectangle aRect (aPnt, aSize);
-            pSdrObj = new SdrGrafObj(aGraphic, aRect);
+            pSdrObj = new SdrGrafObj(getSdrModelFromSdrObjList(), aGraphic, aRect);
             aOutDev.Pop();
         }
         break;
@@ -338,7 +338,7 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, bool bVertical, const ::t
         case PRESOBJ_MEDIA:
         case PRESOBJ_OBJECT:
         {
-            pSdrObj = new SdrOle2Obj();
+            pSdrObj = new SdrOle2Obj(getSdrModelFromSdrObjList());
             BitmapEx aBmpEx(BMP_PRESOBJ_OBJECT);
             Graphic aGraphic( aBmpEx );
             static_cast<SdrOle2Obj*>(pSdrObj)->SetGraphic(aGraphic);
@@ -347,7 +347,7 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, bool bVertical, const ::t
 
         case PRESOBJ_CHART:
         {
-            pSdrObj = new SdrOle2Obj();
+            pSdrObj = new SdrOle2Obj(getSdrModelFromSdrObjList());
             static_cast<SdrOle2Obj*>(pSdrObj)->SetProgName( "StarChart" );
             BitmapEx aBmpEx(BMP_PRESOBJ_CHART);
             Graphic aGraphic( aBmpEx );
@@ -357,7 +357,7 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, bool bVertical, const ::t
 
         case PRESOBJ_ORGCHART:
         {
-            pSdrObj = new SdrOle2Obj();
+            pSdrObj = new SdrOle2Obj(getSdrModelFromSdrObjList());
             static_cast<SdrOle2Obj*>(pSdrObj)->SetProgName( "StarOrg" );
             BitmapEx aBmpEx(BMP_PRESOBJ_ORGCHART);
             Graphic aGraphic( aBmpEx );
@@ -368,7 +368,7 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, bool bVertical, const ::t
         case PRESOBJ_TABLE:
         case PRESOBJ_CALC:
         {
-            pSdrObj = new SdrOle2Obj();
+            pSdrObj = new SdrOle2Obj(getSdrModelFromSdrObjList());
             static_cast<SdrOle2Obj*>(pSdrObj)->SetProgName( "StarCalc" );
             BitmapEx aBmpEx(BMP_PRESOBJ_TABLE);
             Graphic aGraphic( aBmpEx );
@@ -381,7 +381,7 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, bool bVertical, const ::t
             // Save the first standard page at SdrPageObj
             // #i105146# We want no content to be displayed for PageKind::Handout,
             // so just never set a page as content
-            pSdrObj = new SdrPageObj(nullptr);
+            pSdrObj = new SdrPageObj(getSdrModelFromSdrObjList(), nullptr);
         }
         break;
 
@@ -398,11 +398,11 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, bool bVertical, const ::t
 
             if (pModel && nDestPageNum < pModel->GetPageCount())
             {
-                pSdrObj = new SdrPageObj(pModel->GetPage(nDestPageNum));
+                pSdrObj = new SdrPageObj(getSdrModelFromSdrObjList(), pModel->GetPage(nDestPageNum));
             }
             else
             {
-                pSdrObj = new SdrPageObj();
+                pSdrObj = new SdrPageObj(getSdrModelFromSdrObjList());
             }
 
             pSdrObj->SetResizeProtect(true);
@@ -414,7 +414,7 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, bool bVertical, const ::t
         case PRESOBJ_DATETIME:
         case PRESOBJ_SLIDENUMBER:
         {
-            pSdrObj = new SdrRectObj(OBJ_TEXT);
+            pSdrObj = new SdrRectObj(getSdrModelFromSdrObjList(), OBJ_TEXT);
             bEmptyPresObj = false;
             bForceText = true;
         }

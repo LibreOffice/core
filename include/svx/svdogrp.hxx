@@ -46,7 +46,7 @@ private:
     Point                       aRefPoint; // Reference point inside the object group
 
 public:
-    SdrObjGroup();
+    SdrObjGroup(SdrModel& rSdrModel);
     virtual ~SdrObjGroup() override;
 
     virtual void SetBoundRectDirty() override;

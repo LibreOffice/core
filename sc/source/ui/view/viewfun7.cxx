@@ -193,8 +193,8 @@ void ScViewFunc::PasteDraw( const Point& rLogicPos, SdrModel* pModel,
     else
     {
         bPasteIsMove = false;       // no internal move happened
-
-        SdrView aView(pModel);      // #i71529# never create a base class of SdrView directly!
+        // TTTT hide all non-direct SdrView constr to disable construct in-between classes
+        SdrView aView(*pModel);     // #i71529# never create a base class of SdrView directly!
         SdrPageView* pPv = aView.ShowSdrPage(aView.GetModel()->GetPage(0));
         aView.MarkAllObj(pPv);
         Size aSize = aView.GetAllMarkedRect().GetSize();
@@ -353,7 +353,11 @@ bool ScViewFunc::PasteObject( const Point& rPos, const uno::Reference < embed::X
         tools::Rectangle aRect( aInsPos, aSize );
 
         ScDrawView* pDrView = GetScDrawView();
-        SdrOle2Obj* pSdrObj = new SdrOle2Obj( aObjRef, aName, aRect );
+        SdrOle2Obj* pSdrObj = new SdrOle2Obj(
+            pDrView->getSdrModelFromSdrView(),
+            aObjRef,
+            aName,
+            aRect);
 
         SdrPageView* pPV = pDrView->GetSdrPageView();
         pDrView->InsertObjectSafe( pSdrObj, *pPV );             // don't mark if OLE
@@ -432,7 +436,10 @@ bool ScViewFunc::PasteGraphic( const Point& rPos, const Graphic& rGraphic,
 
     GetViewData().GetViewShell()->SetDrawShell( true );
     tools::Rectangle aRect(aPos, aSize);
-    SdrGrafObj* pGrafObj = new SdrGrafObj(rGraphic, aRect);
+    SdrGrafObj* pGrafObj = new SdrGrafObj(
+        pScDrawView->getSdrModelFromSdrView(),
+        rGraphic,
+        aRect);
 
     // path was the name of the graphic in history
 

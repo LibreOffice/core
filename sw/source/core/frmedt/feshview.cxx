@@ -2919,8 +2919,11 @@ long SwFEShell::GetSectionWidth( SwFormat const & rFormat ) const
     SdrView* pDrawView = GetDrawView();
     SdrModel* pDrawModel = pDrawView->GetModel();
     SdrObject* pObj = SdrObjFactory::MakeNewObject(
-        SdrInventor::Default, eSdrObjectKind,
-        nullptr, pDrawModel);
+        *pDrawModel,
+        SdrInventor::Default,
+        eSdrObjectKind,
+        nullptr,
+        pDrawModel);
 
     if(pObj)
     {

@@ -25,17 +25,16 @@
 #include <basegfx/polygon/b3dpolygon.hxx>
 #include <basegfx/polygon/b3dpolygontools.hxx>
 
-
 // DrawContact section
-
 sdr::contact::ViewContact* E3dPolygonObj::CreateObjectSpecificViewContact()
 {
     return new sdr::contact::ViewContactOfE3dPolygon(*this);
 }
 
 E3dPolygonObj::E3dPolygonObj(
+    SdrModel& rSdrModel,
     const basegfx::B3DPolyPolygon& rPolyPoly3D)
-:   E3dCompoundObject(),
+:   E3dCompoundObject(rSdrModel),
     bLineOnly(true)
 {
     // Set geometry
@@ -48,9 +47,9 @@ E3dPolygonObj::E3dPolygonObj(
     CreateDefaultTexture();
 }
 
-E3dPolygonObj::E3dPolygonObj()
-:   E3dCompoundObject(),
-    bLineOnly(false) // added missing initialisation
+E3dPolygonObj::E3dPolygonObj(SdrModel& rSdrModel)
+:   E3dCompoundObject(rSdrModel),
+    bLineOnly(false)
 {
     // Create no geometry
 }
