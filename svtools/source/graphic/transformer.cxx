@@ -50,8 +50,8 @@ GraphicTransformer::~GraphicTransformer()
 uno::Reference< graphic::XGraphic > SAL_CALL GraphicTransformer::colorChange(
     const uno::Reference< graphic::XGraphic >& rxGraphic, sal_Int32 nColorFrom, sal_Int8 nTolerance, sal_Int32 nColorTo, sal_Int8 nAlphaTo )
 {
-    const uno::Reference< uno::XInterface > xIFace(rxGraphic, uno::UNO_QUERY);
-    ::Graphic aGraphic(*::unographic::Graphic::getImplementation(xIFace));
+    ::Graphic aGraphic(rxGraphic);
+    ::Graphic aReturnGraphic;
 
     BitmapColor aBmpColorFrom(static_cast< sal_uInt8 >(nColorFrom), static_cast< sal_uInt8 >(nColorFrom >> 8), static_cast< sal_uInt8 >(nColorFrom >> 16));
     BitmapColor aBmpColorTo( static_cast< sal_uInt8 >(nColorTo), static_cast< sal_uInt8 >(nColorTo >> 8), static_cast< sal_uInt8 >(nColorTo  >> 16));
@@ -61,7 +61,8 @@ uno::Reference< graphic::XGraphic > SAL_CALL GraphicTransformer::colorChange(
 
     const sal_uInt8 cIndexFrom = aBmpColorFrom.GetBlueOrIndex();
 
-    if (aGraphic.GetType() == GraphicType::Bitmap || aGraphic.GetType() == GraphicType::GdiMetafile)
+    if (aGraphic.GetType() == GraphicType::Bitmap ||
+        aGraphic.GetType() == GraphicType::GdiMetafile)
     {
         BitmapEx aBitmapEx(aGraphic.GetBitmapEx());
         Bitmap aBitmap(aBitmapEx.GetBitmap());
@@ -70,7 +71,7 @@ uno::Reference< graphic::XGraphic > SAL_CALL GraphicTransformer::colorChange(
         {
             aBitmapEx.setAlphaFrom( cIndexFrom, nAlphaTo );
             aBitmapEx.Replace(aColorFrom, aColorTo, nTolerance);
-            aGraphic = ::Graphic(aBitmapEx);
+            aReturnGraphic = ::Graphic(aBitmapEx);
         }
         else if (aBitmapEx.IsTransparent())
         {
@@ -80,13 +81,13 @@ uno::Reference< graphic::XGraphic > SAL_CALL GraphicTransformer::colorChange(
                 Bitmap aMask2(aBitmap.CreateMask(aColorFrom, nTolerance));
                 aMask.CombineSimple(aMask2, BmpCombine::Or);
                 aBitmap.Replace(aColorFrom, aColorTo, nTolerance);
-                aGraphic = ::Graphic(BitmapEx(aBitmap, aMask));
+                aReturnGraphic = ::Graphic(BitmapEx(aBitmap, aMask));
             }
             else
             {
                 aBitmapEx.setAlphaFrom(cIndexFrom, 0xff - nAlphaTo);
                 aBitmapEx.Replace(aColorFrom, aColorTo, nTolerance);
-                aGraphic = ::Graphic(aBitmapEx);
+                aReturnGraphic = ::Graphic(aBitmapEx);
             }
         }
         else
@@ -95,57 +96,55 @@ uno::Reference< graphic::XGraphic > SAL_CALL GraphicTransformer::colorChange(
             {
                 Bitmap aMask(aBitmap.CreateMask(aColorFrom, nTolerance));
                 aBitmap.Replace(aColorFrom, aColorTo, nTolerance);
-                aGraphic = ::Graphic(BitmapEx(aBitmap, aMask));
+                aReturnGraphic = ::Graphic(BitmapEx(aBitmap, aMask));
             }
             else
             {
                 aBitmapEx.setAlphaFrom(cIndexFrom, nAlphaTo);
                 aBitmapEx.Replace(aColorFrom, aColorTo, nTolerance);
-                aGraphic = ::Graphic(aBitmapEx);
+                aReturnGraphic = ::Graphic(aBitmapEx);
             }
         }
     }
 
-    ::unographic::Graphic* pUnoGraphic = new ::unographic::Graphic();
-    pUnoGraphic->init(aGraphic);
-    uno::Reference< graphic::XGraphic > xRet(pUnoGraphic);
+    aReturnGraphic.setOriginURL(aGraphic.getOriginURL());
 
-    return xRet;
+    unographic::Graphic* pUnoGraphic = new unographic::Graphic();
+    pUnoGraphic->init(aReturnGraphic);
+    return uno::Reference<graphic::XGraphic>(pUnoGraphic);
 }
 
 uno::Reference< graphic::XGraphic > SAL_CALL GraphicTransformer::applyDuotone(
     const uno::Reference< graphic::XGraphic >& rxGraphic, sal_Int32 nColorOne, sal_Int32 nColorTwo )
 {
-    const uno::Reference< uno::XInterface > xIFace( rxGraphic, uno::UNO_QUERY );
-    ::Graphic aGraphic( *::unographic::Graphic::getImplementation( xIFace ) );
+    ::Graphic aGraphic(rxGraphic);
+    ::Graphic aReturnGraphic;
 
     BitmapEx    aBitmapEx( aGraphic.GetBitmapEx() );
     AlphaMask   aMask( aBitmapEx.GetAlpha() );
     Bitmap      aBitmap( aBitmapEx.GetBitmap() );
     BmpFilterParam aFilter( static_cast<sal_uLong>(nColorOne), static_cast<sal_uLong>(nColorTwo) );
     aBitmap.Filter( BmpFilter::DuoTone, &aFilter );
-    aGraphic = ::Graphic( BitmapEx( aBitmap, aMask ) );
-
+    aReturnGraphic = ::Graphic( BitmapEx( aBitmap, aMask ) );
+    aReturnGraphic.setOriginURL(aGraphic.getOriginURL());
     ::unographic::Graphic* pUnoGraphic = new ::unographic::Graphic();
-    pUnoGraphic->init( aGraphic );
-    uno::Reference< graphic::XGraphic > xRet( pUnoGraphic );
-    return xRet;
+    pUnoGraphic->init(aReturnGraphic);
+    return uno::Reference<graphic::XGraphic>(pUnoGraphic);
 }
 
 uno::Reference< graphic::XGraphic > SAL_CALL GraphicTransformer::applyBrightnessContrast(
     const uno::Reference< graphic::XGraphic >& rxGraphic, sal_Int32 nBrightness, sal_Int32 nContrast, sal_Bool mso )
 {
-    const uno::Reference< uno::XInterface > xIFace( rxGraphic, uno::UNO_QUERY );
-    ::Graphic aGraphic( *::unographic::Graphic::getImplementation( xIFace ) );
+    ::Graphic aGraphic(rxGraphic);
+    ::Graphic aReturnGraphic;
 
-    BitmapEx    aBitmapEx( aGraphic.GetBitmapEx() );
-    aBitmapEx.Adjust( nBrightness, nContrast, 0, 0, 0, 0, false, mso );
-    aGraphic = ::Graphic( aBitmapEx );
-
+    BitmapEx aBitmapEx(aGraphic.GetBitmapEx());
+    aBitmapEx.Adjust(nBrightness, nContrast, 0, 0, 0, 0, false, mso);
+    aReturnGraphic = ::Graphic(aBitmapEx);
+    aReturnGraphic.setOriginURL(aGraphic.getOriginURL());
     ::unographic::Graphic* pUnoGraphic = new ::unographic::Graphic();
-    pUnoGraphic->init( aGraphic );
-    uno::Reference< graphic::XGraphic > xRet( pUnoGraphic );
-    return xRet;
+    pUnoGraphic->init(aReturnGraphic);
+    return uno::Reference<graphic::XGraphic>(pUnoGraphic);
 }
 
 }
