@@ -546,8 +546,13 @@ namespace cairocanvas
                                             CAIRO_FONT_SLANT_NORMAL : CAIRO_FONT_SLANT_ITALIC);
             cairo_font_weight_t weight = (rOutDev.GetFont().GetWeight() == WEIGHT_NORMAL ?
                                               CAIRO_FONT_WEIGHT_NORMAL : CAIRO_FONT_WEIGHT_BOLD);
-            cairo_select_font_face( pSCairo.get(), aFontName,
-                                    slant, weight);
+            // map StarSymbol to OpenSymbol
+            if (aFontName.equals("StarSymbol"))
+                cairo_select_font_face( pSCairo.get(), "OpenSymbol",
+                                        slant, weight);
+            else
+                cairo_select_font_face( pSCairo.get(), aFontName,
+                                        slant, weight);
     #endif
 
             if (font_face)

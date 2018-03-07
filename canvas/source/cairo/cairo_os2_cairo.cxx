@@ -327,7 +327,11 @@ namespace cairo
         fontAttrs.usCodePage = 850;
         fontAttrs.fsType = FATTR_TYPE_MBCS;
         fontAttrs.fsFontUse = FATTR_FONTUSE_NOMIX;
-        strcpy( fontAttrs.szFacename, font);
+        // map StarSymbol to OpenSymbol
+        if (strcmp( font, "StarSymbol") == 0)
+            strcpy( fontAttrs.szFacename, "OpenSymbol");
+        else
+            strcpy( fontAttrs.szFacename, font);
         rc = Ft2CreateLogFont( hps, NULL, 1L, &fontAttrs);
         rc = Ft2SetCharSet( hps, 1L);
 
