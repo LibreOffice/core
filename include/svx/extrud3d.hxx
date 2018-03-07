@@ -40,12 +40,15 @@ private:
 
     virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact() override;
     virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties() override;
-    void SetDefaultAttributes(E3dDefaultAttributes const & rDefault);
+    void SetDefaultAttributes(const E3dDefaultAttributes& rDefault);
 
 public:
-
-    E3dExtrudeObj(E3dDefaultAttributes const & rDefault, const basegfx::B2DPolyPolygon& rPP, double fDepth);
-    E3dExtrudeObj();
+    E3dExtrudeObj(
+        SdrModel& rSdrModel,
+        const E3dDefaultAttributes& rDefault,
+        const basegfx::B2DPolyPolygon& rPP,
+        double fDepth);
+    E3dExtrudeObj(SdrModel& rSdrModel);
 
     // PercentDiagonal: 0..100, before 0.0..0.5
     sal_uInt16 GetPercentDiagonal() const

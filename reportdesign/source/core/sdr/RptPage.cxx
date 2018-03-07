@@ -28,23 +28,23 @@ namespace rptui
 {
 using namespace ::com::sun::star;
 
-
-OReportPage::OReportPage( OReportModel& _rModel
-                         ,const uno::Reference< report::XSection >& _xSection )
-    :SdrPage( _rModel, false/*bMasterPage*/ )
+OReportPage::OReportPage(
+    OReportModel& _rModel,
+    const uno::Reference< report::XSection >& _xSection)
+:   SdrPage(_rModel, false/*bMasterPage*/)
     ,rModel(_rModel)
     ,m_xSection(_xSection)
-     ,m_bSpecialInsertMode(false)
+    ,m_bSpecialInsertMode(false)
 {
 }
 
 
-OReportPage::OReportPage( const OReportPage& rPage )
-    :SdrPage( rPage )
-    ,rModel(rPage.rModel)
-     ,m_xSection(rPage.m_xSection)
-     ,m_bSpecialInsertMode(rPage.m_bSpecialInsertMode)
-     ,m_aTemporaryObjectList(rPage.m_aTemporaryObjectList)
+OReportPage::OReportPage(const OReportPage& rPage)
+:   SdrPage(rPage)
+    ,rModel(rPage.getOReportModelFromOReportPage())
+    ,m_xSection(rPage.m_xSection)
+    ,m_bSpecialInsertMode(rPage.m_bSpecialInsertMode)
+    ,m_aTemporaryObjectList(rPage.m_aTemporaryObjectList)
 {
 }
 

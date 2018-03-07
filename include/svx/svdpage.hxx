@@ -53,15 +53,30 @@ class Color;
 class SfxStyleSheet;
 class SvxUnoDrawPagesAccess;
 
-// class SdrObjList
+////////////////////////////////////////////////////////////////////////////////////////////////////
+//
+//  SdrObjList
+//      E3dObjList
+//      SdrPage
+//          DlgEdPage
+//          FmFormPage
+//              ScDrawPage
+//              SdPage
+//              SwDPage
+//          OReportPage
 
+// class SdrObjList
 class SVX_DLLPUBLIC SdrObjList
 {
     SdrObjList(const SdrObjList& rSrcList) = delete;
     SdrObjList &operator=(const SdrObjList& rSrcList) = delete;
 
 private:
-    ::std::vector<SdrObject*> maList;
+    // the SdrModel this objects was created with, unchanged during SdrObjList lifetime
+    SdrModel&                   mrSdrModelFromSdrObjList;
+
+private:
+    ::std::vector<SdrObject*>   maList;
 
 protected:
 friend class SdrObjListIter;
@@ -78,17 +93,20 @@ friend class SdrEditView;
 protected:
     void RecalcRects();
 
-    SdrObjList();
+    SdrObjList(SdrModel& rSdrModel);
     void lateInit(const SdrObjList& rSrcList);
 
 private:
     /// simple ActionChildInserted forwarder to have it on a central place
     static void impChildInserted(SdrObject const & rChild);
 public:
-    SdrObjList(SdrModel* pNewModel, SdrPage* pNewPage);
+    SdrObjList(SdrModel& rSdrModel, SdrPage* pNewPage);
     virtual ~SdrObjList();
 
     virtual SdrObjList* Clone() const;
+
+    // SdrModel access on SdrObjList level
+    SdrModel& getSdrModelFromSdrObjList() const { return mrSdrModelFromSdrObjList; }
 
     void CopyObjects(const SdrObjList& rSrcList);
     /// clean up everything (without Undo)

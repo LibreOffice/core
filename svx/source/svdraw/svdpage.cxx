@@ -70,13 +70,14 @@ public:
 static const sal_Int32 InitialObjectContainerCapacity (64);
 
 
-SdrObjList::SdrObjList(SdrModel* pNewModel, SdrPage* pNewPage):
+SdrObjList::SdrObjList(SdrModel& rSdrModel, SdrPage* pNewPage)
+:   mrSdrModelFromSdrObjList(rSdrModel),
     maList(),
     mxNavigationOrder(),
     mbIsNavigationOrderDirty(false)
 {
     maList.reserve(InitialObjectContainerCapacity);
-    pModel=pNewModel;
+    pModel=&rSdrModel;
     pPage=pNewPage;
     pUpList=nullptr;
     bObjOrdNumsDirty=false;
@@ -85,7 +86,8 @@ SdrObjList::SdrObjList(SdrModel* pNewModel, SdrPage* pNewPage):
     eListKind=SdrObjListKind::Unknown;
 }
 
-SdrObjList::SdrObjList():
+SdrObjList::SdrObjList(SdrModel& rSdrModel)
+:   mrSdrModelFromSdrObjList(rSdrModel),
     maList(),
     mxNavigationOrder(),
     mbIsNavigationOrderDirty(false)
@@ -113,7 +115,7 @@ SdrObjList::~SdrObjList()
 
 SdrObjList* SdrObjList::Clone() const
 {
-    SdrObjList* const pObjList = new SdrObjList();
+    SdrObjList* const pObjList = new SdrObjList(getSdrModelFromSdrObjList());
     pObjList->lateInit(*this);
     return pObjList;
 }
@@ -1144,7 +1146,7 @@ void SdrPageProperties::SetStyleSheet(SfxStyleSheet* pStyleSheet)
 
 
 SdrPage::SdrPage(SdrModel& rNewModel, bool bMasterPage)
-:   SdrObjList(&rNewModel, this),
+:   SdrObjList(rNewModel, this),
     mpViewContact(nullptr),
     mnWidth(10),
     mnHeight(10),
@@ -1168,7 +1170,7 @@ SdrPage::SdrPage(SdrModel& rNewModel, bool bMasterPage)
 }
 
 SdrPage::SdrPage(const SdrPage& rSrcPage)
-:   SdrObjList(rSrcPage.pModel, this),
+:   SdrObjList(rSrcPage.getSdrModelFromSdrObjList(), this),
     mpViewContact(nullptr),
     mnWidth(rSrcPage.mnWidth),
     mnHeight(rSrcPage.mnHeight),

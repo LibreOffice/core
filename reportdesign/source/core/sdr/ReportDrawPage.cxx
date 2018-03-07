@@ -29,9 +29,9 @@
 #include <svx/svdmodel.hxx>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/embed/Aspects.hpp>
-
 #include <tools/diagnose_ex.h>
 #include <svx/unoshape.hxx>
+#include <svx/svdpage.hxx>
 
 namespace reportdesign
 {
@@ -49,7 +49,12 @@ SdrObject* OReportDrawPage::CreateSdrObject_(const uno::Reference< drawing::XSha
 {
     uno::Reference< report::XReportComponent> xReportComponent(xDescr,uno::UNO_QUERY);
     if ( xReportComponent.is() )
-        return OObjectBase::createObject(xReportComponent);
+    {
+        return OObjectBase::createObject(
+            GetSdrPage()->getSdrModelFromSdrObjList(),
+            xReportComponent);
+    }
+
     return SvxDrawPage::CreateSdrObject_( xDescr );
 }
 

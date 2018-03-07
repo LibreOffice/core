@@ -163,62 +163,66 @@ bool SdGRFFilter::Import()
     const sal_uInt16 nFilter = rGraphicFilter.GetImportFormatNumberForTypeName( mrMedium.GetFilter()->GetTypeName() );
     bool        bRet = false;
 
-        SvStream*       pIStm = mrMedium.GetInStream();
-        ErrCode         nReturn = pIStm ? rGraphicFilter.ImportGraphic( aGraphic, aFileName, *pIStm, nFilter ) : ErrCode(1);
+    SvStream*       pIStm = mrMedium.GetInStream();
+    ErrCode         nReturn = pIStm ? rGraphicFilter.ImportGraphic( aGraphic, aFileName, *pIStm, nFilter ) : ErrCode(1);
 
-        if( nReturn )
-            HandleGraphicFilterError( nReturn, rGraphicFilter.GetLastError().nStreamError );
-        else
+    if( nReturn )
+        HandleGraphicFilterError( nReturn, rGraphicFilter.GetLastError().nStreamError );
+    else
+    {
+        if( mrDocument.GetPageCount() == 0 )
+            mrDocument.CreateFirstPages();
+
+        SdPage*     pPage = mrDocument.GetSdPage( 0, PageKind::Standard );
+        Point       aPos;
+        Size        aPagSize( pPage->GetSize() );
+        Size        aGrfSize( OutputDevice::LogicToLogic( aGraphic.GetPrefSize(),
+                                aGraphic.GetPrefMapMode(), MapMode(MapUnit::Map100thMM)));
+
+        aPagSize.AdjustWidth( -(pPage->GetLeftBorder() + pPage->GetRightBorder()) );
+        aPagSize.AdjustHeight( -(pPage->GetUpperBorder() + pPage->GetLowerBorder()) );
+
+        // scale to fit page
+        if ( ( ( aGrfSize.Height() > aPagSize.Height() ) || ( aGrfSize.Width() > aPagSize.Width() ) ) &&
+                aGrfSize.Height() && aPagSize.Height() )
         {
-            if( mrDocument.GetPageCount() == 0 )
-                mrDocument.CreateFirstPages();
+            double fGrfWH = static_cast<double>(aGrfSize.Width()) / aGrfSize.Height();
+            double fWinWH = static_cast<double>(aPagSize.Width()) / aPagSize.Height();
 
-            SdPage*     pPage = mrDocument.GetSdPage( 0, PageKind::Standard );
-            Point       aPos;
-            Size        aPagSize( pPage->GetSize() );
-            Size        aGrfSize( OutputDevice::LogicToLogic( aGraphic.GetPrefSize(),
-                                  aGraphic.GetPrefMapMode(), MapMode(MapUnit::Map100thMM)));
-
-            aPagSize.AdjustWidth( -(pPage->GetLeftBorder() + pPage->GetRightBorder()) );
-            aPagSize.AdjustHeight( -(pPage->GetUpperBorder() + pPage->GetLowerBorder()) );
-
-            // scale to fit page
-            if ( ( ( aGrfSize.Height() > aPagSize.Height() ) || ( aGrfSize.Width() > aPagSize.Width() ) ) &&
-                 aGrfSize.Height() && aPagSize.Height() )
+            // adjust graphic to page size (scales)
+            if( fGrfWH < fWinWH )
             {
-                double fGrfWH = static_cast<double>(aGrfSize.Width()) / aGrfSize.Height();
-                double fWinWH = static_cast<double>(aPagSize.Width()) / aPagSize.Height();
-
-                // adjust graphic to page size (scales)
-                if( fGrfWH < fWinWH )
-                {
-                    aGrfSize.setWidth( static_cast<long>( aPagSize.Height() * fGrfWH ) );
-                    aGrfSize.setHeight( aPagSize.Height() );
-                }
-                else if( fGrfWH > 0.F )
-                {
-                    aGrfSize.setWidth( aPagSize.Width() );
-                    aGrfSize.setHeight( static_cast<long>( aPagSize.Width() / fGrfWH ) );
-                }
+                aGrfSize.setWidth( static_cast<long>( aPagSize.Height() * fGrfWH ) );
+                aGrfSize.setHeight( aPagSize.Height() );
             }
-
-            // set output rectangle for graphic
-            aPos.setX( ( ( aPagSize.Width() - aGrfSize.Width() ) >> 1 ) + pPage->GetLeftBorder() );
-            aPos.setY( ( ( aPagSize.Height() - aGrfSize.Height() ) >> 1 )  + pPage->GetUpperBorder() );
-
-            pPage->InsertObject( new SdrGrafObj( aGraphic, ::tools::Rectangle( aPos, aGrfSize ) ) );
-            bRet = true;
+            else if( fGrfWH > 0.F )
+            {
+                aGrfSize.setWidth( aPagSize.Width() );
+                aGrfSize.setHeight( static_cast<long>( aPagSize.Width() / fGrfWH ) );
+            }
         }
+
+        // set output rectangle for graphic
+        aPos.setX( ( ( aPagSize.Width() - aGrfSize.Width() ) >> 1 ) + pPage->GetLeftBorder() );
+        aPos.setY( ( ( aPagSize.Height() - aGrfSize.Height() ) >> 1 )  + pPage->GetUpperBorder() );
+
+        pPage->InsertObject(
+            new SdrGrafObj(
+                pPage->getSdrModelFromSdrObjList(),
+                aGraphic,
+                ::tools::Rectangle(aPos, aGrfSize)));
+        bRet = true;
+    }
+
     return bRet;
 }
 
 bool SdGRFFilter::Export()
 {
     // SJ: todo: error handling, the GraphicExportFilter does not support proper errorhandling
-
     bool bRet = false;
 
-     uno::Reference< uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
+    uno::Reference< uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
     uno::Reference< drawing::XGraphicExportFilter > xExporter = drawing::GraphicExportFilter::create( xContext );
 
     SdPage* pPage = nullptr;

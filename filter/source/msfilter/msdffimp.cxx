@@ -3958,7 +3958,7 @@ SdrObject* SvxMSDffManager::ImportGraphic( SvStream& rSt, SfxItemSet& rSet, cons
         }
         if( !pRet )
         {
-            pRet = new SdrGrafObj;
+            pRet = new SdrGrafObj(*pSdrModel);
             if( bGrfRead )
                 static_cast<SdrGrafObj*>(pRet)->SetGraphic( aGraf );
 
@@ -4310,7 +4310,7 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
 
         if ( aObjData.nSpFlags & ShapeFlag::Group )
         {
-            pRet = new SdrObjGroup;
+            pRet = new SdrObjGroup(*pSdrModel);
             /*  After CWS aw033 has been integrated, an empty group object
                 cannot store its resulting bounding rectangle anymore. We have
                 to return this rectangle via rClientRect now, but only, if
@@ -4340,7 +4340,10 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                 basegfx::B2DPolygon aPoly;
                 aPoly.append(basegfx::B2DPoint(aObjData.aBoundRect.Left(), aObjData.aBoundRect.Top()));
                 aPoly.append(basegfx::B2DPoint(aObjData.aBoundRect.Right(), aObjData.aBoundRect.Bottom()));
-                pRet = new SdrPathObj(OBJ_LINE, basegfx::B2DPolyPolygon(aPoly));
+                pRet = new SdrPathObj(
+                    *pSdrModel,
+                    OBJ_LINE,
+                    basegfx::B2DPolyPolygon(aPoly));
                 pRet->SetModel( pSdrModel );
                 ApplyAttributes( rSt, aSet, aObjData );
                 pRet->SetMergedItemSet(aSet);
@@ -4352,7 +4355,7 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
 
                     ApplyAttributes( rSt, aSet, aObjData );
 
-                    pRet = new SdrObjCustomShape();
+                    pRet = new SdrObjCustomShape(*pSdrModel);
                     pRet->SetModel( pSdrModel );
 
                     sal_uInt32 ngtextFStrikethrough = GetPropertyValue( DFF_Prop_gtextFStrikethrough, 0 );
@@ -4738,7 +4741,7 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                         basegfx::B2DPolyPolygon aPoly( static_cast<SdrObjCustomShape*>(pRet)->GetLineGeometry( true ) );
                         SdrObject::Free( pRet );
 
-                        pRet = new SdrEdgeObj();
+                        pRet = new SdrEdgeObj(*pSdrModel);
                         ApplyAttributes( rSt, aSet, aObjData );
                         pRet->SetLogicRect( aObjData.aBoundRect );
                         pRet->SetMergedItemSet(aSet);
@@ -5238,7 +5241,10 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
                 }
             }
 
-            pTextObj = new SdrRectObj(OBJ_TEXT, rTextRect);
+            pTextObj = new SdrRectObj(
+                *pSdrModel,
+                OBJ_TEXT,
+                rTextRect);
             pTextImpRec = new SvxMSDffImportRec(*pImpRec);
             bDeleteTextImpRec = true;
 
@@ -5400,7 +5406,7 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
             {
                 if( pTextObj != pObj )
                 {
-                    SdrObject* pGroup = new SdrObjGroup;
+                    SdrObject* pGroup = new SdrObjGroup(*pSdrModel);
                     pGroup->GetSubList()->NbcInsertObject( pObj );
                     pGroup->GetSubList()->NbcInsertObject( pTextObj );
                     if (pOrgObj == pObj)
@@ -5416,7 +5422,9 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
             // simple rectangular objects are ignored by ImportObj()  :-(
             // this is OK for Draw but not for Calc and Writer
             // cause here these objects have a default border
-            pObj = new SdrRectObj(rTextRect);
+            pObj = new SdrRectObj(
+                *pSdrModel,
+                rTextRect);
             pOrgObj = pObj;
             pObj->SetModel( pSdrModel );
             SfxItemSet aSet( pSdrModel->GetItemPool() );
@@ -6622,9 +6630,19 @@ SdrObject* SvxMSDffManager::ImportOLE( sal_uInt32 nOLEId,
     ErrCode nError = ERRCODE_NONE;
     uno::Reference < embed::XStorage > xDstStg;
     if( GetOLEStorageName( nOLEId, sStorageName, xSrcStg, xDstStg ))
-        pRet = CreateSdrOLEFromStorage( sStorageName, xSrcStg, xDstStg,
-                                        rGrf, rBoundRect, rVisArea, pStData, nError,
-                                        nSvxMSDffOLEConvFlags, embed::Aspects::MSOLE_CONTENT, maBaseURL);
+        pRet = CreateSdrOLEFromStorage(
+            *GetModel(),
+            sStorageName,
+            xSrcStg,
+            xDstStg,
+            rGrf,
+            rBoundRect,
+            rVisArea,
+            pStData,
+            nError,
+            nSvxMSDffOLEConvFlags,
+            embed::Aspects::MSOLE_CONTENT,
+            maBaseURL);
     return pRet;
 }
 
@@ -7113,17 +7131,18 @@ css::uno::Reference < css::embed::XEmbeddedObject >  SvxMSDffManager::CheckForCo
 
 // TODO/MBA: code review and testing!
 SdrOle2Obj* SvxMSDffManager::CreateSdrOLEFromStorage(
-                const OUString& rStorageName,
-                tools::SvRef<SotStorage> const & rSrcStorage,
-                const uno::Reference < embed::XStorage >& xDestStorage,
-                const Graphic& rGrf,
-                const tools::Rectangle& rBoundRect,
-                const tools::Rectangle& rVisArea,
-                SvStream* pDataStrm,
-                ErrCode& rError,
-                sal_uInt32 nConvertFlags,
-                sal_Int64 nRecommendedAspect,
-                OUString const& rBaseURL)
+    SdrModel& rSdrModel,
+    const OUString& rStorageName,
+    tools::SvRef<SotStorage> const & rSrcStorage,
+    const uno::Reference < embed::XStorage >& xDestStorage,
+    const Graphic& rGrf,
+    const tools::Rectangle& rBoundRect,
+    const tools::Rectangle& rVisArea,
+    SvStream* pDataStrm,
+    ErrCode& rError,
+    sal_uInt32 nConvertFlags,
+    sal_Int64 nRecommendedAspect,
+    OUString const& rBaseURL)
 {
     sal_Int64 nAspect = nRecommendedAspect;
     SdrOle2Obj* pRet = nullptr;
@@ -7191,7 +7210,12 @@ SdrOle2Obj* SvxMSDffManager::CreateSdrOLEFromStorage(
                         aObj.SetGraphic( rGrf, OUString() );
 
                         // TODO/MBA: check setting of PersistName
-                        pRet = new SdrOle2Obj( aObj, OUString(), rBoundRect);
+                        pRet = new SdrOle2Obj(
+                            rSdrModel,
+                            aObj,
+                            OUString(),
+                            rBoundRect);
+
                         // we have the Object, don't create another
                         bValidStorage = false;
                     }
@@ -7287,7 +7311,11 @@ SdrOle2Obj* SvxMSDffManager::CreateSdrOLEFromStorage(
                 // TODO/LATER: need MediaType
                 aObj.SetGraphic( rGrf, OUString() );
 
-                pRet = new SdrOle2Obj( aObj, aDstStgName, rBoundRect);
+                pRet = new SdrOle2Obj(
+                    rSdrModel,
+                    aObj,
+                    aDstStgName,
+                    rBoundRect);
             }
         }
     }

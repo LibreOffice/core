@@ -90,7 +90,7 @@ protected:
     void ImpCleanup3DDepthMapper();
 
 public:
-    E3dScene();
+    E3dScene(SdrModel& rSdrModel);
     virtual ~E3dScene() override;
 
     virtual void SetBoundRectDirty() override;

@@ -1997,7 +1997,7 @@ void EnhancedCustomShape2d::CreateSubPath( sal_Int32& rSrcPt, sal_Int32& rSegmen
             {
                 basegfx::B2DPolyPolygon aClosedPolyPolygon(aNewB2DPolyPolygon);
                 aClosedPolyPolygon.setClosed(true);
-                SdrPathObj* pFill = new SdrPathObj(OBJ_POLY, aClosedPolyPolygon, dBrightness);
+                SdrPathObj* pFill = new SdrPathObj(pCustomShapeObj->getSdrModelFromSdrObject(), OBJ_POLY, aClosedPolyPolygon, dBrightness);
                 SfxItemSet aTempSet(*this);
                 aTempSet.Put(makeSdrShadowItem(false));
                 aTempSet.Put(XLineStyleItem(drawing::LineStyle_NONE));
@@ -2012,6 +2012,7 @@ void EnhancedCustomShape2d::CreateSubPath( sal_Int32& rSrcPt, sal_Int32& rSegmen
                 // to correct the polygon (here: open it) using the type, the last edge may get lost.
                 // Thus, use a type that fits the polygon
                 SdrPathObj* pStroke = new SdrPathObj(
+                    pCustomShapeObj->getSdrModelFromSdrObject(),
                     aNewB2DPolyPolygon.isClosed() ? OBJ_POLY : OBJ_PLIN,
                     aNewB2DPolyPolygon, dBrightness);
                 SfxItemSet aTempSet(*this);
@@ -2031,6 +2032,7 @@ void EnhancedCustomShape2d::CreateSubPath( sal_Int32& rSrcPt, sal_Int32& rSegmen
             {
                 // see comment above about OBJ_PLIN
                 pObj = new SdrPathObj(
+                    pCustomShapeObj->getSdrModelFromSdrObject(),
                     aNewB2DPolyPolygon.isClosed() ? OBJ_POLY : OBJ_PLIN,
                     aNewB2DPolyPolygon, dBrightness);
                 aTempSet.Put(XFillStyleItem(drawing::FillStyle_NONE));
@@ -2038,7 +2040,7 @@ void EnhancedCustomShape2d::CreateSubPath( sal_Int32& rSrcPt, sal_Int32& rSegmen
             else
             {
                 aNewB2DPolyPolygon.setClosed(true);
-                pObj = new SdrPathObj(OBJ_POLY, aNewB2DPolyPolygon, dBrightness);
+                pObj = new SdrPathObj(pCustomShapeObj->getSdrModelFromSdrObject(), OBJ_POLY, aNewB2DPolyPolygon, dBrightness);
             }
 
             if(bNoStroke)
@@ -2326,7 +2328,7 @@ SdrObject* EnhancedCustomShape2d::CreatePathObj( bool bLineGeometryNeededOnly )
         // copy remaining objects to pRet
         if(vObjectList.size() > 1)
         {
-            pRet = new SdrObjGroup;
+            pRet = new SdrObjGroup(pCustomShapeObj->getSdrModelFromSdrObject());
 
             for (SdrPathObj* pObj : vObjectList)
             {
@@ -2356,7 +2358,7 @@ SdrObject* EnhancedCustomShape2d::CreateObject( bool bLineGeometryNeededOnly )
 
     if ( eSpType == mso_sptRectangle )
     {
-        pRet = new SdrRectObj( aLogicRect );
+        pRet = new SdrRectObj(pCustomShapeObj->getSdrModelFromSdrObject(), aLogicRect);
         pRet->SetMergedItemSet( *this );
     }
     if ( !pRet )

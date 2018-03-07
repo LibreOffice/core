@@ -113,7 +113,9 @@ public:
     */
     void    releaseUnoShape() { m_xKeepShapeAlive.clear(); }
 
-    static SdrObject* createObject(const css::uno::Reference< css::report::XReportComponent>& _xComponent);
+    static SdrObject* createObject(
+        SdrModel& rTargetModel,
+        const css::uno::Reference< css::report::XReportComponent>& _xComponent);
     static sal_uInt16 getObjectType(const css::uno::Reference< css::report::XReportComponent>& _xComponent);
 };
 
@@ -124,9 +126,11 @@ class REPORTDESIGN_DLLPUBLIC OCustomShape final : public SdrObjCustomShape , pub
     friend class OReportPage;
     friend class DlgEdFactory;
 public:
-    static OCustomShape* Create( const css::uno::Reference< css::report::XReportComponent>& _xComponent )
+    static OCustomShape* Create(
+        SdrModel& rSdrModel,
+        const css::uno::Reference< css::report::XReportComponent>& _xComponent)
     {
-        return new OCustomShape( _xComponent );
+        return new OCustomShape(rSdrModel, _xComponent );
     }
 
     virtual ~OCustomShape() override;
@@ -140,8 +144,12 @@ public:
 private:
     virtual void impl_setUnoShape( const css::uno::Reference< css::uno::XInterface >& rxUnoShape ) override;
 
-    OCustomShape(const css::uno::Reference< css::report::XReportComponent>& _xComponent);
-    OCustomShape(const OUString& _sComponentName);
+    OCustomShape(
+        SdrModel& rSdrModel,
+        const css::uno::Reference< css::report::XReportComponent>& _xComponent);
+    OCustomShape(
+        SdrModel& rSdrModel,
+        const OUString& _sComponentName);
 
     virtual void NbcMove( const Size& rSize ) override;
     virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact) override;
@@ -159,9 +167,12 @@ class REPORTDESIGN_DLLPUBLIC OOle2Obj final : public SdrOle2Obj , public OObject
     friend class OReportPage;
     friend class DlgEdFactory;
 public:
-    static OOle2Obj* Create( const css::uno::Reference< css::report::XReportComponent>& _xComponent,sal_uInt16 _nType )
+    static OOle2Obj* Create(
+        SdrModel& rSdrModel,
+        const css::uno::Reference< css::report::XReportComponent>& _xComponent,
+        sal_uInt16 _nType)
     {
-        return new OOle2Obj( _xComponent,_nType );
+        return new OOle2Obj(rSdrModel, _xComponent, _nType);
     }
 
     virtual ~OOle2Obj() override;
@@ -180,9 +191,14 @@ public:
     void initializeChart( const css::uno::Reference< css::frame::XModel>& _xModel);
 
 private:
-    OOle2Obj(const css::uno::Reference< css::report::XReportComponent>& _xComponent,sal_uInt16 _nType);
-    OOle2Obj(const OUString& _sComponentName,sal_uInt16 _nType);
-
+    OOle2Obj(
+        SdrModel& rSdrModel,
+        const css::uno::Reference< css::report::XReportComponent>& _xComponent,
+        sal_uInt16 _nType);
+    OOle2Obj(
+        SdrModel& rSdrModel,
+        const OUString& _sComponentName,
+        sal_uInt16 _nType);
 
     virtual void NbcMove( const Size& rSize ) override;
     virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact) override;
@@ -209,12 +225,15 @@ class REPORTDESIGN_DLLPUBLIC OUnoObject: public SdrUnoObj , public OObjectBase
 
     sal_uInt16   m_nObjectType;
 protected:
-    OUnoObject(const OUString& _sComponentName
-                ,const OUString& rModelName
-                ,sal_uInt16   _nObjectType);
-    OUnoObject(  const css::uno::Reference< css::report::XReportComponent>& _xComponent
-                ,const OUString& rModelName
-                ,sal_uInt16   _nObjectType);
+    OUnoObject(SdrModel& rSdrModel,
+        const OUString& _sComponentName,
+        const OUString& rModelName,
+        sal_uInt16   _nObjectType);
+    OUnoObject(
+        SdrModel& rSdrModel,
+        const css::uno::Reference< css::report::XReportComponent>& _xComponent,
+        const OUString& rModelName,
+        sal_uInt16 _nObjectType);
 
     virtual ~OUnoObject() override;
 

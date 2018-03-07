@@ -801,7 +801,7 @@ bool GalleryTheme::GetGraphic(sal_uInt32 nPos, Graphic& rGraphic, bool bProgress
                         {
                             ScopedVclPtrInstance< VirtualDevice > pVDev;
                             pVDev->SetMapMode( MapMode( MapUnit::Map100thMM ) );
-                            FmFormView aView( aModel.GetModel(), pVDev );
+                            FmFormView aView(*aModel.GetModel(), pVDev);
 
                             aView.hideMarkHandles();
                             aView.ShowSdrPage(aView.GetModel()->GetPage(0));
@@ -1244,7 +1244,7 @@ bool GalleryTheme::InsertTransferable(const uno::Reference< datatransfer::XTrans
                     if( aModel.GetModel() )
                     {
                         SdrPage*    pPage = aModel.GetModel()->GetPage(0);
-                        SdrGrafObj* pGrafObj = new SdrGrafObj( *pGraphic );
+                        SdrGrafObj* pGrafObj = new SdrGrafObj(*aModel.GetModel(), *pGraphic );
 
                         pGrafObj->AppendUserData( new SgaIMapInfo( aImageMap ) );
                         pPage->InsertObject( pGrafObj );

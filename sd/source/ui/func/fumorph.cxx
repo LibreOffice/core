@@ -384,7 +384,7 @@ void FuMorph::ImpInsertPolygons(
     if ( pPageView )
     {
         SfxItemSet      aSet( aSet1 );
-        SdrObjGroup*    pObjGroup = new SdrObjGroup;
+        SdrObjGroup*    pObjGroup = new SdrObjGroup(mpView->getSdrModelFromSdrView());
         SdrObjList*     pObjList = pObjGroup->GetSubList();
         const size_t    nCount = rPolyPolyList3D.size();
         const double    fStep = 1. / ( nCount + 1 );
@@ -397,7 +397,10 @@ void FuMorph::ImpInsertPolygons(
         for ( size_t i = 0; i < nCount; i++, fFactor += fStep )
         {
             const ::basegfx::B2DPolyPolygon& rPolyPoly3D = *rPolyPolyList3D[ i ];
-            SdrPathObj* pNewObj = new SdrPathObj(OBJ_POLY, rPolyPoly3D);
+            SdrPathObj* pNewObj = new SdrPathObj(
+                mpView->getSdrModelFromSdrView(),
+                OBJ_POLY,
+                rPolyPoly3D);
 
             // line color
             if ( bLineColor )

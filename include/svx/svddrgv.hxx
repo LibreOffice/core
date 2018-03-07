@@ -25,7 +25,7 @@
 
 class SdrUndoGeoObj;
 
-class SVX_DLLPUBLIC SdrDragView: public SdrExchangeView
+class SVX_DLLPUBLIC SdrDragView : public SdrExchangeView
 {
     friend class                SdrPageView;
     friend class                SdrDragMethod;
@@ -69,7 +69,10 @@ protected:
 
 protected:
     // #i71538# make constructors of SdrView sub-components protected to avoid incomplete incarnations which may get casted to SdrView
-    SdrDragView(SdrModel* pModel1, OutputDevice* pOut);
+    SdrDragView(
+        SdrModel& rSdrModel,
+        OutputDevice* pOut);
+
     virtual ~SdrDragView() override;
 
 public:

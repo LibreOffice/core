@@ -1469,7 +1469,9 @@ void DrawViewShell::InsertURLField(const OUString& rURL, const OUString& rText,
         pOutl->QuickInsertField( aURLItem, ESelection() );
         OutlinerParaObject* pOutlParaObject = pOutl->CreateParaObject();
 
-        SdrRectObj* pRectObj = new SdrRectObj(OBJ_TEXT);
+        SdrRectObj* pRectObj = new SdrRectObj(
+            GetView()->getSdrModelFromSdrView(),
+            OBJ_TEXT);
 
         pOutl->UpdateFields();
         pOutl->SetUpdateMode( true );
@@ -1545,8 +1547,13 @@ void DrawViewShell::InsertURLButton(const OUString& rURL, const OUString& rText,
 
     if (bNewObj) try
     {
-        SdrUnoObj* pUnoCtrl = static_cast< SdrUnoObj* >( SdrObjFactory::MakeNewObject(SdrInventor::FmForm, OBJ_FM_BUTTON,
-                                mpDrawView->GetSdrPageView()->GetPage(), GetDoc()) );
+        SdrUnoObj* pUnoCtrl = static_cast< SdrUnoObj* >(
+            SdrObjFactory::MakeNewObject(
+                GetView()->getSdrModelFromSdrView(),
+                SdrInventor::FmForm,
+                OBJ_FM_BUTTON,
+                mpDrawView->GetSdrPageView()->GetPage(),
+                GetDoc()));
 
         Reference< awt::XControlModel > xControlModel( pUnoCtrl->GetUnoControlModel(), uno::UNO_QUERY_THROW );
         Reference< beans::XPropertySet > xPropSet( xControlModel, uno::UNO_QUERY_THROW );

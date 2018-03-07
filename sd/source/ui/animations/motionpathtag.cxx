@@ -316,7 +316,7 @@ MotionPathTag::MotionPathTag( CustomAnimationPane& rPane, ::sd::View& rView, con
 , msLastPath( pEffect->getPath() )
 , mbInUpdatePath( false )
 {
-    mpPathObj = mpEffect->createSdrPathObjFromPath();
+    mpPathObj = mpEffect->createSdrPathObjFromPath(rView.getSdrModelFromSdrView());
     mxPolyPoly = mpPathObj->GetPathPoly();
     if (mxOrigin.is())
         maOriginPos = mxOrigin->getPosition();

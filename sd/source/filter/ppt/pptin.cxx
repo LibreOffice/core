@@ -2689,7 +2689,9 @@ SdrObject* ImplSdPPTImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                                             aMediaURL = ReadSound( nRef );
                                         if ( !aMediaURL.isEmpty() )
                                         {
-                                            SdrMediaObj* pMediaObj = new SdrMediaObj( pObj->GetSnapRect() );
+                                            SdrMediaObj* pMediaObj = new SdrMediaObj(
+                                                pObj->getSdrModelFromSdrObject(),
+                                                pObj->GetSnapRect());
                                             pMediaObj->SetModel( pObj->GetModel() );
                                             pMediaObj->SetMergedItemSet( pObj->GetMergedItemSet() );
 

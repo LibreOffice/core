@@ -189,16 +189,19 @@ sdr::contact::ViewContact* SdrCaptionObj::CreateObjectSpecificViewContact()
 }
 
 
-SdrCaptionObj::SdrCaptionObj():
-    SdrRectObj(OBJ_TEXT),
+SdrCaptionObj::SdrCaptionObj(SdrModel& rSdrModel)
+:   SdrRectObj(rSdrModel, OBJ_TEXT),
     aTailPoly(3),  // default size: 3 points = 2 lines
     mbSpecialTextBoxShadow(false),
     mbFixedTail(false)
 {
 }
 
-SdrCaptionObj::SdrCaptionObj(const tools::Rectangle& rRect, const Point& rTail):
-    SdrRectObj(OBJ_TEXT,rRect),
+SdrCaptionObj::SdrCaptionObj(
+    SdrModel& rSdrModel,
+    const tools::Rectangle& rRect,
+    const Point& rTail)
+:   SdrRectObj(rSdrModel, OBJ_TEXT,rRect),
     aTailPoly(3),  // default size: 3 points = 2 lines
     mbSpecialTextBoxShadow(false),
     mbFixedTail(false)
@@ -706,8 +709,9 @@ SdrObject* SdrCaptionObj::DoConvertToPolyObj(bool bBezier, bool bAddText) const
         if (pOL!=nullptr) { pRet=pRect; bInsTail = false; }
         if (pOL==nullptr) pOL=pRect->GetSubList();
         if (pOL!=nullptr) { pRet=pRect; bInsRect = false; }
-        if (pOL==nullptr) {
-            SdrObjGroup* pGrp=new SdrObjGroup;
+        if (pOL==nullptr)
+        {
+            SdrObjGroup* pGrp = new SdrObjGroup(getSdrModelFromSdrObject());
             pOL=pGrp->GetSubList();
             pRet=pGrp;
         }

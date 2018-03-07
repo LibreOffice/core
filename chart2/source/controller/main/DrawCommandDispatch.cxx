@@ -425,8 +425,13 @@ SdrObject* DrawCommandDispatch::createDefaultObject( const sal_uInt16 nID )
         if ( pPage )
         {
             SolarMutexGuard aGuard;
-            pObj = SdrObjFactory::MakeNewObject( pDrawViewWrapper->GetCurrentObjInventor(),
-                pDrawViewWrapper->GetCurrentObjIdentifier(), pPage );
+
+            pObj = SdrObjFactory::MakeNewObject(
+                pDrawModelWrapper->getSdrModel(),
+                pDrawViewWrapper->GetCurrentObjInventor(),
+                pDrawViewWrapper->GetCurrentObjIdentifier(),
+                pPage);
+
             if ( pObj )
             {
                 Size aObjectSize( 4000, 2500 );

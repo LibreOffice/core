@@ -68,27 +68,27 @@ IMPL_LINK( DlgEdFactory, MakeObject, SdrObjCreatorParams, aParams, SdrObject* )
         switch( aParams.nObjIdentifier )
         {
             case OBJ_DLG_PUSHBUTTON:
-                 pNewObj = new DlgEdObj( "com.sun.star.awt.UnoControlButtonModel", xDialogSFact );
+                 pNewObj = new DlgEdObj(aParams.rSdrModel, "com.sun.star.awt.UnoControlButtonModel", xDialogSFact );
                  break;
             case OBJ_DLG_RADIOBUTTON:
-                 pNewObj = new DlgEdObj( "com.sun.star.awt.UnoControlRadioButtonModel", xDialogSFact );
+                 pNewObj = new DlgEdObj(aParams.rSdrModel, "com.sun.star.awt.UnoControlRadioButtonModel", xDialogSFact );
                  break;
             case OBJ_DLG_FORMRADIO:
-                 pNewObj = new DlgEdObj( "com.sun.star.form.component.RadioButton", xDialogSFact );
+                 pNewObj = new DlgEdObj(aParams.rSdrModel, "com.sun.star.form.component.RadioButton", xDialogSFact );
                  static_cast< DlgEdObj* >( pNewObj )->MakeDataAware( mxModel );
                  break;
             case OBJ_DLG_CHECKBOX:
-                 pNewObj = new DlgEdObj( "com.sun.star.awt.UnoControlCheckBoxModel", xDialogSFact );
+                 pNewObj = new DlgEdObj(aParams.rSdrModel, "com.sun.star.awt.UnoControlCheckBoxModel", xDialogSFact );
                  break;
             case OBJ_DLG_FORMCHECK:
-                 pNewObj = new DlgEdObj( "com.sun.star.form.component.CheckBox", xDialogSFact );
+                 pNewObj = new DlgEdObj(aParams.rSdrModel, "com.sun.star.form.component.CheckBox", xDialogSFact );
                  static_cast< DlgEdObj* >( pNewObj )->MakeDataAware( mxModel );
                  break;
             case OBJ_DLG_LISTBOX:
-                 pNewObj = new DlgEdObj( "com.sun.star.awt.UnoControlListBoxModel", xDialogSFact );
+                 pNewObj = new DlgEdObj(aParams.rSdrModel, "com.sun.star.awt.UnoControlListBoxModel", xDialogSFact );
                  break;
             case OBJ_DLG_FORMLIST:
-                 pNewObj = new DlgEdObj( "com.sun.star.form.component.ListBox", xDialogSFact );
+                 pNewObj = new DlgEdObj(aParams.rSdrModel, "com.sun.star.form.component.ListBox", xDialogSFact );
                  static_cast< DlgEdObj* >( pNewObj )->MakeDataAware( mxModel );
                  break;
             case OBJ_DLG_FORMCOMBO:
@@ -96,10 +96,10 @@ IMPL_LINK( DlgEdFactory, MakeObject, SdrObjCreatorParams, aParams, SdrObject* )
             {
                  DlgEdObj* pNew = nullptr;
                  if ( aParams.nObjIdentifier == OBJ_DLG_COMBOBOX )
-                     pNew = new DlgEdObj( "com.sun.star.awt.UnoControlComboBoxModel", xDialogSFact );
+                     pNew = new DlgEdObj(aParams.rSdrModel, "com.sun.star.awt.UnoControlComboBoxModel", xDialogSFact );
                  else
                  {
-                     pNew = new DlgEdObj( "com.sun.star.form.component.ComboBox", xDialogSFact );
+                     pNew = new DlgEdObj(aParams.rSdrModel, "com.sun.star.form.component.ComboBox", xDialogSFact );
                      pNew->MakeDataAware( mxModel );
                  }
                  pNewObj = pNew;
@@ -117,25 +117,25 @@ IMPL_LINK( DlgEdFactory, MakeObject, SdrObjCreatorParams, aParams, SdrObject* )
             }
             break;
             case OBJ_DLG_GROUPBOX:
-                 pNewObj = new DlgEdObj( "com.sun.star.awt.UnoControlGroupBoxModel", xDialogSFact );
+                 pNewObj = new DlgEdObj(aParams.rSdrModel, "com.sun.star.awt.UnoControlGroupBoxModel", xDialogSFact );
                  break;
             case OBJ_DLG_EDIT:
-                 pNewObj = new DlgEdObj( "com.sun.star.awt.UnoControlEditModel", xDialogSFact );
+                 pNewObj = new DlgEdObj(aParams.rSdrModel, "com.sun.star.awt.UnoControlEditModel", xDialogSFact );
                  break;
             case OBJ_DLG_FIXEDTEXT:
-                 pNewObj = new DlgEdObj( "com.sun.star.awt.UnoControlFixedTextModel", xDialogSFact );
+                 pNewObj = new DlgEdObj(aParams.rSdrModel, "com.sun.star.awt.UnoControlFixedTextModel", xDialogSFact );
                  break;
             case OBJ_DLG_IMAGECONTROL:
-                 pNewObj = new DlgEdObj( "com.sun.star.awt.UnoControlImageControlModel", xDialogSFact );
+                 pNewObj = new DlgEdObj(aParams.rSdrModel, "com.sun.star.awt.UnoControlImageControlModel", xDialogSFact );
                  break;
             case OBJ_DLG_PROGRESSBAR:
-                 pNewObj = new DlgEdObj( "com.sun.star.awt.UnoControlProgressBarModel", xDialogSFact );
+                 pNewObj = new DlgEdObj(aParams.rSdrModel, "com.sun.star.awt.UnoControlProgressBarModel", xDialogSFact );
                  break;
             case OBJ_DLG_HSCROLLBAR:
-                 pNewObj = new DlgEdObj( "com.sun.star.awt.UnoControlScrollBarModel", xDialogSFact );
+                 pNewObj = new DlgEdObj(aParams.rSdrModel, "com.sun.star.awt.UnoControlScrollBarModel", xDialogSFact );
                  break;
             case OBJ_DLG_FORMHSCROLL:
-                 pNewObj = new DlgEdObj( "com.sun.star.form.component.ScrollBar", xDialogSFact );
+                 pNewObj = new DlgEdObj(aParams.rSdrModel, "com.sun.star.form.component.ScrollBar", xDialogSFact );
                  static_cast< DlgEdObj* >( pNewObj )->MakeDataAware( mxModel );
                  break;
             case OBJ_DLG_FORMVSCROLL:
@@ -143,10 +143,10 @@ IMPL_LINK( DlgEdFactory, MakeObject, SdrObjCreatorParams, aParams, SdrObject* )
             {
                  DlgEdObj* pNew = nullptr;
                  if ( aParams.nObjIdentifier ==  OBJ_DLG_VSCROLLBAR )
-                     pNew = new DlgEdObj( "com.sun.star.awt.UnoControlScrollBarModel", xDialogSFact );
+                     pNew = new DlgEdObj(aParams.rSdrModel, "com.sun.star.awt.UnoControlScrollBarModel", xDialogSFact );
                  else
                  {
-                     pNew = new DlgEdObj( "com.sun.star.form.component.ScrollBar", xDialogSFact );
+                     pNew = new DlgEdObj(aParams.rSdrModel, "com.sun.star.form.component.ScrollBar", xDialogSFact );
                      pNew->MakeDataAware( mxModel );
                  }
                  pNewObj = pNew;
@@ -164,11 +164,11 @@ IMPL_LINK( DlgEdFactory, MakeObject, SdrObjCreatorParams, aParams, SdrObject* )
                  }
             }    break;
             case OBJ_DLG_HFIXEDLINE:
-                 pNewObj = new DlgEdObj( "com.sun.star.awt.UnoControlFixedLineModel", xDialogSFact );
+                 pNewObj = new DlgEdObj(aParams.rSdrModel, "com.sun.star.awt.UnoControlFixedLineModel", xDialogSFact );
                  break;
             case OBJ_DLG_VFIXEDLINE:
             {
-                 DlgEdObj* pNew = new DlgEdObj( "com.sun.star.awt.UnoControlFixedLineModel", xDialogSFact );
+                 DlgEdObj* pNew = new DlgEdObj(aParams.rSdrModel, "com.sun.star.awt.UnoControlFixedLineModel", xDialogSFact );
                  pNewObj = pNew;
                  // set vertical orientation
                  try
@@ -184,35 +184,35 @@ IMPL_LINK( DlgEdFactory, MakeObject, SdrObjCreatorParams, aParams, SdrObject* )
                  }
             }    break;
             case OBJ_DLG_DATEFIELD:
-                 pNewObj = new DlgEdObj( "com.sun.star.awt.UnoControlDateFieldModel", xDialogSFact );
+                 pNewObj = new DlgEdObj(aParams.rSdrModel, "com.sun.star.awt.UnoControlDateFieldModel", xDialogSFact );
                  break;
             case OBJ_DLG_TIMEFIELD:
-                 pNewObj = new DlgEdObj( "com.sun.star.awt.UnoControlTimeFieldModel", xDialogSFact );
+                 pNewObj = new DlgEdObj(aParams.rSdrModel, "com.sun.star.awt.UnoControlTimeFieldModel", xDialogSFact );
                  break;
             case OBJ_DLG_NUMERICFIELD:
-                 pNewObj = new DlgEdObj( "com.sun.star.awt.UnoControlNumericFieldModel", xDialogSFact );
+                 pNewObj = new DlgEdObj(aParams.rSdrModel, "com.sun.star.awt.UnoControlNumericFieldModel", xDialogSFact );
                  break;
             case OBJ_DLG_CURRENCYFIELD:
-                 pNewObj = new DlgEdObj( "com.sun.star.awt.UnoControlCurrencyFieldModel", xDialogSFact );
+                 pNewObj = new DlgEdObj(aParams.rSdrModel, "com.sun.star.awt.UnoControlCurrencyFieldModel", xDialogSFact );
                  break;
             case OBJ_DLG_FORMATTEDFIELD:
-                 pNewObj = new DlgEdObj( "com.sun.star.awt.UnoControlFormattedFieldModel", xDialogSFact );
+                 pNewObj = new DlgEdObj(aParams.rSdrModel, "com.sun.star.awt.UnoControlFormattedFieldModel", xDialogSFact );
                  break;
             case OBJ_DLG_PATTERNFIELD:
-                 pNewObj = new DlgEdObj( "com.sun.star.awt.UnoControlPatternFieldModel", xDialogSFact );
+                 pNewObj = new DlgEdObj(aParams.rSdrModel, "com.sun.star.awt.UnoControlPatternFieldModel", xDialogSFact );
                  break;
             case OBJ_DLG_FILECONTROL:
-                 pNewObj = new DlgEdObj( "com.sun.star.awt.UnoControlFileControlModel", xDialogSFact );
+                 pNewObj = new DlgEdObj(aParams.rSdrModel, "com.sun.star.awt.UnoControlFileControlModel", xDialogSFact );
                  break;
             case OBJ_DLG_SPINBUTTON:
-                 pNewObj = new DlgEdObj( "com.sun.star.awt.UnoControlSpinButtonModel", xDialogSFact );
+                 pNewObj = new DlgEdObj(aParams.rSdrModel, "com.sun.star.awt.UnoControlSpinButtonModel", xDialogSFact );
                  break;
             case OBJ_DLG_FORMSPIN:
-                 pNewObj = new DlgEdObj( "com.sun.star.form.component.SpinButton", xDialogSFact );
+                 pNewObj = new DlgEdObj(aParams.rSdrModel, "com.sun.star.form.component.SpinButton", xDialogSFact );
                  static_cast< DlgEdObj* >( pNewObj )->MakeDataAware( mxModel );
                  break;
             case OBJ_DLG_TREECONTROL:
-                 pNewObj = new DlgEdObj( "com.sun.star.awt.tree.TreeControlModel", xDialogSFact );
+                 pNewObj = new DlgEdObj(aParams.rSdrModel, "com.sun.star.awt.tree.TreeControlModel", xDialogSFact );
                  break;
         }
     }

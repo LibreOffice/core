@@ -139,7 +139,18 @@ bool WW8Export::TestOleNeedsGraphic(const SwAttrSet& rSet,
         if ( pOLENd )
             nAspect = pOLENd->GetAspect();
         SdrOle2Obj *pRet = SvxMSDffManager::CreateSdrOLEFromStorage(
-            rStorageName,xObjStg,m_pDoc->GetDocStorage(),aGraph,aRect,tools::Rectangle(),nullptr,nErr,0,nAspect, m_pWriter->GetBaseURL());
+            *m_pDoc->getIDocumentDrawModelAccess().GetOrCreateDrawModel(),
+            rStorageName,
+            xObjStg,
+            m_pDoc->GetDocStorage(),
+            aGraph,
+            aRect,
+            tools::Rectangle(),
+            nullptr,
+            nErr,
+            0,
+            nAspect,
+            m_pWriter->GetBaseURL());
 
         if (pRet)
         {

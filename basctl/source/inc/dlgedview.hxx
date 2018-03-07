@@ -39,7 +39,11 @@ private:
 
 public:
 
-    DlgEdView (SdrModel& rModel, OutputDevice& rOut, DlgEditor& rEditor);
+    DlgEdView(
+        SdrModel& rSdrModel,
+        OutputDevice& rOut,
+        DlgEditor& rEditor);
+
     virtual ~DlgEdView() override;
 
     virtual void MarkListHasChanged() override;

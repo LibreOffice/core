@@ -98,15 +98,8 @@ public:
 
     css::uno::Reference< css::drawing::XCustomShapeEngine > const & GetCustomShapeEngine() const;
 
-//  SVX_DLLPRIVATE css::uno::Sequence< css::uno::Reference< css::drawing::XCustomShapeHandle > >
-//      SdrObjCustomShape::GetInteraction( const SdrObjCustomShape* pCustomShape ) const;
-// #i47293#
-//  SVX_DLLPRIVATE std::vector< css::uno::Reference< css::drawing::XCustomShapeHandle > > GetFixedInteractionHandle() const;
-
     SVX_DLLPRIVATE std::vector< SdrCustomShapeInteraction > GetInteractionHandles() const;
-
     SVX_DLLPRIVATE void DragCreateObject( SdrDragStat& rDrag );
-
     SVX_DLLPRIVATE void DragResizeCustomShape( const tools::Rectangle& rNewRect );
     SVX_DLLPRIVATE void DragMoveCustomShapeHdl( const Point& rDestination,
             const sal_uInt16 nCustomShapeHdlNum, bool bMoveCalloutRectangle );
@@ -147,7 +140,7 @@ public:
     double GetObjectRotation() const { return fObjectRotation;}
     double GetExtraTextRotation( const bool bPreRotation = false ) const;
 
-    SdrObjCustomShape();
+    SdrObjCustomShape(SdrModel& rSdrModel);
     virtual ~SdrObjCustomShape() override;
 
     /* is merging default attributes from type-shape into the SdrCustomShapeGeometryItem. If pType

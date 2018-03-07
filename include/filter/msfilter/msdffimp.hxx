@@ -696,17 +696,19 @@ public:
 
     void RemoveFromShapeOrder( SdrObject const * pObject ) const;
 
-    static SdrOle2Obj* CreateSdrOLEFromStorage( const OUString& rStorageName,
-                                                tools::SvRef<SotStorage> const & rSrcStorage,
-                                                const css::uno::Reference < css::embed::XStorage >& xDestStg,
-                                                const Graphic& rGraf,
-                                                const tools::Rectangle& rBoundRect,
-                                                const tools::Rectangle& rVisArea,
-                                                SvStream* pDataStrrm,
-                                                ErrCode& rError,
-                                                sal_uInt32 nConvertFlags,
-                                                sal_Int64 nAspect,
-                                                OUString const& rBaseURL);
+    static SdrOle2Obj* CreateSdrOLEFromStorage(
+        SdrModel& rSdrModel,
+        const OUString& rStorageName,
+        tools::SvRef<SotStorage> const & rSrcStorage,
+        const css::uno::Reference < css::embed::XStorage >& xDestStg,
+        const Graphic& rGraf,
+        const tools::Rectangle& rBoundRect,
+        const tools::Rectangle& rVisArea,
+        SvStream* pDataStrrm,
+        ErrCode& rError,
+        sal_uInt32 nConvertFlags,
+        sal_Int64 nAspect,
+        OUString const& rBaseURL);
 
     /** Create connections between shapes.
         This method should be called after a page is imported.

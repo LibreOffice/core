@@ -326,7 +326,10 @@ SdrObject* SwWW8ImplReader::ReadLine(WW8_DPHEAD const * pHd, SfxAllItemSet &rSet
     ::basegfx::B2DPolygon aPolygon;
     aPolygon.append(::basegfx::B2DPoint(aP[0].X(), aP[0].Y()));
     aPolygon.append(::basegfx::B2DPoint(aP[1].X(), aP[1].Y()));
-    SdrObject* pObj = new SdrPathObj(OBJ_LINE, ::basegfx::B2DPolyPolygon(aPolygon));
+    SdrObject* pObj = new SdrPathObj(
+        *m_pDrawModel,
+        OBJ_LINE,
+        ::basegfx::B2DPolyPolygon(aPolygon));
 
     SetStdAttr( rSet, aLine.aLnt, aLine.aShd );
     SetLineEndAttr( rSet, aLine.aEpp, aLine.aLnt );
@@ -347,7 +350,9 @@ SdrObject* SwWW8ImplReader::ReadRect(WW8_DPHEAD const * pHd, SfxAllItemSet &rSet
     aP1.AdjustX(static_cast<sal_Int16>(SVBT16ToShort( pHd->dxa )) );
     aP1.AdjustY(static_cast<sal_Int16>(SVBT16ToShort( pHd->dya )) );
 
-    SdrObject* pObj = new SdrRectObj( tools::Rectangle( aP0, aP1 ) );
+    SdrObject* pObj = new SdrRectObj(
+        *m_pDrawModel,
+        tools::Rectangle(aP0, aP1));
 
     SetStdAttr( rSet, aRect.aLnt, aRect.aShd );
     SetFill( rSet, aRect.aFill );
@@ -368,7 +373,10 @@ SdrObject* SwWW8ImplReader::ReadElipse(WW8_DPHEAD const * pHd, SfxAllItemSet &rS
     aP1.AdjustX(static_cast<sal_Int16>(SVBT16ToShort( pHd->dxa )) );
     aP1.AdjustY(static_cast<sal_Int16>(SVBT16ToShort( pHd->dya )) );
 
-    SdrObject* pObj = new SdrCircObj( OBJ_CIRC, tools::Rectangle( aP0, aP1 ) );
+    SdrObject* pObj = new SdrCircObj(
+        *m_pDrawModel,
+        OBJ_CIRC,
+        tools::Rectangle(aP0, aP1));
 
     SetStdAttr( rSet, aElipse.aLnt, aElipse.aShd );
     SetFill( rSet, aElipse.aFill );
@@ -400,8 +408,12 @@ SdrObject* SwWW8ImplReader::ReadArc(WW8_DPHEAD const * pHd, SfxAllItemSet &rSet)
         aP1.AdjustX( -static_cast<sal_Int16>(SVBT16ToShort( pHd->dxa )) );
     }
 
-    SdrObject* pObj = new SdrCircObj( OBJ_SECT, tools::Rectangle( aP0, aP1 ),
-                               nW * 9000, ( ( nW + 1 ) & 3 ) * 9000 );
+    SdrObject* pObj = new SdrCircObj(
+        *m_pDrawModel,
+        OBJ_SECT,
+        tools::Rectangle(aP0, aP1),
+        nW * 9000,
+        ( ( nW + 1 ) & 3 ) * 9000);
 
     SetStdAttr( rSet, aArc.aLnt, aArc.aShd );
     SetFill( rSet, aArc.aFill );
@@ -436,7 +448,11 @@ SdrObject* SwWW8ImplReader::ReadPolyLine(WW8_DPHEAD const * pHd, SfxAllItemSet &
     }
     xP.reset();
 
-    SdrObject* pObj = new SdrPathObj(( SVBT16ToShort( aPoly.aBits1 ) & 0x1 ) ? OBJ_POLY : OBJ_PLIN, ::basegfx::B2DPolyPolygon(aP.getB2DPolygon()));
+    SdrObject* pObj = new SdrPathObj(
+        *m_pDrawModel,
+        (SVBT16ToShort(aPoly.aBits1) & 0x1) ? OBJ_POLY : OBJ_PLIN,
+        ::basegfx::B2DPolyPolygon(aP.getB2DPolygon()));
+
     SetStdAttr( rSet, aPoly.aLnt, aPoly.aShd );
     SetFill( rSet, aPoly.aFill );
 
@@ -1092,7 +1108,7 @@ void SwWW8ImplReader::InsertTxbxText(SdrTextObj* pTextObj,
 
                                 if( !pNew )
                                 {
-                                    pNew = new SdrGrafObj;
+                                    pNew = new SdrGrafObj(*m_pDrawModel);
                                     static_cast<SdrGrafObj*>(pNew)->SetGraphic(aGraph);
                                 }
 
@@ -1221,7 +1237,11 @@ SdrObject* SwWW8ImplReader::ReadTextBox(WW8_DPHEAD const * pHd, SfxAllItemSet &r
     aP1.AdjustX(static_cast<sal_Int16>(SVBT16ToShort( pHd->dxa )) );
     aP1.AdjustY(static_cast<sal_Int16>(SVBT16ToShort( pHd->dya )) );
 
-    SdrRectObj* pObj = new SdrRectObj( OBJ_TEXT, tools::Rectangle( aP0, aP1 ) );
+    SdrRectObj* pObj = new SdrRectObj(
+        *m_pDrawModel,
+        OBJ_TEXT,
+        tools::Rectangle(aP0, aP1));
+
     pObj->SetModel( m_pDrawModel );
     pObj->NbcSetSnapRect(tools::Rectangle(aP0, aP1));
     Size aSize( static_cast<sal_Int16>(SVBT16ToShort( pHd->dxa )) ,
@@ -1291,7 +1311,11 @@ SdrObject* SwWW8ImplReader::ReadCaptionBox(WW8_DPHEAD const * pHd, SfxAllItemSet
                + m_nDrawYOfs2 + static_cast<sal_Int16>(SVBT16ToShort( xP[1] )) );
     xP.reset();
 
-    SdrCaptionObj* pObj = new SdrCaptionObj( tools::Rectangle( aP0, aP1 ), aP2 );
+    SdrCaptionObj* pObj = new SdrCaptionObj(
+        *m_pDrawModel,
+        tools::Rectangle(aP0, aP1),
+        aP2);
+
     pObj->SetModel( m_pDrawModel );
     pObj->NbcSetSnapRect(tools::Rectangle(aP0, aP1));
     Size aSize( static_cast<sal_Int16>(SVBT16ToShort( aCallB.dpheadTxbx.dxa )),
@@ -1324,7 +1348,7 @@ SdrObject *SwWW8ImplReader::ReadGroup(WW8_DPHEAD const * pHd, SfxAllItemSet &rSe
     m_nDrawXOfs = m_nDrawXOfs + static_cast<sal_Int16>(SVBT16ToShort( pHd->xa ));
     m_nDrawYOfs = m_nDrawYOfs + static_cast<sal_Int16>(SVBT16ToShort( pHd->ya ));
 
-    SdrObject* pObj = new SdrObjGroup;
+    SdrObject* pObj = new SdrObjGroup(*m_pDrawModel);
 
     short nLeft = static_cast<sal_Int16>(SVBT16ToShort( pHd->cb )) - sizeof( WW8_DPHEAD );
     for (int i = 0; i < nGrouped && nLeft >= static_cast<short>(sizeof(WW8_DPHEAD)); ++i)
@@ -2790,7 +2814,10 @@ SwFrameFormat* SwWW8ImplReader::MungeTextIntoDrawBox(SdrObject* pTrueObject,
     {
         // Group objects don't have text. Insert a text object into
         // the group for holding the text.
-        pSdrTextObj = new SdrRectObj( OBJ_TEXT, pThisGroup->GetCurrentBoundRect());
+        pSdrTextObj = new SdrRectObj(
+            *m_pDrawModel,
+            OBJ_TEXT,
+            pThisGroup->GetCurrentBoundRect());
 
         SfxItemSet aSet(m_pDrawModel->GetItemPool());
         aSet.Put(XFillStyleItem(drawing::FillStyle_NONE));

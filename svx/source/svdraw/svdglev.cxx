@@ -29,16 +29,16 @@
 #include <svx/svdtrans.hxx>
 #include <svx/svdobj.hxx>
 
-
-SdrGlueEditView::SdrGlueEditView(SdrModel* pModel1, OutputDevice* pOut):
-    SdrPolyEditView(pModel1,pOut)
+SdrGlueEditView::SdrGlueEditView(
+    SdrModel& rSdrModel,
+    OutputDevice* pOut)
+:   SdrPolyEditView(rSdrModel, pOut)
 {
 }
 
 SdrGlueEditView::~SdrGlueEditView()
 {
 }
-
 
 void SdrGlueEditView::ImpDoMarkedGluePoints(PGlueDoFunc pDoFunc, bool bConst, const void* p1, const void* p2, const void* p3, const void* p4)
 {

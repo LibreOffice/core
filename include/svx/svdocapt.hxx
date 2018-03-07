@@ -25,28 +25,20 @@
 
 
 //   Forward Declarations
-
-
 class ImpCaptParams;
 
 namespace sdr { namespace properties {
     class CaptionProperties;
 }}
 
-
 //   Helper Class SdrCaptObjGeoData
-
-
 class SdrCaptObjGeoData : public SdrTextObjGeoData
 {
 public:
     tools::Polygon aTailPoly;
 };
 
-
 //   SdrCaptionObj
-
-
 class SVX_DLLPUBLIC SdrCaptionObj : public SdrRectObj
 {
 private:
@@ -73,8 +65,12 @@ private:
     SVX_DLLPRIVATE void ImpRecalcTail();
 
 public:
-    SdrCaptionObj();
-    SdrCaptionObj(const tools::Rectangle& rRect, const Point& rTail);
+    SdrCaptionObj(SdrModel& rSdrModel);
+    SdrCaptionObj(
+        SdrModel& rSdrModel,
+        const tools::Rectangle& rRect,
+        const Point& rTail);
+
     virtual ~SdrCaptionObj() override;
 
     virtual void TakeObjInfo(SdrObjTransformInfoRec& rInfo) const override;

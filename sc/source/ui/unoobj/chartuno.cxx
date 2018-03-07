@@ -246,7 +246,11 @@ void SAL_CALL ScChartsObj::addNewByName( const OUString& rName,
             rDoc.GetChartListenerCollection()->insert( pChartListener );
             pChartListener->StartListeningTo();
 
-            SdrOle2Obj* pObj = new SdrOle2Obj( ::svt::EmbeddedObjectRef( xObj, embed::Aspects::MSOLE_CONTENT ), aName, aInsRect );
+            SdrOle2Obj* pObj = new SdrOle2Obj(
+                *pModel,
+                ::svt::EmbeddedObjectRef(xObj, embed::Aspects::MSOLE_CONTENT),
+                aName,
+                aInsRect);
 
             // set VisArea
             if( xObj.is())

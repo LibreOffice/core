@@ -65,16 +65,17 @@ struct SdrMediaObj::Impl
     OUString m_LastFailedPkgURL;
 };
 
-
-SdrMediaObj::SdrMediaObj()
-    : SdrRectObj()
-    , m_xImpl( new Impl )
+SdrMediaObj::SdrMediaObj(SdrModel& rSdrModel)
+:   SdrRectObj(rSdrModel)
+    ,m_xImpl( new Impl )
 {
 }
 
-SdrMediaObj::SdrMediaObj( const tools::Rectangle& rRect )
-    : SdrRectObj( rRect )
-    , m_xImpl( new Impl )
+SdrMediaObj::SdrMediaObj(
+    SdrModel& rSdrModel,
+    const tools::Rectangle& rRect)
+:   SdrRectObj(rSdrModel, rRect)
+    ,m_xImpl( new Impl )
 {
 }
 

@@ -46,12 +46,15 @@ using ::com::sun::star::uno::Reference;
 namespace chart
 {
 
-ChartTransferable::ChartTransferable( SdrModel* pDrawModel, SdrObject* pSelectedObj, bool bDrawing )
-    :m_pMarkedObjModel( nullptr )
+ChartTransferable::ChartTransferable(
+    SdrModel& rSdrModel,
+    SdrObject* pSelectedObj,
+    bool bDrawing)
+:   m_pMarkedObjModel( nullptr )
     ,m_bDrawing( bDrawing )
 {
-    std::unique_ptr<SdrExchangeView> pExchgView(o3tl::make_unique<SdrView>( pDrawModel ));
-    SdrPageView* pPv = pExchgView->ShowSdrPage( pDrawModel->GetPage( 0 ));
+    std::unique_ptr<SdrExchangeView> pExchgView(o3tl::make_unique<SdrView>( rSdrModel ));
+    SdrPageView* pPv = pExchgView->ShowSdrPage( rSdrModel.GetPage( 0 ));
     if( pSelectedObj )
         pExchgView->MarkObj( pSelectedObj, pPv );
     else

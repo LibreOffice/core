@@ -41,8 +41,14 @@ protected:
     virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties() override;
 
 public:
-    SdrPageObj(SdrPage* pNewPage = nullptr);
-    SdrPageObj(const tools::Rectangle& rRect, SdrPage* pNewPage = nullptr);
+    SdrPageObj(
+        SdrModel& rSdrModel,
+        SdrPage* pNewPage = nullptr);
+    SdrPageObj(
+        SdrModel& rSdrModel,
+        const tools::Rectangle& rRect,
+        SdrPage* pNewPage = nullptr);
+
     virtual ~SdrPageObj() override;
 
     SdrPage* GetReferencedPage() const { return mpShownPage;}

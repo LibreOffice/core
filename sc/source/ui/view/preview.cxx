@@ -165,7 +165,9 @@ void ScPreview::UpdateDrawView()        // nTab must be right
 
         if ( !pDrawView )                                   // New Drawing?
         {
-            pDrawView = new FmFormView( pModel, this );
+            pDrawView = new FmFormView(
+                *pModel,
+                this);
 
             // The DrawView takes over the Design-Mode from the Model
             // (Settings "In opening Draftmode"), therefore to restore here

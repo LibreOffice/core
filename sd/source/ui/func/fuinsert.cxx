@@ -389,7 +389,11 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
                 aRect = ::tools::Rectangle(aPos, aSize);
             }
 
-            SdrOle2Obj* pOleObj = new SdrOle2Obj( svt::EmbeddedObjectRef( xObj, nAspect ), aObjName, aRect );
+            SdrOle2Obj* pOleObj = new SdrOle2Obj(
+                mpView->getSdrModelFromSdrView(),
+                svt::EmbeddedObjectRef( xObj, nAspect ),
+                aObjName,
+                aRect);
             SdrPageView* pPV = mpView->GetSdrPageView();
 
             // if we have a pick obj we need to make this new ole a pres obj replacing the current pick obj
@@ -616,8 +620,11 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
                     Point aPnt ((aPageSize.Width()  - aSize.Width())  / 2,
                         (aPageSize.Height() - aSize.Height()) / 2);
                     ::tools::Rectangle aRect (aPnt, aSize);
-
-                    SdrOle2Obj* pObj = new SdrOle2Obj( aObjRef, aName, aRect);
+                    SdrOle2Obj* pObj = new SdrOle2Obj(
+                        mpView->getSdrModelFromSdrView(),
+                        aObjRef,
+                        aName,
+                        aRect);
 
                     if( mpView->InsertObjectAtView(pObj, *pPV, SdrInsertFlags::SETDEFLAYER) )
                     {

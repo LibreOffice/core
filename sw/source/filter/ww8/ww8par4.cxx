@@ -436,9 +436,21 @@ SdrObject* SwWW8ImplReader::ImportOleBase( Graphic& rGraph,
             }
 
             ErrCode nError = ERRCODE_NONE;
+            GrafikCtor();
+
             pRet = SvxMSDffManager::CreateSdrOLEFromStorage(
-                aSrcStgName, xSrc0, m_pDocShell->GetStorage(), rGraph, aRect, aVisArea, pTmpData, nError,
-                SwMSDffManager::GetFilterFlags(), nAspect, GetBaseURL());
+                *m_pDrawModel,
+                aSrcStgName,
+                xSrc0,
+                m_pDocShell->GetStorage(),
+                rGraph,
+                aRect,
+                aVisArea,
+                pTmpData,
+                nError,
+                SwMSDffManager::GetFilterFlags(),
+                nAspect,
+                GetBaseURL());
             m_pDataStream->Seek( nOldPos );
         }
     }

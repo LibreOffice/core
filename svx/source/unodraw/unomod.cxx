@@ -246,8 +246,26 @@ uno::Sequence< OUString > SvxUnoDrawMSFactory::concatServiceNames( uno::Sequence
     return aSeq;
 }
 
-SvxUnoDrawingModel::SvxUnoDrawingModel( SdrModel* pDoc ) throw()
-: SfxBaseModel(nullptr), mpDoc( pDoc )
+SdrModel* SvxUnoDrawingModel::getSdrModelFromUnoModel() const
+{
+    return mpDoc;
+}
+
+SvxUnoDrawingModel::SvxUnoDrawingModel(SdrModel* pDoc) throw()
+:   SfxBaseModel(nullptr),
+    SvxFmMSFactory(),
+    css::drawing::XDrawPagesSupplier(),
+    css::lang::XServiceInfo(),
+    css::ucb::XAnyCompareFactory(),
+    mpDoc(pDoc),
+    mxDrawPagesAccess(),
+    mxDashTable(),
+    mxGradientTable(),
+    mxHatchTable(),
+    mxBitmapTable(),
+    mxTransGradientTable(),
+    mxMarkerTable(),
+    maTypeSequence()
 {
 }
 

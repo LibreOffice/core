@@ -1287,7 +1287,10 @@ static void lcl_ConvertSdrOle2ObjsToSdrGrafObjs( SdrModel* _pModel )
                 pOle2Obj->Disconnect();
 
                 // create new graphic shape with the ole graphic and shape size
-                SdrGrafObj* pGraphicObj = new SdrGrafObj( aGraphic, pOle2Obj->GetCurrentBoundRect() );
+                SdrGrafObj* pGraphicObj = new SdrGrafObj(
+                    *_pModel, // TTTT why ptr?
+                    aGraphic,
+                    pOle2Obj->GetCurrentBoundRect());
                 // apply layer of ole2 shape at graphic shape
                 pGraphicObj->SetLayer( pOle2Obj->GetLayer() );
 

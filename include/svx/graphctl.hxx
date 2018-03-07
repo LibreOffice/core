@@ -141,10 +141,13 @@ protected:
     }
 
 public:
-    GraphCtrlView(SdrModel* pModel, GraphCtrl* pWindow)
-        : SdrView(pModel, pWindow)
-        , rGraphCtrl(*pWindow)
-    {}
+    GraphCtrlView(
+        SdrModel& rSdrModel,
+        GraphCtrl* pWindow)
+        :   SdrView(rSdrModel, pWindow)
+        ,rGraphCtrl(*pWindow)
+    {
+    }
 };
 
 #endif // INCLUDED_SVX_GRAPHCTL_HXX

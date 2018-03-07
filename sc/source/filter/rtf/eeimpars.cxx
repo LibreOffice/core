@@ -602,7 +602,11 @@ void ScEEImport::InsertGraphic( SCCOL nCol, SCROW nRow, SCTAB nTab,
         if ( pI->pGraphic )
         {
             tools::Rectangle aRect ( aInsertPos, aLogicSize );
-            SdrGrafObj* pObj = new SdrGrafObj( *pI->pGraphic, aRect );
+            SdrGrafObj* pObj = new SdrGrafObj(
+                *pModel,
+                *pI->pGraphic,
+                aRect);
+
             // calling SetGraphicLink here doesn't work
             pObj->SetName( pI->aURL );
 

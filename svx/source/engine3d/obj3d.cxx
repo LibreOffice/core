@@ -83,13 +83,13 @@ using namespace com::sun::star;
 // List for 3D-Objects
 
 
-E3dObjList::E3dObjList()
-:   SdrObjList(nullptr, nullptr)
+E3dObjList::E3dObjList(SdrModel& rSdrModel)
+:   SdrObjList(rSdrModel, nullptr)
 {
 }
 
-E3dObjList::E3dObjList(const E3dObjList&)
-:   SdrObjList()
+E3dObjList::E3dObjList(const E3dObjList& rSrcList)
+:   SdrObjList(rSrcList.getSdrModelFromSdrObjList())
 {
 }
 
@@ -176,8 +176,9 @@ sdr::properties::BaseProperties* E3dObject::CreateObjectSpecificProperties()
 }
 
 
-E3dObject::E3dObject()
-:   maSubList(),
+E3dObject::E3dObject(SdrModel& rSdrModel)
+:   SdrAttrObj(rSdrModel),
+    maSubList(rSdrModel),
     maLocalBoundVol(),
     maTransformation(),
     maFullTransform(),
@@ -743,9 +744,8 @@ sdr::properties::BaseProperties* E3dCompoundObject::CreateObjectSpecificProperti
     return new sdr::properties::E3dCompoundProperties(*this);
 }
 
-
-E3dCompoundObject::E3dCompoundObject()
-:   E3dObject(),
+E3dCompoundObject::E3dCompoundObject(SdrModel& rSdrModel)
+:   E3dObject(rSdrModel),
     aMaterialAmbientColor()
 {
     // Set defaults

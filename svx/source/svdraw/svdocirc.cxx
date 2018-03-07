@@ -104,8 +104,10 @@ sdr::contact::ViewContact* SdrCircObj::CreateObjectSpecificViewContact()
     return new sdr::contact::ViewContactOfSdrCircObj(*this);
 }
 
-
-SdrCircObj::SdrCircObj(SdrObjKind eNewKind)
+SdrCircObj::SdrCircObj(
+    SdrModel& rSdrModel,
+    SdrObjKind eNewKind)
+:   SdrRectObj(rSdrModel)
 {
     nStartAngle=0;
     nEndAngle=36000;
@@ -113,8 +115,11 @@ SdrCircObj::SdrCircObj(SdrObjKind eNewKind)
     bClosedObj=eNewKind!=OBJ_CARC;
 }
 
-SdrCircObj::SdrCircObj(SdrObjKind eNewKind, const tools::Rectangle& rRect):
-    SdrRectObj(rRect)
+SdrCircObj::SdrCircObj(
+    SdrModel& rSdrModel,
+    SdrObjKind eNewKind,
+    const tools::Rectangle& rRect)
+:   SdrRectObj(rSdrModel, rRect)
 {
     nStartAngle=0;
     nEndAngle=36000;
@@ -122,8 +127,13 @@ SdrCircObj::SdrCircObj(SdrObjKind eNewKind, const tools::Rectangle& rRect):
     bClosedObj=eNewKind!=OBJ_CARC;
 }
 
-SdrCircObj::SdrCircObj(SdrObjKind eNewKind, const tools::Rectangle& rRect, long nNewStartWink, long nNewEndWink):
-    SdrRectObj(rRect)
+SdrCircObj::SdrCircObj(
+    SdrModel& rSdrModel,
+    SdrObjKind eNewKind,
+    const tools::Rectangle& rRect,
+    long nNewStartWink,
+    long nNewEndWink)
+:   SdrRectObj(rSdrModel, rRect)
 {
     long nAngleDif=nNewEndWink-nNewStartWink;
     nStartAngle=NormAngle360(nNewStartWink);

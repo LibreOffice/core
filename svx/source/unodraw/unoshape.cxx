@@ -677,7 +677,10 @@ uno::Any SvxShape::GetBitmap( bool bMetaFile /* = false */ ) const
     SdrModel* pModel = mpObj->GetModel();
     SdrPage* pPage = mpObj->GetPage();
 
-    std::unique_ptr<E3dView> pView(new E3dView( pModel, pVDev.get() ));
+    std::unique_ptr<E3dView> pView(
+        new E3dView(
+            mpObj->getSdrModelFromSdrObject(),
+            pVDev.get()));
     pView->hideMarkHandles();
     SdrPageView* pPageView = pView->ShowSdrPage(pPage);
 

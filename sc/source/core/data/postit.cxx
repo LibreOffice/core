@@ -375,7 +375,11 @@ void ScCaptionCreator::CreateCaption( bool bShown, bool bTailFront )
     // create the caption drawing object
     tools::Rectangle aTextRect( Point( 0 , 0 ), Size( SC_NOTECAPTION_WIDTH, SC_NOTECAPTION_HEIGHT ) );
     Point aTailPos = CalcTailPos( bTailFront );
-    mxCaption.reset( new SdrCaptionObj( aTextRect, aTailPos ));
+    mxCaption.reset(
+        new SdrCaptionObj(
+            *mrDoc.GetDrawLayer(), // TTTT should ret a ref?
+            aTextRect,
+            aTailPos));
     // basic caption settings
     ScCaptionUtil::SetBasicCaptionSettings( *mxCaption, bShown );
 }

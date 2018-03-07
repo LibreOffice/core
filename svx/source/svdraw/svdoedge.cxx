@@ -161,8 +161,8 @@ sdr::contact::ViewContact* SdrEdgeObj::CreateObjectSpecificViewContact()
 }
 
 
-SdrEdgeObj::SdrEdgeObj()
-:   SdrTextObj(),
+SdrEdgeObj::SdrEdgeObj(SdrModel& rSdrModel)
+:   SdrTextObj(rSdrModel),
     nNotifyingCount(0),
     bEdgeTrackDirty(false),
     bEdgeTrackUserDefined(false),

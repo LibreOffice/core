@@ -146,15 +146,15 @@ SdrDropMarkerOverlay::~SdrDropMarkerOverlay()
     // OverlayManager and deletes them.
 }
 
-
-SdrView::SdrView(SdrModel* pModel1, OutputDevice* pOut)
-:   SdrCreateView(pModel1,pOut),
+SdrView::SdrView(
+    SdrModel& rSdrModel,
+    OutputDevice* pOut)
+:   SdrCreateView(rSdrModel, pOut),
     bNoExtendedMouseDispatcher(false),
     bNoExtendedKeyDispatcher(false),
     mbMasterPagePaintCaching(false)
 {
     maAccessibilityOptions.AddListener(this);
-
     onAccessibilityOptionsChanged();
 }
 

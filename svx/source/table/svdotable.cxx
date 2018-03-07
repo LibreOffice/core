@@ -749,20 +749,20 @@ sdr::contact::ViewContact* SdrTableObj::CreateObjectSpecificViewContact()
     return new sdr::contact::ViewContactOfTableObj(*this);
 }
 
-
-SdrTableObj::SdrTableObj(SdrModel* _pModel)
+SdrTableObj::SdrTableObj(SdrModel& rSdrModel)
+:   SdrTextObj(rSdrModel)
 {
-    pModel = _pModel;
     init( 1, 1 );
 }
 
-
-SdrTableObj::SdrTableObj(SdrModel* _pModel, const ::tools::Rectangle& rNewRect, sal_Int32 nColumns, sal_Int32 nRows)
-: SdrTextObj( rNewRect )
-, maLogicRect( rNewRect )
+SdrTableObj::SdrTableObj(
+    SdrModel& rSdrModel,
+    const ::tools::Rectangle& rNewRect,
+    sal_Int32 nColumns,
+    sal_Int32 nRows)
+:   SdrTextObj(rSdrModel, rNewRect)
+    ,maLogicRect(rNewRect)
 {
-    pModel = _pModel;
-
     if( nColumns <= 0 )
         nColumns = 1;
 
@@ -2346,7 +2346,11 @@ SdrTableObj* SdrTableObj::CloneRange( const CellPos& rStart, const CellPos& rEnd
     const sal_Int32 nColumns = rEnd.mnCol - rStart.mnCol + 1;
     const sal_Int32 nRows = rEnd.mnRow - rStart.mnRow + 1;
 
-    SdrTableObj* pNewTableObj = new SdrTableObj( GetModel(), GetCurrentBoundRect(), nColumns, nRows);
+    SdrTableObj* pNewTableObj = new SdrTableObj(
+        getSdrModelFromSdrObject(),
+        GetCurrentBoundRect(),
+        nColumns,
+        nRows);
     pNewTableObj->setTableStyleSettings( getTableStyleSettings() );
     pNewTableObj->setTableStyle( getTableStyle() );
 

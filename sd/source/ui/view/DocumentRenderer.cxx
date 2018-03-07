@@ -1527,7 +1527,10 @@ private:
         std::vector< ::tools::Rectangle >::iterator iter( aAreas.begin() );
         while( iter != aAreas.end() )
         {
-            pHandout->NbcInsertObject( new SdrPageObj((*iter++)) );
+            pHandout->NbcInsertObject(
+                new SdrPageObj(
+                    rModel,
+                    (*iter++)));
 
             if( bDrawLines && (iter != aAreas.end())  )
             {
@@ -1547,7 +1550,10 @@ private:
                     aPathPoly.append( aPoly );
                 }
 
-                SdrPathObj* pPathObj = new SdrPathObj(OBJ_PATHLINE, aPathPoly );
+                SdrPathObj* pPathObj = new SdrPathObj(
+                    rModel,
+                    OBJ_PATHLINE,
+                    aPathPoly);
                 pPathObj->SetMergedItem(XLineStyleItem(drawing::LineStyle_SOLID));
                 pPathObj->SetMergedItem(XLineColorItem(OUString(), COL_BLACK));
 

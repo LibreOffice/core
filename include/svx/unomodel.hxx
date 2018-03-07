@@ -31,11 +31,12 @@
 
 class SdrModel;
 
-class SVX_DLLPUBLIC SvxUnoDrawingModel : public SfxBaseModel, // implements SfxListener, OWEAKOBJECT & other
-                           public SvxFmMSFactory,
-                           public css::drawing::XDrawPagesSupplier,
-                           public css::lang::XServiceInfo,
-                           public css::ucb::XAnyCompareFactory
+class SVX_DLLPUBLIC SvxUnoDrawingModel
+:   public SfxBaseModel, // implements SfxListener, OWEAKOBJECT & other
+    public SvxFmMSFactory,
+    public css::drawing::XDrawPagesSupplier,
+    public css::lang::XServiceInfo,
+    public css::ucb::XAnyCompareFactory
 {
     friend class SvxUnoDrawPagesAccess;
 
@@ -52,6 +53,10 @@ private:
     css::uno::Reference< css::uno::XInterface > mxMarkerTable;
 
     css::uno::Sequence< css::uno::Type > maTypeSequence;
+
+protected:
+    // SvxUnoDrawMSFactory
+    virtual SdrModel* getSdrModelFromUnoModel() const;
 
 public:
     SvxUnoDrawingModel( SdrModel* pDoc ) throw();

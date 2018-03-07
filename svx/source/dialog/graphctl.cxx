@@ -143,7 +143,7 @@ void GraphCtrl::InitSdrModel()
     pModel->SetChanged( false );
 
     // Creating a View
-    pView = new GraphCtrlView( pModel, this );
+    pView = new GraphCtrlView(*pModel, this);
     pView->SetWorkArea( tools::Rectangle( Point(), aGraphSize ) );
     pView->EnableExtendedMouseEventDispatcher( true );
     pView->ShowSdrPage(pView->GetModel()->GetPage(0));

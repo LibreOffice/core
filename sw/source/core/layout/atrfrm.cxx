@@ -2886,7 +2886,11 @@ SwFlyFrameFormat::~SwFlyFrameFormat()
 SwFlyDrawContact* SwFlyFrameFormat::GetOrCreateContact()
 {
     if(!m_pContact)
-        m_pContact.reset(new SwFlyDrawContact(this));
+    {
+        SwDrawModel* pDrawModel(GetDoc()->getIDocumentDrawModelAccess().GetOrCreateDrawModel());
+        m_pContact.reset(new SwFlyDrawContact(this, *pDrawModel));
+    }
+
     return m_pContact.get();
 }
 

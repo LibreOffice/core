@@ -349,7 +349,7 @@ void SvxLineTabPage::InitSymbols(MenuButton const * pButton)
         pModel->InsertPage( pPage, 0 );
         {
         // 3D View
-        std::unique_ptr<SdrView> pView(new SdrView( pModel.get(), pVDev ));
+        std::unique_ptr<SdrView> pView(new SdrView( *pModel, pVDev ));
         pView->hideMarkHandles();
         pView->ShowSdrPage(pPage);
 
@@ -1119,7 +1119,7 @@ void SvxLineTabPage::Reset( const SfxItemSet* rAttrs )
         pPage->SetSize(Size(1000,1000));
         pModel->InsertPage( pPage, 0 );
         {
-        std::unique_ptr<SdrView> pView(new SdrView( pModel.get(), pVDev ));
+        std::unique_ptr<SdrView> pView(new SdrView( *pModel, pVDev ));
         pView->hideMarkHandles();
         pView->ShowSdrPage(pPage);
         SdrObject *pObj=nullptr;

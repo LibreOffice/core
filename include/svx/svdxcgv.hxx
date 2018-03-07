@@ -25,7 +25,7 @@
 #include <vcl/gdimtf.hxx>
 #include <svx/svxdllapi.h>
 
-class SVX_DLLPUBLIC SdrExchangeView: public SdrObjEditView
+class SVX_DLLPUBLIC SdrExchangeView : public SdrObjEditView
 {
     friend class SdrPageView;
 
@@ -40,7 +40,9 @@ protected:
 
 protected:
     // #i71538# make constructors of SdrView sub-components protected to avoid incomplete incarnations which may get casted to SdrView
-    SdrExchangeView(SdrModel* pModel1, OutputDevice* pOut);
+    SdrExchangeView(
+        SdrModel& rSdrModel,
+        OutputDevice* pOut);
 
 public:
     // Output all marked objects on the specified OutputDevice

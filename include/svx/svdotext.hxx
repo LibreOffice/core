@@ -136,15 +136,12 @@ class SVX_DLLPUBLIC SdrTextObj : public SdrAttrObj, public svx::ITextProvider
 {
 private:
     // Cell needs access to ImpGetDrawOutliner();
-
     friend class                sdr::table::Cell;
     friend class                sdr::table::SdrTableRtfExporter;
     friend class                sdr::table::SdrTableRTFParser;
-
     friend class                TextChain;
     friend class                TextChainFlow;
     friend class                EditingTextChainFlow;
-
 
     // CustomShapeproperties need to access the "bTextFrame" member:
     friend class sdr::properties::CustomShapeProperties;
@@ -272,7 +269,6 @@ private:
     SVX_DLLPRIVATE void ImpRegisterLink();
     SVX_DLLPRIVATE void ImpDeregisterLink();
     SVX_DLLPRIVATE ImpSdrObjTextLinkUserData* GetLinkUserData() const;
-//  void ImpCheckItemSetChanges(const SfxItemSet& rAttr);
 
     /** Appends the style family to a provided style name */
     static void AppendFamilyToStyleName(OUString& styleName, SfxStyleFamily family);
@@ -306,12 +302,19 @@ protected:
     virtual void AdaptTextMinSize();
 
     // constructors for labeled graphical objects
-    SdrTextObj();
-    SdrTextObj(const tools::Rectangle& rNewRect);
+    SdrTextObj(SdrModel& rSdrModel);
+    SdrTextObj(
+        SdrModel& rSdrModel,
+        const tools::Rectangle& rNewRect);
 
     // constructors for text frames
-    SdrTextObj(SdrObjKind eNewTextKind);
-    SdrTextObj(SdrObjKind eNewTextKind, const tools::Rectangle& rNewRect);
+    SdrTextObj(
+        SdrModel& rSdrModel,
+        SdrObjKind eNewTextKind);
+    SdrTextObj(
+        SdrModel& rSdrModel,
+        SdrObjKind eNewTextKind,
+        const tools::Rectangle& rNewRect);
 
     virtual ~SdrTextObj() override;
 

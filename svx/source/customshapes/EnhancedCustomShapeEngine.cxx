@@ -161,7 +161,7 @@ SdrObject* EnhancedCustomShapeEngine::ImplForceGroupWithText( const SdrObjCustom
                 if ( dynamic_cast<const SdrObjGroup*>( pRenderedShape) ==  nullptr )
                 {
                     SdrObject* pTmp = pRenderedShape;
-                    pRenderedShape = new SdrObjGroup();
+                    pRenderedShape = new SdrObjGroup(pCustoObj->getSdrModelFromSdrObject());
                     static_cast<SdrObjGroup*>(pRenderedShape)->GetSubList()->NbcInsertObject( pTmp );
                 }
                 static_cast<SdrObjGroup*>(pRenderedShape)->GetSubList()->NbcInsertObject( pShadowGeometry->Clone(), 0 );
@@ -175,7 +175,11 @@ SdrObject* EnhancedCustomShapeEngine::ImplForceGroupWithText( const SdrObjCustom
         {
             // #i37011# also create a text object and add at rPos + 1
             SdrObject* pTextObj = SdrObjFactory::MakeNewObject(
-                pCustoObj->GetObjInventor(), OBJ_TEXT, nullptr, pCustoObj->GetModel());
+                pCustoObj->getSdrModelFromSdrObject(),
+                pCustoObj->GetObjInventor(),
+                OBJ_TEXT,
+                nullptr,
+                pCustoObj->GetModel());
 
             // Copy text content
             OutlinerParaObject* pParaObj = pCustoObj->GetOutlinerParaObject();
@@ -216,7 +220,7 @@ SdrObject* EnhancedCustomShapeEngine::ImplForceGroupWithText( const SdrObjCustom
                 if ( dynamic_cast<const SdrObjGroup*>( pRenderedShape) ==  nullptr )
                 {
                     SdrObject* pTmp = pRenderedShape;
-                    pRenderedShape = new SdrObjGroup();
+                    pRenderedShape = new SdrObjGroup(pCustoObj->getSdrModelFromSdrObject());
                     static_cast<SdrObjGroup*>(pRenderedShape)->GetSubList()->NbcInsertObject( pTmp );
                 }
                 static_cast<SdrObjGroup*>(pRenderedShape)->GetSubList()->NbcInsertObject( pTextObj );
@@ -231,7 +235,7 @@ SdrObject* EnhancedCustomShapeEngine::ImplForceGroupWithText( const SdrObjCustom
             if ( dynamic_cast<const SdrObjGroup*>( pRenderedShape) ==  nullptr )
             {
                 SdrObject* pTmp = pRenderedShape;
-                pRenderedShape = new SdrObjGroup();
+                pRenderedShape = new SdrObjGroup(pCustoObj->getSdrModelFromSdrObject());
                 static_cast<SdrObjGroup*>(pRenderedShape)->GetSubList()->NbcInsertObject( pTmp );
             }
             pRenderedShape->SetPage( pCustoObj->GetPage() );

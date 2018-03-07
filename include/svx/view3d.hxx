@@ -63,7 +63,10 @@ protected:
     void BreakSingle3DObj(E3dObject* pObj);
 
 public:
-    E3dView(SdrModel* pModel, OutputDevice* pOut);
+    E3dView(
+        SdrModel& rSdrModel,
+        OutputDevice* pOut);
+
     virtual ~E3dView() override;
 
     // Output all marked Objects on the given OutputDevice.

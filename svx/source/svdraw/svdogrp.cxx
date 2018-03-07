@@ -50,31 +50,26 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <libxml/xmlwriter.h>
 
-
 // BaseProperties section
-
 sdr::properties::BaseProperties* SdrObjGroup::CreateObjectSpecificProperties()
 {
     return new sdr::properties::GroupProperties(*this);
 }
 
-
 // DrawContact section
-
 sdr::contact::ViewContact* SdrObjGroup::CreateObjectSpecificViewContact()
 {
     return new sdr::contact::ViewContactOfGroup(*this);
 }
 
-
-SdrObjGroup::SdrObjGroup()
+SdrObjGroup::SdrObjGroup(SdrModel& rSdrModel)
+:   SdrObject(rSdrModel)
 {
-    pSub.reset( new SdrObjList(nullptr,nullptr) );
+    pSub.reset(new SdrObjList(rSdrModel, nullptr));
     pSub->SetOwnerObj(this);
     pSub->SetListKind(SdrObjListKind::GroupObj);
     bClosedObj=false;
 }
-
 
 SdrObjGroup::~SdrObjGroup()
 {
@@ -736,7 +731,7 @@ void SdrObjGroup::ReformatText()
 
 SdrObject* SdrObjGroup::DoConvertToPolyObj(bool bBezier, bool bAddText) const
 {
-    SdrObject* pGroup = new SdrObjGroup;
+    SdrObject* pGroup = new SdrObjGroup(getSdrModelFromSdrObject());
     pGroup->SetModel(GetModel());
 
     for(size_t a=0; a<pSub->GetObjCount(); ++a)

@@ -56,8 +56,11 @@ class ScDrawView final : public FmFormView
     virtual SdrUndoManager* getSdrUndoManagerForEnhancedTextEdit() const override;
 
 public:
-                    ScDrawView( OutputDevice* pOut, ScViewData* pData );
-    virtual         ~ScDrawView() override;
+    ScDrawView(
+        OutputDevice* pOut,
+        ScViewData* pData);
+
+    virtual ~ScDrawView() override;
 
     virtual void    MarkListHasChanged() override;
     virtual void    Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
