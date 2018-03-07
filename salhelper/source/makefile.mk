@@ -64,6 +64,8 @@ DEF1NAME=	$(SHL1TARGET)
 
 .IF "$(COMNAME)"=="msci"
 SHL1VERSIONMAP=msci.map
+.ELIF "$(COMNAME)"=="mscx"
+SHL1VERSIONMAP=mscx.map
 .ELIF "$(GUI)"=="OS2"
 SHL1VERSIONMAP=gcc3os2.map
 .ELIF "$(COMNAME)"=="sunpro5"
