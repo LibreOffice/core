@@ -141,8 +141,6 @@ oslFileError osl_getVolumeInformation( rtl_uString* ustrDirectoryURL, oslVolumeI
 
 #if defined(NETBSD)
 
-#include <sys/param.h>
-
 #   define OSL_detail_STATFS_STRUCT              struct statvfs
 #   define OSL_detail_STATFS(dir, sfs)           statvfs((dir), (sfs))
 #   define OSL_detail_STATFS_ISREMOTE(a)         (((a).f_flag & ST_LOCAL) == 0)
