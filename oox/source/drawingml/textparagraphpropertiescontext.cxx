@@ -148,8 +148,8 @@ TextParagraphPropertiesContext::~TextParagraphPropertiesContext()
         rPropertyMap.setProperty( PROP_ParaTabStops, aSeq);
     }
 
-    if ( mxBlipProps.get() && mxBlipProps->mxGraphic.is() )
-        mrBulletList.setGraphic( mxBlipProps->mxGraphic );
+    if (mxBlipProps.get() && mxBlipProps->mxFillGraphic.is())
+        mrBulletList.setGraphic(mxBlipProps->mxFillGraphic);
 
     if( mrBulletList.is() )
         rPropertyMap.setProperty( PROP_IsNumbering, true);

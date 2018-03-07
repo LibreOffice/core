@@ -68,7 +68,7 @@ Reference< XGraphic > lclCheckAndApplyDuotoneTransform( const BlipFillProperties
         ::Color nColor2 = aBlipProps.maDuotoneColors[1].getColor( rGraphicHelper, nPhClr );
         try
         {
-            Reference< XGraphicTransformer > xTransformer( aBlipProps.mxGraphic, UNO_QUERY_THROW );
+            Reference< XGraphicTransformer > xTransformer( aBlipProps.mxFillGraphic, UNO_QUERY_THROW );
             return xTransformer->applyDuotone( xGraphic, sal_Int32(nColor1), sal_Int32(nColor2) );
         }
         catch( Exception& )
@@ -89,7 +89,7 @@ Reference< XGraphic > lclCheckAndApplyChangeColorTransform( const BlipFillProper
         {
             sal_Int16 nToTransparence = aBlipProps.maColorChangeTo.getTransparency();
             sal_Int8 nToAlpha = static_cast< sal_Int8 >( (100 - nToTransparence) * 2.55 );
-            Reference< XGraphicTransformer > xTransformer( aBlipProps.mxGraphic, UNO_QUERY_THROW );
+            Reference< XGraphicTransformer > xTransformer( aBlipProps.mxFillGraphic, UNO_QUERY_THROW );
             return xTransformer->colorChange( xGraphic, sal_Int32(nFromColor), 9, sal_Int32(nToColor), nToAlpha );
         }
         catch( Exception& )
@@ -187,8 +187,8 @@ void PatternFillProperties::assignUsed( const PatternFillProperties& rSourceProp
 
 void BlipFillProperties::assignUsed( const BlipFillProperties& rSourceProps )
 {
-    if( rSourceProps.mxGraphic.is() )
-        mxGraphic = rSourceProps.mxGraphic;
+    if(rSourceProps.mxFillGraphic.is())
+        mxFillGraphic = rSourceProps.mxFillGraphic;
     moBitmapMode.assignIfUsed( rSourceProps.moBitmapMode );
     moFillRect.assignIfUsed( rSourceProps.moFillRect );
     moTileOffsetX.assignIfUsed( rSourceProps.moTileOffsetX );
@@ -598,10 +598,9 @@ void FillProperties::pushToPropMap( ShapePropertyMap& rPropMap,
 
             case XML_blipFill:
                 // do not start complex graphic transformation if property is not supported...
-                if (maBlipProps.mxGraphic.is() && rPropMap.supportsProperty(ShapeProperty::FillBitmap))
+                if (maBlipProps.mxFillGraphic.is() && rPropMap.supportsProperty(ShapeProperty::FillBitmap))
                 {
-                    Reference< XGraphic > xGraphic = lclCheckAndApplyDuotoneTransform( maBlipProps, maBlipProps.mxGraphic, rGraphicHelper, nPhClr );
-                    uno::Reference<awt::XBitmap> xBitmap(xGraphic, uno::UNO_QUERY);
+                    uno::Reference<graphic::XGraphic> xGraphic = lclCheckAndApplyDuotoneTransform(maBlipProps, maBlipProps.mxFillGraphic, rGraphicHelper, nPhClr);
                     // TODO: "rotate with shape" is not possible with our current core
 
                     if (xGraphic.is())
@@ -631,7 +630,7 @@ void FillProperties::pushToPropMap( ShapePropertyMap& rPropMap,
                             RectanglePoint eRectPoint = lclGetRectanglePoint( maBlipProps.moTileAlign.get( XML_tl ) );
                             rPropMap.setProperty( ShapeProperty::FillBitmapRectanglePoint, eRectPoint );
 
-                            awt::Size aOriginalSize = lclGetOriginalSize( rGraphicHelper, maBlipProps.mxGraphic );
+                            awt::Size aOriginalSize = lclGetOriginalSize(rGraphicHelper, maBlipProps.mxFillGraphic);
                             if( (aOriginalSize.Width > 0) && (aOriginalSize.Height > 0) )
                             {
                                 // size of one bitmap tile (given as 1/1000 percent of bitmap size), convert to 1/100 mm
@@ -726,10 +725,10 @@ void GraphicProperties::pushToPropMap( PropertyMap& rPropMap, const GraphicHelpe
         case XML_grayscl:   eColorMode = ColorMode_GREYS;   break;
     }
 
-    if( maBlipProps.mxGraphic.is() )
+    if (maBlipProps.mxFillGraphic.is())
     {
         // created transformed graphic
-        Reference< XGraphic > xGraphic = lclCheckAndApplyChangeColorTransform(maBlipProps, maBlipProps.mxGraphic, rGraphicHelper, API_RGB_TRANSPARENT);
+        uno::Reference<graphic::XGraphic> xGraphic = lclCheckAndApplyChangeColorTransform(maBlipProps, maBlipProps.mxFillGraphic, rGraphicHelper, API_RGB_TRANSPARENT);
         xGraphic = lclCheckAndApplyDuotoneTransform(maBlipProps, xGraphic, rGraphicHelper, API_RGB_TRANSPARENT);
 
         if (eColorMode == ColorMode_STANDARD && nBrightness == 70 && nContrast == -70)
