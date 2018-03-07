@@ -67,7 +67,7 @@ bool VPolarAngleAxis::createTextShapes_ForAngleAxis(
         , rAxisLabelProperties.m_aFontReferenceSize );
 
     uno::Any* pColorAny = PropertyMapper::getValuePointer(aPropValues,aPropNames,"CharColor");
-    sal_Int32 nColor = COL_AUTO.GetColor();
+    Color nColor = COL_AUTO;
     if(pColorAny)
         *pColorAny >>= nColor;
 
@@ -96,7 +96,7 @@ bool VPolarAngleAxis::createTextShapes_ForAngleAxis(
         {
             //create single label
             bool bHasExtraColor=false;
-            sal_Int32 nExtraColor=0;
+            Color nExtraColor;
 
             OUString aLabel;
             if(pLabels)

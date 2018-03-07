@@ -26,6 +26,7 @@
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
+#include <tools/color.hxx>
 
 #include <vector>
 
@@ -70,7 +71,7 @@ private:
     bool                                m_bDataSeries;
     bool                                m_bOverwriteLabelsForAttributedDataPointsAlso;
     bool                                m_bUseSpecialFillColor;
-    sal_Int32                           m_nSpecialFillColor;
+    Color                               m_nSpecialFillColor;
     sal_Int32                           m_nNumberFormat;
     sal_Int32                           m_nPercentNumberFormat;
     css::uno::Sequence<sal_Int32>       m_aAvailableLabelPlacements;

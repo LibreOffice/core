@@ -30,7 +30,7 @@ void Renderable3DObject::render()
     (void) mnUniqueId;
 }
 
-Bar::Bar(OpenGL3DRenderer* pRenderer, const glm::mat4& rPosition, sal_uInt32 aColor, sal_uInt32 nId)
+Bar::Bar(OpenGL3DRenderer* pRenderer, const glm::mat4& rPosition, Color aColor, sal_uInt32 nId)
     : Renderable3DObject(pRenderer, nId)
     , maPos(rPosition)
     , maColor(aColor)
@@ -40,7 +40,7 @@ Bar::Bar(OpenGL3DRenderer* pRenderer, const glm::mat4& rPosition, sal_uInt32 aCo
 
 void Bar::render()
 {
-    mpRenderer->AddShape3DExtrudeObject(true/*RoundedCorners*/, maColor.GetColor(), 0xFFFFFF, maPos, mnUniqueId);
+    mpRenderer->AddShape3DExtrudeObject(true/*RoundedCorners*/, maColor, 0xFFFFFF, maPos, mnUniqueId);
     mpRenderer->EndAddShape3DExtrudeObject();
 }
 
@@ -51,7 +51,7 @@ Line::Line(OpenGL3DRenderer* pRenderer, sal_uInt32 nId):
 
 void Line::render()
 {
-    mpRenderer->AddShapePolygon3DObject(0, true, maLineColor.GetColor(), 0, 0, mnUniqueId);
+    mpRenderer->AddShapePolygon3DObject(Color(0), true, maLineColor, 0, 0, mnUniqueId);
     mpRenderer->AddPolygon3DObjectPoint(maPosBegin.x, maPosBegin.y, maPosBegin.z);
     mpRenderer->AddPolygon3DObjectPoint(maPosEnd.x, maPosEnd.y, maPosEnd.z);
     mpRenderer->EndAddPolygon3DObjectPoint();
@@ -159,7 +159,7 @@ void Rectangle::render()
     glm::vec3 dir1 = maBottomRight - maTopLeft;
     glm::vec3 dir2 = maTopRight - maTopLeft;
     glm::vec3 normal = glm::normalize(glm::cross(dir1, dir2));
-    mpRenderer->AddShapePolygon3DObject(maColor.GetColor(), false, 0, 1, 0xFFFFFF, mnUniqueId);
+    mpRenderer->AddShapePolygon3DObject(maColor, false, Color(0), 1, 0xFFFFFF, mnUniqueId);
     glm::vec3 bottomLeft = maBottomRight - dir2;
     //set polygon points and normals
     mpRenderer->AddPolygon3DObjectPoint(maBottomRight.x, maBottomRight.y, maBottomRight.z);
@@ -174,9 +174,9 @@ void Rectangle::render()
     mpRenderer->EndAddPolygon3DObjectNormalPoint();
     mpRenderer->EndAddShapePolygon3DObject();
     //we should render the edge if the edge color is different from the fill color
-    if (maColor.GetColor() != maLineColor.GetColor())
+    if (maColor != maLineColor)
     {
-        mpRenderer->AddShapePolygon3DObject(0, true, maLineColor.GetColor(), 0, 0xFFFFFF, mnUniqueId);
+        mpRenderer->AddShapePolygon3DObject(Color(0), true, maLineColor, 0, 0xFFFFFF, mnUniqueId);
         mpRenderer->AddPolygon3DObjectPoint(maBottomRight.x, maBottomRight.y, maBottomRight.z);
         mpRenderer->AddPolygon3DObjectPoint(maTopRight.x, maTopRight.y, maTopRight.z);
         mpRenderer->AddPolygon3DObjectPoint(maTopLeft.x, maTopLeft.y, maTopLeft.z);

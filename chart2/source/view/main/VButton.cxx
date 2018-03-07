@@ -85,7 +85,7 @@ uno::Reference<drawing::XShape> VButton::createTriangle(awt::Size aSize)
     xProperies->setPropertyValue("Name", uno::makeAny(m_sCID));
     xProperies->setPropertyValue(UNO_NAME_POLYPOLYGON, uno::Any(PolyToPointSequence(aPolyPolygon)));
     xProperies->setPropertyValue("LineStyle", uno::makeAny(drawing::LineStyle_NONE));
-    xProperies->setPropertyValue("FillColor", uno::Any(m_nArrowColor));
+    xProperies->setPropertyValue("FillColor", uno::makeAny(m_nArrowColor));
 
     return xShape;
 }

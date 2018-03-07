@@ -181,16 +181,16 @@ public:
     ~OpenGL3DRenderer();
 
     void init();
-    void Set3DSenceInfo(sal_uInt32 color, bool twoSidesLighting = true);
-    void SetLightInfo(bool lightOn, sal_uInt32 color, const glm::vec4& direction);
-    void AddShapePolygon3DObject(sal_uInt32 color, bool lineOnly, sal_uInt32 lineColor,
+    void Set3DSenceInfo(Color color, bool twoSidesLighting = true);
+    void SetLightInfo(bool lightOn, Color color, const glm::vec4& direction);
+    void AddShapePolygon3DObject(Color color, bool lineOnly, Color lineColor,
             long fillStyle, sal_uInt32 specular, sal_uInt32 nUniqueId);
     void EndAddShapePolygon3DObject();
     void AddPolygon3DObjectNormalPoint(float x, float y, float z);
     void EndAddPolygon3DObjectNormalPoint();
     void AddPolygon3DObjectPoint(float x, float y, float z);
     void EndAddPolygon3DObjectPoint();
-    void AddShape3DExtrudeObject(bool roundedCorner, sal_uInt32 color, sal_uInt32 specular, const glm::mat4& modelMatrix, sal_uInt32 nUniqueId);
+    void AddShape3DExtrudeObject(bool roundedCorner, Color color, sal_uInt32 specular, const glm::mat4& modelMatrix, sal_uInt32 nUniqueId);
     void EndAddShape3DExtrudeObject();
     void SetSize(const Size& rSize);
     void SetCameraInfo(const glm::vec3& pos, const glm::vec3& direction, const glm::vec3& up);
@@ -207,7 +207,7 @@ public:
 
     void SetPickingMode(bool bPickingMode);
 
-    sal_uInt32 GetPixelColorFromPoint(long nX, long nY);
+    Color GetPixelColorFromPoint(long nX, long nY);
 
     void ReleaseShapes();
     void ReleaseScreenTextShapes();

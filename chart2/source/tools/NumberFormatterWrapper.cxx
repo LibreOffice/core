@@ -42,7 +42,7 @@ FixedNumberFormatter::~FixedNumberFormatter()
 {
 }
 
-OUString FixedNumberFormatter::getFormattedString( double fValue, sal_Int32& rLabelColor, bool& rbColorChanged ) const
+OUString FixedNumberFormatter::getFormattedString( double fValue, Color& rLabelColor, bool& rbColorChanged ) const
 {
     return m_aNumberFormatterWrapper.getFormattedString(
         m_nNumberFormatKey, fValue, rLabelColor, rbColorChanged );
@@ -84,7 +84,7 @@ Date NumberFormatterWrapper::getNullDate() const
 }
 
 OUString NumberFormatterWrapper::getFormattedString( sal_Int32 nNumberFormatKey, double fValue,
-                                                     sal_Int32& rLabelColor, bool& rbColorChanged ) const
+                                                     Color& rLabelColor, bool& rbColorChanged ) const
 {
     OUString aText;
     Color* pTextColor = nullptr;
@@ -115,7 +115,7 @@ OUString NumberFormatterWrapper::getFormattedString( sal_Int32 nNumberFormatKey,
     if(pTextColor)
     {
         rbColorChanged = true;
-        rLabelColor = pTextColor->GetColor();
+        rLabelColor = *pTextColor;
     }
     else
         rbColorChanged = false;

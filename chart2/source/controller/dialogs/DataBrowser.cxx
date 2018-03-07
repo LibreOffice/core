@@ -657,7 +657,7 @@ OUString DataBrowser::GetCellText( long nRow, sal_uInt16 nColumnId ) const
         if( m_apDataBrowserModel->getCellType( nColIndex ) == DataBrowserModel::NUMBER )
         {
             double fData( m_apDataBrowserModel->getCellNumber( nColIndex, nRow ));
-            sal_Int32 nLabelColor;
+            Color nLabelColor;
 
             if( ! ::rtl::math::isNan( fData ) &&
                 m_spNumberFormatterWrapper.get() )
@@ -685,7 +685,7 @@ OUString DataBrowser::GetCellText( long nRow, sal_uInt16 nColumnId ) const
                     // guess work.
                     sal_Int32 nNumberFormat = DiagramHelper::getDateTimeInputNumberFormat(
                             Reference< util::XNumberFormatsSupplier >( m_xChartDoc, uno::UNO_QUERY), fDouble );
-                    sal_Int32 nLabelColor;
+                    Color nLabelColor;
                     bool bColorChanged = false;
                     aResult = m_spNumberFormatterWrapper->getFormattedString(
                         nNumberFormat, fDouble, nLabelColor, bColorChanged );

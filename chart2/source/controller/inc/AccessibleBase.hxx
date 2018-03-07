@@ -285,7 +285,7 @@ private:
         ACC_BASE_FOREGROUND,
         ACC_BASE_BACKGROUND
     };
-    sal_Int32 getColor( eColorType eColType );
+    Color getColor( eColorType eColType );
 
 private:
     /** type of the vector containing the accessible children

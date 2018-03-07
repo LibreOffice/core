@@ -64,7 +64,7 @@ void LightButton::switchLightOn(bool bOn)
 
 struct LightSource
 {
-    long nDiffuseColor;
+    Color nDiffuseColor;
     css::drawing::Direction3D aDirection;
     bool bIsEnabled;
 
@@ -88,7 +88,7 @@ LightSourceInfo::LightSourceInfo()
     : pButton(nullptr)
     , aLightSource()
 {
-    aLightSource.nDiffuseColor = 0xffffff; // white
+    aLightSource.nDiffuseColor = Color(0xffffff); // white
     aLightSource.aDirection = drawing::Direction3D(1,1,1);
     aLightSource.bIsEnabled = false;
 }
@@ -158,7 +158,7 @@ namespace
             try
             {
                 xSceneProperties->setPropertyValue( "D3DSceneLightColor" + aIndex,
-                                                    uno::Any( rLightSource.nDiffuseColor ));
+                                                    uno::makeAny( rLightSource.nDiffuseColor ));
                 xSceneProperties->setPropertyValue( "D3DSceneLightDirection" + aIndex,
                                                     uno::Any( rLightSource.aDirection ));
                 xSceneProperties->setPropertyValue( "D3DSceneLightOn" + aIndex,
@@ -193,7 +193,7 @@ namespace
         try
         {
             xSceneProperties->setPropertyValue("D3DSceneAmbientColor",
-                                               uno::Any( rColor.GetColor()));
+                                               uno::makeAny( rColor ));
         }
         catch( const uno::Exception & ex )
         {
@@ -330,42 +330,42 @@ IMPL_LINK_NOARG(ThreeD_SceneIllumination_TabPage, PreviewChangeHdl, SvxLightCtl3
     const SfxItemSet a3DLightAttributes(m_pCtl_Preview->GetSvx3DLightControl().Get3DAttributes());
     LightSourceInfo* pInfo = &m_pLightSourceInfoList[0];
 
-    pInfo->aLightSource.nDiffuseColor = a3DLightAttributes.Get(SDRATTR_3DSCENE_LIGHTCOLOR_1).GetValue().GetColor();
+    pInfo->aLightSource.nDiffuseColor = a3DLightAttributes.Get(SDRATTR_3DSCENE_LIGHTCOLOR_1).GetValue();
     pInfo->aLightSource.bIsEnabled = a3DLightAttributes.Get(SDRATTR_3DSCENE_LIGHTON_1).GetValue();
     pInfo->aLightSource.aDirection = B3DVectorToDirection3D(a3DLightAttributes.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_1).GetValue());
 
     pInfo = &m_pLightSourceInfoList[1];
-    pInfo->aLightSource.nDiffuseColor = a3DLightAttributes.Get(SDRATTR_3DSCENE_LIGHTCOLOR_2).GetValue().GetColor();
+    pInfo->aLightSource.nDiffuseColor = a3DLightAttributes.Get(SDRATTR_3DSCENE_LIGHTCOLOR_2).GetValue();
     pInfo->aLightSource.bIsEnabled = a3DLightAttributes.Get(SDRATTR_3DSCENE_LIGHTON_2).GetValue();
     pInfo->aLightSource.aDirection = B3DVectorToDirection3D(a3DLightAttributes.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_2).GetValue());
 
     pInfo = &m_pLightSourceInfoList[2];
-    pInfo->aLightSource.nDiffuseColor = a3DLightAttributes.Get(SDRATTR_3DSCENE_LIGHTCOLOR_3).GetValue().GetColor();
+    pInfo->aLightSource.nDiffuseColor = a3DLightAttributes.Get(SDRATTR_3DSCENE_LIGHTCOLOR_3).GetValue();
     pInfo->aLightSource.bIsEnabled = a3DLightAttributes.Get(SDRATTR_3DSCENE_LIGHTON_3).GetValue();
     pInfo->aLightSource.aDirection = B3DVectorToDirection3D(a3DLightAttributes.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_3).GetValue());
 
     pInfo = &m_pLightSourceInfoList[3];
-    pInfo->aLightSource.nDiffuseColor = a3DLightAttributes.Get(SDRATTR_3DSCENE_LIGHTCOLOR_4).GetValue().GetColor();
+    pInfo->aLightSource.nDiffuseColor = a3DLightAttributes.Get(SDRATTR_3DSCENE_LIGHTCOLOR_4).GetValue();
     pInfo->aLightSource.bIsEnabled = a3DLightAttributes.Get(SDRATTR_3DSCENE_LIGHTON_4).GetValue();
     pInfo->aLightSource.aDirection = B3DVectorToDirection3D(a3DLightAttributes.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_4).GetValue());
 
     pInfo = &m_pLightSourceInfoList[4];
-    pInfo->aLightSource.nDiffuseColor = a3DLightAttributes.Get(SDRATTR_3DSCENE_LIGHTCOLOR_5).GetValue().GetColor();
+    pInfo->aLightSource.nDiffuseColor = a3DLightAttributes.Get(SDRATTR_3DSCENE_LIGHTCOLOR_5).GetValue();
     pInfo->aLightSource.bIsEnabled = a3DLightAttributes.Get(SDRATTR_3DSCENE_LIGHTON_5).GetValue();
     pInfo->aLightSource.aDirection = B3DVectorToDirection3D(a3DLightAttributes.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_5).GetValue());
 
     pInfo = &m_pLightSourceInfoList[5];
-    pInfo->aLightSource.nDiffuseColor = a3DLightAttributes.Get(SDRATTR_3DSCENE_LIGHTCOLOR_6).GetValue().GetColor();
+    pInfo->aLightSource.nDiffuseColor = a3DLightAttributes.Get(SDRATTR_3DSCENE_LIGHTCOLOR_6).GetValue();
     pInfo->aLightSource.bIsEnabled = a3DLightAttributes.Get(SDRATTR_3DSCENE_LIGHTON_6).GetValue();
     pInfo->aLightSource.aDirection = B3DVectorToDirection3D(a3DLightAttributes.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_6).GetValue());
 
     pInfo = &m_pLightSourceInfoList[6];
-    pInfo->aLightSource.nDiffuseColor = a3DLightAttributes.Get(SDRATTR_3DSCENE_LIGHTCOLOR_7).GetValue().GetColor();
+    pInfo->aLightSource.nDiffuseColor = a3DLightAttributes.Get(SDRATTR_3DSCENE_LIGHTCOLOR_7).GetValue();
     pInfo->aLightSource.bIsEnabled = a3DLightAttributes.Get(SDRATTR_3DSCENE_LIGHTON_7).GetValue();
     pInfo->aLightSource.aDirection = B3DVectorToDirection3D(a3DLightAttributes.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_7).GetValue());
 
     pInfo = &m_pLightSourceInfoList[7];
-    pInfo->aLightSource.nDiffuseColor = a3DLightAttributes.Get(SDRATTR_3DSCENE_LIGHTCOLOR_8).GetValue().GetColor();
+    pInfo->aLightSource.nDiffuseColor = a3DLightAttributes.Get(SDRATTR_3DSCENE_LIGHTCOLOR_8).GetValue();
     pInfo->aLightSource.bIsEnabled = a3DLightAttributes.Get(SDRATTR_3DSCENE_LIGHTON_8).GetValue();
     pInfo->aLightSource.aDirection = B3DVectorToDirection3D(a3DLightAttributes.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_8).GetValue());
 
@@ -427,7 +427,7 @@ IMPL_LINK( ThreeD_SceneIllumination_TabPage, SelectColorHdl, SvxColorListBox&, r
     if(pListBox==m_pLB_AmbientLight)
     {
         m_bInCommitToModel = true;
-        lcl_setAmbientColor( m_xSceneProperties, pListBox->GetSelectEntryColor().GetColor());
+        lcl_setAmbientColor( m_xSceneProperties, pListBox->GetSelectEntryColor());
         m_bInCommitToModel = false;
     }
     else if(pListBox==m_pLB_LightSource)
@@ -444,7 +444,7 @@ IMPL_LINK( ThreeD_SceneIllumination_TabPage, SelectColorHdl, SvxColorListBox&, r
         }
         if(pInfo)
         {
-            pInfo->aLightSource.nDiffuseColor = pListBox->GetSelectEntryColor().GetColor();
+            pInfo->aLightSource.nDiffuseColor = pListBox->GetSelectEntryColor();
             applyLightSourceToModel( nL );
         }
     }

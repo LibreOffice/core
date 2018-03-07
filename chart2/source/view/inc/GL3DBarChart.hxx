@@ -116,7 +116,7 @@ private:
     static void swapVector(int i, int j, std::vector<sal_uInt32> &vectorNearest);
     void getNearestBars(std::vector<sal_uInt32> &vectorNearest);
     void updateScroll();
-    void processAutoFly(sal_uInt32 nId, sal_uInt32 nColor);
+    void processAutoFly(sal_uInt32 nId, Color nColor);
     void getNeighborBarID(sal_uInt32 nSelectBarId, sal_uInt32 *pNeighborBarId);
     void addMovementScreenText(sal_uInt32 nBarId);
     css::uno::Reference<css::chart2::XChartType> mxChartType;
@@ -184,7 +184,7 @@ private:
     std::map<sal_uInt32, std::deque<float> > maBarHistory;
     std::vector<sal_uInt32> maVectorNearest;
     std::map<sal_uInt32, float> maDistanceMap;
-    std::map<sal_uInt32, sal_uInt32> maBarColorMap;
+    std::map<sal_uInt32, Color> maBarColorMap;
     int mnColorRate;
     bool mbBenchMarkMode;
     sal_uInt32 mnHistoryCounter;
