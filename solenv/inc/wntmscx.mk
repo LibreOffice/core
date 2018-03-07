@@ -79,6 +79,10 @@ COMPILE_ECHO_FILE=
 # -wd4251 -wd4275 -wd4290 -wd4675 -wd4786 -wd4800
 CFLAGS+=-Zm500 -Zc:wchar_t- -GR
 
+# main\sal\qa\OStringBuffer\rtl_OStringBuffer.cxx
+# "fatal error C1128: number of sections exceeded object file format limit : compile with /bigobj"
+CFLAGS+=-bigobj
+
 # Stack buffer overrun detection.
 CFLAGS+=-GS
 
