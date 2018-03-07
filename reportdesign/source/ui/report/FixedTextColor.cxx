@@ -80,7 +80,7 @@ namespace rptui
     }
 
 
-    void FixedTextColor::setPropertyTextColor(const uno::Reference< awt::XVclWindowPeer >& _xVclWindowPeer, sal_Int32 _nTextColor)
+    void FixedTextColor::setPropertyTextColor(const uno::Reference< awt::XVclWindowPeer >& _xVclWindowPeer, Color _nTextColor)
     {
         _xVclWindowPeer->setProperty(PROPERTY_TEXTCOLOR, uno::makeAny(_nTextColor));
     }
@@ -103,8 +103,8 @@ namespace rptui
         try
         {
             bool bIsDark = false;
-            const sal_Int32 nBackColor( xFixedText->getControlBackground() );
-            if (nBackColor == sal_Int32(COL_TRANSPARENT))
+            const Color nBackColor( xFixedText->getControlBackground() );
+            if (nBackColor == COL_TRANSPARENT)
             {
                 uno::Reference <report::XSection> xSection(xFixedText->getParent(), uno::UNO_QUERY_THROW);
 
@@ -134,12 +134,12 @@ namespace rptui
             {
                 const StyleSettings& aStyleSettings = Application::GetSettings().GetStyleSettings();
                 Color aLabelTextColor  = aStyleSettings.GetLabelTextColor();
-                setPropertyTextColor(xVclWindowPeer, aLabelTextColor.GetColor());
+                setPropertyTextColor(xVclWindowPeer, aLabelTextColor);
             }
             else
             {
                 util::Color aLabelColor = xFixedText->getCharColor();
-                setPropertyTextColor(xVclWindowPeer, aLabelColor);
+                setPropertyTextColor(xVclWindowPeer, ::Color(aLabelColor));
             }
 
         }
