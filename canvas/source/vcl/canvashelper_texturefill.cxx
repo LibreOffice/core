@@ -1061,7 +1061,7 @@ namespace vclcanvas
                             const vcl::Region aPolyClipRegion( aPolyPoly );
 
                             rOutDev.Push( PushFlags::CLIPREGION );
-                            rOutDev.SetClipRegion( aPolyClipRegion );
+                            rOutDev.IntersectClipRegion( aPolyClipRegion );
 
                             textureFill( rOutDev,
                                          *pGrfObj,
@@ -1079,7 +1079,7 @@ namespace vclcanvas
                                 OutputDevice& r2ndOutDev( mp2ndOutDev->getOutDev() );
                                 r2ndOutDev.Push( PushFlags::CLIPREGION );
 
-                                r2ndOutDev.SetClipRegion( aPolyClipRegion );
+                                r2ndOutDev.IntersectClipRegion( aPolyClipRegion );
                                 textureFill( r2ndOutDev,
                                              *pGrfObj,
                                              aPt,
