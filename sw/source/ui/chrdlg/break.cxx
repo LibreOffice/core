@@ -52,7 +52,12 @@ short SwBreakDlg::run()
             const int nPos = m_xPageCollBox->get_active();
             if (nPos != 0 && nPos != -1)
             {
-                oPgNum = static_cast<sal_uInt16>(m_xPageNumEdit->get_value());
+                m_aTemplate = m_xPageCollBox->get_active_text();
+                oPgNum = boost::none;
+                if (m_xPageNumBox->get_active())
+                {
+                    oPgNum = static_cast<sal_uInt16>(m_xPageNumEdit->get_value());
+                }
             }
         }
     }
