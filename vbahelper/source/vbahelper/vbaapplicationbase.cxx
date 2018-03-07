@@ -152,6 +152,7 @@ struct VbaApplicationBase_Impl final
 {
     VbaTimerHashMap m_aTimerHash;
     bool mbVisible;
+    OUString msCaption;
 
     VbaApplicationBase_Impl() : mbVisible( true ) {}
 
@@ -263,6 +264,39 @@ void SAL_CALL VbaApplicationBase::setVisible( sal_Bool bVisible )
     m_pImpl->mbVisible = bVisible;  // dummy implementation
 }
 
+OUString SAL_CALL VbaApplicationBase::getCaption()
+{
+    SbMethod* pMeth = StarBASIC::GetActiveMethod();
+    if (!pMeth)
+    {
+        // When called from Automation clients, we don't even try, as there doesn't seem to be any
+        // good way to get at the actual "caption" (title) of the application's window (any of them,
+        // if there are several). We just keep a copy of a fake caption in the VbaApplicationBase_Impl.
+        return m_pImpl->msCaption;
+    }
+
+    // No idea if this code, which uses APIs that apparently are related to StarBasic (check
+    // getCurrentDoc() in vbahelper.cxx), actually works any better.
+    uno::Reference< frame::XModel > xModel( getCurrentDocument(), uno::UNO_QUERY_THROW );
+    uno::Reference< frame::XFrame > xFrame( xModel->getCurrentController()->getFrame(), uno::UNO_QUERY_THROW );
+    return xFrame->getName();
+}
+
+void SAL_CALL VbaApplicationBase::setCaption( const OUString& sCaption )
+{
+    // See comments in getCaption().
+
+    SbMethod* pMeth = StarBASIC::GetActiveMethod();
+    if (!pMeth)
+    {
+        m_pImpl->msCaption = sCaption;
+        return;
+    }
+
+    uno::Reference< frame::XModel > xModel( getCurrentDocument(), uno::UNO_QUERY_THROW );
+    uno::Reference< frame::XFrame > xFrame( xModel->getCurrentController()->getFrame(), uno::UNO_QUERY_THROW );
+    xFrame->setName( sCaption );
+}
 
 void SAL_CALL
 VbaApplicationBase::OnKey( const OUString& Key, const uno::Any& Procedure )
