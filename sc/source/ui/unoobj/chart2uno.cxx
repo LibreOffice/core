@@ -2669,10 +2669,9 @@ void ScChart2DataSequence::UpdateTokensFromRanges(const ScRangeList& rRanges)
     for ( size_t i = 0, nCount = rRanges.size(); i < nCount; ++i )
     {
         ScTokenRef pToken;
-        const ScRange* pRange = rRanges[i];
-        OSL_ENSURE(pRange, "range object is nullptr.");
+        const ScRange & rRange = rRanges[i];
 
-        ScRefTokenHelper::getTokenFromRange(pToken, *pRange);
+        ScRefTokenHelper::getTokenFromRange(pToken, rRange);
         sal_uInt32 nOrigPos = (*m_pRangeIndices)[i];
         m_aTokens[nOrigPos] = pToken;
     }
@@ -2756,7 +2755,7 @@ void ScChart2DataSequence::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint
             {
                 ScRange aRange;
                 ScRefTokenHelper::getRangeFromToken(aRange, *itr, ScAddress());
-                aRanges.Append(aRange);
+                aRanges.push_back(aRange);
                 sal_uInt32 nPos = distance(itrBeg, itr);
                 m_pRangeIndices->push_back(nPos);
             }

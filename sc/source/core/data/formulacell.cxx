@@ -4291,12 +4291,12 @@ struct ScDependantsCalculator
 
         for (size_t i = 0; i < aRangeList.size(); ++i)
         {
-            const ScRange* pRange = aRangeList[i];
-            assert(pRange->aStart.Tab() == pRange->aEnd.Tab());
-            for (auto nCol = pRange->aStart.Col(); nCol <= pRange->aEnd.Col(); nCol++)
+            const ScRange & rRange = aRangeList[i];
+            assert(rRange.aStart.Tab() == rRange.aEnd.Tab());
+            for (auto nCol = rRange.aStart.Col(); nCol <= rRange.aEnd.Col(); nCol++)
             {
-                if (!mrDoc.HandleRefArrayForParallelism(ScAddress(nCol, pRange->aStart.Row(), pRange->aStart.Tab()),
-                                                        pRange->aEnd.Row() - pRange->aStart.Row() + 1))
+                if (!mrDoc.HandleRefArrayForParallelism(ScAddress(nCol, rRange.aStart.Row(), rRange.aStart.Tab()),
+                                                        rRange.aEnd.Row() - rRange.aStart.Row() + 1))
                     return false;
             }
         }

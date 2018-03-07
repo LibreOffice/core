@@ -33,7 +33,7 @@ ScRangeList ScStatisticsInputOutputDialog::MakeColumnRangeList(SCTAB aTab, ScAdd
             ScAddress(inCol, aStart.Row(), aTab),
             ScAddress(inCol, aEnd.Row(),   aTab) );
 
-        aRangeList.Append(aColumnRange);
+        aRangeList.push_back(aColumnRange);
     }
     return aRangeList;
 }
@@ -47,7 +47,7 @@ ScRangeList ScStatisticsInputOutputDialog::MakeRowRangeList(SCTAB aTab, ScAddres
             ScAddress(aStart.Col(), inRow, aTab),
             ScAddress(aEnd.Col(),   inRow, aTab) );
 
-        aRangeList.Append(aRowRange);
+        aRangeList.push_back(aRowRange);
     }
     return aRangeList;
 }
@@ -233,7 +233,7 @@ IMPL_LINK_NOARG( ScStatisticsInputOutputDialog, RefInputModifyHandler, Edit&, vo
         {
             ScRangeList aRangeList;
             bool bValid = ParseWithNames( aRangeList, mpInputRangeEdit->GetText(), mDocument);
-            const ScRange* pRange = (bValid && aRangeList.size() == 1) ? aRangeList[0] : nullptr;
+            const ScRange* pRange = (bValid && aRangeList.size() == 1) ? &aRangeList[0] : nullptr;
             if (pRange)
             {
                 mInputRange = *pRange;
@@ -249,7 +249,7 @@ IMPL_LINK_NOARG( ScStatisticsInputOutputDialog, RefInputModifyHandler, Edit&, vo
         {
             ScRangeList aRangeList;
             bool bValid = ParseWithNames( aRangeList, mpOutputRangeEdit->GetText(), mDocument);
-            const ScRange* pRange = (bValid && aRangeList.size() == 1) ? aRangeList[0] : nullptr;
+            const ScRange* pRange = (bValid && aRangeList.size() == 1) ? &aRangeList[0] : nullptr;
             if (pRange)
             {
                 mOutputAddress = pRange->aStart;

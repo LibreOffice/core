@@ -258,7 +258,7 @@ void getOleSourceRanges(const SdrMarkList& rMarkList, bool& rAnyOle, bool& rOneO
         if (aRange.Parse(*it, pDoc, pDoc->GetAddressConvention()) & ScRefFlags::VALID)
         {
             for(size_t i = 0; i < aRange.size(); ++i)
-                pRanges->push_back(*aRange[i]);
+                pRanges->push_back(aRange[i]);
         }
         else if (aAddr.Parse(*it, pDoc, pDoc->GetAddressConvention()) & ScRefFlags::VALID)
             pRanges->push_back(aAddr);

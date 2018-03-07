@@ -1188,8 +1188,7 @@ void ScViewData::GetMultiArea( ScRangeListRef& rRange ) const
     {
         ScRange aSimple;
         GetSimpleArea(aSimple);
-        rRange = new ScRangeList;
-        rRange->Append(aSimple);
+        rRange = new ScRangeList(aSimple);
     }
 }
 

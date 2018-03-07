@@ -542,13 +542,13 @@ bool ScRangeStringConverter::GetRangeListFromString(
     sal_Int32 nOffset = 0;
     while( nOffset >= 0 )
     {
-        std::unique_ptr<ScRange> pRange( new ScRange );
+        ScRange aRange;
         if (
-             GetRangeFromString( *pRange, rRangeListStr, pDocument, eConv, nOffset, cSeparator, cQuote ) &&
+             GetRangeFromString( aRange, rRangeListStr, pDocument, eConv, nOffset, cSeparator, cQuote ) &&
              (nOffset >= 0)
            )
         {
-            rRangeList.push_back( pRange.release() );
+            rRangeList.push_back( aRange );
         }
         else if (nOffset > -1)
             bRet = false;
@@ -644,9 +644,8 @@ void ScRangeStringConverter::GetStringFromRangeList(
     {
         for( size_t nIndex = 0, nCount = pRangeList->size(); nIndex < nCount; nIndex++ )
         {
-            const ScRange* pRange = (*pRangeList)[nIndex];
-            if( pRange )
-                GetStringFromRange( sRangeListStr, *pRange, pDocument, eConv, cSeparator, true );
+            const ScRange & rRange = (*pRangeList)[nIndex];
+            GetStringFromRange( sRangeListStr, rRange, pDocument, eConv, cSeparator, true );
         }
     }
     rString = sRangeListStr;

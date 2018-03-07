@@ -114,10 +114,9 @@ void SAL_CALL ScXMLTableScenarioContext::endFastElement( sal_Int32 /*nElement*/ 
         pDoc->SetScenarioData( nCurrTable, sComment, aBorderColor, nFlags );
         for( size_t i = 0; i < aScenarioRanges.size(); ++i )
         {
-            ScRange* pRange(aScenarioRanges[ i ]);
-            if( pRange )
-                pDoc->ApplyFlagsTab( pRange->aStart.Col(), pRange->aStart.Row(),
-                    pRange->aEnd.Col(), pRange->aEnd.Row(), nCurrTable, ScMF::Scenario );
+            ScRange const & rRange = aScenarioRanges[ i ];
+            pDoc->ApplyFlagsTab( rRange.aStart.Col(), rRange.aStart.Row(),
+                rRange.aEnd.Col(), rRange.aEnd.Row(), nCurrTable, ScMF::Scenario );
         }
         pDoc->SetActiveScenario( nCurrTable, bIsActive );
     }

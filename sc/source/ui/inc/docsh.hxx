@@ -475,8 +475,7 @@ namespace HelperNotifyChanges
     {
         if (ScModelObj* pModelObj = getMustPropagateChangesModel(rDocShell))
         {
-            ScRangeList aChangeRanges;
-            aChangeRanges.Append(rRange);
+            ScRangeList aChangeRanges(rRange);
             Notify(*pModelObj, aChangeRanges, rType);
         }
     }

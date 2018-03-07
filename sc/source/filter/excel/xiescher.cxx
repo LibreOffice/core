@@ -1927,8 +1927,8 @@ void XclImpControlHelper::ReadCellLinkFormula( XclImpStream& rStrm, bool bWithBo
     // Use first cell of first range
     if ( !aScRanges.empty() )
     {
-        const ScRange* pScRange = aScRanges.front();
-        mxCellLink.reset( new ScAddress( pScRange->aStart ) );
+        const ScRange & rScRange = aScRanges.front();
+        mxCellLink.reset( new ScAddress( rScRange.aStart ) );
     }
 }
 
@@ -1939,8 +1939,8 @@ void XclImpControlHelper::ReadSourceRangeFormula( XclImpStream& rStrm, bool bWit
     // Use first range
     if ( !aScRanges.empty() )
     {
-        const ScRange* pScRange = aScRanges.front();
-        mxSrcRange.reset( new ScRange( *pScRange ) );
+        const ScRange & rScRange = aScRanges.front();
+        mxSrcRange.reset( new ScRange( rScRange ) );
     }
 }
 

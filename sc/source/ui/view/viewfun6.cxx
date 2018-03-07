@@ -128,25 +128,24 @@ void ScViewFunc::MarkAndJumpToRanges(const ScRangeList& rRanges)
     size_t ListSize = aRanges.size();
     for ( size_t i = 0; i < ListSize; ++i )
     {
-        const ScRange* p = aRanges[i];
+        const ScRange & r = aRanges[i];
         // Collect only those ranges that are on the same sheet as the current
         // cursor.
-        if (p->aStart.Tab() == aCurPos.Tab())
-            aRangesToMark.Append(*p);
+        if (r.aStart.Tab() == aCurPos.Tab())
+            aRangesToMark.push_back(r);
     }
 
     if (aRangesToMark.empty())
         return;
 
     // Jump to the first range of all precedent ranges.
-    const ScRange* p = aRangesToMark.front();
-    lcl_jumpToRange(*p, &rView, &pDocSh->GetDocument());
+    const ScRange & r = aRangesToMark.front();
+    lcl_jumpToRange(r, &rView, &pDocSh->GetDocument());
 
     ListSize = aRangesToMark.size();
     for ( size_t i = 0; i < ListSize; ++i )
     {
-        p = aRangesToMark[i];
-        MarkRange(*p, false, true);
+        MarkRange(aRangesToMark[i], false, true);
     }
 }
 
@@ -161,7 +160,7 @@ void ScViewFunc::DetectiveMarkPred()
     if (rMarkData.IsMarked() || rMarkData.IsMultiMarked())
         rMarkData.FillRangeListWithMarks(&aRanges, false);
     else
-        aRanges.Append(aCurPos);
+        aRanges.push_back(aCurPos);
 
     vector<ScTokenRef> aRefTokens;
     pDocSh->GetDocFunc().DetectiveCollectAllPreds(aRanges, aRefTokens);
@@ -225,7 +224,7 @@ void ScViewFunc::DetectiveMarkSucc()
     if (rMarkData.IsMarked() || rMarkData.IsMultiMarked())
         rMarkData.FillRangeListWithMarks(&aRanges, false);
     else
-        aRanges.Append(aCurPos);
+        aRanges.push_back(aCurPos);
 
     vector<ScTokenRef> aRefTokens;
     pDocSh->GetDocFunc().DetectiveCollectAllSuccs(aRanges, aRefTokens);

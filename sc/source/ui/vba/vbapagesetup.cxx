@@ -78,7 +78,7 @@ OUString SAL_CALL ScVbaPageSetup::getPrintArea()
         {
             ScRange aRange;
             ScUnoConversion::FillScRange( aRange, aSeq[i] );
-            aRangeList.Append( aRange );
+            aRangeList.push_back( aRange );
         }
         ScDocument& rDoc = excel::getDocShell( mxModel )->GetDocument();
         aRangeList.Format( aPrintArea, ScRefFlags::RANGE_ABS, &rDoc, formula::FormulaGrammar::CONV_XL_A1, ','  );
@@ -106,9 +106,9 @@ void SAL_CALL ScVbaPageSetup::setPrintArea( const OUString& rAreas )
             uno::Sequence< table::CellRangeAddress > aSeq( aCellRanges.size() );
             for ( size_t i = 0, nRanges = aCellRanges.size(); i < nRanges; ++i )
             {
-                ScRange* pRange = aCellRanges[ i ];
+                ScRange & rRange = aCellRanges[ i ];
                 table::CellRangeAddress aRangeAddress;
-                ScUnoConversion::FillApiRange( aRangeAddress, *pRange );
+                ScUnoConversion::FillApiRange( aRangeAddress, rRange );
                 aSeq[ i++ ] = aRangeAddress;
             }
             xPrintAreas->setPrintAreas( aSeq );

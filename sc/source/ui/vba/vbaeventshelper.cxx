@@ -385,7 +385,7 @@ void SAL_CALL ScVbaEventListener::changesOccurred( const util::ChangesEvent& rEv
             {
                 ScRange aRange;
                 ScUnoConversion::FillScRange( aRange, xCellRangeAddressable->getRangeAddress() );
-                aRangeList.Append( aRange );
+                aRangeList.push_back( aRange );
             }
         }
     }
@@ -829,7 +829,7 @@ bool lclSelectionChanged( const ScRangeList& rLeft, const ScRangeList& rRight )
         return !(bLeftEmpty && bRightEmpty);
 
     // check sheet indexes of the range lists (assuming that all ranges in a list are on the same sheet)
-    if (rLeft[0]->aStart.Tab() != rRight[0]->aStart.Tab())
+    if (rLeft[0].aStart.Tab() != rRight[0].aStart.Tab())
         return false;
 
     // compare all ranges

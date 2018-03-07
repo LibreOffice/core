@@ -191,7 +191,7 @@ SvtScriptType ScDocument::GetRangeScriptType( const ScRangeList& rRanges )
     sc::ColumnSpanSet aSet(false);
     for (size_t i = 0, n = rRanges.size(); i < n; ++i)
     {
-        const ScRange& rRange = *rRanges[i];
+        const ScRange& rRange = rRanges[i];
         SCTAB nTab = rRange.aStart.Tab();
         SCROW nRow1 = rRange.aStart.Row();
         SCROW nRow2 = rRange.aEnd.Row();

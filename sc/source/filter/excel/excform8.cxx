@@ -1580,7 +1580,7 @@ void ExcelToSc8::GetAbsRefs( ScRangeList& r, XclImpStream& aIn, std::size_t nLen
                     nCol1 &= 0x3FFF;
                     nCol2 &= 0x3FFF;
                     if( GetAddressConverter().ConvertRange( aScRange, XclRange( nCol1, nRow1, nCol2, nRow2 ), nTab1, nTab2, true ) )
-                        r.Append( aScRange );
+                        r.push_back( aScRange );
                 }
                 break;
             case 0x1C: // Error Value                           [314 266]

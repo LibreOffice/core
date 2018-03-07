@@ -104,7 +104,7 @@ void ScDocShell::PostPaint( const ScRangeList& rRanges, PaintPartFlags nPart, sa
     ScRangeList aPaintRanges;
     for (size_t i = 0, n = rRanges.size(); i < n; ++i)
     {
-        const ScRange& rRange = *rRanges[i];
+        const ScRange& rRange = rRanges[i];
         SCCOL nCol1 = rRange.aStart.Col(), nCol2 = rRange.aEnd.Col();
         SCROW nRow1 = rRange.aStart.Row(), nRow2 = rRange.aEnd.Row();
         SCTAB nTab1 = rRange.aStart.Tab(), nTab2 = rRange.aEnd.Tab();
@@ -159,7 +159,7 @@ void ScDocShell::PostPaint( const ScRangeList& rRanges, PaintPartFlags nPart, sa
                 nCol2 = MAXCOL;
             }
         }
-        aPaintRanges.Append(ScRange(nCol1, nRow1, nTab1, nCol2, nRow2, nTab2));
+        aPaintRanges.push_back(ScRange(nCol1, nRow1, nTab1, nCol2, nRow2, nTab2));
     }
 
     Broadcast(ScPaintHint(aPaintRanges.Combine(), nPart));
@@ -255,9 +255,9 @@ void ScDocShell::UnlockPaint_Impl(bool bDoc)
                 for ( size_t i = 0, nCount = xRangeList->size(); i < nCount; i++ )
                 {
                     //! nExtFlags ???
-                    ScRange aRange = *(*xRangeList)[i];
-                    PostPaint( aRange.aStart.Col(), aRange.aStart.Row(), aRange.aStart.Tab(),
-                                aRange.aEnd.Col(), aRange.aEnd.Row(), aRange.aEnd.Tab(),
+                    ScRange const & rRange = (*xRangeList)[i];
+                    PostPaint( rRange.aStart.Col(), rRange.aStart.Row(), rRange.aStart.Tab(),
+                                rRange.aEnd.Col(), rRange.aEnd.Row(), rRange.aEnd.Tab(),
                                 nParts );
                 }
             }

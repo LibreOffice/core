@@ -528,21 +528,20 @@ static void lcl_collectAllPredOrSuccRanges(
     ScRangeList aSrcRanges(rSrcRanges);
     if (aSrcRanges.empty())
         return;
-    ScRange* p = aSrcRanges.front();
-    ScDetectiveFunc aDetFunc(&rDoc, p->aStart.Tab());
-    ScRangeList aDestRanges;
+    ScRange const & rFrontRange = aSrcRanges.front();
+    ScDetectiveFunc aDetFunc(&rDoc, rFrontRange.aStart.Tab());
     for (size_t i = 0, n = aSrcRanges.size(); i < n; ++i)
     {
-        p = aSrcRanges[i];
+        ScRange const & r = aSrcRanges[i];
         if (bPred)
         {
             aDetFunc.GetAllPreds(
-                p->aStart.Col(), p->aStart.Row(), p->aEnd.Col(), p->aEnd.Row(), aRefTokens);
+                r.aStart.Col(), r.aStart.Row(), r.aEnd.Col(), r.aEnd.Row(), aRefTokens);
         }
         else
         {
             aDetFunc.GetAllSuccs(
-                p->aStart.Col(), p->aStart.Row(), p->aEnd.Col(), p->aEnd.Row(), aRefTokens);
+                r.aStart.Col(), r.aStart.Row(), r.aEnd.Col(), r.aEnd.Row(), aRefTokens);
         }
     }
     rRefTokens.swap(aRefTokens);

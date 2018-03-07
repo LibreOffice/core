@@ -258,7 +258,7 @@ void XclExpMergedcells::AppendRange( const ScRange& rRange, sal_uInt32 nBaseXFId
 {
     if( GetBiff() == EXC_BIFF8 )
     {
-        maMergedRanges.Append( rRange );
+        maMergedRanges.push_back( rRange );
         maBaseXFIds.push_back( nBaseXFId );
     }
 }
@@ -270,8 +270,8 @@ sal_uInt32 XclExpMergedcells::GetBaseXFId( const ScAddress& rPos ) const
     ScRangeList& rNCRanges = const_cast< ScRangeList& >( maMergedRanges );
     for ( size_t i = 0, nRanges = rNCRanges.size(); i < nRanges; ++i, ++aIt )
     {
-        const ScRange* pScRange = rNCRanges[ i ];
-        if( pScRange->In( rPos ) )
+        const ScRange & rScRange = rNCRanges[ i ];
+        if( rScRange.In( rPos ) )
             return *aIt;
     }
     return EXC_XFID_NOTFOUND;
@@ -308,12 +308,10 @@ void XclExpMergedcells::SaveXml( XclExpXmlStream& rStrm )
             FSEND );
     for( size_t i = 0; i < nCount; ++i )
     {
-        if( const ScRange* pRange = maMergedRanges[ i ] )
-        {
-            rWorksheet->singleElement( XML_mergeCell,
-                    XML_ref,    XclXmlUtils::ToOString( *pRange ).getStr(),
+        const ScRange & rRange = maMergedRanges[ i ];
+        rWorksheet->singleElement( XML_mergeCell,
+                    XML_ref,    XclXmlUtils::ToOString( rRange ).getStr(),
                     FSEND );
-        }
     }
     rWorksheet->endElement( XML_mergeCells );
 }
@@ -540,9 +538,9 @@ XclExpLabelranges::XclExpLabelranges( const XclExpRoot& rRoot ) :
     // row labels only over 1 column (restriction of Excel97/2000/XP)
     for ( size_t i = 0, nRanges = maRowRanges.size(); i < nRanges; ++i )
     {
-        ScRange* pScRange = maRowRanges[ i ];
-        if( pScRange->aStart.Col() != pScRange->aEnd.Col() )
-            pScRange->aEnd.SetCol( pScRange->aStart.Col() );
+        ScRange & rScRange = maRowRanges[ i ];
+        if( rScRange.aStart.Col() != rScRange.aEnd.Col() )
+            rScRange.aEnd.SetCol( rScRange.aStart.Col() );
     }
     // col label ranges
     FillRangeList( maColRanges, rRoot.GetDoc().GetColNameRangesRef(), nScTab );
@@ -556,7 +554,7 @@ void XclExpLabelranges::FillRangeList( ScRangeList& rScRanges,
         ScRangePair* pRangePair = (*xLabelRangesRef)[i];
         const ScRange& rScRange = pRangePair->GetRange( 0 );
         if( rScRange.aStart.Tab() == nScTab )
-            rScRanges.Append( rScRange );
+            rScRanges.push_back( rScRange );
     }
 }
 
@@ -1345,8 +1343,8 @@ XclExpColorScale::XclExpColorScale( const XclExpRoot& rRoot, const ScColorScaleF
     XclExpRoot( rRoot ),
     mnPriority( nPriority )
 {
-    const ScRange* pRange = rFormat.GetRange().front();
-    ScAddress aAddr = pRange->aStart;
+    const ScRange & rRange = rFormat.GetRange().front();
+    ScAddress aAddr = rRange.aStart;
     for(ScColorScaleEntries::const_iterator itr = rFormat.begin();
             itr != rFormat.end(); ++itr)
     {
@@ -1385,8 +1383,8 @@ XclExpDataBar::XclExpDataBar( const XclExpRoot& rRoot, const ScDataBarFormat& rF
     mnPriority( nPriority ),
     maGUID(rGUID)
 {
-    const ScRange* pRange = rFormat.GetRange().front();
-    ScAddress aAddr = pRange->aStart;
+    const ScRange & rRange = rFormat.GetRange().front();
+    ScAddress aAddr = rRange.aStart;
     // exact position is not important, we allow only absolute refs
     mpCfvoLowerLimit.reset( new XclExpCfvo( GetRoot(), *mrFormat.GetDataBarData()->mpLowerLimit.get(), aAddr, true ) );
     mpCfvoUpperLimit.reset( new XclExpCfvo( GetRoot(), *mrFormat.GetDataBarData()->mpUpperLimit.get(), aAddr, false ) );
@@ -1438,8 +1436,8 @@ XclExpIconSet::XclExpIconSet( const XclExpRoot& rRoot, const ScIconSetFormat& rF
     mrFormat( rFormat ),
     mnPriority( nPriority )
 {
-    const ScRange* pRange = rFormat.GetRange().front();
-    ScAddress aAddr = pRange->aStart;
+    const ScRange & rRange = rFormat.GetRange().front();
+    ScAddress aAddr = rRange.aStart;
     for (auto const& itr : rFormat)
     {
         // exact position is not important, we allow only absolute refs

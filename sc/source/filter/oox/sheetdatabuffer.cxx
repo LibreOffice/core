@@ -336,7 +336,7 @@ void addIfNotInMyMap( const StylesBuffer& rStyles, std::map< FormatKeyPair, ScRa
                     // add ranges from the rangelist to the existing rangelist for the
                     // matching style ( should we check if they overlap ? )
                     for (size_t i = 0, nSize = rRangeList.size(); i < nSize; ++i)
-                        it->second.Append(*rRangeList[i]);
+                        it->second.push_back(rRangeList[i]);
                     return;
                 }
             }
@@ -423,7 +423,7 @@ void SheetDataBuffer::finalizeImport()
     {
         const ScRangeList& rRanges( it->second );
         for (size_t i = 0, nSize = rRanges.size(); i < nSize; ++i)
-            addColXfStyle( it->first.first, it->first.second, *rRanges[i]);
+            addColXfStyle( it->first.first, it->first.second, rRanges[i]);
     }
 
     for ( std::map< sal_Int32, std::vector< ValueRange > >::iterator it = maXfIdRowRangeList.begin(), it_end =  maXfIdRowRangeList.end(); it != it_end; ++it )
@@ -660,7 +660,7 @@ void SheetDataBuffer::setCellFormat( const CellModel& rModel )
     if( rModel.mnXfId >= 0 )
     {
         ScRangeList& rRangeList = maXfIdRangeLists[ XfIdNumFmtKey( rModel.mnXfId, -1 ) ];
-        ScRange* pLastRange = rRangeList.empty() ? nullptr : rRangeList.back();
+        ScRange* pLastRange = rRangeList.empty() ? nullptr : &rRangeList.back();
         /* The xlsx sheet data contains row wise information.
          * It is sufficient to check if the row range size is one
          */
@@ -674,28 +674,28 @@ void SheetDataBuffer::setCellFormat( const CellModel& rModel )
         }
         else
         {
-            rRangeList.Append(ScRange(rModel.maCellAddr));
-            pLastRange = rRangeList.back();
+            rRangeList.push_back(ScRange(rModel.maCellAddr));
+            pLastRange = &rRangeList.back();
         }
 
         if (rRangeList.size() > 1)
         {
             for (size_t i = rRangeList.size() - 1; i != 0; --i)
             {
-                ScRange* pMergeRange = rRangeList[i - 1];
-                if (pLastRange->aStart.Tab() != pMergeRange->aStart.Tab())
+                ScRange& rMergeRange = rRangeList[i - 1];
+                if (pLastRange->aStart.Tab() != rMergeRange.aStart.Tab())
                     break;
 
                 /* Try to merge this with the previous range */
-                if (pLastRange->aStart.Row() == (pMergeRange->aEnd.Row() + 1) &&
-                    pLastRange->aStart.Col() == pMergeRange->aStart.Col() &&
-                    pLastRange->aEnd.Col() == pMergeRange->aEnd.Col())
+                if (pLastRange->aStart.Row() == (rMergeRange.aEnd.Row() + 1) &&
+                    pLastRange->aStart.Col() == rMergeRange.aStart.Col() &&
+                    pLastRange->aEnd.Col() == rMergeRange.aEnd.Col())
                 {
-                    pMergeRange->aEnd.SetRow(pLastRange->aEnd.Row());
+                    rMergeRange.aEnd.SetRow(pLastRange->aEnd.Row());
                     rRangeList.Remove(rRangeList.size() - 1);
                     break;
                 }
-                else if (pLastRange->aStart.Row() > (pMergeRange->aEnd.Row() + 1))
+                else if (pLastRange->aStart.Row() > (rMergeRange.aEnd.Row() + 1))
                     break; // Un-necessary to check with any other rows
             }
         }

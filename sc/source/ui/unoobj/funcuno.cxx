@@ -549,18 +549,18 @@ uno::Any SAL_CALL ScFunctionAccess::callFunction( const OUString& aName,
                 const ScRangeList& rRanges = pImpl->GetRangeList();
                 if ( pSrcDoc && rRanges.size() == 1 )
                 {
-                    ScRange aSrcRange = *rRanges[ 0 ];
+                    ScRange const & rSrcRange = rRanges[ 0 ];
 
                     long nStartRow = nDocRow;
-                    long nColCount = aSrcRange.aEnd.Col() - aSrcRange.aStart.Col() + 1;
-                    long nRowCount = aSrcRange.aEnd.Row() - aSrcRange.aStart.Row() + 1;
+                    long nColCount = rSrcRange.aEnd.Col() - rSrcRange.aStart.Col() + 1;
+                    long nRowCount = rSrcRange.aEnd.Row() - rSrcRange.aStart.Row() + 1;
 
                     if ( nStartRow + nRowCount > MAXROWCOUNT )
                         bOverflow = true;
                     else
                     {
                         // copy data
-                        if ( !lcl_CopyData( pSrcDoc, aSrcRange, pDoc, ScAddress( 0, static_cast<SCROW>(nDocRow), 0 ) ) )
+                        if ( !lcl_CopyData( pSrcDoc, rSrcRange, pDoc, ScAddress( 0, static_cast<SCROW>(nDocRow), 0 ) ) )
                             bOverflow = true;
                     }
 

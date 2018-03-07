@@ -344,7 +344,7 @@ IMPL_LINK_NOARG(ScSamplingDialog, RefInputModifyHandler, Edit&, void)
         {
             ScRangeList aRangeList;
             bool bValid = ParseWithNames( aRangeList, mpInputRangeEdit->GetText(), mDocument);
-            const ScRange* pRange = (bValid && aRangeList.size() == 1) ? aRangeList[0] : nullptr;
+            const ScRange* pRange = (bValid && aRangeList.size() == 1) ? &aRangeList[0] : nullptr;
             if (pRange)
             {
                 mInputRange = *pRange;
@@ -360,7 +360,7 @@ IMPL_LINK_NOARG(ScSamplingDialog, RefInputModifyHandler, Edit&, void)
         {
             ScRangeList aRangeList;
             bool bValid = ParseWithNames( aRangeList, mpOutputRangeEdit->GetText(), mDocument);
-            const ScRange* pRange = (bValid && aRangeList.size() == 1) ? aRangeList[0] : nullptr;
+            const ScRange* pRange = (bValid && aRangeList.size() == 1) ? &aRangeList[0] : nullptr;
             if (pRange)
             {
                 mOutputAddress = pRange->aStart;

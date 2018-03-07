@@ -1117,7 +1117,7 @@ void CondFormatBuffer::finalizeImport()
         ScDocument* pDoc = &getScDocument();
 
         const ScRangeList& rRange = (*itr)->getRange();
-        SCTAB nTab = rRange.front()->aStart.Tab();
+        SCTAB nTab = rRange.front().aStart.Tab();
         ScConditionalFormat* pFormat = findFormatByRange(rRange, pDoc, nTab);
         if (!pFormat)
         {

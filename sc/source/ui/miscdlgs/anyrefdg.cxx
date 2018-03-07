@@ -144,9 +144,9 @@ void ScFormulaReferenceHelper::ShowSimpleReference(const OUString& rStr)
             {
                 for ( size_t i = 0, nRanges = aRangeList.size(); i < nRanges; ++i )
                 {
-                    ScRange* pRangeEntry = aRangeList[ i ];
+                    ScRange const & rRangeEntry = aRangeList[ i ];
                     Color aColName = ScRangeFindList::GetColorName( i );
-                    pTabViewShell->AddHighlightRange( *pRangeEntry, aColName );
+                    pTabViewShell->AddHighlightRange( rRangeEntry, aColName );
                }
             }
         }
@@ -173,10 +173,10 @@ bool ScFormulaReferenceHelper::ParseWithNames( ScRangeList& rRanges, const OUStr
                 aRange.aStart.SetTab( nRefTab );
             if ( (nFlags & ScRefFlags::TAB2_3D) == ScRefFlags::ZERO )
                 aRange.aEnd.SetTab( aRange.aStart.Tab() );
-            rRanges.Append( aRange );
+            rRanges.push_back( aRange );
         }
         else if ( ScRangeUtil::MakeRangeFromName( aRangeStr, pDoc, nRefTab, aRange, RUTL_NAMES, aDetails ) )
-            rRanges.Append( aRange );
+            rRanges.push_back( aRange );
         else
             bError = true;
     }
@@ -304,13 +304,13 @@ void ScFormulaReferenceHelper::ReleaseFocus( formula::RefEdit* pEdit )
             {
                 if ( !aRangeList.empty() )
                 {
-                    const ScRange* pRange = aRangeList.front();
-                    pViewShell->SetTabNo( pRange->aStart.Tab() );
-                    pViewShell->MoveCursorAbs(  pRange->aStart.Col(),
-                        pRange->aStart.Row(), SC_FOLLOW_JUMP, false, false );
-                    pViewShell->MoveCursorAbs( pRange->aEnd.Col(),
-                        pRange->aEnd.Row(), SC_FOLLOW_JUMP, true, false );
-                    m_pDlg->SetReference( *pRange, pDoc );
+                    const ScRange & rRange = aRangeList.front();
+                    pViewShell->SetTabNo( rRange.aStart.Tab() );
+                    pViewShell->MoveCursorAbs(  rRange.aStart.Col(),
+                        rRange.aStart.Row(), SC_FOLLOW_JUMP, false, false );
+                    pViewShell->MoveCursorAbs( rRange.aEnd.Col(),
+                        rRange.aEnd.Row(), SC_FOLLOW_JUMP, true, false );
+                    m_pDlg->SetReference( rRange, pDoc );
                 }
             }
         }

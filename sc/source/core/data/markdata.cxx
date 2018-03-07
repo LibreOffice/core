@@ -341,7 +341,7 @@ void ScMarkData::MarkFromRangeList( const ScRangeList& rList, bool bReset )
     size_t nCount = rList.size();
     if ( nCount == 1 && !bMarked && !bMultiMarked )
     {
-        const ScRange& rRange = *rList[ 0 ];
+        const ScRange& rRange = rList[ 0 ];
         SetMarkArea( rRange );
         SelectTable( rRange.aStart.Tab(), true );
     }
@@ -349,7 +349,7 @@ void ScMarkData::MarkFromRangeList( const ScRangeList& rList, bool bReset )
     {
         for (size_t i=0; i < nCount; i++)
         {
-            const ScRange& rRange = *rList[ i ];
+            const ScRange& rRange = rList[ i ];
             SetMultiMarkArea( rRange );
             SelectTable( rRange.aStart.Tab(), true );
         }
@@ -405,13 +405,13 @@ void ScMarkData::FillRangeListWithMarks( ScRangeList* pList, bool bClear, SCTAB 
     if ( bMarked )
     {
         if (nForTab < 0)
-            pList->Append( aMarkRange );
+            pList->push_back( aMarkRange );
         else
         {
             ScRange aRange( aMarkRange );
             aRange.aStart.SetTab( nForTab );
             aRange.aEnd.SetTab( nForTab );
-            pList->Append( aRange );
+            pList->push_back( aRange );
         }
     }
 }
@@ -428,10 +428,10 @@ void ScMarkData::ExtendRangeListTables( ScRangeList* pList ) const
     for (; it != maTabMarked.end(); ++it)
         for ( size_t i=0, nCount = aOldList.size(); i<nCount; i++)
         {
-            ScRange aRange = *aOldList[ i ];
+            ScRange aRange = aOldList[ i ];
             aRange.aStart.SetTab(*it);
             aRange.aEnd.SetTab(*it);
-            pList->Append( aRange );
+            pList->push_back( aRange );
         }
 }
 
@@ -459,7 +459,7 @@ std::vector<sc::ColRowSpan> ScMarkData::GetMarkedRowSpans() const
 
     for (size_t i = 0, n = aRanges.size(); i < n; ++i)
     {
-        const ScRange& r = *aRanges[i];
+        const ScRange& r = aRanges[i];
         itPos = aSpans.insert(itPos, r.aStart.Row(), r.aEnd.Row()+1, true).first;
     }
 
@@ -706,7 +706,7 @@ void ScMarkData::GetSelectionCover( ScRange& rRange )
                         ScRange aAddRange(nCol - 1, nTop, aMultiRange.aStart.Tab(),
                                           nCol - 1, nBottom, aMultiRange.aStart.Tab());
                         lcl_AddRanges( rRange, aAddRange ); // Left envelope
-                        aLeftEnvelope.Append( aAddRange );
+                        aLeftEnvelope.push_back( aAddRange );
                     }
                     else if( nCol > nStartCol )
                     {
@@ -728,7 +728,7 @@ void ScMarkData::GetSelectionCover( ScRange& rRange )
                                 ScRange aAddRange( nCol - 1, nTop1, aMultiRange.aStart.Tab(),
                                                    nCol - 1, nBottom1, aMultiRange.aStart.Tab() );
                                 lcl_AddRanges( rRange, aAddRange ); // Left envelope
-                                aLeftEnvelope.Append( aAddRange );
+                                aLeftEnvelope.push_back( aAddRange );
                                 nTop1 = ++nBottom1;
                             }
                         }
@@ -747,7 +747,7 @@ void ScMarkData::GetSelectionCover( ScRange& rRange )
                                         ScRange aAddRange( nCol, nTopPrev, aMultiRange.aStart.Tab(),
                                                            nCol, nBottomPrev, aMultiRange.aStart.Tab());
                                         lcl_AddRanges( rRange, aAddRange ); // Right envelope
-                                        aRightEnvelope.Append( aAddRange );
+                                        aRightEnvelope.push_back( aAddRange );
                                         nTopPrev = nBottomPrev = (nBottom + 1);
                                     }
                                     else
@@ -755,7 +755,7 @@ void ScMarkData::GetSelectionCover( ScRange& rRange )
                                         ScRange aAddRange( nCol, nTopPrev, aMultiRange.aStart.Tab(),
                                                            nCol, nBottomPrev, aMultiRange.aStart.Tab());
                                         lcl_AddRanges( rRange, aAddRange ); // Right envelope
-                                        aRightEnvelope.Append( aAddRange );
+                                        aRightEnvelope.push_back( aAddRange );
                                         nTopPrev = ++nBottomPrev;
                                     }
                                 }
@@ -795,7 +795,7 @@ void ScMarkData::GetSelectionCover( ScRange& rRange )
                         ScRange aAddRange(nCol, nTopPrev, aMultiRange.aStart.Tab(),
                                           nCol, nBottomPrev, aMultiRange.aStart.Tab());
                         lcl_AddRanges( rRange, aAddRange ); // Right envelope
-                        aRightEnvelope.Append( aAddRange );
+                        aRightEnvelope.push_back( aAddRange );
                         nTopPrev = ++nBottomPrev;
                     }
                     else
@@ -820,7 +820,7 @@ void ScMarkData::GetSelectionCover( ScRange& rRange )
                         ScRange aAddRange(nCol, nTopPrev, aMultiRange.aStart.Tab(),
                                           nCol, nBottomPrev, aMultiRange.aStart.Tab());
                         lcl_AddRanges( rRange, aAddRange ); // Right envelope
-                        aRightEnvelope.Append( aAddRange );
+                        aRightEnvelope.push_back( aAddRange );
                         nTopPrev = ++nBottomPrev;
                     }
                     else
@@ -844,7 +844,7 @@ void ScMarkData::GetSelectionCover( ScRange& rRange )
                 if( !rKV.second.getRangeData( nStart, aRange ) )
                     break;
                 if( aRange.mbValue ) // is marked
-                    aTopEnvelope.Append( ScRange( aRange.mnCol1, rKV.first, aMultiRange.aStart.Tab(),
+                    aTopEnvelope.push_back( ScRange( aRange.mnCol1, rKV.first, aMultiRange.aStart.Tab(),
                                                   aRange.mnCol2, rKV.first, aMultiRange.aStart.Tab() ) );
                 nStart = aRange.mnCol2 + 1;
             }
@@ -858,7 +858,7 @@ void ScMarkData::GetSelectionCover( ScRange& rRange )
                 if( !rKV.second.getRangeData( nStart, aRange ) )
                     break;
                 if( aRange.mbValue ) // is marked
-                    aBottomEnvelope.Append( ScRange( aRange.mnCol1, rKV.first, aMultiRange.aStart.Tab(),
+                    aBottomEnvelope.push_back( ScRange( aRange.mnCol1, rKV.first, aMultiRange.aStart.Tab(),
                                                      aRange.mnCol2, rKV.first, aMultiRange.aStart.Tab() ) );
                 nStart = aRange.mnCol2 + 1;
             }
@@ -878,22 +878,22 @@ void ScMarkData::GetSelectionCover( ScRange& rRange )
         // Each envelope will have zero or more ranges for single rectangle selection.
         if( nCol1 > 0 )
         {
-            aLeftEnvelope.Append( ScRange( nCol1 - 1, nRow1, nTab1, nCol1 - 1, nRow2, nTab2 ) );
+            aLeftEnvelope.push_back( ScRange( nCol1 - 1, nRow1, nTab1, nCol1 - 1, nRow2, nTab2 ) );
             --nCol1New;
         }
         if( nRow1 > 0 )
         {
-            aTopEnvelope.Append( ScRange( nCol1, nRow1 - 1, nTab1, nCol2, nRow1 - 1, nTab2 ) );
+            aTopEnvelope.push_back( ScRange( nCol1, nRow1 - 1, nTab1, nCol2, nRow1 - 1, nTab2 ) );
             --nRow1New;
         }
         if( nCol2 < MAXCOL )
         {
-            aRightEnvelope.Append( ScRange( nCol2 + 1, nRow1, nTab1, nCol2 + 1, nRow2, nTab2 ) );
+            aRightEnvelope.push_back( ScRange( nCol2 + 1, nRow1, nTab1, nCol2 + 1, nRow2, nTab2 ) );
             ++nCol2New;
         }
         if( nRow2 < MAXROW )
         {
-            aBottomEnvelope.Append( ScRange( nCol1, nRow2 + 1, nTab1, nCol2, nRow2 + 1, nTab2 ) );
+            aBottomEnvelope.push_back( ScRange( nCol1, nRow2 + 1, nTab1, nCol2, nRow2 + 1, nTab2 ) );
             ++nRow2New;
         }
         rRange = ScRange( nCol1New, nRow1New, nTab1, nCol2New, nRow2New, nTab2 );

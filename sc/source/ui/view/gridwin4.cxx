@@ -206,7 +206,7 @@ static void lcl_DrawScenarioFrames( OutputDevice* pDev, ScViewData* pViewData, S
 
         for (size_t j = 0, n = xRanges->size(); j < n; ++j)
         {
-            ScRange aRange = *(*xRanges)[j];
+            ScRange aRange = (*xRanges)[j];
             // Always extend scenario frame to merged cells where no new non-covered cells
             // are framed
             pDoc->ExtendTotalMerge( aRange );
