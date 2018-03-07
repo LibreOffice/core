@@ -1909,19 +1909,7 @@ void ImpEditEngine::InitWritingDirections( sal_Int32 nPara )
     WritingDirectionInfos& rInfos = pParaPortion->aWritingDirectionInfos;
     rInfos.clear();
 
-    bool bCTL = false;
-    ScriptTypePosInfos& rTypes = pParaPortion->aScriptInfos;
-    for (ScriptTypePosInfo & rType : rTypes)
-    {
-        if ( rType.nScriptType == i18n::ScriptType::COMPLEX )
-           {
-            bCTL = true;
-            break;
-        }
-    }
-
-    const UBiDiLevel nBidiLevel = IsRightToLeft( nPara ) ? 1 /*RTL*/ : 0 /*LTR*/;
-    if ( ( bCTL || ( nBidiLevel == 1 /*RTL*/ ) ) && pParaPortion->GetNode()->Len() )
+    if (pParaPortion->GetNode()->Len())
     {
         const OUString aText = pParaPortion->GetNode()->GetString();
 
@@ -1931,6 +1919,7 @@ void ImpEditEngine::InitWritingDirections( sal_Int32 nPara )
         UBiDi* pBidi = ubidi_openSized( aText.getLength(), 0, &nError );
         nError = U_ZERO_ERROR;
 
+        const UBiDiLevel nBidiLevel = IsRightToLeft(nPara) ? 1 /*RTL*/ : 0 /*LTR*/;
         ubidi_setPara( pBidi, reinterpret_cast<const UChar *>(aText.getStr()), aText.getLength(), nBidiLevel, nullptr, &nError );
         nError = U_ZERO_ERROR;
 
@@ -1954,7 +1943,7 @@ void ImpEditEngine::InitWritingDirections( sal_Int32 nPara )
         ubidi_close( pBidi );
     }
 
-    // No infos mean no CTL and default dir is L2R...
+    // No infos mean ubidi error, default to LTR
     if ( rInfos.empty() )
         rInfos.emplace_back( 0, 0, pParaPortion->GetNode()->Len() );
 
