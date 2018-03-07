@@ -109,9 +109,12 @@
 #include <SwAppletImpl.hxx>
 
 #include <sfx2/viewfrm.hxx>
+#include <svx/svdobj.hxx>
 
 #include <statstr.hrc>
 #include <swerror.h>
+#include <ndole.hxx>
+#include <unoframe.hxx>
 #include <css1atr.hxx>
 
 #define FONTSIZE_MASK           7
@@ -1483,6 +1486,23 @@ void SwHTMLParser::NextToken( HtmlTokenId nToken )
         {
             if( !m_bDocInitalized )
                 DocumentDetected();
+
+            if (!m_aEmbeds.empty())
+            {
+                // The text token is inside an OLE object, which means
+                // alternate text.
+                SwOLENode* pOLENode = m_aEmbeds.top();
+                if (SwFlyFrameFormat* pFormat
+                    = dynamic_cast<SwFlyFrameFormat*>(pOLENode->GetFlyFormat()))
+                {
+                    if (SdrObject* pObject = SwXFrame::GetOrCreateSdrObject(*pFormat))
+                    {
+                        pObject->SetTitle(pObject->GetTitle() + aToken);
+                        break;
+                    }
+                }
+            }
+
             m_xDoc->getIDocumentContentOperations().InsertString( *m_pPam, aToken );
 
             // if there are temporary paragraph attributes and the
