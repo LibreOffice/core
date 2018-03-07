@@ -1758,7 +1758,7 @@ SwLayoutFrame *SwFrame::GetNextSctLeaf( MakePageType eMakePage )
                     assert(!pTmp->IsPageFrame());
                     assert(pTmp->GetType() == (*iter)->GetType());
                     // for cell frames and table frames:
-                    // 1) there may be multliple follow frames of the old one
+                    // 1) there may be multiple follow frames of the old one
                     // 2) the new frame may be identical to the old one
                     //    (not sure if this is allowed, but it happens now
                     //     for the outer table of a nested table)
