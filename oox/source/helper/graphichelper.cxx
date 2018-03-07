@@ -372,17 +372,6 @@ OUString GraphicHelper::importGraphicObject( const Reference< XInputStream >& rx
     return createGraphicObject( importGraphic( rxInStrm, pExtHeader ) );
 }
 
-OUString GraphicHelper::importGraphicObject( const StreamDataSequence& rGraphicData ) const
-{
-    return createGraphicObject( importGraphic( rGraphicData ) );
-}
-
-OUString GraphicHelper::importEmbeddedGraphicObject( const OUString& rStreamName ) const
-{
-    Reference< XGraphic > xGraphic = importEmbeddedGraphic( rStreamName );
-    return xGraphic.is() ? createGraphicObject( xGraphic ) : OUString();
-}
-
 awt::Size GraphicHelper::getOriginalSize( const Reference< XGraphic >& xGraphic ) const
 {
     awt::Size aSizeHmm;

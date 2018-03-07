@@ -371,11 +371,6 @@ void Outliner::SetHoriAlignIgnoreTrailingWhitespace(bool bEnabled)
     pEditEngine->SetHoriAlignIgnoreTrailingWhitespace( bEnabled );
 }
 
-bool Outliner::IsHoriAlignIgnoreTrailingWhitespace() const
-{
-    return pEditEngine->IsHoriAlignIgnoreTrailingWhitespace();
-}
-
 OutlinerParaObject* Outliner::CreateParaObject( sal_Int32 nStartPara, sal_Int32 nCount ) const
 {
     if ( static_cast<sal_uLong>(nStartPara) + nCount >

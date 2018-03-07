@@ -81,9 +81,6 @@ public:
     //sID may not exist
     PopupMenu*      get_menu(const OString& sID);
 
-    //given an sID return the response value for that widget
-    short           get_response(const vcl::Window *pWindow) const;
-
     //release ownership of pWindow, i.e. don't delete it
     void            drop_ownership(const vcl::Window *pWindow);
 
