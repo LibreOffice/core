@@ -24,16 +24,14 @@
 
 module ooo {  module vba {
 
-
-
 interface XApplicationBase
 {
     interface ::ooo::vba::XHelperInterface;
 
     [attribute] boolean ScreenUpdating;
     [attribute] boolean DisplayStatusBar;
-     [attribute] boolean Interactive;
-     [attribute] boolean Visible;
+    [attribute] boolean Interactive;
+    [attribute] boolean Visible;
 
     [attribute, readonly] string Version;
     [attribute, readonly] any VBE;
@@ -46,8 +44,6 @@ interface XApplicationBase
     float CentimetersToPoints([in] float Centimeters );
     void Undo();
 };
-
-
 
 }; };
 
