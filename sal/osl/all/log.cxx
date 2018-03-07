@@ -20,8 +20,10 @@
 
 #include <stdio.h>
 #include <string.h>
+#include <fstream>
 
 #include "osl/thread.hxx"
+#include "osl/process.h"
 #include "rtl/string.h"
 #include "rtl/ustring.hxx"
 #include "sal/detail/log.h"
@@ -89,8 +91,8 @@ char const * getEnvironmentVariable() {
 
 #else
 
-char const * getEnvironmentVariable_() {
-    char const * p1 = std::getenv("SAL_LOG");
+char const * getEnvironmentVariable(const char* env) {
+    char const * p1 = std::getenv(env);
     if (p1 == nullptr) {
         return nullptr;
     }
@@ -101,86 +103,7 @@ char const * getEnvironmentVariable_() {
     return p2;
 }
 
-char const * getEnvironmentVariable() {
-    static char const * env = getEnvironmentVariable_();
-    return env;
-}
-
-void maybeOutputTimestamp(std::ostringstream &s) {
-    char const * env = getEnvironmentVariable();
-    if (env == nullptr)
-        return;
-    bool outputTimestamp = false;
-    bool outputRelativeTimer = false;
-    for (char const * p = env;;) {
-        switch (*p++) {
-        case '\0':
-            if (outputTimestamp) {
-                char ts[100];
-                TimeValue systemTime;
-                osl_getSystemTime(&systemTime);
-                TimeValue localTime;
-                osl_getLocalTimeFromSystemTime(&systemTime, &localTime);
-                oslDateTime dateTime;
-                osl_getDateTimeFromTimeValue(&localTime, &dateTime);
-                struct tm tm;
-                tm.tm_sec = dateTime.Seconds;
-                tm.tm_min = dateTime.Minutes;
-                tm.tm_hour = dateTime.Hours;
-                tm.tm_mday = dateTime.Day;
-                tm.tm_mon = dateTime.Month - 1;
-                tm.tm_year = dateTime.Year - 1900;
-                strftime(ts, sizeof(ts), "%Y-%m-%d:%H:%M:%S", &tm);
-                char milliSecs[10];
-                sprintf(milliSecs, "%03d", static_cast<int>(dateTime.NanoSeconds/1000000));
-                s << ts << '.' << milliSecs << ':';
-            }
-            if (outputRelativeTimer) {
-                static bool beenHere = false;
-                static TimeValue first;
-                if (!beenHere) {
-                    osl_getSystemTime(&first);
-                    beenHere = true;
-                }
-                TimeValue now;
-                osl_getSystemTime(&now);
-                int seconds = now.Seconds - first.Seconds;
-                int milliSeconds;
-                if (now.Nanosec < first.Nanosec) {
-                    seconds--;
-                    milliSeconds = 1000-(first.Nanosec-now.Nanosec)/1000000;
-                }
-                else
-                    milliSeconds = (now.Nanosec-first.Nanosec)/1000000;
-                char relativeTimestamp[100];
-                sprintf(relativeTimestamp, "%d.%03d", seconds, milliSeconds);
-                s << relativeTimestamp << ':';
-            }
-            return;
-        case '+':
-            {
-                char const * p1 = p;
-                while (*p1 != '.' && *p1 != '+' && *p1 != '-' && *p1 != '\0') {
-                    ++p1;
-                }
-                if (equalStrings(p, p1 - p, RTL_CONSTASCII_STRINGPARAM("TIMESTAMP")))
-                    outputTimestamp = true;
-                else if (equalStrings(p, p1 - p, RTL_CONSTASCII_STRINGPARAM("RELATIVETIMER")))
-                    outputRelativeTimer = true;
-                char const * p2 = p1;
-                while (*p2 != '+' && *p2 != '-' && *p2 != '\0') {
-                    ++p2;
-                }
-                p = p2;
-            }
-            break;
-        default:
-            ; // nothing
-        }
-    }
-    return;
-}
-
+#ifdef WNT
 bool getValueFromLoggingIniFile(const char* key, char* value) {
     rtl::OUString programDirectoryURL;
     rtl::OUString programDirectoryPath;
@@ -208,33 +131,40 @@ bool getValueFromLoggingIniFile(const char* key, char* value) {
             return true;
         }
     }
-    return;
+    return false;
 }
+#endif
 
 char const * getLogLevel() {
     // First check the environment variable, then the setting in logging.ini
-    static char const * env = getEnvironmentVariable_("SAL_LOG");
+    static char const * env = getEnvironmentVariable("SAL_LOG");
     if (env != nullptr)
         return env;
 
+#ifdef WNT
     static char logLevel[1024];
     if (getValueFromLoggingIniFile("LogLevel", logLevel)) {
         return logLevel;
     }
+#endif
 
     return nullptr;
 }
 
 char const * getLogFilePath() {
     // First check the environment variable, then the setting in logging.ini
-    static char const * logFile = getEnvironmentVariable_("SAL_LOG_FILE");
+    static char const * logFile = getEnvironmentVariable("SAL_LOG_FILE");
     if (logFile != nullptr)
         return logFile;
 
+#ifdef WNT
     static char logFilePath[1024];
     if (getValueFromLoggingIniFile("LogFilePath", logFilePath)) {
         return logFilePath;
     }
+#endif
+
+    return nullptr;
 }
 
 bool isDebug(sal_detail_LogLevel level) {
