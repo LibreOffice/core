@@ -733,7 +733,6 @@ void ScConditionEntry::Interpret( const ScAddress& rPos )
         // Repaint everything for dependent formats
         DataChanged();
     }
-
     bFirstRun = false;
 }
 
@@ -1252,6 +1251,7 @@ bool ScConditionEntry::IsCellValid( ScRefCellValue& rCell, const ScAddress& rPos
 
     double nArg = 0.0;
     OUString aArgStr;
+
     bool bVal = lcl_GetCellContent( rCell, bIsStr1, nArg, aArgStr, mpDoc );
     if (bVal)
         return IsValid( nArg, rPos );

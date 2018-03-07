@@ -331,7 +331,7 @@ void Window::StartTracking( StartTrackingFlags nFlags )
 void Window::EndTracking( TrackingEventFlags nFlags )
 {
     ImplSVData* pSVData = ImplGetSVData();
-
+    SAL_DEBUG("Window::EndTracking #1");
     if ( pSVData->maWinData.mpTrackWin.get() == this )
     {
         // due to DbgChkThis in brackets, as the window could be destroyed
@@ -348,10 +348,11 @@ void Window::EndTracking( TrackingEventFlags nFlags )
         pSVData->maWinData.mnTrackFlags  = StartTrackingFlags::NONE;
         ReleaseMouse();
         }
-
+        SAL_DEBUG("Window::EndTracking #2");
         // call EndTracking if required
         if ( !(nFlags & TrackingEventFlags::DontCallHdl) )
         {
+            SAL_DEBUG("Window::EndTracking #3");
             Point           aMousePos( mpWindowImpl->mpFrameData->mnLastMouseX, mpWindowImpl->mpFrameData->mnLastMouseY );
             if( ImplIsAntiparallel() )
             {

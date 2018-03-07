@@ -719,7 +719,7 @@ void ScTabView::TestHintWindow()
     //  show input help window and list drop-down button for validity
 
     mxInputHintOO.reset();
-
+    SAL_DEBUG("ScTabView::TestHintWindow: #1");
     bool bListValButton = false;
     ScAddress aListValPos;
 
@@ -736,6 +736,7 @@ void ScTabView::TestHintWindow()
 
         if ( pData && pData->GetInput( aTitle, aMessage ) && !aMessage.isEmpty() )
         {
+            SAL_DEBUG("ScTabView::TestHintWindow: #2");
             ScSplitPos eWhich = aViewData.GetActivePart();
             ScGridWindow* pWin = pGridWin[eWhich].get();
             SCCOL nCol = aViewData.GetCurX();
@@ -793,12 +794,13 @@ void ScTabView::TestHintWindow()
                 }
             }
         }
-
+        SAL_DEBUG("ScTabView::TestHintWindow: #3: pData: " << pData);
         // list drop-down button
         if ( pData && pData->HasSelectionList() )
         {
             aListValPos.Set( aViewData.GetCurX(), aViewData.GetCurY(), aViewData.GetTabNo() );
             bListValButton = true;
+            SAL_DEBUG("ScTabView::TestHintWindow: #4");
         }
     }
 
@@ -1129,6 +1131,7 @@ bool ScTabView::SelMouseButtonDown( const MouseEvent& rMEvt )
 void ScTabView::MoveCursorAbs( SCCOL nCurX, SCROW nCurY, ScFollowMode eMode,
                                bool bShift, bool bControl, bool bKeepOld, bool bKeepSel )
 {
+    SAL_DEBUG("ScTabView::MoveCursorAbs #1");
     if (!bKeepOld)
         aViewData.ResetOldCursor();
 

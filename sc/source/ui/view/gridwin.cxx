@@ -1073,6 +1073,7 @@ void ScGridWindow::LaunchDataSelectMenu( SCCOL nCol, SCROW nRow )
 
     if (!bEmpty)
     {
+        SAL_DEBUG("ScGridWindow::LaunchDataSelectMenu #1");
         //  Adjust position and size to Window
         //! Check first if the entries fit (width)
 
@@ -1090,7 +1091,7 @@ void ScGridWindow::LaunchDataSelectMenu( SCCOL nCol, SCROW nRow )
 
         mpFilterFloat->SetOutputSizePixel(aSize);
         mpFilterFloat->StartPopupMode(aCellRect, FloatWinPopupFlags::Down | FloatWinPopupFlags::GrabFocus);
-
+        SAL_DEBUG("ScGridWindow::LaunchDataSelectMenu #2");
         // Fill Listbox
         bool bWait = aStrings.size() > 100;
 
@@ -1103,7 +1104,7 @@ void ScGridWindow::LaunchDataSelectMenu( SCCOL nCol, SCROW nRow )
 
         if (bWait)
             LeaveWait();
-
+        SAL_DEBUG("ScGridWindow::LaunchDataSelectMenu #3");
         mpFilterBox->SetUpdateMode(true);
     }
 
@@ -1436,6 +1437,7 @@ bool ScGridWindow::IsCellCoveredByText(SCCOL nPosX, SCROW nPosY, SCTAB nTab, SCC
 
 void ScGridWindow::HandleMouseButtonDown( const MouseEvent& rMEvt, MouseEventState& rState )
 {
+    SAL_DEBUG("ScGridWindow::HandleMouseButtonDown: #1");
     // We have to check if a context menu is shown and we have an UI
     // active inplace client. In that case we have to ignore the event.
     // Otherwise we would crash (context menu has been
@@ -1473,7 +1475,7 @@ void ScGridWindow::HandleMouseButtonDown( const MouseEvent& rMEvt, MouseEventSta
     bool bDouble = (rMEvt.GetClicks() == 2);
     ScDocument* pDoc = pViewData->GetDocument();
     bool bIsTiledRendering = comphelper::LibreOfficeKit::isActive();
-
+    SAL_DEBUG("ScGridWindow::HandleMouseButtonDown #2");
     // DeactivateIP does only happen when MarkListHasChanged
 
     // An error message can show up during GrabFocus call
@@ -1679,7 +1681,7 @@ void ScGridWindow::HandleMouseButtonDown( const MouseEvent& rMEvt, MouseEventSta
     }
 
     // Auto filter / pivot table / data select popup.  This shouldn't activate the part.
-
+    SAL_DEBUG("ScGridWindow::HandleMouseButtonDown: #3");
     if ( !bDouble && !bFormulaMode && rMEvt.IsLeft() )
     {
         SCCOL nRealPosX;
@@ -1710,10 +1712,12 @@ void ScGridWindow::HandleMouseButtonDown( const MouseEvent& rMEvt, MouseEventSta
         }
 
         //  List Validity drop-down button
-
+        SAL_DEBUG("ScGridWindow::HandleMouseButtonDown #4");
         if ( bListValButton )
         {
             tools::Rectangle aButtonRect = GetListValButtonRect( aListValPos );
+            SAL_DEBUG("ScGridWindow::HandleMouseButtonDown: aPos: " << aPos
+                    << ", aButtonRect: " << aButtonRect);
             if ( aButtonRect.IsInside( aPos ) )
             {
                 LaunchDataSelectMenu( aListValPos.Col(), aListValPos.Row() );
@@ -1791,7 +1795,7 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
     aCurMousePos = rMEvt.GetPosPixel();
     ScDocument* pDoc = pViewData->GetDocument();
     ScMarkData& rMark = pViewData->GetMarkData();
-
+    SAL_DEBUG("ScGridWindow::MouseButtonUp #1");
     // #i41690# detect a MouseButtonUp call from within MouseButtonDown
     // (possible through Reschedule from storing an OLE object that is deselected)
 
@@ -1904,7 +1908,7 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
     }
 
     rMark.SetMarking(false);
-
+    SAL_DEBUG("ScGridWindow::MouseButtonUp #2");
     SetPointer( Pointer( PointerStyle::Arrow ) );
 
     if (pViewData->IsFillMode() ||
@@ -2033,7 +2037,7 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
 
     // double click (only left button)
     // in the tiled rendering case, single click works this way too
-
+    SAL_DEBUG("ScGridWindow::MouseButtonUp #3");
     bool bIsTiledRendering = comphelper::LibreOfficeKit::isActive();
     bool bDouble = ( rMEvt.GetClicks() == 2 && rMEvt.IsLeft() );
     if ((bDouble || bIsTiledRendering) && !bRefMode && (nMouseStatus == SC_GM_DBLDOWN || bIsTiledRendering) && !pScMod->IsRefDialogOpen())
@@ -2083,7 +2087,7 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
 
             return;
         }
-
+        SAL_DEBUG("ScGridWindow::MouseButtonUp #4");
         // Check for cell protection attribute.
         ScTableProtection* pProtect = pDoc->GetTabProtection( nTab );
         bool bEditAllowed = true;
@@ -2132,9 +2136,61 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
                 pTabView->SelectionChanged();
         }
 
+        if ( bIsTiledRendering && rMEvt.IsLeft() && pViewData->GetView()->GetSelEngine()->SelMouseButtonUp( rMEvt ) )
+        {
+            pViewData->GetView()->SelectionChanged();
+
+            SfxDispatcher* pDisp = pViewData->GetViewShell()->GetDispatcher();
+            bool bFormulaMode = pScMod->IsFormulaMode();
+            OSL_ENSURE( pDisp || bFormulaMode, "Cursor moved on inactive View ?" );
+
+            //  #i14927# execute SID_CURRENTCELL (for macro recording) only if there is no
+            //  multiple selection, so the argument string completely describes the selection,
+            //  and executing the slot won't change the existing selection (executing the slot
+            //  here and from a recorded macro is treated equally)
+            if ( pDisp && !bFormulaMode && !rMark.IsMultiMarked() )
+            {
+                OUString aAddr;                               // CurrentCell
+                if( rMark.IsMarked() )
+                {
+                    ScRange aScRange;
+                    rMark.GetMarkArea( aScRange );
+                    aAddr = aScRange.Format(ScRefFlags::RANGE_ABS);
+                    if ( aScRange.aStart == aScRange.aEnd )
+                    {
+                        //  make sure there is a range selection string even for a single cell
+                        aAddr = aAddr + ":" + aAddr;
+                    }
+
+                    //! SID_MARKAREA does not exist anymore ???
+                    //! What happens when selecting with the cursor ???
+                }
+                else                                        // only move cursor
+                {
+                    ScAddress aScAddress( pViewData->GetCurX(), pViewData->GetCurY(), 0 );
+                    aAddr = aScAddress.Format(ScRefFlags::ADDR_ABS);
+                }
+
+                SfxStringItem aPosItem( SID_CURRENTCELL, aAddr );
+                // We don't want to align to the cursor position because if the
+                // cell cursor isn't visible after making selection, it would jump
+                // back to the origin of the selection where the cell cursor is.
+                SfxBoolItem aAlignCursorItem( FN_PARAM_2, false );
+                SAL_DEBUG("ScGridWindow::MouseButtonUp");
+                pDisp->ExecuteList(SID_CURRENTCELL,
+                        SfxCallMode::SLOT | SfxCallMode::RECORD,
+                        { &aPosItem, &aAlignCursorItem });
+
+                pViewData->GetView()->InvalidateAttribs();
+
+            }
+            pViewData->GetViewShell()->SelectionChanged();
+            return;
+        }
+
         return;
     }
-
+    SAL_DEBUG("ScGridWindow::MouseButtonUp #5");
             //      Links in edit cells
 
     bool bAlt = rMEvt.IsMod2();
@@ -2216,7 +2272,7 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
             return;
         }
     }
-
+    SAL_DEBUG("ScGridWindow::MouseButtonUp #6");
             //      Gridwin - SelectionEngine
 
     //  SelMouseButtonDown is called only for left button, but SelMouseButtonUp would return
@@ -2234,7 +2290,7 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
         //  multiple selection, so the argument string completely describes the selection,
         //  and executing the slot won't change the existing selection (executing the slot
         //  here and from a recorded macro is treated equally)
-
+        SAL_DEBUG("ScGridWindow::MouseButtonUp #7");
         if ( pDisp && !bFormulaMode && !rMark.IsMultiMarked() )
         {
             OUString aAddr;                               // CurrentCell
@@ -2263,6 +2319,7 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
             // cell cursor isn't visible after making selection, it would jump
             // back to the origin of the selection where the cell cursor is.
             SfxBoolItem aAlignCursorItem( FN_PARAM_2, false );
+            SAL_DEBUG("ScGridWindow::MouseButtonUp");
             pDisp->ExecuteList(SID_CURRENTCELL,
                     SfxCallMode::SLOT | SfxCallMode::RECORD,
                     { &aPosItem, &aAlignCursorItem });
@@ -2555,11 +2612,12 @@ void ScGridWindow::Tracking( const TrackingEvent& rTEvt )
 {
     // Since the SelectionEngine does not track, the events have to be
     // handed to the different MouseHandler...
-
+    SAL_DEBUG("ScGridWindow::Tracking #1");
     const MouseEvent& rMEvt = rTEvt.GetMouseEvent();
 
     if ( rTEvt.IsTrackingCanceled() )           // Cancel everything...
     {
+        SAL_DEBUG("ScGridWindow::Tracking #2");
         if (!pViewData->GetView()->IsInActivatePart() && !SC_MOD()->IsRefDialogOpen())
         {
             if (bDPMouse)
@@ -2592,6 +2650,7 @@ void ScGridWindow::Tracking( const TrackingEvent& rTEvt )
     }
     else if ( rTEvt.IsTrackingEnded() )
     {
+        SAL_DEBUG("ScGridWindow::Tracking #3");
         // MouseButtonUp always with matching buttons (eg for test tool, # 63148 #)
         // The tracking event will indicate if it was completed and not canceled.
         MouseEvent aUpEvt( rMEvt.GetPosPixel(), rMEvt.GetClicks(),
@@ -4561,6 +4620,7 @@ void ScGridWindow::UpdateListValPos( bool bVisible, const ScAddress& rPos )
     bListValButton = bVisible;
     aListValPos = rPos;
 
+    SAL_DEBUG("ScGridWindow::UpdateListValPos: bVisible: " << bVisible << ", rPos: " << rPos);
     if ( bListValButton )
     {
         if ( !bOldButton || aListValPos != aOldPos )

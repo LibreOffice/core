@@ -1526,7 +1526,7 @@ void ScGridWindow::DrawPagePreview( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, 
 void ScGridWindow::DrawButtons(SCCOL nX1, SCCOL nX2, const ScTableInfo& rTabInfo, OutputDevice* pContentDev)
 {
     aComboButton.SetOutputDevice( pContentDev );
-
+    //SAL_DEBUG("ScGridWindow::DrawButtons: nX1: " << nX1 << ", nX2: " << nX2);
     ScDocument* pDoc = pViewData->GetDocument();
     ScDPFieldButton aCellBtn(pContentDev, &GetSettings().GetStyleSettings(), &pViewData->GetZoomX(), &pViewData->GetZoomY(), pDoc);
 
@@ -1659,8 +1659,15 @@ void ScGridWindow::DrawButtons(SCCOL nX1, SCCOL nX2, const ScTableInfo& rTabInfo
             }
         }
 
+//        SAL_DEBUG("ScGridWindow::DrawButtons: bListValButton: " << bListValButton
+//                << ", pRowInfo[nArrY].nRowNo: " << pRowInfo[nArrY].nRowNo
+//                << ", aListValPos.Row(): " << aListValPos.Row()
+//                << ", pRowInfo[nArrY].bChanged: " << pRowInfo[nArrY].bChanged);
+
         if ( bListValButton && pRowInfo[nArrY].nRowNo == aListValPos.Row() && pRowInfo[nArrY].bChanged )
         {
+            SAL_DEBUG("ScGridWindow::DrawButtons: aListValPos.Row(): " << aListValPos.Row());
+
             tools::Rectangle aRect = GetListValButtonRect( aListValPos );
             aComboButton.SetPosPixel( aRect.TopLeft() );
             aComboButton.SetSizePixel( aRect.GetSize() );
@@ -1669,6 +1676,8 @@ void ScGridWindow::DrawButtons(SCCOL nX1, SCCOL nX2, const ScTableInfo& rTabInfo
             pContentDev->SetClipRegion();           // always called from Draw() without clip region
             aComboButton.SetPosPixel( aOldPos );    // restore old state
             aComboButton.SetSizePixel( aOldSize );  // for MouseUp/Down (AutoFilter)
+            SAL_DEBUG("ScGridWindow::DrawButtons: aRect: " << aRect
+                    << ", aOldPos: " << aOldPos << ", aOldSize: " << aOldSize);
         }
     }
 

@@ -291,8 +291,10 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
 
         case SID_JUMPTOMARK:
         case SID_CURRENTCELL:
+            SAL_DEBUG("SID_CURRENTCELL #1");
             if ( pReqArgs )
             {
+                SAL_DEBUG("SID_CURRENTCELL #2");
                 OUString aAddress;
                 const SfxPoolItem* pItem;
                 if ( pReqArgs->GetItemState( nSlot, true, &pItem ) == SfxItemState::SET )

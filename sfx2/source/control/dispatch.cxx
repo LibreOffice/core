@@ -1087,9 +1087,10 @@ const SfxPoolItem* SfxDispatcher::Execute(sal_uInt16 nSlot, SfxCallMode eCall,
 const SfxPoolItem* SfxDispatcher::ExecuteList(sal_uInt16 nSlot, SfxCallMode eCall,
         std::initializer_list<SfxPoolItem const*> args)
 {
+    SAL_DEBUG("SfxDispatcher::ExecuteList #1");
     if ( IsLocked() )
         return nullptr;
-
+    SAL_DEBUG("SfxDispatcher::ExecuteList #2");
     SfxShell *pShell = nullptr;
     const SfxSlot *pSlot = nullptr;
     if ( GetShellAndSlot_Impl( nSlot, &pShell, &pSlot, false,
@@ -1102,7 +1103,7 @@ const SfxPoolItem* SfxDispatcher::ExecuteList(sal_uInt16 nSlot, SfxCallMode eCal
            assert(pArg);
            MappedPut_Impl( aSet, *pArg );
        }
-
+       SAL_DEBUG("SfxDispatcher::ExecuteList #3");
        SfxRequest aReq( nSlot, eCall, aSet );
        Execute_( *pShell, *pSlot, aReq, eCall );
        return aReq.GetReturnValue();
