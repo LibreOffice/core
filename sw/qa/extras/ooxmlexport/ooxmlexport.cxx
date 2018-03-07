@@ -715,7 +715,7 @@ DECLARE_OOXMLEXPORT_TEST(testNumOverrideLvltext, "num-override-lvltext.docx")
     CPPUNIT_ASSERT_EQUAL(sal_Int16(2), comphelper::SequenceAsHashMap(xRules->getByIndex(1))["ParentNumbering"].get<sal_Int16>());
 
     // The paragraph marker's red font color was inherited by the number portion, this was ff0000.
-    CPPUNIT_ASSERT_EQUAL(OUString("00000a"), parseDump("//Special[@nType='POR_NUMBER']/SwFont", "color"));
+    CPPUNIT_ASSERT_EQUAL(OUString("ffffffff"), parseDump("//Special[@nType='POR_NUMBER']/SwFont", "color"));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testNumOverrideStart, "num-override-start.docx")
