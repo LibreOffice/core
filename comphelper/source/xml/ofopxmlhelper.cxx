@@ -110,6 +110,38 @@ uno::Sequence< uno::Sequence< beans::StringPair > > ReadContentTypeSequence(
     return ReadSequence_Impl( xInStream, aStringID, CONTENTTYPE_FORMAT, rContext );
 }
 
+OUString GetContentTypeByName(
+                const css::uno::Sequence<css::uno::Sequence<css::beans::StringPair>>& rContentTypes,
+                const OUString& rFilename)
+{
+    if (rContentTypes.getLength() < 2)
+    {
+        return OUString();
+    }
+
+    const uno::Sequence<beans::StringPair>& rDefaults = rContentTypes[0];
+    const uno::Sequence<beans::StringPair>& rOverrides = rContentTypes[1];
+
+    // Find the extension and use it to get the type.
+    const sal_Int32 nDotOffset = rFilename.lastIndexOf('.');
+    const OUString aExt = (nDotOffset >= 0 ? rFilename.copy(nDotOffset + 1) : rFilename); // Skip the dot.
+
+    const std::vector<OUString> aNames = { aExt, "/" + rFilename };
+    for (const OUString& aName : aNames)
+    {
+        const auto it1 = std::find_if(rOverrides.begin(), rOverrides.end(), [&aName](const beans::StringPair& rPair)
+                                                                              { return rPair.First == aName; });
+        if (it1 != rOverrides.end())
+            return it1->Second;
+
+        const auto it2 = std::find_if(rDefaults.begin(), rDefaults.end(), [&aName](const beans::StringPair& rPair)
+                                                                            { return rPair.First == aName; });
+        if (it2 != rDefaults.end())
+            return it2->Second;
+    }
+
+    return OUString();
+}
 
 void WriteRelationsInfoSequence(
         const uno::Reference< io::XOutputStream >& xOutStream,

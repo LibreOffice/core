@@ -56,6 +56,18 @@ namespace OFOPXMLHelper {
         const css::uno::Reference< css::io::XInputStream >& xInStream,
         const css::uno::Reference< css::uno::XComponentContext >& rContext );
 
+    // returns the ContentType for the given name, or empty when not found.
+    // rContentTypes is a sequence containing two entries of type sequence<StringPair>
+    // the first sequence describes "Default" elements, where each element is described
+    // by StringPair object ( First - Extension, Second - ContentType )
+    // the second sequence describes "Override" elements, where each element is described
+    // by StringPair object ( First - PartName, Second - ContentType )
+    // The "Override" sequence is searched first before falling back on "Default".
+    COMPHELPER_DLLPUBLIC
+    OUString
+    GetContentTypeByName(const css::uno::Sequence<css::uno::Sequence<css::beans::StringPair>>& rContentTypes,
+                         const OUString& rFilename);
+
     // writes sequence of elements, where each element is described by sequence of tags,
     // where each tag is described by StringPair ( First - name, Second - value )
     // the first tag of each element sequence must be "Id"
