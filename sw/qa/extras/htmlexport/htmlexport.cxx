@@ -55,8 +55,8 @@ private:
             setImportFilterOptions("xhtmlns=reqif-xhtml");
             // Bypass filter detect.
             setImportFilterName("HTML (StarWriter)");
-            // Export options.
-            setFilterOptions("XHTML,xhtmlns=reqif-xhtml");
+            // Export options (implies XHTML).
+            setFilterOptions("xhtmlns=reqif-xhtml");
         }
         else
             setFilterOptions("");

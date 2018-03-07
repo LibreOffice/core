@@ -196,6 +196,8 @@ void SwHTMLWriter::SetupFilterOptions(SfxMedium& rMedium)
             if (maNamespace == "reqif-xhtml")
                 // XHTML is always just a fragment inside ReqIF.
                 mbSkipHeaderFooter = true;
+            // XHTML namespace implies XHTML.
+            mbXHTML = true;
         }
     }
 }
