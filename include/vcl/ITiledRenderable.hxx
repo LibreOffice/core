@@ -124,7 +124,7 @@ public:
             // sometimes MouseButtonDown captures mouse and starts tracking, and VCL
             // will not take care of releasing that with tiled rendering
             if (pLOKEv->mpWindow->IsTracking())
-                pLOKEv->mpWindow->EndTracking(TrackingEventFlags::DontCallHdl);
+                pLOKEv->mpWindow->EndTracking();
 
             break;
         case VCLEVENT_WINDOW_MOUSEMOVE:
