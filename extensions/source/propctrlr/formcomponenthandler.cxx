@@ -2847,9 +2847,8 @@ namespace pcr
 
     bool FormComponentPropertyHandler::impl_dialogColorChooser_throw( sal_Int32 _nColorPropertyId, Any& _out_rNewValue, ::osl::ClearableMutexGuard& _rClearBeforeDialog ) const
     {
-        sal_Int32 nColor = 0;
-        OSL_VERIFY( impl_getPropertyValue_throw( impl_getPropertyNameFromId_nothrow( _nColorPropertyId ) ) >>= nColor );
-        ::Color aColor( nColor );
+        ::Color aColor;
+        OSL_VERIFY( impl_getPropertyValue_throw( impl_getPropertyNameFromId_nothrow( _nColorPropertyId ) ) >>= aColor );
         SvColorDialog aColorDlg( impl_getDefaultDialogParent_nothrow() );
         aColorDlg.SetColor( aColor );
 
@@ -2857,9 +2856,7 @@ namespace pcr
         if ( !aColorDlg.Execute() )
             return false;
 
-        aColor = aColorDlg.GetColor();
-        nColor = aColor.GetColor();
-        _out_rNewValue <<= nColor;
+        _out_rNewValue <<= aColorDlg.GetColor();
         return true;
     }
 

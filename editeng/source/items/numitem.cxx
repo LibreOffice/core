@@ -295,7 +295,7 @@ void SvxNumberFormat::Store(SvStream &rStream, FontToSubsFontConverter pConverte
     WritePair( rStream, aGraphicSize );
 
     Color nTempColor = nBulletColor;
-    if(COL_AUTO == nBulletColor.GetColor())
+    if(COL_AUTO == nBulletColor)
         nTempColor = COL_BLACK;
     WriteColor( rStream, nTempColor );
     rStream.WriteUInt16( nBulletRelSize );

@@ -357,9 +357,9 @@ namespace frm
             }
             else
             {
-                sal_Int32 nColor(COL_TRANSPARENT);
+                Color nColor = COL_TRANSPARENT;
                 _rValue >>= nColor;
-                pControl->SetBackgroundColor( Color( nColor ) );
+                pControl->SetBackgroundColor( nColor );
             }
         }
         else if ( _rPropertyName == PROPERTY_HSCROLL )

@@ -170,17 +170,17 @@ namespace frm
     }
 
 
-    sal_Int32 FontControlModel::getTextColor( ) const
+    Color FontControlModel::getTextColor( ) const
     {
-        sal_Int32 nColor(COL_TRANSPARENT);
+        Color nColor = COL_TRANSPARENT;
         m_aTextColor >>= nColor;
         return nColor;
     }
 
 
-    sal_Int32 FontControlModel::getTextLineColor( ) const
+    Color FontControlModel::getTextLineColor( ) const
     {
-        sal_Int32 nColor(COL_TRANSPARENT);
+        Color nColor = COL_TRANSPARENT;
         m_aTextLineColor >>= nColor;
         return nColor;
     }

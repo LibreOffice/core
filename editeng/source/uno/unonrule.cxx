@@ -252,7 +252,7 @@ Sequence<beans::PropertyValue> SvxUnoNumberingRules::getNumberingRuleByIndex(sal
 
     pArray[nIdx++] = beans::PropertyValue("SymbolTextDistance", -1, aVal, beans::PropertyState_DIRECT_VALUE);
 
-    aVal <<= static_cast<sal_Int32>(rFmt.GetBulletColor().GetColor());
+    aVal <<= rFmt.GetBulletColor();
     pArray[nIdx++] = beans::PropertyValue(UNO_NAME_NRULE_BULLET_COLOR, -1, aVal, beans::PropertyState_DIRECT_VALUE);
 
     aVal <<= static_cast<sal_Int16>(rFmt.GetBulletRelSize());

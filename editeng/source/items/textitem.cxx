@@ -1168,7 +1168,7 @@ bool SvxTextLineItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
         rVal <<= static_cast<sal_Int16>(GetValue());
         break;
     case MID_TL_COLOR:
-        rVal <<= static_cast<sal_Int32>( mColor.GetColor() );
+        rVal <<= mColor;
         break;
     case MID_TL_HASCOLOR:
         rVal <<= !mColor.GetTransparency();
@@ -1628,7 +1628,7 @@ bool SvxBackgroundColorItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) c
         }
         default:
         {
-            rVal <<= static_cast<sal_Int32>(aColor.GetColor());
+            rVal <<= aColor;
             break;
         }
     }
@@ -1703,18 +1703,13 @@ bool SvxColorItem::operator==( const SfxPoolItem& rAttr ) const
 
 bool SvxColorItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
 {
-    rVal <<= static_cast<sal_Int32>(mColor.GetColor());
+    rVal <<= mColor;
     return true;
 }
 
 bool SvxColorItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
 {
-    sal_Int32 nColor = 0;
-    if(!(rVal >>= nColor))
-        return false;
-
-    mColor = nColor;
-    return true;
+    return (rVal >>= mColor);
 }
 
 SfxPoolItem* SvxColorItem::Clone( SfxItemPool * ) const
@@ -1725,7 +1720,7 @@ SfxPoolItem* SvxColorItem::Clone( SfxItemPool * ) const
 SvStream& SvxColorItem::Store( SvStream& rStrm , sal_uInt16 nItemVersion ) const
 {
     if( VERSION_USEAUTOCOLOR == nItemVersion &&
-        COL_AUTO == mColor.GetColor() )
+        COL_AUTO == mColor )
         WriteColor( rStrm, COL_BLACK );
     else
         WriteColor( rStrm, mColor );
