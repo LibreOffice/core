@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba2be162_434bd52b",
+        "filename": "vcl/source/bitmap/bitmapconvert.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 736,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-03-07T07:35:59Z",
+      "side": 1,
+      "message": "again: when moving code around, please refrain from any unnecessary reformatting",
+      "revId": "966d62b42a4cfa05f7ea78b44d5d5b9c3ab91617",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
