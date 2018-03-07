@@ -604,7 +604,7 @@ namespace vclcanvas
                 const vcl::Region aPolyClipRegion( rPoly );
 
                 rOutDev.Push( PushFlags::CLIPREGION );
-                rOutDev.SetClipRegion( aPolyClipRegion );
+                rOutDev.IntersectClipRegion( aPolyClipRegion );
 
                 doGradientFill( rOutDev,
                                 rValues,
