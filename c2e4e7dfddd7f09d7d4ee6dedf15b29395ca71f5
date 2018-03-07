@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba2be162_63c1b980",
+        "filename": "solenv/clang-format/blacklist",
+        "patchSetId": 4
+      },
+      "lineNbr": 18060,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-03-07T07:31:38Z",
+      "side": 1,
+      "message": "no idea whether or not this change is good or bad overall, but please keep this list sorted (it\u0027s apparently sorted lexicographically by ASCII values)",
+      "revId": "c2e4e7dfddd7f09d7d4ee6dedf15b29395ca71f5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
