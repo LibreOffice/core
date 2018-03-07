@@ -43,7 +43,7 @@ class SwBreakDlg
     std::unique_ptr<weld::SpinButton> m_xPageNumEdit;
     std::unique_ptr<weld::Button> m_xOkBtn;
 
-    OUString        aTemplate;
+    OUString        m_aTemplate;
     sal_uInt16      nKind;
     ::boost::optional<sal_uInt16>      oPgNum;
 
@@ -60,7 +60,7 @@ class SwBreakDlg
 public:
     SwBreakDlg(weld::Window *pParent, SwWrtShell &rSh);
     short run();
-    const OUString& GetTemplateName() const { return aTemplate; }
+    const OUString& GetTemplateName() const { return m_aTemplate; }
     sal_uInt16 GetKind() const { return nKind; }
     const ::boost::optional<sal_uInt16>&  GetPageNumber() const { return oPgNum; }
 };
