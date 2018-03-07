@@ -13,6 +13,7 @@
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <tools/color.hxx>
 
 namespace chart
 {
@@ -28,8 +29,8 @@ private:
     css::awt::Point m_aPosition;
     css::awt::Size m_aSize;
     bool m_bShowArrow;
-    sal_Int32 m_nArrowColor;
-    sal_Int32 m_nBGColor;
+    Color m_nArrowColor;
+    Color m_nBGColor;
 
     css::uno::Reference<css::drawing::XShape>
         createTriangle(css::awt::Size aSize);
@@ -46,11 +47,11 @@ public:
     {
         m_bShowArrow = bShowArrow;
     }
-    void setArrowColor(sal_Int32 nArrowColor)
+    void setArrowColor(Color nArrowColor)
     {
         m_nArrowColor = nArrowColor;
     }
-    void setBGColor(sal_Int32 nBGColor)
+    void setBGColor(Color nBGColor)
     {
         m_nBGColor = nBGColor;
     }

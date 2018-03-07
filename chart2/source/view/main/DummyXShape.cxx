@@ -675,7 +675,7 @@ void DummyRectangle::render()
     if(itr != maProperties.end())
     {
         uno::Any co =  itr->second;
-        sal_Int32 nColorValue = co.get<sal_Int32>();
+        Color nColorValue(co.get<sal_Int32>());
         //here FillStyle works for background color and gradients
         pChart->m_GLRender.SetBackGroundColor(nColorValue, nColorValue, eStyle);
     }
@@ -725,7 +725,7 @@ struct FontAttribSetter
         else if(rPropName == "CharColor")
         {
             sal_Int32 nColor = rProp.second.get<sal_Int32>();
-            mrFont.SetFillColor(nColor);
+            mrFont.SetFillColor(Color(nColor));
         }
         else if(rPropName == "CharHeight")
         {

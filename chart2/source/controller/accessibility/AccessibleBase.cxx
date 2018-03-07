@@ -716,17 +716,17 @@ void SAL_CALL AccessibleBase::grabFocus()
 
 sal_Int32 SAL_CALL AccessibleBase::getForeground()
 {
-    return getColor( ACC_BASE_FOREGROUND );
+    return sal_Int32(getColor( ACC_BASE_FOREGROUND ));
 }
 
 sal_Int32 SAL_CALL AccessibleBase::getBackground()
 {
-    return getColor( ACC_BASE_BACKGROUND );
+    return sal_Int32(getColor( ACC_BASE_BACKGROUND ));
 }
 
-sal_Int32 AccessibleBase::getColor( eColorType eColType )
+Color AccessibleBase::getColor( eColorType eColType )
 {
-    sal_Int32 nResult = static_cast< sal_Int32 >(COL_TRANSPARENT);
+    Color nResult = COL_TRANSPARENT;
     if( m_bAlwaysTransparent )
         return nResult;
 

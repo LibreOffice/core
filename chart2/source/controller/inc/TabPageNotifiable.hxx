@@ -25,7 +25,7 @@
 // color to use as foreground for an invalid range
 #define RANGE_SELECTION_INVALID_RANGE_FOREGROUND_COLOR COL_WHITE
 // color to use as background for an invalid range
-#define RANGE_SELECTION_INVALID_RANGE_BACKGROUND_COLOR 0xff6563
+#define RANGE_SELECTION_INVALID_RANGE_BACKGROUND_COLOR Color(0xff6563)
 
 namespace chart
 {

@@ -105,7 +105,7 @@ OUString lcl_getDataPointValueText( const Reference< XDataSeries >& xSeries, sal
 
     uno::Reference< util::XNumberFormatsSupplier > xNumberFormatsSupplier( xChartModel, uno::UNO_QUERY );
     NumberFormatterWrapper aNumberFormatterWrapper( xNumberFormatsSupplier );
-    sal_Int32 nLabelColor = 0;//dummy
+    Color nLabelColor;//dummy
     bool bColorChanged;//dummy
 
     for(sal_Int32 nN = aDataSequences.getLength();nN--;)

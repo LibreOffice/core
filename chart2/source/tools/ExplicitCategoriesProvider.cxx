@@ -178,7 +178,7 @@ void ExplicitCategoriesProvider::convertCategoryAnysToText( uno::Sequence< OUStr
             xAxis, xCooSysModel, uno::Reference<chart2::XChartDocument>(static_cast< ::cppu::OWeakObject* >(&rModel), uno::UNO_QUERY), false );
     }
 
-    sal_Int32 nLabelColor;
+    Color nLabelColor;
     bool bColorChanged = false;
 
     NumberFormatterWrapper aNumberFormatterWrapper( rModel.getNumberFormatsSupplier() );

@@ -42,13 +42,12 @@ GLfloat texCoords[] = {
     0.0f, 0.0f
 };
 
-glm::vec4 getColorAsVector(sal_uInt32 nColor)
+glm::vec4 getColorAsVector(Color nColor)
 {
-    auto red   = ((nColor & 0x00FF0000) >> 16) / 255.0f;
-    auto green = ((nColor & 0x0000FF00) >> 8) / 255.0f;
-    auto blue  = (nColor & 0x000000FF) / 255.0f;
-    auto alpha = (0xFF - ((nColor & 0xFF000000) >> 24)) / 255.0;
-    return glm::vec4(red, green, blue, alpha);
+    return glm::vec4(nColor.GetRed() / 255.0f,
+            nColor.GetGreen() / 255.0f,
+            nColor.GetBlue() / 255.0f,
+            (0xFF - nColor.GetTransparency())/255.0);
 }
 
 }
@@ -435,7 +434,7 @@ void OpenGL3DRenderer::init()
     m_TextInfoBatch.batchNum = 512;
     CHECK_GL_ERROR();
     glViewport(0, 0, m_iWidth, m_iHeight);
-    Set3DSenceInfo(0xFFFFFF);
+    Set3DSenceInfo(Color(0xFFFFFF));
     m_GlobalScaleMatrix = glm::scale(glm::vec3(0.01f, 0.01f, 0.01f));
 }
 
@@ -1085,7 +1084,7 @@ void OpenGL3DRenderer::RenderPolygon3DObject()
     glDepthMask(GL_TRUE);
 }
 
-void OpenGL3DRenderer::Set3DSenceInfo(sal_uInt32 nColor, bool twoSidesLighting)
+void OpenGL3DRenderer::Set3DSenceInfo(Color nColor, bool twoSidesLighting)
 {
     m_Polygon3DInfo.material.twoSidesLighting = twoSidesLighting;
     if (maResources.m_b330Support)
@@ -1098,13 +1097,13 @@ void OpenGL3DRenderer::Set3DSenceInfo(sal_uInt32 nColor, bool twoSidesLighting)
         m_iLightNum = 0;
         m_Ambient = getColorAsVector(nColor);
     }
-    SetLightInfo(true, 0xFFFFFF, glm::vec4(-1.0, -1.0, 1.0, 0.0));
-    SetLightInfo(true, 0xFFFFFF, glm::vec4(-1.0, 1.0, 1.0, 0.0));
-    SetLightInfo(true, 0xFFFFFF, glm::vec4(1.0, -1.0, 1.0, 0.0));
-    SetLightInfo(true, 0xFFFFFF, glm::vec4(1.0, 1.0, 1.0, 0.0));
+    SetLightInfo(true, Color(0xFFFFFF), glm::vec4(-1.0, -1.0, 1.0, 0.0));
+    SetLightInfo(true, Color(0xFFFFFF), glm::vec4(-1.0, 1.0, 1.0, 0.0));
+    SetLightInfo(true, Color(0xFFFFFF), glm::vec4(1.0, -1.0, 1.0, 0.0));
+    SetLightInfo(true, Color(0xFFFFFF), glm::vec4(1.0, 1.0, 1.0, 0.0));
 }
 
-void OpenGL3DRenderer::SetLightInfo(bool lightOn, sal_uInt32 nColor, const glm::vec4& direction)
+void OpenGL3DRenderer::SetLightInfo(bool lightOn, Color nColor, const glm::vec4& direction)
 {
     if (lightOn)
     {
@@ -1133,10 +1132,10 @@ void OpenGL3DRenderer::SetLightInfo(bool lightOn, sal_uInt32 nColor, const glm::
     }
 }
 
-void OpenGL3DRenderer::AddShapePolygon3DObject(sal_uInt32 nColor, bool lineOnly, sal_uInt32 nLineColor,long fillStyle, sal_uInt32 specular, sal_uInt32 nUniqueId)
+void OpenGL3DRenderer::AddShapePolygon3DObject(Color nColor, bool lineOnly, Color nLineColor,long fillStyle, sal_uInt32 specular, sal_uInt32 nUniqueId)
 {
     m_Polygon3DInfo.polygonColor = getColorAsVector(nColor);
-    m_Polygon3DInfo.id = getColorAsVector(nUniqueId);
+    m_Polygon3DInfo.id = getColorAsVector(Color(nUniqueId));
     m_Polygon3DInfo.material.materialColor = m_Polygon3DInfo.polygonColor;//material color seems to be the same for all parts, so we use the polygon color
     //line or Polygon
     m_Polygon3DInfo.lineOnly = lineOnly;
@@ -1151,7 +1150,7 @@ void OpenGL3DRenderer::AddShapePolygon3DObject(sal_uInt32 nColor, bool lineOnly,
     m_Polygon3DInfo.fillStyle= fillStyle;
 
     //material specular;
-    m_Polygon3DInfo.material.specular = getColorAsVector(specular);
+    m_Polygon3DInfo.material.specular = getColorAsVector(Color(specular));
 
     m_Polygon3DInfo.material.diffuse = glm::vec4(1.0, 1.0, 1.0, 1.0);
 
@@ -1208,9 +1207,9 @@ void OpenGL3DRenderer::EndAddPolygon3DObjectPoint()
     m_Polygon3DInfo.vertices = nullptr;
 }
 
-void OpenGL3DRenderer::AddShape3DExtrudeObject(bool roundedCorner, sal_uInt32 nColor, sal_uInt32 specular, const glm::mat4& modelMatrix, sal_uInt32 nUniqueId)
+void OpenGL3DRenderer::AddShape3DExtrudeObject(bool roundedCorner, Color nColor, sal_uInt32 specular, const glm::mat4& modelMatrix, sal_uInt32 nUniqueId)
 {
-    m_Extrude3DInfo.id = getColorAsVector(nUniqueId);
+    m_Extrude3DInfo.id = getColorAsVector(Color(nUniqueId));
     m_Extrude3DInfo.orgID = nUniqueId;
     glm::vec4 tranform = modelMatrix * glm::vec4(0.0, 0.0, 0.0, 1.0);
     glm::vec4 DirX = modelMatrix * glm::vec4(1.0, 0.0, 0.0, 0.0);
@@ -1228,7 +1227,7 @@ void OpenGL3DRenderer::AddShape3DExtrudeObject(bool roundedCorner, sal_uInt32 nC
     m_Extrude3DInfo.material.materialColor = m_Extrude3DInfo.extrudeColor;//material color seems to be the same for all parts, so we use the polygon color
 
     //material specular;
-    m_Extrude3DInfo.material.specular = getColorAsVector(specular);
+    m_Extrude3DInfo.material.specular = getColorAsVector(Color(specular));
 
     m_Extrude3DInfo.material.diffuse = glm::vec4(1.0, 1.0, 1.0, 1.0);
 
@@ -1715,7 +1714,7 @@ void OpenGL3DRenderer::CreateScreenTextTexture(
     long bmpHeight = rSizePixels.Height();
 
     TextInfo aTextInfo;
-    aTextInfo.id = getColorAsVector(nUniqueId);
+    aTextInfo.id = getColorAsVector(Color(nUniqueId));
     aTextInfo.uniqueId = nUniqueId;
     aTextInfo.vertex[0] = vBottomRight.x;
     aTextInfo.vertex[1] = vBottomRight.y;
@@ -1766,7 +1765,7 @@ void OpenGL3DRenderer::CreateTextTextureSingle(const boost::shared_array<sal_uIn
     long bmpHeight = rSizePixels.Height();
 
     TextInfo aTextInfo;
-    aTextInfo.id = getColorAsVector(nUniqueId);
+    aTextInfo.id = getColorAsVector(Color(nUniqueId));
     aTextInfo.vertex[0] = vBottomRight.x;
     aTextInfo.vertex[1] = vBottomRight.y;
     aTextInfo.vertex[2] = vBottomRight.z;
@@ -1809,7 +1808,7 @@ void OpenGL3DRenderer::CreateTextTextureBatch(const boost::shared_array<sal_uInt
 {
     long bmpWidth = rSizePixels.Width();
     long bmpHeight = rSizePixels.Height();
-    glm::vec4 id = getColorAsVector(nUniqueId);
+    glm::vec4 id = getColorAsVector(Color(nUniqueId));
     m_TextInfoBatch.idList.push_back(id);
     m_TextInfoBatch.vertexList.emplace_back(vBottomRight.x, vBottomRight.y, vBottomRight.z);
     m_TextInfoBatch.vertexList.emplace_back(vTopRight.x, vTopRight.y, vTopRight.z);
@@ -2234,7 +2233,7 @@ void OpenGL3DRenderer::SetPickingMode(bool bPickingMode)
     }
 }
 
-sal_uInt32 OpenGL3DRenderer::GetPixelColorFromPoint(long nX, long nY)
+Color OpenGL3DRenderer::GetPixelColorFromPoint(long nX, long nY)
 {
     static sal_uInt32 nId = 0;
     OUString aFileName = "/home/moggi/work/picking_" + OUString::number(nId++) + ".png";
@@ -2242,7 +2241,7 @@ sal_uInt32 OpenGL3DRenderer::GetPixelColorFromPoint(long nX, long nY)
     std::unique_ptr<sal_uInt8[]> buf(new sal_uInt8[4]);
     glReadPixels(nX, m_iHeight-nY, 1, 1, GL_BGRA, GL_UNSIGNED_BYTE, buf.get());
     Color aColor(255-buf[3], buf[2], buf[1], buf[0]);
-    return aColor.GetColor();
+    return aColor;
 }
 
 void OpenGL3DRenderer::ReleaseBatchBarInfo()

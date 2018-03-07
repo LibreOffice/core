@@ -37,7 +37,7 @@ using ::com::sun::star::uno::Sequence;
 namespace
 {
 
-const auto defaultPreferredColor = COL_LIGHTBLUE;
+const Color defaultPreferredColor = COL_LIGHTBLUE;
 
 void lcl_fillRanges(
     Sequence< chart2::data::HighlightedRange > & rOutRanges,

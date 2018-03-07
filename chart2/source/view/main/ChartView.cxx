@@ -2443,7 +2443,7 @@ void lcl_createButtons(const uno::Reference<drawing::XShapes>& xPageShapes,
             pButton->setPosition(aNewPosition);
             pButton->setSize(aSize);
             if (rPageFieldEntry.HasHiddenMembers)
-                pButton->setArrowColor(0x0000FF);
+                pButton->setArrowColor(Color(0x0000FF));
 
             pButton->createShapes(xModelPage);
             x += aSize.Width + 100;
@@ -2470,11 +2470,11 @@ void lcl_createButtons(const uno::Reference<drawing::XShapes>& xPageShapes,
             pButton->setSize(aSize);
             if ( rRowFieldEntry.Name == "Data" )
             {
-                pButton->setBGColor( 0x00F6F6F6 );
+                pButton->setBGColor( Color(0x00F6F6F6) );
                 pButton->showArrow( false );
             }
             else if (rRowFieldEntry.HasHiddenMembers)
-                pButton->setArrowColor(0x0000FF);
+                pButton->setArrowColor(Color(0x0000FF));
             pButton->createShapes(xModelPage);
             x += aSize.Width + 100;
         }

@@ -382,7 +382,7 @@ OUString VSeriesPlotter::getLabelTextForValue( VDataSeries const & rDataSeries
         if(nNumberFormatKey<0)
             nNumberFormatKey=0;
 
-        sal_Int32 nLabelCol = 0;
+        Color nLabelCol;
         bool bColChanged;
         aNumber = m_apNumberFormatterWrapper->getFormattedString(
                 nNumberFormatKey, fValue, nLabelCol, bColChanged );
@@ -1353,7 +1353,7 @@ void VSeriesPlotter::createRegressionCurveEquationShapes(
                 double fR( xRegressionCurveCalculator->getCorrelationCoefficient());
                 if( m_apNumberFormatterWrapper.get())
                 {
-                    sal_Int32 nLabelCol = 0;
+                    Color nLabelCol;
                     bool bColChanged;
                     aFormula.append(
                         m_apNumberFormatterWrapper->getFormattedString(

@@ -411,7 +411,7 @@ bool lcl_hasWordBreak( const Reference<drawing::XShape>& xShape )
 
 OUString getTextLabelString(
     const FixedNumberFormatter& rFixedNumberFormatter, const uno::Sequence<OUString>* pCategories,
-    const TickInfo* pTickInfo, bool bComplexCat, sal_Int32& rExtraColor, bool& rHasExtraColor )
+    const TickInfo* pTickInfo, bool bComplexCat, Color& rExtraColor, bool& rHasExtraColor )
 {
     if (pCategories)
     {
@@ -744,7 +744,7 @@ bool VCartesianAxis::createTextShapes(
     getAxisLabelProperties(aPropNames, aPropValues, m_aAxisProperties, rAxisLabelProperties, nLimitedSpaceForText, bLimitedHeight);
 
     uno::Any* pColorAny = PropertyMapper::getValuePointer(aPropValues,aPropNames,"CharColor");
-    sal_Int32 nColor = COL_AUTO.GetColor();
+    Color nColor = COL_AUTO;
     if(pColorAny)
         *pColorAny >>= nColor;
 
@@ -808,7 +808,7 @@ bool VCartesianAxis::createTextShapes(
         }
 
         bool bHasExtraColor=false;
-        sal_Int32 nExtraColor=0;
+        Color nExtraColor;
 
         OUString aLabel = getTextLabelString(
             aFixedNumberFormatter, pCategories, pTickInfo, isComplexCategoryAxis(),
@@ -932,7 +932,7 @@ bool VCartesianAxis::createTextShapesSimple(
     getAxisLabelProperties(aPropNames, aPropValues, m_aAxisProperties, rAxisLabelProperties, -1, bLimitedHeight);
 
     uno::Any* pColorAny = PropertyMapper::getValuePointer(aPropValues,aPropNames,"CharColor");
-    sal_Int32 nColor = COL_AUTO.GetColor();
+    Color nColor = COL_AUTO;
     if(pColorAny)
         *pColorAny >>= nColor;
 
@@ -974,7 +974,7 @@ bool VCartesianAxis::createTextShapesSimple(
         }
 
         bool bHasExtraColor=false;
-        sal_Int32 nExtraColor=0;
+        Color nExtraColor;
 
         OUString aLabel = getTextLabelString(
             aFixedNumberFormatter, pCategories, pTickInfo, isComplexCategoryAxis(),

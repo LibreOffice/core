@@ -1116,7 +1116,7 @@ double VDataSeries::getValueByProperty( sal_Int32 nIndex, const OUString& rPropN
             sal_uInt8 b = aOldColor.GetBlue() + (aColor.GetBlue() - aOldColor.GetBlue()) * mnPercent;
             sal_uInt8 t = aOldColor.GetTransparency() + (aColor.GetTransparency() - aOldColor.GetTransparency()) * mnPercent;
             Color aRet(t, r, g, b);
-            return aRet.GetColor();
+            return sal_uInt32(aRet);
         }
         return fOldValue + (fValue - fOldValue) * mnPercent;
     }

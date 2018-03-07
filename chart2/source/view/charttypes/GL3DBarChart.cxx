@@ -690,14 +690,14 @@ void GL3DBarChart::create3DShapes(const std::vector<std::unique_ptr<VDataSeries>
             p->setPosition(aTopLeft, aTopRight, aBottomRight);
         }
 
-        sal_Int32 nColor = aSeriesColor[nSeriesIndex % SAL_N_ELEMENTS(aSeriesColor)].GetColor();
+        Color nColor = aSeriesColor[nSeriesIndex % SAL_N_ELEMENTS(aSeriesColor)];
         for(sal_Int32 nIndex = 0; nIndex < nPointCount; ++nIndex)
         {
             if(bMappedFillProperty)
             {
                 double nPropVal = rDataSeries->getValueByProperty(nIndex, "FillColor");
                 if(!rtl::math::isNan(nPropVal))
-                    nColor = static_cast<sal_uInt32>(nPropVal);
+                    nColor = Color(static_cast<sal_uInt32>(nPropVal));
             }
 
             float nVal = rDataSeries->getYValue(nIndex);
@@ -716,7 +716,7 @@ void GL3DBarChart::create3DShapes(const std::vector<std::unique_ptr<VDataSeries>
             recordBarHistory(nId, nVal);
             if (mbBenchMarkMode)
             {
-                std::map<sal_uInt32, sal_uInt32>::const_iterator it = maBarColorMap.find(nId);
+                auto it = maBarColorMap.find(nId);
                 if (it == maBarColorMap.end())
                 {
                     maBarColorMap[nId] = nColor;
@@ -919,7 +919,7 @@ sal_uInt32 GL3DBarChart::barIdAtPosition(const Point& rPos)
         mpWindow->getContext().makeCurrent();
         mpRenderer->SetPickingMode(true);
         renderFrame();
-        nId = mpRenderer->GetPixelColorFromPoint(rPos.X(), rPos.Y());
+        nId = sal_uInt32(mpRenderer->GetPixelColorFromPoint(rPos.X(), rPos.Y()));
         mpRenderer->SetPickingMode(false);
         mpWindow->getContext().resetCurrent();
     }
@@ -1454,10 +1454,10 @@ void GL3DBarChart::updateScroll()
     }
 }
 
-void GL3DBarChart::processAutoFly(sal_uInt32 nId, sal_uInt32 nColor)
+void GL3DBarChart::processAutoFly(sal_uInt32 nId, Color nColor)
 {
     //record the color
-    sal_uInt32 nPreColor = maBarColorMap[nId];
+    Color nPreColor = maBarColorMap[nId];
     maBarColorMap[nId] = nColor;
     //if has manul event, just record the color and process manul event first
     if (maRenderEvent != EVENT_NONE)
@@ -1465,7 +1465,7 @@ void GL3DBarChart::processAutoFly(sal_uInt32 nId, sal_uInt32 nColor)
         return;
     }
     //calc the percentage of color change
-    int nColorRate = (nColor - nPreColor) * 100 / nPreColor;
+    int nColorRate = (sal_uInt32(nColor) - sal_uInt32(nPreColor)) * 100 / sal_uInt32(nPreColor);
     nColorRate = abs(nColorRate);
     if (nColorRate >= FLY_THRESHOLD)
     {
