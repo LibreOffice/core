@@ -1,6 +1,6 @@
 Index: configure.ac
 ===================================================================
---- configure.ac	(revision 1825802)
+--- configure.ac	(revision 1826001)
 +++ configure.ac	(working copy)
 @@ -2116,18 +2116,27 @@
  		PATH="$MSPDB_PATH:$PATH"
@@ -48,7 +48,7 @@ Index: configure.ac
  		AC_MSG_CHECKING([the Mingwin32 C++ Compiler])
 Index: set_soenv.in
 ===================================================================
---- set_soenv.in	(revision 1825825)
+--- set_soenv.in	(revision 1826001)
 +++ set_soenv.in	(working copy)
 @@ -687,8 +687,6 @@
        $USE_DIRECTX5   = "";
@@ -173,22 +173,27 @@ Index: set_soenv.in
  	   if ( $PATH !~ /(?:[:]|\A)(?:$tmppath\/bin)(?:[:]|\Z)/i ) {
 Index: solenv/gbuild/platform/windows.mk
 ===================================================================
---- solenv/gbuild/platform/windows.mk	(revision 1825802)
+--- solenv/gbuild/platform/windows.mk	(revision 1826001)
 +++ solenv/gbuild/platform/windows.mk	(working copy)
-@@ -63,7 +63,12 @@
+@@ -59,11 +59,15 @@
+ 	-D_MT \
+ 	-D_DLL \
+ 	-DBOOST_MEM_FN_ENABLE_CDECL \
+-	-DCPPU_ENV=msci \
  	-DFULL_DESK \
  	-DM1500 \
  
+-gb_CPUDEFS := -DINTEL -D_X86_=1
 +ifeq ($(CPUNAME),INTEL)
- gb_CPUDEFS := -DINTEL -D_X86_=1
++gb_CPUDEFS := -DINTEL -D_X86_=1 -DCPPU_ENV=msci
 +endif
 +ifeq ($(CPUNAME),X86_64)
-+gb_CPUDEFS := -DX86_64 -D_AMD64_=1
++gb_CPUDEFS := -DX86_64 -D_AMD64_=1 -DCPPU_ENV=mscx
 +endif
  
  gb_RCDEFS := \
       -DWINVER=0x0400 \
-@@ -187,12 +192,21 @@
+@@ -187,12 +191,21 @@
  
  gb_NoexPrecompiledHeader_NOEXCEPTIONFLAGS := $(gb_LinkTarget_NOEXCEPTIONFLAGS)
  
@@ -211,7 +216,7 @@ Index: solenv/gbuild/platform/windows.mk
  gb_DEBUG_CFLAGS := -Zi
  
  ifeq ($(gb_DEBUGGING),TRUE)
-@@ -437,7 +451,12 @@
+@@ -437,7 +450,12 @@
  # Library class
  
  gb_Library_DEFS := -D_DLL_
@@ -224,7 +229,7 @@ Index: solenv/gbuild/platform/windows.mk
  gb_Library_get_rpath :=
  
  gb_Library_SYSPRE := i
-@@ -608,7 +627,12 @@
+@@ -608,7 +626,12 @@
  # Executable class
  
  gb_Executable_EXT := .exe
@@ -239,7 +244,7 @@ Index: solenv/gbuild/platform/windows.mk
  
 Index: solenv/inc/wnt.mk
 ===================================================================
---- solenv/inc/wnt.mk	(revision 1825802)
+--- solenv/inc/wnt.mk	(revision 1826001)
 +++ solenv/inc/wnt.mk	(working copy)
 @@ -39,6 +39,10 @@
  .INCLUDE : wntgcci.mk
@@ -252,10 +257,25 @@ Index: solenv/inc/wnt.mk
  # --- changes for W32-tcsh - should move into settings.mk ---
  JAVAC=javac
  JAVA=java
-Index: main/odk/settings/settings.mk
+Index: solenv/inc/tg_compv.mk
 ===================================================================
---- main/odk/settings/settings.mk	(revision 1825955)
-+++ main/odk/settings/settings.mk	(revision 1825956)
+--- solenv/inc/tg_compv.mk	(revision 1826001)
++++ solenv/inc/tg_compv.mk	(working copy)
+@@ -72,7 +72,10 @@
+ .IF "$(COM)"=="MSC"
+ .IF "$(CCNUMVER)">="001200000000"
+ COMID=MSC
++.IF "$(CPUNAME)"=="INTEL"
+ COMNAME=msci
++.ELIF "$(CPUNAME)"=="X86_64"
++COMNAME=mscx
+ .ENDIF
+ .ENDIF
+ 
+Index: odk/settings/settings.mk
+===================================================================
+--- odk/settings/settings.mk	(revision 1826001)
++++ odk/settings/settings.mk	(working copy)
 @@ -57,6 +57,8 @@
  ifeq "$(PLATFORM)" "windows"
  # Settings for Windows using Microsoft compiler/linker
