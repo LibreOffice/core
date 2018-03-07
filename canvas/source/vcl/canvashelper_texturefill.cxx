@@ -632,11 +632,11 @@ namespace vclcanvas
                 ::canvas::tools::calcTransformedRectBounds( aTextureDeviceRect,
                                                             aRect,
                                                             aTextureTransform );
-                rOutDev.SetLineColor( COL_RED );
+                rOutDev.SetLineCOL_RED );
                 rOutDev.SetFillColor();
                 rOutDev.DrawRect( vcl::unotools::rectangleFromB2DRectangle( aTextureDeviceRect ) );
 
-                rOutDev.SetLineColor( COL_BLUE );
+                rOutDev.SetLineCOL_BLUE );
                 ::tools::Polygon aPoly1(
                     vcl::unotools::rectangleFromB2DRectangle( aRect ));
                 ::basegfx::B2DPolygon aPoly2( aPoly1.getB2DPolygon() );

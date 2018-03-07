@@ -78,7 +78,7 @@ sal_Int32 VCLXAccessiblePopupMenu::getBackground(  )
 {
     OExternalLockGuard aGuard( this );
 
-    return Application::GetSettings().GetStyleSettings().GetMenuColor().GetColor();
+    return sal_Int32(Application::GetSettings().GetStyleSettings().GetMenuColor());
 }
 
 

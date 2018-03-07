@@ -94,7 +94,7 @@ namespace dxcanvas
                               "TextLayoutDrawHelper::drawText(): Invalid GraphicDevice" );
 
             // set text color. Make sure to remove transparence part first.
-            Color aColor( COL_WHITE );
+            Color aCOL_WHITE );
 
             if( rRenderState.DeviceColor.getLength() > 2 )
                 aColor = vcl::unotools::doubleSequenceToColor(
