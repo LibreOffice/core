@@ -2845,6 +2845,9 @@ void SwFrameFormat::dumpAsXml(xmlTextWriterPtr pWriter) const
 
     GetAttrSet().dumpAsXml(pWriter);
 
+    if (const SdrObject* pSdrObject = FindSdrObject())
+        const_cast<SdrObject*>(pSdrObject)->dumpAsXml(pWriter);
+
     xmlTextWriterEndElement(pWriter);
 }
 
