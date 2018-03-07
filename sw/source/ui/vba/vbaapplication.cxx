@@ -154,6 +154,11 @@ float SAL_CALL SwVbaApplication::CentimetersToPoints( float Centimeters )
     return VbaApplicationBase::CentimetersToPoints( Centimeters );
 }
 
+void SAL_CALL SwVbaApplication::ShowMe()
+{
+    // No idea what we should or could do
+}
+
 uno::Reference< frame::XModel >
 SwVbaApplication::getCurrentDocument()
 {

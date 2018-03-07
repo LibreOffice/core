@@ -55,6 +55,7 @@ public:
     virtual sal_Int32 SAL_CALL getEnableCancelKey() override;
     virtual void SAL_CALL setEnableCancelKey( sal_Int32 _enableCancelKey ) override;
     virtual float SAL_CALL CentimetersToPoints( float Centimeters ) override;
+    virtual void SAL_CALL ShowMe() override;
     // XHelperInterface
     virtual OUString getServiceImplName() override;
     virtual css::uno::Sequence<OUString> getServiceNames() override;
