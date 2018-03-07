@@ -27,7 +27,7 @@ namespace chart
 class BarChartType final : public ChartType
 {
 public:
-    explicit BarChartType( css::uno::Reference< css::uno::XComponentContext > const & xContext );
+    explicit BarChartType();
     virtual ~BarChartType() override;
 
     virtual OUString SAL_CALL

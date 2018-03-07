@@ -56,7 +56,6 @@ PosSizePropertyPanel::PosSizePropertyPanel(
     mpView(nullptr),
     mlOldWidth(1),
     mlOldHeight(1),
-    maAnchorPos(),
     mlRotX(0),
     mlRotY(0),
     maUIScale(),
@@ -370,7 +369,6 @@ IMPL_LINK_NOARG( PosSizePropertyPanel, ChangePosXHdl, Edit&, void )
         long lX = GetCoreValue( *mpMtrPosX, mePoolUnit );
 
         Fraction aUIScale = mpView->GetModel()->GetUIScale();
-        lX += maAnchorPos.X();
         lX = long( lX * aUIScale );
 
         SfxInt32Item aPosXItem( SID_ATTR_TRANSFORM_POS_X,static_cast<sal_uInt32>(lX));
@@ -388,7 +386,6 @@ IMPL_LINK_NOARG( PosSizePropertyPanel, ChangePosYHdl, Edit&, void )
         long lY = GetCoreValue( *mpMtrPosY, mePoolUnit );
 
         Fraction aUIScale = mpView->GetModel()->GetUIScale();
-        lY += maAnchorPos.Y();
         lY = long( lY * aUIScale );
 
         SfxInt32Item aPosYItem( SID_ATTR_TRANSFORM_POS_Y,static_cast<sal_uInt32>(lY));

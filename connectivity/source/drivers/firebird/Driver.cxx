@@ -183,7 +183,7 @@ Reference< XConnection > SAL_CALL FirebirdDriver::connect(
     if ( ! acceptsURL(url) )
         return nullptr;
 
-    Connection* pCon = new Connection(this);
+    Connection* pCon = new Connection();
     Reference< XConnection > xCon = pCon;
     pCon->construct(url, info);
 

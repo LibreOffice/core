@@ -38,9 +38,7 @@ using ::com::sun::star::uno::Reference;
 namespace chart
 {
 
-NetChartType_Base::NetChartType_Base(
-    const uno::Reference< uno::XComponentContext > & xContext ) :
-        ChartType( xContext )
+NetChartType_Base::NetChartType_Base()
 {}
 
 NetChartType_Base::NetChartType_Base( const NetChartType_Base & rOther ) :
@@ -134,9 +132,7 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL NetChartType_Base::getPropert
     return *StaticNetChartTypeInfo::get();
 }
 
-NetChartType::NetChartType(
-    const uno::Reference< uno::XComponentContext > & xContext ) :
-        NetChartType_Base( xContext )
+NetChartType::NetChartType()
 {}
 
 NetChartType::NetChartType( const NetChartType & rOther ) :
@@ -180,10 +176,10 @@ css::uno::Sequence< OUString > SAL_CALL NetChartType::getSupportedServiceNames()
 } //  namespace chart
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
-com_sun_star_comp_chart_NetChartType_get_implementation(css::uno::XComponentContext *context,
+com_sun_star_comp_chart_NetChartType_get_implementation(css::uno::XComponentContext * /*context*/,
         css::uno::Sequence<css::uno::Any> const &)
 {
-    return cppu::acquire(new ::chart::NetChartType(context));
+    return cppu::acquire(new ::chart::NetChartType);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -42,7 +42,6 @@ private:
     VclPtr<ScrollBar>          mpVScrollBar;
     VclPtr<ScrollBarBox>       mpScrollBox;
 
-    Point               maTextWindowOffset;
     long                mnTextWidth;
     mutable Selection   maSelection;
 
@@ -379,7 +378,7 @@ void ImpVclMEdit::Resize()
         else
             mpHScrollBar->setPosSizePixel( 0, aEditSize.Height()-nSBWidth, aSz.Width(), nSBWidth );
 
-        Point aTextWindowPos( maTextWindowOffset );
+        Point aTextWindowPos;
         if ( mpVScrollBar )
         {
             if( AllSettings::GetLayoutRTL() )
@@ -395,8 +394,6 @@ void ImpVclMEdit::Resize()
             mpScrollBox->setPosSizePixel( aSz.Width(), aSz.Height(), nSBWidth, nSBWidth );
 
         Size aTextWindowSize( aSz );
-        aTextWindowSize.AdjustWidth( -(maTextWindowOffset.X()) );
-        aTextWindowSize.AdjustHeight( -(maTextWindowOffset.Y()) );
         if ( aTextWindowSize.Width() < 0 )
             aTextWindowSize.setWidth( 0 );
         if ( aTextWindowSize.Height() < 0 )

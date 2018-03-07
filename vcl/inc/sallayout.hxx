@@ -341,8 +341,6 @@ protected:
     std::vector<GlyphItem>     m_GlyphItems;
 
 private:
-    mutable Point   maBasePoint;
-
                     GenericSalLayout( const GenericSalLayout& ) = delete;
                     GenericSalLayout& operator=( const GenericSalLayout& ) = delete;
 };

@@ -137,11 +137,9 @@ namespace chart
 {
 
 ScatterChartType::ScatterChartType(
-    const uno::Reference< uno::XComponentContext > & xContext,
     chart2::CurveStyle eCurveStyle /* chart2::CurveStyle_LINES */ ,
     sal_Int32 nResolution /* = 20 */,
-    sal_Int32 nOrder /* = 3 */ ) :
-        ChartType( xContext )
+    sal_Int32 nOrder /* = 3 */ )
 {
     if( eCurveStyle != chart2::CurveStyle_LINES )
         setFastPropertyValue_NoBroadcast( PROP_SCATTERCHARTTYPE_CURVE_STYLE,
@@ -256,10 +254,10 @@ css::uno::Sequence< OUString > SAL_CALL ScatterChartType::getSupportedServiceNam
 } //  namespace chart
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
-com_sun_star_comp_chart_ScatterChartType_get_implementation(css::uno::XComponentContext *context,
+com_sun_star_comp_chart_ScatterChartType_get_implementation(css::uno::XComponentContext * /*context*/,
         css::uno::Sequence<css::uno::Any> const &)
 {
-    return cppu::acquire(new ::chart::ScatterChartType(context));
+    return cppu::acquire(new ::chart::ScatterChartType);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
