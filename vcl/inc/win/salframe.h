@@ -33,8 +33,8 @@ public:
     HWND                    mhWnd;                  // Window handle
     HCURSOR                 mhCursor;               // cursor handle
     HIMC                    mhDefIMEContext;        // default IME-Context
-    WinSalGraphics*         mpGraphics;             // current frame graphics
-    WinSalGraphics*         mpGraphics2;            // current frame graphics for other threads
+    WinSalGraphics*         mpLocalGraphics;        // current local frame graphics
+    WinSalGraphics*         mpThreadGraphics;       // current frame graphics for other threads
     WinSalFrame*            mpNextFrame;            // pointer to next frame
     HMENU                   mSelectedhMenu;         // the menu where highlighting is currently going on
     HMENU                   mLastActivatedhMenu;    // the menu that was most recently opened
@@ -82,6 +82,12 @@ public:
     bool                    mbPropertiesStored;     // has values stored in the window property store
 
     void updateScreenNumber();
+
+private:
+    void ImplSetParentFrame( HWND hNewParentWnd, bool bAsChild );
+    bool InitFrameGraphicsDC( WinSalGraphics *pGraphics, HDC hDC, HWND hWnd );
+    bool ReleaseFrameGraphicsDC( WinSalGraphics* pGraphics );
+
 public:
     WinSalFrame();
     virtual ~WinSalFrame() override;
