@@ -338,6 +338,9 @@ DECLARE_HTMLIMPORT_TEST(testReqIfOleImg, "reqif-ole-img.xhtml")
         = xStorage->openStreamElement(aStreamName, embed::ElementModes::READ);
     // This was empty.
     CPPUNIT_ASSERT_EQUAL(OUString("text/rtf"), getProperty<OUString>(xStream, "MediaType"));
+
+    // Check alternate text (it was empty).
+    CPPUNIT_ASSERT_EQUAL(OUString("OLE Object"), getProperty<OUString>(xObject, "Title").trim());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
