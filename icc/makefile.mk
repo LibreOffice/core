@@ -34,7 +34,7 @@ TARGET=icc
 
 TARFILE_NAME=SampleICC-1.3.2
 TARFILE_MD5=fdb27bfe2dbe2e7b57ae194d9bf36bab
-PATCH_FILES=$(TARFILE_NAME).patch $(TARFILE_NAME).format-security.patch
+PATCH_FILES=$(TARFILE_NAME).patch $(TARFILE_NAME).format-security.patch SampleICC-1.3.2-Win64.patch
 
 CONVERTFILES= \
     IccProfLib$/IccTagProfSeqId.h \
