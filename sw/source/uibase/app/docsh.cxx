@@ -890,6 +890,8 @@ tools::Rectangle SwDocShell::GetVisArea( sal_uInt16 nAspect ) const
         SwContentNode* pNd = m_xDoc->GetNodes().GoNext( &aIdx );
 
         const SwRect aPageRect = pNd->FindPageFrameRect();
+        if (aPageRect.IsEmpty())
+            return tools::Rectangle();
         tools::Rectangle aRect(aPageRect.SVRect());
 
         // tdf#81219 sanitize - nobody is interested in a thumbnail where's
