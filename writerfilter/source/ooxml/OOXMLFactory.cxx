@@ -96,6 +96,15 @@ void OOXMLFactory::attributes(OOXMLFastContextHandler * pHandler,
                 pFactory->attributeAction(pHandler, nToken, xValue);
             }
             break;
+        case ResourceType::HexColor:
+            {
+                const char *pValue = "";
+                pAttribs->getAsChar(nToken, pValue);
+                OOXMLValue::Pointer_t xValue(new OOXMLHexColorValue(pValue));
+                pHandler->newProperty(nId, xValue);
+                pFactory->attributeAction(pHandler, nToken, xValue);
+            }
+            break;
         case ResourceType::TwipsMeasure:
             {
                 const char *pValue = "";
