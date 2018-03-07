@@ -16,6 +16,24 @@
       "revId": "7fb6fb7d1809f4b3349556f5fc64360ff6958f6f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba2be162_9ee4423c",
+        "filename": "fpicker/source/win32/filepicker/asyncrequests.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2018-03-07T16:50:05Z",
+      "side": 1,
+      "message": "Actually everone (except for a single direct callsite) just calls triggerRequestThreadAware on AsyncRequests, so we could make all other \"trigger\" calls private.\n\nOr even just drop them and move all code into \"ThreadAware\".\n\nThat patch was much larger but in the end I went for the one-liner.",
+      "parentUuid": "ba2be162_5e372ae3",
+      "revId": "7fb6fb7d1809f4b3349556f5fc64360ff6958f6f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
