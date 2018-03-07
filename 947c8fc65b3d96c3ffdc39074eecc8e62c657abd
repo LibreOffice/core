@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba2be162_e38cc937",
+        "filename": "sd/source/ui/view/drviews5.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 240,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2018-03-07T09:10:57Z",
+      "side": 1,
+      "message": "This looks mildly wrong, should be ALL_UPPER_CASE",
+      "range": {
+        "startLine": 240,
+        "startChar": 40,
+        "endLine": 240,
+        "endChar": 57
+      },
+      "revId": "947c8fc65b3d96c3ffdc39074eecc8e62c657abd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba2be162_0382bd00",
+        "filename": "sd/source/ui/view/drviews5.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 241,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2018-03-07T09:10:57Z",
+      "side": 1,
+      "message": "pPageView can be null (see \u0027if (pPageView)\u0027 check couple of lines below ), please move this code into that block too",
+      "revId": "947c8fc65b3d96c3ffdc39074eecc8e62c657abd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba2be162_437cb520",
+        "filename": "sd/source/ui/view/drviews5.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 243,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2018-03-07T09:10:57Z",
+      "side": 1,
+      "message": "Simplify: \npPageView-\u003eSetLayerVisible( aBackroundLayer, !pPageView-\u003eIsLayerVisible( aBackgroundLayer) );\n\nBut does this really work? \u0027if the layer is visible, then make it invisible\u0027 ... did I miss something?",
+      "revId": "947c8fc65b3d96c3ffdc39074eecc8e62c657abd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
