@@ -122,3 +122,33 @@ diff -ur misc/openssl-1.0.2h/util/pl/VC-32.pl misc/build/openssl-1.0.2h/util/pl/
  if ($FLAVOR =~ /WIN64/)
      {
      # Note that we currently don't have /WX on Win64! There is a lot of
+diff -Nur misc/build/openssl-1.0.2h/ms/do_win64a.bat misc/build/openssl-1.0.2h/ms/do_win64a.bat
+--- misc/build/openssl-1.0.2h/ms/do_win64a.bat	2016-05-03 15:44:42.000000000 +0200
++++ misc/build/openssl-1.0.2h/ms/do_win64a.bat	2018-03-07 07:59:41.870638000 +0200
+@@ -1,19 +1,19 @@
+-perl util\mkfiles.pl >MINFO
++%1 util\mkfiles.pl >MINFO
+ 
+ cmd /c "nasm -f win64 -v" >NUL 2>&1
+ if %errorlevel% neq 0 goto ml64
+ 
+-perl ms\uplink-x86_64.pl nasm > ms\uptable.asm
++%1 ms\uplink-x86_64.pl nasm > ms\uptable.asm
+ nasm -f win64 -o ms\uptable.obj ms\uptable.asm
+ goto proceed
+ 
+ :ml64
+-perl ms\uplink-x86_64.pl masm > ms\uptable.asm
++%1 ms/uplink-x86_64.pl masm > ms/uptable.asm
+ ml64 -c -Foms\uptable.obj ms\uptable.asm
+ 
+ :proceed
+-perl util\mk1mf.pl VC-WIN64A >ms\nt.mak
+-perl util\mk1mf.pl dll VC-WIN64A >ms\ntdll.mak
++%1 util\mk1mf.pl VC-WIN64A >ms\nt.mak
++%1 util\mk1mf.pl dll VC-WIN64A >ms\ntdll.mak
+ 
+-perl util\mkdef.pl 32 libeay > ms\libeay32.def
+-perl util\mkdef.pl 32 ssleay > ms\ssleay32.def
++%1 util\mkdef.pl 32 libeay > ms\libeay32.def
++%1 util\mkdef.pl 32 ssleay > ms\ssleay32.def

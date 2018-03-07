@@ -151,12 +151,18 @@ OUT2BIN += out/libeay32.dll
         .ENDIF
 
         #CONFIGURE_ACTION=cmd /c $(PERL:s!\!/!) configure
-        CONFIGURE_ACTION=$(PERL) configure $(NO_ASM)
-        CONFIGURE_FLAGS=VC-WIN32
-        .IF "$(NASM_PATH)"=="NO_NASM_HOME"
-          BUILD_ACTION=cmd /c "ms$(EMQ)\do_ms.bat $(subst,/,\ $(normpath,1 $(PERL)))" && nmake -f ms/ntdll.mak
-        .ELSE
-          BUILD_ACTION=cmd /c "ms$(EMQ)\do_nasm.bat $(subst,/,\ $(normpath,1 $(PERL)))" && nmake -f ms/ntdll.mak
+        .IF "$(CPUNAME)"=="INTEL"
+            CONFIGURE_ACTION=$(PERL) configure $(NO_ASM)
+            CONFIGURE_FLAGS=VC-WIN32
+            .IF "$(NASM_PATH)"=="NO_NASM_HOME"
+              BUILD_ACTION=cmd /c "ms$(EMQ)\do_ms.bat $(subst,/,\ $(normpath,1 $(PERL)))" && nmake -f ms/ntdll.mak
+            .ELSE
+              BUILD_ACTION=cmd /c "ms$(EMQ)\do_nasm.bat $(subst,/,\ $(normpath,1 $(PERL)))" && nmake -f ms/ntdll.mak
+            .ENDIF
+        .ELIF "$(CPUNAME)"=="X86_64"
+            CONFIGURE_ACTION=$(PERL) configure $(NO_ASM)
+            CONFIGURE_FLAGS=VC-WIN64A
+            BUILD_ACTION=cmd /c "ms$(EMQ)\do_win64a.bat $(subst,/,\ $(normpath,1 $(PERL)))" && cmd /c "nmake -f ms/ntdll.mak"
         .ENDIF
 
         OUT2LIB = out32dll$/ssleay32.lib
