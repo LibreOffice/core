@@ -681,21 +681,6 @@ bool getComponent(OUString const & path, OUString * component)
     return true;
 }
 
-uno::Sequence< OUString > setToSeq(std::set< OUString > const & set)
-{
-    std::set< OUString >::size_type n = set.size();
-    if (n > SAL_MAX_INT32) {
-        throw std::bad_alloc();
-    }
-    uno::Sequence< OUString > seq(static_cast< sal_Int32 >(n));
-    sal_Int32 i = 0;
-    for (auto const& elem : set)
-    {
-        seq[i++] = elem;
-    }
-    return seq;
-}
-
 }
 
 void MigrationImpl::copyConfig()
@@ -756,8 +741,9 @@ void MigrationImpl::copyConfig()
             configuration::Update::get(
                 comphelper::getProcessComponentContext())->
             insertModificationXcuFile(
-                regFilePath, setToSeq(comp.second.includedPaths),
-                setToSeq(comp.second.excludedPaths));
+                regFilePath,
+                comphelper::containerToSequence(comp.second.includedPaths),
+                comphelper::containerToSequence(comp.second.excludedPaths));
         } else {
             SAL_INFO( "desktop.migration", "configuration migration component " << comp.first << " ignored (only excludes, no includes)" );
         }
