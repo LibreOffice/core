@@ -93,9 +93,7 @@ struct StaticBubbleChartTypeInfo : public rtl::StaticAggregate< uno::Reference< 
 namespace chart
 {
 
-BubbleChartType::BubbleChartType(
-    const uno::Reference< uno::XComponentContext > & xContext )
-    : ChartType( xContext )
+BubbleChartType::BubbleChartType()
 {
 }
 
@@ -215,10 +213,10 @@ css::uno::Sequence< OUString > SAL_CALL BubbleChartType::getSupportedServiceName
 } //  namespace chart
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
-com_sun_star_comp_chart_BubbleChartType_get_implementation(css::uno::XComponentContext *context,
+com_sun_star_comp_chart_BubbleChartType_get_implementation(css::uno::XComponentContext * /*context*/,
         css::uno::Sequence<css::uno::Any> const &)
 {
-    return cppu::acquire(new ::chart::BubbleChartType(context));
+    return cppu::acquire(new ::chart::BubbleChartType);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

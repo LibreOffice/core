@@ -122,9 +122,7 @@ struct StaticColumnChartTypeInfo : public rtl::StaticAggregate< uno::Reference< 
 namespace chart
 {
 
-ColumnChartType::ColumnChartType(
-    const uno::Reference< uno::XComponentContext > & xContext ) :
-        ChartType( xContext )
+ColumnChartType::ColumnChartType()
 {}
 
 ColumnChartType::ColumnChartType( const ColumnChartType & rOther ) :
@@ -197,10 +195,10 @@ css::uno::Sequence< OUString > SAL_CALL ColumnChartType::getSupportedServiceName
 } //  namespace chart
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
-com_sun_star_comp_chart_ColumnChartType_get_implementation(css::uno::XComponentContext *context,
+com_sun_star_comp_chart_ColumnChartType_get_implementation(css::uno::XComponentContext * /*context*/,
         css::uno::Sequence<css::uno::Any> const &)
 {
-    return cppu::acquire(new ::chart::ColumnChartType(context));
+    return cppu::acquire(new ::chart::ColumnChartType());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

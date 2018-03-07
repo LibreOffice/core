@@ -37,11 +37,9 @@ using ::com::sun::star::uno::Reference;
 namespace chart
 {
 
-ChartType::ChartType(
-    const Reference< uno::XComponentContext > & xContext ) :
+ChartType::ChartType() :
         ::property::OPropertySet( m_aMutex ),
         m_xModifyEventForwarder( ModifyListenerHelper::createModifyEventForwarder()),
-        m_xContext( xContext ),
         m_bNotifyChanges( true )
 {}
 
@@ -50,7 +48,6 @@ ChartType::ChartType( const ChartType & rOther ) :
         impl::ChartType_Base(),
         ::property::OPropertySet( rOther, m_aMutex ),
     m_xModifyEventForwarder( ModifyListenerHelper::createModifyEventForwarder()),
-    m_xContext( rOther.m_xContext ),
     m_bNotifyChanges( true )
 {
     {

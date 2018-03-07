@@ -770,7 +770,7 @@ void GenericSalLayout::Justify( DeviceCoordinate nNewWidth )
     if( nNewWidth < nMaxGlyphWidth)
         nNewWidth = nMaxGlyphWidth;
     nNewWidth -= pGlyphIterRight->mnOrigWidth;
-    pGlyphIterRight->maLinearPos.setX( maBasePoint.X() + nNewWidth );
+    pGlyphIterRight->maLinearPos.setX( nNewWidth );
 
     // justify glyph widths and positions
     int nDiffWidth = nNewWidth - nOldWidth;
@@ -802,9 +802,9 @@ void GenericSalLayout::Justify( DeviceCoordinate nNewWidth )
         {
             for( pGlyphIter = m_GlyphItems.begin(); ++pGlyphIter != pGlyphIterRight;)
             {
-                int nX = pGlyphIter->maLinearPos.X() - maBasePoint.X();
+                int nX = pGlyphIter->maLinearPos.X();
                 nX = static_cast<int>(nX * fSqueeze);
-                pGlyphIter->maLinearPos.setX( nX + maBasePoint.X() );
+                pGlyphIter->maLinearPos.setX( nX );
             }
         }
         // adjust glyph widths to new positions
@@ -928,7 +928,7 @@ int GenericSalLayout::GetNextGlyphs(int nLen, const GlyphItem** pGlyphs,
         return 0;
 
     // calculate absolute position in pixel units
-    Point aRelativePos = pGlyphIter->maLinearPos - maBasePoint;
+    Point aRelativePos = pGlyphIter->maLinearPos;
 
     // find more glyphs which can be merged into one drawing instruction
     int nCount = 0;

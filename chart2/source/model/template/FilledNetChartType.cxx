@@ -34,9 +34,7 @@ using ::com::sun::star::uno::Sequence;
 namespace chart
 {
 
-FilledNetChartType::FilledNetChartType(
-    const uno::Reference< uno::XComponentContext > & xContext ) :
-        NetChartType_Base( xContext )
+FilledNetChartType::FilledNetChartType()
 {}
 
 FilledNetChartType::FilledNetChartType( const FilledNetChartType & rOther ) :
@@ -80,10 +78,10 @@ css::uno::Sequence< OUString > SAL_CALL FilledNetChartType::getSupportedServiceN
 } //  namespace chart
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
-com_sun_star_comp_chart_FilledNetChartType_get_implementation(css::uno::XComponentContext *context,
+com_sun_star_comp_chart_FilledNetChartType_get_implementation(css::uno::XComponentContext * /*context*/,
                                                          css::uno::Sequence<css::uno::Any> const &)
 {
-    return cppu::acquire(new ::chart::FilledNetChartType(context));
+    return cppu::acquire(new ::chart::FilledNetChartType);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

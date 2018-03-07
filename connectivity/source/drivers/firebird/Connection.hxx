@@ -73,8 +73,6 @@ namespace connectivity
             TTypeInfoVector     m_aTypeInfo;    //  vector containing an entry
                                                                     //  for each row returned by
                                                                     //  DatabaseMetaData.getTypeInfo.
-            /** The parent driver that created this connection. */
-            ::rtl::Reference<FirebirdDriver>     m_xDriver;
 
             /** The URL passed to us when opening, i.e. of the form sdbc:* */
             ::rtl::OUString     m_sConnectionURL;
@@ -166,7 +164,7 @@ namespace connectivity
             void disposeStatements();
 
         public:
-            explicit Connection(FirebirdDriver* _pDriver);
+            explicit Connection();
             virtual ~Connection() override;
 
             /// @throws css::sdbc::SQLException
