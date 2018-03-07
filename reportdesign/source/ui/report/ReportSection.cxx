@@ -214,7 +214,7 @@ void OReportSection::fill()
     sal_Int32 nColor = m_xSection->getBackColor();
     if ( nColor == static_cast<sal_Int32>(COL_TRANSPARENT) )
         nColor = getStyleProperty<sal_Int32>(m_xSection->getReportDefinition(),PROPERTY_BACKCOLOR);
-    m_pView->SetApplicationDocumentColor(nColor);
+    m_pView->SetApplicationDocumentColor(Color(nColor));
 
     uno::Reference<report::XReportDefinition> xReportDefinition = m_xSection->getReportDefinition();
     const sal_Int32 nLeftMargin = getStyleProperty<sal_Int32>(xReportDefinition,PROPERTY_LEFTMARGIN);
@@ -469,7 +469,7 @@ void OReportSection::_propertyChanged(const beans::PropertyChangeEvent& _rEvent)
             sal_Int32 nColor = m_xSection->getBackColor();
             if ( nColor == static_cast<sal_Int32>(COL_TRANSPARENT) )
                 nColor = getStyleProperty<sal_Int32>(m_xSection->getReportDefinition(),PROPERTY_BACKCOLOR);
-            m_pView->SetApplicationDocumentColor(nColor);
+            m_pView->SetApplicationDocumentColor(Color(nColor));
             Invalidate(InvalidateFlags::NoChildren|InvalidateFlags::NoErase);
         }
         else

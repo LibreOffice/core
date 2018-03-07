@@ -2439,7 +2439,7 @@ void OReportController::openPageDialog(const uno::Reference<report::XSection>& _
                 {
                     const SfxPoolItem* pItem;
                     if ( SfxItemState::SET == pSet->GetItemState( RPTUI_ID_BRUSH,true,&pItem))
-                        _xSection->setBackColor(static_cast<const SvxBrushItem*>(pItem)->GetColor().GetColor());
+                        _xSection->setBackColor(sal_Int32(static_cast<const SvxBrushItem*>(pItem)->GetColor()));
                 }
                 else
                 {
@@ -2482,7 +2482,7 @@ void OReportController::openPageDialog(const uno::Reference<report::XSection>& _
                     {
                         ::Color aBackColor = static_cast<const SvxBrushItem*>(pItem)->GetColor();
                         xProp->setPropertyValue(PROPERTY_BACKTRANSPARENT,uno::makeAny(aBackColor == COL_TRANSPARENT));
-                        xProp->setPropertyValue(PROPERTY_BACKCOLOR,uno::makeAny(aBackColor.GetColor()));
+                        xProp->setPropertyValue(PROPERTY_BACKCOLOR,uno::makeAny(aBackColor));
                     }
                 }
             }

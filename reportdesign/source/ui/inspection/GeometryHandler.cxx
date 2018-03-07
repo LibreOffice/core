@@ -972,7 +972,7 @@ uno::Any SAL_CALL GeometryHandler::convertToPropertyValue(const OUString & Prope
         case PROPERTY_ID_CONTROLBACKGROUND:
             if ( !_rControlValue.hasValue() )
             {
-                aPropertyValue <<= static_cast<sal_Int32>(COL_TRANSPARENT);
+                aPropertyValue <<= COL_TRANSPARENT;
                 break;
             }
             SAL_FALLTHROUGH;
