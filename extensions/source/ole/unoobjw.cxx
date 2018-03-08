@@ -184,10 +184,16 @@ STDMETHODIMP  InterfaceOleWrapper::getOriginalUnoStruct( Any * pStruct)
     return ret;
 }
 
-STDMETHODIMP InterfaceOleWrapper::GetTypeInfoCount( unsigned int * /*pctinfo*/ )
+STDMETHODIMP InterfaceOleWrapper::GetTypeInfoCount( unsigned int *pctinfo )
 {
-    SAL_WARN("extensions.olebridge", "InterfaceOleWrapper@" << this << "::GetTypeInfoCount: NOTIMPL");
-    return E_NOTIMPL;
+    SAL_INFO("extensions.olebridge", "InterfaceOleWrapper@" << this << "::GetTypeInfoCount()");
+
+    if (!pctinfo)
+        return E_POINTER;
+
+    *pctinfo = 1;
+
+    return S_OK;
 }
 
 class CXTypeInfo : public ITypeInfo,
