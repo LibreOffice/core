@@ -32,7 +32,7 @@ protected:
 public:
     SfxPreviewWin_Impl(weld::DrawingArea* pArea);
     void            SetObjectShell( SfxObjectShell const * pObj );
-    DECL_LINK(DoPaint, vcl::RenderContext&, void);
+    DECL_LINK(DoPaint, weld::DrawingArea::draw_args, void);
     DECL_LINK(DoResize, const Size& rSize, void);
     void queue_draw() { m_xDrawingArea->queue_draw(); }
     void show() { m_xDrawingArea->show(); }
