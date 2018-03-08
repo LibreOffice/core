@@ -38,7 +38,6 @@ uno::Reference< lang::XComponent > SynchronousDispatch::dispatch(
         const uno::Reference< uno::XInterface > &xStartPoint,
         const OUString &sURL,
         const OUString &sTarget,
-        const sal_Int32 nFlags,
         const uno::Sequence< beans::PropertyValue > &lArguments )
 {
     util::URL aURL;
@@ -50,7 +49,7 @@ uno::Reference< lang::XComponent > SynchronousDispatch::dispatch(
     uno::Reference < frame::XDispatchProvider > xProvider( xStartPoint, uno::UNO_QUERY );
 
     if ( xProvider.is() )
-        xDispatcher = xProvider->queryDispatch( aURL, sTarget, nFlags );
+        xDispatcher = xProvider->queryDispatch( aURL, sTarget, 0 );
 
     uno::Reference < lang::XComponent > aComponent;
 

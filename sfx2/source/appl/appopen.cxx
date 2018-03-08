@@ -1063,7 +1063,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
 
         try
         {
-            xComp = ::comphelper::SynchronousDispatch::dispatch( xTargetFrame, aFileName, aTarget, 0, aArgs );
+            xComp = ::comphelper::SynchronousDispatch::dispatch( xTargetFrame, aFileName, aTarget, aArgs );
         }
         catch(const RuntimeException&)
         {

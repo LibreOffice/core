@@ -51,7 +51,6 @@ namespace comphelper
             const css::uno::Reference< css::uno::XInterface > &xStartPoint,
             const OUString &sURL,
             const OUString &sTarget,
-            const sal_Int32 nFlags,
             const css::uno::Sequence< css::beans::PropertyValue > &lArguments );
     };
 

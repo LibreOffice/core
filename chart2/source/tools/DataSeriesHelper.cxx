@@ -226,12 +226,12 @@ Reference< chart2::data::XLabeledDataSequence >
 
 std::vector< Reference< chart2::data::XLabeledDataSequence > >
     getAllDataSequencesByRole( const Sequence< Reference< chart2::data::XLabeledDataSequence > > & aDataSequences,
-                               const OUString& aRole, bool bMatchPrefix /* = false */ )
+                               const OUString& aRole )
 {
     std::vector< Reference< chart2::data::XLabeledDataSequence > > aResultVec;
     std::copy_if( aDataSequences.begin(), aDataSequences.end(),
                            std::back_inserter( aResultVec ),
-                           lcl_MatchesRole(aRole, bMatchPrefix) );
+                           lcl_MatchesRole(aRole, /*bMatchPrefix*/true) );
     return aResultVec;
 }
 
