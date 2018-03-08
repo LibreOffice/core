@@ -216,7 +216,7 @@ public:
     virtual HRESULT STDMETHODCALLTYPE GetTypeComp(ITypeComp **ppTComp) override
     {
         (void) ppTComp;
-        SAL_WARN("extensions.olebridge", "CxTypeInfo::GetTypeComp: NOTIMPL");
+        SAL_WARN("extensions.olebridge", "CXTypeInfo::GetTypeComp: NOTIMPL");
         return E_NOTIMPL;
     }
 
@@ -225,7 +225,7 @@ public:
     {
         (void) index;
         (void) ppFuncDesc;
-        SAL_WARN("extensions.olebridge", "CxTypeInfo::GetFuncDesc: NOTIMPL");
+        SAL_WARN("extensions.olebridge", "CXTypeInfo::GetFuncDesc: NOTIMPL");
         return E_NOTIMPL;
     }
 
@@ -234,7 +234,7 @@ public:
     {
         (void) index;
         (void) ppVarDesc;
-        SAL_WARN("extensions.olebridge", "CxTypeInfo::GetVarDesc: NOTIMPL");
+        SAL_WARN("extensions.olebridge", "CXTypeInfo::GetVarDesc: NOTIMPL");
         return E_NOTIMPL;
     }
 
@@ -247,7 +247,7 @@ public:
         (void) rgBstrNames;
         (void) cMaxNames;
         (void) pcNames;
-        SAL_WARN("extensions.olebridge", "CxTypeInfo::GetNames: NOTIMPL");
+        SAL_WARN("extensions.olebridge", "CXTypeInfo::GetNames: NOTIMPL");
         return E_NOTIMPL;
     }
 
@@ -256,7 +256,7 @@ public:
     {
         (void) index;
         (void) pRefType;
-        SAL_WARN("extensions.olebridge", "CxTypeInfo::GetRefTypeOfImplType: NOTIMPL");
+        SAL_WARN("extensions.olebridge", "CXTypeInfo::GetRefTypeOfImplType: NOTIMPL");
         return E_NOTIMPL;
     }
 
@@ -265,7 +265,7 @@ public:
     {
         (void) index;
         (void) pImplTypeFlags;
-        SAL_WARN("extensions.olebridge", "CxTypeInfo::GetImplTypeFlags: NOTIMPL");
+        SAL_WARN("extensions.olebridge", "CXTypeInfo::GetImplTypeFlags: NOTIMPL");
         return E_NOTIMPL;
     }
 
@@ -276,7 +276,7 @@ public:
         (void) rgszNames;
         (void) cNames;
         (void) pMemId;
-        SAL_WARN("extensions.olebridge", "CxTypeInfo::GetIDsOfNames: NOTIMPL");
+        SAL_WARN("extensions.olebridge", "CXTypeInfo::GetIDsOfNames: NOTIMPL");
         return E_NOTIMPL;
     }
 
@@ -295,7 +295,7 @@ public:
         (void) pVarResult;
         (void) pExcepInfo;
         (void) puArgErr;
-        SAL_WARN("extensions.olebridge", "CxTypeInfo::Invoke: NOTIMPL");
+        SAL_WARN("extensions.olebridge", "CXTypeInfo::Invoke: NOTIMPL");
         return E_NOTIMPL;
     }
 
@@ -305,7 +305,7 @@ public:
                                                        DWORD *pdwHelpContext,
                                                        BSTR *pBstrHelpFile) override
     {
-        SAL_INFO("extensions.olebridge", "CxTypeInfo::GetDocumentation(" << memid << ")");
+        SAL_INFO("extensions.olebridge", "CXTypeInfo::GetDocumentation(" << memid << ")");
         if (pBstrName)
         {
             if (memid == MEMBERID_NIL)
@@ -343,7 +343,7 @@ public:
         (void) pBstrDllName;
         (void) pBstrName;
         (void) pwOrdinal;
-        SAL_WARN("extensions.olebridge", "CxTypeInfo::GetDllEntry: NOTIMPL");
+        SAL_WARN("extensions.olebridge", "CXTypeInfo::GetDllEntry: NOTIMPL");
         return E_NOTIMPL;
     }
 
@@ -352,7 +352,7 @@ public:
     {
         (void) hRefType;
         (void) ppTInfo;
-        SAL_WARN("extensions.olebridge", "CxTypeInfo::GetRefTypeInfo: NOTIMPL");
+        SAL_WARN("extensions.olebridge", "CXTypeInfo::GetRefTypeInfo: NOTIMPL");
         return E_NOTIMPL;
     }
 
@@ -363,7 +363,7 @@ public:
         (void) memid;
         (void) invKind;
         (void) ppv;
-        SAL_WARN("extensions.olebridge", "CxTypeInfo::AddressOfMember: NOTIMPL");
+        SAL_WARN("extensions.olebridge", "CXTypeInfo::AddressOfMember: NOTIMPL");
         return E_NOTIMPL;
     }
 
@@ -374,7 +374,7 @@ public:
         (void) pUnkOuter;
         (void) riid;
         (void) ppvObj;
-        SAL_WARN("extensions.olebridge", "CxTypeInfo::CreateInstance: NOTIMPL");
+        SAL_WARN("extensions.olebridge", "CXTypeInfo::CreateInstance: NOTIMPL");
         return E_NOTIMPL;
     }
 
@@ -383,7 +383,7 @@ public:
     {
         (void) memid;
         (void) pBstrMops;
-        SAL_WARN("extensions.olebridge", "CxTypeInfo::GetMops: NOTIMPL");
+        SAL_WARN("extensions.olebridge", "CXTypeInfo::GetMops: NOTIMPL");
         return E_NOTIMPL;
     }
 
@@ -392,26 +392,26 @@ public:
     {
         (void) ppTLib;
         (void) pIndex;
-        SAL_WARN("extensions.olebridge", "CxTypeInfo::GetContainingTypeLib: NOTIMPL");
+        SAL_WARN("extensions.olebridge", "CXTypeInfo::GetContainingTypeLib: NOTIMPL");
         return E_NOTIMPL;
     }
 
     virtual void STDMETHODCALLTYPE ReleaseTypeAttr(TYPEATTR *pTypeAttr) override
     {
         (void) pTypeAttr;
-        SAL_WARN("extensions.olebridge", "CxTypeInfo::ReleaseTypeAttr: NOTIMPL");
+        SAL_WARN("extensions.olebridge", "CXTypeInfo::ReleaseTypeAttr: NOTIMPL");
     }
 
     virtual void STDMETHODCALLTYPE ReleaseFuncDesc(FUNCDESC *pFuncDesc) override
     {
         (void) pFuncDesc;
-        SAL_WARN("extensions.olebridge", "CxTypeInfo::ReleaseFuncDesc: NOTIMPL");
+        SAL_WARN("extensions.olebridge", "CXTypeInfo::ReleaseFuncDesc: NOTIMPL");
     }
 
     virtual void STDMETHODCALLTYPE ReleaseVarDesc(VARDESC *pVarDesc) override
     {
         (void) pVarDesc;
-        SAL_WARN("extensions.olebridge", "CxTypeInfo::ReleaseVarDesc: NOTIMPL");
+        SAL_WARN("extensions.olebridge", "CXTypeInfo::ReleaseVarDesc: NOTIMPL");
     }
 
 private:
