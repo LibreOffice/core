@@ -217,7 +217,7 @@ public:
     void WriteLinespacing( const css::style::LineSpacing& rLineSpacing );
 
     OUString WriteBlip( const css::uno::Reference< css::beans::XPropertySet >& rXPropSet,
-            const OUString& rURL, bool bRelPathToMedia, const Graphic *pGraphic=nullptr );
+            const OUString& rURL, bool bRelPathToMedia );
 
     OUString WriteXGraphicBlip(css::uno::Reference<css::beans::XPropertySet> const & rXPropSet,
                                css::uno::Reference<css::graphic::XGraphic> const & rxGraphic,

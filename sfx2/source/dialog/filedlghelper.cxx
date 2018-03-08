@@ -2633,7 +2633,6 @@ void FileDialogHelper::DialogClosed( const DialogClosedEvent& _rEvent )
 ErrCode FileOpenDialog_Impl( const vcl::Window* pParent,
                              sal_Int16 nDialogType,
                              FileDialogFlags nFlags,
-                             const OUString& rFact,
                              std::vector<OUString>& rpURLList,
                              OUString& rFilter,
                              SfxItemSet *& rpSet,
@@ -2650,7 +2649,7 @@ ErrCode FileOpenDialog_Impl( const vcl::Window* pParent,
     if (nFlags & FileDialogFlags::SignPDF)
         pDialog.reset(new FileDialogHelper(nDialogType, nFlags, SfxResId(STR_SFX_FILTERNAME_PDF), "pdf", rStandardDir, rBlackList, pParent));
     else
-        pDialog.reset(new FileDialogHelper(nDialogType, nFlags, rFact, nDialog, SfxFilterFlags::NONE, SfxFilterFlags::NONE, rStandardDir, rBlackList, pParent));
+        pDialog.reset(new FileDialogHelper(nDialogType, nFlags, OUString(), nDialog, SfxFilterFlags::NONE, SfxFilterFlags::NONE, rStandardDir, rBlackList, pParent));
 
     OUString aPath;
     if ( pPath )

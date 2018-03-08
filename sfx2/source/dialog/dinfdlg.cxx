@@ -2123,12 +2123,12 @@ IMPL_LINK_NOARG(CustomPropertiesControl, RemovedHdl, void*, void)
         m_pVertScroll->DoScrollAction ( ScrollType::LineUp );
 }
 
-void CustomPropertiesControl::AddLine( const OUString& sName, Any const & rAny, bool bInteractive )
+void CustomPropertiesControl::AddLine( Any const & rAny )
 {
-    m_pPropertiesWin->AddLine( sName, rAny );
+    m_pPropertiesWin->AddLine( OUString(), rAny );
     long nLineCount = m_pPropertiesWin->GetTotalLineCount();
     m_pVertScroll->SetRangeMax(nLineCount + 1);
-    if ( bInteractive && m_pPropertiesWin->GetOutputSizePixel().Height() < nLineCount * m_pPropertiesWin->GetLineHeight() )
+    if ( m_pPropertiesWin->GetOutputSizePixel().Height() < nLineCount * m_pPropertiesWin->GetLineHeight() )
         m_pVertScroll->DoScroll(nLineCount + 1);
 }
 
@@ -2161,8 +2161,7 @@ void SfxCustomPropertiesPage::dispose()
 
 IMPL_LINK_NOARG(SfxCustomPropertiesPage, AddHdl, Button*, void)
 {
-    Any aAny;
-    m_pPropertiesCtrl->AddLine( OUString(), aAny, true );
+    m_pPropertiesCtrl->AddLine( Any() );
 }
 
 bool SfxCustomPropertiesPage::FillItemSet( SfxItemSet* rSet )

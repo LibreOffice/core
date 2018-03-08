@@ -348,7 +348,7 @@ IMPL_LINK_NOARG( SfxManageStyleSheetPage, EditStyleSelectHdl_Impl, ListBox&, voi
 IMPL_LINK_NOARG( SfxManageStyleSheetPage, EditStyleHdl_Impl, Button*, void )
 {
     OUString aTemplName(m_pFollowLb->GetSelectedEntry());
-    Execute_Impl(SID_STYLE_EDIT, aTemplName, OUString(), static_cast<sal_uInt16>(pStyle->GetFamily()));
+    Execute_Impl(SID_STYLE_EDIT, aTemplName, static_cast<sal_uInt16>(pStyle->GetFamily()));
 }
 
 IMPL_LINK_NOARG( SfxManageStyleSheetPage, EditLinkStyleSelectHdl_Impl, ListBox&, void )
@@ -364,25 +364,22 @@ IMPL_LINK_NOARG( SfxManageStyleSheetPage, EditLinkStyleHdl_Impl, Button*, void )
 {
     OUString aTemplName(m_pBaseLb->GetSelectedEntry());
     if (aTemplName != SfxResId(STR_NONE))
-        Execute_Impl( SID_STYLE_EDIT, aTemplName, OUString(),static_cast<sal_uInt16>(pStyle->GetFamily()) );
+        Execute_Impl( SID_STYLE_EDIT, aTemplName, static_cast<sal_uInt16>(pStyle->GetFamily()) );
 }
 
 // Internal: Perform functions through the Dispatcher
 bool SfxManageStyleSheetPage::Execute_Impl(
-    sal_uInt16 nId, const OUString &rStr, const OUString& rRefStr, sal_uInt16 nFamily)
+    sal_uInt16 nId, const OUString &rStr, sal_uInt16 nFamily)
 {
 
     SfxDispatcher &rDispatcher = *SfxGetpApp()->GetDispatcher_Impl();
     SfxStringItem aItem(nId, rStr);
     SfxUInt16Item aFamily(SID_STYLE_FAMILY, nFamily);
-    SfxStringItem aRefName( SID_STYLE_REFERENCE, rRefStr );
     const SfxPoolItem* pItems[ 6 ];
     sal_uInt16 nCount = 0;
     if( !rStr.isEmpty() )
         pItems[ nCount++ ] = &aItem;
     pItems[ nCount++ ] = &aFamily;
-    if ( !rRefStr.isEmpty() )
-        pItems[ nCount++ ] = &aRefName;
 
     pItems[ nCount++ ] = nullptr;
 
