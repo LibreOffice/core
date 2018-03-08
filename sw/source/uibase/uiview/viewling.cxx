@@ -24,6 +24,7 @@
 #include <com/sun/star/linguistic2/ProofreadingResult.hpp>
 #include <com/sun/star/i18n/TextConversionOption.hpp>
 #include <linguistic/lngprops.hxx>
+#include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/propertysequence.hxx>
@@ -710,11 +711,10 @@ bool SwView::ExecSpellPopup(const Point& rPt)
                 aEvent.ExecutePosition.Y = aPixPos.Y();
                 ScopedVclPtr<Menu> pMenu;
 
-                OUString sMenuName  = bUseGrammarContext ?
+                OUString sMenuName = bUseGrammarContext ?
                     OUString("private:resource/GrammarContextMenu") : OUString("private:resource/SpellContextMenu");
                 if (TryContextMenuInterception(xPopup->GetMenu(), sMenuName, pMenu, aEvent))
                 {
-
                     //! happy hacking for context menu modifying extensions of this
                     //! 'custom made' menu... *sigh* (code copied from sfx2 and framework)
                     if ( pMenu )
@@ -762,6 +762,9 @@ bool SwView::ExecSpellPopup(const Point& rPt)
                     }
                     else
                     {
+                        if (comphelper::LibreOfficeKit::isActive())
+                            xPopup->GetMenu().SetLOKNotifier(SfxViewShell::Current());
+
                         xPopup->Execute(aToFill.SVRect(), m_pEditWin);
                     }
                 }
