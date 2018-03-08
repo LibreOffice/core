@@ -847,8 +847,8 @@ void SdOOXMLExportTest1::testCustomXml()
     CPPUNIT_ASSERT(pRelsDoc);
 
     // Check there is a relation to itemProps1.xml.
-    const OUString sXmlPath = "/rels:Relationships/rels:Relationship[@Id='rId1']";
-    assertXPath(pRelsDoc, OUStringToOString(sXmlPath, RTL_TEXTENCODING_UTF8), "Target", "itemProps1.xml");
+    assertXPath(pRelsDoc, "/rels:Relationships/rels:Relationship", 1);
+    assertXPath(pRelsDoc, "/rels:Relationships/rels:Relationship[@Id='rId1']", "Target", "itemProps1.xml");
 
     std::shared_ptr<SvStream> pStream = parseExportStream(tempFile, "ddp/ddpfile.xen");
     CPPUNIT_ASSERT(pStream);

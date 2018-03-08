@@ -536,6 +536,17 @@ DECLARE_OOXMLEXPORT_TEST(testCustomXmlGrabBag, "customxml.docx")
     CPPUNIT_ASSERT(CustomXml); // Grab Bag has all the expected elements
 }
 
+DECLARE_OOXMLEXPORT_TEST(testCustomXmlRelationships, "customxml.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport("customXml/_rels/item1.xml.rels");
+    if(!pXmlDoc)
+        return;
+
+    // Check there is a relation to itemProps1.xml.
+    assertXPath(pXmlDoc, "/rels:Relationships/rels:Relationship", 1);
+    assertXPath(pXmlDoc, "/rels:Relationships/rels:Relationship[@Id='rId1']", "Target", "itemProps1.xml");
+}
+
 DECLARE_OOXMLEXPORT_TEST(testFdo69644, "fdo69644.docx")
 {
     // The problem was that the exporter exported the table definition
