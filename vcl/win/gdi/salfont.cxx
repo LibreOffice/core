@@ -1709,7 +1709,7 @@ bool WinSalGraphics::CreateFontSubset( const OUString& rToFile,
 
     // write subset into destination file
     nRC = ::CreateTTFromTTGlyphs( aSftTTF.get(), aToFile.getStr(), aShortIDs,
-            aTempEncs, nGlyphCount, 0, nullptr );
+            aTempEncs, nGlyphCount );
     return (nRC == SF_OK);
 }
 

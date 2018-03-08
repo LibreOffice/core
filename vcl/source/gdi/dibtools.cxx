@@ -1608,10 +1608,10 @@ bool ImplWriteDIBBody(const Bitmap& rBitmap, SvStream& rOStm, BitmapReadAccess c
     return bRet;
 }
 
-bool ImplWriteDIBFileHeader(SvStream& rOStm, BitmapReadAccess const & rAcc, bool bUseDIBV5)
+bool ImplWriteDIBFileHeader(SvStream& rOStm, BitmapReadAccess const & rAcc)
 {
     const sal_uInt32 nPalCount((rAcc.HasPalette() ? rAcc.GetPaletteEntryCount() : isBitfieldCompression(rAcc.GetScanlineFormat()) ? 3UL : 0UL));
-    const sal_uInt32 nOffset(14 + (bUseDIBV5 ? DIBV5HEADERSIZE : DIBINFOHEADERSIZE) + nPalCount * 4UL);
+    const sal_uInt32 nOffset(14 + DIBINFOHEADERSIZE + nPalCount * 4UL);
 
     rOStm.WriteUInt16( 0x4D42 ); // 'MB' from BITMAPFILEHEADER
     rOStm.WriteUInt32( nOffset + (rAcc.Height() * rAcc.GetScanlineSize()) );
@@ -1686,7 +1686,7 @@ bool ImplWriteDIB(
         {
             if(bFileHeader)
             {
-                if(ImplWriteDIBFileHeader(rOStm, *pAcc, false))
+                if(ImplWriteDIBFileHeader(rOStm, *pAcc))
                 {
                     bRet = ImplWriteDIBBody(rSource, rOStm, *pAcc, pAccAlpha.get(), bCompressed);
                 }
@@ -1829,11 +1829,9 @@ bool WriteDIB(
 
 bool WriteDIB(
     const BitmapEx& rSource,
-    SvStream& rOStm,
-    bool bCompressed,
-    bool bFileHeader)
+    SvStream& rOStm)
 {
-    return ImplWriteDIB(rSource.GetBitmapRef(), rOStm, bCompressed, bFileHeader);
+    return ImplWriteDIB(rSource.GetBitmapRef(), rOStm, /*bCompressed*/true, /*bFileHeader*/true);
 }
 
 bool WriteDIBBitmapEx(

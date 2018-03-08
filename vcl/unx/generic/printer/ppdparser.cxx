@@ -127,12 +127,11 @@ namespace psp
     };
 
     static css::lang::Locale normalizeInputLocale(
-        const css::lang::Locale& i_rLocale,
-        bool bInsertDefault
+        const css::lang::Locale& i_rLocale
         )
     {
         css::lang::Locale aLoc( i_rLocale );
-        if( bInsertDefault && aLoc.Language.isEmpty() )
+        if( aLoc.Language.isEmpty() )
         {
             // empty locale requested, fill in application UI locale
             aLoc = Application::GetSettings().GetUILanguageTag().getLocale();
@@ -214,7 +213,7 @@ namespace psp
             {
                 const translation_map& rMap( it->second );
 
-                css::lang::Locale aLoc( normalizeInputLocale( css::lang::Locale(), true ) );
+                css::lang::Locale aLoc( normalizeInputLocale( css::lang::Locale() ) );
                 /* FIXME-BCP47: use LanguageTag::getFallbackStrings()? */
                 for( int nTry = 0; nTry < 4; nTry++ )
                 {

@@ -660,7 +660,7 @@ void Application::SetSettings( const AllSettings& rSettings )
             DataChangedEvent aDCEvt( DataChangedEventType::SETTINGS, &aOldSettings, nChangeFlags );
 
             // notify data change handler
-            ImplCallEventListeners( VclEventId::ApplicationDataChanged, &aDCEvt);
+            ImplCallEventListenersApplicationDataChanged( &aDCEvt);
 
             // Update all windows
             vcl::Window* pFirstFrame = pSVData->maWinData.mpFirstFrame;
@@ -775,10 +775,10 @@ void Application::NotifyAllWindows( DataChangedEvent& rDCEvt )
     }
 }
 
-void Application::ImplCallEventListeners( VclEventId nEvent, void* pData )
+void Application::ImplCallEventListenersApplicationDataChanged( void* pData )
 {
     ImplSVData* pSVData = ImplGetSVData();
-    VclWindowEvent aEvent( nullptr, nEvent, pData );
+    VclWindowEvent aEvent( nullptr, VclEventId::ApplicationDataChanged, pData );
 
     if ( pSVData->maAppData.mpEventListeners )
         pSVData->maAppData.mpEventListeners->Call( aEvent );

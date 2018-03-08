@@ -339,9 +339,6 @@ namespace vcl
  *                    the glyphID glyphArray[i]. Character code 0 usually points to a default
  *                    glyph (glyphID 0)
  * @param nGlyphs     number of glyph IDs in glyphArray and encoding values in encoding
- * @param nNameRecs   number of NameRecords for the font, if 0 the name table from the
- *                    original font will be used
- * @param nr          array of NameRecords
  * @param flags       or'ed TTCreationFlags
  * @return            return the value of SFErrCodes enum
  * @see               SFErrCodes
@@ -352,9 +349,7 @@ namespace vcl
                               const char    *fname,
                               sal_uInt16 const *glyphArray,
                               sal_uInt8 const *encoding,
-                              int            nGlyphs,
-                              int            nNameRecs,
-                              NameRecord const *nr);
+                              int            nGlyphs);
 
 /**
  * Generates a new PostScript Type42 font and dumps it to <b>outf</b> file.
