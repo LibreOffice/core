@@ -33,6 +33,7 @@
 #include <poolfmt.hxx>
 #include <ndtxt.hxx>
 #include <paratr.hxx>
+#include <pam.hxx>
 
 #include "htmlnum.hxx"
 #include "wrthtml.hxx"

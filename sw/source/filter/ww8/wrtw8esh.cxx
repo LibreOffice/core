@@ -100,6 +100,7 @@
 #include <unotools/saveopt.hxx>
 #include <o3tl/enumrange.hxx>
 #include <o3tl/enumarray.hxx>
+#include <sfx2/docfile.hxx>
 
 #include <algorithm>
 

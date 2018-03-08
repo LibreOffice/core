@@ -113,7 +113,9 @@
 #include <vcl/scheduler.hxx>
 #include <config_features.h>
 #include <sfx2/watermarkitem.hxx>
+#include <sfx2/fcontnr.hxx>
 #include <fmthdft.hxx>
+#include <iodetect.hxx>
 
 static char const DATA_DIRECTORY[] = "/sw/qa/extras/uiwriter/data/";
 

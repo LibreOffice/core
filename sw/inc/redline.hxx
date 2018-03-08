@@ -23,7 +23,6 @@
 #include <rtl/ustring.hxx>
 
 #include "pam.hxx"
-#include "swtable.hxx"
 
 #include "IDocumentRedlineAccess.hxx"
 

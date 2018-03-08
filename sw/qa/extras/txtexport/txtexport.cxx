@@ -15,6 +15,7 @@
 #include <shellio.hxx>
 #include <unotextrange.hxx>
 #include <usrpref.hxx>
+#include <iodetect.hxx>
 
 class TxtImportTest : public SwModelTestBase
 {

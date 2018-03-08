@@ -54,6 +54,7 @@
 #include <osl/file.hxx>
 #include <vcl/settings.hxx>
 #include <unoprnms.hxx>
+#include <iodetect.hxx>
 
 #include <dbui.hrc>
 #include <unomid.h>

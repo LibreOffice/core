@@ -40,6 +40,7 @@
 #include <unotxdoc.hxx>
 #include <unotools/streamwrap.hxx>
 #include <unotextrange.hxx>
+#include <sfx2/docfile.hxx>
 #define AUTOTEXT_GALLERY "autoTxt"
 
 using namespace css;

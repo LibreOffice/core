@@ -111,6 +111,7 @@
 #include <filter/msfilter/svxmsbas.hxx>
 #include <rtl/random.h>
 #include <vcl/svapp.hxx>
+#include <sfx2/docfilt.hxx>
 #include "WW8Sttbf.hxx"
 #include <editeng/charrotateitem.hxx>
 #include "WW8FibData.hxx"
@@ -118,6 +119,7 @@
 #include <fmtclds.hxx>
 #include <rdfhelper.hxx>
 #include <fmtclbl.hxx>
+#include <iodetect.hxx>
 
 using namespace css;
 using namespace sw::util;

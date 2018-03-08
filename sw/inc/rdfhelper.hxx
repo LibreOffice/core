@@ -16,7 +16,7 @@
 
 #include "swdllapi.h"
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/uno/Reference.h>
 
 class SwTextNode;
 

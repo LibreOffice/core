@@ -23,6 +23,7 @@
 #include "hintids.hxx"
 #include "format.hxx"
 #include <svl/poolitem.hxx>
+#include <svx/swframetypes.hxx>
 
 #include <memory>
 

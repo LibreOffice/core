@@ -90,6 +90,7 @@
 #include <com/sun/star/i18n/WordType.hpp>
 #include <com/sun/star/text/RubyPosition.hpp>
 #include <oox/export/vmlexport.hxx>
+#include <sfx2/docfile.hxx>
 
 #include "sprmids.hxx"
 

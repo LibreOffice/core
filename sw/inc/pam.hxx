@@ -19,10 +19,8 @@
 #ifndef INCLUDED_SW_INC_PAM_HXX
 #define INCLUDED_SW_INC_PAM_HXX
 
-#include <stddef.h>
 #include <sal/types.h>
 #include <tools/mempool.hxx>
-#include "cshtyp.hxx"
 #include "ring.hxx"
 #include "index.hxx"
 #include "ndindex.hxx"

@@ -35,6 +35,7 @@
 #include <shellio.hxx>
 #include <acorrect.hxx>
 #include <swerror.h>
+#include <iodetect.hxx>
 
 void SwEditShell::InsertGlossary( SwTextBlocks& rGlossary, const OUString& rStr )
 {

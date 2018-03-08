@@ -19,6 +19,7 @@
 
 #include <pam.hxx>
 #include <pamtyp.hxx>
+#include <cshtyp.hxx>
 
 static SwMoveFnCollection aFwrd = {
     /* fnNd         */  &GoNext,

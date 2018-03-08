@@ -60,6 +60,8 @@
 #include <ndtxt.hxx>
 #include <numrule.hxx>
 #include <frmatr.hxx>
+#include <swtable.hxx>
+#include <IMark.hxx>
 
 using namespace ::com::sun::star;
 

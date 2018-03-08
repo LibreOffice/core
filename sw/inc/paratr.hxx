@@ -26,7 +26,6 @@
 #include "swatrset.hxx"
 #include "format.hxx"
 #include "charfmt.hxx"
-#include "swtypes.hxx"
 #include <editeng/adjustitem.hxx>
 #include <editeng/lspcitem.hxx>
 #include <editeng/spltitem.hxx>

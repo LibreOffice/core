@@ -179,6 +179,7 @@
 #include <SwSpellDialogChildWindow.hxx>
 #include <memory>
 #include <fchrfmt.hxx>
+#include <redline.hxx>
 
 #define TWIPS_PER_PIXEL 15
 

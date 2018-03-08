@@ -19,7 +19,6 @@
 #ifndef INCLUDED_SW_INC_RUBYLIST_HXX
 #define INCLUDED_SW_INC_RUBYLIST_HXX
 
-#include "swtypes.hxx"
 #include "fmtruby.hxx"
 
 class SwRubyListEntry

@@ -131,6 +131,7 @@
 #include <watermarkdialog.hxx>
 
 #include <ndtxt.hxx>
+#include <iodetect.hxx>
 
 #include <memory>
 
