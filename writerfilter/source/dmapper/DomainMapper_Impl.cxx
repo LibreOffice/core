@@ -2254,7 +2254,8 @@ void DomainMapper_Impl::PopShapeContext()
         if ( !m_aAnchoredStack.top().bToRemove )
         {
             RemoveLastParagraph();
-            m_aTextAppendStack.pop();
+            if (!m_aTextAppendStack.empty())
+                m_aTextAppendStack.pop();
         }
 
         uno::Reference< text::XTextContent > xObj = m_aAnchoredStack.top( ).xTextContent;
