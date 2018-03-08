@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba2be162_39d1b0fc",
+        "filename": "sc/source/core/tool/rangelst.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 245,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-03-08T13:15:34Z",
+      "side": 1,
+      "message": "With this the identity test will fail, see below.\n\nIf underlying ranges are deleted in the if(bJoined){if(bIsInList)} case then pOver was updated as well.",
+      "revId": "fd38815767c9d7c0fd5e5987476e11b5121ce8ff",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba2be162_19ececc6",
+        "filename": "sc/source/core/tool/rangelst.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 260,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-03-08T13:15:34Z",
+      "side": 1,
+      "message": "This is wrong. The old behaviour tested for identity, this now only for equal ranges, which may yield wrong results. During Join() there may be different equal ranges, of which all but the current pOver one are eliminated.",
+      "revId": "fd38815767c9d7c0fd5e5987476e11b5121ce8ff",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
