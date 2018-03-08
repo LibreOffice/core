@@ -728,11 +728,10 @@ bool SwView::ExecSpellPopup(const Point& rPt)
                 aEvent.ExecutePosition.Y = aPixPos.Y();
                 ScopedVclPtr<Menu> pMenu;
 
-                OUString sMenuName  = bUseGrammarContext ?
+                OUString sMenuName = bUseGrammarContext ?
                     OUString("private:resource/GrammarContextMenu") : OUString("private:resource/SpellContextMenu");
-                if(TryContextMenuInterception( *pPopup, sMenuName, pMenu, aEvent ))
+                if (TryContextMenuInterception(*pPopup, sMenuName, pMenu, aEvent))
                 {
-
                     //! happy hacking for context menu modifying extensions of this
                     //! 'custom made' menu... *sigh* (code copied from sfx2 and framework)
                     if ( pMenu )
@@ -780,6 +779,7 @@ bool SwView::ExecSpellPopup(const Point& rPt)
                     }
                     else
                     {
+                        pPopup->SetLOKNotifier(SfxViewShell::Current());
                         pPopup->Execute( aToFill.SVRect(), m_pEditWin );
                     }
                 }
