@@ -1331,69 +1331,6 @@ bool SvxGraphicObject::setPropertyValueImpl( const OUString& rName, const SfxIte
         }
         break;
     }
-    case OWN_ATTR_GRAFURL:
-    {
-        OUString aURL;
-        if( rValue >>= aURL )
-        {
-            if( aURL.startsWith( UNO_NAME_GRAPHOBJ_URLPREFIX ) )
-            {
-                // graphic manager url
-                aURL = aURL.copy( sizeof( UNO_NAME_GRAPHOBJ_URLPREFIX ) - 1 );
-                OUString aTmpStr(aURL);
-                OString aUniqueID(OUStringToOString(aTmpStr, RTL_TEXTENCODING_UTF8));
-                GraphicObject aGrafObj(aUniqueID);
-
-                // #101808# since loading a graphic can cause a reschedule of the office
-                //          it is possible that our shape is removed while where in this
-                //          method.
-                if( mpObj.is() )
-                {
-                    static_cast<SdrGrafObj*>(mpObj.get())->ReleaseGraphicLink();
-                    static_cast<SdrGrafObj*>(mpObj.get())->SetGraphicObject( aGrafObj );
-                }
-            }
-            else if( !aURL.startsWith( UNO_NAME_GRAPHOBJ_URLPKGPREFIX ) )
-            {
-                // normal link
-                OUString            aFilterName;
-                std::shared_ptr<const SfxFilter> pSfxFilter;
-                SfxMedium           aSfxMedium( aURL, referer_, StreamMode::READ | StreamMode::SHARE_DENYNONE );
-
-                SfxGetpApp()->GetFilterMatcher().GuessFilter( aSfxMedium, pSfxFilter );
-
-                if( !pSfxFilter )
-                {
-                    INetURLObject aURLObj( aURL );
-
-                    if( aURLObj.GetProtocol() == INetProtocol::NotValid )
-                    {
-                        OUString aValidURL;
-
-                        if( osl::FileBase::getFileURLFromSystemPath( aURL, aValidURL ) == osl::FileBase::E_None )
-                            aURLObj = INetURLObject( aValidURL );
-                    }
-
-                    if( aURLObj.GetProtocol() != INetProtocol::NotValid )
-                    {
-                        GraphicFilter &rGrfFilter = GraphicFilter::GetGraphicFilter();
-                        aFilterName = rGrfFilter.GetImportFormatName( rGrfFilter.GetImportFormatNumberForShortName( aURLObj.getExtension() ) );
-                    }
-                }
-                else
-                    aFilterName = pSfxFilter->GetFilterName();
-
-                // #101808# since loading a graphic can cause a reschedule of the office
-                //          it is possible that our shape is removed while where in this
-                //          method.
-                if( mpObj.is() )
-                    static_cast<SdrGrafObj*>(mpObj.get())->SetGraphicLink( aURL, referer_, aFilterName );
-
-            }
-            bOk = true;
-        }
-        break;
-    }
 
     case OWN_ATTR_GRAFSTREAMURL:
     {
@@ -1559,22 +1496,6 @@ bool SvxGraphicObject::getPropertyValueImpl( const OUString& rName, const SfxIte
                 static_cast< const sal_Int8* >(aDestStrm.GetData()),
                 aDestStrm.GetEndOfData());
             rValue <<= aSeq;
-        }
-        break;
-    }
-
-    case OWN_ATTR_GRAFURL:
-    {
-        if( static_cast< SdrGrafObj*>( mpObj.get() )->IsLinkedGraphic() )
-        {
-            rValue <<= static_cast< SdrGrafObj*>( mpObj.get() )->GetFileName();
-        }
-        else
-        {
-            const GraphicObject& rGrafObj = static_cast< SdrGrafObj*>( mpObj.get() )->GetGraphicObject(true);
-            OUString aURL( UNO_NAME_GRAPHOBJ_URLPREFIX);
-            aURL += OStringToOUString(rGrafObj.GetUniqueID(), RTL_TEXTENCODING_ASCII_US);
-            rValue <<= aURL;
         }
         break;
     }
