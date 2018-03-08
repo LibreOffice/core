@@ -126,4 +126,67 @@ bool HexColorControl::ImplProcessKeyInput( const KeyEvent& rKEv )
     return false;
 }
 
+namespace weld {
+
+HexColorControl::HexColorControl(weld::Entry* pEntry)
+    : m_xEntry(pEntry)
+{
+    m_xEntry->set_max_length(6);
+    m_xEntry->set_width_chars(6);
+    m_xEntry->connect_insert_text(LINK(this, HexColorControl, ImplProcessInputHdl));
+}
+
+void HexColorControl::SetColor(Color nColor)
+{
+    OUStringBuffer aBuffer;
+    sax::Converter::convertColor(aBuffer, nColor);
+    m_xEntry->set_text(aBuffer.makeStringAndClear().copy(1));
+}
+
+Color HexColorControl::GetColor()
+{
+    sal_Int32 nColor = -1;
+
+    OUString aStr("#");
+    aStr += m_xEntry->get_text();
+    sal_Int32 nLen = aStr.getLength();
+
+    if (nLen < 7)
+    {
+        static const sal_Char* const pNullStr = "000000";
+        aStr += OUString::createFromAscii( &pNullStr[nLen-1] );
+    }
+
+    sax::Converter::convertColor(nColor, aStr);
+
+#if 0
+    if (nColor == -1)
+        SetControlBackground(COL_RED);
+    else
+        SetControlBackground();
+#endif
+
+    return Color(nColor);
+}
+
+IMPL_LINK(HexColorControl, ImplProcessInputHdl, OUString&, rTest, bool)
+{
+    const sal_Unicode* pTest = rTest.getStr();
+    sal_Int32 nLen = rTest.getLength();
+
+    OUStringBuffer aFilter(nLen);
+    for (sal_Int32 i = 0; i < nLen; ++i)
+    {
+        if (rtl::isAsciiHexDigit(*pTest))
+            aFilter.append(*pTest);
+        ++pTest;
+    }
+
+    rTest = aFilter.makeStringAndClear();
+    return true;
+}
+
+
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

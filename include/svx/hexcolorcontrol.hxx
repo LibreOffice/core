@@ -26,6 +26,7 @@
 #include <vcl/edit.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/builderfactory.hxx>
+#include <vcl/weld.hxx>
 #include <sot/exchange.hxx>
 #include <sax/tools/converter.hxx>
 #include <svx/svxdllapi.h>
@@ -45,6 +46,25 @@ public:
 private:
     static bool ImplProcessKeyInput( const KeyEvent& rKEv );
 };
+
+namespace weld {
+
+class SVX_DLLPUBLIC HexColorControl
+{
+private:
+    std::unique_ptr<weld::Entry> m_xEntry;
+
+    DECL_LINK(ImplProcessInputHdl, OUString&, bool);
+public:
+    HexColorControl(weld::Entry* pEdit);
+
+    void connect_changed(const Link<Entry&, void>& rLink) { m_xEntry->connect_changed(rLink); }
+
+    void SetColor( ::Color nColor );
+    ::Color GetColor();
+};
+
+}
 
 #endif  // INCLUDED_SVX_HEXCOLOR_HXX
 

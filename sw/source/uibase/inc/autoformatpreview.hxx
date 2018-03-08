@@ -67,7 +67,7 @@ private:
     uno::Reference<i18n::XBreakIterator> m_xBreak;
 
     void Init();
-    DECL_LINK(DoPaint, vcl::RenderContext&, void);
+    DECL_LINK(DoPaint, weld::DrawingArea::draw_args, void);
     DECL_LINK(DoResize, const Size& rSize, void);
     void CalcCellArray(bool bFitWidth);
     void CalcLineMap();
