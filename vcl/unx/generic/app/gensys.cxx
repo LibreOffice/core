@@ -40,48 +40,6 @@
 
 using namespace com::sun::star;
 
-namespace {
-
-OUString GetNativeMessageBoxButtonText( StandardButtonType nButtonId, bool bUseResources )
-{
-    OUString aText;
-    if( bUseResources )
-    {
-        aText = Button::GetStandardText( nButtonId );
-    }
-    if( aText.isEmpty() )
-    {
-        switch( nButtonId )
-        {
-        case StandardButtonType::OK:
-            aText = "OK";
-            break;
-        case StandardButtonType::Cancel:
-            aText = "Cancel";
-            break;
-        case StandardButtonType::Abort:
-            aText = "Abort";
-            break;
-        case StandardButtonType::Retry:
-            aText = "Retry";
-            break;
-        case StandardButtonType::Ignore:
-            aText = "Ignore";
-            break;
-        case StandardButtonType::Yes:
-            aText = "Yes";
-            break;
-        case StandardButtonType::No:
-            aText = "No";
-            break;
-        default: break;
-        }
-    }
-    return aText;
-}
-
-}
-
 SalGenericSystem::SalGenericSystem()
 {
 }
@@ -97,7 +55,7 @@ int SalGenericSystem::ShowNativeMessageBox( const OUString& rTitle, const OUStri
 
     ImplHideSplash();
 
-    aButtons.push_back( GetNativeMessageBoxButtonText( StandardButtonType::OK, false/*bUseResources*/ ) );
+    aButtons.push_back( "OK" );
     nButtonIds[nBut++] = SALSYSTEM_SHOWNATIVEMSGBOX_BTN_OK;
     int nResult = ShowNativeDialog( rTitle, rMessage, aButtons );
 

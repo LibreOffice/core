@@ -302,8 +302,7 @@ public:
     void                Replace(
                             const Color* pSearchColors,
                             const Color* pReplaceColors,
-                            sal_uLong nColorCount,
-                            const sal_uInt8* pTols = nullptr );
+                            sal_uLong nColorCount );
 
     /** Change various global color characteristics
 

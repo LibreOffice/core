@@ -318,7 +318,7 @@ bool AquaSalGraphics::CreateFontSubset( const OUString& rToFile,
 
     // write subset into destination file
     nRC = ::CreateTTFromTTGlyphs( pSftFont, aToFile.getStr(), aShortIDs,
-                                  aTempEncs, nGlyphCount, 0, nullptr );
+                                  aTempEncs, nGlyphCount );
     ::CloseTTFont(pSftFont);
     return (nRC == SF_OK);
 }

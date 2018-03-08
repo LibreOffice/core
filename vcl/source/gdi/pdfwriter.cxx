@@ -464,11 +464,10 @@ std::set< PDFWriter::ErrorCode > const & PDFWriter::GetErrors()
 
 css::uno::Reference< css::beans::XMaterialHolder >
 PDFWriter::InitEncryption( const OUString& i_rOwnerPassword,
-                           const OUString& i_rUserPassword,
-                           bool b128Bit
+                           const OUString& i_rUserPassword
                           )
 {
-    return PDFWriterImpl::initEncryption( i_rOwnerPassword, i_rUserPassword, b128Bit );
+    return PDFWriterImpl::initEncryption( i_rOwnerPassword, i_rUserPassword, /*b128Bit*/true );
 }
 
 void PDFWriter::PlayMetafile( const GDIMetaFile& i_rMTF, const vcl::PDFWriter::PlayMetafileContext& i_rPlayContext, PDFExtOutDevData* i_pData )

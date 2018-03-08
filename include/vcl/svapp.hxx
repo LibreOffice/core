@@ -716,13 +716,12 @@ public:
 
     /** Send event to all VCL application event listeners
 
-     @param     nEvent          Event ID
      @param     pWin            Pointer to window to send event
      @param     pData           Pointer to data to send with event
 
      @see ImplCallEventListeners(VclSimpleEvent* pEvent)
     */
-    static void                 ImplCallEventListeners( VclEventId nEvent, void* pData );
+    static void                 ImplCallEventListenersApplicationDataChanged( void* pData );
 
     /** Send event to all VCL application event listeners
 
