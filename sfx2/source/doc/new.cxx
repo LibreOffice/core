@@ -237,8 +237,7 @@ sal_uInt16  SfxNewFileDialog::GetSelectedTemplatePos() const
 }
 
 SfxNewFileDialog::SfxNewFileDialog(weld::Window *pParent, SfxNewFileDialogMode nFlags)
-    : m_xBuilder(Application::CreateBuilder(pParent, "sfx/ui/loadtemplatedialog.ui"))
-    , m_xDialog(m_xBuilder->weld_dialog("LoadTemplateDialog"))
+    : GenericDialogController(pParent, "sfx/ui/loadtemplatedialog.ui", "LoadTemplateDialog")
     , m_xRegionLb(m_xBuilder->weld_tree_view("categories"))
     , m_xTemplateLb(m_xBuilder->weld_tree_view("templates"))
     , m_xTextStyleCB(m_xBuilder->weld_check_button("text"))

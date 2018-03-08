@@ -24,11 +24,9 @@
 
 class SwWrtShell;
 
-class SwSplitTableDlg
+class SwSplitTableDlg : public weld::GenericDialogController
 {
 private:
-    std::unique_ptr<weld::Builder> m_xBuilder;
-    std::unique_ptr<weld::Dialog> m_xDialog;
     std::unique_ptr<weld::RadioButton> m_xHorzBox;
     std::unique_ptr<weld::RadioButton> m_xContentCopyRB;
     std::unique_ptr<weld::RadioButton> m_xBoxAttrCopyWithParaRB;
@@ -43,7 +41,7 @@ private:
 public:
     SwSplitTableDlg(weld::Window *pParent, SwWrtShell &rSh);
 
-    short run()
+    short execute()
     {
         short nRet = m_xDialog->run();
         if (nRet == RET_OK)

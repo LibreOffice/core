@@ -94,11 +94,11 @@ IMPL_ABSTDLG_BASE(AbstractSwAsciiFilterDlg_Impl);
 IMPL_ABSTDLG_BASE(VclAbstractDialog_Impl);
 short AbstractSplitTableDialog_Impl::Execute()
 {
-    return m_xDlg->run();
+    return m_xDlg->execute();
 }
 short AbstractSwBreakDlg_Impl::Execute()
 {
-    return m_xDlg->run();
+    return m_xDlg->execute();
 }
 IMPL_ABSTDLG_BASE(AbstractTabDialog_Impl);
 short AbstractSwConvertTableDlg_Impl::Execute()
@@ -111,7 +111,7 @@ IMPL_ABSTDLG_BASE(AbstractSwLabDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractSwSelGlossaryDlg_Impl);
 short AbstractSwAutoFormatDlg_Impl::Execute()
 {
-    return m_xDlg->run();
+    return m_xDlg->execute();
 }
 IMPL_ABSTDLG_BASE(AbstractSwFieldDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractSwRenameXNamedDlg_Impl);

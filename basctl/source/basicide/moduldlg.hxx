@@ -42,11 +42,9 @@ enum class ObjectMode
     Dialog  = 3,
 };
 
-class NewObjectDialog
+class NewObjectDialog : public weld::GenericDialogController
 {
 private:
-    std::unique_ptr<weld::Builder> m_xBuilder;
-    std::unique_ptr<weld::Dialog> m_xDialog;
     std::unique_ptr<weld::Entry> m_xEdit;
     std::unique_ptr<weld::Button> m_xOKButton;
     bool m_bCheckName;
@@ -54,7 +52,6 @@ private:
     DECL_LINK(OkButtonHandler, weld::Button&, void);
 public:
     NewObjectDialog(weld::Window* pParent, ObjectMode, bool bCheckName = false);
-    short run() { return m_xDialog->run(); }
     OUString GetObjectName() const { return m_xEdit->get_text(); }
     void SetObjectName(const OUString& rName)
     {
