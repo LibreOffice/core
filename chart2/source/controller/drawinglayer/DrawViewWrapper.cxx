@@ -72,7 +72,7 @@ SfxObjectShell * lcl_GetParentObjectShell( const uno::Reference< frame::XModel >
             {
                 SvGlobalName aSfxIdent( SFX_GLOBAL_CLASSID );
                 pResult = reinterpret_cast< SfxObjectShell * >(
-                    xParentTunnel->getSomething( uno::Sequence< sal_Int8 >( aSfxIdent.GetByteSequence() ) ) );
+                    xParentTunnel->getSomething( aSfxIdent.GetByteSequence() ) );
             }
         }
     }

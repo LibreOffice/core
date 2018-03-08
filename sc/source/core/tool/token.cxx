@@ -2139,7 +2139,7 @@ FormulaToken* ScTokenArray::MergeArray( )
                 }
                 else if ( t->GetType() == svString )
                 {
-                    pArray->PutString(svl::SharedString(t->GetString()), nCol, nRow);
+                    pArray->PutString(t->GetString(), nCol, nRow);
                 }
             break;
 

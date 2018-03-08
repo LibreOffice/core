@@ -1975,7 +1975,7 @@ Any SAL_CALL ScDataPilotFieldObj::getPropertyValue( const OUString& aPropertyNam
     {
         const DataPilotFieldAutoShowInfo* pInfo = getAutoShowInfo();
         if (pInfo)
-            aRet <<= DataPilotFieldAutoShowInfo(*pInfo);
+            aRet <<= *pInfo;
     }
     else if ( aPropertyName == SC_UNONAME_HASLAYOUTINFO )
         aRet <<= (getLayoutInfo() != nullptr);
@@ -1983,7 +1983,7 @@ Any SAL_CALL ScDataPilotFieldObj::getPropertyValue( const OUString& aPropertyNam
     {
         const DataPilotFieldLayoutInfo* pInfo = getLayoutInfo();
         if (pInfo)
-            aRet <<= DataPilotFieldLayoutInfo(*pInfo);
+            aRet <<= *pInfo;
     }
     else if ( aPropertyName == SC_UNONAME_HASREFERENCE )
         aRet <<= (getReference() != nullptr);
@@ -1991,7 +1991,7 @@ Any SAL_CALL ScDataPilotFieldObj::getPropertyValue( const OUString& aPropertyNam
     {
         const DataPilotFieldReference* pRef = getReference();
         if (pRef)
-            aRet <<= DataPilotFieldReference(*pRef);
+            aRet <<= *pRef;
     }
     else if ( aPropertyName == SC_UNONAME_HASSORTINFO )
         aRet <<= (getSortInfo() != nullptr);
@@ -1999,7 +1999,7 @@ Any SAL_CALL ScDataPilotFieldObj::getPropertyValue( const OUString& aPropertyNam
     {
         const DataPilotFieldSortInfo* pInfo = getSortInfo();
         if (pInfo)
-            aRet <<= DataPilotFieldSortInfo(*pInfo);
+            aRet <<= *pInfo;
     }
     else if ( aPropertyName == SC_UNONAME_ISGROUP )
         aRet <<= hasGroupInfo();

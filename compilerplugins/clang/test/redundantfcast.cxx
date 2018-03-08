@@ -14,7 +14,14 @@
 #include "rtl/ustring.hxx"
 #include "tools/color.hxx"
 
-void method1(OUString const&);
+void method1(OUString const&); // expected-note {{in call to method here [loplugin:redundantfcast]}}
+
+struct Foo
+{
+    Foo(int) {}
+};
+
+void func1(Foo const& f); // expected-note {{in call to method here [loplugin:redundantfcast]}}
 
 int main()
 {
@@ -34,7 +41,7 @@ int main()
     OUString s1;
     method1(OUString(
         s1)); // expected-error@-1 {{redundant functional cast from 'rtl::OUString' to 'rtl::OUString' [loplugin:redundantfcast]}}
-
+    // expected-error@-2 {{redundant functional cast from 'rtl::OUString' to 'rtl::OUString' [loplugin:redundantfcast]}}
     OUString s2;
     s2 = OUString(
         s1); // expected-error@-1 {{redundant functional cast from 'rtl::OUString' to 'rtl::OUString' [loplugin:redundantfcast]}}
@@ -43,6 +50,10 @@ int main()
     Color col2 = Color(
         col1); // expected-error@-1 {{redundant functional cast from 'Color' to 'Color' [loplugin:redundantfcast]}}
     (void)col2;
+
+    Foo foo(1);
+    func1(Foo(
+        foo)); // expected-error@-1 {{redundant functional cast from 'Foo' to 'Foo' [loplugin:redundantfcast]}}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

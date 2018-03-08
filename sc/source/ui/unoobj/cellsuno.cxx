@@ -2114,7 +2114,7 @@ uno::Any SAL_CALL ScCellRangesBase::getPropertyDefault( const OUString& aPropert
                         break;
                     case SC_WID_UNO_NUMRULES:
                         {
-                            aAny <<= uno::Reference<container::XIndexReplace>(ScStyleObj::CreateEmptyNumberingRules());
+                            aAny <<= ScStyleObj::CreateEmptyNumberingRules();
                         }
                         break;
                 }
@@ -2601,7 +2601,7 @@ void ScCellRangesBase::GetOnePropertyValue( const SfxItemPropertySimpleEntry* pE
                 case SC_WID_UNO_NUMRULES:
                     {
                         // always return empty numbering rules object
-                        rAny <<= uno::Reference<container::XIndexReplace>(ScStyleObj::CreateEmptyNumberingRules());
+                        rAny <<= ScStyleObj::CreateEmptyNumberingRules();
                     }
                     break;
                 case SC_WID_UNO_ABSNAME:

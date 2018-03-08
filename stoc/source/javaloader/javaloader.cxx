@@ -259,8 +259,7 @@ const css::uno::Reference<XImplementationLoader> & JavaComponentLoader::getJavaL
         css::uno::Reference<XInitialization> javaLoader_XInitialization(m_javaLoader, UNO_QUERY_THROW);
 
         Any any;
-        any <<= css::uno::Reference<XMultiComponentFactory>(
-            m_xComponentContext->getServiceManager());
+        any <<= m_xComponentContext->getServiceManager();
 
         javaLoader_XInitialization->initialize(Sequence<Any>(&any, 1));
     }
