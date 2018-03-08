@@ -920,6 +920,7 @@ void SfxFilterContainer::ReadSingleFilter_Impl(
         OUString sExtension          ;
         OUString sPattern            ;
         OUString sServiceName        ;
+        bool bEnabled = true         ;
 
         // first get directly available properties
         sal_Int32 nFilterPropertyCount = lFilterProperties.getLength();
@@ -1014,6 +1015,11 @@ void SfxFilterContainer::ReadSingleFilter_Impl(
                     }
                 }
             }
+            else if ( lFilterProperties[nFilterProperty].Name == "Enabled" )
+            {
+                lFilterProperties[nFilterProperty].Value >>= bEnabled;
+            }
+
         }
 
         if ( sServiceName.isEmpty() )
@@ -1050,7 +1056,8 @@ void SfxFilterContainer::ReadSingleFilter_Impl(
                                      sType                   ,
                                      sMimeType               ,
                                      sUserData               ,
-                                     sServiceName ));
+                                     sServiceName            ,
+                                     bEnabled ));
             rList.push_back( pFilter );
         }
         else
@@ -1064,6 +1071,7 @@ void SfxFilterContainer::ReadSingleFilter_Impl(
             pFilt->aMimeType    = sMimeType;
             pFilt->aUserData    = sUserData;
             pFilt->aServiceName = sServiceName;
+            pFilt->mbEnabled    = bEnabled;
         }
 
         SfxFilter* pFilt = const_cast<SfxFilter*>(pFilter.get());

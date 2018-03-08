@@ -646,6 +646,11 @@ bool SfxObjectShell::DoLoad( SfxMedium *pMed )
     pImpl->nLoadedFlags = SfxLoadedFlags::NONE;
     pImpl->bModelInitialized = false;
 
+    if (pFilter && !pFilter->IsEnabled())
+    {
+        SetError( ERRCODE_IO_FILTERDISABLED );
+    }
+
     // initialize static language table so language-related extensions are learned before the document loads
     (void)SvtLanguageTable::GetLanguageEntryCount();
 
