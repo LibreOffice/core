@@ -61,6 +61,7 @@ class SFX2_DLLPUBLIC SfxFilter
     sal_uIntPtr     nVersion;
     SotClipboardFormatId lFormat;
     sal_uInt16      nDocIcon;
+    bool mbEnabled;
 
 public:
     SfxFilter( const OUString& rProvider, const OUString& rFilterName );
@@ -73,7 +74,8 @@ public:
                sal_uInt16 nDocIcon,
                const OUString &rMimeType,
                const OUString &rUserData,
-               const OUString& rServiceName );
+               const OUString& rServiceName,
+               bool bEnabled = true );
     ~SfxFilter();
 
     bool IsAllowedAsTemplate() const { return bool(nFormatType & SfxFilterFlags::TEMPLATE); }
@@ -118,6 +120,7 @@ public:
                     css::lang::WrappedTargetException,
                     css::uno::RuntimeException,
                     std::exception );
+     bool IsEnabled() const  { return mbEnabled; }
 };
 
 #endif
