@@ -47,7 +47,6 @@ void Graphic::init( const ::Graphic& rGraphic )
     unographic::GraphicDescriptor::init(maGraphic);
 }
 
-
 uno::Any SAL_CALL Graphic::queryAggregation( const uno::Type& rType )
 {
     uno::Any aAny;
@@ -63,7 +62,6 @@ uno::Any SAL_CALL Graphic::queryAggregation( const uno::Type& rType )
     return aAny;
 }
 
-
 uno::Any SAL_CALL Graphic::queryInterface( const uno::Type & rType )
 {
     css::uno::Any aReturn = ::unographic::GraphicDescriptor::queryInterface( rType );
@@ -72,13 +70,11 @@ uno::Any SAL_CALL Graphic::queryInterface( const uno::Type & rType )
     return aReturn;
 }
 
-
 void SAL_CALL Graphic::acquire()
     throw()
 {
     unographic::GraphicDescriptor::acquire();
 }
-
 
 void SAL_CALL Graphic::release() throw()
 {
@@ -121,12 +117,10 @@ uno::Sequence< uno::Type > SAL_CALL Graphic::getTypes()
     return aRet;
 }
 
-
 uno::Sequence< sal_Int8 > SAL_CALL Graphic::getImplementationId()
 {
     return css::uno::Sequence<sal_Int8>();
 }
-
 
 sal_Int8 SAL_CALL Graphic::getType()
 {
@@ -146,7 +140,6 @@ sal_Int8 SAL_CALL Graphic::getType()
     return cRet;
 }
 
-
 // XBitmap
 
 awt::Size SAL_CALL Graphic::getSize()
@@ -160,7 +153,6 @@ awt::Size SAL_CALL Graphic::getSize()
     }
     return awt::Size(aVclSize.Width(), aVclSize.Height());
 }
-
 
 uno::Sequence<sal_Int8> SAL_CALL Graphic::getDIB()
 {
@@ -179,7 +171,6 @@ uno::Sequence<sal_Int8> SAL_CALL Graphic::getDIB()
     }
 }
 
-
 uno::Sequence<sal_Int8> SAL_CALL Graphic::getMaskDIB()
 {
     SolarMutexGuard aGuard;
@@ -197,14 +188,12 @@ uno::Sequence<sal_Int8> SAL_CALL Graphic::getMaskDIB()
     }
 }
 
-
 const ::Graphic* Graphic::getImplementation( const uno::Reference< uno::XInterface >& rxIFace )
     throw()
 {
     uno::Reference< lang::XUnoTunnel > xTunnel( rxIFace, uno::UNO_QUERY );
     return( xTunnel.is() ? reinterpret_cast< ::Graphic* >( xTunnel->getSomething( ::Graphic::getUnoTunnelId() ) ) : nullptr );
 }
-
 
 sal_Int64 SAL_CALL Graphic::getSomething( const uno::Sequence< sal_Int8 >& rId )
 {

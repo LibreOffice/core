@@ -39,7 +39,6 @@ class Graphic : public css::graphic::XGraphic,
                 public ::unographic::GraphicTransformer
 {
 public:
-
     Graphic();
     virtual ~Graphic() throw() override;
 
