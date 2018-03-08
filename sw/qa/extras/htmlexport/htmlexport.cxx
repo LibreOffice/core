@@ -379,10 +379,6 @@ DECLARE_HTMLEXPORT_ROUNDTRIP_TEST(testReqIfOleImg, "reqif-ole-img.xhtml")
     // This was only 1247, size was not set explicitly.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(aLogic.getWidth()), aSize.Width);
 
-    if (mbExported)
-        // The below is not yet working for export.
-        return;
-
     // Check mime/media types.
     CPPUNIT_ASSERT_EQUAL(OUString("image/png"), getProperty<OUString>(xGraphic, "MimeType"));
 
@@ -391,8 +387,12 @@ DECLARE_HTMLEXPORT_ROUNDTRIP_TEST(testReqIfOleImg, "reqif-ole-img.xhtml")
     auto aStreamName = getProperty<OUString>(xObject, "StreamName");
     uno::Reference<io::XStream> xStream
         = xStorage->openStreamElement(aStreamName, embed::ElementModes::READ);
-    // This was empty.
+    // This was empty when either import or export handling was missing.
     CPPUNIT_ASSERT_EQUAL(OUString("text/rtf"), getProperty<OUString>(xStream, "MediaType"));
+
+    if (mbExported)
+        // The below is not yet working for export.
+        return;
 
     // Check alternate text (it was empty).
     CPPUNIT_ASSERT_EQUAL(OUString("OLE Object"), getProperty<OUString>(xObject, "Title").trim());

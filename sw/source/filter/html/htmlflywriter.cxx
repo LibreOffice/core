@@ -1385,6 +1385,18 @@ Writer& OutHTML_Image( Writer& rWrt, const SwFrameFormat &rFrameFormat,
         aHtml.attribute(aAttribute, sBuffer.makeStringAndClear().getStr());
     }
 
+    if (nFrameOpts & HtmlFrmOpts::Replacement)
+    {
+        // Handle XHTML type attribute for OLE replacement images.
+        uno::Reference<beans::XPropertySet> xGraphic(rGraphic.GetXGraphic(), uno::UNO_QUERY);
+        if (xGraphic.is())
+        {
+            OUString aMimeType;
+            xGraphic->getPropertyValue("MimeType") >>= aMimeType;
+            aHtml.attribute(OOO_STRING_SVTOOLS_HTML_O_type, aMimeType.toUtf8());
+        }
+    }
+
     // Events
     if (SfxItemState::SET == rItemSet.GetItemState(RES_FRMMACRO, true, &pItem))
     {
