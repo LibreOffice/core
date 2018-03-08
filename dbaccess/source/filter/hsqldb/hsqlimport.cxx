@@ -155,8 +155,12 @@ void lcl_setParams(const RowVector& row, Reference<XParameters>& xParam,
                 // TODO
                 break;
             case DataType::BOOLEAN:
-                // TODO
-                break;
+            {
+                bool bVal = false;
+                if (row.at(i) >>= bVal)
+                    xParam->setBoolean(i + 1, bVal);
+            }
+            break;
             case DataType::OTHER:
                 // TODO
                 break;
