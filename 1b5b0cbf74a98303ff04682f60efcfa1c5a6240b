@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba2be162_79ade887",
+        "filename": "include/editeng/svxenum.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 204,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-03-08T12:45:23Z",
+      "side": 1,
+      "message": "Please follow existing naming conventions, so here that should be\n\n SVX_NUM_NUMBER_EAST_ARABIC_INDIC \u003d ...\n SVX_NUM_NUMBER_INDIC_DEVANAGARI \u003d ...",
+      "revId": "1b5b0cbf74a98303ff04682f60efcfa1c5a6240b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
