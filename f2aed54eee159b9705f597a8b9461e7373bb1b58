@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba2be162_f981d8fc",
+        "filename": "icon-themes/colibre/COPYING-ICONS",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000130
+      },
+      "writtenOn": "2018-03-08T12:36:49Z",
+      "side": 1,
+      "message": "obviously not Breeze, no? did you just copy this (and COPYING.LIB) without taking care?",
+      "revId": "f2aed54eee159b9705f597a8b9461e7373bb1b58",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
