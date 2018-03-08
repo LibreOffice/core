@@ -3927,6 +3927,9 @@ $(call gb_Executable_add_runtime_dependencies,saxparser,\
 )
 endef
 
+# Executable_svidl links against Library_tl, which links against Library_comphelper, which links
+# against libraries from ExternalProject_gpgmepp, which links against libraries from
+# ExternalProject_libassuan and ExternalProject_libgpg-error:
 define gb_Executable__register_svidl
 $(call gb_Executable_add_runtime_dependencies,svidl, \
     $(call gb_Helper_optional,GPGMEPP, \
