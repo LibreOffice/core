@@ -52,10 +52,10 @@ private:
     void                ImpReadCERNLine( const OString& rLine );
     static Point        ImpReadCERNCoords( const char** ppStr );
     static long         ImpReadCERNRadius( const char** ppStr );
-    static OUString     ImpReadCERNURL( const char** ppStr, const OUString& rBaseURL );
+    static OUString     ImpReadCERNURL( const char** ppStr );
 
     void                ImpReadNCSALine( const OString& rLine );
-    static OUString     ImpReadNCSAURL( const char** ppStr, const OUString& rBaseURL );
+    static OUString     ImpReadNCSAURL( const char** ppStr );
     static Point        ImpReadNCSACoords( const char** ppStr );
 
     static sal_uLong    ImpDetectFormat( SvStream& rIStm );

@@ -61,9 +61,9 @@ inline double ImplGetParameter( const Point& rCenter, const Point& rPt, double f
     return atan2(fWR*sin(fAngle), fHR*cos(fAngle));
 }
 
-ImplPolygon::ImplPolygon( sal_uInt16 nInitSize, bool bFlags  )
+ImplPolygon::ImplPolygon( sal_uInt16 nInitSize  )
 {
-    ImplInitSize(nInitSize, bFlags);
+    ImplInitSize(nInitSize, false);
 }
 
 ImplPolygon::ImplPolygon( const ImplPolygon& rImpPoly )

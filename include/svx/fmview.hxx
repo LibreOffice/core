@@ -92,7 +92,6 @@ public:
         const css::uno::Reference< css::beans::XPropertySet >& _rxField,
         const css::uno::Reference< css::util::XNumberFormats >& _rxNumberFormats,
         sal_uInt16 _nControlObjectID,
-        const OUString& _rFieldPostfix,
         SdrInventor _nInventor,
         sal_uInt16 _nLabelObjectID,
         SdrPage* _pLabelPage,

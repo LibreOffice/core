@@ -30,11 +30,10 @@ enum class FontToSubsFontFlags
 {
     IMPORT                   = 0x01,
     EXPORT                   = 0x02,
-    ONLYOLDSOSYMBOLFONTS     = 0x04,
 };
 namespace o3tl
 {
-    template<> struct typed_flags<FontToSubsFontFlags> : is_typed_flags<FontToSubsFontFlags, 0x07> {};
+    template<> struct typed_flags<FontToSubsFontFlags> : is_typed_flags<FontToSubsFontFlags, 0x03> {};
 }
 
 typedef void* FontToSubsFontConverter;

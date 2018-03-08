@@ -1306,7 +1306,7 @@ struct RecodeTable { const char* pOrgName; ConvertChar aCvt;};
 static const RecodeTable aStarSymbolRecodeTable[] =
 {
     // the first two entries must be StarMath and StarBats; do not reorder!
-    // reason: fgrep for FONTTOSUBSFONT_ONLYOLDSOSYMBOLFONTS
+    // reason: see CreateFontToSubsFontConverter method
     {"starbats",        {aStarBatsTab,  "StarSymbol", nullptr}},
     {"starmath",        {aStarMathTab,  "StarSymbol", nullptr}},
 
@@ -1388,9 +1388,7 @@ FontToSubsFontConverter CreateFontToSubsFontConverter( const OUString& rOrgName,
 
     if ( nFlags & FontToSubsFontFlags::IMPORT )
     {
-        int nEntries = SAL_N_ELEMENTS(aStarSymbolRecodeTable);
-        if ( nFlags & FontToSubsFontFlags::ONLYOLDSOSYMBOLFONTS ) // only StarMath+StarBats
-            nEntries = 2;
+        int nEntries = 2; // only StarMath+StarBats
         for( int i = 0; i < nEntries; ++i )
         {
             const RecodeTable& r = aStarSymbolRecodeTable[i];
@@ -1403,7 +1401,7 @@ FontToSubsFontConverter CreateFontToSubsFontConverter( const OUString& rOrgName,
     }
     else
     {
-        // TODO: FontToSubsFontFlags::ONLYOLDSOSYMBOLFONTS
+        // TODO: only StarMath+StarBats
         if( aName == "starsymbol" )
             pCvt = &aImplStarSymbolCvt;
         else if( aName == "opensymbol" )

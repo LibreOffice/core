@@ -58,7 +58,7 @@ SvStream& Out_Hex( SvStream& rStream, sal_uLong nHex, sal_uInt8 nLen )
 // U+1D44E being encoded as UTF-16 surrogate pair "\u-10187?\u-9138?", so
 // sal_Unicode actually works fine here.
 SvStream& Out_Char(SvStream& rStream, sal_Unicode c,
-    int *pUCMode, rtl_TextEncoding eDestEnc, bool bWriteHelpFile)
+    int *pUCMode, rtl_TextEncoding eDestEnc)
 {
     const sal_Char* pStr = nullptr;
     switch (c)
@@ -84,36 +84,33 @@ SvStream& Out_Char(SvStream& rStream, sal_Unicode c,
         pStr = OOO_STRING_SVTOOLS_RTF_TAB;
         break;
     default:
-        if(!bWriteHelpFile)
+        switch(c)
         {
-            switch(c)
-            {
-                case 149:
-                    pStr = OOO_STRING_SVTOOLS_RTF_BULLET;
-                    break;
-                case 150:
-                    pStr = OOO_STRING_SVTOOLS_RTF_ENDASH;
-                    break;
-                case 151:
-                    pStr = OOO_STRING_SVTOOLS_RTF_EMDASH;
-                    break;
-                case 145:
-                    pStr = OOO_STRING_SVTOOLS_RTF_LQUOTE;
-                    break;
-                case 146:
-                    pStr = OOO_STRING_SVTOOLS_RTF_RQUOTE;
-                    break;
-                case 147:
-                    pStr = OOO_STRING_SVTOOLS_RTF_LDBLQUOTE;
-                    break;
-                case 148:
-                    pStr = OOO_STRING_SVTOOLS_RTF_RDBLQUOTE;
-                    break;
-            }
-
-            if (pStr)
+            case 149:
+                pStr = OOO_STRING_SVTOOLS_RTF_BULLET;
+                break;
+            case 150:
+                pStr = OOO_STRING_SVTOOLS_RTF_ENDASH;
+                break;
+            case 151:
+                pStr = OOO_STRING_SVTOOLS_RTF_EMDASH;
+                break;
+            case 145:
+                pStr = OOO_STRING_SVTOOLS_RTF_LQUOTE;
+                break;
+            case 146:
+                pStr = OOO_STRING_SVTOOLS_RTF_RQUOTE;
+                break;
+            case 147:
+                pStr = OOO_STRING_SVTOOLS_RTF_LDBLQUOTE;
+                break;
+            case 148:
+                pStr = OOO_STRING_SVTOOLS_RTF_RDBLQUOTE;
                 break;
         }
+
+        if (pStr)
+            break;
 
         switch (c)
         {
@@ -186,7 +183,7 @@ SvStream& RTFOutFuncs::Out_String( SvStream& rStream, const OUString& rStr,
 {
     int nUCMode = 1;
     for (sal_Int32 n = 0; n < rStr.getLength(); ++n)
-        Out_Char(rStream, rStr[n], &nUCMode, eDestEnc, false/*bWriteHelpFile*/);
+        Out_Char(rStream, rStr[n], &nUCMode, eDestEnc);
     if (nUCMode != 1)
       rStream.WriteCharPtr( "\\uc1" ).WriteCharPtr( " " ); // #i47831# add an additional whitespace, so that "document whitespaces" are not ignored.;
     return rStream;

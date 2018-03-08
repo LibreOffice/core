@@ -238,7 +238,7 @@ namespace sdr
                     }
                 }
 
-                if(mbRefreshWithPreRendering)
+                // refresh with prerendering
                 {
                     // #i73602# ensure valid and sized mpOutputBufferDevice
                     const Size aDestinationSizePixel(mpBufferDevice->GetOutputSizePixel());
@@ -325,15 +325,6 @@ namespace sdr
                         getOutputDevice().EnableMapMode(bMapModeWasEnabledDest);
                     }
                 }
-                else
-                {
-                    // Restore all rectangles for remembered region from buffer
-                    ImpRestoreBackground();
-
-                    // paint overlay content for remembered region, use
-                    // method from base class directly
-                    OverlayManager::ImpDrawMembers(aBufferRememberedRangeLogic, getOutputDevice());
-                }
 
                 // VCL hack for transparent child windows
                 // Problem is e.g. a radiobutton form control in life mode. The used window
@@ -374,13 +365,11 @@ namespace sdr
         }
 
         OverlayManagerBuffered::OverlayManagerBuffered(
-            OutputDevice& rOutputDevice,
-            bool bRefreshWithPreRendering)
+            OutputDevice& rOutputDevice)
         :   OverlayManager(rOutputDevice),
             mpBufferDevice(VclPtr<VirtualDevice>::Create()),
             mpOutputBufferDevice(VclPtr<VirtualDevice>::Create()),
-            maBufferIdle("sdr overlay OverlayManagerBuffered Idle"),
-            mbRefreshWithPreRendering(bRefreshWithPreRendering)
+            maBufferIdle("sdr overlay OverlayManagerBuffered Idle")
         {
             // Init timer
             maBufferIdle.SetPriority( TaskPriority::POST_PAINT );
@@ -391,8 +380,7 @@ namespace sdr
         rtl::Reference<OverlayManager> OverlayManagerBuffered::create(
             OutputDevice& rOutputDevice)
         {
-            return rtl::Reference<OverlayManager>(new OverlayManagerBuffered(rOutputDevice,
-                true/*bRefreshWithPreRendering*/));
+            return rtl::Reference<OverlayManager>(new OverlayManagerBuffered(rOutputDevice));
         }
 
         OverlayManagerBuffered::~OverlayManagerBuffered()

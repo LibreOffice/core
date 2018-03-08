@@ -828,7 +828,7 @@ sal_Int32 SvxLanguageComboBox::SaveEditedAsEntry()
     {
         // Add to both, SvtLanguageTable and SvxLanguageComboBox.
         /* TODO: a descriptive user comment would be a nice to have here. */
-        SvtLanguageTable::AddLanguageTag( aLanguageTag, OUString());
+        SvtLanguageTable::AddLanguageTag( aLanguageTag );
     }
 
     nPos = InsertLanguage( nLang);

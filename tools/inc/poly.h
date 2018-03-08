@@ -33,7 +33,7 @@ public:
 
 public:
                     ImplPolygon() : mnPoints(0) {}
-                    ImplPolygon( sal_uInt16 nInitSize, bool bFlags = false );
+                    ImplPolygon( sal_uInt16 nInitSize );
                     ImplPolygon( sal_uInt16 nPoints, const Point* pPtAry, const PolyFlags* pInitFlags );
                     ImplPolygon( const ImplPolygon& rImplPoly );
                     ImplPolygon( const tools::Rectangle& rRect );
