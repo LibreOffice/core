@@ -128,7 +128,7 @@ public:
 
     ~SwSpellPopup();
 
-    Menu&   GetMenu()
+    PopupMenu& GetMenu()
     {
         return *m_xPopupMenu.get();
     }
