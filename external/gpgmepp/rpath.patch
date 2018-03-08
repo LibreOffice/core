@@ -1,0 +1,12 @@
+--- configure.ac
++++ configure.ac
+@@ -176,6 +176,9 @@
+ LT_INIT([win32-dll disable-static])
+ LT_LANG([Windows Resource])
+ 
++hardcode_libdir_flag_spec=
++hardcode_libdir_flag_spec_CXX=
++
+ # For now we hardcode the use of version scripts.  It would be better
+ # to write a test for this or even implement this within libtool.
+ have_ld_version_script=no

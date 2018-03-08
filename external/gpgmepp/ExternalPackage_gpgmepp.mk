@@ -29,6 +29,12 @@ $(eval $(call gb_ExternalPackage_add_file,gpgmepp,$(LIBO_LIB_FOLDER)/gpgme-w32sp
 
 endif
 
+# If a tool executed during the build (like svidl) requires these gpgmepp libraries, it will also
+# require those libassuan and libgpg-error libraries that these gpgmepp libraries link against:
+$(call gb_Package_get_target_for_build,gpgmepp): \
+     $(call gb_Helper_optional,LIBASSUAN,$(call gb_Package_get_target_for_build,libassuan)) \
+     $(call gb_Helper_optional,LIBGPGERROR,$(call gb_Package_get_target_for_build,libgpg-error))
+
 endif # $(DISABLE_DYNLOADING)
 
 # vim: set noet sw=4 ts=4:
