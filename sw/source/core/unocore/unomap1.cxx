@@ -849,7 +849,6 @@ const SfxItemPropertyMapEntry*  SwUnoPropertyMapProvider::GetGraphicPropertyMap(
         { OUString(UNO_NAME_HORI_MIRRORED_ON_EVEN_PAGES), RES_GRFATR_MIRRORGRF, cppu::UnoType<bool>::get(),             PROPERTY_NONE,      MID_MIRROR_HORZ_EVEN_PAGES            },
         { OUString(UNO_NAME_HORI_MIRRORED_ON_ODD_PAGES), RES_GRFATR_MIRRORGRF,  cppu::UnoType<bool>::get(),             PROPERTY_NONE,      MID_MIRROR_HORZ_ODD_PAGES                 },
         { OUString(UNO_NAME_VERT_MIRRORED), RES_GRFATR_MIRRORGRF,   cppu::UnoType<bool>::get(),             PROPERTY_NONE,     MID_MIRROR_VERT            },
-        { OUString(UNO_NAME_GRAPHIC_URL), FN_UNO_GRAPHIC_U_R_L, cppu::UnoType<OUString>::get(), 0, 0 },
         { OUString(UNO_NAME_REPLACEMENT_GRAPHIC), FN_UNO_REPLACEMENT_GRAPHIC, cppu::UnoType<css::graphic::XGraphic>::get(), 0, 0 },
         { OUString(UNO_NAME_GRAPHIC_FILTER), FN_UNO_GRAPHIC_FILTER,      cppu::UnoType<OUString>::get(), 0, 0 },
         { OUString(UNO_NAME_GRAPHIC), FN_UNO_GRAPHIC, cppu::UnoType<css::graphic::XGraphic>::get(), 0, 0 },

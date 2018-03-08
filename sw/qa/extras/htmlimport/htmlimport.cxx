@@ -78,14 +78,10 @@ DECLARE_HTMLIMPORT_TEST(testInlinedImage, "inlined_image.html")
     uno::Reference<container::XNamed> const xNamed(xShape, uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT_EQUAL(OUString("Image1"), xNamed->getName());
 
-    uno::Reference<graphic::XGraphic> xGraphic =
-        getProperty< uno::Reference<graphic::XGraphic> >(xShape, "Graphic");
+    uno::Reference<graphic::XGraphic> xGraphic;
+    xGraphic = getProperty< uno::Reference<graphic::XGraphic> >(xShape, "Graphic");
     CPPUNIT_ASSERT(xGraphic.is());
     CPPUNIT_ASSERT(xGraphic->getType() != graphic::GraphicType::EMPTY);
-
-    OUString sGraphicURL = getProperty< OUString >(xShape, "GraphicURL");
-    // Before it was "data:image/png;base64,<data>"
-    CPPUNIT_ASSERT(sGraphicURL.startsWith("vnd.sun.star.GraphicObject:"));
 
     for (int n = 0; ; n++)
     {

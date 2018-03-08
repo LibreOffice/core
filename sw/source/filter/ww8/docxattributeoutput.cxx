@@ -4482,14 +4482,14 @@ void DocxAttributeOutput::WriteSrcRect(const SdrObject* pSdrObj, const SwFrameFo
     uno::Reference< drawing::XShape > xShape( const_cast<SdrObject*>(pSdrObj)->getUnoShape(), uno::UNO_QUERY );
     uno::Reference< beans::XPropertySet > xPropSet( xShape, uno::UNO_QUERY );
 
-    OUString sUrl;
-    xPropSet->getPropertyValue("GraphicURL") >>= sUrl;
-    const GraphicObject aGrafObj(GraphicObject::CreateGraphicObjectFromURL(sUrl));
+    uno::Reference<graphic::XGraphic> xGraphic;
+    xPropSet->getPropertyValue("Graphic") >>= xGraphic;
+    const Graphic aGraphic(xGraphic);
 
-    Size aOriginalSize(aGrafObj.GetPrefSize());
+    Size aOriginalSize(aGraphic.GetPrefSize());
 
     const MapMode aMap100mm( MapUnit::Map100thMM );
-    const MapMode& rMapMode = aGrafObj.GetPrefMapMode();
+    const MapMode& rMapMode = aGraphic.GetPrefMapMode();
     if (rMapMode.GetMapUnit() == MapUnit::MapPixel)
     {
         aOriginalSize = Application::GetDefaultDevice()->PixelToLogic(aOriginalSize, aMap100mm);

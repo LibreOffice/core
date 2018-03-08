@@ -517,24 +517,6 @@ void RtfSdrExport::impl_writeGraphic()
     {
         aGraphic = Graphic(xGraphic);
     }
-    else
-    {
-        OUString sGraphicURL;
-        try
-        {
-            xPropertySet->getPropertyValue("GraphicURL") >>= sGraphicURL;
-        }
-        catch (beans::UnknownPropertyException& rException)
-        {
-            // ATM groupshapes are not supported, just make sure we don't crash on them.
-            SAL_WARN("sw.rtf", "failed. Message: " << rException);
-            return;
-        }
-
-        OString aURLBS(OUStringToOString(sGraphicURL, RTL_TEXTENCODING_UTF8));
-        OString aUrl = aURLBS.copy(RTL_CONSTASCII_LENGTH("vnd.sun.star.GraphicObject:"));
-        aGraphic = GraphicObject(aUrl).GetTransformedGraphic();
-    }
 
     // Export it to a stream.
     SvMemoryStream aStream;
