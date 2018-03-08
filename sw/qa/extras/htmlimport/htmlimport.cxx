@@ -299,15 +299,6 @@ DECLARE_HTMLIMPORT_TEST(testReqIfBr, "reqif-br.xhtml")
     CPPUNIT_ASSERT(getParagraph(1)->getString().startsWith("aaa\nbbb"));
 }
 
-DECLARE_HTMLIMPORT_TEST(testReqIfOleData, "reqif-ole-data.xhtml")
-{
-    uno::Reference<text::XTextEmbeddedObjectsSupplier> xSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xObjects(xSupplier->getEmbeddedObjects(),
-                                                     uno::UNO_QUERY);
-    // This was 0, <object> without URL was ignored.
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), xObjects->getCount());
-}
-
 DECLARE_HTMLIMPORT_TEST(testReqIfOleImg, "reqif-ole-img.xhtml")
 {
     uno::Reference<text::XTextEmbeddedObjectsSupplier> xSupplier(mxComponent, uno::UNO_QUERY);
