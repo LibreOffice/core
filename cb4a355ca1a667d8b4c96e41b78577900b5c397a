@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba2be162_7977a802",
+        "filename": "qadevOOo/.classpath",
+        "patchSetId": 1
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-03-08T13:57:38Z",
+      "side": 1,
+      "message": "perhaps output should be \n   workdir/bin\n?",
+      "revId": "cb4a355ca1a667d8b4c96e41b78577900b5c397a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
