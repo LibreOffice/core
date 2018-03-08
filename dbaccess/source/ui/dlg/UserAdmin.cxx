@@ -216,7 +216,7 @@ IMPL_LINK( OUserAdmin, UserHdl, Button *, pButton, void )
         {
             SfxPasswordDialog aPwdDlg(GetFrameWeld());
             aPwdDlg.ShowExtras(SfxShowExtras::ALL);
-            if (aPwdDlg.run())
+            if (aPwdDlg.execute())
             {
                 Reference<XDataDescriptorFactory> xUserFactory(m_xUsers,UNO_QUERY);
                 Reference<XPropertySet> xNewUser = xUserFactory->createDataDescriptor();

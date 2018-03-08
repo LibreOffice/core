@@ -1479,6 +1479,12 @@ namespace weld
         , m_xDialog(m_xBuilder->weld_dialog(rDialogId))
     {
     }
+
+    MessageDialogController::MessageDialogController(weld::Widget* pParent, const OUString &rUIFile, const OString& rDialogId)
+        : m_xBuilder(Application::CreateBuilder(pParent, rUIFile))
+        , m_xDialog(m_xBuilder->weld_message_dialog(rDialogId))
+    {
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

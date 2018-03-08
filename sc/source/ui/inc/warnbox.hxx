@@ -24,10 +24,8 @@
 
 /** Warning box for "Replace cell contents?".
     With warning image and "Do not show again" checkbox. */
-class ScReplaceWarnBox
+class ScReplaceWarnBox : public weld::MessageDialogController
 {
-    std::unique_ptr<weld::Builder> m_xBuilder;
-    std::unique_ptr<weld::MessageDialog> m_xDialog;
     std::unique_ptr<weld::CheckButton> m_xWarningOnBox;
     std::unique_ptr<weld::Container> m_xOrigParent;
     std::unique_ptr<weld::Container> m_xContentArea;
@@ -38,7 +36,7 @@ public:
     /** Opens dialog if IsDialogEnabled() returns true.
         @descr  If after executing the dialog the checkbox "Do not show again" is set,
                 the method DisableDialog() will be called. */
-    short run();
+    short execute();
 };
 
 #endif

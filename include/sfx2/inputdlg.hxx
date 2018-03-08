@@ -13,18 +13,15 @@
 #include <sfx2/dllapi.h>
 #include <vcl/weld.hxx>
 
-class SFX2_DLLPUBLIC InputDialog
+class SFX2_DLLPUBLIC InputDialog : public weld::GenericDialogController
 {
 private:
-    std::unique_ptr<weld::Builder> m_xBuilder;
-    std::unique_ptr<weld::Dialog> m_xDialog;
     std::unique_ptr<weld::Entry> m_xEntry;
     std::unique_ptr<weld::Label> m_xLabel;
     std::unique_ptr<weld::Button> m_xHelp;
 
 public:
     InputDialog(weld::Window* pParent, const OUString &rLabelText);
-    short run() { return m_xDialog->run(); }
     OUString GetEntryText() const;
     void SetEntryText(const OUString& rStr);
     void HideHelpBtn();

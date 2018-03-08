@@ -304,22 +304,18 @@ namespace
         return nullptr;
     }
 
-    class LicenseDialog
+    class LicenseDialog : public weld::GenericDialogController
     {
-    private:
-        std::unique_ptr<weld::Builder> m_xBuilder;
-        std::unique_ptr<weld::Dialog> m_xDialog;
         std::unique_ptr<weld::Label> m_xLabel;
     public:
         LicenseDialog(weld::Window* pParent)
-            : m_xBuilder(Application::CreateBuilder(pParent, "sfx/ui/licensedialog.ui"))
-            , m_xDialog(m_xBuilder->weld_dialog("LicenseDialog"))
+            : GenericDialogController(pParent, "sfx/ui/licensedialog.ui",  "LicenseDialog")
             , m_xLabel(m_xBuilder->weld_label("label"))
         {
             m_xLabel->set_label(Translate::GetReadStringHook()(m_xLabel->get_label()));
         }
 
-        short run()
+        short execute()
         {
             short nRet = m_xDialog->run();
             if (nRet == RET_OK)
@@ -328,20 +324,16 @@ namespace
         }
     };
 
-    class SafeModeQueryDialog
+    class SafeModeQueryDialog : public weld::MessageDialogController
     {
-    private:
-        std::unique_ptr<weld::Builder> m_xBuilder;
-        std::unique_ptr<weld::MessageDialog> m_xDialog;
     public:
         SafeModeQueryDialog(weld::Window* pParent)
-            : m_xBuilder(Application::CreateBuilder(pParent, "sfx/ui/safemodequerydialog.ui"))
-            , m_xDialog(m_xBuilder->weld_message_dialog("SafeModeQueryDialog"))
+            : MessageDialogController(pParent, "sfx/ui/safemodequerydialog.ui", "SafeModeQueryDialog")
         {
             m_xDialog->set_primary_text(Translate::GetReadStringHook()(m_xDialog->get_primary_text()));
         }
 
-        short run()
+        short execute()
         {
             short nRet = m_xDialog->run();
             if (nRet == RET_OK)
@@ -572,7 +564,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
         case SID_SHOW_LICENSE:
         {
             LicenseDialog aDialog(rReq.GetFrameWeld());
-            aDialog.run();
+            aDialog.execute();
             break;
         }
 
@@ -1036,7 +1028,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
         case SID_SAFE_MODE:
         {
             SafeModeQueryDialog aDialog(rReq.GetFrameWeld());
-            aDialog.run();
+            aDialog.execute();
             break;
         }
 

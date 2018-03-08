@@ -34,8 +34,7 @@ using namespace ::com::sun::star::frame;
 // Class SfxSaveAsTemplateDialog --------------------------------------------------
 
 SfxSaveAsTemplateDialog::SfxSaveAsTemplateDialog(weld::Window* pParent, const uno::Reference<frame::XModel> &rModel)
-    : m_xBuilder(Application::CreateBuilder(pParent, "sfx/ui/saveastemplatedlg.ui"))
-    , m_xDialog(m_xBuilder->weld_dialog("SaveAsTemplateDialog"))
+    : GenericDialogController(pParent, "sfx/ui/saveastemplatedlg.ui", "SaveAsTemplateDialog")
     , m_xLBCategory(m_xBuilder->weld_tree_view("categorylb"))
     , m_xCBXDefault(m_xBuilder->weld_check_button("defaultcb"))
     , m_xTemplateNameEdit(m_xBuilder->weld_entry("name_entry"))

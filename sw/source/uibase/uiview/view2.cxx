@@ -567,7 +567,7 @@ void SwView::Execute(SfxRequest &rReq)
                     SfxPasswordDialog aPasswdDlg(pParent);
                     aPasswdDlg.SetMinLen(1);
                     //#i69751# the result of Execute() can be ignored
-                    (void)aPasswdDlg.run();
+                    (void)aPasswdDlg.execute();
                     OUString sNewPasswd(aPasswdDlg.GetPassword());
                     Sequence <sal_Int8> aNewPasswd = rIDRA.GetRedlinePassword();
                     SvPasswordHelper::GetHashPassword( aNewPasswd, sNewPasswd );
@@ -609,7 +609,7 @@ void SwView::Execute(SfxRequest &rReq)
             aPasswdDlg.SetMinLen(1);
             if (!aPasswd.getLength())
                 aPasswdDlg.ShowExtras(SfxShowExtras::CONFIRM);
-            if (aPasswdDlg.run())
+            if (aPasswdDlg.execute())
             {
                 RedlineFlags nOn = RedlineFlags::On;
                 OUString sNewPasswd(aPasswdDlg.GetPassword());
