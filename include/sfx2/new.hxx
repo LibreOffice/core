@@ -54,11 +54,9 @@ namespace o3tl
 
 #define RET_TEMPLATE_LOAD       100
 
-class SFX2_DLLPUBLIC SfxNewFileDialog
+class SFX2_DLLPUBLIC SfxNewFileDialog : public weld::GenericDialogController
 {
 private:
-    std::unique_ptr<weld::Builder> m_xBuilder;
-    std::unique_ptr<weld::Dialog> m_xDialog;
     std::unique_ptr<weld::TreeView> m_xRegionLb;
     std::unique_ptr<weld::TreeView> m_xTemplateLb;
     std::unique_ptr<weld::CheckButton> m_xTextStyleCB;
@@ -87,9 +85,7 @@ private:
 
 public:
     SfxNewFileDialog(weld::Window *pParent, SfxNewFileDialogMode nFlags);
-    void set_title(const OUString& rTitle) { m_xDialog->set_title(rTitle); }
-    short run() { return m_xDialog->run(); }
-    ~SfxNewFileDialog();
+    virtual ~SfxNewFileDialog() override;
 
     // Returns false, when '- No -' is set as Template
     // Template names can only be obtained when IsTemplate() returns true.

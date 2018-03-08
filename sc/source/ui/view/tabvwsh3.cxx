@@ -1067,7 +1067,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                         aDlg.set_help_id(GetStaticInterface()->GetSlot(FID_PROTECT_DOC)->GetCommand());
                         aDlg.SetEditHelpId(HID_PASSWD_DOC);
 
-                        if (aDlg.run() == RET_OK)
+                        if (aDlg.execute() == RET_OK)
                             aPassword = aDlg.GetPassword();
                         else
                             bCancel = true;
@@ -1091,7 +1091,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                     aDlg.ShowExtras(SfxShowExtras::CONFIRM);
                     aDlg.SetConfirmHelpId(HID_PASSWD_DOC_CONFIRM);
 
-                    if (aDlg.run() == RET_OK)
+                    if (aDlg.execute() == RET_OK)
                     {
                         OUString aPassword = aDlg.GetPassword();
                         Protect( TABLEID_DOC, aPassword );
@@ -1137,7 +1137,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                     aDlg.set_help_id(GetStaticInterface()->GetSlot(FID_PROTECT_TABLE)->GetCommand());
                     aDlg.SetEditHelpId(HID_PASSWD_TABLE);
 
-                    if (aDlg.run() == RET_OK)
+                    if (aDlg.execute() == RET_OK)
                     {
                         OUString aPassword = aDlg.GetPassword();
                         Unprotect(nTab, aPassword);

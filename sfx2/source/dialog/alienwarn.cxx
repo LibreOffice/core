@@ -27,8 +27,7 @@
 
 SfxAlienWarningDialog::SfxAlienWarningDialog(weld::Window* pParent, const OUString& _rFormatName,
                                              const OUString& _rDefaultExtension, bool rDefaultIsAlien)
-    : m_xBuilder(Application::CreateBuilder(pParent, "sfx/ui/alienwarndialog.ui"))
-    , m_xDialog(m_xBuilder->weld_message_dialog("AlienWarnDialog"))
+    : MessageDialogController(pParent, "sfx/ui/alienwarndialog.ui", "AlienWarnDialog")
     , m_xKeepCurrentBtn(m_xBuilder->weld_button("save"))
     , m_xUseDefaultFormatBtn(m_xBuilder->weld_button("cancel"))
     , m_xWarningOnBox(m_xBuilder->weld_check_button("ask"))

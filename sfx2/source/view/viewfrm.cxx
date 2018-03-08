@@ -154,22 +154,19 @@ void SfxViewFrame::InitInterface_Impl()
 
 namespace {
 /// Asks the user if editing a read-only document is really wanted.
-class SfxEditDocumentDialog
+class SfxEditDocumentDialog : public weld::MessageDialogController
 {
 private:
-    std::unique_ptr<weld::Builder> m_xBuilder;
-    std::unique_ptr<weld::MessageDialog> m_xDialog;
     std::unique_ptr<weld::Button> m_xEditDocument;
     std::unique_ptr<weld::Button> m_xCancel;
 
 public:
     SfxEditDocumentDialog(weld::Widget* pParent);
-    short run() { return m_xDialog->run(); }
 };
 
 SfxEditDocumentDialog::SfxEditDocumentDialog(weld::Widget* pParent)
-    : m_xBuilder(Application::CreateBuilder(pParent, "sfx/ui/editdocumentdialog.ui"))
-    , m_xDialog(m_xBuilder->weld_message_dialog("EditDocumentDialog"))
+    : MessageDialogController(pParent, "sfx/ui/editdocumentdialog.ui",
+            "EditDocumentDialog")
     , m_xEditDocument(m_xBuilder->weld_button("edit"))
     , m_xCancel(m_xBuilder->weld_button("cancel"))
 {

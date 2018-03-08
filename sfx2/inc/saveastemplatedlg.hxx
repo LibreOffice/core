@@ -15,11 +15,9 @@
 #include <vcl/weld.hxx>
 
 //  class SfxSaveAsTemplateDialog -------------------------------------------------------------------
-class SfxSaveAsTemplateDialog
+class SfxSaveAsTemplateDialog : public weld::GenericDialogController
 {
 private:
-    std::unique_ptr<weld::Builder> m_xBuilder;
-    std::unique_ptr<weld::Dialog> m_xDialog;
     std::unique_ptr<weld::TreeView> m_xLBCategory;
     std::unique_ptr<weld::CheckButton> m_xCBXDefault;
     std::unique_ptr<weld::Entry> m_xTemplateNameEdit;
@@ -51,7 +49,6 @@ public:
 public:
     SfxSaveAsTemplateDialog(weld::Window* pParent,
                             const css::uno::Reference<css::frame::XModel>& rModel);
-    short run() { return m_xDialog->run(); }
 };
 
 #endif // INCLUDED_SFX2_INC_SAVEASTEMPLATEDLG_HXX

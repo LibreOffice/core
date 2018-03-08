@@ -27,11 +27,8 @@ class SwView;
 class SwWrtShell;
 struct SwInsertTableOptions;
 
-class SwConvertTableDlg
+class SwConvertTableDlg : public weld::GenericDialogController
 {
-    std::unique_ptr<weld::Builder> m_xBuilder;
-    std::unique_ptr<weld::Dialog> m_xDialog;
-
     std::unique_ptr<weld::RadioButton> m_xTabBtn;
     std::unique_ptr<weld::RadioButton> m_xSemiBtn;
     std::unique_ptr<weld::RadioButton> m_xParaBtn;
@@ -62,8 +59,6 @@ class SwConvertTableDlg
 
 public:
     SwConvertTableDlg(SwView& rView, bool bToTable);
-
-    short run() { return m_xDialog->run(); }
 
     void GetValues( sal_Unicode& rDelim,
                     SwInsertTableOptions& rInsTableOpts,
