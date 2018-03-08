@@ -160,7 +160,6 @@
 #define UNO_NAME_MISC_OBJ_DESCRIPTION           "Description"
 
 #define UNO_NAME_GRAPHOBJ_FILLBITMAP            "GraphicObjectFillBitmap"
-#define UNO_NAME_GRAPHOBJ_GRAFURL               "GraphicURL"
 #define UNO_NAME_GRAPHOBJ_REPLACEMENT_GRAPHIC   "ReplacementGraphic"
 #define UNO_NAME_GRAPHOBJ_GRAFSTREAMURL         "GraphicStreamURL"
 #define UNO_NAME_GRAPHOBJ_URLPREFIX             "vnd.sun.star.GraphicObject:"

@@ -56,6 +56,7 @@
 #include <com/sun/star/awt/XBitmap.hpp>
 #include <com/sun/star/awt/FontDescriptor.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
+#include <com/sun/star/graphic/GraphicType.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
@@ -460,16 +461,13 @@ void SdExportTest::testSwappedOutImageExport()
 
         uno::Reference<drawing::XShape> xImage(xDrawPage->getByIndex(2), uno::UNO_QUERY);
         uno::Reference< beans::XPropertySet > XPropSet( xImage, uno::UNO_QUERY_THROW );
-        // Check URL
-        {
-            OUString sURL;
-            XPropSet->getPropertyValue("GraphicURL") >>= sURL;
-            CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), sURL != "vnd.sun.star.GraphicObject:00000000000000000000000000000000");
-        }
-        // Check size
+
+        // Check Graphic, Size
         {
             uno::Reference<graphic::XGraphic> xGraphic;
             XPropSet->getPropertyValue("Graphic") >>= xGraphic;
+            CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), xGraphic.is());
+            CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), xGraphic->getType() != graphic::GraphicType::EMPTY);
             uno::Reference<awt::XBitmap> xBitmap(xGraphic, uno::UNO_QUERY);
             CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), xBitmap.is());
             CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), static_cast<sal_Int32>(610), xBitmap->getSize().Width );
@@ -480,16 +478,13 @@ void SdExportTest::testSwappedOutImageExport()
         xDrawPage.set(xDrawPagesSupplier->getDrawPages()->getByIndex(1), uno::UNO_QUERY_THROW );
         xImage.set(xDrawPage->getByIndex(1), uno::UNO_QUERY);
         XPropSet.set( xImage, uno::UNO_QUERY_THROW );
-        // Check URL
-        {
-            OUString sURL;
-            XPropSet->getPropertyValue("GraphicURL") >>= sURL;
-            CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), sURL != "vnd.sun.star.GraphicObject:00000000000000000000000000000000");
-        }
-        // Check size
+
+        // Check Graphic, Size
         {
             uno::Reference<graphic::XGraphic> xGraphic;
             XPropSet->getPropertyValue("Graphic") >>= xGraphic;
+            CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), xGraphic.is());
+            CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), xGraphic->getType() != graphic::GraphicType::EMPTY);
             uno::Reference<awt::XBitmap> xBitmap(xGraphic, uno::UNO_QUERY);
             CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), xBitmap.is());
             CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), static_cast<sal_Int32>(900), xBitmap->getSize().Width );
@@ -671,16 +666,13 @@ void SdExportTest::testImageWithSpecialID()
 
         uno::Reference<drawing::XShape> xImage(xDrawPage->getByIndex(2), uno::UNO_QUERY);
         uno::Reference< beans::XPropertySet > XPropSet( xImage, uno::UNO_QUERY_THROW );
-        // Check URL
-        {
-            OUString sURL;
-            XPropSet->getPropertyValue("GraphicURL") >>= sURL;
-            CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), sURL != "vnd.sun.star.GraphicObject:00000000000000000000000000000000");
-        }
-        // Check size
+
+        // Check Graphic, Size
         {
             uno::Reference<graphic::XGraphic> xGraphic;
             XPropSet->getPropertyValue("Graphic") >>= xGraphic;
+            CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), xGraphic.is());
+            CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), xGraphic->getType() != graphic::GraphicType::EMPTY);
             uno::Reference<awt::XBitmap> xBitmap(xGraphic, uno::UNO_QUERY);
             CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), xBitmap.is());
             CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), static_cast<sal_Int32>(610), xBitmap->getSize().Width );
@@ -691,16 +683,13 @@ void SdExportTest::testImageWithSpecialID()
         xDrawPage.set(xDrawPagesSupplier->getDrawPages()->getByIndex(1), uno::UNO_QUERY_THROW );
         xImage.set(xDrawPage->getByIndex(1), uno::UNO_QUERY);
         XPropSet.set( xImage, uno::UNO_QUERY_THROW );
-        // Check URL
-        {
-            OUString sURL;
-            XPropSet->getPropertyValue("GraphicURL") >>= sURL;
-            CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), sURL != "vnd.sun.star.GraphicObject:00000000000000000000000000000000");
-        }
-        // Check size
+
+        // Check Graphic, Size
         {
             uno::Reference<graphic::XGraphic> xGraphic;
             XPropSet->getPropertyValue("Graphic") >>= xGraphic;
+            CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), xGraphic.is());
+            CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), xGraphic->getType() != graphic::GraphicType::EMPTY);
             uno::Reference<awt::XBitmap> xBitmap(xGraphic, uno::UNO_QUERY);
             CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), xBitmap.is());
             CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), static_cast<sal_Int32>(900), xBitmap->getSize().Width );

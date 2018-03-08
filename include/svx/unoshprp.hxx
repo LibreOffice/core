@@ -98,7 +98,7 @@
 #define OWN_ATTR_LDNAME                         (OWN_ATTR_VALUE_START+30)
 #define OWN_ATTR_LDBITMAP                       (OWN_ATTR_VALUE_START+31)
 #define OWN_ATTR_OLESIZE                        (OWN_ATTR_VALUE_START+32)
-#define OWN_ATTR_GRAFURL                        (OWN_ATTR_VALUE_START+33)
+//#define free                                  (OWN_ATTR_VALUE_START+33)
 #define OWN_ATTR_OLEMODEL                       (OWN_ATTR_VALUE_START+34)
 #define OWN_ATTR_MIRRORED                       (OWN_ATTR_VALUE_START+35)
 #define OWN_ATTR_CLSID                          (OWN_ATTR_VALUE_START+36)
@@ -426,7 +426,6 @@
 #define SPECIAL_GRAPHOBJ_PROPERTIES \
     SPECIAL_GRAPHOBJ_PROPERTIES_DEFAULTS \
     { OUString(UNO_NAME_GRAPHIC_GRAPHICCROP),           SDRATTR_GRAFCROP            , ::cppu::UnoType<css::text::GraphicCrop>::get(),        0,  0 }, \
-    { OUString(UNO_NAME_GRAPHOBJ_GRAFURL),              OWN_ATTR_GRAFURL            , ::cppu::UnoType<OUString>::get(), 0, 0 }, \
     { OUString(UNO_NAME_GRAPHOBJ_REPLACEMENT_GRAPHIC),  OWN_ATTR_REPLACEMENT_GRAPHIC, cppu::UnoType<css::graphic::XGraphic>::get()  ,   0,     0}, \
     { OUString(UNO_NAME_GRAPHOBJ_GRAFSTREAMURL),        OWN_ATTR_GRAFSTREAMURL      , ::cppu::UnoType<OUString>::get(), css::beans::PropertyAttribute::MAYBEVOID, 0 }, \
     { OUString(UNO_NAME_GRAPHOBJ_FILLBITMAP),           OWN_ATTR_VALUE_FILLBITMAP   , cppu::UnoType<css::awt::XBitmap>::get()  ,    0,     0},    \
