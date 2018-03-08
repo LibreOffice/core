@@ -446,8 +446,6 @@ void initDataRows(
         ScDrawLayer* pDrawLayer = rTab.GetDoc().GetDrawLayer();
         if (pDrawLayer)
             aRowDrawObjects = pDrawLayer->GetObjectsAnchoredToRange(rTab.GetTab(), nCol, nRow1, nRow2);
-        else
-            SAL_WARN("sc", "Could not retrieve anchored images, no DrawLayer available");
 
         for (SCROW nRow = nRow1; nRow <= nRow2; ++nRow)
         {
