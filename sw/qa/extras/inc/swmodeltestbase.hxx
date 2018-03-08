@@ -711,6 +711,23 @@ protected:
         {
             setTestInteractionHandler(pPassword, aFilterOptions);
         }
+
+        if (!maImportFilterOptions.isEmpty())
+        {
+            beans::PropertyValue aValue;
+            aValue.Name = "FilterOptions";
+            aValue.Value <<= maImportFilterOptions;
+            aFilterOptions.push_back(aValue);
+        }
+
+        if (!maImportFilterName.isEmpty())
+        {
+            beans::PropertyValue aValue;
+            aValue.Name = "FilterName";
+            aValue.Value <<= maImportFilterName;
+            aFilterOptions.push_back(aValue);
+        }
+
         mxComponent = loadFromDesktop(maTempFile.GetURL(), "com.sun.star.text.TextDocument", comphelper::containerToSequence(aFilterOptions));
         if (pPassword)
         {

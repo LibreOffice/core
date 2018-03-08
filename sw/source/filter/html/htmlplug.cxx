@@ -1400,6 +1400,48 @@ Writer& OutHTML_FrameFormatOLENodeGrf( Writer& rWrt, const SwFrameFormat& rFrame
     }
 
     Graphic aGraphic( *pOLENd->GetGraphic() );
+
+    SwDocShell* pDocSh = rHTMLWrt.pDoc->GetDocShell();
+    bool bObjectOpened = false;
+    if (rHTMLWrt.mbXHTML && pDocSh)
+    {
+        // Map native data to an outer <object> element.
+
+        // Calculate the file name, which is meant to be the same as the
+        // replacement image, just with a .ole extension.
+        OUString aFileName;
+        if (rHTMLWrt.GetOrigFileName())
+            aFileName = *rHTMLWrt.GetOrigFileName();
+        INetURLObject aURL(aFileName);
+        OUString aName(aURL.getBase());
+        aName += "_";
+        aName += aURL.getExtension();
+        aName += "_";
+        aName += OUString::number(aGraphic.GetChecksum(), 16);
+        aURL.setBase(aName);
+        aURL.setExtension("ole");
+        aFileName = aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE);
+
+        // Write the data.
+        OUString aStreamName = pOLENd->GetOLEObj().GetCurrentPersistName();
+        uno::Reference<embed::XStorage> xStorage = pDocSh->GetStorage();
+        uno::Reference<io::XStream> xInStream
+            = xStorage->openStreamElement(aStreamName, embed::ElementModes::READ);
+        SvFileStream aOutStream(aFileName, StreamMode::WRITE);
+        uno::Reference<io::XStream> xOutStream(new utl::OStreamWrapper(aOutStream));
+        comphelper::OStorageHelper::CopyInputToOutput(xInStream->getInputStream(),
+                                                      xOutStream->getOutputStream());
+        aFileName = URIHelper::simpleNormalizedMakeRelative(rWrt.GetBaseURL(), aFileName);
+
+        // Refer to this data.
+        if (rHTMLWrt.m_bLFPossible)
+            rHTMLWrt.OutNewLine();
+        rWrt.Strm().WriteOString("<" + rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_object);
+        rWrt.Strm().WriteOString(" data=\"" + aFileName.toUtf8() + "\">");
+        bObjectOpened = true;
+        rHTMLWrt.m_bLFPossible = true;
+    }
+
     OUString aGraphicURL;
     if(!rHTMLWrt.mbEmbedImages)
     {
@@ -1426,6 +1468,11 @@ Writer& OutHTML_FrameFormatOLENodeGrf( Writer& rWrt, const SwFrameFormat& rFrame
     OutHTML_Image( rWrt, rFrameFormat, aGraphicURL, aGraphic,
             pOLENd->GetTitle(), pOLENd->GetTwipSize(),
             nFlags, "ole" );
+
+    if (bObjectOpened)
+        // Close native data.
+        rWrt.Strm().WriteOString("</" + rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_object
+                                 ">");
 
     return rWrt;
 }
