@@ -550,7 +550,7 @@
 #define FN_UNO_IS_PIXEL_CONTOUR             (FN_EXTRA2 + 83)
 #define FN_UNO_ALTERNATIVE_TEXT             (FN_EXTRA2 + 84)
 #define FN_UNO_ACTUAL_SIZE                  (FN_EXTRA2 + 85)
-#define FN_UNO_GRAPHIC_U_R_L                (FN_EXTRA2 + 86)
+// #define free                             (FN_EXTRA2 + 86)
 #define FN_UNO_GRAPHIC_FILTER               (FN_EXTRA2 + 87)
 #define FN_UNO_CELL_NAME                    (FN_EXTRA2 + 88)
 #define FN_INSERT_GLOSSARY                  (FN_EXTRA2 + 89)

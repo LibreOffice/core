@@ -7,7 +7,7 @@
 "SwXTextGraphicObject";"com::sun::star::text::TextGraphicObject";"HoriMirroredOnEvenPages"
 "SwXTextGraphicObject";"com::sun::star::text::TextGraphicObject";"HoriMirroredOnOddPages"
 "SwXTextGraphicObject";"com::sun::star::text::TextGraphicObject";"VertMirrored"
-"SwXTextGraphicObject";"com::sun::star::text::TextGraphicObject";"GraphicURL"
+"SwXTextGraphicObject";"com::sun::star::text::TextGraphicObject";"Graphic"
 "SwXTextGraphicObject";"com::sun::star::text::TextGraphicObject";"GraphicFilter"
 "SwXTextGraphicObject";"com::sun::star::text::TextGraphicObject";"ActualSize"
 "SwXTextGraphicObject";"com::sun::star::text::TextGraphicObject";"AdjustLuminance"

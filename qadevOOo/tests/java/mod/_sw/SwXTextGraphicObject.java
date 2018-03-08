@@ -26,14 +26,19 @@ import lib.TestParameters;
 import util.SOfficeFactory;
 
 import com.sun.star.beans.XPropertySet;
+import com.sun.star.beans.PropertyValue;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.text.TextContentAnchorType;
 import com.sun.star.text.XText;
 import com.sun.star.text.XTextContent;
 import com.sun.star.text.XTextCursor;
 import com.sun.star.text.XTextDocument;
+import com.sun.star.graphic.XGraphic;
+import com.sun.star.graphic.XGraphicProvider;
+import com.sun.star.graphic.GraphicProvider;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
+import com.sun.star.uno.XComponentContext;
 
 public class SwXTextGraphicObject extends TestCase {
 
@@ -124,12 +129,26 @@ public class SwXTextGraphicObject extends TestCase {
         the_text.insertTextContent(the_cursor, the_content, true);
 
         log.println("adding graphic");
+
+        XComponentContext xContext = tParam.getComponentContext();
+
+        XGraphicProvider xGraphicProvider = UnoRuntime.queryInterface(XGraphicProvider.class,
+            xContext.getServiceManager().createInstanceWithContext("com.sun.star.graphic.GraphicProvider", xContext));
+
+        String fullURL = util.utils.getFullTestURL("space-metal.jpg");
+
+        PropertyValue[] aMediaProps = new PropertyValue[] { new PropertyValue() };
+        aMediaProps[0].Name = "URL";
+        aMediaProps[0].Value = fullURL;
+
+        XGraphic xGraphic = UnoRuntime.queryInterface(XGraphic.class,
+                                xGraphicProvider.queryGraphic(aMediaProps));
+
         XPropertySet oProps = UnoRuntime.queryInterface(XPropertySet.class,
                 oObj);
-        String wat = util.utils.getFullTestURL("space-metal.jpg");
-        oProps.setPropertyValue("AnchorType",
-                TextContentAnchorType.AT_PARAGRAPH);
-        oProps.setPropertyValue("GraphicURL", wat);
+
+        oProps.setPropertyValue("AnchorType", TextContentAnchorType.AT_PARAGRAPH);
+        oProps.setPropertyValue("Graphic", xGraphic);
         oProps.setPropertyValue("HoriOrientPosition", Integer.valueOf(5500));
         oProps.setPropertyValue("VertOrientPosition", Integer.valueOf(4200));
         oProps.setPropertyValue("Width", Integer.valueOf(4400));
@@ -167,4 +186,3 @@ public class SwXTextGraphicObject extends TestCase {
     } // finish method getTestEnvironment
 
 } // finish class SwXTextGraphicObject
-
