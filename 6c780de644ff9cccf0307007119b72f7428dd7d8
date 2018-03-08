@@ -128,6 +128,24 @@
       "revId": "6c780de644ff9cccf0307007119b72f7428dd7d8",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba2be162_19a4ec55",
+        "filename": "sc/source/core/data/validat.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 576,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-03-08T14:58:06Z",
+      "side": 1,
+      "message": "AFAICS for IsCellValid() the cell doesn\u0027t have to be committed to the document, or what am I overlooking? I find the old comment \"TODO: the value must be in the document\" a bit confusing as it doesn\u0027t state why that would be necessary.\n\nThe problem with modifying the document content here is that IsDataValid() may be called anytime, even during interpreting some formula cell if forced recalculation is set for it. Also ScDetectiveFunc calls it to mark some cell. Committing a cell will destroy the existing cell at the position, which could not only kill the current formula code being interpreted, but also has various side effects such as shared formula ranges being torn apart and possibly rejoined, changes broadcasted, listeners notified, actions performed ...\n\nIn short, that is a big no-no.",
+      "parentUuid": "ba2be162_233a6137",
+      "revId": "6c780de644ff9cccf0307007119b72f7428dd7d8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
