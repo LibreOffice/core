@@ -346,6 +346,17 @@ DECLARE_HTMLEXPORT_TEST(testReqIfParagraph, "reqif-p.xhtml")
     CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
 }
 
+DECLARE_HTMLEXPORT_ROUNDTRIP_TEST(testReqIfOleData, "reqif-ole-data.xhtml")
+{
+    uno::Reference<text::XTextEmbeddedObjectsSupplier> xSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xObjects(xSupplier->getEmbeddedObjects(),
+                                                     uno::UNO_QUERY);
+    // This was 0, <object> without URL was ignored.
+    // Then this was 0 on export, as data of OLE nodes was ignored.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), xObjects->getCount());
+}
+
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
