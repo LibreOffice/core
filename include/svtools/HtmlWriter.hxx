@@ -27,6 +27,7 @@ private:
 
     bool mbElementOpen;
     bool mbContentWritten;
+    bool mbCharactersWritten;
     bool mbPrettyPrint;
     /// XML namespace, in case of XHTML.
     OString maNamespace;
@@ -52,6 +53,9 @@ public:
 
     void single(const OString& aContent);
     void endAttribute();
+
+    /// Writes character data.
+    void characters(const OString& rChars);
 };
 
 #endif
