@@ -364,17 +364,6 @@ void SvxUnoNumberingRules::setNumberingRuleByIndex(const Sequence<beans::Propert
                 continue;
             }
         }
-        else if ( rPropName == "GraphicURL" )
-        {
-            OUString aURL;
-            if( aVal >>= aURL )
-            {
-                GraphicObject aGrafObj( GraphicObject::CreateGraphicObjectFromURL( aURL ) );
-                SvxBrushItem aBrushItem( aGrafObj, GPOS_AREA, SID_ATTR_BRUSH );
-                aFmt.SetGraphicBrush( &aBrushItem );
-                continue;
-            }
-        }
         else if ( rPropName == "GraphicSize" )
         {
             awt::Size aUnoSize;
