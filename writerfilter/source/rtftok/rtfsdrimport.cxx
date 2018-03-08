@@ -132,7 +132,8 @@ void RTFSdrImport::popParent()
 {
     if (!m_aGraphicZOrderHelpers.empty())
         m_aGraphicZOrderHelpers.pop();
-    m_aParents.pop();
+    if (!m_aParents.empty())
+        m_aParents.pop();
 }
 
 void RTFSdrImport::resolveDhgt(uno::Reference<beans::XPropertySet> const& xPropertySet,
