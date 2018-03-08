@@ -760,13 +760,13 @@ void SdXMLShapeContext::SetThumbnail()
             return;
 
         uno::Reference< beans::XPropertySetInfo > xPropSetInfo( xPropSet->getPropertySetInfo() );
-        if( xPropSetInfo.is() && xPropSetInfo->hasPropertyByName( "ThumbnailGraphicURL" ) )
+        if( xPropSetInfo.is() && xPropSetInfo->hasPropertyByName( "ThumbnailGraphic" ) )
         {
             // load the thumbnail graphic and export it to a wmf stream so we can set
             // it at the api
 
-            const OUString aInternalURL( GetImport().ResolveGraphicObjectURL( maThumbnailURL, false ) );
-            xPropSet->setPropertyValue( "ThumbnailGraphicURL", uno::makeAny( aInternalURL ) );
+            uno::Reference<graphic::XGraphic> xGraphic = GetImport().loadGraphicByURL(maThumbnailURL);
+            xPropSet->setPropertyValue("ThumbnailGraphic", uno::makeAny(xGraphic));
         }
     }
     catch(const uno::Exception&)
