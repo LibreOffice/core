@@ -3468,6 +3468,9 @@ void DomainMapper_Impl::handleToc
     pContext->SetTOC( xTOC );
     m_bParaHadField = false;
 
+    if (m_aTextAppendStack.empty())
+        return;
+
     OUString sMarker("Y");
     //insert index
     uno::Reference< text::XTextContent > xToInsert( xTOC, uno::UNO_QUERY );
@@ -4247,7 +4250,7 @@ void DomainMapper_Impl::CloseFieldCommand()
                  */
                 OUString aCode( pContext->GetCommand().trim() );
                 // Don't waste resources on wrapping shapes inside a fieldmark.
-                if (aCode != "SHAPE" && m_xTextFactory.is())
+                if (aCode != "SHAPE" && m_xTextFactory.is() && !m_aTextAppendStack.empty())
                 {
                     xFieldInterface = m_xTextFactory->createInstance("com.sun.star.text.Fieldmark");
                     const uno::Reference<text::XTextContent> xTextContent(xFieldInterface, uno::UNO_QUERY_THROW);
