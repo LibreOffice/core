@@ -265,41 +265,41 @@ void ColorFieldControl::UpdateBitmap()
 {
     const Size aSize(GetOutputSizePixel());
 
+    if (mxBitmap && mxBitmap->GetOutputSizePixel() != aSize)
+        mxBitmap.disposeAndClear();
+
     const sal_Int32 nWidth = aSize.Width();
     const sal_Int32 nHeight = aSize.Height();
 
     if (nWidth == 0 || nHeight == 0)
         return;
 
-    if (mxBitmap && mxBitmap->GetOutputSizePixel() == aSize)
-        return;
-
-    mxBitmap.disposeAndClear();
-    mxBitmap = VclPtr<VirtualDevice>::Create();
-    mxBitmap->SetOutputSizePixel(aSize);
-
-    maRGB_Horiz.resize( nWidth );
-    maGrad_Horiz.resize( nWidth );
-    maPercent_Horiz.resize( nWidth );
-
-    sal_uInt8* pRGB = maRGB_Horiz.data();
-    sal_uInt16* pGrad = maGrad_Horiz.data();
-    sal_uInt16* pPercent = maPercent_Horiz.data();
-
-    for( sal_Int32 x = 0; x < nWidth; x++ )
+    if (!mxBitmap)
     {
-        *pRGB++ = static_cast<sal_uInt8>((x * 256) / nWidth);
-        *pGrad++ = static_cast<sal_uInt16>((x * 359) / nWidth);
-        *pPercent++ = static_cast<sal_uInt16>((x * 100) / nWidth);
-    }
+        mxBitmap = VclPtr<VirtualDevice>::Create();
+        mxBitmap->SetOutputSizePixel(aSize);
 
-    maRGB_Vert.resize(nHeight);
-    maPercent_Vert.resize(nHeight);
+        maRGB_Horiz.resize( nWidth );
+        maGrad_Horiz.resize( nWidth );
+        maPercent_Horiz.resize( nWidth );
 
-    pRGB = maRGB_Vert.data();
-    pPercent = maPercent_Vert.data();
+        sal_uInt8* pRGB = maRGB_Horiz.data();
+        sal_uInt16* pGrad = maGrad_Horiz.data();
+        sal_uInt16* pPercent = maPercent_Horiz.data();
 
-    {
+        for( sal_Int32 x = 0; x < nWidth; x++ )
+        {
+            *pRGB++ = static_cast<sal_uInt8>((x * 256) / nWidth);
+            *pGrad++ = static_cast<sal_uInt16>((x * 359) / nWidth);
+            *pPercent++ = static_cast<sal_uInt16>((x * 100) / nWidth);
+        }
+
+        maRGB_Vert.resize(nHeight);
+        maPercent_Vert.resize(nHeight);
+
+        pRGB = maRGB_Vert.data();
+        pPercent = maPercent_Vert.data();
+
         sal_Int32 y = nHeight;
         while (y--)
         {
