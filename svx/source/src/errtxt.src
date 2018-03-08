@@ -508,6 +508,10 @@ Resource RID_ERRHDL
     {
         Text [ en-US ] = "File format error found at $(ARG1)(row,col).";
     };
+    String ERRCODE_IO_FILTERDISABLED
+    {
+        Text [ en-US ] = "The filter for this file format is disabled in configuration. Please contact your systems administrator.";
+    };
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

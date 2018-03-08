@@ -241,6 +241,8 @@ inline sal_uInt32 ERRCODE_TOERROR( ErrCode x )
                                          ERRCODE_AREA_IO)
 #define ERRCODE_IO_NOTSTORABLEINBINARYFORMAT      CAST_TO_UINT32(39UL |ERRCODE_CLASS_FORMAT|\
                                          ERRCODE_AREA_IO)
+#define ERRCODE_IO_FILTERDISABLED     CAST_TO_UINT32(40UL |ERRCODE_CLASS_FORMAT|\
+                                         ERRCODE_AREA_IO)
 
 // FsysErrorCodes
 
