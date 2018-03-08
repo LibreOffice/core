@@ -39,7 +39,6 @@
 #define UNO_NAME_BACK_GRAPHIC "BackGraphic"
 #define UNO_NAME_BACK_GRAPHIC_FILTER "BackGraphicFilter"
 #define UNO_NAME_BACK_GRAPHIC_LOCATION "BackGraphicLocation"
-#define UNO_NAME_GRAPHIC_URL "GraphicURL"
 #define UNO_NAME_GRAPHIC_FILTER "GraphicFilter"
 #define UNO_NAME_GRAPHIC_SIZE "GraphicSize"
 #define UNO_NAME_GRAPHIC_BITMAP "GraphicBitmap"

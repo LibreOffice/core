@@ -1873,8 +1873,10 @@ DECLARE_RTFEXPORT_TEST(testClassificatonPasteLevels, "classification-confidentia
 DECLARE_RTFEXPORT_TEST(testTdf95707, "tdf95707.rtf")
 {
     // Graphic was replaced with a "Read-Error" placeholder.
-    CPPUNIT_ASSERT(getProperty<OUString>(getShape(1), "GraphicURL")
-                   != "vnd.sun.star.GraphicObject:0000000000000000000000000000000000000000");
+    uno::Reference<graphic::XGraphic> xGraphic;
+    xGraphic = getProperty<uno::Reference<graphic::XGraphic>>(getShape(1), "Graphic");
+    CPPUNIT_ASSERT(xGraphic.is());
+    CPPUNIT_ASSERT(xGraphic->getType() != graphic::GraphicType::EMPTY);
 }
 
 DECLARE_RTFEXPORT_TEST(testTdf96275, "tdf96275.rtf")

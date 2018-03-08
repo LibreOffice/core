@@ -151,9 +151,6 @@ using ::com::sun::star::frame::XModel;
 using ::com::sun::star::container::XNameAccess;
 using ::com::sun::star::style::XStyleFamiliesSupplier;
 
-const sal_Char sPackageProtocol[] = "vnd.sun.star.Package:";
-const sal_Char sGraphicObjectProtocol[] = "vnd.sun.star.GraphicObject:";
-
 class BaseFrameProperties_Impl
 {
     SwUnoCursorHelper::SwAnyMapHelper aAnyMap;
@@ -1575,44 +1572,15 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const ::uno::Any&
             delete pSet;
 
         }
-        else if( FN_UNO_GRAPHIC_U_R_L == pEntry->nWID ||
-                FN_UNO_GRAPHIC_FILTER == pEntry->nWID)
+        else if (FN_UNO_GRAPHIC_FILTER == pEntry->nWID)
         {
             OUString sGrfName;
             OUString sFltName;
-            std::unique_ptr<GraphicObject> pGrfObj;
             SwDoc::GetGrfNms( *static_cast<SwFlyFrameFormat*>(pFormat), &sGrfName, &sFltName );
-            OUString sTmp;
-            aValue >>= sTmp;
+            aValue >>= sFltName;
             UnoActionContext aAction(pFormat->GetDoc());
-            if(FN_UNO_GRAPHIC_U_R_L == pEntry->nWID)
-            {
-                if( sTmp.startsWith(sPackageProtocol) )
-                {
-                    pGrfObj = o3tl::make_unique<GraphicObject>();
-                    pGrfObj->SetUserData( sTmp );
-                    sGrfName.clear();
-                }
-                else if( sTmp.startsWith(sGraphicObjectProtocol) )
-                {
-                    const OString sId(OUStringToOString(
-                        sTmp.copy(sizeof(sGraphicObjectProtocol)-1),
-                        RTL_TEXTENCODING_ASCII_US));
-                    pGrfObj = o3tl::make_unique<GraphicObject>( sId );
-                    sGrfName.clear();
-                }
-                else
-                {
-                    sGrfName = sTmp;
-                }
-            }
-            else
-            {
-                sFltName = sTmp;
-            }
-
             const ::SwNodeIndex* pIdx = pFormat->GetContent().GetContentIdx();
-            if(pIdx)
+            if (pIdx)
             {
                 SwNodeIndex aIdx(*pIdx, 1);
                 SwGrfNode* pGrfNode = aIdx.GetNode().GetGrfNode();
@@ -1621,11 +1589,10 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const ::uno::Any&
                     throw uno::RuntimeException();
                 }
                 SwPaM aGrfPaM(*pGrfNode);
-                pFormat->GetDoc()->getIDocumentContentOperations().ReRead( aGrfPaM, sGrfName, sFltName, nullptr,
-                                        pGrfObj.get() );
+                pFormat->GetDoc()->getIDocumentContentOperations().ReRead(aGrfPaM, sGrfName, sFltName, nullptr, nullptr);
             }
         }
-        else if( FN_UNO_GRAPHIC == pEntry->nWID )
+        else if (FN_UNO_GRAPHIC == pEntry->nWID)
         {
             uno::Reference< graphic::XGraphic > xGraphic;
             aValue >>= xGraphic;
@@ -1636,7 +1603,7 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const ::uno::Any&
                 {
                     SwNodeIndex aIdx(*pIdx, 1);
                     SwGrfNode* pGrfNode = aIdx.GetNode().GetGrfNode();
-                    if(!pGrfNode)
+                    if (!pGrfNode)
                     {
                         throw uno::RuntimeException();
                     }
@@ -1652,7 +1619,6 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const ::uno::Any&
             aValue >>= xGraphic;
             if (xGraphic.is())
             {
-                Graphic aGraphic(xGraphic);
                 const ::SwFormatContent* pCnt = &pFormat->GetContent();
                 if ( pCnt->GetContentIdx() && pDoc->GetNodes()[ pCnt->GetContentIdx()->GetIndex() + 1 ] )
                 {
@@ -1660,9 +1626,9 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const ::uno::Any&
 
                     if ( pOleNode )
                     {
-                        svt::EmbeddedObjectRef &rObj = pOleNode->GetOLEObj().GetObject();
-
-                        rObj.SetGraphic( aGraphic, OUString() );
+                        svt::EmbeddedObjectRef &rEmbeddedObject = pOleNode->GetOLEObj().GetObject();
+                        Graphic aGraphic(xGraphic);
+                        rEmbeddedObject.SetGraphic(aGraphic, OUString() );
                     }
                 }
             }
@@ -2039,30 +2005,6 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
                 }
             }
         }
-        else if( FN_UNO_GRAPHIC_U_R_L == pEntry->nWID)
-        {
-            OUString sGrfName;
-            const SwNodeIndex* pIdx = pFormat->GetContent().GetContentIdx();
-            if(pIdx)
-            {
-                SwNodeIndex aIdx(*pIdx, 1);
-                SwGrfNode* pGrfNode = aIdx.GetNode().GetGrfNode();
-                if(!pGrfNode)
-                    throw uno::RuntimeException();
-                if( pGrfNode->IsGrfLink() )
-                {
-                    SwDoc::GetGrfNms( *static_cast<SwFlyFrameFormat*>(pFormat), &sGrfName, nullptr );
-                }
-                else
-                {
-                    OUString sId(OStringToOUString(
-                        pGrfNode->GetGrfObj().GetUniqueID(),
-                        RTL_TEXTENCODING_ASCII_US));
-                    sGrfName = sGraphicObjectProtocol + sId;
-                }
-            }
-            aAny <<= sGrfName;
-        }
         else if (FN_UNO_REPLACEMENT_GRAPHIC == pEntry->nWID)
         {
             const SwNodeIndex* pIdx = pFormat->GetContent().GetContentIdx();
@@ -2370,7 +2312,7 @@ uno::Sequence< beans::PropertyState > SwXFrame::getPropertyStates(
             if(pEntry->nWID == FN_UNO_ANCHOR_TYPES||
                 pEntry->nWID == FN_PARAM_LINK_DISPLAY_NAME||
                 FN_UNO_FRAME_STYLE_NAME == pEntry->nWID||
-                FN_UNO_GRAPHIC_U_R_L == pEntry->nWID||
+                FN_UNO_GRAPHIC == pEntry->nWID||
                 FN_UNO_GRAPHIC_FILTER     == pEntry->nWID||
                 FN_UNO_ACTUAL_SIZE == pEntry->nWID||
                 FN_UNO_ALTERNATIVE_TEXT == pEntry->nWID)
@@ -2777,53 +2719,27 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
     }
     else if( eType == FLYCNTTYPE_GRF)
     {
-        UnoActionContext aCont(pDoc);
-        const ::uno::Any* pGraphicURL;
-        OUString sGraphicURL;
-        std::unique_ptr<GraphicObject> pGrfObj;
-        if (m_pProps->GetProperty(FN_UNO_GRAPHIC_U_R_L, 0, pGraphicURL))
-        {
-            (*pGraphicURL) >>= sGraphicURL;
-            if( sGraphicURL.startsWith(sPackageProtocol) )
-            {
-                pGrfObj = o3tl::make_unique<GraphicObject>();
-                pGrfObj->SetUserData( sGraphicURL );
-                sGraphicURL.clear();
-            }
-            else if( sGraphicURL.startsWith(sGraphicObjectProtocol) )
-            {
-                OString sId(OUStringToOString(
-                    sGraphicURL.copy( sizeof(sGraphicObjectProtocol)-1 ),
-                    RTL_TEXTENCODING_ASCII_US));
-                pGrfObj = o3tl::make_unique<GraphicObject>( sId );
-                sGraphicURL.clear();
-            }
-        }
+        UnoActionContext aActionContext(pDoc);
         Graphic aGraphic;
-        const ::uno::Any* pGraphic;
-        const bool bHasGraphic = m_pProps->GetProperty(FN_UNO_GRAPHIC, 0, pGraphic);
-        if( bHasGraphic )
+        const ::uno::Any* pGraphicAny;
+        const bool bHasGraphic = m_pProps->GetProperty(FN_UNO_GRAPHIC, 0, pGraphicAny);
+        if (bHasGraphic)
         {
-            uno::Reference< graphic::XGraphic > xGraphic;
-            (*pGraphic) >>= xGraphic;
-            aGraphic = Graphic( xGraphic );
+            uno::Reference<graphic::XGraphic> xGraphic;
+            (*pGraphicAny) >>= xGraphic;
+            aGraphic = Graphic(xGraphic);
         }
 
-        OUString sFltName;
-        const ::uno::Any* pFilter;
-        if (m_pProps->GetProperty(FN_UNO_GRAPHIC_FILTER, 0, pFilter))
+        OUString sFilterName;
+        const uno::Any* pFilterAny;
+        if (m_pProps->GetProperty(FN_UNO_GRAPHIC_FILTER, 0, pFilterAny))
         {
-            (*pFilter) >>= sFltName;
+            (*pFilterAny) >>= sFilterName;
         }
 
-        pFormat = pGrfObj
-            ? pDoc->getIDocumentContentOperations().InsertGraphicObject(
-                    aPam, *pGrfObj.get(), &aFrameSet, &aGrSet, pParentFrameFormat)
-            : pDoc->getIDocumentContentOperations().InsertGraphic(
-                    aPam, sGraphicURL, sFltName,
-                    (!bHasGraphic && !sGraphicURL.isEmpty()) ? nullptr : &aGraphic,
-                    &aFrameSet, &aGrSet, pParentFrameFormat);
-        if(pFormat)
+        pFormat = pDoc->getIDocumentContentOperations().InsertGraphic(
+                    aPam, OUString(), sFilterName, &aGraphic, &aFrameSet, &aGrSet, pParentFrameFormat);
+        if (pFormat)
         {
             SwGrfNode *pGrfNd = pDoc->GetNodes()[ pFormat->GetContent().GetContentIdx()
                                         ->GetIndex()+1 ]->GetGrfNode();

@@ -11,6 +11,7 @@
 
 #include <com/sun/star/awt/XBitmap.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
+#include <com/sun/star/graphic/GraphicType.hpp>
 #include <officecfg/Office/Common.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
@@ -105,16 +106,13 @@ void Test::testSwappedOutImageExport()
         // First image
         uno::Reference<drawing::XShape> xImage(xDraws->getByIndex(0), uno::UNO_QUERY);
         uno::Reference< beans::XPropertySet > XPropSet( xImage, uno::UNO_QUERY_THROW );
-        // Check URL
-        {
-            OUString sURL;
-            XPropSet->getPropertyValue("GraphicURL") >>= sURL;
-            CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), sURL != "vnd.sun.star.GraphicObject:00000000000000000000000000000000");
-        }
-        // Check size
+
+        // Check graphic, size
         {
             uno::Reference<graphic::XGraphic> xGraphic;
             XPropSet->getPropertyValue("Graphic") >>= xGraphic;
+            CPPUNIT_ASSERT(xGraphic.is());
+            CPPUNIT_ASSERT(xGraphic->getType() != graphic::GraphicType::EMPTY);
             uno::Reference<awt::XBitmap> xBitmap(xGraphic, uno::UNO_QUERY);
             CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), xBitmap.is());
             CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), static_cast<sal_Int32>(610), xBitmap->getSize().Width );
@@ -124,17 +122,13 @@ void Test::testSwappedOutImageExport()
         // Second Image
         xImage.set(xDraws->getByIndex(1), uno::UNO_QUERY);
         XPropSet.set( xImage, uno::UNO_QUERY_THROW );
-        // Check URL
-        {
-            OUString sURL;
-            XPropSet->getPropertyValue("GraphicURL") >>= sURL;
-            CPPUNIT_ASSERT_MESSAGE(
-                sFailedMessage.getStr(), sURL != "vnd.sun.star.GraphicObject:00000000000000000000000000000000");
-        }
-        // Check size
+
+        // Check graphic, size
         {
             uno::Reference<graphic::XGraphic> xGraphic;
             XPropSet->getPropertyValue("Graphic") >>= xGraphic;
+            CPPUNIT_ASSERT(xGraphic.is());
+            CPPUNIT_ASSERT(xGraphic->getType() != graphic::GraphicType::EMPTY);
             uno::Reference<awt::XBitmap> xBitmap(xGraphic, uno::UNO_QUERY);
             CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), xBitmap.is());
             CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), static_cast<sal_Int32>(900), xBitmap->getSize().Width );
@@ -246,16 +240,13 @@ void Test::testImageWithSpecialID()
 
         uno::Reference<drawing::XShape> xImage = getShape(1);
         uno::Reference< beans::XPropertySet > XPropSet( xImage, uno::UNO_QUERY_THROW );
-        // Check URL
-        {
-            OUString sURL;
-            XPropSet->getPropertyValue("GraphicURL") >>= sURL;
-            CPPUNIT_ASSERT(sURL != "vnd.sun.star.GraphicObject:00000000000000000000000000000000");
-        }
-        // Check size
+
+        // Check graphic, size
         {
             uno::Reference<graphic::XGraphic> xGraphic;
             XPropSet->getPropertyValue("Graphic") >>= xGraphic;
+            CPPUNIT_ASSERT(xGraphic.is());
+            CPPUNIT_ASSERT(xGraphic->getType() != graphic::GraphicType::EMPTY);
             uno::Reference<awt::XBitmap> xBitmap(xGraphic, uno::UNO_QUERY);
             CPPUNIT_ASSERT(xBitmap.is());
             CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(610), xBitmap->getSize().Width );
@@ -264,16 +255,13 @@ void Test::testImageWithSpecialID()
         // Second Image
         xImage = getShape(2);
         XPropSet.set( xImage, uno::UNO_QUERY_THROW );
-        // Check URL
-        {
-            OUString sURL;
-            XPropSet->getPropertyValue("GraphicURL") >>= sURL;
-            CPPUNIT_ASSERT(sURL != "vnd.sun.star.GraphicObject:00000000000000000000000000000000");
-        }
+
         // Check size
         {
             uno::Reference<graphic::XGraphic> xGraphic;
             XPropSet->getPropertyValue("Graphic") >>= xGraphic;
+            CPPUNIT_ASSERT(xGraphic.is());
+            CPPUNIT_ASSERT(xGraphic->getType() != graphic::GraphicType::EMPTY);
             uno::Reference<awt::XBitmap> xBitmap(xGraphic, uno::UNO_QUERY);
             CPPUNIT_ASSERT(xBitmap.is());
             CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(900), xBitmap->getSize().Width );
