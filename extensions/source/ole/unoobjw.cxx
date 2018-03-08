@@ -816,7 +816,7 @@ STDMETHODIMP InterfaceOleWrapper_Impl::Invoke(DISPID dispidMember,
                         // Pass missing (hopefully optional) parameters as Any().
                         InvocationInfo aInvocationInfo;
                         getInvocationInfoForCall(dispidMember, aInvocationInfo);
-                        if (pdispparams->cArgs < (UINT)aInvocationInfo.aParamTypes.getLength())
+                        if (pdispparams->cArgs < sal_uInt32(aInvocationInfo.aParamTypes.getLength()))
                         {
                             params.realloc(aInvocationInfo.aParamTypes.getLength());
                             Any* pParams = params.getArray();
