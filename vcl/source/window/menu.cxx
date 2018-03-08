@@ -2715,13 +2715,15 @@ MenuFloatingWindow * PopupMenu::ImplGetFloatingWindow() const {
 }
 
 PopupMenu::PopupMenu()
-    : pRefAutoSubMenu(nullptr)
+    : pRefAutoSubMenu(nullptr),
+      mpLOKNotifier(nullptr)
 {
     mpSalMenu = ImplGetSVData()->mpDefInst->CreateMenu(false, this);
 }
 
 PopupMenu::PopupMenu( const ResId& rResId )
-    : pRefAutoSubMenu(nullptr)
+    : pRefAutoSubMenu(nullptr),
+      mpLOKNotifier(nullptr)
 {
     mpSalMenu = ImplGetSVData()->mpDefInst->CreateMenu(false, this);
 
@@ -2755,7 +2757,8 @@ PopupMenu::PopupMenu( const ResId& rResId )
 
 PopupMenu::PopupMenu( const PopupMenu& rMenu )
     : Menu(),
-      pRefAutoSubMenu(nullptr)
+      pRefAutoSubMenu(nullptr),
+      mpLOKNotifier(nullptr)
 {
     mpSalMenu = ImplGetSVData()->mpDefInst->CreateMenu(false, this);
     *this = rMenu;
@@ -2969,6 +2972,8 @@ sal_uInt16 PopupMenu::ImplExecute( const VclPtr<vcl::Window>& pW, const Rectangl
     }
 
     VclPtrInstance<MenuFloatingWindow> pWin( this, pW, nStyle | WB_SYSTEMWINDOW );
+    pWin->SetLOKNotifier(mpLOKNotifier);
+
     if( pSVData->maNWFData.mbFlatMenu )
         pWin->SetBorderStyle( WindowBorderStyle::NOBORDER );
     else
