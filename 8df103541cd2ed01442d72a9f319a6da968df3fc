@@ -36,6 +36,24 @@
     },
     {
       "key": {
+        "uuid": "ba2be162_1414b1f3",
+        "filename": "sfx2/source/bastyp/fltfnc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1020,
+      "author": {
+        "id": 1000028
+      },
+      "writtenOn": "2018-03-08T22:41:55Z",
+      "side": 1,
+      "message": "It set to true in the schema, so all filters are enabled by default.",
+      "parentUuid": "ba2be162_3977f0d5",
+      "revId": "8df103541cd2ed01442d72a9f319a6da968df3fc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ba2be162_f96c780a",
         "filename": "sfx2/source/doc/docfilt.cxx",
         "patchSetId": 1
@@ -47,6 +65,24 @@
       "writtenOn": "2018-03-08T15:52:03Z",
       "side": 1,
       "message": "We should initialize mbEnabled to true in the other constructor I think (?)",
+      "revId": "8df103541cd2ed01442d72a9f319a6da968df3fc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba2be162_34f9b5c9",
+        "filename": "sfx2/source/doc/docfilt.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1000028
+      },
+      "writtenOn": "2018-03-08T22:41:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ba2be162_f96c780a",
       "revId": "8df103541cd2ed01442d72a9f319a6da968df3fc",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
