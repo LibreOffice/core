@@ -56,10 +56,8 @@ public:
     /**
      * The caller is responsible for allocate the memory for the RGBA buffer, before call
      * this method. RGBA buffer size is assumed to be 4*width*height.
-     * Since OpenGL uses textures flipped relative to BitmapEx storage this method
-     * also adds the possibility to mirror the bitmap vertically at the same time.
     **/
-    static void ConvertBitmapExToRGBATextureBuffer(const BitmapEx& rBitmapEx, sal_uInt8* o_pRGBABuffer, const bool bFlip = false);
+    static void ConvertBitmapExToRGBATextureBuffer(const BitmapEx& rBitmapEx, sal_uInt8* o_pRGBABuffer);
     static BitmapEx ConvertBGRABufferToBitmapEx(const sal_uInt8* const pBuffer, long nWidth, long nHeight);
     static void renderToFile(long nWidth, long nHeight, const OUString& rFileName);
 

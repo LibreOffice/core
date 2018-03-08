@@ -1911,9 +1911,7 @@ int  CreateTTFromTTGlyphs(TrueTypeFont  *ttf,
                           const char    *fname,
                           sal_uInt16 const *glyphArray,
                           sal_uInt8 const *encoding,
-                          int            nGlyphs,
-                          int            nNameRecs,
-                          NameRecord const *nr)
+                          int            nGlyphs)
 {
     TrueTypeCreator *ttcr;
     TrueTypeTable *head=nullptr, *hhea=nullptr, *maxp=nullptr, *cvt=nullptr, *prep=nullptr, *glyf=nullptr, *fpgm=nullptr, *cmap=nullptr, *name=nullptr, *post = nullptr, *os2 = nullptr;
@@ -1924,14 +1922,10 @@ int  CreateTTFromTTGlyphs(TrueTypeFont  *ttf,
 
     /**                       name                         **/
 
-    if (nNameRecs == 0) {
-        NameRecord *names;
-        int n = GetTTNameRecords(ttf, &names);
-        name = TrueTypeTableNew_name(n, names);
-        DisposeNameRecords(names, n);
-    } else {
-        name = TrueTypeTableNew_name(nNameRecs, nr);
-    }
+    NameRecord *names;
+    int n = GetTTNameRecords(ttf, &names);
+    name = TrueTypeTableNew_name(n, names);
+    DisposeNameRecords(names, n);
 
     /**                       maxp                         **/
     maxp = TrueTypeTableNew_maxp(getTable(ttf, O_maxp), getTableSize(ttf, O_maxp));
