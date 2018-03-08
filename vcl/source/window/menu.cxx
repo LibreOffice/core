@@ -20,6 +20,7 @@
 #include <tools/diagnose_ex.h>
 #include <tools/stream.hxx>
 
+#include <comphelper/lok.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/mnemonic.hxx>
 #include <vcl/image.hxx>
@@ -40,6 +41,7 @@
 #include <vcl/dockingarea.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/commandinfoprovider.hxx>
+#include <vcl/IDialogRenderable.hxx>
 
 #include <salinst.hxx>
 #include <svdata.hxx>
@@ -2672,12 +2674,14 @@ MenuFloatingWindow * PopupMenu::ImplGetFloatingWindow() const {
 }
 
 PopupMenu::PopupMenu()
+    : mpLOKNotifier(nullptr)
 {
     mpSalMenu = ImplGetSVData()->mpDefInst->CreateMenu(false, this);
 }
 
 PopupMenu::PopupMenu( const PopupMenu& rMenu )
-    : Menu()
+    : Menu(),
+      mpLOKNotifier(nullptr)
 {
     mpSalMenu = ImplGetSVData()->mpDefInst->CreateMenu(false, this);
     *this = rMenu;
@@ -2878,6 +2882,9 @@ sal_uInt16 PopupMenu::ImplExecute( const VclPtr<vcl::Window>& pW, const tools::R
     }
 
     VclPtrInstance<MenuFloatingWindow> pWin( this, pW, WB_BORDER | WB_SYSTEMWINDOW );
+    if (comphelper::LibreOfficeKit::isActive() && mpLOKNotifier)
+        pWin->SetLOKNotifier(mpLOKNotifier);
+
     if( pSVData->maNWFData.mbFlatMenu )
         pWin->SetBorderStyle( WindowBorderStyle::NOBORDER );
     else
