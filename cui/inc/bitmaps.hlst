@@ -63,7 +63,6 @@
 #define RID_SVXBMP_FILEOPEN             "res/fileopen.png"
 #define RID_SVXBMP_TARGET               "res/target.png"
 #define RID_SVXBMP_NEWDOC               "res/newdoc.png"
-#define RID_SVXBMP_COLORSLIDER          "res/colorslider.png"
 
 #define RID_SVXBMP_COLLAPSEDNODE        "res/sx18002.png"
 #define RID_SVXBMP_EXPANDEDNODE         "res/sx18003.png"

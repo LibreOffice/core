@@ -105,9 +105,9 @@ void SfxPreviewWin_Impl::ImpPaint(vcl::RenderContext& rRenderContext, GDIMetaFil
     }
 }
 
-IMPL_LINK(SfxPreviewWin_Impl, DoPaint, vcl::RenderContext&, rRenderContext, void)
+IMPL_LINK(SfxPreviewWin_Impl, DoPaint, weld::DrawingArea::draw_args, aPayload, void)
 {
-    ImpPaint(rRenderContext, xMetaFile.get());
+    ImpPaint(aPayload.first, xMetaFile.get());
 }
 
 IMPL_LINK_NOARG(SfxNewFileDialog, Update, Timer*, void)
@@ -193,6 +193,7 @@ IMPL_LINK( SfxNewFileDialog, RegionSelect, weld::TreeView&, rBox, void )
         m_xTemplateLb->append(m_aTemplates.GetName(nRegion, i));
     m_xTemplateLb->thaw();
     m_xTemplateLb->select(0);
+    TemplateSelect(*m_xTemplateLb);
 }
 
 IMPL_LINK_NOARG(SfxNewFileDialog, Expand, weld::Expander&, void)
