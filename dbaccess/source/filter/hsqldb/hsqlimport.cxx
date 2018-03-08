@@ -143,8 +143,16 @@ void lcl_setParams(const RowVector& row, Reference<XParameters>& xParam,
             }
             case DataType::NUMERIC:
             case DataType::DECIMAL:
-                // TODO
-                break;
+            {
+                Sequence<Any> aNumeric;
+                if (row.at(i) >>= aNumeric)
+                {
+                    sal_Int32 nScale = 0;
+                    if (aNumeric[1] >>= nScale)
+                        xParam->setObjectWithInfo(i + 1, aNumeric[0], rColTypes.at(i), nScale);
+                }
+            }
+            break;
             case DataType::DATE:
                 // TODO
                 break;
