@@ -153,8 +153,8 @@ public class SwXTextDocument extends TestCase {
         SOfficeFactory.insertTextContent(xTextDoc, oTC);
 
         log.println("    adding TextGraphic");
-        WriterTools.insertTextGraphic(xTextDoc, oDocMSF, 5200, 4200, 4400,
-                4000, "space-metal.jpg", "SwXTextDocument");
+        WriterTools.insertTextGraphic(xTextDoc, oDocMSF, Param.getComponentContext(),
+                5200, 4200, 4400, 4000, "space-metal.jpg", "SwXTextDocument");
 
         log.println("    adding EndNote");
 

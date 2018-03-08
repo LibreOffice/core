@@ -27,13 +27,19 @@ import com.sun.star.drawing.XDrawPageSupplier;
 
 import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.lang.XMultiComponentFactory;
 
 import com.sun.star.text.XText;
 import com.sun.star.text.XTextContent;
 import com.sun.star.text.XTextCursor;
 import com.sun.star.text.XTextDocument;
 
+import com.sun.star.graphic.XGraphic;
+import com.sun.star.graphic.XGraphicProvider;
+import com.sun.star.graphic.GraphicProvider;
+
 import com.sun.star.uno.UnoRuntime;
+import com.sun.star.uno.XComponentContext;
 
 public class WriterTools {
     public static XTextDocument createTextDoc(XMultiServiceFactory xMSF) {
@@ -77,12 +83,26 @@ public class WriterTools {
     }
 
     public static void insertTextGraphic(XTextDocument aDoc,
-                                         XMultiServiceFactory xMSF, int hpos,
+                                         XMultiServiceFactory xMSF, XComponentContext xContext, int hpos,
                                          int vpos, int width, int height,
                                          String pic, String name) {
         try {
             Object oGObject = xMSF.createInstance(
                                       "com.sun.star.text.GraphicObject");
+
+            XGraphicProvider xGraphicProvider = UnoRuntime.queryInterface(
+                XGraphicProvider.class,
+                xContext.getServiceManager().createInstanceWithContext(
+                    "com.sun.star.graphic.GraphicProvider", xContext));
+
+            String fullURL = util.utils.getFullTestURL(pic);
+
+            PropertyValue[] aMediaProps = new PropertyValue[] { new PropertyValue() };
+            aMediaProps[0].Name = "URL";
+            aMediaProps[0].Value = fullURL;
+
+            XGraphic xGraphic = UnoRuntime.queryInterface(XGraphic.class,
+                                xGraphicProvider.queryGraphic(aMediaProps));
 
             XText the_text = aDoc.getText();
             XTextCursor the_cursor = the_text.createTextCursor();
@@ -93,8 +113,7 @@ public class WriterTools {
             XPropertySet oProps = UnoRuntime.queryInterface(
                                           XPropertySet.class, oGObject);
 
-            String fullURL = util.utils.getFullTestURL(pic);
-            oProps.setPropertyValue("GraphicURL", fullURL);
+            oProps.setPropertyValue("Graphic", xGraphic);
             oProps.setPropertyValue("HoriOrientPosition", Integer.valueOf(hpos));
             oProps.setPropertyValue("VertOrientPosition", Integer.valueOf(vpos));
             oProps.setPropertyValue("Width", Integer.valueOf(width));
