@@ -723,10 +723,10 @@ The following structure describes the permissions used in PDF security
      */
     std::set< ErrorCode > const & GetErrors();
 
+    // uses 128bit encryption
     static css::uno::Reference< css::beans::XMaterialHolder >
            InitEncryption( const OUString& i_rOwnerPassword,
-                           const OUString& i_rUserPassword,
-                           bool b128Bit
+                           const OUString& i_rUserPassword
                          );
 
     /* functions for graphics state */

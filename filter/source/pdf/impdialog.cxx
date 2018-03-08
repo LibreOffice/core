@@ -1345,7 +1345,7 @@ IMPL_LINK_NOARG(ImpPDFTabSecurityPage, ClickmaPbSetPwdHdl, Button*, void)
         mbHaveUserPassword = !aUserPW.isEmpty();
         mbHaveOwnerPassword = !aOwnerPW.isEmpty();
 
-        mxPreparedPasswords = vcl::PDFWriter::InitEncryption( aOwnerPW, aUserPW, true );
+        mxPreparedPasswords = vcl::PDFWriter::InitEncryption( aOwnerPW, aUserPW );
 
         if( mbHaveOwnerPassword )
         {

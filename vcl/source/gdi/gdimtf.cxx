@@ -1814,7 +1814,7 @@ BitmapEx GDIMetaFile::ImplBmpReplaceFnc( const BitmapEx& rBmpEx, const void* pBm
     const ImplBmpReplaceParam*  p = static_cast<const ImplBmpReplaceParam*>(pBmpParam);
     BitmapEx                    aRet( rBmpEx );
 
-    aRet.Replace( p->pSrcCols, p->pDstCols, p->nCount, nullptr );
+    aRet.Replace( p->pSrcCols, p->pDstCols, p->nCount );
 
     return aRet;
 }
