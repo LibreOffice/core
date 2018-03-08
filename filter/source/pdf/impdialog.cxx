@@ -1337,7 +1337,7 @@ IMPL_LINK_NOARG(ImpPDFTabSecurityPage, ClickmaPbSetPwdHdl, Button*, void)
     aPwdDialog.set_title(msStrSetPwd);
     aPwdDialog.SetGroup2Text(msOwnerPwdTitle);
     aPwdDialog.AllowAsciiOnly();
-    if (aPwdDialog.run() == RET_OK)  // OK issued get password and set it
+    if (aPwdDialog.execute() == RET_OK)  // OK issued get password and set it
     {
         OUString aUserPW(aPwdDialog.GetPassword());
         OUString aOwnerPW(aPwdDialog.GetPassword2());

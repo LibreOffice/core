@@ -2182,8 +2182,7 @@ void SvtFileView_Impl::SetActualFolder( const INetURLObject& rActualFolder )
 namespace svtools {
 
 QueryDeleteDlg_Impl::QueryDeleteDlg_Impl(weld::Widget* pParent, const OUString& rName)
-    : m_xBuilder(Application::CreateBuilder(pParent, "svt/ui/querydeletedialog.ui"))
-    , m_xDialog(m_xBuilder->weld_message_dialog("QueryDeleteDialog"))
+    : MessageDialogController(pParent, "svt/ui/querydeletedialog.ui", "QueryDeleteDialog")
     , m_xAllButton(m_xBuilder->weld_button("all"))
 {
     // display specified texts

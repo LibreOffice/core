@@ -21,11 +21,9 @@
 
 #include <vcl/weld.hxx>
 
-class SfxAlienWarningDialog
+class SfxAlienWarningDialog : public weld::MessageDialogController
 {
 private:
-    std::unique_ptr<weld::Builder> m_xBuilder;
-    std::unique_ptr<weld::MessageDialog> m_xDialog;
     std::unique_ptr<weld::Button> m_xKeepCurrentBtn;
     std::unique_ptr<weld::Button> m_xUseDefaultFormatBtn;
     std::unique_ptr<weld::CheckButton> m_xWarningOnBox;
@@ -36,7 +34,6 @@ private:
 public:
     SfxAlienWarningDialog(weld::Window* pParent, const OUString& _rFormatName,
                           const OUString& _rDefaultExtension, bool rDefaultIsAlien);
-    short run() { return m_xDialog->run(); }
     ~SfxAlienWarningDialog();
 };
 

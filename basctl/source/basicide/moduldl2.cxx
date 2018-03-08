@@ -369,8 +369,7 @@ IMPL_LINK_NOARG(NewObjectDialog, OkButtonHandler, weld::Button&, void)
 }
 
 NewObjectDialog::NewObjectDialog(weld::Window * pParent, ObjectMode eMode, bool bCheckName)
-    : m_xBuilder(Application::CreateBuilder(pParent, "modules/BasicIDE/ui/newlibdialog.ui"))
-    , m_xDialog(m_xBuilder->weld_dialog("NewLibDialog"))
+    : GenericDialogController(pParent, "modules/BasicIDE/ui/newlibdialog.ui", "NewLibDialog")
     , m_xEdit(m_xBuilder->weld_entry("entry"))
     , m_xOKButton(m_xBuilder->weld_button("ok"))
     , m_bCheckName(bCheckName)

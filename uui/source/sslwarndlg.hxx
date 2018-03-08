@@ -27,11 +27,9 @@
 
 //= Https_WarnDialog
 
-class SSLWarnDialog
+class SSLWarnDialog : public weld::MessageDialogController
 {
 private:
-    std::unique_ptr<weld::Builder> m_xBuilder;
-    std::unique_ptr<weld::MessageDialog> m_xDialog;
     std::unique_ptr<weld::Button> m_xView;
     const css::uno::Reference< css::uno::XComponentContext >& m_xContext;
     const css::uno::Reference< css::security::XCertificate >& m_rXCert;
@@ -44,9 +42,6 @@ public:
         const css::uno::Reference< css::uno::XComponentContext >& xContext );
 
     void setDescription1Text(const OUString &rText) { m_xDialog->set_primary_text(rText); }
-    void set_title(const OUString &rText) { m_xDialog->set_title(rText); }
-
-    short run() { return m_xDialog->run(); }
 };
 
 #endif // INCLUDED_UUI_SOURCE_SSLWARNDLG_HXX

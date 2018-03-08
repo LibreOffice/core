@@ -36,7 +36,7 @@
 #include <strings.hrc>
 #include <SwStyleNameMapper.hxx>
 
-short SwBreakDlg::run()
+short SwBreakDlg::execute()
 {
     short nRet = m_xDialog->run();
     if (nRet == RET_OK)
@@ -131,21 +131,19 @@ IMPL_LINK_NOARG(SwBreakDlg, OkHdl, weld::Button&, void)
 }
 
 SwBreakDlg::SwBreakDlg(weld::Window *pParent, SwWrtShell &rS)
-    : rSh(rS)
-    , m_xBuilder(Application::CreateBuilder(pParent, "modules/swriter/ui/insertbreak.ui"))
+    : GenericDialogController(pParent, "modules/swriter/ui/insertbreak.ui", "BreakDialog")
+    , m_xLineBtn(m_xBuilder->weld_radio_button("linerb"))
+    , m_xColumnBtn(m_xBuilder->weld_radio_button("columnrb"))
+    , m_xPageBtn(m_xBuilder->weld_radio_button("pagerb"))
+    , m_xPageCollText(m_xBuilder->weld_label("styleft"))
+    , m_xPageCollBox(m_xBuilder->weld_combo_box_text("stylelb"))
+    , m_xPageNumBox(m_xBuilder->weld_check_button("pagenumcb"))
+    , m_xPageNumEdit(m_xBuilder->weld_spin_button("pagenumsb"))
+    , m_xOkBtn(m_xBuilder->weld_button("ok"))
+    , rSh(rS)
     , nKind(0)
     , bHtmlMode(0 != ::GetHtmlMode(rS.GetView().GetDocShell()))
 {
-    m_xDialog.reset(m_xBuilder->weld_dialog("BreakDialog"));
-    m_xLineBtn.reset(m_xBuilder->weld_radio_button("linerb"));
-    m_xColumnBtn.reset(m_xBuilder->weld_radio_button("columnrb"));
-    m_xPageBtn.reset(m_xBuilder->weld_radio_button("pagerb"));
-    m_xPageCollBox.reset(m_xBuilder->weld_combo_box_text("stylelb"));
-    m_xPageNumBox.reset(m_xBuilder->weld_check_button("pagenumcb"));
-    m_xPageNumEdit.reset(m_xBuilder->weld_spin_button("pagenumsb"));
-    m_xPageCollText.reset(m_xBuilder->weld_label("styleft"));
-    m_xOkBtn.reset(m_xBuilder->weld_button("ok"));
-
     Link<weld::ToggleButton&,void> aLk = LINK(this, SwBreakDlg, ToggleHdl);
     m_xPageBtn->connect_toggled(aLk);
     m_xLineBtn->connect_toggled(aLk);

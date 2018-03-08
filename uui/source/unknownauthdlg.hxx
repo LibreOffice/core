@@ -27,11 +27,9 @@
 
 //= Https_UADialog
 
-class UnknownAuthDialog
+class UnknownAuthDialog : public weld::MessageDialogController
 {
 private:
-    std::unique_ptr<weld::Builder> m_xBuilder;
-    std::unique_ptr<weld::MessageDialog> m_xDialog;
     std::unique_ptr<weld::Button> m_xCommandButtonOK;
     std::unique_ptr<weld::Button> m_xView_Certificate;
     std::unique_ptr<weld::RadioButton> m_xOptionButtonAccept;
@@ -52,8 +50,6 @@ public:
     {
         m_xDialog->set_primary_text(rText);
     }
-
-    short run() { return m_xDialog->run(); }
 };
 
 #endif // INCLUDED_UUI_SOURCE_UNKNOWNAUTHDLG_HXX
