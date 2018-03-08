@@ -131,6 +131,7 @@ public:
     void    SetVisibleXY(double fX, double fY);
     double  GetVisibleWidth();
     double  GetVisibleHeight();
+    Point   GetVisibleCenter();
     double  GetScrlLineWidth();
     double  GetScrlLineHeight();
     double  GetScrlPageWidth();
