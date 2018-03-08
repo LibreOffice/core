@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba2be162_f9563805",
+        "filename": "canvas/source/vcl/canvashelper_texturefill.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1028,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2018-03-08T09:15:24Z",
+      "side": 1,
+      "message": "there\u0027s another one here - it\u0027s using the same aPolyPoly, just with an additional Translate in the line above, but on the other hand it is using a new \"pVDev\", so does it have the same bug?",
+      "revId": "b41c504f9dd6bb148ef6777baaca77743a4c01f6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
