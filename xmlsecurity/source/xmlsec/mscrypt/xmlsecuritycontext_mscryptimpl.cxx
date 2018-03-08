@@ -44,7 +44,6 @@ class XMLSecurityContext_MSCryptImpl : public ::cppu::WeakImplHelper<
 
     public:
         XMLSecurityContext_MSCryptImpl();
-        virtual ~XMLSecurityContext_MSCryptImpl() override;
 
         //Methods from XXMLSecurityContext
         virtual sal_Int32 SAL_CALL addSecurityEnvironment(
@@ -79,10 +78,6 @@ class XMLSecurityContext_MSCryptImpl : public ::cppu::WeakImplHelper<
 XMLSecurityContext_MSCryptImpl::XMLSecurityContext_MSCryptImpl()
     ://m_pKeysMngr( NULL ) ,
      m_xSecurityEnvironment( nullptr )
-{
-}
-
-XMLSecurityContext_MSCryptImpl::~XMLSecurityContext_MSCryptImpl()
 {
 }
 

@@ -52,7 +52,6 @@ class XMLSignature_MSCryptImpl : public ::cppu::WeakImplHelper<
 {
     public:
         explicit XMLSignature_MSCryptImpl();
-        virtual ~XMLSignature_MSCryptImpl() override;
 
         //Methods from XXMLSignature
         virtual css::uno::Reference< css::xml::crypto::XXMLSignatureTemplate > SAL_CALL generate(
@@ -76,9 +75,6 @@ class XMLSignature_MSCryptImpl : public ::cppu::WeakImplHelper<
 } ;
 
 XMLSignature_MSCryptImpl::XMLSignature_MSCryptImpl() {
-}
-
-XMLSignature_MSCryptImpl::~XMLSignature_MSCryptImpl() {
 }
 
 /* XXMLSignature */
