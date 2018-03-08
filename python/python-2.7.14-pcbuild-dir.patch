@@ -1,0 +1,10 @@
+--- misc/build/Python-2.7.14/PC/VS9.0/make_buildinfo.vcproj	2018-03-08 06:37:03.303029800 +0200
++++ misc/build/Python-2.7.14/PC/VS9.0/make_buildinfo.vcproj	2018-03-08 06:39:42.007110300 +0200
+@@ -120,6 +120,7 @@
+ 			/>
+ 			<Tool
+ 				Name="VCLinkerTool"
++				OutputFile="$(SolutionDir)/make_buildinfo.exe"
+ 				AdditionalOptions="/NXCOMPAT /DYNAMICBASE"
+ 				SubSystem="1"
+ 			/>

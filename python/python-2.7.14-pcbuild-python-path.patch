@@ -1,0 +1,11 @@
+--- misc/build/Python-2.7.14/PC/VS9.0/pyproject.vsprops	2017-09-16 19:38:35.000000000 +0200
++++ misc/build/Python-2.7.14/PC/VS9.0/pyproject.vsprops	2018-03-08 07:10:30.002138400 +0200
+@@ -42,7 +42,7 @@
+ 	/>
+ 	<UserMacro
+ 		Name="PythonExe"
+-		Value="$(SolutionDir)\python.exe"
++		Value="$(OutDir)\python.exe"
+ 	/>
+ 	<UserMacro
+ 		Name="externalsDir"

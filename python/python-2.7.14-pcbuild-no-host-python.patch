@@ -1,0 +1,11 @@
+--- misc/build/Python-2.7.14/PC/VS9.0/x64.vsprops	2017-09-16 19:38:35.000000000 +0200
++++ misc/build/Python-2.7.14/PC/VS9.0/x64.vsprops	2018-03-08 07:04:52.320860000 +0200
+@@ -15,8 +15,4 @@
+ 		Name="VCLinkerTool"
+ 		TargetMachine="17"
+ 	/>
+-	<UserMacro
+-		Name="PythonExe"
+-		Value="$(HOST_PYTHON)"
+-	/>
+ </VisualStudioPropertySheet>

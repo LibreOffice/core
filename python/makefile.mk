@@ -50,8 +50,21 @@ PATCH_FILES=\
     python-ssl.patch \
     python-solver-before-std.patch \
     python-$(PYVERSION)-sysbase.patch \
-    python-$(PYVERSION)-nohardlink.patch \
-    python-$(PYVERSION)-pcbuild.patch
+    python-$(PYVERSION)-nohardlink.patch
+
+.IF "$(GUI)"=="WNT"
+.IF "$(CPUNAME)"=="INTEL"
+PATCH_FILES += python-$(PYVERSION)-pcbuild.patch
+.ELIF "$(CPUNAME)"=="X86_64"
+PATCH_FILES += \
+    python-$(PYVERSION)-pcbuild-win64.patch \
+    python-$(PYVERSION)-pcbuild-win64-target.patch \
+    python-$(PYVERSION)-pcbuild-subsystem.patch \
+    python-2.7.14-pcbuild-dir.patch \
+    python-2.7.14-pcbuild-no-host-python.patch \
+    python-2.7.14-pcbuild-python-path.patch
+.ENDIF
+.ENDIF
 
 CONFIGURE_DIR=
 
@@ -116,7 +129,11 @@ BUILD_DIR=PC/VS9.0
 # Build python executable and then runs a minimal script. Running the minimal script
 # ensures that certain *.pyc files are generated which would otherwise be created on
 # solver during registration in insetoo_native
+.IF "$(CPUNAME)"=="INTEL"
 BUILD_ACTION=$(COMPATH)$/vcpackages$/vcbuild.exe -useenv pcbuild.sln "Release|Win32"
+.ELIF "$(CPUNAME)"=="X86_64"
+BUILD_ACTION=$(COMPATH)$/vcpackages$/vcbuild.exe -useenv pcbuild.sln "Release|x64"
+.ENDIF
 .ENDIF
 .ENDIF
 
