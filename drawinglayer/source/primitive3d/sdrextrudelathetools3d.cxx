@@ -204,8 +204,7 @@ namespace
 
     void impCreateInBetweenNormals(
         basegfx::B3DPolyPolygon& rPolA,
-        basegfx::B3DPolyPolygon& rPolB,
-        bool bSmoothHorizontalNormals)
+        basegfx::B3DPolyPolygon& rPolB)
     {
         OSL_ENSURE(rPolA.count() == rPolB.count(), "sdrExtrudePrimitive3D: unequally sized polygons (!)");
         const sal_uInt32 nPolygonCount(std::min(rPolA.count(), rPolB.count()));
@@ -249,7 +248,7 @@ namespace
                     // create left normal
                     const basegfx::B3DVector aNormalLeft(aDepth.getPerpendicular(aLeft));
 
-                    if(bSmoothHorizontalNormals)
+                    // smooth horizontal normals
                     {
                         // vector to right (correct for non-closed lines)
                         const bool bLastAndNotClosed(!bClosed && b + 1 == nPointCount);
@@ -266,12 +265,6 @@ namespace
                         // set as new normal at polygons
                         aSubA.setNormal(b, aNewNormal);
                         aSubB.setNormal(b, aNewNormal);
-                    }
-                    else
-                    {
-                        // set aNormalLeft as new normal at polygons
-                        aSubA.setNormal(b, aNormalLeft);
-                        aSubB.setNormal(b, aNormalLeft);
                     }
 
                     // prepare next step
@@ -646,7 +639,7 @@ namespace drawinglayer
                         {
                             if(bCreateNormals)
                             {
-                                impCreateInBetweenNormals(aPolB, aPolA, true/*bSmoothHorizontalNormals*/);
+                                impCreateInBetweenNormals(aPolB, aPolA);
                             }
 
                             {
@@ -678,7 +671,7 @@ namespace drawinglayer
 
                                         if(bHasSlant)
                                         {
-                                            impCreateInBetweenNormals(aPolAA, aPrev, true/*bSmoothHorizontalNormals*/);
+                                            impCreateInBetweenNormals(aPolAA, aPrev);
 
                                             if(bSmoothNormals)
                                             {
@@ -741,7 +734,7 @@ namespace drawinglayer
                                 {
                                     if(bCreateNormals && bSmoothNormals && (nIndPrev != a + 1))
                                     {
-                                        impCreateInBetweenNormals(aPolAA, aPrev, true/*bSmoothHorizontalNormals*/);
+                                        impCreateInBetweenNormals(aPolAA, aPrev);
                                         impMixNormals(aPolA, aPolAA, 0.5);
                                     }
                                 }
@@ -770,7 +763,7 @@ namespace drawinglayer
 
                                         if(bHasSlant)
                                         {
-                                            impCreateInBetweenNormals(aNext, aPolBB, true/*bSmoothHorizontalNormals*/);
+                                            impCreateInBetweenNormals(aNext, aPolBB);
 
                                             if(bSmoothNormals)
                                             {
@@ -832,7 +825,7 @@ namespace drawinglayer
                                 {
                                     if(bCreateNormals && bSmoothNormals && (nIndNext != a))
                                     {
-                                        impCreateInBetweenNormals(aNext, aPolBB, true/*bSmoothHorizontalNormals*/);
+                                        impCreateInBetweenNormals(aNext, aPolBB);
                                         impMixNormals(aPolB, aPolBB, 0.5);
                                     }
                                 }

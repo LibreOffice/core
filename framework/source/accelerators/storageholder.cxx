@@ -129,7 +129,7 @@ css::uno::Reference< css::embed::XStorage > StorageHolder::openPath(const OUStri
 
             try
             {
-                xChild = StorageHolder::openSubStorageWithFallback(xParent, sChild, nOpenMode, true); // TODO think about delegating fallback decision to our own caller!
+                xChild = StorageHolder::openSubStorageWithFallback(xParent, sChild, nOpenMode); // TODO think about delegating fallback decision to our own caller!
             }
             catch(const css::uno::RuntimeException&)
                 { throw; }
@@ -403,8 +403,7 @@ StorageHolder& StorageHolder::operator=(const StorageHolder& rCopy)
 
 css::uno::Reference< css::embed::XStorage > StorageHolder::openSubStorageWithFallback(const css::uno::Reference< css::embed::XStorage >& xBaseStorage  ,
                                                                                       const OUString&                             sSubStorage   ,
-                                                                                            sal_Int32                                    eOpenMode     ,
-                                                                                            bool                                     bAllowFallback)
+                                                                                            sal_Int32                                    eOpenMode)
 {
     // a) try it first with user specified open mode
     //    ignore errors ... but save it for later use!
@@ -421,10 +420,7 @@ css::uno::Reference< css::embed::XStorage > StorageHolder::openSubStorageWithFal
         { exResult = ex; }
 
     // b) readonly already tried? => forward last error!
-    if (
-        (!bAllowFallback                                                                 ) ||   // fallback allowed  ?
-        ((eOpenMode & css::embed::ElementModes::WRITE) != css::embed::ElementModes::WRITE)      // fallback possible ?
-       )
+    if ((eOpenMode & css::embed::ElementModes::WRITE) != css::embed::ElementModes::WRITE) // fallback possible ?
         throw exResult;
 
     // c) try it readonly
@@ -438,45 +434,6 @@ css::uno::Reference< css::embed::XStorage > StorageHolder::openSubStorageWithFal
     // d) no chance!
     SAL_INFO("fwk", "openSubStorageWithFallback(): Unexpected situation! Got no exception for missing storage ...");
     return css::uno::Reference< css::embed::XStorage >();
-}
-
-css::uno::Reference< css::io::XStream > StorageHolder::openSubStreamWithFallback(const css::uno::Reference< css::embed::XStorage >& xBaseStorage  ,
-                                                                                 const OUString&                             sSubStream    ,
-                                                                                       sal_Int32                                    eOpenMode     ,
-                                                                                       bool                                     bAllowFallback)
-{
-    // a) try it first with user specified open mode
-    //    ignore errors ... but save it for later use!
-    css::uno::Exception exResult;
-    try
-    {
-        css::uno::Reference< css::io::XStream > xSubStream = xBaseStorage->openStreamElement(sSubStream, eOpenMode);
-        if (xSubStream.is())
-            return xSubStream;
-    }
-    catch(const css::uno::RuntimeException&)
-        { throw; }
-    catch(const css::uno::Exception& ex)
-        { exResult = ex; }
-
-    // b) readonly already tried? => forward last error!
-    if (
-        (!bAllowFallback                                                                 ) ||   // fallback allowed  ?
-        ((eOpenMode & css::embed::ElementModes::WRITE) != css::embed::ElementModes::WRITE)      // fallback possible ?
-       )
-        throw exResult;
-
-    // c) try it readonly
-    //    don't catch exception here! Outside code wish to know, if operation failed or not.
-    //    Otherwise they work on NULL references ...
-    sal_Int32 eNewMode = (eOpenMode & ~css::embed::ElementModes::WRITE);
-    css::uno::Reference< css::io::XStream > xSubStream = xBaseStorage->openStreamElement(sSubStream, eNewMode);
-    if (xSubStream.is())
-        return xSubStream;
-
-    // d) no chance!
-    SAL_INFO("fwk", "openSubStreamWithFallbacks(): Unexpected situation! Got no exception for missing stream ...");
-    return css::uno::Reference< css::io::XStream >();
 }
 
 OUString StorageHolder::impl_st_normPath(const OUString& sPath)

@@ -279,11 +279,9 @@ void SAL_CALL XMLBasedAcceleratorConfiguration::store()
 
 void SAL_CALL XMLBasedAcceleratorConfiguration::storeToStorage(const css::uno::Reference< css::embed::XStorage >& xStorage)
 {
-    css::uno::Reference< css::io::XStream > xStream = StorageHolder::openSubStreamWithFallback(
-                                                            xStorage,
-                                                            TARGET_CURRENT,
-                                                            css::embed::ElementModes::READWRITE,
-                                                            false); // False => no fallback from read/write to readonly!
+    // no fallback from read/write to readonly!
+    css::uno::Reference< css::io::XStream > xStream = xStorage->openStreamElement(TARGET_CURRENT, css::embed::ElementModes::READWRITE);
+
     css::uno::Reference< css::io::XOutputStream > xOut;
     if (xStream.is())
         xOut = xStream->getOutputStream();

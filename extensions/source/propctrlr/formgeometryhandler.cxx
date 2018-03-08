@@ -459,7 +459,7 @@ namespace pcr
                 Optional< double > aZero( true, 0 );
                 Optional< double > aValueNotPresent( false, 0 );
                 aLineDesc.Control = PropertyHandlerHelper::createNumericControl(
-                    _rxControlFactory, 2, bIsSize ? aZero : aValueNotPresent, aValueNotPresent, false );
+                    _rxControlFactory, 2, bIsSize ? aZero : aValueNotPresent, aValueNotPresent );
 
                 Reference< XNumericControl > xNumericControl( aLineDesc.Control, UNO_QUERY_THROW );
                 xNumericControl->setValueUnit( MeasureUnit::MM_100TH );

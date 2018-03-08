@@ -103,7 +103,7 @@ protected:
 public:
     static Reference<deployment::XPackageRegistry> create(
         OUString const & context,
-        OUString const & cachePath, bool readOnly,
+        OUString const & cachePath,
         Reference<XComponentContext> const & xComponentContext );
 
     // XUpdatable
@@ -273,7 +273,7 @@ void PackageRegistryImpl::insertBackend(
 
 Reference<deployment::XPackageRegistry> PackageRegistryImpl::create(
     OUString const & context,
-    OUString const & cachePath, bool readOnly,
+    OUString const & cachePath,
     Reference<XComponentContext> const & xComponentContext )
 {
     PackageRegistryImpl * that = new PackageRegistryImpl;
@@ -304,10 +304,9 @@ Reference<deployment::XPackageRegistry> PackageRegistryImpl::create(
                                  rtl_UriEncodeIgnoreEscapes,
                                  RTL_TEXTENCODING_UTF8 ) ) );
                 registryArgs[ 1 ] <<= registryCachePath;
-                registryArgs[ 2 ] <<= readOnly;
-                if (! readOnly)
-                    create_folder( nullptr, registryCachePath,
-                                   Reference<XCommandEnvironment>() );
+                registryArgs[ 2 ] <<= false; // readOnly;
+                create_folder( nullptr, registryCachePath,
+                               Reference<XCommandEnvironment>() );
             }
 
             Reference<deployment::XPackageRegistry> xBackend;
@@ -342,7 +341,7 @@ Reference<deployment::XPackageRegistry> PackageRegistryImpl::create(
     // backends.
     Reference<deployment::XPackageRegistry> extensionBackend =
         ::dp_registry::backend::bundle::create(
-            that, context, cachePath, readOnly, xComponentContext);
+            that, context, cachePath, /*readOnly*/false, xComponentContext);
     that->insertBackend(extensionBackend);
 
     Reference<lang::XServiceInfo> xServiceInfo(
@@ -525,7 +524,7 @@ Reference<deployment::XPackageRegistry> create(
     Reference<XComponentContext> const & xComponentContext )
 {
     return PackageRegistryImpl::create(
-        context, cachePath, false/*readOnly*/, xComponentContext );
+        context, cachePath, xComponentContext );
 }
 
 } // namespace dp_registry
