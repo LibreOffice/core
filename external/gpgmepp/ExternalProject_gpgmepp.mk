@@ -49,6 +49,7 @@ $(call gb_ExternalProject_get_state_target,gpgmepp,build):
 	$(call gb_ExternalProject_run,build,\
 		autoreconf \
 		&& ./configure \
+		   --disable-gpg-test \
 		   --enable-languages="cpp" \
 		   GPG_ERROR_CFLAGS="$(GPG_ERROR_CFLAGS)" \
 		   GPG_ERROR_LIBS="$(GPG_ERROR_LIBS)" \
