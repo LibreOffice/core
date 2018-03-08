@@ -658,6 +658,12 @@ bool SfxObjectShell::DoLoad( SfxMedium *pMed )
     pImpl->nLoadedFlags = SfxLoadedFlags::NONE;
     pImpl->bModelInitialized = false;
 
+    if (pFilter && !pFilter->IsEnabled())
+    {
+        SetError( ERRCODE_IO_FILTERDISABLED, OSL_LOG_PREFIX );
+    }
+
+
     //TODO/LATER: make a clear strategy how to handle "UsesStorage" etc.
     bool bOwnStorageFormat = IsOwnStorageFormat( *pMedium );
     bool bHasStorage = IsPackageStorageFormat_Impl( *pMedium );

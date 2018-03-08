@@ -43,7 +43,8 @@ SfxFilter::SfxFilter( const OUString& rProvider, const OUString &rFilterName ) :
     nFormatType(SfxFilterFlags::NONE),
     nVersion(0),
     lFormat(SotClipboardFormatId::NONE),
-    nDocIcon(0)
+    nDocIcon(0),
+    mbEnabled(true)
 {
 }
 
@@ -55,7 +56,8 @@ SfxFilter::SfxFilter( const OUString &rName,
                       sal_uInt16 nIcon,
                       const OUString &rMimeType,
                       const OUString &rUsrDat,
-                      const OUString &rServiceName ):
+                      const OUString &rServiceName,
+                      bool bEnabled ):
     aWildCard(rWildCard, ';'),
     aTypeName(rTypNm),
     aUserData(rUsrDat),
@@ -66,7 +68,8 @@ SfxFilter::SfxFilter( const OUString &rName,
     nFormatType(nType),
     nVersion(SOFFICE_FILEFORMAT_50),
     lFormat(lFmt),
-    nDocIcon(nIcon)
+    nDocIcon(nIcon),
+    mbEnabled(bEnabled)
 {
     OUString aExts = GetWildcard().getGlob();
     OUString aShort, aLong;
