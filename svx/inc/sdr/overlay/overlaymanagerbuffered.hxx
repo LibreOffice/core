@@ -46,10 +46,6 @@ namespace sdr
             // Range for buffering (in pixel to be independent from mapMode)
             basegfx::B2IRange                       maBufferRememberedRangePixel;
 
-            // Flag to decide if PreRendering shall be used for overlay refreshes.
-            // Default is false.
-            bool                                    mbRefreshWithPreRendering : 1;
-
             // link for timer
             DECL_LINK(ImpBufferTimerHandler, Timer*, void);
 
@@ -59,9 +55,7 @@ namespace sdr
             void ImpRestoreBackground(const vcl::Region& rRegionPixel) const;
             void ImpSaveBackground(const vcl::Region& rRegion, OutputDevice* pPreRenderDevice);
 
-            OverlayManagerBuffered(
-                OutputDevice& rOutputDevice,
-                bool bRefreshWithPreRendering);
+            OverlayManagerBuffered(OutputDevice& rOutputDevice);
             virtual ~OverlayManagerBuffered() override;
 
         public:

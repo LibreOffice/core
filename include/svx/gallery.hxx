@@ -118,8 +118,7 @@ public:
     static bool                 InsertURL( sal_uInt32 nThemeId, const OUString& rURL );
 
     static bool                 GetGraphicObj( const OUString& rThemeName, sal_uInt32 nPos,
-                                               Graphic* pGraphic, BitmapEx* pThumb,
-                                               bool bProgress = false );
+                                               Graphic* pGraphic );
     static bool                 GetGraphicObj( sal_uInt32 nThemeId, sal_uInt32 nPos,
                                                Graphic* pGraphic );
 

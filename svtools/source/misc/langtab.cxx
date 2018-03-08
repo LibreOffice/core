@@ -281,9 +281,9 @@ LanguageType SvtLanguageTable::GetLanguageTypeAtIndex( sal_uInt32 nIndex )
 }
 
 
-sal_uInt32 SvtLanguageTable::AddLanguageTag( const LanguageTag& rLanguageTag, const OUString& rString )
+sal_uInt32 SvtLanguageTable::AddLanguageTag( const LanguageTag& rLanguageTag )
 {
-    return theLanguageTable::get().AddItem( (rString.isEmpty() ? lcl_getDescription(rLanguageTag.getBcp47()) : rString),
+    return theLanguageTable::get().AddItem( lcl_getDescription(rLanguageTag.getBcp47()),
             rLanguageTag.getLanguageType());
 }
 

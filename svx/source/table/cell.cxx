@@ -382,7 +382,7 @@ namespace sdr { namespace table {
 
 rtl::Reference< Cell > Cell::create( SdrTableObj& rTableObj )
 {
-    rtl::Reference< Cell > xCell( new Cell( rTableObj, nullptr ) );
+    rtl::Reference< Cell > xCell( new Cell( rTableObj ) );
     if( xCell->mxTable.is() )
     {
         Reference< XEventListener > xListener( xCell.get() );
@@ -392,8 +392,8 @@ rtl::Reference< Cell > Cell::create( SdrTableObj& rTableObj )
 }
 
 
-Cell::Cell( SdrTableObj& rTableObj, OutlinerParaObject* pOutlinerParaObject )
-: SdrText( rTableObj, pOutlinerParaObject )
+Cell::Cell( SdrTableObj& rTableObj )
+: SdrText( rTableObj, /*pOutlinerParaObject*/nullptr )
 , SvxUnoTextBase( ImplGetSvxUnoOutlinerTextCursorSvxPropertySet() )
 , mpPropSet( ImplGetSvxCellPropertySet() )
 , mpProperties( new sdr::properties::CellProperties( rTableObj, this ) )

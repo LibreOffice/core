@@ -1131,7 +1131,7 @@ private:
         bool bKeepVisibleEscapes);
 
     static inline OUString encodeText(
-        OUString const & rTheText, bool bOctets, Part ePart,
+        OUString const & rTheText, Part ePart,
         EncodeMechanism eMechanism, rtl_TextEncoding eCharset,
         bool bKeepVisibleEscapes);
 
@@ -1151,13 +1151,13 @@ private:
 
 // static
 inline OUString INetURLObject::encodeText(OUString const & rTheText,
-                                           bool bOctets, Part ePart,
+                                           Part ePart,
                                            EncodeMechanism eMechanism,
                                            rtl_TextEncoding eCharset,
                                            bool bKeepVisibleEscapes)
 {
     return encodeText(rTheText.getStr(),
-                      rTheText.getStr() + rTheText.getLength(), bOctets, ePart,
+                      rTheText.getStr() + rTheText.getLength(), /*bOctets*/false, ePart,
                       eMechanism, eCharset, bKeepVisibleEscapes);
 }
 
@@ -1324,7 +1324,7 @@ inline OUString INetURLObject::encode(OUString const & rText, Part ePart,
                                        EncodeMechanism eMechanism,
                                        rtl_TextEncoding eCharset)
 {
-    return encodeText(rText, false, ePart, eMechanism, eCharset, false);
+    return encodeText(rText, ePart, eMechanism, eCharset, false);
 }
 
 // static

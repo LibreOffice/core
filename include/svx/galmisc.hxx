@@ -187,8 +187,8 @@ public:
                      GalleryHint( GalleryHintType nType, const OUString& rThemeName, void* nData1 = nullptr ) :
                         mnType( nType ), maThemeName( rThemeName ), mnData1( nData1 ) {}
 
-                     GalleryHint( GalleryHintType nType, const OUString& rThemeName, const OUString& rStringData, void* nData1 = nullptr ) :
-                        mnType( nType ), maThemeName( rThemeName ), maStringData( rStringData ), mnData1( nData1 ) {}
+                     GalleryHint( GalleryHintType nType, const OUString& rThemeName, const OUString& rStringData ) :
+                        mnType( nType ), maThemeName( rThemeName ), maStringData( rStringData ), mnData1( nullptr ) {}
 
     GalleryHintType  GetType() const { return mnType; }
     const OUString&  GetThemeName() const { return maThemeName; }

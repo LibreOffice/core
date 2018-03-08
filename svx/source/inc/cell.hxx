@@ -193,7 +193,7 @@ protected:
 
 private:
     /// @throws css::uno::RuntimeException
-    SVX_DLLPRIVATE Cell( SdrTableObj& rTableObj, OutlinerParaObject* pOutlinerParaObject );
+    SVX_DLLPRIVATE Cell( SdrTableObj& rTableObj );
     SVX_DLLPRIVATE virtual ~Cell() throw() override;
 
     Cell(Cell const &) = delete;
