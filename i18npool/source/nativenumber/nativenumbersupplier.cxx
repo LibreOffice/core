@@ -63,10 +63,10 @@ OUString getHebrewNativeNumberString(const OUString& aNumberString, bool useGere
 OUString getCyrillicNativeNumberString(const OUString& aNumberString);
 
 /// @throws RuntimeException
-OUString AsciiToNativeChar( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount,
+OUString AsciiToNativeChar( const OUString& inStr, sal_Int32 nCount,
         Sequence< sal_Int32 >& offset, bool useOffset, sal_Int16 number )
 {
-    const sal_Unicode *src = inStr.getStr() + startPos;
+    const sal_Unicode *src = inStr.getStr();
     rtl_uString *newStr = rtl_uString_alloc(nCount);
     if (useOffset)
         offset.realloc(nCount);
@@ -86,7 +86,7 @@ OUString AsciiToNativeChar( const OUString& inStr, sal_Int32 startPos, sal_Int32
         else
             newStr->buffer[i] = ch;
         if (useOffset)
-            offset[i] = startPos + i;
+            offset[i] = i;
     }
     return OUString(newStr, SAL_NO_ACQUIRE); // take ownership
 }
@@ -163,12 +163,12 @@ bool AsciiToNative_numberMaker(const sal_Unicode *str, sal_Int32 begin, sal_Int3
 }
 
 /// @throws RuntimeException
-OUString AsciiToNative( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount,
+OUString AsciiToNative( const OUString& inStr, sal_Int32 nCount,
         Sequence< sal_Int32 >& offset, bool useOffset, const Number* number )
 {
     OUString aRet;
 
-    sal_Int32 strLen = inStr.getLength() - startPos;
+    sal_Int32 strLen = inStr.getLength();
     const sal_Unicode *numberChar = NumberChar[number->number];
 
     if (nCount > strLen)
@@ -176,7 +176,7 @@ OUString AsciiToNative( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCo
 
     if (nCount > 0)
     {
-        const sal_Unicode *str = inStr.getStr() + startPos;
+        const sal_Unicode *str = inStr.getStr();
         std::unique_ptr<sal_Unicode[]> newStr(new sal_Unicode[nCount * 2 + 1]);
         std::unique_ptr<sal_Unicode[]> srcStr(new sal_Unicode[nCount + 1]); // for keeping number without comma
         sal_Int32 i, len = 0, count = 0;
@@ -191,7 +191,7 @@ OUString AsciiToNative( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCo
                 if (bDoDecimal) {
                     newStr[count] = numberChar[str[i] - NUMBER_ZERO];
                     if (useOffset)
-                        offset[count] = i + startPos;
+                        offset[count] = i;
                     count++;
                 }
                 else
@@ -206,7 +206,7 @@ OUString AsciiToNative( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCo
                         if (end == 0) continue;
                         sal_Int32 _count = count;
                         bNotZero |= AsciiToNative_numberMaker(srcStr.get(), begin, end - begin, newStr.get(), count,
-                                end == len ? -1 : 0, offset, useOffset, i - len + startPos, number, numberChar);
+                                end == len ? -1 : 0, offset, useOffset, i - len, number, numberChar);
                         if (count > 0 && number->multiplierExponent[number->exponentCount-1] == 1 &&
                                 newStr[count-1] == numberChar[0])
                             count--;
@@ -214,7 +214,7 @@ OUString AsciiToNative( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCo
                             if (end != len) {
                                 newStr[count] = number->multiplierChar[0];
                                 if (useOffset)
-                                    offset[count] = i - len + startPos;
+                                    offset[count] = i - len;
                                 count++;
                             }
                         }
@@ -222,7 +222,7 @@ OUString AsciiToNative( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCo
                     if (! bNotZero && ! (number->numberFlag & NUMBER_OMIT_ONLY_ZERO)) {
                         newStr[count] = numberChar[0];
                         if (useOffset)
-                            offset[count] = i - len + startPos;
+                            offset[count] = i - len;
                         count++;
                     }
                     len = 0;
@@ -238,7 +238,7 @@ OUString AsciiToNative( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCo
                     else
                         newStr[count] = str[i];
                     if (useOffset)
-                        offset[count] = i + startPos;
+                        offset[count] = i;
                     count++;
                 }
             }
@@ -301,17 +301,17 @@ static void NativeToAscii_numberMaker(sal_Int16 max, sal_Int16 prev, const sal_U
 
 /// @throws RuntimeException
 static OUString NativeToAscii(const OUString& inStr,
-        sal_Int32 startPos, sal_Int32 nCount, Sequence< sal_Int32 >& offset, bool useOffset )
+        sal_Int32 nCount, Sequence< sal_Int32 >& offset, bool useOffset )
 {
     OUString aRet;
 
-    sal_Int32 strLen = inStr.getLength() - startPos;
+    sal_Int32 strLen = inStr.getLength();
 
     if (nCount > strLen)
         nCount = strLen;
 
     if (nCount > 0) {
-        const sal_Unicode *str = inStr.getStr() + startPos;
+        const sal_Unicode *str = inStr.getStr();
         std::unique_ptr<sal_Unicode[]> newStr(new sal_Unicode[nCount * MultiplierExponent_7_CJK[0] + 2]);
         if (useOffset)
             offset.realloc( nCount * MultiplierExponent_7_CJK[0] + 1 );
@@ -368,8 +368,6 @@ static OUString NativeToAscii(const OUString& inStr,
 
         if (useOffset) {
             offset.realloc(count);
-            for (i = 0; i < count; i++)
-                offset[i] += startPos;
         }
         aRet = OUString(newStr.get(), count);
     }
@@ -539,7 +537,7 @@ OUString NativeNumberSupplierService::getNativeNumberString(const OUString& aNum
     switch (nNativeNumberMode)
     {
         case NativeNumberMode::NATNUM0: // Ascii
-            return NativeToAscii(aNumberString,  0, aNumberString.getLength(), offset, useOffset);
+            return NativeToAscii(aNumberString, aNumberString.getLength(), offset, useOffset);
         case NativeNumberMode::NATNUM1: // Char, Lower
             num = natnum1[langnum];
             break;
@@ -595,14 +593,14 @@ OUString NativeNumberSupplierService::getNativeNumberString(const OUString& aNum
                 SeparatorChar[NumberChar_FullWidth]=SeparatorChar[NumberChar_HalfWidth]+0xFEE0;
         }
         if (number)
-            return AsciiToNative( aNumberString, 0, aNumberString.getLength(), offset, useOffset, number );
+            return AsciiToNative( aNumberString, aNumberString.getLength(), offset, useOffset, number );
         else if (num == NumberChar_he)
             return getHebrewNativeNumberString(aNumberString,
                     nNativeNumberMode == NativeNumberMode::NATNUM2);
         else if (num == NumberChar_cu)
             return getCyrillicNativeNumberString(aNumberString);
         else
-            return AsciiToNativeChar(aNumberString, 0, aNumberString.getLength(), offset, useOffset, num);
+            return AsciiToNativeChar(aNumberString, aNumberString.getLength(), offset, useOffset, num);
     }
     else
         return aNumberString;

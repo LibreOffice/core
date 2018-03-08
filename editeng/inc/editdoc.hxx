@@ -289,7 +289,7 @@ public:
     /// return length including expanded fields
     sal_uLong GetExpandedLen() const;
     /// return content including expanded fields
-    OUString  GetExpandedText(sal_Int32 nStartPos = 0, sal_Int32 nEndPos = -1, bool bResolveFields = true) const;
+    OUString  GetExpandedText(sal_Int32 nStartPos = 0, sal_Int32 nEndPos = -1) const;
     /// re-write offsets in the expanded text to string offsets
     void      UnExpandPositions( sal_Int32 &rStartPos, sal_Int32 &rEndPos );
 

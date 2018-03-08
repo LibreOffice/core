@@ -141,6 +141,8 @@ class StorageHolder final
         StorageHolder& operator=(const StorageHolder& rCopy);
 
         /** @short  opens a sub element of the specified base storage.
+                    If eOpenMode contains an ELEMENT_WRITE flag remove it and try it with the rest of eOpenMode flags
+                    again.
 
             @descr  First this method try to open the requested sub element
                     using the given open mode. If it failed there is second step,
@@ -158,20 +160,10 @@ class StorageHolder final
             @param  eOpenMode
                     a flag field, which set the open mode for this operation.
 
-            @param  bAllowFallback
-                    if eOpenMode contains an ELEMENT_WRITE flag this parameter
-                    allow to remove it and try it with the rest of eOpenMode flags
-                    again.
          */
         static css::uno::Reference< css::embed::XStorage > openSubStorageWithFallback(const css::uno::Reference< css::embed::XStorage >& xBaseStorage  ,
                                                                                       const OUString&                             sSubStorage   ,
-                                                                                            sal_Int32                                    eOpenMode     ,
-                                                                                            bool                                     bAllowFallback);
-
-        static css::uno::Reference< css::io::XStream > openSubStreamWithFallback(const css::uno::Reference< css::embed::XStorage >& xBaseStorage  ,
-                                                                                 const OUString&                             sSubStream    ,
-                                                                                       sal_Int32                                    eOpenMode     ,
-                                                                                       bool                                     bAllowFallback);
+                                                                                      sal_Int32                                    eOpenMode);
 
         // helper
         private:

@@ -98,7 +98,7 @@ namespace pcr
             );
 
         /** creates an <member scope="css::inspection">PropertyControlType::ListBox</member>-type control
-            and fills it with initial values
+            and fills it with initial values.
 
             @param _rxControlFactory
                 A control factory. Must not be <NULL/>.
@@ -112,9 +112,6 @@ namespace pcr
             @param _bReadOnlyControl
                 determines whether the control should be read-only
 
-            @param _bSorted
-                determines whether the list entries should be sorted
-
             @return
                 the newly created control
         */
@@ -122,8 +119,7 @@ namespace pcr
             createListBoxControl(
                 const css::uno::Reference< css::inspection::XPropertyControlFactory >& _rxControlFactory,
                 const char** pTransIds, size_t nElements,
-                bool _bReadOnlyControl,
-                bool _bSorted
+                bool _bReadOnlyControl
             );
 
         /** creates an <member scope="css::inspection">PropertyControlType::ComboBox</member>-type control
@@ -135,9 +131,6 @@ namespace pcr
             @param  _rInitialListEntries
                 the initial values of the control
 
-            @param _bReadOnlyControl
-                determines whether the control should be read-only
-
             @param _bSorted
                 determines whether the list entries should be sorted
 
@@ -148,7 +141,6 @@ namespace pcr
             createComboBoxControl(
                 const css::uno::Reference< css::inspection::XPropertyControlFactory >& _rxControlFactory,
                 const std::vector< OUString >& _rInitialListEntries,
-                bool _bReadOnlyControl,
                 bool _bSorted
             );
 
@@ -166,8 +158,6 @@ namespace pcr
             @param _rMaxValue
                 maximum value which can be entered in the control
                 (<member scope="css::inspection">XNumericControl::MaxValue</member>)
-            @param _bReadOnlyControl
-                determines whether the control should be read-only
 
             @return
                 the newly created control
@@ -177,8 +167,7 @@ namespace pcr
                 const css::uno::Reference< css::inspection::XPropertyControlFactory >& _rxControlFactory,
                 sal_Int16 _nDigits,
                 const css::beans::Optional< double >& _rMinValue,
-                const css::beans::Optional< double >& _rMaxValue,
-                bool _bReadOnlyControl
+                const css::beans::Optional< double >& _rMaxValue
             );
 
         /** marks the document passed in our UNO context as modified

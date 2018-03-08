@@ -1626,7 +1626,7 @@ sal_uLong ContentNode::GetExpandedLen() const
     return nLen;
 }
 
-OUString ContentNode::GetExpandedText(sal_Int32 nStartPos, sal_Int32 nEndPos, bool bResolveFields) const
+OUString ContentNode::GetExpandedText(sal_Int32 nStartPos, sal_Int32 nEndPos) const
 {
     if ( nEndPos < 0 || nEndPos > Len() )
         nEndPos = Len();
@@ -1658,8 +1658,7 @@ OUString ContentNode::GetExpandedText(sal_Int32 nStartPos, sal_Int32 nEndPos, bo
                 case EE_FEATURE_LINEBR: aStr += "\x0A";
                 break;
                 case EE_FEATURE_FIELD:
-                    if ( bResolveFields )
-                        aStr += static_cast<const EditCharAttribField*>(pNextFeature)->GetFieldValue();
+                    aStr += static_cast<const EditCharAttribField*>(pNextFeature)->GetFieldValue();
                 break;
                 default:    OSL_FAIL( "What feature?" );
             }
@@ -2163,7 +2162,7 @@ OUString EditDoc::GetParaAsString( sal_Int32 nNode ) const
 OUString EditDoc::GetParaAsString(
     const ContentNode* pNode, sal_Int32 nStartPos, sal_Int32 nEndPos)
 {
-    return pNode->GetExpandedText(nStartPos, nEndPos, true/*bResolveFields*/);
+    return pNode->GetExpandedText(nStartPos, nEndPos);
 }
 
 EditPaM EditDoc::GetStartPaM() const

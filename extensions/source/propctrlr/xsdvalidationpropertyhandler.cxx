@@ -403,7 +403,7 @@ namespace pcr
             aDescriptor.Control = PropertyHandlerHelper::createListBoxControl( _rxControlFactory, aListEntries, false, false );
             break;
         case PropertyControlType::NumericField:
-            aDescriptor.Control = PropertyHandlerHelper::createNumericControl( _rxControlFactory, 0, aMinValue, aMaxValue, false );
+            aDescriptor.Control = PropertyHandlerHelper::createNumericControl( _rxControlFactory, 0, aMinValue, aMaxValue );
             break;
         default:
             aDescriptor.Control = _rxControlFactory->createPropertyControl( nControlType, false );
