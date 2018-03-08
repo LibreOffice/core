@@ -63,10 +63,11 @@ FilterCache::FilterCache()
     , m_eFillState(E_CONTAINS_NOTHING                      )
 {
     int i = 0;
-    OUString sStandardProps[9];
+    OUString sStandardProps[10];
 
     sStandardProps[i++] = PROPNAME_USERDATA;
     sStandardProps[i++] = PROPNAME_TEMPLATENAME;
+    sStandardProps[i++] = PROPNAME_ENABLED;
     // E_READ_UPDATE only above
     sStandardProps[i++] = PROPNAME_TYPE;
     sStandardProps[i++] = PROPNAME_FILEFORMATVERSION;
@@ -79,9 +80,9 @@ FilterCache::FilterCache()
 
     // E_READ_NOTHING -> creative nothingness.
     m_aStandardProps[E_READ_STANDARD] =
-        css::uno::Sequence< OUString >(sStandardProps + 2, 7);
+        css::uno::Sequence< OUString >(sStandardProps + 3, 7);
     m_aStandardProps[E_READ_UPDATE] =
-        css::uno::Sequence< OUString >(sStandardProps, 2);
+        css::uno::Sequence< OUString >(sStandardProps, 3);
     m_aStandardProps[E_READ_ALL] =
         css::uno::Sequence< OUString >(sStandardProps,
                                        SAL_N_ELEMENTS(sStandardProps));
