@@ -287,9 +287,6 @@
     <glade-widget-class title="Color Slider Control" name="cuilo-ColorSliderControl"
                         generic-name="Color Slider Control" parent="GtkDrawingArea"
                         icon-name="widget-gtk-drawingarea"/>
-    <glade-widget-class title="Color Preview Control" name="cuilo-ColorPreviewControl"
-                        generic-name="Color Preview Control" parent="GtkDrawingArea"
-                        icon-name="widget-gtk-drawingarea"/>
     <glade-widget-class title="Html Attribute Preview" name="sduilo-SdHtmlAttrPreview"
                         generic-name="Html Attribute Preview" parent="GtkDrawingArea"
                         icon-name="widget-gtk-drawingarea"/>

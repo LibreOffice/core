@@ -289,6 +289,16 @@ public:
         return m_xWidget->get_grid_top_attach();
     }
 
+    virtual void set_margin_top(int nMargin) override
+    {
+        m_xWidget->set_margin_top(nMargin);
+    }
+
+    virtual void set_margin_bottom(int nMargin) override
+    {
+        m_xWidget->set_margin_bottom(nMargin);
+    }
+
     virtual weld::Container* weld_parent() const override;
 
     virtual ~SalInstanceWidget() override
@@ -795,6 +805,11 @@ public:
         m_xEntry->SetWidthInChars(nChars);
     }
 
+    virtual void set_max_length(int nChars) override
+    {
+        m_xEntry->SetMaxTextLen(nChars);
+    }
+
     virtual void select_region(int nStartPos, int nEndPos) override
     {
         m_xEntry->SetSelection(Selection(nStartPos, nEndPos < 0 ? SELECTION_MAX : nEndPos));
@@ -884,7 +899,6 @@ public:
             m_xTreeView->SetNoSelection();
         else
             m_xTreeView->SelectEntryPos(pos);
-        m_xTreeView->Select();
     }
 
     virtual OUString get_selected() override
@@ -1122,8 +1136,12 @@ class SalInstanceDrawingArea : public SalInstanceWidget, public virtual weld::Dr
 private:
     VclPtr<VclDrawingArea> m_xDrawingArea;
 
-    DECL_LINK(PaintHdl, vcl::RenderContext&, void);
+    typedef std::pair<vcl::RenderContext&, const tools::Rectangle&> target_and_area;
+    DECL_LINK(PaintHdl, target_and_area, void);
     DECL_LINK(ResizeHdl, const Size&, void);
+    DECL_LINK(MousePressHdl, const Point&, void);
+    DECL_LINK(MouseMoveHdl, const Point&, void);
+    DECL_LINK(MouseReleaseHdl, const Point&, void);
 
 public:
     SalInstanceDrawingArea(VclDrawingArea* pDrawingArea, bool bTakeOwnership)
@@ -1132,6 +1150,9 @@ public:
     {
         m_xDrawingArea->SetPaintHdl(LINK(this, SalInstanceDrawingArea, PaintHdl));
         m_xDrawingArea->SetResizeHdl(LINK(this, SalInstanceDrawingArea, ResizeHdl));
+        m_xDrawingArea->SetMousePressHdl(LINK(this, SalInstanceDrawingArea, MousePressHdl));
+        m_xDrawingArea->SetMouseMoveHdl(LINK(this, SalInstanceDrawingArea, MouseMoveHdl));
+        m_xDrawingArea->SetMouseReleaseHdl(LINK(this, SalInstanceDrawingArea, MouseReleaseHdl));
     }
 
     virtual void queue_draw() override
@@ -1139,21 +1160,41 @@ public:
         m_xDrawingArea->Invalidate();
     }
 
+    virtual void queue_draw_area(int x, int y, int width, int height) override
+    {
+        m_xDrawingArea->Invalidate(tools::Rectangle(Point(x, y), Size(width, height)));
+    }
+
     virtual ~SalInstanceDrawingArea() override
     {
         m_xDrawingArea->SetResizeHdl(Link<const Size&, void>());
-        m_xDrawingArea->SetPaintHdl(Link<vcl::RenderContext&, void>());
+        m_xDrawingArea->SetPaintHdl(Link<std::pair<vcl::RenderContext&, const tools::Rectangle&>, void>());
     }
 };
 
-IMPL_LINK(SalInstanceDrawingArea, PaintHdl, vcl::RenderContext&, rDevice, void)
+IMPL_LINK(SalInstanceDrawingArea, PaintHdl, target_and_area, aPayload, void)
 {
-    m_aDrawHdl.Call(rDevice);
+    m_aDrawHdl.Call(aPayload);
 }
 
 IMPL_LINK(SalInstanceDrawingArea, ResizeHdl, const Size&, rSize, void)
 {
     m_aSizeAllocateHdl.Call(rSize);
+}
+
+IMPL_LINK(SalInstanceDrawingArea, MousePressHdl, const Point&, rPos, void)
+{
+    m_aMousePressHdl.Call(rPos);
+}
+
+IMPL_LINK(SalInstanceDrawingArea, MouseMoveHdl, const Point&, rPos, void)
+{
+    m_aMouseMotionHdl.Call(rPos);
+}
+
+IMPL_LINK(SalInstanceDrawingArea, MouseReleaseHdl, const Point&, rPos, void)
+{
+    m_aMouseReleaseHdl.Call(rPos);
 }
 
 //ComboBox and ListBox have the same apis, ComboBoxes in LibreOffice have an edit box and ListBoxes

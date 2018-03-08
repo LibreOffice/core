@@ -613,14 +613,39 @@ public:
 class VCL_DLLPUBLIC VclDrawingArea : public vcl::Window
 {
 private:
-    Link<vcl::RenderContext&, void> m_aPaintHdl;
+    Link<std::pair<vcl::RenderContext&, const tools::Rectangle&>, void> m_aPaintHdl;
     Link<const Size&, void> m_aResizeHdl;
+    Link<const Point&, void> m_aMousePressHdl;
+    Link<const Point&, void> m_aMouseMotionHdl;
+    Link<const Point&, void> m_aMouseReleaseHdl;
+
+    virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override
+    {
+        m_aPaintHdl.Call(std::pair<vcl::RenderContext&, const tools::Rectangle&>(rRenderContext, rRect));
+    }
+    virtual void Resize() override
+    {
+        m_aResizeHdl.Call(GetOutputSizePixel());
+    }
+    virtual void MouseMove(const MouseEvent& rMEvt) override
+    {
+        m_aMouseMotionHdl.Call(rMEvt.GetPosPixel());
+    }
+    virtual void MouseButtonDown(const MouseEvent& rMEvt) override
+    {
+        m_aMousePressHdl.Call(rMEvt.GetPosPixel());
+    }
+    virtual void MouseButtonUp(const MouseEvent& rMEvt) override
+    {
+        m_aMouseReleaseHdl.Call(rMEvt.GetPosPixel());
+    }
+
 public:
     VclDrawingArea(vcl::Window *pParent, WinBits nStyle)
         : vcl::Window(pParent, nStyle)
     {
     }
-    void SetPaintHdl(const Link<vcl::RenderContext&, void>& rLink)
+    void SetPaintHdl(const Link<std::pair<vcl::RenderContext&, const tools::Rectangle&>, void>& rLink)
     {
         m_aPaintHdl = rLink;
     }
@@ -628,13 +653,17 @@ public:
     {
         m_aResizeHdl = rLink;
     }
-    virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& /*rRect*/) override
+    void SetMousePressHdl(const Link<const Point&, void>& rLink)
     {
-        m_aPaintHdl.Call(rRenderContext);
+        m_aMousePressHdl = rLink;
     }
-    virtual void Resize() override
+    void SetMouseMoveHdl(const Link<const Point&, void>& rLink)
     {
-        m_aResizeHdl.Call(GetOutputSizePixel());
+        m_aMouseMotionHdl = rLink;
+    }
+    void SetMouseReleaseHdl(const Link<const Point&, void>& rLink)
+    {
+        m_aMouseReleaseHdl = rLink;
     }
 };
 

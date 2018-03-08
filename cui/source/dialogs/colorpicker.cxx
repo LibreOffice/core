@@ -28,6 +28,7 @@
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/basemutex.hxx>
+#include <vcl/weld.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/button.hxx>
 #include <vcl/fixed.hxx>
@@ -150,61 +151,85 @@ static void RGBtoCMYK( double dR, double dG, double dB, double& fCyan, double& f
     }
 }
 
-class ColorPreviewControl : public Control
+class ColorPreviewControl
 {
-public:
-    ColorPreviewControl( vcl::Window* pParent, WinBits nStyle );
-
-    virtual void Paint(vcl::RenderContext& rRenderContext, const ::tools::Rectangle& rRect) override;
-
-    void SetColor(const Color& rColor);
-
 private:
-    Color maColor;
+    std::unique_ptr<weld::DrawingArea> m_xDrawingArea;
+    Color m_aColor;
+    Size m_aSize;
+
+    DECL_LINK(DoPaint, weld::DrawingArea::draw_args, void);
+    DECL_LINK(DoResize, const Size& rSize, void);
+public:
+    ColorPreviewControl(weld::DrawingArea* pDrawingArea)
+        : m_xDrawingArea(pDrawingArea)
+    {
+        m_xDrawingArea->connect_size_allocate(LINK(this, ColorPreviewControl, DoResize));
+        m_xDrawingArea->connect_draw(LINK(this, ColorPreviewControl, DoPaint));
+        m_xDrawingArea->set_size_request(m_xDrawingArea->get_approximate_char_width() * 10,
+                                         m_xDrawingArea->get_text_height() * 2);
+
+    }
+
+    void SetColor(const Color& rCol)
+    {
+        if (rCol != m_aColor)
+        {
+            m_aColor = rCol;
+            m_xDrawingArea->queue_draw();
+        }
+    }
+
+    void show() { m_xDrawingArea->show(); }
 };
 
-ColorPreviewControl::ColorPreviewControl(vcl::Window* pParent, WinBits nStyle)
-    : Control(pParent, nStyle)
+IMPL_LINK(ColorPreviewControl, DoPaint, weld::DrawingArea::draw_args, aPayload, void)
 {
+    vcl::RenderContext& rRenderContext = aPayload.first;
+    rRenderContext.SetFillColor(m_aColor);
+    rRenderContext.SetLineColor(m_aColor);
+    rRenderContext.DrawRect(tools::Rectangle(Point(0, 0), m_aSize));
 }
 
-VCL_BUILDER_FACTORY_CONSTRUCTOR(ColorPreviewControl, 0)
-
-void ColorPreviewControl::SetColor( const Color& rCol )
+IMPL_LINK(ColorPreviewControl, DoResize, const Size&, rSize, void)
 {
-    if (rCol != maColor)
+    if (m_aSize != rSize)
     {
-        maColor = rCol;
-        Invalidate();
+        m_aSize = rSize;
+        m_xDrawingArea->queue_draw();
     }
-}
-
-void ColorPreviewControl::Paint(vcl::RenderContext& rRenderContext, const ::tools::Rectangle& rRect)
-{
-    rRenderContext.SetFillColor(maColor);
-    rRenderContext.SetLineColor(maColor);
-    rRenderContext.DrawRect(rRect);
 }
 
 enum ColorMode { HUE, SATURATION, BRIGHTNESS, RED, GREEN, BLUE };
 const ColorMode DefaultMode = HUE;
 
-class ColorFieldControl : public Control
+class ColorFieldControl
 {
 public:
-    ColorFieldControl(vcl::Window* pParent, WinBits nStyle);
-    virtual ~ColorFieldControl() override;
+    ColorFieldControl(weld::DrawingArea* pDrawingArea)
+        : m_xDrawingArea(pDrawingArea)
+        , meMode( DefaultMode )
+        , mdX( -1.0 )
+        , mdY( -1.0 )
+    {
+        m_xDrawingArea->set_size_request(m_xDrawingArea->get_approximate_char_width() * 40,
+                                         m_xDrawingArea->get_text_height() * 10);
+        m_xDrawingArea->connect_size_allocate(LINK(this, ColorFieldControl, DoResize));
+        m_xDrawingArea->connect_draw(LINK(this, ColorFieldControl, DoPaint));
+        m_xDrawingArea->connect_mouse_press(LINK(this, ColorFieldControl, DoButtonDown));
+        m_xDrawingArea->connect_mouse_release(LINK(this, ColorFieldControl, DoButtonUp));
+    }
 
-    virtual void dispose() override;
+    ~ColorFieldControl()
+    {
+        mxBitmap.disposeAndClear();
+    }
 
-    virtual void MouseMove( const MouseEvent& rMEvt ) override;
-    virtual void MouseButtonDown( const MouseEvent& rMEvt ) override;
-    virtual void MouseButtonUp( const MouseEvent& rMEvt ) override;
-    virtual void KeyInput( const KeyEvent& rKEvt ) override;
-    virtual void Paint(vcl::RenderContext& rRenderContext, const ::tools::Rectangle& rRect) override;
-    virtual void Resize() override;
-
-    virtual Size GetOptimalSize() const override;
+    DECL_LINK(DoPaint, weld::DrawingArea::draw_args, void);
+    DECL_LINK(DoResize, const Size& rSize, void);
+    DECL_LINK(DoButtonDown, const Point& rMEvt, void);
+    DECL_LINK(DoMouseMove, const Point& rMEvt, void);
+    DECL_LINK(DoButtonUp, const Point& rMEvt, void);
 
     void UpdateBitmap();
     void ShowPosition( const Point& rPos, bool bUpdate );
@@ -215,18 +240,18 @@ public:
     double GetX() { return mdX;}
     double GetY() { return mdY;}
 
-    void KeyMove(int dx, int dy);
-
     void SetModifyHdl(const Link<ColorFieldControl&,void>& rLink) { maModifyHdl = rLink; }
 
 private:
-    Link<ColorFieldControl&,void> maModifyHdl;
+    std::unique_ptr<weld::DrawingArea> m_xDrawingArea;
+    Size m_aSize;
     ColorMode meMode;
     Color maColor;
     double mdX;
     double mdY;
     Point maPosition;
     VclPtr<VirtualDevice> mxBitmap;
+    Link<ColorFieldControl&,void> maModifyHdl;
     std::vector<sal_uInt8>  maRGB_Horiz;
     std::vector<sal_uInt16> maGrad_Horiz;
     std::vector<sal_uInt16> maPercent_Horiz;
@@ -234,36 +259,9 @@ private:
     std::vector<sal_uInt16> maPercent_Vert;
 };
 
-ColorFieldControl::ColorFieldControl( vcl::Window* pParent, WinBits nStyle )
-: Control( pParent, nStyle )
-, meMode( DefaultMode )
-, mdX( -1.0 )
-, mdY( -1.0 )
-{
-    SetControlBackground();
-}
-
-ColorFieldControl::~ColorFieldControl()
-{
-    disposeOnce();
-}
-
-void ColorFieldControl::dispose()
-{
-    mxBitmap.disposeAndClear();
-    Control::dispose();
-}
-
-VCL_BUILDER_FACTORY_CONSTRUCTOR(ColorFieldControl, 0)
-
-Size ColorFieldControl::GetOptimalSize() const
-{
-    return LogicToPixel(Size(158, 158), MapMode(MapUnit::MapAppFont));
-}
-
 void ColorFieldControl::UpdateBitmap()
 {
-    const Size aSize(GetOutputSizePixel());
+    const Size aSize(m_aSize);
 
     if (mxBitmap && mxBitmap->GetOutputSizePixel() != aSize)
         mxBitmap.disposeAndClear();
@@ -405,7 +403,7 @@ void ColorFieldControl::ShowPosition( const Point& rPos, bool bUpdate )
     if (!mxBitmap)
     {
         UpdateBitmap();
-        Invalidate();
+        m_xDrawingArea->queue_draw();
     }
 
     if (!mxBitmap)
@@ -428,8 +426,8 @@ void ColorFieldControl::ShowPosition( const Point& rPos, bool bUpdate )
     Point aPos = maPosition;
     maPosition.setX( nX - 5 );
     maPosition.setY( nY - 5 );
-    Invalidate(::tools::Rectangle(aPos, Size(11, 11)));
-    Invalidate(::tools::Rectangle(maPosition, Size(11, 11)));
+    m_xDrawingArea->queue_draw_area(aPos.X(), aPos.Y(), 11, 11);
+    m_xDrawingArea->queue_draw_area(maPosition.X(), maPosition.Y(), 11, 11);
 
     if (bUpdate)
     {
@@ -440,85 +438,32 @@ void ColorFieldControl::ShowPosition( const Point& rPos, bool bUpdate )
     }
 }
 
-void ColorFieldControl::MouseMove( const MouseEvent& rMEvt )
+IMPL_LINK(ColorFieldControl, DoButtonDown, const Point&, rMEvt, void)
 {
-    if( rMEvt.IsLeft() )
-    {
-        ShowPosition( rMEvt.GetPosPixel(), true );
-        Modify();
-    }
-}
-
-void ColorFieldControl::MouseButtonDown( const MouseEvent& rMEvt )
-{
-    if( rMEvt.IsLeft() && !rMEvt.IsShift() )
-    {
-        CaptureMouse();
-        ShowPosition( rMEvt.GetPosPixel(), true );
-        Modify();
-    }
-}
-
-void ColorFieldControl::MouseButtonUp( const MouseEvent& )
-{
-    if( IsMouseCaptured() )
-        ReleaseMouse();
-}
-
-void ColorFieldControl::KeyMove( int dx, int dy )
-{
-    Size aSize(GetOutputSizePixel());
-    Point aPos(static_cast<long>(mdX * aSize.Width()), static_cast<long>((1.0 - mdY) * aSize.Height()));
-    aPos.AdjustX(dx );
-    aPos.AdjustY(dy );
-    if( aPos.X() < 0 )
-        aPos.AdjustX(aSize.Width() );
-    else if( aPos.X() >= aSize.Width() )
-        aPos.AdjustX( -(aSize.Width()) );
-
-    if( aPos.Y() < 0 )
-        aPos.AdjustY(aSize.Height() );
-    else if( aPos.Y() >= aSize.Height() )
-        aPos.AdjustY( -(aSize.Height()) );
-
-    ShowPosition( aPos, true );
+    m_xDrawingArea->connect_mouse_move(LINK(this, ColorFieldControl, DoMouseMove));
+    ShowPosition(rMEvt, true);
     Modify();
 }
 
-void ColorFieldControl::KeyInput( const KeyEvent& rKEvt )
+IMPL_LINK(ColorFieldControl, DoMouseMove, const Point&, rMEvt, void)
 {
-    bool   bShift = rKEvt.GetKeyCode().IsShift();
-    bool   bCtrl = rKEvt.GetKeyCode().IsMod1();
-    bool   bAlt = rKEvt.GetKeyCode().IsMod2();
-
-    if (!bAlt && !bShift)
-    {
-        switch( rKEvt.GetKeyCode().GetCode() )
-        {
-        case KEY_DOWN:
-            KeyMove(0, bCtrl ? 5 : 1);
-            return;
-        case KEY_UP:
-            KeyMove(0, bCtrl ? -5 : -1);
-            return;
-        case KEY_LEFT:
-            KeyMove(bCtrl ? -5 : -1,  0);
-            return;
-        case KEY_RIGHT:
-            KeyMove(bCtrl ? 5 :  1,  0);
-            return;
-        }
-    }
-    Control::KeyInput(rKEvt);
+    ShowPosition(rMEvt, true);
+    Modify();
 }
 
-void ColorFieldControl::Paint(vcl::RenderContext& rRenderContext, const ::tools::Rectangle& rRect)
+IMPL_LINK_NOARG(ColorFieldControl, DoButtonUp, const Point&, void)
 {
+    m_xDrawingArea->connect_mouse_move(Link<const Point&, void>());
+}
+
+IMPL_LINK(ColorFieldControl, DoPaint, weld::DrawingArea::draw_args, aPayload, void)
+{
+    vcl::RenderContext& rRenderContext = aPayload.first;
     if (!mxBitmap)
         UpdateBitmap();
 
     if (mxBitmap)
-        rRenderContext.DrawOutDev(rRect.TopLeft(), rRect.GetSize(), rRect.TopLeft(), rRect.GetSize(), *mxBitmap);
+        rRenderContext.DrawOutDev(Point(0, 0), m_aSize, Point(0, 0), m_aSize, *mxBitmap);
 
     // draw circle around current color
     if (maColor.IsDark())
@@ -531,11 +476,15 @@ void ColorFieldControl::Paint(vcl::RenderContext& rRenderContext, const ::tools:
     rRenderContext.DrawEllipse(::tools::Rectangle(maPosition, Size(11, 11)));
 }
 
-void ColorFieldControl::Resize()
+IMPL_LINK(ColorFieldControl, DoResize, const Size&, rSize, void)
 {
-    UpdateBitmap();
-    UpdatePosition();
-    Control::Resize();
+    if (m_aSize != rSize)
+    {
+        m_aSize = rSize;
+        UpdateBitmap();
+        UpdatePosition();
+        m_xDrawingArea->queue_draw();
+    }
 }
 
 void ColorFieldControl::Modify()
@@ -557,29 +506,27 @@ void ColorFieldControl::SetValues( Color aColor, ColorMode eMode, double x, doub
             UpdateBitmap();
         UpdatePosition();
         if (bUpdateBitmap)
-            Invalidate();
+            m_xDrawingArea->queue_draw();
     }
 }
 
 void ColorFieldControl::UpdatePosition()
 {
-    Size aSize(GetOutputSizePixel());
+    Size aSize(m_aSize);
     ShowPosition(Point(static_cast<long>(mdX * aSize.Width()), static_cast<long>((1.0 - mdY) * aSize.Height())), false);
 }
 
-class ColorSliderControl : public Control
+class ColorSliderControl
 {
 public:
-    ColorSliderControl( vcl::Window* pParent, WinBits nStyle );
-    virtual ~ColorSliderControl() override;
-    virtual void dispose() override;
+    ColorSliderControl(weld::DrawingArea* pDrawingArea);
+    ~ColorSliderControl();
 
-    virtual void MouseMove( const MouseEvent& rMEvt ) override;
-    virtual void MouseButtonDown( const MouseEvent& rMEvt ) override;
-    virtual void MouseButtonUp( const MouseEvent& rMEvt ) override;
-    virtual void KeyInput( const KeyEvent& rKEvt ) override;
-    virtual void Paint( vcl::RenderContext& rRenderContext, const ::tools::Rectangle& rRect ) override;
-    virtual void Resize() override;
+    DECL_LINK(DoButtonDown, const Point& rMEvt, void);
+    DECL_LINK(DoMouseMove, const Point& rMEvt, void);
+    DECL_LINK(DoButtonUp, const Point& rMEvt, void);
+    DECL_LINK(DoPaint, weld::DrawingArea::draw_args, void);
+    DECL_LINK(DoResize, const Size& rSize, void);
 
     void UpdateBitmap();
     void ChangePosition( long nY );
@@ -588,14 +535,17 @@ public:
     void SetValue( const Color& rColor, ColorMode eMode, double dValue );
     double GetValue() const { return mdValue; }
 
-    void KeyMove( int dy );
-
     void SetModifyHdl( const Link<ColorSliderControl&,void>& rLink ) { maModifyHdl = rLink; }
 
     sal_Int16 GetLevel() const { return mnLevel; }
 
+    void set_margin_top(int nMargin) { m_xDrawingArea->set_margin_top(nMargin); }
+    void set_margin_bottom(int nMargin) { m_xDrawingArea->set_margin_bottom(nMargin); }
+
 private:
     Link<ColorSliderControl&,void> maModifyHdl;
+    std::unique_ptr<weld::DrawingArea> m_xDrawingArea;
+    Size m_aSize;
     Color maColor;
     ColorMode meMode;
     VclPtr<VirtualDevice> mxBitmap;
@@ -603,31 +553,27 @@ private:
     double mdValue;
 };
 
-ColorSliderControl::ColorSliderControl( vcl::Window* pParent, WinBits nStyle )
-    : Control( pParent, nStyle )
+ColorSliderControl::ColorSliderControl(weld::DrawingArea* pDrawingArea)
+    : m_xDrawingArea(pDrawingArea)
     , meMode( DefaultMode )
     , mnLevel( 0 )
     , mdValue( -1.0 )
 {
-    SetControlBackground();
+    m_xDrawingArea->set_size_request(m_xDrawingArea->get_approximate_char_width() * 3, -1);
+    m_xDrawingArea->connect_size_allocate(LINK(this, ColorSliderControl, DoResize));
+    m_xDrawingArea->connect_draw(LINK(this, ColorSliderControl, DoPaint));
+    m_xDrawingArea->connect_mouse_press(LINK(this, ColorSliderControl, DoButtonDown));
+    m_xDrawingArea->connect_mouse_release(LINK(this, ColorSliderControl, DoButtonUp));
 }
 
 ColorSliderControl::~ColorSliderControl()
 {
-    disposeOnce();
-}
-
-void ColorSliderControl::dispose()
-{
     mxBitmap.disposeAndClear();
-    Control::dispose();
 }
-
-VCL_BUILDER_FACTORY_CONSTRUCTOR(ColorSliderControl, 0)
 
 void ColorSliderControl::UpdateBitmap()
 {
-    Size aSize(1, GetOutputSizePixel().Height());
+    Size aSize(1, m_aSize.Height());
 
     if (mxBitmap && mxBitmap->GetOutputSizePixel() != aSize)
         mxBitmap.disposeAndClear();
@@ -704,7 +650,7 @@ void ColorSliderControl::UpdateBitmap()
 
 void ColorSliderControl::ChangePosition(long nY)
 {
-    const long nHeight = GetOutputSizePixel().Height() - 1;
+    const long nHeight = m_aSize.Height() - 1;
 
     if (nY < 0)
         nY = 0;
@@ -715,75 +661,51 @@ void ColorSliderControl::ChangePosition(long nY)
     mdValue = double(nHeight - nY) / double(nHeight);
 }
 
-void ColorSliderControl::MouseMove( const MouseEvent& rMEvt )
+IMPL_LINK(ColorSliderControl, DoButtonDown, const Point&, rMEvt, void)
 {
-    if (rMEvt.IsLeft())
-    {
-        ChangePosition(rMEvt.GetPosPixel().Y());
-        Modify();
-    }
-}
-
-void ColorSliderControl::MouseButtonDown(const MouseEvent& rMEvt)
-{
-    if (rMEvt.IsLeft() && !rMEvt.IsShift())
-    {
-        CaptureMouse();
-        ChangePosition( rMEvt.GetPosPixel().Y() );
-        Modify();
-    }
-}
-
-void ColorSliderControl::MouseButtonUp(const MouseEvent&)
-{
-    if (IsMouseCaptured())
-        ReleaseMouse();
-}
-
-void ColorSliderControl::KeyMove(int dy)
-{
-    ChangePosition( mnLevel + dy );
+    m_xDrawingArea->connect_mouse_move(LINK(this, ColorSliderControl, DoMouseMove));
+    ChangePosition(rMEvt.Y());
     Modify();
 }
 
-void ColorSliderControl::KeyInput(const KeyEvent& rKEvt)
+IMPL_LINK(ColorSliderControl, DoMouseMove, const Point&, rMEvt, void)
 {
-    if (!rKEvt.GetKeyCode().IsMod2() && !rKEvt.GetKeyCode().IsShift())
-    {
-        switch (rKEvt.GetKeyCode().GetCode())
-        {
-        case KEY_DOWN:
-            KeyMove(rKEvt.GetKeyCode().IsMod1() ?  5 :  1);
-            return;
-        case KEY_UP:
-            KeyMove(rKEvt.GetKeyCode().IsMod1() ? -5 : -1);
-            return;
-        }
-    }
-
-    Control::KeyInput( rKEvt );
+    ChangePosition(rMEvt.Y());
+    Modify();
 }
 
-void ColorSliderControl::Paint(vcl::RenderContext& rRenderContext, const ::tools::Rectangle& /*rRect*/)
+IMPL_LINK_NOARG(ColorSliderControl, DoButtonUp, const Point&, void)
 {
+    m_xDrawingArea->connect_mouse_move(Link<const Point&, void>());
+}
+
+
+IMPL_LINK(ColorSliderControl, DoPaint, weld::DrawingArea::draw_args, aPayload, void)
+{
+    vcl::RenderContext& rRenderContext = aPayload.first;
+
     if (!mxBitmap)
         UpdateBitmap();
 
-    const Size aSize(GetOutputSizePixel());
+    const Size aSize(m_aSize);
 
     Point aPos;
     int x = aSize.Width();
     while (x--)
     {
         rRenderContext.DrawOutDev(aPos, aSize, Point(0,0), aSize, *mxBitmap);
-        aPos.AdjustX(1 );
+        aPos.AdjustX(1);
     }
 }
 
-void ColorSliderControl::Resize()
+IMPL_LINK(ColorSliderControl, DoResize, const Size&, rSize, void)
 {
-    UpdateBitmap();
-    Control::Resize();
+    if (m_aSize != rSize)
+    {
+        m_aSize = rSize;
+        UpdateBitmap();
+        m_xDrawingArea->queue_draw();
+    }
 }
 
 void ColorSliderControl::Modify()
@@ -798,30 +720,56 @@ void ColorSliderControl::SetValue(const Color& rColor, ColorMode eMode, double d
     {
         maColor = rColor;
         mdValue = dValue;
-        mnLevel = static_cast<sal_Int16>((1.0-dValue) * GetOutputSizePixel().Height());
+        mnLevel = static_cast<sal_Int16>((1.0-dValue) * m_aSize.Height());
         meMode = eMode;
         if (bUpdateBitmap)
             UpdateBitmap();
-        Invalidate();
+        m_xDrawingArea->queue_draw();
     }
 }
 
-class ColorPickerDialog : public ModalDialog
+class ColorPickerDialog : public weld::GenericDialogController
 {
+private:
+    std::unique_ptr<ColorFieldControl> m_xColorField;
+    std::unique_ptr<ColorSliderControl> m_xColorSlider;
+    std::unique_ptr<ColorPreviewControl> m_xColorPreview;
+    std::unique_ptr<ColorPreviewControl> m_xColorPrevious;
+
+    std::unique_ptr<weld::Widget> m_xFISliderLeft;
+    std::unique_ptr<weld::Widget> m_xFISliderRight;
+    std::unique_ptr<weld::RadioButton> m_xRBRed;
+    std::unique_ptr<weld::RadioButton> m_xRBGreen;
+    std::unique_ptr<weld::RadioButton> m_xRBBlue;
+    std::unique_ptr<weld::RadioButton> m_xRBHue;
+    std::unique_ptr<weld::RadioButton> m_xRBSaturation;
+    std::unique_ptr<weld::RadioButton> m_xRBBrightness;
+
+    std::unique_ptr<weld::SpinButton> m_xMFRed;
+    std::unique_ptr<weld::SpinButton> m_xMFGreen;
+    std::unique_ptr<weld::SpinButton> m_xMFBlue;
+    std::unique_ptr<weld::HexColorControl> m_xEDHex;
+
+    std::unique_ptr<weld::MetricSpinButton> m_xMFHue;
+    std::unique_ptr<weld::MetricSpinButton> m_xMFSaturation;
+    std::unique_ptr<weld::MetricSpinButton> m_xMFBrightness;
+
+    std::unique_ptr<weld::MetricSpinButton> m_xMFCyan;
+    std::unique_ptr<weld::MetricSpinButton> m_xMFMagenta;
+    std::unique_ptr<weld::MetricSpinButton> m_xMFYellow;
+    std::unique_ptr<weld::MetricSpinButton> m_xMFKey;
+
 public:
-    ColorPickerDialog(vcl::Window* pParent, Color nColor, sal_Int16 nMode);
-    virtual ~ColorPickerDialog() override
-    {
-        disposeOnce();
-    }
-    virtual void dispose() override;
+    ColorPickerDialog(weld::Window* pParent, Color nColor, sal_Int16 nMode);
 
     void update_color(UpdateFlags n = UpdateFlags::All);
 
     DECL_LINK(ColorFieldControlModifydl, ColorFieldControl&, void);
     DECL_LINK(ColorSliderControlModifyHdl, ColorSliderControl&, void);
-    DECL_LINK(ColorModifyEditHdl, Edit&, void);
-    DECL_LINK(ModeModifyHdl, RadioButton&, void);
+    DECL_LINK(ColorModifyMetricHdl, weld::MetricSpinButton&, void);
+    DECL_LINK(ColorModifySpinHdl, weld::SpinButton&, void);
+    DECL_LINK(ColorModifyEditHdl, weld::Entry&, void);
+    DECL_LINK(ModeModifyHdl, weld::ToggleButton&, void);
 
     Color GetColor() const;
 
@@ -834,130 +782,84 @@ private:
     double mdRed, mdGreen, mdBlue;
     double mdHue, mdSat, mdBri;
     double mdCyan, mdMagenta, mdYellow, mdKey;
-
-private:
-    VclPtr<ColorFieldControl>    mpColorField;
-    VclPtr<ColorSliderControl>   mpColorSlider;
-    VclPtr<ColorPreviewControl>  mpColorPreview;
-    VclPtr<ColorPreviewControl>  mpColorPrevious;
-
-    VclPtr<FixedImage>   mpFISliderLeft;
-    VclPtr<FixedImage>   mpFISliderRight;
-    Image         maSliderImage;
-
-    VclPtr<RadioButton>    mpRBRed;
-    VclPtr<RadioButton>    mpRBGreen;
-    VclPtr<RadioButton>    mpRBBlue;
-    VclPtr<RadioButton>    mpRBHue;
-    VclPtr<RadioButton>    mpRBSaturation;
-    VclPtr<RadioButton>    mpRBBrightness;
-
-    VclPtr<MetricField>        mpMFRed;
-    VclPtr<MetricField>        mpMFGreen;
-    VclPtr<MetricField>        mpMFBlue;
-    VclPtr<HexColorControl>    mpEDHex;
-
-    VclPtr<MetricField>    mpMFHue;
-    VclPtr<MetricField>    mpMFSaturation;
-    VclPtr<MetricField>    mpMFBrightness;
-
-    VclPtr<MetricField>    mpMFCyan;
-    VclPtr<MetricField>    mpMFMagenta;
-    VclPtr<MetricField>    mpMFYellow;
-    VclPtr<MetricField>    mpMFKey;
 };
 
-ColorPickerDialog::ColorPickerDialog( vcl::Window* pParent, Color nColor, sal_Int16 nMode )
-: ModalDialog( pParent, "ColorPicker", "cui/ui/colorpickerdialog.ui" )
-, mnDialogMode( nMode )
-, meMode( DefaultMode )
-, maSliderImage( BitmapEx( RID_SVXBMP_COLORSLIDER ) )
+ColorPickerDialog::ColorPickerDialog(weld::Window* pParent, Color nColor, sal_Int16 nMode)
+    : GenericDialogController(pParent, "cui/ui/colorpickerdialog.ui", "ColorPicker")
+    , m_xColorField(new ColorFieldControl(m_xBuilder->weld_drawing_area("colorField")))
+    , m_xColorSlider(new ColorSliderControl(m_xBuilder->weld_drawing_area("colorSlider")))
+    , m_xColorPreview(new ColorPreviewControl(m_xBuilder->weld_drawing_area("preview")))
+    , m_xColorPrevious(new ColorPreviewControl(m_xBuilder->weld_drawing_area("previous")))
+    , m_xFISliderLeft(m_xBuilder->weld_widget("leftImage"))
+    , m_xFISliderRight(m_xBuilder->weld_widget("rightImage"))
+    , m_xRBRed(m_xBuilder->weld_radio_button("redRadiobutton"))
+    , m_xRBGreen(m_xBuilder->weld_radio_button("greenRadiobutton"))
+    , m_xRBBlue(m_xBuilder->weld_radio_button("blueRadiobutton"))
+    , m_xRBHue(m_xBuilder->weld_radio_button("hueRadiobutton"))
+    , m_xRBSaturation(m_xBuilder->weld_radio_button("satRadiobutton"))
+    , m_xRBBrightness(m_xBuilder->weld_radio_button("brightRadiobutton"))
+    , m_xMFRed(m_xBuilder->weld_spin_button("redSpinbutton"))
+    , m_xMFGreen(m_xBuilder->weld_spin_button("greenSpinbutton"))
+    , m_xMFBlue(m_xBuilder->weld_spin_button("blueSpinbutton"))
+    , m_xEDHex(new weld::HexColorControl(m_xBuilder->weld_entry("hexEntry")))
+    , m_xMFHue(m_xBuilder->weld_metric_spin_button("hueSpinbutton"))
+    , m_xMFSaturation(m_xBuilder->weld_metric_spin_button("satSpinbutton"))
+    , m_xMFBrightness(m_xBuilder->weld_metric_spin_button("brightSpinbutton"))
+    , m_xMFCyan(m_xBuilder->weld_metric_spin_button("cyanSpinbutton"))
+    , m_xMFMagenta(m_xBuilder->weld_metric_spin_button("magSpinbutton"))
+    , m_xMFYellow(m_xBuilder->weld_metric_spin_button("yellowSpinbutton"))
+    , m_xMFKey(m_xBuilder->weld_metric_spin_button("keySpinbutton"))
+    , mnDialogMode( nMode )
+    , meMode( DefaultMode )
 {
-    get(mpColorField, "colorField");
-    get(mpColorSlider, "colorSlider");
-    get(mpColorPreview, "preview");
-    get(mpColorPrevious, "previous");
-    get(mpRBRed, "redRadiobutton");
-    get(mpRBGreen, "greenRadiobutton");
-    get(mpRBBlue, "blueRadiobutton");
-    get(mpRBHue, "hueRadiobutton");
-    get(mpRBSaturation, "satRadiobutton");
-    get(mpRBBrightness, "brightRadiobutton");
-    get(mpMFRed, "redSpinbutton");
-    get(mpMFGreen, "greenSpinbutton");
-    get(mpMFBlue, "blueSpinbutton");
-    get(mpEDHex, "hexEntry");
-    get(mpMFHue, "hueSpinbutton");
-    get(mpMFSaturation, "satSpinbutton");
-    get(mpMFBrightness, "brightSpinbutton");
-    get(mpMFCyan, "cyanSpinbutton");
-    get(mpMFMagenta, "magSpinbutton");
-    get(mpMFYellow, "yellowSpinbutton");
-    get(mpMFKey, "keySpinbutton");
-    get(mpFISliderLeft, "leftImage");
-    get(mpFISliderRight, "rightImage");
+    m_xMFHue->set_unit(FUNIT_DEGREE);
+    m_xMFSaturation->set_unit(FUNIT_PERCENT);
+    m_xMFBrightness->set_unit(FUNIT_PERCENT);
 
-    Size aDialogSize = get_preferred_size();
-    set_width_request(aDialogSize.Width() + 50);
-    set_height_request(aDialogSize.Height() + 30);
+    m_xMFCyan->set_unit(FUNIT_PERCENT);
+    m_xMFMagenta->set_unit(FUNIT_PERCENT);
+    m_xMFYellow->set_unit(FUNIT_PERCENT);
+    m_xMFKey->set_unit(FUNIT_PERCENT);
 
-    mpColorField->SetModifyHdl( LINK( this, ColorPickerDialog, ColorFieldControlModifydl ) );
-    mpColorSlider->SetModifyHdl( LINK( this, ColorPickerDialog, ColorSliderControlModifyHdl ) );
+    m_xColorField->SetModifyHdl( LINK( this, ColorPickerDialog, ColorFieldControlModifydl ) );
+    m_xColorSlider->SetModifyHdl( LINK( this, ColorPickerDialog, ColorSliderControlModifyHdl ) );
 
-    Link<Edit&,void> aLink3( LINK( this, ColorPickerDialog, ColorModifyEditHdl ) );
-    mpMFRed->SetModifyHdl( aLink3 );
-    mpMFGreen->SetModifyHdl( aLink3 );
-    mpMFBlue->SetModifyHdl( aLink3 );
+    int nMargin = (m_xFISliderLeft->get_preferred_size().Height() + 1) / 2;
+    m_xColorSlider->set_margin_top(nMargin);
+    m_xColorSlider->set_margin_bottom(nMargin);
 
-    mpMFCyan->SetModifyHdl( aLink3 );
-    mpMFMagenta->SetModifyHdl( aLink3 );
-    mpMFYellow->SetModifyHdl( aLink3 );
-    mpMFKey->SetModifyHdl( aLink3 );
+    Link<weld::MetricSpinButton&,void> aLink3( LINK( this, ColorPickerDialog, ColorModifyMetricHdl ) );
+    m_xMFCyan->connect_value_changed( aLink3 );
+    m_xMFMagenta->connect_value_changed( aLink3 );
+    m_xMFYellow->connect_value_changed( aLink3 );
+    m_xMFKey->connect_value_changed( aLink3 );
 
-    mpMFHue->SetModifyHdl( aLink3 );
-    mpMFSaturation->SetModifyHdl( aLink3 );
-    mpMFBrightness->SetModifyHdl( aLink3 );
+    m_xMFHue->connect_value_changed( aLink3 );
+    m_xMFSaturation->connect_value_changed( aLink3 );
+    m_xMFBrightness->connect_value_changed( aLink3 );
 
-    mpEDHex->SetModifyHdl( aLink3 );
+    Link<weld::SpinButton&,void> aLink4(LINK(this, ColorPickerDialog, ColorModifySpinHdl));
+    m_xMFRed->connect_value_changed(aLink4);
+    m_xMFGreen->connect_value_changed(aLink4);
+    m_xMFBlue->connect_value_changed(aLink4);
 
-    Link<RadioButton&,void> aLink2 = LINK( this, ColorPickerDialog, ModeModifyHdl );
-    mpRBRed->SetToggleHdl( aLink2 );
-    mpRBGreen->SetToggleHdl( aLink2 );
-    mpRBBlue->SetToggleHdl( aLink2 );
-    mpRBHue->SetToggleHdl( aLink2 );
-    mpRBSaturation->SetToggleHdl( aLink2 );
-    mpRBBrightness->SetToggleHdl( aLink2 );
+    m_xEDHex->connect_changed(LINK(this, ColorPickerDialog, ColorModifyEditHdl));
 
-    Image aSliderImage( maSliderImage );
+    Link<weld::ToggleButton&,void> aLink2 = LINK( this, ColorPickerDialog, ModeModifyHdl );
+    m_xRBRed->connect_toggled( aLink2 );
+    m_xRBGreen->connect_toggled( aLink2 );
+    m_xRBBlue->connect_toggled( aLink2 );
+    m_xRBHue->connect_toggled( aLink2 );
+    m_xRBSaturation->connect_toggled( aLink2 );
+    m_xRBBrightness->connect_toggled( aLink2 );
 
-    mpFISliderLeft->SetImage( aSliderImage );
-    mpFISliderLeft->Show();
-
-    BitmapEx aTmpBmp( maSliderImage.GetBitmapEx() );
-    aTmpBmp.Mirror( BmpMirrorFlags::Horizontal );
-    mpFISliderRight->SetImage( Image( aTmpBmp  ) );
-
-    Size aSize( maSliderImage.GetSizePixel() );
-    mpFISliderLeft->SetSizePixel( aSize );
-    mpFISliderRight->SetSizePixel( aSize );
-
-    Point aPos( mpColorSlider->GetPosPixel() );
-
-    aPos.AdjustX( -(aSize.Width()) );
-    aPos.AdjustY( -(aSize.Height() / 2) );
-    mpFISliderLeft->SetPosPixel( aPos );
-
-    aPos.AdjustX(aSize.Width() + mpColorSlider->GetSizePixel().Width() );
-    mpFISliderRight->SetPosPixel( aPos );
-
-    Color aColor( nColor );
+    Color aColor(nColor);
 
     // modify
-    if( mnDialogMode == 2 )
+    if (mnDialogMode == 2)
     {
-        mpColorPreview->SetSizePixel( mpColorPrevious->GetSizePixel() );
-        mpColorPrevious->SetColor( aColor );
-        mpColorPrevious->Show();
+        m_xColorPrevious->SetColor(aColor);
+        m_xColorPrevious->show();
     }
 
     mdRed = static_cast<double>(aColor.GetRed()) / 255.0;
@@ -968,34 +870,6 @@ ColorPickerDialog::ColorPickerDialog( vcl::Window* pParent, Color nColor, sal_In
     RGBtoCMYK( mdRed, mdGreen, mdBlue, mdCyan, mdMagenta, mdYellow, mdKey );
 
     update_color();
-}
-
-void ColorPickerDialog::dispose()
-{
-    mpColorField.clear();
-    mpColorSlider.clear();
-    mpColorPreview.clear();
-    mpColorPrevious.clear();
-    mpFISliderLeft.clear();
-    mpFISliderRight.clear();
-    mpRBRed.clear();
-    mpRBGreen.clear();
-    mpRBBlue.clear();
-    mpRBHue.clear();
-    mpRBSaturation.clear();
-    mpRBBrightness.clear();
-    mpMFRed.clear();
-    mpMFGreen.clear();
-    mpMFBlue.clear();
-    mpEDHex.clear();
-    mpMFHue.clear();
-    mpMFSaturation.clear();
-    mpMFBrightness.clear();
-    mpMFCyan.clear();
-    mpMFMagenta.clear();
-    mpMFYellow.clear();
-    mpMFKey.clear();
-    ModalDialog::dispose();
 }
 
 static int toInt( double dValue, double dRange )
@@ -1018,24 +892,24 @@ void ColorPickerDialog::update_color( UpdateFlags n )
 
     if (n & UpdateFlags::RGB) // update RGB
     {
-        mpMFRed->SetValue(nRed);
-        mpMFGreen->SetValue(nGreen);
-        mpMFBlue->SetValue(nBlue);
+        m_xMFRed->set_value(nRed);
+        m_xMFGreen->set_value(nGreen);
+        m_xMFBlue->set_value(nBlue);
     }
 
     if (n & UpdateFlags::CMYK) // update CMYK
     {
-        mpMFCyan->SetValue(toInt(mdCyan, 100.0));
-        mpMFMagenta->SetValue(toInt(mdMagenta, 100.0));
-        mpMFYellow->SetValue(toInt(mdYellow, 100.0));
-        mpMFKey->SetValue(toInt(mdKey, 100.0));
+        m_xMFCyan->set_value(toInt(mdCyan, 100.0), FUNIT_PERCENT);
+        m_xMFMagenta->set_value(toInt(mdMagenta, 100.0), FUNIT_PERCENT);
+        m_xMFYellow->set_value(toInt(mdYellow, 100.0), FUNIT_PERCENT);
+        m_xMFKey->set_value(toInt(mdKey, 100.0), FUNIT_PERCENT);
     }
 
     if (n & UpdateFlags::HSB ) // update HSB
     {
-        mpMFHue->SetValue(toInt(mdHue, 1.0));
-        mpMFSaturation->SetValue(toInt( mdSat, 100.0));
-        mpMFBrightness->SetValue(toInt( mdBri, 100.0));
+        m_xMFHue->set_value(toInt(mdHue, 1.0), FUNIT_DEGREE);
+        m_xMFSaturation->set_value(toInt( mdSat, 100.0), FUNIT_PERCENT);
+        m_xMFBrightness->set_value(toInt( mdBri, 100.0), FUNIT_PERCENT);
     }
 
     if (n & UpdateFlags::ColorChooser ) // update Color Chooser 1
@@ -1043,22 +917,22 @@ void ColorPickerDialog::update_color( UpdateFlags n )
         switch( meMode )
         {
         case HUE:
-            mpColorField->SetValues(aColor, meMode, mdSat, mdBri);
+            m_xColorField->SetValues(aColor, meMode, mdSat, mdBri);
             break;
         case SATURATION:
-            mpColorField->SetValues(aColor, meMode, mdHue / 360.0, mdBri);
+            m_xColorField->SetValues(aColor, meMode, mdHue / 360.0, mdBri);
             break;
         case BRIGHTNESS:
-            mpColorField->SetValues(aColor, meMode, mdHue / 360.0, mdSat);
+            m_xColorField->SetValues(aColor, meMode, mdHue / 360.0, mdSat);
             break;
         case RED:
-            mpColorField->SetValues(aColor, meMode, mdBlue, mdGreen);
+            m_xColorField->SetValues(aColor, meMode, mdBlue, mdGreen);
             break;
         case GREEN:
-            mpColorField->SetValues(aColor, meMode, mdBlue, mdRed);
+            m_xColorField->SetValues(aColor, meMode, mdBlue, mdRed);
             break;
         case BLUE:
-            mpColorField->SetValues(aColor, meMode, mdRed, mdGreen);
+            m_xColorField->SetValues(aColor, meMode, mdRed, mdGreen);
             break;
         }
     }
@@ -1068,51 +942,39 @@ void ColorPickerDialog::update_color( UpdateFlags n )
         switch (meMode)
         {
         case HUE:
-            mpColorSlider->SetValue(aColor, meMode, mdHue / 360.0);
+            m_xColorSlider->SetValue(aColor, meMode, mdHue / 360.0);
             break;
         case SATURATION:
-            mpColorSlider->SetValue(aColor, meMode, mdSat);
+            m_xColorSlider->SetValue(aColor, meMode, mdSat);
             break;
         case BRIGHTNESS:
-            mpColorSlider->SetValue(aColor, meMode, mdBri);
+            m_xColorSlider->SetValue(aColor, meMode, mdBri);
             break;
         case RED:
-            mpColorSlider->SetValue(aColor, meMode, mdRed);
+            m_xColorSlider->SetValue(aColor, meMode, mdRed);
             break;
         case GREEN:
-            mpColorSlider->SetValue(aColor, meMode, mdGreen);
+            m_xColorSlider->SetValue(aColor, meMode, mdGreen);
             break;
         case BLUE:
-            mpColorSlider->SetValue(aColor, meMode, mdBlue);
+            m_xColorSlider->SetValue(aColor, meMode, mdBlue);
             break;
         }
     }
 
     if (n & UpdateFlags::Hex) // update hex
     {
-        mpEDHex->SetColor(aColor);
+        m_xFISliderLeft->set_margin_top(m_xColorSlider->GetLevel());
+        m_xFISliderRight->set_margin_top(m_xColorSlider->GetLevel());
+        m_xEDHex->SetColor(aColor);
     }
-
-    {
-        Point aPos(0, mpColorSlider->GetLevel() + mpColorSlider->GetPosPixel().Y() - 1);
-
-        aPos.setX( mpFISliderLeft->GetPosPixel().X() );
-        if (aPos != mpFISliderLeft->GetPosPixel())
-        {
-            mpFISliderLeft->SetPosPixel(aPos);
-
-            aPos.setX( mpFISliderRight->GetPosPixel().X() );
-            mpFISliderRight->SetPosPixel(aPos);
-        }
-    }
-
-    mpColorPreview->SetColor(aColor);
+    m_xColorPreview->SetColor(aColor);
 }
 
 IMPL_LINK_NOARG(ColorPickerDialog, ColorFieldControlModifydl, ColorFieldControl&, void)
 {
-    double x = mpColorField->GetX();
-    double y = mpColorField->GetY();
+    double x = m_xColorField->GetX();
+    double y = m_xColorField->GetY();
 
     switch( meMode )
     {
@@ -1147,7 +1009,7 @@ IMPL_LINK_NOARG(ColorPickerDialog, ColorFieldControlModifydl, ColorFieldControl&
 
 IMPL_LINK_NOARG(ColorPickerDialog, ColorSliderControlModifyHdl, ColorSliderControl&, void)
 {
-    double dValue = mpColorSlider->GetValue();
+    double dValue = m_xColorSlider->GetValue();
     switch (meMode)
     {
     case HUE:
@@ -1173,101 +1035,119 @@ IMPL_LINK_NOARG(ColorPickerDialog, ColorSliderControlModifyHdl, ColorSliderContr
     update_color(UpdateFlags::All & ~UpdateFlags::ColorSlider);
 }
 
-IMPL_LINK(ColorPickerDialog, ColorModifyEditHdl, Edit&, rEdit, void)
+IMPL_LINK(ColorPickerDialog, ColorModifyMetricHdl, weld::MetricSpinButton&, rEdit, void)
 {
+    return;
+
     UpdateFlags n = UpdateFlags::NONE;
 
-    if (&rEdit == mpMFRed)
+    if (&rEdit == m_xMFHue.get())
     {
-        setColorComponent( ColorComponent::Red, static_cast<double>(mpMFRed->GetValue()) / 255.0 );
-        n = UpdateFlags::All & ~UpdateFlags::RGB;
-    }
-    else if (&rEdit == mpMFGreen)
-    {
-        setColorComponent( ColorComponent::Green, static_cast<double>(mpMFGreen->GetValue()) / 255.0 );
-        n = UpdateFlags::All & ~UpdateFlags::RGB;
-    }
-    else if (&rEdit == mpMFBlue)
-    {
-        setColorComponent( ColorComponent::Blue, static_cast<double>(mpMFBlue->GetValue()) / 255.0 );
-        n = UpdateFlags::All & ~UpdateFlags::RGB;
-    }
-    else if (&rEdit == mpMFHue)
-    {
-        setColorComponent( ColorComponent::Hue, static_cast<double>(mpMFHue->GetValue()) );
+        setColorComponent( ColorComponent::Hue, static_cast<double>(m_xMFHue->get_value(FUNIT_DEGREE)) );
         n = UpdateFlags::All & ~UpdateFlags::HSB;
     }
-    else if (&rEdit == mpMFSaturation)
+    else if (&rEdit == m_xMFSaturation.get())
     {
-        setColorComponent( ColorComponent::Saturation, static_cast<double>(mpMFSaturation->GetValue()) / 100.0 );
+        setColorComponent( ColorComponent::Saturation, static_cast<double>(m_xMFSaturation->get_value(FUNIT_PERCENT)) / 100.0 );
         n = UpdateFlags::All & ~UpdateFlags::HSB;
     }
-    else if (&rEdit == mpMFBrightness)
+    else if (&rEdit == m_xMFBrightness.get())
     {
-        setColorComponent( ColorComponent::Brightness, static_cast<double>(mpMFBrightness->GetValue()) / 100.0 );
+        setColorComponent( ColorComponent::Brightness, static_cast<double>(m_xMFBrightness->get_value(FUNIT_PERCENT)) / 100.0 );
         n = UpdateFlags::All & ~UpdateFlags::HSB;
     }
-    else if (&rEdit == mpMFCyan)
+    else if (&rEdit == m_xMFCyan.get())
     {
-        setColorComponent( ColorComponent::Cyan, static_cast<double>(mpMFCyan->GetValue()) / 100.0 );
+        setColorComponent( ColorComponent::Cyan, static_cast<double>(m_xMFCyan->get_value(FUNIT_PERCENT)) / 100.0 );
         n = UpdateFlags::All & ~UpdateFlags::CMYK;
     }
-    else if (&rEdit == mpMFMagenta)
+    else if (&rEdit == m_xMFMagenta.get())
     {
-        setColorComponent( ColorComponent::Magenta, static_cast<double>(mpMFMagenta->GetValue()) / 100.0 );
+        setColorComponent( ColorComponent::Magenta, static_cast<double>(m_xMFMagenta->get_value(FUNIT_PERCENT)) / 100.0 );
         n = UpdateFlags::All & ~UpdateFlags::CMYK;
     }
-    else if (&rEdit == mpMFYellow)
+    else if (&rEdit == m_xMFYellow.get())
     {
-        setColorComponent( ColorComponent::Yellow, static_cast<double>(mpMFYellow->GetValue()) / 100.0 );
+        setColorComponent( ColorComponent::Yellow, static_cast<double>(m_xMFYellow->get_value(FUNIT_PERCENT)) / 100.0 );
         n = UpdateFlags::All & ~UpdateFlags::CMYK;
     }
-    else if (&rEdit == mpMFKey)
+    else if (&rEdit == m_xMFKey.get())
     {
-        setColorComponent( ColorComponent::Key, static_cast<double>(mpMFKey->GetValue()) / 100.0 );
+        setColorComponent( ColorComponent::Key, static_cast<double>(m_xMFKey->get_value(FUNIT_PERCENT)) / 100.0 );
         n = UpdateFlags::All & ~UpdateFlags::CMYK;
-    }
-    else if (&rEdit == mpEDHex)
-    {
-        Color aColor = mpEDHex->GetColor();
-
-        if (aColor != Color(0xffffffff) && aColor != GetColor())
-        {
-            mdRed = static_cast<double>(aColor.GetRed()) / 255.0;
-            mdGreen = static_cast<double>(aColor.GetGreen()) / 255.0;
-            mdBlue = static_cast<double>(aColor.GetBlue()) / 255.0;
-
-            RGBtoHSV( mdRed, mdGreen, mdBlue, mdHue, mdSat, mdBri );
-            RGBtoCMYK( mdRed, mdGreen, mdBlue, mdCyan, mdMagenta, mdYellow, mdKey );
-            n = UpdateFlags::All & ~UpdateFlags::Hex;
-        }
     }
 
     if (n != UpdateFlags::NONE)
         update_color(n);
 }
 
-IMPL_LINK_NOARG(ColorPickerDialog, ModeModifyHdl, RadioButton&, void)
+IMPL_LINK_NOARG(ColorPickerDialog, ColorModifyEditHdl, weld::Entry&, void)
+{
+    UpdateFlags n = UpdateFlags::NONE;
+
+    Color aColor = m_xEDHex->GetColor();
+
+    if (aColor != Color(0xffffffff) && aColor != GetColor())
+    {
+        mdRed = static_cast<double>(aColor.GetRed()) / 255.0;
+        mdGreen = static_cast<double>(aColor.GetGreen()) / 255.0;
+        mdBlue = static_cast<double>(aColor.GetBlue()) / 255.0;
+
+        RGBtoHSV( mdRed, mdGreen, mdBlue, mdHue, mdSat, mdBri );
+        RGBtoCMYK( mdRed, mdGreen, mdBlue, mdCyan, mdMagenta, mdYellow, mdKey );
+        n = UpdateFlags::All & ~UpdateFlags::Hex;
+    }
+
+    if (n != UpdateFlags::NONE)
+        update_color(n);
+}
+
+IMPL_LINK(ColorPickerDialog, ColorModifySpinHdl, weld::SpinButton&, rEdit, void)
+{
+    UpdateFlags n = UpdateFlags::NONE;
+
+    if (&rEdit == m_xMFRed.get())
+    {
+        setColorComponent( ColorComponent::Red, static_cast<double>(m_xMFRed->get_value()) / 255.0 );
+        n = UpdateFlags::All & ~UpdateFlags::RGB;
+    }
+    else if (&rEdit == m_xMFGreen.get())
+    {
+        setColorComponent( ColorComponent::Green, static_cast<double>(m_xMFGreen->get_value()) / 255.0 );
+        n = UpdateFlags::All & ~UpdateFlags::RGB;
+    }
+    else if (&rEdit == m_xMFBlue.get())
+    {
+        setColorComponent( ColorComponent::Blue, static_cast<double>(m_xMFBlue->get_value()) / 255.0 );
+        n = UpdateFlags::All & ~UpdateFlags::RGB;
+    }
+
+    if (n != UpdateFlags::NONE)
+        update_color(n);
+}
+
+
+IMPL_LINK_NOARG(ColorPickerDialog, ModeModifyHdl, weld::ToggleButton&, void)
 {
     ColorMode eMode = HUE;
 
-    if (mpRBRed->IsChecked())
+    if (m_xRBRed->get_active())
     {
         eMode = RED;
     }
-    else if (mpRBGreen->IsChecked())
+    else if (m_xRBGreen->get_active())
     {
         eMode = GREEN;
     }
-    else if (mpRBBlue->IsChecked())
+    else if (m_xRBBlue->get_active())
     {
         eMode = BLUE;
     }
-    else if (mpRBSaturation->IsChecked())
+    else if (m_xRBSaturation->get_active())
     {
         eMode = SATURATION;
     }
-    else if (mpRBBrightness->IsChecked())
+    else if (m_xRBBrightness->get_active())
     {
         eMode = BRIGHTNESS;
     }
@@ -1445,13 +1325,13 @@ void SAL_CALL ColorPicker::setTitle( const OUString& sTitle )
     msTitle = sTitle;
 }
 
-sal_Int16 SAL_CALL ColorPicker::execute(  )
+sal_Int16 SAL_CALL ColorPicker::execute()
 {
-    ScopedVclPtrInstance< ColorPickerDialog > aDlg( VCLUnoHelper::GetWindow( mxParent ), mnColor, mnMode );
-    sal_Int16 ret = aDlg->Execute();
-    if( ret )
-        mnColor = aDlg->GetColor();
-
+    vcl::Window* pWin = VCLUnoHelper::GetWindow(mxParent);
+    std::unique_ptr<ColorPickerDialog> xDlg(new ColorPickerDialog(pWin ? pWin->GetFrameWeld() : nullptr, mnColor, mnMode));
+    sal_Int16 ret = xDlg->run();
+    if (ret)
+        mnColor = xDlg->GetColor();
     return ret;
 }
 

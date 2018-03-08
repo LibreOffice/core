@@ -842,8 +842,10 @@ void AutoFormatPreview::NotifyChange(const SwTableAutoFormat& rNewData)
     mxDrawingArea->queue_draw();
 }
 
-IMPL_LINK(AutoFormatPreview, DoPaint, vcl::RenderContext&, rRenderContext, void)
+IMPL_LINK(AutoFormatPreview, DoPaint, weld::DrawingArea::draw_args, aPayload, void)
 {
+    vcl::RenderContext& rRenderContext = aPayload.first;
+
     rRenderContext.Push(PushFlags::ALL);
 
     DrawModeFlags nOldDrawMode = rRenderContext.GetDrawMode();

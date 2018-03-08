@@ -1,19 +1,53 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.18.3 -->
+<!-- Generated with glade 3.20.2 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.18"/>
-  <requires lib="LibreOffice" version="1.0"/>
-  <object class="GtkAdjustment" id="adjustment1">
+  <object class="GtkAdjustment" id="adjustmentblue">
     <property name="upper">255</property>
     <property name="step_increment">1</property>
     <property name="page_increment">10</property>
   </object>
-  <object class="GtkAdjustment" id="adjustment2">
+  <object class="GtkAdjustment" id="adjustmentbright">
+    <property name="upper">100</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustmentcyan">
+    <property name="upper">100</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustmentgreen">
+    <property name="upper">255</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustmenthue">
     <property name="upper">360</property>
     <property name="step_increment">1</property>
     <property name="page_increment">10</property>
   </object>
-  <object class="GtkAdjustment" id="adjustment3">
+  <object class="GtkAdjustment" id="adjustmentkey">
+    <property name="upper">100</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustmentmag">
+    <property name="upper">100</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustmentred">
+    <property name="upper">255</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustmentsat">
+    <property name="upper">100</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustmentyellow">
     <property name="upper">100</property>
     <property name="step_increment">1</property>
     <property name="page_increment">10</property>
@@ -26,6 +60,8 @@
     <property name="title" translatable="yes" context="colorpickerdialog|ColorPicker">Pick a Color</property>
     <property name="resizable">False</property>
     <property name="modal">True</property>
+    <property name="default_width">0</property>
+    <property name="default_height">0</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
@@ -115,7 +151,7 @@
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
                     <child>
-                      <object class="cuilo-ColorPreviewControl" id="preview">
+                      <object class="GtkDrawingArea" id="preview">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="hexpand">True</property>
@@ -127,8 +163,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="cuilo-ColorPreviewControl" id="previous">
-                        <property name="visible">True</property>
+                      <object class="GtkDrawingArea" id="previous">
                         <property name="can_focus">False</property>
                         <property name="hexpand">True</property>
                       </object>
@@ -145,9 +180,10 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="cuilo-ColorFieldControl" id="colorField:border">
+                  <object class="GtkDrawingArea" id="colorField">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="events">GDK_BUTTON_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_STRUCTURE_MASK</property>
                     <property name="hexpand">True</property>
                     <property name="vexpand">True</property>
                   </object>
@@ -157,9 +193,10 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="cuilo-ColorSliderControl" id="colorSlider:border">
+                  <object class="GtkDrawingArea" id="colorSlider">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="events">GDK_BUTTON_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_STRUCTURE_MASK</property>
                     <property name="vexpand">True</property>
                   </object>
                   <packing>
@@ -172,7 +209,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="valign">start</property>
-                    <property name="stock">gtk-missing-image</property>
+                    <property name="icon_name">res/colorsliderright.png</property>
                   </object>
                   <packing>
                     <property name="left_attach">3</property>
@@ -184,7 +221,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="valign">start</property>
-                    <property name="stock">gtk-missing-image</property>
+                    <property name="icon_name">res/colorsliderleft.png</property>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -248,9 +285,8 @@
                                 <property name="receives_default">False</property>
                                 <property name="use_underline">True</property>
                                 <property name="xalign">0</property>
-                                <property name="active">True</property>
                                 <property name="draw_indicator">True</property>
-                                <property name="group">greenRadiobutton</property>
+                                <property name="group">hueRadiobutton</property>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -267,7 +303,7 @@
                                 <property name="use_underline">True</property>
                                 <property name="xalign">0</property>
                                 <property name="draw_indicator">True</property>
-                                <property name="group">redRadiobutton</property>
+                                <property name="group">hueRadiobutton</property>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -284,7 +320,7 @@
                                 <property name="use_underline">True</property>
                                 <property name="xalign">0</property>
                                 <property name="draw_indicator">True</property>
-                                <property name="group">redRadiobutton</property>
+                                <property name="group">hueRadiobutton</property>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -292,11 +328,11 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkSpinButton" id="redSpinbutton:0">
+                              <object class="GtkSpinButton" id="redSpinbutton">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="hexpand">True</property>
-                                <property name="adjustment">adjustment1</property>
+                                <property name="adjustment">adjustmentred</property>
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
@@ -304,11 +340,11 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkSpinButton" id="greenSpinbutton:0">
+                              <object class="GtkSpinButton" id="greenSpinbutton">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="hexpand">True</property>
-                                <property name="adjustment">adjustment1</property>
+                                <property name="adjustment">adjustmentgreen</property>
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
@@ -316,11 +352,11 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkSpinButton" id="blueSpinbutton:0">
+                              <object class="GtkSpinButton" id="blueSpinbutton">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="hexpand">True</property>
-                                <property name="adjustment">adjustment1</property>
+                                <property name="adjustment">adjustmentblue</property>
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
@@ -331,10 +367,10 @@
                               <object class="GtkLabel" id="label2">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="xalign">0</property>
                                 <property name="label" translatable="yes" context="colorpickerdialog|label2">Hex _#:</property>
                                 <property name="use_underline">True</property>
                                 <property name="mnemonic_widget">hexEntry</property>
+                                <property name="xalign">0</property>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -342,7 +378,7 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="svxcorelo-HexColorControl" id="hexEntry">
+                              <object class="GtkEntry" id="hexEntry">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="hexpand">True</property>
@@ -408,7 +444,6 @@
                                 <property name="xalign">0</property>
                                 <property name="active">True</property>
                                 <property name="draw_indicator">True</property>
-                                <property name="group">redRadiobutton</property>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -425,7 +460,7 @@
                                 <property name="use_underline">True</property>
                                 <property name="xalign">0</property>
                                 <property name="draw_indicator">True</property>
-                                <property name="group">redRadiobutton</property>
+                                <property name="group">hueRadiobutton</property>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -442,7 +477,7 @@
                                 <property name="use_underline">True</property>
                                 <property name="xalign">0</property>
                                 <property name="draw_indicator">True</property>
-                                <property name="group">redRadiobutton</property>
+                                <property name="group">hueRadiobutton</property>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -450,11 +485,11 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkSpinButton" id="hueSpinbutton:°">
+                              <object class="GtkSpinButton" id="hueSpinbutton">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="hexpand">True</property>
-                                <property name="adjustment">adjustment2</property>
+                                <property name="adjustment">adjustmenthue</property>
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
@@ -462,11 +497,11 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkSpinButton" id="satSpinbutton:%">
+                              <object class="GtkSpinButton" id="satSpinbutton">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="hexpand">True</property>
-                                <property name="adjustment">adjustment3</property>
+                                <property name="adjustment">adjustmentsat</property>
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
@@ -474,11 +509,11 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkSpinButton" id="brightSpinbutton:%">
+                              <object class="GtkSpinButton" id="brightSpinbutton">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="hexpand">True</property>
-                                <property name="adjustment">adjustment3</property>
+                                <property name="adjustment">adjustmentbright</property>
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
@@ -533,10 +568,10 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="halign">start</property>
-                                <property name="xalign">0</property>
                                 <property name="label" translatable="yes" context="colorpickerdialog|label5">_Cyan:</property>
                                 <property name="use_underline">True</property>
-                                <property name="mnemonic_widget">cyanSpinbutton:%</property>
+                                <property name="mnemonic_widget">cyanSpinbutton</property>
+                                <property name="xalign">0</property>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -548,10 +583,10 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="halign">start</property>
-                                <property name="xalign">0</property>
                                 <property name="label" translatable="yes" context="colorpickerdialog|label6">_Magenta:</property>
                                 <property name="use_underline">True</property>
-                                <property name="mnemonic_widget">magSpinbutton:%</property>
+                                <property name="mnemonic_widget">magSpinbutton</property>
+                                <property name="xalign">0</property>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -563,10 +598,10 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="halign">start</property>
-                                <property name="xalign">0</property>
                                 <property name="label" translatable="yes" context="colorpickerdialog|label7">_Yellow:</property>
                                 <property name="use_underline">True</property>
-                                <property name="mnemonic_widget">yellowSpinbutton:%</property>
+                                <property name="mnemonic_widget">yellowSpinbutton</property>
+                                <property name="xalign">0</property>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -578,10 +613,10 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="halign">start</property>
-                                <property name="xalign">0</property>
                                 <property name="label" translatable="yes" context="colorpickerdialog|label8">_Key:</property>
                                 <property name="use_underline">True</property>
-                                <property name="mnemonic_widget">keySpinbutton:%</property>
+                                <property name="mnemonic_widget">keySpinbutton</property>
+                                <property name="xalign">0</property>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -589,11 +624,11 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkSpinButton" id="cyanSpinbutton:%">
+                              <object class="GtkSpinButton" id="cyanSpinbutton">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="hexpand">True</property>
-                                <property name="adjustment">adjustment3</property>
+                                <property name="adjustment">adjustmentcyan</property>
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
@@ -601,11 +636,11 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkSpinButton" id="magSpinbutton:%">
+                              <object class="GtkSpinButton" id="magSpinbutton">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="hexpand">True</property>
-                                <property name="adjustment">adjustment3</property>
+                                <property name="adjustment">adjustmentmag</property>
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
@@ -613,11 +648,11 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkSpinButton" id="yellowSpinbutton:%">
+                              <object class="GtkSpinButton" id="yellowSpinbutton">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="hexpand">True</property>
-                                <property name="adjustment">adjustment3</property>
+                                <property name="adjustment">adjustmentyellow</property>
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
@@ -625,11 +660,11 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkSpinButton" id="keySpinbutton:%">
+                              <object class="GtkSpinButton" id="keySpinbutton">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="hexpand">True</property>
-                                <property name="adjustment">adjustment3</property>
+                                <property name="adjustment">adjustmentkey</property>
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
@@ -678,6 +713,9 @@
       <action-widget response="-6">cancel</action-widget>
       <action-widget response="-11">help</action-widget>
     </action-widgets>
+    <child>
+      <placeholder/>
+    </child>
   </object>
   <object class="GtkSizeGroup" id="sizegroup1">
     <widgets>
