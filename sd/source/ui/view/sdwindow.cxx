@@ -683,6 +683,26 @@ double Window::GetVisibleHeight()
     return (static_cast<double>(aWinSize.Height()) / maViewSize.Height());
 }
 
+Point Window::GetVisibleCenter()
+{
+    Size aWinSize = PixelToLogic(GetOutputSizePixel());
+    if ( aWinSize.Height() > maViewSize.Height() )
+        aWinSize.setHeight( maViewSize.Height() );
+    if ( aWinSize.Width() > maViewSize.Width() )
+        aWinSize.setWidth( maViewSize.Width() );
+
+    Point aPos;
+    aPos = ::tools::Rectangle(aPos, aWinSize).Center();
+
+    // For LOK
+    bool bMapModeWasEnabled(IsMapModeEnabled());
+    EnableMapMode(/*true*/);
+    aPos = PixelToLogic(aPos);
+    EnableMapMode(bMapModeWasEnabled);
+
+    return aPos;
+}
+
 /**
  * @returns width of a scroll column in proportion to the width of the whole
  * working area.
