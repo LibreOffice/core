@@ -1465,6 +1465,8 @@ Writer& OutHTML_FrameFormatOLENodeGrf( Writer& rWrt, const SwFrameFormat& rFrame
     }
     HtmlFrmOpts nFlags = bInCntnr ? HtmlFrmOpts::GenImgAllMask
         : HtmlFrmOpts::GenImgMask;
+    if (bObjectOpened)
+        nFlags |= HtmlFrmOpts::Replacement;
     OutHTML_Image( rWrt, rFrameFormat, aGraphicURL, aGraphic,
             pOLENd->GetTitle(), pOLENd->GetTwipSize(),
             nFlags, "ole" );

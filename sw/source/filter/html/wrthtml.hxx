@@ -99,12 +99,14 @@ enum class HtmlFrmOpts {
     SPixSize    = 1<<18,
     Id          = 1<<19,
     Dir         = 1<<20,
+    /// The graphic frame is a replacement image of an OLE object.
+    Replacement = 1<<21,
 
     GenImgAllMask = Alt | Size | AbsSize | Name,
     GenImgMask    = GenImgAllMask | Align | Space | BrClear
 };
 namespace o3tl {
-    template<> struct typed_flags<HtmlFrmOpts> : is_typed_flags<HtmlFrmOpts, ((1<<21)-1)> {};
+    template<> struct typed_flags<HtmlFrmOpts> : is_typed_flags<HtmlFrmOpts, ((1<<22)-1)> {};
 }
 
 #define HTMLMODE_BLOCK_SPACER       0x00010000
