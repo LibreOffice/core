@@ -358,9 +358,9 @@ void PowerPointExport::writeDocumentProperties()
     uno::Reference<document::XDocumentProperties> xDocProps = xDPS->getDocumentProperties();
 
     if (xDocProps.is())
-    {
         exportDocumentProperties(xDocProps);
-    }
+
+    exportCustomFragments();
 }
 
 bool PowerPointExport::importDocument() throw()
