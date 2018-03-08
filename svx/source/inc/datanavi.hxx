@@ -633,14 +633,10 @@ namespace svxform
     };
 
 
-    class LinkedInstanceWarningBox
+    class LinkedInstanceWarningBox : public weld::MessageDialogController
     {
-    private:
-        std::unique_ptr<weld::Builder> m_xBuilder;
-        std::unique_ptr<weld::MessageDialog> m_xDialog;
     public:
         LinkedInstanceWarningBox(weld::Widget* pParent);
-        short run() { return m_xDialog->run(); }
     };
 }
 

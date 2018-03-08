@@ -92,15 +92,12 @@ enum class InputDialogMode {
     RENAME        = 3,
 };
 
-class CuiInputDialog
+class CuiInputDialog : public weld::GenericDialogController
 {
 private:
-    std::unique_ptr<weld::Builder> m_xBuilder;
-    std::unique_ptr<weld::Dialog> m_xDialog;
     std::unique_ptr<weld::Entry> m_xEdit;
 public:
     CuiInputDialog(weld::Window * pParent, InputDialogMode nMode);
-    short run() { return m_xDialog->run(); }
     OUString GetObjectName() const { return m_xEdit->get_text(); }
     void SetObjectName(const OUString& rName)
     {

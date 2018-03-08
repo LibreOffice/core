@@ -29,11 +29,8 @@
 
 class SwWrtShell;
 
-class SwBreakDlg
+class SwBreakDlg : public weld::GenericDialogController
 {
-    SwWrtShell     &rSh;
-    std::unique_ptr<weld::Builder> m_xBuilder;
-    std::unique_ptr<weld::Dialog> m_xDialog;
     std::unique_ptr<weld::RadioButton> m_xLineBtn;
     std::unique_ptr<weld::RadioButton> m_xColumnBtn;
     std::unique_ptr<weld::RadioButton> m_xPageBtn;
@@ -43,6 +40,7 @@ class SwBreakDlg
     std::unique_ptr<weld::SpinButton> m_xPageNumEdit;
     std::unique_ptr<weld::Button> m_xOkBtn;
 
+    SwWrtShell     &rSh;
     OUString        m_aTemplate;
     sal_uInt16      nKind;
     ::boost::optional<sal_uInt16>      oPgNum;
@@ -59,7 +57,7 @@ class SwBreakDlg
 
 public:
     SwBreakDlg(weld::Window *pParent, SwWrtShell &rSh);
-    short run();
+    short execute();
     const OUString& GetTemplateName() const { return m_aTemplate; }
     sal_uInt16 GetKind() const { return nKind; }
     const ::boost::optional<sal_uInt16>&  GetPageNumber() const { return oPgNum; }
