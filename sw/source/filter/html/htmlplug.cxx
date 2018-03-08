@@ -1432,12 +1432,19 @@ Writer& OutHTML_FrameFormatOLENodeGrf( Writer& rWrt, const SwFrameFormat& rFrame
         comphelper::OStorageHelper::CopyInputToOutput(xInStream->getInputStream(),
                                                       xOutStream->getOutputStream());
         aFileName = URIHelper::simpleNormalizedMakeRelative(rWrt.GetBaseURL(), aFileName);
+        uno::Reference<beans::XPropertySet> xOutStreamProps(xInStream, uno::UNO_QUERY);
+        OUString aFileType;
+        if (xOutStreamProps.is())
+            xOutStreamProps->getPropertyValue("MediaType") >>= aFileType;
 
         // Refer to this data.
         if (rHTMLWrt.m_bLFPossible)
             rHTMLWrt.OutNewLine();
         rWrt.Strm().WriteOString("<" + rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_object);
-        rWrt.Strm().WriteOString(" data=\"" + aFileName.toUtf8() + "\">");
+        rWrt.Strm().WriteOString(" data=\"" + aFileName.toUtf8() + "\"");
+        if (!aFileType.isEmpty())
+            rWrt.Strm().WriteOString(" type=\"" + aFileType.toUtf8() + "\"");
+        rWrt.Strm().WriteOString(">");
         bObjectOpened = true;
         rHTMLWrt.m_bLFPossible = true;
     }
