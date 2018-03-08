@@ -41,15 +41,15 @@ using namespace com::sun::star;
 /// @see GetDictionaryPaths
 enum class DictionaryPathFlags
 {
-    NONE      = 0x00,
     INTERNAL  = 0x01,
     USER      = 0x02,
+    WRITABLE  = 0x04
 };
 namespace o3tl
 {
-    template<> struct typed_flags<DictionaryPathFlags> : is_typed_flags<DictionaryPathFlags, 0x03> {};
+    template<> struct typed_flags<DictionaryPathFlags> : is_typed_flags<DictionaryPathFlags, 0x07> {};
 }
-#define PATH_FLAG_ALL       (DictionaryPathFlags::INTERNAL | DictionaryPathFlags::USER)
+#define PATH_FLAG_ALL       (DictionaryPathFlags::INTERNAL | DictionaryPathFlags::USER | DictionaryPathFlags::WRITABLE)
 
 namespace linguistic
 {
@@ -112,7 +112,7 @@ static std::vector< OUString > GetMultiPaths_Impl(
             ++nMaxEntries;
         aRes.resize( nMaxEntries );
         sal_Int32 nCount = 0;   // number of actually added entries
-        if (!aWritablePath.isEmpty())
+        if ((nPathFlags & DictionaryPathFlags::WRITABLE) && !aWritablePath.isEmpty())
             aRes[ nCount++ ] = aWritablePath;
         for (int i = 0;  i < 2;  ++i)
         {
@@ -134,7 +134,7 @@ static std::vector< OUString > GetMultiPaths_Impl(
 
 OUString GetDictionaryWriteablePath()
 {
-    std::vector< OUString > aPaths( GetMultiPaths_Impl( "Dictionary", DictionaryPathFlags::NONE ) );
+    std::vector< OUString > aPaths( GetMultiPaths_Impl( "Dictionary", DictionaryPathFlags::WRITABLE ) );
     DBG_ASSERT( aPaths.size() == 1, "Dictionary_writable path corrupted?" );
     OUString aRes;
     if (aPaths.size() > 0)

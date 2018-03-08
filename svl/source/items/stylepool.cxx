@@ -404,20 +404,6 @@ std::shared_ptr<SfxItemSet> StylePoolImpl::insertItemSet( const SfxItemSet& rSet
     // If rSet contains at least one non poolable item, a new itemset has to be inserted
     if( bNonPoolable )
         pCurNode->setItemSet( rSet );
-#ifdef DEBUG
-    {
-        sal_Int32 nCheck = -1;
-        IStylePoolIteratorAccess* pIter = createIterator();
-        std::shared_ptr<SfxItemSet> pTemp;
-        do
-        {
-            ++nCheck;
-            pTemp = pIter->getNext();
-        } while( pTemp.get() );
-        DBG_ASSERT( mnCount == nCheck, "Wrong counting");
-        delete pIter;
-    }
-#endif
     return pCurNode->getItemSet();
 }
 

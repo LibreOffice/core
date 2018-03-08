@@ -107,9 +107,6 @@ void RequestQueue::AddRequest (
 
     // If the request is already a member of the queue then remove it so
     // that the following insertion will use the new prioritization.
-#if OSL_DEBUG_LEVEL >=2
-    bool bRemoved =
-#endif
         RemoveRequest(aKey);
 
     // The priority of the request inside its priority class is defined by
@@ -127,11 +124,6 @@ void RequestQueue::AddRequest (
         pPage->AddPageUser(*this);
     }
 
-#if OSL_DEBUG_LEVEL >=2
-    SAL_INFO("sd.sls", OSL_THIS_FUNC << ": " << (bRemoved?"replaced":"added")
-        << " request for page " << ((aKey->GetPageNum()-1)/2)
-        << " with priority class " << static_cast<int>(eRequestClass));
-#endif
 }
 
 void RequestQueue::PageInDestruction(const SdrPage& rPage)

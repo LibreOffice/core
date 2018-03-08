@@ -338,35 +338,16 @@ public:
             genericClip.append(aRect);
         }
 
-#if OSL_DEBUG_LEVEL > 2
-        fprintf(stderr, "%s input      - svg:d=\"%s\"\n",
-                pName, OUStringToOString(
-                    basegfx::utils::exportToSvgD(
-                        genericClip, , true, true, false),
-                    RTL_TEXTENCODING_UTF8).getStr() );
-#endif
 
         const B2DPolyPolygon boxClipResult=rRange.solveCrossovers();
         const OUString boxClipSvg(
             basegfx::utils::exportToSvgD(
                 normalizePoly(boxClipResult), true, true, false));
-#if OSL_DEBUG_LEVEL > 2
-        fprintf(stderr, "%s boxclipper - svg:d=\"%s\"\n",
-                pName, OUStringToOString(
-                    boxClipSvg,
-                    RTL_TEXTENCODING_UTF8).getStr() );
-#endif
 
         genericClip = utils::solveCrossovers(genericClip);
         const OUString genericClipSvg(
             basegfx::utils::exportToSvgD(
                 normalizePoly(genericClip), true, true, false));
-#if OSL_DEBUG_LEVEL > 2
-        fprintf(stderr, "%s genclipper - svg:d=\"%s\"\n",
-                pName, OUStringToOString(
-                    genericClipSvg,
-                    RTL_TEXTENCODING_UTF8).getStr() );
-#endif
 
         CPPUNIT_ASSERT_EQUAL_MESSAGE(pName,
                                boxClipSvg, genericClipSvg);

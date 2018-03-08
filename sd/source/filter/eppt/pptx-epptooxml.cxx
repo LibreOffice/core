@@ -111,10 +111,6 @@ using ::sax_fastparser::FSHelperPtr;
 using namespace oox::drawingml;
 using namespace oox::core;
 
-#if OSL_DEBUG_LEVEL > 1
-void dump_pset(Reference< XPropertySet > const& rXPropSet);
-#endif
-
 namespace oox
 {
 namespace core
@@ -2237,9 +2233,7 @@ void PowerPointExport::ImplWritePPTXLayout(sal_Int32 nOffset, sal_uInt32 nMaster
 
     Reference< beans::XPropertySet > xPropSet(xSlide, uno::UNO_QUERY);
     xPropSet->setPropertyValue("Layout", makeAny(short(aLayoutInfo[ nOffset ].nType)));
-#if OSL_DEBUG_LEVEL > 1
-    dump_pset(xPropSet);
-#endif
+
     mXPagePropSet.set(xSlide, UNO_QUERY);
     mXShapes.set(xSlide, UNO_QUERY);
 
@@ -2862,36 +2856,5 @@ css_comp_Impress_oox_PowerPointExport(uno::XComponentContext* rxCtxt,
 {
     return cppu::acquire(new PowerPointExport(rxCtxt, rArguments));
 }
-
-#if OSL_DEBUG_LEVEL > 1
-void dump_pset(Reference< XPropertySet > const& rXPropSet)
-{
-    Reference< XPropertySetInfo > info = rXPropSet->getPropertySetInfo();
-    Sequence< beans::Property > props = info->getProperties();
-
-    for (int i=0; i < props.getLength(); i++)
-    {
-        OString name = OUStringToOString(props [i].Name, RTL_TEXTENCODING_UTF8);
-
-        Any value = rXPropSet->getPropertyValue(props [i].Name);
-
-        OUString strValue;
-        sal_Int32 intValue;
-        bool boolValue;
-        RectanglePoint pointValue;
-
-        if (value >>= strValue)
-            SAL_INFO("sd.eppt", name << " = \"" << strValue << "\"");
-        else if (value >>= intValue)
-            SAL_INFO("sd.eppt", name << " = " << intValue << "(hex : " << std::hex << intValue << ")");
-        else if (value >>= boolValue)
-            SAL_INFO("sd.eppt", name << " = " << boolValue << "           (bool)");
-        else if (value >>= pointValue)
-            SAL_INFO("sd.eppt", name << " = " << pointValue << "    (RectanglePoint)");
-        else
-            SAL_INFO("sd.eppt", "???          <unhandled type>");
-    }
-}
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

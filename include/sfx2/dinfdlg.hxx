@@ -480,7 +480,7 @@ public:
     virtual ~CustomPropertiesControl() override;
     virtual void dispose() override;
 
-    void         AddLine(css::uno::Any const & rAny);
+    void         AddLine(const OUString& sName, css::uno::Any const & rAny, bool bInteractive);
 
     bool         AreAllLinesValid() const { return m_pPropertiesWin->AreAllLinesValid(); }
     void         ClearAllLines() { m_pPropertiesWin->ClearAllLines(); }

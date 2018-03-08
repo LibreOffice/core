@@ -244,7 +244,7 @@ void SfxEventConfiguration::ConfigureEvent( const OUString& aName, const SvxMacr
 
 SvxMacro* SfxEventConfiguration::ConvertToMacro( const css::uno::Any& rElement, SfxObjectShell* pDoc )
 {
-    return SfxEvents_Impl::ConvertToMacro( rElement, pDoc );
+    return SfxEvents_Impl::ConvertToMacro( rElement, pDoc, true/*bBlowUp*/ );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

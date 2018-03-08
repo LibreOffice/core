@@ -246,6 +246,7 @@ public:
 ErrCode FileOpenDialog_Impl( const vcl::Window* pParent,
                              sal_Int16 nDialogType,
                              FileDialogFlags nFlags,
+                             const OUString& rFact,
                              std::vector<OUString>& rpURLList,
                              OUString& rFilter,
                              SfxItemSet *& rpSet,

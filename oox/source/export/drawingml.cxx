@@ -1086,7 +1086,7 @@ void DrawingML::WriteImageBrightnessContrastTransparence(uno::Reference<beans::X
     }
 }
 
-OUString DrawingML::WriteBlip( const Reference< XPropertySet >& rXPropSet, const OUString& rURL, bool bRelPathToMedia )
+OUString DrawingML::WriteBlip( const Reference< XPropertySet >& rXPropSet, const OUString& rURL, bool bRelPathToMedia, const Graphic *pGraphic )
 {
     OUString sRelId;
     BitmapChecksum nChecksum = 0;
@@ -1101,7 +1101,7 @@ OUString DrawingML::WriteBlip( const Reference< XPropertySet >& rXPropSet, const
     }
     if (sRelId.isEmpty())
     {
-        sRelId = WriteImage( rURL, bRelPathToMedia );
+        sRelId = pGraphic ? WriteImage( *pGraphic, bRelPathToMedia ) : WriteImage( rURL, bRelPathToMedia );
         if (!rURL.isEmpty() && mpTextExport)
             mpTextExport->CacheRelId(nChecksum, sRelId);
     }

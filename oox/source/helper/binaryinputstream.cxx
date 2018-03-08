@@ -74,7 +74,7 @@ OUString BinaryInputStream::readCharArrayUC( sal_Int32 nChars, rtl_TextEncoding 
     return OStringToOUString( readCharArray( nChars ), eTextEnc );
 }
 
-OUString BinaryInputStream::readUnicodeArray( sal_Int32 nChars )
+OUString BinaryInputStream::readUnicodeArray( sal_Int32 nChars, bool bAllowNulChars )
 {
     if( nChars <= 0 )
         return OUString();
@@ -85,8 +85,8 @@ OUString BinaryInputStream::readUnicodeArray( sal_Int32 nChars )
         return OUString();
 
     aBuffer.resize( static_cast< size_t >( nCharsRead ) );
-    // don't allow nul chars
-    ::std::replace( aBuffer.begin(), aBuffer.begin() + nCharsRead, '\0', '?' );
+    if( !bAllowNulChars )
+        ::std::replace( aBuffer.begin(), aBuffer.begin() + nCharsRead, '\0', '?' );
 
     OUStringBuffer aStringBuffer;
     aStringBuffer.ensureCapacity( nCharsRead );

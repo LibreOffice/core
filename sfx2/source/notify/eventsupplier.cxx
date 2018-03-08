@@ -330,12 +330,15 @@ SfxEvents_Impl::~SfxEvents_Impl()
 }
 
 
-SvxMacro* SfxEvents_Impl::ConvertToMacro( const uno::Any& rElement, SfxObjectShell* pObjShell )
+SvxMacro* SfxEvents_Impl::ConvertToMacro( const uno::Any& rElement, SfxObjectShell* pObjShell, bool bNormalizeMacro )
 {
     SvxMacro* pMacro = nullptr;
     uno::Sequence < beans::PropertyValue > aProperties;
     uno::Any aAny;
-    NormalizeMacro( rElement, aAny, pObjShell );
+    if ( bNormalizeMacro )
+        NormalizeMacro( rElement, aAny, pObjShell );
+    else
+        aAny = rElement;
 
     if ( aAny >>= aProperties )
     {

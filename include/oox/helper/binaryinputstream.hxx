@@ -163,12 +163,15 @@ public:
     OUString     readCharArrayUC( sal_Int32 nChars, rtl_TextEncoding eTextEnc );
 
     /** Reads a Unicode character array and returns the string.
-        NUL characters are replaced by question marks (default).
 
         @param nChars
             Number of 16-bit characters to read from the stream.
+
+        @param bAllowNulChars
+            True = NUL characters are inserted into the imported string.
+            False = NUL characters are replaced by question marks (default).
      */
-    OUString     readUnicodeArray( sal_Int32 nChars );
+    OUString     readUnicodeArray( sal_Int32 nChars, bool bAllowNulChars = false );
 
     /** Reads a Unicode character array (may be compressed) and returns the
         string.

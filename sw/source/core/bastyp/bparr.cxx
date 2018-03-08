@@ -26,24 +26,7 @@
     As a result there are approx. 20 * MAXENTRY == 20000 entries available */
 static const sal_uInt16 nBlockGrowSize = 20;
 
-#if OSL_DEBUG_LEVEL > 2
-#define CHECKIDX( p, n, i, c ) CheckIdx( p, n, i, c );
-void CheckIdx( BlockInfo** ppInf, sal_uInt16 nBlock, sal_uLong nSize, sal_uInt16 nCur )
-{
-    assert( !nSize || nCur < nBlock ); // BigPtrArray: CurIndex invalid
-
-    sal_uLong nIdx = 0;
-    for( sal_uInt16 nCnt = 0; nCnt < nBlock; ++nCnt, ++ppInf )
-    {
-        nIdx += (*ppInf)->nElem;
-        // Array with holes is not allowed
-        assert( !nCnt || (*(ppInf-1))->nEnd + 1 == (*ppInf)->nStart );
-    }
-    assert(nIdx == nSize); // invalid count in nSize
-}
-#else
 #define CHECKIDX( p, n, i, c )
-#endif
 
 BigPtrArray::BigPtrArray()
 {

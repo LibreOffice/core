@@ -79,8 +79,7 @@ public:
     // --- ::lang::XEventListener ---
     virtual void SAL_CALL       disposing( const css::lang::EventObject& Source ) override;
 
-    // convert and normalize
-    static SvxMacro*            ConvertToMacro( const css::uno::Any& rElement, SfxObjectShell* pDoc );
+    static SvxMacro*            ConvertToMacro( const css::uno::Any& rElement, SfxObjectShell* pDoc, bool bNormalizeMacro );
     static void                 NormalizeMacro( const css::uno::Any& rIn, css::uno::Any& rOut, SfxObjectShell* pDoc );
     static void                 NormalizeMacro(
                                     const ::comphelper::NamedValueCollection& i_eventDescriptor,

@@ -519,7 +519,8 @@ public:
     virtual VclPtr<SfxAbstractTabDialog> CreateSvxBorderBackgroundDlg(
        vcl::Window* pParent,
        const SfxItemSet& rCoreSet,
-       bool bEnableDrawingLayerFillStyles) override;
+       bool bEnableSelector,
+       bool bEnableDrawingLayerFillStyles = false) override;
 
     virtual VclPtr<AbstractSvxTransformTabDialog> CreateSvxTransformTabDialog( vcl::Window* pParent,
                                                                 const SfxItemSet* pAttr,

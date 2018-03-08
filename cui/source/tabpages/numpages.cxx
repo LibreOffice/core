@@ -2702,27 +2702,6 @@ void SvxNumPositionTabPage::dispose()
 
 /*-------------------------------------------------------*/
 
-#if OSL_DEBUG_LEVEL > 1
-void lcl_PrintDebugOutput(FixedText& rFixed, const SvxNumberFormat& rNumFmt)
-{
-    OUString const sHash( " # " );
-    if ( rNumFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
-    {
-        OUString sDebugText = OUString::number( convertTwipToMm100(rNumFmt.GetAbsLSpace() ) ) + sHash
-                            + OUString::number( convertTwipToMm100(rNumFmt.GetCharTextDistance() ) + sHash
-                            + OUString::number( convertTwipToMm100(rNumFmt.GetFirstLineOffset() ) );
-        rFixed.SetText(sDebugText);
-    }
-    else if ( rNumFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT )
-    {
-        OUString sDebugText = OUString::number( convertTwipToMm100(rNumFmt.GetListtabPos() ) ) + sHash;
-                            + OUString::number( convertTwipToMm100(rNumFmt.GetFirstLineIndent() ) ) + sHash
-                            + OUString::number( convertTwipToMm100(rNumFmt.GetIndentAt() ) );
-        rFixed.SetText(sDebugText);
-    }
-
-}
-#endif
 
 void SvxNumPositionTabPage::InitControls()
 {

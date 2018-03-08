@@ -106,66 +106,6 @@ namespace container = com::sun::star::container;
 namespace beans = com::sun::star::beans;
 namespace graphic = com::sun::star::graphic;
 
-#if OSL_DEBUG_LEVEL > 1
-
-void printPropertySet(
-    const OUString& prefix,
-    const uno::Reference< beans::XPropertySet >& xPropSet )
-{
-    uno::Reference< beans::XPropertySetInfo > xPropSetInfo =
-        xPropSet->getPropertySetInfo();
-
-    uno::Sequence< beans::Property > aPropDetails =
-        xPropSetInfo->getProperties();
-
-    SAL_WARN("cui", "printPropertySet: " << aPropDetails.getLength() << " properties" );
-
-    for ( sal_Int32 i = 0; i < aPropDetails.getLength(); ++i )
-    {
-        OUString tmp;
-        sal_Int32 ival;
-
-        uno::Any a = xPropSet->getPropertyValue( aPropDetails[i].Name );
-
-        if ( a >>= tmp )
-        {
-            SAL_WARN("cui", prefix << ": Got property: " << aPropDetails[i].Name << tmp);
-        }
-        else if ( ( a >>= ival ) )
-        {
-            SAL_WARN("cui", prefix << ": Got property: " << aPropDetails[i].Name << " = " << ival);
-        }
-        else
-        {
-            SAL_WARN("cui", prefix << ": Got property: " << aPropDetails[i].Name << " of type " << a.getValueTypeName());
-        }
-    }
-}
-
-void printProperties(
-    const OUString& prefix,
-    const uno::Sequence< beans::PropertyValue >& aProp )
-{
-    for ( sal_Int32 i = 0; i < aProp.getLength(); ++i )
-    {
-        OUString tmp;
-
-        aProp[i].Value >>= tmp;
-
-        SAL_WARN("cui", prefix << ": Got property: " << aProp[i].Name << " = " << tmp);
-    }
-}
-
-void printEntries(SvxEntries* entries)
-{
-    for (auto const& entry : *entries)
-    {
-        SAL_WARN("cui", "printEntries: " << entry.GetName());
-    }
-}
-
-#endif
-
 bool
 SvxConfigPage::CanConfig( const OUString& aModuleId )
 {
