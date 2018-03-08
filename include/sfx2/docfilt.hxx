@@ -60,6 +60,7 @@ class SFX2_DLLPUBLIC SfxFilter
     SfxFilterFlags  nFormatType;
     sal_Int32       nVersion;
     SotClipboardFormatId lFormat;
+    bool mbEnabled;
 
 public:
     SfxFilter( const OUString& rProvider, const OUString& rFilterName );
@@ -71,7 +72,8 @@ public:
                const OUString &rTypeName,
                const OUString &rMimeType,
                const OUString &rUserData,
-               const OUString& rServiceName );
+               const OUString& rServiceName,
+               bool bEnabled = true );
     ~SfxFilter();
 
     bool IsAllowedAsTemplate() const { return bool(nFormatType & SfxFilterFlags::TEMPLATE); }
@@ -115,6 +117,7 @@ public:
     /// @throws css::uno::RuntimeException
     static OUString GetTypeFromStorage(
         const css::uno::Reference<css::embed::XStorage>& xStorage );
+    bool IsEnabled() const  { return mbEnabled; }
 };
 
 #endif

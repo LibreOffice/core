@@ -94,6 +94,14 @@
           this filter.</desc>
         </info>
       </prop>
+      <prop oor:name="Enabled" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>Whether the filter is enabled. It makes sense to disable a filter,
+          as a temporary security measure, when there is a 0-day vulnerability in
+          it.</desc>
+        </info>
+        <value>true</value>
+      </prop>
     </group>
   </templates>
   <component>

@@ -58,6 +58,7 @@
 #define  PROPNAME_TEMPLATENAME      "TemplateName"
 #define  PROPNAME_FILEFORMATVERSION "FileFormatVersion"
 #define  PROPNAME_EXPORTEXTENSION   "ExportExtension"
+#define  PROPNAME_ENABLED           "Enabled"
 
 /** @short  used to identify a frame loader or detect service item
             property against the configuration API and can be used
