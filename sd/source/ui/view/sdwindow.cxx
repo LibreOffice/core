@@ -685,6 +685,20 @@ double Window::GetVisibleHeight()
     return ((double) aWinSize.Height() / maViewSize.Height());
 }
 
+Point Window::GetVisibleCenter()
+{
+    Point aPos;
+    aPos = Rectangle(aPos, GetOutputSizePixel()).Center();
+
+    // For LOK
+    bool bMapModeWasEnabled(IsMapModeEnabled());
+    EnableMapMode(/*true*/);
+    aPos = PixelToLogic(aPos);
+    EnableMapMode(bMapModeWasEnabled);
+
+    return aPos;
+}
+
 /**
  * @returns width of a scroll column in proportion to the width of the whole
  * working area.

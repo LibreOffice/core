@@ -265,7 +265,7 @@ void View::DoCopy (vcl::Window* pWindow)
     }
 }
 
-void View::DoPaste (vcl::Window* pWindow)
+void View::DoPaste (::sd::Window* pWindow)
 {
     TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( mpViewSh->GetActiveWindow() ) );
     if( !aDataHelper.GetTransferable().is() )
@@ -316,17 +316,8 @@ void View::DoPaste (vcl::Window* pWindow)
     }
     else
     {
-        Point       aPos;
         sal_Int8    nDnDAction = DND_ACTION_COPY;
-
-        if( pWindow )
-        {
-            if (comphelper::LibreOfficeKit::isActive())
-                aPos = Rectangle(aPos, GetSdrPageView()->GetPage()->GetSize()).Center();
-            else
-                aPos = pWindow->PixelToLogic( Rectangle( aPos, pWindow->GetOutputSizePixel() ).Center() );
-        }
-
+        Point aPos = pWindow->GetVisibleCenter();
         DrawViewShell* pDrViewSh = static_cast<DrawViewShell*>( mpDocSh->GetViewShell() );
 
         if (pDrViewSh != nullptr)
