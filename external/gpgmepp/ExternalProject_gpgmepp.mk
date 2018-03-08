@@ -71,7 +71,10 @@ $(call gb_ExternalProject_get_state_target,gpgmepp,build):
 		   $(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
 		   $(if $(filter MACOSX,$(OS)),--prefix=/@.__________________________________________________OOO) \
 	           $(if $(filter TRUE,$(DISABLE_DYNLOADING)),--disable-shared,--disable-static) \
-	  && $(MAKE) \
+	  && $(if $(filter LINUX,$(OS)), \
+	         $(call gb_Helper_optional,LIBASSUAN LIBGPGERROR, \
+	             LD_RUN_PATH=$${LD_RUN_PATH:+$$LD_RUN_PATH:}$(call gb_Helper_optional,LIBASSUAN,$(call gb_UnpackedTarball_get_dir,libassuan)/src/.libs)$(call gb_Helper_optional,LIBGPGERROR,$(call gb_Helper_optional,LIBASSUAN,:)$(call gb_UnpackedTarball_get_dir,libgpg-error)/src/.libs))) \
+	     $(MAKE) \
 	  $(if $(filter MACOSX,$(OS)),\
 		  && $(PERL) $(SRCDIR)/solenv/bin/macosx-change-install-names.pl shl OOO \
 			  $(EXTERNAL_WORKDIR)/lang/cpp/src/.libs/libgpgmepp.6.dylib \
