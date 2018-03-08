@@ -840,27 +840,24 @@ void RTFDocumentImpl::resolvePict(bool const bInline, uno::Reference<drawing::XS
                                                     uno::UNO_QUERY);
     if (xServiceInfo.is() && xServiceInfo->supportsService("com.sun.star.text.TextFrame"))
         pExtHeader = nullptr;
-    OUString aGraphicUrl = m_pGraphicHelper->importGraphicObject(xInputStream, pExtHeader);
+
+    uno::Reference<graphic::XGraphic> xGraphic;
+    xGraphic = m_pGraphicHelper->importGraphic(xInputStream, pExtHeader);
 
     if (m_aStates.top().aPicture.eStyle != RTFBmpStyle::NONE)
     {
         // In case of PNG/JPEG, the real size is known, don't use the values
         // provided by picw and pich.
-        OString aURLBS(OUStringToOString(aGraphicUrl, RTL_TEXTENCODING_UTF8));
-        const char aURLBegin[] = "vnd.sun.star.GraphicObject:";
-        if (aURLBS.startsWith(aURLBegin))
-        {
-            Graphic aGraphic = GraphicObject(aURLBS.copy(RTL_CONSTASCII_LENGTH(aURLBegin)))
-                                   .GetTransformedGraphic();
-            Size aSize(aGraphic.GetPrefSize());
-            MapMode aMap(MapUnit::Map100thMM);
-            if (aGraphic.GetPrefMapMode().GetMapUnit() == MapUnit::MapPixel)
-                aSize = Application::GetDefaultDevice()->PixelToLogic(aSize, aMap);
-            else
-                aSize = OutputDevice::LogicToLogic(aSize, aGraphic.GetPrefMapMode(), aMap);
-            m_aStates.top().aPicture.nWidth = aSize.Width();
-            m_aStates.top().aPicture.nHeight = aSize.Height();
-        }
+
+        Graphic aGraphic(xGraphic);
+        Size aSize(aGraphic.GetPrefSize());
+        MapMode aMap(MapUnit::Map100thMM);
+        if (aGraphic.GetPrefMapMode().GetMapUnit() == MapUnit::MapPixel)
+            aSize = Application::GetDefaultDevice()->PixelToLogic(aSize, aMap);
+        else
+            aSize = OutputDevice::LogicToLogic(aSize, aGraphic.GetPrefMapMode(), aMap);
+        m_aStates.top().aPicture.nWidth = aSize.Width();
+        m_aStates.top().aPicture.nHeight = aSize.Height();
     }
 
     // Wrap it in an XShape.
@@ -895,20 +892,13 @@ void RTFDocumentImpl::resolvePict(bool const bInline, uno::Reference<drawing::XS
 
     uno::Reference<beans::XPropertySet> xPropertySet(xShape, uno::UNO_QUERY);
 
+    if (xPropertySet.is())
+        xPropertySet->setPropertyValue("Graphic", uno::Any(xGraphic));
+
     // check if the picture is in an OLE object and if the \objdata element is used
     // (see RTF_OBJECT in RTFDocumentImpl::dispatchDestination)
     if (m_bObject)
     {
-        // Set bitmap
-        beans::PropertyValues aMediaProperties(1);
-        aMediaProperties[0].Name = "URL";
-        aMediaProperties[0].Value <<= aGraphicUrl;
-        uno::Reference<graphic::XGraphicProvider> xGraphicProvider(
-            graphic::GraphicProvider::create(m_xContext));
-        uno::Reference<graphic::XGraphic> xGraphic
-            = xGraphicProvider->queryGraphic(aMediaProperties);
-        xPropertySet->setPropertyValue("Graphic", uno::Any(xGraphic));
-
         // Set the object size
         awt::Size aSize;
         aSize.Width = (m_aStates.top().aPicture.nGoalWidth ? m_aStates.top().aPicture.nGoalWidth
@@ -925,9 +915,6 @@ void RTFDocumentImpl::resolvePict(bool const bInline, uno::Reference<drawing::XS
         m_aObjectAttributes.set(NS_ooxml::LN_shape, pShapeValue);
         return;
     }
-
-    if (xPropertySet.is())
-        xPropertySet->setPropertyValue("GraphicURL", uno::Any(aGraphicUrl));
 
     if (m_aStates.top().bInListpicture)
     {
