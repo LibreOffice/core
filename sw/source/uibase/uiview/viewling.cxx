@@ -24,7 +24,6 @@
 #include <com/sun/star/linguistic2/ProofreadingResult.hpp>
 #include <com/sun/star/i18n/TextConversionOption.hpp>
 #include <linguistic/lngprops.hxx>
-#include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/scopeguard.hxx>
@@ -731,13 +730,9 @@ bool SwView::ExecSpellPopup(const Point& rPt)
 
                 OUString sMenuName  = bUseGrammarContext ?
                     OUString("private:resource/GrammarContextMenu") : OUString("private:resource/SpellContextMenu");
-                if (comphelper::LibreOfficeKit::isActive())
+                if(TryContextMenuInterception( *pPopup, sMenuName, pMenu, aEvent ))
                 {
-                    // TODO for LOK, we'll need to convert the spelling popup menu to
-                    // something much more sfx2-based & non-modal...
-                }
-                else if (TryContextMenuInterception( *pPopup, sMenuName, pMenu, aEvent ))
-                {
+
                     //! happy hacking for context menu modifying extensions of this
                     //! 'custom made' menu... *sigh* (code copied from sfx2 and framework)
                     if ( pMenu )
