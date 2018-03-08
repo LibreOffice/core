@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da36d5c6_72734e4e",
+        "filename": "cui/source/options/optcolor.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 950,
+      "author": {
+        "id": 1000169
+      },
+      "writtenOn": "2018-03-08T05:20:29Z",
+      "side": 1,
+      "message": "This 10 is also a constant",
+      "range": {
+        "startLine": 950,
+        "startChar": 48,
+        "endLine": 950,
+        "endChar": 50
+      },
+      "revId": "296ebed05273c22aca0922d010af1ec8915c45a7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
