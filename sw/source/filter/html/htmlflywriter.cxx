@@ -1427,6 +1427,11 @@ Writer& OutHTML_Image( Writer& rWrt, const SwFrameFormat &rFrameFormat,
         aHtml.attribute(OOO_STRING_SVTOOLS_HTML_O_usemap, "#" + aIMapName);
     }
 
+    if ((nFrameOpts & HtmlFrmOpts::Replacement) && !rAlternateText.isEmpty())
+        // XHTML object replacement image's alternate text doesn't use the
+        // "alt" attribute.
+        aHtml.characters(rAlternateText.toUtf8());
+
     aHtml.flushStack();
 
     if( !rHTMLWrt.m_aINetFormats.empty() )
