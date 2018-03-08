@@ -854,8 +854,6 @@ void XmlFilterBase::exportDocumentProperties( const Reference< XDocumentProperti
         writeAppProperties( *this, xProperties );
         writeCustomProperties( *this, xProperties );
     }
-
-    exportCustomFragments();
 }
 
 // protected ------------------------------------------------------------------

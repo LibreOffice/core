@@ -3030,6 +3030,10 @@ void ScExportTest::testCustomXml()
     xmlDocPtr pRelsDoc = XPathHelper::parseExport(pXPathFile, m_xSFactory, "customXml/_rels/item1.xml.rels");
     CPPUNIT_ASSERT(pRelsDoc);
 
+    // Check there is a relation to itemProps1.xml.
+    assertXPath(pRelsDoc, "/r:Relationships/r:Relationship", 1);
+    assertXPath(pRelsDoc, "/r:Relationships/r:Relationship[@Id='rId1']", "Target", "itemProps1.xml");
+
     std::shared_ptr<SvStream> pStream = XPathHelper::parseExportStream(pXPathFile, m_xSFactory, "ddp/ddpfile.xen");
     CPPUNIT_ASSERT(pStream);
 }

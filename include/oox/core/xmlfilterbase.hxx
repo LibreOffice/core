@@ -227,7 +227,12 @@ public:
      */
     void exportDocumentProperties( const css::uno::Reference< css::document::XDocumentProperties >& xProperties );
 
+    /** Write the customXml entries we are preserving (xlsx and pptx only). */
+    void exportCustomFragments();
+
+    /** Read the document properties and also the customXml entries (xlsx and pptx only). */
     void importDocumentProperties();
+
     static void putPropertiesToDocumentGrabBag(const css::uno::Reference<css::lang::XComponent>& xDstDoc,
                                                const comphelper::SequenceAsHashMap& rProperties);
 
@@ -258,7 +263,6 @@ private:
                             const css::uno::Reference< css::io::XStream >& rxOutStream ) const override;
 
     void importCustomFragments(css::uno::Reference<css::embed::XStorage>& xDocumentStorage);
-    void exportCustomFragments();
 
 private:
     ::std::unique_ptr< XmlFilterBaseImpl > mxImpl;
