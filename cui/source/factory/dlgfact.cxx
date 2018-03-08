@@ -1038,13 +1038,12 @@ VclPtr<AbstractSvxSearchSimilarityDialog> AbstractDialogFactory_Impl::CreateSvxS
 VclPtr<SfxAbstractTabDialog> AbstractDialogFactory_Impl::CreateSvxBorderBackgroundDlg(
     vcl::Window* pParent,
     const SfxItemSet& rCoreSet,
-    bool bEnableSelector,
     bool bEnableDrawingLayerFillStyles)
 {
     VclPtrInstance<SvxBorderBackgroundDlg> pDlg(
         pParent,
         rCoreSet,
-        bEnableSelector,
+        /*bEnableSelector*/true,
         bEnableDrawingLayerFillStyles);
 
     return VclPtr<CuiAbstractTabDialog_Impl>::Create(pDlg);

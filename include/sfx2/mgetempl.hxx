@@ -86,8 +86,7 @@ friend class SfxStyleDialog;
     virtual bool        FillItemSet(SfxItemSet *) override;
     virtual void        Reset(const SfxItemSet *) override;
 
-    static bool    Execute_Impl( sal_uInt16 nId, const OUString& rStr, const OUString& rRefStr,
-                          sal_uInt16 nFamily );
+    static bool    Execute_Impl( sal_uInt16 nId, const OUString& rStr, sal_uInt16 nFamily );
     using TabPage::ActivatePage;
     virtual void        ActivatePage(const SfxItemSet &) override;
     using TabPage::DeactivatePage;
