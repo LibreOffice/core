@@ -140,11 +140,11 @@ bool SvxOle2Shape::setPropertyValueImpl( const OUString& rName, const SfxItemPro
     }
     case OWN_ATTR_THUMBNAIL:
     {
-        OUString aURL;
-        if( rValue >>= aURL )
+        uno::Reference< graphic::XGraphic > xGraphic( rValue, uno::UNO_QUERY );
+        if( xGraphic.is() )
         {
-            GraphicObject aGrafObj( GraphicObject::CreateGraphicObjectFromURL( aURL ) );
-            static_cast<SdrOle2Obj*>(mpObj.get())->SetGraphic(aGrafObj.GetGraphic());
+            const Graphic aGraphic(xGraphic);
+            static_cast<SdrOle2Obj*>(mpObj.get())->SetGraphic(aGraphic);
             return true;
         }
         break;
@@ -324,20 +324,11 @@ bool SvxOle2Shape::getPropertyValueImpl( const OUString& rName, const SfxItemPro
 
     case OWN_ATTR_THUMBNAIL:
     {
-        OUString    aURL;
-        SdrOle2Obj* pOle = dynamic_cast< SdrOle2Obj* >( mpObj.get() );
-        if( pOle )
-        {
-            const Graphic* pGraphic = pOle->GetGraphic();
-
-            if( pGraphic )
-            {
-                GraphicObject aObj( *pGraphic );
-                aURL = UNO_NAME_GRAPHOBJ_URLPREFIX;
-                aURL += OStringToOUString(aObj.GetUniqueID(), RTL_TEXTENCODING_ASCII_US);
-            }
-        }
-        rValue <<= aURL;
+        uno::Reference< graphic::XGraphic > xGraphic;
+        const Graphic* pGraphic = static_cast<SdrOle2Obj*>( mpObj.get() )->GetGraphic();
+        if( pGraphic )
+            xGraphic = pGraphic->GetXGraphic();
+        rValue <<= xGraphic;
         break;
     }
     case OWN_ATTR_PERSISTNAME:
