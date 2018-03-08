@@ -451,7 +451,7 @@ SfxItemPropertyMapEntry const * ImplGetSvxOle2PropertyMap()
         TEXT_PROPERTIES
         FONTWORK_PROPERTIES
 
-        { OUString("ThumbnailGraphicURL"),      OWN_ATTR_THUMBNAIL          , cppu::UnoType<OUString>::get(), 0, 0 },
+        { OUString("ThumbnailGraphic"),         OWN_ATTR_THUMBNAIL          , cppu::UnoType<css::graphic::XGraphic>::get(), 0, 0 },
         { OUString("Model"),                    OWN_ATTR_OLEMODEL           , cppu::UnoType<css::frame::XModel>::get(), css::beans::PropertyAttribute::READONLY, 0},
         { OUString("EmbeddedObject"),           OWN_ATTR_OLE_EMBEDDED_OBJECT, cppu::UnoType<css::embed::XEmbeddedObject>::get(), css::beans::PropertyAttribute::READONLY, 0},
         { OUString("EmbeddedObjectNoNewClient"),OWN_ATTR_OLE_EMBEDDED_OBJECT_NONEWCLIENT, cppu::UnoType<css::embed::XEmbeddedObject>::get(), css::beans::PropertyAttribute::READONLY, 0},
@@ -483,7 +483,7 @@ SfxItemPropertyMapEntry const * ImplGetSvxPluginPropertyMap()
         { OUString(UNO_NAME_LINKDISPLAYBITMAP), OWN_ATTR_LDBITMAP           , cppu::UnoType<css::awt::XBitmap>::get(), css::beans::PropertyAttribute::READONLY, 0},
         { OUString(UNO_NAME_LINKDISPLAYNAME),   OWN_ATTR_LDNAME             , cppu::UnoType<OUString>::get(),   css::beans::PropertyAttribute::READONLY, 0},
         { OUString(UNO_NAME_OLE2_METAFILE),     OWN_ATTR_METAFILE           , cppu::UnoType<css::uno::Sequence<sal_Int8>>::get(), css::beans::PropertyAttribute::READONLY, 0},
-        { OUString("ThumbnailGraphicURL"),      OWN_ATTR_THUMBNAIL          , cppu::UnoType<OUString>::get(), 0, 0 },
+        { OUString("ThumbnailGraphic"),         OWN_ATTR_THUMBNAIL          , cppu::UnoType<css::graphic::XGraphic>::get(), 0, 0 },
         { OUString(UNO_NAME_MISC_OBJ_MOVEPROTECT),      SDRATTR_OBJMOVEPROTECT, cppu::UnoType<bool>::get(),0, 0},
         { OUString(UNO_NAME_MISC_OBJ_SIZEPROTECT),      SDRATTR_OBJSIZEPROTECT, cppu::UnoType<bool>::get(),0, 0},
         { OUString(UNO_NAME_OLE2_PERSISTNAME),  OWN_ATTR_PERSISTNAME        , cppu::UnoType<OUString>::get(), 0, 0 },
@@ -517,7 +517,7 @@ SfxItemPropertyMapEntry const * ImplGetSvxFramePropertyMap()
         { OUString(UNO_NAME_LINKDISPLAYBITMAP), OWN_ATTR_LDBITMAP           , cppu::UnoType<css::awt::XBitmap>::get(), css::beans::PropertyAttribute::READONLY, 0},
         { OUString(UNO_NAME_LINKDISPLAYNAME),   OWN_ATTR_LDNAME             , cppu::UnoType<OUString>::get(),   css::beans::PropertyAttribute::READONLY, 0},
         { OUString(UNO_NAME_OLE2_METAFILE),     OWN_ATTR_METAFILE           , cppu::UnoType<css::uno::Sequence<sal_Int8>>::get(), css::beans::PropertyAttribute::READONLY, 0},
-        { OUString("ThumbnailGraphicURL"),      OWN_ATTR_THUMBNAIL          , cppu::UnoType<OUString>::get(), 0, 0 },
+        { OUString("ThumbnailGraphic"),         OWN_ATTR_THUMBNAIL          , cppu::UnoType<css::graphic::XGraphic>::get(), 0, 0 },
         { OUString(UNO_NAME_MISC_OBJ_MOVEPROTECT),      SDRATTR_OBJMOVEPROTECT, cppu::UnoType<bool>::get(),0, 0},
         { OUString(UNO_NAME_MISC_OBJ_SIZEPROTECT),      SDRATTR_OBJSIZEPROTECT, cppu::UnoType<bool>::get(),0, 0},
         { OUString(UNO_NAME_OLE2_PERSISTNAME),  OWN_ATTR_PERSISTNAME        , cppu::UnoType<OUString>::get(), 0, 0 },
@@ -550,7 +550,7 @@ SfxItemPropertyMapEntry const * ImplGetSvxAppletPropertyMap()
         { OUString(UNO_NAME_LINKDISPLAYBITMAP), OWN_ATTR_LDBITMAP           , cppu::UnoType<css::awt::XBitmap>::get(), css::beans::PropertyAttribute::READONLY, 0},
         { OUString(UNO_NAME_LINKDISPLAYNAME),   OWN_ATTR_LDNAME             , cppu::UnoType<OUString>::get(),   css::beans::PropertyAttribute::READONLY, 0},
         { OUString(UNO_NAME_OLE2_METAFILE),     OWN_ATTR_METAFILE           , cppu::UnoType<css::uno::Sequence<sal_Int8>>::get(), css::beans::PropertyAttribute::READONLY, 0},
-        { OUString("ThumbnailGraphicURL"),      OWN_ATTR_THUMBNAIL          , cppu::UnoType<OUString>::get(), 0, 0 },
+        { OUString("ThumbnailGraphic"),         OWN_ATTR_THUMBNAIL          , cppu::UnoType<css::graphic::XGraphic>::get(), 0, 0 },
         { OUString(UNO_NAME_MISC_OBJ_MOVEPROTECT),      SDRATTR_OBJMOVEPROTECT, cppu::UnoType<bool>::get(),0, 0},
         { OUString(UNO_NAME_MISC_OBJ_SIZEPROTECT),      SDRATTR_OBJSIZEPROTECT, cppu::UnoType<bool>::get(),0, 0},
         { OUString(UNO_NAME_OLE2_PERSISTNAME),  OWN_ATTR_PERSISTNAME        , cppu::UnoType<OUString>::get(), 0, 0 },
