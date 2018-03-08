@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "ba2be162_39545053",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2018-03-08T14:04:20Z",
+      "side": 1,
+      "message": "please use the notation \"tdf#115542\" to reference bugs as various automated notifications depend on that.",
+      "revId": "947c8fc65b3d96c3ffdc39074eecc8e62c657abd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ba2be162_e38cc937",
         "filename": "sd/source/ui/view/drviews5.cxx",
         "patchSetId": 1
