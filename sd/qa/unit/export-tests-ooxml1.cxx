@@ -377,12 +377,12 @@ void SdOOXMLExportTest1::testBnc880763()
     CPPUNIT_ASSERT(pObjGroup);
     const SdrObject *pObj = pObjGroup->GetSubList()->GetObj(0);
     CPPUNIT_ASSERT_MESSAGE( "no object", pObj != nullptr);
-    CPPUNIT_ASSERT_EQUAL( sal_uInt32(0x0000ff),(static_cast< const XColorItem& >(pObj->GetMergedItem(XATTR_FILLCOLOR))).GetColorValue().GetColor());
+    CPPUNIT_ASSERT_EQUAL( Color(0x0000ff),(static_cast< const XColorItem& >(pObj->GetMergedItem(XATTR_FILLCOLOR))).GetColorValue());
 
     // Second object at the front has green background color
     pObj = pPage->GetObj(2); // FIXME should be 1, smartart import creates an additional empty group for some reason
     CPPUNIT_ASSERT_MESSAGE( "no object", pObj != nullptr);
-    CPPUNIT_ASSERT_EQUAL( sal_uInt32(0x00ff00),(static_cast< const XColorItem& >(pObj->GetMergedItem(XATTR_FILLCOLOR))).GetColorValue().GetColor());
+    CPPUNIT_ASSERT_EQUAL( Color(0x00ff00),(static_cast< const XColorItem& >(pObj->GetMergedItem(XATTR_FILLCOLOR))).GetColorValue());
 
     xDocShRef->DoClose();
 }
@@ -617,7 +617,7 @@ void SdOOXMLExportTest1::testBulletColor()
     const EditTextObject& aEdit = pTxtObj->GetOutlinerParaObject()->GetTextObject();
     const SvxNumBulletItem *pNumFmt = aEdit.GetParaAttribs(0).GetItem(EE_PARA_NUMBULLET);
     CPPUNIT_ASSERT(pNumFmt);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Bullet's color is wrong!", sal_uInt32(0xff0000),pNumFmt->GetNumRule()->GetLevel(0).GetBulletColor().GetColor());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Bullet's color is wrong!", Color(0xff0000),pNumFmt->GetNumRule()->GetLevel(0).GetBulletColor());
 
     xDocShRef->DoClose();
 }

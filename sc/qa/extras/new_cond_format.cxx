@@ -201,26 +201,26 @@ void testUseGradient(uno::Reference<beans::XPropertySet> const & xPropSet, bool 
 
 void testPositiveColor(uno::Reference<beans::XPropertySet> const & xPropSet, Color aColor)
 {
-    sal_Int32 nColor = 0;
+    ::Color nColor;
     uno::Any aAny = xPropSet->getPropertyValue("Color");
     CPPUNIT_ASSERT(aAny >>= nColor);
-    CPPUNIT_ASSERT_EQUAL(aColor.GetColor(), sal_uInt32(nColor));
+    CPPUNIT_ASSERT_EQUAL(aColor, nColor);
 }
 
 void testNegativeColor(uno::Reference<beans::XPropertySet> const & xPropSet, Color aColor)
 {
-    sal_Int32 nColor = 0;
+    ::Color nColor;
     uno::Any aAny = xPropSet->getPropertyValue("NegativeColor");
     CPPUNIT_ASSERT(aAny >>= nColor);
-    CPPUNIT_ASSERT_EQUAL(aColor.GetColor(), sal_uInt32(nColor));
+    CPPUNIT_ASSERT_EQUAL(aColor, nColor);
 }
 
 void testAxisColor(uno::Reference<beans::XPropertySet> const & xPropSet, Color aColor)
 {
-    sal_Int32 nColor = 0;
+    ::Color nColor;
     uno::Any aAny = xPropSet->getPropertyValue("AxisColor");
     CPPUNIT_ASSERT(aAny >>= nColor);
-    CPPUNIT_ASSERT_EQUAL(aColor.GetColor(), sal_uInt32(nColor));
+    CPPUNIT_ASSERT_EQUAL(aColor, nColor);
 }
 
 void testDataBarEntryValue(uno::Reference<sheet::XDataBarEntry> const & xEntry,

@@ -412,7 +412,7 @@ template<> struct assertion_traits<Color>
     static std::string toString( const Color& c )
     {
         OStringStream ost;
-        ost << static_cast<unsigned int>(c.GetColor());
+        ost << static_cast<sal_uInt32>(c);
         return ost.str();
     }
 };
