@@ -226,6 +226,7 @@ enum class ErrCodeClass {
 #define ERRCODE_IO_WRITEPROTECTED        ErrCode( ErrCodeArea::Io, ErrCodeClass::Access, 37 )
 #define ERRCODE_IO_BROKENPACKAGE         ErrCode( ErrCodeArea::Io, ErrCodeClass::Format, 38 )
 #define ERRCODE_IO_NOTSTORABLEINBINARYFORMAT ErrCode( ErrCodeArea::Io, ErrCodeClass::Format, 39 )
+#define ERRCODE_IO_FILTERDISABLED        ErrCode( ErrCodeArea::Io, ErrCodeClass::Format, 40 )
 
 // StreamErrorCodes
 
