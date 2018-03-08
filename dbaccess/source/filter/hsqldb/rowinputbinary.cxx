@@ -24,6 +24,92 @@
 
 #include <unotools/ucbstreamhelper.hxx>
 #include <tools/stream.hxx>
+#include <rtl/ustrbuf.hxx>
+
+namespace
+{
+/**
+     * Converts binary represented big integer value to BCD (Binary Coded
+     * Decimal), and returns a string representation of the number.
+     *
+     * Bytes[0] is the most significant part of the number.
+     */
+OUString lcl_double_dabble(const std::vector<sal_uInt8>& bytes)
+{
+    size_t nbits = 8 * bytes.size(); // length of array in bits
+    size_t nscratch = nbits / 3; // length of scratch in bytes
+    std::vector<char> scratch(nscratch, 0);
+    size_t smin = nscratch - 2; // speed optimization
+
+    for (size_t i = 0; i < bytes.size(); ++i)
+    {
+        for (size_t j = 0; j < 8; ++j)
+        {
+            /* This bit will be shifted in on the right. */
+            int shifted_in = (bytes[i] & (1 << (7 - j))) ? 1 : 0;
+
+            /* Add 3 everywhere that scratch[k] >= 5. */
+            for (size_t k = smin; k < nscratch; ++k)
+                scratch[k] += (scratch[k] >= 5) ? 3 : 0;
+
+            /* Shift scratch to the left by one position. */
+            if (scratch[smin] >= 8)
+                smin -= 1;
+            for (size_t k = smin; k < nscratch - 1; ++k)
+            {
+                scratch[k] <<= 1;
+                scratch[k] &= 0xF;
+                scratch[k] |= (scratch[k + 1] >= 8);
+            }
+
+            /* Shift in the new bit from arr. */
+            scratch[nscratch - 1] <<= 1;
+            scratch[nscratch - 1] &= 0xF;
+            scratch[nscratch - 1] |= shifted_in;
+        }
+    }
+
+    auto it = scratch.begin();
+    /* Remove leading zeros from the scratch space. */
+    while (*it != 0)
+    {
+        it = scratch.erase(it);
+    }
+
+    /* Convert the scratch space from BCD digits to ASCII. */
+    for (auto& digit : scratch)
+        digit += '0';
+
+    /* Resize and return the resulting string. */
+    return rtl::OStringToOUString(OString(scratch.data(), scratch.size()), RTL_TEXTENCODING_UTF8);
+}
+
+OUString lcl_makeStringFromBigint(const std::vector<sal_uInt8> bytes)
+{
+    std::vector<sal_uInt8> aBytes{ bytes };
+
+    OUStringBuffer sRet;
+    // two's complement
+    if (aBytes[0] == 1)
+    {
+        sRet.append("-");
+        for (auto& byte : aBytes)
+            byte = ~byte;
+        // add 1 to byte array
+        // FIXME e.g. 10000 valid ?
+        for (size_t i = aBytes.size() - 1; i != 0; ++i)
+        {
+            aBytes[i] += 1;
+            if (aBytes[i] != 0)
+                break;
+        }
+    }
+    // convert binary to BCD
+    OUString sNum = lcl_double_dabble(aBytes);
+    sRet.append(sNum);
+    return sRet.makeStringAndClear();
+}
+}
 
 namespace dbahsql
 {
@@ -200,8 +286,15 @@ std::vector<Any> HsqlRowInputStream::readOneRow(const ColumnTypeVector& nColType
 
                 std::vector<sal_uInt8> aBytes(nSize);
                 m_pStream->ReadBytes(aBytes.data(), nSize);
+                assert(aBytes.size() > 0);
 
-                // TODO make a numeric out of this.
+                sal_Int32 nScale = 0;
+                m_pStream->ReadInt32(nScale);
+
+                Sequence<Any> result(2);
+                result[0] <<= lcl_makeStringFromBigint(aBytes);
+                result[1] <<= nSize;
+                aData.push_back(makeAny(result));
             }
             break;
             case DataType::DATE:
