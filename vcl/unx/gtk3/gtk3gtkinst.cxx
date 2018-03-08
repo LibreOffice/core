@@ -1300,6 +1300,16 @@ public:
         return nAttach;
     }
 
+    virtual void set_margin_top(int nMargin) override
+    {
+        gtk_widget_set_margin_top(m_pWidget, nMargin);
+    }
+
+    virtual void set_margin_bottom(int nMargin) override
+    {
+        gtk_widget_set_margin_bottom(m_pWidget, nMargin);
+    }
+
     virtual weld::Container* weld_parent() const override;
 
     virtual OString get_buildable_name() const override
@@ -1335,6 +1345,14 @@ public:
     {
         if (m_bTakeOwnership)
             gtk_widget_destroy(m_pWidget);
+    }
+
+    virtual void disable_notify_events()
+    {
+    }
+
+    virtual void enable_notify_events()
+    {
     }
 };
 
@@ -1851,7 +1869,9 @@ public:
 
     virtual void set_active(bool active) override
     {
+        disable_notify_events();
         gtk_toggle_button_set_active(m_pToggleButton, active);
+        enable_notify_events();
     }
 
     virtual bool get_active() const override
@@ -1867,6 +1887,18 @@ public:
     virtual bool get_inconsistent() const override
     {
         return gtk_toggle_button_get_inconsistent(m_pToggleButton);
+    }
+
+    virtual void disable_notify_events() override
+    {
+        g_signal_handler_block(m_pToggleButton, m_nSignalId);
+        GtkInstanceButton::disable_notify_events();
+    }
+
+    virtual void enable_notify_events() override
+    {
+        GtkInstanceButton::enable_notify_events();
+        g_signal_handler_unblock(m_pToggleButton, m_nSignalId);
     }
 
     virtual ~GtkInstanceToggleButton() override
@@ -1939,7 +1971,9 @@ public:
 
     virtual void set_text(const OUString& rText) override
     {
+        disable_notify_events();
         gtk_entry_set_text(m_pEntry, OUStringToOString(rText, RTL_TEXTENCODING_UTF8).getStr());
+        enable_notify_events();
     }
 
     virtual OUString get_text() const override
@@ -1951,7 +1985,16 @@ public:
 
     virtual void set_width_chars(int nChars) override
     {
+        disable_notify_events();
         gtk_entry_set_width_chars(m_pEntry, nChars);
+        enable_notify_events();
+    }
+
+    virtual void set_max_length(int nChars) override
+    {
+        disable_notify_events();
+        gtk_entry_set_max_length(m_pEntry, nChars);
+        enable_notify_events();
     }
 
     virtual void select_region(int nStartPos, int nEndPos) override
@@ -1962,6 +2005,20 @@ public:
     virtual void set_position(int nCursorPos) override
     {
         gtk_editable_set_position(GTK_EDITABLE(m_pEntry), nCursorPos);
+    }
+
+    virtual void disable_notify_events() override
+    {
+        g_signal_handler_block(m_pEntry, m_nInsertTextSignalId);
+        g_signal_handler_block(m_pEntry, m_nChangedSignalId);
+        GtkInstanceWidget::disable_notify_events();
+    }
+
+    virtual void enable_notify_events() override
+    {
+        GtkInstanceWidget::disable_notify_events();
+        g_signal_handler_unblock(m_pEntry, m_nChangedSignalId);
+        g_signal_handler_unblock(m_pEntry, m_nInsertTextSignalId);
     }
 
     virtual ~GtkInstanceEntry() override
@@ -2034,18 +2091,22 @@ public:
 
     virtual void insert(const OUString& rText, int pos) override
     {
+        disable_notify_events();
         GtkTreeIter iter;
         gtk_list_store_insert(m_pListStore, &iter, pos);
         gtk_list_store_set(m_pListStore, &iter, 0, OUStringToOString(rText, RTL_TEXTENCODING_UTF8).getStr(), -1);
+        enable_notify_events();
     }
 
     using GtkInstanceContainer::remove;
 
     virtual void remove(int pos) override
     {
+        disable_notify_events();
         GtkTreeIter iter;
         gtk_tree_model_iter_nth_child(GTK_TREE_MODEL(m_pListStore), &iter, nullptr, pos);
         gtk_list_store_remove(m_pListStore, &iter);
+        enable_notify_events();
     }
 
     virtual int find(const OUString& rText) const override
@@ -2060,6 +2121,7 @@ public:
         if (pos == before)
             return;
 
+        disable_notify_events();
         GtkTreeIter iter;
         gtk_tree_model_iter_nth_child(GTK_TREE_MODEL(m_pListStore), &iter, nullptr, pos);
 
@@ -2067,16 +2129,21 @@ public:
         gtk_tree_model_iter_nth_child(GTK_TREE_MODEL(m_pListStore), &position, nullptr, before);
 
         gtk_list_store_move_before(m_pListStore, &iter, &position);
+        enable_notify_events();
     }
 
     virtual void set_top_entry(int pos) override
     {
+        disable_notify_events();
         move_before(pos, 0);
+        enable_notify_events();
     }
 
     virtual void clear() override
     {
+        disable_notify_events();
         gtk_list_store_clear(m_pListStore);
+        enable_notify_events();
     }
 
     virtual int n_children() const override
@@ -2087,6 +2154,7 @@ public:
     virtual void select(int pos) override
     {
         assert(gtk_tree_view_get_model(m_pTreeView) && "don't select when frozen");
+        disable_notify_events();
         if (pos != -1)
         {
             GtkTreePath* path = gtk_tree_path_new_from_indices(pos, -1);
@@ -2097,6 +2165,7 @@ public:
         {
             gtk_tree_selection_unselect_all(gtk_tree_view_get_selection(m_pTreeView));
         }
+        enable_notify_events();
     }
 
     virtual OUString get_selected() override
@@ -2141,14 +2210,18 @@ public:
 
     virtual void freeze() override
     {
+        disable_notify_events();
         g_object_ref(m_pListStore);
         gtk_tree_view_set_model(m_pTreeView, nullptr);
+        enable_notify_events();
     }
 
     virtual void thaw() override
     {
+        disable_notify_events();
         gtk_tree_view_set_model(m_pTreeView, GTK_TREE_MODEL(m_pListStore));
         g_object_unref(m_pListStore);
+        enable_notify_events();
     }
 
     virtual int get_height_rows(int nRows) const override
@@ -2173,6 +2246,20 @@ public:
             gtk_widget_set_size_request(pParent, nWidth, nHeight);
         else
             gtk_widget_set_size_request(m_pWidget, nWidth, nHeight);
+    }
+
+    virtual void disable_notify_events() override
+    {
+        g_signal_handler_block(gtk_tree_view_get_selection(m_pTreeView), m_nChangedSignalId);
+        g_signal_handler_block(m_pTreeView, m_nRowActivatedSignalId);
+        GtkInstanceContainer::disable_notify_events();
+    }
+
+    virtual void enable_notify_events() override
+    {
+        GtkInstanceContainer::disable_notify_events();
+        g_signal_handler_unblock(m_pTreeView, m_nRowActivatedSignalId);
+        g_signal_handler_unblock(gtk_tree_view_get_selection(m_pTreeView), m_nChangedSignalId);
     }
 
     virtual ~GtkInstanceTreeView() override
@@ -2228,12 +2315,16 @@ public:
 
     virtual void set_value(int value) override
     {
+        disable_notify_events();
         gtk_spin_button_set_value(m_pButton, toGtk(value));
+        enable_notify_events();
     }
 
     virtual void set_range(int min, int max) override
     {
+        disable_notify_events();
         gtk_spin_button_set_range(m_pButton, toGtk(min), toGtk(max));
+        enable_notify_events();
     }
 
     virtual void get_range(int& min, int& max) const override
@@ -2246,7 +2337,9 @@ public:
 
     virtual void set_increments(int step, int page) override
     {
+        disable_notify_events();
         gtk_spin_button_set_increments(m_pButton, toGtk(step), toGtk(page));
+        enable_notify_events();
     }
 
     virtual void get_increments(int& step, int& page) const override
@@ -2259,12 +2352,26 @@ public:
 
     virtual void set_digits(unsigned int digits) override
     {
+        disable_notify_events();
         gtk_spin_button_set_digits(m_pButton, digits);
+        enable_notify_events();
     }
 
     virtual unsigned int get_digits() const override
     {
         return gtk_spin_button_get_digits(m_pButton);
+    }
+
+    virtual void disable_notify_events() override
+    {
+        g_signal_handler_block(m_pButton, m_nValueChangedSignalId);
+        GtkInstanceEntry::disable_notify_events();
+    }
+
+    virtual void enable_notify_events() override
+    {
+        GtkInstanceEntry::disable_notify_events();
+        g_signal_handler_unblock(m_pButton, m_nValueChangedSignalId);
     }
 
     virtual ~GtkInstanceSpinButton() override
@@ -2356,11 +2463,26 @@ private:
     cairo_surface_t* m_pSurface;
     gulong m_nDrawSignalId;
     gulong m_nSizeAllocateSignalId;
+    gulong m_nButtonPressSignalId;
+    gulong m_nMotionSignalId;
+    gulong m_nButtonReleaseSignalId;
     static gboolean signalDraw(GtkWidget*, cairo_t* cr, gpointer widget)
     {
         GtkInstanceDrawingArea* pThis = static_cast<GtkInstanceDrawingArea*>(widget);
         pThis->signal_draw(cr);
         return false;
+    }
+    void signal_draw(cairo_t* cr)
+    {
+        GdkRectangle rect;
+        if (!gdk_cairo_get_clip_rectangle(cr, &rect))
+            return;
+        tools::Rectangle aRect(Point(rect.x, rect.y), Size(rect.width, rect.height));
+        m_aDrawHdl.Call(std::pair<vcl::RenderContext&, const tools::Rectangle&>(*m_xDevice, aRect));
+        cairo_surface_mark_dirty(m_pSurface);
+
+        cairo_set_source_surface(cr, m_pSurface, 0, 0);
+        cairo_paint(cr);
     }
     static void signalSizeAllocate(GtkWidget*, GdkRectangle* allocation, gpointer widget)
     {
@@ -2384,22 +2506,52 @@ private:
 #endif
         m_aSizeAllocateHdl.Call(Size(nWidth, nHeight));
     }
-    void signal_draw(cairo_t* cr)
+    static gboolean signalButton(GtkWidget*, GdkEventButton* pEvent, gpointer widget)
     {
-        m_aDrawHdl.Call(*m_xDevice);
-        cairo_surface_mark_dirty(m_pSurface);
-
-        cairo_set_source_surface(cr, m_pSurface, 0, 0);
-        cairo_paint(cr);
+        GtkInstanceDrawingArea* pThis = static_cast<GtkInstanceDrawingArea*>(widget);
+        return pThis->signal_button(pEvent);
     }
+    bool signal_button(GdkEventButton* pEvent)
+    {
+        Point aEvent(pEvent->x, pEvent->y);
+
+        switch (pEvent->type)
+        {
+            case GDK_BUTTON_PRESS:
+                m_aMousePressHdl.Call(aEvent);
+                break;
+            case GDK_BUTTON_RELEASE:
+                m_aMouseReleaseHdl.Call(aEvent);
+                break;
+            default:
+                return false;
+        }
+
+        return true;
+    }
+    static gboolean signalMotion(GtkWidget*, GdkEventMotion* pEvent, gpointer widget)
+    {
+        GtkInstanceDrawingArea* pThis = static_cast<GtkInstanceDrawingArea*>(widget);
+        return pThis->signal_motion(pEvent);
+    }
+    bool signal_motion(GdkEventMotion* pEvent)
+    {
+        Point aEvent(pEvent->x, pEvent->y);
+        m_aMouseMotionHdl.Call(aEvent);
+        return true;
+    }
+
 public:
     GtkInstanceDrawingArea(GtkDrawingArea* pDrawingArea, bool bTakeOwnership)
         : GtkInstanceWidget(GTK_WIDGET(pDrawingArea), bTakeOwnership)
         , m_pDrawingArea(pDrawingArea)
         , m_xDevice(nullptr, Size(1, 1), DeviceFormat::DEFAULT)
         , m_pSurface(nullptr)
-        , m_nDrawSignalId(g_signal_connect(pDrawingArea, "draw", G_CALLBACK(signalDraw), this))
-        , m_nSizeAllocateSignalId(g_signal_connect(pDrawingArea, "size_allocate", G_CALLBACK(signalSizeAllocate), this))
+        , m_nDrawSignalId(g_signal_connect(m_pDrawingArea, "draw", G_CALLBACK(signalDraw), this))
+        , m_nSizeAllocateSignalId(g_signal_connect(m_pDrawingArea, "size_allocate", G_CALLBACK(signalSizeAllocate), this))
+        , m_nButtonPressSignalId(g_signal_connect(m_pDrawingArea, "button-press-event", G_CALLBACK(signalButton), this))
+        , m_nMotionSignalId(g_signal_connect(m_pDrawingArea, "motion-notify-event", G_CALLBACK(signalMotion), this))
+        , m_nButtonReleaseSignalId(g_signal_connect(m_pDrawingArea, "button-release-event", G_CALLBACK(signalButton), this))
     {
     }
 
@@ -2408,10 +2560,18 @@ public:
         gtk_widget_queue_draw(GTK_WIDGET(m_pDrawingArea));
     }
 
+    virtual void queue_draw_area(int x, int y, int width, int height) override
+    {
+        gtk_widget_queue_draw_area(GTK_WIDGET(m_pDrawingArea), x, y, width, height);
+    }
+
     virtual ~GtkInstanceDrawingArea() override
     {
         if (m_pSurface)
             cairo_surface_destroy(m_pSurface);
+        g_signal_handler_disconnect(m_pDrawingArea, m_nButtonPressSignalId);
+        g_signal_handler_disconnect(m_pDrawingArea, m_nMotionSignalId);
+        g_signal_handler_disconnect(m_pDrawingArea, m_nButtonReleaseSignalId);
         g_signal_handler_disconnect(m_pDrawingArea, m_nSizeAllocateSignalId);
         g_signal_handler_disconnect(m_pDrawingArea, m_nDrawSignalId);
     }
@@ -2483,13 +2643,17 @@ public:
 
     virtual void set_active_id(const OUString& rStr) override
     {
+        disable_notify_events();
         OString aId(OUStringToOString(rStr, RTL_TEXTENCODING_UTF8));
         gtk_combo_box_set_active_id(GTK_COMBO_BOX(m_pComboBoxText), aId.getStr());
+        enable_notify_events();
     }
 
     virtual void set_active(int pos) override
     {
+        disable_notify_events();
         gtk_combo_box_set_active(GTK_COMBO_BOX(m_pComboBoxText), pos);
+        enable_notify_events();
     }
 
     virtual OUString get_active_text() const override
@@ -2579,6 +2743,18 @@ public:
         GtkTreeSortable* pSortable = GTK_TREE_SORTABLE(pModel);
         gtk_tree_sortable_set_sort_func(pSortable, 0, sort_func, m_xSorter.get(), nullptr);
         gtk_tree_sortable_set_sort_column_id(pSortable, 0, GTK_SORT_ASCENDING);
+    }
+
+    virtual void disable_notify_events() override
+    {
+        g_signal_handler_block(m_pComboBoxText, m_nSignalId);
+        GtkInstanceContainer::disable_notify_events();
+    }
+
+    virtual void enable_notify_events() override
+    {
+        GtkInstanceContainer::disable_notify_events();
+        g_signal_handler_unblock(m_pComboBoxText, m_nSignalId);
     }
 
     virtual ~GtkInstanceComboBoxText() override

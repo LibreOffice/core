@@ -54,6 +54,9 @@ public:
     virtual void set_grid_top_attach(int nAttach) = 0;
     virtual int get_grid_top_attach() const = 0;
 
+    virtual void set_margin_top(int nMargin) = 0;
+    virtual void set_margin_bottom(int nMargin) = 0;
+
     virtual Container* weld_parent() const = 0;
 
     virtual ~Widget() {}
@@ -307,6 +310,7 @@ public:
     virtual void set_text(const OUString& rText) = 0;
     virtual OUString get_text() const = 0;
     virtual void set_width_chars(int nChars) = 0;
+    virtual void set_max_length(int nChars) = 0;
     virtual void select_region(int nStartPos, int nEndPos) = 0;
     virtual void set_position(int nCursorPos) = 0;
 
@@ -493,14 +497,27 @@ public:
 
 class VCL_DLLPUBLIC DrawingArea : virtual public Widget
 {
+public:
+    typedef std::pair<vcl::RenderContext&, const tools::Rectangle&> draw_args;
+
 protected:
-    Link<vcl::RenderContext&, void> m_aDrawHdl;
+    Link<draw_args, void> m_aDrawHdl;
     Link<const Size&, void> m_aSizeAllocateHdl;
+    Link<const Point&, void> m_aMousePressHdl;
+    Link<const Point&, void> m_aMouseMotionHdl;
+    Link<const Point&, void> m_aMouseReleaseHdl;
 
 public:
-    void connect_draw(const Link<vcl::RenderContext&, void>& rLink) { m_aDrawHdl = rLink; }
+    void connect_draw(const Link<draw_args, void>& rLink) { m_aDrawHdl = rLink; }
     void connect_size_allocate(const Link<const Size&, void>& rLink) { m_aSizeAllocateHdl = rLink; }
+    void connect_mouse_press(const Link<const Point&, void>& rLink) { m_aMousePressHdl = rLink; }
+    void connect_mouse_move(const Link<const Point&, void>& rLink) { m_aMouseMotionHdl = rLink; }
+    void connect_mouse_release(const Link<const Point&, void>& rLink)
+    {
+        m_aMouseReleaseHdl = rLink;
+    }
     virtual void queue_draw() = 0;
+    virtual void queue_draw_area(int x, int y, int width, int height) = 0;
 };
 
 class VCL_DLLPUBLIC Builder
