@@ -94,8 +94,8 @@ void SwConvertTableDlg::GetValues(  sal_Unicode& rDelim,
 }
 
 SwConvertTableDlg::SwConvertTableDlg(SwView& rView, bool bToTable)
-    : m_xBuilder(Application::CreateBuilder(rView.GetViewFrame()->GetWindow().GetFrameWeld(), "modules/swriter/ui/converttexttable.ui"))
-    , m_xDialog(m_xBuilder->weld_dialog("ConvertTextTableDialog"))
+    : GenericDialogController(rView.GetViewFrame()->GetWindow().GetFrameWeld(),
+            "modules/swriter/ui/converttexttable.ui", "ConvertTextTableDialog")
     , m_xTabBtn(m_xBuilder->weld_radio_button("tabs"))
     , m_xSemiBtn(m_xBuilder->weld_radio_button("semicolons"))
     , m_xParaBtn(m_xBuilder->weld_radio_button("paragraph"))

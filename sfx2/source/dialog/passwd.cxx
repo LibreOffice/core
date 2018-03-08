@@ -82,8 +82,7 @@ IMPL_LINK_NOARG(SfxPasswordDialog, OKHdl, weld::Button&, void)
 // CTOR / DTOR -----------------------------------------------------------
 
 SfxPasswordDialog::SfxPasswordDialog(weld::Window* pParent, const OUString* pGroupText)
-    : m_xBuilder(Application::CreateBuilder(pParent, "sfx/ui/password.ui"))
-    , m_xDialog(m_xBuilder->weld_dialog("PasswordDialog"))
+    : GenericDialogController(pParent, "sfx/ui/password.ui", "PasswordDialog")
     , m_xPassword1Box(m_xBuilder->weld_frame("password1frame"))
     , m_xUserFT(m_xBuilder->weld_label("userft"))
     , m_xUserED(m_xBuilder->weld_entry("usered"))
@@ -151,7 +150,7 @@ void SfxPasswordDialog::ShowMinLengthText(bool bShow)
     m_xMinLengthFT->show(bShow);
 }
 
-short SfxPasswordDialog::run()
+short SfxPasswordDialog::execute()
 {
     m_xUserFT->hide();
     m_xUserED->hide();
@@ -191,6 +190,5 @@ short SfxPasswordDialog::run()
 
     return m_xDialog->run();
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

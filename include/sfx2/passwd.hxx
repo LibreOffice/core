@@ -43,12 +43,9 @@ namespace o3tl
 
 // class SfxPasswordDialog -----------------------------------------------
 
-class SFX2_DLLPUBLIC SfxPasswordDialog
+class SFX2_DLLPUBLIC SfxPasswordDialog : public weld::GenericDialogController
 {
 private:
-    std::unique_ptr<weld::Builder> m_xBuilder;
-    std::unique_ptr<weld::Dialog> m_xDialog;
-
     std::unique_ptr<weld::Frame> m_xPassword1Box;
     std::unique_ptr<weld::Label> m_xUserFT;
     std::unique_ptr<weld::Entry> m_xUserED;
@@ -128,9 +125,7 @@ public:
 
     void ShowMinLengthText(bool bShow);
 
-    void set_title(const OUString& rTitle) { m_xDialog->set_title(rTitle); }
-    void set_help_id(const OString& rHelpId) { m_xDialog->set_help_id(rHelpId); }
-    short run();
+    short execute();
 };
 
 #endif // INCLUDED_SFX2_PASSWD_HXX

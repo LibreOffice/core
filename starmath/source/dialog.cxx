@@ -394,18 +394,14 @@ void SmFontDialog::DataChanged( const DataChangedEvent& rDCEvt )
     ModalDialog::DataChanged( rDCEvt );
 }
 
-class SaveDefaultsQuery
+class SaveDefaultsQuery : public weld::MessageDialogController
 {
-private:
-    std::unique_ptr<weld::Builder> m_xBuilder;
-    std::unique_ptr<weld::MessageDialog> m_xBox;
 public:
     explicit SaveDefaultsQuery(weld::Widget* pParent)
-        : m_xBuilder(Application::CreateBuilder(pParent, "modules/smath/ui/savedefaultsdialog.ui"))
-        , m_xBox(m_xBuilder->weld_message_dialog("SaveDefaultsDialog"))
+        : MessageDialogController(pParent, "modules/smath/ui/savedefaultsdialog.ui",
+                "SaveDefaultsDialog")
     {
     }
-    short run() { return m_xBox->run(); }
 };
 
 IMPL_LINK_NOARG( SmFontSizeDialog, DefaultButtonClickHdl, Button *, void )

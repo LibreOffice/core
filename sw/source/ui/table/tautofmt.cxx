@@ -24,19 +24,17 @@
 #include <shellres.hxx>
 #include <tautofmt.hxx>
 
-class SwStringInputDlg
+class SwStringInputDlg : public weld::GenericDialogController
 {
 private:
-    std::unique_ptr<weld::Builder> m_xBuilder;
-    std::unique_ptr<weld::Dialog> m_xDialog;
     std::unique_ptr<weld::Label> m_xLabel;
     std::unique_ptr<weld::Entry> m_xEdInput; // Edit obtains the focus.
 
 public:
     SwStringInputDlg(weld::Window* pParent, const OUString& rTitle,
         const OUString& rEditTitle, const OUString& rDefault)
-        : m_xBuilder(Application::CreateBuilder(pParent, "modules/swriter/ui/stringinput.ui"))
-        , m_xDialog(m_xBuilder->weld_dialog("StringInputDialog"))
+        : GenericDialogController(pParent, "modules/swriter/ui/stringinput.ui",
+                "StringInputDialog")
         , m_xLabel(m_xBuilder->weld_label("name"))
         , m_xEdInput(m_xBuilder->weld_entry("edit"))
     {
@@ -50,15 +48,13 @@ public:
     {
         return m_xEdInput->get_text();
     }
-
-    short run() {  return m_xDialog->run(); }
 };
 
 // AutoFormat-Dialogue:
 SwAutoFormatDlg::SwAutoFormatDlg(weld::Window* pParent, SwWrtShell* pWrtShell,
                                  bool bAutoFormat, const SwTableAutoFormat* pSelFormat)
-    : m_xBuilder(Application::CreateBuilder(pParent, "modules/swriter/ui/autoformattable.ui"))
-    , m_xDialog(m_xBuilder->weld_dialog("AutoFormatTableDialog"))
+    : GenericDialogController(pParent, "modules/swriter/ui/autoformattable.ui",
+            "AutoFormatTableDialog")
     , m_xLbFormat(m_xBuilder->weld_tree_view("formatlb"))
     , m_xBtnNumFormat(m_xBuilder->weld_check_button("numformatcb"))
     , m_xBtnBorder(m_xBuilder->weld_check_button("bordercb"))
@@ -394,7 +390,7 @@ IMPL_LINK_NOARG(SwAutoFormatDlg, SelFormatHdl, weld::TreeView&, void)
     m_xBtnRename->set_sensitive(bBtnEnable);
 }
 
-short SwAutoFormatDlg::run()
+short SwAutoFormatDlg::execute()
 {
     short nRet = m_xDialog->run();
     if (nRet == RET_OK && bSetAutoFormat)

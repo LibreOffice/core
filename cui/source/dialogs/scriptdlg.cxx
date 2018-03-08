@@ -405,8 +405,7 @@ void SFTreeListBox::ExpandedHdl()
 
 // CuiInputDialog ------------------------------------------------------------
 CuiInputDialog::CuiInputDialog(weld::Window * pParent, InputDialogMode nMode)
-    : m_xBuilder(Application::CreateBuilder(pParent, "cui/ui/newlibdialog.ui"))
-    , m_xDialog(m_xBuilder->weld_dialog("NewLibDialog"))
+    : GenericDialogController(pParent, "cui/ui/newlibdialog.ui", "NewLibDialog")
     , m_xEdit(m_xBuilder->weld_entry("entry"))
 {
     m_xEdit->grab_focus();

@@ -23,16 +23,13 @@
 #include <vcl/weld.hxx>
 #include <svx/svxdllapi.h>
 
-class SVX_DLLPUBLIC SvxLinkWarningDialog
+class SVX_DLLPUBLIC SvxLinkWarningDialog : public weld::MessageDialogController
 {
 private:
-    std::unique_ptr<weld::Builder> m_xBuilder;
-    std::unique_ptr<weld::MessageDialog> m_xDialog;
     std::unique_ptr<weld::CheckButton> m_xWarningOnBox;
 
 public:
     SvxLinkWarningDialog(weld::Widget* pParent, const OUString& _rFileName);
-    short run() { return m_xDialog->run(); }
     ~SvxLinkWarningDialog();
 };
 

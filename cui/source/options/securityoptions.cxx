@@ -40,8 +40,7 @@ namespace svx
 {
 
 SecurityOptionsDialog::SecurityOptionsDialog(weld::Window* pParent, SvtSecurityOptions const * pOptions)
-    : m_xBuilder(Application::CreateBuilder(pParent, "cui/ui/securityoptionsdialog.ui"))
-    , m_xDialog(m_xBuilder->weld_dialog("SecurityOptionsDialog"))
+    : GenericDialogController(pParent, "cui/ui/securityoptionsdialog.ui", "SecurityOptionsDialog")
     , m_xSaveOrSendDocsCB(m_xBuilder->weld_check_button("savesenddocs"))
     , m_xSaveOrSendDocsImg(m_xBuilder->weld_widget("locksavesenddocs"))
     , m_xSignDocsCB(m_xBuilder->weld_check_button("whensigning"))

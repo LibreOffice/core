@@ -22,8 +22,7 @@
 #include <tblenum.hxx>
 
 SwSplitTableDlg::SwSplitTableDlg(weld::Window *pParent, SwWrtShell &rSh)
-    : m_xBuilder(Application::CreateBuilder(pParent, "modules/swriter/ui/splittable.ui"))
-    , m_xDialog(m_xBuilder->weld_dialog("SplitTableDialog"))
+    : GenericDialogController(pParent, "modules/swriter/ui/splittable.ui", "SplitTableDialog")
     , m_xContentCopyRB(m_xBuilder->weld_radio_button("copyheading"))
     , m_xBoxAttrCopyWithParaRB(m_xBuilder->weld_radio_button("customheadingapplystyle"))
     , m_xBoxAttrCopyNoParaRB(m_xBuilder->weld_radio_button("customheading"))
