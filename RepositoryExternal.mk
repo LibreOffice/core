@@ -3927,17 +3927,6 @@ $(call gb_Executable_add_runtime_dependencies,saxparser,\
 )
 endef
 
-# Executable_svidl links against Library_tl, which links against Library_comphelper, which links
-# against libraries from ExternalProject_gpgmepp, which links against libraries from
-# ExternalProject_libassuan and ExternalProject_libgpg-error:
-define gb_Executable__register_svidl
-$(call gb_Executable_add_runtime_dependencies,svidl, \
-    $(call gb_Helper_optional,GPGMEPP, \
-        $(call gb_Helper_optional,LIBASSUAN,$(call gb_Package_get_target_for_build,libassuan)) \
-        $(call gb_Helper_optional,LIBGPGERROR,$(call gb_Package_get_target_for_build,libgpg-error))) \
-)
-endef
-
 # NOTE: the dependencies on ure/services.rdb and udkapi.rdb are implicitly
 # required due to the settings for URE_SERVICES and URE_TYPES in
 # cppuhelper/source/unorc
