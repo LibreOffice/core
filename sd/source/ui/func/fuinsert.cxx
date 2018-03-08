@@ -69,7 +69,6 @@
 #include <sfx2/opengrf.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svx/charthelper.hxx>
-#include <comphelper/lok.hxx>
 
 #include <app.hrc>
 #include <sdresid.hxx>
@@ -170,20 +169,7 @@ void FuInsertGraphic::DoExecute( SfxRequest& rReq )
                 bSelectionReplaced = true;
             }
 
-            Point aPos;
-            // For LOK, set position to center of the page
-            if (comphelper::LibreOfficeKit::isActive())
-                aPos = ::tools::Rectangle(aPos, mpView->GetSdrPageView()->GetPage()->GetSize()).Center();
-            else
-            {
-                ::tools::Rectangle aRect(aPos, mpWindow->GetOutputSizePixel() );
-                aPos = aRect.Center();
-                bool bMapModeWasEnabled(mpWindow->IsMapModeEnabled());
-                mpWindow->EnableMapMode(/*true*/);
-                aPos = mpWindow->PixelToLogic(aPos);
-                mpWindow->EnableMapMode(bMapModeWasEnabled);
-            }
-
+            Point aPos = mpWindow->GetVisibleCenter();
             SdrGrafObj* pGrafObj = mpView->InsertGraphic(aGraphic, nAction, aPos, pPickObj, nullptr);
 
             if(pGrafObj && bAsLink )
@@ -380,10 +366,7 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
                     aSize = OutputDevice::LogicToLogic(aSize, MapMode(aUnit), MapMode(MapUnit::Map100thMM));
                 }
 
-                Point aPos;
-                ::tools::Rectangle aWinRect(aPos, mpWindow->GetOutputSizePixel() );
-                aPos = aWinRect.Center();
-                aPos = mpWindow->PixelToLogic(aPos);
+                Point aPos = mpWindow->GetVisibleCenter();
                 aPos.AdjustX( -(aSize.Width() / 2) );
                 aPos.AdjustY( -(aSize.Height() / 2) );
                 aRect = ::tools::Rectangle(aPos, aSize);
