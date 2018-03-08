@@ -47,6 +47,7 @@
 #include <doctxm.hxx>
 #include <poolfmt.hxx>
 #include <calbck.hxx>
+#include <iodetect.hxx>
 #include <memory>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>

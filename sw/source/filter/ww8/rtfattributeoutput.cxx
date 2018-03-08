@@ -90,6 +90,7 @@
 #include <o3tl/make_unique.hxx>
 #include <svl/grabbagitem.hxx>
 #include <frmatr.hxx>
+#include <swtable.hxx>
 #include "rtfexport.hxx"
 
 using namespace ::com::sun::star;

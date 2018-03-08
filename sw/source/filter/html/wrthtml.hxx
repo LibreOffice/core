@@ -58,6 +58,7 @@ class SwHTMLNumRuleInfo;
 class SwHTMLPosFlyFrames;
 class SwTextFootnote;
 enum class HtmlPosition;
+enum class HtmlTokenId : sal_Int16;
 
 extern SwAttrFnTab aHTMLAttrFnTab;
 

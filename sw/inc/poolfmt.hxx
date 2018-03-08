@@ -20,7 +20,6 @@
 #define INCLUDED_SW_INC_POOLFMT_HXX
 
 #include <limits.h>
-#include <tools/solar.h>
 #include <editeng/frmdir.hxx>
 #include <i18nlangtag/lang.h>
 

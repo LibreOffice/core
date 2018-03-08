@@ -19,9 +19,8 @@
 #ifndef INCLUDED_SW_INC_RING_HXX
 #define INCLUDED_SW_INC_RING_HXX
 
-#include "swdllapi.h"
-#include "swtypes.hxx"
 #include <utility>
+#include <sal/types.h>
 #include <iterator>
 #include <type_traits>
 #include <boost/iterator/iterator_facade.hpp>

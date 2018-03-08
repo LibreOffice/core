@@ -56,6 +56,7 @@
 #include <wrtsh.hxx>
 #include <shellres.hxx>
 #include <AnnotationWin.hxx>
+#include <redline.hxx>
 #include <memory>
 
 namespace sw { namespace sidebarwindows {

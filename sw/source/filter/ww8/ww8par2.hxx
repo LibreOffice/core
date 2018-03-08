@@ -25,6 +25,7 @@
 #include <fmtornt.hxx>
 #include <fmtsrnd.hxx>
 #include <editeng/lrspitem.hxx>
+#include <swtable.hxx>
 
 #include "ww8scan.hxx"
 #include "ww8par.hxx"

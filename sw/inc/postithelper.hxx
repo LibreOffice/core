@@ -21,16 +21,16 @@
 
 #include "swrect.hxx"
 #include "fmtfld.hxx"
-#include "redline.hxx"
 #include <cstddef>
-#include <vector>
-#include <vcl/window.hxx>
+#include <vcl/vclptr.hxx>
 #include "SidebarWindowsTypes.hxx"
 
 class SfxBroadcaster;
 class SwRootFrame;
 class SwPostItMgr;
 class SwEditWin;
+class SwFrame;
+class SvxLanguageItem;
 namespace sw { namespace annotation {
     class SwAnnotationWin;
 } }

@@ -104,6 +104,7 @@
 #include <memory>
 #include <unoparaframeenum.hxx>
 #include <unoparagraph.hxx>
+#include <iodetect.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/profilezone.hxx>
 

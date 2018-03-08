@@ -43,6 +43,7 @@
 #include <strings.hrc>
 #include <mdiexp.hxx>
 #include <poolfmt.hxx>
+#include <iodetect.hxx>
 
 #include <vcl/metric.hxx>
 

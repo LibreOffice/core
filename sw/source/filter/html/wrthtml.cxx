@@ -24,6 +24,7 @@
 #include <rtl/tencinfo.h>
 #include <vcl/wrkwin.hxx>
 #include <sfx2/linkmgr.hxx>
+#include <sfx2/docfile.hxx>
 
 #include <svtools/htmlcfg.hxx>
 #include <svtools/htmltokn.h>

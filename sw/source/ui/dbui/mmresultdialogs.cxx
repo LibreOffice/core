@@ -72,6 +72,7 @@
 #include <strings.hrc>
 #include <unomid.h>
 #include <comphelper/string.hxx>
+#include <iodetect.hxx>
 
 using namespace svt;
 using namespace ::com::sun::star;

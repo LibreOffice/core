@@ -23,24 +23,16 @@
 
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/embed/XStorage.hpp>
-#include <sfx2/docfile.hxx>
-#include <sfx2/fcontnr.hxx>
-#include <sot/formats.hxx>
 #include <sot/storage.hxx>
-#include <svtools/parhtml.hxx>
 #include <tools/date.hxx>
 #include <tools/time.hxx>
 #include <tools/datetime.hxx>
 #include <tools/ref.hxx>
 #include <rtl/ref.hxx>
+#include <osl/thread.h>
 #include "swdllapi.h"
-#include "swtypes.hxx"
 #include "docfac.hxx"
-#include "iodetect.hxx"
-#include "IMark.hxx"
 
-class SfxFilterContainer;
-class SfxFilter;
 class SfxItemPool;
 class SfxItemSet;
 class SfxMedium;
@@ -54,6 +46,13 @@ class SwPaM;
 class SwTextBlocks;
 struct SwPosition;
 struct Writer_Impl;
+namespace sw
+{
+namespace mark
+{
+class IMark;
+}
+}
 
 // Defines the count of chars at which a paragraph read via ASCII/W4W-Reader
 // is forced to wrap. It has to be always greater than 200!!!
@@ -96,8 +95,6 @@ public:
 
 // Base class of possible options for a special reader.
 class Reader;
-// Calls reader with its options, document, cursor etc.
-class SwReader;
 // SwRead is pointer to the read-options base class.
 typedef Reader *SwRead;
 
@@ -136,6 +133,7 @@ public:
         { ResetAllFormatsOnly(); aASCIIOpts.Reset(); }
 };
 
+// Calls reader with its options, document, cursor etc.
 class SW_DLLPUBLIC SwReader: public SwDocFac
 {
     SvStream* pStrm;

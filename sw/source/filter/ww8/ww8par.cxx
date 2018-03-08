@@ -128,6 +128,7 @@
 #endif
 
 #include <svx/hlnkitem.hxx>
+#include <sfx2/docfile.hxx>
 #include <swdll.hxx>
 #include "WW8Sttbf.hxx"
 #include "WW8FibData.hxx"

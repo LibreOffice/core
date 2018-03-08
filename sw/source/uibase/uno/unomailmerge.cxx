@@ -67,6 +67,7 @@
 #include <mailmergehelper.hxx>
 
 #include <unomid.h>
+#include <iodetect.hxx>
 
 #include <memory>
 

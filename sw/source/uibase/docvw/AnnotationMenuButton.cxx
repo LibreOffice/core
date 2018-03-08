@@ -32,6 +32,7 @@
 
 #include <cmdid.h>
 #include <AnnotationWin.hxx>
+#include <swtypes.hxx>
 
 namespace sw { namespace annotation {
 

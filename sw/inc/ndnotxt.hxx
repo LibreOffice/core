@@ -22,6 +22,7 @@
 #include <memory>
 #include "node.hxx"
 
+class Size;
 namespace tools { class PolyPolygon; }
 
 // SwNoTextNode

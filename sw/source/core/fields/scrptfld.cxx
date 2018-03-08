@@ -21,6 +21,7 @@
 #include <unofldmid.h>
 #include <strings.hrc>
 #include <o3tl/any.hxx>
+#include <swtypes.hxx>
 
 using namespace ::com::sun::star;
 

@@ -138,6 +138,7 @@
 #include <dbfld.hxx>
 #include <IDocumentState.hxx>
 #include <imaildsplistener.hxx>
+#include <iodetect.hxx>
 
 #include <memory>
 #include <comphelper/propertysequence.hxx>
