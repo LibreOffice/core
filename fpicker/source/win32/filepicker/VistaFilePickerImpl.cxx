@@ -595,7 +595,7 @@ void VistaFilePickerImpl::impl_sta_enableFeatures(::sal_Int32 nFeatures, ::sal_I
 
     if ((nFeatures & FEATURE_IMAGEANCHOR) == FEATURE_IMAGEANCHOR)
     {
-        iCustom->StartVisualGroup (GROUP_IMAGEANCHOR, o3tl::toW(FpsResId(STR_SVT_FILEPICKER_IMAGE_ANCHOR).replaceFirst("~","").getStr()));
+        iCustom->StartVisualGroup (GROUP_IMAGEANCHOR, L"Anchor");
         iCustom->AddComboBox      (css::ui::dialogs::ExtendedFilePickerElementIds::LISTBOX_IMAGE_ANCHOR);
         iCustom->EndVisualGroup   ();
         iCustom->MakeProminent    (GROUP_IMAGEANCHOR);
