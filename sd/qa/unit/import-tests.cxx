@@ -450,7 +450,7 @@ void SdImportTest::testN862510_4()
         for( std::vector<EECharAttrib>::reverse_iterator it = rLst.rbegin(); it != rLst.rend(); ++it )
         {
             const SvxColorItem *pC = dynamic_cast<const SvxColorItem *>( (*it).pAttr );
-            CPPUNIT_ASSERT_MESSAGE( "gradfill for text color not handled!", !( pC && pC->GetValue().GetColor() == 0 ) );
+            CPPUNIT_ASSERT_MESSAGE( "gradfill for text color not handled!", !( pC && pC->GetValue() == Color(0) ) );
         }
     }
 
@@ -1774,7 +1774,7 @@ void SdImportTest::testTdf103477()
     const EditTextObject& aEdit = pTxtObj->GetOutlinerParaObject()->GetTextObject();
     const SvxNumBulletItem *pNumFmt = aEdit.GetParaAttribs(0).GetItem(EE_PARA_NUMBULLET);
     CPPUNIT_ASSERT(pNumFmt);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Bullet's color is wrong!", sal_uInt32(0x000000), pNumFmt->GetNumRule()->GetLevel(1).GetBulletColor().GetColor());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Bullet's color is wrong!", Color(0x000000), pNumFmt->GetNumRule()->GetLevel(1).GetBulletColor());
 
     xDocShRef->DoClose();
 }

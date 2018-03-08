@@ -758,11 +758,11 @@ sal_Int32 AccessibleDialogWindow::getForeground(  )
 {
     OExternalLockGuard aGuard( this );
 
-    sal_Int32 nColor = 0;
+    Color nColor;
     if ( m_pDialogWindow )
     {
         if ( m_pDialogWindow->IsControlForeground() )
-            nColor = m_pDialogWindow->GetControlForeground().GetColor();
+            nColor = m_pDialogWindow->GetControlForeground();
         else
         {
             vcl::Font aFont;
@@ -770,11 +770,11 @@ sal_Int32 AccessibleDialogWindow::getForeground(  )
                 aFont = m_pDialogWindow->GetControlFont();
             else
                 aFont = m_pDialogWindow->GetFont();
-            nColor = aFont.GetColor().GetColor();
+            nColor = aFont.GetColor();
         }
     }
 
-    return nColor;
+    return sal_Int32(nColor);
 }
 
 
@@ -782,16 +782,16 @@ sal_Int32 AccessibleDialogWindow::getBackground(  )
 {
     OExternalLockGuard aGuard( this );
 
-    sal_Int32 nColor = 0;
+    Color nColor;
     if ( m_pDialogWindow )
     {
         if ( m_pDialogWindow->IsControlBackground() )
-            nColor = m_pDialogWindow->GetControlBackground().GetColor();
+            nColor = m_pDialogWindow->GetControlBackground();
         else
-            nColor = m_pDialogWindow->GetBackground().GetColor().GetColor();
+            nColor = m_pDialogWindow->GetBackground().GetColor();
     }
 
-    return nColor;
+    return sal_Int32(nColor);
 }
 
 

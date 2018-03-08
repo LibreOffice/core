@@ -2688,7 +2688,7 @@ void ScExportTest::testSheetTabColorsXLSX()
 
             for (size_t i = 0; i < SAL_N_ELEMENTS(aXclColors); ++i)
             {
-                if (aXclColors[i] != rDoc.GetTabBgColor(i).GetColor())
+                if (aXclColors[i] != rDoc.GetTabBgColor(i))
                 {
                     cerr << "wrong sheet color for sheet " << i << endl;
                     return false;

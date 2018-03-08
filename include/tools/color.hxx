@@ -74,7 +74,7 @@ public:
 
     bool operator<(const Color& b) const
     {
-        return mnColor < b.GetColor();
+        return mnColor < b.mnColor;
     }
 
     void SetRed(sal_uInt8 nRed);
@@ -98,10 +98,6 @@ public:
         return COLORDATA_TRANSPARENCY(mnColor);
     }
 
-    sal_uInt32 GetColor() const
-    {
-        return mnColor;
-    }
     Color GetRGBColor() const
     {
         return COLORDATA_RGB(mnColor);
