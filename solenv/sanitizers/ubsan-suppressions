@@ -13,9 +13,9 @@
 # UBSAN_OPTIONS environment variable (and making sure to compile with
 # -fsanitize-recover=float-divide-by-zero):
 
-float-divide-by-zero:sc/source/core/tool/interpr1.cxx
-float-divide-by-zero:sc/source/core/tool/interpr2.cxx
-float-divide-by-zero:sc/source/core/tool/interpr3.cxx
-float-divide-by-zero:sc/source/core/tool/interpr8.cxx
-float-divide-by-zero:scaddins/source/analysis/analysis.cxx
-float-divide-by-zero:scaddins/source/analysis/financial.cxx
+float-divide-by-zero:/sc/source/core/tool/interpr1.cxx$
+float-divide-by-zero:/sc/source/core/tool/interpr2.cxx$
+float-divide-by-zero:/sc/source/core/tool/interpr3.cxx$
+float-divide-by-zero:/sc/source/core/tool/interpr8.cxx$
+float-divide-by-zero:/scaddins/source/analysis/analysis.cxx$
+float-divide-by-zero:/scaddins/source/analysis/financial.cxx$
