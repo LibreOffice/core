@@ -295,41 +295,6 @@ DECLARE_HTMLIMPORT_TEST(testReqIfBr, "reqif-br.xhtml")
     CPPUNIT_ASSERT(getParagraph(1)->getString().startsWith("aaa\nbbb"));
 }
 
-DECLARE_HTMLIMPORT_TEST(testReqIfOleImg, "reqif-ole-img.xhtml")
-{
-    uno::Reference<text::XTextEmbeddedObjectsSupplier> xSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xObjects(xSupplier->getEmbeddedObjects(),
-                                                     uno::UNO_QUERY);
-    uno::Reference<document::XEmbeddedObjectSupplier2> xObject(xObjects->getByIndex(0),
-                                                               uno::UNO_QUERY);
-    // This failed, OLE object had no replacement image.
-    uno::Reference<graphic::XGraphic> xGraphic = xObject->getReplacementGraphic();
-    CPPUNIT_ASSERT(xGraphic.is());
-
-    uno::Reference<drawing::XShape> xShape(xObject, uno::UNO_QUERY);
-    OutputDevice* pDevice = Application::GetDefaultDevice();
-    Size aPixel(64, 64);
-    // Expected to be 1693.
-    Size aLogic(pDevice->PixelToLogic(aPixel, MapMode(MapUnit::Map100thMM)));
-    awt::Size aSize = xShape->getSize();
-    // This was only 1247, size was not set explicitly.
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(aLogic.getWidth()), aSize.Width);
-
-    // Check mime/media types.
-    CPPUNIT_ASSERT_EQUAL(OUString("image/png"), getProperty<OUString>(xGraphic, "MimeType"));
-
-    uno::Reference<document::XStorageBasedDocument> xStorageProvider(mxComponent, uno::UNO_QUERY);
-    uno::Reference<embed::XStorage> xStorage = xStorageProvider->getDocumentStorage();
-    auto aStreamName = getProperty<OUString>(xObject, "StreamName");
-    uno::Reference<io::XStream> xStream
-        = xStorage->openStreamElement(aStreamName, embed::ElementModes::READ);
-    // This was empty.
-    CPPUNIT_ASSERT_EQUAL(OUString("text/rtf"), getProperty<OUString>(xStream, "MediaType"));
-
-    // Check alternate text (it was empty).
-    CPPUNIT_ASSERT_EQUAL(OUString("OLE Object"), getProperty<OUString>(xObject, "Title").trim());
-}
-
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

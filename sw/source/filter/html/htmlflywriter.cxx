@@ -808,7 +808,7 @@ void SwHTMLWriter::writeFrameFormatOptions(HtmlWriter& aHtml, const SwFrameForma
 
     // Name
     if( (nFrameOptions & (HtmlFrmOpts::Id|HtmlFrmOpts::Name)) &&
-        !rFrameFormat.GetName().isEmpty() )
+        !rFrameFormat.GetName().isEmpty() && !(nFrameOptions & HtmlFrmOpts::Replacement))
     {
         const sal_Char* pAttributeName = (nFrameOptions & HtmlFrmOpts::Id) ? OOO_STRING_SVTOOLS_HTML_O_id : OOO_STRING_SVTOOLS_HTML_O_name;
         aHtml.attribute(pAttributeName, rFrameFormat.GetName());
@@ -823,7 +823,7 @@ void SwHTMLWriter::writeFrameFormatOptions(HtmlWriter& aHtml, const SwFrameForma
     }
 
     // alt
-    if( (nFrameOptions & HtmlFrmOpts::Alt) && !rAlternateText.isEmpty() )
+    if( (nFrameOptions & HtmlFrmOpts::Alt) && !rAlternateText.isEmpty() && !(nFrameOptions & HtmlFrmOpts::Replacement) )
     {
         aHtml.attribute(OOO_STRING_SVTOOLS_HTML_O_alt, rAlternateText);
     }
@@ -832,7 +832,7 @@ void SwHTMLWriter::writeFrameFormatOptions(HtmlWriter& aHtml, const SwFrameForma
     const sal_Char* pAlignString = nullptr;
     RndStdIds eAnchorId = rFrameFormat.GetAnchor().GetAnchorId();
     if( (nFrameOptions & HtmlFrmOpts::Align) &&
-        ((RndStdIds::FLY_AT_PARA == eAnchorId) || (RndStdIds::FLY_AT_CHAR == eAnchorId)) )
+        ((RndStdIds::FLY_AT_PARA == eAnchorId) || (RndStdIds::FLY_AT_CHAR == eAnchorId)) && !(nFrameOptions & HtmlFrmOpts::Replacement))
     {
         const SwFormatHoriOrient& rHoriOri = rFrameFormat.GetHoriOrient();
         if( !(nFrameOptions & HtmlFrmOpts::SAlign) ||
@@ -863,7 +863,7 @@ void SwHTMLWriter::writeFrameFormatOptions(HtmlWriter& aHtml, const SwFrameForma
         case text::VertOrientation::NONE:     break;
         }
     }
-    if (pAlignString)
+    if (pAlignString && !(nFrameOptions & HtmlFrmOpts::Replacement))
     {
         aHtml.attribute(OOO_STRING_SVTOOLS_HTML_O_align, pAlignString);
     }
@@ -1356,7 +1356,11 @@ Writer& OutHTML_Image( Writer& rWrt, const SwFrameFormat &rFrameFormat,
         }
     }
 
-    aHtml.start(OOO_STRING_SVTOOLS_HTML_image);
+    OString aTag(OOO_STRING_SVTOOLS_HTML_image);
+    if (nFrameOpts & HtmlFrmOpts::Replacement)
+        // Write replacement graphic of OLE object as <object>.
+        aTag = OOO_STRING_SVTOOLS_HTML_object;
+    aHtml.start(aTag);
 
     OStringBuffer sBuffer;
     if(rHTMLWrt.mbEmbedImages)
@@ -1375,7 +1379,10 @@ Writer& OutHTML_Image( Writer& rWrt, const SwFrameFormat &rFrameFormat,
     else
     {
         sBuffer.append(OUStringToOString(aGraphicURL, RTL_TEXTENCODING_UTF8));
-        aHtml.attribute(OOO_STRING_SVTOOLS_HTML_O_src, sBuffer.makeStringAndClear().getStr());
+        OString aAttribute(OOO_STRING_SVTOOLS_HTML_O_src);
+        if (nFrameOpts & HtmlFrmOpts::Replacement)
+            aAttribute = OOO_STRING_SVTOOLS_HTML_O_data;
+        aHtml.attribute(aAttribute, sBuffer.makeStringAndClear().getStr());
     }
 
     // Events
