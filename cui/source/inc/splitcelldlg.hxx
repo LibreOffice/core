@@ -22,11 +22,9 @@
 #include <svx/svxdlg.hxx>
 #include <vcl/weld.hxx>
 
-class SvxSplitTableDlg : public SvxAbstractSplittTableDialog
+class SvxSplitTableDlg : public SvxAbstractSplittTableDialog, public weld::GenericDialogController
 {
 private:
-    std::unique_ptr<weld::Builder> m_xBuilder;
-    std::unique_ptr<weld::Dialog> m_xDialog;
     std::unique_ptr<weld::SpinButton> m_xCountEdit;
     std::unique_ptr<weld::RadioButton> m_xHorzBox;
     std::unique_ptr<weld::RadioButton> m_xVertBox;

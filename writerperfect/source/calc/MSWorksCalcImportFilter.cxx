@@ -243,7 +243,7 @@ bool MSWorksCalcImportFilter::doImportDocument(librevenge::RVNGInputStream &rInp
         {
             SfxPasswordDialog aPasswdDlg(nullptr);
             aPasswdDlg.SetMinLen(1);
-            if (!aPasswdDlg.run())
+            if (!aPasswdDlg.execute())
                 return false;
             OUString aPasswd = aPasswdDlg.GetPassword();
             aUtf8Passwd = OUStringToOString(aPasswd, RTL_TEXTENCODING_UTF8);

@@ -409,7 +409,7 @@ bool SwEditRegionDlg::CheckPasswd(CheckBox* pBox)
         {
             SfxPasswordDialog aPasswdDlg(GetFrameWeld());
             bRet = false;
-            if (aPasswdDlg.run())
+            if (aPasswdDlg.execute())
             {
                 const OUString sNewPasswd(aPasswdDlg.GetPassword());
                 css::uno::Sequence <sal_Int8 > aNewPasswd;
@@ -1262,7 +1262,7 @@ IMPL_LINK( SwEditRegionDlg, ChangePasswdHdl, Button *, pBox, void )
             {
                 SfxPasswordDialog aPasswdDlg(GetFrameWeld());
                 aPasswdDlg.ShowExtras(SfxShowExtras::CONFIRM);
-                if (RET_OK == aPasswdDlg.run())
+                if (RET_OK == aPasswdDlg.execute())
                 {
                     const OUString sNewPasswd(aPasswdDlg.GetPassword());
                     if (aPasswdDlg.GetConfirm() == sNewPasswd)
@@ -1702,7 +1702,7 @@ IMPL_LINK( SwInsertSectionTabPage, ChangePasswdHdl, Button *, pButton, void )
         {
             SfxPasswordDialog aPasswdDlg(GetFrameWeld());
             aPasswdDlg.ShowExtras(SfxShowExtras::CONFIRM);
-            if(RET_OK == aPasswdDlg.run())
+            if (RET_OK == aPasswdDlg.execute())
             {
                 const OUString sNewPasswd(aPasswdDlg.GetPassword());
                 if (aPasswdDlg.GetConfirm() == sNewPasswd)
