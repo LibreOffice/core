@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba2be162_19722ce6",
+        "filename": "sfx2/source/bastyp/fltfnc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 923,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2018-03-08T15:52:03Z",
+      "side": 1,
+      "message": "the whitespace mismatch is a little jarring but so is the original ;-)",
+      "revId": "8df103541cd2ed01442d72a9f319a6da968df3fc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba2be162_3977f0d5",
+        "filename": "sfx2/source/bastyp/fltfnc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1020,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2018-03-08T15:52:03Z",
+      "side": 1,
+      "message": "Do we cope with this not being set and/or what are the defaults here ? presumably bEnabled \u003d true - but ... ?",
+      "revId": "8df103541cd2ed01442d72a9f319a6da968df3fc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba2be162_f96c780a",
+        "filename": "sfx2/source/doc/docfilt.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2018-03-08T15:52:03Z",
+      "side": 1,
+      "message": "We should initialize mbEnabled to true in the other constructor I think (?)",
+      "revId": "8df103541cd2ed01442d72a9f319a6da968df3fc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
