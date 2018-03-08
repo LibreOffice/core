@@ -15,6 +15,7 @@ HtmlWriter::HtmlWriter(SvStream& rStream, const OString& rNamespace) :
     mrStream(rStream),
     mbElementOpen(false),
     mbContentWritten(false),
+    mbCharactersWritten(false),
     mbPrettyPrint(true)
 {
     if (!rNamespace.isEmpty())
@@ -83,7 +84,7 @@ void HtmlWriter::flushStack()
 
 void HtmlWriter::end()
 {
-    if (mbElementOpen)
+    if (mbElementOpen && !mbCharactersWritten)
     {
         mrStream.WriteCharPtr("/>");
         if (mbPrettyPrint)
@@ -107,6 +108,7 @@ void HtmlWriter::end()
     maElementStack.pop_back();
     mbElementOpen = false;
     mbContentWritten = false;
+    mbCharactersWritten = false;
 }
 
 void HtmlWriter::attribute(const OString &aAttribute, const OString& aValue)
@@ -146,5 +148,12 @@ void HtmlWriter::attribute(const OString& aAttribute)
     }
 }
 
+void HtmlWriter::characters(const OString& rChars)
+{
+    if (!mbCharactersWritten)
+        mrStream.WriteCharPtr(">");
+    mrStream.WriteOString(rChars);
+    mbCharactersWritten = true;
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -41,6 +41,7 @@ public:
     void testNested();
     void testNamespace();
     void testAttributeValues();
+    void testCharacters();
 
     CPPUNIT_TEST_SUITE(Test);
     CPPUNIT_TEST(testSingleElement);
@@ -50,6 +51,7 @@ public:
     CPPUNIT_TEST(testNested);
     CPPUNIT_TEST(testNamespace);
     CPPUNIT_TEST(testAttributeValues);
+    CPPUNIT_TEST(testCharacters);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -188,6 +190,21 @@ void Test::testAttributeValues()
     OString aString = extractFromStream(aStream);
 
     CPPUNIT_ASSERT_EQUAL(OString("<abc one=\"one\" two=\"two\" three=\"12\"/>"), aString);
+}
+
+void Test::testCharacters()
+{
+    SvMemoryStream aStream;
+
+    HtmlWriter aHtml(aStream);
+    aHtml.prettyPrint(false);
+    aHtml.start("abc");
+    aHtml.characters("hello");
+    aHtml.end();
+
+    OString aString = extractFromStream(aStream);
+
+    CPPUNIT_ASSERT_EQUAL(OString("<abc>hello</abc>"), aString);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
