@@ -340,8 +340,7 @@ void checkNameAndType(Reference<XPropertySet> const & xProperties, const OUStrin
 void checkLinearTrendline(
         Reference<chart2::XRegressionCurve> const & xCurve, const OUString& aExpectedName,
         double aExpectedExtrapolateForward, double aExpectedExtrapolateBackward,
-        bool aExpectedForceIntercept, double aExpectedInterceptValue,
-        bool aExpectedShowEquation, bool aExpectedR2)
+        double aExpectedInterceptValue)
 {
     Reference<XPropertySet> xProperties( xCurve , uno::UNO_QUERY );
     CPPUNIT_ASSERT(xProperties.is());
@@ -351,16 +350,15 @@ void checkLinearTrendline(
     checkCommonTrendline(
         xCurve,
         aExpectedExtrapolateForward, aExpectedExtrapolateBackward,
-        aExpectedForceIntercept, aExpectedInterceptValue,
-        aExpectedShowEquation, aExpectedR2);
+        /*aExpectedForceIntercept*/false, aExpectedInterceptValue,
+        /*aExpectedShowEquation*/true, /*aExpectedR2*/false);
 }
 
 void checkPolynomialTrendline(
         Reference<chart2::XRegressionCurve> const & xCurve, const OUString& aExpectedName,
         sal_Int32 aExpectedDegree,
         double aExpectedExtrapolateForward, double aExpectedExtrapolateBackward,
-        bool aExpectedForceIntercept, double aExpectedInterceptValue,
-        bool aExpectedShowEquation, bool aExpectedR2)
+        double aExpectedInterceptValue)
 {
     Reference<XPropertySet> xProperties( xCurve , uno::UNO_QUERY );
     CPPUNIT_ASSERT(xProperties.is());
@@ -374,8 +372,8 @@ void checkPolynomialTrendline(
     checkCommonTrendline(
         xCurve,
         aExpectedExtrapolateForward, aExpectedExtrapolateBackward,
-        aExpectedForceIntercept, aExpectedInterceptValue,
-        aExpectedShowEquation, aExpectedR2);
+        /*aExpectedForceIntercept*/true, aExpectedInterceptValue,
+        /*aExpectedShowEquation*/true, /*aExpectedR2*/true);
 }
 
 void checkMovingAverageTrendline(
@@ -408,11 +406,11 @@ void checkTrendlinesInChart(uno::Reference< chart2::XChartDocument > const & xCh
 
     xCurve = xRegressionCurveSequence[0];
     CPPUNIT_ASSERT(xCurve.is());
-    checkPolynomialTrendline(xCurve, "col2_poly", 3, 0.1, -0.1, true, -1.0, true, true);
+    checkPolynomialTrendline(xCurve, "col2_poly", 3, 0.1, -0.1, -1.0);
 
     xCurve = xRegressionCurveSequence[1];
     CPPUNIT_ASSERT(xCurve.is());
-    checkLinearTrendline(xCurve, "col2_linear", -0.5, -0.5, false, 0.0, true, false);
+    checkLinearTrendline(xCurve, "col2_linear", -0.5, -0.5, 0.0);
 
     xCurve = xRegressionCurveSequence[2];
     CPPUNIT_ASSERT(xCurve.is());
@@ -798,23 +796,21 @@ void Chart2ExportTest::testAxisNumberFormatXLS()
             }
         }
 
-        void change( const Reference<chart2::XChartDocument>& xChartDoc, bool bSetNumFmtLinked, sal_Int16 nNumFmtTypeFlag )
+        void change( const Reference<chart2::XChartDocument>& xChartDoc, sal_Int16 nNumFmtTypeFlag )
         {
             Reference<chart2::XAxis> xAxisY = getAxisFromDoc( xChartDoc, 0, 1, 0 );
             Reference<beans::XPropertySet> xPS( xAxisY, uno::UNO_QUERY_THROW );
-            Any aAny( bSetNumFmtLinked );
+            Any aAny( false );
             xPS->setPropertyValue( "LinkNumberFormatToSource", aAny );
-            if ( !bSetNumFmtLinked )
-            {
-                Reference<util::XNumberFormatsSupplier> xNFS( xChartDoc, uno::UNO_QUERY_THROW );
-                Reference<util::XNumberFormats> xNumberFormats = xNFS->getNumberFormats();
-                CPPUNIT_ASSERT( xNumberFormats.is() );
-                lang::Locale aLocale{ "en", "US", "" };
-                Sequence<sal_Int32> aNumFmts = xNumberFormats->queryKeys( nNumFmtTypeFlag, aLocale, false );
-                CPPUNIT_ASSERT( aNumFmts.hasElements() );
-                aAny <<= aNumFmts[0];
-                xPS->setPropertyValue( CHART_UNONAME_NUMFMT, aAny );
-            }
+
+            Reference<util::XNumberFormatsSupplier> xNFS( xChartDoc, uno::UNO_QUERY_THROW );
+            Reference<util::XNumberFormats> xNumberFormats = xNFS->getNumberFormats();
+            CPPUNIT_ASSERT( xNumberFormats.is() );
+            lang::Locale aLocale{ "en", "US", "" };
+            Sequence<sal_Int32> aNumFmts = xNumberFormats->queryKeys( nNumFmtTypeFlag, aLocale, false );
+            CPPUNIT_ASSERT( aNumFmts.hasElements() );
+            aAny <<= aNumFmts[0];
+            xPS->setPropertyValue( CHART_UNONAME_NUMFMT, aAny );
         }
 
     } aTest;
@@ -824,7 +820,7 @@ void Chart2ExportTest::testAxisNumberFormatXLS()
     Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet( 0, mxComponent );
     aTest.check( xChartDoc, true, util::NumberFormat::PERCENT );
 
-    aTest.change( xChartDoc, false, util::NumberFormat::NUMBER );
+    aTest.change( xChartDoc, util::NumberFormat::NUMBER );
     // Write the document(xls) with changes made close it, load it and check if changes are intact
     reload( "MS Excel 97" );
     xChartDoc = getChartDocFromSheet( 0, mxComponent );

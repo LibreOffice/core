@@ -266,7 +266,6 @@ namespace vclcanvas
                                     const ::basegfx::B2DHomMatrix&                 rTextureTransform,
                                     const ::tools::Rectangle&                             rBounds,
                                     unsigned int                                   nStepCount,
-                                    bool                                           bFillNonOverlapping,
                                     const ::canvas::ParametricPolyPolygon::Values& rValues,
                                     const std::vector< ::Color >&                  rColors )
         {
@@ -356,131 +355,48 @@ namespace vclcanvas
 
             basegfx::utils::KeyStopLerp aLerper(rValues.maStops);
 
-            if( !bFillNonOverlapping )
+            // fill background
+            rOutDev.SetFillColor( rColors.front() );
+            rOutDev.DrawRect( rBounds );
+
+            // render polygon
+            // ==============
+
+            for( unsigned int i=1,p; i<nStepCount; ++i )
             {
-                // fill background
-                rOutDev.SetFillColor( rColors.front() );
-                rOutDev.DrawRect( rBounds );
+                const double fT( i/double(nStepCount) );
 
-                // render polygon
-                // ==============
+                std::ptrdiff_t nIndex;
+                double fAlpha;
+                std::tie(nIndex,fAlpha)=aLerper.lerp(fT);
 
-                for( unsigned int i=1,p; i<nStepCount; ++i )
+                // lerp color
+                rOutDev.SetFillColor(
+                    Color( static_cast<sal_uInt8>(basegfx::utils::lerp(rColors[nIndex].GetRed(),rColors[nIndex+1].GetRed(),fAlpha)),
+                           static_cast<sal_uInt8>(basegfx::utils::lerp(rColors[nIndex].GetGreen(),rColors[nIndex+1].GetGreen(),fAlpha)),
+                           static_cast<sal_uInt8>(basegfx::utils::lerp(rColors[nIndex].GetBlue(),rColors[nIndex+1].GetBlue(),fAlpha)) ));
+
+                // scale and render polygon, by interpolating between
+                // outer and inner polygon.
+
+                for( p=0; p<nNumPoints; ++p )
                 {
-                    const double fT( i/double(nStepCount) );
+                    const ::basegfx::B2DPoint& rOuterPoint( aOuterPoly.getB2DPoint(p) );
+                    const ::basegfx::B2DPoint& rInnerPoint( aInnerPoly.getB2DPoint(p) );
 
-                    std::ptrdiff_t nIndex;
-                    double fAlpha;
-                    std::tie(nIndex,fAlpha)=aLerper.lerp(fT);
-
-                    // lerp color
-                    rOutDev.SetFillColor(
-                        Color( static_cast<sal_uInt8>(basegfx::utils::lerp(rColors[nIndex].GetRed(),rColors[nIndex+1].GetRed(),fAlpha)),
-                               static_cast<sal_uInt8>(basegfx::utils::lerp(rColors[nIndex].GetGreen(),rColors[nIndex+1].GetGreen(),fAlpha)),
-                               static_cast<sal_uInt8>(basegfx::utils::lerp(rColors[nIndex].GetBlue(),rColors[nIndex+1].GetBlue(),fAlpha)) ));
-
-                    // scale and render polygon, by interpolating between
-                    // outer and inner polygon.
-
-                    for( p=0; p<nNumPoints; ++p )
-                    {
-                        const ::basegfx::B2DPoint& rOuterPoint( aOuterPoly.getB2DPoint(p) );
-                        const ::basegfx::B2DPoint& rInnerPoint( aInnerPoly.getB2DPoint(p) );
-
-                        aTempPoly[static_cast<sal_uInt16>(p)] = ::Point(
-                            basegfx::fround( fT*rInnerPoint.getX() + (1-fT)*rOuterPoint.getX() ),
-                            basegfx::fround( fT*rInnerPoint.getY() + (1-fT)*rOuterPoint.getY() ) );
-                    }
-
-                    // close polygon explicitly
-                    aTempPoly[static_cast<sal_uInt16>(p)] = aTempPoly[0];
-
-                    // TODO(P1): compare with vcl/source/gdi/outdev4.cxx,
-                    // OutputDevice::ImplDrawComplexGradient(), there's a note
-                    // that on some VDev's, rendering disjunct poly-polygons
-                    // is faster!
-                    rOutDev.DrawPolygon( aTempPoly );
+                    aTempPoly[static_cast<sal_uInt16>(p)] = ::Point(
+                        basegfx::fround( fT*rInnerPoint.getX() + (1-fT)*rOuterPoint.getX() ),
+                        basegfx::fround( fT*rInnerPoint.getY() + (1-fT)*rOuterPoint.getY() ) );
                 }
-            }
-            else
-            {
-                // render polygon
-                // ==============
 
-                // For performance reasons, we create a temporary VCL polygon
-                // here, keep it all the way and only change the vertex values
-                // in the loop below (as ::Polygon is a pimpl class, creating
-                // one every loop turn would really stress the mem allocator)
-                ::tools::PolyPolygon aTempPolyPoly;
-                ::tools::Polygon aTempPoly2( static_cast<sal_uInt16>(nNumPoints+1) );
+                // close polygon explicitly
+                aTempPoly[static_cast<sal_uInt16>(p)] = aTempPoly[0];
 
-                aTempPoly2[0] = rBounds.TopLeft();
-                aTempPoly2[1] = rBounds.TopRight();
-                aTempPoly2[2] = rBounds.BottomRight();
-                aTempPoly2[3] = rBounds.BottomLeft();
-                aTempPoly2[4] = rBounds.TopLeft();
-
-                aTempPolyPoly.Insert( aTempPoly );
-                aTempPolyPoly.Insert( aTempPoly2 );
-
-                for( unsigned int i=0,p; i<nStepCount; ++i )
-                {
-                    const double fT( (i+1)/double(nStepCount) );
-
-                    std::ptrdiff_t nIndex;
-                    double fAlpha;
-                    std::tie(nIndex,fAlpha)=aLerper.lerp(fT);
-
-                    // lerp color
-                    rOutDev.SetFillColor(
-                        Color( static_cast<sal_uInt8>(basegfx::utils::lerp(rColors[nIndex].GetRed(),rColors[nIndex+1].GetRed(),fAlpha)),
-                               static_cast<sal_uInt8>(basegfx::utils::lerp(rColors[nIndex].GetGreen(),rColors[nIndex+1].GetGreen(),fAlpha)),
-                               static_cast<sal_uInt8>(basegfx::utils::lerp(rColors[nIndex].GetBlue(),rColors[nIndex+1].GetBlue(),fAlpha)) ));
-
-#if OSL_DEBUG_LEVEL > 0
-                    if( i && !(i % 10) )
-                        rOutDev.SetFillColor( COL_RED );
-#endif
-
-                    // scale and render polygon. Note that here, we
-                    // calculate the inner polygon, which is actually the
-                    // start of the _next_ color strip. Thus, i+1
-
-                    for( p=0; p<nNumPoints; ++p )
-                    {
-                        const ::basegfx::B2DPoint& rOuterPoint( aOuterPoly.getB2DPoint(p) );
-                        const ::basegfx::B2DPoint& rInnerPoint( aInnerPoly.getB2DPoint(p) );
-
-                        aTempPoly[static_cast<sal_uInt16>(p)] = ::Point(
-                            basegfx::fround( fT*rInnerPoint.getX() + (1-fT)*rOuterPoint.getX() ),
-                            basegfx::fround( fT*rInnerPoint.getY() + (1-fT)*rOuterPoint.getY() ) );
-                    }
-
-                    // close polygon explicitly
-                    aTempPoly[static_cast<sal_uInt16>(p)] = aTempPoly[0];
-
-                    // swap inner and outer polygon
-                    aTempPolyPoly.Replace( aTempPolyPoly.GetObject( 1 ), 0 );
-
-                    if( i+1<nStepCount )
-                    {
-                        // assign new inner polygon. Note that with this
-                        // formulation, the internal pimpl objects for both
-                        // temp polygons and the polypolygon remain identical,
-                        // minimizing heap accesses (only a Polygon wrapper
-                        // object is freed and deleted twice during this swap).
-                        aTempPolyPoly.Replace( aTempPoly, 1 );
-                    }
-                    else
-                    {
-                        // last, i.e. inner strip. Now, the inner polygon
-                        // has zero area anyway, and to not leave holes in
-                        // the gradient, finally render a simple polygon:
-                        aTempPolyPoly.Remove( 1 );
-                    }
-
-                    rOutDev.DrawPolyPolygon( aTempPolyPoly );
-                }
+                // TODO(P1): compare with vcl/source/gdi/outdev4.cxx,
+                // OutputDevice::ImplDrawComplexGradient(), there's a note
+                // that on some VDev's, rendering disjunct poly-polygons
+                // is faster!
+                rOutDev.DrawPolygon( aTempPoly );
             }
         }
 
@@ -509,7 +425,6 @@ namespace vclcanvas
                                            rTextureTransform,
                                            rBounds,
                                            nStepCount,
-                                           false/*bFillNonOverlapping*/,
                                            rValues,
                                            rColors );
                     break;

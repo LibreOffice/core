@@ -45,14 +45,14 @@ static void lcl_GetDataArea(const uno::Reference<text::XTextTable>& xTable, sal_
 }
 
 static void lcl_GetColumnInfo(const uno::Reference<text::XTextTable>& xTable,
-                              sal_Int32 nDocColumn, sal_Int32 nStartRow, bool bHasHeaders,
+                              sal_Int32 nDocColumn, bool bHasHeaders,
                               OUString& rName, sal_Int32& rDataType, bool& rCurrency)
 {
     uno::Reference<table::XCellRange> xCellRange(xTable, uno::UNO_QUERY);
     // get column name from first row, if range contains headers
     if (bHasHeaders)
     {
-        uno::Reference<text::XText> xHeaderText(xCellRange->getCellByPosition(nDocColumn, nStartRow), uno::UNO_QUERY);
+        uno::Reference<text::XText> xHeaderText(xCellRange->getCellByPosition(nDocColumn, /*nStartRow*/0), uno::UNO_QUERY);
         if (xHeaderText.is())
             rName = xHeaderText->getString();
     }
@@ -63,11 +63,11 @@ static void lcl_GetColumnInfo(const uno::Reference<text::XTextTable>& xTable,
 
 
 static void lcl_SetValue(connectivity::ORowSetValue& rValue, const uno::Reference<text::XTextTable>& xTable,
-                         sal_Int32 nStartCol, sal_Int32 nStartRow, bool bHasHeaders,
+                         sal_Int32 nStartCol, bool bHasHeaders,
                          sal_Int32 nDBRow, sal_Int32 nDBColumn)
 {
     sal_Int32 nDocColumn = nStartCol + nDBColumn - 1;   // database counts from 1
-    sal_Int32 nDocRow = nStartRow + nDBRow - 1;
+    sal_Int32 nDocRow = nDBRow - 1;
     if (bHasHeaders)
         ++nDocRow;
 
@@ -111,7 +111,7 @@ void OWriterTable::fillColumns()
         sal_Int32 eType = sdbc::DataType::OTHER;
         bool bCurrency = false;
 
-        lcl_GetColumnInfo(m_xTable, m_nStartCol + i, 0, m_bHasHeaders,
+        lcl_GetColumnInfo(m_xTable, m_nStartCol + i, m_bHasHeaders,
                           aColumnName, eType, bCurrency);
 
         sal_Int32 nPrecision = 0;   //! ...
@@ -254,7 +254,7 @@ bool OWriterTable::fetchRow(OValueRefRow& _rRow, const OSQLColumns& _rCols,
     {
         if ((_rRow->get())[i]->isBound())
         {
-            lcl_SetValue((_rRow->get())[i]->get(), m_xTable, m_nStartCol, 0, m_bHasHeaders,
+            lcl_SetValue((_rRow->get())[i]->get(), m_xTable, m_nStartCol, m_bHasHeaders,
                          m_nFilePos, i);
         }
     }

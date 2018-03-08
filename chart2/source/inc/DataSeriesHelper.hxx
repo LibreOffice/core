@@ -57,7 +57,7 @@ OOO_DLLPUBLIC_CHARTTOOLS css::uno::Reference< css::chart2::data::XLabeledDataSeq
                            bool bMatchPrefix = false );
 
 /** Retrieves all data sequences in the given data source that match the given
-    role.
+    role prefix.
 
     @param aSource
         The data source containing all data sequences to be searched through.
@@ -68,8 +68,7 @@ OOO_DLLPUBLIC_CHARTTOOLS css::uno::Reference< css::chart2::data::XLabeledDataSeq
 OOO_DLLPUBLIC_CHARTTOOLS std::vector<
   css::uno::Reference< css::chart2::data::XLabeledDataSequence > >
     getAllDataSequencesByRole( const css::uno::Sequence< css::uno::Reference< css::chart2::data::XLabeledDataSequence > > & aDataSequences,
-                               const OUString& aRole,
-                               bool bMatchPrefix );
+                               const OUString& aRole );
 
 OOO_DLLPUBLIC_CHARTTOOLS
 std::vector<css::uno::Reference<css::chart2::data::XLabeledDataSequence> >

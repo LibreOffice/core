@@ -337,7 +337,7 @@ Reference< XConnection> getConnection(const Reference< XRowSet>& _rxRowSet)
 // if connectRowset (which is deprecated) is removed, this function and one of its parameters are
 // not needed anymore, the whole implementation can be moved into ensureRowSetConnection then)
 SharedConnection lcl_connectRowSet(const Reference< XRowSet>& _rxRowSet, const Reference< XComponentContext >& _rxContext,
-        bool _bSetAsActiveConnection, bool _bAttachAutoDisposer )
+        bool _bAttachAutoDisposer )
 {
     SharedConnection xConnection;
 
@@ -359,11 +359,8 @@ SharedConnection lcl_connectRowSet(const Reference< XRowSet>& _rxRowSet, const R
             ||  ( xExistingConn = findConnection( _rxRowSet ) ).is()
             )
         {
-            if ( _bSetAsActiveConnection )
-            {
-                xRowSetProps->setPropertyValue("ActiveConnection", makeAny( xExistingConn ) );
-                // no auto disposer needed, since we did not create the connection
-            }
+            xRowSetProps->setPropertyValue("ActiveConnection", makeAny( xExistingConn ) );
+            // no auto disposer needed, since we did not create the connection
 
             xConnection.reset( xExistingConn, SharedConnection::NoTakeOwnership );
             break;
@@ -424,7 +421,7 @@ SharedConnection lcl_connectRowSet(const Reference< XRowSet>& _rxRowSet, const R
         );
 
         // now if we created a connection, forward it to the row set
-        if ( xConnection.is() && _bSetAsActiveConnection )
+        if ( xConnection.is() )
         {
             try
             {
@@ -451,13 +448,13 @@ SharedConnection lcl_connectRowSet(const Reference< XRowSet>& _rxRowSet, const R
 
 Reference< XConnection> connectRowset(const Reference< XRowSet>& _rxRowSet, const Reference< XComponentContext >& _rxContext )
 {
-    SharedConnection xConnection = lcl_connectRowSet( _rxRowSet, _rxContext, true/*bSetAsActiveConnection*/, true );
+    SharedConnection xConnection = lcl_connectRowSet( _rxRowSet, _rxContext, true );
     return xConnection.getTyped();
 }
 
 SharedConnection ensureRowSetConnection(const Reference< XRowSet>& _rxRowSet, const Reference< XComponentContext>& _rxContext )
 {
-    return lcl_connectRowSet( _rxRowSet, _rxContext, true, false/*bUseAutoConnectionDisposer*/ );
+    return lcl_connectRowSet( _rxRowSet, _rxContext, false/*bUseAutoConnectionDisposer*/ );
 }
 
 Reference< XNameAccess> getTableFields(const Reference< XConnection>& _rxConn,const OUString& _rName)

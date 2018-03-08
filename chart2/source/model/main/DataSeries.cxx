@@ -306,7 +306,7 @@ Reference< beans::XPropertySet >
     }
 
     std::vector< Reference< chart2::data::XLabeledDataSequence > > aValuesSeries(
-        DataSeriesHelper::getAllDataSequencesByRole( aSequences , "values", true ) );
+        DataSeriesHelper::getAllDataSequencesByRole( aSequences , "values" ) );
 
     if (aValuesSeries.empty())
         throw lang::IndexOutOfBoundsException();
