@@ -92,7 +92,7 @@ namespace svx {
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
         if(pFact)
         {
-            ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateSvxBorderBackgroundDlg( pParent, *pBBSet, true/*bEnableBackgroundSelector*/ ));
+            ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateSvxBorderBackgroundDlg( pParent, *pBBSet, false/*bEnableDrawingLayerFillStyles*/ ));
             DBG_ASSERT(pDlg, "Dialog creation failed!");
             if ( pDlg->Execute() == RET_OK && pDlg->GetOutputItemSet() )
             {
@@ -680,7 +680,6 @@ IMPL_LINK_NOARG(SvxHFPage, BackgroundHdl, Button*, void)
         ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateSvxBorderBackgroundDlg(
             this,
             *pBBSet,
-            true/*EnableBackgroundSelector*/,
             mbEnableDrawingLayerFillStyles));
 
         DBG_ASSERT(pDlg,"Dialog creation failed!");
