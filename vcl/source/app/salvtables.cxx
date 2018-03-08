@@ -448,6 +448,7 @@ public:
         VclButtonBox* pBox = m_xDialog->get_action_area();
         VclPtr<PushButton> xButton(VclPtr<PushButton>::Create(pBox, WB_CLIPCHILDREN|WB_CENTER|WB_VCENTER));
         xButton->SetText(rText);
+        xButton->Show();
         m_xDialog->add_button(xButton, nResponse, true);
     }
 

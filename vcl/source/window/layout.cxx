@@ -2235,6 +2235,7 @@ void MessageDialog::create_message_area()
             case VclButtonsType::Cancel:
                 pBtn.set( VclPtr<CancelButton>::Create(pButtonBox) );
                 pBtn->SetStyle(pBtn->GetStyle() & WB_DEFBUTTON);
+                pBtn->Show();
                 pBtn->set_id("cancel");
                 add_button(pBtn, RET_CANCEL, true);
                 nDefaultResponse = RET_CANCEL;
