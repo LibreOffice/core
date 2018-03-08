@@ -18,6 +18,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,libassuan, \
     external/libassuan/fix-autoconf-macros.patch \
     $(if $(filter MSC,$(COM)),external/libassuan/w32-build-fixes.patch.1) \
     external/libassuan/w32-build-fixes-2.patch \
+    $(if $(filter LINUX,$(OS)),external/libassuan/rpath.patch) \
 ))
 
 # vim: set noet sw=4 ts=4:
