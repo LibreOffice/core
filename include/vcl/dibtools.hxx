@@ -60,11 +60,10 @@ bool VCL_DLLPUBLIC WriteDIB( // WriteDIB(rBitmap, rOStm, false, true);
     bool bCompressed,
     bool bFileHeader);
 
+// compressed, with file header
 bool VCL_DLLPUBLIC WriteDIB( // WriteDIB(rBitmap, rOStm, false, true);
     const BitmapEx& rSource,
-    SvStream& rOStm,
-    bool bCompressed,
-    bool bFileHeader);
+    SvStream& rOStm);
 
 bool VCL_DLLPUBLIC WriteDIBBitmapEx(
     const BitmapEx& rSource,

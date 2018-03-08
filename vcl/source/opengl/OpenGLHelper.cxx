@@ -533,7 +533,7 @@ GLint OpenGLHelper::LoadShaders(const OUString& rVertexShaderName,
     return LoadShaders(rVertexShaderName, rFragmentShaderName, OUString(), "", "");
 }
 
-void OpenGLHelper::ConvertBitmapExToRGBATextureBuffer(const BitmapEx& rBitmapEx, sal_uInt8* o_pRGBABuffer, const bool bFlip)
+void OpenGLHelper::ConvertBitmapExToRGBATextureBuffer(const BitmapEx& rBitmapEx, sal_uInt8* o_pRGBABuffer)
 {
     long nBmpWidth = rBitmapEx.GetSizePixel().Width();
     long nBmpHeight = rBitmapEx.GetSizePixel().Height();
@@ -543,7 +543,7 @@ void OpenGLHelper::ConvertBitmapExToRGBATextureBuffer(const BitmapEx& rBitmapEx,
     Bitmap::ScopedReadAccess pReadAccces( aBitmap );
     AlphaMask::ScopedReadAccess pAlphaReadAccess( aAlpha );
     size_t i = 0;
-    for (long ny = (bFlip ? nBmpHeight - 1 : 0); (bFlip ? ny >= 0 : ny < nBmpHeight); (bFlip ? ny-- : ny++))
+    for (long ny = 0; ny < nBmpHeight; ny++)
     {
         Scanline pAScan = pAlphaReadAccess ? pAlphaReadAccess->GetScanline(ny) : nullptr;
         for(long nx = 0; nx < nBmpWidth; nx++)

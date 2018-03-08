@@ -1111,9 +1111,7 @@ bool PrintFontManager::createFontSubset(
                                                      aToFile.getStr(),
                                                      pGID,
                                                      pEnc,
-                                                     nGlyphs,
-                                                     0,
-                                                     nullptr ) );
+                                                     nGlyphs ) );
     CloseTTFont( pTTFont );
 
     return bSuccess;
