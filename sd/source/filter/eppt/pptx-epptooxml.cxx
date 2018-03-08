@@ -2400,7 +2400,7 @@ ShapeExport& PowerPointShapeExport::WritePlaceholderShape(const Reference< XShap
     WritePresetShape("rect");
     Reference< XPropertySet > xProps(xShape, UNO_QUERY);
     if (xProps.is())
-        WriteBlipFill(xProps, "GraphicURL");
+        WriteBlipFill(xProps, "Graphic");
     mpFS->endElementNS(XML_p, XML_spPr);
 
     WriteTextBox(xShape, XML_p);

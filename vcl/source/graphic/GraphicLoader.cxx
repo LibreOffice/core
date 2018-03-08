@@ -39,9 +39,19 @@ Graphic loadFromURL(OUString const& rURL)
 
     xGraphic = xProv->queryGraphic(aLoadProps);
 
-    Graphic aGraphic(xGraphic);
-    aGraphic.setOriginURL(rURL);
-    return aGraphic;
+    std::unique_ptr<Graphic> pGraphic;
+    if (xGraphic.is())
+    {
+        pGraphic.reset(new Graphic(xGraphic));
+    }
+    else
+    {
+        pGraphic.reset(new Graphic);
+        pGraphic->SetDefaultType();
+    }
+    pGraphic->setOriginURL(rURL);
+
+    return *pGraphic.get();
 }
 }
 } // end vcl::graphic

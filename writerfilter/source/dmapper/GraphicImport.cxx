@@ -654,8 +654,8 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
                         uno::Reference< beans::XPropertySet > xShapeProps
                             ( xShape, uno::UNO_QUERY_THROW );
 
-                        OUString sUrl;
-                        xShapeProps->getPropertyValue("GraphicURL") >>= sUrl;
+                        uno::Reference<graphic::XGraphic> xGraphic;
+                        xShapeProps->getPropertyValue("Graphic") >>= xGraphic;
 
                         sal_Int32 nRotation = 0;
                         xShapeProps->getPropertyValue("RotateAngle") >>= nRotation;
@@ -672,10 +672,6 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
                                 bContainsEffects = true;
                         }
 
-                        beans::PropertyValues aMediaProperties( 1 );
-                        aMediaProperties[0].Name = "URL";
-                        aMediaProperties[0].Value <<= sUrl;
-
                         xShapeProps->getPropertyValue("Shadow") >>= m_pImpl->bShadow;
                         if (m_pImpl->bShadow)
                         {
@@ -691,7 +687,7 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
 
                         // fdo#70457: transform XShape into a SwXTextGraphicObject only if there's no rotation
                         if ( nRotation == 0 && !bContainsEffects )
-                            m_xGraphicObject = createGraphicObject( aMediaProperties, xShapeProps );
+                            m_xGraphicObject = createGraphicObject( xGraphic, xShapeProps );
 
                         bUseShape = !m_xGraphicObject.is( );
 
@@ -1111,20 +1107,18 @@ void GraphicImport::lcl_entry(int /*pos*/, writerfilter::Reference<Properties>::
 {
 }
 
-uno::Reference< text::XTextContent > GraphicImport::createGraphicObject( const beans::PropertyValues& aMediaProperties, const uno::Reference<beans::XPropertySet>& xShapeProps )
+uno::Reference<text::XTextContent> GraphicImport::createGraphicObject(uno::Reference<graphic::XGraphic> const & rxGraphic,
+                                                                      uno::Reference<beans::XPropertySet> const & xShapeProps)
 {
-    uno::Reference< text::XTextContent > xGraphicObject;
+    uno::Reference<text::XTextContent> xGraphicObject;
     try
     {
-        uno::Reference< graphic::XGraphicProvider > xGraphicProvider( graphic::GraphicProvider::create(m_xComponentContext) );
-        uno::Reference< graphic::XGraphic > xGraphic = xGraphicProvider->queryGraphic( aMediaProperties );
-
-        if(xGraphic.is())
+        if (rxGraphic.is())
         {
             uno::Reference< beans::XPropertySet > xGraphicObjectProperties(
                 m_xTextFactory->createInstance("com.sun.star.text.TextGraphicObject"),
                 uno::UNO_QUERY_THROW);
-            xGraphicObjectProperties->setPropertyValue(getPropertyName(PROP_GRAPHIC), uno::makeAny( xGraphic ));
+            xGraphicObjectProperties->setPropertyValue(getPropertyName(PROP_GRAPHIC), uno::makeAny(rxGraphic));
             xGraphicObjectProperties->setPropertyValue(getPropertyName(PROP_ANCHOR_TYPE),
                 uno::makeAny( m_pImpl->eGraphicImportType == IMPORT_AS_DETECTED_ANCHOR ?
                                     text::TextContentAnchorType_AT_CHARACTER :
@@ -1293,7 +1287,7 @@ uno::Reference< text::XTextContent > GraphicImport::createGraphicObject( const b
             m_pImpl->applyZOrder(xGraphicObjectProperties);
 
             //there seems to be no way to detect the original size via _real_ API
-            uno::Reference< beans::XPropertySet > xGraphicProperties( xGraphic, uno::UNO_QUERY_THROW );
+            uno::Reference< beans::XPropertySet > xGraphicProperties(rxGraphic, uno::UNO_QUERY_THROW);
 
             if (m_pImpl->mpWrapPolygon.get() != nullptr)
             {
@@ -1357,14 +1351,16 @@ uno::Reference< text::XTextContent > GraphicImport::createGraphicObject( const b
 
 void GraphicImport::data(const sal_uInt8* buf, size_t len, writerfilter::Reference<Properties>::Pointer_t /*ref*/)
 {
-        beans::PropertyValues aMediaProperties( 1 );
-        aMediaProperties[0].Name = getPropertyName(PROP_INPUT_STREAM);
+    beans::PropertyValues aMediaProperties( 1 );
+    aMediaProperties[0].Name = getPropertyName(PROP_INPUT_STREAM);
 
-        uno::Reference< io::XInputStream > xIStream = new XInputStreamHelper( buf, len );
-        aMediaProperties[0].Value <<= xIStream;
+    uno::Reference< io::XInputStream > xIStream = new XInputStreamHelper( buf, len );
+    aMediaProperties[0].Value <<= xIStream;
 
-        uno::Reference<beans::XPropertySet> xPropertySet;
-        m_xGraphicObject = createGraphicObject( aMediaProperties, xPropertySet );
+    uno::Reference<beans::XPropertySet> xPropertySet;
+    uno::Reference<graphic::XGraphicProvider> xGraphicProvider(graphic::GraphicProvider::create(m_xComponentContext));
+    uno::Reference<graphic::XGraphic> xGraphic = xGraphicProvider->queryGraphic(aMediaProperties);
+    m_xGraphicObject = createGraphicObject(xGraphic, xPropertySet);
 }
 
 
