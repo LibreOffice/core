@@ -28,11 +28,9 @@
 #include <vcl/weld.hxx>
 
 /// Dialog for editing a name
-class SvxNameDialog
+class SvxNameDialog : public weld::GenericDialogController
 {
 private:
-    std::unique_ptr<weld::Builder> m_xBuilder;
-    std::unique_ptr<weld::Dialog> m_xDialog;
     std::unique_ptr<weld::Entry> m_xEdtName;
     std::unique_ptr<weld::Label> m_xFtDescription;
     std::unique_ptr<weld::Button> m_xBtnOK;
@@ -44,11 +42,7 @@ private:
 public:
     SvxNameDialog(weld::Window* pWindow, const OUString& rName, const OUString& rDesc);
 
-    void set_title(const OUString& rTitle) { m_xDialog->set_title(rTitle); }
-    void set_help_id(const OString& rHelpId) { m_xDialog->set_help_id(rHelpId); }
     OUString GetName() const { return m_xEdtName->get_text(); }
-
-    short run() { return m_xDialog->run(); }
 
     /** add a callback Link that is called whenever the content of the edit
         field is changed.  The Link result determines whether the OK

@@ -25,8 +25,7 @@
 #include <splitcelldlg.hxx>
 
 SvxSplitTableDlg::SvxSplitTableDlg(weld::Window *pParent, bool bIsTableVertical, long nMaxVertical, long nMaxHorizontal)
-    : m_xBuilder(Application::CreateBuilder(pParent, "cui/ui/splitcellsdialog.ui"))
-    , m_xDialog(m_xBuilder->weld_dialog("SplitCellsDialog"))
+    : GenericDialogController(pParent, "cui/ui/splitcellsdialog.ui", "SplitCellsDialog")
     , m_xCountEdit(m_xBuilder->weld_spin_button("countnf"))
     , m_xHorzBox(!bIsTableVertical ? m_xBuilder->weld_radio_button("hori") : m_xBuilder->weld_radio_button("vert"))
     , m_xVertBox(!bIsTableVertical ? m_xBuilder->weld_radio_button("vert") : m_xBuilder->weld_radio_button("hori"))
@@ -84,7 +83,7 @@ long SvxSplitTableDlg::GetCount() const
 
 short SvxSplitTableDlg::Execute()
 {
-    return m_xDialog->run();
+    return run();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

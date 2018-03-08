@@ -34,8 +34,7 @@ sal_uInt16 SvxInsRowColDlg::getInsertCount() const
 }
 
 SvxInsRowColDlg::SvxInsRowColDlg(weld::Window* pParent, bool bCol, const OString& rHelpId)
-    : m_xBuilder(Application::CreateBuilder(pParent, "cui/ui/insertrowcolumn.ui"))
-    , m_xDialog(m_xBuilder->weld_dialog("InsertRowColumnDialog"))
+    : GenericDialogController(pParent, "cui/ui/insertrowcolumn.ui", "InsertRowColumnDialog")
     , m_xCountEdit(m_xBuilder->weld_spin_button("insert_number"))
     , m_xBeforeBtn(m_xBuilder->weld_radio_button("insert_before"))
     , m_xAfterBtn(m_xBuilder->weld_radio_button("insert_after"))
@@ -49,7 +48,7 @@ SvxInsRowColDlg::SvxInsRowColDlg(weld::Window* pParent, bool bCol, const OString
 
 short SvxInsRowColDlg::Execute()
 {
-    return m_xDialog->run();
+    return run();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

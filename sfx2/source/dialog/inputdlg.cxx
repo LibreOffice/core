@@ -12,8 +12,7 @@
 #include <vcl/svapp.hxx>
 
 InputDialog::InputDialog(weld::Window* pParent, const OUString &rLabelText)
-    : m_xBuilder(Application::CreateBuilder(pParent, "sfx/ui/inputdialog.ui"))
-    , m_xDialog(m_xBuilder->weld_dialog("InputDialog"))
+    : GenericDialogController(pParent, "sfx/ui/inputdialog.ui", "InputDialog")
     , m_xEntry(m_xBuilder->weld_entry("entry"))
     , m_xLabel(m_xBuilder->weld_label("label"))
     , m_xHelp(m_xBuilder->weld_button("help"))

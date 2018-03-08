@@ -29,8 +29,7 @@
 \************************************************************************/
 
 SvxNameDialog::SvxNameDialog(weld::Window* pParent, const OUString& rName, const OUString& rDesc)
-    : m_xBuilder(Application::CreateBuilder(pParent, "cui/ui/namedialog.ui"))
-    , m_xDialog(m_xBuilder->weld_dialog("NameDialog"))
+    : GenericDialogController(pParent, "cui/ui/namedialog.ui", "NameDialog")
     , m_xEdtName(m_xBuilder->weld_entry("name_entry"))
     , m_xFtDescription(m_xBuilder->weld_label("description_label"))
     , m_xBtnOK(m_xBuilder->weld_button("ok"))

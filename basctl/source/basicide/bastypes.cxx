@@ -768,7 +768,7 @@ bool QueryPassword( const Reference< script::XLibraryContainer >& xLibContainer,
         }
 
         // execute dialog
-        nRet = aDlg.run();
+        nRet = aDlg.execute();
 
         // verify password
         if ( nRet == RET_OK )

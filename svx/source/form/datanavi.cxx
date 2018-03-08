@@ -3402,8 +3402,8 @@ namespace svxform
     }
 
     LinkedInstanceWarningBox::LinkedInstanceWarningBox(weld::Widget* pParent)
-        : m_xBuilder(Application::CreateBuilder(pParent, "svx/ui/formlinkwarndialog.ui"))
-        , m_xDialog(m_xBuilder->weld_message_dialog("FormLinkWarnDialog"))
+        : MessageDialogController(pParent, "svx/ui/formlinkwarndialog.ui",
+                "FormLinkWarnDialog")
     {
     }
 

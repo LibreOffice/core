@@ -35,10 +35,8 @@ class SwWrtShell;
 
 enum AutoFormatLine { TOP_LINE, BOTTOM_LINE, LEFT_LINE, RIGHT_LINE };
 
-class SwAutoFormatDlg
+class SwAutoFormatDlg : public weld::GenericDialogController
 {
-    std::unique_ptr<weld::Builder> m_xBuilder;
-    std::unique_ptr<weld::Dialog> m_xDialog;
     std::unique_ptr<weld::TreeView> m_xLbFormat;
     std::unique_ptr<weld::Container> m_xFormatting;
     std::unique_ptr<weld::CheckButton> m_xBtnNumFormat;
@@ -79,7 +77,7 @@ public:
     SwAutoFormatDlg(weld::Window* pParent, SwWrtShell* pShell,
                     bool bSetAutoFormat, const SwTableAutoFormat* pSelFormat);
 
-    short run();
+    short execute();
 
     SwTableAutoFormat* FillAutoFormatOfIndex() const;
 
