@@ -24,11 +24,9 @@
 #include <svx/stddlg.hxx>
 #include <vcl/weld.hxx>
 
-class SvxInsRowColDlg : public SvxAbstractInsRowColDlg
+class SvxInsRowColDlg : public SvxAbstractInsRowColDlg, public weld::GenericDialogController
 {
 private:
-    std::unique_ptr<weld::Builder> m_xBuilder;
-    std::unique_ptr<weld::Dialog> m_xDialog;
     std::unique_ptr<weld::SpinButton> m_xCountEdit;
     std::unique_ptr<weld::RadioButton> m_xBeforeBtn;
     std::unique_ptr<weld::RadioButton> m_xAfterBtn;

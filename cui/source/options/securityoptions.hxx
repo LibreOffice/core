@@ -26,12 +26,9 @@ class SvtSecurityOptions;
 namespace svx
 {
 
-    class SecurityOptionsDialog
+    class SecurityOptionsDialog : public weld::GenericDialogController
     {
     private:
-        std::unique_ptr<weld::Builder> m_xBuilder;
-        std::unique_ptr<weld::Dialog> m_xDialog;
-
         std::unique_ptr<weld::CheckButton> m_xSaveOrSendDocsCB;
         std::unique_ptr<weld::Widget> m_xSaveOrSendDocsImg;
         std::unique_ptr<weld::CheckButton> m_xSignDocsCB;
@@ -52,8 +49,6 @@ namespace svx
 
     public:
         SecurityOptionsDialog(weld::Window* pParent, SvtSecurityOptions const * pOptions);
-
-        short run() { return m_xDialog->run(); }
 
         bool IsSaveOrSendDocsChecked() const { return m_xSaveOrSendDocsCB->get_active(); }
         bool IsSignDocsChecked() const { return m_xSignDocsCB->get_active(); }

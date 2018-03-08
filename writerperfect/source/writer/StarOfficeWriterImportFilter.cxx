@@ -47,7 +47,7 @@ bool StarOfficeWriterImportFilter::doImportDocument(librevenge::RVNGInputStream 
         {
             SfxPasswordDialog aPasswdDlg(nullptr);
             aPasswdDlg.SetMinLen(0);
-            if (!aPasswdDlg.run())
+            if (!aPasswdDlg.execute())
                 return false;
             OUString aPasswd = aPasswdDlg.GetPassword();
             aUtf8Passwd = OUStringToOString(aPasswd, RTL_TEXTENCODING_UTF8);

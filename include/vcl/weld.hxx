@@ -566,6 +566,24 @@ protected:
 public:
     GenericDialogController(weld::Widget* pParent, const OUString& rUIFile,
                             const OString& rDialogId);
+    void set_title(const OUString& rTitle) { m_xDialog->set_title(rTitle); }
+    void set_help_id(const OString& rHelpId) { m_xDialog->set_help_id(rHelpId); }
+};
+
+class VCL_DLLPUBLIC MessageDialogController : public DialogController
+{
+private:
+    virtual Dialog* getDialog() override { return m_xDialog.get(); }
+
+protected:
+    std::unique_ptr<weld::Builder> m_xBuilder;
+    std::unique_ptr<weld::MessageDialog> m_xDialog;
+
+public:
+    MessageDialogController(weld::Widget* pParent, const OUString& rUIFile,
+                            const OString& rDialogId);
+    void set_title(const OUString& rTitle) { m_xDialog->set_title(rTitle); }
+    void set_help_id(const OString& rHelpId) { m_xDialog->set_help_id(rHelpId); }
 };
 }
 #endif

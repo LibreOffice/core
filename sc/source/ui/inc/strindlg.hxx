@@ -22,11 +22,9 @@
 
 #include <vcl/weld.hxx>
 
-class ScStringInputDlg
+class ScStringInputDlg : public weld::GenericDialogController
 {
 private:
-    std::unique_ptr<weld::Builder> m_xBuilder;
-    std::unique_ptr<weld::Dialog> m_xDialog;
     std::unique_ptr<weld::Label> m_xLabel;
     std::unique_ptr<weld::Entry> m_xEdInput;
 
@@ -36,8 +34,6 @@ public:
         const OUString& rEditTitle,
         const OUString& rDefault,
         const OString& sHelpId, const OString& sEditHelpId);
-
-    short run() { return m_xDialog->run(); }
 
     OUString GetInputString() const
     {
