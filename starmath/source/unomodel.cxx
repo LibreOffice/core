@@ -1058,7 +1058,7 @@ void SAL_CALL SmModel::setParent( const uno::Reference< uno::XInterface >& xPare
     {
         SvGlobalName aSfxIdent( SFX_GLOBAL_CLASSID );
         SfxObjectShell* pDoc = reinterpret_cast<SfxObjectShell *>(xParentTunnel->getSomething(
-                                        uno::Sequence< sal_Int8 >( aSfxIdent.GetByteSequence() ) ) );
+                                        aSfxIdent.GetByteSequence() ) );
         if ( pDoc )
             GetObjectShell()->OnDocumentPrinterChanged( pDoc->GetDocumentPrinter() );
     }

@@ -1537,7 +1537,7 @@ void ChartController::impl_initializeAccessible( const uno::Reference< lang::XIn
     {
         uno::Sequence< uno::Any > aArguments(5);
         aArguments[0] <<= uno::Reference<view::XSelectionSupplier>(this);
-        aArguments[1] <<= uno::Reference<frame::XModel>(getModel());
+        aArguments[1] <<= getModel();
         aArguments[2] <<= m_xChartView;
         uno::Reference< XAccessible > xParent;
         {

@@ -21,12 +21,63 @@ public:
     {
     }
 
+    /* Check for the creation of unnecessary temporaries when calling a method that takes a param by const & */
+    bool VisitCallExpr(CallExpr const* callExpr)
+    {
+        if (ignoreLocation(callExpr))
+            return true;
+        const FunctionDecl* functionDecl;
+        if (isa<CXXMemberCallExpr>(callExpr))
+            functionDecl = dyn_cast<CXXMemberCallExpr>(callExpr)->getMethodDecl();
+        else
+            functionDecl = callExpr->getDirectCallee();
+        if (!functionDecl)
+            return true;
+
+        unsigned len = std::min(callExpr->getNumArgs(), functionDecl->getNumParams());
+        for (unsigned i = 0; i < len; ++i)
+        {
+            // check if param is const&
+            auto param = functionDecl->getParamDecl(i);
+            auto lvalueType = param->getType()->getAs<LValueReferenceType>();
+            if (!lvalueType)
+                continue;
+            if (!lvalueType->getPointeeType().isConstQualified())
+                continue;
+            auto paramClassOrStructType = lvalueType->getPointeeType()->getAs<RecordType>();
+            if (!paramClassOrStructType)
+                continue;
+            // check for temporary and functional cast in argument expression
+            auto arg = callExpr->getArg(i)->IgnoreImpCasts();
+            auto materializeTemporaryExpr = dyn_cast<MaterializeTemporaryExpr>(arg);
+            if (!materializeTemporaryExpr)
+                continue;
+            auto functionalCast = dyn_cast<CXXFunctionalCastExpr>(
+                materializeTemporaryExpr->GetTemporaryExpr()->IgnoreImpCasts());
+            if (!functionalCast)
+                continue;
+            auto const t1 = functionalCast->getTypeAsWritten();
+            auto const t2 = compat::getSubExprAsWritten(functionalCast)->getType();
+            if (t1.getCanonicalType().getTypePtr() != t2.getCanonicalType().getTypePtr())
+                continue;
+            // Check that the underlying expression is of the same class/struct type as the param i.e. that we are not instantiating
+            // something useful
+            if (t1.getCanonicalType().getTypePtr() != paramClassOrStructType)
+                continue;
+
+            report(DiagnosticsEngine::Warning, "redundant functional cast from %0 to %1",
+                   arg->getExprLoc())
+                << t2 << t1 << arg->getSourceRange();
+            report(DiagnosticsEngine::Note, "in call to method here", param->getLocation())
+                << param->getSourceRange();
+        }
+        return true;
+    }
+
     bool VisitCXXFunctionalCastExpr(CXXFunctionalCastExpr const* expr)
     {
         if (ignoreLocation(expr))
-        {
             return true;
-        }
         auto const t1 = expr->getTypeAsWritten();
         auto const t2 = compat::getSubExprAsWritten(expr)->getType();
         if (t1.getCanonicalType().getTypePtr() != t2.getCanonicalType().getTypePtr())

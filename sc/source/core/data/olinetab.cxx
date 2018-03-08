@@ -153,7 +153,7 @@ ScOutlineArray::ScOutlineArray( const ScOutlineArray& rArray ) :
         for (; it != itEnd; ++it)
         {
             const ScOutlineEntry *const pEntry = &it->second;
-            aCollections[nLevel].insert(ScOutlineEntry(*pEntry));
+            aCollections[nLevel].insert(*pEntry);
         }
     }
 }

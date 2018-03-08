@@ -863,7 +863,7 @@ Reference<ui::XUIElement> SidebarController::CreateUIElement (
         Reference<ui::XUIElement> xUIElement(
             xUIElementFactory->createUIElement(
                 rsImplementationURL,
-                Sequence<beans::PropertyValue>(aCreationArguments.getPropertyValues())),
+                aCreationArguments.getPropertyValues()),
             UNO_QUERY_THROW);
 
         return xUIElement;
