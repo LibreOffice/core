@@ -899,15 +899,25 @@ sal_uInt16 SdrPageView::GetEnteredLevel() const
 
 void SdrPageView::CheckAktGroup()
 {
-    SdrObject* pGrp=GetAktGroup();
-    while (pGrp!=nullptr &&
-           (!pGrp->IsInserted() || pGrp->GetObjList()==nullptr ||
-            pGrp->GetPage()==nullptr || pGrp->GetModel()==nullptr)) { // anything outside of the borders?
-        pGrp=pGrp->GetUpGroup();
+    SdrObject* pGrp(GetAktGroup());
+
+    while(nullptr != pGrp &&
+        (!pGrp->IsInserted() || nullptr == pGrp->GetObjList() || nullptr == pGrp->GetPage()))
+    {
+        // anything outside of the borders?
+        pGrp = pGrp->GetUpGroup();
     }
-    if (pGrp!=GetAktGroup()) {
-        if (pGrp!=nullptr) EnterGroup(pGrp);
-        else LeaveAllGroup();
+
+    if(pGrp != GetAktGroup())
+    {
+        if(nullptr != pGrp)
+        {
+            EnterGroup(pGrp);
+        }
+        else
+        {
+            LeaveAllGroup();
+        }
     }
 }
 

@@ -156,10 +156,10 @@ ScUndoAnchorData::~ScUndoAnchorData()
 void ScUndoAnchorData::Undo()
 {
     // Trigger Object Change
-    if (pObj->IsInserted() && pObj->GetPage() && pObj->GetModel())
+    if (pObj->IsInserted() && pObj->GetPage())
     {
         SdrHint aHint(SdrHintKind::ObjectChange, *pObj);
-        pObj->GetModel()->Broadcast(aHint);
+        pObj->getSdrModelFromSdrObject().Broadcast(aHint);
     }
 
     if (mbWasCellAnchored)
@@ -176,10 +176,10 @@ void ScUndoAnchorData::Redo()
         ScDrawLayer::SetCellAnchoredFromPosition(*pObj, *mpDoc, mnTab, mbWasResizeWithCell);
 
     // Trigger Object Change
-    if (pObj->IsInserted() && pObj->GetPage() && pObj->GetModel())
+    if (pObj->IsInserted() && pObj->GetPage())
     {
         SdrHint aHint(SdrHintKind::ObjectChange, *pObj);
-        pObj->GetModel()->Broadcast(aHint);
+        pObj->getSdrModelFromSdrObject().Broadcast(aHint);
     }
 }
 
@@ -448,10 +448,11 @@ void ScDrawLayer::ScCopyPage( sal_uInt16 nOldPos, sal_uInt16 nNewPos )
                 pOldData->maStart.SetTab(nOldTab);
                 pOldData->maEnd.SetTab(nOldTab);
             }
-            SdrObject* pNewObject = pOldObject->Clone();
-            pNewObject->SetModel(this);
-            pNewObject->SetPage(pNewPage);
 
+            // TTTT clone to thatet SdrModel
+            SdrObject* pNewObject = pOldObject->Clone(this);
+            // pNewObject->SetModel(this);
+            pNewObject->SetPage(pNewPage);
             pNewObject->NbcMove(Size(0,0));
             pNewPage->InsertObject( pNewObject );
             ScDrawObjData* pNewData = GetObjData(pNewObject);
@@ -1397,8 +1398,9 @@ void ScDrawLayer::CopyToClip( ScDocument* pClipDoc, SCTAB nTab, const tools::Rec
                 OSL_ENSURE( pDestPage, "no page" );
                 if (pDestPage)
                 {
-                    SdrObject* pNewObject = pOldObject->Clone();
-                    pNewObject->SetModel(pDestModel);
+                    // TTTT clone to target SdrModel
+                    SdrObject* pNewObject = pOldObject->Clone(pDestModel);
+                    // pNewObject->SetModel(pDestModel);
                     pNewObject->SetPage(pDestPage);
 
                     uno::Reference< chart2::XChartDocument > xOldChart( ScChartHelper::GetChartFromSdrObject( pOldObject ) );
@@ -1563,8 +1565,9 @@ void ScDrawLayer::CopyFromClip( ScDrawLayer* pClipModel, SCTAB nSourceTab, const
         // do not copy internal objects (detective) and note captions
         if ( rSourceRange.IsInside( aObjRect ) && (pOldObject->GetLayer() != SC_LAYER_INTERN) && !IsNoteCaption( pOldObject ) )
         {
-            SdrObject* pNewObject = pOldObject->Clone();
-            pNewObject->SetModel(this);
+            // TTTT clone to target SdrModel
+            SdrObject* pNewObject = pOldObject->Clone(this);
+            // pNewObject->SetModel(this);
             pNewObject->SetPage(pDestPage);
 
             if ( bMirrorObj )

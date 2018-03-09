@@ -35,10 +35,10 @@ using namespace ::com::sun::star::table;
 namespace sdr { namespace table {
 
 CellUndo::CellUndo( const tools::WeakReference<SdrObject>& xObjRef, const CellRef& xCell )
-    : SdrUndoAction( *xCell->GetModel() )
-    , mxObjRef( xObjRef )
-    , mxCell( xCell )
-    , mbUndo( true )
+:   SdrUndoAction(xCell->GetObject().getSdrModelFromSdrObject())
+    ,mxObjRef( xObjRef )
+    ,mxCell( xCell )
+    ,mbUndo( true )
 {
     if( mxCell.is() && mxObjRef.is() )
     {
@@ -162,10 +162,10 @@ static void Dispose( RowVector& rRows )
 
 
 InsertRowUndo::InsertRowUndo( const TableModelRef& xTable, sal_Int32 nIndex, RowVector& aNewRows )
-    : SdrUndoAction( *xTable->getSdrTableObj()->GetModel() )
-    , mxTable( xTable )
-    , mnIndex( nIndex )
-    , mbUndo( true )
+:   SdrUndoAction(xTable->getSdrTableObj()->getSdrModelFromSdrObject())
+    ,mxTable( xTable )
+    ,mnIndex( nIndex )
+    ,mbUndo( true )
 {
     maRows.swap( aNewRows );
 }
@@ -202,10 +202,10 @@ void InsertRowUndo::Redo()
 
 
 RemoveRowUndo::RemoveRowUndo( const TableModelRef& xTable, sal_Int32 nIndex, RowVector& aRemovedRows )
-    : SdrUndoAction( *xTable->getSdrTableObj()->GetModel() )
-    , mxTable( xTable )
-    , mnIndex( nIndex )
-    , mbUndo( true )
+:   SdrUndoAction(xTable->getSdrTableObj()->getSdrModelFromSdrObject())
+    ,mxTable( xTable )
+    ,mnIndex( nIndex )
+    ,mbUndo( true )
 {
     maRows.swap( aRemovedRows );
 }
@@ -258,10 +258,10 @@ static void Dispose( CellVector& rCells )
 
 
 InsertColUndo::InsertColUndo( const TableModelRef& xTable, sal_Int32 nIndex, ColumnVector& aNewCols, CellVector& aCells  )
-    : SdrUndoAction( *xTable->getSdrTableObj()->GetModel() )
-    , mxTable( xTable )
-    , mnIndex( nIndex )
-    , mbUndo( true )
+:   SdrUndoAction(xTable->getSdrTableObj()->getSdrModelFromSdrObject())
+    ,mxTable( xTable )
+    ,mnIndex( nIndex )
+    ,mbUndo( true )
 {
     maColumns.swap( aNewCols );
     maCells.swap( aCells );
@@ -302,10 +302,10 @@ void InsertColUndo::Redo()
 
 
 RemoveColUndo::RemoveColUndo( const TableModelRef& xTable, sal_Int32 nIndex, ColumnVector& aNewCols, CellVector& aCells )
-    : SdrUndoAction( *xTable->getSdrTableObj()->GetModel() )
-    , mxTable( xTable )
-    , mnIndex( nIndex )
-    , mbUndo( true )
+:   SdrUndoAction(xTable->getSdrTableObj()->getSdrModelFromSdrObject())
+    ,mxTable( xTable )
+    ,mnIndex( nIndex )
+    ,mbUndo( true )
 {
     maColumns.swap( aNewCols );
     maCells.swap( aCells );
@@ -346,9 +346,9 @@ void RemoveColUndo::Redo()
 
 
 TableColumnUndo::TableColumnUndo( const TableColumnRef& xCol )
-    : SdrUndoAction( *xCol->mxTableModel->getSdrTableObj()->GetModel() )
-    , mxCol( xCol )
-    , mbHasRedoData( false )
+:   SdrUndoAction(xCol->mxTableModel->getSdrTableObj()->getSdrModelFromSdrObject())
+    ,mxCol( xCol )
+    ,mbHasRedoData( false )
 {
     getData( maUndoData );
 }
@@ -412,7 +412,7 @@ void TableColumnUndo::getData( Data& rData )
 
 
 TableRowUndo::TableRowUndo( const TableRowRef& xRow )
-    : SdrUndoAction( *xRow->mxTableModel->getSdrTableObj()->GetModel() )
+:   SdrUndoAction(xRow->mxTableModel->getSdrTableObj()->getSdrModelFromSdrObject())
     , mxRow( xRow )
     , mbHasRedoData( false )
 {
@@ -475,9 +475,9 @@ void TableRowUndo::getData( Data& rData )
 
 
 TableStyleUndo::TableStyleUndo( const SdrTableObj& rTableObj )
-    : SdrUndoAction( *rTableObj.GetModel() )
-    , mxObjRef( const_cast< sdr::table::SdrTableObj*>( &rTableObj ) )
-    , mbHasRedoData(false)
+:   SdrUndoAction(rTableObj.getSdrModelFromSdrObject())
+    ,mxObjRef( const_cast< sdr::table::SdrTableObj*>( &rTableObj ) )
+    ,mbHasRedoData(false)
 {
     getData( maUndoData );
 }

@@ -154,12 +154,13 @@ void ExternalToolEdit::Edit(GraphicObject const*const pGraphicObject)
 }
 
 SdrExternalToolEdit::SdrExternalToolEdit(
-        FmFormView *const pView, SdrObject *const pObj)
-    : m_pView(pView)
-    , m_pObj(pObj)
+    FmFormView* pView,
+    SdrObject* pObj)
+:   m_pView(pView)
+    ,m_pObj(pObj)
 {
     assert(m_pObj && m_pView);
-    StartListening(*m_pObj->GetModel());
+    StartListening(m_pObj->getSdrModelFromSdrObject());
 }
 
 

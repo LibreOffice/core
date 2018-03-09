@@ -132,20 +132,23 @@ void SdrObjList::lateInit(const SdrObjList& rSrcList)
 void SdrObjList::CopyObjects(const SdrObjList& rSrcList)
 {
     Clear();
-    bObjOrdNumsDirty=false;
-    bRectsDirty     =false;
-    size_t nCloneErrCnt = 0;
-    const size_t nCount = rSrcList.GetObjCount();
-    for (size_t no=0; no<nCount; ++no) {
-        SdrObject* pSO=rSrcList.GetObj(no);
+    bObjOrdNumsDirty = false;
+    bRectsDirty = false;
+    size_t nCloneErrCnt(0);
+    const size_t nCount(rSrcList.GetObjCount());
 
-        SdrObject* pDO = pSO->Clone();
+    for (size_t no(0); no < nCount; ++no)
+    {
+        SdrObject* pSO(rSrcList.GetObj(no));
+        SdrObject* pDO(pSO->Clone(&getSdrModelFromSdrObjList()));
 
-        if (pDO!=nullptr) {
-            pDO->SetModel(pModel);
+        if(nullptr != pDO)
+        {
             pDO->SetPage(pPage);
             NbcInsertObject(pDO, SAL_MAX_SIZE);
-        } else {
+        }
+        else
+        {
             nCloneErrCnt++;
         }
     }
@@ -271,17 +274,18 @@ SdrModel* SdrObjList::GetModel() const
     return pModel;
 }
 
-void SdrObjList::SetModel(SdrModel* pNewModel)
-{
-    if (pModel!=pNewModel) {
-        pModel=pNewModel;
-        const size_t nCount = GetObjCount();
-        for (size_t i=0; i<nCount; ++i) {
-            SdrObject* pObj=GetObj(i);
-            pObj->SetModel(pModel);
-        }
-    }
-}
+// TTTT needed?
+// void SdrObjList::SetModel(SdrModel* pNewModel)
+// {
+//     if (pModel!=pNewModel) {
+//         pModel=pNewModel;
+//         const size_t nCount = GetObjCount();
+//         for (size_t i=0; i<nCount; ++i) {
+//             SdrObject* pObj=GetObj(i);
+//             pObj->SetModel(pModel);
+//         }
+//     }
+// }
 
 void SdrObjList::RecalcObjOrdNums()
 {
@@ -1284,10 +1288,11 @@ void SdrPage::lateInit(const SdrPage& rSrcPage, SdrModel* const pNewModel)
     eListKind = (mbMaster) ? SdrObjListKind::MasterPage : SdrObjListKind::DrawPage;
 }
 
-SdrPage* SdrPage::Clone() const
-{
-    return Clone(nullptr);
-}
+// TTTT
+// SdrPage* SdrPage::Clone() const
+// {
+//     return Clone(nullptr);
+// }
 
 SdrPage* SdrPage::Clone(SdrModel* pNewModel) const
 {
@@ -1454,47 +1459,48 @@ void SdrPage::impl_setModelForLayerAdmin(SdrModel* const pNewModel)
     mpLayerAdmin->SetModel(pNewModel);
 }
 
-void SdrPage::SetModel(SdrModel* pNewModel)
-{
-    SdrModel* pOldModel=pModel;
-    SdrObjList::SetModel(pNewModel);
+// TTTT needed?
+// void SdrPage::SetModel(SdrModel* pNewModel)
+// {
+//     SdrModel* pOldModel=pModel;
+//     SdrObjList::SetModel(pNewModel);
 
-    if (pNewModel!=pOldModel)
-    {
-        impl_setModelForLayerAdmin( pNewModel );
+//     if (pNewModel!=pOldModel)
+//     {
+//         impl_setModelForLayerAdmin( pNewModel );
 
-        // create new SdrPageProperties with new model (due to SfxItemSet there)
-        // and copy ItemSet and StyleSheet
-        std::unique_ptr<SdrPageProperties> pNew(new SdrPageProperties(*this));
+//         // create new SdrPageProperties with new model (due to SfxItemSet there)
+//         // and copy ItemSet and StyleSheet
+//         std::unique_ptr<SdrPageProperties> pNew(new SdrPageProperties(*this));
 
-        if(!IsMasterPage())
-        {
-            const SfxItemSet& rOldSet = getSdrPageProperties().GetItemSet();
-            SfxItemSet* pNewSet = rOldSet.Clone(false, &pNewModel->GetItemPool());
-            //ensure checkForUniqueItem is called so new pages which have e.g.
-            //XFillBitmapItem set, do not conflict with an existing XFillBitmapItem
-            //with the same name but different properties
-            SdrModel::MigrateItemSet(&rOldSet, pNewSet, pNewModel);
-            pNew->PutItemSet(*pNewSet);
-            delete pNewSet;
-        }
+//         if(!IsMasterPage())
+//         {
+//             const SfxItemSet& rOldSet = getSdrPageProperties().GetItemSet();
+//             SfxItemSet* pNewSet = rOldSet.Clone(false, &pNewModel->GetItemPool());
+//             //ensure checkForUniqueItem is called so new pages which have e.g.
+//             //XFillBitmapItem set, do not conflict with an existing XFillBitmapItem
+//             //with the same name but different properties
+//             SdrModel::MigrateItemSet(&rOldSet, pNewSet, pNewModel);
+//             pNew->PutItemSet(*pNewSet);
+//             delete pNewSet;
+//         }
 
-        pNew->SetStyleSheet(getSdrPageProperties().GetStyleSheet());
+//         pNew->SetStyleSheet(getSdrPageProperties().GetStyleSheet());
 
-        mpSdrPageProperties = std::move(pNew);
-    }
+//         mpSdrPageProperties = std::move(pNew);
+//     }
 
-    // update listeners at possible API wrapper object
-    if( pOldModel != pNewModel )
-    {
-        if( mxUnoPage.is() )
-        {
-            SvxDrawPage* pPage2 = SvxDrawPage::getImplementation( mxUnoPage );
-            if( pPage2 )
-                pPage2->ChangeModel( pNewModel );
-        }
-    }
-}
+//     // update listeners at possible API wrapper object
+//     if( pOldModel != pNewModel )
+//     {
+//         if( mxUnoPage.is() )
+//         {
+//             SvxDrawPage* pPage2 = SvxDrawPage::getImplementation( mxUnoPage );
+//             if( pPage2 )
+//                 pPage2->ChangeModel( pNewModel );
+//         }
+//     }
+// }
 
 
 // #i68775# React on PageNum changes (from Model in most cases)

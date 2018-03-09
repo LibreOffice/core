@@ -153,11 +153,12 @@ void ScViewFunc::PasteDraw( const Point& rLogicPos, SdrModel* pModel,
                 const SdrMark* pM=aMark.GetMark(nm);
                 const SdrObject* pObj=pM->GetMarkedSdrObj();
 
-                SdrObject* pNewObj=pObj->Clone();
+                // TTTT directly clone to taget  SdrModel
+                SdrObject* pNewObj(pObj->Clone(pDrawModel));
 
                 if (pNewObj!=nullptr)
                 {
-                    pNewObj->SetModel(pDrawModel);
+                    // pNewObj->SetModel(pDrawModel);
                     pNewObj->SetPage(pDestPage);
 
                     //  copy graphics within the same model - always needs new name

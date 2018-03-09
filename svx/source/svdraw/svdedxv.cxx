@@ -1089,8 +1089,14 @@ bool SdrObjEditView::SdrBeginTextEdit(
         pTextEditPV=pPV;
         mxTextEditObj.reset( pObj );
         pTextEditOutliner.reset(pGivenOutliner);
-        if (pTextEditOutliner==nullptr)
-            pTextEditOutliner.reset(SdrMakeOutliner( OutlinerMode::TextObject, *mxTextEditObj->GetModel() ));
+
+        if(nullptr == pTextEditOutliner)
+        {
+            pTextEditOutliner.reset(
+                SdrMakeOutliner(
+                    OutlinerMode::TextObject,
+                    mxTextEditObj->getSdrModelFromSdrObject());
+        }
 
         {
             SvtAccessibilityOptions aOptions;
@@ -1586,8 +1592,7 @@ SdrEndTextEditKind SdrObjEditView::SdrEndTextEdit(bool bDontDeleteReally)
     }
 
     if( pTEObj &&
-        pTEObj->GetModel() &&
-        !pTEObj->GetModel()->isLocked() &&
+        !pTEObj->getSdrModelFromSdrObject().isLocked() &&
         pTEObj->GetBroadcaster())
     {
         SdrHint aHint(SdrHintKind::EndEdit, *pTEObj);
@@ -2406,11 +2411,17 @@ void SdrObjEditView::MarkListHasChanged()
     const SdrMarkList& rMarkList=GetMarkedObjectList();
     if( rMarkList.GetMarkCount() == 1 )
     {
-        const SdrObject* pObj= rMarkList.GetMark(0)->GetMarkedSdrObj();
+        const SdrObject* pObj(rMarkList.GetMark(0)->GetMarkedSdrObj());
+        SdrView* pView(dynamic_cast< SdrView* >(this));
+
         // check for table
-        if( pObj && (pObj->GetObjInventor() == SdrInventor::Default ) && (pObj->GetObjIdentifier() == OBJ_TABLE) )
+        if(pObj && pView && (pObj->GetObjInventor() == SdrInventor::Default ) && (pObj->GetObjIdentifier() == OBJ_TABLE))
         {
-            mxSelectionController = sdr::table::CreateTableController( this, static_cast<sdr::table::SdrTableObj const *>(pObj), mxLastSelectionController );
+            mxSelectionController = sdr::table::CreateTableController(
+                *pView,
+                static_cast<const sdr::table::SdrTableObj&>(*pObj),
+                mxLastSelectionController);
+
             if( mxSelectionController.is() )
             {
                 mxLastSelectionController.clear();

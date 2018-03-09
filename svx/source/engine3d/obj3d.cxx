@@ -311,14 +311,7 @@ void E3dObject::SetPage(SdrPage* pNewPage)
     maSubList.SetPage(pNewPage);
 }
 
-void E3dObject::SetModel(SdrModel* pNewModel)
-{
-    SdrAttrObj::SetModel(pNewModel);
-    maSubList.SetModel(pNewModel);
-}
-
 // resize object, used from old 2d interfaces, e.g. in Move/Scale dialog (F4)
-
 void E3dObject::NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact)
 {
     // Movement in X, Y in the eye coordinate system
@@ -664,9 +657,9 @@ OUString E3dObject::TakeObjNamePlural() const
     return ImpGetResStr(STR_ObjNamePluralObj3d);
 }
 
-E3dObject* E3dObject::Clone() const
+E3dObject* E3dObject::Clone(SdrModel* pTargetModel) const
 {
-    return CloneHelper< E3dObject >();
+    return CloneHelper< E3dObject >(pTargetModel);
 }
 
 E3dObject& E3dObject::operator=(const E3dObject& rObj)
@@ -888,9 +881,20 @@ void E3dCompoundObject::RecalcSnapRect()
     }
 }
 
-E3dCompoundObject* E3dCompoundObject::Clone() const
+E3dCompoundObject* E3dCompoundObject::Clone(SdrModel* pTargetModel) const
 {
-    return CloneHelper< E3dCompoundObject >();
+    return CloneHelper< E3dCompoundObject >(pTargetModel);
+}
+
+E3dCompoundObject& E3dCompoundObject::operator=(const E3dCompoundObject& rObj)
+{
+    if( this == &rObj )
+        return *this;
+    E3dObject::operator=(rObj);
+
+    aMaterialAmbientColor = rObj.aMaterialAmbientColor;
+
+    return *this;
 }
 
 // convert given basegfx::B3DPolyPolygon to screen coor

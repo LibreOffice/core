@@ -504,7 +504,7 @@ void DlgEdObj::UpdateStep()
     sal_Int32 nCurStep = GetDlgEdForm()->GetStep();
     sal_Int32 nStep = GetStep();
 
-    SdrLayerAdmin& rLayerAdmin = GetModel()->GetLayerAdmin();
+    SdrLayerAdmin& rLayerAdmin(getSdrModelFromSdrObject().GetLayerAdmin());
     SdrLayerID nHiddenLayerId   = rLayerAdmin.GetLayerID( "HiddenLayer" );
     SdrLayerID nControlLayerId   = rLayerAdmin.GetLayerID( rLayerAdmin.GetControlLayerName() );
 
@@ -608,7 +608,7 @@ void DlgEdObj::TabIndexChange( const beans::PropertyChangeEvent& evt )
             }
 
             // reorder objects in drawing page
-            GetModel()->GetPage(0)->SetObjectOrdNum( nOldTabIndex + 1, nNewTabIndex + 1 );
+            getSdrModelFromSdrObject().GetPage(0)->SetObjectOrdNum( nOldTabIndex + 1, nNewTabIndex + 1 );
 
             pForm->UpdateTabOrderAndGroups();
         }
@@ -888,9 +888,9 @@ void DlgEdObj::clonedFrom(const DlgEdObj* _pSource)
     StartListening();
 }
 
-DlgEdObj* DlgEdObj::Clone() const
+DlgEdObj* DlgEdObj::Clone(SdrModel* pTargetModel) const
 {
-    DlgEdObj* pDlgEdObj = CloneHelper< DlgEdObj >();
+    DlgEdObj* pDlgEdObj = CloneHelper< DlgEdObj >(pTargetModel);
     DBG_ASSERT( pDlgEdObj != nullptr, "DlgEdObj::Clone: invalid clone!" );
     if ( pDlgEdObj )
         pDlgEdObj->clonedFrom( this );

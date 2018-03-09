@@ -661,17 +661,18 @@ void SdDrawDocument::NewOrLoadCompleted(DocCreationMode eMode)
     mbNewOrLoadCompleted = true;
 
     // Update all linked pages
-    sal_uInt16 nMaxSdPages = GetSdPageCount(PageKind::Standard);
+    // TTTT SdrPage s should already be constructed with *this as SdrModel
+    // sal_uInt16 nMaxSdPages = GetSdPageCount(PageKind::Standard);
 
-    for (sal_uInt16 nSdPage=0; nSdPage < nMaxSdPages; nSdPage++)
-    {
-        SdPage* pPage = GetSdPage(nSdPage, PageKind::Standard);
+    // for (sal_uInt16 nSdPage=0; nSdPage < nMaxSdPages; nSdPage++)
+    // {
+    //     SdPage* pPage = GetSdPage(nSdPage, PageKind::Standard);
 
-        if (pPage && !pPage->GetFileName().isEmpty() && pPage->GetBookmarkName().getLength())
-        {
-            pPage->SetModel(this);
-        }
-    }
+    //     if (pPage && !pPage->GetFileName().isEmpty() && pPage->GetBookmarkName().getLength())
+    //     {
+    //         pPage->SetModel(this);
+    //     }
+    // }
 
     UpdateAllLinks();
 

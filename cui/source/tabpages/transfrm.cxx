@@ -530,14 +530,18 @@ bool SvxSlantTabPage::FillItemSet(SfxItemSet* rAttrs)
     if (!bControlPointsChanged)
         return bModified;
 
-    SdrObject* pObj = pView->GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj();
-    SdrModel* pModel = pObj->GetModel();
-    SdrUndoAction* pUndo = pModel->IsUndoEnabled() ?
-                pModel->GetSdrUndoFactory().CreateUndoAttrObject(*pObj) :
-                nullptr;
+    SdrObject* pObj(pView->GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj());
+
+    if(nullptr == pObj)
+        return bModified;
+
+    SdrModel& rModel(pObj->getSdrModelFromSdrObject());
+    SdrUndoAction* pUndo(rModel.IsUndoEnabled() ?
+        rModel.GetSdrUndoFactory().CreateUndoAttrObject(*pObj) :
+        nullptr);
 
     if (pUndo)
-        pModel->BegUndo(pUndo->GetComment());
+        rModel.BegUndo(pUndo->GetComment());
 
     EnhancedCustomShape2d aShape(pObj);
     ::tools::Rectangle aLogicRect = aShape.GetLogicRect();
@@ -564,8 +568,8 @@ bool SvxSlantTabPage::FillItemSet(SfxItemSet* rAttrs)
 
     if (pUndo)
     {
-        pModel->AddUndo(pUndo);
-        pModel->EndUndo();
+        rModel.AddUndo(pUndo);
+        rModel.EndUndo();
     }
 
     return bModified;

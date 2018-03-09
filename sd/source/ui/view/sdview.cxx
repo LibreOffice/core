@@ -660,7 +660,7 @@ bool View::SdrBeginTextEdit(
         EventMultiplexerEventId::BeginTextEdit, static_cast<void*>(pObj) );
 
     if( pOutl==nullptr && pObj )
-        pOutl = SdrMakeOutliner(OutlinerMode::TextObject, *pObj->GetModel());
+        pOutl = SdrMakeOutliner(OutlinerMode::TextObject, pObj->getSdrModelFromSdrObject());
 
     // make draw&impress specific initialisations
     if( pOutl )

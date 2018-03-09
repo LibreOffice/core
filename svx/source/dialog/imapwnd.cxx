@@ -767,9 +767,7 @@ void IMapWindow::CreateDefaultObject()
     SdrObject* pObj = SdrObjFactory::MakeNewObject(
         *pModel,
         pView->GetCurrentObjInventor(),
-        pView->GetCurrentObjIdentifier(),
-        nullptr,
-        pModel);
+        pView->GetCurrentObjIdentifier());
     pObj->SetLogicRect(aNewObjectRectangle);
 
     switch( pObj->GetObjIdentifier() )

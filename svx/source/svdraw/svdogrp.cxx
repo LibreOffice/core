@@ -175,36 +175,35 @@ void SdrObjGroup::SetPage(SdrPage* pNewPage)
     pSub->SetPage(pNewPage);
 }
 
+// TTTT needed?
+// void SdrObjGroup::SetModel(SdrModel* pNewModel)
+// {
+//     if(pNewModel!=pModel)
+//     {
+//         // #i30648#
+//         // This method also needs to migrate the used ItemSet
+//         // when the destination model uses a different pool
+//         // than the current one. Else it is possible to create
+//         // SdrObjGroups which reference the old pool which might
+//         // be destroyed (as the bug shows).
+//         SdrModel* pOldModel = pModel;
 
-void SdrObjGroup::SetModel(SdrModel* pNewModel)
-{
-    if(pNewModel!=pModel)
-    {
-        // #i30648#
-        // This method also needs to migrate the used ItemSet
-        // when the destination model uses a different pool
-        // than the current one. Else it is possible to create
-        // SdrObjGroups which reference the old pool which might
-        // be destroyed (as the bug shows).
-        SdrModel* pOldModel = pModel;
+//         // test for correct pool in ItemSet; move to new pool if necessary
+//         if(pNewModel && &GetObjectItemPool() != &pNewModel->GetItemPool())
+//         {
+//             MigrateItemPool(&GetObjectItemPool(), &pNewModel->GetItemPool(), pNewModel);
+//         }
 
-        // test for correct pool in ItemSet; move to new pool if necessary
-        if(pNewModel && &GetObjectItemPool() != &pNewModel->GetItemPool())
-        {
-            MigrateItemPool(&GetObjectItemPool(), &pNewModel->GetItemPool(), pNewModel);
-        }
+//         // call parent
+//         SdrObject::SetModel(pNewModel);
 
-        // call parent
-        SdrObject::SetModel(pNewModel);
+//         // set new model at content
+//         pSub->SetModel(pNewModel);
 
-        // set new model at content
-        pSub->SetModel(pNewModel);
-
-        // modify properties
-        GetProperties().SetModel(pOldModel, pNewModel);
-    }
-}
-
+//         // modify properties
+//         GetProperties().SetModel(pOldModel, pNewModel);
+//     }
+// }
 
 SdrObjList* SdrObjGroup::GetSubList() const
 {
@@ -235,15 +234,16 @@ const tools::Rectangle& SdrObjGroup::GetSnapRect() const
     }
 }
 
-SdrObjGroup* SdrObjGroup::Clone() const
+SdrObjGroup* SdrObjGroup::Clone(SdrModel* pTargetModel) const
 {
-    return CloneHelper< SdrObjGroup >();
+    return CloneHelper< SdrObjGroup >(pTargetModel);
 }
 
 SdrObjGroup& SdrObjGroup::operator=(const SdrObjGroup& rObj)
 {
     if( this == &rObj )
         return *this;
+
     // copy SdrObject stuff
     SdrObject::operator=(rObj);
 
@@ -251,7 +251,10 @@ SdrObjGroup& SdrObjGroup::operator=(const SdrObjGroup& rObj)
     // copy SubList, init model and page first
     SdrObjList& rSourceSubList = *rObj.GetSubList();
     pSub->SetPage(rSourceSubList.GetPage());
-    pSub->SetModel(rSourceSubList.GetModel());
+
+    // TTTT maybe check SdrModels/need to clone?
+    // pSub->SetModel(rSourceSubList.GetModel());
+
     pSub->CopyObjects(*rObj.GetSubList());
 
     // copy local parameters
@@ -732,7 +735,6 @@ void SdrObjGroup::ReformatText()
 SdrObject* SdrObjGroup::DoConvertToPolyObj(bool bBezier, bool bAddText) const
 {
     SdrObject* pGroup = new SdrObjGroup(getSdrModelFromSdrObject());
-    pGroup->SetModel(GetModel());
 
     for(size_t a=0; a<pSub->GetObjCount(); ++a)
     {

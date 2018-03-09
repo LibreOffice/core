@@ -1480,8 +1480,7 @@ SdrObject* FmXFormView::implCreateXFormsControl( const svx::OXFormsDescriptor &_
                 SdrObjFactory::MakeNewObject(
                     getView()->getSdrModelFromSdrView(),
                     SdrInventor::FmForm,
-                    nObjID,
-                    nullptr));
+                    nObjID));
             controlSize.setWidth( long(controlSize.Width() * eTargetMode.GetScaleX()) );
             controlSize.setHeight( long(controlSize.Height() * eTargetMode.GetScaleY()) );
             ::Point controlPos( OutputDevice::LogicToLogic( ::Point( controlSize.Width(), 0 ), eSourceMode, eTargetMode ) );
@@ -1589,8 +1588,7 @@ bool FmXFormView::createControlLabelPair( OutputDevice const & _rOutDev, sal_Int
                 *_pModel,
                 _nInventor,
                 _nLabelObjectID,
-                _pLabelPage,
-                _pModel)));
+                _pLabelPage)));
 
         OSL_ENSURE( pLabel.get(), "FmXFormView::createControlLabelPair: could not create the label!" );
 
@@ -1623,8 +1621,7 @@ bool FmXFormView::createControlLabelPair( OutputDevice const & _rOutDev, sal_Int
             *_pModel,
              _nInventor,
              _nControlObjectID,
-             _pControlPage,
-             _pModel)));
+             _pControlPage)));
 
     OSL_ENSURE( pControl.get(), "FmXFormView::createControlLabelPair: could not create the control!" );
 

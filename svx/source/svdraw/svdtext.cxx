@@ -31,7 +31,6 @@
 SdrText::SdrText( SdrTextObj& rObject, OutlinerParaObject* pOutlinerParaObject /* = 0 */ )
 : mpOutlinerParaObject( pOutlinerParaObject )
 , mrObject( rObject )
-, mpModel( rObject.GetModel() )
 , mbPortionInfoChecked( false )
 {
     OSL_ENSURE(&mrObject, "SdrText created without SdrTextObj (!)");
@@ -48,11 +47,12 @@ void SdrText::CheckPortionInfo( SdrOutliner& rOutliner )
     {
         // #i102062# no action when the Outliner is the HitTestOutliner,
         // this will remove WrongList info at the OPO
-        if(mpModel && &rOutliner == &mpModel->GetHitTestOutliner())
+        if(&rOutliner == &mrObject.getSdrModelFromSdrObject().GetHitTestOutliner())
             return;
 
         // TODO: optimization: we could create a BigTextObject
         mbPortionInfoChecked=true;
+
         if(mpOutlinerParaObject!=nullptr && rOutliner.ShouldCreateBigTextObject())
         {
             // #i102062# MemoryLeak closed
@@ -76,16 +76,15 @@ void SdrText::SetOutlinerParaObject( OutlinerParaObject* pTextObject )
 {
     if( mpOutlinerParaObject.get() != pTextObject )
     {
-        if( mpModel )
+        // Update HitTestOutliner
+        const SdrTextObj* pTestObj(mrObject.getSdrModelFromSdrObject().GetHitTestOutliner().GetTextObj());
+
+        if(pTestObj && pTestObj->GetOutlinerParaObject() == mpOutlinerParaObject.get())
         {
-            // Update HitTestOutliner
-            const SdrTextObj* pTestObj = mpModel->GetHitTestOutliner().GetTextObj();
-            if( pTestObj && pTestObj->GetOutlinerParaObject() == mpOutlinerParaObject.get() )
-                mpModel->GetHitTestOutliner().SetTextObj( nullptr );
+            mrObject.getSdrModelFromSdrObject().GetHitTestOutliner().SetTextObj(nullptr);
         }
 
         mpOutlinerParaObject.reset(pTextObject);
-
         mbPortionInfoChecked = false;
     }
 }
@@ -98,82 +97,85 @@ OutlinerParaObject* SdrText::GetOutlinerParaObject() const
 /** returns the current OutlinerParaObject and removes it from this instance */
 OutlinerParaObject* SdrText::RemoveOutlinerParaObject()
 {
-    if( mpModel )
+    // Update HitTestOutliner
+    const SdrTextObj* pTestObj(mrObject.getSdrModelFromSdrObject().GetHitTestOutliner().GetTextObj());
+
+    if(pTestObj && pTestObj->GetOutlinerParaObject() == mpOutlinerParaObject.get())
     {
-        // Update HitTestOutliner
-        const SdrTextObj* pTestObj = mpModel->GetHitTestOutliner().GetTextObj();
-        if( pTestObj && pTestObj->GetOutlinerParaObject() == mpOutlinerParaObject.get() )
-            mpModel->GetHitTestOutliner().SetTextObj( nullptr );
+        mrObject.getSdrModelFromSdrObject().GetHitTestOutliner().SetTextObj(nullptr);
     }
 
     OutlinerParaObject* pOPO = mpOutlinerParaObject.release();
-
     mbPortionInfoChecked = false;
 
     return pOPO;
 }
 
-void SdrText::SetModel( SdrModel* pNewModel )
-{
-    if( pNewModel == mpModel )
-        return;
+// TTTT needed?
+// void SdrText::SetModel( SdrModel* pNewModel )
+// {
+//     if( pNewModel == mpModel )
+//         return;
 
-    SdrModel* pOldModel = mpModel;
-    mpModel = pNewModel;
+//     SdrModel* pOldModel = mpModel;
+//     mpModel = pNewModel;
 
-    if( !mpOutlinerParaObject || pOldModel==nullptr || pNewModel==nullptr)
-        return;
+//     if( !mpOutlinerParaObject || pOldModel==nullptr || pNewModel==nullptr)
+//         return;
 
-    bool bHgtSet = GetObjectItemSet().GetItemState(EE_CHAR_FONTHEIGHT) == SfxItemState::SET;
+//     bool bHgtSet = GetObjectItemSet().GetItemState(EE_CHAR_FONTHEIGHT) == SfxItemState::SET;
 
-    MapUnit aOldUnit(pOldModel->GetScaleUnit());
-    MapUnit aNewUnit(pNewModel->GetScaleUnit());
-    bool bScaleUnitChanged=aNewUnit!=aOldUnit;
-    // Now move the OutlinerParaObject into a new Pool.
-    // TODO: We should compare the DefTab and RefDevice of both Models to
-    // see whether we need to use AutoGrow!
-    sal_Int32 nOldFontHgt=pOldModel->GetDefaultFontHeight();
-    sal_Int32 nNewFontHgt=pNewModel->GetDefaultFontHeight();
-    bool bDefHgtChanged=nNewFontHgt!=nOldFontHgt;
-    bool bSetHgtItem=bDefHgtChanged && !bHgtSet;
-    if (bSetHgtItem)
-    {
-        // fix the value of HeightItem, so
-        // 1. it remains and
-        // 2. DoStretchChars gets the right value
-        SetObjectItem(SvxFontHeightItem(nOldFontHgt, 100, EE_CHAR_FONTHEIGHT));
-    }
-    // now use the Outliner, etc. so the above SetAttr can work at all
-    SdrOutliner& rOutliner = mrObject.ImpGetDrawOutliner();
-    rOutliner.SetText(*mpOutlinerParaObject);
-    mpOutlinerParaObject.reset();
-    if (bScaleUnitChanged)
-    {
-        Fraction aMetricFactor=GetMapFactor(aOldUnit,aNewUnit).X();
+//     MapUnit aOldUnit(pOldModel->GetScaleUnit());
+//     MapUnit aNewUnit(pNewModel->GetScaleUnit());
+//     bool bScaleUnitChanged=aNewUnit!=aOldUnit;
+//     // Now move the OutlinerParaObject into a new Pool.
+//     // TODO: We should compare the DefTab and RefDevice of both Models to
+//     // see whether we need to use AutoGrow!
+//     sal_Int32 nOldFontHgt=pOldModel->GetDefaultFontHeight();
+//     sal_Int32 nNewFontHgt=pNewModel->GetDefaultFontHeight();
+//     bool bDefHgtChanged=nNewFontHgt!=nOldFontHgt;
+//     bool bSetHgtItem=bDefHgtChanged && !bHgtSet;
+//     if (bSetHgtItem)
+//     {
+//         // fix the value of HeightItem, so
+//         // 1. it remains and
+//         // 2. DoStretchChars gets the right value
+//         SetObjectItem(SvxFontHeightItem(nOldFontHgt, 100, EE_CHAR_FONTHEIGHT));
+//     }
+//     // now use the Outliner, etc. so the above SetAttr can work at all
+//     SdrOutliner& rOutliner = mrObject.ImpGetDrawOutliner();
+//     rOutliner.SetText(*mpOutlinerParaObject);
+//     mpOutlinerParaObject.reset();
+//     if (bScaleUnitChanged)
+//     {
+//         Fraction aMetricFactor=GetMapFactor(aOldUnit,aNewUnit).X();
 
-        if (bSetHgtItem)
-        {
-            // Now correct the frame attribute
-            nOldFontHgt=BigMulDiv(nOldFontHgt,aMetricFactor.GetNumerator(),aMetricFactor.GetDenominator());
-            SetObjectItem(SvxFontHeightItem(nOldFontHgt, 100, EE_CHAR_FONTHEIGHT));
-        }
-    }
-    SetOutlinerParaObject(rOutliner.CreateParaObject());
-    mpOutlinerParaObject->ClearPortionInfo();
-    mbPortionInfoChecked=false;
-    rOutliner.Clear();
-}
+//         if (bSetHgtItem)
+//         {
+//             // Now correct the frame attribute
+//             nOldFontHgt=BigMulDiv(nOldFontHgt,aMetricFactor.GetNumerator(),aMetricFactor.GetDenominator());
+//             SetObjectItem(SvxFontHeightItem(nOldFontHgt, 100, EE_CHAR_FONTHEIGHT));
+//         }
+//     }
+//     SetOutlinerParaObject(rOutliner.CreateParaObject());
+//     mpOutlinerParaObject->ClearPortionInfo();
+//     mbPortionInfoChecked=false;
+//     rOutliner.Clear();
+// }
 
 void SdrText::ForceOutlinerParaObject( OutlinerMode nOutlMode )
 {
-    if( mpModel && !mpOutlinerParaObject )
+    if(!mpOutlinerParaObject)
     {
-        std::unique_ptr<Outliner> pOutliner(SdrMakeOutliner(nOutlMode, *mpModel));
-        if( pOutliner )
-        {
-            Outliner& aDrawOutliner = mpModel->GetDrawOutliner();
-            pOutliner->SetCalcFieldValueHdl( aDrawOutliner.GetCalcFieldValueHdl() );
+        std::unique_ptr<Outliner> pOutliner(
+            SdrMakeOutliner(
+                nOutlMode,
+                mrObject.getSdrModelFromSdrObject()));
 
+        if(pOutliner)
+        {
+            Outliner& aDrawOutliner(mrObject.getSdrModelFromSdrObject().GetDrawOutliner());
+            pOutliner->SetCalcFieldValueHdl( aDrawOutliner.GetCalcFieldValueHdl() );
             pOutliner->SetStyleSheet( 0, GetStyleSheet());
             OutlinerParaObject* pOutlinerParaObject = pOutliner->CreateParaObject();
             SetOutlinerParaObject( pOutlinerParaObject );

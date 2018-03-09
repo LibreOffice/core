@@ -37,7 +37,7 @@ protected:
     virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact() override;
 
     SdrObject&                  rRefObj; // Referenced drawing object
-    tools::Rectangle                   aSnapRect;
+    tools::Rectangle            aSnapRect;
 
 protected:
     virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) override;
@@ -55,7 +55,6 @@ public:
     SdrObject& ReferencedObj();
     const SdrObject& GetReferencedObj() const;
     virtual void NbcSetAnchorPos(const Point& rAnchorPos) override;
-    virtual void SetModel(SdrModel* pNewModel) override;
 
     virtual void TakeObjInfo(SdrObjTransformInfoRec& rInfo) const override;
     virtual SdrInventor GetObjInventor() const override;
@@ -65,7 +64,7 @@ public:
     virtual const tools::Rectangle& GetCurrentBoundRect() const override;
     virtual const tools::Rectangle& GetLastBoundRect() const override;
     virtual void RecalcBoundRect() override;
-    virtual SdrVirtObj* Clone() const override;
+    virtual SdrVirtObj* Clone(SdrModel* pTargetModel = nullptr) const override;
     SdrVirtObj& operator=(const SdrVirtObj& rObj);
 
     virtual OUString TakeObjNameSingul() const override;

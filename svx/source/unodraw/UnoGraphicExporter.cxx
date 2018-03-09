@@ -108,24 +108,21 @@ namespace {
         Fraction    maScaleX;
         Fraction    maScaleY;
 
-        explicit ExportSettings( SdrModel const * pDoc );
+        explicit ExportSettings(const SdrModel& rSdrModel);
     };
 
-    ExportSettings::ExportSettings( SdrModel const * pDoc )
-    : mnWidth( 0 )
-    , mnHeight( 0 )
-    , mbExportOnlyBackground( false )
-    , mbScrollText( false )
-    , mbUseHighContrast( false )
-    , mbTranslucent( false )
-    , maScaleX( 1, 1 )
-    , maScaleY( 1, 1 )
+    ExportSettings::ExportSettings(const SdrModel& rSdrModel)
+    :   mnWidth( 0 )
+        ,mnHeight( 0 )
+        ,mbExportOnlyBackground( false )
+        ,mbScrollText( false )
+        ,mbUseHighContrast( false )
+        ,mbTranslucent( false )
+        ,maScaleX( 1, 1 )
+        ,maScaleY( 1, 1 )
     {
-        if( pDoc )
-        {
-            maScaleX = pDoc->GetScaleFraction();
-            maScaleY = pDoc->GetScaleFraction();
-        }
+        maScaleX = rSdrModel.GetScaleFraction();
+        maScaleY = rSdrModel.GetScaleFraction();
     }
 
     /** implements a component to export shapes or pages to external graphic formats.
@@ -1003,8 +1000,8 @@ sal_Bool SAL_CALL GraphicExporter::filter( const Sequence< PropertyValue >& aDes
     GraphicFilter &rFilter = GraphicFilter::GetGraphicFilter();
 
     // get the arguments from the descriptor
-    ExportSettings aSettings( mpDoc );
-    ParseSettings( aDescriptor, aSettings );
+    ExportSettings aSettings(*mpDoc);
+    ParseSettings(aDescriptor, aSettings);
 
     const sal_uInt16    nFilter = !aSettings.maMediaType.isEmpty()
                             ? rFilter.GetExportFormatNumberForMediaType( aSettings.maMediaType )
@@ -1252,7 +1249,7 @@ Graphic SvxGetGraphicForShape( SdrObject& rShape )
         rtl::Reference< GraphicExporter > xExporter( new GraphicExporter() );
         Reference< XComponent > xComp( rShape.getUnoShape(), UNO_QUERY_THROW );
         xExporter->setSourceDocument( xComp );
-        ExportSettings aSettings( rShape.GetModel() );
+        ExportSettings aSettings(rShape.getSdrModelFromSdrObject());
         xExporter->GetGraphic( aSettings, aGraphic, true/*bVector*/ );
     }
     catch( Exception& )

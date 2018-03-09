@@ -50,7 +50,7 @@ class SVX_DLLPUBLIC E3DModifySceneSnapRectUpdater
     // of the to-be-changed 3D object when the scene has a 3d transformation
     // stack at construction time. In all other cases it's set to zero and
     // no action needs to be taken
-    E3dScene*                                   mpScene;
+    E3dScene*       mpScene;
 
     // the 3d transformation stack at the time of construction, valid when
     // mpScene is not zero
@@ -58,7 +58,7 @@ class SVX_DLLPUBLIC E3DModifySceneSnapRectUpdater
 
 public:
     // the constructor evaluates and sets the members at construction time
-    E3DModifySceneSnapRectUpdater(const SdrObject* pObject);
+    E3DModifySceneSnapRectUpdater(const SdrObject* mpObject);
 
     // the destructor will take action if mpScene is not zero and modify the
     // 2D geomeztry of the target scene

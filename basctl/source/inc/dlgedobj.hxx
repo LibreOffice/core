@@ -97,7 +97,7 @@ public:
     virtual SdrInventor GetObjInventor() const override;
     virtual sal_uInt16 GetObjIdentifier() const override;
 
-    virtual DlgEdObj*   Clone() const override;                                          // not working yet
+    virtual DlgEdObj* Clone(SdrModel* pTargetModel = nullptr) const override;                                          // not working yet
     void clonedFrom(const DlgEdObj* _pSource);                          // not working yet
 
     // FullDrag support

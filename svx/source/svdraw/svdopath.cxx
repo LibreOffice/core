@@ -941,27 +941,27 @@ OUString ImpPathForDragAndCreate::getSpecialDragComment(const SdrDragStat& rDrag
         {
             aStr += SdrModel::GetAngleString(std::abs(pU->nCircRelAngle))
                     + " r="
-                    + mrSdrPathObject.GetModel()->GetMetricString(pU->nCircRadius, true);
+                    + mrSdrPathObject.getSdrModelFromSdrObject().GetMetricString(pU->nCircRadius, true);
         }
 
         aStr += "dx="
-                + mrSdrPathObject.GetModel()->GetMetricString(aNow.X(), true)
+                + mrSdrPathObject.getSdrModelFromSdrObject().GetMetricString(aNow.X(), true)
                 + " dy="
-                + mrSdrPathObject.GetModel()->GetMetricString(aNow.Y(), true);
+                + mrSdrPathObject.getSdrModelFromSdrObject().GetMetricString(aNow.Y(), true);
 
         if(!IsFreeHand(meObjectKind))
         {
             sal_Int32 nLen(GetLen(aNow));
             sal_Int32 nAngle(GetAngle(aNow));
             aStr += "  l="
-                    + mrSdrPathObject.GetModel()->GetMetricString(nLen, true)
+                    + mrSdrPathObject.getSdrModelFromSdrObject().GetMetricString(nLen, true)
                     + " "
                     + SdrModel::GetAngleString(nAngle);
         }
 
         aStr += ")";
     }
-    else if(!mrSdrPathObject.GetModel() || !pHdl)
+    else if(!pHdl)
     {
         // #i103058# fallback when no model and/or Handle, both needed
         // for else-path
@@ -1011,9 +1011,9 @@ OUString ImpPathForDragAndCreate::getSpecialDragComment(const SdrDragStat& rDrag
 
         aStr.clear();
         aStr += "dx="
-                + mrSdrPathObject.GetModel()->GetMetricString(aNow.X() - aBeg.X(), true)
+                + mrSdrPathObject.getSdrModelFromSdrObject().GetMetricString(aNow.X() - aBeg.X(), true)
                 + " dy="
-                + mrSdrPathObject.GetModel()->GetMetricString(aNow.Y() - aBeg.Y(), true);
+                + mrSdrPathObject.getSdrModelFromSdrObject().GetMetricString(aNow.Y() - aBeg.Y(), true);
 
         if(!pDragData->IsMultiPointDrag())
         {
@@ -1040,7 +1040,7 @@ OUString ImpPathForDragAndCreate::getSpecialDragComment(const SdrDragStat& rDrag
                 sal_Int32 nLen(GetLen(aNow));
                 sal_Int32 nAngle(GetAngle(aNow));
                 aStr += "  l="
-                        + mrSdrPathObject.GetModel()->GetMetricString(nLen, true)
+                        + mrSdrPathObject.getSdrModelFromSdrObject().GetMetricString(nLen, true)
                         + " "
                         + SdrModel::GetAngleString(nAngle);
             }
@@ -1083,7 +1083,7 @@ OUString ImpPathForDragAndCreate::getSpecialDragComment(const SdrDragStat& rDrag
                     sal_Int32 nLen(GetLen(aPt));
                     sal_Int32 nAngle(GetAngle(aPt));
                     aStr += "  l="
-                            + mrSdrPathObject.GetModel()->GetMetricString(nLen, true)
+                            + mrSdrPathObject.getSdrModelFromSdrObject().GetMetricString(nLen, true)
                             + " "
                             + SdrModel::GetAngleString(nAngle);
                 }
@@ -1101,7 +1101,7 @@ OUString ImpPathForDragAndCreate::getSpecialDragComment(const SdrDragStat& rDrag
                     sal_Int32 nLen(GetLen(aPt));
                     sal_Int32 nAngle(GetAngle(aPt));
                     aStr += "l="
-                            + mrSdrPathObject.GetModel()->GetMetricString(nLen, true)
+                            + mrSdrPathObject.getSdrModelFromSdrObject().GetMetricString(nLen, true)
                             + " "
                             + SdrModel::GetAngleString(nAngle);
                 }
@@ -1831,9 +1831,9 @@ sal_uInt16 SdrPathObj::GetObjIdentifier() const
     return sal_uInt16(meKind);
 }
 
-SdrPathObj* SdrPathObj::Clone() const
+SdrPathObj* SdrPathObj::Clone(SdrModel* pTargetModel) const
 {
-    return CloneHelper< SdrPathObj >();
+    return CloneHelper< SdrPathObj >(pTargetModel);
 }
 
 SdrPathObj& SdrPathObj::operator=(const SdrPathObj& rObj)
@@ -2889,7 +2889,7 @@ bool SdrPathObj::TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegfx::B2DP
     }
 
     // position maybe relative to anchorpos, convert
-    if( pModel && pModel->IsWriter() )
+    if( getSdrModelFromSdrObject().IsWriter() )
     {
         if(GetAnchorPos().X() || GetAnchorPos().Y())
         {
@@ -2998,7 +2998,7 @@ void SdrPathObj::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const b
         }
     }
 
-    if( pModel && pModel->IsWriter() )
+    if( getSdrModelFromSdrObject().IsWriter() )
     {
         // if anchor is used, make position relative to it
         if(GetAnchorPos().X() || GetAnchorPos().Y())

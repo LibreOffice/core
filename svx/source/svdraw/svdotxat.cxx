@@ -62,10 +62,6 @@ bool SdrTextObj::AdjustTextFrameWidthAndHeight( tools::Rectangle& rR, bool bHgt,
         // Not a text frame.  Bail out.
         return false;
 
-    if (!pModel)
-        // Model doesn't exist.  Bail out.
-        return false;
-
     if (rR.IsEmpty())
         // Empty rectangle.
         return false;
@@ -95,7 +91,7 @@ bool SdrTextObj::AdjustTextFrameWidthAndHeight( tools::Rectangle& rR, bool bHgt,
     aNewSize.AdjustWidth( -1 ); aNewSize.AdjustHeight( -1 );
 
     Size aMaxSiz(100000, 100000);
-    Size aTmpSiz = pModel->GetMaxObjSize();
+    Size aTmpSiz(getSdrModelFromSdrObject().GetMaxObjSize());
 
     if (aTmpSiz.Width())
         aMaxSiz.setWidth( aTmpSiz.Width() );
@@ -312,7 +308,7 @@ bool SdrTextObj::AdjustTextFrameWidthAndHeight()
 
 void SdrTextObj::ImpSetTextStyleSheetListeners()
 {
-    SfxStyleSheetBasePool* pStylePool=pModel!=nullptr ? pModel->GetStyleSheetPool() : nullptr;
+    SfxStyleSheetBasePool* pStylePool(getSdrModelFromSdrObject().GetStyleSheetPool());
     if (pStylePool!=nullptr)
     {
         std::vector<OUString> aStyleNames;

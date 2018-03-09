@@ -206,14 +206,15 @@ void SAL_CALL TableRow::setName( const OUString& aName )
 
 void SAL_CALL TableRow::setFastPropertyValue( sal_Int32 nHandle, const Any& aValue )
 {
-    bool bOk = false;
-    bool bChange = false;
+    if(!mxTableModel.is() || nullptr == mxTableModel->getSdrTableObj())
+        return;
 
-    TableRowUndo* pUndo = nullptr;
-
-    SdrModel* pModel = mxTableModel->getSdrTableObj()->GetModel();
-
-    const bool bUndo = mxTableModel.is() && mxTableModel->getSdrTableObj() && mxTableModel->getSdrTableObj()->IsInserted() && pModel && pModel->IsUndoEnabled();
+    SdrTableObj& rTableObj(*mxTableModel->getSdrTableObj());
+    SdrModel& rModel(rTableObj.getSdrModelFromSdrObject());
+    bool bOk(false);
+    bool bChange(false);
+    TableRowUndo* pUndo(nullptr);
+    const bool bUndo(rTableObj.IsInserted() && rModel.IsUndoEnabled());
 
     if( bUndo )
     {
@@ -276,6 +277,7 @@ void SAL_CALL TableRow::setFastPropertyValue( sal_Int32 nHandle, const Any& aVal
         delete pUndo;
         throw UnknownPropertyException( OUString::number(nHandle), static_cast<cppu::OWeakObject*>(this));
     }
+
     if( !bOk )
     {
         delete pUndo;
@@ -286,7 +288,7 @@ void SAL_CALL TableRow::setFastPropertyValue( sal_Int32 nHandle, const Any& aVal
     {
         if( pUndo )
         {
-            pModel->AddUndo( pUndo );
+            rModel.AddUndo( pUndo );
             pUndo = nullptr;
         }
         mxTableModel->setModified(true);

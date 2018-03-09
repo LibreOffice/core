@@ -26,14 +26,14 @@
 #include <border.hxx>
 #include <svx/dialogs.hrc>
 
-SvxFormatCellsDialog::SvxFormatCellsDialog( vcl::Window* pParent, const SfxItemSet* pAttr, SdrModel const * pModel )
+SvxFormatCellsDialog::SvxFormatCellsDialog( vcl::Window* pParent, const SfxItemSet* pAttr, const SdrModel& rModel )
     : SfxTabDialog(pParent, "FormatCellsDialog", "cui/ui/formatcellsdialog.ui", pAttr)
     , mrOutAttrs(*pAttr)
-    , mpColorTab(pModel->GetColorList())
-    , mpGradientList(pModel->GetGradientList())
-    , mpHatchingList(pModel->GetHatchList())
-    , mpBitmapList(pModel->GetBitmapList())
-    , mpPatternList(pModel->GetPatternList())
+    , mpColorTab(rModel.GetColorList())
+    , mpGradientList(rModel.GetGradientList())
+    , mpHatchingList(rModel.GetHatchList())
+    , mpBitmapList(rModel.GetBitmapList())
+    , mpPatternList(rModel.GetPatternList())
     , m_nAreaPageId(0)
 {
     AddTabPage("name", RID_SVXPAGE_CHAR_NAME);

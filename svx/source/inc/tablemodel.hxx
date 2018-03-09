@@ -176,7 +176,7 @@ private:
     rtl::Reference< TableColumns > mxTableColumns;
     rtl::Reference< TableRows >    mxTableRows;
 
-    SdrTableObj* mpTableObj;
+    SdrTableObj* mpTableObj; // TTTT should be ref?
 
     bool mbModified;
     bool mbNotifyPending;

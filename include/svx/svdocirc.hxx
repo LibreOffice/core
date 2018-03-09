@@ -94,7 +94,11 @@ public:
     virtual OUString TakeObjNameSingul() const override;
     virtual OUString TakeObjNamePlural() const override;
 
-    virtual SdrCircObj* Clone() const override;
+    virtual SdrCircObj* Clone(SdrModel* pTargetModel = nullptr) const override;
+
+    // implemented mainly for the purposes of Clone()
+    SdrCircObj& operator=(const SdrCircObj& rObj);
+
     virtual void RecalcSnapRect() override;
     virtual void NbcSetSnapRect(const tools::Rectangle& rRect) override;
     virtual basegfx::B2DPolyPolygon TakeXorPoly() const override;

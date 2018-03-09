@@ -341,7 +341,7 @@ bool SvxOle2Shape::getPropertyValueImpl( const OUString& rName, const SfxItemPro
             aPersistName = pOle->GetPersistName();
             if( !aPersistName.isEmpty() )
             {
-                ::comphelper::IEmbeddedHelper *pPersist = mpObj->GetModel()->GetPersist();
+                ::comphelper::IEmbeddedHelper* pPersist(mpObj->getSdrModelFromSdrObject().GetPersist());
                 if( (nullptr == pPersist) || !pPersist->getEmbeddedObjectContainer().HasEmbeddedObject( pOle->GetPersistName() ) )
                     aPersistName.clear();
             }

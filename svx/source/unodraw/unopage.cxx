@@ -199,7 +199,8 @@ void SAL_CALL SvxDrawPage::add( const uno::Reference< drawing::XShape >& xShape 
     }
     else if ( !pObj->IsInserted() )
     {
-        pObj->SetModel(mpModel);
+        // TTTT should no tbe needed, should altready be constructed with it
+        // pObj->SetModel(mpModel);
         mpPage->InsertObject( pObj );
     }
 
@@ -208,7 +209,8 @@ void SAL_CALL SvxDrawPage::add( const uno::Reference< drawing::XShape >& xShape 
 
     if ( !pObj->IsInserted() )
     {
-        pObj->SetModel(mpModel);
+        // TTTT should no tbe needed, should altready be constructed with it
+        // pObj->SetModel(mpModel);
         mpPage->InsertObject( pObj );
     }
 
@@ -241,7 +243,8 @@ void SAL_CALL SvxDrawPage::addBottom( const uno::Reference< drawing::XShape >& x
     }
     else if ( !pObj->IsInserted() )
     {
-        pObj->SetModel(mpModel);
+        // TTTT should no tbe needed, should altready be constructed with it
+        // pObj->SetModel(mpModel);
         mpPage->InsertObject( pObj, 0 );
     }
 
@@ -250,7 +253,8 @@ void SAL_CALL SvxDrawPage::addBottom( const uno::Reference< drawing::XShape >& x
 
     if ( !pObj->IsInserted() )
     {
-        pObj->SetModel(mpModel);
+        // TTTT should no tbe needed, should altready be constructed with it
+        // pObj->SetModel(mpModel);
         mpPage->InsertObject( pObj, 0 );
     }
 
@@ -483,8 +487,8 @@ SdrObject* SvxDrawPage::CreateSdrObject_(const Reference< drawing::XShape > & xS
         *mpModel,
         nInventor,
         nType,
-        aRect,
-        mpPage);
+        mpPage,
+        &aRect);
 
     if (!pNewObj)
         return nullptr;
@@ -817,7 +821,8 @@ SdrObject *SvxDrawPage::CreateSdrObject( const Reference< drawing::XShape > & xS
     SdrObject* pObj = CreateSdrObject_( xShape );
     if( pObj)
     {
-        pObj->SetModel(mpModel);
+        // TTTT CreateSdrObject_ already uses mpModel
+        // pObj->SetModel(mpModel);
         if ( !pObj->IsInserted() && !pObj->IsDoNotInsertIntoPageAutomatically() )
         {
             if(bBeginning)

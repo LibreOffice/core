@@ -309,12 +309,12 @@ public:
 /// Abstract DrawObject
 class SVX_DLLPUBLIC SdrObject: public SfxListener, public virtual tools::WeakBase
 {
+private:
     friend class                SdrObjListIter;
     friend class                SdrVirtObj;
     friend class                SdrRectObj;
     friend class                SdrDelayBroadcastObjectChange;
 
-private:
     // the SdrModel this objects was created with, unchanged during SdrObject lifetime
     SdrModel&                   mrSdrModelFromSdrObject;
 
@@ -367,9 +367,6 @@ public:
 
     virtual void SetPage(SdrPage* pNewPage);
     SdrPage* GetPage() const { return pPage;}
-
-    virtual void SetModel(SdrModel* pNewModel);
-    SdrModel* GetModel() const { return pModel;}
     SfxItemPool & GetObjectItemPool() const;
 
     void AddListener(SfxListener& rListener);
@@ -464,7 +461,7 @@ public:
     // Returns a copy of the object. Every inherited class must reimplement this (in class Foo
     // it should be sufficient to do "virtual Foo* Clone() const { return CloneHelper< Foo >(); }".
     // Note that this function uses operator= internally.
-    virtual SdrObject* Clone() const;
+    virtual SdrObject* Clone(SdrModel* pTargetModel = nullptr) const;
 
     // implemented mainly for the purposes of Clone()
     SdrObject& operator=(const SdrObject& rObj);
@@ -899,7 +896,6 @@ protected:
     tools::Rectangle                   aOutRect;     // surrounding rectangle for Paint (incl. LineWdt, ...)
     Point                       aAnchor;      // anchor position (Writer)
     SdrPage*                    pPage;
-    SdrModel*                   pModel;
     SdrObjUserCall*             pUserCall;
     std::unique_ptr<SdrObjPlusData>
                                 pPlusData;    // Broadcaster, UserData, connectors, ... (this is the Bitsack)
@@ -941,7 +937,6 @@ protected:
 
     void ImpForcePlusData();
 
-    OUString GetAngleStr(long nAngle) const;
     OUString GetMetrStr(long nVal) const;
 
     /// A derived class must override these 3 methods if it has own geometric
@@ -977,7 +972,7 @@ protected:
     virtual void impl_setUnoShape( const css::uno::Reference< css::uno::XInterface >& _rxUnoShape );
 
     // helper function for reimplementing Clone().
-    template< typename T > T* CloneHelper() const;
+    template< typename T > T* CloneHelper(SdrModel* pTargetModel) const;
 
 private:
     struct Impl;
@@ -1053,34 +1048,39 @@ class SVX_DLLPUBLIC SdrObjFactory
 {
 public:
     static SdrObject* MakeNewObject(
-        SdrModel& rSdrModel,    // TTTT check usages, may be better to put to a class
-        SdrInventor nInventor,
-        sal_uInt16 nObjIdentifier,
-        SdrPage* pPage,
-        SdrModel* pModel=nullptr);
-
-    static SdrObject* MakeNewObject(
         SdrModel& rSdrModel,
         SdrInventor nInventor,
         sal_uInt16 nObjIdentifier,
-        const tools::Rectangle& rSnapRect,
-        SdrPage* pPage);
+        SdrPage* pPage = nullptr,
+        const tools::Rectangle* pSnapRect = nullptr);
 
     static void InsertMakeObjectHdl(Link<SdrObjCreatorParams, SdrObject*> const & rLink);
     static void RemoveMakeObjectHdl(Link<SdrObjCreatorParams, SdrObject*> const & rLink);
 
 private:
-    static SVX_DLLPRIVATE SdrObject* CreateObjectFromFactory(SdrModel& rSdrModel, SdrInventor nInventor, sal_uInt16 nIdentifier);
+    static SVX_DLLPRIVATE SdrObject* CreateObjectFromFactory(
+        SdrModel& rSdrModel,
+        SdrInventor nInventor,
+        sal_uInt16 nIdentifier);
 
     SdrObjFactory() = delete;
 };
 
-template< typename T > T* SdrObject::CloneHelper() const
+template< typename T > T* SdrObject::CloneHelper(SdrModel* pTargetModel) const
 {
     OSL_ASSERT( typeid( T ) == typeid( *this ));
-    T* pObj = dynamic_cast< T* >(SdrObjFactory::MakeNewObject(getSdrModelFromSdrObject(), GetObjInventor(), GetObjIdentifier(), nullptr));
-    if (pObj!=nullptr)
-        *pObj=*static_cast< const T* >( this );
+    T* pObj = dynamic_cast< T* >(
+        SdrObjFactory::MakeNewObject(
+            nullptr == pTargetModel ? getSdrModelFromSdrObject() : *pTargetModel,
+            GetObjInventor(),
+            GetObjIdentifier()));
+
+    if(nullptr != pObj)
+    {
+        // use ::operator=()
+        *pObj = *static_cast< const T* >( this );
+    }
+
     return pObj;
 }
 

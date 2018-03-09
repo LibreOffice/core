@@ -250,7 +250,7 @@ class SwDrawVirtObj : public SdrVirtObj
         /// access to offset
         virtual const Point GetOffset() const override;
 
-        virtual SwDrawVirtObj* Clone() const override;
+        virtual SwDrawVirtObj* Clone(SdrModel* pTargetModel = nullptr) const override;
         SwDrawVirtObj& operator= (const SwDrawVirtObj& rObj);
 
         /// connection to writer layout

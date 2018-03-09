@@ -161,7 +161,7 @@ IMPL_LINK(SdModule, CalcFieldValueHdl, EditFieldInfo*, pInfo, void)
         const SdrTextObj* pTextObj = pSdrOutliner->GetTextObj();
 
         if( pTextObj )
-            pDoc = dynamic_cast< SdDrawDocument* >( pTextObj->GetModel() );
+            pDoc = dynamic_cast< SdDrawDocument* >( &pTextObj->getSdrModelFromSdrObject() );
 
         if( pDoc )
             pDocShell = pDoc->GetDocSh();

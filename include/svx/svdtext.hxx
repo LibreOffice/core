@@ -47,7 +47,9 @@ public:
     SdrText( SdrTextObj& rObject, OutlinerParaObject* pOutlinerParaObject = nullptr );
     virtual ~SdrText() override;
 
-    virtual void SetModel(SdrModel* pNewModel);
+    // TTTT
+    // virtual void SetModel(SdrModel* pNewModel);
+
     void ForceOutlinerParaObject( OutlinerMode nOutlMode );
 
     virtual void SetOutlinerParaObject( OutlinerParaObject* pTextObject );
@@ -60,7 +62,8 @@ public:
     // return a text-specific ItemSet
     virtual const SfxItemSet& GetItemSet() const;
 
-    SdrModel* GetModel() const { return mpModel; }
+    // TTTT does not need an own SdrModel reference - always has the SdrTextObj working with
+    // SdrModel& GetSdrModelFromSdrTextObj() const { return mrObject.getSdrModelFromSdrObject(); }
     SdrTextObj& GetObject() const { return mrObject; }
 
     /** returns the current OutlinerParaObject and removes it from this instance */
@@ -76,7 +79,6 @@ protected:
 private:
     std::unique_ptr<OutlinerParaObject> mpOutlinerParaObject;
     SdrTextObj& mrObject;
-    SdrModel* mpModel;
     bool mbPortionInfoChecked;
 };
 

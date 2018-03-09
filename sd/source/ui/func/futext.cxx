@@ -692,7 +692,7 @@ bool FuText::MouseButtonUp(const MouseEvent& rMEvt)
             // outliner object up to now; also it needs to be set back to not
             // vertical when there was a vertical one used last time.
             OutlinerParaObject* pOPO = GetTextObj()->GetOutlinerParaObject();
-            SdrOutliner& rOutl = mxTextObj->GetModel()->GetDrawOutliner(GetTextObj());
+            SdrOutliner& rOutl(mxTextObj->getSdrModelFromSdrObject().GetDrawOutliner(GetTextObj()));
             bool bVertical((pOPO && pOPO->IsVertical())
                 || nSlotId == SID_ATTR_CHAR_VERTICAL
                 || nSlotId == SID_TEXT_FITTOSIZE_VERTICAL);
@@ -1309,8 +1309,7 @@ SdrObject* FuText::CreateDefaultObject(const sal_uInt16 nID, const ::tools::Rect
         mpView->getSdrModelFromSdrView(),
         mpView->GetCurrentObjInventor(),
         mpView->GetCurrentObjIdentifier(),
-        nullptr,
-        mpDoc);
+        nullptr);
 
     if(pObj)
     {

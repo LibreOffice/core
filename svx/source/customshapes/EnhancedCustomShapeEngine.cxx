@@ -177,9 +177,7 @@ SdrObject* EnhancedCustomShapeEngine::ImplForceGroupWithText( const SdrObjCustom
             SdrObject* pTextObj = SdrObjFactory::MakeNewObject(
                 pCustoObj->getSdrModelFromSdrObject(),
                 pCustoObj->GetObjInventor(),
-                OBJ_TEXT,
-                nullptr,
-                pCustoObj->GetModel());
+                OBJ_TEXT);
 
             // Copy text content
             OutlinerParaObject* pParaObj = pCustoObj->GetOutlinerParaObject();
@@ -239,7 +237,9 @@ SdrObject* EnhancedCustomShapeEngine::ImplForceGroupWithText( const SdrObjCustom
                 static_cast<SdrObjGroup*>(pRenderedShape)->GetSubList()->NbcInsertObject( pTmp );
             }
             pRenderedShape->SetPage( pCustoObj->GetPage() );
-            pRenderedShape->SetModel( pCustoObj->GetModel() );
+
+            // TTTT
+            // pRenderedShape->SetModel( pCustoObj->GetModel() );
         }
     }
     return pRenderedShape;
@@ -350,7 +350,7 @@ awt::Rectangle SAL_CALL EnhancedCustomShapeEngine::getTextBounds()
     awt::Rectangle aTextRect;
     SdrObject* pSdrObjCustomShape( GetSdrObjectFromXShape( mxShape ) );
     uno::Reference< document::XActionLockable > xLockable( mxShape, uno::UNO_QUERY );
-    if ( pSdrObjCustomShape && pSdrObjCustomShape->GetModel() && xLockable.is() && !xLockable->isActionLocked() )
+    if ( pSdrObjCustomShape && xLockable.is() && !xLockable->isActionLocked() )
     {
         if ( pSdrObjCustomShape )
         {

@@ -4000,7 +4000,6 @@ SdrObject* SvxMSDffManager::ImportGraphic( SvStream& rSt, SfxItemSet& rSet, cons
                 pRet->SetName( aFileName );
         }
     }
-    pRet->SetModel( pSdrModel ); // required for GraphicLink
     pRet->SetLogicRect( rObjData.aBoundRect );
 
     if ( dynamic_cast<const SdrGrafObj* >(pRet) !=  nullptr )
@@ -4344,7 +4343,6 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                     *pSdrModel,
                     OBJ_LINE,
                     basegfx::B2DPolyPolygon(aPoly));
-                pRet->SetModel( pSdrModel );
                 ApplyAttributes( rSt, aSet, aObjData );
                 pRet->SetMergedItemSet(aSet);
             }
@@ -4356,7 +4354,6 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                     ApplyAttributes( rSt, aSet, aObjData );
 
                     pRet = new SdrObjCustomShape(*pSdrModel);
-                    pRet->SetModel( pSdrModel );
 
                     sal_uInt32 ngtextFStrikethrough = GetPropertyValue( DFF_Prop_gtextFStrikethrough, 0 );
                     bool bIsFontwork = ( ngtextFStrikethrough & 0x4000 ) != 0;
@@ -4477,9 +4474,7 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                         {
                             SdrOutliner& rOutliner = static_cast<SdrObjCustomShape*>(pRet)->ImpGetDrawOutliner();
                             bool bOldUpdateMode = rOutliner.GetUpdateMode();
-                            SdrModel* pModel = pRet->GetModel();
-                            if ( pModel )
-                                rOutliner.SetStyleSheetPool( static_cast<SfxStyleSheetPool*>(pModel->GetStyleSheetPool()) );
+                            rOutliner.SetStyleSheetPool(static_cast< SfxStyleSheetPool* >(pRet->getSdrModelFromSdrObject().GetStyleSheetPool()));
                             rOutliner.SetUpdateMode( false );
                             rOutliner.SetText( *pParaObj );
                             ScopedVclPtrInstance< VirtualDevice > pVirDev(DeviceFormat::BITMASK);
@@ -5373,7 +5368,6 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
             }
 
             pTextObj->SetMergedItemSet(aSet);
-            pTextObj->SetModel(pSdrModel);
 
             if (bVerticalText)
                 pTextObj->SetVerticalWriting(true);
@@ -5425,8 +5419,8 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
             pObj = new SdrRectObj(
                 *pSdrModel,
                 rTextRect);
+
             pOrgObj = pObj;
-            pObj->SetModel( pSdrModel );
             SfxItemSet aSet( pSdrModel->GetItemPool() );
             ApplyAttributes( rSt, aSet, rObjData );
 

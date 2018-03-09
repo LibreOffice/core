@@ -135,7 +135,6 @@ bool SwTextShell::InsertMediaDlg( SfxRequest const & rReq )
                 *rSh.GetDoc()->getIDocumentDrawModelAccess().GetDrawModel(),
                 tools::Rectangle(aPos, aSize));
 
-            pObj->SetModel(rSh.GetDoc()->getIDocumentDrawModelAccess().GetDrawModel()); // set before setURL
             pObj->setURL( realURL, "" );
             rSh.EnterStdMode();
             rSh.SwFEShell::InsertDrawObj( *pObj, aPos );

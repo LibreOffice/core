@@ -150,9 +150,9 @@ void SdrPageObj::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
     rInfo.bCanConvToPolyLineToArea=false;
 }
 
-SdrPageObj* SdrPageObj::Clone() const
+SdrPageObj* SdrPageObj::Clone(SdrModel* pTargetModel) const
 {
-    return CloneHelper< SdrPageObj >();
+    return CloneHelper< SdrPageObj >(pTargetModel);
 }
 
 SdrPageObj& SdrPageObj::operator=(const SdrPageObj& rObj)

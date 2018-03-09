@@ -450,18 +450,15 @@ void DlgEdFunc::colorizeOverlappedObject(SdrObject* _pOverlappedObj)
         uno::Reference<report::XReportComponent> xComponent = pObj->getReportComponent();
         if (xComponent.is() && xComponent != m_xOverlappingObj)
         {
-            OReportModel* pRptModel = static_cast<OReportModel*>(_pOverlappedObj->GetModel());
-            if ( pRptModel )
-            {
-                OXUndoEnvironment::OUndoEnvLock aLock(pRptModel->GetUndoEnv());
+            OReportModel& rRptModel(static_cast< OReportModel& >(_pOverlappedObj->getSdrModelFromSdrObject()));
+            OXUndoEnvironment::OUndoEnvLock aLock(rRptModel.GetUndoEnv());
 
-                // uncolorize an old object, if there is one
-                unColorizeOverlappedObj();
+            // uncolorize an old object, if there is one
+            unColorizeOverlappedObj();
 
-                m_nOldColor = lcl_setColorOfObject(xComponent, m_nOverlappedControlColor);
-                m_xOverlappingObj = xComponent;
-                m_pOverlappingObj = _pOverlappedObj;
-            }
+            m_nOldColor = lcl_setColorOfObject(xComponent, m_nOverlappedControlColor);
+            m_xOverlappingObj = xComponent;
+            m_pOverlappingObj = _pOverlappedObj;
         }
     }
 }
@@ -471,15 +468,12 @@ void DlgEdFunc::unColorizeOverlappedObj()
     // uncolorize an old object, if there is one
     if (m_xOverlappingObj.is())
     {
-        OReportModel* pRptModel = static_cast<OReportModel*>(m_pOverlappingObj->GetModel());
-        if ( pRptModel )
-        {
-            OXUndoEnvironment::OUndoEnvLock aLock(pRptModel->GetUndoEnv());
+        OReportModel& rRptModel(static_cast< OReportModel& >(m_pOverlappingObj->getSdrModelFromSdrObject()));
+        OXUndoEnvironment::OUndoEnvLock aLock(rRptModel.GetUndoEnv());
 
-            lcl_setColorOfObject(m_xOverlappingObj, m_nOldColor);
-            m_xOverlappingObj = nullptr;
-            m_pOverlappingObj = nullptr;
-        }
+        lcl_setColorOfObject(m_xOverlappingObj, m_nOldColor);
+        m_xOverlappingObj = nullptr;
+        m_pOverlappingObj = nullptr;
     }
 }
 

@@ -251,27 +251,25 @@ bool EnhancedCustomShape3d::Transformation2D::IsParallel() const
 
 SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, const SdrObject* pCustomShape )
 {
-    SdrObject*  pRet = nullptr;
-    SdrModel*   pModel = pCustomShape->GetModel();
+    SdrObject* pRet(nullptr);
+    SdrModel& rModel(pCustomShape->getSdrModelFromSdrObject());
     const SdrCustomShapeGeometryItem& rGeometryItem = pCustomShape->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY );
+    double fMap(1.0), *pMap = nullptr;
+    Fraction aFraction( rModel.GetScaleFraction() );
 
-    double      fMap, *pMap = nullptr;
-    if ( pModel )
+    if ( aFraction.GetNumerator() != 1 || aFraction.GetDenominator() != 1 )
     {
-        fMap = 1.0;
-        Fraction aFraction( pModel->GetScaleFraction() );
-        if ( aFraction.GetNumerator() != 1 || aFraction.GetDenominator() != 1 )
-         {
-            fMap *= double(aFraction);
-            pMap = &fMap;
-        }
-        if ( pModel->GetScaleUnit() != MapUnit::Map100thMM )
-        {
-            DBG_ASSERT( pModel->GetScaleUnit() == MapUnit::MapTwip, "EnhancedCustomShape3d::Current MapMode is Unsupported" );
-            fMap *= 1440.0 / 2540.0;
-            pMap = &fMap;
-        }
+        fMap *= double(aFraction);
+        pMap = &fMap;
     }
+
+    if ( rModel.GetScaleUnit() != MapUnit::Map100thMM )
+    {
+        DBG_ASSERT( rModel.GetScaleUnit() == MapUnit::MapTwip, "EnhancedCustomShape3d::Current MapMode is Unsupported" );
+        fMap *= 1440.0 / 2540.0;
+        pMap = &fMap;
+    }
+
     if ( GetBool( rGeometryItem, "Extrusion", false ) )
     {
         bool bIsMirroredX = static_cast<const SdrObjCustomShape*>(pCustomShape)->IsMirroredX();

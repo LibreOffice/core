@@ -1114,7 +1114,9 @@ void SwWW8ImplReader::InsertTxbxText(SdrTextObj* pTextObj,
 
                                 GrafikCtor();
 
-                                pNew->SetModel( m_pDrawModel );
+                                // TTTT already in constructor, also in ImportOleBase
+                                // which may trigger xShape creation, too
+                                // pNew->SetModel( m_pDrawModel );
                                 pNew->SetLogicRect( pTextObj->GetCurrentBoundRect() );
                                 pNew->SetLayer( pTextObj->GetLayer() );
 
@@ -1242,7 +1244,6 @@ SdrObject* SwWW8ImplReader::ReadTextBox(WW8_DPHEAD const * pHd, SfxAllItemSet &r
         OBJ_TEXT,
         tools::Rectangle(aP0, aP1));
 
-    pObj->SetModel( m_pDrawModel );
     pObj->NbcSetSnapRect(tools::Rectangle(aP0, aP1));
     Size aSize( static_cast<sal_Int16>(SVBT16ToShort( pHd->dxa )) ,
         static_cast<sal_Int16>(SVBT16ToShort( pHd->dya )) );
@@ -1316,7 +1317,6 @@ SdrObject* SwWW8ImplReader::ReadCaptionBox(WW8_DPHEAD const * pHd, SfxAllItemSet
         tools::Rectangle(aP0, aP1),
         aP2);
 
-    pObj->SetModel( m_pDrawModel );
     pObj->NbcSetSnapRect(tools::Rectangle(aP0, aP1));
     Size aSize( static_cast<sal_Int16>(SVBT16ToShort( aCallB.dpheadTxbx.dxa )),
                            static_cast<sal_Int16>(SVBT16ToShort(  aCallB.dpheadTxbx.dya )) );

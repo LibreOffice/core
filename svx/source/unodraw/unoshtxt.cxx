@@ -159,7 +159,7 @@ SvxTextEditSourceImpl::SvxTextEditSourceImpl( SdrObject* pObject, SdrText* pText
     mpText          ( pText ),
     mpView          ( nullptr ),
     mpWindow        ( nullptr ),
-    mpModel         ( pObject ? pObject->GetModel() : nullptr ),
+    mpModel         ( pObject ? &pObject->getSdrModelFromSdrObject() : nullptr ), // TTTT shbe ref
     mpOutliner      ( nullptr ),
     mpTextForwarder ( nullptr ),
     mpViewForwarder ( nullptr ),
@@ -195,7 +195,7 @@ SvxTextEditSourceImpl::SvxTextEditSourceImpl( SdrObject& rObject, SdrText* pText
     mpText          ( pText ),
     mpView          ( &rView ),
     mpWindow        ( &rWindow ),
-    mpModel         ( rObject.GetModel() ),
+    mpModel         ( &rObject.getSdrModelFromSdrObject() ), // TTTT shbe ref
     mpOutliner      ( nullptr ),
     mpTextForwarder ( nullptr ),
     mpViewForwarder ( nullptr ),
@@ -638,7 +638,7 @@ SvxTextForwarder* SvxTextEditSourceImpl::GetBackgroundTextForwarder()
             bool bVertical = pOutlinerParaObject && pOutlinerParaObject->IsVertical();
 
             // set objects style sheet on empty outliner
-            SfxStyleSheetPool* pPool = static_cast<SfxStyleSheetPool*>(mpObject->GetModel()->GetStyleSheetPool());
+            SfxStyleSheetPool* pPool = static_cast<SfxStyleSheetPool*>(mpObject->getSdrModelFromSdrObject().GetStyleSheetPool());
             if( pPool )
                 mpOutliner->SetStyleSheetPool( pPool );
 
@@ -709,10 +709,7 @@ SvxTextForwarder* SvxTextEditSourceImpl::GetTextForwarder()
         return nullptr;
 
     if( mpModel == nullptr )
-        mpModel = mpObject->GetModel();
-
-    if( mpModel == nullptr )
-        return nullptr;
+        mpModel = &mpObject->getSdrModelFromSdrObject();
 
     // distinguish the cases
     // a) connected to view, maybe edit mode is active, can work directly on the EditOutliner
@@ -763,10 +760,7 @@ SvxEditViewForwarder* SvxTextEditSourceImpl::GetEditViewForwarder( bool bCreate 
         return nullptr;
 
     if( mpModel == nullptr )
-        mpModel = mpObject->GetModel();
-
-    if( mpModel == nullptr )
-        return nullptr;
+        mpModel = &mpObject->getSdrModelFromSdrObject();
 
     // shall we delete?
     if( mpViewForwarder )

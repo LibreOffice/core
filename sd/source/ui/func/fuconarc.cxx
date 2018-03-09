@@ -206,9 +206,7 @@ SdrObject* FuConstructArc::CreateDefaultObject(const sal_uInt16 nID, const ::too
     SdrObject* pObj = SdrObjFactory::MakeNewObject(
         mpView->getSdrModelFromSdrView(),
         mpView->GetCurrentObjInventor(),
-        mpView->GetCurrentObjIdentifier(),
-        nullptr,
-        mpDoc);
+        mpView->GetCurrentObjIdentifier());
 
     if(pObj)
     {

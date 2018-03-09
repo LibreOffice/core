@@ -164,44 +164,45 @@ namespace sdr
             if(pNewItem)
             {
                 const SfxPoolItem* pResultItem = nullptr;
-                SdrModel* pModel = GetSdrObject().GetModel();
+                SdrModel& rModel(GetSdrObject().getSdrModelFromSdrObject());
 
                 switch( nWhich )
                 {
                     case XATTR_FILLBITMAP:
                     {
-                        pResultItem = static_cast<const XFillBitmapItem*>(pNewItem)->checkForUniqueItem( pModel );
+                        // TTTT checkForUniqueItem should use SdrModel&
+                        pResultItem = static_cast<const XFillBitmapItem*>(pNewItem)->checkForUniqueItem( &rModel );
                         break;
                     }
                     case XATTR_LINEDASH:
                     {
-                        pResultItem = static_cast<const XLineDashItem*>(pNewItem)->checkForUniqueItem( pModel );
+                        pResultItem = static_cast<const XLineDashItem*>(pNewItem)->checkForUniqueItem( &rModel );
                         break;
                     }
                     case XATTR_LINESTART:
                     {
-                        pResultItem = static_cast<const XLineStartItem*>(pNewItem)->checkForUniqueItem( pModel );
+                        pResultItem = static_cast<const XLineStartItem*>(pNewItem)->checkForUniqueItem( &rModel );
                         break;
                     }
                     case XATTR_LINEEND:
                     {
-                        pResultItem = static_cast<const XLineEndItem*>(pNewItem)->checkForUniqueItem( pModel );
+                        pResultItem = static_cast<const XLineEndItem*>(pNewItem)->checkForUniqueItem( &rModel );
                         break;
                     }
                     case XATTR_FILLGRADIENT:
                     {
-                        pResultItem = static_cast<const XFillGradientItem*>(pNewItem)->checkForUniqueItem( pModel );
+                        pResultItem = static_cast<const XFillGradientItem*>(pNewItem)->checkForUniqueItem( &rModel );
                         break;
                     }
                     case XATTR_FILLFLOATTRANSPARENCE:
                     {
                         // #85953# allow all kinds of XFillFloatTransparenceItem to be set
-                        pResultItem = static_cast<const XFillFloatTransparenceItem*>(pNewItem)->checkForUniqueItem( pModel );
+                        pResultItem = static_cast<const XFillFloatTransparenceItem*>(pNewItem)->checkForUniqueItem( &rModel );
                         break;
                     }
                     case XATTR_FILLHATCH:
                     {
-                        pResultItem = static_cast<const XFillHatchItem*>(pNewItem)->checkForUniqueItem( pModel );
+                        pResultItem = static_cast<const XFillHatchItem*>(pNewItem)->checkForUniqueItem( &rModel );
                         break;
                     }
                 }
@@ -539,22 +540,22 @@ namespace sdr
                     {
                         // Style needs to be exchanged
                         SfxStyleSheet* pNewStSh = nullptr;
-                        SdrModel* pModel = rObj.GetModel();
+                        SdrModel& rModel(rObj.getSdrModelFromSdrObject());
 
                         // Do nothing if object is in destruction, else a StyleSheet may be found from
                         // a StyleSheetPool which is just being deleted itself. and thus it would be fatal
                         // to register as listener to that new StyleSheet.
-                        if(pModel && !rObj.IsInDestruction())
+                        if(!rObj.IsInDestruction())
                         {
                             if(dynamic_cast<const SfxStyleSheet *>(GetStyleSheet()) != nullptr)
                             {
-                                pNewStSh = static_cast<SfxStyleSheet*>(pModel->GetStyleSheetPool()->Find(
+                                pNewStSh = static_cast<SfxStyleSheet*>(rModel.GetStyleSheetPool()->Find(
                                     GetStyleSheet()->GetParent(), GetStyleSheet()->GetFamily()));
                             }
 
                             if(!pNewStSh)
                             {
-                                pNewStSh = pModel->GetDefaultStyleSheet();
+                                pNewStSh = rModel.GetDefaultStyleSheet();
                             }
                         }
 

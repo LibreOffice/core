@@ -218,8 +218,7 @@ namespace accessibility
         mrViewWindow(rViewWindow),
         mbEditSourceEmpty( true )
     {
-        if( mrObj.GetModel() )
-            StartListening( *mrObj.GetModel() );
+        StartListening( mrObj.getSdrModelFromSdrObject() );
     }
 
     AccessibleEmptyEditSource::~AccessibleEmptyEditSource()
@@ -232,8 +231,7 @@ namespace accessibility
         }
         else
         {
-            if( mrObj.GetModel() )
-                EndListening( *mrObj.GetModel() );
+            EndListening( mrObj.getSdrModelFromSdrObject() );
         }
     }
 
@@ -256,8 +254,7 @@ namespace accessibility
     void AccessibleEmptyEditSource::Switch2ProxyEditSource()
     {
         // deregister EmptyEditSource model listener
-        if( mrObj.GetModel() )
-            EndListening( *mrObj.GetModel() );
+        EndListening( mrObj.getSdrModelFromSdrObject() );
 
         ::std::unique_ptr< SvxEditSource > pProxySource( new AccessibleProxyEditSource_Impl(mrObj, mrView, mrViewWindow) );
         mpEditSource.swap(pProxySource);

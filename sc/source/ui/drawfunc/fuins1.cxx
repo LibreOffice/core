@@ -235,7 +235,7 @@ static void lcl_InsertMedia( const OUString& rMediaURL, bool bApi,
         *rData.GetDocument()->GetDrawLayer(),
         tools::Rectangle(aInsertPos, aSize));
 
-    pObj->SetModel(rData.GetDocument()->GetDrawLayer()); // set before setURL
+    // TTTT pObj->SetModel(rData.GetDocument()->GetDrawLayer()); // set before setURL
     pObj->setURL( realURL, ""/*TODO?*/ );
     pView->InsertObjectAtView( pObj, *pPV, bApi ? SdrInsertFlags::DONTMARK : SdrInsertFlags::NONE );
 }

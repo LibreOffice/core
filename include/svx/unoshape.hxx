@@ -206,7 +206,8 @@ public:
     void TakeSdrObjectOwnership();
     bool HasSdrObjectOwnership() const;
 
-    void ChangeModel( SdrModel* pNewModel );
+    // TTTT needed?
+    // void ChangeModel( SdrModel* pNewModel );
 
     void InvalidateSdrObject() { mpObj.reset( nullptr ); };
     SdrObject* GetSdrObject() const {return mpObj.get();}

@@ -150,7 +150,6 @@ public:
 
     virtual void        SetObjList(SdrObjList* pNewObjList) override;
     virtual void        SetPage(SdrPage* pNewPage) override;
-    virtual void        SetModel(SdrModel* pNewModel) override;
     virtual void        NbcMove(const Size& rSize) override;
     virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact) override;
     virtual SdrObjList* GetSubList() const override;
@@ -185,7 +184,7 @@ public:
     // TakeObjName...() is for the display in the UI, for example "3 frames selected".
     virtual OUString TakeObjNameSingul() const override;
     virtual OUString TakeObjNamePlural() const override;
-    virtual E3dObject* Clone() const override;
+    virtual E3dObject* Clone(SdrModel* pTargetModel = nullptr) const override;
     E3dObject& operator=( const E3dObject& rObj );
 
     virtual SdrObjGeoData *NewGeoData() const override;
@@ -244,7 +243,10 @@ public:
     virtual sal_uInt16 GetObjIdentifier() const override;
     virtual void RecalcSnapRect() override;
 
-    virtual E3dCompoundObject* Clone() const override;
+    virtual E3dCompoundObject* Clone(SdrModel* pTargetModel = nullptr) const override;
+
+    // implemented mainly for the purposes of Clone()
+    E3dCompoundObject& operator=(const E3dCompoundObject& rObj);
 
     bool IsAOrdNumRemapCandidate(E3dScene*& prScene) const;
 };

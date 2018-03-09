@@ -1552,8 +1552,7 @@ void DrawViewShell::InsertURLButton(const OUString& rURL, const OUString& rText,
                 GetView()->getSdrModelFromSdrView(),
                 SdrInventor::FmForm,
                 OBJ_FM_BUTTON,
-                mpDrawView->GetSdrPageView()->GetPage(),
-                GetDoc()));
+                mpDrawView->GetSdrPageView()->GetPage()));
 
         Reference< awt::XControlModel > xControlModel( pUnoCtrl->GetUnoControlModel(), uno::UNO_QUERY_THROW );
         Reference< beans::XPropertySet > xPropSet( xControlModel, uno::UNO_QUERY_THROW );

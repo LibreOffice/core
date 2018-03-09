@@ -311,9 +311,7 @@ SdrObject* FuConstructBezierPolygon::CreateDefaultObject(const sal_uInt16 nID, c
     SdrObject* pObj = SdrObjFactory::MakeNewObject(
         mpView->getSdrModelFromSdrView(),
         mpView->GetCurrentObjInventor(),
-        mpView->GetCurrentObjIdentifier(),
-        nullptr,
-        mpDoc);
+        mpView->GetCurrentObjIdentifier());
 
     if(pObj)
     {

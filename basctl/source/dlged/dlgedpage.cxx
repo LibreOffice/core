@@ -43,11 +43,11 @@ DlgEdPage::~DlgEdPage()
     Clear();
 }
 
-
-SdrPage* DlgEdPage::Clone() const
-{
-    return Clone(nullptr);
-}
+// TTTT
+// SdrPage* DlgEdPage::Clone() const
+// {
+//     return Clone(nullptr);
+// }
 
 SdrPage* DlgEdPage::Clone(SdrModel* const pNewModel) const
 {

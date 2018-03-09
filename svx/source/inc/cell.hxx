@@ -91,7 +91,8 @@ public:
     SVX_DLLPRIVATE SdrTextVertAdjust GetTextVerticalAdjust() const;
     SdrTextHorzAdjust GetTextHorizontalAdjust() const;
 
-    SVX_DLLPRIVATE virtual void SetModel(SdrModel* pNewModel) override;
+    // TTTT
+    // SVX_DLLPRIVATE virtual void SetModel(SdrModel* pNewModel) override;
 
     SVX_DLLPRIVATE void merge( sal_Int32 nColumnSpan, sal_Int32 nRowSpan );
     SVX_DLLPRIVATE void mergeContent( const CellRef& xSourceCell );

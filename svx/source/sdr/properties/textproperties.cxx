@@ -240,7 +240,7 @@ namespace sdr
             // #i101556# StyleSheet has changed -> new version
             maVersion++;
 
-            if( rObj.GetModel() /*&& !rObj.IsTextEditActive()*/ && !rObj.IsLinkedText() )
+            if(!rObj.IsLinkedText() )
             {
                 SdrOutliner& rOutliner = rObj.ImpGetDrawOutliner();
 
@@ -279,9 +279,7 @@ namespace sdr
                                     aNewStyleSheetName = aNewStyleSheetName.copy(0, aNewStyleSheetName.getLength() - 1);
                                     sal_Int16 nDepth = rOutliner.GetDepth(nPara);
                                     aNewStyleSheetName += OUString::number( nDepth <= 0 ? 1 : nDepth + 1);
-
-                                    SdrModel* pModel = rObj.GetModel();
-                                    SfxStyleSheetBasePool* pStylePool = (pModel != nullptr) ? pModel->GetStyleSheetPool() : nullptr;
+                                    SfxStyleSheetBasePool* pStylePool(rObj.getSdrModelFromSdrObject().GetStyleSheetPool());
                                     SfxStyleSheet* pNewStyle = nullptr;
                                     if(pStylePool)
                                         pNewStyle = static_cast<SfxStyleSheet*>(pStylePool->Find(aNewStyleSheetName, GetStyleSheet()->GetFamily()));
@@ -397,11 +395,9 @@ namespace sdr
             // now the standard TextProperties stuff
             SdrTextObj& rObj = static_cast<SdrTextObj&>(GetSdrObject());
 
-            if(rObj.GetModel()
-                && !rObj.IsTextEditActive()
-                && !rObj.IsLinkedText())
+            if(!rObj.IsTextEditActive() && !rObj.IsLinkedText())
             {
-                Outliner* pOutliner = SdrMakeOutliner(OutlinerMode::OutlineObject, *rObj.GetModel());
+                Outliner* pOutliner = SdrMakeOutliner(OutlinerMode::OutlineObject, rObj.getSdrModelFromSdrObject());
                 const svx::ITextProvider& rTextProvider(getTextProvider());
                 sal_Int32 nText = rTextProvider.getTextCount();
                 while (nText--)

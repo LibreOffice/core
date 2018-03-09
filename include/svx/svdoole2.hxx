@@ -119,7 +119,6 @@ public:
     void AbandonObject();
 
     virtual void SetPage(SdrPage* pNewPage) override;
-    virtual void SetModel(SdrModel* pModel) override;
 
     /** Change the IsClosedObj attribute
 
@@ -136,7 +135,7 @@ public:
     virtual OUString TakeObjNameSingul() const override;
     virtual OUString TakeObjNamePlural() const override;
 
-    virtual SdrOle2Obj* Clone() const override;
+    virtual SdrOle2Obj* Clone(SdrModel* pTargetModel = nullptr) const override;
 
     SdrOle2Obj& assignFrom(const SdrOle2Obj& rObj);
     SdrOle2Obj& operator=(const SdrOle2Obj& rObj);

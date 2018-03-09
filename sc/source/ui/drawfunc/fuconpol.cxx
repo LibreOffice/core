@@ -187,9 +187,7 @@ SdrObject* FuConstPolygon::CreateDefaultObject(const sal_uInt16 nID, const tools
     SdrObject* pObj = SdrObjFactory::MakeNewObject(
         *pDrDoc,
         pView->GetCurrentObjInventor(),
-        pView->GetCurrentObjIdentifier(),
-        nullptr,
-        pDrDoc);
+        pView->GetCurrentObjIdentifier());
 
     if(pObj)
     {

@@ -218,9 +218,23 @@ SdrObject *E3dPolygonObj::DoConvertToPolyObj(bool /*bBezier*/, bool /*bAddText*/
     return nullptr;
 }
 
-E3dPolygonObj* E3dPolygonObj::Clone() const
+E3dPolygonObj* E3dPolygonObj::Clone(SdrModel* pTargetModel) const
 {
-    return CloneHelper< E3dPolygonObj >();
+    return CloneHelper< E3dPolygonObj >(pTargetModel);
+}
+
+E3dPolygonObj& E3dPolygonObj::operator=(const E3dPolygonObj& rObj)
+{
+    if( this == &rObj )
+        return *this;
+    E3dCompoundObject::operator=(rObj);
+
+    aPolyPoly3D = rObj.aPolyPoly3D;
+    aPolyNormals3D = rObj.aPolyNormals3D;
+    aPolyTexture2D = rObj.aPolyTexture2D;
+    bLineOnly = rObj.bLineOnly;
+
+    return *this;
 }
 
 void E3dPolygonObj::SetLineOnly(bool bNew)

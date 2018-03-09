@@ -57,7 +57,10 @@ public:
     virtual sal_uInt16 GetObjIdentifier() const override;
     virtual SdrObject* DoConvertToPolyObj(bool bBezier, bool bAddText) const override;
 
-    virtual E3dPolygonObj* Clone() const override;
+    virtual E3dPolygonObj* Clone(SdrModel* pTargetModel = nullptr) const override;
+
+    // implemented mainly for the purposes of Clone()
+    E3dPolygonObj& operator=(const E3dPolygonObj& rObj);
 
     // LineOnly?
     bool GetLineOnly() const { return bLineOnly; }

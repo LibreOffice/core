@@ -108,7 +108,10 @@ public:
     virtual ~SdrTableObj() override;
 
     // Table stuff
-    SdrTableObj* CloneRange( const CellPos& rStartPos, const CellPos& rEndPos );
+    SdrTableObj* CloneRange(
+        const CellPos& rStartPos,
+        const CellPos& rEndPos,
+        SdrModel& rTargetModel);
     void DistributeColumns( sal_Int32 nFirstColumn, sal_Int32 nLastColumn );
     void DistributeRows( sal_Int32 nFirstRow, sal_Int32 nLastRow );
 
@@ -188,7 +191,6 @@ public:
 
     virtual bool IsFontwork() const override;
 
-    virtual void SetModel(SdrModel* pNewModel) override;
     virtual void TakeObjInfo(SdrObjTransformInfoRec& rInfo) const override;
     virtual sal_uInt16 GetObjIdentifier() const override;
     virtual void SetChanged() override;
@@ -197,7 +199,7 @@ public:
     virtual bool AdjustTextFrameWidthAndHeight() override;
     virtual OUString TakeObjNameSingul() const override;
     virtual OUString TakeObjNamePlural() const override;
-    virtual SdrTableObj* Clone() const override;
+    virtual SdrTableObj* Clone(SdrModel* pTargetModel = nullptr) const override;
     SdrTableObj& operator=(const SdrTableObj& rObj);
     virtual void RecalcSnapRect() override;
     virtual const tools::Rectangle& GetSnapRect() const override;

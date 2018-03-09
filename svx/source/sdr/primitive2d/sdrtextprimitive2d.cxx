@@ -64,16 +64,16 @@ namespace
         sal_Int16 nRetval(0);
         SdrPage* pPage = GetSdrPageFromXDrawPage(rxDrawPage);
 
-        if(pPage && pPage->GetModel())
+        if(pPage)
         {
             if( (pPage->GetPageNum() == 0) && !pPage->IsMasterPage() )
             {
                 // handout page!
-                return pPage->GetModel()->getHandoutPageCount();
+                return pPage->getSdrModelFromSdrObjList().getHandoutPageCount();
             }
             else
             {
-                const sal_uInt16 nPageCount(pPage->GetModel()->GetPageCount());
+                const sal_uInt16 nPageCount(pPage->getSdrModelFromSdrObjList().GetPageCount());
                 nRetval = (static_cast<sal_Int16>(nPageCount) - 1) / 2;
             }
         }
@@ -188,9 +188,9 @@ namespace drawinglayer
                 }
 
                 // #i101443#  check change of TextBackgroundolor
-                if(!bDoDelete && getSdrText() && getSdrText()->GetModel())
+                if(!bDoDelete && getSdrText())
                 {
-                    SdrOutliner& rDrawOutliner = getSdrText()->GetModel()->GetDrawOutliner();
+                    SdrOutliner& rDrawOutliner = getSdrText()->GetObject().getSdrModelFromSdrObject().GetDrawOutliner();
                     aNewTextBackgroundColor = rDrawOutliner.GetBackgroundColor();
                     bNewTextBackgroundColorIsSet = true;
 
@@ -223,9 +223,9 @@ namespace drawinglayer
                     nCurrentlyValidPageCount = getPageCount(xCurrentlyVisualizingPage);
                 }
 
-                if(!bNewTextBackgroundColorIsSet && getSdrText() && getSdrText()->GetModel())
+                if(!bNewTextBackgroundColorIsSet && getSdrText())
                 {
-                    SdrOutliner& rDrawOutliner = getSdrText()->GetModel()->GetDrawOutliner();
+                    SdrOutliner& rDrawOutliner = getSdrText()->GetObject().getSdrModelFromSdrObject().GetDrawOutliner();
                     aNewTextBackgroundColor = rDrawOutliner.GetBackgroundColor();
                 }
 
