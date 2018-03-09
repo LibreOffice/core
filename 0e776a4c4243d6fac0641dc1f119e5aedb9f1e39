@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba2be162_7a3cf72f",
+        "filename": "xmlsecurity/CppunitTest_xmlsecurity_signing.mk",
+        "patchSetId": 3
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-03-09T20:02:06Z",
+      "side": 1,
+      "message": "should that be called with GNUPGHOME env var set to the same value as it is set to in SigningTest::setUp in xmlsecurity/qa/unit/signing/signing.cxx?  (and `gpgconf --remove-sockedir` be called after the test?)",
+      "revId": "0e776a4c4243d6fac0641dc1f119e5aedb9f1e39",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
