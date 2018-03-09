@@ -22,8 +22,6 @@ canvas/source/vcl/impltools.hxx:117
     vclcanvas::tools::LocalGuard aSolarGuard class SolarMutexGuard
 chart2/source/controller/inc/RangeSelectionListener.hxx:62
     chart::RangeSelectionListener m_aControllerLockGuard class chart::ControllerLockGuardUNO
-chart2/source/model/template/ChartType.hxx:127
-    chart::ChartType m_xContext const css::uno::Reference<css::uno::XComponentContext>
 chart2/source/view/inc/GL3DRenderer.hxx:54
     chart::opengl3D::MaterialParameters pad float
 chart2/source/view/inc/GL3DRenderer.hxx:55
@@ -78,6 +76,8 @@ include/svtools/unoevent.hxx:162
     SvEventDescriptor xParentRef css::uno::Reference<css::uno::XInterface>
 include/svx/ClassificationDialog.hxx:63
     svx::ClassificationDialog m_nInsertMarkings sal_Int16
+include/svx/unoshape.hxx:676
+    SvxGraphicObject referer_ class rtl::OUString
 include/vcl/pdfwriter.hxx:549
     vcl::PDFWriter::PDFSignContext m_pDerEncoded sal_Int8 *
 include/vcl/pdfwriter.hxx:551

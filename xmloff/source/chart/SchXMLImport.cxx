@@ -497,8 +497,6 @@ SchXMLImport::SchXMLImport(
 {
     GetNamespaceMap().Add( GetXMLToken(XML_NP_XLINK), GetXMLToken(XML_N_XLINK), XML_NAMESPACE_XLINK );
     GetNamespaceMap().Add( GetXMLToken(XML_NP_CHART_EXT), GetXMLToken(XML_N_CHART_EXT), XML_NAMESPACE_CHART_EXT);
-
-    mbIsGraphicLoadOnDemandSupported = false;
 }
 
 SchXMLImport::~SchXMLImport() throw ()

@@ -84,8 +84,6 @@ codemaker/source/cppumaker/dependencies.hxx:115
     codemaker::cppumaker::Dependencies m_doubleDependency _Bool
 configmgr/source/components.cxx:162
     configmgr::Components::WriteThread reference_ rtl::Reference<WriteThread> *
-connectivity/source/drivers/firebird/Connection.hxx:77
-    connectivity::firebird::Connection m_xDriver ::rtl::Reference<FirebirdDriver>
 connectivity/source/drivers/mork/MorkParser.hxx:133
     MorkParser error_ enum MorkErrors
 connectivity/source/inc/dbase/DTable.hxx:62
@@ -262,6 +260,8 @@ include/xmloff/shapeimport.hxx:181
     SdXML3DSceneAttributesHelper mbVPNUsed _Bool
 include/xmloff/shapeimport.hxx:182
     SdXML3DSceneAttributesHelper mbVUPUsed _Bool
+include/xmloff/xmlimp.hxx:241
+    SvXMLImport mbIsGraphicLoadOnDemandSupported _Bool
 l10ntools/inc/common.hxx:31
     common::HandledArgs m_bUTF8BOM _Bool
 libreofficekit/qa/gtktiledviewer/gtv-application-window.hxx:61
@@ -466,7 +466,7 @@ svx/source/sidebar/line/LinePropertyPanel.hxx:106
     svx::sidebar::LinePropertyPanel maCapStyle sfx2::sidebar::ControllerItem
 svx/source/table/tablertfimporter.cxx:53
     sdr::table::RTFCellDefault maItemSet class SfxItemSet
-sw/inc/shellio.hxx:147
+sw/inc/shellio.hxx:145
     SwReader aFileName class rtl::OUString
 sw/source/core/doc/tblafmt.cxx:184
     SwAfVersions m_nVerticalAlignmentVersion sal_uInt16
@@ -538,7 +538,7 @@ vcl/inc/salwtype.hxx:242
     SalInputContext mpFont class FontSelectPattern *
 vcl/inc/salwtype.hxx:250
     SalSwipeEvent mnVelocityY double
-vcl/inc/sft.hxx:468
+vcl/inc/sft.hxx:463
     vcl::TrueTypeFont mapper sal_uInt32 (*)(const sal_uInt8 *, sal_uInt32, sal_uInt32)
 vcl/opengl/salbmp.cxx:426
     (anonymous namespace)::ScanlineWriter mpCurrentScanline sal_uInt8 *
