@@ -1149,7 +1149,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
             }
             rSh.EndUndo();
 
-            GetView().GetViewFrame()->GetBindings().Invalidate( FN_TOOL_ANCHOR );
+            GetView().GetViewFrame()->GetBindings().Invalidate( SID_ANCHOR_MENU );
         }
         break;
 
@@ -1617,7 +1617,7 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
             }
             break;
 
-            case FN_TOOL_ANCHOR:
+            case SID_ANCHOR_MENU:
             case FN_TOOL_ANCHOR_PAGE:
             case FN_TOOL_ANCHOR_PARAGRAPH:
             case FN_TOOL_ANCHOR_CHAR:
@@ -1649,7 +1649,7 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
 
                     if( nWhich == FN_TOOL_ANCHOR_FRAME && !rSh.IsFlyInFly() )
                         rSet.DisableItem(nWhich);
-                    else if(nWhich != FN_TOOL_ANCHOR)
+                    else if(nWhich != SID_ANCHOR_MENU)
                         rSet.Put(SfxBoolItem(nWhich, bSet));
                 }
                 else

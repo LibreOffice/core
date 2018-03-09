@@ -962,9 +962,10 @@ class SfxStringItem;
 #define SID_BMPMASK_COLOR                               ( SID_SVX_START + 1169 )
 #define SID_PARAGRAPH_SIGN_CLASSIFY_DLG                 ( SID_SVX_START + 1170 )
 #define SID_CLASSIFICATION_DIALOG                       ( SID_SVX_START + 1171 )
+#define SID_ANCHOR_MENU                                 ( SID_SVX_START + 1172 )
 
 // IMPORTANT NOTE: adjust SID_SVX_FIRSTFREE, when adding new slot id
-#define SID_SVX_FIRSTFREE                               ( SID_CLASSIFICATION_DIALOG + 1 )
+#define SID_SVX_FIRSTFREE                               ( SID_ANCHOR_MENU + 1 )
 
 // Overflow check for slot IDs
 #if SID_SVX_FIRSTFREE > SID_SVX_END
