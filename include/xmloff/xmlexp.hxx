@@ -137,7 +137,6 @@ class XMLOFF_DLLPUBLIC SvXMLExport : public cppu::WeakImplHelper<
     rtl::Reference<SvXMLAttributeList>          mxAttrList;        // a common attribute list
 
     OUString     msOrigFileName; // the original URL
-    OUString     msGraphicObjectProtocol;
     OUString     msEmbeddedObjectProtocol;
     OUString     msFilterName;
     OUString     msImgFilterName;
@@ -459,9 +458,6 @@ public:
 
     /// get the export for image maps
     XMLImageMapExport& GetImageMapExport();
-
-    OUString AddEmbeddedGraphicObject(
-                            const OUString& rGraphicObjectURL );
 
     OUString AddEmbeddedXGraphic(css::uno::Reference<css::graphic::XGraphic> const & rxGraphic, OUString & rOutMimeType, OUString const & rRequestedName = OUString());
     bool AddEmbeddedXGraphicAsBase64(css::uno::Reference<css::graphic::XGraphic> const & rxGraphic);

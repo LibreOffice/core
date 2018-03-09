@@ -33,6 +33,7 @@
 #include <rtl/strbuf.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/util/Date.hpp>
+#include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/util/Time.hpp>
 #include <com/sun/star/util/DateTime.hpp>
 #include <comphelper/extract.hxx>
@@ -46,6 +47,7 @@
 namespace xmloff
 {
 
+    using namespace css;
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::beans;
@@ -394,20 +396,33 @@ namespace xmloff
     {
         DBG_CHECK_PROPERTY( _sPropertyName, OUString );
 
-        OUString sTargetLocation = comphelper::getString(m_xProps->getPropertyValue(_sPropertyName));
-        if ( !sTargetLocation.isEmpty() )
-                    // If this isn't a GraphicObject then GetRelativeReference
-                    // will be called anyway ( in AddEmbeddedGraphic )
-            sTargetLocation = m_rContext.getGlobalContext().AddEmbeddedGraphicObject(sTargetLocation);
-        AddAttribute(OAttributeMetaData::getCommonControlAttributeNamespace(_nProperty)
-                    ,OAttributeMetaData::getCommonControlAttributeName(_nProperty)
-                    , sTargetLocation);
+        Any aAny = m_xProps->getPropertyValue(_sPropertyName);
 
-        // #i110911# add xlink:type="simple" if required
-        if (_bAddType)
-            AddAttribute(XML_NAMESPACE_XLINK, token::XML_TYPE, token::XML_SIMPLE);
+        OUString sTargetLocation;
+        if (aAny.has<uno::Reference<graphic::XGraphic>>())
+        {
+            auto xGraphic = aAny.get<uno::Reference<graphic::XGraphic>>();
+            OUString sOutMimeType;
+            sTargetLocation = m_rContext.getGlobalContext().AddEmbeddedXGraphic(xGraphic, sOutMimeType);
+        }
+        else if (aAny.has<OUString>())
+        {
+            auto sURL = aAny.get<OUString>();
+            sTargetLocation = m_rContext.getGlobalContext().AddEmbeddedObject(sURL);
+        }
 
-        exportedProperty(_sPropertyName);
+        if (!sTargetLocation.isEmpty())
+        {
+            AddAttribute(OAttributeMetaData::getCommonControlAttributeNamespace(_nProperty)
+                        ,OAttributeMetaData::getCommonControlAttributeName(_nProperty)
+                        , sTargetLocation);
+
+            // #i110911# add xlink:type="simple" if required
+            if (_bAddType)
+                AddAttribute(XML_NAMESPACE_XLINK, token::XML_TYPE, token::XML_SIMPLE);
+
+            exportedProperty(_sPropertyName);
+        }
     }
     void OPropertyExport::flagStyleProperties()
     {

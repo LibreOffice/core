@@ -396,7 +396,6 @@ void SvXMLExport::InitCtor_()
             GetXMLToken(XML_NP_CSS3TEXT), GetXMLToken(XML_N_CSS3TEXT), XML_NAMESPACE_CSS3TEXT );
     }
 
-    msGraphicObjectProtocol = "vnd.sun.star.GraphicObject:";
     msEmbeddedObjectProtocol = "vnd.sun.star.EmbeddedObject:";
 
     if (mxModel.is() && !mxEventListener.is())
@@ -1867,23 +1866,6 @@ sal_Int32 SvXMLExport::dataStyleForceSystemLanguage(sal_Int32 nFormat) const
                  ? mpNumExport->ForceSystemLanguage( nFormat ) : nFormat;
 }
 
-OUString SvXMLExport::AddEmbeddedGraphicObject( const OUString& rGraphicObjectURL )
-{
-    OUString sRet( rGraphicObjectURL );
-    if( rGraphicObjectURL.startsWith( msGraphicObjectProtocol ) &&
-        mxGraphicResolver.is() )
-    {
-        if( !(getExportFlags() & SvXMLExportFlags::EMBEDDED) )
-            sRet = mxGraphicResolver->resolveGraphicObjectURL( rGraphicObjectURL );
-        else
-            sRet.clear();
-    }
-    else
-        sRet = GetRelativeReference( sRet );
-
-    return sRet;
-}
-
 OUString SvXMLExport::AddEmbeddedXGraphic(uno::Reference<graphic::XGraphic> const & rxGraphic, OUString & rOutMimeType, OUString const & rRequestedName)
 {
     OUString sURL;
@@ -1951,12 +1933,10 @@ bool SvXMLExport::AddEmbeddedXGraphicAsBase64(uno::Reference<graphic::XGraphic> 
 OUString SvXMLExport::AddEmbeddedObject( const OUString& rEmbeddedObjectURL )
 {
     OUString sRet;
-    if( (rEmbeddedObjectURL.startsWith( msEmbeddedObjectProtocol ) ||
-         rEmbeddedObjectURL.startsWith( msGraphicObjectProtocol ) ) &&
-        mxEmbeddedResolver.is() )
+    if (rEmbeddedObjectURL.startsWith(msEmbeddedObjectProtocol) &&
+        mxEmbeddedResolver.is())
     {
-        sRet =
-            mxEmbeddedResolver->resolveEmbeddedObjectURL( rEmbeddedObjectURL );
+        sRet = mxEmbeddedResolver->resolveEmbeddedObjectURL(rEmbeddedObjectURL);
     }
     else
         sRet = GetRelativeReference( rEmbeddedObjectURL );
@@ -1967,9 +1947,8 @@ OUString SvXMLExport::AddEmbeddedObject( const OUString& rEmbeddedObjectURL )
 bool SvXMLExport::AddEmbeddedObjectAsBase64( const OUString& rEmbeddedObjectURL )
 {
     bool bRet = false;
-    if( (rEmbeddedObjectURL.startsWith( msEmbeddedObjectProtocol ) ||
-         rEmbeddedObjectURL.startsWith( msGraphicObjectProtocol ) ) &&
-        mxEmbeddedResolver.is() )
+    if (rEmbeddedObjectURL.startsWith(msEmbeddedObjectProtocol) &&
+        mxEmbeddedResolver.is())
     {
         Reference < XNameAccess > xNA( mxEmbeddedResolver, UNO_QUERY );
         if( xNA.is() )
