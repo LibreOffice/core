@@ -16,6 +16,24 @@
       "revId": "0e776a4c4243d6fac0641dc1f119e5aedb9f1e39",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba2be162_1a5a1b84",
+        "filename": "xmlsecurity/CppunitTest_xmlsecurity_signing.mk",
+        "patchSetId": 3
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2018-03-09T23:38:39Z",
+      "side": 1,
+      "message": "Hmm, the socketdir is created in /run/user, so GNUPGHOME should have no influence. But the manpage is indeed a tad ambiguous there.\nYes to the second suggestion.\nBut I\u0027d wait for Luke\u0027s feedback anyway before merging...",
+      "parentUuid": "ba2be162_7a3cf72f",
+      "revId": "0e776a4c4243d6fac0641dc1f119e5aedb9f1e39",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
