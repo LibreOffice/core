@@ -1467,7 +1467,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
                     long nDiff = pLine->GetHeight() - nH;
                     if ( nDiff > pLine->GetMaxAscent() )
                         nDiff = pLine->GetMaxAscent();
-                    pLine->SetMaxAscent( static_cast<sal_uInt16>( pLine->GetMaxAscent() - nDiff ) * 4 / 5 ); // 80%
+                    pLine->SetMaxAscent( static_cast<sal_uInt16>( pLine->GetMaxAscent() * 4 / 5 - nDiff ) ); // 80%
                     pLine->SetHeight( static_cast<sal_uInt16>(nH), nTxtHeight );
                 }
             }
