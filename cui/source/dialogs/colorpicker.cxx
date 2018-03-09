@@ -629,12 +629,14 @@ void ColorSliderControl::UpdateBitmap()
 {
     Size aSize(1, GetOutputSizePixel().Height());
 
-    if (mxBitmap && mxBitmap->GetOutputSizePixel() == aSize)
-        return;
+    if (mxBitmap && mxBitmap->GetOutputSizePixel() != aSize)
+        mxBitmap.disposeAndClear();
 
-    mxBitmap.disposeAndClear();
-    mxBitmap = VclPtr<VirtualDevice>::Create();
-    mxBitmap->SetOutputSizePixel(aSize);
+    if (!mxBitmap)
+    {
+        mxBitmap = VclPtr<VirtualDevice>::Create();
+        mxBitmap->SetOutputSizePixel(aSize);
+    }
 
     const long nY = aSize.Height() - 1;
 
