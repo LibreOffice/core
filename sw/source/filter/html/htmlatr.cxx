@@ -2876,7 +2876,7 @@ Writer& OutHTML_INetFormat( Writer& rWrt, const SwFormatINetFormat& rINetFormat,
         return rWrt;
     }
 
-    OString sOut = "<" OOO_STRING_SVTOOLS_HTML_anchor;
+    OString sOut("<" + rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_anchor);
 
     bool bScriptDependent = false;
     {
