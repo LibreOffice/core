@@ -66,10 +66,10 @@ protected:
     /// @throws css::uno::RuntimeException
     virtual void statusChanged(const css::frame::FeatureStateEvent& Event );
 
+    css::uno::Reference< css::frame::XFrame >  mxFrame;
 private:
     void init();
 
-    css::uno::Reference< css::frame::XFrame >  mxFrame;
     rtl::Reference< svt::FrameStatusListener > mxStatusListener;
 };
 
