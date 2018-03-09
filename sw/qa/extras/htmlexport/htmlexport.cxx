@@ -337,15 +337,23 @@ DECLARE_HTMLEXPORT_TEST(testReqIfParagraph, "reqif-p.xhtml")
 {
     SvStream* pStream = maTempFile.GetStream(StreamMode::READ);
     CPPUNIT_ASSERT(pStream);
+    pStream->Seek(STREAM_SEEK_TO_END);
+    sal_uInt64 nLength = pStream->Tell();
+    pStream->Seek(0);
 
     OString aExpected("<reqif-xhtml:p>aaa<reqif-xhtml:br/>\nbbb</reqif-xhtml:p>" SAL_NEWLINE_STRING);
 
     // This was '<table' instead.
     aExpected += "<reqif-xhtml:table";
 
+    OString aStream(read_uInt8s_ToOString(*pStream, nLength));
+    pStream->Seek(0);
     OString aActual(read_uInt8s_ToOString(*pStream, aExpected.getLength()));
     // This was a HTML header, like '<!DOCTYPE html ...'.
     CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
+
+    // This was "<a", was not found.
+    CPPUNIT_ASSERT(aStream.indexOf("<reqif-xhtml:a") != -1);
 }
 
 DECLARE_HTMLEXPORT_ROUNDTRIP_TEST(testReqIfOleData, "reqif-ole-data.xhtml")
