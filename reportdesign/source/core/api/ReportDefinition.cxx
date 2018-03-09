@@ -144,7 +144,6 @@
 #define SC_UNO_PAGE_HDRBACKTRAN     "HeaderBackTransparent"
 #define SC_UNO_PAGE_HDRGRFFILT      "HeaderBackGraphicFilter"
 #define SC_UNO_PAGE_HDRGRFLOC       "HeaderBackGraphicLocation"
-#define SC_UNO_PAGE_HDRGRFURL       "HeaderBackGraphicURL"
 #define SC_UNO_PAGE_HDRGRF          "HeaderBackGraphic"
 #define SC_UNO_PAGE_HDRLEFTBOR      "HeaderLeftBorder"
 #define SC_UNO_PAGE_HDRRIGHTBOR     "HeaderRightBorder"
@@ -167,7 +166,6 @@
 #define SC_UNO_PAGE_FTRBACKTRAN     "FooterBackTransparent"
 #define SC_UNO_PAGE_FTRGRFFILT      "FooterBackGraphicFilter"
 #define SC_UNO_PAGE_FTRGRFLOC       "FooterBackGraphicLocation"
-#define SC_UNO_PAGE_FTRGRFURL       "FooterBackGraphicURL"
 #define SC_UNO_PAGE_FTRGRF          "FooterBackGraphic"
 #define SC_UNO_PAGE_FTRLEFTBOR      "FooterLeftBorder"
 #define SC_UNO_PAGE_FTRRIGHTBOR     "FooterRightBorder"
@@ -305,7 +303,6 @@ OStyle::OStyle()
     registerPropertyNoMember(SC_UNO_PAGE_FTRBACKCOL,  ++i,nBound, cppu::UnoType<sal_Int32>::get(), css::uno::makeAny(COL_TRANSPARENT));
     registerPropertyNoMember(SC_UNO_PAGE_FTRGRFFILT,  ++i,nBound, cppu::UnoType<OUString>::get(), css::uno::Any(OUString()));
     registerPropertyNoMember(SC_UNO_PAGE_FTRGRFLOC,   ++i,nBound, cppu::UnoType<style::GraphicLocation>::get(), css::uno::Any(style::GraphicLocation_NONE));
-    registerPropertyNoMember(SC_UNO_PAGE_FTRGRFURL,   ++i,nBound, cppu::UnoType<OUString>::get(), css::uno::Any(OUString()));
     registerPropertyNoMember(SC_UNO_PAGE_FTRGRF,      ++i,nBound, cppu::UnoType<graphic::XGraphic>::get(), css::uno::Any(uno::Reference<graphic::XGraphic>()));
     registerPropertyNoMember(SC_UNO_PAGE_FTRBACKTRAN, ++i,nBound,cppu::UnoType<bool>::get(), css::uno::Any(true));
     registerPropertyNoMember(SC_UNO_PAGE_FTRBODYDIST, ++i,nBound, cppu::UnoType<sal_Int32>::get(), css::uno::makeAny<sal_Int32>(0));
@@ -329,7 +326,6 @@ OStyle::OStyle()
     registerPropertyNoMember(SC_UNO_PAGE_HDRBACKCOL,  ++i,nBound|nMayBeVoid, cppu::UnoType<sal_Int32>::get(), css::uno::makeAny(COL_TRANSPARENT));
     registerPropertyNoMember(SC_UNO_PAGE_HDRGRFFILT,  ++i,nBound|nMayBeVoid, cppu::UnoType<OUString>::get(), css::uno::Any(OUString()));
     registerPropertyNoMember(SC_UNO_PAGE_HDRGRFLOC,   ++i,nBound|nMayBeVoid, cppu::UnoType<style::GraphicLocation>::get(), css::uno::Any(style::GraphicLocation_NONE));
-    registerPropertyNoMember(SC_UNO_PAGE_HDRGRFURL,   ++i,nBound|nMayBeVoid, cppu::UnoType<OUString>::get(), css::uno::Any(OUString()));
     registerPropertyNoMember(SC_UNO_PAGE_HDRGRF,      ++i,nBound|nMayBeVoid, cppu::UnoType<graphic::XGraphic>::get(), css::uno::Any(uno::Reference<graphic::XGraphic>()));
     registerPropertyNoMember(SC_UNO_PAGE_HDRBACKTRAN, ++i,nBound|nMayBeVoid,cppu::UnoType<bool>::get(), css::uno::Any(true));
     registerPropertyNoMember(SC_UNO_PAGE_HDRBODYDIST, ++i,nBound|nMayBeVoid, cppu::UnoType<sal_Int32>::get(), css::uno::makeAny<sal_Int32>(0));
