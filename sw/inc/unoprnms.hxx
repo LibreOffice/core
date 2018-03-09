@@ -35,7 +35,6 @@
 #define UNO_NAME_FOOTER_GRAPHIC_URL "FooterBackGraphicURL"
 #define UNO_NAME_FOOTER_GRAPHIC "FooterBackGraphic"
 #define UNO_NAME_FOOTER_GRAPHIC_FILTER "FooterBackGraphicFilter"
-#define UNO_NAME_BACK_GRAPHIC_URL "BackGraphicURL"
 #define UNO_NAME_BACK_GRAPHIC "BackGraphic"
 #define UNO_NAME_BACK_GRAPHIC_FILTER "BackGraphicFilter"
 #define UNO_NAME_BACK_GRAPHIC_LOCATION "BackGraphicLocation"

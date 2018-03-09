@@ -311,8 +311,6 @@ bool needToMapFillItemsToSvxBrushItemTypes(const SfxItemSet& rSet,
         case drawing::FillStyle_BITMAP:
             switch (nMID)
             {
-                case MID_GRAPHIC_URL:
-                    return SfxItemState::SET == rSet.GetItemState(XATTR_FILLBITMAP);
                 case MID_GRAPHIC:
                     return SfxItemState::SET == rSet.GetItemState(XATTR_FILLBITMAP);
                 case MID_GRAPHIC_POSITION:

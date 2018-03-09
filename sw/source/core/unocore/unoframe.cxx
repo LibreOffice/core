@@ -208,14 +208,12 @@ bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rToSet, const SfxI
     const ::uno::Any* pColTrans = nullptr; GetProperty(RES_BACKGROUND, MID_BACK_COLOR_TRANSPARENCY, pColTrans);
     const ::uno::Any* pTrans = nullptr; GetProperty(RES_BACKGROUND, MID_GRAPHIC_TRANSPARENT, pTrans );
     const ::uno::Any* pGrLoc = nullptr; GetProperty(RES_BACKGROUND, MID_GRAPHIC_POSITION, pGrLoc );
-    const ::uno::Any* pGrURL = nullptr; GetProperty(RES_BACKGROUND, MID_GRAPHIC_URL, pGrURL     );
     const ::uno::Any* pGraphic = nullptr; GetProperty(RES_BACKGROUND, MID_GRAPHIC, pGraphic     );
     const ::uno::Any* pGrFilter = nullptr; GetProperty(RES_BACKGROUND, MID_GRAPHIC_FILTER, pGrFilter     );
     const ::uno::Any* pGrTranparency = nullptr; GetProperty(RES_BACKGROUND, MID_GRAPHIC_TRANSPARENCY, pGrTranparency     );
     const bool bSvxBrushItemPropertiesUsed(
         pCol ||
         pTrans ||
-        pGrURL ||
         pGraphic ||
         pGrFilter ||
         pGrLoc ||
@@ -262,8 +260,7 @@ bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rToSet, const SfxI
     // tdf#91140: ignore SOLID fill style for determining if fill style is used
     // but there is a GraphicURL
     const bool bFillStyleUsed(pXFillStyleItem && pXFillStyleItem->hasValue() &&
-        (pXFillStyleItem->get<drawing::FillStyle>() != drawing::FillStyle_SOLID
-         || !pGrURL || !pGraphic));
+        (pXFillStyleItem->get<drawing::FillStyle>() != drawing::FillStyle_SOLID || !pGraphic));
     SAL_INFO_IF(pXFillStyleItem && pXFillStyleItem->hasValue() && !bFillStyleUsed,
             "sw.uno", "FillBaseProperties: ignoring invalid FillStyle");
     const bool bXFillStyleItemUsed(
@@ -321,11 +318,6 @@ bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rToSet, const SfxI
             // don't overwrite transparency with a non-transparence flag
             if(!pColTrans || Any2Bool( *pTrans ))
                 bRet &= static_cast<SfxPoolItem&>(aBrush).PutValue(*pTrans, MID_GRAPHIC_TRANSPARENT);
-        }
-
-        if(pGrURL)
-        {
-            bRet &= static_cast<SfxPoolItem&>(aBrush).PutValue(*pGrURL, MID_GRAPHIC_URL);
         }
 
         if (pGraphic)

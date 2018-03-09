@@ -3196,22 +3196,6 @@ bool SvxBrushItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
             rVal <<= ( aColor.GetTransparency() == 0xff );
         break;
 
-        case MID_GRAPHIC_URL:
-        {
-            OUString sLink;
-            if ( !maStrLink.isEmpty() )
-                sLink = maStrLink;
-            else if (xGraphicObject)
-            {
-                OUString sId(OStringToOUString(
-                    xGraphicObject->GetUniqueID(),
-                    RTL_TEXTENCODING_ASCII_US));
-                sLink = UNO_NAME_GRAPHOBJ_URLPREFIX + sId;
-            }
-            rVal <<= sLink;
-        }
-        break;
-
         case MID_GRAPHIC:
         {
             uno::Reference<graphic::XGraphic> xGraphic;
@@ -3292,38 +3276,6 @@ bool SvxBrushItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 
         case MID_GRAPHIC_TRANSPARENT:
             aColor.SetTransparency( Any2Bool( rVal ) ? 0xff : 0 );
-        break;
-
-        case MID_GRAPHIC_URL:
-        {
-            if ( rVal.getValueType() == ::cppu::UnoType<OUString>::get() )
-            {
-                OUString sLink;
-                rVal >>= sLink;
-                if( sLink.startsWith( UNO_NAME_GRAPHOBJ_URLPKGPREFIX ) )
-                {
-                    OSL_FAIL( "package urls aren't implemented" );
-                }
-                else if( sLink.startsWith( UNO_NAME_GRAPHOBJ_URLPREFIX ) )
-                {
-                    maStrLink.clear();
-                    OString sId(OUStringToOString(sLink.copy( sizeof(UNO_NAME_GRAPHOBJ_URLPREFIX)-1 ),
-                                                  RTL_TEXTENCODING_ASCII_US));
-                    std::unique_ptr<GraphicObject> xOldGrfObj(std::move(xGraphicObject));
-                    xGraphicObject.reset(new GraphicObject(sId));
-                    ApplyGraphicTransparency_Impl();
-                    xOldGrfObj.reset();
-                }
-                else
-                {
-                    SetGraphicLink(sLink);
-                }
-                if ( !sLink.isEmpty() && eGraphicPos == GPOS_NONE )
-                    eGraphicPos = GPOS_MM;
-                else if( sLink.isEmpty() )
-                    eGraphicPos = GPOS_NONE;
-            }
-        }
         break;
 
         case MID_GRAPHIC:

@@ -1,7 +1,6 @@
 "SwXTextTableRow";"com::sun::star::text::TextTableRow";"BackColor"
 "SwXTextTableRow";"com::sun::star::text::TextTableRow";"BackTransparent"
-"SwXTextTableRow";"com::sun::star::text::TextTableRow";"BackGraphicURL"
-"SwXTextTableRow";"com::sun::star::text::TextTableRow";"BackGraphicFilter"
+"SwXTextTableRow";"com::sun::star::text::TextTableRow";"BackGraphic"
 "SwXTextTableRow";"com::sun::star::text::TextTableRow";"BackGraphicLocation"
 "SwXTextTableRow";"com::sun::star::text::TextTableRow";"TableColumnSeparators"
 "SwXTextTableRow";"com::sun::star::text::TextTableRow";"Height"
