@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba2be162_d42f79f4",
+        "filename": "writerfilter/source/dmapper/DomainMapper_Impl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2257,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-03-09T07:57:50Z",
+      "side": 1,
+      "message": "shouldn\u0027t this throw an exception? doesn\u0027t this reveal some kind of format error?",
+      "revId": "6ea8c6444c09d08046665c5062a986214c7fb533",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
