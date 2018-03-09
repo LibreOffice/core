@@ -35,7 +35,6 @@
 
 //NameOrIndex
 #define MID_NAME                16
-#define MID_GRAFURL             32
 
 // SvxPageModelItem
 #define MID_AUTO                1

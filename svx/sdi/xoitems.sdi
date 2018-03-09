@@ -20,7 +20,6 @@
 struct XFillBitmap
 {
     String  Name        MID_NAME;
-    String  GraphicsURL MID_GRAFURL;
 //  com::sun::star::awt::XBitmap
 };
 item XFillBitmap XFillBitmapItem;
