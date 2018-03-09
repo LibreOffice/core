@@ -76,8 +76,8 @@ namespace ooo
         // word seems to return an erroneous mime type :-/ "application/msword"  not consistent with the excel one
         inline bool isAlienWordDoc( SfxObjectShell const & rDocShell ) { return isAlienDoc( rDocShell, "application/msword" ); }
 
-    } // openoffice
-} // org
+    }
+}
 
 #endif
 
