@@ -19,6 +19,9 @@
 #include "editeng/eeitem.hxx"
 #include "editeng/editids.hrc"
 #include "editeng/editdoc.hxx"
+#include "editeng/fontitem.hxx"
+#include "editeng/fhgtitem.hxx"
+#include "editeng/lspcitem.hxx"
 #include "editeng/svxacorr.hxx"
 #include "editeng/unofield.hxx"
 #include "editeng/wghtitem.hxx"
@@ -45,6 +48,9 @@ public:
     virtual void setUp() override;
     virtual void tearDown() override;
 
+    /// Test text portions position when percentage line spacing is set
+    void testLineSpacing();
+
     void testConstruction();
 
     /// Test UNO service class that implements text field items.
@@ -63,6 +69,7 @@ public:
 
     CPPUNIT_TEST_SUITE(Test);
     CPPUNIT_TEST(testConstruction);
+    CPPUNIT_TEST(testLineSpacing);
     CPPUNIT_TEST(testUnoTextFields);
     CPPUNIT_TEST(testAutocorrect);
     CPPUNIT_TEST(testHyperlinkSearch);
@@ -108,6 +115,93 @@ bool includes(const uno::Sequence<OUString>& rSeq, const OUString& rVal)
     return false;
 }
 
+}
+
+void Test::testLineSpacing()
+{
+    // Create EditEngine's instance
+    EditEngine aEditEngine(mpItemPool);
+
+    if(aEditEngine.GetRefDevice()->GetDPIY() != 96
+        || !basegfx::fTools::equal(aEditEngine.GetRefDevice()->GetDPIScaleFactor(), 1.0))
+        return;
+
+    // Get EditDoc for current EditEngine's instance
+    EditDoc &rDoc = aEditEngine.GetEditDoc();
+
+    // Initially no text should be there
+    CPPUNIT_ASSERT_EQUAL(sal_uLong(0), rDoc.GetTextLen());
+    CPPUNIT_ASSERT_EQUAL(OUString(), rDoc.GetParaAsString(sal_Int32(0)));
+
+    // Set initial text
+    OUString aText = "This is multi-line paragraph";
+
+    sal_Int32 aTextLen = aText.getLength();
+    aEditEngine.SetText(aText);
+
+    // Assert changes - text insertion
+    CPPUNIT_ASSERT_EQUAL(sal_uLong(aTextLen), rDoc.GetTextLen());
+    CPPUNIT_ASSERT_EQUAL(aText, rDoc.GetParaAsString(sal_Int32(0)));
+
+    // Get ItemSet for line spacing - 60%
+    std::unique_ptr<SfxItemSet> pSet(new SfxItemSet(aEditEngine.GetEmptyItemSet()));
+    SvxLineSpacingItem aLineSpacing(LINE_SPACE_DEFAULT_HEIGHT, EE_PARA_SBL);
+    aLineSpacing.SetPropLineSpace(60);
+    pSet->Put(aLineSpacing);
+
+    // Set font
+    SvxFontItem aFont(EE_CHAR_FONTINFO);
+    aFont.SetFamilyName("Liberation Sans");
+    pSet->Put(aFont);
+    SvxFontHeightItem aFontSize(240, 100, EE_CHAR_FONTHEIGHT);
+    pSet->Put(aFontSize);
+
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(3), pSet->Count());
+
+    // Select all paragraphs and set spacing
+    ESelection aSelection(0, 0, 0, aTextLen);
+    aEditEngine.QuickSetAttribs(*pSet, aSelection);
+
+    // Force multiple lines
+    aEditEngine.SetPaperSize(Size(1000, 6000));
+    CPPUNIT_ASSERT_EQUAL((sal_Int32)4, aEditEngine.GetLineCount(0));
+
+    // Assert changes
+    ParaPortion* pParaPortion = aEditEngine.GetParaPortions()[0];
+    ContentNode* const pNode = pParaPortion->GetNode();
+    const SfxPoolItem& rLSItem = pNode->GetContentAttribs().GetItem(EE_PARA_SBL);
+    const SvxLineSpacingItem* pLSItem = static_cast<const SvxLineSpacingItem*>(&rLSItem);
+    CPPUNIT_ASSERT(SvxInterLineSpaceRule::Prop == pLSItem->GetInterLineSpaceRule());
+    CPPUNIT_ASSERT_EQUAL((sal_uInt16)60, pLSItem->GetPropLineSpace());
+
+    // Check the first line
+    ParagraphInfos aInfo = aEditEngine.GetParagraphInfos(0);
+    CPPUNIT_ASSERT_EQUAL((sal_uInt16)122, aInfo.nFirstLineMaxAscent);
+    CPPUNIT_ASSERT_EQUAL((sal_uInt16)153, (sal_uInt16)aEditEngine.GetLineHeight(0));
+
+    // Prepare second case - 150%
+    std::unique_ptr<SfxItemSet> pSet2(new SfxItemSet(aEditEngine.GetEmptyItemSet()));
+    SvxLineSpacingItem aLineSpacing2(LINE_SPACE_DEFAULT_HEIGHT, EE_PARA_SBL);
+    aLineSpacing2.SetPropLineSpace(150);
+    pSet2->Put(aLineSpacing2);
+    pSet2->Put(aFont);
+    pSet2->Put(aFontSize);
+
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(3), pSet2->Count());
+
+    // Select all paragraphs and set spacing
+    aEditEngine.QuickSetAttribs(*pSet2, aSelection);
+
+    // Assert changes
+    const SfxPoolItem& rLSItem2 = pNode->GetContentAttribs().GetItem(EE_PARA_SBL);
+    const SvxLineSpacingItem* pLSItem2 = static_cast<const SvxLineSpacingItem*>(&rLSItem2);
+    CPPUNIT_ASSERT(SvxInterLineSpaceRule::Prop == pLSItem2->GetInterLineSpaceRule());
+    CPPUNIT_ASSERT_EQUAL((sal_uInt16)150, pLSItem2->GetPropLineSpace());
+
+    // Check the first line
+    ParagraphInfos aInfo2 = aEditEngine.GetParagraphInfos(0);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(311), aInfo2.nFirstLineMaxAscent);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(382), static_cast<sal_uInt16>(aEditEngine.GetLineHeight(0)));
 }
 
 void Test::testUnoTextFields()
