@@ -293,7 +293,7 @@ void SwHTMLParser::SetSpace( const Size& rPixSpace,
     }
 }
 
-void SwHTMLParser::InsertEmbed()
+bool SwHTMLParser::InsertEmbed()
 {
     OUString aURL, aType, aName, aAlt, aId, aStyle, aClass;
     OUString aData;
@@ -382,6 +382,10 @@ void SwHTMLParser::InsertEmbed()
         aCmdLst.Append( rOption.GetTokenString(), rOption.GetString() );
     }
 
+    if (aType == "image/png" && m_aEmbeds.empty())
+        // Toplevel <object> for PNG -> that's an image, not an OLE object.
+        return false;
+
     SfxItemSet aItemSet( m_xDoc->GetAttrPool(), m_pCSS1Parser->GetWhichMap() );
     SvxCSS1PropertyInfo aPropInfo;
     if( HasStyleOptions( aStyle, aId, aClass ) )
@@ -422,7 +426,7 @@ void SwHTMLParser::InsertEmbed()
     // do not insert plugin if it has neither URL nor type
     bool bHasType = !aType.isEmpty();
     if( !bHasURL && !bHasType && !bHasData )
-        return;
+        return true;
 
     if (!m_aEmbeds.empty())
     {
@@ -431,7 +435,7 @@ void SwHTMLParser::InsertEmbed()
         svt::EmbeddedObjectRef& rObj = pOLENode->GetOLEObj().GetObject();
         Graphic aGraphic;
         if (GraphicFilter::GetGraphicFilter().ImportGraphic(aGraphic, aURLObj) != ERRCODE_NONE)
-            return;
+            return true;
 
         rObj.SetGraphic(aGraphic, aType);
 
@@ -448,7 +452,7 @@ void SwHTMLParser::InsertEmbed()
 
         SwFrameFormat* pFormat = pOLENode->GetFlyFormat();
         if (!pFormat)
-            return;
+            return true;
 
         SwAttrSet aAttrSet(pFormat->GetAttrSet());
         aAttrSet.ClearItem(RES_CNTNT);
@@ -456,7 +460,7 @@ void SwHTMLParser::InsertEmbed()
         SwFormatFrameSize aFrameSize(ATT_FIX_SIZE, aTwipSize.Width(), aTwipSize.Height());
         aAttrSet.Put(aFrameSize);
         pOLENode->GetDoc()->SetFlyFrameAttr(*pFormat, aAttrSet);
-        return;
+        return true;
     }
 
     // create the plug-in
@@ -559,13 +563,15 @@ void SwHTMLParser::InsertEmbed()
     }
 
     if (!bHasData)
-        return;
+        return true;
 
     SwOLENode* pOLENode = pNoTextNd->GetOLENode();
     if (!pOLENode)
-        return;
+        return true;
 
     m_aEmbeds.push(pOLENode);
+
+    return true;
 }
 
 #if HAVE_FEATURE_JAVA

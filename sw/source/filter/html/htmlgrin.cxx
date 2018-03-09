@@ -306,6 +306,7 @@ void SwHTMLParser::InsertImage()
     // and now analyze
     OUString sAltNm, aId, aClass, aStyle, aMap, sHTMLGrfName;
     OUString sGrfNm;
+    OUString aGraphicData;
     sal_Int16 eVertOri = text::VertOrientation::TOP;
     sal_Int16 eHoriOri = text::HoriOrientation::NONE;
     bool bWidthProvided=false, bHeightProvided=false;
@@ -343,6 +344,11 @@ void SwHTMLParser::InsertImage()
                 sGrfNm = rOption.GetString();
                 if( !InternalImgToPrivateURL(sGrfNm) )
                     sGrfNm = INetURLObject::GetAbsURL( m_sBaseURL, sGrfNm );
+                break;
+            case HtmlOptionId::DATA:
+                aGraphicData = rOption.GetString();
+                if (!InternalImgToPrivateURL(aGraphicData))
+                    aGraphicData = INetURLObject::GetAbsURL(m_sBaseURL, aGraphicData);
                 break;
             case HtmlOptionId::ALIGN:
                 eVertOri =
@@ -427,6 +433,9 @@ IMAGE_SETEVENT:
         }
     }
 
+    if (sGrfNm.isEmpty() && !aGraphicData.isEmpty())
+        sGrfNm = aGraphicData;
+
     if( sGrfNm.isEmpty() )
         return;
 
@@ -469,8 +478,10 @@ IMAGE_SETEVENT:
                 sGrfNm.clear();
         }
     }
-    else if (m_sBaseURL.isEmpty()) // sBaseURL is empty if the source is clipboard
+    else if (m_sBaseURL.isEmpty() || !aGraphicData.isEmpty())
     {
+        // sBaseURL is empty if the source is clipboard
+        // aGraphicData is non-empty for <object data="..."> -> not a linked graphic.
         if (ERRCODE_NONE == GraphicFilter::GetGraphicFilter().ImportGraphic(aGraphic, aGraphicURL))
             sGrfNm.clear();
     }

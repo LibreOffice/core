@@ -402,6 +402,15 @@ DECLARE_HTMLEXPORT_ROUNDTRIP_TEST(testReqIfOleImg, "reqif-ole-img.xhtml")
     CPPUNIT_ASSERT_EQUAL(OUString("OLE Object"), getProperty<OUString>(xObject, "Title").trim());
 }
 
+DECLARE_HTMLEXPORT_ROUNDTRIP_TEST(testReqIfPngImg, "reqif-png-img.xhtml")
+{
+    uno::Reference<container::XNamed> xShape(getShape(1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xShape.is());
+
+    // This was Object1, PNG without fallback was imported as OLE object.
+    CPPUNIT_ASSERT_EQUAL(OUString("Image1"), xShape->getName());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
