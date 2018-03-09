@@ -143,12 +143,9 @@ void ODatasourceSelectDialog::fillListBox(const StringBag& _rDatasources)
          sSelected = m_pDatasource->GetSelectedEntry();
     m_pDatasource->Clear();
     // fill the list
-    for (   StringBag::const_iterator aDS = _rDatasources.begin();
-            aDS != _rDatasources.end();
-            ++aDS
-        )
+    for (auto const& datasource : _rDatasources)
     {
-        m_pDatasource->InsertEntry( *aDS );
+        m_pDatasource->InsertEntry(datasource);
     }
 
     if (m_pDatasource->GetEntryCount())

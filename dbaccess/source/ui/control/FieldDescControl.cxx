@@ -783,10 +783,8 @@ void OFieldDescControl::ActivateAggregate( EControlType eType )
         m_pType->SetDropDownLineCount(20);
         {
             const OTypeInfoMap* pTypeInfo = getTypeInfo();
-            OTypeInfoMap::const_iterator aIter = pTypeInfo->begin();
-            OTypeInfoMap::const_iterator aEnd = pTypeInfo->end();
-            for(;aIter != aEnd;++aIter)
-                m_pType->InsertEntry( aIter->second->aUIName );
+            for (auto const& elem : *pTypeInfo)
+                m_pType->InsertEntry( elem.second->aUIName );
         }
         m_pType->SelectEntryPos(0);
         InitializeControl(m_pType,HID_TAB_ENT_TYPE,true);

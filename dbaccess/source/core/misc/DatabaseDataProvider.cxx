@@ -727,20 +727,18 @@ void DatabaseDataProvider::impl_fillInternalDataProvider_throw(bool _bHasCategor
     uno::Reference< sdbc::XResultSetMetaDataSupplier > xSuppMeta( m_xRowSet,uno::UNO_QUERY_THROW );
     uno::Reference< sdbc::XColumnLocate > xColumnLocate( m_xRowSet, uno::UNO_QUERY_THROW );
 
-    for (   ColumnDescriptions::iterator col = aColumns.begin();
-            col != aColumns.end();
-            ++col
-         )
+    sal_Int32 columnIndex = 0;
+    for (auto & column : aColumns)
     {
-        col->nResultSetPosition = xColumnLocate->findColumn( col->sName );
+        column.nResultSetPosition = xColumnLocate->findColumn( column.sName );
 
-        const uno::Reference< beans::XPropertySet > xColumn( xColumns->getByName( col->sName ), uno::UNO_QUERY_THROW );
+        const uno::Reference< beans::XPropertySet > xColumn( xColumns->getByName( column.sName ), uno::UNO_QUERY_THROW );
         const uno::Any aNumberFormat( xColumn->getPropertyValue( PROPERTY_NUMBERFORMAT ) );
-        OSL_VERIFY( xColumn->getPropertyValue( PROPERTY_TYPE ) >>= col->nDataType );
+        OSL_VERIFY( xColumn->getPropertyValue( PROPERTY_TYPE ) >>= column.nDataType );
 
-        const sal_Int32 columnIndex = col - aColumns.begin();
         const OUString sRangeName = OUString::number( columnIndex );
         m_aNumberFormats.emplace( sRangeName, aNumberFormat );
+        ++columnIndex;
     }
 
     std::vector< OUString > aRowLabels;
@@ -755,15 +753,17 @@ void DatabaseDataProvider::impl_fillInternalDataProvider_throw(bool _bHasCategor
         aRowLabels.push_back( aValue.getString() );
 
         std::vector< double > aRow;
-        for (   ColumnDescriptions::const_iterator col = aColumns.begin();
-                col != aColumns.end();
-                ++col
-            )
+        bool bFirstLoop = true;
+        for (auto const& column : aColumns)
         {
-            if ( bFirstColumnIsCategory && ( col == aColumns.begin() )  )
-                continue;
+            if (bFirstLoop)
+            {
+                bFirstLoop = false;
+                if (bFirstColumnIsCategory)
+                    continue;
+            }
 
-            aValue.fill( col->nResultSetPosition, col->nDataType, xRow );
+            aValue.fill( column.nResultSetPosition, column.nDataType, xRow );
             if ( aValue.isNull() )
             {
                 double nValue;

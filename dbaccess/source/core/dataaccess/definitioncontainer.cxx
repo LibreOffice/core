@@ -98,13 +98,9 @@ ODefinitionContainer::ODefinitionContainer(   const Reference< XComponentContext
     m_pImpl->m_aProps.bIsFolder = true;
 
     const ODefinitionContainer_Impl& rDefinitions( getDefinitions() );
-    ODefinitionContainer_Impl::const_iterator aEnd = rDefinitions.end();
-    for (   ODefinitionContainer_Impl::const_iterator aDefinition = rDefinitions.begin();
-            aDefinition != aEnd;
-            ++aDefinition
-        )
+    for (auto const& definition : rDefinitions)
         m_aDocuments.push_back(
-            m_aDocumentMap.emplace(aDefinition->first, Documents::mapped_type() ).first );
+            m_aDocumentMap.emplace(definition.first, Documents::mapped_type() ).first );
 
 }
 
@@ -120,12 +116,9 @@ void SAL_CALL ODefinitionContainer::disposing()
     m_aContainerListeners.disposeAndClear(aEvt);
 
     // dispose our elements
-    Documents::const_iterator aIter = m_aDocumentMap.begin();
-    Documents::const_iterator aEnd = m_aDocumentMap.end();
-
-    for (; aIter != aEnd; ++aIter)
+    for (auto const& elem : m_aDocumentMap)
     {
-        Reference<XContent> xProp = aIter->second;
+        Reference<XContent> xProp = elem.second;
         if ( xProp.is() )
         {
             removeObjectListener(xProp);
@@ -428,13 +421,10 @@ Sequence< OUString > SAL_CALL ODefinitionContainer::getElementNames(  )
 
     Sequence< OUString > aNames(m_aDocumentMap.size());
     OUString* pNames = aNames.getArray();
-    Documents::const_iterator aEnd = m_aDocumentMap.end();
-    for (   Documents::const_iterator aNameIter = m_aDocumentMap.begin();
-            aNameIter != aEnd;
-            ++pNames, ++aNameIter
-        )
+    for (auto const& elem : m_aDocumentMap)
     {
-        *pNames = aNameIter->first;
+        *pNames = elem.first;
+        ++pNames;
     }
 
     return aNames;
@@ -452,15 +442,13 @@ void SAL_CALL ODefinitionContainer::disposing( const EventObject& _rSource )
     MutexGuard aGuard(m_aMutex);
     Reference< XContent > xSource(_rSource.Source, UNO_QUERY);
     // it's one of our documents ....
-    Documents::iterator aIter = m_aDocumentMap.begin();
-    Documents::const_iterator aEnd = m_aDocumentMap.end();
-    for (;aIter != aEnd;++aIter )
+    for (auto & elem : m_aDocumentMap)
     {
-        if ( xSource == aIter->second.get() )
+        if ( xSource == elem.second.get() )
         {
             removeObjectListener(xSource);
             // and clear our document map/vector, so the object will be recreated on next access
-            aIter->second = Documents::mapped_type();
+            elem.second = Documents::mapped_type();
         }
     }
 }

@@ -562,24 +562,21 @@ void ODbDataSourceAdministrationHelper::translateProperties(const Reference< XPr
 {
     if (_rxSource.is())
     {
-        for (   MapInt2String::const_iterator aDirect = m_aDirectPropTranslator.begin();
-                aDirect != m_aDirectPropTranslator.end();
-                ++aDirect
-            )
+        for (auto const& elem : m_aDirectPropTranslator)
         {
             // get the property value
             Any aValue;
             try
             {
-                aValue = _rxSource->getPropertyValue(aDirect->second);
+                aValue = _rxSource->getPropertyValue(elem.second);
             }
             catch(Exception&)
             {
                 SAL_WARN("dbaccess", "ODbDataSourceAdministrationHelper::translateProperties: could not extract the property "
-                        << aDirect->second);
+                        << elem.second);
             }
             // transfer it into an item
-            implTranslateProperty(_rDest, aDirect->first, aValue);
+            implTranslateProperty(_rDest, elem.first, aValue);
         }
 
         // get the additional information
@@ -608,17 +605,14 @@ void ODbDataSourceAdministrationHelper::translateProperties(const Reference< XPr
         if ( !aInfos.empty() )
         {
             PropertyValue aSearchFor;
-            MapInt2String::const_iterator aEnd = m_aIndirectPropTranslator.end();
-            for (   MapInt2String::const_iterator aIndirect = m_aIndirectPropTranslator.begin();
-                    aIndirect != aEnd;
-                    ++aIndirect)
+            for (auto const& elem : m_aIndirectPropTranslator)
             {
-                aSearchFor.Name = aIndirect->second;
+                aSearchFor.Name = elem.second;
                 PropertyValueSet::const_iterator aInfoPos = aInfos.find(aSearchFor);
                 if (aInfos.end() != aInfoPos)
                     // the property is contained in the info sequence
                     // -> transfer it into an item
-                    implTranslateProperty(_rDest, aIndirect->first, aInfoPos->Value);
+                    implTranslateProperty(_rDest, elem.first, aInfoPos->Value);
             }
         }
 
@@ -650,30 +644,27 @@ void ODbDataSourceAdministrationHelper::translateProperties(const SfxItemSet& _r
 
     const OUString sUrlProp("URL");
     // transfer the direct properties
-    for (   MapInt2String::const_iterator aDirect = m_aDirectPropTranslator.begin();
-            aDirect != m_aDirectPropTranslator.end();
-            ++aDirect
-        )
+    for (auto const& elem : m_aDirectPropTranslator)
     {
-        const SfxPoolItem* pCurrentItem = _rSource.GetItem(static_cast<sal_uInt16>(aDirect->first));
+        const SfxPoolItem* pCurrentItem = _rSource.GetItem(static_cast<sal_uInt16>(elem.first));
         if (pCurrentItem)
         {
             sal_Int16 nAttributes = PropertyAttribute::READONLY;
             if (xInfo.is())
             {
-                try { nAttributes = xInfo->getPropertyByName(aDirect->second).Attributes; }
+                try { nAttributes = xInfo->getPropertyByName(elem.second).Attributes; }
                 catch(Exception&) { }
             }
             if ((nAttributes & PropertyAttribute::READONLY) == 0)
             {
-                if ( sUrlProp == aDirect->second )
+                if ( sUrlProp == elem.second )
                 {
                     Any aValue(makeAny(getConnectionURL()));
                     //  aValue <<= OUString();
-                    lcl_putProperty(_rxDest, aDirect->second,aValue);
+                    lcl_putProperty(_rxDest, elem.second,aValue);
                 }
                 else
-                    implTranslateProperty(_rxDest, aDirect->second, pCurrentItem);
+                    implTranslateProperty(_rxDest, elem.second, pCurrentItem);
             }
         }
     }
@@ -708,11 +699,10 @@ void ODbDataSourceAdministrationHelper::fillDatasourceInfo(const SfxItemSet& _rS
     // collect the translated property values for the relevant items
     PropertyValueSet aRelevantSettings;
     MapInt2String::const_iterator aTranslation;
-    std::vector< sal_Int32>::const_iterator aDetailsEnd = aDetailIds.end();
-    for (std::vector< sal_Int32>::const_iterator aIter = aDetailIds.begin();aIter != aDetailsEnd ; ++aIter)
+    for (auto const& detailId : aDetailIds)
     {
-        const SfxPoolItem* pCurrent = _rSource.GetItem(static_cast<sal_uInt16>(*aIter));
-        aTranslation = m_aIndirectPropTranslator.find(*aIter);
+        const SfxPoolItem* pCurrent = _rSource.GetItem(static_cast<sal_uInt16>(detailId));
+        aTranslation = m_aIndirectPropTranslator.find(detailId);
         if ( pCurrent && (m_aIndirectPropTranslator.end() != aTranslation) )
         {
             if ( aTranslation->second == INFO_CHARSET )
@@ -772,25 +762,17 @@ void ODbDataSourceAdministrationHelper::fillDatasourceInfo(const SfxItemSet& _rS
         // now check the to-be-preserved props
         std::vector< sal_Int32 > aRemoveIndexes;
         sal_Int32 nPositionCorrector = 0;
-        MapInt2String::const_iterator aPreservedEnd = aPreservedSettings.end();
-        for (   MapInt2String::const_iterator aPreserved = aPreservedSettings.begin();
-                aPreserved != aPreservedEnd;
-                ++aPreserved
-            )
+        for (auto const& preservedSetting : aPreservedSettings)
         {
-            if (aIndirectProps.end() != aIndirectProps.find(aPreserved->second))
+            if (aIndirectProps.end() != aIndirectProps.find(preservedSetting.second))
             {
-                aRemoveIndexes.push_back(aPreserved->first - nPositionCorrector);
+                aRemoveIndexes.push_back(preservedSetting.first - nPositionCorrector);
                 ++nPositionCorrector;
             }
         }
         // now finally remove all such props
-        std::vector< sal_Int32 >::const_iterator aRemoveEnd = aRemoveIndexes.end();
-        for (   std::vector< sal_Int32 >::const_iterator aRemoveIndex = aRemoveIndexes.begin();
-                aRemoveIndex != aRemoveEnd;
-                ++aRemoveIndex
-            )
-            ::comphelper::removeElementAt(_rInfo, *aRemoveIndex);
+        for (auto const& removeIndex : aRemoveIndexes)
+            ::comphelper::removeElementAt(_rInfo, removeIndex);
     }
 
     ::connectivity::DriversConfig aDriverConfig(getORB());
@@ -809,21 +791,18 @@ void ODbDataSourceAdministrationHelper::fillDatasourceInfo(const SfxItemSet& _rS
         sal_Int32 nOldLength = _rInfo.getLength();
         _rInfo.realloc(nOldLength + aRelevantSettings.size());
         PropertyValue* pAppendValues = _rInfo.getArray() + nOldLength;
-        PropertyValueSet::const_iterator aRelevantEnd = aRelevantSettings.end();
-        for (   PropertyValueSet::const_iterator aLoop = aRelevantSettings.begin();
-                aLoop != aRelevantEnd;
-                ++aLoop, ++pAppendValues
-            )
+        for (auto const& relevantSetting : aRelevantSettings)
         {
-            if ( aLoop->Name == INFO_CHARSET )
+            if ( relevantSetting.Name == INFO_CHARSET )
             {
                 OUString sCharSet;
-                aLoop->Value >>= sCharSet;
+                relevantSetting.Value >>= sCharSet;
                 if ( !sCharSet.isEmpty() )
-                    *pAppendValues = *aLoop;
+                    *pAppendValues = relevantSetting;
             }
             else
-                *pAppendValues = *aLoop;
+                *pAppendValues = relevantSetting;
+            ++pAppendValues;
         }
     }
 }

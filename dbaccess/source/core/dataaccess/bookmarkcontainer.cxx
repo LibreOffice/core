@@ -245,13 +245,11 @@ Sequence< OUString > SAL_CALL OBookmarkContainer::getElementNames(  )
 
     Sequence< OUString > aNames(m_aBookmarks.size());
     OUString* pNames = aNames.getArray();
-    ;
-    for (   MapIteratorVector::const_iterator aNameIter = m_aBookmarksIndexed.begin();
-            aNameIter != m_aBookmarksIndexed.end();
-            ++pNames, ++aNameIter
-        )
+
+    for (auto const& bookmarkIndexed : m_aBookmarksIndexed)
     {
-        *pNames = (*aNameIter)->first;
+        *pNames = bookmarkIndexed->first;
+        ++pNames;
     }
 
     return aNames;

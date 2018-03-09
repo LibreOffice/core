@@ -53,10 +53,8 @@ namespace dbaccess
                 _xSource->addPropertyChangeListener( OUString(), this );
             else
             {
-                std::vector< OUString >::const_iterator aIter = _aPropertyList.begin();
-                std::vector< OUString >::const_iterator aEnd = _aPropertyList.end();
-                for (; aIter != aEnd ; ++aIter )
-                    _xSource->addPropertyChangeListener( *aIter, this );
+                for (auto const& property : _aPropertyList)
+                    _xSource->addPropertyChangeListener(property, this);
             }
         }
         catch( const Exception& )

@@ -118,12 +118,12 @@ namespace dbaui
 
         bool HasCriteria() const
         {
-            std::vector< OUString>::const_iterator aIter = m_aCriteria.begin();
-            std::vector< OUString>::const_iterator aEnd = m_aCriteria.end();
-            for(;aIter != aEnd;++aIter)
-                if(!aIter->isEmpty())
-                    break;
-            return aIter != aEnd;
+            for (auto const& criteria : m_aCriteria)
+            {
+                if(!criteria.isEmpty())
+                    return true;
+            }
+            return false;
         }
 
         const std::vector< OUString>&  GetCriteria() const { return m_aCriteria; }

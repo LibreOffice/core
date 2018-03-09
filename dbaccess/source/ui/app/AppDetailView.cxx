@@ -472,9 +472,11 @@ void OTasksWindow::fillTaskEntryList( const TaskEntryList& _rList )
         // copy the commands so we can use them with the config managers
         Sequence< OUString > aCommands( _rList.size() );
         OUString* pCommands = aCommands.getArray();
-        TaskEntryList::const_iterator aEnd = _rList.end();
-        for ( TaskEntryList::const_iterator pCopyTask = _rList.begin(); pCopyTask != aEnd; ++pCopyTask, ++pCommands )
-            *pCommands = pCopyTask->sUNOCommand;
+        for (auto const& copyTask : _rList)
+        {
+            *pCommands = copyTask.sUNOCommand;
+            ++pCommands;
+        }
 
         Sequence< Reference< XGraphic> > aImages = xImageMgr->getImages(
             ImageType::SIZE_DEFAULT | ImageType::COLOR_NORMAL ,
@@ -483,14 +485,15 @@ void OTasksWindow::fillTaskEntryList( const TaskEntryList& _rList )
 
         const Reference< XGraphic >* pImages( aImages.getConstArray() );
 
-        for ( TaskEntryList::const_iterator pTask = _rList.begin(); pTask != aEnd; ++pTask, ++pImages )
+        for (auto const& task : _rList)
         {
-            SvTreeListEntry* pEntry = m_aCreation->InsertEntry( pTask->sTitle );
-            pEntry->SetUserData( new TaskEntry( *pTask ) );
+            SvTreeListEntry* pEntry = m_aCreation->InsertEntry(task.sTitle);
+            pEntry->SetUserData( new TaskEntry(task) );
 
             Image aImage( *pImages );
             m_aCreation->SetExpandedEntryBmp(  pEntry, aImage );
             m_aCreation->SetCollapsedEntryBmp( pEntry, aImage );
+            ++pImages;
         }
     }
     catch(Exception&)
@@ -717,12 +720,9 @@ void OApplicationDetailView::impl_fillTaskPaneData( ElementType _eType, TaskPane
     }
 
     // for the remaining entries, assign mnemonics
-    for (   TaskEntryList::const_iterator pTask = rList.begin();
-            pTask != rList.end();
-            ++pTask
-        )
+    for (auto const& task : rList)
     {
-        aAllMnemonics.CreateMnemonic( pTask->sTitle );
+        aAllMnemonics.CreateMnemonic(task.sTitle);
         // don't do this for now, until our task window really supports mnemonics
     }
 }
