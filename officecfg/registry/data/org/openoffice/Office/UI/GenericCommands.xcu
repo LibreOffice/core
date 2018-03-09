@@ -1730,7 +1730,7 @@
           <value xml:lang="en-US">Center</value>
         </prop>
         <prop oor:name="TooltipLabel" oor:type="xs:string">
-          <value xml:lang="en-US">Center Horizontally</value>
+          <value xml:lang="en-US">Align Center</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>11</value>
