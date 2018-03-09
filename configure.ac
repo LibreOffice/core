@@ -10956,9 +10956,16 @@ then
     if test "$QMAKE5" = "no"; then
         AC_MSG_ERROR([Qmake not found.  Please specify the root of your Qt5 installation by exporting QT5DIR before running "configure".])
     else
-        qmake5_test_ver="`$QMAKE5 -v 2>&1 | sed -n -e '/^Using Qt version 5\./p'`"
+        qmake5_test_ver="`$QMAKE5 -v 2>&1 | $SED -n -e 's/^Using Qt version \(5\.[[0-9.]]\+\).*$/\1/p'`"
         if test -z "$qmake5_test_ver"; then
             AC_MSG_ERROR([Wrong qmake for Qt5 found. Please specify the root of your Qt5 installation by exporting QT5DIR before running "configure".])
+        fi
+        qmake5_minor_version="`echo $qmake5_test_ver | cut -d. -f2`"
+        qt5_minimal_minor="6"
+        if test "$qmake5_minor_version" -lt "$qt5_minimal_minor"; then
+            AC_MSG_ERROR([The minimal supported Qt5 version is 5.${qt5_minimal_minor}, but your 'qmake -v' reports Qt5 version $qmake5_test_ver.])
+        else
+            AC_MSG_NOTICE([Detected Qt5 version: $qmake5_test_ver])
         fi
     fi
 
