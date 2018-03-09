@@ -1388,7 +1388,8 @@ void SwHTMLParser::NextToken( HtmlTokenId nToken )
     case HtmlTokenId::OBJECT_ON:
         if (m_bXHTML)
         {
-            InsertEmbed();
+            if (!InsertEmbed())
+                InsertImage();
             break;
         }
 #if HAVE_FEATURE_JAVA
