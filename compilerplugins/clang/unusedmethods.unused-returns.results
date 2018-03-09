@@ -218,9 +218,9 @@ include/test/sheet/xstyleloader.hxx:27
     class com::sun::star::uno::Reference<class com::sun::star::lang::XComponent> apitest::XStyleLoader::getTargetComponent()
 include/test/sheet/xusedareacursor.hxx:25
     class com::sun::star::uno::Reference<class com::sun::star::uno::XInterface> apitest::XUsedAreaCursor::init()
-include/tools/color.hxx:155
+include/tools/color.hxx:151
     class SvStream & Color::Read(class SvStream &)
-include/tools/color.hxx:156
+include/tools/color.hxx:152
     class SvStream & Color::Write(class SvStream &) const
 include/tools/multisel.hxx:93
     _Bool StringRangeEnumerator::insertRange(int,int,_Bool)
