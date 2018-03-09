@@ -1280,7 +1280,7 @@ void DocxSdrExport::writeDiagram(const SdrObject* sdrObject, const SwFrameFormat
     {
         serializer.set(drawingDom, uno::UNO_QUERY);
         uno::Reference< io::XOutputStream > xDrawingOutputStream = m_pImpl->m_rExport.GetFilter().openFragmentStream("word/" + drawingFileName,
-                "application/vnd.openxmlformats-officedocument.drawingml.diagramDrawing+xml");
+                "application/vnd.ms-office.drawingml.diagramDrawing+xml");
         writer->setOutputStream(xDrawingOutputStream);
         serializer->serialize(uno::Reference< xml::sax::XDocumentHandler >(writer, uno::UNO_QUERY_THROW),
                               uno::Sequence< beans::StringPair >());
