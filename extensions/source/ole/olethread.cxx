@@ -35,7 +35,7 @@ void o2u_attachCurrentThread()
         if (!SUCCEEDED(hr))
         {   // FIXME: is it a problem that this ends up in STA currently?
             assert(RPC_E_CHANGED_MODE == hr);
-            // Let's find out explicitly what aprtment mode we are in.
+            // Let's find out explicitly what apartment mode we are in.
             SAL_WARN("extensions.olebridge", "CoInitializeEx failed"
                      << (hr == RPC_E_CHANGED_MODE ? " (expectedly)" : "")
                      << ": " << WindowsErrorStringFromHRESULT(hr));
