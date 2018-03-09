@@ -465,7 +465,6 @@ public:
     void                    StopAnimation( OutputDevice* pOut = nullptr, long nExtraData = 0 );
 
     static bool isGraphicObjectUniqueIdURL(OUString const & rURL);
-    static GraphicObject CreateGraphicObjectFromURL(OUString const & rURL);
 
     // will inspect an object ( e.g. a control ) for any 'ImageURL'
     // properties and return these in a vector. Note: this implementation

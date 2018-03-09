@@ -1045,30 +1045,6 @@ bool GraphicObject::isGraphicObjectUniqueIdURL(OUString const & rURL)
     return rURL.startsWith(aPrefix);
 }
 
-GraphicObject GraphicObject::CreateGraphicObjectFromURL(OUString const & rURL)
-{
-    if (GraphicObject::isGraphicObjectUniqueIdURL(rURL))
-    {
-        SAL_WARN("vcl", "Deprecated URL '" << rURL << "' was used to create a GraphicObject");
-
-        // graphic manager url
-        OString aUniqueID(OUStringToOString(rURL.copy(sizeof(UNO_NAME_GRAPHOBJ_URLPREFIX) - 1), RTL_TEXTENCODING_UTF8));
-        return GraphicObject( aUniqueID );
-    }
-    else
-    {
-        Graphic     aGraphic;
-        if ( !rURL.isEmpty() )
-        {
-            std::unique_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream( rURL, StreamMode::READ ));
-            if( pStream )
-                GraphicConverter::Import( *pStream, aGraphic );
-        }
-
-        return GraphicObject( aGraphic );
-    }
-}
-
 void
 GraphicObject::InspectForGraphicObjectImageURL( const Reference< XInterface >& xIf,  std::vector< OUString >& rvEmbedImgUrls )
 {

@@ -52,14 +52,6 @@ namespace oox {
 
 /** Provides helper functions for colors, device measurement conversion,
     graphics, and graphic objects handling.
-
-    All createGraphicObject() and importGraphicObject() functions create
-    persistent graphic objects internally and store them in an internal
-    container to prevent their early destruction. This makes it possible to use
-    the returned URL of the graphic object in any way (e.g. insert it into a
-    property map) without needing to store it immediately at an object that
-    resolves the graphic object from the passed URL and thus prevents it from
-    being destroyed.
  */
 class OOX_DLLPUBLIC GraphicHelper
 {
@@ -132,17 +124,6 @@ public:
     /** Imports graphics from the storage with the passed stream names. */
     void importEmbeddedGraphics(const std::vector<OUString>& rStreamNames) const;
 
-    /** Creates a persistent graphic object from the passed graphic.
-        @return  The URL of the created and internally cached graphic object. */
-    OUString     createGraphicObject(
-                            const css::uno::Reference< css::graphic::XGraphic >& rxGraphic ) const;
-
-    /** Creates a persistent graphic object from the passed input stream.
-        @return  The URL of the created and internally cached graphic object. */
-    OUString     importGraphicObject(
-                            const css::uno::Reference< css::io::XInputStream >& rxInStrm,
-                            const WmfExternal* pExtHeader ) const;
-
     /** calculates the original size of a graphic which is necessary to be able to calculate cropping values
         @return The original Graphic size in 100thmm */
     css::awt::Size getOriginalSize( const css::uno::Reference< css::graphic::XGraphic >& rxGraphic ) const;
@@ -160,7 +141,6 @@ private:
     StorageRef          mxStorage;                  ///< Storage containing embedded graphics.
     mutable GraphicObjectDeque maGraphicObjects;    ///< Caches all created graphic objects to keep them alive.
     mutable EmbeddedGraphicMap maEmbeddedGraphics;  ///< Maps all embedded graphics by their storage path.
-    const OUString      maGraphicObjScheme;       ///< The URL scheme name for graphic objects.
     double              mfPixelPerHmmX;             ///< Number of screen pixels per 1/100 mm in X direction.
     double              mfPixelPerHmmY;             ///< Number of screen pixels per 1/100 mm in Y direction.
 };

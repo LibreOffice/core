@@ -64,8 +64,7 @@ inline sal_Int32 lclConvertScreenPixelToHmm( double fPixel, double fPixelPerHmm 
 
 GraphicHelper::GraphicHelper( const Reference< XComponentContext >& rxContext, const Reference< XFrame >& rxTargetFrame, const StorageRef& rxStorage ) :
     mxContext( rxContext ),
-    mxStorage( rxStorage ),
-    maGraphicObjScheme( "vnd.sun.star.GraphicObject:" )
+    mxStorage( rxStorage )
 {
     OSL_ENSURE( mxContext.is(), "GraphicHelper::GraphicHelper - missing component context" );
     if( mxContext.is() )
@@ -348,28 +347,6 @@ Reference< XGraphic > GraphicHelper::importEmbeddedGraphic( const OUString& rStr
             xGraphic = aIt->second;
     }
     return xGraphic;
-}
-
-OUString GraphicHelper::createGraphicObject( const Reference< XGraphic >& rxGraphic ) const
-{
-    OUString aGraphicObjUrl;
-    if( mxContext.is() && rxGraphic.is() ) try
-    {
-        Reference< XGraphicObject > xGraphicObj( graphic::GraphicObject::create( mxContext ), UNO_SET_THROW );
-        xGraphicObj->setGraphic( rxGraphic );
-        maGraphicObjects.push_back( xGraphicObj );
-        aGraphicObjUrl = maGraphicObjScheme + xGraphicObj->getUniqueID();
-    }
-    catch( Exception& )
-    {
-    }
-    return aGraphicObjUrl;
-}
-
-OUString GraphicHelper::importGraphicObject( const Reference< XInputStream >& rxInStrm,
-        const WmfExternal* pExtHeader ) const
-{
-    return createGraphicObject( importGraphic( rxInStrm, pExtHeader ) );
 }
 
 awt::Size GraphicHelper::getOriginalSize( const Reference< XGraphic >& xGraphic ) const
