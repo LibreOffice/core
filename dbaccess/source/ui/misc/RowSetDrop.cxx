@@ -154,71 +154,70 @@ bool ORowSetImportExport::insertNewRow()
     {
         m_xTargetResultSetUpdate->moveToInsertRow();
         sal_Int32 i = 1;
-        std::vector<sal_Int32>::const_iterator aEnd = m_aColumnMapping.end();
-        for (std::vector<sal_Int32>::const_iterator aIter = m_aColumnMapping.begin(); aIter != aEnd ;++aIter,++i )
+        for (auto const& column : m_aColumnMapping)
         {
-            if(*aIter > 0)
+            if(column > 0)
             {
                 Any aValue;
                 switch(m_aColumnTypes[i-1])
                 {
                     case DataType::CHAR:
                     case DataType::VARCHAR:
-                        aValue <<= m_xRow->getString(*aIter);
+                        aValue <<= m_xRow->getString(column);
                         break;
                     case DataType::DECIMAL:
                     case DataType::NUMERIC:
-                        aValue <<= m_xRow->getDouble(*aIter);
+                        aValue <<= m_xRow->getDouble(column);
                         break;
                     case DataType::BIGINT:
-                        aValue <<= m_xRow->getLong(*aIter);
+                        aValue <<= m_xRow->getLong(column);
                         break;
                     case DataType::FLOAT:
-                        aValue <<= m_xRow->getFloat(*aIter);
+                        aValue <<= m_xRow->getFloat(column);
                         break;
                     case DataType::DOUBLE:
-                        aValue <<= m_xRow->getDouble(*aIter);
+                        aValue <<= m_xRow->getDouble(column);
                         break;
                     case DataType::LONGVARCHAR:
-                        aValue <<= m_xRow->getString(*aIter);
+                        aValue <<= m_xRow->getString(column);
                         break;
                     case DataType::LONGVARBINARY:
-                        aValue <<= m_xRow->getBytes(*aIter);
+                        aValue <<= m_xRow->getBytes(column);
                         break;
                     case DataType::DATE:
-                        aValue <<= m_xRow->getDate(*aIter);
+                        aValue <<= m_xRow->getDate(column);
                         break;
                     case DataType::TIME:
-                        aValue <<= m_xRow->getTime(*aIter);
+                        aValue <<= m_xRow->getTime(column);
                         break;
                     case DataType::TIMESTAMP:
-                        aValue <<= m_xRow->getTimestamp(*aIter);
+                        aValue <<= m_xRow->getTimestamp(column);
                         break;
                     case DataType::BIT:
                     case DataType::BOOLEAN:
-                        aValue <<= m_xRow->getBoolean(*aIter);
+                        aValue <<= m_xRow->getBoolean(column);
                         break;
                     case DataType::TINYINT:
-                        aValue <<= m_xRow->getByte(*aIter);
+                        aValue <<= m_xRow->getByte(column);
                         break;
                     case DataType::SMALLINT:
-                        aValue <<= m_xRow->getShort(*aIter);
+                        aValue <<= m_xRow->getShort(column);
                         break;
                     case DataType::INTEGER:
-                        aValue <<= m_xRow->getInt(*aIter);
+                        aValue <<= m_xRow->getInt(column);
                         break;
                     case DataType::REAL:
-                        aValue <<= m_xRow->getDouble(*aIter);
+                        aValue <<= m_xRow->getDouble(column);
                         break;
                     case DataType::BINARY:
                     case DataType::VARBINARY:
-                        aValue <<= m_xRow->getBytes(*aIter);
+                        aValue <<= m_xRow->getBytes(column);
                         break;
                     case DataType::BLOB:
-                        aValue <<= m_xRow->getBlob(*aIter);
+                        aValue <<= m_xRow->getBlob(column);
                         break;
                     case DataType::CLOB:
-                        aValue <<= m_xRow->getClob(*aIter);
+                        aValue <<= m_xRow->getClob(column);
                         break;
                     default:
                         SAL_WARN("dbaccess.ui", "Unknown type");
@@ -228,8 +227,9 @@ bool ORowSetImportExport::insertNewRow()
                 else
                     m_xTargetRowUpdate->updateObject(i,aValue);
             }
-            else if(*aIter == 0)//now we have know that we to set this column to null
+            else if(column == 0)//now we have know that we to set this column to null
                 m_xTargetRowUpdate->updateNull(i);
+            ++i;
         }
         m_xTargetResultSetUpdate->insertRow();
     }

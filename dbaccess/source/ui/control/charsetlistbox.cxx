@@ -31,11 +31,9 @@ namespace dbaui
     {
         SetDropDownLineCount( 20 );
 
-        OCharsetDisplay::const_iterator charSet = m_aCharSets.begin();
-        while ( charSet != m_aCharSets.end() )
+        for (auto const& charset : m_aCharSets)
         {
-            InsertEntry( (*charSet).getDisplayName() );
-            ++charSet;
+            InsertEntry( charset.getDisplayName() );
         }
     }
 

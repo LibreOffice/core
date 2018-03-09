@@ -104,13 +104,10 @@ namespace dbaccess
 
             aTextOutput.writeLine( "[storages]" );
 
-            for (   MapStringToCompDesc::const_iterator stor = i_mapStorageToCompDesc.begin();
-                    stor != i_mapStorageToCompDesc.end();
-                    ++stor
-                )
+            for (auto const& elem : i_mapStorageToCompDesc)
             {
                 OUStringBuffer aLine;
-                lcl_getPersistentRepresentation( *stor, aLine );
+                lcl_getPersistentRepresentation(elem, aLine);
 
                 aTextOutput.writeLine( aLine.makeStringAndClear() );
             }
@@ -242,12 +239,9 @@ namespace dbaccess
 
             MapCompTypeToCompDescs aMapCompDescs;
 
-            for (   std::vector< Reference< XController > >::const_iterator ctrl = i_rControllers.begin();
-                    ctrl != i_rControllers.end();
-                    ++ctrl
-                )
+            for (auto const& controller : i_rControllers)
             {
-                Reference< XDatabaseDocumentUI > xDatabaseUI( *ctrl, UNO_QUERY_THROW );
+                Reference< XDatabaseDocumentUI > xDatabaseUI(controller, UNO_QUERY_THROW);
                 Sequence< Reference< XComponent > > aComponents( xDatabaseUI->getSubComponents() );
 
                 for ( auto const & component : aComponents )
@@ -257,14 +251,11 @@ namespace dbaccess
                 }
             }
 
-            for (   MapCompTypeToCompDescs::const_iterator map = aMapCompDescs.begin();
-                    map != aMapCompDescs.end();
-                    ++map
-                )
+            for (auto const& elem : aMapCompDescs)
             {
                 Reference< XStorage > xComponentsStor( xRecoveryStorage->openStorageElement(
-                    SubComponentRecovery::getComponentsStorageName( map->first ), ElementModes::WRITE | ElementModes::NOCREATE ) );
-                lcl_writeObjectMap_throw( m_pData->aContext, xComponentsStor, map->second );
+                    SubComponentRecovery::getComponentsStorageName( elem.first ), ElementModes::WRITE | ElementModes::NOCREATE ) );
+                lcl_writeObjectMap_throw( m_pData->aContext, xComponentsStor, elem.second );
                 tools::stor::commitStorageIfWriteable( xComponentsStor );
             }
         }
@@ -301,29 +292,23 @@ namespace dbaccess
         }
 
         // recover all sub components as indicated by the map
-        for (   MapCompTypeToCompDescs::const_iterator map = aMapCompDescs.begin();
-                map != aMapCompDescs.end();
-                ++map
-            )
+        for (auto const& elemMapCompDescs : aMapCompDescs)
         {
-            const SubComponentType eComponentType = map->first;
+            const SubComponentType eComponentType = elemMapCompDescs.first;
 
             // the storage for all components of the current type
             Reference< XStorage > xComponentsStor( xRecoveryStorage->openStorageElement(
                 SubComponentRecovery::getComponentsStorageName( eComponentType ), ElementModes::READ ), UNO_QUERY_THROW );
 
             // loop through all components of this type
-            for (   MapStringToCompDesc::const_iterator stor = map->second.begin();
-                    stor != map->second.end();
-                    ++stor
-                )
+            for (auto const&  elem : elemMapCompDescs.second)
             {
-                const OUString sComponentName( stor->second.sName );
-                if ( !xComponentsStor->hasByName( stor->first ) )
+                const OUString sComponentName(elem.second.sName);
+                if ( !xComponentsStor->hasByName(elem.first) )
                 {
                     SAL_WARN( "dbaccess",
                               "DatabaseDocumentRecovery::recoverSubDocuments: inconsistent recovery storage: storage '" <<
-                              stor->first <<
+                              elem.first <<
                               "' not found in '" <<
                               SubComponentRecovery::getComponentsStorageName( eComponentType ) <<
                               "', but required per map file!" );
@@ -335,9 +320,9 @@ namespace dbaccess
                     xDocumentUI->connect();
 
                 // recover the single component
-                Reference< XStorage > xCompStor( xComponentsStor->openStorageElement( stor->first, ElementModes::READ ) );
+                Reference< XStorage > xCompStor( xComponentsStor->openStorageElement( elem.first, ElementModes::READ ) );
                 SubComponentRecovery aComponentRecovery( m_pData->aContext, xDocumentUI, eComponentType );
-                Reference< XComponent > xSubComponent( aComponentRecovery.recoverFromStorage( xCompStor, sComponentName, stor->second.bForEditing ) );
+                Reference< XComponent > xSubComponent( aComponentRecovery.recoverFromStorage( xCompStor, sComponentName, elem.second.bForEditing ) );
 
                 // at the moment, we only store, during session save, sub components which are modified. So, set this
                 // recovered sub component to "modified", too.

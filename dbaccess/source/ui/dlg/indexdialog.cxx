@@ -66,13 +66,12 @@ namespace dbaui
         if (_rLHS.size() != _rRHS.size())
             return false;
 
-        IndexFields::const_iterator aLeft = _rLHS.begin();
-        IndexFields::const_iterator aLeftEnd = _rLHS.end();
         IndexFields::const_iterator aRight = _rRHS.begin();
-        for (; aLeft != aLeftEnd; ++aLeft, ++aRight)
+        for (auto const& left : _rLHS)
         {
-            if (*aLeft != *aRight)
+            if (left != *aRight)
                 return false;
+            ++aRight;
         }
 
         return true;
@@ -238,18 +237,16 @@ namespace dbaui
         m_pClose->SetClickHdl(LINK(this, DbaIndexDialog, OnCloseDialog));
 
         // if all of the indexes have an empty description, we're not interested in displaying it
-        Indexes::const_iterator aCheck;
-
-        for (   aCheck = m_pIndexes->begin();
-                aCheck != m_pIndexes->end();
-                ++aCheck
-            )
+        bool bFound = false;
+        for (auto const& check : *m_pIndexes)
         {
-            if (!aCheck->sDescription.isEmpty())
+            if (!check.sDescription.isEmpty())
+            {
+                bFound = true;
                 break;
+            }
         }
-
-        if (aCheck == m_pIndexes->end())
+        if (!bFound)
         {
             // hide the controls which are necessary for the description
             m_pDescription->Hide();
@@ -286,17 +283,17 @@ namespace dbaui
         Image aPKeyIcon(BitmapEx(BMP_PKEYICON));
         // fill the list with the index names
         m_pIndexList->Clear();
-        Indexes::const_iterator aIndexLoop = m_pIndexes->begin();
-        Indexes::const_iterator aEnd = m_pIndexes->end();
-        for (; aIndexLoop != aEnd; ++aIndexLoop)
+        sal_Int32 nPos = 0;
+        for (auto const& indexLoop : *m_pIndexes)
         {
             SvTreeListEntry* pNewEntry = nullptr;
-            if (aIndexLoop->bPrimaryKey)
-                pNewEntry = m_pIndexList->InsertEntry(aIndexLoop->sName, aPKeyIcon, aPKeyIcon);
+            if (indexLoop.bPrimaryKey)
+                pNewEntry = m_pIndexList->InsertEntry(indexLoop.sName, aPKeyIcon, aPKeyIcon);
             else
-                pNewEntry = m_pIndexList->InsertEntry(aIndexLoop->sName);
+                pNewEntry = m_pIndexList->InsertEntry(indexLoop.sName);
 
-            pNewEntry->SetUserData(reinterpret_cast< void* >(sal_Int32(aIndexLoop - m_pIndexes->begin())));
+            pNewEntry->SetUserData(reinterpret_cast< void* >(nPos));
+            ++nPos;
         }
 
         OnIndexSelected(*m_pIndexList);
@@ -693,16 +690,13 @@ namespace dbaui
 
         // no double fields
         std::set< OUString > aExistentFields;
-        for (   IndexFields::const_iterator aFieldCheck = _rPos->aFields.begin();
-                aFieldCheck != _rPos->aFields.end();
-                ++aFieldCheck
-            )
+        for (auto const& fieldCheck : _rPos->aFields)
         {
-            if (aExistentFields.end() != aExistentFields.find(aFieldCheck->sFieldName))
+            if (aExistentFields.end() != aExistentFields.find(fieldCheck.sFieldName))
             {
                 // a column is specified twice ... won't work anyway, so prevent this here and now
                 OUString sMessage(DBA_RES(STR_INDEXDESIGN_DOUBLE_COLUMN_NAME));
-                sMessage = sMessage.replaceFirst("$name$", aFieldCheck->sFieldName);
+                sMessage = sMessage.replaceFirst("$name$", fieldCheck.sFieldName);
                 std::unique_ptr<weld::MessageDialog> xError(Application::CreateMessageDialog(GetFrameWeld(),
                                                             VclMessageType::Warning, VclButtonsType::Ok,
                                                             sMessage));
@@ -710,7 +704,7 @@ namespace dbaui
                 m_pFields->GrabFocus();
                 return false;
             }
-            aExistentFields.insert(aFieldCheck->sFieldName);
+            aExistentFields.insert(fieldCheck.sFieldName);
         }
 
         return true;

@@ -75,13 +75,9 @@ struct DataSupplier_Impl
 
 DataSupplier_Impl::~DataSupplier_Impl()
 {
-    ResultList::const_iterator it  = m_aResults.begin();
-    ResultList::const_iterator end = m_aResults.end();
-
-    while ( it != end )
+    for (auto const& result : m_aResults)
     {
-        delete *it;
-        ++it;
+        delete result;
     }
 }
 

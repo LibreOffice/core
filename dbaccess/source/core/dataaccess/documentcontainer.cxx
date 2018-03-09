@@ -651,11 +651,9 @@ void ODocumentContainer::getPropertyDefaultByHandle( sal_Int32 /*_nHandle*/, Any
 void SAL_CALL ODocumentContainer::commit(  )
 {
     MutexGuard aGuard(m_aMutex);
-    Documents::const_iterator aIter = m_aDocumentMap.begin();
-    Documents::const_iterator aEnd = m_aDocumentMap.end();
-    for (; aIter != aEnd ; ++aIter)
+    for (auto const& elem : m_aDocumentMap)
     {
-        Reference<XTransactedObject> xTrans(aIter->second.get(),UNO_QUERY);
+        Reference<XTransactedObject> xTrans(elem.second.get(),UNO_QUERY);
         if ( xTrans.is() )
             xTrans->commit();
     }
@@ -667,11 +665,9 @@ void SAL_CALL ODocumentContainer::commit(  )
 void SAL_CALL ODocumentContainer::revert(  )
 {
     MutexGuard aGuard(m_aMutex);
-    Documents::const_iterator aIter = m_aDocumentMap.begin();
-    Documents::const_iterator aEnd = m_aDocumentMap.end();
-    for (; aIter != aEnd ; ++aIter)
+    for (auto const& elem : m_aDocumentMap)
     {
-        Reference<XTransactedObject> xTrans(aIter->second.get(),UNO_QUERY);
+        Reference<XTransactedObject> xTrans(elem.second.get(),UNO_QUERY);
         if ( xTrans.is() )
             xTrans->revert();
     }

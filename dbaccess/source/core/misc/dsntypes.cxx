@@ -84,21 +84,19 @@ OUString ODsnTypeCollection::cutPrefix(const OUString& _sURL) const
 {
     OUString sRet;
     OUString sOldPattern;
-    StringVector::const_iterator aIter = m_aDsnPrefixes.begin();
-    StringVector::const_iterator aEnd = m_aDsnPrefixes.end();
 
-    for(;aIter != aEnd;++aIter)
+    for (auto const& dsnPrefix : m_aDsnPrefixes)
     {
-        WildCard aWildCard(*aIter);
-        if ( sOldPattern.getLength() < aIter->getLength() && aWildCard.Matches(_sURL) )
+        WildCard aWildCard(dsnPrefix);
+        if ( sOldPattern.getLength() < dsnPrefix.getLength() && aWildCard.Matches(_sURL) )
         {
             // This relies on the fact that all patterns are of the form
             //   foo*
             // that is, the very concept of "prefix" applies.
-            OUString prefix(comphelper::string::stripEnd(*aIter, '*'));
+            OUString prefix(comphelper::string::stripEnd(dsnPrefix, '*'));
             OSL_ENSURE(prefix.getLength() <= _sURL.getLength(), "How can A match B when A shorter than B?");
             sRet = _sURL.copy(prefix.getLength());
-            sOldPattern = *aIter;
+            sOldPattern = dsnPrefix;
         }
     }
 
@@ -109,19 +107,17 @@ OUString ODsnTypeCollection::getPrefix(const OUString& _sURL) const
 {
     OUString sRet;
     OUString sOldPattern;
-    StringVector::const_iterator aIter = m_aDsnPrefixes.begin();
-    StringVector::const_iterator aEnd = m_aDsnPrefixes.end();
-    for(;aIter != aEnd;++aIter)
+    for (auto const& dsnPrefix : m_aDsnPrefixes)
     {
-        WildCard aWildCard(*aIter);
-        if ( sOldPattern.getLength() < aIter->getLength() && aWildCard.Matches(_sURL) )
+        WildCard aWildCard(dsnPrefix);
+        if ( sOldPattern.getLength() < dsnPrefix.getLength() && aWildCard.Matches(_sURL) )
         {
             // This relies on the fact that all patterns are of the form
             //   foo*
             // that is, the very concept of "prefix" applies.
-            sRet = comphelper::string::stripEnd(*aIter, '*');
+            sRet = comphelper::string::stripEnd(dsnPrefix, '*');
             OSL_ENSURE(sRet.getLength() <= _sURL.getLength(), "How can A match B when A shorter than B?");
-            sOldPattern = *aIter;
+            sOldPattern = dsnPrefix;
         }
     }
 
@@ -138,15 +134,13 @@ bool ODsnTypeCollection::isConnectionUrlRequired(const OUString& _sURL) const
 {
     OUString sRet;
     OUString sOldPattern;
-    StringVector::const_iterator aIter = m_aDsnPrefixes.begin();
-    StringVector::const_iterator aEnd = m_aDsnPrefixes.end();
-    for(;aIter != aEnd;++aIter)
+    for (auto const& dsnPrefix : m_aDsnPrefixes)
     {
-        WildCard aWildCard(*aIter);
-        if ( sOldPattern.getLength() < aIter->getLength() && aWildCard.Matches(_sURL) )
+        WildCard aWildCard(dsnPrefix);
+        if ( sOldPattern.getLength() < dsnPrefix.getLength() && aWildCard.Matches(_sURL) )
         {
-            sRet = *aIter;
-            sOldPattern = *aIter;
+            sRet = dsnPrefix;
+            sOldPattern = dsnPrefix;
         }
     }
     return sRet.getLength() > 0 && sRet[sRet.getLength()-1] == '*';
@@ -487,14 +481,12 @@ void ODsnTypeCollection::fillPageIds(const OUString& _sURL,std::vector<sal_Int16
 OUString ODsnTypeCollection::getType(const OUString& _sURL) const
 {
     OUString sOldPattern;
-    StringVector::const_iterator aIter = m_aDsnPrefixes.begin();
-    StringVector::const_iterator aEnd = m_aDsnPrefixes.end();
-    for(;aIter != aEnd;++aIter)
+    for (auto const& dsnPrefix : m_aDsnPrefixes)
     {
-        WildCard aWildCard(*aIter);
-        if ( sOldPattern.getLength() < aIter->getLength() && aWildCard.Matches(_sURL) )
+        WildCard aWildCard(dsnPrefix);
+        if ( sOldPattern.getLength() < dsnPrefix.getLength() && aWildCard.Matches(_sURL) )
         {
-            sOldPattern = *aIter;
+            sOldPattern = dsnPrefix;
         }
     }
     return sOldPattern;
@@ -504,16 +496,16 @@ sal_Int32 ODsnTypeCollection::getIndexOf(const OUString& _sURL) const
 {
     sal_Int32 nRet = -1;
     OUString sOldPattern;
-    StringVector::const_iterator aIter = m_aDsnPrefixes.begin();
-    StringVector::const_iterator aEnd = m_aDsnPrefixes.end();
-    for(sal_Int32 i = 0;aIter != aEnd;++aIter,++i)
+    sal_Int32 i = 0;
+    for (auto const& dsnPrefix : m_aDsnPrefixes)
     {
-        WildCard aWildCard(*aIter);
-        if ( sOldPattern.getLength() < aIter->getLength() && aWildCard.Matches(_sURL) )
+        WildCard aWildCard(dsnPrefix);
+        if ( sOldPattern.getLength() < dsnPrefix.getLength() && aWildCard.Matches(_sURL) )
         {
             nRet = i;
-            sOldPattern = *aIter;
+            sOldPattern = dsnPrefix;
         }
+        ++i;
     }
 
     return nRet;
