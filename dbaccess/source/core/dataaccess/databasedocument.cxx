@@ -610,12 +610,9 @@ sal_Bool SAL_CALL ODatabaseDocument::wasModifiedSinceLastSave()
 
     try
     {
-        for (   Controllers::const_iterator ctrl = m_aControllers.begin();
-                ctrl != m_aControllers.end();
-                ++ctrl
-            )
+        for (auto const& controller : m_aControllers)
         {
-            if ( lcl_hasAnyModifiedSubComponent_throw( *ctrl ) )
+            if ( lcl_hasAnyModifiedSubComponent_throw(controller) )
                 return true;
         }
     }
@@ -800,12 +797,9 @@ void SAL_CALL ODatabaseDocument::connectController( const Reference< XController
     DocumentGuard aGuard(*this, DocumentGuard::DefaultMethod);
 
 #if OSL_DEBUG_LEVEL > 0
-    for (   Controllers::const_iterator controller = m_aControllers.begin();
-            controller != m_aControllers.end();
-            ++controller
-        )
+    for (auto const& controller : m_aControllers)
     {
-        OSL_ENSURE( *controller != _xController, "ODatabaseDocument::connectController: this controller is already connected!" );
+        OSL_ENSURE( controller != _xController, "ODatabaseDocument::connectController: this controller is already connected!" );
     }
 #endif
 
@@ -1429,15 +1423,14 @@ void ODatabaseDocument::impl_closeControllerFrames_nolck_throw( bool _bDeliverOw
 {
     Controllers aCopy = m_aControllers;
 
-    Controllers::const_iterator aEnd = aCopy.end();
-    for ( Controllers::const_iterator aIter = aCopy.begin(); aIter != aEnd ; ++aIter )
+    for (auto const& elem : aCopy)
     {
-        if ( !aIter->is() )
+        if ( !elem.is() )
             continue;
 
         try
         {
-            Reference< XCloseable> xFrame( (*aIter)->getFrame(), UNO_QUERY );
+            Reference< XCloseable> xFrame( elem->getFrame(), UNO_QUERY );
             if ( xFrame.is() )
                 xFrame->close( _bDeliverOwnership );
         }

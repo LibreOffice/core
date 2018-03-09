@@ -769,12 +769,11 @@ FeatureState OApplicationController::GetState(sal_uInt16 _nId) const
                             std::vector< OUString > aSelected;
                             getSelectionElementNames( aSelected );
                             bool bAlterableViews = true;
-                            for (   std::vector< OUString >::const_iterator selectedName = aSelected.begin();
-                                    bAlterableViews && ( selectedName != aSelected.end() ) ;
-                                    ++selectedName
-                                )
+                            for (auto const& selectedName : aSelected)
                             {
-                                bAlterableViews &= impl_isAlterableView_nothrow( *selectedName );
+                                bAlterableViews &= impl_isAlterableView_nothrow(selectedName);
+                                if (!bAlterableViews)
+                                    break;
                             }
                             aReturn.bEnabled = bAlterableViews;
                         }
@@ -1047,9 +1046,8 @@ void OApplicationController::Execute(sal_uInt16 _nId, const Sequence< PropertyVa
                         ScopedVclPtr<SfxAbstractPasteDialog> pDlg(pFact->CreatePasteDialog( getView() ));
                         std::vector<SotClipboardFormatId> aFormatIds;
                         getSupportedFormats(getContainer()->getElementType(),aFormatIds);
-                        const std::vector<SotClipboardFormatId>::const_iterator aEnd = aFormatIds.end();
-                        for (std::vector<SotClipboardFormatId>::const_iterator aIter = aFormatIds.begin();aIter != aEnd; ++aIter)
-                            pDlg->Insert(*aIter,"");
+                        for (auto const& formatId : aFormatIds)
+                            pDlg->Insert(formatId,"");
 
                         const TransferableDataHelper& rClipboard = getViewClipboard();
                         pasteFormat(pDlg->GetFormat(rClipboard.GetTransferable()));
@@ -2788,18 +2786,15 @@ sal_Bool SAL_CALL OApplicationController::select( const Any& _aSelection )
             }
         }
     }
-    for (   SelectionByElementType::const_iterator sel = aSelectedElements.begin();
-            sel != aSelectedElements.end();
-            ++sel
-        )
+    for (auto const& selectedElement : aSelectedElements)
     {
-        if ( sel->first == m_eCurrentType )
+        if ( selectedElement.first == m_eCurrentType )
         {
-            getContainer()->selectElements( comphelper::containerToSequence(sel->second) );
+            getContainer()->selectElements( comphelper::containerToSequence(selectedElement.second) );
         }
         else
         {
-            m_aPendingSelection[ sel->first ] = sel->second;
+            m_aPendingSelection[ selectedElement.first ] = selectedElement.second;
         }
     }
 

@@ -265,16 +265,13 @@ void OTableTreeListBox::UpdateTableList( const Reference< XConnection >& _rxConn
             return;
 
         // get the table/view names
-        TNames::const_iterator aIter = _rTables.begin();
-        TNames::const_iterator aEnd = _rTables.end();
-
         Reference< XDatabaseMetaData > xMeta( _rxConnection->getMetaData(), UNO_QUERY_THROW );
-        for ( ; aIter != aEnd; ++aIter )
+        for (auto const& table : _rTables)
         {
             // add the entry
             implAddEntry(
                 xMeta,
-                aIter->first,
+                table.first,
                 false
             );
         }
@@ -296,14 +293,11 @@ void OTableTreeListBox::UpdateTableList( const Reference< XConnection >& _rxConn
                 sal_Int32 nFolderType = bCatalogs ? DatabaseObjectContainer::CATALOG : DatabaseObjectContainer::SCHEMA;
 
                 SvTreeListEntry* pRootEntry = getAllObjectsEntry();
-                for (   std::vector< OUString >::const_iterator folder = aFolderNames.begin();
-                        folder != aFolderNames.end();
-                        ++folder
-                    )
+                for (auto const& folderName : aFolderNames)
                 {
-                    SvTreeListEntry* pFolder = GetEntryPosByName( *folder, pRootEntry );
+                    SvTreeListEntry* pFolder = GetEntryPosByName( folderName, pRootEntry );
                     if ( !pFolder )
-                        InsertEntry( *folder, pRootEntry, false, TREELIST_APPEND, reinterpret_cast< void* >( nFolderType ) );
+                        InsertEntry( folderName, pRootEntry, false, TREELIST_APPEND, reinterpret_cast< void* >( nFolderType ) );
                 }
             }
         }

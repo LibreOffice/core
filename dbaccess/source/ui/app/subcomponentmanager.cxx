@@ -337,25 +337,22 @@ namespace dbaui
             return;
 
         // find the sub component whose name changed
-        for (   SubComponents::iterator comp = m_pData->m_aComponents.begin();
-                comp != m_pData->m_aComponents.end();
-                ++comp
-            )
+        for (auto & component : m_pData->m_aComponents)
         {
-            if ( comp->xDocumentDefinitionProperties != i_rEvent.Source )
+            if ( component.xDocumentDefinitionProperties != i_rEvent.Source )
                 continue;
 
             OUString sNewName;
             OSL_VERIFY( i_rEvent.NewValue >>= sNewName );
 
         #if OSL_DEBUG_LEVEL > 0
-            OUString sOldKnownName( comp->sName );
+            OUString sOldKnownName( component.sName );
             OUString sOldName;
             OSL_VERIFY( i_rEvent.OldValue >>= sOldName );
             OSL_ENSURE( sOldName == sOldKnownName, "SubComponentManager::propertyChange: inconsistency in the old names!" );
         #endif
 
-            comp->sName = sNewName;
+            component.sName = sNewName;
             break;
         }
     }
@@ -430,12 +427,9 @@ namespace dbaui
         try
         {
             SubComponents aWorkingCopy( m_pData->m_aComponents );
-            for (   SubComponents::const_iterator comp = aWorkingCopy.begin();
-                    comp != aWorkingCopy.end();
-                    ++comp
-                )
+            for (auto const& elem : aWorkingCopy)
             {
-                lcl_closeComponent( *comp );
+                lcl_closeComponent(elem);
             }
         }
         catch ( const Exception& )
@@ -521,15 +515,12 @@ namespace dbaui
         ENSURE_OR_RETURN_FALSE( !i_rName.isEmpty(), "SubComponentManager::closeSubFrames: illegal name!" );
 
         SubComponents aWorkingCopy( m_pData->m_aComponents );
-        for (   SubComponents::const_iterator comp = aWorkingCopy.begin();
-                comp != aWorkingCopy.end();
-                ++comp
-            )
+        for (auto const& elem : aWorkingCopy)
         {
-            if ( ( comp->sName != i_rName ) || ( comp->nComponentType != _nComponentType ) )
+            if ( ( elem.sName != i_rName ) || ( elem.nComponentType != _nComponentType ) )
                 continue;
 
-            if ( !lcl_closeComponent( *comp ) )
+            if ( !lcl_closeComponent(elem) )
                 return false;
         }
 
@@ -539,24 +530,21 @@ namespace dbaui
     bool SubComponentManager::lookupSubComponent( const Reference< XComponent >& i_rComponent,
             OUString& o_rName, sal_Int32& o_rComponentType )
     {
-        for (   SubComponents::const_iterator comp = m_pData->m_aComponents.begin();
-                comp != m_pData->m_aComponents.end();
-                ++comp
-            )
+        for (auto const& component : m_pData->m_aComponents)
         {
-            if  (   (   comp->xModel.is()
-                    &&  ( comp->xModel == i_rComponent )
+            if  (   (   component.xModel.is()
+                    &&  ( component.xModel == i_rComponent )
                     )
-                ||  (   comp->xController.is()
-                    &&  ( comp->xController == i_rComponent )
+                ||  (   component.xController.is()
+                    &&  ( component.xController == i_rComponent )
                     )
-                ||  (   comp->xFrame.is()
-                    &&  ( comp->xFrame == i_rComponent )
+                ||  (   component.xFrame.is()
+                    &&  ( component.xFrame == i_rComponent )
                     )
                 )
             {
-                o_rName = comp->sName;
-                o_rComponentType = comp->nComponentType;
+                o_rName = component.sName;
+                o_rComponentType = component.nComponentType;
                 return true;
             }
         }

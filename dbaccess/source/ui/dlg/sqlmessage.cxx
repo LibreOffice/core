@@ -326,13 +326,11 @@ OExceptionChainDialog::OExceptionChainDialog(vcl::Window* pParent, const Excepti
     bool bHave22018 = false;
     size_t elementPos = 0;
 
-    for (   ExceptionDisplayChain::const_iterator loop = m_aExceptions.begin();
-            loop != m_aExceptions.end();
-            ++loop, ++elementPos
-        )
+    for (auto const& elem : m_aExceptions)
     {
-        lcl_insertExceptionEntry( *m_pExceptionList, elementPos, *loop );
-        bHave22018 = loop->sSQLState == "22018";
+        lcl_insertExceptionEntry(*m_pExceptionList, elementPos, elem);
+        bHave22018 = elem.sSQLState == "22018";
+        ++elementPos;
     }
 
     // if the error has the code 22018, then add an additional explanation
@@ -575,12 +573,9 @@ void OSQLMessageBox::impl_addDetailsButton()
     {
         // even if the text fits into what we can display, we might need to details button
         // if there is more non-trivial information in the errors than the mere messages
-        for (   ExceptionDisplayChain::const_iterator error = m_pImpl->aDisplayInfo.begin();
-                error != m_pImpl->aDisplayInfo.end();
-                ++error
-            )
+        for (auto const& error : m_pImpl->aDisplayInfo)
         {
-            if ( lcl_hasDetails( *error ) )
+            if ( lcl_hasDetails(error) )
             {
                 bMoreDetailsAvailable = true;
                 break;

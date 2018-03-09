@@ -339,16 +339,16 @@ namespace dbaui
         m_aVisitedParams[m_nCurrentlySelected] |= VisitFlags::Visited;
 
         // was it the last "not visited yet" entry ?
-        std::vector<VisitFlags>::const_iterator aIter;
-        for (   aIter = m_aVisitedParams.begin();
-                aIter < m_aVisitedParams.end();
-                ++aIter
-            )
+        bool bVisited = false;
+        for (auto const& visitedParam : m_aVisitedParams)
         {
-            if (!((*aIter) & VisitFlags::Visited))
+            if (!(visitedParam & VisitFlags::Visited))
+            {
+                bVisited = true;
                 break;
+            }
         }
-        if (aIter == m_aVisitedParams.end())
+        if (!bVisited)
         {   // yes, there isn't another one -> change the "default button"
             m_pTravelNext->SetStyle(m_pTravelNext->GetStyle() & ~WB_DEFBUTTON);
             m_pOKBtn->SetStyle(m_pOKBtn->GetStyle() | WB_DEFBUTTON);

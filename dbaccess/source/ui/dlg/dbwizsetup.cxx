@@ -186,12 +186,10 @@ void ODbTypeWizDialogSetup::declareAuthDepPath( const OUString& _sURL, PathId _n
     // collect the elements of the path
     WizardPath aPath;
 
-    svt::RoadmapWizardTypes::WizardPath::const_iterator aIter = _rPaths.begin();
-    svt::RoadmapWizardTypes::WizardPath::const_iterator aEnd = _rPaths.end();
-    for(;aIter != aEnd;++aIter)
+    for (auto const& path : _rPaths)
     {
-        if ( bHasAuthentication || ( *aIter != PAGE_DBSETUPWIZARD_AUTHENTIFICATION ) )
-            aPath.push_back( *aIter );
+        if ( bHasAuthentication || ( path != PAGE_DBSETUPWIZARD_AUTHENTIFICATION ) )
+            aPath.push_back(path);
     }
 
     // call base method
@@ -383,11 +381,8 @@ void ODbTypeWizDialogSetup::resetPages(const Reference< XPropertySet >& _rxDatas
     // are set. Select another data source of the same type, where the indirect props are not set (yet). Then,
     // the indirect property values of the first ds are shown in the second ds ...)
     const ODbDataSourceAdministrationHelper::MapInt2String& rMap = m_pImpl->getIndirectProperties();
-    for (   ODbDataSourceAdministrationHelper::MapInt2String::const_iterator aIndirect = rMap.begin();
-            aIndirect != rMap.end();
-            ++aIndirect
-        )
-        getWriteOutputSet()->ClearItem( static_cast<sal_uInt16>(aIndirect->first) );
+    for (auto const& elem : rMap)
+        getWriteOutputSet()->ClearItem( static_cast<sal_uInt16>(elem.first) );
 
     // extract all relevant data from the property set of the data source
     m_pImpl->translateProperties(_rxDatasource, *getWriteOutputSet());

@@ -36,12 +36,9 @@ void ODriversSettings::getSupportedIndirectSettings( const OUString& _sURLPrefix
     // central DataSourceUI instance.
     DataSourceMetaData aMeta( _sURLPrefix );
     const FeatureSet& rFeatures( aMeta.getFeatureSet() );
-    for (   FeatureSet::const_iterator feature = rFeatures.begin();
-            feature != rFeatures.end();
-            ++feature
-        )
+    for (auto const& feature : rFeatures)
     {
-        _out_rDetailsIds.push_back( *feature );
+        _out_rDetailsIds.push_back(feature);
     }
 
     // the rest is configuration-based

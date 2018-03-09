@@ -97,16 +97,13 @@ namespace dbmm
 
             // tell the single phases their "overall starting point"
             PhaseWeight nRunningWeight( 0 );
-            for (   Phases::iterator phase = _rData.aPhases.begin();
-                    phase != _rData.aPhases.end();
-                    ++phase
-                )
+            for (auto & phase : _rData.aPhases)
             {
-                phase->second.nGlobalStart = static_cast<sal_uInt32>( nRunningWeight * _rData.nOverallStretch );
-                nRunningWeight += phase->second.nWeight;
+                phase.second.nGlobalStart = static_cast<sal_uInt32>( nRunningWeight * _rData.nOverallStretch );
+                nRunningWeight += phase.second.nWeight;
 
                 sal_uInt32 nNextPhaseStart = static_cast<sal_uInt32>( nRunningWeight * _rData.nOverallStretch );
-                phase->second.nGlobalRange = nNextPhaseStart - phase->second.nGlobalStart;
+                phase.second.nGlobalRange = nNextPhaseStart - phase.second.nGlobalStart;
             }
 
             _rData.rConsumer.start( OVERALL_RANGE );
