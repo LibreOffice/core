@@ -416,7 +416,7 @@ interface BaseTextSelection
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 // Method for frames and objects
-    FN_TOOL_ANCHOR
+    SID_ANCHOR_MENU
     [
         StateMethod = GetState ;
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";

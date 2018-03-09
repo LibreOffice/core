@@ -244,6 +244,7 @@ void ScDrawShell::GetDrawFuncState( SfxItemSet& rSet )      // disable functions
                 rSet.DisableItem( SID_COPY );
                 // Notes always default to Page anchor.
                 rSet.DisableItem( SID_ANCHOR_TOGGLE );
+                rSet.DisableItem( SID_ANCHOR_MENU );
             }
         }
 
@@ -273,6 +274,7 @@ void ScDrawShell::GetDrawFuncState( SfxItemSet& rSet )      // disable functions
         rSet.DisableItem( SID_COPY );
             //  other
         rSet.DisableItem( SID_ANCHOR_TOGGLE );
+        rSet.DisableItem( SID_ANCHOR_MENU );
         rSet.DisableItem( SID_ORIGINALSIZE );
         rSet.DisableItem( SID_FITCELLSIZE );
         rSet.DisableItem( SID_ATTR_TRANSFORM );

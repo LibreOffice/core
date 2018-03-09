@@ -32,7 +32,7 @@
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:FillStyle"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:ToggleAnchorType"/>
+ <toolbar:toolbaritem xlink:href=".uno:AnchorMenu"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:ToggleObjectRotateMode"/>
  <toolbar:toolbaritem xlink:href=".uno:ObjectAlign"/>
