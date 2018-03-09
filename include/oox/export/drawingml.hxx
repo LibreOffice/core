@@ -141,10 +141,6 @@ protected:
                   const OUString& aName, css::beans::PropertyState& eState );
     OUString GetFieldValue( const css::uno::Reference< css::text::XTextRange >& rRun, bool& bIsURLField );
 
-
-    /// If bRelPathToMedia is true add "../" to image folder path while adding the image relationship
-    OUString WriteImage( const OUString& rURL, bool bRelPathToMedia = false);
-
     /// Output the media (including copying a video from vnd.sun.star.Package: to the output if necessary).
     void WriteMediaNonVisualProperties(const css::uno::Reference<css::drawing::XShape>& xShape);
 
@@ -186,9 +182,6 @@ public:
     void WriteBlipOrNormalFill( const css::uno::Reference< css::beans::XPropertySet >& rXPropSet,
             const OUString& rURLPropName );
     void WriteBlipFill( const css::uno::Reference< css::beans::XPropertySet >& rXPropSet,
-                         const OUString& sBitmapURL, sal_Int32 nXmlNamespace,
-                         bool bWriteMode, bool bRelPathToMedia = false );
-    void WriteBlipFill( const css::uno::Reference< css::beans::XPropertySet >& rXPropSet,
             const OUString& sURLPropName );
     void WriteBlipFill( const css::uno::Reference< css::beans::XPropertySet >& rXPropSet,
                          const OUString& sURLPropName, sal_Int32 nXmlNamespace );
@@ -208,23 +201,17 @@ public:
                               css::uno::Reference<css::graphic::XGraphic> const & rxGraphic);
 
     void WriteOutline( const css::uno::Reference< css::beans::XPropertySet >& rXPropSet );
-    void WriteStretch( const css::uno::Reference< css::beans::XPropertySet >& rXPropSet, const OUString& rURL );
 
     void WriteXGraphicStretch(css::uno::Reference<css::beans::XPropertySet> const & rXPropSet,
                               css::uno::Reference<css::graphic::XGraphic> const & rxGraphic);
 
     void WriteLinespacing( const css::style::LineSpacing& rLineSpacing );
 
-    OUString WriteBlip( const css::uno::Reference< css::beans::XPropertySet >& rXPropSet,
-            const OUString& rURL, bool bRelPathToMedia );
-
     OUString WriteXGraphicBlip(css::uno::Reference<css::beans::XPropertySet> const & rXPropSet,
                                css::uno::Reference<css::graphic::XGraphic> const & rxGraphic,
                                bool bRelPathToMedia);
 
     void WriteImageBrightnessContrastTransparence(css::uno::Reference<css::beans::XPropertySet> const & rXPropSet);
-
-    void WriteBlipMode( const css::uno::Reference< css::beans::XPropertySet >& rXPropSet, const OUString& rURL );
 
     void WriteXGraphicBlipMode(css::uno::Reference<css::beans::XPropertySet> const & rXPropSet,
                                css::uno::Reference<css::graphic::XGraphic> const & rxGraphic);

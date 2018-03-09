@@ -1335,11 +1335,6 @@ void ChartExport::exportBitmapFill( const Reference< XPropertySet >& xPropSet )
                     WriteXGraphicBlipFill(xPropSet, xGraphic, XML_a, true, true);
                 }
             }
-            else if (rValue.has<OUString>()) // TODO: Remove, when not used anymore
-            {
-                OUString sBitmapURL = rValue.get<OUString>();
-                WriteBlipFill(xPropSet, sBitmapURL, XML_a, true, true);
-            }
         }
         catch (const uno::Exception & rEx)
         {
