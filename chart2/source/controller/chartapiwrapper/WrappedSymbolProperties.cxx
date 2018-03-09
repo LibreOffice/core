@@ -65,7 +65,7 @@ class WrappedSymbolBitmapProperty : public WrappedSeriesOrDiagramProperty<uno::R
 {
 public:
     virtual uno::Reference<graphic::XGraphic> getValueFromSeries(const Reference<beans::XPropertySet>& xSeriesPropertySet) const override;
-    virtual void setValueToSeries(const Reference<beans::XPropertySet> & xSeriesPropertySet, uno::Reference<graphic::XGraphic> const & aNewGraphicURL) const override;
+    virtual void setValueToSeries(const Reference<beans::XPropertySet> & xSeriesPropertySet, uno::Reference<graphic::XGraphic> const & xNewGraphic) const override;
 
     explicit WrappedSymbolBitmapProperty(const std::shared_ptr<Chart2ModelContact>& spChart2ModelContact,
                                             tSeriesOrDiagramPropertyType ePropertyType);
