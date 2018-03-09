@@ -198,8 +198,8 @@ void Test::testLineSpacing()
 
     // Check the first line
     ParagraphInfos aInfo2 = aEditEngine.GetParagraphInfos(0);
-    CPPUNIT_ASSERT_EQUAL((sal_uInt16)269, aInfo2.nFirstLineMaxAscent);
-    CPPUNIT_ASSERT_EQUAL((sal_uInt16)382, (sal_uInt16)aEditEngine.GetLineHeight(0));
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(311), aInfo2.nFirstLineMaxAscent);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(382), static_cast<sal_uInt16>(aEditEngine.GetLineHeight(0)));
 }
 
 void Test::testConstruction()
