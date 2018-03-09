@@ -209,13 +209,6 @@ static SvXMLEnumMapEntry<sal_Int16> const pXML_RubyPosition_Enum[] =
     { XML_TOKEN_INVALID,        0 }
 };
 
-static SvXMLEnumMapEntry<sal_Int16> const pXML_RubyIsAbove_Enum[] =
-{
-    { XML_ABOVE,                RubyPosition::ABOVE},
-    { XML_BELOW,                RubyPosition::BELOW},
-    { XML_TOKEN_INVALID,        0 }
-};
-
 static SvXMLEnumMapEntry<sal_uInt16> const pXML_FontRelief_Enum[] =
 {
     { XML_NONE,             FontRelief::NONE        },
@@ -1309,7 +1302,7 @@ static const XMLPropertyHandler *GetPropertyHandler
         pHdl = new XMLConstantsPropertyHandler( pXML_RubyPosition_Enum, XML_TOKEN_INVALID );
         break;
     case XML_TYPE_TEXT_RUBY_IS_ABOVE:
-        pHdl = new XMLConstantsPropertyHandler( pXML_RubyIsAbove_Enum, XML_TOKEN_INVALID );
+        pHdl = new XMLNamedBoolPropertyHdl(::xmloff::token::XML_ABOVE, ::xmloff::token::XML_BELOW);
         break;
     // OD 2004-05-05 #i28701#
     case XML_TYPE_WRAP_INFLUENCE_ON_POSITION:

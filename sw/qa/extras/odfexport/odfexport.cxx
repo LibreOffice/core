@@ -1921,7 +1921,10 @@ DECLARE_ODFEXPORT_TEST(testReferenceLanguage, "referencelanguage.odt")
 DECLARE_ODFEXPORT_TEST(testRubyPosition, "ruby-position.odt")
 {
     if (xmlDocPtr pXmlDoc = parseExport("content.xml"))
+    {
         assertXPath(pXmlDoc, "//style:style[@style:family='ruby']/style:ruby-properties[@loext:ruby-position='inter-character']", 1);
+        assertXPath(pXmlDoc, "//style:style[@style:family='ruby']/style:ruby-properties[@style:ruby-position='below']", 1);
+    }
 }
 
 DECLARE_ODFEXPORT_TEST(testBulletAsImage, "BulletAsImage.odt")
