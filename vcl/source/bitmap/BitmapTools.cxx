@@ -29,6 +29,7 @@
 #if ENABLE_CAIRO_CANVAS
 #include <cairo.h>
 #endif
+#include <tools/diagnose_ex.h>
 
 using namespace css;
 
@@ -298,6 +299,251 @@ BitmapEx* CreateFromCairoSurface(Size aSize, cairo_surface_t * pSurface)
     return pBitmapEx;
 }
 #endif
+
+BitmapEx CanvasBitmapHelperSetPixel( const uno::Sequence< sal_Int8 >&      color,
+                                     const geometry::IntegerPoint2D&       pos,
+                                     BitmapEx & rBitmapEx )
+{
+    // retrieve local copies from the BitmapEx, which are later
+    // stored back. Unfortunately, the BitmapEx does not permit
+    // in-place modifications, as they are necessary here.
+    Bitmap aBitmap( rBitmapEx.GetBitmap() );
+    Bitmap aAlpha( rBitmapEx.GetAlpha().GetBitmap() );
+
+    {
+        Bitmap::ScopedWriteAccess pWriteAccess( aBitmap );
+        Bitmap::ScopedWriteAccess pAlphaWriteAccess( aAlpha.IsEmpty() ?
+                                                   nullptr : aAlpha.AcquireWriteAccess(),
+                                                   aAlpha );
+
+        ENSURE_OR_THROW( pWriteAccess.get() != nullptr,
+                         "Could not acquire write access to bitmap" );
+
+        pWriteAccess->SetPixel( pos.Y, pos.X, BitmapColor( color[ 0 ],
+                                                           color[ 1 ],
+                                                           color[ 2 ] ) );
+
+        if( pAlphaWriteAccess.get() != nullptr )
+            pAlphaWriteAccess->SetPixel( pos.Y, pos.X, BitmapColor( 255 - color[ 3 ] ) );
+    }
+
+    if( aAlpha.IsEmpty() )
+        return BitmapEx( aBitmap );
+    else
+        return BitmapEx( aBitmap, AlphaMask( aAlpha ) );
+}
+
+BitmapEx CanvasBitmapHelperSetData( const uno::Sequence< sal_Int8 >&      data,
+                                    const geometry::IntegerRectangle2D&   rect,
+                                    BitmapEx & rBitmapEx)
+{
+    Bitmap aBitmap( rBitmapEx.GetBitmap() );
+    Bitmap aAlpha( rBitmapEx.GetAlpha().GetBitmap() );
+
+    {
+        Bitmap::ScopedWriteAccess pWriteAccess( aBitmap );
+        Bitmap::ScopedWriteAccess pAlphaWriteAccess( aAlpha.IsEmpty() ?
+                                                   nullptr : aAlpha.AcquireWriteAccess(),
+                                                   aAlpha );
+
+        if( pAlphaWriteAccess.get() )
+        {
+            DBG_ASSERT( pAlphaWriteAccess->GetScanlineFormat() == ScanlineFormat::N8BitPal ||
+                        pAlphaWriteAccess->GetScanlineFormat() == ScanlineFormat::N8BitTcMask,
+                        "non-8bit alpha not supported!" );
+        }
+
+        ENSURE_OR_THROW( pWriteAccess.get() != nullptr,
+                         "Could not acquire write access to bitmap" );
+
+        // TODO(F1): Support more formats.
+        const Size aBmpSize( aBitmap.GetSizePixel() );
+
+        // for the time being, always read as BGRA
+        int nCurrPos(0);
+        for( long y=rect.Y1;
+             y<aBmpSize.Height() && y<rect.Y2;
+             ++y )
+        {
+            if( pAlphaWriteAccess.get() != nullptr )
+            {
+                switch( pWriteAccess->GetScanlineFormat() )
+                {
+                    case ScanlineFormat::N8BitPal:
+                    {
+                        Scanline pScan  = pWriteAccess->GetScanline( y );
+                        Scanline pAScan = pAlphaWriteAccess->GetScanline( y );
+
+                        for( long x=rect.X1;
+                             x<aBmpSize.Width() && x<rect.X2;
+                             ++x )
+                        {
+                            *pScan++ = static_cast<sal_uInt8>(pWriteAccess->GetBestPaletteIndex(
+                                BitmapColor( data[ nCurrPos   ],
+                                             data[ nCurrPos+1 ],
+                                             data[ nCurrPos+2 ] ) ));
+
+                            nCurrPos += 3;
+
+                            // cast to unsigned byte, for correct subtraction result
+                            *pAScan++ = static_cast<sal_uInt8>(255 -
+                                                          static_cast<sal_uInt8>(data[ nCurrPos++ ]));
+                        }
+                    }
+                    break;
+
+                    case ScanlineFormat::N24BitTcBgr:
+                    {
+                        Scanline pScan  = pWriteAccess->GetScanline( y );
+                        Scanline pAScan = pAlphaWriteAccess->GetScanline( y );
+
+                        for( long x=rect.X1;
+                             x<aBmpSize.Width() && x<rect.X2;
+                             ++x )
+                        {
+                            *pScan++ = data[ nCurrPos+2 ];
+                            *pScan++ = data[ nCurrPos+1 ];
+                            *pScan++ = data[ nCurrPos   ];
+
+                            nCurrPos += 3;
+
+                            // cast to unsigned byte, for correct subtraction result
+                            *pAScan++ = static_cast<sal_uInt8>(255 -
+                                                          static_cast<sal_uInt8>(data[ nCurrPos++ ]));
+                        }
+                    }
+                    break;
+
+                    case ScanlineFormat::N24BitTcRgb:
+                    {
+                        Scanline pScan  = pWriteAccess->GetScanline( y );
+                        Scanline pAScan = pAlphaWriteAccess->GetScanline( y );
+
+                        for( long x=rect.X1;
+                             x<aBmpSize.Width() && x<rect.X2;
+                             ++x )
+                        {
+                            *pScan++ = data[ nCurrPos   ];
+                            *pScan++ = data[ nCurrPos+1 ];
+                            *pScan++ = data[ nCurrPos+2 ];
+
+                            nCurrPos += 3;
+
+                            // cast to unsigned byte, for correct subtraction result
+                            *pAScan++ = static_cast<sal_uInt8>(255 -
+                                                          static_cast<sal_uInt8>(data[ nCurrPos++ ]));
+                        }
+                    }
+                    break;
+
+                    default:
+                    {
+                        Scanline pScan  = pWriteAccess->GetScanline( y );
+                        Scanline pAScan = pAlphaWriteAccess->GetScanline( y );
+
+                        for( long x=rect.X1;
+                             x<aBmpSize.Width() && x<rect.X2;
+                             ++x )
+                        {
+                            pWriteAccess->SetPixelOnData( pScan, x, BitmapColor( data[ nCurrPos   ],
+                                                                       data[ nCurrPos+1 ],
+                                                                       data[ nCurrPos+2 ] ) );
+                            nCurrPos += 3;
+
+                            // cast to unsigned byte, for correct subtraction result
+                            pAlphaWriteAccess->SetPixelOnData( pAScan, x,
+                                                         BitmapColor(
+                                                             static_cast<sal_uInt8>(255 -
+                                                                               static_cast<sal_uInt8>(data[ nCurrPos++ ])) ) );
+                        }
+                    }
+                    break;
+                }
+            }
+            else
+            {
+                // TODO(Q3): This is copy'n'pasted from
+                // canvashelper.cxx, unify!
+                switch( pWriteAccess->GetScanlineFormat() )
+                {
+                    case ScanlineFormat::N8BitPal:
+                    {
+                        Scanline pScan = pWriteAccess->GetScanline( y );
+
+                        for( long x=rect.X1;
+                             x<aBmpSize.Width() && x<rect.X2;
+                             ++x )
+                        {
+                            *pScan++ = static_cast<sal_uInt8>(pWriteAccess->GetBestPaletteIndex(
+                                BitmapColor( data[ nCurrPos   ],
+                                             data[ nCurrPos+1 ],
+                                             data[ nCurrPos+2 ] ) ));
+
+                            nCurrPos += 4; // skip three colors, _plus_ alpha
+                        }
+                    }
+                    break;
+
+                    case ScanlineFormat::N24BitTcBgr:
+                    {
+                        Scanline pScan = pWriteAccess->GetScanline( y );
+
+                        for( long x=rect.X1;
+                             x<aBmpSize.Width() && x<rect.X2;
+                             ++x )
+                        {
+                            *pScan++ = data[ nCurrPos+2 ];
+                            *pScan++ = data[ nCurrPos+1 ];
+                            *pScan++ = data[ nCurrPos   ];
+
+                            nCurrPos += 4; // skip three colors, _plus_ alpha
+                        }
+                    }
+                    break;
+
+                    case ScanlineFormat::N24BitTcRgb:
+                    {
+                        Scanline pScan = pWriteAccess->GetScanline( y );
+
+                        for( long x=rect.X1;
+                             x<aBmpSize.Width() && x<rect.X2;
+                             ++x )
+                        {
+                            *pScan++ = data[ nCurrPos   ];
+                            *pScan++ = data[ nCurrPos+1 ];
+                            *pScan++ = data[ nCurrPos+2 ];
+
+                            nCurrPos += 4; // skip three colors, _plus_ alpha
+                        }
+                    }
+                    break;
+
+                    default:
+                    {
+                        Scanline pScan = pWriteAccess->GetScanline( y );
+
+                        for( long x=rect.X1;
+                             x<aBmpSize.Width() && x<rect.X2;
+                             ++x )
+                        {
+                            pWriteAccess->SetPixelOnData( pScan, x, BitmapColor( data[ nCurrPos   ],
+                                                                       data[ nCurrPos+1 ],
+                                                                       data[ nCurrPos+2 ] ) );
+                            nCurrPos += 4; // skip three colors, _plus_ alpha
+                        }
+                    }
+                    break;
+                }
+            }
+        }
+    }
+
+    if( aAlpha.IsEmpty() )
+        return BitmapEx( aBitmap );
+    else
+        return BitmapEx( aBitmap, AlphaMask( aAlpha ) );
+}
+
 
 }} // end vcl::bitmap
 

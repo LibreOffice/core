@@ -18,6 +18,8 @@
 #if ENABLE_CAIRO_CANVAS
 #include <vcl/cairo.hxx>
 #endif
+#include <com/sun/star/geometry/IntegerPoint2D.hpp>
+#include <com/sun/star/geometry/IntegerRectangle2D.hpp>
 
 namespace vcl {
 namespace bitmap {
@@ -82,6 +84,13 @@ BitmapEx VCL_DLLPUBLIC CreateFromData( RawBitmap && data );
 #if ENABLE_CAIRO_CANVAS
 VCL_DLLPUBLIC BitmapEx* CreateFromCairoSurface(Size size, cairo_surface_t* pSurface);
 #endif
+
+VCL_DLLPUBLIC BitmapEx CanvasBitmapHelperSetPixel( const css::uno::Sequence< sal_Int8 >& color,
+                                                   const css::geometry::IntegerPoint2D&  pos,
+                                                   BitmapEx & rBitmapEx );
+VCL_DLLPUBLIC BitmapEx CanvasBitmapHelperSetData( const css::uno::Sequence< sal_Int8 >&      data,
+                                                  const css::geometry::IntegerRectangle2D&   rect,
+                                                  BitmapEx & rBitmapEx);
 
 }} // end vcl::bitmap
 
