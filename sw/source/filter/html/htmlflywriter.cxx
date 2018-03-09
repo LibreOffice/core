@@ -803,12 +803,13 @@ OString SwHTMLWriter::OutFrameFormatOptions( const SwFrameFormat &rFrameFormat,
 
 void SwHTMLWriter::writeFrameFormatOptions(HtmlWriter& aHtml, const SwFrameFormat& rFrameFormat, const OUString& rAlternateText, HtmlFrmOpts nFrameOptions)
 {
+    bool bReplacement = (nFrameOptions & HtmlFrmOpts::Replacement) || mbReqIF;
     const SfxPoolItem* pItem;
     const SfxItemSet& rItemSet = rFrameFormat.GetAttrSet();
 
     // Name
     if( (nFrameOptions & (HtmlFrmOpts::Id|HtmlFrmOpts::Name)) &&
-        !rFrameFormat.GetName().isEmpty() && !(nFrameOptions & HtmlFrmOpts::Replacement))
+        !rFrameFormat.GetName().isEmpty() && !bReplacement)
     {
         const sal_Char* pAttributeName = (nFrameOptions & HtmlFrmOpts::Id) ? OOO_STRING_SVTOOLS_HTML_O_id : OOO_STRING_SVTOOLS_HTML_O_name;
         aHtml.attribute(pAttributeName, rFrameFormat.GetName());
@@ -823,7 +824,7 @@ void SwHTMLWriter::writeFrameFormatOptions(HtmlWriter& aHtml, const SwFrameForma
     }
 
     // alt
-    if( (nFrameOptions & HtmlFrmOpts::Alt) && !rAlternateText.isEmpty() && !(nFrameOptions & HtmlFrmOpts::Replacement) )
+    if( (nFrameOptions & HtmlFrmOpts::Alt) && !rAlternateText.isEmpty() && !bReplacement )
     {
         aHtml.attribute(OOO_STRING_SVTOOLS_HTML_O_alt, rAlternateText);
     }
@@ -832,7 +833,7 @@ void SwHTMLWriter::writeFrameFormatOptions(HtmlWriter& aHtml, const SwFrameForma
     const sal_Char* pAlignString = nullptr;
     RndStdIds eAnchorId = rFrameFormat.GetAnchor().GetAnchorId();
     if( (nFrameOptions & HtmlFrmOpts::Align) &&
-        ((RndStdIds::FLY_AT_PARA == eAnchorId) || (RndStdIds::FLY_AT_CHAR == eAnchorId)) && !(nFrameOptions & HtmlFrmOpts::Replacement))
+        ((RndStdIds::FLY_AT_PARA == eAnchorId) || (RndStdIds::FLY_AT_CHAR == eAnchorId)) && !bReplacement)
     {
         const SwFormatHoriOrient& rHoriOri = rFrameFormat.GetHoriOrient();
         if( !(nFrameOptions & HtmlFrmOpts::SAlign) ||
@@ -863,7 +864,7 @@ void SwHTMLWriter::writeFrameFormatOptions(HtmlWriter& aHtml, const SwFrameForma
         case text::VertOrientation::NONE:     break;
         }
     }
-    if (pAlignString && !(nFrameOptions & HtmlFrmOpts::Replacement))
+    if (pAlignString && !bReplacement)
     {
         aHtml.attribute(OOO_STRING_SVTOOLS_HTML_O_align, pAlignString);
     }
@@ -1205,6 +1206,8 @@ Writer& OutHTML_Image( Writer& rWrt, const SwFrameFormat &rFrameFormat,
                        const ImageMap *pAltImgMap )
 {
     SwHTMLWriter& rHTMLWrt = static_cast<SwHTMLWriter&>(rWrt);
+    // <object data="..."> instead of <img src="...">
+    bool bReplacement = (nFrameOpts & HtmlFrmOpts::Replacement) || rHTMLWrt.mbReqIF;
 
     if (rHTMLWrt.mbSkipImages)
         return rHTMLWrt;
@@ -1357,7 +1360,7 @@ Writer& OutHTML_Image( Writer& rWrt, const SwFrameFormat &rFrameFormat,
     }
 
     OString aTag(OOO_STRING_SVTOOLS_HTML_image);
-    if (nFrameOpts & HtmlFrmOpts::Replacement)
+    if (bReplacement)
         // Write replacement graphic of OLE object as <object>.
         aTag = OOO_STRING_SVTOOLS_HTML_object;
     aHtml.start(aTag);
@@ -1380,12 +1383,12 @@ Writer& OutHTML_Image( Writer& rWrt, const SwFrameFormat &rFrameFormat,
     {
         sBuffer.append(OUStringToOString(aGraphicURL, RTL_TEXTENCODING_UTF8));
         OString aAttribute(OOO_STRING_SVTOOLS_HTML_O_src);
-        if (nFrameOpts & HtmlFrmOpts::Replacement)
+        if (bReplacement)
             aAttribute = OOO_STRING_SVTOOLS_HTML_O_data;
         aHtml.attribute(aAttribute, sBuffer.makeStringAndClear().getStr());
     }
 
-    if (nFrameOpts & HtmlFrmOpts::Replacement)
+    if (bReplacement)
     {
         // Handle XHTML type attribute for OLE replacement images.
         uno::Reference<beans::XPropertySet> xGraphic(rGraphic.GetXGraphic(), uno::UNO_QUERY);
@@ -1412,7 +1415,7 @@ Writer& OutHTML_Image( Writer& rWrt, const SwFrameFormat &rFrameFormat,
     if( rHTMLWrt.IsHTMLMode( HTMLMODE_ABS_POS_FLY ) )
         rHTMLWrt.OutCSS1_FrameFormatOptions( rFrameFormat, nFrameOpts );
 
-    if( nFrameOpts & HtmlFrmOpts::Border )
+    if ((nFrameOpts & HtmlFrmOpts::Border) && !bReplacement)
     {
         aHtml.attribute(OOO_STRING_SVTOOLS_HTML_O_border, nBorderWidth);
     }
@@ -1427,7 +1430,7 @@ Writer& OutHTML_Image( Writer& rWrt, const SwFrameFormat &rFrameFormat,
         aHtml.attribute(OOO_STRING_SVTOOLS_HTML_O_usemap, "#" + aIMapName);
     }
 
-    if ((nFrameOpts & HtmlFrmOpts::Replacement) && !rAlternateText.isEmpty())
+    if (bReplacement && !rAlternateText.isEmpty())
         // XHTML object replacement image's alternate text doesn't use the
         // "alt" attribute.
         aHtml.characters(rAlternateText.toUtf8());
