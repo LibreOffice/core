@@ -893,7 +893,10 @@ void LwpTableLayout::SplitRowToCells(XFTable* pTmpTable, rtl::Reference<XFTable>
     double fHeight = 0;
     OUString styleName;
     std::unique_ptr<XFRowStyle> xRowStyle(new XFRowStyle);
-    styleName = pTmpTable->GetRow(1)->GetStyleName();
+    XFRow* pRow = pTmpTable->GetRow(1);
+    if (!pRow)
+        throw std::runtime_error("missing row");
+    styleName = pRow->GetStyleName();
 
     // get settings of the row and assign them to new row style
     XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
