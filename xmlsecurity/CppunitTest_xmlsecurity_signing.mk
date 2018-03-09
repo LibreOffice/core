@@ -52,11 +52,20 @@ ifeq ($(ENABLE_PDFIMPORT),TRUE)
 $(eval $(call gb_CppunitTest_use_executable,xmlsecurity_signing,xpdfimport))
 endif
 
-# reset the LD_LIBRARY_PATH for spawned GPG processes
+# various hacks to make unit test work on Linux more often
 ifeq ($(OS),LINUX)
+# reset the LD_LIBRARY_PATH for spawned GPG processes
 $(call gb_CppunitTest_get_target,xmlsecurity_signing): \
     EXTRA_ENV_VARS := \
         LIBO_LD_PATH=$$LD_LIBRARY_PATH
+
+# create socket dir below /run/user/ instead of in workdir
+.PHONY : gb_CppunitTest_run_gpgconf
+gb_CppunitTest_run_gpgconf:
+	gpgconf --create-socketdir 2>/dev/null || true
+
+$(call gb_CppunitTest_get_target,xmlsecurity_signing): \
+    gb_CppunitTest_run_gpgconf
 endif
 
 # vim: set noet sw=4 ts=4:
