@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba2be162_343ff526",
+        "filename": "xmlsecurity/CppunitTest_xmlsecurity_signing.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-03-09T08:01:18Z",
+      "side": 1,
+      "message": "does that make sense?\n\n\u003e LIBO_LD_PATH\u003d... gpgconf --create-socketdir || true workdir/LinkTarget/Executable/cppunittester ...\n\nwill always succeed, trivially, without testing anything",
+      "revId": "42a1acf3b18c0509a441e0772f2242c88ab45066",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
