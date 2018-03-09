@@ -399,8 +399,7 @@ SvXMLImport::SvXMLImport(
     maNamespaceHandler( new SvXMLImportFastNamespaceHandler() ),
     mxFastDocumentHandler( nullptr ),
     mbIsFormsSupported( true ),
-    mbIsTableShapeSupported( false ),
-    mbIsGraphicLoadOnDemandSupported( true )
+    mbIsTableShapeSupported( false )
 {
     SAL_WARN_IF( !xContext.is(), "xmloff.core", "got no service manager" );
     InitCtor_();

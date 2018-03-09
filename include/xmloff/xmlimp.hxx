@@ -238,7 +238,6 @@ class XMLOFF_DLLPUBLIC SvXMLImport : public cppu::WeakImplHelper<
 protected:
     bool                        mbIsFormsSupported;
     bool                        mbIsTableShapeSupported;
-    bool                        mbIsGraphicLoadOnDemandSupported;
 
     // Create top-level element context.
     // This method is called after the namespace map has been updated, but
