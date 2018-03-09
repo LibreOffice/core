@@ -647,6 +647,7 @@ void ScHTMLLayoutParser::SetWidths()
         for ( nCol = 0; nCol <= nColsPerRow; ++nCol, nOff = nOff + nWidth )
         {
             MakeColNoRef( pLocalColOffset, nOff, 0, 0, 0 );
+            MakeColNoRef( &maColOffset, nOff,0,0,0);
         }
         nTableWidth = static_cast<sal_uInt16>(pLocalColOffset->back() - pLocalColOffset->front());
         for ( size_t i = nFirstTableCell, nListSize = maList.size(); i < nListSize; ++i )
