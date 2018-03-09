@@ -1853,7 +1853,11 @@ sal_Int32 Window::get_border_width() const
 void Window::set_margin_left(sal_Int32 nWidth)
 {
     WindowImpl *pWindowImpl = mpWindowImpl->mpBorderWindow ? mpWindowImpl->mpBorderWindow->mpWindowImpl.get() : mpWindowImpl.get();
-    pWindowImpl->mnMarginLeft = nWidth;
+    if (pWindowImpl->mnMarginLeft != nWidth)
+    {
+        pWindowImpl->mnMarginLeft = nWidth;
+        queue_resize();
+    }
 }
 
 sal_Int32 Window::get_margin_left() const
@@ -1865,7 +1869,11 @@ sal_Int32 Window::get_margin_left() const
 void Window::set_margin_right(sal_Int32 nWidth)
 {
     WindowImpl *pWindowImpl = mpWindowImpl->mpBorderWindow ? mpWindowImpl->mpBorderWindow->mpWindowImpl.get() : mpWindowImpl.get();
-    pWindowImpl->mnMarginRight = nWidth;
+    if (pWindowImpl->mnMarginRight != nWidth)
+    {
+        pWindowImpl->mnMarginRight = nWidth;
+        queue_resize();
+    }
 }
 
 sal_Int32 Window::get_margin_right() const
@@ -1877,7 +1885,11 @@ sal_Int32 Window::get_margin_right() const
 void Window::set_margin_top(sal_Int32 nWidth)
 {
     WindowImpl *pWindowImpl = mpWindowImpl->mpBorderWindow ? mpWindowImpl->mpBorderWindow->mpWindowImpl.get() : mpWindowImpl.get();
-    pWindowImpl->mnMarginTop = nWidth;
+    if (pWindowImpl->mnMarginTop != nWidth)
+    {
+        pWindowImpl->mnMarginTop = nWidth;
+        queue_resize();
+    }
 }
 
 sal_Int32 Window::get_margin_top() const
@@ -1889,7 +1901,11 @@ sal_Int32 Window::get_margin_top() const
 void Window::set_margin_bottom(sal_Int32 nWidth)
 {
     WindowImpl *pWindowImpl = mpWindowImpl->mpBorderWindow ? mpWindowImpl->mpBorderWindow->mpWindowImpl.get() : mpWindowImpl.get();
-    pWindowImpl->mnMarginBottom = nWidth;
+    if (pWindowImpl->mnMarginBottom != nWidth)
+    {
+        pWindowImpl->mnMarginBottom = nWidth;
+        queue_resize();
+    }
 }
 
 sal_Int32 Window::get_margin_bottom() const
