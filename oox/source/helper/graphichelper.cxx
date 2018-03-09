@@ -366,12 +366,6 @@ OUString GraphicHelper::createGraphicObject( const Reference< XGraphic >& rxGrap
     return aGraphicObjUrl;
 }
 
-OUString GraphicHelper::importGraphicObject( const Reference< XInputStream >& rxInStrm,
-        const WmfExternal* pExtHeader ) const
-{
-    return createGraphicObject( importGraphic( rxInStrm, pExtHeader ) );
-}
-
 awt::Size GraphicHelper::getOriginalSize( const Reference< XGraphic >& xGraphic ) const
 {
     awt::Size aSizeHmm;
