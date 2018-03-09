@@ -19,6 +19,9 @@
 #ifndef INCLUDED_SC_SOURCE_UI_INC_TABVIEW_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_TABVIEW_HXX
 
+#include <sal/config.h>
+
+#include <array>
 #include <memory>
 #include <vcl/scrbar.hxx>
 #include <vcl/help.hxx>
@@ -92,7 +95,7 @@ private:
     enum ModifierTagType { Adder, Remover };
 
 public:
-    ScExtraEditViewManager(ScTabViewShell* pThisViewShell, VclPtr<ScGridWindow>* pGridWin)
+    ScExtraEditViewManager(ScTabViewShell* pThisViewShell, std::array<VclPtr<ScGridWindow>, 4> const & pGridWin)
         : mpThisViewShell(pThisViewShell)
         , mpGridWin(pGridWin)
         , mpOtherEditView(nullptr)
@@ -120,7 +123,7 @@ private:
 
 private:
     ScTabViewShell* mpThisViewShell;
-    VclPtr<ScGridWindow>* mpGridWin;
+    std::array<VclPtr<ScGridWindow>, 4> const & mpGridWin;
     EditView* mpOtherEditView;
     int nTotalWindows;
 };
@@ -147,11 +150,11 @@ private:
     FuPoor*             pDrawActual;
     FuPoor*             pDrawOld;
 
-    VclPtr<ScGridWindow>        pGridWin[4];
-    VclPtr<ScColBar>            pColBar[2];
-    VclPtr<ScRowBar>            pRowBar[2];
-    VclPtr<ScOutlineWindow>     pColOutline[2];
-    VclPtr<ScOutlineWindow>     pRowOutline[2];
+    std::array<VclPtr<ScGridWindow>, 4> pGridWin;
+    std::array<VclPtr<ScColBar>, 2> pColBar;
+    std::array<VclPtr<ScRowBar>, 2> pRowBar;
+    std::array<VclPtr<ScOutlineWindow>, 2> pColOutline;
+    std::array<VclPtr<ScOutlineWindow>, 2> pRowOutline;
     VclPtr<ScTabSplitter>       pHSplitter;
     VclPtr<ScTabSplitter>       pVSplitter;
     VclPtr<ScTabControl>        pTabControl;
