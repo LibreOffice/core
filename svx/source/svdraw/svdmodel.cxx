@@ -1324,7 +1324,10 @@ void SdrModel::InsertPage(SdrPage* pPage, sal_uInt16 nPos)
     PageListChanged();
     pPage->SetInserted();
     pPage->SetPageNum(nPos);
-    pPage->SetModel(this);
+
+    // TTTT
+    // pPage->SetModel(this);
+
     if (nPos<nCount) bPagNumsDirty=true;
     SetChanged();
     SdrHint aHint(SdrHintKind::PageOrderChange, pPage);
@@ -1373,7 +1376,10 @@ void SdrModel::InsertMasterPage(SdrPage* pPage, sal_uInt16 nPos)
     MasterPageListChanged();
     pPage->SetInserted();
     pPage->SetPageNum(nPos);
-    pPage->SetModel(this);
+
+    // TTTT
+    // pPage->SetModel(this);
+
     if (nPos<nCount) {
         bMPgNumsDirty=true;
     }
@@ -1477,7 +1483,7 @@ void SdrModel::CopyPages(sal_uInt16 nFirstPageNum, sal_uInt16 nLastPageNum,
         if (!bMoveNoCopy)
         {
             const SdrPage* pPg1=GetPage(nPageNum2);
-            pPg=pPg1->Clone();
+            pPg=pPg1->Clone(nullptr); // TTTT copy to local model
             InsertPage(pPg,nDestNum);
             if (bUndo)
                 AddUndo(GetSdrUndoFactory().CreateUndoCopyPage(*pPg));
@@ -1578,14 +1584,18 @@ void SdrModel::Merge(SdrModel& rSourceModel,
     if (pMasterMap && pMasterNeed && nMasterNeed!=0) {
         for (sal_uInt16 i=nSrcMasterPageCnt; i>0;) {
             i--;
-            if (pMasterNeed[i]) {
-                SdrPage* pPg=nullptr;
-                if (bTreadSourceAsConst) {
-                    const SdrPage* pPg1=rSourceModel.GetMasterPage(i);
-                    pPg=pPg1->Clone();
-                } else {
-                    pPg=rSourceModel.RemoveMasterPage(i);
+            if (pMasterNeed[i])
+            {
+                // TTTT always clone to new model
+                const SdrPage* pPg1(rSourceModel.GetMasterPage(i));
+                SdrPage* pPg(pPg1->Clone(this));
+
+                if(!bTreadSourceAsConst)
+                {
+                    // if requested, delete original/modify original model
+                    delete rSourceModel.RemoveMasterPage(i);
                 }
+
                 if (pPg!=nullptr) {
                     // Now append all of them to the end of the DstModel.
                     // Don't use InsertMasterPage(), because everything is
@@ -1593,7 +1603,10 @@ void SdrModel::Merge(SdrModel& rSourceModel,
                     maMaPag.insert(maMaPag.begin()+nDstMasterPageCnt, pPg);
                     MasterPageListChanged();
                     pPg->SetInserted();
-                    pPg->SetModel(this);
+
+                    // TTTT
+                    // pPg->SetModel(this);
+
                     bMPgNumsDirty=true;
                     if (bUndo) AddUndo(GetSdrUndoFactory().CreateUndoNewPage(*pPg));
                 } else {
@@ -1608,14 +1621,18 @@ void SdrModel::Merge(SdrModel& rSourceModel,
         sal_uInt16 nSourcePos=nFirstPageNum;
         sal_uInt16 nMergeCount=sal_uInt16(std::abs(static_cast<long>(static_cast<long>(nFirstPageNum)-nLastPageNum))+1);
         if (nDestPos>GetPageCount()) nDestPos=GetPageCount();
-        while (nMergeCount>0) {
-            SdrPage* pPg=nullptr;
-            if (bTreadSourceAsConst) {
-                const SdrPage* pPg1=rSourceModel.GetPage(nSourcePos);
-                pPg=pPg1->Clone();
-            } else {
-                pPg=rSourceModel.RemovePage(nSourcePos);
+        while (nMergeCount>0)
+        {
+            // TTTT always clone to new model
+            const SdrPage* pPg1(rSourceModel.GetPage(nSourcePos));
+            SdrPage* pPg(pPg1->Clone(this));
+
+            if(!bTreadSourceAsConst)
+            {
+                // if requested, delete original/modify original model
+                delete rSourceModel.RemovePage(nSourcePos);
             }
+
             if (pPg!=nullptr) {
                 InsertPage(pPg,nDestPos);
                 if (bUndo) AddUndo(GetSdrUndoFactory().CreateUndoNewPage(*pPg));

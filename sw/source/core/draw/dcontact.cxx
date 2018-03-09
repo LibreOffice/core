@@ -517,7 +517,6 @@ SwVirtFlyDrawObj* SwFlyDrawContact::CreateNewRef(SwFlyFrame* pFly, SwFlyFrameFor
             pContact->GetMaster()->getSdrModelFromSdrObject(),
             *pContact->GetMaster(),
             pFly));
-    pDrawObj->SetModel(pContact->GetMaster()->GetModel());
     pDrawObj->SetUserCall(pContact);
 
     // The Reader creates the Masters and inserts them into the Page in
@@ -2181,10 +2180,10 @@ SwDrawVirtObj& SwDrawVirtObj::operator=( const SwDrawVirtObj& rObj )
     return *this;
 }
 
-SwDrawVirtObj* SwDrawVirtObj::Clone() const
+SwDrawVirtObj* SwDrawVirtObj::Clone(SdrModel* pTargetModel) const
 {
     SwDrawVirtObj* pObj = new SwDrawVirtObj(
-        getSdrModelFromSdrObject(),
+        nullptr == pTargetModel ? getSdrModelFromSdrObject() : *pTargetModel,
         rRefObj,
         mrDrawContact);
 

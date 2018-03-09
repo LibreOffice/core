@@ -1076,7 +1076,6 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                     pTObj = new SdrRectObj(
                         *pSdrModel,
                         eTextKind != OBJ_RECT ? eTextKind : OBJ_TEXT);
-                    pTObj->SetModel( pSdrModel );
                     SfxItemSet aSet( pSdrModel->GetItemPool() );
                     if ( !pRet )
                         ApplyAttributes( rSt, aSet, rObjData );
@@ -3075,14 +3074,17 @@ SdrObject* SdrPowerPointImport::ImportPageBackgroundObject( const SdrPage& rPage
         pSet->Put( XFillStyleItem( drawing::FillStyle_NONE ) );
     }
     pSet->Put( XLineStyleItem( drawing::LineStyle_NONE ) );
-    tools::Rectangle aRect( rPage.GetLeftBorder(), rPage.GetUpperBorder(), rPage.GetWidth()-rPage.GetRightBorder(), rPage.GetHeight()-rPage.GetLowerBorder() );
+    tools::Rectangle aRect(
+        rPage.GetLeftBorder(),
+        rPage.GetUpperBorder(),
+        rPage.GetWidth() - rPage.GetRightBorder(),
+        rPage.GetHeight() - rPage.GetLowerBorder());
+
     pRet = new SdrRectObj(
         *pSdrModel,
         aRect);
-    pRet->SetModel( pSdrModel );
 
     pRet->SetMergedItemSet(*pSet);
-
     pRet->SetMarkProtect( true );
     pRet->SetMoveProtect( true );
     pRet->SetResizeProtect( true );

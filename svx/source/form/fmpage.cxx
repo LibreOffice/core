@@ -74,45 +74,45 @@ FmFormPage::~FmFormPage()
 {
 }
 
+// TTTT
+// void FmFormPage::SetModel(SdrModel* pNewModel)
+// {
+//     /* #35055# */
+//     // we want to call the super's "SetModel" method even if the model is the
+//     // same, in case code somewhere in the system depends on it.  But our code
+//     // doesn't, so get the old model to do a check.
+//     SdrModel *pOldModel = GetModel();
 
-void FmFormPage::SetModel(SdrModel* pNewModel)
-{
-    /* #35055# */
-    // we want to call the super's "SetModel" method even if the model is the
-    // same, in case code somewhere in the system depends on it.  But our code
-    // doesn't, so get the old model to do a check.
-    SdrModel *pOldModel = GetModel();
+//     SdrPage::SetModel( pNewModel );
 
-    SdrPage::SetModel( pNewModel );
+//     /* #35055# */
+//     if ( ( pOldModel != pNewModel ) && m_pImpl )
+//     {
+//         try
+//         {
+//             Reference< css::form::XForms > xForms( m_pImpl->getForms( false ) );
+//             if ( xForms.is() )
+//             {
+//                 // we want to keep the current collection, just reset the model
+//                 // with which it's associated.
+//                 FmFormModel* pDrawModel = static_cast<FmFormModel*>( GetModel() );
+//                 SfxObjectShell* pObjShell = pDrawModel->GetObjectShell();
+//                 if ( pObjShell )
+//                     xForms->setParent( pObjShell->GetModel() );
+//             }
+//         }
+//         catch( css::uno::Exception const& )
+//         {
+//             OSL_FAIL( "UNO Exception caught resetting model for m_pImpl (FmFormPageImpl) in FmFormPage::SetModel" );
+//         }
+//     }
+// }
 
-    /* #35055# */
-    if ( ( pOldModel != pNewModel ) && m_pImpl )
-    {
-        try
-        {
-            Reference< css::form::XForms > xForms( m_pImpl->getForms( false ) );
-            if ( xForms.is() )
-            {
-                // we want to keep the current collection, just reset the model
-                // with which it's associated.
-                FmFormModel* pDrawModel = static_cast<FmFormModel*>( GetModel() );
-                SfxObjectShell* pObjShell = pDrawModel->GetObjectShell();
-                if ( pObjShell )
-                    xForms->setParent( pObjShell->GetModel() );
-            }
-        }
-        catch( css::uno::Exception const& )
-        {
-            OSL_FAIL( "UNO Exception caught resetting model for m_pImpl (FmFormPageImpl) in FmFormPage::SetModel" );
-        }
-    }
-}
-
-
-SdrPage* FmFormPage::Clone() const
-{
-    return Clone(nullptr);
-}
+// TTTT
+// SdrPage* FmFormPage::Clone() const
+// {
+//     return Clone(nullptr);
+// }
 
 SdrPage* FmFormPage::Clone(SdrModel* const pNewModel) const
 {

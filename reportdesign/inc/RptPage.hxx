@@ -58,9 +58,9 @@ public:
     OReportPage( OReportModel& rModel
                 ,const css::uno::Reference< css::report::XSection >& _xSection );
 
-
-    virtual SdrPage* Clone() const override;
-    virtual SdrPage* Clone( SdrModel* pNewModel ) const override;
+    // TTTT
+    // virtual SdrPage* Clone() const override;
+    virtual SdrPage* Clone(SdrModel* pNewModel = nullptr) const override;
 
     virtual void NbcInsertObject(SdrObject* pObj, size_t nPos=SAL_MAX_SIZE) override;
     virtual SdrObject* RemoveObject(size_t nObjNum) override;

@@ -467,7 +467,7 @@ public:
                 const sal_uInt16 _nInitiallySelectedEvent
             ) = 0;
 
-    virtual VclPtr<SfxAbstractTabDialog> CreateSvxFormatCellsDialog( const SfxItemSet* pAttr, SdrModel* pModel, const SdrObject* pObj )=0;
+    virtual VclPtr<SfxAbstractTabDialog> CreateSvxFormatCellsDialog( const SfxItemSet* pAttr, const SdrModel& rModel, const SdrObject* pObj )=0;
 
     virtual VclPtr<SvxAbstractSplittTableDialog> CreateSvxSplittTableDialog(weld::Window* pParent, bool bIsTableVertical, long nMaxVertical) = 0;
 

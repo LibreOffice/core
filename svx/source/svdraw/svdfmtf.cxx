@@ -1021,7 +1021,7 @@ void ImpSdrGDIMetaFileImport::ImportText( const Point& rPos, const OUString& rSt
         aPos.AdjustY( -nTextHeight );
 
     tools::Rectangle aTextRect( aPos, aSize );
-    SdrRectObj* pText =new SdrRectObj(
+    SdrRectObj* pText = new SdrRectObj(
         *mpModel,
         OBJ_TEXT,
         aTextRect);
@@ -1043,7 +1043,6 @@ void ImpSdrGDIMetaFileImport::ImportText( const Point& rPos, const OUString& rSt
         pText->SetMergedItem( makeSdrTextAutoGrowWidthItem( true ) );
     }
 
-    pText->SetModel(mpModel);
     pText->SetLayer(mnLayer);
     pText->NbcSetText( rStr );
     SetAttributes( pText, true );

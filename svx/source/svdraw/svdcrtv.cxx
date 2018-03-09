@@ -350,7 +350,10 @@ void SdrCreateView::SetCurrentObj(sal_uInt16 nIdent, SdrInventor nInvent)
         nAktInvent=nInvent;
         nAktIdent=nIdent;
         SdrObject * pObj = (nIdent == OBJ_NONE) ? nullptr :
-            SdrObjFactory::MakeNewObject(*GetModel(), nInvent, nIdent, nullptr);
+            SdrObjFactory::MakeNewObject(
+                *GetModel(),
+                nInvent,
+                nIdent);
 
         if(pObj)
         {
@@ -411,12 +414,16 @@ bool SdrCreateView::ImpBegCreateObj(SdrInventor nInvent, sal_uInt16 nIdent, cons
                 }
                 else if (mpModel)
                 {
-                    pCurrentCreate->SetModel(mpModel);
+                    // TTTT pCurrentCreate->SetModel(mpModel);
                 }
             }
             else
             {
-                pCurrentCreate = SdrObjFactory::MakeNewObject(*mpModel, nInvent, nIdent, pCreatePV->GetPage(), mpModel);
+                pCurrentCreate = SdrObjFactory::MakeNewObject(
+                    *mpModel,
+                    nInvent,
+                    nIdent,
+                    pCreatePV->GetPage());
             }
 
             Point aPnt(rPnt);

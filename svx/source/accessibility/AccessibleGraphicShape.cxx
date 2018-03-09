@@ -169,7 +169,7 @@ OUString AccessibleGraphicShape::CreateAccessibleDescription()
 //  Return this object's role.
 sal_Int16 SAL_CALL AccessibleGraphicShape::getAccessibleRole()
 {
-    if( m_pShape->GetModel()->GetImageMapForObject(m_pShape) != nullptr )
+    if( m_pShape->getSdrModelFromSdrObject().GetImageMapForObject(m_pShape) != nullptr )
         return AccessibleRole::IMAGE_MAP;
     else
         return AccessibleShape::getAccessibleRole();

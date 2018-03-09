@@ -120,7 +120,10 @@ public:
     SdrPage*       GetPage() const;
     void           SetPage(SdrPage* pNewPage);
     SdrModel*      GetModel() const;
-    virtual void   SetModel(SdrModel* pNewModel);
+
+    // TTTT
+    // virtual void   SetModel(SdrModel* pNewModel);
+
     /// recalculate order numbers / ZIndex
     void           RecalcObjOrdNums();
     bool           IsObjOrdNumsDirty() const        { return bObjOrdNumsDirty; }
@@ -446,8 +449,11 @@ protected:
 public:
     explicit SdrPage(SdrModel& rNewModel, bool bMasterPage=false);
     virtual ~SdrPage() override;
-    virtual SdrPage* Clone() const override;
-    virtual SdrPage* Clone(SdrModel* pNewModel) const;
+
+    // TTTT
+    // virtual SdrPage* Clone() const override;
+
+    virtual SdrPage* Clone(SdrModel* pNewModel = nullptr) const;
     bool             IsMasterPage() const       { return mbMaster; }
     void             SetInserted(bool bNew = true);
     bool             IsInserted() const         { return mbInserted; }
@@ -478,7 +484,8 @@ public:
     sal_Int32 GetRightBorder() const;
     sal_Int32 GetLowerBorder() const;
 
-    virtual void SetModel(SdrModel* pNewModel) override;
+    // TTTT
+    // virtual void SetModel(SdrModel* pNewModel) override;
 
     // New MasterPage interface
     bool TRG_HasMasterPage() const { return (nullptr != mpMasterPageDescriptor); }

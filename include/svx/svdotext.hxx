@@ -437,7 +437,6 @@ public:
     SdrTextAniDirection GetTextAniDirection() const;
 
     virtual void SetPage(SdrPage* pNewPage) override;
-    virtual void SetModel(SdrModel* pNewModel) override;
     virtual void TakeObjInfo(SdrObjTransformInfoRec& rInfo) const override;
     virtual sal_uInt16 GetObjIdentifier() const override;
 
@@ -445,7 +444,7 @@ public:
     virtual void TakeUnrotatedSnapRect(tools::Rectangle& rRect) const;
     virtual OUString TakeObjNameSingul() const override;
     virtual OUString TakeObjNamePlural() const override;
-    virtual SdrTextObj* Clone() const override;
+    virtual SdrTextObj* Clone(SdrModel* pTargetModel = nullptr) const override;
     SdrTextObj& operator=(const SdrTextObj& rObj);
     virtual basegfx::B2DPolyPolygon TakeXorPoly() const override;
     virtual basegfx::B2DPolyPolygon TakeContour() const override;

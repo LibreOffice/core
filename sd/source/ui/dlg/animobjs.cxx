@@ -781,7 +781,8 @@ void AnimationWindow::AddObj (::sd::View& rView )
 
                     BitmapEx *const pBitmapEx = new BitmapEx(
                         SdrExchangeView::GetObjGraphic(
-                            pSnapShot->GetModel(), pSnapShot).GetBitmapEx() );
+                            &pSnapShot->getSdrModelFromSdrObject(),
+                            pSnapShot).GetBitmapEx() );
 
                     ::tools::Time* pTime = new ::tools::Time( m_pTimeField->GetTime() );
                     size_t nIndex = m_nCurrentFrame + 1;
@@ -834,7 +835,8 @@ void AnimationWindow::AddObj (::sd::View& rView )
 
                     BitmapEx *const pBitmapEx = new BitmapEx(
                         SdrExchangeView::GetObjGraphic(
-                            pObject->GetModel(), pObject).GetBitmapEx() );
+                            &pObject->getSdrModelFromSdrObject(),
+                            pObject).GetBitmapEx() );
 
                     ::tools::Time* pTime = new ::tools::Time( m_pTimeField->GetTime() );
 

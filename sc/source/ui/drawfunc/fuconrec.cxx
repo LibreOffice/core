@@ -58,10 +58,10 @@ FuConstRectangle::~FuConstRectangle()
 
 namespace {
 
-::basegfx::B2DPolyPolygon getPolygon(const char* pResId, const SdrModel* pDoc)
+::basegfx::B2DPolyPolygon getPolygon(const char* pResId, const SdrModel& rModel)
 {
     ::basegfx::B2DPolyPolygon aRetval;
-    XLineEndListRef pLineEndList = pDoc->GetLineEndList();
+    XLineEndListRef pLineEndList(rModel.GetLineEndList());
 
     if( pLineEndList.is() )
     {
@@ -116,7 +116,7 @@ bool FuConstRectangle::MouseButtonDown(const MouseEvent& rMEvt)
 
         if (pObj)
         {
-            SfxItemSet aAttr(pObj->GetModel()->GetItemPool());
+            SfxItemSet aAttr(pObj->getSdrModelFromSdrObject().GetItemPool());
             SetLineEnds(aAttr, pObj, aSfxRequest.GetSlot());
             pObj->SetMergedItemSet(aAttr);
         }
@@ -216,7 +216,7 @@ void FuConstRectangle::Activate()
 
 void FuConstRectangle::SetLineEnds(SfxItemSet& rAttr, const SdrObject* pObj, sal_uInt16 nSlotId)
 {
-    SdrModel *pDoc = pObj->GetModel();
+    SdrModel& rModel(pObj->getSdrModelFromSdrObject()); // TTTT pObj shbe ref
 
     if ( nSlotId == SID_LINE_ARROW_START      ||
          nSlotId == SID_LINE_ARROW_END        ||
@@ -230,7 +230,7 @@ void FuConstRectangle::SetLineEnds(SfxItemSet& rAttr, const SdrObject* pObj, sal
         // set attributes of line start and ends
 
         // arrowhead
-        ::basegfx::B2DPolyPolygon aArrow( getPolygon( RID_SVXSTR_ARROW, pDoc ) );
+        ::basegfx::B2DPolyPolygon aArrow( getPolygon( RID_SVXSTR_ARROW, rModel ) );
         if( !aArrow.count() )
         {
             ::basegfx::B2DPolygon aNewArrow;
@@ -242,7 +242,7 @@ void FuConstRectangle::SetLineEnds(SfxItemSet& rAttr, const SdrObject* pObj, sal
         }
 
         // Circles
-        ::basegfx::B2DPolyPolygon aCircle( getPolygon( RID_SVXSTR_CIRCLE, pDoc ) );
+        ::basegfx::B2DPolyPolygon aCircle( getPolygon( RID_SVXSTR_CIRCLE, rModel ) );
         if( !aCircle.count() )
         {
             ::basegfx::B2DPolygon aNewCircle;
@@ -252,7 +252,7 @@ void FuConstRectangle::SetLineEnds(SfxItemSet& rAttr, const SdrObject* pObj, sal
         }
 
         // Square
-        ::basegfx::B2DPolyPolygon aSquare( getPolygon( RID_SVXSTR_SQUARE, pDoc ) );
+        ::basegfx::B2DPolyPolygon aSquare( getPolygon( RID_SVXSTR_SQUARE, rModel ) );
         if( !aSquare.count() )
         {
             ::basegfx::B2DPolygon aNewSquare;
@@ -264,7 +264,7 @@ void FuConstRectangle::SetLineEnds(SfxItemSet& rAttr, const SdrObject* pObj, sal
             aSquare.append(aNewSquare);
         }
 
-        SfxItemSet aSet( pDoc->GetItemPool() );
+        SfxItemSet aSet( rModel.GetItemPool() );
         long nWidth = 200; // (1/100th mm)
 
         // determine line width and calculate with it the line end width
@@ -358,9 +358,7 @@ SdrObject* FuConstRectangle::CreateDefaultObject(const sal_uInt16 nID, const too
     SdrObject* pObj = SdrObjFactory::MakeNewObject(
         *pDrDoc,
         pView->GetCurrentObjInventor(),
-        pView->GetCurrentObjIdentifier(),
-        nullptr,
-        pDrDoc);
+        pView->GetCurrentObjIdentifier());
 
     if(pObj)
     {

@@ -125,9 +125,7 @@ SdrObject* FuConstArc::CreateDefaultObject(const sal_uInt16 nID, const tools::Re
     SdrObject* pObj = SdrObjFactory::MakeNewObject(
         *pDrDoc,
         pView->GetCurrentObjInventor(),
-        pView->GetCurrentObjIdentifier(),
-        nullptr,
-        pDrDoc);
+        pView->GetCurrentObjIdentifier());
 
     if(pObj)
     {

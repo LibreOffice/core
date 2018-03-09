@@ -1469,13 +1469,8 @@ SvxXLinePreview::SvxXLinePreview(vcl::Window* pParent)
     InitSettings( true, true );
 
     mpLineObjA = new SdrPathObj(getModel(), OBJ_LINE);
-    mpLineObjA->SetModel(&getModel());
-
     mpLineObjB = new SdrPathObj(getModel(), OBJ_PLIN);
-    mpLineObjB->SetModel(&getModel());
-
     mpLineObjC = new SdrPathObj(getModel(), OBJ_PLIN);
-    mpLineObjC->SetModel(&getModel());
 }
 
 VCL_BUILDER_FACTORY(SvxXLinePreview)
@@ -1573,7 +1568,6 @@ SvxXRectPreview::SvxXRectPreview(vcl::Window* pParent)
     mpRectangleObject = new SdrRectObj(
         getModel(),
         aObjectSize);
-    mpRectangleObject->SetModel(&getModel());
 }
 
 void SvxXRectPreview::Resize()
@@ -1585,7 +1579,6 @@ void SvxXRectPreview::Resize()
         mpRectangleObject = new SdrRectObj(
             getModel(),
             aObjectSize);
-        mpRectangleObject->SetModel(&getModel());
         SetAttributes(pOrigObject->GetMergedItemSet());
         SdrObject::Free(pOrigObject);
     }
@@ -1644,14 +1637,12 @@ SvxXShadowPreview::SvxXShadowPreview( vcl::Window* pParent )
     mpRectangleObject = new SdrRectObj(
         getModel(),
         aObjectSize);
-    mpRectangleObject->SetModel(&getModel());
 
     // create ShadowObject
     const tools::Rectangle aShadowSize( Point( aSize.Width(), aSize.Height() ), aSize );
     mpRectangleShadow = new SdrRectObj(
         getModel(),
         aShadowSize);
-    mpRectangleShadow->SetModel(&getModel());
 }
 
 VCL_BUILDER_FACTORY(SvxXShadowPreview)

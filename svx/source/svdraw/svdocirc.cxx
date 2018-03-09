@@ -348,9 +348,22 @@ OUString SdrCircObj::TakeObjNamePlural() const
     return ImpGetResStr(pID);
 }
 
-SdrCircObj* SdrCircObj::Clone() const
+SdrCircObj* SdrCircObj::Clone(SdrModel* pTargetModel) const
 {
-    return CloneHelper< SdrCircObj >();
+    return CloneHelper< SdrCircObj >(pTargetModel);
+}
+
+SdrCircObj& SdrCircObj::operator=(const SdrCircObj& rObj)
+{
+    if( this == &rObj )
+        return *this;
+    SdrRectObj::operator=(rObj);
+
+    meCircleKind = rObj.meCircleKind;
+    nStartAngle = rObj.nStartAngle;
+    nEndAngle = rObj.nEndAngle;
+
+    return *this;
 }
 
 basegfx::B2DPolyPolygon SdrCircObj::TakeXorPoly() const
@@ -586,7 +599,7 @@ OUString SdrCircObj::getSpecialDragComment(const SdrDragStat& rDrag) const
                 nAngle = pU->nEnd;
             }
 
-            aBuf.append(GetAngleStr(nAngle));
+            aBuf.append(SdrModel::GetAngleString(nAngle));
             aBuf.append(')');
         }
 
@@ -604,7 +617,7 @@ OUString SdrCircObj::getSpecialDragComment(const SdrDragStat& rDrag) const
             ImpTakeDescriptionStr(STR_DragCircAngle, aStr);
             OUStringBuffer aBuf(aStr);
             aBuf.append(" (");
-            aBuf.append(GetAngleStr(nAngle));
+            aBuf.append(SdrModel::GetAngleString(nAngle));
             aBuf.append(')');
 
             return aBuf.makeStringAndClear();

@@ -53,7 +53,7 @@ sdr::properties::BaseProperties* E3dExtrudeObj::CreateObjectSpecificProperties()
 // surfaces rectangles from the passed PolyPolygon
 E3dExtrudeObj::E3dExtrudeObj(
     SdrModel& rSdrModel,
-    const E3dDefaultAttributes const& rDefault,
+    const E3dDefaultAttributes& rDefault,
     const basegfx::B2DPolyPolygon& rPP,
     double fDepth)
 :   E3dCompoundObject(rSdrModel),
@@ -98,11 +98,21 @@ sal_uInt16 E3dExtrudeObj::GetObjIdentifier() const
     return E3D_EXTRUDEOBJ_ID;
 }
 
-E3dExtrudeObj* E3dExtrudeObj::Clone() const
+E3dExtrudeObj* E3dExtrudeObj::Clone(SdrModel* pTargetModel) const
 {
-    return CloneHelper< E3dExtrudeObj >();
+    return CloneHelper< E3dExtrudeObj >(pTargetModel);
 }
 
+E3dExtrudeObj& E3dExtrudeObj::operator=(const E3dExtrudeObj& rObj)
+{
+    if( this == &rObj )
+        return *this;
+    E3dCompoundObject::operator=(rObj);
+
+    maExtrudePolygon = rObj.maExtrudePolygon;
+
+    return *this;
+}
 
 // Set local parameters with geometry re-creating
 

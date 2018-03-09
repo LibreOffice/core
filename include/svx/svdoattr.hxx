@@ -28,20 +28,14 @@
 #include <svx/svdattr.hxx>
 #include <svx/svxdllapi.h>
 
-
 //   Initial Declarations
-
-
 class SfxPoolItem;
 class SfxSetItem;
 class SdrOutliner;
 class SfxItemSet;
 class SfxItemPool;
 
-
 //   SdrAttrObj
-
-
 class SVX_DLLPUBLIC SdrAttrObj : public SdrObject
 {
 private:
@@ -71,8 +65,6 @@ public:
     bool HasLine() const;
 
     virtual const tools::Rectangle& GetSnapRect() const override;
-
-    virtual void SetModel(SdrModel* pNewModel) override;
 };
 
 

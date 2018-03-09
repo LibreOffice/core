@@ -75,7 +75,10 @@ public:
 
     virtual void TakeObjInfo(SdrObjTransformInfoRec& rInfo) const override;
     virtual sal_uInt16 GetObjIdentifier() const override;
-    virtual SdrCaptionObj* Clone() const override;
+    virtual SdrCaptionObj* Clone(SdrModel* pTargetModel = nullptr) const override;
+
+    // implemented mainly for the purposes of Clone()
+    SdrCaptionObj& operator=(const SdrCaptionObj& rObj);
 
     // for calc: special shadow only for text box
     void SetSpecialTextBoxShadow() { mbSpecialTextBoxShadow = true; }
@@ -88,7 +91,6 @@ public:
     virtual OUString TakeObjNamePlural() const override;
 
     virtual basegfx::B2DPolyPolygon TakeXorPoly() const override;
-    virtual void SetModel(SdrModel* pNewModel) override;
     virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) override;
 
     virtual sal_uInt32 GetHdlCount() const override;

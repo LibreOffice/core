@@ -566,15 +566,15 @@ bool SvxSlantTabPage::FillItemSet(SfxItemSet* rAttrs)
         SdrObjCustomShape& rSdrObjCustomShape(
             static_cast< SdrObjCustomShape& >(
                 *pView->GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj()));
-        SdrModel* pModel(rSdrObjCustomShape.GetModel());
+        SdrModel& rModel(rSdrObjCustomShape.getSdrModelFromSdrObject());
         SdrUndoAction* pUndo(
-            pModel->IsUndoEnabled()
-                ? pModel->GetSdrUndoFactory().CreateUndoAttrObject(rSdrObjCustomShape)
+            rModel.IsUndoEnabled()
+                ? rModel.GetSdrUndoFactory().CreateUndoAttrObject(rSdrObjCustomShape)
                 : nullptr);
 
         if(pUndo)
         {
-            pModel->BegUndo(pUndo->GetComment());
+            rModel.BegUndo(pUndo->GetComment());
         }
 
         EnhancedCustomShape2d aShape(rSdrObjCustomShape);
@@ -602,8 +602,8 @@ bool SvxSlantTabPage::FillItemSet(SfxItemSet* rAttrs)
 
         if (pUndo)
         {
-            pModel->AddUndo(pUndo);
-            pModel->EndUndo();
+            rModel.AddUndo(pUndo);
+            rModel.EndUndo();
         }
     }
 

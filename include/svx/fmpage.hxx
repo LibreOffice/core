@@ -52,10 +52,12 @@ public:
     explicit FmFormPage(FmFormModel& rModel, bool bMasterPage=false);
     virtual ~FmFormPage() override;
 
-    virtual void    SetModel(SdrModel* pNewModel) override;
+    // TTTT
+    // virtual void    SetModel(SdrModel* pNewModel) override;
 
-    virtual SdrPage* Clone() const override;
-    virtual SdrPage* Clone(SdrModel* pNewModel) const override;
+    // TTTT
+    // virtual SdrPage* Clone() const override;
+    virtual SdrPage* Clone(SdrModel* pNewModel = nullptr) const override;
 
     virtual void    InsertObject(SdrObject* pObj, size_t nPos = SAL_MAX_SIZE) override;
 

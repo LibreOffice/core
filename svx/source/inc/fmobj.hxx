@@ -27,7 +27,7 @@
 
 // FmFormObj
 
-class SVX_DLLPUBLIC FmFormObj: public SdrUnoObj
+class SVX_DLLPUBLIC FmFormObj : public SdrUnoObj
 {
     FmFormObj( const FmFormObj& ) = delete;
 
@@ -73,11 +73,9 @@ public:
     SAL_DLLPRIVATE virtual sal_uInt16 GetObjIdentifier() const override;
     SAL_DLLPRIVATE virtual void NbcReformatText() override;
 
-    SAL_DLLPRIVATE virtual FmFormObj* Clone() const override;
+    SAL_DLLPRIVATE virtual FmFormObj* Clone(SdrModel* pTargetModel = nullptr) const override;
     // #116235# virtual SdrObject*  Clone(SdrPage* pPage, SdrModel* pModel) const;
     SAL_DLLPRIVATE FmFormObj& operator= (const FmFormObj& rObj);
-
-    SAL_DLLPRIVATE virtual void SetModel(SdrModel* pNewModel) override;
 
     SAL_DLLPRIVATE void clonedFrom(const FmFormObj* _pSource);
 

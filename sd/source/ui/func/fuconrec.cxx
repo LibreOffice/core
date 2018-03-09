@@ -501,10 +501,10 @@ void FuConstructRectangle::SetAttributes(SfxItemSet& rAttr, SdrObject* pObj)
 /**
  * set line starts and ends for the object to be created
  */
-::basegfx::B2DPolyPolygon getPolygon(const char* pResId, SdrModel const * pDoc)
+::basegfx::B2DPolyPolygon getPolygon(const char* pResId, const SdrModel& rModel)
 {
     ::basegfx::B2DPolyPolygon aRetval;
-    XLineEndListRef pLineEndList = pDoc->GetLineEndList();
+    XLineEndListRef pLineEndList(rModel.GetLineEndList());
 
     if( pLineEndList.is() )
     {
@@ -541,9 +541,10 @@ void FuConstructRectangle::SetLineEnds(SfxItemSet& rAttr, SdrObject const * pObj
           nSlotId == SID_LINE_SQUARE_ARROW )
     {
         // set attributes of line start and ends
+        SdrModel& rModel(pObj->getSdrModelFromSdrObject()); // TTTT pObj shbe ref
 
         // arrowhead
-        ::basegfx::B2DPolyPolygon aArrow( getPolygon( RID_SVXSTR_ARROW, mpDoc ) );
+        ::basegfx::B2DPolyPolygon aArrow( getPolygon( RID_SVXSTR_ARROW, rModel ) );
         if( !aArrow.count() )
         {
             ::basegfx::B2DPolygon aNewArrow;
@@ -555,7 +556,7 @@ void FuConstructRectangle::SetLineEnds(SfxItemSet& rAttr, SdrObject const * pObj
         }
 
         // Circles
-        ::basegfx::B2DPolyPolygon aCircle( getPolygon( RID_SVXSTR_CIRCLE, mpDoc ) );
+        ::basegfx::B2DPolyPolygon aCircle( getPolygon( RID_SVXSTR_CIRCLE, rModel ) );
         if( !aCircle.count() )
         {
             ::basegfx::B2DPolygon aNewCircle;
@@ -565,7 +566,7 @@ void FuConstructRectangle::SetLineEnds(SfxItemSet& rAttr, SdrObject const * pObj
         }
 
         // Square
-        ::basegfx::B2DPolyPolygon aSquare( getPolygon( RID_SVXSTR_SQUARE, mpDoc ) );
+        ::basegfx::B2DPolyPolygon aSquare( getPolygon( RID_SVXSTR_SQUARE, rModel ) );
         if( !aSquare.count() )
         {
             ::basegfx::B2DPolygon aNewSquare;
@@ -771,8 +772,7 @@ SdrObject* FuConstructRectangle::CreateDefaultObject(const sal_uInt16 nID, const
     SdrObject* pObj = SdrObjFactory::MakeNewObject(
         mpView->getSdrModelFromSdrView(),
         mpView->GetCurrentObjInventor(),
-        mpView->GetCurrentObjIdentifier(),
-        nullptr, mpDoc);
+        mpView->GetCurrentObjIdentifier());
 
     if(pObj)
     {

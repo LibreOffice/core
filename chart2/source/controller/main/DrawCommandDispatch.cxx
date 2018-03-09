@@ -74,7 +74,7 @@ bool DrawCommandDispatch::isFeatureSupported( const OUString& rCommandURL )
     return parseCommandURL( rCommandURL, &nFeatureId, &aBaseCommand, &aCustomShapeType );
 }
 
-::basegfx::B2DPolyPolygon getPolygon(const char* pResId, SdrModel const & rModel)
+::basegfx::B2DPolyPolygon getPolygon(const char* pResId, const SdrModel& rModel)
 {
     ::basegfx::B2DPolyPolygon aReturn;
     XLineEndListRef pLineEndList = rModel.GetLineEndList();
@@ -123,7 +123,7 @@ void DrawCommandDispatch::setAttributes( SdrObject* pObj )
                                 {
                                     const SfxItemSet& rSource = pSourceObj->GetMergedItemSet();
                                     SfxItemSet aDest(
-                                        pObj->GetModel()->GetItemPool(),
+                                        pObj->getSdrModelFromSdrObject().GetItemPool(),
                                         svl::Items<
                                             // Ranges from SdrAttrObj:
                                             SDRATTR_START, SDRATTR_SHADOW_LAST,

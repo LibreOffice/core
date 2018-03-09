@@ -52,7 +52,7 @@ public:
         virtual OUString            TakeObjNameSingul() const override;
         virtual OUString            TakeObjNamePlural() const override;
 
-        virtual SdrMediaObj*            Clone() const override;
+        virtual SdrMediaObj*            Clone(SdrModel* pTargetModel = nullptr) const override;
         SdrMediaObj&                operator=(const SdrMediaObj& rObj);
 
         virtual void                AdjustToMaxRect( const tools::Rectangle& rMaxRect, bool bShrinkOnly = false ) override;

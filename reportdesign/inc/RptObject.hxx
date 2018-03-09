@@ -183,7 +183,7 @@ public:
     virtual sal_uInt16 GetObjIdentifier() const override;
     virtual SdrInventor GetObjInventor() const override;
     // Clone() should make a complete copy of the object.
-    virtual OOle2Obj* Clone() const override;
+    virtual OOle2Obj* Clone(SdrModel* pTargetModel = nullptr) const override;
     virtual void initializeOle() override;
 
     OOle2Obj& operator=(const OOle2Obj& rObj);
@@ -260,7 +260,7 @@ public:
     virtual css::uno::Reference< css::uno::XInterface > getUnoShape() override;
     virtual sal_uInt16 GetObjIdentifier() const override;
     virtual SdrInventor GetObjInventor() const override;
-    virtual OUnoObject* Clone() const override;
+    virtual OUnoObject* Clone(SdrModel* pTargetModel = nullptr) const override;
 
     OUnoObject& operator=(const OUnoObject& rObj);
 

@@ -40,7 +40,7 @@ private:
     sal_uInt16          m_nBorderPageId;
 
 public:
-    SvxFormatCellsDialog( vcl::Window* pParent, const SfxItemSet* pAttr, SdrModel const * pModel );
+    SvxFormatCellsDialog( vcl::Window* pParent, const SfxItemSet* pAttr, const SdrModel& rModel );
 
     virtual void PageCreated( sal_uInt16 nId, SfxTabPage &rPage ) override;
 

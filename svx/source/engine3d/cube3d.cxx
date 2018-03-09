@@ -78,9 +78,22 @@ SdrObject *E3dCubeObj::DoConvertToPolyObj(bool /*bBezier*/, bool /*bAddText*/) c
     return nullptr;
 }
 
-E3dCubeObj* E3dCubeObj::Clone() const
+E3dCubeObj* E3dCubeObj::Clone(SdrModel* pTargetModel) const
 {
-    return CloneHelper< E3dCubeObj >();
+    return CloneHelper< E3dCubeObj >(pTargetModel);
+}
+
+E3dCubeObj& E3dCubeObj::operator=(const E3dCubeObj& rObj)
+{
+    if( this == &rObj )
+        return *this;
+    E3dCompoundObject::operator=(rObj);
+
+    aCubePos = rObj.aCubePos;
+    aCubeSize = rObj.aCubeSize;
+    bPosIsCenter = rObj.bPosIsCenter;
+
+    return *this;
 }
 
 // Set local parameters with geometry re-creating

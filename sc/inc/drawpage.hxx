@@ -24,7 +24,7 @@
 
 class ScDrawLayer;
 
-class ScDrawPage: public FmFormPage
+class ScDrawPage : public FmFormPage
 {
     ScDrawPage& operator=(const ScDrawPage&) = delete;
 
@@ -32,8 +32,8 @@ public:
     explicit ScDrawPage(ScDrawLayer& rNewModel, bool bMasterPage);
     virtual ~ScDrawPage() override;
 
-    virtual ScDrawPage* Clone() const override;
-    virtual ScDrawPage* Clone(SdrModel* pNewModel) const override;
+    // TTTT virtual ScDrawPage* Clone() const override;
+    virtual ScDrawPage* Clone(SdrModel* pNewModel = nullptr) const override;
 
     virtual css::uno::Reference< css::uno::XInterface > createUnoPage() override;
 

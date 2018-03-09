@@ -203,7 +203,9 @@ void SvxShapeGroup::addUnoShape( const uno::Reference< drawing::XShape >& xShape
         pSdrShape->GetObjList()->RemoveObject( pSdrShape->GetOrdNum() );
 
     mpObj->GetSubList()->InsertObject(pSdrShape, nPos);
-    pSdrShape->SetModel(mpObj->GetModel());
+    // TTTT was created using mpModel in CreateSdrObject_ above
+    // TTTT may need to be compared and re-constructed (?)
+    // pSdrShape->SetModel(mpObj->GetModel());
 
     // #85922# It makes no sense to set the layer asked
     // from the group object since these is an iteration

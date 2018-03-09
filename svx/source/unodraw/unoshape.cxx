@@ -353,7 +353,7 @@ void SvxShape::impl_initFromSdrObject()
     }
     osl_atomic_decrement( &m_refCount );
 
-    auto pNewModel = mpObj->GetModel();
+    auto pNewModel = &mpObj->getSdrModelFromSdrObject();
 
     if (pNewModel != mpModel)
     {
@@ -412,13 +412,12 @@ void SvxShape::Create( SdrObject* pNewObj, SvxDrawPage* /*pNewPage*/ )
     if ( pCreatedObj == pNewObj )
         return;
 
-    DBG_ASSERT( pNewObj->GetModel(), "no model for SdrObject?" );
     // Correct condition (#i52126#)
     mpImpl->mpCreatedObj = pNewObj;
 
-    if( mpObj.is() && mpObj->GetModel() )
+    if( mpObj.is() )
     {
-        EndListening( *mpObj->GetModel() );
+        EndListening( mpObj->getSdrModelFromSdrObject() );
     }
 
     mpObj.reset( pNewObj );
@@ -449,38 +448,38 @@ void SvxShape::Create( SdrObject* pNewObj, SvxDrawPage* /*pNewPage*/ )
     }
 }
 
+// TTTT needed?
+// void SvxShape::ChangeModel( SdrModel* pNewModel )
+// {
+//     DBG_TESTSOLARMUTEX();
+//     if( mpObj.is() && mpObj->GetModel() )
+//     {
+//         if( mpObj->GetModel() != pNewModel )
+//         {
+//             EndListening( *mpObj->GetModel() );
+//         }
+//     }
 
-void SvxShape::ChangeModel( SdrModel* pNewModel )
-{
-    DBG_TESTSOLARMUTEX();
-    if( mpObj.is() && mpObj->GetModel() )
-    {
-        if( mpObj->GetModel() != pNewModel )
-        {
-            EndListening( *mpObj->GetModel() );
-        }
-    }
+//     // Always listen to new model (#i52126#)
+//     if( pNewModel )
+//     {
+//         StartListening( *pNewModel );
+//     }
 
-    // Always listen to new model (#i52126#)
-    if( pNewModel )
-    {
-        StartListening( *pNewModel );
-    }
+//     // HACK #i53696# ChangeModel should be virtual, but it isn't. can't change that for 2.0.1
+//     SvxShapeText* pShapeText = dynamic_cast< SvxShapeText* >( this );
+//     if( pShapeText )
+//     {
+//         SvxTextEditSource* pTextEditSource = dynamic_cast< SvxTextEditSource* >( pShapeText->GetEditSource() );
+//         if( pTextEditSource )
+//             pTextEditSource->ChangeModel( pNewModel );
+//     }
 
-    // HACK #i53696# ChangeModel should be virtual, but it isn't. can't change that for 2.0.1
-    SvxShapeText* pShapeText = dynamic_cast< SvxShapeText* >( this );
-    if( pShapeText )
-    {
-        SvxTextEditSource* pTextEditSource = dynamic_cast< SvxTextEditSource* >( pShapeText->GetEditSource() );
-        if( pTextEditSource )
-            pTextEditSource->ChangeModel( pNewModel );
-    }
+//     mpModel = pNewModel;
 
-    mpModel = pNewModel;
-
-    if( mpImpl->mpMaster )
-        mpImpl->mpMaster->modelChanged( pNewModel );
-}
+//     if( mpImpl->mpMaster )
+//         mpImpl->mpMaster->modelChanged( pNewModel );
+// }
 
 
 void SvxShape::ForceMetricToItemPoolMetric(Pair& rPoint) const throw()
@@ -673,8 +672,6 @@ uno::Any SvxShape::GetBitmap( bool bMetaFile /* = false */ ) const
 
     ScopedVclPtrInstance< VirtualDevice > pVDev;
     pVDev->SetMapMode(MapMode(MapUnit::Map100thMM));
-
-    SdrModel* pModel = mpObj->GetModel();
     SdrPage* pPage = mpObj->GetPage();
 
     std::unique_ptr<E3dView> pView(
@@ -2444,16 +2441,13 @@ bool SvxShape::setPropertyValueImpl( const OUString&, const SfxItemPropertySimpl
             SdrPageObj* pPageObj = dynamic_cast< SdrPageObj* >(mpObj.get());
             if( pPageObj )
             {
-                SdrModel* pModel = pPageObj->GetModel();
+                SdrModel& rModel(pPageObj->getSdrModelFromSdrObject());
                 SdrPage* pNewPage = nullptr;
                 const sal_uInt16 nDestinationPageNum(static_cast<sal_uInt16>((nPageNum << 1) - 1));
 
-                if(pModel)
+                if(nDestinationPageNum < rModel.GetPageCount())
                 {
-                    if(nDestinationPageNum < pModel->GetPageCount())
-                    {
-                        pNewPage = pModel->GetPage(nDestinationPageNum);
-                    }
+                    pNewPage = rModel.GetPage(nDestinationPageNum);
                 }
 
                 pPageObj->SetReferencedPage(pNewPage);
@@ -3841,7 +3835,7 @@ void SvxShape::updateShapeKind()
 SvxShapeText::SvxShapeText(SdrObject* pObject)
 : SvxShape( pObject, getSvxMapProvider().GetMap(SVXMAP_TEXT), getSvxMapProvider().GetPropertySet(SVXMAP_TEXT, SdrObject::GetGlobalDrawObjectItemPool()) ), SvxUnoTextBase( ImplGetSvxUnoOutlinerTextCursorSvxPropertySet() )
 {
-    if( pObject && pObject->GetModel() )
+    if( pObject )
         SetEditSource( new SvxTextEditSource( pObject, nullptr ) );
 }
 
@@ -3849,7 +3843,7 @@ SvxShapeText::SvxShapeText(SdrObject* pObject)
 SvxShapeText::SvxShapeText(SdrObject* pObject, const SfxItemPropertyMapEntry* pPropertyMap, const SvxItemPropertySet* pPropertySet)
 : SvxShape( pObject, pPropertyMap, pPropertySet ), SvxUnoTextBase( ImplGetSvxUnoOutlinerTextCursorSvxPropertySet() )
 {
-    if( pObject && pObject->GetModel() )
+    if( pObject )
         SetEditSource( new SvxTextEditSource( pObject, nullptr ) );
 }
 

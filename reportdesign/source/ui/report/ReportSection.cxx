@@ -265,10 +265,11 @@ void OReportSection::Paste(const uno::Sequence< beans::NamedValue >& _aAllreadyC
                         SdrObject* pObject = pShape ? pShape->GetSdrObject() : nullptr;
                         if ( pObject )
                         {
-                            SdrObject* pNewObj = pObject->Clone();
+                            // TTTT clone to target SdrModel
+                            SdrObject* pNewObj(pObject->Clone(m_pModel.get()));
 
                             pNewObj->SetPage( m_pPage );
-                            pNewObj->SetModel( m_pModel.get() );
+                            //pNewObj->SetModel( m_pModel.get() );
                             m_pPage->InsertObject(pNewObj, SAL_MAX_SIZE);
 
                             tools::Rectangle aRet(VCLPoint((*pCopiesIter)->getPosition()),VCLSize((*pCopiesIter)->getSize()));
@@ -609,7 +610,7 @@ void OReportSection::createDefault(const OUString& _sType,SdrObject* _pObj)
                         {
                             const SfxItemSet& rSource = pSourceObj->GetMergedItemSet();
                             SfxItemSet aDest(
-                                _pObj->GetModel()->GetItemPool(),
+                                _pObj->getSdrModelFromSdrObject().GetItemPool(),
                                 svl::Items<
                                     // Ranges from SdrAttrObj:
                                     SDRATTR_START, SDRATTR_SHADOW_LAST,

@@ -134,9 +134,7 @@ SdrObject* FuConstCustomShape::CreateDefaultObject(const sal_uInt16 /* nID */, c
     SdrObject* pObj = SdrObjFactory::MakeNewObject(
         *pDrDoc,
         pView->GetCurrentObjInventor(),
-        pView->GetCurrentObjIdentifier(),
-        nullptr,
-        pDrDoc);
+        pView->GetCurrentObjIdentifier());
 
     if( pObj )
     {
@@ -173,7 +171,7 @@ void FuConstCustomShape::SetAttributes( SdrObject* pObj )
                         {
                             const SfxItemSet& rSource = pSourceObj->GetMergedItemSet();
                             SfxItemSet aDest(
-                                pObj->GetModel()->GetItemPool(),
+                                pObj->getSdrModelFromSdrObject().GetItemPool(),
                                 svl::Items<
                                     // Ranges from SdrAttrObj:
                                     SDRATTR_START, SDRATTR_SHADOW_LAST,

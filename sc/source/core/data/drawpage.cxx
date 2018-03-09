@@ -39,10 +39,11 @@ ScDrawPage::~ScDrawPage()
 {
 }
 
-ScDrawPage* ScDrawPage::Clone() const
-{
-    return Clone(nullptr);
-}
+// TTTT
+// ScDrawPage* ScDrawPage::Clone() const
+// {
+//     return Clone(nullptr);
+// }
 
 ScDrawPage* ScDrawPage::Clone(SdrModel* const pNewModel) const
 {

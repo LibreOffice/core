@@ -333,11 +333,13 @@ void SAL_CALL ScShapeObj::setPropertyValue(const OUString& aPropertyName, const 
         SdrObject *pObj = GetSdrObject();
         if (pObj)
         {
-            ScDrawLayer* pModel = static_cast<ScDrawLayer*>(pObj->GetModel());
-            SdrPage* pPage = pObj->GetPage();
-            if ( pModel && pPage )
+            ScDrawLayer& rModel(static_cast< ScDrawLayer& >(pObj->getSdrModelFromSdrObject()));
+            SdrPage* pPage(pObj->GetPage());
+
+            if ( pPage )
             {
-                ScDocument* pDoc = pModel->GetDocument();
+                ScDocument* pDoc(rModel.GetDocument());
+
                 if ( pDoc )
                 {
                     SfxObjectShell* pObjSh = pDoc->GetDocumentShell();
@@ -346,7 +348,7 @@ void SAL_CALL ScShapeObj::setPropertyValue(const OUString& aPropertyName, const 
                         ScDocShell* pDocSh = static_cast<ScDocShell*>(pObjSh);
 
                         SCTAB nTab = 0;
-                        if ( lcl_GetPageNum( pPage, *pModel, nTab ) )
+                        if ( lcl_GetPageNum( pPage, rModel, nTab ) )
                         {
                             table::CellRangeAddress aAddress = xRangeAdd->getRangeAddress();
                             if (nTab == aAddress.Sheet)
@@ -463,14 +465,15 @@ void SAL_CALL ScShapeObj::setPropertyValue(const OUString& aPropertyName, const 
             SdrObject *pObj = GetSdrObject();
             if (pObj)
             {
-                ScDrawLayer* pModel = static_cast<ScDrawLayer*>(pObj->GetModel());
-                SdrPage* pPage = pObj->GetPage();
-                if ( pModel && pPage )
+                ScDrawLayer& rModel(static_cast< ScDrawLayer& >(pObj->getSdrModelFromSdrObject()));
+                SdrPage* pPage(pObj->GetPage());
+
+                if ( pPage )
                 {
                     SCTAB nTab = 0;
-                    if ( lcl_GetPageNum( pPage, *pModel, nTab ) )
+                    if ( lcl_GetPageNum( pPage, rModel, nTab ) )
                     {
-                        ScDocument* pDoc = pModel->GetDocument();
+                        ScDocument* pDoc = rModel.GetDocument();
                         if ( pDoc )
                         {
                             SfxObjectShell* pObjSh = pDoc->GetDocumentShell();
@@ -561,14 +564,15 @@ void SAL_CALL ScShapeObj::setPropertyValue(const OUString& aPropertyName, const 
             SdrObject *pObj = GetSdrObject();
             if (pObj)
             {
-                ScDrawLayer* pModel = static_cast<ScDrawLayer*>(pObj->GetModel());
-                SdrPage* pPage = pObj->GetPage();
-                if ( pModel && pPage )
+                ScDrawLayer& rModel(static_cast< ScDrawLayer& >(pObj->getSdrModelFromSdrObject()));
+                SdrPage* pPage(pObj->GetPage());
+
+                if ( pPage )
                 {
                     SCTAB nTab = 0;
-                    if ( lcl_GetPageNum( pPage, *pModel, nTab ) )
+                    if ( lcl_GetPageNum( pPage, rModel, nTab ) )
                     {
-                        ScDocument* pDoc = pModel->GetDocument();
+                        ScDocument* pDoc = rModel.GetDocument();
                         if ( pDoc )
                         {
                             SfxObjectShell* pObjSh = pDoc->GetDocumentShell();
@@ -657,15 +661,16 @@ uno::Any SAL_CALL ScShapeObj::getPropertyValue( const OUString& aPropertyName )
         SdrObject *pObj = GetSdrObject();
         if (pObj)
         {
-            ScDrawLayer* pModel = static_cast<ScDrawLayer*>(pObj->GetModel());
-            SdrPage* pPage = pObj->GetPage();
-            if ( pModel && pPage )
+            ScDrawLayer& rModel(static_cast< ScDrawLayer& >(pObj->getSdrModelFromSdrObject()));
+            SdrPage* pPage(pObj->GetPage());
+
+            if ( pPage )
             {
-                ScDocument* pDoc = pModel->GetDocument();
+                ScDocument* pDoc = rModel.GetDocument();
                 if ( pDoc )
                 {
                     SCTAB nTab = 0;
-                    if ( lcl_GetPageNum( pPage, *pModel, nTab ) )
+                    if ( lcl_GetPageNum( pPage, rModel, nTab ) )
                     {
                         SfxObjectShell* pObjSh = pDoc->GetDocumentShell();
                         if ( pObjSh && dynamic_cast<const ScDocShell*>( pObjSh) !=  nullptr )
@@ -705,15 +710,16 @@ uno::Any SAL_CALL ScShapeObj::getPropertyValue( const OUString& aPropertyName )
         SdrObject *pObj = GetSdrObject();
         if (pObj)
         {
-            ScDrawLayer* pModel = static_cast<ScDrawLayer*>(pObj->GetModel());
-            SdrPage* pPage = pObj->GetPage();
-            if ( pModel && pPage )
+            ScDrawLayer& rModel(static_cast< ScDrawLayer& >(pObj->getSdrModelFromSdrObject()));
+            SdrPage* pPage(pObj->GetPage());
+
+            if ( pPage )
             {
-                ScDocument* pDoc = pModel->GetDocument();
+                ScDocument* pDoc = rModel.GetDocument();
                 if ( pDoc )
                 {
                     SCTAB nTab = 0;
-                    if ( lcl_GetPageNum( pPage, *pModel, nTab ) )
+                    if ( lcl_GetPageNum( pPage, rModel, nTab ) )
                     {
                         uno::Reference<drawing::XShape> xShape( mxShapeAgg, uno::UNO_QUERY );
                         if (xShape.is())
@@ -764,15 +770,16 @@ uno::Any SAL_CALL ScShapeObj::getPropertyValue( const OUString& aPropertyName )
         SdrObject *pObj = GetSdrObject();
         if (pObj)
         {
-            ScDrawLayer* pModel = static_cast<ScDrawLayer*>(pObj->GetModel());
-            SdrPage* pPage = pObj->GetPage();
-            if ( pModel && pPage )
+            ScDrawLayer& rModel(static_cast< ScDrawLayer& >(pObj->getSdrModelFromSdrObject()));
+            SdrPage* pPage(pObj->GetPage());
+
+            if ( pPage )
             {
-                ScDocument* pDoc = pModel->GetDocument();
+                ScDocument* pDoc = rModel.GetDocument();
                 if ( pDoc )
                 {
                     SCTAB nTab = 0;
-                    if ( lcl_GetPageNum( pPage, *pModel, nTab ) )
+                    if ( lcl_GetPageNum( pPage, rModel, nTab ) )
                     {
                         uno::Reference<drawing::XShape> xShape( mxShapeAgg, uno::UNO_QUERY );
                         if (xShape.is())
@@ -997,28 +1004,26 @@ uno::Reference<text::XTextRange> SAL_CALL ScShapeObj::getAnchor()
     SdrObject* pObj = GetSdrObject();
     if( pObj )
     {
-        ScDrawLayer* pModel = static_cast<ScDrawLayer*>(pObj->GetModel());
-        SdrPage* pPage = pObj->GetPage();
-        if ( pModel )
+        ScDrawLayer& rModel(static_cast< ScDrawLayer& >(pObj->getSdrModelFromSdrObject()));
+        SdrPage* pPage(pObj->GetPage());
+        ScDocument* pDoc = rModel.GetDocument();
+
+        if ( pPage && pDoc )
         {
-            ScDocument* pDoc = pModel->GetDocument();
-            if ( pDoc )
+            SfxObjectShell* pObjSh = pDoc->GetDocumentShell();
+            if ( pObjSh && dynamic_cast<const ScDocShell*>( pObjSh) !=  nullptr )
             {
-                SfxObjectShell* pObjSh = pDoc->GetDocumentShell();
-                if ( pObjSh && dynamic_cast<const ScDocShell*>( pObjSh) !=  nullptr )
+                ScDocShell* pDocSh = static_cast<ScDocShell*>(pObjSh);
+
+                SCTAB nTab = 0;
+                if ( lcl_GetPageNum( pPage, rModel, nTab ) )
                 {
-                    ScDocShell* pDocSh = static_cast<ScDocShell*>(pObjSh);
+                    Point aPos(pObj->GetCurrentBoundRect().TopLeft());
+                    ScRange aRange(pDoc->GetRange( nTab, tools::Rectangle( aPos, aPos ) ));
 
-                    SCTAB nTab = 0;
-                    if ( lcl_GetPageNum( pPage, *pModel, nTab ) )
-                    {
-                        Point aPos(pObj->GetCurrentBoundRect().TopLeft());
-                        ScRange aRange(pDoc->GetRange( nTab, tools::Rectangle( aPos, aPos ) ));
+                    //  anchor is always the cell
 
-                        //  anchor is always the cell
-
-                        xRet.set(new ScCellObj( pDocSh, aRange.aStart ));
-                    }
+                    xRet.set(new ScCellObj( pDocSh, aRange.aStart ));
                 }
             }
         }
@@ -1242,25 +1247,23 @@ uno::Reference< uno::XInterface > SAL_CALL ScShapeObj::getParent()
     SdrObject* pObj = GetSdrObject();
     if( pObj )
     {
-        ScDrawLayer* pModel = static_cast<ScDrawLayer*>(pObj->GetModel());
-        SdrPage* pPage = pObj->GetPage();
-        if ( pModel )
-        {
-            ScDocument* pDoc = pModel->GetDocument();
-            if ( pDoc )
-            {
-                SfxObjectShell* pObjSh = pDoc->GetDocumentShell();
-                if ( pObjSh && dynamic_cast<const ScDocShell*>( pObjSh) !=  nullptr )
-                {
-                    ScDocShell* pDocSh = static_cast<ScDocShell*>(pObjSh);
+        ScDrawLayer& rModel(static_cast< ScDrawLayer& >(pObj->getSdrModelFromSdrObject()));
+        SdrPage* pPage(pObj->GetPage());
+        ScDocument* pDoc = rModel.GetDocument();
 
-                    SCTAB nTab = 0;
-                    if ( lcl_GetPageNum( pPage, *pModel, nTab ) )
-                    {
-                        const ScDrawObjData* pCaptData = ScDrawLayer::GetNoteCaptionData( pObj, nTab );
-                        if( pCaptData )
-                            return static_cast< ::cppu::OWeakObject* >( new ScCellObj( pDocSh, pCaptData->maStart ) );
-                    }
+        if ( pPage && pDoc )
+        {
+            SfxObjectShell* pObjSh = pDoc->GetDocumentShell();
+            if ( pObjSh && dynamic_cast<const ScDocShell*>( pObjSh) !=  nullptr )
+            {
+                ScDocShell* pDocSh = static_cast<ScDocShell*>(pObjSh);
+
+                SCTAB nTab = 0;
+                if ( lcl_GetPageNum( pPage, rModel, nTab ) )
+                {
+                    const ScDrawObjData* pCaptData = ScDrawLayer::GetNoteCaptionData( pObj, nTab );
+                    if( pCaptData )
+                        return static_cast< ::cppu::OWeakObject* >( new ScCellObj( pDocSh, pCaptData->maStart ) );
                 }
             }
         }

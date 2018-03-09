@@ -2692,7 +2692,6 @@ SdrObject* ImplSdPPTImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                                             SdrMediaObj* pMediaObj = new SdrMediaObj(
                                                 pObj->getSdrModelFromSdrObject(),
                                                 pObj->GetSnapRect());
-                                            pMediaObj->SetModel( pObj->GetModel() );
                                             pMediaObj->SetMergedItemSet( pObj->GetMergedItemSet() );
 
                                             //--remove object from maAnimations list and add the new object instead

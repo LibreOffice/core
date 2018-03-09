@@ -82,12 +82,12 @@ void SdrVirtObj::NbcSetAnchorPos(const Point& rAnchorPos)
     aAnchor=rAnchorPos;
 }
 
-
-void SdrVirtObj::SetModel(SdrModel* pNewModel)
-{
-    SdrObject::SetModel(pNewModel);
-    rRefObj.SetModel(pNewModel);
-}
+// TTTT not needed
+// void SdrVirtObj::SetModel(SdrModel* pNewModel)
+// {
+//     SdrObject::SetModel(pNewModel);
+//     rRefObj.SetModel(pNewModel);
+// }
 
 void SdrVirtObj::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
 {
@@ -129,17 +129,29 @@ void SdrVirtObj::RecalcBoundRect()
     aOutRect+=aAnchor;
 }
 
-SdrVirtObj* SdrVirtObj::Clone() const
+SdrVirtObj* SdrVirtObj::Clone(SdrModel* pTargetModel) const
 {
-    return new SdrVirtObj(
-        getSdrModelFromSdrObject(),
-        rRefObj); // only a further reference
+    return CloneHelper< SdrVirtObj >(pTargetModel);
+    // TTTT not sure if the above works - how could SdrObjFactory::MakeNewObject
+    // create an object wit correct rRefObj (?) OTOH VirtObj probably needs not
+    // to be cloned ever - only used in Writer for multiple instances e.g. Header/Footer
+    // return new SdrVirtObj(
+    //     getSdrModelFromSdrObject(),
+    //     rRefObj); // only a further reference
 }
 
 SdrVirtObj& SdrVirtObj::operator=(const SdrVirtObj& rObj)
-{   // reference different object??
+{
     SdrObject::operator=(rObj);
-    aAnchor=rObj.aAnchor;
+
+    // reference different object?? TTTT -> yes!
+    rRefObj.DelReference(*this);
+    rRefObj = rObj.rRefObj;
+    rRefObj.AddReference(*this);
+
+    aSnapRect = rObj.aSnapRect;
+    aAnchor = rObj.aAnchor;
+
     return *this;
 }
 
@@ -272,7 +284,9 @@ SdrObject* SdrVirtObj::getFullDragClone() const
     SdrObject& rReferencedObject = const_cast<SdrVirtObj*>(this)->ReferencedObj();
     return new SdrGrafObj(
         getSdrModelFromSdrObject(),
-        SdrDragView::GetObjGraphic(GetModel(), &rReferencedObject),
+        SdrDragView::GetObjGraphic(
+            &getSdrModelFromSdrObject(),
+            &rReferencedObject),
         GetLogicRect());
 }
 
