@@ -194,8 +194,11 @@ void SwHTMLWriter::SetupFilterOptions(SfxMedium& rMedium)
         {
             maNamespace = rOption.copy(aXhtmlNsKey.getLength()).toUtf8();
             if (maNamespace == "reqif-xhtml")
+            {
+                mbReqIF = true;
                 // XHTML is always just a fragment inside ReqIF.
                 mbSkipHeaderFooter = true;
+            }
             // XHTML namespace implies XHTML.
             mbXHTML = true;
         }

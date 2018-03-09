@@ -394,6 +394,8 @@ public:
     bool mbXHTML = false;
     /// XML namespace, in case of XHTML.
     OString maNamespace;
+    /// If the ReqIF subset of XHTML should be written.
+    bool mbReqIF = false;
 
 #define sCSS2_P_CLASS_leaders "leaders"
     bool m_bCfgPrintLayout : 1;       // PrintLayout option for TOC dot leaders

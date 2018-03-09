@@ -409,6 +409,19 @@ DECLARE_HTMLEXPORT_ROUNDTRIP_TEST(testReqIfPngImg, "reqif-png-img.xhtml")
 
     // This was Object1, PNG without fallback was imported as OLE object.
     CPPUNIT_ASSERT_EQUAL(OUString("Image1"), xShape->getName());
+
+    if (!mbExported)
+        return;
+
+    // This was <img>, not <object>, which is not valid in the reqif-xhtml
+    // subset.
+    SvStream* pStream = maTempFile.GetStream(StreamMode::READ);
+    CPPUNIT_ASSERT(pStream);
+    pStream->Seek(STREAM_SEEK_TO_END);
+    sal_uInt64 nLength = pStream->Tell();
+    pStream->Seek(0);
+    OString aStream(read_uInt8s_ToOString(*pStream, nLength));
+    CPPUNIT_ASSERT(aStream.indexOf("<reqif-xhtml:object") != -1);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
