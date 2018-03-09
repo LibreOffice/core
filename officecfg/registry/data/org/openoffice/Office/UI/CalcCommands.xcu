@@ -1811,7 +1811,20 @@
           <value xml:lang="en-US">Redraw Chart</value>
         </prop>
       </node>
+      <!-- ToggleAnchorType is no longer available since we no longer have two, but three anchor
+           types. It's mapped to the new AnchorMenu for b/c with old customized toolbars -->
       <node oor:name=".uno:ToggleAnchorType" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Change Anchor</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
+        <prop oor:name="TargetURL" oor:type="xs:string">
+          <value>.uno:AnchorMenu</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:AnchorMenu" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Change Anchor</value>
         </prop>
