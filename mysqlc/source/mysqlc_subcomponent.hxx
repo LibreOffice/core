@@ -50,11 +50,6 @@ namespace connectivity
 {
     namespace mysqlc
     {
-        void release(oslInterlockedCount& _refCount,
-                     ::cppu::OBroadcastHelper& rBHelper,
-                     css::uno::Reference< css::uno::XInterface >& _xInterface,
-                     css::lang::XComponent* _pObject);
-
         /// @throws css::lang::DisposedException
         void checkDisposed(bool _bThrow);
 

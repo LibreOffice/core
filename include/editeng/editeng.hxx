@@ -623,7 +623,6 @@ public:
 
     // tdf#115639 compatibility flag
     void SetHoriAlignIgnoreTrailingWhitespace(bool bEnabled);
-    bool IsHoriAlignIgnoreTrailingWhitespace() const;
 };
 
 #endif // INCLUDED_EDITENG_EDITENG_HXX
