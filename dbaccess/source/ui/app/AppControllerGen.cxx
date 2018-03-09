@@ -690,15 +690,14 @@ void OApplicationController::doAction(sal_uInt16 _nId, const ElementOpenMode _eO
     }
 
     std::vector< std::pair< OUString ,Reference< XModel > > > aComponents;
-    std::vector< OUString>::const_iterator aEnd = aList.end();
-    for (std::vector< OUString>::const_iterator aIter = aList.begin(); aIter != aEnd; ++aIter)
+    for (auto const& elem : aList)
     {
         if ( SID_DB_APP_CONVERTTOVIEW == _nId )
-            convertToView(*aIter);
+            convertToView(elem);
         else
         {
-            Reference< XModel > xModel( openElementWithArguments( *aIter, eType, eOpenMode, _nId,aArguments ), UNO_QUERY );
-            aComponents.emplace_back( *aIter, xModel );
+            Reference< XModel > xModel( openElementWithArguments( elem, eType, eOpenMode, _nId,aArguments ), UNO_QUERY );
+            aComponents.emplace_back( elem, xModel );
         }
     }
 
@@ -706,19 +705,19 @@ void OApplicationController::doAction(sal_uInt16 _nId, const ElementOpenMode _eO
     if ( _eOpenMode == E_OPEN_FOR_MAIL )
     {
 
-        std::vector< std::pair< OUString ,Reference< XModel > > >::const_iterator componentIter = aComponents.begin();
-        std::vector< std::pair< OUString ,Reference< XModel > > >::const_iterator componentEnd = aComponents.end();
         SfxMailModel aSendMail;
         SfxMailModel::SendMailResult eResult = SfxMailModel::SEND_MAIL_OK;
-        for (; componentIter != componentEnd && SfxMailModel::SEND_MAIL_OK == eResult; ++componentIter)
+        for (auto const& component : aComponents)
         {
             try
             {
-                Reference< XModel > xModel(componentIter->second,UNO_QUERY);
+                Reference< XModel > xModel(component.second,UNO_QUERY);
 
                 // Send document as e-Mail using stored/default type
-                eResult = aSendMail.AttachDocument(xModel,componentIter->first);
+                eResult = aSendMail.AttachDocument(xModel,component.first);
                 ::comphelper::disposeComponent(xModel);
+                if (eResult != SfxMailModel::SEND_MAIL_OK)
+                    break;
             }
             catch(const Exception&)
             {

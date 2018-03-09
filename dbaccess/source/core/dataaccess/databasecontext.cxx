@@ -275,13 +275,9 @@ void ODatabaseContext::disposing()
     // dispose the data sources
     // disposing seems to remove elements, so work on copy for valid iterators
     ObjectCache objCopy(m_aDatabaseObjects);
-    ObjectCache::const_iterator const aEnd = objCopy.end();
-    for (   ObjectCache::const_iterator aIter = objCopy.begin();
-            aIter != aEnd;
-            ++aIter
-        )
+    for (auto const& elem : objCopy)
     {
-        rtl::Reference< ODatabaseModelImpl > obj(aIter->second);
+        rtl::Reference< ODatabaseModelImpl > obj(elem.second);
             // make sure obj is acquired and does not delete itself from within
             // dispose()
         obj->dispose();

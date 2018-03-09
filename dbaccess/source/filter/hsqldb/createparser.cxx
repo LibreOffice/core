@@ -73,9 +73,9 @@ std::vector<OUString> lcl_splitColumnPart(const OUString& sColumnPart)
     std::vector<OUString> sReturn;
 
     OUStringBuffer current;
-    for (auto it = sParts.begin(); it != sParts.end(); ++it)
+    for (auto const& part : sParts)
     {
-        current.append(*it);
+        current.append(part);
         if (current.lastIndexOf("(") > current.lastIndexOf(")"))
             current.append(","); // it was false split
         else

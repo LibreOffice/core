@@ -165,13 +165,11 @@ namespace dbaui
     {
         // do not just copy the array, we may have empty field names (which should not be copied)
         _rFields.resize(m_aFields.size());
-        IndexFields::const_iterator aSource = m_aFields.begin();
-        IndexFields::const_iterator aSourceEnd = m_aFields.end();
         IndexFields::iterator aDest = _rFields.begin();
-        for (; aSource != aSourceEnd; ++aSource)
-            if (!aSource->sFieldName.isEmpty())
+        for (auto const& source : m_aFields)
+            if (!source.sFieldName.isEmpty())
             {
-                *aDest = *aSource;
+                *aDest = source;
                 ++aDest;
             }
 
@@ -400,7 +398,7 @@ namespace dbaui
                 else if (sSelectedEntry.isEmpty() && (nCurrentRow == rowCount - 2))
                 {   // in the (last-1)th row, an empty entry has been selected
                     // -> remove the last row
-                    m_aFields.erase(m_aFields.end() - 1);
+                    m_aFields.pop_back();
                     RowRemoved(GetRowCount() - 1);
                     Invalidate(GetRowRectPixel(nCurrentRow));
                 }

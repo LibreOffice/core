@@ -117,12 +117,11 @@ namespace dbmm
     {
 #if OSL_DEBUG_LEVEL > 0
         bool bAlreadyKnown = false;
-        for (   DocumentLogs::const_iterator doc = m_pData->aDocumentLogs.begin();
-                doc != m_pData->aDocumentLogs.end() && !bAlreadyKnown;
-                ++doc
-            )
+        for (auto const& documentLog : m_pData->aDocumentLogs)
         {
-            bAlreadyKnown = ( doc->second.eType == _eType ) && ( doc->second.sName == _rName );
+            bAlreadyKnown = ( documentLog.second.eType == _eType ) && ( documentLog.second.sName == _rName );
+            if (bAlreadyKnown)
+                break;
         }
         OSL_ENSURE( !bAlreadyKnown, "MigrationLog::startedDocument: document is already known!" );
 #endif
@@ -165,15 +164,12 @@ namespace dbmm
         }
 
         const DocumentEntry& rDocEntry( docPos->second );
-        for (   std::vector< LibraryEntry >::const_iterator lib = rDocEntry.aMovedLibraries.begin();
-                lib != rDocEntry.aMovedLibraries.end();
-                ++lib
-            )
+        for (auto const& elem : rDocEntry.aMovedLibraries)
         {
-            if  (   ( _eScriptType == lib->eType )
-                &&  ( _rOriginalLibName == lib->sOldName )
+            if  (   ( _eScriptType == elem.eType )
+                &&  ( _rOriginalLibName == elem.sOldName )
                 )
-                return lib->sNewName;
+                return elem.sNewName;
         }
 
         OSL_FAIL( "MigrationLog::getNewLibraryName: doc is known, but library isn't!" );
@@ -348,21 +344,18 @@ namespace dbmm
 
             OUString sException( DBA_RES( STR_EXCEPTION ) );
 
-            for (   ErrorLog::const_iterator error = _rErrors.begin();
-                    error != _rErrors.end();
-                    ++error
-                )
+            for (auto const& error : _rErrors)
             {
                 _rBuffer.append( '-' );
                 _rBuffer.append( ' ' );
-                lcl_appendErrorDescription( _rBuffer, *error );
+                lcl_appendErrorDescription(_rBuffer, error);
                 _rBuffer.append( '\n' );
 
-                if ( !error->aCaughtException.hasValue() )
+                if ( !error.aCaughtException.hasValue() )
                     continue;
 
                 _rBuffer.append( sException );
-                _rBuffer.append( ::comphelper::anyToString( error->aCaughtException ) );
+                _rBuffer.append( ::comphelper::anyToString( error.aCaughtException ) );
                 _rBuffer.append( '\n' );
                 _rBuffer.append( '\n' );
             }
@@ -402,12 +395,9 @@ namespace dbmm
         {
             OUString sMovedLibTemplate( DBA_RES( STR_MOVED_LIBRARY ) );
 
-            for (   DocumentLogs::const_iterator doc = m_pData->aDocumentLogs.begin();
-                    doc != m_pData->aDocumentLogs.end();
-                    ++doc
-                )
+            for (auto const& documentLog : m_pData->aDocumentLogs)
             {
-                const DocumentEntry& rDoc( doc->second );
+                const DocumentEntry& rDoc( documentLog.second );
 
                 if ( rDoc.aMovedLibraries.empty() )
                     continue;
@@ -417,15 +407,12 @@ namespace dbmm
 
                 aBuffer.append( "=== " + sDocTitle + " ===\n" );
 
-                for (   std::vector< LibraryEntry >::const_iterator lib = rDoc.aMovedLibraries.begin();
-                        lib != rDoc.aMovedLibraries.end();
-                        ++lib
-                    )
+                for (auto const& elem : rDoc.aMovedLibraries)
                 {
                     OUString sMovedLib( sMovedLibTemplate );
-                    sMovedLib = sMovedLib.replaceAll( "$type$", getScriptTypeDisplayName( lib->eType ) );
-                    sMovedLib = sMovedLib.replaceAll( "$old$", lib->sOldName );
-                    sMovedLib = sMovedLib.replaceAll( "$new$", lib->sNewName );
+                    sMovedLib = sMovedLib.replaceAll( "$type$", getScriptTypeDisplayName( elem.eType ) );
+                    sMovedLib = sMovedLib.replaceAll( "$old$", elem.sOldName );
+                    sMovedLib = sMovedLib.replaceAll( "$new$", elem.sNewName );
 
                     aBuffer.append( sMovedLib + "\n" );
                 }

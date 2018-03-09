@@ -172,12 +172,8 @@ namespace dbaui
                     }
                 }
                 std::sort( aDisplayedTypes.begin(), aDisplayedTypes.end(), DisplayedTypeLess() );
-                DisplayedTypes::const_iterator aDisplayEnd = aDisplayedTypes.end();
-                for (   DisplayedTypes::const_iterator loop = aDisplayedTypes.begin();
-                        loop != aDisplayEnd;
-                        ++loop
-                    )
-                    insertEmbeddedDBTypeEntryData( loop->eType, loop->sDisplayName );
+                for (auto const& displayedType : aDisplayedTypes)
+                    insertEmbeddedDBTypeEntryData( displayedType.eType, displayedType.sDisplayName );
             }
         }
     }

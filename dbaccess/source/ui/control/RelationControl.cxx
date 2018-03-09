@@ -469,22 +469,20 @@ namespace dbaui
         OTableWindow* pInitialRight = nullptr;
 
         // Collect the names of all TabWins
-        OJoinTableView::OTableWindowMap::const_iterator aIter = m_pTableMap->begin();
-        OJoinTableView::OTableWindowMap::const_iterator aEnd = m_pTableMap->end();
-        for(;aIter != aEnd;++aIter)
+        for (auto const& elem : *m_pTableMap)
         {
-            m_pLeftTable->InsertEntry(aIter->first);
-            m_pRightTable->InsertEntry(aIter->first);
+            m_pLeftTable->InsertEntry(elem.first);
+            m_pRightTable->InsertEntry(elem.first);
 
             if (!pInitialLeft)
             {
-                pInitialLeft = aIter->second;
-                m_strCurrentLeft = aIter->first;
+                pInitialLeft = elem.second;
+                m_strCurrentLeft = elem.first;
             }
             else if (!pInitialRight)
             {
-                pInitialRight = aIter->second;
-                m_strCurrentRight = aIter->first;
+                pInitialRight = elem.second;
+                m_strCurrentRight = elem.first;
             }
         }
 
@@ -602,30 +600,28 @@ namespace dbaui
         bool bValid = !rLines.empty();
         if (bValid)
         {
-            OConnectionLineDataVec::const_iterator l(rLines.begin());
-            const OConnectionLineDataVec::const_iterator le(rLines.end());
-            for (; bValid && l!=le; ++l)
+            for (auto const& line : rLines)
             {
-                bValid = ! ((*l)->GetSourceFieldName().isEmpty() || (*l)->GetDestFieldName().isEmpty());
+                bValid = ! (line->GetSourceFieldName().isEmpty() || line->GetDestFieldName().isEmpty());
+                if (!bValid)
+                    break;
             }
         }
         m_pParentDialog->setValid(bValid);
 
-        ORelationControl::ops_type::const_iterator i (m_pRC_Tables->m_ops.begin());
-        const ORelationControl::ops_type::const_iterator e (m_pRC_Tables->m_ops.end());
         m_pRC_Tables->DeactivateCell();
-        for(; i != e; ++i)
+        for (auto const& elem : m_pRC_Tables->m_ops)
         {
-            switch(i->first)
+            switch(elem.first)
             {
             case ORelationControl::DELETE:
-                m_pRC_Tables->RowRemoved(i->second.first, i->second.second - i->second.first);
+                m_pRC_Tables->RowRemoved(elem.second.first, elem.second.second - elem.second.first);
                 break;
             case ORelationControl::INSERT:
-                m_pRC_Tables->RowInserted(i->second.first, i->second.second - i->second.first);
+                m_pRC_Tables->RowInserted(elem.second.first, elem.second.second - elem.second.first);
                 break;
             case ORelationControl::MODIFY:
-                for(OConnectionLineDataVec::size_type j = i->second.first; j < i->second.second; ++j)
+                for(OConnectionLineDataVec::size_type j = elem.second.first; j < elem.second.second; ++j)
                     m_pRC_Tables->RowModified(j);
                 break;
             }

@@ -929,12 +929,9 @@ namespace dbmm
 
         m_rProgress.start( nOverallRange );
 
-        for (   SubDocuments::const_iterator doc = m_aSubDocs.begin();
-                doc != m_aSubDocs.end();
-                ++doc
-            )
+        sal_Int32 nOverallProgressValue = 1;
+        for (auto const& subDoc : m_aSubDocs)
         {
-            sal_Int32 nOverallProgressValue( doc - m_aSubDocs.begin() + 1 );
             // update overall progress text
             OUString sOverallProgress(
                 sProgressSkeleton.replaceFirst("$current$",
@@ -942,11 +939,12 @@ namespace dbmm
             m_rProgress.setOverallProgressText( sOverallProgress );
 
             // migrate document
-            if ( !impl_handleDocument_nothrow( *doc ) )
+            if ( !impl_handleDocument_nothrow(subDoc) )
                 return false;
 
             // update overall progress value
             m_rProgress.setOverallProgressValue( nOverallProgressValue );
+            ++nOverallProgressValue;
         }
 
         // commit the root storage of the database document, for all changes made so far to take effect

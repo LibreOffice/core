@@ -281,11 +281,8 @@ ODatabaseExport::ODatabaseExport(const SharedConnection& _rxConnection,
 ODatabaseExport::~ODatabaseExport()
 {
     m_pFormatter = nullptr;
-    ODatabaseExport::TColumns::const_iterator aIter = m_aDestColumns.begin();
-    ODatabaseExport::TColumns::const_iterator aEnd  = m_aDestColumns.end();
-
-    for(;aIter != aEnd;++aIter)
-        delete aIter->second;
+    for (auto const& destColumn : m_aDestColumns)
+        delete destColumn.second;
     m_vDestVector.clear();
     m_aDestColumns.clear();
 }
@@ -555,10 +552,13 @@ void ODatabaseExport::SetColumnTypes(const TColumnVector* _pList,const OTypeInfo
         OSL_ENSURE(m_vNumberFormat.size() == m_vColumnSize.size() && m_vColumnSize.size() == _pList->size(),"Illegal columns in list");
         Reference< XNumberFormatsSupplier > xSupplier = m_xFormatter->getNumberFormatsSupplier();
         Reference< XNumberFormats >         xFormats = xSupplier->getNumberFormats();
-        TColumnVector::const_iterator aIter = _pList->begin();
-        TColumnVector::const_iterator aEnd = _pList->end();
-        for(sal_Int32 i= 0;aIter != aEnd && i < static_cast<sal_Int32>(m_vNumberFormat.size()) && i < static_cast<sal_Int32>(m_vColumnSize.size()) ;++aIter,++i)
+        sal_Int32 minBothSize = std::min<sal_Int32>(m_vNumberFormat.size(), m_vColumnSize.size());
+        sal_Int32 i = 0;
+        for (auto const& elem : *_pList)
         {
+            if (i >= minBothSize)
+                break;
+
             sal_Int32 nDataType;
             sal_Int32 nLength(0),nScale(0);
             sal_Int16 nType = m_vNumberFormat[i] & ~NumberFormat::DEFINED;
@@ -603,18 +603,19 @@ void ODatabaseExport::SetColumnTypes(const TColumnVector* _pList,const OTypeInfo
             OTypeInfoMap::const_iterator aFind = _pInfoMap->find(nDataType);
             if(aFind != _pInfoMap->end())
             {
-                (*aIter)->second->SetType(aFind->second);
-                (*aIter)->second->SetPrecision(std::min<sal_Int32>(aFind->second->nPrecision,nLength));
-                (*aIter)->second->SetScale(std::min<sal_Int32>(aFind->second->nMaximumScale,nScale));
+                elem->second->SetType(aFind->second);
+                elem->second->SetPrecision(std::min<sal_Int32>(aFind->second->nPrecision,nLength));
+                elem->second->SetScale(std::min<sal_Int32>(aFind->second->nMaximumScale,nScale));
 
                 sal_Int32 nFormatKey = ::dbtools::getDefaultNumberFormat( nDataType,
-                                    (*aIter)->second->GetScale(),
-                                    (*aIter)->second->IsCurrency(),
+                                    elem->second->GetScale(),
+                                    elem->second->IsCurrency(),
                                     Reference< XNumberFormatTypes>(xFormats,UNO_QUERY),
                                     m_aLocale);
 
-                (*aIter)->second->SetFormatKey(nFormatKey);
+                elem->second->SetFormatKey(nFormatKey);
             }
+            ++i;
         }
     }
 }
@@ -840,12 +841,11 @@ Reference< XPreparedStatement > ODatabaseExport::createPreparedStatment( const R
     }
 
     // create the sql string
-    std::vector< OUString>::const_iterator aInsertEnd = aInsertList.end();
-    for (std::vector< OUString>::const_iterator aInsertIter = aInsertList.begin(); aInsertIter != aInsertEnd; ++aInsertIter)
+    for (auto const& elem : aInsertList)
     {
-        if ( !aInsertIter->isEmpty() )
+        if ( !elem.isEmpty() )
         {
-            aSql += *aInsertIter;
+            aSql += elem;
             aSql += ",";
             aValues += "?,";
         }
