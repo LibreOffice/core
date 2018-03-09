@@ -53,11 +53,11 @@ OReportPage::~OReportPage()
 {
 }
 
-
-SdrPage* OReportPage::Clone() const
-{
-    return Clone(nullptr);
-}
+// TTTT
+// SdrPage* OReportPage::Clone() const
+// {
+//     return Clone(nullptr);
+// }
 
 SdrPage* OReportPage::Clone( SdrModel* const pNewModel ) const
 {

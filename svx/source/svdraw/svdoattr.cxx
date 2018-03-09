@@ -100,22 +100,23 @@ const tools::Rectangle& SdrAttrObj::GetSnapRect() const
     return maSnapRect;
 }
 
-void SdrAttrObj::SetModel(SdrModel* pNewModel)
-{
-    SdrModel* pOldModel = pModel;
+// TTTT clone?
+// void SdrAttrObj::SetModel(SdrModel* pNewModel)
+// {
+//     SdrModel* pOldModel = pModel;
 
-    // test for correct pool in ItemSet; move to new pool if necessary
-    if(pNewModel && &GetObjectItemPool() != &pNewModel->GetItemPool())
-    {
-        MigrateItemPool(&GetObjectItemPool(), &pNewModel->GetItemPool(), pNewModel);
-    }
+//     // test for correct pool in ItemSet; move to new pool if necessary
+//     if(pNewModel && &GetObjectItemPool() != &pNewModel->GetItemPool())
+//     {
+//         MigrateItemPool(&GetObjectItemPool(), &pNewModel->GetItemPool(), pNewModel);
+//     }
 
-    // call parent
-    SdrObject::SetModel(pNewModel);
+//     // call parent
+//     SdrObject::SetModel(pNewModel);
 
-    // modify properties
-    GetProperties().SetModel(pOldModel, pNewModel);
-}
+//     // modify properties
+//     GetProperties().SetModel(pOldModel, pNewModel);
+// }
 
 
 // syntactical sugar for ItemSet accesses

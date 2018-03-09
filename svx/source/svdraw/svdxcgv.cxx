@@ -149,7 +149,7 @@ bool SdrExchangeView::Paste(const OUString& rStr, const Point& rPos, SdrObjList*
         getSdrModelFromSdrView(),
         OBJ_TEXT,
         aTextRect);
-    pObj->SetModel(mpModel);
+
     pObj->SetLayer(nLayer);
     pObj->NbcSetText(rStr); // SetText before SetAttr, else SetAttr doesn't work!
     if (mpDefaultStyleSheet!=nullptr) pObj->NbcSetStyleSheet(mpDefaultStyleSheet, false);
@@ -189,7 +189,7 @@ bool SdrExchangeView::Paste(SvStream& rInput, EETextFormat eFormat, const Point&
         getSdrModelFromSdrView(),
         OBJ_TEXT,
         aTextRect);
-    pObj->SetModel(mpModel);
+
     pObj->SetLayer(nLayer);
     if (mpDefaultStyleSheet!=nullptr) pObj->NbcSetStyleSheet(mpDefaultStyleSheet, false);
 
@@ -209,9 +209,9 @@ bool SdrExchangeView::Paste(SvStream& rInput, EETextFormat eFormat, const Point&
     ImpPasteObject(pObj,*pLst,aPos,aSiz,MapMode(eMap,Point(0,0),aMap,aMap),nOptions);
 
     // b4967543
-    if(pObj->GetModel() && pObj->GetOutlinerParaObject())
+    if(pObj->GetOutlinerParaObject())
     {
-        SdrOutliner& rOutliner = pObj->GetModel()->GetHitTestOutliner();
+        SdrOutliner& rOutliner = pObj->getSdrModelFromSdrObject().GetHitTestOutliner();
         rOutliner.SetText(*pObj->GetOutlinerParaObject());
 
         if(1 == rOutliner.GetParagraphCount())
@@ -220,7 +220,7 @@ bool SdrExchangeView::Paste(SvStream& rInput, EETextFormat eFormat, const Point&
 
             if(pCandidate)
             {
-                if(pObj->GetModel()->GetStyleSheetPool() == &pCandidate->GetPool())
+                if(pObj->getSdrModelFromSdrObject().GetStyleSheetPool() == &pCandidate->GetPool())
                 {
                     pObj->NbcSetStyleSheet(pCandidate, true);
                 }
@@ -313,15 +313,13 @@ bool SdrExchangeView::Paste(
             {
                 if(bResize)
                 {
-                    pNewObj->GetModel()->SetPasteResize(true);
+                    pNewObj->getSdrModelFromSdrObject().SetPasteResize(true);
                     pNewObj->NbcResize(aPt0,aXResize,aYResize);
-                    pNewObj->GetModel()->SetPasteResize(false);
+                    pNewObj->getSdrModelFromSdrObject().SetPasteResize(false);
                 }
 
                 // #i39861#
-                pNewObj->SetModel(pDstLst->GetModel());
                 pNewObj->SetPage(pDstLst->GetPage());
-
                 pNewObj->NbcMove(aSiz);
 
                 const SdrPage* pPg = pDstLst->GetPage();
@@ -353,7 +351,7 @@ bool SdrExchangeView::Paste(
                 pDstLst->InsertObject(pNewObj, SAL_MAX_SIZE);
 
                 if( bUndo )
-                    AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoNewObject(*pNewObj));
+                    AddUndo(getSdrModelFromSdrView().GetSdrUndoFactory().CreateUndoNewObject(*pNewObj));
 
                 if (bMark) {
                     // Don't already set Markhandles!
@@ -422,7 +420,7 @@ void SdrExchangeView::ImpPasteObject(SdrObject* pObj, SdrObjList& rLst, const Po
     rLst.InsertObject(pObj, SAL_MAX_SIZE);
 
     if( IsUndoEnabled() )
-        AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoNewObject(*pObj));
+        AddUndo(getSdrModelFromSdrView().GetSdrUndoFactory().CreateUndoNewObject(*pObj));
 
     SdrPageView* pMarkPV=nullptr;
     SdrPageView* pPV = GetSdrPageView();
@@ -741,13 +739,11 @@ SdrModel* SdrExchangeView::GetMarkedObjModel() const
                     GetObjGraphic(mpModel, pObj),
                     pObj->GetLogicRect());
                 pNewObj->SetPage( pNeuPag );
-                pNewObj->SetModel( pNeuMod );
             }
             else
             {
                 pNewObj = pObj->Clone();
                 pNewObj->SetPage( pNeuPag );
-                pNewObj->SetModel( pNeuMod );
             }
 
             pNeuPag->InsertObject(pNewObj, SAL_MAX_SIZE);

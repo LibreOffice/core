@@ -186,7 +186,7 @@ public:
     // #i25616#
     virtual basegfx::B2DPolyPolygon TakeXorPoly() const override;
 
-    virtual SdrGrafObj* Clone() const override;
+    virtual SdrGrafObj* Clone(SdrModel* pTargetModel = nullptr) const override;
     SdrGrafObj&             operator=(const SdrGrafObj& rObj);
 
     virtual sal_uInt32 GetHdlCount() const override;
@@ -201,7 +201,6 @@ public:
     bool                    HasGDIMetaFile() const;
 
     virtual void            SetPage(SdrPage* pNewPage) override;
-    virtual void            SetModel(SdrModel* pNewModel) override;
 
     bool isEmbeddedVectorGraphicData() const;
     GDIMetaFile getMetafileFromEmbeddedVectorGraphicData() const;

@@ -393,7 +393,7 @@ SdrObject* FuConstruct3dObject::CreateDefaultObject(const sal_uInt16 nID, const 
     double fW(aVolume.getWidth());
     double fH(aVolume.getHeight());
     ::tools::Rectangle a3DRect(0, 0, static_cast<long>(fW), static_cast<long>(fH));
-    E3dScene* pScene = new E3dScene(mpView->getSdrModelFromSdrView());
+    E3dScene* pScene = new E3dScene(*mpDoc);
 
     // copied code from E3dView::InitScene
     double fCamZ(aVolume.getMaxZ() + ((fW + fH) / 4.0));
@@ -407,13 +407,9 @@ SdrObject* FuConstruct3dObject::CreateDefaultObject(const sal_uInt16 nID, const 
     aCam.SetFocalLength(mpView->GetDefaultCamFocal());
     aCam.SetDefaults(::basegfx::B3DPoint(0.0, 0.0, fDefaultCamPosZ), aLookAt);
     pScene->SetCamera(aCam);
-
     pScene->Insert3DObj(p3DObj);
     pScene->NbcSetSnapRect(a3DRect);
-    pScene->SetModel(mpDoc);
-
     ImpPrepareBasic3DShape(p3DObj, pScene);
-
     SfxItemSet aAttr(mpDoc->GetPool());
     SetStyleSheet(aAttr, p3DObj);
     aAttr.Put(XLineStyleItem (drawing::LineStyle_NONE));

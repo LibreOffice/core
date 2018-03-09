@@ -520,13 +520,14 @@ void SdrEdgeObj::ImpSetTailPoint(bool bTail1, const Point& rPt)
 
 void SdrEdgeObj::ImpDirtyEdgeTrack()
 {
-    if ( !bEdgeTrackUserDefined || !(GetModel() && GetModel()->isLocked()) )
+    if ( !bEdgeTrackUserDefined || !getSdrModelFromSdrObject().isLocked() )
         bEdgeTrackDirty = true;
 }
 
 void SdrEdgeObj::ImpUndirtyEdgeTrack()
 {
-    if (bEdgeTrackDirty && (GetModel() && GetModel()->isLocked()) ) {
+    if (bEdgeTrackDirty && getSdrModelFromSdrObject().isLocked())
+    {
         ImpRecalcEdgeTrack();
     }
 }
@@ -540,7 +541,7 @@ void SdrEdgeObj::ImpRecalcEdgeTrack()
     }
 
     // #i120437# also not when model locked during import, but remember
-    if(!GetModel() || GetModel()->isLocked())
+    if(getSdrModelFromSdrObject().isLocked())
     {
         mbSuppressed = true;
         return;
@@ -1615,9 +1616,9 @@ void SdrEdgeObj::Reformat()
     }
 }
 
-SdrEdgeObj* SdrEdgeObj::Clone() const
+SdrEdgeObj* SdrEdgeObj::Clone(SdrModel* pTargetModel) const
 {
-    return CloneHelper< SdrEdgeObj >();
+    return CloneHelper< SdrEdgeObj >(pTargetModel);
 }
 
 SdrEdgeObj& SdrEdgeObj::operator=(const SdrEdgeObj& rObj)
@@ -2247,7 +2248,7 @@ void SdrEdgeObj::NbcResize(const Point& rRefPnt, const Fraction& aXFact, const F
     ResizeXPoly(*pEdgeTrack,rRefPnt,aXFact,aYFact);
 
     // if resize is not from paste, forget user distances
-    if (!GetModel() || !GetModel()->IsPasteResize())
+    if (!getSdrModelFromSdrObject().IsPasteResize())
     {
         aEdgeInfo.aObj1Line2 = Point();
         aEdgeInfo.aObj1Line3 = Point();

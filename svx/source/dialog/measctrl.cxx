@@ -47,7 +47,6 @@ SvxXMeasurePreview::SvxXMeasurePreview(vcl::Window* pParent, WinBits nStyle)
         *pModel,
         aPt1,
         aPt2);
-    pMeasureObj->SetModel(pModel);
 
     bool bHighContrast = GetSettings().GetStyleSettings().GetHighContrastMode();
     SetDrawMode(bHighContrast ? OUTPUT_DRAWMODE_CONTRAST : OUTPUT_DRAWMODE_COLOR);

@@ -395,11 +395,12 @@ void ChartController::impl_PasteShapes( SdrModel* pModel )
                 SdrObjListIter aIter( *pPage, SdrIterMode::DeepNoGroups );
                 while ( aIter.IsMore() )
                 {
-                    SdrObject* pObj = aIter.Next();
-                    SdrObject* pNewObj = ( pObj ? pObj->Clone() : nullptr );
+                    SdrObject* pObj(aIter.Next());
+                    // TTTT clone to new SdrModel
+                    SdrObject* pNewObj(pObj ? pObj->Clone(&pDrawModelWrapper->getSdrModel()) : nullptr);
+
                     if ( pNewObj )
                     {
-                        pNewObj->SetModel( &pDrawModelWrapper->getSdrModel() );
                         pNewObj->SetPage( pDestPage );
 
                         // set position

@@ -286,15 +286,16 @@ void SdPage::EndListenOutlineText()
 |*
 \************************************************************************/
 
-void SdPage::SetModel(SdrModel* pNewModel)
-{
-    DisconnectLink();
+// TTTT
+// void SdPage::SetModel(SdrModel* pNewModel)
+// {
+//     DisconnectLink();
 
-    // assign model
-    FmFormPage::SetModel(pNewModel);
+//     // assign model
+//     FmFormPage::SetModel(pNewModel);
 
-    ConnectLink();
-}
+//     ConnectLink();
+// }
 
 /*************************************************************************
 |*
@@ -426,10 +427,11 @@ void SdPage::lateInit(const SdPage& rSrcPage)
 |*
 \************************************************************************/
 
-SdrPage* SdPage::Clone() const
-{
-    return Clone(nullptr);
-}
+// TTTT
+// SdrPage* SdPage::Clone() const
+// {
+//     return Clone(nullptr);
+// }
 
 SdrPage* SdPage::Clone(SdrModel* pNewModel) const
 {

@@ -411,24 +411,9 @@ void E3dScene::removeAllNonSelectedObjects()
     }
 }
 
-E3dScene* E3dScene::Clone() const
+E3dScene* E3dScene::Clone(SdrModel* pTargetModel) const
 {
-    return CloneHelper< E3dScene >();
-}
-
-void E3dScene::SuspendReportingDirtyRects()
-{
-    GetScene()->mbSkipSettingDirty = true;
-}
-
-void E3dScene::ResumeReportingDirtyRects()
-{
-    GetScene()->mbSkipSettingDirty = false;
-}
-
-void E3dScene::SetAllSceneRectsDirty()
-{
-    GetScene()->SetRectsDirty();
+    return CloneHelper< E3dScene >(pTargetModel);
 }
 
 E3dScene& E3dScene::operator=(const E3dScene& rObj)
@@ -461,6 +446,21 @@ E3dScene& E3dScene::operator=(const E3dScene& rObj)
     // flush that cached data and initialize its valid reconstruction
     GetViewContact().ActionChanged();
     return *this;
+}
+
+void E3dScene::SuspendReportingDirtyRects()
+{
+    GetScene()->mbSkipSettingDirty = true;
+}
+
+void E3dScene::ResumeReportingDirtyRects()
+{
+    GetScene()->mbSkipSettingDirty = false;
+}
+
+void E3dScene::SetAllSceneRectsDirty()
+{
+    GetScene()->SetRectsDirty();
 }
 
 // Rebuild Light- and label- object lists rebuild (after loading, allocation)

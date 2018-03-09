@@ -165,8 +165,6 @@ public:
     virtual sal_uInt16 GetObjIdentifier() const override;
     virtual void TakeObjInfo(SdrObjTransformInfoRec& rInfo) const override;
 
-    virtual void SetModel(SdrModel* pNewModel) override;
-
     virtual void Move(const Size& rSiz) override;
     virtual void Shear(const Point& rRef, long nAngle, double tn, bool bVShear) override;
     virtual void SetSnapRect(const tools::Rectangle& rRect) override;
@@ -209,7 +207,7 @@ public:
     virtual void TakeTextAnchorRect( tools::Rectangle& rAnchorRect ) const override;
     virtual void TakeTextRect( SdrOutliner& rOutliner, tools::Rectangle& rTextRect, bool bNoEditText,
         tools::Rectangle* pAnchorRect, bool bLineWidth = true ) const override;
-    virtual SdrObjCustomShape* Clone() const override;
+    virtual SdrObjCustomShape* Clone(SdrModel* pTargetModel = nullptr) const override;
     SdrObjCustomShape& operator=(const SdrObjCustomShape& rObj);
 
     virtual OUString TakeObjNameSingul() const override;

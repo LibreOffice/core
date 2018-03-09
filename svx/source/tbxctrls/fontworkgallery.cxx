@@ -197,7 +197,8 @@ void FontWorkGalleryDialog::insertSelectedFontwork()
             SdrPage* pPage = pModel->GetPage(0);
             if( pPage && pPage->GetObjCount() )
             {
-                SdrObject* pNewObject = pPage->GetObj(0)->Clone();
+                // TTTT clone directly to target SdrModel
+                SdrObject* pNewObject(pPage->GetObj(0)->Clone(mpDestModel));
 
                 // center shape on current view
                 OutputDevice* pOutDev = mpSdrView->GetFirstOutputDevice();
@@ -210,16 +211,15 @@ void FontWorkGalleryDialog::insertSelectedFontwork()
                     aPagePos.AdjustY( -(aObjRect.GetHeight() / 2) );
                     tools::Rectangle aNewObjectRectangle(aPagePos, aObjRect.GetSize());
                     SdrPageView* pPV = mpSdrView->GetSdrPageView();
-
                     pNewObject->SetLogicRect(aNewObjectRectangle);
+
                     if ( mppSdrObject )
                     {
                         *mppSdrObject = pNewObject;
-                        (*mppSdrObject)->SetModel( mpDestModel );
                     }
                     else if( pPV )
                     {
-                            mpSdrView->InsertObjectAtView( pNewObject, *pPV );
+                        mpSdrView->InsertObjectAtView( pNewObject, *pPV );
                     }
                 }
             }

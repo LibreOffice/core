@@ -797,7 +797,11 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                                 aNewSet.Put( pObj->GetMergedItemSet() );
 
                                 if( bUndo )
-                                    AddUndo( new E3dAttributesUndoAction( mrDoc, static_cast<E3dObject*>(pPickObj), aNewSet, aOldSet ) );
+                                    AddUndo(
+                                        new E3dAttributesUndoAction(
+                                            *static_cast< E3dObject* >(pPickObj),
+                                            aNewSet,
+                                            aOldSet));
                                 pPickObj->SetMergedItemSetAndBroadcast( aNewSet );
                             }
 

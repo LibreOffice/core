@@ -175,7 +175,7 @@ void SdrTextObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fract
 
     AdaptTextMinSize();
 
-    if(bTextFrame && (!pModel || !pModel->IsPasteResize()))
+    if(bTextFrame && !getSdrModelFromSdrObject().IsPasteResize())
     {
         NbcAdjustTextFrameWidthAndHeight();
     }
@@ -378,12 +378,7 @@ SdrObject* SdrTextObj::ImpConvertContainedTextToSdrPathObjs(bool bToPoly) const
                     // copy basic information from original
                     pPathObj->ImpSetAnchorPos(GetAnchorPos());
                     pPathObj->NbcSetLayer(GetLayer());
-
-                    if(GetModel())
-                    {
-                        pPathObj->SetModel(GetModel());
-                        pPathObj->NbcSetStyleSheet(GetStyleSheet(), true);
-                    }
+                    pPathObj->NbcSetStyleSheet(GetStyleSheet(), true);
 
                     // apply prepared ItemSet and add to target
                     pPathObj->SetMergedItemSet(aAttributeSet);
@@ -452,18 +447,11 @@ SdrObject* SdrTextObj::ImpConvertMakeObj(const basegfx::B2DPolyPolygon& rPolyPol
 
     pPathObj->ImpSetAnchorPos(aAnchor);
     pPathObj->NbcSetLayer(GetLayer());
-
-    if(pModel)
-    {
-        pPathObj->SetModel(pModel);
-
-        sdr::properties::ItemChangeBroadcaster aC(*pPathObj);
-
-        pPathObj->ClearMergedItem();
-        pPathObj->SetMergedItemSet(GetObjectItemSet());
-        pPathObj->GetProperties().BroadcastItemChange(aC);
-        pPathObj->NbcSetStyleSheet(GetStyleSheet(), true);
-    }
+    sdr::properties::ItemChangeBroadcaster aC(*pPathObj);
+    pPathObj->ClearMergedItem();
+    pPathObj->SetMergedItemSet(GetObjectItemSet());
+    pPathObj->GetProperties().BroadcastItemChange(aC);
+    pPathObj->NbcSetStyleSheet(GetStyleSheet(), true);
 
     return pPathObj;
 }

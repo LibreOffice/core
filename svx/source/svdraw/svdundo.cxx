@@ -209,8 +209,8 @@ OUString SdrUndoGroup::GetSdrRepeatComment(SdrView& /*rView*/) const
 }
 
 SdrUndoObj::SdrUndoObj(SdrObject& rNewObj)
-    : SdrUndoAction(*rNewObj.GetModel())
-    , pObj(&rNewObj)
+:   SdrUndoAction(rNewObj.getSdrModelFromSdrObject())
+    ,pObj(&rNewObj)
 {
 }
 
@@ -237,10 +237,10 @@ void SdrUndoObj::ImpTakeDescriptionStr(const char* pStrCacheID, OUString& rStr, 
 // common call method for possible change of the page when UNDO/REDO is triggered
 void SdrUndoObj::ImpShowPageOfThisObject()
 {
-    if(pObj && pObj->IsInserted() && pObj->GetPage() && pObj->GetModel())
+    if(pObj && pObj->IsInserted() && pObj->GetPage())
     {
         SdrHint aHint(SdrHintKind::SwitchToPage, *pObj, pObj->GetPage());
-        pObj->GetModel()->Broadcast(aHint);
+        pObj->getSdrModelFromSdrObject().Broadcast(aHint);
     }
 }
 
@@ -275,7 +275,7 @@ SdrUndoAttrObj::SdrUndoAttrObj(SdrObject& rNewObj, bool bStyleSheet1, bool bSave
     if(bIsGroup)
     {
         // it's a group object!
-        pUndoGroup.reset( new SdrUndoGroup(*pObj->GetModel()) );
+        pUndoGroup.reset(new SdrUndoGroup(pObj->getSdrModelFromSdrObject()));
         const size_t nObjCount(pOL->GetObjCount());
 
         for(size_t nObjNum = 0; nObjNum < nObjCount; ++nObjNum)
@@ -343,9 +343,9 @@ void SdrUndoAttrObj::Undo()
             mxRedoStyleSheet = pObj->GetStyleSheet();
             SfxStyleSheet* pSheet = dynamic_cast< SfxStyleSheet* >(mxUndoStyleSheet.get());
 
-            if(pSheet && pObj->GetModel() && pObj->GetModel()->GetStyleSheetPool())
+            if(pSheet && pObj->getSdrModelFromSdrObject().GetStyleSheetPool())
             {
-                ensureStyleSheetInStyleSheetPool(*pObj->GetModel()->GetStyleSheetPool(), *pSheet);
+                ensureStyleSheetInStyleSheetPool(*pObj->getSdrModelFromSdrObject().GetStyleSheetPool(), *pSheet);
                 pObj->SetStyleSheet(pSheet, true);
             }
             else
@@ -426,9 +426,9 @@ void SdrUndoAttrObj::Redo()
             mxUndoStyleSheet = pObj->GetStyleSheet();
             SfxStyleSheet* pSheet = dynamic_cast< SfxStyleSheet* >(mxRedoStyleSheet.get());
 
-            if(pSheet && pObj->GetModel() && pObj->GetModel()->GetStyleSheetPool())
+            if(pSheet && pObj->getSdrModelFromSdrObject().GetStyleSheetPool())
             {
-                ensureStyleSheetInStyleSheetPool(*pObj->GetModel()->GetStyleSheetPool(), *pSheet);
+                ensureStyleSheetInStyleSheetPool(*pObj->getSdrModelFromSdrObject().GetStyleSheetPool(), *pSheet);
                 pObj->SetStyleSheet(pSheet, true);
             }
             else
@@ -581,7 +581,7 @@ SdrUndoGeoObj::SdrUndoGeoObj(SdrObject& rNewObj)
         // this is a group object!
         // If this were 3D scene, we'd only add an Undo for the scene itself
         // (which we do elsewhere).
-        pUndoGroup.reset(new SdrUndoGroup(*pObj->GetModel()));
+        pUndoGroup.reset(new SdrUndoGroup(pObj->getSdrModelFromSdrObject()));
         const size_t nObjCount = pOL->GetObjCount();
         for (size_t nObjNum = 0; nObjNum<nObjCount; ++nObjNum) {
             pUndoGroup->AddAction(new SdrUndoGeoObj(*pOL->GetObj(nObjNum)));
@@ -1335,8 +1335,8 @@ OUString SdrUndoMoveLayer::GetComment() const
 
 
 SdrUndoPage::SdrUndoPage(SdrPage& rNewPg)
-    : SdrUndoAction(*rNewPg.GetModel())
-    , mrPage(rNewPg)
+:   SdrUndoAction(rNewPg.getSdrModelFromSdrObjList())
+    ,mrPage(rNewPg)
 {
 }
 
@@ -1657,7 +1657,7 @@ void SdrUndoPageRemoveMasterPage::Undo()
 {
     if(mbOldHadMasterPage)
     {
-        mrPage.TRG_SetMasterPage(*mrPage.GetModel()->GetMasterPage(maOldMasterPageNumber));
+        mrPage.TRG_SetMasterPage(*mrPage.getSdrModelFromSdrObjList().GetMasterPage(maOldMasterPageNumber));
         mrPage.TRG_SetMasterPageVisibleLayers(maOldSet);
     }
 }
@@ -1695,7 +1695,7 @@ void SdrUndoPageChangeMasterPage::Undo()
     if(mbOldHadMasterPage)
     {
         mrPage.TRG_ClearMasterPage();
-        mrPage.TRG_SetMasterPage(*mrPage.GetModel()->GetMasterPage(maOldMasterPageNumber));
+        mrPage.TRG_SetMasterPage(*mrPage.getSdrModelFromSdrObjList().GetMasterPage(maOldMasterPageNumber));
         mrPage.TRG_SetMasterPageVisibleLayers(maOldSet);
     }
 }
@@ -1706,7 +1706,7 @@ void SdrUndoPageChangeMasterPage::Redo()
     if(mbNewHadMasterPage)
     {
         mrPage.TRG_ClearMasterPage();
-        mrPage.TRG_SetMasterPage(*mrPage.GetModel()->GetMasterPage(maNewMasterPageNumber));
+        mrPage.TRG_SetMasterPage(*mrPage.getSdrModelFromSdrObjList().GetMasterPage(maNewMasterPageNumber));
         mrPage.TRG_SetMasterPageVisibleLayers(maNewSet);
     }
 }

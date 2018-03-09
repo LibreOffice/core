@@ -56,13 +56,12 @@ public:
     virtual void NbcSetLayer(SdrLayerID nLayer) override;
     virtual void SetObjList(SdrObjList* pNewObjList) override;
     virtual void SetPage(SdrPage* pNewPage) override;
-    virtual void SetModel(SdrModel* pNewModel) override;
     virtual SdrObjList* GetSubList() const override;
 
     virtual const tools::Rectangle& GetCurrentBoundRect() const override;
     virtual const tools::Rectangle& GetSnapRect() const override;
 
-    virtual SdrObjGroup* Clone() const override;
+    virtual SdrObjGroup* Clone(SdrModel* pTargetModel = nullptr) const override;
     SdrObjGroup& operator=(const SdrObjGroup& rObj);
 
     virtual OUString TakeObjNameSingul() const override;

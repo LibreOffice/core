@@ -870,7 +870,6 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
             if (pObj != nullptr)
             {
                 pObj->SetMergedItemSet(aSet);
-                pObj->SetModel(pSdrModel);
 
                 if (bVerticalText)
                 {
@@ -939,7 +938,7 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
             pObj = new SdrRectObj(
                 *pSdrModel,
                 rTextRect);
-            pObj->SetModel( pSdrModel );
+
             SfxItemSet aSet( pSdrModel->GetItemPool() );
             ApplyAttributes( rSt, aSet, rObjData );
 

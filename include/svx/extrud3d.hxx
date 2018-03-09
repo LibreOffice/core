@@ -84,7 +84,10 @@ public:
 
     virtual sal_uInt16 GetObjIdentifier() const override;
 
-    virtual E3dExtrudeObj* Clone() const override;
+    virtual E3dExtrudeObj* Clone(SdrModel* pTargetModel = nullptr) const override;
+
+    // implemented mainly for the purposes of Clone()
+    E3dExtrudeObj& operator=(const E3dExtrudeObj& rObj);
 
     // TakeObjName...() is for the display in the UI (for example "3 frames selected")
     virtual OUString TakeObjNameSingul() const override;

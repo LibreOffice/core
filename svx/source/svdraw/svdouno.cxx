@@ -255,9 +255,9 @@ OUString SdrUnoObj::TakeObjNamePlural() const
     return ImpGetResStr(STR_ObjNamePluralUno);
 }
 
-SdrUnoObj* SdrUnoObj::Clone() const
+SdrUnoObj* SdrUnoObj::Clone(SdrModel* pTargetModel) const
 {
-    return CloneHelper< SdrUnoObj >();
+    return CloneHelper< SdrUnoObj >(pTargetModel);
 }
 
 SdrUnoObj& SdrUnoObj::operator= (const SdrUnoObj& rObj)

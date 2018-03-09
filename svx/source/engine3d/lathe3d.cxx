@@ -104,9 +104,20 @@ sal_uInt16 E3dLatheObj::GetObjIdentifier() const
     return E3D_LATHEOBJ_ID;
 }
 
-E3dLatheObj* E3dLatheObj::Clone() const
+E3dLatheObj* E3dLatheObj::Clone(SdrModel* pTargetModel) const
 {
-    return CloneHelper< E3dLatheObj >();
+    return CloneHelper< E3dLatheObj >(pTargetModel);
+}
+
+E3dLatheObj& E3dLatheObj::operator=(const E3dLatheObj& rObj)
+{
+    if( this == &rObj )
+        return *this;
+    E3dCompoundObject::operator=(rObj);
+
+    maPolyPoly2D = rObj.maPolyPoly2D;
+
+    return *this;
 }
 
 // Convert the object to group object consisting of n polygons

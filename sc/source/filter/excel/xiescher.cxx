@@ -425,8 +425,14 @@ SdrObjectPtr XclImpDrawObjBase::CreateSdrObject( XclImpDffConverter& rDffConv, c
     else
     {
         xSdrObj = DoCreateSdrObj( rDffConv, rAnchorRect );
-        if( xSdrObj )
-            xSdrObj->SetModel( rDffConv.GetModel() );
+
+        // TTTT DoCreateSdrObj uses *GetDoc().GetDrawLayer() in most cases,
+        // also XclImpDffConverter::CreateSdrObject which uses
+        // XclImpTbxObjBase::CreateSdrObjectFromShape, so all creating aleady
+        // in the target SdrModel
+        // if( xSdrObj )
+        //     xSdrObj->SetModel( rDffConv.GetModel() );
+
         //added for exporting OCX control
         /*  mnObjType value set should be as below table:
                     0x0000      Group               0x0001      Line

@@ -359,8 +359,7 @@ void SwHTMLParser::NewMarquee( HTMLTable *pCurTable )
         *pModel,
         SdrInventor::Default,
         OBJ_TEXT,
-        pPg,
-        pModel);
+        pPg);
 
     if( !m_pMarquee )
         return;

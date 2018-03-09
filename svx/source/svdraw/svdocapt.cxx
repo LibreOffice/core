@@ -235,9 +235,23 @@ sal_uInt16 SdrCaptionObj::GetObjIdentifier() const
     return sal_uInt16(OBJ_CAPTION);
 }
 
-SdrCaptionObj* SdrCaptionObj::Clone() const
+SdrCaptionObj* SdrCaptionObj::Clone(SdrModel* pTargetModel) const
 {
-    return CloneHelper< SdrCaptionObj >();
+    return CloneHelper< SdrCaptionObj >(pTargetModel);
+}
+
+SdrCaptionObj& SdrCaptionObj::operator=(const SdrCaptionObj& rObj)
+{
+    if( this == &rObj )
+        return *this;
+    SdrRectObj::operator=(rObj);
+
+    aTailPoly = rObj.aTailPoly;
+    mbSpecialTextBoxShadow = rObj.mbSpecialTextBoxShadow;
+    mbFixedTail = rObj.mbFixedTail;
+    maFixedTailPos = rObj.maFixedTailPos;
+
+    return *this;
 }
 
 OUString SdrCaptionObj::TakeObjNameSingul() const
@@ -666,11 +680,12 @@ Point SdrCaptionObj::GetSnapPoint(sal_uInt32 /*i*/) const
     return Point(0,0);
 }
 
-void SdrCaptionObj::SetModel(SdrModel* pNewModel)
-{
-    SdrRectObj::SetModel(pNewModel);
-    ImpRecalcTail();
-}
+// TTTT needed?
+// void SdrCaptionObj::SetModel(SdrModel* pNewModel)
+// {
+//     SdrRectObj::SetModel(pNewModel);
+//     ImpRecalcTail();
+// }
 
 void SdrCaptionObj::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
 {
@@ -751,7 +766,8 @@ void SdrCaptionObj::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, cons
     handleNegativeScale(aScale, &fRotate);
 
     // force metric to pool metric
-    MapUnit eMapUnit = pModel->GetItemPool().GetMetric(0);
+    MapUnit eMapUnit(getSdrModelFromSdrObject().GetItemPool().GetMetric(0));
+
     if(eMapUnit != MapUnit::Map100thMM)
     {
         switch(eMapUnit)
@@ -776,7 +792,7 @@ void SdrCaptionObj::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, cons
     }
 
     // if anchor is used, make position relative to it
-    if( pModel->IsWriter() )
+    if(getSdrModelFromSdrObject().IsWriter())
     {
         if(GetAnchorPos().X() || GetAnchorPos().Y())
         {

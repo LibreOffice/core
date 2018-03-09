@@ -3111,8 +3111,7 @@ void OReportController::createControl(const Sequence< PropertyValue >& _aArgs,co
             *m_aReportModel,
             SdrInventor::ReportDesign,
             _nObjectId,
-            pSectionWindow->getReportSection().getPage(),
-            m_aReportModel.get());
+            pSectionWindow->getReportSection().getPage());
         xShapeProp.set(pNewControl->getUnoShape(),uno::UNO_QUERY);
         OUString sCustomShapeType = getDesignView()->GetInsertObjString();
         if ( sCustomShapeType.isEmpty() )
@@ -3126,8 +3125,7 @@ void OReportController::createControl(const Sequence< PropertyValue >& _aArgs,co
             *m_aReportModel,
             SdrInventor::ReportDesign,
             _nObjectId,
-            pSectionWindow->getReportSection().getPage(),
-            m_aReportModel.get());
+            pSectionWindow->getReportSection().getPage());
 
         pNewControl->SetLogicRect(tools::Rectangle(3000,500,8000,5500)); // switch height and width
         xShapeProp.set(pNewControl->getUnoShape(),uno::UNO_QUERY_THROW);

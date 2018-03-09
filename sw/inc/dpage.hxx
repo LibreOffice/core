@@ -38,8 +38,8 @@ public:
     explicit SwDPage(SwDrawModel& rNewModel, bool bMasterPage);
     virtual ~SwDPage() override;
 
-    virtual SwDPage* Clone() const override;
-    virtual SwDPage* Clone(SdrModel* pNewModel) const override;
+    // TTTT virtual SwDPage* Clone() const override;
+    virtual SwDPage* Clone(SdrModel* pNewModel = nullptr) const override;
 
     // #i3694#
     // This GetOffset() method is not needed anymore, it even leads to errors.

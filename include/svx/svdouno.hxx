@@ -73,7 +73,7 @@ public:
     virtual void TakeObjInfo(SdrObjTransformInfoRec& rInfo) const override;
     virtual sal_uInt16 GetObjIdentifier() const override;
 
-    virtual SdrUnoObj* Clone() const override;
+    virtual SdrUnoObj* Clone(SdrModel* pTargetModel = nullptr) const override;
     SdrUnoObj& operator= (const SdrUnoObj& rObj);
     virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact) override;
     virtual void NbcSetLayer(SdrLayerID nLayer) override;

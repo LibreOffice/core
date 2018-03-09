@@ -1590,7 +1590,7 @@ void SdrEditView::ImpDismantleOneObject(const SdrObject* pObj, SdrObjList& rOL, 
             {
                 SdrObject* pCandidate = pReplacement->Clone();
                 DBG_ASSERT(pCandidate, "SdrEditView::ImpDismantleOneObject: Could not clone SdrObject (!)");
-                pCandidate->SetModel(pCustomShape->GetModel());
+                // TTTT pCandidate->SetModel(pCustomShape->GetModel());
 
                 if(pCustomShape->GetMergedItem(SDRATTR_SHADOW).GetValue())
                 {
@@ -1611,9 +1611,7 @@ void SdrEditView::ImpDismantleOneObject(const SdrObject* pObj, SdrObjList& rOL, 
                     SdrObject* pTextObj = SdrObjFactory::MakeNewObject(
                         pCustomShape->getSdrModelFromSdrObject(),
                         pCustomShape->GetObjInventor(),
-                        OBJ_TEXT,
-                        nullptr,
-                        pCustomShape->GetModel());
+                        OBJ_TEXT);
 
                     // Copy text content
                     OutlinerParaObject* pParaObj = pCustomShape->GetOutlinerParaObject();

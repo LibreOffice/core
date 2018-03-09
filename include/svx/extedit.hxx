@@ -43,18 +43,20 @@ class FmFormView;
 class SdrObject;
 
 class SAL_WARN_UNUSED SVX_DLLPUBLIC SdrExternalToolEdit
-    : public ExternalToolEdit
-    , public SfxListener
+:   public ExternalToolEdit
+    ,public SfxListener
 {
 private:
-    FmFormView * m_pView;
-    SdrObject *  m_pObj;
+    FmFormView* m_pView;
+    SdrObject*  m_pObj;
 
     SAL_DLLPRIVATE virtual void Update(Graphic&) override;
     SAL_DLLPRIVATE virtual void Notify(SfxBroadcaster&, const SfxHint&) override;
 
 public:
-    SdrExternalToolEdit(FmFormView * pView, SdrObject * pObj);
+    SdrExternalToolEdit(
+        FmFormView* pView,
+        SdrObject* pObj);
 };
 
 #endif

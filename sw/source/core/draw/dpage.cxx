@@ -85,10 +85,11 @@ void SwDPage::lateInit(const SwDPage& rPage, SwDrawModel* const pNewModel)
     pDoc = &pSwDrawModel->GetDoc();
 }
 
-SwDPage* SwDPage::Clone() const
-{
-    return Clone( nullptr );
-}
+// TTTT
+// SwDPage* SwDPage::Clone() const
+// {
+//     return Clone( nullptr );
+// }
 
 SwDPage* SwDPage::Clone(SdrModel* const pNewModel) const
 {

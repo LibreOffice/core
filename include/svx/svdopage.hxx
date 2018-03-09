@@ -59,7 +59,7 @@ public:
 
     virtual sal_uInt16 GetObjIdentifier() const override;
     virtual void TakeObjInfo(SdrObjTransformInfoRec& rInfo) const override;
-    virtual SdrPageObj* Clone() const override;
+    virtual SdrPageObj* Clone(SdrModel* pTargetModel = nullptr) const override;
     SdrPageObj& operator=(const SdrPageObj& rObj);
 
     virtual OUString TakeObjNameSingul() const override;

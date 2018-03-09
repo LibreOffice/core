@@ -107,21 +107,6 @@ SdrRectObj::~SdrRectObj()
 {
 }
 
-SdrRectObj& SdrRectObj::operator=(const SdrRectObj& rCopy)
-{
-    if ( this == &rCopy )
-        return *this;
-
-    SdrTextObj::operator=( rCopy );
-
-    if ( rCopy.mpXPoly )
-        mpXPoly.reset( new XPolygon( *rCopy.mpXPoly ) );
-    else
-        mpXPoly.reset();
-
-    return *this;
-}
-
 void SdrRectObj::SetXPolyDirty()
 {
     mpXPoly.reset();
@@ -274,9 +259,24 @@ OUString SdrRectObj::TakeObjNamePlural() const
     return ImpGetResStr(pResId);
 }
 
-SdrRectObj* SdrRectObj::Clone() const
+SdrRectObj* SdrRectObj::Clone(SdrModel* pTargetModel) const
 {
-    return CloneHelper< SdrRectObj >();
+    return CloneHelper< SdrRectObj >(pTargetModel);
+}
+
+SdrRectObj& SdrRectObj::operator=(const SdrRectObj& rCopy)
+{
+    if ( this == &rCopy )
+        return *this;
+
+    SdrTextObj::operator=( rCopy );
+
+    if ( rCopy.mpXPoly )
+        mpXPoly.reset( new XPolygon( *rCopy.mpXPoly ) );
+    else
+        mpXPoly.reset();
+
+    return *this;
 }
 
 basegfx::B2DPolyPolygon SdrRectObj::TakeXorPoly() const
