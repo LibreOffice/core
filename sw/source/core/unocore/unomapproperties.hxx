@@ -132,7 +132,6 @@
         { OUString(UNO_NAME_CHAR_OVERLINE),                       RES_CHRATR_OVERLINE,           cppu::UnoType<sal_Int16>::get(),         PropertyAttribute::MAYBEVOID, MID_TL_STYLE                           }, \
         { OUString(UNO_NAME_CHAR_OVERLINE_COLOR),                 RES_CHRATR_OVERLINE,           cppu::UnoType<sal_Int32>::get(),         PropertyAttribute::MAYBEVOID, MID_TL_COLOR                           }, \
         { OUString(UNO_NAME_CHAR_OVERLINE_HAS_COLOR),             RES_CHRATR_OVERLINE,           cppu::UnoType<bool>::get(),       PropertyAttribute::MAYBEVOID, MID_TL_HASCOLOR                        }, \
-        { OUString(UNO_NAME_PARA_GRAPHIC_URL),                    RES_BACKGROUND,                cppu::UnoType<OUString>::get(),      PropertyAttribute::MAYBEVOID, MID_GRAPHIC_URL                        }, \
         { OUString(UNO_NAME_PARA_GRAPHIC),                        RES_BACKGROUND,                cppu::UnoType<css::graphic::XGraphic>::get(),      PropertyAttribute::MAYBEVOID, MID_GRAPHIC                        }, \
         { OUString(UNO_NAME_PARA_GRAPHIC_FILTER),                 RES_BACKGROUND,                cppu::UnoType<OUString>::get(),      PropertyAttribute::MAYBEVOID, MID_GRAPHIC_FILTER                     }, \
         { OUString(UNO_NAME_PARA_GRAPHIC_LOCATION),               RES_BACKGROUND,                cppu::UnoType<css::style::GraphicLocation>::get(),    PropertyAttribute::MAYBEVOID, MID_GRAPHIC_POSITION                   }, \
@@ -268,7 +267,6 @@
     { OUString(UNO_NAME_FRAME_INTEROP_GRAB_BAG), RES_FRMATR_GRABBAG, cppu::UnoType< cppu::UnoSequenceType<css::beans::PropertyValue> >::get(), PROPERTY_NONE, 0}, \
     { OUString(UNO_NAME_CONTENT_PROTECTED), RES_PROTECT,            cppu::UnoType<bool>::get(),             PROPERTY_NONE, MID_PROTECT_CONTENT  },                          \
     { OUString(UNO_NAME_FRAME_STYLE_NAME), FN_UNO_FRAME_STYLE_NAME,cppu::UnoType<OUString>::get(),         PROPERTY_NONE, 0},                                   \
-    { OUString(UNO_NAME_BACK_GRAPHIC_URL), RES_BACKGROUND,      cppu::UnoType<OUString>::get(),        PROPERTY_NONE ,MID_GRAPHIC_URL    },                 \
     { OUString(UNO_NAME_BACK_GRAPHIC), RES_BACKGROUND, cppu::UnoType<css::graphic::XGraphic>::get(), PROPERTY_NONE, MID_GRAPHIC }, \
     { OUString(UNO_NAME_BACK_GRAPHIC_FILTER), RES_BACKGROUND,       cppu::UnoType<OUString>::get(),        PROPERTY_NONE ,MID_GRAPHIC_FILTER    },              \
     { OUString(UNO_NAME_BACK_GRAPHIC_LOCATION), RES_BACKGROUND,         cppu::UnoType<css::style::GraphicLocation>::get(), PROPERTY_NONE ,MID_GRAPHIC_POSITION}, \
@@ -352,7 +350,6 @@
                     { OUString(UNO_NAME_CHAR_HIGHLIGHT), RES_CHRATR_HIGHLIGHT, cppu::UnoType<sal_Int32>::get(), PROPERTY_NONE ,MID_BACK_COLOR },\
                     { OUString(UNO_NAME_PARA_BACK_COLOR), RES_BACKGROUND,       cppu::UnoType<sal_Int32>::get(),           PROPERTY_NONE ,MID_BACK_COLOR        },\
                     { OUString(UNO_NAME_PARA_BACK_TRANSPARENT), RES_BACKGROUND,         cppu::UnoType<bool>::get(),         PROPERTY_NONE ,MID_GRAPHIC_TRANSPARENT       },\
-                    { OUString(UNO_NAME_PARA_GRAPHIC_URL), RES_BACKGROUND,      cppu::UnoType<OUString>::get(), PROPERTY_NONE ,MID_GRAPHIC_URL    },\
                     { OUString(UNO_NAME_PARA_GRAPHIC), RES_BACKGROUND,      cppu::UnoType<css::graphic::XGraphic>::get(), PROPERTY_NONE ,MID_GRAPHIC    },\
                     { OUString(UNO_NAME_PARA_GRAPHIC_FILTER), RES_BACKGROUND,       cppu::UnoType<OUString>::get(), PROPERTY_NONE ,MID_GRAPHIC_FILTER    },\
                     { OUString(UNO_NAME_PARA_GRAPHIC_LOCATION), RES_BACKGROUND,         cppu::UnoType<css::style::GraphicLocation>::get(), PROPERTY_NONE ,MID_GRAPHIC_POSITION}, \

@@ -159,7 +159,6 @@
 #define MID_GRAPHIC_POSITION    1
 #define MID_GRAPHIC             2
 #define MID_GRAPHIC_TRANSPARENT 3
-#define MID_GRAPHIC_URL         4
 #define MID_GRAPHIC_FILTER      5
 #define MID_GRAPHIC_REPEAT      6
 #define MID_GRAPHIC_TRANSPARENCY 7

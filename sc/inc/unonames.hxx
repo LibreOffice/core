@@ -405,7 +405,6 @@
 #define SC_UNO_PAGE_BACKTRANS       "BackTransparent"
 #define SC_UNO_PAGE_GRAPHICFILT     "BackGraphicFilter"
 #define SC_UNO_PAGE_GRAPHICLOC      "BackGraphicLocation"
-#define SC_UNO_PAGE_GRAPHICURL      "BackGraphicURL"
 #define SC_UNO_PAGE_GRAPHIC         "BackGraphic"
 #define SC_UNO_PAGE_LEFTBORDER      SC_UNONAME_LEFTBORDER
 #define SC_UNO_PAGE_RIGHTBORDER     SC_UNONAME_RIGHTBORDER

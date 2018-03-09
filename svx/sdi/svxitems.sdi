@@ -232,7 +232,6 @@ struct SvxBrush
 {
     BOOL        Transparent     MID_GRAPHIC_TRANSPARENT;
     INT32       BackColor       MID_BACK_COLOR;
-    String      URL             MID_GRAPHIC_URL;
     String      Filtername      MID_GRAPHIC_FILTER;
     INT16       Position        MID_GRAPHIC_POSITION;
 };
