@@ -35,7 +35,7 @@
  <toolbar:toolbaritem xlink:href=".uno:Crop"/>
  <toolbar:toolbaritem xlink:href=".uno:FillShadow"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:ToggleAnchorType"/>
+ <toolbar:toolbaritem xlink:href=".uno:AnchorMenu"/>
  <toolbar:toolbaritem xlink:href=".uno:ObjectAlign"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:BringToFront"/>

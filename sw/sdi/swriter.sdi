@@ -5999,25 +5999,6 @@ SfxVoidItem TextWrap FN_DRAW_WRAP_DLG
     GroupId = GID_FORMAT;
 ]
 
-SfxVoidItem AnchorMenu FN_TOOL_ANCHOR
-()
-[
-    AutoUpdate = FALSE,
-    FastCall = TRUE,
-    ReadOnlyDoc = FALSE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-    SlotType = SfxUInt16Item
-
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_FORMAT;
-]
-
 SfxVoidItem ToggleObjectLayer FN_TOOL_HIERARCHIE
 ()
 [

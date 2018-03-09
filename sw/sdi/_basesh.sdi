@@ -387,8 +387,8 @@ interface BaseTextSelection
         StateMethod = GetState ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
-// Methode fuer Rahmen und Objekte
-    FN_TOOL_ANCHOR
+// Method for frames and objects
+    SID_ANCHOR_MENU
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;

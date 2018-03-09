@@ -1030,10 +1030,10 @@
 #define SID_ATTR_PAGE_FILLSTYLE                         ( SID_SVX_START + 1157 )
 
 #define SID_EDIT_POSTIT                                 ( SID_SVX_START + 1158 )
-
+#define SID_ANCHOR_MENU                                 ( SID_SVX_START + 1159 )
 
 // IMPORTANT NOTE: adjust SID_SVX_FIRSTFREE, when adding new slot id
-#define SID_SVX_FIRSTFREE                               (SID_EDIT_POSTIT + 1)
+#define SID_SVX_FIRSTFREE                               (SID_ANCHOR_MENU + 1)
 
 // Overflow check for slot IDs
 

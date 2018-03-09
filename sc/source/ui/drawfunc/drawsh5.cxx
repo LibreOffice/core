@@ -377,8 +377,6 @@ void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
             rBindings.Invalidate( SID_ANCHOR_CELL_RESIZE );
             break;
 
-        // TODO: This toggle should probably be converted to a dropdown,
-        //       since we now have three states, not two.
         case SID_ANCHOR_TOGGLE:
             {
                 switch( pView->GetAnchorType() )
