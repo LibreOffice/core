@@ -363,7 +363,7 @@ void GraphicPropertyItemConverter::FillSpecialItem(
 
                 lcl_SetContentForNamedProperty(
                     m_xNamedPropertyTableFactory, "com.sun.star.drawing.BitmapTable" ,
-                    aItem, MID_GRAFURL );
+                    aItem, MID_BITMAP );
 
                 // translate model name to UI-name for predefined entries, so
                 // that the correct entry is chosen in the list of UI-names
@@ -640,7 +640,7 @@ bool GraphicPropertyItemConverter::ApplySpecialItem(
                     {
                         // add Bitmap to list
                         uno::Any aBitmap;
-                        rItem.QueryValue( aBitmap, MID_GRAFURL );
+                        rItem.QueryValue(aBitmap, MID_BITMAP);
                         OUString aPreferredName;
                         aValue >>= aPreferredName;
                         aValue <<= PropertyHelper::addBitmapUniqueNameToTable(
