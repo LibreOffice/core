@@ -29,10 +29,9 @@
 #include <com/sun/star/text/XTextColumns.idl>
 #include <com/sun/star/container/XNameContainer.idl>
 #include <com/sun/star/text/WritingMode2.idl>
+#include <com/sun/star/graphic/XGraphic.idl>
 
-
- module com {  module sun {  module star {  module style {
-
+module com {  module sun {  module star {  module style {
 
 /** describes the style of pages.
  */
@@ -169,11 +168,9 @@ published service PageProperties
      */
     [property, maybevoid] com::sun::star::util::Color HeaderBackColor;
 
-    /**
-     */
-    //[property, maybevoid] HeaderBackGraphic;
-
     /** contains the URL of the background graphic of the header.
+
+        @deprecated use HeaderBackGraphic
      */
     [property, maybevoid] string HeaderBackGraphicURL;
 
@@ -279,6 +276,8 @@ published service PageProperties
     [property, maybevoid] com::sun::star::util::Color FooterBackColor;
 
     /** contains the URL of the background graphic in the footer.
+
+        @deprecated use FooterBackGraphic
      */
     [property, maybevoid] string FooterBackGraphicURL;
 
@@ -454,6 +453,18 @@ published service PageProperties
 
     /** determines the distance of all borders of the header. */
     [property, maybevoid] long HeaderBorderDistance;
+
+    /** contains the graphic of the background of the header.
+
+        @since LibreOffice 6.1
+     */
+    [optional, property] com::sun::star::graphic::XGraphic HeaderBackGraphic
+
+    /** contains the graphic of the background of the footer.
+
+        @since LibreOffice 6.1
+     */
+    [optional, property] com::sun::star::graphic::XGraphic FooterBackGraphic
 };
 
 }; }; }; };

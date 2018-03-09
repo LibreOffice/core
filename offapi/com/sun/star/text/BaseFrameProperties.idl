@@ -30,10 +30,9 @@
 #include <com/sun/star/drawing/FillStyle.idl>
 #include <com/sun/star/awt/Gradient.idl>
 #include <com/sun/star/drawing/TextVerticalAdjust.hpp>
+#include <com/sun/star/graphic/XGraphic.idl>
 
-
- module com {  module sun {  module star {  module text {
-
+module com {  module sun {  module star {  module text {
 
 /** specifies the properties that are provided by all text frames, graphic objects, embedded objects
  and frame styles.
@@ -56,10 +55,13 @@ published service BaseFrameProperties
         AnchorType is TextContentAnchorType::AT_FRAME.</p>
      */
     [property] com::sun::star::text::XTextFrame AnchorFrame;
+
     /** contains the color of the background of the object.
      */
     [property] com::sun::star::util::Color BackColor;
+
     /** contains the URL for the background graphic.
+
      */
     [property] string BackGraphicURL;
 
@@ -352,6 +354,11 @@ published service BaseFrameProperties
             @since LibreOffice 4.3
          */
         [optional, property] short RelativeWidthRelation;
+
+        /**
+            @since LibreOffice 6.1
+         */
+        [optional,property] com::sun::star::graphic::XGraphic BackGraphic;
 };
 
 

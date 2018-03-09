@@ -28,8 +28,7 @@
 #include <com/sun/star/style/GraphicLocation.idl>
 #include <com/sun/star/text/XTextColumns.idl>
 #include <com/sun/star/xml/UserDefinedAttributesSupplier.idl>
-
-
+#include <com/sun/star/graphic/XGraphic.idl>
 
 module com { module sun { module star { module text {
 
@@ -184,6 +183,9 @@ published service TextSection
     /** determines the left margin of the section
      */
     [optional, property] long SectionRightMargin;
+
+    [optional,property] com::sun::star::graphic::XGraphic BackGraphic;
+
 };
 
 

@@ -26,11 +26,9 @@
 #include <com/sun/star/table/BorderLine.idl>
 #include <com/sun/star/container/XNameContainer.idl>
 #include <com/sun/star/xml/UserDefinedAttributesSupplier.idl>
+#include <com/sun/star/graphic/XGraphic.idl>
 
-
-
- module com {  module sun {  module star {  module text {
-
+module com {  module sun {  module star {  module text {
 
 /** service that holds all cell properties of a text table cell in a text document.
 
@@ -122,6 +120,7 @@ published service CellProperties
      */
     [property] short VertOrient;
 
+    [optional, property] com::sun::star::graphic::XGraphic BackGraphic;
 };
 
 

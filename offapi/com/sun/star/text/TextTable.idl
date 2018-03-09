@@ -35,11 +35,9 @@
 #include <com/sun/star/util/XSortable.idl>
 #include <com/sun/star/sheet/XCellRangeData.idl>
 #include <com/sun/star/xml/UserDefinedAttributesSupplier.idl>
+#include <com/sun/star/graphic/XGraphic.idl>
 
-
-
- module com {  module sun {  module star {  module text {
-
+module com {  module sun {  module star {  module text {
 
 /** is a table of text cells which is anchored to a surrounding text.
 
@@ -195,7 +193,6 @@ published service TextTable
      */
     [property] string BackGraphicURL;
 
-
     /** contains the name of the file filter for the background graphic.
      */
     [property] string BackGraphicFilter;
@@ -227,6 +224,7 @@ published service TextTable
      */
     [optional, property] string TableTemplateName;
 
+    [optional, property] com::sun::star::graphic::XGraphic BackGraphic;
 };
 
 

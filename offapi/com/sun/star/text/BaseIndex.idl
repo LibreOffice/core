@@ -29,9 +29,9 @@
 #include <com/sun/star/style/GraphicLocation.idl>
 #include <com/sun/star/lang/Locale.idl>
 #include <com/sun/star/text/XTextSection.idl>
+#include <com/sun/star/graphic/XGraphic.idl>
 
-
- module com {  module sun {  module star {  module text {
+module com {  module sun {  module star {  module text {
 
 /** specifies the basic service of different indexes within a document.@see com::sun::star::text::DocumentIndex
         @see com::sun::star::text::ContentIndex
@@ -108,6 +108,9 @@ published service BaseIndex
     [property] com::sun::star::text::XTextSection ContentSection;
     /** the text section containing the header of the index */
     [property] com::sun::star::text::XTextSection HeaderSection;
+
+    [optional, property] com::sun::star::graphic::XGraphic BackGraphic;
+
 };
 
 

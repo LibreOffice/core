@@ -31,10 +31,9 @@
 #include <com/sun/star/style/CharacterProperties.idl>
 #include <com/sun/star/style/GraphicLocation.idl>
 #include <com/sun/star/chart/XChartDataArray.idl>
-
+#include <com/sun/star/graphic/XGraphic.idl>
 
 module com {  module sun {  module star {  module text {
-
 
 /** area of cells within a text table.
 
@@ -80,7 +79,6 @@ published service CellRange
      */
     [property] string BackGraphicURL;
 
-
     /** determines if the background color is transparent.
      */
     [property] boolean BackTransparent;
@@ -102,6 +100,7 @@ published service CellRange
     */
     [property] long NumberFormat;
 
+    [optional, property] com::sun::star::graphic::XGraphic BackGraphic;
 };
 
 
