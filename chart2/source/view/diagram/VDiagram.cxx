@@ -142,7 +142,7 @@ void VDiagram::createShapes( const awt::Point& rPos, const awt::Size& rSize )
         m_xWall2D->setPosition(m_aCurrentPosWithoutAxes);
     }
 
-    return ::basegfx::B2IRectangle( BaseGFXHelper::makeRectangle(m_aCurrentPosWithoutAxes,m_aCurrentSizeWithoutAxes) );
+    return BaseGFXHelper::makeRectangle(m_aCurrentPosWithoutAxes,m_aCurrentSizeWithoutAxes);
 }
 
 void VDiagram::createShapes_2d()
@@ -462,7 +462,7 @@ void VDiagram::adjustAspectRatio3d( const awt::Size& rAvailableSize )
          rPos, rAvailableSize, m_aCurrentSizeWithoutAxes );
     m_xOuterGroupShape->setPosition(m_aCurrentPosWithoutAxes);
 
-    return ::basegfx::B2IRectangle( BaseGFXHelper::makeRectangle(m_aCurrentPosWithoutAxes,m_aCurrentSizeWithoutAxes) );
+    return BaseGFXHelper::makeRectangle(m_aCurrentPosWithoutAxes,m_aCurrentSizeWithoutAxes);
 }
 
 void VDiagram::createShapes_3d()

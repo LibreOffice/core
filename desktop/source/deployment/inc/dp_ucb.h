@@ -51,8 +51,7 @@ struct DESKTOP_DEPLOYMENTMISC_DLLPUBLIC StrTitle
         createCursor( ::ucbhelper::Content &rContent,
                       ucbhelper::ResultSetInclude eInclude )
     {
-        return css::uno::Reference< css::sdbc::XResultSet >(
-                rContent.createCursor( StrTitle::getTitleSequence(), eInclude ) );
+        return rContent.createCursor( StrTitle::getTitleSequence(), eInclude );
     }
 };
 

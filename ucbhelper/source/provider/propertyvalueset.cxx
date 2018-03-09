@@ -565,7 +565,7 @@ sal_Int32 SAL_CALL PropertyValueSet::findColumn( const OUString& columnName )
         for ( sal_Int32 n = 0; n < nCount; ++n )
         {
             if ( (*m_pValues)[ n ].sPropertyName == columnName  )
-                return sal_Int32( n + 1 ); // Index is 1-based.
+                return n + 1; // Index is 1-based.
         }
     }
     return 0;

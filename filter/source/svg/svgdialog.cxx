@@ -136,7 +136,7 @@ void SVGDialog::executedDialog( sal_Int16 nExecutionResult )
 
 Reference< XPropertySetInfo > SAL_CALL SVGDialog::getPropertySetInfo()
 {
-    return Reference< XPropertySetInfo >( createPropertySetInfo( getInfoHelper() ) );
+    return createPropertySetInfo( getInfoHelper() );
 }
 
 

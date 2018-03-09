@@ -136,12 +136,11 @@ uno::Reference< lang::XSingleServiceFactory >
 DocumentContentFactory::createServiceFactory(
     const uno::Reference< lang::XMultiServiceFactory >& rxServiceMgr )
 {
-    return uno::Reference< lang::XSingleServiceFactory >(
-            cppu::createOneInstanceFactory(
+    return cppu::createOneInstanceFactory(
                 rxServiceMgr,
                 DocumentContentFactory::getImplementationName_Static(),
                 DocumentContentFactory_CreateInstance,
-                DocumentContentFactory::getSupportedServiceNames_Static() ) );
+                DocumentContentFactory::getSupportedServiceNames_Static() );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

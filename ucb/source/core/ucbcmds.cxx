@@ -252,7 +252,7 @@ CommandProcessorInfo::getCommandInfoByName( const OUString& Name )
     for ( sal_Int32 n = 0; n < m_pInfo->getLength(); ++n )
     {
         if ( (*m_pInfo)[ n ].Name == Name )
-            return ucb::CommandInfo( (*m_pInfo)[ n ] );
+            return (*m_pInfo)[ n ];
     }
 
     throw ucb::UnsupportedCommandException();
@@ -266,7 +266,7 @@ CommandProcessorInfo::getCommandInfoByHandle( sal_Int32 Handle )
     for ( sal_Int32 n = 0; n < m_pInfo->getLength(); ++n )
     {
         if ( (*m_pInfo)[ n ].Handle == Handle )
-            return ucb::CommandInfo( (*m_pInfo)[ n ] );
+            return (*m_pInfo)[ n ];
     }
 
     throw ucb::UnsupportedCommandException();

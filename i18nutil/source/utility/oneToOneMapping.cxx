@@ -49,11 +49,11 @@ sal_Unicode oneToOneMapping::find(const sal_Unicode nKey) const
                 return mpTable[current].second;
 
             if( bottom > top )
-                return sal_Unicode( nKey );
+                return nKey;
         }
     }
     else
-        return sal_Unicode( nKey );
+        return nKey;
 }
 
 oneToOneMappingWithFlag::oneToOneMappingWithFlag( UnicodePairWithFlag *rpTableWF, const size_t rnSize, const UnicodePairFlag rnFlag )
@@ -117,7 +117,7 @@ sal_Unicode oneToOneMappingWithFlag::find( const sal_Unicode nKey ) const
                 mpIndex[high][low]->flag & mnFlag )
                 return mpIndex[high][low]->second;
             else
-                return sal_Unicode( nKey );
+                return nKey;
         }
         else
         {
@@ -136,16 +136,16 @@ sal_Unicode oneToOneMappingWithFlag::find( const sal_Unicode nKey ) const
                     if( mpTableWF[current].flag & mnFlag )
                         return mpTableWF[current].second;
                     else
-                        return sal_Unicode( nKey );
+                        return nKey;
                 }
 
                 if( bottom > top )
-                    return sal_Unicode( nKey );
+                    return nKey;
             }
         }
     }
     else
-        return sal_Unicode( nKey );
+        return nKey;
 }
 
 

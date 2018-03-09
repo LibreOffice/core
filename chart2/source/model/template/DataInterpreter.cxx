@@ -297,7 +297,7 @@ Reference< data::XDataSource > SAL_CALL DataInterpreter::mergeInterpretedData(
         }
     }
 
-    return Reference< data::XDataSource >( DataSourceHelper::createDataSource( comphelper::containerToSequence( aResultVec ) ) );
+    return DataSourceHelper::createDataSource( comphelper::containerToSequence( aResultVec ) );
 }
 
 // convenience methods

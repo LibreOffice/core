@@ -119,7 +119,7 @@ OUString SAL_CALL StatusbarItem::getCommand()
     if ( m_pStatusBar )
         return m_pStatusBar->GetItemOffset( m_nId );
 
-    return ::sal_Int32(0);
+    return 0;
 }
 
 css::awt::Rectangle SAL_CALL StatusbarItem::getItemRect()

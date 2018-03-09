@@ -612,7 +612,7 @@ namespace svgio
         {
             if(nChar >= '0' && nChar <= '9')
             {
-                return sal_Int32(nChar - u'0');
+                return nChar - u'0';
             }
             else if(nChar >= 'A' && nChar <= 'F')
             {

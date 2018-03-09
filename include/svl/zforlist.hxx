@@ -62,7 +62,7 @@ constexpr size_t NF_MAX_FORMAT_SYMBOLS = 100;
 /// number formatter was constructed with.
 constexpr sal_uInt32 NF_STANDARD_FORMAT_TEXT = SV_MAX_COUNT_STANDARD_FORMATS;
 
-#define NUMBERFORMAT_ENTRY_NOT_FOUND sal_uInt32(0xffffffff)   /// MAX_ULONG
+constexpr sal_uInt32 NUMBERFORMAT_ENTRY_NOT_FOUND  = 0xffffffff;   /// MAX_ULONG
 
 enum class SvNumFormatType : sal_Int16
 {

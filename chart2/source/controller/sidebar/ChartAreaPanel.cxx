@@ -112,7 +112,7 @@ XGradient getXGradientForName(const css::uno::Reference<css::frame::XModel>& xMo
                 continue;
 
             if (pGradient->GetName() == rName)
-                return XGradient(pGradient->GetGradient());
+                return pGradient->GetGradient();
         }
     }
     catch (...)
@@ -163,7 +163,7 @@ XHatch getXHatchFromName(const css::uno::Reference<css::frame::XModel>& xModel,
             {
                 // we need to update the hatch name
                 rName = pHatch->GetName();
-                return XHatch(pHatch->GetHatch());
+                return pHatch->GetHatch();
             }
         }
     }

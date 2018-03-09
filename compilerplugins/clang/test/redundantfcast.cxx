@@ -56,4 +56,13 @@ int main()
         foo)); // expected-error@-1 {{redundant functional cast from 'Foo' to 'Foo' [loplugin:redundantfcast]}}
 }
 
+class Class1
+{
+    Foo foo;
+    Foo func2()
+    {
+        return Foo(
+            foo); // expected-error@-1 {{redundant functional cast from 'Foo' to 'Foo' [loplugin:redundantfcast]}}
+    }
+};
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

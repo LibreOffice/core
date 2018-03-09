@@ -120,7 +120,7 @@ SwVbaWindow::Panes( const uno::Any& aIndex )
     if(  aIndex.getValueTypeClass() == uno::TypeClass_VOID )
         return uno::makeAny( xPanes );
 
-    return uno::Any( xPanes->Item( aIndex, uno::Any() ) );
+    return xPanes->Item( aIndex, uno::Any() );
 }
 
 uno::Any SAL_CALL

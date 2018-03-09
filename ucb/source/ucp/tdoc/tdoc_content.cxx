@@ -2696,8 +2696,7 @@ uno::Reference< io::XInputStream > Content::getInputStream(
         try
         {
             osl::Guard< osl::Mutex > aGuard( m_aMutex );
-            return uno::Reference< io::XInputStream >(
-                m_pProvider->queryInputStream( aUri, aPassword ) );
+            return m_pProvider->queryInputStream( aUri, aPassword );
         }
         catch ( packages::WrongPasswordException const & )
         {
@@ -2727,9 +2726,8 @@ static uno::Reference< io::XOutputStream > lcl_getTruncatedOutputStream(
     {
         try
         {
-            return uno::Reference< io::XOutputStream >(
-                pProvider->queryOutputStream(
-                    rUri, aPassword, true /* truncate */ ) );
+            return pProvider->queryOutputStream(
+                    rUri, aPassword, true /* truncate */ );
         }
         catch ( packages::WrongPasswordException const & )
         {
@@ -2774,9 +2772,8 @@ uno::Reference< io::XStream > Content::getStream(
     {
         try
         {
-            return uno::Reference< io::XStream >(
-                m_pProvider->queryStream(
-                    aUri, aPassword, false /* no truncate */ ) );
+            return m_pProvider->queryStream(
+                    aUri, aPassword, false /* no truncate */ );
         }
         catch ( packages::WrongPasswordException const & )
         {

@@ -179,13 +179,11 @@ Class::getSupportedServiceNames()                                           \
 css::uno::Reference< css::lang::XSingleServiceFactory >       \
 Class::createServiceFactory( const css::uno::Reference< css::lang::XMultiServiceFactory >& rxServiceMgr )    \
 {                                                                           \
-    return css::uno::Reference<                                  \
-        css::lang::XSingleServiceFactory >(                      \
-            cppu::createOneInstanceFactory(                                 \
+    return cppu::createOneInstanceFactory(                                  \
                 rxServiceMgr,                                               \
                 Class::getImplementationName_Static(),                      \
                 Class##_CreateInstance,                                     \
-                Class::getSupportedServiceNames_Static() ) );               \
+                Class::getSupportedServiceNames_Static() );                 \
 }
 
 #endif /* ! INCLUDED_UCBHELPER_MACROS_HXX */

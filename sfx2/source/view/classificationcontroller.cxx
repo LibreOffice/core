@@ -168,7 +168,7 @@ uno::Reference<awt::XWindow> ClassificationCategoriesController::createItemWindo
         m_pClassification->getCategory()->SetSelectHdl(LINK(this, ClassificationCategoriesController, SelectHdl));
     }
 
-    return uno::Reference<awt::XWindow>(VCLUnoHelper::GetInterface(m_pClassification));
+    return VCLUnoHelper::GetInterface(m_pClassification);
 }
 
 IMPL_LINK(ClassificationCategoriesController, SelectHdl, ListBox&, rCategory, void)

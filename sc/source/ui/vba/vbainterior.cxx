@@ -257,7 +257,7 @@ ScVbaInterior::GetAttributeData( uno::Any const & aValue )
     {
         return aDataValue.Value.toInt32();
     }
-    return sal_Int32( 0 );
+    return 0;
 }
 uno::Any
 ScVbaInterior::SetAttributeData( sal_Int32 nValue )
