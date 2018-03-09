@@ -1032,7 +1032,7 @@ void XclChPropSetHelper::WriteEscherProperties( ScfPropertySet& rPropSet,
                     if( const XFillBitmapItem* pBmpItem = rEscherFmt.mxItemSet->GetItem<XFillBitmapItem>( XATTR_FILLBITMAP, false ) )
                     {
                         uno::Any aBitmapAny;
-                        if( pBmpItem->QueryValue( aBitmapAny, MID_GRAFURL ) )
+                        if (pBmpItem->QueryValue(aBitmapAny, MID_BITMAP))
                         {
                             OUString aBmpName = rBitmapTable.InsertObject( aBitmapAny );
                             if( !aBmpName.isEmpty() )

@@ -236,7 +236,6 @@ bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rToSet, const SfxI
     // XFillBitmapItem: three possible slots supported in UNO API
     const uno::Any* pXFillBitmapItem = nullptr; GetProperty(XATTR_FILLBITMAP, MID_BITMAP, pXFillBitmapItem);
     const uno::Any* pXFillBitmapNameItem = nullptr; GetProperty(XATTR_FILLBITMAP, MID_NAME, pXFillBitmapNameItem);
-    const uno::Any* pXFillBitmapURLItem = nullptr; GetProperty(XATTR_FILLBITMAP, MID_GRAFURL, pXFillBitmapURLItem);
 
     const uno::Any* pXFillTransparenceItem = nullptr; GetProperty(XATTR_FILLTRANSPARENCE, 0, pXFillTransparenceItem);
     const uno::Any* pXGradientStepCountItem = nullptr; GetProperty(XATTR_GRADIENTSTEPCOUNT, 0, pXGradientStepCountItem);
@@ -268,7 +267,7 @@ bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rToSet, const SfxI
         pXFillColorItem ||
         pXFillGradientItem || pXFillGradientNameItem ||
         pXFillHatchItem || pXFillHatchNameItem ||
-        pXFillBitmapItem || pXFillBitmapNameItem || pXFillBitmapURLItem ||
+        pXFillBitmapItem || pXFillBitmapNameItem ||
         pXFillTransparenceItem ||
         pXGradientStepCountItem ||
         pXFillBmpPosItem ||
@@ -435,7 +434,7 @@ bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rToSet, const SfxI
             }
         }
 
-        if(pXFillBitmapItem || pXFillBitmapNameItem || pXFillBitmapURLItem)
+        if (pXFillBitmapItem || pXFillBitmapNameItem)
         {
             if(pXFillBitmapItem)
             {
@@ -456,15 +455,6 @@ bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rToSet, const SfxI
                 }
 
                 bRet &= SvxShape::SetFillAttribute(XATTR_FILLBITMAP, aTempName, rToSet);
-            }
-
-            if(pXFillBitmapURLItem)
-            {
-                const Graphic aNullGraphic;
-                XFillBitmapItem aXFillBitmapItem(aNullGraphic);
-
-                aXFillBitmapItem.PutValue(*pXFillBitmapURLItem, MID_GRAFURL);
-                rToSet.Put(aXFillBitmapItem);
             }
         }
 
@@ -1789,9 +1779,8 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const ::uno::Any&
                     }
                     break;
                 }
-                case MID_GRAFURL:
+                case MID_BITMAP:
                 {
-                    // Bitmap also has the MID_GRAFURL mode where a Bitmap URL is used
                     switch(pEntry->nWID)
                     {
                         case XATTR_FILLBITMAP:

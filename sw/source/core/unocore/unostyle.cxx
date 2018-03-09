@@ -1623,11 +1623,10 @@ void SwXStyle::SetPropertyValue<sal_uInt16(XATTR_FILLGRADIENT)>(const SfxItemPro
             throw lang::IllegalArgumentException();
         SvxShape::SetFillAttribute(rEntry.nWID, aValue.get<OUString>(), rStyleSet);
     }
-    else if(MID_GRAFURL == nMemberId)
+    else if(MID_BITMAP == nMemberId)
     {
         if(sal_uInt16(XATTR_FILLBITMAP) == rEntry.nWID)
         {
-            // Bitmap also has the MID_GRAFURL mode where a Bitmap URL is used
             const Graphic aNullGraphic;
             SfxItemSet& rStyleSet = o_rStyleBase.GetItemSet();
             XFillBitmapItem aXFillBitmapItem(aNullGraphic);
@@ -3615,11 +3614,10 @@ uno::Reference< style::XAutoStyle > SwXAutoStyleFamily::insertStyle(
                         SvxShape::SetFillAttribute(pEntry->nWID, aTempName, aSet);
                         bDone = true;
                     }
-                    else if(MID_GRAFURL == nMemberId)
+                    else if (MID_BITMAP == nMemberId)
                     {
                         if(XATTR_FILLBITMAP == pEntry->nWID)
                         {
-                            // Bitmap also has the MID_GRAFURL mode where a Bitmap URL is used
                             const Graphic aNullGraphic;
                             XFillBitmapItem aXFillBitmapItem(aNullGraphic);
 
