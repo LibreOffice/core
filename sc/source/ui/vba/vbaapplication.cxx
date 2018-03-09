@@ -352,7 +352,7 @@ ScVbaApplication::Workbooks( const uno::Any& aIndex )
         return uno::Any( xWorkBooks );
     }
 
-    return uno::Any ( xWorkBooks->Item( aIndex, uno::Any() ) );
+    return xWorkBooks->Item( aIndex, uno::Any() );
 }
 
 uno::Any SAL_CALL
@@ -384,7 +384,7 @@ ScVbaApplication::Dialogs( const uno::Any &aIndex )
     uno::Reference< excel::XDialogs > xDialogs( new ScVbaDialogs( uno::Reference< XHelperInterface >( this ), mxContext, getCurrentDocument() ) );
     if( !aIndex.hasValue() )
         return uno::Any( xDialogs );
-    return uno::Any( xDialogs->Item( aIndex ) );
+    return xDialogs->Item( aIndex );
 }
 
 uno::Reference< excel::XWindow > SAL_CALL
@@ -480,7 +480,7 @@ ScVbaApplication::Windows( const uno::Any& aIndex  )
     uno::Reference< excel::XWindows >  xWindows( new ScVbaWindows( this, mxContext ) );
     if ( aIndex.getValueTypeClass() == uno::TypeClass_VOID )
         return uno::Any( xWindows );
-    return uno::Any( xWindows->Item( aIndex, uno::Any() ) );
+    return xWindows->Item( aIndex, uno::Any() );
 }
 void SAL_CALL
 ScVbaApplication::wait( double time )
@@ -520,8 +520,8 @@ ScVbaApplication::Names( const css::uno::Any& aIndex )
     if (  aIndex.getValueTypeClass() == uno::TypeClass_VOID )
     {
         return uno::Any( xNames );
-}
-    return uno::Any( xNames->Item( aIndex, uno::Any() ) );
+    }
+    return xNames->Item( aIndex, uno::Any() );
 }
 
 uno::Reference< excel::XWorksheet > SAL_CALL
@@ -1332,7 +1332,7 @@ ScVbaApplication::MenuBars( const uno::Any& aIndex )
     uno::Reference< XCollection > xMenuBars( new ScVbaMenuBars( this, mxContext, xCommandBars ) );
     if (  aIndex.hasValue() )
     {
-        return uno::Any ( xMenuBars->Item( aIndex, uno::Any() ) );
+        return xMenuBars->Item( aIndex, uno::Any() );
     }
 
     return uno::Any( xMenuBars );

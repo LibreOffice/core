@@ -1713,7 +1713,7 @@ PyRef PyUNO_new (
         {
             sal_Int64 that = xUnoTunnel->getSomething( ::pyuno::Adapter::getUnoTunnelImplementationId() );
             if( that )
-                return PyRef( reinterpret_cast<Adapter*>(that)->getWrappedObject() );
+                return reinterpret_cast<Adapter*>(that)->getWrappedObject();
         }
     }
     if( !Py_IsInitialized() )

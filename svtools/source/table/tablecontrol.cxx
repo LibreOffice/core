@@ -207,7 +207,7 @@ namespace svt { namespace table
 
     sal_Int32 TableControl::GetSelectedRowIndex( sal_Int32 const i_selectionIndex ) const
     {
-        return sal_Int32( m_pImpl->getSelectedRowIndex( i_selectionIndex ) );
+        return m_pImpl->getSelectedRowIndex( i_selectionIndex );
     }
 
 

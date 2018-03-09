@@ -856,7 +856,7 @@ Reference< XPreparedStatement > ODatabaseExport::createPreparedStatment( const R
 
     aSql += aValues;
     // now create,fill and execute the prepared statement
-    return Reference< XPreparedStatement >(_xMetaData->getConnection()->prepareStatement(aSql));
+    return _xMetaData->getConnection()->prepareStatement(aSql);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

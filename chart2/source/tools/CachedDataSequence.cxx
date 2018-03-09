@@ -226,7 +226,7 @@ IMPLEMENT_FORWARD_XTYPEPROVIDER2( CachedDataSequence, CachedDataSequence_Base, O
 // ____ XPropertySet ____
 Reference< beans::XPropertySetInfo > SAL_CALL CachedDataSequence::getPropertySetInfo()
 {
-    return Reference< beans::XPropertySetInfo >( createPropertySetInfo( getInfoHelper() ) );
+    return createPropertySetInfo( getInfoHelper() );
 }
 
 // ____ ::comphelper::OPropertySetHelper ____

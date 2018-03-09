@@ -640,7 +640,7 @@ void OUnoObject::impl_setReportComponent_nothrow()
 
 sal_uInt16 OUnoObject::GetObjIdentifier() const
 {
-    return sal_uInt16(m_nObjectType);
+    return m_nObjectType;
 }
 
 SdrInventor OUnoObject::GetObjInventor() const

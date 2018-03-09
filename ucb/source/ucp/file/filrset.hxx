@@ -158,7 +158,7 @@ class XResultSet_impl : public Notifier,
             if( 0 <= m_nRow && m_nRow < sal::static_int_cast<sal_Int32>(m_aItems.size()) )
                 return m_aItems[m_nRow]->getInt( columnIndex );
             else
-                return sal_Int32( 0 );
+                return 0;
         }
 
         virtual sal_Int64 SAL_CALL

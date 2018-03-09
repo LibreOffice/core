@@ -451,7 +451,7 @@ sal_Int32 OStatementCommonBase::getStatementChangeCount()
 
             if (aToken == aDesiredInfoType)
             {
-                return sal_Int32(isc_vax_integer(pResults + 3, aLength));
+                return isc_vax_integer(pResults + 3, aLength);
             }
 
             pResults += (3 + aLength);

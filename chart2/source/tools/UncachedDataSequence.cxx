@@ -125,7 +125,7 @@ IMPLEMENT_FORWARD_XTYPEPROVIDER2( UncachedDataSequence, UncachedDataSequence_Bas
 // ____ XPropertySet ____
 Reference< beans::XPropertySetInfo > SAL_CALL UncachedDataSequence::getPropertySetInfo()
 {
-    return Reference< beans::XPropertySetInfo >( createPropertySetInfo( getInfoHelper() ) );
+    return createPropertySetInfo( getInfoHelper() );
 }
 
 // ____ ::comphelper::OPropertySetHelper ____

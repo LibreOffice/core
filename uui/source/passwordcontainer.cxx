@@ -417,12 +417,11 @@ uno::Reference< lang::XSingleServiceFactory >
 PasswordContainerInteractionHandler::createServiceFactory(
     const uno::Reference< lang::XMultiServiceFactory >& rxServiceMgr )
 {
-    return uno::Reference< lang::XSingleServiceFactory >(
-        cppu::createOneInstanceFactory(
+    return cppu::createOneInstanceFactory(
             rxServiceMgr,
             PasswordContainerInteractionHandler::getImplementationName_Static(),
             PasswordContainerInteractionHandler_CreateInstance,
-            PasswordContainerInteractionHandler::getSupportedServiceNames_Static() ) );
+            PasswordContainerInteractionHandler::getSupportedServiceNames_Static() );
 }
 
 } // namespace uui

@@ -136,13 +136,11 @@ css::uno::Reference< css::lang::XSingleServiceFactory >
 FTPContentProvider::createServiceFactory( const css::uno::Reference<
             css::lang::XMultiServiceFactory >& rxServiceMgr )
 {
-    return css::uno::Reference<
-        css::lang::XSingleServiceFactory >(
-            cppu::createOneInstanceFactory(
+    return cppu::createOneInstanceFactory(
                 rxServiceMgr,
                 FTPContentProvider::getImplementationName_Static(),
                 FTPContentProvider_CreateInstance,
-                FTPContentProvider::getSupportedServiceNames_Static() ) );
+                FTPContentProvider::getSupportedServiceNames_Static() );
 }
 
 // XContentProvider methods.

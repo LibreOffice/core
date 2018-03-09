@@ -93,7 +93,7 @@ ScVbaGlobals::getActiveSheet()
 uno::Any SAL_CALL
 ScVbaGlobals::WorkBooks( const uno::Any& aIndex )
 {
-    return uno::Any( getApplication()->Workbooks(aIndex) );
+    return getApplication()->Workbooks(aIndex);
 }
 
 uno::Any SAL_CALL
@@ -221,7 +221,7 @@ ScVbaGlobals::getDebug()
 uno::Any SAL_CALL
 ScVbaGlobals::MenuBars( const uno::Any& aIndex )
 {
-    return uno::Any( getApplication()->MenuBars(aIndex) );
+    return getApplication()->MenuBars(aIndex);
 }
 
 uno::Sequence< OUString > SAL_CALL

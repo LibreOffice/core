@@ -133,7 +133,7 @@ namespace chelp {
             if( 0 <= m_nRow && sal::static_int_cast<sal_uInt32>( m_nRow ) < m_aItems.size() )
                 return m_aItems[m_nRow]->getInt( columnIndex );
             else
-                return sal_Int32( 0 );
+                return 0;
         }
 
         virtual sal_Int64 SAL_CALL

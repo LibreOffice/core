@@ -109,7 +109,7 @@ CertificateContainer::hasCertificate( const OUString & url, const OUString & cer
     if ( isTemporaryCertificate( url, certificate_name ) )
     {
         if ( isCertificateTrust( url, certificate_name ) )
-            return security::CertificateContainerStatus( security::CertificateContainerStatus_TRUSTED );
+            return security::CertificateContainerStatus_TRUSTED;
         else
             return security::CertificateContainerStatus_UNTRUSTED;
     } else

@@ -459,12 +459,11 @@ css::uno::Sequence< OUString > SortedDynamicResultSetFactory::getSupportedServic
 css::uno::Reference< css::lang::XSingleServiceFactory >
 SortedDynamicResultSetFactory::createServiceFactory( const css::uno::Reference< css::lang::XMultiServiceFactory >& rxServiceMgr )
 {
-    return css::uno::Reference< css::lang::XSingleServiceFactory >(
-            cppu::createOneInstanceFactory(
+    return cppu::createOneInstanceFactory(
                     rxServiceMgr,
                     SortedDynamicResultSetFactory::getImplementationName_Static(),
                     SortedDynamicResultSetFactory_CreateInstance,
-                    SortedDynamicResultSetFactory::getSupportedServiceNames_Static() ) );
+                    SortedDynamicResultSetFactory::getSupportedServiceNames_Static() );
 }
 
 // SortedDynamicResultSetFactory methods.

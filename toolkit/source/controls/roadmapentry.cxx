@@ -70,8 +70,7 @@ IMPLEMENT_FORWARD_XTYPEPROVIDER2( ORoadmapEntry, ORoadmapEntry_Base, ::comphelpe
 css::uno::Reference< css:: beans::XPropertySetInfo > SAL_CALL
     ORoadmapEntry::getPropertySetInfo()
 {
-    return css::uno::Reference< css::beans::XPropertySetInfo >(
-        createPropertySetInfo( getInfoHelper() ) );
+    return createPropertySetInfo( getInfoHelper() );
 }
 
 OUString SAL_CALL ORoadmapEntry::getImplementationName(  )

@@ -21,6 +21,45 @@ public:
     {
     }
 
+    bool TraverseFunctionDecl(FunctionDecl* functionDecl)
+    {
+        auto prev = m_CurrentFunctionDecl;
+        m_CurrentFunctionDecl = functionDecl;
+        auto rv = RecursiveASTVisitor<RedundantFCast>::TraverseFunctionDecl(functionDecl);
+        m_CurrentFunctionDecl = prev;
+        return rv;
+    }
+
+    bool VisitReturnStmt(ReturnStmt const* returnStmt)
+    {
+        if (ignoreLocation(returnStmt))
+            return true;
+        Expr const* expr = returnStmt->getRetValue();
+        if (!expr)
+            return true;
+        if (auto exprWithCleanups = dyn_cast<ExprWithCleanups>(expr))
+            expr = exprWithCleanups->getSubExpr();
+        if (auto cxxConstructExpr = dyn_cast<CXXConstructExpr>(expr))
+        {
+            if (cxxConstructExpr->getNumArgs() != 1)
+                return true;
+            expr = cxxConstructExpr->getArg(0);
+        }
+        if (auto materializeTemporaryExpr = dyn_cast<MaterializeTemporaryExpr>(expr))
+            expr = materializeTemporaryExpr->GetTemporaryExpr();
+        auto cxxFunctionalCastExpr = dyn_cast<CXXFunctionalCastExpr>(expr);
+        if (!cxxFunctionalCastExpr)
+            return true;
+        auto const t1 = cxxFunctionalCastExpr->getTypeAsWritten();
+        auto const t2 = compat::getSubExprAsWritten(cxxFunctionalCastExpr)->getType();
+        if (t1.getCanonicalType().getTypePtr() != t2.getCanonicalType().getTypePtr())
+            return true;
+        report(DiagnosticsEngine::Warning, "redundant functional cast from %0 to %1",
+               cxxFunctionalCastExpr->getExprLoc())
+            << t2 << t1 << cxxFunctionalCastExpr->getSourceRange();
+        return true;
+    }
+
     /* Check for the creation of unnecessary temporaries when calling a method that takes a param by const & */
     bool VisitCallExpr(CallExpr const* callExpr)
     {
@@ -104,6 +143,7 @@ private:
             TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());
         }
     }
+    FunctionDecl const* m_CurrentFunctionDecl;
 };
 
 static loplugin::Plugin::Registration<RedundantFCast> reg("redundantfcast");

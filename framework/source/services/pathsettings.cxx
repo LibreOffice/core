@@ -1387,8 +1387,7 @@ void SAL_CALL PathSettings::getFastPropertyValue(css::uno::Any& aValue ,
 
 css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL PathSettings::getPropertySetInfo()
 {
-    return css::uno::Reference< css::beans::XPropertySetInfo >(
-            ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper()));
+    return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());
 }
 
 css::uno::Reference< css::util::XStringSubstitution > PathSettings::fa_getSubstitution()

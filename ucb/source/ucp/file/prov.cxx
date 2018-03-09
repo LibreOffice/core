@@ -140,11 +140,11 @@ Reference< XSingleServiceFactory >
 FileProvider::createServiceFactory(
                    const Reference< XMultiServiceFactory >& rxServiceMgr )
 {
-    return Reference< XSingleServiceFactory > ( cppu::createSingleFactory(
+    return cppu::createSingleFactory(
         rxServiceMgr,
         fileaccess::TaskManager::getImplementationName_static(),
         FileProvider::CreateInstance,
-        fileaccess::TaskManager::getSupportedServiceNames_static() ) );
+        fileaccess::TaskManager::getSupportedServiceNames_static() );
 }
 
 Reference< XInterface > SAL_CALL

@@ -181,7 +181,7 @@ uno::Reference<awt::XWindow> MMCurrentEntryController::createItemWindow(const un
         m_pCurrentEdit->SetModifyHdl(LINK(this, MMCurrentEntryController, CurrentEditUpdatedHdl));
     }
 
-    return uno::Reference<awt::XWindow>(VCLUnoHelper::GetInterface(m_pCurrentEdit));
+    return VCLUnoHelper::GetInterface(m_pCurrentEdit);
 }
 
 IMPL_LINK(MMCurrentEntryController, CurrentEditUpdatedHdl, Edit&, rEdit, void)
@@ -252,7 +252,7 @@ uno::Reference<awt::XWindow> MMExcludeEntryController::createItemWindow(const un
         m_pExcludeCheckbox->SetToggleHdl(LINK(this, MMExcludeEntryController, ExcludeHdl));
     }
 
-    return uno::Reference<awt::XWindow>(VCLUnoHelper::GetInterface(m_pExcludeCheckbox));
+    return VCLUnoHelper::GetInterface(m_pExcludeCheckbox);
 }
 
 IMPL_STATIC_LINK(MMExcludeEntryController, ExcludeHdl, CheckBox&, rCheckbox, void)

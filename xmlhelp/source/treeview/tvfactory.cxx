@@ -142,12 +142,11 @@ Reference< XSingleServiceFactory >
 TVFactory::createServiceFactory(
     const Reference< XMultiServiceFactory >& rxServiceMgr )
 {
-    return Reference< XSingleServiceFactory > (
-        cppu::createSingleFactory(
+    return cppu::createSingleFactory(
             rxServiceMgr,
             TVFactory::getImplementationName_static(),
             TVFactory::CreateInstance,
-            TVFactory::getSupportedServiceNames_static() ) );
+            TVFactory::getSupportedServiceNames_static() );
 }
 
 Reference< XInterface > SAL_CALL

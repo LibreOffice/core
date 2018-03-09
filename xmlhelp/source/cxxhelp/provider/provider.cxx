@@ -152,13 +152,11 @@ css::uno::Reference< css::lang::XSingleServiceFactory >
 ContentProvider::createServiceFactory( const css::uno::Reference<
             css::lang::XMultiServiceFactory >& rxServiceMgr )
 {
-    return css::uno::Reference<
-        css::lang::XSingleServiceFactory >(
-            cppu::createOneInstanceFactory(
+    return cppu::createOneInstanceFactory(
                 rxServiceMgr,
                 ContentProvider::getImplementationName_Static(),
                 ContentProvider_CreateInstance,
-                ContentProvider::getSupportedServiceNames_Static() ) );
+                ContentProvider::getSupportedServiceNames_Static() );
 }
 
 // XContentProvider methods.
