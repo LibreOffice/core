@@ -1279,8 +1279,8 @@ basegfx::B2DPolyPolygon SvxShapePolyPolygonBezier::GetPolygon() const throw()
     }
 }
 
-SvxGraphicObject::SvxGraphicObject(SdrObject* pObj, OUString const & referer)
-    : SvxShapeText( pObj, getSvxMapProvider().GetMap(SVXMAP_GRAPHICOBJECT), getSvxMapProvider().GetPropertySet(SVXMAP_GRAPHICOBJECT, SdrObject::GetGlobalDrawObjectItemPool()) ), referer_(referer)
+SvxGraphicObject::SvxGraphicObject(SdrObject* pObj)
+    : SvxShapeText( pObj, getSvxMapProvider().GetMap(SVXMAP_GRAPHICOBJECT), getSvxMapProvider().GetPropertySet(SVXMAP_GRAPHICOBJECT, SdrObject::GetGlobalDrawObjectItemPool()) )
 {
 }
 

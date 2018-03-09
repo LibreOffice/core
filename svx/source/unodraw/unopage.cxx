@@ -655,7 +655,7 @@ SvxShape* SvxDrawPage::CreateShapeByTypeAndInventor( sal_uInt16 nType, SdrInvent
                     pRet = new SvxShapeText( pObj );
                     break;
                 case OBJ_GRAF:
-                    pRet = new SvxGraphicObject( pObj, referer );
+                    pRet = new SvxGraphicObject( pObj );
                     break;
                 case OBJ_FRAME:
                     pRet = new SvxFrameShape( pObj );

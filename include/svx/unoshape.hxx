@@ -669,11 +669,8 @@ protected:
     virtual bool getPropertyValueImpl( const OUString& rName, const SfxItemPropertySimpleEntry* pProperty, css::uno::Any& rValue ) override;
 
 public:
-    SvxGraphicObject(SdrObject* pObj, OUString const & referer);
+    SvxGraphicObject(SdrObject* pObj);
     virtual ~SvxGraphicObject() throw() override;
-
-private:
-    OUString referer_;
 };
 
 /***********************************************************************
