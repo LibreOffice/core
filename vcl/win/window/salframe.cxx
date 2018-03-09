@@ -1028,7 +1028,7 @@ SalGraphics* WinSalFrame::AcquireGraphics()
 
     SalData* pSalData = GetSalData();
     WinSalGraphics *pGraphics = nullptr;
-    HDC hDC = 0;
+    HDC hDC = nullptr;
 
     // Other threads get an own DC, because Windows modify in the
     // other case our DC (changing clip region), when they send a
