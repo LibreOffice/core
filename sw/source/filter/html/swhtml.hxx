@@ -735,7 +735,7 @@ private:
 
     // the actual insert methods for <IMG>, <EMBED>, <APPLET> and <PARAM>
     void InsertImage();     // htmlgrin.cxx
-    void InsertEmbed();     // htmlplug.cxx
+    bool InsertEmbed();     // htmlplug.cxx
 
 #if HAVE_FEATURE_JAVA
     void NewObject();   // htmlplug.cxx
