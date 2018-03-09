@@ -4661,6 +4661,22 @@ SfxVoidItem SelectScenario SID_SELECT_SCENARIO
     GroupId = SfxGroupId::Options;
 ]
 
+SfxVoidItem AnchorMenu SID_ANCHOR_MENU
+()
+[
+    AutoUpdate = FALSE,
+    FastCall = TRUE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::Format;
+]
 
 SfxVoidItem SetAnchorToCell SID_ANCHOR_CELL
 ()
@@ -5502,25 +5518,6 @@ SfxStringItem TextValue SID_RANGE_TEXTVALUE
     ToolBoxConfig = FALSE,
     GroupId = SfxGroupId::Intern;
 ]
-
-
-SfxVoidItem ToggleAnchorType SID_ANCHOR_TOGGLE
-()
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-    AccelConfig = FALSE,
-    MenuConfig = TRUE,
-    ToolBoxConfig = TRUE,
-    GroupId = SfxGroupId::Format;
-]
-
 
 SfxVoidItem ToggleRelative SID_TOGGLE_REL
 ()
