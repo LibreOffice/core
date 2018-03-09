@@ -74,7 +74,7 @@ my ( $CALL_CDECL, $COMMON_OUTDIR, $BMP_WRITES_FLAG,
      $BUILD_SOSL_RELEASE, $RSC_ONCE );
 #
 # Platform dependent constant values.
-my ( $BIG_SVX, $COM, $ARCH, $CPU, $CPUNAME, $CVER, $GLIBC, $GUI, $GUIBASE,
+my ( $BIG_SVX, $ARCH, $CPU, $CPUNAME, $CVER, $GLIBC, $GUI, $GUIBASE,
       $GVER, $OS, $OSVERSION, $OUTPATH, $INPATH, $PATH_SEPERATOR,
       $DYNAMIC_CRT, $SET_EXCEPTIONS, $use_shl_versions, $CDPATHx, $JRELIBDIR,
       $JRETOOLKITDIR, $JRETHREADDIR,
@@ -248,10 +248,8 @@ if ( $platform =~ m/solaris/ )
    }
 
    if ( $CC =~ "gcc") {
-       $COM            = "GCC";
        $CVER           = "C300";
    } else {
-       $COM            = "C52";
        $CVER           = "C52";
        $COMEX          = 4;
    }
@@ -306,7 +304,6 @@ elsif ( $platform =~ m/netbsd/ )
       $OUTPATH        = $OUTPATH."2";
    # General NetBSD settings:
       $BIG_SVX        = "TRUE";
-      $COM            = "GCC";
       $COMPATH        = '@COMPATH@'; 
       $GUI            = "UNX";
       $GUIBASE        = "unx";
@@ -320,7 +317,6 @@ elsif ( $platform =~ m/kfreebsd/ )
 # General GNU/kFreeBSD settings:
       $CVER           = "C341";
       $BIG_SVX        = "TRUE";
-      $COM            = "GCC";
       $COMPATH        = '@COMPATH@'; 
       $GLIBC          = "2REDHAT60";
       $GUI            = "UNX";
@@ -358,7 +354,6 @@ elsif ( $platform =~ m/kfreebsd/ )
 }
 elsif ( $platform =~ m/freebsd/ ) 
 {     $BIG_SVX        = "TRUE";
-      $COM            = "@COM_IS@";
       $COMPATH        = '@COMPATH@'; 
       $CVER           = "C300";
       $GUI            = "UNX";
@@ -442,7 +437,6 @@ elsif ( $platform =~ m/linux/ )
 # General Linux settings:
       $CVER           = "C341";
       $BIG_SVX        = "TRUE";
-      $COM            = "@COM_IS@";
       $COMPATH        = '@COMPATH@'; 
       $GLIBC          = "2REDHAT60";
       $GUI            = "UNX";
@@ -661,7 +655,6 @@ elsif ( $platform =~ m/osf1/ )
 {     print "Setting Tru64 specific values... ";
       $outfile        = "Tru64AlphaEnv.Set"; 
       $BIG_SVX        = "TRUE";
-      $COM            = "CXX";
       $COMPATH        = '@COMPATH@'; 
       $CPU            = "A";
       $CPUNAME        = "ALPHA_";
@@ -705,7 +698,6 @@ elsif ( $platform =~ m/cygwin/ )
       $outfile        = "winmingw.set"; 
       $COMPATH        = PathFormat('@COMPATH@/bin');
       $COMPATH        =~ s/\/bin$//i;
-      $COM            = "GCC";
       $CVER           = "C341";
       $OUTPATH        = "wntgcci";
       $INPATH         = $OUTPATH.$PROEXT;
@@ -717,7 +709,6 @@ elsif ( $platform =~ m/cygwin/ )
       $CXX_X64_BINARY = PathFormat('@COMPATH@/bin/amd64/cl.exe');
       $LINK_X64_BINARY = PathFormat('@COMPATH@/bin/amd64/link.exe');
       $LIBMGR_X64_BINARY = PathFormat('@COMPATH@/bin/amd64/lib.exe');
-      $COM            = "MSC";
       $OUTPATH        = "wntmsci@COMEX@";
       $INPATH         = $OUTPATH.$PROEXT;
       $COMEX          = '@COMEX@';
@@ -759,7 +750,6 @@ elsif ( $platform =~ m/os2/ )
   {
       print "Setting OS/2 gcc 3.3.5 specific values... \n";
       $outfile        = "os2env.set";
-      $COM            = "GCC";
       $CVER           = "C300";
       $OUTPATH        = "os2gcci";
       $INPATH         = $OUTPATH.$PROEXT;
@@ -783,7 +773,6 @@ elsif ( $platform =~ m/darwin/ )
       if( $CC =~ "gcc" )
       {
           print "Setting values for MacOSX/Darwin for Xcode<=3";
-          $COM            = "GCC";
           $outfile        = "MacOSXX86Env.Set"; 
           $CPU            = "I";
           $CPUNAME        = "INTEL";
@@ -792,7 +781,6 @@ elsif ( $platform =~ m/darwin/ )
       elsif ($platform =~ m/^i[3456]86/)
       {
           print "Setting values for MacOSX/Darwin on x86_32... ";
-          $COM            = "CLANG";
           $outfile        = "MacOSXX32Env.Set"; 
           $CPU            = "I";
           $CPUNAME        = "INTEL";
@@ -801,7 +789,6 @@ elsif ( $platform =~ m/darwin/ )
       elsif ($platform =~ m/^x86_64/)
       {
           print "Setting values for MacOSX/Darwin on x86_64... ";
-          $COM            = "CLANG";
           $outfile        = "MacOSXX64Env.Set";
           $CPU            = "X";
           $CPUNAME        = "X86_64";
@@ -836,7 +823,6 @@ elsif ( $platform =~ m/aix/ )
    $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."ppc".$ds."classic";
    $JRETHREADDIR   = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."ppc".$ds."native_threads";
    $BIG_SVX        = "TRUE";
-   $COM            = "GCC";
    $CVER           = "C300";
    $COMPATH        = '@COMPATH@'; 
    $GUI            = "UNX";
@@ -1073,7 +1059,7 @@ if ($platform =~ m/cygwin|os2/)
    $ILIB             = $cur_dir;
 
    # Mingw is different
-   if ( $COM eq "MSC" )
+   if ( "@COM@" eq "MSC" )
    {  $ILIB       .=    $wps.$SOLARVER.$ds.$INPATH.$LIB.
                         $wps.$JAVA_HOME.$LIB.
                         $wps.$PSDK_HOME.$LIB.
@@ -1094,7 +1080,7 @@ if ($platform =~ m/cygwin|os2/)
       # ILIB needs to use '\' directory seperators;
       $ILIB = WinPath( $ILIB, ";" );
    }
-   elsif ( $COM eq "GCC" )
+   elsif ( "@COM@" eq "GCC" )
    {  $ILIB       .=    $wps.$SOLARVER.$ds.$INPATH.$LIB.
                         $wps.$SOLARVER.$ds.$INPATH.$BIN.
                         $wps.$JAVA_HOME.$LIB;
@@ -1172,7 +1158,7 @@ elsif ($platform =~ m/cygwin/)
    $tmppath =~ s/^\/\//\//;
    $PATH .= $ps.$tmppath;
 
-   if ( $COM eq "MSC" ) {
+   if ( "@COM@" eq "MSC" ) {
        $tmppath = CygFormat($MSPDB_PATH);
 	   # for .NET to find mspdb71.dll (needed by CL.EXE C/C++ Compiler)
 	   if ( $PATH !~ /(?:[:]|\A)(?:$tmppath)(?:[:]|\Z)/ ) {
@@ -1443,7 +1429,7 @@ elsif ($platform =~ m/cygwin/)
 {  $SOLARINC         .= $I.'$JAVA_HOME'.$ds."include".$ds."win32".
                         $I.'$JAVA_HOME'.$ds."include";
    # Mingw is different
-   if ( $COM eq "MSC" )
+   if ( "@COM@" eq "MSC" )
    {  $SOLARINC       .= $I.'$PSDK_HOME'.$INCLUDE.
                          $I.'$COMPATH'.$ds."include";
       if ( '@ENABLE_DIRECTX@' ne "" ) {
@@ -1455,7 +1441,7 @@ elsif ($platform =~ m/cygwin/)
           }
       }
    }
-   elsif ( $COM eq "GCC" )
+   elsif ( "@COM@" eq "GCC" )
    {  $SOLARINC       .= $I.'$SOLARVER'.$ds.'$INPATH'.$INC.$ds."external".$ds."mingw".$ds."include";
      if ( $USE_MINGW eq "cygwin" )
      {  $SOLARINC    .= $I.PathFormat($USR.$ds."include".$ds."mingw").
@@ -1697,9 +1683,14 @@ ToFile( "ENABLE_ONLINE_UPDATE", "@ENABLE_ONLINE_UPDATE@", "e" );
 ToFile( "Platform dependent constant values.", $empty, "c" );
 ToFile( "SOLAR_JAVA",        $SOLAR_JAVA,        "e" );
 ToFile( "BIG_SVX",           $BIG_SVX,           "e" );
-ToFile( "COM",               $COM,               "e" );
+ToFile( "COM",               "@COM@",            "e" );
 ToFile( "COMPATH",           $COMPATH,           "e" );
 ToFile( "CC_PATH",           "@CC_PATH@",        "e" );
+ToFile( "COMNAME",           "@COMNAME@",        "e" );
+ToFile( "COMID",             "@COMID@",          "e" );
+ToFile( "CCNUMVER",          "@CCNUMVER@",       "e" );
+ToFile( "CCVER",             "@CCVER@",          "e" );
+
 ToFile( "CXX_X64_BINARY",    $CXX_X64_BINARY,    "e" );
 ToFile( "LINK_X64_BINARY",   $LINK_X64_BINARY,   "e" );
 ToFile( "LIBMGR_X64_BINARY", $LIBMGR_X64_BINARY, "e" );

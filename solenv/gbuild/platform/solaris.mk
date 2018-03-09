@@ -55,7 +55,7 @@ gb_OSDEFS := \
 
 gb_COMPILERDEFS := \
 	-D$(COM) \
-	-DCPPU_ENV=sunpro5 \
+	-DCPPU_ENV=$(COMNAME) \
 
 gb_CPUDEFS := -D$(CPUNAME)
 ifeq ($(CPUNAME),SPARC)

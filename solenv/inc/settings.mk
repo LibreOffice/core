@@ -878,7 +878,7 @@ UNOIDLDEPFLAGS=-Mdepend=$(SOLARVER)
 
 UNOIDLINC+=-I. -I.. -I$(PRJ) -I$(PRJ)/inc -I$(PRJ)/$(INPATH)/idl -I$(OUT)/inc -I$(SOLARIDLDIR) -I$(SOLARINCDIR)
 
-CDEFS= -D$(OS) -D$(GUI) -D$(GVER) -D$(COM) -D$(CVER) -D$(CPUNAME)
+CDEFS= -D$(OS) -D$(GUI) -D$(GVER) -D$(COM) -D$(CVER) -D$(CPUNAME) -DCPPU_ENV=$(COMNAME)
 
 .IF "$(USE_STLP_DEBUG)" != "" && "$(GUI)"!="OS2"
 CDEFS+=-D_STLP_DEBUG
@@ -1068,11 +1068,6 @@ SCPLINK=$(PERL) $(SOLARENV)/bin/par2script.pl
 LZIP*=lzip
 CPPLCC*=$(AUGMENT_LIBRARY_PATH) $(SOLARBINDIR)/cpplcc
 
-.IF "$(DISABLE_ENHANCED_COMID)"==""
-.INCLUDE : tg_compv.mk
-.ELSE          # "$(DISABLE_ENHANCED_COMID)"==""
-COMID=$(COM)
-.ENDIF          # "$(DISABLE_ENHANCED_COMID)"==""
 .IF "$(SOLAR_JAVA)"=="TRUE"
 .IF "$(USE_JAVAVER)"!=""
 .INCLUDE : tg_javav.mk
