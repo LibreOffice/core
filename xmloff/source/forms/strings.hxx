@@ -28,7 +28,7 @@ namespace xmloff
     #define PROPERTY_ECHOCHAR "EchoChar"
     #define PROPERTY_MULTILINE "MultiLine"
     #define PROPERTY_NAME "Name"
-    #define PROPERTY_IMAGEURL "ImageURL"
+    #define PROPERTY_GRAPHIC "Graphic"
     #define PROPERTY_LABEL "Label"
     #define PROPERTY_TARGETFRAME "TargetFrame"
     #define PROPERTY_TARGETURL "TargetURL"
