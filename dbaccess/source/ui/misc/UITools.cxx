@@ -407,13 +407,11 @@ TOTypeInfoSP getTypeInfoFromType(const OTypeInfoMap& _rTypeInfo,
     {
         ::comphelper::UStringMixEqual aCase(false);
         // search for typeinfo where the typename is equal _sTypeName
-        OTypeInfoMap::const_iterator typeInfoLoop = _rTypeInfo.begin();
-        OTypeInfoMap::const_iterator typeInfoEnd  = _rTypeInfo.end();
-        for (; typeInfoLoop != typeInfoEnd; ++typeInfoLoop)
+        for (auto const& elem : _rTypeInfo)
         {
-            if ( aCase( typeInfoLoop->second->getDBName() , _sTypeName ) )
+            if ( aCase( elem.second->getDBName() , _sTypeName ) )
             {
-                pTypeInfo = typeInfoLoop->second;
+                pTypeInfo = elem.second;
                 break;
             }
         }
@@ -1104,24 +1102,22 @@ TOTypeInfoSP queryPrimaryKeyType(const OTypeInfoMap& _rTypeInfo)
 {
     TOTypeInfoSP pTypeInfo;
     // first we search for a type which supports autoIncrement
-    OTypeInfoMap::const_iterator aIter = _rTypeInfo.begin();
-    OTypeInfoMap::const_iterator aEnd  = _rTypeInfo.end();
-    for(;aIter != aEnd;++aIter)
+    for (auto const& elem : _rTypeInfo)
     {
         // OJ: we don't want to set an autoincrement column to be key
         // because we don't have the possibility to know how to create
         // such auto increment column later on
         // so until we know how to do it, we create a column without autoincrement
         // therefore we have searched
-        if ( aIter->second->nType == DataType::INTEGER )
+        if ( elem.second->nType == DataType::INTEGER )
         {
-            pTypeInfo = aIter->second; // alternative
+            pTypeInfo = elem.second; // alternative
             break;
         }
-        else if ( !pTypeInfo.get() && aIter->second->nType == DataType::DOUBLE )
-            pTypeInfo = aIter->second; // alternative
-        else if ( !pTypeInfo.get() && aIter->second->nType == DataType::REAL )
-            pTypeInfo = aIter->second; // alternative
+        else if ( !pTypeInfo.get() && elem.second->nType == DataType::DOUBLE )
+            pTypeInfo = elem.second; // alternative
+        else if ( !pTypeInfo.get() && elem.second->nType == DataType::REAL )
+            pTypeInfo = elem.second; // alternative
     }
     if ( !pTypeInfo.get() ) // just a fallback
         pTypeInfo = queryTypeInfoByType(DataType::VARCHAR,_rTypeInfo);

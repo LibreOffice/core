@@ -59,12 +59,10 @@ OQueryTabWinUndoAct::~OQueryTabWinUndoAct()
         m_pTabWin.disposeAndClear();
 
         // and of course the corresponding connections
-        auto aIter = m_vTableConnection.begin();
-        auto aEnd = m_vTableConnection.end();
-        for(;aIter != aEnd;++aIter)
+        for (auto & connection : m_vTableConnection)
         {
-            m_pOwner->DeselectConn(*aIter);
-            aIter->disposeAndClear();
+            m_pOwner->DeselectConn(connection);
+            connection.disposeAndClear();
         }
         m_vTableConnection.clear();
     }

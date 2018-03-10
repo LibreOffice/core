@@ -500,11 +500,10 @@ namespace
 
         // first search for the "to" window
         const auto& rConnections = pEntryConn->GetParent()->getTableConnections();
-        auto aIter = rConnections.begin();
-        auto aEnd = rConnections.end();
-        for(;aIter != aEnd;++aIter)
+        bool bFound = false;
+        for (auto const& connection : rConnections)
         {
-            OQueryTableConnection* pNext = static_cast<OQueryTableConnection*>((*aIter).get());
+            OQueryTableConnection* pNext = static_cast<OQueryTableConnection*>(connection.get());
             if(!pNext->IsVisited() && (pNext->GetSourceWin() == pEntryTabTo || pNext->GetDestWin() == pEntryTabTo))
             {
                 OQueryTableWindow* pEntryTab = pNext->GetSourceWin() == pEntryTabTo ? static_cast<OQueryTableWindow*>(pNext->GetDestWin()) : static_cast<OQueryTableWindow*>(pNext->GetSourceWin());
@@ -512,17 +511,17 @@ namespace
                 JoinCycle(_xConnection,pNext,pEntryTab,aJoin);
                 if(!pNext->IsVisited())
                     GetNextJoin(_xConnection, pNext, pEntryTab, aJoin, _rTableNames);
+                bFound = true;
             }
         }
 
         // when nothing found look for the "from" window
-        if(aIter == aEnd)
+        if(!bFound)
         {
             OQueryTableWindow* pEntryTabFrom = static_cast<OQueryTableWindow*>(pEntryConn->GetSourceWin());
-            aIter = rConnections.begin();
-            for(;aIter != aEnd;++aIter)
+            for (auto const& connection : rConnections)
             {
-                OQueryTableConnection* pNext = static_cast<OQueryTableConnection*>((*aIter).get());
+                OQueryTableConnection* pNext = static_cast<OQueryTableConnection*>(connection.get());
                 if(!pNext->IsVisited() && (pNext->GetSourceWin() == pEntryTabFrom || pNext->GetDestWin() == pEntryTabFrom))
                 {
                     OQueryTableWindow* pEntryTab = pNext->GetSourceWin() == pEntryTabFrom ? static_cast<OQueryTableWindow*>(pNext->GetDestWin()) : static_cast<OQueryTableWindow*>(pNext->GetSourceWin());

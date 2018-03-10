@@ -123,13 +123,11 @@ void OWizColumnSelect::Reset()
 
     // insert the source columns in the left listbox
     const ODatabaseExport::TColumnVector& rSrcColumns = m_pParent->getSrcVector();
-    ODatabaseExport::TColumnVector::const_iterator aIter = rSrcColumns.begin();
-    ODatabaseExport::TColumnVector::const_iterator aEnd = rSrcColumns.end();
 
-    for(;aIter != aEnd;++aIter)
+    for (auto const& column : rSrcColumns)
     {
-        const sal_Int32 nPos = m_pOrgColumnNames->InsertEntry((*aIter)->first);
-        m_pOrgColumnNames->SetEntryData(nPos,(*aIter)->second);
+        const sal_Int32 nPos = m_pOrgColumnNames->InsertEntry(column->first);
+        m_pOrgColumnNames->SetEntryData(nPos,column->second);
     }
 
     if(m_pOrgColumnNames->GetEntryCount())
@@ -155,15 +153,13 @@ void OWizColumnSelect::ActivatePage( )
     // we want to avoid to list the new column generated in the next page
     const ODatabaseExport::TColumns& rSrcColumns = m_pParent->getSourceColumns();
 
-    ODatabaseExport::TColumnVector::const_iterator aIter = rDestColumns.begin();
-    ODatabaseExport::TColumnVector::const_iterator aEnd = rDestColumns.end();
-    for(;aIter != aEnd;++aIter)
+    for (auto const& column : rDestColumns)
     {
-        if (rSrcColumns.find((*aIter)->first) != rSrcColumns.end())
+        if (rSrcColumns.find(column->first) != rSrcColumns.end())
         {
-            const sal_Int32 nPos = m_pNewColumnNames->InsertEntry((*aIter)->first);
-            m_pNewColumnNames->SetEntryData(nPos,new OFieldDescription(*((*aIter)->second)));
-            m_pOrgColumnNames->RemoveEntry((*aIter)->first);
+            const sal_Int32 nPos = m_pNewColumnNames->InsertEntry(column->first);
+            m_pNewColumnNames->SetEntryData(nPos,new OFieldDescription(*(column->second)));
+            m_pOrgColumnNames->RemoveEntry(column->first);
         }
     }
     m_pParent->GetOKButton().Enable(m_pNewColumnNames->GetEntryCount() != 0);

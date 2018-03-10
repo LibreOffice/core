@@ -74,12 +74,8 @@ OTableConnectionData& OTableConnectionData::operator=( const OTableConnectionDat
     ResetConnLines();
 
     // and copy
-    const OConnectionLineDataVec& rLineData = rConnData.GetConnLineDataList();
-
-    OConnectionLineDataVec::const_iterator aIter = rLineData.begin();
-    OConnectionLineDataVec::const_iterator aEnd = rLineData.end();
-    for(;aIter != aEnd;++aIter)
-        m_vConnLineData.push_back(new OConnectionLineData(**aIter));
+    for (auto const& elem : rConnData.GetConnLineDataList())
+        m_vConnLineData.push_back(new OConnectionLineData(*elem));
 
     return *this;
 }
@@ -106,21 +102,16 @@ void OTableConnectionData::SetConnLine( sal_uInt16 nIndex, const OUString& rSour
 
 bool OTableConnectionData::AppendConnLine( const OUString& rSourceFieldName, const OUString& rDestFieldName )
 {
-    OConnectionLineDataVec::const_iterator aIter = m_vConnLineData.begin();
-    OConnectionLineDataVec::const_iterator aEnd = m_vConnLineData.end();
-    for(;aIter != aEnd;++aIter)
+    for (auto const& elem : m_vConnLineData)
     {
-        if((*aIter)->GetDestFieldName() == rDestFieldName && (*aIter)->GetSourceFieldName() == rSourceFieldName)
-            break;
+        if(elem->GetDestFieldName() == rDestFieldName && elem->GetSourceFieldName() == rSourceFieldName)
+            return true;
     }
-    if(aIter == aEnd)
-    {
-        OConnectionLineDataRef pNew = new OConnectionLineData(rSourceFieldName, rDestFieldName);
-        if (!pNew.is())
-            return false;
+    OConnectionLineDataRef pNew = new OConnectionLineData(rSourceFieldName, rDestFieldName);
+    if (!pNew.is())
+        return false;
 
-        m_vConnLineData.push_back(pNew);
-    }
+    m_vConnLineData.push_back(pNew);
     return true;
 }
 

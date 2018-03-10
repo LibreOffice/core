@@ -295,14 +295,13 @@ void OQueryTableView::NotifyTabConnection(const OQueryTableConnection& rNewConn,
                                 aEnd,
                                 VclPtr<OTableConnection>(const_cast<OTableConnection*>(static_cast<const OTableConnection*>(&rNewConn)))
                             );
-    if(aIter == aEnd )
+    if(aIter == aEnd)
     {
-        aIter = rConnections.begin();
-        for(;aIter != aEnd;++aIter)
+        for (auto const& connection : rConnections)
         {
-            if(*static_cast<OQueryTableConnection*>((*aIter).get()) == rNewConn)
+            if(*static_cast<OQueryTableConnection*>(connection.get()) == rNewConn)
             {
-                pTabConn = static_cast<OQueryTableConnection*>((*aIter).get());
+                pTabConn = static_cast<OQueryTableConnection*>(connection.get());
                 break;
             }
         }
@@ -402,16 +401,17 @@ void OQueryTableView::AddTabWin(const OUString& _rComposedName, const OUString& 
     bool bAppend = bNewTable;
     TTableWindowData::value_type pNewTabWinData;
     TTableWindowData& rWindowData = getDesignView()->getController().getTableWindowData();
-    TTableWindowData::const_iterator aWinIter = rWindowData.begin();
-    TTableWindowData::const_iterator aWinEnd = rWindowData.end();
-    for(;aWinIter != aWinEnd;++aWinIter)
+    bool bFoundElem = false;
+    for (auto const& elem : rWindowData)
     {
-        pNewTabWinData = *aWinIter;
-        if (pNewTabWinData && pNewTabWinData->GetWinName() == strAlias && pNewTabWinData->GetComposedName() == _rComposedName && pNewTabWinData->GetTableName() == _rTableName)
+        if (elem && elem->GetWinName() == strAlias && elem->GetComposedName() == _rComposedName && elem->GetTableName() == _rTableName)
+        {
+            bFoundElem = true;
             break;
+        }
     }
     if ( !bAppend )
-        bAppend = ( aWinIter == aWinEnd );
+        bAppend = !bFoundElem;
     if ( bAppend )
         pNewTabWinData = createTableWindowData(_rComposedName, _rTableName, strAlias);
         // I do not need to add TabWinData to the DocShell list, ShowTabWin does that.
@@ -499,11 +499,9 @@ void OQueryTableView::AddTabWin(const OUString& _rComposedName, const OUString& 
                 case KeyType::PRIMARY:
                 {
                     // we have a primary key so look in our list if there exists a key which this is referred to
-                    OTableWindowMap::const_iterator aIter = rTabWins.begin();
-                    OTableWindowMap::const_iterator aEnd  = rTabWins.end();
-                    for(;aIter != aEnd;++aIter)
+                    for (auto const& tabWin : rTabWins)
                     {
-                        OQueryTableWindow* pTabWinTmp = static_cast<OQueryTableWindow*>(aIter->second.get());
+                        OQueryTableWindow* pTabWinTmp = static_cast<OQueryTableWindow*>(tabWin.second.get());
                         if ( pTabWinTmp == pNewTabWin )
                             continue;
 
@@ -653,27 +651,22 @@ OQueryTableWindow* OQueryTableView::FindTable(const OUString& rAliasName)
 bool OQueryTableView::FindTableFromField(const OUString& rFieldName, OTableFieldDescRef const & rInfo, sal_uInt16& rCnt)
 {
     rCnt = 0;
-    OTableWindowMap::const_iterator aIter = GetTabWinMap().begin();
-    OTableWindowMap::const_iterator aEnd  = GetTabWinMap().end();
-    for(;aIter != aEnd;++aIter)
+    for (auto const& tabWin : GetTabWinMap())
     {
-        if(static_cast<OQueryTableWindow*>(aIter->second.get())->ExistsField(rFieldName, rInfo))
+        if(static_cast<OQueryTableWindow*>(tabWin.second.get())->ExistsField(rFieldName, rInfo))
             ++rCnt;
     }
+    // TODO JNA : what should we rCnt > 1?
 
     return rCnt == 1;
 }
 
 bool OQueryTableView::ContainsTabWin(const OTableWindow& rTabWin)
 {
-    OTableWindowMap& rTabWins = GetTabWinMap();
 
-    OTableWindowMap::const_iterator aIter = rTabWins.begin();
-    OTableWindowMap::const_iterator aEnd  = rTabWins.end();
-
-    for ( ;aIter != aEnd ; ++aIter )
+    for (auto const& tabWin : GetTabWinMap())
     {
-        if ( aIter->second == &rTabWin )
+        if ( tabWin.second == &rTabWin )
         {
             return true;
         }
