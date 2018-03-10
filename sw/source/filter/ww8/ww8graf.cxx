@@ -1050,19 +1050,19 @@ void SwWW8ImplReader::InsertTxbxText(SdrTextObj* pTextObj,
                                 const sal_uInt8 *const pParams(aSprmIter.GetCurrentParams());
                                 if (nullptr == pParams)
                                     break;
-                                sal_uInt16 nAktId = aSprmIter.GetCurrentId();
-                                switch( nAktId )
+                                sal_uInt16 nCurrentId = aSprmIter.GetCurrentId();
+                                switch( nCurrentId )
                                 {
                                     case     75:
                                     case    118:
                                     case 0x080A:
                                     case 0x0856:
-                                            Read_Obj(nAktId, pParams, 1);
+                                            Read_Obj(nCurrentId, pParams, 1);
                                         break;
                                     case     68:  // Read_Pic()
                                     case 0x6A03:
                                     case NS_sprm::LN_CObjLocation:
-                                            Read_PicLoc(nAktId, pParams, 1);
+                                            Read_PicLoc(nCurrentId, pParams, 1);
                                         break;
                                 }
                                 aSprmIter.advance();
