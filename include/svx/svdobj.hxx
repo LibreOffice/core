@@ -792,7 +792,8 @@ public:
     void DeleteUserData(sal_uInt16 nNum);
 
     // switch ItemPool for this object
-    void MigrateItemPool(SfxItemPool* pSrcPool, SfxItemPool* pDestPool, SdrModel* pNewModel);
+    // TTTT will no longer ber needed
+    // void MigrateItemPool(SfxItemPool* pSrcPool, SfxItemPool* pDestPool, SdrModel* pNewModel);
 
     // access to the UNO representation of the shape
     virtual css::uno::Reference< css::uno::XInterface > getUnoShape();

@@ -267,30 +267,31 @@ namespace sdr
             return pRetval;
         }
 
-        void E3dSceneProperties::MoveToItemPool(SfxItemPool* pSrcPool, SfxItemPool* pDestPool, SdrModel* pNewModel)
-        {
-            if(pSrcPool && pDestPool && (pSrcPool != pDestPool))
-            {
-                // call parent
-                E3dProperties::MoveToItemPool(pSrcPool, pDestPool, pNewModel);
+        // TTTT
+        // void E3dSceneProperties::MoveToItemPool(SfxItemPool* pSrcPool, SfxItemPool* pDestPool, SdrModel* pNewModel)
+        // {
+        //     if(pSrcPool && pDestPool && (pSrcPool != pDestPool))
+        //     {
+        //         // call parent
+        //         E3dProperties::MoveToItemPool(pSrcPool, pDestPool, pNewModel);
 
-                // own reaction, but only with outmost scene
-                E3dScene& rObj = static_cast<E3dScene&>(GetSdrObject());
-                const SdrObjList* pSubList = rObj.GetSubList();
+        //         // own reaction, but only with outmost scene
+        //         E3dScene& rObj = static_cast<E3dScene&>(GetSdrObject());
+        //         const SdrObjList* pSubList = rObj.GetSubList();
 
-                if(pSubList && rObj.GetScene() == &rObj)
-                {
-                    SdrObjListIter a3DIterator(*pSubList, SdrIterMode::DeepWithGroups);
+        //         if(pSubList && rObj.GetScene() == &rObj)
+        //         {
+        //             SdrObjListIter a3DIterator(*pSubList, SdrIterMode::DeepWithGroups);
 
-                    while(a3DIterator.IsMore())
-                    {
-                        E3dObject* pObj = static_cast<E3dObject*>(a3DIterator.Next());
-                        DBG_ASSERT(dynamic_cast<const E3dObject* >(pObj) !=  nullptr, "In scenes there are only 3D objects allowed (!)");
-                        pObj->GetProperties().MoveToItemPool(pSrcPool, pDestPool, pNewModel);
-                    }
-                }
-            }
-        }
+        //             while(a3DIterator.IsMore())
+        //             {
+        //                 E3dObject* pObj = static_cast<E3dObject*>(a3DIterator.Next());
+        //                 DBG_ASSERT(dynamic_cast<const E3dObject* >(pObj) !=  nullptr, "In scenes there are only 3D objects allowed (!)");
+        //                 pObj->GetProperties().MoveToItemPool(pSrcPool, pDestPool, pNewModel);
+        //             }
+        //         }
+        //     }
+        // }
 
         void E3dSceneProperties::SetSceneItemsFromCamera()
         {

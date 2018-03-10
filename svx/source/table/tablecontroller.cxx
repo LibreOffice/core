@@ -2629,7 +2629,7 @@ bool SvxTableController::GetMarkedObjModel( SdrPage* pNewPage )
             rTableObj.CloneRange( // TTTT clone to new SdrModel
                 aStart,
                 aEnd,
-                pNewPage->getSdrModelFromSdrObjList()));
+                pNewPage->getSdrModelFromSdrPage()));
         pNewTableObj->SetPage(pNewPage);
         pNewPage->InsertObject(pNewTableObj, SAL_MAX_SIZE);
 

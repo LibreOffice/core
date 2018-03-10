@@ -78,10 +78,10 @@ public:
 class E3dObjList final : public SdrObjList
 {
 public:
-    E3dObjList(SdrModel& rSdrModel);
+    E3dObjList();
     SVX_DLLPUBLIC virtual ~E3dObjList() override;
 
-    virtual E3dObjList* Clone() const override;
+    virtual E3dObjList* CloneSdrObjList(SdrModel* pNewModel = nullptr) const override;
 
     virtual void NbcInsertObject(SdrObject* pObj, size_t nPos=SAL_MAX_SIZE) override;
     virtual void InsertObject(SdrObject* pObj, size_t nPos=SAL_MAX_SIZE) override;
@@ -90,8 +90,8 @@ public:
 
 private:
     E3dObjList &operator=(const E3dObjList& rSrcList) = delete;
-
-    SVX_DLLPUBLIC E3dObjList(const E3dObjList& rSrcList);
+    E3dObjList(const E3dObjList& rSrcList) = delete;
+// TTTT    SVX_DLLPUBLIC E3dObjList(const E3dObjList& rSrcList);
 };
 
 /*************************************************************************

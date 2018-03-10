@@ -1762,17 +1762,13 @@ void SdrEditView::GroupMarked()
                 SdrMark* pM=GetSdrMarkByIndex(nm);
                 if (pM->GetPageView()==pPV)
                 {
-                    if (pGrp==nullptr)
+                    SdrObject* pObj=pM->GetMarkedSdrObj();
+                    if (nullptr==pGrp)
                     {
-                        if(nullptr == pGrp)
-                        {
-                            pGrp = new SdrObjGroup(pSrcLst->getSdrModelFromSdrObjList());
-                        }
-
+                        pGrp = new SdrObjGroup(pObj->getSdrModelFromSdrObject());
                         pDstLst=pGrp->GetSubList();
                         DBG_ASSERT(pDstLst!=nullptr,"Alleged group object doesn't return object list.");
                     }
-                    SdrObject* pObj=pM->GetMarkedSdrObj();
                     pSrcLst=pObj->GetObjList();
                     if (pSrcLst!=pSrcLst0)
                     {

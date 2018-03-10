@@ -39,7 +39,7 @@
 SvxXConnectionPreview::SvxXConnectionPreview( vcl::Window* pParent, WinBits nStyle)
     : Control(pParent, nStyle)
     , pEdgeObj(nullptr)
-    , pObjList(nullptr)
+    , pSdrPage(nullptr)
     , pView(nullptr)
 {
     SetMapMode(MapMode(MapUnit::Map100thMM));
@@ -55,7 +55,7 @@ SvxXConnectionPreview::~SvxXConnectionPreview()
 
 void SvxXConnectionPreview::dispose()
 {
-    delete pObjList;
+    delete pSdrPage;
     Control::dispose();
 }
 
@@ -76,13 +76,13 @@ Size SvxXConnectionPreview::GetOptimalSize() const
 void SvxXConnectionPreview::AdaptSize()
 {
     // Adapt size
-    if( !pObjList )
+    if( !pSdrPage )
         return;
 
     SetMapMode(MapMode(MapUnit::Map100thMM));
 
     OutputDevice* pOD = pView->GetFirstOutputDevice(); // GetWin( 0 );
-    tools::Rectangle aRect = pObjList->GetAllObjBoundRect();
+    tools::Rectangle aRect = pSdrPage->GetAllObjBoundRect();
 
     MapMode aMapMode = GetMapMode();
     aMapMode.SetMapUnit( pOD->GetMapMode().GetMapUnit() );
@@ -171,26 +171,28 @@ void SvxXConnectionPreview::Construct()
 
                 // potential memory leak here (!). Create SdrObjList only when there is
                 // not yet one.
-                if(!pObjList)
+                if(!pSdrPage)
                 {
-                    pObjList = new SdrObjList( pView->getSdrModelFromSdrView(), nullptr );
+                    pSdrPage = new SdrPage(
+                        pView->getSdrModelFromSdrView(),
+                        false);
                 }
 
                 if( pTmpObj1 )
                 {
                     SdrObject* pObj1 = pTmpObj1->Clone();
-                    pObjList->InsertObject( pObj1 );
+                    pSdrPage->InsertObject( pObj1 );
                     pEdgeObj->ConnectToNode( true, pObj1 );
                 }
 
                 if( pTmpObj2 )
                 {
                     SdrObject* pObj2 = pTmpObj2->Clone();
-                    pObjList->InsertObject( pObj2 );
+                    pSdrPage->InsertObject( pObj2 );
                     pEdgeObj->ConnectToNode( false, pObj2 );
                 }
 
-                pObjList->InsertObject( pEdgeObj );
+                pSdrPage->InsertObject( pEdgeObj );
             }
         }
     }
@@ -205,7 +207,7 @@ void SvxXConnectionPreview::Construct()
 
 void SvxXConnectionPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
 {
-    if (pObjList)
+    if (pSdrPage)
     {
         // This will not work anymore. To not start at Adam and Eve, i will
         // ATM not try to change all this stuff to really using an own model
@@ -216,9 +218,9 @@ void SvxXConnectionPreview::Paint(vcl::RenderContext& rRenderContext, const tool
         // New stuff: Use a ObjectContactOfObjListPainter.
         sdr::contact::SdrObjectVector aObjectVector;
 
-        for (size_t a = 0; a < pObjList->GetObjCount(); ++a)
+        for (size_t a = 0; a < pSdrPage->GetObjCount(); ++a)
         {
-            SdrObject* pObject = pObjList->GetObj(a);
+            SdrObject* pObject = pSdrPage->GetObj(a);
             DBG_ASSERT(pObject,
                 "SvxXConnectionPreview::Paint: Corrupt ObjectList (!)");
             aObjectVector.push_back(pObject);

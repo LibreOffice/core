@@ -30,6 +30,7 @@ class SwDoc;
 class SwDPage final : public FmFormPage, public SdrObjUserCall
 {
     SwDPage &operator=(const SwDPage&) = delete;
+    SwDPage(const SwDPage&) = delete;
 
     std::unique_ptr<SdrPageGridFrameList>   pGridLst;
     SwDoc*                                  pDoc;
@@ -54,9 +55,9 @@ public:
     virtual css::uno::Reference< css::uno::XInterface > createUnoPage() override;
 
 private:
-    void lateInit(const SwDPage& rPage, SwDrawModel* pNewModel);
+    void lateInit(const SwDPage& rSrcPage);
 
-    SwDPage(const SwDPage& rSrcPage);
+    // TTTT SwDPage(const SwDPage& rSrcPage);
 };
 
 #endif // INCLUDED_SW_INC_DPAGE_HXX

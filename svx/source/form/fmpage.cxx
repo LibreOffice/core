@@ -54,16 +54,16 @@ FmFormPage::FmFormPage(FmFormModel& rModel, bool bMasterPage)
 {
 }
 
+// TTTT
+// FmFormPage::FmFormPage(const FmFormPage& rPage)
+// :   SdrPage(rPage)
+//     ,m_pImpl(new FmFormPageImpl( *this ) )
+// {
+// }
 
-FmFormPage::FmFormPage(const FmFormPage& rPage)
-:   SdrPage(rPage)
-    ,m_pImpl(new FmFormPageImpl( *this ) )
+void FmFormPage::lateInit(const FmFormPage& rPage)
 {
-}
-
-void FmFormPage::lateInit(const FmFormPage& rPage, FmFormModel* const pNewModel)
-{
-    SdrPage::lateInit( rPage, pNewModel );
+    SdrPage::lateInit( rPage );
 
     m_pImpl->initFrom( rPage.GetImpl() );
     m_sPageName = rPage.m_sPageName;
@@ -114,25 +114,22 @@ FmFormPage::~FmFormPage()
 //     return Clone(nullptr);
 // }
 
-SdrPage* FmFormPage::Clone(SdrModel* const pNewModel) const
+SdrPage* FmFormPage::Clone(SdrModel* pNewModel) const
 {
-    FmFormPage* const pNewPage = new FmFormPage(*this);
-    FmFormModel* pFormModel = nullptr;
-    if (pNewModel)
-    {
-        pFormModel = dynamic_cast<FmFormModel*>(pNewModel);
-        assert(pFormModel);
-    }
-    pNewPage->lateInit(*this, pFormModel);
-    return pNewPage;
+    FmFormModel& rFmFormModel(static_cast< FmFormModel& >(nullptr == pNewModel ? getSdrModelFromSdrPage() : *pNewModel));
+    FmFormPage* pClonedFmFormPage(
+        new FmFormPage(
+            rFmFormModel,
+            IsMasterPage()));
+    pClonedFmFormPage->lateInit(*this);
+    return pClonedFmFormPage;
 }
 
 
 void FmFormPage::InsertObject(SdrObject* pObj, size_t nPos)
 {
     SdrPage::InsertObject( pObj, nPos );
-    if (GetModel())
-        static_cast<FmFormModel*>(GetModel())->GetUndoEnv().Inserted(pObj);
+    static_cast< FmFormModel& >(getSdrModelFromSdrPage()).GetUndoEnv().Inserted(pObj);
 }
 
 
@@ -217,8 +214,8 @@ bool FmFormPage::RequestHelp( vcl::Window* pWindow, SdrView const * pView,
 SdrObject* FmFormPage::RemoveObject(size_t nObjNum)
 {
     SdrObject* pObj = SdrPage::RemoveObject(nObjNum);
-    if (pObj && GetModel())
-        static_cast<FmFormModel*>(GetModel())->GetUndoEnv().Removed(pObj);
+    if (pObj)
+        static_cast< FmFormModel& >(getSdrModelFromSdrPage()).GetUndoEnv().Removed(pObj);
     return pObj;
 }
 

@@ -430,7 +430,7 @@ void SdrObject::SetPage(SdrPage* pNewPage)
 
     if(nullptr != pPage)
     {
-        SdrModel* pMod(&pPage->getSdrModelFromSdrObjList());
+        SdrModel* pMod(&pPage->getSdrModelFromSdrPage());
 
         if(pMod != &getSdrModelFromSdrObject())
         {
@@ -2737,13 +2737,14 @@ void SdrObject::SendUserCall(SdrUserCallType eUserCall, const tools::Rectangle& 
 }
 
 // change ItemPool for this object
-void SdrObject::MigrateItemPool(SfxItemPool* pSrcPool, SfxItemPool* pDestPool, SdrModel* pNewModel)
-{
-    if(pSrcPool && pDestPool && (pSrcPool != pDestPool))
-    {
-        GetProperties().MoveToItemPool(pSrcPool, pDestPool, pNewModel);
-    }
-}
+// TTTT
+// void SdrObject::MigrateItemPool(SfxItemPool* pSrcPool, SfxItemPool* pDestPool, SdrModel* pNewModel)
+// {
+//     if(pSrcPool && pDestPool && (pSrcPool != pDestPool))
+//     {
+//         GetProperties().MoveToItemPool(pSrcPool, pDestPool, pNewModel);
+//     }
+// }
 
 void SdrObject::impl_setUnoShape( const uno::Reference< uno::XInterface >& _rxUnoShape )
 {

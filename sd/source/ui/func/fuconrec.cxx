@@ -482,9 +482,9 @@ void FuConstructRectangle::SetAttributes(SfxItemSet& rAttr, SdrObject* pObj)
         // dimension line
         SdPage* pPage = static_cast<SdPage*>( mpView->GetSdrPageView()->GetPage() );
         OUString aName(SdResId(STR_POOLSHEET_MEASURE));
-        SfxStyleSheet* pSheet = static_cast<SfxStyleSheet*>( pPage->GetModel()->
-                                     GetStyleSheetPool()->
-                                     Find(aName, SfxStyleFamily::Para));
+        SfxStyleSheet* pSheet(
+            static_cast< SfxStyleSheet* >(
+                pPage->getSdrModelFromSdrPage().GetStyleSheetPool()->Find(aName, SfxStyleFamily::Para)));
         DBG_ASSERT(pSheet, "StyleSheet missing");
 
         if (pSheet)

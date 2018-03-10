@@ -93,6 +93,7 @@ namespace sd {
 class SD_DLLPUBLIC SdPage final : public FmFormPage, public SdrObjUserCall
 {
     SdPage& operator=(const SdPage&) = delete;
+    SdPage(const SdPage&) = delete;
 
 friend class SdGenericDrawPage;
 friend class SdDrawPage;
@@ -147,7 +148,7 @@ friend class sd::UndoAttrObject;
     sal_Int32 mnTransitionFadeColor;
     double mfTransitionDuration;
 
-    SdPage(const SdPage& rSrcPage);
+    // TTTT SdPage(const SdPage& rSrcPage);
     void lateInit(const SdPage& rSrcPage);
 
 public:
@@ -393,6 +394,8 @@ private:
     sal_uInt16 mnPageId;
 
     /** clone the animations from this and set them to rTargetPage
+     *  TTTT what is strange, should be the other way around by
+     *  convention/convenience and makes usage a little dangerous...
     */
     void cloneAnimations( SdPage& rTargetPage ) const;
 

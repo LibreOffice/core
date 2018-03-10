@@ -208,7 +208,7 @@ bool SdGRFFilter::Import()
 
         pPage->InsertObject(
             new SdrGrafObj(
-                pPage->getSdrModelFromSdrObjList(),
+                pPage->getSdrModelFromSdrPage(),
                 aGraphic,
                 ::tools::Rectangle(aPos, aGrfSize)));
         bRet = true;

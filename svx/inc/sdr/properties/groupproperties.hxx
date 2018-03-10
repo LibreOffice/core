@@ -104,7 +104,7 @@ namespace sdr
             virtual void ForceDefaultAttributes() override;
 
             // Move properties to a new ItemPool.
-            virtual void MoveToItemPool(SfxItemPool* pSrcPool, SfxItemPool* pDestPool, SdrModel* pNewModel) override;
+            // TTTT virtual void MoveToItemPool(SfxItemPool* pSrcPool, SfxItemPool* pDestPool, SdrModel* pNewModel) override;
 
             // force all attributes which come from styles to hard attributes
             // to be able to live without the style.

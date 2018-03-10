@@ -61,7 +61,9 @@ UndoRemovePresObjectImpl::UndoRemovePresObjectImpl( SdrObject& rObject )
             css::uno::Reference< css::drawing::XShape > xShape( rObject.getUnoShape(), css::uno::UNO_QUERY );
             if( pPage->getMainSequence()->hasEffect( xShape ) )
             {
-                mpUndoAnimation = new UndoAnimation( static_cast< SdDrawDocument* >( pPage->GetModel() ), pPage );
+                mpUndoAnimation = new UndoAnimation( // TTTT may use ref? Or just *SdrPage?
+                    static_cast< SdDrawDocument* >(&pPage->getSdrModelFromSdrPage()),
+                    pPage);
             }
         }
     }
@@ -186,7 +188,10 @@ UndoObjectSetText::UndoObjectSetText( SdrObject& rObject, sal_Int32 nText )
         css::uno::Reference< css::drawing::XShape > xShape( rObject.getUnoShape(), css::uno::UNO_QUERY );
         if( pPage->getMainSequence()->hasEffect( xShape ) )
         {
-            mpUndoAnimation.reset( new UndoAnimation( static_cast< SdDrawDocument* >( pPage->GetModel() ), pPage ) );
+            mpUndoAnimation.reset(
+                new UndoAnimation(
+                    static_cast< SdDrawDocument* >(&pPage->getSdrModelFromSdrPage()),
+                    pPage));
         }
     }
 }

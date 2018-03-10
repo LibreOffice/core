@@ -35,6 +35,7 @@ class DlgEdForm;
 class DlgEdPage final : public SdrPage
 {
     DlgEdPage& operator=(const DlgEdPage&) = delete;
+    DlgEdPage(const DlgEdPage&) = delete;
 
     DlgEdForm*      pDlgEdForm;
 
@@ -53,7 +54,7 @@ public:
     virtual SdrObject* SetObjectOrdNum(size_t nOldObjNum, size_t nNewObjNum) override;
 
 private:
-    DlgEdPage(const DlgEdPage& rSrcPage);
+    // TTTT DlgEdPage(const DlgEdPage& rSrcPage);
 };
 
 } // namespace basctl
