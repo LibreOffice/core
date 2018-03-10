@@ -79,7 +79,6 @@ SwXMLTextParagraphExport::SwXMLTextParagraphExport(
          SvXMLAutoStylePoolP& _rAutoStylePool ) :
     XMLTextParagraphExport( rExp, _rAutoStylePool ),
     sEmbeddedObjectProtocol( "vnd.sun.star.EmbeddedObject:" ),
-    sGraphicObjectProtocol( "vnd.sun.star.GraphicObject:" ),
     aAppletClassId( SO3_APPLET_CLASSID ),
     aPluginClassId( SO3_PLUGIN_CLASSID ),
     aIFrameClassId( SO3_IFRAME_CLASSID )
@@ -562,7 +561,8 @@ void SwXMLTextParagraphExport::_exportTextEmbedded(
     }
     if( SV_EMBEDDED_OUTPLACE==nType || SV_EMBEDDED_OWN==nType )
     {
-        OUString sURL( sGraphicObjectProtocol + rOLEObj.GetCurrentPersistName() );
+        OUString sURL(XML_EMBEDDEDOBJECTGRAPHIC_URL_BASE);
+        sURL += rOLEObj.GetCurrentPersistName();
         if( !(rXMLExport.getExportFlags() & SvXMLExportFlags::EMBEDDED) )
         {
             sURL = GetExport().AddEmbeddedObject( sURL );

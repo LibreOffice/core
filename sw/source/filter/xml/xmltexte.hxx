@@ -23,6 +23,8 @@
 #include <xmloff/txtparae.hxx>
 #include <tools/globname.hxx>
 
+#define XML_EMBEDDEDOBJECTGRAPHIC_URL_BASE "vnd.sun.star.GraphicObject:"
+
 class SwXMLExport;
 class SvXMLAutoStylePoolP;
 class SwNoTextNode;
@@ -33,7 +35,6 @@ namespace com { namespace sun { namespace star { namespace style {
 class SwXMLTextParagraphExport : public XMLTextParagraphExport
 {
     const OUString sEmbeddedObjectProtocol;
-    const OUString sGraphicObjectProtocol;
 
     const SvGlobalName aAppletClassId;
     const SvGlobalName aPluginClassId;

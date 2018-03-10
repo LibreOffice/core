@@ -128,6 +128,8 @@ using namespace ::com::sun::star;
 using namespace ::xmloff::EnhancedCustomShapeToken;
 using namespace ::xmloff::token;
 
+#define XML_EMBEDDEDOBJECTGRAPHIC_URL_BASE "vnd.sun.star.GraphicObject:"
+
 namespace {
 
 bool supportsText(XmlShapeType eShapeType)
@@ -2954,7 +2956,7 @@ void XMLShapeExport::ImpExportOLE2Shape(
     }
     if( !bIsEmptyPresObj )
     {
-        OUString sURL(  "vnd.sun.star.GraphicObject:"  );
+        OUString sURL(XML_EMBEDDEDOBJECTGRAPHIC_URL_BASE);
         sURL += sPersistName;
         if( !bExportEmbedded )
         {
