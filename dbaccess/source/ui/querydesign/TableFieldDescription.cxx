@@ -181,13 +181,11 @@ void OTableFieldDesc::Save( ::comphelper::NamedValueCollection& o_rSettings, con
         {
             sal_Int32 c = 0;
             Sequence< PropertyValue > aCriteria( m_aCriteria.size() );
-            for (   std::vector< OUString >::const_iterator crit = m_aCriteria.begin();
-                    crit != m_aCriteria.end();
-                    ++crit, ++c
-                )
+            for (auto const& criteria : m_aCriteria)
             {
                 aCriteria[c].Name = "Criterion_" + OUString::number( c );
-                aCriteria[c].Value <<= *crit;
+                aCriteria[c].Value <<= criteria;
+                ++c;
             }
 
             o_rSettings.put( "Criteria", aCriteria );

@@ -153,34 +153,44 @@ bool OWizNameMatching::LeavePage()
         OFieldDescription* pSrcField = static_cast<OFieldDescription*>(pLeftEntry->GetUserData());
         OSL_ENSURE(pSrcField,"OWizNameMatching: OColumn can not be null!");
 
-        ODatabaseExport::TColumnVector::const_iterator aSrcIter = rSrcColumns.begin();
-        ODatabaseExport::TColumnVector::const_iterator aSrcEnd  = rSrcColumns.end();
-        for(;aSrcIter != aSrcEnd && (*aSrcIter)->second != pSrcField;++aSrcIter)
-            ;
-        const sal_Int32 nPos = std::distance(rSrcColumns.begin(),aSrcIter);
+        sal_Int32 nPos = 0;
+        for (auto const& column : rSrcColumns)
+        {
+            if (column->second == pSrcField)
+                break;
+            ++nPos;
+        }
 
         if(m_pCTRL_LEFT->GetCheckButtonState(pLeftEntry) == SvButtonState::Checked)
         {
             OFieldDescription* pDestField = static_cast<OFieldDescription*>(pRightEntry->GetUserData());
             OSL_ENSURE(pDestField,"OWizNameMatching: OColumn can not be null!");
             const ODatabaseExport::TColumnVector& rDestColumns          = m_pParent->getDestVector();
-            ODatabaseExport::TColumnVector::const_iterator aDestIter    = rDestColumns.begin();
-            ODatabaseExport::TColumnVector::const_iterator aDestEnd = rDestColumns.end();
-
-            for(;aDestIter != aDestEnd && (*aDestIter)->second != pDestField;++aDestIter)
-                ;
+            sal_Int32 nPosDest = 1;
+            bool bDestColumnFound = false;
+            TOTypeInfoSP typeInfoSPFound;
+            for (auto const& column : rDestColumns)
+            {
+                if (column->second == pDestField)
+                {
+                    bDestColumnFound = true;
+                    typeInfoSPFound = column->second->getSpecialTypeInfo();
+                    break;
+                }
+                ++nPosDest;
+            }
 
             OSL_ENSURE((nPos) < static_cast<sal_Int32>(m_pParent->m_vColumnPositions.size()),"m_pParent->m_vColumnPositions: Illegal index for vector");
             m_pParent->m_vColumnPositions[nPos].first = ++nParamPos;
-            m_pParent->m_vColumnPositions[nPos].second = std::distance(rDestColumns.begin(),aDestIter) + 1;
+            m_pParent->m_vColumnPositions[nPos].second = nPosDest;
 
             TOTypeInfoSP pTypeInfo;
 
-            assert(aDestIter != aDestEnd);
-            if (aDestIter != aDestEnd)
+            assert(bDestColumnFound);
+            if (bDestColumnFound)
             {
                 bool bNotConvert = true;
-                pTypeInfo = m_pParent->convertType((*aDestIter)->second->getSpecialTypeInfo(), bNotConvert);
+                pTypeInfo = m_pParent->convertType(typeInfoSPFound, bNotConvert);
             }
 
             sal_Int32 nType = css::sdbc::DataType::VARCHAR;
@@ -391,12 +401,10 @@ bool OColumnTreeBox::Select( SvTreeListEntry* pEntry, bool bSelect )
 void OColumnTreeBox::FillListBox( const ODatabaseExport::TColumnVector& _rList)
 {
     Clear();
-    ODatabaseExport::TColumnVector::const_iterator aIter = _rList.begin();
-    ODatabaseExport::TColumnVector::const_iterator aEnd = _rList.end();
-    for(;aIter != aEnd;++aIter)
+    for (auto const& elem : _rList)
     {
-        SvTreeListEntry* pEntry = InsertEntry((*aIter)->first, nullptr, false, TREELIST_APPEND, (*aIter)->second);
-        SvButtonState eState = !(m_bReadOnly && (*aIter)->second->IsAutoIncrement()) ? SvButtonState::Checked : SvButtonState::Unchecked;
+        SvTreeListEntry* pEntry = InsertEntry(elem->first, nullptr, false, TREELIST_APPEND, elem->second);
+        SvButtonState eState = !(m_bReadOnly && elem->second->IsAutoIncrement()) ? SvButtonState::Checked : SvButtonState::Unchecked;
         SetCheckButtonState( pEntry, eState );
     }
 }

@@ -599,7 +599,7 @@ void OQueryController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >&
                         else
                         {
                             const OSQLTables& rTabs = m_pSqlIterator->getTables();
-                            if ( m_pSqlIterator->getStatementType() != OSQLStatementType::Select || rTabs.begin() == rTabs.end() )
+                            if ( m_pSqlIterator->getStatementType() != OSQLStatementType::Select || rTabs.empty() )
                             {
                                 aError = SQLException(
                                     DBA_RES(STR_QRY_NOSELECT),
@@ -1160,21 +1160,20 @@ void OQueryController::saveViewSettings( ::comphelper::NamedValueCollection& o_r
 {
     saveTableWindows( o_rViewSettings );
 
-    OTableFields::const_iterator field = m_vTableFieldDesc.begin();
-    OTableFields::const_iterator fieldEnd = m_vTableFieldDesc.end();
-
     ::comphelper::NamedValueCollection aAllFieldsData;
     ::comphelper::NamedValueCollection aFieldData;
-    for ( sal_Int32 i = 1; field != fieldEnd; ++field, ++i )
+    sal_Int32 i = 1;
+    for (auto const& fieldDesc : m_vTableFieldDesc)
     {
-        if ( !(*field)->IsEmpty() )
+        if ( !fieldDesc->IsEmpty() )
         {
             aFieldData.clear();
-            (*field)->Save( aFieldData, i_includingCriteria );
+            fieldDesc->Save( aFieldData, i_includingCriteria );
 
             const OUString sFieldSettingName = "Field" + OUString::number( i );
             aAllFieldsData.put( sFieldSettingName, aFieldData.getPropertyValues() );
         }
+        ++i;
     }
 
     o_rViewSettings.put( "Fields", aAllFieldsData.getPropertyValues() );
