@@ -118,6 +118,9 @@ sal_Char const sXML_1_2[] = "1.2";
 
 #define XML_USEPRETTYPRINTING       "UsePrettyPrinting"
 
+#define XML_EMBEDDEDOBJECTGRAPHIC_URL_BASE "vnd.sun.star.GraphicObject:"
+#define XML_EMBEDDEDOBJECT_URL_BASE     "vnd.sun.star.EmbeddedObject:"
+
 namespace {
 
 struct XMLServiceMapEntry_Impl
@@ -395,8 +398,6 @@ void SvXMLExport::InitCtor_()
         mpNamespaceMap->Add(
             GetXMLToken(XML_NP_CSS3TEXT), GetXMLToken(XML_N_CSS3TEXT), XML_NAMESPACE_CSS3TEXT );
     }
-
-    msEmbeddedObjectProtocol = "vnd.sun.star.EmbeddedObject:";
 
     if (mxModel.is() && !mxEventListener.is())
     {
@@ -1933,8 +1934,9 @@ bool SvXMLExport::AddEmbeddedXGraphicAsBase64(uno::Reference<graphic::XGraphic> 
 OUString SvXMLExport::AddEmbeddedObject( const OUString& rEmbeddedObjectURL )
 {
     OUString sRet;
-    if (rEmbeddedObjectURL.startsWith(msEmbeddedObjectProtocol) &&
-        mxEmbeddedResolver.is())
+    bool bSupportedURL = rEmbeddedObjectURL.startsWith(XML_EMBEDDEDOBJECT_URL_BASE) ||
+                         rEmbeddedObjectURL.startsWith(XML_EMBEDDEDOBJECTGRAPHIC_URL_BASE);
+    if (bSupportedURL && mxEmbeddedResolver.is())
     {
         sRet = mxEmbeddedResolver->resolveEmbeddedObjectURL(rEmbeddedObjectURL);
     }
@@ -1947,8 +1949,9 @@ OUString SvXMLExport::AddEmbeddedObject( const OUString& rEmbeddedObjectURL )
 bool SvXMLExport::AddEmbeddedObjectAsBase64( const OUString& rEmbeddedObjectURL )
 {
     bool bRet = false;
-    if (rEmbeddedObjectURL.startsWith(msEmbeddedObjectProtocol) &&
-        mxEmbeddedResolver.is())
+    bool bSupportedURL = rEmbeddedObjectURL.startsWith(XML_EMBEDDEDOBJECT_URL_BASE) ||
+                         rEmbeddedObjectURL.startsWith(XML_EMBEDDEDOBJECTGRAPHIC_URL_BASE);
+    if (bSupportedURL && mxEmbeddedResolver.is())
     {
         Reference < XNameAccess > xNA( mxEmbeddedResolver, UNO_QUERY );
         if( xNA.is() )
