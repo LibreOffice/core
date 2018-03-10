@@ -1308,25 +1308,24 @@ bool SvxGraphicObject::setPropertyValueImpl( const OUString& rName, const SfxIte
                 bOk = true;
             }
         }
-        else if( (rValue.getValueType() == cppu::UnoType<awt::XBitmap>::get()) || (rValue.getValueType() == cppu::UnoType<graphic::XGraphic>::get()))
+        else if (rValue.getValueType() == cppu::UnoType<graphic::XGraphic>::get())
         {
-            Reference< graphic::XGraphic> xGraphic( rValue, UNO_QUERY );
-            if( xGraphic.is() )
+            auto xGraphic = rValue.get<uno::Reference<graphic::XGraphic>>();
+            if (xGraphic.is())
             {
                 static_cast<SdrGrafObj*>(mpObj.get())->SetGraphic(Graphic(xGraphic));
                 bOk = true;
             }
-            else
+        }
+        else if (rValue.getValueType() == cppu::UnoType<awt::XBitmap>::get())
+        {
+            auto xBitmap = rValue.get<uno::Reference<awt::XBitmap>>();
+            if (xBitmap.is())
             {
-                // pack bitmap in the object
-                Reference< awt::XBitmap > xBmp( rValue, UNO_QUERY );
-                if( xBmp.is() )
-                {
-                    // apply bitmap
-                    Graphic aGraphic(VCLUnoHelper::GetBitmap( xBmp ));
-                    static_cast<SdrGrafObj*>(mpObj.get())->SetGraphic(aGraphic);
-                    bOk = true;
-                }
+                uno::Reference<graphic::XGraphic> xGraphic(xBitmap, uno::UNO_QUERY);
+                Graphic aGraphic(xGraphic);
+                static_cast<SdrGrafObj*>(mpObj.get())->SetGraphic(aGraphic);
+                bOk = true;
             }
         }
         break;
@@ -1479,12 +1478,11 @@ bool SvxGraphicObject::getPropertyValueImpl( const OUString& rName, const SfxIte
     {
     case OWN_ATTR_VALUE_FILLBITMAP:
     {
-        const Graphic& rGraphic = static_cast< SdrGrafObj*>( mpObj.get() )->GetGraphic();
+        const Graphic& rGraphic = static_cast<SdrGrafObj*>(mpObj.get())->GetGraphic();
 
-        if(rGraphic.GetType() != GraphicType::GdiMetafile)
+        if (rGraphic.GetType() != GraphicType::GdiMetafile)
         {
-            // pack object in a bitmap
-            Reference< css::awt::XBitmap >  xBitmap( VCLUnoHelper::CreateBitmap(static_cast< SdrGrafObj*>( mpObj.get() )->GetGraphic().GetBitmapEx()) );
+            uno::Reference<awt::XBitmap> xBitmap(rGraphic.GetXGraphic(), uno::UNO_QUERY);
             rValue <<= xBitmap;
         }
         else
