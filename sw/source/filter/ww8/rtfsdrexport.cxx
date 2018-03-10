@@ -688,7 +688,7 @@ void RtfSdrExport::WriteOutliner(const OutlinerParaObject& rParaObj, TextTypes e
         rtl_TextEncoding eChrSet = aAttrIter.GetNodeCharSet();
 
         OUString aStr(rEditObj.GetText(n));
-        sal_Int32 nAktPos = 0;
+        sal_Int32 nCurrentPos = 0;
         const sal_Int32 nEnd = aStr.getLength();
 
         aAttrIter.OutParaAttr(false);
@@ -700,24 +700,24 @@ void RtfSdrExport::WriteOutliner(const OutlinerParaObject& rParaObj, TextTypes e
             const sal_Int32 nNextAttr = std::min(aAttrIter.WhereNext(), nEnd);
             rtl_TextEncoding eNextChrSet = aAttrIter.GetNextCharSet();
 
-            aAttrIter.OutAttr(nAktPos);
+            aAttrIter.OutAttr(nCurrentPos);
             m_rAttrOutput.RunText().append('{');
             m_rAttrOutput.RunText().append(m_rAttrOutput.Styles().makeStringAndClear());
             m_rAttrOutput.RunText().append(m_rAttrOutput.StylesEnd().makeStringAndClear());
             m_rAttrOutput.RunText().append(SAL_NEWLINE_STRING);
-            bool bTextAtr = aAttrIter.IsTextAttr(nAktPos);
+            bool bTextAtr = aAttrIter.IsTextAttr(nCurrentPos);
             if (!bTextAtr)
             {
-                OUString aOut(aStr.copy(nAktPos, nNextAttr - nAktPos));
+                OUString aOut(aStr.copy(nCurrentPos, nNextAttr - nCurrentPos));
                 m_rAttrOutput.RunText().append(msfilter::rtfutil::OutString(aOut, eChrSet));
             }
 
             m_rAttrOutput.RunText().append('}');
 
-            nAktPos = nNextAttr;
+            nCurrentPos = nNextAttr;
             eChrSet = eNextChrSet;
             aAttrIter.NextPos();
-        } while (nAktPos < nEnd);
+        } while (nCurrentPos < nEnd);
         if (bShape || n + 1 < nPara)
             m_rAttrOutput.RunText().append(OOO_STRING_SVTOOLS_RTF_PAR);
     }
