@@ -423,7 +423,7 @@ bool SwDoc::MoveOutlinePara( const SwPaM& rPam, SwOutlineNodes::difference_type 
         return false;
     }
 
-    SwOutlineNodes::size_type nAktPos = 0;
+    SwOutlineNodes::size_type nCurrentPos = 0;
     SwNodeIndex aSttRg( rStt.nNode ), aEndRg( rEnd.nNode );
 
     int nOutLineLevel = MAXLEVEL;
@@ -432,12 +432,12 @@ bool SwDoc::MoveOutlinePara( const SwPaM& rPam, SwOutlineNodes::difference_type 
     if( pSrch->IsTextNode())
         nOutLineLevel = static_cast<sal_uInt8>(pSrch->GetTextNode()->GetAttrOutlineLevel()-1);
     SwNode* pEndSrch = &aEndRg.GetNode();
-    if( !GetNodes().GetOutLineNds().Seek_Entry( pSrch, &nAktPos ) )
+    if( !GetNodes().GetOutLineNds().Seek_Entry( pSrch, &nCurrentPos ) )
     {
-        if( !nAktPos )
+        if( !nCurrentPos )
             return false; // Promoting or demoting before the first outline => no.
-        if( --nAktPos )
-            aSttRg = *GetNodes().GetOutLineNds()[ nAktPos ];
+        if( --nCurrentPos )
+            aSttRg = *GetNodes().GetOutLineNds()[ nCurrentPos ];
         else if( 0 > nOffset )
             return false; // Promoting at the top of document?!
         else
@@ -460,7 +460,7 @@ bool SwDoc::MoveOutlinePara( const SwPaM& rPam, SwOutlineNodes::difference_type 
                     ? *GetNodes().GetOutLineNds()[ nTmpPos ]
                     : GetNodes().GetEndOfContent();
     if( nOffset >= 0 )
-        nAktPos = nTmpPos;
+        nCurrentPos = nTmpPos;
     if( aEndRg == aSttRg )
     {
         OSL_FAIL( "Moving outlines: Surprising selection" );
@@ -497,12 +497,12 @@ bool SwDoc::MoveOutlinePara( const SwPaM& rPam, SwOutlineNodes::difference_type 
     ++aEndRg;
 
     // calculation of the new position
-    if( nOffset < 0 && nAktPos < SwOutlineNodes::size_type(-nOffset) )
+    if( nOffset < 0 && nCurrentPos < SwOutlineNodes::size_type(-nOffset) )
         pNd = GetNodes().GetEndOfContent().StartOfSectionNode();
-    else if( nAktPos + nOffset >= GetNodes().GetOutLineNds().size() )
+    else if( nCurrentPos + nOffset >= GetNodes().GetOutLineNds().size() )
         pNd = &GetNodes().GetEndOfContent();
     else
-        pNd = GetNodes().GetOutLineNds()[ nAktPos + nOffset ];
+        pNd = GetNodes().GetOutLineNds()[ nCurrentPos + nOffset ];
 
     sal_uLong nNewPos = pNd->GetIndex();
 
