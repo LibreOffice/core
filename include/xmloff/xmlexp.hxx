@@ -137,7 +137,6 @@ class XMLOFF_DLLPUBLIC SvXMLExport : public cppu::WeakImplHelper<
     rtl::Reference<SvXMLAttributeList>          mxAttrList;        // a common attribute list
 
     OUString     msOrigFileName; // the original URL
-    OUString     msEmbeddedObjectProtocol;
     OUString     msFilterName;
     OUString     msImgFilterName;
     std::unique_ptr<SvXMLNamespaceMap> mpNamespaceMap;    // the namepspace map
