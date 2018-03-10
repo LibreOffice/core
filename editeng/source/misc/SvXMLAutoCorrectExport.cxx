@@ -51,17 +51,14 @@ ErrCode SvXMLAutoCorrectExport::exportDoc(enum XMLTokenEnum /*eClass*/)
     {
         SvXMLElementExport aRoot (*this, XML_NAMESPACE_BLOCKLIST, XML_BLOCK_LIST, true, true);
         SvxAutocorrWordList::Content aContent = pAutocorr_List->getSortedContent();
-        for( SvxAutocorrWordList::Content::iterator it = aContent.begin();
-             it != aContent.end(); ++it )
+        for (auto const& content : aContent)
         {
-            const SvxAutocorrWord* p = *it;
-
             AddAttribute( XML_NAMESPACE_BLOCKLIST,
                           XML_ABBREVIATED_NAME,
-                          p->GetShort());
+                          content->GetShort());
             AddAttribute( XML_NAMESPACE_BLOCKLIST,
                           XML_NAME,
-                          p->IsTextOnly() ? p->GetLong() : p->GetShort());
+                          content->IsTextOnly() ? content->GetLong() : content->GetShort());
 
             SvXMLElementExport aBlock( *this, XML_NAMESPACE_BLOCKLIST, XML_BLOCK, true, true);
         }

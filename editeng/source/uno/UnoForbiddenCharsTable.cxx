@@ -111,10 +111,9 @@ Sequence< lang::Locale > SAL_CALL SvxUnoForbiddenCharsTable::getLocales()
     {
         lang::Locale* pLocales = aLocales.getArray();
 
-        for( SvxForbiddenCharactersTable::Map::iterator it = mxForbiddenChars->GetMap().begin();
-             it != mxForbiddenChars->GetMap().end(); ++it )
+        for (auto const& elem : mxForbiddenChars->GetMap())
         {
-            const LanguageType nLanguage = it->first;
+            const LanguageType nLanguage = elem.first;
             *pLocales++ = LanguageTag( nLanguage ).getLocale();
         }
     }

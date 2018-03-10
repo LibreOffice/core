@@ -1277,12 +1277,9 @@ void SAL_CALL SvxUnoTextRangeBase::setAllPropertiesToDefault()
 
     if( pForwarder )
     {
-        PropertyEntryVector_t aEntries = mpPropSet->getPropertyMap().getPropertyEntries();
-        PropertyEntryVector_t::const_iterator aIt = aEntries.begin();
-        while( aIt != aEntries.end() )
+        for (auto & entry : mpPropSet->getPropertyMap().getPropertyEntries())
         {
-            _setPropertyToDefault( pForwarder, &(*aIt), -1 );
-            ++aIt;
+            _setPropertyToDefault( pForwarder, &entry, -1 );
         }
     }
 }

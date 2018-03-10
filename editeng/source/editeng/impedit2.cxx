@@ -2260,13 +2260,13 @@ EditPaM ImpEditEngine::ImpConnectParagraphs( ContentNode* pLeft, ContentNode* pR
         pLeft->GetWrongList()->SetInvalidRange(nInv, nEnd+1);
         // Take over misspelled words
         WrongList* pRWrongs = pRight->GetWrongList();
-        for (WrongList::iterator i = pRWrongs->begin(); i < pRWrongs->end(); ++i)
+        for (auto & elem : *pRWrongs)
         {
-            if (i->mnStart != 0)   // Not a subsequent
+            if (elem.mnStart != 0)   // Not a subsequent
             {
-                i->mnStart = i->mnStart + nEnd;
-                i->mnEnd = i->mnEnd + nEnd;
-                pLeft->GetWrongList()->push_back(*i);
+                elem.mnStart = elem.mnStart + nEnd;
+                elem.mnEnd = elem.mnEnd + nEnd;
+                pLeft->GetWrongList()->push_back(elem);
             }
         }
     }
@@ -2845,19 +2845,19 @@ EditPaM ImpEditEngine::ImpInsertParaBreak( EditPaM& rPaM, bool bKeepEndingAttrib
         WrongList* pLWrongs = rPaM.GetNode()->GetWrongList();
         WrongList* pRWrongs = aPaM.GetNode()->GetWrongList();
         // take over misspelled words:
-        for(WrongList::iterator i = pLWrongs->begin(); i < pLWrongs->end(); ++i)
+        for (auto & elem : *pLWrongs)
         {
             // Correct only if really a word gets overlapped in the process of
             // Spell checking
-            if (i->mnStart > static_cast<size_t>(nEnd))
+            if (elem.mnStart > static_cast<size_t>(nEnd))
             {
-                pRWrongs->push_back(*i);
+                pRWrongs->push_back(elem);
                 editeng::MisspellRange& rRWrong = pRWrongs->back();
                 rRWrong.mnStart = rRWrong.mnStart - nEnd;
                 rRWrong.mnEnd = rRWrong.mnEnd - nEnd;
             }
-            else if (i->mnStart < static_cast<size_t>(nEnd) && i->mnEnd > static_cast<size_t>(nEnd))
-                i->mnEnd = nEnd;
+            else if (elem.mnStart < static_cast<size_t>(nEnd) && elem.mnEnd > static_cast<size_t>(nEnd))
+                elem.mnEnd = nEnd;
         }
         sal_Int32 nInv = nEnd ? nEnd-1 : nEnd;
         if ( nEnd )

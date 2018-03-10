@@ -2829,10 +2829,9 @@ EditCharAttrib* CharAttribList::FindAttrib( sal_uInt16 nWhich, sal_Int32 nPos )
 const EditCharAttrib* CharAttribList::FindNextAttrib( sal_uInt16 nWhich, sal_Int32 nFromPos ) const
 {
     assert(nWhich);
-    AttribsType::const_iterator it = aAttribs.begin(), itEnd = aAttribs.end();
-    for (; it != itEnd; ++it)
+    for (auto const& attrib : aAttribs)
     {
-        const EditCharAttrib& rAttr = *it->get();
+        const EditCharAttrib& rAttr = *attrib.get();
         if (rAttr.GetStart() >= nFromPos && rAttr.Which() == nWhich)
             return &rAttr;
     }

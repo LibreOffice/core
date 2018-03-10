@@ -60,9 +60,11 @@ SvxUnoTextContentEnumeration::SvxUnoTextContentEnumeration( const SvxUnoTextBase
             if( currentPara == maSelection.nEndPara )
                 nEndPos = std::min(nEndPos, maSelection.nEndPos);
             ESelection aCurrentParaSel = ESelection( currentPara, nStartPos, currentPara, nEndPos );
-            for( auto aIter = rRanges.begin(); (aIter != rRanges.end()) && (pContent == nullptr); ++aIter )
+            for (auto const& elemRange : rRanges)
             {
-                SvxUnoTextContent* pIterContent = dynamic_cast< SvxUnoTextContent* >( ( *aIter ) );
+                if (!pContent)
+                    break;
+                SvxUnoTextContent* pIterContent = dynamic_cast< SvxUnoTextContent* >( elemRange );
                 if( pIterContent && (pIterContent->mnParagraph == currentPara) )
                 {
                     ESelection aIterSel = pIterContent->GetSelection();
@@ -405,9 +407,11 @@ SvxUnoTextRangeEnumeration::SvxUnoTextRangeEnumeration(const SvxUnoTextBase& rTe
 
             const SvxUnoTextRangeBaseList& rRanges( mpEditSource->getRanges() );
             SvxUnoTextRange* pRange = nullptr;
-            for( auto aIter = rRanges.begin(); (aIter != rRanges.end()) && (pRange == nullptr); ++aIter )
+            for (auto const& elemRange : rRanges)
             {
-                SvxUnoTextRange* pIterRange = dynamic_cast< SvxUnoTextRange* >( ( *aIter ) );
+                if (!pRange)
+                    break;
+                SvxUnoTextRange* pIterRange = dynamic_cast< SvxUnoTextRange* >( elemRange );
                 if( pIterRange && pIterRange->mbPortion && (aSel == pIterRange->maSelection) )
                     pRange = pIterRange;
             }

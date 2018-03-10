@@ -2277,11 +2277,9 @@ sal_uInt16 EditEngine::GetFieldCount( sal_Int32 nPara ) const
     ContentNode* pNode = pImpEditEngine->GetEditDoc().GetObject( nPara );
     if ( pNode )
     {
-        const CharAttribList::AttribsType& rAttrs = pNode->GetCharAttribs().GetAttribs();
-        CharAttribList::AttribsType::const_iterator it = rAttrs.begin(), itEnd = rAttrs.end();
-        for (; it != itEnd; ++it)
+        for (auto const& attrib : pNode->GetCharAttribs().GetAttribs())
         {
-            if ((*it)->Which() == EE_FEATURE_FIELD)
+            if (attrib->Which() == EE_FEATURE_FIELD)
                 ++nFields;
         }
     }
@@ -2295,11 +2293,9 @@ EFieldInfo EditEngine::GetFieldInfo( sal_Int32 nPara, sal_uInt16 nField ) const
     if ( pNode )
     {
         sal_uInt16 nCurrentField = 0;
-        const CharAttribList::AttribsType& rAttrs = pNode->GetCharAttribs().GetAttribs();
-        CharAttribList::AttribsType::const_iterator it = rAttrs.begin(), itEnd = rAttrs.end();
-        for (; it != itEnd; ++it)
+        for (auto const& attrib : pNode->GetCharAttribs().GetAttribs())
         {
-            const EditCharAttrib& rAttr = *it->get();
+            const EditCharAttrib& rAttr = *attrib.get();
             if (rAttr.Which() == EE_FEATURE_FIELD)
             {
                 if ( nCurrentField == nField )

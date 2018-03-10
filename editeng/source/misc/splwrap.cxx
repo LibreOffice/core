@@ -92,11 +92,10 @@ void SvxSpellWrapper::ShowLanguageErrors()
     // display message boxes for languages not available for
     // spellchecking or hyphenation
     LangCheckState_map_t &rLCS = GetLangCheckState();
-    LangCheckState_map_t::iterator aIt( rLCS.begin() );
-    while (aIt != rLCS.end())
+    for (auto const& elem : rLCS)
     {
-        LanguageType nLang = aIt->first;
-        sal_uInt16   nVal  = aIt->second;
+        LanguageType nLang = elem.first;
+        sal_uInt16   nVal  = elem.second;
         sal_uInt16 nTmpSpell = nVal & 0x00FF;
         sal_uInt16 nTmpHyph  = (nVal >> 8) & 0x00FF;
 
@@ -116,7 +115,6 @@ void SvxSpellWrapper::ShowLanguageErrors()
         }
 
         rLCS[ nLang ] = (nTmpHyph << 8) | nTmpSpell;
-        ++aIt;
     }
 
 }

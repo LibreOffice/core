@@ -633,10 +633,10 @@ LongDqPtr TextRanger::GetTextRanges( const Range& rRange )
 {
     DBG_ASSERT( rRange.Min() || rRange.Max(), "Zero-Range not allowed, Bye Bye" );
     //Can we find the result we need in the cache?
-    for (std::deque<RangeCache>::iterator it = mRangeCache.begin(); it != mRangeCache.end(); ++it)
+    for (auto & elem : mRangeCache)
     {
-        if (it->range == rRange)
-            return &(it->results);
+        if (elem.range == rRange)
+            return &(elem.results);
     }
     //Calculate a new result
     RangeCache rngCache(rRange);

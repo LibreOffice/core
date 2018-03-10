@@ -2192,9 +2192,8 @@ void ImpEditEngine::ImpAdjustBlocks( ParaPortion* pParaPortion, EditLine* pLine,
 
     // Correct the positions in the Array and the portion widths:
     // Last character won't be considered ...
-    for ( std::vector<sal_Int32>::const_iterator it(aPositions.begin()); it != aPositions.end(); ++it )
+    for (auto const& nChar : aPositions)
     {
-        sal_Int32 nChar = *it;
         if ( nChar < nLastChar )
         {
             sal_Int32 nPortionStart, nPortion;

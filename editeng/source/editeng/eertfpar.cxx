@@ -497,9 +497,9 @@ void EditRTFParser::CreateStyleSheets()
     // the SvxRTFParser has now created the template...
     if (mpEditEngine->GetStyleSheetPool() && mpEditEngine->IsImportRTFStyleSheetsSet())
     {
-        for (SvxRTFStyleTbl::iterator it = GetStyleTbl().begin(); it != GetStyleTbl().end(); ++it)
+        for (auto const& elem : GetStyleTbl())
         {
-            SvxRTFStyleType* pRTFStyle = it->second.get();
+            SvxRTFStyleType* pRTFStyle = elem.second.get();
             CreateStyleSheet( pRTFStyle );
         }
     }
