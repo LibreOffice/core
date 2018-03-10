@@ -716,7 +716,7 @@ int SwCursorShell::SetCursor( const Point &rLPt, bool bOnlyText, bool bBlock )
     SwShellCursor* pCursor = getShellCursor( bBlock );
     SwPosition aPos( *pCursor->GetPoint() );
     Point aPt( rLPt );
-    Point & rAktCursorPt = pCursor->GetPtPos();
+    Point & rCurrentCursorPt = pCursor->GetPtPos();
     SwCursorMoveState aTmpState( IsTableMode() ? MV_TBLSEL :
                                     bOnlyText ?  MV_SETONLYTEXT : MV_NONE );
     aTmpState.m_bSetInReadOnly = IsReadOnlyAvailable();
@@ -769,7 +769,7 @@ int SwCursorShell::SetCursor( const Point &rLPt, bool bOnlyText, bool bBlock )
         {
             if( pFrame )
             {
-                if( pFrame->getFrameArea().IsInside( rAktCursorPt ))
+                if( pFrame->getFrameArea().IsInside( rCurrentCursorPt ))
                     return bRet;
             }
             else if( aPos.nNode.GetNode().IsContentNode() )
@@ -800,7 +800,7 @@ int SwCursorShell::SetCursor( const Point &rLPt, bool bOnlyText, bool bBlock )
     SwCursorSaveState aSaveState( *pCursor );
 
     *pCursor->GetPoint() = aPos;
-    rAktCursorPt = aPt;
+    rCurrentCursorPt = aPt;
 
     // #i41424# Only update the marked number levels if necessary
     // Force update of marked number levels if necessary.
