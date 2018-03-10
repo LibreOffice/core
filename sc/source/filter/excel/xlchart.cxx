@@ -34,6 +34,7 @@
 #include <com/sun/star/chart/XChartDocument.hpp>
 #include <com/sun/star/chart/XSecondAxisTitleSupplier.hpp>
 #include <com/sun/star/chart2/Symbol.hpp>
+#include <com/sun/star/graphic/XGraphic.hpp>
 
 #include <sal/macros.h>
 #include <rtl/math.hxx>
@@ -821,12 +822,12 @@ void XclChPropSetHelper::ReadEscherProperties(
             drawing::BitmapMode eApiBmpMode;
             maBitmapHlp.ReadFromPropertySet( rPropSet );
             maBitmapHlp >> eApiStyle >> aBitmapName >> eApiBmpMode;
-            OUString aBitmapUrl;
-            if( rBitmapTable.GetObject( aBitmapName ) >>= aBitmapUrl )
+            uno::Reference<awt::XBitmap> xBitmap;
+            if (rBitmapTable.GetObject( aBitmapName ) >>= xBitmap)
             {
                 // convert to Escher properties
                 rEscherFmt.mxEscherSet.reset( new EscherPropertyContainer );
-                rEscherFmt.mxEscherSet->CreateEmbeddedBitmapProperties( aBitmapUrl, eApiBmpMode );
+                rEscherFmt.mxEscherSet->CreateEmbeddedBitmapProperties( xBitmap, eApiBmpMode );
                 rPicFmt.mnBmpMode = (eApiBmpMode == drawing::BitmapMode_REPEAT) ?
                     EXC_CHPICFORMAT_STACK : EXC_CHPICFORMAT_STRETCH;
             }
