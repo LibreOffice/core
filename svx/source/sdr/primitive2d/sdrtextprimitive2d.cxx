@@ -69,11 +69,11 @@ namespace
             if( (pPage->GetPageNum() == 0) && !pPage->IsMasterPage() )
             {
                 // handout page!
-                return pPage->getSdrModelFromSdrObjList().getHandoutPageCount();
+                return pPage->getSdrModelFromSdrPage().getHandoutPageCount();
             }
             else
             {
-                const sal_uInt16 nPageCount(pPage->getSdrModelFromSdrObjList().GetPageCount());
+                const sal_uInt16 nPageCount(pPage->getSdrModelFromSdrPage().GetPageCount());
                 nRetval = (static_cast<sal_Int16>(nPageCount) - 1) / 2;
             }
         }

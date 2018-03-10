@@ -38,15 +38,15 @@ OReportPage::OReportPage(
 {
 }
 
-
-OReportPage::OReportPage(const OReportPage& rPage)
-:   SdrPage(rPage)
-    ,rModel(rPage.getOReportModelFromOReportPage())
-    ,m_xSection(rPage.m_xSection)
-    ,m_bSpecialInsertMode(rPage.m_bSpecialInsertMode)
-    ,m_aTemporaryObjectList(rPage.m_aTemporaryObjectList)
-{
-}
+// TTTT
+// OReportPage::OReportPage(const OReportPage& rPage)
+// :   SdrPage(rPage)
+//     ,rModel(rPage.getOReportModelFromOReportPage())
+//     ,m_xSection(rPage.m_xSection)
+//     ,m_bSpecialInsertMode(rPage.m_bSpecialInsertMode)
+//     ,m_aTemporaryObjectList(rPage.m_aTemporaryObjectList)
+// {
+// }
 
 
 OReportPage::~OReportPage()
@@ -59,17 +59,15 @@ OReportPage::~OReportPage()
 //     return Clone(nullptr);
 // }
 
-SdrPage* OReportPage::Clone( SdrModel* const pNewModel ) const
+SdrPage* OReportPage::Clone(SdrModel* pNewModel) const
 {
-    OReportPage *const pNewPage = new OReportPage( *this );
-    OReportModel* pReportModel = nullptr;
-    if ( pNewModel )
-    {
-        pReportModel = dynamic_cast<OReportModel*>( pNewModel );
-        assert( pReportModel );
-    }
-    pNewPage->lateInit( *this, pReportModel );
-    return pNewPage;
+    OReportModel& rOReportModel(static_cast< OReportModel& >(nullptr == pNewModel ? getSdrModelFromSdrPage() : *pNewModel));
+    OReportPage* pClonedOReportPage(
+        new OReportPage(
+            rOReportModel,
+            m_xSection));
+    pClonedOReportPage->SdrPage::lateInit(*this);
+    return pClonedOReportPage;
 }
 
 

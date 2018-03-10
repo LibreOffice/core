@@ -1335,7 +1335,7 @@ OUString SdrUndoMoveLayer::GetComment() const
 
 
 SdrUndoPage::SdrUndoPage(SdrPage& rNewPg)
-:   SdrUndoAction(rNewPg.getSdrModelFromSdrObjList())
+:   SdrUndoAction(rNewPg.getSdrModelFromSdrPage())
     ,mrPage(rNewPg)
 {
 }
@@ -1657,7 +1657,7 @@ void SdrUndoPageRemoveMasterPage::Undo()
 {
     if(mbOldHadMasterPage)
     {
-        mrPage.TRG_SetMasterPage(*mrPage.getSdrModelFromSdrObjList().GetMasterPage(maOldMasterPageNumber));
+        mrPage.TRG_SetMasterPage(*mrPage.getSdrModelFromSdrPage().GetMasterPage(maOldMasterPageNumber));
         mrPage.TRG_SetMasterPageVisibleLayers(maOldSet);
     }
 }
@@ -1695,7 +1695,7 @@ void SdrUndoPageChangeMasterPage::Undo()
     if(mbOldHadMasterPage)
     {
         mrPage.TRG_ClearMasterPage();
-        mrPage.TRG_SetMasterPage(*mrPage.getSdrModelFromSdrObjList().GetMasterPage(maOldMasterPageNumber));
+        mrPage.TRG_SetMasterPage(*mrPage.getSdrModelFromSdrPage().GetMasterPage(maOldMasterPageNumber));
         mrPage.TRG_SetMasterPageVisibleLayers(maOldSet);
     }
 }
@@ -1706,7 +1706,7 @@ void SdrUndoPageChangeMasterPage::Redo()
     if(mbNewHadMasterPage)
     {
         mrPage.TRG_ClearMasterPage();
-        mrPage.TRG_SetMasterPage(*mrPage.getSdrModelFromSdrObjList().GetMasterPage(maNewMasterPageNumber));
+        mrPage.TRG_SetMasterPage(*mrPage.getSdrModelFromSdrPage().GetMasterPage(maNewMasterPageNumber));
         mrPage.TRG_SetMasterPageVisibleLayers(maNewSet);
     }
 }

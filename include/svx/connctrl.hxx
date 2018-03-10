@@ -32,7 +32,7 @@ namespace vcl { class Window; }
 class SfxItemSet;
 class SdrEdgeObj;
 class SdrView;
-class SdrObjList;
+class SdrPage;
 
 /*************************************************************************
 |*
@@ -45,7 +45,7 @@ class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxXConnectionPreview : public Control
 
 private:
     SdrEdgeObj*         pEdgeObj;
-    SdrObjList*         pObjList;
+    SdrPage*            pSdrPage;
     const SdrView*      pView;
 
     SVX_DLLPRIVATE void SetStyles();

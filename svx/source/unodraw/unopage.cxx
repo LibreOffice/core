@@ -64,8 +64,8 @@ UNO3_GETIMPLEMENTATION_IMPL( SvxDrawPage );
 SvxDrawPage::SvxDrawPage(SdrPage* pInPage) // TTTT shbe ref
 :   mrBHelper(getMutex())
     ,mpPage(pInPage)
-    ,mpModel(&pInPage->getSdrModelFromSdrObjList())  // register at broadcaster
-    ,mpView(new SdrView(pInPage->getSdrModelFromSdrObjList())) // create (hidden) view
+    ,mpModel(&pInPage->getSdrModelFromSdrPage())  // register at broadcaster
+    ,mpView(new SdrView(pInPage->getSdrModelFromSdrPage())) // create (hidden) view
 {
     mpView->SetDesignMode();
 }
@@ -689,39 +689,37 @@ SvxShape* SvxDrawPage::CreateShapeByTypeAndInventor( sal_uInt16 nType, SdrInvent
                             SdrPage* pSdrPage = mpPage->GetSdrPage();
                             if( pSdrPage )
                             {
-                                SdrModel* pSdrModel = pSdrPage->GetModel();
-                                if( pSdrModel )
+                                SdrModel& rSdrModel(pSdrPage->getSdrModelFromSdrPage());
+                                ::comphelper::IEmbeddedHelper *pPersist = rSdrModel.GetPersist();
+
+                                if( pPersist )
                                 {
-                                    ::comphelper::IEmbeddedHelper *pPersist = pSdrModel->GetPersist();
-                                    if( pPersist )
+                                    uno::Reference < embed::XEmbeddedObject > xObject = pPersist->getEmbeddedObjectContainer().
+                                            GetEmbeddedObject( static_cast< SdrOle2Obj* >( pObj )->GetPersistName() );
+
+                                    // TODO CL->KA: Why is this not working anymore?
+                                    if( xObject.is() )
                                     {
-                                        uno::Reference < embed::XEmbeddedObject > xObject = pPersist->getEmbeddedObjectContainer().
-                                                GetEmbeddedObject( static_cast< SdrOle2Obj* >( pObj )->GetPersistName() );
+                                        SvGlobalName aClassId( xObject->getClassID() );
 
-                                        // TODO CL->KA: Why is this not working anymore?
-                                        if( xObject.is() )
+                                        const SvGlobalName aAppletClassId( SO3_APPLET_CLASSID );
+                                        const SvGlobalName aPluginClassId( SO3_PLUGIN_CLASSID );
+                                        const SvGlobalName aIFrameClassId( SO3_IFRAME_CLASSID );
+
+                                        if( aPluginClassId == aClassId )
                                         {
-                                            SvGlobalName aClassId( xObject->getClassID() );
-
-                                            const SvGlobalName aAppletClassId( SO3_APPLET_CLASSID );
-                                            const SvGlobalName aPluginClassId( SO3_PLUGIN_CLASSID );
-                                            const SvGlobalName aIFrameClassId( SO3_IFRAME_CLASSID );
-
-                                            if( aPluginClassId == aClassId )
-                                            {
-                                                pRet = new SvxPluginShape( pObj );
-                                                nType = OBJ_OLE2_PLUGIN;
-                                            }
-                                            else if( aAppletClassId == aClassId )
-                                            {
-                                                pRet = new SvxAppletShape( pObj );
-                                                nType = OBJ_OLE2_APPLET;
-                                            }
-                                            else if( aIFrameClassId == aClassId )
-                                            {
-                                                pRet = new SvxFrameShape( pObj );
-                                                nType = OBJ_FRAME;
-                                            }
+                                            pRet = new SvxPluginShape( pObj );
+                                            nType = OBJ_OLE2_PLUGIN;
+                                        }
+                                        else if( aAppletClassId == aClassId )
+                                        {
+                                            pRet = new SvxAppletShape( pObj );
+                                            nType = OBJ_OLE2_APPLET;
+                                        }
+                                        else if( aIFrameClassId == aClassId )
+                                        {
+                                            pRet = new SvxFrameShape( pObj );
+                                            nType = OBJ_FRAME;
                                         }
                                     }
                                 }

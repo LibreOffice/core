@@ -67,6 +67,7 @@
 #include <docsh.hxx>
 #include <cstdio>
 #include <o3tl/enumrange.hxx>
+#include <IDocumentDrawModelAccess.hxx>
 
 using namespace ::com::sun::star;
 

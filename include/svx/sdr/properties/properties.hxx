@@ -147,7 +147,7 @@ namespace sdr
 
             // Move local items to a new ItemPool.
             // Override this to do it for hierarchical objects like e.g. groups.
-            virtual void MoveToItemPool(SfxItemPool* pSrcPool, SfxItemPool* pDestPool, SdrModel* pNewModel);
+            // TTTT virtual void MoveToItemPool(SfxItemPool* pSrcPool, SfxItemPool* pDestPool, SdrModel* pNewModel);
 
             // Set new model.
             virtual void SetModel(SdrModel* pOldModel, SdrModel* pNewModel);

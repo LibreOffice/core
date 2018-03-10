@@ -244,65 +244,66 @@ namespace sdr
             return mpStyleSheet;
         }
 
-        void AttributeProperties::MoveToItemPool(SfxItemPool* pSrcPool, SfxItemPool* pDestPool, SdrModel* pNewModel)
-        {
-            OSL_ASSERT(pNewModel!=nullptr);
+        // TTTT
+        // void AttributeProperties::MoveToItemPool(SfxItemPool* pSrcPool, SfxItemPool* pDestPool, SdrModel* pNewModel)
+        // {
+        //     OSL_ASSERT(pNewModel!=nullptr);
 
-            if(pSrcPool && pDestPool && (pSrcPool != pDestPool))
-            {
-                if(mpItemSet)
-                {
-                    // migrate ItemSet to new pool. Scaling is NOT necessary
-                    // because this functionality is used by UNDO only. Thus
-                    // objects and ItemSets would be moved back to their original
-                    // pool before usage.
-                    SfxStyleSheet* pStySheet = GetStyleSheet();
+        //     if(pSrcPool && pDestPool && (pSrcPool != pDestPool))
+        //     {
+        //         if(mpItemSet)
+        //         {
+        //             // migrate ItemSet to new pool. Scaling is NOT necessary
+        //             // because this functionality is used by UNDO only. Thus
+        //             // objects and ItemSets would be moved back to their original
+        //             // pool before usage.
+        //             SfxStyleSheet* pStySheet = GetStyleSheet();
 
-                    if(pStySheet)
-                    {
-                        ImpRemoveStyleSheet();
-                    }
+        //             if(pStySheet)
+        //             {
+        //                 ImpRemoveStyleSheet();
+        //             }
 
-                    auto pOldSet = std::move(mpItemSet);
-                    mpItemSet.reset(pOldSet->Clone(false, pDestPool));
-                    SdrModel::MigrateItemSet(pOldSet.get(), mpItemSet.get(), pNewModel);
+        //             auto pOldSet = std::move(mpItemSet);
+        //             mpItemSet.reset(pOldSet->Clone(false, pDestPool));
+        //             SdrModel::MigrateItemSet(pOldSet.get(), mpItemSet.get(), pNewModel);
 
-                    // set stylesheet (if used)
-                    if(pStySheet)
-                    {
-                        // #i109515#
-                        SfxItemPool* pStyleSheetPool = &pStySheet->GetPool().GetPool();
+        //             // set stylesheet (if used)
+        //             if(pStySheet)
+        //             {
+        //                 // #i109515#
+        //                 SfxItemPool* pStyleSheetPool = &pStySheet->GetPool().GetPool();
 
-                        if(pStyleSheetPool == pDestPool)
-                        {
-                            // just re-set stylesheet
-                            ImpAddStyleSheet(pStySheet, true);
-                        }
-                        else
-                        {
-                            // StyleSheet is NOT from the correct pool.
-                            // Look one up in the right pool with the same
-                            // name or use the default.
+        //                 if(pStyleSheetPool == pDestPool)
+        //                 {
+        //                     // just re-set stylesheet
+        //                     ImpAddStyleSheet(pStySheet, true);
+        //                 }
+        //                 else
+        //                 {
+        //                     // StyleSheet is NOT from the correct pool.
+        //                     // Look one up in the right pool with the same
+        //                     // name or use the default.
 
-                            // Look up the style in the new document.
-                            OSL_ASSERT(pNewModel->GetStyleSheetPool() != nullptr);
-                            SfxStyleSheet* pNewStyleSheet = dynamic_cast<SfxStyleSheet*>(
-                                pNewModel->GetStyleSheetPool()->Find(
-                                    pStySheet->GetName(),
-                                    SfxStyleFamily::All));
-                            if (pNewStyleSheet == nullptr
-                                || &pNewStyleSheet->GetPool().GetPool() != pDestPool)
-                            {
-                                // There is no copy of the style in the new
-                                // document.  Use the default as a fallback.
-                                pNewStyleSheet = pNewModel->GetDefaultStyleSheet();
-                            }
-                            ImpAddStyleSheet(pNewStyleSheet, true);
-                        }
-                    }
-                }
-            }
-        }
+        //                     // Look up the style in the new document.
+        //                     OSL_ASSERT(pNewModel->GetStyleSheetPool() != nullptr);
+        //                     SfxStyleSheet* pNewStyleSheet = dynamic_cast<SfxStyleSheet*>(
+        //                         pNewModel->GetStyleSheetPool()->Find(
+        //                             pStySheet->GetName(),
+        //                             SfxStyleFamily::All));
+        //                     if (pNewStyleSheet == nullptr
+        //                         || &pNewStyleSheet->GetPool().GetPool() != pDestPool)
+        //                     {
+        //                         // There is no copy of the style in the new
+        //                         // document.  Use the default as a fallback.
+        //                         pNewStyleSheet = pNewModel->GetDefaultStyleSheet();
+        //                     }
+        //                     ImpAddStyleSheet(pNewStyleSheet, true);
+        //                 }
+        //             }
+        //         }
+        //     }
+        // }
 
         void AttributeProperties::SetModel(SdrModel* pOldModel, SdrModel* pNewModel)
         {

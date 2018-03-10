@@ -74,7 +74,7 @@ SdrObject *SvxFmDrawPage::CreateSdrObject_( const css::uno::Reference< css::draw
         ||  aShapeType == "com.sun.star.drawing.ControlShape"
         )
     {
-        return new FmFormObj(GetSdrPage()->getSdrModelFromSdrObjList());
+        return new FmFormObj(GetSdrPage()->getSdrModelFromSdrPage());
     }
     else
     {
