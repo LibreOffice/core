@@ -816,6 +816,60 @@ void SwEditShell::HyphIgnore()
     g_pHyphIter->ShowSelection();
 }
 
+void SwEditShell::HandleCorrectionError(
+    const OUString aText, SwPosition aPos, sal_Int32 nBegin,
+    sal_Int32 nLen, SwPaM* pCursor,
+    const Point* pPt, SwRect& rSelectRect )
+{
+    // save the start and end positions of the line and the starting point
+    Push();
+    LeftMargin();
+    const sal_Int32 nLineStart = GetCursor()->GetPoint()->nContent.GetIndex();
+    RightMargin();
+    const sal_Int32 nLineEnd = GetCursor()->GetPoint()->nContent.GetIndex();
+    Pop(PopMode::DeleteCurrent);
+
+    // make sure the selection build later from the data below does
+    // not "in word" character to the left and right in order to
+    // preserve those. Therefore count those "in words" in order to
+    // modify the selection accordingly.
+    const sal_Unicode* pChar = aText.getStr();
+    sal_Int32 nLeft = 0;
+    while (*pChar++ == CH_TXTATR_INWORD)
+        ++nLeft;
+    pChar = aText.getLength() ? aText.getStr() + aText.getLength() - 1 : nullptr;
+    sal_Int32 nRight = 0;
+    while (pChar && *pChar-- == CH_TXTATR_INWORD)
+        ++nRight;
+
+    aPos.nContent = nBegin + nLeft;
+    pCursor = GetCursor();
+    *pCursor->GetPoint() = aPos;
+    pCursor->SetMark();
+    ExtendSelection( true, nLen - nLeft - nRight );
+    // don't determine the rectangle in the current line
+    const sal_Int32 nWordStart = (nBegin + nLeft) < nLineStart ? nLineStart : nBegin + nLeft;
+    // take one less than the line end - otherwise the next line would be calculated
+    const sal_Int32 nWordEnd = (nBegin + nLen - nLeft - nRight) > nLineEnd
+                            ? nLineEnd : (nBegin + nLen - nLeft - nRight);
+    Push();
+    pCursor->DeleteMark();
+    SwIndex& rContent = GetCursor()->GetPoint()->nContent;
+    rContent = nWordStart;
+    SwRect aStartRect;
+    SwCursorMoveState aState;
+    aState.m_bRealWidth = true;
+    SwContentNode* pContentNode = pCursor->GetContentNode();
+    SwContentFrame *pContentFrame = pContentNode->getLayoutFrame( GetLayout(), pPt, pCursor->GetPoint(), false);
+
+    pContentFrame->GetCharRect( aStartRect, *pCursor->GetPoint(), &aState );
+    rContent = nWordEnd - 1;
+    SwRect aEndRect;
+    pContentFrame->GetCharRect( aEndRect, *pCursor->GetPoint(),&aState );
+    rSelectRect = aStartRect.Union( aEndRect );
+    Pop(PopMode::DeleteCurrent);
+}
+
 /** Get a list of potential corrections for misspelled word.
  *
  * If empty, word is unknown but there are no corrections available.
@@ -878,53 +932,7 @@ uno::Reference< XSpellAlternatives >
 
             if ( xSpellAlt.is() )   // error found?
             {
-                // save the start and end positions of the line and the starting point
-                Push();
-                LeftMargin();
-                const sal_Int32 nLineStart = GetCursor()->GetPoint()->nContent.GetIndex();
-                RightMargin();
-                const sal_Int32 nLineEnd = GetCursor()->GetPoint()->nContent.GetIndex();
-                Pop(PopMode::DeleteCurrent);
-
-                // make sure the selection build later from the data below does
-                // not "in word" character to the left and right in order to
-                // preserve those. Therefore count those "in words" in order to
-                // modify the selection accordingly.
-                const sal_Unicode* pChar = aText.getStr();
-                sal_Int32 nLeft = 0;
-                while (*pChar++ == CH_TXTATR_INWORD)
-                    ++nLeft;
-                pChar = aText.getLength() ? aText.getStr() + aText.getLength() - 1 : nullptr;
-                sal_Int32 nRight = 0;
-                while (pChar && *pChar-- == CH_TXTATR_INWORD)
-                    ++nRight;
-
-                aPos.nContent = nBegin + nLeft;
-                pCursor = GetCursor();
-                *pCursor->GetPoint() = aPos;
-                pCursor->SetMark();
-                ExtendSelection( true, nLen - nLeft - nRight );
-                // don't determine the rectangle in the current line
-                const sal_Int32 nWordStart = (nBegin + nLeft) < nLineStart ? nLineStart : nBegin + nLeft;
-                // take one less than the line end - otherwise the next line would be calculated
-                const sal_Int32 nWordEnd = (nBegin + nLen - nLeft - nRight) > nLineEnd
-                                        ? nLineEnd : (nBegin + nLen - nLeft - nRight);
-                Push();
-                pCursor->DeleteMark();
-                SwIndex& rContent = GetCursor()->GetPoint()->nContent;
-                rContent = nWordStart;
-                SwRect aStartRect;
-                SwCursorMoveState aState;
-                aState.m_bRealWidth = true;
-                SwContentNode* pContentNode = pCursor->GetContentNode();
-                SwContentFrame *pContentFrame = pContentNode->getLayoutFrame( GetLayout(), pPt, pCursor->GetPoint(), false);
-
-                pContentFrame->GetCharRect( aStartRect, *pCursor->GetPoint(), &aState );
-                rContent = nWordEnd - 1;
-                SwRect aEndRect;
-                pContentFrame->GetCharRect( aEndRect, *pCursor->GetPoint(),&aState );
-                rSelectRect = aStartRect.Union( aEndRect );
-                Pop(PopMode::DeleteCurrent);
+                HandleCorrectionError( aText, aPos, nBegin, nLen, pCursor, pPt, rSelectRect );
             }
         }
     }
@@ -1003,53 +1011,7 @@ bool SwEditShell::GetGrammarCorrection(
 
             if (rResult.aErrors.getLength() > 0)    // error found?
             {
-                // save the start and end positions of the line and the starting point
-                Push();
-                LeftMargin();
-                const sal_Int32 nLineStart = GetCursor()->GetPoint()->nContent.GetIndex();
-                RightMargin();
-                const sal_Int32 nLineEnd = GetCursor()->GetPoint()->nContent.GetIndex();
-                Pop(PopMode::DeleteCurrent);
-
-                // make sure the selection build later from the data below does
-                // not include "in word" character to the left and right in
-                // order to preserve those. Therefore count those "in words" in
-                // order to modify the selection accordingly.
-                const sal_Unicode* pChar = aText.getStr();
-                sal_Int32 nLeft = 0;
-                while (*pChar++ == CH_TXTATR_INWORD)
-                    ++nLeft;
-                pChar = aText.getLength() ? aText.getStr() + aText.getLength() - 1 : nullptr;
-                sal_Int32 nRight = 0;
-                while (pChar && *pChar-- == CH_TXTATR_INWORD)
-                    ++nRight;
-
-                aPos.nContent = nBegin + nLeft;
-                pCursor = GetCursor();
-                *pCursor->GetPoint() = aPos;
-                pCursor->SetMark();
-                ExtendSelection( true, nLen - nLeft - nRight );
-                // don't determine the rectangle in the current line
-                const sal_Int32 nWordStart = (nBegin + nLeft) < nLineStart ? nLineStart : nBegin + nLeft;
-                // take one less than the line end - otherwise the next line would be calculated
-                const sal_Int32 nWordEnd = (nBegin + nLen - nLeft - nRight) > nLineEnd
-                                        ? nLineEnd : (nBegin + nLen - nLeft - nRight);
-                Push();
-                pCursor->DeleteMark();
-                SwIndex& rContent = GetCursor()->GetPoint()->nContent;
-                rContent = nWordStart;
-                SwRect aStartRect;
-                SwCursorMoveState aState;
-                aState.m_bRealWidth = true;
-                SwContentNode* pContentNode = pCursor->GetContentNode();
-                SwContentFrame *pContentFrame = pContentNode->getLayoutFrame( GetLayout(), pPt, pCursor->GetPoint(), false);
-
-                pContentFrame->GetCharRect( aStartRect, *pCursor->GetPoint(), &aState );
-                rContent = nWordEnd - 1;
-                SwRect aEndRect;
-                pContentFrame->GetCharRect( aEndRect, *pCursor->GetPoint(),&aState );
-                rSelectRect = aStartRect.Union( aEndRect );
-                Pop(PopMode::DeleteCurrent);
+                HandleCorrectionError( aText, aPos, nBegin, nLen, pCursor, pPt, rSelectRect );
             }
         }
     }
