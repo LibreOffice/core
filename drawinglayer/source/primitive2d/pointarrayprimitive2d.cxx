@@ -58,9 +58,9 @@ namespace drawinglayer
                 basegfx::B2DRange aNewRange;
 
                 // get the basic range from the position vector
-                for(std::vector< basegfx::B2DPoint >::const_iterator aIter(getPositions().begin()), aEnd(getPositions().end()); aIter != aEnd; ++aIter)
+                for (auto const& pos : getPositions())
                 {
-                    aNewRange.expand(*aIter);
+                    aNewRange.expand(pos);
                 }
 
                 // assign to buffered value

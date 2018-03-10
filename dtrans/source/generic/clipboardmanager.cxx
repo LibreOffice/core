@@ -157,12 +157,9 @@ void SAL_CALL ClipboardManager::dispose()
         aGuard2.clear();
 
         // dispose all clipboards still in list
-        ClipboardMap::iterator iter = aCopy.begin();
-        ClipboardMap::iterator imax = aCopy.end();
-
-        for (; iter != imax; ++iter)
+        for (auto const& elem : aCopy)
         {
-            Reference< XComponent > xComponent(iter->second, UNO_QUERY);
+            Reference< XComponent > xComponent(elem.second, UNO_QUERY);
             if (xComponent.is())
             {
                 try
