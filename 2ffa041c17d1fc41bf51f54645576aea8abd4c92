@@ -16,6 +16,24 @@
       "revId": "2ffa041c17d1fc41bf51f54645576aea8abd4c92",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba2be162_9aaa8b18",
+        "filename": "filter/source/msfilter/escherex.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1401,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2018-03-10T08:57:53Z",
+      "side": 1,
+      "message": "No, it is still set one block before to support external URLs.. compiler would throw a warning if it wouldn\u0027t be.",
+      "parentUuid": "ba2be162_baf90f50",
+      "revId": "2ffa041c17d1fc41bf51f54645576aea8abd4c92",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
