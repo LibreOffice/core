@@ -60,6 +60,8 @@ private:
     SVX_DLLPRIVATE SdrObject* createSdrGrafObjReplacement(bool bAddText) const;
     SVX_DLLPRIVATE void ImpSetVisAreaSize();
 
+    SVX_DLLPRIVATE void Init();
+
 protected:
     virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact() override;
     virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties() override;

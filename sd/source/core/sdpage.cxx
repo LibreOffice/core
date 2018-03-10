@@ -129,6 +129,9 @@ SdPage::SdPage(SdDrawDocument& rNewDoc, bool bMasterPage)
     // presentation template of the outline objects. Therefore, it already
     // contains the designator for the outline (STR_LAYOUT_OUTLINE).
     maLayoutName = SdResId(STR_LAYOUT_DEFAULT_NAME)+ SD_LT_SEPARATOR STR_LAYOUT_OUTLINE;
+
+    // TTTT stuff from old SetModel:
+    ConnectLink();
 }
 
 namespace
