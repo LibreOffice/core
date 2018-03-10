@@ -276,7 +276,11 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
             {
                 SfxViewFrame* m_pFrame;
                 SfxObjectShell* m_pSh;
+                SfxMedium* m_pMed = nullptr;
                 bool m_bSetRO;
+                ReadOnlyUIGuard(SfxViewFrame* pFrame, SfxObjectShell* p_Sh)
+                    : m_pFrame(pFrame), m_pSh(p_Sh), m_bSetRO(p_Sh->IsReadOnlyUI())
+                {}
                 ~ReadOnlyUIGuard() COVERITY_NOEXCEPT_FALSE
                 {
                     if (m_bSetRO != m_pSh->IsReadOnlyUI())
@@ -284,9 +288,15 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                         m_pSh->SetReadOnlyUI(m_bSetRO);
                         if (!m_bSetRO)
                             m_pFrame->RemoveInfoBar("readonly");
+                        if (m_pMed)
+                        {
+                            // tdf#116066: DoSaveCompleted should be called after SetReadOnlyUI
+                            m_pSh->DoSaveCompleted(m_pMed);
+                            m_pSh->Broadcast(SfxHint(SfxHintId::ModeChanged));
+                        }
                     }
                 }
-            } aReadOnlyUIGuard{ this, pSh, pSh->IsReadOnlyUI() };
+            } aReadOnlyUIGuard(this, pSh);
 
             SfxMedium* pMed = pSh->GetMedium();
 
@@ -523,8 +533,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                 }
                 else
                 {
-                    pSh->DoSaveCompleted( pMed );
-                    pSh->Broadcast( SfxHint(SfxHintId::ModeChanged) );
+                    aReadOnlyUIGuard.m_pMed = pMed;
                     rReq.SetReturnValue( SfxBoolItem( rReq.GetSlot(), true ) );
                     rReq.Done( true );
                     return;
