@@ -1208,7 +1208,7 @@ void PPTWriter::ImplWriteBackground( css::uno::Reference< css::beans::XPropertyS
         break;
 
         case css::drawing::FillStyle_BITMAP :
-            aPropOpt.CreateGraphicProperties( rXPropSet, "FillBitmapURL", true );
+            aPropOpt.CreateGraphicProperties( rXPropSet, "FillBitmap", true );
         break;
 
         case css::drawing::FillStyle_HATCH :
