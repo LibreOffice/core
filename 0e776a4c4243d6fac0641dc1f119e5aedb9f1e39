@@ -34,6 +34,24 @@
       "revId": "0e776a4c4243d6fac0641dc1f119e5aedb9f1e39",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba2be162_1a6dbb04",
+        "filename": "xmlsecurity/CppunitTest_xmlsecurity_signing.mk",
+        "patchSetId": 3
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-03-10T10:14:14Z",
+      "side": 1,
+      "message": "\"Hmm, the socketdir is created in /run/user, so GNUPGHOME should have no influence.\"\n\n\u003chttps://git.gnupg.org/cgi-bin/gitweb.cgi?p\u003dgnupg.git;a\u003dblob;f\u003dcommon/homedir.c;h\u003d65cf50fe75444fddec336fcc7140e46ed07407ec;hb\u003d9581a65ccc10daededc05c55391a04022f794a4a#l632\u003e (in _gnupg_socketdir_internal):\n\n\u003e /* If a non default homedir is used, we check whether an\n\u003e  * corresponding sub directory below the socket dir is available\n\u003e  * and use that.  We hash the non default homedir to keep the new\n\u003e  * subdir short enough.  */",
+      "parentUuid": "ba2be162_1a5a1b84",
+      "revId": "0e776a4c4243d6fac0641dc1f119e5aedb9f1e39",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
