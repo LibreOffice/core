@@ -536,19 +536,19 @@ void SdrItemBrowserControl::ImpSetEntry(const ImpItemListRow& rEntry, std::size_
         aList.emplace_back(new ImpItemListRow(rEntry));
         RowInserted(nEntryNum);
     } else {
-        auto& pAktEntry=aList[nEntryNum];
-        if (*pAktEntry!=rEntry) {
-            bool bStateDiff=rEntry.eState!=pAktEntry->eState;
-            bool bValueDiff=rEntry.aValue != pAktEntry->aValue;
+        auto& pCurrentEntry=aList[nEntryNum];
+        if (*pCurrentEntry!=rEntry) {
+            bool bStateDiff=rEntry.eState!=pCurrentEntry->eState;
+            bool bValueDiff=rEntry.aValue != pCurrentEntry->aValue;
             bool bAllDiff = true;
             if (bStateDiff || bValueDiff) {
                 // check whether only state and/or value have changed
                 ImpItemListRow aTest(rEntry);
-                aTest.eState=pAktEntry->eState;
-                aTest.aValue=pAktEntry->aValue;
-                if (aTest==*pAktEntry) bAllDiff = false;
+                aTest.eState=pCurrentEntry->eState;
+                aTest.aValue=pCurrentEntry->aValue;
+                if (aTest==*pCurrentEntry) bAllDiff = false;
             }
-            *pAktEntry=rEntry;
+            *pCurrentEntry=rEntry;
             if (bAllDiff) {
                 RowModified(nEntryNum);
             } else {
