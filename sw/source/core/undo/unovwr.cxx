@@ -173,20 +173,20 @@ bool SwUndoOverwrite::CanGrouping( SwDoc* pDoc, SwPosition& rPos,
 void SwUndoOverwrite::UndoImpl(::sw::UndoRedoContext & rContext)
 {
     SwDoc *const pDoc = & rContext.GetDoc();
-    SwPaM *const pAktPam(& rContext.GetCursorSupplier().CreateNewShellCursor());
+    SwPaM *const pCurrentPam(& rContext.GetCursorSupplier().CreateNewShellCursor());
 
-    pAktPam->DeleteMark();
-    pAktPam->GetPoint()->nNode = nSttNode;
-    SwTextNode* pTextNd = pAktPam->GetNode().GetTextNode();
+    pCurrentPam->DeleteMark();
+    pCurrentPam->GetPoint()->nNode = nSttNode;
+    SwTextNode* pTextNd = pCurrentPam->GetNode().GetTextNode();
     OSL_ENSURE( pTextNd, "Overwrite not in a TextNode?" );
-    SwIndex& rIdx = pAktPam->GetPoint()->nContent;
+    SwIndex& rIdx = pCurrentPam->GetPoint()->nContent;
     rIdx.Assign( pTextNd, nSttContent );
 
     SwAutoCorrExceptWord* pACEWord = pDoc->GetAutoCorrExceptWord();
     if( pACEWord )
     {
         if( 1 == aInsStr.getLength() && 1 == aDelStr.getLength() )
-            pACEWord->CheckChar( *pAktPam->GetPoint(), aDelStr[0] );
+            pACEWord->CheckChar( *pCurrentPam->GetPoint(), aDelStr[0] );
         pDoc->SetAutoCorrExceptWord( nullptr );
     }
 
@@ -226,10 +226,10 @@ void SwUndoOverwrite::UndoImpl(::sw::UndoRedoContext & rContext)
         pHistory->TmpRollback( pDoc, 0, false );
     }
 
-    if( pAktPam->GetMark()->nContent.GetIndex() != nSttContent )
+    if( pCurrentPam->GetMark()->nContent.GetIndex() != nSttContent )
     {
-        pAktPam->SetMark();
-        pAktPam->GetMark()->nContent = nSttContent;
+        pCurrentPam->SetMark();
+        pCurrentPam->GetMark()->nContent = nSttContent;
     }
 
     if( pRedlSaveData )
@@ -238,38 +238,38 @@ void SwUndoOverwrite::UndoImpl(::sw::UndoRedoContext & rContext)
 
 void SwUndoOverwrite::RepeatImpl(::sw::RepeatContext & rContext)
 {
-    SwPaM *const pAktPam = & rContext.GetRepeatPaM();
-    if( aInsStr.isEmpty() || pAktPam->HasMark() )
+    SwPaM *const pCurrentPam = & rContext.GetRepeatPaM();
+    if( aInsStr.isEmpty() || pCurrentPam->HasMark() )
         return;
 
     SwDoc & rDoc = rContext.GetDoc();
 
     {
         ::sw::GroupUndoGuard const undoGuard(rDoc.GetIDocumentUndoRedo());
-        rDoc.getIDocumentContentOperations().Overwrite(*pAktPam, OUString(aInsStr[0]));
+        rDoc.getIDocumentContentOperations().Overwrite(*pCurrentPam, OUString(aInsStr[0]));
     }
     for( sal_Int32 n = 1; n < aInsStr.getLength(); ++n )
-        rDoc.getIDocumentContentOperations().Overwrite( *pAktPam, OUString(aInsStr[n]) );
+        rDoc.getIDocumentContentOperations().Overwrite( *pCurrentPam, OUString(aInsStr[n]) );
 }
 
 void SwUndoOverwrite::RedoImpl(::sw::UndoRedoContext & rContext)
 {
     SwDoc *const pDoc = & rContext.GetDoc();
-    SwPaM *const pAktPam(& rContext.GetCursorSupplier().CreateNewShellCursor());
+    SwPaM *const pCurrentPam(& rContext.GetCursorSupplier().CreateNewShellCursor());
 
-    pAktPam->DeleteMark();
-    pAktPam->GetPoint()->nNode = nSttNode;
-    SwTextNode* pTextNd = pAktPam->GetNode().GetTextNode();
+    pCurrentPam->DeleteMark();
+    pCurrentPam->GetPoint()->nNode = nSttNode;
+    SwTextNode* pTextNd = pCurrentPam->GetNode().GetTextNode();
     OSL_ENSURE( pTextNd, "Overwrite not in TextNode?" );
-    SwIndex& rIdx = pAktPam->GetPoint()->nContent;
+    SwIndex& rIdx = pCurrentPam->GetPoint()->nContent;
 
     if( pRedlSaveData )
     {
         rIdx.Assign( pTextNd, nSttContent );
-        pAktPam->SetMark();
-        pAktPam->GetMark()->nContent += aInsStr.getLength();
-        pDoc->getIDocumentRedlineAccess().DeleteRedline( *pAktPam, false, USHRT_MAX );
-        pAktPam->DeleteMark();
+        pCurrentPam->SetMark();
+        pCurrentPam->GetMark()->nContent += aInsStr.getLength();
+        pDoc->getIDocumentRedlineAccess().DeleteRedline( *pCurrentPam, false, USHRT_MAX );
+        pCurrentPam->DeleteMark();
     }
     rIdx.Assign( pTextNd, !aDelStr.isEmpty() ? nSttContent+1 : nSttContent );
 
@@ -296,10 +296,10 @@ void SwUndoOverwrite::RedoImpl(::sw::UndoRedoContext & rContext)
     // get back old start position from UndoNodes array
     if( pHistory )
         pHistory->SetTmpEnd( pHistory->Count() );
-    if( pAktPam->GetMark()->nContent.GetIndex() != nSttContent )
+    if( pCurrentPam->GetMark()->nContent.GetIndex() != nSttContent )
     {
-        pAktPam->SetMark();
-        pAktPam->GetMark()->nContent = nSttContent;
+        pCurrentPam->SetMark();
+        pCurrentPam->GetMark()->nContent = nSttContent;
     }
 }
 
