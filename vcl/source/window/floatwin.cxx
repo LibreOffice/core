@@ -22,6 +22,7 @@
 #include <window.h>
 #include <salframe.hxx>
 
+#include <comphelper/lok.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
@@ -297,6 +298,7 @@ Point FloatingWindow::ImplCalcPos( vcl::Window* pWindow,
     }
 
     sal_uInt16 nArrangeIndex = 0;
+    const bool bLOKActive = comphelper::LibreOfficeKit::isActive();
 
     for ( ; nArrangeIndex < 5; nArrangeIndex++ )
     {
@@ -318,7 +320,7 @@ Point FloatingWindow::ImplCalcPos( vcl::Window* pWindow,
                     if ( aPos.X() < aScreenRect.Left() )
                         bBreak = false;
                 }
-                if( bBreak )
+                if (bBreak || bLOKActive)
                 {
                     e1 = devRect.TopLeft();
                     e2 = devRect.BottomLeft();
@@ -342,7 +344,7 @@ Point FloatingWindow::ImplCalcPos( vcl::Window* pWindow,
                     if ( aPos.X()+aSize.Width() > aScreenRect.Right() )
                         bBreak = false;
                 }
-                if( bBreak )
+                if (bBreak || bLOKActive)
                 {
                     e1 = devRect.TopRight();
                     e2 = devRect.BottomRight();
@@ -358,7 +360,7 @@ Point FloatingWindow::ImplCalcPos( vcl::Window* pWindow,
                 aPos.setY( devRect.Top()-aSize.Height()+1 );
                 if ( aPos.Y() < aScreenRect.Top() )
                     bBreak = false;
-                if( bBreak )
+                if (bBreak || bLOKActive)
                 {
                     e1 = devRect.TopLeft();
                     e2 = devRect.TopRight();
@@ -373,7 +375,7 @@ Point FloatingWindow::ImplCalcPos( vcl::Window* pWindow,
                 aPos = devRect.BottomLeft();
                 if ( aPos.Y()+aSize.Height() > aScreenRect.Bottom() )
                     bBreak = false;
-                if( bBreak )
+                if (bBreak || bLOKActive)
                 {
                     e1 = devRect.BottomLeft();
                     e2 = devRect.BottomRight();
@@ -386,6 +388,10 @@ Point FloatingWindow::ImplCalcPos( vcl::Window* pWindow,
                 break;
             default: break;
         }
+
+        // no further adjustement for LibreOfficeKit
+        if (bLOKActive)
+            break;
 
         // adjust if necessary
         if (bBreak)
