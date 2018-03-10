@@ -1340,7 +1340,7 @@ void WW8Export::WriteOutliner(const OutlinerParaObject& rParaObj, sal_uInt8 nTyp
         OSL_ENSURE( pO->empty(), " pO is not empty at start of line" );
 
         OUString aStr( rEditObj.GetText( n ));
-        sal_Int32 nAktPos = 0;
+        sal_Int32 nCurrentPos = 0;
         const sal_Int32 nEnd = aStr.getLength();
 
         const SfxItemSet aSet(rEditObj.GetParaAttribs(n));
@@ -1355,17 +1355,17 @@ void WW8Export::WriteOutliner(const OutlinerParaObject& rParaObj, sal_uInt8 nTyp
         do {
             const sal_Int32 nNextAttr = std::min(aAttrIter.WhereNext(), nEnd);
 
-            bool bTextAtr = aAttrIter.IsTextAttr( nAktPos );
+            bool bTextAtr = aAttrIter.IsTextAttr( nCurrentPos );
             if( !bTextAtr )
-                OutSwString(aStr, nAktPos, nNextAttr - nAktPos);
+                OutSwString(aStr, nCurrentPos, nNextAttr - nCurrentPos);
 
             // At the end of the line the attributes are extended over the CR.
             // exception: foot note at line end
             if( nNextAttr == nEnd && !bTextAtr )
                 WriteCR();              // CR after it
 
-                                            // output of character attributes
-            aAttrIter.OutAttr( nAktPos );   // nAktPos - 1 ??
+                                                // output of character attributes
+            aAttrIter.OutAttr( nCurrentPos );   // nCurrentPos - 1 ??
 
             if (bIsRTLPara)
             {
@@ -1384,10 +1384,10 @@ void WW8Export::WriteOutliner(const OutlinerParaObject& rParaObj, sal_uInt8 nTyp
             // exception: foot note at line end
             if( nNextAttr == nEnd && bTextAtr )
                 WriteCR();              // CR after it
-            nAktPos = nNextAttr;
+            nCurrentPos = nNextAttr;
             aAttrIter.NextPos();
         }
-        while( nAktPos < nEnd );
+        while( nCurrentPos < nEnd );
 
         OSL_ENSURE( pO->empty(), " pO is not empty at start of line" );
 
