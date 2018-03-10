@@ -26,12 +26,14 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/reflection/XIdlClass.hpp>
 
+#include "cppuhelper/cppuhelperdllapi.h"
 
 namespace cppu {
 
 /*
   @deprecated
 */
+CPPUHELPER_DLLPUBLIC
 ::com::sun::star::reflection::XIdlClass * SAL_CALL createStandardClassWithSequence(
     const ::com::sun::star::uno::Reference < ::com::sun::star::lang::XMultiServiceFactory > &rSMgr ,
     const ::rtl::OUString & sImplementationName ,

@@ -100,6 +100,7 @@ extern const String C_opt_DevmanRoot;
 //extern const String C_opt_Load;
 //extern const String C_opt_Save;
 
+extern const String C_opt_IgnoreDefine;
 extern const String C_opt_ExternNamespace;
 extern const String C_opt_ExternRoot;
 

@@ -173,7 +173,8 @@ Parser::Create_CppParser()
     pCppDocuInterpreter = ParseToolsFactory().Create_DocuParser_AutodocStyle();
 
     pCppParser->Setup( CommandLine::Get_().TheRepository(),
-                       *pCppDocuInterpreter );
+                       *pCppDocuInterpreter,
+                       CommandLine::Get_().IgnoreDefines() );
 }
 
 void

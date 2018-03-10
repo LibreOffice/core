@@ -355,6 +355,11 @@ CommandLine::do_Init( int                 argc,
             do_clCreateHtml(it,itEnd);
         else if (*it == command::C_opt_SinceFile)
             do_clSinceFile(it,itEnd);
+        else if (*it == command::C_opt_IgnoreDefine)
+        {
+            AddIgnoreDefine(*(++it));
+            ++it;
+        }
         else if (*it == command::C_opt_ExternNamespace)
         {
             sExternNamespace = *(++it);

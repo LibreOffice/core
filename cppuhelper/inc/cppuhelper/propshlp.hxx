@@ -27,6 +27,7 @@
 #include <rtl/alloc.h>
 
 #include <cppuhelper/interfacecontainer.hxx>
+#include "cppuhelper/cppuhelperdllapi.h"
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
@@ -46,7 +47,7 @@ namespace cppu
 /**
    This interface is used by the OPropertyHelper, to access the property description.
  */
-class IPropertyArrayHelper
+class CPPUHELPER_DLLPUBLIC IPropertyArrayHelper
 {
 public:
     // these are here to force memory de/allocation to sal lib.
@@ -113,7 +114,7 @@ public:
    You can use this helper class to map a XPropertySet-Interface to a XFast-
    or a XMultiPropertySet interface.
  */
-class OPropertyArrayHelper : public IPropertyArrayHelper
+class CPPUHELPER_DLLPUBLIC OPropertyArrayHelper : public IPropertyArrayHelper
 {
 public:
      /**
@@ -226,7 +227,7 @@ struct hashInt32_Impl
 /** Specialized class for key type sal_Int32,
     without explicit usage of STL symbols.
 */
-class OMultiTypeInterfaceContainerHelperInt32
+class CPPUHELPER_DLLPUBLIC OMultiTypeInterfaceContainerHelperInt32
 {
 public:
     // these are here to force memory de/allocation to sal lib.
@@ -343,7 +344,7 @@ public:
    the connection point interfaces. But only listeners that listen to all property changes.
 
  */
-class OPropertySetHelper : public ::com::sun::star::beans::XMultiPropertySet,
+class CPPUHELPER_DLLPUBLIC OPropertySetHelper : public ::com::sun::star::beans::XMultiPropertySet,
                            public ::com::sun::star::beans::XFastPropertySet,
                            public ::com::sun::star::beans::XPropertySet
 {

@@ -58,7 +58,9 @@ class CodeParser_Ifc
     virtual void        Setup(
                             ary::Repository &   o_rRepository,
                             const autodoc::DocumentationParser_Ifc &
-                                                i_rDocumentationInterpreter ) = 0;
+                                                i_rDocumentationInterpreter,
+                            const ::std::vector<String> &
+                                                ignoreDefines ) = 0;
 
     virtual void        Run(
                             const autodoc::FileCollector_Ifc &

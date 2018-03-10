@@ -56,7 +56,7 @@ class Udk_MacroMap
   public:
     typedef std::map< String , DefineDescription* > Data;
 
-                        Udk_MacroMap();
+                        Udk_MacroMap(const ::std::vector<String>& ignoreDefines);
                         ~Udk_MacroMap();
 
     const Data &        GetData() const         { return aData; }
@@ -76,7 +76,9 @@ struct S_RunningData
                             S_RunningData(
                                 ary::Repository &   o_rRepository,
                                 const autodoc::DocumentationParser_Ifc &
-                                                    i_rDocumentationInterpreter );
+                                                    i_rDocumentationInterpreter,
+                                const ::std::vector<String> &
+                                                    ignoreDefines );
 };
 
 
@@ -93,9 +95,10 @@ Cpluplus_Parser::~Cpluplus_Parser()
 
 void
 Cpluplus_Parser::Setup( ary::Repository &                        o_rRepository,
-                        const autodoc::DocumentationParser_Ifc & i_rDocumentationInterpreter )
+                        const autodoc::DocumentationParser_Ifc & i_rDocumentationInterpreter,
+                        const ::std::vector<String>            & ignoreDefines )
 {
-    pRunningData = new S_RunningData(o_rRepository, i_rDocumentationInterpreter);
+    pRunningData = new S_RunningData(o_rRepository, i_rDocumentationInterpreter, ignoreDefines);
 }
 
 void
@@ -131,10 +134,11 @@ Cpluplus_Parser::Run( const autodoc::FileCollector_Ifc &    i_rFiles )
 }
 
 S_RunningData::S_RunningData( ary::Repository &                        o_rRepository,
-                              const autodoc::DocumentationParser_Ifc & i_rDocumentationInterpreter )
+                              const autodoc::DocumentationParser_Ifc & i_rDocumentationInterpreter,
+                              const ::std::vector<String>            & ignoreDefines )
     :   aFileContent(),
         rCppGate( o_rRepository.Gate_Cpp() ),
-        aMacros(),
+        aMacros( ignoreDefines ),
         aDealer(o_rRepository.Gate_Cpp()),
         aTkp( * i_rDocumentationInterpreter.Create_DocuContext() )
 {
@@ -144,7 +148,7 @@ S_RunningData::S_RunningData( ary::Repository &                        o_rReposi
 }
 
 
-Udk_MacroMap::Udk_MacroMap()
+Udk_MacroMap::Udk_MacroMap( const ::std::vector<String> & ignoreDefines )
 {
     String  sSAL_CALL("SAL_CALL");
     String  sSAL_CALL_ELLIPSE("SAL_CALL_ELLIPSE");
@@ -206,6 +210,9 @@ Udk_MacroMap::Udk_MacroMap()
         = new DefineDescription(sSAL_EXCEPTION_DLLPUBLIC_EXPORT, aEmpty);
     aData[sSAL_EXCEPTION_DLLPRIVATE]
         = new DefineDescription(sSAL_EXCEPTION_DLLPRIVATE, aEmpty);
+
+    for (size_t index = 0; index != ignoreDefines.size(); ++index)
+        aData[ignoreDefines[index]] = new DefineDescription(ignoreDefines[index], aEmpty);
 }
 
 Udk_MacroMap::~Udk_MacroMap()

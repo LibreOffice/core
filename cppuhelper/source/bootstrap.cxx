@@ -178,6 +178,7 @@ void addFactories(
 }
 
 // private forward decl
+SAL_DLLPUBLIC_EXPORT
 Reference< lang::XMultiComponentFactory > bootstrapInitialSF(
     OUString const & rBootstrapPath )
     SAL_THROW( (Exception) );

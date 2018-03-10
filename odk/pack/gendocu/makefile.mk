@@ -64,7 +64,9 @@ JAVA_BEAN_SRC_FILES=\
         $(JAVA_SRC_DIR)$/com$/sun$/star$/beans$/OfficeConnection.java \
         $(JAVA_SRC_DIR)$/com$/sun$/star$/beans$/OfficeWindow.java
 
-AUTODOCPARAMS= -lg c++ \
+AUTODOCPARAMS=\
+        -ignoredefine CPPUHELPER_DLLPUBLIC \
+        -lg c++ \
         -p sal $(INCOUT) -t sal -t osl -t rtl \
         -p store $(INCOUT) -t store \
         -p registry $(INCOUT) -t registry \

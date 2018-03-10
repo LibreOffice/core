@@ -47,7 +47,9 @@ class Cpluplus_Parser : public autodoc::CodeParser_Ifc
     virtual void        Setup(
                             ary::Repository &   o_rRepository,
                             const autodoc::DocumentationParser_Ifc &
-                                                i_rDocumentationInterpreter );
+                                                i_rDocumentationInterpreter,
+                            const ::std::vector<String> &
+                                                ignoreDefines );
 
     virtual void        Run(
                             const autodoc::FileCollector_Ifc &

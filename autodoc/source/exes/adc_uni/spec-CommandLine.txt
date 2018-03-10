@@ -26,6 +26,7 @@
 autodoc [-v <level>]
         -html <out>
         [-extroot <externroot> -extnsp <externnamespace>]
+        [-ignoredefine <PreprocessorDefinition>]
         -lg <proglang>
         [-t <sourcetree>[ <sourcetree> ...]
         [-d <sourcedir>[ <sourcedir> ...]
@@ -37,6 +38,16 @@ autodoc [-v <level>]
 
     -lg <ProgrammingLanguage>
         Allowed values: "c++" or "idl"
+
+    -ignoredefine <PreprocessorDefinition>
+        Only together with "-lg c++".
+        Ignore the given preprocessor definition when parsing the
+        source code. This is necessary as autodoc doesn't have a
+        C/C++ preprocessor, so it will get confused if it sees a
+        preprocessor definition somewhere it doesn't expect one,
+        and won't parse that code. For example in
+        "class CPPUHELPER_DLLPUBLIC UnoUrl"
+        you need to pass it "-ignoredefine CPPUHELPER_DLLPUBLIC".
 
     -extroot <externroot>
         Only together with "-lg idl" and -extnsp.

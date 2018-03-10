@@ -32,6 +32,8 @@
     // COMPONENTS
     // PARAMETERS
 
+#include <vector>
+
 namespace ary
 {
     class Repository;
@@ -75,6 +77,9 @@ class CommandLine : public csv::CommandLine_Ifc
     const String &      DisplayOf_SinceTagValue(
                             const String &      i_sVersionNumber ) const;
 
+    const ::std::vector<String> & IgnoreDefines() const
+                                                { return ignoreDefines; }
+
         // extern IDL links
     const String &      ExternRoot() const      { return sExternRoot; }
     const String &      ExternNamespace() const { return sExternNamespace; }
@@ -83,6 +88,9 @@ class CommandLine : public csv::CommandLine_Ifc
     bool                IdlUsed() const         { return bIdl; }
 
     // ACCESS
+    void                AddIgnoreDefine(
+                            const String& define)
+                                                { ignoreDefines.push_back(define); }
     static CommandLine &
                         Get_();
     void                Set_ExternRoot(
@@ -146,6 +154,8 @@ class CommandLine : public csv::CommandLine_Ifc
     bool                bInitOk;
     command::CreateHtml *
                         pCommand_CreateHtml;
+
+    ::std::vector<String> ignoreDefines;
 
     String              sExternRoot;
     String              sExternNamespace;

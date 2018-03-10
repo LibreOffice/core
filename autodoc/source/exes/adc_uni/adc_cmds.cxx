@@ -65,6 +65,7 @@ extern const String C_opt_DevmanRoot("-dvgroot");
 //extern const String C_opt_Load("-load");
 //extern const String C_opt_Save("-save");
 
+extern const String C_opt_IgnoreDefine("-ignoredefine");
 extern const String C_opt_ExternNamespace("-extnsp");
 extern const String C_opt_ExternRoot("-extroot");
 
