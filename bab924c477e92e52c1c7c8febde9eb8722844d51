@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba2be162_bdc5895c",
+        "filename": "sc/source/ui/drawfunc/drawsh5.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 371,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2018-03-10T18:10:00Z",
+      "side": 0,
+      "message": "I wonder whether it\u0027s a good idea to remove it, as the old command might be used in macros or bound to kb shortcuts.",
+      "revId": "bab924c477e92e52c1c7c8febde9eb8722844d51",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

@@ -1,0 +1,78 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba2be162_fdbe21d3",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/CalcCommands.xcu",
+        "patchSetId": 2
+      },
+      "lineNbr": 1814,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2018-03-10T18:10:00Z",
+      "side": 1,
+      "message": "Not sure this is necessary, as it might be better to keep the underlying command (see the comment in drawsh5.cxx), and in this case users with customized toolbars might want the old behavior.",
+      "revId": "818b4d21d45ccb804cd2e5becc9e99e216c9925c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba2be162_1db4d5f0",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/CalcCommands.xcu",
+        "patchSetId": 2
+      },
+      "lineNbr": 1829,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2018-03-10T18:10:00Z",
+      "side": 1,
+      "message": "This breaks the text in the menubar and context menus (used to be \"Anchor\"). But anyway I don\u0027t understand why not just rely on the string from GenericCommands.xcu?",
+      "revId": "818b4d21d45ccb804cd2e5becc9e99e216c9925c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba2be162_3db999ea",
+        "filename": "sc/sdi/drawsh.sdi",
+        "patchSetId": 2
+      },
+      "lineNbr": 161,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2018-03-10T18:10:00Z",
+      "side": 1,
+      "message": "It doesn\u0027t need an execute method (and is unused in practice).",
+      "range": {
+        "startLine": 161,
+        "startChar": 30,
+        "endLine": 161,
+        "endChar": 56
+      },
+      "revId": "818b4d21d45ccb804cd2e5becc9e99e216c9925c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba2be162_5dce4d84",
+        "filename": "sc/sdi/scalc.sdi",
+        "patchSetId": 2
+      },
+      "lineNbr": 4664,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2018-03-10T18:10:00Z",
+      "side": 1,
+      "message": "It might be a good idea to move this to svx, to avoid the separate definitions in sc and sw.",
+      "revId": "818b4d21d45ccb804cd2e5becc9e99e216c9925c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
