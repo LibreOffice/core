@@ -1264,7 +1264,7 @@ void SdrEditView::CombineMarkedObjects(bool bNoPolyPoly)
 
     // continue as before
     basegfx::B2DPolyPolygon aPolyPolygon;
-    SdrObjList* pAktOL = nullptr;
+    SdrObjList* pCurrentOL = nullptr;
     SdrMarkList aRemoveMerker;
 
     SortMarkedObjects();
@@ -1280,9 +1280,9 @@ void SdrEditView::CombineMarkedObjects(bool bNoPolyPoly)
         SdrObject* pObj = pM->GetMarkedSdrObj();
         SdrObjList* pThisOL = pObj->GetObjList();
 
-        if(pAktOL != pThisOL)
+        if(pCurrentOL != pThisOL)
         {
-            pAktOL = pThisOL;
+            pCurrentOL = pThisOL;
         }
 
         if(ImpCanConvertForCombine(pObj))
@@ -1736,8 +1736,8 @@ void SdrEditView::GroupMarked()
 
         if(pPV)
         {
-            SdrObjList* pAktLst=pPV->GetObjList();
-            SdrObjList* pSrcLst=pAktLst;
+            SdrObjList* pCurrentLst=pPV->GetObjList();
+            SdrObjList* pSrcLst=pCurrentLst;
             SdrObjList* pSrcLst0=pSrcLst;
             // make sure OrdNums are correct
             if (pSrcLst->IsObjOrdNumsDirty())
@@ -1768,7 +1768,7 @@ void SdrEditView::GroupMarked()
                         if (pSrcLst->IsObjOrdNumsDirty())
                             pSrcLst->RecalcObjOrdNums();
                     }
-                    bool bForeignList=pSrcLst!=pAktLst;
+                    bool bForeignList=pSrcLst!=pCurrentLst;
                     if (!bForeignList && bNeedInsPos)
                     {
                         nInsPos=pObj->GetOrdNum(); // this way, all ObjOrdNum of the page are set
@@ -1787,7 +1787,7 @@ void SdrEditView::GroupMarked()
             {
                 aNewMark.InsertEntry(SdrMark(pGrp,pPV));
                 const size_t nCount=pDstLst->GetObjCount();
-                pAktLst->InsertObject(pGrp,nInsPos);
+                pCurrentLst->InsertObject(pGrp,nInsPos);
                 if( bUndo )
                 {
                     AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoNewObject(*pGrp,true)); // no recalculation!
