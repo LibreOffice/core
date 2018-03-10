@@ -93,19 +93,13 @@ void WrappedIgnoreProperties::addIgnoreFillProperties_without_BitmapProperties( 
     rList.push_back( new WrappedIgnoreProperty( "FillColor", uno::Any( sal_Int32(-1) ) ) );
     rList.push_back( new WrappedIgnoreProperty( "FillTransparence", uno::Any( sal_Int16(0) ) ) );
     rList.push_back( new WrappedIgnoreProperty( "FillTransparenceGradientName", uno::Any( OUString() ) ) );
-//    rList.push_back( new WrappedIgnoreProperty( "FillTransparenceGradient", uno::Any( awt::Gradient() ) ) );
     rList.push_back( new WrappedIgnoreProperty( "FillGradientName", uno::Any( OUString() ) ) );
-//    rList.push_back( new WrappedIgnoreProperty( "FillGradient", uno::Any( awt::Gradient() ) ) );
     rList.push_back( new WrappedIgnoreProperty( "FillHatchName", uno::Any( OUString() ) ) );
-//    rList.push_back( new WrappedIgnoreProperty( "FillHatch", uno::Any( drawing::Hatch() ) ) );
     rList.push_back( new WrappedIgnoreProperty( "FillBackground", uno::Any( false ) ) );
 }
 
 void WrappedIgnoreProperties::addIgnoreFillProperties_only_BitmapProperties( std::vector< WrappedProperty* >& rList )
 {
-//     rList.push_back( new WrappedIgnoreProperty( "FillBitmapName", uno::Any( OUString() ) ) );
-//    rList.push_back( new WrappedIgnoreProperty( "FillBitmap", uno::Any( uno::Reference< awt::XBitmap > (0) ) ) );
-//    rList.push_back( new WrappedIgnoreProperty( "FillBitmapURL", uno::Any( OUString() ) ) );
     rList.push_back( new WrappedIgnoreProperty( "FillBitmapOffsetX", uno::Any( sal_Int16(0) ) ) );
     rList.push_back( new WrappedIgnoreProperty( "FillBitmapOffsetY", uno::Any( sal_Int16(0) ) ) );
     rList.push_back( new WrappedIgnoreProperty( "FillBitmapPositionOffsetX", uno::Any( sal_Int16(0) ) ) );
