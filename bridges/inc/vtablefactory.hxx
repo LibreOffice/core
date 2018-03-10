@@ -31,7 +31,7 @@
 /*See: http://people.redhat.com/drepper/selinux-mem.html*/
 #if defined(LINUX) || defined(OPENBSD) || defined(FREEBSD) \
     || defined(NETBSD) || defined(DRAGONFLY) || defined (ANDROID) \
-    || defined(HAIKU)
+    || defined(HAIKU)  || defined(IOS)
 #define USE_DOUBLE_MMAP
 #endif
 
