@@ -1496,18 +1496,18 @@ void OTableController::reload()
 
 sal_Int32 OTableController::getFirstEmptyRowPosition()
 {
-    sal_Int32 nRet = -1;
-    std::vector< std::shared_ptr<OTableRow> >::const_iterator aIter = m_vRowList.begin();
-    std::vector< std::shared_ptr<OTableRow> >::const_iterator aEnd = m_vRowList.end();
-    for(;aIter != aEnd;++aIter)
+    sal_Int32 nRet = 0;
+    bool bFoundElem = false;
+    for (auto const& row : m_vRowList)
     {
-        if ( !*aIter || !(*aIter)->GetActFieldDescr() || (*aIter)->GetActFieldDescr()->GetName().isEmpty() )
+        if ( !row || !row->GetActFieldDescr() || row->GetActFieldDescr()->GetName().isEmpty() )
         {
-            nRet = aIter - m_vRowList.begin();
+            bFoundElem = true;
             break;
         }
+        ++nRet;
     }
-    if ( nRet == -1 )
+    if (!bFoundElem)
     {
         bool bReadRow = !isAddAllowed();
         std::shared_ptr<OTableRow> pTabEdRow(new OTableRow());

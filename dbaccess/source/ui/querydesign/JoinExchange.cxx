@@ -56,13 +56,9 @@ namespace dbaui
 
     bool OJoinExchObj::isFormatAvailable( const DataFlavorExVector& _rFormats ,SotClipboardFormatId _nSlotID)
     {
-        DataFlavorExVector::const_iterator aCheckEnd = _rFormats.end();
-        for (   DataFlavorExVector::const_iterator aCheck = _rFormats.begin();
-                aCheck != aCheckEnd;
-                ++aCheck
-            )
+        for (auto const& format : _rFormats)
         {
-            if ( _nSlotID == aCheck->mnSotId )
+            if ( _nSlotID == format.mnSotId )
                 return true;
         }
         return false;

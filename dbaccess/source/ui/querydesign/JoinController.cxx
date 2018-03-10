@@ -292,10 +292,8 @@ void OJoinController::SaveTabWinsPosSize( OJoinTableView::OTableWindowMap* pTabW
     OSL_ENSURE(m_vTableData.size() == pTabWinList->size(),
         "OJoinController::SaveTabWinsPosSize : inconsistent state : should have as many TabWinDatas as TabWins !");
 
-    OJoinTableView::OTableWindowMap::const_iterator aIter = pTabWinList->begin();
-    OJoinTableView::OTableWindowMap::const_iterator aEnd = pTabWinList->end();
-    for(;aIter != aEnd;++aIter)
-        SaveTabWinPosSize(aIter->second, nOffsetX, nOffsetY);
+    for (auto const& tabWin : *pTabWinList)
+        SaveTabWinPosSize(tabWin.second, nOffsetX, nOffsetY);
 }
 
 void OJoinController::removeConnectionData(const TTableConnectionData::value_type& _pData)
@@ -390,21 +388,20 @@ void OJoinController::saveTableWindows( ::comphelper::NamedValueCollection& o_rV
     {
         ::comphelper::NamedValueCollection aAllTablesData;
 
-        TTableWindowData::const_iterator aIter = m_vTableData.begin();
-        TTableWindowData::const_iterator aEnd = m_vTableData.end();
-        for ( sal_Int32 i = 1; aIter != aEnd; ++aIter, ++i )
+        sal_Int32 i = 1;
+        for (auto const& elem : m_vTableData)
         {
             ::comphelper::NamedValueCollection aWindowData;
-            aWindowData.put( "ComposedName", (*aIter)->GetComposedName() );
-            aWindowData.put( "TableName", (*aIter)->GetTableName() );
-            aWindowData.put( "WindowName", (*aIter)->GetWinName() );
-            aWindowData.put( "WindowTop", static_cast<sal_Int32>((*aIter)->GetPosition().Y()) );
-            aWindowData.put( "WindowLeft", static_cast<sal_Int32>((*aIter)->GetPosition().X()) );
-            aWindowData.put( "WindowWidth", static_cast<sal_Int32>((*aIter)->GetSize().Width()) );
-            aWindowData.put( "WindowHeight", static_cast<sal_Int32>((*aIter)->GetSize().Height()) );
-            aWindowData.put( "ShowAll", (*aIter)->IsShowAll() );
+            aWindowData.put( "ComposedName", elem->GetComposedName() );
+            aWindowData.put( "TableName", elem->GetTableName() );
+            aWindowData.put( "WindowName", elem->GetWinName() );
+            aWindowData.put( "WindowTop", static_cast<sal_Int32>(elem->GetPosition().Y()) );
+            aWindowData.put( "WindowLeft", static_cast<sal_Int32>(elem->GetPosition().X()) );
+            aWindowData.put( "WindowWidth", static_cast<sal_Int32>(elem->GetSize().Width()) );
+            aWindowData.put( "WindowHeight", static_cast<sal_Int32>(elem->GetSize().Height()) );
+            aWindowData.put( "ShowAll", elem->IsShowAll() );
 
-            const OUString sTableName( "Table" + OUString::number( i ) );
+            const OUString sTableName( "Table" + OUString::number( i++ ) );
             aAllTablesData.put( sTableName, aWindowData.getPropertyValues() );
         }
 

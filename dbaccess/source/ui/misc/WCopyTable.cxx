@@ -83,11 +83,8 @@ namespace
 {
     void clearColumns(ODatabaseExport::TColumns& _rColumns, ODatabaseExport::TColumnVector& _rColumnsVec)
     {
-        ODatabaseExport::TColumns::const_iterator aIter = _rColumns.begin();
-        ODatabaseExport::TColumns::const_iterator aEnd  = _rColumns.end();
-
-        for(;aIter != aEnd;++aIter)
-            delete aIter->second;
+        for (auto const& column : _rColumns)
+            delete column.second;
 
         _rColumnsVec.clear();
         _rColumns.clear();
@@ -341,11 +338,9 @@ void NamedTableCopySource::impl_ensureColumnInfo_throw()
 Sequence< OUString > NamedTableCopySource::getColumnNames() const
 {
     Sequence< OUString > aNames( m_aColumnInfo.size() );
-    for (   std::vector< OFieldDescription >::const_iterator col = m_aColumnInfo.begin();
-            col != m_aColumnInfo.end();
-            ++col
-        )
-        aNames[ col - m_aColumnInfo.begin() ] = col->GetName();
+    size_t nPos = 0;
+    for (auto const& elem : m_aColumnInfo)
+        aNames[ nPos++ ] = elem.GetName();
 
     return aNames;
 }
@@ -375,12 +370,9 @@ Sequence< OUString > NamedTableCopySource::getPrimaryKeyColumnNames() const
 
 OFieldDescription* NamedTableCopySource::createFieldDescription( const OUString& _rColumnName ) const
 {
-    for (   std::vector< OFieldDescription >::const_iterator col = m_aColumnInfo.begin();
-            col != m_aColumnInfo.end();
-            ++col
-        )
-        if ( col->GetName() == _rColumnName )
-            return new OFieldDescription( *col );
+    for (auto const& elem : m_aColumnInfo)
+        if ( elem.GetName() == _rColumnName )
+            return new OFieldDescription(elem);
 
     return nullptr;
 }
@@ -612,11 +604,9 @@ OCopyTableWizard::OCopyTableWizard( vcl::Window* pParent, const OUString& _rDefa
     ,m_bCreatePrimaryKeyColumn(false)
 {
     construct();
-    ODatabaseExport::TColumnVector::const_iterator aIter = _rSourceColVec.begin();
-    ODatabaseExport::TColumnVector::const_iterator aEnd = _rSourceColVec.end();
-    for (; aIter != aEnd ; ++aIter)
+    for (auto const& sourceCol : _rSourceColVec)
     {
-        m_vSourceVec.emplace_back(m_vSourceColumns.find((*aIter)->first));
+        m_vSourceVec.emplace_back(m_vSourceColumns.find(sourceCol->first));
     }
 
     ::dbaui::fillTypeInfo( _xConnection, m_sTypeNames, m_aTypeInfo, m_aTypeInfoIndex );
@@ -792,11 +782,9 @@ bool OCopyTableWizard::CheckColumns(sal_Int32& _rnBreakPos)
 
         if ( bContainsColumns )
         {   // we have dest columns so look for the matching column
-            ODatabaseExport::TColumnVector::const_iterator aSrcIter = m_vSourceVec.begin();
-            ODatabaseExport::TColumnVector::const_iterator aSrcEnd = m_vSourceVec.end();
-            for(;aSrcIter != aSrcEnd;++aSrcIter)
+            for (auto const& elemSource : m_vSourceVec)
             {
-                ODatabaseExport::TColumns::const_iterator aDestIter = m_vDestColumns.find(m_mNameMapping[(*aSrcIter)->first]);
+                ODatabaseExport::TColumns::const_iterator aDestIter = m_vDestColumns.find(m_mNameMapping[elemSource->first]);
 
                 if ( aDestIter != m_vDestColumns.end() )
                 {
@@ -818,13 +806,12 @@ bool OCopyTableWizard::CheckColumns(sal_Int32& _rnBreakPos)
             OUString sExtraChars = xMetaData->getExtraNameCharacters();
             sal_Int32 nMaxNameLen       = getMaxColumnNameLength();
 
-            ODatabaseExport::TColumnVector::const_iterator aSrcIter = m_vSourceVec.begin();
-            ODatabaseExport::TColumnVector::const_iterator aSrcEnd = m_vSourceVec.end();
-            for(_rnBreakPos=0;aSrcIter != aSrcEnd && bRet ;++aSrcIter,++_rnBreakPos)
+            _rnBreakPos=0;
+            for (auto const& elemSource : m_vSourceVec)
             {
-                OFieldDescription* pField = new OFieldDescription(*(*aSrcIter)->second);
-                pField->SetName(convertColumnName(TExportColumnFindFunctor(&m_vDestColumns),(*aSrcIter)->first,sExtraChars,nMaxNameLen));
-                TOTypeInfoSP pType = convertType((*aSrcIter)->second->getSpecialTypeInfo(),bRet);
+                OFieldDescription* pField = new OFieldDescription(*elemSource->second);
+                pField->SetName(convertColumnName(TExportColumnFindFunctor(&m_vDestColumns),elemSource->first,sExtraChars,nMaxNameLen));
+                TOTypeInfoSP pType = convertType(elemSource->second->getSpecialTypeInfo(),bRet);
                 pField->SetType(pType);
                 if ( !bPKeyAllowed )
                     pField->SetPrimaryKey(false);
@@ -832,7 +819,10 @@ bool OCopyTableWizard::CheckColumns(sal_Int32& _rnBreakPos)
                 // now create a column
                 insertColumn(m_vDestColumns.size(),pField);
                 m_vColumnPositions.emplace_back(m_vDestColumns.size(),m_vDestColumns.size());
-                m_vColumnTypes.push_back((*aSrcIter)->second->GetType());
+                m_vColumnTypes.push_back(elemSource->second->GetType());
+                ++_rnBreakPos;
+                if (!bRet)
+                    break;
             }
         }
     }
@@ -1031,9 +1021,8 @@ void OCopyTableWizard::replaceColumn(sal_Int32 _nPos,OFieldDescription* _pField,
 
 void OCopyTableWizard::loadData(  const ICopyTableSourceObject& _rSourceObject, ODatabaseExport::TColumns& _rColumns, ODatabaseExport::TColumnVector& _rColVector )
 {
-    ODatabaseExport::TColumns::const_iterator colEnd = _rColumns.end();
-    for ( ODatabaseExport::TColumns::const_iterator col = _rColumns.begin(); col != colEnd; ++col )
-        delete col->second;
+    for (auto const& column : _rColumns)
+        delete column.second;
 
     _rColVector.clear();
     _rColumns.clear();
@@ -1108,11 +1097,9 @@ void OCopyTableWizard::appendColumns( Reference<XColumnsSupplier> const & _rxCol
     Reference<XAppend> xAppend(xColumns,UNO_QUERY);
     OSL_ENSURE(xAppend.is(),"No XAppend Interface!");
 
-    ODatabaseExport::TColumnVector::const_iterator aIter = _pVec->begin();
-    ODatabaseExport::TColumnVector::const_iterator aEnd = _pVec->end();
-    for(;aIter != aEnd;++aIter)
+    for (auto const& elem : *_pVec)
     {
-        OFieldDescription* pField = (*aIter)->second;
+        OFieldDescription* pField = elem->second;
         if(!pField)
             continue;
 

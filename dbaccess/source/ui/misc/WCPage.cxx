@@ -274,18 +274,18 @@ bool OCopyTable::checkAppendData()
         ObjectCopySource aTableCopySource( m_pParent->m_xDestConnection, xTable );
         m_pParent->loadData( aTableCopySource, m_pParent->m_vDestColumns, m_pParent->m_aDestVec );
         const ODatabaseExport::TColumnVector& rDestColumns          = m_pParent->getDestVector();
-        ODatabaseExport::TColumnVector::const_iterator aDestIter    = rDestColumns.begin();
-        ODatabaseExport::TColumnVector::const_iterator aDestEnd     = rDestColumns.end();
-        const sal_uInt32 nDestSize = rDestColumns.size();
+        const sal_uInt32 nMinSrcDestSize = std::min<sal_uInt32>(nSrcSize, rDestColumns.size());
         sal_uInt32 i = 0;
-        for(sal_Int32 nPos = 1;aDestIter != aDestEnd && i < nDestSize && i < nSrcSize;++aDestIter,++nPos,++i)
+        for (auto const& column : rDestColumns)
         {
+            if (i >= nMinSrcDestSize)
+                break;
             bool bNotConvert = true;
-            m_pParent->m_vColumnPositions[i] = ODatabaseExport::TPositions::value_type(nPos,nPos);
-            TOTypeInfoSP pTypeInfo = m_pParent->convertType((*aDestIter)->second->getSpecialTypeInfo(),bNotConvert);
+            m_pParent->m_vColumnPositions[i] = ODatabaseExport::TPositions::value_type(i+1,i+1);
+            TOTypeInfoSP pTypeInfo = m_pParent->convertType(column->second->getSpecialTypeInfo(),bNotConvert);
             if ( !bNotConvert )
             {
-                m_pParent->showColumnTypeNotSupported((*aDestIter)->first);
+                m_pParent->showColumnTypeNotSupported(column->first);
                 return false;
             }
 
@@ -293,6 +293,7 @@ bool OCopyTable::checkAppendData()
                 m_pParent->m_vColumnTypes[i] = pTypeInfo->nType;
             else
                 m_pParent->m_vColumnTypes[i] = DataType::VARCHAR;
+            ++i;
         }
 
     }

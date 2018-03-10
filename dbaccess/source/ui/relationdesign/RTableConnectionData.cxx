@@ -337,17 +337,17 @@ xKey.clear();
                         xColumn->getPropertyValue(PROPERTY_NAME)            >>= sName;
                         xColumn->getPropertyValue(PROPERTY_RELATEDCOLUMN)   >>= sRelatedColumn;
 
-                        OConnectionLineDataVec::const_iterator aIter = m_vConnLineData.begin();
-                        OConnectionLineDataVec::const_iterator aEnd = m_vConnLineData.end();
-                        for(;aIter != aEnd;++aIter)
+                        bool bFoundElem = false;
+                        for (auto const& elem : m_vConnLineData)
                         {
-                            if(    (*aIter)->GetSourceFieldName() == sName
-                                && (*aIter)->GetDestFieldName() == sRelatedColumn )
+                            if(    elem->GetSourceFieldName() == sName
+                                && elem->GetDestFieldName() == sRelatedColumn )
                             {
+                                bFoundElem = true;
                                 break;
                             }
                         }
-                        if ( aIter == m_vConnLineData.end() )
+                        if (!bFoundElem)
                             break;
                     }
                     if ( pIter == pEnd )

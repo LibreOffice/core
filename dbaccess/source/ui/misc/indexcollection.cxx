@@ -148,19 +148,16 @@ namespace dbaui
             xIndexDescriptor->setPropertyValue(s_sNamePropertyName, makeAny(_rPos->sName));
 
             // the fields
-            for (   IndexFields::const_iterator aFieldLoop = _rPos->aFields.begin();
-                    aFieldLoop != _rPos->aFields.end();
-                    ++aFieldLoop
-                )
+            for (auto const& field : _rPos->aFields)
             {
-                OSL_ENSURE(!xCols->hasByName(aFieldLoop->sFieldName), "OIndexCollection::commitNewIndex: double column name (need to prevent this outside)!");
+                OSL_ENSURE(!xCols->hasByName(field.sFieldName), "OIndexCollection::commitNewIndex: double column name (need to prevent this outside)!");
 
                 Reference< XPropertySet > xColDescriptor = xColumnFactory->createDataDescriptor();
                 OSL_ENSURE(xColDescriptor.is(), "OIndexCollection::commitNewIndex: invalid column descriptor!");
                 if (xColDescriptor.is())
                 {
-                    xColDescriptor->setPropertyValue("IsAscending", css::uno::makeAny(aFieldLoop->bSortAscending));
-                    xColDescriptor->setPropertyValue(s_sNamePropertyName, makeAny(aFieldLoop->sFieldName));
+                    xColDescriptor->setPropertyValue("IsAscending", css::uno::makeAny(field.bSortAscending));
+                    xColDescriptor->setPropertyValue(s_sNamePropertyName, makeAny(field.sFieldName));
                     xAppendCols->appendByDescriptor(xColDescriptor);
                 }
             }

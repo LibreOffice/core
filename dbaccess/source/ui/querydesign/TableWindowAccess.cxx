@@ -126,12 +126,17 @@ namespace dbaui
         if( m_pTable )
         {
             // search the position of our table window in the table window map
-            OJoinTableView::OTableWindowMap& rMap = m_pTable->getTableView()->GetTabWinMap();
-            OJoinTableView::OTableWindowMap::const_iterator aIter = rMap.begin();
-            OJoinTableView::OTableWindowMap::const_iterator aEnd = rMap.end();
-            for (nIndex = 0; aIter != aEnd && aIter->second != m_pTable; ++nIndex,++aIter)
-                ;
-            nIndex = aIter != aEnd ? nIndex : -1;
+            bool bFoundElem = false;
+            for (auto const& tabWin : m_pTable->getTableView()->GetTabWinMap())
+            {
+                if (tabWin.second == m_pTable)
+                {
+                    bFoundElem = true;
+                    break;
+                }
+                ++nIndex;
+            }
+            nIndex = bFoundElem? nIndex : -1;
         }
         return nIndex;
     }
@@ -215,6 +220,8 @@ namespace dbaui
             auto aEnd = rConnectionList.end();
             std::vector< Reference<XInterface> > aRelations;
             aRelations.reserve(5); // just guessing
+            // TODO JNA aIter comes from pView->getTableConnections(m_pTable)
+            // and aEnd comes from pView->getTableConnections().end()
             for (; aIter != aEnd ; ++aIter )
             {
                 uno::Reference<uno::XInterface> xInterface(

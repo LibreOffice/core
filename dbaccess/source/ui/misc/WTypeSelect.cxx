@@ -152,15 +152,13 @@ void OWizTypeSelectControl::CellModified(long nRow, sal_uInt16 nColId )
                 static_cast<OWizTypeSelect*>(m_pParentTabPage.get())->setDuplicateName(false);
 
                 // now we change the name
-                OCopyTableWizard::TNameMapping::iterator aIter = pWiz->m_mNameMapping.begin();
-                OCopyTableWizard::TNameMapping::const_iterator aEnd  = pWiz->m_mNameMapping.end();
 
                 ::comphelper::UStringMixEqual aCase(bCase);
-                for(;aIter != aEnd;++aIter)
+                for (auto & elem : pWiz->m_mNameMapping)
                 {
-                    if ( aCase(aIter->second,sName) )
+                    if ( aCase(elem.second,sName) )
                     {
-                        aIter->second = sNewName;
+                        elem.second = sNewName;
                         break;
                     }
                 }
@@ -299,14 +297,12 @@ void OWizTypeSelect::Reset()
     m_pParent->CheckColumns(nBreakPos);
 
     const ODatabaseExport::TColumnVector& rDestColumns = m_pParent->getDestVector();
-    ODatabaseExport::TColumnVector::const_iterator aIter = rDestColumns.begin();
-    ODatabaseExport::TColumnVector::const_iterator aEnd = rDestColumns.end();
-    for(;aIter != aEnd;++aIter)
+    for (auto const& column : rDestColumns)
     {
-        const sal_Int32 nPos = (*aIter)->second->IsPrimaryKey()
-            ? m_pColumnNames->InsertEntry((*aIter)->first, m_imgPKey )
-            : m_pColumnNames->InsertEntry((*aIter)->first);
-        m_pColumnNames->SetEntryData(nPos,(*aIter)->second);
+        const sal_Int32 nPos = column->second->IsPrimaryKey()
+            ? m_pColumnNames->InsertEntry(column->first, m_imgPKey )
+            : m_pColumnNames->InsertEntry(column->first);
+        m_pColumnNames->SetEntryData(nPos,column->second);
     }
     m_bFirstTime = false;
 }

@@ -77,13 +77,20 @@ namespace dbaui
         if( m_pLine )
         {
             // search the position of our table window in the table window map
+            // TODO JNA Shouldn't nIndex begin at 0?
             nIndex = m_pLine->GetParent()->GetTabWinMap().size();
             const auto& rVec = m_pLine->GetParent()->getTableConnections();
-            auto aIter = rVec.begin();
-            auto aEnd = rVec.end();
-            for (; aIter != aEnd && (*aIter).get() != m_pLine; ++nIndex,++aIter)
-                ;
-            nIndex = ( aIter != aEnd ) ? nIndex : -1;
+            bool bFound = false;
+            for (auto const& elem : rVec)
+            {
+                if (elem.get() == m_pLine)
+                {
+                    bFound = true;
+                    break;
+                }
+                ++nIndex;
+            }
+            nIndex = bFound ? nIndex : -1;
         }
         return nIndex;
     }
