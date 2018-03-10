@@ -406,9 +406,17 @@ Cell::Cell(
     ,mnColSpan( 1 )
     ,mxTable( rTableObj.getTable() )
 {
-    // TTTT should not be needed (?)
-    // if( rTableObj.GetModel() )
-    //     SetModel( rTableObj.GetModel() );
+    // TTTT Caution: SetModel() indirectly did a very necessary thing here,
+    // it created a valid SvxTextEditSource which is needed to bind contained
+    // Text to the UNO API and thus to save/load and more. Added version without
+    // model change.
+    // Also done was (for reference):
+    //         SetStyleSheet( nullptr, true );
+    //         ForceOutlinerParaObject( OutlinerMode::TextObject );
+    if(nullptr == GetEditSource())
+    {
+        SetEditSource(new SvxTextEditSource(&GetObject(), this));
+    }
 }
 
 

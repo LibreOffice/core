@@ -779,6 +779,16 @@ void SdrTableObj::init( sal_Int32 nColumns, sal_Int32 nRows )
 
     mpImpl = new SdrTableObjImpl;
     mpImpl->init( this, nColumns, nRows );
+
+    // TTTT from old SetModel:
+    if( !maLogicRect.IsEmpty() )
+    {
+        maRect = maLogicRect;
+        mpImpl->LayoutTable( maRect, false, false );
+    }
+
+    // TTTT also init from SetModel:
+    mpImpl->SetModel(&getSdrModelFromSdrObject());
 }
 
 

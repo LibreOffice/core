@@ -72,6 +72,8 @@ FmFormObj::FmFormObj(SdrModel& rSdrModel)
     ,m_nPos(-1)
     ,m_pLastKnownRefDevice(nullptr)
 {
+    // TTTT stuff from old SetModel:
+    impl_checkRefDevice_nothrow();
 }
 
 FmFormObj::~FmFormObj()
