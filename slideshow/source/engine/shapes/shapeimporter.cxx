@@ -36,6 +36,7 @@
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <com/sun/star/drawing/XLayerSupplier.hpp>
 #include <com/sun/star/drawing/XLayerManager.hpp>
+#include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
@@ -64,77 +65,19 @@ std::unique_ptr<GraphicObject> importShapeGraphic(uno::Reference<beans::XPropert
 {
     std::unique_ptr<GraphicObject> xRet;
 
-    OUString aURL;
-    if( !getPropertyValue( aURL, xPropSet, "GraphicURL") ||
-        aURL.isEmpty() )
+    uno::Reference<graphic::XGraphic> xGraphic;
+    if (!getPropertyValue(xGraphic, xPropSet, "Graphic") || !xGraphic.is())
     {
         // no or empty property - cannot import shape graphic
         return xRet;
     }
 
-    OUString const aVndUrl(
-        "vnd.sun.star.GraphicObject:"  );
-    sal_Int32 nIndex( aURL.indexOf( aVndUrl ) );
+    Graphic aGraphic(xGraphic);
+    xRet.reset(new GraphicObject(aGraphic));
 
-    if(nIndex != -1)
+    if (GraphicType::Default == xRet->GetType() || GraphicType::NONE == xRet->GetType())
     {
-        // skip past the end of the "vnd..." prefix
-        nIndex += aVndUrl.getLength();
-
-        if(nIndex >= aURL.getLength())
-        {
-            OSL_FAIL( "ShapeImporter::importShape(): "
-                        "embedded graphic has no graphic ID" );
-            return nullptr;
-        }
-
-        // unique ID string found in URL, extract
-        // to separate string
-        OUString const aUniqueId( aURL.copy( nIndex ) );
-
-        // TODO(T2): Creating a GraphicObject is not
-        // thread safe (internally calls VCL, and has
-        // unguarded internal singleton mpGlobalMgr)
-
-        // fetch already loaded graphic from graphic manager.
-        OString const aOldString(OUStringToOString(aUniqueId,
-            RTL_TEXTENCODING_UTF8));
-        xRet.reset(new GraphicObject(aOldString));
-
-
-        if (GraphicType::Default == xRet->GetType()
-            || GraphicType::NONE == xRet->GetType())
-        {
-            // even the GrfMgr does not seem to know this graphic
-            return nullptr;
-        }
-    }
-    else
-    {
-        // no special string found, graphic must be
-        // external. Load via GraphicIm porter
-        INetURLObject aTmp( aURL );
-        std::unique_ptr<SvStream> pGraphicStream(
-            utl::UcbStreamHelper::CreateStream(
-                aTmp.GetMainURL( INetURLObject::DecodeMechanism::NONE ),
-                StreamMode::READ ) );
-        if( !pGraphicStream )
-        {
-            OSL_FAIL( "ShapeImporter::importShape(): "
-                        "cannot create input stream for graphic" );
-            return nullptr;
-        }
-
-        Graphic aTmpGraphic;
-        if( GraphicConverter::Import(
-                *pGraphicStream, aTmpGraphic ) != ERRCODE_NONE )
-        {
-            OSL_FAIL( "ShapeImporter::importShape(): "
-                        "Failed to import shape graphic from given URL" );
-            return nullptr;
-        }
-
-        xRet.reset(new GraphicObject(aTmpGraphic));
+        xRet.reset();
     }
     return xRet;
 }
