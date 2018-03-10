@@ -347,10 +347,9 @@ size_t CalcSizeForStringListBuffer(const FileList_t& fileList)
         return 0;
 
     size_t size = 1; // one for the very final '\0'
-    FileList_t::const_iterator iter_end = fileList.end();
-    for (FileList_t::const_iterator iter = fileList.begin(); iter != iter_end; ++iter)
+    for (auto const& elem : fileList)
     {
-        size += iter->length() + 1; // length including terminating '\0'
+        size += elem.length() + 1; // length including terminating '\0'
     }
     return (size * sizeof(FileList_t::value_type::value_type));
 }
@@ -366,12 +365,10 @@ ByteSequence_t FileListToByteSequence(const FileList_t& fileList)
         wchar_t* p = reinterpret_cast<wchar_t*>(bseq.getArray());
         ZeroMemory(p, size);
 
-        FileList_t::const_iterator iter;
-        FileList_t::const_iterator iter_end = fileList.end();
-        for (iter = fileList.begin(); iter != iter_end; ++iter)
+        for (auto const& elem : fileList)
         {
-            wcsncpy(p, iter->c_str(), iter->length());
-            p += (iter->length() + 1);
+            wcsncpy(p, elem.c_str(), elem.length());
+            p += (elem.length() + 1);
         }
     }
     return bseq;

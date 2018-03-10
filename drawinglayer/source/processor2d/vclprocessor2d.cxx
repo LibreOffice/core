@@ -235,10 +235,9 @@ namespace drawinglayer
                         const basegfx::B2DVector aPixelVector(maCurrentTransformation * basegfx::B2DVector(1.0, 0.0));
                         const double fPixelVectorFactor(aPixelVector.getLength());
 
-                        for(std::vector< double >::const_iterator aStart(rTextCandidate.getDXArray().begin());
-                            aStart != rTextCandidate.getDXArray().end(); ++aStart)
+                        for (auto const& elem : rTextCandidate.getDXArray())
                         {
-                            aTransformedDXArray.push_back(basegfx::fround((*aStart) * fPixelVectorFactor));
+                            aTransformedDXArray.push_back(basegfx::fround(elem * fPixelVectorFactor));
                         }
                     }
 
@@ -921,9 +920,9 @@ namespace drawinglayer
 
                     mpOutputDevice->EnableMapMode(false);
 
-                    for(std::vector< basegfx::B2DPoint >::const_iterator aIter(rPositions.begin()); aIter != rPositions.end(); ++aIter)
+                    for (auto const& pos : rPositions)
                     {
-                        const basegfx::B2DPoint aDiscreteTopLeft((maCurrentTransformation * (*aIter)) - aDiscreteHalfSize);
+                        const basegfx::B2DPoint aDiscreteTopLeft((maCurrentTransformation * pos) - aDiscreteHalfSize);
                         const Point aDiscretePoint(basegfx::fround(aDiscreteTopLeft.getX()), basegfx::fround(aDiscreteTopLeft.getY()));
 
                         mpOutputDevice->DrawBitmapEx(aDiscretePoint + aOrigin, rMarker);
@@ -941,9 +940,9 @@ namespace drawinglayer
             const basegfx::BColor aRGBColor(maBColorModifierStack.getModifiedColor(rPointArrayCandidate.getRGBColor()));
             const Color aVCLColor(aRGBColor);
 
-            for(std::vector< basegfx::B2DPoint >::const_iterator aIter(rPositions.begin()); aIter != rPositions.end(); ++aIter)
+            for (auto const& pos : rPositions)
             {
-                const basegfx::B2DPoint aViewPosition(maCurrentTransformation * (*aIter));
+                const basegfx::B2DPoint aViewPosition(maCurrentTransformation * pos);
                 const Point aPos(basegfx::fround(aViewPosition.getX()), basegfx::fround(aViewPosition.getY()));
 
                 mpOutputDevice->DrawPixel(aPos, aVCLColor);
