@@ -2621,12 +2621,12 @@ struct SvxAutocorrWordList::Impl
 
     void DeleteAndDestroyAll()
     {
-        for (AutocorrWordHashType::const_iterator it = maHash.begin(); it != maHash.end(); ++it)
-            delete it->second;
+        for (auto const& elem : maHash)
+            delete elem.second;
         maHash.clear();
 
-        for (AutocorrWordSetType::const_iterator it2 = maSet.begin(); it2 != maSet.end(); ++it2)
-            delete *it2;
+        for (auto const& elem : maSet)
+            delete elem;
         maSet.clear();
     }
 };
@@ -2701,12 +2701,12 @@ SvxAutocorrWordList::Content SvxAutocorrWordList::getSortedContent() const
     if ( mpImpl->maSet.empty() )
     {
         // This beast has some O(N log(N)) in a terribly slow ICU collate fn.
-        for (AutocorrWordHashType::const_iterator it = mpImpl->maHash.begin(); it != mpImpl->maHash.end(); ++it)
-            mpImpl->maSet.insert( it->second );
+        for (auto const& elem : mpImpl->maHash)
+            mpImpl->maSet.insert( elem.second );
         mpImpl->maHash.clear();
     }
-    for (AutocorrWordSetType::const_iterator it = mpImpl->maSet.begin(); it != mpImpl->maSet.end(); ++it)
-        aContent.push_back( *it );
+    for (auto const& elem : mpImpl->maSet)
+        aContent.push_back(elem);
 
     return aContent;
 }
@@ -2837,15 +2837,15 @@ const SvxAutocorrWord* SvxAutocorrWordList::WordMatches(const SvxAutocorrWord *p
 const SvxAutocorrWord* SvxAutocorrWordList::SearchWordsInList(const OUString& rTxt, sal_Int32& rStt,
                                                               sal_Int32 nEndPos) const
 {
-    for (AutocorrWordHashType::const_iterator it = mpImpl->maHash.begin(); it != mpImpl->maHash.end(); ++it)
+    for (auto const& elem : mpImpl->maHash)
     {
-        if( const SvxAutocorrWord *aTmp = WordMatches( it->second, rTxt, rStt, nEndPos ) )
+        if( const SvxAutocorrWord *aTmp = WordMatches( elem.second, rTxt, rStt, nEndPos ) )
             return aTmp;
     }
 
-    for (AutocorrWordSetType::const_iterator it2 = mpImpl->maSet.begin(); it2 != mpImpl->maSet.end(); ++it2)
+    for (auto const& elem : mpImpl->maSet)
     {
-        if( const SvxAutocorrWord *aTmp = WordMatches( *it2, rTxt, rStt, nEndPos ) )
+        if( const SvxAutocorrWord *aTmp = WordMatches( elem, rTxt, rStt, nEndPos ) )
             return aTmp;
     }
     return nullptr;

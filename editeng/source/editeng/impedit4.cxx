@@ -1381,10 +1381,8 @@ void ImpEditEngine::GetAllMisspellRanges( std::vector<editeng::MisspellRanges>& 
 void ImpEditEngine::SetAllMisspellRanges( const std::vector<editeng::MisspellRanges>& rRanges )
 {
     EditDoc& rDoc = GetEditDoc();
-    std::vector<editeng::MisspellRanges>::const_iterator it = rRanges.begin(), itEnd = rRanges.end();
-    for (; it != itEnd; ++it)
+    for (auto const& rParaRanges : rRanges)
     {
-        const editeng::MisspellRanges& rParaRanges = *it;
         ContentNode* pNode = rDoc.GetObject(rParaRanges.mnParagraph);
         if (!pNode)
             continue;

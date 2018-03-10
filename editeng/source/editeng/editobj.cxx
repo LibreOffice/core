@@ -143,9 +143,8 @@ ContentInfo::ContentInfo( const ContentInfo& rCopyFrom, SfxItemPool& rPoolToUse 
 
 ContentInfo::~ContentInfo()
 {
-    XEditAttributesType::iterator it = maCharAttribs.begin(), itEnd = maCharAttribs.end();
-    for (; it != itEnd; ++it)
-        aParaAttribs.GetPool()->Remove(*(*it)->GetItem());
+    for (auto const& charAttrib : maCharAttribs)
+        aParaAttribs.GetPool()->Remove(*charAttrib->GetItem());
     maCharAttribs.clear();
 }
 
@@ -214,13 +213,11 @@ void ContentInfo::Dump() const
     cout << "text: '" << OUString(const_cast<rtl_uString*>(maText.getData())) << "'" << endl;
     cout << "style: '" << aStyle << "'" << endl;
 
-    XEditAttributesType::const_iterator it = aAttribs.begin(), itEnd = aAttribs.end();
-    for (; it != itEnd; ++it)
+    for (auto const& attrib : aAttribs)
     {
-        const XEditAttribute& rAttr = *it;
         cout << "attribute: " << endl;
-        cout << "  span: [begin=" << rAttr.GetStart() << ", end=" << rAttr.GetEnd() << "]" << endl;
-        cout << "  feature: " << (rAttr.IsFeature() ? "yes":"no") << endl;
+        cout << "  span: [begin=" << attrib.GetStart() << ", end=" << attrib.GetEnd() << "]" << endl;
+        cout << "  feature: " << (attrib.IsFeature() ? "yes":"no") << endl;
     }
 }
 #endif
@@ -468,9 +465,8 @@ void EditTextObjectImpl::ObjectInDestruction(const SfxItemPool& rSfxItemPool)
 
         ContentInfosType aReplaced;
         aReplaced.reserve(aContents.size());
-        ContentInfosType::const_iterator it = aContents.begin(), itEnd = aContents.end();
-        for (; it != itEnd; ++it)
-            aReplaced.push_back(std::unique_ptr<ContentInfo>(new ContentInfo(*it->get(), *pNewPool)));
+        for (auto const& content : aContents)
+            aReplaced.push_back(std::unique_ptr<ContentInfo>(new ContentInfo(*content.get(), *pNewPool)));
         aReplaced.swap(aContents);
 
         // set local variables
@@ -482,9 +478,8 @@ void EditTextObjectImpl::ObjectInDestruction(const SfxItemPool& rSfxItemPool)
 #if DEBUG_EDIT_ENGINE
 void EditTextObjectImpl::Dump() const
 {
-    ContentInfosType::const_iterator it = aContents.begin(), itEnd = aContents.end();
-    for (; it != itEnd; ++it)
-        it->Dump();
+    for (auto const& content : aContents)
+        content.Dump();
 }
 #endif
 
@@ -580,9 +575,8 @@ EditTextObjectImpl::EditTextObjectImpl( EditTextObject* pFront, const EditTextOb
         pPool->SetDefaultMetric( r.pPool->GetMetric( DEF_METRIC ) );
 
     aContents.reserve(r.aContents.size());
-    ContentInfosType::const_iterator it = r.aContents.begin(), itEnd = r.aContents.end();
-    for (; it != itEnd; ++it)
-        aContents.push_back(std::unique_ptr<ContentInfo>(new ContentInfo(*it->get(), *pPool)));
+    for (auto const& content : r.aContents)
+        aContents.push_back(std::unique_ptr<ContentInfo>(new ContentInfo(*content.get(), *pPool)));
 }
 
 EditTextObjectImpl::~EditTextObjectImpl()
@@ -611,10 +605,9 @@ void EditTextObjectImpl::SetUserType( OutlinerMode n )
 
 void EditTextObjectImpl::NormalizeString( svl::SharedStringPool& rPool )
 {
-    ContentInfosType::iterator it = aContents.begin(), itEnd = aContents.end();
-    for (; it != itEnd; ++it)
+    for (auto const& content : aContents)
     {
-        ContentInfo& rInfo = *it->get();
+        ContentInfo& rInfo = *content.get();
         rInfo.NormalizeString(rPool);
     }
 }
@@ -623,10 +616,9 @@ std::vector<svl::SharedString> EditTextObjectImpl::GetSharedStrings() const
 {
     std::vector<svl::SharedString> aSSs;
     aSSs.reserve(aContents.size());
-    ContentInfosType::const_iterator it = aContents.begin(), itEnd = aContents.end();
-    for (; it != itEnd; ++it)
+    for (auto const& content : aContents)
     {
-        const ContentInfo& rInfo = *it->get();
+        const ContentInfo& rInfo = *content.get();
         aSSs.push_back(rInfo.GetSharedString());
     }
     return aSSs;
@@ -706,10 +698,9 @@ void EditTextObjectImpl::ClearPortionInfo()
 
 bool EditTextObjectImpl::HasOnlineSpellErrors() const
 {
-    ContentInfosType::const_iterator it = aContents.begin(), itEnd = aContents.end();
-    for (; it != itEnd; ++it)
+    for (auto const& content : aContents)
     {
-        if ( (*it)->GetWrongList() && !(*it)->GetWrongList()->empty() )
+        if ( content->GetWrongList() && !content->GetWrongList()->empty() )
             return true;
     }
     return false;
@@ -767,11 +758,10 @@ const SvxFieldData* EditTextObjectImpl::GetFieldData(sal_Int32 nPara, size_t nPo
         // URL position is out-of-bound.
         return nullptr;
 
-    ContentInfo::XEditAttributesType::const_iterator it = rC.maCharAttribs.begin(), itEnd = rC.maCharAttribs.end();
     size_t nCurPos = 0;
-    for (; it != itEnd; ++it)
+    for (auto const& charAttrib : rC.maCharAttribs)
     {
-        const XEditAttribute& rAttr = *it->get();
+        const XEditAttribute& rAttr = *charAttrib.get();
         if (rAttr.GetItem()->Which() != EE_FEATURE_FIELD)
             // Skip attributes that are not fields.
             continue;
@@ -900,13 +890,11 @@ void EditTextObjectImpl::GetAllSections( std::vector<editeng::Section>& rAttrs )
     }
 
     // Sort and remove duplicates for each paragraph.
-    std::vector<std::vector<size_t>>::iterator it = aParaBorders.begin(), itEnd = aParaBorders.end();
-    for (; it != itEnd; ++it)
+    for (auto & paraBorders : aParaBorders)
     {
-        std::vector<size_t>& rBorders = *it;
-        std::sort(rBorders.begin(), rBorders.end());
-        auto itUniqueEnd = std::unique(rBorders.begin(), rBorders.end());
-        rBorders.erase(itUniqueEnd, rBorders.end());
+        std::sort(paraBorders.begin(), paraBorders.end());
+        auto itUniqueEnd = std::unique(paraBorders.begin(), paraBorders.end());
+        paraBorders.erase(itUniqueEnd, paraBorders.end());
     }
 
     std::vector<editeng::Section> aAttrs;
@@ -914,26 +902,26 @@ void EditTextObjectImpl::GetAllSections( std::vector<editeng::Section>& rAttrs )
     // Create storage for each section.  Note that this creates storage even
     // for unformatted sections.  The entries are sorted first by paragraph,
     // then by section positions.  They don't overlap with each other.
-    it = aParaBorders.begin();
-    for (; it != itEnd; ++it)
+    size_t nPara1 = 0;
+    for (auto const& paraBorders : aParaBorders)
     {
-        size_t nPara = distance(aParaBorders.begin(), it);
-        const std::vector<size_t>& rBorders = *it;
-        if (rBorders.size() == 1 && rBorders[0] == 0)
+        if (paraBorders.size() == 1 && paraBorders[0] == 0)
         {
             // Empty paragraph. Push an empty section.
-            aAttrs.emplace_back(nPara, 0, 0);
+            aAttrs.emplace_back(nPara1, 0, 0);
+            ++nPara1;
             continue;
         }
 
-        auto itBorder = rBorders.begin(), itBorderEnd = rBorders.end();
+        auto itBorder = paraBorders.begin(), itBorderEnd = paraBorders.end();
         size_t nPrev = *itBorder;
         size_t nCur;
         for (++itBorder; itBorder != itBorderEnd; ++itBorder, nPrev = nCur)
         {
             nCur = *itBorder;
-            aAttrs.emplace_back(nPara, nPrev, nCur);
+            aAttrs.emplace_back(nPara1, nPrev, nCur);
         }
+        ++nPara1;
     }
 
     if (aAttrs.empty())

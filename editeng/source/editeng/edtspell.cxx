@@ -282,7 +282,7 @@ void WrongList::TextDeleted( size_t nPos, size_t nLength )
         }
     }
 
-    for (WrongList::iterator i = begin(); i != end(); )
+    for (WrongList::iterator i = maRanges.begin(); i != maRanges.end(); )
     {
         bool bDelWrong = false;
         if (i->mnEnd >= nPos)
@@ -334,12 +334,12 @@ bool WrongList::NextWrong( size_t& rnStart, size_t& rnEnd ) const
         rnStart get the start position, is possibly adjusted wrt. Wrong start
         rnEnd does not have to be initialized.
     */
-    for (WrongList::const_iterator i = begin(); i != end(); ++i)
+    for (auto const& range : maRanges)
     {
-        if (i->mnEnd > rnStart)
+        if (range.mnEnd > rnStart)
         {
-            rnStart = i->mnStart;
-            rnEnd = i->mnEnd;
+            rnStart = range.mnStart;
+            rnEnd = range.mnEnd;
             return true;
         }
     }
@@ -348,11 +348,11 @@ bool WrongList::NextWrong( size_t& rnStart, size_t& rnEnd ) const
 
 bool WrongList::HasWrong( size_t nStart, size_t nEnd ) const
 {
-    for (WrongList::const_iterator i = begin(); i != end(); ++i)
+    for (auto const& range : maRanges)
     {
-        if (i->mnStart == nStart && i->mnEnd == nEnd)
+        if (range.mnStart == nStart && range.mnEnd == nEnd)
             return true;
-        else if (i->mnStart >= nStart)
+        else if (range.mnStart >= nStart)
             break;
     }
     return false;
@@ -360,11 +360,11 @@ bool WrongList::HasWrong( size_t nStart, size_t nEnd ) const
 
 bool WrongList::HasAnyWrong( size_t nStart, size_t nEnd ) const
 {
-    for (WrongList::const_iterator i = begin(); i != end(); ++i)
+    for (auto const& range : maRanges)
     {
-        if (i->mnEnd >= nStart && i->mnStart < nEnd)
+        if (range.mnEnd >= nStart && range.mnStart < nEnd)
             return true;
-        else if (i->mnStart >= nEnd)
+        else if (range.mnStart >= nEnd)
             break;
     }
     return false;
@@ -373,7 +373,7 @@ bool WrongList::HasAnyWrong( size_t nStart, size_t nEnd ) const
 void WrongList::ClearWrongs( size_t nStart, size_t nEnd,
             const ContentNode* pNode )
 {
-    for (WrongList::iterator i = begin(); i != end(); )
+    for (WrongList::iterator i = maRanges.begin(); i != maRanges.end(); )
     {
         if (i->mnEnd > nStart && i->mnStart < nEnd)
         {
@@ -406,8 +406,8 @@ void WrongList::ClearWrongs( size_t nStart, size_t nEnd,
 
 void WrongList::InsertWrong( size_t nStart, size_t nEnd )
 {
-    WrongList::iterator nPos = end();
-    for (WrongList::iterator i = begin(); i != end(); ++i)
+    WrongList::iterator nPos = maRanges.end();
+    for (WrongList::iterator i = maRanges.begin(); i != maRanges.end(); ++i)
     {
         if (i->mnStart >= nStart)
         {
@@ -453,13 +453,13 @@ bool WrongList::operator==(const WrongList& rCompare) const
         || maRanges.size() != rCompare.maRanges.size())
         return false;
 
-    WrongList::const_iterator rCA = maRanges.begin();
     WrongList::const_iterator rCB = rCompare.maRanges.begin();
 
-    for (; rCA != maRanges.end(); ++rCA, ++rCB)
+    for (auto const& rangeA : maRanges)
     {
-        if(rCA->mnStart != rCB->mnStart || rCA->mnEnd != rCB->mnEnd)
+        if(rangeA.mnStart != rCB->mnStart || rangeA.mnEnd != rCB->mnEnd)
             return false;
+        ++rCB;
     }
 
     return true;
@@ -509,9 +509,9 @@ bool WrongList::DbgIsBuggy() const
 {
     // Check if the ranges overlap.
     bool bError = false;
-    for (WrongList::const_iterator i = begin(); !bError && (i != end()); ++i)
+    for (WrongList::const_iterator i = maRanges.begin(); !bError && (i != maRanges.end()); ++i)
     {
-        for (WrongList::const_iterator j = i + 1; !bError && (j != end()); ++j)
+        for (WrongList::const_iterator j = i + 1; !bError && (j != maRanges.end()); ++j)
         {
             // 1) Start before, End after the second Start
             if (i->mnStart <= j->mnStart && i->mnEnd >= j->mnStart)

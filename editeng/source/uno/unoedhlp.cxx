@@ -128,16 +128,16 @@ bool SvxEditSourceHelper::GetAttributeRun( sal_Int32& nStartIndex, sal_Int32& nE
     // find closest index in front of nIndex
     sal_Int32 nCurrIndex;
     sal_Int32 nClosestStartIndex_s = 0, nClosestStartIndex_e = 0;
-    for(std::vector<EECharAttrib>::iterator i = aCharAttribs.begin(); i < aCharAttribs.end(); ++i)
+    for (auto const& charAttrib : aCharAttribs)
     {
-        nCurrIndex = i->nStart;
+        nCurrIndex = charAttrib.nStart;
 
         if( nCurrIndex > nClosestStartIndex_s &&
             nCurrIndex <= nIndex)
         {
             nClosestStartIndex_s = nCurrIndex;
         }
-        nCurrIndex = i->nEnd;
+        nCurrIndex = charAttrib.nEnd;
         if ( nCurrIndex > nClosestStartIndex_e &&
             nCurrIndex < nIndex )
         {
@@ -149,16 +149,16 @@ bool SvxEditSourceHelper::GetAttributeRun( sal_Int32& nStartIndex, sal_Int32& nE
     // find closest index behind of nIndex
     sal_Int32 nClosestEndIndex_s, nClosestEndIndex_e;
     nClosestEndIndex_s = nClosestEndIndex_e = rEE.GetTextLen(nPara);
-    for(std::vector<EECharAttrib>::iterator i = aCharAttribs.begin(); i < aCharAttribs.end(); ++i)
+    for (auto const& charAttrib : aCharAttribs)
     {
-        nCurrIndex = i->nEnd;
+        nCurrIndex = charAttrib.nEnd;
 
         if( nCurrIndex > nIndex &&
             nCurrIndex < nClosestEndIndex_e )
         {
             nClosestEndIndex_e = nCurrIndex;
         }
-        nCurrIndex = i->nStart;
+        nCurrIndex = charAttrib.nStart;
         if ( nCurrIndex > nIndex &&
             nCurrIndex < nClosestEndIndex_s)
         {

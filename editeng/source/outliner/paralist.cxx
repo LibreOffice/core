@@ -93,9 +93,8 @@ void Paragraph::dumpAsXml(struct _xmlTextWriter* pWriter) const
 
 void ParagraphList::Clear()
 {
-    std::vector<Paragraph*>::iterator iter;
-    for (iter = maEntries.begin(); iter != maEntries.end(); ++iter)
-        delete *iter;
+    for (auto const& entry : maEntries)
+        delete entry;
     maEntries.clear();
 }
 
@@ -236,11 +235,11 @@ void ParagraphList::Collapse( Paragraph const * pParent )
 sal_Int32 ParagraphList::GetAbsPos( Paragraph const * pParent ) const
 {
     sal_Int32 pos = 0;
-    std::vector<Paragraph*>::const_iterator iter;
-    for (iter = maEntries.begin(); iter != maEntries.end(); ++iter, ++pos)
+    for (auto const& entry : maEntries)
     {
-        if (*iter == pParent)
+        if (entry == pParent)
             return pos;
+        ++pos;
     }
 
     return EE_PARA_NOT_FOUND;
