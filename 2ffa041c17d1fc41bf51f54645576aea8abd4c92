@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba2be162_baf90f50",
+        "filename": "filter/source/msfilter/escherex.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1401,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-03-10T07:21:03Z",
+      "side": 1,
+      "message": "looks like this is no longer assigned to?\nwhich makes a big block of code below dead :-)",
+      "revId": "2ffa041c17d1fc41bf51f54645576aea8abd4c92",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
