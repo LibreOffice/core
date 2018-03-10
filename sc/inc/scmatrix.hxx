@@ -315,11 +315,13 @@ public:
     /// an empty string!
     virtual ScMatrixValue Get( SCSIZE nC, SCSIZE nR) const = 0;
 
-    /// @return <TRUE/> if string or empty or empty path, in fact non-value.
-    virtual bool IsString( SCSIZE nIndex ) const = 0;
+    /** @return <TRUE/> if string or any empty, empty cell, empty result, empty
+        path, in fact non-value. */
+    virtual bool IsStringOrEmpty( SCSIZE nIndex ) const = 0;
 
-    /// @return <TRUE/> if string or empty or empty path, in fact non-value.
-    virtual bool IsString( SCSIZE nC, SCSIZE nR ) const = 0;
+    /** @return <TRUE/> if string or any empty, empty cell, empty result, empty
+        path, in fact non-value. */
+    virtual bool IsStringOrEmpty( SCSIZE nC, SCSIZE nR ) const = 0;
 
     /// @return <TRUE/> if empty or empty cell or empty result, not empty path.
     virtual bool IsEmpty( SCSIZE nC, SCSIZE nR ) const = 0;
@@ -531,11 +533,13 @@ public:
     /// an empty string!
     virtual ScMatrixValue Get( SCSIZE nC, SCSIZE nR) const override;
 
-    /// @return <TRUE/> if string or empty or empty path, in fact non-value.
-    virtual bool IsString( SCSIZE nIndex ) const override;
+    /** @return <TRUE/> if string or any empty, empty cell, empty result, empty
+        path, in fact non-value. */
+    virtual bool IsStringOrEmpty( SCSIZE nIndex ) const override;
 
-    /// @return <TRUE/> if string or empty or empty path, in fact non-value.
-    virtual bool IsString( SCSIZE nC, SCSIZE nR ) const override;
+    /** @return <TRUE/> if string or any empty, empty cell, empty result, empty
+        path, in fact non-value. */
+    virtual bool IsStringOrEmpty( SCSIZE nC, SCSIZE nR ) const override;
 
     /// @return <TRUE/> if empty or empty cell or empty result, not empty path.
     virtual bool IsEmpty( SCSIZE nC, SCSIZE nR ) const override;
@@ -750,11 +754,13 @@ public:
     /// an empty string!
     virtual ScMatrixValue Get(SCSIZE nC, SCSIZE nR) const override;
 
-    /// @return <TRUE/> if string or empty or empty path, in fact non-value.
-    virtual bool IsString(SCSIZE nIndex) const override;
+    /** @return <TRUE/> if string or any empty, empty cell, empty result, empty
+        path, in fact non-value. */
+    virtual bool IsStringOrEmpty(SCSIZE nIndex) const override;
 
-    /// @return <TRUE/> if string or empty or empty path, in fact non-value.
-    virtual bool IsString(SCSIZE nC, SCSIZE nR) const override;
+    /** @return <TRUE/> if string or any empty, empty cell, empty result, empty
+        path, in fact non-value. */
+    virtual bool IsStringOrEmpty(SCSIZE nC, SCSIZE nR) const override;
 
     /// @return <TRUE/> if empty or empty cell or empty result, not empty path.
     virtual bool IsEmpty(SCSIZE nC, SCSIZE nR) const override;

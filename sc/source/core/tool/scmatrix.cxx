@@ -266,8 +266,8 @@ public:
     svl::SharedString GetString( SCSIZE nIndex) const;
     svl::SharedString GetString( SvNumberFormatter& rFormatter, SCSIZE nC, SCSIZE nR) const;
     ScMatrixValue Get(SCSIZE nC, SCSIZE nR) const;
-    bool IsString( SCSIZE nIndex ) const;
-    bool IsString( SCSIZE nC, SCSIZE nR ) const;
+    bool IsStringOrEmpty( SCSIZE nIndex ) const;
+    bool IsStringOrEmpty( SCSIZE nC, SCSIZE nR ) const;
     bool IsEmpty( SCSIZE nC, SCSIZE nR ) const;
     bool IsEmptyCell( SCSIZE nC, SCSIZE nR ) const;
     bool IsEmptyResult( SCSIZE nC, SCSIZE nR ) const;
@@ -767,14 +767,14 @@ ScMatrixValue ScMatrixImpl::Get(SCSIZE nC, SCSIZE nR) const
     return aVal;
 }
 
-bool ScMatrixImpl::IsString( SCSIZE nIndex ) const
+bool ScMatrixImpl::IsStringOrEmpty( SCSIZE nIndex ) const
 {
     SCSIZE nC, nR;
     CalcPosition(nIndex, nC, nR);
-    return IsString(nC, nR);
+    return IsStringOrEmpty(nC, nR);
 }
 
-bool ScMatrixImpl::IsString( SCSIZE nC, SCSIZE nR ) const
+bool ScMatrixImpl::IsStringOrEmpty( SCSIZE nC, SCSIZE nR ) const
 {
     ValidColRowReplicated( nC, nR );
     switch (maMat.get_type(nR, nC))
@@ -3035,14 +3035,14 @@ ScMatrixValue ScFullMatrix::Get(SCSIZE nC, SCSIZE nR) const
     return pImpl->Get(nC, nR);
 }
 
-bool ScFullMatrix::IsString( SCSIZE nIndex ) const
+bool ScFullMatrix::IsStringOrEmpty( SCSIZE nIndex ) const
 {
-    return pImpl->IsString(nIndex);
+    return pImpl->IsStringOrEmpty(nIndex);
 }
 
-bool ScFullMatrix::IsString( SCSIZE nC, SCSIZE nR ) const
+bool ScFullMatrix::IsStringOrEmpty( SCSIZE nC, SCSIZE nR ) const
 {
-    return pImpl->IsString(nC, nR);
+    return pImpl->IsStringOrEmpty(nC, nR);
 }
 
 bool ScFullMatrix::IsEmpty( SCSIZE nC, SCSIZE nR ) const
@@ -3914,16 +3914,16 @@ ScMatrixValue ScVectorRefMatrix::Get(SCSIZE nC, SCSIZE nR) const
     return mpFullMatrix->Get(nC, nR);
 }
 
-bool ScVectorRefMatrix::IsString(SCSIZE nIndex) const
+bool ScVectorRefMatrix::IsStringOrEmpty(SCSIZE nIndex) const
 {
     const_cast<ScVectorRefMatrix*>(this)->ensureFullMatrix();
-    return mpFullMatrix->IsString(nIndex);
+    return mpFullMatrix->IsStringOrEmpty(nIndex);
 }
 
-bool ScVectorRefMatrix::IsString(SCSIZE nC, SCSIZE nR) const
+bool ScVectorRefMatrix::IsStringOrEmpty(SCSIZE nC, SCSIZE nR) const
 {
     const_cast<ScVectorRefMatrix*>(this)->ensureFullMatrix();
-    return mpFullMatrix->IsString(nC, nR);
+    return mpFullMatrix->IsStringOrEmpty(nC, nR);
 }
 
 bool ScVectorRefMatrix::IsEmpty(SCSIZE nC, SCSIZE nR) const

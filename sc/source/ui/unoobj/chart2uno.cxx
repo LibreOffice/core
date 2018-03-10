@@ -2645,7 +2645,7 @@ sal_Int32 ScChart2DataSequence::FillCacheFromExternalRef(const ScTokenRef& pToke
                     m_aDataArray.push_back(aItem);
                     ++nDataCount;
                 }
-                else if (pMat->IsString(nC, nR))
+                else if (pMat->IsStringOrEmpty(nC, nR))
                 {
                     Item aItem;
 

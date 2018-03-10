@@ -3383,7 +3383,7 @@ void ScInterpreter::ScMacro()
                         {
                             nIdx[ 1 ] = static_cast<sal_Int32>(nMatCol+1);
                             SbxVariable* p = refArray->Get32( nIdx );
-                            if (pMat->IsString(nMatCol, nMatRow))
+                            if (pMat->IsStringOrEmpty(nMatCol, nMatRow))
                             {
                                 p->PutString( pMat->GetString(nMatCol, nMatRow).getString() );
                             }

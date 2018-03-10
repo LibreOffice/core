@@ -1134,7 +1134,7 @@ static ScMatrixRef lcl_MatrixCalculation(
                 {
                     xResMat->PutError( nErr, i, j);
                 }
-                else if ((!bVal1 && rMat1.IsString(i,j)) || (!bVal2 && rMat2.IsString(i,j)))
+                else if ((!bVal1 && rMat1.IsStringOrEmpty(i,j)) || (!bVal2 && rMat2.IsStringOrEmpty(i,j)))
                 {
                     FormulaError nError1 = FormulaError::NONE;
                     SvNumFormatType nFmt1 = SvNumFormatType::ALL;
@@ -1772,7 +1772,7 @@ void ScInterpreter::CalculateSumX2MY2SumX2DY2(bool _bSumX2DY2)
     double fVal, fSum = 0.0;
     for (i = 0; i < nC1; i++)
         for (j = 0; j < nR1; j++)
-            if (!pMat1->IsString(i,j) && !pMat2->IsString(i,j))
+            if (!pMat1->IsStringOrEmpty(i,j) && !pMat2->IsStringOrEmpty(i,j))
             {
                 fVal = pMat1->GetDouble(i,j);
                 fSum += fVal * fVal;
