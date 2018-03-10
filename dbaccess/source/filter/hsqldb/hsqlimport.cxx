@@ -139,8 +139,8 @@ void lcl_setParams(const RowVector& row, Reference<XParameters>& xParam,
                 {
                     xParam->setDouble(i + 1, nVal);
                 }
-                break;
             }
+            break;
             case DataType::NUMERIC:
             case DataType::DECIMAL:
             {
@@ -157,8 +157,14 @@ void lcl_setParams(const RowVector& row, Reference<XParameters>& xParam,
                 // TODO
                 break;
             case DataType::TIME:
-                // TODO
+            {
+                css::util::Time time;
+                if (row.at(i) >>= time)
+                {
+                    xParam->setTime(i + 1, time);
+                }
                 break;
+            }
             case DataType::TIMESTAMP:
                 // TODO
                 break;

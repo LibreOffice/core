@@ -21,6 +21,7 @@
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/io/WrongFormatException.hpp>
 #include <com/sun/star/io/XConnectable.hpp>
+#include <com/sun/star/util/Time.hpp>
 
 #include <unotools/ucbstreamhelper.hxx>
 #include <tools/stream.hxx>
@@ -300,7 +301,13 @@ std::vector<Any> HsqlRowInputStream::readOneRow(const ColumnTypeVector& nColType
             case DataType::DATE:
                 break;
             case DataType::TIME:
-                break;
+            {
+                sal_Int64 value = 0;
+                m_pStream->ReadInt64(value);
+                css::util::Time time((value % 1000) * 1000000, value / 1000, 0, 0, true);
+                aData.push_back(makeAny(time));
+            }
+            break;
             case DataType::TIMESTAMP:
                 break;
             case DataType::BOOLEAN:
