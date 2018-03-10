@@ -77,9 +77,7 @@ OFormLayerXMLImport_Impl::OFormLayerXMLImport_Impl(SvXMLImport& _rImporter)
     m_aAttributeMetaData.addStringProperty(
         OAttributeMetaData::getCommonControlAttributeName(CCAFlags::Name), PROPERTY_NAME);
     m_aAttributeMetaData.addStringProperty(
-            OAttributeMetaData::getSpecialAttributeName(SCAFlags::GroupName), PROPERTY_GROUP_NAME);
-        m_aAttributeMetaData.addStringProperty(
-        OAttributeMetaData::getCommonControlAttributeName(CCAFlags::ImageData), PROPERTY_IMAGEURL);
+        OAttributeMetaData::getSpecialAttributeName(SCAFlags::GroupName), PROPERTY_GROUP_NAME);
     m_aAttributeMetaData.addStringProperty(
         OAttributeMetaData::getCommonControlAttributeName(CCAFlags::Label), PROPERTY_LABEL);
     m_aAttributeMetaData.addStringProperty(
