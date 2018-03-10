@@ -665,12 +665,34 @@ sdr::contact::ViewContact* SdrOle2Obj::CreateObjectSpecificViewContact()
     return new sdr::contact::ViewContactOfSdrOle2Obj(*this);
 }
 
+void SdrOle2Obj::Init()
+{
+    // TTTT stuff from old SetModel:
+    // #i43086# #i85304 redo the change for charts for the above bugfix, as #i43086# does not occur anymore
+    //so maybe the ImpSetVisAreaSize call can be removed here completely
+    //Nevertheless I leave it in for other objects as I am not sure about the side effects when removing now
+    if(!getSdrModelFromSdrObject().isLocked() && !IsChart())
+    {
+        ImpSetVisAreaSize();
+    }
+
+    ::comphelper::IEmbeddedHelper* pDestPers(getSdrModelFromSdrObject().GetPersist());
+    if(pDestPers && !IsEmptyPresObj())
+    {
+        // object wasn't connected, now it should be
+        Connect_Impl();
+    }
+
+    AddListeners_Impl();
+}
+
 SdrOle2Obj::SdrOle2Obj(
     SdrModel& rSdrModel,
     bool bFrame_)
 :   SdrRectObj(rSdrModel),
     mpImpl(new SdrOle2ObjImpl(bFrame_))
 {
+    Init();
 }
 
 SdrOle2Obj::SdrOle2Obj(
@@ -688,6 +710,8 @@ SdrOle2Obj::SdrOle2Obj(
 
     // For math objects, set closed state to transparent
     SetClosedObj(!ImplIsMathObj( mpImpl->mxObjRef.GetObject() ));
+
+    Init();
 }
 
 OUString SdrOle2Obj::GetStyleString()
