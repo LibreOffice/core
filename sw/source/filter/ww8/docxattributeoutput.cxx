@@ -5547,7 +5547,7 @@ void DocxAttributeOutput::WriteOutliner(const OutlinerParaObject& rParaObj)
             aAttrIter.NextPara( n );
 
         OUString aStr( rEditObj.GetText( n ));
-        sal_Int32 nAktPos = 0;
+        sal_Int32 nCurrentPos = 0;
         sal_Int32 nEnd = aStr.getLength();
 
         StartParagraph(ww8::WW8TableNodeInfo::Pointer_t());
@@ -5565,14 +5565,14 @@ void DocxAttributeOutput::WriteOutliner(const OutlinerParaObject& rParaObj)
 
             // Write run properties.
             m_pSerializer->startElementNS(XML_w, XML_rPr, FSEND);
-            aAttrIter.OutAttr(nAktPos);
+            aAttrIter.OutAttr(nCurrentPos);
             WriteCollectedRunProperties();
             m_pSerializer->endElementNS(XML_w, XML_rPr);
 
-            bool bTextAtr = aAttrIter.IsTextAttr( nAktPos );
+            bool bTextAtr = aAttrIter.IsTextAttr( nCurrentPos );
             if( !bTextAtr )
             {
-                OUString aOut( aStr.copy( nAktPos, nNextAttr - nAktPos ) );
+                OUString aOut( aStr.copy( nCurrentPos, nNextAttr - nCurrentPos ) );
                 RunText(aOut);
             }
 
@@ -5585,10 +5585,10 @@ void DocxAttributeOutput::WriteOutliner(const OutlinerParaObject& rParaObj)
 
             m_pSerializer->endElementNS( XML_w, XML_r );
 
-            nAktPos = nNextAttr;
+            nCurrentPos = nNextAttr;
             aAttrIter.NextPos();
         }
-        while( nAktPos < nEnd );
+        while( nCurrentPos < nEnd );
         // Word can't handle nested text boxes, so write them on the same level.
         ++m_nTextFrameLevel;
         EndParagraph(ww8::WW8TableNodeInfoInner::Pointer_t());
