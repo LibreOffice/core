@@ -1095,7 +1095,7 @@ bool SdrObjEditView::SdrBeginTextEdit(
             pTextEditOutliner.reset(
                 SdrMakeOutliner(
                     OutlinerMode::TextObject,
-                    mxTextEditObj->getSdrModelFromSdrObject());
+                    mxTextEditObj->getSdrModelFromSdrObject()));
         }
 
         {
