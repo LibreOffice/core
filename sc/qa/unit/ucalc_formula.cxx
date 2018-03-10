@@ -4432,6 +4432,13 @@ void Test::testFuncIF()
     // Result must be 16, only the first row matches all criteria.
     CPPUNIT_ASSERT_EQUAL(16.0, m_pDoc->GetValue(ScAddress(3,3,0)));
 
+    // A11:B11
+    // Test nested IF in array/matrix if the nested IF has no Else path.
+    m_pDoc->InsertMatrixFormula(0,10, 1,10, aMark, "=IF(IF({1;0};12);34;56)");
+    // Results must be 34 and 56.
+    CPPUNIT_ASSERT_EQUAL(34.0, m_pDoc->GetValue(ScAddress(0,10,0)));
+    CPPUNIT_ASSERT_EQUAL(56.0, m_pDoc->GetValue(ScAddress(1,10,0)));
+
     m_pDoc->DeleteTab(0);
 }
 
