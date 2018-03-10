@@ -35,13 +35,15 @@ class OReportModel;
 class REPORTDESIGN_DLLPUBLIC OReportPage : public SdrPage
 {
     OReportPage& operator=(const OReportPage&) = delete;
+    OReportPage(const OReportPage&) = delete;
 
     OReportModel&           rModel;
     css::uno::Reference< css::report::XSection > m_xSection;
     bool                    m_bSpecialInsertMode;
     std::vector<SdrObject*> m_aTemporaryObjectList;
 
-    OReportPage(const OReportPage&);
+    // TTTT
+    // OReportPage(const OReportPage&);
 
     // method to remove temporary objects, created by 'special mode'
     // (BegDragObj)

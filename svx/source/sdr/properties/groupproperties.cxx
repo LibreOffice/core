@@ -246,30 +246,31 @@ namespace sdr
             // nothing to do here, groups have no items and thus no default items, too.
         }
 
-        void GroupProperties::MoveToItemPool(SfxItemPool* pSrcPool, SfxItemPool* pDestPool, SdrModel* pNewModel)
-        {
-            if(pSrcPool && pDestPool && (pSrcPool != pDestPool))
-            {
-                const SdrObjList* pSub = static_cast<const SdrObjGroup&>(GetSdrObject()).GetSubList();
-                const size_t nCount(pSub->GetObjCount());
+        // TTTT
+        // void GroupProperties::MoveToItemPool(SfxItemPool* pSrcPool, SfxItemPool* pDestPool, SdrModel* pNewModel)
+        // {
+        //     if(pSrcPool && pDestPool && (pSrcPool != pDestPool))
+        //     {
+        //         const SdrObjList* pSub = static_cast<const SdrObjGroup&>(GetSdrObject()).GetSubList();
+        //         const size_t nCount(pSub->GetObjCount());
 
-                for(size_t a = 0; a < nCount; ++a)
-                {
-                    pSub->GetObj(a)->GetProperties().MoveToItemPool(pSrcPool, pDestPool, pNewModel);
-                }
+        //         for(size_t a = 0; a < nCount; ++a)
+        //         {
+        //             pSub->GetObj(a)->GetProperties().MoveToItemPool(pSrcPool, pDestPool, pNewModel);
+        //         }
 
-                // also clear local ItemSet, it's only temporary for group objects anyways.
-                if(mpItemSet)
-                {
-                    // copy/paste is still using clone operators and MoveToItemPool functionality.
-                    // Since SfxItemSet contains a pool pointer, ClearItem is not enough here.
-                    // The ItemSet for merge is constructed on demand, so it's enough here to
-                    // just delete it and set to 0L.
-                    // mpItemSet->ClearItem();
-                    mpItemSet.reset();
-                }
-            }
-        }
+        //         // also clear local ItemSet, it's only temporary for group objects anyways.
+        //         if(mpItemSet)
+        //         {
+        //             // copy/paste is still using clone operators and MoveToItemPool functionality.
+        //             // Since SfxItemSet contains a pool pointer, ClearItem is not enough here.
+        //             // The ItemSet for merge is constructed on demand, so it's enough here to
+        //             // just delete it and set to 0L.
+        //             // mpItemSet->ClearItem();
+        //             mpItemSet.reset();
+        //         }
+        //     }
+        // }
 
         void GroupProperties::ForceStyleToHardAttributes()
         {

@@ -1029,7 +1029,7 @@ void SdrGrafObj::SetPage( SdrPage* pNewPage )
         // from the following :SetPage().
         // TTTT: Needs to be moved in branch aw080 due to having a SdrModel from the beginning, is at this
         // place for convenience currently (works in both versions, is not in the way)
-        SfxStyleSheet* pSheet(pNewPage->getSdrModelFromSdrObjList().GetDefaultStyleSheetForSdrGrafObjAndSdrOle2Obj());
+        SfxStyleSheet* pSheet(pNewPage->getSdrModelFromSdrPage().GetDefaultStyleSheetForSdrGrafObjAndSdrOle2Obj());
 
         if(pSheet)
         {

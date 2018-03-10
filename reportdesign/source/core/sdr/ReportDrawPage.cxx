@@ -51,7 +51,7 @@ SdrObject* OReportDrawPage::CreateSdrObject_(const uno::Reference< drawing::XSha
     if ( xReportComponent.is() )
     {
         return OObjectBase::createObject(
-            GetSdrPage()->getSdrModelFromSdrObjList(),
+            GetSdrPage()->getSdrModelFromSdrPage(),
             xReportComponent);
     }
 

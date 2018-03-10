@@ -70,7 +70,7 @@ namespace sdr
             virtual SfxStyleSheet* GetStyleSheet() const override;
 
             // Move properties to a new ItemPool.
-            virtual void MoveToItemPool(SfxItemPool* pSrcPool, SfxItemPool* pDestPool, SdrModel* pNewModel) override;
+            // TTTT virtual void MoveToItemPool(SfxItemPool* pSrcPool, SfxItemPool* pDestPool, SdrModel* pNewModel) override;
 
             // Set new model.
             virtual void SetModel(SdrModel* pOldModel, SdrModel* pNewModel) override;

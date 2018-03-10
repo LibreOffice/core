@@ -27,6 +27,7 @@ class ScDrawLayer;
 class ScDrawPage : public FmFormPage
 {
     ScDrawPage& operator=(const ScDrawPage&) = delete;
+    ScDrawPage(const ScDrawPage&) = delete;
 
 public:
     explicit ScDrawPage(ScDrawLayer& rNewModel, bool bMasterPage);
@@ -38,7 +39,7 @@ public:
     virtual css::uno::Reference< css::uno::XInterface > createUnoPage() override;
 
 private:
-    ScDrawPage(const ScDrawPage& rSrcPage);
+    // TTTT ScDrawPage(const ScDrawPage& rSrcPage);
 };
 
 #endif

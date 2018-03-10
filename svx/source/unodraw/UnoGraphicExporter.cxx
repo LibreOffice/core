@@ -1139,7 +1139,7 @@ void SAL_CALL GraphicExporter::setSourceDocument( const Reference< lang::XCompon
         if( nullptr == mpUnoPage || nullptr == mpUnoPage->GetSdrPage() )
             break;
 
-        mpDoc = mpUnoPage->GetSdrPage()->GetModel();
+        mpDoc = &mpUnoPage->GetSdrPage()->getSdrModelFromSdrPage();
 
         // Step 4:  If we got a generic XShapes test all contained shapes
         //          if they belong to the same XDrawPage

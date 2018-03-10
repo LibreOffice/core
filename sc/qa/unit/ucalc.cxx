@@ -2708,7 +2708,7 @@ void Test::testGraphicsInGroup()
     {
         //Add a square
         tools::Rectangle aOrigRect(2,2,100,100);
-        SdrRectObj *pObj = new SdrRectObj(aOrigRect);
+        SdrRectObj *pObj = new SdrRectObj(*pDrawLayer, aOrigRect);
         pPage->InsertObject(pObj);
         const tools::Rectangle &rNewRect = pObj->GetLogicRect();
         CPPUNIT_ASSERT_EQUAL_MESSAGE("must have equal position and size",
@@ -2749,7 +2749,7 @@ void Test::testGraphicsInGroup()
     {
         // Add a circle.
         tools::Rectangle aOrigRect = tools::Rectangle(10,10,210,210); // 200 x 200
-        SdrCircObj* pObj = new SdrCircObj(OBJ_CIRC, aOrigRect);
+        SdrCircObj* pObj = new SdrCircObj(*pDrawLayer, OBJ_CIRC, aOrigRect);
         pPage->InsertObject(pObj);
         const tools::Rectangle& rNewRect = pObj->GetLogicRect();
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Position and size of the circle shouldn't change when inserted into the page.",
@@ -2781,7 +2781,7 @@ void Test::testGraphicsInGroup()
         tools::Rectangle aOrigRect(10,200,110,300); // 100 x 100
         aTempPoly.append(basegfx::B2DPoint(aStartPos.X(), aStartPos.Y()));
         aTempPoly.append(basegfx::B2DPoint(aEndPos.X(), aEndPos.Y()));
-        SdrPathObj* pObj = new SdrPathObj(OBJ_LINE, basegfx::B2DPolyPolygon(aTempPoly));
+        SdrPathObj* pObj = new SdrPathObj(*pDrawLayer, OBJ_LINE, basegfx::B2DPolyPolygon(aTempPoly));
         pObj->NbcSetLogicRect(aOrigRect);
         pPage->InsertObject(pObj);
         const tools::Rectangle& rNewRect = pObj->GetLogicRect();
@@ -2822,7 +2822,7 @@ void Test::testGraphicsOnSheetMove()
 
     // Insert an object.
     tools::Rectangle aObjRect(2,2,100,100);
-    SdrObject* pObj = new SdrRectObj(aObjRect);
+    SdrObject* pObj = new SdrRectObj(*pDrawLayer, aObjRect);
     pPage->InsertObject(pObj);
     ScDrawLayer::SetCellAnchoredFromPosition(*pObj, *m_pDoc, 0, false);
 
@@ -5342,7 +5342,7 @@ void Test::testNoteLifeCycle()
     SdrCaptionObj* pCaption = pNote->GetOrCreateCaption(aPos);
     CPPUNIT_ASSERT_MESSAGE("Failed to create a caption object.", pCaption);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("This caption should belong to the drawing layer of the document.",
-                           m_pDoc->GetDrawLayer(), static_cast<ScDrawLayer*>(pCaption->GetModel()));
+                           m_pDoc->GetDrawLayer(), static_cast<ScDrawLayer*>(&pCaption->getSdrModelFromSdrObject()));
 
     // Copy B2 with note to a clipboard.
 
@@ -5648,7 +5648,7 @@ void Test::testAnchoredRotatedShape()
         tools::Rectangle aRect( 4000, 5000, 10000, 7000 );
 
         tools::Rectangle aRotRect( 6000, 3000, 8000, 9000 );
-        SdrRectObj *pObj = new SdrRectObj(aRect);
+        SdrRectObj *pObj = new SdrRectObj(*pDrawLayer, aRect);
         pPage->InsertObject(pObj);
         Point aRef1(pObj->GetSnapRect().Center());
         int nAngle = 9000; //90 deg.
@@ -6421,7 +6421,7 @@ void Test::testUndoDataAnchor()
 
     // Insert an object.
     tools::Rectangle aObjRect(2,1000,100,1100);
-    SdrObject* pObj = new SdrRectObj(aObjRect);
+    SdrObject* pObj = new SdrRectObj(*pDrawLayer, aObjRect);
     pPage->InsertObject(pObj);
     ScDrawLayer::SetCellAnchoredFromPosition(*pObj, *m_pDoc, 0, false);
 

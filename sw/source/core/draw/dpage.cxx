@@ -56,33 +56,33 @@ SwDPage::SwDPage(SwDrawModel& rNewModel, bool bMasterPage)
 {
 }
 
-SwDPage::SwDPage(const SwDPage& rSrcPage)
-:   FmFormPage(rSrcPage),
-    pDoc( nullptr )
+// TTTT
+// SwDPage::SwDPage(const SwDPage& rSrcPage)
+// :   FmFormPage(rSrcPage),
+//     pDoc( nullptr )
+// {
+//     if ( rSrcPage.pGridLst )
+//     {
+//         pGridLst.reset( new SdrPageGridFrameList );
+//         for ( sal_uInt16 i = 0; i != rSrcPage.pGridLst->GetCount(); ++i )
+//             pGridLst->Insert( ( *rSrcPage.pGridLst )[ i ] );
+//     }
+// }
+
+SwDPage::~SwDPage()
 {
+}
+
+void SwDPage::lateInit(const SwDPage& rSrcPage)
+{
+    FmFormPage::lateInit( rSrcPage );
+
     if ( rSrcPage.pGridLst )
     {
         pGridLst.reset( new SdrPageGridFrameList );
         for ( sal_uInt16 i = 0; i != rSrcPage.pGridLst->GetCount(); ++i )
             pGridLst->Insert( ( *rSrcPage.pGridLst )[ i ] );
     }
-}
-
-SwDPage::~SwDPage()
-{
-}
-
-void SwDPage::lateInit(const SwDPage& rPage, SwDrawModel* const pNewModel)
-{
-    FmFormPage::lateInit( rPage, pNewModel );
-
-    SwDrawModel* pSwDrawModel = pNewModel;
-    if (!pSwDrawModel)
-    {
-        pSwDrawModel = &dynamic_cast<SwDrawModel&>(*GetModel());
-        assert( pSwDrawModel );
-    }
-    pDoc = &pSwDrawModel->GetDoc();
 }
 
 // TTTT
@@ -93,15 +93,13 @@ void SwDPage::lateInit(const SwDPage& rPage, SwDrawModel* const pNewModel)
 
 SwDPage* SwDPage::Clone(SdrModel* const pNewModel) const
 {
-    SwDPage* const pNewPage = new SwDPage( *this );
-    SwDrawModel* pSwDrawModel = nullptr;
-    if ( pNewModel )
-    {
-        pSwDrawModel = &dynamic_cast<SwDrawModel&>(*pNewModel);
-        assert( pSwDrawModel );
-    }
-    pNewPage->lateInit( *this, pSwDrawModel );
-    return pNewPage;
+    SwDrawModel& rSwDrawModel(static_cast< SwDrawModel& >(nullptr == pNewModel ? getSdrModelFromSdrPage() : *pNewModel));
+    SwDPage* pClonedSwDPage(
+        new SwDPage(
+            rSwDrawModel,
+            IsMasterPage()));
+    pClonedSwDPage->lateInit(*this);
+    return pClonedSwDPage;
 }
 
 SdrObject*  SwDPage::ReplaceObject( SdrObject* pNewObj, size_t nObjNum )
@@ -127,7 +125,7 @@ void InsertGridFrame( SdrPageGridFrameList *pLst, const SwFrame *pPg )
 const SdrPageGridFrameList*  SwDPage::GetGridFrameList(
                         const SdrPageView* pPV, const tools::Rectangle *pRect ) const
 {
-    SwViewShell* pSh = static_cast< SwDrawModel* >(GetModel())->GetDoc().getIDocumentLayoutAccess().GetCurrentViewShell();
+    SwViewShell* pSh = static_cast< SwDrawModel& >(getSdrModelFromSdrPage()).GetDoc().getIDocumentLayoutAccess().GetCurrentViewShell();
     if(pSh)
     {
         for(SwViewShell& rShell : pSh->GetRingContainer())

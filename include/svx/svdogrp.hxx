@@ -23,27 +23,20 @@
 #include <memory>
 #include <svx/svdobj.hxx>
 #include <svx/svxdllapi.h>
-
+#include <svx/svdpage.hxx>
 
 // Forward declarations
-
-
-class SdrObjList;
-class SdrObjListIter;
 class SfxItemSet;
 
-
 //   SdrObjGroup
-
-
 class SVX_DLLPUBLIC SdrObjGroup final : public SdrObject
 {
 private:
     virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact() override;
     virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties() override;
 
-    std::unique_ptr<SdrObjList> pSub;    // sub list (children)
-    Point                       aRefPoint; // Reference point inside the object group
+    SdrObjList                  maSdrObjList;   // sub list (children)
+    Point                       aRefPoint;      // Reference point inside the object group
 
 public:
     SdrObjGroup(SdrModel& rSdrModel);

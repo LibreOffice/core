@@ -42,6 +42,7 @@ class HelpEvent;
 class SVX_DLLPUBLIC FmFormPage : public SdrPage
 {
     FmFormPage& operator=(const FmFormPage&) = delete;
+    FmFormPage(const FmFormPage&) = delete;
 
     friend class FmFormObj;
     std::unique_ptr<FmFormPageImpl>     m_pImpl;
@@ -77,9 +78,9 @@ public:
                             const HelpEvent& rEvt );
 
 protected:
-    FmFormPage(const FmFormPage& rPage);
+    // TTTT FmFormPage(const FmFormPage& rPage);
 
-    void lateInit(const FmFormPage& rPage, FmFormModel* pNewModel = nullptr);
+    void lateInit(const FmFormPage& rPage);
 };
 
 #endif // INCLUDED_SVX_FMPAGE_HXX

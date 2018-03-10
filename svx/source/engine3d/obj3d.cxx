@@ -81,16 +81,22 @@ using namespace com::sun::star;
 
 
 // List for 3D-Objects
-
-
-E3dObjList::E3dObjList(SdrModel& rSdrModel)
-:   SdrObjList(rSdrModel, nullptr)
+E3dObjList::E3dObjList()
+:   SdrObjList(nullptr)
 {
 }
 
-E3dObjList::E3dObjList(const E3dObjList& rSrcList)
-:   SdrObjList(rSrcList.getSdrModelFromSdrObjList())
+// TTTT
+// E3dObjList::E3dObjList(const E3dObjList& rSrcList)
+// :   SdrObjList(rSrcList.getSdrModelFromSdrPage())
+// {
+// }
+
+E3dObjList* E3dObjList::CloneSdrObjList(SdrModel* pNewModel) const
 {
+    E3dObjList* pObjList = new E3dObjList();
+    pObjList->lateInitSdrObjList(*this, pNewModel);
+    return pObjList;
 }
 
 E3dObjList::~E3dObjList()
@@ -171,7 +177,7 @@ sdr::properties::BaseProperties* E3dObject::CreateObjectSpecificProperties()
 
 E3dObject::E3dObject(SdrModel& rSdrModel)
 :   SdrAttrObj(rSdrModel),
-    maSubList(rSdrModel),
+    maSubList(),
     maLocalBoundVol(),
     maTransformation(),
     maFullTransform(),
