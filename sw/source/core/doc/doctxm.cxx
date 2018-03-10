@@ -120,21 +120,21 @@ sal_uInt16 SwDoc::GetCurTOXMark( const SwPosition& rPos,
     sal_Int32 nSttIdx;
     const sal_Int32 *pEndIdx;
 
-    const sal_Int32 nAktPos = rPos.nContent.GetIndex();
+    const sal_Int32 nCurrentPos = rPos.nContent.GetIndex();
 
     for( size_t n = 0; n < rHts.Count(); ++n )
     {
         const SwTextAttr* pHt = rHts.Get(n);
         if( RES_TXTATR_TOXMARK != pHt->Which() )
             continue;
-        if( ( nSttIdx = pHt->GetStart() ) < nAktPos )
+        if( ( nSttIdx = pHt->GetStart() ) < nCurrentPos )
         {
             // also check the end
             if( nullptr == ( pEndIdx = pHt->End() ) ||
-                *pEndIdx <= nAktPos )
+                *pEndIdx <= nCurrentPos )
                 continue;       // keep searching
         }
-        else if( nSttIdx > nAktPos )
+        else if( nSttIdx > nCurrentPos )
             // If Hint's Start is greater than rPos, break, because
             // the attributes are sorted by Start!
             break;
