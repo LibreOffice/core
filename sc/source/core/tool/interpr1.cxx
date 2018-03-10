@@ -130,8 +130,10 @@ void ScInterpreter::ScIfJump()
                             else
                             {
                                 // Treat empty and empty path as 0, but string
-                                // as error.
-                                bIsValue = (!pMat->IsString(nC, nR) || pMat->IsEmpty(nC, nR));
+                                // as error. ScMatrix::IsValueOrEmpty() returns
+                                // true for any empty, empty path, empty cell,
+                                // empty result.
+                                bIsValue = pMat->IsValueOrEmpty(nC, nR);
                                 bTrue = false;
                                 fVal = (bIsValue ? 0.0 : CreateDoubleError( FormulaError::NoValue));
                             }
