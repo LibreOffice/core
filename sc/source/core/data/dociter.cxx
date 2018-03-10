@@ -540,7 +540,7 @@ bool ScDBQueryDataIterator::DataAccessMatrix::getCurrent(Value& rValue)
             // Don't take empty values into account.
             continue;
 
-        bool bIsStrVal = rMat.IsString(mpParam->mnField, mnCurRow);
+        bool bIsStrVal = rMat.IsStringOrEmpty(mpParam->mnField, mnCurRow);
         if (bIsStrVal && mpParam->mbSkipString)
             continue;
 
@@ -598,7 +598,7 @@ bool isQueryByString(const ScQueryEntry& rEntry, const ScQueryEntry::Item& rItem
             ;
     }
 
-    return rItem.meType == ScQueryEntry::ByString && rMat.IsString(nCol, nRow);
+    return rItem.meType == ScQueryEntry::ByString && rMat.IsStringOrEmpty(nCol, nRow);
 }
 
 }

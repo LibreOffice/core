@@ -2541,7 +2541,7 @@ void ScInterpreter::ScZTest()
                 else
                 {
                     for (SCSIZE i = 0; i < nCount; i++)
-                        if (!pMat->IsString(i))
+                        if (!pMat->IsStringOrEmpty(i))
                         {
                             fVal= pMat->GetDouble(i);
                             fSum += fVal;
@@ -2586,7 +2586,7 @@ bool ScInterpreter::CalculateTest(bool _bTemplin
     for (i = 0; i < nC1; i++)
         for (j = 0; j < nR1; j++)
         {
-            if (!pMat1->IsString(i,j))
+            if (!pMat1->IsStringOrEmpty(i,j))
             {
                 fVal = pMat1->GetDouble(i,j);
                 fSum1    += fVal;
@@ -2597,7 +2597,7 @@ bool ScInterpreter::CalculateTest(bool _bTemplin
     for (i = 0; i < nC2; i++)
         for (j = 0; j < nR2; j++)
         {
-            if (!pMat2->IsString(i,j))
+            if (!pMat2->IsStringOrEmpty(i,j))
             {
                 fVal = pMat2->GetDouble(i,j);
                 fSum2    += fVal;
@@ -2677,7 +2677,7 @@ void ScInterpreter::ScTTest()
         for (i = 0; i < nC1; i++)
             for (j = 0; j < nR1; j++)
             {
-                if (!pMat1->IsString(i,j) && !pMat2->IsString(i,j))
+                if (!pMat1->IsStringOrEmpty(i,j) && !pMat2->IsStringOrEmpty(i,j))
                 {
                     fVal1 = pMat1->GetDouble(i,j);
                     fVal2 = pMat2->GetDouble(i,j);
@@ -2814,7 +2814,7 @@ void ScInterpreter::ScChiTest()
             if (!(pMat1->IsEmpty(i,j) || pMat2->IsEmpty(i,j)))
             {
                 bEmpty = false;
-                if (!pMat1->IsString(i,j) && !pMat2->IsString(i,j))
+                if (!pMat1->IsStringOrEmpty(i,j) && !pMat2->IsStringOrEmpty(i,j))
                 {
                     double fValX = pMat1->GetDouble(i,j);
                     double fValE = pMat2->GetDouble(i,j);
@@ -2998,7 +2998,7 @@ void ScInterpreter::ScHarMean()
                     else
                     {
                         for (SCSIZE nElem = 0; nElem < nCount; nElem++)
-                            if (!pMat->IsString(nElem))
+                            if (!pMat->IsStringOrEmpty(nElem))
                             {
                                 double x = pMat->GetDouble(nElem);
                                 if (x > 0.0)
@@ -3161,7 +3161,7 @@ void ScInterpreter::ScGeoMean()
                     {
                         for (SCSIZE ui = 0; ui < nCount; ui++)
                         {
-                            if (!pMat->IsString(ui))
+                            if (!pMat->IsStringOrEmpty(ui))
                             {
                                 double x = pMat->GetDouble(ui);
                                 if (x > 0.0)
@@ -3290,7 +3290,7 @@ bool ScInterpreter::CalculateSkew(double& fSum,double& fCount,double& vSum,std::
                     else
                     {
                         for (SCSIZE nElem = 0; nElem < nCount; nElem++)
-                            if (!pMat->IsString(nElem))
+                            if (!pMat->IsStringOrEmpty(nElem))
                             {
                                 fVal = pMat->GetDouble(nElem);
                                 fSum += fVal;
@@ -4053,7 +4053,7 @@ void ScInterpreter::ScAveDev()
                     else
                     {
                         for (SCSIZE nElem = 0; nElem < nCount; nElem++)
-                            if (!pMat->IsString(nElem))
+                            if (!pMat->IsStringOrEmpty(nElem))
                             {
                                 rVal += pMat->GetDouble(nElem);
                                 rValCount++;
@@ -4126,7 +4126,7 @@ void ScInterpreter::ScAveDev()
                     {
                         for (SCSIZE nElem = 0; nElem < nCount; nElem++)
                         {
-                            if (!pMat->IsString(nElem))
+                            if (!pMat->IsStringOrEmpty(nElem))
                                 rVal += fabs(pMat->GetDouble(nElem) - nMiddle);
                         }
                     }
@@ -4267,7 +4267,7 @@ void ScInterpreter::CalculatePearsonCovar( bool _bPearson, bool _bStexy, bool _b
     {
         for (SCSIZE j = 0; j < nR1; j++)
         {
-            if (!pMat1->IsString(i,j) && !pMat2->IsString(i,j))
+            if (!pMat1->IsStringOrEmpty(i,j) && !pMat2->IsStringOrEmpty(i,j))
             {
                 double fValX = pMat1->GetDouble(i,j);
                 double fValY = pMat2->GetDouble(i,j);
@@ -4290,7 +4290,7 @@ void ScInterpreter::CalculatePearsonCovar( bool _bPearson, bool _bStexy, bool _b
         {
             for (SCSIZE j = 0; j < nR1; j++)
             {
-                if (!pMat1->IsString(i,j) && !pMat2->IsString(i,j))
+                if (!pMat1->IsStringOrEmpty(i,j) && !pMat2->IsStringOrEmpty(i,j))
                 {
                     const double fValX = pMat1->GetDouble(i,j);
                     const double fValY = pMat2->GetDouble(i,j);
@@ -4377,7 +4377,7 @@ void ScInterpreter::CalculateSlopeIntercept(bool bSlope)
     {
         for (SCSIZE j = 0; j < nR1; j++)
         {
-            if (!pMat1->IsString(i,j) && !pMat2->IsString(i,j))
+            if (!pMat1->IsStringOrEmpty(i,j) && !pMat2->IsStringOrEmpty(i,j))
             {
                 double fValX = pMat1->GetDouble(i,j);
                 double fValY = pMat2->GetDouble(i,j);
@@ -4399,7 +4399,7 @@ void ScInterpreter::CalculateSlopeIntercept(bool bSlope)
         {
             for (SCSIZE j = 0; j < nR1; j++)
             {
-                if (!pMat1->IsString(i,j) && !pMat2->IsString(i,j))
+                if (!pMat1->IsStringOrEmpty(i,j) && !pMat2->IsStringOrEmpty(i,j))
                 {
                     double fValX = pMat1->GetDouble(i,j);
                     double fValY = pMat2->GetDouble(i,j);
@@ -4460,7 +4460,7 @@ void ScInterpreter::ScForecast()
     {
         for (SCSIZE j = 0; j < nR1; j++)
         {
-            if (!pMat1->IsString(i,j) && !pMat2->IsString(i,j))
+            if (!pMat1->IsStringOrEmpty(i,j) && !pMat2->IsStringOrEmpty(i,j))
             {
                 double fValX = pMat1->GetDouble(i,j);
                 double fValY = pMat2->GetDouble(i,j);
@@ -4482,7 +4482,7 @@ void ScInterpreter::ScForecast()
         {
             for (SCSIZE j = 0; j < nR1; j++)
             {
-                if (!pMat1->IsString(i,j) && !pMat2->IsString(i,j))
+                if (!pMat1->IsStringOrEmpty(i,j) && !pMat2->IsStringOrEmpty(i,j))
                 {
                     double fValX = pMat1->GetDouble(i,j);
                     double fValY = pMat2->GetDouble(i,j);

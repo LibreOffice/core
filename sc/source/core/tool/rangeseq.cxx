@@ -99,7 +99,7 @@ bool ScRangeToSequence::FillLongArray( uno::Any& rAny, const ScMatrix* pMatrix )
         uno::Sequence<sal_Int32> aColSeq( static_cast<sal_Int32>(nColCount) );
         sal_Int32* pColAry = aColSeq.getArray();
         for (SCSIZE nCol = 0; nCol < nColCount; nCol++)
-            if ( pMatrix->IsString( nCol, nRow ) )
+            if ( pMatrix->IsStringOrEmpty( nCol, nRow ) )
                 pColAry[nCol] = 0;
             else
                 pColAry[nCol] = lcl_DoubleToLong( pMatrix->GetDouble( nCol, nRow ) );
@@ -152,7 +152,7 @@ bool ScRangeToSequence::FillDoubleArray( uno::Any& rAny, const ScMatrix* pMatrix
         uno::Sequence<double> aColSeq( static_cast<sal_Int32>(nColCount) );
         double* pColAry = aColSeq.getArray();
         for (SCSIZE nCol = 0; nCol < nColCount; nCol++)
-            if ( pMatrix->IsString( nCol, nRow ) )
+            if ( pMatrix->IsStringOrEmpty( nCol, nRow ) )
                 pColAry[nCol] = 0.0;
             else
                 pColAry[nCol] = pMatrix->GetDouble( nCol, nRow );
@@ -214,7 +214,7 @@ bool ScRangeToSequence::FillStringArray( uno::Any& rAny, const ScMatrix* pMatrix
         for (SCSIZE nCol = 0; nCol < nColCount; nCol++)
         {
             OUString aStr;
-            if ( pMatrix->IsString( nCol, nRow ) )
+            if ( pMatrix->IsStringOrEmpty( nCol, nRow ) )
             {
                 if ( !pMatrix->IsEmpty( nCol, nRow ) )
                     aStr = pMatrix->GetString(nCol, nRow).getString();
@@ -299,7 +299,7 @@ bool ScRangeToSequence::FillMixedArray( uno::Any& rAny, const ScMatrix* pMatrix,
         uno::Any* pColAry = aColSeq.getArray();
         for (SCSIZE nCol = 0; nCol < nColCount; nCol++)
         {
-            if ( pMatrix->IsString( nCol, nRow ) )
+            if ( pMatrix->IsStringOrEmpty( nCol, nRow ) )
             {
                 OUString aStr;
                 if ( !pMatrix->IsEmpty( nCol, nRow ) )

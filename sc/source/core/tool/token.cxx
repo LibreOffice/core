@@ -5056,7 +5056,7 @@ void appendTokenByType( sc::TokenStringContext& rCxt, OUStringBuffer& rBuf, cons
                     {
                         // Skip it.
                     }
-                    else if (pMat->IsString(nC, nR))
+                    else if (pMat->IsStringOrEmpty(nC, nR))
                         appendString(rBuf, pMat->GetString(nC, nR).getString());
                 }
             }

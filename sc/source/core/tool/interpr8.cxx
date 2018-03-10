@@ -1466,7 +1466,7 @@ void ScInterpreter::ScConcat_MS()
                         {
                             for (SCSIZE k = 0; k < nR; k++ )
                             {
-                                if ( pMat->IsString( j, k ) )
+                                if ( pMat->IsStringOrEmpty( j, k ) )
                                     aResBuf.append(  pMat->GetString( j, k ).getString() );
                                 else
                                 {
@@ -1588,7 +1588,7 @@ void ScInterpreter::ScTextJoin_MS()
                             {
                                 if ( !pMat->IsEmpty( j, k ) )
                                 {
-                                    if ( pMat->IsString( j, k ) )
+                                    if ( pMat->IsStringOrEmpty( j, k ) )
                                         aDelimiters.push_back( pMat->GetString( j, k ).getString() );
                                     else
                                     {
@@ -1765,7 +1765,7 @@ void ScInterpreter::ScTextJoin_MS()
                                 {
                                     if ( !pMat->IsEmpty( j, k ) )
                                     {
-                                        if ( pMat->IsString( j, k ) )
+                                        if ( pMat->IsStringOrEmpty( j, k ) )
                                             aStr = pMat->GetString( j, k ).getString();
                                         else
                                         {
