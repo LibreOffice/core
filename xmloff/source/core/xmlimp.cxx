@@ -1399,33 +1399,6 @@ uno::Reference<graphic::XGraphic> SvXMLImport::loadGraphicFromBase64(uno::Refere
     return xGraphic;
 }
 
-OUString SvXMLImport::ResolveGraphicObjectURL( const OUString& rURL,
-                                                      bool bLoadOnDemand )
-{
-    OUString sRet;
-
-    if( IsPackageURL( rURL ) )
-    {
-        if( !bLoadOnDemand && mxGraphicResolver.is() )
-        {
-            OUString     aTmp( msPackageProtocol );
-            aTmp += rURL;
-            sRet = mxGraphicResolver->resolveGraphicObjectURL( aTmp );
-        }
-
-        if( sRet.isEmpty() )
-        {
-            sRet = msPackageProtocol;
-            sRet += rURL;
-        }
-    }
-
-    if( sRet.isEmpty() )
-        sRet = GetAbsoluteReference( rURL );
-
-    return sRet;
-}
-
 Reference< XOutputStream > SvXMLImport::GetStreamForGraphicObjectURLFromBase64()
 {
     Reference< XOutputStream > xOStm;
@@ -1435,17 +1408,6 @@ Reference< XOutputStream > SvXMLImport::GetStreamForGraphicObjectURLFromBase64()
         xOStm = xStmResolver->createOutputStream();
 
     return xOStm;
-}
-
-OUString SvXMLImport::ResolveGraphicObjectURLFromBase64(
-                                 const Reference < XOutputStream >& rOut )
-{
-    OUString sURL;
-    Reference< document::XBinaryStreamResolver > xStmResolver( mxGraphicResolver, UNO_QUERY );
-    if( xStmResolver.is() )
-        sURL = xStmResolver->resolveOutputStream( rOut );
-
-    return sURL;
 }
 
 OUString SvXMLImport::ResolveEmbeddedObjectURL(

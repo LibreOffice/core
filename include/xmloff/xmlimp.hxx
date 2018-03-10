@@ -406,10 +406,7 @@ public:
     // internal package URL. The later one happens only if bLoadURL is true
     OUString ResolveGraphicObjectURL( const OUString& rURL, bool bLoadOnDemand );
 
-    css::uno::Reference< css::io::XOutputStream >
-          GetStreamForGraphicObjectURLFromBase64();
-    OUString ResolveGraphicObjectURLFromBase64(
-        const css::uno::Reference< css::io::XOutputStream >& rOut );
+    css::uno::Reference< css::io::XOutputStream > GetStreamForGraphicObjectURLFromBase64();
 
     bool IsPackageURL( const OUString& rURL ) const;
     OUString ResolveEmbeddedObjectURL( const OUString& rURL,
