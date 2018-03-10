@@ -19,6 +19,7 @@
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
+#include <com/sun/star/graphic/XGraphic.hpp>
 #include <osl/diagnose.h>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/xmltoken.hxx>
@@ -31,7 +32,7 @@ using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::makeAny;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::com::sun::star::beans;
-
+using namespace css;
 
 XMLReplacementImageContext::XMLReplacementImageContext(
         SvXMLImport& rImport,
@@ -75,25 +76,29 @@ void XMLReplacementImageContext::EndElement()
                 "neither URL nor base64 image data given" );
     rtl::Reference < XMLTextImportHelper > xTxtImport =
         GetImport().GetTextImport();
-    OUString sHRef;
-    if( !m_sHRef.isEmpty() )
-    {
-        bool bForceLoad = xTxtImport->IsInsertMode() ||
-                              xTxtImport->IsBlockMode() ||
-                              xTxtImport->IsStylesOnlyMode() ||
-                              xTxtImport->IsOrganizerMode();
-        sHRef = GetImport().ResolveGraphicObjectURL( m_sHRef, !bForceLoad );
-    }
-    else if( m_xBase64Stream.is() )
-    {
-        sHRef = GetImport().ResolveGraphicObjectURLFromBase64( m_xBase64Stream );
-        m_xBase64Stream = nullptr;
-    }
+    uno::Reference<graphic::XGraphic> xGraphic;
 
-    Reference < XPropertySetInfo > xPropSetInfo =
-        m_xPropSet->getPropertySetInfo();
-    if( xPropSetInfo->hasPropertyByName("GraphicURL") )
-        m_xPropSet->setPropertyValue("GraphicURL", makeAny( sHRef ) );
+    try
+    {
+        if( !m_sHRef.isEmpty() )
+        {
+            xGraphic = GetImport().loadGraphicByURL(m_sHRef);
+        }
+        else if( m_xBase64Stream.is() )
+        {
+            xGraphic = GetImport().loadGraphicFromBase64(m_xBase64Stream);
+            m_xBase64Stream = nullptr;
+        }
+    }
+    catch (uno::Exception const &)
+    {}
+
+    Reference < XPropertySetInfo > xPropSetInfo = m_xPropSet->getPropertySetInfo();
+
+    if (xGraphic.is() && xPropSetInfo->hasPropertyByName("Graphic"))
+    {
+        m_xPropSet->setPropertyValue("Graphic", uno::makeAny(xGraphic));
+    }
 }
 
 SvXMLImportContextRef XMLReplacementImageContext::CreateChildContext(
