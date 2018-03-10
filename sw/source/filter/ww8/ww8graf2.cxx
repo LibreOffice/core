@@ -322,14 +322,14 @@ WW8PicDesc::WW8PicDesc( const WW8_PIC& rPic )
     nCT = rPic.dyaCropTop;
     nCB = rPic.dyaCropBottom;
 
-    long nAktWidth  = nOriWidth - (nCL + nCR);  // Size after crop
-    long nAktHeight = nOriHeight - (nCT + nCB);
-    if (!nAktWidth)
-        nAktWidth  = 1;
-    if (!nAktHeight)
-        nAktHeight = 1;
-    nWidth = nAktWidth * rPic.mx / 1000;        // Writer Size
-    nHeight = nAktHeight * rPic.my / 1000;
+    long nCurrentWidth  = nOriWidth - (nCL + nCR);  // Size after crop
+    long nCurrentHeight = nOriHeight - (nCT + nCB);
+    if (!nCurrentWidth)
+        nCurrentWidth  = 1;
+    if (!nCurrentHeight)
+        nCurrentHeight = 1;
+    nWidth = nCurrentWidth * rPic.mx / 1000;        // Writer Size
+    nHeight = nCurrentHeight * rPic.my / 1000;
 }
 
 void SwWW8ImplReader::ReplaceObj(const SdrObject &rReplaceObj,
