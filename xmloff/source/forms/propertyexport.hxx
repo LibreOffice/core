@@ -259,7 +259,7 @@ namespace xmloff
 
             <p>The property needs a special handling because the URL's need to be made relative</p>
         */
-        void exportImageDataAttribute() { exportRelativeTargetLocation(PROPERTY_IMAGEURL,CCAFlags::ImageData,false); }
+        void exportImageDataAttribute() { exportRelativeTargetLocation(PROPERTY_GRAPHIC, CCAFlags::ImageData, false); }
 
         /** flag the style properties as 'already exported'
 

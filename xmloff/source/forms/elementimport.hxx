@@ -33,6 +33,7 @@
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/form/XGridColumnFactory.hpp>
+#include <com/sun/star/graphic/XGraphic.hpp>
 #include <osl/diagnose.h>
 
 #include <map>
@@ -275,6 +276,7 @@ namespace xmloff
     //= OImagePositionImport
     class OImagePositionImport : public OControlImport
     {
+        css::uno::Reference<css::graphic::XGraphic> m_xGraphic;
         sal_Int16   m_nImagePosition;
         sal_Int16   m_nImageAlign;
         bool    m_bHaveImagePosition;

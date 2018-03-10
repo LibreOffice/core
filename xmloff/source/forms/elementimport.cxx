@@ -1118,7 +1118,14 @@ namespace xmloff
     bool OImagePositionImport::handleAttribute( sal_uInt16 _nNamespaceKey, const OUString& _rLocalName,
         const OUString& _rValue )
     {
-        if ( _rLocalName == GetXMLToken( XML_IMAGE_POSITION ) )
+        static const sal_Char* s_pImageDataAttributeName = OAttributeMetaData::getCommonControlAttributeName(CCAFlags::ImageData);
+
+        if (_rLocalName.equalsAscii(s_pImageDataAttributeName))
+        {
+            m_xGraphic = m_rContext.getGlobalContext().loadGraphicByURL(_rValue);
+            return true;
+        }
+        else if ( _rLocalName == GetXMLToken( XML_IMAGE_POSITION ) )
         {
             OSL_VERIFY( PropertyConversion::convertString(
                 cppu::UnoType<decltype(m_nImagePosition)>::get(),
@@ -1127,8 +1134,7 @@ namespace xmloff
             m_bHaveImagePosition = true;
             return true;
         }
-
-        if ( _rLocalName == GetXMLToken( XML_IMAGE_ALIGN ) )
+        else if ( _rLocalName == GetXMLToken( XML_IMAGE_ALIGN ) )
         {
             OSL_VERIFY( PropertyConversion::convertString(
                 cppu::UnoType<decltype(m_nImageAlign)>::get(),
@@ -1144,6 +1150,13 @@ namespace xmloff
     {
         OControlImport::StartElement( _rxAttrList );
 
+        if (m_xGraphic.is())
+        {
+            PropertyValue aGraphicProperty;
+            aGraphicProperty.Name = PROPERTY_GRAPHIC;
+            aGraphicProperty.Value <<= m_xGraphic;
+            implPushBackPropertyValue(aGraphicProperty);
+        }
         if ( m_bHaveImagePosition )
         {
             sal_Int16 nUnoImagePosition = ImagePosition::Centered;
@@ -1276,16 +1289,10 @@ namespace xmloff
                     )
                 );
 
-        if ( bMakeAbsolute && !_rValue.isEmpty() )
+        if (bMakeAbsolute && !_rValue.isEmpty())
         {
-            // make a global URL out of the local one
-            OUString sAdjustedValue;
-            // only resolve image related url
-            // we don't want say form url targets to be resolved
-            // using ResolveGraphicObjectURL
-            if ( _rLocalName.equalsAscii( s_pImageDataAttributeName ) )
-                sAdjustedValue = m_rContext.getGlobalContext().ResolveGraphicObjectURL( _rValue, false );
-            else
+            OUString sAdjustedValue = _rValue;
+            if (!_rLocalName.equalsAscii(s_pImageDataAttributeName))
                 sAdjustedValue = m_rContext.getGlobalContext().GetAbsoluteReference( _rValue );
             return OImagePositionImport::handleAttribute( _nNamespaceKey, _rLocalName, sAdjustedValue );
         }
