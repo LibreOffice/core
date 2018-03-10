@@ -1300,6 +1300,8 @@ BOOL CALLBACK SalPrintAbortProc( HDC hPrnDC, int /* nError */ )
     WinSalPrinter* pPrinter;
     bool        bWhile = true;
 
+    // Ensure we handle the mutex which will be released in WinSalInstance::DoYield
+    SolarMutexGuard aSolarMutexGuard;
     do
     {
         // process messages
