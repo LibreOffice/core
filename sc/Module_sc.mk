@@ -8,6 +8,8 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
+include $(SRCDIR)/sc/common_unoapi_tests.mk
+
 $(eval $(call gb_Module_Module,sc))
 
 $(eval $(call gb_Module_add_targets,sc,\
