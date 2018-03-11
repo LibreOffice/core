@@ -22,7 +22,6 @@
 
 #include <sal/config.h>
 #include <basic/sberrors.hxx>
-#include <memory>
 
 class SbxArray;
 class SbxVariable;
@@ -31,21 +30,14 @@ class SbiDllMgr {
 public:
     SbiDllMgr(const SbiDllMgr&) = delete;
     const SbiDllMgr& operator=(const SbiDllMgr&) = delete;
+    SbiDllMgr() = delete;
+    ~SbiDllMgr() = delete;
 
-    SbiDllMgr();
-
-    ~SbiDllMgr();
-
-    ErrCode Call(
+    static ErrCode Call(
         OUString const & function, OUString const &  library,
         SbxArray * arguments, SbxVariable & result, bool cdeclConvention);
 
-    void FreeDll(OUString const & library);
-
-private:
-    struct Impl;
-
-    std::unique_ptr< Impl > impl_;
+    static void FreeDll(OUString const & library);
 };
 
 #endif

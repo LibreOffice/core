@@ -346,14 +346,6 @@ SbiInstance::~SbiInstance()
     }
 }
 
-SbiDllMgr* SbiInstance::GetDllMgr()
-{
-    if( !pDllMgr )
-    {
-        pDllMgr.reset(new SbiDllMgr);
-    }
-    return pDllMgr.get();
-}
 
 // #39629 create NumberFormatter with the help of a static method now
 std::shared_ptr<SvNumberFormatter> const & SbiInstance::GetNumberFormatter()
@@ -1236,8 +1228,7 @@ void SbiRuntime::DllCall
     // NOT YET IMPLEMENTED
 
     SbxVariable* pRes = new SbxVariable( eResType );
-    SbiDllMgr* pDllMgr = pInst->GetDllMgr();
-    ErrCode nErr = pDllMgr->Call( aFuncName, aDLLName, pArgs, *pRes, bCDecl );
+    ErrCode nErr = SbiDllMgr::Call( aFuncName, aDLLName, pArgs, *pRes, bCDecl );
     if( nErr )
     {
         Error( nErr );

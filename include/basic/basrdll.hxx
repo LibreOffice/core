@@ -23,11 +23,14 @@
 #include <basic/basicdllapi.h>
 #include <memory>
 
+struct SbxAppData;
+
 class BASIC_DLLPUBLIC BasicDLL
 {
-public:
-    struct Impl;
-    std::unique_ptr<Impl> m_xImpl;
+    bool        bDebugMode;
+    bool        bBreakEnabled;
+
+    std::unique_ptr<SbxAppData> xSbxAppData;
 
 public:
     BasicDLL();
@@ -37,6 +40,8 @@ public:
 
     static void EnableBreak( bool bEnable );
     static void SetDebugMode( bool bDebugMode );
+
+    SbxAppData* getSbxAppData() { return xSbxAppData.get();}
 };
 
 #endif // INCLUDED_BASIC_BASRDLL_HXX

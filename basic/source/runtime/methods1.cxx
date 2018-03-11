@@ -702,7 +702,7 @@ void SbRtl_FreeLibrary(StarBASIC *, SbxArray & rPar, bool)
     {
         StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
     }
-    GetSbData()->pInst->GetDllMgr()->FreeDll( rPar.Get(1)->GetOUString() );
+    SbiDllMgr::FreeDll( rPar.Get(1)->GetOUString() );
 }
 bool IsBaseIndexOne()
 {
