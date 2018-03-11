@@ -2432,6 +2432,21 @@ bool SwWW8ImplReader::JoinNode(SwPaM &rPam, bool bStealAttr)
         if (bStealAttr)
             m_pCtrlStck->StealAttr(rPam.GetPoint()->nNode);
 
+        if (m_pLastAnchorPos.get())
+        {
+            //If the last anchor pos is here, then clear the anchor pos.
+            //This "last anchor pos" is only used for fixing up the
+            //positions of things anchored to page breaks and here
+            //we are removing the last paragraph of a frame, so there
+            //cannot be a page break at this point so we can
+            //safely reset m_pLastAnchorPos to avoid any dangling
+            //SwIndex's pointing into the deleted paragraph
+            SwNodeIndex aLastAnchorPos(m_pLastAnchorPos->nNode);
+            SwNodeIndex aToBeJoined(aPref, 1);
+            if (aLastAnchorPos == aToBeJoined)
+                m_pLastAnchorPos.reset();
+        }
+
         pNode->JoinNext();
 
         bRet = true;
