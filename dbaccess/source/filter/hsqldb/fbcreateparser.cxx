@@ -114,7 +114,7 @@ OUString FbCreateStmtParser::compose() const
 
         const std::vector<sal_Int32> params = columnIter->getParams();
 
-        // Firebird SQL dialect does not like paremeters for TIMESTAMP
+        // Firebird SQL dialect does not like parameters for TIMESTAMP
         if (params.size() > 0 && columnIter->getDataType() != DataType::TIMESTAMP)
         {
             sSql.append("(");
