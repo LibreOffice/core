@@ -97,6 +97,7 @@ $(eval $(call gb_CppunitTest_use_components,sc_tablesheetobj,\
     unoxml/source/rdf/unordf \
     unoxml/source/service/unoxml \
     uui/util/uui \
+    vcl/vcl.common \
     xmloff/util/xo \
 	svtools/util/svt \
 ))

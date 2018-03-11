@@ -50,7 +50,7 @@
 #include <svx/flagsdef.hxx>
 #include <svl/intitem.hxx>
 #include <sfx2/request.hxx>
-#include <svtools/grfmgr.hxx>
+#include <vcl/GraphicObject.hxx>
 #include <comphelper/lok.hxx>
 
 using namespace css;

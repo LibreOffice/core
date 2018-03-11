@@ -132,6 +132,7 @@
 #include <vcl/gfxlink.hxx>
 #include <vcl/gradient.hxx>
 #include <vcl/graph.hxx>
+#include <vcl/GraphicObject.hxx>
 #include <vcl/hatch.hxx>
 #include <vcl/inputctx.hxx>
 #include <vcl/inputtypes.hxx>
@@ -296,7 +297,6 @@
 #include <svl/style.hxx>
 #include <svl/stylesheetuser.hxx>
 #include <svl/svldllapi.h>
-#include <svtools/grfmgr.hxx>
 #include <svtools/svtdllapi.h>
 #include <svx/XPropertyEntry.hxx>
 #include <svx/sdmetitm.hxx>

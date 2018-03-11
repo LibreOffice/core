@@ -45,7 +45,7 @@
 #include <vcl/cvtgrf.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/outdev.hxx>
-#include <svtools/grfmgr.hxx>
+#include <vcl/GraphicObject.hxx>
 #include <svx/unoapi.hxx>
 #include <svx/svdxcgv.hxx>
 #include <svx/svdobj.hxx>

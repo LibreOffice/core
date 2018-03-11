@@ -11,6 +11,7 @@
 
 #include <vcl/svapp.hxx>
 #include <vcl/graph.hxx>
+#include <vcl/GraphicObject.hxx>
 #include <vcl/cvtgrf.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <svx/xoutbmp.hxx>
@@ -18,7 +19,6 @@
 #include <svx/svdpagv.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/fmview.hxx>
-#include <svtools/grfmgr.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/bindings.hxx>
 #include <salhelper/thread.hxx>

@@ -106,6 +106,7 @@ $(eval $(call gb_Rdb_add_components,services,\
 	unoxml/source/rdf/unordf \
 	unoxml/source/service/unoxml \
 	uui/util/uui \
+	vcl/vcl.common \
 	xmloff/source/transform/xof \
 	xmloff/util/xo \
 	xmlscript/util/xmlscript \
