@@ -33,7 +33,7 @@
 #include <rtl/string.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
-#include <svtools/grfmgr.hxx>
+#include <vcl/GraphicObject.hxx>
 #include <svx/svdtypes.hxx>
 #include <svx/msdffdef.hxx>
 #include <tools/gen.hxx>

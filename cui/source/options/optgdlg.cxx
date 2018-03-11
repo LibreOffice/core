@@ -20,7 +20,7 @@
 #include <config_features.h>
 #include <svl/zforlist.hxx>
 #include <svl/currencytable.hxx>
-#include <svtools/grfmgr.hxx>
+#include <vcl/GraphicObject.hxx>
 #include <svtools/langhelp.hxx>
 #include <svl/flagitem.hxx>
 #include <sfx2/dispatch.hxx>

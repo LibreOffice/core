@@ -81,6 +81,7 @@ $(eval $(call gb_CppunitTest_use_components,sw_rtfimport,\
     unoxml/source/service/unoxml \
     uui/util/uui \
     writerfilter/util/writerfilter \
+    vcl/vcl.common \
     xmloff/util/xo \
 ))
 

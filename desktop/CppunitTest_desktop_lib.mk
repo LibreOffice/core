@@ -73,6 +73,7 @@ $(eval $(call gb_CppunitTest_use_components,desktop_lib,\
     ucb/source/ucp/file/ucpfile1 \
     unoxml/source/service/unoxml \
     uui/util/uui \
+    vcl/vcl.common \
     xmloff/util/xo \
     i18npool/source/search/i18nsearch \
     filter/source/graphic/graphicfilter \

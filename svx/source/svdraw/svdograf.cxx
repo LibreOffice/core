@@ -28,9 +28,9 @@
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/localfilehelper.hxx>
 #include <svl/style.hxx>
-#include <vcl/graphicfilter.hxx>
 #include <svl/urihelper.hxx>
-#include <svtools/grfmgr.hxx>
+#include <vcl/graphicfilter.hxx>
+#include <vcl/GraphicObject.hxx>
 #include <vcl/svapp.hxx>
 
 #include <sfx2/linkmgr.hxx>

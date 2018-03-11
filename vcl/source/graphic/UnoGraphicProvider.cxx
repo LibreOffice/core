@@ -41,10 +41,10 @@
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
-#include "descriptor.hxx"
-#include "graphic.hxx"
+#include "UnoGraphicDescriptor.hxx"
+#include "UnoGraphic.hxx"
 #include <rtl/ref.hxx>
-#include <svtools/grfmgr.hxx>
+#include <vcl/GraphicObject.hxx>
 #include <vcl/dibtools.hxx>
 #include <comphelper/sequence.hxx>
 #include <memory>

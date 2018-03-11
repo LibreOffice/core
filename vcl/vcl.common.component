@@ -1,5 +1,5 @@
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
  * This file is part of the LibreOffice project.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -15,29 +15,16 @@
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
- */
+-->
 
-#ifndef INCLUDED_SVX_GRFFLT_HXX
-#define INCLUDED_SVX_GRFFLT_HXX
-
-#include <vcl/GraphicObject.hxx>
-#include <svx/svxdllapi.h>
-
-enum class SvxGraphicFilterResult {
-    NONE, UnsupportedGraphicType, UnsupportedSlot
-};
-
-class SfxRequest;
-class SfxItemSet;
-
-class SVX_DLLPUBLIC SvxGraphicFilter
-{
-public:
-
-    static SvxGraphicFilterResult ExecuteGrfFilterSlot( SfxRequest const & rReq, GraphicObject& rFilterObject );
-    static void     DisableGraphicFilterSlots( SfxItemSet& rSet );
-};
-
-#endif
-
-/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
+<component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
+    prefix="vcl" xmlns="http://openoffice.org/2010/uno-components">
+  <implementation name="com.sun.star.comp.graphic.GraphicProvider"
+      constructor="com_sun_star_comp_graphic_GraphicProvider_get_implementation">
+    <service name="com.sun.star.graphic.GraphicProvider"/>
+  </implementation>
+  <implementation name="com.sun.star.graphic.GraphicObject"
+      constructor="com_sun_star_graphic_GraphicObject_get_implementation">
+    <service name="com.sun.star.graphic.GraphicObject"/>
+  </implementation>
+</component>

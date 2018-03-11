@@ -110,6 +110,7 @@ $(eval $(call gb_CppunitTest_use_components,sc_macros_test,\
     unoxml/source/rdf/unordf \
     unoxml/source/service/unoxml \
     uui/util/uui \
+    vcl/vcl.common \
     vbahelper/util/msforms \
     xmloff/util/xo \
 ))

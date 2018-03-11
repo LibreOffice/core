@@ -22,7 +22,7 @@
 
 #include <svx/svxdllapi.h>
 #include <svx/xit.hxx>
-#include <svtools/grfmgr.hxx>
+#include <vcl/GraphicObject.hxx>
 #include <array>
 
 class SdrModel;
