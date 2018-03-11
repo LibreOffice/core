@@ -58,12 +58,11 @@ sc/res/table.png cmd/sc_inserttable.png
 cmd/lc_thesaurusdialog.png cmd/lc_thesaurus.png
 cmd/sc_thesaurusdialog.png cmd/sc_thesaurus.png
 
-# File Menu
-cmd/sc_exporttopdf.png cmd/sc_exportdirecttopdf.png
-
 # Print Preview Toolbar
 cmd/lc_showsinglepage.png cmd/lc_adddirect.png
 cmd/sc_showsinglepage.png cmd/sc_adddirect.png
+cmd/lc_closepreview.png cmd/lc_exitsearch.png
+cmd/sc_closepreview.png cmd/sc_exitsearch.png
 
 # Horizontal Text Alignment (align* is in calc and *para is used in writer)
 #cmd/lc_alignleft.png cmd/lc_leftpara.png
@@ -207,12 +206,18 @@ cmd/sc_objectforwardone.png cmd/sc_forward.png
 cmd/lc_objectbackone.png cmd/lc_backward.png
 cmd/sc_objectbackone.png cmd/sc_backward.png
 
-# writer epub export
-cmd/lc_exportdirecttoepub.png cmd/lc_exportdirecttopdf.png
-cmd/sc_exportdirecttoepub.png cmd/sc_exportdirecttopdf.png
+# writer pdf and epub export
+cmd/lc_exporttopdf.png cmd/lc_exportdirecttopdf.png
+cmd/sc_exporttopdf.png cmd/sc_exportdirecttopdf.png
+cmd/lc_exporttoepub.png cmd/lc_exportdirecttoepub.png
+cmd/sc_exporttoepub.png cmd/sc_exportdirecttoepub.png
 
 # writer formatting style toolbar
 cmd/lc_bulletliststyle.png cmd/lc_defaultbullet.png
 cmd/sc_bulletliststyle.png cmd/sc_defaultbullet.png
 cmd/lc_numberliststyle.png cmd/lc_defaultnumbering.png
 cmd/sc_numberliststyle.png cmd/sc_defaultnumbering.png
+
+# view menu
+cmd/lc_viewsidebarstyles.png cmd/lc_designerdialog.png
+cmd/sc_viewsidebarstyles.png cmd/sc_designerdialog.png
