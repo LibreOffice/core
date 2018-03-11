@@ -93,6 +93,24 @@
 		39E950521FC9842000D82C49 /* source */ = {isa = PBXFileReference; lastKnownFileType = folder; name = source; path = ../source; sourceTree = "<group>"; };
 		39EE81531FA644E800B73AB8 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		39EF4E2E1FA500C9001914AC /* PropertiesController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PropertiesController.swift; sourceTree = "<group>"; };
+		39FD89C9204E87E900E7179F /* except.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = except.cxx; path = "../../bridges/source/cpp_uno/gcc3_macosx_x86-64/except.cxx"; sourceTree = "<group>"; };
+		39FD89CB204E87FD00E7179F /* except.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = except.cxx; path = ../../bridges/source/cpp_uno/gcc3_ios/except.cxx; sourceTree = "<group>"; };
+		39FD89CF204E8EB900E7179F /* cpp2uno.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = cpp2uno.cxx; path = ../../bridges/source/cpp_uno/gcc3_ios/cpp2uno.cxx; sourceTree = "<group>"; };
+		39FD89D1204E8ED000E7179F /* share.hxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = share.hxx; path = ../../bridges/source/cpp_uno/gcc3_ios/share.hxx; sourceTree = "<group>"; };
+		39FD89D2204E8ED000E7179F /* unwind-cxx.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "unwind-cxx.h"; path = "../../bridges/source/cpp_uno/gcc3_ios/unwind-cxx.h"; sourceTree = "<group>"; };
+		39FD89D3204E8ED000E7179F /* rtti.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = rtti.h; path = ../../bridges/source/cpp_uno/gcc3_ios/rtti.h; sourceTree = "<group>"; };
+		39FD89D4204E8ED000E7179F /* ios64_helper.s */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.asm; name = ios64_helper.s; path = ../../bridges/source/cpp_uno/gcc3_ios/ios64_helper.s; sourceTree = "<group>"; };
+		39FD89D5204E8ED000E7179F /* uno2cpp.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = uno2cpp.cxx; path = ../../bridges/source/cpp_uno/gcc3_ios/uno2cpp.cxx; sourceTree = "<group>"; };
+		39FD89D8204E8EEE00E7179F /* call.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = call.cxx; path = "../../bridges/source/cpp_uno/gcc3_macosx_x86-64/call.cxx"; sourceTree = "<group>"; };
+		39FD89D9204E8EEE00E7179F /* abi.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = abi.cxx; path = "../../bridges/source/cpp_uno/gcc3_macosx_x86-64/abi.cxx"; sourceTree = "<group>"; };
+		39FD89DA204E8EEE00E7179F /* uno2cpp.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = uno2cpp.cxx; path = "../../bridges/source/cpp_uno/gcc3_macosx_x86-64/uno2cpp.cxx"; sourceTree = "<group>"; };
+		39FD89DB204E8EEE00E7179F /* share.hxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = share.hxx; path = "../../bridges/source/cpp_uno/gcc3_macosx_x86-64/share.hxx"; sourceTree = "<group>"; };
+		39FD89DC204E8EEE00E7179F /* call.hxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = call.hxx; path = "../../bridges/source/cpp_uno/gcc3_macosx_x86-64/call.hxx"; sourceTree = "<group>"; };
+		39FD89DD204E8EEE00E7179F /* abi.hxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = abi.hxx; path = "../../bridges/source/cpp_uno/gcc3_macosx_x86-64/abi.hxx"; sourceTree = "<group>"; };
+		39FD89DE204E8EEE00E7179F /* callvirtualmethod.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = callvirtualmethod.cxx; path = "../../bridges/source/cpp_uno/gcc3_macosx_x86-64/callvirtualmethod.cxx"; sourceTree = "<group>"; };
+		39FD89DF204E8EEF00E7179F /* cpp2uno.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = cpp2uno.cxx; path = "../../bridges/source/cpp_uno/gcc3_macosx_x86-64/cpp2uno.cxx"; sourceTree = "<group>"; };
+		39FD89E0204E8EEF00E7179F /* callvirtualmethod.hxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = callvirtualmethod.hxx; path = "../../bridges/source/cpp_uno/gcc3_macosx_x86-64/callvirtualmethod.hxx"; sourceTree = "<group>"; };
+		39FD89E6204EBCB900E7179F /* exc_thrower.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = exc_thrower.cxx; path = ../../cppuhelper/source/exc_thrower.cxx; sourceTree = "<group>"; };
 		FC31D01D2012F65500E7F402 /* DocumentHolder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentHolder.swift; sourceTree = "<group>"; };
 		FC31D01F2012F6D300E7F402 /* RenderCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RenderCache.swift; sourceTree = "<group>"; };
 		FC31D02A2013500E00E7F402 /* ButtonScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonScrollView.swift; sourceTree = "<group>"; };
@@ -134,6 +152,9 @@
 		3956B72D1FAB3DBF00BF5DE4 /* extra */ = {
 			isa = PBXGroup;
 			children = (
+				39FD89E6204EBCB900E7179F /* exc_thrower.cxx */,
+				39FD89CE204E8E6500E7179F /* ipad */,
+				39FD89CD204E8E5E00E7179F /* sim */,
 				39E950521FC9842000D82C49 /* source */,
 			);
 			name = extra;
@@ -210,6 +231,37 @@
 			);
 			name = Resources;
 			sourceTree = SOURCE_ROOT;
+		};
+		39FD89CD204E8E5E00E7179F /* sim */ = {
+			isa = PBXGroup;
+			children = (
+				39FD89D9204E8EEE00E7179F /* abi.cxx */,
+				39FD89DD204E8EEE00E7179F /* abi.hxx */,
+				39FD89D8204E8EEE00E7179F /* call.cxx */,
+				39FD89DC204E8EEE00E7179F /* call.hxx */,
+				39FD89DE204E8EEE00E7179F /* callvirtualmethod.cxx */,
+				39FD89E0204E8EEF00E7179F /* callvirtualmethod.hxx */,
+				39FD89DF204E8EEF00E7179F /* cpp2uno.cxx */,
+				39FD89DB204E8EEE00E7179F /* share.hxx */,
+				39FD89DA204E8EEE00E7179F /* uno2cpp.cxx */,
+				39FD89C9204E87E900E7179F /* except.cxx */,
+			);
+			name = sim;
+			sourceTree = "<group>";
+		};
+		39FD89CE204E8E6500E7179F /* ipad */ = {
+			isa = PBXGroup;
+			children = (
+				39FD89D4204E8ED000E7179F /* ios64_helper.s */,
+				39FD89D3204E8ED000E7179F /* rtti.h */,
+				39FD89D1204E8ED000E7179F /* share.hxx */,
+				39FD89D5204E8ED000E7179F /* uno2cpp.cxx */,
+				39FD89D2204E8ED000E7179F /* unwind-cxx.h */,
+				39FD89CF204E8EB900E7179F /* cpp2uno.cxx */,
+				39FD89CB204E87FD00E7179F /* except.cxx */,
+			);
+			name = ipad;
+			sourceTree = "<group>";
 		};
 		FCC2E3F52004A01400CEB504 /* LOKit */ = {
 			isa = PBXGroup;
