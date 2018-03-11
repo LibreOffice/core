@@ -27,6 +27,8 @@
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
+#include <com/sun/star/frame/XLoadable.hpp>
+#include <com/sun/star/frame/XStorable.hpp>
 
 #include <vcl/scheduler.hxx>
 #include <osl/thread.hxx>
@@ -46,6 +48,7 @@
 #include <controller/SlsClipboard.hxx>
 #include <controller/SlsPageSelector.hxx>
 #include <undo/undomanager.hxx>
+#include <unotools/mediadescriptor.hxx>
 #include <DrawViewShell.hxx>
 #include <chrono>
 
@@ -60,6 +63,7 @@ public:
     void testTdf99396();
     void testTdf99396TextEdit();
     void testFillGradient();
+    void testTdf44774();
 
     CPPUNIT_TEST_SUITE(SdMiscTest);
     CPPUNIT_TEST(testTdf96206);
@@ -67,6 +71,7 @@ public:
     CPPUNIT_TEST(testTdf99396);
     CPPUNIT_TEST(testTdf99396TextEdit);
     CPPUNIT_TEST(testFillGradient);
+    CPPUNIT_TEST(testTdf44774);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -296,6 +301,45 @@ void SdMiscTest::testFillGradient()
     CPPUNIT_ASSERT(xPropSet2->getPropertyValue("FillGradient") >>= aGradient2);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(Color(255, 0, 0)),aGradient2.StartColor);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(Color(0, 255, 0)),aGradient2.EndColor);
+}
+
+void SdMiscTest::testTdf44774()
+{
+    sd::DrawDocShellRef xDocShRef = new sd::DrawDocShell(SfxObjectCreateMode::EMBEDDED, false,
+        DocumentType::Draw);
+    const uno::Reference<frame::XLoadable> xLoadable(xDocShRef->GetModel(), uno::UNO_QUERY_THROW);
+    xLoadable->initNew();
+    SfxStyleSheetBasePool* pSSPool = xDocShRef->GetStyleSheetPool();
+
+    // Create a new style with an empty name, like what happens in UI when creating a new style
+    SfxStyleSheetBase& rStyleA = pSSPool->Make("", SfxStyleFamily::Para, SFXSTYLEBIT_USERDEF);
+    // Assign a new name, which does not yet set its ApiName
+    rStyleA.SetName("StyleA");
+    // Create another style
+    SfxStyleSheetBase& rStyleB = pSSPool->Make("StyleB", SfxStyleFamily::Para, SFXSTYLEBIT_USERDEF);
+    // ... and set its parent to the first one
+    rStyleB.SetParent("StyleA");
+
+    // Now save the file and reload
+    uno::Reference< lang::XComponent > xComponent(xDocShRef->GetModel(), uno::UNO_QUERY);
+    uno::Reference<frame::XStorable> xStorable(xComponent, uno::UNO_QUERY_THROW);
+    utl::MediaDescriptor aMediaDescriptor;
+    aMediaDescriptor["FilterName"] <<= OStringToOUString(OString(aFileFormats[ODG].pFilterName),
+        RTL_TEXTENCODING_UTF8);
+
+    utl::TempFile aTempFile;
+    aTempFile.EnableKillingFile();
+    xStorable->storeToURL(aTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+    xComponent.set(xStorable, uno::UNO_QUERY_THROW);
+    xComponent->dispose();
+    xDocShRef = loadURL(aTempFile.GetURL(), ODG);
+    pSSPool = xDocShRef->GetStyleSheetPool();
+
+    SfxStyleSheetIterator iter(pSSPool, SfxStyleFamily::Para);
+    SfxStyleSheetBase* pStyle = iter.Find("StyleB");
+    CPPUNIT_ASSERT(pStyle);
+    // The parent set in StyleB used to reset, because parent style's msApiName was empty
+    CPPUNIT_ASSERT_EQUAL(OUString("StyleA"), pStyle->GetParent());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdMiscTest);
