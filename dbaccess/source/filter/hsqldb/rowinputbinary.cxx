@@ -22,10 +22,12 @@
 #include <com/sun/star/io/WrongFormatException.hpp>
 #include <com/sun/star/io/XConnectable.hpp>
 #include <com/sun/star/util/Time.hpp>
+#include <com/sun/star/util/Date.hpp>
 
 #include <unotools/ucbstreamhelper.hxx>
 #include <tools/stream.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <ctime>
 
 namespace
 {
@@ -299,7 +301,16 @@ std::vector<Any> HsqlRowInputStream::readOneRow(const ColumnTypeVector& nColType
             }
             break;
             case DataType::DATE:
-                break;
+            {
+                sal_Int64 value = 0;
+                m_pStream->ReadInt64(value); // in millisec, from 1970
+                sal_Int64 nEpochSec = value / 1000;
+                std::tm* tm = std::gmtime(&nEpochSec);
+                css::util::Date date(tm->tm_mday, tm->tm_mon + 1,
+                                     tm->tm_year + 1900); // day, month, year
+                aData.push_back(makeAny(date));
+            }
+            break;
             case DataType::TIME:
             {
                 sal_Int64 value = 0;
