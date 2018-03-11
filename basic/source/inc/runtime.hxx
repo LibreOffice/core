@@ -46,7 +46,6 @@ struct SbiGosub;                    // GOSUB stack element
 class  SbiImage;                    // Code-Image
 class  SbiIoSystem;
 class  SbiDdeControl;
-class  SbiDllMgr;
 class  SvNumberFormatter;           // time/date functions
 enum class SbiImageFlags;
 
@@ -131,8 +130,6 @@ class SbiInstance
     std::unique_ptr<SbiIoSystem, o3tl::default_delete<SbiIoSystem>> pIosys;
     // DDE
     std::unique_ptr<SbiDdeControl>    pDdeCtrl;
-    // DLL-Calls (DECLARE)
-    std::unique_ptr<SbiDllMgr>        pDllMgr;
     std::shared_ptr<SvNumberFormatter> pNumberFormatter;
     StarBASIC*      pBasic;
     LanguageType    meFormatterLangType;
@@ -183,7 +180,6 @@ public:
     SbiIoSystem* GetIoSystem() { return pIosys.get(); }
     SbiDdeControl* GetDdeControl() { return pDdeCtrl.get(); }
     StarBASIC* GetBasic() { return pBasic; }
-    SbiDllMgr* GetDllMgr();
     SbiRTLData* GetRTLData() const { return const_cast<SbiRTLData*>(&aRTLData); }
 
     std::shared_ptr<SvNumberFormatter> const & GetNumberFormatter();
