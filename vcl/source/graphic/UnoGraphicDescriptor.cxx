@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "descriptor.hxx"
+#include "UnoGraphicDescriptor.hxx"
 
 #include <unotools/ucbstreamhelper.hxx>
 #include <vcl/graphicfilter.hxx>

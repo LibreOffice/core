@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SVX_GRFFLT_HXX
 #define INCLUDED_SVX_GRFFLT_HXX
 
-#include <svtools/grfmgr.hxx>
+#include <vcl/GraphicObject.hxx>
 #include <svx/svxdllapi.h>
 
 enum class SvxGraphicFilterResult {

@@ -32,7 +32,7 @@
 
 #include <editeng/unoprnms.hxx>
 #include <vcl/graph.hxx>
-#include <svtools/grfmgr.hxx>
+#include <vcl/GraphicObject.hxx>
 #include <vcl/outdev.hxx>
 
 #include <comphelper/processfactory.hxx>

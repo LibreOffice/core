@@ -22,7 +22,7 @@
 
 #include <cppuhelper/compbase.hxx>
 #include <osl/mutex.hxx>
-#include <svtools/grfmgr.hxx>
+#include <vcl/GraphicObject.hxx>
 #include <vector>
 #include <set>
 #include <utility>

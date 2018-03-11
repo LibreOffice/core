@@ -17,12 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVTOOLS_GRFMGR_HXX
-#define INCLUDED_SVTOOLS_GRFMGR_HXX
+#ifndef INCLUDED_VCL_GRAPHICOBJECT_HXX
+#define INCLUDED_VCL_GRAPHICOBJECT_HXX
 
 #include <memory>
 #include <vcl/graph.hxx>
-#include <svtools/svtdllapi.h>
+#include <vcl/dllapi.h>
 #include <o3tl/typed_flags_set.hxx>
 
 #include <unordered_set>
@@ -79,7 +79,7 @@ class VirtualDevice;
 struct GrfSimpleCacheObj;
 struct ImplTileInfo;
 
-class SVT_DLLPUBLIC GraphicAttr
+class VCL_DLLPUBLIC GraphicAttr
 {
 private:
 
@@ -165,7 +165,7 @@ public:
                     }
 };
 
-class SVT_DLLPUBLIC GraphicObject
+class VCL_DLLPUBLIC GraphicObject
 {
     friend class GraphicManager;
     friend class SdrGrafObj;
@@ -197,10 +197,10 @@ private:
     bool                    mbIsInSwapIn    : 1;
     bool                    mbIsInSwapOut   : 1;
 
-    void                    SVT_DLLPRIVATE ImplAssignGraphicData();
-    static void             SVT_DLLPRIVATE ImplEnsureGraphicManager();
-    void                    SVT_DLLPRIVATE ImplAutoSwapIn();
-    bool                    SVT_DLLPRIVATE ImplGetCropParams(
+    void                    VCL_DLLPRIVATE ImplAssignGraphicData();
+    static void             VCL_DLLPRIVATE ImplEnsureGraphicManager();
+    void                    VCL_DLLPRIVATE ImplAutoSwapIn();
+    bool                    VCL_DLLPRIVATE ImplGetCropParams(
                                 OutputDevice const * pOut,
                                 Point& rPt,
                                 Size& rSz,
@@ -247,7 +247,7 @@ private:
 
         @return true, if everything was successfully rendered.
     */
-    bool SVT_DLLPRIVATE     ImplRenderTempTile(
+    bool VCL_DLLPRIVATE     ImplRenderTempTile(
                                 VirtualDevice& rVDev,
                                 int nNumTilesX,
                                 int nNumTilesY,
@@ -257,7 +257,7 @@ private:
                             );
 
     /// internally called by ImplRenderTempTile()
-    bool SVT_DLLPRIVATE     ImplRenderTileRecursive(
+    bool VCL_DLLPRIVATE     ImplRenderTileRecursive(
                                 VirtualDevice& rVDev,
                                 int nExponent,
                                 int nMSBFactor,
@@ -271,7 +271,7 @@ private:
                                 ImplTileInfo& rTileInfo
                             );
 
-    bool SVT_DLLPRIVATE     ImplDrawTiled(
+    bool VCL_DLLPRIVATE     ImplDrawTiled(
                                 OutputDevice* pOut,
                                 const tools::Rectangle& rArea,
                                 const Size& rSizePixel,
@@ -281,7 +281,7 @@ private:
                                 int nTileCacheSize1D
                             );
 
-    bool SVT_DLLPRIVATE     ImplDrawTiled(
+    bool VCL_DLLPRIVATE     ImplDrawTiled(
                                 OutputDevice& rOut,
                                 const Point& rPos,
                                 int nNumTilesX,
@@ -291,7 +291,7 @@ private:
                                 GraphicManagerDrawFlags nFlags
                             );
 
-    void SVT_DLLPRIVATE     ImplTransformBitmap(
+    void VCL_DLLPRIVATE     ImplTransformBitmap(
                                 BitmapEx&           rBmpEx,
                                 const GraphicAttr&  rAttr,
                                 const Size&         rCropLeftTop,
@@ -305,7 +305,7 @@ private:
 
     // Handle evtl. needed AfterDataChanges, needs to be called when new
     // graphic data is swapped in/added to the GraphicManager
-    void SVT_DLLPRIVATE     ImplAfterDataChange();
+    void VCL_DLLPRIVATE     ImplAfterDataChange();
 protected:
 
     SvStream*               GetSwapStream() const;
@@ -488,7 +488,7 @@ public:
     sal_uLong GetDataChangeTimeStamp() const { return mnDataChangeTimeStamp; }
 };
 
-class SVT_DLLPUBLIC GraphicManager
+class VCL_DLLPUBLIC GraphicManager
 {
     friend class GraphicObject;
     friend class GraphicDisplayCacheEntry;
@@ -502,7 +502,7 @@ private:
                         GraphicManager( const GraphicManager& ) = delete;
     GraphicManager&     operator=( const GraphicManager& ) = delete;
 
-    bool SVT_DLLPRIVATE ImplDraw(
+    bool VCL_DLLPRIVATE ImplDraw(
                             OutputDevice* pOut,
                             const Point& rPt,
                             const Size& rSz,
@@ -511,7 +511,7 @@ private:
                             bool& rCached
                         );
 
-    static bool SVT_DLLPRIVATE ImplCreateOutput(
+    static bool VCL_DLLPRIVATE ImplCreateOutput(
                             OutputDevice* pOut,
                             const Point& rPt,
                             const Size& rSz,
@@ -519,7 +519,7 @@ private:
                             const GraphicAttr& rAttr,
                             BitmapEx* pBmpEx = nullptr
                         );
-    static bool SVT_DLLPRIVATE ImplCreateOutput(
+    static bool VCL_DLLPRIVATE ImplCreateOutput(
                             OutputDevice* pOut,
                             const Point& rPt,
                             const Size& rSz,
@@ -529,23 +529,23 @@ private:
                             BitmapEx& rOutBmpEx
                         );
 
-    static void SVT_DLLPRIVATE ImplAdjust(
+    static void VCL_DLLPRIVATE ImplAdjust(
                             BitmapEx& rBmpEx,
                             const GraphicAttr& rAttr,
                             GraphicAdjustmentFlags nAdjustmentFlags
                         );
-    static void SVT_DLLPRIVATE ImplAdjust(
+    static void VCL_DLLPRIVATE ImplAdjust(
                             GDIMetaFile& rMtf,
                             const GraphicAttr& rAttr,
                             GraphicAdjustmentFlags nAdjustmentFlags
                         );
-    static void SVT_DLLPRIVATE ImplAdjust(
+    static void VCL_DLLPRIVATE ImplAdjust(
                             Animation& rAnimation,
                             const GraphicAttr& rAttr,
                             GraphicAdjustmentFlags nAdjustmentFlags
                         );
 
-    static void SVT_DLLPRIVATE ImplDraw(
+    static void VCL_DLLPRIVATE ImplDraw(
                             OutputDevice* pOut,
                             const Point& rPt,
                             const Size& rSz,
@@ -554,20 +554,20 @@ private:
                         );
 
                     // Only used by GraphicObject's Ctor's and Dtor's
-    void SVT_DLLPRIVATE ImplRegisterObj(
+    void VCL_DLLPRIVATE ImplRegisterObj(
                             const GraphicObject& rObj,
                             Graphic& rSubstitute,
                             const OString* pID,
                             const GraphicObject* pCopyObj
                         );
-    void SVT_DLLPRIVATE ImplUnregisterObj( const GraphicObject& rObj );
-    bool SVT_DLLPRIVATE ImplHasObjects() const { return !maObjList.empty(); }
+    void VCL_DLLPRIVATE ImplUnregisterObj( const GraphicObject& rObj );
+    bool VCL_DLLPRIVATE ImplHasObjects() const { return !maObjList.empty(); }
 
                     // Only used in swap case by GraphicObject
-    void SVT_DLLPRIVATE ImplGraphicObjectWasSwappedOut( const GraphicObject& rObj );
-    void SVT_DLLPRIVATE ImplGraphicObjectWasSwappedIn( const GraphicObject& rObj );
+    void VCL_DLLPRIVATE ImplGraphicObjectWasSwappedOut( const GraphicObject& rObj );
+    void VCL_DLLPRIVATE ImplGraphicObjectWasSwappedIn( const GraphicObject& rObj );
 
-    OString SVT_DLLPRIVATE ImplGetUniqueID( const GraphicObject& rObj ) const;
+    OString VCL_DLLPRIVATE ImplGetUniqueID( const GraphicObject& rObj ) const;
 
     // This method allows to check memory footprint for all currently swapped in GraphicObjects on this GraphicManager
     // which are based on Bitmaps. This is needed on 32Bit systems and only does something on those systems. The problem
@@ -576,7 +576,7 @@ private:
     // For 32Bit systems this leads to situations where graphics will be missing. This method will actively swap out
     // the longest swapped in graphics until a maximum memory boundary (derived from user settings in tools/options/memory)
     // is no longer exceeded
-    void SVT_DLLPRIVATE ImplCheckSizeOfSwappedInGraphics(const GraphicObject* pGraphicToIgnore);
+    void VCL_DLLPRIVATE ImplCheckSizeOfSwappedInGraphics(const GraphicObject* pGraphicToIgnore);
 public:
 
                         GraphicManager( sal_uLong nCacheSize, sal_uLong nMaxObjCacheSize );
@@ -606,6 +606,6 @@ public:
                         );
 };
 
-#endif // INCLUDED_SVTOOLS_GRFMGR_HXX
+#endif // INCLUDED_VCL_GRAPHICOBJECT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

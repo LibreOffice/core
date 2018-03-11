@@ -37,7 +37,7 @@
 #include <editeng/editengdllapi.h>
 #include <com/sun/star/lang/Locale.hpp>
 
-#include <svtools/grfmgr.hxx>
+#include <vcl/GraphicObject.hxx>
 
 #include <LibreOfficeKit/LibreOfficeKitTypes.h>
 #include <com/sun/star/uno/Reference.h>

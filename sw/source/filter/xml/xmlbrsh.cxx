@@ -25,7 +25,7 @@
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/XMLBase64ImportContext.hxx>
-#include <svtools/grfmgr.hxx>
+#include <vcl/GraphicObject.hxx>
 #include <svx/unomid.hxx>
 #include <editeng/brushitem.hxx>
 #include <xmloff/xmluconv.hxx>

@@ -25,4 +25,12 @@
   <implementation name="vcl::FontIdentificator">
     <service name="com.sun.star.awt.FontIdentificator"/>
   </implementation>
+  <implementation name="com.sun.star.comp.graphic.GraphicProvider"
+      constructor="com_sun_star_comp_graphic_GraphicProvider_get_implementation">
+    <service name="com.sun.star.graphic.GraphicProvider"/>
+  </implementation>
+  <implementation name="com.sun.star.graphic.GraphicObject"
+      constructor="com_sun_star_graphic_GraphicObject_get_implementation">
+    <service name="com.sun.star.graphic.GraphicObject"/>
+  </implementation>
 </component>
