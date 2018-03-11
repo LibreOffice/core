@@ -22,6 +22,7 @@
 #include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/WrongFormatException.hpp>
+#include <com/sun/star/util/Date.hpp>
 
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/sdbc/XParameters.hpp>
@@ -146,11 +147,23 @@ void lcl_setParams(const RowVector& row, Reference<XParameters>& xParam,
                 // TODO
                 break;
             case DataType::DATE:
-                // TODO
-                break;
+            {
+                css::util::Date date;
+                if (row.at(i) >>= date)
+                {
+                    xParam->setDate(i + 1, date);
+                }
+            }
+            break;
             case DataType::TIME:
-                // TODO
-                break;
+            {
+                css::util::Time time;
+                if (row.at(i) >>= time)
+                {
+                    xParam->setTime(i + 1, time);
+                }
+            }
+            break;
             case DataType::TIMESTAMP:
                 // TODO
                 break;
