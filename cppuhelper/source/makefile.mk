@@ -175,7 +175,9 @@ SHL1DEF=$(MISC)$/$(SHL1TARGET).def
 
 DEF1NAME=$(SHL1TARGET)
 
-.IF "$(COMNAME)"=="sunpro5"
+.IF "$(COMNAME)"=="msci"
+.ELIF "$(COMNAME)"=="mscx"
+.ELIF "$(COMNAME)"=="sunpro5"
 SHL1VERSIONMAP=cc5_solaris_sparc.map
 .ELIF "$(GUI)$(COMNAME)"=="OS2gcc3"
 SHL1VERSIONMAP=gcc3os2.map
