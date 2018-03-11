@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba2be162_e073d8b2",
+        "filename": "dbaccess/source/filter/hsqldb/hsqlimport.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-03-11T10:38:16Z",
+      "side": 1,
+      "message": "This change looks somewhat inconsistent with what you do in line 166 below ;)",
+      "range": {
+        "startLine": 143,
+        "startChar": 12,
+        "endLine": 143,
+        "endChar": 18
+      },
+      "revId": "f9831de353742485b8241fb2bd8ca6b23e3c1c75",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
