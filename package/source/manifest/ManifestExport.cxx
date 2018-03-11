@@ -232,8 +232,6 @@ ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > con
         {
             // yeah, so that goes directly below the manifest:manifest
             // element
-            ::comphelper::AttributeList * pNewAttrList = new ::comphelper::AttributeList;
-            uno::Reference < xml::sax::XAttributeList > xNewAttrList (pNewAttrList);
             OUStringBuffer aBuffer;
 
             xHandler->ignorableWhitespace ( sWhiteSpace );
@@ -248,6 +246,8 @@ ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > con
             const sal_uInt32 nKeyInfoLength = aKeyInfoSequence.getLength();
             for (sal_uInt32 nInd = 0; nInd < nKeyInfoLength ; nInd++ )
             {
+                ::comphelper::AttributeList * pNewAttrList = new ::comphelper::AttributeList;
+                uno::Reference < xml::sax::XAttributeList > xNewAttrList (pNewAttrList);
                 uno::Sequence < sal_Int8 > aPgpKeyID;
                 uno::Sequence < sal_Int8 > aPgpKeyPacket;
                 uno::Sequence < sal_Int8 > aCipherValue;
