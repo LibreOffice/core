@@ -232,8 +232,6 @@ ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > con
         {
             // yeah, so that goes directly below the manifest:manifest
             // element
-            ::comphelper::AttributeList * pNewAttrList = new ::comphelper::AttributeList;
-            uno::Reference < xml::sax::XAttributeList > xNewAttrList (pNewAttrList);
             OUStringBuffer aBuffer;
 
             xHandler->ignorableWhitespace ( sWhiteSpace );
@@ -268,6 +266,8 @@ ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > con
                     xHandler->startElement( sEncryptedKeyElement, nullptr );
                     xHandler->ignorableWhitespace ( sWhiteSpace );
 
+                    ::comphelper::AttributeList * pNewAttrList = new ::comphelper::AttributeList;
+                    uno::Reference < xml::sax::XAttributeList > xNewAttrList (pNewAttrList);
                     // TODO: the algorithm should rather be configurable
                     pNewAttrList->AddAttribute ( sAlgorithmAttribute, sCdataAttribute,
                                                  "http://www.w3.org/2001/04/xmlenc#rsa-oaep-mgf1p" );
