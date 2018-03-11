@@ -34,7 +34,7 @@
 #include <vcl/idle.hxx>
 #include <svl/slstitm.hxx>
 #include <svtools/transfer.hxx>
-#include <svtools/grfmgr.hxx>
+#include <vcl/GraphicObject.hxx>
 #include <sfx2/tabdlg.hxx>
 #include <svx/galctrl.hxx>
 #include <svx/galmisc.hxx>

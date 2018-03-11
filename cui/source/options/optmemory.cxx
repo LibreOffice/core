@@ -24,7 +24,6 @@
 #include <officecfg/Office/Common.hxx>
 #include <svtools/langtab.hxx>
 #include <svl/zforlist.hxx>
-#include <svtools/grfmgr.hxx>
 #include <svl/flagitem.hxx>
 #include <sfx2/dispatch.hxx>
 #include <unotools/lingucfg.hxx>

@@ -92,6 +92,7 @@
 #include <vcl/gdimtf.hxx>
 #include <vcl/gfxlink.hxx>
 #include <vcl/graph.hxx>
+#include <vcl/GraphicObject.hxx>
 #include <vcl/mapmod.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/svapp.hxx>
@@ -252,7 +253,6 @@
 #include <svl/svldllapi.h>
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>
-#include <svtools/grfmgr.hxx>
 #include <svtools/svtdllapi.h>
 #include <svx/algitem.hxx>
 #include <svx/itextprovider.hxx>

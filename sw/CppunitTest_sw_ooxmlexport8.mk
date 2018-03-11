@@ -96,6 +96,7 @@ $(eval $(call gb_CppunitTest_use_components,sw_ooxmlexport8,\
     unoxml/source/service/unoxml \
     unoxml/source/rdf/unordf \
     uui/util/uui \
+    vcl/vcl.common \
     writerfilter/util/writerfilter \
     xmloff/util/xo \
 ))

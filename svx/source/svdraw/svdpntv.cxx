@@ -20,9 +20,8 @@
 #include <memory>
 #include <com/sun/star/awt/XWindow.hpp>
 #include <svx/svdpntv.hxx>
-#include <vcl/msgbox.hxx>
+#include <vcl/GraphicObject.hxx>
 #include <svx/sdrpaintwindow.hxx>
-#include <svtools/grfmgr.hxx>
 #include <svx/svdmodel.hxx>
 
 #ifdef DBG_UTIL

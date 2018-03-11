@@ -133,6 +133,7 @@
 #include <vcl/gfxlink.hxx>
 #include <vcl/gradient.hxx>
 #include <vcl/graph.hxx>
+#include <vcl/GraphicObject.hxx>
 #include <vcl/hatch.hxx>
 #include <vcl/idle.hxx>
 #include <vcl/image.hxx>
@@ -384,7 +385,6 @@
 #include <svl/svldllapi.h>
 #include <svl/undo.hxx>
 #include <svtools/colorcfg.hxx>
-#include <svtools/grfmgr.hxx>
 #include <svtools/imgdef.hxx>
 #include <svtools/miscopt.hxx>
 #include <svtools/optionsdrawinglayer.hxx>

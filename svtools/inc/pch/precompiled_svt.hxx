@@ -114,6 +114,7 @@
 #include <vcl/fntstyle.hxx>
 #include <vcl/font.hxx>
 #include <vcl/graph.hxx>
+#include <vcl/GraphicObject.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <vcl/help.hxx>
 #include <vcl/i18nhelp.hxx>
@@ -411,7 +412,6 @@
 #include <svtools/AccessibleBrowseBoxObjType.hxx>
 #include <svtools/brwbox.hxx>
 #include <svtools/colorcfg.hxx>
-#include <svtools/grfmgr.hxx>
 #include <svtools/headbar.hxx>
 #include <svtools/htmlkywd.hxx>
 #include <svtools/imagemgr.hxx>

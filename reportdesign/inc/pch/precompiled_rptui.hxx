@@ -135,6 +135,7 @@
 #include <vcl/gfxlink.hxx>
 #include <vcl/gradient.hxx>
 #include <vcl/graph.hxx>
+#include <vcl/GraphicObject.hxx>
 #include <vcl/hatch.hxx>
 #include <vcl/idle.hxx>
 #include <vcl/image.hxx>
@@ -408,7 +409,6 @@
 #include <svtools/AccessibleBrowseBoxObjType.hxx>
 #include <svtools/accessibilityoptions.hxx>
 #include <svtools/colorcfg.hxx>
-#include <svtools/grfmgr.hxx>
 #include <svtools/headbar.hxx>
 #include <svtools/optionsdrawinglayer.hxx>
 #include <svtools/statusbarcontroller.hxx>

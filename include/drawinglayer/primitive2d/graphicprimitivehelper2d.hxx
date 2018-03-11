@@ -21,7 +21,7 @@
 
 #include <drawinglayer/drawinglayerdllapi.h>
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
-#include <svtools/grfmgr.hxx>
+#include <vcl/GraphicObject.hxx>
 
 
 // predefines

@@ -21,7 +21,7 @@
 
 #include <editeng/editengdllapi.h>
 #include <svl/poolitem.hxx>
-#include <svtools/grfmgr.hxx>
+#include <vcl/GraphicObject.hxx>
 #include <vcl/font.hxx>
 
 

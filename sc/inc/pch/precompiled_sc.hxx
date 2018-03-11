@@ -137,6 +137,7 @@
 #include <vcl/gdimtf.hxx>
 #include <vcl/gfxlink.hxx>
 #include <vcl/graph.hxx>
+#include <vcl/GraphicObject.hxx>
 #include <vcl/idle.hxx>
 #include <vcl/image.hxx>
 #include <vcl/inputctx.hxx>
@@ -464,7 +465,6 @@
 #include <svl/zformat.hxx>
 #include <svtools/colorcfg.hxx>
 #include <svtools/framestatuslistener.hxx>
-#include <svtools/grfmgr.hxx>
 #include <svtools/optionsdrawinglayer.hxx>
 #include <svtools/svtdllapi.h>
 #include <svtools/toolboxcontroller.hxx>

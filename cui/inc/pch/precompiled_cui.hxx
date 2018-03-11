@@ -134,6 +134,7 @@
 #include <vcl/gfxlink.hxx>
 #include <vcl/gradient.hxx>
 #include <vcl/graph.hxx>
+#include <vcl/GraphicObject.hxx>
 #include <vcl/hatch.hxx>
 #include <vcl/help.hxx>
 #include <vcl/idle.hxx>
@@ -354,7 +355,7 @@
 #include <svl/svldllapi.h>
 #include <svl/undo.hxx>
 #include <svtools/colorcfg.hxx>
-#include <svtools/grfmgr.hxx>
+#include <svtools/ehdl.hxx>
 #include <svtools/optionsdrawinglayer.hxx>
 #include <svtools/svlbitm.hxx>
 #include <svtools/svtdllapi.h>

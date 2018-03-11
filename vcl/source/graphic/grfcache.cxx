@@ -22,7 +22,7 @@
 #include <cstdlib>
 
 #include <salhelper/timer.hxx>
-#include <svtools/grfmgr.hxx>
+#include <vcl/GraphicObject.hxx>
 #include <tools/debug.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/outdev.hxx>

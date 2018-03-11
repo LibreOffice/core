@@ -22,7 +22,7 @@
 
 #include <tools/color.hxx>
 #include <vcl/bitmap.hxx>
-#include <svtools/grfmgr.hxx>
+#include <vcl/GraphicObject.hxx>
 #include <svx/xenum.hxx>
 #include <svx/svxdllapi.h>
 

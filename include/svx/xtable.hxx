@@ -37,7 +37,7 @@
 #include <com/sun/star/embed/XStorage.hpp>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <com/sun/star/container/XNameContainer.hpp>
-#include <svtools/grfmgr.hxx>
+#include <vcl/GraphicObject.hxx>
 #include <svx/XPropertyEntry.hxx>
 
 #include <limits>

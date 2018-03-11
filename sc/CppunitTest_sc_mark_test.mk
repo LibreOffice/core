@@ -112,6 +112,7 @@ $(eval $(call gb_CppunitTest_use_components,sc_mark_test,\
     unotools/util/utl \
     unoxml/source/rdf/unordf \
     unoxml/source/service/unoxml \
+    vcl/vcl.common \
     xmloff/util/xo \
 ))
 

@@ -32,8 +32,8 @@
 #include <vcl/toolbox.hxx>
 #include <vcl/cvtgrf.hxx>
 #include <vcl/graph.hxx>
-#include <svtools/grfmgr.hxx>
-#include "callbacks.hxx"
+#include <vcl/GraphicObject.hxx>
+#include <callbacks.hxx>
 #include <memory>
 
 namespace com{ namespace sun { namespace star { namespace awt   { class XWindow; } } } }

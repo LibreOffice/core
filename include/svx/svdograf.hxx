@@ -25,7 +25,7 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <vcl/graph.hxx>
 #include <svx/svdorect.hxx>
-#include <svtools/grfmgr.hxx>
+#include <vcl/GraphicObject.hxx>
 #include <svx/svxdllapi.h>
 #include <o3tl/typed_flags_set.hxx>
 

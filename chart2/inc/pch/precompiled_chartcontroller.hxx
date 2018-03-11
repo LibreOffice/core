@@ -388,7 +388,8 @@
 #include <svl/svldllapi.h>
 #include <svl/undo.hxx>
 #include <svtools/colorcfg.hxx>
-#include <svtools/grfmgr.hxx>
+#include <svtools/controldims.hxx>
+#include <vcl/GraphicObject.hxx>
 #include <svtools/optionsdrawinglayer.hxx>
 #include <svtools/svtdllapi.h>
 #include <svx/ActionDescriptionProvider.hxx>

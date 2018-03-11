@@ -100,6 +100,7 @@
 #include <vcl/gfxlink.hxx>
 #include <vcl/gradient.hxx>
 #include <vcl/graph.hxx>
+#include <vcl/GraphicObject.hxx>
 #include <vcl/group.hxx>
 #include <vcl/hatch.hxx>
 #include <vcl/idle.hxx>
@@ -361,7 +362,6 @@
 #include <svl/zforlist.hxx>
 #include <svtools/colorcfg.hxx>
 #include <svtools/ctrltool.hxx>
-#include <svtools/grfmgr.hxx>
 #include <svtools/imap.hxx>
 #include <svtools/imapobj.hxx>
 #include <svtools/miscopt.hxx>

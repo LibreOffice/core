@@ -49,7 +49,7 @@
 #include <unotools/ucbstreamhelper.hxx>
 #include <limits.h>
 #include <comphelper/processfactory.hxx>
-#include <svtools/grfmgr.hxx>
+#include <vcl/GraphicObject.hxx>
 #include <tools/urlobj.hxx>
 #include <comphelper/types.hxx>
 #include <svl/memberid.hrc>
