@@ -21,8 +21,8 @@
 #include <com/sun/star/awt/XWindow.hpp>
 #include <svx/svdpntv.hxx>
 #include <vcl/weld.hxx>
+#include <vcl/GraphicObject.hxx>
 #include <svx/sdrpaintwindow.hxx>
-#include <svtools/grfmgr.hxx>
 #include <svx/svdmodel.hxx>
 
 #include <svx/svdpage.hxx>

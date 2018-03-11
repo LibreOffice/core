@@ -21,7 +21,7 @@
 #include <com/sun/star/graphic/GraphicType.hpp>
 #include <com/sun/star/graphic/XGraphicTransformer.hpp>
 #include <vcl/dibtools.hxx>
-#include "graphic.hxx"
+#include "UnoGraphic.hxx"
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/queryinterface.hxx>

@@ -105,6 +105,7 @@ $(eval $(call gb_CppunitTest_use_components,sc_ucalc,\
     ucb/source/ucp/file/ucpfile1 \
     unoxml/source/service/unoxml \
     uui/util/uui \
+    vcl/vcl.common \
 ))
 
 ifeq ($(OS),LINUX)
