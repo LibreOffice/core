@@ -135,7 +135,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                     OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
-                    ScopedVclPtr<AbstractScShowTabDlg> pDlg(pFact->CreateScShowTabDlg(GetDialogParent()));
+                    VclPtr<AbstractScShowTabDlg> pDlg(pFact->CreateScShowTabDlg(GetDialogParent()));
                     OSL_ENSURE(pDlg, "Dialog create fail!");
 
                     OUString aTabName;
@@ -150,18 +150,24 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                         }
                     }
 
-                    if ( pDlg->Execute() == RET_OK )
-                    {
-                        const sal_Int32 nCount = pDlg->GetSelectedEntryCount();
-                        for (sal_Int32 nPos=0; nPos<nCount; ++nPos)
+                    std::shared_ptr<SfxRequest> pReq = std::make_shared<SfxRequest>(rReq);
+                    pDlg->StartExecuteAsync([this, pDlg, pReq](sal_Int32 nResult){
+                        OUString sTable;
+                        std::vector<OUString> sTables;
+                        if (RET_OK == nResult)
                         {
-                            aName = pDlg->GetSelectedEntry(nPos);
-                            rReq.AppendItem( SfxStringItem( FID_TABLE_SHOW, aName ) );
-                            rNames.push_back(aName);
+                            const sal_Int32 nCount = pDlg->GetSelectedEntryCount();
+                            for (sal_Int32 nPos=0; nPos<nCount; ++nPos)
+                            {
+                                sTable = pDlg->GetSelectedEntry(nPos);
+                                pReq->AppendItem( SfxStringItem( FID_TABLE_SHOW, sTable ) );
+                                sTables.push_back(sTable);
+                            }
+                            ShowTable( sTables );
+                            pReq->Done();
                         }
-                        ShowTable( rNames );
-                        rReq.Done();
-                    }
+                    });
+                    rReq.Ignore();
                 }
             }
             break;
