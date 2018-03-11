@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifdef __arm64
-
 // For iOS devices (64-bit ARM). Originally a copy of
 // ../gcc3_linux_arm/cpp2uno.cxx.
 
@@ -555,7 +553,6 @@ unsigned char * bridges::cpp_uno::shared::VtableFactory::addLocalFunctions(
     return code;
 }
 
-#endif
 
 
 void bridges::cpp_uno::shared::VtableFactory::flushCode(
