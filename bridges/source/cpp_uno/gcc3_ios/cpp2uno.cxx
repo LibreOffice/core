@@ -17,14 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-// For iOS devices (64-bit ARM). Originally a copy of
-// ../gcc3_linux_arm/cpp2uno.cxx.
-
-// No attempts at factoring out the large amounts of more or less
-// common code in this, cpp2uno-arm.cxx and cpp2uno-i386.cxx have been
-// done. Which is sad. But then the whole bridges/source/cpp_uno is
-// full of copy/paste. So I continue in that tradition...
-
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <sal/log.hxx>
 #include <uno/data.h>
@@ -36,6 +28,42 @@
 #include "vtablefactory.hxx"
 
 #include "share.hxx"
+
+
+// Snippet code done inline
+extern "C" void privateSnippetExecutor()
+{
+    // _privateSnippetExecutor is jumped to from each codeSnippet_*
+    asm volatile (
+         // Store potential args in general purpose registers
+         "       stp     x6, x7, [sp, #-16]!\n"
+         "       stp     x4, x5, [sp, #-16]!\n"
+         "       stp     x2, x3, [sp, #-16]!\n"
+         "       stp     x0, x1, [sp, #-16]!\n"
+
+         // Store potential args in floating point/SIMD registers
+         "       stp     d6, d7, [sp, #-16]!\n"
+         "       stp     d4, d5, [sp, #-16]!\n"
+         "       stp     d2, d3, [sp, #-16]!\n"
+         "       stp     d0, d1, [sp, #-16]!\n"
+
+         // First argument to cpp_vtable_call: The x15 set up in the codeSnippet instance
+         "       mov     x0, x15\n"
+
+         // Store x8 (potential pointer to return value storage) and lr
+         "       stp     x8, lr, [sp, #-16]!\n"
+
+         // Second argument: The pointer to all the above
+         "       mov     x1, sp\n"
+
+         "       bl      _cpp_vtable_call\n"
+
+         "       ldp     x8, lr, [sp, #0]\n"
+         "       add     sp, sp, #144\n"
+         "       ret     lr\n"
+    );
+}
+
 
 extern "C" {
     extern int nFunIndexes, nVtableOffsets;
