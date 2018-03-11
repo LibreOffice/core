@@ -56,11 +56,11 @@ extern "C" void privateSnippetExecutor()
          // Second argument: The pointer to all the above
          "       mov     x1, sp\n"
 
-         "       bl      _cpp_vtable_call\n"
+         "       b       _cpp_vtable_call\n"
 
          "       ldp     x8, lr, [sp, #0]\n"
          "       add     sp, sp, #144\n"
-         "       ret     lr\n"
+//         "       ret     lr\n"
     );
 }
 
