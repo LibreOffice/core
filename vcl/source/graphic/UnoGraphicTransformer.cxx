@@ -31,8 +31,7 @@
 #include <vcl/bitmapaccess.hxx>
 #include <com/sun/star/text/GraphicCrop.hpp>
 
-#include "graphic.hxx"
-#include "transformer.hxx"
+#include "UnoGraphicTransformer.hxx"
 
 using namespace com::sun::star;
 
@@ -112,10 +111,7 @@ uno::Reference< graphic::XGraphic > SAL_CALL GraphicTransformer::colorChange(
     }
 
     aReturnGraphic.setOriginURL(aGraphic.getOriginURL());
-
-    unographic::Graphic* pUnoGraphic = new unographic::Graphic();
-    pUnoGraphic->init(aReturnGraphic);
-    return uno::Reference<graphic::XGraphic>(pUnoGraphic);
+    return aReturnGraphic.GetXGraphic();
 }
 
 uno::Reference< graphic::XGraphic > SAL_CALL GraphicTransformer::applyDuotone(
@@ -128,13 +124,11 @@ uno::Reference< graphic::XGraphic > SAL_CALL GraphicTransformer::applyDuotone(
     BitmapEx    aBitmapEx( aGraphic.GetBitmapEx() );
     AlphaMask   aMask( aBitmapEx.GetAlpha() );
     Bitmap      aBitmap( aBitmapEx.GetBitmap() );
-    BmpFilterParam aFilter( (sal_uLong) nColorOne, (sal_uLong) nColorTwo );
+    BmpFilterParam aFilter( static_cast<sal_uLong>(nColorOne), static_cast<sal_uLong>(nColorTwo) );
     aBitmap.Filter( BmpFilter::DuoTone, &aFilter );
     aReturnGraphic = ::Graphic( BitmapEx( aBitmap, aMask ) );
     aReturnGraphic.setOriginURL(aGraphic.getOriginURL());
-    ::unographic::Graphic* pUnoGraphic = new ::unographic::Graphic();
-    pUnoGraphic->init(aReturnGraphic);
-    return uno::Reference<graphic::XGraphic>(pUnoGraphic);
+    return aReturnGraphic.GetXGraphic();
 }
 
 uno::Reference< graphic::XGraphic > SAL_CALL GraphicTransformer::applyBrightnessContrast(
@@ -148,9 +142,7 @@ uno::Reference< graphic::XGraphic > SAL_CALL GraphicTransformer::applyBrightness
     aBitmapEx.Adjust(nBrightness, nContrast, 0, 0, 0, 0, false, mso);
     aReturnGraphic = ::Graphic(aBitmapEx);
     aReturnGraphic.setOriginURL(aGraphic.getOriginURL());
-    ::unographic::Graphic* pUnoGraphic = new ::unographic::Graphic();
-    pUnoGraphic->init(aReturnGraphic);
-    return uno::Reference<graphic::XGraphic>(pUnoGraphic);
+    return aReturnGraphic.GetXGraphic();
 }
 
 }

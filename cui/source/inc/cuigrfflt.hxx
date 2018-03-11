@@ -27,7 +27,7 @@
 #include <vcl/dialog.hxx>
 #include <vcl/group.hxx>
 #include <tools/helpers.hxx>
-#include <svtools/grfmgr.hxx>
+#include <vcl/GraphicObject.hxx>
 #include <svx/graphctl.hxx>
 #include <svx/dlgctrl.hxx>
 #include <svx/rectenum.hxx>

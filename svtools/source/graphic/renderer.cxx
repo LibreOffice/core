@@ -29,9 +29,8 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <rtl/ref.hxx>
 #include <svl/itemprop.hxx>
-#include <svtools/grfmgr.hxx>
+#include <vcl/GraphicObject.hxx>
 #include <comphelper/servicehelper.hxx>
-#include "graphic.hxx"
 #include "renderer.hxx"
 
 #define UNOGRAPHIC_DEVICE           1
@@ -262,12 +261,10 @@ void SAL_CALL GraphicRendererVCL::render( const uno::Reference< graphic::XGraphi
 {
     if( mpOutDev && mxDevice.is() && rxGraphic.is() )
     {
-        const uno::Reference< XInterface >  xIFace( rxGraphic, uno::UNO_QUERY );
-        const ::Graphic*                    pGraphic = ::unographic::Graphic::getImplementation( xIFace );
-
-        if( pGraphic )
+        Graphic aGraphic(rxGraphic);
+        if (aGraphic)
         {
-            GraphicObject aGraphicObject( *pGraphic );
+            GraphicObject aGraphicObject(aGraphic);
             aGraphicObject.Draw( mpOutDev, maDestRect.TopLeft(), maDestRect.GetSize() );
         }
     }

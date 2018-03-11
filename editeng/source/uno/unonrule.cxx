@@ -23,7 +23,7 @@
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
 #include <vcl/graph.hxx>
-#include <svtools/grfmgr.hxx>
+#include <vcl/GraphicObject.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 
 #include <editeng/brushitem.hxx>

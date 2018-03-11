@@ -72,6 +72,7 @@ $(eval $(call gb_CppunitTest_use_components,sw_mailmerge, \
     unoxml/source/rdf/unordf \
     unoxml/source/service/unoxml \
     uui/util/uui \
+    vcl/vcl.common \
     $(if $(filter-out MACOSX WNT,$(OS)), \
         $(if $(ENABLE_HEADLESS),, \
             vcl/vcl.unx \

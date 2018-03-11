@@ -43,7 +43,7 @@
 #include <cppuhelper/factory.hxx>
 #include <svtools/sfxecode.hxx>
 #include <svtools/ehdl.hxx>
-#include <svtools/grfmgr.hxx>
+#include <vcl/GraphicObject.hxx>
 
 namespace basic
 {
