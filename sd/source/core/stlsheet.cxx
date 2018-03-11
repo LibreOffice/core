@@ -912,7 +912,7 @@ OUString SAL_CALL SdStyleSheet::getParentStyle() throw(RuntimeException, std::ex
     {
         SdStyleSheet* pParentStyle = static_cast< SdStyleSheet* >( mxPool->Find( GetParent(), nFamily ) );
         if( pParentStyle )
-            return pParentStyle->msApiName;
+            return pParentStyle->GetApiName();
     }
     return OUString();
 }
