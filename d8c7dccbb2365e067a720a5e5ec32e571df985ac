@@ -16,6 +16,24 @@
       "revId": "d8c7dccbb2365e067a720a5e5ec32e571df985ac",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba2be162_6068c8bb",
+        "filename": "include/vcl/GraphicObject.hxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2018-03-11T10:44:28Z",
+      "side": 1,
+      "message": "GraphicObject won\u0027t go away (at least the currently the plan is like that), just most of its responsibility will go into Graphic instead, but the class will stay. \nGraphicManager will be changed to work with Graphic and probably changed beyond recognition in the process.. Most where grfmgr is included it is because of GraphicObject. Not even sure why someone would need the GraphicManager.",
+      "parentUuid": "ba2be162_e0fe7804",
+      "revId": "d8c7dccbb2365e067a720a5e5ec32e571df985ac",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
