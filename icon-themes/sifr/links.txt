@@ -58,9 +58,6 @@ sc/res/table.png cmd/sc_inserttable.png
 cmd/lc_thesaurusdialog.png cmd/lc_thesaurus.png
 cmd/sc_thesaurusdialog.png cmd/sc_thesaurus.png
 
-# File Menu
-cmd/sc_exporttopdf.png cmd/sc_exportdirecttopdf.png
-
 # Print Preview Toolbar
 cmd/lc_showsinglepage.png cmd/lc_adddirect.png
 cmd/sc_showsinglepage.png cmd/sc_adddirect.png
@@ -209,9 +206,11 @@ cmd/sc_objectforwardone.png cmd/sc_forward.png
 cmd/lc_objectbackone.png cmd/lc_backward.png
 cmd/sc_objectbackone.png cmd/sc_backward.png
 
-# writer epub export
-cmd/lc_exportdirecttoepub.png cmd/lc_exportdirecttopdf.png
-cmd/sc_exportdirecttoepub.png cmd/sc_exportdirecttopdf.png
+# writer pdf and epub export
+cmd/lc_exporttopdf.png cmd/lc_exportdirecttopdf.png
+cmd/sc_exporttopdf.png cmd/sc_exportdirecttopdf.png
+cmd/lc_exporttoepub.png cmd/lc_exportdirecttoepub.png
+cmd/sc_exporttoepub.png cmd/sc_exportdirecttoepub.png
 
 # writer formatting style toolbar
 cmd/lc_bulletliststyle.png cmd/lc_defaultbullet.png
