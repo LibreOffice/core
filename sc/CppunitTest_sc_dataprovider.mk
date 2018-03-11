@@ -101,6 +101,7 @@ $(eval $(call gb_CppunitTest_use_components,sc_dataprovider,\
     svl/source/fsstor/fsstorage \
     svtools/util/svt \
     toolkit/util/tk \
+    vcl/vcl.common \
     ucb/source/core/ucb1 \
     ucb/source/ucp/file/ucpfile1 \
     ucb/source/ucp/tdoc/ucptdoc1 \

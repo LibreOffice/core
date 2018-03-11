@@ -21,9 +21,9 @@
 #include <svl/itemiter.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/GraphicObject.hxx>
 
 #include <editeng/itemtype.hxx>
-#include <svtools/grfmgr.hxx>
 #include <unotools/intlwrapper.hxx>
 #include <comphelper/processfactory.hxx>
 #include <rtl/ustrbuf.hxx>

@@ -47,7 +47,10 @@ $(eval $(call gb_CppunitTest_use_components,writerfilter_rtftok,\
 	ucb/source/core/ucb1 \
 	ucb/source/ucp/file/ucpfile1 \
 	writerfilter/util/writerfilter \
+	vcl/vcl.common \
 ))
+
+
 
 $(eval $(call gb_CppunitTest_use_configuration,writerfilter_rtftok))
 

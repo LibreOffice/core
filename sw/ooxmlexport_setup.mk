@@ -76,6 +76,7 @@ define sw_ooxmlexport_components
 	unoxml/source/rdf/unordf \
 	unoxml/source/service/unoxml \
 	uui/util/uui \
+	vcl/vcl.common \
 	writerfilter/util/writerfilter \
 	xmloff/util/xo
 endef

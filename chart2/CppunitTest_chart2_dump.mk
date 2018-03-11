@@ -111,6 +111,7 @@ $(eval $(call gb_CppunitTest_use_components,chart2_dump,\
     svx/util/svx \
     svx/util/svxcore \
     toolkit/util/tk \
+    vcl/vcl.common \
     ucb/source/core/ucb1 \
     ucb/source/ucp/file/ucpfile1 \
     ucb/source/ucp/tdoc/ucptdoc1 \
