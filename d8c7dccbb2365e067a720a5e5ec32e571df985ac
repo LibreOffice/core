@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba2be162_e0fe7804",
+        "filename": "include/vcl/GraphicObject.hxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-03-11T06:34:55Z",
+      "side": 1,
+      "message": "if GraphicObject is going away, why is this file called GraphicObject.hxx?\nShould it not be GraphicManager.hxx?",
+      "revId": "d8c7dccbb2365e067a720a5e5ec32e571df985ac",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
