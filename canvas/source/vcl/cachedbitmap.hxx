@@ -21,7 +21,7 @@
 #define INCLUDED_CANVAS_SOURCE_VCL_CACHEDBITMAP_HXX
 
 #include <canvas/base/cachedprimitivebase.hxx>
-#include <svtools/grfmgr.hxx>
+#include <vcl/GraphicObject.hxx>
 #include <memory>
 
 

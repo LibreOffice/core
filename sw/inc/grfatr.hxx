@@ -23,7 +23,7 @@
 #include <tools/gen.hxx>
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>
-#include <svtools/grfmgr.hxx>
+#include <vcl/GraphicObject.hxx>
 #include <svx/grfcrop.hxx>
 #include "swdllapi.h"
 #include "swatrset.hxx"

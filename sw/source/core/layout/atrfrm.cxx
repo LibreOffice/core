@@ -70,7 +70,7 @@
 #include <unotextbodyhf.hxx>
 #include <SwStyleNameMapper.hxx>
 #include <editeng/brushitem.hxx>
-#include <svtools/grfmgr.hxx>
+#include <vcl/GraphicObject.hxx>
 #include <unomid.h>
 #include <strings.hrc>
 #include <svx/svdundo.hxx>

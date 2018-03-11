@@ -24,7 +24,7 @@
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <svtools/grfmgr.hxx>
+#include <vcl/GraphicObject.hxx>
 #include <rtl/ref.hxx>
 
 using namespace com::sun::star;

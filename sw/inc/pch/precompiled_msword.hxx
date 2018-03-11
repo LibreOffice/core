@@ -138,6 +138,7 @@
 #include <vcl/gfxlink.hxx>
 #include <vcl/gradient.hxx>
 #include <vcl/graph.hxx>
+#include <vcl/GraphicObject.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <vcl/hatch.hxx>
 #include <vcl/idle.hxx>
@@ -551,7 +552,6 @@
 #include <svtools/colorcfg.hxx>
 #include <svtools/ehdl.hxx>
 #include <svtools/embedhlp.hxx>
-#include <svtools/grfmgr.hxx>
 #include <svtools/miscopt.hxx>
 #include <svtools/optionsdrawinglayer.hxx>
 #include <svtools/ruler.hxx>

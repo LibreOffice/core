@@ -17,16 +17,16 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVTOOLS_SOURCE_GRAPHIC_GRAPHIC_HXX
-#define INCLUDED_SVTOOLS_SOURCE_GRAPHIC_GRAPHIC_HXX
+#ifndef INCLUDED_VCL_SOURCE_GRAPHIC_GRAPHIC_HXX
+#define INCLUDED_VCL_SOURCE_GRAPHIC_GRAPHIC_HXX
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/awt/XBitmap.hpp>
 
-#include "descriptor.hxx"
-#include "transformer.hxx"
+#include "UnoGraphicDescriptor.hxx"
+#include "UnoGraphicTransformer.hxx"
 
 #include <vcl/graph.hxx>
 
