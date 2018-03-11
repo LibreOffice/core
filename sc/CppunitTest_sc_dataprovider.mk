@@ -101,6 +101,7 @@ $(eval $(call gb_CppunitTest_use_components,sc_dataprovider,\
     svl/source/fsstor/fsstorage \
     svtools/util/svt \
     toolkit/util/tk \
+    vcl/vcl.common \
     ucb/source/core/ucb1 \
     ucb/source/ucp/file/ucpfile1 \
     ucb/source/ucp/tdoc/ucptdoc1 \
@@ -108,6 +109,7 @@ $(eval $(call gb_CppunitTest_use_components,sc_dataprovider,\
     unoxml/source/rdf/unordf \
     unoxml/source/service/unoxml \
     uui/util/uui \
+    vcl/vcl.common \
     xmloff/util/xo \
     xmlsecurity/util/xmlsecurity \
 ))

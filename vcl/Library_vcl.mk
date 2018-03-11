@@ -19,16 +19,18 @@
 
 $(eval $(call gb_Library_Library,vcl))
 
+$(eval $(call gb_Library_set_componentfile,vcl,vcl/vcl.common))
+
 ifeq ($(OS),MACOSX)
-$(eval $(call gb_Library_set_componentfile,vcl,vcl/vcl.macosx))
+$(eval $(call gb_Library_set_componentfile,vcl,vcl/vcl.macosx vcl/vcl))
 else ifeq ($(OS),WNT)
-$(eval $(call gb_Library_set_componentfile,vcl,vcl/vcl.windows))
+$(eval $(call gb_Library_set_componentfile,vcl,vcl/vcl.windows vcl/vcl))
 else ifeq ($(OS),ANDROID)
-$(eval $(call gb_Library_set_componentfile,vcl,vcl/vcl.android))
+$(eval $(call gb_Library_set_componentfile,vcl,vcl/vcl.android vcl/vcl))
 else ifeq ($(OS),IOS)
-$(eval $(call gb_Library_set_componentfile,vcl,vcl/vcl.ios))
+$(eval $(call gb_Library_set_componentfile,vcl,vcl/vcl.ios vcl/vcl))
 else ifeq ($(ENABLE_HEADLESS),TRUE)
-$(eval $(call gb_Library_set_componentfile,vcl,vcl/vcl.headless))
+$(eval $(call gb_Library_set_componentfile,vcl,vcl/vcl.headless vcl/vcl))
 else
 $(eval $(call gb_Library_set_componentfile,vcl,vcl/vcl.unx))
 endif
@@ -301,6 +303,15 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/gdi/scrptrun \
     vcl/source/gdi/CommonSalLayout \
     vcl/source/graphic/GraphicLoader \
+    vcl/source/graphic/GraphicObject \
+    vcl/source/graphic/GraphicObject2 \
+    vcl/source/graphic/grfcache \
+    vcl/source/graphic/grfattr \
+    vcl/source/graphic/UnoGraphic \
+    vcl/source/graphic/UnoGraphicDescriptor \
+    vcl/source/graphic/UnoGraphicObject \
+    vcl/source/graphic/UnoGraphicProvider \
+    vcl/source/graphic/UnoGraphicTransformer \
     vcl/source/bitmap/bitmap \
     vcl/source/bitmap/bitmapfilter \
     vcl/source/bitmap/bitmappaint \

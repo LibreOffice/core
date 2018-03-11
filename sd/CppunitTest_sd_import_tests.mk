@@ -110,6 +110,7 @@ $(eval $(call gb_CppunitTest_use_components,sd_import_tests,\
     unoxml/source/rdf/unordf \
     unoxml/source/service/unoxml \
     uui/util/uui \
+    vcl/vcl.common \
     xmlscript/util/xmlscript \
     xmloff/util/xo \
     xmlsecurity/util/xmlsecurity \

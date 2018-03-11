@@ -95,6 +95,7 @@ $(eval $(call gb_CppunitTest_use_components,sc_check_data_pilot_field,\
     unoxml/source/rdf/unordf \
     unoxml/source/service/unoxml \
     uui/util/uui \
+    vcl/vcl.common \
         svtools/util/svt \
 ))
 
