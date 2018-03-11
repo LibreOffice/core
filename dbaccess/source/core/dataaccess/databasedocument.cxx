@@ -84,7 +84,7 @@
 
 #include <list>
 
-#include <svtools/grfmgr.hxx>
+#include <vcl/GraphicObject.hxx>
 #include <tools/urlobj.hxx>
 
 using namespace ::com::sun::star::uno;

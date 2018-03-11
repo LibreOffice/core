@@ -144,6 +144,7 @@
 #include <vcl/gfxlink.hxx>
 #include <vcl/gradient.hxx>
 #include <vcl/graph.hxx>
+#include <vcl/GraphicObject.hxx>
 #include <vcl/hatch.hxx>
 #include <vcl/idle.hxx>
 #include <vcl/image.hxx>
@@ -440,7 +441,6 @@
 #include <svtools/ctrlbox.hxx>
 #include <svtools/ehdl.hxx>
 #include <svtools/framestatuslistener.hxx>
-#include <svtools/grfmgr.hxx>
 #include <svtools/miscopt.hxx>
 #include <svtools/optionsdrawinglayer.hxx>
 #include <svtools/svtdllapi.h>

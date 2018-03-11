@@ -94,6 +94,7 @@ $(eval $(call gb_CppunitTest_use_components,sc_editfieldobj_header,\
     unoxml/source/rdf/unordf \
     unoxml/source/service/unoxml \
     uui/util/uui \
+    vcl/vcl.common \
 	svtools/util/svt \
 ))
 

@@ -83,6 +83,7 @@ $(eval $(call gb_CppunitTest_use_components,sw_htmlexport,\
     unotools/util/utl \
     unoxml/source/service/unoxml \
     uui/util/uui \
+    vcl/vcl.common \
     writerfilter/util/writerfilter \
     xmloff/util/xo \
 ))

@@ -106,6 +106,7 @@ $(eval $(call gb_CppunitTest_use_components,sc_cond_format_merge,\
     unoxml/source/rdf/unordf \
     unoxml/source/service/unoxml \
 	uui/util/uui \
+	vcl/vcl.common \
     xmloff/util/xo \
 ))
 

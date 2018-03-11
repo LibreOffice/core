@@ -52,6 +52,7 @@ $(eval $(call gb_CppunitTest_use_components,cppcanvas_emfplus,\
 	sd/util/sdd \
 	svl/source/fsstor/fsstorage \
 	toolkit/util/tk \
+	vcl/vcl.common \
 	ucb/source/core/ucb1 \
 	ucb/source/ucp/file/ucpfile1 \
 	unoxml/source/service/unoxml \
