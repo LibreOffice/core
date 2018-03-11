@@ -867,5 +867,20 @@ DECLARE_ODFIMPORT_TEST(testTdf115079, "tdf115079.odt")
     // This document caused segfault when layouting
 }
 
+DECLARE_ODFIMPORT_TEST(testTdf108482, "tdf108482.odt")
+{
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("The table on second page must have two rows",
+        OUString("2"), parseDump("count(/root/page[2]/body/tab/row)")
+    );
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("The second page table's first row must be the repeated headline",
+        OUString("Header"), parseDump("/root/page[2]/body/tab/row[1]/cell/txt")
+    );
+    // The first (repeated headline) row with vertical text orientation must have non-zero height
+    // (in my tests, it was 1135)
+    CPPUNIT_ASSERT_GREATER(
+        sal_Int32(1000), parseDump("/root/page[2]/body/tab/row[1]/infos/bounds", "height").toInt32()
+    );
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
