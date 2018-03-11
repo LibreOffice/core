@@ -89,7 +89,7 @@
 #include <unotools/fontcvt.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/outdev.hxx>
-#include <svtools/grfmgr.hxx>
+#include <vcl/GraphicObject.hxx>
 #include <rtl/strbuf.hxx>
 #include <sfx2/app.hxx>
 #include <svl/languageoptions.hxx>

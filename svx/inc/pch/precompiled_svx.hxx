@@ -100,6 +100,7 @@
 #include <vcl/font.hxx>
 #include <vcl/gradient.hxx>
 #include <vcl/graph.hxx>
+#include <vcl/GraphicObject.hxx>
 #include <vcl/group.hxx>
 #include <vcl/idle.hxx>
 #include <vcl/image.hxx>
@@ -381,7 +382,6 @@
 #include <svtools/ctrltool.hxx>
 #include <svtools/ehdl.hxx>
 #include <svtools/framestatuslistener.hxx>
-#include <svtools/grfmgr.hxx>
 #include <svtools/imap.hxx>
 #include <svtools/imapobj.hxx>
 #include <svtools/miscopt.hxx>

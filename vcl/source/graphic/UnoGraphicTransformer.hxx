@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVTOOLS_SOURCE_GRAPHIC_TRANSFORMER_HXX
-#define INCLUDED_SVTOOLS_SOURCE_GRAPHIC_TRANSFORMER_HXX
+#ifndef INCLUDED_VCL_SOURCE_GRAPHIC_TRANSFORMER_HXX
+#define INCLUDED_VCL_SOURCE_GRAPHIC_TRANSFORMER_HXX
 
 #include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>

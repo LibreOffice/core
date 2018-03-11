@@ -33,7 +33,7 @@
 #include <svtools/transfer.hxx>
 #include <svtools/valueset.hxx>
 #include <svtools/brwbox.hxx>
-#include <svtools/grfmgr.hxx>
+#include <vcl/GraphicObject.hxx>
 #include <svx/galmisc.hxx>
 #include <svx/svxdllapi.h>
 

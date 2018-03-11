@@ -100,6 +100,7 @@ $(eval $(call gb_CppunitTest_use_components,sc_parallelism,\
     unotools/util/utl \
     unoxml/source/rdf/unordf \
     unoxml/source/service/unoxml \
+    vcl/vcl.common \
     xmloff/util/xo \
 ))
 

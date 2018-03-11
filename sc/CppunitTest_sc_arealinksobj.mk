@@ -96,6 +96,7 @@ $(eval $(call gb_CppunitTest_use_components,sc_arealinksobj,\
     unoxml/source/rdf/unordf \
     unoxml/source/service/unoxml \
     uui/util/uui \
+    vcl/vcl.common \
     xmloff/util/xo \
 	svtools/util/svt \
 ))
@@ -103,5 +104,3 @@ $(eval $(call gb_CppunitTest_use_components,sc_arealinksobj,\
 $(eval $(call gb_CppunitTest_use_configuration,sc_arealinksobj))
 
 # vim: set noet sw=4 ts=4:
-
-
