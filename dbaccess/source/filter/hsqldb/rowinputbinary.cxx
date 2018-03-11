@@ -22,10 +22,13 @@
 #include <com/sun/star/io/WrongFormatException.hpp>
 #include <com/sun/star/io/XConnectable.hpp>
 #include <com/sun/star/util/Time.hpp>
+#include <com/sun/star/util/Date.hpp>
+#include <com/sun/star/util/DateTime.hpp>
 
 #include <unotools/ucbstreamhelper.hxx>
 #include <tools/stream.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <ctime>
 
 namespace
 {
@@ -299,7 +302,16 @@ std::vector<Any> HsqlRowInputStream::readOneRow(const ColumnTypeVector& nColType
             }
             break;
             case DataType::DATE:
-                break;
+            {
+                sal_Int64 value = 0;
+                m_pStream->ReadInt64(value); // in millisec, from 1970
+                sal_Int64 nEpochSec = value / 1000;
+                std::tm* tm = std::gmtime(&nEpochSec);
+                css::util::Date date(tm->tm_mday, tm->tm_mon + 1,
+                                     tm->tm_year + 1900); // day, month, year
+                aData.push_back(makeAny(date));
+            }
+            break;
             case DataType::TIME:
             {
                 sal_Int64 value = 0;
@@ -309,7 +321,25 @@ std::vector<Any> HsqlRowInputStream::readOneRow(const ColumnTypeVector& nColType
             }
             break;
             case DataType::TIMESTAMP:
-                break;
+            {
+                sal_Int64 nEpochMillis = 0;
+                m_pStream->ReadInt64(nEpochMillis);
+                sal_Int64 nEpochSec = nEpochMillis / 1000;
+                std::tm* tm = std::gmtime(&nEpochSec);
+
+                sal_Int32 nNanos = 0;
+                m_pStream->ReadInt32(nNanos);
+                css::util::DateTime dateTime;
+                dateTime.NanoSeconds = nNanos;
+                dateTime.Seconds = tm->tm_sec;
+                dateTime.Minutes = tm->tm_min;
+                dateTime.Hours = tm->tm_hour;
+                dateTime.Day = tm->tm_mday;
+                dateTime.Month = tm->tm_mon + 1; // indexed from 0
+                dateTime.Year = 1900 + tm->tm_year;
+                aData.push_back(makeAny(dateTime));
+            }
+            break;
             case DataType::BOOLEAN:
             {
                 sal_uInt8 nBool = 0;

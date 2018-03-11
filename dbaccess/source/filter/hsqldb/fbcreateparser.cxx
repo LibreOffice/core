@@ -113,7 +113,9 @@ OUString FbCreateStmtParser::compose() const
         lcl_appendWithSpace(sSql, lcl_DataTypetoFbTypeName(columnIter->getDataType()));
 
         const std::vector<sal_Int32> params = columnIter->getParams();
-        if (params.size() > 0)
+
+        // Firebird SQL dialect does not like paremeters for TIMESTAMP
+        if (params.size() > 0 && columnIter->getDataType() != DataType::TIMESTAMP)
         {
             sSql.append("(");
             auto it = params.cbegin();
