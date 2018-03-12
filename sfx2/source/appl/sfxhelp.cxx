@@ -672,7 +672,7 @@ static bool impl_showOnlineHelp( const OUString& rURL )
 
     try
     {
-        sfx2::openUriExternally(aHelpLink, false);
+        URITools::getInstance()->openUriExternally(aHelpLink, false);
         return true;
     }
     catch (const Exception&)
@@ -712,7 +712,7 @@ static bool impl_showOfflineHelp( const OUString& rURL )
 
     try
     {
-        sfx2::openUriExternally(aTempFile.GetURL(), false);
+        URITools::getInstance()->openUriExternally(aTempFile.GetURL(), false);
         return true;
     }
     catch (const Exception&)

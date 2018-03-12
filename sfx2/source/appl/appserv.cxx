@@ -532,7 +532,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
             OUString module = SfxHelp::GetCurrentModuleIdentifier();
             OUString sURL("https://hub.libreoffice.org/send-feedback/?LOversion=" + utl::ConfigManager::getAboutBoxProductVersion() +
                 "&LOlocale=" + utl::ConfigManager::getLocale() + "&LOmodule=" + module.copy(module.lastIndexOf('.') + 1 )  );
-            sfx2::openUriExternally(sURL, false);
+            URITools::getInstance()->openUriExternally(sURL, false);
             break;
         }
 
@@ -542,14 +542,14 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
             // Get language from locale: ll or lll or ll-CC or lll-CC
 
             OUString sURL("https://hub.libreoffice.org/forum/?LOlocale=" + utl::ConfigManager::getLocale());
-            sfx2::openUriExternally(sURL, false);
+            URITools::getInstance()->openUriExternally(sURL, false);
             break;
         }
         case SID_DOCUMENTATION:
         {
             // Open documentation page based on locales
             OUString sURL("https://hub.libreoffice.org/documentation/?LOlocale=" + utl::ConfigManager::getLocale());
-            sfx2::openUriExternally(sURL, false);
+            URITools::getInstance()->openUriExternally(sURL, false);
             break;
         }
         case SID_DONATION:
@@ -558,7 +558,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
             OUString aLang = LanguageTag(utl::ConfigManager::getLocale()).getLanguage();
             OUString aBcp47 = LanguageTag(utl::ConfigManager::getLocale()).getBcp47();
             OUString sURL("https://hub.libreoffice.org/donation/?BCP47=" + aBcp47 + "&LOlang=" + aLang );
-            sfx2::openUriExternally(sURL, false);
+            URITools::getInstance()->openUriExternally(sURL, false);
             break;
         }
         case SID_SHOW_LICENSE:
