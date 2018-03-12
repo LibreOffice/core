@@ -305,7 +305,7 @@ std::vector<Any> HsqlRowInputStream::readOneRow(const ColumnTypeVector& nColType
             {
                 sal_Int64 value = 0;
                 m_pStream->ReadInt64(value); // in millisec, from 1970
-                sal_Int64 nEpochSec = value / 1000;
+                std::time_t nEpochSec = value / 1000;
                 std::tm* tm = std::gmtime(&nEpochSec);
                 css::util::Date date(tm->tm_mday, tm->tm_mon + 1,
                                      tm->tm_year + 1900); // day, month, year
