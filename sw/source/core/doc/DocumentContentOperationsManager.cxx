@@ -138,7 +138,7 @@ namespace
         else
         {
             rDelCount = 0;
-            return SwNodeIndex(rStart);
+            return rStart;
         }
     }
 
