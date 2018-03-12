@@ -241,7 +241,7 @@ CommandProcessorInfo::CommandProcessorInfo()
 uno::Sequence< ucb::CommandInfo > SAL_CALL
 CommandProcessorInfo::getCommands()
 {
-    return uno::Sequence< ucb::CommandInfo >( *m_pInfo );
+    return *m_pInfo;
 }
 
 
