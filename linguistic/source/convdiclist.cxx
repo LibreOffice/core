@@ -170,7 +170,7 @@ uno::Reference< XConversionDictionary > ConvDicNameContainer::GetByName(
 uno::Type SAL_CALL ConvDicNameContainer::getElementType(  )
 {
     MutexGuard  aGuard( GetLinguMutex() );
-    return uno::Type( cppu::UnoType<XConversionDictionary>::get());
+    return cppu::UnoType<XConversionDictionary>::get();
 }
 
 sal_Bool SAL_CALL ConvDicNameContainer::hasElements(  )
