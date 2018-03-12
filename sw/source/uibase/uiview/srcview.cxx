@@ -76,7 +76,7 @@
 #include <com/sun/star/ui/dialogs/XFilePicker3.hpp>
 #include <com/sun/star/ui/dialogs/XFilterManager.hpp>
 #include <sfx2/filedlghelper.hxx>
-#define SwSrcView
+#define ShellClass_SwSrcView
 #include <swslots.hxx>
 
 #include <unomid.h>

@@ -58,7 +58,7 @@
 #include <drwbassh.hxx>
 #include <drawsh.hxx>
 
-#define SwDrawShell
+#define ShellClass_SwDrawShell
 #include <sfx2/msg.hxx>
 #include <swslots.hxx>
 #include <swabstdlg.hxx>

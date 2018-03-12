@@ -49,7 +49,7 @@
 #include <svx/svdpage.hxx>
 #include <svx/svditer.hxx>
 #include <strings.hrc>
-#define SwDrawBaseShell
+#define ShellClass_SwDrawBaseShell
 #include <sfx2/msg.hxx>
 #include <swslots.hxx>
 #include <svx/svxdlg.hxx>

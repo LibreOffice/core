@@ -78,7 +78,7 @@
 
 using namespace com::sun::star;
 
-#define ScPreviewShell
+#define ShellClass_ScPreviewShell
 #include <scslots.hxx>
 
 #include <memory>

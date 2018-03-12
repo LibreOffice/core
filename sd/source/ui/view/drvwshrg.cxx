@@ -48,9 +48,9 @@
 #include <NavigatorChildWindow.hxx>
 
 using namespace sd;
-#define DrawViewShell
+#define ShellClass_DrawViewShell
 #include <sdslots.hxx>
-#define GraphicViewShell
+#define ShellClass_GraphicViewShell
 #include <sdgslots.hxx>
 
 namespace sd {

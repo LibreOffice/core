@@ -70,7 +70,7 @@
 #include <IDocumentDrawModelAccess.hxx>
 //#include <svx/svxids.hrc>
 #include <svx/drawitem.hxx>
-#define SwGrfShell
+#define ShellClass_SwGrfShell
 
 #include <sfx2/msg.hxx>
 #include <swslots.hxx>

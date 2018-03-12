@@ -35,7 +35,7 @@
 #include <sdresid.hxx>
 
 using namespace sd;
-#define GraphicDocShell
+#define ShellClass_GraphicDocShell
 #include <sdgslots.hxx>
 
 namespace sd

@@ -54,7 +54,7 @@
 using namespace sd;
 using namespace sd::ui::table;
 
-#define TableObjectBar
+#define ShellClass_TableObjectBar
 #include <sdslots.hxx>
 
 namespace sd { namespace ui { namespace table {

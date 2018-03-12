@@ -265,9 +265,9 @@ void SvMetaClass::WriteSfx( SvIdlDataBase & rBase, SvStream & rOutStm )
 {
     WriteStars( rOutStm );
     // define class
-    rOutStm.WriteCharPtr( "#ifdef " ).WriteOString( GetName() ) << endl;
+    rOutStm.WriteCharPtr( "#ifdef ShellClass_" ).WriteOString( GetName() ) << endl;
     rOutStm.WriteCharPtr( "#undef ShellClass" ) << endl;
-    rOutStm.WriteCharPtr( "#undef " ).WriteOString( GetName() ) << endl;
+    rOutStm.WriteCharPtr( "#undef ShellClass_" ).WriteOString( GetName() ) << endl;
     rOutStm.WriteCharPtr( "#define ShellClass " ).WriteOString( GetName() ) << endl;
 
     // no slotmaps get written for interfaces

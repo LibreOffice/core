@@ -53,7 +53,7 @@
 #include <strings.hrc>
 #include <errhdl.hrc>
 
-#define SdModule
+#define ShellClass_SdModule
 #include <sdslots.hxx>
 
 SFX_IMPL_INTERFACE(SdModule, SfxModule)

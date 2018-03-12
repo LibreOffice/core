@@ -62,8 +62,8 @@
 #include <sfx2/request.hxx>
     // needed for -fsanitize=function visibility of typeinfo for functions of
     // type void(SfxShell*,SfxRequest&) defined in swslots.hxx
-#define SwWebView
-#define Text
+#define ShellClass_SwWebView
+#define ShellClass_Text
 #include <swslots.hxx>
 
 SFX_IMPL_NAMED_VIEWFACTORY(SwWebView, "Default")

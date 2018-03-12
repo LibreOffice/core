@@ -39,7 +39,7 @@
 #include <svx/extedit.hxx>
 #include <tabvwsh.hxx>
 
-#define ScGraphicShell
+#define ShellClass_ScGraphicShell
 #include <scslots.hxx>
 
 SFX_IMPL_INTERFACE(ScGraphicShell, ScDrawShell)

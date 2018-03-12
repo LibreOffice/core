@@ -45,7 +45,7 @@
 #include <fuconbez.hxx>
 
 using namespace sd;
-#define BezierObjectBar
+#define ShellClass_BezierObjectBar
 #include <sdslots.hxx>
 
 namespace sd {

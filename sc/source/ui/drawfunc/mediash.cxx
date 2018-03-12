@@ -33,7 +33,7 @@
 #include <drawview.hxx>
 #include <scresid.hxx>
 
-#define ScMediaShell
+#define ShellClass_ScMediaShell
 #include <scslots.hxx>
 
 SFX_IMPL_INTERFACE(ScMediaShell, ScDrawShell)

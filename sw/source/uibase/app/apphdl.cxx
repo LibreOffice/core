@@ -109,7 +109,7 @@ using namespace ::com::sun::star;
 
 // here are the SlotID's being included
 // see Idl-file
-#define SwModule
+#define ShellClass_SwModule
 #include <sfx2/msg.hxx>
 #include <swslots.hxx>
 

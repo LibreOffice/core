@@ -84,7 +84,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
 using namespace ::com::sun::star::uno;
 
-#define SmDocShell
+#define ShellClass_SmDocShell
 #include <smslots.hxx>
 
 

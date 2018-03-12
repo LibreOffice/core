@@ -68,7 +68,7 @@
 using namespace sd;
 using namespace ::com::sun::star;
 
-#define TextObjectBar
+#define ShellClass_TextObjectBar
 #include <sdslots.hxx>
 
 namespace sd {

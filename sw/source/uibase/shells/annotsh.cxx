@@ -129,7 +129,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::i18n;
 
-#define SwAnnotationShell
+#define ShellClass_SwAnnotationShell
 
 #include <sfx2/msg.hxx>
 #include <swslots.hxx>

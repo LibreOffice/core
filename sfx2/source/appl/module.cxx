@@ -35,7 +35,7 @@
 #include <rtl/strbuf.hxx>
 #include <sal/log.hxx>
 
-#define SfxModule
+#define ShellClass_SfxModule
 #include <sfxslots.hxx>
 #include <childwinimpl.hxx>
 #include <ctrlfactoryimpl.hxx>

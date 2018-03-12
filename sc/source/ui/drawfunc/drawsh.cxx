@@ -50,7 +50,7 @@
 #include <gridwin.hxx>
 #include <sfx2/bindings.hxx>
 
-#define ScDrawShell
+#define ShellClass_ScDrawShell
 #include <scslots.hxx>
 
 #include <userdat.hxx>

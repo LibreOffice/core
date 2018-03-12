@@ -44,7 +44,7 @@
 #include <view.hxx>
 #include <edtwin.hxx>
 
-#define SwListShell
+#define ShellClass_SwListShell
 #include <sfx2/msg.hxx>
 #include <swslots.hxx>
 

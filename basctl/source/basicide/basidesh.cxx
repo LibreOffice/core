@@ -45,7 +45,7 @@
 #define aSfxDocumentInfoItem_Impl basctl_source_basicide_basidesh_aSfxDocumentInfoItem_Impl
 #endif
 
-#define basctl_Shell
+#define ShellClass_basctl_Shell
 #define SFX_TYPEMAP
 #include <basslots.hxx>
 
