@@ -28,6 +28,7 @@
 #include <PhysicalFontCollection.hxx>
 
 #include <QtGui/QFont>
+#include <QtGui/QFontInfo>
 #include <QtGui/QRawFont>
 
 using namespace vcl;
