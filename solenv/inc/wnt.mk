@@ -39,6 +39,10 @@
 .INCLUDE : wntgcci.mk
 .ENDIF
 
+.IF "$(OS)$(COM)$(CPU)" == "WNTMSCX"
+.INCLUDE : wntmscx.mk
+.ENDIF
+
 # --- changes for W32-tcsh - should move into settings.mk ---
 JAVAC=javac
 JAVA=java

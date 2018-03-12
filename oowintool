@@ -23,6 +23,8 @@
 use File::Copy;
 
 my $output_format = 'u';
+my $aoo32OnWin64 = 0;
+
 
 sub reg_get_value($)
 {
@@ -282,23 +284,30 @@ sub print_dotnetsdk_dir()
 
 sub print_jdk_dir()
 {
-    my $dir =
-	  reg_get_value ("HKEY_LOCAL_MACHINE/SOFTWARE/JavaSoft/Java\ Development\ Kit/1.8/JavaHome") ||
-	  reg_get_value ("HKEY_LOCAL_MACHINE/SOFTWARE/JavaSoft/Java\ Development\ Kit/1.7/JavaHome") ||
-	  reg_get_value ("HKEY_LOCAL_MACHINE/SOFTWARE/JavaSoft/Java\ Development\ Kit/1.6/JavaHome") ||
-	  reg_get_value ("HKEY_LOCAL_MACHINE/SOFTWARE/JavaSoft/Java\ Development\ Kit/1.5/JavaHome") ||
-	  reg_get_value ("HKEY_LOCAL_MACHINE/SOFTWARE/JavaSoft/Java\ Development\ Kit/1.4/JavaHome") ||
-	  reg_get_value ("HKEY_LOCAL_MACHINE/SOFTWARE/JavaSoft/Java\ Development\ Kit/1.3/JavaHome");
-    if (defined $dir) {
-        print cygpath($dir, 'w', $output_format); 
-    } else {
-        # Java 1.9 had to be different:
-        my $currentVersion = reg_get_value ("HKEY_LOCAL_MACHINE/SOFTWARE/JavaSoft/JDK/CurrentVersion");
-        defined $currentVersion || exit 1;
-        my $newDir = reg_get_value ("HKEY_LOCAL_MACHINE/SOFTWARE/JavaSoft/JDK/" . $currentVersion . "/JavaHome");
-        defined $newDir || exit 1;
-        print cygpath($newDir, 'w', $output_format);
+    my $softwareKey;
+    if ($aoo32OnWin64) {
+        $softwareKey = "HKEY_LOCAL_MACHINE/SOFTWARE/Wow6432Node/";
+    }  else {
+        $softwareKey = "HKEY_LOCAL_MACHINE/SOFTWARE/";
     }
+    # Java 1.9 had to be different:
+    my $currentVersion = reg_get_value ($softwareKey . "JavaSoft/JDK/CurrentVersion");
+    if (defined $currentVersion) {
+        my $newDir = reg_get_value ($softwareKey . "JavaSoft/JDK/" . $currentVersion . "/JavaHome");
+        if (defined $newDir) {
+            print cygpath($newDir, 'w', $output_format);
+            return;
+        }
+    }
+    my $dir =
+	  reg_get_value ($softwareKey . "JavaSoft/Java\ Development\ Kit/1.8/JavaHome") ||
+	  reg_get_value ($softwareKey . "JavaSoft/Java\ Development\ Kit/1.7/JavaHome") ||
+	  reg_get_value ($softwareKey . "JavaSoft/Java\ Development\ Kit/1.6/JavaHome") ||
+	  reg_get_value ($softwareKey . "JavaSoft/Java\ Development\ Kit/1.5/JavaHome") ||
+	  reg_get_value ($softwareKey . "JavaSoft/Java\ Development\ Kit/1.4/JavaHome") ||
+	  reg_get_value ($softwareKey . "JavaSoft/Java\ Development\ Kit/1.3/JavaHome");
+    defined $dir || exit 1;
+    print cygpath($dir, 'w', $output_format);
 }
 
 sub print_nsis_dir()
@@ -372,7 +381,8 @@ while (@ARGV) {
 while (@commands) {
     $opt = shift @commands;
 
-    if (0) {
+    if ($opt eq '--aoo32-on-win64') {
+	$aoo32OnWin64 = 1;
     } elsif ($opt eq '--msvc-ver') {
 	print_msvc_ver();
     } elsif ($opt eq '--msvc-copy-dlls') {

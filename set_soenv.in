@@ -680,8 +680,6 @@ elsif ( $platform =~ m/cygwin/ )
       $USE_DIRECTX5   = "";
       $FRAME_HOME     = PathFormat('@FRAME_HOME@');
       $USE_NEW_SDK    = "TRUE";
-      $CPUNAME        = "INTEL";
-      $CPU            = "I";
       $GUI            = "WNT";
       $GUIBASE        = "WIN";
       $GVER           = "NT351";
@@ -698,19 +696,18 @@ elsif ( $platform =~ m/cygwin/ )
       $outfile        = "winmingw.set"; 
       $COMPATH        = PathFormat('@COMPATH@/bin');
       $COMPATH        =~ s/\/bin$//i;
+      $CPUNAME        = "INTEL";
+      $CPU            = "I";
       $CVER           = "C341";
       $OUTPATH        = "wntgcci";
-      $INPATH         = $OUTPATH.$PROEXT;
       $ATL_INCLUDE = '$SOLARVER'.$ds.'$INPATH'.$ds."inc".$ds."external".$ds."mingw".$ds."include".$ds."atl". " ".'$PSDK_HOME'.$ds."include".$ds."atl";
   }
   else # The MSVC section starts here
-  {   $outfile        = "winenv.set";
+  {
       $COMPATH        = PathFormat('@COMPATH@');
       $CXX_X64_BINARY = PathFormat('@COMPATH@/bin/amd64/cl.exe');
       $LINK_X64_BINARY = PathFormat('@COMPATH@/bin/amd64/link.exe');
       $LIBMGR_X64_BINARY = PathFormat('@COMPATH@/bin/amd64/lib.exe');
-      $OUTPATH        = "wntmsci@COMEX@";
-      $INPATH         = $OUTPATH.$PROEXT;
       $COMEX          = '@COMEX@';
       if ( "@COMEX@" eq "10" ) { # .NET 2003 needs M1310
           $CVER        = "M1310";
@@ -723,11 +720,27 @@ elsif ( $platform =~ m/cygwin/ )
 	      die "Unsupported value for COMEX variable.\n";
 	  }
       }
-      print "Setting W32 build with bash shell specific values... ";
       # No special treatment for CC and CXX anymore.
       $FLIPCMD        = "slfl.pl";
       $PATH_SEPERATOR = ';';
+      if ( $platform =~ m/^i[3456]86/ || ( ( $platform =~ m/^x86_64/ ) && ( "@BUILD_WIN64@" ne "TRUE" ) ) ) {
+          print "Setting Windows x86 build with bash shell specific values... ";
+          $outfile    = "winenv.set";
+          $CPU        = "I";
+          $CPUNAME    = "INTEL";
+          $OUTPATH    = "wntmsci@COMEX@";
+      } elsif ( $platform =~ m/^x86_64/ ) {
+          print "Setting Windows x86_64 build with bash shell specific values... ";
+          $outfile    = "winAMD64Env.set";
+          $CPU        = "X";
+          $CPUNAME    = "X86_64";
+          $OUTPATH    = "wntmscx@COMEX@";
+      } else {
+          print "Unsupported Windows architecture: $platform \n";
+          exit 1;
+      }
   }
+  $INPATH = $OUTPATH.$PROEXT;
 }
 elsif ( $platform =~ m/os2/ ) 
 { 
@@ -1061,10 +1074,19 @@ if ($platform =~ m/cygwin|os2/)
    # Mingw is different
    if ( "@COM@" eq "MSC" )
    {  $ILIB       .=    $wps.$SOLARVER.$ds.$INPATH.$LIB.
-                        $wps.$JAVA_HOME.$LIB.
-                        $wps.$PSDK_HOME.$LIB.
+                        $wps.$JAVA_HOME.$LIB;
+      if ( ( $CPUNAME eq "INTEL" ) || ( ( $CPUNAME eq "X86_64" ) && ( "@BUILD_WIN64@" ne "TRUE" ) ) ) {
+          $ILIB   .=    $wps.$PSDK_HOME.$LIB.
                         $wps.$FRAME_HOME.$LIB.
                         $wps.$COMPATH.$LIB;
+      } elsif ( $CPUNAME eq "X86_64" ) {
+          $ILIB   .=    $wps.$PSDK_HOME.$LIB.$ds."x64".
+                        $wps.$FRAME_HOME.$LIB.
+                        $wps.$COMPATH.$LIB.$ds."amd64";
+      } else {
+          print "Unsupported Windows CPU: $CPUNAME\n";
+          exit 1;
+      }
       if ( '@ENABLE_DIRECTX@' ne "" ) {
           # We may have DirectX but not DirectDraw
           if ( '@ENABLE_DIRECT_DRAW@' ne "") {
@@ -1154,11 +1176,18 @@ elsif ($platform =~ m/cygwin/)
    }
 
    # Add path to compiler
-   $tmppath = CygFormat($COMPATH).$BIN;
-   $tmppath =~ s/^\/\//\//;
-   $PATH .= $ps.$tmppath;
-
    if ( "@COM@" eq "MSC" ) {
+       if ( ( $CPUNAME eq "INTEL" ) || ( ( $CPUNAME eq "X86_64") && ( "@BUILD_WIN64@" ne "TRUE" ) ) ) {
+           $tmppath = CygFormat($COMPATH).$BIN;
+       } elsif ( $CPUNAME eq "X86_64" ) {
+           $tmppath = CygFormat($COMPATH).$BIN.$ds."amd64";
+       } else {
+           print "Unsupported Windows CPU: $CPU\n";
+           exit 1;
+       }
+       $tmppath =~ s/^\/\//\//;
+       $PATH .= $ps.$tmppath;
+
        $tmppath = CygFormat($MSPDB_PATH);
 	   # for .NET to find mspdb71.dll (needed by CL.EXE C/C++ Compiler)
 	   if ( $PATH !~ /(?:[:]|\A)(?:$tmppath)(?:[:]|\Z)/ ) {
@@ -1182,6 +1211,10 @@ elsif ($platform =~ m/cygwin/)
 		   }
 	   }
    } else { # Mingw is different
+       $tmppath = CygFormat($COMPATH).$BIN;
+       $tmppath =~ s/^\/\//\//;
+       $PATH .= $ps.$tmppath;
+
 	   # Native installer needs some files if the Windows Installer SDK
                $tmppath = CygFormat($PSDK_HOME);
 	   if ( $PATH !~ /(?:[:]|\A)(?:$tmppath\/bin)(?:[:]|\Z)/i ) {

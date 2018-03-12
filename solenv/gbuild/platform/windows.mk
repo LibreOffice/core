@@ -63,7 +63,12 @@ gb_COMPILERDEFS := \
 	-DFULL_DESK \
 	-DM1500 \
 
+ifeq ($(CPUNAME),INTEL)
 gb_CPUDEFS := -DINTEL -D_X86_=1
+endif
+ifeq ($(CPUNAME),X86_64)
+gb_CPUDEFS := -DX86_64 -D_AMD64_=1
+endif
 
 gb_RCDEFS := \
      -DWINVER=0x0400 \
@@ -187,11 +192,20 @@ gb_LinkTarget_NOEXCEPTIONFLAGS := \
 
 gb_NoexPrecompiledHeader_NOEXCEPTIONFLAGS := $(gb_LinkTarget_NOEXCEPTIONFLAGS)
 
+ifeq ($(CPUNAME),INTEL)
 gb_LinkTarget_LDFLAGS := \
 	-MACHINE:IX86 \
 	-NODEFAULTLIB \
 	$(patsubst %,-LIBPATH:%,$(filter-out .,$(subst ;, ,$(subst \,/,$(ILIB))))) \
-	
+
+endif
+ifeq ($(CPUNAME),X86_64)
+gb_LinkTarget_LDFLAGS := \
+	-MACHINE:X64 \
+	-NODEFAULTLIB \
+	$(patsubst %,-LIBPATH:%,$(filter-out .,$(subst ;, ,$(subst \,/,$(ILIB))))) \
+
+endif
 
 gb_DEBUG_CFLAGS := -Zi
 
@@ -437,7 +451,12 @@ endef
 # Library class
 
 gb_Library_DEFS := -D_DLL_
+ifeq ($(CPUNAME),INTEL)
 gb_Library_TARGETTYPEFLAGS := -DLL -OPT:NOREF -SAFESEH -NXCOMPAT -DYNAMICBASE
+endif
+ifeq ($(CPUNAME),X86_64)
+gb_Library_TARGETTYPEFLAGS := -DLL -OPT:NOREF -NXCOMPAT -DYNAMICBASE
+endif
 gb_Library_get_rpath :=
 
 gb_Library_SYSPRE := i
@@ -608,7 +627,12 @@ endef
 # Executable class
 
 gb_Executable_EXT := .exe
+ifeq ($(CPUNAME),INTEL)
 gb_Executable_TARGETTYPEFLAGS := -RELEASE -BASE:0x1b000000 -OPT:NOREF -INCREMENTAL:NO -DEBUG -SAFESEH -NXCOMPAT -DYNAMICBASE
+endif
+ifeq ($(CPUNAME),X86_64)
+gb_Executable_TARGETTYPEFLAGS := -RELEASE -BASE:0x1b000000 -OPT:NOREF -INCREMENTAL:NO -DEBUG -NXCOMPAT -DYNAMICBASE
+endif
 gb_Executable_get_rpath :=
 gb_Executable_TARGETGUI := 
 
