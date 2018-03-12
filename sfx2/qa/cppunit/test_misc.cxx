@@ -9,6 +9,9 @@
 
 #include <sal/types.h>
 
+#ifndef _WIN32
+#include <sys/stat.h>
+#endif
 #include <memory>
 
 #include <cppunit/TestAssert.h>
@@ -31,6 +34,7 @@
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/processfactory.hxx>
 #include <sfx2/app.hxx>
+#include <osl/file.hxx>
 
 
 using namespace ::com::sun::star;
@@ -117,10 +121,28 @@ void MiscTest::testNoThumbnail()
     utl::TempFile aTempFile;
     uno::Sequence<beans::PropertyValue> aProperties(
         comphelper::InitPropertySequence({ { "NoThumbnail", uno::makeAny(true) } }));
+    osl::File::remove(aTempFile.GetURL());
     xStorable->storeToURL(aTempFile.GetURL(), aProperties);
     uno::Reference<packages::zip::XZipFileAccess2> xZipFile
         = packages::zip::ZipFileAccess::createWithURL(m_xContext, aTempFile.GetURL());
     CPPUNIT_ASSERT(!xZipFile->hasByName("Thumbnails/thumbnail.png"));
+
+#ifndef _WIN32
+    // Check permissions of the URL after store.
+    mode_t nMask = umask(022);
+    osl::DirectoryItem aItem;
+    CPPUNIT_ASSERT_EQUAL(osl::DirectoryItem::E_None,
+                         osl::DirectoryItem::get(aTempFile.GetURL(), aItem));
+
+    osl::FileStatus aStatus(osl_FileStatus_Mask_Attributes);
+    CPPUNIT_ASSERT_EQUAL(osl::DirectoryItem::E_None, aItem.getFileStatus(aStatus));
+
+    // This failed, osl_File_Attribute_GrpRead was not set even if umask
+    // requested so.
+    CPPUNIT_ASSERT(aStatus.getAttributes() & osl_File_Attribute_GrpRead);
+    CPPUNIT_ASSERT(aStatus.getAttributes() & osl_File_Attribute_OthRead);
+    umask(nMask);
+#endif
 
     xComponent->dispose();
 }
