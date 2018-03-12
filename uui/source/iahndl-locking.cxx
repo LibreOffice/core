@@ -116,7 +116,7 @@ handleLockedDocumentRequest_(
             aMessage = UUIInteractionHelper::replaceMessageWithArguments(
                 aMessage, aArguments );
 
-            ScopedVclPtrInstance< TryLaterQueryBox > xDialog( pParent, xManager.get(), aMessage, false );
+            ScopedVclPtrInstance< TryLaterQueryBox > xDialog( pParent, xManager.get(), aMessage, xRetry.is() );
             nResult = xDialog->Execute();
         }
         else if ( nMode == UUI_DOC_OWN_LOAD_LOCK ||
