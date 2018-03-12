@@ -412,26 +412,20 @@ namespace pcr
     bool OPropertyBrowserController::suspendPropertyHandlers_nothrow( bool _bSuspend )
     {
         PropertyHandlerArray aAllHandlers;  // will contain every handler exactly once
-        for (   PropertyHandlerRepository::const_iterator handler = m_aPropertyHandlers.begin();
-                handler != m_aPropertyHandlers.end();
-                ++handler
-            )
+        for (auto const& propertyHandler : m_aPropertyHandlers)
         {
-            if ( std::find( aAllHandlers.begin(), aAllHandlers.end(), handler->second ) != aAllHandlers.end() )
+            if ( std::find( aAllHandlers.begin(), aAllHandlers.end(), propertyHandler.second ) != aAllHandlers.end() )
                 // already visited this particular handler (m_aPropertyHandlers usually contains
                 // the same handler more than once)
                 continue;
-            aAllHandlers.push_back( handler->second );
+            aAllHandlers.push_back(propertyHandler.second);
         }
 
-        for ( PropertyHandlerArray::iterator loop = aAllHandlers.begin();
-              loop != aAllHandlers.end();
-              ++loop
-            )
+        for (auto const& handler : aAllHandlers)
         {
             try
             {
-                if ( !(*loop)->suspend( _bSuspend ) )
+                if ( !handler->suspend( _bSuspend ) )
                     if ( _bSuspend )
                         // if we're not suspending, but reactivating, ignore the error
                         return false;
@@ -636,14 +630,11 @@ namespace pcr
         const sal_uInt16 nCurrentPage = m_pView->getActivaPage();
         if ( sal_uInt16(-1) != nCurrentPage )
         {
-            for (   HashString2Int16::const_iterator pageId = m_aPageIds.begin();
-                    pageId != m_aPageIds.end();
-                    ++pageId
-                )
+            for (auto const& pageId : m_aPageIds)
             {
-                if ( nCurrentPage == pageId->second )
+                if ( nCurrentPage == pageId.second )
                 {
-                    m_sPageSelection = pageId->first;
+                    m_sPageSelection = pageId.first;
                     break;
                 }
             }
@@ -822,14 +813,11 @@ namespace pcr
 
     void OPropertyBrowserController::impl_toggleInspecteeListening_nothrow( bool _bOn )
     {
-        for (   InterfaceArray::const_iterator loop = m_aInspectedObjects.begin();
-                loop != m_aInspectedObjects.end();
-                ++loop
-            )
+        for (auto const& inspectedObject : m_aInspectedObjects)
         {
             try
             {
-                Reference< XComponent > xComp( *loop, UNO_QUERY );
+                Reference< XComponent > xComp( inspectedObject, UNO_QUERY );
                 if ( xComp.is() )
                 {
                     if ( _bOn )
@@ -865,11 +853,8 @@ namespace pcr
         if ( haveView() )
         {
             // remove the pages
-            for (   HashString2Int16::const_iterator erase = m_aPageIds.begin();
-                    erase != m_aPageIds.end();
-                    ++erase
-                )
-                getPropertyBox().RemovePage( erase->second );
+            for (auto const& pageId : m_aPageIds)
+                getPropertyBox().RemovePage( pageId.second );
             clearContainer( m_aPageIds );
         }
 
@@ -885,22 +870,16 @@ namespace pcr
 
         // clean up the property handlers
         PropertyHandlerArray aAllHandlers;  // will contain every handler exactly once
-        for ( PropertyHandlerRepository::const_iterator aHandler = m_aPropertyHandlers.begin();
-              aHandler != m_aPropertyHandlers.end();
-              ++aHandler
-            )
-            if ( std::find( aAllHandlers.begin(), aAllHandlers.end(), aHandler->second ) == aAllHandlers.end() )
-                aAllHandlers.push_back( aHandler->second );
+        for (auto const& propertyHandler : m_aPropertyHandlers)
+            if ( std::find( aAllHandlers.begin(), aAllHandlers.end(), propertyHandler.second ) == aAllHandlers.end() )
+                aAllHandlers.push_back( propertyHandler.second );
 
-        for ( PropertyHandlerArray::iterator loop = aAllHandlers.begin();
-              loop != aAllHandlers.end();
-              ++loop
-            )
+        for (auto const& handler : aAllHandlers)
         {
             try
             {
-                (*loop)->removePropertyChangeListener( this );
-                (*loop)->dispose();
+                handler->removePropertyChangeListener( this );
+                handler->dispose();
             }
             catch( const DisposedException& )
             {
@@ -1056,15 +1035,14 @@ namespace pcr
             m_pUIRequestComposer.reset( new ComposedPropertyUIUpdate( getInspectorUI(), this ) );
 
             // sort the properties by relative position, as indicated by the model
-            for (   std::vector< Property >::const_iterator sourceProps = aProperties.begin();
-                    sourceProps != aProperties.end();
-                    ++sourceProps
-                )
+            sal_Int32 nPos = 0;
+            for (auto const& sourceProps : aProperties)
             {
-                sal_Int32 nRelativePropertyOrder = sourceProps - aProperties.begin();
+                sal_Int32 nRelativePropertyOrder = nPos;
                 if ( m_xModel.is() )
-                    nRelativePropertyOrder = m_xModel->getPropertyOrderIndex( sourceProps->Name );
-                m_aProperties.emplace(nRelativePropertyOrder, *sourceProps);
+                    nRelativePropertyOrder = m_xModel->getPropertyOrderIndex( sourceProps.Name );
+                m_aProperties.emplace(nRelativePropertyOrder, sourceProps);
+                ++nPos;
             }
 
             // be notified when one of our inspectees dies
@@ -1153,16 +1131,13 @@ namespace pcr
         if ( m_xModel.is() )
             aCategories = StlSyntaxSequence< PropertyCategoryDescriptor >(m_xModel->describeCategories());
 
-        for (   StlSyntaxSequence< PropertyCategoryDescriptor >::const_iterator category = aCategories.begin();
-                category != aCategories.end();
-                ++category
-            )
+        for (auto const category : aCategories)
         {
-            OSL_ENSURE( m_aPageIds.find( category->ProgrammaticName ) == m_aPageIds.end(),
+            OSL_ENSURE( m_aPageIds.find( category.ProgrammaticName ) == m_aPageIds.end(),
                 "OPropertyBrowserController::impl_buildCategories_throw: duplicate programmatic name!" );
 
-            m_aPageIds[ category->ProgrammaticName ] =
-                getPropertyBox().AppendPage( category->UIName, HelpIdUrl::getHelpId( category->HelpURL ) );
+            m_aPageIds[ category.ProgrammaticName ] =
+                getPropertyBox().AppendPage( category.UIName, HelpIdUrl::getHelpId( category.HelpURL ) );
         }
     }
 
@@ -1191,17 +1166,16 @@ namespace pcr
 
             // ask the handlers to describe the property UI, and insert the resulting
             // entries into our list boxes
-            OrderedPropertyMap::const_iterator property( m_aProperties.begin() );
-            for ( ; property != m_aProperties.end(); ++property )
+            for (auto const& property : m_aProperties)
             {
                 OLineDescriptor aDescriptor;
-                describePropertyLine( property->second, aDescriptor );
+                describePropertyLine( property.second, aDescriptor );
 
-                bool bIsActuatingProperty = impl_isActuatingProperty_nothrow( property->second.Name );
+                bool bIsActuatingProperty = impl_isActuatingProperty_nothrow( property.second.Name );
 
                 SAL_WARN_IF( aDescriptor.Category.isEmpty(), "extensions.propctrlr",
                         "OPropertyBrowserController::UpdateUI: empty category provided for property '"
-                        << property->second.Name << "'!");
+                        << property.second.Name << "'!");
                 // finally insert this property control
                 sal_uInt16 nTargetPageId = impl_getPageIdForCategory_nothrow( aDescriptor.Category );
                 if ( nTargetPageId == sal_uInt16(-1) )
@@ -1219,30 +1193,29 @@ namespace pcr
                 // if it's an actuating property, remember it
                 if ( bIsActuatingProperty )
                 {
-                    aActuatingProperties.push_back( property->second.Name );
-                    aActuatingPropertyValues.push_back( impl_getPropertyValue_throw( property->second.Name ) );
+                    aActuatingProperties.push_back( property.second.Name );
+                    aActuatingPropertyValues.push_back( impl_getPropertyValue_throw( property.second.Name ) );
                 }
             }
 
             // update any dependencies for the actuating properties which we encountered
             {
-                std::vector< OUString >::const_iterator aProperty = aActuatingProperties.begin();
                 std::vector< Any >::const_iterator aPropertyValue = aActuatingPropertyValues.begin();
-                for ( ; aProperty != aActuatingProperties.end(); ++aProperty, ++aPropertyValue )
-                    impl_broadcastPropertyChange_nothrow( *aProperty, *aPropertyValue, *aPropertyValue, true );
+                for (auto const& actuatingProperty : aActuatingProperties)
+                {
+                    impl_broadcastPropertyChange_nothrow( actuatingProperty, *aPropertyValue, *aPropertyValue, true );
+                    ++aPropertyValue;
+                }
             }
 
             // remove any unused pages (which we did not encounter properties for)
             HashString2Int16 aSurvivingPageIds;
-            for (   HashString2Int16::iterator pageId = m_aPageIds.begin();
-                    pageId != m_aPageIds.end();
-                    ++pageId
-                )
+            for (auto const& pageId : m_aPageIds)
             {
-                if ( aUsedPages.find( pageId->second ) == aUsedPages.end() )
-                    getPropertyBox().RemovePage( pageId->second );
+                if ( aUsedPages.find( pageId.second ) == aUsedPages.end() )
+                    getPropertyBox().RemovePage( pageId.second );
                 else
-                    aSurvivingPageIds.insert( *pageId );
+                    aSurvivingPageIds.insert(pageId);
             }
             m_aPageIds.swap( aSurvivingPageIds );
 
@@ -1321,11 +1294,8 @@ namespace pcr
 
     bool OPropertyBrowserController::hasPropertyByName( const OUString& _rName )
     {
-        for (   OrderedPropertyMap::const_iterator search = m_aProperties.begin();
-                search != m_aProperties.end();
-                ++search
-            )
-            if ( search->second.Name == _rName )
+        for (auto const& property : m_aProperties)
+            if ( property.second.Name == _rName )
                 return true;
         return false;
     }
@@ -1473,15 +1443,12 @@ namespace pcr
                 std::vector< Reference< XPropertyHandler > > aSingleHandlers( _rObjects.size() );
                 std::vector< Reference< XPropertyHandler > >::iterator pHandler = aSingleHandlers.begin();
 
-                InterfaceArray::const_iterator pObject = _rObjects.begin();
-                InterfaceArray::const_iterator pObjectEnd = _rObjects.end();
-
-                for ( ; pObject != pObjectEnd; ++pObject )
+                for (auto const& elem : _rObjects)
                 {
                     *pHandler = lcl_createHandler( m_xContext, handlerFactory );
                     if ( pHandler->is() )
                     {
-                        (*pHandler)->inspect( *pObject );
+                        (*pHandler)->inspect(elem);
                         ++pHandler;
                     }
                 }

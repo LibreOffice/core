@@ -123,16 +123,14 @@ namespace abp
         m_aAllTypes.push_back( ButtonItem( m_pOther, AST_OTHER, true ) );
 
         Link<Button*,void> aTypeSelectionHandler = LINK(this, TypeSelectionPage, OnTypeSelected );
-        for ( std::vector< ButtonItem >::const_iterator loop = m_aAllTypes.begin();
-              loop != m_aAllTypes.end(); ++loop )
+        for (auto const& elem : m_aAllTypes)
         {
-            ButtonItem aItem = *loop;
-            if (!aItem.m_bVisible)
-                aItem.m_pItem->Hide();
+            if (!elem.m_bVisible)
+                elem.m_pItem->Hide();
             else
             {
-                aItem.m_pItem->SetClickHdl( aTypeSelectionHandler );
-                aItem.m_pItem->Show();
+                elem.m_pItem->SetClickHdl( aTypeSelectionHandler );
+                elem.m_pItem->Show();
             }
         }
     }
@@ -145,10 +143,9 @@ namespace abp
 
     void TypeSelectionPage::dispose()
     {
-        for ( std::vector< ButtonItem >::iterator loop = m_aAllTypes.begin();
-              loop != m_aAllTypes.end(); ++loop )
+        for (auto & elem : m_aAllTypes)
         {
-            loop->m_bVisible = false;
+            elem.m_bVisible = false;
         }
         m_pEvolution.clear();
         m_pEvolutionGroupwise.clear();
@@ -166,13 +163,11 @@ namespace abp
     {
         AddressBookSourcePage::ActivatePage();
 
-        for ( std::vector< ButtonItem >::const_iterator loop = m_aAllTypes.begin();
-              loop != m_aAllTypes.end(); ++loop )
+        for (auto const& elem : m_aAllTypes)
         {
-            const ButtonItem& rItem = (*loop);
-            if( rItem.m_pItem->IsChecked() && rItem.m_bVisible )
+            if( elem.m_pItem->IsChecked() && elem.m_bVisible )
             {
-                rItem.m_pItem->GrabFocus();
+                elem.m_pItem->GrabFocus();
                 break;
             }
         }
@@ -190,23 +185,19 @@ namespace abp
 
     void TypeSelectionPage::selectType( AddressSourceType _eType )
     {
-        for ( std::vector< ButtonItem >::const_iterator loop = m_aAllTypes.begin();
-              loop != m_aAllTypes.end(); ++loop )
+        for (auto const& elem : m_aAllTypes)
         {
-            ButtonItem aItem = (*loop);
-            aItem.m_pItem->Check( _eType == aItem.m_eType );
+            elem.m_pItem->Check( _eType == elem.m_eType );
         }
     }
 
 
     AddressSourceType TypeSelectionPage::getSelectedType() const
     {
-        for ( std::vector< ButtonItem >::const_iterator loop = m_aAllTypes.begin();
-              loop != m_aAllTypes.end(); ++loop )
+        for (auto const& elem : m_aAllTypes)
         {
-            ButtonItem aItem = (*loop);
-            if ( aItem.m_pItem->IsChecked() && aItem.m_bVisible )
-                return aItem.m_eType;
+            if ( elem.m_pItem->IsChecked() && elem.m_bVisible )
+                return elem.m_eType;
         }
 
         return AST_INVALID;

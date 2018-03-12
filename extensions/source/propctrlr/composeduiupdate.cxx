@@ -754,12 +754,9 @@ namespace pcr
 
         OSL_ENSURE( m_nSuspendCounter == 0, "ComposedPropertyUIUpdate::dispose: still suspended, the changes will be lost!" );
 
-        for ( ImplMapHandlerToUI::const_iterator singleUI = m_pCollectedUIs->aHandlers.begin();
-              singleUI != m_pCollectedUIs->aHandlers.end();
-              ++singleUI
-            )
+        for (auto const& singleUI : m_pCollectedUIs->aHandlers)
         {
-            singleUI->second->dispose();
+            singleUI.second->dispose();
         }
         m_pCollectedUIs.reset();
         m_xDelegatorUI.set( nullptr );

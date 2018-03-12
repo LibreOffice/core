@@ -655,14 +655,11 @@ namespace pcr
         _rNames.reserve( aAllTypes.size() );
 
         // then allow only those which are "compatible" with our control
-        for ( std::vector< OUString >::const_iterator dataType = aAllTypes.begin();
-              dataType != aAllTypes.end();
-              ++dataType
-            )
+        for (auto const& dataType : aAllTypes)
         {
-            ::rtl::Reference< XSDDataType > pType = m_pHelper->getDataTypeByName( *dataType );
+            ::rtl::Reference< XSDDataType > pType = m_pHelper->getDataTypeByName(dataType);
             if ( pType.is() && m_pHelper->canBindToDataType( pType->classify() ) )
-                _rNames.push_back( *dataType );
+                _rNames.push_back(dataType);
         }
     }
 
