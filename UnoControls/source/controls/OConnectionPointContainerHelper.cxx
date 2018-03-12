@@ -30,7 +30,7 @@ using namespace ::cppu;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 
-namespace unocontrols{
+namespace unocontrols {
 
 //  construct/destruct
 

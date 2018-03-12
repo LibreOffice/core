@@ -28,9 +28,7 @@
 
 #include <basecontrol.hxx>
 
-//  namespaces
-
-namespace unocontrols{
+namespace unocontrols {
 
 #define PROGRESSBAR_FREESPACE               4
 #define PROGRESSBAR_DEFAULT_HORIZONTAL      true
@@ -48,7 +46,6 @@ class ProgressBar   : public css::awt::XControlModel
                     , public css::awt::XProgressBar
                     , public BaseControl
 {
-
 public:
 
     ProgressBar( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
@@ -59,7 +56,7 @@ public:
 
     virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) override;
 
-    /**_______________________________________________________________________________________________________
+    /**
         @short      increment refcount
         @seealso    XInterface
         @seealso    release()
@@ -68,7 +65,7 @@ public:
 
     virtual void SAL_CALL acquire() throw() override;
 
-    /**_______________________________________________________________________________________________________
+    /**
         @short      decrement refcount
         @seealso    XInterface
         @seealso    acquire()
@@ -125,7 +122,6 @@ public:
     static const OUString impl_getStaticImplementationName();
 
 protected:
-
     virtual void impl_paint(
         sal_Int32 nX ,
         sal_Int32 nY ,
@@ -135,7 +131,6 @@ protected:
     void impl_recalcRange();
 
 private:
-
     bool            m_bHorizontal;   // orientation for steps            [true=horizontal/false=vertical]
     css::awt::Size  m_aBlockSize;   // width and height of a block      [>=0,0]
     Color           m_nForegroundColor;   //                                  (alpha,r,g,b)
@@ -145,9 +140,9 @@ private:
     double          m_nBlockValue;   // value for one block              [long, >0]
     sal_Int32       m_nValue;   // value for progress               [long]
 
-};  // class ProgressBar
+};
 
-}   // namespace unocontrols
+}
 
 #endif // INCLUDED_UNOCONTROLS_SOURCE_INC_PROGRESSBAR_HXX
 

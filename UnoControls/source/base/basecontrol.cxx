@@ -38,7 +38,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::awt;
 
-namespace unocontrols{
+namespace unocontrols {
 
 #define DEFAULT_X                           0
 #define DEFAULT_Y                           0
