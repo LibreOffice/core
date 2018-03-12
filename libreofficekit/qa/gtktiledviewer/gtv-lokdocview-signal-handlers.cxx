@@ -403,6 +403,15 @@ void LOKDocViewSigHandlers::window(LOKDocView* pDocView, gchar* pPayload, gpoint
 gboolean LOKDocViewSigHandlers::configureEvent(GtkWidget* pWidget, GdkEventConfigure* /*pEvent*/, gpointer /*pData*/)
 {
     GtvApplicationWindow* window = GTV_APPLICATION_WINDOW(gtk_widget_get_toplevel(GTK_WIDGET(pWidget)));
+
+    gboolean isInit = false;
+    g_object_get(G_OBJECT(window->lokdocview), "is-initialized", &isInit, nullptr);
+    if (!isInit)
+    {
+        g_info("Ignoring configure event; document not yet ready");
+        return false;
+    }
+
     LibreOfficeKitDocument* pDocument = lok_doc_view_get_document(LOK_DOC_VIEW(window->lokdocview));
     if (pDocument && pDocument->pClass->getDocumentType(pDocument) == LOK_DOCTYPE_SPREADSHEET)
     {
