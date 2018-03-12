@@ -60,15 +60,12 @@ const DeviceInfo& GraphicCollector::GetDeviceInfo( const Reference< XComponentCo
 
 void ImpAddEntity( std::vector< GraphicCollector::GraphicEntity >& rGraphicEntities, const GraphicSettings& rGraphicSettings, const GraphicCollector::GraphicUser& rUser )
 {
-    const OUString aGraphicURL( rUser.maGraphicURL );
-
-    if ( rGraphicSettings.mbEmbedLinkedGraphics ||
-         aGraphicURL.isEmpty() || aGraphicURL.match( "vnd.sun.star.GraphicObject:" ) )
+    if ( rGraphicSettings.mbEmbedLinkedGraphics )
     {
         std::vector< GraphicCollector::GraphicEntity >::iterator aIter( rGraphicEntities.begin() );
         while( aIter != rGraphicEntities.end() )
         {
-            if ( aIter->maUser[ 0 ].maGraphicURL == aGraphicURL )
+            if ( aIter->maUser[ 0 ].mxGraphic == rUser.mxGraphic )
             {
                 if ( rUser.maLogicalSize.Width > aIter->maLogicalSize.Width )
                     aIter->maLogicalSize.Width = rUser.maLogicalSize.Width;
@@ -98,7 +95,7 @@ void ImpAddGraphicEntity( const Reference< XComponentContext >& rxMSF, Reference
         GraphicCollector::GraphicUser aUser;
         aUser.mxShape = rxShape;
         aUser.mbFillBitmap = false;
-        xShapePropertySet->getPropertyValue( "GraphicURL" ) >>= aUser.maGraphicURL;
+        aUser.mxGraphic = xGraphic;
         xShapePropertySet->getPropertyValue( "GraphicCrop" ) >>= aGraphicCropLogic;
         awt::Size aLogicalSize( rxShape->getSize() );
 
@@ -180,7 +177,7 @@ void ImpAddFillBitmapEntity( const Reference< XComponentContext >& rxMSF, const 
                         }
                         GraphicCollector::GraphicUser aUser;
                         aUser.mxPropertySet = rxPropertySet;
-                        rxPropertySet->getPropertyValue( "FillBitmapURL" ) >>= aUser.maGraphicURL;
+                        aUser.mxGraphic = xGraphic;
                         aUser.mbFillBitmap = true;
                         aUser.maLogicalSize = aLogicalSize;
                         aUser.mxPagePropertySet = rxPagePropertySet;
