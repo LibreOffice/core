@@ -30,11 +30,7 @@
 #include <basecontrol.hxx>
 #include "OConnectionPointContainerHelper.hxx"
 
-//  namespaces
-
-namespace unocontrols{
-
-//  class
+namespace unocontrols {
 
 class FrameControl  : public css::awt::XControlModel
                     , public css::lang::XConnectionPointContainer
@@ -42,12 +38,7 @@ class FrameControl  : public css::awt::XControlModel
                     , public ::cppu::OBroadcastHelper
                     , public ::cppu::OPropertySetHelper
 {
-
-//  public methods
-
 public:
-
-    //  construct/destruct
 
     FrameControl( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
 
@@ -59,7 +50,7 @@ public:
         const css::uno::Type& aType
     ) override;
 
-    /**_______________________________________________________________________________________________________
+    /**
         @short      increment refcount
         @seealso    XInterface
         @seealso    release()
@@ -68,7 +59,7 @@ public:
 
     virtual void SAL_CALL acquire() throw() override;
 
-    /**_______________________________________________________________________________________________________
+    /**
         @short      decrement refcount
         @seealso    XInterface
         @seealso    acquire()
@@ -140,8 +131,6 @@ public:
 
     static const OUString impl_getStaticImplementationName();
 
-//  protected methods
-
 protected:
     using OPropertySetHelper::getFastPropertyValue;
 
@@ -174,8 +163,6 @@ protected:
         const css::uno::Reference< css::awt::XWindowPeer >& xParentPeer
     ) override;
 
-//  private methods
-
 private:
 
     void impl_createFrame(  const css::uno::Reference< css::awt::XWindowPeer >&       xPeer           ,
@@ -184,18 +171,14 @@ private:
 
     void impl_deleteFrame();
 
-//  private variables
-
-private:
-
     css::uno::Reference< css::frame::XFrame2 >              m_xFrame;
     OUString                                                m_sComponentURL;
     css::uno::Sequence< css::beans::PropertyValue >         m_seqLoaderArguments;
     rtl::Reference<OConnectionPointContainerHelper>         m_aConnectionPointContainer;
 
-};  // class FrameControl
+};
 
-}   // namespace unocontrols
+}
 
 #endif // INCLUDED_UNOCONTROLS_SOURCE_INC_FRAMECONTROL_HXX
 

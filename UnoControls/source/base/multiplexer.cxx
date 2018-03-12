@@ -28,7 +28,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::lang;
 
-namespace unocontrols{
+namespace unocontrols {
 
 //  macros
 

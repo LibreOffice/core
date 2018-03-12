@@ -34,11 +34,7 @@
 
 #include "basecontrol.hxx"
 
-//  "namespaces"
-
-namespace unocontrols{
-
-//  structs, types, forwards
+namespace unocontrols {
 
 struct IMPL_ControlInfo
 {
@@ -50,16 +46,15 @@ class BaseContainerControl  : public css::awt::XControlModel
                             , public css::awt::XControlContainer
                             , public BaseControl
 {
-
 public:
 
-       BaseContainerControl( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
+    BaseContainerControl( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
 
     virtual ~BaseContainerControl() override;
 
     //  XInterface
 
-    /**_______________________________________________________________________________________________________
+    /**
         @short      give answer, if interface is supported
         @descr      The interfaces are searched by type.
 
@@ -78,7 +73,7 @@ public:
 
     //  XTypeProvider
 
-    /**_______________________________________________________________________________________________________
+    /**
         @short      get information about supported interfaces
         @seealso    XTypeProvider
         @return     Sequence of types of all supported interfaces
@@ -155,7 +150,6 @@ protected:
     ) override;
 
 private:
-
     void impl_activateTabControllers();
 
     void impl_cleanMemory();
@@ -168,9 +162,9 @@ private:
 
     ::cppu::OMultiTypeInterfaceContainerHelper                          m_aListeners;
 
-};  // class BaseContainerControl
+};
 
-}   // namespace unocontrols
+}
 
 #endif // INCLUDED_UNOCONTROLS_INC_BASECONTAINERCONTROL_HXX
 

@@ -47,11 +47,7 @@
 #include <cppuhelper/weakref.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 
-//  "namespaces"
-
-namespace unocontrols{
-
-//  class
+namespace unocontrols {
 
 class OMRCListenerMultiplexerHelper : public css::awt::XFocusListener
                                     , public css::awt::XWindowListener
@@ -62,10 +58,9 @@ class OMRCListenerMultiplexerHelper : public css::awt::XFocusListener
                                     , public css::awt::XTopWindowListener
                                     , public ::cppu::OWeakObject
 {
-
 public:
 
-    /**_______________________________________________________________________________________________________
+    /**
         @short      constructor
         @descr      Create a Multiplexer of XWindowEvents.
         @param      rControl    The control. All listeners think that this is the original broadcaster.
@@ -75,7 +70,7 @@ public:
     OMRCListenerMultiplexerHelper(  const   css::uno::Reference< css::awt::XWindow >& xControl    ,
                                     const   css::uno::Reference< css::awt::XWindow >& xPeer       );
 
-    /**_______________________________________________________________________________________________________
+    /**
         @short      copy-constructor
         @descr
         @param      rCopyInstance   C++-Reference to instance to make copy from.
@@ -87,7 +82,7 @@ public:
 
     //  XInterface
 
-    /**_______________________________________________________________________________________________________
+    /**
         @short      give answer, if interface is supported
         @descr      The interfaces are searched by type.
 
@@ -102,7 +97,7 @@ public:
 
     virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) override;
 
-    /**_______________________________________________________________________________________________________
+    /**
         @short      increment refcount
         @seealso    XInterface
         @seealso    release()
@@ -111,7 +106,7 @@ public:
 
     virtual void SAL_CALL acquire() throw() override;
 
-    /**_______________________________________________________________________________________________________
+    /**
         @short      decrement refcount
         @seealso    XInterface
         @seealso    acquire()
@@ -124,27 +119,27 @@ public:
 
     //  container methods
 
-    /**_______________________________________________________________________________________________________
+    /**
         @short      Remove all listeners from the previous set peer and add the needed listeners to rPeer.
         @param      rPeer       The peer from which the original events are dispatched. Null is allowed.
     */
 
     void setPeer( const css::uno::Reference< css::awt::XWindow >& xPeer );
 
-    /**_______________________________________________________________________________________________________
+    /**
         @short      Remove all listeners and send a disposing message.
     */
 
     void disposeAndClear();
 
-    /**_______________________________________________________________________________________________________
+    /**
         @short      Add the specified listener to the source.
     */
 
     void advise(    const   css::uno::Type&                              aType       ,
                     const   css::uno::Reference< css::uno::XInterface >&  xListener   );
 
-    /**_______________________________________________________________________________________________________
+    /**
         @short      Remove the specified listener from the source.
     */
 
@@ -217,7 +212,7 @@ public:
 
 protected:
 
-    /**_______________________________________________________________________________________________________
+    /**
         @short      Remove the listener from the peer.
         @param      xPeer   The peer from which the listener is removed.
         @param      rType   The listener type, which specify the type of the listener.
@@ -226,7 +221,7 @@ protected:
     void impl_adviseToPeer( const   css::uno::Reference< css::awt::XWindow >& xPeer   ,
                             const   css::uno::Type&                          aType   );
 
-    /**_______________________________________________________________________________________________________
+    /**
         @short      Add the listener to the peer.
         @param      xPeer   The peer to which the listener is added.
         @param      rType   The listener type, which specify the type of the listener.
@@ -238,15 +233,14 @@ protected:
 //  private variables
 
 private:
-
     ::osl::Mutex                                m_aMutex;
     css::uno::Reference< css::awt::XWindow >      m_xPeer;   /// The source of the events. Normally this is the peer object.
     css::uno::WeakReference< css::awt::XWindow >  m_xControl;
     ::cppu::OMultiTypeInterfaceContainerHelper  m_aListenerHolder;
 
-};  // class OMRCListenerMultiplexerHelper
+};
 
-}   // namespace unocontrols
+}
 
 #endif // INCLUDED_UNOCONTROLS_INC_MULTIPLEXER_HXX
 
