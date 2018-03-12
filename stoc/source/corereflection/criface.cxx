@@ -763,7 +763,7 @@ Sequence< Reference< XIdlClass > > InterfaceIdlClassImpl::getSuperclasses()
             OSL_ASSERT(_xSuperClasses[i].is());
         }
     }
-    return Sequence< Reference< XIdlClass > >(_xSuperClasses);
+    return _xSuperClasses;
 }
 
 void InterfaceIdlClassImpl::initMembers()
