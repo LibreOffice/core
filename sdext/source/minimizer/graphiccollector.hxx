@@ -57,7 +57,8 @@ class GraphicCollector
         css::uno::Reference< css::drawing::XShape >       mxShape;            // if mbFillBitmap is false the xShape has
         css::uno::Reference< css::beans::XPropertySet >   mxPropertySet;      // to be used otherwise the PropertySet
         css::uno::Reference< css::beans::XPropertySet >   mxPagePropertySet;
-        OUString                       maGraphicURL;
+        css::uno::Reference< css::graphic::XGraphic > mxGraphic;
+
         css::text::GraphicCrop         maGraphicCropLogic;
         css::awt::Size                 maLogicalSize;
         bool                            mbFillBitmap;
