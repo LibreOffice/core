@@ -207,13 +207,13 @@ void ScViewDataTable::ReadUserDataSequence(const uno::Sequence <beans::PropertyV
         }
         else if (sName == SC_HORIZONTALSPLITMODE)
         {
-            aSettings[i].Value >>= nTemp16;
-            eHSplitMode = static_cast<ScSplitMode>(nTemp16);
+            if ((aSettings[i].Value >>= nTemp16) && nTemp16 <= ScSplitMode::SC_SPLIT_MODE_MAX_ENUM)
+                eHSplitMode = static_cast<ScSplitMode>(nTemp16);
         }
         else if (sName == SC_VERTICALSPLITMODE)
         {
-            aSettings[i].Value >>= nTemp16;
-            eVSplitMode = static_cast<ScSplitMode>(nTemp16);
+            if ((aSettings[i].Value >>= nTemp16) && nTemp16 <= ScSplitMode::SC_SPLIT_MODE_MAX_ENUM)
+                eVSplitMode = static_cast<ScSplitMode>(nTemp16);
         }
         else if (sName == SC_HORIZONTALSPLITPOSITION)
         {
@@ -237,8 +237,8 @@ void ScViewDataTable::ReadUserDataSequence(const uno::Sequence <beans::PropertyV
         }
         else if (sName == SC_ACTIVESPLITRANGE)
         {
-            aSettings[i].Value >>= nTemp16;
-            eWhichActive = static_cast<ScSplitPos>(nTemp16);
+            if ((aSettings[i].Value >>= nTemp16) && nTemp16 <= ScSplitPos::SC_SPLIT_POS_MAX_ENUM)
+                eWhichActive = static_cast<ScSplitPos>(nTemp16);
         }
         else if (sName == SC_POSITIONLEFT)
         {
