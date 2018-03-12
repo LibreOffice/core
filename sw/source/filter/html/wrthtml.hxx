@@ -655,7 +655,8 @@ Writer& OutHTML_Image( Writer&, const SwFrameFormat& rFormat,
                        Graphic const & rGraphic, const OUString& rAlternateText,
                        const Size& rRealSize, HtmlFrmOpts nFrameOpts,
                        const sal_Char *pMarkType,
-                       const ImageMap *pGenImgMap = nullptr );
+                       const ImageMap *pGenImgMap = nullptr,
+                       const OUString& rMimeType = OUString() );
 
 Writer& OutHTML_BulletImage( Writer& rWrt, const sal_Char *pTag,
                              const SvxBrushItem* pBrush,
