@@ -670,7 +670,8 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
                     return;
                 }
 
-                rReq.Done(sfx2::openUriExternally(aFileURL, true));
+                sfx2::openUriExternally(aFileURL, true);
+                rReq.Done(true);
                 break;
             }
             else
