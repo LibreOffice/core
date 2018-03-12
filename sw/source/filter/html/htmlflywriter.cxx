@@ -1203,7 +1203,8 @@ Writer& OutHTML_Image( Writer& rWrt, const SwFrameFormat &rFrameFormat,
                        Graphic const & rGraphic, const OUString& rAlternateText,
                        const Size &rRealSize, HtmlFrmOpts nFrameOpts,
                        const sal_Char *pMarkType,
-                       const ImageMap *pAltImgMap )
+                       const ImageMap *pAltImgMap,
+                       const OUString& rMimeType )
 {
     SwHTMLWriter& rHTMLWrt = static_cast<SwHTMLWriter&>(rWrt);
     // <object data="..."> instead of <img src="...">
@@ -1391,13 +1392,8 @@ Writer& OutHTML_Image( Writer& rWrt, const SwFrameFormat &rFrameFormat,
     if (bReplacement)
     {
         // Handle XHTML type attribute for OLE replacement images.
-        uno::Reference<beans::XPropertySet> xGraphic(rGraphic.GetXGraphic(), uno::UNO_QUERY);
-        if (xGraphic.is())
-        {
-            OUString aMimeType;
-            xGraphic->getPropertyValue("MimeType") >>= aMimeType;
-            aHtml.attribute(OOO_STRING_SVTOOLS_HTML_O_type, aMimeType.toUtf8());
-        }
+        if (!rMimeType.isEmpty())
+            aHtml.attribute(OOO_STRING_SVTOOLS_HTML_O_type, rMimeType.toUtf8());
     }
 
     // Events
@@ -1796,6 +1792,7 @@ static Writer& OutHTML_FrameFormatGrfNode( Writer& rWrt, const SwFrameFormat& rF
 
     Graphic aGraphic = pGrfNd->GetGraphic();
     OUString aGraphicURL;
+    OUString aMimeType;
     if(!rHTMLWrt.mbEmbedImages)
     {
         const SwMirrorGrf& rMirror = pGrfNd->GetSwAttrSet().GetMirrorGrf();
@@ -1824,8 +1821,19 @@ static Writer& OutHTML_FrameFormatGrfNode( Writer& rWrt, const SwFrameFormat& rF
             aMM100Size = OutputDevice::LogicToLogic( rSize.GetSize(),
                             MapMode( MapUnit::MapTwip ), MapMode( MapUnit::Map100thMM ));
 
+            OUString aFilterName("JPG");
+
+            if (rHTMLWrt.mbReqIF)
+            {
+                // Writing image without fallback PNG in ReqIF mode: force PNG
+                // output.
+                aFilterName = "PNG";
+                nFlags &= ~XOutFlags::UseNativeIfPossible;
+                aMimeType = "image/png";
+            }
+
             ErrCode nErr = XOutBitmap::WriteGraphic( pGrfNd->GetGrf(), aGraphicURL,
-                    "JPG", nFlags, &aMM100Size );
+                    aFilterName, nFlags, &aMM100Size );
             if( nErr )
             {
                 rHTMLWrt.m_nWarn = WARN_SWG_POOR_LOAD;
@@ -1843,8 +1851,11 @@ static Writer& OutHTML_FrameFormatGrfNode( Writer& rWrt, const SwFrameFormat& rF
         }
 
     }
+    uno::Reference<beans::XPropertySet> xGraphic(aGraphic.GetXGraphic(), uno::UNO_QUERY);
+    if (xGraphic.is() && aMimeType.isEmpty())
+        xGraphic->getPropertyValue("MimeType") >>= aMimeType;
     OutHTML_Image( rWrt, rFrameFormat, aGraphicURL, aGraphic, pGrfNd->GetTitle(),
-                  pGrfNd->GetTwipSize(), nFrameFlags, "graphic" );
+                  pGrfNd->GetTwipSize(), nFrameFlags, "graphic", nullptr, aMimeType );
 
     return rWrt;
 }
