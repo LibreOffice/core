@@ -324,7 +324,7 @@ std::vector<Any> HsqlRowInputStream::readOneRow(const ColumnTypeVector& nColType
             {
                 sal_Int64 nEpochMillis = 0;
                 m_pStream->ReadInt64(nEpochMillis);
-                sal_Int64 nEpochSec = nEpochMillis / 1000;
+                std::time_t nEpochSec = nEpochMillis / 1000;
                 std::tm* tm = std::gmtime(&nEpochSec);
 
                 sal_Int32 nNanos = 0;
