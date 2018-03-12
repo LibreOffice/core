@@ -1724,13 +1724,10 @@ namespace pcr
 
         }   // switch ( nActuatingPropId )
 
-        for ( std::vector< PropertyId >::const_iterator loopAffected = aDependentProperties.begin();
-              loopAffected != aDependentProperties.end();
-              ++loopAffected
-            )
+        for (auto const& dependentProperty : aDependentProperties)
         {
-            if ( impl_isSupportedProperty_nothrow( *loopAffected ) )
-                impl_updateDependentProperty_nothrow( *loopAffected, _rxInspectorUI );
+            if ( impl_isSupportedProperty_nothrow(dependentProperty) )
+                impl_updateDependentProperty_nothrow(dependentProperty, _rxInspectorUI);
         }
     }
 

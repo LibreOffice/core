@@ -639,16 +639,14 @@ namespace pcr
     sal_uInt16 OBrowserListBox::GetPropertyPos( const OUString& _rEntryName ) const
     {
         sal_uInt16 nRet = EDITOR_LIST_ENTRY_NOTFOUND;
-        for ( ListBoxLines::const_iterator linePos = m_aLines.begin();
-              linePos != m_aLines.end();
-              ++linePos
-            )
+        sal_uInt16 nPos = 0;
+        for (auto const& line : m_aLines)
         {
-            if ( linePos->aName == _rEntryName )
+            if ( line.aName == _rEntryName )
             {
-                nRet = static_cast<sal_uInt16>( linePos - m_aLines.begin() );
-                break;
+                return nPos;
             }
+            ++nPos;
         }
 
         return nRet;
@@ -700,10 +698,14 @@ namespace pcr
         BrowserLinePointer pBrowserLine( new OBrowserLine( _rPropertyData.sName, m_aLinesPlayground.get() ) );
 
         // check that the name is unique
-        ListBoxLines::iterator it = m_aLines.begin();
-        for ( ; it != m_aLines.end() && ( it->aName != _rPropertyData.sName ); ++it )
-            ;
-        OSL_ENSURE( it == m_aLines.end(), "OBrowserListBox::InsertEntry: already have another line for this name!" );
+        for (auto const& line : m_aLines)
+        {
+            if (line.aName == _rPropertyData.sName)
+            {
+                // already have another line for this name!
+                assert(false);
+            }
+        }
 
         ListBoxLine aNewLine( _rPropertyData.sName, pBrowserLine, _rPropertyData.xPropertyHandler );
         ListBoxLines::size_type nInsertPos = _nPos;
@@ -909,10 +911,13 @@ namespace pcr
 
     sal_uInt16 OBrowserListBox::impl_getControlPos( const Reference< XPropertyControl >& _rxControl ) const
     {
-        for ( ListBoxLines::const_iterator search = m_aLines.begin(); search != m_aLines.end(); ++search )
-            if ( search->pLine->getControl().get() == _rxControl.get() )
-                return sal_uInt16( search - m_aLines.begin() );
-
+        sal_uInt16 nPos = 0;
+        for (auto const& search : m_aLines)
+        {
+            if ( search.pLine->getControl().get() == _rxControl.get() )
+                return nPos;
+            ++nPos;
+        }
         OSL_FAIL( "OBrowserListBox::impl_getControlPos: invalid control - not part of any of our lines!" );
         return sal_uInt16(-1);
     }
@@ -1001,12 +1006,12 @@ namespace pcr
 
     void OBrowserListBox::Clear()
     {
-        for ( ListBoxLines::iterator loop = m_aLines.begin(); loop != m_aLines.end(); ++loop )
+        for (auto const& line : m_aLines)
         {
             // hide the line
-            loop->pLine->Hide();
+            line.pLine->Hide();
             // reset the listener
-            lcl_implDisposeControl_nothrow( loop->pLine->getControl() );
+            lcl_implDisposeControl_nothrow( line.pLine->getControl() );
         }
 
         clearContainer( m_aLines );

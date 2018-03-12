@@ -351,11 +351,8 @@ namespace dbp
 
         // fill the listbox
         m_pDefSelection->Clear();
-        for (   StringArray::const_iterator aLoop = rSettings.aLabels.begin();
-                aLoop != rSettings.aLabels.end();
-                ++aLoop
-            )
-            m_pDefSelection->InsertEntry(*aLoop);
+        for (auto const& label : rSettings.aLabels)
+            m_pDefSelection->InsertEntry(label);
 
 
         implInitialize(rSettings.sDefaultField);
@@ -434,11 +431,8 @@ namespace dbp
         // fill the list with all available options
         m_pOptions->Clear();
         m_nLastSelection = -1;
-        for (   StringArray::const_iterator aLoop = rSettings.aLabels.begin();
-                aLoop != rSettings.aLabels.end();
-                ++aLoop
-            )
-            m_pOptions->InsertEntry(*aLoop);
+        for (auto const& label : rSettings.aLabels)
+            m_pOptions->InsertEntry(label);
 
         // remember the values ... can't set them directly in the settings without the explicit commit call
         // so we need have a copy of the values

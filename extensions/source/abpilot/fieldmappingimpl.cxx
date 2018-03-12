@@ -256,18 +256,15 @@ namespace abp
 
             // now everything remaining in aFieldAssignment marks a mapping entry which was not present
             // in the config before
-            for (   MapString2String::const_iterator aNewMapping = aFieldAssignment.begin();
-                    aNewMapping != aFieldAssignment.end();
-                    ++aNewMapping
-                )
+            for (auto const& elem : aFieldAssignment)
             {
-                DBG_ASSERT( !aFields.hasByName( aNewMapping->first ),
+                DBG_ASSERT( !aFields.hasByName( elem.first ),
                     "fieldmapping::writeTemplateAddressFieldMapping: inconsistence!" );
                     // in case the config node for the fields already has the node named <aNewMapping->first>,
                     // the entry should have been removed from aNewMapping (in the above loop)
-                OConfigurationNode aNewField =  aFields.createNode( aNewMapping->first );
-                aNewField.setNodeValue( sProgrammaticNodeName, makeAny( aNewMapping->first ) );
-                aNewField.setNodeValue( sAssignedNodeName, makeAny( aNewMapping->second ) );
+                OConfigurationNode aNewField =  aFields.createNode( elem.first );
+                aNewField.setNodeValue( sProgrammaticNodeName, makeAny( elem.first ) );
+                aNewField.setNodeValue( sAssignedNodeName, makeAny( elem.second ) );
             }
 
             // commit the changes done

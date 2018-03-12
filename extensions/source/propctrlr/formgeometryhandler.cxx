@@ -750,13 +750,10 @@ namespace pcr
         aTranslatedEvent.Source = m_rParent;
 
         aGuard.clear();
-        for ( std::vector< EventTranslation >::const_iterator t = aEventTranslations.begin();
-              t != aEventTranslations.end();
-              ++t
-            )
+        for (auto const& eventTranslation : aEventTranslations)
         {
-            aTranslatedEvent.PropertyName = t->sPropertyName;
-            aTranslatedEvent.NewValue = t->aNewPropertyValue;
+            aTranslatedEvent.PropertyName = eventTranslation.sPropertyName;
+            aTranslatedEvent.NewValue = eventTranslation.aNewPropertyValue;
             m_aPropertyChangeListeners.notifyEach( &XPropertyChangeListener::propertyChange, aTranslatedEvent );
         }
     }

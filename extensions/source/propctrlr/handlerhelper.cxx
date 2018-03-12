@@ -129,11 +129,8 @@ namespace pcr
             if ( _bSorted )
                 std::sort( aInitialEntries.begin(), aInitialEntries.end() );
 
-            for (   std::vector< OUString >::const_iterator loop = aInitialEntries.begin();
-                    loop != aInitialEntries.end();
-                    ++loop
-                )
-                xListControl->appendListEntry( *loop );
+            for (auto const& initialEntry : aInitialEntries)
+                xListControl->appendListEntry(initialEntry);
             return xListControl.get();
         }
     }
