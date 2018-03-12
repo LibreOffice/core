@@ -86,22 +86,22 @@ inline bool IsMarkInSameSection( SwWrtShell& rWrtSh, const SwSection* pSect )
 
 SwColumnDlg::SwColumnDlg(vcl::Window* pParent, SwWrtShell& rSh)
     : SfxModalDialog(pParent, "ColumnDialog", "modules/swriter/ui/columndialog.ui")
-    , rWrtShell(rSh)
-    , pPageSet(nullptr)
-    , pSectionSet(nullptr)
-    , pSelectionSet(nullptr)
-    , pFrameSet(nullptr)
-    , nOldSelection(0)
-    , nSelectionWidth(0)
-    , bPageChanged(false)
-    , bSectionChanged(false)
-    , bSelSectionChanged(false)
-    , bFrameChanged(false)
+    , m_rWrtShell(rSh)
+    , m_pPageSet(nullptr)
+    , m_pSectionSet(nullptr)
+    , m_pSelectionSet(nullptr)
+    , m_pFrameSet(nullptr)
+    , m_nOldSelection(0)
+    , m_nSelectionWidth(0)
+    , m_bPageChanged(false)
+    , m_bSectionChanged(false)
+    , m_bSelSectionChanged(false)
+    , m_bFrameChanged(false)
 {
     SwRect aRect;
-    rWrtShell.CalcBoundRect(aRect, RndStdIds::FLY_AS_CHAR);
+    m_rWrtShell.CalcBoundRect(aRect, RndStdIds::FLY_AS_CHAR);
 
-    nSelectionWidth = aRect.Width();
+    m_nSelectionWidth = aRect.Width();
 
     SfxItemSet* pColPgSet = nullptr;
     static sal_uInt16 const aSectIds[] = { RES_COL, RES_COL,
@@ -109,66 +109,66 @@ SwColumnDlg::SwColumnDlg(vcl::Window* pParent, SwWrtShell& rSh)
                                                 RES_COLUMNBALANCE, RES_FRAMEDIR,
                                                 0 };
 
-    const SwSection* pCurrSection = rWrtShell.GetCurrSection();
-    const sal_uInt16 nFullSectCnt = rWrtShell.GetFullSelectedSectionCount();
-    if( pCurrSection && ( !rWrtShell.HasSelection() || 0 != nFullSectCnt ))
+    const SwSection* pCurrSection = m_rWrtShell.GetCurrSection();
+    const sal_uInt16 nFullSectCnt = m_rWrtShell.GetFullSelectedSectionCount();
+    if( pCurrSection && ( !m_rWrtShell.HasSelection() || 0 != nFullSectCnt ))
     {
-        nSelectionWidth = rSh.GetSectionWidth(*pCurrSection->GetFormat());
-        if ( !nSelectionWidth )
-            nSelectionWidth = USHRT_MAX;
-        pSectionSet = new SfxItemSet( rWrtShell.GetAttrPool(), aSectIds );
-        pSectionSet->Put( pCurrSection->GetFormat()->GetAttrSet() );
-        pColPgSet = pSectionSet;
+        m_nSelectionWidth = rSh.GetSectionWidth(*pCurrSection->GetFormat());
+        if ( !m_nSelectionWidth )
+            m_nSelectionWidth = USHRT_MAX;
+        m_pSectionSet = new SfxItemSet( m_rWrtShell.GetAttrPool(), aSectIds );
+        m_pSectionSet->Put( pCurrSection->GetFormat()->GetAttrSet() );
+        pColPgSet = m_pSectionSet;
     }
 
-    if( rWrtShell.HasSelection() && rWrtShell.IsInsRegionAvailable() &&
+    if( m_rWrtShell.HasSelection() && m_rWrtShell.IsInsRegionAvailable() &&
         ( !pCurrSection || ( 1 != nFullSectCnt &&
-            IsMarkInSameSection( rWrtShell, pCurrSection ) )))
+            IsMarkInSameSection( m_rWrtShell, pCurrSection ) )))
     {
-        pSelectionSet = new SfxItemSet( rWrtShell.GetAttrPool(), aSectIds );
-        pColPgSet = pSelectionSet;
+        m_pSelectionSet = new SfxItemSet( m_rWrtShell.GetAttrPool(), aSectIds );
+        pColPgSet = m_pSelectionSet;
     }
 
-    if( rWrtShell.GetFlyFrameFormat() )
+    if( m_rWrtShell.GetFlyFrameFormat() )
     {
         const SwFrameFormat* pFormat = rSh.GetFlyFrameFormat() ;
-        pFrameSet = new SfxItemSet(rWrtShell.GetAttrPool(), aSectIds );
-        pFrameSet->Put(pFormat->GetFrameSize());
-        pFrameSet->Put(pFormat->GetCol());
-        pColPgSet = pFrameSet;
+        m_pFrameSet = new SfxItemSet(m_rWrtShell.GetAttrPool(), aSectIds );
+        m_pFrameSet->Put(pFormat->GetFrameSize());
+        m_pFrameSet->Put(pFormat->GetCol());
+        pColPgSet = m_pFrameSet;
     }
 
-    const SwPageDesc* pPageDesc = rWrtShell.GetSelectedPageDescs();
+    const SwPageDesc* pPageDesc = m_rWrtShell.GetSelectedPageDescs();
     if( pPageDesc )
     {
-        pPageSet = new SfxItemSet(
-            rWrtShell.GetAttrPool(),
+        m_pPageSet = new SfxItemSet(
+            m_rWrtShell.GetAttrPool(),
             svl::Items<
                 RES_FRM_SIZE, RES_FRM_SIZE,
                 RES_LR_SPACE, RES_LR_SPACE,
                 RES_COL, RES_COL>{});
 
         const SwFrameFormat &rFormat = pPageDesc->GetMaster();
-        nPageWidth = rFormat.GetFrameSize().GetSize().Width();
+        m_nPageWidth = rFormat.GetFrameSize().GetSize().Width();
 
         const SvxLRSpaceItem& rLRSpace = rFormat.GetLRSpace();
         const SvxBoxItem& rBox = rFormat.GetBox();
-        nPageWidth -= rLRSpace.GetLeft() + rLRSpace.GetRight() + rBox.GetSmallestDistance();
+        m_nPageWidth -= rLRSpace.GetLeft() + rLRSpace.GetRight() + rBox.GetSmallestDistance();
 
-        pPageSet->Put(rFormat.GetCol());
-        pPageSet->Put(rFormat.GetLRSpace());
-        pColPgSet = pPageSet;
+        m_pPageSet->Put(rFormat.GetCol());
+        m_pPageSet->Put(rFormat.GetLRSpace());
+        pColPgSet = m_pPageSet;
     }
 
     assert(pColPgSet);
 
     // create TabPage
-    pTabPage = static_cast<SwColumnPage*>( SwColumnPage::Create(get_content_area(), pColPgSet).get() );
-    pTabPage->get<vcl::Window>("applytoft")->Show();
-    pTabPage->get(m_pApplyToLB, "applytolb");
+    m_pTabPage = static_cast<SwColumnPage*>( SwColumnPage::Create(get_content_area(), pColPgSet).get() );
+    m_pTabPage->get<vcl::Window>("applytoft")->Show();
+    m_pTabPage->get(m_pApplyToLB, "applytolb");
     m_pApplyToLB->Show();
 
-    if (pCurrSection && (!rWrtShell.HasSelection() || 0 != nFullSectCnt))
+    if (pCurrSection && (!m_rWrtShell.HasSelection() || 0 != nFullSectCnt))
     {
         m_pApplyToLB->RemoveEntry( m_pApplyToLB->GetEntryPos(
                                         reinterpret_cast<void*>(static_cast<sal_IntPtr>( 1 >= nFullSectCnt
@@ -181,16 +181,16 @@ SwColumnDlg::SwColumnDlg(vcl::Window* pParent, SwWrtShell& rSh)
         m_pApplyToLB->RemoveEntry(m_pApplyToLB->GetEntryPos( reinterpret_cast<void*>(sal_IntPtr(LISTBOX_SECTIONS)) ));
     }
 
-    if (!( rWrtShell.HasSelection() && rWrtShell.IsInsRegionAvailable() &&
+    if (!( m_rWrtShell.HasSelection() && m_rWrtShell.IsInsRegionAvailable() &&
         ( !pCurrSection || ( 1 != nFullSectCnt &&
-            IsMarkInSameSection( rWrtShell, pCurrSection ) ))))
+            IsMarkInSameSection( m_rWrtShell, pCurrSection ) ))))
         m_pApplyToLB->RemoveEntry(m_pApplyToLB->GetEntryPos( reinterpret_cast<void*>(sal_IntPtr(LISTBOX_SELECTION)) ));
 
-    if (!rWrtShell.GetFlyFrameFormat())
+    if (!m_rWrtShell.GetFlyFrameFormat())
         m_pApplyToLB->RemoveEntry(m_pApplyToLB->GetEntryPos( reinterpret_cast<void*>(LISTBOX_FRAME) ));
 
     const sal_Int32 nPagePos = m_pApplyToLB->GetEntryPos( reinterpret_cast<void*>(LISTBOX_PAGE) );
-    if (pPageSet && pPageDesc)
+    if (m_pPageSet && pPageDesc)
     {
         const OUString sPageStr = m_pApplyToLB->GetEntry(nPagePos) + pPageDesc->GetName();
         m_pApplyToLB->RemoveEntry(nPagePos);
@@ -210,8 +210,8 @@ SwColumnDlg::SwColumnDlg(vcl::Window* pParent, SwWrtShell& rSh)
     if( !m_pApplyToLB->GetEntryCount() )
         pOK->Enable( false );
     //#i97810# set focus to the TabPage
-    pTabPage->ActivateColumnControl();
-    pTabPage->Show();
+    m_pTabPage->ActivateColumnControl();
+    m_pTabPage->Show();
 }
 
 SwColumnDlg::~SwColumnDlg()
@@ -221,10 +221,10 @@ SwColumnDlg::~SwColumnDlg()
 
 void SwColumnDlg::dispose()
 {
-    pTabPage.disposeAndClear();
-    delete pPageSet;
-    delete pSectionSet;
-    delete pSelectionSet;
+    m_pTabPage.disposeAndClear();
+    delete m_pPageSet;
+    delete m_pSectionSet;
+    delete m_pSelectionSet;
     m_pApplyToLB.clear();
     SfxModalDialog::dispose();
 }
@@ -240,95 +240,95 @@ void SwColumnDlg::ObjectHdl(ListBox const * pBox)
 
     if(pBox)
     {
-        pTabPage->FillItemSet(pSet);
+        m_pTabPage->FillItemSet(pSet);
     }
-    nOldSelection = reinterpret_cast<sal_IntPtr>(m_pApplyToLB->GetSelectedEntryData());
-    long nWidth = nSelectionWidth;
-    switch(nOldSelection)
+    m_nOldSelection = reinterpret_cast<sal_IntPtr>(m_pApplyToLB->GetSelectedEntryData());
+    long nWidth = m_nSelectionWidth;
+    switch(m_nOldSelection)
     {
         case LISTBOX_SELECTION  :
-            pSet = pSelectionSet;
-            if( pSelectionSet )
+            pSet = m_pSelectionSet;
+            if( m_pSelectionSet )
                 pSet->Put(SwFormatFrameSize(ATT_VAR_SIZE, nWidth, nWidth));
         break;
         case LISTBOX_SECTION    :
         case LISTBOX_SECTIONS   :
-            pSet = pSectionSet;
+            pSet = m_pSectionSet;
             pSet->Put(SwFormatFrameSize(ATT_VAR_SIZE, nWidth, nWidth));
         break;
         case LISTBOX_PAGE       :
-            nWidth = nPageWidth;
-            pSet = pPageSet;
+            nWidth = m_nPageWidth;
+            pSet = m_pPageSet;
             pSet->Put(SwFormatFrameSize(ATT_VAR_SIZE, nWidth, nWidth));
         break;
         case LISTBOX_FRAME:
-            pSet = pFrameSet;
+            pSet = m_pFrameSet;
         break;
     }
 
-    bool bIsSection = pSet == pSectionSet || pSet == pSelectionSet;
-    pTabPage->ShowBalance(bIsSection);
-    pTabPage->SetInSection(bIsSection);
-    pTabPage->SetFrameMode(true);
-    pTabPage->SetPageWidth(nWidth);
+    bool bIsSection = pSet == m_pSectionSet || pSet == m_pSelectionSet;
+    m_pTabPage->ShowBalance(bIsSection);
+    m_pTabPage->SetInSection(bIsSection);
+    m_pTabPage->SetFrameMode(true);
+    m_pTabPage->SetPageWidth(nWidth);
     if( pSet )
-        pTabPage->Reset(pSet);
+        m_pTabPage->Reset(pSet);
 }
 
 IMPL_LINK_NOARG(SwColumnDlg, OkHdl, Button*, void)
 {
     // evaluate current selection
     SfxItemSet* pSet = EvalCurrentSelection();
-    pTabPage->FillItemSet(pSet);
+    m_pTabPage->FillItemSet(pSet);
 
-    if(pSelectionSet && SfxItemState::SET == pSelectionSet->GetItemState(RES_COL))
+    if(m_pSelectionSet && SfxItemState::SET == m_pSelectionSet->GetItemState(RES_COL))
     {
         //insert region with columns
-        const SwFormatCol& rColItem = pSelectionSet->Get(RES_COL);
+        const SwFormatCol& rColItem = m_pSelectionSet->Get(RES_COL);
         //only if there actually are columns!
         if(rColItem.GetNumCols() > 1)
-            rWrtShell.GetView().GetViewFrame()->GetDispatcher()->Execute(
-                FN_INSERT_REGION, SfxCallMode::ASYNCHRON, *pSelectionSet );
+            m_rWrtShell.GetView().GetViewFrame()->GetDispatcher()->Execute(
+                FN_INSERT_REGION, SfxCallMode::ASYNCHRON, *m_pSelectionSet );
     }
 
-    if(pSectionSet && pSectionSet->Count() && bSectionChanged )
+    if(m_pSectionSet && m_pSectionSet->Count() && m_bSectionChanged )
     {
-        const SwSection* pCurrSection = rWrtShell.GetCurrSection();
+        const SwSection* pCurrSection = m_rWrtShell.GetCurrSection();
         const SwSectionFormat* pFormat = pCurrSection->GetFormat();
-        const size_t nNewPos = rWrtShell.GetSectionFormatPos( *pFormat );
+        const size_t nNewPos = m_rWrtShell.GetSectionFormatPos( *pFormat );
         SwSectionData aData(*pCurrSection);
-        rWrtShell.UpdateSection( nNewPos, aData, pSectionSet );
+        m_rWrtShell.UpdateSection( nNewPos, aData, m_pSectionSet );
     }
 
-    if(pSectionSet && pSectionSet->Count() && bSelSectionChanged )
+    if(m_pSectionSet && m_pSectionSet->Count() && m_bSelSectionChanged )
     {
-        rWrtShell.SetSectionAttr( *pSectionSet );
+        m_rWrtShell.SetSectionAttr( *m_pSectionSet );
     }
 
-    if(pPageSet && SfxItemState::SET == pPageSet->GetItemState(RES_COL) && bPageChanged)
+    if(m_pPageSet && SfxItemState::SET == m_pPageSet->GetItemState(RES_COL) && m_bPageChanged)
     {
         // determine current PageDescriptor and fill the Set with it
-        const size_t nCurIdx = rWrtShell.GetCurPageDesc();
-        SwPageDesc aPageDesc(rWrtShell.GetPageDesc(nCurIdx));
+        const size_t nCurIdx = m_rWrtShell.GetCurPageDesc();
+        SwPageDesc aPageDesc(m_rWrtShell.GetPageDesc(nCurIdx));
         SwFrameFormat &rFormat = aPageDesc.GetMaster();
-        rFormat.SetFormatAttr(pPageSet->Get(RES_COL));
-        rWrtShell.ChgPageDesc(nCurIdx, aPageDesc);
+        rFormat.SetFormatAttr(m_pPageSet->Get(RES_COL));
+        m_rWrtShell.ChgPageDesc(nCurIdx, aPageDesc);
     }
-    if(pFrameSet && SfxItemState::SET == pFrameSet->GetItemState(RES_COL) && bFrameChanged)
+    if(m_pFrameSet && SfxItemState::SET == m_pFrameSet->GetItemState(RES_COL) && m_bFrameChanged)
     {
-        SfxItemSet aTmp(*pFrameSet->GetPool(), svl::Items<RES_COL, RES_COL>{});
-        aTmp.Put(*pFrameSet);
-        rWrtShell.StartAction();
-        rWrtShell.Push();
-        rWrtShell.SetFlyFrameAttr( aTmp );
+        SfxItemSet aTmp(*m_pFrameSet->GetPool(), svl::Items<RES_COL, RES_COL>{});
+        aTmp.Put(*m_pFrameSet);
+        m_rWrtShell.StartAction();
+        m_rWrtShell.Push();
+        m_rWrtShell.SetFlyFrameAttr( aTmp );
         // undo the frame selection again
-        if(rWrtShell.IsFrameSelected())
+        if(m_rWrtShell.IsFrameSelected())
         {
-            rWrtShell.UnSelectFrame();
-            rWrtShell.LeaveSelFrameMode();
+            m_rWrtShell.UnSelectFrame();
+            m_rWrtShell.LeaveSelFrameMode();
         }
-        rWrtShell.Pop();
-        rWrtShell.EndAction();
+        m_rWrtShell.Pop();
+        m_rWrtShell.EndAction();
     }
     EndDialog(RET_OK);
 }
@@ -337,26 +337,26 @@ SfxItemSet* SwColumnDlg::EvalCurrentSelection(void)
 {
     SfxItemSet* pSet = nullptr;
 
-    switch(nOldSelection)
+    switch(m_nOldSelection)
     {
         case LISTBOX_SELECTION  :
-            pSet = pSelectionSet;
+            pSet = m_pSelectionSet;
         break;
         case LISTBOX_SECTION    :
-            pSet = pSectionSet;
-            bSectionChanged = true;
+            pSet = m_pSectionSet;
+            m_bSectionChanged = true;
         break;
         case LISTBOX_SECTIONS   :
-            pSet = pSectionSet;
-            bSelSectionChanged = true;
+            pSet = m_pSectionSet;
+            m_bSelSectionChanged = true;
         break;
         case LISTBOX_PAGE       :
-            pSet = pPageSet;
-            bPageChanged = true;
+            pSet = m_pPageSet;
+            m_bPageChanged = true;
         break;
         case LISTBOX_FRAME:
-            pSet = pFrameSet;
-            bFrameChanged = true;
+            pSet = m_pFrameSet;
+            m_bFrameChanged = true;
         break;
     }
 

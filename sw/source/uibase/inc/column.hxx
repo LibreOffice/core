@@ -46,21 +46,21 @@ class SwColumnDlg : public SfxModalDialog
 {
     VclPtr<ListBox>            m_pApplyToLB;
 
-    SwWrtShell&         rWrtShell;
-    VclPtr<SwColumnPage>       pTabPage;
-    SfxItemSet*         pPageSet;
-    SfxItemSet*         pSectionSet;
-    SfxItemSet*         pSelectionSet;
-    SfxItemSet*         pFrameSet;
+    SwWrtShell&         m_rWrtShell;
+    VclPtr<SwColumnPage>       m_pTabPage;
+    SfxItemSet*         m_pPageSet;
+    SfxItemSet*         m_pSectionSet;
+    SfxItemSet*         m_pSelectionSet;
+    SfxItemSet*         m_pFrameSet;
 
-    long                nOldSelection;
-    long                nSelectionWidth;
-    long                nPageWidth;
+    long                m_nOldSelection;
+    long                m_nSelectionWidth;
+    long                m_nPageWidth;
 
-    bool                bPageChanged : 1;
-    bool                bSectionChanged : 1;
-    bool                bSelSectionChanged : 1;
-    bool                bFrameChanged : 1;
+    bool                m_bPageChanged : 1;
+    bool                m_bSectionChanged : 1;
+    bool                m_bSelSectionChanged : 1;
+    bool                m_bFrameChanged : 1;
 
     DECL_LINK(ObjectListBoxHdl, ListBox&, void);
     DECL_LINK(OkHdl, Button*, void);
