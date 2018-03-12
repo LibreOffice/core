@@ -19,7 +19,7 @@ public:
                  BitmapFilter();
     virtual      ~BitmapFilter();
 
-    virtual bool filter(Bitmap& rBitmap) = 0;
+    virtual bool execute(Bitmap& rBitmap) = 0;
 };
 
 #endif

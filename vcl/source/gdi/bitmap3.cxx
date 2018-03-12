@@ -776,28 +776,28 @@ bool Bitmap::Scale( const double& rScaleX, const double& rScaleY, BmpScaleFlag n
             }
             else
             {
-                BitmapScaleSuper aScaleSuper(rScaleX, rScaleY);
-                bRetval = aScaleSuper.filter(*this);
+                BitmapScaleSuperFilter aScaleSuperFilter(rScaleX, rScaleY);
+                bRetval = aScaleSuperFilter.execute(*this);
             }
             break;
         }
         case BmpScaleFlag::Lanczos :
         case BmpScaleFlag::BestQuality:
         {
-            vcl::BitmapScaleConvolution aScaleConvolution(rScaleX, rScaleY, vcl::ConvolutionKernelType::Lanczos3);
-            bRetval = aScaleConvolution.filter(*this);
+            vcl::BitmapScaleConvolutionFilter aScaleConvolutionFilter(rScaleX, rScaleY, vcl::ConvolutionKernelType::Lanczos3);
+            bRetval = aScaleConvolutionFilter.execute(*this);
             break;
         }
         case BmpScaleFlag::BiCubic :
         {
-            vcl::BitmapScaleConvolution aScaleConvolution(rScaleX, rScaleY, vcl::ConvolutionKernelType::BiCubic);
-            bRetval = aScaleConvolution.filter(*this);
+            vcl::BitmapScaleConvolutionFilter aScaleConvolutionFilter(rScaleX, rScaleY, vcl::ConvolutionKernelType::BiCubic);
+            bRetval = aScaleConvolutionFilter.execute(*this);
             break;
         }
         case BmpScaleFlag::BiLinear :
         {
-            vcl::BitmapScaleConvolution aScaleConvolution(rScaleX, rScaleY, vcl::ConvolutionKernelType::BiLinear);
-            bRetval = aScaleConvolution.filter(*this);
+            vcl::BitmapScaleConvolutionFilter aScaleConvolutionFilter(rScaleX, rScaleY, vcl::ConvolutionKernelType::BiLinear);
+            bRetval = aScaleConvolutionFilter.execute(*this);
             break;
         }
     }
