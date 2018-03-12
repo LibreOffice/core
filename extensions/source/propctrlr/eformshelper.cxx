@@ -655,12 +655,9 @@ namespace pcr
             _rElementNames.reserve( aModels.size() * 2 );    // heuristics
 
             // for every model, obtain the element
-            for ( std::vector< OUString >::const_iterator pModelName = aModels.begin();
-                  pModelName != aModels.end();
-                  ++pModelName
-                )
+            for (auto const& modelName : aModels)
             {
-                Reference< xforms::XModel > xModel = getFormModelByName( *pModelName );
+                Reference< xforms::XModel > xModel = getFormModelByName(modelName);
                 OSL_ENSURE( xModel.is(), "EFormsHelper::getAllElementUINames: inconsistency in the models!" );
                 Reference< xforms::XFormsUIHelper1 > xHelper( xModel, UNO_QUERY );
 
@@ -687,7 +684,7 @@ namespace pcr
                     }
 #endif
                     OUString sElementName = ( _eType == Submission ) ? xHelper->getSubmissionName( xElement, true ) : xHelper->getBindingName( xElement, true );
-                    OUString sUIName = composeModelElementUIName( *pModelName, sElementName );
+                    OUString sUIName = composeModelElementUIName( modelName, sElementName );
 
                     OSL_ENSURE( rMapUINameToElement.find( sUIName ) == rMapUINameToElement.end(), "EFormsHelper::getAllElementUINames: duplicate name!" );
                     rMapUINameToElement.emplace( sUIName, xElement );
@@ -742,23 +739,20 @@ namespace pcr
             Reference< XPropertySetInfo > xOldInfo = collectPropertiesGetInfo( _rxOldProps, aProperties );
             Reference< XPropertySetInfo > xNewInfo = collectPropertiesGetInfo( _rxNewProps, aProperties );
 
-            for ( PropertyBag::const_iterator aProp = aProperties.begin();
-                  aProp != aProperties.end();
-                  ++aProp
-                )
+            for (auto const& property : aProperties)
             {
-                if ( _rFilter.find( aProp->Name ) != _rFilter.end() )
+                if ( _rFilter.find( property.Name ) != _rFilter.end() )
                     continue;
 
-                Any aOldValue( nullptr, aProp->Type );
-                if ( xOldInfo.is() && xOldInfo->hasPropertyByName( aProp->Name ) )
-                    aOldValue = _rxOldProps->getPropertyValue( aProp->Name );
+                Any aOldValue( nullptr, property.Type );
+                if ( xOldInfo.is() && xOldInfo->hasPropertyByName( property.Name ) )
+                    aOldValue = _rxOldProps->getPropertyValue( property.Name );
 
-                Any aNewValue( nullptr, aProp->Type );
-                if ( xNewInfo.is() && xNewInfo->hasPropertyByName( aProp->Name ) )
-                    aNewValue = _rxNewProps->getPropertyValue( aProp->Name );
+                Any aNewValue( nullptr, property.Type );
+                if ( xNewInfo.is() && xNewInfo->hasPropertyByName( property.Name ) )
+                    aNewValue = _rxNewProps->getPropertyValue( property.Name );
 
-                firePropertyChange( aProp->Name, aOldValue, aNewValue );
+                firePropertyChange( property.Name, aOldValue, aNewValue );
             }
         }
         catch( const Exception& )

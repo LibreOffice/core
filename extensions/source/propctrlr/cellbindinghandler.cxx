@@ -189,12 +189,9 @@ namespace pcr
             OSL_FAIL( "CellBindingPropertyHandler::actuatingPropertyChanged: did not register for this property!" );
         }
 
-        for ( std::vector< PropertyId >::const_iterator loopAffected = aDependentProperties.begin();
-              loopAffected != aDependentProperties.end();
-              ++loopAffected
-            )
+        for (auto const& dependentProperty : aDependentProperties)
         {
-            impl_updateDependentProperty_nothrow( *loopAffected, _rxInspectorUI );
+            impl_updateDependentProperty_nothrow( dependentProperty, _rxInspectorUI );
         }
     }
 

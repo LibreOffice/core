@@ -65,18 +65,15 @@ namespace uno = com::sun::star::uno ;
 // Returns the URL of the release note for the given position
 OUString getReleaseNote(const UpdateInfo& rInfo, sal_uInt8 pos, bool autoDownloadEnabled)
 {
-    std::vector< ReleaseNote >::const_iterator iter = rInfo.ReleaseNotes.begin();
-    while( iter != rInfo.ReleaseNotes.end() )
+    for (auto const& elem : rInfo.ReleaseNotes)
     {
-        if( pos == iter->Pos )
+        if( pos == elem.Pos )
         {
-            if( (pos > 2) || !autoDownloadEnabled || iter->URL2.isEmpty() )
-                return iter->URL;
+            if( (pos > 2) || !autoDownloadEnabled || elem.URL2.isEmpty() )
+                return elem.URL;
         }
-        else if( (pos == iter->Pos2) && ((1 == iter->Pos) || (2 == iter->Pos)) && autoDownloadEnabled )
-            return iter->URL2;
-
-        ++iter;
+        else if( (pos == elem.Pos2) && ((1 == elem.Pos) || (2 == elem.Pos)) && autoDownloadEnabled )
+            return elem.URL2;
     }
 
     return OUString();
@@ -1249,18 +1246,15 @@ UpdateCheck::setUpdateInfo(const UpdateInfo& aInfo)
     // Decide whether to use alternate release note pos ..
     bool autoDownloadEnabled = rModel->isAutoDownloadEnabled();
 
-    std::vector< ReleaseNote >::iterator iter2 = m_aUpdateInfo.ReleaseNotes.begin();
-    while( iter2 != m_aUpdateInfo.ReleaseNotes.end() )
+    for (auto & elem : m_aUpdateInfo.ReleaseNotes)
     {
-        if( ((1 == iter2->Pos) || (2 == iter2->Pos)) && autoDownloadEnabled && !iter2->URL2.isEmpty())
+        if( ((1 == elem.Pos) || (2 == elem.Pos)) && autoDownloadEnabled && !elem.URL2.isEmpty())
         {
-            iter2->URL = iter2->URL2;
-            iter2->URL2.clear();
-            iter2->Pos = iter2->Pos2;
-            iter2->Pos2 = 0;
+            elem.URL = elem.URL2;
+            elem.URL2.clear();
+            elem.Pos = elem.Pos2;
+            elem.Pos2 = 0;
         }
-
-        ++iter2;
     }
 
     // do not move below store/clear ..

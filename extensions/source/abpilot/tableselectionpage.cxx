@@ -69,11 +69,8 @@ namespace abp
             // this page should never bother the user if there is 1 or less tables.
 
         // fill the list
-        for (   StringBag::const_iterator aTables = aTableNames.begin();
-                aTables != aTableNames.end();
-                ++aTables
-            )
-            m_pTableList->InsertEntry( *aTables );
+        for (auto const& tableName : aTableNames)
+            m_pTableList->InsertEntry(tableName);
 
         // initially select the proper table
         m_pTableList->SelectEntry( rSettings.sSelectedTable );
