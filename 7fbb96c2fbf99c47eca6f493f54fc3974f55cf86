@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba2be162_235a5a84",
+        "filename": "vcl/source/outdev/text.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1203,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-03-12T14:37:39Z",
+      "side": 0,
+      "message": "Shouldn\u0027t we rather do what the comment says and disable BiDi if characters used are only of \"known good\" script ranges, i.e. Latin, Cyrillic, ... (instead of this inverted logic that looks for an incomplete set of known RTL characters).\n\nFor these known good cases we don\u0027t need the overhead of BiDi processing, or am I missing something?",
+      "revId": "7fbb96c2fbf99c47eca6f493f54fc3974f55cf86",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
