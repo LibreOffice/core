@@ -131,7 +131,20 @@ void Qt5Graphics::GetGlyphWidths(const PhysicalFontFace* /*pPFF*/, bool /*bVerti
 {
 }
 
-bool Qt5Graphics::GetGlyphBoundRect(const GlyphItem&, tools::Rectangle&) { return false; }
+bool Qt5Graphics::GetGlyphBoundRect(const GlyphItem& rGlyph, tools::Rectangle& rRect)
+{
+    const int nLevel = rGlyph.mnFallbackLevel;
+    if( nLevel >= MAX_FALLBACK )
+        return false;
+
+    Qt5Font* pFont = m_pTextStyle[ nLevel ];
+    if( !pFont )
+        return false;
+
+    QRawFont aRawFont(QRawFont::fromFont( *pFont ));
+    rRect = toRectangle(aRawFont.boundingRect(rGlyph.maGlyphId).toAlignedRect());
+    return true;
+}
 
 bool Qt5Graphics::GetGlyphOutline(const GlyphItem&, basegfx::B2DPolyPolygon&) { return false; }
 
