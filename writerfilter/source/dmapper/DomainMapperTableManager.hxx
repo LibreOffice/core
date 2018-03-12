@@ -95,6 +95,7 @@ public:
     virtual void endOfRowAction() override;
 
     IntVectorPtr const & getCurrentGrid( );
+    bool hasCurrentSpans() const;
     IntVectorPtr const & getCurrentSpans( );
     IntVectorPtr const & getCurrentCellWidths( );
 
