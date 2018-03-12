@@ -38,13 +38,10 @@ namespace svt
     */
     namespace GraphicAccess
     {
-        /** determines whether the given URL denotes an image within a resource
-         ( or an image specified by a vnd.sun.star.GraphicObject scheme URL )
-        */
-        SVT_DLLPUBLIC bool        isSupportedURL( const OUString& _rURL );
+        /** determines whether the given URL denotes an image within a resource */
+        SVT_DLLPUBLIC bool isSupportedURL( const OUString& _rURL );
 
-        /** for a given URL of an image within a resource ( or an image specified by a vnd.sun.star.GraphicObject scheme URL ), this method retrieves
-            an SvStream for this image.
+        /** for a given URL of an image within a resource, this method retrieves an SvStream for this image.
 
             This method works for arbitrary URLs denoting an image, since the
             css::graphics::GraphicsProvider service is used
@@ -52,12 +49,12 @@ namespace svt
             the image must be copied), so you are strongly encouraged to only use it
             when you know that the image is small enough.
         */
-        SVT_DLLPUBLIC SvStream*   getImageStream(
+        SVT_DLLPUBLIC SvStream* getImageStream(
                     const css::uno::Reference< css::uno::XComponentContext >& _rxContext,
                     const OUString& _rImageResourceURL
                 );
 
-        /** for a given URL of an image within a resource ( or an image specified by a vnd.sun.star.GraphicObject scheme URL ), this method retrieves
+        /** for a given URL of an image within a resource, this method retrieves
             an css::io::XInputStream for this image.
         */
         SVT_DLLPUBLIC css::uno::Reference< css::io::XInputStream >

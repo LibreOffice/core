@@ -130,7 +130,6 @@ namespace svt
         return _rURL.startsWith( "private:resource/" )
             || _rURL.startsWith( "private:graphicrepository/" )
             || _rURL.startsWith( "private:standardimage/" )
-            || _rURL.startsWith( "vnd.sun.star.GraphicObject:" )
             || _rURL.startsWith( "vnd.sun.star.extension://" );
     }
 
