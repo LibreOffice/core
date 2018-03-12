@@ -1188,19 +1188,6 @@ ImplLayoutArgs OutputDevice::ImplPrepareLayoutArgs( OUString& rStr,
         nLayoutFlags |= SalLayoutFlags::BiDiRtl;
     if( mnTextLayoutMode & ComplexTextLayoutFlags::BiDiStrong )
         nLayoutFlags |= SalLayoutFlags::BiDiStrong;
-    else if( !(mnTextLayoutMode & ComplexTextLayoutFlags::BiDiRtl) )
-    {
-        // disable Bidi if no RTL hint and no RTL codes used
-        const sal_Unicode* pStr = rStr.getStr() + nMinIndex;
-        const sal_Unicode* pEnd = rStr.getStr() + nEndIndex;
-        for( ; pStr < pEnd; ++pStr )
-            if( ((*pStr >= 0x0580) && (*pStr < 0x0800))   // middle eastern scripts
-            ||  ((*pStr >= 0xFB18) && (*pStr < 0xFE00))   // hebrew + arabic A presentation forms
-            ||  ((*pStr >= 0xFE70) && (*pStr < 0xFEFF)) ) // arabic presentation forms B
-                break;
-        if( pStr >= pEnd )
-            nLayoutFlags |= SalLayoutFlags::BiDiStrong;
-    }
 
     if( !maFont.IsKerning() )
         nLayoutFlags |= SalLayoutFlags::DisableKerning;
