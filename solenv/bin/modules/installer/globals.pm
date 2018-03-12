@@ -37,7 +37,6 @@ BEGIN
 
     @languageproducts = ();
     $build = "";
-    $minor = "";
     $os = "";
     $cpuname = "";
     $com = "";

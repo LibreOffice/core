@@ -221,12 +221,6 @@ sub set_important_properties
         push(@{$propertyfile}, $onepropertyline);
     }
 
-    if ( $allvariables->{'PRODUCTMINOR'} )
-    {
-        my $onepropertyline = "PRODUCTMINOR" . "\t" . $allvariables->{'PRODUCTMINOR'} . "\n";
-        push(@{$propertyfile}, $onepropertyline);
-    }
-
     if ( $allvariables->{'PRODUCTBUILDID'} )
     {
         my $onepropertyline = "PRODUCTBUILDID" . "\t" . $allvariables->{'PRODUCTBUILDID'} . "\n";

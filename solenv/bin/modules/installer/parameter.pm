@@ -42,7 +42,6 @@ The following parameter are needed:
 -p: Product from product list to be created (required)
 -l: Language of the product (comma and hash) (optional, defined in productlist)
 -b: Build, e.g. srx645 (optional)
--m: Minor, e.g. m10 (optional)
 -simple: Path to do a simple install to
 -u: Path, in which zipfiles are unpacked (optional)
 -msitemplate: Source of the msi file templates (Windows compiler only)
@@ -114,7 +113,6 @@ sub getparameter
         elsif ($param eq "-p") { $installer::globals::product = shift(@ARGV); }
         elsif ($param eq "-l") { $installer::globals::languagelist = shift(@ARGV); }
         elsif ($param eq "-b") { $installer::globals::build = shift(@ARGV); }
-        elsif ($param eq "-m") { $installer::globals::minor = shift(@ARGV); }
         elsif ($param eq "-dontunzip") { $installer::globals::dounzip = 0; }
         elsif ($param eq "-pro") { $installer::globals::pro = 1; }
         elsif ($param eq "-format") { $installer::globals::packageformat = shift(@ARGV); }
@@ -521,8 +519,6 @@ sub outputparameter
     push(@output, "Product: $installer::globals::product\n");
     push(@output, "BuildID: $installer::globals::buildid\n");
     push(@output, "Build: $installer::globals::build\n");
-    if ( $installer::globals::minor ) { push(@output, "Minor: $installer::globals::minor\n"); }
-    else  { push(@output, "No minor set\n"); }
     if ( $installer::globals::pro ) { push(@output, "Product version\n"); }
     else  { push(@output, "Non-Product version\n"); }
     if ( $installer::globals::rootpath eq "" ) { push(@output, "Using default installpath\n"); }

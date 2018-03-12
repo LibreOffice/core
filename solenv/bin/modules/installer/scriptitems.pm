@@ -638,19 +638,14 @@ sub replace_setup_variables
 
     # string $buildid, which is used to replace the setup variable <buildid>
 
-    my $localminor = "flat";
-    if ( $installer::globals::minor ne "" ) { $localminor = $installer::globals::minor; }
-
     my $localbuild = $installer::globals::build;
 
     if ( $localbuild =~ /^\s*(\w+?)(\d+)\s*$/ ) { $localbuild = $2; }   # using "680" instead of "src680"
 
     my $buildidstring = `cd $ENV{'SRCDIR'} 2>&1 >/dev/null && git log -n 1 --pretty=format:"%H"`;
     if ($? || !$buildidstring) {
-        $buildidstring = $localbuild . $localminor . "(Build:" . $installer::globals::buildid . ")";
+        $buildidstring = $localbuild . "(Build:" . $installer::globals::buildid . ")";
     }
-
-    if ( $localminor =~ /^\s*\w(\d+)\w*\s*$/ ) { $localminor = $1; }
 
     my $updateid = $productname . "_" . $libo_version_major . "_" . $$languagestringref;
     $updateid =~ s/ /_/g;

@@ -458,9 +458,6 @@ sub run {
         @installer::globals::logfileinfo = ();  # new logfile array and new logfile name
         installer::logger::copy_globalinfo_into_logfile();
 
-        my $logminor = "";
-        $logminor = $installer::globals::minor;
-
         my $loglanguagestring = $$languagestringref;
         my $loglanguagestring_orig = $loglanguagestring;
         if (length($loglanguagestring) > $installer::globals::max_lang_length)
@@ -474,7 +471,6 @@ sub run {
         }
 
         $installer::globals::logfilename = "log_" . $installer::globals::build;
-        if ( $logminor ne "" ) { $installer::globals::logfilename .= "_" . $logminor; }
         $installer::globals::logfilename .= "_" . $loglanguagestring;
         $installer::globals::logfilename .= ".log";
         $loggingdir = $loggingdir . $loglanguagestring . $installer::globals::separator;
