@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba2be162_8023fc04",
+        "filename": "dbaccess/source/filter/hsqldb/rowinputbinary.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 309,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-03-12T05:43:52Z",
+      "side": 1,
+      "message": "This line breaks tinderboxes...\n\n\u003e /home/android/lo/master-android-arm/dbaccess/source/filter/hsqldb/rowinputbinary.cxx:309:43: error: cannot initialize a parameter of type \u0027const time_t *\u0027 (aka \u0027const long *\u0027) with an rvalue of type \u0027sal_Int64 *\u0027 (aka \u0027long long *\u0027)\n\u003e                 std::tm* tm \u003d std::gmtime(\u0026nEpochSec);\n\u003e                                           ^~~~~~~~~~\n\u003e /home/android/android-sdk-linux/ndk-bundle/sysroot/usr/include/time.h:74:33: note: passing argument to parameter \u0027__t\u0027 here\n\u003e struct tm* gmtime(const time_t* __t);\n\u003e                                 ^",
+      "range": {
+        "startLine": 309,
+        "startChar": 16,
+        "endLine": 309,
+        "endChar": 54
+      },
+      "revId": "813296d4a21163ffba86f1f4c0bec6ddb0511e6c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
