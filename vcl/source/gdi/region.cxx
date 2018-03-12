@@ -1593,7 +1593,7 @@ SvStream& ReadRegion(SvStream& rIStrm, vcl::Region& rRegion)
         default:
         {
             RegionBand* pNewRegionBand = new RegionBand();
-            pNewRegionBand->load(rIStrm);
+            bool bSuccess = pNewRegionBand->load(rIStrm);
             rRegion.mpRegionBand.reset(pNewRegionBand);
 
             if(aCompat.GetVersion() >= 2)
@@ -1608,6 +1608,12 @@ SvStream& ReadRegion(SvStream& rIStrm, vcl::Region& rRegion)
                     ReadPolyPolygon( rIStrm, *pNewPoly );
                     rRegion.mpPolyPolygon.reset(pNewPoly);
                 }
+            }
+
+            if (!bSuccess)
+            {
+                SAL_WARN("vcl.gdi", "bad region band");
+                rRegion.SetNull();
             }
 
             break;
