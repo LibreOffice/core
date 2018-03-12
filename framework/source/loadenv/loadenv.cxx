@@ -1076,7 +1076,9 @@ bool LoadEnv::impl_loadContent()
                 {"Parent", uno::Any(xWindow)}
             }));
             xHandler->initialize(aArguments);
-            impl_makeFrameWindowVisible(xWindow, false);
+            //show the frame now, unless (tdf#116277) its the labels/business cards slave frame
+            if (m_aURL.Arguments.indexOf("slot=") == -1)
+                impl_makeFrameWindowVisible(xWindow, false);
         }
     }
 
