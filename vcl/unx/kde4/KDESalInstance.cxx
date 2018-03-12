@@ -49,8 +49,7 @@ uno::Reference< ui::dialogs::XFilePicker2 > KDESalInstance::createFilePicker(
 {
     KDEXLib* kdeXLib = static_cast<KDEXLib*>( mpXLib );
     if (kdeXLib->allowKdeDialogs())
-        return uno::Reference< ui::dialogs::XFilePicker2 >(
-            kdeXLib->createFilePicker(xMSF) );
+        return kdeXLib->createFilePicker(xMSF);
     else
         return X11SalInstance::createFilePicker( xMSF );
 }
