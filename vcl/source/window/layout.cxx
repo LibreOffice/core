@@ -2276,7 +2276,11 @@ void MessageDialog::create_message_area()
 
 void MessageDialog::create_owned_areas()
 {
+#if defined WNT
+    set_border_width(3);
+#else
     set_border_width(12);
+#endif
     m_pOwnedContentArea.set(VclPtr<VclVBox>::Create(this, false, 24));
     set_content_area(m_pOwnedContentArea);
     m_pOwnedContentArea->Show();
