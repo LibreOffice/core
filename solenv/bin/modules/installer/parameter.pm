@@ -41,7 +41,6 @@ The following parameter are needed:
 -i: Install path of the product (/opt/openofficeorg20) (optional)
 -p: Product from product list to be created (required)
 -l: Language of the product (comma and hash) (optional, defined in productlist)
--b: Build, e.g. srx645 (optional)
 -simple: Path to do a simple install to
 -u: Path, in which zipfiles are unpacked (optional)
 -msitemplate: Source of the msi file templates (Windows compiler only)
@@ -112,7 +111,6 @@ sub getparameter
         elsif ($param eq "-s") { $installer::globals::setupscriptname = shift(@ARGV); }
         elsif ($param eq "-p") { $installer::globals::product = shift(@ARGV); }
         elsif ($param eq "-l") { $installer::globals::languagelist = shift(@ARGV); }
-        elsif ($param eq "-b") { $installer::globals::build = shift(@ARGV); }
         elsif ($param eq "-dontunzip") { $installer::globals::dounzip = 0; }
         elsif ($param eq "-pro") { $installer::globals::pro = 1; }
         elsif ($param eq "-format") { $installer::globals::packageformat = shift(@ARGV); }
