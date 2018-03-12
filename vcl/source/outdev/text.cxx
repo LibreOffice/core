@@ -1190,15 +1190,20 @@ ImplLayoutArgs OutputDevice::ImplPrepareLayoutArgs( OUString& rStr,
         nLayoutFlags |= SalLayoutFlags::BiDiStrong;
     else if( !(mnTextLayoutMode & ComplexTextLayoutFlags::BiDiRtl) )
     {
-        // disable Bidi if no RTL hint and no RTL codes used
-        const sal_Unicode* pStr = rStr.getStr() + nMinIndex;
-        const sal_Unicode* pEnd = rStr.getStr() + nEndIndex;
-        for( ; pStr < pEnd; ++pStr )
-            if( ((*pStr >= 0x0580) && (*pStr < 0x0800))   // middle eastern scripts
-            ||  ((*pStr >= 0xFB18) && (*pStr < 0xFE00))   // hebrew + arabic A presentation forms
-            ||  ((*pStr >= 0xFE70) && (*pStr < 0xFEFF)) ) // arabic presentation forms B
+        // Disable Bidi if no RTL hint and only known LTR codes used.
+        bool bAllLtr = true;
+        for (sal_Int32 i = nMinIndex; i < nEndIndex; i++)
+        {
+            // [0x0000, 0x052F] are Latin, Greek and Cyrillic.
+            // [0x0370, 0x03FF] has a few holes as if Unicode 10.0.0, but
+            //                  hopefully no RTL character will be encoded there.
+            if (rStr[i] > 0x052F)
+            {
+                bAllLtr = false;
                 break;
-        if( pStr >= pEnd )
+            }
+        }
+        if (bAllLtr)
             nLayoutFlags |= SalLayoutFlags::BiDiStrong;
     }
 
