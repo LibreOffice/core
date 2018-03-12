@@ -1261,7 +1261,7 @@ SfxMedium::LockFileResult SfxMedium::LockOrigFileOnDemand( bool bLoading, bool b
                     if (!bLoading && bUseSystemLock && pImpl->pTempFile)
                     {
                         INetURLObject aDest(GetURLObject());
-                        OUString aDestURL(aDest.GetMainURL(INetURLObject::DecodeMechanism::NONE));
+                        OUString aDestURL(aDest.GetMainURL(INetURLObject::DecodeMechanism::NO_DECODE));
 
                         if (comphelper::isFileUrl(aDestURL) || !aDest.removeSegment())
                         {
