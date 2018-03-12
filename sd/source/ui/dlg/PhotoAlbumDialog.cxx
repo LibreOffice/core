@@ -142,22 +142,21 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl, Button*, void)
 
                 Reference< drawing::XDrawPage > xSlide = appendNewSlide(aAutoLayout, xDrawPages);
                 Reference< beans::XPropertySet > xSlideProps( xSlide, uno::UNO_QUERY );
-
                 Reference< graphic::XGraphic > xGraphic = createXGraphicFromUrl(sUrl, xProvider);
 
-                Graphic aImg(xGraphic);
+                Graphic aGraphic(xGraphic);
+                if (bInsertAsLink)
+                    aGraphic.setOriginURL(sUrl);
+
                 // Save the original size, multiplied with 100
-                ::awt::Size aPicSize(aImg.GetSizePixel().Width()*100, aImg.GetSizePixel().Height()*100);
+                ::awt::Size aPicSize(aGraphic.GetSizePixel().Width()*100, aGraphic.GetSizePixel().Height()*100);
 
                 Reference< drawing::XShape > xShape(
                     xShapeFactory->createInstance("com.sun.star.drawing.GraphicObjectShape"),
                     uno::UNO_QUERY);
 
                 Reference< beans::XPropertySet > xProps( xShape, uno::UNO_QUERY );
-                if (bInsertAsLink)
-                    xProps->setPropertyValue("GraphicURL", ::uno::Any(sUrl));
-                else
-                    xProps->setPropertyValue("Graphic", ::uno::Any(xGraphic));
+                xProps->setPropertyValue("Graphic", ::uno::Any(xGraphic));
 
                 ::awt::Size aPageSize;
 
@@ -221,19 +220,18 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl, Button*, void)
                 {
                     Reference< graphic::XGraphic > xGraphic = createXGraphicFromUrl(sUrl1, xProvider);
 
-                    Graphic aImg(xGraphic);
+                    Graphic aGraphic(xGraphic);
+                    if (bInsertAsLink)
+                        aGraphic.setOriginURL(sUrl1);
                     // Save the original size, multiplied with 100
-                    ::awt::Size aPicSize(aImg.GetSizePixel().Width()*100, aImg.GetSizePixel().Height()*100);
+                    ::awt::Size aPicSize(aGraphic.GetSizePixel().Width()*100, aGraphic.GetSizePixel().Height()*100);
 
                     Reference< drawing::XShape > xShape(
                         xShapeFactory->createInstance("com.sun.star.drawing.GraphicObjectShape"),
                         uno::UNO_QUERY);
 
                     Reference< beans::XPropertySet > xProps( xShape, uno::UNO_QUERY );
-                    if (bInsertAsLink)
-                        xProps->setPropertyValue("GraphicURL", ::uno::Any(sUrl1));
-                    else
-                        xProps->setPropertyValue("Graphic", ::uno::Any(xGraphic));
+                    xProps->setPropertyValue("Graphic", ::uno::Any(xGraphic));
 
                     ::awt::Point aPicPos;
 
@@ -259,19 +257,18 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl, Button*, void)
                 {
                     Reference< graphic::XGraphic > xGraphic = createXGraphicFromUrl(sUrl2, xProvider);
 
-                    Graphic aImg(xGraphic);
+                    Graphic aGraphic(xGraphic);
+                    if (bInsertAsLink)
+                        aGraphic.setOriginURL(sUrl2);
                     // Save the original size, multiplied with 100
-                    ::awt::Size aPicSize(aImg.GetSizePixel().Width()*100, aImg.GetSizePixel().Height()*100);
+                    ::awt::Size aPicSize(aGraphic.GetSizePixel().Width()*100, aGraphic.GetSizePixel().Height()*100);
 
                     Reference< drawing::XShape > xShape(
                         xShapeFactory->createInstance("com.sun.star.drawing.GraphicObjectShape"),
                         uno::UNO_QUERY);
 
                     Reference< beans::XPropertySet > xProps( xShape, uno::UNO_QUERY );
-                    if (bInsertAsLink)
-                        xProps->setPropertyValue("GraphicURL", ::uno::Any(sUrl2));
-                    else
-                        xProps->setPropertyValue("Graphic", ::uno::Any(xGraphic));
+                    xProps->setPropertyValue("Graphic", ::uno::Any(xGraphic));
 
                     ::awt::Point aPicPos;
 
@@ -342,19 +339,18 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl, Button*, void)
                 {
                     Reference< graphic::XGraphic > xGraphic = createXGraphicFromUrl(sUrl1, xProvider);
 
-                    Graphic aImg(xGraphic);
+                    Graphic aGraphic(xGraphic);
+                    if (bInsertAsLink)
+                        aGraphic.setOriginURL(sUrl1);
                     // Save the original size, multiplied with 100
-                    ::awt::Size aPicSize(aImg.GetSizePixel().Width()*100, aImg.GetSizePixel().Height()*100);
+                    ::awt::Size aPicSize(aGraphic.GetSizePixel().Width()*100, aGraphic.GetSizePixel().Height()*100);
 
                     Reference< drawing::XShape > xShape(
                         xShapeFactory->createInstance("com.sun.star.drawing.GraphicObjectShape"),
                         uno::UNO_QUERY);
 
                     Reference< beans::XPropertySet > xProps( xShape, uno::UNO_QUERY );
-                    if (bInsertAsLink)
-                        xProps->setPropertyValue("GraphicURL", ::uno::Any(sUrl1));
-                    else
-                        xProps->setPropertyValue("Graphic", ::uno::Any(xGraphic));
+                    xProps->setPropertyValue("Graphic", ::uno::Any(xGraphic));
 
                     ::awt::Point aPicPos;
 
@@ -379,19 +375,18 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl, Button*, void)
                 {
                     Reference< graphic::XGraphic > xGraphic = createXGraphicFromUrl(sUrl2, xProvider);
 
-                    Graphic aImg(xGraphic);
+                    Graphic aGraphic(xGraphic);
+                    if (bInsertAsLink)
+                        aGraphic.setOriginURL(sUrl2);
                     // Save the original size, multiplied with 100
-                    ::awt::Size aPicSize(aImg.GetSizePixel().Width()*100, aImg.GetSizePixel().Height()*100);
+                    ::awt::Size aPicSize(aGraphic.GetSizePixel().Width()*100, aGraphic.GetSizePixel().Height()*100);
 
                     Reference< drawing::XShape > xShape(
                         xShapeFactory->createInstance("com.sun.star.drawing.GraphicObjectShape"),
                         uno::UNO_QUERY);
 
                     Reference< beans::XPropertySet > xProps( xShape, uno::UNO_QUERY );
-                    if (bInsertAsLink)
-                        xProps->setPropertyValue("GraphicURL", ::uno::Any(sUrl2));
-                    else
-                        xProps->setPropertyValue("Graphic", ::uno::Any(xGraphic));
+                    xProps->setPropertyValue("Graphic", ::uno::Any(xGraphic));
 
                     ::awt::Point aPicPos;
 
@@ -416,19 +411,18 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl, Button*, void)
                 {
                     Reference< graphic::XGraphic > xGraphic = createXGraphicFromUrl(sUrl3, xProvider);
 
-                    Graphic aImg(xGraphic);
+                    Graphic aGraphic(xGraphic);
+                    if (bInsertAsLink)
+                        aGraphic.setOriginURL(sUrl3);
                     // Save the original size, multiplied with 100
-                    ::awt::Size aPicSize(aImg.GetSizePixel().Width()*100, aImg.GetSizePixel().Height()*100);
+                    ::awt::Size aPicSize(aGraphic.GetSizePixel().Width()*100, aGraphic.GetSizePixel().Height()*100);
 
                     Reference< drawing::XShape > xShape(
                         xShapeFactory->createInstance("com.sun.star.drawing.GraphicObjectShape"),
                         uno::UNO_QUERY);
 
                     Reference< beans::XPropertySet > xProps( xShape, uno::UNO_QUERY );
-                    if (bInsertAsLink)
-                        xProps->setPropertyValue("GraphicURL", ::uno::Any(sUrl3));
-                    else
-                        xProps->setPropertyValue("Graphic", ::uno::Any(xGraphic));
+                    xProps->setPropertyValue("Graphic", ::uno::Any(xGraphic));
 
                     ::awt::Point aPicPos;
 
@@ -453,19 +447,18 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl, Button*, void)
                 {
                     Reference< graphic::XGraphic > xGraphic = createXGraphicFromUrl(sUrl4, xProvider);
 
-                    Graphic aImg(xGraphic);
+                    Graphic aGraphic(xGraphic);
+                    if (bInsertAsLink)
+                        aGraphic.setOriginURL(sUrl4);
                     // Save the original size, multiplied with 100
-                    ::awt::Size aPicSize(aImg.GetSizePixel().Width()*100, aImg.GetSizePixel().Height()*100);
+                    ::awt::Size aPicSize(aGraphic.GetSizePixel().Width()*100, aGraphic.GetSizePixel().Height()*100);
 
                     Reference< drawing::XShape > xShape(
                         xShapeFactory->createInstance("com.sun.star.drawing.GraphicObjectShape"),
                         uno::UNO_QUERY);
 
                     Reference< beans::XPropertySet > xProps( xShape, uno::UNO_QUERY );
-                    if (bInsertAsLink)
-                        xProps->setPropertyValue("GraphicURL", ::uno::Any(sUrl4));
-                    else
-                        xProps->setPropertyValue("Graphic", ::uno::Any(xGraphic));
+                    xProps->setPropertyValue("Graphic", ::uno::Any(xGraphic));
 
                     ::awt::Point aPicPos;
 
