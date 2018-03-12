@@ -256,6 +256,8 @@ void SvXMLMetaDocumentContext::setBuildId(OUString const& i_rBuildId, const uno:
     {
         if (    i_rBuildId.startsWith("StarOffice 7")
             ||  i_rBuildId.startsWith("StarSuite 7")
+            ||  i_rBuildId.startsWith("StarOffice 6")
+            ||  i_rBuildId.startsWith("StarSuite 6")
             ||  i_rBuildId.startsWith("OpenOffice.org 1"))
         {
             sBuildId = "645$8687";
@@ -266,19 +268,20 @@ void SvXMLMetaDocumentContext::setBuildId(OUString const& i_rBuildId, const uno:
         }
     }
 
-    OUString rest;
-    if (i_rBuildId.startsWith("LibreOffice/", &rest) ||
-        i_rBuildId.startsWith("LibreOfficeDev/", &rest) ||
-        i_rBuildId.startsWith("LOdev/", &rest))
+    // "LibreOffice_project" was hard-coded since LO 3.3.0
+    // see utl::DocInfoHelper::GetGeneratorString()
+    if (i_rBuildId.indexOf("LibreOffice_project/") != -1)
     {
         OUStringBuffer sNumber;
-        for (sal_Int32 i = 0; i < rest.getLength(); ++i)
+        auto const firstSlash = i_rBuildId.indexOf("/");
+        assert(firstSlash != -1);
+        for (sal_Int32 i = firstSlash + 1; i < i_rBuildId.getLength(); ++i)
         {
-            if (rtl::isAsciiDigit(rest[i]))
+            if (rtl::isAsciiDigit(i_rBuildId[i]))
             {
-                sNumber.append(rest[i]);
+                sNumber.append(i_rBuildId[i]);
             }
-            else if ('.' != rest[i])
+            else if ('.' != i_rBuildId[i])
             {
                 break;
             }
