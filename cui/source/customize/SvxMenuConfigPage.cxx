@@ -223,6 +223,7 @@ void SvxMenuConfigPage::UpdateButtonStates()
         // Add option (gear_add) will always be enabled
         pGearPopup->EnableItem( "gear_delete", pMenuData->IsDeletable() );
         pGearPopup->EnableItem( "gear_rename", pMenuData->IsRenamable() );
+        pGearPopup->EnableItem( "gear_move", pMenuData->IsMovable() );
     }
 }
 
@@ -347,6 +348,22 @@ IMPL_LINK( SvxMenuConfigPage, GearHdl, MenuButton *, pButton, void )
                 return;
 
             pMenuData->SetName( sNewName );
+
+            ReloadTopLevelListBox();
+
+            GetSaveInData()->SetModified();
+        }
+    }
+    else if (sIdent == "gear_move")
+    {
+        SvxConfigEntry* pMenuData = GetTopLevelSelection();
+
+        VclPtrInstance<SvxMainMenuOrganizerDialog> pDialog(
+            this, GetSaveInData()->GetEntries(), pMenuData, false );
+
+        if ( pDialog->Execute() == RET_OK )
+        {
+            GetSaveInData()->SetEntries( pDialog->GetEntries() );
 
             ReloadTopLevelListBox();
 

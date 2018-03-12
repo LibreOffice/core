@@ -2100,6 +2100,11 @@ SvxConfigEntry::~SvxConfigEntry()
     }
 }
 
+bool SvxConfigEntry::IsMovable()
+{
+    return !IsPopup() || IsMain();
+}
+
 bool SvxConfigEntry::IsDeletable()
 {
     return !IsMain() || IsUserDefined();
