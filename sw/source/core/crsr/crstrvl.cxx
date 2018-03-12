@@ -981,8 +981,9 @@ bool SwCursorShell::GotoPrevOutline()
 
     SwNode* pNd = &(pCursor->GetNode());
     SwOutlineNodes::size_type nPos;
-    bool bRet = rNds.GetOutLineNds().Seek_Entry(pNd, &nPos);
-    if (bRet && nPos)
+    bool bRet = false;
+    (void)rNds.GetOutLineNds().Seek_Entry(pNd, &nPos);
+    if (nPos)
     {
         --nPos; // before
 
