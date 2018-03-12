@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba2be162_4e4bf52b",
+        "filename": "sc/source/core/tool/rangelst.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 328,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-03-12T20:12:23Z",
+      "side": 1,
+      "message": "this path looks problematic because we are removing the current loop entry, and then immediately afterwards (at line 343) taking the address of the current loop entry\n\nBut this part of the code was problematic before my change in \t6529cd54c29c5800340530a1b8182c341fbeeafb too, where it would have ended up reading from recently deleted memory, so it\u0027s odd that hasn\u0027t been seen already.",
+      "revId": "7903ad9f9b022320a69ac60d6a598ecbcebd69f2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
