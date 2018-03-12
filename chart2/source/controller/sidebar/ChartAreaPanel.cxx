@@ -191,7 +191,7 @@ GraphicObject getXBitmapFromName(const css::uno::Reference<css::frame::XModel>& 
 
             if (pBitmap->GetName().equalsIgnoreAsciiCase(rName))
             {
-                return GraphicObject(pBitmap->GetGraphicObject());
+                return pBitmap->GetGraphicObject();
             }
         }
     }
