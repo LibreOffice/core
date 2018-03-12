@@ -354,6 +354,9 @@ DECLARE_HTMLEXPORT_TEST(testReqIfParagraph, "reqif-p.xhtml")
 
     // This was "<a", was not found.
     CPPUNIT_ASSERT(aStream.indexOf("<reqif-xhtml:a") != -1);
+
+    // This was "<u>" instead of CSS.
+    CPPUNIT_ASSERT(aStream.indexOf("<reqif-xhtml:span style=\"text-decoration: underline\"") != -1);
 }
 
 DECLARE_HTMLEXPORT_ROUNDTRIP_TEST(testReqIfOleData, "reqif-ole-data.xhtml")

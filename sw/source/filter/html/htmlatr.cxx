@@ -2808,7 +2808,7 @@ static Writer& OutHTML_SwUnderline( Writer& rWrt, const SfxPoolItem& rHt )
         return rWrt;
 
     const FontLineStyle eUnder = static_cast<const SvxUnderlineItem&>(rHt).GetLineStyle();
-    if( LINESTYLE_NONE != eUnder )
+    if( LINESTYLE_NONE != eUnder && !rHTMLWrt.mbReqIF )
     {
         HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_underline, rHTMLWrt.m_bTagOn );
     }

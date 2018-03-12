@@ -283,7 +283,7 @@ void SwHTMLWriter::OutCSS1_Property( const sal_Char *pProp,
         case CSS1_OUTMODE_SPAN_TAG1_ON:
             if( m_bTagOn )
             {
-                sOut.append("<" OOO_STRING_SVTOOLS_HTML_span
+                sOut.append("<" + GetNamespace() + OOO_STRING_SVTOOLS_HTML_span
                             " " OOO_STRING_SVTOOLS_HTML_O_style "=\"");
             }
             else
@@ -2243,7 +2243,7 @@ static Writer& OutCSS1_SvxTextLn_SvxCrOut_SvxBlink( Writer& rWrt,
             {
                 // this also works in HTML does not need to be written as
                 // a STYLE-Options, and must not be written as Hint
-                OSL_ENSURE( !rHTMLWrt.IsCSS1Source(CSS1_OUTMODE_HINT),
+                OSL_ENSURE( !rHTMLWrt.IsCSS1Source(CSS1_OUTMODE_HINT) || rHTMLWrt.mbReqIF,
                         "write underline as Hint?" );
                 pUStr = sCSS1_PV_underline;
             }
