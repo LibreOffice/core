@@ -48,7 +48,6 @@ public:
 
 private:
     uno::Reference<lang::XComponent> mxComponent;
-    OUString maUrl;
 };
 
 ScSheetLinkObj::ScSheetLinkObj()
