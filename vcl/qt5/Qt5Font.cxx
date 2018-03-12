@@ -41,7 +41,8 @@ static hb_blob_t* getFontTable(hb_face_t*, hb_tag_t nTableTag, void* pUserData)
 
     hb_blob_t* pBlob = nullptr;
     if (nLength > 0)
-        pBlob = hb_blob_create(aTable.data(), nLength, HB_MEMORY_MODE_DUPLICATE, nullptr, nullptr);
+        pBlob = hb_blob_create(aTable.data(), nLength,
+                               HB_MEMORY_MODE_DUPLICATE, nullptr, nullptr);
     return pBlob;
 }
 
