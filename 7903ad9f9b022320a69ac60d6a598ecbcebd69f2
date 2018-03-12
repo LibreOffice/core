@@ -16,6 +16,24 @@
       "revId": "7903ad9f9b022320a69ac60d6a598ecbcebd69f2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba2be162_ee8ca937",
+        "filename": "sc/source/core/tool/rangelst.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 328,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-03-12T21:58:05Z",
+      "side": 1,
+      "message": "Might be I introduced some quirk with 03f429665b4d57f63b8e2862a55e5c4273bc7a2b (and 73049e5dbf9430df077dd26bed9d01435f745544 same for ScRangePairList::Join()) that flattened the former recursion.\n\nI can take a look tomorrow afternoon.\n\nBtw, it should be ScRange in the commit message, not SwRange ;-)",
+      "parentUuid": "ba2be162_4e4bf52b",
+      "revId": "7903ad9f9b022320a69ac60d6a598ecbcebd69f2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
