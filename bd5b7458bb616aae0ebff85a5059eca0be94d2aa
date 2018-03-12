@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba2be162_c0efb4ae",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2018-03-12T00:35:11Z",
+      "side": 1,
+      "message": "perhaps this is a bit too much in the end. how about a terse, three-line-or-so description of the fix:\n\ntdf#116351: fix re-use of AttributeList on PGP manifest\n\nthen describe the bug (multiple attributes of the same name, since not cleared after each round)?",
+      "revId": "bd5b7458bb616aae0ebff85a5059eca0be94d2aa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba2be162_a0f2c098",
+        "filename": "package/source/manifest/ManifestExport.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 250,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2018-03-12T00:35:11Z",
+      "side": 1,
+      "message": "why not moving it even further down, into the if(aPgpKeyID... block, which is the only place this is used here?",
+      "revId": "bd5b7458bb616aae0ebff85a5059eca0be94d2aa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
