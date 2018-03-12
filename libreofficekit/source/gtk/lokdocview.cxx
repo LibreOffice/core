@@ -82,6 +82,7 @@ struct LOKDocViewPrivateImpl
     std::string m_aRenderingArguments;
     gdouble m_nLoadProgress;
     gboolean m_bIsLoading;
+    gboolean m_bInit; // initializeForRendering() has been called
     gboolean m_bCanZoomIn;
     gboolean m_bCanZoomOut;
     LibreOfficeKit* m_pOffice;
@@ -194,6 +195,7 @@ struct LOKDocViewPrivateImpl
     LOKDocViewPrivateImpl()
         : m_nLoadProgress(0),
         m_bIsLoading(false),
+        m_bInit(false),
         m_bCanZoomIn(true),
         m_bCanZoomOut(true),
         m_pOffice(nullptr),
@@ -293,6 +295,7 @@ enum
     PROP_LOAD_PROGRESS,
     PROP_ZOOM,
     PROP_IS_LOADING,
+    PROP_IS_INITIALIZED,
     PROP_DOC_WIDTH,
     PROP_DOC_HEIGHT,
     PROP_CAN_ZOOM_IN,
@@ -969,6 +972,9 @@ static gboolean postDocumentLoad(gpointer pData)
     gtk_widget_set_can_focus(GTK_WIDGET(pLOKDocView), TRUE);
     gtk_widget_grab_focus(GTK_WIDGET(pLOKDocView));
     lok_doc_view_set_zoom(pLOKDocView, 1.0);
+
+    // we are completely loaded
+    priv->m_bInit = TRUE;
 
     return G_SOURCE_REMOVE;
 }
@@ -2575,6 +2581,9 @@ static void lok_doc_view_get_property (GObject* object, guint propId, GValue *va
     case PROP_IS_LOADING:
         g_value_set_boolean (value, priv->m_bIsLoading);
         break;
+    case PROP_IS_INITIALIZED:
+        g_value_set_boolean (value, priv->m_bInit);
+        break;
     case PROP_DOC_WIDTH:
         g_value_set_long (value, priv->m_nDocumentWidthTwips);
         break;
@@ -2840,6 +2849,19 @@ static void lok_doc_view_class_init (LOKDocViewClass* pClass)
         g_param_spec_boolean("is-loading",
                              "Is Loading",
                              "Whether the view is loading a document",
+                             FALSE,
+                             static_cast<GParamFlags>(G_PARAM_READABLE |
+                                                      G_PARAM_STATIC_STRINGS));
+
+    /**
+     * LOKDocView:is-initialized:
+     *
+     * Whether the requested document has completely loaded or not.
+     */
+    properties[PROP_IS_INITIALIZED] =
+        g_param_spec_boolean("is-initialized",
+                             "Has initialized",
+                             "Whether the view has completely initialized",
                              FALSE,
                              static_cast<GParamFlags>(G_PARAM_READABLE |
                                                       G_PARAM_STATIC_STRINGS));
