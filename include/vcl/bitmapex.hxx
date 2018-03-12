@@ -56,7 +56,7 @@ public:
     BitmapEx&           operator=( const BitmapEx& rBitmapEx );
     bool                operator==( const BitmapEx& rBitmapEx ) const;
     bool                operator!=( const BitmapEx& rBitmapEx ) const { return !(*this==rBitmapEx); }
-    bool                operator!() const { return !aBitmap; }
+    bool                operator!() const { return !maBitmap; }
 
     bool                IsEmpty() const;
     void                SetEmpty();
@@ -68,7 +68,7 @@ public:
                               const Point& rDestPt, const Size& rDestSize ) const;
 
     bool                IsTransparent() const;
-    TransparentType     GetTransparentType() const { return eTransparent; }
+    TransparentType     GetTransparentType() const { return meTransparent; }
 
     Bitmap              GetBitmap( const Color* pTransReplaceColor = nullptr ) const;
     /// Gives direct access to the contained bitmap.
@@ -78,18 +78,18 @@ public:
     bool                IsAlpha() const;
     AlphaMask           GetAlpha() const;
 
-    const Size&         GetSizePixel() const { return aBitmapSize; }
+    const Size&         GetSizePixel() const { return maBitmapSize; }
     void                SetSizePixel( const Size& rNewSize, BmpScaleFlag nScaleFlag = BmpScaleFlag::Default );
 
-    const Size&         GetPrefSize() const { return aBitmap.GetPrefSize(); }
-    void                SetPrefSize( const Size& rPrefSize ) { aBitmap.SetPrefSize( rPrefSize ); }
+    const Size&         GetPrefSize() const { return maBitmap.GetPrefSize(); }
+    void                SetPrefSize( const Size& rPrefSize ) { maBitmap.SetPrefSize( rPrefSize ); }
 
-    const MapMode&      GetPrefMapMode() const { return aBitmap.GetPrefMapMode(); }
-    void                SetPrefMapMode( const MapMode& rPrefMapMode ) { aBitmap.SetPrefMapMode( rPrefMapMode ); }
+    const MapMode&      GetPrefMapMode() const { return maBitmap.GetPrefMapMode(); }
+    void                SetPrefMapMode( const MapMode& rPrefMapMode ) { maBitmap.SetPrefMapMode( rPrefMapMode ); }
 
-    const Color&        GetTransparentColor() const { return aTransparentColor; }
+    const Color&        GetTransparentColor() const { return maTransparentColor; }
 
-    sal_uInt16          GetBitCount() const { return aBitmap.GetBitCount(); }
+    sal_uInt16          GetBitCount() const { return maBitmap.GetBitCount(); }
     sal_uLong           GetSizeBytes() const;
     BitmapChecksum      GetChecksum() const;
 
@@ -445,8 +445,8 @@ public:
 
 public:
 
-    SAL_DLLPRIVATE std::shared_ptr<ImpBitmap> const & ImplGetBitmapImpBitmap() const { return aBitmap.ImplGetImpBitmap(); }
-    SAL_DLLPRIVATE std::shared_ptr<ImpBitmap> const & ImplGetMaskImpBitmap() const { return aMask.ImplGetImpBitmap(); }
+    SAL_DLLPRIVATE std::shared_ptr<ImpBitmap> const & ImplGetBitmapImpBitmap() const { return maBitmap.ImplGetImpBitmap(); }
+    SAL_DLLPRIVATE std::shared_ptr<ImpBitmap> const & ImplGetMaskImpBitmap() const { return maMask.ImplGetImpBitmap(); }
 
 
 private:
@@ -454,12 +454,12 @@ private:
     friend bool VCL_DLLPUBLIC WriteDIBBitmapEx(const BitmapEx& rSource, SvStream& rOStm);
     void  loadFromIconTheme( const OUString& rIconName );
 
-    Bitmap              aBitmap;
-    Bitmap              aMask;
-    Size                aBitmapSize;
-    Color               aTransparentColor;
-    TransparentType     eTransparent;
-    bool                bAlpha;
+    Bitmap              maBitmap;
+    Bitmap              maMask;
+    Size                maBitmapSize;
+    Color               maTransparentColor;
+    TransparentType     meTransparent;
+    bool                mbAlpha;
 
 };
 
