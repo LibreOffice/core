@@ -130,6 +130,7 @@ const ErrMsgCode RID_ERRHDL[] =
     { NC_("RID_ERRHDL", "Wrong checksum.") , ERRCODE_IO_BADCRC },
     { NC_("RID_ERRHDL", "Function not possible: write protected.") , ERRCODE_IO_WRITEPROTECTED },
     { NC_("RID_ERRHDL", "The password of a shared spreadsheet cannot be set or changed.\nDeactivate sharing mode first."), ERRCODE_SFX_SHARED_NOPASSWORDCHANGE },
+    { NC_("RID_ERRHDL", "File format error found at $(ARG1)(row,col)."), ERRCODE_SFX_FORMAT_ROWCOL },
     { nullptr, ERRCODE_NONE }
 };
 
