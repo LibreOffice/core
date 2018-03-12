@@ -46,6 +46,11 @@ inline QRect toQRect(const tools::Rectangle& rRect)
     return QRect(rRect.Left(), rRect.Top(), rRect.GetWidth(), rRect.GetHeight());
 }
 
+inline tools::Rectangle toRectangle(const QRect& rRect)
+{
+    return tools::Rectangle(rRect.left(), rRect.top(), rRect.width(), rRect.height());
+}
+
 inline QSize toQSize(const Size& rSize) { return QSize(rSize.Width(), rSize.Height()); }
 
 inline Size toSize(const QSize& rSize) { return Size(rSize.width(), rSize.height()); }
