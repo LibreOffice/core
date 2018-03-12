@@ -53,6 +53,8 @@
 #include <vcl/virdev.hxx>
 #include <o3tl/make_unique.hxx>
 
+using namespace css;
+
 static css::uno::Reference< css::i18n::XBreakIterator > xPPTBreakIter;
 
 PortionObj::PortionObj(const css::uno::Reference< css::beans::XPropertySet > & rXPropSet,
@@ -817,7 +819,7 @@ void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider* pBuProv, sal_Int1
                 nBulletRealSize = 100;
                 nMappedNumType = 0;
 
-                OUString aGraphicURL;
+                uno::Reference<graphic::XGraphic> xGraphic;
                 for ( sal_Int32 i = 0; i < nPropertyCount; i++ )
                 {
                     OUString aPropName( pPropValue[ i ].Name );
@@ -843,8 +845,8 @@ void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider* pBuProv, sal_Int1
                             aFontDesc.CharSet = RTL_TEXTENCODING_MS_1252;
 
                     }
-                    else if ( aPropName == "GraphicURL" )
-                        aGraphicURL = *o3tl::doAccess<OUString>(pPropValue[i].Value);
+                    else if ( aPropName == "Graphic" )
+                        xGraphic = pPropValue[i].Value.get<uno::Reference<graphic::XGraphic>>();
                     else if ( aPropName == "GraphicSize" )
                     {
                         if (auto aSize = o3tl::tryAccess<css::awt::Size>(pPropValue[i].Value))
@@ -887,25 +889,14 @@ void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider* pBuProv, sal_Int1
 #endif
                 }
 
-                if ( !aGraphicURL.isEmpty() )
+                if (xGraphic.is())
                 {
                     if ( aBuGraSize.Width() && aBuGraSize.Height() )
                     {
-                        sal_Int32 nIndex = aGraphicURL.indexOf(':');
-                        if ( nIndex != -1 )
-                        {
-                            nIndex++;
-                            if ( nIndex < aGraphicURL.getLength() )
-                            {
-                                OString aUniqueId( OUStringToOString(aGraphicURL.copy(nIndex), RTL_TEXTENCODING_UTF8) );
-                                if ( !aUniqueId.isEmpty() )
-                                {
-                                    nBulletId = pBuProv->GetId( aUniqueId, aBuGraSize );
-                                    if ( nBulletId != 0xffff )
-                                        bExtendedBulletsUsed = true;
-                                }
-                            }
-                        }
+                        Graphic aGraphic(xGraphic);
+                        nBulletId = pBuProv->GetId(xGraphic, aBuGraSize );
+                        if ( nBulletId != 0xffff )
+                            bExtendedBulletsUsed = true;
                     }
                     else
                     {
