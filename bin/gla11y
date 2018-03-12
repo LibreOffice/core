@@ -36,23 +36,263 @@ try:
     lxml = True
 except ImportError:
     if sys.version_info < (2,7):
+        print("gla11y needs lxml or python >= 2.7")
         exit()
     import xml.etree.ElementTree as ET
     lxml = False
 
+# Toplevel widgets
+widgets_toplevel = [
+    'GtkWindow',
+    'GtkOffscreenWindow',
+    'GtkApplicationWindow',
+    'GtkDialog',
+    'GtkAboutDialog',
+    'GtkFileChooserDialog',
+    'GtkColorChooserDialog',
+    'GtkFontChooserDialog',
+    'GtkMessageDialog',
+    'GtkRecentChooserDialog',
+    'GtkAssistant',
+    'GtkAppChooserDialog',
+    'GtkPrintUnixDialog',
+    'GtkShortcutsWindow',
+]
+
+widgets_ignored = widgets_toplevel + [
+    # Containers
+    'GtkBox',
+    'GtkGrid',
+    'GtkNotebook',
+    'GtkFrame',
+    'GtkAspectFrame',
+    'GtkListBox',
+    'GtkFlowBox',
+    'GtkOverlay',
+    'GtkMenuBar',
+    'GtkToolbar',
+    'GtkToolpalette',
+    'GtkPaned',
+    'GtkHPaned',
+    'GtkVPaned',
+    'GtkButtonBox',
+    'GtkHButtonBox',
+    'GtkVButtonBox',
+    'GtkLayout',
+    'GtkFixed',
+    'GtkEventBox',
+    'GtkExpander',
+    'GtkViewport',
+    'GtkScrolledWindow',
+    'GtkAlignment',
+    'GtkRevealer',
+    'GtkSearchBar',
+    'GtkHeaderBar',
+    'GtkStack',
+    'GtkStackSwticher',
+    'GtkPopover',
+    'GtkPopoverMenu',
+    'GtkActionBar',
+    'GtkHandleBox',
+    'GtkShortcutsSection',
+    'GtkShortcutsGroup',
+    'GtkTable',
+
+    'GtkVBox',
+    'GtkHBox',
+    'GtkToolItem',
+    'GtkMenu',
+
+    # Invisible actions
+    'GtkSeparator',
+    'GtkHSeparator',
+    'GtkVSeparator',
+    'GtkAction',
+    'GtkToggleAction',
+    'GtkActionGroup',
+    'GtkCellRendererGraph',
+    'GtkCellRendererPixbuf',
+    'GtkCellRendererProgress',
+    'GtkCellRendererSpin',
+    'GtkCellRendererText',
+    'GtkCellRendererToggle',
+    'GtkSeparatorMenuItem',
+    'GtkSeparatorToolItem',
+
+    # Storage objects
+    'GtkListStore',
+    'GtkTreeStore',
+    'GtkTreeModelFilter',
+    'GtkTreeModelSort',
+
+    'GtkEntryBuffer',
+    'GtkTextBuffer',
+    'GtkTextTag',
+    'GtkTextTagTable',
+
+    'GtkSizeGroup',
+    'GtkWindowGroup',
+    'GtkAccelGroup',
+    'GtkAdjustment',
+    'GtkEntryCompletion',
+    'GtkIconFactory',
+    'GtkStatusIcon',
+    'GtkFileFilter',
+    'GtkRecentFilter',
+    'GtkRecentManager',
+    'GThemedIcon',
+
+    'GtkTreeSelection',
+
+    'GtkListBoxRow',
+
+    # Useless to label
+    'GtkScrollbar',
+    'GtkHScrollbar',
+    'GtkStatusbar',
+    'GtkInfoBar',
+
+    # These are actually labels
+    'GtkLinkButton',
+
+    # This precisely give a11y information :)
+    'AtkObject',
+]
+
+widgets_suffixignored = [
+]
+
+# These widgets always need a label
+widgets_needlabel = [
+    'GtkEntry',
+    'GtkSearchEntry',
+    'GtkScale',
+    'GtkHScale',
+    'GtkVScale',
+    'GtkSpinButton',
+    'GtkSwitch',
+]
+
+# These widgets normally have their own label
+widgets_buttons = [
+    'GtkButton',
+    'GtkToolButton',
+    'GtkToggleButton',
+    'GtkToggleToolButton',
+    'GtkRadioButton',
+    'GtkRadioToolButton',
+    'GtkCheckButton',
+    'GtkModelButton',
+    'GtkLockButton',
+    'GtkColorButton',
+    'GtkMenuButton',
+
+    'GtkMenuItem',
+    'GtkImageMenuItem',
+    'GtkMenuToolButton',
+    'GtkRadioMenuItem',
+    'GtkCheckMenuItem',
+]
+
+# These widgets are labels that can label other widgets
+widgets_labels = [
+    'GtkLabel',
+    'GtkAccelLabel',
+]
+
+# The rest should probably be labelled if there are orphan labels
+
+# GtkSpinner
+# GtkProgressBar
+# GtkLevelBar
+
+# GtkComboBox
+# GtkComboBoxText
+# GtkFileChooserButton
+# GtkAppChooserButton
+# GtkFontButton
+# GtkCalendar
+# GtkColorChooserWidget
+
+# GtkCellView
+# GtkTreeView
+# GtkTreeViewColumn
+# GtkTextView
+# GtkIconView
+
+# GtkImage
+# GtkArrow
+# GtkDrawingArea
+
+# GtkScaleButton
+# GtkVolumeButton
+
+
+# TODO:
+# GtkColorPlane ?
+# GtkColorScale ?
+# GtkColorSwatch ?
+# GtkFileChooserWidget ?
+# GtkFishbowl ?
+# GtkFontChooserWidget ?
+# GtkIcon ?
+# GtkInspector* ?
+# GtkMagnifier ?
+# GtkPathBar ?
+# GtkPlacesSidebar ?
+# GtkPlacesView ?
+# GtkPrinterOptionWidget ?
+# GtkStackCombo ?
+# GtkStackSidebar ?
+
 progname = os.path.basename(sys.argv[0])
+
 suppressions = {}
+ids = {}
+ids_dup = {}
+labelled_by_elm = {}
+label_for_elm = {}
+mnemonic_for_elm = {}
+
 gen_suppr = None
 gen_supprfile = None
 suppr_prefix = ""
 outfile = None
+
 pflag = False
-Werror = False
-Wnone = False
+
+warn_orphan_labels = True
+
 errors = 0
 errexists = 0
 warnings = 0
 warnexists = 0
+fatals = 0
+fatalexists = 0
+
+enables = [ ]
+dofatals = [ ]
+
+#
+# XML browsing and printing functions
+#
+
+def elm_parent(root, elm):
+    """
+    Return the parent of the element.
+    """
+    if lxml:
+        return elm.getparent()
+    else:
+        def find_parent(cur, elm):
+            for o in cur:
+                if o == elm:
+                    return cur
+                parent = find_parent(o, elm)
+                if parent is not None:
+                    return parent
+            return None
+        return find_parent(root, elm)
 
 def step_elm(elm):
     """
@@ -108,6 +348,10 @@ def errpath(filename, tree, elm):
     path = filename + ':' + path
     return path
 
+#
+# Warning/Error printing functions
+#
+
 def elm_prefix(filename, elm):
     """
     Return the display prefix of the element
@@ -128,8 +372,47 @@ def elm_name(elm):
         if 'id' in elm.attrib:
             id = elm.attrib['id'].encode('ascii','ignore').decode('ascii')
             name += "'%s' " % id
+        if not name:
+            name = "'" + elm.tag + "'"
+            if lxml:
+                name += " line " + str(elm.sourceline)
         return name
     return ""
+
+def elm_name_line(elm):
+    """
+    Return a display name of the element with line number
+    """
+    if elm is not None:
+        name = elm_name(elm)
+        if lxml and " line " not in name:
+            name += "line " + str(elm.sourceline) + " "
+        return name
+    return ""
+
+def elm_line(elm):
+    """
+    Return the line for the given element.
+    """
+    if lxml:
+        return " line " + str(elm.sourceline)
+    else:
+        return ""
+
+def elms_lines(elms):
+    """
+    Return the list of lines for the given elements.
+    """
+    if lxml:
+        return " lines " + ', '.join([str(l.sourceline) for l in elms])
+    else:
+        return ""
+
+def elms_names_lines(elms):
+    """
+    Return the list of names and lines for the given elements.
+    """
+    return ', '.join([elm_name_line(elm) for elm in elms])
 
 def elm_suppr(filename, tree, elm, msgtype):
     """
@@ -161,90 +444,433 @@ def elm_suppr(filename, tree, elm, msgtype):
 
     return (prefix, suppr)
 
-def err(filename, tree, elm, msgtype, msg):
+def is_enabled(elm, msgtype, l, default):
     """
-    Emit an error for an element
+    Test whether warning type msgtype is enabled for elm in l
     """
-    global errors, errexists
+    enabled = default
+    for (enable, thetype, klass) in l:
+        # Match warning type
+        if thetype is not None:
+            if thetype != msgtype:
+                continue
+        # Match elm class
+        if klass is not None and elm is not None:
+            if klass != elm.attrib.get('class'):
+                continue
+        enabled = enable
+    return enabled
 
-    (prefix, suppr) = elm_suppr(filename, tree, elm, msgtype)
+def err(filename, tree, elm, msgtype, msg, error = True):
+    """
+    Emit a warning or error for an element
+    """
+    global errors, errexists, warnings, warnexists, fatals, fatalexists
 
-    if suppr in suppressions:
-        # Suppressed
-        errexists += 1
+    # Let user tune whether a warning or error
+    fatal = is_enabled(elm, msgtype, dofatals, error)
+
+    # By default warnings and errors are enabled, but let user tune it
+    if not is_enabled(elm, msgtype, enables, True):
         return
 
-    errors += 1
-    msg = "%s ERROR: %s%s" % (prefix, elm_name(elm), msg)
-    print(msg)
-    if outfile is not None:
-        print(msg, file=outfile)
-
-
-def warn(filename, tree, elm, msgtype, msg):
-    """
-    Emit a warning for an element
-    """
-    global Werror, Wnone, errors, errexists, warnings, warnexists
-
-    if Wnone:
-        return
-
     (prefix, suppr) = elm_suppr(filename, tree, elm, msgtype)
     if suppr in suppressions:
         # Suppressed
-        if Werror:
+        suppressions[suppr] = False
+        if fatal:
+            fatalexists += 1
+        if error:
             errexists += 1
         else:
             warnexists += 1
         return
 
-    if Werror:
+    if error:
         errors += 1
     else:
         warnings += 1
+    if fatal:
+        fatals += 1
 
-    msg = "%s WARNING: %s%s" % (prefix, elm_name(elm), msg)
+    msg = "%s %s%s: %s%s" % (prefix,
+            "FATAL " if fatal else "",
+            "ERROR" if error else "WARNING",
+            elm_name(elm), msg)
     print(msg)
     if outfile is not None:
         print(msg, file=outfile)
 
-
-def check_objects(filename, tree, elm, objects, target):
+def warn(filename, tree, elm, msgtype, msg):
     """
-    Check that objects contains exactly one object
+    Emit a warning for an element
     """
-    length = len(list(objects))
-    if length == 0:
-        err(filename, tree, elm, "undeclared-target", "uses undeclared target '%s'" % target)
-    elif length > 1:
-        err(filename, tree, elm, "multiple-target", "several targets are named '%s'" % target)
+    err(filename, tree, elm, msgtype, msg, False)
 
-def check_props(filename, tree, root, elm, props):
+#
+# Labelling testing functions
+#
+
+def find_button_parent(root, elm):
+    """
+    Find a parent which is a button
+    """
+    if lxml:
+        parent = elm.getparent()
+        if parent is not None:
+            if parent.attrib.get('class') in widgets_buttons:
+                return parent
+            return find_button_parent(root, parent)
+    else:
+        def find_parent(cur, elm):
+            for o in cur:
+                if o == elm:
+                    if cur.attrib.get('class') in widgets_buttons:
+                        # we are the button, immediately above the target
+                        return cur
+                    else:
+                        # we aren't the button, but target is over there
+                        return True
+                parent = find_parent(o, elm)
+                if parent == True:
+                    # It is over there, but didn't find a button yet
+                    if cur.attrib.get('class') in widgets_buttons:
+                        # we are the button
+                        return cur
+                    else:
+                        return True
+                if parent is not None:
+                    # we have the button parent over there
+                    return parent
+            return None
+        parent = find_parent(root, elm)
+        if parent == True:
+            parent = None
+        return parent
+
+
+def is_labelled_parent(elm):
+    """
+    Return whether this element is a labelled parent
+    """
+    klass = elm.attrib.get('class')
+    if klass in widgets_toplevel:
+        return True
+    if klass == 'GtkShortcutsGroup':
+        children = elm.findall("property[@name='title']")
+        if len(children) >= 1:
+            return True
+    if klass == 'GtkFrame' or klass == 'GtkNotebook':
+        children = elm.findall("child[@type='tab']") + elm.findall("child[@type='label']") 
+        if len(children) >= 1:
+            return True
+    return False
+
+def elm_labelled_parent(root, elm):
+    """
+    Return the first labelled parent of the element, which can thus be used as
+    the root of widgets with common labelled context
+    """
+
+    if lxml:
+        def find_labelled_parent(elm):
+            if is_labelled_parent(elm):
+                return elm
+            parent = elm.getparent()
+            if parent is None:
+                return None
+            return find_labelled_parent(parent)
+        parent = elm.getparent()
+        if parent is None:
+            return None
+        return find_labelled_parent(elm.getparent())
+    else:
+        def find_labelled_parent(cur, elm):
+            if cur == elm:
+                # the target element is over there
+                return True
+            for o in cur:
+                parent = find_labelled_parent(o, elm)
+                if parent == True:
+                    # target element is over there, check ourself
+                    if is_labelled_parent(cur):
+                        # yes, and we are the first ancestor of the target element
+                        return cur
+                    else:
+                        # no, but target element is over there.
+                        return True
+                if parent != None:
+                    # the first ancestor of the target element was over there
+                    return parent
+            return None
+        parent = find_labelled_parent(root, elm)
+        if parent == True:
+            parent = None
+        return parent
+
+def is_orphan_label(filename, tree, root, obj, orphan_root, doprint = False):
+    """
+    Check whether this label has no accessibility relation, or doubtful relation
+    because another label labels the same target
+    """
+    global label_for_elm, labelled_by_elm, mnemonic_for_elm
+
+    # label-for
+    label_for = obj.findall("accessibility/relation[@type='label-for']")
+    for rel in label_for:
+        target = rel.attrib['target']
+        l = label_for_elm[target]
+        if len(l) > 1:
+            return True
+
+    # mnemonic_widget
+    mnemonic_for = obj.findall("property[@name='mnemonic_widget']")
+    for rel in mnemonic_for:
+        target = rel.text
+        l = mnemonic_for_elm[target]
+        if len(l) > 1:
+            return True
+
+    if len(label_for) > 0:
+        # At least one label-for, we are not orphan.
+        return False
+
+    if len(mnemonic_for) > 0:
+        # At least one mnemonic_widget, we are not orphan.
+        return False
+
+    labelled_by = obj.findall("accessibility/relation[@type='labelled-by']")
+    if len(labelled_by) > 0:
+        # Oh, a labelled label, probably not to be labelling anything
+        return False
+
+    parent = elm_parent(root, obj)
+    if parent is not None:
+        childtype = parent.attrib.get('type')
+        if childtype is None:
+            childtype = parent.attrib.get('internal-child')
+        if parent.tag == 'child' and childtype == 'label' \
+                                  or childtype == 'tab':
+            # This is a frame or a notebook label, not orphan.
+            return False
+
+    if find_button_parent(root, obj) is not None:
+        # This label is part of a button
+        return False
+
+    oid = obj.attrib.get('oid')
+    if oid is not None:
+        if oid in labelled_by_elm:
+            # Some widget is labelled by us, we are not orphan.
+            # We should have had a label-for, will warn about it later.
+            return False
+
+    # No label-for, no mnemonic-for, no labelled-by, we are orphan.
+    if doprint:
+        context = elm_name(orphan_root)
+        if context:
+            context = " within " + context
+        warn(filename, tree, obj, "orphan-label", "does not specify what it labels" + context)
+    return True
+
+def is_orphan_widget(filename, tree, root, obj, orphan, orphan_root, doprint = False):
+    """
+    Check whether this widget has no accessibility relation.
+    """
+    if obj.tag != 'object':
+        return False
+
+    oid = obj.attrib.get('id')
+    klass = obj.attrib.get('class')
+
+    # "Don't care" special case
+    if klass in widgets_ignored:
+        return False
+    for suffix in widgets_suffixignored:
+        if klass[-len(suffix):] == suffix:
+            return False
+
+    # Widgets usual do not strictly require a label, i.e. a labelled parent
+    # is enough for context, but some do always need one.
+    requires_label = klass in widgets_needlabel
+
+    labelled_by = obj.findall("accessibility/relation[@type='labelled-by']")
+
+    # Labels special case
+    if klass in widgets_labels:
+        return False
+
+    # Case 1: has an explicit <child internal-child="accessible"> sub-element
+    children = obj.findall("child[@internal-child='accessible']")
+    if len(children) > 1 and doprint:
+        err(filename, tree, obj, "multiple-accessible", "has multiple <child internal-child='accessible'>"
+            "%s" % elms_lines(children))
+    if len(children) >= 1:
+        return False
+
+    # Case 2: has an <accessibility> sub-element with a "labelled-by"
+    # <relation> pointing to an existing element.
+    if len(labelled_by) > 0:
+        return False
+
+    # Case 3: has a label-for
+    if oid in label_for_elm:
+        return False
+
+    # Case 4: has a mnemonic
+    if oid in mnemonic_for_elm:
+        return False
+
+    # Case 5: Has a <property name="tooltip_text">
+    tooltips = obj.findall("property[@name='tooltip_text']")
+    if len(tooltips) > 1 and doprint:
+        err(filename, tree, obj, "multiple-tooltip", "has multiple tooltip_text properties")
+    if len(tooltips) >= 1:
+        return False
+
+    # Case 6: Has a <property name="placeholder_text">
+    placeholders = obj.findall("property[@name='placeholder_text']")
+    if len(placeholders) > 1 and doprint:
+        err(filename, tree, obj, "multiple-placeholder", "has multiple placeholder_text properties")
+    if len(placeholders) >= 1:
+        return False
+
+    # Buttons usually don't need an external label, their own is enough, (but they do need one)
+    if klass in widgets_buttons:
+
+        labels = obj.findall("property[@name='label']")
+        if len(labels) > 1 and doprint:
+            err(filename, tree, obj, "multiple-label", "has multiple label properties")
+        if len(labels) >= 1:
+            # Has a <property name="label">
+            return False
+
+        actions = obj.findall("property[@name='action_name']")
+        if len(actions) > 1 and doprint:
+            err(filename, tree, obj, "multiple-action_name", "has multiple action_name properties")
+        if len(actions) >= 1:
+            # Has a <property name="action_name">
+            return False
+
+        gtklabels = obj.findall(".//object[@class='GtkLabel']") + obj.findall(".//object[@class='GtkAccelLabel']")
+        if len(gtklabels) >= 1:
+            # Has a custom label
+            return False
+
+        # no label for a button, warn
+        if doprint:
+            warn(filename, tree, obj, "button-no-label", "does not have its own label");
+        if not is_enabled(obj, "button-no-label", enables, True):
+            return False
+        return True
+
+    # GtkImages special case
+    if klass == "GtkImage":
+        uses = [u for u in tree.iterfind(".//object/property[@name='image']") if u.text == oid]
+        if len(uses) > 0:
+            # This image is just used by another element, don't warn
+            # about the image itself, we probably want the warning on
+            # the element instead.
+            return False
+
+        if find_button_parent(root, obj) is not None:
+            # This image is part of a button, we want the warning on the button
+            # instead, if any.
+            return False
+
+    # GtkEntry special case
+    if klass == 'GtkEntry' or klass == 'GtkSearchEntry':
+        parent = elm_parent(root, obj)
+        if parent is not None:
+            if parent.tag == 'child' and \
+                parent.attrib.get('internal-child') == "entry":
+                # This is an internal entry of another widget. Relations
+                # will be handled by that widget.
+                return False
+
+    # GtkShortcutsShortcut special case
+    if klass == 'GtkShortcutsShortcut':
+        children = obj.findall("property[@name='title']")
+        if len(children) >= 1:
+            return False
+
+
+    # Really no label, perhaps emit a warning
+    if not is_enabled(obj, "no-labelled-by", enables, True):
+        return False
+
+    if not orphan:
+        # No orphan label, so probably the labelled parent provides enough
+        # context.
+        if requires_label:
+            # But these always need a label.
+            if doprint:
+                warn(filename, tree, obj, "no-labelled-by", "has no accessibility label")
+            return True
+        return False
+
+    if doprint:
+        context = elm_name(orphan_root)
+        if context:
+            context = " within " + context
+        warn(filename, tree, obj, "no-labelled-by", "has no accessibility label while there are orphan labels" + context)
+    return True
+
+def orphan_items(filename, tree, root, elm):
+    """
+    Check whether from some element there exists orphan labels and orphan widgets
+    """
+    orphan_labels = False
+    orphan_widgets = False
+    if elm.attrib.get('class') in widgets_labels:
+        orphan_labels = is_orphan_label(filename, tree, root, elm, None)
+    else:
+        orphan_widgets = is_orphan_widget(filename, tree, root, elm, True, None)
+    for obj in elm:
+        # We are not interested in orphan labels under another labelled
+        # parent.  This also allows to keep linear complexity.
+        if not is_labelled_parent(obj):
+            label, widget = orphan_items(filename, tree, root, obj)
+            if label:
+                orphan_labels = True
+            if widget:
+                orphan_widgets = True
+            if orphan_labels and orphan_widgets:
+                # No need to look up more
+                break
+    return orphan_labels, orphan_widgets
+
+#
+# UI accessibility checks
+#
+
+def check_props(filename, tree, root, elm, forward):
     """
     Check the given list of relation properties
     """
+    props = elm.findall("property[@name='mnemonic_widget']")
     for prop in props:
-        objects = root.iterfind(".//object[@id='%s']" % prop.text)
-        check_objects(filename, tree, elm, objects, prop.text)
+        if prop.text not in ids:
+            err(filename, tree, elm, "undeclared-target", forward + " uses undeclared target '%s'" % prop.text)
+    return props
 
-def check_rels(filename, tree, root, elm, rels):
+def check_rels(filename, tree, root, elm, forward, backward = None):
     """
-    Check the given list of relations
+    Check the relations given by forward
     """
+    oid = elm.attrib.get('id')
+    rels = elm.findall("accessibility/relation[@type='" + forward + "']")
     for rel in rels:
         target = rel.attrib['target']
-        targets = root.iterfind(".//object[@id='%s']" % target)
-        check_objects(filename, tree, elm, targets, target)
-
-def elms_lines(elms):
-    """
-    Return the list of lines for the given elements.
-    """
-    if lxml:
-        return ": lines " + ', '.join([str(l.sourceline) for l in elms])
-    else:
-        return ""
+        if target not in ids:
+            err(filename, tree, elm, "undeclared-target", forward + " uses undeclared target '%s'" % target)
+        elif backward is not None:
+            widget = ids[target]
+            backrels = widget.findall("accessibility/relation[@type='" + backward + "']")
+            if len([x for x in backrels if x.attrib['target'] == oid]) == 0:
+                err(filename, tree, elm, "missing-" + backward, "has " + forward + \
+                    ", but is not " + backward + " by " + elm_name_line(widget))
+    return rels
 
 def check_a11y_relation(filename, tree):
     """
@@ -252,111 +878,256 @@ def check_a11y_relation(filename, tree):
     document represented by `root' doesn't comply with Accessibility
     rules.
     """
+    global widgets_ignored, ids, label_for_elm, labelled_by_elm, mnemonic_for_elm
+
+    def check_elm(orphan_root, obj, orphan_labels, orphan_widgets):
+        """
+        Check one element, knowing that orphan_labels/widgets tell whether
+        there are orphan labels and widgets within orphan_root
+        """
+
+        oid = obj.attrib.get('id')
+        klass = obj.attrib.get('class')
+
+        # "Don't care" special case
+        if klass in widgets_ignored:
+            return
+        for suffix in widgets_suffixignored:
+            if klass[-len(suffix):] == suffix:
+                return
+
+        # Widgets usual do not strictly require a label, i.e. a labelled parent
+        # is enough for context, but some do always need one.
+        requires_label = klass in widgets_needlabel
+
+        if oid is not None:
+            # Check that ids are unique
+            if oid in ids_dup:
+                if ids[oid] == obj:
+                    # We are the first, warn
+                    duplicates = tree.findall(".//object[@id='" + oid + "']")
+                    err(filename, tree, obj, "duplicate-id", "has the same id as other elements " + elms_names_lines(duplicates))
+
+        # Check label-for and their dual labelled-by
+        label_for = check_rels(filename, tree, root, obj, "label-for", "labelled-by")
+
+        # Check labelled-by and its dual label-for
+        labelled_by = check_rels(filename, tree, root, obj, "labelled-by", "label-for")
+
+        # Should have only one label
+        if len(labelled_by) >= 1:
+            if oid in mnemonic_for_elm:
+                warn(filename, tree, obj, "labelled-by-and-mnemonic",
+                     "has both a mnemonic " + elm_name_line(mnemonic_for_elm[oid][0]) + "and labelled-by relation")
+            if len(labelled_by) > 1:
+                warn(filename, tree, obj, "multiple-labelled-by", "has multiple labelled-by relations")
+        if oid in label_for_elm:
+            if len(label_for_elm[oid]) > 1:
+                warn(filename, tree, obj, "duplicate-label-for", "is referenced by multiple label-for " + elms_names_lines(label_for_elm[oid]))
+        if oid in mnemonic_for_elm:
+            if len(mnemonic_for_elm[oid]) > 1:
+                warn(filename, tree, obj, "duplicate-mnemonic", "is referenced by multiple mnemonic_widget " + elms_names_lines(mnemonic_for_elm[oid]))
+
+        # Check member-of
+        member_of = check_rels(filename, tree, root, obj, "member-of")
+
+        # Labels special case
+        if klass in widgets_labels:
+            properties = check_props(filename, tree, root, obj, "mnemonic_widget")
+            if len(properties) > 1:
+                err(filename, tree, obj, "multiple-mnemonic", "has multiple mnemonic_widgets properties"
+                    "%s" % elms_lines(properties))
+
+            # Emit orphaning warnings
+            if warn_orphan_labels or orphan_widgets:
+                is_orphan_label(filename, tree, root, obj, orphan_root, True)
+
+            # We are done with the label
+            return
+
+        # Not a label, will perhaps need one
+
+        # Emit orphaning warnings
+        is_orphan_widget(filename, tree, root, obj, orphan_labels, orphan_root, True)
+
     root = tree.getroot()
 
+    # Flush ids and relations from previous files
+    ids = {}
+    ids_dup = {}
+    labelled_by_elm = {}
+    label_for_elm = {}
+    mnemonic_for_elm = {}
+
+    # First pass to get links into hash tables, no warning, just record duplicates
     for obj in root.iter('object'):
-
-        label_for = obj.findall("accessibility/relation[@type='label-for']")
-        check_rels(filename, tree, root, obj, label_for)
-
-        labelled_by = obj.findall("accessibility/relation[@type='labelled-by']")
-        check_rels(filename, tree, root, obj, labelled_by)
-
-        member_of = obj.findall("accessibility/relation[@type='member-of']")
-        check_rels(filename, tree, root, obj, member_of)
-
-        if obj.attrib['class'] == 'GtkLabel':
-            # Case 0: A 'GtkLabel' must contain one or more "label-for"
-            # pointing to existing elements or...
-            if len(label_for) > 0:
-                continue
-
-            # ...a single "mnemonic_widget"
-            properties = obj.findall("property[@name='mnemonic_widget']")
-            check_props(filename, tree, root, obj, properties)
-            if len(properties) > 1:
-                # It does not make sense for a label to be a mnemonic for
-                # several actions.
-                err(filename, tree, obj, "multiple-mnemonic", "has too many sub-elements"
-                    ", expected single <property name='mnemonic_widgets'>"
-                    "%s" % elms_lines(properties))
-                continue
-            if len(properties) == 1:
-                continue
-            # TODO: warn that it is a label for nothing
-            continue
-
-        # Case 1: has a <child internal-child="accessible"> sub-element
-        children = obj.findall("child[@internal-child='accessible']")
-        if children:
-            if len(children) > 1:
-                err(filename, tree, obj, "multiple-accessible", "has too many sub-elements"
-                    ", expected single <child internal-child='accessible'>"
-                    "%s" % elms_lines(children))
-            continue
-
-        # Case 2: has an <accessibility> sub-element with a "labelled-by"
-        # <relation> pointing to an existing element.
-        if len(labelled_by) > 0:
-            continue
-
-        # Case 3/4: has an ID...
         oid = obj.attrib.get('id')
         if oid is not None:
-            # ...referenced by a single "label-for" <relation>
-            rels = root.iterfind(".//relation[@target='%s']" % oid)
-            labelfor = [r for r in rels if r.attrib.get('type') == 'label-for']
-            if len(labelfor) == 1:
-                continue
-            if len(labelfor) > 1:
-                err(filename, tree, obj, "multiple-label-for", "has too many elements"
-                    ", expected single <relation type='label-for' target='%s'>"
-                    "%s" % (oid, elm_lines(labelfor)))
-                continue
+            if oid not in ids:
+                ids[oid] = obj
+            else:
+                ids_dup[oid] = True
 
-            # ...referenced by a single "mnemonic_widget"
-            props = root.iterfind(".//property[@name='mnemonic_widget']")
-            props = [p for p in props if p.text == oid]
-            # TODO: warn when more than one.
-            if len(props) >= 1:
-                continue
+        labelled_by = obj.findall("accessibility/relation[@type='labelled-by']")
+        for rel in labelled_by:
+            target = rel.attrib.get('target')
+            if target is not None:
+                if target not in labelled_by_elm:
+                    labelled_by_elm[target] = [ obj ]
+                else:
+                    labelled_by_elm[target].append(obj)
 
-        # TODO: after a few more checks and false-positives filtering, warn
-        # that this does not have a label
-        if obj.attrib['class'] == "GtkScale":
-            # GtkScale definitely needs a context
-            err(filename, tree, obj, "no-labelled-by", "has no accessibility label")
+        label_for = obj.findall("accessibility/relation[@type='label-for']")
+        for rel in label_for:
+            target = rel.attrib.get('target')
+            if target is not None:
+                if target not in label_for_elm:
+                    label_for_elm[target] = [ obj ]
+                else:
+                    label_for_elm[target].append(obj)
 
+        mnemonic_for = obj.findall("property[@name='mnemonic_widget']")
+        for rel in mnemonic_for:
+            target = rel.text
+            if target is not None:
+                if target not in mnemonic_for_elm:
+                    mnemonic_for_elm[target] = [ obj ]
+                else:
+                    mnemonic_for_elm[target].append(obj)
+
+    # Second pass, recursive depth-first, to be able to efficiently know whether
+    # there are orphan labels within a part of the tree.
+    def recurse(orphan_root, obj, orphan_labels, orphan_widgets):
+        if obj == root or is_labelled_parent(obj):
+            orphan_root = obj
+            orphan_labels, orphan_widgets = orphan_items(filename, tree, root, obj)
+
+        if obj.tag == 'object':
+            check_elm(orphan_root, obj, orphan_labels, orphan_widgets)
+
+        for o in obj:
+            recurse(orphan_root, o, orphan_labels, orphan_widgets)
+
+    recurse(root, root, False, False)
+
+#
+# Main
+#
 
 def usage():
-    print("%s [-W error|none] [-p] [-g SUPPR_FILE] [-s SUPPR_FILE] [-P SUPPR_PREFIX] [-o LOG_FILE] [file ... | -L filelist]" % progname,
+    print("%s [-p] [-g SUPPR_FILE] [-s SUPPR_FILE] [-i WIDGET1,WIDGET2[,...]] [-o LOG_FILE] [file ...]" % progname,
           file=sys.stderr)
-    print("  -p print XML class path instead of line number");
-    print("  -g Generate suppression file SUPPR_FILE");
-    print("  -s Suppress warnings given by file SUPPR_FILE");
-    print("  -P Suppress SUPPR_PREFIX from emitted warnings, e.g. absolute source directory");
-    print("  -o Also prints errors and warnings to given file");
+    print("")
+    print("  -p Print XML class path instead of line number")
+    print("  -g Generate suppression file SUPPR_FILE")
+    print("  -s Suppress warnings given by file SUPPR_FILE")
+    print("  -i Ignore warnings for widgets of a given class")
+    print("  -o Also prints errors and warnings to given file")
+    print("")
+    print("  --widgets-FOO [+][CLASS1[,CLASS2[,...]]]")
+    print("    Give or extend one of the lists of widget classes, where FOO can be:")
+    print("    - toplevel      : widgets to be considered toplevel windows")
+    print("    - ignored       : widgets which do not need labelling (e.g. GtkBox)")
+    print("    - suffixignored : suffixes of widget classes which do not need labelling")
+    print("    - needlabel     : widgets which always need labelling (e.g. GtkEntry)")
+    print("    - buttons       : widgets which need their own label but not more")
+    print("                      (e.g. GtkButton)")
+    print("    - labels        : widgets which provide labels (e.g. GtkLabel)")
+    print("  --widgets-print print default widgets lists")
+    print("")
+    print("  --enable-all         enable all warnings/dofatals (default)")
+    print("  --disable-all        disable all warnings/dofatals")
+    print("  --fatal-all          make all warnings dofatals")
+    print("  --not-fatal-all      do not make all warnings dofatals (default)")
+    print("")
+    print("  --enable-type=TYPE    enable warning/fatal type TYPE")
+    print("  --disable-type=TYPE   disable warning/fatal type TYPE")
+    print("  --fatal-type=TYPE     make warning type TYPE an fatal")
+    print("  --not-fatal-type=TYPE make warning type TYPE not an fatal")
+    print("")
+    print("  --enable-widgets=CLASS    enable warning/fatal type CLASS")
+    print("  --disable-widgets=CLASS   disable warning/fatal type CLASS")
+    print("  --fatal-widgets=CLASS     make warning type CLASS an fatal")
+    print("  --not-fatal-widgets=CLASS make warning type CLASS not an fatal")
+    print("")
+    print("  --enable-specific=TYPE.CLASS    enable warning/fatal type TYPE for widget")
+    print("                                  class CLASS")
+    print("  --disable-specific=TYPE.CLASS   disable warning/fatal type TYPE for widget")
+    print("                                  class CLASS")
+    print("  --fatal-specific=TYPE.CLASS     make warning type TYPE an fatal for widget")
+    print("                                  class CLASS")
+    print("  --not-fatal-specific=TYPE.CLASS make warning type TYPE not an fatal for widget")
+    print("                                  class CLASS")
+    print("")
+    print("  --disable-orphan-labels         only warn about orphan labels when there are")
+    print("                                  orphan widgets in the same context")
     sys.exit(2)
+
+def widgets_opt(widgets_list, arg):
+    """
+    Replace or extend `widgets_list' with the list of classes contained in `arg'
+    """
+    append = arg and arg[0] == '+'
+    if append:
+        arg = arg[1:]
+
+    if arg:
+        widgets = arg.split(',')
+    else:
+        widgets = []
+
+    if not append:
+        del widgets_list[:]
+
+    widgets_list.extend(widgets)
 
 
 def main():
-    global pflag, Werror, Wnone, gen_suppr, gen_supprfile, suppressions, suppr_prefix, errors, outfile
+    global pflag, gen_suppr, gen_supprfile, suppressions, suppr_prefix, dofatals, enables, dofatals, warn_orphan_labels
+    global widgets_toplevel, widgets_ignored, widgets_suffixignored, widgets_needlabel, widgets_buttons, widgets_labels
+    global outfile
 
     try:
-        opts, args = getopt.getopt(sys.argv[1:], "W:pg:s:P:o:L:")
+        opts, args = getopt.getopt(sys.argv[1:], "piIg:s:P:o:L:", [
+                "widgets-toplevel=",
+                "widgets-ignored=",
+                "widgets-suffixignored=",
+                "widgets-needlabel=",
+                "widgets-buttons=",
+                "widgets-labels=",
+                "widgets-print",
+
+                "enable-all",
+                "disable-all",
+                "fatal-all",
+                "not-fatal-all",
+
+                "enable-type=",
+                "disable-type=",
+                "fatal-type=",
+                "not-fatal-type=",
+
+                "enable-widgets=",
+                "disable-widgets=",
+                "fatal-widgets=",
+                "not-fatal-widgets=",
+
+                "enable-specific=",
+                "disable-specific=",
+                "fatal-specific=",
+                "not-fatal-specific=",
+
+                "disable-orphan-labels",
+            ] )
     except getopt.GetoptError:
         usage()
 
     suppr = None
     out = None
     filelist = None
+
     for o, a in opts:
-        if o == "-W":
-            if a == "error":
-                Werror = True
-            elif a == "none":
-                Wnone = True
-        elif o == "-p":
+        if o == "-p":
             pflag = True
         elif o == "-g":
             gen_suppr = a
@@ -368,6 +1139,70 @@ def main():
             out = a
         elif o == "-L":
             filelist = a
+
+        elif o == "--widgets-toplevel":
+            widgets_opt(widgets_toplevel, a)
+        elif o == "--widgets-ignored":
+            widgets_opt(widgets_ignored, a)
+        elif o == "--widgets-suffixignored":
+            widgets_opt(widgets_suffixignored, a)
+        elif o == "--widgets-needlabel":
+            widgets_opt(widgets_needlabel, a)
+        elif o == "--widgets-buttons":
+            widgets_opt(widgets_buttons, a)
+        elif o == "--widgets-labels":
+            widgets_opt(widgets_labels, a)
+        elif o == "--widgets-print":
+            print("--widgets-toplevel '" + ','.join(widgets_toplevel) + "'")
+            print("--widgets-ignored '" + ','.join(widgets_ignored) + "'")
+            print("--widgets-suffixignored '" + ','.join(widgets_suffixignored) + "'")
+            print("--widgets-needlabel '" + ','.join(widgets_needlabel) + "'")
+            print("--widgets-buttons '" + ','.join(widgets_buttons) + "'")
+            print("--widgets-labels '" + ','.join(widgets_labels) + "'")
+            sys.exit(0)
+
+        elif o == '--enable-all':
+            enables.append( (True, None, None) )
+        elif o == '--disable-all':
+            enables.append( (False, None, None) )
+        elif o == '--fatal-all':
+            dofatals.append( (True, None, None) )
+        elif o == '--not-fatal-all':
+            dofatals.append( (False, None, None) )
+
+        elif o == '--enable-type':
+            enables.append( (True, a, None) )
+        elif o == '--disable-type':
+            enables.append( (False, a, None) )
+        elif o == '--fatal-type':
+            dofatals.append( (True, a, None) )
+        elif o == '--not-fatal-type':
+            dofatals.append( (False, a, None) )
+
+        elif o == '--enable-widgets':
+            enables.append( (True, None, a) )
+        elif o == '--disable-widgets':
+            enables.append( (False, None, a) )
+        elif o == '--fatal-widgets':
+            dofatals.append( (True, None, a) )
+        elif o == '--not-fatal-widgets':
+            dofatals.append( (False, None, a) )
+
+        elif o == '--enable-specific':
+            (thetype, klass) = a.split('.', 1)
+            enables.append( (True, thetype, klass) )
+        elif o == '--disable-specific':
+            (thetype, klass) = a.split('.', 1)
+            enables.append( (False, thetype, klass) )
+        elif o == '--fatal-specific':
+            (thetype, klass) = a.split('.', 1)
+            dofatals.append( (True, thetype, klass) )
+        elif o == '--not-fatal-specific':
+            (thetype, klass) = a.split('.', 1)
+            dofatals.append( (False, thetype, klass) )
+
+        elif o == '--disable-orphan-labels':
+            warn_orphan_labels = False
 
     # Read suppression file before overwriting it
     if suppr is not None:
@@ -418,17 +1253,31 @@ def main():
         print(estr)
 
     if warnings > 0 or warnexists > 0:
-        wstr = "%s new warning%s" % (warnings,
-                                           's' if warnings > 1 else '')
+        wstr = "%s new warning%s" % (warnings, 's' if warnings > 1 else '')
         if warnexists > 0:
             wstr += " (%s suppressed by %s)" % (warnexists, suppr)
         print(wstr)
+
+    if fatals > 0 or fatalexists > 0:
+        wstr = "%s new fatal%s" % (fatals, 's' if fatals > 1 else '')
+        if fatalexists > 0:
+            wstr += " (%s suppressed by %s)" % (fatalexists, suppr)
+        print(wstr)
+
+    n = 0
+    for (suppr,unused) in suppressions.items():
+        if unused:
+            n += 1
+
+    if n > 0:
+        print("%s suppression%s unused" % (n, 's' if n > 1 else ''))
 
     if gen_supprfile is not None:
         gen_supprfile.close()
     if outfile is not None:
         outfile.close()
-    if errors > 0 and gen_suppr is None:
+    if fatals > 0 and gen_suppr is None:
+        print("Explanations are available on https://wiki.documentfoundation.org/Development/Accessibility")
         sys.exit(1)
 
 

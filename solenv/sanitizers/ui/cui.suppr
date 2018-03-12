@@ -1,3 +1,8 @@
 cui/uiconfig/ui/gradientpage.ui:GtkBox[@id='GradientPage']/GtkFrame[@id='frame1']/GtkAlignment[@id='alignment1']/GtkBox[@id='box2']/GtkGrid[@id='grid6']/GtkScale[@id='incrementslider'] no-labelled-by
+cui/uiconfig/ui/gradientpage.ui:GtkBox[@id='GradientPage']/GtkFrame[@id='frame1']/GtkAlignment[@id='alignment1']/GtkBox[@id='box2']/GtkGrid[@id='grid5']/GtkLabel[@id='centerft'] orphan-label
 cui/uiconfig/ui/gradientpage.ui:GtkBox[@id='GradientPage']/GtkFrame[@id='frame1']/GtkAlignment[@id='alignment1']/GtkBox[@id='box2']/GtkGrid[@id='grid3']/GtkScale[@id='borderslider'] no-labelled-by
+cui/uiconfig/ui/hatchpage.ui:GtkBox[@id='HatchPage']/GtkFrame[@id='frame1']/GtkAlignment[@id='alignment1']/GtkBox[@id='box3']/GtkLabel[@id='distanceft'] orphan-label
+cui/uiconfig/ui/hatchpage.ui:GtkBox[@id='HatchPage']/GtkFrame[@id='frame1']/GtkAlignment[@id='alignment1']/GtkBox[@id='box3']/GtkLabel[@id='angleft'] orphan-label
 cui/uiconfig/ui/hatchpage.ui:GtkBox[@id='HatchPage']/GtkFrame[@id='frame1']/GtkAlignment[@id='alignment1']/GtkBox[@id='box3']/GtkBox[@id='box1']/GtkScale[@id='angleslider'] no-labelled-by
+cui/uiconfig/ui/hatchpage.ui:GtkBox[@id='HatchPage']/GtkFrame[@id='frame1']/GtkAlignment[@id='alignment1']/GtkBox[@id='box3']/GtkLabel[@id='linetypeft'] orphan-label
+cui/uiconfig/ui/hatchpage.ui:GtkBox[@id='HatchPage']/GtkFrame[@id='frame1']/GtkAlignment[@id='alignment1']/GtkBox[@id='box3']/GtkLabel[@id='linecolorft'] orphan-label
