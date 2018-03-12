@@ -16,6 +16,24 @@
       "revId": "7fbb96c2fbf99c47eca6f493f54fc3974f55cf86",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba2be162_c37edead",
+        "filename": "vcl/source/outdev/text.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1203,
+      "author": {
+        "id": 1000381
+      },
+      "writtenOn": "2018-03-12T15:45:01Z",
+      "side": 0,
+      "message": "I did consider this, but ICU already short-cuts such cases and does not run the whole bidi algorithm. It does not hurt to do it here also, I guess.",
+      "parentUuid": "ba2be162_235a5a84",
+      "revId": "7fbb96c2fbf99c47eca6f493f54fc3974f55cf86",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
