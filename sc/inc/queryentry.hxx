@@ -39,6 +39,8 @@ struct SC_DLLPUBLIC ScQueryEntry
         QueryType     meType;
         double        mfVal;
         svl::SharedString maString;
+        // a cache for transliterated version of maString
+        mutable OUString  maTransliteratedString;
         bool              mbMatchEmpty;
 
         Item() : meType(ByValue), mfVal(0.0), mbMatchEmpty(false) {}

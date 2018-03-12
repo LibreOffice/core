@@ -2605,17 +2605,20 @@ public:
                 }
                 else
                 {
-                    OUString aQueryStr = rItem.maString.getString();
                     const LanguageType nLang = ScGlobal::pSysLocale->GetLanguageTag().getLanguageType();
                     OUString aCell( mpTransliteration->transliterate(
                         aCellStr.getString(), nLang, 0, aCellStr.getLength(),
                         nullptr ) );
-                    OUString aQuer( mpTransliteration->transliterate(
-                        aQueryStr, nLang, 0, aQueryStr.getLength(),
-                        nullptr ) );
+                    if (rItem.maTransliteratedString.isEmpty() && !rItem.maString.isEmpty())
+                    {
+                        rItem.maTransliteratedString = mpTransliteration->transliterate(
+                            rItem.maString.getString(), nLang, 0, rItem.maString.getLength(),
+                            nullptr );
+                    }
+                    OUString *pQuer = &rItem.maTransliteratedString;
                     sal_Int32 nIndex = (rEntry.eOp == SC_ENDS_WITH || rEntry.eOp == SC_DOES_NOT_END_WITH) ?
-                        (aCell.getLength() - aQuer.getLength()) : 0;
-                    sal_Int32 nStrPos = ((nIndex < 0) ? -1 : aCell.indexOf( aQuer, nIndex ));
+                        (aCell.getLength() - pQuer->getLength()) : 0;
+                    sal_Int32 nStrPos = ((nIndex < 0) ? -1 : aCell.indexOf( *pQuer, nIndex ));
                     switch (rEntry.eOp)
                     {
                     case SC_EQUAL:
@@ -2633,10 +2636,10 @@ public:
                         bOk = ( nStrPos != 0 );
                         break;
                     case SC_ENDS_WITH:
-                        bOk = (nStrPos >= 0 && nStrPos + aQuer.getLength() == aCell.getLength() );
+                        bOk = (nStrPos >= 0 && nStrPos + pQuer->getLength() == aCell.getLength() );
                         break;
                     case SC_DOES_NOT_END_WITH:
-                        bOk = (nStrPos < 0 || nStrPos + aQuer.getLength() != aCell.getLength() );
+                        bOk = (nStrPos < 0 || nStrPos + pQuer->getLength() != aCell.getLength() );
                         break;
                     default:
                         {
