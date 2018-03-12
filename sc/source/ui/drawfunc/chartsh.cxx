@@ -39,7 +39,7 @@
 #include <gridwin.hxx>
 #include <scresid.hxx>
 
-#define ScChartShell
+#define ShellClass_ScChartShell
 #include <scslots.hxx>
 
 using namespace css::uno;

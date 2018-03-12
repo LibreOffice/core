@@ -59,8 +59,8 @@
 #include <markdata.hxx>
 #include <gridwin.hxx>
 
-#define ScCellShell
-#define CellMovement
+#define ShellClass_ScCellShell
+#define ShellClass_CellMovement
 #include <scslots.hxx>
 
 

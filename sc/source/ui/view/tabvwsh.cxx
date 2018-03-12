@@ -45,7 +45,7 @@
 #include <sfx2/request.hxx>
     // needed for -fsanitize=function visibility of typeinfo for functions of
     // type void(SfxShell*,SfxRequest&) defined in scslots.hxx
-#define ScTabViewShell
+#define ShellClass_ScTabViewShell
 #include <scslots.hxx>
 
 

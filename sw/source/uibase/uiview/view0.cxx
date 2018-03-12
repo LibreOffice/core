@@ -57,9 +57,9 @@
 #include <wview.hxx>
 #include <strings.hrc>
 
-#define SwView
-#define Text
-#define TextDrawText
+#define ShellClass_SwView
+#define ShellClass_Text
+#define ShellClass_TextDrawText
 
 #include <sfx2/msg.hxx>
 #include <swslots.hxx>

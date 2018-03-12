@@ -69,7 +69,7 @@
 #include <comphelper/processfactory.hxx>
 
 using namespace ::sd::slidesorter;
-#define SlideSorterViewShell
+#define ShellClass_SlideSorterViewShell
 #include <sdslots.hxx>
 
 using namespace ::com::sun::star;

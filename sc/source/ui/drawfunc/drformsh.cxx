@@ -37,7 +37,7 @@
 #include <svx/svdobj.hxx>
 #include <vcl/EnumContext.hxx>
 
-#define ScDrawFormShell
+#define ShellClass_ScDrawFormShell
 #include <scslots.hxx>
 
 SFX_IMPL_INTERFACE(ScDrawFormShell, ScDrawShell)

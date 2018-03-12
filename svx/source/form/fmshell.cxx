@@ -80,7 +80,7 @@
 
 #include <svx/sdrobjectfilter.hxx>
 
-#define FmFormShell
+#define ShellClass_FmFormShell
 #include <svxslots.hxx>
 
 #include <tbxform.hxx>

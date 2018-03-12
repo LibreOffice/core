@@ -58,7 +58,7 @@
 #include <globals.hrc>
 #include <strings.hrc>
 
-#define SwDrawTextShell
+#define ShellClass_SwDrawTextShell
 #include <sfx2/msg.hxx>
 #include <swslots.hxx>
 #include <uitool.hxx>

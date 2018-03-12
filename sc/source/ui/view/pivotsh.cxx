@@ -39,7 +39,7 @@
 #include <uiitems.hxx>
 #include <scabstdlg.hxx>
 
-#define ScPivotShell
+#define ShellClass_ScPivotShell
 #include <scslots.hxx>
 #include <memory>
 

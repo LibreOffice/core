@@ -75,7 +75,7 @@
 #include <tabvwsh.hxx>
 #include <gridwin.hxx>
 
-#define ScDrawTextObjectBar
+#define ShellClass_ScDrawTextObjectBar
 #include <scslots.hxx>
 
 #include <memory>

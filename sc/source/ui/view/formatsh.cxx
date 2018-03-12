@@ -76,9 +76,9 @@
 #include <markarr.hxx>
 #include <attrib.hxx>
 
-#define ScFormatShell
-#define TableFont
-#define FormatForSelection
+#define ShellClass_ScFormatShell
+#define ShellClass_TableFont
+#define ShellClass_FormatForSelection
 #include <scslots.hxx>
 
 #include <scabstdlg.hxx>

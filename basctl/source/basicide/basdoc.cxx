@@ -27,7 +27,7 @@
 #include "unomodel.hxx"
 
 #include "basdoc.hxx"
-#define basctl_DocShell     // This CANNOT come before basdoc apparently
+#define ShellClass_basctl_DocShell
 #include <basslots.hxx>
 #include <sfx2/sfxmodelfactory.hxx>
 #include <svl/itemset.hxx>

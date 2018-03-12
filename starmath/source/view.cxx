@@ -80,7 +80,7 @@
 #define CMD_BOX_PADDING 4
 #define CMD_BOX_PADDING_TOP 10
 
-#define SmViewShell
+#define ShellClass_SmViewShell
 #include <smslots.hxx>
 
 using namespace css;

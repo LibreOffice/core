@@ -62,7 +62,7 @@
 #include <svx/sdr/contact/viewcontactofsdrmediaobj.hxx>
 #include <avmedia/mediaitem.hxx>
 
-#define SwMediaShell
+#define ShellClass_SwMediaShell
 #include <sfx2/msg.hxx>
 #include <swslots.hxx>
 #include <swabstdlg.hxx>

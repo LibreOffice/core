@@ -34,7 +34,7 @@
 #include <sfx2/request.hxx>
     // needed for -fsanitize=function visibility of typeinfo for functions of
     // type void(SfxShell*,SfxRequest&) defined in swslots.hxx
-#define SwWebListShell
+#define ShellClass_SwWebListShell
 #include <swslots.hxx>
 
 SFX_IMPL_INTERFACE(SwWebListShell, SwListShell)

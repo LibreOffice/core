@@ -81,7 +81,7 @@
 #include <svx/drawitem.hxx>
 #include <memory>
 
-#define SwFrameShell
+#define ShellClass_SwFrameShell
 #include <sfx2/msg.hxx>
 #include <swslots.hxx>
 #include <grfatr.hxx>

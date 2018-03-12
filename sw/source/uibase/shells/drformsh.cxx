@@ -47,7 +47,7 @@
 #include <sfx2/docfile.hxx>
 #include <docsh.hxx>
 
-#define SwDrawFormShell
+#define ShellClass_SwDrawFormShell
 #include <sfx2/msg.hxx>
 #include <swslots.hxx>
 

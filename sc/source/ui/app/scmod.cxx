@@ -110,7 +110,7 @@
 
 #include <svx/xmlsecctrl.hxx>
 
-#define ScModule
+#define ShellClass_ScModule
 #include <scslots.hxx>
 
 #include <scabstdlg.hxx>

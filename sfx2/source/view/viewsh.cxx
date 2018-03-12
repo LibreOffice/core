@@ -95,7 +95,7 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::util;
 using namespace ::cppu;
 
-#define SfxViewShell
+#define ShellClass_SfxViewShell
 #include <sfxslots.hxx>
 
 

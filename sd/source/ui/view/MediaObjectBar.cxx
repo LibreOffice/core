@@ -42,7 +42,7 @@
 
 using namespace sd;
 
-#define MediaObjectBar
+#define ShellClass_MediaObjectBar
 #include <sdslots.hxx>
 
 namespace sd {
