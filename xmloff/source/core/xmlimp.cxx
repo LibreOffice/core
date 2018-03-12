@@ -229,7 +229,7 @@ public:
             {
                 mnGeneratorVersion = SvXMLImport::OOo_34x;
             }
-            else if (nUPD == 400)
+            else if (nUPD == 400 || nUPD == 401)
             {
                 mnGeneratorVersion = SvXMLImport::AOO_40x;
             }
