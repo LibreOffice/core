@@ -861,7 +861,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
                      aINetProtocol == INetProtocol::Http ||
                      aINetProtocol == INetProtocol::Https )
                 {
-                    sfx2::openUriExternally(aURL.Complete, true);
+                    URITools().openUriExternally(aURL.Complete, true);
                     return;
                 }
                 else
@@ -908,8 +908,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
                         bool bLoadInternal = false;
                         try
                         {
-                            sfx2::openUriExternally(
-                                aURL.Complete, pFilter == nullptr);
+                            URITools().openUriExternally(aURL.Complete, pFilter == nullptr);
                         }
                         catch ( css::system::SystemShellExecuteException& )
                         {

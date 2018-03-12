@@ -12,24 +12,29 @@
 
 #include <sal/config.h>
 
+class URITools
+{
+private:
+    Timer aOpenURITimer;
+    DECL_LINK(onOpenURI, Timer*, void);
+    OUString msURI;
+    bool mbHandleSystemShellExecuteException;
 
-namespace sfx2 {
+public:
+    /** Open a URI via com.sun.star.system.SystemShellExecute
 
-/// Open a URI via com.sun.star.system.SystemShellExecute
-///
-/// Handles XSystemShellExecute.execute's IllegalArgumentException (throwing a
-/// RuntimeException if it is unexpected, i.e., not caused by the given uri not
-/// being an absolute URI reference).
-///
-/// Handles XSystemShellExecute.execute's SystemShellExecuteException unless the
-/// given handleSystemShellExecuteException is false (in which case the
-/// exception is re-thrown).
-///
-/// @return true iff execution was successful
-bool openUriExternally(
-    OUString const & uri, bool handleSystemShellExecuteException);
+        Handles XSystemShellExecute.execute's IllegalArgumentException (throwing a
+        RuntimeException if it is unexpected, i.e., not caused by the given uri not
+        being an absolute URI reference).
 
-}
+        Handles XSystemShellExecute.execute's SystemShellExecuteException unless the
+        given handleSystemShellExecuteException is false (in which case the
+        exception is re-thrown).
+
+         @return true if execution was successful
+     */
+    void openUriExternally(const OUString& sURI, bool bHandleSystemShellExecuteException);
+};
 
 #endif
 
