@@ -417,7 +417,6 @@ void CompressGraphics( ImpOptimizer& rOptimizer, const Reference< XComponentCont
                             if ( aGraphicUserIter->mxShape.is() )
                             {
                                 Reference< XPropertySet > xShapePropertySet( aGraphicUserIter->mxShape, UNO_QUERY_THROW );
-                                xShapePropertySet->setPropertyValue( "GraphicURL", Any( OUString() ) );
                                 xShapePropertySet->setPropertyValue( "Graphic", Any( xNewGraphic ) );
 
                                 if ( aGraphicUserIter->maGraphicCropLogic.Left || aGraphicUserIter->maGraphicCropLogic.Top
