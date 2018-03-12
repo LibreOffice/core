@@ -318,7 +318,7 @@ std::vector<Any> HsqlRowInputStream::readOneRow(const ColumnTypeVector& nColType
             }
             break;
             case DataType::OTHER:
-                // TODO
+                aData.push_back(Any{}); // TODO
                 break;
             case DataType::BINARY:
             case DataType::VARBINARY:
@@ -334,7 +334,6 @@ std::vector<Any> HsqlRowInputStream::readOneRow(const ColumnTypeVector& nColType
             break;
 
             default:
-                // TODO other exception
                 throw WrongFormatException();
         }
     }
