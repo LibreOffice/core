@@ -22,13 +22,13 @@
 
 #include "bitmapfilter.hxx"
 
-class BitmapScaleSuper : public BitmapFilter
+class BitmapScaleSuperFilter : public BitmapFilter
 {
 public:
-                    BitmapScaleSuper(const double& rScaleX, const double& rScaleY);
-    virtual         ~BitmapScaleSuper() override;
+                    BitmapScaleSuperFilter(const double& rScaleX, const double& rScaleY);
+    virtual         ~BitmapScaleSuperFilter() override;
 
-    virtual bool    filter(Bitmap& rBitmap) override;
+    virtual bool    execute(Bitmap& rBitmap) override;
 
 private:
     double          mrScaleX;
