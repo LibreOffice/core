@@ -908,8 +908,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
                         bool bLoadInternal = false;
                         try
                         {
-                            sfx2::openUriExternally(
-                                aURL.Complete, pFilter == nullptr);
+                            sfx2::openUriExternally(aURL.Complete, pFilter == nullptr);
                         }
                         catch ( css::system::SystemShellExecuteException& )
                         {
