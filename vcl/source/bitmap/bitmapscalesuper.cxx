@@ -918,15 +918,15 @@ void scaleNonPalleteGeneral2(ScaleContext &rCtx, long nStartY, long nEndY)
 
 } // end anonymous namespace
 
-BitmapScaleSuper::BitmapScaleSuper(const double& rScaleX, const double& rScaleY) :
+BitmapScaleSuperFilter::BitmapScaleSuperFilter(const double& rScaleX, const double& rScaleY) :
     mrScaleX(rScaleX),
     mrScaleY(rScaleY)
 {}
 
-BitmapScaleSuper::~BitmapScaleSuper()
+BitmapScaleSuperFilter::~BitmapScaleSuperFilter()
 {}
 
-bool BitmapScaleSuper::filter(Bitmap& rBitmap)
+bool BitmapScaleSuperFilter::execute(Bitmap& rBitmap)
 {
     bool bRet = false;
 

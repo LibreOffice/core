@@ -371,7 +371,7 @@ bool ImplScaleConvolution(Bitmap& rBitmap, const double& rScaleX, const double& 
 
 } // end anonymous namespace
 
-bool BitmapScaleConvolution::filter(Bitmap& rBitmap)
+bool BitmapScaleConvolutionFilter::execute(Bitmap& rBitmap)
 {
 
     switch(meKernelType)

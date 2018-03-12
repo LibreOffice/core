@@ -32,17 +32,17 @@ enum class ConvolutionKernelType
     Lanczos3  = 3,
 };
 
-class VCL_DLLPUBLIC BitmapScaleConvolution : public BitmapFilter
+class VCL_DLLPUBLIC BitmapScaleConvolutionFilter : public BitmapFilter
 {
 public:
 
-    BitmapScaleConvolution(const double& rScaleX, const double& rScaleY, ConvolutionKernelType eKernelType)
+    BitmapScaleConvolutionFilter(const double& rScaleX, const double& rScaleY, ConvolutionKernelType eKernelType)
         : mrScaleX(rScaleX)
         , mrScaleY(rScaleY)
         , meKernelType(eKernelType)
     {}
 
-    virtual bool filter(Bitmap& rBitmap) override;
+    virtual bool execute(Bitmap& rBitmap) override;
 
 private:
     double mrScaleX;
