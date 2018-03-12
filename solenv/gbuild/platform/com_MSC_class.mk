@@ -583,7 +583,7 @@ $(call gb_Helper_abbreviate_dirs,\
 	FILES=$(call var2file,$(shell $(gb_MKTEMP)),100,$(UIFILES)) && \
 	$(gb_UIConfig_LXML_PATH) $(gb_Helper_set_ld_path) \
 	$(call gb_ExternalExecutable_get_command,python) \
-	$(gb_UIConfig_gla11y_SCRIPT) -s $(UI_A11YSUPPRS) $(GEN_A11Y_SUPPRS) -P $(SRCDIR)/ -o $@ -L $$FILES
+	$(gb_UIConfig_gla11y_SCRIPT) $(gb_UIConfig_gla11y_PARAMETERS) -o $@ -L $$FILES
 )
 
 endef

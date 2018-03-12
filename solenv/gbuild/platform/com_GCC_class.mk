@@ -159,7 +159,7 @@ define gb_UIConfig__gla11y_command
 $(call gb_Helper_abbreviate_dirs,\
 	$(gb_UIConfig_LXML_PATH) $(gb_Helper_set_ld_path) \
 	$(call gb_ExternalExecutable_get_command,python) \
-	$(gb_UIConfig_gla11y_SCRIPT) -s $(UI_A11YSUPPRS) $(GEN_A11Y_SUPPRS) -P $(SRCDIR)/ -o $@ $(UIFILES)
+	$(gb_UIConfig_gla11y_SCRIPT) $(gb_UIConfig_gla11y_PARAMETERS) -o $@ $(UIFILES)
 )
 
 endef
