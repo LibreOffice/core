@@ -12,24 +12,20 @@
 
 #include <sal/config.h>
 
+namespace sfx2
+{
+/** Open a URI via com.sun.star.system.SystemShellExecute
 
-namespace sfx2 {
+    Handles XSystemShellExecute.execute's IllegalArgumentException (throwing a
+    RuntimeException if it is unexpected, i.e., not caused by the given uri not
+    being an absolute URI reference).
 
-/// Open a URI via com.sun.star.system.SystemShellExecute
-///
-/// Handles XSystemShellExecute.execute's IllegalArgumentException (throwing a
-/// RuntimeException if it is unexpected, i.e., not caused by the given uri not
-/// being an absolute URI reference).
-///
-/// Handles XSystemShellExecute.execute's SystemShellExecuteException unless the
-/// given handleSystemShellExecuteException is false (in which case the
-/// exception is re-thrown).
-///
-/// @return true iff execution was successful
-bool openUriExternally(
-    OUString const & uri, bool handleSystemShellExecuteException);
-
-}
+    Handles XSystemShellExecute.execute's SystemShellExecuteException unless the
+    given handleSystemShellExecuteException is false (in which case the
+    exception is re-thrown).
+*/
+void openUriExternally(const OUString& sURI, bool bHandleSystemShellExecuteException);
+};
 
 #endif
 
