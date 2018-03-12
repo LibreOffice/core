@@ -31,7 +31,7 @@
 #include <sc.hrc>
 #include <document.hxx>
 
-#define ScAuditingShell
+#define ShellClass_ScAuditingShell
 #include <scslots.hxx>
 
 

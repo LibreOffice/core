@@ -29,7 +29,7 @@
 #include <wolesh.hxx>
 #include <cmdid.h>
 
-#define SwWebOleShell
+#define ShellClass_SwWebOleShell
 #include <swslots.hxx>
 
 SFX_IMPL_INTERFACE(SwWebOleShell, SwOleShell)

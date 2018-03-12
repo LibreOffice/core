@@ -45,7 +45,7 @@
 #include <fupoor.hxx>
 #include <Window.hxx>
 
-#define PresentationViewShell
+#define ShellClass_PresentationViewShell
 using namespace sd;
 #include <sdslots.hxx>
 

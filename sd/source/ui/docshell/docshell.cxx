@@ -79,7 +79,7 @@
 #include <sfx2/notebookbar/SfxNotebookBar.hxx>
 
 using namespace sd;
-#define DrawDocShell
+#define ShellClass_DrawDocShell
 #include <sdslots.hxx>
 
 SFX_IMPL_SUPERCLASS_INTERFACE(DrawDocShell, SfxObjectShell);

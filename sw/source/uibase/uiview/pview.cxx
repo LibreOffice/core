@@ -69,7 +69,7 @@
 #include <globals.hrc>
 #include <strings.hrc>
 
-#define SwPagePreview
+#define ShellClass_SwPagePreview
 #include <sfx2/msg.hxx>
 #include <swslots.hxx>
 #include <pagepreviewlayout.hxx>

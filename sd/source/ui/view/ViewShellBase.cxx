@@ -84,7 +84,7 @@
 #include <drawview.hxx>
 
 using namespace sd;
-#define ViewShellBase
+#define ShellClass_ViewShellBase
 #include <sdslots.hxx>
 
 using ::sd::framework::FrameworkHelper;

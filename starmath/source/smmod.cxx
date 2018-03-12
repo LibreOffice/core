@@ -37,7 +37,7 @@
 #include <svx/modctrl.hxx>
 
 
-#define SmModule
+#define ShellClass_SmModule
 #include <smslots.hxx>
 
 OUString SmResId(const char* pId)

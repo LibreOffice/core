@@ -46,7 +46,7 @@
 #include <drawdoc.hxx>
 
 using namespace sd;
-#define GraphicObjectBar
+#define ShellClass_GraphicObjectBar
 #include <sdslots.hxx>
 
 namespace sd {

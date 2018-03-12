@@ -73,7 +73,7 @@
 #include <globstr.hrc>
 #include <gridwin.hxx>
 
-#define ScEditShell
+#define ShellClass_ScEditShell
 #include <scslots.hxx>
 
 #include <scui_def.hxx>

@@ -93,7 +93,7 @@
 
 #include <chartins.hxx>
 
-#define SwTextShell
+#define ShellClass_SwTextShell
 #include <sfx2/msg.hxx>
 #include <vcl/EnumContext.hxx>
 #include <swslots.hxx>

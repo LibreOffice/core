@@ -31,7 +31,7 @@
 #include <document.hxx>
 #include <sc.hrc>
 
-#define ScPageBreakShell
+#define ShellClass_ScPageBreakShell
 #include <scslots.hxx>
 
 

@@ -163,7 +163,7 @@ static const sal_Char pFilterHtml[]     = "HTML (StarCalc)";
 static const sal_Char pFilterHtmlWebQ[] = "calc_HTML_WebQuery";
 static const sal_Char pFilterRtf[]      = "Rich Text Format (StarCalc)";
 
-#define ScDocShell
+#define ShellClass_ScDocShell
 #include <scslots.hxx>
 
 SFX_IMPL_INTERFACE(ScDocShell,SfxObjectShell)

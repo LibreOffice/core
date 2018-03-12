@@ -77,7 +77,7 @@
 #include <globals.hrc>
 #include <unobaseclass.hxx>
 
-#define SwTableShell
+#define ShellClass_SwTableShell
 #include <sfx2/msg.hxx>
 #include <swslots.hxx>
 

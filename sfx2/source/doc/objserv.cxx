@@ -113,7 +113,7 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::document;
 using namespace ::com::sun::star::task;
 
-#define SfxObjectShell
+#define ShellClass_SfxObjectShell
 #include <sfxslots.hxx>
 
 SFX_IMPL_SUPERCLASS_INTERFACE(SfxObjectShell, SfxShell)

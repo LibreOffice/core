@@ -108,7 +108,7 @@
 #include <sfx2/objface.hxx>
 #include <comphelper/storagehelper.hxx>
 
-#define SwDocShell
+#define ShellClass_SwDocShell
 #include <sfx2/msg.hxx>
 #include <swslots.hxx>
 #include <com/sun/star/document/UpdateDocMode.hpp>

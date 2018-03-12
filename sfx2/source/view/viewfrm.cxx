@@ -136,9 +136,8 @@ using ::com::sun::star::container::XIndexContainer;
 #include "impviewframe.hxx"
 #include <vcl/svapp.hxx>
 
-#define SfxViewFrame
+#define ShellClass_SfxViewFrame
 #include <sfxslots.hxx>
-#undef SfxViewFrame
 
 SFX_IMPL_SUPERCLASS_INTERFACE(SfxViewFrame,SfxShell)
 

@@ -127,7 +127,7 @@ static sal_uInt8 nPagePos;
 static sal_uInt8 nHeaderPos;
 static sal_uInt8 nFooterPos;
 
-#define SwBaseShell
+#define ShellClass_SwBaseShell
 #include <sfx2/msg.hxx>
 #include <swslots.hxx>
 

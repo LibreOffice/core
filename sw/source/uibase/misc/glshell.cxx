@@ -47,8 +47,8 @@
 #include <swerror.h>
 #include <strings.hrc>
 
-#define SwWebGlosDocShell
-#define SwGlosDocShell
+#define ShellClass_SwWebGlosDocShell
+#define ShellClass_SwGlosDocShell
 
 #include <sfx2/msg.hxx>
 #include <swslots.hxx>

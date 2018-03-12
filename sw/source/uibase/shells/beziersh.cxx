@@ -35,7 +35,7 @@
 #include <drawbase.hxx>
 #include <beziersh.hxx>
 #include <strings.hrc>
-#define SwBezierShell
+#define ShellClass_SwBezierShell
 #include <sfx2/msg.hxx>
 #include <swslots.hxx>
 

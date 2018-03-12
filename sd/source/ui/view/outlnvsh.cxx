@@ -93,7 +93,7 @@ using namespace ::com::sun::star::linguistic2;
 
 using namespace sd;
 
-#define OutlineViewShell
+#define ShellClass_OutlineViewShell
 #include <sdslots.hxx>
 
 namespace sd {
