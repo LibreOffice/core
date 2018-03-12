@@ -1025,11 +1025,7 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link<SpellCallbackInfo
         EPaM aP = pImpEditView->pEditEngine->pImpEditEngine->CreateEPaM(aPaM);
         EPaM aP2 = pImpEditView->pEditEngine->pImpEditEngine->CreateEPaM(aPaM2);
 
-        sal_uInt16 nId = 0;
-        // TODO for LOK, we'll need to convert the spelling popup menu to
-        // something much more sfx2-based & non-modal...
-        if (!comphelper::LibreOfficeKit::isActive())
-            nId = aPopupMenu->Execute( pImpEditView->GetWindow(), aTempRect, PopupMenuFlags::NoMouseUpClose );
+        sal_uInt16 nId = aPopupMenu->Execute( pImpEditView->GetWindow(), aTempRect, PopupMenuFlags::NoMouseUpClose );
 
         aPaM2 = pImpEditView->pEditEngine->pImpEditEngine->CreateEditPaM(aP2);
         aPaM = pImpEditView->pEditEngine->pImpEditEngine->CreateEditPaM(aP);
