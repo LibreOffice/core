@@ -202,6 +202,7 @@ void ScRangeList::Format( OUString& rStr, ScRefFlags nFlags, ScDocument* pDoc,
 
 void ScRangeList::Join( const ScRange& rNewRange, bool bIsInList )
 {
+    std::vector<void*> aDeleted;
     if ( maRanges.empty() )
     {
         push_back( rNewRange );
@@ -247,6 +248,7 @@ void ScRangeList::Join( const ScRange& rNewRange, bool bIsInList )
 Label_Range_Join:
 
     assert(pOver);
+    assert(std::find(aDeleted.begin(), aDeleted.end(), pOver) == aDeleted.end());
     const SCCOL nCol1 = pOver->aStart.Col();
     const SCROW nRow1 = pOver->aStart.Row();
     const SCCOL nTab1 = pOver->aStart.Tab();
@@ -320,13 +322,17 @@ Label_Range_Join:
             if ( bIsInList )
             {   // delete range pOver within the list
                 if (nOverPos != std::numeric_limits<size_t>::max())
+                {
+                    aDeleted.push_back(&maRanges[nOverPos]);
                     Remove(nOverPos);
+                }
                 else
                 {
                     for (size_t nOver = 0, nRanges = maRanges.size(); nOver < nRanges; ++nOver)
                     {
                         if (&maRanges[nOver] == pOver)
                         {
+                            aDeleted.push_back(&maRanges[nOver]);
                             Remove(nOver);
                             break;
                         }
