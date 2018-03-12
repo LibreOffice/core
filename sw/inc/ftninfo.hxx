@@ -32,33 +32,35 @@ class SwDoc;
 
 class SW_DLLPUBLIC SwEndNoteInfo : public SwClient
 {
-    SwDepend    aPageDescDep;
-    SwDepend    aCharFormatDep, aAnchorCharFormatDep;
+    mutable sw::WriterMultiListener aDepends;
+    mutable SwTextFormatColl* pTextFormatColl;
+    mutable SwPageDesc* pPageDesc;
+    mutable SwCharFormat* pCharFormat;
+    mutable SwCharFormat* pAnchorFormat;
     OUString sPrefix;
     OUString sSuffix;
 protected:
     bool        m_bEndNote;
-    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew ) override;
+    virtual void SwClientNotify( const SwModify&, const SfxHint&) override;
 
 public:
     SvxNumberType aFormat;
     sal_uInt16    nFootnoteOffset;
 
-    void        ChgPageDesc( SwPageDesc *pDesc );
-    SwPageDesc* GetPageDesc( SwDoc &rDoc ) const;
-    bool        KnowsPageDesc() const;
-    bool        DependsOn( const SwPageDesc* ) const;
+    void ChgPageDesc(SwPageDesc* pDesc);
+    SwPageDesc* GetPageDesc(SwDoc& rDoc) const;
+    bool KnowsPageDesc() const;
+    bool DependsOn(const SwPageDesc*) const;
 
     void SetFootnoteTextColl(SwTextFormatColl& rColl);
-    SwTextFormatColl* GetFootnoteTextColl() const { return const_cast<SwTextFormatColl*>(static_cast<const SwTextFormatColl*>(GetRegisteredIn())); } // can be 0.
+    SwTextFormatColl* GetFootnoteTextColl() const { return pTextFormatColl; } // can be 0.
 
     SwCharFormat* GetCharFormat(SwDoc &rDoc) const;
     void SetCharFormat( SwCharFormat* );
-    SwClient   *GetCharFormatDep() const { return const_cast<SwClient*>(static_cast<SwClient const *>(&aCharFormatDep)); }
 
     SwCharFormat* GetAnchorCharFormat(SwDoc &rDoc) const;
-    void SetAnchorCharFormat( SwCharFormat* );
-    SwClient   *GetAnchorCharFormatDep() const { return const_cast<SwClient*>(static_cast<SwClient const *>(&aAnchorCharFormatDep)); }
+    void SetAnchorCharFormat(SwCharFormat*);
+    SwCharFormat* GetCurrentCharFormat(const bool bAnchor) const;
 
     SwEndNoteInfo & operator=(const SwEndNoteInfo&);
     bool operator==( const SwEndNoteInfo &rInf ) const;

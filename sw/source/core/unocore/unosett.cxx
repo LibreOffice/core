@@ -490,17 +490,7 @@ uno::Any SwXFootnoteProperties::getPropertyValue(const OUString& rPropertyName)
         case WID_CHARACTER_STYLE:
         {
             OUString aString;
-            const SwCharFormat* pCharFormat = nullptr;
-            if( pEntry->nWID == WID_ANCHOR_CHARACTER_STYLE )
-            {
-                if( rFootnoteInfo.GetAnchorCharFormatDep()->GetRegisteredIn() )
-                    pCharFormat = rFootnoteInfo.GetAnchorCharFormat(*pDoc);
-            }
-            else
-            {
-                if( rFootnoteInfo.GetCharFormatDep()->GetRegisteredIn() )
-                    pCharFormat = rFootnoteInfo.GetCharFormat(*pDoc);
-            }
+            const SwCharFormat* pCharFormat = rFootnoteInfo.GetCurrentCharFormat(pEntry->nWID == WID_ANCHOR_CHARACTER_STYLE);
             if( pCharFormat )
             {
                 SwStyleNameMapper::FillProgName(
@@ -713,17 +703,7 @@ uno::Any SwXEndnoteProperties::getPropertyValue(const OUString& rPropertyName)
             case WID_CHARACTER_STYLE:
             {
                 OUString aString;
-                const SwCharFormat* pCharFormat = nullptr;
-                if( pEntry->nWID == WID_ANCHOR_CHARACTER_STYLE )
-                {
-                    if( rEndInfo.GetAnchorCharFormatDep()->GetRegisteredIn() )
-                        pCharFormat = rEndInfo.GetAnchorCharFormat(*pDoc);
-                }
-                else
-                {
-                    if( rEndInfo.GetCharFormatDep()->GetRegisteredIn() )
-                        pCharFormat = rEndInfo.GetCharFormat(*pDoc);
-                }
+                const SwCharFormat* pCharFormat = rEndInfo.GetCurrentCharFormat( pEntry->nWID == WID_ANCHOR_CHARACTER_STYLE );
                 if( pCharFormat )
                 {
                     SwStyleNameMapper::FillProgName(
