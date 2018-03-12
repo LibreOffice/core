@@ -1038,7 +1038,7 @@ bool ImpGraphic::ImplReadEmbedded( SvStream& rIStm )
                 maEx = maVectorGraphicData->getReplacement();
             }
 
-            maEx.aBitmapSize = aSize;
+            maEx.maBitmapSize = aSize;
 
             if( aMapMode != MapMode() )
             {
