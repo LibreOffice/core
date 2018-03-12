@@ -41,7 +41,7 @@ using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::util;
 
-namespace unocontrols{
+namespace unocontrols {
 
 enum PropertyHandle  // values represent index in PropertyArray
 {                   // for FrameControl

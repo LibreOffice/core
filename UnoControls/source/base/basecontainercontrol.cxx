@@ -31,7 +31,7 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::container;
 
-namespace unocontrols{
+namespace unocontrols {
 
 //  construct/destruct
 

@@ -93,11 +93,7 @@ namespace com { namespace sun { namespace star { namespace uno {
     class XComponentContext;
 } } } }
 
-//  "namespaces"
-
-namespace unocontrols{
-
-//  structs
+namespace unocontrols {
 
 struct IMPL_MutexContainer
 {
@@ -114,16 +110,14 @@ class BaseControl   : public css::lang::XServiceInfo
                     , public IMPL_MutexContainer
                     , public ::cppu::OComponentHelper
 {
-
 public:
-
     BaseControl( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
 
     virtual ~BaseControl() override;
 
     //  XInterface
 
-    /**_______________________________________________________________________________________________________
+    /**
         @short      give answer, if interface is supported
         @descr      The interfaces are searched by type.
 
@@ -140,7 +134,7 @@ public:
         const css::uno::Type& aType
     ) override;
 
-    /**_______________________________________________________________________________________________________
+    /**
         @short      increment refcount
         @seealso    XInterface
         @seealso    release()
@@ -149,7 +143,7 @@ public:
 
     virtual void SAL_CALL acquire() throw() override;
 
-    /**_______________________________________________________________________________________________________
+    /**
         @short      decrement refcount
         @seealso    XInterface
         @seealso    acquire()
@@ -160,7 +154,7 @@ public:
 
     //  XTypeProvider
 
-    /**_______________________________________________________________________________________________________
+    /**
         @short      get information about supported interfaces
         @seealso    XTypeProvider
         @return     Sequence of types of all supported interfaces
@@ -170,7 +164,7 @@ public:
 
     virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes() override;
 
-    /**_______________________________________________________________________________________________________
+    /**
         @short      get implementation id
         @descr      This ID is necessary for UNO-caching. If there no ID, cache is disabled.
                     Another way, cache is enabled.
@@ -368,7 +362,6 @@ protected:
     const css::uno::Reference< css::uno::XInterface >& impl_getDelegator() const { return m_xDelegator;}
 
 private:
-
     OMRCListenerMultiplexerHelper* impl_getMultiplexer();
 
     css::uno::Reference< css::uno::XComponentContext >        m_xComponentContext;
@@ -386,10 +379,9 @@ private:
     bool                                        m_bVisible;   // Some state flags
     bool                                        m_bInDesignMode;
     bool                                        m_bEnable;
+};
 
-};  // class BaseControl
-
-}   // namespace unocontrols
+}
 
 #endif // INCLUDED_UNOCONTROLS_INC_BASECONTROL_HXX
 

@@ -41,7 +41,7 @@ using namespace ::com::sun::star::awt;
 using ::std::vector;
 using ::std::find;
 
-namespace unocontrols{
+namespace unocontrols {
 
 ProgressMonitor::ProgressMonitor( const css::uno::Reference< XComponentContext >& rxContext )
     : BaseContainerControl  ( rxContext  )
