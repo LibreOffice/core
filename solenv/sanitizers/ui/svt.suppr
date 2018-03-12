@@ -1,2 +1,2 @@
-svtools/uiconfig/ui/graphicexport.ui:GtkDialog[@id='GraphicExportDialog']/GtkBox[@id='dialog-vbox1']/GtkBox[@id='box1']/GtkFrame[@id='jpgquality']/GtkAlignment[@id='alignment5']/GtkGrid[@id='grid2']/GtkScale[@id='compressionjpgsb'] no-labelled-by
-svtools/uiconfig/ui/graphicexport.ui:GtkDialog[@id='GraphicExportDialog']/GtkBox[@id='dialog-vbox1']/GtkBox[@id='box1']/GtkFrame[@id='pngcompression']/GtkAlignment[@id='alignment13']/GtkGrid[@id='grid9']/GtkScale[@id='compressionpngsb'] no-labelled-by
+svtools/uiconfig/ui/graphicexport.ui:GtkScale[@id='compressionjpgsb'] no-labelled-by
+svtools/uiconfig/ui/graphicexport.ui:GtkScale[@id='compressionpngsb'] no-labelled-by
