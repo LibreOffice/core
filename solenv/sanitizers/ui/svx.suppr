@@ -1,6 +1,12 @@
 svx/uiconfig/ui/compressgraphicdialog.ui:GtkDialog[@id='CompressGraphicDialog']/GtkBox[@id='dialog-vbox1']/GtkGrid/GtkFrame[@id='frame2']/GtkAlignment[@id='alignment1']/GtkGrid[@id='grid2']/GtkAlignment/GtkGrid/GtkScale[@id='scale-quality'] no-labelled-by
 svx/uiconfig/ui/compressgraphicdialog.ui:GtkDialog[@id='CompressGraphicDialog']/GtkBox[@id='dialog-vbox1']/GtkGrid/GtkFrame[@id='frame2']/GtkAlignment[@id='alignment1']/GtkGrid[@id='grid2']/GtkAlignment/GtkGrid/GtkScale[@id='scale-compression'] no-labelled-by
+svx/uiconfig/ui/mediaplayback.ui:GtkGrid[@id='MediaPlaybackPanel']/GtkGrid[@id='grid1']/GtkLabel[@id='label1'] orphan-label
+svx/uiconfig/ui/mediaplayback.ui:GtkGrid[@id='MediaPlaybackPanel']/GtkGrid[@id='grid1']/GtkLabel[@id='label2'] orphan-label
+svx/uiconfig/ui/mediaplayback.ui:GtkGrid[@id='MediaPlaybackPanel']/GtkGrid[@id='grid1']/GtkLabel[@id='label3'] orphan-label
 svx/uiconfig/ui/mediaplayback.ui:GtkGrid[@id='MediaPlaybackPanel']/GtkGrid[@id='grid1']/GtkScale[@id='timeslider'] no-labelled-by
 svx/uiconfig/ui/mediaplayback.ui:GtkGrid[@id='MediaPlaybackPanel']/GtkGrid[@id='grid1']/GtkScale[@id='volumeslider'] no-labelled-by
-svx/uiconfig/ui/sidebararea.ui:GtkGrid[@id='AreaPropertyPanel']/GtkBox[@id='box1']/GtkGrid[@id='grid1']/GtkScale[@id='transparencyslider'] no-labelled-by
+svx/uiconfig/ui/sidebarshadow.ui:GtkGrid[@id='ShadowPropertyPanel']/GtkGrid[@id='grid3']/GtkBox[@id='box2']/GtkGrid[@id='grid1']/GtkLabel[@id='angle'] orphan-label
+svx/uiconfig/ui/sidebarshadow.ui:GtkGrid[@id='ShadowPropertyPanel']/GtkGrid[@id='grid3']/GtkBox[@id='box2']/GtkGrid[@id='grid1']/GtkLabel[@id='distance'] orphan-label
+svx/uiconfig/ui/sidebarshadow.ui:GtkGrid[@id='ShadowPropertyPanel']/GtkGrid[@id='grid3']/GtkBox[@id='box2']/GtkBox[@id='box1']/GtkLabel[@id='transparency_label'] orphan-label
 svx/uiconfig/ui/sidebarshadow.ui:GtkGrid[@id='ShadowPropertyPanel']/GtkGrid[@id='grid3']/GtkBox[@id='box2']/GtkBox[@id='box1']/GtkGrid[@id='grid2']/GtkScale[@id='transparency_slider'] no-labelled-by
+svx/uiconfig/ui/sidebarshadow.ui:GtkGrid[@id='ShadowPropertyPanel']/GtkGrid[@id='grid3']/GtkBox[@id='box2']/GtkGrid[@id='grid4']/GtkLabel[@id='color'] orphan-label
