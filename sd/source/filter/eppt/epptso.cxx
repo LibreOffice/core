@@ -37,6 +37,7 @@
 #include <sot/storage.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/virdev.hxx>
+#include <vcl/graph.hxx>
 #include <sfx2/app.hxx>
 #include <svl/languageoptions.hxx>
 #include <editeng/svxenum.hxx>
@@ -104,14 +105,14 @@ PPTExBulletProvider::~PPTExBulletProvider()
 {
 }
 
-sal_uInt16 PPTExBulletProvider::GetId( const OString& rUniqueId, Size& rGraphicSize )
+sal_uInt16 PPTExBulletProvider::GetId(Graphic const & rGraphic, Size& rGraphicSize )
 {
     sal_uInt16 nRetValue = 0xffff;
 
-    if ( !rUniqueId.isEmpty() )
+    if (rGraphic)
     {
-        std::unique_ptr<GraphicObject> xGraphicObject(new GraphicObject(rUniqueId));
-        Graphic         aMappedGraphic, aGraphic(xGraphicObject->GetGraphic());
+        Graphic         aMappedGraphic, aGraphic(rGraphic);
+        std::unique_ptr<GraphicObject> xGraphicObject(new GraphicObject(aGraphic));
         Size            aPrefSize( aGraphic.GetPrefSize() );
         BitmapEx        aBmpEx( aGraphic.GetBitmapEx() );
 

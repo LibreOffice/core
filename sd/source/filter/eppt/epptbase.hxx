@@ -33,8 +33,10 @@
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/presentation/FadeEffect.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>
+#include <com/sun/star/graphic/XGraphic.hpp>
 #include <vcl/vclptr.hxx>
 #include <vcl/virdev.hxx>
+#include <vcl/graph.hxx>
 
 #include "grouptable.hxx"
 
@@ -122,10 +124,10 @@ class PPTExBulletProvider
 
     public:
 
-        sal_uInt16              GetId( const OString& rUniqueId, Size& rGraphicSize );
+        sal_uInt16 GetId(Graphic const & rGraphic, Size& rGraphicSize);
 
-                                PPTExBulletProvider();
-                                ~PPTExBulletProvider();
+        PPTExBulletProvider();
+        ~PPTExBulletProvider();
 };
 
 struct FontCollectionEntry
