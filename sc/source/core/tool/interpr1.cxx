@@ -9405,7 +9405,7 @@ static bool lcl_LookupQuery( ScAddress & o_rResultPos, ScDocument * pDoc, const 
         const ScQueryParam & rParam, const ScQueryEntry & rEntry )
 {
     bool bFound = false;
-    ScQueryCellIterator aCellIter( pDoc, rContext, rParam.nTab, rParam, false);
+    ScQueryCellIterator aCellIter( pDoc, rContext, rParam.nTab, rParam, false, true);
     if (rEntry.eOp != SC_EQUAL)
     {
         // range lookup <= or >=

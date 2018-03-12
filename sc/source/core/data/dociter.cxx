@@ -1048,7 +1048,7 @@ bool ScCellIterator::next()
 }
 
 ScQueryCellIterator::ScQueryCellIterator(ScDocument* pDocument, const ScInterpreterContext& rContext, SCTAB nTable,
-             const ScQueryParam& rParam, bool bMod ) :
+                                         const ScQueryParam& rParam, bool bMod, bool bVlookUp ) :
     mpParam(new ScQueryParam(rParam)),
     pDoc( pDocument ),
     mrContext( rContext ),
@@ -1056,7 +1056,8 @@ ScQueryCellIterator::ScQueryCellIterator(ScDocument* pDocument, const ScInterpre
     nStopOnMismatch( nStopOnMismatchDisabled ),
     nTestEqualCondition( nTestEqualConditionDisabled ),
     bAdvanceQuery( false ),
-    bIgnoreMismatchOnLeadingStrings( false )
+    bIgnoreMismatchOnLeadingStrings( false ),
+    bIsVlookUp( bVlookUp )
 {
     nCol = mpParam->nCol1;
     nRow = mpParam->nRow1;
@@ -1185,7 +1186,7 @@ bool ScQueryCellIterator::GetThis()
             if ( pDoc->maTabs[nTab]->ValidQuery( nRow, *mpParam,
                     (nCol == static_cast<SCCOL>(nFirstQueryField) ? &aCell : nullptr),
                     (nTestEqualCondition ? &bTestEqualCondition : nullptr),
-                    &mrContext) )
+                    &mrContext, bIsVlookUp) )
             {
                 if ( nTestEqualCondition && bTestEqualCondition )
                     nTestEqualCondition |= nTestEqualConditionMatched;

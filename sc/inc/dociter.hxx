@@ -277,6 +277,7 @@ class ScQueryCellIterator           // walk through all non-empty cells in an ar
     sal_uInt8            nTestEqualCondition;
     bool            bAdvanceQuery;
     bool            bIgnoreMismatchOnLeadingStrings;
+    bool            bIsVlookUp;
 
     /** Initialize position for new column. */
     void InitPos();
@@ -297,7 +298,7 @@ class ScQueryCellIterator           // walk through all non-empty cells in an ar
 
 public:
                     ScQueryCellIterator(ScDocument* pDocument, const ScInterpreterContext& rContext, SCTAB nTable,
-                                        const ScQueryParam& aParam, bool bMod);
+                                        const ScQueryParam& aParam, bool bMod, bool bVlookUp = false);
                                         // when !bMod, the QueryParam has to be filled
                                         // (bIsString)
     bool GetFirst();

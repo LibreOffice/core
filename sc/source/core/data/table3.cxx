@@ -2459,7 +2459,7 @@ public:
 
     std::pair<bool,bool> compareByString(
         ScRefCellValue& rCell, SCROW nRow, const ScQueryEntry& rEntry, const ScQueryEntry::Item& rItem,
-        const ScInterpreterContext* pContext = nullptr)
+        const ScInterpreterContext* pContext = nullptr, bool bVlookUp = false)
     {
         bool bOk = false;
         bool bTestEqual = false;
@@ -2580,14 +2580,16 @@ public:
                 }
                 else
                 {
-                    OUString aQueryStr = rItem.maString.getString();
-                    const LanguageType nLang = ScGlobal::pSysLocale->GetLanguageTag().getLanguageType();
-                    OUString aCell( mpTransliteration->transliterate(
-                        aCellStr.getString(), nLang, 0, aCellStr.getLength(),
-                        nullptr ) );
-                    OUString aQuer( mpTransliteration->transliterate(
-                        aQueryStr, nLang, 0, aQueryStr.getLength(),
-                        nullptr ) );
+                    OUString aCell(aCellStr.getString());
+                    OUString aQuer(rItem.maString.getString());
+                    if ( !bVlookUp )
+                    {
+                        const LanguageType nLang = ScGlobal::pSysLocale->GetLanguageTag().getLanguageType();
+                        aCell = mpTransliteration->transliterate( aCell, nLang, 0, aCell.getLength(),
+                                                                  nullptr );
+                        aQuer = mpTransliteration->transliterate( aQuer, nLang, 0, aQuer.getLength(),
+                                                                  nullptr );
+                    }
                     sal_Int32 nIndex = (rEntry.eOp == SC_ENDS_WITH || rEntry.eOp == SC_DOES_NOT_END_WITH) ?
                         (aCell.getLength() - aQuer.getLength()) : 0;
                     sal_Int32 nStrPos = ((nIndex < 0) ? -1 : aCell.indexOf( aQuer, nIndex ));
@@ -2693,7 +2695,7 @@ public:
 
 bool ScTable::ValidQuery(
     SCROW nRow, const ScQueryParam& rParam, const ScRefCellValue* pCell, bool* pbTestEqualCondition,
-    const ScInterpreterContext* pContext)
+    const ScInterpreterContext* pContext, bool bVlookUp)
 {
     if (!rParam.GetEntry(0).bDoQuery)
         return true;
@@ -2748,7 +2750,7 @@ bool ScTable::ValidQuery(
                 else if (aEval.isQueryByString(rEntry, *itr, nCol, nRow, aCell))
                 {
                     std::pair<bool,bool> aThisRes =
-                        aEval.compareByString(aCell, nRow, rEntry, *itr, pContext);
+                        aEval.compareByString(aCell, nRow, rEntry, *itr, pContext, bVlookUp);
                     aRes.first |= aThisRes.first;
                     aRes.second |= aThisRes.second;
                 }
