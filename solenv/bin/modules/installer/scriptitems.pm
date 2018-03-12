@@ -640,7 +640,6 @@ sub replace_setup_variables
 
     my $localminor = "flat";
     if ( $installer::globals::minor ne "" ) { $localminor = $installer::globals::minor; }
-    else { $localminor = $installer::globals::lastminor; }
 
     my $localbuild = $installer::globals::build;
 

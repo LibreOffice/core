@@ -108,8 +108,6 @@ sub set_global_environment_variables
     $installer::globals::cpuname = $environment->{'CPUNAME'};
     $installer::globals::platformid = $environment->{'PLATFORMID'};
 
-    if ( $ENV{'LAST_MINOR'} ) { $installer::globals::lastminor = $ENV{'LAST_MINOR'}; }
-
     if ( $ENV{'ENABLE_DBGUTIL'} ) {} else { $installer::globals::pro = 1; }
 
     if ( $ENV{'VERBOSE'} && ( (lc $ENV{'VERBOSE'}) eq "false" ) ) { $installer::globals::quiet = 1; }
