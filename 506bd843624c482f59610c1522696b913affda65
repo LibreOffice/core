@@ -1,0 +1,84 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba2be162_c3525edd",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-03-12T12:21:03Z",
+      "side": 1,
+      "message": "This comment does not spread confidence in the change..\n\nIs your change based on some analysis and debugging, or is it a blind shot?",
+      "range": {
+        "startLine": 7,
+        "startChar": 33,
+        "endLine": 7,
+        "endChar": 54
+      },
+      "revId": "506bd843624c482f59610c1522696b913affda65",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba2be162_e35da2ed",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-03-12T12:21:03Z",
+      "side": 1,
+      "message": "If it happens for tables with a colspan on the first row, then probably adding columns for the span is missing.",
+      "range": {
+        "startLine": 10,
+        "startChar": 15,
+        "endLine": 10,
+        "endChar": 52
+      },
+      "revId": "506bd843624c482f59610c1522696b913affda65",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba2be162_8348662f",
+        "filename": "sc/source/filter/html/htmlpars.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 650,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-03-12T12:21:03Z",
+      "side": 1,
+      "message": "This is at least wrong if there are stacked tables (table in table). maColOffset is THE resulting column layout, and here would be forced to the values of a current local table.",
+      "revId": "506bd843624c482f59610c1522696b913affda65",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba2be162_c3009ead",
+        "filename": "sc/source/filter/html/htmlpars.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 779,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-03-12T12:21:03Z",
+      "side": 1,
+      "message": "Instead, probably this needs to take the colspan into account as well.",
+      "revId": "506bd843624c482f59610c1522696b913affda65",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
