@@ -151,6 +151,10 @@ SvxToolbarConfigPage::SvxToolbarConfigPage(vcl::Window *pParent, const SfxItemSe
     pPopup->EnableItem(OString( "insertsubmenu"), false );
     pPopup->RemoveDisabledEntries();
 
+    // Gear menu's "Move" action is irrelevant to the toolbars
+    pPopup = m_pGearBtn->GetPopupMenu();
+    pPopup->EnableItem("gear_move", false);
+
     // default toolbar to select is standardbar unless a different one
     // has been passed in
     m_aURLToSelect = ITEM_TOOLBAR_URL;

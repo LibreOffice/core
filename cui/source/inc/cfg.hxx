@@ -319,6 +319,7 @@ public:
     void    SetModified( bool bValue = true ) { bIsModified = bValue; }
     bool    IsModified() { return bIsModified; }
 
+    bool    IsMovable();
     bool    IsDeletable();
     bool    IsRenamable();
 
