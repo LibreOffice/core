@@ -424,6 +424,18 @@ DECLARE_HTMLEXPORT_ROUNDTRIP_TEST(testReqIfPngImg, "reqif-png-img.xhtml")
     CPPUNIT_ASSERT(aStream.indexOf("<reqif-xhtml:object") != -1);
 }
 
+DECLARE_HTMLEXPORT_TEST(testReqIfJpgImg, "reqif-jpg-img.xhtml")
+{
+    SvStream* pStream = maTempFile.GetStream(StreamMode::READ);
+    CPPUNIT_ASSERT(pStream);
+    pStream->Seek(STREAM_SEEK_TO_END);
+    sal_uInt64 nLength = pStream->Tell();
+    pStream->Seek(0);
+    OString aStream(read_uInt8s_ToOString(*pStream, nLength));
+    // This was image/jpeg, JPG was not converted to PNG in ReqIF mode.
+    CPPUNIT_ASSERT(aStream.indexOf("type=\"image/png\"") != -1);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
