@@ -29,45 +29,39 @@ class SvStream;
 
 namespace svt
 {
+namespace GraphicAccess
+{
 
+/** Helpers for obtaining streams (which also can be used with the ImageProducer)
+    from a resource.
+*/
 
-    //= GraphicAccess
+/** determines whether the given URL denotes an image within a resource */
+SVT_DLLPUBLIC bool isSupportedURL(OUString const & rURL);
 
-    /** helper class for obtaining streams (which also can be used with the ImageProducer)
-        from a resource
-    */
-    namespace GraphicAccess
-    {
-        /** determines whether the given URL denotes an image within a resource */
-        SVT_DLLPUBLIC bool isSupportedURL( const OUString& _rURL );
+/** for a given URL of an image within a resource, this method retrieves an
+    SvStream for this image.
 
-        /** for a given URL of an image within a resource, this method retrieves an SvStream for this image.
+    This method works for arbitrary URLs denoting an image, since the
+    css::graphics::GraphicsProvider service is used
+    to resolve the URL. However, obtaining the stream is expensive (since
+    the image must be copied), so you are strongly encouraged to only use it
+    when you know that the image is small enough.
+*/
+SVT_DLLPUBLIC SvStream* getImageStream(
+            css::uno::Reference<css::uno::XComponentContext> const & rxContext,
+            OUString const & rImageResourceURL);
 
-            This method works for arbitrary URLs denoting an image, since the
-            css::graphics::GraphicsProvider service is used
-            to resolve the URL. However, obtaining the stream is expensive (since
-            the image must be copied), so you are strongly encouraged to only use it
-            when you know that the image is small enough.
-        */
-        SVT_DLLPUBLIC SvStream* getImageStream(
-                    const css::uno::Reference< css::uno::XComponentContext >& _rxContext,
-                    const OUString& _rImageResourceURL
-                );
+/** for a given URL of an image within a resource, this method retrieves
+    an css::io::XInputStream for this image.
+*/
+SVT_DLLPUBLIC css::uno::Reference<css::io::XInputStream> getImageXStream(
+            css::uno::Reference<css::uno::XComponentContext> const & rxContext,
+            OUString const & rImageResourceURL);
 
-        /** for a given URL of an image within a resource, this method retrieves
-            an css::io::XInputStream for this image.
-        */
-        SVT_DLLPUBLIC css::uno::Reference< css::io::XInputStream >
-                getImageXStream(
-                    const css::uno::Reference< css::uno::XComponentContext >& _rxContext,
-                    const OUString& _rImageResourceURL
-                );
-    }
-
-
+} // namespace GraphicAccess
 } // namespace svt
 
-
-#endif // DBA14_ INCLUDED_SVTOOLS_IMAGERESOURCEACCESS_HXX
+#endif // INCLUDED_SVTOOLS_IMAGERESOURCEACCESS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

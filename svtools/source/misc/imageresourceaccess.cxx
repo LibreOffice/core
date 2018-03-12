@@ -32,159 +32,136 @@
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/processfactory.hxx>
 
-
 namespace svt
 {
+namespace GraphicAccess
+{
 
+using namespace ::utl;
+using namespace css;
 
-    using namespace ::utl;
-    using namespace ::com::sun::star::io;
-    using namespace ::com::sun::star::uno;
-    using namespace ::com::sun::star::lang;
-    using namespace ::com::sun::star::beans;
-    using namespace ::com::sun::star::graphic;
+typedef ::cppu::WeakImplHelper<io::XStream, io::XSeekable> StreamSupplier_Base;
 
+class StreamSupplier : public StreamSupplier_Base
+{
+private:
+    uno::Reference<io::XInputStream> m_xInput;
+    uno::Reference<io::XOutputStream> m_xOutput;
+    uno::Reference<io::XSeekable> m_xSeekable;
 
-    //= StreamSupplier
+public:
+    StreamSupplier(uno::Reference<io::XInputStream> const & rxInput, uno::Reference<io::XOutputStream> const & rxOutput);
 
-    typedef ::cppu::WeakImplHelper <   XStream
-                                    ,   XSeekable
-                                    >   StreamSupplier_Base;
-    class StreamSupplier : public StreamSupplier_Base
+protected:
+    // XStream
+    virtual uno::Reference<io::XInputStream> SAL_CALL getInputStream() override;
+    virtual uno::Reference<io::XOutputStream> SAL_CALL getOutputStream() override;
+
+    // XSeekable
+    virtual void SAL_CALL seek(sal_Int64 location) override;
+    virtual sal_Int64 SAL_CALL getPosition() override;
+    virtual sal_Int64 SAL_CALL getLength() override;
+};
+
+StreamSupplier::StreamSupplier(uno::Reference<io::XInputStream> const & rxInput, uno::Reference<io::XOutputStream> const & rxOutput)
+    : m_xInput(rxInput)
+    , m_xOutput(rxOutput)
+{
+    m_xSeekable.set(m_xInput, uno::UNO_QUERY);
+    if (!m_xSeekable.is())
+        m_xSeekable.set(m_xOutput, uno::UNO_QUERY);
+    OSL_ENSURE(m_xSeekable.is(), "StreamSupplier::StreamSupplier: at least one of both must be seekable!");
+}
+
+uno::Reference<io::XInputStream> SAL_CALL StreamSupplier::getInputStream()
+{
+    return m_xInput;
+}
+
+uno::Reference<io::XOutputStream> SAL_CALL StreamSupplier::getOutputStream()
+{
+    return m_xOutput;
+}
+
+void SAL_CALL StreamSupplier::seek(sal_Int64 nLocation)
+{
+    if (!m_xSeekable.is())
+        throw io::NotConnectedException();
+    m_xSeekable->seek(nLocation);
+}
+
+sal_Int64 SAL_CALL StreamSupplier::getPosition()
+{
+    if (!m_xSeekable.is())
+        throw io::NotConnectedException();
+    return m_xSeekable->getPosition();
+}
+
+sal_Int64 SAL_CALL StreamSupplier::getLength()
+{
+    if (!m_xSeekable.is())
+        throw io::NotConnectedException();
+
+    return m_xSeekable->getLength();
+}
+
+bool isSupportedURL(OUString const & rURL)
+{
+    return rURL.startsWith("private:resource/")
+        || rURL.startsWith("private:graphicrepository/")
+        || rURL.startsWith("private:standardimage/")
+        || rURL.startsWith("vnd.sun.star.extension://");
+}
+
+SvStream* getImageStream(uno::Reference<uno::XComponentContext> const & rxContext, OUString const & rImageResourceURL)
+{
+    SvStream* pReturn = nullptr;
+
+    try
     {
-    private:
-        Reference< XInputStream >   m_xInput;
-        Reference< XOutputStream >  m_xOutput;
-        Reference< XSeekable >      m_xSeekable;
+        // get a GraphicProvider
+        uno::Reference<graphic::XGraphicProvider> xProvider = css::graphic::GraphicProvider::create(rxContext);
 
-    public:
-        StreamSupplier( const Reference< XInputStream >& _rxInput, const Reference< XOutputStream >& _rxOutput );
+        // let it create a graphic from the given URL
+        uno::Sequence<beans::PropertyValue> aMediaProperties(1);
+        aMediaProperties[0].Name = "URL";
+        aMediaProperties[0].Value <<= rImageResourceURL;
+        uno::Reference<graphic::XGraphic> xGraphic(xProvider->queryGraphic(aMediaProperties));
 
-    protected:
-        // XStream
-        virtual Reference< XInputStream > SAL_CALL getInputStream(  ) override;
-        virtual Reference< XOutputStream > SAL_CALL getOutputStream(  ) override;
+        OSL_ENSURE(xGraphic.is(), "GraphicAccess::getImageStream: the provider did not give us a graphic object!");
+        if (!xGraphic.is())
+            return pReturn;
 
-        // XSeekable
-        virtual void SAL_CALL seek( ::sal_Int64 location ) override;
-        virtual ::sal_Int64 SAL_CALL getPosition(  ) override;
-        virtual ::sal_Int64 SAL_CALL getLength(  ) override;
-    };
+        // copy the graphic to a in-memory buffer
+        SvMemoryStream* pMemBuffer = new SvMemoryStream;
+        uno::Reference<io::XStream> xBufferAccess = new StreamSupplier(
+            new OSeekableInputStreamWrapper(*pMemBuffer),
+            new OSeekableOutputStreamWrapper(*pMemBuffer));
 
+        aMediaProperties.realloc(2);
+        aMediaProperties[0].Name = "OutputStream";
+        aMediaProperties[0].Value <<= xBufferAccess;
+        aMediaProperties[1].Name = "MimeType";
+        aMediaProperties[1].Value <<= OUString("image/png");
+        xProvider->storeGraphic(xGraphic, aMediaProperties);
 
-    StreamSupplier::StreamSupplier( const Reference< XInputStream >& _rxInput, const Reference< XOutputStream >& _rxOutput )
-        :m_xInput( _rxInput )
-        ,m_xOutput( _rxOutput )
+        pMemBuffer->Seek(0);
+        pReturn = pMemBuffer;
+    }
+    catch (const uno::Exception&)
     {
-        m_xSeekable.set(m_xInput, css::uno::UNO_QUERY);
-        if ( !m_xSeekable.is() )
-            m_xSeekable.set(m_xOutput, css::uno::UNO_QUERY);
-        OSL_ENSURE( m_xSeekable.is(), "StreamSupplier::StreamSupplier: at least one of both must be seekable!" );
+        OSL_FAIL("GraphicAccess::getImageStream: caught an exception!");
     }
 
+    return pReturn;
+}
 
-    Reference< XInputStream > SAL_CALL StreamSupplier::getInputStream(  )
-    {
-        return m_xInput;
-    }
+uno::Reference<io::XInputStream> getImageXStream(uno::Reference<uno::XComponentContext> const & rxContext, OUString const & rImageResourceURL)
+{
+    return new OSeekableInputStreamWrapper(getImageStream(rxContext, rImageResourceURL), true);   // take ownership
+}
 
-
-    Reference< XOutputStream > SAL_CALL StreamSupplier::getOutputStream(  )
-    {
-        return m_xOutput;
-    }
-
-
-    void SAL_CALL StreamSupplier::seek( ::sal_Int64 location )
-    {
-        if ( !m_xSeekable.is() )
-            throw NotConnectedException();
-
-        m_xSeekable->seek( location );
-    }
-
-
-    ::sal_Int64 SAL_CALL StreamSupplier::getPosition(  )
-    {
-        if ( !m_xSeekable.is() )
-            throw NotConnectedException();
-
-        return m_xSeekable->getPosition();
-    }
-
-
-    ::sal_Int64 SAL_CALL StreamSupplier::getLength(  )
-    {
-        if ( !m_xSeekable.is() )
-            throw NotConnectedException();
-
-        return m_xSeekable->getLength();
-    }
-
-
-    //= GraphicAccess
-
-
-    bool GraphicAccess::isSupportedURL( const OUString& _rURL )
-    {
-        return _rURL.startsWith( "private:resource/" )
-            || _rURL.startsWith( "private:graphicrepository/" )
-            || _rURL.startsWith( "private:standardimage/" )
-            || _rURL.startsWith( "vnd.sun.star.extension://" );
-    }
-
-
-    SvStream* GraphicAccess::getImageStream( const Reference< XComponentContext >& _rxContext, const OUString& _rImageResourceURL )
-    {
-        SvStream* pReturn = nullptr;
-
-        try
-        {
-            // get a GraphicProvider
-            Reference< XGraphicProvider > xProvider = css::graphic::GraphicProvider::create(_rxContext);
-
-            // let it create a graphic from the given URL
-            Sequence< PropertyValue > aMediaProperties( 1 );
-            aMediaProperties[0].Name = "URL";
-            aMediaProperties[0].Value <<= _rImageResourceURL;
-            Reference< XGraphic > xGraphic( xProvider->queryGraphic( aMediaProperties ) );
-            OSL_ENSURE( xGraphic.is(), "GraphicAccess::getImageStream: the provider did not give us a graphic object!" );
-            if ( !xGraphic.is() )
-                return pReturn;
-
-            // copy the graphic to a in-memory buffer
-            SvMemoryStream* pMemBuffer = new SvMemoryStream;
-            Reference< XStream > xBufferAccess = new StreamSupplier(
-                new OSeekableInputStreamWrapper( *pMemBuffer ),
-                new OSeekableOutputStreamWrapper( *pMemBuffer )
-            );
-
-            aMediaProperties.realloc( 2 );
-            aMediaProperties[0].Name = "OutputStream";
-            aMediaProperties[0].Value <<= xBufferAccess;
-            aMediaProperties[1].Name = "MimeType";
-            aMediaProperties[1].Value <<= OUString( "image/png" );
-            xProvider->storeGraphic( xGraphic, aMediaProperties );
-
-            pMemBuffer->Seek( 0 );
-            pReturn = pMemBuffer;
-        }
-        catch( const Exception& )
-        {
-            OSL_FAIL( "GraphicAccess::getImageStream: caught an exception!" );
-        }
-
-        return pReturn;
-    }
-
-
-    Reference< XInputStream > GraphicAccess::getImageXStream( const Reference< XComponentContext >& _rxContext, const OUString& _rImageResourceURL )
-    {
-        return new OSeekableInputStreamWrapper( getImageStream( _rxContext, _rImageResourceURL ), true );   // take ownership
-    }
-
-
+} // namespace GraphicAccess
 } // namespace svt
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
