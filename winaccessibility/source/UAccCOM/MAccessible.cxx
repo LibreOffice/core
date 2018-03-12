@@ -2844,30 +2844,12 @@ OUString CMAccessible::get_String4Numbering(const Any& pAny, sal_Int16 numbering
         {
             css::beans::PropertyValue rProp = pPropArray[i];
             if( (rProp.Name == "BulletChar" ) ||
-                (rProp.Name == "GraphicURL" ) ||
                 (rProp.Name == "NumberingType" ))
             {
                 buf.append(rProp.Name);
                 buf.append('=');
                 auto const pTemp = CMAccessible::get_StringFromAny(rProp.Value);
-                if(rProp.Name == "GraphicURL")
-                {
-                    auto const pOccur = pTemp.indexOf(':');
-                    if(pOccur != -1)
-                    {
-                        buf.append(pTemp.copy(0, pOccur));
-                        buf.append('.');
-                        buf.append(pTemp.copy(pOccur + 1));
-                    }
-                    else
-                    {
-                        buf.append(pTemp);
-                    }
-                }
-                else
-                {
-                    buf.append(pTemp);
-                }
+                buf.append(pTemp);
                 buf.append(',');
 
                 if(rProp.Name == "NumberingType")
