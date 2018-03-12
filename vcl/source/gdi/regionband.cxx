@@ -190,7 +190,7 @@ bool RegionBand::operator==( const RegionBand& rRegionBand ) const
 
 enum StreamEntryType { STREAMENTRY_BANDHEADER, STREAMENTRY_SEPARATION, STREAMENTRY_END };
 
-void RegionBand::load(SvStream& rIStrm)
+bool RegionBand::load(SvStream& rIStrm)
 {
     // clear this instance data
     implReset();
@@ -203,14 +203,14 @@ void RegionBand::load(SvStream& rIStrm)
     rIStrm.ReadUInt16(nTmp16);
 
     if (STREAMENTRY_END == (StreamEntryType)nTmp16)
-        return;
+        return false;
 
     size_t nRecordsPossible = rIStrm.remainingSize() / (2*sizeof(sal_Int32));
     if (!nRecordsPossible)
     {
         OSL_ENSURE(false, "premature end of region stream" );
         implReset();
-        return;
+        return false;
     }
 
     do
@@ -259,13 +259,19 @@ void RegionBand::load(SvStream& rIStrm)
         {
             OSL_ENSURE(false, "premature end of region stream" );
             implReset();
-            return;
+            return false;
         }
 
         // get next header
         rIStrm.ReadUInt16( nTmp16 );
     }
     while (STREAMENTRY_END != (StreamEntryType)nTmp16 && rIStrm.good());
+    if (!CheckConsistency())
+    {
+        implReset();
+        return false;
+    }
+    return true;
 }
 
 void RegionBand::save(SvStream& rOStrm) const
@@ -1152,6 +1158,19 @@ bool RegionBand::Exclude(const RegionBand& rSource)
         pBand = pBand->mpNextBand;
     }
 
+    return true;
+}
+
+bool RegionBand::CheckConsistency() const
+{
+    // look in the band list (don't test first band again!)
+    const ImplRegionBand* pBand = mpFirstBand->mpNextBand;
+    while (pBand)
+    {
+        if (!pBand->mpFirstSep)
+            return false;
+        pBand = pBand->mpNextBand;
+    }
     return true;
 }
 
