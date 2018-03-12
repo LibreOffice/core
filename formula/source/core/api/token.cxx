@@ -1275,7 +1275,7 @@ FormulaTokenArray * FormulaTokenArray::RewriteMissing( const MissingConvention &
 
     /* TODO: with some effort we might be able to merge the two almost
      * identical function stacks into one and generalize things, otherwise
-     * adding yet another "omit argument" would be copypasta. */
+     * adding yet another "omit argument" would be copy&paste. */
 
     int aOpCodeAddressStack[ nAlloc ];  // use of ADDRESS() function
     const int nOmitAddressArg = 3;      // ADDRESS() 4th parameter A1/R1C1
