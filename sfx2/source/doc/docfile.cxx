@@ -158,6 +158,32 @@ bool IsLockingUsed()
 
 #endif
 
+/// Gets default attributes of a file:// URL.
+sal_uInt64 GetDefaultFileAttributes(const OUString& rURL)
+{
+    sal_uInt64 nRet = 0;
+
+    if (!comphelper::isFileUrl(rURL))
+        return nRet;
+
+    osl::File aFile(rURL);
+    if (aFile.open(osl_File_OpenFlag_Create) != osl::File::E_None)
+        return nRet;
+
+    aFile.close();
+
+    osl::DirectoryItem aItem;
+    if (osl::DirectoryItem::get(rURL, aItem) != osl::DirectoryItem::E_None)
+        return nRet;
+
+    osl::FileStatus aStatus(osl_FileStatus_Mask_Attributes);
+    if (aItem.getFileStatus(aStatus) != osl::DirectoryItem::E_None)
+        return nRet;
+
+    nRet = aStatus.getAttributes();
+    return nRet;
+}
+
 } // anonymous namespace
 
 class SfxMedium_Impl
@@ -1690,8 +1716,16 @@ void SfxMedium::TransactedTransferForFS_Impl( const INetURLObject& aSource,
             {
                 OUString aSourceMainURL = aSource.GetMainURL(INetURLObject::DecodeMechanism::NONE);
                 OUString aDestMainURL = aDest.GetMainURL(INetURLObject::DecodeMechanism::NONE);
+
+                sal_uInt64 nAttributes = GetDefaultFileAttributes(aDestMainURL);
                 if (comphelper::isFileUrl(aDestMainURL) && osl::File::move(aSourceMainURL, aDestMainURL) == osl::FileBase::E_None)
+                {
+                    if (nAttributes)
+                        // Adjust attributes, source might be created with
+                        // the osl_File_OpenFlag_Private flag.
+                        osl::File::setAttributes(aDestMainURL, nAttributes);
                     bResult = true;
+                }
                 else
                 {
                     if (bOverWrite && ::utl::UCBContentHelper::IsDocument(aDestMainURL))
