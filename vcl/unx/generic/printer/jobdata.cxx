@@ -273,11 +273,15 @@ bool JobData::constructFromStreamBuffer( const void* pData, sal_uInt32 bytes, Jo
                 if( rJobData.m_pParser )
                 {
                     rJobData.m_aContext.setParser( rJobData.m_pParser );
-                    const sal_uInt64 nBytes = bytes - aStream.Tell();
-                    std::unique_ptr<char[]> pRemain(new char[bytes - aStream.Tell()]);
-                    aStream.ReadBytes( pRemain.get(), nBytes );
-                    rJobData.m_aContext.rebuildFromStreamBuffer( pRemain.get(), nBytes );
-                    bContext = true;
+                    sal_uInt64 nBytes = bytes - aStream.Tell();
+                    std::vector<char> aRemain(nBytes+1);
+                    nBytes = aStream.ReadBytes(aRemain.data(), nBytes);
+                    if (nBytes)
+                    {
+                        aRemain[nBytes] = 0;
+                        rJobData.m_aContext.rebuildFromStreamBuffer(aRemain.data(), nBytes);
+                        bContext = true;
+                    }
                 }
             }
         }
