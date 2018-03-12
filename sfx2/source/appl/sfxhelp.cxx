@@ -154,7 +154,7 @@ bool impl_checkHelpLocalePath(OUString const & rpPath)
 }
 
 /// Check for built-in help
-/// Check if help//lang folder exist
+/// Check if help/<lang>/err.html file exist
 bool impl_hasHelpInstalled()
 {
     if (comphelper::LibreOfficeKit::isActive())
@@ -168,15 +168,19 @@ bool impl_hasHelpInstalled()
         aLocaleStr = HelpLocaleString();
     }
 
-    OUString helpRootURL = getHelpRootURL() + "/" + aLocaleStr;
+    OUString helpRootURL = getHelpRootURL() + "/" + aLocaleStr + "/err.html";
+    bool bOK = false;
+    osl::DirectoryItem directoryItem;
+    if(osl::DirectoryItem::get(helpRootURL, directoryItem) == osl::FileBase::E_None){
+        bOK=true;
+    }
 
-    bool bOK = impl_checkHelpLocalePath( helpRootURL );
+    SAL_INFO( "sfx.appl", "Checking old help installed " << bOK);
     return bOK;
 }
 
-
 /// Check for html built-in help
-/// Check if help/productversion/lang folder exist
+/// Check if help/lang/text folder exist. Only html has it.
 bool impl_hasHTMLHelpInstalled()
 {
     if (comphelper::LibreOfficeKit::isActive())
@@ -190,9 +194,9 @@ bool impl_hasHTMLHelpInstalled()
         aLocaleStr = HelpLocaleString();
     }
 
-    OUString helpRootURL = getHelpRootURL() + "/" + utl::ConfigManager::getProductVersion() + "/" + aLocaleStr;
-
+    OUString helpRootURL = getHelpRootURL() + "/" + aLocaleStr + "/text";
     bool bOK = impl_checkHelpLocalePath( helpRootURL );
+    SAL_INFO( "sfx.appl", "Checking new help (html) installed " << bOK);
     return bOK;
 }
 
@@ -691,7 +695,7 @@ static bool impl_showOfflineHelp( const OUString& rURL )
     OUString aBaseInstallPath = getHelpRootURL();
     OUString const aInternal( "vnd.sun.star.help://"  );
 
-    OUString aHelpLink( aBaseInstallPath + "/" + utl::ConfigManager::getProductVersion() + "/index.html?" );
+    OUString aHelpLink( aBaseInstallPath + "/index.html?" );
     aHelpLink += rURL.copy( aInternal.getLength() );
     aHelpLink = aHelpLink.replaceAll("%2F","/").replaceAll("%3A",":");
 
