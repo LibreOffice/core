@@ -85,6 +85,18 @@ void tools::Rectangle::SaturatingSetSize(const Size& rSize)
         nBottom = RECT_EMPTY;
 }
 
+void tools::Rectangle::SaturatingSetX(long x)
+{
+    nRight = o3tl::saturating_add(nRight, x - nLeft);
+    nLeft = x;
+}
+
+void tools::Rectangle::SaturatingSetY(long y)
+{
+    nBottom = o3tl::saturating_add(nBotton, y - nTop);
+    nTop = y;
+}
+
 tools::Rectangle& tools::Rectangle::Union( const tools::Rectangle& rRect )
 {
     if ( rRect.IsEmpty() )

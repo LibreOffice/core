@@ -472,6 +472,9 @@ public:
      * Sanitizing variants for handling data from the outside
      */
     void                SaturatingSetSize(const Size& rSize);
+    void                SaturatingSetX(long x);
+    void                SaturatingSetY(long y);
+
 private:
     long                nLeft;
     long                nTop;
