@@ -181,6 +181,7 @@ private:
     VclPtr<PushButton>     m_pCloseBtn;
     VclPtr<CheckBox>       m_pIncludeDiacritics;
     VclPtr<CheckBox>       m_pIncludeKashida;
+    VclPtr<VclExpander>    m_pOtherOptionsExpander;
     VclPtr<CheckBox>       m_pSelectionBtn;
     VclPtr<CheckBox>       m_pRegExpBtn;
     VclPtr<CheckBox>       m_pWildcardBtn;

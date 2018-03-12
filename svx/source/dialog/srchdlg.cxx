@@ -309,6 +309,7 @@ SvxSearchDialog::SvxSearchDialog( vcl::Window* pParent, SfxChildWindow* pChildWi
 
     get(m_pCloseBtn, "close");
 
+    get(m_pOtherOptionsExpander, "OptionsExpander");
     get(m_pIncludeDiacritics, "includediacritics");
     get(m_pIncludeKashida, "includekashida");
     get(m_pSelectionBtn, "selection");
@@ -391,6 +392,7 @@ void SvxSearchDialog::dispose()
     m_pCloseBtn.clear();
     m_pIncludeDiacritics.clear();
     m_pIncludeKashida.clear();
+    m_pOtherOptionsExpander.clear();
     m_pSelectionBtn.clear();
     m_pReplaceBackwardsCB.clear();
     m_pRegExpBtn.clear();
@@ -811,6 +813,18 @@ void SvxSearchDialog::Init_Impl( bool bSearchPattern )
     m_pIncludeDiacritics->Check( !aOpt.IsIgnoreDiacritics_CTL() );
     if (m_pIncludeKashida->IsVisible())
         m_pIncludeKashida->Check( !aOpt.IsIgnoreKashida_CTL() );
+    if (m_pReplaceBackwardsCB->IsChecked() ||
+        m_pSelectionBtn->IsChecked() ||
+        m_pRegExpBtn->IsChecked() ||
+        m_pLayoutBtn->IsChecked() ||
+        m_pSimilarityBox->IsChecked() ||
+        m_pJapMatchFullHalfWidthCB->IsChecked() ||
+        m_pJapOptionsCB->IsChecked() ||
+        m_pWildcardBtn->IsChecked() ||
+        m_pNotesBtn->IsChecked() ||
+        m_pIncludeKashida->IsChecked() ||
+        m_pIncludeDiacritics->IsChecked() )
+        m_pOtherOptionsExpander->set_expanded( true );
     ApplyTransliterationFlags_Impl( pSearchItem->GetTransliterationFlags() );
 
     ShowOptionalControls_Impl();
