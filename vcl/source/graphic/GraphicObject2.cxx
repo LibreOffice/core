@@ -18,11 +18,9 @@
  */
 
 #include <sal/config.h>
-
-#include <cstdlib>
+#include <tools/poly.hxx>
 
 #include <vcl/bitmapaccess.hxx>
-#include <tools/poly.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/window.hxx>
 #include <vcl/gdimtf.hxx>
@@ -31,9 +29,13 @@
 #include <vcl/animate.hxx>
 #include <vcl/alpha.hxx>
 #include <vcl/virdev.hxx>
-#include "grfcache.hxx"
 #include <vcl/GraphicObject.hxx>
+#include <vcl/BitmapConverter.hxx>
+
+#include "grfcache.hxx"
+
 #include <memory>
+#include <cstdlib>
 
 
 #define WATERMARK_LUM_OFFSET        50
@@ -1408,29 +1410,37 @@ bool GraphicManager::ImplCreateOutput( OutputDevice* pOut,
 
 void GraphicManager::ImplAdjust( BitmapEx& rBmpEx, const GraphicAttr& rAttr, GraphicAdjustmentFlags nAdjustmentFlags )
 {
-    GraphicAttr aAttr( rAttr );
+    GraphicAttr aAttr(rAttr);
 
-    if( ( nAdjustmentFlags & GraphicAdjustmentFlags::DRAWMODE ) && aAttr.IsSpecialDrawMode() )
+    if ((nAdjustmentFlags & GraphicAdjustmentFlags::DRAWMODE) && aAttr.IsSpecialDrawMode())
     {
-        switch( aAttr.GetDrawMode() )
+        switch (aAttr.GetDrawMode())
         {
             case GraphicDrawMode::Mono:
-                rBmpEx.Convert( BmpConversion::N1BitThreshold );
+            {
+                BitmapConverter aBmpConverter(BmpConversion::N1BitThreshold);
+                BitmapEx aConvertedBmp(aBmpConverter.execute(rBmpEx));
+                SAL_WARN_IF(aConvertedBmp.IsEmpty(), "sal.gdi", "Conversion failed");
+            }
             break;
 
             case GraphicDrawMode::Greys:
-                rBmpEx.Convert( BmpConversion::N8BitGreys );
+            {
+                BitmapConverter aBmpConverter(BmpConversion::N8BitGreys);
+                BitmapEx aConvertedBmp(aBmpConverter.execute(rBmpEx));
+                SAL_WARN_IF(aConvertedBmp.IsEmpty(), "sal.gdi", "Conversion failed");
+            }
             break;
 
             case GraphicDrawMode::Watermark:
             {
-                aAttr.SetLuminance( aAttr.GetLuminance() + WATERMARK_LUM_OFFSET );
-                aAttr.SetContrast( aAttr.GetContrast() + WATERMARK_CON_OFFSET );
+                aAttr.SetLuminance(aAttr.GetLuminance() + WATERMARK_LUM_OFFSET);
+                aAttr.SetContrast(aAttr.GetContrast() + WATERMARK_CON_OFFSET);
             }
             break;
 
             default:
-            break;
+                break;
         }
     }
 
