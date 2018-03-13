@@ -50,6 +50,8 @@
 #include <basegfx/color/bcolor.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <vcl/graph.hxx>
+#include <vcl/BitmapConverter.hxx>
+#include <vcl/BitmapScaleFilter.hxx>
 
 #include "getdigitlanguage.hxx"
 
@@ -442,12 +444,20 @@ namespace drawinglayer
                                     // if color depth is below 24bit, expand before scaling for better quality.
                                     // This is even needed for low colors, else the scale will produce
                                     // a bitmap in gray or Black/White (!)
-                                    if(aBitmapEx.GetBitCount() < 24)
+                                    if (aBitmapEx.GetBitCount() < 24)
                                     {
-                                        aBitmapEx.Convert(BmpConversion::N24Bit);
+                                        BitmapConverter aBmpConverter(BmpConversion::N24Bit);
+                                        BitmapEx aConvertedBmp(aBmpConverter.execute(aBitmapEx));
+                                        if (aConvertedBmp.IsEmpty())
+                                            SAL_WARN("vcl.gdi", "Conversion failed");
+                                        else
+                                            aBitmapEx = aConvertedBmp;
                                     }
 
-                                    aBitmapEx.Scale(aNeededBitmapSizePixel, BmpScaleFlag::Interpolate);
+                                    BitmapScaleFilter aFilter(aNeededBitmapSizePixel, BmpScaleFlag::Interpolate);
+                                    BitmapEx aTmpBmpEx(aFilter.execute(aBitmapEx));
+                                    if (!aTmpBmpEx.IsEmpty())
+                                        aBitmapEx = aTmpBmpEx;
                                 }
 
                                 bool bPainted(false);

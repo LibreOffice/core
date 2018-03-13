@@ -24,23 +24,23 @@
 
 namespace vcl
 {
-
 enum class ConvolutionKernelType
 {
-    BiLinear  = 1,
-    BiCubic   = 2,
-    Lanczos3  = 3,
+    BiLinear = 1,
+    BiCubic = 2,
+    Lanczos3 = 3,
 };
 
 class VCL_DLLPUBLIC BitmapScaleConvolutionFilter : public BitmapFilter
 {
 public:
-
-    BitmapScaleConvolutionFilter(const double& rScaleX, const double& rScaleY, ConvolutionKernelType eKernelType)
+    BitmapScaleConvolutionFilter(const double& rScaleX, const double& rScaleY,
+                                 ConvolutionKernelType eKernelType)
         : mrScaleX(rScaleX)
         , mrScaleY(rScaleY)
         , meKernelType(eKernelType)
-    {}
+    {
+    }
 
     virtual BitmapEx execute(BitmapEx const& rBitmap) override;
 
@@ -50,7 +50,6 @@ private:
 
     ConvolutionKernelType meKernelType;
 };
-
 }
 
 #endif // INCLUDED_VCL_BITMAPSCALECONVOLUTION_HXX

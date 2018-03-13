@@ -24,6 +24,7 @@
 #include <vcl/dockingarea.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/taskpanelist.hxx>
+#include <vcl/BitmapScaleFilter.hxx>
 
 #include <salframe.hxx>
 #include <salmenu.hxx>
@@ -98,7 +99,11 @@ void DecoToolBox::SetImages( long nMaxHeight, bool bForce )
 
     aEraseColor.SetTransparency( 255 );
     aBmpExDst.Erase( aEraseColor );
-    aBmpExDst.SetSizePixel( Size( lastSize, lastSize ) );
+
+    BitmapScaleFilter aFilter(Size(lastSize, lastSize));
+    BitmapEx aBmpTmpEx(aFilter.execute(aBmpExDst));
+    if (!aBmpTmpEx.IsEmpty())
+        aBmpExDst = aBmpTmpEx;
 
     tools::Rectangle aSrcRect( Point(0,0), maImage.GetSizePixel() );
     tools::Rectangle aDestRect( Point((lastSize - maImage.GetSizePixel().Width())/2,

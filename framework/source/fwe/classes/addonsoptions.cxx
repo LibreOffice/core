@@ -31,6 +31,7 @@
 #include <vcl/graph.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <vcl/toolbox.hxx>
+#include <vcl/BitmapScaleFilter.hxx>
 
 #include <algorithm>
 #include <unordered_map>
@@ -478,7 +479,12 @@ static Image ScaleImage( const Image &rImage, bool bBig )
     BitmapEx aScaleBmp(rImage.GetBitmapEx());
     SAL_INFO("fwk", "Addons: expensive scale image from "
              << aScaleBmp.GetSizePixel() << " to " << aSize);
-    aScaleBmp.Scale(aSize, BmpScaleFlag::BestQuality);
+
+    BitmapScaleFilter aFilter(aSize, BmpScaleFlag::BestQuality);
+    BitmapEx aTmpBmpEx(aFilter.execute(aScaleBmp));
+    if (!aTmpBmpEx.IsEmpty())
+        aScaleBmp = aTmpBmpEx;
+
     return Image(aScaleBmp);
 }
 

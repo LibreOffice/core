@@ -39,6 +39,7 @@
 #include <com/sun/star/ui/ImageType.hpp>
 #include <vcl/graph.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/BitmapScaleFilter.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <o3tl/enumrange.hxx>
 #include <osl/mutex.hxx>
@@ -245,7 +246,12 @@ static bool implts_checkAndScaleGraphic( uno::Reference< XGraphic >& rOutGraphic
     if (bMustScale)
     {
         BitmapEx aBitmap = aImage.GetBitmapEx();
-        aBitmap.Scale( aNormSize );
+
+        BitmapScaleFilter aFilter(aNormSize);
+        BitmapEx aTmpBmpEx(aFilter.execute(aBitmap));
+        if (!aTmpBmpEx.IsEmpty())
+            aBitmap = aTmpBmpEx;
+
         aImage = Graphic(aBitmap);
         rOutGraphic = aImage.GetXGraphic();
     }

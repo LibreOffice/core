@@ -43,6 +43,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/weld.hxx>
+#include <vcl/BitmapScaleFilter.hxx>
 #include <svx/fmmodel.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/svxdlg.hxx>
@@ -1275,8 +1276,20 @@ IMPL_LINK_NOARG(GalleryBrowser2, MiscHdl, LinkParamNone*, void)
     {
         const Size aLargeSize( 24, 24);
 
-        aIconBmpEx.Scale( aLargeSize );
-        aListBmpEx.Scale( aLargeSize );
+        BitmapScaleFilter aFilter(aLargeSize);
+
+        {
+            BitmapEx aTmpBmpEx(aFilter.execute(aIconBmpEx));
+            if (!aTmpBmpEx.IsEmpty())
+                aIconBmpEx = aTmpBmpEx;
+        }
+
+        {
+            BitmapEx aTmpBmpEx(aFilter.execute(aListBmpEx));
+            if (!aTmpBmpEx.IsEmpty())
+                aListBmpEx = aTmpBmpEx;
+        }
+
     }
 
     maViewBox->SetItemImage(TBX_ID_ICON, Image(aIconBmpEx));

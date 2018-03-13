@@ -36,6 +36,7 @@
 #include <dialmgr.hxx>
 #include <sfx2/htmlmode.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/BitmapScaleFilter.hxx>
 #include <svx/flagsdef.hxx>
 #include <sfx2/request.hxx>
 #include <svl/grabbagitem.hxx>
@@ -182,10 +183,23 @@ SvxBorderTabPage::SvxBorderTabPage(vcl::Window* pParent, const SfxItemSet& rCore
     if ( GetDPIScaleFactor() > 1 )
     {
         for (size_t i = 0; i < m_aBorderImgVec.size(); ++i)
-            m_aBorderImgVec[i].Scale(GetDPIScaleFactor(), GetDPIScaleFactor(), BmpScaleFlag::Fast);
+        {
+            BitmapScaleFilter aFilter(Size(GetDPIScaleFactor(), GetDPIScaleFactor()), BmpScaleFlag::Fast);
+
+            BitmapEx aTmpBmpEx(aFilter.execute(m_aBorderImgVec[i]));
+            if (!aTmpBmpEx.IsEmpty())
+                m_aBorderImgVec[i] = aTmpBmpEx;
+        }
+
 
         for (size_t i = 0; i < m_aShadowImgVec.size(); ++i)
-            m_aShadowImgVec[i].Scale(GetDPIScaleFactor(), GetDPIScaleFactor(), BmpScaleFlag::Fast);
+        {
+            BitmapScaleFilter aFilter(Size(GetDPIScaleFactor(), GetDPIScaleFactor()), BmpScaleFlag::Fast);
+
+            BitmapEx aTmpBmpEx(aFilter.execute(m_aShadowImgVec[i]));
+            if (!aTmpBmpEx.IsEmpty())
+                m_aShadowImgVec[i] = aTmpBmpEx;
+        }
     }
 
     // this page needs ExchangeSupport

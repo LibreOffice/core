@@ -43,6 +43,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/FilterConfigItem.hxx>
+#include <vcl/BitmapScaleFilter.hxx>
 #include <svl/outstrm.hxx>
 #include <svx/sdr/contact/objectcontactofobjlistpainter.hxx>
 #include <svx/sdr/contact/viewobjectcontact.hxx>
@@ -827,7 +828,14 @@ bool GraphicExporter::GetGraphic( ExportSettings const & rSettings, Graphic& aGr
                         {
                             BitmapEx aBmpEx( aGraphic.GetBitmapEx() );
                             // export: use highest quality
-                            aBmpEx.Scale( Size( rSettings.mnWidth, rSettings.mnHeight ), BmpScaleFlag::Lanczos );
+
+                            BitmapScaleFilter aFilter(Size(rSettings.mnWidth, rSettings.mnHeight),
+                                    BmpScaleFlag::Lanczos);
+
+                            BitmapEx aTmpBmpEx(aFilter.execute(aBmpEx));
+                            if (!aTmpBmpEx.IsEmpty())
+                                aBmpEx = aTmpBmpEx;
+
                             aGraphic = aBmpEx;
                         }
 
