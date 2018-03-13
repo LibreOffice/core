@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba2be162_0920179b",
+        "filename": "vcl/inc/bitmapfilter.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2018-03-13T05:59:07Z",
+      "side": 1,
+      "message": "Instead of creating a new BitmapFilterEx, rather change the existing one to use BitmapEx.",
+      "revId": "7257c27ab51a1a63051faab13ad564f43f4c2dab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
