@@ -17,33 +17,27 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <BitmapScaleConvolution.hxx>
-#include <ResampleKernel.hxx>
-#include <bitmapwriteaccess.hxx>
+#include <osl/diagnose.h>
 
 #include <vcl/bitmapaccess.hxx>
-#include <osl/diagnose.h>
+
+#include <bitmapwriteaccess.hxx>
+#include <BitmapScaleConvolutionFilter.hxx>
+#include <ResampleKernel.hxx>
 
 #include <algorithm>
 #include <memory>
 
 namespace vcl
 {
-
 namespace
 {
-
-void ImplCalculateContributions(
-    const long aSourceSize,
-    const long aDestinationSize,
-    long& aNumberOfContributions,
-    double*& pWeights,
-    long*& pPixels,
-    long*& pCount,
-    const Kernel& aKernel)
+void ImplCalculateContributions(const long aSourceSize, const long aDestinationSize,
+                                long& aNumberOfContributions, double*& pWeights, long*& pPixels,
+                                long*& pCount, const Kernel& aKernel)
 {
     const double fSamplingRadius(aKernel.GetWidth());
-    const double fScale(aDestinationSize / static_cast< double >(aSourceSize));
+    const double fScale(aDestinationSize / static_cast<double>(aSourceSize));
     const double fScaledRadius((fScale < 1.0) ? fSamplingRadius / fScale : fSamplingRadius);
     const double fFilterFactor(std::min(fScale, 1.0));
 
@@ -53,20 +47,21 @@ void ImplCalculateContributions(
     pPixels = new long[nAllocSize];
     pCount = new long[aDestinationSize];
 
-    for(long i(0); i < aDestinationSize; i++)
+    for (long i(0); i < aDestinationSize; i++)
     {
         const long aIndex(i * aNumberOfContributions);
         const double aCenter(i / fScale);
-        const sal_Int32 aLeft(static_cast< sal_Int32 >(floor(aCenter - fScaledRadius)));
-        const sal_Int32 aRight(static_cast< sal_Int32 >(ceil(aCenter + fScaledRadius)));
+        const sal_Int32 aLeft(static_cast<sal_Int32>(floor(aCenter - fScaledRadius)));
+        const sal_Int32 aRight(static_cast<sal_Int32>(ceil(aCenter + fScaledRadius)));
         long aCurrentCount(0);
 
-        for(sal_Int32 j(aLeft); j <= aRight; j++)
+        for (sal_Int32 j(aLeft); j <= aRight; j++)
         {
-            const double aWeight(aKernel.Calculate(fFilterFactor * (aCenter - static_cast< double>(j))));
+            const double aWeight(
+                aKernel.Calculate(fFilterFactor * (aCenter - static_cast<double>(j))));
 
             // Reduce calculations with ignoring weights of 0.0
-            if(fabs(aWeight) < 0.0001)
+            if (fabs(aWeight) < 0.0001)
             {
                 continue;
             }
@@ -85,21 +80,22 @@ void ImplCalculateContributions(
     }
 }
 
-bool ImplScaleConvolutionHor(Bitmap& rSource, Bitmap& rTarget, const double& rScaleX, const Kernel& aKernel)
+bool ImplScaleConvolutionHor(Bitmap& rSource, Bitmap& rTarget, const double& rScaleX,
+                             const Kernel& aKernel)
 {
     // Do horizontal filtering
     OSL_ENSURE(rScaleX > 0.0, "Error in scaling: Mirror given in non-mirror-capable method (!)");
     const long nWidth(rSource.GetSizePixel().Width());
     const long nNewWidth(FRound(nWidth * rScaleX));
 
-    if(nWidth == nNewWidth)
+    if (nWidth == nNewWidth)
     {
         return true;
     }
 
     Bitmap::ScopedReadAccess pReadAcc(rSource);
 
-    if(pReadAcc)
+    if (pReadAcc)
     {
         double* pWeights = nullptr;
         long* pPixels = nullptr;
@@ -107,18 +103,19 @@ bool ImplScaleConvolutionHor(Bitmap& rSource, Bitmap& rTarget, const double& rSc
         long aNumberOfContributions(0);
 
         const long nHeight(rSource.GetSizePixel().Height());
-        ImplCalculateContributions(nWidth, nNewWidth, aNumberOfContributions, pWeights, pPixels, pCount, aKernel);
+        ImplCalculateContributions(nWidth, nNewWidth, aNumberOfContributions, pWeights, pPixels,
+                                   pCount, aKernel);
         rTarget = Bitmap(Size(nNewWidth, nHeight), 24);
         BitmapScopedWriteAccess pWriteAcc(rTarget);
         bool bResult(pWriteAcc);
 
-        if(bResult)
+        if (bResult)
         {
-            for(long y(0); y < nHeight; y++)
+            for (long y(0); y < nHeight; y++)
             {
-                Scanline pScanline = pWriteAcc->GetScanline( y );
-                Scanline pScanlineRead = pReadAcc->GetScanline( y );
-                for(long x(0); x < nNewWidth; x++)
+                Scanline pScanline = pWriteAcc->GetScanline(y);
+                Scanline pScanlineRead = pReadAcc->GetScanline(y);
+                for (long x(0); x < nNewWidth; x++)
                 {
                     const long aBaseIndex(x * aNumberOfContributions);
                     double aSum(0.0);
@@ -126,7 +123,7 @@ bool ImplScaleConvolutionHor(Bitmap& rSource, Bitmap& rTarget, const double& rSc
                     double aValueGreen(0.0);
                     double aValueBlue(0.0);
 
-                    for(long j(0); j < pCount[x]; j++)
+                    for (long j(0); j < pCount[x]; j++)
                     {
                         const long aIndex(aBaseIndex + j);
                         const double aWeight(pWeights[aIndex]);
@@ -134,9 +131,10 @@ bool ImplScaleConvolutionHor(Bitmap& rSource, Bitmap& rTarget, const double& rSc
 
                         aSum += aWeight;
 
-                        if(pReadAcc->HasPalette())
+                        if (pReadAcc->HasPalette())
                         {
-                            aColor = pReadAcc->GetPaletteColor(pReadAcc->GetIndexFromData(pScanlineRead, pPixels[aIndex]));
+                            aColor = pReadAcc->GetPaletteColor(
+                                pReadAcc->GetIndexFromData(pScanlineRead, pPixels[aIndex]));
                         }
                         else
                         {
@@ -149,9 +147,12 @@ bool ImplScaleConvolutionHor(Bitmap& rSource, Bitmap& rTarget, const double& rSc
                     }
 
                     const BitmapColor aResultColor(
-                        static_cast< sal_uInt8 >(MinMax(static_cast< sal_Int32 >(aValueRed / aSum), 0, 255)),
-                        static_cast< sal_uInt8 >(MinMax(static_cast< sal_Int32 >(aValueGreen / aSum), 0, 255)),
-                        static_cast< sal_uInt8 >(MinMax(static_cast< sal_Int32 >(aValueBlue / aSum), 0, 255)));
+                        static_cast<sal_uInt8>(
+                            MinMax(static_cast<sal_Int32>(aValueRed / aSum), 0, 255)),
+                        static_cast<sal_uInt8>(
+                            MinMax(static_cast<sal_Int32>(aValueGreen / aSum), 0, 255)),
+                        static_cast<sal_uInt8>(
+                            MinMax(static_cast<sal_Int32>(aValueBlue / aSum), 0, 255)));
 
                     pWriteAcc->SetPixelOnData(pScanline, x, aResultColor);
                 }
@@ -164,7 +165,7 @@ bool ImplScaleConvolutionHor(Bitmap& rSource, Bitmap& rTarget, const double& rSc
         delete[] pCount;
         delete[] pPixels;
 
-        if(bResult)
+        if (bResult)
         {
             return true;
         }
@@ -173,21 +174,22 @@ bool ImplScaleConvolutionHor(Bitmap& rSource, Bitmap& rTarget, const double& rSc
     return false;
 }
 
-bool ImplScaleConvolutionVer(Bitmap& rSource, Bitmap& rTarget, const double& rScaleY, const Kernel& aKernel)
+bool ImplScaleConvolutionVer(Bitmap& rSource, Bitmap& rTarget, const double& rScaleY,
+                             const Kernel& aKernel)
 {
     // Do vertical filtering
     OSL_ENSURE(rScaleY > 0.0, "Error in scaling: Mirror given in non-mirror-capable method (!)");
     const long nHeight(rSource.GetSizePixel().Height());
     const long nNewHeight(FRound(nHeight * rScaleY));
 
-    if(nHeight == nNewHeight)
+    if (nHeight == nNewHeight)
     {
         return true;
     }
 
     Bitmap::ScopedReadAccess pReadAcc(rSource);
 
-    if(pReadAcc)
+    if (pReadAcc)
     {
         double* pWeights = nullptr;
         long* pPixels = nullptr;
@@ -195,16 +197,17 @@ bool ImplScaleConvolutionVer(Bitmap& rSource, Bitmap& rTarget, const double& rSc
         long aNumberOfContributions(0);
 
         const long nWidth(rSource.GetSizePixel().Width());
-        ImplCalculateContributions(nHeight, nNewHeight, aNumberOfContributions, pWeights, pPixels, pCount, aKernel);
+        ImplCalculateContributions(nHeight, nNewHeight, aNumberOfContributions, pWeights, pPixels,
+                                   pCount, aKernel);
         rTarget = Bitmap(Size(nWidth, nNewHeight), 24);
         BitmapScopedWriteAccess pWriteAcc(rTarget);
         bool bResult(pWriteAcc);
 
-        if(pWriteAcc)
+        if (pWriteAcc)
         {
-            for(long x(0); x < nWidth; x++)
+            for (long x(0); x < nWidth; x++)
             {
-                for(long y(0); y < nNewHeight; y++)
+                for (long y(0); y < nNewHeight; y++)
                 {
                     const long aBaseIndex(y * aNumberOfContributions);
                     double aSum(0.0);
@@ -212,7 +215,7 @@ bool ImplScaleConvolutionVer(Bitmap& rSource, Bitmap& rTarget, const double& rSc
                     double aValueGreen(0.0);
                     double aValueBlue(0.0);
 
-                    for(long j(0); j < pCount[y]; j++)
+                    for (long j(0); j < pCount[y]; j++)
                     {
                         const long aIndex(aBaseIndex + j);
                         const double aWeight(pWeights[aIndex]);
@@ -220,9 +223,10 @@ bool ImplScaleConvolutionVer(Bitmap& rSource, Bitmap& rTarget, const double& rSc
 
                         aSum += aWeight;
 
-                        if(pReadAcc->HasPalette())
+                        if (pReadAcc->HasPalette())
                         {
-                            aColor = pReadAcc->GetPaletteColor(pReadAcc->GetPixelIndex(pPixels[aIndex], x));
+                            aColor = pReadAcc->GetPaletteColor(
+                                pReadAcc->GetPixelIndex(pPixels[aIndex], x));
                         }
                         else
                         {
@@ -235,13 +239,18 @@ bool ImplScaleConvolutionVer(Bitmap& rSource, Bitmap& rTarget, const double& rSc
                     }
 
                     const BitmapColor aResultColor(
-                        static_cast< sal_uInt8 >(MinMax(static_cast< sal_Int32 >(aValueRed / aSum), 0, 255)),
-                        static_cast< sal_uInt8 >(MinMax(static_cast< sal_Int32 >(aValueGreen / aSum), 0, 255)),
-                        static_cast< sal_uInt8 >(MinMax(static_cast< sal_Int32 >(aValueBlue / aSum), 0, 255)));
+                        static_cast<sal_uInt8>(
+                            MinMax(static_cast<sal_Int32>(aValueRed / aSum), 0, 255)),
+                        static_cast<sal_uInt8>(
+                            MinMax(static_cast<sal_Int32>(aValueGreen / aSum), 0, 255)),
+                        static_cast<sal_uInt8>(
+                            MinMax(static_cast<sal_Int32>(aValueBlue / aSum), 0, 255)));
 
-                    if(pWriteAcc->HasPalette())
+                    if (pWriteAcc->HasPalette())
                     {
-                        pWriteAcc->SetPixelIndex(y, x, static_cast< sal_uInt8 >(pWriteAcc->GetBestPaletteIndex(aResultColor)));
+                        pWriteAcc->SetPixelIndex(
+                            y, x,
+                            static_cast<sal_uInt8>(pWriteAcc->GetBestPaletteIndex(aResultColor)));
                     }
                     else
                     {
@@ -255,7 +264,7 @@ bool ImplScaleConvolutionVer(Bitmap& rSource, Bitmap& rTarget, const double& rSc
         delete[] pCount;
         delete[] pPixels;
 
-        if(bResult)
+        if (bResult)
         {
             return true;
         }
@@ -264,7 +273,8 @@ bool ImplScaleConvolutionVer(Bitmap& rSource, Bitmap& rTarget, const double& rSc
     return false;
 }
 
-bool ImplScaleConvolution(Bitmap& rBitmap, const double& rScaleX, const double& rScaleY, const Kernel& aKernel)
+bool ImplScaleConvolution(Bitmap& rBitmap, const double& rScaleX, const double& rScaleY,
+                          const Kernel& aKernel)
 {
     const bool bMirrorHor(rScaleX < 0.0);
     const bool bMirrorVer(rScaleY < 0.0);
@@ -289,12 +299,12 @@ bool ImplScaleConvolution(Bitmap& rBitmap, const double& rScaleX, const double& 
 
     if (bMirror)
     {
-        if(bMirrorHor)
+        if (bMirrorHor)
         {
             nMirrorFlags |= BmpMirrorFlags::Horizontal;
         }
 
-        if(bMirrorVer)
+        if (bMirrorVer)
         {
             nMirrorFlags |= BmpMirrorFlags::Vertical;
         }
@@ -304,7 +314,7 @@ bool ImplScaleConvolution(Bitmap& rBitmap, const double& rScaleX, const double& 
 
         bMirrorAfter = nStartSize > nEndSize;
 
-        if(!bMirrorAfter)
+        if (!bMirrorAfter)
         {
             bResult = rBitmap.Mirror(nMirrorFlags);
         }
@@ -318,16 +328,16 @@ bool ImplScaleConvolution(Bitmap& rBitmap, const double& rScaleX, const double& 
         const long nInBetweenSizeVerFirst(nNewHeight * nWidth);
         Bitmap aSource(rBitmap);
 
-        if(nInBetweenSizeHorFirst < nInBetweenSizeVerFirst)
+        if (nInBetweenSizeHorFirst < nInBetweenSizeVerFirst)
         {
-            if(bScaleHor)
+            if (bScaleHor)
             {
                 bResult = ImplScaleConvolutionHor(aSource, aResult, fScaleX, aKernel);
             }
 
-            if(bResult && bScaleVer)
+            if (bResult && bScaleVer)
             {
-                if(bScaleHor)
+                if (bScaleHor)
                 {
                     // copy partial result, independent of color depth
                     aSource = aResult;
@@ -338,14 +348,14 @@ bool ImplScaleConvolution(Bitmap& rBitmap, const double& rScaleX, const double& 
         }
         else
         {
-            if(bScaleVer)
+            if (bScaleVer)
             {
                 bResult = ImplScaleConvolutionVer(aSource, aResult, fScaleY, aKernel);
             }
 
-            if(bResult && bScaleHor)
+            if (bResult && bScaleHor)
             {
-                if(bScaleVer)
+                if (bScaleVer)
                 {
                     // copy partial result, independent of color depth
                     aSource = aResult;
@@ -356,12 +366,12 @@ bool ImplScaleConvolution(Bitmap& rBitmap, const double& rScaleX, const double& 
         }
     }
 
-    if(bResult && bMirrorAfter)
+    if (bResult && bMirrorAfter)
     {
         bResult = aResult.Mirror(nMirrorFlags);
     }
 
-    if(bResult)
+    if (bResult)
     {
         rBitmap.ImplAdaptBitCount(aResult);
         rBitmap = aResult;
@@ -377,7 +387,7 @@ BitmapEx BitmapScaleConvolutionFilter::execute(BitmapEx const& rBitmapEx)
     bool bRetval = false;
     Bitmap aBitmap(rBitmapEx.GetBitmap());
 
-    switch(meKernelType)
+    switch (meKernelType)
     {
         case ConvolutionKernelType::BiLinear:
             bRetval = ImplScaleConvolution(aBitmap, mrScaleX, mrScaleY, BilinearKernel());
@@ -397,7 +407,6 @@ BitmapEx BitmapScaleConvolutionFilter::execute(BitmapEx const& rBitmapEx)
 
     return BitmapEx();
 }
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

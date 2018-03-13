@@ -26,6 +26,7 @@
 #include <vcl/bitmapaccess.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/BitmapConverter.hxx>
+#include <vcl/BitmapScaleFilter.hxx>
 
 #include <svdata.hxx>
 
@@ -142,7 +143,7 @@ void PDFWriterImpl::implWriteBitmapEx( const Point& i_rPoint, const Size& i_rSiz
             if( aNewBmpSize.Width() && aNewBmpSize.Height() )
             {
                 // #i121233# Use best quality for PDF exports
-                aBitmapEx.Scale( aNewBmpSize, BmpScaleFlag::BestQuality );
+                BitmapFilter::Filter(aBitmapEx, BitmapScaleFilter(aNewBmpSize, BmpScaleFlag::BestQuality));
             }
             else
             {

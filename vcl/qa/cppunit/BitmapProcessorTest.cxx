@@ -40,10 +40,12 @@ class BitmapProcessorTest : public CppUnit::TestFixture
 void BitmapProcessorTest::testDisabledImage()
 {
     Bitmap aBitmap(Size(3, 3), 24);
+
     {
         BitmapScopedWriteAccess pWriteAccess(aBitmap);
         pWriteAccess->Erase(Color(0x00, 0x11, 0x22, 0x33));
     }
+
     BitmapEx aBitmapEx(aBitmap);
     BitmapDisabledImageFilter aDisabledImageFilter;
     BitmapEx aDisabledBitmapEx(aDisabledImageFilter.execute(aBitmapEx));
