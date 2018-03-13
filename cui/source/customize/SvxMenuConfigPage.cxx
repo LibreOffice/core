@@ -363,7 +363,7 @@ IMPL_LINK( SvxMenuConfigPage, GearHdl, MenuButton *, pButton, void )
 
         if ( pDialog->Execute() == RET_OK )
         {
-            GetSaveInData()->SetEntries( pDialog->GetEntries() );
+            GetSaveInData()->SetEntries( pDialog->ReleaseEntries() );
 
             ReloadTopLevelListBox();
 
