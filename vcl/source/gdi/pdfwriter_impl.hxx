@@ -42,9 +42,10 @@
 #include <o3tl/typed_flags_set.hxx>
 #include <comphelper/hash.hxx>
 
+#include "pdffontcache.hxx"
+
 #include <sallayout.hxx>
 #include <outdata.hxx>
-#include "pdffontcache.hxx"
 #include <PhysicalFontFace.hxx>
 
 class StyleSettings;
