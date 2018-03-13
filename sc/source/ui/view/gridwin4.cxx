@@ -1720,7 +1720,7 @@ void ScGridWindow::DrawButtons(SCCOL nX1, SCCOL nX2, const ScTableInfo& rTabInfo
 
                             if ( bOtherListValButton && pRowInfo[nArrY].nRowNo == aOtherListValPos.Row() && pRowInfo[nArrY].bChanged )
                             {
-                                tools::Rectangle aRect = GetListValButtonRect( aOtherListValPos );
+                                Rectangle aRect = GetListValButtonRect( aOtherListValPos );
                                 aComboButton.SetPosPixel( aRect.TopLeft() );
                                 aComboButton.SetSizePixel( aRect.GetSize() );
                                 pContentDev->SetClipRegion(vcl::Region(aRect));
