@@ -22,7 +22,7 @@
 #include <vcl/bitmapaccess.hxx>
 
 #include <bitmapwriteaccess.hxx>
-#include <bitmapscalesuper.hxx>
+#include <BitmapScaleSuperFilter.hxx>
 
 #include <algorithm>
 #include <memory>
@@ -952,70 +952,70 @@ BitmapEx BitmapScaleSuperFilter::execute(BitmapEx const& rBitmap)
         return BitmapEx();
     {
         Bitmap::ScopedReadAccess pReadAccess(aBitmap);
-
+        
         Bitmap aOutBmp(Size(nDstW, nDstH), 24);
-
+        
         BitmapScopedWriteAccess pWriteAccess(aOutBmp);
-
+        
         const long nStartY = 0;
         const long nEndY   = nDstH - 1;
-
+        
         if (pReadAccess && pWriteAccess)
         {
             ScaleRangeFn pScaleRangeFn;
             ScaleContext aContext( pReadAccess.get(),
-                                   pWriteAccess.get(),
-                                   pReadAccess->Width(),
-                                   pWriteAccess->Width(),
-                                   pReadAccess->Height(),
-                                   pWriteAccess->Height(),
-                                   bVMirr, bHMirr );
-
+                                  pWriteAccess.get(),
+                                  pReadAccess->Width(),
+                                  pWriteAccess->Width(),
+                                  pReadAccess->Height(),
+                                  pWriteAccess->Height(),
+                                  bVMirr, bHMirr );
+            
             bool bScaleUp = fScaleX >= fScaleThresh && fScaleY >= fScaleThresh;
             if( pReadAccess->HasPalette() )
             {
                 switch( pReadAccess->GetScanlineFormat() )
                 {
-                case ScanlineFormat::N8BitPal:
-                    pScaleRangeFn = bScaleUp ? scalePallete8bit : scalePallete8bit2;
-                    break;
-                default:
-                    pScaleRangeFn = bScaleUp ? scalePalleteGeneral
-                                            : scalePalleteGeneral2;
-                    break;
+                    case ScanlineFormat::N8BitPal:
+                        pScaleRangeFn = bScaleUp ? scalePallete8bit : scalePallete8bit2;
+                        break;
+                    default:
+                        pScaleRangeFn = bScaleUp ? scalePalleteGeneral
+                        : scalePalleteGeneral2;
+                        break;
                 }
             }
             else
             {
                 switch( pReadAccess->GetScanlineFormat() )
                 {
-                case ScanlineFormat::N24BitTcBgr:
-                    pScaleRangeFn = bScaleUp ? scale24bitBGR : scale24bitBGR2;
-                    break;
-                case ScanlineFormat::N24BitTcRgb:
-                    pScaleRangeFn = bScaleUp ? scale24bitRGB : scale24bitRGB2;
-                    break;
-                default:
-                    pScaleRangeFn = bScaleUp ? scaleNonPalleteGeneral
-                                            : scaleNonPalleteGeneral2;
-                    break;
+                    case ScanlineFormat::N24BitTcBgr:
+                        pScaleRangeFn = bScaleUp ? scale24bitBGR : scale24bitBGR2;
+                        break;
+                    case ScanlineFormat::N24BitTcRgb:
+                        pScaleRangeFn = bScaleUp ? scale24bitRGB : scale24bitRGB2;
+                        break;
+                    default:
+                        pScaleRangeFn = bScaleUp ? scaleNonPalleteGeneral
+                        : scaleNonPalleteGeneral2;
+                        break;
                 }
             }
-
+            
             // We want to thread - only if there is a lot of work to do:
             // We work hard when there is a large destination image, or
             // A large source image.
             bool bHorizontalWork = pReadAccess->Width() > 512 || pWriteAccess->Width() > 512;
             bool bUseThreads = true;
-
+            
             static bool bDisableThreadedScaling = getenv ("VCL_NO_THREAD_SCALE");
             if ( bDisableThreadedScaling || !bHorizontalWork ||
-                 nEndY - nStartY < SCALE_THREAD_STRIP )
+                nEndY - nStartY < SCALE_THREAD_STRIP )
             {
                 SAL_INFO("vcl.gdi", "Scale in main thread");
                 bUseThreads = false;
             }
-
+            
             if (bUseThreads)
             {
                 try
@@ -1042,7 +1042,7 @@ BitmapEx BitmapScaleSuperFilter::execute(BitmapEx const& rBitmap)
                     }
                     // finish any remaining bits here
                     pScaleRangeFn( aContext, nStripY, nEndY );
-
+                    
                     rShared.waitUntilDone(pTag);
                     SAL_INFO("vcl.gdi", "All threaded scaling tasks complete");
                 }
@@ -1052,12 +1052,12 @@ BitmapEx BitmapScaleSuperFilter::execute(BitmapEx const& rBitmap)
                     bUseThreads = false;
                 }
             }
-
+            
             if (!bUseThreads)
                 pScaleRangeFn( aContext, nStartY, nEndY );
-
+            
             bRet = true;
-
+            
             if (bRet)
             {
                 aBitmap.AdaptBitCount(aOutBmp);
@@ -1065,14 +1065,14 @@ BitmapEx BitmapScaleSuperFilter::execute(BitmapEx const& rBitmap)
             }
         }
     }
-
+    
     if (bRet)
     {
         tools::Rectangle aRect(Point(0, 0), Point(nDstW, nDstH));
         aBitmap.Crop(aRect);
         return BitmapEx(aBitmap);
     }
-
+    
     return BitmapEx();
 
 }

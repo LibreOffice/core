@@ -5,27 +5,19 @@
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
  */
 
-#include <rtl/ustring.hxx>
+#include <vcl/BitmapConverter.hxx>
 
-#include <vcl/dllapi.h>
-
-#include <memory>
-
-class UIObject;
-
-class UITEST_DLLPUBLIC UITest
+BitmapEx BitmapConverter::execute(BitmapEx const& rBitmapEx)
 {
-public:
+    Bitmap aBitmap = const_cast<Bitmap&>(rBitmapEx.GetBitmapRef());
 
-    static bool executeCommand(const OUString& rCommand);
+    if (aBitmap.Convert(meConversion))
+        return rBitmapEx;
 
-    static bool executeDialog(const OUString& rCommand);
-
-    static std::unique_ptr<UIObject> getFocusTopWindow();
-
-    static std::unique_ptr<UIObject> getFloatWindow();
-};
+    return BitmapEx();
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
