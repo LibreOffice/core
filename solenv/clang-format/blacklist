@@ -7955,6 +7955,8 @@ include/vbahelper/vbashapes.hxx
 include/vbahelper/vbatextframe.hxx
 include/vbahelper/vbawindowbase.hxx
 include/vcl/BitmapTools.hxx
+include/vcl/BitmapConverter.hxx
+include/vcl/BitmapFilter.hxx
 include/vcl/EnumContext.hxx
 include/vcl/FilterConfigItem.hxx
 include/vcl/GraphicNativeMetadata.hxx
@@ -17548,7 +17550,8 @@ vcl/headless/svpprn.cxx
 vcl/headless/svptext.cxx
 vcl/headless/svpvd.cxx
 vcl/inc/BitmapProcessor.hxx
-vcl/inc/BitmapScaleConvolution.hxx
+vcl/inc/BitmapScaleConvolutionFilter.hxx
+vcl/inc/BitmapScaleSuperFilter.hxx
 vcl/inc/BitmapSymmetryCheck.hxx
 vcl/inc/CommonSalLayout.hxx
 vcl/inc/ControlCacheKey.hxx
@@ -17560,8 +17563,6 @@ vcl/inc/accel.h
 vcl/inc/accmgr.hxx
 vcl/inc/android/androidinst.hxx
 vcl/inc/android/svsys.h
-vcl/inc/bitmapfilter.hxx
-vcl/inc/bitmapscalesuper.hxx
 vcl/inc/bmpfast.hxx
 vcl/inc/brdwin.hxx
 vcl/inc/canvasbitmap.hxx
@@ -18037,13 +18038,16 @@ vcl/source/app/timer.cxx
 vcl/source/app/unohelp.cxx
 vcl/source/app/unohelp2.cxx
 vcl/source/app/vclevent.cxx
-vcl/source/bitmap/bitmap.cxx
-vcl/source/bitmap/BitmapProcessor.cxx
+vcl/source/bitmap/BitmapColorizeFilter.cxx
+vcl/source/bitmap/BitmapConverter.cxx
+vcl/source/bitmap/BitmapDisabledImageFilter.cxx
+vcl/source/bitmap/BitmapLightenFilter.cxx
 vcl/source/bitmap/BitmapScaleConvolution.cxx
+vcl/source/bitmap/BitmapScaleSuperFilter.cxx
 vcl/source/bitmap/BitmapSymmetryCheck.cxx
 vcl/source/bitmap/BitmapTools.cxx
+vcl/source/bitmap/bitmap.cxx
 vcl/source/bitmap/bitmapfilter.cxx
-vcl/source/bitmap/bitmapscalesuper.cxx
 vcl/source/bitmap/checksum.cxx
 vcl/source/components/dtranscomp.cxx
 vcl/source/components/factory.cxx

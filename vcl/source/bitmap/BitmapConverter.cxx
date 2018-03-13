@@ -8,12 +8,16 @@
  *
  */
 
-#include <vcl/BitmapFilter.hxx>
+#include <vcl/BitmapConverter.hxx>
 
-BitmapFilter::BitmapFilter()
-{}
+BitmapEx BitmapConverter::execute(BitmapEx const& rBitmapEx)
+{
+    Bitmap aBitmap = const_cast<Bitmap&>(rBitmapEx.GetBitmapRef());
 
-BitmapFilter::~BitmapFilter()
-{}
+    if (aBitmap.Convert(meConversion))
+        return rBitmapEx;
+
+    return BitmapEx();
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

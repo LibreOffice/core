@@ -17,12 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <comphelper/threadpool.hxx>
+
 #include <vcl/bitmapaccess.hxx>
-#include <bitmapscalesuper.hxx>
+
+#include <BitmapScaleSuperFilter.hxx>
 
 #include <algorithm>
 #include <memory>
-#include <comphelper/threadpool.hxx>
 
 namespace {
 
@@ -926,8 +928,10 @@ BitmapScaleSuperFilter::BitmapScaleSuperFilter(const double& rScaleX, const doub
 BitmapScaleSuperFilter::~BitmapScaleSuperFilter()
 {}
 
-bool BitmapScaleSuperFilter::execute(Bitmap& rBitmap)
+BitmapEx BitmapScaleSuperFilter::execute(BitmapEx const& rBitmap)
 {
+    Bitmap aBitmap = const_cast<Bitmap&>(rBitmap.GetBitmapRef());
+
     bool bRet = false;
 
     const Size aSizePix(rBitmap.GetSizePixel());
@@ -944,9 +948,9 @@ bool BitmapScaleSuperFilter::execute(Bitmap& rBitmap)
     const double fScaleThresh = 0.6;
 
     if (nDstW <= 1 || nDstH <= 1)
-        return false;
+        return BitmapEx();
 
-    Bitmap::ScopedReadAccess pReadAccess(rBitmap);
+    Bitmap::ScopedReadAccess pReadAccess(aBitmap);
 
     Bitmap aOutBmp(Size(nDstW, nDstH), 24);
     Bitmap::ScopedWriteAccess pWriteAccess(aOutBmp);
@@ -1053,13 +1057,14 @@ bool BitmapScaleSuperFilter::execute(Bitmap& rBitmap)
         bRet = true;
     }
 
-    if( bRet )
+    if (bRet)
     {
-        rBitmap.AdaptBitCount(aOutBmp);
-        rBitmap = aOutBmp;
+        aBitmap.AdaptBitCount(aOutBmp);
+        aBitmap = aOutBmp;
+        return rBitmap;
     }
 
-    return bRet;
+    return BitmapEx();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
