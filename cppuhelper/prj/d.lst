@@ -55,7 +55,6 @@ mkdir: %_DEST%\inc%_EXT%\cppuhelper
 ..\inc\cppuhelper\implementationentry.hxx %_DEST%\inc%_EXT%\cppuhelper\implementationentry.hxx
 ..\inc\cppuhelper\access_control.hxx %_DEST%\inc%_EXT%\cppuhelper\access_control.hxx
 ..\inc\cppuhelper\unourl.hxx %_DEST%\inc%_EXT%\cppuhelper\unourl.hxx
-..\inc\cppuhelper\cppuhelperdllapi.h %_DEST%\inc%_EXT%\cppuhelper\cppuhelperdllapi.h
 
 ..\%__SRC%\bin\cppuh*.dll %_DEST%\bin%_EXT%\cppuh*.dll
 ..\%__SRC%\lib\*cppuhelper*.lib %_DEST%\lib%_EXT%\*

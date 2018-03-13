@@ -27,7 +27,7 @@
 #include <cppuhelper/implbase_ex.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <com/sun/star/lang/XComponent.hpp>
-#include "cppuhelper/cppuhelperdllapi.h"
+
 
 namespace cppu
 {
@@ -36,7 +36,7 @@ namespace cppu
     ::com::sun::star::lang::XComponent.
     @internal
 */
-class CPPUHELPER_DLLPUBLIC SAL_NO_VTABLE WeakComponentImplHelperBase
+class SAL_NO_VTABLE WeakComponentImplHelperBase
     : public ::cppu::OWeakObject
     , public ::com::sun::star::lang::XComponent
 {
@@ -90,7 +90,7 @@ public:
     ::com::sun::star::lang::XComponent.
     @internal
 */
-class CPPUHELPER_DLLPUBLIC SAL_NO_VTABLE WeakAggComponentImplHelperBase
+class SAL_NO_VTABLE WeakAggComponentImplHelperBase
     : public ::cppu::OWeakAggObject
     , public ::com::sun::star::lang::XComponent
 {
@@ -138,7 +138,6 @@ public:
 /** WeakComponentImplHelper
     @internal
 */
-CPPUHELPER_DLLPUBLIC
 ::com::sun::star::uno::Any SAL_CALL WeakComponentImplHelper_query(
     ::com::sun::star::uno::Type const & rType,
     class_data * cd,
@@ -148,7 +147,6 @@ CPPUHELPER_DLLPUBLIC
 /** WeakComponentImplHelper
     @internal
 */
-CPPUHELPER_DLLPUBLIC
 ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL WeakComponentImplHelper_getTypes(
     class_data * cd )
     SAL_THROW( (::com::sun::star::uno::RuntimeException) );
@@ -156,7 +154,6 @@ CPPUHELPER_DLLPUBLIC
 /** WeakAggComponentImplHelper
     @internal
 */
-CPPUHELPER_DLLPUBLIC
 ::com::sun::star::uno::Any SAL_CALL WeakAggComponentImplHelper_queryAgg(
     ::com::sun::star::uno::Type const & rType,
     class_data * cd,
@@ -166,7 +163,6 @@ CPPUHELPER_DLLPUBLIC
 /** WeakAggComponentImplHelper
     @internal
 */
-CPPUHELPER_DLLPUBLIC
 ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL WeakAggComponentImplHelper_getTypes(
     class_data * cd )
     SAL_THROW( (::com::sun::star::uno::RuntimeException) );

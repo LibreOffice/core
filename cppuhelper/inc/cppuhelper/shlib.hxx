@@ -28,7 +28,6 @@
 #include <com/sun/star/loader/CannotActivateFactoryException.hpp>
 #include <com/sun/star/registry/CannotRegisterImplementationException.hpp>
 
-#include "cppuhelper/cppuhelperdllapi.h"
 
 namespace cppu
 {
@@ -48,7 +47,6 @@ namespace cppu
     factory instance (::com::sun::star::lang::XSingleComponentFactory or
     ::com::sun::star::lang::XSingleComponentFactory)
 */
-CPPUHELPER_DLLPUBLIC
 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
 SAL_CALL loadSharedLibComponentFactory(
     ::rtl::OUString const & rLibName, ::rtl::OUString const & rPath,
@@ -70,7 +68,6 @@ SAL_CALL loadSharedLibComponentFactory(
     @param xMgr service manager to be provided to the component
     @param xKey registry key to be provided to the component
 */
-CPPUHELPER_DLLPUBLIC
 void
 SAL_CALL writeSharedLibComponentInfo(
     ::rtl::OUString const & rLibName, ::rtl::OUString const & rPath,

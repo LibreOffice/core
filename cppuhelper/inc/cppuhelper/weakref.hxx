@@ -25,8 +25,6 @@
 
 #include <com/sun/star/uno/XInterface.hpp>
 
-#include "cppuhelper/cppuhelperdllapi.h"
-
 
 namespace com
 {
@@ -43,7 +41,7 @@ class OWeakRefListener;
 /** The WeakReferenceHelper holds a weak reference to an object. This object must implement
     the ::com::sun::star::uno::XWeak interface.  The implementation is thread safe.
 */
-class CPPUHELPER_DLLPUBLIC WeakReferenceHelper
+class WeakReferenceHelper
 {
 public:
     /** Default ctor.  Creates an empty weak reference.

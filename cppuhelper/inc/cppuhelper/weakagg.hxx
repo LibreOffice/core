@@ -24,7 +24,6 @@
 #define _CPPUHELPER_WEAKAGG_HXX_
 
 #include <cppuhelper/weak.hxx>
-#include "cppuhelper/cppuhelperdllapi.h"
 #include <com/sun/star/uno/XAggregation.hpp>
 
 
@@ -41,7 +40,7 @@ namespace cppu
     Inherit from this class and delegate acquire()/ release() calls.  Re-implement
     XAggregation::queryInterface().
 */
-class CPPUHELPER_DLLPUBLIC OWeakAggObject
+class OWeakAggObject
     : public ::cppu::OWeakObject
     , public ::com::sun::star::uno::XAggregation
 {

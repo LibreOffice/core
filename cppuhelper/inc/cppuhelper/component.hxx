@@ -34,7 +34,6 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>
 
-#include "cppuhelper/cppuhelperdllapi.h"
 
 namespace cppu
 {
@@ -48,7 +47,7 @@ namespace cppu
     The life-cycle of the passed mutex reference has to be longer than objects of this class.
     @deprecated
 */
-class CPPUHELPER_DLLPUBLIC OComponentHelper
+class OComponentHelper
     : public ::cppu::OWeakAggObject
     , public ::com::sun::star::lang::XTypeProvider
     , public ::com::sun::star::lang::XComponent

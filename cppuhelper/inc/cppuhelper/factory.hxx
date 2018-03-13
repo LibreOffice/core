@@ -33,8 +33,6 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/registry/XRegistryKey.hpp>
 
-#include "cppuhelper/cppuhelperdllapi.h"
-
 //##################################################################################################
 
 #define COMPONENT_GETENV            "component_getImplementationEnvironment"
@@ -140,7 +138,6 @@ typedef ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >(
     @param rServiceNames supported services
     @param pModCount for future extension (library unloading concept).
 */
-CPPUHELPER_DLLPUBLIC
 ::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleComponentFactory >
 SAL_CALL createSingleComponentFactory(
     ComponentFactoryFunc fptr,
@@ -158,7 +155,6 @@ SAL_CALL createSingleComponentFactory(
 
     @see createSingleComponentFactory
 */
-CPPUHELPER_DLLPUBLIC
 ::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleComponentFactory > SAL_CALL
 createOneInstanceComponentFactory(
     ComponentFactoryFunc fptr,
@@ -189,7 +185,6 @@ typedef ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >(SA
     @see createOneInstanceFactory
     @deprecated
 */
-CPPUHELPER_DLLPUBLIC
 ::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleServiceFactory > SAL_CALL
 createSingleFactory(
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & rServiceManager,
@@ -213,7 +208,6 @@ createSingleFactory(
     @see createSingleFactory
     @deprecated
 */
-CPPUHELPER_DLLPUBLIC
 ::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleServiceFactory > SAL_CALL
 createFactoryProxy(
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & rServiceManager,
@@ -233,7 +227,6 @@ createFactoryProxy(
     @see createSingleFactory
     @deprecated
 */
-CPPUHELPER_DLLPUBLIC
 ::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleServiceFactory > SAL_CALL
 createOneInstanceFactory(
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & rServiceManager,
@@ -252,7 +245,6 @@ createOneInstanceFactory(
     XSingleServiceFactory and XComponent.
     @deprecated
 */
-CPPUHELPER_DLLPUBLIC
 ::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleServiceFactory > SAL_CALL createSingleRegistryFactory(
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & rServiceManager,
     const ::rtl::OUString & rImplementationName,
@@ -271,7 +263,6 @@ CPPUHELPER_DLLPUBLIC
     @see createSingleRegistryFactory
     @deprecated
 */
-CPPUHELPER_DLLPUBLIC
 ::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleServiceFactory > SAL_CALL createOneInstanceRegistryFactory(
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & rServiceManager,
     const ::rtl::OUString & rComponentName,
