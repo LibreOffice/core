@@ -137,6 +137,7 @@ void PageBordersHandler::SetBorders( SectionPropertyMap* pSectContext )
     {
         pSectContext->SetBorder( rBorder.m_ePos, rBorder.m_nDistance, rBorder.m_rLine, rBorder.m_bShadow );
     }
+    pSectContext->SetBorderParams(GetDisplayOffset());
 }
 
 } }
