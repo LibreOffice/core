@@ -18,7 +18,7 @@ class VCL_DLLPUBLIC BitmapDisabledImageFilter : public BitmapFilterEx
 public:
     BitmapDisabledImageFilter() {}
 
-    virtual BitmapEx execute(BitmapEx const& rBitmapEx);
+    virtual BitmapEx execute(BitmapEx const& rBitmapEx) override;
 };
 
 #endif
