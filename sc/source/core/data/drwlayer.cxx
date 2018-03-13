@@ -689,13 +689,13 @@ void ScDrawLayer::ResizeLastRectFromAnchor(const SdrObject* pObj, ScDrawObjData&
                 {
                     // To actually grow the image, we need to take the max
                     fWidthFactor = fHeightFactor = std::max(fWidthFactor, fHeightFactor);
-                    // But we don't want the image to become larger than the current cell
-                    fWidthFactor = fHeightFactor = std::min(fWidthFactor, fMaxFactor);
                 }
                 else // cell is growing smaller, take the min
                 {
                     fWidthFactor = fHeightFactor = std::min(fWidthFactor, fHeightFactor);
                 }
+                // We don't want the image to become larger than the current cell
+                fWidthFactor = fHeightFactor = std::min(fWidthFactor, fMaxFactor);
             }
 
             // When shrinking the cell, and the image still fits in the smaller cell, don't resize it at all
@@ -706,6 +706,13 @@ void ScDrawLayer::ResizeLastRectFromAnchor(const SdrObject* pObj, ScDrawObjData&
                     rtl::math::round(static_cast<double>(aRect.GetWidth()) * fWidthFactor));
                 aRect.setHeight(
                     rtl::math::round(static_cast<double>(aRect.GetHeight()) * fHeightFactor));
+
+                // Reduce offset also when shrinking
+                if (!bIsGrowingLarger)
+                {
+                    aRect.setX(rtl::math::round(static_cast<double>(aRect.getX()) * fWidthFactor));
+                    aRect.setY(rtl::math::round(static_cast<double>(aRect.getY()) * fHeightFactor));
+                }
             }
         }
     }
