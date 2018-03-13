@@ -25,6 +25,8 @@
 
 namespace framework{
 
+bool InterceptionHelper::m_bPreferrFirstInterceptor = true;
+
 InterceptionHelper::InterceptionHelper(const css::uno::Reference< css::frame::XFrame >&            xOwner,
                                        const css::uno::Reference< css::frame::XDispatchProvider >& xSlave)
     : m_xOwnerWeak  (xOwner                       )
@@ -138,7 +140,22 @@ void SAL_CALL InterceptionHelper::registerDispatchProviderInterceptor(const css:
     //    It's slave and it's master must be valid references ...
     //    because we created it.
 
-    // insert it before any other existing interceptor - means at the beginning of our list.
+    // b1) If "m_bPreferrFirstInterceptor" is set to true, we have to
+    //     insert it behind any other existing interceptor - means at the end of our list.
+    else if (m_bPreferrFirstInterceptor)
+    {
+        css::uno::Reference< css::frame::XDispatchProvider >            xSlaveD = m_lInterceptionRegs.begin()->xInterceptor;
+        css::uno::Reference< css::frame::XDispatchProviderInterceptor > xSlaveI (xSlaveD , css::uno::UNO_QUERY);
+
+        xInterceptor->setMasterDispatchProvider(xThis             );
+        xInterceptor->setSlaveDispatchProvider (xSlaveD           );
+        xSlaveI->setMasterDispatchProvider     (aInfo.xInterceptor);
+
+        m_lInterceptionRegs.push_front(aInfo);
+    }
+
+    // b2) If "m_bPreferrFirstInterceptor" is set to false, we have to
+    //     insert it before any other existing interceptor - means at the beginning of our list.
     else
     {
         css::uno::Reference< css::frame::XDispatchProvider >            xSlaveD = m_lInterceptionRegs.begin()->xInterceptor;
