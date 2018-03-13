@@ -105,6 +105,7 @@
 #include <o3tl/typed_flags_set.hxx>
 
 #include <vcl/BitmapTools.hxx>
+#include <vcl/BitmapScaleFilter.hxx>
 
 #define COL_NOTES_SIDEPANE                  Color(230,230,230)
 #define COL_NOTES_SIDEPANE_BORDER           Color(200,200,200)
@@ -5819,7 +5820,8 @@ static void lcl_paintBitmapExToRect(vcl::RenderContext *pOut, const Point& aPoin
             const long nWidth = aPageRightShadow.GetSizePixel().Width();
             const long nHeight = aPagePxRect.Height() - 2 * (mnShadowPxWidth - 1);
             if (aPageRightShadow.GetSizePixel().Height() < BORDER_TILE_SIZE)
-                aPageRightShadow.Scale(Size(nWidth, BORDER_TILE_SIZE), BmpScaleFlag::Fast);
+                BitmapFilter::Filter(aPageRightShadow,
+                        BitmapScaleFilter(Size(nWidth, BORDER_TILE_SIZE), BmpScaleFlag::Fast));
 
             lcl_paintBitmapExToRect(pOut,
                     Point(aPaintRect.Right() + mnShadowPxWidth, aPagePxRect.Top() + mnShadowPxWidth - 1),
@@ -5840,7 +5842,8 @@ static void lcl_paintBitmapExToRect(vcl::RenderContext *pOut, const Point& aPoin
             const long nWidth = aPageLeftShadow.GetSizePixel().Width();
             const long nHeight = aPagePxRect.Height() - 2 * (mnShadowPxWidth - 1);
             if (aPageLeftShadow.GetSizePixel().Height() < BORDER_TILE_SIZE)
-                aPageLeftShadow.Scale(Size(nWidth, BORDER_TILE_SIZE), BmpScaleFlag::Fast);
+                BitmapFilter::Filter(aPageLeftShadow,
+                        BitmapScaleFilter(Size(nWidth, BORDER_TILE_SIZE), BmpScaleFlag::Fast));
 
             lcl_paintBitmapExToRect(pOut,
                     Point(lLeft, aPagePxRect.Top() + mnShadowPxWidth - 1),
@@ -5852,7 +5855,8 @@ static void lcl_paintBitmapExToRect(vcl::RenderContext *pOut, const Point& aPoin
     // Bottom shadow
     const long nBottomHeight = aPageBottomShadow.GetSizePixel().Height();
     if (aPageBottomShadow.GetSizePixel().Width() < BORDER_TILE_SIZE)
-        aPageBottomShadow.Scale(Size(BORDER_TILE_SIZE, nBottomHeight), BmpScaleFlag::Fast);
+        BitmapFilter::Filter(aPageBottomShadow,
+            BitmapScaleFilter(Size(BORDER_TILE_SIZE, nBottomHeight), BmpScaleFlag::Fast));
 
     lcl_paintBitmapExToRect(pOut,
             Point(aPaintRect.Left(), aPagePxRect.Bottom() + 2),
@@ -5862,7 +5866,8 @@ static void lcl_paintBitmapExToRect(vcl::RenderContext *pOut, const Point& aPoin
     // Top shadow
     const long nTopHeight = aPageTopShadow.GetSizePixel().Height();
     if (aPageTopShadow.GetSizePixel().Width() < BORDER_TILE_SIZE)
-        aPageTopShadow.Scale(Size(BORDER_TILE_SIZE, nTopHeight), BmpScaleFlag::Fast);
+        BitmapFilter::Filter(aPageTopShadow,
+                BitmapScaleFilter(Size(BORDER_TILE_SIZE, nTopHeight), BmpScaleFlag::Fast));
 
     lcl_paintBitmapExToRect(pOut,
             Point(aPaintRect.Left(), aPagePxRect.Top() - mnShadowPxWidth),

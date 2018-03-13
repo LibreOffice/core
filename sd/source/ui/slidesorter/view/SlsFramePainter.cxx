@@ -20,6 +20,7 @@
 #include "SlsFramePainter.hxx"
 #include <vcl/outdev.hxx>
 #include <vcl/bitmapaccess.hxx>
+#include <vcl/BitmapScaleFilter.hxx>
 
 namespace sd { namespace slidesorter { namespace view {
 
@@ -134,17 +135,12 @@ FramePainter::OffsetBitmap::OffsetBitmap (
     // paint calls.
     const sal_Int32 nSideBitmapSize (64);
     if (nHorizontalPosition == 0 && nVerticalPosition == 0)
-    {
-        maBitmap.Scale(Size(nSideBitmapSize,nSideBitmapSize));
-    }
+        BitmapFilter::Filter(maBitmap, BitmapScaleFilter(Size(nSideBitmapSize, nSideBitmapSize)));
     else if (nHorizontalPosition == 0)
-    {
-        maBitmap.Scale(Size(nSideBitmapSize,aSize.Height()));
-    }
+        BitmapFilter::Filter(maBitmap, BitmapScaleFilter(Size(nSideBitmapSize, aSize.Height())));
     else if (nVerticalPosition == 0)
-    {
-        maBitmap.Scale(Size(maBitmap.GetSizePixel().Width(), nSideBitmapSize));
-    }
+        BitmapFilter::Filter(maBitmap,
+                BitmapScaleFilter(Size(maBitmap.GetSizePixel().Width(), nSideBitmapSize)));
 }
 
 void FramePainter::OffsetBitmap::PaintCorner (

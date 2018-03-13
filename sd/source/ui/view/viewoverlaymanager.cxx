@@ -27,6 +27,7 @@
 
 #include <vcl/help.hxx>
 #include <vcl/lazydelete.hxx>
+#include <vcl/BitmapScaleFilter.hxx>
 
 #include <svx/sdrpagewindow.hxx>
 #include <svx/sdrpaintwindow.hxx>
@@ -340,7 +341,7 @@ BitmapEx ChangePlaceholderTag::createOverlayImage( int nHighlight )
 
         Size aSize( getButtonImage( 0, bLarge )->GetSizePixel() );
 
-        aRet.SetSizePixel( Size( aSize.Width() << 1, aSize.Height() << 1 ) );
+        BitmapFilter::Filter(aRet, BitmapScaleFilter(Size(aSize.Width() << 1, aSize.Height() << 1)));
 
         const ::tools::Rectangle aRectSrc( Point( 0, 0 ), aSize );
 
