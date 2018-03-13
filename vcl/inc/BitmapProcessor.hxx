@@ -15,8 +15,6 @@
 class VCL_DLLPUBLIC BitmapProcessor
 {
 public:
-    static BitmapEx createLightImage(const BitmapEx& rBitmapEx);
-    static BitmapEx createDisabledImage(const BitmapEx& rBitmapEx);
     static void colorizeImage(BitmapEx const & rBitmapEx, Color aColor);
 };
 
