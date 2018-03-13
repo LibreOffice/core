@@ -32,17 +32,17 @@ void SwInsTableDlg::GetValues( OUString& rName, sal_uInt16& rRow, sal_uInt16& rC
                                 SwTableAutoFormat *& prTAFormat )
 {
     sal_uInt16 nInsMode = 0;
-    rName = m_pNameEdit->GetText();
-    rRow = static_cast<sal_uInt16>(m_pRowNF->GetValue());
-    rCol = static_cast<sal_uInt16>(m_pColNF->GetValue());
+    rName = m_xNameEdit->get_text();
+    rRow = m_xRowNF->get_value();
+    rCol = m_xColNF->get_value();
 
-    if (m_pHeaderCB->IsChecked())
+    if (m_xHeaderCB->get_active())
         nInsMode |= tabopts::HEADLINE;
-    if (m_pRepeatHeaderCB->IsEnabled() && m_pRepeatHeaderCB->IsChecked())
-        rInsTableOpts.mnRowsToRepeat = sal_uInt16( m_pRepeatHeaderNF->GetValue() );
+    if (m_xRepeatHeaderCB->get_sensitive() && m_xRepeatHeaderCB->get_active())
+        rInsTableOpts.mnRowsToRepeat = m_xRepeatHeaderNF->get_value();
     else
         rInsTableOpts.mnRowsToRepeat = 0;
-    if (!m_pDontSplitCB->IsChecked())
+    if (!m_xDontSplitCB->get_active())
         nInsMode |= tabopts::SPLIT_LAYOUT;
     if( pTAutoFormat )
     {
@@ -53,35 +53,45 @@ void SwInsTableDlg::GetValues( OUString& rName, sal_uInt16& rRow, sal_uInt16& rC
     rInsTableOpts.mnInsMode = nInsMode;
 }
 
-SwInsTableDlg::SwInsTableDlg( SwView& rView )
-    : SfxModalDialog(rView.GetWindow(), "InsertTableDialog", "modules/swriter/ui/inserttable.ui")
+IMPL_LINK(SwInsTableDlg, TextFilterHdl, OUString&, rTest, bool)
+{
+    rTest = m_aTextFilter.filter(rTest);
+    return true;
+}
+
+SwInsTableDlg::SwInsTableDlg(SwView& rView)
+    : weld::GenericDialogController(rView.GetFrameWeld(), "modules/swriter/ui/inserttable.ui", "InsertTableDialog")
+    , m_xNameEdit(m_xBuilder->weld_entry("nameedit"))
+    , m_xColNF(m_xBuilder->weld_spin_button("colspin"))
+    , m_xRowNF(m_xBuilder->weld_spin_button("rowspin"))
+    , m_xHeaderCB(m_xBuilder->weld_check_button("headercb"))
+    , m_xRepeatHeaderCB(m_xBuilder->weld_check_button("repeatcb"))
+    , m_xRepeatHeaderNF(m_xBuilder->weld_spin_button("repeatheaderspin"))
+    , m_xRepeatGroup(m_xBuilder->weld_widget("repeatgroup"))
+    , m_xDontSplitCB(m_xBuilder->weld_check_button("dontsplitcb"))
+    , m_xInsertBtn(m_xBuilder->weld_button("ok"))
+    , m_xLbFormat(m_xBuilder->weld_tree_view("formatlbinstable"))
+    , m_xWndPreview(new AutoFormatPreview(m_xBuilder->weld_drawing_area("previewinstable")))
     , m_aTextFilter(" .<>")
     , pShell(&rView.GetWrtShell())
     , pTAutoFormat(nullptr)
     , nEnteredValRepeatHeaderNF(-1)
 {
-    get(m_pNameEdit, "nameedit");
-    m_pNameEdit->SetTextFilter(&m_aTextFilter);
-    get(m_pColNF, "colspin");
-    get(m_pRowNF, "rowspin");
-    get(m_pHeaderCB, "headercb");
-    get(m_pRepeatHeaderCB, "repeatcb");
-    get(m_pDontSplitCB, "dontsplitcb");
-    get(m_pInsertBtn, "ok");
-    get(m_pRepeatGroup, "repeatgroup");
-    get(m_pRepeatHeaderNF, "repeatheaderspin");
-    get(m_pLbFormat, "formatlbinstable");
-    get(m_pWndPreview, "previewinstable");
+    const int nWidth = m_xLbFormat->get_approximate_char_width() * 32;
+    const int nHeight = m_xLbFormat->get_height_rows(8);
+    m_xLbFormat->set_size_request(nWidth, nHeight);
+    m_xWndPreview->set_size_request(nWidth, nHeight);
 
-    m_pNameEdit->SetText(pShell->GetUniqueTableName());
-    m_pNameEdit->SetModifyHdl(LINK(this, SwInsTableDlg, ModifyName));
-    m_pColNF->SetModifyHdl(LINK(this, SwInsTableDlg, ModifyRowCol));
-    m_pRowNF->SetModifyHdl(LINK(this, SwInsTableDlg, ModifyRowCol));
+    m_xNameEdit->connect_insert_text(LINK(this, SwInsTableDlg, TextFilterHdl));
+    m_xNameEdit->set_text(pShell->GetUniqueTableName());
+    m_xNameEdit->connect_changed(LINK(this, SwInsTableDlg, ModifyName));
+    m_xColNF->connect_value_changed(LINK(this, SwInsTableDlg, ModifyRowCol));
+    m_xRowNF->connect_value_changed(LINK(this, SwInsTableDlg, ModifyRowCol));
 
-    m_pRowNF->SetMax(ROW_COL_PROD/m_pColNF->GetValue());
-    m_pColNF->SetMax(ROW_COL_PROD/m_pRowNF->GetValue());
+    m_xRowNF->set_max(ROW_COL_PROD/m_xColNF->get_value());
+    m_xColNF->set_max(ROW_COL_PROD/m_xRowNF->get_value());
 
-    m_pInsertBtn->SetClickHdl(LINK(this, SwInsTableDlg, OKHdl));
+    m_xInsertBtn->connect_clicked(LINK(this, SwInsTableDlg, OKHdl));
 
     bool bHTMLMode = 0 != (::GetHtmlMode(rView.GetDocShell())&HTMLMODE_ON);
     const SwModuleOptions* pModOpt = SW_MOD()->GetModuleConfig();
@@ -89,47 +99,47 @@ SwInsTableDlg::SwInsTableDlg( SwView& rView )
     SwInsertTableOptions aInsOpts = pModOpt->GetInsTableFlags(bHTMLMode);
     sal_uInt16 nInsTableFlags = aInsOpts.mnInsMode;
 
-    m_pHeaderCB->Check( 0 != (nInsTableFlags & tabopts::HEADLINE) );
-    m_pRepeatHeaderCB->Check(aInsOpts.mnRowsToRepeat > 0);
-    if(bHTMLMode)
-        m_pDontSplitCB->Hide();
+    m_xHeaderCB->set_active(0 != (nInsTableFlags & tabopts::HEADLINE));
+    m_xRepeatHeaderCB->set_active(aInsOpts.mnRowsToRepeat > 0);
+    if (bHTMLMode)
+        m_xDontSplitCB->hide();
     else
-        m_pDontSplitCB->Check( 0 == (nInsTableFlags & tabopts::SPLIT_LAYOUT) );
+        m_xDontSplitCB->set_active(0 == (nInsTableFlags & tabopts::SPLIT_LAYOUT));
 
-    m_pRepeatHeaderNF->SetModifyHdl( LINK( this, SwInsTableDlg, ModifyRepeatHeaderNF_Hdl ) );
-    m_pHeaderCB->SetClickHdl( LINK( this, SwInsTableDlg, CheckBoxHdl ) );
-    m_pRepeatHeaderCB->SetClickHdl( LINK( this, SwInsTableDlg, ReapeatHeaderCheckBoxHdl ) );
-    ReapeatHeaderCheckBoxHdl(nullptr);
-    CheckBoxHdl(nullptr);
+    m_xRepeatHeaderNF->connect_value_changed( LINK( this, SwInsTableDlg, ModifyRepeatHeaderNF_Hdl ) );
+    m_xHeaderCB->connect_toggled( LINK( this, SwInsTableDlg, CheckBoxHdl ) );
+    m_xRepeatHeaderCB->connect_toggled( LINK( this, SwInsTableDlg, RepeatHeaderCheckBoxHdl ) );
+    RepeatHeaderCheckBoxHdl(*m_xRepeatHeaderCB);
+    CheckBoxHdl(*m_xHeaderCB);
 
-    sal_Int64 nMax = m_pRowNF->GetValue();
+    sal_Int64 nMax = m_xRowNF->get_value();
     if( nMax <= 1 )
         nMax = 1;
     else
         --nMax;
-    m_pRepeatHeaderNF->SetMax( nMax );
+    m_xRepeatHeaderNF->set_max( nMax );
 
     InitAutoTableFormat();
 }
 
 void SwInsTableDlg::InitAutoTableFormat()
 {
-    m_pWndPreview->DetectRTL(pShell);
+    m_xWndPreview->DetectRTL(pShell);
 
-    m_pLbFormat->SetSelectHdl( LINK( this, SwInsTableDlg, SelFormatHdl ) );
+    m_xLbFormat->connect_changed(LINK(this, SwInsTableDlg, SelFormatHdl));
 
     pTableTable = new SwTableAutoFormatTable;
     pTableTable->Load();
 
     // Add "- none -" style autoformat table.
-    m_pLbFormat->InsertEntry( SwViewShell::GetShellRes()->aStrNone ); // Insert to listbox
+    m_xLbFormat->append( SwViewShell::GetShellRes()->aStrNone ); // Insert to listbox
 
     // Add other styles of autoformat tables.
     for (sal_uInt8 i = 0, nCount = static_cast<sal_uInt8>(pTableTable->size());
             i < nCount; i++)
     {
         SwTableAutoFormat const& rFormat = (*pTableTable)[ i ];
-        m_pLbFormat->InsertEntry(rFormat.GetName());
+        m_xLbFormat->append(rFormat.GetName());
         if (pTAutoFormat && rFormat.GetName() == pTAutoFormat->GetName())
             lbIndex = i;
     }
@@ -138,10 +148,10 @@ void SwInsTableDlg::InitAutoTableFormat()
     minTableIndexInLb = 1;
     maxTableIndexInLb = minTableIndexInLb + static_cast<sal_uInt8>(pTableTable->size());
     lbIndex = 1;
-    m_pLbFormat->SelectEntryPos( lbIndex );
+    m_xLbFormat->select( lbIndex );
     tbIndex = lbIndexToTableIndex(lbIndex);
 
-    SelFormatHdl( *m_pLbFormat );
+    SelFormatHdl( *m_xLbFormat );
 }
 
 sal_uInt8 SwInsTableDlg::lbIndexToTableIndex( const sal_uInt8 listboxIndex )
@@ -156,30 +166,6 @@ sal_uInt8 SwInsTableDlg::lbIndexToTableIndex( const sal_uInt8 listboxIndex )
     return 255;
 }
 
-SwInsTableDlg::~SwInsTableDlg()
-{
-    disposeOnce();
-}
-
-void SwInsTableDlg::dispose()
-{
-    delete pTAutoFormat;
-    m_pLbFormat.clear();
-    m_pNameEdit.clear();
-    m_pColNF.clear();
-    m_pRowNF.clear();
-    m_pHeaderCB.clear();
-    m_pRepeatHeaderCB.clear();
-    m_pRepeatHeaderNF.clear();
-    m_pRepeatGroup.clear();
-    m_pDontSplitCB.clear();
-    m_pInsertBtn.clear();
-    m_pWndPreview.clear();
-    pTableTable->Save();
-    delete pTableTable;
-    SfxModalDialog::dispose();
-}
-
 static void lcl_SetProperties( SwTableAutoFormat* pTableAutoFormat, bool bVal )
 {
     pTableAutoFormat->SetFont( bVal );
@@ -190,27 +176,26 @@ static void lcl_SetProperties( SwTableAutoFormat* pTableAutoFormat, bool bVal )
     pTableAutoFormat->SetWidthHeight( bVal );
 }
 
-
-IMPL_LINK_NOARG(SwInsTableDlg, SelFormatHdl, ListBox&, void)
+IMPL_LINK_NOARG(SwInsTableDlg, SelFormatHdl, weld::TreeView&, void)
 {
     // Get index of selected item from the listbox
-    lbIndex = static_cast<sal_uInt8>(m_pLbFormat->GetSelectedEntryPos());
+    lbIndex = static_cast<sal_uInt8>(m_xLbFormat->get_selected_index());
     tbIndex = lbIndexToTableIndex( lbIndex );
 
     // To understand this index maping, look InitAutoTableFormat function to
     // see how listbox item is implemented.
     if( tbIndex < 255 )
-        m_pWndPreview->NotifyChange( (*pTableTable)[tbIndex] );
+        m_xWndPreview->NotifyChange( (*pTableTable)[tbIndex] );
     else
     {
         SwTableAutoFormat aTmp( SwViewShell::GetShellRes()->aStrNone );
         lcl_SetProperties( &aTmp, false );
 
-        m_pWndPreview->NotifyChange( aTmp );
+        m_xWndPreview->NotifyChange( aTmp );
     }
 }
 
-IMPL_LINK_NOARG(SwInsTableDlg, OKHdl, Button*, void)
+IMPL_LINK_NOARG(SwInsTableDlg, OKHdl, weld::Button&, void)
 {
     if( tbIndex < 255 )
         pShell->SetTableStyle((*pTableTable)[tbIndex]);
@@ -229,64 +214,58 @@ IMPL_LINK_NOARG(SwInsTableDlg, OKHdl, Button*, void)
         lcl_SetProperties( pTAutoFormat, false );
     }
 
-    EndDialog(RET_OK);
+    m_xDialog->response(RET_OK);
 }
 
-IMPL_LINK( SwInsTableDlg, ModifyName, Edit&, rEdit, void )
+IMPL_LINK( SwInsTableDlg, ModifyName, weld::Entry&, rEdit, void )
 {
-    OUString sTableName = rEdit.GetText();
-    if (sTableName.indexOf(' ') != -1)
-    {
-        sTableName = sTableName.replaceAll(" ", "");
-        rEdit.SetText(sTableName);
-    }
-
-    m_pInsertBtn->Enable(pShell->GetTableStyle( sTableName ) == nullptr);
+    OUString sTableName = rEdit.get_text();
+    m_xInsertBtn->set_sensitive(pShell->GetTableStyle(sTableName) == nullptr);
 }
 
-IMPL_LINK( SwInsTableDlg, ModifyRowCol, Edit&, rEdit, void )
+IMPL_LINK( SwInsTableDlg, ModifyRowCol, weld::SpinButton&, rEdit, void )
 {
-    if(&rEdit == m_pColNF)
+    if(&rEdit == m_xColNF.get())
     {
-        sal_Int64 nCol = m_pColNF->GetValue();
+        sal_Int64 nCol = m_xColNF->get_value();
         if(!nCol)
             nCol = 1;
-        m_pRowNF->SetMax(ROW_COL_PROD/nCol);
+        m_xRowNF->set_max(ROW_COL_PROD/nCol);
     }
     else
     {
-        sal_Int64 nRow = m_pRowNF->GetValue();
+        sal_Int64 nRow = m_xRowNF->get_value();
         if(!nRow)
             nRow = 1;
-        m_pColNF->SetMax(ROW_COL_PROD/nRow);
+        m_xColNF->set_max(ROW_COL_PROD/nRow);
 
         // adjust depending NF for repeated rows
         sal_Int64 nMax = ( nRow == 1 )? 1 : nRow - 1 ;
-        sal_Int64 nActVal = m_pRepeatHeaderNF->GetValue();
+        sal_Int64 nActVal = m_xRepeatHeaderNF->get_value();
 
-        m_pRepeatHeaderNF->SetMax( nMax );
+        m_xRepeatHeaderNF->set_max( nMax );
 
         if( nActVal > nMax )
-            m_pRepeatHeaderNF->SetValue( nMax );
+            m_xRepeatHeaderNF->set_value( nMax );
         else if( nActVal < nEnteredValRepeatHeaderNF )
-            m_pRepeatHeaderNF->SetValue( std::min( nEnteredValRepeatHeaderNF, nMax ) );
+            m_xRepeatHeaderNF->set_value(std::min(nEnteredValRepeatHeaderNF, nMax));
     }
 }
 
-IMPL_LINK_NOARG(SwInsTableDlg, CheckBoxHdl, Button*, void)
+IMPL_LINK_NOARG(SwInsTableDlg, CheckBoxHdl, weld::ToggleButton&, void)
 {
-    m_pRepeatHeaderCB->Enable(m_pHeaderCB->IsChecked());
-    ReapeatHeaderCheckBoxHdl(nullptr);
+    m_xRepeatHeaderCB->set_sensitive(m_xHeaderCB->get_active());
+    RepeatHeaderCheckBoxHdl(*m_xRepeatHeaderCB);
 }
 
-IMPL_LINK_NOARG(SwInsTableDlg, ReapeatHeaderCheckBoxHdl, Button*, void)
+IMPL_LINK_NOARG(SwInsTableDlg, RepeatHeaderCheckBoxHdl, weld::ToggleButton&, void)
 {
-    m_pRepeatGroup->Enable(m_pHeaderCB->IsChecked() && m_pRepeatHeaderCB->IsChecked());
+    m_xRepeatGroup->set_sensitive(m_xHeaderCB->get_active() && m_xRepeatHeaderCB->get_active());
 }
 
-IMPL_LINK_NOARG(SwInsTableDlg, ModifyRepeatHeaderNF_Hdl, Edit&, void)
+IMPL_LINK_NOARG(SwInsTableDlg, ModifyRepeatHeaderNF_Hdl, weld::SpinButton&, void)
 {
-    nEnteredValRepeatHeaderNF = m_pRepeatHeaderNF->GetValue();
+    nEnteredValRepeatHeaderNF = m_xRepeatHeaderNF->get_value();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -2013,4 +2013,9 @@ void SfxViewShell::AddRemoveClipboardListener( const uno::Reference < datatransf
     }
 }
 
+weld::Window* SfxViewShell::GetFrameWeld() const
+{
+    return pWindow ? pWindow->GetFrameWeld() : nullptr;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
