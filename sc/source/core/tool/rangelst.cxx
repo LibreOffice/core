@@ -320,7 +320,11 @@ Label_Range_Join:
             if ( bIsInList )
             {   // delete range pOver within the list
                 if (nOverPos != std::numeric_limits<size_t>::max())
+                {
                     Remove(nOverPos);
+                    if (nOverPos < i)
+                        --i;
+                }
                 else
                 {
                     for (size_t nOver = 0, nRanges = maRanges.size(); nOver < nRanges; ++nOver)
@@ -334,7 +338,7 @@ Label_Range_Join:
                 }
             }
             bJoinedInput = true;
-            pOver = &rRange;
+            pOver = &maRanges[i];
             bIsInList = true;
             goto Label_Range_Join;
         }
