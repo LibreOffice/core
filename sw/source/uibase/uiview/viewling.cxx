@@ -24,6 +24,7 @@
 #include <com/sun/star/linguistic2/ProofreadingResult.hpp>
 #include <com/sun/star/i18n/TextConversionOption.hpp>
 #include <linguistic/lngprops.hxx>
+#include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/scopeguard.hxx>
@@ -779,7 +780,9 @@ bool SwView::ExecSpellPopup(const Point& rPt)
                     }
                     else
                     {
-                        pPopup->SetLOKNotifier(SfxViewShell::Current());
+                        if (comphelper::LibreOfficeKit::isActive())
+                            pPopup->SetLOKNotifier(SfxViewShell::Current());
+
                         pPopup->Execute( aToFill.SVRect(), m_pEditWin );
                     }
                 }
