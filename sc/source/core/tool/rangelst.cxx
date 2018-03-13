@@ -1187,8 +1187,6 @@ ScRangeList ScRangeList::GetIntersectedRange(const ScRange& rRange) const
 //  ScRangePairList
 ScRangePairList::~ScRangePairList()
 {
-    for_each( maPairs.begin(), maPairs.end(), std::default_delete<ScRangePair>() );
-    maPairs.clear();
 }
 
 void ScRangePairList::Remove(size_t nPos)
@@ -1196,23 +1194,15 @@ void ScRangePairList::Remove(size_t nPos)
     if (maPairs.size() <= nPos)
         // Out-of-bound condition.  Bail out.
         return;
-
-    vector<ScRangePair*>::iterator itr = maPairs.begin();
-    advance(itr, nPos);
-    delete *itr;
-    maPairs.erase(itr);
+    maPairs.erase(maPairs.begin() + nPos);
 }
 
-void ScRangePairList::Remove( const ScRangePair* Adr)
+void ScRangePairList::Remove( const ScRangePair & rAdr)
 {
-    if (Adr == nullptr)
-        return;
-
-    for ( vector<ScRangePair*>::iterator itr = maPairs.begin(); itr != maPairs.end(); ++itr )
+    for ( auto itr = maPairs.begin(); itr != maPairs.end(); ++itr )
     {
-        if (Adr == *itr)
+        if (&rAdr == &*itr)
         {
-            delete *itr;
             maPairs.erase( itr );
             return;
         }
@@ -1220,12 +1210,12 @@ void ScRangePairList::Remove( const ScRangePair* Adr)
     assert(false);
 }
 
-ScRangePair* ScRangePairList::operator [](size_t idx)
+ScRangePair & ScRangePairList::operator [](size_t idx)
 {
     return maPairs[idx];
 }
 
-const ScRangePair* ScRangePairList::operator [](size_t idx) const
+const ScRangePair & ScRangePairList::operator [](size_t idx) const
 {
     return maPairs[idx];
 }
@@ -1248,11 +1238,11 @@ void ScRangePairList::UpdateReference( UpdateRefMode eUpdateRefMode,
         SCROW nRow2;
         SCTAB nTab2;
         rWhere.GetVars( nCol1, nRow1, nTab1, nCol2, nRow2, nTab2 );
-        for (ScRangePair* pR : maPairs)
+        for (ScRangePair & rR : maPairs)
         {
             for ( sal_uInt16 j=0; j<2; j++ )
             {
-                ScRange& rRange = pR->GetRange(j);
+                ScRange& rRange = rR.GetRange(j);
                 SCCOL theCol1;
                 SCROW theRow1;
                 SCTAB theTab1;
@@ -1277,38 +1267,35 @@ void ScRangePairList::UpdateReference( UpdateRefMode eUpdateRefMode,
 // Delete entries that have the labels (first range) on nTab
 void ScRangePairList::DeleteOnTab( SCTAB nTab )
 {
-    size_t nListCount = maPairs.size();
-    size_t nPos = 0;
-    while ( nPos < nListCount )
+    for (auto it = maPairs.begin(); it != maPairs.end(); )
     {
-        ScRangePair* pR = maPairs[  nPos ];
-        ScRange aRange = pR->GetRange(0);
-        if ( aRange.aStart.Tab() == nTab && aRange.aEnd.Tab() == nTab )
+        const ScRangePair & rR = *it;
+        const ScRange & rRange = rR.GetRange(0);
+        if ( rRange.aStart.Tab() == nTab && rRange.aEnd.Tab() == nTab )
         {
-            Remove( nPos );
-            nListCount = maPairs.size();
+            it = maPairs.erase(it);
         }
         else
-            ++nPos;
+            ++it;
     }
 }
 
-ScRangePair* ScRangePairList::Find( const ScAddress& rAdr ) const
+ScRangePair* ScRangePairList::Find( const ScAddress& rAdr )
 {
-    for (ScRangePair* pR : maPairs)
+    for (ScRangePair & rR : maPairs)
     {
-        if ( pR->GetRange(0).In( rAdr ) )
-            return pR;
+        if ( rR.GetRange(0).In( rAdr ) )
+            return &rR;
     }
     return nullptr;
 }
 
-ScRangePair* ScRangePairList::Find( const ScRange& rRange ) const
+ScRangePair* ScRangePairList::Find( const ScRange& rRange )
 {
-    for (ScRangePair* pR : maPairs)
+    for (ScRangePair & rR : maPairs)
     {
-        if ( pR->GetRange(0) == rRange )
-            return pR;
+        if ( rR.GetRange(0) == rRange )
+            return &rR;
     }
     return nullptr;
 }
@@ -1316,9 +1303,9 @@ ScRangePair* ScRangePairList::Find( const ScRange& rRange ) const
 ScRangePairList* ScRangePairList::Clone() const
 {
     ScRangePairList* pNew = new ScRangePairList;
-    for (const ScRangePair* pR : maPairs)
+    for (const ScRangePair & rR : maPairs)
     {
-        pNew->Append( *pR );
+        pNew->Append( rR );
     }
     return pNew;
 }
@@ -1425,15 +1412,15 @@ Label_RangePair_Join:
     size_t nOverPos = std::numeric_limits<size_t>::max();
     for (size_t i = 0; i < maPairs.size(); ++i)
     {
-        ScRangePair* p = maPairs[ i ];
-        if ( p == pOver )
+        ScRangePair & rPair = maPairs[ i ];
+        if ( &rPair == pOver )
         {
             nOverPos = i;
             continue;           // the same one, continue with the next
         }
         bool bJoined = false;
-        ScRange& rp1 = p->GetRange(0);
-        ScRange& rp2 = p->GetRange(1);
+        ScRange& rp1 = rPair.GetRange(0);
+        ScRange& rp2 = rPair.GetRange(1);
         if ( rp2 == r2 )
         {   // only if Range2 is equal
             if ( rp1.In( r1 ) )
@@ -1448,7 +1435,7 @@ Label_RangePair_Join:
             }
             else if ( r1.In( rp1 ) )
             {   // RangePair p included in RangePair pOver, make pOver the new RangePair
-                *p = *pOver;
+                rPair = *pOver;
                 bJoined = true;
             }
         }
@@ -1500,21 +1487,26 @@ Label_RangePair_Join:
             if ( bIsInList )
             {   // delete RangePair pOver within the list
                 if (nOverPos != std::numeric_limits<size_t>::max())
+                {
                     Remove(nOverPos);
+                    if (nOverPos < i)
+                        --i;
+                }
                 else
                 {
-                    for (size_t nOver = 0, nPairs = maPairs.size(); nOver < nPairs; ++nOver)
+                    for (size_t nOver = 0, nRangePairs = maPairs.size(); nOver < nRangePairs; ++nOver)
                     {
-                        if (maPairs[nOver] == pOver)
+                        if (&maPairs[nOver] == pOver)
                         {
-                            Remove(nOver);
+                            maPairs.erase(maPairs.begin() + nOver);
                             break;
                         }
                     }
+                    assert(false);
                 }
             }
             bJoinedInput = true;
-            pOver = p;
+            pOver = &maPairs[i];
             bIsInList = true;
             goto Label_RangePair_Join;
         }
@@ -1523,9 +1515,14 @@ Label_RangePair_Join:
         Append( r );
 }
 
-std::vector<ScRangePair*> ScRangePairList::CreateNameSortedArray( ScDocument* pDoc ) const
+std::vector<const ScRangePair*> ScRangePairList::CreateNameSortedArray( ScDocument* pDoc ) const
 {
-    std::vector<ScRangePair*> aSortedVec(maPairs);
+    std::vector<const ScRangePair*> aSortedVec(maPairs.size());
+    size_t i = 0;
+    for ( auto const & rPair : maPairs)
+    {
+        aSortedVec[i++] = &rPair;
+    }
 
     std::sort( aSortedVec.begin(), aSortedVec.end(), ScRangePairList_sortNameCompare(pDoc) );
 

@@ -391,7 +391,7 @@ void ScColRowNameRangesDlg::UpdateNames()
     pLbRange->SetEntryData( nPos, reinterpret_cast<void*>(nEntryDataDelim) );
     if ( (nCount = xColNameRanges->size()) > 0 )
     {
-        std::vector<ScRangePair*> aSortArray(xColNameRanges->CreateNameSortedArray(
+        std::vector<const ScRangePair*> aSortArray(xColNameRanges->CreateNameSortedArray(
                pDoc ));
         nCount = aSortArray.size();
         for ( j=0; j < nCount; j++ )
@@ -435,7 +435,7 @@ void ScColRowNameRangesDlg::UpdateNames()
     pLbRange->SetEntryData( nPos, reinterpret_cast<void*>(nEntryDataDelim) );
     if ( (nCount = xRowNameRanges->size()) > 0 )
     {
-        std::vector<ScRangePair*> aSortArray(xRowNameRanges->CreateNameSortedArray(
+        std::vector<const ScRangePair*> aSortArray(xRowNameRanges->CreateNameSortedArray(
                pDoc ));
         nCount = aSortArray.size();
         for ( j=0; j < nCount; j++ )
@@ -557,11 +557,11 @@ IMPL_LINK_NOARG(ScColRowNameRangesDlg, AddBtnHdl, Button*, void)
             ScRangePair* pPair;
             if ( ( pPair = xColNameRanges->Find( theCurArea ) ) != nullptr )
             {
-                xColNameRanges->Remove( pPair );
+                xColNameRanges->Remove( *pPair );
             }
             if ( ( pPair = xRowNameRanges->Find( theCurArea ) ) != nullptr )
             {
-                xRowNameRanges->Remove( pPair );
+                xRowNameRanges->Remove( *pPair );
             }
             if ( pBtnColHead->IsChecked() )
                 xColNameRanges->Join( ScRangePair( theCurArea, theCurData ) );
@@ -619,9 +619,9 @@ IMPL_LINK_NOARG(ScColRowNameRangesDlg, RemoveBtnHdl, Button*, void)
         if (RET_YES == QUERYBOX(GetFrameWeld(), aMsg))
         {
             if ( bColName )
-                xColNameRanges->Remove( pPair );
+                xColNameRanges->Remove( *pPair );
             else
-                xRowNameRanges->Remove( pPair );
+                xRowNameRanges->Remove( *pPair );
 
             UpdateNames();
             const sal_Int32 nCnt = pLbRange->GetEntryCount();

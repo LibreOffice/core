@@ -1041,9 +1041,8 @@ ScLabelRangeObj* ScLabelRangesObj::GetObjectByIndex_Impl(size_t nIndex)
         ScRangePairList* pList = bColumn ? rDoc.GetColNameRanges() : rDoc.GetRowNameRanges();
         if ( pList && nIndex < pList->size() )
         {
-            ScRangePair* pData = (*pList)[nIndex];
-            if (pData)
-                return new ScLabelRangeObj( pDocShell, bColumn, pData->GetRange(0) );
+            ScRangePair & rData = (*pList)[nIndex];
+            return new ScLabelRangeObj( pDocShell, bColumn, rData.GetRange(0) );
         }
     }
     return nullptr;
@@ -1094,23 +1093,19 @@ void SAL_CALL ScLabelRangesObj::removeByIndex( sal_Int32 nIndex )
         {
             ScRangePairListRef xNewList(pOldList->Clone());
 
-            ScRangePair* pEntry = (*xNewList)[nIndex];
-            if (pEntry)
-            {
-                xNewList->Remove( pEntry );
+            xNewList->Remove( nIndex );
 
-                if (bColumn)
-                    rDoc.GetColNameRangesRef() = xNewList;
-                else
-                    rDoc.GetRowNameRangesRef() = xNewList;
+            if (bColumn)
+                rDoc.GetColNameRangesRef() = xNewList;
+            else
+                rDoc.GetRowNameRangesRef() = xNewList;
 
-                rDoc.CompileColRowNameFormula();
-                pDocShell->PostPaint( 0,0,0, MAXCOL,MAXROW,MAXTAB, PaintPartFlags::Grid );
-                pDocShell->SetDocumentModified();
-                bDone = true;
+            rDoc.CompileColRowNameFormula();
+            pDocShell->PostPaint( 0,0,0, MAXCOL,MAXROW,MAXTAB, PaintPartFlags::Grid );
+            pDocShell->SetDocumentModified();
+            bDone = true;
 
-                //! Undo ?!?! (here and from dialog)
-            }
+            //! Undo ?!?! (here and from dialog)
         }
     }
     if (!bDone)
