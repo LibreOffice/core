@@ -33,9 +33,9 @@
 #include <impoctree.hxx>
 #include "impvect.hxx"
 
-#include <bitmapscalesuper.hxx>
+#include "BitmapScaleSuperFilter.hxx"
+#include "BitmapScaleConvolutionFilter.hxx"
 #include <octree.hxx>
-#include <BitmapScaleConvolution.hxx>
 
 #define RGB15( _def_cR, _def_cG, _def_cB )  ((static_cast<sal_uLong>(_def_cR)<<10)|(static_cast<sal_uLong>(_def_cG)<<5)|static_cast<sal_uLong>(_def_cB))
 #define GAMMA( _def_cVal, _def_InvGamma )   (static_cast<sal_uInt8>(MinMax(FRound(pow( _def_cVal/255.0,_def_InvGamma)*255.0),0,255)))
@@ -777,7 +777,7 @@ bool Bitmap::Scale( const double& rScaleX, const double& rScaleY, BmpScaleFlag n
             else
             {
                 BitmapScaleSuperFilter aScaleSuperFilter(rScaleX, rScaleY);
-                bRetval = aScaleSuperFilter.execute(*this);
+                bRetval = (!aScaleSuperFilter.execute(*this).IsEmpty());
             }
             break;
         }
@@ -785,19 +785,20 @@ bool Bitmap::Scale( const double& rScaleX, const double& rScaleY, BmpScaleFlag n
         case BmpScaleFlag::BestQuality:
         {
             vcl::BitmapScaleConvolutionFilter aScaleConvolutionFilter(rScaleX, rScaleY, vcl::ConvolutionKernelType::Lanczos3);
-            bRetval = aScaleConvolutionFilter.execute(*this);
+            bRetval = (!aScaleConvolutionFilter.execute(*this).IsEmpty());
             break;
         }
         case BmpScaleFlag::BiCubic :
         {
             vcl::BitmapScaleConvolutionFilter aScaleConvolutionFilter(rScaleX, rScaleY, vcl::ConvolutionKernelType::BiCubic);
-            bRetval = aScaleConvolutionFilter.execute(*this);
+            bRetval = (!aScaleConvolutionFilter.execute(*this).IsEmpty());
             break;
         }
         case BmpScaleFlag::BiLinear :
         {
             vcl::BitmapScaleConvolutionFilter aScaleConvolutionFilter(rScaleX, rScaleY, vcl::ConvolutionKernelType::BiLinear);
-            bRetval = aScaleConvolutionFilter.execute(*this);
+
+            bRetval = (!aScaleConvolutionFilter.execute(*this).IsEmpty());
             break;
         }
     }
