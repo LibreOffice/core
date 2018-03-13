@@ -1612,12 +1612,12 @@ void PSWriter::ImplSetClipRegion( vcl::Region const & rClipRegion )
         RectangleVector aRectangles;
         rClipRegion.GetRegionRectangles(aRectangles);
 
-        for(RectangleVector::const_iterator aRectIter(aRectangles.begin()); aRectIter != aRectangles.end(); ++aRectIter)
+        for (auto const& rectangle : aRectangles)
         {
-            double nX1(aRectIter->Left());
-            double nY1(aRectIter->Top());
-            double nX2(aRectIter->Right());
-            double nY2(aRectIter->Bottom());
+            double nX1(rectangle.Left());
+            double nY1(rectangle.Top());
+            double nX2(rectangle.Right());
+            double nY2(rectangle.Bottom());
 
             ImplWriteDouble( nX1 );
             ImplWriteDouble( nY1 );
@@ -1714,21 +1714,21 @@ void PSWriter::ImplBmp( Bitmap const * pBitmap, Bitmap const * pMaskBitmap, cons
             aRegion.GetRegionRectangles(aRectangles);
             const long nMoveVertical(nHeightLeft - nHeightOrg);
 
-            for(RectangleVector::iterator aRectIter(aRectangles.begin()); aRectIter != aRectangles.end(); ++aRectIter)
+            for (auto & rectangle : aRectangles)
             {
-                aRectIter->Move(0, nMoveVertical);
+                rectangle.Move(0, nMoveVertical);
 
-                ImplWriteLong( aRectIter->Left() );
-                ImplWriteLong( aRectIter->Top() );
+                ImplWriteLong( rectangle.Left() );
+                ImplWriteLong( rectangle.Top() );
                 ImplWriteByte( 'm' );
-                ImplWriteLong( aRectIter->Right() + 1 );
-                ImplWriteLong( aRectIter->Top() );
+                ImplWriteLong( rectangle.Right() + 1 );
+                ImplWriteLong( rectangle.Top() );
                 ImplWriteByte( 'l' );
-                ImplWriteLong( aRectIter->Right() + 1 );
-                ImplWriteLong( aRectIter->Bottom() + 1 );
+                ImplWriteLong( rectangle.Right() + 1 );
+                ImplWriteLong( rectangle.Bottom() + 1 );
                 ImplWriteByte( 'l' );
-                ImplWriteLong( aRectIter->Left() );
-                ImplWriteLong( aRectIter->Bottom() + 1 );
+                ImplWriteLong( rectangle.Left() );
+                ImplWriteLong( rectangle.Bottom() + 1 );
                 ImplWriteByte( 'l' );
                 ImplWriteByte( 'p', PS_SPACE | PS_WRAP );
             }
@@ -2038,9 +2038,8 @@ void PSWriter::ImplText( const OUString& rUniString, const Point& rPos, const lo
                 ImplWriteF( nRotation, 1 );
                 mpPS->WriteCharPtr( "r " );
             }
-            std::vector<tools::PolyPolygon>::iterator aIter( aPolyPolyVec.begin() );
-            while ( aIter != aPolyPolyVec.end() )
-                ImplPolyPoly( *aIter++, true );
+            for (auto const& elem : aPolyPolyVec)
+                ImplPolyPoly( elem, true );
             ImplWriteLine( "pom" );
         }
         bLineColor = bOldLineColor;

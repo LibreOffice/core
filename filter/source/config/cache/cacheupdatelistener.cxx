@@ -146,15 +146,11 @@ void SAL_CALL  CacheUpdateListener::changesOccurred(const css::util::ChangesEven
     }
 
     bool                     bNotifyRefresh = false;
-    OUStringList::const_iterator pIt;
-    for (  pIt  = lChangedItems.begin();
-           pIt != lChangedItems.end()  ;
-         ++pIt                         )
+    for (auto const& changedItem : lChangedItems)
     {
-        const OUString& sItem = *pIt;
         try
         {
-            m_rCache.refreshItem(eType, sItem);
+            m_rCache.refreshItem(eType, changedItem);
         }
         catch(const css::container::NoSuchElementException&)
             {

@@ -293,15 +293,12 @@ OUStringList FilterFactory::impl_queryMatchByDocumentService(const QueryTokenize
     OUStringList lFilterNames = pCache->getItemNames(FilterCache::E_FILTER);
     OUStringList lResult      ;
 
-    for (OUStringList::const_iterator pName  = lFilterNames.begin();
-                                      pName != lFilterNames.end()  ;
-                                    ++pName                        )
+    for (auto const& filterName : lFilterNames)
     {
         try
         {
-            const OUString&          sName   = *pName;
-            const CacheItem                 aFilter = pCache->getItem(FilterCache::E_FILTER, sName);
-                CacheItem::const_iterator pProp   ;
+            const CacheItem aFilter = pCache->getItem(FilterCache::E_FILTER, filterName);
+            CacheItem::const_iterator pProp;
 
             // "matchByDocumentService="                    => any filter will be addressed here
             // "matchByDocumentService=all"                 => any filter will be addressed here
@@ -343,7 +340,7 @@ OUStringList FilterFactory::impl_queryMatchByDocumentService(const QueryTokenize
 
             // OK - this filter passed all checks.
             // It match the query ...
-            lResult.push_back(sName);
+            lResult.push_back(filterName);
         }
         catch(const css::uno::RuntimeException&)
             { throw; }
@@ -427,20 +424,12 @@ OUStringList FilterFactory::impl_getSortedFilterList(const QueryTokenizer& lToke
         // more complex search for all filters
         // We check first, which office modules are installed ...
         OUStringList lModules = impl_getListOfInstalledModules();
-        OUStringList::const_iterator pIt2;
-        for (  pIt2  = lModules.begin();
-               pIt2 != lModules.end()  ;
-             ++pIt2                    )
+        for (auto const& module : lModules)
         {
-            sModule = *pIt2;
-            OUStringList lFilters4Module = impl_getSortedFilterListForModule(sModule, nIFlags, nEFlags);
-            OUStringList::const_iterator pIt3;
-            for (  pIt3  = lFilters4Module.begin();
-                   pIt3 != lFilters4Module.end()  ;
-                 ++pIt3                           )
+            OUStringList lFilters4Module = impl_getSortedFilterListForModule(module, nIFlags, nEFlags);
+            for (auto const& filter4Module : lFilters4Module)
             {
-                const OUString& sFilter = *pIt3;
-                lFilterList.push_back(sFilter);
+                lFilterList.push_back(filter4Module);
             }
         }
     }
@@ -485,15 +474,12 @@ OUStringList FilterFactory::impl_getSortedFilterListForModule(const OUString& sM
     ::std::sort(lOtherFilters.begin(), lOtherFilters.end());
 
     // merge both lists together
-    OUStringList           lMergedFilters = lSortedFilters;
-    const OUStringList::const_iterator itlOtherFiltersEnd = lOtherFilters.end();
+    OUStringList lMergedFilters = lSortedFilters;
     const OUStringList::const_iterator itlSortedFiltersEnd = lSortedFilters.end();
-    for (OUStringList::const_iterator  pIt  = lOtherFilters.begin();
-           pIt != itlOtherFiltersEnd  ;
-         ++pIt                         )
+    for (auto const& otherFilter : lOtherFilters)
     {
-        if (::std::find(lSortedFilters.begin(), lSortedFilters.end(), *pIt) == itlSortedFiltersEnd)
-            lMergedFilters.push_back(*pIt);
+        if (::std::find(lSortedFilters.begin(), lSortedFilters.end(), otherFilter) == itlSortedFiltersEnd)
+            lMergedFilters.push_back(otherFilter);
     }
 
     OUStringList::iterator pItToErase;

@@ -61,11 +61,9 @@ PageInfo::PageInfo()
 
 PageInfo::~PageInfo()
 {
-    std::vector<ShapeInfo*>::iterator aIter( maShapesVector.begin() );
-    const std::vector<ShapeInfo*>::iterator aEnd( maShapesVector.end() );
-    while( aIter != aEnd )
+    for (auto const& shape : maShapesVector)
     {
-        delete *aIter++;
+        delete shape;
     }
 }
 

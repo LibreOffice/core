@@ -128,11 +128,10 @@ void ImplCopySvStreamToXOutputStream( SvStream& rIn, Reference< XOutputStream > 
 
 void Writer::storeTo( Reference< XOutputStream > const &xOutStream )
 {
-    for(FontMap::iterator i = maFonts.begin(); i != maFonts.end(); ++i)
+    for (auto const& font : maFonts)
     {
-        FlashFont* pFont = (*i);
-        pFont->write( *mpFontsStream );
-        delete pFont;
+        font->write( *mpFontsStream );
+        delete font;
     }
 
     // Endtag
@@ -275,24 +274,17 @@ sal_uInt16 Writer::defineShape( const GDIMetaFile& rMtf )
     Impl_writeActions( rMtf );
 
     sal_uInt16 nId = 0;
+    if (maShapeIds.empty())
+        return nId;
+
     {
-        CharacterIdVector::iterator aIter( maShapeIds.begin() );
-        const CharacterIdVector::iterator aEnd( maShapeIds.end() );
-
-        bool bHaveShapes = aIter != aEnd;
-
-        if (bHaveShapes)
+        nId = startSprite();
+        sal_uInt16 iDepth = 1;
+        for (auto const& shape : maShapeIds)
         {
-            nId = startSprite();
-
-            sal_uInt16 iDepth = 1;
-            for(; aIter != aEnd; ++aIter)
-            {
-                placeShape( *aIter, iDepth++, 0, 0 );
-            }
-
-            endSprite();
+            placeShape( shape, iDepth++, 0, 0 );
         }
+        endSprite();
     }
 
     maShapeIds.clear();

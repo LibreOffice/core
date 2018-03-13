@@ -2448,23 +2448,21 @@ void ConvertEnhancedCustomShapeEquation( SdrObjCustomShape* pCustoShape,
                 rEquationOrder.push_back( rEquations.size() - 1 );
             }
             // now updating our old equation indices, they are marked with a bit in the hiword of nOperation
-            std::vector< EnhancedCustomShapeEquation >::iterator aIter( rEquations.begin() );
-            std::vector< EnhancedCustomShapeEquation >::iterator aEnd ( rEquations.end() );
-            while( aIter != aEnd )
+            for (auto & equation : rEquations)
             {
                 sal_uInt32 nMask = 0x20000000;
                 for( i = 0; i < 3; i++ )
                 {
-                    if ( aIter->nOperation & nMask )
+                    if ( equation.nOperation & nMask )
                     {
-                        aIter->nOperation ^= nMask;
-                        const size_t nIndex(aIter->nPara[ i ] & 0x3ff);
+                        equation.nOperation ^= nMask;
+                        const size_t nIndex(equation.nPara[ i ] & 0x3ff);
 
                         // #i124661# check index access, there are cases where this is out of bound leading
                         // to errors up to crashes when executed
                         if(nIndex < rEquationOrder.size())
                         {
-                            aIter->nPara[ i ] = rEquationOrder[ nIndex ] | 0x400;
+                            equation.nPara[ i ] = rEquationOrder[ nIndex ] | 0x400;
                         }
                         else
                         {
@@ -2473,7 +2471,6 @@ void ConvertEnhancedCustomShapeEquation( SdrObjCustomShape* pCustoShape,
                     }
                     nMask <<= 1;
                 }
-                ++aIter;
             }
         }
     }
@@ -2938,15 +2935,12 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                                .WriteUInt16( nElements )
                                .WriteUInt16( nElementSize );
 
-                            std::vector< EnhancedCustomShapeEquation >::const_iterator aIter( aEquations.begin() );
-                            std::vector< EnhancedCustomShapeEquation >::const_iterator aEnd ( aEquations.end() );
-                            while( aIter != aEnd )
+                            for (auto const& equation : aEquations)
                             {
-                                aOut.WriteUInt16( aIter->nOperation )
-                                    .WriteInt16( aIter->nPara[ 0 ] )
-                                    .WriteInt16( aIter->nPara[ 1 ] )
-                                    .WriteInt16( aIter->nPara[ 2 ] );
-                                ++aIter;
+                                aOut.WriteUInt16( equation.nOperation )
+                                    .WriteInt16( equation.nPara[ 0 ] )
+                                    .WriteInt16( equation.nPara[ 1 ] )
+                                    .WriteInt16( equation.nPara[ 2 ] );
                             }
                             sal_uInt8* pBuf = new sal_uInt8[ nStreamSize ];
                             memcpy( pBuf, aOut.GetData(), nStreamSize );
@@ -4825,10 +4819,10 @@ void EscherExGlobal::WriteDggAtom( SvStream& rStrm ) const
     // calculate and write the fixed DGG data
     sal_uInt32 nShapeCount = 0;
     sal_uInt32 nLastShapeId = 0;
-    for( DrawingInfoVector::const_iterator aIt = maDrawingInfos.begin(), aEnd = maDrawingInfos.end(); aIt != aEnd; ++aIt )
+    for (auto const& drawingInfo : maDrawingInfos)
     {
-        nShapeCount += aIt->mnShapeCount;
-        nLastShapeId = ::std::max( nLastShapeId, aIt->mnLastShapeId );
+        nShapeCount += drawingInfo.mnShapeCount;
+        nLastShapeId = ::std::max( nLastShapeId, drawingInfo.mnLastShapeId );
     }
     // the non-existing cluster with index #0 is counted too
     sal_uInt32 nClusterCount = static_cast< sal_uInt32 >( maClusterTable.size() + 1 );
@@ -4836,8 +4830,8 @@ void EscherExGlobal::WriteDggAtom( SvStream& rStrm ) const
     rStrm.WriteUInt32( nLastShapeId ).WriteUInt32( nClusterCount ).WriteUInt32( nShapeCount ).WriteUInt32( nDrawingCount );
 
     // write the cluster table
-    for( ClusterTable::const_iterator aIt = maClusterTable.begin(), aEnd = maClusterTable.end(); aIt != aEnd; ++aIt )
-        rStrm.WriteUInt32( aIt->mnDrawingId ).WriteUInt32( aIt->mnNextShapeId );
+    for (auto const& elem : maClusterTable)
+        rStrm.WriteUInt32( elem.mnDrawingId ).WriteUInt32( elem.mnNextShapeId );
 }
 
 SvStream* EscherExGlobal::QueryPictureStream()
@@ -4967,10 +4961,10 @@ void EscherEx::InsertAtCurrentPos( sal_uInt32 nBytes )
         else
             mpOutStrm->SeekRel( nSize );
     }
-    for (std::vector< sal_uInt32 >::iterator aIter( mOffsets.begin() ), aEnd( mOffsets.end() ); aIter != aEnd ; ++aIter)
+    for (auto & offset : mOffsets)
     {
-        if ( *aIter > nCurPos )
-            *aIter += nBytes;
+        if ( offset > nCurPos )
+            offset += nBytes;
     }
     mpOutStrm->Seek( STREAM_SEEK_TO_END );
     nSource = mpOutStrm->Tell();
