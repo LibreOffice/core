@@ -1163,6 +1163,8 @@ bool RegionBand::Exclude(const RegionBand& rSource)
 
 bool RegionBand::CheckConsistency() const
 {
+    if (!mpFirstBand)
+        return true;
     // look in the band list (don't test first band again!)
     const ImplRegionBand* pBand = mpFirstBand->mpNextBand;
     while (pBand)
