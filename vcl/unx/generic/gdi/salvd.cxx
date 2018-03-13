@@ -52,10 +52,10 @@ SalVirtualDevice* X11SalInstance::CreateVirtualDevice(SalGraphics* pGraphics,
     return CreateX11VirtualDevice(pGraphics, nDX, nDY, eFormat, pData, new X11SalGraphics());
 }
 
-void X11SalGraphics::Init( X11SalVirtualDevice *pDevice, SalColormap* pColormap,
+void X11SalGraphics::Init( X11SalVirtualDevice *pDevice, Colormap* pColormap,
                            bool bDeleteColormap )
 {
-    SalColormap *pOrigDeleteColormap = m_pDeleteColormap;
+    Colormap *pOrigDeleteColormap = m_pDeleteColormap;
 
     SalDisplay *pDisplay  = pDevice->GetDisplay();
     m_nXScreen = pDevice->GetXScreenNumber();
@@ -72,7 +72,7 @@ void X11SalGraphics::Init( X11SalVirtualDevice *pDevice, SalColormap* pColormap,
     else if( nDeviceDepth == nVisualDepth )
         m_pColormap = &pDisplay->GetColormap( m_nXScreen );
     else if( nDeviceDepth == 1 )
-        m_pColormap = m_pDeleteColormap = new SalColormap();
+        m_pColormap = m_pDeleteColormap = new Colormap();
 
     if (m_pDeleteColormap != pOrigDeleteColormap)
         delete pOrigDeleteColormap;
@@ -95,7 +95,7 @@ X11SalVirtualDevice::X11SalVirtualDevice(SalGraphics const * pGraphics, long &nD
     m_nXScreen(0),
     bGraphics_(false)
 {
-    SalColormap* pColormap = nullptr;
+    Colormap* pColormap = nullptr;
     bool bDeleteColormap = false;
 
     sal_uInt16 nBitCount;
@@ -154,14 +154,14 @@ X11SalVirtualDevice::X11SalVirtualDevice(SalGraphics const * pGraphics, long &nD
     {
         pGraphics_->SetXRenderFormat( pXRenderFormat );
         if( pXRenderFormat->colormap )
-            pColormap = new SalColormap( pDisplay_, pXRenderFormat->colormap, m_nXScreen );
+            pColormap = new Colormap( pDisplay_, pXRenderFormat->colormap, m_nXScreen );
         else
-            pColormap = new SalColormap( nBitCount );
+            pColormap = new Colormap( nBitCount );
          bDeleteColormap = true;
     }
     else if( nBitCount != pDisplay_->GetVisual( m_nXScreen ).GetDepth() )
     {
-        pColormap = new SalColormap( nBitCount );
+        pColormap = new Colormap( nBitCount );
         bDeleteColormap = true;
     }
 

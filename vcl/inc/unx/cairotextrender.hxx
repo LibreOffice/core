@@ -34,7 +34,7 @@ class VCL_DLLPUBLIC CairoTextRender : public TextRenderImpl
 {
     FreetypeFont*   mpFreetypeFont[ MAX_FALLBACK ];
 
-    SalColor        mnTextColor;
+    Color        mnTextColor;
 
 protected:
     virtual GlyphCache&         getPlatformGlyphCache() = 0;
@@ -50,7 +50,7 @@ public:
                                 CairoTextRender();
 
 
-    virtual void                SetTextColor( SalColor nSalColor ) override;
+    virtual void                SetTextColor( Color nColor ) override;
     virtual void                SetFont( const FontSelectPattern*, int nFallbackLevel ) override;
     virtual void                GetFontMetric( ImplFontMetricDataRef&, int nFallbackLevel ) override;
     virtual const FontCharMapRef GetFontCharMap() const override;

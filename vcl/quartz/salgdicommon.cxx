@@ -481,18 +481,18 @@ static void getBoundRect( sal_uInt32 nPoints, const SalPoint *pPtAry,
     rHeight = nY2 - nY1 + 1;
 }
 
-static SalColor ImplGetROPSalColor( SalROPColor nROPColor )
+static Color ImplGetROPColor( SalROPColor nROPColor )
 {
-    SalColor nSalColor;
+    Color nColor;
     if ( nROPColor == SalROPColor::N0 )
     {
-        nSalColor = MAKE_SALCOLOR( 0, 0, 0 );
+        nColor = Color( 0, 0, 0 );
     }
     else
     {
-        nSalColor = MAKE_SALCOLOR( 255, 255, 255 );
+        nColor = Color( 255, 255, 255 );
     }
-    return nSalColor;
+    return nColor;
 }
 
 // apply the XOR mask to the target context if active and dirty
@@ -901,7 +901,7 @@ void AquaSalGraphics::drawLine( long nX1, long nY1, long nX2, long nY2 )
     DBG_DRAW_OPERATION_EXIT("drawLine");
 }
 
-void AquaSalGraphics::drawMask( const SalTwoRect& rPosAry, const SalBitmap& rSalBitmap, SalColor nMaskColor )
+void AquaSalGraphics::drawMask( const SalTwoRect& rPosAry, const SalBitmap& rSalBitmap, Color nMaskColor )
 {
     DBG_DRAW_OPERATION("drawMask",);
 
@@ -937,9 +937,9 @@ void AquaSalGraphics::drawPixel( long nX, long nY )
     ImplDrawPixel( nX, nY, maLineColor );
 }
 
-void AquaSalGraphics::drawPixel( long nX, long nY, SalColor nSalColor )
+void AquaSalGraphics::drawPixel( long nX, long nY, Color nColor )
 {
-    const RGBAColor aPixelColor( nSalColor );
+    const RGBAColor aPixelColor( nColor );
     ImplDrawPixel( nX, nY, aPixelColor );
 }
 
@@ -1487,7 +1487,7 @@ long AquaSalGraphics::GetGraphicsWidth() const
     return w;
 }
 
-SalColor AquaSalGraphics::getPixel( long nX, long nY )
+Color AquaSalGraphics::getPixel( long nX, long nY )
 {
     // return default value on printers or when out of bounds
     if( !mxLayer || (nX < 0) || (nX >= mnWidth) ||
@@ -1527,8 +1527,8 @@ SalColor AquaSalGraphics::getPixel( long nX, long nY )
     SAL_INFO( "vcl.cg", "CGContextRelease(" << xOnePixelContext << ")" );
     CGContextRelease( xOnePixelContext );
 
-    SalColor nSalColor = MAKE_SALCOLOR( aPixel.r, aPixel.g, aPixel.b );
-    return nSalColor;
+    Color nColor = Color( aPixel.r, aPixel.g, aPixel.b );
+    return nColor;
 }
 
 void AquaSalGraphics::GetResolution( sal_Int32& rDPIX, sal_Int32& rDPIY )
@@ -1838,9 +1838,9 @@ void AquaSalGraphics::SetLineColor()
     }
 }
 
-void AquaSalGraphics::SetLineColor( SalColor nSalColor )
+void AquaSalGraphics::SetLineColor( Color nColor )
 {
-    maLineColor = RGBAColor( nSalColor );
+    maLineColor = RGBAColor( nColor );
     if( CheckContext() )
     {
         SAL_INFO( "vcl.cg", "CGContextSetRGBStrokeColor(" << mrContext << "," << maLineColor << ")" );
@@ -1860,9 +1860,9 @@ void AquaSalGraphics::SetFillColor()
     }
 }
 
-void AquaSalGraphics::SetFillColor( SalColor nSalColor )
+void AquaSalGraphics::SetFillColor( Color nColor )
 {
-    maFillColor = RGBAColor( nSalColor );
+    maFillColor = RGBAColor( nColor );
     if( CheckContext() )
     {
         SAL_INFO( "vcl.cg", "CGContextSetRGBFillColor(" << mrContext << "," << maFillColor << ")" );
@@ -1940,7 +1940,7 @@ void AquaSalGraphics::SetROPFillColor( SalROPColor nROPColor )
 {
     if( ! mbPrinter )
     {
-        SetFillColor( ImplGetROPSalColor( nROPColor ) );
+        SetFillColor( ImplGetROPColor( nROPColor ) );
     }
 }
 
@@ -1948,7 +1948,7 @@ void AquaSalGraphics::SetROPLineColor( SalROPColor nROPColor )
 {
     if( ! mbPrinter )
     {
-        SetLineColor( ImplGetROPSalColor( nROPColor ) );
+        SetLineColor( ImplGetROPColor( nROPColor ) );
     }
 }
 

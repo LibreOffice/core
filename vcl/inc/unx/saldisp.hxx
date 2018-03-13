@@ -21,7 +21,7 @@
 #define INCLUDED_VCL_INC_UNX_SALDISP_HXX
 
 class   SalDisplay;
-class   SalColormap;
+class   Colormap;
 class   SalVisual;
 class   SalXLib;
 
@@ -68,7 +68,7 @@ typedef enum  {
 
 extern "C" srv_vendor_t sal_GetServerVendor( Display *p_display );
 
-// MSB/Bigendian view (SalColor == RGB, r=0xFF0000, g=0xFF00, b=0xFF)
+// MSB/Bigendian view (Color == RGB, r=0xFF0000, g=0xFF00, b=0xFF)
 
 enum SalRGB { RGB,  RBG,
               GBR,  GRB,
@@ -97,15 +97,15 @@ public:
     int             GetClass() const { return c_class; }
     int             GetDepth() const { return depth; }
 
-            Pixel           GetTCPixel( SalColor nColor ) const;
-            SalColor        GetTCColor( Pixel nPixel ) const;
+            Pixel           GetTCPixel( Color nColor ) const;
+            Color        GetTCColor( Pixel nPixel ) const;
 };
 
-class SalColormap
+class Colormap
 {
     const SalDisplay*       m_pDisplay;
     Colormap                m_hColormap;
-    std::vector<SalColor>   m_aPalette;         // Pseudocolor
+    std::vector<Color>   m_aPalette;         // Pseudocolor
     SalVisual               m_aVisual;
     std::vector<sal_uInt16>     m_aLookupTable;     // Pseudocolor: 12bit reduction
     Pixel                   m_nWhitePixel;
@@ -116,11 +116,11 @@ class SalColormap
     void            GetPalette();
     void            GetLookupTable();
 public:
-    SalColormap( const SalDisplay*  pSalDisplay,
+    Colormap( const SalDisplay*  pSalDisplay,
                  Colormap           hColormap,
                  SalX11Screen       nXScreen );
-    SalColormap( sal_uInt16         nDepth );
-    SalColormap();
+    Colormap( sal_uInt16         nDepth );
+    Colormap();
 
     Colormap            GetXColormap() const { return m_hColormap; }
     const SalDisplay*   GetDisplay() const { return m_pDisplay; }
@@ -139,8 +139,8 @@ public:
                                            int      r,
                                            int      g,
                                            int      b ) const;
-    Pixel           GetPixel( SalColor nColor ) const;
-    SalColor        GetColor( Pixel nPixel ) const;
+    Pixel           GetPixel( Color nColor ) const;
+    Color        GetColor( Pixel nPixel ) const;
 };
 
 class SalI18N_InputMethod;
@@ -230,7 +230,7 @@ public:
         ::Window            m_aRefWindow;
         Size                m_aSize;
         SalVisual           m_aVisual;
-        SalColormap         m_aColormap;
+        Colormap         m_aColormap;
         GC                  m_aMonoGC;
         GC                  m_aCopyGC;
         GC                  m_aAndInvertedGC;
@@ -351,7 +351,7 @@ public:
     bool            IsDisplay() const { return !!pXLib_; }
     GC              GetCopyGC( SalX11Screen nXScreen ) const { return getDataForScreen(nXScreen).m_aCopyGC; }
     Pixmap          GetInvert50( SalX11Screen nXScreen ) const { return getDataForScreen(nXScreen).m_hInvert50; }
-    const SalColormap&    GetColormap( SalX11Screen nXScreen ) const { return getDataForScreen(nXScreen).m_aColormap; }
+    const Colormap&    GetColormap( SalX11Screen nXScreen ) const { return getDataForScreen(nXScreen).m_aColormap; }
     const SalVisual&      GetVisual( SalX11Screen nXScreen ) const { return getDataForScreen(nXScreen).m_aVisual; }
     RenderEntryMap&       GetRenderEntries( SalX11Screen nXScreen ) const { return getDataForScreen(nXScreen).m_aRenderData; }
     const Pair     &GetResolution() const { return aResolution_; }
@@ -380,7 +380,7 @@ public:
     std::list< SalObject* >& getSalObjects() { return m_aSalObjects; }
 };
 
-inline  Display *SalColormap::GetXDisplay() const
+inline  Display *Colormap::GetXDisplay() const
 { return m_pDisplay->GetDisplay(); }
 
 class VCLPLUG_GEN_PUBLIC SalX11Display : public SalDisplay

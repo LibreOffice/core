@@ -33,7 +33,6 @@
 
 Color OutputDevice::GetPixel( const Point& rPt ) const
 {
-
     Color aColor;
 
     if ( mpGraphics || AcquireGraphics() )
@@ -45,10 +44,7 @@ Color OutputDevice::GetPixel( const Point& rPt ) const
         {
             const long nX = ImplLogicXToDevicePixel( rPt.X() );
             const long nY = ImplLogicYToDevicePixel( rPt.Y() );
-            const SalColor aSalCol = mpGraphics->GetPixel( nX, nY, this );
-            aColor.SetRed( SALCOLOR_RED( aSalCol ) );
-            aColor.SetGreen( SALCOLOR_GREEN( aSalCol ) );
-            aColor.SetBlue( SALCOLOR_BLUE( aSalCol ) );
+            aColor = mpGraphics->GetPixel( nX, nY, this );
         }
     }
     return aColor;
@@ -107,7 +103,7 @@ void OutputDevice::DrawPixel( const Point& rPt, const Color& rColor )
     if ( mbOutputClipped )
         return;
 
-    mpGraphics->DrawPixel( aPt.X(), aPt.Y(), ImplColorToSal( aColor ), this );
+    mpGraphics->DrawPixel( aPt.X(), aPt.Y(), aColor, this );
 
     if( mpAlphaVDev )
         mpAlphaVDev->DrawPixel( rPt );
@@ -150,7 +146,7 @@ void OutputDevice::DrawPixel( const tools::Polygon& rPts, const Color* pColors )
                 for ( sal_uInt16 i = 0; i < nSize; i++ )
                 {
                     const Point aPt( ImplLogicToDevicePixel( rPts[ i ] ) );
-                    mpGraphics->DrawPixel( aPt.X(), aPt.Y(), ImplColorToSal( pColors[ i ] ), this );
+                    mpGraphics->DrawPixel( aPt.X(), aPt.Y(), pColors[ i ], this );
                 }
             }
         }

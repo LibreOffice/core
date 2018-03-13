@@ -45,7 +45,7 @@ typedef unsigned long Pixel;
 class FontAttributes;
 class FontSelectPattern;
 class SalBitmap;
-class SalColormap;
+class Colormap;
 class SalDisplay;
 class SalFrame;
 class X11Pixmap;
@@ -75,7 +75,7 @@ public:
     virtual                         ~X11SalGraphics() override;
 
     void                            Init( SalFrame *pFrame, Drawable aDrawable, SalX11Screen nXScreen );
-    void                            Init( X11SalVirtualDevice *pVirtualDevice, SalColormap* pColormap = nullptr, bool bDeleteColormap = false );
+    void                            Init( X11SalVirtualDevice *pVirtualDevice, Colormap* pColormap = nullptr, bool bDeleteColormap = false );
     void                            Init( X11OpenGLSalVirtualDevice *pVirtualDevice );
     void                            DeInit();
 
@@ -88,10 +88,10 @@ public:
     void                            SetDrawable( Drawable d, SalX11Screen nXScreen );
     XRenderPictFormat*              GetXRenderFormat() const;
     void                    SetXRenderFormat( XRenderPictFormat* pXRenderFormat ) { m_pXRenderFormat = pXRenderFormat; }
-    const SalColormap&      GetColormap() const { return *m_pColormap; }
+    const Colormap&      GetColormap() const { return *m_pColormap; }
 
     using SalGraphics::GetPixel;
-    inline  Pixel                   GetPixel( SalColor nSalColor ) const;
+    inline  Pixel                   GetPixel( Color nColor ) const;
 
     const SalX11Screen&             GetScreenNumber() const { return m_nXScreen; }
 
@@ -104,17 +104,17 @@ public:
     virtual bool                    setClipRegion( const vcl::Region& ) override;
 
     virtual void                    SetLineColor() override;
-    virtual void                    SetLineColor( SalColor nSalColor ) override;
+    virtual void                    SetLineColor( Color nColor ) override;
     virtual void                    SetFillColor() override;
 
-    virtual void                    SetFillColor( SalColor nSalColor ) override;
+    virtual void                    SetFillColor( Color nColor ) override;
 
     virtual void                    SetXORMode( bool bSet ) override;
 
     virtual void                    SetROPLineColor( SalROPColor nROPColor ) override;
     virtual void                    SetROPFillColor( SalROPColor nROPColor ) override;
 
-    virtual void                    SetTextColor( SalColor nSalColor ) override;
+    virtual void                    SetTextColor( Color nColor ) override;
     virtual void                    SetFont( const FontSelectPattern*, int nFallbackLevel ) override;
     virtual void                    GetFontMetric( ImplFontMetricDataRef&, int nFallbackLevel ) override;
     virtual const FontCharMapRef    GetFontCharMap() const override;
@@ -149,7 +149,7 @@ public:
 
     virtual bool                    supportsOperation( OutDevSupportType ) const override;
     virtual void                    drawPixel( long nX, long nY ) override;
-    virtual void                    drawPixel( long nX, long nY, SalColor nSalColor ) override;
+    virtual void                    drawPixel( long nX, long nY, Color nColor ) override;
     virtual void                    drawLine( long nX1, long nY1, long nX2, long nY2 ) override;
     virtual void                    drawRect( long nX, long nY, long nWidth, long nHeight ) override;
     virtual void                    drawPolyLine( sal_uInt32 nPoints, const SalPoint* pPtAry ) override;
@@ -215,10 +215,10 @@ public:
     virtual void                    drawMask(
                                         const SalTwoRect& rPosAry,
                                         const SalBitmap& rSalBitmap,
-                                        SalColor nMaskColor ) override;
+                                        Color nMaskColor ) override;
 
     virtual SalBitmap*              getBitmap( long nX, long nY, long nWidth, long nHeight ) override;
-    virtual SalColor                getPixel( long nX, long nY ) override;
+    virtual Color                getPixel( long nX, long nY ) override;
     virtual void                    invert( long nX, long nY, long nWidth, long nHeight, SalInvert nFlags ) override;
     virtual void                    invert( sal_uInt32 nPoints, const SalPoint* pPtAry, SalInvert nFlags ) override;
 
@@ -305,7 +305,7 @@ public:
 protected:
     using SalGraphics::SetClipRegion;
     void                            SetClipRegion( GC pGC, Region pXReg = nullptr ) const;
-    bool                            GetDitherPixmap ( SalColor nSalColor );
+    bool                            GetDitherPixmap ( Color nColor );
 
     using SalGraphics::DrawBitmap;
 
@@ -317,8 +317,8 @@ protected:
     SalFrame*                       m_pFrame; // the SalFrame which created this Graphics or NULL
     SalVirtualDevice*               m_pVDev;  // the SalVirtualDevice which created this Graphics or NULL
 
-    const SalColormap*              m_pColormap;
-    SalColormap*                    m_pDeleteColormap;
+    const Colormap*              m_pColormap;
+    Colormap*                    m_pDeleteColormap;
     Drawable                        hDrawable_;     // use
     SalX11Screen                    m_nXScreen;
     mutable XRenderPictFormat*      m_pXRenderFormat;
@@ -327,8 +327,8 @@ protected:
     Region                          mpClipRegion;
 #if ENABLE_CAIRO_CANVAS
     vcl::Region                     maClipRegion;
-    SalColor                        mnPenColor;
-    SalColor                        mnFillColor;
+    Color                        mnPenColor;
+    Color                        mnFillColor;
 #endif // ENABLE_CAIRO_CANVAS
 
     GC                              pFontGC_;       // Font attributes
@@ -356,8 +356,8 @@ inline const SalVisual& X11SalGraphics::GetVisual() const
 inline Display *X11SalGraphics::GetXDisplay() const
 { return GetColormap().GetXDisplay(); }
 
-inline Pixel X11SalGraphics::GetPixel( SalColor nSalColor ) const
-{ return GetColormap().GetPixel( nSalColor ); }
+inline Pixel X11SalGraphics::GetPixel( Color nColor ) const
+{ return GetColormap().GetPixel( nColor ); }
 
 #endif // INCLUDED_VCL_INC_UNX_SALGDI_H
 

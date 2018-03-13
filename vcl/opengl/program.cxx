@@ -233,13 +233,13 @@ void OpenGLProgram::SetUniform1i( const OString& rName, GLint v1 )
     CHECK_GL_ERROR();
 }
 
-void OpenGLProgram::SetColor( const OString& rName, SalColor nColor, sal_uInt8 nTransparency )
+void OpenGLProgram::SetColor( const OString& rName, Color nColor, sal_uInt8 nTransparency )
 {
     GLuint nUniform = GetUniformLocation( rName );
     glUniform4f( nUniform,
-                 static_cast<float>(SALCOLOR_RED( nColor )) / 255,
-                 static_cast<float>(SALCOLOR_GREEN( nColor )) / 255,
-                 static_cast<float>(SALCOLOR_BLUE( nColor )) / 255,
+                 nColor.GetRed() / 255.0f,
+                 nColor.GetGreen() / 255.0f,
+                 nColor.GetBlue() / 255.0f,
                  (100 - nTransparency) * (1.0 / 100) );
     CHECK_GL_ERROR();
 
@@ -247,13 +247,13 @@ void OpenGLProgram::SetColor( const OString& rName, SalColor nColor, sal_uInt8 n
         SetBlendMode( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
 }
 
-void OpenGLProgram::SetColorf( const OString& rName, SalColor nColor, double fTransparency )
+void OpenGLProgram::SetColorf( const OString& rName, Color nColor, double fTransparency )
 {
     GLuint nUniform = GetUniformLocation( rName );
     glUniform4f( nUniform,
-                 static_cast<float>(SALCOLOR_RED( nColor )) / 255,
-                 static_cast<float>(SALCOLOR_GREEN( nColor )) / 255,
-                 static_cast<float>(SALCOLOR_BLUE( nColor )) / 255,
+                 nColor.GetRed() / 255.0f,
+                 nColor.GetGreen() / 255.0f,
+                 nColor.GetBlue() / 255.0f,
                  (1.0f - fTransparency) );
     CHECK_GL_ERROR();
 

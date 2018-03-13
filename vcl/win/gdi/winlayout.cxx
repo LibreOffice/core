@@ -151,7 +151,7 @@ bool WinFontInstance::CacheGlyphToAtlas(HDC hDC, HFONT hFont, int nGlyphIndex, S
     SetTextColor(aDC.getCompatibleHDC(), RGB(0, 0, 0));
     SetBkColor(aDC.getCompatibleHDC(), RGB(255, 255, 255));
 
-    aDC.fill(MAKE_SALCOLOR(0xff, 0xff, 0xff));
+    aDC.fill(Color(0xff, 0xff, 0xff));
 
     pTxt->BindDC(aDC.getCompatibleHDC(), tools::Rectangle(0, 0, nBitmapWidth, nBitmapHeight));
     auto pRT = pTxt->GetRenderTarget();
@@ -371,7 +371,7 @@ bool WinSalGraphics::DrawCachedGlyphs(const CommonSalLayout& rLayout)
     rLayout.GetBoundRect(*this, aRect);
 
     COLORREF color = GetTextColor(hDC);
-    SalColor salColor = MAKE_SALCOLOR(GetRValue(color), GetGValue(color), GetBValue(color));
+    Color salColor = Color(GetRValue(color), GetGValue(color), GetBValue(color));
 
     WinOpenGLSalGraphicsImpl *pImpl = dynamic_cast<WinOpenGLSalGraphicsImpl*>(mpImpl.get());
     if (!pImpl)
@@ -486,7 +486,7 @@ void WinSalGraphics::DrawTextLayout(const CommonSalLayout& rLayout)
             ::SetTextAlign(aDC.getCompatibleHDC(), nTextAlign);
 
             COLORREF color = ::GetTextColor(hDC);
-            SalColor salColor = MAKE_SALCOLOR(GetRValue(color), GetGValue(color), GetBValue(color));
+            Color salColor = Color(GetRValue(color), GetGValue(color), GetBValue(color));
 
             // the actual drawing
             DrawTextLayout(rLayout, aDC.getCompatibleHDC(), !bForceGDI);

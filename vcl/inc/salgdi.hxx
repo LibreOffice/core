@@ -102,14 +102,14 @@ public:
     virtual void                SetLineColor() = 0;
 
     // set the line color to a specific color
-    virtual void                SetLineColor( SalColor nSalColor ) = 0;
+    virtual void                SetLineColor( Color nColor ) = 0;
 
     // set the fill color to transparent (= don't fill)
     virtual void                SetFillColor() = 0;
 
     // set the fill color to a specific color, shapes will be
     // filled accordingly
-    virtual void                SetFillColor( SalColor nSalColor ) = 0;
+    virtual void                SetFillColor( Color nColor ) = 0;
 
     // enable/disable XOR drawing
     virtual void                SetXORMode( bool bSet ) = 0;
@@ -121,7 +121,7 @@ public:
     virtual void                SetROPFillColor( SalROPColor nROPColor ) = 0;
 
     // set the text color to a specific color
-    virtual void                SetTextColor( SalColor nSalColor ) = 0;
+    virtual void                SetTextColor( Color nColor ) = 0;
 
     // set the font
     virtual void                SetFont( const FontSelectPattern*, int nFallbackLevel ) = 0;
@@ -221,7 +221,7 @@ public:
 
     // draw --> LineColor and FillColor and RasterOp and ClipRegion
     void                        DrawPixel( long nX, long nY, const OutputDevice *pOutDev );
-    void                        DrawPixel( long nX, long nY, SalColor nSalColor, const OutputDevice *pOutDev );
+    void                        DrawPixel( long nX, long nY, Color nColor, const OutputDevice *pOutDev );
 
     void                        DrawLine( long nX1, long nY1, long nX2, long nY2, const OutputDevice *pOutDev );
 
@@ -304,7 +304,7 @@ public:
     void                        DrawMask(
                                     const SalTwoRect& rPosAry,
                                     const SalBitmap& rSalBitmap,
-                                    SalColor nMaskColor,
+                                    Color nMaskColor,
                                     const OutputDevice *pOutDev );
 
     SalBitmap*                  GetBitmap(
@@ -312,7 +312,7 @@ public:
                                     long nWidth, long nHeight,
                                     const OutputDevice *pOutDev );
 
-    SalColor                    GetPixel(
+    Color                    GetPixel(
                                     long nX, long nY,
                                     const OutputDevice *pOutDev );
 
@@ -445,7 +445,7 @@ protected:
 
     // draw --> LineColor and FillColor and RasterOp and ClipRegion
     virtual void                drawPixel( long nX, long nY ) = 0;
-    virtual void                drawPixel( long nX, long nY, SalColor nSalColor ) = 0;
+    virtual void                drawPixel( long nX, long nY, Color nColor ) = 0;
 
     virtual void                drawLine( long nX1, long nY1, long nX2, long nY2 ) = 0;
 
@@ -507,11 +507,11 @@ protected:
     virtual void                drawMask(
                                     const SalTwoRect& rPosAry,
                                     const SalBitmap& rSalBitmap,
-                                    SalColor nMaskColor ) = 0;
+                                    Color nMaskColor ) = 0;
 
     virtual SalBitmap*          getBitmap( long nX, long nY, long nWidth, long nHeight ) = 0;
 
-    virtual SalColor            getPixel( long nX, long nY ) = 0;
+    virtual Color            getPixel( long nX, long nY ) = 0;
 
     // invert --> ClipRegion (only Windows or VirDevs)
     virtual void                invert(

@@ -1032,7 +1032,7 @@ CGImageRef CreateCGImage( const Image& rImage )
     else if( aBmpEx.GetTransparentType() == TransparentType::Color )
     {
         Color aTransColor( aBmpEx.GetTransparentColor() );
-        SalColor nTransColor = MAKE_SALCOLOR( aTransColor.GetRed(), aTransColor.GetGreen(), aTransColor.GetBlue() );
+        Color nTransColor = Color( aTransColor.GetRed(), aTransColor.GetGreen(), aTransColor.GetBlue() );
         xImage = pSalBmp->CreateColorMask( 0, 0, pSalBmp->mnWidth, pSalBmp->mnHeight, nTransColor );
     }
 

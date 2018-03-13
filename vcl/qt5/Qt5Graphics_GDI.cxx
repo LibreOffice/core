@@ -169,10 +169,10 @@ void Qt5Graphics::drawPixel(long nX, long nY)
     aPainter.update(nX, nY, 1, 1);
 }
 
-void Qt5Graphics::drawPixel(long nX, long nY, SalColor nSalColor)
+void Qt5Graphics::drawPixel(long nX, long nY, Color nColor)
 {
     Qt5Painter aPainter(*this);
-    aPainter.setPen(QColor(QRgb(nSalColor)));
+    aPainter.setPen(QColor(QRgb(nColor)));
     aPainter.setPen(Qt::SolidLine);
     aPainter.drawPoint(nX, nY);
     aPainter.update(nX, nY, 1, 1);
@@ -425,7 +425,7 @@ void Qt5Graphics::drawBitmap(const SalTwoRect& rPosAry, const SalBitmap& /*rSalB
 }
 
 void Qt5Graphics::drawMask(const SalTwoRect& rPosAry, const SalBitmap& /*rSalBitmap*/,
-                           SalColor /*nMaskColor*/)
+                           Color /*nMaskColor*/)
 {
     if (rPosAry.mnSrcWidth <= 0 || rPosAry.mnSrcHeight <= 0 || rPosAry.mnDestWidth <= 0
         || rPosAry.mnDestHeight <= 0)
@@ -440,7 +440,7 @@ SalBitmap* Qt5Graphics::getBitmap(long nX, long nY, long nWidth, long nHeight)
     return new Qt5Bitmap(m_pQImage->copy(nX, nY, nWidth, nHeight));
 }
 
-SalColor Qt5Graphics::getPixel(long nX, long nY) { return m_pQImage->pixel(nX, nY); }
+Color Qt5Graphics::getPixel(long nX, long nY) { return m_pQImage->pixel(nX, nY); }
 
 void Qt5Graphics::invert(long /*nX*/, long /*nY*/, long /*nWidth*/, long /*nHeight*/,
                          SalInvert /*nFlags*/)
@@ -586,11 +586,11 @@ long Qt5Graphics::GetGraphicsWidth() const { return m_pQImage->width(); }
 
 void Qt5Graphics::SetLineColor() { m_aLineColor = SALCOLOR_NONE; }
 
-void Qt5Graphics::SetLineColor(SalColor nSalColor) { m_aLineColor = nSalColor; }
+void Qt5Graphics::SetLineColor(Color nColor) { m_aLineColor = nColor; }
 
 void Qt5Graphics::SetFillColor() { m_aFillColor = SALCOLOR_NONE; }
 
-void Qt5Graphics::SetFillColor(SalColor nSalColor) { m_aFillColor = nSalColor; }
+void Qt5Graphics::SetFillColor(Color nColor) { m_aFillColor = nColor; }
 
 void Qt5Graphics::SetXORMode(bool bSet)
 {
