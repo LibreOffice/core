@@ -8,12 +8,25 @@
  *
  */
 
+#ifndef INCLUDED_INCLUDE_VCL_BITMAPCONVERTER_HXX
+#define INCLUDED_INCLUDE_VCL_BITMAPCONVERTER_HXX
+
+#include <vcl/bitmap.hxx>
+#include <vcl/bitmapex.hxx>
 #include <vcl/BitmapFilter.hxx>
 
-BitmapFilter::BitmapFilter()
-{}
+class VCL_DLLPUBLIC BitmapConverter : public BitmapFilter
+{
+public:
+    BitmapConverter(BmpConversion eConversion)
+        : meConversion(eConversion) {}
 
-BitmapFilter::~BitmapFilter()
-{}
+    virtual BitmapEx execute(BitmapEx const& rBitmapEx) override;
+
+private:
+    BmpConversion meConversion;
+};
+
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

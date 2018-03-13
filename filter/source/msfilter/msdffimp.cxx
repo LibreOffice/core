@@ -43,6 +43,7 @@
 #include <vcl/settings.hxx>
 #include <vcl/vclptr.hxx>
 #include <vcl/BitmapTools.hxx>
+#include <vcl/BitmapConverter.hxx>
 #include "viscache.hxx"
 
 // SvxItem-Mapping. Is needed to successfully include the SvxItem-Header
@@ -3919,13 +3920,23 @@ SdrObject* SvxMSDffManager::ImportGraphic( SvStream& rSt, SfxItemSet& rSet, cons
                     {
                         case GraphicType::Bitmap :
                         {
-                            BitmapEx    aBitmapEx( aGraf.GetBitmapEx() );
-                            if ( nBrightness || nContrast || ( nGamma != 0x10000 ) )
-                                aBitmapEx.Adjust( nBrightness, static_cast<sal_Int16>(nContrast), 0, 0, 0, static_cast<double>(nGamma) / 0x10000, false, true );
-                            if ( eDrawMode == GraphicDrawMode::Greys )
-                                aBitmapEx.Convert( BmpConversion::N8BitGreys );
-                            else if ( eDrawMode == GraphicDrawMode::Mono )
-                                aBitmapEx.Convert( BmpConversion::N1BitThreshold );
+                            BitmapEx aBitmapEx( aGraf.GetBitmapEx() );
+                            if (nBrightness || nContrast || (nGamma != 0x10000))
+                                aBitmapEx.Adjust(nBrightness, static_cast<sal_Int16>(nContrast), 0, 0, 0, static_cast<double>(nGamma) / 0x10000, false, true);
+
+                            if (eDrawMode == GraphicDrawMode::Greys)
+                            {
+                                BitmapConverter aBmpConverter(BmpConversion::N8BitColors);
+                                BitmapEx aConvertedBmp(aBmpConverter.execute(aBitmapEx));
+                                SAL_WARN_IF(aConvertedBmp.IsEmpty(), "vcl.gdi", "Conversion failed");
+                            }
+                            else if (eDrawMode == GraphicDrawMode::Mono)
+                            {
+                                BitmapConverter aBmpConverter(BmpConversion::N1BitThreshold);
+                                BitmapEx aConvertedBmp(aBmpConverter.execute(aBitmapEx));
+                                SAL_WARN_IF(aConvertedBmp.IsEmpty(), "vcl.gdi", "Conversion failed");
+                            }
+
                             aGraf = aBitmapEx;
 
                         }
