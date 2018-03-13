@@ -18,7 +18,6 @@
  */
 
 #include <BitmapScaleConvolution.hxx>
-#include <ResampleKernel.hxx>
 #include <bitmapwriteaccess.hxx>
 
 #include <vcl/bitmapaccess.hxx>
@@ -372,21 +371,17 @@ bool ImplScaleConvolution(Bitmap& rBitmap, const double& rScaleX, const double& 
 
 } // end anonymous namespace
 
-bool BitmapScaleConvolutionFilter::execute(Bitmap& rBitmap)
+BitmapEx BitmapScaleConvolutionFilter::execute(BitmapEx const& rBitmapEx)
 {
+    bool bRetval = false;
+    Bitmap aBitmap(rBitmapEx.GetBitmap());
 
-    switch(meKernelType)
-    {
-        case ConvolutionKernelType::BiLinear:
-            return ImplScaleConvolution(rBitmap, mrScaleX, mrScaleY, BilinearKernel());
-        case ConvolutionKernelType::BiCubic:
-            return ImplScaleConvolution(rBitmap, mrScaleX, mrScaleY, BicubicKernel());
-        case ConvolutionKernelType::Lanczos3:
-            return ImplScaleConvolution(rBitmap, mrScaleX, mrScaleY, Lanczos3Kernel());
-        default:
-            break;
-    }
-    return false;
+    bRetval = ImplScaleConvolution(aBitmap, mrScaleX, mrScaleY, mrKernel);
+
+    if (bRetval)
+        return BitmapEx(aBitmap);
+
+    return BitmapEx();
 }
 
 }
