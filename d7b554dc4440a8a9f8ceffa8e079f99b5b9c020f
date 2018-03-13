@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba2be162_b4aafe6e",
+        "filename": "sw/source/core/text/itrform2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 611,
+      "author": {
+        "id": 1000821
+      },
+      "writtenOn": "2018-03-13T14:24:53Z",
+      "side": 1,
+      "message": "Shouldn\u0027t this be nTmp-1 as the compared position is nTmp and nTmp-1 in line 608?",
+      "range": {
+        "startLine": 611,
+        "startChar": 81,
+        "endLine": 611,
+        "endChar": 83
+      },
+      "revId": "d7b554dc4440a8a9f8ceffa8e079f99b5b9c020f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
