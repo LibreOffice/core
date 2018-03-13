@@ -1079,6 +1079,11 @@ void ScGridWindow::LaunchDataSelectMenu( SCCOL nCol, SCROW nRow )
         //  Adjust position and size to Window
         //! Check first if the entries fit (width)
 
+        // minimum width in pixel
+        const long nMinLOKWinWidth = static_cast<long>(1.3 * STD_COL_WIDTH * pViewData->GetPPTX());
+        if (comphelper::LibreOfficeKit::isActive() && nSizeX < nMinLOKWinWidth)
+            nSizeX = nMinLOKWinWidth;
+
         Size aParentSize = GetParent()->GetOutputSizePixel();
         Size aSize( nSizeX, nHeight );
 
