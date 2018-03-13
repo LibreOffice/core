@@ -38,6 +38,7 @@
 #include <vcl/commandinfoprovider.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/toolbox.hxx>
+#include <vcl/BitmapScaleFilter.hxx>
 
 #include <com/sun/star/awt/PopupMenuDirection.hpp>
 #include <com/sun/star/awt/XPopupMenu.hpp>
@@ -798,8 +799,10 @@ void NewToolbarController::setItemImage( const OUString &rCommand )
     Size aBigSize( pToolBox->GetDefaultImageSize() );
     if ( bBig && aImage.GetSizePixel() != aBigSize )
     {
-        BitmapEx aScaleBmpEx( aImage.GetBitmapEx() );
-        aScaleBmpEx.Scale( aBigSize, BmpScaleFlag::Interpolate );
+        BitmapEx aScaleBmpEx(aImage.GetBitmapEx());
+
+        BitmapFilter::Filter(aScaleBmpEx, BitmapScaleFilter(aBigSize, BmpScaleFlag::Interpolate));
+
         pToolBox->SetItemImage( m_nToolBoxId, Image( aScaleBmpEx ) );
     }
     else
