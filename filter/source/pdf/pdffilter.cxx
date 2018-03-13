@@ -74,6 +74,7 @@ bool PDFFilter::implExport( const Sequence< PropertyValue >& rDescriptor )
         aCfgItem.ReadBool(  "ExportNotes", false );
         aCfgItem.ReadBool( "ExportPlaceholders", false );
         aCfgItem.ReadBool(  "ExportNotesPages", false );
+        aCfgItem.ReadBool(  "ExportOnlyNotesPages", false );
         aCfgItem.ReadBool(  "UseTransitionEffects", true );
         aCfgItem.ReadBool(  "IsSkipEmptyPages", false );
         aCfgItem.ReadBool(  "ExportFormFields", true );
@@ -87,8 +88,10 @@ bool PDFFilter::implExport( const Sequence< PropertyValue >& rDescriptor )
         aCfgItem.ReadBool(  "DisplayPDFDocumentTitle", true );
         aCfgItem.ReadInt32( "InitialView", 0 );
         aCfgItem.ReadInt32( "Magnification", 0 );
+        aCfgItem.ReadInt32( "Zoom", 100 );
         aCfgItem.ReadInt32( "PageLayout", 0 );
         aCfgItem.ReadBool(  "FirstPageOnLeft", false );
+        aCfgItem.ReadInt32( "InitialPage", 1 );
         aCfgItem.ReadBool(  "IsAddStream", false );
 
         // the encryption is not available when exporting directly, since the encryption is off by default and the selection
