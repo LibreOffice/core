@@ -17,12 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <vcl/animate.hxx>
 #include <tools/stream.hxx>
 #include <rtl/crc.h>
+
+#include <vcl/animate.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/window.hxx>
 #include <vcl/dibtools.hxx>
+#include <vcl/BitmapConverter.hxx>
 
 #include <impanmvw.hxx>
 
@@ -503,18 +505,20 @@ void Animation::ResetLoopCount()
 
 void Animation::Convert( BmpConversion eConversion )
 {
-    SAL_WARN_IF( IsInAnimation(), "vcl", "Animation modified while it is animated" );
+    SAL_WARN_IF(IsInAnimation(), "vcl", "Animation modified while it is animated");
 
-    bool bRet;
-
-    if( !IsInAnimation() && !maList.empty() )
+    if (!IsInAnimation() && !maList.empty())
     {
-        bRet = true;
+        bool bRet=false;
+        BitmapConverter aBmpConverter(eConversion);
 
-        for( size_t i = 0, n = maList.size(); ( i < n ) && bRet; ++i )
-            bRet = maList[ i ]->aBmpEx.Convert( eConversion );
+        for (size_t i = 0, n = maList.size(); i < n && bRet; ++i)
+        {
+            bRet = (!(aBmpConverter.execute(maList[i]->aBmpEx).IsEmpty()));
+        }
 
-        maBitmapEx.Convert( eConversion );
+        BitmapEx aConvertedBmp(aBmpConverter.execute(maBitmapEx));
+        SAL_WARN_IF(aConvertedBmp.IsEmpty(), "vcl.gdi", "Conversion of bitmap failed");
     }
 }
 
