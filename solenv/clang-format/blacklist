@@ -17562,7 +17562,6 @@ vcl/inc/accel.h
 vcl/inc/accmgr.hxx
 vcl/inc/android/androidinst.hxx
 vcl/inc/android/svsys.h
-vcl/inc/bitmapscalesuper.hxx
 vcl/inc/bmpfast.hxx
 vcl/inc/brdwin.hxx
 vcl/inc/canvasbitmap.hxx
@@ -17906,6 +17905,7 @@ vcl/inc/win/svsys.h
 vcl/inc/win/wincomp.hxx
 vcl/inc/win/winlayout.hxx
 vcl/inc/window.h
+vcl/inc/BitmapScaleSuperFilter.hxx
 vcl/ios/dummies.cxx
 vcl/ios/iosinst.cxx
 vcl/null/printerinfomanager.cxx
@@ -18044,8 +18044,8 @@ vcl/source/bitmap/BitmapScaleConvolution.cxx
 vcl/source/bitmap/BitmapSymmetryCheck.cxx
 vcl/source/bitmap/BitmapTools.cxx
 vcl/source/bitmap/bitmapfilter.cxx
-vcl/source/bitmap/bitmapscalesuper.cxx
 vcl/source/bitmap/checksum.cxx
+vcl/source/bitmap/BitmapScaleSuperFilter.cxx
 vcl/source/components/dtranscomp.cxx
 vcl/source/components/factory.cxx
 vcl/source/components/fontident.cxx
