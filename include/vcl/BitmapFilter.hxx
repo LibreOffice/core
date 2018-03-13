@@ -8,8 +8,8 @@
  *
  */
 
-#ifndef INCLUDED_VCL_INC_BITMAPFILTER_HXX
-#define INCLUDED_VCL_INC_BITMAPFILTER_HXX
+#ifndef INCLUDED_INCLUDE_VCL_BITMAPFILTER_HXX
+#define INCLUDED_INCLUDE_VCL_BITMAPFILTER_HXX
 
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmapex.hxx>

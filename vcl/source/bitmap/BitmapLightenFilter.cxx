@@ -11,10 +11,9 @@
 #include <basegfx/color/bcolortools.hxx>
 
 #include <vcl/bitmapaccess.hxx>
+#include <vcl/BitmapLightenFilter.hxx>
 
-#include "BitmapLightenFilter.hxx"
-
-BitmapEx BitmapLightenFilter::execute(BitmapEx const & rBitmapEx)
+BitmapEx BitmapLightenFilter::execute(BitmapEx const& rBitmapEx)
 {
     const Size aSize(rBitmapEx.GetSizePixel());
 
@@ -28,13 +27,14 @@ BitmapEx BitmapLightenFilter::execute(BitmapEx const & rBitmapEx)
     {
         for (long nY = 0; nY < aSize.Height(); ++nY)
         {
-            Scanline pScanline = pWrite->GetScanline( nY );
-            Scanline pScanlineRead = pRead->GetScanline( nY );
+            Scanline pScanline = pWrite->GetScanline(nY);
+            Scanline pScanlineRead = pRead->GetScanline(nY);
             for (long nX = 0; nX < aSize.Width(); ++nX)
             {
-                BitmapColor aBmpColor = pRead->HasPalette() ?
-                                        pRead->GetPaletteColor(pRead->GetIndexFromData(pScanlineRead, nX)) :
-                                        pRead->GetPixelFromData(pScanlineRead, nX);
+                BitmapColor aBmpColor
+                    = pRead->HasPalette()
+                          ? pRead->GetPaletteColor(pRead->GetIndexFromData(pScanlineRead, nX))
+                          : pRead->GetPixelFromData(pScanlineRead, nX);
                 basegfx::BColor aBColor(aBmpColor.Invert().GetColor().getBColor());
                 aBColor = basegfx::utils::rgb2hsl(aBColor);
 
@@ -62,6 +62,5 @@ BitmapEx BitmapLightenFilter::execute(BitmapEx const & rBitmapEx)
 
     return BitmapEx(aDarkBitmap, rBitmapEx.GetAlpha());
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
