@@ -19,9 +19,7 @@ class VCL_DLLPUBLIC BitmapConverter : public BitmapFilter
 {
 public:
     BitmapConverter(BmpConversion eConversion)
-        : meConversion(eConversion)
-    {
-    }
+        : meConversion(eConversion) {}
 
     virtual BitmapEx execute(BitmapEx const& rBitmapEx) override;
 
