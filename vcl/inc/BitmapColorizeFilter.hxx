@@ -8,12 +8,12 @@
  *
  */
 
-#ifndef INCLUDED_VCL_INC_BITMAPCOLORIZEFILTER_HXX
-#define INCLUDED_VCL_INC_BITMAPCOLORIZEFILTER_HXX
+#ifndef INCLUDED_INCLUDE_VCL_BITMAPCOLORIZEFILTER_HXX
+#define INCLUDED_INCLUDE_VCL_BITMAPCOLORIZEFILTER_HXX
 
 #include <tools/color.hxx>
 
-#include "BitmapFilter.hxx"
+#include <vcl/BitmapFilter.hxx>
 
 class VCL_DLLPUBLIC BitmapColorizeFilter : public BitmapFilter
 {
