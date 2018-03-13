@@ -17,42 +17,25 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_BITMAPSCALECONVOLUTION_HXX
-#define INCLUDED_VCL_BITMAPSCALECONVOLUTION_HXX
+#ifndef INCLUDED_VCL_INC_BITMAPSCALESUPERFILTER_HXX
+#define INCLUDED_VCL_INC_BITMAPSCALESUPERFILTER_HXX
 
 #include "bitmapfilter.hxx"
 
-namespace vcl
-{
-
-enum class ConvolutionKernelType
-{
-    BiLinear  = 1,
-    BiCubic   = 2,
-    Lanczos3  = 3,
-};
-
-class VCL_DLLPUBLIC BitmapScaleConvolutionFilter : public BitmapFilter
+class BitmapScaleSuperFilter : public BitmapFilter
 {
 public:
+    BitmapScaleSuperFilter(const double& rScaleX, const double& rScaleY);
+    virtual ~BitmapScaleSuperFilter() override;
 
-    BitmapScaleConvolutionFilter(const double& rScaleX, const double& rScaleY, ConvolutionKernelType eKernelType)
-        : mrScaleX(rScaleX)
-        , mrScaleY(rScaleY)
-        , meKernelType(eKernelType)
-    {}
-
-    virtual bool execute(Bitmap& rBitmap) override;
+    virtual BitmapEx execute(BitmapEx const& rBitmap) override;
 
 private:
     double mrScaleX;
     double mrScaleY;
 
-    ConvolutionKernelType meKernelType;
 };
 
-}
-
-#endif // INCLUDED_VCL_BITMAPSCALECONVOLUTION_HXX
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

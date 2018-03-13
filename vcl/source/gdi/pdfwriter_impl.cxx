@@ -74,6 +74,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/filter/pdfdocument.hxx>
+#include <vcl/BitmapConverter.hxx>
 #include <comphelper/hash.hxx>
 
 #include <fontsubset.hxx>
@@ -9850,16 +9851,24 @@ void PDFWriterImpl::drawBitmap( const Point& rDestPoint, const Size& rDestSize, 
 
 const PDFWriterImpl::BitmapEmit& PDFWriterImpl::createBitmapEmit( const BitmapEx& i_rBitmap, const Graphic& rGraphic )
 {
-    BitmapEx aBitmap( i_rBitmap );
-    if( m_aContext.ColorMode == PDFWriter::DrawGreyscale )
+    BitmapEx aBitmap(i_rBitmap);
+
+    if (m_aContext.ColorMode == PDFWriter::DrawGreyscale)
     {
         BmpConversion eConv = BmpConversion::N8BitGreys;
         int nDepth = aBitmap.GetBitmap().GetBitCount();
-        if( nDepth <= 4 )
+
+        if (nDepth <= 4)
             eConv = BmpConversion::N4BitGreys;
-        if( nDepth > 1 )
-            aBitmap.Convert( eConv );
+
+        if (nDepth > 1)
+        {
+            BitmapConverter aBmpConverter(eConv);
+            BitmapEx aConvertedBmp(aBmpConverter.execute(aBitmap));
+            SAL_WARN_IF(aConvertedBmp.IsEmpty(), "sal.gdi", "Conversion failed");
+        }
     }
+
     BitmapID aID;
     aID.m_aPixelSize        = aBitmap.GetSizePixel();
     aID.m_nSize             = aBitmap.GetBitCount();
