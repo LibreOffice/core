@@ -176,12 +176,6 @@ namespace oglcanvas
         return maText;
     }
 
-    void TextLayout::draw( const rendering::ViewState&                          /*rViewState*/,
-                           const rendering::RenderState&                        /*rRenderState*/,
-                           const uno::Reference< rendering::XGraphicDevice >&   /*xGraphicDevice*/ ) const
-    {
-        // TODO
-    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -58,10 +58,6 @@ namespace oglcanvas
         // XCanvas (only providing, not implementing the
         // interface. Also note subtle method parameter differences)
         void clear();
-        void drawPoint( const css::rendering::XCanvas*     pCanvas,
-                        const css::geometry::RealPoint2D&  aPoint,
-                        const css::rendering::ViewState&   viewState,
-                        const css::rendering::RenderState& renderState );
         void drawLine( const css::rendering::XCanvas*      pCanvas,
                        const css::geometry::RealPoint2D&   aStartPoint,
                        const css::geometry::RealPoint2D&   aEndPoint,

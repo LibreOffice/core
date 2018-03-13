@@ -92,23 +92,6 @@ namespace oglcanvas
 
     namespace
     {
-        bool lcl_drawPoint( const CanvasHelper&              /*rHelper*/,
-                            const ::basegfx::B2DHomMatrix&   rTransform,
-                            GLenum                           eSrcBlend,
-                            GLenum                           eDstBlend,
-                            const rendering::ARGBColor&      rColor,
-                            const geometry::RealPoint2D&     rPoint )
-        {
-            TransformationPreserver aPreserver;
-            setupState(rTransform, eSrcBlend, eDstBlend, rColor);
-
-            glBegin(GL_POINTS);
-            glVertex2d(rPoint.X, rPoint.Y);
-            glEnd();
-
-            return true;
-        }
-
         bool lcl_drawLine( const CanvasHelper&              /*rHelper*/,
                            const ::basegfx::B2DHomMatrix&   rTransform,
                            GLenum                           eSrcBlend,
@@ -396,23 +379,6 @@ namespace oglcanvas
     void CanvasHelper::clear()
     {
         mpRecordedActions->clear();
-    }
-
-    void CanvasHelper::drawPoint( const rendering::XCanvas*     /*pCanvas*/,
-                                  const geometry::RealPoint2D&  aPoint,
-                                  const rendering::ViewState&   viewState,
-                                  const rendering::RenderState& renderState )
-    {
-        if( mpDevice )
-        {
-            mpRecordedActions->push_back( Action() );
-            Action& rAct=mpRecordedActions->back();
-
-            setupGraphicsState( rAct, viewState, renderState );
-            rAct.maFunction = std::bind(&lcl_drawPoint,
-                                            _1,_2,_3,_4,_5,
-                                            aPoint);
-        }
     }
 
     void CanvasHelper::drawLine( const rendering::XCanvas*      /*pCanvas*/,
