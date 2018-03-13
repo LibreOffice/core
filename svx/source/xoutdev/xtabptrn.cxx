@@ -20,6 +20,7 @@
 #include <svx/XPropertyTable.hxx>
 
 #include <vcl/virdev.hxx>
+#include <vcl/BitmapScaleFilter.hxx>
 #include <svl/itemset.hxx>
 #include <sfx2/docfile.hxx>
 #include <svx/strings.hrc>
@@ -115,7 +116,8 @@ Bitmap XPatternList::CreateBitmap( long nIndex, const Size& rSize ) const
 
         if(rBitmapEx.GetSizePixel().Width() >= rSize.Width() && rBitmapEx.GetSizePixel().Height() >= rSize.Height())
         {
-            rBitmapEx.Scale(rSize);
+            BitmapFilter::Filter(rBitmapEx, BitmapScaleFilter(rSize));
+
             pVirtualDevice->DrawBitmapEx(Point(0, 0), rBitmapEx);
         }
         else

@@ -21,6 +21,7 @@
 
 #include <o3tl/make_unique.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/BitmapScaleFilter.hxx>
 #include <unotools/viewoptions.hxx>
 #include <cuihyperdlg.hxx>
 #include <hlinettp.hxx>
@@ -98,7 +99,8 @@ SvxHpLinkDlg::SvxHpLinkDlg (vcl::Window* pParent, SfxBindings* pBindings)
     for(Image &aImage : imgVector )
     {
         BitmapEx aBitmap = aImage.GetBitmapEx();
-        aBitmap.Scale(GetDPIScaleFactor(),GetDPIScaleFactor(),BmpScaleFlag::BestQuality);
+        auto nScale = GetDPIScaleFactor();
+        BitmapFilter::Filter(aBitmap, BitmapScaleFilter(Size(nScale, nScale), BmpScaleFlag::BestQuality));
         aImage = Image(aBitmap);
     }
     aStrTitle = CuiResId( RID_SVXSTR_HYPERDLG_HLINETTP );

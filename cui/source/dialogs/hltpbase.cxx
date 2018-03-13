@@ -21,6 +21,7 @@
 #include <sal/config.h>
 
 #include <osl/file.hxx>
+#include <vcl/BitmapScaleFilter.hxx>
 #include <sfx2/event.hxx>
 #include <sfx2/frame.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -176,7 +177,10 @@ void SvxHyperlinkTabPageBase::InitStdControls ()
         get(mpEdText, "name");
         get(mpBtScript, "script");
         BitmapEx aBitmap(RID_SVXBMP_SCRIPT);
-        aBitmap.Scale(GetDPIScaleFactor(),GetDPIScaleFactor(),BmpScaleFlag::BestQuality );
+
+        auto nFactor = GetDPIScaleFactor();
+        BitmapFilter::Filter(aBitmap, BitmapScaleFilter(nFactor, nFactor, BmpScaleFlag::BestQuality));
+
         mpBtScript->SetModeImage(Image(aBitmap));
 
         mpBtScript->SetClickHdl ( LINK ( this, SvxHyperlinkTabPageBase, ClickScriptHdl_Impl ) );
