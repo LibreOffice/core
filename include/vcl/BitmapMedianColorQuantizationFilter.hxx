@@ -13,13 +13,8 @@
 
 #include <tools/color.hxx>
 
+#include <vcl/bitmap.hxx>
 #include <vcl/BitmapFilter.hxx>
-
-#define RGB15(_def_cR, _def_cG, _def_cB)                                                           \
-    ((static_cast<sal_uLong>(_def_cR) << 10) | (static_cast<sal_uLong>(_def_cG) << 5)              \
-     | static_cast<sal_uLong>(_def_cB))
-#define GAMMA(_def_cVal, _def_InvGamma)                                                            \
-    (static_cast<sal_uInt8>(MinMax(FRound(pow(_def_cVal / 255.0, _def_InvGamma) * 255.0), 0, 255)))
 
 class VCL_DLLPUBLIC BitmapMedianColorQuantizationFilter : public BitmapFilter
 {
