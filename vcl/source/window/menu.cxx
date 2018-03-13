@@ -22,6 +22,7 @@
 #include <tools/rc.h>
 #include <tools/stream.hxx>
 
+#include <comphelper/lok.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/mnemonic.hxx>
 #include <vcl/image.hxx>
@@ -2972,7 +2973,8 @@ sal_uInt16 PopupMenu::ImplExecute( const VclPtr<vcl::Window>& pW, const Rectangl
     }
 
     VclPtrInstance<MenuFloatingWindow> pWin( this, pW, nStyle | WB_SYSTEMWINDOW );
-    pWin->SetLOKNotifier(mpLOKNotifier);
+    if (comphelper::LibreOfficeKit::isActive() && mpLOKNotifier)
+        pWin->SetLOKNotifier(mpLOKNotifier);
 
     if( pSVData->maNWFData.mbFlatMenu )
         pWin->SetBorderStyle( WindowBorderStyle::NOBORDER );
