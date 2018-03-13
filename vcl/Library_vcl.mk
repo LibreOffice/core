@@ -316,9 +316,11 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/bitmap/BitmapLightenFilter \
     vcl/source/bitmap/BitmapDisabledImageFilter \
     vcl/source/bitmap/BitmapColorizeFilter \
+    vcl/source/bitmap/BitmapConverter \
     vcl/source/bitmap/bitmappaint \
-    vcl/source/bitmap/bitmapscalesuper \
-    vcl/source/bitmap/BitmapScaleConvolution \
+	vcl/source/bitmap/BitmapScaleFilter \
+    vcl/source/bitmap/BitmapScaleSuperFilter \
+    vcl/source/bitmap/BitmapScaleConvolutionFilter \
     vcl/source/bitmap/BitmapSymmetryCheck \
     vcl/source/bitmap/BitmapTools \
     vcl/source/bitmap/checksum \

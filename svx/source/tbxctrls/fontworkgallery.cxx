@@ -22,16 +22,13 @@
 
 #include <vcl/toolbox.hxx>
 #include <vcl/settings.hxx>
-
+#include <vcl/BitmapScaleFilter.hxx>
 #include <svl/itempool.hxx>
-
 #include <svtools/toolbarmenu.hxx>
 #include <svtools/popupwindowcontroller.hxx>
 #include <svtools/popupmenucontrollerbase.hxx>
-
 #include <sfx2/app.hxx>
 #include <sfx2/dispatch.hxx>
-
 #include <editeng/eeitem.hxx>
 #include <editeng/frmdiritem.hxx>
 
@@ -43,11 +40,10 @@
 #include <svx/svdobj.hxx>
 #include <svx/svdview.hxx>
 #include <svx/svdoutl.hxx>
-
 #include <svx/gallery.hxx>
 #include <svx/dlgutil.hxx>
-
 #include <svx/fontworkgallery.hxx>
+
 #include <coreservices.hxx>
 
 #include <algorithm>
@@ -124,7 +120,10 @@ void FontWorkGalleryDialog::initFavorites(sal_uInt16 nThemeId)
             const Point aNull(0, 0);
 
             if (GetDPIScaleFactor() > 1)
-                aThumb.Scale(GetDPIScaleFactor(), GetDPIScaleFactor());
+            {
+                auto nFactor = GetDPIScaleFactor();
+                BitmapFilter::Filter(aThumb, BitmapScaleFilter(nFactor, nFactor));
+            }
 
             const Size aSize(aThumb.GetSizePixel());
 

@@ -35,6 +35,7 @@
 #include <vcl/bitmap.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <vcl/toolbox.hxx>
+#include <vcl/BitmapScaleFilter.hxx>
 #include <svtools/miscopt.hxx>
 #include <memory>
 
@@ -138,8 +139,9 @@ bool ImageButtonToolbarController::ReadImageFromURL( bool bBigImage, const OUStr
         if ( aBmpSize.Width() > 0 && aBmpSize.Height() > 0 )
         {
             ::Size aNoScaleSize( aBmpSize.Width(), aSize.Height() );
-            if ( aBmpSize != aNoScaleSize )
-                aBitmapEx.Scale( aNoScaleSize, BmpScaleFlag::BestQuality );
+            if (aBmpSize != aNoScaleSize)
+                BitmapFilter::Filter(aBitmapEx, BitmapScaleFilter(aNoScaleSize, BmpScaleFlag::BestQuality));
+
             aImage = Image( aBitmapEx );
             return true;
         }
