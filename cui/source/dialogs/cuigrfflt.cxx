@@ -19,6 +19,7 @@
 
 #include <vcl/builderfactory.hxx>
 #include <vcl/BitmapScaleFilter.hxx>
+#include <vcl/BitmapColorQuantizationFilter.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/objsh.hxx>
@@ -501,9 +502,8 @@ Graphic GraphicFilterPoster::GetFilteredGraphic( const Graphic& rGraphic, double
     }
     else
     {
-        BitmapEx aBmpEx( rGraphic.GetBitmapEx() );
-
-        if( aBmpEx.ReduceColors( nPosterCount ) )
+        BitmapEx aBmpEx(rGraphic.GetBitmapEx());
+        if (BitmapFilter::Filter(aBmpEx, BitmapColorQuantizationFilter(nPosterCount)))
             aRet = aBmpEx;
     }
 
