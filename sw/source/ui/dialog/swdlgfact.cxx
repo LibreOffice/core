@@ -119,7 +119,10 @@ IMPL_ABSTDLG_BASE(AbstractSwModalRedlineAcceptDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractGlossaryDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractFieldInputDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractInsFootNoteDlg_Impl);
-IMPL_ABSTDLG_BASE(AbstractInsTableDlg_Impl);
+short AbstractInsTableDlg_Impl::Execute()
+{
+    return m_xDlg->run();
+}
 IMPL_ABSTDLG_BASE(AbstractJavaEditDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractMailMergeDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractMailMergeCreateFromDlg_Impl);
@@ -453,7 +456,7 @@ void AbstractInsTableDlg_Impl::GetValues( OUString& rName, sal_uInt16& rRow, sal
                                 SwInsertTableOptions& rInsTableFlags, OUString& rTableAutoFormatName,
                                 SwTableAutoFormat *& prTAFormat )
 {
-    pDlg->GetValues( rName, rRow, rCol, rInsTableFlags, rTableAutoFormatName, prTAFormat);
+    m_xDlg->GetValues(rName, rRow, rCol, rInsTableFlags, rTableAutoFormatName, prTAFormat);
 }
 
 OUString AbstractJavaEditDialog_Impl::GetScriptText() const
@@ -930,8 +933,7 @@ VclPtr<VclAbstractDialog> SwAbstractDialogFactory_Impl::CreateVclSwViewDialog(Sw
 
 VclPtr<AbstractInsTableDlg> SwAbstractDialogFactory_Impl::CreateInsTableDlg(SwView& rView)
 {
-    VclPtr<SwInsTableDlg> pDlg = VclPtr<SwInsTableDlg>::Create(rView);
-    return VclPtr<AbstractInsTableDlg_Impl>::Create( pDlg );
+    return VclPtr<AbstractInsTableDlg_Impl>::Create(new SwInsTableDlg(rView));
 }
 
 VclPtr<AbstractJavaEditDialog> SwAbstractDialogFactory_Impl::CreateJavaEditDialog(

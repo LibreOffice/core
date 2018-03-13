@@ -344,6 +344,18 @@ public:
     virtual int get_value() const = 0;
     virtual void set_range(int min, int max) = 0;
     virtual void get_range(int& min, int& max) const = 0;
+    void set_min(int min)
+    {
+        int dummy, max;
+        get_range(dummy, max);
+        set_range(min, max);
+    }
+    void set_max(int max)
+    {
+        int min, dummy;
+        get_range(min, dummy);
+        set_range(min, max);
+    }
     virtual void set_increments(int step, int page) = 0;
     virtual void get_increments(int& step, int& page) const = 0;
     virtual void set_digits(unsigned int digits) = 0;

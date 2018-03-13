@@ -48,7 +48,7 @@ class SwAutoFormatDlg : public weld::GenericDialogController
     std::unique_ptr<weld::Button> m_xBtnAdd;
     std::unique_ptr<weld::Button> m_xBtnRemove;
     std::unique_ptr<weld::Button> m_xBtnRename;
-    AutoFormatPreview m_aWndPreview;
+    std::unique_ptr<AutoFormatPreview> m_xWndPreview;
     std::unique_ptr<SwTableAutoFormatTable> m_xTableTable;
     OUString        aStrTitle;
     OUString        aStrLabel;
