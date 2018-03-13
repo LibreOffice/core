@@ -28,6 +28,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/builderfactory.hxx>
+#include <vcl/BitmapScaleFilter.hxx>
 
 #include <svx/strings.hrc>
 #include <svx/svxids.hrc>
@@ -592,7 +593,8 @@ namespace
 
             if(rBitmapEx.GetSizePixel().Width() >= rSize.Width() && rBitmapEx.GetSizePixel().Height() >= rSize.Height())
             {
-                rBitmapEx.Scale(rSize);
+                BitmapFilter::Filter(rBitmapEx, BitmapScaleFilter(rSize));
+
                 pVirtualDevice->DrawBitmapEx(Point(0, 0), rBitmapEx);
             }
             else

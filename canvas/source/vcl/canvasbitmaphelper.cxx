@@ -33,6 +33,7 @@
 #include <vcl/BitmapTools.hxx>
 #include <vcl/canvastools.hxx>
 #include <vcl/window.hxx>
+#include <vcl/BitmapScaleFilter.hxx>
 
 #include "canvasbitmap.hxx"
 #include "canvasbitmaphelper.hxx"
@@ -99,10 +100,11 @@ namespace vclcanvas
         if( !mpBackBuffer || mpDevice )
             return uno::Reference< rendering::XBitmap >(); // we're disposed
 
-        BitmapEx aRes( mpBackBuffer->getBitmapReference() );
+        BitmapEx aRes(mpBackBuffer->getBitmapReference());
 
-        aRes.Scale( vcl::unotools::sizeFromRealSize2D(newSize),
-                     beFast ? BmpScaleFlag::Default : BmpScaleFlag::BestQuality );
+        BitmapFilter::Filter(aRes,
+                BitmapScaleFilter(vcl::unotools::sizeFromRealSize2D(newSize),
+                    beFast ? BmpScaleFlag::Default : BmpScaleFlag::BestQuality));
 
         return uno::Reference< rendering::XBitmap >(
             new CanvasBitmap( aRes, *mpDevice, mpOutDevReference ) );
