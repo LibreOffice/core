@@ -99,23 +99,6 @@ public:
      */
     void GetSplitData( std::vector<sal_uInt8>& rvColorData, std::vector<sal_uInt8>& rvAlphaData ) const;
 
-    /** Reduce number of colors for the bitmap using the POPULAR algorithm
-
-        @param nNewColorCount
-        Maximal number of bitmap colors after the reduce operation
-
-        @return true, if the color reduction operation was completed successfully.
-     */
-    bool                ReduceColors( sal_uInt16 nNewColorCount );
-
-    /** Apply a dither algorithm to the bitmap
-
-        This method dithers the bitmap inplace, i.e. a true color
-        bitmap is converted to a paletted bitmap, reducing the color
-        deviation by error diffusion.
-     */
-    bool                Dither();
-
     /** Crop the bitmap
 
         @param rRectPixel
@@ -198,6 +181,38 @@ public:
         @return true, if the operation was completed successfully.
      */
     bool                Mirror( BmpMirrorFlags nMirrorFlags );
+
+    /** Scale the bitmap
+
+        @param rNewSize
+        The resulting size of the scaled bitmap
+
+        @param nScaleFlag
+        The algorithm to be used for scaling
+
+        @return true, if the operation was completed successfully.
+     */
+    bool                Scale(
+                            const Size& rNewSize,
+                            BmpScaleFlag nScaleFlag = BmpScaleFlag::Default );
+
+    /** Scale the bitmap
+
+        @param rScaleX
+        The scale factor in x direction.
+
+        @param rScaleY
+        The scale factor in y direction.
+
+        @param nScaleFlag
+        The algorithm to be used for scaling
+
+        @return true, if the operation was completed successfully.
+     */
+    bool                Scale(
+                            const double& rScaleX,
+                            const double& rScaleY,
+                            BmpScaleFlag nScaleFlag = BmpScaleFlag::Default );
 
     /** Rotate bitmap by the specified angle
 
@@ -432,6 +447,7 @@ private:
 
     Bitmap              maBitmap;
     Bitmap              maMask;
+    Size                maBitmapSize;
     Color               maTransparentColor;
     TransparentType     meTransparent;
     bool                mbAlpha;
