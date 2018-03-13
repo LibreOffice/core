@@ -29,7 +29,7 @@ class ScDocument;
 
 class SC_DLLPUBLIC ScDocumentPool: public SfxItemPool
 {
-    std::vector<SfxPoolItem*>* mpPoolDefaults;
+    std::vector<SfxPoolItem*> mvPoolDefaults;
     sal_uInt64 mnCurrentMaxKey;
 
 public:
