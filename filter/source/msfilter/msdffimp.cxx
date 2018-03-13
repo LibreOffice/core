@@ -3917,13 +3917,15 @@ SdrObject* SvxMSDffManager::ImportGraphic( SvStream& rSt, SfxItemSet& rSet, cons
                     {
                         case GraphicType::Bitmap :
                         {
-                            BitmapEx    aBitmapEx( aGraf.GetBitmapEx() );
-                            if ( nBrightness || nContrast || ( nGamma != 0x10000 ) )
-                                aBitmapEx.Adjust( nBrightness, static_cast<sal_Int16>(nContrast), 0, 0, 0, static_cast<double>(nGamma) / 0x10000, false, true );
-                            if ( eDrawMode == GraphicDrawMode::Greys )
+                            BitmapEx aBitmapEx( aGraf.GetBitmapEx());
+                            if (nBrightness || nContrast || (nGamma != 0x10000) )
+                                aBitmapEx.Adjust(nBrightness, static_cast<sal_Int16>(nContrast), 0, 0, 0, static_cast<double>(nGamma) / 0x10000, false, true);
+
+                            if (eDrawMode == GraphicDrawMode::Greys)
                                 BitmapFilter::Filter(aBitmapEx, BitmapConverter(BmpConversion::N8BitGreys));
-                            else if ( eDrawMode == GraphicDrawMode::Mono )
+                            else if (eDrawMode == GraphicDrawMode::Mono)
                                 BitmapFilter::Filter(aBitmapEx, BitmapConverter(BmpConversion::N1BitThreshold));;
+
                             aGraf = aBitmapEx;
 
                         }

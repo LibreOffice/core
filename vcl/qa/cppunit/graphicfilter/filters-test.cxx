@@ -16,6 +16,7 @@
 #include <comphelper/fileformat.h>
 
 #include <vcl/graphicfilter.hxx>
+#include <vcl/BitmapScaleFilter.hxx>
 
 using namespace ::com::sun::star;
 
@@ -93,8 +94,10 @@ void VclFiltersTest::testScaling()
         BitmapEx aBitmapEx( aBitmap );
 
         fprintf( stderr, "scale with type %d\n", int( i ) );
-        CPPUNIT_ASSERT( aBitmapEx.Scale( 0.1937046, 0.193154, i ) );
-        Size aAfter( aBitmapEx.GetSizePixel() );
+        BitmapScaleFilter aFilter(0.1937046, 0.193154, i);
+        BitmapEx aScaledBmp(aFilter.execute(aBitmapEx));
+        CPPUNIT_ASSERT(!aScaledBmp.IsEmpty());
+        Size aAfter(aScaledBmp.GetSizePixel());
         fprintf( stderr, "size %ld, %ld\n", aAfter.Width(), aAfter.Height() );
         CPPUNIT_ASSERT( labs (aAfter.Height() - aAfter.Width()) <= 1 );
     }
