@@ -8,26 +8,22 @@
  *
  */
 
-#include <vcl/BitmapFilter.hxx>
+#ifndef INCLUDED_VCL_INC_BITMAPFILTER_HXX
+#define INCLUDED_VCL_INC_BITMAPFILTER_HXX
 
-BitmapFilter::BitmapFilter()
-{}
+#include <vcl/bitmapex.hxx>
 
-BitmapFilter::~BitmapFilter()
-{}
-
-bool BitmapFilter::Filter(BitmapEx &rBmpEx, BitmapFilter &&rFilter)
+class VCL_DLLPUBLIC BitmapFilter
 {
-    BitmapEx aTmpBmpEx(rFilter.execute(rBmpEx));
+public:
+    BitmapFilter();
+    virtual ~BitmapFilter();
 
-    if (aTmpBmpEx.IsEmpty())
-    {
-        SAL_WARN("vcl.gdi", "Bitmap filter failed");
-        return false;
-    }
+    virtual BitmapEx execute(BitmapEx const& rBitmapEx) = 0;
 
-    rBmpEx = aTmpBmpEx;
-    return true;
-}
+    static bool Filter(BitmapEx& rBmpEx, BitmapFilter&& rFilter);
+};
+
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17546,7 +17546,8 @@ vcl/headless/svpprn.cxx
 vcl/headless/svptext.cxx
 vcl/headless/svpvd.cxx
 vcl/inc/BitmapProcessor.hxx
-vcl/inc/BitmapScaleConvolution.hxx
+vcl/inc/BitmapScaleConvolutionFilter.hxx
+vcl/inc/BitmapScaleSuperFilter.hxx
 vcl/inc/BitmapSymmetryCheck.hxx
 vcl/inc/CommonSalLayout.hxx
 vcl/inc/ControlCacheKey.hxx
@@ -17559,7 +17560,6 @@ vcl/inc/accmgr.hxx
 vcl/inc/android/androidinst.hxx
 vcl/inc/android/svsys.h
 vcl/inc/bitmapfilter.hxx
-vcl/inc/bitmapscalesuper.hxx
 vcl/inc/bmpfast.hxx
 vcl/inc/brdwin.hxx
 vcl/inc/canvasbitmap.hxx
@@ -18038,12 +18038,12 @@ vcl/source/app/unohelp.cxx
 vcl/source/app/unohelp2.cxx
 vcl/source/app/vclevent.cxx
 vcl/source/bitmap/BitmapProcessor.cxx
-vcl/source/bitmap/BitmapScaleConvolution.cxx
+vcl/source/bitmap/BitmapScaleConvolutionFilter.cxx
+vcl/source/bitmap/BitmapScaleSuperFilter.cxx
 vcl/source/bitmap/BitmapSymmetryCheck.cxx
 vcl/source/bitmap/BitmapTools.cxx
 vcl/source/bitmap/bitmap.cxx
 vcl/source/bitmap/bitmapfilter.cxx
-vcl/source/bitmap/bitmapscalesuper.cxx
 vcl/source/bitmap/checksum.cxx
 vcl/source/components/dtranscomp.cxx
 vcl/source/components/factory.cxx

@@ -27,16 +27,17 @@
 #if HAVE_FEATURE_OPENGL
 #include <vcl/opengl/OpenGLHelper.hxx>
 #endif
-#include <memory>
 
 #include <impbmp.hxx>
 #include <impoctree.hxx>
+#include <BitmapScaleSuperFilter.hxx>
+#include <BitmapScaleConvolutionFilter.hxx>
+#include <bitmapwriteaccess.hxx>
+#include <octree.hxx>
+
 #include "impvect.hxx"
 
-#include <bitmapscalesuper.hxx>
-#include <octree.hxx>
-#include <BitmapScaleConvolution.hxx>
-#include <bitmapwriteaccess.hxx>
+#include <memory>
 
 #define RGB15( _def_cR, _def_cG, _def_cB )  ((static_cast<sal_uLong>(_def_cR)<<10)|(static_cast<sal_uLong>(_def_cG)<<5)|static_cast<sal_uLong>(_def_cB))
 #define GAMMA( _def_cVal, _def_InvGamma )   (static_cast<sal_uInt8>(MinMax(FRound(pow( _def_cVal/255.0,_def_InvGamma)*255.0),0,255)))
@@ -738,70 +739,58 @@ bool Bitmap::Scale( const double& rScaleX, const double& rScaleY, BmpScaleFlag n
         }
     }
 
-    //fdo#33455
+    // fdo#33455
     //
-    //If we start with a 1 bit image, then after scaling it in any mode except
-    //BmpScaleFlag::Fast we have a 24bit image which is perfectly correct, but we
-    //are going to down-shift it to mono again and Bitmap::MakeMonochrome just
-    //has "Bitmap aNewBmp( GetSizePixel(), 1 );" to create a 1 bit bitmap which
-    //will default to black/white and the colors mapped to which ever is closer
-    //to black/white
+    // If we start with a 1 bit image, then after scaling it in any mode except
+    // BmpScaleFlag::Fast we have a 24bit image which is perfectly correct, but we
+    // are going to down-shift it to mono again and Bitmap::MakeMonochrome just
+    // has "Bitmap aNewBmp( GetSizePixel(), 1 );" to create a 1 bit bitmap which
+    // will default to black/white and the colors mapped to which ever is closer
+    // to black/white
     //
-    //So the easiest thing to do to retain the colors of 1 bit bitmaps is to
-    //just use the fast scale rather than attempting to count unique colors in
-    //the other converters and pass all the info down through
-    //Bitmap::MakeMonochrome
+    // So the easiest thing to do to retain the colors of 1 bit bitmaps is to
+    // just use the fast scale rather than attempting to count unique colors in
+    // the other converters and pass all the info down through
+    // Bitmap::MakeMonochrome
     if (nStartCount == 1)
         nScaleFlag = BmpScaleFlag::Fast;
 
+    BitmapEx aBmpEx(*this);
     bool bRetval(false);
 
     switch(nScaleFlag)
     {
-        case BmpScaleFlag::Fast :
-        {
-            bRetval = ImplScaleFast( rScaleX, rScaleY );
+        case BmpScaleFlag::Fast:
+            bRetval = BitmapFilter::Filter(aBmpEx, BitmapFastScaleFilter(rScaleX, rScaleY));
             break;
-        }
-        case BmpScaleFlag::Interpolate :
-        {
-            bRetval = ImplScaleInterpolate( rScaleX, rScaleY );
+
+        case BmpScaleFlag::Interpolate:
+            bRetval = ImplScaleInterpolate(rScaleX, rScaleY);
             break;
-        }
+
         case BmpScaleFlag::Default:
-        {
             if (GetSizePixel().Width() < 2 || GetSizePixel().Height() < 2)
-            {
-                // fallback to ImplScaleFast
-                bRetval = ImplScaleFast( rScaleX, rScaleY );
-            }
+                bRetval = BitmapFilter::Filter(aBmpEx, BitmapFastScaleFilter(rScaleX, rScaleY));
             else
-            {
-                BitmapScaleSuperFilter aScaleSuperFilter(rScaleX, rScaleY);
-                bRetval = aScaleSuperFilter.execute(*this);
-            }
+                bRetval = BitmapFilter::Filter(aBmpEx, BitmapScaleSuperFilter(rScaleX, rScaleY));
             break;
-        }
-        case BmpScaleFlag::Lanczos :
+
+        case BmpScaleFlag::Lanczos:
         case BmpScaleFlag::BestQuality:
-        {
-            vcl::BitmapScaleConvolutionFilter aScaleConvolutionFilter(rScaleX, rScaleY, vcl::ConvolutionKernelType::Lanczos3);
-            bRetval = aScaleConvolutionFilter.execute(*this);
+            bRetval = BitmapFilter::Filter(aBmpEx, vcl::BitmapScaleLanczos3Filter(rScaleX, rScaleY));
             break;
-        }
-        case BmpScaleFlag::BiCubic :
-        {
-            vcl::BitmapScaleConvolutionFilter aScaleConvolutionFilter(rScaleX, rScaleY, vcl::ConvolutionKernelType::BiCubic);
-            bRetval = aScaleConvolutionFilter.execute(*this);
+
+        case BmpScaleFlag::BiCubic:
+            bRetval = BitmapFilter::Filter(aBmpEx, vcl::BitmapScaleBicubicFilter(rScaleX, rScaleY));
             break;
-        }
-        case BmpScaleFlag::BiLinear :
-        {
-            vcl::BitmapScaleConvolutionFilter aScaleConvolutionFilter(rScaleX, rScaleY, vcl::ConvolutionKernelType::BiLinear);
-            bRetval = aScaleConvolutionFilter.execute(*this);
+
+        case BmpScaleFlag::BiLinear:
+            bRetval = BitmapFilter::Filter(aBmpEx, vcl::BitmapScaleBilinearFilter(rScaleX, rScaleY));
             break;
-        }
     }
+
+    if (bRetval && nScaleFlag != BmpScaleFlag::Interpolate)
+        *this = aBmpEx.GetBitmapRef();
 
     OSL_ENSURE(!bRetval || nStartCount == GetBitCount(), "Bitmap::Scale has changed the ColorDepth, this should *not* happen (!)");
     return bRetval;
@@ -881,75 +870,6 @@ void Bitmap::AdaptBitCount(Bitmap& rNew) const
             }
         }
     }
-}
-
-bool Bitmap::ImplScaleFast( const double& rScaleX, const double& rScaleY )
-{
-    const Size aSizePix( GetSizePixel() );
-    const long nNewWidth = FRound( aSizePix.Width() * rScaleX );
-    const long nNewHeight = FRound( aSizePix.Height() * rScaleY );
-    bool bRet = false;
-
-    if( nNewWidth && nNewHeight )
-    {
-        ScopedReadAccess pReadAcc(*this);
-
-        if(pReadAcc)
-        {
-            Bitmap aNewBmp( Size( nNewWidth, nNewHeight ), GetBitCount(), &pReadAcc->GetPalette() );
-            BitmapScopedWriteAccess pWriteAcc(aNewBmp);
-
-            if( pWriteAcc )
-            {
-                const long nScanlineSize = pWriteAcc->GetScanlineSize();
-                const long nNewWidth1 = nNewWidth - 1;
-                const long nNewHeight1 = nNewHeight - 1;
-
-                if( nNewWidth1 && nNewHeight1 )
-                {
-                    const double nWidth = pReadAcc->Width();
-                    const double nHeight = pReadAcc->Height();
-                    std::unique_ptr<long[]> pLutX(new long[ nNewWidth ]);
-                    std::unique_ptr<long[]> pLutY(new long[ nNewHeight ]);
-
-                    for( long nX = 0; nX < nNewWidth; nX++ )
-                        pLutX[ nX ] = long(nX * nWidth / nNewWidth);
-
-                    for( long nY = 0; nY < nNewHeight; nY++ )
-                        pLutY[ nY ] = long(nY * nHeight / nNewHeight);
-
-                    long nActY = 0;
-                    while( nActY < nNewHeight )
-                    {
-                        long nMapY = pLutY[ nActY ];
-                        Scanline pScanline = pWriteAcc->GetScanline(nActY);
-                        Scanline pScanlineRead = pReadAcc->GetScanline(nMapY);
-
-                        for( long nX = 0; nX < nNewWidth; nX++ )
-                            pWriteAcc->SetPixelOnData( pScanline, nX, pReadAcc->GetPixelFromData( pScanlineRead , pLutX[ nX ] ) );
-
-                        while( ( nActY < nNewHeight1 ) && ( pLutY[ nActY + 1 ] == nMapY ) )
-                        {
-                            memcpy( pWriteAcc->GetScanline( nActY + 1 ),
-                                    pWriteAcc->GetScanline( nActY ), nScanlineSize );
-                            nActY++;
-                        }
-                        nActY++;
-                    }
-
-                    bRet = true;
-                }
-
-                pWriteAcc.reset();
-            }
-            pReadAcc.reset();
-
-            if (bRet)
-                ReassignWithSize(aNewBmp);
-        }
-    }
-
-    return bRet;
 }
 
 bool Bitmap::ImplScaleInterpolate( const double& rScaleX, const double& rScaleY )
@@ -1132,9 +1052,12 @@ bool Bitmap::ImplScaleInterpolate( const double& rScaleX, const double& rScaleY 
         }
     }
 
-    if( !bRet )
+    if (!bRet)
     {
-        bRet = ImplScaleFast( rScaleX, rScaleY );
+        BitmapEx aNewBmpEx(*this);
+        bRet = BitmapFilter::Filter(aNewBmpEx, BitmapFastScaleFilter(rScaleX, rScaleY));
+        if (bRet)
+            *this = aNewBmpEx.GetBitmapRef();
     }
 
     return bRet;
