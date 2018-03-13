@@ -606,7 +606,9 @@ void SwTextFormatter::BuildPortions( SwTextFormatInfo &rInf )
                 // to 20% of the fontheight.
                 sal_Int32 nTmp = rInf.GetIdx() + pPor->GetLen();
                 if( nTmp == m_pScriptInfo->NextScriptChg( nTmp - 1 ) &&
-                    nTmp != rInf.GetText().getLength() )
+                    nTmp != rInf.GetText().getLength() &&
+                    (m_pScriptInfo->ScriptType(nTmp - 1) == css::i18n::ScriptType::ASIAN ||
+                     m_pScriptInfo->ScriptType(nTmp) == css::i18n::ScriptType::ASIAN) )
                 {
                     const sal_uInt16 nDist = static_cast<sal_uInt16>(rInf.GetFont()->GetHeight()/5);
 
