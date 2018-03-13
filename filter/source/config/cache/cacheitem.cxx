@@ -40,15 +40,13 @@ CacheItem::CacheItem()
 
 void CacheItem::update(const CacheItem& rUpdateItem)
 {
-    for(const_iterator pItUpdate  = rUpdateItem.begin();
-                       pItUpdate != rUpdateItem.end()  ;
-                     ++pItUpdate                       )
+    for (auto const& elem : rUpdateItem)
     {
-        iterator pItThis = find(pItUpdate->first);
+        iterator pItThis = find(elem.first);
         if (pItThis == end())
-            (*this)[pItUpdate->first] = pItUpdate->second; // add new prop
+            (*this)[elem.first] = elem.second; // add new prop
         else
-            pItThis->second = pItUpdate->second; // change value of existing prop
+            pItThis->second = elem.second; // change value of existing prop
     }
 }
 
@@ -204,11 +202,9 @@ bool isSubSet(const css::uno::Any& aSubSet,
                 OUStringList stl_s1(comphelper::sequenceToContainer<OUStringList>(uno_s1));
                 OUStringList stl_s2(comphelper::sequenceToContainer<OUStringList>(uno_s2));
 
-                for (OUStringList::const_iterator it1  = stl_s1.begin();
-                                                  it1 != stl_s1.end()  ;
-                                                ++it1                  )
+                for (auto const& elem : stl_s1)
                 {
-                    if (::std::find(stl_s2.begin(), stl_s2.end(), *it1) == stl_s2.end())
+                    if (::std::find(stl_s2.begin(), stl_s2.end(), elem) == stl_s2.end())
                     {
                         return false;
                     }
@@ -227,16 +223,14 @@ bool isSubSet(const css::uno::Any& aSubSet,
                 ::comphelper::SequenceAsHashMap stl_p1(uno_p1);
                 ::comphelper::SequenceAsHashMap stl_p2(uno_p2);
 
-                for (::comphelper::SequenceAsHashMap::const_iterator it1  = stl_p1.begin();
-                                                                     it1 != stl_p1.end()  ;
-                                                                   ++it1                  )
+                for (auto const& elem : stl_p1)
                 {
-                    ::comphelper::SequenceAsHashMap::const_iterator it2 = stl_p2.find(it1->first);
+                    ::comphelper::SequenceAsHashMap::const_iterator it2 = stl_p2.find(elem.first);
                     if (it2 == stl_p2.end())
                     {
                         return false;
                     }
-                    if (!isSubSet(it1->second, it2->second))
+                    if (!isSubSet(elem.second, it2->second))
                     {
                         return false;
                     }
@@ -255,16 +249,14 @@ bool isSubSet(const css::uno::Any& aSubSet,
                 ::comphelper::SequenceAsHashMap stl_n1(uno_n1);
                 ::comphelper::SequenceAsHashMap stl_n2(uno_n2);
 
-                for (::comphelper::SequenceAsHashMap::const_iterator it1  = stl_n1.begin();
-                                                                     it1 != stl_n1.end()  ;
-                                                                   ++it1                  )
+                for (auto const& elem : stl_n1)
                 {
-                    ::comphelper::SequenceAsHashMap::const_iterator it2 = stl_n2.find(it1->first);
+                    ::comphelper::SequenceAsHashMap::const_iterator it2 = stl_n2.find(elem.first);
                     if (it2 == stl_n2.end())
                     {
                         return false;
                     }
-                    if (!isSubSet(it1->second, it2->second))
+                    if (!isSubSet(elem.second, it2->second))
                     {
                         return false;
                     }
@@ -283,19 +275,17 @@ bool isSubSet(const css::uno::Any& aSubSet,
 
 bool CacheItem::haveProps(const CacheItem& lProps) const
 {
-    for (const_iterator pIt  = lProps.begin();
-                        pIt != lProps.end()  ;
-                      ++pIt                  )
+    for (auto const& prop : lProps)
     {
         // i) one required property does not exist at this item => return false
-        const_iterator pItThis = find(pIt->first);
+        const_iterator pItThis = find(prop.first);
         if (pItThis == end())
         {
             return false;
         }
 
         // ii) one item does not have the right value => return false
-        if (!isSubSet(pIt->second, pItThis->second))
+        if (!isSubSet(prop.second, pItThis->second))
         {
             return false;
         }
@@ -310,15 +300,13 @@ bool CacheItem::haveProps(const CacheItem& lProps) const
 
 bool CacheItem::dontHaveProps(const CacheItem& lProps) const
 {
-    for (const_iterator pIt  = lProps.begin();
-                        pIt != lProps.end()  ;
-                      ++pIt                  )
+    for (auto const& prop : lProps)
     {
         // i) one item does not exist in general
         //    => continue with next one, because
         //    "excluding" means... "don't have it".
         //    And "not exists" matches to "don't have it".
-        const_iterator pItThis = find(pIt->first);
+        const_iterator pItThis = find(prop.first);
         if (pItThis == end())
         {
             continue;
@@ -327,7 +315,7 @@ bool CacheItem::dontHaveProps(const CacheItem& lProps) const
         // ii) one item have the right value => return false
         //     because this item has the requested property...
         //     But we checked for "don't have it" here.
-        if (isSubSet(pIt->second, pItThis->second))
+        if (isSubSet(prop.second, pItThis->second))
         {
             return false;
         }

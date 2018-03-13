@@ -365,15 +365,12 @@ bool compare_fonts_for_me(const vcl::Font& rFont1, const vcl::Font& rFont2)
 
 FlashFont& Writer::Impl_getFont( const vcl::Font& rFont )
 {
-    FontMap::iterator aIter( maFonts.begin() );
-    const FontMap::iterator aEnd( maFonts.end() );
-
-    for(; aIter != aEnd; ++aIter)
+    for (auto const& font : maFonts)
     {
-        const vcl::Font tempFont = (*aIter)->getFont();
+        const vcl::Font tempFont = font->getFont();
         if( compare_fonts_for_me(tempFont, rFont) )
         {
-            return **aIter;
+            return *font;
         }
     }
 

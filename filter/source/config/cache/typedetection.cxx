@@ -357,10 +357,8 @@ public:
 void printFlatDetectionList(const char* caption, const FlatDetection& types)
 {
     cout << "-- " << caption << " (size=" << types.size() << ")" << endl;
-    FlatDetection::const_iterator it = types.begin(), itEnd = types.end();
-    for (; it != itEnd; ++it)
+    for (auto const& item : types)
     {
-        const FlatDetectionInfo& item = *it;
         cout << "  type='" << item.sType << "'; match by extension (" << item.bMatchByExtension
             << "); match by pattern (" << item.bMatchByPattern << "); pre-selected by doc service ("
             << item.bPreselectedByDocumentService << ")" << endl;
@@ -508,19 +506,18 @@ void TypeDetection::impl_checkResultsAndAddBestFilter(utl::MediaDescriptor& rDes
             aLock.clear();
             // <- SAFE
 
-            for (OUStringList::const_iterator pIt  = lFilters.begin();
-                  pIt != lFilters.end(); ++pIt)
+            for (auto const& filter : lFilters)
             {
                 // SAFE ->
                 aLock.reset();
                 try
                 {
-                    CacheItem aFilter = cache.getItem(FilterCache::E_FILTER, *pIt);
+                    CacheItem aFilter = cache.getItem(FilterCache::E_FILTER, filter);
                     sal_Int32 nFlags  = 0;
                     aFilter[PROPNAME_FLAGS] >>= nFlags;
 
                     if (static_cast<SfxFilterFlags>(nFlags) & SfxFilterFlags::IMPORT)
-                        sFilter = *pIt;
+                        sFilter = filter;
                     if (static_cast<SfxFilterFlags>(nFlags) & SfxFilterFlags::PREFERED)
                         break;
                 }
@@ -589,12 +586,9 @@ void TypeDetection::impl_checkResultsAndAddBestFilter(utl::MediaDescriptor& rDes
         aLock.clear();
         // <- SAFE
 
-        OUStringList::const_iterator pIt;
-        for (  pIt  = lFilters.begin();
-               pIt != lFilters.end()  ;
-             ++pIt                    )
+        for (auto const& filter : lFilters)
         {
-            sFilter = *pIt;
+            sFilter = filter;
 
             // SAFE ->
             aLock.reset();
@@ -683,11 +677,9 @@ bool TypeDetection::impl_getPreselectionForType(
         OUStringList lExtensions(comphelper::sequenceToContainer<OUStringList>(aType[PROPNAME_EXTENSIONS].get<css::uno::Sequence<OUString> >() ));
         OUStringList lURLPattern(comphelper::sequenceToContainer<OUStringList>(aType[PROPNAME_URLPATTERN].get<css::uno::Sequence<OUString> >() ));
 
-        for (OUStringList::const_iterator pIt  = lExtensions.begin();
-                                          pIt != lExtensions.end()  ;
-                                        ++pIt                       )
+        for (auto const& extension : lExtensions)
         {
-            OUString sCheckExtension(pIt->toAsciiLowerCase());
+            OUString sCheckExtension(extension.toAsciiLowerCase());
             if (sCheckExtension == sExtension)
             {
                 bBreakDetection        = true;
@@ -698,14 +690,12 @@ bool TypeDetection::impl_getPreselectionForType(
 
         if (!bBreakDetection)
         {
-            for (OUStringList::const_iterator pIt  = lURLPattern.begin();
-                                              pIt != lURLPattern.end()  ;
-                                            ++pIt                       )
+            for (auto const& elem : lURLPattern)
             {
-                WildCard aCheck(*pIt);
+                WildCard aCheck(elem);
                 if (aCheck.Matches(aParsedURL.Main))
                 {
-                    bMatchByPattern        = true;
+                    bMatchByPattern = true;
                     break;
                 }
             }
@@ -766,11 +756,9 @@ bool TypeDetection::impl_getPreselectionForDocumentService(
     // But use temp. list of "preselected types" instead of incoming rFlatTypes list!
     // The reason behind: we must filter the obtained results. And copying stl entries
     // is an easier job than removing them .-)
-    for (OUStringList::const_iterator pFilter  = lFilters.begin();
-         pFilter != lFilters.end();
-         ++pFilter)
+    for (auto const& filter : lFilters)
     {
-        OUString aType = impl_getTypeFromFilter(*pFilter);
+        OUString aType = impl_getTypeFromFilter(filter);
         if (aType.isEmpty())
             continue;
 
@@ -818,9 +806,9 @@ void TypeDetection::impl_getAllFormatTypes(
     }
 
     // Retrieve the default type for each of these filters, and store them.
-    for (OUStringList::const_iterator it = aFilterNames.begin(); it != aFilterNames.end(); ++it)
+    for (auto const& filterName : aFilterNames)
     {
-        OUString aType = impl_getTypeFromFilter(*it);
+        OUString aType = impl_getTypeFromFilter(filterName);
 
         if (aType.isEmpty())
             continue;
@@ -834,18 +822,17 @@ void TypeDetection::impl_getAllFormatTypes(
         // Get all types that match the URL alone.
         FlatDetection aFlatByURL;
         TheFilterCache::get().detectFlatForURL(aParsedURL, aFlatByURL);
-        FlatDetection::const_iterator it = aFlatByURL.begin(), itEnd = aFlatByURL.end();
-        for (; it != itEnd; ++it)
+        for (auto const& elem : aFlatByURL)
         {
-            FlatDetection::iterator itPos = std::find_if(rFlatTypes.begin(), rFlatTypes.end(), FindByType(it->sType));
+            FlatDetection::iterator itPos = std::find_if(rFlatTypes.begin(), rFlatTypes.end(), FindByType(elem.sType));
             if (itPos == rFlatTypes.end())
                 // Not in the list yet.
-                rFlatTypes.push_back(*it);
+                rFlatTypes.push_back(elem);
             else
             {
                 // Already in the list. Update the flags.
                 FlatDetectionInfo& rInfo = *itPos;
-                const FlatDetectionInfo& rThisInfo = *it;
+                const FlatDetectionInfo& rThisInfo = elem;
                 if (rThisInfo.bMatchByExtension)
                     rInfo.bMatchByExtension = true;
                 if (rThisInfo.bMatchByPattern)
@@ -899,12 +886,11 @@ OUString TypeDetection::impl_detectTypeFlatAndDeep(      utl::MediaDescriptor& r
     //    or any needed information could not be
     //    obtained from the cache                 => ignore it, and continue with search
 
-    for (FlatDetection::const_iterator pFlatIt  = lFlatTypes.begin();
-                                       pFlatIt != lFlatTypes.end() && !m_bCancel;
-                                     ++pFlatIt                      )
+    for (auto const& flatTypeInfo : lFlatTypes)
     {
-        const FlatDetectionInfo& aFlatTypeInfo = *pFlatIt;
-        OUString sFlatType = aFlatTypeInfo.sType;
+        if (m_bCancel)
+            break;
+        OUString sFlatType = flatTypeInfo.sType;
 
         if (!impl_validateAndSetTypeOnDescriptor(rDescriptor, sFlatType))
             continue;
@@ -912,7 +898,7 @@ OUString TypeDetection::impl_detectTypeFlatAndDeep(      utl::MediaDescriptor& r
         // b)
         if (
             (!bAllowDeep                  ) ||
-            (aFlatTypeInfo.bMatchByPattern)
+            (flatTypeInfo.bMatchByPattern)
            )
         {
             return sFlatType;

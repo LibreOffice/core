@@ -108,11 +108,9 @@ void BitStream::writeTo( SvStream& out )
 {
     pad();
 
-    std::vector< sal_uInt8 >::iterator aIter( maData.begin() );
-    const std::vector< sal_uInt8>::iterator aEnd( maData.end() );
-    while(aIter != aEnd)
+    for (auto const& data : maData)
     {
-        out.WriteUChar( *aIter++ );
+        out.WriteUChar(data);
     }
 }
 
@@ -336,16 +334,16 @@ Sprite::Sprite( sal_uInt16 nId )
 
 Sprite::~Sprite()
 {
-    for(std::vector< Tag* >::iterator i = maTags.begin(); i != maTags.end(); ++i)
-        delete *i;
+    for (auto const& tag : maTags)
+        delete tag;
 }
 
 
 void Sprite::write( SvStream& out )
 {
     SvMemoryStream aTmp;
-    for(std::vector< Tag* >::iterator i = maTags.begin(); i != maTags.end(); ++i)
-        (*i)->write( aTmp );
+    for (auto const& tag : maTags)
+        tag->write( aTmp );
 
     if( !mnFrames )
         mnFrames = 1;
@@ -464,8 +462,8 @@ void FlashFont::write( SvStream& out )
     sal_uInt16 nGlyphs = uInt16_( maGlyphOffsets.size() );
     sal_uInt16 nOffset = nGlyphs * sizeof( sal_uInt16 );
 
-    for(std::vector< sal_uInt16 >::iterator i = maGlyphOffsets.begin(); i != maGlyphOffsets.end(); ++i)
-        aTag.addUI16( nOffset + (*i) );
+    for (auto const& glyphOffset : maGlyphOffsets)
+        aTag.addUI16( nOffset + glyphOffset );
 
     aTag.addBits( maGlyphData );
 
@@ -625,10 +623,10 @@ void FillStyle::Impl_addGradient( Tag* pTag ) const
 
     pTag->addUI8( static_cast<sal_uInt8>( aGradientRecords.size() ) );
 
-    for(std::vector< GradRecord >::iterator i = aGradientRecords.begin(); i != aGradientRecords.end(); ++i)
+    for (auto const& gradientRecord : aGradientRecords)
     {
-        pTag->addUI8( (*i).mnRatio );
-        pTag->addRGBA( (*i).maColor );
+        pTag->addUI8( gradientRecord.mnRatio );
+        pTag->addRGBA( gradientRecord.maColor );
     }
 }
 
