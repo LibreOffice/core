@@ -17,13 +17,15 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <comphelper/threadpool.hxx>
+
 #include <vcl/bitmapaccess.hxx>
-#include <bitmapscalesuper.hxx>
+
 #include <bitmapwriteaccess.hxx>
+#include <bitmapscalesuper.hxx>
 
 #include <algorithm>
 #include <memory>
-#include <comphelper/threadpool.hxx>
 
 namespace {
 
@@ -927,8 +929,10 @@ BitmapScaleSuperFilter::BitmapScaleSuperFilter(const double& rScaleX, const doub
 BitmapScaleSuperFilter::~BitmapScaleSuperFilter()
 {}
 
-bool BitmapScaleSuperFilter::execute(Bitmap& rBitmap)
+BitmapEx BitmapScaleSuperFilter::execute(BitmapEx const& rBitmap)
 {
+    Bitmap aBitmap = const_cast<Bitmap&>(rBitmap.GetBitmapRef());
+
     bool bRet = false;
 
     const Size aSizePix(rBitmap.GetSizePixel());
@@ -945,122 +949,132 @@ bool BitmapScaleSuperFilter::execute(Bitmap& rBitmap)
     const double fScaleThresh = 0.6;
 
     if (nDstW <= 1 || nDstH <= 1)
-        return false;
-
-    Bitmap::ScopedReadAccess pReadAccess(rBitmap);
-
-    Bitmap aOutBmp(Size(nDstW, nDstH), 24);
-    BitmapScopedWriteAccess pWriteAccess(aOutBmp);
-
-    const long nStartY = 0;
-    const long nEndY   = nDstH - 1;
-
-    if (pReadAccess && pWriteAccess)
+        return BitmapEx();
     {
-        ScaleRangeFn pScaleRangeFn;
-        ScaleContext aContext( pReadAccess.get(),
-                               pWriteAccess.get(),
-                               pReadAccess->Width(),
-                               pWriteAccess->Width(),
-                               pReadAccess->Height(),
-                               pWriteAccess->Height(),
-                               bVMirr, bHMirr );
+        Bitmap::ScopedReadAccess pReadAccess(aBitmap);
 
-        bool bScaleUp = fScaleX >= fScaleThresh && fScaleY >= fScaleThresh;
-        if( pReadAccess->HasPalette() )
+        Bitmap aOutBmp(Size(nDstW, nDstH), 24);
+
+        BitmapScopedWriteAccess pWriteAccess(aOutBmp);
+
+        const long nStartY = 0;
+        const long nEndY   = nDstH - 1;
+
+        if (pReadAccess && pWriteAccess)
         {
-            switch( pReadAccess->GetScanlineFormat() )
+            ScaleRangeFn pScaleRangeFn;
+            ScaleContext aContext( pReadAccess.get(),
+                                   pWriteAccess.get(),
+                                   pReadAccess->Width(),
+                                   pWriteAccess->Width(),
+                                   pReadAccess->Height(),
+                                   pWriteAccess->Height(),
+                                   bVMirr, bHMirr );
+
+            bool bScaleUp = fScaleX >= fScaleThresh && fScaleY >= fScaleThresh;
+            if( pReadAccess->HasPalette() )
             {
-            case ScanlineFormat::N8BitPal:
-                pScaleRangeFn = bScaleUp ? scalePallete8bit : scalePallete8bit2;
-                break;
-            default:
-                pScaleRangeFn = bScaleUp ? scalePalleteGeneral
-                                        : scalePalleteGeneral2;
-                break;
-            }
-        }
-        else
-        {
-            switch( pReadAccess->GetScanlineFormat() )
-            {
-            case ScanlineFormat::N24BitTcBgr:
-                pScaleRangeFn = bScaleUp ? scale24bitBGR : scale24bitBGR2;
-                break;
-            case ScanlineFormat::N24BitTcRgb:
-                pScaleRangeFn = bScaleUp ? scale24bitRGB : scale24bitRGB2;
-                break;
-            default:
-                pScaleRangeFn = bScaleUp ? scaleNonPalleteGeneral
-                                        : scaleNonPalleteGeneral2;
-                break;
-            }
-        }
-
-        // We want to thread - only if there is a lot of work to do:
-        // We work hard when there is a large destination image, or
-        // A large source image.
-        bool bHorizontalWork = pReadAccess->Width() > 512 || pWriteAccess->Width() > 512;
-        bool bUseThreads = true;
-
-        static bool bDisableThreadedScaling = getenv ("VCL_NO_THREAD_SCALE");
-        if ( bDisableThreadedScaling || !bHorizontalWork ||
-             nEndY - nStartY < SCALE_THREAD_STRIP )
-        {
-            SAL_INFO("vcl.gdi", "Scale in main thread");
-            bUseThreads = false;
-        }
-
-        if (bUseThreads)
-        {
-            try
-            {
-                // partition and queue work
-                comphelper::ThreadPool &rShared = comphelper::ThreadPool::getSharedOptimalPool();
-                std::shared_ptr<comphelper::ThreadTaskTag> pTag = comphelper::ThreadPool::createThreadTaskTag();
-                sal_uInt32 nThreads = rShared.getWorkerCount();
-                assert( nThreads > 0 );
-                sal_uInt32 nStrips = ((nEndY - nStartY) + SCALE_THREAD_STRIP - 1) / SCALE_THREAD_STRIP;
-                sal_uInt32 nStripsPerThread = nStrips / nThreads;
-                SAL_INFO("vcl.gdi", "Scale in " << nStrips << " strips " << nStripsPerThread << " per thread we have " << nThreads << " CPU threads ");
-                long nStripY = nStartY;
-                for ( sal_uInt32 t = 0; t < nThreads - 1; t++ )
+                switch( pReadAccess->GetScanlineFormat() )
                 {
-                    ScaleTask *pTask = new ScaleTask( pTag, pScaleRangeFn );
-                    for ( sal_uInt32 j = 0; j < nStripsPerThread; j++ )
-                    {
-                        ScaleRangeContext aRC( &aContext, nStripY );
-                        pTask->push( aRC );
-                        nStripY += SCALE_THREAD_STRIP;
-                    }
-                    rShared.pushTask( pTask );
+                case ScanlineFormat::N8BitPal:
+                    pScaleRangeFn = bScaleUp ? scalePallete8bit : scalePallete8bit2;
+                    break;
+                default:
+                    pScaleRangeFn = bScaleUp ? scalePalleteGeneral
+                                            : scalePalleteGeneral2;
+                    break;
                 }
-                // finish any remaining bits here
-                pScaleRangeFn( aContext, nStripY, nEndY );
-
-                rShared.waitUntilDone(pTag);
-                SAL_INFO("vcl.gdi", "All threaded scaling tasks complete");
             }
-            catch (...)
+            else
             {
-                SAL_WARN("vcl.gdi", "threaded bitmap scaling failed");
+                switch( pReadAccess->GetScanlineFormat() )
+                {
+                case ScanlineFormat::N24BitTcBgr:
+                    pScaleRangeFn = bScaleUp ? scale24bitBGR : scale24bitBGR2;
+                    break;
+                case ScanlineFormat::N24BitTcRgb:
+                    pScaleRangeFn = bScaleUp ? scale24bitRGB : scale24bitRGB2;
+                    break;
+                default:
+                    pScaleRangeFn = bScaleUp ? scaleNonPalleteGeneral
+                                            : scaleNonPalleteGeneral2;
+                    break;
+                }
+            }
+
+            // We want to thread - only if there is a lot of work to do:
+            // We work hard when there is a large destination image, or
+            // A large source image.
+            bool bHorizontalWork = pReadAccess->Width() > 512 || pWriteAccess->Width() > 512;
+            bool bUseThreads = true;
+
+            static bool bDisableThreadedScaling = getenv ("VCL_NO_THREAD_SCALE");
+            if ( bDisableThreadedScaling || !bHorizontalWork ||
+                 nEndY - nStartY < SCALE_THREAD_STRIP )
+            {
+                SAL_INFO("vcl.gdi", "Scale in main thread");
                 bUseThreads = false;
             }
+
+            if (bUseThreads)
+            {
+                try
+                {
+                    // partition and queue work
+                    comphelper::ThreadPool &rShared = comphelper::ThreadPool::getSharedOptimalPool();
+                    std::shared_ptr<comphelper::ThreadTaskTag> pTag = comphelper::ThreadPool::createThreadTaskTag();
+                    sal_uInt32 nThreads = rShared.getWorkerCount();
+                    assert( nThreads > 0 );
+                    sal_uInt32 nStrips = ((nEndY - nStartY) + SCALE_THREAD_STRIP - 1) / SCALE_THREAD_STRIP;
+                    sal_uInt32 nStripsPerThread = nStrips / nThreads;
+                    SAL_INFO("vcl.gdi", "Scale in " << nStrips << " strips " << nStripsPerThread << " per thread we have " << nThreads << " CPU threads ");
+                    long nStripY = nStartY;
+                    for ( sal_uInt32 t = 0; t < nThreads - 1; t++ )
+                    {
+                        ScaleTask *pTask = new ScaleTask( pTag, pScaleRangeFn );
+                        for ( sal_uInt32 j = 0; j < nStripsPerThread; j++ )
+                        {
+                            ScaleRangeContext aRC( &aContext, nStripY );
+                            pTask->push( aRC );
+                            nStripY += SCALE_THREAD_STRIP;
+                        }
+                        rShared.pushTask( pTask );
+                    }
+                    // finish any remaining bits here
+                    pScaleRangeFn( aContext, nStripY, nEndY );
+
+                    rShared.waitUntilDone(pTag);
+                    SAL_INFO("vcl.gdi", "All threaded scaling tasks complete");
+                }
+                catch (...)
+                {
+                    SAL_WARN("vcl.gdi", "threaded bitmap scaling failed");
+                    bUseThreads = false;
+                }
+            }
+
+            if (!bUseThreads)
+                pScaleRangeFn( aContext, nStartY, nEndY );
+
+            bRet = true;
+
+            if (bRet)
+            {
+                aBitmap.AdaptBitCount(aOutBmp);
+                aBitmap = aOutBmp;
+            }
         }
-
-        if (!bUseThreads)
-            pScaleRangeFn( aContext, nStartY, nEndY );
-
-        bRet = true;
     }
 
-    if( bRet )
+    if (bRet)
     {
-        rBitmap.AdaptBitCount(aOutBmp);
-        rBitmap = aOutBmp;
+        tools::Rectangle aRect(Point(0, 0), Point(nDstW, nDstH));
+        aBitmap.Crop(aRect);
+        return BitmapEx(aBitmap);
     }
 
-    return bRet;
+    return BitmapEx();
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
