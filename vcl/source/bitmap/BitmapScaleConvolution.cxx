@@ -371,21 +371,35 @@ bool ImplScaleConvolution(Bitmap& rBitmap, const double& rScaleX, const double& 
 
 } // end anonymous namespace
 
-bool BitmapScaleConvolutionFilter::execute(Bitmap& rBitmap)
+BitmapEx BitmapScaleConvolutionFilter::execute(BitmapEx const& rBitmapEx)
 {
+    bool bRetval = false;
+    Bitmap aBitmap(rBitmapEx.GetBitmap());
 
     switch(meKernelType)
     {
         case ConvolutionKernelType::BiLinear:
-            return ImplScaleConvolution(rBitmap, mrScaleX, mrScaleY, BilinearKernel());
+            bRetval = ImplScaleConvolution(aBitmap, mrScaleX, mrScaleY, BilinearKernel());
+            break;
         case ConvolutionKernelType::BiCubic:
-            return ImplScaleConvolution(rBitmap, mrScaleX, mrScaleY, BicubicKernel());
+            bRetval = ImplScaleConvolution(aBitmap, mrScaleX, mrScaleY, BicubicKernel());
+            break;
         case ConvolutionKernelType::Lanczos3:
-            return ImplScaleConvolution(rBitmap, mrScaleX, mrScaleY, Lanczos3Kernel());
+            bRetval = ImplScaleConvolution(aBitmap, mrScaleX, mrScaleY, Lanczos3Kernel());
+            break;
         default:
             break;
     }
-    return false;
+
+    Size aAfter(aBitmap.GetSizePixel());
+    fprintf( stderr, "size %ld, %ld\n", aAfter.Width(), aAfter.Height() );
+
+    if (bRetval)
+    {
+        return BitmapEx(aBitmap);
+    }
+
+    return BitmapEx();
 }
 
 }
