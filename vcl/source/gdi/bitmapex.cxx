@@ -459,11 +459,6 @@ bool BitmapEx::Crop( const tools::Rectangle& rRectPixel )
     return bRet;
 }
 
-bool BitmapEx::Convert( BmpConversion eConversion )
-{
-    return !!maBitmap && maBitmap.Convert( eConversion );
-}
-
 bool BitmapEx::ReduceColors( sal_uInt16 nNewColorCount )
 {
     return !!maBitmap && maBitmap.ReduceColors( nNewColorCount, BMP_REDUCE_POPULAR );
