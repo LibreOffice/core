@@ -31,7 +31,8 @@
 #include <sal/types.h>
 #include <image.h>
 
-#include <BitmapProcessor.hxx>
+#include <BitmapDisabledImageFilter.hxx>
+#include <BitmapColorizeFilter.hxx>
 
 #if OSL_DEBUG_LEVEL > 0
 #include <rtl/strbuf.hxx>
@@ -125,8 +126,11 @@ void Image::Draw(OutputDevice* pOutDev, const Point& rPos, DrawImageFlags nStyle
         BitmapChecksum aChecksum = mpImplData->maBitmapEx.GetChecksum();
         if (mpImplData->maBitmapChecksum != aChecksum)
         {
+            BitmapEx aDisabledBmpEx(mpImplData->maBitmapEx);
+            BitmapFilter::Filter(aDisabledBmpEx, BitmapDisabledImageFilter());
+
             mpImplData->maBitmapChecksum = aChecksum;
-            mpImplData->maDisabledBitmapEx = BitmapProcessor::createDisabledImage(mpImplData->maBitmapEx);
+            mpImplData->maDisabledBitmapEx = aDisabledBmpEx;
         }
         pOutDev->DrawBitmapEx(rPos, aOutSize, aSrcPos, aBitmapSizePixel, mpImplData->maDisabledBitmapEx);
     }
@@ -146,7 +150,7 @@ void Image::Draw(OutputDevice* pOutDev, const Point& rPos, DrawImageFlags nStyle
                 else
                     aColor = rSettings.GetDeactiveColor();
 
-                BitmapProcessor::colorizeImage(aTempBitmapEx, aColor);
+                BitmapFilter::Filter(aTempBitmapEx, BitmapColorizeFilter(aColor));
             }
 
             if (nStyle & DrawImageFlags::SemiTransparent)
