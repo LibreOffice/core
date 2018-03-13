@@ -8,28 +8,15 @@
  *
  */
 
-#ifndef INCLUDED_VCL_INC_BITMAPFILTER_HXX
-#define INCLUDED_VCL_INC_BITMAPFILTER_HXX
+#ifndef INCLUDED_VCL_INC_BITMAPLIGHTENFILTER_HXX
+#define INCLUDED_VCL_INC_BITMAPLIGHTENFILTER_HXX
 
-#include <vcl/bitmap.hxx>
-#include <vcl/bitmapex.hxx>
+#include "bitmapfilter.hxx"
 
-class BitmapFilter
+class VCL_DLLPUBLIC BitmapLightenFilter : public BitmapFilterEx
 {
 public:
-    BitmapFilter();
-    virtual ~BitmapFilter();
-
-    virtual bool execute(Bitmap& rBitmap) = 0;
-};
-
-class VCL_DLLPUBLIC BitmapFilterEx
-{
-public:
-    BitmapFilterEx();
-    virtual ~BitmapFilterEx();
-
-    virtual BitmapEx execute(BitmapEx const & rBitmapEx) = 0;
+    virtual BitmapEx execute(BitmapEx const& rBitmapEx);
 };
 
 #endif

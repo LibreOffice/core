@@ -16,4 +16,10 @@ BitmapFilter::BitmapFilter()
 BitmapFilter::~BitmapFilter()
 {}
 
+BitmapFilterEx::BitmapFilterEx()
+{}
+
+BitmapFilterEx::~BitmapFilterEx()
+{}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
