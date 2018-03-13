@@ -54,14 +54,11 @@ struct ResultListEntry
     explicit ResultListEntry(const ContentProperties& rEntry) : rData( rEntry ) {}
 };
 
-// ResultList.
-typedef std::vector< ResultListEntry* > ResultList;
-
 // struct DataSupplier_Impl.
 struct DataSupplier_Impl
 {
     osl::Mutex                                   m_aMutex;
-    ResultList                                   m_aResults;
+    std::vector< std::unique_ptr<ResultListEntry> > m_aResults;
     rtl::Reference< ODocumentContainer >         m_xContent;
     bool                                         m_bCountFinal;
 
@@ -70,16 +67,7 @@ struct DataSupplier_Impl
         , m_bCountFinal(false)
     {
     }
-    ~DataSupplier_Impl();
 };
-
-DataSupplier_Impl::~DataSupplier_Impl()
-{
-    for (auto const& result : m_aResults)
-    {
-        delete result;
-    }
-}
 
 }
 
@@ -217,7 +205,7 @@ bool DataSupplier::getResult( sal_uInt32 nIndex )
         const OUString* pEnd   = pIter + aSeq.getLength();
         for(pIter = pIter + nPos;pIter != pEnd;++pIter,++nPos)
         {
-            m_pImpl->m_aResults.push_back(
+            m_pImpl->m_aResults.emplace_back(
                             new ResultListEntry( m_pImpl->m_xContent->getContent(*pIter)->getContentProperties() ) );
 
             if ( nPos == nIndex )
@@ -263,7 +251,7 @@ sal_uInt32 DataSupplier::totalCount()
     const OUString* pIter = aSeq.getConstArray();
     const OUString* pEnd   = pIter + aSeq.getLength();
     for(;pIter != pEnd;++pIter)
-        m_pImpl->m_aResults.push_back(
+        m_pImpl->m_aResults.emplace_back(
                         new ResultListEntry( m_pImpl->m_xContent->getContent(*pIter)->getContentProperties() ) );
 
     m_pImpl->m_bCountFinal = true;
