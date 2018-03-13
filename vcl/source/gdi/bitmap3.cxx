@@ -45,181 +45,6 @@
 
 #define GAMMA( _def_cVal, _def_InvGamma )   (static_cast<sal_uInt8>(MinMax(FRound(pow( _def_cVal/255.0,_def_InvGamma)*255.0),0,255)))
 
-#define CALC_ERRORS                                                             \
-                        nTemp = p1T[nX++] >> 12;                              \
-                        nBErr = MinMax( nTemp, 0, 255 );                        \
-                        nBErr = nBErr - FloydIndexMap[ nBC = FloydMap[nBErr] ]; \
-                        nTemp = p1T[nX++] >> 12;                              \
-                        nGErr = MinMax( nTemp, 0, 255 );                        \
-                        nGErr = nGErr - FloydIndexMap[ nGC = FloydMap[nGErr] ]; \
-                        nTemp = p1T[nX] >> 12;                                \
-                        nRErr = MinMax( nTemp, 0, 255 );                        \
-                        nRErr = nRErr - FloydIndexMap[ nRC = FloydMap[nRErr] ];
-
-#define CALC_TABLES3                                        \
-                        p2T[nX++] += FloydError3[nBErr];    \
-                        p2T[nX++] += FloydError3[nGErr];    \
-                        p2T[nX++] += FloydError3[nRErr];
-
-#define CALC_TABLES5                                        \
-                        p2T[nX++] += FloydError5[nBErr];    \
-                        p2T[nX++] += FloydError5[nGErr];    \
-                        p2T[nX++] += FloydError5[nRErr];
-
-#define CALC_TABLES7                                        \
-                        p1T[++nX] += FloydError7[nBErr];    \
-                        p2T[nX++] += FloydError1[nBErr];    \
-                        p1T[nX] += FloydError7[nGErr];      \
-                        p2T[nX++] += FloydError1[nGErr];    \
-                        p1T[nX] += FloydError7[nRErr];      \
-                        p2T[nX] += FloydError1[nRErr];
-
-const extern sal_uLong nVCLRLut[ 6 ] = { 16, 17, 18, 19, 20, 21 };
-const extern sal_uLong nVCLGLut[ 6 ] = { 0, 6, 12, 18, 24, 30 };
-const extern sal_uLong nVCLBLut[ 6 ] = { 0, 36, 72, 108, 144, 180 };
-
-const extern sal_uLong nVCLDitherLut[ 256 ] =
-{
-       0, 49152, 12288, 61440,  3072, 52224, 15360, 64512,   768, 49920, 13056,
-   62208,  3840, 52992, 16128, 65280, 32768, 16384, 45056, 28672, 35840, 19456,
-   48128, 31744, 33536, 17152, 45824, 29440, 36608, 20224, 48896, 32512, 8192,
-   57344,  4096, 53248, 11264, 60416,  7168, 56320,  8960, 58112,  4864, 54016,
-   12032, 61184,  7936, 57088, 40960, 24576, 36864, 20480, 44032, 27648, 39936,
-   23552, 41728, 25344, 37632, 21248, 44800, 28416, 40704, 24320, 2048, 51200,
-   14336, 63488,  1024, 50176, 13312, 62464,  2816, 51968, 15104, 64256,  1792,
-   50944, 14080, 63232, 34816, 18432, 47104, 30720, 33792, 17408, 46080, 29696,
-   35584, 19200, 47872, 31488, 34560, 18176, 46848, 30464, 10240, 59392,  6144,
-   55296,  9216, 58368,  5120, 54272, 11008, 60160,  6912, 56064,  9984, 59136,
-    5888, 55040, 43008, 26624, 38912, 22528, 41984, 25600, 37888, 21504, 43776,
-   27392, 39680, 23296, 42752, 26368, 38656, 22272,   512, 49664, 12800, 61952,
-    3584, 52736, 15872, 65024,   256, 49408, 12544, 61696,  3328, 52480, 15616,
-   64768, 33280, 16896, 45568, 29184, 36352, 19968, 48640, 32256, 33024, 16640,
-   45312, 28928, 36096, 19712, 48384, 32000,  8704, 57856,  4608, 53760, 11776,
-   60928,  7680, 56832,  8448, 57600,  4352, 53504, 11520, 60672,  7424, 56576,
-   41472, 25088, 37376, 20992, 44544, 28160, 40448, 24064, 41216, 24832, 37120,
-   20736, 44288, 27904, 40192, 23808,  2560, 51712, 14848, 64000,  1536, 50688,
-   13824, 62976,  2304, 51456, 14592, 63744,  1280, 50432, 13568, 62720, 35328,
-   18944, 47616, 31232, 34304, 17920, 46592, 30208, 35072, 18688, 47360, 30976,
-   34048, 17664, 46336, 29952, 10752, 59904,  6656, 55808,  9728, 58880,  5632,
-   54784, 10496, 59648,  6400, 55552,  9472, 58624,  5376, 54528, 43520, 27136,
-   39424, 23040, 42496, 26112, 38400, 22016, 43264, 26880, 39168, 22784, 42240,
-   25856, 38144, 21760
-};
-
-const extern sal_uLong nVCLLut[ 256 ] =
-{
-         0,  1286,  2572,  3858,  5144,  6430,  7716,  9002,
-     10288, 11574, 12860, 14146, 15432, 16718, 18004, 19290,
-     20576, 21862, 23148, 24434, 25720, 27006, 28292, 29578,
-     30864, 32150, 33436, 34722, 36008, 37294, 38580, 39866,
-     41152, 42438, 43724, 45010, 46296, 47582, 48868, 50154,
-     51440, 52726, 54012, 55298, 56584, 57870, 59156, 60442,
-     61728, 63014, 64300, 65586, 66872, 68158, 69444, 70730,
-     72016, 73302, 74588, 75874, 77160, 78446, 79732, 81018,
-     82304, 83590, 84876, 86162, 87448, 88734, 90020, 91306,
-     92592, 93878, 95164, 96450, 97736, 99022,100308,101594,
-    102880,104166,105452,106738,108024,109310,110596,111882,
-    113168,114454,115740,117026,118312,119598,120884,122170,
-    123456,124742,126028,127314,128600,129886,131172,132458,
-    133744,135030,136316,137602,138888,140174,141460,142746,
-    144032,145318,146604,147890,149176,150462,151748,153034,
-    154320,155606,156892,158178,159464,160750,162036,163322,
-    164608,165894,167180,168466,169752,171038,172324,173610,
-    174896,176182,177468,178754,180040,181326,182612,183898,
-    185184,186470,187756,189042,190328,191614,192900,194186,
-    195472,196758,198044,199330,200616,201902,203188,204474,
-    205760,207046,208332,209618,210904,212190,213476,214762,
-    216048,217334,218620,219906,221192,222478,223764,225050,
-    226336,227622,228908,230194,231480,232766,234052,235338,
-    236624,237910,239196,240482,241768,243054,244340,245626,
-    246912,248198,249484,250770,252056,253342,254628,255914,
-    257200,258486,259772,261058,262344,263630,264916,266202,
-    267488,268774,270060,271346,272632,273918,275204,276490,
-    277776,279062,280348,281634,282920,284206,285492,286778,
-    288064,289350,290636,291922,293208,294494,295780,297066,
-    298352,299638,300924,302210,303496,304782,306068,307354,
-    308640,309926,311212,312498,313784,315070,316356,317642,
-    318928,320214,321500,322786,324072,325358,326644,327930
-};
-
-const long FloydMap[256] =
-{
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1,
-    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2,
-    2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
-    2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
-    2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
-    3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3,
-    3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3,
-    3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3,
-    3, 3, 3, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
-    4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
-    4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
-    4, 4, 4, 4, 4, 4, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5,
-    5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5
-};
-
-const long FloydError1[61] =
-{
-    -7680, -7424, -7168, -6912, -6656, -6400, -6144,
-    -5888, -5632, -5376, -5120, -4864, -4608, -4352,
-    -4096, -3840, -3584, -3328, -3072, -2816, -2560,
-    -2304, -2048, -1792, -1536, -1280, -1024, -768,
-    -512, -256, 0, 256, 512, 768, 1024, 1280, 1536,
-    1792, 2048, 2304, 2560, 2816, 3072, 3328, 3584,
-    3840, 4096, 4352, 4608, 4864, 5120, 5376, 5632,
-    5888, 6144, 6400, 6656, 6912, 7168, 7424, 7680
-};
-
-const long FloydError3[61] =
-{
-    -23040, -22272, -21504, -20736, -19968, -19200,
-    -18432, -17664, -16896, -16128, -15360, -14592,
-    -13824, -13056, -12288, -11520, -10752, -9984,
-    -9216, -8448, -7680, -6912, -6144, -5376, -4608,
-    -3840, -3072, -2304, -1536, -768, 0, 768, 1536,
-    2304, 3072, 3840, 4608, 5376, 6144, 6912, 7680,
-    8448, 9216, 9984, 10752, 11520, 12288, 13056,
-    13824, 14592, 15360, 16128, 16896, 17664, 18432,
-    19200, 19968, 20736, 21504, 22272, 23040
-};
-
-const long FloydError5[61] =
-{
-    -38400, -37120, -35840, -34560, -33280, -32000,
-    -30720, -29440, -28160, -26880, -25600, -24320,
-    -23040, -21760, -20480, -19200, -17920, -16640,
-    -15360, -14080, -12800, -11520, -10240, -8960,
-    -7680, -6400, -5120, -3840, -2560, -1280,   0,
-    1280, 2560, 3840, 5120, 6400, 7680, 8960, 10240,
-    11520, 12800, 14080, 15360, 16640, 17920, 19200,
-    20480, 21760, 23040, 24320, 25600, 26880, 28160,
-    29440, 30720, 32000, 33280, 34560, 35840, 37120,
-    38400
-};
-
-const long FloydError7[61] =
-{
-    -53760, -51968, -50176, -48384, -46592, -44800,
-    -43008, -41216, -39424, -37632, -35840, -34048,
-    -32256, -30464, -28672, -26880, -25088, -23296,
-    -21504, -19712, -17920, -16128, -14336, -12544,
-    -10752, -8960, -7168, -5376, -3584, -1792,  0,
-    1792, 3584, 5376, 7168, 8960, 10752, 12544, 14336,
-    16128, 17920, 19712, 21504, 23296, 25088, 26880,
-    28672, 30464, 32256, 34048, 35840, 37632, 39424,
-    41216, 43008, 44800, 46592, 48384, 50176, 51968,
-    53760
-};
-
-const long FloydIndexMap[6] =
-{
-    -30,  21, 72, 123, 174, 225
-};
-
 bool Bitmap::Convert( BmpConversion eConversion )
 {
     // try to convert in backend
@@ -880,334 +705,498 @@ void Bitmap::AdaptBitCount(Bitmap& rNew) const
     }
 }
 
-bool Bitmap::Dither( BmpDitherFlags nDitherFlags )
+bool Bitmap::ReduceColors( sal_uInt16 nColorCount, BmpReduce eReduce )
 {
-    bool bRet = false;
+    bool bRet;
 
-    const Size aSizePix( GetSizePixel() );
-
-    if( aSizePix.Width() == 1 || aSizePix.Height() == 1 )
+    if( GetColorCount() <= static_cast<sal_uLong>(nColorCount) )
         bRet = true;
-    else if( nDitherFlags & BmpDitherFlags::Matrix )
-        bRet = ImplDitherMatrix();
-    else if( nDitherFlags & BmpDitherFlags::Floyd )
-        bRet = ImplDitherFloyd();
-    else if( ( nDitherFlags & BmpDitherFlags::Floyd16 ) && ( GetBitCount() == 24 ) )
-        bRet = ImplDitherFloyd16();
+    else if( nColorCount )
+    {
+        if( BMP_REDUCE_SIMPLE == eReduce )
+            bRet = ImplReduceSimple( nColorCount );
+        else if( BMP_REDUCE_POPULAR == eReduce )
+            bRet = ImplReducePopular( nColorCount );
+        else
+            bRet = ImplReduceMedian( nColorCount );
+    }
+    else
+        bRet = false;
 
     return bRet;
 }
 
-bool Bitmap::ImplDitherMatrix()
+bool Bitmap::ImplReduceSimple( sal_uInt16 nColorCount )
 {
-    ScopedReadAccess pReadAcc(*this);
-    Bitmap aNewBmp( GetSizePixel(), 8 );
-    BitmapScopedWriteAccess pWriteAcc(aNewBmp);
+    Bitmap aNewBmp;
+    ScopedReadAccess pRAcc(*this);
+    const sal_uInt16 nColCount = std::min( nColorCount, sal_uInt16(256) );
+    sal_uInt16 nBitCount;
     bool bRet = false;
 
-    if( pReadAcc && pWriteAcc )
+    if( nColCount <= 2 )
+        nBitCount = 1;
+    else if( nColCount <= 16 )
+        nBitCount = 4;
+    else
+        nBitCount = 8;
+
+    if( pRAcc )
     {
-        const sal_uLong nWidth = pReadAcc->Width();
-        const sal_uLong nHeight = pReadAcc->Height();
-        BitmapColor aIndex( sal_uInt8(0) );
+        Octree aOct( *pRAcc, nColCount );
+        const BitmapPalette& rPal = aOct.GetPalette();
 
-        if( pReadAcc->HasPalette() )
+        aNewBmp = Bitmap( GetSizePixel(), nBitCount, &rPal );
+        BitmapScopedWriteAccess pWAcc(aNewBmp);
+
+        if( pWAcc )
         {
-            for( sal_uLong nY = 0; nY < nHeight; nY++ )
-            {
-                Scanline pScanline = pWriteAcc->GetScanline(nY);
-                Scanline pScanlineRead = pReadAcc->GetScanline(nY);
-                for( sal_uLong nX = 0, nModY = ( nY & 0x0FUL ) << 4; nX < nWidth; nX++ )
-                {
-                    const BitmapColor aCol( pReadAcc->GetPaletteColor( pReadAcc->GetIndexFromData( pScanlineRead, nX ) ) );
-                    const sal_uLong nD = nVCLDitherLut[ nModY + ( nX & 0x0FUL ) ];
-                    const sal_uLong nR = ( nVCLLut[ aCol.GetRed() ] + nD ) >> 16;
-                    const sal_uLong nG = ( nVCLLut[ aCol.GetGreen() ] + nD ) >> 16;
-                    const sal_uLong nB = ( nVCLLut[ aCol.GetBlue() ] + nD ) >> 16;
+            const long nWidth = pRAcc->Width();
+            const long nHeight = pRAcc->Height();
 
-                    aIndex.SetIndex( static_cast<sal_uInt8>( nVCLRLut[ nR ] + nVCLGLut[ nG ] + nVCLBLut[ nB ] ) );
-                    pWriteAcc->SetPixelOnData( pScanline, nX, aIndex );
+            if( pRAcc->HasPalette() )
+            {
+                for( long nY = 0; nY < nHeight; nY++ )
+                {
+                    Scanline pScanline = pWAcc->GetScanline(nY);
+                    Scanline pScanlineRead = pRAcc->GetScanline(nY);
+                    for( long nX =0; nX < nWidth; nX++ )
+                    {
+                        auto c = pRAcc->GetPaletteColor( pRAcc->GetIndexFromData( pScanlineRead, nX ) );
+                        pWAcc->SetPixelOnData( pScanline, nX, BitmapColor(static_cast<sal_uInt8>(aOct.GetBestPaletteIndex( c ))) );
+                    }
+                }
+            }
+            else
+            {
+                for( long nY = 0; nY < nHeight; nY++ )
+                {
+                    Scanline pScanline = pWAcc->GetScanline(nY);
+                    Scanline pScanlineRead = pRAcc->GetScanline(nY);
+                    for( long nX =0; nX < nWidth; nX++ )
+                    {
+                        auto c = pRAcc->GetPixelFromData( pScanlineRead, nX );
+                        pWAcc->SetPixelOnData( pScanline, nX, BitmapColor(static_cast<sal_uInt8>(aOct.GetBestPaletteIndex( c ))) );
+                    }
+                }
+            }
+
+            pWAcc.reset();
+            bRet = true;
+        }
+
+        pRAcc.reset();
+    }
+
+    if( bRet )
+    {
+        const MapMode aMap( maPrefMapMode );
+        const Size aSize( maPrefSize );
+
+        *this = aNewBmp;
+        maPrefMapMode = aMap;
+        maPrefSize = aSize;
+    }
+
+    return bRet;
+}
+
+struct PopularColorCount
+{
+    sal_uInt32 mnIndex;
+    sal_uInt32 mnCount;
+};
+
+extern "C" int ImplPopularCmpFnc( const void* p1, const void* p2 )
+{
+    int nRet;
+
+    if( static_cast<PopularColorCount const *>(p1)->mnCount < static_cast<PopularColorCount const *>(p2)->mnCount )
+        nRet = 1;
+    else if( static_cast<PopularColorCount const *>(p1)->mnCount == static_cast<PopularColorCount const *>(p2)->mnCount )
+        nRet = 0;
+    else
+        nRet = -1;
+
+    return nRet;
+}
+
+bool Bitmap::ImplReducePopular( sal_uInt16 nColCount )
+{
+    ScopedReadAccess pRAcc(*this);
+    sal_uInt16 nBitCount;
+    bool bRet = false;
+
+    if( nColCount > 256 )
+        nColCount = 256;
+
+    if( nColCount < 17 )
+        nBitCount = 4;
+    else
+        nBitCount = 8;
+
+    if( pRAcc )
+    {
+        const sal_uInt32 nValidBits = 4;
+        const sal_uInt32 nRightShiftBits = 8 - nValidBits;
+        const sal_uInt32 nLeftShiftBits1 = nValidBits;
+        const sal_uInt32 nLeftShiftBits2 = nValidBits << 1;
+        const sal_uInt32 nColorsPerComponent = 1 << nValidBits;
+        const sal_uInt32 nColorOffset = 256 / nColorsPerComponent;
+        const sal_uInt32 nTotalColors = nColorsPerComponent * nColorsPerComponent * nColorsPerComponent;
+        const long nWidth = pRAcc->Width();
+        const long nHeight = pRAcc->Height();
+        std::unique_ptr<PopularColorCount[]> pCountTable(new PopularColorCount[ nTotalColors ]);
+
+        memset( pCountTable.get(), 0, nTotalColors * sizeof( PopularColorCount ) );
+
+        for( long nR = 0, nIndex = 0; nR < 256; nR += nColorOffset )
+        {
+            for( long nG = 0; nG < 256; nG += nColorOffset )
+            {
+                for( long nB = 0; nB < 256; nB += nColorOffset )
+                {
+                    pCountTable[ nIndex ].mnIndex = nIndex;
+                    nIndex++;
+                }
+            }
+        }
+
+        if( pRAcc->HasPalette() )
+        {
+            for( long nY = 0; nY < nHeight; nY++ )
+            {
+                Scanline pScanlineRead = pRAcc->GetScanline(nY);
+                for( long nX = 0; nX < nWidth; nX++ )
+                {
+                    const BitmapColor& rCol = pRAcc->GetPaletteColor( pRAcc->GetIndexFromData( pScanlineRead, nX ) );
+                    pCountTable[ ( ( static_cast<sal_uInt32>(rCol.GetRed()) >> nRightShiftBits ) << nLeftShiftBits2 ) |
+                                 ( ( static_cast<sal_uInt32>(rCol.GetGreen()) >> nRightShiftBits ) << nLeftShiftBits1 ) |
+                                 ( static_cast<sal_uInt32>(rCol.GetBlue()) >> nRightShiftBits ) ].mnCount++;
                 }
             }
         }
         else
         {
-            for( sal_uLong nY = 0; nY < nHeight; nY++ )
+            for( long nY = 0; nY < nHeight; nY++ )
             {
-                Scanline pScanline = pWriteAcc->GetScanline(nY);
-                Scanline pScanlineRead = pReadAcc->GetScanline(nY);
-                for( sal_uLong nX = 0, nModY = ( nY & 0x0FUL ) << 4; nX < nWidth; nX++ )
+                Scanline pScanlineRead = pRAcc->GetScanline(nY);
+                for( long nX = 0; nX < nWidth; nX++ )
                 {
-                    const BitmapColor aCol( pReadAcc->GetPixelFromData( pScanlineRead, nX ) );
-                    const sal_uLong nD = nVCLDitherLut[ nModY + ( nX & 0x0FUL ) ];
-                    const sal_uLong nR = ( nVCLLut[ aCol.GetRed() ] + nD ) >> 16;
-                    const sal_uLong nG = ( nVCLLut[ aCol.GetGreen() ] + nD ) >> 16;
-                    const sal_uLong nB = ( nVCLLut[ aCol.GetBlue() ] + nD ) >> 16;
-
-                    aIndex.SetIndex( static_cast<sal_uInt8>( nVCLRLut[ nR ] + nVCLGLut[ nG ] + nVCLBLut[ nB ] ) );
-                    pWriteAcc->SetPixelOnData( pScanline, nX, aIndex );
+                    const BitmapColor aCol( pRAcc->GetPixelFromData( pScanlineRead, nX ) );
+                    pCountTable[ ( ( static_cast<sal_uInt32>(aCol.GetRed()) >> nRightShiftBits ) << nLeftShiftBits2 ) |
+                                 ( ( static_cast<sal_uInt32>(aCol.GetGreen()) >> nRightShiftBits ) << nLeftShiftBits1 ) |
+                                 ( static_cast<sal_uInt32>(aCol.GetBlue()) >> nRightShiftBits ) ].mnCount++;
                 }
             }
         }
 
-        bRet = true;
-    }
+        BitmapPalette aNewPal( nColCount );
 
-    pReadAcc.reset();
-    pWriteAcc.reset();
+        qsort( pCountTable.get(), nTotalColors, sizeof( PopularColorCount ), ImplPopularCmpFnc );
 
-    if( bRet )
-    {
-        const MapMode aMap( maPrefMapMode );
-        const Size aSize( maPrefSize );
-
-        *this = aNewBmp;
-
-        maPrefMapMode = aMap;
-        maPrefSize = aSize;
-    }
-
-    return bRet;
-}
-
-bool Bitmap::ImplDitherFloyd()
-{
-    const Size aSize( GetSizePixel() );
-    bool bRet = false;
-
-    if( ( aSize.Width() > 3 ) && ( aSize.Height() > 2 ) )
-    {
-        ScopedReadAccess pReadAcc(*this);
-        Bitmap aNewBmp( GetSizePixel(), 8 );
-        BitmapScopedWriteAccess pWriteAcc(aNewBmp);
-
-        if( pReadAcc && pWriteAcc )
+        for( sal_uInt16 n = 0; n < nColCount; n++ )
         {
-            BitmapColor aColor;
-            long nWidth = pReadAcc->Width();
-            long nWidth1 = nWidth - 1;
-            long nHeight = pReadAcc->Height();
-            long nX;
-            long nW = nWidth * 3;
-            long nW2 = nW - 3;
-            long nRErr, nGErr, nBErr;
-            long nRC, nGC, nBC;
-            std::unique_ptr<long[]> p1(new long[ nW ]);
-            std::unique_ptr<long[]> p2(new long[ nW ]);
-            long* p1T = p1.get();
-            long* p2T = p2.get();
-            long* pTmp;
-            bool bPal = pReadAcc->HasPalette();
+            const PopularColorCount& rPop = pCountTable[ n ];
+            aNewPal[ n ] = BitmapColor( static_cast<sal_uInt8>( ( rPop.mnIndex >> nLeftShiftBits2 ) << nRightShiftBits ),
+                                        static_cast<sal_uInt8>( ( ( rPop.mnIndex >> nLeftShiftBits1 ) & ( nColorsPerComponent - 1 ) ) << nRightShiftBits ),
+                                        static_cast<sal_uInt8>( ( rPop.mnIndex & ( nColorsPerComponent - 1 ) ) << nRightShiftBits ) );
+        }
 
-            pTmp = p2T;
+        Bitmap aNewBmp( GetSizePixel(), nBitCount, &aNewPal );
+        BitmapScopedWriteAccess pWAcc(aNewBmp);
 
-            if( bPal )
+        if( pWAcc )
+        {
+            BitmapColor aDstCol( sal_uInt8(0) );
+            std::unique_ptr<sal_uInt8[]> pIndexMap(new sal_uInt8[ nTotalColors ]);
+
+            for( long nR = 0, nIndex = 0; nR < 256; nR += nColorOffset )
+                for( long nG = 0; nG < 256; nG += nColorOffset )
+                    for( long nB = 0; nB < 256; nB += nColorOffset )
+                        pIndexMap[ nIndex++ ] = static_cast<sal_uInt8>(aNewPal.GetBestIndex( BitmapColor( static_cast<sal_uInt8>(nR), static_cast<sal_uInt8>(nG), static_cast<sal_uInt8>(nB) ) ));
+
+            if( pRAcc->HasPalette() )
             {
-                Scanline pScanlineRead = pReadAcc->GetScanline(0);
-                for( long nZ = 0; nZ < nWidth; nZ++ )
+                for( long nY = 0; nY < nHeight; nY++ )
                 {
-                    aColor = pReadAcc->GetPaletteColor( pReadAcc->GetIndexFromData( pScanlineRead, nZ ) );
-
-                    *pTmp++ = static_cast<long>(aColor.GetBlue()) << 12;
-                    *pTmp++ = static_cast<long>(aColor.GetGreen()) << 12;
-                    *pTmp++ = static_cast<long>(aColor.GetRed()) << 12;
+                    Scanline pScanline = pWAcc->GetScanline(nY);
+                    Scanline pScanlineRead = pRAcc->GetScanline(nY);
+                    for( long nX = 0; nX < nWidth; nX++ )
+                    {
+                        const BitmapColor& rCol = pRAcc->GetPaletteColor( pRAcc->GetIndexFromData( pScanlineRead, nX ) );
+                        aDstCol.SetIndex( pIndexMap[ ( ( static_cast<sal_uInt32>(rCol.GetRed()) >> nRightShiftBits ) << nLeftShiftBits2 ) |
+                                                     ( ( static_cast<sal_uInt32>(rCol.GetGreen()) >> nRightShiftBits ) << nLeftShiftBits1 ) |
+                                                     ( static_cast<sal_uInt32>(rCol.GetBlue()) >> nRightShiftBits ) ] );
+                        pWAcc->SetPixelOnData( pScanline, nX, aDstCol );
+                    }
                 }
             }
             else
             {
-                Scanline pScanlineRead = pReadAcc->GetScanline(0);
-                for( long nZ = 0; nZ < nWidth; nZ++ )
+                for( long nY = 0; nY < nHeight; nY++ )
                 {
-                    aColor = pReadAcc->GetPixelFromData( pScanlineRead, nZ );
-
-                    *pTmp++ = static_cast<long>(aColor.GetBlue()) << 12;
-                    *pTmp++ = static_cast<long>(aColor.GetGreen()) << 12;
-                    *pTmp++ = static_cast<long>(aColor.GetRed()) << 12;
+                    Scanline pScanline = pWAcc->GetScanline(nY);
+                    Scanline pScanlineRead = pRAcc->GetScanline(nY);
+                    for( long nX = 0; nX < nWidth; nX++ )
+                    {
+                        const BitmapColor aCol( pRAcc->GetPixelFromData( pScanlineRead, nX ) );
+                        aDstCol.SetIndex( pIndexMap[ ( ( static_cast<sal_uInt32>(aCol.GetRed()) >> nRightShiftBits ) << nLeftShiftBits2 ) |
+                                                     ( ( static_cast<sal_uInt32>(aCol.GetGreen()) >> nRightShiftBits ) << nLeftShiftBits1 ) |
+                                                     ( static_cast<sal_uInt32>(aCol.GetBlue()) >> nRightShiftBits ) ] );
+                        pWAcc->SetPixelOnData( pScanline, nX, aDstCol );
+                    }
                 }
             }
 
-            for( long nY = 1, nYAcc = 0; nY <= nHeight; nY++, nYAcc++ )
-            {
-                pTmp = p1T;
-                p1T = p2T;
-                p2T = pTmp;
-
-                if( nY < nHeight )
-                {
-                    if( bPal )
-                    {
-                        Scanline pScanlineRead = pReadAcc->GetScanline(nY);
-                        for( long nZ = 0; nZ < nWidth; nZ++ )
-                        {
-                            aColor = pReadAcc->GetPaletteColor( pReadAcc->GetIndexFromData( pScanlineRead, nZ ) );
-
-                            *pTmp++ = static_cast<long>(aColor.GetBlue()) << 12;
-                            *pTmp++ = static_cast<long>(aColor.GetGreen()) << 12;
-                            *pTmp++ = static_cast<long>(aColor.GetRed()) << 12;
-                        }
-                    }
-                    else
-                    {
-                        Scanline pScanlineRead = pReadAcc->GetScanline(nY);
-                        for( long nZ = 0; nZ < nWidth; nZ++ )
-                        {
-                            aColor = pReadAcc->GetPixelFromData( pScanlineRead, nZ );
-
-                            *pTmp++ = static_cast<long>(aColor.GetBlue()) << 12;
-                            *pTmp++ = static_cast<long>(aColor.GetGreen()) << 12;
-                            *pTmp++ = static_cast<long>(aColor.GetRed()) << 12;
-                        }
-                    }
-                }
-
-                // Examine first Pixel separately
-                nX = 0;
-                long nTemp;
-                CALC_ERRORS;
-                CALC_TABLES7;
-                nX -= 5;
-                CALC_TABLES5;
-                Scanline pScanline = pWriteAcc->GetScanline(nYAcc);
-                pWriteAcc->SetPixelOnData( pScanline, 0, BitmapColor(static_cast<sal_uInt8>(nVCLBLut[ nBC ] + nVCLGLut[nGC ] + nVCLRLut[nRC ])) );
-
-                // Get middle Pixels using a loop
-                long nXAcc;
-                for ( nX = 3, nXAcc = 1; nX < nW2; nXAcc++ )
-                {
-                    CALC_ERRORS;
-                    CALC_TABLES7;
-                    nX -= 8;
-                    CALC_TABLES3;
-                    CALC_TABLES5;
-                    pWriteAcc->SetPixelOnData( pScanline, nXAcc, BitmapColor(static_cast<sal_uInt8>(nVCLBLut[ nBC ] + nVCLGLut[nGC ] + nVCLRLut[nRC ])) );
-                }
-
-                // Treat last Pixel separately
-                CALC_ERRORS;
-                nX -= 5;
-                CALC_TABLES3;
-                CALC_TABLES5;
-                pWriteAcc->SetPixelOnData( pScanline, nWidth1, BitmapColor(static_cast<sal_uInt8>(nVCLBLut[ nBC ] + nVCLGLut[nGC ] + nVCLRLut[nRC ])) );
-            }
-
+            pWAcc.reset();
             bRet = true;
         }
 
-        pReadAcc.reset();
-        pWriteAcc.reset();
+        pCountTable.reset();
+        pRAcc.reset();
 
         if( bRet )
         {
             const MapMode aMap( maPrefMapMode );
-            const Size aPrefSize( maPrefSize );
+            const Size aSize( maPrefSize );
 
             *this = aNewBmp;
-
             maPrefMapMode = aMap;
-            maPrefSize = aPrefSize;
+            maPrefSize = aSize;
         }
     }
 
     return bRet;
 }
 
-bool Bitmap::ImplDitherFloyd16()
+bool Bitmap::ImplReduceMedian( sal_uInt16 nColCount )
 {
-    ScopedReadAccess pReadAcc(*this);
-    Bitmap aNewBmp( GetSizePixel(), 24 );
-    BitmapScopedWriteAccess pWriteAcc(aNewBmp);
+    ScopedReadAccess pRAcc(*this);
+    sal_uInt16 nBitCount;
     bool bRet = false;
 
-    if( pReadAcc && pWriteAcc )
+    if( nColCount < 17 )
+        nBitCount = 4;
+    else if( nColCount < 257 )
+        nBitCount = 8;
+    else
     {
-        const long nWidth = pWriteAcc->Width();
-        const long nWidth1 = nWidth - 1;
-        const long nHeight = pWriteAcc->Height();
-        BitmapColor aColor;
-        BitmapColor aBestCol;
-        ImpErrorQuad aErrQuad;
-        std::unique_ptr<ImpErrorQuad[]> pErrQuad1(new ImpErrorQuad[ nWidth ]);
-        std::unique_ptr<ImpErrorQuad[]> pErrQuad2(new ImpErrorQuad[ nWidth ]);
-        ImpErrorQuad* pQLine1 = pErrQuad1.get();
-        ImpErrorQuad* pQLine2 = nullptr;
-        long nYTmp = 0;
-        bool bQ1 = true;
-
-        for( long nY = 0; nY < std::min( nHeight, 2L ); nY++, nYTmp++ )
-        {
-            pQLine2 = !nY ? pErrQuad1.get() : pErrQuad2.get();
-            Scanline pScanlineRead = pReadAcc->GetScanline(nYTmp);
-            for( long nX = 0; nX < nWidth; nX++ )
-                pQLine2[ nX ] = pReadAcc->GetPixelFromData( pScanlineRead, nX );
-        }
-
-        assert(pQLine2 || nHeight == 0);
-
-        for( long nY = 0; nY < nHeight; nY++, nYTmp++ )
-        {
-            // First RowPixel
-            aBestCol = pQLine1[ 0 ].ImplGetColor();
-            aBestCol.SetRed( ( aBestCol.GetRed() & 248 ) | 7 );
-            aBestCol.SetGreen( ( aBestCol.GetGreen() & 248 ) | 7 );
-            aBestCol.SetBlue( ( aBestCol.GetBlue() & 248 ) | 7 );
-            Scanline pScanline = pWriteAcc->GetScanline(nY);
-            pWriteAcc->SetPixelOnData( pScanline, 0, aBestCol );
-
-            long nX;
-            for( nX = 1; nX < nWidth1; nX++ )
-            {
-                aColor = pQLine1[ nX ].ImplGetColor();
-                aBestCol.SetRed( ( aColor.GetRed() & 248 ) | 7 );
-                aBestCol.SetGreen( ( aColor.GetGreen() & 248 ) | 7 );
-                aBestCol.SetBlue( ( aColor.GetBlue() & 248 ) | 7 );
-                aErrQuad = ( ImpErrorQuad( aColor ) -= aBestCol );
-                pQLine1[ ++nX ].ImplAddColorError7( aErrQuad );
-                pQLine2[ nX-- ].ImplAddColorError1( aErrQuad );
-                pQLine2[ nX-- ].ImplAddColorError5( aErrQuad );
-                pQLine2[ nX++ ].ImplAddColorError3( aErrQuad );
-                pWriteAcc->SetPixelOnData( pScanline, nX, aBestCol );
-            }
-
-            // Last RowPixel
-            aBestCol = pQLine1[ nWidth1 ].ImplGetColor();
-            aBestCol.SetRed( ( aBestCol.GetRed() & 248 ) | 7 );
-            aBestCol.SetGreen( ( aBestCol.GetGreen() & 248 ) | 7 );
-            aBestCol.SetBlue( ( aBestCol.GetBlue() & 248 ) | 7 );
-            pWriteAcc->SetPixelOnData( pScanline, nX, aBestCol );
-
-            // Refill/copy row buffer
-            pQLine1 = pQLine2;
-            bQ1 = !bQ1;
-            pQLine2 = bQ1 ? pErrQuad2.get() : pErrQuad1.get();
-
-            if( nYTmp < nHeight )
-            {
-                Scanline pScanlineRead = pReadAcc->GetScanline(nYTmp);
-                for( nX = 0; nX < nWidth; nX++ )
-                    pQLine2[ nX ] = pReadAcc->GetPixelFromData( pScanlineRead, nX );
-            }
-        }
-
-        bRet = true;
+        OSL_FAIL( "Bitmap::ImplReduceMedian(): invalid color count!" );
+        nBitCount = 8;
+        nColCount = 256;
     }
 
-    pReadAcc.reset();
-    pWriteAcc.reset();
-
-    if( bRet )
+    if( pRAcc )
     {
-        const MapMode aMap( maPrefMapMode );
-        const Size aSize( maPrefSize );
+        Bitmap aNewBmp( GetSizePixel(), nBitCount );
+        BitmapScopedWriteAccess pWAcc(aNewBmp);
 
-        *this = aNewBmp;
+        if( pWAcc )
+        {
+            const sal_uLong nSize = 32768 * sizeof( sal_uLong );
+            sal_uLong* pColBuf = static_cast<sal_uLong*>(rtl_allocateMemory( nSize ));
+            const long nWidth = pWAcc->Width();
+            const long nHeight = pWAcc->Height();
+            long nIndex = 0;
 
-        maPrefMapMode = aMap;
-        maPrefSize = aSize;
+            memset( pColBuf, 0, nSize );
+
+            // create Buffer
+            if( pRAcc->HasPalette() )
+            {
+                for( long nY = 0; nY < nHeight; nY++ )
+                {
+                    Scanline pScanlineRead = pRAcc->GetScanline(nY);
+                    for( long nX = 0; nX < nWidth; nX++ )
+                    {
+                        const BitmapColor& rCol = pRAcc->GetPaletteColor( pRAcc->GetIndexFromData( pScanlineRead, nX ) );
+                        pColBuf[ RGB15( rCol.GetRed() >> 3, rCol.GetGreen() >> 3, rCol.GetBlue() >> 3 ) ]++;
+                    }
+                }
+            }
+            else
+            {
+                for( long nY = 0; nY < nHeight; nY++ )
+                {
+                    Scanline pScanlineRead = pRAcc->GetScanline(nY);
+                    for( long nX = 0; nX < nWidth; nX++ )
+                    {
+                        const BitmapColor aCol( pRAcc->GetPixelFromData( pScanlineRead, nX ) );
+                        pColBuf[ RGB15( aCol.GetRed() >> 3, aCol.GetGreen() >> 3, aCol.GetBlue() >> 3 ) ]++;
+                    }
+                }
+            }
+
+            // create palette via median cut
+            BitmapPalette aPal( pWAcc->GetPaletteEntryCount() );
+            ImplMedianCut( pColBuf, aPal, 0, 31, 0, 31, 0, 31,
+                           nColCount, nWidth * nHeight, nIndex );
+
+            // do mapping of colors to palette
+            InverseColorMap aMap( aPal );
+            pWAcc->SetPalette( aPal );
+            for( long nY = 0; nY < nHeight; nY++ )
+            {
+                Scanline pScanline = pWAcc->GetScanline(nY);
+                for( long nX = 0; nX < nWidth; nX++ )
+                    pWAcc->SetPixelOnData( pScanline, nX, BitmapColor(static_cast<sal_uInt8>( aMap.GetBestPaletteIndex( pRAcc->GetColor( nY, nX ) ))) );
+            }
+
+            rtl_freeMemory( pColBuf );
+            pWAcc.reset();
+            bRet = true;
+        }
+
+        pRAcc.reset();
+
+        if( bRet )
+        {
+            const MapMode aMap( maPrefMapMode );
+            const Size aSize( maPrefSize );
+
+            *this = aNewBmp;
+            maPrefMapMode = aMap;
+            maPrefSize = aSize;
+        }
     }
 
     return bRet;
 }
 
+void Bitmap::ImplMedianCut( sal_uLong* pColBuf, BitmapPalette& rPal,
+                            long nR1, long nR2, long nG1, long nG2, long nB1, long nB2,
+                            long nColors, long nPixels, long& rIndex )
+{
+    if( !nPixels )
+        return;
+
+    BitmapColor aCol;
+    const long nRLen = nR2 - nR1;
+    const long nGLen = nG2 - nG1;
+    const long nBLen = nB2 - nB1;
+    sal_uLong* pBuf = pColBuf;
+
+    if( !nRLen && !nGLen && !nBLen )
+    {
+        if( pBuf[ RGB15( nR1, nG1, nB1 ) ] )
+        {
+            aCol.SetRed( static_cast<sal_uInt8>( nR1 << 3 ) );
+            aCol.SetGreen( static_cast<sal_uInt8>( nG1 << 3 ) );
+            aCol.SetBlue( static_cast<sal_uInt8>( nB1 << 3 ) );
+            rPal[ static_cast<sal_uInt16>(rIndex++) ] = aCol;
+        }
+    }
+    else
+    {
+        if( 1 == nColors || 1 == nPixels )
+        {
+            long nPixSum = 0, nRSum = 0, nGSum = 0, nBSum = 0;
+
+            for( long nR = nR1; nR <= nR2; nR++ )
+            {
+                for( long nG = nG1; nG <= nG2; nG++ )
+                {
+                    for( long nB = nB1; nB <= nB2; nB++ )
+                    {
+                        nPixSum = pBuf[ RGB15( nR, nG, nB ) ];
+
+                        if( nPixSum )
+                        {
+                            nRSum += nR * nPixSum;
+                            nGSum += nG * nPixSum;
+                            nBSum += nB * nPixSum;
+                        }
+                    }
+                }
+            }
+
+            aCol.SetRed( static_cast<sal_uInt8>( ( nRSum / nPixels ) << 3 ) );
+            aCol.SetGreen( static_cast<sal_uInt8>( ( nGSum / nPixels ) << 3 ) );
+            aCol.SetBlue( static_cast<sal_uInt8>( ( nBSum / nPixels ) << 3 ) );
+            rPal[ static_cast<sal_uInt16>(rIndex++) ] = aCol;
+        }
+        else
+        {
+            const long nTest = ( nPixels >> 1 );
+            long nPixOld = 0;
+            long nPixNew = 0;
+
+            if( nBLen > nGLen && nBLen > nRLen )
+            {
+                long nB = nB1 - 1;
+
+                while( nPixNew < nTest )
+                {
+                    nB++;
+                    nPixOld = nPixNew;
+                    for( long nR = nR1; nR <= nR2; nR++ )
+                        for( long nG = nG1; nG <= nG2; nG++ )
+                            nPixNew += pBuf[ RGB15( nR, nG, nB ) ];
+                }
+
+                if( nB < nB2 )
+                {
+                    ImplMedianCut( pBuf, rPal, nR1, nR2, nG1, nG2, nB1, nB, nColors >> 1, nPixNew, rIndex );
+                    ImplMedianCut( pBuf, rPal, nR1, nR2, nG1, nG2, nB + 1, nB2, nColors >> 1, nPixels - nPixNew, rIndex );
+                }
+                else
+                {
+                    ImplMedianCut( pBuf, rPal, nR1, nR2, nG1, nG2, nB1, nB - 1, nColors >> 1, nPixOld, rIndex );
+                    ImplMedianCut( pBuf, rPal, nR1, nR2, nG1, nG2, nB, nB2, nColors >> 1, nPixels - nPixOld, rIndex );
+                }
+            }
+            else if( nGLen > nRLen )
+            {
+                long nG = nG1 - 1;
+
+                while( nPixNew < nTest )
+                {
+                    nG++;
+                    nPixOld = nPixNew;
+                    for( long nR = nR1; nR <= nR2; nR++ )
+                        for( long nB = nB1; nB <= nB2; nB++ )
+                            nPixNew += pBuf[ RGB15( nR, nG, nB ) ];
+                }
+
+                if( nG < nG2 )
+                {
+                    ImplMedianCut( pBuf, rPal, nR1, nR2, nG1, nG, nB1, nB2, nColors >> 1, nPixNew, rIndex );
+                    ImplMedianCut( pBuf, rPal, nR1, nR2, nG + 1, nG2, nB1, nB2, nColors >> 1, nPixels - nPixNew, rIndex );
+                }
+                else
+                {
+                    ImplMedianCut( pBuf, rPal, nR1, nR2, nG1, nG - 1, nB1, nB2, nColors >> 1, nPixOld, rIndex );
+                    ImplMedianCut( pBuf, rPal, nR1, nR2, nG, nG2, nB1, nB2, nColors >> 1, nPixels - nPixOld, rIndex );
+                }
+            }
+            else
+            {
+                long nR = nR1 - 1;
+
+                while( nPixNew < nTest )
+                {
+                    nR++;
+                    nPixOld = nPixNew;
+                    for( long nG = nG1; nG <= nG2; nG++ )
+                        for( long nB = nB1; nB <= nB2; nB++ )
+                            nPixNew += pBuf[ RGB15( nR, nG, nB ) ];
+                }
+
+                if( nR < nR2 )
+                {
+                    ImplMedianCut( pBuf, rPal, nR1, nR, nG1, nG2, nB1, nB2, nColors >> 1, nPixNew, rIndex );
+                    ImplMedianCut( pBuf, rPal, nR1 + 1, nR2, nG1, nG2, nB1, nB2, nColors >> 1, nPixels - nPixNew, rIndex );
+                }
+                else
+                {
+                    ImplMedianCut( pBuf, rPal, nR1, nR - 1, nG1, nG2, nB1, nB2, nColors >> 1, nPixOld, rIndex );
+                    ImplMedianCut( pBuf, rPal, nR, nR2, nG1, nG2, nB1, nB2, nColors >> 1, nPixels - nPixOld, rIndex );
+                }
+            }
+        }
+    }
+}
 
 void Bitmap::Vectorize( GDIMetaFile& rMtf, sal_uInt8 cReduce, const Link<long,void>* pProgress )
 {
