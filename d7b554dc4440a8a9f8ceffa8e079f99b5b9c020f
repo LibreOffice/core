@@ -40,6 +40,24 @@
       "revId": "d7b554dc4440a8a9f8ceffa8e079f99b5b9c020f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba2be162_54262217",
+        "filename": "sw/source/core/text/itrform2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 611,
+      "author": {
+        "id": 1000821
+      },
+      "writtenOn": "2018-03-13T14:46:30Z",
+      "side": 1,
+      "message": "nTmp+1 might not be valid. It should be like line 620.",
+      "parentUuid": "ba2be162_343a8e37",
+      "revId": "d7b554dc4440a8a9f8ceffa8e079f99b5b9c020f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
