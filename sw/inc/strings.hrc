@@ -566,7 +566,7 @@
 #define STR_PRINTOPTUI_PRODUCTNAME              NC_("STR_PRINTOPTUI_PRODUCTNAME", "%PRODUCTNAME %s")
 #define STR_PRINTOPTUI_CONTENTS                 NC_("STR_PRINTOPTUI_CONTENTS", "Contents")
 #define STR_PRINTOPTUI_PAGE_BACKGROUND          NC_("STR_PRINTOPTUI_PAGE_BACKGROUND", "Page ba~ckground")
-#define STR_PRINTOPTUI_PICTURES                 NC_("STR_PRINTOPTUI_PICTURES", "P~ictures and other graphic objects")
+#define STR_PRINTOPTUI_PICTURES                 NC_("STR_PRINTOPTUI_PICTURES", "~Images and other graphic objects")
 #define STR_PRINTOPTUI_HIDDEN                   NC_("STR_PRINTOPTUI_HIDDEN", "Hidden te~xt")
 #define STR_PRINTOPTUI_TEXT_PLACEHOLDERS        NC_("STR_PRINTOPTUI_TEXT_PLACEHOLDERS", "~Text placeholders")
 #define STR_PRINTOPTUI_FORM_CONTROLS            NC_("STR_PRINTOPTUI_FORM_CONTROLS", "Form control~s")
