@@ -427,7 +427,7 @@ public:
 
     virtual VclPtr<AbstractSwSelGlossaryDlg> CreateSwSelGlossaryDlg(const OUString &rShortName) = 0;
 
-    virtual VclPtr<VclAbstractDialog> CreateSwSortingDialog(vcl::Window * pParent, SwWrtShell &rSh) = 0;
+    virtual VclPtr<VclAbstractDialog> CreateSwSortingDialog(weld::Window * pParent, SwWrtShell &rSh) = 0;
     virtual VclPtr<VclAbstractDialog> CreateSwTableHeightDialog(vcl::Window *pParent, SwWrtShell &rSh) = 0;
     virtual VclPtr<VclAbstractDialog> CreateSwColumnDialog(vcl::Window *pParent, SwWrtShell &rSh) = 0;
     virtual VclPtr<AbstractSplitTableDialog> CreateSplitTableDialog(weld::Window* pParent, SwWrtShell &rSh) = 0;

@@ -787,7 +787,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
         case FN_SORTING_DLG:
         {
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-            ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateSwSortingDialog(GetView().GetWindow(), rWrtSh));
+            ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateSwSortingDialog(GetView().GetFrameWeld(), rWrtSh));
             pDlg->Execute();
             rReq.Done();
         }

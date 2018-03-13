@@ -23,6 +23,7 @@
 #include <ascfldlg.hxx>
 #include <break.hxx>
 #include <convert.hxx>
+#include <srtdlg.hxx>
 #include <dbinsdlg.hxx>
 #include <DropDownFieldDialog.hxx>
 #include <fldtdlg.hxx>

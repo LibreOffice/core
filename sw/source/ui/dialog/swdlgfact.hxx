@@ -25,6 +25,7 @@ class SwInsertAbstractDlg;
 class SwAsciiFilterDlg;
 class Dialog;
 class SwBreakDlg;
+class SwSortDlg;
 class SfxTabDialog;
 class SwConvertTableDlg;
 class SwInsertDBColAutoPilot;
@@ -99,6 +100,18 @@ class AbstractSwAsciiFilterDlg_Impl : public AbstractSwAsciiFilterDlg
 class VclAbstractDialog_Impl : public VclAbstractDialog
 {
     DECL_ABSTDLG_BASE(VclAbstractDialog_Impl,Dialog)
+};
+
+class AbstractSwSortDlg_Impl : public VclAbstractDialog
+{
+protected:
+    std::unique_ptr<SwSortDlg> m_xDlg;
+public:
+    explicit AbstractSwSortDlg_Impl(SwSortDlg* p)
+        : m_xDlg(p)
+    {
+    }
+    virtual short Execute() override;
 };
 
 class AbstractSwBreakDlg_Impl : public AbstractSwBreakDlg
@@ -449,7 +462,7 @@ public:
 
     virtual VclPtr<VclAbstractDialog> CreateSwAutoMarkDialog(vcl::Window *pParent, SwWrtShell &rSh) override;
     virtual VclPtr<AbstractSwSelGlossaryDlg> CreateSwSelGlossaryDlg(const OUString &rShortName) override;
-    virtual VclPtr<VclAbstractDialog> CreateSwSortingDialog(vcl::Window * pParent, SwWrtShell &rSh) override;
+    virtual VclPtr<VclAbstractDialog> CreateSwSortingDialog(weld::Window * pParent, SwWrtShell &rSh) override;
     virtual VclPtr<VclAbstractDialog> CreateSwTableHeightDialog(vcl::Window *pParent, SwWrtShell &rSh) override;
     virtual VclPtr<VclAbstractDialog> CreateSwColumnDialog(vcl::Window *pParent, SwWrtShell &rSh) override;
     virtual VclPtr<AbstractSplitTableDialog> CreateSplitTableDialog(weld::Window* pParent, SwWrtShell &rSh) override;

@@ -100,6 +100,10 @@ short AbstractSwBreakDlg_Impl::Execute()
 {
     return m_xDlg->execute();
 }
+short AbstractSwSortDlg_Impl::Execute()
+{
+    return m_xDlg->execute();
+}
 IMPL_ABSTDLG_BASE(AbstractTabDialog_Impl);
 short AbstractSwConvertTableDlg_Impl::Execute()
 {
@@ -795,10 +799,9 @@ VclPtr<VclAbstractDialog> SwAbstractDialogFactory_Impl::CreateSwTableHeightDialo
     return VclPtr<VclAbstractDialog_Impl>::Create( pDlg );
 }
 
-VclPtr<VclAbstractDialog> SwAbstractDialogFactory_Impl::CreateSwSortingDialog(vcl::Window *pParent, SwWrtShell &rSh)
+VclPtr<VclAbstractDialog> SwAbstractDialogFactory_Impl::CreateSwSortingDialog(weld::Window *pParent, SwWrtShell &rSh)
 {
-    VclPtr<Dialog> pDlg = VclPtr<SwSortDlg>::Create( pParent, rSh);
-    return VclPtr<VclAbstractDialog_Impl>::Create( pDlg );
+    return VclPtr<AbstractSwSortDlg_Impl>::Create(new SwSortDlg(pParent, rSh));
 }
 
 VclPtr<AbstractSplitTableDialog> SwAbstractDialogFactory_Impl::CreateSplitTableDialog(weld::Window *pParent, SwWrtShell &rSh)
