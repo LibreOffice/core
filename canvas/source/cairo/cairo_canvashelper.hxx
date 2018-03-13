@@ -211,8 +211,6 @@ namespace cairocanvas
 
         css::rendering::IntegerBitmapLayout getMemoryLayout();
 
-        bool hasAlpha() const { return mbHaveAlpha; }
-
         enum ColorType
         {
             LINE_COLOR, FILL_COLOR, TEXT_COLOR, IGNORE_COLOR
