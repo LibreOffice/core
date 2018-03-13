@@ -81,18 +81,13 @@ inline bool isValidBitCount( sal_uInt16 nBitCount )
 
 sal_uInt16 lclBytesPerRow(sal_uInt16 nBits, int nWidth)
 {
-    switch(nBits)
-    {
-    case 1:  return (nWidth + 7) >> 3;
-    case 4:  return (nWidth + 1) >> 1;
-    case 8:  return  nWidth;
-    case 16: return  nWidth * 2;
-    case 24: return  nWidth * 3;
-    case 32: return  nWidth * 4;
-    default:
-        OSL_FAIL("vcl::OpenGLSalBitmap::AllocateUserData(), illegal bitcount!");
-    }
-    return 0;
+    assert ((nBits == 1 || nBits == 4 || nBits == 8 || nBits == 16 || nBits == 24 || nBits == 32)
+            && "vcl::OpenGLSalBitmap::AllocateUserData(), illegal bitcount!");
+
+    if (!isValidBitCount(nBits))
+        return 0;
+
+    return AlignedWidth4Bytes(nBits * nWidth);
 }
 
 typedef std::vector<std::unique_ptr< FixedTextureAtlasManager > > TextureAtlasVector;
