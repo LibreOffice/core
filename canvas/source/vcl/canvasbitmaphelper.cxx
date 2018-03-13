@@ -48,19 +48,6 @@ namespace vclcanvas
     {
     }
 
-    void CanvasBitmapHelper::setBitmap( const BitmapEx& rBitmap )
-    {
-        ENSURE_OR_THROW( mpOutDevProvider,
-                         "Invalid reference device" );
-
-        mpBackBuffer.reset( new BitmapBackBuffer( rBitmap,
-                                                  mpOutDevProvider->getOutDev() ) );
-
-        // tell canvas helper about the new target OutDev (don't
-        // protect state, it's our own VirDev, anyways)
-        setOutDev( mpBackBuffer, false );
-    }
-
     void CanvasBitmapHelper::init( const BitmapEx&                rBitmap,
                                    rendering::XGraphicDevice&     rDevice,
                                    const OutDevProviderSharedPtr& rOutDevReference )
@@ -185,60 +172,6 @@ namespace vclcanvas
         }
 
         return aRes;
-    }
-
-    void CanvasBitmapHelper::setData( const uno::Sequence< sal_Int8 >&      data,
-                                      const rendering::IntegerBitmapLayout& rLayout,
-                                      const geometry::IntegerRectangle2D&   rect )
-    {
-        SAL_INFO( "canvas.vcl", "::vclcanvas::CanvasBitmapHelper::setData()" );
-
-        if( !mpBackBuffer )
-            return; // we're disposed
-
-        const rendering::IntegerBitmapLayout aRefLayout( getMemoryLayout() );
-        ENSURE_ARG_OR_THROW( aRefLayout.PlaneStride != rLayout.PlaneStride ||
-                             aRefLayout.ColorSpace  != rLayout.ColorSpace ||
-                             aRefLayout.Palette     != rLayout.Palette ||
-                             aRefLayout.IsMsbFirst  != rLayout.IsMsbFirst,
-                             "Mismatching memory layout" );
-
-        // retrieve local copies from the BitmapEx, which are later
-        // stored back. Unfortunately, the BitmapEx does not permit
-        // in-place modifications, as they are necessary here.
-
-        BitmapEx newBitmap = vcl::bitmap::CanvasBitmapHelperSetData(data, rect, mpBackBuffer->getBitmapReference());
-        setBitmap( newBitmap );
-    }
-
-    void CanvasBitmapHelper::setPixel( const uno::Sequence< sal_Int8 >&      color,
-                                       const rendering::IntegerBitmapLayout& rLayout,
-                                       const geometry::IntegerPoint2D&       pos )
-    {
-        SAL_INFO( "canvas.vcl", "::vclcanvas::CanvasBitmapHelper::setPixel()" );
-
-        if( !mpBackBuffer )
-            return; // we're disposed
-
-        const Size aBmpSize( mpBackBuffer->getBitmapReference().GetSizePixel() );
-
-        ENSURE_ARG_OR_THROW( pos.X >= 0 && pos.X < aBmpSize.Width(),
-                         "X coordinate out of bounds" );
-        ENSURE_ARG_OR_THROW( pos.Y >= 0 && pos.Y < aBmpSize.Height(),
-                         "Y coordinate out of bounds" );
-        ENSURE_ARG_OR_THROW( color.getLength() > 3,
-                         "not enough color components" );
-
-        const rendering::IntegerBitmapLayout aRefLayout( getMemoryLayout() );
-        ENSURE_ARG_OR_THROW( aRefLayout.PlaneStride != rLayout.PlaneStride ||
-                             aRefLayout.ColorSpace  != rLayout.ColorSpace ||
-                             aRefLayout.Palette     != rLayout.Palette ||
-                             aRefLayout.IsMsbFirst  != rLayout.IsMsbFirst,
-                             "Mismatching memory layout" );
-
-
-        BitmapEx newBitmapEx = vcl::bitmap::CanvasBitmapHelperSetPixel(color, pos, mpBackBuffer->getBitmapReference());
-        setBitmap( newBitmapEx );
     }
 
     uno::Sequence< sal_Int8 > CanvasBitmapHelper::getPixel( rendering::IntegerBitmapLayout& rLayout,

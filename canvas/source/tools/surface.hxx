@@ -134,7 +134,6 @@ namespace canvas
         bool                  mbIsDirty;
 
     private:
-        void refresh( canvas::IColorBuffer& rBuffer ) const;
         void prepareRendering();
 
         basegfx::B2DRectangle getUVCoords() const;

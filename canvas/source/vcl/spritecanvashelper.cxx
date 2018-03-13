@@ -578,7 +578,6 @@ namespace vclcanvas
             {
             }
 
-            void operator()() { *mpTarget += mnIncrement; }
             void operator()( const ::canvas::Sprite::Reference& ) { *mpTarget += mnIncrement; }
             void operator()( T nIncrement ) { *mpTarget += nIncrement; }
 
