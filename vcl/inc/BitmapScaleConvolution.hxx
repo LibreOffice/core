@@ -17,10 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_BITMAPSCALECONVOLUTION_HXX
-#define INCLUDED_VCL_BITMAPSCALECONVOLUTION_HXX
+#ifndef INCLUDED_VCL_INC_BITMAPSCALECONVOLUTION_HXX
+#define INCLUDED_VCL_INC_BITMAPSCALECONVOLUTION_HXX
 
-#include "bitmapfilter.hxx"
+#include <vcl/BitmapFilter.hxx>
 
 namespace vcl
 {

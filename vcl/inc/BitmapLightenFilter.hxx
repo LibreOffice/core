@@ -8,10 +8,10 @@
  *
  */
 
-#ifndef INCLUDED_VCL_INC_BITMAPLIGHTENFILTER_HXX
-#define INCLUDED_VCL_INC_BITMAPLIGHTENFILTER_HXX
+#ifndef INCLUDED_INCLUDE_VCL_BITMAPLIGHTENFILTER_HXX
+#define INCLUDED_INCLUDE_VCL_BITMAPLIGHTENFILTER_HXX
 
-#include "bitmapfilter.hxx"
+#include <vcl/BitmapFilter.hxx>
 
 class VCL_DLLPUBLIC BitmapLightenFilter : public BitmapFilterEx
 {

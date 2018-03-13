@@ -8140,6 +8140,7 @@ include/vcl/wmf.hxx
 include/vcl/wmfexternal.hxx
 include/vcl/wrkwin.hxx
 include/vcl/xtextedt.hxx
+include/vcl/BitmapFilter.hxx
 include/xmloff/DashStyle.hxx
 include/xmloff/DocumentSettingsContext.hxx
 include/xmloff/EnumPropertyHdl.hxx
@@ -17561,7 +17562,6 @@ vcl/inc/accel.h
 vcl/inc/accmgr.hxx
 vcl/inc/android/androidinst.hxx
 vcl/inc/android/svsys.h
-vcl/inc/bitmapfilter.hxx
 vcl/inc/bitmapscalesuper.hxx
 vcl/inc/bmpfast.hxx
 vcl/inc/brdwin.hxx
