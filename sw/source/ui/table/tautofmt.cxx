@@ -65,7 +65,7 @@ SwAutoFormatDlg::SwAutoFormatDlg(weld::Window* pParent, SwWrtShell* pWrtShell,
     , m_xBtnAdd(m_xBuilder->weld_button("add"))
     , m_xBtnRemove(m_xBuilder->weld_button("remove"))
     , m_xBtnRename(m_xBuilder->weld_button("rename"))
-    , m_aWndPreview(m_xBuilder->weld_drawing_area("preview"))
+    , m_xWndPreview(new AutoFormatPreview(m_xBuilder->weld_drawing_area("preview")))
     , m_xTableTable(new SwTableAutoFormatTable)
     , aStrTitle(SwResId(STR_ADD_AUTOFORMAT_TITLE))
     , aStrLabel(SwResId(STR_ADD_AUTOFORMAT_LABEL))
@@ -80,8 +80,13 @@ SwAutoFormatDlg::SwAutoFormatDlg(weld::Window* pParent, SwWrtShell* pWrtShell,
     , bCoreDataChanged(false)
     , bSetAutoFormat(bAutoFormat)
 {
-    m_aWndPreview.DetectRTL(pWrtShell);
+    m_xWndPreview->DetectRTL(pWrtShell);
     m_xTableTable->Load();
+
+    const int nWidth = m_xLbFormat->get_approximate_char_width() * 32;
+    const int nHeight = m_xLbFormat->get_height_rows(8);
+    m_xLbFormat->set_size_request(nWidth, nHeight);
+    m_xWndPreview->set_size_request(nWidth, nHeight);
 
     Init(pSelFormat);
 }
@@ -201,7 +206,7 @@ IMPL_LINK(SwAutoFormatDlg, CheckHdl, weld::ToggleButton&, rBtn, void)
             bCoreDataChanged = true;
         }
 
-        m_aWndPreview.NotifyChange(rData);
+        m_xWndPreview->NotifyChange(rData);
     }
 }
 
@@ -370,7 +375,7 @@ IMPL_LINK_NOARG(SwAutoFormatDlg, SelFormatHdl, weld::TreeView&, void)
     if (nSelPos >= nDfltStylePos)
     {
         m_nIndex = nSelPos - nDfltStylePos;
-        m_aWndPreview.NotifyChange((*m_xTableTable)[m_nIndex]);
+        m_xWndPreview->NotifyChange((*m_xTableTable)[m_nIndex]);
         bBtnEnable = 0 != m_nIndex;
         UpdateChecks( (*m_xTableTable)[m_nIndex], true );
     }
@@ -382,7 +387,7 @@ IMPL_LINK_NOARG(SwAutoFormatDlg, SelFormatHdl, weld::TreeView&, void)
         lcl_SetProperties( &aTmp, false );
 
         if (nOldIdx != m_nIndex)
-            m_aWndPreview.NotifyChange(aTmp);
+            m_xWndPreview->NotifyChange(aTmp);
         UpdateChecks( aTmp, false );
     }
 

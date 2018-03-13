@@ -103,8 +103,6 @@
                         <property name="column_spacing">12</property>
                         <child>
                           <object class="GtkGrid" id="grid2">
-                            <property name="width_request">450</property>
-                            <property name="height_request">200</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="hexpand">True</property>

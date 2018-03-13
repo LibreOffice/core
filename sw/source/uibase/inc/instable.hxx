@@ -35,26 +35,20 @@
 #include <tblafmt.hxx>
 #include <itabenum.hxx>
 
-class SwInsTableDlg : public SfxModalDialog
+class SwInsTableDlg : public weld::GenericDialogController
 {
+    std::unique_ptr<weld::Entry> m_xNameEdit;
+    std::unique_ptr<weld::SpinButton> m_xColNF;
+    std::unique_ptr<weld::SpinButton> m_xRowNF;
+    std::unique_ptr<weld::CheckButton> m_xHeaderCB;
+    std::unique_ptr<weld::CheckButton> m_xRepeatHeaderCB;
+    std::unique_ptr<weld::SpinButton> m_xRepeatHeaderNF;
+    std::unique_ptr<weld::Widget> m_xRepeatGroup;
+    std::unique_ptr<weld::CheckButton> m_xDontSplitCB;
+    std::unique_ptr<weld::Button> m_xInsertBtn;
+    std::unique_ptr<weld::TreeView> m_xLbFormat;
+    std::unique_ptr<AutoFormatPreview> m_xWndPreview;
     TextFilter      m_aTextFilter;
-    VclPtr<Edit>    m_pNameEdit;
-
-    VclPtr<NumericField>    m_pColNF;
-    VclPtr<NumericField>    m_pRowNF;
-
-    VclPtr<CheckBox>        m_pHeaderCB;
-    VclPtr<CheckBox>        m_pRepeatHeaderCB;
-    VclPtr<NumericField>    m_pRepeatHeaderNF;
-    VclPtr<VclContainer>    m_pRepeatGroup;
-
-    VclPtr<CheckBox>        m_pDontSplitCB;
-
-    VclPtr<PushButton>      m_pInsertBtn;
-
-    VclPtr<ListBox>         m_pLbFormat;
-
-    VclPtr<AutoFormatPreviewWindow> m_pWndPreview;
 
     SwWrtShell*     pShell;
     SwTableAutoFormatTable* pTableTable;
@@ -71,18 +65,17 @@ class SwInsTableDlg : public SfxModalDialog
     sal_uInt8 lbIndexToTableIndex( const sal_uInt8 listboxIndex );
     void InitAutoTableFormat();
 
-    DECL_LINK( SelFormatHdl, ListBox&, void );
-    DECL_LINK( ModifyName, Edit&, void );
-    DECL_LINK( ModifyRowCol, Edit&, void );
-    DECL_LINK( OKHdl, Button*, void );
-    DECL_LINK( CheckBoxHdl, Button*, void );
-    DECL_LINK( ReapeatHeaderCheckBoxHdl, Button*, void );
-    DECL_LINK( ModifyRepeatHeaderNF_Hdl, Edit&, void );
+    DECL_LINK(TextFilterHdl, OUString&, bool);
+    DECL_LINK(SelFormatHdl, weld::TreeView&, void);
+    DECL_LINK(ModifyName, weld::Entry&, void);
+    DECL_LINK(ModifyRowCol, weld::SpinButton&, void);
+    DECL_LINK(OKHdl, weld::Button&, void);
+    DECL_LINK(CheckBoxHdl, weld::ToggleButton&, void);
+    DECL_LINK(RepeatHeaderCheckBoxHdl, weld::ToggleButton&, void);
+    DECL_LINK(ModifyRepeatHeaderNF_Hdl, weld::SpinButton&, void);
 
 public:
-    SwInsTableDlg( SwView& rView );
-    virtual ~SwInsTableDlg() override;
-    virtual void dispose() override;
+    SwInsTableDlg(SwView& rView);
 
     void GetValues( OUString& rName, sal_uInt16& rRow, sal_uInt16& rCol,
                     SwInsertTableOptions& rInsTableOpts, OUString& rTableAutoFormatName,
