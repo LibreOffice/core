@@ -142,14 +142,14 @@ private:
                         mpOutliner;          ///< local outliner for outline mode
     std::unique_ptr<SdOutliner>
                         mpInternalOutliner;  ///< internal outliner for creation of text objects
-    Timer*              mpWorkStartupTimer;
+    std::unique_ptr<Timer> mpWorkStartupTimer;
     Idle*               mpOnlineSpellingIdle;
     sd::ShapeList*      mpOnlineSpellingList;
     std::unique_ptr<SvxSearchItem>
                         mpOnlineSearchItem;
     std::vector<std::unique_ptr<sd::FrameView>>
                         maFrameViewList;
-    SdCustomShowList*   mpCustomShowList;
+    std::unique_ptr<SdCustomShowList>   mpCustomShowList;
     ::sd::DrawDocShell* mpDocSh;
     SdTransferable *    mpCreatingTransferable;
     bool                mbHasOnlineSpellErrors;
