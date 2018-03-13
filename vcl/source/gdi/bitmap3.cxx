@@ -34,7 +34,7 @@
 #include "impvect.hxx"
 
 #include "BitmapScaleSuperFilter.hxx"
-#include "BitmapScaleConvolution.hxx"
+#include "BitmapScaleConvolutionFilter.hxx"
 #include <octree.hxx>
 
 #define RGB15( _def_cR, _def_cG, _def_cB )  ((static_cast<sal_uLong>(_def_cR)<<10)|(static_cast<sal_uLong>(_def_cG)<<5)|static_cast<sal_uLong>(_def_cB))
