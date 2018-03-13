@@ -8135,6 +8135,9 @@ include/vcl/wmf.hxx
 include/vcl/wmfexternal.hxx
 include/vcl/wrkwin.hxx
 include/vcl/xtextedt.hxx
+include/vcl/BitmapConverter.hxx
+include/vcl/BitmapFilter.hxx
+include/vcl/BitmapScaleSuperFilter.hxx
 include/xmloff/DashStyle.hxx
 include/xmloff/DocumentSettingsContext.hxx
 include/xmloff/EnumPropertyHdl.hxx
@@ -18034,6 +18037,7 @@ vcl/source/app/timer.cxx
 vcl/source/app/unohelp.cxx
 vcl/source/app/unohelp2.cxx
 vcl/source/app/vclevent.cxx
+vcl/source/bitmap/BitmapDitheringFilter.cxx
 vcl/source/bitmap/BitmapProcessor.cxx
 vcl/source/bitmap/BitmapScaleConvolutionFilter.cxx
 vcl/source/bitmap/BitmapScaleSuperFilter.cxx
@@ -18042,6 +18046,7 @@ vcl/source/bitmap/BitmapTools.cxx
 vcl/source/bitmap/bitmap.cxx
 vcl/source/bitmap/bitmapfilter.cxx
 vcl/source/bitmap/checksum.cxx
+vcl/source/bitmap/BitmapScaleSuperFilter.cxx
 vcl/source/components/dtranscomp.cxx
 vcl/source/components/factory.cxx
 vcl/source/components/fontident.cxx
