@@ -161,9 +161,9 @@ public:
 
 class SC_DLLPUBLIC ScPageHFItem : public SfxPoolItem
 {
-    EditTextObject* pLeftArea;
-    EditTextObject* pCenterArea;
-    EditTextObject* pRightArea;
+    std::unique_ptr<EditTextObject> pLeftArea;
+    std::unique_ptr<EditTextObject> pCenterArea;
+    std::unique_ptr<EditTextObject> pRightArea;
 
 public:
                 ScPageHFItem( sal_uInt16 nWhich );
@@ -176,9 +176,9 @@ public:
     virtual bool            QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
     virtual bool            PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 
-    const EditTextObject* GetLeftArea() const       { return pLeftArea; }
-    const EditTextObject* GetCenterArea() const     { return pCenterArea; }
-    const EditTextObject* GetRightArea() const      { return pRightArea; }
+    const EditTextObject* GetLeftArea() const       { return pLeftArea.get(); }
+    const EditTextObject* GetCenterArea() const     { return pCenterArea.get(); }
+    const EditTextObject* GetRightArea() const      { return pRightArea.get(); }
 
     void SetLeftArea( const EditTextObject& rNew );
     void SetCenterArea( const EditTextObject& rNew );

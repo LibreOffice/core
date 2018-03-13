@@ -389,25 +389,22 @@ ScPageHFItem::ScPageHFItem( const ScPageHFItem& rItem )
         pRightArea  ( nullptr )
 {
     if ( rItem.pLeftArea )
-        pLeftArea = rItem.pLeftArea->Clone();
+        pLeftArea.reset(rItem.pLeftArea->Clone());
     if ( rItem.pCenterArea )
-        pCenterArea = rItem.pCenterArea->Clone();
+        pCenterArea.reset(rItem.pCenterArea->Clone());
     if ( rItem.pRightArea )
-        pRightArea = rItem.pRightArea->Clone();
+        pRightArea.reset(rItem.pRightArea->Clone());
 }
 
 ScPageHFItem::~ScPageHFItem()
 {
-    delete pLeftArea;
-    delete pCenterArea;
-    delete pRightArea;
 }
 
 bool ScPageHFItem::QueryValue( uno::Any& rVal, sal_uInt8 /* nMemberId */ ) const
 {
     rtl::Reference<ScHeaderFooterContentObj> xContent =
         new ScHeaderFooterContentObj();
-    xContent->Init(pLeftArea, pCenterArea, pRightArea);
+    xContent->Init(pLeftArea.get(), pCenterArea.get(), pRightArea.get());
 
     uno::Reference<sheet::XHeaderFooterContent> xCont(xContent.get());
 
@@ -428,27 +425,24 @@ bool ScPageHFItem::PutValue( const uno::Any& rVal, sal_uInt8 /* nMemberId */ )
             if (pImp.is())
             {
                 const EditTextObject* pImpLeft = pImp->GetLeftEditObject();
-                delete pLeftArea;
-                pLeftArea = pImpLeft ? pImpLeft->Clone() : nullptr;
+                pLeftArea.reset( pImpLeft ? pImpLeft->Clone() : nullptr );
 
                 const EditTextObject* pImpCenter = pImp->GetCenterEditObject();
-                delete pCenterArea;
-                pCenterArea = pImpCenter ? pImpCenter->Clone() : nullptr;
+                pCenterArea.reset( pImpCenter ? pImpCenter->Clone() : nullptr );
 
                 const EditTextObject* pImpRight = pImp->GetRightEditObject();
-                delete pRightArea;
-                pRightArea = pImpRight ? pImpRight->Clone() : nullptr;
+                pRightArea.reset( pImpRight ? pImpRight->Clone() : nullptr );
 
                 if ( !pLeftArea || !pCenterArea || !pRightArea )
                 {
                     // no Text with Null are left
                     ScEditEngineDefaulter aEngine( EditEngine::CreatePool(), true );
                     if (!pLeftArea)
-                        pLeftArea = aEngine.CreateTextObject();
+                        pLeftArea.reset( aEngine.CreateTextObject() );
                     if (!pCenterArea)
-                        pCenterArea = aEngine.CreateTextObject();
+                        pCenterArea.reset( aEngine.CreateTextObject() );
                     if (!pRightArea)
-                        pRightArea = aEngine.CreateTextObject();
+                        pRightArea.reset( aEngine.CreateTextObject() );
                 }
 
                 bRet = true;
@@ -470,9 +464,9 @@ bool ScPageHFItem::operator==( const SfxPoolItem& rItem ) const
 
     const ScPageHFItem& r = static_cast<const ScPageHFItem&>(rItem);
 
-    return    ScGlobal::EETextObjEqual(pLeftArea,   r.pLeftArea)
-           && ScGlobal::EETextObjEqual(pCenterArea, r.pCenterArea)
-           && ScGlobal::EETextObjEqual(pRightArea,  r.pRightArea);
+    return    ScGlobal::EETextObjEqual(pLeftArea.get(),   r.pLeftArea.get())
+           && ScGlobal::EETextObjEqual(pCenterArea.get(), r.pCenterArea.get())
+           && ScGlobal::EETextObjEqual(pRightArea.get(),  r.pRightArea.get());
 }
 
 SfxPoolItem* ScPageHFItem::Clone( SfxItemPool* ) const
@@ -482,20 +476,17 @@ SfxPoolItem* ScPageHFItem::Clone( SfxItemPool* ) const
 
 void ScPageHFItem::SetLeftArea( const EditTextObject& rNew )
 {
-    delete pLeftArea;
-    pLeftArea = rNew.Clone();
+    pLeftArea.reset( rNew.Clone() );
 }
 
 void ScPageHFItem::SetCenterArea( const EditTextObject& rNew )
 {
-    delete pCenterArea;
-    pCenterArea = rNew.Clone();
+    pCenterArea.reset( rNew.Clone() );
 }
 
 void ScPageHFItem::SetRightArea( const EditTextObject& rNew )
 {
-    delete pRightArea;
-    pRightArea = rNew.Clone();
+    pRightArea.reset( rNew.Clone() );
 }
 
 /**
