@@ -78,7 +78,7 @@ public:
     bool                IsAlpha() const;
     AlphaMask           GetAlpha() const;
 
-    const Size          GetSizePixel() const { return maBitmap.GetSizePixel(); }
+    const Size&         GetSizePixel() const { return maBitmapSize; }
     void                SetSizePixel( const Size& rNewSize, BmpScaleFlag nScaleFlag = BmpScaleFlag::Default );
 
     const Size&         GetPrefSize() const { return maBitmap.GetPrefSize(); }
@@ -439,7 +439,6 @@ public:
 
     void                AdjustTransparency( sal_uInt8 cTrans );
 
-    void                CombineMaskOr(Color maskColor, sal_uInt8 nTol);
 public:
 
     SAL_DLLPRIVATE std::shared_ptr<ImpBitmap> const & ImplGetBitmapImpBitmap() const { return maBitmap.ImplGetImpBitmap(); }
@@ -453,6 +452,7 @@ private:
 
     Bitmap              maBitmap;
     Bitmap              maMask;
+    Size                maBitmapSize;
     Color               maTransparentColor;
     TransparentType     meTransparent;
     bool                mbAlpha;
