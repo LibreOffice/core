@@ -7954,6 +7954,8 @@ include/vbahelper/vbashaperange.hxx
 include/vbahelper/vbashapes.hxx
 include/vbahelper/vbatextframe.hxx
 include/vbahelper/vbawindowbase.hxx
+include/vcl/BitmapConverter.hxx
+include/vcl/BitmapFilter.hxx
 include/vcl/BitmapTools.hxx
 include/vcl/EnumContext.hxx
 include/vcl/FilterConfigItem.hxx

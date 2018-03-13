@@ -19,6 +19,7 @@
 
 #include <cuihyperdlg.hxx>
 #include <osl/file.hxx>
+#include <vcl/BitmapScaleFilter.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 
@@ -43,13 +44,23 @@ SvxHyperlinkDocTp::SvxHyperlinkDocTp ( vcl::Window *pParent, IconChoiceDialog* p
     m_pCbbPath->SetSmartProtocol(INetProtocol::File);
     get(m_pBtFileopen, "fileopen");
     BitmapEx aBitmap(RID_SVXBMP_FILEOPEN);
-    aBitmap.Scale(GetDPIScaleFactor(),GetDPIScaleFactor(),BmpScaleFlag::BestQuality);
+    {
+        auto nFactor = GetDPIScaleFactor();
+        BitmapFilter::Filter(aBitmap, BitmapScaleFilter(nFactor, nFactor, BmpScaleFlag::BestQuality));
+    }
+
     m_pBtFileopen->SetModeImage(Image(aBitmap));
     get(m_pEdTarget, "target");
     get(m_pFtFullURL, "url");
     get(m_pBtBrowse, "browse");
     aBitmap = BitmapEx(RID_SVXBMP_TARGET);
-    aBitmap.Scale(GetDPIScaleFactor(),GetDPIScaleFactor(),BmpScaleFlag::BestQuality );
+    {
+        BitmapScaleFilter aFilter(Size(GetDPIScaleFactor(), GetDPIScaleFactor()), BmpScaleFlag::BestQuality);
+        BitmapEx aTmpBmpEx(aFilter.execute(aBitmap));
+        if (!aTmpBmpEx.IsEmpty())
+            aBitmap = aTmpBmpEx;
+    }
+
     m_pBtBrowse->SetModeImage(Image(aBitmap));
 
     // Disable display of bitmap names.

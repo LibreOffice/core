@@ -29,20 +29,25 @@
 #include <ucbhelper/content.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/tempfile.hxx>
+
 #include <vcl/outdev.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/gfxlink.hxx>
 #include <vcl/cvtgrf.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/metaact.hxx>
-#include <impgraph.hxx>
-#include <com/sun/star/ucb/CommandAbortedException.hpp>
-#include <vcl/dibtools.hxx>
-#include <memory>
-#include <o3tl/make_unique.hxx>
 #include <vcl/gdimetafiletools.hxx>
+#include <vcl/dibtools.hxx>
+#include <vcl/BitmapScaleFilter.hxx>
 
+#include <impgraph.hxx>
 #include <pdfread.hxx>
+
+#include <o3tl/make_unique.hxx>
+
+#include <memory>
+
+#include <com/sun/star/ucb/CommandAbortedException.hpp>
 
 #define GRAPHIC_MTFTOBMP_MAXEXT     2048
 #define GRAPHIC_STREAMBUFSIZE       8192UL
@@ -554,12 +559,9 @@ BitmapEx ImpGraphic::ImplGetBitmapEx(const GraphicConversionParameters& rParamet
 
         aRetBmpEx = ( mpAnimation ? mpAnimation->GetBitmapEx() : maEx );
 
-        if(rParameters.getSizePixel().Width() || rParameters.getSizePixel().Height())
-        {
-            aRetBmpEx.Scale(
-                rParameters.getSizePixel(),
-                BmpScaleFlag::Fast);
-        }
+        if (rParameters.getSizePixel().Width() || rParameters.getSizePixel().Height())
+            BitmapFilter::Filter(aRetBmpEx,
+                    BitmapScaleFilter(rParameters.getSizePixel(), BmpScaleFlag::Fast));
     }
     else if( ( meType != GraphicType::Default ) && ImplIsSupportedGraphic() )
     {
