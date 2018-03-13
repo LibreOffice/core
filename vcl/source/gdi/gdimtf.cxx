@@ -18,11 +18,15 @@
  */
 
 #include <rtl/crc.h>
-#include <cstdlib>
-#include <memory>
 #include <tools/stream.hxx>
 #include <tools/vcompat.hxx>
 #include <tools/fract.hxx>
+#include <basegfx/polygon/b2dpolygon.hxx>
+#include <comphelper/fileformat.h>
+#include <comphelper/processfactory.hxx>
+
+#include <vcl/bitmap.hxx>
+#include <vcl/bitmapex.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/salbtype.hxx>
 #include <vcl/outdev.hxx>
@@ -31,12 +35,9 @@
 #include <vcl/svapp.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/graphictools.hxx>
-#include <comphelper/fileformat.h>
-#include <basegfx/polygon/b2dpolygon.hxx>
 #include <vcl/canvastools.hxx>
 
 #include <svmconverter.hxx>
-
 #include <salbmp.hxx>
 #include <salinst.hxx>
 #include <svdata.hxx>
@@ -45,16 +46,16 @@
 #include <com/sun/star/rendering/MtfRenderer.hpp>
 #include <com/sun/star/rendering/XBitmapCanvas.hpp>
 #include <com/sun/star/rendering/XCanvas.hpp>
-#include <comphelper/processfactory.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/awt/XGraphics.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/graphic/XGraphicRenderer.hpp>
 
-using namespace com::sun::star;
+#include <cstdlib>
+#include <memory>
 
-#define GAMMA( _def_cVal, _def_InvGamma )   (static_cast<sal_uInt8>(MinMax(FRound(pow( _def_cVal/255.0,_def_InvGamma)*255.0),0,255)))
+using namespace com::sun::star;
 
 struct ImplColAdjustParam
 {
