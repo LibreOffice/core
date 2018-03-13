@@ -2599,7 +2599,11 @@ void HTMLTable::MakeTable( SwTableBox *pBox, sal_uInt16 nAbsAvail,
     // Only tables with relative width or without width should be modified
     m_pLayoutInfo->SetMustResize( m_bPrcWidth || !m_nWidth );
 
-    m_pLayoutInfo->SetWidths();
+    SwTableLine *pLine1 = (m_pSwTable->GetTabLines())[0];
+    if (!pLine1->GetTabBoxes().empty())
+        m_pLayoutInfo->SetWidths();
+    else
+        SAL_WARN("sw.html", "no table box");
 
     const_cast<SwTable *>(m_pSwTable)->SetHTMLTableLayout( m_pLayoutInfo );
 
@@ -3990,6 +3994,8 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
         while( m_aContexts.size() > m_nContextStAttrMin )
         {
             HTMLAttrContext *pCntxt = PopContext();
+            if (!pCntxt)
+                break;
             ClearContext( pCntxt );
             delete pCntxt;
         }
