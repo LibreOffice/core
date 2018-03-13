@@ -1323,82 +1323,81 @@ ScRangePairList* ScRangePairList::Clone() const
     return pNew;
 }
 
-struct ScRangePairNameSort
+class ScRangePairList_sortNameCompare
 {
-    ScRangePair*    pPair;
-    ScDocument*     pDoc;
+public:
+    ScRangePairList_sortNameCompare(ScDocument *pDoc) : mpDoc(pDoc) {}
+
+    bool operator()( const ScRangePair *ps1, const ScRangePair* ps2 ) const
+    {
+        const ScAddress& rStartPos1 = ps1->GetRange(0).aStart;
+        const ScAddress& rStartPos2 = ps2->GetRange(0).aStart;
+        OUString aStr1, aStr2;
+        sal_Int32 nComp;
+        if ( rStartPos1.Tab() == rStartPos2.Tab() )
+            nComp = 0;
+        else
+        {
+            mpDoc->GetName( rStartPos1.Tab(), aStr1 );
+            mpDoc->GetName( rStartPos2.Tab(), aStr2 );
+            nComp = ScGlobal::GetCollator()->compareString( aStr1, aStr2 );
+        }
+        if (nComp < 0)
+        {
+            return true; // -1;
+        }
+        else if (nComp > 0)
+        {
+            return false; // 1;
+        }
+
+        // equal tabs
+        if ( rStartPos1.Col() < rStartPos2.Col() )
+            return true; // -1;
+        if ( rStartPos1.Col() > rStartPos2.Col() )
+            return false; // 1;
+        // equal cols
+        if ( rStartPos1.Row() < rStartPos2.Row() )
+            return true; // -1;
+        if ( rStartPos1.Row() > rStartPos2.Row() )
+            return false; // 1;
+
+        // first corner equal, second corner
+        const ScAddress& rEndPos1 = ps1->GetRange(0).aEnd;
+        const ScAddress& rEndPos2 = ps2->GetRange(0).aEnd;
+        if ( rEndPos1.Tab() == rEndPos2.Tab() )
+            nComp = 0;
+        else
+        {
+            mpDoc->GetName( rEndPos1.Tab(), aStr1 );
+            mpDoc->GetName( rEndPos2.Tab(), aStr2 );
+            nComp = ScGlobal::GetCollator()->compareString( aStr1, aStr2 );
+        }
+        if (nComp < 0)
+        {
+            return true; // -1;
+        }
+        else if (nComp > 0)
+        {
+            return false; // 1;
+        }
+
+        // equal tabs
+        if ( rEndPos1.Col() < rEndPos2.Col() )
+            return true; // -1;
+        if ( rEndPos1.Col() > rEndPos2.Col() )
+            return false; // 1;
+        // equal cols
+        if ( rEndPos1.Row() < rEndPos2.Row() )
+            return true; // -1;
+        if ( rEndPos1.Row() > rEndPos2.Row() )
+            return false; // 1;
+
+        return false;
+    }
+private:
+    ScDocument *mpDoc;
 };
-
-extern "C"
-int ScRangePairList_QsortNameCompare( const void* p1, const void* p2 )
-{
-    const ScRangePairNameSort* ps1 = static_cast<const ScRangePairNameSort*>(p1);
-    const ScRangePairNameSort* ps2 = static_cast<const ScRangePairNameSort*>(p2);
-    const ScAddress& rStartPos1 = ps1->pPair->GetRange(0).aStart;
-    const ScAddress& rStartPos2 = ps2->pPair->GetRange(0).aStart;
-    OUString aStr1, aStr2;
-    sal_Int32 nComp;
-    if ( rStartPos1.Tab() == rStartPos2.Tab() )
-        nComp = 0;
-    else
-    {
-        ps1->pDoc->GetName( rStartPos1.Tab(), aStr1 );
-        ps2->pDoc->GetName( rStartPos2.Tab(), aStr2 );
-        nComp = ScGlobal::GetCollator()->compareString( aStr1, aStr2 );
-    }
-    if (nComp < 0)
-    {
-        return -1;
-    }
-    else if (nComp > 0)
-    {
-        return 1;
-    }
-
-    // equal tabs
-    if ( rStartPos1.Col() < rStartPos2.Col() )
-        return -1;
-    if ( rStartPos1.Col() > rStartPos2.Col() )
-        return 1;
-    // equal cols
-    if ( rStartPos1.Row() < rStartPos2.Row() )
-        return -1;
-    if ( rStartPos1.Row() > rStartPos2.Row() )
-        return 1;
-
-    // first corner equal, second corner
-    const ScAddress& rEndPos1 = ps1->pPair->GetRange(0).aEnd;
-    const ScAddress& rEndPos2 = ps2->pPair->GetRange(0).aEnd;
-    if ( rEndPos1.Tab() == rEndPos2.Tab() )
-        nComp = 0;
-    else
-    {
-        ps1->pDoc->GetName( rEndPos1.Tab(), aStr1 );
-        ps2->pDoc->GetName( rEndPos2.Tab(), aStr2 );
-        nComp = ScGlobal::GetCollator()->compareString( aStr1, aStr2 );
-    }
-    if (nComp < 0)
-    {
-        return -1;
-    }
-    else if (nComp > 0)
-    {
-        return 1;
-    }
-
-    // equal tabs
-    if ( rEndPos1.Col() < rEndPos2.Col() )
-        return -1;
-    if ( rEndPos1.Col() > rEndPos2.Col() )
-        return 1;
-    // equal cols
-    if ( rEndPos1.Row() < rEndPos2.Row() )
-        return -1;
-    if ( rEndPos1.Row() > rEndPos2.Row() )
-        return 1;
-
-    return 0;
-}
 
 void ScRangePairList::Join( const ScRangePair& r, bool bIsInList )
 {
@@ -1524,28 +1523,13 @@ Label_RangePair_Join:
         Append( r );
 }
 
-ScRangePair** ScRangePairList::CreateNameSortedArray( size_t& nListCount,
-        ScDocument* pDoc ) const
+std::vector<ScRangePair*> ScRangePairList::CreateNameSortedArray( ScDocument* pDoc ) const
 {
-    nListCount = maPairs.size();
-    OSL_ENSURE( nListCount * sizeof(ScRangePairNameSort) <= size_t(~0x1F),
-        "ScRangePairList::CreateNameSortedArray nListCount * sizeof(ScRangePairNameSort) > (size_t)~0x1F" );
-    ScRangePairNameSort* pSortArray = reinterpret_cast<ScRangePairNameSort*>(
-        new sal_uInt8 [ nListCount * sizeof(ScRangePairNameSort) ]);
-    sal_uLong j;
-    for ( j=0; j < nListCount; j++ )
-    {
-        pSortArray[j].pPair = maPairs[ j ];
-        pSortArray[j].pDoc = pDoc;
-    }
-    qsort( static_cast<void*>(pSortArray), nListCount, sizeof(ScRangePairNameSort), &ScRangePairList_QsortNameCompare );
-    // move ScRangePair pointer up
-    ScRangePair** ppSortArray = reinterpret_cast<ScRangePair**>(pSortArray);
-    for ( j=0; j < nListCount; j++ )
-    {
-        ppSortArray[j] = pSortArray[j].pPair;
-    }
-    return ppSortArray;
+    std::vector<ScRangePair*> aSortedVec(maPairs);
+
+    std::sort( aSortedVec.begin(), aSortedVec.end(), ScRangePairList_sortNameCompare(pDoc) );
+
+    return aSortedVec;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

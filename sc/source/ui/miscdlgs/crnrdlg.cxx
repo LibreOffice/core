@@ -391,15 +391,16 @@ void ScColRowNameRangesDlg::UpdateNames()
     pLbRange->SetEntryData( nPos, reinterpret_cast<void*>(nEntryDataDelim) );
     if ( (nCount = xColNameRanges->size()) > 0 )
     {
-        std::unique_ptr<ScRangePair*[]> ppSortArray(xColNameRanges->CreateNameSortedArray(
-               nCount, pDoc ));
+        std::vector<ScRangePair*> aSortArray(xColNameRanges->CreateNameSortedArray(
+               pDoc ));
+        nCount = aSortArray.size();
         for ( j=0; j < nCount; j++ )
         {
-            const ScRange aRange(ppSortArray[j]->GetRange(0));
+            const ScRange aRange(aSortArray[j]->GetRange(0));
             aString = aRange.Format(ScRefFlags::RANGE_ABS_3D, pDoc, aDetails);
 
             //@008 get range parameters from document
-            ppSortArray[j]->GetRange(0).GetVars( nCol1, nRow1, nTab1,
+            aSortArray[j]->GetRange(0).GetVars( nCol1, nRow1, nTab1,
                                             nCol2, nRow2, nTab2 );
             SCCOL q=nCol1+3;
             if(q>nCol2) q=nCol2;
@@ -434,15 +435,16 @@ void ScColRowNameRangesDlg::UpdateNames()
     pLbRange->SetEntryData( nPos, reinterpret_cast<void*>(nEntryDataDelim) );
     if ( (nCount = xRowNameRanges->size()) > 0 )
     {
-        std::unique_ptr<ScRangePair*[]> ppSortArray(xRowNameRanges->CreateNameSortedArray(
-               nCount, pDoc ));
+        std::vector<ScRangePair*> aSortArray(xRowNameRanges->CreateNameSortedArray(
+               pDoc ));
+        nCount = aSortArray.size();
         for ( j=0; j < nCount; j++ )
         {
-            const ScRange aRange(ppSortArray[j]->GetRange(0));
+            const ScRange aRange(aSortArray[j]->GetRange(0));
             aString = aRange.Format(ScRefFlags::RANGE_ABS_3D, pDoc, aDetails);
 
             //@008 Build string for rows below
-            ppSortArray[j]->GetRange(0).GetVars( nCol1, nRow1, nTab1,
+            aSortArray[j]->GetRange(0).GetVars( nCol1, nRow1, nTab1,
                                             nCol2, nRow2, nTab2 );
             SCROW q=nRow1+3;
             if(q>nRow2) q=nRow2;

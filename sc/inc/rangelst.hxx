@@ -139,7 +139,8 @@ public:
     void                DeleteOnTab( SCTAB nTab );
     ScRangePair*        Find( const ScAddress& ) const;
     ScRangePair*        Find( const ScRange& ) const;
-    ScRangePair**       CreateNameSortedArray( size_t& nCount, ScDocument* ) const;
+    std::vector<ScRangePair*>
+                        CreateNameSortedArray( ScDocument* ) const;
 
     void                Remove(size_t nPos);
     void                Remove(const ScRangePair* pAdr);
