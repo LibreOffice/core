@@ -94,6 +94,24 @@
       "revId": "d7b554dc4440a8a9f8ceffa8e079f99b5b9c020f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba2be162_0f09f72c",
+        "filename": "sw/source/core/text/itrform2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 611,
+      "author": {
+        "id": 1000381
+      },
+      "writtenOn": "2018-03-13T16:34:30Z",
+      "side": 1,
+      "message": "Using m_pFont-\u003eGetActual() does not work, CTL+Western is still kerned, I changed the plus to minus.",
+      "parentUuid": "ba2be162_f4f2b66e",
+      "revId": "d7b554dc4440a8a9f8ceffa8e079f99b5b9c020f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
