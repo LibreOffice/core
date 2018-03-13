@@ -754,6 +754,7 @@ bool Bitmap::Scale( const double& rScaleX, const double& rScaleY, BmpScaleFlag n
     if (nStartCount == 1)
         nScaleFlag = BmpScaleFlag::Fast;
 
+    BitmapEx aBmpEx(*this);
     bool bRetval(false);
 
     switch(nScaleFlag)
@@ -777,31 +778,34 @@ bool Bitmap::Scale( const double& rScaleX, const double& rScaleY, BmpScaleFlag n
             }
             else
             {
-                BitmapScaleSuperFilter aScaleSuperFilter(rScaleX, rScaleY);
-                bRetval = aScaleSuperFilter.execute(*this);
+                bRetval = BitmapFilter::Filter(aBmpEx, BitmapScaleSuperFilter(rScaleX, rScaleY));
             }
             break;
         }
         case BmpScaleFlag::Lanczos :
         case BmpScaleFlag::BestQuality:
         {
-            vcl::BitmapScaleConvolutionFilter aScaleConvolutionFilter(rScaleX, rScaleY, vcl::ConvolutionKernelType::Lanczos3);
-            bRetval = aScaleConvolutionFilter.execute(*this);
+            bRetval = BitmapFilter::Filter(aBmpEx,
+                    vcl::BitmapScaleConvolutionFilter(rScaleX, rScaleY, vcl::ConvolutionKernelType::Lanczos3));
             break;
         }
         case BmpScaleFlag::BiCubic :
         {
-            vcl::BitmapScaleConvolutionFilter aScaleConvolutionFilter(rScaleX, rScaleY, vcl::ConvolutionKernelType::BiCubic);
-            bRetval = aScaleConvolutionFilter.execute(*this);
+            bRetval = BitmapFilter::Filter(aBmpEx,
+                    vcl::BitmapScaleConvolutionFilter(rScaleX, rScaleY, vcl::ConvolutionKernelType::BiCubic));
+
             break;
         }
         case BmpScaleFlag::BiLinear :
         {
-            vcl::BitmapScaleConvolutionFilter aScaleConvolutionFilter(rScaleX, rScaleY, vcl::ConvolutionKernelType::BiLinear);
-            bRetval = aScaleConvolutionFilter.execute(*this);
+            bRetval = BitmapFilter::Filter(aBmpEx,
+                    vcl::BitmapScaleConvolutionFilter(rScaleX, rScaleY, vcl::ConvolutionKernelType::BiLinear));
             break;
         }
     }
+
+    if (bRetval && nScaleFlag != BmpScaleFlag::Fast && nScaleFlag != BmpScaleFlag::Interpolate)
+        *this = aBmpEx.GetBitmapRef();
 
     OSL_ENSURE(!bRetval || nStartCount == GetBitCount(), "Bitmap::Scale has changed the ColorDepth, this should *not* happen (!)");
     return bRetval;
