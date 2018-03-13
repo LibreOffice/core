@@ -39,6 +39,7 @@
 #include <vcl/FilterConfigItem.hxx>
 #include <vcl/graphictools.hxx>
 #include <vcl/weld.hxx>
+#include <vcl/BitmapConverter.hxx>
 #include <strings.hrc>
 
 #include <math.h>
@@ -346,14 +347,23 @@ bool PSWriter::WritePS( const Graphic& rGraphic, SvStream& rTargetStream, Filter
            .WriteUInt32( nStreamPosition + 26 ).WriteUInt32( 0 ).WriteUInt16( 0xffff );
 
         ErrCode nErrCode;
-        if ( mbGrayScale )
+
+        if (mbGrayScale)
         {
             BitmapEx aTempBitmapEx( rGraphic.GetBitmapEx() );
-            aTempBitmapEx.Convert( BmpConversion::N8BitGreys );
-            nErrCode = GraphicConverter::Export( rTargetStream, aTempBitmapEx, ConvertDataFormat::TIF ) ;
+            BitmapConverter aBmpConverter(BmpConversion::N8BitGreys);
+            BitmapEx aConvertedBmp(aBmpConverter.execute(aTempBitmapEx));
+            if (aConvertedBmp.IsEmpty())
+                SAL_WARN("vcl.gdi", "Conversion failed");
+            else
+                aTempBitmapEx = aConvertedBmp;
+
+            nErrCode = GraphicConverter::Export(rTargetStream, aTempBitmapEx, ConvertDataFormat::TIF);
         }
         else
-            nErrCode = GraphicConverter::Export( rTargetStream, rGraphic, ConvertDataFormat::TIF ) ;
+        {
+            nErrCode = GraphicConverter::Export(rTargetStream, rGraphic, ConvertDataFormat::TIF);
+        }
 
         if ( nErrCode == ERRCODE_NONE )
         {

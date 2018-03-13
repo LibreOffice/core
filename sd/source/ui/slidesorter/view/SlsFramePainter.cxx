@@ -20,6 +20,7 @@
 #include "SlsFramePainter.hxx"
 #include <vcl/outdev.hxx>
 #include <vcl/bitmapaccess.hxx>
+#include <vcl/BitmapScaleFilter.hxx>
 
 namespace sd { namespace slidesorter { namespace view {
 
@@ -135,15 +136,25 @@ FramePainter::OffsetBitmap::OffsetBitmap (
     const sal_Int32 nSideBitmapSize (64);
     if (nHorizontalPosition == 0 && nVerticalPosition == 0)
     {
-        maBitmap.Scale(Size(nSideBitmapSize,nSideBitmapSize));
+        BitmapScaleFilter aFilter(Size(nSideBitmapSize, nSideBitmapSize));
+        BitmapEx aTmpBmpEx(aFilter.execute(maBitmap));
+        if (!aTmpBmpEx.IsEmpty())
+            maBitmap = aTmpBmpEx;
     }
     else if (nHorizontalPosition == 0)
     {
-        maBitmap.Scale(Size(nSideBitmapSize,aSize.Height()));
+        BitmapScaleFilter aFilter(Size(nSideBitmapSize, aSize.Height()));
+        BitmapEx aTmpBmpEx(aFilter.execute(maBitmap));
+        if (!aTmpBmpEx.IsEmpty())
+            maBitmap = aTmpBmpEx;
+
     }
     else if (nVerticalPosition == 0)
     {
-        maBitmap.Scale(Size(maBitmap.GetSizePixel().Width(), nSideBitmapSize));
+        BitmapScaleFilter aFilter(Size(maBitmap.GetSizePixel().Width(), nSideBitmapSize));
+        BitmapEx aTmpBmpEx(aFilter.execute(maBitmap));
+        if (!aTmpBmpEx.IsEmpty())
+            maBitmap = aTmpBmpEx;
     }
 }
 

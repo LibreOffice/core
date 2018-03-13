@@ -39,6 +39,7 @@
 #include <svl/intitem.hxx>
 #include <sfx2/request.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/BitmapScaleFilter.hxx>
 
 #define IID_BOTTOMLOCK 1
 #define IID_TOPLOCK    2
@@ -348,9 +349,25 @@ void AlignmentTabPage::InitVsRefEgde()
 
     if( GetDPIScaleFactor() > 1 )
     {
-        aBottomLock.Scale(GetDPIScaleFactor(), GetDPIScaleFactor(), BmpScaleFlag::Fast);
-        aTopLock.Scale(GetDPIScaleFactor(), GetDPIScaleFactor(), BmpScaleFlag::Fast);
-        aCellLock.Scale(GetDPIScaleFactor(), GetDPIScaleFactor(), BmpScaleFlag::Fast);
+        BitmapScaleFilter aFilter(Size(GetDPIScaleFactor(), GetDPIScaleFactor()), BmpScaleFlag::BestQuality);
+
+        {
+            BitmapEx aTmpBmpEx(aFilter.execute(aBottomLock));
+            if (!aTmpBmpEx.IsEmpty())
+                aBottomLock = aTmpBmpEx;
+        }
+
+        {
+            BitmapEx aTmpBmpEx(aFilter.execute(aTopLock));
+            if (!aTmpBmpEx.IsEmpty())
+                aTopLock = aTmpBmpEx;
+        }
+
+        {
+            BitmapEx aTmpBmpEx(aFilter.execute(aCellLock));
+            if (!aTmpBmpEx.IsEmpty())
+                aCellLock = aTmpBmpEx;
+        }
     }
 
     Size aItemSize(aBottomLock.GetSizePixel());

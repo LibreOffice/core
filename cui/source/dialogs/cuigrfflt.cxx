@@ -18,6 +18,7 @@
  */
 
 #include <vcl/builderfactory.hxx>
+#include <vcl/BitmapScaleFilter.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/objsh.hxx>
@@ -111,8 +112,10 @@ void GraphicPreviewWindow::ScaleImageToFit()
         {
             BitmapEx aBmpEx( mpOrigGraphic->GetBitmapEx() );
 
-            if( aBmpEx.Scale( aGrfSize ) )
-                maScaledOrig = aBmpEx;
+            BitmapScaleFilter aFilter(aGrfSize);
+            BitmapEx aTmpBmpEx(aFilter.execute(aBmpEx));
+            if (!aTmpBmpEx.IsEmpty())
+                maScaledOrig = aTmpBmpEx;
         }
     }
 

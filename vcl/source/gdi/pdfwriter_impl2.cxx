@@ -25,6 +25,8 @@
 #include <vcl/metaact.hxx>
 #include <vcl/bitmapaccess.hxx>
 #include <vcl/graph.hxx>
+#include <vcl/BitmapConverter.hxx>
+#include <vcl/BitmapScaleFilter.hxx>
 
 #include <svdata.hxx>
 
@@ -141,7 +143,10 @@ void PDFWriterImpl::implWriteBitmapEx( const Point& i_rPoint, const Size& i_rSiz
             if( aNewBmpSize.Width() && aNewBmpSize.Height() )
             {
                 // #i121233# Use best quality for PDF exports
-                aBitmapEx.Scale( aNewBmpSize, BmpScaleFlag::BestQuality );
+                BitmapScaleFilter aFilter(aNewBmpSize, BmpScaleFlag::BestQuality);
+                BitmapEx aTmpBmpEx(aFilter.execute(aBitmapEx));
+                if (!aTmpBmpEx.IsEmpty())
+                    aBitmapEx = aTmpBmpEx;
             }
             else
             {
@@ -153,15 +158,22 @@ void PDFWriterImpl::implWriteBitmapEx( const Point& i_rPoint, const Size& i_rSiz
     const Size aSizePixel( aBitmapEx.GetSizePixel() );
     if ( aSizePixel.Width() && aSizePixel.Height() )
     {
-        if( m_aContext.ColorMode == PDFWriter::DrawGreyscale )
+        if (m_aContext.ColorMode == PDFWriter::DrawGreyscale)
         {
             BmpConversion eConv = BmpConversion::N8BitGreys;
             int nDepth = aBitmapEx.GetBitmap().GetBitCount();
-            if( nDepth <= 4 )
+
+            if (nDepth <= 4)
                 eConv = BmpConversion::N4BitGreys;
-            if( nDepth > 1 )
-                aBitmapEx.Convert( eConv );
+
+            if (nDepth > 1)
+            {
+                BitmapConverter aBmpConverter(eConv);
+                BitmapEx aConvertedBmp(aBmpConverter.execute(aBitmapEx));
+                SAL_WARN_IF(aConvertedBmp.IsEmpty(), "vcl.gdi", "Conversion failed");
+            }
         }
+
         bool bUseJPGCompression = !i_rContext.m_bOnlyLosslessCompression;
         if ( bIsPng || ( aSizePixel.Width() < 32 ) || ( aSizePixel.Height() < 32 ) )
             bUseJPGCompression = false;

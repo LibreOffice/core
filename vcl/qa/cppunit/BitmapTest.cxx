@@ -16,6 +16,7 @@
 
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmapaccess.hxx>
+#include <vcl/BitmapScaleFilter.hxx>
 #include <vcl/virdev.hxx>
 
 #include <rtl/strbuf.hxx>
@@ -42,6 +43,7 @@ class BitmapTest : public CppUnit::TestFixture
     void testScale();
     void testCRC();
     void testGreyPalette();
+    void testBmpExScaling();
 
     CPPUNIT_TEST_SUITE(BitmapTest);
     CPPUNIT_TEST(testCreation);
@@ -53,8 +55,20 @@ class BitmapTest : public CppUnit::TestFixture
     CPPUNIT_TEST(testScale);
     CPPUNIT_TEST(testCRC);
     CPPUNIT_TEST(testGreyPalette);
+    CPPUNIT_TEST(testBmpExScaling);
     CPPUNIT_TEST_SUITE_END();
 };
+
+void BitmapTest::testBmpExScaling()
+{
+    BitmapEx aBmpEx(Bitmap(Size(100, 100), 8));
+    BitmapScaleFilter aFilter(Size(10, 10));
+    BitmapEx aScaledBmpEx(aFilter.execute(aBmpEx));
+
+    Size aSize = aScaledBmpEx.GetSizePixel();
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong width", static_cast<long>(10), aSize.Width());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong height", static_cast<long>(10), aSize.Height());
+}
 
 void BitmapTest::testCreation()
 {

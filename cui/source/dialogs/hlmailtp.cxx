@@ -21,6 +21,7 @@
 #include <sfx2/request.hxx>
 
 #include <comphelper/processfactory.hxx>
+#include <vcl/BitmapScaleFilter.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <unotools/pathoptions.hxx>
 #include <unotools/moduleoptions.hxx>
@@ -44,7 +45,12 @@ SvxHyperlinkMailTp::SvxHyperlinkMailTp ( vcl::Window *pParent, IconChoiceDialog*
     m_pCbbReceiver->SetSmartProtocol(INetProtocol::Mailto);
     get(m_pBtAdrBook, "adressbook");
     BitmapEx aBitmap(RID_SVXBMP_ADRESSBOOK);
-    aBitmap.Scale(GetDPIScaleFactor(),GetDPIScaleFactor(),BmpScaleFlag::BestQuality );
+
+    BitmapScaleFilter aFilter(Size(GetDPIScaleFactor(), GetDPIScaleFactor()), BmpScaleFlag::BestQuality);
+    BitmapEx aTmpBmpEx(aFilter.execute(aBitmap));
+    if (!aTmpBmpEx.IsEmpty())
+        aBitmap = aTmpBmpEx;
+
     m_pBtAdrBook->SetModeImage(Image(aBitmap));
     get(m_pFtSubject, "subject_label");
     get(m_pEdSubject, "subject");

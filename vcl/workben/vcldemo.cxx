@@ -45,6 +45,7 @@
 #include <vcl/help.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/ImageTree.hxx>
+#include <vcl/BitmapScaleFilter.hxx>
 #include <bitmapwriteaccess.hxx>
 
 #include <basegfx/numeric/ftools.hxx>
@@ -866,8 +867,11 @@ public:
             // and yes - we really do this in the page border rendering code ...
             for (size_t i = 0; i < SAL_N_ELEMENTS(aSizes); i++)
             {
-                aShadowStretch.Scale(Size(aShadowStretch.GetSizePixel().Width(), aSizes[i]),
+                BitmapScaleFilter aFilter(Size(aShadowStretch.GetSizePixel().Width(), aSizes[i]),
                                      BmpScaleFlag::Fast);
+                BitmapEx aTmpBmpEx(aFilter.execute(aShadowStretch));
+                if (aTmpBmpEx.IsEmpty())
+                    aShadowStretch = aTmpBmpEx;
 
                 rDev.DrawBitmapEx(aRenderPt, aShadowStretch);
                 aRenderPt.Move(aShadowStretch.GetSizePixel().Width() + 4, 0);
@@ -909,7 +913,12 @@ public:
             maCheckered.RenderRegion(rDev, r, rCtx);
 
             BitmapEx aBitmap(rCtx.mpDemoRenderer->maIntro);
-            aBitmap.Scale(r.GetSize(), BmpScaleFlag::BestQuality);
+
+            BitmapScaleFilter aFilter(r.GetSize(), BmpScaleFlag::BestQuality);
+            BitmapEx aTmpBmpEx(aFilter.execute(aBitmap));
+            if (!aTmpBmpEx.IsEmpty())
+                aBitmap = aTmpBmpEx;
+
             AlphaMask aSemiTransp(aBitmap.GetSizePixel());
             aSemiTransp.Erase(64);
             rDev.DrawBitmapEx(r.TopLeft(), BitmapEx(aBitmap.GetBitmap(),

@@ -26,6 +26,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/slider.hxx>
+#include <vcl/BitmapScaleFilter.hxx>
 #include <svx/strings.hrc>
 #include <svx/svdograf.hxx>
 #include <svx/sdgcpitm.hxx>
@@ -278,7 +279,11 @@ void CompressGraphicsDialog::Compress(SvStream& aStream)
         long nPixelX = static_cast<long>( GetViewWidthInch() * m_dResolution );
         long nPixelY = static_cast<long>( GetViewHeightInch() * m_dResolution );
 
-        aBitmap.Scale( Size( nPixelX, nPixelY ), GetSelectedInterpolationType() );
+        BitmapScaleFilter aFilter(Size(nPixelX, nPixelY), GetSelectedInterpolationType());
+
+        BitmapEx aTmpBmpEx(aFilter.execute(aBitmap));
+        if (!aTmpBmpEx.IsEmpty())
+            aBitmap = aTmpBmpEx;
     }
     Graphic aScaledGraphic( aBitmap );
     GraphicFilter& rFilter = GraphicFilter::GetGraphicFilter();

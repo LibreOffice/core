@@ -22,6 +22,7 @@
 #include <tools/fract.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <vcl/FilterConfigItem.hxx>
+#include <vcl/BitmapScaleFilter.hxx>
 #include <svtools/strings.hrc>
 #include <svtools/svtresid.hxx>
 #include <svtools/DocumentToGraphicRenderer.hxx>
@@ -448,9 +449,14 @@ void ExportDialog::GetGraphicStream()
                         ( ( maSize.Width != aSizePixel.Width() ) ||
                           ( maSize.Height != aSizePixel.Height() ) ) )
                     {
-                        BitmapEx aBmpEx( aGraphic.GetBitmapEx() );
+                        BitmapEx aBmpEx(aGraphic.GetBitmapEx());
+
                         // export: use highest quality
-                        aBmpEx.Scale( Size( maSize.Width, maSize.Height ), BmpScaleFlag::Lanczos );
+                        BitmapScaleFilter aFilter(Size(maSize.Width, maSize.Height), BmpScaleFlag::Lanczos);
+                        BitmapEx aTmpBmpEx(aFilter.execute(aBmpEx));
+                        if (!aTmpBmpEx.IsEmpty())
+                            aBmpEx = aTmpBmpEx;
+
                         aGraphic = aBmpEx;
                     }
                 }

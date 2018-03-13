@@ -17,25 +17,31 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_INC_BITMAPSCALESUPER_HXX
-#define INCLUDED_VCL_INC_BITMAPSCALESUPER_HXX
+#include <vcl/bitmapex.hxx>
+#include <vcl/BitmapScaleFilter.hxx>
 
-#include <vcl/BitmapFilter.hxx>
-
-class BitmapScaleSuperFilter : public BitmapFilter
+BitmapEx BitmapScaleFilter::execute(BitmapEx const& rBitmapEx)
 {
-public:
-    BitmapScaleSuperFilter(const double& rScaleX, const double& rScaleY);
-    virtual ~BitmapScaleSuperFilter() override;
+    Bitmap aBitmap(rBitmapEx.GetBitmap());
+    bool bRet = false;
 
-    virtual BitmapEx execute(BitmapEx const& rBitmap) override;
+    if (maSize == Size(0, 0))
+        bRet = aBitmap.Scale(mfScaleX, mfScaleY, mnScaleFlag);
+    else
+        bRet = aBitmap.Scale(maSize, mnScaleFlag);
 
-private:
-    double mrScaleX;
-    double mrScaleY;
+    Bitmap aMask(rBitmapEx.GetMask());
 
-};
+    if (bRet && (rBitmapEx.GetTransparentType() == TransparentType::Bitmap) && !aMask.IsEmpty())
+        bRet = aMask.Scale(maSize, mnScaleFlag);
 
-#endif
+    SAL_WARN_IF(!aMask.IsEmpty() && aBitmap.GetSizePixel() != aMask.GetSizePixel(), "vcl",
+                "BitmapEx::Scale(): size mismatch for bitmap and alpha mask.");
+
+    if (bRet)
+        return BitmapEx(aBitmap, aMask);
+
+    return BitmapEx();
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
