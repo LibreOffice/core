@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba2be162_4073c4b1",
+        "filename": "include/filter/msfilter/util.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1000210
+      },
+      "writtenOn": "2018-03-13T08:43:52Z",
+      "side": 1,
+      "message": "Does this count as breaking the ABI?  Does that need to be avoided, or perhaps only avoided for backports?",
+      "revId": "d64382061726111dbdb76602fc32ad8af9ec9c7b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
