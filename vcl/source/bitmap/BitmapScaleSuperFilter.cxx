@@ -936,8 +936,8 @@ BitmapEx BitmapScaleSuperFilter::execute(BitmapEx const& rBitmap)
 
     const Size aSizePix(rBitmap.GetSizePixel());
 
-    bool bHMirr = mrScaleX < 0;
-    bool bVMirr = mrScaleY < 0;
+    bool bHMirr = (mrScaleX < 0);
+    bool bVMirr = (mrScaleY < 0);
 
     double fScaleX = std::fabs(mrScaleX);
     double fScaleY = std::fabs(mrScaleY);
