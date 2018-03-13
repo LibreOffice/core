@@ -87,7 +87,7 @@
               <object class="GtkEntry" id="edit">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
-                <property name="invisible_char">•</property>
+                <property name="activates_default">True</property>
                 <property name="width_chars">30</property>
               </object>
               <packing>
