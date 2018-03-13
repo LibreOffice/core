@@ -147,9 +147,10 @@ ModelToViewHelper::ModelToViewHelper(const SwTextNode &rNode, ExpandMode eMode)
                         case RES_TXTATR_ANNOTATION:
                             if (eMode & ExpandMode::ExpandFields)
                             {
-                                aFieldResult.m_sExpand = (eMode & ExpandMode::ReplaceMode)
-                                    ? OUString(CHAR_ZWSP)
-                                    : static_txtattr_cast<SwTextField const*>(pAttr)->
+                                // add a ZWSP before the expanded field in replace mode
+                                aFieldResult.m_sExpand = ((eMode & ExpandMode::ReplaceMode)
+                                    ? OUString(CHAR_ZWSP) : OUString("")) +
+                                      static_txtattr_cast<SwTextField const*>(pAttr)->
                                       GetFormatField().GetField()->ExpandField(true);
                                 aFieldResult.m_eType = FieldResult::FIELD;
                             }
