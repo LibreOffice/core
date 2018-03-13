@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba2be162_4ff92fc8",
+        "filename": "sw/source/core/crsr/crstrvl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 985,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2018-03-13T19:57:33Z",
+      "side": 1,
+      "message": "ah this will return false for one-past-the-end, guess that\u0027s the problem",
+      "revId": "69ca7051e95e0d6ed8a78b60cc4a6c8c8fa2ebf7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
