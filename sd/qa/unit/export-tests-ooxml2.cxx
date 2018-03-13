@@ -111,6 +111,8 @@ public:
     void testGroupsRotatedPosition();
     void testAccentColor();
     void testTdf114848();
+    /// SmartArt animated elements
+    void testTdf104792();
 
     CPPUNIT_TEST_SUITE(SdOOXMLExportTest2);
 
@@ -143,6 +145,7 @@ public:
     CPPUNIT_TEST(testGroupsRotatedPosition);
     CPPUNIT_TEST(testAccentColor);
     CPPUNIT_TEST(testTdf114848);
+    CPPUNIT_TEST(testTdf104792);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -906,6 +909,19 @@ void SdOOXMLExportTest2::testTdf114848()
     assertXPath(pXmlDocTheme1, "/a:theme/a:themeElements/a:clrScheme/a:dk2/a:srgbClr", "val", "1f497d");
     xmlDocPtr pXmlDocTheme2 = parseExport(tempFile, "ppt/theme/theme2.xml");
     assertXPath(pXmlDocTheme2, "/a:theme/a:themeElements/a:clrScheme/a:dk2/a:srgbClr", "val", "1f497d");
+}
+
+void SdOOXMLExportTest2::testTdf104792()
+{
+    ::sd::DrawDocShellRef xDocShRef = loadURL(
+        m_directories.getURLFromSrc("sd/qa/unit/data/pptx/tdf104792-smart-art-animation.pptx"), PPTX);
+    utl::TempFile tempFile;
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
+
+    xmlDocPtr pXmlDocContent = parseExport(tempFile, "ppt/slides/slide1.xml");
+    assertXPath(pXmlDocContent, "/p:sld/p:timing/p:tnLst/p:par/p:cTn/p:childTnLst[1]/p:seq/p:cTn/p:childTnLst[1]/p:par[1]/p:cTn/p:childTnLst[1]/p:par/p:cTn/p:childTnLst[1]/p:par/p:cTn/p:childTnLst[1]/p:set/p:cBhvr/p:tgtEl/p:spTgt", 1);
+
+    xDocShRef->DoClose();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdOOXMLExportTest2);
