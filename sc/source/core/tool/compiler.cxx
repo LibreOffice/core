@@ -3482,8 +3482,8 @@ bool ScCompiler::IsColRowName( const OUString& rName )
                 pRL = pDoc->GetRowNameRanges();
             for ( size_t iPair = 0, nPairs = pRL->size(); iPair < nPairs && !bInList; ++iPair )
             {
-                ScRangePair* pR = (*pRL)[iPair];
-                const ScRange& rNameRange = pR->GetRange(0);
+                const ScRangePair & rR = (*pRL)[iPair];
+                const ScRange& rNameRange = rR.GetRange(0);
                 if ( jThisTab && !(rNameRange.aStart.Tab() <= nThisTab &&
                         nThisTab <= rNameRange.aEnd.Tab()) )
                     continue;   // for
@@ -5252,11 +5252,11 @@ bool ScCompiler::HandleColRowName()
     ScRange aRange;
     for ( size_t i = 0, nPairs = pRL->size(); i < nPairs; ++i )
     {
-        ScRangePair* pR = (*pRL)[i];
-        if ( pR->GetRange(0).In( aAbs ) )
+        const ScRangePair & rR = (*pRL)[i];
+        if ( rR.GetRange(0).In( aAbs ) )
         {
             bInList = bValidName = true;
-            aRange = pR->GetRange(1);
+            aRange = rR.GetRange(1);
             if ( bColName )
             {
                 aRange.aStart.SetCol( nCol );
@@ -5300,8 +5300,8 @@ bool ScCompiler::HandleColRowName()
                 }
                 for ( size_t i = 0, nPairs = pRL->size(); i < nPairs; ++i )
                 {   // next defined ColNameRange below limits row
-                    ScRangePair* pR = (*pRL)[i];
-                    const ScRange& rRange = pR->GetRange(1);
+                    const ScRangePair & rR = (*pRL)[i];
+                    const ScRange& rRange = rR.GetRange(1);
                     if ( rRange.aStart.Col() <= nCol && nCol <= rRange.aEnd.Col() )
                     {   // identical column range
                         SCROW nTmp = rRange.aStart.Row();
@@ -5333,8 +5333,8 @@ bool ScCompiler::HandleColRowName()
                 }
                 for ( size_t i = 0, nPairs = pRL->size(); i < nPairs; ++i )
                 {   // next defined RowNameRange to the right limits column
-                    ScRangePair* pR = (*pRL)[i];
-                    const ScRange& rRange = pR->GetRange(1);
+                    const ScRangePair & rR = (*pRL)[i];
+                    const ScRange& rRange = rR.GetRange(1);
                     if ( rRange.aStart.Row() <= nRow && nRow <= rRange.aEnd.Row() )
                     {   // identical row range
                         SCCOL nTmp = rRange.aStart.Col();

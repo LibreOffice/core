@@ -1661,9 +1661,9 @@ void ScDocument::GetFormulaEntries( ScTypedCaseStrSet& rStrings )
 
         for ( size_t i = 0, nPairs = pList->size(); i < nPairs; ++i )
         {
-            ScRangePair* pPair = (*pList)[i];
-            ScRange aRange = pPair->GetRange(0);
-            ScCellIterator aIter( this, aRange );
+            const ScRangePair & rPair = (*pList)[i];
+            const ScRange & rRange = rPair.GetRange(0);
+            ScCellIterator aIter( this, rRange );
             for (bool bHas = aIter.first(); bHas; bHas = aIter.next())
             {
                 if (!aIter.hasString())
