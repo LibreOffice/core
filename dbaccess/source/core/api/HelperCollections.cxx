@@ -49,7 +49,7 @@ namespace dbaccess
     {
     }
 
-    OPrivateColumns* OPrivateColumns::createWithIntrinsicNames( const ::rtl::Reference< ::connectivity::OSQLColumns >& _rColumns,
+    std::unique_ptr<OPrivateColumns> OPrivateColumns::createWithIntrinsicNames( const ::rtl::Reference< ::connectivity::OSQLColumns >& _rColumns,
         bool _bCase, ::cppu::OWeakObject& _rParent, ::osl::Mutex& _rMutex )
     {
         std::vector< OUString > aNames; aNames.reserve( _rColumns->get().size() );
@@ -61,7 +61,7 @@ namespace dbaccess
             xColumn->getPropertyValue( PROPERTY_NAME ) >>= sColumName;
             aNames.push_back( sColumName );
         }
-        return new OPrivateColumns( _rColumns, _bCase, _rParent, _rMutex, aNames, false );
+        return std::unique_ptr<OPrivateColumns>(new OPrivateColumns( _rColumns, _bCase, _rParent, _rMutex, aNames, false ));
     }
 
     void OPrivateColumns::disposing()

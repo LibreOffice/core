@@ -63,7 +63,7 @@ namespace dbaccess
 
         /** creates a columns instance as above, but taking the names from the columns itself
         */
-        static OPrivateColumns* createWithIntrinsicNames(
+        static std::unique_ptr<OPrivateColumns> createWithIntrinsicNames(
             const ::rtl::Reference< ::connectivity::OSQLColumns >& _rColumns,
             bool _bCase,
             ::cppu::OWeakObject& _rParent,
