@@ -26,6 +26,7 @@
 #include <ViewShell.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/BitmapScaleFilter.hxx>
 
 #include <svx/svdpagv.hxx>
 #include <svx/svdoutl.hxx>
@@ -455,7 +456,8 @@ Image PreviewRenderer::ScaleBitmap (
 
         // Paint the bitmap scaled to the desired width.
         BitmapEx aScaledBitmap (rBitmapEx.GetBitmap());
-        aScaledBitmap.Scale (aPreviewSize, BmpScaleFlag::BestQuality);
+        BitmapFilter::Filter(aScaledBitmap, BitmapScaleFilter(aPreviewSize, BmpScaleFlag::BestQuality));
+
         mpPreviewDevice->DrawBitmap (
             Point(1,1),
             aPreviewSize,

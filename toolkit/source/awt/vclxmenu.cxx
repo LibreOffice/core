@@ -35,6 +35,7 @@
 #include <vcl/image.hxx>
 #include <vcl/mnemonic.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/BitmapScaleFilter.hxx>
 
 #include <com/sun/star/awt/KeyModifier.hpp>
 
@@ -588,7 +589,7 @@ namespace
 
                 bool bModified( false );
                 BitmapEx aBitmapEx = aImage.GetBitmapEx();
-                bModified = aBitmapEx.Scale( aNewSize, BmpScaleFlag::BestQuality );
+                BitmapFilter::Filter(aBitmapEx, BitmapScaleFilter(aNewSize, BmpScaleFlag::BestQuality));
 
                 if ( bModified )
                     aImage = Image( aBitmapEx );
