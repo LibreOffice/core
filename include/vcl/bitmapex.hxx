@@ -94,21 +94,12 @@ public:
     BitmapChecksum      GetChecksum() const;
 
 public:
-
+    
     /**
      * @brief extract the bitmap and alpha data separately. Used by the SWF filter.
      */
     void GetSplitData( std::vector<sal_uInt8>& rvColorData, std::vector<sal_uInt8>& rvAlphaData ) const;
     
-    /** Reduce number of colors for the bitmap using the POPULAR algorithm
-
-        @param nNewColorCount
-        Maximal number of bitmap colors after the reduce operation
-
-        @return true, if the color reduction operation was completed successfully.
-     */
-    bool                ReduceColors( sal_uInt16 nNewColorCount );
-
     /** Apply a dither algorithm to the bitmap
 
         This method dithers the bitmap inplace, i.e. a true color
