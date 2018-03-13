@@ -19,6 +19,7 @@
 
 #include <vcl/builderfactory.hxx>
 #include <vcl/BitmapScaleFilter.hxx>
+#include <vcl/BitmapColorQuantizationFilter.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/objsh.hxx>
@@ -112,10 +113,8 @@ void GraphicPreviewWindow::ScaleImageToFit()
         {
             BitmapEx aBmpEx( mpOrigGraphic->GetBitmapEx() );
 
-            BitmapScaleFilter aFilter(aGrfSize);
-            BitmapEx aTmpBmpEx(aFilter.execute(aBmpEx));
-            if (!aTmpBmpEx.IsEmpty())
-                maScaledOrig = aTmpBmpEx;
+            if( aBmpEx.Scale( aGrfSize ) )
+                maScaledOrig = aBmpEx;
         }
     }
 
@@ -504,10 +503,14 @@ Graphic GraphicFilterPoster::GetFilteredGraphic( const Graphic& rGraphic, double
     }
     else
     {
-        BitmapEx aBmpEx( rGraphic.GetBitmapEx() );
+        BitmapEx aBmpEx(rGraphic.GetBitmapEx());
+        BitmapColorQuantizationFilter aBmpColorQuantizationFilter(nPosterCount);
 
-        if( aBmpEx.ReduceColors( nPosterCount ) )
-            aRet = aBmpEx;
+        BitmapEx aBmpTmpEx(aBmpColorQuantizationFilter.execute(aBmpEx));
+        if (!aBmpTmpEx.IsEmpty())
+            aRet = aBmpTmpEx;
+        else
+            SAL_WARN("vcl.gdi", "Color quantization failed");
     }
 
     return aRet;

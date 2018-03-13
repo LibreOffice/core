@@ -25,6 +25,7 @@
 #include <vcl/window.hxx>
 #include <vcl/dibtools.hxx>
 #include <vcl/BitmapConverter.hxx>
+#include <vcl/BitmapColorQuantizationFilter.hxx>
 
 #include <impanmvw.hxx>
 
@@ -522,23 +523,43 @@ void Animation::Convert( BmpConversion eConversion )
     }
 }
 
-bool Animation::ReduceColors( sal_uInt16 nNewColorCount )
+bool Animation::ReduceColors(sal_uInt16 nNewColorCount)
 {
-    SAL_WARN_IF( IsInAnimation(), "vcl", "Animation modified while it is animated" );
+    SAL_WARN_IF(IsInAnimation(), "vcl", "Animation modified while it is animated");
 
     bool bRet;
 
-    if( !IsInAnimation() && !maList.empty() )
+    if (!IsInAnimation() && !maList.empty())
     {
+        BitmapColorQuantizationFilter aBmpColorQuantizationFilter(nNewColorCount);
         bRet = true;
 
-        for( size_t i = 0, n = maList.size(); ( i < n ) && bRet; ++i )
-            bRet = maList[ i ]->aBmpEx.ReduceColors( nNewColorCount );
+        for (size_t i = 0, n = maList.size(); i < n && bRet; ++i)
+        {
+            BitmapEx aTmpBmpEx(aBmpColorQuantizationFilter.execute(maList[i]->aBmpEx));
+            if (aTmpBmpEx.IsEmpty())
+            {
+                SAL_WARN("vcl.gdi", "Frame " << i << " colour quantization failed");
+                bRet = false;
+            }
+            else
+            {
+                maList[i]->aBmpEx = aTmpBmpEx;
+                bRet = true;
+            }
+        }
 
-        maBitmapEx.ReduceColors( nNewColorCount );
+        BitmapEx aTmpBmpEx(aBmpColorQuantizationFilter.execute(maBitmapEx));
+
+        if (aTmpBmpEx.IsEmpty())
+            SAL_WARN("vcl.gdi", "Could not reduce colours");
+        else
+            maBitmapEx = aTmpBmpEx;
     }
     else
+    {
         bRet = false;
+    }
 
     return bRet;
 }

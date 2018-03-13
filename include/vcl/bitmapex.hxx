@@ -79,7 +79,6 @@ public:
     AlphaMask           GetAlpha() const;
 
     const Size          GetSizePixel() const { return maBitmap.GetSizePixel(); }
-    void                SetSizePixel( const Size& rNewSize, BmpScaleFlag nScaleFlag = BmpScaleFlag::Default )=delete;
 
     const Size&         GetPrefSize() const { return maBitmap.GetPrefSize(); }
     void                SetPrefSize( const Size& rPrefSize ) { maBitmap.SetPrefSize( rPrefSize ); }
@@ -199,38 +198,6 @@ public:
         @return true, if the operation was completed successfully.
      */
     bool                Mirror( BmpMirrorFlags nMirrorFlags );
-
-    /** Scale the bitmap
-
-        @param rNewSize
-        The resulting size of the scaled bitmap
-
-        @param nScaleFlag
-        The algorithm to be used for scaling
-
-        @return true, if the operation was completed successfully.
-     */
-    bool                Scale(
-                            const Size& rNewSize,
-                            BmpScaleFlag nScaleFlag = BmpScaleFlag::Default ) = delete;
-
-    /** Scale the bitmap
-
-        @param rScaleX
-        The scale factor in x direction.
-
-        @param rScaleY
-        The scale factor in y direction.
-
-        @param nScaleFlag
-        The algorithm to be used for scaling
-
-        @return true, if the operation was completed successfully.
-     */
-    bool                Scale(
-                            const double& rScaleX,
-                            const double& rScaleY,
-                            BmpScaleFlag nScaleFlag = BmpScaleFlag::Default ) = delete;
 
     /** Rotate bitmap by the specified angle
 
