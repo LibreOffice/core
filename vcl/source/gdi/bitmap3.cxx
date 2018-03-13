@@ -753,6 +753,7 @@ bool Bitmap::Scale( const double& rScaleX, const double& rScaleY, BmpScaleFlag n
     if (nStartCount == 1)
         nScaleFlag = BmpScaleFlag::Fast;
 
+    BitmapEx aBmpEx(*this);
     bool bRetval(false);
 
     switch(nScaleFlag)
@@ -777,7 +778,7 @@ bool Bitmap::Scale( const double& rScaleX, const double& rScaleY, BmpScaleFlag n
             else
             {
                 BitmapScaleSuperFilter aScaleSuperFilter(rScaleX, rScaleY);
-                bRetval = aScaleSuperFilter.execute(*this);
+                bRetval = (!aScaleSuperFilter.execute(aBmpEx).IsEmpty());
             }
             break;
         }
@@ -785,22 +786,26 @@ bool Bitmap::Scale( const double& rScaleX, const double& rScaleY, BmpScaleFlag n
         case BmpScaleFlag::BestQuality:
         {
             vcl::BitmapScaleConvolutionFilter aScaleConvolutionFilter(rScaleX, rScaleY, vcl::ConvolutionKernelType::Lanczos3);
-            bRetval = aScaleConvolutionFilter.execute(*this);
+            bRetval = (!aScaleConvolutionFilter.execute(aBmpEx).IsEmpty());
             break;
         }
         case BmpScaleFlag::BiCubic :
         {
             vcl::BitmapScaleConvolutionFilter aScaleConvolutionFilter(rScaleX, rScaleY, vcl::ConvolutionKernelType::BiCubic);
-            bRetval = aScaleConvolutionFilter.execute(*this);
+            bRetval = (!aScaleConvolutionFilter.execute(aBmpEx).IsEmpty());
             break;
         }
         case BmpScaleFlag::BiLinear :
         {
             vcl::BitmapScaleConvolutionFilter aScaleConvolutionFilter(rScaleX, rScaleY, vcl::ConvolutionKernelType::BiLinear);
-            bRetval = aScaleConvolutionFilter.execute(*this);
+
+            bRetval = (!aScaleConvolutionFilter.execute(aBmpEx).IsEmpty());
             break;
         }
     }
+
+    if (bRetval)
+        *this = const_cast<Bitmap&>(aBmpEx.GetBitmapRef());
 
     OSL_ENSURE(!bRetval || nStartCount == GetBitCount(), "Bitmap::Scale has changed the ColorDepth, this should *not* happen (!)");
     return bRetval;
