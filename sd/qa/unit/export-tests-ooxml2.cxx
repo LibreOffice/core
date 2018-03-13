@@ -128,6 +128,8 @@ public:
     void testFontScale();
     void testTdf115394();
     void testTdf115394Zero();
+    /// SmartArt animated elements
+    void testTdf104792();
 
     CPPUNIT_TEST_SUITE(SdOOXMLExportTest2);
 
@@ -177,6 +179,7 @@ public:
     CPPUNIT_TEST(testFontScale);
     CPPUNIT_TEST(testTdf115394);
     CPPUNIT_TEST(testTdf115394Zero);
+    CPPUNIT_TEST(testTdf104792);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -1195,6 +1198,19 @@ void SdOOXMLExportTest2::testTdf115394Zero()
     SdPage* pPage = xDocShRef->GetDoc()->GetSdPage(0, PageKind::Standard);
     fTransitionDuration = pPage->getTransitionDuration();
     CPPUNIT_ASSERT_EQUAL(0.01, fTransitionDuration);
+
+    xDocShRef->DoClose();
+}
+
+void SdOOXMLExportTest2::testTdf104792()
+{
+    ::sd::DrawDocShellRef xDocShRef = loadURL(
+        m_directories.getURLFromSrc("sd/qa/unit/data/pptx/tdf104792-smart-art-animation.pptx"), PPTX);
+    utl::TempFile tempFile;
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
+
+    xmlDocPtr pXmlDocContent = parseExport(tempFile, "ppt/slides/slide1.xml");
+    assertXPath(pXmlDocContent, "/p:sld/p:timing/p:tnLst/p:par/p:cTn/p:childTnLst[1]/p:seq/p:cTn/p:childTnLst[1]/p:par[1]/p:cTn/p:childTnLst[1]/p:par/p:cTn/p:childTnLst[1]/p:par/p:cTn/p:childTnLst[1]/p:set/p:cBhvr/p:tgtEl/p:spTgt", 1);
 
     xDocShRef->DoClose();
 }
