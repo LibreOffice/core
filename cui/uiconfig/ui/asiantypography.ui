@@ -54,7 +54,7 @@
             </child>
             <child>
               <object class="GtkCheckButton" id="checkApplySpacing">
-                <property name="label" translatable="yes" context="asiantypography|checkApplySpacing">Apply spacing between Asian, Latin and complex text</property>
+                <property name="label" translatable="yes" context="asiantypography|checkApplySpacing">Apply spacing between Asian and non-Asian text</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
