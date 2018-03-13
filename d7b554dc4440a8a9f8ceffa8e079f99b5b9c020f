@@ -76,6 +76,24 @@
       "revId": "d7b554dc4440a8a9f8ceffa8e079f99b5b9c020f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba2be162_f4f2b66e",
+        "filename": "sw/source/core/text/itrform2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 611,
+      "author": {
+        "id": 1000821
+      },
+      "writtenOn": "2018-03-13T15:56:03Z",
+      "side": 1,
+      "message": "The kerning portion whose width is to be determined will be placed between pPor that ends at nTmp-1 and the next portion that starts from nTmp. That\u0027s why I think char at nTmp and nTmp-1 should be compared. They are sure to have different script type, which is not necessary true for nTmp and nTmp+1.\n\nI see it loops in ScriptType() and NextScriptChg() to find actual script type value from the position. The code can save a little bit time to use m_pFont-\u003eGetActual() as current script type, and save SwFontScript(m_pScriptInfo-\u003eScriptType(nTmp)) as next script type. Check if they are different and one of them is SwFontScript::Asian, so that only invoke ScriptType() once and NextScriptChg() won\u0027t be necessary.",
+      "parentUuid": "ba2be162_9477ba01",
+      "revId": "d7b554dc4440a8a9f8ceffa8e079f99b5b9c020f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
