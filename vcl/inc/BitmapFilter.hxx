@@ -11,15 +11,15 @@
 #ifndef INCLUDED_VCL_INC_BITMAPFILTER_HXX
 #define INCLUDED_VCL_INC_BITMAPFILTER_HXX
 
-#include <vcl/bitmap.hxx>
+#include <vcl/bitmapex.hxx>
 
-class BitmapFilter
+class VCL_DLLPUBLIC BitmapFilter
 {
 public:
-                 BitmapFilter();
-    virtual      ~BitmapFilter();
+    BitmapFilter();
+    virtual ~BitmapFilter();
 
-    virtual bool execute(Bitmap& rBitmap) = 0;
+    virtual BitmapEx execute(BitmapEx const & rBitmapEx) = 0;
 };
 
 #endif
