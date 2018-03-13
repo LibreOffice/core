@@ -17,42 +17,31 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_BITMAPSCALECONVOLUTION_HXX
-#define INCLUDED_VCL_BITMAPSCALECONVOLUTION_HXX
+#include <vcl/bitmapex.hxx>
+#include <vcl/BitmapScaleFilter.hxx>
 
-#include "bitmapfilter.hxx"
-
-namespace vcl
+BitmapEx BitmapScaleFilter::execute(BitmapEx const& rBitmapEx)
 {
+    Bitmap aBitmap(rBitmapEx.GetBitmap());
+    bool bRet = false;
 
-enum class ConvolutionKernelType
-{
-    BiLinear  = 1,
-    BiCubic   = 2,
-    Lanczos3  = 3,
-};
+    if (maSize == Size(0, 0))
+        bRet = aBitmap.Scale(mfScaleX, mfScaleY, mnScaleFlag);
+    else
+        bRet = aBitmap.Scale(maSize, mnScaleFlag);
 
-class VCL_DLLPUBLIC BitmapScaleConvolutionFilter : public BitmapFilter
-{
-public:
+    Bitmap aMask(rBitmapEx.GetMask());
 
-    BitmapScaleConvolutionFilter(const double& rScaleX, const double& rScaleY, ConvolutionKernelType eKernelType)
-        : mrScaleX(rScaleX)
-        , mrScaleY(rScaleY)
-        , meKernelType(eKernelType)
-    {}
+    if (bRet && (rBitmapEx.GetTransparentType() == TransparentType::Bitmap) && !aMask.IsEmpty())
+        bRet = aMask.Scale(maSize, mnScaleFlag);
 
-    virtual bool execute(Bitmap& rBitmap) override;
+    SAL_WARN_IF(!aMask.IsEmpty() && aBitmap.GetSizePixel() != aMask.GetSizePixel(), "vcl",
+                "BitmapEx::Scale(): size mismatch for bitmap and alpha mask.");
 
-private:
-    double mrScaleX;
-    double mrScaleY;
+    if (bRet)
+        return BitmapEx(aBitmap, aMask);
 
-    ConvolutionKernelType meKernelType;
-};
-
+    return BitmapEx();
 }
-
-#endif // INCLUDED_VCL_BITMAPSCALECONVOLUTION_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -18,11 +18,9 @@
  */
 
 #include <sal/config.h>
-
-#include <cstdlib>
+#include <tools/poly.hxx>
 
 #include <vcl/bitmapaccess.hxx>
-#include <tools/poly.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/window.hxx>
 #include <vcl/gdimtf.hxx>
@@ -31,8 +29,15 @@
 #include <vcl/animate.hxx>
 #include <vcl/alpha.hxx>
 #include <vcl/virdev.hxx>
+#include "grfcache.hxx"
 #include <vcl/GraphicObject.hxx>
+#include <vcl/BitmapConverter.hxx>
+#include <vcl/BitmapScaleFilter.hxx>
+
+#include "grfcache.hxx"
+
 #include <bitmapwriteaccess.hxx>
+
 #include <memory>
 
 struct ImplTileInfo

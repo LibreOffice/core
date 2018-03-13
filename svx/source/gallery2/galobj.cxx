@@ -39,6 +39,8 @@
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/dibtools.hxx>
+#include <vcl/BitmapConverter.hxx>
+#include <vcl/BitmapScaleFilter.hxx>
 #include "gallerydrawmodel.hxx"
 #include <memory>
 #include <bitmaps.hlst>
@@ -82,9 +84,7 @@ BitmapEx SgaObject::createPreviewBitmapEx(const Size& rSizePixel) const
             // only scale when need to decrease, no need to make bigger as original. Also
             // prevent scaling close to 1.0 which is not needed for pixel graphics
             if(fScale < 1.0 && fabs(1.0 - fScale) > 0.005)
-            {
-                aRetval.Scale(fScale, fScale, BmpScaleFlag::BestQuality);
-            }
+                BitmapFilter::Filter(aRetval, BitmapScaleFilter(fScale, fScale, BmpScaleFlag::BestQuality));
         }
     }
 
@@ -118,7 +118,7 @@ bool SgaObject::CreateThumb( const Graphic& rGraphic )
                     else
                         aBmpSize.setHeight( FRound( aBmpSize.Width() / fFactorLog ) );
 
-                    aBmpEx.Scale(aBmpSize, BmpScaleFlag::BestQuality);
+                    BitmapFilter::Filter(aBmpEx, BitmapScaleFilter(aBmpSize, BmpScaleFlag::BestQuality));
                 }
             }
 
@@ -127,7 +127,7 @@ bool SgaObject::CreateThumb( const Graphic& rGraphic )
 
             if( ( aBmpSize.Width() <= S_THUMB ) && ( aBmpSize.Height() <= S_THUMB ) )
             {
-                aThumbBmp.Convert( BmpConversion::N8BitColors );
+                BitmapConverter::Convert(aThumbBmp, BitmapConverter(BmpConversion::N8BitColors));
                 bRet = true;
             }
             else
@@ -135,12 +135,12 @@ bool SgaObject::CreateThumb( const Graphic& rGraphic )
                 const float fFactor  = static_cast<float>(aBmpSize.Width()) / aBmpSize.Height();
                 const Size  aNewSize( std::max( static_cast<long>(fFactor < 1. ? S_THUMB * fFactor : S_THUMB), 8L ),
                                       std::max( static_cast<long>(fFactor < 1. ? S_THUMB : S_THUMB / fFactor), 8L ) );
-                if(aThumbBmp.Scale(
+                if (BitmapFilter::Filter(aThumbBmp, BitmapScaleFilter(
                     static_cast<double>(aNewSize.Width()) / aBmpSize.Width(),
                     static_cast<double>(aNewSize.Height()) / aBmpSize.Height(),
-                    BmpScaleFlag::BestQuality ) )
+                    BmpScaleFlag::BestQuality)))
                 {
-                    aThumbBmp.Convert( BmpConversion::N8BitColors );
+                    BitmapConverter::Convert(aThumbBmp, BitmapConverter(BmpConversion::N8BitColors));
                     bRet = true;
                 }
             }
@@ -161,7 +161,7 @@ bool SgaObject::CreateThumb( const Graphic& rGraphic )
 
         if( !aThumbBmp.IsEmpty() )
         {
-            aThumbBmp.Convert( BmpConversion::N8BitColors );
+            BitmapConverter::Convert(aThumbBmp, BitmapConverter(BmpConversion::N8BitColors));
             bRet = true;
         }
     }
@@ -480,10 +480,12 @@ bool SgaObjectSvDraw::CreateThumb( const FmFormModel& rModel )
                         nTargetSizeX = (aDiscreteSize.Width() * nTargetSizeY) / aDiscreteSize.Height();
                     }
 
-                    if(!!aThumbBmp)
+                    if (!!aThumbBmp)
                     {
-                        aThumbBmp.Scale(Size(nTargetSizeX, nTargetSizeY), BmpScaleFlag::BestQuality);
-                        aThumbBmp.Convert(BmpConversion::N8BitColors);
+                        BitmapFilter::Filter(aThumbBmp,
+                                BitmapScaleFilter(Size(nTargetSizeX, nTargetSizeY),
+                                    BmpScaleFlag::BestQuality));
+                        BitmapConverter::Converter(aThumbBmp, BitmapConverter(BmpConversion::N8BitColors));
                         bRet = true;
                     }
                 }

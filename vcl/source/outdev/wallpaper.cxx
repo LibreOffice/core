@@ -24,6 +24,7 @@
 #include <vcl/outdev.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/window.hxx>
+#include <vcl/BitmapScaleFilter.hxx>
 
 #include <wall2.hxx>
 
@@ -196,8 +197,10 @@ void OutputDevice::DrawBitmapWallpaper( long nX, long nY,
                 rWallpaper.ImplReleaseCachedBitmap();
 
             aBmpEx = rWallpaper.GetBitmap();
-            aBmpEx.Scale( aSize );
-            aBmpEx = BitmapEx( aBmpEx.GetBitmap().CreateDisplayBitmap( this ), aBmpEx.GetMask() );
+
+            BitmapFilter::Filter(aBmpEx, BitmapScaleFilter(aSize));
+
+            aBmpEx = BitmapEx(aBmpEx.GetBitmap().CreateDisplayBitmap(this), aBmpEx.GetMask());
         }
         break;
 

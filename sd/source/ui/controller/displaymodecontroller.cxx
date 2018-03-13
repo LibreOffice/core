@@ -12,6 +12,7 @@
 #include <svtools/toolbarmenu.hxx>
 #include <svtools/valueset.hxx>
 #include <vcl/toolbox.hxx>
+#include <vcl/BitmapScaleFilter.hxx>
 
 #include <strings.hrc>
 
@@ -253,9 +254,12 @@ void DisplayModeController::setToolboxItemImage(const OUString& rImage)
         Size size = aBmp.GetSizePixel();
         if (size.Width() > targetSize)
             scale = static_cast<double>(targetSize) / static_cast<double>(size.Width());
+
         if (size.Height() > targetSize)
             scale = ::std::min( scale, static_cast<double>(targetSize) / static_cast<double>(size.Height()) );
-        aBmp.Scale( scale, scale );
+
+        BitmapFilter::Filter(aBmp, BitmapScaleFilter(Size(scale, scale)));
+
         pToolBox->SetItemImage( nId, Image( aBmp ) );
     }
 }

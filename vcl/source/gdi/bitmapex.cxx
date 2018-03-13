@@ -19,11 +19,11 @@
 
 #include <rtl/crc.h>
 #include <rtl/strbuf.hxx>
-
-#include <o3tl/any.hxx>
 #include <tools/debug.hxx>
 #include <unotools/resmgr.hxx>
 #include <tools/stream.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
+
 #include <vcl/ImageTree.hxx>
 #include <vcl/salbtype.hxx>
 #include <vcl/outdev.hxx>
@@ -34,17 +34,21 @@
 #include <vcl/bitmapaccess.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/BitmapScaleFilter.hxx>
 
+#include <bitmapwriteaccess.hxx>
 #include <image.h>
-#include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 // BitmapEx::Create
 #include <salbmp.hxx>
 #include <salinst.hxx>
 #include <svdata.hxx>
+
+#include <o3tl/any.hxx>
+
 #include <com/sun/star/beans/XFastPropertySet.hpp>
+
 #include <memory>
-#include <bitmapwriteaccess.hxx>
 
 using namespace ::com::sun::star;
 
@@ -332,48 +336,6 @@ bool BitmapEx::Mirror( BmpMirrorFlags nMirrorFlags )
     return bRet;
 }
 
-bool BitmapEx::Scale( const double& rScaleX, const double& rScaleY, BmpScaleFlag nScaleFlag )
-{
-    bool bRet = false;
-
-    if( !!maBitmap )
-    {
-        bRet = maBitmap.Scale( rScaleX, rScaleY, nScaleFlag );
-
-        if( bRet && ( meTransparent == TransparentType::Bitmap ) && !!maMask )
-        {
-            maMask.Scale( rScaleX, rScaleY, nScaleFlag );
-        }
-
-        SetSizePixel(maBitmap.GetSizePixel());
-
-        SAL_WARN_IF( !!maMask && maBitmap.GetSizePixel() != maMask.GetSizePixel(), "vcl",
-                    "BitmapEx::Scale(): size mismatch for bitmap and alpha mask." );
-    }
-
-    return bRet;
-}
-
-bool BitmapEx::Scale( const Size& rNewSize, BmpScaleFlag nScaleFlag )
-{
-    bool bRet;
-
-    if (GetSizePixel().Width() && GetSizePixel().Height()
-            && (rNewSize.Width()  != GetSizePixel().Width()
-                    || rNewSize.Height() != GetSizePixel().Height() ) )
-    {
-        bRet = Scale( static_cast<double>(rNewSize.Width()) / GetSizePixel().Width(),
-                      static_cast<double>(rNewSize.Height()) / GetSizePixel().Height(),
-                      nScaleFlag );
-    }
-    else
-    {
-        bRet = true;
-    }
-
-    return bRet;
-}
-
 bool BitmapEx::Rotate( long nAngle10, const Color& rFillColor )
 {
     bool bRet = false;
@@ -411,8 +373,8 @@ bool BitmapEx::Rotate( long nAngle10, const Color& rFillColor )
 
         SetSizePixel(maBitmap.GetSizePixel());
 
-        SAL_WARN_IF(!!maMask && maBitmap.GetSizePixel() != maMask.GetSizePixel(), "vcl",
-                    "BitmapEx::Rotate(): size mismatch for bitmap and alpha mask.");
+        SAL_WARN_IF( !!maMask && maBitmap.GetSizePixel() != maMask.GetSizePixel(), "vcl",
+                    "BitmapEx::Rotate(): size mismatch for bitmap and alpha mask." );
     }
 
     return bRet;
@@ -657,7 +619,7 @@ BitmapEx BitmapEx:: AutoScaleBitmap(BitmapEx const & aBitmap, const long aStanda
         }
 
         aScaledSize = Size( imgNewWidth, imgNewHeight );
-        aRet.Scale( aScaledSize, BmpScaleFlag::BestQuality );
+        BitmapFilter::Filter(aRet, BitmapScaleFilter(aScaledSize, BmpScaleFlag::BestQuality));
     }
     else
     {
@@ -1329,10 +1291,8 @@ void BitmapEx::AdjustTransparency(sal_uInt8 cTrans)
 {
     AlphaMask   aAlpha;
 
-    if (!IsTransparent())
-    {
-        aAlpha = AlphaMask(GetSizePixel(), &cTrans);
-    }
+    if( !IsTransparent() )
+        aAlpha = AlphaMask( GetSizePixel(), &cTrans );
     else if( !IsAlpha() )
     {
         aAlpha = GetMask();
@@ -1403,18 +1363,14 @@ void BitmapEx::GetSplitData( std::vector<sal_uInt8>& rvColorData, std::vector<sa
     sal_uInt8* p = rvColorData.data(), *pAlpha = rvAlphaData.data();
 
 
-    if (IsAlpha())
-    {
+    if( IsAlpha() )
         aAlpha = GetAlpha();
-    }
-    else if (IsTransparent())
-    {
+    else if( IsTransparent() )
         aAlpha = GetMask();
-    }
     else
     {
         sal_uInt8 cAlphaVal = 0;
-        aAlpha = AlphaMask(aBmp.GetSizePixel(), &cAlphaVal);
+        aAlpha = AlphaMask( aBmp.GetSizePixel(), &cAlphaVal );
     }
 
     AlphaMask::ScopedReadAccess pAAcc(aAlpha);
@@ -1454,7 +1410,6 @@ void BitmapEx::CombineMaskOr(Color maskColor, sal_uInt8 nTol)
     if ( IsTransparent() )
          aNewMask.CombineSimple( maMask, BmpCombine::Or );
     maMask = aNewMask;
-    meTransparent = TransparentType::Bitmap;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

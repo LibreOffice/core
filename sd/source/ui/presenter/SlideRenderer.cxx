@@ -23,6 +23,7 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <com/sun/star/rendering/XBitmapCanvas.hpp>
 #include <vcl/svapp.hxx>
+#include <vcl/BitmapScaleFilter.hxx>
 #include <cppcanvas/vclfactory.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
@@ -179,9 +180,10 @@ BitmapEx SlideRenderer::CreatePreview (
     else
     {
         BitmapEx aScaledPreview = aPreview.GetBitmapEx();
-        aScaledPreview.Scale(
-            Size(aPreviewSize.Width,aPreviewSize.Height),
-            BmpScaleFlag::BestQuality);
+
+        BitmapFilter::Filter(aScaledPreview,
+                BitmapScaleFilter(Size(aPreviewSize.Width, aPreviewSize.Height), BmpScaleFlag::BestQuality));
+
         return aScaledPreview;
     }
 }

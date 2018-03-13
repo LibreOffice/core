@@ -34,6 +34,7 @@
 #include <sdmod.hxx>
 
 #include <vcl/virdev.hxx>
+#include <vcl/BitmapScaleFilter.hxx>
 #include <basegfx/range/b2drectangle.hxx>
 #include <basegfx/utils/canvastools.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
@@ -144,7 +145,8 @@ void InsertionIndicatorOverlay::Create (
     PaintPageCount(*pContent.get(), nSelectionCount, aPreviewSize, aOffset);
 
     maIcon = pContent->GetBitmapEx(Point(0,0), aIconSize);
-    maIcon.Scale(aIconSize);
+
+    BitmapFilter::Filter(maIcon, BitmapScaleFilter(aIconSize));
 }
 
 Point InsertionIndicatorOverlay::PaintRepresentatives (

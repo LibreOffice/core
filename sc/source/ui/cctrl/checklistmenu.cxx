@@ -25,6 +25,7 @@
 
 #include <vcl/decoview.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/BitmapScaleFilter.hxx>
 #include <tools/wintypes.hxx>
 
 #include <AccessibleFilterMenu.hxx>
@@ -1103,7 +1104,9 @@ void ScCheckListMenuWindow::packWindow()
 
     BitmapEx aSingleSelectBmp(RID_BMP_SELECT_CURRENT);
     if (fScaleFactor > 1)
-        aSingleSelectBmp.Scale(fScaleFactor, fScaleFactor, BmpScaleFlag::Fast);
+        BitmapFilter::Filter(aSingleSelectBmp,
+                BitmapScaleFilter(fScaleFactor, fScaleFactor, BmpScaleFlag::Fast));
+
     Image aSingleSelect(aSingleSelectBmp);
 
     getSectionPosSize(aPos, aSize, BTN_SINGLE_SELECT);
@@ -1115,7 +1118,9 @@ void ScCheckListMenuWindow::packWindow()
 
     BitmapEx aSingleUnselectBmp(RID_BMP_UNSELECT_CURRENT);
     if (fScaleFactor > 1)
-        aSingleUnselectBmp.Scale(fScaleFactor, fScaleFactor, BmpScaleFlag::Fast);
+        BitmapFilter::Filter(aSingleUnselectBmp,
+                BitmapScaleFilter(Size(fScaleFactor, fScaleFactor), BmpScaleFlag::Fast));
+
     Image aSingleUnselect(aSingleUnselectBmp);
 
     getSectionPosSize(aPos, aSize, BTN_SINGLE_UNSELECT);

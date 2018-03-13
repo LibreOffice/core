@@ -8,17 +8,21 @@
  *
  */
 
-#include <vcl/BitmapFilter.hxx>
+#include <vcl/BitmapConverter.hxx>
 
-BitmapFilter::BitmapFilter()
-{}
-
-BitmapFilter::~BitmapFilter()
-{}
-
-bool BitmapFilter::Filter(BitmapEx &rBmpEx, BitmapFilter &&rFilter)
+BitmapEx BitmapConverter::execute(BitmapEx const& rBitmapEx)
 {
-    BitmapEx aTmpBmpEx(rFilter.execute(rBmpEx));
+    Bitmap aBitmap(rBitmapEx.GetBitmap());
+
+    if (aBitmap.Convert(meConversion))
+        return BitmapEx(aBitmap);
+
+    return BitmapEx();
+}
+
+bool BitmapConverter::Convert(BitmapEx& rBmpEx, BitmapConverter&& rBmpConverter)
+{
+    BitmapEx aTmpBmpEx(rBmpConverter.execute(rBmpEx));
 
     if (aTmpBmpEx.IsEmpty())
     {
@@ -29,5 +33,4 @@ bool BitmapFilter::Filter(BitmapEx &rBmpEx, BitmapFilter &&rFilter)
     rBmpEx = aTmpBmpEx;
     return true;
 }
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

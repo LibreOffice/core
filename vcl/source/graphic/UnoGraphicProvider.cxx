@@ -22,6 +22,7 @@
 #include <vcl/metaact.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/imagerepository.hxx>
+#include <vcl/BitmapScaleFilter.hxx>
 #include <unotools/resmgr.hxx>
 #include <tools/fract.hxx>
 #include <unotools/ucbstreamhelper.hxx>
@@ -500,7 +501,9 @@ void ImplApplyBitmapScaling( ::Graphic& rGraphic, sal_Int32 nPixelWidth, sal_Int
         BitmapEx aBmpEx( rGraphic.GetBitmapEx() );
         MapMode aPrefMapMode( aBmpEx.GetPrefMapMode() );
         Size    aPrefSize( aBmpEx.GetPrefSize() );
-        aBmpEx.Scale( Size( nPixelWidth, nPixelHeight ) );
+
+        BitmapFilter::Filter(aBmpEx, BitmapScaleFilter(Size(nPixelWidth, nPixelHeight)));
+
         aBmpEx.SetPrefMapMode( aPrefMapMode );
         aBmpEx.SetPrefSize( aPrefSize );
         rGraphic = aBmpEx;

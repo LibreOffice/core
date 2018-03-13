@@ -36,6 +36,7 @@
 #include <dialmgr.hxx>
 #include <sfx2/htmlmode.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/BitmapScaleFilter.hxx>
 #include <svx/flagsdef.hxx>
 #include <sfx2/request.hxx>
 #include <svl/grabbagitem.hxx>
@@ -181,11 +182,17 @@ SvxBorderTabPage::SvxBorderTabPage(vcl::Window* pParent, const SfxItemSet& rCore
 
     if ( GetDPIScaleFactor() > 1 )
     {
+        auto nFactor = GetDPIScaleFactor();
+
         for (size_t i = 0; i < m_aBorderImgVec.size(); ++i)
-            m_aBorderImgVec[i].Scale(GetDPIScaleFactor(), GetDPIScaleFactor(), BmpScaleFlag::Fast);
+        {
+            BitmapFilter::Filter(m_aBorderImgVec[i], BitmapScaleFilter(nFactor, nFactor, BmpScaleFlag::Fast));
+        }
 
         for (size_t i = 0; i < m_aShadowImgVec.size(); ++i)
-            m_aShadowImgVec[i].Scale(GetDPIScaleFactor(), GetDPIScaleFactor(), BmpScaleFlag::Fast);
+        {
+            BitmapFilter::Filter(m_aShadowImgVec[i], BitmapScaleFilter(nFactor, nFactor, BmpScaleFlag::Fast));
+        }
     }
 
     // this page needs ExchangeSupport

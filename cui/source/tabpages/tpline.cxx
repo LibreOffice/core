@@ -51,6 +51,7 @@
 #include <svx/dialmgr.hxx>
 #include <svx/dialogs.hrc>
 #include <svx/strings.hrc>
+#include <vcl/BitmapScaleFilter.hxx>
 #include <vcl/settings.hxx>
 #include <cuitabarea.hxx>
 
@@ -404,7 +405,8 @@ void SvxLineTabPage::InitSymbols(MenuButton const * pButton)
                 double nScale = bWidth ?
                                     double(MAX_BMP_WIDTH) / static_cast<double>(aSize.Width()):
                                     double(MAX_BMP_HEIGHT) / static_cast<double>(aSize.Height());
-                aBitmapEx.Scale(nScale, nScale);
+
+                BitmapFilter::Filter(aBitmapEx, BitmapScaleFilter(nScale, nScale));
             }
             Image aImage(aBitmapEx);
             pPopup->InsertItem(pInfo->nItemId,"",aImage);

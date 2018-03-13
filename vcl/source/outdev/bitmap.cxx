@@ -32,6 +32,7 @@
 #include <vcl/virdev.hxx>
 #include <vcl/image.hxx>
 #include <vcl/window.hxx>
+#include <vcl/BitmapConverter.hxx>
 
 #include <bmpfast.hxx>
 #include <salgdi.hxx>
@@ -336,13 +337,13 @@ void OutputDevice::DrawBitmapEx( const Point& rDestPt, const Size& rDestSize,
                     aBmpEx = BitmapEx( aColorBmp, aBmpEx.GetMask() );
                 }
             }
-            else if( !!aBmpEx )
+            else if (!!aBmpEx)
             {
-                if ( mnDrawMode & DrawModeFlags::GrayBitmap )
-                    aBmpEx.Convert( BmpConversion::N8BitGreys );
+                if (mnDrawMode & DrawModeFlags::GrayBitmap)
+                    BitmapConverter::Convert(aBmpEx, BitmapConverter(BmpConversion::N8BitGreys));
 
-                if ( mnDrawMode & DrawModeFlags::GhostedBitmap )
-                    aBmpEx.Convert( BmpConversion::Ghosted );
+                if (mnDrawMode & DrawModeFlags::GhostedBitmap)
+                    BitmapConverter::Convert(aBmpEx, BitmapConverter(BmpConversion::Ghosted));
             }
         }
 
