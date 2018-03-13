@@ -18,11 +18,12 @@
  */
 
 #include <rtl/crc.h>
-#include <cstdlib>
-#include <memory>
+#include <comphelper/fileformat.h>
+#include <basegfx/polygon/b2dpolygon.hxx>
 #include <tools/stream.hxx>
 #include <tools/vcompat.hxx>
 #include <tools/fract.hxx>
+
 #include <vcl/metaact.hxx>
 #include <vcl/salbtype.hxx>
 #include <vcl/outdev.hxx>
@@ -31,9 +32,8 @@
 #include <vcl/svapp.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/graphictools.hxx>
-#include <comphelper/fileformat.h>
-#include <basegfx/polygon/b2dpolygon.hxx>
 #include <vcl/canvastools.hxx>
+#include <vcl/BitmapConverter.hxx>
 
 #include <svmconverter.hxx>
 
@@ -51,6 +51,9 @@
 #include <com/sun/star/awt/XGraphics.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/graphic/XGraphicRenderer.hpp>
+
+#include <cstdlib>
+#include <memory>
 
 using namespace com::sun::star;
 
@@ -1758,11 +1761,15 @@ Color GDIMetaFile::ImplColConvertFnc( const Color& rColor, const void* pColParam
 
 BitmapEx GDIMetaFile::ImplBmpConvertFnc( const BitmapEx& rBmpEx, const void* pBmpParam )
 {
-    BitmapEx aRet( rBmpEx );
+    BitmapEx aRet(rBmpEx);
 
-    aRet.Convert( static_cast<const ImplBmpConvertParam*>(pBmpParam)->eConversion );
+    BitmapConverter aBmpConverter(static_cast<const ImplBmpConvertParam*>(pBmpParam)->eConversion);
+    BitmapEx aConvertedBmp(aBmpConverter.execute(aRet));
 
-    return aRet;
+    if (aConvertedBmp.IsEmpty())
+        return aRet;
+
+    return aConvertedBmp;
 }
 
 Color GDIMetaFile::ImplColMonoFnc( const Color&, const void* pColParam )
