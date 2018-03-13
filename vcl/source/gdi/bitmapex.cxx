@@ -175,7 +175,7 @@ bool BitmapEx::operator==( const BitmapEx& rBitmapEx ) const
     if( !maBitmap.ShallowEquals(rBitmapEx.maBitmap) )
         return false;
 
-    if( maBitmapSize != rBitmapEx.maBitmapSize )
+    if( maBitmapSize != rBitmapEx.GetSizePixel() )
         return false;
 
     if( meTransparent == TransparentType::NONE )
@@ -358,16 +358,18 @@ bool BitmapEx::Scale( const Size& rNewSize, BmpScaleFlag nScaleFlag )
 {
     bool bRet;
 
-    if( maBitmapSize.Width() && maBitmapSize.Height() &&
-        ( rNewSize.Width()  != maBitmapSize.Width() ||
-          rNewSize.Height() != maBitmapSize.Height() ) )
+    if (GetSizePixel().Width() && GetSizePixel().Height()
+            && (rNewSize.Width()  != GetSizePixel().Width()
+                    || rNewSize.Height() != GetSizePixel().Height()))
     {
-        bRet = Scale( static_cast<double>(rNewSize.Width()) / maBitmapSize.Width(),
-                      static_cast<double>(rNewSize.Height()) / maBitmapSize.Height(),
+        bRet = Scale( static_cast<double>(rNewSize.Width()) / GetSizePixel().Width(),
+                      static_cast<double>(rNewSize.Height()) / GetSizePixel().Height(),
                       nScaleFlag );
     }
     else
+    {
         bRet = true;
+    }
 
     return bRet;
 }
@@ -390,7 +392,7 @@ bool BitmapEx::Rotate( long nAngle10, const Color& rFillColor )
 
                 if( meTransparent == TransparentType::NONE )
                 {
-                    maMask = Bitmap( maBitmapSize, 1 );
+                    maMask = Bitmap(GetSizePixel(), 1);
                     maMask.Erase( COL_BLACK );
                     meTransparent = TransparentType::Bitmap;
                 }
@@ -685,7 +687,7 @@ sal_uInt8 BitmapEx::GetTransparency(sal_Int32 nX, sal_Int32 nY) const
 
     if(!maBitmap.IsEmpty())
     {
-        if(nX >= 0 && nX < maBitmapSize.Width() && nY >= 0 && nY < maBitmapSize.Height())
+        if(nX >= 0 && nX < GetSizePixel().Width() && nY >= 0 && nY < GetSizePixel().Height())
         {
             switch(meTransparent)
             {

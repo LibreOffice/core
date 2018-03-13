@@ -5,21 +5,30 @@
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
  */
 
-#ifndef VCL_INC_BITMAP_PROCESSOR_HXX
-#define VCL_INC_BITMAP_PROCESSOR_HXX
+#ifndef INCLUDED_VCL_INC_BITMAPCOLORIZEFILTER_HXX
+#define INCLUDED_VCL_INC_BITMAPCOLORIZEFILTER_HXX
 
-#include <vcl/bitmapex.hxx>
+#include <tools/color.hxx>
 
-class VCL_DLLPUBLIC BitmapProcessor
+#include <vcl/BitmapFilter.hxx>
+
+class VCL_DLLPUBLIC BitmapColorizeFilter : public BitmapFilter
 {
 public:
-    static BitmapEx createLightImage(const BitmapEx& rBitmapEx);
-    static BitmapEx createDisabledImage(const BitmapEx& rBitmapEx);
-    static void colorizeImage(BitmapEx const & rBitmapEx, Color aColor);
+    BitmapColorizeFilter(Color aColor)
+        : maColor(aColor)
+    {
+    }
+
+    virtual BitmapEx execute(BitmapEx const& rBitmapEx) override;
+
+private:
+    Color maColor;
 };
 
-#endif // VCL_INC_BITMAP_PROCESSOR_HXX
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
