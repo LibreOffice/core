@@ -8,23 +8,24 @@
  *
  */
 
-#ifndef INCLUDED_INCLUDE_VCL_BITMAPCONVERTER_HXX
-#define INCLUDED_INCLUDE_VCL_BITMAPCONVERTER_HXX
+#ifndef INCLUDED_INCLUDE_VCL_BITMAPDITHERINGFILTER_HXX
+#define INCLUDED_INCLUDE_VCL_BITMAPDITHERINGFILTER_HXX
 
-#include <vcl/bitmap.hxx>
-#include <vcl/bitmapex.hxx>
+#include <tools/color.hxx>
+
 #include <vcl/BitmapFilter.hxx>
 
-class VCL_DLLPUBLIC BitmapConverter : public BitmapFilter
+/** Dither filter
+
+    This command-pattern based class dithers the bitmap inplace,
+    i.e. a true colorbitmap is converted to a paletted bitmap,
+    reducing the color deviation by error diffusion.
+*/
+
+class VCL_DLLPUBLIC BitmapDitheringFilter : public BitmapFilter
 {
 public:
-    BitmapConverter(BmpConversion eConversion)
-        : meConversion(eConversion) {}
-
     virtual BitmapEx execute(BitmapEx const& rBitmapEx);
-
-private:
-    BmpConversion meConversion;
 };
 
 #endif

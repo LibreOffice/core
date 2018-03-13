@@ -94,14 +94,6 @@ public:
     BitmapChecksum      GetChecksum() const;
 
 public:
-    /** Apply a dither algorithm to the bitmap
-
-        This method dithers the bitmap inplace, i.e. a true color
-        bitmap is converted to a paletted bitmap, reducing the color
-        deviation by error diffusion.
-     */
-    bool                Dither();
-
     /** Crop the bitmap
 
         @param rRectPixel
