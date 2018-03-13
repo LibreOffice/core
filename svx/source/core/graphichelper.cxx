@@ -19,6 +19,7 @@
 
 #include <unotools/pathoptions.hxx>
 #include <vcl/graphicfilter.hxx>
+#include <vcl/BitmapScaleFilter.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <svx/xoutbmp.hxx>
@@ -318,9 +319,12 @@ OUString GraphicHelper::ExportGraphic(const vcl::Window* pParent, const Graphic&
                         ( ( nWidth != aSizePixel.Width() ) ||
                           ( nHeight != aSizePixel.Height() ) ) )
                     {
-                        BitmapEx aBmpEx( aGraphic.GetBitmapEx() );
+                        BitmapEx aBmpEx(aGraphic.GetBitmapEx());
+
                         // export: use highest quality
-                        aBmpEx.Scale( Size( nWidth, nHeight ), BmpScaleFlag::Lanczos );
+                        BitmapFilter::Filter(aBmpEx,
+                                BitmapScaleFilter(Size(nWidth, nHeight), BmpScaleFlag::Lanczos));
+
                         aGraphic = aBmpEx;
                     }
 

@@ -24,6 +24,7 @@
 #include <vcl/mnemonic.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
+#include <vcl/BitmapScaleFilter.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/cmdoptions.hxx>
 #include <comphelper/processfactory.hxx>
@@ -1043,7 +1044,10 @@ void SfxDocumentPage::Reset( const SfxItemSet* rSet )
     if ( GetDPIScaleFactor() > 1)
     {
         BitmapEx b = aImage.GetBitmapEx();
-        b.Scale(GetDPIScaleFactor(), GetDPIScaleFactor());
+
+        auto nFactor = GetDPIScaleFactor();
+        BitmapFilter::Filter(b, BitmapScaleFilter(nFactor, nFactor));
+
         aImage = Image(b);
     }
 

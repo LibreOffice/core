@@ -32,6 +32,7 @@
 #include <vcl/canvastools.hxx>
 #include <vcl/bitmapaccess.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/BitmapScaleFilter.hxx>
 
 #include <algorithm>
 
@@ -434,8 +435,11 @@ uno::Reference< rendering::XBitmap > SAL_CALL VclCanvasBitmap::getScaledBitmap( 
 {
     SolarMutexGuard aGuard;
 
-    BitmapEx aNewBmp( m_aBitmap );
-    aNewBmp.Scale( sizeFromRealSize2D( newSize ), beFast ? BmpScaleFlag::Default : BmpScaleFlag::BestQuality );
+    BitmapEx aNewBmp(m_aBitmap);
+    BitmapFilter::Filter(aNewBmp,
+            BitmapScaleFilter(sizeFromRealSize2D(newSize),
+                beFast ? BmpScaleFlag::Default : BmpScaleFlag::BestQuality));
+
     return uno::Reference<rendering::XBitmap>( new VclCanvasBitmap( aNewBmp ) );
 }
 
