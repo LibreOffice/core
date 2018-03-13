@@ -175,7 +175,7 @@ public:
     virtual bool HasURL( const OUString& aURL ) = 0;
     virtual bool HasSettings() = 0;
     virtual SvxEntries* GetEntries() = 0;
-    virtual void SetEntries( SvxEntries* ) = 0;
+    virtual void SetEntries( std::unique_ptr<SvxEntries> ) = 0;
     virtual void Reset() = 0;
     virtual bool Apply() = 0;
 };
@@ -214,7 +214,7 @@ public:
 
     /// methods inherited from SaveInData
     SvxEntries*         GetEntries() override;
-    void                SetEntries( SvxEntries* ) override;
+    void                SetEntries( std::unique_ptr<SvxEntries> ) override;
     bool                HasURL( const OUString& ) override { return false; }
     bool                HasSettings() override { return m_xMenuSettings.is(); }
     void                Reset() override;
@@ -236,7 +236,7 @@ public:
     virtual ~ContextMenuSaveInData() override;
 
     SvxEntries* GetEntries() override;
-    void SetEntries( SvxEntries* pNewEntries ) override;
+    void SetEntries( std::unique_ptr<SvxEntries> pNewEntries ) override;
     bool HasSettings() override;
     bool HasURL( const OUString& rURL ) override;
     void Reset() override;
@@ -268,7 +268,7 @@ private:
     css::uno::Reference<
         css::graphic::XGraphic > xBackupGraphic;
 
-    SvxEntries                  *mpEntries;
+    std::unique_ptr<SvxEntries>  mpEntries;
 
 public:
 
@@ -307,8 +307,8 @@ public:
     bool    IsBinding() const { return !bPopUp; }
     bool    IsSeparator() const { return nId == 0; }
 
-    SvxEntries* GetEntries() const { return mpEntries; }
-    void    SetEntries( SvxEntries* entries ) { mpEntries = entries; }
+    SvxEntries* GetEntries() const { return mpEntries.get(); }
+    void    SetEntries( std::unique_ptr<SvxEntries> entries ) { mpEntries = std::move(entries); }
 
     void    SetMain() { bIsMain = true; }
     bool    IsMain() { return bIsMain; }
@@ -500,7 +500,7 @@ class SvxMainMenuOrganizerDialog : public ModalDialog
     VclPtr<PushButton>     m_pMoveUpButton;
     VclPtr<PushButton>     m_pMoveDownButton;
 
-    SvxEntries*     mpEntries;
+    std::unique_ptr<SvxEntries> mpEntries;
     SvTreeListEntry*    pNewMenuEntry;
     bool            bModified;
 
@@ -517,7 +517,7 @@ public:
     virtual ~SvxMainMenuOrganizerDialog() override;
     virtual void dispose() override;
 
-    SvxEntries*     GetEntries() { return mpEntries;}
+    std::unique_ptr<SvxEntries> ReleaseEntries() { return std::move(mpEntries);}
     SvxConfigEntry* GetSelectedEntry();
 };
 
@@ -560,7 +560,7 @@ public:
     sal_Int32       GetSystemStyle( const OUString& rResourceURL );
 
     SvxEntries*     GetEntries() override;
-    void            SetEntries( SvxEntries* ) override;
+    void            SetEntries( std::unique_ptr<SvxEntries> ) override;
     bool            HasSettings() override;
     bool            HasURL( const OUString& rURL ) override;
     void            Reset() override;
