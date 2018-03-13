@@ -308,19 +308,19 @@ class SC_DLLPUBLIC ScConditionEntry : public ScFormatEntry
     const formula::FormulaGrammar::Grammar eTempGrammar2;  // grammar to be used on (re)compilation, e.g. in XML import
     bool                bIsStr1;        // for recognition of empty strings
     bool                bIsStr2;
-    ScTokenArray*       pFormula1;      // entered formula
-    ScTokenArray*       pFormula2;
+    std::unique_ptr<ScTokenArray> pFormula1;      // entered formula
+    std::unique_ptr<ScTokenArray> pFormula2;
     ScAddress           aSrcPos;        // source position for formulas
                                         // temporary data:
     OUString              aSrcString;     // formula source position as text during XML import
-    ScFormulaCell*      pFCell1;
-    ScFormulaCell*      pFCell2;
+    std::unique_ptr<ScFormulaCell>  pFCell1;
+    std::unique_ptr<ScFormulaCell>  pFCell2;
     bool                bRelRef1;
     bool                bRelRef2;
     bool                bFirstRun;
     std::unique_ptr<ScFormulaListener> mpListener;
 
-    void    SimplifyCompiledFormula( ScTokenArray*& rFormula,
+    void    SimplifyCompiledFormula( std::unique_ptr<ScTokenArray>& rFormula,
                                      double& rVal,
                                      bool& rIsStr,
                                      OUString& rStrVal );

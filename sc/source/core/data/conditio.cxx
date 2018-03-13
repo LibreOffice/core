@@ -160,8 +160,8 @@ void ScConditionEntry::StartListening()
 
     const ScRangeList& rRanges = pCondFormat->GetRange();
     mpListener->stopListening();
-    start_listen_to(*mpListener, pFormula1, rRanges);
-    start_listen_to(*mpListener, pFormula2, rRanges);
+    start_listen_to(*mpListener, pFormula1.get(), rRanges);
+    start_listen_to(*mpListener, pFormula2.get(), rRanges);
 
     mpListener->setCallback([&]() { pCondFormat->DoRepaint();});
 }
@@ -200,9 +200,9 @@ ScConditionEntry::ScConditionEntry( const ScConditionEntry& r ) :
 {
     // ScTokenArray copy ctor creates a flat copy
     if (r.pFormula1)
-        pFormula1 = new ScTokenArray( *r.pFormula1 );
+        pFormula1.reset( new ScTokenArray( *r.pFormula1 ) );
     if (r.pFormula2)
-        pFormula2 = new ScTokenArray( *r.pFormula2 );
+        pFormula2.reset( new ScTokenArray( *r.pFormula2 ) );
 
     StartListening();
     // Formula cells are created at IsValid
@@ -236,9 +236,9 @@ ScConditionEntry::ScConditionEntry( ScDocument* pDocument, const ScConditionEntr
 {
     // Real copy of the formulas (for Ref Undo)
     if (r.pFormula1)
-        pFormula1 = r.pFormula1->Clone();
+        pFormula1.reset( r.pFormula1->Clone() );
     if (r.pFormula2)
-        pFormula2 = r.pFormula2->Clone();
+        pFormula2.reset( r.pFormula2->Clone() );
 
     // Formula cells are created at IsValid
     // TODO: But not in the Clipboard! So interpret beforehand!
@@ -300,15 +300,15 @@ ScConditionEntry::ScConditionEntry( ScConditionMode eOper,
 {
     if ( pArr1 )
     {
-        pFormula1 = new ScTokenArray( *pArr1 );
+        pFormula1.reset( new ScTokenArray( *pArr1 ) );
         SimplifyCompiledFormula( pFormula1, nVal1, bIsStr1, aStrVal1 );
-        bRelRef1 = lcl_HasRelRef( mpDoc, pFormula1 );
+        bRelRef1 = lcl_HasRelRef( mpDoc, pFormula1.get() );
     }
     if ( pArr2 )
     {
-        pFormula2 = new ScTokenArray( *pArr2 );
+        pFormula2.reset( new ScTokenArray( *pArr2 ) );
         SimplifyCompiledFormula( pFormula2, nVal2, bIsStr2, aStrVal2 );
-        bRelRef2 = lcl_HasRelRef( mpDoc, pFormula2 );
+        bRelRef2 = lcl_HasRelRef( mpDoc, pFormula2.get() );
     }
 
     StartListening();
@@ -318,14 +318,9 @@ ScConditionEntry::ScConditionEntry( ScConditionMode eOper,
 
 ScConditionEntry::~ScConditionEntry()
 {
-    delete pFCell1;
-    delete pFCell2;
-
-    delete pFormula1;
-    delete pFormula2;
 }
 
-void ScConditionEntry::SimplifyCompiledFormula( ScTokenArray*& rFormula,
+void ScConditionEntry::SimplifyCompiledFormula( std::unique_ptr<ScTokenArray>& rFormula,
                                                 double& rVal,
                                                 bool& rIsStr,
                                                 OUString& rStrVal )
@@ -339,13 +334,13 @@ void ScConditionEntry::SimplifyCompiledFormula( ScTokenArray*& rFormula,
             if ( pToken->GetType() == svDouble )
             {
                 rVal = pToken->GetDouble();
-                DELETEZ(rFormula);             // Do not remember as formula
+                rFormula.reset();             // Do not remember as formula
             }
             else if ( pToken->GetType() == svString )
             {
                 rIsStr = true;
                 rStrVal = pToken->GetString().getString();
-                DELETEZ(rFormula);             // Do not remember as formula
+                rFormula.reset();             // Do not remember as formula
             }
         }
     }
@@ -366,39 +361,39 @@ void ScConditionEntry::Compile( const OUString& rExpr1, const OUString& rExpr2,
 
         if ( !rExpr1.isEmpty() )
         {
-            delete pFormula1;
+            pFormula1.reset();
             aComp.SetGrammar( eGrammar1 );
             if ( mpDoc->IsImportingXML() && !bTextToReal )
             {
                 //  temporary formula string as string tokens
-                pFormula1 = new ScTokenArray;
+                pFormula1.reset( new ScTokenArray );
                 pFormula1->AssignXMLString( rExpr1, rExprNmsp1 );
                 // bRelRef1 is set when the formula is compiled again (CompileXML)
             }
             else
             {
-                pFormula1 = aComp.CompileString( rExpr1, rExprNmsp1 );
+                pFormula1.reset( aComp.CompileString( rExpr1, rExprNmsp1 ) );
                 SimplifyCompiledFormula( pFormula1, nVal1, bIsStr1, aStrVal1 );
-                bRelRef1 = lcl_HasRelRef( mpDoc, pFormula1 );
+                bRelRef1 = lcl_HasRelRef( mpDoc, pFormula1.get() );
             }
         }
 
         if ( !rExpr2.isEmpty() )
         {
-            delete pFormula2;
+            pFormula2.reset();
             aComp.SetGrammar( eGrammar2 );
             if ( mpDoc->IsImportingXML() && !bTextToReal )
             {
                 //  temporary formula string as string tokens
-                pFormula2 = new ScTokenArray;
+                pFormula2.reset( new ScTokenArray );
                 pFormula2->AssignXMLString( rExpr2, rExprNmsp2 );
                 // bRelRef2 is set when the formula is compiled again (CompileXML)
             }
             else
             {
-                pFormula2 = aComp.CompileString( rExpr2, rExprNmsp2 );
+                pFormula2.reset( aComp.CompileString( rExpr2, rExprNmsp2 ) );
                 SimplifyCompiledFormula( pFormula2, nVal2, bIsStr2, aStrVal2 );
-                bRelRef2 = lcl_HasRelRef( mpDoc, pFormula2 );
+                bRelRef2 = lcl_HasRelRef( mpDoc, pFormula2.get() );
             }
         }
     }
@@ -417,7 +412,7 @@ void ScConditionEntry::MakeCells( const ScAddress& rPos )
         {
             // pFCell1 will hold a flat-copied ScTokenArray sharing ref-counted
             // code tokens with pFormula1
-            pFCell1 = new ScFormulaCell(mpDoc, rPos, *pFormula1);
+            pFCell1.reset( new ScFormulaCell(mpDoc, rPos, *pFormula1) );
             pFCell1->StartListeningTo( mpDoc );
         }
 
@@ -425,7 +420,7 @@ void ScConditionEntry::MakeCells( const ScAddress& rPos )
         {
             // pFCell2 will hold a flat-copied ScTokenArray sharing ref-counted
             // code tokens with pFormula2
-            pFCell2 = new ScFormulaCell(mpDoc, rPos, *pFormula2);
+            pFCell2.reset( new ScFormulaCell(mpDoc, rPos, *pFormula2) );
             pFCell2->StartListeningTo( mpDoc );
         }
     }
@@ -446,8 +441,8 @@ void ScConditionEntry::SetIgnoreBlank(bool bSet)
  */
 void ScConditionEntry::CompileAll()
 {
-    DELETEZ(pFCell1);
-    DELETEZ(pFCell2);
+    pFCell1.reset();
+    pFCell2.reset();
 }
 
 void ScConditionEntry::CompileXML()
@@ -486,11 +481,11 @@ void ScConditionEntry::SetSrcString( const OUString& rNew )
 
 void ScConditionEntry::SetFormula1( const ScTokenArray& rArray )
 {
-    DELETEZ( pFormula1 );
+    pFormula1.reset();
     if( rArray.GetLen() > 0 )
     {
-        pFormula1 = new ScTokenArray( rArray );
-        bRelRef1 = lcl_HasRelRef( mpDoc, pFormula1 );
+        pFormula1.reset( new ScTokenArray( rArray ) );
+        bRelRef1 = lcl_HasRelRef( mpDoc, pFormula1.get() );
     }
 
     StartListening();
@@ -498,11 +493,11 @@ void ScConditionEntry::SetFormula1( const ScTokenArray& rArray )
 
 void ScConditionEntry::SetFormula2( const ScTokenArray& rArray )
 {
-    DELETEZ( pFormula2 );
+    pFormula2.reset();
     if( rArray.GetLen() > 0 )
     {
-        pFormula2 = new ScTokenArray( rArray );
-        bRelRef2 = lcl_HasRelRef( mpDoc, pFormula2 );
+        pFormula2.reset( new ScTokenArray( rArray ) );
+        bRelRef2 = lcl_HasRelRef( mpDoc, pFormula2.get() );
     }
 
     StartListening();
@@ -540,7 +535,7 @@ void ScConditionEntry::UpdateReference( sc::RefUpdateContext& rCxt )
         }
 
         if (aRes.mbReferenceModified || bChangedPos)
-            DELETEZ(pFCell1);       // is created again in IsValid
+            pFCell1.reset();       // is created again in IsValid
     }
 
     if (pFormula2)
@@ -559,7 +554,7 @@ void ScConditionEntry::UpdateReference( sc::RefUpdateContext& rCxt )
         }
 
         if (aRes.mbReferenceModified || bChangedPos)
-            DELETEZ(pFCell2);       // is created again in IsValid
+            pFCell2.reset();       // is created again in IsValid
     }
 
     StartListening();
@@ -570,13 +565,13 @@ void ScConditionEntry::UpdateInsertTab( sc::RefUpdateInsertTabContext& rCxt )
     if (pFormula1)
     {
         pFormula1->AdjustReferenceOnInsertedTab(rCxt, aSrcPos);
-        DELETEZ(pFCell1);
+        pFCell1.reset();
     }
 
     if (pFormula2)
     {
         pFormula2->AdjustReferenceOnInsertedTab(rCxt, aSrcPos);
-        DELETEZ(pFCell2);
+        pFCell2.reset();
     }
 
     ScRangeUpdater::UpdateInsertTab(aSrcPos, rCxt);
@@ -587,13 +582,13 @@ void ScConditionEntry::UpdateDeleteTab( sc::RefUpdateDeleteTabContext& rCxt )
     if (pFormula1)
     {
         pFormula1->AdjustReferenceOnDeletedTab(rCxt, aSrcPos);
-        DELETEZ(pFCell1);
+        pFCell1.reset();
     }
 
     if (pFormula2)
     {
         pFormula2->AdjustReferenceOnDeletedTab(rCxt, aSrcPos);
-        DELETEZ(pFCell2);
+        pFCell2.reset();
     }
 
     ScRangeUpdater::UpdateDeleteTab(aSrcPos, rCxt);
@@ -605,23 +600,23 @@ void ScConditionEntry::UpdateMoveTab( sc::RefUpdateMoveTabContext& rCxt )
     if (pFormula1)
     {
         pFormula1->AdjustReferenceOnMovedTab(rCxt, aSrcPos);
-        DELETEZ(pFCell1);
+        pFCell1.reset();
     }
 
     if (pFormula2)
     {
         pFormula2->AdjustReferenceOnMovedTab(rCxt, aSrcPos);
-        DELETEZ(pFCell2);
+        pFCell2.reset();
     }
 
     StartListening();
 }
 
-static bool lcl_IsEqual( const ScTokenArray* pArr1, const ScTokenArray* pArr2 )
+static bool lcl_IsEqual( const std::unique_ptr<ScTokenArray>& pArr1, const std::unique_ptr<ScTokenArray>& pArr2 )
 {
     // We only compare the non-RPN array
     if ( pArr1 && pArr2 )
-        return pArr1->EqualTokens( pArr2 );
+        return pArr1->EqualTokens( pArr2.get() );
     else
         return !pArr1 && !pArr2; // Both 0? -> the same
 }
@@ -666,7 +661,7 @@ void ScConditionEntry::Interpret( const ScAddress& rPos )
     bool bDirty = false; // 1 and 2 separate?
 
     std::unique_ptr<ScFormulaCell> pTemp1;
-    ScFormulaCell* pEff1 = pFCell1;
+    ScFormulaCell* pEff1 = pFCell1.get();
     if ( bRelRef1 )
     {
         pTemp1.reset(pFormula1 ? new ScFormulaCell(mpDoc, rPos, *pFormula1) : new ScFormulaCell(mpDoc, rPos));
@@ -696,7 +691,7 @@ void ScConditionEntry::Interpret( const ScAddress& rPos )
     pTemp1.reset();
 
     std::unique_ptr<ScFormulaCell> pTemp2;
-    ScFormulaCell* pEff2 = pFCell2; //@ 1!=2
+    ScFormulaCell* pEff2 = pFCell2.get(); //@ 1!=2
     if ( bRelRef2 )
     {
         pTemp2.reset(pFormula2 ? new ScFormulaCell(mpDoc, rPos, *pFormula2) : new ScFormulaCell(mpDoc, rPos));
@@ -1358,7 +1353,7 @@ ScAddress ScConditionEntry::GetValidSrcPos() const
 
     for (sal_uInt16 nPass = 0; nPass < 2; nPass++)
     {
-        ScTokenArray* pFormula = nPass ? pFormula2 : pFormula1;
+        ScTokenArray* pFormula = nPass ? pFormula2.get() : pFormula1.get();
         if (pFormula)
         {
             for ( auto t: pFormula->References() )
@@ -1409,7 +1404,7 @@ bool ScConditionEntry::MarkUsedExternalReferences() const
     bool bAllMarked = false;
     for (sal_uInt16 nPass = 0; !bAllMarked && nPass < 2; nPass++)
     {
-        ScTokenArray* pFormula = nPass ? pFormula2 : pFormula1;
+        ScTokenArray* pFormula = nPass ? pFormula2.get() : pFormula1.get();
         if (pFormula)
             bAllMarked = mpDoc->MarkUsedExternalReferences(*pFormula, aSrcPos);
     }
