@@ -87,6 +87,7 @@
 #include <vcl/graph.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/GraphicObject.hxx>
+#include <vcl/BitmapScaleFilter.hxx>
 #include <rtl/strbuf.hxx>
 #include <sfx2/app.hxx>
 #include <svl/languageoptions.hxx>
@@ -2018,7 +2019,9 @@ void DrawingML::WriteParagraphNumbering(const Reference< XPropertySet >& rXPropS
             AlphaMask aMask(aDestSize);
             aMask.Erase(255);
             BitmapEx aSourceBitmap(aGraphic.GetBitmapEx());
-            aSourceBitmap.Scale(aDestRect.GetSize());
+
+            BitmapFilter::Filter(aSourceBitmap, BitmapScaleFilter(aDestRect.GetSize()));
+
             tools::Rectangle aSourceRect(Point(0, 0), aDestRect.GetSize());
             BitmapEx aDestBitmap(Bitmap(aDestSize, 24), aMask);
             aDestBitmap.CopyPixel(aDestRect, aSourceRect, &aSourceBitmap);
