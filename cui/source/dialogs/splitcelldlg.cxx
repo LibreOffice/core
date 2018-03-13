@@ -61,9 +61,7 @@ IMPL_LINK(SvxSplitTableDlg, ClickHdl, weld::Button&, rButton, void)
     const bool bIsVert = &rButton == m_xVertBox.get();
     long nMax = bIsVert ? mnMaxVertical : mnMaxHorizontal;
     m_xPropCB->set_sensitive(!bIsVert);
-    int nMin, dummy;
-    m_xCountEdit->get_range(nMin, dummy);
-    m_xCountEdit->set_range(nMin, nMax);
+    m_xCountEdit->set_max(nMax);
 }
 
 bool SvxSplitTableDlg::IsHorizontal() const
