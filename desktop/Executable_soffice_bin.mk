@@ -43,7 +43,7 @@ $(eval $(call gb_Executable_add_nativeres,soffice_bin,sofficebin/officeloader))
 ifeq ($(COM),MSC)
 
 $(eval $(call gb_Executable_add_ldflags,soffice_bin,\
-    /STACK:10000000 \
+    /STACK:100000000 \
 ))
 
 endif
