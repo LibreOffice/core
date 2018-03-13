@@ -34,9 +34,9 @@
 #include "impvect.hxx"
 
 #include <bitmapscalesuper.hxx>
-#include <octree.hxx>
 #include <BitmapScaleConvolution.hxx>
 #include <bitmapwriteaccess.hxx>
+#include <octree.hxx>
 
 #define RGB15( _def_cR, _def_cG, _def_cB )  ((static_cast<sal_uLong>(_def_cR)<<10)|(static_cast<sal_uLong>(_def_cG)<<5)|static_cast<sal_uLong>(_def_cB))
 #define GAMMA( _def_cVal, _def_InvGamma )   (static_cast<sal_uInt8>(MinMax(FRound(pow( _def_cVal/255.0,_def_InvGamma)*255.0),0,255)))
@@ -754,54 +754,44 @@ bool Bitmap::Scale( const double& rScaleX, const double& rScaleY, BmpScaleFlag n
     if (nStartCount == 1)
         nScaleFlag = BmpScaleFlag::Fast;
 
+    BitmapEx aBmpEx(*this);
     bool bRetval(false);
 
     switch(nScaleFlag)
     {
-        case BmpScaleFlag::Fast :
-        {
-            bRetval = ImplScaleFast( rScaleX, rScaleY );
+        case BmpScaleFlag::Fast:
+            bRetval = ImplScaleFast(rScaleX, rScaleY);
             break;
-        }
-        case BmpScaleFlag::Interpolate :
-        {
-            bRetval = ImplScaleInterpolate( rScaleX, rScaleY );
+
+        case BmpScaleFlag::Interpolate:
+            bRetval = ImplScaleInterpolate(rScaleX, rScaleY);
             break;
-        }
+
         case BmpScaleFlag::Default:
-        {
             if (GetSizePixel().Width() < 2 || GetSizePixel().Height() < 2)
-            {
-                // fallback to ImplScaleFast
-                bRetval = ImplScaleFast( rScaleX, rScaleY );
-            }
+                bRetval = ImplScaleFast(rScaleX, rScaleY); // fallback to ImplScaleFast
             else
-            {
-                BitmapScaleSuperFilter aScaleSuperFilter(rScaleX, rScaleY);
-                bRetval = aScaleSuperFilter.execute(*this);
-            }
+                bRetval = BitmapFilter::Filter(aBmpEx, BitmapScaleSuperFilter(rScaleX, rScaleY));
+
             break;
-        }
-        case BmpScaleFlag::Lanczos :
+
+        case BmpScaleFlag::Lanczos:
         case BmpScaleFlag::BestQuality:
-        {
-            vcl::BitmapScaleConvolutionFilter aScaleConvolutionFilter(rScaleX, rScaleY, vcl::ConvolutionKernelType::Lanczos3);
-            bRetval = aScaleConvolutionFilter.execute(*this);
+            bRetval = BitmapFilter::Filter(aBmpEx, vcl::BitmapScaleLanczos3Filter(rScaleX, rScaleY));
             break;
-        }
-        case BmpScaleFlag::BiCubic :
-        {
-            vcl::BitmapScaleConvolutionFilter aScaleConvolutionFilter(rScaleX, rScaleY, vcl::ConvolutionKernelType::BiCubic);
-            bRetval = aScaleConvolutionFilter.execute(*this);
+
+        case BmpScaleFlag::BiCubic:
+            bRetval = BitmapFilter::Filter(aBmpEx, vcl::BitmapScaleBicubicFilter(rScaleX, rScaleY));
+
             break;
-        }
-        case BmpScaleFlag::BiLinear :
-        {
-            vcl::BitmapScaleConvolutionFilter aScaleConvolutionFilter(rScaleX, rScaleY, vcl::ConvolutionKernelType::BiLinear);
-            bRetval = aScaleConvolutionFilter.execute(*this);
+
+        case BmpScaleFlag::BiLinear:
+            bRetval = BitmapFilter::Filter(aBmpEx, vcl::BitmapScaleBilinearFilter(rScaleX, rScaleY));
             break;
-        }
     }
+
+    if (bRetval && nScaleFlag != BmpScaleFlag::Fast && nScaleFlag != BmpScaleFlag::Interpolate)
+        *this = aBmpEx.GetBitmapRef();
 
     OSL_ENSURE(!bRetval || nStartCount == GetBitCount(), "Bitmap::Scale has changed the ColorDepth, this should *not* happen (!)");
     return bRetval;
