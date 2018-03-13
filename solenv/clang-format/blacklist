@@ -18044,7 +18044,6 @@ vcl/source/bitmap/BitmapScaleConvolution.cxx
 vcl/source/bitmap/BitmapSymmetryCheck.cxx
 vcl/source/bitmap/BitmapTools.cxx
 vcl/source/bitmap/bitmapfilter.cxx
-vcl/source/bitmap/bitmapscalesuper.cxx
 vcl/source/bitmap/checksum.cxx
 vcl/source/components/dtranscomp.cxx
 vcl/source/components/factory.cxx
