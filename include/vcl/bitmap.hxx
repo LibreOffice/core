@@ -57,18 +57,6 @@ enum class BmpScaleFlag
 };
 
 
-enum class BmpDitherFlags
-{
-    NONE             = 0x0000,
-    Matrix           = 0x0001,
-    Floyd            = 0x0002,
-    Floyd16          = 0x0004,
-};
-namespace o3tl
-{
-    template<> struct typed_flags<BmpDitherFlags> : is_typed_flags<BmpDitherFlags, 0x07> {};
-}
-
 #define BMP_COL_TRANS               Color( 252, 3, 251 )
 
 enum class BmpConversion
@@ -279,16 +267,19 @@ public:
     */
     bool                    MakeMonochrome(sal_uInt8 cThreshold);
 
-    /** Apply a dither algorithm to the bitmap
+    /** Reduce number of colors for the bitmap
 
-        This method dithers the bitmap inplace, i.e. a true color
-        bitmap is converted to a paletted bitmap, reducing the color
-        deviation by error diffusion.
+        @param nNewColorCount
+        Maximal number of bitmap colors after the reduce operation
 
-        @param nDitherFlags
-        The algorithm to be used for dithering
+        @param eReduce
+        Algorithm to use for color reduction
+
+        @return true the color reduction operation was completed successfully.
      */
-    bool                    Dither( BmpDitherFlags nDitherFlags = BmpDitherFlags::Matrix );
+    bool                    ReduceColors(
+                                sal_uInt16 nNewColorCount,
+                                BmpReduce eReduce = BMP_REDUCE_SIMPLE );
 
     /** Crop the bitmap
 
@@ -657,9 +648,14 @@ public:
     SAL_DLLPRIVATE bool     ImplScaleInterpolate( const double& rScaleX, const double& rScaleY );
 
     SAL_DLLPRIVATE bool     ImplMakeGreyscales( sal_uInt16 nGreyscales );
-    SAL_DLLPRIVATE bool     ImplDitherMatrix();
-    SAL_DLLPRIVATE bool     ImplDitherFloyd();
-    SAL_DLLPRIVATE bool     ImplDitherFloyd16();
+    SAL_DLLPRIVATE bool     ImplReduceSimple( sal_uInt16 nColorCount );
+    SAL_DLLPRIVATE bool     ImplReducePopular( sal_uInt16 nColorCount );
+    SAL_DLLPRIVATE bool     ImplReduceMedian( sal_uInt16 nColorCount );
+    SAL_DLLPRIVATE void     ImplMedianCut(
+                                sal_uLong* pColBuf,
+                                BitmapPalette& rPal,
+                                long nR1, long nR2, long nG1, long nG2, long nB1, long nB2,
+                                long nColors, long nPixels, long& rIndex );
 
     SAL_DLLPRIVATE bool     ImplConvolute3( const long* pMatrix );
 
