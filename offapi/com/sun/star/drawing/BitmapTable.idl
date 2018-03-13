@@ -31,7 +31,7 @@
     are used inside a document for filling.
 
     @see DrawingDocumentFactory
-    @see FillStyle::FillBitmapURL
+    @see FillProperties::FillBitmap
 */
 published service BitmapTable
 {

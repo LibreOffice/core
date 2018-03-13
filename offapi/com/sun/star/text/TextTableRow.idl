@@ -23,11 +23,9 @@
 #include <com/sun/star/util/Color.idl>
 #include <com/sun/star/style/GraphicLocation.idl>
 #include <com/sun/star/text/TableColumnSeparator.idl>
+#include <com/sun/star/graphic/XGraphic.idl>
 
-
-
- module com {  module sun {  module star {  module text {
-
+module com {  module sun {  module star {  module text {
 
 /** specifies the properties of a text table row.
 
@@ -49,9 +47,10 @@ published service TextTableRow
 
 
     /** contains the URL of a background graphic.
+
+        @deprecated use BackGraphic
      */
     [property] string BackGraphicURL;
-
 
     /** contains the name of the file filter of a background graphic.
      */
@@ -95,7 +94,11 @@ published service TextTableRow
     */
     [optional, property] sequence<com::sun::star::beans::PropertyValue> RowInteropGrabBag;
 
+    /** contains the graphic of a background.
 
+        @since LibreOffice 6.1
+     */
+    [optional, property] com::sun::star::graphic::XGraphic BackGraphic;
 };
 
 

@@ -104,6 +104,8 @@ published service FillProperties
 
     /** If the property #FillStyle is set to
         FillStyle::BITMAP, this is a URL to the bitmap used.
+
+        @deprecated, use FillBitmap
     */
     [optional, property] string FillBitmapURL;
 

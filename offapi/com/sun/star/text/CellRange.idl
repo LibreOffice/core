@@ -31,10 +31,9 @@
 #include <com/sun/star/style/CharacterProperties.idl>
 #include <com/sun/star/style/GraphicLocation.idl>
 #include <com/sun/star/chart/XChartDataArray.idl>
-
+#include <com/sun/star/graphic/XGraphic.idl>
 
 module com {  module sun {  module star {  module text {
-
 
 /** area of cells within a text table.
 
@@ -77,9 +76,10 @@ published service CellRange
 
 
     /** contains the URL of the background graphic.
+
+        @deprecated use BackGraphic
      */
     [property] string BackGraphicURL;
-
 
     /** determines if the background color is transparent.
      */
@@ -102,6 +102,11 @@ published service CellRange
     */
     [property] long NumberFormat;
 
+    /** contains the graphic of the background.
+
+        @since LibreOffice 6.1
+     */
+    [optional, property] com::sun::star::graphic::XGraphic BackGraphic;
 };
 
 

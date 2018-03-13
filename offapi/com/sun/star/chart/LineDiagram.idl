@@ -123,6 +123,17 @@ published service LineDiagram
     /** determines the number of sampling points of a spline
      */
     [optional, property] long SplineResolution;
+
+    /** Set this property to any valid URL that points to a graphic
+        file.  This graphic is then used as symbol for all series.
+
+        <p>When you query this value you get an internal URL of the
+        embedded graphic.</p>
+
+        @deprecated
+        @see ChartSymbolType
+     */
+    [optional, property] string SymbolBitmap;
 };
 
 

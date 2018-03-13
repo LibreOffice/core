@@ -50,6 +50,8 @@ published service GraphicObjectShape
     service com::sun::star::drawing::RotationDescriptor;
 
     /** This is an url to the source bitmap for this graphic shape.
+
+        @deprecated use Graphic
     */
     [property] string GraphicURL;
 

@@ -19,13 +19,11 @@
 #ifndef __com_sun_star_style_NumberingLevel_idl__
 #define __com_sun_star_style_NumberingLevel_idl__
 
-
+#include <com/sun/star/graphic/XGraphic.idl>
 
  module com {  module sun {  module star {  module style {
 
 /** These properties describe the numbering of a paragraph.
-
-
 
     <p>NumberType determines the type of the numbering symbol.
     Depending on this setting, some of the following values will be
@@ -70,6 +68,11 @@ published service NumberingLevel
      */
     [property] short StartWith;
 
+    /** This is the graphic file to use as a symbol.
+
+        @since LibreOffice 6.1
+     */
+    [property] com::sun::star::graphic::XGraphic Graphic;
 };
 
 
