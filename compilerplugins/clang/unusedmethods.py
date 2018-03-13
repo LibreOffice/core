@@ -141,12 +141,6 @@ for d in definitionSet:
        continue
     if method == "class tools::SvRef<class FontCharMap> FontCharMap::GetDefaultMap(_Bool)":
        continue
-    # too much template magic here for my plugin
-    if (   ("cairocanvas::" in d[1])
-        or ("canvas::" in d[1])
-        or ("oglcanvas::" in d[1])
-        or ("vclcanvas::" in d[1])):
-       continue
     # these are loaded by dlopen() from somewhere
     if "get_implementation" in d[1]:
        continue
