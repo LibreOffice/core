@@ -561,6 +561,10 @@ StyleTreeArr_Impl& MakeTree_Impl(StyleTreeArr_Impl& rArr)
     // tdf#91106 sort top level styles
     std::sort(rArr.begin(), rArr.end(),
         [&aSorter](StyleTree_Impl* pEntry1, StyleTree_Impl* pEntry2) {
+            if (pEntry2->getName() == "Default Style")
+                return false;
+            if (pEntry1->getName() == "Default Style")
+                return true; // default always first
             return aSorter.compare(pEntry1->getName(), pEntry2->getName()) < 0;
         });
 
