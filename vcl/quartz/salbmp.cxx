@@ -310,19 +310,10 @@ bool QuartzSalBitmap::AllocateUserData()
 
     if( mnWidth && mnHeight )
     {
-        mnBytesPerRow =  0;
+        assert((mnBits == 1 || mnBits == 4 || mnBits == 8 || mnBits == 16 || mnBits == 24 || mnBits == 32)
+                && "vcl::QuartzSalBitmap::AllocateUserData(), illegal bitcount!");
 
-        switch( mnBits )
-        {
-        case 1:     mnBytesPerRow = (mnWidth + 7) >> 3; break;
-        case 4:     mnBytesPerRow = (mnWidth + 1) >> 1; break;
-        case 8:     mnBytesPerRow = mnWidth; break;
-        case 16:    mnBytesPerRow = mnWidth << 1; break;
-        case 24:    mnBytesPerRow = (mnWidth << 1) + mnWidth; break;
-        case 32:    mnBytesPerRow = mnWidth << 2; break;
-        default:
-            OSL_FAIL("vcl::QuartzSalBitmap::AllocateUserData(), illegal bitcount!");
-        }
+        mnBytesPerRow = AlignedWidth4Bytes(mnBits * mnWidth);
     }
 
     bool alloc = false;
