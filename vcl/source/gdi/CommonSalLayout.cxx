@@ -723,8 +723,7 @@ bool CommonSalLayout::LayoutText(ImplLayoutArgs& rArgs)
                 if (u_isUWhiteSpace(aChar))
                      nGlyphFlags |= GlyphItem::IS_SPACING;
 
-                if ((aSubRun.maScript == HB_SCRIPT_ARABIC ||
-                     aSubRun.maScript == HB_SCRIPT_SYRIAC) &&
+                if (aSubRun.maScript == HB_SCRIPT_ARABIC &&
                     HB_DIRECTION_IS_BACKWARD(aSubRun.maDirection) &&
                     (nGlyphFlags & GlyphItem::IS_SPACING) == 0)
                 {
