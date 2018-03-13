@@ -400,11 +400,6 @@ bool BitmapEx::Crop( const tools::Rectangle& rRectPixel )
     return bRet;
 }
 
-bool BitmapEx::Convert( BmpConversion eConversion )
-{
-    return !!maBitmap && maBitmap.Convert( eConversion );
-}
-
 bool BitmapEx::ReduceColors( sal_uInt16 nNewColorCount )
 {
     return !!maBitmap && maBitmap.ReduceColors( nNewColorCount, BMP_REDUCE_POPULAR );
@@ -596,7 +591,7 @@ BitmapEx BitmapEx:: AutoScaleBitmap(BitmapEx const & aBitmap, const long aStanda
     double imgposY = 0;
     BitmapEx  aRet = aBitmap;
     double imgOldWidth = aRet.GetSizePixel().Width();
-    double imgOldHeight = aRet.GetSizePixel().Height();
+    double imgOldHeight =aRet.GetSizePixel().Height();
 
     Size aScaledSize;
     if (imgOldWidth >= aStandardSize || imgOldHeight >= aStandardSize)
@@ -651,7 +646,7 @@ sal_uInt8 BitmapEx::GetTransparency(sal_Int32 nX, sal_Int32 nY) const
 
     if(!maBitmap.IsEmpty())
     {
-        if (nX >= 0 && nX < GetSizePixel().Width() && nY >= 0 && nY < GetSizePixel().Height())
+        if(nX >= 0 && nX < maBitmapSize.Width() && nY >= 0 && nY < maBitmapSize.Height())
         {
             switch(meTransparent)
             {
