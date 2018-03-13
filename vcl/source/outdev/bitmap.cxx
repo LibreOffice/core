@@ -337,12 +337,12 @@ void OutputDevice::DrawBitmapEx( const Point& rDestPt, const Size& rDestSize,
                     aBmpEx = BitmapEx( aColorBmp, aBmpEx.GetMask() );
                 }
             }
-            else if( !!aBmpEx )
+            else if (!!aBmpEx)
             {
-                if ( mnDrawMode & DrawModeFlags::GrayBitmap )
+                if (mnDrawMode & DrawModeFlags::GrayBitmap)
                     BitmapFilter::Filter(aBmpEx, BitmapConverter(BmpConversion::N8BitGreys));
 
-                if ( mnDrawMode & DrawModeFlags::GhostedBitmap )
+                if (mnDrawMode & DrawModeFlags::GhostedBitmap)
                     BitmapFilter::Filter(aBmpEx, BitmapConverter(BmpConversion::Ghosted));
             }
         }

@@ -16,6 +16,7 @@
 #include <comphelper/fileformat.h>
 
 #include <vcl/graphicfilter.hxx>
+#include <vcl/BitmapScaleFilter.hxx>
 
 using namespace ::com::sun::star;
 

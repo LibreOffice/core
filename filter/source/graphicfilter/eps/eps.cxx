@@ -347,15 +347,17 @@ bool PSWriter::WritePS( const Graphic& rGraphic, SvStream& rTargetStream, Filter
            .WriteUInt32( nStreamPosition + 26 ).WriteUInt32( 0 ).WriteUInt16( 0xffff );
 
         ErrCode nErrCode;
-        if ( mbGrayScale )
+
+        if (mbGrayScale)
         {
-            BitmapEx aTempBitmapEx( rGraphic.GetBitmapEx() );
+            BitmapEx aTempBitmapEx(rGraphic.GetBitmapEx());
             BitmapFilter::Filter(aTempBitmapEx, BitmapConverter(BmpConversion::N8BitGreys));
-            nErrCode = GraphicConverter::Export( rTargetStream, aTempBitmapEx, ConvertDataFormat::TIF ) ;
+
+            nErrCode = GraphicConverter::Export(rTargetStream, aTempBitmapEx, ConvertDataFormat::TIF);
         }
         else
         {
-            nErrCode = GraphicConverter::Export( rTargetStream, rGraphic, ConvertDataFormat::TIF ) ;
+            nErrCode = GraphicConverter::Export(rTargetStream, rGraphic, ConvertDataFormat::TIF);
         }
 
         if ( nErrCode == ERRCODE_NONE )
