@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_INC_BITMAPSCALESUPER_HXX
-#define INCLUDED_VCL_INC_BITMAPSCALESUPER_HXX
+#ifndef INCLUDED_VCL_INC_BITMAPSCALESUPERFILTER_HXX
+#define INCLUDED_VCL_INC_BITMAPSCALESUPERFILTER_HXX
 
 #include "bitmapfilter.hxx"
 
