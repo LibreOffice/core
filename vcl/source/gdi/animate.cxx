@@ -504,13 +504,11 @@ void Animation::ResetLoopCount()
 
 void Animation::Convert( BmpConversion eConversion )
 {
-    SAL_WARN_IF( IsInAnimation(), "vcl", "Animation modified while it is animated" );
+    SAL_WARN_IF(IsInAnimation(), "vcl", "Animation modified while it is animated");
 
-    bool bRet;
-
-    if( !IsInAnimation() && !maList.empty() )
+    if (!IsInAnimation() && !maList.empty())
     {
-        bRet = true;
+        bool bRet=false;
 
         for (size_t i = 0, n = maList.size(); i < n && bRet; ++i)
         {
