@@ -58,6 +58,24 @@
       "revId": "d7b554dc4440a8a9f8ceffa8e079f99b5b9c020f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba2be162_9477ba01",
+        "filename": "sw/source/core/text/itrform2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 611,
+      "author": {
+        "id": 1000381
+      },
+      "writtenOn": "2018-03-13T14:53:43Z",
+      "side": 1,
+      "message": "but `nTmp !\u003d rInf.GetText().getLength()`before it already does that, no?",
+      "parentUuid": "ba2be162_54262217",
+      "revId": "d7b554dc4440a8a9f8ceffa8e079f99b5b9c020f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
