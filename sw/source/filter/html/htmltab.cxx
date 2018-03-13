@@ -2404,7 +2404,10 @@ void HTMLTable::MakeTable( SwTableBox *pBox, sal_uInt16 nAbsAvail,
     // Only tables with relative width or without width should be modified
     m_xLayoutInfo->SetMustResize( m_bPrcWidth || !m_nWidth );
 
-    m_xLayoutInfo->SetWidths();
+    if (!pLine1->GetTabBoxes().empty())
+        m_xLayoutInfo->SetWidths();
+    else
+        SAL_WARN("sw.html", "no table box");
 
     const_cast<SwTable *>(m_pSwTable)->SetHTMLTableLayout(m_xLayoutInfo);
 
