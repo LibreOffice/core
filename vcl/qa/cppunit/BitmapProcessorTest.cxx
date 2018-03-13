@@ -22,8 +22,7 @@
 #include <vcl/graphicfilter.hxx>
 #include <config_features.h>
 
-#include <BitmapProcessor.hxx>
-
+#include <vcl/BitmapDisabledImageFilter.hxx>
 
 namespace
 {
@@ -45,8 +44,10 @@ void BitmapProcessorTest::testDisabledImage()
         pWriteAccess->Erase(Color(0x00, 0x11, 0x22, 0x33));
     }
     BitmapEx aBitmapEx(aBitmap);
-    BitmapEx aDisabledBitmapEx(BitmapProcessor::createDisabledImage(aBitmapEx));
+    BitmapDisabledImageFilter aDisabledImageFilter;
+    BitmapEx aDisabledBitmapEx(aDisabledImageFilter.execute(aBitmapEx));
     Bitmap aDisabledBitmap(aDisabledBitmapEx.GetBitmap());
+
     {
         Bitmap::ScopedReadAccess pReadAccess(aDisabledBitmap);
         Color aColor(pReadAccess->GetPixel(0, 0).GetColor());
