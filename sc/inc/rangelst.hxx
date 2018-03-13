@@ -22,6 +22,7 @@
 
 #include "global.hxx"
 #include "address.hxx"
+#include <array>
 #include <ostream>
 #include <vector>
 #include <sal/types.h>
@@ -129,28 +130,27 @@ public:
     ScRangePairList*    Clone() const;
     void                Append( const ScRangePair& rRangePair )
                         {
-                            ScRangePair* pR = new ScRangePair( rRangePair );
-                            maPairs.push_back( pR );
+                            maPairs.push_back( rRangePair );
                         }
     void                Join( const ScRangePair&, bool bIsInList = false );
     void                UpdateReference( UpdateRefMode, const ScDocument*,
                                     const ScRange& rWhere,
                                     SCCOL nDx, SCROW nDy, SCTAB nDz );
     void                DeleteOnTab( SCTAB nTab );
-    ScRangePair*        Find( const ScAddress& ) const;
-    ScRangePair*        Find( const ScRange& ) const;
-    std::vector<ScRangePair*>
+    ScRangePair*        Find( const ScAddress& );
+    ScRangePair*        Find( const ScRange& );
+    std::vector<const ScRangePair*>
                         CreateNameSortedArray( ScDocument* ) const;
 
     void                Remove(size_t nPos);
-    void                Remove(const ScRangePair* pAdr);
+    void                Remove(const ScRangePair & rAdr);
 
     size_t              size() const;
-    ScRangePair*        operator[](size_t idx);
-    const ScRangePair*  operator[](size_t idx) const;
+    ScRangePair&        operator[](size_t idx);
+    const ScRangePair&  operator[](size_t idx) const;
 
 private:
-    ::std::vector< ScRangePair* > maPairs;
+    ::std::vector< ScRangePair > maPairs;
 };
 typedef tools::SvRef<ScRangePairList> ScRangePairListRef;
 
