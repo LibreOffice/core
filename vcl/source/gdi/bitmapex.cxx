@@ -588,11 +588,6 @@ bool BitmapEx::Erase( const Color& rFillColor )
     return bRet;
 }
 
-bool BitmapEx::Dither()
-{
-    return !!maBitmap && maBitmap.Dither();
-}
-
 void BitmapEx::Replace( const Color& rSearchColor, const Color& rReplaceColor )
 {
     if (!!maBitmap)
