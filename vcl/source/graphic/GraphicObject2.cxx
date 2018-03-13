@@ -33,6 +33,7 @@
 #include <vcl/BitmapConverter.hxx>
 #include <vcl/BitmapScaleFilter.hxx>
 
+#include "BitmapDitheringFilter.hxx"
 #include "grfcache.hxx"
 
 #include <bitmapwriteaccess.hxx>
@@ -1032,8 +1033,14 @@ bool GraphicManager::ImplCreateOutput( OutputDevice* pOutputDevice,
                     ImplAdjust( aOutBmpEx, rAttributes, GraphicAdjustmentFlags::DRAWMODE | GraphicAdjustmentFlags::COLORS | GraphicAdjustmentFlags::TRANSPARENCY );
 
                 // OutDev adjustment if necessary
-                if( pOutputDevice->GetOutDevType() != OUTDEV_PRINTER && pOutputDevice->GetBitCount() <= 8 && aOutBmpEx.GetBitCount() >= 8 )
-                    aOutBmpEx.Dither();
+                if (pOutputDevice->GetOutDevType() != OUTDEV_PRINTER &&
+                    pOutputDevice->GetBitCount() <= 8 &&
+                    aOutBmpEx.GetBitCount() >= 8)
+                {
+                    BitmapDitheringFilter aBmpDitherFilter;
+                    BitmapEx aDitheredBmp(aBmpDitherFilter.execute(aOutBmpEx));
+                    SAL_WARN_IF(aDitheredBmp.IsEmpty(), "vcl.gdi", "Dithering failed");
+                }
             }
         }
 
