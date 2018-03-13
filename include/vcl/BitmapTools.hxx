@@ -91,6 +91,9 @@ VCL_DLLPUBLIC BitmapEx CanvasBitmapHelperSetPixel( const css::uno::Sequence< sal
 VCL_DLLPUBLIC BitmapEx CanvasBitmapHelperSetData( const css::uno::Sequence< sal_Int8 >&      data,
                                                   const css::geometry::IntegerRectangle2D&   rect,
                                                   BitmapEx & rBitmapEx);
+VCL_DLLPUBLIC void CanvasBitmapHelperSetData2( OutputDevice& rDevice,
+                                               const css::uno::Sequence< sal_Int8 >&      data,
+                                               const css::geometry::IntegerRectangle2D&   rect);
 
 }} // end vcl::bitmap
 

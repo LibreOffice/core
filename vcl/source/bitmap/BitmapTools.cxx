@@ -544,6 +544,119 @@ BitmapEx CanvasBitmapHelperSetData( const uno::Sequence< sal_Int8 >&      data,
         return BitmapEx( aBitmap, AlphaMask( aAlpha ) );
 }
 
+void CanvasBitmapHelperSetData2( OutputDevice& rOutDev,
+                                 const uno::Sequence< sal_Int8 >&      data,
+                                 const geometry::IntegerRectangle2D&   rect)
+{
+    const ::tools::Rectangle aRect( vcl::unotools::rectangleFromIntegerRectangle2D(rect) );
+
+    const sal_uInt16 nBitCount( std::min( sal_uInt16(24), rOutDev.GetBitCount() ) );
+    const BitmapPalette* pPalette = nullptr;
+
+    if( nBitCount <= 8 )
+    {
+        // TODO(Q1): Extract this to a common place, e.g. GraphicDevice
+
+        // try to determine palette from output device (by
+        // extracting a 1,1 bitmap, and querying it)
+        const Point aEmptyPoint;
+        const Size  aSize(1,1);
+        Bitmap aTmpBitmap( rOutDev.GetBitmap( aEmptyPoint,
+                                              aSize ) );
+
+        Bitmap::ScopedReadAccess pReadAccess( aTmpBitmap );
+
+        pPalette = &pReadAccess->GetPalette();
+    }
+
+    // TODO(F2): Support alpha canvas here
+    Bitmap aBitmap( aRect.GetSize(), nBitCount, pPalette );
+
+    {
+        Bitmap::ScopedWriteAccess pWriteAccess( aBitmap );
+
+        ENSURE_OR_THROW( pWriteAccess.get() != nullptr,
+                         "Could not acquire write access to OutDev bitmap" );
+
+        // for the time being, always read as RGB
+        const sal_Int32 nWidth( rect.X2 - rect.X1 );
+        const sal_Int32 nHeight( rect.Y2 - rect.Y1 );
+        int x, y, nCurrPos(0);
+        for( y=0; y<nHeight; ++y )
+        {
+            switch( pWriteAccess->GetScanlineFormat() )
+            {
+                case ScanlineFormat::N8BitPal:
+                {
+                    Scanline pScan = pWriteAccess->GetScanline( y );
+
+                    for( x=0; x<nWidth; ++x )
+                    {
+                        *pScan++ = static_cast<sal_uInt8>(pWriteAccess->GetBestPaletteIndex(
+                            BitmapColor( data[ nCurrPos ],
+                                         data[ nCurrPos+1 ],
+                                         data[ nCurrPos+2 ] ) ));
+
+                        nCurrPos += 4;
+                    }
+                }
+                break;
+
+                case ScanlineFormat::N24BitTcBgr:
+                {
+                    Scanline pScan = pWriteAccess->GetScanline( y );
+
+                    for( x=0; x<nWidth; ++x )
+                    {
+                        *pScan++ = data[ nCurrPos+2 ];
+                        *pScan++ = data[ nCurrPos+1 ];
+                        *pScan++ = data[ nCurrPos   ];
+
+                        nCurrPos += 4;
+                    }
+                }
+                break;
+
+                case ScanlineFormat::N24BitTcRgb:
+                {
+                    Scanline pScan = pWriteAccess->GetScanline( y );
+
+                    for( x=0; x<nWidth; ++x )
+                    {
+                        *pScan++ = data[ nCurrPos   ];
+                        *pScan++ = data[ nCurrPos+1 ];
+                        *pScan++ = data[ nCurrPos+2 ];
+
+                        nCurrPos += 4;
+                    }
+                }
+                break;
+
+                default:
+                {
+                    Scanline pScan = pWriteAccess->GetScanline( y );
+
+                    for( x=0; x<nWidth; ++x )
+                    {
+                        pWriteAccess->SetPixelOnData( pScan, x, BitmapColor( data[ nCurrPos   ],
+                                                                   data[ nCurrPos+1 ],
+                                                                   data[ nCurrPos+2 ] ) );
+                        nCurrPos += 4;
+                    }
+                }
+                break;
+            }
+        }
+    }
+
+    // copy back only here, since the BitmapAccessors must be
+    // destroyed beforehand
+    if( !aBitmap.IsEmpty() )
+    {
+        // TODO(F2): Support alpha canvas here
+        rOutDev.DrawBitmapEx(Point(rect.X1, rect.Y1), aBitmap);
+    }
+}
 
 }} // end vcl::bitmap
 
