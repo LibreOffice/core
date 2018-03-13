@@ -14,7 +14,7 @@
 #include <utility>
 #include <vector>
 
-#include <boost/intrusive_ptr.hpp>
+#include <tools/ref.hxx>
 #include "rtfvalue.hxx"
 
 namespace writerfilter
@@ -24,18 +24,9 @@ namespace rtftok
 using RTFSprmsImplBase = std::vector<std::pair<Id, RTFValue::Pointer_t>>;
 
 /// The payload of RTFSprms which is only copied on write.
-class RTFSprmsImpl : public RTFSprmsImplBase
+class RTFSprmsImpl : public RTFSprmsImplBase, public SvRefBase
 {
-public:
-    sal_Int32 m_nRefCount = 0;
 };
-
-inline void intrusive_ptr_add_ref(RTFSprmsImpl* p) { ++(p->m_nRefCount); }
-inline void intrusive_ptr_release(RTFSprmsImpl* p)
-{
-    if (!--(p->m_nRefCount))
-        delete p;
-}
 
 enum class RTFOverwrite
 {
@@ -75,7 +66,7 @@ public:
 
 private:
     void ensureCopyBeforeWrite();
-    boost::intrusive_ptr<RTFSprmsImpl> m_pSprms;
+    tools::SvRef<RTFSprmsImpl> m_pSprms;
 };
 
 /// RTF keyword with a parameter
