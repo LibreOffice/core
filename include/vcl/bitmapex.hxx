@@ -78,7 +78,7 @@ public:
     bool                IsAlpha() const;
     AlphaMask           GetAlpha() const;
 
-    const Size          GetSizePixel() const { return maBitmap.GetSizePixel(); }
+    const Size&         GetSizePixel() const { return maBitmapSize; }
     void                SetSizePixel( const Size& rNewSize, BmpScaleFlag nScaleFlag = BmpScaleFlag::Default );
 
     const Size&         GetPrefSize() const { return maBitmap.GetPrefSize(); }
@@ -465,6 +465,7 @@ private:
 
     Bitmap              maBitmap;
     Bitmap              maMask;
+    Size                maBitmapSize;
     Color               maTransparentColor;
     TransparentType     meTransparent;
     bool                mbAlpha;
