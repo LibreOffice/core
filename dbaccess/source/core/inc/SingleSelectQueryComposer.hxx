@@ -80,8 +80,10 @@ namespace dbaccess
         ::connectivity::OSQLParser              m_aSqlParser;
         ::connectivity::OSQLParseTreeIterator   m_aSqlIterator;         // the iterator for the complete statement
         ::connectivity::OSQLParseTreeIterator   m_aAdditiveIterator;    // the iterator for the "additive statement" (means without the clauses of the elementary statement)
-        std::vector<OPrivateColumns*>         m_aColumnsCollection;   // used for columns and parameters of old queries
-        std::vector<OPrivateTables*>          m_aTablesCollection;
+        std::vector<std::unique_ptr<OPrivateColumns>>
+                                                m_aColumnsCollection;   // used for columns and parameters of old queries
+        std::vector<std::unique_ptr<OPrivateTables>>
+                                                m_aTablesCollection;
 
         std::vector< OUString >        m_aElementaryParts;     // the filter/groupby/having/order of the elementary statement
 
@@ -93,8 +95,8 @@ namespace dbaccess
         css::uno::Reference< css::uno::XComponentContext>         m_aContext;
         css::uno::Reference< css::script::XTypeConverter >        m_xTypeConverter;
 
-        std::vector<OPrivateColumns*>         m_aCurrentColumns;
-        OPrivateTables*                         m_pTables;      // currently used tables
+        std::vector<std::unique_ptr<OPrivateColumns>>         m_aCurrentColumns;
+        std::unique_ptr<OPrivateTables>                       m_pTables;      // currently used tables
 
         OUString                                m_aPureSelectSQL;   // the pure select statement, without filter/order/groupby/having
         OUString                                m_sDecimalSep;

@@ -264,11 +264,6 @@ OSingleSelectQueryComposer::OSingleSelectQueryComposer(const Reference< XNameAcc
 
 OSingleSelectQueryComposer::~OSingleSelectQueryComposer()
 {
-    for (auto const& columnCollection : m_aColumnsCollection)
-        delete columnCollection;
-
-    for (auto const& tableCollection : m_aTablesCollection)
-        delete tableCollection;
 }
 
 // OComponentHelper
@@ -727,10 +722,10 @@ Reference< XNameAccess > SAL_CALL OSingleSelectQueryComposer::getTables(  )
         for (auto const& elem : aTables)
             aNames.push_back(elem.first);
 
-        m_pTables = new OPrivateTables(aTables,m_xMetaData->supportsMixedCaseQuotedIdentifiers(),*this,m_aMutex,aNames);
+        m_pTables.reset( new OPrivateTables(aTables,m_xMetaData->supportsMixedCaseQuotedIdentifiers(),*this,m_aMutex,aNames) );
     }
 
-    return m_pTables;
+    return m_pTables.get();
 }
 
 // XColumnsSupplier
@@ -739,7 +734,7 @@ Reference< XNameAccess > SAL_CALL OSingleSelectQueryComposer::getColumns(  )
     ::connectivity::checkDisposed(OSubComponent::rBHelper.bDisposed);
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( !!m_aCurrentColumns[SelectColumns] )
-        return m_aCurrentColumns[SelectColumns];
+        return m_aCurrentColumns[SelectColumns].get();
 
     std::vector< OUString> aNames;
     ::rtl::Reference< OSQLColumns> aSelectColumns;
@@ -948,9 +943,9 @@ Reference< XNameAccess > SAL_CALL OSingleSelectQueryComposer::getColumns(  )
     if ( aNames.empty() )
         m_aCurrentColumns[ SelectColumns ] = OPrivateColumns::createWithIntrinsicNames( aSelectColumns, bCase, *this, m_aMutex );
     else
-        m_aCurrentColumns[ SelectColumns ] = new OPrivateColumns( aSelectColumns, bCase, *this, m_aMutex, aNames );
+        m_aCurrentColumns[ SelectColumns ].reset( new OPrivateColumns( aSelectColumns, bCase, *this, m_aMutex, aNames ) );
 
-    return m_aCurrentColumns[SelectColumns];
+    return m_aCurrentColumns[SelectColumns].get();
 }
 
 bool OSingleSelectQueryComposer::setORCriteria(OSQLParseNode const * pCondition, OSQLParseTreeIterator& _rIterator,
@@ -1330,20 +1325,19 @@ Reference< XIndexAccess > SAL_CALL OSingleSelectQueryComposer::getParameters(  )
         std::vector< OUString> aNames;
         for (auto const& elem : aCols->get())
             aNames.push_back(getString(elem->getPropertyValue(PROPERTY_NAME)));
-        m_aCurrentColumns[ParameterColumns] = new OPrivateColumns(aCols,m_xMetaData->supportsMixedCaseQuotedIdentifiers(),*this,m_aMutex,aNames,true);
+        m_aCurrentColumns[ParameterColumns].reset( new OPrivateColumns(aCols,m_xMetaData->supportsMixedCaseQuotedIdentifiers(),*this,m_aMutex,aNames,true) );
     }
 
-    return m_aCurrentColumns[ParameterColumns];
+    return m_aCurrentColumns[ParameterColumns].get();
 }
 
 void OSingleSelectQueryComposer::clearColumns( const EColumnType _eType )
 {
-    OPrivateColumns* pColumns = m_aCurrentColumns[ _eType ];
+    OPrivateColumns* pColumns = m_aCurrentColumns[ _eType ].get();
     if ( pColumns != nullptr )
     {
         pColumns->disposing();
-        m_aColumnsCollection.push_back( pColumns );
-        m_aCurrentColumns[ _eType ] = nullptr;
+        m_aColumnsCollection.push_back( std::move(m_aCurrentColumns[ _eType ]) );
     }
 }
 
@@ -1354,16 +1348,14 @@ void OSingleSelectQueryComposer::clearCurrentCollections()
         if (currentColumn)
         {
             currentColumn->disposing();
-            m_aColumnsCollection.push_back(currentColumn);
-            currentColumn = nullptr;
+            m_aColumnsCollection.push_back(std::move(currentColumn));
         }
     }
 
     if(m_pTables)
     {
         m_pTables->disposing();
-        m_aTablesCollection.push_back(m_pTables);
-        m_pTables = nullptr;
+        m_aTablesCollection.push_back(std::move(m_pTables));
     }
 }
 
@@ -1379,10 +1371,10 @@ Reference< XIndexAccess > OSingleSelectQueryComposer::setCurrentColumns( EColumn
         std::vector< OUString> aNames;
         for (auto const& elem : _rCols->get())
             aNames.push_back(getString(elem->getPropertyValue(PROPERTY_NAME)));
-        m_aCurrentColumns[_eType] = new OPrivateColumns(_rCols,m_xMetaData->supportsMixedCaseQuotedIdentifiers(),*this,m_aMutex,aNames,true);
+        m_aCurrentColumns[_eType].reset( new OPrivateColumns(_rCols,m_xMetaData->supportsMixedCaseQuotedIdentifiers(),*this,m_aMutex,aNames,true) );
     }
 
-    return m_aCurrentColumns[_eType];
+    return m_aCurrentColumns[_eType].get();
 }
 
 Reference< XIndexAccess > SAL_CALL OSingleSelectQueryComposer::getGroupColumns(  )
