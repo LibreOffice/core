@@ -166,40 +166,38 @@ void DXFStyle::Read(DXFGroupReader & rDGR)
 //----------------------------------DXFVPort-----------------------------------
 
 DXFVPort::DXFVPort()
+    : pSucc(nullptr)
+    , nFlags(0)
+    , fMinX(0.0)
+    , fMinY(0.0)
+    , fMaxX(0.0)
+    , fMaxY(0.0)
+    , fCenterX(0.0)
+    , fCenterY(0.0)
+    , fSnapBaseX(0.0)
+    , fSnapBaseY(0.0)
+    , fSnapSpacingX(0.0)
+    , fSnapSpacingY(0.0)
+    , fGridX(0.0)
+    , fGridY(0.0)
+    , aDirection(DXFVector(0.0, 0.0, 1.0))
+    , fHeight(0.0)
+    , fAspectRatio(0.0)
+    , fLensLength(0.0)
+    , fFrontClipPlane(0.0)
+    , fBackClipPlane(0.0)
+    , fTwistAngle(0.0)
+    , nStatus(0)
+    , nID(0)
+    , nMode(0)
+    , nCircleZoomPercent(0)
+    , nFastZoom(0)
+    , nUCSICON(0)
+    , nSnap(0)
+    , nGrid(0)
+    , nSnapStyle(0)
+    , nSnapIsopair(0)
 {
-    pSucc=nullptr;
-
-    nFlags=0;
-    fMinX=0;
-    fMinY=0;
-    fMaxX=0;
-    fMaxY=0;
-    fCenterX=0;
-    fCenterY=0;
-    fSnapBaseX=0;
-    fSnapBaseY=0;
-    fSnapSpacingX=0;
-    fSnapSpacingY=0;
-    fGridX=0;
-    fGridY=0;
-    aDirection=DXFVector(0,0,1);
-    aTarget=DXFVector(0,0,0);
-    fHeight=0;
-    fAspectRatio=0;
-    fLensLength=0;
-    fFrontClipPlane=0;
-    fBackClipPlane=0;
-    fTwistAngle=0;
-    nStatus=0;
-    nID=0;
-    nMode=0;
-    nCircleZoomPercent=0;
-    nFastZoom=0;
-    nUCSICON=0;
-    nSnap=0;
-    nGrid=0;
-    nSnapStyle=0;
-    nSnapIsopair=0;
 }
 
 void DXFVPort::Read(DXFGroupReader & rDGR)
