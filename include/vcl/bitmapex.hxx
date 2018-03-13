@@ -100,15 +100,6 @@ public:
      */
     void GetSplitData( std::vector<sal_uInt8>& rvColorData, std::vector<sal_uInt8>& rvAlphaData ) const;
 
-    /** Convert bitmap format
-
-        @param eConversion
-        The format this bitmap should be converted to.
-
-        @return true, if the conversion was completed successfully.
-     */
-    bool                Convert( BmpConversion eConversion );
-
     /** Reduce number of colors for the bitmap using the POPULAR algorithm
 
         @param nNewColorCount

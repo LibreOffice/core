@@ -66,6 +66,7 @@
 #include <rtl/bootstrap.hxx>
 #include <rtl/instance.hxx>
 #include <vcl/metaact.hxx>
+#include <vcl/BitmapConverter.hxx>
 #include <vector>
 #include <memory>
 
@@ -853,12 +854,20 @@ static Graphic ImpGetScaledGraphic( const Graphic& rGraphic, FilterConfigItem& r
                 aGraphic = rGraphic;
 
             sal_Int32 nColors = rConfigItem.ReadInt32( "Color", 0 );
-            if ( nColors )  // graphic conversion necessary ?
+
+            if (nColors)  // graphic conversion necessary?
             {
-                BitmapEx aBmpEx( aGraphic.GetBitmapEx() );
-                aBmpEx.Convert( static_cast<BmpConversion>(nColors) );   // the entries in the xml section have the same meaning as
-                aGraphic = aBmpEx;                          // they have in the BmpConversion enum, so it should be
-            }                                               // allowed to cast them
+                BitmapEx aBmpEx(aGraphic.GetBitmapEx());
+
+                // the entries in the xml section have the same meaning as
+                // they have in the BmpConversion enum, so it should be
+                // allowed to cast them
+                BitmapConverter aBmpConverter(static_cast<BmpConversion>(nColors));
+                BitmapEx aConvertedBmp(aBmpConverter.execute(aBmpEx));
+                SAL_WARN_IF(aConvertedBmp.IsEmpty(), "vcl.gdi", "Conversion failed");
+
+                aGraphic = aBmpEx;
+            }
         }
         else
         {
