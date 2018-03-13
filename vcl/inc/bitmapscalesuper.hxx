@@ -20,19 +20,19 @@
 #ifndef INCLUDED_VCL_INC_BITMAPSCALESUPER_HXX
 #define INCLUDED_VCL_INC_BITMAPSCALESUPER_HXX
 
-#include "bitmapfilter.hxx"
+#include <vcl/BitmapFilter.hxx>
 
 class BitmapScaleSuperFilter : public BitmapFilter
 {
 public:
-                    BitmapScaleSuperFilter(const double& rScaleX, const double& rScaleY);
-    virtual         ~BitmapScaleSuperFilter() override;
+    BitmapScaleSuperFilter(const double& rScaleX, const double& rScaleY);
+    virtual ~BitmapScaleSuperFilter() override;
 
-    virtual bool    execute(Bitmap& rBitmap) override;
+    virtual BitmapEx execute(BitmapEx const& rBitmap) override;
 
 private:
-    double          mrScaleX;
-    double          mrScaleY;
+    double mrScaleX;
+    double mrScaleY;
 
 };
 
