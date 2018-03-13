@@ -20,7 +20,7 @@
 #ifndef INCLUDED_VCL_BITMAPSCALECONVOLUTION_HXX
 #define INCLUDED_VCL_BITMAPSCALECONVOLUTION_HXX
 
-#include "bitmapfilter.hxx"
+#include "BitmapFilter.hxx"
 
 namespace vcl
 {
@@ -42,7 +42,7 @@ public:
         , meKernelType(eKernelType)
     {}
 
-    virtual bool execute(Bitmap& rBitmap) override;
+    virtual BitmapEx execute(BitmapEx const& rBitmap) override;
 
 private:
     double mrScaleX;
