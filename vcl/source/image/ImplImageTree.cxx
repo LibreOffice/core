@@ -50,7 +50,7 @@
 #include <vcl/IconThemeScanner.hxx>
 #include <vcl/pngwrite.hxx>
 
-#include <BitmapProcessor.hxx>
+#include "BitmapLightenFilter.hxx"
 
 bool ImageRequestParameters::convertToDarkTheme()
 {
@@ -160,8 +160,13 @@ void loadImageFromStream(std::shared_ptr<SvStream> const & xStream, OUString con
     {
         rParameters.mbWriteImageToCache = true; // We always want to cache a SVG image
         vcl::bitmap::loadFromSvg(*xStream.get(), rPath, rParameters.mrBitmap, aScalePercentage / 100.0);
+
         if (bConvertToDarkTheme)
-            rParameters.mrBitmap = BitmapProcessor::createLightImage(rParameters.mrBitmap);
+        {
+            BitmapLightenFilter aBmpLightenFilter;
+            rParameters.mrBitmap = aBmpLightenFilter.execute(rParameters.mrBitmap);
+        }
+
         return;
     }
     else
@@ -172,7 +177,8 @@ void loadImageFromStream(std::shared_ptr<SvStream> const & xStream, OUString con
     if (bConvertToDarkTheme)
     {
         rParameters.mbWriteImageToCache = true; // Cache the dark variant
-        rParameters.mrBitmap = BitmapProcessor::createLightImage(rParameters.mrBitmap);
+        BitmapLightenFilter aBmpLightenFilter;
+        rParameters.mrBitmap = aBmpLightenFilter.execute(rParameters.mrBitmap);
     }
 
     if (aScalePercentage > 100)
