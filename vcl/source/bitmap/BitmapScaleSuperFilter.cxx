@@ -22,7 +22,7 @@
 #include <vcl/bitmapaccess.hxx>
 
 #include <bitmapwriteaccess.hxx>
-#include <bitmapscalesuper.hxx>
+#include <BitmapScaleSuperFilter.hxx>
 
 #include <algorithm>
 #include <memory>
@@ -981,7 +981,7 @@ BitmapEx BitmapScaleSuperFilter::execute(BitmapEx const& rBitmap)
                     break;
                 default:
                     pScaleRangeFn = bScaleUp ? scalePalleteGeneral
-                                            : scalePalleteGeneral2;
+                    : scalePalleteGeneral2;
                     break;
                 }
             }
@@ -997,7 +997,7 @@ BitmapEx BitmapScaleSuperFilter::execute(BitmapEx const& rBitmap)
                     break;
                 default:
                     pScaleRangeFn = bScaleUp ? scaleNonPalleteGeneral
-                                            : scaleNonPalleteGeneral2;
+                    : scaleNonPalleteGeneral2;
                     break;
                 }
             }

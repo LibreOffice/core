@@ -17,12 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <BitmapScaleConvolution.hxx>
-#include <ResampleKernel.hxx>
-#include <bitmapwriteaccess.hxx>
+#include <osl/diagnose.h>
 
 #include <vcl/bitmapaccess.hxx>
-#include <osl/diagnose.h>
+
+#include <bitmapwriteaccess.hxx>
+#include <BitmapScaleConvolutionFilter.hxx>
+#include <ResampleKernel.hxx>
 
 #include <algorithm>
 #include <memory>
@@ -392,13 +393,8 @@ BitmapEx BitmapScaleConvolutionFilter::execute(BitmapEx const& rBitmapEx)
             break;
     }
 
-    Size aAfter(aBitmap.GetSizePixel());
-    fprintf( stderr, "size %ld, %ld\n", aAfter.Width(), aAfter.Height() );
-
     if (bRetval)
-    {
         return BitmapEx(aBitmap);
-    }
 
     return BitmapEx();
 }
