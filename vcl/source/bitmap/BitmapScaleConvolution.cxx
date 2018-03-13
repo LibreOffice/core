@@ -17,11 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <BitmapScaleConvolution.hxx>
-#include <ResampleKernel.hxx>
+#include <osl/diagnose.h>
 
 #include <vcl/bitmapaccess.hxx>
-#include <osl/diagnose.h>
+
+#include "BitmapScaleConvolutionFilter.hxx"
+#include "ResampleKernel.hxx"
 
 #include <algorithm>
 #include <memory>
