@@ -57,18 +57,6 @@ enum class BmpScaleFlag
 };
 
 
-enum class BmpDitherFlags
-{
-    NONE             = 0x0000,
-    Matrix           = 0x0001,
-    Floyd            = 0x0002,
-    Floyd16          = 0x0004,
-};
-namespace o3tl
-{
-    template<> struct typed_flags<BmpDitherFlags> : is_typed_flags<BmpDitherFlags, 0x07> {};
-}
-
 #define BMP_COL_TRANS               Color( 252, 3, 251 )
 
 enum class BmpConversion
@@ -299,17 +287,6 @@ public:
     bool                    ReduceColors(
                                 sal_uInt16 nNewColorCount,
                                 BmpReduce eReduce = BMP_REDUCE_SIMPLE );
-
-    /** Apply a dither algorithm to the bitmap
-
-        This method dithers the bitmap inplace, i.e. a true color
-        bitmap is converted to a paletted bitmap, reducing the color
-        deviation by error diffusion.
-
-        @param nDitherFlags
-        The algorithm to be used for dithering
-     */
-    bool                    Dither( BmpDitherFlags nDitherFlags = BmpDitherFlags::Matrix );
 
     /** Crop the bitmap
 
@@ -686,9 +663,6 @@ public:
                                 const int* pCount );
 
     SAL_DLLPRIVATE bool     ImplMakeGreyscales( sal_uInt16 nGreyscales );
-    SAL_DLLPRIVATE bool     ImplDitherMatrix();
-    SAL_DLLPRIVATE bool     ImplDitherFloyd();
-    SAL_DLLPRIVATE bool     ImplDitherFloyd16();
     SAL_DLLPRIVATE bool     ImplReduceSimple( sal_uInt16 nColorCount );
     SAL_DLLPRIVATE bool     ImplReducePopular( sal_uInt16 nColorCount );
     SAL_DLLPRIVATE bool     ImplReduceMedian( sal_uInt16 nColorCount );
