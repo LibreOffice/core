@@ -658,6 +658,173 @@ void CanvasBitmapHelperSetData2( OutputDevice& rOutDev,
     }
 }
 
+BitmapEx CanvasTransformBitmap( const BitmapEx&                 rBitmap,
+                                const ::basegfx::B2DHomMatrix&  rTransform,
+                                ::basegfx::B2DRectangle const & rDestRect,
+                                ::basegfx::B2DHomMatrix const & rLocalTransform )
+{
+    bool bCopyBack( false );
+    const Size aBmpSize( rBitmap.GetSizePixel() );
+    Bitmap aSrcBitmap( rBitmap.GetBitmap() );
+    Bitmap aSrcAlpha;
+
+    // differentiate mask and alpha channel (on-off
+    // vs. multi-level transparency)
+    if( rBitmap.IsTransparent() )
+    {
+        if( rBitmap.IsAlpha() )
+            aSrcAlpha = rBitmap.GetAlpha().GetBitmap();
+        else
+            aSrcAlpha = rBitmap.GetMask();
+    }
+
+    Bitmap::ScopedReadAccess pReadAccess( aSrcBitmap );
+    Bitmap::ScopedReadAccess pAlphaReadAccess( rBitmap.IsTransparent() ?
+                                             aSrcAlpha.AcquireReadAccess() :
+                                             nullptr,
+                                             aSrcAlpha );
+
+    if( pReadAccess.get() == nullptr ||
+        (pAlphaReadAccess.get() == nullptr && rBitmap.IsTransparent()) )
+    {
+        // TODO(E2): Error handling!
+        ENSURE_OR_THROW( false,
+                          "transformBitmap(): could not access source bitmap" );
+    }
+
+    // mapping table, to translate pAlphaReadAccess' pixel
+    // values into destination alpha values (needed e.g. for
+    // paletted 1-bit masks).
+    sal_uInt8 aAlphaMap[256];
+
+    if( rBitmap.IsTransparent() )
+    {
+        if( rBitmap.IsAlpha() )
+        {
+            // source already has alpha channel - 1:1 mapping,
+            // i.e. aAlphaMap[0]=0,...,aAlphaMap[255]=255.
+            sal_uInt8  val=0;
+            sal_uInt8* pCur=aAlphaMap;
+            sal_uInt8* const pEnd=&aAlphaMap[256];
+            while(pCur != pEnd)
+                *pCur++ = val++;
+        }
+        else
+        {
+            // mask transparency - determine used palette colors
+            const BitmapColor& rCol0( pAlphaReadAccess->GetPaletteColor( 0 ) );
+            const BitmapColor& rCol1( pAlphaReadAccess->GetPaletteColor( 1 ) );
+
+            // shortcut for true luminance calculation
+            // (assumes that palette is grey-level)
+            aAlphaMap[0] = rCol0.GetRed();
+            aAlphaMap[1] = rCol1.GetRed();
+        }
+    }
+    // else: mapping table is not used
+
+    const Size aDestBmpSize( ::basegfx::fround( rDestRect.getWidth() ),
+                             ::basegfx::fround( rDestRect.getHeight() ) );
+
+    if( aDestBmpSize.Width() == 0 || aDestBmpSize.Height() == 0 )
+        return BitmapEx();
+
+    Bitmap aDstBitmap( aDestBmpSize, aSrcBitmap.GetBitCount(), &pReadAccess->GetPalette() );
+    Bitmap aDstAlpha( AlphaMask( aDestBmpSize ).GetBitmap() );
+
+    {
+        // just to be on the safe side: let the
+        // ScopedAccessors get destructed before
+        // copy-constructing the resulting bitmap. This will
+        // rule out the possibility that cached accessor data
+        // is not yet written back.
+        Bitmap::ScopedWriteAccess pWriteAccess( aDstBitmap );
+        Bitmap::ScopedWriteAccess pAlphaWriteAccess( aDstAlpha );
+
+
+        if( pWriteAccess.get() != nullptr &&
+            pAlphaWriteAccess.get() != nullptr &&
+            rTransform.isInvertible() )
+        {
+            // we're doing inverse mapping here, i.e. mapping
+            // points from the destination bitmap back to the
+            // source
+            ::basegfx::B2DHomMatrix aTransform( rLocalTransform );
+            aTransform.invert();
+
+            // for the time being, always read as ARGB
+            for( long y=0; y<aDestBmpSize.Height(); ++y )
+            {
+                // differentiate mask and alpha channel (on-off
+                // vs. multi-level transparency)
+                if( rBitmap.IsTransparent() )
+                {
+                    Scanline pScan = pWriteAccess->GetScanline( y );
+                    Scanline pScanAlpha = pAlphaWriteAccess->GetScanline( y );
+                    // Handling alpha and mask just the same...
+                    for( long x=0; x<aDestBmpSize.Width(); ++x )
+                    {
+                        ::basegfx::B2DPoint aPoint(x,y);
+                        aPoint *= aTransform;
+
+                        const int nSrcX( ::basegfx::fround( aPoint.getX() ) );
+                        const int nSrcY( ::basegfx::fround( aPoint.getY() ) );
+                        if( nSrcX < 0 || nSrcX >= aBmpSize.Width() ||
+                            nSrcY < 0 || nSrcY >= aBmpSize.Height() )
+                        {
+                            pAlphaWriteAccess->SetPixelOnData( pScanAlpha, x, BitmapColor(255) );
+                        }
+                        else
+                        {
+                            const sal_uInt8 cAlphaIdx = pAlphaReadAccess->GetPixelIndex( nSrcY, nSrcX );
+                            pAlphaWriteAccess->SetPixelOnData( pScanAlpha, x, BitmapColor(aAlphaMap[ cAlphaIdx ]) );
+                            pWriteAccess->SetPixelOnData( pScan, x, pReadAccess->GetPixel( nSrcY, nSrcX ) );
+                        }
+                    }
+                }
+                else
+                {
+                    Scanline pScan = pWriteAccess->GetScanline( y );
+                    Scanline pScanAlpha = pAlphaWriteAccess->GetScanline( y );
+                    for( long x=0; x<aDestBmpSize.Width(); ++x )
+                    {
+                        ::basegfx::B2DPoint aPoint(x,y);
+                        aPoint *= aTransform;
+
+                        const int nSrcX( ::basegfx::fround( aPoint.getX() ) );
+                        const int nSrcY( ::basegfx::fround( aPoint.getY() ) );
+                        if( nSrcX < 0 || nSrcX >= aBmpSize.Width() ||
+                            nSrcY < 0 || nSrcY >= aBmpSize.Height() )
+                        {
+                            pAlphaWriteAccess->SetPixelOnData( pScanAlpha, x, BitmapColor(255) );
+                        }
+                        else
+                        {
+                            pAlphaWriteAccess->SetPixelOnData( pScanAlpha, x, BitmapColor(0) );
+                            pWriteAccess->SetPixelOnData( pScan, x, pReadAccess->GetPixel( nSrcY,
+                                                                                 nSrcX ) );
+                        }
+                    }
+                }
+            }
+
+            bCopyBack = true;
+        }
+        else
+        {
+            // TODO(E2): Error handling!
+            ENSURE_OR_THROW( false,
+                              "transformBitmap(): could not access bitmap" );
+        }
+    }
+
+    if( bCopyBack )
+        return BitmapEx( aDstBitmap, AlphaMask( aDstAlpha ) );
+    else
+        return BitmapEx();
+}
+
+
 }} // end vcl::bitmap
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
