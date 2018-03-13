@@ -33,10 +33,10 @@
 #include <impoctree.hxx>
 #include "impvect.hxx"
 
-#include <bitmapscalesuper.hxx>
-#include <octree.hxx>
-#include <BitmapScaleConvolution.hxx>
 #include <bitmapwriteaccess.hxx>
+#include <BitmapScaleSuperFilter.hxx>
+#include <BitmapScaleConvolutionFilter.hxx>
+#include <octree.hxx>
 
 #define RGB15( _def_cR, _def_cG, _def_cB )  ((static_cast<sal_uLong>(_def_cR)<<10)|(static_cast<sal_uLong>(_def_cG)<<5)|static_cast<sal_uLong>(_def_cB))
 #define GAMMA( _def_cVal, _def_InvGamma )   (static_cast<sal_uInt8>(MinMax(FRound(pow( _def_cVal/255.0,_def_InvGamma)*255.0),0,255)))
@@ -715,15 +715,15 @@ bool Bitmap::Scale( const double& rScaleX, const double& rScaleY, BmpScaleFlag n
         // no scale
         return true;
     }
-
+    
     if(basegfx::fTools::equal(rScaleX, 1.0) && basegfx::fTools::equal(rScaleY, 1.0))
     {
         // no scale
         return true;
     }
-
+    
     const sal_uInt16 nStartCount(GetBitCount());
-
+    
     if (mxImpBmp && mxImpBmp->ImplScalingSupported())
     {
         // implementation specific scaling
@@ -737,7 +737,7 @@ bool Bitmap::Scale( const double& rScaleX, const double& rScaleY, BmpScaleFlag n
             return true;
         }
     }
-
+    
     //fdo#33455
     //
     //If we start with a 1 bit image, then after scaling it in any mode except
@@ -753,10 +753,10 @@ bool Bitmap::Scale( const double& rScaleX, const double& rScaleY, BmpScaleFlag n
     //Bitmap::MakeMonochrome
     if (nStartCount == 1)
         nScaleFlag = BmpScaleFlag::Fast;
-
+    
     BitmapEx aBmpEx(*this);
     bool bRetval(false);
-
+    
     switch(nScaleFlag)
     {
         case BmpScaleFlag::Fast :
@@ -809,7 +809,7 @@ bool Bitmap::Scale( const double& rScaleX, const double& rScaleY, BmpScaleFlag n
                 bRetval = true;
                 aBmpEx = aBmpEx2;
             }
-
+            
             break;
         }
         case BmpScaleFlag::BiLinear :
@@ -824,10 +824,10 @@ bool Bitmap::Scale( const double& rScaleX, const double& rScaleY, BmpScaleFlag n
             break;
         }
     }
-
+    
     if (bRetval && nScaleFlag != BmpScaleFlag::Fast && nScaleFlag != BmpScaleFlag::Interpolate)
         *this = aBmpEx.GetBitmapRef();
-
+    
     OSL_ENSURE(!bRetval || nStartCount == GetBitCount(), "Bitmap::Scale has changed the ColorDepth, this should *not* happen (!)");
     return bRetval;
 }
