@@ -120,7 +120,6 @@
                           <object class="GtkSpinButton" id="insert_number">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
-                            <property name="invisible_char">●</property>
                             <property name="activates_default">True</property>
                             <property name="adjustment">adjustment1</property>
                             <property name="numeric">True</property>
