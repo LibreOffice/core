@@ -341,15 +341,8 @@ void BitmapTest::testConvert()
     {
         Bitmap::ScopedReadAccess pReadAccess(aBitmap);
         CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(8), pReadAccess->GetBitCount());
-#if defined MACOSX || defined IOS
-        //it would be nice to find and change the stride for quartz to be the same as everyone else
-        CPPUNIT_ASSERT_EQUAL(static_cast<sal_uLong>(10), pReadAccess->GetScanlineSize());
-#else
-#if HAVE_FEATURE_OPENGL
-        if (!OpenGLHelper::isVCLOpenGLEnabled())
-            CPPUNIT_ASSERT_EQUAL(static_cast<sal_uLong>(12), pReadAccess->GetScanlineSize());
-#endif
-#endif
+        // scanline should pad to 16-bit multiples when using 8-bit bitmaps
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_uLong>(12), pReadAccess->GetScanlineSize());
         CPPUNIT_ASSERT(pReadAccess->HasPalette());
         const BitmapColor& rColor = pReadAccess->GetPaletteColor(pReadAccess->GetPixelIndex(1, 1));
         CPPUNIT_ASSERT_EQUAL(sal_Int32(204), sal_Int32(rColor.GetRed()));
@@ -364,22 +357,8 @@ void BitmapTest::testConvert()
         Bitmap::ScopedReadAccess pReadAccess(aBitmap);
         // 24 bit Bitmap on SVP backend can now use 24bit RGB everywhere.
         CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(24), pReadAccess->GetBitCount());
-
-#if defined LINUX || defined FREEBSD
+        // scanline should pad to 32-bit multiples when using 24-bit bitmaps
         CPPUNIT_ASSERT_EQUAL(sal_uLong(32), pReadAccess->GetScanlineSize());
-#else
-#if defined(_WIN32)
-        if (!OpenGLHelper::isVCLOpenGLEnabled())
-        {
-            // GDI Scanlines padded to DWORD multiples, it seems
-            CPPUNIT_ASSERT_EQUAL(sal_uLong(32), pReadAccess->GetScanlineSize());
-        }
-        else
-#endif
-        {
-            CPPUNIT_ASSERT_EQUAL(sal_uLong(30), pReadAccess->GetScanlineSize());
-        }
-#endif
 
         CPPUNIT_ASSERT(!pReadAccess->HasPalette());
         Color aColor = pReadAccess->GetPixel(0, 0).GetColor();
