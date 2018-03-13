@@ -313,6 +313,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/graphic/UnoGraphicTransformer \
     vcl/source/bitmap/bitmap \
     vcl/source/bitmap/bitmapfilter \
+    vcl/source/bitmap/BitmapDitheringFilter \
     vcl/source/bitmap/BitmapLightenFilter \
     vcl/source/bitmap/BitmapDisabledImageFilter \
     vcl/source/bitmap/BitmapColorizeFilter \
