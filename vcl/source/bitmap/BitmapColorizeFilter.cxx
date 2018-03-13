@@ -13,7 +13,7 @@
 
 #include <vcl/bitmapaccess.hxx>
 
-#include "BitmapColorizeFilter.hxx"
+#include <vcl/BitmapColorizeFilter.hxx>
 
 BitmapEx BitmapColorizeFilter::execute(BitmapEx const& rBitmapEx)
 {

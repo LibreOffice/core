@@ -8,25 +8,15 @@
  *
  */
 
-#ifndef INCLUDED_VCL_INC_BITMAPCOLORIZEFILTER_HXX
-#define INCLUDED_VCL_INC_BITMAPCOLORIZEFILTER_HXX
+#ifndef INCLUDED_INCLUDE_VCL_BITMAPLIGHTENFILTER_HXX
+#define INCLUDED_INCLUDE_VCL_BITMAPLIGHTENFILTER_HXX
 
-#include <tools/color.hxx>
+#include <vcl/BitmapFilter.hxx>
 
-#include "bitmapfilter.hxx"
-
-class VCL_DLLPUBLIC BitmapColorizeFilter : public BitmapFilterEx
+class VCL_DLLPUBLIC BitmapLightenFilter : public BitmapFilterEx
 {
 public:
-    BitmapColorizeFilter(Color aColor)
-        : maColor(aColor)
-    {
-    }
-
     virtual BitmapEx execute(BitmapEx const& rBitmapEx);
-
-private:
-    Color maColor;
 };
 
 #endif

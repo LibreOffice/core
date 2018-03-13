@@ -11,10 +11,9 @@
 #include <basegfx/color/bcolortools.hxx>
 
 #include <vcl/bitmapaccess.hxx>
+#include <vcl/BitmapDisabledImageFilter.hxx>
 
-#include "BitmapDisabledImageFilter.hxx"
-
-BitmapEx BitmapDisabledImageFilter::execute(BitmapEx const & rBitmapEx)
+BitmapEx BitmapDisabledImageFilter::execute(BitmapEx const& rBitmapEx)
 {
     const Size aSize(rBitmapEx.GetSizePixel());
 
@@ -47,9 +46,9 @@ BitmapEx BitmapDisabledImageFilter::execute(BitmapEx const & rBitmapEx)
 
             for (long nY = 0; nY < aSize.Height(); ++nY)
             {
-                Scanline pScanAlpha = pGreyAlpha->GetScanline( nY );
-                Scanline pScanline = pGrey->GetScanline( nY );
-                Scanline pScanReadAlpha = pReadAlpha->GetScanline( nY );
+                Scanline pScanAlpha = pGreyAlpha->GetScanline(nY);
+                Scanline pScanline = pGrey->GetScanline(nY);
+                Scanline pScanReadAlpha = pReadAlpha->GetScanline(nY);
 
                 for (long nX = 0; nX < aSize.Width(); ++nX)
                 {
@@ -57,9 +56,11 @@ BitmapEx BitmapDisabledImageFilter::execute(BitmapEx const & rBitmapEx)
                     BitmapColor aGreyValue(nLum, nLum, nLum);
                     pGrey->SetPixelOnData(pScanline, nX, aGreyValue);
 
-                    const BitmapColor aBitmapAlphaValue(pReadAlpha->GetPixelFromData(pScanReadAlpha, nX));
+                    const BitmapColor aBitmapAlphaValue(
+                        pReadAlpha->GetPixelFromData(pScanReadAlpha, nX));
 
-                    aGreyAlphaValue.SetIndex(sal_uInt8(std::min(aBitmapAlphaValue.GetIndex() + 178ul, 255ul)));
+                    aGreyAlphaValue.SetIndex(
+                        sal_uInt8(std::min(aBitmapAlphaValue.GetIndex() + 178ul, 255ul)));
                     pGreyAlpha->SetPixelOnData(pScanAlpha, nX, aGreyAlphaValue);
                 }
             }
@@ -76,8 +77,8 @@ BitmapEx BitmapDisabledImageFilter::execute(BitmapEx const & rBitmapEx)
 
             for (long nY = 0; nY < aSize.Height(); ++nY)
             {
-                Scanline pScanAlpha = pGreyAlpha->GetScanline( nY );
-                Scanline pScanline = pGrey->GetScanline( nY );
+                Scanline pScanAlpha = pGreyAlpha->GetScanline(nY);
+                Scanline pScanline = pGrey->GetScanline(nY);
 
                 for (long nX = 0; nX < aSize.Width(); ++nX)
                 {
@@ -100,6 +101,5 @@ BitmapEx BitmapDisabledImageFilter::execute(BitmapEx const & rBitmapEx)
 
     return aReturnBitmap;
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
