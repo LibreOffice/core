@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba2be162_cf87df10",
+        "filename": "sc/source/core/tool/rangelst.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 327,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-03-13T21:40:29Z",
+      "side": 1,
+      "message": "What can happen here is that nOverPos\u003ci and i was the last position in maRanges, so the remembered rRange\u003dmaRanges[i] and thus the next pOver\u003d\u0026rRange below is invalid. But it still wouldn\u0027t use deleted memory because a std::vector::erase() doesn\u0027t reallocate. Maybe the ofz message is misleading and it\u0027s rather meant as some sort of out-of-bounds.",
+      "revId": "47b4baba85d72d462ff57cc71c288ddb47aec62e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
