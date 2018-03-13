@@ -8140,6 +8140,9 @@ include/vcl/wmf.hxx
 include/vcl/wmfexternal.hxx
 include/vcl/wrkwin.hxx
 include/vcl/xtextedt.hxx
+include/vcl/BitmapConverter.hxx
+include/vcl/BitmapFilter.hxx
+include/vcl/BitmapScaleSuperFilter.hxx
 include/xmloff/DashStyle.hxx
 include/xmloff/DocumentSettingsContext.hxx
 include/xmloff/EnumPropertyHdl.hxx
@@ -17549,7 +17552,7 @@ vcl/headless/svpprn.cxx
 vcl/headless/svptext.cxx
 vcl/headless/svpvd.cxx
 vcl/inc/BitmapProcessor.hxx
-vcl/inc/BitmapScaleConvolution.hxx
+vcl/inc/BitmapScaleConvolutionFilter.hxx
 vcl/inc/BitmapSymmetryCheck.hxx
 vcl/inc/CommonSalLayout.hxx
 vcl/inc/ControlCacheKey.hxx
@@ -18044,8 +18047,8 @@ vcl/source/bitmap/BitmapScaleConvolution.cxx
 vcl/source/bitmap/BitmapSymmetryCheck.cxx
 vcl/source/bitmap/BitmapTools.cxx
 vcl/source/bitmap/bitmapfilter.cxx
-vcl/source/bitmap/bitmapscalesuper.cxx
 vcl/source/bitmap/checksum.cxx
+vcl/source/bitmap/BitmapScaleSuperFilter.cxx
 vcl/source/components/dtranscomp.cxx
 vcl/source/components/factory.cxx
 vcl/source/components/fontident.cxx
