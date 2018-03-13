@@ -17,42 +17,67 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_BITMAPSCALECONVOLUTION_HXX
-#define INCLUDED_VCL_BITMAPSCALECONVOLUTION_HXX
+#ifndef VCL_INC_BITMAPSCALECONVOLUTIONFILTER_HXX
+#define VCL_INC_BITMAPSCALECONVOLUTIONFILTER_HXX
 
-#include "bitmapfilter.hxx"
+#include <vcl/BitmapFilter.hxx>
+
+#include "ResampleKernel.hxx"
 
 namespace vcl
 {
-
-enum class ConvolutionKernelType
-{
-    BiLinear  = 1,
-    BiCubic   = 2,
-    Lanczos3  = 3,
-};
-
 class VCL_DLLPUBLIC BitmapScaleConvolutionFilter : public BitmapFilter
 {
 public:
-
-    BitmapScaleConvolutionFilter(const double& rScaleX, const double& rScaleY, ConvolutionKernelType eKernelType)
+    BitmapScaleConvolutionFilter(const double& rScaleX, const double& rScaleY, Kernel const& rKernel)
         : mrScaleX(rScaleX)
         , mrScaleY(rScaleY)
-        , meKernelType(eKernelType)
-    {}
+        , mrKernel(rKernel)
+    {
+    }
 
-    virtual bool execute(Bitmap& rBitmap) override;
+    virtual BitmapEx execute(BitmapEx const& rBitmap) override;
+
+protected:
+    Kernel* mpKernel;
 
 private:
     double mrScaleX;
     double mrScaleY;
+};
 
-    ConvolutionKernelType meKernelType;
+class VCL_DLLPUBLIC BitmapScaleBilinearFilter : public BitmapScaleConvolutionFilter
+{
+public:
+    BitmapScaleBilinearFilter(const double& rScaleX, const double& rScaleY)
+        : BitmapScaleConvolutionFilter(rScaleX, rScaleY)
+    {
+        mpKernel = new BilinearKernel();
+    }
+};
+
+class VCL_DLLPUBLIC BitmapScaleBicubicFilter : public BitmapScaleConvolutionFilter
+{
+public:
+    BitmapScaleBicubicFilter(const double& rScaleX, const double& rScaleY)
+      : BitmapScaleConvolutionFilter(rScaleX, rScaleY)
+    {
+        mpKernel = new BicubicKernel();
+    }
+};
+
+class VCL_DLLPUBLIC BitmapScaleLanczos3Filter : public BitmapScaleConvolutionFilter
+{
+public:
+    BitmapScaleLanczos3Filter(const double& rScaleX, const double& rScaleY)
+        : BitmapScaleConvolutionFilter(rScaleX, rScaleY)
+    {
+        mpKernel = Lanczos3Kernel();
+    }
 };
 
 }
 
-#endif // INCLUDED_VCL_BITMAPSCALECONVOLUTION_HXX
+#endif // VCL_INC_BITMAPSCALECONVOLUTIONFILTER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
