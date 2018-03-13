@@ -17550,7 +17550,7 @@ vcl/headless/svpprn.cxx
 vcl/headless/svptext.cxx
 vcl/headless/svpvd.cxx
 vcl/inc/BitmapProcessor.hxx
-vcl/inc/BitmapScaleConvolution.hxx
+vcl/inc/BitmapScaleConvolutionFilter.hxx
 vcl/inc/BitmapSymmetryCheck.hxx
 vcl/inc/CommonSalLayout.hxx
 vcl/inc/ControlCacheKey.hxx
