@@ -273,9 +273,9 @@ bool RTFSprms::equals(RTFValue& rOther)
 
 void RTFSprms::ensureCopyBeforeWrite()
 {
-    if (m_pSprms->m_nRefCount > 1)
+    if (m_pSprms->GetRefCount() > 1)
     {
-        boost::intrusive_ptr<RTFSprmsImpl> pClone(new RTFSprmsImpl);
+        tools::SvRef<RTFSprmsImpl> pClone(new RTFSprmsImpl);
         for (auto& rSprm : *m_pSprms)
             pClone->push_back(
                 std::make_pair(rSprm.first, RTFValue::Pointer_t(rSprm.second->Clone())));
@@ -294,10 +294,10 @@ RTFSprms::RTFSprms(const RTFSprms& rSprms) { *this = rSprms; }
 
 void RTFSprms::clear()
 {
-    if (m_pSprms->m_nRefCount == 1)
+    if (m_pSprms->GetRefCount() == 1)
         return m_pSprms->clear();
 
-    m_pSprms.reset(new RTFSprmsImpl);
+    m_pSprms = tools::SvRef<RTFSprmsImpl>(new RTFSprmsImpl);
 }
 
 } // namespace rtftok
