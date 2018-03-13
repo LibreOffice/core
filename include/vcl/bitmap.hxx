@@ -29,6 +29,8 @@
 #include <vcl/scopedbitmapaccess.hxx>
 #include <o3tl/typed_flags_set.hxx>
 
+#define GAMMA( _def_cVal, _def_InvGamma )   (static_cast<sal_uInt8>(MinMax(FRound(pow( _def_cVal/255.0,_def_InvGamma)*255.0),0,255)))
+
 class Color;
 
 enum class BmpMirrorFlags
@@ -56,18 +58,6 @@ enum class BmpScaleFlag
     BiLinear
 };
 
-
-enum class BmpDitherFlags
-{
-    NONE             = 0x0000,
-    Matrix           = 0x0001,
-    Floyd            = 0x0002,
-    Floyd16          = 0x0004,
-};
-namespace o3tl
-{
-    template<> struct typed_flags<BmpDitherFlags> : is_typed_flags<BmpDitherFlags, 0x07> {};
-}
 
 #define BMP_COL_TRANS               Color( 252, 3, 251 )
 
@@ -278,17 +268,6 @@ public:
         @return true conversion to monochrome bitmap was successful
     */
     bool                    MakeMonochrome(sal_uInt8 cThreshold);
-
-    /** Apply a dither algorithm to the bitmap
-
-        This method dithers the bitmap inplace, i.e. a true color
-        bitmap is converted to a paletted bitmap, reducing the color
-        deviation by error diffusion.
-
-        @param nDitherFlags
-        The algorithm to be used for dithering
-     */
-    bool                    Dither( BmpDitherFlags nDitherFlags = BmpDitherFlags::Matrix );
 
     /** Crop the bitmap
 
@@ -654,9 +633,14 @@ public:
     SAL_DLLPRIVATE void     ImplSetSalBitmap( const std::shared_ptr<SalBitmap>& xImpBmp );
 
     SAL_DLLPRIVATE bool     ImplMakeGreyscales( sal_uInt16 nGreyscales );
-    SAL_DLLPRIVATE bool     ImplDitherMatrix();
-    SAL_DLLPRIVATE bool     ImplDitherFloyd();
-    SAL_DLLPRIVATE bool     ImplDitherFloyd16();
+    SAL_DLLPRIVATE bool     ImplReduceSimple( sal_uInt16 nColorCount );
+    SAL_DLLPRIVATE bool     ImplReducePopular( sal_uInt16 nColorCount );
+    SAL_DLLPRIVATE bool     ImplReduceMedian( sal_uInt16 nColorCount );
+    SAL_DLLPRIVATE void     ImplMedianCut(
+                                sal_uLong* pColBuf,
+                                BitmapPalette& rPal,
+                                long nR1, long nR2, long nG1, long nG2, long nB1, long nB2,
+                                long nColors, long nPixels, long& rIndex );
 
 public:
 

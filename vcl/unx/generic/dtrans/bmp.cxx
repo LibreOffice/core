@@ -28,12 +28,10 @@
 
 #include <unx/x11/xlimits.hxx>
 
-#include "bmp.hxx"
 #include "X11_selection.hxx"
+#include "bmp.hxx"
 
-#include <unistd.h>
-#include <cstdio>
-#include <cstring>
+#include <BitmapFloydDitheringFilter.hxx>
 
 using namespace x11;
 
@@ -748,7 +746,9 @@ css::uno::Sequence<sal_Int8> x11::convertBitmapDepth(
     Bitmap bm;
     ReadDIB(bm, in, true);
     if (bm.GetBitCount() == 24 && depth <= 8) {
-        bm.Dither(BmpDitherFlags::Floyd);
+        BitmapEx aBmpEx(bm);
+        BitmapFilter::Filter(aBmpEx, BitmapFloydDitheringFilter());
+        bm = aBmpEx.GetBitmap();
     }
     if (bm.GetBitCount() != depth) {
         switch (depth) {
