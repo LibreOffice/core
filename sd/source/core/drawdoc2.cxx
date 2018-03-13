@@ -681,7 +681,7 @@ void SdDrawDocument::CreateFirstPages( SdDrawDocument const * pRefDocument /* = 
         if( !pRefPage && (meDocType != DocumentType::Draw) )
             pPage->SetAutoLayout( AUTOLAYOUT_TITLE, true, true );
 
-        mpWorkStartupTimer = new Timer("DrawWorkStartupTimer");
+        mpWorkStartupTimer.reset( new Timer("DrawWorkStartupTimer") );
         mpWorkStartupTimer->SetInvokeHandler( LINK(this, SdDrawDocument, WorkStartupHdl) );
         mpWorkStartupTimer->SetTimeout(2000);
         mpWorkStartupTimer->Start();
@@ -968,8 +968,7 @@ void SdDrawDocument::StopWorkStartupDelay()
             WorkStartupHdl(nullptr);
         }
 
-        delete mpWorkStartupTimer;
-        mpWorkStartupTimer = nullptr;
+        mpWorkStartupTimer.reset();
     }
 }
 

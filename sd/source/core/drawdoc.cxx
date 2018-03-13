@@ -351,8 +351,7 @@ SdDrawDocument::~SdDrawDocument()
         if ( mpWorkStartupTimer->IsActive() )
             mpWorkStartupTimer->Stop();
 
-        delete mpWorkStartupTimer;
-        mpWorkStartupTimer = nullptr;
+        mpWorkStartupTimer.reset();
     }
 
     StopOnlineSpelling();
@@ -386,8 +385,7 @@ SdDrawDocument::~SdDrawDocument()
             delete pCustomShow;
         }
 
-        delete mpCustomShowList;
-        mpCustomShowList = nullptr;
+        mpCustomShowList.reset();
     }
 
     mpOutliner.reset();

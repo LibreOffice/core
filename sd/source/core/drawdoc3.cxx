@@ -1181,10 +1181,10 @@ SdCustomShowList* SdDrawDocument::GetCustomShowList(bool bCreate)
 {
     if (!mpCustomShowList && bCreate)
     {
-        mpCustomShowList = new SdCustomShowList;
+        mpCustomShowList.reset(new SdCustomShowList);
     }
 
-    return mpCustomShowList;
+    return mpCustomShowList.get();
 }
 
 // Remove unused master pages and layouts
