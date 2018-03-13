@@ -49,6 +49,7 @@ class SfxBaseController;
 class Size;
 class Fraction;
 namespace vcl { class Window; }
+namespace weld { class Window; }
 class KeyEvent;
 class WorkWindow;
 class SvBorder;
@@ -232,6 +233,7 @@ public:
 
     // Viewing Interface
     vcl::Window*                GetWindow() const { return pWindow; }
+    weld::Window*               GetFrameWeld() const;
     void                        SetWindow( vcl::Window *pViewPort );
     virtual void                AdjustPosSizePixel( const Point &rOfs, const Size &rSize );
     const SvBorder&             GetBorderPixel() const;

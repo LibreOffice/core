@@ -44,6 +44,11 @@ public:
 
     void DetectRTL(SwWrtShell const* pWrtShell);
 
+    void set_size_request(int nWidth, int nHeight)
+    {
+        mxDrawingArea->set_size_request(nWidth, nHeight);
+    }
+
 private:
     std::unique_ptr<weld::DrawingArea> mxDrawingArea;
     SwTableAutoFormat aCurData;
@@ -80,58 +85,6 @@ private:
 
     void MakeFonts(vcl::RenderContext& rRenderContext, sal_uInt8 nIndex, vcl::Font& rFont,
                    vcl::Font& rCJKFont, vcl::Font& rCTLFont);
-};
-
-class AutoFormatPreviewWindow : public vcl::Window
-{
-public:
-    AutoFormatPreviewWindow(vcl::Window* pParent, WinBits nStyle);
-    virtual ~AutoFormatPreviewWindow() override;
-    virtual void dispose() override;
-
-    void NotifyChange(const SwTableAutoFormat& rNewData);
-
-    void DetectRTL(SwWrtShell const* pWrtShell);
-
-    virtual void Resize() override;
-
-protected:
-    virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
-
-private:
-    SwTableAutoFormat aCurData;
-    ScopedVclPtr<VirtualDevice> aVD;
-    svx::frame::Array maArray; /// Implementation to draw the frame borders.
-    bool bFitWidth;
-    bool mbRTL;
-    Size aPrvSize;
-    long nLabelColWidth;
-    long nDataColWidth1;
-    long nDataColWidth2;
-    long nRowHeight;
-    const OUString aStrJan;
-    const OUString aStrFeb;
-    const OUString aStrMar;
-    const OUString aStrNorth;
-    const OUString aStrMid;
-    const OUString aStrSouth;
-    const OUString aStrSum;
-    SvNumberFormatter* pNumFormat;
-
-    uno::Reference<i18n::XBreakIterator> m_xBreak;
-
-    void Init();
-    void DoPaint(vcl::RenderContext& rRenderContext);
-    void CalcCellArray(bool bFitWidth);
-    void CalcLineMap();
-    void PaintCells(vcl::RenderContext& rRenderContext);
-
-    sal_uInt8 GetFormatIndex(size_t nCol, size_t nRow) const;
-
-    void DrawString(vcl::RenderContext& rRenderContext, size_t nCol, size_t nRow);
-    void DrawBackground(vcl::RenderContext& rRenderContext);
-
-    void MakeFonts(sal_uInt8 nIndex, vcl::Font& rFont, vcl::Font& rCJKFont, vcl::Font& rCTLFont);
 };
 
 #endif
