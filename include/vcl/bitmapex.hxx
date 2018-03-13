@@ -109,13 +109,14 @@ public:
      */
     bool                Convert( BmpConversion eConversion );
 
-    /** Apply a dither algorithm to the bitmap
+    /** Reduce number of colors for the bitmap using the POPULAR algorithm
 
-        This method dithers the bitmap inplace, i.e. a true color
-        bitmap is converted to a paletted bitmap, reducing the color
-        deviation by error diffusion.
+        @param nNewColorCount
+        Maximal number of bitmap colors after the reduce operation
+
+        @return true, if the color reduction operation was completed successfully.
      */
-    bool                Dither();
+    bool                ReduceColors( sal_uInt16 nNewColorCount );
 
     /** Crop the bitmap
 
