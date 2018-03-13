@@ -25,8 +25,9 @@
 #include <vcl/window.hxx>
 #include <vcl/dibtools.hxx>
 #include <vcl/BitmapConverter.hxx>
+#include <vcl/BitmapColorQuantizationFilter.hxx>
 
-#include <impanmvw.hxx>
+#include "impanmvw.hxx"
 
 #define MIN_TIMEOUT 2
 #define INC_TIMEOUT 0
@@ -530,15 +531,21 @@ bool Animation::ReduceColors( sal_uInt16 nNewColorCount )
 
     if( !IsInAnimation() && !maList.empty() )
     {
+        BitmapColorQuantizationFilter aBmpColorQuantizationFilter(nNewColorCount);
         bRet = true;
 
-        for( size_t i = 0, n = maList.size(); ( i < n ) && bRet; ++i )
-            bRet = maList[ i ]->aBmpEx.ReduceColors( nNewColorCount );
+        for (size_t i = 0, n = maList.size(); i < n && bRet; ++i)
+        {
+            bRet = (!aBmpColorQuantizationFilter.execute(maList[i]->aBmpEx).IsEmpty());
+        }
 
-        maBitmapEx.ReduceColors( nNewColorCount );
+        if (aBmpColorQuantizationFilter.execute(maBitmapEx).IsEmpty())
+            SAL_WARN("vcl.gdi", "Could not reduce colours");
     }
     else
+    {
         bRet = false;
+    }
 
     return bRet;
 }
