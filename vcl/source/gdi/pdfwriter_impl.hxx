@@ -44,7 +44,7 @@
 
 #include <sallayout.hxx>
 #include <outdata.hxx>
-#include "pdffontcache.hxx"
+#include <pdffontcache.hxx>
 #include <PhysicalFontFace.hxx>
 
 class StyleSettings;

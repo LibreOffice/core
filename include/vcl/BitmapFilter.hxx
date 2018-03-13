@@ -8,12 +8,20 @@
  *
  */
 
-#include <vcl/BitmapFilter.hxx>
+#ifndef INCLUDED_VCL_INC_BITMAPFILTER_HXX
+#define INCLUDED_VCL_INC_BITMAPFILTER_HXX
 
-BitmapFilter::BitmapFilter()
-{}
+#include <vcl/bitmapex.hxx>
 
-BitmapFilter::~BitmapFilter()
-{}
+class VCL_DLLPUBLIC BitmapFilter
+{
+public:
+    BitmapFilter();
+    virtual ~BitmapFilter();
+
+    virtual BitmapEx execute(BitmapEx const& rBitmapEx) = 0;
+};
+
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
