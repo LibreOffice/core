@@ -459,11 +459,6 @@ bool BitmapEx::Crop( const tools::Rectangle& rRectPixel )
     return bRet;
 }
 
-bool BitmapEx::ReduceColors( sal_uInt16 nNewColorCount )
-{
-    return !!maBitmap && maBitmap.ReduceColors( nNewColorCount, BMP_REDUCE_POPULAR );
-}
-
 void BitmapEx::Expand( sal_uLong nDX, sal_uLong nDY, bool bExpandTransparent )
 {
     bool bRet = false;
