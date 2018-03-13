@@ -466,7 +466,7 @@ void SwFont::dumpAsXml(xmlTextWriterPtr writer) const
     xmlTextWriterStartElement(writer, BAD_CAST("SwFont"));
     xmlTextWriterWriteFormatAttribute(writer, BAD_CAST("ptr"), "%p", this);
     // do not use Color::AsRGBHexString() as that omits the transparency
-    xmlTextWriterWriteFormatAttribute(writer, BAD_CAST("color"), "%08x", sal_uInt32(GetColor()));
+    xmlTextWriterWriteFormatAttribute(writer, BAD_CAST("color"), "%08" SAL_PRIxUINT32, sal_uInt32(GetColor()));
     xmlTextWriterEndElement(writer);
 }
 
