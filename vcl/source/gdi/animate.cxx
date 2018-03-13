@@ -536,10 +536,17 @@ bool Animation::ReduceColors( sal_uInt16 nNewColorCount )
 
         for (size_t i = 0, n = maList.size(); i < n && bRet; ++i)
         {
-            bRet = (!aBmpColorQuantizationFilter.execute(maList[i]->aBmpEx).IsEmpty());
+            BitmapEx aTmpBmpEx = aBmpColorQuantizationFilter.execute(maList[i]->aBmpEx);
+            if (!aTmpBmpEx.IsEmpty())
+                maList[i]->aBmpEx = aTmpBmpEx;
+            else
+                SAL_WARN("vcl.gdi", "cannot reduce colours for frame " << i << " of animation");
         }
 
-        if (aBmpColorQuantizationFilter.execute(maBitmapEx).IsEmpty())
+        BitmapEx aTmpBmpEx = aBmpColorQuantizationFilter.execute(maBitmapEx);
+        if (!aTmpBmpEx.IsEmpty())
+            maBitmapEx = aTmpBmpEx;
+        else
             SAL_WARN("vcl.gdi", "Could not reduce colours");
     }
     else
