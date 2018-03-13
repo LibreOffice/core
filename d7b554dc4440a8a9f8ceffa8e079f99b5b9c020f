@@ -22,6 +22,24 @@
       "revId": "d7b554dc4440a8a9f8ceffa8e079f99b5b9c020f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba2be162_343a8e37",
+        "filename": "sw/source/core/text/itrform2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 611,
+      "author": {
+        "id": 1000381
+      },
+      "writtenOn": "2018-03-13T14:33:08Z",
+      "side": 1,
+      "message": "The line above is checking whether the current position is a script change position, so it moves back one character and checks whether the next script change  position matches. What I’m is whether the current character or the next one are CJK characters.",
+      "parentUuid": "ba2be162_b4aafe6e",
+      "revId": "d7b554dc4440a8a9f8ceffa8e079f99b5b9c020f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
