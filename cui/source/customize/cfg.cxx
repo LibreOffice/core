@@ -440,13 +440,9 @@ MenuSaveInData::GetEntries()
 }
 
 void
-MenuSaveInData::SetEntries( SvxEntries* pNewEntries )
+MenuSaveInData::SetEntries( std::unique_ptr<SvxEntries> pNewEntries )
 {
-    // delete old menu hierarchy first
-    delete pRootEntry->GetEntries();
-
-    // now set new menu hierarchy
-    pRootEntry->SetEntries( pNewEntries );
+    pRootEntry->SetEntries( std::move(pNewEntries) );
 }
 
 bool SaveInData::LoadSubMenus( const uno::Reference< container::XIndexAccess >& xMenuSettings,
@@ -849,10 +845,9 @@ SvxEntries* ContextMenuSaveInData::GetEntries()
     return m_pRootEntry->GetEntries();
 }
 
-void ContextMenuSaveInData::SetEntries( SvxEntries* pNewEntries )
+void ContextMenuSaveInData::SetEntries( std::unique_ptr<SvxEntries> pNewEntries )
 {
-    delete m_pRootEntry->GetEntries();
-    m_pRootEntry->SetEntries( pNewEntries );
+    m_pRootEntry->SetEntries( std::move(pNewEntries) );
 }
 
 bool ContextMenuSaveInData::HasURL( const OUString& rURL )
@@ -1900,7 +1895,7 @@ SvxMainMenuOrganizerDialog::SvxMainMenuOrganizerDialog(
     // Copy the entries list passed in
     if ( entries != nullptr )
     {
-        mpEntries = new SvxEntries;
+        mpEntries.reset( new SvxEntries );
         for (auto const& entry : *entries)
         {
             SvTreeListEntry* pLBEntry =
@@ -1921,7 +1916,7 @@ SvxMainMenuOrganizerDialog::SvxMainMenuOrganizerDialog(
         OUString prefix = CuiResId( RID_SVXSTR_NEW_MENU );
 
         OUString newname = SvxConfigPageHelper::generateCustomName( prefix, entries );
-        OUString newurl = SvxConfigPageHelper::generateCustomMenuURL( mpEntries );
+        OUString newurl = SvxConfigPageHelper::generateCustomMenuURL( mpEntries.get() );
 
         SvxConfigEntry* pNewEntryData =
             new SvxConfigEntry( newname, newurl, true, /*bParentData*/false );
@@ -2036,9 +2031,9 @@ IMPL_LINK( SvxMainMenuOrganizerDialog, MoveHdl, Button *, pButton, void )
         SvxConfigEntry* pTargetData =
             static_cast<SvxConfigEntry*>(pTargetEntry->GetUserData());
 
-        SvxEntries::iterator iter1 = GetEntries()->begin();
-        SvxEntries::iterator iter2 = GetEntries()->begin();
-        SvxEntries::const_iterator end = GetEntries()->end();
+        SvxEntries::iterator iter1 = mpEntries->begin();
+        SvxEntries::iterator iter2 = mpEntries->begin();
+        SvxEntries::const_iterator end = mpEntries->end();
 
         // Advance the iterators to the positions of the source and target
         while (*iter1 != pSourceData && ++iter1 != end) ;
@@ -2084,19 +2079,15 @@ SvxConfigEntry::SvxConfigEntry( const OUString& rDisplayName,
 {
     if (bPopUp)
     {
-        mpEntries = new SvxEntries;
+        mpEntries.reset( new SvxEntries );
     }
 }
 
 SvxConfigEntry::~SvxConfigEntry()
 {
-    if ( mpEntries != nullptr )
+    for (auto const& entry : *mpEntries)
     {
-        for (auto const& entry : *mpEntries)
-        {
-            delete entry;
-        }
-        delete mpEntries;
+        delete entry;
     }
 }
 
@@ -2406,13 +2397,9 @@ SvxEntries* ToolbarSaveInData::GetEntries()
 }
 
 void
-ToolbarSaveInData::SetEntries( SvxEntries* pNewEntries )
+ToolbarSaveInData::SetEntries( std::unique_ptr<SvxEntries> pNewEntries )
 {
-    // delete old menu hierarchy first
-    delete pRootEntry->GetEntries();
-
-    // now set new menu hierarchy
-    pRootEntry->SetEntries( pNewEntries );
+    pRootEntry->SetEntries( std::move(pNewEntries) );
 }
 
 bool
