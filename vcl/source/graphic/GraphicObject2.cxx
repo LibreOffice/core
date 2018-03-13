@@ -18,11 +18,9 @@
  */
 
 #include <sal/config.h>
-
-#include <cstdlib>
+#include <tools/poly.hxx>
 
 #include <vcl/bitmapaccess.hxx>
-#include <tools/poly.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/window.hxx>
 #include <vcl/gdimtf.hxx>
@@ -34,8 +32,14 @@
 #include "grfcache.hxx"
 #include <vcl/GraphicObject.hxx>
 #include <vcl/BitmapConverter.hxx>
+#include <vcl/BitmapScaleFilter.hxx>
+
+#include "grfcache.hxx"
+
 #include <bitmapwriteaccess.hxx>
+
 #include <memory>
+#include <cstdlib>
 
 
 #define WATERMARK_LUM_OFFSET        50
@@ -967,7 +971,8 @@ bool GraphicManager::ImplCreateOutput( OutputDevice* pOutputDevice,
             {
                 if( bSimple )
                 {
-                    bRet = ( aOutBmpEx = rBitmapEx ).Scale( aUnrotatedSizePix );
+                    aOutBmpEx = rBitmapEx;
+                    bRet = BitmapFilter::Filter(aOutBmpEx, BitmapScaleFilter(aUnrotatedSizePix));
 
                     if( bRet )
                         aOutBmpEx.Rotate( nRot10, COL_TRANSPARENT );
@@ -993,7 +998,10 @@ bool GraphicManager::ImplCreateOutput( OutputDevice* pOutputDevice,
                 {
                     if( bSimple )
                     {
-                        bRet = ( aOutBmpEx = rBitmapEx ).Scale( Size( nEndX - nStartX + 1, nEndY - nStartY + 1 ) );
+                        aOutBmpEx = rBitmapEx;
+
+                        BitmapFilter::Filter(aOutBmpEx,
+                                BitmapScaleFilter(Size(nEndX - nStartX + 1, nEndY - nStartY + 1)));
                     }
                     else
                     {
@@ -1418,16 +1426,16 @@ void GraphicManager::ImplAdjust( BitmapEx& rBmpEx, const GraphicAttr& rAttr, Gra
         {
             case GraphicDrawMode::Mono:
                 BitmapConverter::Convert(rBmpEx, BitmapConverter(BmpConversion::N1BitThreshold));
-            break;
+            	break;
 
             case GraphicDrawMode::Greys:
                 BitmapConverter::Convert(rBmpEx, BitmapConverter(BmpConversion::N8BitGreys));
-            break;
+            	break;
 
             case GraphicDrawMode::Watermark:
             {
-                aAttr.SetLuminance( aAttr.GetLuminance() + WATERMARK_LUM_OFFSET );
-                aAttr.SetContrast( aAttr.GetContrast() + WATERMARK_CON_OFFSET );
+                aAttr.SetLuminance(aAttr.GetLuminance() + WATERMARK_LUM_OFFSET);
+                aAttr.SetContrast(aAttr.GetContrast() + WATERMARK_CON_OFFSET);
             }
             break;
 
@@ -2037,7 +2045,7 @@ void GraphicObject::ImplTransformBitmap( BitmapEx&          rBmpEx,
                 rBmpEx = aBmpEx2;
             }
 
-            aBmpEx2.Scale(Size(nPadTotalWidth, nPadTotalHeight));
+            BitmapFilter::Filter(aBmpEx2, BitmapScaleFilter(Size(nPadTotalWidth, nPadTotalHeight)));
             aBmpEx2.Erase( Color(0xFF,0,0,0) );
             aBmpEx2.CopyPixel( tools::Rectangle( Point(nPadLeft, nPadTop), aBmpSize ), tools::Rectangle( Point(0, 0), aBmpSize ), &rBmpEx );
             rBmpEx = aBmpEx2;
@@ -2062,7 +2070,7 @@ void GraphicObject::ImplTransformBitmap( BitmapEx&          rBmpEx,
     else
         fScaleX = fDstWH * aSizePixel.Height() / aSizePixel.Width();
 
-    rBmpEx.Scale( fScaleX, fScaleY );
+    BitmapFilter::Filter(rBmpEx, BitmapScaleFilter(fScaleX, fScaleY));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

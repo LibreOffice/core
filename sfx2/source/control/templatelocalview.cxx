@@ -23,6 +23,7 @@
 #include <vcl/help.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
+#include <vcl/BitmapScaleFilter.hxx>
 
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
@@ -961,7 +962,7 @@ BitmapEx TemplateLocalView::scaleImg (const BitmapEx &rImg, long width, long hei
         // make the picture fit the given width/height constraints
         double nRatio = std::min(double(width)/double(aSize.Width()), double(height)/double(aSize.Height()));
 
-        aImg.Scale(Size(aSize.Width() * nRatio, aSize.Height() * nRatio));
+        BitmapFilter::Filter(aImg, BitmapScaleFilter(Size(aSize.Width() * nRatio, aSize.Height() * nRatio)));
     }
 
     return aImg;
