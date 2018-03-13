@@ -20,6 +20,8 @@
 #endif
 #include <com/sun/star/geometry/IntegerPoint2D.hpp>
 #include <com/sun/star/geometry/IntegerRectangle2D.hpp>
+#include <basegfx/range/b2drectangle.hxx>
+#include <basegfx/matrix/b2dhommatrix.hxx>
 
 namespace vcl {
 namespace bitmap {
@@ -91,6 +93,11 @@ VCL_DLLPUBLIC BitmapEx CanvasBitmapHelperSetPixel( const css::uno::Sequence< sal
 VCL_DLLPUBLIC BitmapEx CanvasBitmapHelperSetData( const css::uno::Sequence< sal_Int8 >&      data,
                                                   const css::geometry::IntegerRectangle2D&   rect,
                                                   BitmapEx & rBitmapEx);
+
+VCL_DLLPUBLIC BitmapEx CanvasTransformBitmap( const BitmapEx& rBitmap,
+                                  const ::basegfx::B2DHomMatrix&  rTransform,
+                                  ::basegfx::B2DRectangle const & rDestRect,
+                                  ::basegfx::B2DHomMatrix const & rLocalTransform );
 
 }} // end vcl::bitmap
 
