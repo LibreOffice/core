@@ -19,74 +19,70 @@
 #ifndef INCLUDED_SW_SOURCE_UIBASE_INC_SRTDLG_HXX
 #define INCLUDED_SW_SOURCE_UIBASE_INC_SRTDLG_HXX
 
-#include <vcl/fixed.hxx>
-#include <vcl/button.hxx>
-#include <vcl/field.hxx>
-#include <vcl/lstbox.hxx>
-#include <svx/stddlg.hxx>
+#include <svtools/collatorres.hxx>
 #include <svx/langbox.hxx>
+#include <vcl/weld.hxx>
 
 class SwWrtShell;
-class CollatorResource;
 
-class SwSortDlg : public SvxStandardDialog
+class SwSortDlg : public weld::GenericDialogController
 {
-    VclPtr<FixedText>          m_pColLbl;
-    VclPtr<FixedText>          m_pTypLbl;
+    weld::Window* m_pParent;
+    std::unique_ptr<weld::Label> m_xColLbl;
+    std::unique_ptr<weld::Label> m_xTypLbl;
 
-    VclPtr<CheckBox>           m_pKeyCB1;
-    VclPtr<NumericField>       m_pColEdt1;
-    VclPtr<ListBox>            m_pTypDLB1;
-    VclPtr<RadioButton>        m_pSortUp1RB;
-    VclPtr<RadioButton>        m_pSortDn1RB;
+    std::unique_ptr<weld::CheckButton> m_xKeyCB1;
+    std::unique_ptr<weld::SpinButton> m_xColEdt1;
+    std::unique_ptr<weld::ComboBoxText> m_xTypDLB1;
+    std::unique_ptr<weld::RadioButton> m_xSortUp1RB;
+    std::unique_ptr<weld::RadioButton> m_xSortDn1RB;
 
-    VclPtr<CheckBox>           m_pKeyCB2;
-    VclPtr<NumericField>       m_pColEdt2;
-    VclPtr<ListBox>            m_pTypDLB2;
-    VclPtr<RadioButton>        m_pSortUp2RB;
-    VclPtr<RadioButton>        m_pSortDn2RB;
+    std::unique_ptr<weld::CheckButton> m_xKeyCB2;
+    std::unique_ptr<weld::SpinButton> m_xColEdt2;
+    std::unique_ptr<weld::ComboBoxText> m_xTypDLB2;
+    std::unique_ptr<weld::RadioButton> m_xSortUp2RB;
+    std::unique_ptr<weld::RadioButton> m_xSortDn2RB;
 
-    VclPtr<CheckBox>           m_pKeyCB3;
-    VclPtr<NumericField>       m_pColEdt3;
-    VclPtr<ListBox>            m_pTypDLB3;
-    VclPtr<RadioButton>        m_pSortUp3RB;
-    VclPtr<RadioButton>        m_pSortDn3RB;
+    std::unique_ptr<weld::CheckButton> m_xKeyCB3;
+    std::unique_ptr<weld::SpinButton> m_xColEdt3;
+    std::unique_ptr<weld::ComboBoxText> m_xTypDLB3;
+    std::unique_ptr<weld::RadioButton> m_xSortUp3RB;
+    std::unique_ptr<weld::RadioButton> m_xSortDn3RB;
 
-    VclPtr<RadioButton>        m_pColumnRB;
-    VclPtr<RadioButton>        m_pRowRB;
+    std::unique_ptr<weld::RadioButton> m_xColumnRB;
+    std::unique_ptr<weld::RadioButton> m_xRowRB;
 
-    VclPtr<RadioButton>        m_pDelimTabRB;
-    VclPtr<RadioButton>        m_pDelimFreeRB;
-    VclPtr<Edit>               m_pDelimEdt;
-    VclPtr<PushButton>         m_pDelimPB;
+    std::unique_ptr<weld::RadioButton> m_xDelimTabRB;
+    std::unique_ptr<weld::RadioButton> m_xDelimFreeRB;
+    std::unique_ptr<weld::Entry> m_xDelimEdt;
+    std::unique_ptr<weld::Button> m_xDelimPB;
 
-    VclPtr<SvxLanguageBox>     m_pLangLB;
+    std::unique_ptr<LanguageBox> m_xLangLB;
 
-    VclPtr<CheckBox>           m_pCaseCB;
+    std::unique_ptr<weld::CheckButton> m_xCaseCB;
 
     OUString aColText;
     OUString aRowText;
     OUString aNumericText;
 
     SwWrtShell          &rSh;
-    CollatorResource* pColRes;
+    std::unique_ptr<CollatorResource> m_xColRes;
 
     sal_uInt16 nX;
     sal_uInt16 nY;
 
-    virtual void        Apply() override;
+    void Apply();
     sal_Unicode         GetDelimChar() const;
 
-    DECL_LINK( CheckHdl, Button*, void );
-    DECL_LINK( DelimHdl, Button*, void );
-    DECL_LINK( LanguageListBoxHdl, ListBox&, void );
-    void LanguageHdl(ListBox const *);
-    DECL_LINK(DelimCharHdl, Button*,void);
+    DECL_LINK(CheckHdl, weld::ToggleButton&, void);
+    DECL_LINK(DelimHdl, weld::ToggleButton&, void );
+    DECL_LINK(LanguageListBoxHdl, weld::ComboBoxText&, void);
+    void LanguageHdl(weld::ComboBoxText const*);
+    DECL_LINK(DelimCharHdl, weld::Button&,void);
 
 public:
-    SwSortDlg(vcl::Window * pParent, SwWrtShell &rSh);
-    virtual ~SwSortDlg() override;
-    virtual void dispose() override;
+    SwSortDlg(weld::Window * pParent, SwWrtShell &rSh);
+    short execute();
 };
 
 #endif

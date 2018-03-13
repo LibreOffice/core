@@ -57,6 +57,8 @@ public:
     virtual void set_margin_top(int nMargin) = 0;
     virtual void set_margin_bottom(int nMargin) = 0;
 
+    virtual void set_accessible_name(const OUString& rName) = 0;
+
     virtual Container* weld_parent() const = 0;
 
     virtual ~Widget() {}
@@ -170,9 +172,12 @@ public:
     virtual void append(const OUString& rId, const OUString& rStr) = 0;
     virtual void insert(int pos, const OUString& rId, const OUString& rStr) = 0;
     virtual int find_text(const OUString& rStr) const = 0;
+    virtual int find_id(const OUString& rId) const = 0;
     virtual int get_count() const = 0;
     virtual void make_sorted() = 0;
     virtual void clear() = 0;
+
+    virtual void set_entry_error(bool bError) = 0;
 
     void connect_changed(const Link<ComboBoxText&, void>& rLink) { m_aChangeHdl = rLink; }
 

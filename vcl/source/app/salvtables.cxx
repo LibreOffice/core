@@ -299,6 +299,11 @@ public:
         m_xWidget->set_margin_bottom(nMargin);
     }
 
+    virtual void set_accessible_name(const OUString& rName) override
+    {
+        m_xWidget->SetAccessibleName(rName);
+    }
+
     virtual weld::Container* weld_parent() const override;
 
     virtual ~SalInstanceWidget() override
@@ -1197,25 +1202,19 @@ IMPL_LINK(SalInstanceDrawingArea, MouseReleaseHdl, const Point&, rPos, void)
     m_aMouseReleaseHdl.Call(rPos);
 }
 
-//ComboBox and ListBox have the same apis, ComboBoxes in LibreOffice have an edit box and ListBoxes
+//ComboBox and ListBox have similiar apis, ComboBoxes in LibreOffice have an edit box and ListBoxes
 //don't. This distinction isn't there in Gtk. Use a template to sort this problem out.
 template <class vcl_type>
 class SalInstanceComboBoxText : public SalInstanceContainer, public virtual weld::ComboBoxText
 {
-private:
+protected:
     VclPtr<vcl_type> m_xComboBoxText;
-
-    static void LinkStubSetSelectHdl(void* instance, vcl_type&)
-    {
-        return static_cast<SalInstanceComboBoxText*>(instance)->signal_changed();
-    }
 
 public:
     SalInstanceComboBoxText(vcl_type* pComboBoxText, bool bTakeOwnership)
         : SalInstanceContainer(pComboBoxText, bTakeOwnership)
         , m_xComboBoxText(pComboBoxText)
     {
-        m_xComboBoxText->SetSelectHdl(LINK(this, SalInstanceComboBoxText, SetSelectHdl));
     }
 
     virtual int get_active() const override
@@ -1312,6 +1311,19 @@ public:
         return nRet;
     }
 
+    virtual int find_id(const OUString& rStr) const override
+    {
+        for (int i = 0; i < get_count(); ++i)
+        {
+            const OUString* pId = getEntryData(i);
+            if (!pId)
+                continue;
+            if (*pId == rStr)
+                return i;
+        }
+        return -1;
+    }
+
     virtual void clear() override
     {
         for (int i = 0; i < get_count(); ++i)
@@ -1329,10 +1341,67 @@ public:
 
     virtual ~SalInstanceComboBoxText() override
     {
-        m_xComboBoxText->SetSelectHdl(Link<vcl_type&, void>());
         clear();
     }
 };
+
+class SalInstanceComboBoxTextWithoutEdit : public SalInstanceComboBoxText<ListBox>
+{
+private:
+    DECL_LINK(SelectHdl, ListBox&, void);
+
+public:
+    SalInstanceComboBoxTextWithoutEdit(ListBox* pListBox, bool bTakeOwnership)
+        : SalInstanceComboBoxText<ListBox>(pListBox, bTakeOwnership)
+    {
+        m_xComboBoxText->SetSelectHdl(LINK(this, SalInstanceComboBoxTextWithoutEdit, SelectHdl));
+    }
+
+    virtual void set_entry_error(bool /*bError*/) override
+    {
+        assert(false);
+    }
+
+    virtual ~SalInstanceComboBoxTextWithoutEdit() override
+    {
+        m_xComboBoxText->SetSelectHdl(Link<ListBox&, void>());
+    }
+};
+
+IMPL_LINK_NOARG(SalInstanceComboBoxTextWithoutEdit, SelectHdl, ListBox&, void)
+{
+    return signal_changed();
+}
+
+class SalInstanceComboBoxTextWithEdit : public SalInstanceComboBoxText<ComboBox>
+{
+private:
+    DECL_LINK(ChangeHdl, Edit&, void);
+public:
+    SalInstanceComboBoxTextWithEdit(ComboBox* pComboBoxText, bool bTakeOwnership)
+        : SalInstanceComboBoxText<ComboBox>(pComboBoxText, bTakeOwnership)
+    {
+        m_xComboBoxText->SetModifyHdl(LINK(this, SalInstanceComboBoxTextWithEdit, ChangeHdl));
+    }
+
+    virtual void set_entry_error(bool bError) override
+    {
+        if (bError)
+            m_xComboBoxText->SetControlForeground(Color(0xf0, 0, 0));
+        else
+            m_xComboBoxText->SetControlForeground();
+    }
+
+    virtual ~SalInstanceComboBoxTextWithEdit() override
+    {
+        m_xComboBoxText->SetModifyHdl(Link<Edit&, void>());
+    }
+};
+
+IMPL_LINK_NOARG(SalInstanceComboBoxTextWithEdit, ChangeHdl, Edit&, void)
+{
+    signal_changed();
+}
 
 class SalInstanceBuilder : public weld::Builder
 {
@@ -1437,9 +1506,9 @@ public:
         vcl::Window* pComboBoxText = m_xBuilder->get<vcl::Window>(id);
         ComboBox* pComboBox = dynamic_cast<ComboBox*>(pComboBoxText);
         if (pComboBox)
-            return new SalInstanceComboBoxText<ComboBox>(pComboBox, bTakeOwnership);
+            return new SalInstanceComboBoxTextWithEdit(pComboBox, bTakeOwnership);
         ListBox* pListBox = dynamic_cast<ListBox*>(pComboBoxText);
-        return pListBox ? new SalInstanceComboBoxText<ListBox>(pListBox, bTakeOwnership) : nullptr;
+        return pListBox ? new SalInstanceComboBoxTextWithoutEdit(pListBox, bTakeOwnership) : nullptr;
     }
 
     virtual weld::TreeView* weld_tree_view(const OString &id, bool bTakeOwnership) override

@@ -25,6 +25,7 @@
 #include <vcl/image.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/combobox.hxx>
+#include <vcl/weld.hxx>
 #include <o3tl/typed_flags_set.hxx>
 
 
@@ -146,6 +147,31 @@ private:
     SVX_DLLPRIVATE virtual sal_Int32    ImplGetSavedValue() const override;
 };
 
+class SVX_DLLPUBLIC LanguageBox
+{
+private:
+    std::unique_ptr<weld::ComboBoxText> m_xControl;
+    Link<weld::ComboBoxText&, void> m_aChangeHdl;
+    OUString m_aAllString;
+    bool m_bHasLangNone;
+    bool m_bLangNoneIsLangAll;
+    bool m_bWithCheckmark;
+
+    SVX_DLLPRIVATE int ImplTypeToPos(LanguageType eType) const;
+    SVX_DLLPRIVATE void InsertLanguage(const LanguageType nLangType);
+    SVX_DLLPRIVATE void ImplClear();
+    DECL_LINK(ChangeHdl, weld::ComboBoxText&, void);
+public:
+    LanguageBox(weld::ComboBoxText* pControl);
+    void            SetLanguageList( SvxLanguageListFlags nLangList,
+                            bool bHasLangNone, bool bLangNoneIsLangAll = false,
+                            bool bCheckSpellAvail = false );
+    void            AddLanguages( const std::vector< LanguageType >& rLanguageTypes, SvxLanguageListFlags nLangList );
+    void            SelectLanguage( const LanguageType eLangType );
+    LanguageType    GetSelectLanguage() const;
+
+    void connect_changed(const Link<weld::ComboBoxText&, void>& rLink) { m_aChangeHdl = rLink; }
+};
 
 class SVX_DLLPUBLIC SvxLanguageComboBox : public ComboBox, public SvxLanguageBoxBase
 {
