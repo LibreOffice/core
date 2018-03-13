@@ -7367,7 +7367,6 @@ Graphic SwFlyFrameFormat::MakeGraphic( ImageMap* pMap )
         if( bNoteURL )
         {
             OSL_ENSURE( pNoteURL, "MakeGraphic: Good Bye, NoteURL." );
-            pNoteURL->FillImageMap( pMap, pFly->getFrameArea().Pos(), aMap );
             delete pNoteURL;
             pNoteURL = nullptr;
         }
