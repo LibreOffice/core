@@ -49,8 +49,7 @@
 #include <vcl/BitmapTools.hxx>
 #include <vcl/IconThemeScanner.hxx>
 #include <vcl/pngwrite.hxx>
-
-#include "BitmapLightenFilter.hxx"
+#include <vcl/BitmapLightenFilter.hxx>
 
 bool ImageRequestParameters::convertToDarkTheme()
 {
