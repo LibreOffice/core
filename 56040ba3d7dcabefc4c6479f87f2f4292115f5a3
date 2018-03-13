@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba2be162_ef0903df",
+        "filename": "sfx2/source/inc/openuriexternally.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-03-13T19:29:45Z",
+      "side": 1,
+      "message": "rather make this method static and move the necessary fields for the timer into a local class inside openuriexternally.cxx",
+      "revId": "56040ba3d7dcabefc4c6479f87f2f4292115f5a3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
