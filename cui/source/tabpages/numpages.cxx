@@ -80,6 +80,7 @@
 #include <comphelper/string.hxx>
 #include <vcl/cvtgrf.hxx>
 #include <vcl/graphicfilter.hxx>
+#include <vcl/BitmapScaleFilter.hxx>
 #include <svx/SvxNumOptionsTabPageHelper.hxx>
 
 using namespace css;
@@ -1033,7 +1034,8 @@ IMPL_LINK_NOARG(SvxBitmapPickTabPage, ClickAddBrowseHdl_Impl, Button*, void)
                     nPixelX = static_cast<long>(nPixelY/ratio);
                 }
 
-                aBitmap.Scale( Size( nPixelX, nPixelY ), BmpScaleFlag::Fast );
+                BitmapFilter::Filter(aBitmap, BitmapScaleFilter(Size(nPixelX, nPixelY), BmpScaleFlag::Fast));
+
                 Graphic aScaledGraphic( aBitmap );
                 GraphicFilter& rFilter = GraphicFilter::GetGraphicFilter();
 

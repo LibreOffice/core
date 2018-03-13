@@ -22,6 +22,7 @@
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/bitmapaccess.hxx>
+#include <vcl/BitmapConverter.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/metaact.hxx>
 #include <config_features.h>
@@ -103,10 +104,18 @@ void OutputDevice::DrawBitmap( const Point& rDestPt, const Size& rDestSize,
         else if( !!aBmp )
         {
             if ( mnDrawMode & DrawModeFlags::GrayBitmap )
-                aBmp.Convert( BmpConversion::N8BitGreys );
+            {
+                BitmapEx aTmpBmp(aBmp);
+                if (BitmapFilter::Filter(aTmpBmp, BitmapConverter(BmpConversion::N8BitGreys)))
+                    aBmp = aTmpBmp.GetBitmap();
+            }
 
             if ( mnDrawMode & DrawModeFlags::GhostedBitmap )
-                aBmp.Convert( BmpConversion::Ghosted );
+            {
+                BitmapEx aTmpBmp(aBmp);
+                if (BitmapFilter::Filter(aTmpBmp, BitmapConverter(BmpConversion::Ghosted)))
+                    aBmp = aTmpBmp.GetBitmap();
+            }
         }
     }
 
@@ -336,13 +345,13 @@ void OutputDevice::DrawBitmapEx( const Point& rDestPt, const Size& rDestSize,
                     aBmpEx = BitmapEx( aColorBmp, aBmpEx.GetMask() );
                 }
             }
-            else if( !!aBmpEx )
+            else if (!!aBmpEx)
             {
-                if ( mnDrawMode & DrawModeFlags::GrayBitmap )
-                    aBmpEx.Convert( BmpConversion::N8BitGreys );
+                if (mnDrawMode & DrawModeFlags::GrayBitmap)
+                    BitmapFilter::Filter(aBmpEx, BitmapConverter(BmpConversion::N8BitGreys));
 
-                if ( mnDrawMode & DrawModeFlags::GhostedBitmap )
-                    aBmpEx.Convert( BmpConversion::Ghosted );
+                if (mnDrawMode & DrawModeFlags::GhostedBitmap)
+                    BitmapFilter::Filter(aBmpEx, BitmapConverter(BmpConversion::Ghosted));
             }
         }
 
