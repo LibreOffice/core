@@ -507,7 +507,7 @@ Graphic GraphicFilterPoster::GetFilteredGraphic( const Graphic& rGraphic, double
 
         BitmapEx aTmpBmp(aBmpColorQuantizationFilter.execute(aBmpEx));
         if (!aTmpBmp.IsEmpty())
-            aRet = aBmpEx;
+            aRet = aTmpBmp;
     }
 
     return aRet;
