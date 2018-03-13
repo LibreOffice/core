@@ -294,13 +294,13 @@ namespace vclcanvas
         css::rendering::XGraphicDevice*              mpDevice;
 
         /// Rendering to this outdev preserves its state
-        OutDevProviderSharedPtr                      mpProtectedOutDev;
+        OutDevProviderSharedPtr                      mpProtectedOutDevProvider;
 
         /// Rendering to this outdev does not preserve its state
-        OutDevProviderSharedPtr                      mpOutDev;
+        OutDevProviderSharedPtr                      mpOutDevProvider;
 
         /// Rendering to this outdev does not preserve its state
-        OutDevProviderSharedPtr                      mp2ndOutDev;
+        OutDevProviderSharedPtr                      mp2ndOutDevProvider;
 
         /// When true, content is able to represent alpha
         bool                                         mbHaveAlpha;

@@ -576,9 +576,9 @@ namespace vclcanvas
         ENSURE_ARG_OR_THROW( textures.getLength(),
                          "CanvasHelper::fillTexturedPolyPolygon: empty texture sequence");
 
-        if( mpOutDev )
+        if( mpOutDevProvider )
         {
-            tools::OutDevStateKeeper aStateKeeper( mpProtectedOutDev );
+            tools::OutDevStateKeeper aStateKeeper( mpProtectedOutDevProvider );
 
             const int nTransparency( setupOutDevState( viewState, renderState, IGNORE_COLOR ) );
             ::tools::PolyPolygon aPolyPoly( tools::mapPolyPolygon(
@@ -618,8 +618,8 @@ namespace vclcanvas
 
                         // TODO(E1): Return value
                         // TODO(F1): FillRule
-                        gradientFill( mpOutDev->getOutDev(),
-                                      mp2ndOutDev.get() ? &mp2ndOutDev->getOutDev() : nullptr,
+                        gradientFill( mpOutDevProvider->getOutDev(),
+                                      mp2ndOutDevProvider.get() ? &mp2ndOutDevProvider->getOutDev() : nullptr,
                                       rValues,
                                       aColors,
                                       aPolyPoly,
@@ -859,7 +859,7 @@ namespace vclcanvas
                     const sal_Int32 nTilesY( textures[0].RepeatModeX == rendering::TexturingMode::NONE ?
                                              1 : nY2 - nY1 );
 
-                    OutputDevice& rOutDev( mpOutDev->getOutDev() );
+                    OutputDevice& rOutDev( mpOutDevProvider->getOutDev() );
 
                     if( bRectangularPolygon )
                     {
@@ -902,9 +902,9 @@ namespace vclcanvas
                                      aSz,
                                      aGrfAttr );
 
-                        if( mp2ndOutDev )
+                        if( mp2ndOutDevProvider )
                         {
-                            OutputDevice& r2ndOutDev( mp2ndOutDev->getOutDev() );
+                            OutputDevice& r2ndOutDev( mp2ndOutDevProvider->getOutDev() );
                             r2ndOutDev.IntersectClipRegion( aPolygonDeviceRect );
                             textureFill( r2ndOutDev,
                                          *pGrfObj,
@@ -967,8 +967,8 @@ namespace vclcanvas
                             rOutDev.DrawBitmapEx( aPolygonDeviceRect.TopLeft(),
                                                   aOutputBmpEx );
 
-                            if( mp2ndOutDev )
-                                mp2ndOutDev->getOutDev().DrawBitmapEx( aPolygonDeviceRect.TopLeft(),
+                            if( mp2ndOutDevProvider )
+                                mp2ndOutDevProvider->getOutDev().DrawBitmapEx( aPolygonDeviceRect.TopLeft(),
                                                                        aOutputBmpEx );
                         }
                         else
@@ -989,9 +989,9 @@ namespace vclcanvas
                                          aGrfAttr );
                             rOutDev.Pop();
 
-                            if( mp2ndOutDev )
+                            if( mp2ndOutDevProvider )
                             {
-                                OutputDevice& r2ndOutDev( mp2ndOutDev->getOutDev() );
+                                OutputDevice& r2ndOutDev( mp2ndOutDevProvider->getOutDev() );
                                 r2ndOutDev.Push( PushFlags::CLIPREGION );
 
                                 r2ndOutDev.IntersectClipRegion( aPolyClipRegion );
