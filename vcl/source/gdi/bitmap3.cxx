@@ -33,8 +33,9 @@
 #include <impoctree.hxx>
 #include "impvect.hxx"
 
-#include <bitmapscalesuper.hxx>
-#include <BitmapScaleConvolution.hxx>
+#include <bitmapwriteaccess.hxx>
+#include <BitmapScaleSuperFilter.hxx>
+#include <BitmapScaleConvolutionFilter.hxx>
 #include <bitmapwriteaccess.hxx>
 #include <ResampleKernel.hxx>
 #include <octree.hxx>
