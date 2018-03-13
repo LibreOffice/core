@@ -27,16 +27,17 @@
 #if HAVE_FEATURE_OPENGL
 #include <vcl/opengl/OpenGLHelper.hxx>
 #endif
-#include <memory>
 
 #include <impbmp.hxx>
 #include <impoctree.hxx>
+#include <BitmapScaleSuperFilter.hxx>
+#include <BitmapScaleConvolutionFilter.hxx>
+#include <bitmapwriteaccess.hxx>
+#include <octree.hxx>
+
 #include "impvect.hxx"
 
-#include <bitmapscalesuper.hxx>
-#include <octree.hxx>
-#include <BitmapScaleConvolution.hxx>
-#include <bitmapwriteaccess.hxx>
+#include <memory>
 
 #define RGB15( _def_cR, _def_cG, _def_cB )  ((static_cast<sal_uLong>(_def_cR)<<10)|(static_cast<sal_uLong>(_def_cG)<<5)|static_cast<sal_uLong>(_def_cB))
 #define GAMMA( _def_cVal, _def_InvGamma )   (static_cast<sal_uInt8>(MinMax(FRound(pow( _def_cVal/255.0,_def_InvGamma)*255.0),0,255)))
@@ -738,70 +739,58 @@ bool Bitmap::Scale( const double& rScaleX, const double& rScaleY, BmpScaleFlag n
         }
     }
 
-    //fdo#33455
+    // fdo#33455
     //
-    //If we start with a 1 bit image, then after scaling it in any mode except
-    //BmpScaleFlag::Fast we have a 24bit image which is perfectly correct, but we
-    //are going to down-shift it to mono again and Bitmap::MakeMonochrome just
-    //has "Bitmap aNewBmp( GetSizePixel(), 1 );" to create a 1 bit bitmap which
-    //will default to black/white and the colors mapped to which ever is closer
-    //to black/white
+    // If we start with a 1 bit image, then after scaling it in any mode except
+    // BmpScaleFlag::Fast we have a 24bit image which is perfectly correct, but we
+    // are going to down-shift it to mono again and Bitmap::MakeMonochrome just
+    // has "Bitmap aNewBmp( GetSizePixel(), 1 );" to create a 1 bit bitmap which
+    // will default to black/white and the colors mapped to which ever is closer
+    // to black/white
     //
-    //So the easiest thing to do to retain the colors of 1 bit bitmaps is to
-    //just use the fast scale rather than attempting to count unique colors in
-    //the other converters and pass all the info down through
-    //Bitmap::MakeMonochrome
+    // So the easiest thing to do to retain the colors of 1 bit bitmaps is to
+    // just use the fast scale rather than attempting to count unique colors in
+    // the other converters and pass all the info down through
+    // Bitmap::MakeMonochrome
     if (nStartCount == 1)
         nScaleFlag = BmpScaleFlag::Fast;
 
+    BitmapEx aBmpEx(*this);
     bool bRetval(false);
 
     switch(nScaleFlag)
     {
-        case BmpScaleFlag::Fast :
-        {
+        case BmpScaleFlag::Fast:
             bRetval = ImplScaleFast( rScaleX, rScaleY );
             break;
-        }
-        case BmpScaleFlag::Interpolate :
-        {
-            bRetval = ImplScaleInterpolate( rScaleX, rScaleY );
+
+        case BmpScaleFlag::Interpolate:
+            bRetval = ImplScaleInterpolate(rScaleX, rScaleY);
             break;
-        }
+
         case BmpScaleFlag::Default:
-        {
             if (GetSizePixel().Width() < 2 || GetSizePixel().Height() < 2)
-            {
-                // fallback to ImplScaleFast
-                bRetval = ImplScaleFast( rScaleX, rScaleY );
-            }
+                bRetval = ImplScaleFast(rScaleX, rScaleY);
             else
-            {
-                BitmapScaleSuperFilter aScaleSuperFilter(rScaleX, rScaleY);
-                bRetval = aScaleSuperFilter.execute(*this);
-            }
+                bRetval = BitmapFilter::Filter(aBmpEx, BitmapScaleSuperFilter(rScaleX, rScaleY));
             break;
-        }
-        case BmpScaleFlag::Lanczos :
+
+        case BmpScaleFlag::Lanczos:
         case BmpScaleFlag::BestQuality:
-        {
-            vcl::BitmapScaleConvolutionFilter aScaleConvolutionFilter(rScaleX, rScaleY, vcl::ConvolutionKernelType::Lanczos3);
-            bRetval = aScaleConvolutionFilter.execute(*this);
+            bRetval = BitmapFilter::Filter(aBmpEx, vcl::BitmapScaleLanczos3Filter(rScaleX, rScaleY));
             break;
-        }
-        case BmpScaleFlag::BiCubic :
-        {
-            vcl::BitmapScaleConvolutionFilter aScaleConvolutionFilter(rScaleX, rScaleY, vcl::ConvolutionKernelType::BiCubic);
-            bRetval = aScaleConvolutionFilter.execute(*this);
+
+        case BmpScaleFlag::BiCubic:
+            bRetval = BitmapFilter::Filter(aBmpEx, vcl::BitmapScaleBicubicFilter(rScaleX, rScaleY));
             break;
-        }
-        case BmpScaleFlag::BiLinear :
-        {
-            vcl::BitmapScaleConvolutionFilter aScaleConvolutionFilter(rScaleX, rScaleY, vcl::ConvolutionKernelType::BiLinear);
-            bRetval = aScaleConvolutionFilter.execute(*this);
+
+        case BmpScaleFlag::BiLinear:
+            bRetval = BitmapFilter::Filter(aBmpEx, vcl::BitmapScaleBilinearFilter(rScaleX, rScaleY));
             break;
-        }
     }
+
+    if (bRetval && nScaleFlag != BmpScaleFlag::Fast && nScaleFlag != BmpScaleFlag::Interpolate)
+        *this = aBmpEx.GetBitmapRef();
 
     OSL_ENSURE(!bRetval || nStartCount == GetBitCount(), "Bitmap::Scale has changed the ColorDepth, this should *not* happen (!)");
     return bRetval;
@@ -1132,10 +1121,8 @@ bool Bitmap::ImplScaleInterpolate( const double& rScaleX, const double& rScaleY 
         }
     }
 
-    if( !bRet )
-    {
-        bRet = ImplScaleFast( rScaleX, rScaleY );
-    }
+    if (!bRet)
+        bRet = ImplScaleFast(rScaleX, rScaleY);
 
     return bRet;
 }
