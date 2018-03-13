@@ -35,6 +35,7 @@
 
 #include "grfcache.hxx"
 
+#include <BitmapDitheringFilter.hxx>
 #include <bitmapwriteaccess.hxx>
 
 #include <memory>
@@ -1019,8 +1020,12 @@ bool GraphicManager::ImplCreateOutput( OutputDevice* pOutputDevice,
                     ImplAdjust( aOutBmpEx, rAttributes, GraphicAdjustmentFlags::DRAWMODE | GraphicAdjustmentFlags::COLORS | GraphicAdjustmentFlags::TRANSPARENCY );
 
                 // OutDev adjustment if necessary
-                if( pOutputDevice->GetOutDevType() != OUTDEV_PRINTER && pOutputDevice->GetBitCount() <= 8 && aOutBmpEx.GetBitCount() >= 8 )
-                    aOutBmpEx.Dither();
+                if (pOutputDevice->GetOutDevType() != OUTDEV_PRINTER &&
+                    pOutputDevice->GetBitCount() <= 8 &&
+                    aOutBmpEx.GetBitCount() >= 8)
+                {
+                    BitmapFilter::Filter(aOutBmpEx, BitmapDitheringFilter());
+                }
             }
         }
 
