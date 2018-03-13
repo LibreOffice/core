@@ -11,8 +11,7 @@
 #include <basegfx/color/bcolortools.hxx>
 
 #include <vcl/bitmapaccess.hxx>
-
-#include "BitmapDisabledImageFilter.hxx"
+#include <vcl/BitmapDisabledImageFilter.hxx>
 
 BitmapEx BitmapDisabledImageFilter::execute(BitmapEx const& rBitmapEx)
 {
