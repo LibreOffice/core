@@ -1344,7 +1344,7 @@ void ScFiltersTest::testDataValidityODS()
     );
     //sheet3's expected Data Validation Entry values
     ValDataTestParams aVDTParams3(
-        SC_VALID_CUSTOM, ScConditionMode::Direct, "ISTEXT(C3)", EMPTY_OUSTRING, rDoc,
+        SC_VALID_CUSTOM, SC_COND_DIRECT, "ISTEXT(C3)", EMPTY_OUSTRING, rDoc,
         aValBaseAddr3, "Error sheet 3",
         "Must not be a numerical value.",
         SC_VALERR_STOP, 3
