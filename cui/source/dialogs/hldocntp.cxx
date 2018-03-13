@@ -27,6 +27,7 @@
 #include <com/sun/star/uno/Exception.hpp>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
+#include <vcl/BitmapScaleFilter.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/pathoptions.hxx>
 #include <unotools/dynamicmenuoptions.hxx>
@@ -110,7 +111,10 @@ SvxHyperlinkNewDocTp::SvxHyperlinkNewDocTp ( vcl::Window *pParent, IconChoiceDia
     m_pCbbPath->SetSmartProtocol(INetProtocol::File);
     get(m_pBtCreate, "create");
     BitmapEx aBitmap(RID_SVXBMP_NEWDOC);
-    aBitmap.Scale(GetDPIScaleFactor(),GetDPIScaleFactor(),BmpScaleFlag::BestQuality );
+
+    auto nFactor = GetDPIScaleFactor();
+    BitmapFilter::Filter(aBitmap, BitmapScaleFilter(nFactor, nFactor, BmpScaleFlag::BestQuality));
+
     m_pBtCreate->SetModeImage(Image(aBitmap));
     get(m_pLbDocTypes, "types");
     m_pLbDocTypes->set_height_request(m_pLbDocTypes->GetTextHeight() * 5);

@@ -17,11 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <BitmapScaleConvolution.hxx>
-#include <bitmapwriteaccess.hxx>
+#include <osl/diagnose.h>
 
 #include <vcl/bitmapaccess.hxx>
-#include <osl/diagnose.h>
+
+#include <BitmapScaleConvolutionFilter.hxx>
+#include <ResampleKernel.hxx>
+#include <bitmapwriteaccess.hxx>
 
 #include <algorithm>
 #include <memory>
@@ -383,7 +385,6 @@ BitmapEx BitmapScaleConvolutionFilter::execute(BitmapEx const& rBitmapEx)
 
     return BitmapEx();
 }
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

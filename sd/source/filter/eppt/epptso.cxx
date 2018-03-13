@@ -38,6 +38,7 @@
 #include <vcl/outdev.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/graph.hxx>
+#include <vcl/BitmapScaleFilter.hxx>
 #include <sfx2/app.hxx>
 #include <svl/languageoptions.hxx>
 #include <editeng/svxenum.hxx>
@@ -128,7 +129,8 @@ sal_uInt16 PPTExBulletProvider::GetId(Graphic const & rGraphic, Size& rGraphicSi
 
             if ( ( fXScale != 1.0 ) || ( fYScale != 1.0 ) )
             {
-                aBmpEx.Scale( fXScale, fYScale );
+                BitmapFilter::Filter(aBmpEx, BitmapScaleFilter(Size(fXScale, fYScale)));
+
                 Size aNewSize( static_cast<sal_Int32>(static_cast<double>(rGraphicSize.Width()) / fXScale + 0.5 ),
                                 static_cast<sal_Int32>(static_cast<double>(rGraphicSize.Height()) / fYScale + 0.5 ) );
 
