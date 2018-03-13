@@ -50,11 +50,11 @@ namespace vclcanvas
 
     void CanvasBitmapHelper::setBitmap( const BitmapEx& rBitmap )
     {
-        ENSURE_OR_THROW( mpOutDev,
+        ENSURE_OR_THROW( mpOutDevProvider,
                          "Invalid reference device" );
 
         mpBackBuffer.reset( new BitmapBackBuffer( rBitmap,
-                                                  mpOutDev->getOutDev() ) );
+                                                  mpOutDevProvider->getOutDev() ) );
 
         // tell canvas helper about the new target OutDev (don't
         // protect state, it's our own VirDev, anyways)
@@ -289,7 +289,7 @@ namespace vclcanvas
 
     rendering::IntegerBitmapLayout CanvasBitmapHelper::getMemoryLayout()
     {
-        if( !mpOutDev.get() )
+        if( !mpOutDevProvider.get() )
             return rendering::IntegerBitmapLayout(); // we're disposed
 
         rendering::IntegerBitmapLayout aBitmapLayout( ::canvas::tools::getStdMemoryLayout(getSize()) );
