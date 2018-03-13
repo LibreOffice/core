@@ -319,6 +319,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/bitmap/BitmapColorizeFilter \
     vcl/source/bitmap/BitmapColorQuantizationFilter \
     vcl/source/bitmap/BitmapConverter \
+    vcl/source/bitmap/BitmapDitheringFilter \
     vcl/source/bitmap/bitmappaint \
     vcl/source/bitmap/BitmapScaleSuperFilter \
     vcl/source/bitmap/BitmapScaleConvolution \
