@@ -227,7 +227,7 @@
                     <property name="xalign">1</property>
                     <property name="label" translatable="yes" context="pdfsignpage|label15">Time Stamp Authority:</property>
                     <property name="use_underline">True</property>
-                    <property name="mnemonic_widget">reason</property>
+                    <property name="mnemonic_widget">tsa</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
