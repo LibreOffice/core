@@ -57,8 +57,9 @@ double pointToPixel(double fPoint)
 }
 
 /// Does PDF to bitmap conversion using pdfium.
-bool generatePreview(SvStream& rStream, Bitmap& rBitmap,
-                     sal_uInt64 nPos, sal_uInt64 nSize)
+size_t generatePreview(SvStream& rStream, std::vector<Bitmap>& rBitmaps,
+                       sal_uInt64 nPos, sal_uInt64 nSize,
+                       const size_t nFirstPage = 0, int nPages = 1)
 {
     FPDF_LIBRARY_CONFIG aConfig;
     aConfig.version = 2;
@@ -75,45 +76,54 @@ bool generatePreview(SvStream& rStream, Bitmap& rBitmap,
     // Load the buffer using pdfium.
     FPDF_DOCUMENT pPdfDocument = FPDF_LoadMemDocument(aInBuffer.GetData(), aInBuffer.GetSize(), /*password=*/nullptr);
     if (!pPdfDocument)
-        return false;
+        return 0;
 
-    // Render the first page.
-    FPDF_PAGE pPdfPage = FPDF_LoadPage(pPdfDocument, /*page_index=*/0);
-    if (!pPdfPage)
-        return false;
+    const int nPageCount = FPDF_GetPageCount(pPdfDocument);
+    if (nPages <= 0)
+        nPages = nPageCount;
+    const size_t nLastPage = std::min<int>(nPageCount - 1, nFirstPage + nPages);
 
-    // Returned unit is points, convert that to pixel.
-    size_t nPageWidth = pointToPixel(FPDF_GetPageWidth(pPdfPage));
-    size_t nPageHeight = pointToPixel(FPDF_GetPageHeight(pPdfPage));
-    FPDF_BITMAP pPdfBitmap = FPDFBitmap_Create(nPageWidth, nPageHeight, /*alpha=*/1);
-    if (!pPdfBitmap)
-        return false;
-
-    FPDF_DWORD nColor = FPDFPage_HasTransparency(pPdfPage) ? 0x00000000 : 0xFFFFFFFF;
-    FPDFBitmap_FillRect(pPdfBitmap, 0, 0, nPageWidth, nPageHeight, nColor);
-    FPDF_RenderPageBitmap(pPdfBitmap, pPdfPage, /*start_x=*/0, /*start_y=*/0, nPageWidth, nPageHeight, /*rotate=*/0, /*flags=*/0);
-
-    // Save the buffer as a bitmap.
-    Bitmap aBitmap(Size(nPageWidth, nPageHeight), 24);
+    for (size_t nPageIndex = nFirstPage; nPageIndex <= nLastPage; ++nPageIndex)
     {
-        Bitmap::ScopedWriteAccess pWriteAccess(aBitmap);
-        auto pPdfBuffer = static_cast<ConstScanline>(FPDFBitmap_GetBuffer(pPdfBitmap));
-        for (size_t nRow = 0; nRow < nPageHeight; ++nRow)
-        {
-            int nStride = FPDFBitmap_GetStride(pPdfBitmap);
-            ConstScanline pPdfLine = pPdfBuffer + (nStride * nRow);
-            // pdfium byte order is BGRA.
-            pWriteAccess->CopyScanline(nRow, pPdfLine, ScanlineFormat::N32BitTcBgra, nStride);
-        }
-    }
-    rBitmap = aBitmap;
+        // Render next page.
+        FPDF_PAGE pPdfPage = FPDF_LoadPage(pPdfDocument, nPageIndex);
+        if (!pPdfPage)
+            break;
 
-    FPDFBitmap_Destroy(pPdfBitmap);
-    FPDF_ClosePage(pPdfPage);
+        // Returned unit is points, convert that to pixel.
+        const size_t nPageWidth = pointToPixel(FPDF_GetPageWidth(pPdfPage));
+        const size_t nPageHeight = pointToPixel(FPDF_GetPageHeight(pPdfPage));
+        FPDF_BITMAP pPdfBitmap = FPDFBitmap_Create(nPageWidth, nPageHeight, /*alpha=*/1);
+        if (!pPdfBitmap)
+            break;
+
+        const FPDF_DWORD nColor = FPDFPage_HasTransparency(pPdfPage) ? 0x00000000 : 0xFFFFFFFF;
+        FPDFBitmap_FillRect(pPdfBitmap, 0, 0, nPageWidth, nPageHeight, nColor);
+        FPDF_RenderPageBitmap(pPdfBitmap, pPdfPage, /*start_x=*/0, /*start_y=*/0, nPageWidth, nPageHeight, /*rotate=*/0, /*flags=*/0);
+
+        // Save the buffer as a bitmap.
+        Bitmap aBitmap(Size(nPageWidth, nPageHeight), 24);
+        {
+            Bitmap::ScopedWriteAccess pWriteAccess(aBitmap);
+            const auto pPdfBuffer = static_cast<ConstScanline>(FPDFBitmap_GetBuffer(pPdfBitmap));
+            const int nStride = FPDFBitmap_GetStride(pPdfBitmap);
+            for (size_t nRow = 0; nRow < nPageHeight; ++nRow)
+            {
+                ConstScanline pPdfLine = pPdfBuffer + (nStride * nRow);
+                // pdfium byte order is BGRA.
+                pWriteAccess->CopyScanline(nRow, pPdfLine, ScanlineFormat::N32BitTcBgra, nStride);
+            }
+        }
+
+        rBitmaps.emplace_back(std::move(aBitmap));
+        FPDFBitmap_Destroy(pPdfBitmap);
+        FPDF_ClosePage(pPdfPage);
+    }
+
     FPDF_CloseDocument(pPdfDocument);
     FPDF_DestroyLibrary();
 
-    return true;
+    return rBitmaps.size();
 }
 
 /// Decide if PDF data is old enough to be compatible.
@@ -181,8 +191,9 @@ bool getCompatibleStream(SvStream& rInStream, SvStream& rOutStream,
     return rOutStream.good();
 }
 #else
-bool generatePreview(SvStream&, Bitmap&,
-                     sal_uInt64, sal_uInt64)
+size_t generatePreview(SvStream&, std::vector<Bitmap>&,
+                     sal_uInt64 nPos, sal_uInt64 nSize,
+                     size_t nFirstPage = 0, int nLastPage = 0)
 {
     return true;
 }
@@ -206,8 +217,11 @@ bool ImportPDF(SvStream& rStream, Bitmap& rBitmap,
                sal_uInt64 nPos, sal_uInt64 nSize)
 {
     // Get the preview of the first page.
-    if (!generatePreview(rStream, rBitmap, nPos, nSize))
+    std::vector<Bitmap> aBitmaps;
+    if (generatePreview(rStream, aBitmaps, nPos, nSize, 0, 1) != 1)
         return false;
+
+    rBitmap = aBitmaps[0];
 
     // Save the original PDF stream for later use.
     SvMemoryStream aMemoryStream;
