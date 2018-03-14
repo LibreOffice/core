@@ -84,6 +84,8 @@ inline std::basic_ostream<charT, traits>& operator<<(std::basic_ostream<charT, t
 
         if (IsEqualIID(rIid, IID_IMarshal))
             stream << "=\"IMarshal\"";
+        else if (IsEqualIID(rIid, IID_IMarshal2))
+            stream << "=\"IMarshal2\"";
         else if (IsEqualIID(rIid, IID_INoMarshal))
             stream << "=\"INoMarshal\"";
         else if (IsEqualIID(rIid, IID_IdentityUnmarshal))
