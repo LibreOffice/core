@@ -103,8 +103,8 @@ private:
 
     static void WriteAnimateTo( const ::sax_fastparser::FSHelperPtr& pFS, const css::uno::Any& rValue, const OUString& rAttributeName );
     static void WriteAnimateValues( const ::sax_fastparser::FSHelperPtr& pFS, const css::uno::Reference< css::animations::XAnimate >& rXAnimate );
-    static void WriteAnimationCondition( const ::sax_fastparser::FSHelperPtr& pFS, css::uno::Any const & rAny, bool bWriteEvent, bool bMainSeqChild );
-    static void WriteAnimationCondition( const ::sax_fastparser::FSHelperPtr& pFS, const char* pDelay, const char* pEvent, double fDelay, bool bHasFDelay );
+    static void WriteAnimationCondition( const ::sax_fastparser::FSHelperPtr& pFS, css::uno::Any const & rAny, bool bWriteEvent, bool bMainSeqChild, sal_Int32 nToken );
+    static void WriteAnimationCondition( const ::sax_fastparser::FSHelperPtr& pFS, const char* pDelay, const char* pEvent, double fDelay, bool bHasFDelay, sal_Int32 nToken );
     void WriteAnimations( const ::sax_fastparser::FSHelperPtr& pFS );
     static void WriteAnimationAttributeName( const ::sax_fastparser::FSHelperPtr& pFS, const OUString& rAttributeName );
     void WriteAnimationNode( const ::sax_fastparser::FSHelperPtr& pFS, const css::uno::Reference< css::animations::XAnimationNode >& rXNode, bool bMainSeqChild );
