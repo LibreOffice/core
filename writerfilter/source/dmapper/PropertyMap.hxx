@@ -172,6 +172,20 @@ typedef std::shared_ptr<PropertyMap>  PropertyMapPtr;
 
 class SectionPropertyMap : public PropertyMap
 {
+public:
+    enum class BorderApply
+    {
+        ToAllInSection = 0,
+        ToFirstPageInSection = 1,
+        ToAllButFirstInSection = 2,
+        ToWholeDocument = 3,
+    };
+    enum class BorderOffsetFrom
+    {
+        Text = 0,
+        Edge = 1,
+    };
+private:
     //--> debug
     sal_Int32 nSectionNumber;
     //<-- debug
@@ -188,7 +202,8 @@ class SectionPropertyMap : public PropertyMap
 
     boost::optional<css::table::BorderLine2> m_oBorderLines[4];
     sal_Int32                               m_nBorderDistances[4];
-    sal_Int32                               m_nBorderParams;
+    BorderApply                             m_eBorderApply;
+    BorderOffsetFrom                        m_eBorderOffsetFrom;
     bool                                    m_bBorderShadows[4];
 
     bool                                    m_bTitlePage;
@@ -261,7 +276,7 @@ class SectionPropertyMap : public PropertyMap
                            PropertyIds eMarginId,
                            PropertyIds eDistId,
                            sal_Int32 nDistance,
-                           sal_Int32 nOffsetFrom,
+                           BorderOffsetFrom eOffsetFrom,
                            sal_uInt32 nLineWidth);
     /// Determines if conversion of a given floating table is wanted or not.
     bool FloatingTableConversion(DomainMapper_Impl& rDM_Impl, FloatingTableInfo& rInfo);
@@ -297,7 +312,8 @@ public:
                 css::uno::RuntimeException, std::exception);
 
     void SetBorder(BorderPosition ePos, sal_Int32 nLineDistance, const css::table::BorderLine2& rBorderLine, bool bShadow);
-    void SetBorderParams( sal_Int32 nSet ) { m_nBorderParams = nSet; }
+    void SetBorderApply( BorderApply nSet ) { m_eBorderApply = nSet; }
+    void SetBorderOffsetFrom( BorderOffsetFrom nSet ) { m_eBorderOffsetFrom = nSet; }
 
     void SetColumnCount( sal_Int16 nCount ) { m_nColumnCount = nCount; }
     sal_Int16 ColumnCount() const { return m_nColumnCount; }
@@ -338,7 +354,7 @@ public:
     //determine which style gets the borders
     void ApplyBorderToPageStyles(const css::uno::Reference<css::container::XNameContainer>& xStyles,
                                  const css::uno::Reference<css::lang::XMultiServiceFactory>& xTextFactory,
-                                 sal_Int32 nValue);
+                                 BorderApply eBorderApply, BorderOffsetFrom eOffsetFrom);
 
     void CloseSectionGroup( DomainMapper_Impl& rDM_Impl );
     /// Handling of margins, header and footer for any kind of sections breaks.
