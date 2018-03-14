@@ -130,9 +130,11 @@ class Desktop : public Application
                                     css::uno::Reference< css::uno::XComponentContext > const & context);
         static void             DeregisterServices();
 
+    public:
         static void             CreateTemporaryDirectory();
         static void             RemoveTemporaryDirectory();
 
+    private:
         static bool             InitializeConfiguration();
         static void             FlushConfiguration();
         static bool             InitializeQuickstartMode( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
