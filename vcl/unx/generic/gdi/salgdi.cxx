@@ -227,7 +227,7 @@ void X11SalGraphics::SetClipRegion( GC pGC, Region pXReg ) const
 #define P_DELTA         51
 #define DMAP( v, m )    ((v % P_DELTA) > m ? (v / P_DELTA) + 1 : (v / P_DELTA))
 
-bool X11SalGraphics::GetDitherPixmap( SalColor nSalColor )
+bool X11SalGraphics::GetDitherPixmap( Color nColor )
 {
     static const short nOrdDither8Bit[ 8 ][ 8 ] =
     {
@@ -249,20 +249,20 @@ bool X11SalGraphics::GetDitherPixmap( SalColor nSalColor )
     char   *pBitsPtr = pBits;
 
     // Set the palette-entries for the dithering tile
-    sal_uInt8 nSalColorRed   = SALCOLOR_RED   ( nSalColor );
-    sal_uInt8 nSalColorGreen = SALCOLOR_GREEN ( nSalColor );
-    sal_uInt8 nSalColorBlue  = SALCOLOR_BLUE  ( nSalColor );
+    sal_uInt8 nColorRed   = nColor.GetRed();
+    sal_uInt8 nColorGreen = nColor.GetGreen();
+    sal_uInt8 nColorBlue  = nColor.GetBlue();
 
     for(auto & nY : nOrdDither8Bit)
     {
         for( int nX = 0; nX < 8; nX++ )
         {
             short nMagic = nY[nX];
-            sal_uInt8 nR   = P_DELTA * DMAP( nSalColorRed,   nMagic );
-            sal_uInt8 nG   = P_DELTA * DMAP( nSalColorGreen, nMagic );
-            sal_uInt8 nB   = P_DELTA * DMAP( nSalColorBlue,  nMagic );
+            sal_uInt8 nR   = P_DELTA * DMAP( nColorRed,   nMagic );
+            sal_uInt8 nG   = P_DELTA * DMAP( nColorGreen, nMagic );
+            sal_uInt8 nB   = P_DELTA * DMAP( nColorBlue,  nMagic );
 
-            *pBitsPtr++ = GetColormap().GetPixel( MAKE_SALCOLOR( nR, nG, nB ) );
+            *pBitsPtr++ = GetColormap().GetPixel( Color( nR, nG, nB ) );
         }
     }
 
@@ -369,13 +369,13 @@ void X11SalGraphics::SetLineColor()
     mxImpl->SetLineColor();
 }
 
-void X11SalGraphics::SetLineColor( SalColor nSalColor )
+void X11SalGraphics::SetLineColor( Color nColor )
 {
 #if ENABLE_CAIRO_CANVAS
-    mnPenColor = nSalColor;
+    mnPenColor = nColor;
 #endif // ENABLE_CAIRO_CANVAS
 
-    mxImpl->SetLineColor( nSalColor );
+    mxImpl->SetLineColor( nColor );
 }
 
 void X11SalGraphics::SetFillColor()
@@ -387,13 +387,13 @@ void X11SalGraphics::SetFillColor()
     mxImpl->SetFillColor();
 }
 
-void X11SalGraphics::SetFillColor( SalColor nSalColor )
+void X11SalGraphics::SetFillColor( Color nColor )
 {
 #if ENABLE_CAIRO_CANVAS
-    mnFillColor = nSalColor;
+    mnFillColor = nColor;
 #endif // ENABLE_CAIRO_CANVAS
 
-    mxImpl->SetFillColor( nSalColor );
+    mxImpl->SetFillColor( nColor );
 }
 
 void X11SalGraphics::SetROPLineColor( SalROPColor nROPColor )
@@ -416,9 +416,9 @@ void X11SalGraphics::drawPixel( long nX, long nY )
     mxImpl->drawPixel( nX, nY );
 }
 
-void X11SalGraphics::drawPixel( long nX, long nY, SalColor nSalColor )
+void X11SalGraphics::drawPixel( long nX, long nY, Color nColor )
 {
-    mxImpl->drawPixel( nX, nY, nSalColor );
+    mxImpl->drawPixel( nX, nY, nColor );
 }
 
 void X11SalGraphics::drawLine( long nX1, long nY1, long nX2, long nY2 )
@@ -656,9 +656,9 @@ bool X11SalGraphics::drawPolyPolygon( const basegfx::B2DPolyPolygon& rOrigPolyPo
         if(SALCOLOR_NONE != mnFillColor)
         {
             cairo_set_source_rgba(cr,
-                SALCOLOR_RED(mnFillColor)/255.0,
-                SALCOLOR_GREEN(mnFillColor)/255.0,
-                SALCOLOR_BLUE(mnFillColor)/255.0,
+                mnFillColor.GetRed()/255.0,
+                mnFillColor.GetGreen()/255.0,
+                mnFillColor.GetBlue()/255.0,
                 1.0 - fTransparency);
             cairo_set_fill_rule(cr, CAIRO_FILL_RULE_EVEN_ODD);
             cairo_fill_preserve(cr);
@@ -667,9 +667,9 @@ bool X11SalGraphics::drawPolyPolygon( const basegfx::B2DPolyPolygon& rOrigPolyPo
         if(SALCOLOR_NONE != mnPenColor)
         {
             cairo_set_source_rgba(cr,
-                    SALCOLOR_RED(mnPenColor)/255.0,
-                    SALCOLOR_GREEN(mnPenColor)/255.0,
-                    SALCOLOR_BLUE(mnPenColor)/255.0,
+                    mnPenColor.GetRed()/255.0,
+                    mnPenColor.GetGreen()/255.0,
+                    mnPenColor.GetBlue()/255.0,
                     1.0 - fTransparency);
             cairo_stroke_preserve(cr);
         }
@@ -770,9 +770,9 @@ bool X11SalGraphics::drawPolyLine(
         }
 
         cairo_set_source_rgba(cr,
-            SALCOLOR_RED(mnPenColor)/255.0,
-            SALCOLOR_GREEN(mnPenColor)/255.0,
-            SALCOLOR_BLUE(mnPenColor)/255.0,
+            mnPenColor.GetRed()/255.0,
+            mnPenColor.GetGreen()/255.0,
+            mnPenColor.GetBlue()/255.0,
             1.0 - fTransparency);
         cairo_set_line_join(cr, eCairoLineJoin);
         cairo_set_line_cap(cr, eCairoLineCap);

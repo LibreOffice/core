@@ -920,7 +920,7 @@ CGImageRef QuartzSalBitmap::CreateWithMask( const QuartzSalBitmap& rMask,
 /** creates an image from the given rectangle, replacing all black pixels
     with nMaskColor and make all other full transparent */
 CGImageRef QuartzSalBitmap::CreateColorMask( int nX, int nY, int nWidth,
-                                             int nHeight, SalColor nMaskColor ) const
+                                             int nHeight, Color nMaskColor ) const
 {
     CGImageRef xMask = nullptr;
     if (m_pUserBuffer.get() && (nX + nWidth <= mnWidth) && (nY + nHeight <= mnHeight))
@@ -935,9 +935,9 @@ CGImageRef QuartzSalBitmap::CreateColorMask( int nX, int nY, int nWidth,
         {
             sal_uInt32 nColor;
             reinterpret_cast<sal_uInt8*>(&nColor)[0] = 0xff;
-            reinterpret_cast<sal_uInt8*>(&nColor)[1] = SALCOLOR_RED( nMaskColor );
-            reinterpret_cast<sal_uInt8*>(&nColor)[2] = SALCOLOR_GREEN( nMaskColor );
-            reinterpret_cast<sal_uInt8*>(&nColor)[3] = SALCOLOR_BLUE( nMaskColor );
+            reinterpret_cast<sal_uInt8*>(&nColor)[1] = nMaskColor.GetRed();
+            reinterpret_cast<sal_uInt8*>(&nColor)[2] = nMaskColor.GetGreen();
+            reinterpret_cast<sal_uInt8*>(&nColor)[3] = nMaskColor.GetBlue();
 
             sal_uInt8* pSource = m_pUserBuffer.get();
             if( nY )

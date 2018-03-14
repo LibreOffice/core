@@ -167,10 +167,10 @@ using namespace ::com::sun::star::uno;
     return [ NSNumber numberWithShort: value ];
 }
 
-+(void)addColor:(SalColor)nSalColor forAttribute:(NSString *)attribute andRange:(NSRange)range toString:(NSMutableAttributedString *)string {
-    if( nSalColor == sal_uInt32(COL_TRANSPARENT) )
++(void)addColor:(Color)nColor forAttribute:(NSString *)attribute andRange:(NSRange)range toString:(NSMutableAttributedString *)string {
+    if( nColor == sal_uInt32(COL_TRANSPARENT) )
         return;
-    const RGBAColor aRGBAColor( nSalColor);
+    const RGBAColor aRGBAColor( nColor);
     CGColorRef aColorRef = CGColorCreate ( CGColorSpaceCreateWithName ( kCGColorSpaceGenericRGB ), aRGBAColor.AsArray() );
     [ string addAttribute: attribute value: reinterpret_cast<id>(aColorRef) range: range ];
     CGColorRelease( aColorRef );

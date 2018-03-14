@@ -68,7 +68,7 @@ typedef enum  {
 
 extern "C" srv_vendor_t sal_GetServerVendor( Display *p_display );
 
-// MSB/Bigendian view (SalColor == RGB, r=0xFF0000, g=0xFF00, b=0xFF)
+// MSB/Bigendian view (Color == RGB, r=0xFF0000, g=0xFF00, b=0xFF)
 
 enum SalRGB { RGB,  RBG,
               GBR,  GRB,
@@ -97,15 +97,15 @@ public:
     int             GetClass() const { return c_class; }
     int             GetDepth() const { return depth; }
 
-            Pixel           GetTCPixel( SalColor nColor ) const;
-            SalColor        GetTCColor( Pixel nPixel ) const;
+            Pixel           GetTCPixel( Color nColor ) const;
+            Color           GetTCColor( Pixel nPixel ) const;
 };
 
 class SalColormap
 {
     const SalDisplay*       m_pDisplay;
     Colormap                m_hColormap;
-    std::vector<SalColor>   m_aPalette;         // Pseudocolor
+    std::vector<Color>      m_aPalette;         // Pseudocolor
     SalVisual               m_aVisual;
     std::vector<sal_uInt16>     m_aLookupTable;     // Pseudocolor: 12bit reduction
     Pixel                   m_nWhitePixel;
@@ -139,8 +139,8 @@ public:
                                            int      r,
                                            int      g,
                                            int      b ) const;
-    Pixel           GetPixel( SalColor nColor ) const;
-    SalColor        GetColor( Pixel nPixel ) const;
+    Pixel           GetPixel( Color nColor ) const;
+    Color           GetColor( Pixel nPixel ) const;
 };
 
 class SalI18N_InputMethod;
