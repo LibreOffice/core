@@ -2678,7 +2678,6 @@ cppcanvas/source/wrapper/implcanvas.hxx
 cppcanvas/source/wrapper/implcustomsprite.cxx
 cppcanvas/source/wrapper/implcustomsprite.hxx
 cppcanvas/source/wrapper/implfont.cxx
-cppcanvas/source/wrapper/implfont.hxx
 cppcanvas/source/wrapper/implpolypolygon.cxx
 cppcanvas/source/wrapper/implpolypolygon.hxx
 cppcanvas/source/wrapper/implsprite.cxx
