@@ -348,9 +348,6 @@ namespace canvas
             const css::geometry::IntegerSize2D& rBitmapSize );
 
         /// Convert standard 8888 RGBA color to vcl color
-        CANVASTOOLS_DLLPUBLIC ::Color stdIntSequenceToColor( const css::uno::Sequence<sal_Int8>& rColor );
-
-        /// Convert standard 8888 RGBA color to vcl color
         CANVASTOOLS_DLLPUBLIC css::uno::Sequence<sal_Int8> colorToStdIntSequence( const ::Color& rColor );
 
         // Modelled closely after boost::numeric_cast, only that we
