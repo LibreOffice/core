@@ -4932,12 +4932,12 @@ bool PDFWriterImpl::emitEmbeddedFiles()
         aLine.append(rEmbeddedFile.m_nObject);
         aLine.append(" 0 obj\n");
         aLine.append("<< /Type /EmbeddedFile /Length ");
-        aLine.append(static_cast<sal_Int64>(rEmbeddedFile.m_aData.getLength()));
+        aLine.append(static_cast<sal_Int64>(rEmbeddedFile.m_pData->getLength()));
         aLine.append(" >>\nstream\n");
         CHECK_RETURN(writeBuffer(aLine.getStr(), aLine.getLength()));
         aLine.setLength(0);
 
-        CHECK_RETURN(writeBuffer(rEmbeddedFile.m_aData.getArray(), rEmbeddedFile.m_aData.getLength()));
+        CHECK_RETURN(writeBuffer(rEmbeddedFile.m_pData->getArray(), rEmbeddedFile.m_pData->getLength()));
 
         aLine.append("\nendstream\nendobj\n\n");
         CHECK_RETURN(writeBuffer(aLine.getStr(), aLine.getLength()));
@@ -8872,7 +8872,7 @@ bool PDFWriterImpl::writeGradientFunction( GradientEmit const & rObject )
 
 void PDFWriterImpl::writeJPG( JPGEmit& rObject )
 {
-    if (rObject.m_aReferenceXObject.m_aPDFData.hasElements() && !m_aContext.UseReferenceXObject)
+    if (rObject.m_aReferenceXObject.m_pPDFData->hasElements() && !m_aContext.UseReferenceXObject)
     {
         writeReferenceXObject(rObject.m_aReferenceXObject);
         return;
@@ -9180,7 +9180,7 @@ void PDFWriterImpl::writeReferenceXObject(ReferenceXObjectEmit& rEmit)
         // Parse the PDF data, we need that to write the PDF dictionary of our
         // object.
         SvMemoryStream aPDFStream;
-        aPDFStream.WriteBytes(rEmit.m_aPDFData.getArray(), rEmit.m_aPDFData.getLength());
+        aPDFStream.WriteBytes(rEmit.m_pPDFData->getArray(), rEmit.m_pPDFData->getLength());
         aPDFStream.Seek(0);
         filter::PDFDocument aPDFDocument;
         if (!aPDFDocument.Read(aPDFStream))
@@ -9416,7 +9416,7 @@ namespace
 
 bool PDFWriterImpl::writeBitmapObject( BitmapEmit& rObject, bool bMask )
 {
-    if (rObject.m_aReferenceXObject.m_aPDFData.hasElements() && !m_aContext.UseReferenceXObject)
+    if (rObject.m_aReferenceXObject.m_pPDFData->hasElements() && !m_aContext.UseReferenceXObject)
     {
         writeReferenceXObject(rObject.m_aReferenceXObject);
         return true;
@@ -9734,7 +9734,7 @@ void PDFWriterImpl::createEmbeddedFile(const Graphic& rGraphic, ReferenceXObject
     // no pdf data.
     rEmit.m_nBitmapObject = nBitmapObject;
 
-    if (!rGraphic.getPdfData().hasElements())
+    if (!rGraphic.getPdfData()->hasElements())
         return;
 
     if (m_aContext.UseReferenceXObject)
@@ -9742,12 +9742,12 @@ void PDFWriterImpl::createEmbeddedFile(const Graphic& rGraphic, ReferenceXObject
         // Store the original PDF data as an embedded file.
         m_aEmbeddedFiles.emplace_back();
         m_aEmbeddedFiles.back().m_nObject = createObject();
-        m_aEmbeddedFiles.back().m_aData = rGraphic.getPdfData();
+        m_aEmbeddedFiles.back().m_pData = rGraphic.getPdfData();
 
         rEmit.m_nEmbeddedObject = m_aEmbeddedFiles.back().m_nObject;
     }
     else
-        rEmit.m_aPDFData = rGraphic.getPdfData();
+        rEmit.m_pPDFData = rGraphic.getPdfData();
 
     rEmit.m_nFormObject = createObject();
     rEmit.m_aPixelSize = rGraphic.GetPrefSize();
@@ -9802,7 +9802,7 @@ void PDFWriterImpl::drawJPGBitmap( SvStream& rDCTData, bool bIsTrueColor, const 
     {
         m_aJPGs.emplace( m_aJPGs.begin() );
         JPGEmit& rEmit = m_aJPGs.front();
-        if (!rGraphic.getPdfData().hasElements() || m_aContext.UseReferenceXObject)
+        if (!rGraphic.getPdfData()->hasElements() || m_aContext.UseReferenceXObject)
             rEmit.m_nObject = createObject();
         rEmit.m_aID         = aID;
         rEmit.m_pStream.reset( pStream );
@@ -9910,7 +9910,7 @@ const PDFWriterImpl::BitmapEmit& PDFWriterImpl::createBitmapEmit( const BitmapEx
         m_aBitmaps.push_front( BitmapEmit() );
         m_aBitmaps.front().m_aID        = aID;
         m_aBitmaps.front().m_aBitmap    = aBitmap;
-        if (!rGraphic.getPdfData().hasElements() || m_aContext.UseReferenceXObject)
+        if (!rGraphic.getPdfData()->hasElements() || m_aContext.UseReferenceXObject)
             m_aBitmaps.front().m_nObject = createObject();
         createEmbeddedFile(rGraphic, m_aBitmaps.front().m_aReferenceXObject, m_aBitmaps.front().m_nObject);
         it = m_aBitmaps.begin();

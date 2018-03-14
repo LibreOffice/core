@@ -88,9 +88,17 @@ private:
     bool                         mbSwapOut;
     bool                         mbDummyContext;
     VectorGraphicDataPtr         maVectorGraphicData;
-    css::uno::Sequence<sal_Int8> maPdfData;
+    /// The PDF stream from which this Graphic is rendered,
+    /// as converted (version downgraded) from the original,
+    /// which should be in GfxLink.
+    std::shared_ptr<css::uno::Sequence<sal_Int8>> mpPdfData;
     std::unique_ptr<GraphicID>   mpGraphicID;
     GraphicExternalLink          maGraphicExternalLink;
+
+    /// Used with GfxLink and/or PdfData when they store original media
+    /// which might be multi-page (PDF, f.e.) and we need to re-render
+    /// this Graphic (a page) from the source in GfxLink or PdfData.
+    sal_Int32                    mnPageNumber;
 
     std::chrono::high_resolution_clock::time_point maLastUsed;
     bool mbPrepared;
@@ -214,9 +222,9 @@ private:
 
     const VectorGraphicDataPtr& getVectorGraphicData() const;
 
-    const css::uno::Sequence<sal_Int8>& getPdfData() const;
+    const std::shared_ptr<css::uno::Sequence<sal_Int8>>& getPdfData() const;
 
-    void setPdfData(const css::uno::Sequence<sal_Int8>& rPdfData);
+    void setPdfData(const std::shared_ptr<css::uno::Sequence<sal_Int8>>& rPdfData);
 
     bool ensureAvailable () const;
 
