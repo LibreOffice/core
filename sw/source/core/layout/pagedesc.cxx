@@ -46,6 +46,7 @@ SwPageDesc::SwPageDesc(const OUString& rName, SwFrameFormat *pFormat, SwDoc *con
     , m_FirstMaster( pDoc->GetAttrPool(), rName, pFormat )
     , m_FirstLeft( pDoc->GetAttrPool(), rName, pFormat )
     , m_aDepends(*this)
+    , m_pTextFormatColl(nullptr)
     , m_pFollow( this )
     , m_nRegHeight( 0 )
     , m_nRegAscent( 0 )
