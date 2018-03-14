@@ -92,14 +92,14 @@ protected:
      */
     OpenGLTexture maOffscreenTex;
 
-    SalColor mnLineColor;
-    SalColor mnFillColor;
+    Color mnLineColor;
+    Color mnFillColor;
 #ifdef DBG_UTIL
     bool mProgramIsSolidColor;
 #endif
     sal_uInt32 mnDrawCount;
     sal_uInt32 mnDrawCountAtFlush;
-    SalColor mProgramSolidColor;
+    Color mProgramSolidColor;
     double mProgramSolidTransparency;
 
     std::unique_ptr<RenderList> mpRenderList;
@@ -113,11 +113,11 @@ protected:
 
 public:
     bool UseProgram( const OUString& rVertexShader, const OUString& rFragmentShader, const OString& preamble = "" );
-    bool UseSolid( SalColor nColor, sal_uInt8 nTransparency );
-    bool UseSolid( SalColor nColor, double fTransparency );
-    bool UseSolid( SalColor nColor );
+    bool UseSolid( Color nColor, sal_uInt8 nTransparency );
+    bool UseSolid( Color nColor, double fTransparency );
+    bool UseSolid( Color nColor );
     void UseSolid();
-    bool UseLine(SalColor nColor, double fTransparency, GLfloat fLineWidth, bool bUseAA);
+    bool UseLine(Color nColor, double fTransparency, GLfloat fLineWidth, bool bUseAA);
     void UseLine(GLfloat fLineWidth, bool bUseAA);
     bool UseInvert50();
     bool UseInvert(SalInvert nFlags);
@@ -138,11 +138,11 @@ public:
     void DrawTextureDiff( OpenGLTexture& rTexture, OpenGLTexture& rMask, const SalTwoRect& rPosAry, bool bInverted );
     void DrawTextureWithMask( OpenGLTexture& rTexture, OpenGLTexture& rMask, const SalTwoRect& rPosAry );
     void DrawBlendedTexture( OpenGLTexture& rTexture, OpenGLTexture& rMask, OpenGLTexture& rAlpha, const SalTwoRect& rPosAry );
-    void DrawMask( OpenGLTexture& rTexture, SalColor nMaskColor, const SalTwoRect& rPosAry );
+    void DrawMask( OpenGLTexture& rTexture, Color nMaskColor, const SalTwoRect& rPosAry );
     void DrawLinearGradient( const Gradient& rGradient, const tools::Rectangle& rRect );
     void DrawAxialGradient( const Gradient& rGradient, const tools::Rectangle& rRect );
     void DrawRadialGradient( const Gradient& rGradient, const tools::Rectangle& rRect );
-    void DeferredTextDraw(OpenGLTexture const & rTexture, const SalColor nMaskColor, const SalTwoRect& rPosAry);
+    void DeferredTextDraw(OpenGLTexture const & rTexture, const Color nMaskColor, const SalTwoRect& rPosAry);
 
     void FlushDeferredDrawing();
     void FlushLinesOrTriangles(DrawShaderType eType, RenderParameters const & rParameters);
@@ -218,14 +218,14 @@ public:
     virtual void SetLineColor() override;
 
     // set the line color to a specific color
-    virtual void SetLineColor( SalColor nSalColor ) override;
+    virtual void SetLineColor( Color nColor ) override;
 
     // set the fill color to transparent (= don't fill)
     virtual void SetFillColor() override;
 
     // set the fill color to a specific color, shapes will be
     // filled accordingly
-    virtual void SetFillColor( SalColor nSalColor ) override;
+    virtual void SetFillColor( Color nColor ) override;
 
     // enable/disable XOR drawing
     virtual void SetXORMode( bool bSet ) override;
@@ -238,7 +238,7 @@ public:
 
     // draw --> LineColor and FillColor and RasterOp and ClipRegion
     virtual void drawPixel( long nX, long nY ) override;
-    virtual void drawPixel( long nX, long nY, SalColor nSalColor ) override;
+    virtual void drawPixel( long nX, long nY, Color nColor ) override;
 
     virtual void drawLine( long nX1, long nY1, long nX2, long nY2 ) override;
 
@@ -306,11 +306,11 @@ public:
     virtual void drawMask(
                 const SalTwoRect& rPosAry,
                 const SalBitmap& rSalBitmap,
-                SalColor nMaskColor ) override;
+                Color nMaskColor ) override;
 
     virtual SalBitmap* getBitmap( long nX, long nY, long nWidth, long nHeight ) override;
 
-    virtual SalColor getPixel( long nX, long nY ) override;
+    virtual Color getPixel( long nX, long nY ) override;
 
     // invert --> ClipRegion (only Windows or VirDevs)
     virtual void invert(

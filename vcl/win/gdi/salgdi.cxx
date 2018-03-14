@@ -342,12 +342,12 @@ void ImplFreeSalGDI()
     pSalData->mbResourcesAlreadyFreed = true;
 }
 
-int ImplIsSysColorEntry( SalColor nSalColor )
+int ImplIsSysColorEntry( Color nColor )
 {
     SysColorEntry*  pEntry = pFirstSysColor;
-    const DWORD     nTestRGB = static_cast<DWORD>(RGB( SALCOLOR_RED( nSalColor ),
-                                           SALCOLOR_GREEN( nSalColor ),
-                                           SALCOLOR_BLUE( nSalColor ) ));
+    const DWORD     nTestRGB = static_cast<DWORD>(RGB( nColor.GetRed(),
+                                           nColor.GetGreen(),
+                                           nColor.GetBlue() ));
 
     while ( pEntry )
     {
@@ -730,9 +730,9 @@ void WinSalGraphics::SetLineColor()
     mpImpl->SetLineColor();
 }
 
-void WinSalGraphics::SetLineColor( SalColor nSalColor )
+void WinSalGraphics::SetLineColor( Color nColor )
 {
-    mpImpl->SetLineColor( nSalColor );
+    mpImpl->SetLineColor( nColor );
 }
 
 void WinSalGraphics::SetFillColor()
@@ -740,9 +740,9 @@ void WinSalGraphics::SetFillColor()
     mpImpl->SetFillColor();
 }
 
-void WinSalGraphics::SetFillColor( SalColor nSalColor )
+void WinSalGraphics::SetFillColor( Color nColor )
 {
-    mpImpl->SetFillColor( nSalColor );
+    mpImpl->SetFillColor( nColor );
 }
 
 void WinSalGraphics::SetXORMode( bool bSet)
@@ -765,9 +765,9 @@ void WinSalGraphics::drawPixel( long nX, long nY )
     mpImpl->drawPixel( nX, nY );
 }
 
-void WinSalGraphics::drawPixel( long nX, long nY, SalColor nSalColor )
+void WinSalGraphics::drawPixel( long nX, long nY, Color nColor )
 {
-    mpImpl->drawPixel( nX, nY, nSalColor );
+    mpImpl->drawPixel( nX, nY, nColor );
 }
 
 void WinSalGraphics::drawLine( long nX1, long nY1, long nX2, long nY2 )

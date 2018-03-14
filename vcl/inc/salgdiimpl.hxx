@@ -24,6 +24,7 @@
 
 #include <rtl/ustring.hxx>
 
+#include <tools/color.hxx>
 #include <tools/poly.hxx>
 #include <tools/solar.h>
 
@@ -68,14 +69,14 @@ public:
     virtual void SetLineColor() = 0;
 
     // set the line color to a specific color
-    virtual void SetLineColor( SalColor nSalColor ) = 0;
+    virtual void SetLineColor( Color nColor ) = 0;
 
     // set the fill color to transparent (= don't fill)
     virtual void SetFillColor() = 0;
 
     // set the fill color to a specific color, shapes will be
     // filled accordingly
-    virtual void SetFillColor( SalColor nSalColor ) = 0;
+    virtual void SetFillColor( Color nColor ) = 0;
 
     // enable/disable XOR drawing
     virtual void SetXORMode( bool bSet ) = 0;
@@ -88,7 +89,7 @@ public:
 
     // draw --> LineColor and FillColor and RasterOp and ClipRegion
     virtual void drawPixel( long nX, long nY ) = 0;
-    virtual void drawPixel( long nX, long nY, SalColor nSalColor ) = 0;
+    virtual void drawPixel( long nX, long nY, Color nColor ) = 0;
 
     virtual void drawLine( long nX1, long nY1, long nX2, long nY2 ) = 0;
 
@@ -146,11 +147,11 @@ public:
     virtual void drawMask(
                 const SalTwoRect& rPosAry,
                 const SalBitmap& rSalBitmap,
-                SalColor nMaskColor ) = 0;
+                Color nMaskColor ) = 0;
 
     virtual SalBitmap* getBitmap( long nX, long nY, long nWidth, long nHeight ) = 0;
 
-    virtual SalColor getPixel( long nX, long nY ) = 0;
+    virtual Color getPixel( long nX, long nY ) = 0;
 
     // invert --> ClipRegion (only Windows or VirDevs)
     virtual void invert(

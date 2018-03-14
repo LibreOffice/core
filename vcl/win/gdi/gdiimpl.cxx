@@ -215,14 +215,14 @@ static BYTE aOrdDither16Bit[8][8] =
    { 5, 3, 4, 2, 5, 3, 4, 2 }
 };
 
-SalColor ImplGetROPSalColor( SalROPColor nROPColor )
+Color ImplGetROPColor( SalROPColor nROPColor )
 {
-    SalColor nSalColor;
+    Color nColor;
     if ( nROPColor == SalROPColor::N0 )
-        nSalColor = MAKE_SALCOLOR( 0, 0, 0 );
+        nColor = Color( 0, 0, 0 );
     else
-        nSalColor = MAKE_SALCOLOR( 255, 255, 255 );
-    return nSalColor;
+        nColor = Color( 255, 255, 255 );
+    return nColor;
 }
 
 int ImplIsPaletteEntry( BYTE nRed, BYTE nGreen, BYTE nBlue )
@@ -624,11 +624,10 @@ void ImplDrawBitmap( HDC hDC, const SalTwoRect& rPosAry, const WinSalBitmap& rSa
                     const BitmapPalette& rPalette = pBitmapBuffer->maPalette;
                     if (rPalette.GetEntryCount() == 2)
                     {
-                        SalColor nCol;
-                        nCol = ImplColorToSal(rPalette[0].GetColor());
-                        nTextColor = RGB( SALCOLOR_RED(nCol), SALCOLOR_GREEN(nCol), SALCOLOR_BLUE(nCol) );
-                        nCol = ImplColorToSal(rPalette[1].GetColor());
-                        nBkColor = RGB( SALCOLOR_RED(nCol), SALCOLOR_GREEN(nCol), SALCOLOR_BLUE(nCol) );
+                        Color nCol = rPalette[0].GetColor();
+                        nTextColor = RGB( nCol.GetRed(), nCol.GetGreen(), nCol.GetBlue() );
+                        nCol = rPalette[1].GetColor();
+                        nBkColor = RGB( nCol.GetRed(), nCol.GetGreen(), nCol.GetBlue() );
                     }
                     const_cast<WinSalBitmap&>(rSalBitmap).ReleaseBuffer(pBitmapBuffer, BitmapAccessMode::Info);
                 }
@@ -820,7 +819,7 @@ bool WinSalGraphicsImpl::drawAlphaRect( long nX, long nY, long nWidth,
 
 void WinSalGraphicsImpl::drawMask( const SalTwoRect& rPosAry,
                             const SalBitmap& rSSalBitmap,
-                            SalColor nMaskColor )
+                            Color nMaskColor )
 {
     SAL_WARN_IF( mrParent.isPrinter(), "vcl", "No transparency print possible!" );
 
@@ -829,9 +828,9 @@ void WinSalGraphicsImpl::drawMask( const SalTwoRect& rPosAry,
     const WinSalBitmap& rSalBitmap = static_cast<const WinSalBitmap&>(rSSalBitmap);
 
     SalTwoRect  aPosAry = rPosAry;
-    const BYTE  cRed = SALCOLOR_RED( nMaskColor );
-    const BYTE  cGreen = SALCOLOR_GREEN( nMaskColor );
-    const BYTE  cBlue = SALCOLOR_BLUE( nMaskColor );
+    const BYTE  cRed = nMaskColor.GetRed();
+    const BYTE  cGreen = nMaskColor.GetGreen();
+    const BYTE  cBlue = nMaskColor.GetBlue();
     HDC         hDC = mrParent.getHDC();
     HBRUSH      hMaskBrush = CreateSolidBrush( RGB( cRed, cGreen, cBlue ) );
     HBRUSH      hOldBrush = SelectBrush( hDC, hMaskBrush );
@@ -888,14 +887,14 @@ SalBitmap* WinSalGraphicsImpl::getBitmap( long nX, long nY, long nDX, long nDY )
     return pSalBitmap;
 }
 
-SalColor WinSalGraphicsImpl::getPixel( long nX, long nY )
+Color WinSalGraphicsImpl::getPixel( long nX, long nY )
 {
     COLORREF aWinCol = ::GetPixel( mrParent.getHDC(), static_cast<int>(nX), static_cast<int>(nY) );
 
     if ( CLR_INVALID == aWinCol )
-        return MAKE_SALCOLOR( 0, 0, 0 );
+        return Color( 0, 0, 0 );
     else
-        return MAKE_SALCOLOR( GetRValue( aWinCol ),
+        return Color( GetRValue( aWinCol ),
                               GetGValue( aWinCol ),
                               GetBValue( aWinCol ) );
 }
@@ -1366,12 +1365,12 @@ void WinSalGraphicsImpl::SetLineColor()
     mbStockPen  = TRUE;
 }
 
-void WinSalGraphicsImpl::SetLineColor( SalColor nSalColor )
+void WinSalGraphicsImpl::SetLineColor( Color nColor )
 {
-    maLineColor = nSalColor;
-    COLORREF    nPenColor = PALETTERGB( SALCOLOR_RED( nSalColor ),
-                                        SALCOLOR_GREEN( nSalColor ),
-                                        SALCOLOR_BLUE( nSalColor ) );
+    maLineColor = nColor;
+    COLORREF    nPenColor = PALETTERGB( nColor.GetRed(),
+                                        nColor.GetGreen(),
+                                        nColor.GetBlue() );
     HPEN        hNewPen = nullptr;
     bool        bStockPen = FALSE;
 
@@ -1396,7 +1395,7 @@ void WinSalGraphicsImpl::SetLineColor( SalColor nSalColor )
     {
         if ( !mrParent.isPrinter() )
         {
-            if ( GetSalData()->mhDitherPal && ImplIsSysColorEntry( nSalColor ) )
+            if ( GetSalData()->mhDitherPal && ImplIsSysColorEntry( nColor ) )
                 nPenColor = PALRGB_TO_RGB( nPenColor );
         }
 
@@ -1444,13 +1443,13 @@ void WinSalGraphicsImpl::SetFillColor()
     mbStockBrush = TRUE;
 }
 
-void WinSalGraphicsImpl::SetFillColor( SalColor nSalColor )
+void WinSalGraphicsImpl::SetFillColor( Color nColor )
 {
-    maFillColor = nSalColor;
+    maFillColor = nColor;
     SalData*    pSalData    = GetSalData();
-    BYTE        nRed        = SALCOLOR_RED( nSalColor );
-    BYTE        nGreen      = SALCOLOR_GREEN( nSalColor );
-    BYTE        nBlue       = SALCOLOR_BLUE( nSalColor );
+    BYTE        nRed        = nColor.GetRed();
+    BYTE        nGreen      = nColor.GetGreen();
+    BYTE        nBlue       = nColor.GetBlue();
     COLORREF    nBrushColor = PALETTERGB( nRed, nGreen, nBlue );
     HBRUSH      hNewBrush   = nullptr;
     bool        bStockBrush = FALSE;
@@ -1497,7 +1496,7 @@ void WinSalGraphicsImpl::SetFillColor( SalColor nSalColor )
 
                 hNewBrush = CreateDIBPatternBrush( pSalData->mhDitherDIB, DIB_RGB_COLORS );
             }
-            else if ( ImplIsSysColorEntry( nSalColor ) )
+            else if ( ImplIsSysColorEntry( nColor ) )
             {
                 nBrushColor = PALRGB_TO_RGB( nBrushColor );
                 hNewBrush = CreateSolidBrush( nBrushColor );
@@ -1555,12 +1554,12 @@ void WinSalGraphicsImpl::SetXORMode( bool bSet)
 
 void WinSalGraphicsImpl::SetROPLineColor( SalROPColor nROPColor )
 {
-    SetLineColor( ImplGetROPSalColor( nROPColor ) );
+    SetLineColor( ImplGetROPColor( nROPColor ) );
 }
 
 void WinSalGraphicsImpl::SetROPFillColor( SalROPColor nROPColor )
 {
-    SetFillColor( ImplGetROPSalColor( nROPColor ) );
+    SetFillColor( ImplGetROPColor( nROPColor ) );
 }
 
 void WinSalGraphicsImpl::drawPixelImpl( long nX, long nY, COLORREF crColor )
@@ -1582,15 +1581,15 @@ void WinSalGraphicsImpl::drawPixel( long nX, long nY )
     drawPixelImpl( nX, nY, mnPenColor );
 }
 
-void WinSalGraphicsImpl::drawPixel( long nX, long nY, SalColor nSalColor )
+void WinSalGraphicsImpl::drawPixel( long nX, long nY, Color nColor )
 {
-    COLORREF nCol = PALETTERGB( SALCOLOR_RED( nSalColor ),
-                                SALCOLOR_GREEN( nSalColor ),
-                                SALCOLOR_BLUE( nSalColor ) );
+    COLORREF nCol = PALETTERGB( nColor.GetRed(),
+                                nColor.GetGreen(),
+                                nColor.GetBlue() );
 
     if ( !mrParent.isPrinter() &&
          GetSalData()->mhDitherPal &&
-         ImplIsSysColorEntry( nSalColor ) )
+         ImplIsSysColorEntry( nColor ) )
         nCol = PALRGB_TO_RGB( nCol );
 
     drawPixelImpl( nX, nY, nCol );
@@ -1903,7 +1902,7 @@ bool WinSalGraphicsImpl::drawPolyPolygon( const basegfx::B2DPolyPolygon& rPolyPo
     {
         Gdiplus::Graphics aGraphics(mrParent.getHDC());
         const sal_uInt8 aTrans(sal_uInt8(255) - static_cast<sal_uInt8>(basegfx::fround(fTransparency * 255.0)));
-        const Gdiplus::Color aTestColor(aTrans, SALCOLOR_RED(maFillColor), SALCOLOR_GREEN(maFillColor), SALCOLOR_BLUE(maFillColor));
+        const Gdiplus::Color aTestColor(aTrans, maFillColor.GetRed(), maFillColor.GetGreen(), maFillColor.GetBlue());
         const Gdiplus::SolidBrush aSolidBrush(aTestColor.GetValue());
         Gdiplus::GraphicsPath aGraphicsPath(Gdiplus::FillModeAlternate);
 
@@ -1969,7 +1968,7 @@ bool WinSalGraphicsImpl::drawPolyLine(
     {
         Gdiplus::Graphics aGraphics(mrParent.getHDC());
         const sal_uInt8 aTrans = static_cast<sal_uInt8>(basegfx::fround( 255 * (1.0 - fTransparency) ));
-        const Gdiplus::Color aTestColor(aTrans, SALCOLOR_RED(maLineColor), SALCOLOR_GREEN(maLineColor), SALCOLOR_BLUE(maLineColor));
+        const Gdiplus::Color aTestColor(aTrans, maLineColor.GetRed(), maLineColor.GetGreen(), maLineColor.GetBlue());
         Gdiplus::Pen aPen(aTestColor.GetValue(), Gdiplus::REAL(rLineWidths.getX()));
         Gdiplus::GraphicsPath aGraphicsPath(Gdiplus::FillModeAlternate);
         bool bNoLineJoin(false);

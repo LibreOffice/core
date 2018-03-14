@@ -76,7 +76,7 @@ CairoFontsCache::LRUFonts CairoFontsCache::maLRUFonts;
 }
 
 CairoTextRender::CairoTextRender()
-    : mnTextColor(MAKE_SALCOLOR(0x00, 0x00, 0x00)) //black
+    : mnTextColor(Color(0x00, 0x00, 0x00)) //black
 {
     for(FreetypeFont* & rp : mpFreetypeFont)
         rp = nullptr;
@@ -209,9 +209,9 @@ void CairoTextRender::DrawTextLayout(const CommonSalLayout& rLayout)
     clipRegion(cr);
 
     cairo_set_source_rgb(cr,
-        SALCOLOR_RED(mnTextColor)/255.0,
-        SALCOLOR_GREEN(mnTextColor)/255.0,
-        SALCOLOR_BLUE(mnTextColor)/255.0);
+        mnTextColor.GetRed()/255.0,
+        mnTextColor.GetGreen()/255.0,
+        mnTextColor.GetBlue()/255.0);
 
     FT_Face aFace = rFont.GetFtFace();
     CairoFontsCache::CacheId aId;
@@ -339,11 +339,11 @@ void CairoTextRender::SetFont( const FontSelectPattern *pEntry, int nFallbackLev
 }
 
 void
-CairoTextRender::SetTextColor( SalColor nSalColor )
+CairoTextRender::SetTextColor( Color nColor )
 {
-    if( mnTextColor != nSalColor )
+    if( mnTextColor != nColor )
     {
-        mnTextColor = nSalColor;
+        mnTextColor = nColor;
     }
 }
 

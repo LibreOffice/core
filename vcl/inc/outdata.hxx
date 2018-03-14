@@ -23,11 +23,6 @@
 #include <tools/color.hxx>
 #include <vcl/salgtype.hxx>
 
-inline SalColor ImplColorToSal( Color aColor )
-{
-    return MAKE_SALCOLOR( aColor.GetRed(), aColor.GetGreen(), aColor.GetBlue() );
-}
-
 inline bool ImplIsColorTransparent( Color aColor )
 {
     return aColor.GetTransparency() != 0;

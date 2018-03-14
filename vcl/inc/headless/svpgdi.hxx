@@ -86,8 +86,8 @@ class VCL_DLLPUBLIC SvpSalGraphics : public SalGraphics
     cairo_surface_t*               m_pSurface;
     basegfx::B2IVector             m_aFrameSize;
     double                         m_fScale;
-    SalColor                       m_aLineColor;
-    SalColor                       m_aFillColor;
+    Color                          m_aLineColor;
+    Color                          m_aFillColor;
     PaintMode                      m_ePaintMode;
 
 public:
@@ -99,7 +99,7 @@ private:
     void invert(const basegfx::B2DPolygon &rPoly, SalInvert nFlags);
     void copySource(const SalTwoRect& rTR, cairo_surface_t* source);
     void setupPolyPolygon(cairo_t* cr, const basegfx::B2DPolyPolygon& rPolyPoly);
-    void applyColor(cairo_t *cr, SalColor rColor);
+    void applyColor(cairo_t *cr, Color rColor);
     void drawPolyPolygon(const basegfx::B2DPolyPolygon& rPolyPoly);
 protected:
     vcl::Region                         m_aClipRegion;
@@ -135,16 +135,16 @@ public:
     virtual bool            setClipRegion( const vcl::Region& ) override;
 
     virtual void            SetLineColor() override;
-    virtual void            SetLineColor( SalColor nSalColor ) override;
+    virtual void            SetLineColor( Color nColor ) override;
     virtual void            SetFillColor() override;
-    virtual void            SetFillColor( SalColor nSalColor ) override;
+    virtual void            SetFillColor( Color nColor ) override;
 
     virtual void            SetXORMode( bool bSet ) override;
 
     virtual void            SetROPLineColor( SalROPColor nROPColor ) override;
     virtual void            SetROPFillColor( SalROPColor nROPColor ) override;
 
-    virtual void            SetTextColor( SalColor nSalColor ) override;
+    virtual void            SetTextColor( Color nColor ) override;
     virtual void            SetFont( const FontSelectPattern*, int nFallbackLevel ) override;
     virtual void            GetFontMetric( ImplFontMetricDataRef&, int nFallbackLevel ) override;
     virtual const FontCharMapRef GetFontCharMap() const override;
@@ -173,7 +173,7 @@ public:
     virtual void            DrawTextLayout( const CommonSalLayout& ) override;
     virtual bool            supportsOperation( OutDevSupportType ) const override;
     virtual void            drawPixel( long nX, long nY ) override;
-    virtual void            drawPixel( long nX, long nY, SalColor nSalColor ) override;
+    virtual void            drawPixel( long nX, long nY, Color nColor ) override;
     virtual void            drawLine( long nX1, long nY1, long nX2, long nY2 ) override;
     virtual void            drawRect( long nX, long nY, long nWidth, long nHeight ) override;
     virtual bool            drawPolyPolygon( const basegfx::B2DPolyPolygon&, double fTransparency ) override;
@@ -216,9 +216,9 @@ public:
                                         const SalBitmap& rTransparentBitmap ) override;
     virtual void            drawMask( const SalTwoRect& rPosAry,
                                       const SalBitmap& rSalBitmap,
-                                      SalColor nMaskColor ) override;
+                                      Color nMaskColor ) override;
     virtual SalBitmap*      getBitmap( long nX, long nY, long nWidth, long nHeight ) override;
-    virtual SalColor        getPixel( long nX, long nY ) override;
+    virtual Color           getPixel( long nX, long nY ) override;
     virtual void            invert( long nX, long nY, long nWidth, long nHeight, SalInvert nFlags ) override;
     virtual void            invert( sal_uInt32 nPoints, const SalPoint* pPtAry, SalInvert nFlags ) override;
 

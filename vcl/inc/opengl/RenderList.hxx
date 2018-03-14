@@ -150,22 +150,22 @@ public:
         return maRenderEntries;
     }
 
-    void addDrawTextureWithMaskColor(OpenGLTexture const & rTexture, SalColor nColor, const SalTwoRect& r2Rect);
+    void addDrawTextureWithMaskColor(OpenGLTexture const & rTexture, Color nColor, const SalTwoRect& r2Rect);
 
-    void addDrawPixel(long nX, long nY, SalColor nColor);
+    void addDrawPixel(long nX, long nY, Color nColor);
 
     void addDrawRectangle(long nX, long nY, long nWidth, long nHeight, double fTransparency,
-                          SalColor nLineColor, SalColor nFillColor);
+                          Color nLineColor, Color nFillColor);
 
-    void addDrawLine(long nX1, long nY1, long nX2, long nY2, SalColor nLineColor, bool bUseAA);
+    void addDrawLine(long nX1, long nY1, long nX2, long nY2, Color nLineColor, bool bUseAA);
 
     void addDrawPolyPolygon(const basegfx::B2DPolyPolygon& rPolyPolygon, double fTransparency,
-                            SalColor nLineColor, SalColor nFillColor, bool bUseAA);
+                            Color nLineColor, Color nFillColor, bool bUseAA);
 
     void addDrawPolyLine(const basegfx::B2DPolygon& rPolygon, double fTransparency,
                          const basegfx::B2DVector& rLineWidth, basegfx::B2DLineJoin eLineJoin,
                          css::drawing::LineCap eLineCap, double fMiterMinimumAngle,
-                         SalColor nLineColor, bool bUseAA);
+                         Color nLineColor, bool bUseAA);
 };
 
 #endif // INCLUDED_VCL_INC_OPENGL_RENDERLIST_H

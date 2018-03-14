@@ -93,7 +93,7 @@ public:
 
 public:
     CGImageRef      CreateWithMask( const QuartzSalBitmap& rMask, int nX, int nY, int nWidth, int nHeight ) const;
-    CGImageRef      CreateColorMask( int nX, int nY, int nWidth, int nHeight, SalColor nMaskColor ) const;
+    CGImageRef      CreateColorMask( int nX, int nY, int nWidth, int nHeight, Color nMaskColor ) const;
     CGImageRef      CreateCroppedImage( int nX, int nY, int nWidth, int nHeight ) const;
 };
 

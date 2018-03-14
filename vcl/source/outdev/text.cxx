@@ -69,7 +69,7 @@ void OutputDevice::ImplInitTextColor()
 
     if ( mbInitTextColor )
     {
-        mpGraphics->SetTextColor( ImplColorToSal( GetTextColor() ) );
+        mpGraphics->SetTextColor( GetTextColor() );
         mbInitTextColor = false;
     }
 }
@@ -145,7 +145,7 @@ void OutputDevice::ImplDrawTextBackground( const SalLayout& rSalLayout )
         mpGraphics->SetLineColor();
         mbInitLineColor = true;
     }
-    mpGraphics->SetFillColor( ImplColorToSal( GetTextFillColor() ) );
+    mpGraphics->SetFillColor( GetTextFillColor() );
     mbInitFillColor = true;
 
     ImplDrawTextRect( nX, nY, 0, -(mpFontInstance->mxFontMetric->GetAscent() + mnEmphasisAscent),
