@@ -721,12 +721,8 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
         case SID_PRESENTATION_CURRENT_SLIDE:
         case SID_REHEARSE_TIMINGS:
         {
-            sfx2::SfxNotebookBar::LockNotebookBar();
-
             slideshowhelp::ShowSlideShow(rReq, *GetDoc());
             rReq.Ignore ();
-
-            sfx2::SfxNotebookBar::UnlockNotebookBar();
         }
         break;
 
@@ -1587,6 +1583,7 @@ namespace slideshowhelp
         Reference< XPresentation2 > xPresentation( rDoc.getPresentation() );
         if( xPresentation.is() )
         {
+            sfx2::SfxNotebookBar::LockNotebookBar();
             if (SID_REHEARSE_TIMINGS == rReq.GetSlot())
                 xPresentation->rehearseTimings();
             else if (rDoc.getPresentationSettings().mbCustomShow)
@@ -1616,6 +1613,7 @@ namespace slideshowhelp
 
                 xPresentation->startWithArguments( aArguments );
             }
+            sfx2::SfxNotebookBar::UnlockNotebookBar();
         }
     }
 }
