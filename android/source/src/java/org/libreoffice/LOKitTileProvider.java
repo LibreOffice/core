@@ -604,6 +604,27 @@ class LOKitTileProvider implements TileProvider {
     }
 
     /**
+     * @param mimeType
+     * @return
+     */
+    @Override
+    public String getTextSelection(String mimeType) {
+        return mDocument.getTextSelection(mimeType);
+    }
+
+    /**
+     * paste
+     * @param mimeType
+     * @param data
+     * @return
+     */
+    @Override
+    public boolean paste(String mimeType, String data) {
+        return mDocument.paste(mimeType, data);
+    }
+
+
+    /**
      * @see org.libreoffice.TileProvider#setGraphicSelectionStart(android.graphics.PointF)
      */
     @Override
