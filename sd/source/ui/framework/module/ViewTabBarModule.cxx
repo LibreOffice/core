@@ -172,14 +172,6 @@ void ViewTabBarModule::UpdateViewTabBar (const Reference<XTabBar>& rxTabBar)
             aNotesViewButton.ButtonLabel = SdResId(STR_NOTES_MODE);
             if ( ! xBar->hasTabBarButton(aNotesViewButton))
                 xBar->addTabBarButtonAfter(aNotesViewButton, aOutlineViewButton);
-
-            TabBarButton aHandoutViewButton;
-            aHandoutViewButton.ResourceId = FrameworkHelper::CreateResourceId(
-                FrameworkHelper::msHandoutViewURL,
-                xAnchor);
-            aHandoutViewButton.ButtonLabel = SdResId(STR_HANDOUT_MASTER_MODE);
-            if ( ! xBar->hasTabBarButton(aHandoutViewButton))
-                xBar->addTabBarButtonAfter(aHandoutViewButton, aNotesViewButton);
         }
     }
 }
