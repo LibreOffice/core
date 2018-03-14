@@ -179,6 +179,7 @@
                     <property name="can_focus">True</property>
                     <property name="no_show_all">True</property>
                     <property name="invisible_char">●</property>
+                    <property name="tooltip_text" translatable="yes" context="numberingformatpage|commented|tooltip_text">Comment</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
