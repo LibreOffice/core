@@ -486,7 +486,6 @@ void StatusBarManager::FillStatusBar( const uno::Reference< container::XIndexAcc
                 StatusbarMerger::ProcessMergeOperation( m_pStatusBar,
                                                         nRefPos,
                                                         nItemId,
-                                                        "",
                                                         rInstruction.aMergeCommand,
                                                         rInstruction.aMergeCommandParameter,
                                                         aItems );
@@ -495,7 +494,6 @@ void StatusBarManager::FillStatusBar( const uno::Reference< container::XIndexAcc
             {
                 StatusbarMerger::ProcessMergeFallback( m_pStatusBar,
                                                        nItemId,
-                                                       "",
                                                        rInstruction.aMergeCommand,
                                                        rInstruction.aMergeCommandParameter,
                                                        aItems );

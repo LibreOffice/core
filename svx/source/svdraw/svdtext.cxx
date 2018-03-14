@@ -28,8 +28,8 @@
 #include <libxml/xmlwriter.h>
 #include <memory>
 
-SdrText::SdrText( SdrTextObj& rObject, OutlinerParaObject* pOutlinerParaObject /* = 0 */ )
-: mpOutlinerParaObject( pOutlinerParaObject )
+SdrText::SdrText( SdrTextObj& rObject )
+: mpOutlinerParaObject( nullptr )
 , mrObject( rObject )
 , mpModel( rObject.GetModel() )
 , mbPortionInfoChecked( false )

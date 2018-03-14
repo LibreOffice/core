@@ -1588,14 +1588,14 @@ BackendImpl::PackageImpl::getPackagesFromDb(
 
 Reference<deployment::XPackageRegistry> create(
     Reference<deployment::XPackageRegistry> const & xRootRegistry,
-    OUString const & context, OUString const & cachePath, bool readOnly,
+    OUString const & context, OUString const & cachePath,
     Reference<XComponentContext> const & xComponentContext )
 {
     Sequence<Any> args(cachePath.isEmpty() ? 1 : 3 );
     args[ 0 ] <<= context;
     if (!cachePath.isEmpty()) {
         args[ 1 ] <<= cachePath;
-        args[ 2 ] <<= readOnly;
+        args[ 2 ] <<= false; // readOnly
     }
     return new BackendImpl( args, xComponentContext, xRootRegistry );
 }

@@ -149,7 +149,7 @@ bool GalleryExplorer::GetGraphicObj( const OUString& rThemeName, sal_uInt32 nPos
         if( pTheme )
         {
             if( pGraphic )
-                bRet = bRet || pTheme->GetGraphic( nPos, *pGraphic, /*bProgress*/false );
+                bRet = bRet || pTheme->GetGraphic( nPos, *pGraphic );
 
             pGal->ReleaseTheme( pTheme, aListener );
         }

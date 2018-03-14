@@ -3384,7 +3384,7 @@ bool INetURLObject::hasDosVolume(FSysStyle eStyle) const
 
 // static
 OUString INetURLObject::encodeText(sal_Unicode const * pBegin,
-                                    sal_Unicode const * pEnd, bool bOctets,
+                                    sal_Unicode const * pEnd,
                                     Part ePart, EncodeMechanism eMechanism,
                                     rtl_TextEncoding eCharset,
                                     bool bKeepVisibleEscapes)
@@ -3393,9 +3393,9 @@ OUString INetURLObject::encodeText(sal_Unicode const * pBegin,
     while (pBegin < pEnd)
     {
         EscapeType eEscapeType;
-        sal_uInt32 nUTF32 = getUTF32(pBegin, pEnd, bOctets,
+        sal_uInt32 nUTF32 = getUTF32(pBegin, pEnd, /*bOctets*/false,
                                      eMechanism, eCharset, eEscapeType);
-        appendUCS4(aResult, nUTF32, eEscapeType, bOctets, ePart,
+        appendUCS4(aResult, nUTF32, eEscapeType, /*bOctets*/false, ePart,
                    eCharset, bKeepVisibleEscapes);
     }
     return aResult.makeStringAndClear();
