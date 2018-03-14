@@ -3056,7 +3056,7 @@ static Writer& OutHTML_SwTextCharFormat( Writer& rWrt, const SfxPoolItem& rHt )
 
     if( rHTMLWrt.m_bTagOn )
     {
-        OString sOut = "<";
+        OString sOut = "<" + rHTMLWrt.GetNamespace();
         if( !pFormatInfo->aToken.isEmpty() )
             sOut += pFormatInfo->aToken;
         else
