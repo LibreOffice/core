@@ -773,6 +773,7 @@ OUString SvXMLGraphicHelper::implSaveGraphic(css::uno::Reference<css::graphic::X
                 {
                     pStream->WriteBytes(aGfxLink.GetData(), aGfxLink.GetDataSize());
                 }
+
                 rOutSavedMimeType = aMimeType;
                 bSuccess = (pStream->GetError() == ERRCODE_NONE);
             }

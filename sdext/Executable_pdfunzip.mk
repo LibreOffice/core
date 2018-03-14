@@ -28,6 +28,7 @@ $(eval $(call gb_Executable_use_libraries,pdfunzip,\
     cppuhelper \
     sal \
     vcl \
+    tl \
     xo \
 ))
 

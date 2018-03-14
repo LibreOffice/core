@@ -49,7 +49,16 @@ private:
     bool                         mbSwapOut;
     bool                         mbDummyContext;
     VectorGraphicDataPtr         maVectorGraphicData;
+
+    /// The PDF stream from which this Graphic is rendered,
+    /// as converted (version downgraded) from the original,
+    /// which should be in GfxLink.
     std::shared_ptr<css::uno::Sequence<sal_Int8>> mpPdfData;
+
+    /// Used with GfxLink and/or PdfData when they store original media
+    /// which might be multi-page (PDF, f.e.) and we need to re-render
+    /// this Graphic (a page) from the source in GfxLink or PdfData.
+    sal_Int32                    mnPageNumber;
     OUString msOriginURL;
 
 private:
