@@ -125,7 +125,7 @@ $(call gb_UIConfig_get_clean_target,%) :
 	$(call gb_Output_announce,$*,$(false),UIA,2)
 	rm -f $(call gb_UIConfig_get_a11yerrors_target,$*)
 
-gb_UIConfig_gla11y_PARAMETERS = -P $(SRCDIR)/
+gb_UIConfig_gla11y_PARAMETERS = -P $(SRCDIR)/ -f $(UI_A11YFALSE)
 
 # Disable this to see suppressed warnings
 ifeq (1,1)
@@ -226,6 +226,7 @@ $(call gb_UIConfig_get_target,$(1)) :| $(dir $(call gb_UIConfig_get_target,$(1))
 $(call gb_UIConfig_get_imagelist_target,$(1)) :| $(dir $(call gb_UIConfig_get_imagelist_target,$(1))).dir
 $(call gb_UIConfig_get_a11yerrors_target,$(1)) :| $(dir $(call gb_UIConfig_get_a11yerrors_target,$(1))).dir
 $(call gb_UIConfig_get_a11yerrors_target,$(1)) : UI_A11YSUPPRS := $(SRCDIR)/solenv/sanitizers/ui/$(1).suppr
+$(call gb_UIConfig_get_a11yerrors_target,$(1)) : UI_A11YFALSE := $(SRCDIR)/solenv/sanitizers/ui/$(1).false
 $(call gb_UIConfig_get_target,$(1)) : $(call gb_PackageSet_get_target,$(call gb_UIConfig_get_packagesetname,$(1)))
 $(call gb_UIConfig_get_clean_target,$(1)) : $(call gb_PackageSet_get_clean_target,$(call gb_UIConfig_get_packagesetname,$(1)))
 

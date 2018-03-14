@@ -248,6 +248,7 @@ widgets_labels = [
 progname = os.path.basename(sys.argv[0])
 
 suppressions = {}
+false_positives = {}
 ids = {}
 ids_dup = {}
 labelled_by_elm = {}
@@ -422,12 +423,12 @@ def elm_suppr(filename, tree, elm, msgtype, dogen):
     """
     global gen_suppr, gen_supprfile, suppr_prefix, pflag
 
-    if suppressions or gen_suppr is not None or pflag:
+    if suppressions or false_positives or gen_suppr is not None or pflag:
         prefix = errpath(filename, tree, elm)
         if prefix[0:len(suppr_prefix)] == suppr_prefix:
             prefix = prefix[len(suppr_prefix):]
 
-    if suppressions or gen_suppr is not None:
+    if suppressions or false_positives or gen_suppr is not None:
         suppr = '%s %s' % (prefix, msgtype)
 
         if gen_suppr is not None and msgtype is not None and dogen:
@@ -476,6 +477,9 @@ def err(filename, tree, elm, msgtype, msg, error = True):
         return
 
     (prefix, suppr) = elm_suppr(filename, tree, elm, msgtype, True)
+    if suppr in false_positives:
+        # That was actually expected
+        return
     if suppr in suppressions:
         # Suppressed
         suppressions[suppr] = False
@@ -668,6 +672,9 @@ def is_orphan_label(filename, tree, root, obj, orphan_root, doprint = False):
 
     # No label-for, no mnemonic-for, no labelled-by, we are orphan.
     (_, suppr) = elm_suppr(filename, tree, obj, "orphan-label", False)
+    if suppr in false_positives:
+        # That was actually expected
+        return False
     if suppr in suppressions:
         # Warning suppressed for this label
         if suppressions[suppr]:
@@ -774,6 +781,9 @@ def is_orphan_widget(filename, tree, root, obj, orphan, orphan_root, doprint = F
             # Warnings disabled
             return False
         (_, suppr) = elm_suppr(filename, tree, obj, "button-no-label", False)
+        if suppr in false_positives:
+            # That was actually expected
+            return False
         if suppr in suppressions:
             # Warning suppressed for this widget
             if suppressions[suppr]:
@@ -818,6 +828,9 @@ def is_orphan_widget(filename, tree, root, obj, orphan, orphan_root, doprint = F
         # Warnings disabled for this class of widgets
         return False
     (_, suppr) = elm_suppr(filename, tree, obj, "no-labelled-by", False)
+    if suppr in false_positives:
+        # That was actually expected
+        return False
     if suppr in suppressions:
         # Warning suppressed for this widget
         if suppressions[suppr]:
@@ -1041,12 +1054,13 @@ def check_a11y_relation(filename, tree):
 #
 
 def usage():
-    print("%s [-p] [-g SUPPR_FILE] [-s SUPPR_FILE] [-i WIDGET1,WIDGET2[,...]] [-o LOG_FILE] [file ...]" % progname,
+    print("%s [-p] [-g SUPPR_FILE] [-s SUPPR_FILE] [-f SUPPR_FILE] [-i WIDGET1,WIDGET2[,...]] [-o LOG_FILE] [file ...]" % progname,
           file=sys.stderr)
     print("")
     print("  -p Print XML class path instead of line number")
     print("  -g Generate suppression file SUPPR_FILE")
     print("  -s Suppress warnings given by file SUPPR_FILE")
+    print("  -f Suppress warnings given by file SUPPR_FILE completely")
     print("  -i Ignore warnings for widgets of a given class")
     print("  -o Also prints errors and warnings to given file")
     print("")
@@ -1109,12 +1123,12 @@ def widgets_opt(widgets_list, arg):
 
 
 def main():
-    global pflag, gen_suppr, gen_supprfile, suppressions, suppr_prefix, dofatals, enables, dofatals, warn_orphan_labels
+    global pflag, gen_suppr, gen_supprfile, suppressions, suppr_prefix, false_positives, dofatals, enables, dofatals, warn_orphan_labels
     global widgets_toplevel, widgets_ignored, widgets_suffixignored, widgets_needlabel, widgets_buttons, widgets_labels
     global outfile
 
     try:
-        opts, args = getopt.getopt(sys.argv[1:], "piIg:s:P:o:L:", [
+        opts, args = getopt.getopt(sys.argv[1:], "piIg:s:f:P:o:L:", [
                 "widgets-toplevel=",
                 "widgets-ignored=",
                 "widgets-suffixignored=",
@@ -1149,6 +1163,7 @@ def main():
         usage()
 
     suppr = None
+    false = None
     out = None
     filelist = None
 
@@ -1159,6 +1174,8 @@ def main():
             gen_suppr = a
         elif o == "-s":
             suppr = a
+        elif o == "-f":
+            false = a
         elif o == "-P":
             suppr_prefix = a
         elif o == "-o":
@@ -1238,6 +1255,17 @@ def main():
                 prefix = line.rstrip()
                 suppressions[prefix] = True
             supprfile.close()
+        except IOError:
+            pass
+
+    # Read false positives file
+    if false is not None:
+        try:
+            falsefile = open(false, 'r')
+            for line in falsefile.readlines():
+                prefix = line.rstrip()
+                false_positives[prefix] = True
+            falsefile.close()
         except IOError:
             pass
 
