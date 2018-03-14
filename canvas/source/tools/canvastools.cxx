@@ -888,16 +888,6 @@ namespace canvas
             return aLayout;
         }
 
-        ::Color stdIntSequenceToColor( const uno::Sequence<sal_Int8>& rColor )
-        {
-#ifdef OSL_BIGENDIAN
-            const sal_Int8* pCols( rColor.getConstArray() );
-            return ::Color( pCols[3], pCols[0], pCols[1], pCols[2] );
-#else
-            return ::Color( *reinterpret_cast< const ::sal_uInt32* >(rColor.getConstArray()) );
-#endif
-        }
-
         uno::Sequence<sal_Int8> colorToStdIntSequence( const ::Color& rColor )
         {
             uno::Sequence<sal_Int8> aRet(4);

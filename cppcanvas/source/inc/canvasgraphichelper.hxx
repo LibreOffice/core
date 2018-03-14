@@ -56,7 +56,6 @@ namespace cppcanvas
             // for our clients
             // ===============
             const CanvasSharedPtr&                                               getCanvas() const {  return mpCanvas; }
-            const css::uno::Reference< css::rendering::XGraphicDevice >&         getGraphicDevice() const {  return mxGraphicDevice; }
             const css::rendering::RenderState&                                   getRenderState() const;
 
         private:
