@@ -22,6 +22,24 @@
       "revId": "489c7088b4a99720d1a2839ed52b3becd7aac342",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba2be162_843f8924",
+        "filename": "vcl/source/outdev/text.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1199,
+      "author": {
+        "id": 1000381
+      },
+      "writtenOn": "2018-03-14T20:15:59Z",
+      "side": 1,
+      "message": "This still means that an unencoded character that is not listed in that file can still get a non-L value, though in this specific case it is still unlikely to encode an RTL character in the Greek range.",
+      "parentUuid": "ba2be162_44267169",
+      "revId": "489c7088b4a99720d1a2839ed52b3becd7aac342",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
