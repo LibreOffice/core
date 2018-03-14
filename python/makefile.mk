@@ -54,15 +54,15 @@ PATCH_FILES=\
 
 .IF "$(GUI)"=="WNT"
 .IF "$(CPUNAME)"=="INTEL"
-PATCH_FILES += python-$(PYVERSION)-pcbuild.patch
+PATCH_FILES += python-$(PYVERSION)-msvs9.patch
 .ELIF "$(CPUNAME)"=="X86_64"
 PATCH_FILES += \
-    python-$(PYVERSION)-pcbuild-win64.patch \
-    python-$(PYVERSION)-pcbuild-win64-target.patch \
-    python-$(PYVERSION)-pcbuild-subsystem.patch \
-    python-2.7.14-pcbuild-dir.patch \
-    python-2.7.14-pcbuild-no-host-python.patch \
-    python-2.7.14-pcbuild-python-path.patch
+    python-$(PYVERSION)-msvs9-win64.patch \
+    python-$(PYVERSION)-msvs9-win64-target.patch \
+    python-$(PYVERSION)-msvs9-subsystem.patch \
+    python-$(PYVERSION)-msvs9-dir.patch \
+    python-$(PYVERSION)-msvs9-no-host-python.patch \
+    python-$(PYVERSION)-msvs9-python-path.patch
 .ENDIF
 .ENDIF
 
