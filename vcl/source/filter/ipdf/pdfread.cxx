@@ -19,6 +19,7 @@
 
 #include <vcl/bitmapaccess.hxx>
 #include <vcl/graph.hxx>
+#include <unotools/ucbstreamhelper.hxx>
 
 using namespace com::sun::star;
 
@@ -245,6 +246,27 @@ bool ImportPDF(SvStream& rStream, Graphic& rGraphic)
     rGraphic = aBitmap;
     rGraphic.setPdfData(aPdfData);
     return bRet;
+}
+
+size_t ImportPDF(const OUString& rURL, std::vector<Bitmap>& rBitmaps,
+                 css::uno::Sequence<sal_Int8>& rPdfData)
+{
+    std::unique_ptr<SvStream> xStream(::utl::UcbStreamHelper::CreateStream(rURL, StreamMode::READ | StreamMode::SHARE_DENYNONE));
+
+    if (generatePreview(*xStream, rBitmaps, STREAM_SEEK_TO_BEGIN, STREAM_SEEK_TO_END, 0, -1) == 0)
+        return 0;
+
+    // Save the original PDF stream for later use.
+    SvMemoryStream aMemoryStream;
+    if (!getCompatibleStream(*xStream, aMemoryStream, STREAM_SEEK_TO_BEGIN, STREAM_SEEK_TO_END))
+        return 0;
+
+    aMemoryStream.Seek(STREAM_SEEK_TO_END);
+    rPdfData = css::uno::Sequence<sal_Int8>(aMemoryStream.Tell());
+    aMemoryStream.Seek(STREAM_SEEK_TO_BEGIN);
+    aMemoryStream.ReadBytes(rPdfData.getArray(), rPdfData.getLength());
+
+    return rBitmaps.size();
 }
 
 }
