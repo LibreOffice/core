@@ -370,6 +370,23 @@ extern "C" SAL_JNI_EXPORT jstring JNICALL Java_org_libreoffice_kit_Document_getT
     return pEnv->NewStringUTF(pSelection);
 }
 
+extern "C" SAL_JNI_EXPORT jboolean JNICALL Java_org_libreoffice_kit_Document_paste
+    (JNIEnv* pEnv, jobject aObject, jstring mimeType, jstring data)
+{
+    LibreOfficeKitDocument* pDocument = getHandle<LibreOfficeKitDocument>(pEnv, aObject);
+
+    const char* pMimeType = pEnv->GetStringUTFChars(mimeType, NULL);
+    const char* pData = pEnv->GetStringUTFChars(data, NULL);
+    const size_t nSize = pEnv->GetStringLength(data);
+
+    LibreOfficeKitDocumentClass* pcls = pDocument->pClass;
+    bool result = pcls->paste(pDocument, pMimeType, pData, nSize);
+    pEnv->ReleaseStringUTFChars(mimeType, pMimeType);
+    pEnv->ReleaseStringUTFChars(data, pData);
+
+    return result;
+}
+
 extern "C" SAL_JNI_EXPORT void JNICALL Java_org_libreoffice_kit_Document_setGraphicSelection
     (JNIEnv* pEnv, jobject aObject, jint type, jint x, jint y)
 {
