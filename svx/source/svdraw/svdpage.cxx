@@ -1212,7 +1212,8 @@ SdrPage::~SdrPage()
 void SdrPage::lateInit(const SdrPage& rSrcPage)
 {
     assert(!mpViewContact);
-    assert(!mpSdrPageProperties);
+    // TTTT SdrPageProperties get set by SdrPage::SdrPage already
+    // assert(!mpSdrPageProperties);
     assert(!mxUnoPage.is());
 
     // copy all the local parameters to make this instance

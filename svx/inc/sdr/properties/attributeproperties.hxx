@@ -31,6 +31,9 @@ namespace sdr
     {
         class AttributeProperties : public DefaultProperties, public SfxListener, public svl::StyleSheetUser
         {
+            // core to set parent at SfxItemSet and to execute the hard attribute computations
+            void ImpSetParentAtSfxItemSet(bool bDontRemoveHardAttr);
+
             // add style sheet, do all the necessary handling
             void ImpAddStyleSheet(SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHardAttr);
 
@@ -60,6 +63,10 @@ namespace sdr
             // Clone() operator, normally just calls the local copy constructor
             virtual BaseProperties& Clone(SdrObject& rObj) const override;
 
+            // Get the local ItemSet. This directly returns the local ItemSet of the object. No
+            // merging of ItemSets is done for e.g. Group objects.
+            virtual const SfxItemSet& GetObjectItemSet() const override;
+
             // destructor
             virtual ~AttributeProperties() override;
 
@@ -72,8 +79,8 @@ namespace sdr
             // Move properties to a new ItemPool.
             // TTTT virtual void MoveToItemPool(SfxItemPool* pSrcPool, SfxItemPool* pDestPool, SdrModel* pNewModel) override;
 
-            // Set new model.
-            virtual void SetModel(SdrModel* pOldModel, SdrModel* pNewModel) override;
+            // Initialize for new SdrModel
+            // virtual void SetModel(SdrModel& rNewModel) override;
 
             // force all attributes which come from styles to hard attributes
             // to be able to live without the style.

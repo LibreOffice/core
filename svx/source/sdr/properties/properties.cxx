@@ -93,11 +93,12 @@ namespace sdr
         //     // Override where an ItemSet is implemented.
         // }
 
-        void BaseProperties::SetModel(SdrModel* /*pOldModel*/, SdrModel* /*pNewModel*/)
-        {
-            // Set new model. Default implementation does nothing.
-            // Override where an ItemSet is implemented.
-        }
+        // TTTT
+        // void BaseProperties::SetModel(SdrModel& /*rNewModel*/)
+        // {
+        //     // Set new model. Default implementation does nothing.
+        //     // Override where an ItemSet is implemented.
+        // }
 
         void BaseProperties::ForceStyleToHardAttributes()
         {

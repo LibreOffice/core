@@ -70,6 +70,11 @@ SdrObjGroup::SdrObjGroup(SdrModel& rSdrModel)
     maSdrObjList.SetOwnerObj(this);
     maSdrObjList.SetListKind(SdrObjListKind::GroupObj);
     bClosedObj=false;
+
+    // TTTT stuff from SetModel:
+    // Needed - creates the properties and sets a StyleSheet (!)
+    // TTTT NOT in constructor - will lead to wrong class casts (!)
+    // GetProperties().SetModel(rSdrModel);
 }
 
 SdrObjGroup::~SdrObjGroup()
