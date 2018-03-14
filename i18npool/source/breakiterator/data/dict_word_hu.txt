@@ -24,6 +24,14 @@ $Katakana  = [[:Script = KATAKANA:] [:name = KATAKANA-HIRAGANA PROLONGED SOUND M
 $Ideographic = [:Ideographic:];
 $Hangul = [:Script = HANGUL:];
 
+
+# Fix spelling of a)-ban, b)-ben, when the letter is a reference
+# resulting bad word breaking "ban" and "ben"
+# (reference fields are not expanded in spell checking, yet, only
+# for grammar checking).
+
+$PrefixLetter = [[:name = RIGHT PARENTHESIS:]];
+
 $ALetter   = [[:Alphabetic:] [:name= COMMERCIAL AT:] [:name= HEBREW PUNCTUATION GERESH:]
                 [:name = PERCENT SIGN:] [:name = PER MILLE SIGN:] [:name = PER TEN THOUSAND SIGN:]
                 [:name = SECTION SIGN:] [:name = DEGREE SIGN:] [:name = EURO SIGN:]
@@ -123,7 +131,7 @@ $NumberSequence {100};
 #     - may include both letters and numbers.
 #     - may include  MideLetter, MidNumber punctuation.
 #
-$LetterSequence = $ALetterEx ($FormatEx* $MidLetterEx? $FormatEx* $ALetterEx)*;     # rules #6, #7
+$LetterSequence = $PrefixLetter? $ALetterEx ($FormatEx* $MidLetterEx? $FormatEx* $ALetterEx)*;     # rules #6, #7
 ($NumberSequence $FormatEx*)? $LetterSequence ($FormatEx* ($NumberSequence | $LetterSequence))* $SufixLetterEx? {200};
 
 [[:P:][:S:]]*;
