@@ -127,13 +127,13 @@ inline void XRenderPeer::CompositeTrapezoids( int nOp,
         nXSrc, nYSrc, pXT, nCount );
 }
 
-inline XRenderColor GetXRenderColor( SalColor rSalColor, double fTransparency )
+inline XRenderColor GetXRenderColor( Color rColor, double fTransparency )
 {
     XRenderColor aRetVal;
-    // convert the SalColor
-    aRetVal.red   = SALCOLOR_RED(   rSalColor ); aRetVal.red   |= (aRetVal.red   << 8);
-    aRetVal.green = SALCOLOR_GREEN( rSalColor ); aRetVal.green |= (aRetVal.green << 8);
-    aRetVal.blue  = SALCOLOR_BLUE(  rSalColor ); aRetVal.blue  |= (aRetVal.blue  << 8);
+    // convert the Color
+    aRetVal.red   = rColor.GetRed(); aRetVal.red   |= (aRetVal.red   << 8);
+    aRetVal.green = rColor.GetGreen(); aRetVal.green |= (aRetVal.green << 8);
+    aRetVal.blue  = rColor.GetBlue(); aRetVal.blue  |= (aRetVal.blue  << 8);
 
     // handle transparency
     aRetVal.alpha = 0xFFFF; // default to opaque

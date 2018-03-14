@@ -327,11 +327,11 @@ void GenPspGraphics::SetLineColor()
     m_pPrinterGfx->SetLineColor ();
 }
 
-void GenPspGraphics::SetLineColor( SalColor nSalColor )
+void GenPspGraphics::SetLineColor( Color nColor )
 {
-    psp::PrinterColor aColor (SALCOLOR_RED   (nSalColor),
-                              SALCOLOR_GREEN (nSalColor),
-                              SALCOLOR_BLUE  (nSalColor));
+    psp::PrinterColor aColor (nColor.GetRed(),
+                              nColor.GetGreen(),
+                              nColor.GetBlue());
     m_pPrinterGfx->SetLineColor (aColor);
 }
 
@@ -340,11 +340,11 @@ void GenPspGraphics::SetFillColor()
     m_pPrinterGfx->SetFillColor ();
 }
 
-void GenPspGraphics::SetFillColor( SalColor nSalColor )
+void GenPspGraphics::SetFillColor( Color nColor )
 {
-    psp::PrinterColor aColor (SALCOLOR_RED   (nSalColor),
-                              SALCOLOR_GREEN (nSalColor),
-                              SALCOLOR_BLUE  (nSalColor));
+    psp::PrinterColor aColor (nColor.GetRed(),
+                              nColor.GetGreen(),
+                              nColor.GetBlue());
     m_pPrinterGfx->SetFillColor (aColor);
 }
 
@@ -368,11 +368,11 @@ void GenPspGraphics::drawPixel( long nX, long nY )
     m_pPrinterGfx->DrawPixel (Point(nX, nY));
 }
 
-void GenPspGraphics::drawPixel( long nX, long nY, SalColor nSalColor )
+void GenPspGraphics::drawPixel( long nX, long nY, Color nColor )
 {
-    psp::PrinterColor aColor (SALCOLOR_RED   (nSalColor),
-                              SALCOLOR_GREEN (nSalColor),
-                              SALCOLOR_BLUE  (nSalColor));
+    psp::PrinterColor aColor (nColor.GetRed(),
+                              nColor.GetGreen(),
+                              nColor.GetBlue());
     m_pPrinterGfx->DrawPixel (Point(nX, nY), aColor);
 }
 
@@ -491,7 +491,7 @@ void GenPspGraphics::drawBitmap( const SalTwoRect&,
 
 void GenPspGraphics::drawMask( const SalTwoRect&,
                             const SalBitmap &,
-                            SalColor )
+                            Color )
 {
     OSL_FAIL("Error: PrinterGfx::DrawMask() not implemented");
 }
@@ -502,7 +502,7 @@ SalBitmap* GenPspGraphics::getBitmap( long, long, long, long )
     return nullptr;
 }
 
-SalColor GenPspGraphics::getPixel( long, long )
+Color GenPspGraphics::getPixel( long, long )
 {
     OSL_FAIL("Warning: PrinterGfx::GetPixel() not implemented");
     return 0;
@@ -653,11 +653,11 @@ void GenPspGraphics::SetFont( const FontSelectPattern *pEntry, int nFallbackLeve
                             );
 }
 
-void GenPspGraphics::SetTextColor( SalColor nSalColor )
+void GenPspGraphics::SetTextColor( Color nColor )
 {
-    psp::PrinterColor aColor (SALCOLOR_RED   (nSalColor),
-                              SALCOLOR_GREEN (nSalColor),
-                              SALCOLOR_BLUE  (nSalColor));
+    psp::PrinterColor aColor (nColor.GetRed(),
+                              nColor.GetGreen(),
+                              nColor.GetBlue());
     m_pPrinterGfx->SetTextColor (aColor);
 }
 

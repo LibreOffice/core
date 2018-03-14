@@ -30,7 +30,7 @@
 #include <QtGui/QRawFont>
 #include <QtCore/QStringList>
 
-void Qt5Graphics::SetTextColor(SalColor nSalColor) { m_aTextColor = nSalColor; }
+void Qt5Graphics::SetTextColor(Color nColor) { m_aTextColor = nColor; }
 
 void Qt5Graphics::SetFont(const FontSelectPattern* pReqFont, int nFallbackLevel)
 {

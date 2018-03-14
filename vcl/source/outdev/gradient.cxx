@@ -332,7 +332,7 @@ void OutputDevice::DrawLinearGradient( const tools::Rectangle& rRect,
         nGreen      = static_cast<sal_uInt8>(nStartGreen);
         nBlue       = static_cast<sal_uInt8>(nStartBlue);
 
-        mpGraphics->SetFillColor( MAKE_SALCOLOR( nRed, nGreen, nBlue ) );
+        mpGraphics->SetFillColor( Color( nRed, nGreen, nBlue ) );
 
         aBorderRect.SetBottom( static_cast<long>( aBorderRect.Top() + fBorder ) );
         aRect.SetTop( aBorderRect.Bottom() );
@@ -394,7 +394,7 @@ void OutputDevice::DrawLinearGradient( const tools::Rectangle& rRect,
         fTempColor = static_cast<double>(nStartBlue) * (1.0-fAlpha) + static_cast<double>(nEndBlue) * fAlpha;
         nBlue = GetGradientColorValue(static_cast<long>(fTempColor));
 
-        mpGraphics->SetFillColor( MAKE_SALCOLOR( nRed, nGreen, nBlue ) );
+        mpGraphics->SetFillColor( Color( nRed, nGreen, nBlue ) );
 
         // Polygon for this color step
         aRect.SetTop( static_cast<long>( fGradientLine + static_cast<double>(i) * fScanInc ) );
@@ -428,7 +428,7 @@ void OutputDevice::DrawLinearGradient( const tools::Rectangle& rRect,
     nGreen = GetGradientColorValue(nEndGreen);
     nBlue = GetGradientColorValue(nEndBlue);
 
-    mpGraphics->SetFillColor( MAKE_SALCOLOR( nRed, nGreen, nBlue ) );
+    mpGraphics->SetFillColor( Color( nRed, nGreen, nBlue ) );
 
     aRect.SetTop( static_cast<long>( fGradientLine + static_cast<double>(nSteps) * fScanInc ) );
     aRect.SetBottom( static_cast<long>( fMirrorGradientLine - static_cast<double>(nSteps) * fScanInc ) );
@@ -517,7 +517,7 @@ void OutputDevice::DrawComplexGradient( const tools::Rectangle& rRect,
     sal_uInt8   nRed = static_cast<sal_uInt8>(nStartRed), nGreen = static_cast<sal_uInt8>(nStartGreen), nBlue = static_cast<sal_uInt8>(nStartBlue);
     bool    bPaintLastPolygon( false ); // #107349# Paint last polygon only if loop has generated any output
 
-    mpGraphics->SetFillColor( MAKE_SALCOLOR( nRed, nGreen, nBlue ) );
+    mpGraphics->SetFillColor( Color( nRed, nGreen, nBlue ) );
 
     if( xPolyPoly )
     {
@@ -579,12 +579,12 @@ void OutputDevice::DrawComplexGradient( const tools::Rectangle& rRect,
             // full aPoly. Thus, here, we're painting the band before
             // the one painted in the window outdev path below. To get
             // matching colors, have to delay color setting here.
-            mpGraphics->SetFillColor( MAKE_SALCOLOR( nRed, nGreen, nBlue ) );
+            mpGraphics->SetFillColor( Color( nRed, nGreen, nBlue ) );
         }
         else
         {
             // #107349# Set fill color _before_ geometry painting
-            mpGraphics->SetFillColor( MAKE_SALCOLOR( nRed, nGreen, nBlue ) );
+            mpGraphics->SetFillColor( Color( nRed, nGreen, nBlue ) );
 
             ImplDrawPolygon( aPoly, pClixPolyPoly );
         }
@@ -607,7 +607,7 @@ void OutputDevice::DrawComplexGradient( const tools::Rectangle& rRect,
                 nBlue = GetGradientColorValue( nEndBlue );
             }
 
-            mpGraphics->SetFillColor( MAKE_SALCOLOR( nRed, nGreen, nBlue ) );
+            mpGraphics->SetFillColor( Color( nRed, nGreen, nBlue ) );
             ImplDrawPolygon( rPoly, pClixPolyPoly );
         }
     }

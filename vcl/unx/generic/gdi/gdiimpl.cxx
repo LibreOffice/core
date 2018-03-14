@@ -110,10 +110,10 @@ namespace
             if (rPalette.GetEntryCount() == 2)
             {
                 const BitmapColor aWhite(rPalette[rPalette.GetBestIndex(COL_WHITE)]);
-                rValues.foreground = rColMap.GetPixel(ImplColorToSal(aWhite.GetColor()));
+                rValues.foreground = rColMap.GetPixel(aWhite.GetColor());
 
                 const BitmapColor aBlack(rPalette[rPalette.GetBestIndex(COL_BLACK)]);
-                rValues.background = rColMap.GetPixel(ImplColorToSal(aBlack.GetColor()));
+                rValues.background = rColMap.GetPixel(aBlack.GetColor());
             }
             rBitmap.ReleaseBuffer(pBitmapBuffer, BitmapAccessMode::Read);
         }
@@ -122,7 +122,7 @@ namespace
 
 X11SalGraphicsImpl::X11SalGraphicsImpl(X11SalGraphics& rParent):
     mrParent(rParent),
-    mnBrushColor( MAKE_SALCOLOR( 0xFF, 0xFF, 0XFF ) ),
+    mnBrushColor( 0xFF, 0xFF, 0XFF ),
     mpBrushGC(nullptr),
     mnBrushPixel(0),
     mbPenGC(false),
@@ -135,7 +135,7 @@ X11SalGraphicsImpl::X11SalGraphicsImpl(X11SalGraphics& rParent):
     mbDitherBrush(false),
     mbXORMode(false),
     mpPenGC(nullptr),
-    mnPenColor( MAKE_SALCOLOR( 0x00, 0x00, 0x00 ) ),
+    mnPenColor( 0x00, 0x00, 0x00 ),
     mnPenPixel(0),
     mpMonoGC(nullptr),
     mpCopyGC(nullptr),
@@ -942,7 +942,7 @@ bool X11SalGraphicsImpl::drawAlphaRect( long nX, long nY, long nWidth,
 
 void X11SalGraphicsImpl::drawMask( const SalTwoRect& rPosAry,
                                const SalBitmap &rSalBitmap,
-                               SalColor nMaskColor )
+                               Color nMaskColor )
 {
     const SalDisplay*   pSalDisp = mrParent.GetDisplay();
     Display*            pXDisp = pSalDisp->GetDisplay();
@@ -1076,12 +1076,12 @@ void X11SalGraphicsImpl::SetLineColor()
     }
 }
 
-void X11SalGraphicsImpl::SetLineColor( SalColor nSalColor )
+void X11SalGraphicsImpl::SetLineColor( Color nColor )
 {
-    if( mnPenColor != nSalColor )
+    if( mnPenColor != nColor )
     {
-        mnPenColor      = nSalColor;
-        mnPenPixel      = mrParent.GetPixel( nSalColor );
+        mnPenColor      = nColor;
+        mnPenPixel      = mrParent.GetPixel( nColor );
         mbPenGC         = false;
     }
 }
@@ -1096,32 +1096,32 @@ void X11SalGraphicsImpl::SetFillColor()
     }
 }
 
-void X11SalGraphicsImpl::SetFillColor( SalColor nSalColor )
+void X11SalGraphicsImpl::SetFillColor( Color nColor )
 {
-    if( mnBrushColor != nSalColor )
+    if( mnBrushColor != nColor )
     {
         mbDitherBrush   = false;
-        mnBrushColor    = nSalColor;
-        mnBrushPixel    = mrParent.GetPixel( nSalColor );
+        mnBrushColor    = nColor;
+        mnBrushPixel    = mrParent.GetPixel( nColor );
         if( TrueColor != mrParent.GetColormap().GetVisual().GetClass()
             && mrParent.GetColormap().GetColor( mnBrushPixel ) != mnBrushColor
-            && nSalColor != MAKE_SALCOLOR( 0x00, 0x00, 0x00 ) // black
-            && nSalColor != MAKE_SALCOLOR( 0x00, 0x00, 0x80 ) // blue
-            && nSalColor != MAKE_SALCOLOR( 0x00, 0x80, 0x00 ) // green
-            && nSalColor != MAKE_SALCOLOR( 0x00, 0x80, 0x80 ) // cyan
-            && nSalColor != MAKE_SALCOLOR( 0x80, 0x00, 0x00 ) // red
-            && nSalColor != MAKE_SALCOLOR( 0x80, 0x00, 0x80 ) // magenta
-            && nSalColor != MAKE_SALCOLOR( 0x80, 0x80, 0x00 ) // brown
-            && nSalColor != MAKE_SALCOLOR( 0x80, 0x80, 0x80 ) // gray
-            && nSalColor != MAKE_SALCOLOR( 0xC0, 0xC0, 0xC0 ) // light gray
-            && nSalColor != MAKE_SALCOLOR( 0x00, 0x00, 0xFF ) // light blue
-            && nSalColor != MAKE_SALCOLOR( 0x00, 0xFF, 0x00 ) // light green
-            && nSalColor != MAKE_SALCOLOR( 0x00, 0xFF, 0xFF ) // light cyan
-            && nSalColor != MAKE_SALCOLOR( 0xFF, 0x00, 0x00 ) // light red
-            && nSalColor != MAKE_SALCOLOR( 0xFF, 0x00, 0xFF ) // light magenta
-            && nSalColor != MAKE_SALCOLOR( 0xFF, 0xFF, 0x00 ) // light brown
-            && nSalColor != MAKE_SALCOLOR( 0xFF, 0xFF, 0xFF ) )
-            mbDitherBrush = mrParent.GetDitherPixmap(nSalColor);
+            && nColor != Color( 0x00, 0x00, 0x00 ) // black
+            && nColor != Color( 0x00, 0x00, 0x80 ) // blue
+            && nColor != Color( 0x00, 0x80, 0x00 ) // green
+            && nColor != Color( 0x00, 0x80, 0x80 ) // cyan
+            && nColor != Color( 0x80, 0x00, 0x00 ) // red
+            && nColor != Color( 0x80, 0x00, 0x80 ) // magenta
+            && nColor != Color( 0x80, 0x80, 0x00 ) // brown
+            && nColor != Color( 0x80, 0x80, 0x80 ) // gray
+            && nColor != Color( 0xC0, 0xC0, 0xC0 ) // light gray
+            && nColor != Color( 0x00, 0x00, 0xFF ) // light blue
+            && nColor != Color( 0x00, 0xFF, 0x00 ) // light green
+            && nColor != Color( 0x00, 0xFF, 0xFF ) // light cyan
+            && nColor != Color( 0xFF, 0x00, 0x00 ) // light red
+            && nColor != Color( 0xFF, 0x00, 0xFF ) // light magenta
+            && nColor != Color( 0xFF, 0xFF, 0x00 ) // light brown
+            && nColor != Color( 0xFF, 0xFF, 0xFF ) )
+            mbDitherBrush = mrParent.GetDitherPixmap(nColor);
         mbBrushGC       = false;
     }
 }
@@ -1185,15 +1185,15 @@ void X11SalGraphicsImpl::drawPixel( long nX, long nY )
         XDrawPoint( mrParent.GetXDisplay(), mrParent.GetDrawable(), SelectPen(), nX, nY );
 }
 
-void X11SalGraphicsImpl::drawPixel( long nX, long nY, SalColor nSalColor )
+void X11SalGraphicsImpl::drawPixel( long nX, long nY, Color nColor )
 {
-    if( nSalColor != SALCOLOR_NONE )
+    if( nColor != SALCOLOR_NONE )
     {
         Display *pDisplay = mrParent.GetXDisplay();
 
         if( (mnPenColor == SALCOLOR_NONE) && !mbPenGC )
         {
-            SetLineColor( nSalColor );
+            SetLineColor( nColor );
             XDrawPoint( pDisplay, mrParent.GetDrawable(), SelectPen(), nX, nY );
             mnPenColor = SALCOLOR_NONE;
             mbPenGC = False;
@@ -1202,12 +1202,12 @@ void X11SalGraphicsImpl::drawPixel( long nX, long nY, SalColor nSalColor )
         {
             GC pGC = SelectPen();
 
-            if( nSalColor != mnPenColor )
-                XSetForeground( pDisplay, pGC, mrParent.GetPixel( nSalColor ) );
+            if( nColor != mnPenColor )
+                XSetForeground( pDisplay, pGC, mrParent.GetPixel( nColor ) );
 
             XDrawPoint( pDisplay, mrParent.GetDrawable(), pGC, nX, nY );
 
-            if( nSalColor != mnPenColor )
+            if( nColor != mnPenColor )
                 XSetForeground( pDisplay, pGC, mnPenPixel );
         }
     }
@@ -1586,7 +1586,7 @@ bool X11SalGraphicsImpl::drawPolyLine(
 
     // temporarily adjust brush color to pen color
     // since the line is drawn as an area-polygon
-    const SalColor aKeepBrushColor = mnBrushColor;
+    const Color aKeepBrushColor = mnBrushColor;
     mnBrushColor = mnPenColor;
 
     // #i11575#desc5#b adjust B2D tessellation result to raster positions
@@ -1650,7 +1650,7 @@ bool X11SalGraphicsImpl::drawPolyLine(
     return bDrawnOk;
 }
 
-SalColor X11SalGraphicsImpl::getPixel( long nX, long nY )
+Color X11SalGraphicsImpl::getPixel( long nX, long nY )
 {
     if( mrParent.bWindow_ && !mrParent.bVirDev_ )
     {
