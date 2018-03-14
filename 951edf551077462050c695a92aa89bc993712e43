@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba2be162_24633db3",
+        "filename": "sd/qa/unit/export-tests.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 484,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-03-14T16:19:29Z",
+      "side": 1,
+      "message": "Test building on 5-4-6 I got\n\nsd/qa/unit/export-tests.cxx:484:5: error: ‘assertXPathNSDef’ was not declared in this scope",
+      "range": {
+        "startLine": 484,
+        "startChar": 4,
+        "endLine": 484,
+        "endChar": 20
+      },
+      "revId": "951edf551077462050c695a92aa89bc993712e43",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
