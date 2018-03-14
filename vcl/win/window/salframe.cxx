@@ -920,17 +920,12 @@ bool WinSalFrame::ReleaseFrameGraphicsDC( WinSalGraphics* pGraphics )
     // we don't want to run the WinProc in the main thread directly
     // so we don't hit the mbNoYieldLock assert
     if ( !pSalData->mpInstance->IsMainThread() )
-    {
-        assert( pGraphics == mpThreadGraphics );
         SendMessageW( pSalData->mpInstance->mhComWnd, SAL_MSG_RELEASEDC,
             reinterpret_cast<WPARAM>(mhWnd), reinterpret_cast<LPARAM>(hDC) );
-        pSalData->mnCacheDCInUse--;
-    }
     else
-    {
-        assert( pGraphics == mpLocalGraphics );
         ReleaseDC( mhWnd, hDC );
-    }
+    if ( pGraphics == mpThreadGraphics )
+        pSalData->mnCacheDCInUse--;
     pGraphics->setHDC(nullptr);
     return TRUE;
 }
@@ -994,10 +989,6 @@ bool WinSalFrame::InitFrameGraphicsDC( WinSalGraphics *pGraphics, HDC hDC, HWND 
 {
     SalData* pSalData = GetSalData();
     assert( pGraphics );
-    if ( !pSalData->mpInstance->IsMainThread() )
-        assert( pGraphics == mpThreadGraphics );
-    else
-        assert( pGraphics == mpLocalGraphics );
     pGraphics->setHWND( hWnd );
 
     HDC hCurrentDC = pGraphics->getHDC();
@@ -1045,7 +1036,7 @@ SalGraphics* WinSalFrame::AcquireGraphics()
         pGraphics = mpThreadGraphics;
         assert( !pGraphics->getHDC() );
         hDC = reinterpret_cast<HDC>(static_cast<sal_IntPtr>(SendMessageW( pSalData->mpInstance->mhComWnd,
-                                    SAL_MSG_GETDC, reinterpret_cast<WPARAM>(mhWnd), 0 )));
+                                    SAL_MSG_GETCACHEDDC, reinterpret_cast<WPARAM>(mhWnd), 0 )));
     }
     else
     {
@@ -1525,7 +1516,7 @@ void WinSalFrame::ImplSetParentFrame( HWND hNewParentWnd, bool bAsChild )
     {
         HDC hDC = reinterpret_cast<HDC>(static_cast<sal_IntPtr>(
                     SendMessageW( pSalData->mpInstance->mhComWnd,
-                        SAL_MSG_GETDC, reinterpret_cast<WPARAM>(hWnd), 0 )));
+                        SAL_MSG_GETCACHEDDC, reinterpret_cast<WPARAM>(hWnd), 0 )));
         InitFrameGraphicsDC( mpThreadGraphics, hDC, hWnd );
         if ( hDC )
         {
