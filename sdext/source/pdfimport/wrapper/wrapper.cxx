@@ -35,6 +35,7 @@
 #include <rtl/strbuf.hxx>
 #include <rtl/byteseq.hxx>
 
+#include <comphelper/lok.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <com/sun/star/io/XInputStream.hpp>
@@ -70,6 +71,12 @@
 #include <rtl/bootstrap.h>
 
 #include <rtl/character.hxx>
+
+#include <vcl/bitmapaccess.hxx>
+#include <vcl/bitmap.hxx>
+#include <vcl/graph.hxx>
+#include <vcl/pdfread.hxx>
+#include <vcl/pngwrite.hxx>
 
 using namespace com::sun::star;
 
@@ -1009,12 +1016,117 @@ bool xpdf_ImportFromFile_Poppler(const OUString& aSysUPath,
                                  const uno::Reference<uno::XComponentContext>& xContext,
                                  const OUString& rFilterOptions);
 
-bool xpdf_ImportFromFile( const OUString&                             rURL,
-                          const ContentSinkSharedPtr&                        rSink,
-                          const uno::Reference< task::XInteractionHandler >& xIHdl,
-                          const OUString&                               rPwd,
-                          const uno::Reference< uno::XComponentContext >&    xContext,
-                          const OUString&                                    rFilterOptions )
+bool xpdf_ImportFromFile_Pdfium(const OUString& rURL,
+                                const ContentSinkSharedPtr& rSink,
+                                const uno::Reference<task::XInteractionHandler>& /*xIHdl*/,
+                                const bool /*bIsEncrypted*/,
+                                const OUString& /*aPwd*/,
+                                const uno::Reference<uno::XComponentContext>& xContext,
+                                const OUString& /*rFilterOptions*/)
+{
+    //FIXME: Replace with parsing the PDF elements to allow editing.
+    //FIXME: For now we import as images for simplicity.
+
+    uno::Sequence<sal_Int8> aPdfData;
+    std::vector<Bitmap> aBitmaps;
+    if (vcl::ImportPDF(rURL, aBitmaps, aPdfData) == 0)
+        return false;
+
+    uno::Reference<lang::XMultiComponentFactory> xFactory(xContext->getServiceManager(), uno::UNO_SET_THROW);
+
+    uno::Sequence<uno::Any> aStreamCreationArgs(1);
+    aStreamCreationArgs[0] <<= aPdfData;
+
+    uno::Reference<io::XInputStream> xPdfDataStream(
+        xFactory->createInstanceWithArgumentsAndContext("com.sun.star.io.SequenceInputStream", aStreamCreationArgs, xContext),
+        uno::UNO_QUERY_THROW);
+
+    uno::Sequence<beans::PropertyValue> aPdfPropertyValueSequence(comphelper::InitPropertySequence({
+            { "URL", uno::makeAny(OUString("DUMMY.PDF")) },
+            { "InputStream", uno::makeAny(xPdfDataStream) },
+            { "InputSequence", uno::makeAny(aPdfData) }
+        }));
+
+    size_t nPageNumber = 1;
+    for (Bitmap& aBitmap : aBitmaps)
+    {
+        // Convert to PPM and create
+        const size_t nImageWidth = aBitmap.GetSizePixel().Width();
+        const size_t nImageHeight = aBitmap.GetSizePixel().Height();
+
+        char header[64];
+        sprintf(header, "P6\n%zu %zu\n255\n", nImageWidth, nImageHeight);
+        const size_t nHeaderSize = strlen(header);
+
+        const size_t nDataSize = nHeaderSize + (nImageWidth * nImageHeight * 3);
+        uno::Sequence<sal_Int8> aDataSequence(nDataSize);
+        sal_Int8* pBuf(aDataSequence.getArray());
+        memcpy(pBuf, header, nHeaderSize);
+        pBuf += nHeaderSize;
+
+        // Source data is B, G, R.
+        // Dest data is R, G, B.
+        Bitmap::ScopedReadAccess pReadAccess(aBitmap);
+        for (size_t h = 0; h < nImageHeight; ++h)
+        {
+            const Scanline pSrc = pReadAccess->GetScanline(h);
+            sal_Int8* pDst = pBuf + (nImageWidth * h * 3);
+            for (size_t w = 0; w < nImageWidth; ++w)
+            {
+                pDst[(w * 3) + 0] = pSrc[(w * 3) + 2]; // R
+                pDst[(w * 3) + 1] = pSrc[(w * 3) + 1]; // G
+                pDst[(w * 3) + 2] = pSrc[(w * 3) + 0]; // B
+            }
+        }
+
+        // Convert to PNG.
+        SvMemoryStream aStream(65535, 65535);
+        vcl::PNGWriter aWriter(aBitmap);
+        if (!aWriter.Write(aStream))
+        {
+            SAL_WARN("sdext.pdfimport", "Failed to convert to PNG!");
+            return false;
+        }
+
+        memcpy(aDataSequence.getArray(), aStream.GetData(), aStream.Tell());
+        aDataSequence.realloc(aStream.Tell());
+        aStreamCreationArgs[0] <<= aDataSequence;
+
+        uno::Reference<io::XInputStream> xDataStream(
+            xFactory->createInstanceWithArgumentsAndContext("com.sun.star.io.SequenceInputStream", aStreamCreationArgs, xContext),
+            uno::UNO_QUERY_THROW);
+
+        static const OUString aFileName = rURL + "_Page#" + OUString::number(nPageNumber) + ".PNG";
+        uno::Sequence<beans::PropertyValue> aPropertyValueSequence(comphelper::InitPropertySequence({
+                { "URL", uno::makeAny(aFileName) },
+                { "InputStream", uno::makeAny(xDataStream) },
+                { "InputSequence", uno::makeAny(aDataSequence) }
+            }));
+
+        rSink->setPageNum(nPageNumber++);
+        rSink->startPage(geometry::RealSize2D(nImageWidth * 100., nImageHeight * 100.));
+
+        geometry::AffineMatrix2D aMat(100.000000, 0.000000, 0.000000, 0.0, -100.000000, nImageHeight * 100.);
+        rSink->setTransformation(aMat);
+
+        geometry::AffineMatrix2D aMat2(nImageWidth * 100., 0.000000, 0.000000, 0.0, nImageHeight * -100., nImageHeight * 100.);
+        rSink->setTransformation(aMat2);
+
+        rSink->drawImage(aPdfPropertyValueSequence); // Original Content.
+        rSink->drawImage(aPropertyValueSequence); // ReplacementContent
+
+        rSink->endPage();
+    }
+
+    return true;
+}
+
+bool xpdf_ImportFromFile(const OUString& rURL,
+                             const ContentSinkSharedPtr& rSink,
+                         const uno::Reference<task::XInteractionHandler>& xIHdl,
+                         const OUString& rPwd,
+                         const uno::Reference<uno::XComponentContext>& xContext,
+                         const OUString& rFilterOptions)
 {
     OSL_ASSERT(rSink);
 
@@ -1038,6 +1150,11 @@ bool xpdf_ImportFromFile( const OUString&                             rURL,
             "checkEncryption(" << aSysUPath << ") failed");
         return false;
     }
+
+    // Experimental import with Pdfium.
+    if (comphelper::LibreOfficeKit::isActive())
+        if (xpdf_ImportFromFile_Pdfium(rURL, rSink, xIHdl, bIsEncrypted, aPwd, xContext, rFilterOptions))
+            return true;
 
     return xpdf_ImportFromFile_Poppler(aSysUPath, rSink, xIHdl, bIsEncrypted, aPwd, xContext, rFilterOptions);
 }
