@@ -22,6 +22,7 @@
 
 #include <sal/types.h>
 #include <o3tl/typed_flags_set.hxx>
+#include <tools/color.hxx>
 
 enum class DeviceFormat {
                             NONE = -1,
@@ -32,16 +33,7 @@ enum class DeviceFormat {
 #endif
                         };
 
-typedef sal_uInt32 SalColor;
-
-constexpr SalColor MAKE_SALCOLOR(sal_uInt8 r, sal_uInt8 g, sal_uInt8 b) {
-    return sal_uInt32(b) | (sal_uInt32(g) << 8) | (sal_uInt32(r) << 16);
-}
-
-#define SALCOLOR_RED( n )           (static_cast<sal_uInt8>((n)>>16))
-#define SALCOLOR_GREEN( n )         (static_cast<sal_uInt8>((static_cast<sal_uInt16>(n)) >> 8))
-#define SALCOLOR_BLUE( n )          (static_cast<sal_uInt8>(n))
-#define SALCOLOR_NONE           (~SalColor(0))
+constexpr ::Color SALCOLOR_NONE ( 0xFF, 0xFF, 0xFF, 0xFF );
 
 // must equal to class Point
 struct SalPoint

@@ -228,7 +228,7 @@ bool X11SalGraphics::drawAlphaRect( long nX, long nY, long nWidth,
 
 void X11SalGraphics::drawMask( const SalTwoRect& rPosAry,
                                const SalBitmap &rSalBitmap,
-                               SalColor nMaskColor )
+                               Color nMaskColor )
 {
     mxImpl->drawMask( rPosAry, rSalBitmap, nMaskColor );
 }
@@ -238,7 +238,7 @@ SalBitmap *X11SalGraphics::getBitmap( long nX, long nY, long nDX, long nDY )
     return mxImpl->getBitmap( nX, nY, nDX, nDY );
 }
 
-SalColor X11SalGraphics::getPixel( long nX, long nY )
+Color X11SalGraphics::getPixel( long nX, long nY )
 {
     return mxImpl->getPixel( nX, nY );
 }
