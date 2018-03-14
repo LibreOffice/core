@@ -16,6 +16,24 @@
       "revId": "5b87abe06da35ca3a11628674af23460349b439a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba2be162_a409ed33",
+        "filename": "odk/examples/java/Text/GraphicsInserter.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2018-03-14T23:39:42Z",
+      "side": 1,
+      "message": "by mistake",
+      "parentUuid": "ba2be162_44abd189",
+      "revId": "5b87abe06da35ca3a11628674af23460349b439a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
