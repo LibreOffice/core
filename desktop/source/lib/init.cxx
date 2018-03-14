@@ -92,6 +92,7 @@
 #include <unotools/configmgr.hxx>
 #include <unotools/syslocaleoptions.hxx>
 #include <unotools/mediadescriptor.hxx>
+#include <unotools/pathoptions.hxx>
 #include <osl/module.hxx>
 #include <comphelper/sequence.hxx>
 #include <sfx2/sfxbasemodel.hxx>
@@ -3805,6 +3806,13 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char
 
         if (eStage != PRE_INIT)
         {
+            SAL_INFO("lok", "Re-initialize temp paths");
+            SvtPathOptions aOptions;
+            OUString aNewTemp;
+            osl::FileBase::getTempDirURL(aNewTemp);
+            aOptions.SetTempPath(aNewTemp);
+            desktop::Desktop::CreateTemporaryDirectory();
+
             SAL_INFO("lok", "Enabling RequestHandler");
             RequestHandler::Enable(false);
             SAL_INFO("lok", "Starting soffice_main");
