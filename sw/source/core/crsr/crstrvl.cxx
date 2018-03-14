@@ -1233,7 +1233,14 @@ bool SwCursorShell::GetContentAtPos( const Point& rPt,
                     if ( pField )
                     {
                         if( pFieldRect && nullptr != ( pFrame = pTextNd->getLayoutFrame( GetLayout(), &aPt ) ) )
+                        {
+                            //tdf#116397 now that we looking for the bounds of the field drop the SmartTag
+                            //index within field setting so we don't the bounds of the char within the field
+                            SwSpecialPos* pSpecialPos = aTmpState.m_pSpecialPos;
+                            aTmpState.m_pSpecialPos = nullptr;
                             pFrame->GetCharRect( *pFieldRect, aPos, &aTmpState );
+                            aTmpState.m_pSpecialPos = pSpecialPos;
+                        }
 
                         if( bSetCursor )
                         {
