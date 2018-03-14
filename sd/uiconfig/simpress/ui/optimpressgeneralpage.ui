@@ -53,7 +53,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="textselected">
-                    <property name="label" translatable="yes" context="optimpressgeneralpage|textselected">Only text area selected</property>
+                    <property name="label" translatable="yes" context="optimpressgeneralpage|textselected">Only text area selectable</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
