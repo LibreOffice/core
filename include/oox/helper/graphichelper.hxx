@@ -130,7 +130,6 @@ public:
 
 
 private:
-    typedef ::std::deque< css::uno::Reference< css::graphic::XGraphicObject > > GraphicObjectDeque;
     typedef ::std::map< OUString, css::uno::Reference< css::graphic::XGraphic > > EmbeddedGraphicMap;
 
     css::uno::Reference< css::uno::XComponentContext > mxContext;
@@ -139,7 +138,6 @@ private:
     css::awt::DeviceInfo maDeviceInfo; ///< Current output device info.
     ::std::map< sal_Int32, ::Color >  maSystemPalette;  ///< Maps system colors (XML tokens) to RGB color values.
     StorageRef          mxStorage;                  ///< Storage containing embedded graphics.
-    mutable GraphicObjectDeque maGraphicObjects;    ///< Caches all created graphic objects to keep them alive.
     mutable EmbeddedGraphicMap maEmbeddedGraphics;  ///< Maps all embedded graphics by their storage path.
     double              mfPixelPerHmmX;             ///< Number of screen pixels per 1/100 mm in X direction.
     double              mfPixelPerHmmY;             ///< Number of screen pixels per 1/100 mm in Y direction.
