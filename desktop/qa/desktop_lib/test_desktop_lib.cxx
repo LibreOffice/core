@@ -1280,7 +1280,8 @@ void DesktopLOKTest::testContextMenuImpress()
     pDocument->pClass->initializeForRendering(pDocument, nullptr);
     pDocument->pClass->registerCallback(pDocument, &DesktopLOKTest::callback, this);
 
-    Point aRandomPoint(1150, 1100);
+    // random point where we don't hit an underlying comment or text box
+    Point aRandomPoint(10, 1150);
     pDocument->pClass->postMouseEvent(pDocument,
                                       LOK_MOUSEEVENT_MOUSEBUTTONDOWN,
                                       aRandomPoint.X(), aRandomPoint.Y(),
