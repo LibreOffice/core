@@ -103,6 +103,9 @@
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
+                        <accessibility>
+                          <relation type="label-for" target="spinED_PAGENO"/>
+                        </accessibility>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -116,6 +119,9 @@
                         <property name="max_length">5</property>
                         <property name="invisible_char">•</property>
                         <property name="adjustment">adjustmentFirstPage</property>
+                        <accessibility>
+                          <relation type="labelled-by" target="checkBTN_PAGENO"/>
+                        </accessibility>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
