@@ -18,13 +18,15 @@ class Graphic;
 
 namespace vcl
 {
-
 /// Imports a PDF stream into rGraphic as a GDIMetaFile.
 VCL_DLLPUBLIC bool ImportPDF(SvStream& rStream, Bitmap& rBitmap,
                              css::uno::Sequence<sal_Int8>& rPdfData,
                              sal_uInt64 nPos = STREAM_SEEK_TO_BEGIN,
                              sal_uInt64 nSize = STREAM_SEEK_TO_END);
 VCL_DLLPUBLIC bool ImportPDF(SvStream& rStream, Graphic& rGraphic);
+
+VCL_DLLPUBLIC size_t ImportPDF(const OUString& rURL, std::vector<Bitmap>& rBitmaps,
+                               css::uno::Sequence<sal_Int8>& rPdfData);
 
 }
 
