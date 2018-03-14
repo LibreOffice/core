@@ -15,17 +15,34 @@
 
 module com {  module sun {  module star {  module document {
 
-/** used to load, save and serialize XGraphic objects to the document storage
+/** interface for loading, saving and serializing of XGraphic objects to
+    a document storage
+
+    @since LibreOffice 6.1
  */
 interface XGraphicStorageHandler : com::sun::star::uno::XInterface
 {
+    /** load a graphic defined by the URL from the storage
+    */
     com::sun::star::graphic::XGraphic loadGraphic([in] string aURL);
+
+    /** load a graphic from the output stream
+    */
     com::sun::star::graphic::XGraphic loadGraphicFromOutputStream([in] com::sun::star::io::XOutputStream xOutputStream);
 
+    /** save the graphic to the storage and return the URL reference to
+        its location inside the storage
+    */
     string saveGraphic([in] com::sun::star::graphic::XGraphic xGraphic);
 
+    /** save the graphic to the storage with a requested name and return
+        the URL reference to its location inside the storage and the mime
+        type of the format that the graphic was saved to as an output parameter
+    */
     string saveGraphicByName([in] com::sun::star::graphic::XGraphic xGraphic, [out] string savedMimeType, [in] string aRequestedName);
 
+    /** create an input stream from the input graphic
+    */
     com::sun::star::io::XInputStream createInputStream([in] com::sun::star::graphic::XGraphic xGraphic);
 };
 
