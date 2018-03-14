@@ -117,7 +117,13 @@ gtv_lok_dialog_draw(GtkWidget* pDialogDrawingArea, cairo_t* pCairo, gpointer)
     cairo_surface_mark_dirty(pSurface);
 
     cairo_set_source_surface(pCairo, pSurface, aRect.x, aRect.y);
+    // paint the dialog image
     cairo_paint(pCairo);
+
+    // debug red-colored border around the painted region
+    cairo_set_source_rgb(pCairo, 1.0, 0, 0);
+    cairo_rectangle(pCairo, aRect.x, aRect.y, nWidth, nHeight);
+    cairo_stroke(pCairo);
 }
 
 static gboolean
