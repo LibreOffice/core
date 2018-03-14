@@ -2085,9 +2085,12 @@ SvxConfigEntry::SvxConfigEntry( const OUString& rDisplayName,
 
 SvxConfigEntry::~SvxConfigEntry()
 {
-    for (auto const& entry : *mpEntries)
+    if (mpEntries)
     {
-        delete entry;
+        for (auto const& entry : *mpEntries)
+        {
+            delete entry;
+        }
     }
 }
 
