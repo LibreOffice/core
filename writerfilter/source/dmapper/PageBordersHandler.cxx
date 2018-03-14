@@ -37,8 +37,8 @@ PgBorder::~PgBorder( )
 
 PageBordersHandler::PageBordersHandler( ) :
 LoggedProperties("PageBordersHandler"),
-m_nDisplay( 0 ),
-m_nOffset( 0 )
+m_eBorderApply(SectionPropertyMap::BorderApply::ToAllInSection),
+m_eOffsetFrom(SectionPropertyMap::BorderOffsetFrom::Text)
 {
 }
 
@@ -57,13 +57,13 @@ void PageBordersHandler::lcl_attribute( Id eName, Value& rVal )
             {
                 default:
                 case NS_ooxml::LN_Value_doc_ST_PageBorderDisplay_allPages:
-                    m_nDisplay = 0;
+                    m_eBorderApply = SectionPropertyMap::BorderApply::ToAllInSection;
                     break;
                 case NS_ooxml::LN_Value_doc_ST_PageBorderDisplay_firstPage:
-                    m_nDisplay = 1;
+                    m_eBorderApply = SectionPropertyMap::BorderApply::ToFirstPageInSection;
                     break;
                 case NS_ooxml::LN_Value_doc_ST_PageBorderDisplay_notFirstPage:
-                    m_nDisplay = 2;
+                    m_eBorderApply = SectionPropertyMap::BorderApply::ToAllButFirstInSection;
                     break;
             }
         }
@@ -74,10 +74,10 @@ void PageBordersHandler::lcl_attribute( Id eName, Value& rVal )
             {
                 default:
                 case NS_ooxml::LN_Value_doc_ST_PageBorderOffset_page:
-                    m_nOffset = 1;
+                    m_eOffsetFrom = SectionPropertyMap::BorderOffsetFrom::Edge;
                     break;
                 case NS_ooxml::LN_Value_doc_ST_PageBorderOffset_text:
-                    m_nOffset = 0;
+                    m_eOffsetFrom = SectionPropertyMap::BorderOffsetFrom::Text;
                     break;
             }
         }
@@ -137,6 +137,8 @@ void PageBordersHandler::SetBorders( SectionPropertyMap* pSectContext )
     {
         pSectContext->SetBorder( rBorder.m_ePos, rBorder.m_nDistance, rBorder.m_rLine, rBorder.m_bShadow );
     }
+    pSectContext->SetBorderApply(m_eBorderApply);
+    pSectContext->SetBorderOffsetFrom(m_eOffsetFrom);
 }
 
 } }

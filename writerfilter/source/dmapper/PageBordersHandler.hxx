@@ -50,8 +50,8 @@ class PageBordersHandler : public LoggedProperties
 private:
 
     // See implementation of SectionPropertyMap::ApplyBorderToPageStyles
-    sal_Int32 m_nDisplay;
-    sal_Int32 m_nOffset;
+    SectionPropertyMap::BorderApply m_eBorderApply;
+    SectionPropertyMap::BorderOffsetFrom m_eOffsetFrom;
     std::vector<PgBorder> m_aBorders;
 
     // Properties
@@ -62,10 +62,6 @@ public:
     PageBordersHandler( );
     virtual ~PageBordersHandler( ) override;
 
-    sal_Int32 GetDisplayOffset( )
-    {
-        return ( m_nOffset << 5 ) + m_nDisplay;
-    };
     void SetBorders( SectionPropertyMap* pSectContext );
 };
 

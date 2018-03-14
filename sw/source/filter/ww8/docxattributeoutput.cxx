@@ -3015,8 +3015,6 @@ static OutputBorderOptions lcl_getTableDefaultBorderOptions(bool bEcma)
     rOptions.bWriteTag = true;
     rOptions.bWriteInsideHV = true;
     rOptions.bWriteDistance = false;
-    rOptions.aShadowLocation = SvxShadowLocation::NONE;
-    rOptions.bCheckDistanceSize = false;
 
     return rOptions;
 }
@@ -3030,8 +3028,6 @@ static OutputBorderOptions lcl_getTableCellBorderOptions(bool bEcma)
     rOptions.bWriteTag = true;
     rOptions.bWriteInsideHV = true;
     rOptions.bWriteDistance = false;
-    rOptions.aShadowLocation = SvxShadowLocation::NONE;
-    rOptions.bCheckDistanceSize = false;
 
     return rOptions;
 }
@@ -3045,23 +3041,103 @@ static OutputBorderOptions lcl_getBoxBorderOptions()
     rOptions.bWriteTag = false;
     rOptions.bWriteInsideHV = false;
     rOptions.bWriteDistance = true;
-    rOptions.aShadowLocation = SvxShadowLocation::NONE;
-    rOptions.bCheckDistanceSize = false;
 
     return rOptions;
 }
 
-static bool boxHasLineLargerThan31(const SvxBoxItem& rBox)
+struct BorderDistances
 {
-    return  (
-                ( rBox.GetDistance( SvxBoxItemLine::TOP ) / 20 ) > 31 ||
-                ( rBox.GetDistance( SvxBoxItemLine::LEFT ) / 20 ) > 31 ||
-                ( rBox.GetDistance( SvxBoxItemLine::BOTTOM ) / 20 ) > 31 ||
-                ( rBox.GetDistance( SvxBoxItemLine::RIGHT ) / 20 ) > 31
-            );
+    bool bFromEdge = false;
+    sal_uInt16 nTop = 0;
+    sal_uInt16 nLeft = 0;
+    sal_uInt16 nBottom = 0;
+    sal_uInt16 nRight = 0;
+};
+
+// Heuristics to decide if we need to use "from edge" offset of borders
+//
+// There are two cases when we can safely use "from text" or "from edge" offset without distorting
+// border position (modulo rounding errors):
+// 1. When distance of all borders from text is no greater than 31 pt, we use "from text"
+// 2. Otherwise, if distance of all borders from edge is no greater than 31 pt, we use "from edge"
+// In all other cases, the position of borders would be distirted on export, because Word doesn't
+// support the offset of >31 pts (https://msdn.microsoft.com/en-us/library/ff533820), and we need
+// to decide which type of offset would provide less wrong result (i.e., the result would look
+// closer to original). Here, we just check sum of distances from text to borders, and if it is
+// less than sum of distances from borders to edges. The alternative would be to compare total areas
+// between text-and-borders and between borders-and-edges (taking into account different lengths of
+// borders, and visual impact of that).
+static void CalculateExportDistances(const SvxBoxItem& rBox, const PageMargins& rMargins,
+                                     OutputBorderOptions& rOptions)
+{
+    rOptions.pDistances = std::make_shared<BorderDistances>();
+
+    const sal_uInt16 nT = rBox.GetDistance(SvxBoxItemLine::TOP);
+    const sal_uInt16 nL = rBox.GetDistance(SvxBoxItemLine::LEFT);
+    const sal_uInt16 nB = rBox.GetDistance(SvxBoxItemLine::BOTTOM);
+    const sal_uInt16 nR = rBox.GetDistance(SvxBoxItemLine::RIGHT);
+
+    // Only take into account existing borders
+    const SvxBorderLine* pLnT = rBox.GetLine(SvxBoxItemLine::TOP);
+    const SvxBorderLine* pLnL = rBox.GetLine(SvxBoxItemLine::LEFT);
+    const SvxBorderLine* pLnB = rBox.GetLine(SvxBoxItemLine::BOTTOM);
+    const SvxBorderLine* pLnR = rBox.GetLine(SvxBoxItemLine::RIGHT);
+
+    // We need to take border widths into account
+    const sal_uInt16 nWidthT = pLnT ? pLnT->GetWidth() : 0;
+    const sal_uInt16 nWidthL = pLnL ? pLnL->GetWidth() : 0;
+    const sal_uInt16 nWidthB = pLnB ? pLnB->GetWidth() : 0;
+    const sal_uInt16 nWidthR = pLnR ? pLnR->GetWidth() : 0;
+
+    // Resulting distances from text to borders
+    const sal_uInt16 nT2BT = pLnT ? nT : 0;
+    const sal_uInt16 nT2BL = pLnL ? nL : 0;
+    const sal_uInt16 nT2BB = pLnB ? nB : 0;
+    const sal_uInt16 nT2BR = pLnR ? nR : 0;
+
+    // Resulting distances from edge to borders
+    const sal_uInt16 nE2BT = pLnT ? rMargins.nPageMarginTop - nT - nWidthT : 0;
+    const sal_uInt16 nE2BL = pLnL ? rMargins.nPageMarginLeft - nL - nWidthL : 0;
+    const sal_uInt16 nE2BB = pLnB ? rMargins.nPageMarginBottom - nB - nWidthB : 0;
+    const sal_uInt16 nE2BR = pLnR ? rMargins.nPageMarginRight - nR - nWidthR : 0;
+
+    // 1. If all borders are in range of 31 pts from text
+    if ((nT2BT / 20) <= 31 && (nT2BL / 20) <= 31 && (nT2BB / 20) <= 31 && (nT2BR / 20) <= 31)
+    {
+        rOptions.pDistances->bFromEdge = false;
+    }
+    else
+    {
+        // 2. If all borders are in range of 31 pts from edge
+        if ((nE2BT / 20) <= 31 && (nE2BL / 20) <= 31 && (nE2BB / 20) <= 31 && (nE2BR / 20) <= 31)
+        {
+            rOptions.pDistances->bFromEdge = true;
+        }
+        else
+        {
+            // Let's try to guess which would be the best approximation
+            rOptions.pDistances->bFromEdge =
+                (nT2BT + nT2BL + nT2BB + nT2BR) > (nE2BT + nE2BL + nE2BB + nE2BR);
+        }
+    }
+
+    if (rOptions.pDistances->bFromEdge)
+    {
+        rOptions.pDistances->nTop = nE2BT;
+        rOptions.pDistances->nLeft = nE2BL;
+        rOptions.pDistances->nBottom = nE2BB;
+        rOptions.pDistances->nRight = nE2BR;
+    }
+    else
+    {
+        rOptions.pDistances->nTop = nT2BT;
+        rOptions.pDistances->nLeft = nT2BL;
+        rOptions.pDistances->nBottom = nT2BB;
+        rOptions.pDistances->nRight = nT2BR;
+    }
 }
 
-static void impl_borders( FSHelperPtr const & pSerializer, const SvxBoxItem& rBox, const OutputBorderOptions& rOptions, PageMargins const * pageMargins,
+static void impl_borders( FSHelperPtr const & pSerializer, const SvxBoxItem& rBox, const OutputBorderOptions& rOptions,
                           std::map<SvxBoxItemLine, css::table::BorderLine2> &rTableStyleConf )
 {
     static const SvxBoxItemLine aBorders[] =
@@ -3078,16 +3154,6 @@ static void impl_borders( FSHelperPtr const & pSerializer, const SvxBoxItem& rBo
     };
     bool tagWritten = false;
     const SvxBoxItemLine* pBrd = aBorders;
-
-    bool bExportDistanceFromPageEdge = false;
-    if ( rOptions.bCheckDistanceSize && boxHasLineLargerThan31(rBox) )
-    {
-        // The distance is larger than '31'. This cannot be exported as 'distance from text'.
-        // Instead - it should be exported as 'distance from page edge'.
-        // This is based on http://wiki.openoffice.org/wiki/Writer/MSInteroperability/PageBorder
-        // Specifically 'export case #2'
-        bExportDistanceFromPageEdge = true;
-    }
 
     bool bWriteInsideH = false;
     bool bWriteInsideV = false;
@@ -3137,22 +3203,20 @@ static void impl_borders( FSHelperPtr const & pSerializer, const SvxBoxItem& rBo
         sal_uInt16 nDist = 0;
         if (rOptions.bWriteDistance)
         {
-            if (bExportDistanceFromPageEdge)
+            if (rOptions.pDistances)
             {
-                // Export 'Distance from Page Edge'
                 if ( *pBrd == SvxBoxItemLine::TOP)
-                    nDist = pageMargins->nPageMarginTop - rBox.GetDistance( *pBrd );
+                    nDist = rOptions.pDistances->nTop;
                 else if ( *pBrd == SvxBoxItemLine::LEFT)
-                    nDist = pageMargins->nPageMarginLeft - rBox.GetDistance( *pBrd );
+                    nDist = rOptions.pDistances->nLeft;
                 else if ( *pBrd == SvxBoxItemLine::BOTTOM)
-                    nDist = pageMargins->nPageMarginBottom - rBox.GetDistance( *pBrd );
+                    nDist = rOptions.pDistances->nBottom;
                 else if ( *pBrd == SvxBoxItemLine::RIGHT)
-                    nDist = pageMargins->nPageMarginRight - rBox.GetDistance( *pBrd );
+                    nDist = rOptions.pDistances->nRight;
             }
             else
             {
-                // Export 'Distance from text'
-                nDist = rBox.GetDistance( *pBrd );
+                nDist = rBox.GetDistance(*pBrd);
             }
         }
 
@@ -3301,7 +3365,7 @@ void DocxAttributeOutput::TableCellProperties( ww8::WW8TableNodeInfoInner::Point
     const SvxBoxItem& rDefaultBox = (*tableFirstCells.rbegin())->getTableBox( )->GetFrameFormat( )->GetBox( );
     {
         // The cell borders
-        impl_borders( m_pSerializer, rBox, lcl_getTableCellBorderOptions(bEcma), nullptr, m_aTableStyleConf );
+        impl_borders( m_pSerializer, rBox, lcl_getTableCellBorderOptions(bEcma), m_aTableStyleConf );
     }
 
     TableBackgrounds( pTableTextNodeInfoInner );
@@ -3805,7 +3869,7 @@ void DocxAttributeOutput::TableDefaultBorders( ww8::WW8TableNodeInfoInner::Point
     if (m_aTableStyleConf.empty())
     {
         // the defaults of the table are taken from the top-left cell
-        impl_borders(m_pSerializer, pFrameFormat->GetBox(), lcl_getTableDefaultBorderOptions(bEcma), nullptr, m_aTableStyleConf);
+        impl_borders(m_pSerializer, pFrameFormat->GetBox(), lcl_getTableDefaultBorderOptions(bEcma), m_aTableStyleConf);
     }
 }
 
@@ -6048,26 +6112,7 @@ void DocxAttributeOutput::SectionPageBorders( const SwFrameFormat* pFormat, cons
     if ( !(pBottom || pTop || pLeft || pRight) )
         return;
 
-    bool bExportDistanceFromPageEdge = false;
-    if ( boxHasLineLargerThan31(rBox) )
-    {
-        // The distance is larger than '31'. This cannot be exported as 'distance from text'.
-        // Instead - it should be exported as 'distance from page edge'.
-        // This is based on http://wiki.openoffice.org/wiki/Writer/MSInteroperability/PageBorder
-        // Specifically 'export case #2'
-        bExportDistanceFromPageEdge = true;
-    }
-
-    // All distances are relative to the text margins
-    m_pSerializer->startElementNS( XML_w, XML_pgBorders,
-           FSNS( XML_w, XML_display ), "allPages",
-           FSNS( XML_w, XML_offsetFrom ), bExportDistanceFromPageEdge ? "page" : "text",
-           FSEND );
-
     OutputBorderOptions aOutputBorderOptions = lcl_getBoxBorderOptions();
-
-    // Check if the distance is larger than 31 points
-    aOutputBorderOptions.bCheckDistanceSize = true;
 
     // Check if there is a shadow item
     const SfxPoolItem* pItem = GetExport().HasItem( RES_SHADOW );
@@ -6086,9 +6131,16 @@ void DocxAttributeOutput::SectionPageBorders( const SwFrameFormat* pFormat, cons
     if (aGlue.HasFooter())
         aMargins.nPageMarginBottom = aGlue.dyaHdrBottom;
 
+    CalculateExportDistances(rBox, aMargins, aOutputBorderOptions);
+
+    // All distances are relative to the text margins
+    m_pSerializer->startElementNS(XML_w, XML_pgBorders,
+        FSNS(XML_w, XML_display), "allPages",
+        FSNS(XML_w, XML_offsetFrom), aOutputBorderOptions.pDistances->bFromEdge ? "page" : "text",
+        FSEND);
+
     std::map<SvxBoxItemLine, css::table::BorderLine2> aEmptyMap; // empty styles map
-    impl_borders( m_pSerializer, rBox, aOutputBorderOptions, &aMargins,
-                  aEmptyMap );
+    impl_borders( m_pSerializer, rBox, aOutputBorderOptions, aEmptyMap );
 
     m_pSerializer->endElementNS( XML_w, XML_pgBorders );
 
@@ -8538,8 +8590,7 @@ void DocxAttributeOutput::FormatBox( const SvxBoxItem& rBox )
         m_pSerializer->startElementNS( XML_w, XML_pBdr, FSEND );
 
         std::map<SvxBoxItemLine, css::table::BorderLine2> aEmptyMap; // empty styles map
-        impl_borders( m_pSerializer, rBox, aOutputBorderOptions, &m_pageMargins,
-                      aEmptyMap );
+        impl_borders( m_pSerializer, rBox, aOutputBorderOptions, aEmptyMap );
 
         // Close the paragraph's borders tag
         m_pSerializer->endElementNS( XML_w, XML_pBdr );
