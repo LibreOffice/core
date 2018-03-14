@@ -154,16 +154,6 @@ void SwAutoFormatDlg::UpdateChecks( const SwTableAutoFormat& rFormat, bool bEnab
     m_xBtnAlignment->set_active(rFormat.IsJustify());
 }
 
-static void lcl_SetProperties( SwTableAutoFormat* pTableAutoFormat, bool bVal )
-{
-    pTableAutoFormat->SetFont( bVal );
-    pTableAutoFormat->SetJustify( bVal );
-    pTableAutoFormat->SetFrame( bVal );
-    pTableAutoFormat->SetBackground( bVal );
-    pTableAutoFormat->SetValueFormat( bVal );
-    pTableAutoFormat->SetWidthHeight( bVal );
-}
-
 SwTableAutoFormat* SwAutoFormatDlg::FillAutoFormatOfIndex() const
 {
     if( 255 != m_nIndex )
@@ -171,9 +161,7 @@ SwTableAutoFormat* SwAutoFormatDlg::FillAutoFormatOfIndex() const
         return new SwTableAutoFormat( (*m_xTableTable)[ m_nIndex ] );
     }
 
-    SwTableAutoFormat* pRet = new SwTableAutoFormat( SwViewShell::GetShellRes()->aStrNone );
-    lcl_SetProperties(pRet, false);
-    return pRet;
+    return nullptr;
 }
 
 // Handler:
@@ -384,7 +372,12 @@ IMPL_LINK_NOARG(SwAutoFormatDlg, SelFormatHdl, weld::TreeView&, void)
         m_nIndex = 255;
 
         SwTableAutoFormat aTmp( SwViewShell::GetShellRes()->aStrNone );
-        lcl_SetProperties( &aTmp, false );
+        aTmp.SetFont( false );
+        aTmp.SetJustify( false );
+        aTmp.SetFrame( false );
+        aTmp.SetBackground( false );
+        aTmp.SetValueFormat( false );
+        aTmp.SetWidthHeight( false );
 
         if (nOldIdx != m_nIndex)
             m_xWndPreview->NotifyChange(aTmp);
