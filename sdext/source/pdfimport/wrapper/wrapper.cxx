@@ -71,6 +71,27 @@
 
 #include <rtl/character.hxx>
 
+#include <vcl/bitmapaccess.hxx>
+#include <vcl/bitmap.hxx>
+#include <vcl/graph.hxx>
+#include <vcl/pngwrite.hxx>
+
+namespace vcl
+{
+
+bool ImportPDF(SvStream& rStream, Bitmap& rBitmap,
+               css::uno::Sequence<sal_Int8>& rPdfData,
+               sal_uInt64 nPos = STREAM_SEEK_TO_BEGIN,
+               sal_uInt64 nSize = STREAM_SEEK_TO_END);
+
+/// Imports a PDF stream into rGraphic as a GDIMetaFile.
+bool ImportPDF(SvStream& rStream, Graphic& rGraphic);
+
+size_t ImportPDF(const OUString& rURL, std::vector<Bitmap>& rBitmaps,
+                 css::uno::Sequence<sal_Int8>& rPdfData);
+
+}
+
 using namespace com::sun::star;
 
 namespace pdfi
@@ -1009,12 +1030,92 @@ bool xpdf_ImportFromFile_Poppler(const OUString& aSysUPath,
                                  const uno::Reference<uno::XComponentContext>& xContext,
                                  const OUString& rFilterOptions);
 
-bool xpdf_ImportFromFile( const OUString&                             rURL,
-                          const ContentSinkSharedPtr&                        rSink,
-                          const uno::Reference< task::XInteractionHandler >& xIHdl,
-                          const OUString&                               rPwd,
-                          const uno::Reference< uno::XComponentContext >&    xContext,
-                          const OUString&                                    rFilterOptions )
+bool xpdf_ImportFromFile_Pdfium(const OUString& rURL,
+                                const ContentSinkSharedPtr& rSink,
+                                const uno::Reference<task::XInteractionHandler>& /*xIHdl*/,
+                                const bool /*bIsEncrypted*/,
+                                const OUString& /*aPwd*/,
+                                const uno::Reference<uno::XComponentContext>& xContext,
+                                const OUString& /*rFilterOptions*/)
+{
+    //FIXME: Replace with parsing the PDF elements to allow editing.
+    //FIXME: For now we import as images for simplicity.
+
+    uno::Sequence<sal_Int8> aPdfData;
+    std::vector<Bitmap> aBitmaps;
+    if (vcl::ImportPDF(rURL, aBitmaps, aPdfData) == 0)
+        return false;
+
+    size_t nPageNumber = 1;
+    for (Bitmap& aBitmap : aBitmaps)
+    {
+        // Convert to PPM and create
+        const size_t nImageWidth = aBitmap.GetSizePixel().Width();
+        const size_t nImageHeight = aBitmap.GetSizePixel().Height();
+
+        char header[256];
+        sprintf(header, "P6\n%zu %zu\n255\n", nImageWidth, nImageHeight);
+        const size_t nHeaderSize = strlen(header);
+
+        const size_t nDataSize = nHeaderSize + (nImageWidth * nImageHeight * 3);
+        uno::Sequence<sal_Int8> aDataSequence(nDataSize);
+        sal_Int8* pBuf(aDataSequence.getArray());
+        memcpy(pBuf, header, nHeaderSize);
+        pBuf += nHeaderSize;
+
+        // Source data is B, G, R, unused.
+        // Dest data is R, G, B.
+        Bitmap::ScopedReadAccess pReadAccess(aBitmap);
+        for (size_t h = 0; h < nImageHeight; ++h)
+        {
+            const Scanline pSrc = pReadAccess->GetScanline(h);
+            sal_Int8* pDst = pBuf + (nImageWidth * h * 3);
+            for (size_t w = 0; w < nImageWidth; ++w)
+            {
+                pDst[(w * 3) + 0] = pSrc[(w * 3) + 2]; // R
+                pDst[(w * 3) + 1] = pSrc[(w * 3) + 1]; // G
+                pDst[(w * 3) + 2] = pSrc[(w * 3) + 0]; // B
+            }
+        }
+
+        uno::Sequence<uno::Any> aStreamCreationArgs(1);
+        aStreamCreationArgs[0] <<= aDataSequence;
+
+        uno::Reference<lang::XMultiComponentFactory> xFactory(xContext->getServiceManager(), uno::UNO_SET_THROW);
+        uno::Reference<io::XInputStream> xDataStream(
+        xFactory->createInstanceWithArgumentsAndContext("com.sun.star.io.SequenceInputStream", aStreamCreationArgs, xContext),
+            uno::UNO_QUERY_THROW);
+
+        static const OUString aFileName = "DUMMY.PPM";
+        uno::Sequence<beans::PropertyValue> aPropertyValueSequence(comphelper::InitPropertySequence({
+                { "URL", uno::makeAny(aFileName) },
+                    { "InputStream", uno::makeAny(xDataStream) },
+                { "InputSequence", uno::makeAny(aDataSequence) }
+            }));
+
+        rSink->setPageNum(nPageNumber++);
+        rSink->startPage(geometry::RealSize2D(nImageWidth * 100., nImageHeight * 100.));
+
+        geometry::AffineMatrix2D aMat(100.000000, 0.000000, 0.000000, 0.0, -100.000000, nImageHeight * 100.);
+        rSink->setTransformation(aMat);
+
+        geometry::AffineMatrix2D aMat2(nImageWidth * 100., 0.000000, 0.000000, 0.0, nImageHeight * -100., nImageHeight * 100.);
+        rSink->setTransformation(aMat2);
+
+        rSink->drawImage(aPropertyValueSequence);
+
+        rSink->endPage();
+    }
+
+    return true;
+}
+
+bool xpdf_ImportFromFile(const OUString& rURL,
+                             const ContentSinkSharedPtr& rSink,
+                         const uno::Reference<task::XInteractionHandler>& xIHdl,
+                         const OUString& rPwd,
+                         const uno::Reference<uno::XComponentContext>& xContext,
+                         const OUString& rFilterOptions)
 {
     OSL_ASSERT(rSink);
 
@@ -1039,6 +1140,14 @@ bool xpdf_ImportFromFile( const OUString&                             rURL,
         return false;
     }
 
+#define IMPORT_PDF_WITH_PDFIUM
+
+#ifdef IMPORT_PDF_WITH_PDFIUM
+    // Experimental import with Pdfium.
+    if (getenv("IMPORT_PDF_WITH_PDFIUM"))
+        return xpdf_ImportFromFile_Pdfium(rURL, rSink, xIHdl, bIsEncrypted, aPwd, xContext, rFilterOptions);
+#endif
+
     return xpdf_ImportFromFile_Poppler(aSysUPath, rSink, xIHdl, bIsEncrypted, aPwd, xContext, rFilterOptions);
 }
 
@@ -1046,7 +1155,7 @@ bool xpdf_ImportFromFile( const OUString&                             rURL,
 /// to be phased out in favor of pdfium.
 bool xpdf_ImportFromFile_Poppler(const OUString& aSysUPath,
                                  const ContentSinkSharedPtr& rSink,
-                                 const uno::Reference<task::XInteractionHandler>& xIHdl,
+                                 const uno::Reference<task::XInteractionHandler>& /*xIHdl*/,
                                  const bool bIsEncrypted,
                                  const OUString& aPwd,
                                  const uno::Reference<uno::XComponentContext>& xContext,
