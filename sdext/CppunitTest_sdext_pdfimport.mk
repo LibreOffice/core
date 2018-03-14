@@ -30,6 +30,8 @@ $(eval $(call gb_CppunitTest_use_libraries,sdext_pdfimport,\
     sal \
     test \
     unotest \
+    tl \
+    xo \
 ))
 
 $(eval $(call gb_CppunitTest_use_library_objects,sdext_pdfimport,pdfimport))

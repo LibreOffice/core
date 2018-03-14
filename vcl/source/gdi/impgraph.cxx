@@ -41,7 +41,7 @@
 #include <o3tl/make_unique.hxx>
 #include <vcl/gdimetafiletools.hxx>
 
-#include <pdfread.hxx>
+#include <vcl/pdfread.hxx>
 
 #define GRAPHIC_MTFTOBMP_MAXEXT     2048
 #define GRAPHIC_STREAMBUFSIZE       8192UL

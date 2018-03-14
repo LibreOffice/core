@@ -227,9 +227,13 @@ public:
     const VectorGraphicDataPtr& getVectorGraphicData() const;
 
     void setPdfData(const std::shared_ptr<css::uno::Sequence<sal_Int8>>& rPdfData);
-    void setPdfData(const css::uno::Sequence<sal_Int8>& rPdfData) { setPdfData(std::make_shared<css::uno::Sequence<sal_Int8>>(rPdfData)); }
     std::shared_ptr<css::uno::Sequence<sal_Int8>> getPdfData() const;
     bool hasPdfData() const;
+
+    /// Set the page number of the multi-page source this Graphic is rendered from.
+    void setPageNumber(sal_Int32 nPageNumber);
+    /// Get the page number of the multi-page source this Graphic is rendered from.
+    sal_Int32 getPageNumber() const;
 
     static css::uno::Sequence<sal_Int8> getUnoTunnelId();
 };

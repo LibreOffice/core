@@ -608,6 +608,16 @@ bool Graphic::hasPdfData() const
     return pPdfData && pPdfData->hasElements();
 }
 
+void Graphic::setPageNumber(sal_Int32 nPageNumber)
+{
+    mxImpGraphic->mnPageNumber = nPageNumber;
+}
+
+sal_Int32 Graphic::getPageNumber() const
+{
+    return mxImpGraphic->mnPageNumber;
+}
+
 OUString Graphic::getOriginURL() const
 {
     if (mxImpGraphic)

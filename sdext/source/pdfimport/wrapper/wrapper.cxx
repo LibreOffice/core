@@ -35,6 +35,7 @@
 #include <rtl/strbuf.hxx>
 #include <rtl/byteseq.hxx>
 
+#include <comphelper/lok.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <com/sun/star/io/XInputStream.hpp>
@@ -70,6 +71,12 @@
 #include <rtl/bootstrap.h>
 
 #include <rtl/character.hxx>
+
+#include <vcl/bitmapaccess.hxx>
+#include <vcl/bitmap.hxx>
+#include <vcl/graph.hxx>
+#include <vcl/pdfread.hxx>
+#include <vcl/pngwrite.hxx>
 
 using namespace com::sun::star;
 
@@ -1008,12 +1015,12 @@ public:
     }
 };
 
-bool xpdf_ImportFromFile( const OUString&                             rURL,
-                          const ContentSinkSharedPtr&                        rSink,
-                          const uno::Reference< task::XInteractionHandler >& xIHdl,
-                          const OUString&                               rPwd,
-                          const uno::Reference< uno::XComponentContext >&    xContext,
-                          const OUString&                                    rFilterOptions )
+bool xpdf_ImportFromFile(const OUString& rURL,
+                         const ContentSinkSharedPtr& rSink,
+                         const uno::Reference<task::XInteractionHandler>& xIHdl,
+                         const OUString& rPwd,
+                         const uno::Reference<uno::XComponentContext>& xContext,
+                         const OUString& rFilterOptions)
 {
     OSL_ASSERT(rSink);
 

@@ -80,6 +80,7 @@
 #include <sdcgmfilter.hxx>
 #include <sdgrffilter.hxx>
 #include <sdhtmlfilter.hxx>
+#include <sdpdffilter.hxx>
 #include <framework/FrameworkHelper.hxx>
 
 #include <SdUnoDrawView.hxx>
@@ -490,11 +491,17 @@ bool DrawDocShell::ConvertFrom( SfxMedium& rMedium )
         ErrCode nError = ERRCODE_NONE;
         bRet = SdXMLFilter( rMedium, *this, SDXMLMODE_Normal, SOFFICE_FILEFORMAT_60 ).Import( nError );
     }
-    else if( aFilterName == "CGM - Computer Graphics Metafile" )
+    else if (aFilterName == "CGM - Computer Graphics Metafile")
     {
         mpDoc->CreateFirstPages();
         mpDoc->StopWorkStartupDelay();
         bRet = SdCGMFilter( rMedium, *this ).Import();
+    }
+    else if (aFilterName == "draw_pdf_import")
+    {
+        mpDoc->CreateFirstPages();
+        mpDoc->StopWorkStartupDelay();
+        bRet = SdPdfFilter(rMedium, *this).Import();
     }
     else
     {
