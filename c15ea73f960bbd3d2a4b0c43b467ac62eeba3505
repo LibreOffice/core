@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba2be162_e49cc56b",
+        "filename": "vcl/win/window/salframe.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 931,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-03-14T17:09:59Z",
+      "side": 1,
+      "message": "That assert consistently hits during `make JunitTest_chart2_unoapi` for me, with pGraphics being non-null and mpLocalGraphics being null.",
+      "revId": "c15ea73f960bbd3d2a4b0c43b467ac62eeba3505",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
