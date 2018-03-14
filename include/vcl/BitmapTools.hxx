@@ -92,6 +92,8 @@ VCL_DLLPUBLIC BitmapEx CanvasTransformBitmap( const BitmapEx& rBitmap,
                                   ::basegfx::B2DRectangle const & rDestRect,
                                   ::basegfx::B2DHomMatrix const & rLocalTransform );
 
+VCL_DLLPUBLIC void DrawAlphaBitmapAndAlphaGradient(BitmapEx & rBitmapEx, bool bFixedTransparence, float fTransparence, AlphaMask & rNewMask);
+
 }} // end vcl::bitmap
 
 #endif // INCLUDED_VCL_BITMAP_TOOLS_HXX
