@@ -467,6 +467,76 @@ BitmapEx CanvasTransformBitmap( const BitmapEx&                 rBitmap,
 }
 
 
+void DrawAlphaBitmapAndAlphaGradient(BitmapEx & rBitmapEx, bool bFixedTransparence, float fTransparence, AlphaMask & rNewMask)
+{
+    // mix existing and new alpha mask
+    AlphaMask aOldMask;
+
+    if(rBitmapEx.IsAlpha())
+    {
+        aOldMask = rBitmapEx.GetAlpha();
+    }
+    else if(TransparentType::Bitmap == rBitmapEx.GetTransparentType())
+    {
+        aOldMask = rBitmapEx.GetMask();
+    }
+    else if(TransparentType::Color == rBitmapEx.GetTransparentType())
+    {
+        aOldMask = rBitmapEx.GetBitmap().CreateMask(rBitmapEx.GetTransparentColor());
+    }
+
+    {
+        AlphaMask::ScopedWriteAccess pOld(aOldMask);
+
+        assert(pOld && "Got no access to old alpha mask (!)");
+
+        const double fFactor(1.0 / 255.0);
+
+        if(bFixedTransparence)
+        {
+            const double fOpNew(1.0 - fTransparence);
+
+            for(long y(0); y < pOld->Height(); y++)
+            {
+                Scanline pScanline = pOld->GetScanline( y );
+                for(long x(0); x < pOld->Width(); x++)
+                {
+                    const double fOpOld(1.0 - (pOld->GetIndexFromData(pScanline, x) * fFactor));
+                    const sal_uInt8 aCol(basegfx::fround((1.0 - (fOpOld * fOpNew)) * 255.0));
+
+                    pOld->SetPixelOnData(pScanline, x, BitmapColor(aCol));
+                }
+            }
+        }
+        else
+        {
+            AlphaMask::ScopedReadAccess pNew(rNewMask);
+
+            assert(pNew && "Got no access to new alpha mask (!)");
+
+            assert(pOld->Width() == pNew->Width() && pOld->Height() == pNew->Height() &&
+                    "Alpha masks have different sizes (!)");
+
+            for(long y(0); y < pOld->Height(); y++)
+            {
+                Scanline pScanline = pOld->GetScanline( y );
+                for(long x(0); x < pOld->Width(); x++)
+                {
+                    const double fOpOld(1.0 - (pOld->GetIndexFromData(pScanline, x) * fFactor));
+                    const double fOpNew(1.0 - (pNew->GetIndexFromData(pScanline, x) * fFactor));
+                    const sal_uInt8 aCol(basegfx::fround((1.0 - (fOpOld * fOpNew)) * 255.0));
+
+                    pOld->SetPixelOnData(pScanline, x, BitmapColor(aCol));
+                }
+            }
+        }
+
+    }
+
+    // apply combined bitmap as mask
+    rBitmapEx = BitmapEx(rBitmapEx.GetBitmap(), aOldMask);
+}
+
 }} // end vcl::bitmap
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

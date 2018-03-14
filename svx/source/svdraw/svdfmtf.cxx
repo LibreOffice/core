@@ -71,6 +71,7 @@
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <svx/svditer.hxx>
 #include <svx/svdogrp.hxx>
+#include <vcl/BitmapTools.hxx>
 
 using namespace com::sun::star;
 
@@ -1557,87 +1558,7 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaFloatTransparentAction const & rAct)
             }
             else
             {
-                // mix existing and new alpha mask
-                AlphaMask aOldMask;
-
-                if(aBitmapEx.IsAlpha())
-                {
-                    aOldMask = aBitmapEx.GetAlpha();
-                }
-                else if(TransparentType::Bitmap == aBitmapEx.GetTransparentType())
-                {
-                    aOldMask = aBitmapEx.GetMask();
-                }
-                else if(TransparentType::Color == aBitmapEx.GetTransparentType())
-                {
-                    aOldMask = aBitmapEx.GetBitmap().CreateMask(aBitmapEx.GetTransparentColor());
-                }
-
-                AlphaMask::ScopedWriteAccess pOld(aOldMask);
-
-                if(pOld)
-                {
-                    const double fFactor(1.0 / 255.0);
-
-                    if(bFixedTransparence)
-                    {
-                        const double fOpNew(1.0 - fTransparence);
-
-                        for(long y(0); y < pOld->Height(); y++)
-                        {
-                            Scanline pScanline = pOld->GetScanline( y );
-                            for(long x(0); x < pOld->Width(); x++)
-                            {
-                                const double fOpOld(1.0 - (pOld->GetIndexFromData(pScanline, x) * fFactor));
-                                const sal_uInt8 aCol(basegfx::fround((1.0 - (fOpOld * fOpNew)) * 255.0));
-
-                                pOld->SetPixelOnData(pScanline, x, BitmapColor(aCol));
-                            }
-                        }
-                    }
-                    else
-                    {
-                        AlphaMask::ScopedReadAccess pNew(aNewMask);
-
-                        if(pNew)
-                        {
-                            if(pOld->Width() == pNew->Width() && pOld->Height() == pNew->Height())
-                            {
-                                for(long y(0); y < pOld->Height(); y++)
-                                {
-                                    Scanline pScanline = pOld->GetScanline( y );
-                                    for(long x(0); x < pOld->Width(); x++)
-                                    {
-                                        const double fOpOld(1.0 - (pOld->GetIndexFromData(pScanline, x) * fFactor));
-                                        const double fOpNew(1.0 - (pNew->GetIndexFromData(pScanline, x) * fFactor));
-                                        const sal_uInt8 aCol(basegfx::fround((1.0 - (fOpOld * fOpNew)) * 255.0));
-
-                                        pOld->SetPixelOnData(pScanline, x, BitmapColor(aCol));
-                                    }
-                                }
-                            }
-                            else
-                            {
-                                OSL_ENSURE(false, "Alpha masks have different sizes (!)");
-                            }
-
-                            pNew.reset();
-                        }
-                        else
-                        {
-                            OSL_ENSURE(false, "Got no access to new alpha mask (!)");
-                        }
-                    }
-
-                    pOld.reset();
-                }
-                else
-                {
-                    OSL_ENSURE(false, "Got no access to old alpha mask (!)");
-                }
-
-                // apply combined bitmap as mask
-                aBitmapEx = BitmapEx(aBitmapEx.GetBitmap(), aOldMask);
+                vcl::bitmap::DrawAlphaBitmapAndAlphaGradient(aBitmapEx, bFixedTransparence, fTransparence, aNewMask);
             }
         }
 
