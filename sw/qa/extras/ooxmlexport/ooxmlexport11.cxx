@@ -11,6 +11,7 @@
 
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/table/BorderLine.hpp>
 #include <com/sun/star/text/XDependentTextField.hpp>
 #include <com/sun/star/text/XFootnote.hpp>
 #include <com/sun/star/text/XPageCursor.hpp>
@@ -251,6 +252,37 @@ DECLARE_OOXMLEXPORT_TEST(testTdf116801, "tdf116801.docx")
     uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
     uno::Reference<text::XTextRange> xCell(xTable->getCellByName("D1"), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(OUString("D1"), xCell->getString());
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf112118, "tdf112118.docx")
+{
+    auto xStyles = getStyles("PageStyles");
+    auto testProc = [&](const OUString& sStyleName, sal_Int32 nMargin, sal_Int32 nBorderDistance,
+                        sal_Int16 nBorderWidth)
+    {
+        typedef std::initializer_list<OUStringLiteral> StringList;
+        uno::Reference<beans::XPropertySet> xStyle(xStyles->getByName(sStyleName), uno::UNO_QUERY_THROW);
+        for (const auto& side : StringList{ "Top", "Left", "Bottom", "Right" })
+        {
+            table::BorderLine aBorder = getProperty<table::BorderLine>(xStyle, side + "Border");
+            CPPUNIT_ASSERT_EQUAL(sal_Int16(nBorderWidth), aBorder.OuterLineWidth);
+            CPPUNIT_ASSERT_EQUAL(sal_Int16(0), aBorder.InnerLineWidth);
+            CPPUNIT_ASSERT_EQUAL(sal_Int16(0), aBorder.LineDistance);
+
+            sal_Int32 nMarginActual = getProperty<sal_Int32>(xStyle, side + "Margin");
+            CPPUNIT_ASSERT_EQUAL(nMargin, nMarginActual);
+
+            sal_Int32 nBorderDistanceActual = getProperty<sal_Int32>(xStyle, side + "BorderDistance");
+            CPPUNIT_ASSERT_EQUAL(nBorderDistance, nBorderDistanceActual);
+        }
+    };
+
+    // For both styles used in document, the total distance from page edge to text must be 2.54 cm.
+    // The first style uses "from edge" border distance; the second uses "from text" border distance
+    // Border distances in both cases are 24 pt = 847 mm100; line widths are 6 pt = 212 mm100.
+    // 1482 + 847 + 212 = 2541
+    testProc("Standard", 847, 1482, 212);
+    testProc("Converted1", 1482, 847, 212);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

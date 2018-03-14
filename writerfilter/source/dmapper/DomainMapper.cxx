@@ -2154,7 +2154,6 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
 
             // Set the borders to the context and apply them to the styles
             pHandler->SetBorders( pSectionContext );
-            pSectionContext->SetBorderParams( pHandler->GetDisplayOffset( ) );
         }
     }
     break;
