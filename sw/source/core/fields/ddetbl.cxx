@@ -32,8 +32,6 @@
 #include <fldupde.hxx>
 #include <swtblfmt.hxx>
 #include <fieldhint.hxx>
-#include <ddefld.hxx>
-
 
 /// Ctor moves all lines/boxes from a SwTable into itself.
 /// Afterwards the SwTable is empty and must be deleted.
