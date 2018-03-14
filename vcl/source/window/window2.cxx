@@ -1396,6 +1396,12 @@ void Window::queue_resize(StateChangedType eReason)
         if (pBorderWindow)
             pBorderWindow->Resize();
     }
+
+    if (VclPtr<vcl::Window> pParent = GetParentWithLOKNotifier())
+    {
+        if (GetParentDialog())
+            LogicInvalidate(nullptr);
+    }
 }
 
 namespace
