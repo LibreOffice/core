@@ -1291,10 +1291,12 @@ void PowerPointExport::WriteAnimationNodeAnimateInside(const FSHelperPtr& pFS, c
         WriteAnimateTo(pFS, rXAnimate->getTo(), rXAnimate->getAttributeName());
 }
 
-void PowerPointExport::WriteAnimationCondition(const FSHelperPtr& pFS, const char* pDelay, const char* pEvent, double fDelay, bool bHasFDelay)
+void PowerPointExport::WriteAnimationCondition(const FSHelperPtr& pFS, const char* pDelay, const char* pEvent, double fDelay, bool bHasFDelay, sal_Int32 nToken)
 {
     if (bHasFDelay || pDelay || pEvent)
     {
+        pFS->startElementNS(XML_p, nToken, FSEND);
+
         if (!pEvent)
             pFS->singleElementNS(XML_p, XML_cond,
                                  XML_delay, bHasFDelay ? I64S(static_cast<sal_uInt32>(fDelay*1000.0)) : pDelay,
@@ -1312,10 +1314,12 @@ void PowerPointExport::WriteAnimationCondition(const FSHelperPtr& pFS, const cha
 
             pFS->endElementNS(XML_p, XML_cond);
         }
+
+        pFS->endElementNS(XML_p, nToken);
     }
 }
 
-void PowerPointExport::WriteAnimationCondition(const FSHelperPtr& pFS, Any const& rAny, bool bWriteEvent, bool bMainSeqChild)
+void PowerPointExport::WriteAnimationCondition(const FSHelperPtr& pFS, Any const& rAny, bool bWriteEvent, bool bMainSeqChild, sal_Int32 nToken)
 {
     bool bHasFDelay = false;
     double fDelay = 0;
@@ -1403,7 +1407,7 @@ void PowerPointExport::WriteAnimationCondition(const FSHelperPtr& pFS, Any const
         }
     }
 
-    WriteAnimationCondition(pFS, pDelay, pEvent, fDelay, bHasFDelay);
+    WriteAnimationCondition(pFS, pDelay, pEvent, fDelay, bHasFDelay, nToken);
 }
 
 void PowerPointExport::WriteAnimationNodeCommonPropsStart(const FSHelperPtr& pFS, const Reference< XAnimationNode >& rXNode, bool bSingle, bool bMainSeqChild)
@@ -1565,15 +1569,13 @@ void PowerPointExport::WriteAnimationNodeCommonPropsStart(const FSHelperPtr& pFS
     {
         Sequence< Any > aCondSeq;
 
-        pFS->startElementNS(XML_p, XML_stCondLst, FSEND);
         if (aAny >>= aCondSeq)
         {
             for (int i = 0; i < aCondSeq.getLength(); i ++)
-                WriteAnimationCondition(pFS, aCondSeq[ i ], false, bMainSeqChild);
+                WriteAnimationCondition(pFS, aCondSeq[ i ], false, bMainSeqChild, XML_stCondLst);
         }
         else
-            WriteAnimationCondition(pFS, aAny, false, bMainSeqChild);
-        pFS->endElementNS(XML_p, XML_stCondLst);
+            WriteAnimationCondition(pFS, aAny, false, bMainSeqChild, XML_stCondLst);
     }
 
     aAny = rXNode->getEnd();
@@ -1581,15 +1583,13 @@ void PowerPointExport::WriteAnimationNodeCommonPropsStart(const FSHelperPtr& pFS
     {
         Sequence< Any > aCondSeq;
 
-        pFS->startElementNS(XML_p, XML_endCondLst, FSEND);
         if (aAny >>= aCondSeq)
         {
             for (int i = 0; i < aCondSeq.getLength(); i ++)
-                WriteAnimationCondition(pFS, aCondSeq[ i ], false, bMainSeqChild);
+                WriteAnimationCondition(pFS, aCondSeq[ i ], false, bMainSeqChild, XML_endCondLst);
         }
         else
-            WriteAnimationCondition(pFS, aAny, false, bMainSeqChild);
-        pFS->endElementNS(XML_p, XML_endCondLst);
+            WriteAnimationCondition(pFS, aAny, false, bMainSeqChild, XML_endCondLst);
     }
 
     Reference< XEnumerationAccess > xEnumerationAccess(rXNode, UNO_QUERY);
@@ -1630,13 +1630,8 @@ void PowerPointExport::WriteAnimationNodeSeq(const FSHelperPtr& pFS, const Refer
 
     WriteAnimationNodeCommonPropsStart(pFS, rXNode, true, bMainSeqChild);
 
-    pFS->startElementNS(XML_p, XML_prevCondLst, FSEND);
-    WriteAnimationCondition(pFS, nullptr, "onPrev", 0, true);
-    pFS->endElementNS(XML_p, XML_prevCondLst);
-
-    pFS->startElementNS(XML_p, XML_nextCondLst, FSEND);
-    WriteAnimationCondition(pFS, nullptr, "onNext", 0, true);
-    pFS->endElementNS(XML_p, XML_nextCondLst);
+    WriteAnimationCondition(pFS, nullptr, "onPrev", 0, true, XML_prevCondLst);
+    WriteAnimationCondition(pFS, nullptr, "onNext", 0, true, XML_nextCondLst);
 
     pFS->endElementNS(XML_p, XML_seq);
 }
