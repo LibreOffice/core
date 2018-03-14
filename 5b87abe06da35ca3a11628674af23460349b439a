@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba2be162_44abd189",
+        "filename": "odk/examples/java/Text/GraphicsInserter.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-03-14T17:05:41Z",
+      "side": 1,
+      "message": "why change these apparently unrelated lines?",
+      "revId": "5b87abe06da35ca3a11628674af23460349b439a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
