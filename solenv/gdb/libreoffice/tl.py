@@ -62,7 +62,7 @@ class FractionPrinter(object):
         self.val = val
 
     def to_string(self):
-        impl = self.val['mpImpl'].dereference()
+        impl = self.val['mpImpl']['_M_t']['_M_t']['_M_head_impl'].dereference().cast(gdb.lookup_type('Fraction::Impl'))
         numerator = impl['value']['num']
         denominator = impl['value']['den']
         if impl['valid']:
