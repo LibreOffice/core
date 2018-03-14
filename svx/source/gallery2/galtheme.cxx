@@ -765,7 +765,7 @@ bool GalleryTheme::GetThumb(sal_uInt32 nPos, BitmapEx& rBmp)
     return bRet;
 }
 
-bool GalleryTheme::GetGraphic(sal_uInt32 nPos, Graphic& rGraphic, bool bProgress)
+bool GalleryTheme::GetGraphic(sal_uInt32 nPos, Graphic& rGraphic)
 {
     const GalleryObject*    pObject = ImplGetGalleryObject( nPos );
     bool                    bRet = false;
@@ -781,7 +781,7 @@ bool GalleryTheme::GetGraphic(sal_uInt32 nPos, Graphic& rGraphic, bool bProgress
             case SgaObjKind::Inet:
             {
                 OUString aFilterDummy;
-                bRet = ( GalleryGraphicImport( aURL, rGraphic, aFilterDummy, bProgress ) != GalleryGraphicImportRet::IMPORT_NONE );
+                bRet = ( GalleryGraphicImport( aURL, rGraphic, aFilterDummy, /*bProgress*/false ) != GalleryGraphicImportRet::IMPORT_NONE );
             }
             break;
 

@@ -46,12 +46,11 @@ namespace xmloff
         static css::uno::Any convertString(
             const css::uno::Type& _rExpectedType,
             const OUString& _rReadCharacters,
-            const SvXMLEnumMapEntry<EnumT>* _pEnumMap = nullptr,
-            const bool _bInvertBoolean = false
+            const SvXMLEnumMapEntry<EnumT>* _pEnumMap = nullptr
         )
         {
             return convertString(_rExpectedType, _rReadCharacters,
-                    reinterpret_cast<const SvXMLEnumMapEntry<sal_uInt16>*>(_pEnumMap), _bInvertBoolean);
+                    reinterpret_cast<const SvXMLEnumMapEntry<sal_uInt16>*>(_pEnumMap), /*_bInvertBoolean*/false);
         }
         static css::uno::Any convertString(
             const css::uno::Type& _rExpectedType,

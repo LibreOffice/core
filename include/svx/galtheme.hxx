@@ -183,7 +183,7 @@ public:
 
     SAL_DLLPRIVATE bool         GetThumb(sal_uInt32 nPos, BitmapEx& rBmp);
 
-    bool                        GetGraphic(sal_uInt32 nPos, Graphic& rGraphic, bool bProgress = false);
+    bool                        GetGraphic(sal_uInt32 nPos, Graphic& rGraphic);
     bool                        InsertGraphic(const Graphic& rGraphic, sal_uInt32 nInsertPos);
 
     bool                        GetModel(sal_uInt32 nPos, SdrModel& rModel);

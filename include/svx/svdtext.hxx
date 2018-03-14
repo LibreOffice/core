@@ -44,7 +44,7 @@ class SfxStyleSheet;
 class SVX_DLLPUBLIC SdrText : public virtual tools::WeakBase
 {
 public:
-    SdrText( SdrTextObj& rObject, OutlinerParaObject* pOutlinerParaObject = nullptr );
+    explicit SdrText( SdrTextObj& rObject );
     virtual ~SdrText() override;
 
     virtual void SetModel(SdrModel* pNewModel);

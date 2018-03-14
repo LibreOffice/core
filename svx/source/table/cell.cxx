@@ -393,7 +393,7 @@ rtl::Reference< Cell > Cell::create( SdrTableObj& rTableObj )
 
 
 Cell::Cell( SdrTableObj& rTableObj )
-: SdrText( rTableObj, /*pOutlinerParaObject*/nullptr )
+: SdrText( rTableObj )
 , SvxUnoTextBase( ImplGetSvxUnoOutlinerTextCursorSvxPropertySet() )
 , mpPropSet( ImplGetSvxCellPropertySet() )
 , mpProperties( new sdr::properties::CellProperties( rTableObj, this ) )

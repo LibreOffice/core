@@ -217,7 +217,7 @@ Reference < XFrame > SfxFrame::CreateBlankFrame()
     return xFrame;
 }
 
-SfxFrame* SfxFrame::Create( SfxObjectShell const & rDoc, vcl::Window& rWindow, SfxInterfaceId nViewId, bool bHidden )
+SfxFrame* SfxFrame::CreateHidden( SfxObjectShell const & rDoc, vcl::Window& rWindow, SfxInterfaceId nViewId )
 {
     SfxFrame* pFrame = nullptr;
     try
@@ -240,7 +240,7 @@ SfxFrame* SfxFrame::Create( SfxObjectShell const & rDoc, vcl::Window& rWindow, S
 
         ::comphelper::NamedValueCollection aArgs( aLoadArgs );
         aArgs.put( "Model", rDoc.GetModel() );
-        aArgs.put( "Hidden", bHidden );
+        aArgs.put( "Hidden", true );
         if ( nViewId != SFX_INTERFACE_NONE )
             aArgs.put( "ViewId", static_cast<sal_uInt16>(nViewId) );
 

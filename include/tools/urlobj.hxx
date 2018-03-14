@@ -1126,7 +1126,7 @@ private:
         OUStringBuffer & rTheText, sal_uInt32 nOctet);
 
     static OUString encodeText(
-        sal_Unicode const * pBegin, sal_Unicode const * pEnd, bool bOctets,
+        sal_Unicode const * pBegin, sal_Unicode const * pEnd,
         Part ePart, EncodeMechanism eMechanism, rtl_TextEncoding eCharset,
         bool bKeepVisibleEscapes);
 
@@ -1157,7 +1157,7 @@ inline OUString INetURLObject::encodeText(OUString const & rTheText,
                                            bool bKeepVisibleEscapes)
 {
     return encodeText(rTheText.getStr(),
-                      rTheText.getStr() + rTheText.getLength(), /*bOctets*/false, ePart,
+                      rTheText.getStr() + rTheText.getLength(), ePart,
                       eMechanism, eCharset, bKeepVisibleEscapes);
 }
 

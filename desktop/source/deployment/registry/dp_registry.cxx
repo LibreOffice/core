@@ -341,7 +341,7 @@ Reference<deployment::XPackageRegistry> PackageRegistryImpl::create(
     // backends.
     Reference<deployment::XPackageRegistry> extensionBackend =
         ::dp_registry::backend::bundle::create(
-            that, context, cachePath, /*readOnly*/false, xComponentContext);
+            that, context, cachePath, xComponentContext);
     that->insertBackend(extensionBackend);
 
     Reference<lang::XServiceInfo> xServiceInfo(

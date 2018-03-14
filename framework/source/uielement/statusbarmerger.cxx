@@ -190,17 +190,16 @@ bool StatusbarMerger::ProcessMergeOperation(
     StatusBar* pStatusbar,
     sal_uInt16 nPos,
     sal_uInt16& rItemId,
-    const ::rtl::OUString& rModuleIdentifier,
     const ::rtl::OUString& rMergeCommand,
     const ::rtl::OUString& rMergeCommandParameter,
     const AddonStatusbarItemContainer& rItems )
 {
     if ( rMergeCommand == MERGECOMMAND_ADDAFTER )
-        return lcl_MergeItems( pStatusbar, nPos, 1, rItemId, rModuleIdentifier, rItems );
+        return lcl_MergeItems( pStatusbar, nPos, 1, rItemId, "", rItems );
     else if ( rMergeCommand == MERGECOMMAND_ADDBEFORE )
-        return lcl_MergeItems( pStatusbar, nPos, 0, rItemId, rModuleIdentifier, rItems );
+        return lcl_MergeItems( pStatusbar, nPos, 0, rItemId, "", rItems );
     else if ( rMergeCommand == MERGECOMMAND_REPLACE )
-        return lcl_ReplaceItem( pStatusbar, nPos, rItemId, rModuleIdentifier, rItems );
+        return lcl_ReplaceItem( pStatusbar, nPos, rItemId, "", rItems );
     else if ( rMergeCommand == MERGECOMMAND_REMOVE )
         return lcl_RemoveItems( pStatusbar, nPos, rMergeCommandParameter );
 
@@ -210,7 +209,6 @@ bool StatusbarMerger::ProcessMergeOperation(
 bool StatusbarMerger::ProcessMergeFallback(
     StatusBar* pStatusbar,
     sal_uInt16& rItemId,
-    const ::rtl::OUString& rModuleIdentifier,
     const ::rtl::OUString& rMergeCommand,
     const ::rtl::OUString& rMergeFallback,
     const AddonStatusbarItemContainer& rItems )
@@ -226,9 +224,9 @@ bool StatusbarMerger::ProcessMergeFallback(
              ( rMergeCommand == MERGECOMMAND_ADDAFTER ) )
     {
         if ( rMergeFallback == "AddFirst" )
-            return lcl_MergeItems( pStatusbar, 0, 0, rItemId, rModuleIdentifier, rItems );
+            return lcl_MergeItems( pStatusbar, 0, 0, rItemId, "", rItems );
         else if ( rMergeFallback == "AddLast" )
-            return lcl_MergeItems( pStatusbar, STATUSBAR_APPEND, 0, rItemId, rModuleIdentifier, rItems );
+            return lcl_MergeItems( pStatusbar, STATUSBAR_APPEND, 0, rItemId, "", rItems );
     }
 
     return false;
