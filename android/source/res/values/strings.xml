@@ -173,4 +173,11 @@
     <string name="compress_photo_no_compress">Don\'t Compress</string>
     <string name="compress_photo_title">Do you want to compress the photo?</string>
 
+    <!-- Clipboard Actions -->
+    <string name="action_copy">Copy</string>
+    <string name="action_paste">Paste</string>
+    <string name="action_cut">Cut</string>
+    <string name="action_back">Back</string>
+    <string name="action_text_copied">Text copied to the clipboard</string>
+
 </resources>
