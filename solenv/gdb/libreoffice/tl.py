@@ -62,7 +62,14 @@ class FractionPrinter(object):
         self.val = val
 
     def to_string(self):
-        impl = self.val['mpImpl']['_M_t']['_M_t']['_M_head_impl'].dereference().cast(gdb.lookup_type('Fraction::Impl'))
+        # Workaround gdb bug <https://sourceware.org/bugzilla/show_bug.cgi?id=22968> "ptype does not
+        #     find inner C++ class type without -readnow"
+        gdb.lookup_type('Fraction')
+        # This would be simpler and more reliable if we could call the operator* on mpImpl to get the internal Impl.
+        # Different libc have different structures. Some have one _M_t, some have two nested.
+        tmp = self.val['mpImpl']['_M_t']
+        if tmp.type.fields()[0].name == '_M_t': tmp = tmp['_M_t']
+        impl = tmp['_M_head_impl'].dereference().cast(gdb.lookup_type('Fraction::Impl'))
         numerator = impl['value']['num']
         denominator = impl['value']['den']
         if impl['valid']:
