@@ -22,6 +22,30 @@
       "revId": "951edf551077462050c695a92aa89bc993712e43",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba2be162_a4e48d0d",
+        "filename": "sd/qa/unit/export-tests.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 484,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2018-03-14T16:36:18Z",
+      "side": 1,
+      "message": "sorry forgot to backport this patch which adds that function\nhttps://gerrit.libreoffice.org/51288",
+      "parentUuid": "ba2be162_24633db3",
+      "range": {
+        "startLine": 484,
+        "startChar": 4,
+        "endLine": 484,
+        "endChar": 20
+      },
+      "revId": "951edf551077462050c695a92aa89bc993712e43",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
