@@ -215,7 +215,7 @@ int ImplSalWICompareAscii( const wchar_t* pStr1, const char* pStr2 );
 // wParam == 0; lParam == pObject;
 #define SAL_MSG_DESTROYOBJECT       (WM_USER+117)
 // wParam == hWnd; lParam == 0; lResult == hDC
-#define SAL_MSG_GETDC               (WM_USER+120)
+#define SAL_MSG_GETCACHEDDC         (WM_USER+120)
 // wParam == hWnd; lParam == 0
 #define SAL_MSG_RELEASEDC           (WM_USER+121)
 // wParam == newParentHwnd; lParam == oldHwnd; lResult == newhWnd
