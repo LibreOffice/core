@@ -921,16 +921,12 @@ bool WinSalFrame::ReleaseFrameGraphicsDC( WinSalGraphics* pGraphics )
     // so we don't hit the mbNoYieldLock assert
     if ( !pSalData->mpInstance->IsMainThread() )
     {
-        assert( pGraphics == mpThreadGraphics );
         SendMessageW( pSalData->mpInstance->mhComWnd, SAL_MSG_RELEASEDC,
             reinterpret_cast<WPARAM>(mhWnd), reinterpret_cast<LPARAM>(hDC) );
         pSalData->mnCacheDCInUse--;
     }
     else
-    {
-        assert( pGraphics == mpLocalGraphics );
         ReleaseDC( mhWnd, hDC );
-    }
     pGraphics->setHDC(nullptr);
     return TRUE;
 }
@@ -1045,7 +1041,7 @@ SalGraphics* WinSalFrame::AcquireGraphics()
         pGraphics = mpThreadGraphics;
         assert( !pGraphics->getHDC() );
         hDC = reinterpret_cast<HDC>(static_cast<sal_IntPtr>(SendMessageW( pSalData->mpInstance->mhComWnd,
-                                    SAL_MSG_GETDC, reinterpret_cast<WPARAM>(mhWnd), 0 )));
+                                    SAL_MSG_GETCACHEDDC, reinterpret_cast<WPARAM>(mhWnd), 0 )));
     }
     else
     {
@@ -1525,7 +1521,7 @@ void WinSalFrame::ImplSetParentFrame( HWND hNewParentWnd, bool bAsChild )
     {
         HDC hDC = reinterpret_cast<HDC>(static_cast<sal_IntPtr>(
                     SendMessageW( pSalData->mpInstance->mhComWnd,
-                        SAL_MSG_GETDC, reinterpret_cast<WPARAM>(hWnd), 0 )));
+                        SAL_MSG_GETCACHEDDC, reinterpret_cast<WPARAM>(hWnd), 0 )));
         InitFrameGraphicsDC( mpThreadGraphics, hDC, hWnd );
         if ( hDC )
         {

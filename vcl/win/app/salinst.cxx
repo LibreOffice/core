@@ -630,7 +630,7 @@ LRESULT CALLBACK SalComWndProc( HWND, UINT nMsg, WPARAM wParam, LPARAM lParam, b
         CASE_NOYIELDLOCK_RESULT( SAL_MSG_CREATEOBJECT, ImplSalCreateObject(
             GetSalData()->mpInstance, reinterpret_cast<WinSalFrame*>(lParam)) )
         CASE_NOYIELDLOCK( SAL_MSG_DESTROYOBJECT, delete reinterpret_cast<SalObject*>(lParam) )
-        CASE_NOYIELDLOCK_RESULT( SAL_MSG_GETDC, GetDCEx(
+        CASE_NOYIELDLOCK_RESULT( SAL_MSG_GETCACHEDDC, GetDCEx(
             reinterpret_cast<HWND>(wParam), nullptr, DCX_CACHE) )
         CASE_NOYIELDLOCK( SAL_MSG_RELEASEDC, ReleaseDC(
             reinterpret_cast<HWND>(wParam), reinterpret_cast<HDC>(lParam)) )
