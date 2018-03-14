@@ -51,10 +51,20 @@ private:
     bool                         mbSwapOut;
     bool                         mbDummyContext;
     SvgDataPtr                   maSvgData;
+
+    /// The PDF stream from which this Graphic is rendered,
+    /// as converted (version downgraded) from the original,
+    /// which should be in GfxLink.
     std::shared_ptr<css::uno::Sequence<sal_Int8>> mpPdfData;
     GraphicExternalLink          maGraphicExternalLink;
 
-private:
+    /// Used with GfxLink and/or PdfData when they store original media
+    /// which might be multi-page (PDF, f.e.) and we need to re-render
+    /// this Graphic (a page) from the source in GfxLink or PdfData.
+    sal_Int32                    mnPageNumber;
+
+    std::chrono::high_resolution_clock::time_point maLastUsed;
+    bool mbPrepared;
 
                         ImpGraphic();
                         ImpGraphic( const ImpGraphic& rImpGraphic );

@@ -100,6 +100,8 @@
 #include <basic/modsizeexceeded.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <osl/file.hxx>
+#include <comphelper/scopeguard.hxx>
+#include <comphelper/lok.hxx>
 
 #include <sfx2/signaturestate.hxx>
 #include <sfx2/app.hxx>
@@ -752,9 +754,13 @@ bool SfxObjectShell::DoLoad( SfxMedium *pMed )
 
         if ( GetError() == ERRCODE_NONE )
         {
+            // Experimental PDF importing using PDFium. This is currently enabled for LOK only and
+            // we handle it not via XmlFilterAdaptor but a new SdPdfFiler.
+            const bool bPdfiumImport = comphelper::LibreOfficeKit::isActive() && pMedium->GetFilter() &&
+                                       (pMedium->GetFilter()->GetFilterName() == "draw_pdf_import");
             pImpl->nLoadedFlags = SfxLoadedFlags::NONE;
             pImpl->bModelInitialized = false;
-            if ( pMedium->GetFilter() && ( pMedium->GetFilter()->GetFilterFlags() & SfxFilterFlags::STARONEFILTER ) )
+            if ( pMedium->GetFilter() && ( pMedium->GetFilter()->GetFilterFlags() & SfxFilterFlags::STARONEFILTER ) && !bPdfiumImport )
             {
                 uno::Reference < beans::XPropertySet > xSet( GetModel(), uno::UNO_QUERY );
                 OUString sLockUpdates("LockUpdates");

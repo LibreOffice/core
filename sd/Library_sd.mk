@@ -157,6 +157,7 @@ $(eval $(call gb_Library_add_exception_objects,sd,\
 	sd/source/filter/html/buttonset \
 	sd/source/filter/html/htmlex \
 	sd/source/filter/html/sdhtmlfilter \
+	sd/source/filter/pdf/sdpdffilter \
 	sd/source/filter/sdfilter \
 	sd/source/filter/sdpptwrp \
 	sd/source/filter/xml/sdtransform \
