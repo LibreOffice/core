@@ -8,12 +8,8 @@
  */
 package org.libreoffice;
 
-import android.content.ClipData;
-import android.content.ClipboardManager;
-import android.content.Context;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -29,9 +25,6 @@ public class ToolbarController implements Toolbar.OnMenuItemClickListener {
     private final Menu mMainMenu;
 
     private boolean isEditModeOn = false;
-    private String clipboardText = null;
-    ClipboardManager clipboardManager;
-    ClipData clipData;
 
     public ToolbarController(LibreOfficeMainActivity context, Toolbar toolbarTop) {
         mToolbarTop = toolbarTop;
@@ -42,7 +35,6 @@ public class ToolbarController implements Toolbar.OnMenuItemClickListener {
         switchToViewMode();
 
         mMainMenu = mToolbarTop.getMenu();
-        clipboardManager = (ClipboardManager)mContext.getSystemService(Context.CLIPBOARD_SERVICE);
     }
 
     public void disableMenuItem(final int menuItemId, final boolean disabled) {
@@ -81,48 +73,6 @@ public class ToolbarController implements Toolbar.OnMenuItemClickListener {
                 mToolbarTop.setNavigationIcon(R.drawable.ic_check);
                 mToolbarTop.setLogo(null);
                 setEditModeOn(true);
-            }
-        });
-    }
-
-    /**
-     * Show clipboard Actions on the toolbar
-     * */
-    void showClipboardActions(final String value){
-        LOKitShell.getMainHandler().post(new Runnable() {
-            @Override
-            public void run() {
-                if(value  != null){
-                    mMainMenu.setGroupVisible(R.id.group_edit_actions, false);
-                    mMainMenu.setGroupVisible(R.id.group_edit_clipboard, true);
-                    if(getEditModeStatus()){
-                        showHideClipboardCutAndCopy(true);
-                    } else {
-                        mMainMenu.findItem(R.id.action_cut).setVisible(false);
-                        mMainMenu.findItem(R.id.action_paste).setVisible(false);
-                    }
-                    clipboardText = value;
-                }
-            }
-        });
-    }
-
-    void hideClipboardActions(){
-        LOKitShell.getMainHandler().post(new Runnable() {
-            @Override
-            public void run() {
-                mMainMenu.setGroupVisible(R.id.group_edit_actions, getEditModeStatus());
-                mMainMenu.setGroupVisible(R.id.group_edit_clipboard, false);
-            }
-        });
-    }
-
-    void showHideClipboardCutAndCopy(final boolean option){
-        LOKitShell.getMainHandler().post(new Runnable() {
-            @Override
-            public void run() {
-                mMainMenu.findItem(R.id.action_copy).setVisible(option);
-                mMainMenu.findItem(R.id.action_cut).setVisible(option);
             }
         });
     }
@@ -190,26 +140,6 @@ public class ToolbarController implements Toolbar.OnMenuItemClickListener {
                 return true;
             case R.id.action_add_worksheet:
                 mContext.addPart();
-                return true;
-            case R.id.action_back:
-                hideClipboardActions();
-                return true;
-            case R.id.action_copy:
-                LOKitShell.sendEvent(new LOEvent(LOEvent.UNO_COMMAND, ".uno:Copy"));
-                clipData = ClipData.newPlainText("clipboard data", clipboardText);
-                clipboardManager.setPrimaryClip(clipData);
-                Toast.makeText(mContext, mContext.getResources().getString(R.string.action_text_copied), Toast.LENGTH_SHORT).show();
-                return true;
-            case R.id.action_paste:
-                clipData = clipboardManager.getPrimaryClip();
-                ClipData.Item clipItem = clipData.getItemAt(0);
-                mContext.setDocumentChanged(true);
-                return mContext.getTileProvider().paste("text/plain;charset=utf-16", clipItem.getText().toString());
-            case R.id.action_cut:
-                clipData = ClipData.newPlainText("clipboard data", clipboardText);
-                clipboardManager.setPrimaryClip(clipData);
-                LOKitShell.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_DEL));
-                mContext.setDocumentChanged(true);
                 return true;
         }
         return false;
