@@ -144,14 +144,6 @@ namespace canvas
         {
             enum class ChangeType { none=0, move, update };
 
-            SpriteChangeRecord() :
-                meChangeType( ChangeType::none ),
-                mpAffectedSprite(),
-                maOldPos(),
-                maUpdateArea()
-            {
-            }
-
             SpriteChangeRecord( const Sprite::Reference&    rSprite,
                                 const ::basegfx::B2DPoint&  rOldPos,
                                 const ::basegfx::B2DPoint&  rNewPos,

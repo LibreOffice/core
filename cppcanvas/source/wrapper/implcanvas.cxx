@@ -28,7 +28,6 @@
 #include <canvas/canvastools.hxx>
 #include <cppcanvas/polypolygon.hxx>
 
-#include "implfont.hxx"
 #include "implcanvas.hxx"
 
 

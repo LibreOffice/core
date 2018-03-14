@@ -133,9 +133,6 @@ for d in definitionSet:
     # alone if the other one is in use.
     if d[1] == "begin() const" or d[1] == "begin()" or d[1] == "end()" or d[1] == "end() const":
         continue
-    # There is lots of macro magic going on in SRCDIR/include/sax/fshelper.hxx that should be using C++11 varargs templates
-    if d[1].startswith("sax_fastparser::FastSerializerHelper::"):
-       continue
     # used by Windows build
     if any(x in d[1] for x in ["DdeTopic::", "DdeData::", "DdeService::", "DdeTransaction::", "DdeConnection::", "DdeLink::", "DdeItem::", "DdeGetPutItem::"]):
        continue
