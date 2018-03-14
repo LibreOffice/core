@@ -151,7 +151,7 @@ void appendPolyLine(vcl::LineBuilder& rBuilder, const basegfx::B2DPolygon& rPoly
 inline void appendTrapezoid(std::vector<Vertex>& rVertices, std::vector<GLuint>& rIndices,
                        GLfloat x1, GLfloat y1, GLfloat x2, GLfloat y2,
                        GLfloat x3, GLfloat y3, GLfloat x4, GLfloat y4,
-                       SalColor nColor, GLfloat fTransparency)
+                       Color nColor, GLfloat fTransparency)
 {
     GLubyte nR, nG, nB, nA;
     vcl::vertex::createColor(nColor, fTransparency, nR, nG, nB, nA);
@@ -173,7 +173,7 @@ inline void appendTrapezoid(std::vector<Vertex>& rVertices, std::vector<GLuint>&
 
 void appendRectangle(std::vector<Vertex>& rVertices, std::vector<GLuint>& rIndices,
                      GLfloat x1, GLfloat y1, GLfloat x2, GLfloat y2,
-                     SalColor nColor, GLfloat fTransparency)
+                     Color nColor, GLfloat fTransparency)
 {
     GLubyte nR, nG, nB, nA;
     vcl::vertex::createColor(nColor, fTransparency, nR, nG, nB, nA);
@@ -195,7 +195,7 @@ void appendRectangle(std::vector<Vertex>& rVertices, std::vector<GLuint>& rIndic
 
 } // end anonymous namespace
 
-void RenderList::addDrawPixel(long nX, long nY, SalColor nColor)
+void RenderList::addDrawPixel(long nX, long nY, Color nColor)
 {
     if (nColor == SALCOLOR_NONE)
         return;
@@ -208,7 +208,7 @@ void RenderList::addDrawPixel(long nX, long nY, SalColor nColor)
 }
 
 void RenderList::addDrawRectangle(long nX, long nY, long nWidth, long nHeight, double fTransparency,
-                                  SalColor nLineColor, SalColor nFillColor)
+                                  Color nLineColor, Color nFillColor)
 {
     if (nLineColor == SALCOLOR_NONE && nFillColor == SALCOLOR_NONE)
         return;
@@ -256,7 +256,7 @@ void RenderList::addDrawRectangle(long nX, long nY, long nWidth, long nHeight, d
     }
 }
 
-void RenderList::addDrawLine(long nX1, long nY1, long nX2, long nY2, SalColor nLineColor, bool bUseAA)
+void RenderList::addDrawLine(long nX1, long nY1, long nX2, long nY2, Color nLineColor, bool bUseAA)
 {
     if (nLineColor == SALCOLOR_NONE)
         return;
@@ -273,7 +273,7 @@ void RenderList::addDrawLine(long nX1, long nY1, long nX2, long nY2, SalColor nL
 }
 
 void RenderList::addDrawPolyPolygon(const basegfx::B2DPolyPolygon& rPolyPolygon, double fTransparency,
-                        SalColor nLineColor, SalColor nFillColor, bool bUseAA)
+                        Color nLineColor, Color nFillColor, bool bUseAA)
 {
     if (rPolyPolygon.count() <= 0)
         return;
@@ -314,7 +314,7 @@ void RenderList::addDrawPolyPolygon(const basegfx::B2DPolyPolygon& rPolyPolygon,
 
     if (nLineColor != SALCOLOR_NONE || bUseAA)
     {
-        SalColor nColor = (nLineColor == SALCOLOR_NONE) ? nFillColor : nLineColor;
+        Color nColor = (nLineColor == SALCOLOR_NONE) ? nFillColor : nLineColor;
 
         vcl::LineBuilder aBuilder(rLineRenderParameter.maVertices, rLineRenderParameter.maIndices,
                                   nColor, fTransparency, 1.0f, bUseAA);
@@ -348,7 +348,7 @@ void RenderList::addDrawPolyPolygon(const basegfx::B2DPolyPolygon& rPolyPolygon,
     }
 }
 
-void RenderList::addDrawTextureWithMaskColor(OpenGLTexture const & rTexture, SalColor nColor, const SalTwoRect& r2Rect)
+void RenderList::addDrawTextureWithMaskColor(OpenGLTexture const & rTexture, Color nColor, const SalTwoRect& r2Rect)
 {
     if (!rTexture)
         return;
@@ -374,7 +374,7 @@ void RenderList::addDrawTextureWithMaskColor(OpenGLTexture const & rTexture, Sal
 void RenderList::addDrawPolyLine(const basegfx::B2DPolygon& rPolygon, double fTransparency,
                                  const basegfx::B2DVector& rLineWidth, basegfx::B2DLineJoin eLineJoin,
                                  css::drawing::LineCap eLineCap, double fMiterMinimumAngle,
-                                 SalColor nLineColor, bool bUseAA)
+                                 Color nLineColor, bool bUseAA)
 {
     if (rPolygon.count() <= 1)
         return;

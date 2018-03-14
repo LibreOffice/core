@@ -325,7 +325,7 @@ void OpenGLSalGraphicsImpl::ImplSetClipBit( const vcl::Region& rClip, GLuint nMa
 
     glClear( GL_STENCIL_BUFFER_BIT );
     CHECK_GL_ERROR();
-    if( UseSolid( MAKE_SALCOLOR( 0xFF, 0xFF, 0xFF ) ) )
+    if( UseSolid( Color( 0xFF, 0xFF, 0xFF ) ) )
     {
         if( rClip.getRegionBand() )
             DrawRegionBand( *rClip.getRegionBand() );
@@ -445,11 +445,11 @@ void OpenGLSalGraphicsImpl::SetLineColor()
 }
 
 // set the line color to a specific color
-void OpenGLSalGraphicsImpl::SetLineColor( SalColor nSalColor )
+void OpenGLSalGraphicsImpl::SetLineColor( Color nColor )
 {
-    if( mnLineColor != nSalColor )
+    if( mnLineColor != nColor )
     {
-        mnLineColor = nSalColor;
+        mnLineColor = nColor;
     }
 }
 
@@ -464,11 +464,11 @@ void OpenGLSalGraphicsImpl::SetFillColor()
 
 // set the fill color to a specific color, shapes will be
 // filled accordingly
-void OpenGLSalGraphicsImpl::SetFillColor( SalColor nSalColor )
+void OpenGLSalGraphicsImpl::SetFillColor( Color nColor )
 {
-    if( mnFillColor != nSalColor )
+    if( mnFillColor != nColor )
     {
-        mnFillColor = nSalColor;
+        mnFillColor = nColor;
     }
 }
 
@@ -487,13 +487,13 @@ void OpenGLSalGraphicsImpl::SetROPLineColor(SalROPColor nROPColor)
     switch (nROPColor)
     {
         case SalROPColor::N0:
-            mnLineColor = MAKE_SALCOLOR(0, 0, 0);
+            mnLineColor = Color(0, 0, 0);
             break;
         case SalROPColor::N1:
-            mnLineColor = MAKE_SALCOLOR(0xff, 0xff, 0xff);
+            mnLineColor = Color(0xff, 0xff, 0xff);
             break;
         case SalROPColor::Invert:
-            mnLineColor = MAKE_SALCOLOR(0xff, 0xff, 0xff);
+            mnLineColor = Color(0xff, 0xff, 0xff);
             break;
     }
 }
@@ -503,13 +503,13 @@ void OpenGLSalGraphicsImpl::SetROPFillColor(SalROPColor nROPColor)
     switch (nROPColor)
     {
         case SalROPColor::N0:
-            mnFillColor = MAKE_SALCOLOR(0, 0, 0);
+            mnFillColor = Color(0, 0, 0);
             break;
         case SalROPColor::N1:
-            mnFillColor = MAKE_SALCOLOR(0xff, 0xff, 0xff);
+            mnFillColor = Color(0xff, 0xff, 0xff);
             break;
         case SalROPColor::Invert:
-            mnFillColor = MAKE_SALCOLOR(0xff, 0xff, 0xff);
+            mnFillColor = Color(0xff, 0xff, 0xff);
             break;
     }
 }
@@ -591,7 +591,7 @@ bool OpenGLSalGraphicsImpl::UseProgram( const OUString& rVertexShader, const OUS
     return ( mpProgram != nullptr );
 }
 
-bool OpenGLSalGraphicsImpl::UseSolid( SalColor nColor, sal_uInt8 nTransparency )
+bool OpenGLSalGraphicsImpl::UseSolid( Color nColor, sal_uInt8 nTransparency )
 {
     if( nColor == SALCOLOR_NONE )
         return false;
@@ -606,7 +606,7 @@ bool OpenGLSalGraphicsImpl::UseSolid( SalColor nColor, sal_uInt8 nTransparency )
     return true;
 }
 
-bool OpenGLSalGraphicsImpl::UseSolid( SalColor nColor, double fTransparency )
+bool OpenGLSalGraphicsImpl::UseSolid( Color nColor, double fTransparency )
 {
     if( nColor == SALCOLOR_NONE )
         return false;
@@ -632,7 +632,7 @@ bool OpenGLSalGraphicsImpl::UseInvert50()
     return UseProgram( "dumbVertexShader", "invert50FragmentShader" );
 }
 
-bool OpenGLSalGraphicsImpl::UseSolid( SalColor nColor )
+bool OpenGLSalGraphicsImpl::UseSolid( Color nColor )
 {
     return UseSolid( nColor, 0.0f );
 }
@@ -652,7 +652,7 @@ bool OpenGLSalGraphicsImpl::UseInvert( SalInvert nFlags )
     }
     else
     {
-        if( !UseSolid( MAKE_SALCOLOR( 255, 255, 255 ) ) )
+        if( !UseSolid( Color( 255, 255, 255 ) ) )
             return false;
         mpProgram->SetBlendMode( GL_ONE_MINUS_DST_COLOR, GL_ZERO );
     }
@@ -683,7 +683,7 @@ void OpenGLSalGraphicsImpl::DrawLineSegment(float x1, float y1, float x2, float 
     CHECK_GL_ERROR();
 }
 
-bool OpenGLSalGraphicsImpl::UseLine(SalColor nColor, double fTransparency, GLfloat fLineWidth, bool bUseAA)
+bool OpenGLSalGraphicsImpl::UseLine(Color nColor, double fTransparency, GLfloat fLineWidth, bool bUseAA)
 {
     if( nColor == SALCOLOR_NONE )
         return false;
@@ -738,7 +738,7 @@ void OpenGLSalGraphicsImpl::DrawConvexPolygon( sal_uInt32 nPoints, const SalPoin
 #ifdef DBG_UTIL
         assert( mProgramIsSolidColor );
 #endif
-        SalColor lastSolidColor = mProgramSolidColor;
+        Color lastSolidColor = mProgramSolidColor;
         double lastSolidTransparency = mProgramSolidTransparency;
         if (UseLine(lastSolidColor, lastSolidTransparency, 1.0f, true))
         {
@@ -783,7 +783,7 @@ void OpenGLSalGraphicsImpl::DrawConvexPolygon( const tools::Polygon& rPolygon, b
 #ifdef DBG_UTIL
         assert( mProgramIsSolidColor );
 #endif
-        SalColor lastSolidColor = mProgramSolidColor;
+        Color lastSolidColor = mProgramSolidColor;
         double lastSolidTransparency = mProgramSolidTransparency;
         if (UseLine(lastSolidColor, lastSolidTransparency, 1.0f, true))
         {
@@ -835,7 +835,7 @@ void OpenGLSalGraphicsImpl::DrawTrapezoid( const basegfx::B2DTrapezoid& trapezoi
 #ifdef DBG_UTIL
         assert( mProgramIsSolidColor );
 #endif
-        SalColor lastSolidColor = mProgramSolidColor;
+        Color lastSolidColor = mProgramSolidColor;
         double lastSolidTransparency = mProgramSolidTransparency;
         if (UseLine(lastSolidColor, lastSolidTransparency, 1.0f, true))
         {
@@ -1291,7 +1291,7 @@ void OpenGLSalGraphicsImpl::DrawBlendedTexture( OpenGLTexture& rTexture, OpenGLT
     mpProgram->Clean();
 }
 
-void OpenGLSalGraphicsImpl::DrawMask( OpenGLTexture& rMask, SalColor nMaskColor, const SalTwoRect& rPosAry )
+void OpenGLSalGraphicsImpl::DrawMask( OpenGLTexture& rMask, Color nMaskColor, const SalTwoRect& rPosAry )
 {
     OpenGLZone aZone;
 
@@ -1313,7 +1313,7 @@ void OpenGLSalGraphicsImpl::DrawMask( OpenGLTexture& rMask, SalColor nMaskColor,
     mpProgram->Clean();
 }
 
-void OpenGLSalGraphicsImpl::DeferredTextDraw(OpenGLTexture const & rTexture, SalColor aMaskColor, const SalTwoRect& rPosAry)
+void OpenGLSalGraphicsImpl::DeferredTextDraw(OpenGLTexture const & rTexture, Color aMaskColor, const SalTwoRect& rPosAry)
 {
     mpRenderList->addDrawTextureWithMaskColor(rTexture, aMaskColor, rPosAry);
     PostBatchDraw();
@@ -1519,10 +1519,10 @@ void OpenGLSalGraphicsImpl::drawPixel(long nX, long nY)
     PostBatchDraw();
 }
 
-void OpenGLSalGraphicsImpl::drawPixel(long nX, long nY, SalColor nSalColor)
+void OpenGLSalGraphicsImpl::drawPixel(long nX, long nY, Color nColor)
 {
     VCL_GL_INFO("::drawPixel: (" << nX << ", " << nY << ")");
-    mpRenderList->addDrawPixel(nX, nY, nSalColor);
+    mpRenderList->addDrawPixel(nX, nY, nColor);
     PostBatchDraw();
 }
 
@@ -1711,7 +1711,7 @@ void OpenGLSalGraphicsImpl::drawBitmap(
 void OpenGLSalGraphicsImpl::drawMask(
             const SalTwoRect& rPosAry,
             const SalBitmap& rSalBitmap,
-            SalColor nMaskColor )
+            Color nMaskColor )
 {
     VCL_GL_INFO("::drawMask");
 
@@ -1741,7 +1741,7 @@ SalBitmap* OpenGLSalGraphicsImpl::getBitmap( long nX, long nY, long nWidth, long
     return pBitmap;
 }
 
-SalColor OpenGLSalGraphicsImpl::getPixel( long nX, long nY )
+Color OpenGLSalGraphicsImpl::getPixel( long nX, long nY )
 {
     FlushDeferredDrawing();
 
@@ -1753,7 +1753,7 @@ SalColor OpenGLSalGraphicsImpl::getPixel( long nX, long nY )
     CHECK_GL_ERROR();
     PostDraw();
 
-    return MAKE_SALCOLOR( pixel[0], pixel[1], pixel[2] );
+    return Color( pixel[0], pixel[1], pixel[2] );
 }
 
 // invert --> ClipRegion (only Windows or VirDevs)
@@ -2007,7 +2007,7 @@ bool OpenGLSalGraphicsImpl::drawGradient(const tools::PolyPolygon& rPolyPoly,
 
         Color aColor = rGradient.GetStartColor();
         long nIntensity = rGradient.GetStartIntensity();
-        if (UseSolid(MAKE_SALCOLOR(aColor.GetRed()  * nIntensity / 100.0,
+        if (UseSolid(Color(aColor.GetRed()  * nIntensity / 100.0,
                                    aColor.GetGreen()* nIntensity / 100.0,
                                    aColor.GetBlue() * nIntensity / 100.0)))
         {

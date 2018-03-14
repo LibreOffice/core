@@ -43,19 +43,19 @@ inline void addRectangle<GL_TRIANGLE_FAN>(std::vector<GLfloat>& rVertices, GLflo
     });
 }
 
-inline void createColor(SalColor nColor, GLfloat fTransparency, GLubyte& nR, GLubyte& nG, GLubyte& nB, GLubyte& nA)
+inline void createColor(Color nColor, GLfloat fTransparency, GLubyte& nR, GLubyte& nG, GLubyte& nB, GLubyte& nA)
 {
-    nR = SALCOLOR_RED(nColor);
-    nG = SALCOLOR_GREEN(nColor);
-    nB = SALCOLOR_BLUE(nColor);
+    nR = nColor.GetRed();
+    nG = nColor.GetGreen();
+    nB = nColor.GetBlue();
     nA = (1.0f - fTransparency) * 255.0f;
 }
 
 template<GLenum TYPE>
-inline void addQuadColors(std::vector<GLubyte>& rColors, SalColor nColor, GLfloat fTransparency);
+inline void addQuadColors(std::vector<GLubyte>& rColors, Color nColor, GLfloat fTransparency);
 
 template<>
-inline void addQuadColors<GL_TRIANGLES>(std::vector<GLubyte>& rColors, SalColor nColor, GLfloat fTransparency)
+inline void addQuadColors<GL_TRIANGLES>(std::vector<GLubyte>& rColors, Color nColor, GLfloat fTransparency)
 {
     GLubyte nR, nG, nB, nA;
     createColor(nColor, fTransparency, nR, nG, nB, nA);

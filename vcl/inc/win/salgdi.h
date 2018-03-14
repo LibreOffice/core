@@ -224,7 +224,7 @@ protected:
     virtual bool        setClipRegion( const vcl::Region& ) override;
     // draw --> LineColor and FillColor and RasterOp and ClipRegion
     virtual void        drawPixel( long nX, long nY ) override;
-    virtual void        drawPixel( long nX, long nY, SalColor nSalColor ) override;
+    virtual void        drawPixel( long nX, long nY, Color nColor ) override;
     virtual void        drawLine( long nX1, long nY1, long nX2, long nY2 ) override;
     virtual void        drawRect( long nX, long nY, long nWidth, long nHeight ) override;
     virtual void        drawPolyLine( sal_uInt32 nPoints, const SalPoint* pPtAry ) override;
@@ -256,10 +256,10 @@ protected:
                                     const SalBitmap& rTransparentBitmap ) override;
     virtual void        drawMask( const SalTwoRect& rPosAry,
                                   const SalBitmap& rSalBitmap,
-                                  SalColor nMaskColor ) override;
+                                  Color nMaskColor ) override;
 
     virtual SalBitmap*  getBitmap( long nX, long nY, long nWidth, long nHeight ) override;
-    virtual SalColor    getPixel( long nX, long nY ) override;
+    virtual Color       getPixel( long nX, long nY ) override;
 
     // invert --> ClipRegion (only Windows or VirDevs)
     virtual void        invert( long nX, long nY, long nWidth, long nHeight, SalInvert nFlags) override;
@@ -317,12 +317,12 @@ public:
     // set the line color to transparent (= don't draw lines)
     virtual void            SetLineColor() override;
     // set the line color to a specific color
-    virtual void            SetLineColor( SalColor nSalColor ) override;
+    virtual void            SetLineColor( Color nColor ) override;
     // set the fill color to transparent (= don't fill)
     virtual void            SetFillColor() override;
     // set the fill color to a specific color, shapes will be
     // filled accordingly
-    virtual void            SetFillColor( SalColor nSalColor ) override;
+    virtual void            SetFillColor( Color nColor ) override;
     // enable/disable XOR drawing
     virtual void            SetXORMode( bool bSet ) override;
     // set line color for raster operations
@@ -330,7 +330,7 @@ public:
     // set fill color for raster operations
     virtual void            SetROPFillColor( SalROPColor nROPColor ) override;
     // set the text color to a specific color
-    virtual void            SetTextColor( SalColor nSalColor ) override;
+    virtual void            SetTextColor( Color nColor ) override;
     // set the font
     virtual void            SetFont( const FontSelectPattern*, int nFallbackLevel ) override;
     // get the current font's metrics
@@ -396,7 +396,7 @@ public:
 
 // Init/Deinit Graphics
 void    ImplUpdateSysColorEntries();
-int     ImplIsSysColorEntry( SalColor nSalColor );
+int     ImplIsSysColorEntry( Color nColor );
 void    ImplGetLogFontFromFontSelect( HDC, const FontSelectPattern*,
             LOGFONTW&, bool bTestVerticalAvail );
 

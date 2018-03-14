@@ -272,10 +272,10 @@ SalGraphicsImpl* AquaSalGraphics::GetImpl() const
     return nullptr;
 }
 
-void AquaSalGraphics::SetTextColor( SalColor nSalColor )
+void AquaSalGraphics::SetTextColor( Color nColor )
 {
-    maTextColor = RGBAColor( nSalColor );
-    // SAL_ DEBUG(std::hex << nSalColor << std::dec << "={" << maTextColor.GetRed() << ", " << maTextColor.GetGreen() << ", " << maTextColor.GetBlue() << ", " << maTextColor.GetAlpha() << "}");
+    maTextColor = RGBAColor( nColor );
+    // SAL_ DEBUG(std::hex << nColor << std::dec << "={" << maTextColor.GetRed() << ", " << maTextColor.GetGreen() << ", " << maTextColor.GetBlue() << ", " << maTextColor.GetAlpha() << "}");
 }
 
 void AquaSalGraphics::GetFontMetric(ImplFontMetricDataRef& rxFontMetric, int nFallbackLevel)
