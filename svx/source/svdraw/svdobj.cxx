@@ -226,6 +226,10 @@ sdr::properties::BaseProperties& SdrObject::GetProperties() const
 {
     if(!mpProperties)
     {
+        // TTTT CAUTION(!) Do *not* vall this during SdrObject construction,
+        // that will lead to wrong type-casts (dependent on costructor-level)
+        // and thus eventually create the wrong sdr::properties (!). Is there
+        // a way to check if on the stack is a SdrObject-constructor (?)
         const_cast< SdrObject* >(this)->mpProperties.reset(
             const_cast< SdrObject* >(this)->CreateObjectSpecificProperties() );
     }

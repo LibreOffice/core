@@ -83,6 +83,10 @@ sdr::properties::BaseProperties* SdrAttrObj::CreateObjectSpecificProperties()
 SdrAttrObj::SdrAttrObj(SdrModel& rSdrModel)
 :   SdrObject(rSdrModel)
 {
+    // TTTT stuff from SetModel:
+    // Needed - creates the properties and sets a StyleSheet (!)
+    // TTTT NOT in constructor - will lead to wrong class casts (!)
+    // GetProperties().SetModel(rSdrModel);
 }
 
 SdrAttrObj::~SdrAttrObj()

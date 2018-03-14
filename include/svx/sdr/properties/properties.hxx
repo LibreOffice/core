@@ -44,6 +44,32 @@ namespace sdr
     }
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+//
+//  BaseProperties
+//      DefaultProperties                   ->SfxItemSet
+//          AttributeProperties             ->SfxStyleSheet
+//              E3dProperties
+//                  E3dCompoundProperties
+//                      E3dExtrudeProperties
+//                      E3dLatheProperties
+//                      E3dSphereProperties
+//                  E3dSceneProperties
+//              TextProperties              ->maVersion
+//                  ConnectorProperties
+//                  CustomShapeProperties
+//                  MeasureProperties
+//                  RectangleProperties
+//                      CaptionProperties
+//                      CircleProperties
+//                      GraphicProperties
+//                      OleProperties
+//                  CellProperties
+//                  TableProperties
+//          GroupProperties
+//      EmptyProperties
+//          PageProperties
+
 namespace sdr
 {
     namespace properties
@@ -149,8 +175,8 @@ namespace sdr
             // Override this to do it for hierarchical objects like e.g. groups.
             // TTTT virtual void MoveToItemPool(SfxItemPool* pSrcPool, SfxItemPool* pDestPool, SdrModel* pNewModel);
 
-            // Set new model.
-            virtual void SetModel(SdrModel* pOldModel, SdrModel* pNewModel);
+            // Initialize for new SdrModel
+            // TTTT virtual void SetModel(SdrModel& rNewModel);
 
             // force all attributes which come from styles to hard attributes
             // to be able to live without the style.
