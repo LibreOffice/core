@@ -29,7 +29,7 @@ private:
 
 public:
     LineBuilder(std::vector<Vertex>& rVertices, std::vector<GLuint>& rIndices,
-                SalColor nColor, GLfloat fTransparency,
+                Color nColor, GLfloat fTransparency,
                 GLfloat fLineWidth, bool bUseAA);
 
     void appendLineSegment(const glm::vec2& rPoint1, const glm::vec2& rNormal1, GLfloat aExtrusion1,

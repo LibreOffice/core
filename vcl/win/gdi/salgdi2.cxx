@@ -210,7 +210,7 @@ bool WinSalGraphics::drawAlphaRect( long nX, long nY, long nWidth,
 
 void WinSalGraphics::drawMask( const SalTwoRect& rPosAry,
                             const SalBitmap& rSSalBitmap,
-                            SalColor nMaskColor )
+                            Color nMaskColor )
 {
     mpImpl->drawMask( rPosAry, rSSalBitmap, nMaskColor );
 }
@@ -220,7 +220,7 @@ SalBitmap* WinSalGraphics::getBitmap( long nX, long nY, long nDX, long nDY )
     return mpImpl->getBitmap( nX, nY, nDX, nDY );
 }
 
-SalColor WinSalGraphics::getPixel( long nX, long nY )
+Color WinSalGraphics::getPixel( long nX, long nY )
 {
     return mpImpl->getPixel( nX, nY );
 }

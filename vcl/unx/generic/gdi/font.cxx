@@ -76,10 +76,10 @@ void X11SalGraphics::SetFont( const FontSelectPattern *pEntry, int nFallbackLeve
 }
 
 void
-X11SalGraphics::SetTextColor( SalColor nSalColor )
+X11SalGraphics::SetTextColor( Color nColor )
 {
-    mxTextRenderImpl->SetTextColor(nSalColor);
-    nTextPixel_     = GetPixel( nSalColor );
+    mxTextRenderImpl->SetTextColor(nColor);
+    nTextPixel_     = GetPixel( nColor );
     bFontGC_        = false;
 }
 

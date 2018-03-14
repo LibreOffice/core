@@ -384,12 +384,12 @@ BitmapBuffer* X11SalBitmap::ImplCreateDIB(
 
                 for( sal_uInt16 i = 0; i < nCols; i++ )
                 {
-                    const SalColor  nColor( rColMap.GetColor( i ) );
+                    const Color  nColor( rColMap.GetColor( i ) );
                     BitmapColor&    rBmpCol = rPal[ i ];
 
-                    rBmpCol.SetRed( SALCOLOR_RED( nColor ) );
-                    rBmpCol.SetGreen( SALCOLOR_GREEN( nColor ) );
-                    rBmpCol.SetBlue( SALCOLOR_BLUE( nColor ) );
+                    rBmpCol.SetRed( nColor.GetRed() );
+                    rBmpCol.SetGreen( nColor.GetGreen() );
+                    rBmpCol.SetBlue( nColor.GetBlue() );
                 }
             }
 
@@ -546,12 +546,12 @@ XImage* X11SalBitmap::ImplCreateXImage(
 
                 for( sal_uInt16 i = 0; i < nCols; i++ )
                 {
-                    const SalColor  nColor( rColMap.GetColor( i ) );
+                    const Color  nColor( rColMap.GetColor( i ) );
                     BitmapColor&    rBmpCol = (*xPal)[ i ];
 
-                    rBmpCol.SetRed( SALCOLOR_RED( nColor ) );
-                    rBmpCol.SetGreen( SALCOLOR_GREEN( nColor ) );
-                    rBmpCol.SetBlue( SALCOLOR_BLUE( nColor ) );
+                    rBmpCol.SetRed( nColor.GetRed() );
+                    rBmpCol.SetGreen( nColor.GetGreen() );
+                    rBmpCol.SetBlue( nColor.GetBlue() );
                 }
             }
 

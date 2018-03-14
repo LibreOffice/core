@@ -111,9 +111,9 @@ void SvpSalGraphics::DrawTextLayout(const CommonSalLayout& rLayout)
     m_aTextRenderImpl.DrawTextLayout(rLayout);
 }
 
-void SvpSalGraphics::SetTextColor( SalColor nSalColor )
+void SvpSalGraphics::SetTextColor( Color nColor )
 {
-    m_aTextRenderImpl.SetTextColor(nSalColor);
+    m_aTextRenderImpl.SetTextColor(nColor);
 }
 
 #if ENABLE_CAIRO_CANVAS

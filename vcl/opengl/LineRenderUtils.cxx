@@ -14,13 +14,13 @@ namespace vcl
 {
 
 LineBuilder::LineBuilder(std::vector<Vertex>& rVertices, std::vector<GLuint>& rIndices,
-                SalColor nColor, GLfloat fTransparency,
+                Color nColor, GLfloat fTransparency,
                 GLfloat fLineWidth, bool bUseAA)
     : mrVertices(rVertices)
     , mrIndices(rIndices)
-    , mR(SALCOLOR_RED(nColor))
-    , mG(SALCOLOR_GREEN(nColor))
-    , mB(SALCOLOR_BLUE(nColor))
+    , mR(nColor.GetRed())
+    , mG(nColor.GetGreen())
+    , mB(nColor.GetBlue())
     , mA((1.0f - fTransparency) * 255.0f)
     , mfLineWidth(fLineWidth)
     , mfLineWidthAndAA(bUseAA ? fLineWidth : -fLineWidth)

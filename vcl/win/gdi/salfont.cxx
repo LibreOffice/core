@@ -726,15 +726,15 @@ void WinFontFace::GetFontCapabilities( HDC hDC ) const
     }
 }
 
-void WinSalGraphics::SetTextColor( SalColor nSalColor )
+void WinSalGraphics::SetTextColor( Color nColor )
 {
-    COLORREF aCol = PALETTERGB( SALCOLOR_RED( nSalColor ),
-                                SALCOLOR_GREEN( nSalColor ),
-                                SALCOLOR_BLUE( nSalColor ) );
+    COLORREF aCol = PALETTERGB( nColor.GetRed(),
+                                nColor.GetGreen(),
+                                nColor.GetBlue() );
 
     if( !mbPrinter &&
         GetSalData()->mhDitherPal &&
-        ImplIsSysColorEntry( nSalColor ) )
+        ImplIsSysColorEntry( nColor ) )
     {
         aCol = PALRGB_TO_RGB( aCol );
     }

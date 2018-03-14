@@ -586,7 +586,7 @@ void OutputDevice::InitLineColor()
         else if( RasterOp::Invert == meRasterOp )
             mpGraphics->SetROPLineColor( SalROPColor::Invert );
         else
-            mpGraphics->SetLineColor( ImplColorToSal( maLineColor ) );
+            mpGraphics->SetLineColor( maLineColor );
     }
     else
         mpGraphics->SetLineColor();
@@ -608,7 +608,7 @@ void OutputDevice::InitFillColor()
         else if( RasterOp::Invert == meRasterOp )
             mpGraphics->SetROPFillColor( SalROPColor::Invert );
         else
-            mpGraphics->SetFillColor( ImplColorToSal( maFillColor ) );
+            mpGraphics->SetFillColor( maFillColor );
     }
     else
         mpGraphics->SetFillColor();
