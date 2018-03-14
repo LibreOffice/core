@@ -395,7 +395,8 @@ void PropertyMap::printProperties()
 
 SectionPropertyMap::SectionPropertyMap(bool bIsFirstSection) :
     m_bIsFirstSection( bIsFirstSection )
-    ,m_nBorderParams( 0 )
+    ,m_eBorderApply( BorderApply::ToAllInSection )
+    ,m_eBorderOffsetFrom( BorderOffsetFrom::Text )
     ,m_bTitlePage( false )
     ,m_nColumnCount( 0 )
     ,m_nColumnDistance( 1249 )
@@ -568,7 +569,7 @@ void SectionPropertyMap::SetBorder( BorderPosition ePos, sal_Int32 nLineDistance
 void SectionPropertyMap::ApplyBorderToPageStyles(
             const uno::Reference< container::XNameContainer >& xPageStyles,
             const uno::Reference < lang::XMultiServiceFactory >& xTextFactory,
-        sal_Int32 nValue )
+            BorderApply eBorderApply, BorderOffsetFrom eOffsetFrom)
 {
             /*
             page border applies to:
@@ -585,26 +586,25 @@ void SectionPropertyMap::ApplyBorderToPageStyles(
             */
     uno::Reference< beans::XPropertySet >  xFirst;
     uno::Reference< beans::XPropertySet >  xSecond;
-    sal_Int32 nOffsetFrom = (nValue & 0x00E0) >> 5;
     //todo: negative spacing (from ww8par6.cxx)
-    switch( nValue & 0x07)
+    switch( eBorderApply )
     {
-        case 0: /*all styles*/
+        case BorderApply::ToAllInSection: // all styles
             if ( !m_sFollowPageStyleName.isEmpty() )
                 xFirst = GetPageStyle( xPageStyles, xTextFactory, false );
             if ( !m_sFirstPageStyleName.isEmpty() )
                 xSecond = GetPageStyle( xPageStyles, xTextFactory, true );
         break;
-        case 1: /*first page*/
+        case BorderApply::ToFirstPageInSection: /*first page*/
             if ( !m_sFirstPageStyleName.isEmpty() )
                 xFirst = GetPageStyle( xPageStyles, xTextFactory, true );
         break;
-        case 2: /*left and right*/
+        case BorderApply::ToAllButFirstInSection: /*left and right*/
             if ( !m_sFollowPageStyleName.isEmpty() )
-                xFirst  = GetPageStyle( xPageStyles, xTextFactory, false );
+                xFirst = GetPageStyle( xPageStyles, xTextFactory, false );
         break;
-        case 3: //whole document?
-            //todo: how to apply a border to the whole document - find all sections or access all page styles?
+        case BorderApply::ToWholeDocument: //whole document?
+            // todo: how to apply a border to the whole document - find all sections or access all page styles?
         default:
             return;
     }
@@ -648,10 +648,10 @@ void SectionPropertyMap::ApplyBorderToPageStyles(
                 nLineWidth = m_oBorderLines[nBorder]->LineWidth;
             if(xFirst.is())
                 SetBorderDistance( xFirst, aMarginIds[nBorder], aBorderDistanceIds[nBorder],
-                  m_nBorderDistances[nBorder], nOffsetFrom, nLineWidth );
-            if(xSecond.is())
+                    m_nBorderDistances[nBorder], eOffsetFrom, nLineWidth );
+            if ( xSecond.is() )
                 SetBorderDistance( xSecond, aMarginIds[nBorder], aBorderDistanceIds[nBorder],
-                      m_nBorderDistances[nBorder], nOffsetFrom, nLineWidth );
+                    m_nBorderDistances[nBorder], eOffsetFrom, nLineWidth );
         }
     }
 
@@ -679,25 +679,46 @@ table::ShadowFormat PropertyMap::getShadowFromBorder(const table::BorderLine2& r
 }
 
 void SectionPropertyMap::SetBorderDistance( uno::Reference< beans::XPropertySet > const& xStyle,
-        PropertyIds eMarginId, PropertyIds eDistId, sal_Int32 nDistance, sal_Int32 nOffsetFrom, sal_uInt32 nLineWidth )
+        PropertyIds eMarginId, PropertyIds eDistId, sal_Int32 nDistance, BorderOffsetFrom eOffsetFrom, sal_uInt32 nLineWidth )
 {
-    sal_Int32 nDist = nDistance;
-    if( nOffsetFrom == 1 ) // From page
-    {
-        const OUString sMarginName = getPropertyName( eMarginId );
-        uno::Any aMargin = xStyle->getPropertyValue( sMarginName );
-        sal_Int32 nMargin = 0;
-        aMargin >>= nMargin;
+    // See https://wiki.openoffice.org/wiki/Writer/MSInteroperability/PageBorder
 
-        // Change the margins with the border distance
-        xStyle->setPropertyValue( sMarginName, uno::makeAny( nDistance ) );
-
-        // Set the distance to ( Margin - distance - nLineWidth )
-        nDist = nMargin - nDistance - nLineWidth;
-    }
+    if (!xStyle.is())
+        return;
+    const OUString sMarginName = getPropertyName( eMarginId );
     const OUString sBorderDistanceName = getPropertyName( eDistId );
-    if (xStyle.is())
-        xStyle->setPropertyValue( sBorderDistanceName, uno::makeAny( nDist ));
+    uno::Any aMargin = xStyle->getPropertyValue( sMarginName );
+    sal_Int32 nMargin = 0;
+    aMargin >>= nMargin;
+    sal_Int32 nNewMargin = nMargin;
+    sal_Int32 nNewDist = nDistance;
+
+    switch (eOffsetFrom)
+    {
+    case BorderOffsetFrom::Text:
+        nNewMargin -= nDistance + nLineWidth;
+        break;
+    case BorderOffsetFrom::Edge:
+        nNewMargin = nDistance;
+        nNewDist = nMargin - nDistance - nLineWidth;
+        break;
+    }
+    // Ensure corrent distance from page edge to text in cases not supported by us:
+    // when border is outside entire page area (eOffsetFrom == Text && nDistance > nMargin),
+    // and when border is inside page body area (eOffsetFrom == Edge && nDistance > nMargin)
+    if (nNewMargin < 0)
+    {
+        nNewMargin = 0;
+        nNewDist = std::max<sal_Int32>(nMargin - nLineWidth, 0);
+    }
+    else if (nNewDist < 0)
+    {
+        nNewMargin = std::max<sal_Int32>(nMargin - nLineWidth, 0);
+        nNewDist = 0;
+    }
+    // Change the margins with the border distance
+    xStyle->setPropertyValue( sMarginName, uno::makeAny( nNewMargin ) );
+    xStyle->setPropertyValue( sBorderDistanceName, uno::makeAny( nNewDist ) );
 }
 
 void SectionPropertyMap::DontBalanceTextColumns()
@@ -1408,7 +1429,7 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
                     getPropertyName( PROP_TEXT_COLUMNS ), uno::makeAny( xColumns ));
         }
 
-        ApplyBorderToPageStyles( rDM_Impl.GetPageStyles( ), rDM_Impl.GetTextFactory( ), m_nBorderParams );
+        ApplyBorderToPageStyles( rDM_Impl.GetPageStyles(), rDM_Impl.GetTextFactory(), m_eBorderApply, m_eBorderOffsetFrom );
 
         try
         {
