@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba2be162_44267169",
+        "filename": "vcl/source/outdev/text.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1199,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-03-14T16:29:30Z",
+      "side": 1,
+      "message": "wouldn\u0027t that be highly unlikely anyway, given \u003chttps://www.unicode.org/Public/10.0.0/ucd/extracted/DerivedBidiClass.txt\u003e \"Unlike other properties, unassigned code points in blocks reserved for right-to-left scripts are given either types R or AL. [...] For all other cases: All code points not explicitly listed for Bidi_Class have the value Left_To_Right (L).\"",
+      "range": {
+        "startLine": 1199,
+        "startChar": 32,
+        "endLine": 1199,
+        "endChar": 80
+      },
+      "revId": "489c7088b4a99720d1a2839ed52b3becd7aac342",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
