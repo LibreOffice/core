@@ -1,5 +1,3 @@
-canvas/source/cairo/cairo_canvashelper.hxx:214
-    _Bool cairocanvas::CanvasHelper::hasAlpha() const
 chart2/source/view/main/OpenGLRender.hxx:69
     int OpenGLRender::InitOpenGL()
 chart2/source/view/main/OpenGLRender.hxx:70
@@ -36,10 +34,6 @@ connectivity/source/inc/odbc/OConnection.hxx:78
     short connectivity::odbc::OConnection::Construct(const class rtl::OUString &,const class com::sun::star::uno::Sequence<struct com::sun::star::beans::PropertyValue> &)
 connectivity/source/inc/odbc/OStatement.hxx:116
     _Bool connectivity::odbc::OStatement_Base::lockIfNecessary(const class rtl::OUString &)
-cppcanvas/source/inc/canvasgraphichelper.hxx:59
-    const class com::sun::star::uno::Reference<class com::sun::star::rendering::XGraphicDevice> & cppcanvas::internal::CanvasGraphicHelper::getGraphicDevice() const
-cui/source/options/securityoptions.hxx:56
-    short svx::SecurityOptionsDialog::run()
 extensions/source/scanner/sane.hxx:97
     _Bool Sane::CheckConsistency(const char *,_Bool)
 extensions/source/scanner/sane.hxx:140
@@ -64,38 +58,6 @@ include/basegfx/vector/b3dvector.hxx:155
     class basegfx::B3DVector & basegfx::B3DVector::setLength(double)
 include/basegfx/vector/b3dvector.hxx:180
     class basegfx::B3DVector & basegfx::B3DVector::normalize()
-include/canvas/base/bufferedgraphicdevicebase.hxx:158
-    const class com::sun::star::uno::Reference<class com::sun::star::awt::XWindow2> & canvas::BufferedGraphicDeviceBase::getWindow() const
-include/canvas/base/canvascustomspritehelper.hxx:118
-    _Bool canvas::CanvasCustomSpriteHelper::hasAlphaChanged() const
-include/canvas/base/canvascustomspritehelper.hxx:121
-    _Bool canvas::CanvasCustomSpriteHelper::hasPositionChanged() const
-include/canvas/base/canvascustomspritehelper.hxx:127
-    _Bool canvas::CanvasCustomSpriteHelper::hasClipChanged() const
-include/canvas/base/canvascustomspritehelper.hxx:130
-    _Bool canvas::CanvasCustomSpriteHelper::hasPrioChanged() const
-include/canvas/base/canvascustomspritehelper.hxx:133
-    _Bool canvas::CanvasCustomSpriteHelper::hasVisibilityChanged() const
-include/canvas/rendering/icolorbuffer.hxx:49
-    unsigned char * canvas::IColorBuffer::lock() const
-include/canvas/rendering/icolorbuffer.hxx:68
-    unsigned int canvas::IColorBuffer::getStride() const
-include/canvas/rendering/icolorbuffer.hxx:72
-    enum canvas::IColorBuffer::Format canvas::IColorBuffer::getFormat() const
-include/canvas/rendering/isurfaceproxy.hxx:55
-    _Bool canvas::ISurfaceProxy::draw(double,const class basegfx::B2DPoint &,const class basegfx::B2DHomMatrix &)
-include/canvas/rendering/isurfaceproxy.hxx:75
-    _Bool canvas::ISurfaceProxy::draw(double,const class basegfx::B2DPoint &,const class basegfx::B2DRange &,const class basegfx::B2DHomMatrix &)
-include/canvas/rendering/isurfaceproxy.hxx:95
-    _Bool canvas::ISurfaceProxy::draw(double,const class basegfx::B2DPoint &,const class basegfx::B2DPolyPolygon &,const class basegfx::B2DHomMatrix &)
-include/canvas/rendering/isurfaceproxymanager.hxx:58
-    class std::shared_ptr<struct canvas::ISurfaceProxy> canvas::ISurfaceProxyManager::createSurfaceProxy(const class std::shared_ptr<struct canvas::IColorBuffer> &) const
-include/canvas/rendering/isurfaceproxymanager.hxx:64
-    class std::shared_ptr<struct canvas::ISurfaceProxyManager> createSurfaceProxyManager(const class std::shared_ptr<struct canvas::IRenderModule> &)
-include/canvas/vclwrapper.hxx:134
-    type-parameter-?-? & canvas::vcltools::VCLObject::get()
-include/canvas/vclwrapper.hxx:135
-    const type-parameter-?-? & canvas::vcltools::VCLObject::get() const
 include/comphelper/backupfilehelper.hxx:206
     _Bool comphelper::BackupFileHelper::tryPush_extensionInfo(const class rtl::OUString &)
 include/editeng/editview.hxx:220
@@ -238,6 +200,8 @@ include/vcl/texteng.hxx:285
     _Bool TextEngine::Read(class SvStream &,const class TextSelection *)
 include/vcl/textview.hxx:192
     _Bool TextView::SetCursorAtPoint(const class Point &)
+include/vcl/toolbox.hxx:513
+    _Bool ToolBox::ChangeHighlightUpDn(_Bool,_Bool)
 lotuswordpro/inc/lwpsvstream.hxx:76
     class LwpSvStream & LwpSvStream::ReadUInt8(unsigned char &)
 lotuswordpro/inc/lwpsvstream.hxx:77
@@ -306,12 +270,10 @@ sd/source/ui/inc/OutlineViewShell.hxx:114
     class ErrCode sd::OutlineViewShell::ReadRtf(class SvStream &)
 sd/source/ui/remotecontrol/IBluetoothSocket.hxx:37
     int sd::IBluetoothSocket::write(const void *,unsigned int)
-sfx2/inc/saveastemplatedlg.hxx:54
-    short SfxSaveAsTemplateDialog::run()
-sfx2/source/appl/appserv.cxx:322
-    short (anonymous namespace)::LicenseDialog::run()
-sfx2/source/appl/appserv.cxx:344
-    short (anonymous namespace)::SafeModeQueryDialog::run()
+sfx2/source/appl/appserv.cxx:318
+    short (anonymous namespace)::LicenseDialog::execute()
+sfx2/source/appl/appserv.cxx:336
+    short (anonymous namespace)::SafeModeQueryDialog::execute()
 sw/inc/calc.hxx:112
     class SwSbxValue & SwSbxValue::MakeDouble()
 sw/inc/doc.hxx:1102

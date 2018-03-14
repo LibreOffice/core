@@ -228,8 +228,6 @@ public:
         o.m_pToTell = nullptr;
     }
 
-    SwClient* GetToTell() { return m_pToTell; }
-
     /** get Client information */
     virtual bool GetInfo( SfxPoolItem& rInfo) const override
         { return m_pToTell == nullptr || m_pToTell->GetInfo( rInfo ); }
