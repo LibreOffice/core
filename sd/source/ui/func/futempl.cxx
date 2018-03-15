@@ -107,12 +107,12 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
     if( pArgs && SfxItemState::SET == pArgs->GetItemState( SID_STYLE_FAMILY,
         false, &pItem ))
     {
-        nFamily = static_cast<SfxStyleFamily>(static_cast<const SfxUInt16Item &>( pArgs->Get( SID_STYLE_FAMILY ) ).GetValue());
+        nFamily = static_cast<SfxStyleFamily>( pArgs->Get( SID_STYLE_FAMILY ).GetValue());
     }
     else if( pArgs && SfxItemState::SET == pArgs->GetItemState( SID_STYLE_FAMILYNAME,
         false, &pItem ))
     {
-        OUString sFamily = static_cast<const SfxStringItem &>( pArgs->Get( SID_STYLE_FAMILYNAME ) ).GetValue();
+        OUString sFamily = pArgs->Get( SID_STYLE_FAMILYNAME ).GetValue();
         if (sFamily == "graphics")
             nFamily = SfxStyleFamily::Para;
         else
@@ -172,7 +172,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
 
             if (pArgs && pArgs->GetItemState(SID_STYLE_REFERENCE) == SfxItemState::SET)
             {
-                OUString aParentName(static_cast<const SfxStringItem&>( pArgs->Get(SID_STYLE_REFERENCE)).GetValue());
+                OUString aParentName( pArgs->Get(SID_STYLE_REFERENCE).GetValue());
                 pStyleSheet->SetParent(aParentName);
             }
             else

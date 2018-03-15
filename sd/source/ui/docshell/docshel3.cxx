@@ -145,9 +145,9 @@ void DrawDocShell::Execute( SfxRequest& rReq )
 
             if (pReqArgs)
             {
-                const SvxSearchItem* pSearchItem = static_cast<const SvxSearchItem*>( &pReqArgs->Get(SID_SEARCH_ITEM) );
+                const SvxSearchItem & rSearchItem = pReqArgs->Get(SID_SEARCH_ITEM);
 
-                SD_MOD()->SetSearchItem(std::unique_ptr<SvxSearchItem>(static_cast<SvxSearchItem*>(pSearchItem->Clone())));
+                SD_MOD()->SetSearchItem(std::unique_ptr<SvxSearchItem>(static_cast<SvxSearchItem*>(rSearchItem.Clone())));
             }
 
             rReq.Done();
@@ -208,11 +208,10 @@ void DrawDocShell::Execute( SfxRequest& rReq )
 
                 if( xFuSearch.is() )
                 {
-                    const SvxSearchItem* pSearchItem =
-                        static_cast<const SvxSearchItem*>( &pReqArgs->Get(SID_SEARCH_ITEM) );
+                    const SvxSearchItem& rSearchItem = pReqArgs->Get(SID_SEARCH_ITEM);
 
-                    SD_MOD()->SetSearchItem(std::unique_ptr<SvxSearchItem>(static_cast<SvxSearchItem*>( pSearchItem->Clone() )));
-                    xFuSearch->SearchAndReplace(pSearchItem);
+                    SD_MOD()->SetSearchItem(std::unique_ptr<SvxSearchItem>(static_cast<SvxSearchItem*>( rSearchItem.Clone() )));
+                    xFuSearch->SearchAndReplace(&rSearchItem);
                 }
             }
 

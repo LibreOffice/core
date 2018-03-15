@@ -289,7 +289,7 @@ bool SdGRFFilter::Export()
 
                     // take selection if needed
                     if( ( SfxItemState::SET == pSet->GetItemState( SID_SELECTION ) )
-                        && static_cast< const SfxBoolItem& >( pSet->Get( SID_SELECTION ) ).GetValue()
+                        && pSet->Get( SID_SELECTION ).GetValue()
                         && pDrawViewShell )
                     {
                         uno::Reference< view::XSelectionSupplier > xSelectionSupplier(

@@ -65,7 +65,7 @@ void FuFormatPaintBrush::DoExecute( SfxRequest& rReq )
     const SfxItemSet *pArgs = rReq.GetArgs();
     if( pArgs && pArgs->Count() >= 1 )
     {
-        mbPermanent = static_cast<const SfxBoolItem &>(pArgs->Get(SID_FORMATPAINTBRUSH)).GetValue();
+        mbPermanent = pArgs->Get(SID_FORMATPAINTBRUSH).GetValue();
     }
 
     if( mpView )

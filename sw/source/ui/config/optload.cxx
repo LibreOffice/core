@@ -323,7 +323,7 @@ void SwLoadOptPage::Reset( const SfxItemSet* rSet)
     m_pMetricLB->SetNoSelection();
     if ( rSet->GetItemState( SID_ATTR_METRIC ) >= SfxItemState::DEFAULT )
     {
-        const SfxUInt16Item& rItem = static_cast<const SfxUInt16Item&>(rSet->Get( SID_ATTR_METRIC ));
+        const SfxUInt16Item& rItem = rSet->Get( SID_ATTR_METRIC );
         FieldUnit eFieldUnit = static_cast<FieldUnit>(rItem.GetValue());
 
         for ( sal_Int32 i = 0; i < m_pMetricLB->GetEntryCount(); ++i )

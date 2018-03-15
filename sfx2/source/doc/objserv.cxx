@@ -1106,13 +1106,13 @@ void SfxObjectShell::ExecProps_Impl(SfxRequest &rReq)
     {
         case SID_MODIFIED:
         {
-            SetModified( static_cast<const SfxBoolItem&>(rReq.GetArgs()->Get(SID_MODIFIED)).GetValue() );
+            SetModified( rReq.GetArgs()->Get(SID_MODIFIED).GetValue() );
             rReq.Done();
             break;
         }
 
         case SID_DOCTITLE:
-            SetTitle( static_cast<const SfxStringItem&>(rReq.GetArgs()->Get(SID_DOCTITLE)).GetValue() );
+            SetTitle( rReq.GetArgs()->Get(SID_DOCTITLE).GetValue() );
             rReq.Done();
             break;
 

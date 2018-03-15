@@ -527,7 +527,7 @@ void    ScTpLayoutOptions::Reset( const SfxItemSet* rCoreSet )
     m_pUnitLB->SetNoSelection();
     if ( rCoreSet->GetItemState( SID_ATTR_METRIC ) >= SfxItemState::DEFAULT )
     {
-        const SfxUInt16Item& rItem = static_cast<const SfxUInt16Item&>(rCoreSet->Get( SID_ATTR_METRIC ));
+        const SfxUInt16Item& rItem = rCoreSet->Get( SID_ATTR_METRIC );
         FieldUnit eFieldUnit = static_cast<FieldUnit>(rItem.GetValue());
 
         for ( sal_Int32 i = 0; i < m_pUnitLB->GetEntryCount(); ++i )

@@ -699,7 +699,7 @@ bool SfxDocumentDescPage::FillItemSet(SfxItemSet *rSet)
 
 void SfxDocumentDescPage::Reset(const SfxItemSet *rSet)
 {
-    m_pInfoItem = const_cast<SfxDocumentInfoItem*>(&static_cast<const SfxDocumentInfoItem &>(rSet->Get(SID_DOCINFO)));
+    m_pInfoItem = const_cast<SfxDocumentInfoItem*>(&rSet->Get(SID_DOCINFO));
 
     m_pTitleEd->SetText( m_pInfoItem->getTitle() );
     m_pThemaEd->SetText( m_pInfoItem->getSubject() );
@@ -1006,8 +1006,7 @@ bool SfxDocumentPage::FillItemSet( SfxItemSet* rSet )
 void SfxDocumentPage::Reset( const SfxItemSet* rSet )
 {
     // Determine the document information
-    const SfxDocumentInfoItem& rInfoItem =
-        static_cast<const SfxDocumentInfoItem &>(rSet->Get(SID_DOCINFO));
+    const SfxDocumentInfoItem& rInfoItem = rSet->Get(SID_DOCINFO);
 
     // template data
     if ( rInfoItem.HasTemplate() )
@@ -1166,8 +1165,7 @@ SfxDocumentInfoDialog::SfxDocumentInfoDialog( vcl::Window* pParent,
         "sfx/ui/documentpropertiesdialog.ui", &rItemSet)
     , m_nDocInfoId(0)
 {
-    const SfxDocumentInfoItem& rInfoItem =
-        static_cast<const SfxDocumentInfoItem &>(rItemSet.Get( SID_DOCINFO ));
+    const SfxDocumentInfoItem& rInfoItem = rItemSet.Get( SID_DOCINFO );
 
 #ifdef DBG_UTIL
     const SfxStringItem* pURLItem = rItemSet.GetItem<SfxStringItem>(SID_BASEURL, false);
@@ -2191,7 +2189,7 @@ bool SfxCustomPropertiesPage::FillItemSet( SfxItemSet* rSet )
     {
         if ( SfxItemState::SET !=
                 GetTabDialog()->GetExampleSet()->GetItemState( SID_DOCINFO, true, &pItem ) )
-            pInfo = const_cast<SfxDocumentInfoItem*>(&static_cast<const SfxDocumentInfoItem& >(rSet->Get( SID_DOCINFO )));
+            pInfo = const_cast<SfxDocumentInfoItem*>(&rSet->Get( SID_DOCINFO ));
         else
         {
             bMustDelete = true;
@@ -2234,7 +2232,7 @@ bool SfxCustomPropertiesPage::FillItemSet( SfxItemSet* rSet )
 void SfxCustomPropertiesPage::Reset( const SfxItemSet* rItemSet )
 {
     m_pPropertiesCtrl->ClearAllLines();
-    const SfxDocumentInfoItem& rInfoItem = static_cast<const SfxDocumentInfoItem &>(rItemSet->Get(SID_DOCINFO));
+    const SfxDocumentInfoItem& rInfoItem = rItemSet->Get(SID_DOCINFO);
     std::vector< CustomProperty* > aCustomProps = rInfoItem.GetCustomProperties();
     m_pPropertiesCtrl->SetCustomProperties(aCustomProps);
 }
@@ -2659,7 +2657,7 @@ bool SfxCmisPropertiesPage::FillItemSet( SfxItemSet* rSet )
     {
         if ( SfxItemState::SET !=
                 GetTabDialog()->GetExampleSet()->GetItemState( SID_DOCINFO, true, &pItem ) )
-            pInfo = const_cast<SfxDocumentInfoItem*>(&static_cast<const SfxDocumentInfoItem& >(rSet->Get( SID_DOCINFO )));
+            pInfo = const_cast<SfxDocumentInfoItem*>(&rSet->Get( SID_DOCINFO ));
         else
         {
             bMustDelete = true;
@@ -2721,7 +2719,7 @@ bool SfxCmisPropertiesPage::FillItemSet( SfxItemSet* rSet )
 void SfxCmisPropertiesPage::Reset( const SfxItemSet* rItemSet )
 {
     m_pPropertiesCtrl.ClearAllLines();
-    const SfxDocumentInfoItem& rInfoItem = static_cast<const SfxDocumentInfoItem& >(rItemSet->Get(SID_DOCINFO));
+    const SfxDocumentInfoItem& rInfoItem = rItemSet->Get(SID_DOCINFO);
     uno::Sequence< document::CmisProperty > aCmisProps = rInfoItem.GetCmisProperties();
     for ( sal_Int32 i = 0; i < aCmisProps.getLength(); i++ )
     {
