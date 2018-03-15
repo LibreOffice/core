@@ -91,7 +91,7 @@ public:
     void                    SelectAll();
     void                    DoCut();
     void                    DoCopy();
-    void                    DoPaste(vcl::Window const * pWindow=nullptr);
+    void                    DoPaste(vcl::Window* pWindow=nullptr);
     virtual void            DoConnect(SdrOle2Obj* pOleObj) override;
     virtual bool            SetStyleSheet(SfxStyleSheet* pStyleSheet, bool bDontRemoveHardAttr = false);
     void                    StartDrag( const Point& rStartPos, vcl::Window* pWindow );

@@ -264,7 +264,7 @@ void View::DoCopy()
     }
 }
 
-void View::DoPaste (vcl::Window const * pWindow)
+void View::DoPaste (vcl::Window* pWindow)
 {
     TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( mpViewSh->GetActiveWindow() ) );
     if( !aDataHelper.GetTransferable().is() )
@@ -320,10 +320,11 @@ void View::DoPaste (vcl::Window const * pWindow)
 
         if( pWindow )
         {
-            if (comphelper::LibreOfficeKit::isActive())
-                aPos = ::tools::Rectangle(aPos, GetSdrPageView()->GetPage()->GetSize()).Center();
-            else
-                aPos = pWindow->PixelToLogic( ::tools::Rectangle( aPos, pWindow->GetOutputSizePixel() ).Center() );
+            // map mode required for LOK
+            bool bMapModeWasEnabled(pWindow->IsMapModeEnabled());
+            pWindow->EnableMapMode(/*true*/);
+            aPos = pWindow->PixelToLogic( ::tools::Rectangle( aPos, pWindow->GetOutputSizePixel() ).Center() );
+            pWindow->EnableMapMode(bMapModeWasEnabled);
         }
 
         DrawViewShell* pDrViewSh = static_cast<DrawViewShell*>( mpDocSh->GetViewShell() );
