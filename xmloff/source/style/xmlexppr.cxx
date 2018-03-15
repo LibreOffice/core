@@ -919,7 +919,7 @@ void SvXMLExportPropertyMapper::_exportXML(
                         else
                         {
                             // check if there is a prefix registered for the
-                            // namepsace URI
+                            // namespace URI
                             nKey = pNamespaceMap->GetKeyByName( sNamespace );
                             if( XML_NAMESPACE_UNKNOWN == nKey )
                             {

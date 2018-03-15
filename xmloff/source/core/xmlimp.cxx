@@ -2207,8 +2207,8 @@ void SvXMLImportFastNamespaceHandler::addNSDeclAttributes( rtl::Reference < comp
 
 void SvXMLImportFastNamespaceHandler::registerNamespace( const OUString& rNamespacePrefix, const OUString& rNamespaceURI )
 {
-    // Elements with default namespace parsed by FastParser have namepsace prefix.
-    // A default namespace needs to be registered with the prefix, to maintan the compatibility.
+    // Elements with default namespace parsed by FastParser have namespace prefix.
+    // A default namespace needs to be registered with the prefix, to maintain the compatibility.
     if ( rNamespacePrefix.isEmpty() )
         m_aNamespaceDefines.push_back( o3tl::make_unique<NamespaceDefine>(
                                     SvXMLImport::getNamespacePrefixFromURI( rNamespaceURI ), rNamespaceURI) );

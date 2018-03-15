@@ -669,7 +669,7 @@ void SectionPropertyMap::SetBorderDistance( const uno::Reference< beans::XProper
         nNewDist = nMargin - nDistance - nLineWidth;
         break;
     }
-    // Ensure corrent distance from page edge to text in cases not supported by us:
+    // Ensure correct distance from page edge to text in cases not supported by us:
     // when border is outside entire page area (eOffsetFrom == Text && nDistance > nMargin),
     // and when border is inside page body area (eOffsetFrom == Edge && nDistance > nMargin)
     if (nNewMargin < 0)

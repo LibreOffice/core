@@ -3081,7 +3081,7 @@ struct BorderDistances
 // border position (modulo rounding errors):
 // 1. When distance of all borders from text is no greater than 31 pt, we use "from text"
 // 2. Otherwise, if distance of all borders from edge is no greater than 31 pt, we use "from edge"
-// In all other cases, the position of borders would be distirted on export, because Word doesn't
+// In all other cases, the position of borders would be distorted on export, because Word doesn't
 // support the offset of >31 pts (https://msdn.microsoft.com/en-us/library/ff533820), and we need
 // to decide which type of offset would provide less wrong result (i.e., the result would look
 // closer to original). Here, we just check sum of distances from text to borders, and if it is
