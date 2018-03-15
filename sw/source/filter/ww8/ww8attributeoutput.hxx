@@ -22,6 +22,7 @@
 
 #include "attributeoutputbase.hxx"
 #include "wrtww8.hxx"
+#include <editeng/boxitem.hxx>
 
 class WW8AttributeOutput : public AttributeOutputBase
 {
@@ -490,6 +491,11 @@ protected:
 
     void TableCellBorders(
         ww8::WW8TableNodeInfoInner::Pointer_t const & pTableTextNodeInfoInner );
+
+private:
+
+    editeng::WordPageMargins m_pageMargins;
+    bool m_bFromEdge = false;
 
 };
 

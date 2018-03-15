@@ -281,7 +281,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf107035, "tdf107035.docx")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(COL_AUTO), nPgNumColour);
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTdf112118, "tdf112118.docx")
+DECLARE_OOXMLEXPORT_TEST(testTdf112118_DOCX, "tdf112118.docx")
 {
     auto xStyles = getStyles("PageStyles");
     auto testProc = [&](const OUString& sStyleName, sal_Int32 nMargin, sal_Int32 nBorderDistance,
