@@ -321,10 +321,11 @@ void View::DoPaste (vcl::Window* pWindow)
 
         if( pWindow )
         {
-            if (comphelper::LibreOfficeKit::isActive())
-                aPos = Rectangle(aPos, GetSdrPageView()->GetPage()->GetSize()).Center();
-            else
-                aPos = pWindow->PixelToLogic( Rectangle( aPos, pWindow->GetOutputSizePixel() ).Center() );
+            // map mode required for LOK
+            bool bMapModeWasEnabled(pWindow->IsMapModeEnabled());
+            pWindow->EnableMapMode(/*true*/);
+            aPos = pWindow->PixelToLogic( Rectangle( aPos, pWindow->GetOutputSizePixel() ).Center() );
+            pWindow->EnableMapMode(bMapModeWasEnabled);
         }
 
         DrawViewShell* pDrViewSh = static_cast<DrawViewShell*>( mpDocSh->GetViewShell() );
