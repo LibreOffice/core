@@ -54,8 +54,6 @@ using namespace com::sun::star;
 
 namespace {
 
-#define UNO_NAME_GRAPHOBJ_URLPREFIX                             "vnd.sun.star.GraphicObject:"
-
 class GraphicProvider : public ::cppu::WeakImplHelper< css::graphic::XGraphicProvider2,
                                                         css::lang::XServiceInfo >
 {
@@ -85,7 +83,6 @@ protected:
 private:
 
     static css::uno::Reference< css::graphic::XGraphic > implLoadMemory( const OUString& rResourceURL );
-    static css::uno::Reference< css::graphic::XGraphic > implLoadGraphicObject( const OUString& rResourceURL );
     static css::uno::Reference< css::graphic::XGraphic > implLoadRepositoryImage( const OUString& rResourceURL );
     static css::uno::Reference< css::graphic::XGraphic > implLoadBitmap( const css::uno::Reference< css::awt::XBitmap >& rBitmap );
     static css::uno::Reference< css::graphic::XGraphic > implLoadStandardImage( const OUString& rResourceURL );
@@ -126,26 +123,6 @@ uno::Sequence< uno::Type > SAL_CALL GraphicProvider::getTypes()
 uno::Sequence< sal_Int8 > SAL_CALL GraphicProvider::getImplementationId()
 {
     return css::uno::Sequence<sal_Int8>();
-}
-
-
-uno::Reference< ::graphic::XGraphic > GraphicProvider::implLoadGraphicObject( const OUString& rResourceURL )
-{
-    uno::Reference< ::graphic::XGraphic >   xRet;
-    if( rResourceURL.startsWith( UNO_NAME_GRAPHOBJ_URLPREFIX ) )
-    {
-        // graphic manager url
-        OUString aTmpStr( rResourceURL.copy( sizeof( UNO_NAME_GRAPHOBJ_URLPREFIX ) - 1 ) );
-        OString aUniqueID(OUStringToOString(aTmpStr,
-            RTL_TEXTENCODING_UTF8));
-        GraphicObject aGrafObj(aUniqueID);
-        // I don't call aGrafObj.GetXGraphic because it will call us back
-        // into implLoadMemory ( with "private:memorygraphic" test )
-        ::unographic::Graphic* pUnoGraphic = new ::unographic::Graphic;
-        pUnoGraphic->init( aGrafObj.GetGraphic() );
-        xRet = pUnoGraphic;
-    }
-    return xRet;
 }
 
 uno::Reference< ::graphic::XGraphic > GraphicProvider::implLoadMemory( const OUString& rResourceURL )
@@ -287,8 +264,6 @@ uno::Reference< beans::XPropertySet > SAL_CALL GraphicProvider::queryGraphicDesc
     else if( !aURL.isEmpty() )
     {
         uno::Reference< ::graphic::XGraphic > xGraphic( implLoadMemory( aURL ) );
-        if( !xGraphic.is() )
-            xGraphic = implLoadGraphicObject( aURL );
 
         if ( !xGraphic.is() )
             xGraphic = implLoadRepositoryImage( aURL );
@@ -386,9 +361,6 @@ uno::Reference< ::graphic::XGraphic > SAL_CALL GraphicProvider::queryGraphic( co
     else if( !aPath.isEmpty() )
     {
         xRet = implLoadMemory( aPath );
-
-        if( !xRet.is() )
-            xRet = implLoadGraphicObject( aPath );
 
         if ( !xRet.is() )
             xRet = implLoadRepositoryImage( aPath );
