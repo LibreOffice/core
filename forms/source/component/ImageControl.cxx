@@ -273,15 +273,7 @@ void OImageControlModel::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, con
 
             if ( m_bExternalGraphic )
             {
-                // if that's an external graphic, i.e. one which has not been loaded by ourselves in response to a
-                // new image URL, then also adjust our ImageURL.
-                OUString sNewImageURL;
-                if ( m_xGraphicObject.is() )
-                {
-                    sNewImageURL = "vnd.sun.star.GraphicObject:";
-                    sNewImageURL = sNewImageURL + m_xGraphicObject->getUniqueID();
-                }
-                m_sImageURL = sNewImageURL;
+                m_sImageURL = OUString();
                 // TODO: speaking strictly, this would need to be notified, since ImageURL is a bound property. However,
                 // this method here is called with a locked mutex, so we cannot simply call listeners ...
                 // I think the missing notification (and thus clients which potentially cannot observe the change)
