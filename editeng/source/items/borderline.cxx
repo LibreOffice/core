@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <algorithm>
+
 #include <basegfx/color/bcolor.hxx>
 #include <basegfx/color/bcolortools.hxx>
 
@@ -43,7 +47,7 @@ namespace {
         else
             nCoef = nDark;
 
-        double L = hsl.getZ() * 255.0 + nCoef;
+        double L = std::min(hsl.getZ() * 255.0 + nCoef, 255.0);
         hsl.setZ( L / 255.0 );
         color = basegfx::utils::hsl2rgb( hsl );
 
