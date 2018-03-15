@@ -53,11 +53,11 @@ void CustomToolBarImportHelper::ScaleImage( uno::Reference< graphic::XGraphic >&
 
 void CustomToolBarImportHelper::applyIcons()
 {
-    for ( std::vector< iconcontrolitem >::iterator it = iconcommands.begin(); it != iconcommands.end(); ++it )
+    for (auto const& concommand : iconcommands)
     {
-        uno::Sequence<OUString> commands { it->sCommand };
+        uno::Sequence<OUString> commands { concommand.sCommand };
         uno::Sequence< uno::Reference< graphic::XGraphic > > images(1);
-        images[ 0 ] = it->image;
+        images[ 0 ] = concommand.image;
 
         uno::Reference< ui::XImageManager > xImageManager( getCfgManager()->getImageManager(), uno::UNO_QUERY_THROW );
         sal_uInt16 nColor = ui::ImageType::COLOR_NORMAL;
@@ -282,10 +282,11 @@ bool TBCData::ImportToolBarControl( CustomToolBarImportHelper& helper, std::vect
         {
             // if we have a icon then lets  set it for the command
             OUString sCommand;
-            for ( std::vector< css::beans::PropertyValue >::iterator it = props.begin(); it != props.end(); ++it )
+            for (auto const& property : props)
             {
-                if ( it->Name == "CommandURL" )
-                    it->Value >>= sCommand;
+                // TODO JNA : couldn't we break if we find CommandURL to avoid keeping on the loop?
+                if ( property.Name == "CommandURL" )
+                    property.Value >>= sCommand;
             }
             if ( TBCBitMap* pIcon = pSpecificInfo->getIcon() )
             {

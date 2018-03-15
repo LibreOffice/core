@@ -34,10 +34,9 @@ XMLFilterTabPageBasic::XMLFilterTabPageBasic(vcl::Window* pParent)
     m_pEDDescription->set_height_request(m_pEDDescription->GetTextHeight() * 4);
 
     std::vector< application_info_impl* >& rInfos = getApplicationInfos();
-    std::vector< application_info_impl* >::iterator aIter( rInfos.begin() );
-    while( aIter != rInfos.end() )
+    for (auto const& info : rInfos)
     {
-        OUString aEntry( (*aIter++)->maDocumentUIName );
+        OUString aEntry( info->maDocumentUIName );
         m_pCBApplication->InsertEntry( aEntry );
     }
 }
@@ -104,17 +103,15 @@ void XMLFilterTabPageBasic::FillInfo( filter_info_impl* pInfo )
         if( !pInfo->maDocumentService.isEmpty() )
         {
             std::vector< application_info_impl* >& rInfos = getApplicationInfos();
-            std::vector< application_info_impl* >::iterator aIter( rInfos.begin() );
-            while( aIter != rInfos.end() )
+            for (auto const& info : rInfos)
             {
-                if( pInfo->maDocumentService == (*aIter)->maDocumentUIName )
+                if( pInfo->maDocumentService == info->maDocumentUIName )
                 {
-                    pInfo->maDocumentService = (*aIter)->maDocumentService;
-                    pInfo->maExportService = (*aIter)->maXMLExporter;
-                    pInfo->maImportService = (*aIter)->maXMLImporter;
+                    pInfo->maDocumentService = info->maDocumentService;
+                    pInfo->maExportService = info->maXMLExporter;
+                    pInfo->maImportService = info->maXMLImporter;
                     break;
                 }
-                ++aIter;
             }
         }
     }

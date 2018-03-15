@@ -112,36 +112,31 @@ void TypeDetectionExporter::doExport( const Reference< XOutputStream >& xOS,  co
             xHandler->ignorableWhitespace ( sWhiteSpace );
             xHandler->startElement( sNode, xAttrList );
 
-            XMLFilterVector::const_iterator aIter( rFilters.begin() );
-            while( aIter != rFilters.end() )
+            for (auto const& filter : rFilters)
             {
-                const filter_info_impl* pFilter = (*aIter);
-
                 xAttrList = pAttrList = new ::comphelper::AttributeList;
-                pAttrList->AddAttribute( sName, sCdataAttribute, pFilter->maType );
+                pAttrList->AddAttribute( sName, sCdataAttribute, filter->maType );
                 xHandler->ignorableWhitespace ( sWhiteSpace );
                 xHandler->startElement( sNode, xAttrList );
                 OUString sValue("0");
                 sValue += sComma;
                 sValue += sComma;
-                if( !pFilter->maDocType.isEmpty() )
+                if( !filter->maDocType.isEmpty() )
                 {
                     sValue += sDocTypePrefix;
-                    sValue += pFilter->maDocType;
+                    sValue += filter->maDocType;
                 }
                 sValue += sComma;
                 sValue += sComma;
-                sValue += pFilter->maExtension;
+                sValue += filter->maExtension;
                 sValue += sComma;
-                sValue += OUString::number( pFilter->mnDocumentIconID );
+                sValue += OUString::number( filter->mnDocumentIconID );
                 sValue += sComma;
 
                 addProperty( xHandler, sData, sValue );
-                addLocaleProperty( xHandler, sUIName, pFilter->maInterfaceName );
+                addLocaleProperty( xHandler, sUIName, filter->maInterfaceName );
                 xHandler->ignorableWhitespace ( sWhiteSpace );
                 xHandler->endElement( sNode );
-
-                ++aIter;
             }
 
             xHandler->ignorableWhitespace ( sWhiteSpace );
@@ -155,53 +150,49 @@ void TypeDetectionExporter::doExport( const Reference< XOutputStream >& xOS,  co
             xHandler->ignorableWhitespace ( sWhiteSpace );
             xHandler->startElement( sNode, xAttrList );
 
-            XMLFilterVector::const_iterator aIter( rFilters.begin() );
-            while( aIter != rFilters.end() )
+            for (auto const& filter : rFilters)
             {
-                const filter_info_impl* pFilter = (*aIter);
-
                 xAttrList = pAttrList = new ::comphelper::AttributeList;
-                pAttrList->AddAttribute( sName, sCdataAttribute, pFilter->maFilterName );
+                pAttrList->AddAttribute( sName, sCdataAttribute, filter->maFilterName );
                 xHandler->ignorableWhitespace ( sWhiteSpace );
                 xHandler->startElement( sNode, xAttrList );
-                addLocaleProperty( xHandler, sUIName, pFilter->maInterfaceName );
+                addLocaleProperty( xHandler, sUIName, filter->maInterfaceName );
 
                 OUString sValue("0");
                 sValue += sComma;
-                sValue += pFilter->maType;
+                sValue += filter->maType;
                 sValue += sComma;
-                sValue += pFilter->maDocumentService;
+                sValue += filter->maDocumentService;
                 sValue += sComma;
                 sValue += sFilterAdaptorService;
                 sValue += sComma;
-                sValue += OUString::number( pFilter->maFlags );
+                sValue += OUString::number( filter->maFlags );
                 sValue += sComma;
                 sValue += sXSLTFilterService;
                 sValue += sDelim;
-                sValue += OUString::boolean( pFilter->mbNeedsXSLT2 );
+                sValue += OUString::boolean( filter->mbNeedsXSLT2 );
                 sValue += sDelim;
 
-                const application_info_impl* pAppInfo = getApplicationInfo( pFilter->maExportService );
+                const application_info_impl* pAppInfo = getApplicationInfo( filter->maExportService );
                 sValue += pAppInfo->maXMLImporter;
                 sValue += sDelim;
                 sValue += pAppInfo->maXMLExporter;
                 sValue += sDelim;
 
-                sValue += createRelativeURL( pFilter->maFilterName, pFilter->maImportXSLT );
+                sValue += createRelativeURL( filter->maFilterName, filter->maImportXSLT );
                 sValue += sDelim;
-                sValue += createRelativeURL( pFilter->maFilterName, pFilter->maExportXSLT );
+                sValue += createRelativeURL( filter->maFilterName, filter->maExportXSLT );
                 sValue += sDelim;
                 // entry DTD obsolete and removed, but delimiter kept
                 sValue += sDelim;
-                sValue += pFilter->maComment;
+                sValue += filter->maComment;
                 sValue += sComma;
                 sValue += "0";
                 sValue += sComma;
-                sValue += createRelativeURL( pFilter->maFilterName, pFilter->maImportTemplate );
+                sValue += createRelativeURL( filter->maFilterName, filter->maImportTemplate );
                 addProperty( xHandler, sData, sValue );
                 xHandler->ignorableWhitespace ( sWhiteSpace );
                 xHandler->endElement( sNode );
-                ++aIter;
             }
 
             xHandler->endElement( sNode );

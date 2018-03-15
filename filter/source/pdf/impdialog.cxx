@@ -1602,10 +1602,9 @@ ImplErrorDialog::ImplErrorDialog(const std::set< vcl::PDFWriter::ErrorCode >& rE
     Image aWarnImg(BitmapEx(IMG_WARN));
     Image aErrImg(BitmapEx(IMG_ERR));
 
-    for( std::set<vcl::PDFWriter::ErrorCode>::const_iterator it = rErrors.begin();
-         it != rErrors.end(); ++it )
+    for (auto const& error : rErrors)
     {
-        switch( *it )
+        switch(error)
         {
         case vcl::PDFWriter::Warning_Transparency_Omitted_PDFA:
         {
@@ -1751,9 +1750,9 @@ IMPL_LINK_NOARG( ImpPDFTabSigningPage, ClickmaPbSignCertSelect, Button*, void )
             if (aTSAURLs)
             {
                 const css::uno::Sequence<OUString>& rTSAURLs = aTSAURLs.get();
-                for (auto i = rTSAURLs.begin(); i != rTSAURLs.end(); ++i)
+                for (auto const& elem : rTSAURLs)
                 {
-                    mpLBSignTSA->InsertEntry( *i );
+                    mpLBSignTSA->InsertEntry(elem);
                 }
             }
         }

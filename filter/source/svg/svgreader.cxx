@@ -1926,10 +1926,9 @@ void writeShapes( StateMap&                                         rStateMap,
     ShapeWritingVisitor aVisitor(rStateMap,xDocHdl);
     visitElements(aVisitor, rElem, SHAPE_WRITER);
 
-    std::vector< uno::Reference<xml::dom::XElement> >::iterator it;
-    for ( it = rUseElementVector.begin() ; it != rUseElementVector.end(); ++it)
+    for (auto const& useElement : rUseElementVector)
     {
-        visitElements(aVisitor, *it, SHAPE_WRITER);
+        visitElements(aVisitor, useElement, SHAPE_WRITER);
     }
 }
 

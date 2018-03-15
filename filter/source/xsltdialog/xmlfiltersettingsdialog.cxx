@@ -935,18 +935,15 @@ void XMLFilterSettingsDialog::onOpen()
         aJarHelper.openPackage( aURL, aFilters );
 
         int nFilters = 0;
-        XMLFilterVector::iterator aIter( aFilters.begin() );
-        while( aIter != aFilters.end() )
+        for (auto const& filter : aFilters)
         {
-            filter_info_impl* pInfo = (*aIter++);
-
-            if( insertOrEdit( pInfo ) )
+            if( insertOrEdit(filter) )
             {
-                aFilterName = pInfo->maFilterName;
+                aFilterName = filter->maFilterName;
                 nFilters++;
             }
 
-            delete pInfo;
+            delete filter;
         }
 
         disposeFilterList();
@@ -1005,10 +1002,9 @@ bool XMLFilterSettingsDialog::EventNotify( NotifyEvent& rNEvt )
 
 void XMLFilterSettingsDialog::disposeFilterList()
 {
-    std::vector< filter_info_impl* >::iterator aIter( maFilterVector.begin() );
-    while( aIter != maFilterVector.end() )
+    for (auto const& filter : maFilterVector)
     {
-        delete *aIter++;
+        delete filter;
     }
     maFilterVector.clear();
 
@@ -1259,13 +1255,12 @@ std::vector< application_info_impl* >& getApplicationInfos()
 const application_info_impl* getApplicationInfo( const OUString& rServiceName )
 {
     std::vector< application_info_impl* >& rInfos = getApplicationInfos();
-    for (std::vector< application_info_impl* >::const_iterator aIter( rInfos.begin() ), aEnd( rInfos.end() );
-        aIter != aEnd ; ++aIter)
+    for (auto const& info : rInfos)
     {
-        if( rServiceName == (*aIter)->maXMLExporter ||
-            rServiceName == (*aIter)->maXMLImporter)
+        if( rServiceName == info->maXMLExporter ||
+            rServiceName == info->maXMLImporter)
         {
-            return (*aIter);
+            return info;
         }
     }
     return nullptr;
