@@ -903,20 +903,79 @@ void PowerPointExport::WriteAnimationAttributeName( const FSHelperPtr& pFS, cons
 
     SAL_INFO("sd.eppt", "write attribute name: " << USS(rAttributeName));
 
-    const char* sAttributeName = nullptr;
-    if ( rAttributeName == "Visibility" ) {
-        sAttributeName = "style.visibility";
-    } else if ( rAttributeName == "X" ) {
-        sAttributeName = "ppt_x";
-    } else if ( rAttributeName == "Y" ) {
-        sAttributeName = "ppt_y";
+    const char* pAttribute = nullptr;
+
+    if (rAttributeName == "Visibility")
+    {
+        pAttribute = "style.visibility";
+    }
+    else if (rAttributeName == "X")
+    {
+        pAttribute = "ppt_x";
+    }
+    else if (rAttributeName == "Y")
+    {
+        pAttribute = "ppt_y";
+    }
+    else if (rAttributeName == "X;Y")
+    {
+        pFS->startElementNS(XML_p, XML_attrName, FSEND);
+        pFS->writeEscaped("ppt_x");
+        pFS->endElementNS(XML_p, XML_attrName);
+
+        pFS->startElementNS(XML_p, XML_attrName, FSEND);
+        pFS->writeEscaped("ppt_y");
+        pFS->endElementNS(XML_p, XML_attrName);
+    }
+    else if (rAttributeName == "Width")
+    {
+        pAttribute = "ppt_w";
+    }
+    else if (rAttributeName == "Height")
+    {
+        pAttribute = "ppt_h";
+    }
+    else if (rAttributeName == "Rotate")
+    {
+        pAttribute = "r";
+    }
+    else if (rAttributeName == "FillStyle")
+    {
+        pAttribute = "fill.type";
+    }
+    else if (rAttributeName == "FillOn")
+    {
+        pAttribute = "fill.on";
+    }
+    else if (rAttributeName == "FillColor")
+    {
+        pAttribute = "fillcolor";
+    }
+    else if (rAttributeName == "CharColor")
+    {
+        pAttribute = "style.color";
+    }
+    else if (rAttributeName == "Opacity")
+    {
+        pAttribute = "style.opacity";
+    }
+    else if (rAttributeName == "SkewX")
+    {
+        pAttribute = "xshear";
+    }
+    else
+    {
+        SAL_WARN("sd.eppt", "unhandled animation attribute name: " << rAttributeName);
     }
 
-    pFS->startElementNS( XML_p, XML_attrName, FSEND );
-    pFS->writeEscaped( sAttributeName );
-    pFS->endElementNS( XML_p, XML_attrName );
+    if (pAttribute)
+    {
+        pFS->startElementNS(XML_p, XML_attrName, FSEND);
+        pFS->writeEscaped(pAttribute);
+        pFS->endElementNS(XML_p, XML_attrName);
+    }
 
-    pFS->endElementNS( XML_p, XML_attrNameLst );
+    pFS->endElementNS(XML_p, XML_attrNameLst);
 }
 
 void PowerPointExport::WriteAnimationTarget( const FSHelperPtr& pFS, const Any& rTarget )
