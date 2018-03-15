@@ -104,8 +104,8 @@ void UITestLogger::logKeyInput(VclPtr<vcl::Window> const & xUIElement, const Key
     sal_uInt16 nKeyCode = rEvent.GetKeyCode().GetCode();
     bool bShift = rEvent.GetKeyCode().IsShift();
     bool bMod1 = rEvent.GetKeyCode().IsMod1();
-    bool bMod2 = rEvent.GetKeyCode().IsMod1();
-    bool bMod3 = rEvent.GetKeyCode().IsMod1();
+    bool bMod2 = rEvent.GetKeyCode().IsMod2();
+    bool bMod3 = rEvent.GetKeyCode().IsMod3();
 
     std::map<OUString, sal_uInt16> aKeyMap = {
         {"ESC", KEY_ESCAPE},
