@@ -18,6 +18,7 @@
  */
 
 #include "ChartController.hxx"
+#include "ChartWindow.hxx"
 #include "macros.hxx"
 
 #include "dlg_DataEditor.hxx"
@@ -52,7 +53,7 @@ void ChartController::executeDispatch_EditData()
             UndoLiveUpdateGuardWithData aUndoGuard(
                 SCH_RESSTR( STR_ACTION_EDIT_CHART_DATA ),
                 m_xUndoManager );
-            ScopedVclPtrInstance<DataEditor> aDataEditorDialog( nullptr, xChartDoc, m_xCC );
+            ScopedVclPtrInstance<DataEditor> aDataEditorDialog( m_pChartWindow.get(), xChartDoc, m_xCC );
             if (aDataEditorDialog->Execute() == RET_OK)
                 aDataEditorDialog->ApplyChangesToModel();
             aUndoGuard.commit();
