@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba2be162_7a722c7e",
+        "filename": "sd/source/ui/func/fuinsert.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 1000068
+      },
+      "writtenOn": "2018-03-15T16:49:31Z",
+      "side": 1,
+      "message": "Originally this was in the non-LOK case, so why it says \"For LOK\" now - is that intentional, or a mistake, please?",
+      "range": {
+        "startLine": 177,
+        "startChar": 15,
+        "endLine": 177,
+        "endChar": 22
+      },
+      "revId": "be89914eded17476b0be172c8c2d857aeaeb0746",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
