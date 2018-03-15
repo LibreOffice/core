@@ -317,7 +317,6 @@ public:
                             GraphicObject();
                             GraphicObject( const Graphic& rGraphic );
                             GraphicObject( const GraphicObject& rCacheObj );
-                            explicit GraphicObject( const OString& rUniqueID );
                             ~GraphicObject();
 
     GraphicObject&          operator=( const GraphicObject& rCacheObj );
