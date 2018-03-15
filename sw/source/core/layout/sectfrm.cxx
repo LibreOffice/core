@@ -1748,6 +1748,12 @@ SwLayoutFrame *SwFrame::GetNextSctLeaf( MakePageType eMakePage )
                     assert(parents[2]->IsSctFrame());
                     std::advance(iter, +2);
                 }
+                else if (IsBodyFrame() && parents.size() >= 1
+                         && parents[0]->IsColumnFrame())
+                {   // same as above, special case: "this" is the body frame
+                    assert(parents[1]->IsSctFrame());
+                    std::advance(iter, +1);
+                }
                 else  if (IsSctFrame()) // special case: "this" is the section
                 {
                     pTmp = pTmp->GetUpper();
