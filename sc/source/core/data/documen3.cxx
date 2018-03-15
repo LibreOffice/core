@@ -1622,9 +1622,11 @@ void ScDocument::GetDataEntries(
         return;
 
     std::set<ScTypedStrData> aStrings;
-    maTabs[nTab]->GetDataEntries(nCol, nRow, aStrings, bLimit);
-    rStrings.insert(rStrings.end(), aStrings.begin(), aStrings.end());
-    sortAndRemoveDuplicates(rStrings, true/*bCaseSens*/);
+    if (maTabs[nTab]->GetDataEntries(nCol, nRow, aStrings, bLimit))
+    {
+        rStrings.insert(rStrings.end(), aStrings.begin(), aStrings.end());
+        sortAndRemoveDuplicates(rStrings, true/*bCaseSens*/);
+    }
 }
 
 /**
