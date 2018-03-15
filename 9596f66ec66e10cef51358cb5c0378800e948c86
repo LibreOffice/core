@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "ba2be162_9a3c4031",
+        "filename": "sc/source/core/data/segmenttree.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 298,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-03-15T19:08:48Z",
+      "side": 1,
+      "message": "I\u0027ll do.",
+      "parentUuid": "ba2be162_9c5ff574",
+      "revId": "9596f66ec66e10cef51358cb5c0378800e948c86",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ba2be162_1c26a516",
         "filename": "sc/source/core/data/table3.cxx",
         "patchSetId": 2
@@ -66,6 +84,24 @@
       "side": 1,
       "message": "sc/source/core/data/documen3.cxx:1625 ignores it",
       "parentUuid": "ba2be162_1c26a516",
+      "revId": "9596f66ec66e10cef51358cb5c0378800e948c86",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba2be162_ba76643c",
+        "filename": "sc/source/core/data/table3.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3461,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-03-15T19:08:48Z",
+      "side": 1,
+      "message": "Not anymore ;-) 47481514174583214cb2c6773caba3e0a439c9f5",
+      "parentUuid": "ba2be162_3c6a891b",
       "revId": "9596f66ec66e10cef51358cb5c0378800e948c86",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
