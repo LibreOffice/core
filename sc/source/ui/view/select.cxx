@@ -321,13 +321,28 @@ void ScViewFunctionSet::SetCursorAtPoint( const Point& rPointPixel, bool /* bDon
                                                  pEngine->GetWindow(),
                                                  nullptr, false);
 
-    bool bBottomScroll = ( aEditArea.Bottom() >= aWinSize.Height() );
-    bool bRightScroll  = ( aEditArea.Right() >= aWinSize.Width() );
+    bool bFillingSelection = pViewData->IsFillMode() || pViewData->GetFillMode() == ScFillMode::MATRIX;
+    bool bBottomScroll;
+    bool bRightScroll;
+    // for Autofill don't yet assume we want to auto-scroll to the cell under the mouse
+    // because the autofill handle extends into a cells neighbours so initial click is usually
+    // above a neighbour cell
+    if (bFillingSelection)
+    {
+        bBottomScroll = aEffPos.X() >= aWinSize.Height();
+        bRightScroll  = aEffPos.Y() >= aWinSize.Width();
+    }
+    else
+    {
+        //in the normal case make the full selected cell visible
+        bBottomScroll = aEditArea.Bottom() >= aWinSize.Height();
+        bRightScroll  = aEditArea.Right() >= aWinSize.Width();
+    }
+
     bool bScroll = bRightScroll || bBottomScroll || bLeftScroll || bTopScroll;
 
-    // for Autofill switch in the center of cell
-    // thereby don't prevent scrolling to bottom/right
-    if ( pViewData->IsFillMode() || pViewData->GetFillMode() == ScFillMode::MATRIX )
+    // for Autofill switch in the center of cell thereby don't prevent scrolling to bottom/right
+    if (bFillingSelection)
     {
         bool bLeft, bTop;
         pViewData->GetMouseQuadrant( aEffPos, GetWhich(), nPosX, nPosY, bLeft, bTop );
