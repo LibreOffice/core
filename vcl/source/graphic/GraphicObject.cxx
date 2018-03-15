@@ -157,22 +157,6 @@ GraphicObject::GraphicObject(const GraphicObject& rGraphicObj)
         SetSwapState();
 }
 
-GraphicObject::GraphicObject(const OString& rUniqueID)
-    : mbAutoSwapped(false)
-    , mbIsInSwapIn(false)
-    , mbIsInSwapOut(false)
-{
-    ImplEnsureGraphicManager();
-
-    // assign default properties
-    ImplAssignGraphicData();
-
-    mpGlobalMgr->ImplRegisterObj(*this, maGraphic, &rUniqueID, nullptr);
-
-    // update properties
-    ImplAssignGraphicData();
-}
-
 GraphicObject::~GraphicObject()
 {
     mpGlobalMgr->ImplUnregisterObj( *this );
