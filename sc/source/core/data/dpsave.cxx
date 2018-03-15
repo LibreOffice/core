@@ -223,26 +223,18 @@ ScDPSaveDimension::ScDPSaveDimension(const ScDPSaveDimension& r) :
     for (MemberList::const_iterator i=r.maMemberList.begin(); i != r.maMemberList.end() ; ++i)
     {
         const OUString& rName =  (*i)->GetName();
-        ScDPSaveMember* pNew = new ScDPSaveMember( **i );
-        maMemberHash[rName] = pNew;
-        maMemberList.push_back( pNew );
+        std::unique_ptr<ScDPSaveMember> pNew(new ScDPSaveMember( **i ));
+        maMemberList.push_back( pNew.get() );
+        maMemberHash[rName] = std::move(pNew);
     }
     if (r.pReferenceValue)
-        pReferenceValue = new sheet::DataPilotFieldReference( *(r.pReferenceValue) );
-    else
-        pReferenceValue = nullptr;
+        pReferenceValue.reset( new sheet::DataPilotFieldReference( *(r.pReferenceValue) ) );
     if (r.pSortInfo)
-        pSortInfo = new sheet::DataPilotFieldSortInfo( *(r.pSortInfo) );
-    else
-        pSortInfo = nullptr;
+        pSortInfo.reset( new sheet::DataPilotFieldSortInfo( *(r.pSortInfo) ) );
     if (r.pAutoShowInfo)
-        pAutoShowInfo = new sheet::DataPilotFieldAutoShowInfo( *(r.pAutoShowInfo) );
-    else
-        pAutoShowInfo = nullptr;
+        pAutoShowInfo.reset( new sheet::DataPilotFieldAutoShowInfo( *(r.pAutoShowInfo) ) );
     if (r.pLayoutInfo)
-        pLayoutInfo = new sheet::DataPilotFieldLayoutInfo( *(r.pLayoutInfo) );
-    else
-        pLayoutInfo = nullptr;
+        pLayoutInfo.reset(new sheet::DataPilotFieldLayoutInfo( *(r.pLayoutInfo) ));
     if (r.mpLayoutName)
         mpLayoutName.reset(new OUString(*r.mpLayoutName));
     if (r.mpSubtotalName)
@@ -251,12 +243,11 @@ ScDPSaveDimension::ScDPSaveDimension(const ScDPSaveDimension& r) :
 
 ScDPSaveDimension::~ScDPSaveDimension()
 {
-    for (MemberHash::const_iterator i=maMemberHash.begin(); i != maMemberHash.end() ; ++i)
-        delete i->second;
-    delete pReferenceValue;
-    delete pSortInfo;
-    delete pAutoShowInfo;
-    delete pLayoutInfo;
+    maMemberHash.clear();
+    pReferenceValue.reset();
+    pSortInfo.reset();
+    pAutoShowInfo.reset();
+    pLayoutInfo.reset();
 }
 
 bool ScDPSaveDimension::operator== ( const ScDPSaveDimension& r ) const
@@ -319,22 +310,21 @@ bool ScDPSaveDimension::operator== ( const ScDPSaveDimension& r ) const
     return true;
 }
 
-void ScDPSaveDimension::AddMember(ScDPSaveMember* pMember)
+void ScDPSaveDimension::AddMember(std::unique_ptr<ScDPSaveMember> pMember)
 {
     const OUString & rName = pMember->GetName();
-    MemberHash::iterator aExisting = maMemberHash.find( rName );
+    auto aExisting = maMemberHash.find( rName );
+    auto tmp = pMember.get();
     if ( aExisting == maMemberHash.end() )
     {
-        std::pair< const OUString, ScDPSaveMember *> key( rName, pMember );
-        maMemberHash.insert ( key );
+        maMemberHash[rName] = std::move(pMember);
     }
     else
     {
-        maMemberList.remove( aExisting->second );
-        delete aExisting->second;
-        aExisting->second = pMember;
+        maMemberList.erase(std::remove(maMemberList.begin(), maMemberList.end(), aExisting->second.get()), maMemberList.end());
+        aExisting->second = std::move(pMember);
     }
-    maMemberList.push_back( pMember );
+    maMemberList.push_back( tmp );
 }
 
 void ScDPSaveDimension::SetName( const OUString& rNew )
@@ -429,38 +419,34 @@ void ScDPSaveDimension::RemoveLayoutName()
 
 void ScDPSaveDimension::SetReferenceValue(const sheet::DataPilotFieldReference* pNew)
 {
-    delete pReferenceValue;
     if (pNew)
-        pReferenceValue = new sheet::DataPilotFieldReference(*pNew);
+        pReferenceValue.reset( new sheet::DataPilotFieldReference(*pNew) );
     else
-        pReferenceValue = nullptr;
+        pReferenceValue.reset();
 }
 
 void ScDPSaveDimension::SetSortInfo(const sheet::DataPilotFieldSortInfo* pNew)
 {
-    delete pSortInfo;
     if (pNew)
-        pSortInfo = new sheet::DataPilotFieldSortInfo(*pNew);
+        pSortInfo.reset( new sheet::DataPilotFieldSortInfo(*pNew) );
     else
-        pSortInfo = nullptr;
+        pSortInfo.reset();
 }
 
 void ScDPSaveDimension::SetAutoShowInfo(const sheet::DataPilotFieldAutoShowInfo* pNew)
 {
-    delete pAutoShowInfo;
     if (pNew)
-        pAutoShowInfo = new sheet::DataPilotFieldAutoShowInfo(*pNew);
+        pAutoShowInfo.reset( new sheet::DataPilotFieldAutoShowInfo(*pNew) );
     else
-        pAutoShowInfo = nullptr;
+        pAutoShowInfo.reset();
 }
 
 void ScDPSaveDimension::SetLayoutInfo(const sheet::DataPilotFieldLayoutInfo* pNew)
 {
-    delete pLayoutInfo;
     if (pNew)
-        pLayoutInfo = new sheet::DataPilotFieldLayoutInfo(*pNew);
+        pLayoutInfo.reset( new sheet::DataPilotFieldLayoutInfo(*pNew) );
     else
-        pLayoutInfo = nullptr;
+        pLayoutInfo.reset();
 }
 
 void ScDPSaveDimension::SetCurrentPage( const OUString* pPage )
@@ -492,20 +478,20 @@ OUString ScDPSaveDimension::GetCurrentPage() const
 
 ScDPSaveMember* ScDPSaveDimension::GetExistingMemberByName(const OUString& rName)
 {
-    MemberHash::const_iterator res = maMemberHash.find (rName);
+    auto res = maMemberHash.find (rName);
     if (res != maMemberHash.end())
-        return res->second;
+        return res->second.get();
     return nullptr;
 }
 
 ScDPSaveMember* ScDPSaveDimension::GetMemberByName(const OUString& rName)
 {
-    MemberHash::const_iterator res = maMemberHash.find (rName);
+    auto res = maMemberHash.find (rName);
     if (res != maMemberHash.end())
-        return res->second;
+        return res->second.get();
 
     ScDPSaveMember* pNew = new ScDPSaveMember( rName );
-    maMemberHash[rName] = pNew;
+    maMemberHash[rName] = std::unique_ptr<ScDPSaveMember>(pNew);
     maMemberList.push_back( pNew );
     return pNew;
 }
@@ -514,12 +500,9 @@ void ScDPSaveDimension::SetMemberPosition( const OUString& rName, sal_Int32 nNew
 {
     ScDPSaveMember* pMember = GetMemberByName( rName ); // make sure it exists and is in the hash
 
-    maMemberList.remove( pMember );
+    maMemberList.erase(std::remove( maMemberList.begin(), maMemberList.end(), pMember), maMemberList.end() );
 
-    MemberList::iterator aIter = maMemberList.begin();
-    for (sal_Int32 i=0; i<nNewPos && aIter != maMemberList.end(); i++)
-        ++aIter;
-    maMemberList.insert( aIter, pMember );
+    maMemberList.insert( maMemberList.begin() + nNewPos, pMember );
 }
 
 void ScDPSaveDimension::WriteToSource( const uno::Reference<uno::XInterface>& xDim )
@@ -687,22 +670,17 @@ bool ScDPSaveDimension::HasInvisibleMember() const
 
 void ScDPSaveDimension::RemoveObsoleteMembers(const MemberSetType& rMembers)
 {
-    maMemberHash.clear();
     MemberList aNew;
-    MemberList::iterator it = maMemberList.begin(), itEnd = maMemberList.end();
-    for (; it != itEnd; ++it)
+    for (ScDPSaveMember* pMem : maMemberList)
     {
-        ScDPSaveMember* pMem = *it;
         if (rMembers.count(pMem->GetName()))
         {
             // This member still exists.
-            maMemberHash.emplace(pMem->GetName(), pMem);
             aNew.push_back(pMem);
         }
         else
         {
-            // This member no longer exists.
-            delete pMem;
+            maMemberHash.erase(pMem->GetName());
         }
     }
 
@@ -1325,7 +1303,7 @@ void ScDPSaveData::BuildAllDimensionMembers(ScDPTableData* pData)
 
             unique_ptr<ScDPSaveMember> pNewMember(new ScDPSaveMember(aMemName));
             pNewMember->SetIsVisible(true);
-            iter->AddMember(pNewMember.release());
+            iter->AddMember(std::move(pNewMember));
         }
     }
 
