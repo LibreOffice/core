@@ -23,6 +23,7 @@
 #include <vcl/alpha.hxx>
 
 #include <impbmp.hxx>
+#include <bitmapwriteaccess.hxx>
 
 #include <algorithm>
 #include <memory>
@@ -32,7 +33,7 @@ bool Bitmap::Erase(const Color& rFillColor)
     if (IsEmpty())
         return true;
 
-    Bitmap::ScopedWriteAccess pWriteAcc(*this);
+    BitmapScopedWriteAccess pWriteAcc(*this);
     bool bRet = false;
 
     if (pWriteAcc)
@@ -109,7 +110,7 @@ bool Bitmap::Erase(const Color& rFillColor)
 
 bool Bitmap::Invert()
 {
-    ScopedWriteAccess pAcc(*this);
+    BitmapScopedWriteAccess pAcc(*this);
     bool bRet = false;
 
     if (pAcc)
@@ -158,7 +159,7 @@ bool Bitmap::Mirror(BmpMirrorFlags nMirrorFlags)
 
     if (bHorz && !bVert)
     {
-        ScopedWriteAccess pAcc(*this);
+        BitmapScopedWriteAccess pAcc(*this);
 
         if (pAcc)
         {
@@ -185,7 +186,7 @@ bool Bitmap::Mirror(BmpMirrorFlags nMirrorFlags)
     }
     else if (bVert && !bHorz)
     {
-        ScopedWriteAccess pAcc(*this);
+        BitmapScopedWriteAccess pAcc(*this);
 
         if (pAcc)
         {
@@ -208,7 +209,7 @@ bool Bitmap::Mirror(BmpMirrorFlags nMirrorFlags)
     }
     else if (bHorz && bVert)
     {
-        ScopedWriteAccess pAcc(*this);
+        BitmapScopedWriteAccess pAcc(*this);
 
         if (pAcc)
         {
@@ -278,7 +279,7 @@ bool Bitmap::Rotate(long nAngle10, const Color& rFillColor)
             {
                 const Size aNewSizePix(aSizePix.Height(), aSizePix.Width());
                 Bitmap aNewBmp(aNewSizePix, GetBitCount(), &pReadAcc->GetPalette());
-                ScopedWriteAccess pWriteAcc(aNewBmp);
+                BitmapScopedWriteAccess pWriteAcc(aNewBmp);
 
                 if (pWriteAcc)
                 {
@@ -329,7 +330,7 @@ bool Bitmap::Rotate(long nAngle10, const Color& rFillColor)
                 tools::Rectangle aNewBound(aPoly.GetBoundRect());
                 const Size aNewSizePix(aNewBound.GetSize());
                 Bitmap aNewBmp(aNewSizePix, GetBitCount(), &pReadAcc->GetPalette());
-                ScopedWriteAccess pWriteAcc(aNewBmp);
+                BitmapScopedWriteAccess pWriteAcc(aNewBmp);
 
                 if (pWriteAcc)
                 {
@@ -423,7 +424,7 @@ Bitmap Bitmap::CreateMask(const Color& rTransColor, sal_uInt8 nTol) const
     }
 
     Bitmap aNewBmp(GetSizePixel(), 1);
-    ScopedWriteAccess pWriteAcc(aNewBmp);
+    BitmapScopedWriteAccess pWriteAcc(aNewBmp);
     bool bRet = false;
 
     if (pWriteAcc && pReadAcc)
@@ -730,7 +731,7 @@ vcl::Region Bitmap::CreateRegion(const Color& rColor, const tools::Rectangle& rR
 bool Bitmap::Replace(const Bitmap& rMask, const Color& rReplaceColor)
 {
     ScopedReadAccess pMaskAcc(const_cast<Bitmap&>(rMask));
-    ScopedWriteAccess pAcc(*this);
+    BitmapScopedWriteAccess pAcc(*this);
     bool bRet = false;
 
     if (pMaskAcc && pAcc)
@@ -810,7 +811,7 @@ bool Bitmap::Replace(const AlphaMask& rAlpha, const Color& rMergeColor)
     Bitmap aNewBmp(GetSizePixel(), 24);
     ScopedReadAccess pAcc(*this);
     AlphaMask::ScopedReadAccess pAlphaAcc(const_cast<AlphaMask&>(rAlpha));
-    ScopedWriteAccess pNewAcc(aNewBmp);
+    BitmapScopedWriteAccess pNewAcc(aNewBmp);
     bool bRet = false;
 
     if (pAcc && pAlphaAcc && pNewAcc)
@@ -874,7 +875,7 @@ bool Bitmap::Replace(const Color& rSearchColor, const Color& rReplaceColor, sal_
     if (GetBitCount() == 1)
         Convert(BmpConversion::N4BitColors);
 
-    ScopedWriteAccess pAcc(*this);
+    BitmapScopedWriteAccess pAcc(*this);
     bool bRet = false;
 
     if (pAcc)
@@ -937,7 +938,7 @@ bool Bitmap::Replace(const Color* pSearchColors, const Color* pReplaceColors, sa
     if (GetBitCount() == 1)
         Convert(BmpConversion::N4BitColors);
 
-    ScopedWriteAccess pAcc(*this);
+    BitmapScopedWriteAccess pAcc(*this);
     bool bRet = false;
 
     if (pAcc)
@@ -1037,7 +1038,7 @@ bool Bitmap::Replace(const Color* pSearchColors, const Color* pReplaceColors, sa
 bool Bitmap::CombineSimple(const Bitmap& rMask, BmpCombine eCombine)
 {
     ScopedReadAccess pMaskAcc(const_cast<Bitmap&>(rMask));
-    ScopedWriteAccess pAcc(*this);
+    BitmapScopedWriteAccess pAcc(*this);
     bool bRet = false;
 
     if (pMaskAcc && pAcc)
@@ -1115,7 +1116,7 @@ bool Bitmap::Blend(const AlphaMask& rAlpha, const Color& rBackgroundColor)
 
     AlphaMask::ScopedReadAccess pAlphaAcc(const_cast<AlphaMask&>(rAlpha));
 
-    ScopedWriteAccess pAcc(*this);
+    BitmapScopedWriteAccess pAcc(*this);
     bool bRet = false;
 
     if (pAlphaAcc && pAcc)

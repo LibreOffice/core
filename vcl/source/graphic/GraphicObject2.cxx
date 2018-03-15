@@ -33,6 +33,7 @@
 #include <vcl/virdev.hxx>
 #include "grfcache.hxx"
 #include <vcl/GraphicObject.hxx>
+#include <bitmapwriteaccess.hxx>
 #include <memory>
 
 

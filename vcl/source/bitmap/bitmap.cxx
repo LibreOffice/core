@@ -24,6 +24,7 @@
 
 #include <impbmp.hxx>
 #include <salbmp.hxx>
+#include <bitmapwriteaccess.hxx>
 
 #include <algorithm>
 #include <memory>
@@ -388,7 +389,7 @@ bool Bitmap::Crop( const tools::Rectangle& rRectPixel )
         {
             const tools::Rectangle     aNewRect( Point(), aRect.GetSize() );
             Bitmap              aNewBmp( aNewRect.GetSize(), GetBitCount(), &pReadAcc->GetPalette() );
-            ScopedWriteAccess   pWriteAcc(aNewBmp);
+            BitmapScopedWriteAccess pWriteAcc(aNewBmp);
 
             if( pWriteAcc )
             {
@@ -458,7 +459,7 @@ bool Bitmap::CopyPixel( const tools::Rectangle& rRectDst,
                 if( nNextIndex )
                 {
                     ScopedReadAccess    pSrcAcc(*pSrc);
-                    ScopedWriteAccess   pDstAcc(*this);
+                    BitmapScopedWriteAccess pDstAcc(*this);
 
                     if( pSrcAcc && pDstAcc )
                     {
@@ -495,7 +496,7 @@ bool Bitmap::CopyPixel( const tools::Rectangle& rRectDst,
 
                 if( pReadAcc )
                 {
-                    ScopedWriteAccess pWriteAcc(*this);
+                    BitmapScopedWriteAccess pWriteAcc(*this);
 
                     if( pWriteAcc )
                     {
@@ -558,7 +559,7 @@ bool Bitmap::CopyPixel( const tools::Rectangle& rRectDst,
 
             if( !aRectSrc.IsEmpty() && ( aRectSrc != aRectDst ) )
             {
-                ScopedWriteAccess   pWriteAcc(*this);
+                BitmapScopedWriteAccess   pWriteAcc(*this);
 
                 if( pWriteAcc )
                 {
@@ -651,7 +652,7 @@ bool Bitmap::CopyPixel_AlphaOptimized( const tools::Rectangle& rRectDst, const t
 
                 if( pReadAcc )
                 {
-                    ScopedWriteAccess pWriteAcc(*this);
+                    BitmapScopedWriteAccess pWriteAcc(*this);
 
                     if( pWriteAcc )
                     {
@@ -685,7 +686,7 @@ bool Bitmap::CopyPixel_AlphaOptimized( const tools::Rectangle& rRectDst, const t
 
             if( !aRectSrc.IsEmpty() && ( aRectSrc != aRectDst ) )
             {
-                ScopedWriteAccess   pWriteAcc(*this);
+                BitmapScopedWriteAccess   pWriteAcc(*this);
 
                 if( pWriteAcc )
                 {
@@ -768,7 +769,7 @@ bool Bitmap::Expand( sal_uLong nDX, sal_uLong nDY, const Color* pInitColor )
         {
             BitmapPalette       aBmpPal( pReadAcc->GetPalette() );
             Bitmap              aNewBmp( aNewSize, GetBitCount(), &aBmpPal );
-            ScopedWriteAccess   pWriteAcc(aNewBmp);
+            BitmapScopedWriteAccess pWriteAcc(aNewBmp);
 
             if( pWriteAcc )
             {
@@ -841,7 +842,7 @@ bool Bitmap::MakeMonochrome(sal_uInt8 cThreshold)
     if( pReadAcc )
     {
         Bitmap aNewBmp( GetSizePixel(), 1 );
-        ScopedWriteAccess pWriteAcc(aNewBmp);
+        BitmapScopedWriteAccess pWriteAcc(aNewBmp);
 
         if( pWriteAcc )
         {

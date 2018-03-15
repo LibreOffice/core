@@ -22,6 +22,7 @@
 
 #include <comphelper/string.hxx>
 #include <rtl/character.hxx>
+#include <bitmapwriteaccess.hxx>
 
 #include "xbmread.hxx"
 
@@ -42,7 +43,7 @@ class XBMReader : public GraphicReader
 {
     SvStream&           rIStm;
     Bitmap              aBmp1;
-    Bitmap::ScopedWriteAccess pAcc1;
+    BitmapScopedWriteAccess pAcc1;
     std::unique_ptr<short[]>
                         pHexTable;
     BitmapColor         aWhite;
@@ -323,7 +324,7 @@ ReadState XBMReader::ReadXBM( Graphic& rGraphic )
                         if ( bStatus && nWidth && nHeight )
                         {
                             aBmp1 = Bitmap( Size( nWidth, nHeight ), 1 );
-                            pAcc1 = Bitmap::ScopedWriteAccess(aBmp1);
+                            pAcc1 = BitmapScopedWriteAccess(aBmp1);
 
                             if( pAcc1 )
                             {

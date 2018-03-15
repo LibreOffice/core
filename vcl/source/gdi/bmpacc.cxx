@@ -22,7 +22,7 @@
 #include <vcl/bitmapaccess.hxx>
 
 #include <impbmp.hxx>
-
+#include <bitmapwriteaccess.hxx>
 
 #include <string.h>
 

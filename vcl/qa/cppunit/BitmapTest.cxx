@@ -27,6 +27,7 @@
 #endif
 
 #include <BitmapSymmetryCheck.hxx>
+#include <bitmapwriteaccess.hxx>
 
 namespace
 {
@@ -397,7 +398,7 @@ void BitmapTest::testScale()
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(24), aBitmap24Bit.GetBitCount());
 
     {
-        Bitmap::ScopedWriteAccess aWriteAccess(aBitmap24Bit);
+        BitmapScopedWriteAccess aWriteAccess(aBitmap24Bit);
         aWriteAccess->Erase(COL_WHITE);
         aWriteAccess->SetLineColor(COL_BLACK);
         aWriteAccess->DrawRect(tools::Rectangle(1, 1, 8, 8));

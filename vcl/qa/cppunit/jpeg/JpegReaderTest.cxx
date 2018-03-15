@@ -12,6 +12,7 @@
 #include <unotest/bootstrapfixturebase.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <vcl/bitmapaccess.hxx>
+#include <bitmapwriteaccess.hxx>
 
 class JpegReaderTest : public test::BootstrapFixtureBase
 {
@@ -51,7 +52,7 @@ int deltaColor(BitmapColor aColor1, BitmapColor aColor2)
 
 bool checkRect(Bitmap& rBitmap, int aLayerNumber, long nAreaHeight, long nAreaWidth, Color aExpectedColor, int nMaxDelta)
 {
-    Bitmap::ScopedWriteAccess pAccess(rBitmap);
+    BitmapScopedWriteAccess pAccess(rBitmap);
 
     long nWidth  = std::min(nAreaWidth,  pAccess->Width());
     long nHeight = std::min(nAreaHeight, pAccess->Height());

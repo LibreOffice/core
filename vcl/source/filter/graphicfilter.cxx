@@ -1303,7 +1303,7 @@ struct GraphicImportContext
     /// The Graphic the import filter gets.
     std::shared_ptr<Graphic> m_pGraphic;
     /// Write pixel data using this access.
-    std::unique_ptr<Bitmap::ScopedWriteAccess> m_pAccess;
+    std::unique_ptr<BitmapScopedWriteAccess> m_pAccess;
     /// Signals if import finished correctly.
     ErrCode m_nStatus = ERRCODE_GRFILTER_FILTERERROR;
     /// Original graphic format.
@@ -1384,7 +1384,7 @@ void GraphicFilter::ImportGraphics(std::vector< std::shared_ptr<Graphic> >& rGra
                     else
                     {
                         Bitmap& rBitmap = const_cast<Bitmap&>(rContext.m_pGraphic->GetBitmapExRef().GetBitmapRef());
-                        rContext.m_pAccess = o3tl::make_unique<Bitmap::ScopedWriteAccess>(rBitmap);
+                        rContext.m_pAccess = o3tl::make_unique<BitmapScopedWriteAccess>(rBitmap);
                         pStream->Seek(rContext.m_nStreamBegin);
                         if (bThreads)
                             rSharedPool.pushTask(new GraphicImportTask(pTag, rContext));
@@ -1610,7 +1610,7 @@ ErrCode GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPath, 
             else
             {
                 Bitmap& rBitmap = const_cast<Bitmap&>(rGraphic.GetBitmapExRef().GetBitmapRef());
-                Bitmap::ScopedWriteAccess pWriteAccess(rBitmap);
+                BitmapScopedWriteAccess pWriteAccess(rBitmap);
                 rIStream.Seek(nPosition);
                 if( !ImportJPEG( rIStream, rGraphic, nImportFlags | GraphicFilterImportFlags::UseExistingBitmap, &pWriteAccess ) )
                     nStatus = ERRCODE_GRFILTER_FILTERERROR;
