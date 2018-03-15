@@ -152,12 +152,6 @@ codeSnippet_7_3:
     mov x15, 3
     b _privateSnippetExecutor
 
-    .globl _nFunIndexes
-_nFunIndexes:
-    .long 8
-    .globl _nVtableOffsets
-_nVtableOffsets:
-    .long 4
     .globl _codeSnippets
 _codeSnippets:
     .long codeSnippet_0_0 - _codeSnippets

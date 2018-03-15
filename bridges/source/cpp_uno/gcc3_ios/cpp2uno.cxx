@@ -16,25 +16,23 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <sal/log.hxx>
 #include <uno/data.h>
 #include <typelib/typedescription.hxx>
-
 #include "bridge.hxx"
 #include "cppinterfaceproxy.hxx"
 #include "types.hxx"
 #include "vtablefactory.hxx"
-
 #include "share.hxx"
 
 
 
-extern "C" {
-    extern int nFunIndexes, nVtableOffsets;
-    extern int codeSnippets[];
-}
+extern "C" int codeSnippets[];
+const int nFunIndexes = 8;
+const int nVtableOffsets = 4;
+
+
 
 using namespace ::com::sun::star::uno;
 
