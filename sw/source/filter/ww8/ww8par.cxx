@@ -3957,7 +3957,7 @@ bool SwWW8ImplReader::ReadText(WW8_CP nStartCp, WW8_CP nTextLen, ManTypes nType)
     long nCpOfs = m_pPlcxMan->GetCpOfs(); // Offset for Header/Footer, Footnote
 
     WW8_CP nNext = m_pPlcxMan->Where();
-    SwTextNode* pPreviousNode = nullptr;
+    m_pPreviousNode = nullptr;
     sal_uInt8 nDropLines = 0;
     SwCharFormat* pNewSwCharFormat = nullptr;
     const SwCharFormat* pFormat = nullptr;
@@ -3986,7 +3986,7 @@ bool SwWW8ImplReader::ReadText(WW8_CP nStartCp, WW8_CP nTextLen, ManTypes nType)
 
         // If the previous paragraph was a dropcap then do not
         // create a new txtnode and join the two paragraphs together
-        if (bStartLine && !pPreviousNode) // Line end
+        if (bStartLine && !m_pPreviousNode) // Line end
         {
             bool bSplit = true;
             if (m_bCareFirstParaEndInToc)
@@ -4010,10 +4010,10 @@ bool SwWW8ImplReader::ReadText(WW8_CP nStartCp, WW8_CP nTextLen, ManTypes nType)
             }
         }
 
-        if (pPreviousNode && bStartLine)
+        if (m_pPreviousNode && bStartLine)
         {
             SwTextNode* pEndNd = m_pPaM->GetNode().GetTextNode();
-            const sal_Int32 nDropCapLen = pPreviousNode->GetText().getLength();
+            const sal_Int32 nDropCapLen = m_pPreviousNode->GetText().getLength();
 
             // Need to reset the font size and text position for the dropcap
             {
@@ -4040,12 +4040,12 @@ bool SwWW8ImplReader::ReadText(WW8_CP nStartCp, WW8_CP nTextLen, ManTypes nType)
             SwPosition aStart(*pEndNd);
             m_pCtrlStck->NewAttr(aStart, aDrop);
             m_pCtrlStck->SetAttr(*m_pPaM->GetPoint(), RES_PARATR_DROP);
-            pPreviousNode = nullptr;
+            m_pPreviousNode = nullptr;
         }
         else if (m_bDropCap)
         {
             // If we have found a dropcap store the textnode
-            pPreviousNode = m_pPaM->GetNode().GetTextNode();
+            m_pPreviousNode = m_pPaM->GetNode().GetTextNode();
 
             SprmResult aDCS;
             if (m_bVer67)
@@ -4056,7 +4056,7 @@ bool SwWW8ImplReader::ReadText(WW8_CP nStartCp, WW8_CP nTextLen, ManTypes nType)
             if (aDCS.pSprm && aDCS.nRemainingData >= 1)
                 nDropLines = (*aDCS.pSprm) >> 3;
             else    // There is no Drop Cap Specifier hence no dropcap
-                pPreviousNode = nullptr;
+                m_pPreviousNode = nullptr;
 
             SprmResult aDistance = m_pPlcxMan->GetPapPLCF()->HasSprm(0x842F);
             if (aDistance.pSprm && aDistance.nRemainingData >= 2)
@@ -4125,6 +4125,8 @@ bool SwWW8ImplReader::ReadText(WW8_CP nStartCp, WW8_CP nTextLen, ManTypes nType)
             }
         }
     }
+
+    m_pPreviousNode = nullptr;
 
     if (m_pPaM->GetPoint()->nContent.GetIndex())
         AppendTextNode(*m_pPaM->GetPoint());
@@ -4261,6 +4263,7 @@ SwWW8ImplReader::SwWW8ImplReader(sal_uInt8 nVersionPara, SotStorage* pStorage,
     , m_nEmbeddedTOXLevel(0)
     , m_bLoadingTOXHyperlink(false)
     , m_pPosAfterTOC(nullptr)
+    , m_pPreviousNode(nullptr)
     , m_bCareFirstParaEndInToc(false)
     , m_bCareLastParaEndInToc(false)
     , m_aTOXEndCps()
