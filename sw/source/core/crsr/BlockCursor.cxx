@@ -22,47 +22,11 @@
 
 SwBlockCursor::~SwBlockCursor()
 {
-    delete pStartPt;
-    delete pEndPt;
 }
 
 SwShellCursor& SwBlockCursor::getShellCursor()
 {
     return aCursor;
-}
-
-void SwBlockCursor::setStartPoint( const Point &rPt )
-{
-    if( pStartPt )
-        *pStartPt = rPt;
-    else
-        pStartPt = new Point( rPt );
-}
-
-void SwBlockCursor::setEndPoint( const Point &rPt )
-{
-    if( pEndPt )
-        *pEndPt = rPt;
-    else
-        pEndPt = new Point( rPt );
-}
-
-const Point* SwBlockCursor::getStartPoint() const
-{
-    return pStartPt;
-}
-
-const Point* SwBlockCursor::getEndPoint() const
-{
-    return pEndPt;
-}
-
-void SwBlockCursor::clearPoints()
-{
-    delete pStartPt;
-    delete pEndPt;
-    pStartPt = nullptr;
-    pEndPt = nullptr;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
