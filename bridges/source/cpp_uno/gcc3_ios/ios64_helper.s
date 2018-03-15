@@ -16,9 +16,9 @@
 //   except in compliance with the License. You may obtain a copy of
 //   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 //
-    .text
-    .align 4
+    .section        __TEXT,__text,regular,pure_instructions
 
+    .p2align        2
 codeSnippet_00000000_0:
     adr x15, .+8
     b _privateSnippetExecutor
@@ -220,5 +220,41 @@ _codeSnippets:
     .long codeSnippet_00000007_2 - _codeSnippets
     .long codeSnippet_00000007_3 - _codeSnippets
 
+
+
+    .private_extern _privateSnippetExecutor
+    .globl  _privateSnippetExecutor
+    .p2align        2
+_privateSnippetExecutor:
+    .cfi_startproc
+    .cfi_def_cfa w29, 16
+    .cfi_offset w30, -8
+    .cfi_offset w29, -16
+
+    // _privateSnippetExecutor is jumped to from codeSnippet_*
+
+    // push all GP, FP/SIMD registers to the stack
+    stp     x6, x7, [sp, #-16]!
+    stp     x4, x5, [sp, #-16]!
+    stp     x2, x3, [sp, #-16]!
+    stp     x0, x1, [sp, #-16]!
+    stp     d6, d7, [sp, #-16]!
+    stp     d4, d5, [sp, #-16]!
+    stp     d2, d3, [sp, #-16]!
+    stp     d0, d1, [sp, #-16]!
+
+    // push x8 (RC pointer) and lr to stack
+    stp     x8, lr, [sp, #-16]!
+
+    // First argument (x15 set up in the codeSnippet instance)
+    // Second argument: The pointer to all the above
+    mov     x0, x15
+    mov     x1, sp
+
+    bl      _cpp_vtable_call
+    ldp     x8, lr, [sp, #0]
+    add     sp, sp, #144
+    ret     lr
+    .cfi_endproc
 
 // vim:set shiftwidth=4 softtabstop=4 expandtab:

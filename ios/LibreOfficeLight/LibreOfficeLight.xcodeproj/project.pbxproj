@@ -24,6 +24,11 @@
 		3941EF21204B4C8A00082486 /* welcome.odt in Resources */ = {isa = PBXBuildFile; fileRef = 3941EF12204B4C8900082486 /* welcome.odt */; };
 		3941EF22204B4C8A00082486 /* config in Resources */ = {isa = PBXBuildFile; fileRef = 3941EF13204B4C8900082486 /* config */; };
 		3941EF23204B4C8A00082486 /* share in Resources */ = {isa = PBXBuildFile; fileRef = 3941EF14204B4C8900082486 /* share */; };
+		39514E002057DC55005599D0 /* shared in Resources */ = {isa = PBXBuildFile; fileRef = 39514DFF2057DC55005599D0 /* shared */; };
+		39514E022057DC92005599D0 /* gcc3_ios in Resources */ = {isa = PBXBuildFile; fileRef = 39514E012057DC92005599D0 /* gcc3_ios */; };
+		39514E042057DCE7005599D0 /* gcc3_macosx_x86-64 in Resources */ = {isa = PBXBuildFile; fileRef = 39514E032057DCE7005599D0 /* gcc3_macosx_x86-64 */; };
+		39514E062057DD17005599D0 /* gcc3_linux_aarch64 in Resources */ = {isa = PBXBuildFile; fileRef = 39514E052057DD17005599D0 /* gcc3_linux_aarch64 */; };
+		39514E082057E4A8005599D0 /* inc in Resources */ = {isa = PBXBuildFile; fileRef = 39514E072057E4A8005599D0 /* inc */; };
 		396F92F71E7AE62400A28C82 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 396F92F61E7AE62400A28C82 /* Settings.bundle */; };
 		397868D61E59A3EA007F9248 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 397868D81E59A3EA007F9248 /* LaunchScreen.xib */; };
 		397E08FE1E597BD8001374E0 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 397E08FD1E597BD8001374E0 /* AppDelegate.swift */; };
@@ -80,6 +85,11 @@
 		3941EF13204B4C8900082486 /* config */ = {isa = PBXFileReference; lastKnownFileType = folder; name = config; path = ../generated/resources/config; sourceTree = "<group>"; };
 		3941EF14204B4C8900082486 /* share */ = {isa = PBXFileReference; lastKnownFileType = folder; name = share; path = ../generated/resources/share; sourceTree = "<group>"; };
 		39503A6F1F94C4AC00F19C78 /* lokit-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "lokit-Bridging-Header.h"; sourceTree = "<group>"; };
+		39514DFF2057DC55005599D0 /* shared */ = {isa = PBXFileReference; lastKnownFileType = folder; name = shared; path = ../../bridges/source/cpp_uno/shared; sourceTree = "<group>"; };
+		39514E012057DC92005599D0 /* gcc3_ios */ = {isa = PBXFileReference; lastKnownFileType = folder; name = gcc3_ios; path = ../../bridges/source/cpp_uno/gcc3_ios; sourceTree = "<group>"; };
+		39514E032057DCE7005599D0 /* gcc3_macosx_x86-64 */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "gcc3_macosx_x86-64"; path = "../../bridges/source/cpp_uno/gcc3_macosx_x86-64"; sourceTree = "<group>"; };
+		39514E052057DD17005599D0 /* gcc3_linux_aarch64 */ = {isa = PBXFileReference; lastKnownFileType = folder; name = gcc3_linux_aarch64; path = ../../bridges/source/cpp_uno/gcc3_linux_aarch64; sourceTree = "<group>"; };
+		39514E072057E4A8005599D0 /* inc */ = {isa = PBXFileReference; lastKnownFileType = folder; name = inc; path = ../../bridges/inc; sourceTree = "<group>"; };
 		396F92F61E7AE62400A28C82 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		397275391E77D9F1006ACDCC /* LibreOfficeLight.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = LibreOfficeLight.entitlements; sourceTree = "<group>"; };
 		397868D71E59A3EA007F9248 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
@@ -94,13 +104,6 @@
 		39EE81531FA644E800B73AB8 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		39EF4E2E1FA500C9001914AC /* PropertiesController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PropertiesController.swift; sourceTree = "<group>"; };
 		39FD89C9204E87E900E7179F /* except.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = except.cxx; path = "../../bridges/source/cpp_uno/gcc3_macosx_x86-64/except.cxx"; sourceTree = "<group>"; };
-		39FD89CB204E87FD00E7179F /* except.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = except.cxx; path = ../../bridges/source/cpp_uno/gcc3_ios/except.cxx; sourceTree = "<group>"; };
-		39FD89CF204E8EB900E7179F /* cpp2uno.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = cpp2uno.cxx; path = ../../bridges/source/cpp_uno/gcc3_ios/cpp2uno.cxx; sourceTree = "<group>"; };
-		39FD89D1204E8ED000E7179F /* share.hxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = share.hxx; path = ../../bridges/source/cpp_uno/gcc3_ios/share.hxx; sourceTree = "<group>"; };
-		39FD89D2204E8ED000E7179F /* unwind-cxx.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "unwind-cxx.h"; path = "../../bridges/source/cpp_uno/gcc3_ios/unwind-cxx.h"; sourceTree = "<group>"; };
-		39FD89D3204E8ED000E7179F /* rtti.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = rtti.h; path = ../../bridges/source/cpp_uno/gcc3_ios/rtti.h; sourceTree = "<group>"; };
-		39FD89D4204E8ED000E7179F /* ios64_helper.s */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.asm; name = ios64_helper.s; path = ../../bridges/source/cpp_uno/gcc3_ios/ios64_helper.s; sourceTree = "<group>"; };
-		39FD89D5204E8ED000E7179F /* uno2cpp.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = uno2cpp.cxx; path = ../../bridges/source/cpp_uno/gcc3_ios/uno2cpp.cxx; sourceTree = "<group>"; };
 		39FD89D8204E8EEE00E7179F /* call.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = call.cxx; path = "../../bridges/source/cpp_uno/gcc3_macosx_x86-64/call.cxx"; sourceTree = "<group>"; };
 		39FD89D9204E8EEE00E7179F /* abi.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = abi.cxx; path = "../../bridges/source/cpp_uno/gcc3_macosx_x86-64/abi.cxx"; sourceTree = "<group>"; };
 		39FD89DA204E8EEE00E7179F /* uno2cpp.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = uno2cpp.cxx; path = "../../bridges/source/cpp_uno/gcc3_macosx_x86-64/uno2cpp.cxx"; sourceTree = "<group>"; };
@@ -152,8 +155,12 @@
 		3956B72D1FAB3DBF00BF5DE4 /* extra */ = {
 			isa = PBXGroup;
 			children = (
+				39514E072057E4A8005599D0 /* inc */,
+				39514E052057DD17005599D0 /* gcc3_linux_aarch64 */,
+				39514E032057DCE7005599D0 /* gcc3_macosx_x86-64 */,
+				39514E012057DC92005599D0 /* gcc3_ios */,
+				39514DFF2057DC55005599D0 /* shared */,
 				39FD89E6204EBCB900E7179F /* exc_thrower.cxx */,
-				39FD89CE204E8E6500E7179F /* ipad */,
 				39FD89CD204E8E5E00E7179F /* sim */,
 				39E950521FC9842000D82C49 /* source */,
 			);
@@ -249,20 +256,6 @@
 			name = sim;
 			sourceTree = "<group>";
 		};
-		39FD89CE204E8E6500E7179F /* ipad */ = {
-			isa = PBXGroup;
-			children = (
-				39FD89D4204E8ED000E7179F /* ios64_helper.s */,
-				39FD89D3204E8ED000E7179F /* rtti.h */,
-				39FD89D1204E8ED000E7179F /* share.hxx */,
-				39FD89D5204E8ED000E7179F /* uno2cpp.cxx */,
-				39FD89D2204E8ED000E7179F /* unwind-cxx.h */,
-				39FD89CF204E8EB900E7179F /* cpp2uno.cxx */,
-				39FD89CB204E87FD00E7179F /* except.cxx */,
-			);
-			name = ipad;
-			sourceTree = "<group>";
-		};
 		FCC2E3F52004A01400CEB504 /* LOKit */ = {
 			isa = PBXGroup;
 			children = (
@@ -350,12 +343,15 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				39514E042057DCE7005599D0 /* gcc3_macosx_x86-64 in Resources */,
 				3941EF15204B4C8A00082486 /* unorc in Resources */,
 				3941EF19204B4C8A00082486 /* oovbaapi.rdb in Resources */,
 				3941EF1D204B4C8A00082486 /* filter in Resources */,
 				397E09081E597BD8001374E0 /* Assets.xcassets in Resources */,
 				397868D61E59A3EA007F9248 /* LaunchScreen.xib in Resources */,
+				39514E002057DC55005599D0 /* shared in Resources */,
 				3941EF1A204B4C8A00082486 /* registry in Resources */,
+				39514E062057DD17005599D0 /* gcc3_linux_aarch64 in Resources */,
 				3941EF18204B4C8A00082486 /* services.rdb in Resources */,
 				3941EF1C204B4C8A00082486 /* offapi.rdb in Resources */,
 				3941EF22204B4C8A00082486 /* config in Resources */,
@@ -366,7 +362,9 @@
 				3941EF21204B4C8A00082486 /* welcome.odt in Resources */,
 				397E09031E597BD8001374E0 /* Main.storyboard in Resources */,
 				3941EF20204B4C8A00082486 /* icudt60l.dat in Resources */,
+				39514E022057DC92005599D0 /* gcc3_ios in Resources */,
 				3941EF16204B4C8A00082486 /* fundamentalrc in Resources */,
+				39514E082057E4A8005599D0 /* inc in Resources */,
 				3941EF1F204B4C8A00082486 /* udkapi.rdb in Resources */,
 				3941EF17204B4C8A00082486 /* program in Resources */,
 			);
