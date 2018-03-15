@@ -71,18 +71,16 @@ SdModule::SdModule(SfxObjectFactory* pFact1, SfxObjectFactory* pFact2 )
     pTransferSelection(nullptr),
     pImpressOptions(nullptr),
     pDrawOptions(nullptr),
-    pSearchItem(nullptr),
-    pNumberFormatter( nullptr ),
     bWaterCan(false),
     mbEventListenerAdded(false),
     mpColorConfig(new svtools::ColorConfig)
 {
     SetName( "StarDraw" );  // Do not translate!
-    pSearchItem = new SvxSearchItem(SID_SEARCH_ITEM);
+    pSearchItem.reset( new SvxSearchItem(SID_SEARCH_ITEM) );
     pSearchItem->SetAppFlag(SvxSearchApp::DRAW);
     StartListening( *SfxGetpApp() );
     SvxErrorHandler::ensure();
-    mpErrorHdl = new SfxErrorHandler(RID_SD_ERRHDL, ErrCodeArea::Sd, ErrCodeArea::Sd, GetResLocale());
+    mpErrorHdl.reset( new SfxErrorHandler(RID_SD_ERRHDL, ErrCodeArea::Sd, ErrCodeArea::Sd, GetResLocale()) );
 
     // Create a new ref device and (by calling SetReferenceDevice())
     // set its resolution to 600 DPI.  This leads to a visually better
@@ -100,16 +98,21 @@ OUString SdResId(const char* pId)
 // Dtor
 SdModule::~SdModule()
 {
-    delete pSearchItem;
-    delete pNumberFormatter;
+    pSearchItem.reset();
+    pNumberFormatter.reset();
 
     if (mbEventListenerAdded)
     {
         Application::RemoveEventListener( LINK( this, SdModule, EventListenerHdl ) );
     }
 
-    delete mpErrorHdl;
+    mpErrorHdl.reset();
     mpVirtualRefDevice.disposeAndClear();
+}
+
+void SdModule::SetSearchItem(std::unique_ptr<SvxSearchItem> pItem)
+{
+    pSearchItem = std::move(pItem);
 }
 
 /// get notifications
@@ -205,9 +208,9 @@ tools::SvRef<SotStorageStream> SdModule::GetOptionStream( const OUString& rOptio
 SvNumberFormatter* SdModule::GetNumberFormatter()
 {
     if( !pNumberFormatter )
-        pNumberFormatter = new SvNumberFormatter( ::comphelper::getProcessComponentContext(), LANGUAGE_SYSTEM );
+        pNumberFormatter.reset( new SvNumberFormatter( ::comphelper::getProcessComponentContext(), LANGUAGE_SYSTEM ) );
 
-    return pNumberFormatter;
+    return pNumberFormatter.get();
 }
 
 svtools::ColorConfig& SdModule::GetColorConfig()
