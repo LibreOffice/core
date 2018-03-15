@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba2be162_5ae2c804",
+        "filename": "chart2/source/controller/main/ChartController_Window.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1239,
+      "author": {
+        "id": 1000068
+      },
+      "writtenOn": "2018-03-15T17:25:04Z",
+      "side": 1,
+      "message": "Shouldn\u0027t we use dynamic_cast here I guess, and then check for nullptr before calling the SetLOKNotifier (?)  I see that other places are using static_cast for the GetMenu() / PopupMenu, but does not look right to me ;-)",
+      "range": {
+        "startLine": 1239,
+        "startChar": 36,
+        "endLine": 1239,
+        "endChar": 46
+      },
+      "revId": "2cc570c9dd4f8197f2f49b62829c1f06a7b98b48",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
