@@ -24,6 +24,7 @@
 #include <svx/svdobj.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/svdotext.hxx>
+#include <svx/svdoashp.hxx>
 #include <svx/sderitm.hxx>
 #include <svx/dialogs.hrc>
 #include <svx/transfrmhelper.hxx>
@@ -530,42 +531,80 @@ bool SvxSlantTabPage::FillItemSet(SfxItemSet* rAttrs)
     if (!bControlPointsChanged)
         return bModified;
 
-    SdrObject* pObj = pView->GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj();
-    SdrModel* pModel = pObj->GetModel();
-    SdrUndoAction* pUndo = pModel->IsUndoEnabled() ?
-                pModel->GetSdrUndoFactory().CreateUndoAttrObject(*pObj) :
-                nullptr;
+    bool bSelectionIsSdrObjCustomShape(false);
 
-    if (pUndo)
-        pModel->BegUndo(pUndo->GetComment());
-
-    EnhancedCustomShape2d aShape(pObj);
-    ::tools::Rectangle aLogicRect = aShape.GetLogicRect();
-
-    for (int i = 0; i < 2; ++i)
+    while(true)
     {
-        if (m_aControlX[i]->IsValueChangedFromSaved() || m_aControlY[i]->IsValueChangedFromSaved())
+        if(nullptr == pView)
         {
-            Point aNewPosition(GetCoreValue(*m_aControlX[i], ePoolUnit),
-                               GetCoreValue(*m_aControlY[i], ePoolUnit));
-            aNewPosition.Move(aLogicRect.Left(), aLogicRect.Top());
-
-            css::awt::Point aPosition;
-            aPosition.X = aNewPosition.X();
-            aPosition.Y = aNewPosition.Y();
-
-            aShape.SetHandleControllerPosition(i, aPosition);
+            break;
         }
+
+        if(0 == pView->GetMarkedObjectList().GetMarkCount())
+        {
+            break;
+        }
+
+        SdrObject* pCandidate(pView->GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj());
+
+        if(nullptr == pCandidate)
+        {
+            break;
+        }
+
+        if(nullptr == dynamic_cast< SdrObjCustomShape* >(pCandidate))
+        {
+            break;
+        }
+
+        bSelectionIsSdrObjCustomShape = true;
+        break;
     }
 
-    pObj->SetChanged();
-    pObj->BroadcastObjectChange();
-    bModified = true;
-
-    if (pUndo)
+    if(bSelectionIsSdrObjCustomShape)
     {
-        pModel->AddUndo(pUndo);
-        pModel->EndUndo();
+        SdrObjCustomShape& rSdrObjCustomShape(
+            static_cast< SdrObjCustomShape& >(
+                *pView->GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj()));
+        SdrModel* pModel(rSdrObjCustomShape.GetModel());
+        SdrUndoAction* pUndo(
+            pModel->IsUndoEnabled()
+                ? pModel->GetSdrUndoFactory().CreateUndoAttrObject(rSdrObjCustomShape)
+                : nullptr);
+
+        if(pUndo)
+        {
+            pModel->BegUndo(pUndo->GetComment());
+        }
+
+        EnhancedCustomShape2d aShape(rSdrObjCustomShape);
+        ::tools::Rectangle aLogicRect = aShape.GetLogicRect();
+
+        for (int i = 0; i < 2; ++i)
+        {
+            if (m_aControlX[i]->IsValueChangedFromSaved() || m_aControlY[i]->IsValueChangedFromSaved())
+            {
+                Point aNewPosition(GetCoreValue(*m_aControlX[i], ePoolUnit),
+                                GetCoreValue(*m_aControlY[i], ePoolUnit));
+                aNewPosition.Move(aLogicRect.Left(), aLogicRect.Top());
+
+                css::awt::Point aPosition;
+                aPosition.X = aNewPosition.X();
+                aPosition.Y = aNewPosition.Y();
+
+                aShape.SetHandleControllerPosition(i, aPosition);
+            }
+        }
+
+        rSdrObjCustomShape.SetChanged();
+        rSdrObjCustomShape.BroadcastObjectChange();
+        bModified = true;
+
+        if (pUndo)
+        {
+            pModel->AddUndo(pUndo);
+            pModel->EndUndo();
+        }
     }
 
     return bModified;
@@ -622,67 +661,94 @@ void SvxSlantTabPage::Reset(const SfxItemSet* rAttrs)
 
     m_pMtrAngle->SaveValue();
 
-    const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
-    if (rMarkList.GetMarkCount() == 1)
+    bool bSelectionIsSdrObjCustomShape(false);
+
+    while(true)
     {
-        SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
-        SdrObjKind eKind = static_cast<SdrObjKind>(pObj->GetObjIdentifier());
-        if (eKind == OBJ_CUSTOMSHAPE)
+        if(nullptr == pView)
         {
-            //save geometry
-            SdrCustomShapeGeometryItem aInitialGeometry =
-                pObj->GetMergedItem(SDRATTR_CUSTOMSHAPE_GEOMETRY);
-
-            EnhancedCustomShape2d aShape(pObj);
-
-            for (int i = 0; i < 2; ++i)
-            {
-                Point aInitialPosition;
-                if (!aShape.GetHandlePosition(i, aInitialPosition))
-                    break;
-                m_aControlGroups[i]->Enable();
-                css::awt::Point aPosition;
-
-                aPosition.X = SAL_MAX_INT32/2;
-                aPosition.Y = SAL_MAX_INT32/2;
-                aShape.SetHandleControllerPosition(i, aPosition);
-                Point aMaxPosition;
-                aShape.GetHandlePosition(i, aMaxPosition);
-
-                aPosition.X = SAL_MIN_INT32/2;
-                aPosition.Y = SAL_MIN_INT32/2;
-                aShape.SetHandleControllerPosition(i, aPosition);
-                Point aMinPosition;
-                aShape.GetHandlePosition(i, aMinPosition);
-
-                ::tools::Rectangle aLogicRect = aShape.GetLogicRect();
-                aInitialPosition.Move(-aLogicRect.Left(), -aLogicRect.Top());
-                aMaxPosition.Move(-aLogicRect.Left(), -aLogicRect.Top());
-                aMinPosition.Move(-aLogicRect.Left(), -aLogicRect.Top());
-
-                SetMetricValue(*m_aControlX[i], aInitialPosition.X(), ePoolUnit);
-                SetMetricValue(*m_aControlY[i], aInitialPosition.Y(), ePoolUnit);
-
-                if (aMaxPosition.X() == aMinPosition.X())
-                    m_aControlGroupX[i]->Disable();
-                else
-                {
-                    m_aControlX[i]->SetMin(aMinPosition.X(), FUNIT_MM);
-                    m_aControlX[i]->SetMax(aMaxPosition.X(), FUNIT_MM);
-                }
-                if (aMaxPosition.Y() == aMinPosition.Y())
-                    m_aControlGroupY[i]->Disable();
-                else
-                {
-                    m_aControlY[i]->SetMin(aMinPosition.Y(), FUNIT_MM);
-                    m_aControlY[i]->SetMax(aMaxPosition.Y(), FUNIT_MM);
-                }
-            }
-
-            //restore geometry
-            pObj->SetMergedItem(aInitialGeometry);
+            break;
         }
+
+        if(1 != pView->GetMarkedObjectList().GetMarkCount())
+        {
+            break;
+        }
+
+        SdrObject* pCandidate(pView->GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj());
+
+        if(nullptr == pCandidate)
+        {
+            break;
+        }
+
+        if(nullptr == dynamic_cast< SdrObjCustomShape* >(pCandidate))
+        {
+            break;
+        }
+
+        bSelectionIsSdrObjCustomShape = true;
+        break;
     }
+
+    if(bSelectionIsSdrObjCustomShape)
+    {
+        SdrObjCustomShape& rSdrObjCustomShape(
+            static_cast< SdrObjCustomShape& >(
+                *pView->GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj()));
+
+        //save geometry
+        SdrCustomShapeGeometryItem aInitialGeometry(rSdrObjCustomShape.GetMergedItem(SDRATTR_CUSTOMSHAPE_GEOMETRY));
+        EnhancedCustomShape2d aShape(rSdrObjCustomShape);
+
+        for (int i = 0; i < 2; ++i)
+        {
+            Point aInitialPosition;
+            if (!aShape.GetHandlePosition(i, aInitialPosition))
+                break;
+            m_aControlGroups[i]->Enable();
+            css::awt::Point aPosition;
+
+            aPosition.X = SAL_MAX_INT32/2;
+            aPosition.Y = SAL_MAX_INT32/2;
+            aShape.SetHandleControllerPosition(i, aPosition);
+            Point aMaxPosition;
+            aShape.GetHandlePosition(i, aMaxPosition);
+
+            aPosition.X = SAL_MIN_INT32/2;
+            aPosition.Y = SAL_MIN_INT32/2;
+            aShape.SetHandleControllerPosition(i, aPosition);
+            Point aMinPosition;
+            aShape.GetHandlePosition(i, aMinPosition);
+
+            ::tools::Rectangle aLogicRect = aShape.GetLogicRect();
+            aInitialPosition.Move(-aLogicRect.Left(), -aLogicRect.Top());
+            aMaxPosition.Move(-aLogicRect.Left(), -aLogicRect.Top());
+            aMinPosition.Move(-aLogicRect.Left(), -aLogicRect.Top());
+
+            SetMetricValue(*m_aControlX[i], aInitialPosition.X(), ePoolUnit);
+            SetMetricValue(*m_aControlY[i], aInitialPosition.Y(), ePoolUnit);
+
+            if (aMaxPosition.X() == aMinPosition.X())
+                m_aControlGroupX[i]->Disable();
+            else
+            {
+                m_aControlX[i]->SetMin(aMinPosition.X(), FUNIT_MM);
+                m_aControlX[i]->SetMax(aMaxPosition.X(), FUNIT_MM);
+            }
+            if (aMaxPosition.Y() == aMinPosition.Y())
+                m_aControlGroupY[i]->Disable();
+            else
+            {
+                m_aControlY[i]->SetMin(aMinPosition.Y(), FUNIT_MM);
+                m_aControlY[i]->SetMax(aMaxPosition.Y(), FUNIT_MM);
+            }
+        }
+
+        //restore geometry
+        rSdrObjCustomShape.SetMergedItem(aInitialGeometry);
+    }
+
     for (int i = 0; i < 2; ++i)
     {
         m_aControlX[i]->SaveValue();

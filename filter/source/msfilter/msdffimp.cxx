@@ -4706,7 +4706,7 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                         static_cast<SdrObjCustomShape*>(pRet)->MergeDefaultAttributes();
 
                     pRet->SetSnapRect( aObjData.aBoundRect );
-                    EnhancedCustomShape2d aCustomShape2d( pRet );
+                    EnhancedCustomShape2d aCustomShape2d(static_cast<SdrObjCustomShape&>(*pRet));
                     aTextRect = aCustomShape2d.GetTextRect();
 
                     if( bIsConnector )
