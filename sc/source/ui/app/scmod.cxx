@@ -1554,20 +1554,25 @@ void ScModule::SetRefDialog( sal_uInt16 nId, bool bVis, SfxViewFrame* pViewFrm )
     }
 }
 
-static SfxChildWindow* lcl_GetChildWinFromAnyView( sal_uInt16 nId )
+static inline SfxChildWindow* lcl_GetChildWinFromCurrentView( sal_uInt16 nId )
 {
-    // First, try the current view
     SfxViewFrame* pViewFrm = SfxViewFrame::Current();
 
     // #i46999# current view frame can be null (for example, when closing help)
-    SfxChildWindow* pChildWnd = pViewFrm ? pViewFrm->GetChildWindow( nId ) : nullptr;
+    return pViewFrm ? pViewFrm->GetChildWindow( nId ) : nullptr;
+}
+
+static SfxChildWindow* lcl_GetChildWinFromAnyView( sal_uInt16 nId )
+{
+    // First, try the current view
+    SfxChildWindow* pChildWnd = lcl_GetChildWinFromCurrentView( nId );
     if ( pChildWnd )
         return pChildWnd;           // found in the current view
 
     //  if not found there, get the child window from any open view
     //  it can be open only in one view because nCurRefDlgId is global
 
-    pViewFrm = SfxViewFrame::GetFirst();
+    SfxViewFrame* pViewFrm = SfxViewFrame::GetFirst();
     while ( pViewFrm )
     {
         pChildWnd = pViewFrm->GetChildWindow( nId );
@@ -1588,7 +1593,7 @@ bool ScModule::IsModalMode(SfxObjectShell* pDocSh)
 
     if ( nCurRefDlgId )
     {
-        SfxChildWindow* pChildWnd = lcl_GetChildWinFromAnyView( nCurRefDlgId );
+        SfxChildWindow* pChildWnd = lcl_GetChildWinFromCurrentView( nCurRefDlgId );
         if ( pChildWnd )
         {
             IAnyRefDialog* pRefDlg = dynamic_cast<IAnyRefDialog*>(pChildWnd->GetWindow());
@@ -1596,15 +1601,6 @@ bool ScModule::IsModalMode(SfxObjectShell* pDocSh)
             bIsModal = pChildWnd->IsVisible() && pRefDlg &&
                 !( pRefDlg->IsRefInputMode() && pRefDlg->IsDocAllowed(pDocSh) );
         }
-        else
-        {
-            // in 592 and above, the dialog isn't visible in other views
-            //  if the dialog is open but can't be accessed, disable input
-            bIsModal = true;
-        }
-
-        //  pChildWnd can be 0 if the dialog has not been created by another Shell yet after
-        //  switching over(e.g. in GetFocus())
     }
     else if (pDocSh)
     {
@@ -1650,11 +1646,9 @@ bool ScModule::IsRefDialogOpen()
 
     if ( nCurRefDlgId )
     {
-        SfxChildWindow* pChildWnd = lcl_GetChildWinFromAnyView( nCurRefDlgId );
+        SfxChildWindow* pChildWnd = lcl_GetChildWinFromCurrentView( nCurRefDlgId );
         if ( pChildWnd )
             bIsOpen = pChildWnd->IsVisible();
-        else
-            bIsOpen = true;     // for other views, see IsModalMode
     }
 
     return bIsOpen;
@@ -1674,15 +1668,13 @@ bool ScModule::IsFormulaMode()
 
     if ( nCurRefDlgId )
     {
-        SfxChildWindow* pChildWnd = lcl_GetChildWinFromAnyView( nCurRefDlgId );
+        SfxChildWindow* pChildWnd = lcl_GetChildWinFromCurrentView( nCurRefDlgId );
         if ( pChildWnd )
         {
             IAnyRefDialog* pRefDlg = dynamic_cast<IAnyRefDialog*>(pChildWnd->GetWindow());
             assert(pRefDlg);
             bIsFormula = pChildWnd->IsVisible() && pRefDlg && pRefDlg->IsRefInputMode();
         }
-        else
-            bIsFormula = true;
     }
     else
     {
