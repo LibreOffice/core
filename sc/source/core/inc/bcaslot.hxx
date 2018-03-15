@@ -281,7 +281,7 @@ private:
         TableSlots& operator=( const TableSlots& ) = delete;
     };
 
-    typedef ::std::map< SCTAB, TableSlots* > TableSlotsMap;
+    typedef ::std::map< SCTAB, std::unique_ptr<TableSlots> > TableSlotsMap;
 
     typedef ::std::vector< ::std::pair< ScBroadcastAreaSlot*, ScBroadcastAreas::iterator > > AreasToBeErased;
 
@@ -290,7 +290,7 @@ private:
     BulkGroupAreasType m_BulkGroupAreas;
     TableSlotsMap         aTableSlotsMap;
     AreasToBeErased       maAreasToBeErased;
-    SvtBroadcaster       *pBCAlways;             // for the RC_ALWAYS special range
+    std::unique_ptr<SvtBroadcaster> pBCAlways;             // for the RC_ALWAYS special range
     ScDocument           *pDoc;
     ScBroadcastArea      *pUpdateChain;
     ScBroadcastArea      *pEOUpdateChain;
