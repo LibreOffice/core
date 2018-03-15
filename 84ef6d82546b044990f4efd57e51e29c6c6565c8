@@ -16,6 +16,24 @@
       "revId": "84ef6d82546b044990f4efd57e51e29c6c6565c8",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba2be162_b7e75d3f",
+        "filename": "external/lxml/ExternalProject_lxml.mk",
+        "patchSetId": 23
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1001814
+      },
+      "writtenOn": "2018-03-15T08:36:21Z",
+      "side": 1,
+      "message": "PYPATH is not read by Python, but by solenv/gbuild/platform/*.mk to set PYTHONPATH as a precommand for Python.",
+      "parentUuid": "ba2be162_f7e8f518",
+      "revId": "84ef6d82546b044990f4efd57e51e29c6c6565c8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
