@@ -488,7 +488,8 @@ void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
 
                         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                         OSL_ENSURE(pFact, "Dialog creation failed!");
-                        ScopedVclPtr<AbstractSvxObjectNameDialog> pDlg(pFact->CreateSvxObjectNameDialog(aName));
+                        vcl::Window* pWin = pViewData->GetActiveWin();
+                        ScopedVclPtr<AbstractSvxObjectNameDialog> pDlg(pFact->CreateSvxObjectNameDialog(pWin ? pWin->GetFrameWeld() : nullptr, aName));
                         OSL_ENSURE(pDlg, "Dialog creation failed!");
 
                         pDlg->SetCheckNameHdl(LINK(this, ScDrawShell, NameObjectHdl));

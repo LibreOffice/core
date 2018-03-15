@@ -2506,7 +2506,8 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                 OSL_ENSURE(pFact, "Dialog creation failed!");
-                ScopedVclPtr<AbstractSvxObjectNameDialog> pDlg(pFact->CreateSvxObjectNameDialog(aName));
+                ::sd::Window* pWindow = GetActiveWindow();
+                ScopedVclPtr<AbstractSvxObjectNameDialog> pDlg(pFact->CreateSvxObjectNameDialog(pWindow ? pWindow->GetFrameWeld() : nullptr, aName));
                 OSL_ENSURE(pDlg, "Dialog creation failed!");
 
                 pDlg->SetCheckNameHdl(LINK(this, DrawViewShell, NameObjectHdl));

@@ -54,43 +54,27 @@ IMPL_LINK_NOARG(SvxNameDialog, ModifyHdl, weld::Entry&, void)
 // Dialog for editing Object Name
 // plus uniqueness-callback-linkHandler
 
-SvxObjectNameDialog::SvxObjectNameDialog(
-    vcl::Window* pWindow,
-    const OUString& rName) :
-    ModalDialog     ( pWindow, "ObjectNameDialog", "cui/ui/objectnamedialog.ui" )
+SvxObjectNameDialog::SvxObjectNameDialog(weld::Window* pParent, const OUString& rName)
+    : GenericDialogController(pParent, "cui/ui/objectnamedialog.ui", "ObjectNameDialog")
+    , m_xEdtName(m_xBuilder->weld_entry("object_name_entry"))
+    , m_xBtnOK(m_xBuilder->weld_button("ok"))
 {
-    get(pBtnOK, "ok");
-    get(pEdtName, "object_name_entry");
     // set name
-    pEdtName->SetText(rName);
+    m_xEdtName->set_text(rName);
+    m_xEdtName->select_region(0, -1);
 
     // activate name
-    pEdtName->SetSelection(Selection(SELECTION_MIN, SELECTION_MAX));
-    ModifyHdl(*pEdtName.get());
-    pEdtName->SetModifyHdl(LINK(this, SvxObjectNameDialog, ModifyHdl));
+    ModifyHdl(*m_xEdtName);
+    m_xEdtName->connect_changed(LINK(this, SvxObjectNameDialog, ModifyHdl));
 }
 
-SvxObjectNameDialog::~SvxObjectNameDialog()
+IMPL_LINK_NOARG(SvxObjectNameDialog, ModifyHdl, weld::Entry&, void)
 {
-    disposeOnce();
-}
-
-void SvxObjectNameDialog::dispose()
-{
-    pEdtName.clear();
-    pBtnOK.clear();
-    ModalDialog::dispose();
-}
-
-
-IMPL_LINK_NOARG(SvxObjectNameDialog, ModifyHdl, Edit&, void)
-{
-    if(aCheckNameHdl.IsSet())
+    if (aCheckNameHdl.IsSet())
     {
-        pBtnOK->Enable(aCheckNameHdl.Call(*this));
+        m_xBtnOK->set_sensitive(aCheckNameHdl.Call(*this));
     }
 }
-
 
 // #i68101#
 // Dialog for editing Object Title and Description

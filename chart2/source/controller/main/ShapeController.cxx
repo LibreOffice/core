@@ -456,8 +456,9 @@ void ShapeController::executeDispatch_RenameObject()
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                 if ( pFact )
                 {
+                    VclPtr<ChartWindow> pChartWindow( m_pChartController->GetChartWindow() );
                     ScopedVclPtr< AbstractSvxObjectNameDialog > pDlg(
-                        pFact->CreateSvxObjectNameDialog( aName ) );
+                        pFact->CreateSvxObjectNameDialog(pChartWindow ? pChartWindow->GetFrameWeld() : nullptr, aName));
                     pDlg->SetCheckNameHdl( LINK( this, ShapeController, CheckNameHdl ) );
                     if ( pDlg.get() && ( pDlg->Execute() == RET_OK ) )
                     {
