@@ -421,7 +421,7 @@ public:
     bool importVerticalAlignProperty(
         OUString const & rPropName, OUString const & rAttrName,
         css::uno::Reference<css::xml::input::XAttributes> const & xAttributes );
-    bool importImageURLProperty( OUString const & rPropName, OUString const & rAttrName,
+    bool importGraphicOrImageProperty(OUString const & rAttrName,
         css::uno::Reference< css::xml::input::XAttributes > const & xAttributes );
     bool importImageAlignProperty(
         OUString const & rPropName, OUString const & rAttrName,

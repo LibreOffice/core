@@ -40,7 +40,6 @@ extern StringTriple const * const g_pEventTranslations;
 
 }
 
-#define XMLSCRIPT_GRAPHOBJ_URLPREFIX "vnd.sun.star.GraphicObject:"
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -140,8 +140,6 @@ public:
         OUString const & rPropName, OUString const & rAttrName );
     void readVerticalAlignAttr(
         OUString const & rPropName, OUString const & rAttrName );
-    void readImageURLAttr(
-        OUString const & rPropName, OUString const & rAttrName );
     void readImageAlignAttr(
         OUString const & rPropName, OUString const & rAttrName );
     void readImagePositionAttr(
@@ -164,8 +162,10 @@ public:
         OUString const & rPropName, OUString const & rAttrName );
     void readImageScaleModeAttr(
         OUString const & rPropName, OUString const & rAttrName );
-    void readDataAwareAttr(
-        OUString const & rAttrName );
+
+    void readDataAwareAttr(OUString const & rAttrName );
+    void readImageOrGraphicAttr(OUString const & rAttrName );
+
     void addBoolAttr(
         OUString const & rAttrName, bool bValue )
         { addAttribute( rAttrName, OUString::boolean(bValue) ); }
