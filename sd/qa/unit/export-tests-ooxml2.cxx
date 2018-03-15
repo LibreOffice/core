@@ -114,6 +114,7 @@ public:
     /// SmartArt animated elements
     void testTdf104792();
     void testTdf90627();
+    void testTdf104786();
 
     CPPUNIT_TEST_SUITE(SdOOXMLExportTest2);
 
@@ -148,6 +149,7 @@ public:
     CPPUNIT_TEST(testTdf114848);
     CPPUNIT_TEST(testTdf104792);
     CPPUNIT_TEST(testTdf90627);
+    CPPUNIT_TEST(testTdf104786);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -935,6 +937,19 @@ void SdOOXMLExportTest2::testTdf90627()
     xmlDocPtr pXmlDocContent = parseExport(tempFile, "ppt/slides/slide1.xml");
     // Don't export empty conditions
     assertXPath(pXmlDocContent, "/p:sld/p:timing/p:tnLst/p:par/p:cTn/p:childTnLst[1]/p:seq/p:cTn/p:childTnLst[1]/p:par[2]/p:cTn/p:childTnLst[1]/p:par/p:cTn/p:childTnLst[1]/p:par/p:cTn/p:endCondLst", 0);
+
+    xDocShRef->DoClose();
+}
+
+void SdOOXMLExportTest2::testTdf104786()
+{
+    ::sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/pptx/tdf104786.pptx"), PPTX);
+    utl::TempFile tempFile;
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
+
+    xmlDocPtr pXmlDocContent = parseExport(tempFile, "ppt/slides/slide2.xml");
+    // Don't export empty 'to'
+    assertXPath(pXmlDocContent, "/p:sld/p:timing/p:tnLst/p:par/p:cTn/p:childTnLst[1]/p:seq/p:cTn/p:childTnLst[1]/p:par[2]/p:cTn/p:childTnLst[1]/p:par/p:cTn/p:childTnLst[1]/p:par/p:cTn/p:childTnLst/p:set[2]/p:to", 0);
 
     xDocShRef->DoClose();
 }
