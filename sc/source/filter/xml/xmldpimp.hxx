@@ -277,7 +277,7 @@ public:
     void SetShowEmpty(const bool bValue) { if (xDim) xDim->SetShowEmpty(bValue); }
     void SetRepeatItemLabels(const bool bSet) { if (xDim) xDim->SetRepeatItemLabels(bSet); }
     void SetSubTotals(std::vector<ScGeneralFunction> const & rFunctions) { if (xDim) xDim->SetSubTotals(rFunctions); }
-    void AddMember(ScDPSaveMember* pMember);
+    void AddMember(std::unique_ptr<ScDPSaveMember> pMember);
     void SetSubTotalName(const OUString& rName);
     void SetFieldReference(const css::sheet::DataPilotFieldReference& aRef) { if (xDim) xDim->SetReferenceValue(&aRef); }
     void SetAutoShowInfo(const css::sheet::DataPilotFieldAutoShowInfo& aInfo) { if (xDim) xDim->SetAutoShowInfo(&aInfo); }

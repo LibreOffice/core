@@ -909,17 +909,16 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLDataPilotFieldCont
     return pContext;
 }
 
-void ScXMLDataPilotFieldContext::AddMember(ScDPSaveMember* pMember)
+void ScXMLDataPilotFieldContext::AddMember(std::unique_ptr<ScDPSaveMember> pMember)
 {
     if (xDim)
     {
-        xDim->AddMember(pMember);
-        if (!pMember->GetIsVisible())
+        bool isVisible = pMember->GetIsVisible();
+        xDim->AddMember(std::move(pMember));
+        if (!isVisible)
             // This member is hidden.
             mbHasHiddenMember = true;
     }
-    else
-        delete pMember;
 }
 
 void ScXMLDataPilotFieldContext::SetSubTotalName(const OUString& rName)
@@ -1389,12 +1388,12 @@ void SAL_CALL ScXMLDataPilotMemberContext::endFastElement( sal_Int32 /*nElement*
 {
     if (bHasName)   // #i53407# don't check sName, empty name is allowed
     {
-        ScDPSaveMember* pMember = new ScDPSaveMember(sName);
+        std::unique_ptr<ScDPSaveMember> pMember(new ScDPSaveMember(sName));
         if (!maDisplayName.isEmpty())
             pMember->SetLayoutName(maDisplayName);
         pMember->SetIsVisible(bDisplay);
         pMember->SetShowDetails(bDisplayDetails);
-        pDataPilotField->AddMember(pMember);
+        pDataPilotField->AddMember(std::move(pMember));
     }
 }
 
