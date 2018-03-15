@@ -56,10 +56,7 @@ void FuArea::DoExecute( SfxRequest& rReq )
 
     const SfxItemSet* pArgs = rReq.GetArgs();
     if (pArgs)
-    {
-        mpViewShell->Cancel();
         return;
-    }
 
     SfxItemSet aNewAttr( mpDoc->GetPool() );
     mpView->GetAttributes( aNewAttr );
@@ -67,10 +64,7 @@ void FuArea::DoExecute( SfxRequest& rReq )
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
     VclPtr<AbstractSvxAreaTabDialog> pDlg(pFact ? pFact->CreateSvxAreaTabDialog(mpViewShell->GetActiveWindow(), &aNewAttr, mpDoc, true) : nullptr);
     if (!pDlg)
-    {
-        mpViewShell->Cancel();
         return;
-    }
 
     pDlg->StartExecuteAsync([=](sal_Int32 nResult){
         if (nResult == RET_OK)
@@ -90,6 +84,9 @@ void FuArea::DoExecute( SfxRequest& rReq )
 
             mpViewShell->GetViewFrame()->GetBindings().Invalidate( SidArray );
         }
+
+        // deferred until the dialog ends
+        mpViewShell->Cancel();
     });
 }
 
