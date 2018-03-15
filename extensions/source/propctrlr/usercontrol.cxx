@@ -22,6 +22,7 @@
 #include <com/sun/star/inspection/PropertyControlType.hpp>
 #include <svl/numuno.hxx>
 #include <rtl/math.hxx>
+#include <vcl/GraphicObject.hxx>
 #include <tools/debug.hxx>
 #include <svl/zformat.hxx>
 #include <connectivity/dbconversion.hxx>
@@ -258,7 +259,7 @@ namespace pcr
         OUString sURL;
         if (  _rValue >>= sURL )
         {
-            if ( sURL.startsWith( "vnd.sun.star.GraphicObject:" ) )
+            if (GraphicObject::isGraphicObjectUniqueIdURL(sURL))
                 getTypedControlWindow()->DisplayURL( getTypedControlWindow()->GetPlaceHolder() );
             else
                 getTypedControlWindow()->DisplayURL( sURL );
