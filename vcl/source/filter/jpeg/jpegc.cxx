@@ -133,14 +133,14 @@ struct JpegStuff
     jpeg_decompress_struct cinfo;
     ErrorManagerStruct jerr;
     JpegDecompressOwner aOwner;
-    std::unique_ptr<Bitmap::ScopedWriteAccess> pScopedAccess;
+    std::unique_ptr<BitmapScopedWriteAccess> pScopedAccess;
     std::vector<sal_uInt8> pScanLineBuffer;
     std::vector<sal_uInt8> pCYMKBuffer;
 };
 
 void ReadJPEG(JpegStuff& rContext, JPEGReader* pJPEGReader, void* pInputStream, long* pLines,
               Size const & previewSize, GraphicFilterImportFlags nImportFlags,
-              Bitmap::ScopedWriteAccess* ppAccess)
+              BitmapScopedWriteAccess* ppAccess)
 {
     if (setjmp(rContext.jerr.setjmp_buffer))
     {
@@ -234,9 +234,9 @@ void ReadJPEG(JpegStuff& rContext, JPEGReader* pJPEGReader, void* pInputStream, 
             // ppAccess must be set if this flag is used.
             assert(ppAccess);
         else
-            rContext.pScopedAccess.reset(new Bitmap::ScopedWriteAccess(pJPEGReader->GetBitmap()));
+            rContext.pScopedAccess.reset(new BitmapScopedWriteAccess(pJPEGReader->GetBitmap()));
 
-        Bitmap::ScopedWriteAccess& pAccess = bUseExistingBitmap ? *ppAccess : *rContext.pScopedAccess.get();
+        BitmapScopedWriteAccess& pAccess = bUseExistingBitmap ? *ppAccess : *rContext.pScopedAccess.get();
 
         if (pAccess)
         {
@@ -341,7 +341,7 @@ void ReadJPEG(JpegStuff& rContext, JPEGReader* pJPEGReader, void* pInputStream, 
 
 void ReadJPEG( JPEGReader* pJPEGReader, void* pInputStream, long* pLines,
                Size const & previewSize, GraphicFilterImportFlags nImportFlags,
-               Bitmap::ScopedWriteAccess* ppAccess )
+               BitmapScopedWriteAccess* ppAccess )
 {
     JpegStuff aContext;
     ReadJPEG(aContext, pJPEGReader, pInputStream, pLines, previewSize, nImportFlags, ppAccess);

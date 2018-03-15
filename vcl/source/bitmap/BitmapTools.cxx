@@ -32,6 +32,7 @@
 #endif
 #include <tools/diagnose_ex.h>
 #include <tools/fract.hxx>
+#include <bitmapwriteaccess.hxx>
 
 using namespace css;
 
@@ -123,16 +124,16 @@ BitmapEx CreateFromData( sal_uInt8 const *pData, sal_Int32 nWidth, sal_Int32 nHe
     assert( nBitCount == 1 || nBitCount == 24 || nBitCount == 32);
     Bitmap aBmp( Size( nWidth, nHeight ), nBitCount );
 
-    Bitmap::ScopedWriteAccess pWrite(aBmp);
+    BitmapScopedWriteAccess pWrite(aBmp);
     assert(pWrite.get());
     if( !pWrite )
         return BitmapEx();
     std::unique_ptr<AlphaMask> pAlphaMask;
-    AlphaMask::ScopedWriteAccess xMaskAcc;
+    AlphaScopedWriteAccess xMaskAcc;
     if (nBitCount == 32)
     {
         pAlphaMask.reset( new AlphaMask( Size(nWidth, nHeight) ) );
-        xMaskAcc = AlphaMask::ScopedWriteAccess(*pAlphaMask);
+        xMaskAcc = AlphaScopedWriteAccess(*pAlphaMask);
     }
     if (nBitCount == 1)
     {
@@ -186,16 +187,16 @@ BitmapEx CreateFromData( RawBitmap&& rawBitmap )
     assert( nBitCount == 24 || nBitCount == 32);
     Bitmap aBmp( rawBitmap.maSize, nBitCount );
 
-    Bitmap::ScopedWriteAccess pWrite(aBmp);
+    BitmapScopedWriteAccess pWrite(aBmp);
     assert(pWrite.get());
     if( !pWrite )
         return BitmapEx();
     std::unique_ptr<AlphaMask> pAlphaMask;
-    AlphaMask::ScopedWriteAccess xMaskAcc;
+    AlphaScopedWriteAccess xMaskAcc;
     if (nBitCount == 32)
     {
         pAlphaMask.reset( new AlphaMask( rawBitmap.maSize ) );
-        xMaskAcc = AlphaMask::ScopedWriteAccess(*pAlphaMask);
+        xMaskAcc = AlphaScopedWriteAccess(*pAlphaMask);
     }
 
     auto nHeight = rawBitmap.maSize.getHeight();
@@ -249,12 +250,12 @@ BitmapEx* CreateFromCairoSurface(Size aSize, cairo_surface_t * pSurface)
     ::Bitmap aRGB( aSize, 24 );
     ::AlphaMask aMask( aSize );
 
-    Bitmap::ScopedWriteAccess pRGBWrite(aRGB);
+    BitmapScopedWriteAccess pRGBWrite(aRGB);
     assert(pRGBWrite);
     if (!pRGBWrite)
         return nullptr;
 
-    AlphaMask::ScopedWriteAccess pMaskWrite(aMask);
+    AlphaScopedWriteAccess pMaskWrite(aMask);
     assert(pMaskWrite);
     if (!pMaskWrite)
         return nullptr;
@@ -382,8 +383,8 @@ BitmapEx CanvasTransformBitmap( const BitmapEx&                 rBitmap,
         // copy-constructing the resulting bitmap. This will
         // rule out the possibility that cached accessor data
         // is not yet written back.
-        Bitmap::ScopedWriteAccess pWriteAccess( aDstBitmap );
-        Bitmap::ScopedWriteAccess pAlphaWriteAccess( aDstAlpha );
+        BitmapScopedWriteAccess pWriteAccess( aDstBitmap );
+        BitmapScopedWriteAccess pAlphaWriteAccess( aDstAlpha );
 
 
         if( pWriteAccess.get() != nullptr &&
@@ -488,7 +489,7 @@ void DrawAlphaBitmapAndAlphaGradient(BitmapEx & rBitmapEx, bool bFixedTransparen
     }
 
     {
-        AlphaMask::ScopedWriteAccess pOld(aOldMask);
+        AlphaScopedWriteAccess pOld(aOldMask);
 
         assert(pOld && "Got no access to old alpha mask (!)");
 
@@ -572,7 +573,7 @@ void DrawAndClipBitmap(const Point& rPos, const Size& rSize, const BitmapEx& rBi
             AlphaMask fromVDev(aVDevMask);
             AlphaMask fromBmpEx(aBmpEx.GetAlpha());
             AlphaMask::ScopedReadAccess pR(fromVDev);
-            AlphaMask::ScopedWriteAccess pW(fromBmpEx);
+            AlphaScopedWriteAccess pW(fromBmpEx);
 
             if(pR && pW)
             {

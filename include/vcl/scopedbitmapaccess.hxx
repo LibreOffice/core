@@ -35,7 +35,7 @@ namespace vcl
     pReadAccess->SetPixel()...
 
     Bitmap aBitmap2;
-    Bitmap::ScopedWriteAccess pWriteAccess( bCond ? aBitmap2.AcquireWriteAccess() : 0, aBitmap2 );
+    BitmapScopedWriteAccess pWriteAccess( bCond ? aBitmap2.AcquireWriteAccess() : 0, aBitmap2 );
     if ( pWriteAccess )...
 
     @attention for practical reasons, ScopedBitmapAccess stores a

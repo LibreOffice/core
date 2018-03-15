@@ -252,7 +252,7 @@ Graphic JPEGReader::CreateIntermediateGraphic(long nLines)
         if (nNewLines > 0)
         {
             {
-                Bitmap::ScopedWriteAccess pAccess(*mpIncompleteAlpha);
+                BitmapScopedWriteAccess pAccess(*mpIncompleteAlpha);
                 pAccess->SetFillColor(COL_BLACK);
                 pAccess->FillRect(tools::Rectangle(Point(0, mnLastLines), Size(pAccess->Width(), nNewLines)));
             }
@@ -274,7 +274,7 @@ Graphic JPEGReader::CreateIntermediateGraphic(long nLines)
     return aGraphic;
 }
 
-ReadState JPEGReader::Read( Graphic& rGraphic, GraphicFilterImportFlags nImportFlags, Bitmap::ScopedWriteAccess* ppAccess )
+ReadState JPEGReader::Read( Graphic& rGraphic, GraphicFilterImportFlags nImportFlags, BitmapScopedWriteAccess* ppAccess )
 {
     ReadState   eReadState;
     bool        bRet = false;

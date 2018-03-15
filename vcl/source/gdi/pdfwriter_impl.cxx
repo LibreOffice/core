@@ -83,6 +83,7 @@
 #include <sallayout.hxx>
 #include <textlayout.hxx>
 #include <textlineinfo.hxx>
+#include <bitmapwriteaccess.hxx>
 
 #include "pdfwriter_impl.hxx"
 
@@ -291,7 +292,7 @@ void doTestCode()
 
     // prepare an alpha mask
     Bitmap aTransMask( Size( 256, 256 ), 8, &Bitmap::GetGreyPalette( 256 ) );
-    Bitmap::ScopedWriteAccess pAcc(aTransMask);
+    BitmapScopedWriteAccess pAcc(aTransMask);
     for( int nX = 0; nX < 256; nX++ )
         for( int nY = 0; nY < 256; nY++ )
             pAcc->SetPixel( nX, nY, BitmapColor( (sal_uInt8)((nX+nY)/2) ) );
@@ -315,7 +316,7 @@ void doTestCode()
     aWriter.DrawRect( aTranspRect );
 
     Bitmap aImageBmp( Size( 256, 256 ), 24 );
-    pAcc = Bitmap::ScopedWriteAccess(aImageBmp);
+    pAcc = BitmapScopedWriteAccess(aImageBmp);
     pAcc->SetFillColor( Color( 0xff, 0, 0xff ) );
     pAcc->FillRect( Rectangle( Point( 0, 0 ), Size( 256, 256 ) ) );
     pAcc.reset();
@@ -9372,7 +9373,7 @@ namespace
         if (eFormat != ScanlineFormat::N1BitLsbPal)
             return rBitmap;
         Bitmap aNewBmp(rBitmap);
-        Bitmap::ScopedWriteAccess xWriteAcc(aNewBmp);
+        BitmapScopedWriteAccess xWriteAcc(aNewBmp);
         const int nScanLineBytes = (pAccess->Width() + 7U) / 8U;
         for (long nY = 0L; nY < xWriteAcc->Height(); ++nY)
         {

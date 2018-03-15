@@ -26,6 +26,7 @@
 #include <sal/types.h>
 #include <basegfx/vector/b2dsize.hxx>
 #include <vcl/bitmap.hxx>
+#include <bitmapwriteaccess.hxx>
 
 #include <jpeglib.h>
 
@@ -49,7 +50,7 @@ bool    WriteJPEG( JPEGWriter* pJPEGWriter, void* pOutputStream,
 
 void    ReadJPEG( JPEGReader* pJPEGReader, void* pInputStream, long* pLines,
                   Size const & previewSize, GraphicFilterImportFlags nImportFlags,
-                  Bitmap::ScopedWriteAccess* ppAccess );
+                  BitmapScopedWriteAccess* ppAccess );
 
 void    Transform(void* pInputStream, void* pOutputStream, long nAngle);
 

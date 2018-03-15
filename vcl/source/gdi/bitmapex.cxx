@@ -44,6 +44,7 @@
 #include <svdata.hxx>
 #include <com/sun/star/beans/XFastPropertySet.hpp>
 #include <memory>
+#include <bitmapwriteaccess.hxx>
 
 using namespace ::com::sun::star;
 
@@ -823,7 +824,7 @@ namespace
         bool bSmooth)
     {
         Bitmap aDestination(rDestinationSize, 24);
-        Bitmap::ScopedWriteAccess xWrite(aDestination);
+        BitmapScopedWriteAccess xWrite(aDestination);
 
         if(xWrite)
         {
@@ -1036,7 +1037,7 @@ BitmapEx BitmapEx::ModifyBitmapEx(const basegfx::BColorModifierStack& rBColorMod
         }
         else
         {
-            Bitmap::ScopedWriteAccess xContent(aChangedBitmap);
+            BitmapScopedWriteAccess xContent(aChangedBitmap);
 
             if(xContent)
             {
@@ -1204,8 +1205,8 @@ BitmapEx createBlendFrame(
 
         aContent.Erase(COL_BLACK);
 
-        Bitmap::ScopedWriteAccess pContent(aContent);
-        AlphaMask::ScopedWriteAccess pAlpha(aAlpha);
+        BitmapScopedWriteAccess pContent(aContent);
+        AlphaScopedWriteAccess pAlpha(aAlpha);
 
         if(pContent && pAlpha)
         {
@@ -1304,7 +1305,7 @@ void BitmapEx::Replace(const Color& rSearchColor,
 void BitmapEx::setAlphaFrom( sal_uInt8 cIndexFrom, sal_Int8 nAlphaTo )
 {
     AlphaMask aAlphaMask(GetAlpha());
-    Bitmap::ScopedWriteAccess pWriteAccess(aAlphaMask);
+    BitmapScopedWriteAccess pWriteAccess(aAlphaMask);
     Bitmap::ScopedReadAccess pReadAccess(maBitmap);
     assert( pReadAccess.get() && pWriteAccess.get() );
     if ( pReadAccess.get() && pWriteAccess.get() )
@@ -1337,7 +1338,7 @@ void BitmapEx::AdjustTransparency(sal_uInt8 cTrans)
     else
     {
         aAlpha = GetAlpha();
-        Bitmap::ScopedWriteAccess pA(aAlpha);
+        BitmapScopedWriteAccess pA(aAlpha);
         assert(pA);
 
         if( !pA )

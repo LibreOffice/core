@@ -320,7 +320,7 @@ static void dumpRGBABitmap( const OUString& rPath, const unsigned char* pBuffer,
                             const int nWidth, const int nHeight )
 {
     Bitmap aBitmap( Size( nWidth, nHeight ), 32 );
-    Bitmap::ScopedWriteAccess pWriteAccess( aBitmap );
+    BitmapScopedWriteAccess pWriteAccess( aBitmap );
     memcpy( pWriteAccess->GetBuffer(), pBuffer, 4*nWidth*nHeight );
 
     BitmapEx aBitmapEx( aBitmap );

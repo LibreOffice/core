@@ -40,6 +40,7 @@
 #include <vcl/opengl/OpenGLWrapper.hxx>
 #include <vcl/opengl/OpenGLContext.hxx>
 #include <desktop/crashreport.hxx>
+#include <bitmapwriteaccess.hxx>
 
 #if defined UNX && !defined MACOSX && !defined IOS && !defined ANDROID && !defined HAIKU
 #include <opengl/x11/X11DeviceInfo.hxx>
@@ -583,8 +584,8 @@ BitmapEx OpenGLHelper::ConvertBGRABufferToBitmapEx(const sal_uInt8* const pBuffe
     AlphaMask aAlpha( Size(nWidth, nHeight) );
 
     {
-        Bitmap::ScopedWriteAccess pWriteAccess( aBitmap );
-        AlphaMask::ScopedWriteAccess pAlphaWriteAccess( aAlpha );
+        BitmapScopedWriteAccess pWriteAccess( aBitmap );
+        AlphaScopedWriteAccess pAlphaWriteAccess( aAlpha );
 
         size_t nCurPos = 0;
         for( long y = 0; y < nHeight; ++y)

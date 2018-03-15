@@ -20,6 +20,7 @@
 #include <vcl/bitmapaccess.hxx>
 #include <tools/color.hxx>
 #include <vcl/alpha.hxx>
+#include <bitmapwriteaccess.hxx>
 
 AlphaMask::AlphaMask()
 {
@@ -88,7 +89,7 @@ void AlphaMask::Erase( sal_uInt8 cTransparency )
 bool AlphaMask::Replace( const Bitmap& rMask, sal_uInt8 cReplaceTransparency )
 {
     Bitmap::ScopedReadAccess pMaskAcc( const_cast<Bitmap&>(rMask) );
-    AlphaMask::ScopedWriteAccess pAcc(*this);
+    AlphaScopedWriteAccess pAcc(*this);
 
     if( pMaskAcc && pAcc )
     {
@@ -111,7 +112,7 @@ bool AlphaMask::Replace( const Bitmap& rMask, sal_uInt8 cReplaceTransparency )
 
 void AlphaMask::Replace( sal_uInt8 cSearchTransparency, sal_uInt8 cReplaceTransparency )
 {
-    AlphaMask::ScopedWriteAccess pAcc(*this);
+    AlphaScopedWriteAccess pAcc(*this);
 
     if( pAcc && pAcc->GetBitCount() == 8 )
     {
