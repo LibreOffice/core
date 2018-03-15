@@ -26,6 +26,7 @@
 #include <set>
 #include <utility>
 #include <vector>
+#include <unordered_map>
 
 #include <boost/optional.hpp>
 #include <com/sun/star/uno/Any.hxx>
@@ -529,7 +530,7 @@ protected:
 
 public:
     std::unique_ptr<DffPropertyReader> pSecPropSet;
-    std::map<sal_uInt32,OString> aEscherBlipCache;
+    std::unordered_map<sal_uInt32, Graphic> aEscherBlipCache;
 
     DffRecordManager    maShapeRecords;
     Color               mnDefaultColor;

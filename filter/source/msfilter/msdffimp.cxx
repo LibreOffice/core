@@ -6294,10 +6294,9 @@ bool SvxMSDffManager::GetShape(sal_uLong nId, SdrObject*&         rpShape,
 }
 
 
-/*      access to a BLIP at runtime (if the Blip-Number is already known)
-        ---------------------------
-******************************************************************************/
-bool SvxMSDffManager::GetBLIP( sal_uLong nIdx_, Graphic& rData, tools::Rectangle* pVisArea )
+/** Access to a BLIP at runtime (if the Blip-Number is already known)
+ */
+bool SvxMSDffManager::GetBLIP( sal_uLong nIdx_, Graphic& rGraphic, tools::Rectangle* pVisArea )
 {
     if (!pStData)
         return false;
@@ -6305,24 +6304,22 @@ bool SvxMSDffManager::GetBLIP( sal_uLong nIdx_, Graphic& rData, tools::Rectangle
     bool bOk = false;       // initialize result variable
 
     // check if a graphic for this blipId is already imported
-    if ( nIdx_)
+    if (nIdx_)
     {
-        std::map<sal_uInt32,OString>::iterator iter = aEscherBlipCache.find(nIdx_);
+        auto iter = aEscherBlipCache.find(nIdx_);
 
         if (iter != aEscherBlipCache.end())
         {
-            /* if this entry is available, then it should be possible
-            to get the Graphic via GraphicObject */
-            GraphicObject aGraphicObject( iter->second );
-            rData = aGraphicObject.GetGraphic();
-            if ( rData.GetType() != GraphicType::NONE )
+            /* if this entry is available */
+            rGraphic = Graphic(iter->second);
+            if (rGraphic.GetType() != GraphicType::NONE)
                 bOk = true;
             else
                 aEscherBlipCache.erase(iter);
         }
     }
 
-    if ( !bOk )
+    if (!bOk)
     {
         sal_uInt16 nIdx = sal_uInt16( nIdx_ );
         if (!nIdx || (m_pBLIPInfos->size() < nIdx))
@@ -6347,7 +6344,7 @@ bool SvxMSDffManager::GetBLIP( sal_uLong nIdx_, Graphic& rData, tools::Rectangle
         if (!bOk || pStData->GetError())
             pStData->ResetError();
         else
-            bOk = GetBLIPDirect( *pStData, rData, pVisArea );
+            bOk = GetBLIPDirect( *pStData, rGraphic, pVisArea );
         if( pStData2 && !bOk )
         {
             // Error, but the is a second chance: There is a second
@@ -6361,7 +6358,7 @@ bool SvxMSDffManager::GetBLIP( sal_uLong nIdx_, Graphic& rData, tools::Rectangle
             if (!bOk || pStData2->GetError())
                 pStData2->ResetError();
             else
-                bOk = GetBLIPDirect( *pStData2, rData, pVisArea );
+                bOk = GetBLIPDirect( *pStData2, rGraphic, pVisArea );
             // restore of FilePos of the second data stream
             pStData2->Seek( nOldPosData2 );
         }
@@ -6370,11 +6367,10 @@ bool SvxMSDffManager::GetBLIP( sal_uLong nIdx_, Graphic& rData, tools::Rectangle
         if( &rStCtrl != pStData )
           pStData->Seek( nOldPosData );
 
-        if ( bOk )
+        if (bOk)
         {
             // create new BlipCacheEntry for this graphic
-            GraphicObject aGraphicObject( rData );
-            aEscherBlipCache.insert(std::make_pair(nIdx_,aGraphicObject.GetUniqueID()));
+            aEscherBlipCache.insert(std::make_pair(nIdx_, rGraphic));
         }
     }
 
