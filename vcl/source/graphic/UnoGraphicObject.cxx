@@ -27,25 +27,27 @@
 #include <vcl/GraphicObject.hxx>
 #include <rtl/ref.hxx>
 
-using namespace com::sun::star;
+using namespace css;
 
 namespace {
 
-typedef ::cppu::WeakImplHelper< graphic::XGraphicObject, css::lang::XServiceInfo > GObjectAccess_BASE;
+typedef ::cppu::WeakImplHelper<graphic::XGraphicObject, css::lang::XServiceInfo> GraphicObject_BASE;
+
  // Simple uno wrapper around the GraphicObject class to allow basic
  // access. ( and solves a horrible cyclic link problem between
  // goodies/toolkit/extensions )
-class GObjectImpl : public GObjectAccess_BASE
+class GraphicObjectImpl : public GraphicObject_BASE
 {
-     ::osl::Mutex m_aMutex;
-     std::unique_ptr< GraphicObject > mpGObject;
+     osl::Mutex m_aMutex;
+     std::unique_ptr<GraphicObject> mpGraphicObject;
+
 public:
     /// @throws uno::RuntimeException
-    explicit GObjectImpl(uno::Sequence< uno::Any > const & args);
+    explicit GraphicObjectImpl(uno::Sequence<uno::Any> const & rArgs);
 
      // XGraphicObject
-    virtual uno::Reference< graphic::XGraphic > SAL_CALL getGraphic() override;
-    virtual void SAL_CALL setGraphic( const uno::Reference< graphic::XGraphic >& _graphic ) override;
+    virtual uno::Reference<graphic::XGraphic> SAL_CALL getGraphic() override;
+    virtual void SAL_CALL setGraphic(uno::Reference<graphic::XGraphic> const & rxGraphic) override;
     OUString SAL_CALL getUniqueID() override;
 
     virtual OUString SAL_CALL getImplementationName() override
@@ -60,48 +62,49 @@ public:
 
     virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
     {
-        uno::Sequence<OUString> aRet { "com.sun.star.graphic.GraphicObject" };
-        return aRet;
+        return uno::Sequence<OUString> { "com.sun.star.graphic.GraphicObject" };
     }
 };
 
-GObjectImpl::GObjectImpl(const uno::Sequence< uno::Any >& /*args*/)
+GraphicObjectImpl::GraphicObjectImpl(const uno::Sequence<uno::Any>& /*rArgs*/)
 {
-    mpGObject.reset(new GraphicObject());
+    mpGraphicObject.reset(new GraphicObject());
 }
 
-uno::Reference< graphic::XGraphic > SAL_CALL GObjectImpl::getGraphic()
+uno::Reference<graphic::XGraphic> SAL_CALL GraphicObjectImpl::getGraphic()
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    if ( !mpGObject.get() )
+    osl::MutexGuard aGuard(m_aMutex);
+
+    if (!mpGraphicObject.get())
         throw uno::RuntimeException();
-    return mpGObject->GetGraphic().GetXGraphic();
+    return mpGraphicObject->GetGraphic().GetXGraphic();
 }
 
-void SAL_CALL GObjectImpl::setGraphic( const uno::Reference< graphic::XGraphic >& _graphic )
+void SAL_CALL GraphicObjectImpl::setGraphic(uno::Reference<graphic::XGraphic> const & rxGraphic)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    if ( !mpGObject.get() )
+    osl::MutexGuard aGuard(m_aMutex);
+
+    if (!mpGraphicObject.get())
         throw uno::RuntimeException();
-    Graphic aGraphic( _graphic );
-    mpGObject->SetGraphic( aGraphic );
+    Graphic aGraphic(rxGraphic);
+    mpGraphicObject->SetGraphic(aGraphic);
 }
 
-OUString SAL_CALL GObjectImpl::getUniqueID()
+OUString SAL_CALL GraphicObjectImpl::getUniqueID()
 {
     // not supported anymore so return empty string for now
     osl::MutexGuard aGuard(m_aMutex);
     return OUString();
 }
 
-}
+} // end anonymous namespace
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
-com_sun_star_graphic_GraphicObject_get_implementation(
-    SAL_UNUSED_PARAMETER css::uno::XComponentContext *,
-    css::uno::Sequence<css::uno::Any> const &arguments)
+extern "C" SAL_DLLPUBLIC_EXPORT
+css::uno::XInterface* com_sun_star_graphic_GraphicObject_get_implementation(
+                            SAL_UNUSED_PARAMETER uno::XComponentContext*,
+                            uno::Sequence<uno::Any> const & rArguments)
 {
-    return cppu::acquire(new GObjectImpl(arguments));
+    return cppu::acquire(new GraphicObjectImpl(rArguments));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
