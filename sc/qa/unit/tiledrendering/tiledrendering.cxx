@@ -30,9 +30,11 @@
 
 #include <comphelper/lok.hxx>
 #include <comphelper/propertyvalue.hxx>
+#include <sfx2/childwin.hxx>
 #include <sfx2/lokhelper.hxx>
 #include <svx/svdpage.hxx>
 #include <vcl/vclevent.hxx>
+#include <sc.hrc>
 
 #include <chrono>
 #include <tabvwsh.hxx>
@@ -83,6 +85,7 @@ public:
     void testLanguageStatus();
     void testMultiViewCopyPaste();
     void testIMESupport();
+    void testFilterDlg();
 
     CPPUNIT_TEST_SUITE(ScTiledRenderingTest);
     CPPUNIT_TEST(testRowColumnSelections);
@@ -114,6 +117,7 @@ public:
     CPPUNIT_TEST(testLanguageStatus);
     CPPUNIT_TEST(testMultiViewCopyPaste);
     CPPUNIT_TEST(testIMESupport);
+    CPPUNIT_TEST(testFilterDlg);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -1595,6 +1599,45 @@ void ScTiledRenderingTest::testIMESupport()
     Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT_EQUAL(aInputs[aInputs.size() - 1], pDoc->GetString(ScAddress(0, 0, 0)));
+
+    comphelper::LibreOfficeKit::setActive(false);
+}
+
+void ScTiledRenderingTest::testFilterDlg()
+{
+    comphelper::LibreOfficeKit::setActive();
+
+    createDoc("empty.ods");
+
+    // view #1
+    SfxViewShell* pView1 = SfxViewShell::Current();
+    int nView1 = SfxLokHelper::getView();
+
+    // view #2
+    SfxLokHelper::createView();
+    SfxViewShell* pView2 = SfxViewShell::Current();
+    CPPUNIT_ASSERT(pView1 != pView2);
+    {
+        pView2->GetViewFrame()->GetDispatcher()->Execute(SID_FILTER,
+            SfxCallMode::SLOT|SfxCallMode::RECORD);
+    }
+
+    Scheduler::ProcessEventsToIdle();
+    SfxChildWindow* pRefWindow = pView2->GetViewFrame()->GetChildWindow(SID_FILTER);
+    CPPUNIT_ASSERT(pRefWindow);
+
+    // switch to view 1
+    SfxLokHelper::setView(nView1);
+    CPPUNIT_ASSERT_EQUAL(true, pView2->GetViewFrame()->GetDispatcher()->IsLocked());
+    CPPUNIT_ASSERT_EQUAL(false, pView1->GetViewFrame()->GetDispatcher()->IsLocked());
+
+    KeyEvent aEvent(27, KEY_ESCAPE, 0);
+    Application::PostKeyEvent(VclEventId::WindowKeyInput, pRefWindow->GetWindow(), &aEvent);
+    Application::PostKeyEvent(VclEventId::WindowKeyUp, pRefWindow->GetWindow(), &aEvent);
+
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(false, pView2->GetViewFrame()->GetDispatcher()->IsLocked());
+    CPPUNIT_ASSERT_EQUAL(false, pView1->GetViewFrame()->GetDispatcher()->IsLocked());
 
     comphelper::LibreOfficeKit::setActive(false);
 }

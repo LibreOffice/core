@@ -90,7 +90,7 @@ public:
 
     inline void         SetWindow(vcl::Window* _pWindow) { m_pWindow = _pWindow; }
     void                DoClose( sal_uInt16 nId );
-    static void         SetDispatcherLock( bool bLock );
+    void                SetDispatcherLock( bool bLock );
     static void         EnableSpreadsheets( bool bFlag = true );
     static void         ViewShellChanged();
 
@@ -126,7 +126,7 @@ protected:
     void                disposeRefHandler();
     bool                DoClose( sal_uInt16 nId );
 
-    static void         SetDispatcherLock( bool bLock );
+    void                SetDispatcherLock( bool bLock );
 
     virtual void        RefInputStart( formula::RefEdit* pEdit, formula::RefButton* pButton = nullptr ) override;
     virtual void        RefInputDone( bool bForced = false ) override;

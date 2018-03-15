@@ -108,7 +108,7 @@ ScFormulaDlg::ScFormulaDlg( SfxBindings* pB, SfxChildWindow* pCW,
     ScFormulaReferenceHelper::enableInput( true );
     ScFormulaReferenceHelper::EnableSpreadsheets();
     m_aHelper.Init();
-    ScFormulaReferenceHelper::SetDispatcherLock( true );
+    m_aHelper.SetDispatcherLock( true );
 
     notifyChange();
     fill();
@@ -528,7 +528,7 @@ void ScFormulaDlg::dispatch(bool _bOK, bool _bMatrixChecked)
     if ( aStrItem.GetValue().isEmpty() )
         aRetItem.SetValue( false );     // sal_False = Cancel
 
-    ScFormulaReferenceHelper::SetDispatcherLock( false ); // turn off modal-mode
+    m_aHelper.SetDispatcherLock( false ); // turn off modal-mode
 
     clear();
 
@@ -538,7 +538,7 @@ void ScFormulaDlg::dispatch(bool _bOK, bool _bMatrixChecked)
 }
 void ScFormulaDlg::setDispatcherLock( bool bLock )
 {
-    ScFormulaReferenceHelper::SetDispatcherLock( bLock );
+    m_aHelper.SetDispatcherLock( bLock );
 }
 void ScFormulaDlg::deleteFormData()
 {
