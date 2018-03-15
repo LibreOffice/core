@@ -58,6 +58,7 @@
 
 #include <canvasbitmap.hxx>
 #include <vcl/canvastools.hxx>
+#include <bitmapwriteaccess.hxx>
 
 using namespace ::com::sun::star;
 
@@ -89,8 +90,8 @@ namespace vcl
                           sal_Int32                                                  nHeight,
                           const rendering::IntegerBitmapLayout&                      rLayout,
                           const uno::Reference< rendering::XIntegerReadOnlyBitmap >& xInputBitmap,
-                          Bitmap::ScopedWriteAccess&                                   rWriteAcc,
-                          Bitmap::ScopedWriteAccess&                                   rAlphaAcc )
+                          BitmapScopedWriteAccess&                                   rWriteAcc,
+                          BitmapScopedWriteAccess&                                   rAlphaAcc )
             {
                 rendering::IntegerBitmapLayout      aCurrLayout;
                 geometry::IntegerRectangle2D        aRect;
@@ -298,8 +299,8 @@ namespace vcl
                                            sal::static_int_cast<sal_uInt16>(1 << nAlphaDepth)) );
 
                 { // limit scoped access
-                    Bitmap::ScopedWriteAccess pWriteAccess( aBitmap );
-                    Bitmap::ScopedWriteAccess pAlphaWriteAccess( nAlphaDepth ? aAlpha.AcquireWriteAccess() : nullptr,
+                    BitmapScopedWriteAccess pWriteAccess( aBitmap );
+                    BitmapScopedWriteAccess pAlphaWriteAccess( nAlphaDepth ? aAlpha.AcquireWriteAccess() : nullptr,
                                                                aAlpha );
 
                     ENSURE_OR_THROW(pWriteAccess.get() != nullptr,

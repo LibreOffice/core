@@ -33,6 +33,7 @@
 #include <vcl/alpha.hxx>
 #include <osl/endian.h>
 #include <o3tl/make_unique.hxx>
+#include <bitmapwriteaccess.hxx>
 
 namespace vcl
 {
@@ -80,11 +81,11 @@ private:
     std::vector<sal_uInt8>::iterator maDataIter;
 
     std::unique_ptr<Bitmap>    mpBmp;
-    Bitmap::ScopedWriteAccess  mxAcc;
+    BitmapScopedWriteAccess  mxAcc;
     std::unique_ptr<Bitmap>    mpMaskBmp;
-    Bitmap::ScopedWriteAccess  mxMaskAcc;
+    BitmapScopedWriteAccess    mxMaskAcc;
     std::unique_ptr<AlphaMask> mpAlphaMask;
-    AlphaMask::ScopedWriteAccess mxAlphaAcc;
+    AlphaScopedWriteAccess     mxAlphaAcc;
     BitmapWriteAccess*         mpMaskAcc;
 
     ZCodec              mpZCodec;
@@ -665,7 +666,7 @@ bool PNGReaderImpl::ImplReadHeader( const Size& rPreviewSizeHint )
         return false;
 
     mpBmp = o3tl::make_unique<Bitmap>( maTargetSize, mnTargetDepth );
-    mxAcc = Bitmap::ScopedWriteAccess(*mpBmp);
+    mxAcc = BitmapScopedWriteAccess(*mpBmp);
     if (!mxAcc)
         return false;
 
@@ -673,7 +674,7 @@ bool PNGReaderImpl::ImplReadHeader( const Size& rPreviewSizeHint )
     {
         mpAlphaMask = o3tl::make_unique<AlphaMask>( maTargetSize );
         mpAlphaMask->Erase( 128 );
-        mxAlphaAcc = AlphaMask::ScopedWriteAccess(*mpAlphaMask);
+        mxAlphaAcc = AlphaScopedWriteAccess(*mpAlphaMask);
         mpMaskAcc = mxAlphaAcc.get();
         if (!mpMaskAcc)
             return false;
@@ -790,13 +791,13 @@ bool PNGReaderImpl::ImplReadTransparent()
         if( bNeedAlpha)
         {
             mpAlphaMask = o3tl::make_unique<AlphaMask>( maTargetSize );
-            mxAlphaAcc = AlphaMask::ScopedWriteAccess(*mpAlphaMask);
+            mxAlphaAcc = AlphaScopedWriteAccess(*mpAlphaMask);
             mpMaskAcc = mxAlphaAcc.get();
         }
         else
         {
             mpMaskBmp = o3tl::make_unique<Bitmap>( maTargetSize, 1 );
-            mxMaskAcc = Bitmap::ScopedWriteAccess(*mpMaskBmp);
+            mxMaskAcc = BitmapScopedWriteAccess(*mpMaskBmp);
             mpMaskAcc = mxMaskAcc.get();
         }
         mbTransparent = (mpMaskAcc != nullptr);
@@ -1142,7 +1143,7 @@ namespace
         return nIndex;
     }
 
-    void SanitizePaletteIndexes(sal_uInt8* pEntries, int nLen, const Bitmap::ScopedWriteAccess& rAcc)
+    void SanitizePaletteIndexes(sal_uInt8* pEntries, int nLen, const BitmapScopedWriteAccess& rAcc)
     {
         sal_uInt16 nPaletteEntryCount = rAcc->GetPaletteEntryCount();
         for (int nX = 0; nX < nLen; ++nX)

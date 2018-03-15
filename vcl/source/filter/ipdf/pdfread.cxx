@@ -19,6 +19,7 @@
 
 #include <vcl/bitmapaccess.hxx>
 #include <vcl/graph.hxx>
+#include <bitmapwriteaccess.hxx>
 
 using namespace com::sun::star;
 
@@ -96,7 +97,7 @@ bool generatePreview(SvStream& rStream, Bitmap& rBitmap,
     // Save the buffer as a bitmap.
     Bitmap aBitmap(Size(nPageWidth, nPageHeight), 24);
     {
-        Bitmap::ScopedWriteAccess pWriteAccess(aBitmap);
+        BitmapScopedWriteAccess pWriteAccess(aBitmap);
         auto pPdfBuffer = static_cast<ConstScanline>(FPDFBitmap_GetBuffer(pPdfBitmap));
         for (size_t nRow = 0; nRow < nPageHeight; ++nRow)
         {

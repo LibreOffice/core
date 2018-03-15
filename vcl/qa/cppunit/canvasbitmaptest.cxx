@@ -42,6 +42,7 @@
 
 #include <canvasbitmap.hxx>
 #include <algorithm>
+#include <bitmapwriteaccess.hxx>
 
 using namespace ::com::sun::star;
 using namespace vcl::unotools;
@@ -641,7 +642,7 @@ void CanvasBitmapTest::runTest()
         Bitmap aBitmap(Size(200,200),nDepth);
         aBitmap.Erase(COL_WHITE);
         {
-            Bitmap::ScopedWriteAccess pAcc(aBitmap);
+            BitmapScopedWriteAccess pAcc(aBitmap);
             if( pAcc.get() )
             {
                 BitmapColor aBlack(0);
@@ -671,7 +672,7 @@ void CanvasBitmapTest::runTest()
         Bitmap aMask(Size(200,200),1);
         aMask.Erase(COL_WHITE);
         {
-            Bitmap::ScopedWriteAccess pAcc(aMask);
+            BitmapScopedWriteAccess pAcc(aMask);
             if( pAcc.get() )
             {
                 pAcc->SetFillColor(COL_BLACK);

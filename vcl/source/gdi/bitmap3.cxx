@@ -36,6 +36,7 @@
 #include <bitmapscalesuper.hxx>
 #include <octree.hxx>
 #include <BitmapScaleConvolution.hxx>
+#include <bitmapwriteaccess.hxx>
 
 #define RGB15( _def_cR, _def_cG, _def_cB )  ((static_cast<sal_uLong>(_def_cR)<<10)|(static_cast<sal_uLong>(_def_cG)<<5)|static_cast<sal_uLong>(_def_cB))
 #define GAMMA( _def_cVal, _def_InvGamma )   (static_cast<sal_uInt8>(MinMax(FRound(pow( _def_cVal/255.0,_def_InvGamma)*255.0),0,255)))
@@ -319,7 +320,7 @@ bool Bitmap::ImplMakeGreyscales( sal_uInt16 nGreys )
         if( bPalDiffers )
         {
             Bitmap aNewBmp( GetSizePixel(), ( nGreys == 16 ) ? 4 : 8, &rPal );
-            ScopedWriteAccess pWriteAcc(aNewBmp);
+            BitmapScopedWriteAccess pWriteAcc(aNewBmp);
 
             if( pWriteAcc )
             {
@@ -429,7 +430,7 @@ bool Bitmap::ImplConvertUp(sal_uInt16 nBitCount, Color const * pExtColor)
     {
         BitmapPalette aPalette;
         Bitmap aNewBmp(GetSizePixel(), nBitCount, pReadAcc->HasPalette() ? &pReadAcc->GetPalette() : &aPalette);
-        Bitmap::ScopedWriteAccess pWriteAcc(aNewBmp);
+        BitmapScopedWriteAccess pWriteAcc(aNewBmp);
 
         if (pWriteAcc)
         {
@@ -518,7 +519,7 @@ bool Bitmap::ImplConvertDown(sal_uInt16 nBitCount, Color const * pExtColor)
     {
         BitmapPalette aPalette;
         Bitmap aNewBmp(GetSizePixel(), nBitCount, &aPalette);
-        Bitmap::ScopedWriteAccess pWriteAcc(aNewBmp);
+        BitmapScopedWriteAccess pWriteAcc(aNewBmp);
 
         if (pWriteAcc)
         {
@@ -654,7 +655,7 @@ bool Bitmap::ImplConvertGhosted()
             }
 
             aNewBmp = Bitmap( GetSizePixel(), GetBitCount(), &aNewPal );
-            ScopedWriteAccess pW(aNewBmp);
+            BitmapScopedWriteAccess pW(aNewBmp);
 
             if( pW )
             {
@@ -666,7 +667,7 @@ bool Bitmap::ImplConvertGhosted()
         {
             aNewBmp = Bitmap( GetSizePixel(), 24 );
 
-            ScopedWriteAccess pW(aNewBmp);
+            BitmapScopedWriteAccess pW(aNewBmp);
 
             if( pW )
             {
@@ -901,7 +902,7 @@ bool Bitmap::ImplScaleFast( const double& rScaleX, const double& rScaleY )
         if(pReadAcc)
         {
             Bitmap aNewBmp( Size( nNewWidth, nNewHeight ), GetBitCount(), &pReadAcc->GetPalette() );
-            ScopedWriteAccess pWriteAcc(aNewBmp);
+            BitmapScopedWriteAccess pWriteAcc(aNewBmp);
 
             if( pWriteAcc )
             {
@@ -971,7 +972,7 @@ bool Bitmap::ImplScaleInterpolate( const double& rScaleX, const double& rScaleY 
             long nWidth = pReadAcc->Width();
             long nHeight = pReadAcc->Height();
             Bitmap aNewBmp( Size( nNewWidth, nHeight ), 24 );
-            ScopedWriteAccess pWriteAcc(aNewBmp);
+            BitmapScopedWriteAccess pWriteAcc(aNewBmp);
 
             if( pWriteAcc )
             {
@@ -1061,7 +1062,7 @@ bool Bitmap::ImplScaleInterpolate( const double& rScaleX, const double& rScaleY 
                 *this = aNewBmp;
                 aNewBmp = Bitmap( Size( nNewWidth, nNewHeight ), 24 );
                 pReadAcc = ScopedReadAccess(*this);
-                pWriteAcc = ScopedWriteAccess(aNewBmp);
+                pWriteAcc = BitmapScopedWriteAccess(aNewBmp);
 
                 if( pReadAcc && pWriteAcc )
                 {
@@ -1166,7 +1167,7 @@ bool Bitmap::ImplDitherMatrix()
 {
     ScopedReadAccess pReadAcc(*this);
     Bitmap aNewBmp( GetSizePixel(), 8 );
-    ScopedWriteAccess pWriteAcc(aNewBmp);
+    BitmapScopedWriteAccess pWriteAcc(aNewBmp);
     bool bRet = false;
 
     if( pReadAcc && pWriteAcc )
@@ -1243,7 +1244,7 @@ bool Bitmap::ImplDitherFloyd()
     {
         ScopedReadAccess pReadAcc(*this);
         Bitmap aNewBmp( GetSizePixel(), 8 );
-        ScopedWriteAccess pWriteAcc(aNewBmp);
+        BitmapScopedWriteAccess pWriteAcc(aNewBmp);
 
         if( pReadAcc && pWriteAcc )
         {
@@ -1379,7 +1380,7 @@ bool Bitmap::ImplDitherFloyd16()
 {
     ScopedReadAccess pReadAcc(*this);
     Bitmap aNewBmp( GetSizePixel(), 24 );
-    ScopedWriteAccess pWriteAcc(aNewBmp);
+    BitmapScopedWriteAccess pWriteAcc(aNewBmp);
     bool bRet = false;
 
     if( pReadAcc && pWriteAcc )
@@ -1514,7 +1515,7 @@ bool Bitmap::ImplReduceSimple( sal_uInt16 nColorCount )
         const BitmapPalette& rPal = aOct.GetPalette();
 
         aNewBmp = Bitmap( GetSizePixel(), nBitCount, &rPal );
-        ScopedWriteAccess pWAcc(aNewBmp);
+        BitmapScopedWriteAccess pWAcc(aNewBmp);
 
         if( pWAcc )
         {
@@ -1671,7 +1672,7 @@ bool Bitmap::ImplReducePopular( sal_uInt16 nColCount )
         }
 
         Bitmap aNewBmp( GetSizePixel(), nBitCount, &aNewPal );
-        ScopedWriteAccess pWAcc(aNewBmp);
+        BitmapScopedWriteAccess pWAcc(aNewBmp);
 
         if( pWAcc )
         {
@@ -1757,7 +1758,7 @@ bool Bitmap::ImplReduceMedian( sal_uInt16 nColCount )
     if( pRAcc )
     {
         Bitmap aNewBmp( GetSizePixel(), nBitCount );
-        ScopedWriteAccess pWAcc(aNewBmp);
+        BitmapScopedWriteAccess pWAcc(aNewBmp);
 
         if( pWAcc )
         {
@@ -1985,7 +1986,7 @@ bool Bitmap::Adjust( short nLuminancePercent, short nContrastPercent,
     }
     else
     {
-        ScopedWriteAccess pAcc(*this);
+        BitmapScopedWriteAccess pAcc(*this);
 
         if( pAcc )
         {
@@ -2122,7 +2123,7 @@ bool Bitmap::ImplConvolutionPass(Bitmap& aNewBitmap, BitmapReadAccess const * pR
     if (!pReadAcc)
         return false;
 
-    ScopedWriteAccess pWriteAcc(aNewBitmap);
+    BitmapScopedWriteAccess pWriteAcc(aNewBitmap);
     if (!pWriteAcc)
         return false;
 

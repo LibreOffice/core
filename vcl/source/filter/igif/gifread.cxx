@@ -21,6 +21,7 @@
 #include "gifread.hxx"
 #include <memory>
 #include <o3tl/make_unique.hxx>
+#include <bitmapwriteaccess.hxx>
 
 #define NO_PENDING( rStm ) ( ( rStm ).GetError() != ERRCODE_IO_PENDING )
 
@@ -59,8 +60,8 @@ class GIFReader : public GraphicReader
     SvStream&           rIStm;
     std::vector<sal_uInt8> aSrcBuf;
     std::unique_ptr<GIFLZWDecompressor> pDecomp;
-    Bitmap::ScopedWriteAccess pAcc8;
-    Bitmap::ScopedWriteAccess pAcc1;
+    BitmapScopedWriteAccess pAcc8;
+    BitmapScopedWriteAccess pAcc1;
     long                nYAcc;
     long                nLastPos;
     sal_uInt64          nMaxStreamData;
@@ -205,7 +206,7 @@ void GIFReader::CreateBitmaps(long nWidth, long nHeight, BitmapPalette* pPal,
         if (!aAnimation.Count())
             aBmp1.Erase(aWhite);
 
-        pAcc1 = Bitmap::ScopedWriteAccess(aBmp1);
+        pAcc1 = BitmapScopedWriteAccess(aBmp1);
 
         if (pAcc1)
         {
@@ -227,7 +228,7 @@ void GIFReader::CreateBitmaps(long nWidth, long nHeight, BitmapPalette* pPal,
         else
             aBmp8.Erase(COL_WHITE);
 
-        pAcc8 = Bitmap::ScopedWriteAccess(aBmp8);
+        pAcc8 = BitmapScopedWriteAccess(aBmp8);
         bStatus = bool(pAcc8);
     }
 }
@@ -690,13 +691,13 @@ Graphic GIFReader::GetIntermediateGraphic()
             pAcc1.reset();
             aImGraphic = BitmapEx( aBmp8, aBmp1 );
 
-            pAcc1 = Bitmap::ScopedWriteAccess(aBmp1);
+            pAcc1 = BitmapScopedWriteAccess(aBmp1);
             bStatus = bStatus && pAcc1;
         }
         else
             aImGraphic = aBmp8;
 
-        pAcc8 = Bitmap::ScopedWriteAccess(aBmp8);
+        pAcc8 = BitmapScopedWriteAccess(aBmp8);
         bStatus = bStatus && pAcc8;
     }
 

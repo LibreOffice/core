@@ -25,6 +25,7 @@
 #include <vcl/fltcall.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>
+#include <bitmapwriteaccess.hxx>
 
 enum class GraphicFilterImportFlags;
 
@@ -62,7 +63,7 @@ public:
             JPEGReader( SvStream& rStream, GraphicFilterImportFlags nImportFlags );
     virtual ~JPEGReader() override;
 
-    ReadState Read(Graphic& rGraphic, GraphicFilterImportFlags nImportFlags, Bitmap::ScopedWriteAccess* ppAccess);
+    ReadState Read(Graphic& rGraphic, GraphicFilterImportFlags nImportFlags, BitmapScopedWriteAccess* ppAccess);
 
     bool CreateBitmap(JPEGCreateBitmapParam const & param);
 

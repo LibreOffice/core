@@ -45,6 +45,7 @@
 #include <vcl/help.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/ImageTree.hxx>
+#include <bitmapwriteaccess.hxx>
 
 #include <basegfx/numeric/ftools.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
@@ -1301,8 +1302,8 @@ public:
             AlphaMask aMask(aSrc.GetSizePixel());
             Bitmap aRecovered(aSrc.GetSizePixel(), 24);
             {
-                AlphaMask::ScopedWriteAccess pMaskAcc(aMask);
-                Bitmap::ScopedWriteAccess pRecAcc(aRecovered);
+                AlphaScopedWriteAccess pMaskAcc(aMask);
+                BitmapScopedWriteAccess pRecAcc(aRecovered);
                 Bitmap::ScopedReadAccess pAccW(aWhiteBmp); // a * pix + (1-a)
                 Bitmap::ScopedReadAccess pAccB(aBlackBmp); // a * pix + 0
                 int nSizeX = aSrc.GetSizePixel().Width();

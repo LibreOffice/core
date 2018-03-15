@@ -35,6 +35,7 @@
 #include <vcl/bitmapaccess.hxx>
 #include <vcl/metric.hxx>
 #include <vcl/vclptr.hxx>
+#include <bitmapwriteaccess.hxx>
 
 #include <rtl/ustrbuf.hxx>
 

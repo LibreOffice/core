@@ -19,6 +19,7 @@
 
 #include <BitmapScaleConvolution.hxx>
 #include <ResampleKernel.hxx>
+#include <bitmapwriteaccess.hxx>
 
 #include <vcl/bitmapaccess.hxx>
 #include <osl/diagnose.h>
@@ -108,7 +109,7 @@ bool ImplScaleConvolutionHor(Bitmap& rSource, Bitmap& rTarget, const double& rSc
         const long nHeight(rSource.GetSizePixel().Height());
         ImplCalculateContributions(nWidth, nNewWidth, aNumberOfContributions, pWeights, pPixels, pCount, aKernel);
         rTarget = Bitmap(Size(nNewWidth, nHeight), 24);
-        Bitmap::ScopedWriteAccess pWriteAcc(rTarget);
+        BitmapScopedWriteAccess pWriteAcc(rTarget);
         bool bResult(pWriteAcc);
 
         if(bResult)
@@ -196,7 +197,7 @@ bool ImplScaleConvolutionVer(Bitmap& rSource, Bitmap& rTarget, const double& rSc
         const long nWidth(rSource.GetSizePixel().Width());
         ImplCalculateContributions(nHeight, nNewHeight, aNumberOfContributions, pWeights, pPixels, pCount, aKernel);
         rTarget = Bitmap(Size(nWidth, nNewHeight), 24);
-        Bitmap::ScopedWriteAccess pWriteAcc(rTarget);
+        BitmapScopedWriteAccess pWriteAcc(rTarget);
         bool bResult(pWriteAcc);
 
         if(pWriteAcc)
