@@ -1241,7 +1241,7 @@ void SwTableOptionsTabPage::Reset( const SfxItemSet* rSet)
     const SwModuleOptions* pModOpt = SW_MOD()->GetModuleConfig();
     if ( rSet->GetItemState( SID_ATTR_METRIC ) >= SfxItemState::DEFAULT )
     {
-        const SfxUInt16Item& rItem = static_cast<const SfxUInt16Item&>(rSet->Get( SID_ATTR_METRIC ));
+        const SfxUInt16Item& rItem = rSet->Get( SID_ATTR_METRIC );
         FieldUnit eFieldUnit = static_cast<FieldUnit>(rItem.GetValue());
         ::SetFieldUnit( *m_pRowMoveMF, eFieldUnit );
         ::SetFieldUnit( *m_pColMoveMF, eFieldUnit );

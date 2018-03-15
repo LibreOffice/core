@@ -281,13 +281,13 @@ bool DrawDocShell::Load( SfxMedium& rMedium )
 
     if( pSet )
     {
-        if( (  SfxItemState::SET == pSet->GetItemState(SID_PREVIEW ) ) && static_cast<const SfxBoolItem&>( pSet->Get( SID_PREVIEW ) ).GetValue() )
+        if( (  SfxItemState::SET == pSet->GetItemState(SID_PREVIEW ) ) && pSet->Get( SID_PREVIEW ).GetValue() )
         {
             mpDoc->SetStarDrawPreviewMode( true );
         }
 
         if( SfxItemState::SET == pSet->GetItemState(SID_DOC_STARTPRESENTATION)&&
-            static_cast<const SfxBoolItem&>( pSet->Get( SID_DOC_STARTPRESENTATION ) ).GetValue() )
+            pSet->Get( SID_DOC_STARTPRESENTATION ).GetValue() )
         {
             bStartPresentation = true;
             mpDoc->SetStartWithPresentation( true );
@@ -420,7 +420,7 @@ bool DrawDocShell::ImportFrom(SfxMedium &rMedium,
     if( pSet )
     {
         if( SfxItemState::SET == pSet->GetItemState(SID_DOC_STARTPRESENTATION)&&
-            static_cast<const SfxBoolItem&>( pSet->Get( SID_DOC_STARTPRESENTATION ) ).GetValue() )
+            pSet->Get( SID_DOC_STARTPRESENTATION ).GetValue() )
         {
             mpDoc->SetStartWithPresentation( true );
 
@@ -451,13 +451,13 @@ bool DrawDocShell::ConvertFrom( SfxMedium& rMedium )
     SfxItemSet* pSet = rMedium.GetItemSet();
     if( pSet )
     {
-        if( (  SfxItemState::SET == pSet->GetItemState(SID_PREVIEW ) ) && static_cast<const SfxBoolItem&>( pSet->Get( SID_PREVIEW ) ).GetValue() )
+        if( (  SfxItemState::SET == pSet->GetItemState(SID_PREVIEW ) ) && pSet->Get( SID_PREVIEW ).GetValue() )
         {
             mpDoc->SetStarDrawPreviewMode( true );
         }
 
         if( SfxItemState::SET == pSet->GetItemState(SID_DOC_STARTPRESENTATION)&&
-            static_cast<const SfxBoolItem&>( pSet->Get( SID_DOC_STARTPRESENTATION ) ).GetValue() )
+            pSet->Get( SID_DOC_STARTPRESENTATION ).GetValue() )
         {
             bStartPresentation = true;
             mpDoc->SetStartWithPresentation( true );

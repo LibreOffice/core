@@ -2004,7 +2004,7 @@ bool SmViewShell::IsInlineEditEnabled() const
 void SmViewShell::ZoomByItemSet(const SfxItemSet *pSet)
 {
     assert(pSet);
-    const SvxZoomItem &rZoom = static_cast<const SvxZoomItem &>(pSet->Get(SID_ATTR_ZOOM));
+    const SvxZoomItem &rZoom = pSet->Get(SID_ATTR_ZOOM);
     switch( rZoom.GetType() )
     {
         case SvxZoomType::PERCENT:

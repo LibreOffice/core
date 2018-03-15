@@ -4194,7 +4194,7 @@ void OReportController::openZoomDialog()
 
             if ( !bCancel )
             {
-                const SvxZoomItem&  rZoomItem = static_cast<const SvxZoomItem&>(pDlg->GetOutputItemSet()->Get( SID_ATTR_ZOOM ));
+                const SvxZoomItem&  rZoomItem = pDlg->GetOutputItemSet()->Get( SID_ATTR_ZOOM );
                 m_eZoomType = rZoomItem.GetType();
                 m_nZoomValue = rZoomItem.GetValue();
                 if ( m_eZoomType != SvxZoomType::PERCENT )

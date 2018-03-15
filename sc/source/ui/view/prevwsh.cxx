@@ -610,8 +610,7 @@ void ScPreviewShell::Execute( SfxRequest& rReq )
                 if ( pReqArgs )
                 {
 
-                    const SvxZoomItem& rZoomItem = static_cast<const SvxZoomItem&>(
-                                                   pReqArgs->Get(SID_ATTR_ZOOM));
+                    const SvxZoomItem& rZoomItem = pReqArgs->Get(SID_ATTR_ZOOM);
 
                     eZoom = rZoomItem.GetType();
                     nZoom = rZoomItem.GetValue();
@@ -633,9 +632,8 @@ void ScPreviewShell::Execute( SfxRequest& rReq )
 
                         if ( !bCancel )
                         {
-                            const SvxZoomItem&  rZoomItem = static_cast<const SvxZoomItem&>(
-                                                    pDlg->GetOutputItemSet()->
-                                                        Get( SID_ATTR_ZOOM ));
+                            const SvxZoomItem&  rZoomItem = pDlg->GetOutputItemSet()->
+                                                        Get( SID_ATTR_ZOOM );
 
                             eZoom = rZoomItem.GetType();
                             nZoom = rZoomItem.GetValue();

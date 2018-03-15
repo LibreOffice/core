@@ -21,6 +21,12 @@
 
 #include <svl/solar.hrc>
 #include <svl/memberid.h>
+#include <svl/typedwhich.hxx>
+
+class SvxZoomItem;
+class SfxUInt16Item;
+class SvxHyperlinkItem;
+class SfxDocumentInfoItem;
 
 // Please be careful:
 // Changing just one part here doesn't add new
@@ -70,7 +76,7 @@
 
 #define SID_PROGRESS_STATUSBAR_CONTROL      (SID_SFX_START + 1597)
 
-#define SID_SELECTION                       (SID_SFX_START + 346)
+#define SID_SELECTION                       TypedWhichId<SfxBoolItem>(SID_SFX_START + 346)
 
 // 360-400 see SID_MAIL_...
 
@@ -156,7 +162,7 @@
 #define SID_EXPLORER_FILEPROPS_START        (SID_SFX_START + 1390)
 //      SID_EXPLORER_FILEPROPS_END          (SID_SFX_START + 1399)
 
-#define SID_ATTR_ZOOM                      (SID_SVX_START + 0)
+#define SID_ATTR_ZOOM                      TypedWhichId<SvxZoomItem>(SID_SVX_START + 0)
 
 #define SID_EXPLORER_PROPS_START            (SID_SFX_START + 1410)
 //      SID_EXPLORER_PROPS_END              (SID_SFX_START + 1499)
@@ -257,7 +263,7 @@
 #define SID_VIEW_DATA                       (SID_SFX_START + 1582)
 #define SID_SILENT                          (SID_SFX_START + 528)
 #define SID_HIDDEN                          (SID_SFX_START + 534)
-#define SID_PREVIEW                         (SID_SFX_START + 1404)
+#define SID_PREVIEW                         TypedWhichId<SfxBoolItem>(SID_SFX_START + 1404)
 
 #define SID_FOCUSURLBOX                     (SID_SFX_START + 1406)
 
@@ -274,7 +280,7 @@
 #define SID_DOC_LOADING                     (SID_SFX_START + 585)
 #define SID_IMG_LOADING                     (SID_SFX_START + 586)
 #define SID_DOC_SAVED                       (SID_SFX_START + 599)
-#define SID_DOCINFO                         (SID_SFX_START + 535)
+#define SID_DOCINFO                         TypedWhichId<SfxDocumentInfoItem>(SID_SFX_START + 535)
 #define SID_DOCINFO_KEYWORDS                (SID_SFX_START + 591)
 #define SID_DOCINFO_COMMENTS                (SID_SFX_START + 592)
 #define SID_DOCINFO_AUTHOR                  (SID_SFX_START + 593)
@@ -288,7 +294,7 @@
 #define SID_MODIFIER                        (SID_SFX_START + 669)
 #define SID_SETOPTIONS                      (SID_SFX_START + 670)
 #define SID_SOURCEVIEW                      (SID_SFX_START + 675)
-#define SID_DOC_STARTPRESENTATION           (SID_SFX_START + 695)
+#define SID_DOC_STARTPRESENTATION           TypedWhichId<SfxBoolItem>(SID_SFX_START + 695)
 #define SID_DDE_RECONNECT_ONLOAD            (SID_SFX_START + 696)
 
 #define SID_DOCTEMPLATE                     (SID_SFX_START + 538)
@@ -314,8 +320,8 @@
 #define SID_STYLE_EDIT                      (SID_SFX_START + 550)
 #define SID_STYLE_DELETE                    (SID_SFX_START + 551)
 #define SID_STYLE_APPLY                     (SID_SFX_START + 552)
-#define SID_STYLE_FAMILY                    (SID_SFX_START + 553)
-#define SID_STYLE_FAMILYNAME                (SID_SFX_START + 566)
+#define SID_STYLE_FAMILY                    TypedWhichId<SfxUInt16Item>(SID_SFX_START + 553)
+#define SID_STYLE_FAMILYNAME                TypedWhichId<SfxStringItem>(SID_SFX_START + 566)
 #define SID_STYLE_WATERCAN                  (SID_SFX_START + 554)
 #define SID_STYLE_NEW_BY_EXAMPLE            (SID_SFX_START + 555)
 #define SID_STYLE_UPDATE_BY_EXAMPLE         (SID_SFX_START + 556)
@@ -326,7 +332,7 @@
 #define SID_STYLE_HIDE                      (SID_SFX_START + 1603)
 #define SID_STYLE_SHOW                      (SID_SFX_START + 1604)
 #define SID_STYLE_UPD_BY_EX_NAME            (SID_SFX_START + 1585)
-#define SID_STYLE_REFERENCE                 (SID_SFX_START + 1602)
+#define SID_STYLE_REFERENCE                 TypedWhichId<SfxStringItem>(SID_SFX_START + 1602)
 
 #define SID_TEMPLATE_NAME                   (SID_SFX_START + 660)
 #define SID_TEMPLATE_REGIONNAME             (SID_SFX_START + 662)
@@ -349,7 +355,7 @@
 // Doc-Properties
 #define SID_DOCFULLNAME                     (SID_SFX_START + 581)
 #define SID_DOCPATH                         (SID_SFX_START + 582)
-#define SID_DOCTITLE                        (SID_SFX_START + 583)
+#define SID_DOCTITLE                        TypedWhichId<SfxStringItem>(SID_SFX_START + 583)
 
 #define SID_DOCUMENT                        (SID_SFX_START + 588)
 
@@ -381,7 +387,7 @@
 #define SID_DELETE                          (SID_SFX_START + 713)
 
 #define SID_BACKSPACE                       (SID_SFX_START + 714)
-#define SID_FORMATPAINTBRUSH                (SID_SFX_START + 715)
+#define SID_FORMATPAINTBRUSH                TypedWhichId<SfxBoolItem>(SID_SFX_START + 715)
 #define SID_SELECT                          (SID_SFX_START + 720)
 #define SID_SELECTALL                       (SID_SFX_START + 723)
 #define SID_CURSORDOWN                      (SID_SFX_START + 731)
@@ -423,7 +429,7 @@
 #define SID_SHOWPOPUPS                      (SID_SFX_START + 929)
 
 // Item-Id for the assigned event Tabpage
-#define SID_ATTR_MACROITEM                  (SID_SFX_START + 934)
+#define SID_ATTR_MACROITEM                  TypedWhichId<SvxMacroItem>(SID_SFX_START + 934)
 
 #define SID_OPTIONS                         (SID_SFX_START + 940)
 #define SID_BASICLOAD                       (SID_SFX_START + 951)
@@ -444,7 +450,7 @@
 
 #define SID_BASICBREAK                      (SID_SFX_START +1521)
 
-#define SID_OBJECTRESIZE                    (SID_SFX_START + 1000)
+#define SID_OBJECTRESIZE                    TypedWhichId<SfxRectangleItem>(SID_SFX_START + 1000)
 
 #define SID_EVENTCONFIG                     (SID_SFX_START + 1101)
 #define SID_VERB_START                      (SID_SFX_START + 1100)
@@ -466,7 +472,7 @@
 
 // GeneralTabPage
 
-#define SID_ATTR_METRIC                 (SID_OPTIONS_START +  8)
+#define SID_ATTR_METRIC                 TypedWhichId<SfxUInt16Item>(SID_OPTIONS_START +  8)
 #define SID_ATTR_DEFTABSTOP             (SID_OPTIONS_START + 14)
 #define SID_ATTR_BUTTON_OUTSTYLE3D      (SID_OPTIONS_START + 62)
 #define SID_ATTR_BUTTON_BIGSIZE         (SID_OPTIONS_START + 63)
@@ -524,12 +530,12 @@
 #define SID_SIZE_PAGE                       (SID_SVX_START + 100)
 #define SID_GALLERY_BG_BRUSH                (SID_SVX_START + 279)
 #define SID_SEARCH_OPTIONS                  (SID_SVX_START + 281)
-#define SID_SEARCH_ITEM                     (SID_SVX_START + 291)
+#define SID_SEARCH_ITEM                     TypedWhichId<SvxSearchItem>(SID_SVX_START + 291)
 #define SID_SIDEBAR                         (SID_SVX_START + 336)
 #define SID_NOTEBOOKBAR                     (SID_SVX_START + 338)
 #define SID_MENUBAR                         (SID_SVX_START + 339)
 #define SID_HYPERLINK_GETLINK               (SID_SVX_START + 361)
-#define SID_HYPERLINK_SETLINK               (SID_SVX_START + 362)
+#define SID_HYPERLINK_SETLINK               TypedWhichId<SvxHyperlinkItem>(SID_SVX_START + 362)
 #define SID_INFOBAR                         (SID_SVX_START + 365)
 #define SID_NAVIGATOR                       (SID_SVX_START + 366)
 #define SID_ZOOM_NEXT                       (SID_SVX_START + 402)
@@ -578,11 +584,11 @@
 #define SID_BASICIDE_SBXRENAMED             ( SID_BASICIDE_START + 26 )
 #define SID_BASICIDE_LIBLOADED              ( SID_BASICIDE_START + 27 )
 #define SID_BASICIDE_LIBREMOVED             ( SID_BASICIDE_START + 28 )
-#define SID_BASICIDE_ARG_TABID              ( SID_BASICIDE_START + 30 )
-#define SID_BASICIDE_ARG_SBX                ( SID_BASICIDE_START + 31 )
-#define SID_BASICIDE_ARG_MACROINFO          ( SID_BASICIDE_START + 32 )
-#define SID_BASICIDE_ARG_LIBNAME            ( SID_BASICIDE_START + 34 )
-#define SID_BASICIDE_ARG_MODULENAME         ( SID_BASICIDE_START + 35 )
+#define SID_BASICIDE_ARG_TABID              TypedWhichId<SfxUInt16Item>( SID_BASICIDE_START + 30 )
+#define SID_BASICIDE_ARG_SBX                TypedWhichId<SbxItem>( SID_BASICIDE_START + 31 )
+#define SID_BASICIDE_ARG_MACROINFO          TypedWhichId<SfxMacroInfoItem>( SID_BASICIDE_START + 32 )
+#define SID_BASICIDE_ARG_LIBNAME            TypedWhichId<SfxStringItem>( SID_BASICIDE_START + 34 )
+#define SID_BASICIDE_ARG_MODULENAME         TypedWhichId<SfxStringItem>( SID_BASICIDE_START + 35 )
 #define SID_BASICIDE_BRKPNTSCHANGED         ( SID_BASICIDE_START + 36 )
 #define SID_BASICIDE_STAT_POS               ( SID_BASICIDE_START + 38 )
 #define SID_BASICIDE_STAT_DATE              ( SID_BASICIDE_START + 39 )
@@ -590,13 +596,13 @@
 #define SID_BASICIDE_MANAGEBRKPNTS          ( SID_BASICIDE_START + 42 )
 #define SID_BASICIDE_TOGGLEBRKPNTENABLED    ( SID_BASICIDE_START + 43 )
 #define SID_BASICIDE_SHOWWINDOW             ( SID_BASICIDE_START + 44 )
-#define SID_BASICIDE_ARG_DOCUMENT           ( SID_BASICIDE_START + 45 )
+#define SID_BASICIDE_ARG_DOCUMENT           TypedWhichId<SfxUnoAnyItem>( SID_BASICIDE_START + 45 )
 #define SID_BASICIDE_ARG_NAME               ( SID_BASICIDE_START + 46 )
 #define SID_BASICIDE_ARG_TYPE               ( SID_BASICIDE_START + 47 )
 #define SID_BASICIDE_ARG_LINE               ( SID_BASICIDE_START + 48 )
 #define SID_BASICIDE_ARG_COLUMN1            ( SID_BASICIDE_START + 49 )
 #define SID_BASICIDE_ARG_COLUMN2            ( SID_BASICIDE_START + 50 )
-#define SID_BASICIDE_ARG_DOCUMENT_MODEL     ( SID_BASICIDE_START + 51 )
+#define SID_BASICIDE_ARG_DOCUMENT_MODEL     TypedWhichId<SfxUnoAnyItem>( SID_BASICIDE_START + 51 )
 #define SID_BASICIDE_MANAGE_LANG            ( SID_BASICIDE_START + 52 )
 #define SID_BASICIDE_CURRENT_LANG           ( SID_BASICIDE_START + 53 )
 #define SID_OPTIONS_TREEDIALOG              ( SID_BASICIDE_START + 862)
@@ -626,7 +632,7 @@
 #define SID_CURSOREND_SEL                   (SID_KEYFUNC_START + 13)
 #define SID_REPAINT                         (SID_SC_START + 12)
 
-#define SID_MODIFIED                        (SID_SD_START+89)
+#define SID_MODIFIED                        TypedWhichId<SfxBoolItem>(SID_SD_START+89)
 #define ID_VAL_DUMMY0                       (SID_SD_START+230)
 #define SID_SIZE_OPTIMAL                    (SID_SD_START+99)
 

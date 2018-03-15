@@ -651,7 +651,7 @@ void IMapWindow::DoMacroAssign()
     if ( pMacroDlg && pMacroDlg->Execute() == RET_OK )
     {
         const SfxItemSet* pOutSet = pMacroDlg->GetOutputItemSet();
-        pIMapObj->SetMacroTable( static_cast<const SvxMacroItem& >(pOutSet->Get( SID_ATTR_MACROITEM )).GetMacroTable() );
+        pIMapObj->SetMacroTable( pOutSet->Get( SID_ATTR_MACROITEM ).GetMacroTable() );
         pModel->SetChanged();
         UpdateInfo( false );
     }

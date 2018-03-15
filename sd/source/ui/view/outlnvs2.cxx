@@ -89,13 +89,11 @@ void OutlineViewShell::FuTemporary(SfxRequest &rReq)
 
             if ( pArgs )
             {
-                SvxZoomType eZT = static_cast<const SvxZoomItem&>( pArgs->
-                                            Get( SID_ATTR_ZOOM ) ).GetType();
+                SvxZoomType eZT = pArgs->Get( SID_ATTR_ZOOM ).GetType();
                 switch( eZT )
                 {
                     case SvxZoomType::PERCENT:
-                        SetZoom( static_cast<long>(static_cast<const SvxZoomItem&>( pArgs->
-                                            Get( SID_ATTR_ZOOM ) ).GetValue()) );
+                        SetZoom( static_cast<long>( pArgs->Get( SID_ATTR_ZOOM ).GetValue()) );
                         Invalidate( SID_ATTR_ZOOM );
                         Invalidate( SID_ATTR_ZOOMSLIDER );
                         break;
@@ -368,7 +366,7 @@ void OutlineViewShell::FuTemporaryModify(SfxRequest &rReq)
             if (pReqArgs)
             {
                 const SvxHyperlinkItem* pHLItem =
-                    static_cast<const SvxHyperlinkItem*>( &pReqArgs->Get(SID_HYPERLINK_SETLINK) );
+                    &pReqArgs->Get(SID_HYPERLINK_SETLINK);
 
                 SvxFieldItem aURLItem(SvxURLField(pHLItem->GetURL(),
                                                   pHLItem->GetName(),

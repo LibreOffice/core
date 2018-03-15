@@ -331,7 +331,7 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
             if ( pIPClient && pIPClient->IsObjectInPlaceActive() )
             {
                 const SfxRectangleItem& rRect =
-                    static_cast<const SfxRectangleItem&>(rReq.GetArgs()->Get(SID_OBJECTRESIZE));
+                    rReq.GetArgs()->Get(SID_OBJECTRESIZE);
                 ::tools::Rectangle aRect( GetActiveWindow()->PixelToLogic( rRect.GetValue() ) );
 
                 if ( mpDrawView->AreObjectsMarked() )

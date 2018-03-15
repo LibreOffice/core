@@ -908,13 +908,11 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
             if ( pArgs )
             {
-                SvxZoomType eZT = static_cast<const SvxZoomItem&>( pArgs->
-                                            Get( SID_ATTR_ZOOM ) ).GetType();
+                SvxZoomType eZT = pArgs->Get( SID_ATTR_ZOOM ).GetType();
                 switch( eZT )
                 {
                     case SvxZoomType::PERCENT:
-                        SetZoom( static_cast<long>(static_cast<const SvxZoomItem&>( pArgs->
-                                            Get( SID_ATTR_ZOOM ) ).GetValue()) );
+                        SetZoom( static_cast<long>( pArgs->Get( SID_ATTR_ZOOM ).GetValue()) );
                         break;
 
                     case SvxZoomType::OPTIMAL:
@@ -2139,7 +2137,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             if (pReqArgs)
             {
                 const SvxHyperlinkItem* pHLItem =
-                    static_cast<const SvxHyperlinkItem*>( &pReqArgs->Get(SID_HYPERLINK_SETLINK) );
+                    &pReqArgs->Get(SID_HYPERLINK_SETLINK);
 
                 if (pHLItem->GetInsertMode() == HLINK_FIELD)
                 {

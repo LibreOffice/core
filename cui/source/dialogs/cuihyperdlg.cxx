@@ -201,8 +201,7 @@ void SvxHpLinkDlg::Apply()
     {
         pCurrentPage->FillItemSet( &aItemSet );
 
-        const SvxHyperlinkItem *aItem = static_cast<const SvxHyperlinkItem *>(
-                                      aItemSet.GetItem (SID_HYPERLINK_SETLINK));
+        const SvxHyperlinkItem *aItem = aItemSet.GetItem(SID_HYPERLINK_SETLINK);
         if ( !aItem->GetURL().isEmpty() )
             GetDispatcher()->ExecuteList(SID_HYPERLINK_SETLINK,
                     SfxCallMode::ASYNCHRON | SfxCallMode::RECORD, { aItem });

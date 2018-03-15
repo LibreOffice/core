@@ -140,7 +140,7 @@
 #define SID_STATUS_PAGE                     (SID_SD_START+86)
 #define SID_STATUS_LAYOUT                   (SID_SD_START+87)
 #define SID_STATUS_SELMODE                  (SID_SD_START+88)
-#define SID_MODIFIED                        (SID_SD_START+89)
+#define SID_MODIFIED                        TypedWhichId<SfxBoolItem>(SID_SD_START+89)
 #define SID_OBJECT_CROOK_ROTATE             (SID_SD_START+90)
 #define SID_OBJECT_CROOK_SLANT              (SID_SD_START+91)
 #define SID_OBJECT_CROOK_STRETCH            (SID_SD_START+92)

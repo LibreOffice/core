@@ -2798,7 +2798,7 @@ void ScFormatShell::ExecFormatPaintbrush( const SfxRequest& rReq )
         bool bLock = false;
         const SfxItemSet *pArgs = rReq.GetArgs();
         if( pArgs && pArgs->Count() >= 1 )
-            bLock = static_cast<const SfxBoolItem&>(pArgs->Get(SID_FORMATPAINTBRUSH)).GetValue();
+            bLock = pArgs->Get(SID_FORMATPAINTBRUSH).GetValue();
 
         // in case of multi selection, deselect all and use the cursor position
         ScRange aDummy;
