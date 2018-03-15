@@ -65,18 +65,9 @@ public:
     }
 };
 
-GObjectImpl::GObjectImpl(const uno::Sequence< uno::Any >& args)
+GObjectImpl::GObjectImpl(const uno::Sequence< uno::Any >& /*args*/)
 {
-    if ( args.getLength() == 1 )
-    {
-        OUString sId;
-        if ( !( args[ 0 ] >>= sId ) || sId.isEmpty() )
-            throw lang::IllegalArgumentException();
-        OString bsId(OUStringToOString(sId, RTL_TEXTENCODING_UTF8));
-        mpGObject.reset( new GraphicObject( bsId ) );
-    }
-    else
-       mpGObject.reset( new GraphicObject() );
+    mpGObject.reset(new GraphicObject());
 }
 
 uno::Reference< graphic::XGraphic > SAL_CALL GObjectImpl::getGraphic()
@@ -98,11 +89,9 @@ void SAL_CALL GObjectImpl::setGraphic( const uno::Reference< graphic::XGraphic >
 
 OUString SAL_CALL GObjectImpl::getUniqueID()
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    OUString sId;
-    if ( mpGObject.get() )
-        sId = OStringToOUString(mpGObject->GetUniqueID(), RTL_TEXTENCODING_ASCII_US);
-    return sId;
+    // not supported anymore so return empty string for now
+    osl::MutexGuard aGuard(m_aMutex);
+    return OUString();
 }
 
 }
