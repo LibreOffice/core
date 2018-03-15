@@ -1011,21 +1011,27 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         case SID_ATTRIBUTES_LINE:  // BASIC
         {
             SetCurrentFunction( FuLine::Create( this, GetActiveWindow(), mpDrawView, GetDoc(), rReq ) );
-            // Cancel() called directly in FuTransform::Create()
+            if (rReq.GetArgs())
+                Cancel();
         }
         break;
 
         case SID_ATTRIBUTES_AREA:  // BASIC
         {
             SetCurrentFunction( FuArea::Create( this, GetActiveWindow(), mpDrawView, GetDoc(), rReq ) );
-            // Cancel() called directly in FuTransform::Create()
+            if (rReq.GetArgs())
+                Cancel();
         }
         break;
 
         case SID_ATTR_TRANSFORM:
         {
             SetCurrentFunction( FuTransform::Create( this, GetActiveWindow(), mpDrawView, GetDoc(), rReq ) );
-            // Cancel() and Invalidate() called directly in FuTransform::Create()
+            if (rReq.GetArgs())
+            {
+                Invalidate(SID_RULER_OBJECT);
+                Cancel();
+            }
         }
         break;
 
