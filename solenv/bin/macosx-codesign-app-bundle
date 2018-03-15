@@ -106,7 +106,7 @@ while read framework; do
     for version in "$framework"/Versions/*; do
         if test ! -L "$version" -a -d "$version"; then
 	    # Assume the framework has a XML (and not binary) Info.plist
-	    id=`grep -A 1 '<key>CFBundleIdentifier</key>' $version/Resources/Info.plist | tail -1 | sed -e 's,.*<string>,,' -e 's,</string>.*,,'`
+	    id=`grep -A 1 '<key>CFBundleIdentifier</key>' "$version/Resources/Info.plist" | tail -1 | sed -e 's,.*<string>,,' -e 's,</string>.*,,'`
 	    if test -d $version/bin; then
 		# files in bin are not covered by signing the framework...
 		for scriptorexecutable in $(find $version/bin/ -type f); do
