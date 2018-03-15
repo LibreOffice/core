@@ -63,35 +63,10 @@ void setUndo(::sd::View* pView, const SfxItemSet* pArgs)
     pView->EndUndo();
 }
 
-class ScopeCleanup
-{
-    ViewShell* mpViewShell;
-public:
-    ScopeCleanup(ViewShell* pViewShell) : mpViewShell(pViewShell)
-    {
-    }
-
-    ~ScopeCleanup()
-    {
-        if (mpViewShell)
-        {
-            mpViewShell->Invalidate(SID_RULER_OBJECT);
-            mpViewShell->Cancel();
-        }
-    }
-
-    void ignore()
-    {
-        mpViewShell = nullptr;
-    }
-};
-
 }
 
 void FuTransform::DoExecute( SfxRequest& rReq )
 {
-    ScopeCleanup aCleanup(mpViewShell);
-
     if (!mpView->AreObjectsMarked())
         return;
 
@@ -143,7 +118,6 @@ void FuTransform::DoExecute( SfxRequest& rReq )
 
     std::shared_ptr<SfxRequest> pRequest(new SfxRequest(rReq));
     rReq.Ignore(); // the 'old' request is not relevant any more
-    aCleanup.ignore(); // the lambda does it
 
     pDlg->StartExecuteAsync([=](sal_Int32 nResult){
         if (nResult == RET_OK)
@@ -152,6 +126,7 @@ void FuTransform::DoExecute( SfxRequest& rReq )
             setUndo(mpView, pRequest->GetArgs());
         }
 
+        // deferred until the dialog ends
         mpViewShell->Invalidate(SID_RULER_OBJECT);
         mpViewShell->Cancel();
     });
