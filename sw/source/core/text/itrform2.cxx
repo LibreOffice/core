@@ -2294,12 +2294,12 @@ void SwTextFormatter::CalcFlyWidth( SwTextFormatInfo &rInf )
     }
     else
     {
-        nAscent = pLast->GetAscent();
-        nHeight = pLast->Height();
-
         // We make a first guess for the lines real height
         if ( ! m_pCurr->GetRealHeight() )
             CalcRealHeight();
+
+        nAscent = pLast->GetAscent();
+        nHeight = pLast->Height();
 
         if ( m_pCurr->GetRealHeight() > nHeight )
             nTop += m_pCurr->GetRealHeight() - nHeight;
