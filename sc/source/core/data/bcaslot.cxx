@@ -659,12 +659,8 @@ ScBroadcastAreaSlotMachine::ScBroadcastAreaSlotMachine(
 
 ScBroadcastAreaSlotMachine::~ScBroadcastAreaSlotMachine()
 {
-    for (TableSlotsMap::iterator iTab( aTableSlotsMap.begin());
-            iTab != aTableSlotsMap.end(); ++iTab)
-    {
-        delete (*iTab).second;
-    }
-    delete pBCAlways;
+    aTableSlotsMap.clear();
+    pBCAlways.reset();
     // Areas to-be-erased still present is a serious error in handling, but at
     // this stage there's nothing we can do anymore.
     SAL_WARN_IF( !maAreasToBeErased.empty(), "sc.core", "ScBroadcastAreaSlotMachine::dtor: maAreasToBeErased not empty");
@@ -727,7 +723,7 @@ void ScBroadcastAreaSlotMachine::StartListeningArea(
     if ( rRange == BCA_LISTEN_ALWAYS  )
     {
         if ( !pBCAlways )
-            pBCAlways = new SvtBroadcaster;
+            pBCAlways.reset( new SvtBroadcaster );
         pListener->StartListening( *pBCAlways );
     }
     else
@@ -743,7 +739,7 @@ void ScBroadcastAreaSlotMachine::StartListeningArea(
         {
             TableSlotsMap::iterator iTab( aTableSlotsMap.find( nTab));
             if (iTab == aTableSlotsMap.end())
-                iTab = aTableSlotsMap.emplace(nTab, new TableSlots).first;
+                iTab = aTableSlotsMap.emplace(nTab, std::unique_ptr<TableSlots>(new TableSlots)).first;
             ScBroadcastAreaSlot** ppSlots = (*iTab).second->getSlots();
             SCSIZE nStart, nEnd, nRowBreak;
             ComputeAreaPoints( rRange, nStart, nEnd, nRowBreak );
@@ -781,8 +777,7 @@ void ScBroadcastAreaSlotMachine::EndListeningArea(
             pListener->EndListening( *pBCAlways);
             if (!pBCAlways->HasListeners())
             {
-                delete pBCAlways;
-                pBCAlways = nullptr;
+                pBCAlways.reset();
             }
         }
     }
@@ -990,14 +985,13 @@ void ScBroadcastAreaSlotMachine::UpdateBroadcastAreas(
             // Remove sheets, if any, iDel or/and iTab may as well point to end().
             while (iDel != iTab)
             {
-                delete (*iDel).second;
                 aTableSlotsMap.erase( iDel++);
             }
             // shift remaining down
             while (iTab != aTableSlotsMap.end())
             {
                 SCTAB nTab = (*iTab).first + nDz;
-                aTableSlotsMap[nTab] = (*iTab).second;
+                aTableSlotsMap[nTab] = std::move((*iTab).second);
                 aTableSlotsMap.erase( iTab++);
             }
         }
@@ -1014,14 +1008,14 @@ void ScBroadcastAreaSlotMachine::UpdateBroadcastAreas(
                 while (iTab != iStop)
                 {
                     SCTAB nTab = (*iTab).first + nDz;
-                    aTableSlotsMap[nTab] = (*iTab).second;
+                    aTableSlotsMap[nTab] = std::move((*iTab).second);
                     aTableSlotsMap.erase( iTab--);
                 }
                 // Shift the very first, iTab==iStop in this case.
                 if (bStopIsBegin)
                 {
                     SCTAB nTab = (*iTab).first + nDz;
-                    aTableSlotsMap[nTab] = (*iTab).second;
+                    aTableSlotsMap[nTab] = std::move((*iTab).second);
                     aTableSlotsMap.erase( iStop);
                 }
             }
@@ -1056,7 +1050,7 @@ void ScBroadcastAreaSlotMachine::UpdateBroadcastAreas(
         {
             TableSlotsMap::iterator iTab( aTableSlotsMap.find( nTab));
             if (iTab == aTableSlotsMap.end())
-                iTab = aTableSlotsMap.emplace(nTab, new TableSlots).first;
+                iTab = aTableSlotsMap.emplace(nTab, std::unique_ptr<TableSlots>(new TableSlots)).first;
             ScBroadcastAreaSlot** ppSlots = (*iTab).second->getSlots();
             SCSIZE nStart, nEnd, nRowBreak;
             ComputeAreaPoints( aRange, nStart, nEnd, nRowBreak );
