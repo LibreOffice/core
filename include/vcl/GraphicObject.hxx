@@ -25,6 +25,8 @@
 #include <vcl/dllapi.h>
 #include <o3tl/typed_flags_set.hxx>
 
+#include <com/sun/star/graphic/XGraphic.hpp>
+
 #include <unordered_set>
 
 enum class GraphicManagerDrawFlags
@@ -466,12 +468,6 @@ public:
 
     static bool isGraphicObjectUniqueIdURL(OUString const & rURL);
 
-    // will inspect an object ( e.g. a control ) for any 'ImageURL'
-    // properties and return these in a vector. Note: this implementation
-    // will cater for XNameContainer objects and deep inspect any containers
-    // if they exist
-    static void InspectForGraphicObjectImageURL( const css::uno::Reference< css::uno::XInterface >& rxIf, std::vector< OUString >& rvEmbedImgUrls );
-
     // create CropScaling information
     // fWidth, fHeight: object size
     // f*Crop: crop values relative to original bitmap size
@@ -604,6 +600,24 @@ public:
                             bool& rCached
                         );
 };
+
+namespace vcl
+{
+namespace graphic
+{
+
+// Will search an object ( e.g. a control ) for any 'ImageURL' or 'Graphic'
+// properties and return graphics from the properties in a vector. ImageURL
+// will be loaded from the URL.
+//
+// Note: this implementation will cater for XNameContainer objects and deep inspect any containers
+// if they exist
+
+VCL_DLLPUBLIC void SearchForGraphics(css::uno::Reference<css::uno::XInterface> const & rxInterface,
+                                     std::vector<css::uno::Reference<css::graphic::XGraphic>> & raGraphicList);
+
+}
+} // end namespace vcl::graphic
 
 #endif // INCLUDED_VCL_GRAPHICOBJECT_HXX
 
