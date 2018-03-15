@@ -3960,25 +3960,25 @@ void WW8AttributeOutput::FormatLRSpace( const SvxLRSpaceItem& rLR )
     }
     else if ( m_rWW8Export.m_bOutPageDescs )                // PageDescs
     {
-        sal_uInt16 nLDist, nRDist;
-        const SfxPoolItem* pItem = m_rWW8Export.HasItem( RES_BOX );
-        if ( pItem )
+        m_pageMargins.nLeft = 0;
+        m_pageMargins.nRight = 0;
+
+        if ( auto pBoxItem = static_cast<const SvxBoxItem*>(m_rWW8Export.HasItem( RES_BOX )) )
         {
-            nRDist = static_cast<const SvxBoxItem*>(pItem)->CalcLineSpace( SvxBoxItemLine::LEFT, /*bEvenIfNoLine*/true );
-            nLDist = static_cast<const SvxBoxItem*>(pItem)->CalcLineSpace( SvxBoxItemLine::RIGHT, /*bEvenIfNoLine*/true );
+            m_pageMargins.nRight = pBoxItem->CalcLineSpace( SvxBoxItemLine::LEFT, /*bEvenIfNoLine*/true );
+            m_pageMargins.nLeft = pBoxItem->CalcLineSpace( SvxBoxItemLine::RIGHT, /*bEvenIfNoLine*/true );
         }
-        else
-            nLDist = nRDist = 0;
-        nLDist = nLDist + (sal_uInt16)rLR.GetLeft();
-        nRDist = nRDist + (sal_uInt16)rLR.GetRight();
+
+        m_pageMargins.nLeft += (sal_uInt16)rLR.GetLeft();
+        m_pageMargins.nRight += (sal_uInt16)rLR.GetRight();
 
         // sprmSDxaLeft
         m_rWW8Export.InsUInt16( NS_sprm::sprmSDxaLeft );
-        m_rWW8Export.InsUInt16( nLDist );
+        m_rWW8Export.InsUInt16( m_pageMargins.nLeft );
 
         // sprmSDxaRight
         m_rWW8Export.InsUInt16( NS_sprm::sprmSDxaRight );
-        m_rWW8Export.InsUInt16( nRDist );
+        m_rWW8Export.InsUInt16( m_pageMargins.nRight );
     }
     else
     {                                          // normal paragraphs
@@ -4025,6 +4025,7 @@ void WW8AttributeOutput::FormatULSpace( const SvxULSpaceItem& rUL )
         // sprmSDyaTop
         m_rWW8Export.InsUInt16( NS_sprm::sprmSDyaTop );
         m_rWW8Export.InsUInt16( aDistances.dyaTop );
+        m_pageMargins.nTop = aDistances.dyaTop;
 
         if ( aDistances.HasFooter() )
         {
@@ -4036,6 +4037,7 @@ void WW8AttributeOutput::FormatULSpace( const SvxULSpaceItem& rUL )
         //sprmSDyaBottom
         m_rWW8Export.InsUInt16( NS_sprm::sprmSDyaBottom );
         m_rWW8Export.InsUInt16( aDistances.dyaBottom );
+        m_pageMargins.nBottom = aDistances.dyaBottom;
     }
     else
     {
@@ -4462,7 +4464,21 @@ void WW8AttributeOutput::FormatBox( const SvxBoxItem& rBox )
                       && ( p->GetWidth() != 0 );
         }
 
-        m_rWW8Export.Out_SwFormatBox( rBox, bShadow );
+        SvxBoxItem aBox(rBox);
+        if (m_rWW8Export.m_bOutPageDescs)
+        {
+            editeng::WordBorderDistances aDistances;
+            editeng::BorderDistancesToWord(aBox, m_pageMargins, aDistances);
+
+            aBox.SetDistance(aDistances.nTop, SvxBoxItemLine::TOP);
+            aBox.SetDistance(aDistances.nLeft, SvxBoxItemLine::LEFT);
+            aBox.SetDistance(aDistances.nBottom, SvxBoxItemLine::BOTTOM);
+            aBox.SetDistance(aDistances.nRight, SvxBoxItemLine::RIGHT);
+
+            m_bFromEdge = aDistances.bFromEdge;
+        }
+
+        m_rWW8Export.Out_SwFormatBox( aBox, bShadow );
     }
 }
 
