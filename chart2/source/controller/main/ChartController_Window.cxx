@@ -58,15 +58,16 @@
 #include <com/sun/star/util/XUpdatable.hpp>
 #include <com/sun/star/awt/Rectangle.hpp>
 
+#include <comphelper/lok.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/sequence.hxx>
 
 #include <toolkit/awt/vclxmenu.hxx>
 
+#include <sfx2/viewsh.hxx>
 #include <svx/svxids.hrc>
 #include <svx/ActionDescriptionProvider.hxx>
-
 #include <svx/obj3d.hxx>
 #include <svx/scene3d.hxx>
 #include <svx/svddrgmt.hxx>
@@ -1252,6 +1253,12 @@ void ChartController::execute_Command( const CommandEvent& rCEvt )
 
         if ( !xPopupController.is() || !xPopupMenu.is() )
             return;
+
+        if (comphelper::LibreOfficeKit::isActive())
+        {
+            PopupMenu* pPopupMenu = static_cast<PopupMenu*>(VCLXMenu::GetImplementation(xPopupMenu)->GetMenu());
+            pPopupMenu->SetLOKNotifier(SfxViewShell::Current());
+        }
 
         xPopupController->setPopupMenu( xPopupMenu );
         xPopupMenu->execute( css::uno::Reference< css::awt::XWindowPeer >( m_xFrame->getContainerWindow(), css::uno::UNO_QUERY ),
