@@ -137,6 +137,7 @@ public:
     void testTdf104792();
     void testTdf90627();
     void testTdf104786();
+    void testTdf104789();
 
     CPPUNIT_TEST_SUITE(SdOOXMLExportTest2);
 
@@ -198,6 +199,7 @@ public:
     CPPUNIT_TEST(testTdf104792);
     CPPUNIT_TEST(testTdf90627);
     CPPUNIT_TEST(testTdf104786);
+    CPPUNIT_TEST(testTdf104789);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -1580,6 +1582,19 @@ void SdOOXMLExportTest2::testTdf104786()
     xmlDocPtr pXmlDocContent = parseExport(tempFile, "ppt/slides/slide2.xml");
     // Don't export empty 'to'
     assertXPath(pXmlDocContent, "/p:sld/p:timing/p:tnLst/p:par/p:cTn/p:childTnLst[1]/p:seq/p:cTn/p:childTnLst[1]/p:par[2]/p:cTn/p:childTnLst[1]/p:par/p:cTn/p:childTnLst[1]/p:par/p:cTn/p:childTnLst/p:set[2]/p:to", 0);
+
+    xDocShRef->DoClose();
+}
+
+void SdOOXMLExportTest2::testTdf104789()
+{
+    ::sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/pptx/tdf104789.pptx"), PPTX);
+    utl::TempFile tempFile;
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
+
+    xmlDocPtr pXmlDocContent = parseExport(tempFile, "ppt/slides/slide1.xml");
+    OUString sAttributeName = getXPathContent(pXmlDocContent, "/p:sld/p:timing/p:tnLst/p:par/p:cTn/p:childTnLst/p:seq/p:cTn/p:childTnLst/p:par/p:cTn/p:childTnLst/p:par/p:cTn/p:childTnLst/p:par/p:cTn/p:childTnLst/p:set/p:cBhvr/p:attrNameLst/p:attrName");
+    CPPUNIT_ASSERT_EQUAL(OUString("style.opacity"), sAttributeName);
 
     xDocShRef->DoClose();
 }
