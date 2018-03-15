@@ -96,8 +96,8 @@ public:
     bool                    GetWaterCan() const { return bWaterCan; }
     void                    SetWaterCan( bool bWC ) { bWaterCan = bWC; }
 
-    SvxSearchItem*          GetSearchItem() { return pSearchItem; }
-    void                    SetSearchItem(SvxSearchItem* pItem) { pSearchItem = pItem; }
+    SvxSearchItem*          GetSearchItem() { return pSearchItem.get(); }
+    void                    SetSearchItem(std::unique_ptr<SvxSearchItem> pItem);
 
     /** Return the virtual device that can be used for printer independent
         layout.
@@ -125,11 +125,11 @@ private:
 
     SdOptions*              pImpressOptions;
     SdOptions*              pDrawOptions;
-    SvxSearchItem*          pSearchItem;
-    SvNumberFormatter*      pNumberFormatter;
+    std::unique_ptr<SvxSearchItem>      pSearchItem;
+    std::unique_ptr<SvNumberFormatter>  pNumberFormatter;
     tools::SvRef<SotStorage>            xOptionStorage;
     bool                    bWaterCan;
-    SfxErrorHandler*        mpErrorHdl;
+    std::unique_ptr<SfxErrorHandler> mpErrorHdl;
     /** This device is used for printer independent layout.  It is virtual
         in the sense that it does not represent a printer.  The pointer may
         be NULL when the virtual device could not be created.
