@@ -105,18 +105,17 @@ private:
     bool bRepeatItemLabels; //! at level
     bool bSubTotalDefault; //! at level
     std::vector<ScGeneralFunction> maSubTotalFuncs;
-    css::sheet::DataPilotFieldReference* pReferenceValue;
-    css::sheet::DataPilotFieldSortInfo* pSortInfo; // (level)
-    css::sheet::DataPilotFieldAutoShowInfo* pAutoShowInfo; // (level)
-    css::sheet::DataPilotFieldLayoutInfo* pLayoutInfo; // (level)
+    std::unique_ptr<css::sheet::DataPilotFieldReference> pReferenceValue;
+    std::unique_ptr<css::sheet::DataPilotFieldSortInfo> pSortInfo; // (level)
+    std::unique_ptr<css::sheet::DataPilotFieldAutoShowInfo> pAutoShowInfo; // (level)
+    std::unique_ptr<css::sheet::DataPilotFieldLayoutInfo> pLayoutInfo; // (level)
 
 public:
     typedef std::unordered_set<OUString> MemberSetType;
-    typedef std::unordered_map <OUString, ScDPSaveMember*> MemberHash;
-    typedef std::list <ScDPSaveMember*> MemberList;
+    typedef std::vector<ScDPSaveMember*> MemberList;
 
 private:
-    MemberHash maMemberHash;
+    std::unordered_map<OUString, std::unique_ptr<ScDPSaveMember>> maMemberHash;
     MemberList maMemberList;
 
 public:
@@ -129,7 +128,7 @@ public:
     const MemberList& GetMembers() const
         { return maMemberList; }
 
-    void AddMember(ScDPSaveMember* pMember);
+    void AddMember(std::unique_ptr<ScDPSaveMember> pMember);
 
     void SetDupFlag(bool bSet)
         { bDupFlag = bSet; }
@@ -180,20 +179,20 @@ public:
     bool IsMemberNameInUse(const OUString& rName) const;
 
     const css::sheet::DataPilotFieldReference* GetReferenceValue() const
-        { return pReferenceValue; }
+        { return pReferenceValue.get(); }
 
     void SetReferenceValue(const css::sheet::DataPilotFieldReference* pNew);
 
     const css::sheet::DataPilotFieldSortInfo* GetSortInfo() const
-        { return pSortInfo; }
+        { return pSortInfo.get(); }
 
     void SetSortInfo(const css::sheet::DataPilotFieldSortInfo* pNew);
     const css::sheet::DataPilotFieldAutoShowInfo* GetAutoShowInfo() const
-        { return pAutoShowInfo; }
+        { return pAutoShowInfo.get(); }
 
     void SetAutoShowInfo(const css::sheet::DataPilotFieldAutoShowInfo* pNew);
     const css::sheet::DataPilotFieldLayoutInfo* GetLayoutInfo() const
-        { return pLayoutInfo; }
+        { return pLayoutInfo.get(); }
 
     void SetLayoutInfo(const css::sheet::DataPilotFieldLayoutInfo* pNew);
 
