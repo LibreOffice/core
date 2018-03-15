@@ -192,6 +192,8 @@ public:
 
     bool HasRuler() { return mbHasRulers;}
     void SetRuler(bool bRuler);
+    // Hides horizontal, vertical scrollbar as well as scrollbox
+    void SetScrollBarsVisible(bool bVisible);
 
     /** Set internal values of all scroll bars that determine thumb size and
         position.  The external values like size and position of the scroll

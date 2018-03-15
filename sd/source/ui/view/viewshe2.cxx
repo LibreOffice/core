@@ -929,6 +929,18 @@ void ViewShell::SetRuler(bool bRuler)
         GetViewShell()->InvalidateBorder();
 }
 
+void ViewShell::SetScrollBarsVisible(bool bVisible)
+{
+    if (mpVerticalScrollBar.get() != nullptr)
+        mpVerticalScrollBar->Show( bVisible );
+
+    if (mpHorizontalScrollBar.get() != nullptr)
+        mpHorizontalScrollBar->Show( bVisible );
+
+    if (mpScrollBarBox.get() != nullptr)
+        mpScrollBarBox->Show(bVisible);
+}
+
 sal_Int8 ViewShell::AcceptDrop (
     const AcceptDropEvent& rEvt,
     DropTargetHelper& rTargetHelper,
