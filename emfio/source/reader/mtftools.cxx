@@ -24,6 +24,7 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <vcl/graphictools.hxx>
+#include <vcl/BitmapTools.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/canvastools.hxx>
 #include <vcl/svapp.hxx>
@@ -1627,90 +1628,7 @@ namespace emfio
         BitmapEx aBmpEx( rBitmap );
         if ( mbComplexClip )
         {
-            VclPtrInstance< VirtualDevice > pVDev;
-            MapMode aMapMode( MapUnit::Map100thMM );
-            aMapMode.SetOrigin( Point( -rPos.X(), -rPos.Y() ) );
-            const Size aOutputSizePixel( pVDev->LogicToPixel( rSize, aMapMode ) );
-            const Size aSizePixel( rBitmap.GetSizePixel() );
-            if ( aOutputSizePixel.Width() && aOutputSizePixel.Height() )
-            {
-                aMapMode.SetScaleX( Fraction( aSizePixel.Width(), aOutputSizePixel.Width() ) );
-                aMapMode.SetScaleY( Fraction( aSizePixel.Height(), aOutputSizePixel.Height() ) );
-            }
-            pVDev->SetMapMode( aMapMode );
-            pVDev->SetOutputSizePixel( aSizePixel );
-            pVDev->SetFillColor( COL_BLACK );
-            const tools::PolyPolygon aClip( maClipPath.getClipPath() );
-            pVDev->DrawPolyPolygon( aClip );
-            const Point aEmptyPoint;
-
-            // #i50672# Extract whole VDev content (to match size of rBitmap)
-            pVDev->EnableMapMode( false );
-            const Bitmap aVDevMask(pVDev->GetBitmap(aEmptyPoint, aSizePixel));
-
-            if(aBmpEx.IsTransparent())
-            {
-                // bitmap already uses a Mask or Alpha, we need to blend that with
-                // the new masking in pVDev
-                if(aBmpEx.IsAlpha())
-                {
-                    // need to blend in AlphaMask quality (8Bit)
-                    AlphaMask fromVDev(aVDevMask);
-                    AlphaMask fromBmpEx(aBmpEx.GetAlpha());
-                    AlphaMask::ScopedReadAccess pR(fromVDev);
-                    AlphaMask::ScopedWriteAccess pW(fromBmpEx);
-
-                    if(pR && pW)
-                    {
-                        const long nWidth(std::min(pR->Width(), pW->Width()));
-                        const long nHeight(std::min(pR->Height(), pW->Height()));
-
-                        for(long nY(0); nY < nHeight; nY++)
-                        {
-                            Scanline pScanlineR = pR->GetScanline( nY );
-                            Scanline pScanlineW = pW->GetScanline( nY );
-                            for(long nX(0); nX < nWidth; nX++)
-                            {
-                                const sal_uInt8 nIndR(pR->GetIndexFromData(pScanlineR, nX));
-                                const sal_uInt8 nIndW(pW->GetIndexFromData(pScanlineW, nX));
-
-                                // these values represent transparency (0 == no, 255 == fully transparent),
-                                // so to blend these we have to multiply the inverse (opacity)
-                                // and re-invert the result to transparence
-                                const sal_uInt8 nCombined(0x00ff - (((0x00ff - nIndR) * (0x00ff - nIndW)) >> 8));
-
-                                pW->SetPixelOnData(pScanlineW, nX, BitmapColor(nCombined));
-                            }
-                        }
-                    }
-
-                    pR.reset();
-                    pW.reset();
-                    aBmpEx = BitmapEx(aBmpEx.GetBitmap(), fromBmpEx);
-                }
-                else
-                {
-                    // need to blend in Mask quality (1Bit)
-                    Bitmap aMask(aVDevMask.CreateMask(COL_WHITE));
-
-                    if ( rBitmap.GetTransparentColor() == COL_WHITE )
-                    {
-                        aMask.CombineSimple( rBitmap.GetMask(), BmpCombine::Or );
-                    }
-                    else
-                    {
-                        aMask.CombineSimple( rBitmap.GetMask(), BmpCombine::And );
-                    }
-
-                    aBmpEx = BitmapEx( rBitmap.GetBitmap(), aMask );
-                }
-            }
-            else
-            {
-                // no mask yet, create and add new mask. For better quality, use Alpha,
-                // this allows the drawn mask being processed with AntiAliasing (AAed)
-                aBmpEx = BitmapEx(rBitmap.GetBitmap(), aVDevMask);
-            }
+            vcl::bitmap::DrawAndClipBitmap(rPos, rSize, rBitmap, aBmpEx, maClipPath.getClipPath());
         }
 
         if ( aBmpEx.IsTransparent() )
