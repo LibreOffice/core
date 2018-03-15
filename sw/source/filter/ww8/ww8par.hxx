@@ -1359,6 +1359,8 @@ private:
     bool m_bLoadingTOXHyperlink;
     // a document position recorded the after-position of TOC section, managed by Read_F_TOX() and End_Field()
     SwPaM* m_pPosAfterTOC;
+    // used for some dropcap tweaking
+    SwTextNode* m_pPreviousNode;
 
     std::unique_ptr< SwPosition > m_pLastAnchorPos;
 
