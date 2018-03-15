@@ -179,8 +179,8 @@ public:
 class SmCategoryDesc
 {
     OUString Name;
-    OUString  *Strings[4];
-    Image *Graphics[4];    /* regular bitmaps */
+    OUString Strings[4];
+    std::unique_ptr<Image> Graphics[4];    /* regular bitmaps */
     sal_uInt16 Minimum[4];
     sal_uInt16 Maximum[4];
     sal_uInt16 Value[4];
@@ -190,7 +190,7 @@ public:
     ~SmCategoryDesc();
 
     const OUString& GetName() const                 { return Name; }
-    const OUString* GetString(sal_uInt16 Index) const   { return Strings[Index];  }
+    const OUString& GetString(sal_uInt16 Index) const   { return Strings[Index];  }
     sal_uInt16          GetMinimum(sal_uInt16 Index)        { return Minimum[Index]; }
     sal_uInt16          GetMaximum(sal_uInt16 Index)        { return Maximum[Index]; }
     sal_uInt16          GetValue(sal_uInt16 Index) const    { return Value[Index]; }
@@ -198,7 +198,7 @@ public:
 
     const Image *  GetGraphic(sal_uInt16 Index) const
     {
-        return Graphics[Index];
+        return Graphics[Index].get();
     }
 };
 
