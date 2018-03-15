@@ -413,11 +413,7 @@ void UnoDialogControl::PrepareWindowDescriptor( css::awt::WindowDescriptor& rDes
     if (( ImplGetPropertyValue( PROPERTY_IMAGEURL ) >>= aImageURL ) &&
         ( !aImageURL.isEmpty() ))
     {
-        OUString absoluteUrl = aImageURL;
-        if ( !aImageURL.startsWith( UNO_NAME_GRAPHOBJ_URLPREFIX ) )
-            absoluteUrl = getPhysicalLocation( ImplGetPropertyValue( PROPERTY_DIALOGSOURCEURL ),
-                                 uno::makeAny( aImageURL ) );
-
+        OUString absoluteUrl = getPhysicalLocation(ImplGetPropertyValue(PROPERTY_DIALOGSOURCEURL), uno::makeAny(aImageURL));
         xGraphic = ImageHelper::getGraphicFromURL_nothrow( absoluteUrl );
         ImplSetPropertyValue( PROPERTY_GRAPHIC, uno::makeAny( xGraphic ), true );
     }
@@ -632,12 +628,7 @@ void UnoDialogControl::ImplModelPropertiesChanged( const Sequence< PropertyChang
             if (( ImplGetPropertyValue( GetPropertyName( BASEPROPERTY_IMAGEURL ) ) >>= aImageURL ) &&
                 ( !aImageURL.isEmpty() ))
             {
-                OUString absoluteUrl = aImageURL;
-                if ( !aImageURL.startsWith( UNO_NAME_GRAPHOBJ_URLPREFIX ) )
-
-                    absoluteUrl = getPhysicalLocation( ImplGetPropertyValue( GetPropertyName( BASEPROPERTY_DIALOGSOURCEURL )),
-                                         uno::makeAny(aImageURL));
-
+                OUString absoluteUrl = getPhysicalLocation(ImplGetPropertyValue(GetPropertyName(BASEPROPERTY_DIALOGSOURCEURL)), uno::makeAny(aImageURL));
                 xGraphic = ImageHelper::getGraphicFromURL_nothrow( absoluteUrl );
             }
             ImplSetPropertyValue(  GetPropertyName( BASEPROPERTY_GRAPHIC), uno::makeAny( xGraphic ), true );
