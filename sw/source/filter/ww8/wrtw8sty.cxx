@@ -1392,6 +1392,10 @@ void WW8AttributeOutput::SectionPageBorders( const SwFrameFormat* pPdFormat, con
             nPgBorder = 2;
     }
 
+    // [MS-DOC] 2.9.255 SPgbPropOperand; 2.9.185 PgbOffsetFrom
+    if (m_bFromEdge)
+        nPgBorder |= (1<<5);
+
     if ( USHRT_MAX != nPgBorder )
     {
         // write the Flag and Border Attribute
