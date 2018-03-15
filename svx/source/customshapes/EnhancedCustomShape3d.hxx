@@ -28,6 +28,7 @@
 #include <tools/gen.hxx>
 
 class SdrObject;
+class SdrObjCustomShape;
 
 class EnhancedCustomShape3d final
 {

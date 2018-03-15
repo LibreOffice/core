@@ -42,6 +42,7 @@
 class Color;
 class SdrObject;
 class SdrPathObj;
+class SdrObjCustomShape;
 
 enum class HandleFlags
 {

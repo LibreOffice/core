@@ -23,6 +23,8 @@
 #include <com/sun/star/i18n/XBreakIterator.hpp>
 
 class SdrObject;
+class SdrObjCustomShape;
+
 class EnhancedCustomShapeFontWork
 {
         static css::uno::Reference < css::i18n::XBreakIterator > mxBreakIterator;
