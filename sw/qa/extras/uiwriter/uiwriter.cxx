@@ -288,6 +288,7 @@ public:
     void testTdf99689TableOfContents();
     void testTdf99689TableOfFigures();
     void testTdf99689TableOfTables();
+    void testTdf112448();
     void testTdf113790();
     void testTdf114306();
     void testTdf114306_2();
@@ -462,6 +463,7 @@ public:
     CPPUNIT_TEST(testTdf99689TableOfContents);
     CPPUNIT_TEST(testTdf99689TableOfFigures);
     CPPUNIT_TEST(testTdf99689TableOfTables);
+    CPPUNIT_TEST(testTdf112448);
     CPPUNIT_TEST(testTdf113790);
     CPPUNIT_TEST(testTdf114306);
     CPPUNIT_TEST(testTdf114306_2);
@@ -5627,6 +5629,19 @@ void SwUiWriterTest::testParagraphOfTextRange()
     // This failed as there were no TextParagraph property.
     auto xParagraph = getProperty< uno::Reference<text::XTextRange> >(xViewCursor->getStart(), "TextParagraph");
     CPPUNIT_ASSERT_EQUAL(OUString("In section"), xParagraph->getString());
+}
+
+// tdf#112448: Fix: take correct line height
+//
+// When line metrics is not calculated we need to call CalcRealHeight()
+// before usage of the Height() and GetRealHeight().
+void SwUiWriterTest::testTdf112448()
+{
+    createDoc("tdf112448.odt");
+
+    // check actual number of line breaks in the paragraph
+    xmlDocPtr pXmlDoc = parseLayoutDump();
+    assertXPath(pXmlDoc, "/root/page/body/txt/LineBreak", 2);
 }
 
 void SwUiWriterTest::testTdf113790()
