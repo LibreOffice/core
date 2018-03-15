@@ -2400,109 +2400,109 @@ bool GetValueForEnhancedCustomShapeHandleParameter( sal_Int32& nRetValue, const 
     return bSpecial;
 }
 
-void ConvertEnhancedCustomShapeEquation( SdrObjCustomShape* pCustoShape,
-        std::vector< EnhancedCustomShapeEquation >& rEquations, std::vector< sal_Int32 >& rEquationOrder )
+void ConvertEnhancedCustomShapeEquation(
+    const SdrObjCustomShape& rSdrObjCustomShape,
+    std::vector< EnhancedCustomShapeEquation >& rEquations,
+    std::vector< sal_Int32 >& rEquationOrder )
 {
-    if ( pCustoShape )
+    uno::Sequence< OUString > sEquationSource;
+    const SdrCustomShapeGeometryItem& rGeometryItem =
+        rSdrObjCustomShape.GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY );
+    const uno::Any* pAny = rGeometryItem.GetPropertyValueByName( "Equations" );
+    if ( pAny )
+        *pAny >>= sEquationSource;
+    sal_Int32 nEquationSourceCount = sEquationSource.getLength();
+    if ( nEquationSourceCount && (nEquationSourceCount <= 128) )
     {
-        uno::Sequence< OUString > sEquationSource;
-        const SdrCustomShapeGeometryItem& rGeometryItem =
-            pCustoShape->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY );
-        const uno::Any* pAny = rGeometryItem.GetPropertyValueByName( "Equations" );
-        if ( pAny )
-            *pAny >>= sEquationSource;
-        sal_Int32 nEquationSourceCount = sEquationSource.getLength();
-        if ( nEquationSourceCount && (nEquationSourceCount <= 128) )
+        sal_Int32 i;
+        for ( i = 0; i < nEquationSourceCount; i++ )
         {
-            sal_Int32 i;
-            for ( i = 0; i < nEquationSourceCount; i++ )
+            try
             {
-                EnhancedCustomShape2d aCustoShape2d( pCustoShape );
-                try
+                std::shared_ptr< EnhancedCustomShape::ExpressionNode > aExpressNode(
+                    EnhancedCustomShape::FunctionParser::parseFunction(
+                        sEquationSource[ i ],
+                        const_cast< SdrObjCustomShape& >(rSdrObjCustomShape)));
+                drawing::EnhancedCustomShapeParameter aPara( aExpressNode->fillNode( rEquations, nullptr, 0 ) );
+                if ( aPara.Type != drawing::EnhancedCustomShapeParameterType::EQUATION )
                 {
-                    std::shared_ptr< EnhancedCustomShape::ExpressionNode > aExpressNode(
-                        EnhancedCustomShape::FunctionParser::parseFunction( sEquationSource[ i ], aCustoShape2d ) );
-                    drawing::EnhancedCustomShapeParameter aPara( aExpressNode->fillNode( rEquations, nullptr, 0 ) );
-                    if ( aPara.Type != drawing::EnhancedCustomShapeParameterType::EQUATION )
-                    {
-                        EnhancedCustomShapeEquation aEquation;
-                        aEquation.nOperation = 0;
-                        EnhancedCustomShape::FillEquationParameter( aPara, 0, aEquation );
-                        rEquations.push_back( aEquation );
-                    }
-                }
-                catch ( const EnhancedCustomShape::ParseError& )
-                {
-                    EnhancedCustomShapeEquation aEquation;      // ups, we should not be here,
-                    aEquation.nOperation = 0;                   // creating a default equation with value 1
-                    aEquation.nPara[ 0 ] = 1;                   // hoping that this will not break anything
+                    EnhancedCustomShapeEquation aEquation;
+                    aEquation.nOperation = 0;
+                    EnhancedCustomShape::FillEquationParameter( aPara, 0, aEquation );
                     rEquations.push_back( aEquation );
                 }
-                catch ( ... )
-                {
-                    EnhancedCustomShapeEquation aEquation;      // #i112309# EnhancedCustomShape::Parse error
-                    aEquation.nOperation = 0;                   // not caught on linux platform
-                    aEquation.nPara[ 0 ] = 1;
-                    rEquations.push_back( aEquation );
-                }
-                rEquationOrder.push_back( rEquations.size() - 1 );
             }
-            // now updating our old equation indices, they are marked with a bit in the hiword of nOperation
-            for (auto & equation : rEquations)
+            catch ( const EnhancedCustomShape::ParseError& )
             {
-                sal_uInt32 nMask = 0x20000000;
-                for( i = 0; i < 3; i++ )
+                EnhancedCustomShapeEquation aEquation;      // ups, we should not be here,
+                aEquation.nOperation = 0;                   // creating a default equation with value 1
+                aEquation.nPara[ 0 ] = 1;                   // hoping that this will not break anything
+                rEquations.push_back( aEquation );
+            }
+            catch ( ... )
+            {
+                EnhancedCustomShapeEquation aEquation;      // #i112309# EnhancedCustomShape::Parse error
+                aEquation.nOperation = 0;                   // not caught on linux platform
+                aEquation.nPara[ 0 ] = 1;
+                rEquations.push_back( aEquation );
+            }
+            rEquationOrder.push_back( rEquations.size() - 1 );
+        }
+        // now updating our old equation indices, they are marked with a bit in the hiword of nOperation
+        for (auto & equation : rEquations)
+        {
+            sal_uInt32 nMask = 0x20000000;
+            for( i = 0; i < 3; i++ )
+            {
+                if ( equation.nOperation & nMask )
                 {
-                    if ( equation.nOperation & nMask )
-                    {
-                        equation.nOperation ^= nMask;
-                        const size_t nIndex(equation.nPara[ i ] & 0x3ff);
+                    equation.nOperation ^= nMask;
+                    const size_t nIndex(equation.nPara[ i ] & 0x3ff);
 
-                        // #i124661# check index access, there are cases where this is out of bound leading
-                        // to errors up to crashes when executed
-                        if(nIndex < rEquationOrder.size())
-                        {
-                            equation.nPara[ i ] = rEquationOrder[ nIndex ] | 0x400;
-                        }
-                        else
-                        {
-                            OSL_ENSURE(false, "Attempted out of bound access to rEquationOrder of CustomShape (!)");
-                        }
+                    // #i124661# check index access, there are cases where this is out of bound leading
+                    // to errors up to crashes when executed
+                    if(nIndex < rEquationOrder.size())
+                    {
+                        equation.nPara[ i ] = rEquationOrder[ nIndex ] | 0x400;
                     }
-                    nMask <<= 1;
+                    else
+                    {
+                        OSL_ENSURE(false, "Attempted out of bound access to rEquationOrder of CustomShape (!)");
+                    }
                 }
+                nMask <<= 1;
             }
         }
     }
 }
 
-bool EscherPropertyContainer::IsDefaultObject( SdrObjCustomShape const * pCustoShape , const MSO_SPT eShapeType )
+bool EscherPropertyContainer::IsDefaultObject(
+    const SdrObjCustomShape& rSdrObjCustomShape,
+    const MSO_SPT eShapeType)
 {
-    bool bIsDefaultObject = false;
     switch(eShapeType)
     {
         // if the custom shape is not default shape of ppt, return sal_Fasle;
         case mso_sptTearDrop:
-            return bIsDefaultObject;
+            return false;
 
         default:
             break;
     }
 
-    if ( pCustoShape )
+    if(rSdrObjCustomShape.IsDefaultGeometry( SdrObjCustomShape::DefaultType::Equations )
+        && rSdrObjCustomShape.IsDefaultGeometry( SdrObjCustomShape::DefaultType::Viewbox )
+        && rSdrObjCustomShape.IsDefaultGeometry( SdrObjCustomShape::DefaultType::Path )
+        && rSdrObjCustomShape.IsDefaultGeometry( SdrObjCustomShape::DefaultType::Gluepoints )
+        && rSdrObjCustomShape.IsDefaultGeometry( SdrObjCustomShape::DefaultType::Segments )
+        && rSdrObjCustomShape.IsDefaultGeometry( SdrObjCustomShape::DefaultType::StretchX )
+        && rSdrObjCustomShape.IsDefaultGeometry( SdrObjCustomShape::DefaultType::StretchY )
+        && rSdrObjCustomShape.IsDefaultGeometry( SdrObjCustomShape::DefaultType::TextFrames ) )
     {
-    if (   pCustoShape->IsDefaultGeometry( SdrObjCustomShape::DefaultType::Equations )
-           && pCustoShape->IsDefaultGeometry( SdrObjCustomShape::DefaultType::Viewbox )
-           && pCustoShape->IsDefaultGeometry( SdrObjCustomShape::DefaultType::Path )
-           && pCustoShape->IsDefaultGeometry( SdrObjCustomShape::DefaultType::Gluepoints )
-           && pCustoShape->IsDefaultGeometry( SdrObjCustomShape::DefaultType::Segments )
-           && pCustoShape->IsDefaultGeometry( SdrObjCustomShape::DefaultType::StretchX )
-           && pCustoShape->IsDefaultGeometry( SdrObjCustomShape::DefaultType::StretchY )
-           && pCustoShape->IsDefaultGeometry( SdrObjCustomShape::DefaultType::TextFrames ) )
-        bIsDefaultObject = true;
+        return true;
     }
 
-    return bIsDefaultObject;
+    return false;
 }
 
 void EscherPropertyContainer::LookForPolarHandles( const MSO_SPT eShapeType, sal_Int32& nAdjustmentsWhichNeedsToBeConverted )
@@ -2552,8 +2552,12 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
     uno::Reference< beans::XPropertySet > aXPropSet( rXShape, uno::UNO_QUERY );
     if ( aXPropSet.is() )
     {
-        SdrObjCustomShape* pCustoShape = static_cast<SdrObjCustomShape*>(GetSdrObjectFromXShape( rXShape ));
-        if ( !pCustoShape ) return;
+        if(nullptr == dynamic_cast< SdrObjCustomShape* >(GetSdrObjectFromXShape(rXShape)))
+        {
+            return;
+        }
+
+        SdrObjCustomShape& rSdrObjCustomShape(static_cast< SdrObjCustomShape& >(*GetSdrObjectFromXShape(rXShape)));
         const OUString sCustomShapeGeometry( "CustomShapeGeometry"  );
         uno::Any aGeoPropSet = aXPropSet->getPropertyValue( sCustomShapeGeometry );
         uno::Sequence< beans::PropertyValue > aGeoPropSeq;
@@ -2576,12 +2580,18 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
             sal_Int32 nAdjustmentsWhichNeedsToBeConverted = 0;
             uno::Sequence< beans::PropertyValues > aHandlesPropSeq;
             bool bPredefinedHandlesUsed = true;
-            bool bIsDefaultObject = IsDefaultObject( pCustoShape , eShapeType);
+            const bool bIsDefaultObject(
+                IsDefaultObject(
+                    rSdrObjCustomShape,
+                    eShapeType));
 
             // convert property "Equations" into std::vector< EnhancedCustomShapeEquationEquation >
             std::vector< EnhancedCustomShapeEquation >  aEquations;
             std::vector< sal_Int32 >                    aEquationOrder;
-            ConvertEnhancedCustomShapeEquation( pCustoShape, aEquations, aEquationOrder );
+            ConvertEnhancedCustomShapeEquation(
+                rSdrObjCustomShape,
+                aEquations,
+                aEquationOrder);
 
             sal_Int32 i, nCount = aGeoPropSeq.getLength();
             for ( i = 0; i < nCount; i++ )
@@ -3421,7 +3431,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                                 case drawing::TextHorizontalAdjust_BLOCK:
                                     {
                                         drawing::TextFitToSizeType const eFTS(
-                                            pCustoShape->GetMergedItem( SDRATTR_TEXT_FITTOSIZE ).GetValue() );
+                                            rSdrObjCustomShape.GetMergedItem( SDRATTR_TEXT_FITTOSIZE ).GetValue() );
                                         if (eFTS == drawing::TextFitToSizeType_ALLLINES ||
                                             eFTS == drawing::TextFitToSizeType_PROPORTIONAL)
                                         {
@@ -3441,7 +3451,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                         }
                         if((nTextPathFlags & 0x4000) != 0)  // Is Font work
                         {
-                            OutlinerParaObject* pOutlinerParaObject = pCustoShape->GetOutlinerParaObject();
+                            OutlinerParaObject* pOutlinerParaObject(rSdrObjCustomShape.GetOutlinerParaObject());
                             if ( pOutlinerParaObject && pOutlinerParaObject->IsVertical() )
                                 nTextPathFlags |= 0x2000;
                         }
@@ -4538,11 +4548,13 @@ sal_uInt32 EscherConnectorListEntry::GetConnectorRule( bool bFirst )
 
         if (aType == "drawing.Custom")
         {
-            SdrObject* pCustoShape(GetSdrObjectFromXShape(aXShape));
-            if (dynamic_cast<const SdrObjCustomShape*>(pCustoShape) !=  nullptr)
+            const bool bIsSdrObjCustomShape(nullptr != dynamic_cast< SdrObjCustomShape* >(GetSdrObjectFromXShape(aXShape)));
+
+            if(bIsSdrObjCustomShape)
             {
+                SdrObjCustomShape& rSdrObjCustomShape(static_cast< SdrObjCustomShape& >(*GetSdrObjectFromXShape(aXShape)));
                 const SdrCustomShapeGeometryItem& rGeometryItem =
-                    pCustoShape->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY );
+                    rSdrObjCustomShape.GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY );
 
                 const OUString sPath( "Path"  );
                 const OUString sType( "Type"  );
@@ -4563,7 +4575,7 @@ sal_uInt32 EscherConnectorListEntry::GetConnectorRule( bool bFirst )
 
                 if ( nGluePointType == drawing::EnhancedCustomShapeGluePointType::CUSTOM )
                 {
-                    const SdrGluePointList* pList = pCustoShape->GetGluePointList();
+                    const SdrGluePointList* pList = rSdrObjCustomShape.GetGluePointList();
                     if ( pList )
                     {
                         tools::Polygon aPoly;
@@ -4573,7 +4585,7 @@ sal_uInt32 EscherConnectorListEntry::GetConnectorRule( bool bFirst )
                             for ( nNum = 0; nNum < nCnt; nNum++ )
                             {
                                 const SdrGluePoint& rGP = (*pList)[ nNum ];
-                                Point aPt( rGP.GetAbsolutePos( *pCustoShape ) );
+                                Point aPt(rGP.GetAbsolutePos(rSdrObjCustomShape));
                                 aPoly.Insert( POLY_APPEND, aPt );
                             }
                             nRule = GetClosestPoint( aPoly, aRefPoint );
@@ -4583,15 +4595,25 @@ sal_uInt32 EscherConnectorListEntry::GetConnectorRule( bool bFirst )
                 }
                 else if ( nGluePointType == drawing::EnhancedCustomShapeGluePointType::SEGMENTS )
                 {
-                    SdrObject* pObject = pCustoShape->DoConvertToPolyObj(true, true);
-                    if (auto pSdrPathObj = dynamic_cast<const SdrPathObj*>(pObject))
+                    tools::PolyPolygon aPolyPoly;
+                    SdrObject* pTemporyryConvertResultObject(rSdrObjCustomShape.DoConvertToPolyObj(true, true));
+                    SdrPathObj* pSdrPathObj(dynamic_cast< SdrPathObj* >(pTemporyryConvertResultObject));
+
+                    if(pSdrPathObj)
+                    {
+                        // #i74631# use explicit constructor here. Also XPolyPolygon is not necessary,
+                        // reducing to PolyPolygon
+                        aPolyPoly = tools::PolyPolygon(pSdrPathObj->GetPathPoly());
+                    }
+
+                    // do *not* forget to delete the temporary used SdrObject - possible memory leak (!)
+                    SdrObject::Free(pTemporyryConvertResultObject);
+                    pSdrPathObj = nullptr;
+
+                    if(0 != aPolyPoly.Count())
                     {
                         sal_Int16 a, b, nIndex = 0;
                         sal_uInt32 nDistance = 0xffffffff;
-
-                        // #i74631# use explicit constructor here. Also XPolyPolygon is not necessary,
-                        // reducing to PolyPolygon
-                        const tools::PolyPolygon aPolyPoly(pSdrPathObj->GetPathPoly());
 
                         for ( a = 0; a < aPolyPoly.Count(); a++ )
                         {
@@ -4610,6 +4632,7 @@ sal_uInt32 EscherConnectorListEntry::GetConnectorRule( bool bFirst )
                                 nIndex++;
                             }
                         }
+
                         if ( nDistance != 0xffffffff )
                             bRectangularConnection = false;
                     }

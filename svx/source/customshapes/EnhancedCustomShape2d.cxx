@@ -690,9 +690,9 @@ void EnhancedCustomShape2d::SetPathSize( sal_Int32 nIndex )
         fYRatio = 1.0;
 }
 
-EnhancedCustomShape2d::EnhancedCustomShape2d( SdrObject* pAObj ) :
-    SfxItemSet          ( pAObj->GetMergedItemSet() ),
-    pCustomShapeObj     ( pAObj ),
+EnhancedCustomShape2d::EnhancedCustomShape2d(SdrObjCustomShape& rSdrObjCustomShape)
+:   SfxItemSet          ( rSdrObjCustomShape.GetMergedItemSet() ),
+    mrSdrObjCustomShape ( rSdrObjCustomShape ),
     eSpType             ( mso_sptNil ),
     nCoordLeft          ( 0 ),
     nCoordTop           ( 0 ),
@@ -702,8 +702,8 @@ EnhancedCustomShape2d::EnhancedCustomShape2d( SdrObject* pAObj ) :
     nXRef               ( 0x80000000 ),
     nYRef               ( 0x80000000 ),
     nColorData          ( 0 ),
-    bFilled             ( pAObj->GetMergedItem( XATTR_FILLSTYLE ).GetValue() != drawing::FillStyle_NONE ),
-    bStroked            ( pAObj->GetMergedItem( XATTR_LINESTYLE ).GetValue() != drawing::LineStyle_NONE ),
+    bFilled             ( rSdrObjCustomShape.GetMergedItem( XATTR_FILLSTYLE ).GetValue() != drawing::FillStyle_NONE ),
+    bStroked            ( rSdrObjCustomShape.GetMergedItem( XATTR_LINESTYLE ).GetValue() != drawing::LineStyle_NONE ),
     bFlipH              ( false ),
     bFlipV              ( false )
 {
@@ -723,14 +723,14 @@ EnhancedCustomShape2d::EnhancedCustomShape2d( SdrObject* pAObj ) :
     // 2D helper shape.
     ClearItem(SDRATTR_SHADOW);
 
-    Point aP( pCustomShapeObj->GetSnapRect().Center() );
-    Size aS( pCustomShapeObj->GetLogicRect().GetSize() );
+    Point aP( mrSdrObjCustomShape.GetSnapRect().Center() );
+    Size aS( mrSdrObjCustomShape.GetLogicRect().GetSize() );
     aP.AdjustX( -(aS.Width() / 2) );
     aP.AdjustY( -(aS.Height() / 2) );
     aLogicRect = tools::Rectangle( aP, aS );
 
     OUString sShapeType;
-    const SdrCustomShapeGeometryItem& rGeometryItem = pCustomShapeObj->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY );
+    const SdrCustomShapeGeometryItem& rGeometryItem(mrSdrObjCustomShape.GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ));
     const Any* pAny = rGeometryItem.GetPropertyValueByName( "Type" );
     if ( pAny ) {
         *pAny >>= sShapeType;
@@ -746,10 +746,7 @@ EnhancedCustomShape2d::EnhancedCustomShape2d( SdrObject* pAObj ) :
     if ( pAny )
         *pAny >>= bFlipV;
 
-    if ( dynamic_cast<const SdrObjCustomShape*>( pCustomShapeObj) !=  nullptr )    // should always be a SdrObjCustomShape, but you don't know
-        nRotateAngle = static_cast<sal_Int32>(static_cast<SdrObjCustomShape*>(pCustomShapeObj)->GetObjectRotation() * 100.0);
-    else
-         nRotateAngle = pCustomShapeObj->GetRotateAngle();
+    nRotateAngle = static_cast<sal_Int32>(static_cast< SdrObjCustomShape& >(mrSdrObjCustomShape).GetObjectRotation() * 100.0);
 
     /*const sal_Int32* pDefData =*/ ApplyShapeAttributes( rGeometryItem );
     SetPathSize();
@@ -1170,7 +1167,7 @@ bool EnhancedCustomShape2d::GetHandlePosition( const sal_uInt32 nIndex, Point& r
                 }
                 rReturnPosition = GetPoint( aHandle.aPosition );
             }
-            const GeoStat aGeoStat( static_cast<SdrObjCustomShape*>(pCustomShapeObj)->GetGeoStat() );
+            const GeoStat aGeoStat(mrSdrObjCustomShape.GetGeoStat());
             if ( aGeoStat.nShearAngle )
             {
                 double nTan = aGeoStat.nTan;
@@ -1215,7 +1212,7 @@ bool EnhancedCustomShape2d::SetHandleControllerPosition( const sal_uInt32 nIndex
                 double a = -nRotateAngle * F_PI18000;
                 RotatePoint( aP, Point( aLogicRect.GetWidth() / 2, aLogicRect.GetHeight() / 2 ), sin( a ), cos( a ) );
             }
-            const GeoStat aGeoStat( static_cast<SdrObjCustomShape*>(pCustomShapeObj)->GetGeoStat() );
+            const GeoStat aGeoStat(mrSdrObjCustomShape.GetGeoStat());
             if ( aGeoStat.nShearAngle )
             {
                 double nTan = -aGeoStat.nTan;
@@ -1372,13 +1369,12 @@ bool EnhancedCustomShape2d::SetHandleControllerPosition( const sal_uInt32 nIndex
                 }
             }
             // and writing them back into the GeometryItem
-            SdrCustomShapeGeometryItem aGeometryItem(
-                pCustomShapeObj->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ));
+            SdrCustomShapeGeometryItem aGeometryItem(mrSdrObjCustomShape.GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ));
             css::beans::PropertyValue aPropVal;
             aPropVal.Name = "AdjustmentValues";
             aPropVal.Value <<= seqAdjustmentValues;
             aGeometryItem.SetPropertyValue( aPropVal );
-            pCustomShapeObj->SetMergedItem( aGeometryItem );
+            mrSdrObjCustomShape.SetMergedItem( aGeometryItem );
             bRetValue = true;
         }
     }
@@ -1610,7 +1606,7 @@ void EnhancedCustomShape2d::CreateSubPath(
                             bIsDefaultPath = true;
 
                         OUString sShpType;
-                        SdrCustomShapeGeometryItem& rGeometryItem = const_cast<SdrCustomShapeGeometryItem&>(pCustomShapeObj->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ));
+                        SdrCustomShapeGeometryItem& rGeometryItem = const_cast<SdrCustomShapeGeometryItem&>(mrSdrObjCustomShape.GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ));
                         Any* pAny = rGeometryItem.GetPropertyValueByName( "Type" );
                         if ( pAny )
                             *pAny >>= sShpType;
@@ -1642,7 +1638,7 @@ void EnhancedCustomShape2d::CreateSubPath(
                             aPropVal.Name = "ViewBox";
                             aPropVal.Value <<= aViewBox;
                             rGeometryItem.SetPropertyValue( aPropVal );
-                            pCustomShapeObj->SetMergedItem( rGeometryItem );
+                            mrSdrObjCustomShape.SetMergedItem( rGeometryItem );
                         }else{
                             _aCenter = GetPoint( seqCoordinates[ rSrcPt ], true, true );
                             GetParameter( fWidth,  seqCoordinates[ rSrcPt + 1 ].First, true, false);
@@ -2257,7 +2253,7 @@ SdrObject* EnhancedCustomShape2d::CreatePathObj( bool bLineGeometryNeededOnly )
 
     if ( !vObjectList.empty() )
     {
-        const SfxItemSet& rCustomShapeSet(pCustomShapeObj->GetMergedItemSet());
+        const SfxItemSet& rCustomShapeSet(mrSdrObjCustomShape.GetMergedItemSet());
         const sal_uInt32 nColorCount(nColorData >> 28);
         sal_uInt32 nColorIndex(0);
 
@@ -2325,10 +2321,7 @@ SdrObject* EnhancedCustomShape2d::CreatePathObj( bool bLineGeometryNeededOnly )
                     // to define that all helper geometites defined here (SdrObjects currently)
                     // will use the same FillGeometryDefinition (from the referenced SdrObjCustomShape).
                     // This will all same-filled objects look like filled smoothly with the same style.
-                    if(pCustomShapeObj)
-                    {
-                        pObj->setFillGeometryDefiningShape(pCustomShapeObj);
-                    }
+                    pObj->setFillGeometryDefiningShape(&mrSdrObjCustomShape);
                 }
             }
 

@@ -729,8 +729,12 @@ ShapeExport& ShapeExport::WriteCustomShape( const Reference< XShape >& xShape )
     OUString sShapeType;
     ShapeFlag nMirrorFlags = ShapeFlag::NONE;
     MSO_SPT eShapeType = EscherPropertyContainer::GetCustomShapeType( xShape, nMirrorFlags, sShapeType );
-    SdrObjCustomShape* pShape = static_cast<SdrObjCustomShape*>( GetSdrObjectFromXShape( xShape ) );
-    bool bIsDefaultObject = EscherPropertyContainer::IsDefaultObject( pShape, eShapeType );
+    OSL_ENSURE(nullptr != dynamic_cast< SdrObjCustomShape* >(GetSdrObjectFromXShape(xShape)), "Not a SdrObjCustomShape (!)");
+    SdrObjCustomShape& rSdrObjCustomShape(static_cast< SdrObjCustomShape& >(*GetSdrObjectFromXShape(xShape)));
+    const bool bIsDefaultObject(
+        EscherPropertyContainer::IsDefaultObject(
+            rSdrObjCustomShape,
+            eShapeType));
     const char* sPresetShape = msfilter::util::GetOOXMLPresetGeometry( USS( sShapeType ) );
     SAL_INFO("oox.shape", "custom shape type: " << sShapeType << " ==> " << sPresetShape);
     Sequence< PropertyValue > aGeometrySeq;
@@ -845,10 +849,10 @@ ShapeExport& ShapeExport::WriteCustomShape( const Reference< XShape >& xShape )
     else if( bHasHandles )
         bCustGeom = true;
 
-    if (bHasHandles && bCustGeom && pShape)
+    if (bHasHandles && bCustGeom)
     {
         WriteShapeTransformation( xShape, XML_a, bFlipH, bFlipV, false, true );// do not flip, polypolygon coordinates are flipped already
-        tools::PolyPolygon aPolyPolygon( pShape->GetLineGeometry(true) );
+        tools::PolyPolygon aPolyPolygon( rSdrObjCustomShape.GetLineGeometry(true) );
         sal_Int32 nRotation = 0;
         // The RotateAngle property's value is independent from any flipping, and that's exactly what we need here.
         uno::Reference<beans::XPropertySet> xPropertySet(xShape, uno::UNO_QUERY);
@@ -864,7 +868,7 @@ ShapeExport& ShapeExport::WriteCustomShape( const Reference< XShape >& xShape )
     else if (bCustGeom)
     {
         WriteShapeTransformation( xShape, XML_a, bFlipH, bFlipV );
-        bool bSuccess = WriteCustomGeometry( xShape, pShape );
+        bool bSuccess = WriteCustomGeometry(xShape, rSdrObjCustomShape);
         if (!bSuccess)
             WritePresetShape( sPresetShape );
     }

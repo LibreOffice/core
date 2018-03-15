@@ -48,26 +48,41 @@ void SAL_CALL EnhancedCustomShapeHandle::release() throw()
 // XCustomShapeHandle
 css::awt::Point SAL_CALL EnhancedCustomShapeHandle::getPosition()
 {
-    SdrObject* pSdrObjCustomShape( GetSdrObjectFromXShape( mxCustomShape ) );
-    if ( !pSdrObjCustomShape )
-        throw css::uno::RuntimeException();
+    const bool bIsSdrObjCustomShape(nullptr != dynamic_cast< SdrObjCustomShape* >(GetSdrObjectFromXShape(mxCustomShape)));
 
-    Point aPosition;
-    EnhancedCustomShape2d aCustomShape2d( pSdrObjCustomShape );
-    if ( !aCustomShape2d.GetHandlePosition( mnIndex, aPosition ) )
+    if(!bIsSdrObjCustomShape)
+    {
         throw css::uno::RuntimeException();
+    }
+
+    SdrObjCustomShape& rSdrObjCustomShape(static_cast< SdrObjCustomShape& >(*GetSdrObjectFromXShape(mxCustomShape)));
+    Point aPosition;
+    EnhancedCustomShape2d aCustomShape2d(rSdrObjCustomShape);
+
+    if(!aCustomShape2d.GetHandlePosition(mnIndex, aPosition))
+    {
+        throw css::uno::RuntimeException();
+    }
+
     return css::awt::Point( aPosition.X(), aPosition.Y() );
 }
 
 void SAL_CALL EnhancedCustomShapeHandle::setControllerPosition( const css::awt::Point& aPnt )
 {
-    SdrObject* pSdrObjCustomShape( GetSdrObjectFromXShape( mxCustomShape ) );
-    if ( !pSdrObjCustomShape )
-        throw css::uno::RuntimeException();
+    const bool bIsSdrObjCustomShape(nullptr != dynamic_cast< SdrObjCustomShape* >(GetSdrObjectFromXShape(mxCustomShape)));
 
-    EnhancedCustomShape2d aCustomShape2d( pSdrObjCustomShape );
-    if ( !aCustomShape2d.SetHandleControllerPosition( mnIndex, aPnt ) )
+    if(!bIsSdrObjCustomShape)
+    {
         throw css::uno::RuntimeException();
+    }
+
+    SdrObjCustomShape& rSdrObjCustomShape(static_cast< SdrObjCustomShape& >(*GetSdrObjectFromXShape(mxCustomShape)));
+    EnhancedCustomShape2d aCustomShape2d(rSdrObjCustomShape);
+
+    if(!aCustomShape2d.SetHandleControllerPosition(mnIndex, aPnt))
+    {
+        throw css::uno::RuntimeException();
+    }
 }
 
 // XInitialization

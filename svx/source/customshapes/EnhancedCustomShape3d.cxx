@@ -175,8 +175,10 @@ drawing::Direction3D GetDirection3D( const SdrCustomShapeGeometryItem& rItem, co
 
 }
 
-EnhancedCustomShape3d::Transformation2D::Transformation2D( const SdrObject* pCustomShape, const double *pM )
-    : aCenter( pCustomShape->GetSnapRect().Center() )
+EnhancedCustomShape3d::Transformation2D::Transformation2D(
+    const SdrObjCustomShape& rSdrObjCustomShape,
+    const double *pM)
+:   aCenter(rSdrObjCustomShape.GetSnapRect().Center())
     , eProjectionMode( drawing::ProjectionMode_PARALLEL )
     , fSkewAngle(0.0)
     , fSkew(0.0)
@@ -185,7 +187,7 @@ EnhancedCustomShape3d::Transformation2D::Transformation2D( const SdrObject* pCus
     , fOriginY(0.0)
     , pMap( pM )
 {
-    const SdrCustomShapeGeometryItem& rGeometryItem = pCustomShape->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY );
+    const SdrCustomShapeGeometryItem& rGeometryItem(rSdrObjCustomShape.GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ));
     const Any* pAny = rGeometryItem.GetPropertyValueByName( "Extrusion", "ProjectionMode" );
     if ( pAny )
         *pAny >>= eProjectionMode;
@@ -195,8 +197,8 @@ EnhancedCustomShape3d::Transformation2D::Transformation2D( const SdrObject* pCus
     else
     {
         GetOrigin( rGeometryItem, fOriginX, fOriginY );
-        fOriginX = fOriginX * pCustomShape->GetLogicRect().GetWidth();
-        fOriginY = fOriginY * pCustomShape->GetLogicRect().GetHeight();
+        fOriginX = fOriginX * rSdrObjCustomShape.GetLogicRect().GetWidth();
+        fOriginY = fOriginY * rSdrObjCustomShape.GetLogicRect().GetHeight();
 
         drawing::Position3D aViewPointDefault( 3472, -3472, 25000 );
         drawing::Position3D aViewPoint( GetPosition3D( rGeometryItem, "ViewPoint", aViewPointDefault, pMap ) );
@@ -249,11 +251,13 @@ bool EnhancedCustomShape3d::Transformation2D::IsParallel() const
     return eProjectionMode == css::drawing::ProjectionMode_PARALLEL;
 }
 
-SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, const SdrObject* pCustomShape )
+SdrObject* EnhancedCustomShape3d::Create3DObject(
+    const SdrObject* pShape2d,
+    const SdrObjCustomShape& rSdrObjCustomShape)
 {
     SdrObject*  pRet = nullptr;
-    SdrModel*   pModel = pCustomShape->GetModel();
-    const SdrCustomShapeGeometryItem& rGeometryItem = pCustomShape->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY );
+    SdrModel*   pModel = rSdrObjCustomShape.GetModel();
+    const SdrCustomShapeGeometryItem& rGeometryItem = rSdrObjCustomShape.GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY );
 
     double      fMap, *pMap = nullptr;
     if ( pModel )
@@ -274,17 +278,17 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
     }
     if ( GetBool( rGeometryItem, "Extrusion", false ) )
     {
-        bool bIsMirroredX = static_cast<const SdrObjCustomShape*>(pCustomShape)->IsMirroredX();
-        bool bIsMirroredY = static_cast<const SdrObjCustomShape*>(pCustomShape)->IsMirroredY();
-        tools::Rectangle aSnapRect( pCustomShape->GetLogicRect() );
-        long nObjectRotation = pCustomShape->GetRotateAngle();
+        bool bIsMirroredX(rSdrObjCustomShape.IsMirroredX());
+        bool bIsMirroredY(rSdrObjCustomShape.IsMirroredY());
+        tools::Rectangle aSnapRect(rSdrObjCustomShape.GetLogicRect());
+        long nObjectRotation(rSdrObjCustomShape.GetRotateAngle());
         if ( nObjectRotation )
         {
             double a = ( 36000 - nObjectRotation ) * nPi180;
             long dx = aSnapRect.Right() - aSnapRect.Left();
             long dy = aSnapRect.Bottom()- aSnapRect.Top();
             Point aP( aSnapRect.TopLeft() );
-            RotatePoint( aP, pCustomShape->GetSnapRect().Center(), sin( a ), cos( a ) );
+            RotatePoint( aP, rSdrObjCustomShape.GetSnapRect().Center(), sin( a ), cos( a ) );
             aSnapRect.SetLeft( aP.X() );
             aSnapRect.SetTop( aP.Y() );
             aSnapRect.SetRight( aSnapRect.Left() + dx );
@@ -292,7 +296,7 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
         }
         Point aCenter( aSnapRect.Center() );
 
-        SfxItemSet aSet( pCustomShape->GetMergedItemSet() );
+        SfxItemSet aSet( rSdrObjCustomShape.GetMergedItemSet() );
 
         //SJ: vertical writing is not required, by removing this item no outliner is created
         aSet.ClearItem( SDRATTR_TEXTDIRECTION );
@@ -530,7 +534,7 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
                     p3DObj->NbcSetLayer( pShape2d->GetLayer() );
                     p3DObj->SetMergedItemSet( aLocalSet );
                     if ( bUseExtrusionColor )
-                        p3DObj->SetMergedItem( XFillColorItem( "", pCustomShape->GetMergedItem( XATTR_SECONDARYFILLCOLOR ).GetColorValue() ) );
+                        p3DObj->SetMergedItem( XFillColorItem( "", rSdrObjCustomShape.GetMergedItem( XATTR_SECONDARYFILLCOLOR ).GetColorValue() ) );
                     p3DObj->SetMergedItem( XFillStyleItem( drawing::FillStyle_SOLID ) );
                     p3DObj->SetMergedItem( Svx3DCloseFrontItem( false ) );
                     p3DObj->SetMergedItem( Svx3DCloseBackItem( false ) );
@@ -599,7 +603,7 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
 
             double fXRotate, fYRotate;
             GetRotateAngle( rGeometryItem, fXRotate, fYRotate );
-            double fZRotate = static_cast<const SdrObjCustomShape*>(pCustomShape)->GetObjectRotation() * F_PI180;
+            double fZRotate(rSdrObjCustomShape.GetObjectRotation() * F_PI180);
             if ( fZRotate != 0.0 )
                 aNewTransform.rotate( 0.0, 0.0, fZRotate );
             if ( bIsMirroredX )
@@ -717,7 +721,12 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
             pScene->GetProperties().SetObjectItem( makeSvx3DMaterialSpecularItem( aSpecularCol ) );
             pScene->GetProperties().SetObjectItem( makeSvx3DMaterialSpecularIntensityItem( static_cast<sal_uInt16>(nIntensity) ) );
 
-            pScene->SetLogicRect( CalculateNewSnapRect( pCustomShape, aSnapRect, aBoundRect2d, pMap ) );
+            pScene->SetLogicRect(
+                CalculateNewSnapRect(
+                    rSdrObjCustomShape,
+                    aSnapRect,
+                    aBoundRect2d,
+                    pMap));
 
             // removing placeholder objects
             for (std::vector< E3dCompoundObject* >::iterator aObjectListIter( aPlaceholderObjectList.begin() ); aObjectListIter != aPlaceholderObjectList.end(); )
@@ -732,9 +741,13 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
     return pRet;
 }
 
-tools::Rectangle EnhancedCustomShape3d::CalculateNewSnapRect( const SdrObject* pCustomShape, const tools::Rectangle& rSnapRect, const tools::Rectangle& rBoundRect, const double* pMap )
+tools::Rectangle EnhancedCustomShape3d::CalculateNewSnapRect(
+    const SdrObjCustomShape& rSdrObjCustomShape,
+    const tools::Rectangle& rSnapRect,
+    const tools::Rectangle& rBoundRect,
+    const double* pMap)
 {
-    const SdrCustomShapeGeometryItem& rGeometryItem = pCustomShape->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY );
+    const SdrCustomShapeGeometryItem& rGeometryItem(rSdrObjCustomShape.GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ));
     const Point aCenter( rSnapRect.Center() );
     double fExtrusionBackward, fExtrusionForward;
     GetExtrusionDepth( rGeometryItem, pMap, fExtrusionBackward, fExtrusionForward );
@@ -759,16 +772,16 @@ tools::Rectangle EnhancedCustomShape3d::CalculateNewSnapRect( const SdrObject* p
 
     double fXRotate, fYRotate;
     GetRotateAngle( rGeometryItem, fXRotate, fYRotate );
-    double fZRotate = - static_cast<const SdrObjCustomShape*>(pCustomShape)->GetObjectRotation() * F_PI180;
+    double fZRotate(rSdrObjCustomShape.GetObjectRotation() * F_PI180);
 
     // rotating bound volume
     basegfx::B3DHomMatrix aMatrix;
     aMatrix.translate(-aRotationCenter.DirectionX, -aRotationCenter.DirectionY, -aRotationCenter.DirectionZ);
     if ( fZRotate != 0.0 )
         aMatrix.rotate( 0.0, 0.0, fZRotate );
-    if ( static_cast<const SdrObjCustomShape*>(pCustomShape)->IsMirroredX() )
+    if (rSdrObjCustomShape.IsMirroredX())
         aMatrix.scale( -1.0, 1, 1 );
-    if ( static_cast<const SdrObjCustomShape*>(pCustomShape)->IsMirroredY() )
+    if (rSdrObjCustomShape.IsMirroredY())
         aMatrix.scale( 1, -1.0, 1 );
     if( fYRotate != 0.0 )
         aMatrix.rotate( 0.0, fYRotate, 0.0 );
@@ -777,7 +790,10 @@ tools::Rectangle EnhancedCustomShape3d::CalculateNewSnapRect( const SdrObject* p
     aMatrix.translate(aRotationCenter.DirectionX, aRotationCenter.DirectionY, aRotationCenter.DirectionZ);
     aBoundVolume.transform(aMatrix);
 
-    Transformation2D aTransformation2D( pCustomShape, pMap );
+    Transformation2D aTransformation2D(
+        rSdrObjCustomShape,
+        pMap);
+
     if ( aTransformation2D.IsParallel() )
         aBoundVolume = aTransformation2D.ApplySkewSettings( aBoundVolume );
 

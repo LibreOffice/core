@@ -72,7 +72,7 @@ namespace o3tl
 
 class SVX_DLLPUBLIC EnhancedCustomShape2d : public SfxItemSet
 {
-        SdrObject*                  pCustomShapeObj;
+        SdrObjCustomShape&          mrSdrObjCustomShape;
         MSO_SPT                     eSpType;
 
         sal_Int32                   nCoordLeft;
@@ -189,7 +189,7 @@ class SVX_DLLPUBLIC EnhancedCustomShape2d : public SfxItemSet
         bool                    GetHandlePosition( const sal_uInt32 nIndex, Point& rReturnPosition ) const;
         bool                    SetHandleControllerPosition( const sal_uInt32 nIndex, const css::awt::Point& rPosition );
 
-        EnhancedCustomShape2d( SdrObject* pSdrObjCustomShape );
+        EnhancedCustomShape2d(SdrObjCustomShape& rSdrObjCustomShape);
         virtual ~EnhancedCustomShape2d() override;
 
         SAL_DLLPRIVATE double   GetEnumFunc( const EnhancedCustomShape::ExpressionFunct eVal ) const;
