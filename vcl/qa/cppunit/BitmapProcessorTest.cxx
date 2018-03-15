@@ -23,6 +23,7 @@
 #include <config_features.h>
 
 #include <BitmapProcessor.hxx>
+#include <bitmapwriteaccess.hxx>
 
 
 namespace
@@ -41,7 +42,7 @@ void BitmapProcessorTest::testDisabledImage()
 {
     Bitmap aBitmap(Size(3, 3), 24);
     {
-        Bitmap::ScopedWriteAccess pWriteAccess(aBitmap);
+        BitmapScopedWriteAccess pWriteAccess(aBitmap);
         pWriteAccess->Erase(Color(0x00, 0x11, 0x22, 0x33));
     }
     BitmapEx aBitmapEx(aBitmap);

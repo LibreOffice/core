@@ -30,6 +30,7 @@
 #include <vcl/bitmapex.hxx>
 #include <vcl/bitmapaccess.hxx>
 #include <vcl/outdev.hxx>
+#include <bitmapwriteaccess.hxx>
 #include <memory>
 
 
@@ -955,7 +956,7 @@ bool ImplReadDIBBody(SvStream& rIStm, Bitmap& rBmp, AlphaMask* pBmpAlpha, sal_uL
 
     const Size aSizePixel(aHeader.nWidth, aHeader.nHeight);
     AlphaMask aNewBmpAlpha;
-    AlphaMask::ScopedWriteAccess pAccAlpha;
+    AlphaScopedWriteAccess pAccAlpha;
     bool bAlphaPossible(pBmpAlpha && aHeader.nBitCount == 32);
 
     if (bAlphaPossible)
@@ -977,7 +978,7 @@ bool ImplReadDIBBody(SvStream& rIStm, Bitmap& rBmp, AlphaMask* pBmpAlpha, sal_uL
     if (bAlphaPossible)
     {
         aNewBmpAlpha = AlphaMask(aSizePixel);
-        pAccAlpha = AlphaMask::ScopedWriteAccess(aNewBmpAlpha);
+        pAccAlpha = AlphaScopedWriteAccess(aNewBmpAlpha);
     }
 
     sal_uInt16 nBitCount(discretizeBitcount(aHeader.nBitCount));
@@ -994,7 +995,7 @@ bool ImplReadDIBBody(SvStream& rIStm, Bitmap& rBmp, AlphaMask* pBmpAlpha, sal_uL
     }
 
     Bitmap aNewBmp(aSizePixel, nBitCount, pPal);
-    Bitmap::ScopedWriteAccess pAcc(aNewBmp);
+    BitmapScopedWriteAccess pAcc(aNewBmp);
     if (!pAcc)
         return false;
     if (pAcc->Width() != aHeader.nWidth || pAcc->Height() != aHeader.nHeight)

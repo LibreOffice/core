@@ -12,6 +12,7 @@
 #include <basegfx/color/bcolortools.hxx>
 
 #include <BitmapProcessor.hxx>
+#include <bitmapwriteaccess.hxx>
 
 BitmapEx BitmapProcessor::createLightImage(const BitmapEx& rBitmapEx)
 {
@@ -21,7 +22,7 @@ BitmapEx BitmapProcessor::createLightImage(const BitmapEx& rBitmapEx)
     Bitmap aDarkBitmap(aSize, 24);
 
     Bitmap::ScopedReadAccess pRead(aBitmap);
-    Bitmap::ScopedWriteAccess pWrite(aDarkBitmap);
+    BitmapScopedWriteAccess pWrite(aDarkBitmap);
 
     if (pRead && pWrite)
     {
@@ -79,8 +80,8 @@ BitmapEx BitmapProcessor::createDisabledImage(const BitmapEx& rBitmapEx)
     Bitmap aBitmap(rBitmapEx.GetBitmap());
     Bitmap::ScopedReadAccess pRead(aBitmap);
 
-    Bitmap::ScopedWriteAccess pGrey(aGrey);
-    AlphaMask::ScopedWriteAccess pGreyAlpha(aGreyAlpha);
+    BitmapScopedWriteAccess pGrey(aGrey);
+    AlphaScopedWriteAccess pGreyAlpha(aGreyAlpha);
 
     BitmapEx aReturnBitmap;
 
@@ -148,7 +149,7 @@ BitmapEx BitmapProcessor::createDisabledImage(const BitmapEx& rBitmapEx)
 void BitmapProcessor::colorizeImage(BitmapEx const & rBitmapEx, Color aColor)
 {
     Bitmap aBitmap = rBitmapEx.GetBitmap();
-    Bitmap::ScopedWriteAccess pWriteAccess(aBitmap);
+    BitmapScopedWriteAccess pWriteAccess(aBitmap);
 
     if (!pWriteAccess)
         return;

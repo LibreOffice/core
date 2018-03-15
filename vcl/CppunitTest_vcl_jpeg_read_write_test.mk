@@ -15,6 +15,11 @@ $(eval $(call gb_CppunitTest_add_exception_objects,vcl_jpeg_read_write_test, \
 
 $(eval $(call gb_CppunitTest_use_external,vcl_jpeg_read_write_test,boost_headers))
 
+$(eval $(call gb_CppunitTest_set_include,vcl_jpeg_read_write_test,\
+    $$(INCLUDE) \
+    -I$(SRCDIR)/vcl/inc \
+))
+
 $(eval $(call gb_CppunitTest_use_libraries,vcl_jpeg_read_write_test, \
 	comphelper \
 	cppu \

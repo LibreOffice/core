@@ -11,6 +11,7 @@
 #include <test/outputdevice.hxx>
 #include <vcl/bitmapex.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
+#include <bitmapwriteaccess.hxx>
 
 namespace vcl {
 namespace test {
@@ -20,7 +21,7 @@ Bitmap OutputDeviceTestBitmap::setupDrawTransformedBitmap()
     Size aBitmapSize(9, 9);
     Bitmap aBitmap(aBitmapSize, 24);
     {
-        Bitmap::ScopedWriteAccess aWriteAccess(aBitmap);
+        BitmapScopedWriteAccess aWriteAccess(aBitmap);
         aWriteAccess->Erase(constFillColor);
         aWriteAccess->SetLineColor(COL_YELLOW);
         aWriteAccess->DrawRect(tools::Rectangle(0, 0,  8, 8));
@@ -45,7 +46,7 @@ Bitmap OutputDeviceTestBitmap::setupDrawBitmap()
     Size aBitmapSize(9, 9);
     Bitmap aBitmap(aBitmapSize, 24);
     {
-        Bitmap::ScopedWriteAccess aWriteAccess(aBitmap);
+        BitmapScopedWriteAccess aWriteAccess(aBitmap);
         aWriteAccess->Erase(constFillColor);
         aWriteAccess->SetLineColor(COL_YELLOW);
         aWriteAccess->DrawRect(tools::Rectangle(0, 0,  8, 8));
@@ -67,7 +68,7 @@ Bitmap OutputDeviceTestBitmap::setupDrawBitmapExWithAlpha()
     Size aBitmapSize(9, 9);
     Bitmap aBitmap(aBitmapSize, 24);
     {
-        Bitmap::ScopedWriteAccess aWriteAccess(aBitmap);
+        BitmapScopedWriteAccess aWriteAccess(aBitmap);
         aWriteAccess->Erase(COL_WHITE);
         aWriteAccess->SetLineColor(Color(0xFF, 0xFF, 0x00));
         aWriteAccess->DrawRect(tools::Rectangle(0, 0, 8, 8));
@@ -76,7 +77,7 @@ Bitmap OutputDeviceTestBitmap::setupDrawBitmapExWithAlpha()
 
     AlphaMask aAlpha(aBitmapSize);
     {
-        AlphaMask::ScopedWriteAccess aWriteAccess(aAlpha);
+        AlphaScopedWriteAccess aWriteAccess(aAlpha);
         aWriteAccess->Erase(COL_WHITE);
         aWriteAccess->SetLineColor(Color(0x44, 0x44, 0x44));
         aWriteAccess->DrawRect(tools::Rectangle(0, 0, 8, 8));
@@ -97,7 +98,7 @@ Bitmap OutputDeviceTestBitmap::setupDrawMask()
     Size aBitmapSize(9, 9);
     Bitmap aBitmap(aBitmapSize, 24);
     {
-        Bitmap::ScopedWriteAccess aWriteAccess(aBitmap);
+        BitmapScopedWriteAccess aWriteAccess(aBitmap);
         aWriteAccess->Erase(COL_WHITE);
         aWriteAccess->SetLineColor(COL_BLACK);
         aWriteAccess->DrawRect(tools::Rectangle(0, 0,  8, 8));

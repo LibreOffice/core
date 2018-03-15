@@ -9,6 +9,7 @@
  */
 
 #include <test/outputdevice.hxx>
+#include <bitmapwriteaccess.hxx>
 
 namespace vcl {
 namespace test {
@@ -25,7 +26,7 @@ int deltaColor(BitmapColor aColor1, BitmapColor aColor2)
     return std::max(std::max(deltaR, deltaG), deltaB);
 }
 
-void checkValue(Bitmap::ScopedWriteAccess& pAccess, int x, int y, Color aExpected,
+void checkValue(BitmapScopedWriteAccess& pAccess, int x, int y, Color aExpected,
                       int& nNumberOfQuirks, int& nNumberOfErrors, bool bQuirkMode, int nColorDeltaThresh = 0)
 {
     const bool bColorize = false;
@@ -53,7 +54,7 @@ void checkValue(Bitmap::ScopedWriteAccess& pAccess, int x, int y, Color aExpecte
 
 TestResult checkRect(Bitmap& rBitmap, int aLayerNumber, Color aExpectedColor)
 {
-    Bitmap::ScopedWriteAccess pAccess(rBitmap);
+    BitmapScopedWriteAccess pAccess(rBitmap);
     long nHeight = pAccess->Height();
     long nWidth = pAccess->Width();
 
@@ -92,7 +93,7 @@ TestResult checkRect(Bitmap& rBitmap, int aLayerNumber, Color aExpectedColor)
 
 TestResult checkHorizontalVerticalDiagonalLines(Bitmap& rBitmap, Color aExpectedColor, int nColorThresh)
 {
-    Bitmap::ScopedWriteAccess pAccess(rBitmap);
+    BitmapScopedWriteAccess pAccess(rBitmap);
     long nWidth  = pAccess->Width();
     long nHeight = pAccess->Height();
 
@@ -164,7 +165,7 @@ TestResult checkHorizontalVerticalDiagonalLines(Bitmap& rBitmap, Color aExpected
 
 TestResult checkDiamondLine(Bitmap& rBitmap, int aLayerNumber, Color aExpectedColor)
 {
-    Bitmap::ScopedWriteAccess pAccess(rBitmap);
+    BitmapScopedWriteAccess pAccess(rBitmap);
     long nHeight = pAccess->Height();
     long nWidth = pAccess->Width();
 

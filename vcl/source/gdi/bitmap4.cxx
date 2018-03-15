@@ -23,6 +23,7 @@
 #include <vcl/bitmapaccess.hxx>
 #include <vcl/bitmap.hxx>
 #include <impbmp.hxx>
+#include <bitmapwriteaccess.hxx>
 
 #define S2(a,b)             { long t; if( ( t = b - a ) < 0 ) { a += t; b -= t; } }
 #define MN3(a,b,c)          S2(a,b); S2(a,c);
@@ -121,7 +122,7 @@ bool Bitmap::ImplConvolute3( const long* pMatrix )
     if( pReadAcc )
     {
         Bitmap              aNewBmp( GetSizePixel(), 24 );
-        ScopedWriteAccess   pWriteAcc(aNewBmp);
+        BitmapScopedWriteAccess pWriteAcc(aNewBmp);
 
         if( pWriteAcc )
         {
@@ -279,7 +280,7 @@ bool Bitmap::ImplMedianFilter()
     if( pReadAcc )
     {
         Bitmap              aNewBmp( GetSizePixel(), 24 );
-        ScopedWriteAccess   pWriteAcc(aNewBmp);
+        BitmapScopedWriteAccess pWriteAcc(aNewBmp);
 
         if( pWriteAcc )
         {
@@ -444,7 +445,7 @@ bool Bitmap::ImplSobelGrey()
         if( pReadAcc )
         {
             Bitmap              aNewBmp( GetSizePixel(), 8, &pReadAcc->GetPalette() );
-            ScopedWriteAccess   pWriteAcc(aNewBmp);
+            BitmapScopedWriteAccess pWriteAcc(aNewBmp);
 
             if( pWriteAcc )
             {
@@ -571,7 +572,7 @@ bool Bitmap::ImplEmbossGrey( const BmpFilterParam* pFilterParam )
         if( pReadAcc )
         {
             Bitmap              aNewBmp( GetSizePixel(), 8, &pReadAcc->GetPalette() );
-            ScopedWriteAccess   pWriteAcc(aNewBmp);
+            BitmapScopedWriteAccess pWriteAcc(aNewBmp);
 
             if( pWriteAcc )
             {
@@ -674,7 +675,7 @@ bool Bitmap::ImplEmbossGrey( const BmpFilterParam* pFilterParam )
 bool Bitmap::ImplSolarize( const BmpFilterParam* pFilterParam )
 {
     bool                bRet = false;
-    ScopedWriteAccess   pWriteAcc(*this);
+    BitmapScopedWriteAccess pWriteAcc(*this);
 
     if( pWriteAcc )
     {
@@ -743,7 +744,7 @@ bool Bitmap::ImplSepia( const BmpFilterParam* pFilterParam )
         }
 
         Bitmap              aNewBmp( GetSizePixel(), 8, &aSepiaPal );
-        ScopedWriteAccess   pWriteAcc(aNewBmp);
+        BitmapScopedWriteAccess pWriteAcc(aNewBmp);
 
         if( pWriteAcc )
         {
@@ -1007,7 +1008,7 @@ bool Bitmap::ImplPopArt()
     {
         bRet = false;
 
-        ScopedWriteAccess pWriteAcc(*this);
+        BitmapScopedWriteAccess pWriteAcc(*this);
 
         if( pWriteAcc )
         {
@@ -1216,7 +1217,7 @@ bool Bitmap::ImplSeparableUnsharpenFilter(const double radius) {
 
     ScopedReadAccess pReadAccBlur(aBlur);
     ScopedReadAccess pReadAcc(*this);
-    ScopedWriteAccess pWriteAcc(aResultBitmap);
+    BitmapScopedWriteAccess pWriteAcc(aResultBitmap);
 
     BitmapColor aColor, aColorBlur;
 
@@ -1252,7 +1253,7 @@ bool Bitmap::ImplDuotoneFilter( const sal_uLong nColorOne, const sal_uLong nColo
 
     Bitmap aResultBitmap( GetSizePixel(), 24);
     ScopedReadAccess pReadAcc(*this);
-    ScopedWriteAccess pWriteAcc(aResultBitmap);
+    BitmapScopedWriteAccess pWriteAcc(aResultBitmap);
     const BitmapColor aColorOne( static_cast< sal_uInt8 >( nColorOne >> 16 ), static_cast< sal_uInt8 >( nColorOne >> 8 ), static_cast< sal_uInt8 >( nColorOne ) );
     const BitmapColor aColorTwo( static_cast< sal_uInt8 >( nColorTwo >> 16 ), static_cast< sal_uInt8 >( nColorTwo >> 8 ), static_cast< sal_uInt8 >( nColorTwo ) );
 

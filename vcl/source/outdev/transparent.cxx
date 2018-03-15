@@ -34,6 +34,7 @@
 
 #include <outdata.hxx>
 #include <salgdi.hxx>
+#include <bitmapwriteaccess.hxx>
 
 namespace
 {
@@ -468,7 +469,7 @@ void OutputDevice::EmulateDrawTransparent ( const tools::PolyPolygon& rPolyPoly,
                 // #107766# check for non-empty bitmaps before accessing them
                 if( !!aPaint && !!aPolyMask )
                 {
-                    Bitmap::ScopedWriteAccess pW(aPaint);
+                    BitmapScopedWriteAccess pW(aPaint);
                     Bitmap::ScopedReadAccess pR(aPolyMask);
 
                     if( pW && pR )

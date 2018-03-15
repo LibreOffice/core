@@ -18,6 +18,7 @@
  */
 
 #include <vcl/bitmapaccess.hxx>
+#include <bitmapwriteaccess.hxx>
 #include <vcl/graph.hxx>
 #include "rgbtable.hxx"
 #include "xpmread.hxx"
@@ -57,9 +58,9 @@ private:
 
     SvStream&                   mrIStm;
     Bitmap                      maBmp;
-    Bitmap::ScopedWriteAccess   mpAcc;
+    BitmapScopedWriteAccess     mpAcc;
     Bitmap                      maMaskBmp;
-    Bitmap::ScopedWriteAccess   mpMaskAcc;
+    BitmapScopedWriteAccess     mpMaskAcc;
     long                        mnLastPos;
 
     sal_uLong               mnWidth;
@@ -191,13 +192,13 @@ ReadState XPMReader::ReadXPM( Graphic& rGraphic )
                         nBits = 1;
 
                     maBmp = Bitmap( Size( mnWidth, mnHeight ), nBits );
-                    mpAcc = Bitmap::ScopedWriteAccess(maBmp);
+                    mpAcc = BitmapScopedWriteAccess(maBmp);
 
                     // mbTransparent is TRUE if at least one colour is transparent
                     if ( mbTransparent )
                     {
                         maMaskBmp = Bitmap( Size( mnWidth, mnHeight ), 1 );
-                        mpMaskAcc = Bitmap::ScopedWriteAccess(maMaskBmp);
+                        mpMaskAcc = BitmapScopedWriteAccess(maMaskBmp);
                         if ( !mpMaskAcc )
                             mbStatus = false;
                     }

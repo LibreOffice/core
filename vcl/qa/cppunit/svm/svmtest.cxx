@@ -14,6 +14,7 @@
 #include <vcl/metaact.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/bitmapaccess.hxx>
+#include <bitmapwriteaccess.hxx>
 
 using namespace css;
 
@@ -789,17 +790,17 @@ void SvmTest::testBitmaps()
 
     Bitmap aBitmap1(Size(4,4), 24);
     {
-        Bitmap::ScopedWriteAccess pAccess(aBitmap1);
+        BitmapScopedWriteAccess pAccess(aBitmap1);
         pAccess->Erase(COL_RED);
     }
     Bitmap aBitmap2(Size(4,4), 24);
     {
-        Bitmap::ScopedWriteAccess pAccess(aBitmap2);
+        BitmapScopedWriteAccess pAccess(aBitmap2);
         pAccess->Erase(COL_GREEN);
     }
     Bitmap aBitmap3(Size(4,4), 24);
     {
-        Bitmap::ScopedWriteAccess pAccess(aBitmap3);
+        BitmapScopedWriteAccess pAccess(aBitmap3);
         pAccess->Erase(COL_BLUE);
     }
     pVirtualDev->DrawBitmap(Point(1, 2), aBitmap1);
@@ -850,21 +851,21 @@ void SvmTest::testBitmapExs()
 
     Bitmap aBitmap1(Size(4,4), 24);
     {
-        Bitmap::ScopedWriteAccess pAccess(aBitmap1);
+        BitmapScopedWriteAccess pAccess(aBitmap1);
         pAccess->Erase(COL_RED);
     }
     BitmapEx aBitmapEx1(aBitmap1, COL_YELLOW);
 
     Bitmap aBitmap2(Size(4,4), 24);
     {
-        Bitmap::ScopedWriteAccess pAccess(aBitmap2);
+        BitmapScopedWriteAccess pAccess(aBitmap2);
         pAccess->Erase(COL_GREEN);
     }
     BitmapEx aBitmapEx2(aBitmap2, COL_YELLOW);
 
     Bitmap aBitmap3(Size(4,4), 24);
     {
-        Bitmap::ScopedWriteAccess pAccess(aBitmap3);
+        BitmapScopedWriteAccess pAccess(aBitmap3);
         pAccess->Erase(COL_BLUE);
     }
     BitmapEx aBitmapEx3(aBitmap3, COL_YELLOW);
@@ -906,17 +907,17 @@ void SvmTest::testMasks()
 
     Bitmap aBitmap1(Size(4,4), 24);
     {
-        Bitmap::ScopedWriteAccess pAccess(aBitmap1);
+        BitmapScopedWriteAccess pAccess(aBitmap1);
         pAccess->Erase(COL_RED);
     }
     Bitmap aBitmap2(Size(4,4), 24);
     {
-        Bitmap::ScopedWriteAccess pAccess(aBitmap2);
+        BitmapScopedWriteAccess pAccess(aBitmap2);
         pAccess->Erase(COL_GREEN);
     }
     Bitmap aBitmap3(Size(4,4), 24);
     {
-        Bitmap::ScopedWriteAccess pAccess(aBitmap3);
+        BitmapScopedWriteAccess pAccess(aBitmap3);
         pAccess->Erase(COL_BLUE);
     }
 

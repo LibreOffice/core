@@ -68,8 +68,6 @@ public:
 
     typedef vcl::ScopedBitmapAccess< BitmapReadAccess, AlphaMask, &AlphaMask::AcquireReadAccess >
         ScopedReadAccess;
-    typedef vcl::ScopedBitmapAccess< BitmapWriteAccess, AlphaMask, &AlphaMask::AcquireWriteAccess >
-        ScopedWriteAccess;
 
 private:
     friend class BitmapEx;

@@ -41,6 +41,7 @@
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <memory>
 #include <comphelper/lok.hxx>
+#include <bitmapwriteaccess.hxx>
 
 void OutputDevice::DrawBitmap( const Point& rDestPt, const Bitmap& rBitmap )
 {
@@ -997,7 +998,7 @@ void OutputDevice::DrawDeviceAlphaBitmapSlowPath(const Bitmap& rBitmap, const Al
         {
             LinearScaleContext aLinearContext(aDstRect, aBmpRect, aOutSize, nOffX, nOffY);
 
-            if (aLinearContext.blendBitmap( Bitmap::ScopedWriteAccess(aBmp).get(), pBitmapReadAccess.get(), pAlphaReadAccess.get(),
+            if (aLinearContext.blendBitmap( BitmapScopedWriteAccess(aBmp).get(), pBitmapReadAccess.get(), pAlphaReadAccess.get(),
                     nDstWidth, nDstHeight))
             {
                 aNewBitmap = aBmp;
@@ -1410,14 +1411,14 @@ Bitmap OutputDevice::BlendBitmapWithAlpha(
     mpAlphaVDev->EnableMapMode(false);
 
     Bitmap aAlphaBitmap( mpAlphaVDev->GetBitmap( aDstRect.TopLeft(), aDstRect.GetSize() ) );
-    Bitmap::ScopedWriteAccess pAlphaW(aAlphaBitmap);
+    BitmapScopedWriteAccess pAlphaW(aAlphaBitmap);
 
     if( GetBitCount() <= 8 )
     {
         Bitmap              aDither( aBmp.GetSizePixel(), 8 );
         BitmapColor         aIndex( 0 );
         Bitmap::ScopedReadAccess pB(aBmp);
-        Bitmap::ScopedWriteAccess pW(aDither);
+        BitmapScopedWriteAccess pW(aDither);
 
         if (pB && pP && pA && pW && pAlphaW)
         {
@@ -1456,7 +1457,7 @@ Bitmap OutputDevice::BlendBitmapWithAlpha(
     }
     else
     {
-        Bitmap::ScopedWriteAccess pB(aBmp);
+        BitmapScopedWriteAccess pB(aBmp);
         if (pB && pP && pA && pAlphaW)
         {
             for( nY = 0; nY < nDstHeight; nY++ )
@@ -1510,7 +1511,7 @@ Bitmap OutputDevice::BlendBitmap(
         Bitmap              aDither( aBmp.GetSizePixel(), 8 );
         BitmapColor         aIndex( 0 );
         Bitmap::ScopedReadAccess pB(aBmp);
-        Bitmap::ScopedWriteAccess pW(aDither);
+        BitmapScopedWriteAccess pW(aDither);
 
         if( pB && pP && pA && pW )
         {
@@ -1553,7 +1554,7 @@ Bitmap OutputDevice::BlendBitmap(
     }
     else
     {
-        Bitmap::ScopedWriteAccess pB(aBmp);
+        BitmapScopedWriteAccess pB(aBmp);
 
         bool bFastBlend = false;
         if( pP && pA && pB )
