@@ -61,6 +61,7 @@
 #include <com/sun/star/awt/XControl.hpp>
 #include <com/sun/star/awt/DialogProvider.hpp>
 #include <com/sun/star/document/XGraphicObjectResolver.hpp>
+#include <com/sun/star/document/XGraphicStorageHandler.hpp>
 
 #include <comphelper/documentconstants.hxx>
 #include <comphelper/enumhelper.hxx>
@@ -355,7 +356,7 @@ void lcl_uglyHackToStoreDialogeEmbedImages( const Reference< XStorageBasedLibrar
     Sequence< OUString > sLibraries = xDlgCont->getElementNames();
     Reference< XStorage > xTmpPic = xStorage->openStorageElement( "tempPictures", ElementModes::READWRITE  );
 
-    std::vector< OUString > vEmbedImgUrls;
+    std::vector<uno::Reference<graphic::XGraphic>> vxGraphicList;
     for ( sal_Int32 i=0; i < sLibraries.getLength(); ++i )
     {
         OUString sLibrary( sLibraries[ i ] );
@@ -374,21 +375,25 @@ void lcl_uglyHackToStoreDialogeEmbedImages( const Reference< XStorageBasedLibrar
 
                 Reference< css::awt::XControl > xDialog( xDlgPrv->createDialog( sDialogUrl ), UNO_QUERY );
                 Reference< XInterface > xModel( xDialog->getModel() );
-                GraphicObject::InspectForGraphicObjectImageURL( xModel, vEmbedImgUrls );
+                vcl::graphic::SearchForGraphics(xModel, vxGraphicList);
             }
         }
     }
     // if we have any image urls, make sure we copy the associated images into tempPictures
-    if ( !vEmbedImgUrls.empty() )
+    if (!vxGraphicList.empty())
     {
         // Export the images to the storage
-        Reference< XGraphicObjectResolver > xGraphicResolver = GraphicObjectResolver::createWithStorage(rxContext, xTmpPic);
-        if ( xGraphicResolver.is() )
+        uno::Reference<document::XGraphicObjectResolver> xGraphicResolver;
+        xGraphicResolver.set(GraphicObjectResolver::createWithStorage(rxContext, xTmpPic));
+        uno::Reference<document::XGraphicStorageHandler> xGraphicStorageHandler;
+        xGraphicStorageHandler.set(xGraphicResolver, uno::UNO_QUERY);
+        if (xGraphicStorageHandler.is())
         {
-            for ( const OUString& rURL : vEmbedImgUrls )
-                xGraphicResolver->resolveGraphicObjectURL( rURL );
+            for (uno::Reference<graphic::XGraphic> const & rxGraphic : vxGraphicList)
+            {
+                xGraphicStorageHandler->saveGraphic(rxGraphic);
+            }
         }
-
         // delete old 'Pictures' storage and copy the contents of tempPictures into xStorage
         xStorage->removeElement( sPictures );
         xTmpPic->copyElementTo( sPictures, xStorage, sPictures );

@@ -31,6 +31,7 @@
 #include <com/sun/star/resource/StringResourceWithStorage.hpp>
 #include <com/sun/star/resource/StringResourceWithLocation.hpp>
 #include <com/sun/star/document/GraphicObjectResolver.hpp>
+#include <com/sun/star/document/XGraphicStorageHandler.hpp>
 #include <dlgcont.hxx>
 #include <comphelper/fileformat.h>
 #include <comphelper/processfactory.hxx>
@@ -236,17 +237,21 @@ void SfxDialogLibraryContainer::storeLibrariesToStorage( const uno::Reference< e
                         mxContext->getServiceManager()->createInstanceWithContext("com.sun.star.awt.UnoControlDialogModel", mxContext),
                         UNO_QUERY );
                     ::xmlscript::importDialogModel( xInput, xDialogModel, mxContext, mxOwnerDocument );
-                    std::vector< OUString > vEmbeddedImageURLs;
-                    GraphicObject::InspectForGraphicObjectImageURL( Reference<XInterface>(xDialogModel, UNO_QUERY),  vEmbeddedImageURLs );
-                    if ( !vEmbeddedImageURLs.empty() )
+                    std::vector<uno::Reference<graphic::XGraphic>> vxGraphicList;
+                    vcl::graphic::SearchForGraphics(Reference<XInterface>(xDialogModel, UNO_QUERY), vxGraphicList);
+                    if (!vxGraphicList.empty())
                     {
                         // Export the images to the storage
-                        Reference< document::XGraphicObjectResolver > xGraphicResolver =
-                            document::GraphicObjectResolver::createWithStorage( mxContext, xStorage );
-                        if ( xGraphicResolver.is() )
+                        Reference<document::XGraphicObjectResolver> xGraphicResolver;
+                        xGraphicResolver.set(document::GraphicObjectResolver::createWithStorage(mxContext, xStorage));
+                        Reference<document::XGraphicStorageHandler> xGraphicStorageHandler;
+                        xGraphicStorageHandler.set(xGraphicResolver, uno::UNO_QUERY);
+                        if (xGraphicStorageHandler.is())
                         {
-                            for ( const OUString& rURL : vEmbeddedImageURLs )
-                                xGraphicResolver->resolveGraphicObjectURL( rURL );
+                            for (uno::Reference<graphic::XGraphic> const & rxGraphic : vxGraphicList)
+                            {
+                                xGraphicStorageHandler->saveGraphic(rxGraphic);
+                            }
                         }
                     }
                 }

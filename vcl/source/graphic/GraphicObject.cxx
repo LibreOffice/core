@@ -34,17 +34,67 @@
 #include <vcl/metaact.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/GraphicObject.hxx>
+#include <vcl/GraphicLoader.hxx>
 
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <memory>
 
+
+using namespace css;
 using com::sun::star::uno::Reference;
 using com::sun::star::uno::XInterface;
 using com::sun::star::uno::UNO_QUERY;
 using com::sun::star::uno::Sequence;
 using com::sun::star::container::XNameContainer;
 using com::sun::star::beans::XPropertySet;
+
+namespace vcl
+{
+namespace graphic
+{
+
+void SearchForGraphics(uno::Reference<uno::XInterface> const & xInterface,
+                       std::vector<uno::Reference<css::graphic::XGraphic>> & raGraphicList)
+{
+    uno::Reference<beans::XPropertySet> xPropertySet(xInterface, UNO_QUERY);
+    if (xPropertySet.is())
+    {
+        if (xPropertySet->getPropertySetInfo()->hasPropertyByName("ImageURL"))
+        {
+            OUString sURL;
+            xPropertySet->getPropertyValue("ImageURL") >>= sURL;
+            if (!sURL.isEmpty() && !GraphicObject::isGraphicObjectUniqueIdURL(sURL))
+            {
+                Graphic aGraphic = vcl::graphic::loadFromURL(sURL);
+                if (aGraphic)
+                {
+                    raGraphicList.push_back(aGraphic.GetXGraphic());
+                }
+            }
+        } else if (xPropertySet->getPropertySetInfo()->hasPropertyByName("Graphic"))
+        {
+            uno::Reference<css::graphic::XGraphic> xGraphic;
+            xPropertySet->getPropertyValue("Graphic") >>= xGraphic;
+            if (xGraphic.is())
+            {
+                raGraphicList.push_back(xGraphic);
+            }
+        }
+    }
+    Reference<XNameContainer> xContainer(xInterface, UNO_QUERY);
+    if (xContainer.is())
+    {
+        for (OUString const & rName : xContainer->getElementNames())
+        {
+            uno::Reference<XInterface> xInnerInterface;
+            xContainer->getByName(rName) >>= xInnerInterface;
+            SearchForGraphics(xInnerInterface, raGraphicList);
+        }
+    }
+}
+
+}} // end namespace vcl::graphic
 
 GraphicManager* GraphicObject::mpGlobalMgr = nullptr;
 
@@ -1043,36 +1093,6 @@ bool GraphicObject::isGraphicObjectUniqueIdURL(OUString const & rURL)
 {
     const OUString aPrefix(UNO_NAME_GRAPHOBJ_URLPREFIX);
     return rURL.startsWith(aPrefix);
-}
-
-void
-GraphicObject::InspectForGraphicObjectImageURL( const Reference< XInterface >& xIf,  std::vector< OUString >& rvEmbedImgUrls )
-{
-    static const char sImageURL[] = "ImageURL";
-    Reference< XPropertySet > xProps( xIf, UNO_QUERY );
-    if ( xProps.is() )
-    {
-
-        if ( xProps->getPropertySetInfo()->hasPropertyByName( sImageURL ) )
-        {
-            OUString sURL;
-            xProps->getPropertyValue( sImageURL ) >>= sURL;
-            if ( !sURL.isEmpty() && sURL.startsWith( UNO_NAME_GRAPHOBJ_URLPREFIX ) )
-                rvEmbedImgUrls.push_back( sURL );
-        }
-    }
-    Reference< XNameContainer > xContainer( xIf, UNO_QUERY );
-    if ( xContainer.is() )
-    {
-        Sequence< OUString > sNames = xContainer->getElementNames();
-        sal_Int32 nContainees = sNames.getLength();
-        for ( sal_Int32 index = 0; index < nContainees; ++index )
-        {
-            Reference< XInterface > xCtrl;
-            xContainer->getByName( sNames[ index ] ) >>= xCtrl;
-            InspectForGraphicObjectImageURL( xCtrl, rvEmbedImgUrls );
-        }
-    }
 }
 
 // calculate scalings between real image size and logic object size. This
