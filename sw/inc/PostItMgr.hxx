@@ -69,25 +69,16 @@ namespace i18nutil { struct SearchOptions2; }
 #define COL_NOTES_SIDEPANE_ARROW_ENABLED    Color(0,0,0)
 #define COL_NOTES_SIDEPANE_ARROW_DISABLED   Color(172,168,153)
 
-typedef std::list<SwSidebarItem*> SwSidebarItem_list;
-
 struct SwPostItPageItem
 {
     bool bScrollbar;
     sw::sidebarwindows::SidebarPosition eSidebarPosition;
     long lOffset;
     SwRect mPageRect;
-    SwSidebarItem_list* mList;
+    std::vector<SwSidebarItem*> mvSidebarItems;
     SwPostItPageItem(): bScrollbar(false), eSidebarPosition( sw::sidebarwindows::SidebarPosition::LEFT ), lOffset(0)
     {
-        mList = new SwSidebarItem_list;
     }
-    ~SwPostItPageItem()
-    {
-        mList->clear();
-        delete mList;
-    }
-
 };
 
 struct FieldShadowState
