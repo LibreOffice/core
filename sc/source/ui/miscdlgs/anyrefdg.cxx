@@ -650,26 +650,20 @@ void ScFormulaReferenceHelper::DoClose( sal_uInt16 nId )
 
 void ScFormulaReferenceHelper::SetDispatcherLock( bool bLock )
 {
-    //  lock / unlock only the dispatchers of Calc documents
-
-    ScDocShell* pDocShell = static_cast<ScDocShell*>(SfxObjectShell::GetFirst(checkSfxObjectShell<ScDocShell>));
-    while( pDocShell )
+    //  lock / unlock only the dispatcher of Calc document
+    SfxDispatcher* pDisp = nullptr;
+    if ( m_pBindings )
     {
-        SfxViewFrame* pFrame = SfxViewFrame::GetFirst( pDocShell );
-        while( pFrame )
-        {
-            SfxDispatcher* pDisp = pFrame->GetDispatcher();
-            if (pDisp)
-                pDisp->Lock( bLock );
-
-            pFrame = SfxViewFrame::GetNext( *pFrame, pDocShell );
-        }
-        pDocShell = static_cast<ScDocShell*>(SfxObjectShell::GetNext(*pDocShell, checkSfxObjectShell<ScDocShell>));
+        pDisp = m_pBindings->GetDispatcher();
+    }
+    else if(SfxViewFrame* pViewFrame = SfxViewFrame::Current())
+    {
+        if (dynamic_cast< ScTabViewShell* >(pViewFrame->GetViewShell()))
+            pDisp = pViewFrame->GetDispatcher();
     }
 
-    //  if a new view is created while the dialog is open,
-    //  that view's dispatcher is locked when trying to create the dialog
-    //  for that view (ScTabViewShell::CreateRefDialog)
+    if (pDisp)
+        pDisp->Lock(bLock);
 }
 
 void ScFormulaReferenceHelper::ViewShellChanged()
@@ -815,7 +809,7 @@ bool ScRefHandler::EnterRefMode()
 
     m_aHelper.Init();
 
-    ScFormulaReferenceHelper::SetDispatcherLock( true );
+    m_aHelper.SetDispatcherLock( true );
 
     return m_bInRefMode = true;
 }
@@ -904,7 +898,7 @@ bool ScRefHandler::DoClose( sal_uInt16 nId )
 
 void ScRefHandler::SetDispatcherLock( bool bLock )
 {
-    ScFormulaReferenceHelper::SetDispatcherLock( bLock );
+    m_aHelper.SetDispatcherLock( bLock );
 }
 
 void ScRefHandler::ViewShellChanged()
