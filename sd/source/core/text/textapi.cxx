@@ -40,21 +40,19 @@ class UndoTextAPIChanged : public SdrUndoAction
 {
 public:
     UndoTextAPIChanged( SdrModel& rModel, TextApiObject* pTextObj );
-    virtual ~UndoTextAPIChanged() override;
 
     virtual void Undo() override;
     virtual void Redo() override;
 
 protected:
-    OutlinerParaObject* mpOldText;
-    OutlinerParaObject* mpNewText;
+    std::unique_ptr<OutlinerParaObject> mpOldText;
+    std::unique_ptr<OutlinerParaObject> mpNewText;
     rtl::Reference< TextApiObject > mxTextObj;
 };
 
 UndoTextAPIChanged::UndoTextAPIChanged(SdrModel& rModel, TextApiObject* pTextObj )
 : SdrUndoAction( rModel )
 , mpOldText( pTextObj->CreateText() )
-, mpNewText( nullptr )
 , mxTextObj( pTextObj )
 {
 #if defined __clang__ && defined _MSC_VER // workaround clang-cl ABI bug PR25641
@@ -62,16 +60,10 @@ UndoTextAPIChanged::UndoTextAPIChanged(SdrModel& rModel, TextApiObject* pTextObj
 #endif
 }
 
-UndoTextAPIChanged::~UndoTextAPIChanged()
-{
-    delete mpOldText;
-    delete mpNewText;
-}
-
 void UndoTextAPIChanged::Undo()
 {
     if( !mpNewText )
-        mpNewText = mxTextObj->CreateText();
+        mpNewText.reset( mxTextObj->CreateText() );
 
     mxTextObj->SetText( *mpOldText );
 }
