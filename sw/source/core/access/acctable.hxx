@@ -43,7 +43,7 @@ class SwAccessibleTable :
         public css::accessibility::XAccessibleTableSelection,
         public SwClient
 {
-    SwAccessibleTableData_Impl *mpTableData;    // the table's data, prot by Sol-Mutex
+    std::unique_ptr<SwAccessibleTableData_Impl> mpTableData;    // the table's data, protected by SolarMutex
     OUString m_sDesc;
     const SwSelBoxes *GetSelBoxes() const;
 
@@ -69,7 +69,7 @@ protected:
         m_sDesc = sNewDesc;
     }
 
-    virtual SwAccessibleTableData_Impl* CreateNewTableData(); // #i77106#
+    virtual std::unique_ptr<SwAccessibleTableData_Impl> CreateNewTableData(); // #i77106#
 
     // force update of table data
     void UpdateTableData();
@@ -234,7 +234,7 @@ protected:
     virtual ~SwAccessibleTableColHeaders() override
     {}
 
-    virtual SwAccessibleTableData_Impl* CreateNewTableData() override;
+    virtual std::unique_ptr<SwAccessibleTableData_Impl> CreateNewTableData() override;
     virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) override;
 
 public:
