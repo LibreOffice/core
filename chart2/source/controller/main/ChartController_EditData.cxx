@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <ChartWindow.hxx>
 #include <ChartController.hxx>
 
 #include <dlg_DataEditor.hxx>
@@ -46,7 +47,7 @@ void ChartController::executeDispatch_EditData()
         UndoLiveUpdateGuardWithData aUndoGuard(
             SchResId( STR_ACTION_EDIT_CHART_DATA ),
             m_xUndoManager );
-        ScopedVclPtrInstance<DataEditor> aDataEditorDialog( nullptr, xChartDoc, m_xCC );
+        ScopedVclPtrInstance<DataEditor> aDataEditorDialog( GetChartWindow().get(), xChartDoc, m_xCC );
         if (aDataEditorDialog->Execute() == RET_OK)
             aDataEditorDialog->ApplyChangesToModel();
         aUndoGuard.commit();
