@@ -885,7 +885,7 @@ void PowerPointExport::WriteTransition( const FSHelperPtr& pFS )
     }
 }
 
-void PowerPointExport::WriteAnimationProperty( const FSHelperPtr& pFS, const Any& rAny )
+void PowerPointExport::WriteAnimationProperty(const FSHelperPtr& pFS, const Any& rAny, sal_Int32 nToken)
 {
     if( !rAny.hasValue() )
         return;
@@ -893,7 +893,17 @@ void PowerPointExport::WriteAnimationProperty( const FSHelperPtr& pFS, const Any
     sal_uInt32 nRgb;
     double fDouble;
 
-    switch( rAny.getValueType().getTypeClass() ) {
+    uno::TypeClass aClass = rAny.getValueType().getTypeClass();
+    bool bWriteToken = nToken &&
+        (  aClass == TypeClass_LONG
+        || aClass == TypeClass_DOUBLE
+        || aClass == TypeClass_STRING );
+
+    if (bWriteToken)
+        pFS->startElementNS(XML_p, XML_to, FSEND);
+
+    switch (rAny.getValueType().getTypeClass())
+    {
     case TypeClass_LONG:
         rAny >>= nRgb;
         pFS->singleElementNS(XML_a, XML_srgbClr,
@@ -914,6 +924,9 @@ void PowerPointExport::WriteAnimationProperty( const FSHelperPtr& pFS, const Any
     default:
         break;
     }
+
+    if (bWriteToken)
+        pFS->endElementNS(XML_p, nToken);
 }
 
 void PowerPointExport::WriteAnimateValues( const FSHelperPtr& pFS, const Reference< XAnimate >& rXAnimate )
@@ -959,18 +972,14 @@ void PowerPointExport::WriteAnimateTo( const FSHelperPtr& pFS, const Any& rValue
 
     SAL_INFO("sd.eppt", "to attribute name: " << USS(rAttributeName));
 
-    pFS->startElementNS( XML_p, XML_to, FSEND );
-
     sal_uInt32 nColor;
     if (rValue >>= nColor)
     {
         // RGB color
-        WriteAnimationProperty(pFS, rValue);
+        WriteAnimationProperty(pFS, rValue, XML_to);
     }
     else
-        WriteAnimationProperty(pFS, AnimationExporter::convertAnimateValue(rValue, rAttributeName));
-
-    pFS->endElementNS( XML_p, XML_to );
+        WriteAnimationProperty(pFS, AnimationExporter::convertAnimateValue(rValue, rAttributeName), XML_to);
 }
 
 void PowerPointExport::WriteAnimationAttributeName( const FSHelperPtr& pFS, const OUString& rAttributeName )
