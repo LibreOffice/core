@@ -650,14 +650,14 @@ SmCategoryDesc::SmCategoryDesc(VclBuilderContainer& rBuilder, sal_uInt16 nCatego
 
         if (pLabel)
         {
-            Strings  [i] = new OUString(pLabel->GetText());
+            Strings[i] = pLabel->GetText();
             FixedImage* pImage = rBuilder.get<FixedImage>(OString::number(nCategoryIdx)+"image"+OString::number(i+1));
-            Graphics [i] = new Image(pImage->GetImage());
+            Graphics[i].reset(new Image(pImage->GetImage()));
         }
         else
         {
-            Strings  [i] = nullptr;
-            Graphics [i] = nullptr;
+            Strings[i].clear();
+            Graphics[i].reset();
         }
 
         const FieldMinMax& rMinMax = pMinMaxData[ nCategoryIdx-1 ][i];
@@ -668,11 +668,6 @@ SmCategoryDesc::SmCategoryDesc(VclBuilderContainer& rBuilder, sal_uInt16 nCatego
 
 SmCategoryDesc::~SmCategoryDesc()
 {
-    for (int i = 0; i < 4; ++i)
-    {
-        delete Strings  [i];
-        delete Graphics [i];
-    }
 }
 
 /**************************************************************************/
@@ -829,7 +824,7 @@ void SmDistanceDialog::SetCategory(sal_uInt16 nCategory)
         if (bActive)
         {
             pCat = Categories[nCategory];
-            pFT->SetText(*pCat->GetString(i));
+            pFT->SetText(pCat->GetString(i));
 
             pMF->SetMin(pCat->GetMinimum(i));
             pMF->SetMax(pCat->GetMaximum(i));
