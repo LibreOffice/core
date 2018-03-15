@@ -430,11 +430,22 @@ void wwSectionManager::SetPage(SwPageDesc &rInPageDesc, SwFrameFormat &rFormat,
         SetCols(rFormat, rSection, rSection.GetTextAreaWidth());
 }
 
-static sal_uInt16 lcl_MakeSafeNegativeSpacing(sal_uInt16 nIn)
+namespace {
+// Returns corrected (ODF) margin size
+long SetBorderDistance(bool bFromEdge, SvxBoxItem& aBox, SvxBoxItemLine eLine, long nMSMargin)
 {
-    if (nIn > SHRT_MAX)
-        nIn = 0;
-    return nIn;
+    const editeng::SvxBorderLine* pLine = aBox.GetLine(eLine);
+    if (!pLine)
+        return nMSMargin;
+    sal_Int32 nNewMargin = nMSMargin;
+    sal_Int32 nNewDist = aBox.GetDistance(eLine);
+    sal_Int32 nLineWidth = pLine->GetWidth();
+
+    editeng::BorderDistanceFromWord(bFromEdge, nNewMargin, nNewDist, nLineWidth);
+    aBox.SetDistance(nNewDist, eLine);
+
+    return nNewMargin;
+}
 }
 
 void SwWW8ImplReader::SetPageBorder(SwFrameFormat &rFormat, const wwSection &rSection)
@@ -447,65 +458,15 @@ void SwWW8ImplReader::SetPageBorder(SwFrameFormat &rFormat, const wwSection &rSe
     SetFlyBordersShadow(aSet, rSection.brc, &aSizeArray[0]);
     SvxLRSpaceItem aLR(ItemGet<SvxLRSpaceItem>(aSet, RES_LR_SPACE));
     SvxULSpaceItem aUL(ItemGet<SvxULSpaceItem>(aSet, RES_UL_SPACE));
-
     SvxBoxItem aBox(ItemGet<SvxBoxItem>(aSet, RES_BOX));
-    short aOriginalBottomMargin = aBox.GetDistance(SvxBoxItemLine::BOTTOM);
+    bool bFromEdge = rSection.maSep.pgbOffsetFrom == 1;
 
-    if (rSection.maSep.pgbOffsetFrom == 1)
-    {
-        sal_uInt16 nDist;
-        if (aBox.GetLeft())
-        {
-            nDist = aBox.GetDistance(SvxBoxItemLine::LEFT);
-            aBox.SetDistance(lcl_MakeSafeNegativeSpacing(static_cast<sal_uInt16>(aLR.GetLeft() - nDist)), SvxBoxItemLine::LEFT);
-            aSizeArray[WW8_LEFT] =
-                aSizeArray[WW8_LEFT] - nDist + aBox.GetDistance(SvxBoxItemLine::LEFT);
-        }
+    aLR.SetLeft(SetBorderDistance(bFromEdge, aBox, SvxBoxItemLine::LEFT, aLR.GetLeft()));
+    aLR.SetRight(SetBorderDistance(bFromEdge, aBox, SvxBoxItemLine::RIGHT, aLR.GetRight()));
+    aUL.SetUpper(SetBorderDistance(bFromEdge, aBox, SvxBoxItemLine::TOP, aUL.GetUpper()));
+    aUL.SetLower(SetBorderDistance(bFromEdge, aBox, SvxBoxItemLine::BOTTOM, aUL.GetLower()));
 
-        if (aBox.GetRight())
-        {
-            nDist = aBox.GetDistance(SvxBoxItemLine::RIGHT);
-            aBox.SetDistance(lcl_MakeSafeNegativeSpacing(static_cast<sal_uInt16>(aLR.GetRight() - nDist)), SvxBoxItemLine::RIGHT);
-            aSizeArray[WW8_RIGHT] =
-                aSizeArray[WW8_RIGHT] - nDist + aBox.GetDistance(SvxBoxItemLine::RIGHT);
-        }
-
-        if (aBox.GetTop())
-        {
-            nDist = aBox.GetDistance(SvxBoxItemLine::TOP);
-            aBox.SetDistance(lcl_MakeSafeNegativeSpacing(static_cast<sal_uInt16>(aUL.GetUpper() - nDist)), SvxBoxItemLine::TOP);
-            aSizeArray[WW8_TOP] =
-                aSizeArray[WW8_TOP] - nDist + aBox.GetDistance(SvxBoxItemLine::TOP);
-        }
-
-        if (aBox.GetBottom())
-        {
-            nDist = aBox.GetDistance(SvxBoxItemLine::BOTTOM);
-            aBox.SetDistance(lcl_MakeSafeNegativeSpacing(static_cast<sal_uInt16>(aUL.GetLower() - nDist)), SvxBoxItemLine::BOTTOM);
-            aSizeArray[WW8_BOT] =
-                aSizeArray[WW8_BOT] - nDist + aBox.GetDistance(SvxBoxItemLine::BOTTOM);
-        }
-
-        aSet.Put(aBox);
-    }
-
-    if (aBox.GetLeft())
-        aLR.SetLeft(lcl_MakeSafeNegativeSpacing(static_cast<sal_uInt16>(aLR.GetLeft() - aSizeArray[WW8_LEFT])));
-    if (aBox.GetRight())
-        aLR.SetRight(lcl_MakeSafeNegativeSpacing(static_cast<sal_uInt16>(aLR.GetRight() - aSizeArray[WW8_RIGHT])));
-    if (aBox.GetTop())
-        aUL.SetUpper(lcl_MakeSafeNegativeSpacing(static_cast<sal_uInt16>(aUL.GetUpper() - aSizeArray[WW8_TOP])));
-    if (aBox.GetBottom())
-    {
-        //#i30088# and #i30074# - do a final sanity check on
-        //bottom value. Do not allow a resulting zero if bottom
-        //Border margin value was not originally zero.
-        if(aUL.GetLower() != 0)
-            aUL.SetLower(lcl_MakeSafeNegativeSpacing(static_cast<sal_uInt16>(aUL.GetLower() - aSizeArray[WW8_BOT])));
-        else
-            aUL.SetLower(lcl_MakeSafeNegativeSpacing(static_cast<sal_uInt16>(aOriginalBottomMargin - aSizeArray[WW8_BOT])));
-    }
-
+    aSet.Put(aBox);
     aSet.Put(aLR);
     aSet.Put(aUL);
     rFormat.SetFormatAttr(aSet);
