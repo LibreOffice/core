@@ -379,7 +379,13 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
                 Point aPos;
                 Rectangle aWinRect(aPos, mpWindow->GetOutputSizePixel() );
                 aPos = aWinRect.Center();
+
+                // For LOK
+                bool bMapModeWasEnabled(mpWindow->IsMapModeEnabled());
+                mpWindow->EnableMapMode(/*true*/);
                 aPos = mpWindow->PixelToLogic(aPos);
+                mpWindow->EnableMapMode(bMapModeWasEnabled);
+                
                 aPos.X() -= aSize.Width() / 2;
                 aPos.Y() -= aSize.Height() / 2;
                 aRect = Rectangle(aPos, aSize);
