@@ -33,7 +33,7 @@ namespace sfx2 { namespace sidebar {
 namespace
 {
 static const sal_Int32 gaLeftGripPadding (3);
-static const sal_Int32 gaRightGripPadding (3);
+static const sal_Int32 gaRightGripPadding (6);
 }
 
 DeckTitleBar::DeckTitleBar (const OUString& rsTitle,
@@ -81,8 +81,12 @@ tools::Rectangle DeckTitleBar::GetTitleArea (const tools::Rectangle& rTitleBarBo
         rTitleBarBox.Bottom());
 }
 
-void DeckTitleBar::PaintDecoration(vcl::RenderContext& /*rRenderContext*/, const tools::Rectangle& /*rTitleBarBox*/)
+void DeckTitleBar::PaintDecoration(vcl::RenderContext& rRenderContext, const tools::Rectangle& /*rTitleBarBox*/)
 {
+   Image aImage (Theme::GetImage(Theme::Image_Grip));
+   const Point aTopLeft(gaLeftGripPadding,
+                        (GetSizePixel().Height() - aImage.GetSizePixel().Height()) / 2);
+   rRenderContext.DrawImage(aTopLeft, aImage);
 }
 
 sidebar::Paint DeckTitleBar::GetBackgroundPaint()
