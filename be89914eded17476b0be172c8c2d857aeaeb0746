@@ -22,6 +22,30 @@
       "revId": "be89914eded17476b0be172c8c2d857aeaeb0746",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba2be162_fa045cc7",
+        "filename": "sd/source/ui/func/fuinsert.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 1000897
+      },
+      "writtenOn": "2018-03-15T16:54:49Z",
+      "side": 1,
+      "message": "No, this enabling of map mode thing was also introduced just for LOK. We don\u0027t need to set this map mode if we are not LOK.\n\nSee 30f1fa9993ee6ac444ab9da412b8a4820b045423",
+      "parentUuid": "ba2be162_7a722c7e",
+      "range": {
+        "startLine": 177,
+        "startChar": 15,
+        "endLine": 177,
+        "endChar": 22
+      },
+      "revId": "be89914eded17476b0be172c8c2d857aeaeb0746",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
