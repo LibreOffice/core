@@ -2082,6 +2082,13 @@ AC_ARG_WITH(iwyu,
          Use only if you are hacking on it.]),
 ,)
 
+libo_FUZZ_ARG_WITH(lxml,
+    AS_HELP_STRING([--without-lxml],
+        [gla11y will use python lxml when available, potentially building a local copy if necessary.
+         --without-lxml tells it to not use python lxml at all, which means that gla11y will only
+         report widget classes and ids.]),
+,)
+
 dnl ===================================================================
 dnl Branding
 dnl ===================================================================
@@ -8157,35 +8164,37 @@ if test $enable_python = system; then
     PYTHON_FOR_BUILD=$PYTHON
 fi
 
-if test -z "$PYTHON_FOR_BUILD"; then
-    case $build_os in
-        cygwin)
-            AC_MSG_WARN([No system-provided python lxml, gla11y will only report widget classes and ids])
-            ;;
-        *)
-            if test "$cross_compiling" != yes ; then
-                BUILD_TYPE="$BUILD_TYPE LXML"
-            fi
-            ;;
-    esac
-else
-    AC_MSG_CHECKING([for python lxml])
-    if $PYTHON_FOR_BUILD -c "import lxml.etree as ET" 2> /dev/null ; then
-        AC_MSG_RESULT([yes])
-    else
+if test "$with_lxml" != no; then
+    if test -z "$PYTHON_FOR_BUILD"; then
         case $build_os in
             cygwin)
-                AC_MSG_RESULT([no, gla11y will only report widget classes and ids])
+                AC_MSG_WARN([No system-provided python lxml, gla11y will only report widget classes and ids])
                 ;;
             *)
-                if test "$cross_compiling" != yes -a "x$ac_cv_header_Python_h" = "xyes"; then
+                if test "$cross_compiling" != yes ; then
                     BUILD_TYPE="$BUILD_TYPE LXML"
-                    AC_MSG_RESULT([no, using internal lxml])
-                else
-                    AC_MSG_RESULT([no, and system does not provide python development headers, gla11y will only report widget classes and ids])
                 fi
                 ;;
         esac
+    else
+        AC_MSG_CHECKING([for python lxml])
+        if $PYTHON_FOR_BUILD -c "import lxml.etree as ET" 2> /dev/null ; then
+            AC_MSG_RESULT([yes])
+        else
+            case $build_os in
+                cygwin)
+                    AC_MSG_RESULT([no, gla11y will only report widget classes and ids])
+                    ;;
+                *)
+                    if test "$cross_compiling" != yes -a "x$ac_cv_header_Python_h" = "xyes"; then
+                        BUILD_TYPE="$BUILD_TYPE LXML"
+                        AC_MSG_RESULT([no, using internal lxml])
+                    else
+                        AC_MSG_RESULT([no, and system does not provide python development headers, gla11y will only report widget classes and ids])
+                    fi
+                    ;;
+            esac
+        fi
     fi
 fi
 
