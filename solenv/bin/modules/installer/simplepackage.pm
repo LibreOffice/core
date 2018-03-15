@@ -282,7 +282,7 @@ sub create_package
 
         if ( ! $allvariables->{'HIDELICENSEDIALOG'} )
         {
-            installer::scriptitems::get_sourcepath_from_filename_and_includepath( \$sla, $includepatharrayref, 0);
+            $ref = installer::scriptitems::get_sourcepath_from_filename_and_includepath( \$sla, $includepatharrayref, 0);
         }
 
         my $localtempdir = $tempdir;
@@ -401,13 +401,17 @@ sub create_package
                 push( @installer::globals::logfileinfo, $infoline);
             }
         }
-        elsif ($volume_name_classic_app eq 'LibreOffice' || $volume_name_classic_app eq 'LibreOfficeDev')
+        elsif ($volume_name_classic_app eq 'Collabora Office')
         {
-            my $subdir = "$tempdir/$packagename/$volume_name_classic_app.app/Contents/Resources";
+            my $oldappdir = "$tempdir/$packagename/CollaboraOffice.app";
+            my $newappdir = "$tempdir/$packagename/Collabora Office.app";
+            installer::systemactions::rename_directory($oldappdir,$newappdir);
+            my $subdir = "$newappdir/Contents/Resources";
             if ( ! -d $subdir ) { installer::systemactions::create_directory($subdir); }
             if ( $ENV{'MACOSX_CODESIGNING_IDENTITY'} )
             {
-                $systemcall = "$ENV{'SRCDIR'}/solenv/bin/macosx-codesign-app-bundle $localtempdir/$folder/$volume_name_classic_app.app";
+                $newappdir =~ s/ /\\ /g;
+                $systemcall = "$ENV{'SRCDIR'}/solenv/bin/macosx-codesign-app-bundle $newappdir";
                 print "... $systemcall ...\n";
                 my $returnvalue = system($systemcall);
                 $infoline = "Systemcall: $systemcall\n";
@@ -458,7 +462,7 @@ sub create_package
         $megabytes = 2000 if $ENV{'ENABLE_DBGUTIL'};
         $systemcall = "cd $localtempdir && hdiutil create -megabytes $megabytes -srcfolder $folder $archive -ov -fs HFS+ -volname \"$volume_name\" -format UDBZ";
         if (( $ref ne "" ) && ( $$ref ne "" )) {
-            $systemcall .= " && hdiutil unflatten $archive && Rez -a $$ref -o $archive && hdiutil flatten $archive &&";
+            $systemcall .= " && hdiutil unflatten $archive && Rez -a $$ref -o $archive && hdiutil flatten $archive";
         }
     }
     else
