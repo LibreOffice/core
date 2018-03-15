@@ -420,11 +420,11 @@ namespace
  * (called by asm snippets)
  */
 
-extern "C" sal_Int64 cpp_vtable_call( sal_Int32 *pFunctionAndOffset,
+extern "C" sal_Int64 cpp_vtable_call( sal_Int32 func, sal_Int32 offset,
                                       void **pCallStack )
 {
     sal_Int64 nRegReturn;
-    typelib_TypeClass aType = cpp_mediate( pFunctionAndOffset[0], pFunctionAndOffset[1], pCallStack, &nRegReturn );
+    typelib_TypeClass aType = cpp_mediate( func, offset, pCallStack, &nRegReturn );
 
     switch( aType )
     {

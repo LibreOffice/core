@@ -19,166 +19,139 @@
     .section        __TEXT,__text,regular,pure_instructions
 
     .p2align        2
-codeSnippet_00000000_0:
-    adr x15, .+8
+codeSnippet_0_0:
+    mov x14, 0
+    mov x15, 0
     b _privateSnippetExecutor
-    .long 00000000
-    .long 0
-codeSnippet_00000000_1:
-    adr x15, .+8
+codeSnippet_0_1:
+    mov x14, 0
+    mov x15, 1
     b _privateSnippetExecutor
-    .long 00000000
-    .long 1
-codeSnippet_00000000_2:
-    adr x15, .+8
+codeSnippet_0_2:
+    mov x14, 0
+    mov x15, 2
     b _privateSnippetExecutor
-    .long 00000000
-    .long 2
-codeSnippet_00000000_3:
-    adr x15, .+8
+codeSnippet_0_3:
+    mov x14, 0
+    mov x15, 3
     b _privateSnippetExecutor
-    .long 00000000
-    .long 3
-codeSnippet_00000001_0:
-    adr x15, .+8
+codeSnippet_1_0:
+    mov x14, 1
+    mov x15, 0
     b _privateSnippetExecutor
     .long 0x000001
     .long 0
-codeSnippet_00000001_1:
-    adr x15, .+8
+codeSnippet_1_1:
+    mov x14, 1
+    mov x15, 1
     b _privateSnippetExecutor
-    .long 0x000001
-    .long 1
-codeSnippet_00000001_2:
-    adr x15, .+8
+codeSnippet_1_2:
+    mov x14, 1
+    mov x15, 2
     b _privateSnippetExecutor
-    .long 0x000001
-    .long 2
-codeSnippet_00000001_3:
-    adr x15, .+8
+codeSnippet_1_3:
+    mov x14, 1
+    mov x15, 3
     b _privateSnippetExecutor
-    .long 0x000001
-    .long 3
-codeSnippet_00000002_0:
-    adr x15, .+8
+codeSnippet_2_0:
+    mov x14, 2
+    mov x15, 0
     b _privateSnippetExecutor
-    .long 0x000002
-    .long 0
-codeSnippet_00000002_1:
-    adr x15, .+8
+codeSnippet_2_1:
+    mov x14, 2
+    mov x15, 1
     b _privateSnippetExecutor
-    .long 0x000002
-    .long 1
-codeSnippet_00000002_2:
-    adr x15, .+8
+codeSnippet_2_2:
+    mov x14, 2
+    mov x15, 2
     b _privateSnippetExecutor
-    .long 0x000002
-    .long 2
-codeSnippet_00000002_3:
-    adr x15, .+8
+codeSnippet_2_3:
+    mov x14, 2
+    mov x15, 3
     b _privateSnippetExecutor
     .long 0x000002
     .long 3
-codeSnippet_00000003_0:
-    adr x15, .+8
+codeSnippet_3_0:
+    mov x14, 3
+    mov x15, 0
     b _privateSnippetExecutor
-    .long 0x000003
-    .long 0
-codeSnippet_00000003_1:
-    adr x15, .+8
+codeSnippet_3_1:
+    mov x14, 3
+    mov x15, 1
     b _privateSnippetExecutor
-    .long 0x000003
-    .long 1
-codeSnippet_00000003_2:
-    adr x15, .+8
+codeSnippet_3_2:
+    mov x14, 3
+    mov x15, 2
     b _privateSnippetExecutor
-    .long 0x000003
-    .long 2
-codeSnippet_00000003_3:
-    adr x15, .+8
+codeSnippet_3_3:
+    mov x14, 3
+    mov x15, 3
     b _privateSnippetExecutor
-    .long 0x000003
-    .long 3
-codeSnippet_00000004_0:
-    adr x15, .+8
+codeSnippet_4_0:
+    mov x14, 4
+    mov x15, 0
     b _privateSnippetExecutor
-    .long 0x000004
-    .long 0
-codeSnippet_00000004_1:
-    adr x15, .+8
+codeSnippet_4_1:
+    mov x14, 4
+    mov x15, 1
     b _privateSnippetExecutor
-    .long 0x000004
-    .long 1
-codeSnippet_00000004_2:
-    adr x15, .+8
+codeSnippet_4_2:
+    mov x14, 4
+    mov x15, 2
     b _privateSnippetExecutor
-    .long 0x000004
-    .long 2
-codeSnippet_00000004_3:
-    adr x15, .+8
+codeSnippet_4_3:
+    mov x14, 4
+    mov x15, 3
     b _privateSnippetExecutor
-    .long 0x000004
-    .long 3
-codeSnippet_00000005_0:
-    adr x15, .+8
+codeSnippet_5_0:
+    mov x14, 5
+    mov x15, 0
     b _privateSnippetExecutor
-    .long 0x000005
-    .long 0
-codeSnippet_00000005_1:
-    adr x15, .+8
+codeSnippet_5_1:
+    mov x14, 5
+    mov x15, 1
     b _privateSnippetExecutor
-    .long 0x000005
-    .long 1
-codeSnippet_00000005_2:
-    adr x15, .+8
+codeSnippet_5_2:
+    mov x14, 5
+    mov x15, 2
     b _privateSnippetExecutor
-    .long 0x000005
-    .long 2
-codeSnippet_00000005_3:
-    adr x15, .+8
+codeSnippet_5_3:
+    mov x14, 5
+    mov x15, 3
     b _privateSnippetExecutor
-    .long 0x000005
-    .long 3
-codeSnippet_00000006_0:
-    adr x15, .+8
+codeSnippet_6_0:
+    mov x14, 6
+    mov x15, 0
     b _privateSnippetExecutor
-    .long 0x000006
-    .long 0
-codeSnippet_00000006_1:
-    adr x15, .+8
+codeSnippet_6_1:
+    mov x14, 6
+    mov x15, 1
     b _privateSnippetExecutor
-    .long 0x000006
-    .long 1
-codeSnippet_00000006_2:
-    adr x15, .+8
+codeSnippet_6_2:
+    mov x14, 6
+    mov x15, 2
     b _privateSnippetExecutor
-    .long 0x000006
-    .long 2
-codeSnippet_00000006_3:
-    adr x15, .+8
+codeSnippet_6_3:
+    mov x14, 6
+    mov x15, 3
     b _privateSnippetExecutor
-    .long 0x000006
-    .long 3
-codeSnippet_00000007_0:
-    adr x15, .+8
+codeSnippet_7_0:
+    mov x14, 7
+    mov x15, 0
     b _privateSnippetExecutor
-    .long 0x000007
-    .long 0
-codeSnippet_00000007_1:
-    adr x15, .+8
+codeSnippet_7_1:
+    mov x14, 7
+    mov x15, 1
     b _privateSnippetExecutor
-    .long 0x000007
-    .long 1
-codeSnippet_00000007_2:
-    adr x15, .+8
+codeSnippet_7_2:
+    mov x14, 7
+    mov x15, 2
     b _privateSnippetExecutor
-    .long 0x000007
-    .long 2
-codeSnippet_00000007_3:
-    adr x15, .+8
+codeSnippet_7_3:
+    mov x14, 7
+    mov x15, 3
     b _privateSnippetExecutor
-    .long 0x000007
-    .long 3
+
     .globl _nFunIndexes
 _nFunIndexes:
     .long 8
@@ -187,38 +160,38 @@ _nVtableOffsets:
     .long 4
     .globl _codeSnippets
 _codeSnippets:
-    .long codeSnippet_00000000_0 - _codeSnippets
-    .long codeSnippet_00000000_1 - _codeSnippets
-    .long codeSnippet_00000000_2 - _codeSnippets
-    .long codeSnippet_00000000_3 - _codeSnippets
-    .long codeSnippet_00000001_0 - _codeSnippets
-    .long codeSnippet_00000001_1 - _codeSnippets
-    .long codeSnippet_00000001_2 - _codeSnippets
-    .long codeSnippet_00000001_3 - _codeSnippets
-    .long codeSnippet_00000002_0 - _codeSnippets
-    .long codeSnippet_00000002_1 - _codeSnippets
-    .long codeSnippet_00000002_2 - _codeSnippets
-    .long codeSnippet_00000002_3 - _codeSnippets
-    .long codeSnippet_00000003_0 - _codeSnippets
-    .long codeSnippet_00000003_1 - _codeSnippets
-    .long codeSnippet_00000003_2 - _codeSnippets
-    .long codeSnippet_00000003_3 - _codeSnippets
-    .long codeSnippet_00000004_0 - _codeSnippets
-    .long codeSnippet_00000004_1 - _codeSnippets
-    .long codeSnippet_00000004_2 - _codeSnippets
-    .long codeSnippet_00000004_3 - _codeSnippets
-    .long codeSnippet_00000005_0 - _codeSnippets
-    .long codeSnippet_00000005_1 - _codeSnippets
-    .long codeSnippet_00000005_2 - _codeSnippets
-    .long codeSnippet_00000005_3 - _codeSnippets
-    .long codeSnippet_00000006_0 - _codeSnippets
-    .long codeSnippet_00000006_1 - _codeSnippets
-    .long codeSnippet_00000006_2 - _codeSnippets
-    .long codeSnippet_00000006_3 - _codeSnippets
-    .long codeSnippet_00000007_0 - _codeSnippets
-    .long codeSnippet_00000007_1 - _codeSnippets
-    .long codeSnippet_00000007_2 - _codeSnippets
-    .long codeSnippet_00000007_3 - _codeSnippets
+    .long codeSnippet_0_0 - _codeSnippets
+    .long codeSnippet_0_1 - _codeSnippets
+    .long codeSnippet_0_2 - _codeSnippets
+    .long codeSnippet_0_3 - _codeSnippets
+    .long codeSnippet_1_0 - _codeSnippets
+    .long codeSnippet_1_1 - _codeSnippets
+    .long codeSnippet_1_2 - _codeSnippets
+    .long codeSnippet_1_3 - _codeSnippets
+    .long codeSnippet_2_0 - _codeSnippets
+    .long codeSnippet_2_1 - _codeSnippets
+    .long codeSnippet_2_2 - _codeSnippets
+    .long codeSnippet_2_3 - _codeSnippets
+    .long codeSnippet_3_0 - _codeSnippets
+    .long codeSnippet_3_1 - _codeSnippets
+    .long codeSnippet_3_2 - _codeSnippets
+    .long codeSnippet_3_3 - _codeSnippets
+    .long codeSnippet_4_0 - _codeSnippets
+    .long codeSnippet_4_1 - _codeSnippets
+    .long codeSnippet_4_2 - _codeSnippets
+    .long codeSnippet_4_3 - _codeSnippets
+    .long codeSnippet_5_0 - _codeSnippets
+    .long codeSnippet_5_1 - _codeSnippets
+    .long codeSnippet_5_2 - _codeSnippets
+    .long codeSnippet_5_3 - _codeSnippets
+    .long codeSnippet_6_0 - _codeSnippets
+    .long codeSnippet_6_1 - _codeSnippets
+    .long codeSnippet_6_2 - _codeSnippets
+    .long codeSnippet_6_3 - _codeSnippets
+    .long codeSnippet_7_0 - _codeSnippets
+    .long codeSnippet_7_1 - _codeSnippets
+    .long codeSnippet_7_2 - _codeSnippets
+    .long codeSnippet_7_3 - _codeSnippets
 
 
 
@@ -248,8 +221,9 @@ _privateSnippetExecutor:
 
     // First argument (x15 set up in the codeSnippet instance)
     // Second argument: The pointer to all the above
-    mov     x0, x15
-    mov     x1, sp
+    mov     x0, x14
+    mov     x1, x15
+    mov     x2, sp
 
     bl      _cpp_vtable_call
     ldp     x8, lr, [sp, #0]
