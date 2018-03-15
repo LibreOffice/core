@@ -14,10 +14,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/graphic/GraphicProvider.hpp>
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
-//#include <com/sun/star/lang/XUnoTunnel.hpp>
-//#include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
-//#include <cppuhelper/typeprovider.hxx>
 
 using namespace css;
 
@@ -27,31 +24,32 @@ namespace graphic
 {
 Graphic loadFromURL(OUString const& rURL)
 {
-    uno::Reference<css::graphic::XGraphic> xGraphic;
+    Graphic aGraphic;
 
-    uno::Reference<uno::XComponentContext> xContext(comphelper::getProcessComponentContext());
-    uno::Reference<css::graphic::XGraphicProvider> xProv(
-        css::graphic::GraphicProvider::create(xContext));
-
-    uno::Sequence<beans::PropertyValue> aLoadProps(1);
-    aLoadProps[0].Name = "URL";
-    aLoadProps[0].Value <<= rURL;
-
-    xGraphic = xProv->queryGraphic(aLoadProps);
-
-    std::unique_ptr<Graphic> pGraphic;
-    if (xGraphic.is())
+    try
     {
-        pGraphic.reset(new Graphic(xGraphic));
-    }
-    else
-    {
-        pGraphic.reset(new Graphic);
-        pGraphic->SetDefaultType();
-    }
-    pGraphic->setOriginURL(rURL);
+        uno::Reference<css::graphic::XGraphic> xGraphic;
+        uno::Reference<uno::XComponentContext> xContext(comphelper::getProcessComponentContext());
+        uno::Reference<css::graphic::XGraphicProvider> xProvider;
+        xProvider.set(css::graphic::GraphicProvider::create(xContext));
 
-    return *pGraphic.get();
+        uno::Sequence<beans::PropertyValue> aLoadProps(1);
+        aLoadProps[0].Name = "URL";
+        aLoadProps[0].Value <<= rURL;
+
+        xGraphic = xProvider->queryGraphic(aLoadProps);
+
+        if (xGraphic.is())
+            aGraphic = Graphic(xGraphic);
+        else
+            aGraphic.SetDefaultType();
+        aGraphic.setOriginURL(rURL);
+    }
+    catch (uno::Exception const&)
+    {
+    }
+
+    return aGraphic;
 }
 }
 } // end vcl::graphic
