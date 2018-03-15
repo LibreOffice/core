@@ -82,7 +82,7 @@ while read app; do
     fn=`basename "$app"`
     fn=${fn%.*}
     # Assume the app has a XML (and not binary) Info.plist
-    id=`grep -A 1 '<key>CFBundleIdentifier</key>' $app/Contents/Info.plist | tail -1 | sed -e 's,.*<string>,,' -e 's,</string>.*,,'`
+    id=`grep -A 1 '<key>CFBundleIdentifier</key>' "$app/Contents/Info.plist" | tail -1 | sed -e 's,.*<string>,,' -e 's,</string>.*,,'`
     codesign --verbose --force --identifier=$id --sign "$MACOSX_CODESIGNING_IDENTITY" $entitlements "$app" > "/tmp/codesign_${fn}.log" 2>&1
     if [ "$?" != "0" ] ; then
 	exit 1
@@ -99,7 +99,7 @@ while read framework; do
     for version in "$framework"/Versions/*; do
         if test ! -L "$version" -a -d "$version"; then
 	    # Assume the framework has a XML (and not binary) Info.plist
-	    id=`grep -A 1 '<key>CFBundleIdentifier</key>' $version/Resources/Info.plist | tail -1 | sed -e 's,.*<string>,,' -e 's,</string>.*,,'`
+	    id=`grep -A 1 '<key>CFBundleIdentifier</key>' "$version/Resources/Info.plist" | tail -1 | sed -e 's,.*<string>,,' -e 's,</string>.*,,'`
             codesign --verbose --force --identifier=$id --sign "$MACOSX_CODESIGNING_IDENTITY" "$version" > "/tmp/codesign_${fn}.log" 2>&1
 	    if [ "$?" != "0" ] ; then
 		exit 1
