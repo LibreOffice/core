@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba2be162_b7dbdd1a",
+        "filename": "vcl/inc/win/saldata.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 218,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-03-15T12:32:39Z",
+      "side": 1,
+      "message": "and maybe call this\n\n  SAL_MSG_GET_MAIN_THREAD_DC\n\nthe more obvious this convoluted code is, the better",
+      "revId": "a46169f0eaff7216dbe6e9da41fa8c769abe2242",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba2be162_57ec61c7",
+        "filename": "vcl/inc/win/salframe.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-03-15T12:32:39Z",
+      "side": 1,
+      "message": "maybe we could rename these to something like:\n\n  mpMainThreadGraphics\n  mpOtherThreadGraphics\n?\nat least the current mpLocalGraphics makes me think it\u0027s thread-local, when it\u0027s exactly not.",
+      "revId": "a46169f0eaff7216dbe6e9da41fa8c769abe2242",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
