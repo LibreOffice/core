@@ -206,13 +206,16 @@ void ScTable::UpdatePageBreaks( const ScRange* pUserArea )
     {
         bool bStartOfPage = false;
         bool bThisRowHidden = false;
-        aIterHidden.getValue(nY, bThisRowHidden);
+        const bool bHasValue = aIterHidden.getValue(nY, bThisRowHidden);
+        assert(bHasValue); (void)bHasValue;
         long nThisY = 0;
         if (!bThisRowHidden)
         {
             sal_uInt16 nTmp;
-            aIterHeights.getValue(nY, nTmp);
-            nThisY = static_cast<long>(nTmp);
+            const bool bHasHeight = aIterHeights.getValue(nY, nTmp);
+            assert(bHasHeight);
+            if (bHasHeight)
+                nThisY = static_cast<long>(nTmp);
         }
 
         bool bManualBreak = false;

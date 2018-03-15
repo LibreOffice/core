@@ -714,7 +714,8 @@ void ScMarkData::GetSelectionCover( ScRange& rRange )
                         while( nTop1 <= nBottom && nBottom1 <= nBottom )
                         {
                             bool bRangeMarked = false;
-                            aPrevItr.getValue( nTop1, bRangeMarked );
+                            const bool bHasValue = aPrevItr.getValue( nTop1, bRangeMarked );
+                            assert(bHasValue); (void)bHasValue;
                             if( bRangeMarked )
                             {
                                 nTop1 = aPrevItr.getLastPos() + 1;
@@ -735,7 +736,8 @@ void ScMarkData::GetSelectionCover( ScRange& rRange )
                         while( nTopPrev <= nBottom && nBottomPrev <= nBottom )
                         {
                             bool bRangeMarked;
-                            aPrevItr1.getValue( nTopPrev, bRangeMarked );
+                            const bool bHasValue = aPrevItr1.getValue( nTopPrev, bRangeMarked );
+                            assert(bHasValue); (void)bHasValue;
                             if( bRangeMarked )
                             {
                                 nBottomPrev = aPrevItr1.getLastPos();
@@ -788,7 +790,8 @@ void ScMarkData::GetSelectionCover( ScRange& rRange )
                 while( nTopPrev <= MAXROW && nBottomPrev <= MAXROW && ( nCol > nStartCol ) )
                 {
                     bool bRangeMarked;
-                    aPrevItr1.getValue( nTopPrev, bRangeMarked );
+                    const bool bHasValue = aPrevItr1.getValue( nTopPrev, bRangeMarked );
+                    assert(bHasValue); (void)bHasValue;
                     if( bRangeMarked )
                     {
                         nBottomPrev = aPrevItr1.getLastPos();
@@ -813,7 +816,8 @@ void ScMarkData::GetSelectionCover( ScRange& rRange )
                 ScFlatBoolRowSegments::ForwardIterator aPrevItr( pPrevColMarkedRows.get() ? *pPrevColMarkedRows : aNoRowsMarked );
                 while( nTopPrev <= MAXROW && nBottomPrev <= MAXROW )
                 {
-                    aPrevItr.getValue(nTopPrev, bRangeMarked);
+                    const bool bHasValue = aPrevItr.getValue(nTopPrev, bRangeMarked);
+                    assert(bHasValue); (void)bHasValue;
                     if( bRangeMarked )
                     {
                         nBottomPrev = aPrevItr.getLastPos();
