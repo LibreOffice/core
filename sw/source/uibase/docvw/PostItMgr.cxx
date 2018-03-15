@@ -604,7 +604,7 @@ bool SwPostItMgr::CalcRects()
                 for (unsigned int j=0; j<aPageNum - nNumberOfPages; ++j)
                     mPages.push_back( new SwPostItPageItem());
             }
-            mPages[aPageNum-1]->mList->push_back(pItem);
+            mPages[aPageNum-1]->mvSidebarItems.push_back(pItem);
             mPages[aPageNum-1]->mPageRect = pItem->maLayoutInfo.mPageFrame;
             mPages[aPageNum-1]->eSidebarPosition = pItem->maLayoutInfo.meSidebarPosition;
         }
@@ -665,7 +665,7 @@ void SwPostItMgr::PreparePageContainer()
     // only clear the list, DO NOT delete the objects itself
     for (auto const& page : mPages)
     {
-        page->mList->clear();
+        page->mvSidebarItems.clear();
         if (mvPostItFields.empty())
             page->bScrollbar = false;
     }
@@ -689,14 +689,14 @@ void SwPostItMgr::LayoutPostIts()
         for (SwPostItPageItem* pPage : mPages)
         {
             // only layout if there are notes on this page
-            if (pPage->mList->size()>0)
+            if (pPage->mvSidebarItems.size()>0)
             {
                 std::list<SwAnnotationWin*> aVisiblePostItList;
                 unsigned long           lNeededHeight = 0;
                 long                    mlPageBorder = 0;
                 long                    mlPageEnd = 0;
 
-                for (auto const& pItem : *pPage->mList)
+                for (auto const& pItem : pPage->mvSidebarItems)
                 {
                     VclPtr<SwAnnotationWin> pPostIt = pItem->pPostIt;
 
@@ -929,13 +929,13 @@ void SwPostItMgr::LayoutPostIts()
 
 bool SwPostItMgr::BorderOverPageBorder(unsigned long aPage) const
 {
-    if ( mPages[aPage-1]->mList->empty() )
+    if ( mPages[aPage-1]->mvSidebarItems.empty() )
     {
         OSL_FAIL("Notes SidePane painted but no rects and page lists calculated!");
         return false;
     }
 
-    auto aItem = mPages[aPage-1]->mList->end();
+    auto aItem = mPages[aPage-1]->mvSidebarItems.end();
     --aItem;
     OSL_ENSURE ((*aItem)->pPostIt,"BorderOverPageBorder: NULL postIt, should never happen");
     if ((*aItem)->pPostIt)
@@ -953,7 +953,7 @@ void SwPostItMgr::DrawNotesForPage(OutputDevice *pOutDev, sal_uInt32 nPage)
     assert(nPage < mPages.size());
     if (nPage >= mPages.size())
         return;
-    for (auto const& pItem : *mPages[nPage]->mList)
+    for (auto const& pItem : mPages[nPage]->mvSidebarItems)
     {
         SwAnnotationWin* pPostIt = pItem->pPostIt;
         if (!pPostIt)
@@ -1000,7 +1000,7 @@ void SwPostItMgr::Scroll(const long lScroll,const unsigned long aPage)
     const bool bOldUp = ArrowEnabled(KEY_PAGEUP,aPage);
     const bool bOldDown = ArrowEnabled(KEY_PAGEDOWN,aPage);
     const long aSidebarheight = mpEditWin->PixelToLogic(Size(0,GetSidebarScrollerHeight())).Height();
-    for (auto const& item : *mPages[aPage-1]->mList)
+    for (auto const& item : mPages[aPage-1]->mvSidebarItems)
     {
         SwAnnotationWin* pPostIt = item->pPostIt;
         // if this is an answer, we should take the normal position and not the real, slightly moved position
@@ -1071,7 +1071,7 @@ void SwPostItMgr::MakeVisible(const SwAnnotationWin* pPostIt )
     std::vector<SwPostItPageItem*>::size_type n=0;
     for (auto const& page : mPages)
     {
-        for (auto const& item : *page->mList)
+        for (auto const& item : page->mvSidebarItems)
         {
             if (item->pPostIt==pPostIt)
             {
@@ -1728,13 +1728,13 @@ long SwPostItMgr::GetNextBorder()
 {
     for (auto const& pPage : mPages)
     {
-        for(auto b = pPage->mList->begin(); b!= pPage->mList->end(); ++b)
+        for(auto b = pPage->mvSidebarItems.begin(); b!= pPage->mvSidebarItems.end(); ++b)
         {
             if ((*b)->pPostIt == mpActivePostIt)
             {
                 auto aNext = b;
                 ++aNext;
-                bool bFollow = (aNext != pPage->mList->end()) && (*aNext)->pPostIt->IsFollow();
+                bool bFollow = (aNext != pPage->mvSidebarItems.end()) && (*aNext)->pPostIt->IsFollow();
                 if ( pPage->bScrollbar || bFollow )
                 {
                     return -1;
@@ -1742,7 +1742,7 @@ long SwPostItMgr::GetNextBorder()
                 else
                 {
                     //if this is the last item, return the bottom border otherwise the next item
-                    if (aNext == pPage->mList->end())
+                    if (aNext == pPage->mvSidebarItems.end())
                         return mpEditWin->LogicToPixel(Point(0,pPage->mPageRect.Bottom())).Y() - GetSpaceBetween();
                     else
                         return (*aNext)->pPostIt->GetPosPixel().Y() - GetSpaceBetween();
@@ -1974,7 +1974,7 @@ void SwPostItMgr::CorrectPositions()
         long aAnchorPosY = 0;
         for (SwPostItPageItem* pPage : mPages)
         {
-            for (auto const& item : *pPage->mList)
+            for (auto const& item : pPage->mvSidebarItems)
             {
                 // check, if anchor overlay object exists.
                 if ( item->bShow && item->pPostIt && item->pPostIt->Anchor() )
