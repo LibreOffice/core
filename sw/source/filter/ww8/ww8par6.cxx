@@ -2432,19 +2432,31 @@ bool SwWW8ImplReader::JoinNode(SwPaM &rPam, bool bStealAttr)
         if (bStealAttr)
             m_pCtrlStck->StealAttr(rPam.GetPoint()->nNode);
 
-        if (m_pLastAnchorPos.get())
+        if (m_pLastAnchorPos || m_pPreviousNode)
         {
-            //If the last anchor pos is here, then clear the anchor pos.
-            //This "last anchor pos" is only used for fixing up the
-            //positions of things anchored to page breaks and here
-            //we are removing the last paragraph of a frame, so there
-            //cannot be a page break at this point so we can
-            //safely reset m_pLastAnchorPos to avoid any dangling
-            //SwIndex's pointing into the deleted paragraph
-            SwNodeIndex aLastAnchorPos(m_pLastAnchorPos->nNode);
             SwNodeIndex aToBeJoined(aPref, 1);
-            if (aLastAnchorPos == aToBeJoined)
-                m_pLastAnchorPos.reset();
+
+            if (m_pLastAnchorPos)
+            {
+                //If the last anchor pos is here, then clear the anchor pos.
+                //This "last anchor pos" is only used for fixing up the
+                //positions of things anchored to page breaks and here
+                //we are removing the last paragraph of a frame, so there
+                //cannot be a page break at this point so we can
+                //safely reset m_pLastAnchorPos to avoid any dangling
+                //SwIndex's pointing into the deleted paragraph
+                SwNodeIndex aLastAnchorPos(m_pLastAnchorPos->nNode);
+                if (aLastAnchorPos == aToBeJoined)
+                    m_pLastAnchorPos.reset();
+            }
+
+            if (m_pPreviousNode)
+            {
+                //If the drop character start pos is here, then clear it.
+                SwNodeIndex aDropCharPos(*m_pPreviousNode);
+                if (aDropCharPos == aToBeJoined)
+                    m_pPreviousNode = nullptr;
+            }
         }
 
         pNode->JoinNext();
