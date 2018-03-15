@@ -115,10 +115,9 @@ protected:
     {
         const sal_Unicode * ustr = sText.getStr();
         sal_Int32 nLength = sText.getLength();
-        SVGFilter::ObjectSet::const_iterator aMasterPageIt = mMasterPageSet.begin();
-        for( ; aMasterPageIt != mMasterPageSet.end(); ++aMasterPageIt )
+        for (auto const& masterPage : mMasterPageSet)
         {
-            const Reference< XInterface > & xMasterPage = *aMasterPageIt;
+            const Reference< XInterface > & xMasterPage = masterPage;
             for( sal_Int32 i = 0; i < nLength; ++i )
             {
                 aTextFieldCharSets[ xMasterPage ][ sTextFieldId ].insert( ustr[i] );
@@ -284,10 +283,9 @@ public:
         // we use the unicode char set in an improper way: we put in the date/time format
         // in order to pass it to the CalcFieldValue method
         static const OUString sFieldId = aOOOAttrDateTimeField + "-variable";
-        SVGFilter::ObjectSet::const_iterator aMasterPageIt = mMasterPageSet.begin();
-        for( ; aMasterPageIt != mMasterPageSet.end(); ++aMasterPageIt )
+        for (auto const& masterPage : mMasterPageSet)
         {
-            aTextFieldCharSets[ *aMasterPageIt ][ sFieldId ].insert( static_cast<sal_Unicode>( format ) );
+            aTextFieldCharSets[ masterPage ][ sFieldId ].insert( static_cast<sal_Unicode>( format ) );
         }
     }
 };
@@ -590,11 +588,10 @@ bool SVGFilter::implExport( const Sequence< PropertyValue >& rDescriptor )
                     // the maOldFieldHdl for all that have ended up using
                     // maNewFieldHdl
                     std::vector<SdrOutliner*> aOutliners(mpSdrModel->GetActiveOutliners());
-                    for (auto aIter = aOutliners.begin(); aIter != aOutliners.end(); ++aIter)
+                    for (auto const& outliner : aOutliners)
                     {
-                        SdrOutliner* pOutliner = *aIter;
-                        if (maNewFieldHdl == pOutliner->GetCalcFieldValueHdl())
-                            pOutliner->SetCalcFieldValueHdl(maOldFieldHdl);
+                        if (maNewFieldHdl == outliner->GetCalcFieldValueHdl())
+                            outliner->SetCalcFieldValueHdl(maOldFieldHdl);
                     }
                 }
 
@@ -827,14 +824,12 @@ bool SVGFilter::implExportDocument()
         // Create the (Shape, GDIMetaFile) map
         if( implCreateObjects() )
         {
-            ObjectMap::const_iterator                aIter( mpObjects->begin() );
             ::std::vector< ObjectRepresentation >    aObjects( mpObjects->size() );
             sal_uInt32                               nPos = 0;
 
-            while( aIter != mpObjects->end() )
+            for (auto const& elem : *mpObjects)
             {
-                aObjects[ nPos++ ] = (*aIter).second;
-                ++aIter;
+                aObjects[ nPos++ ] = elem.second;
             }
 
             mpSVGFontExport = new SVGFontExport( *mpSVGExport, aObjects );
@@ -1262,11 +1257,9 @@ void SVGFilter::implExportTextEmbeddedBitmaps()
 
     OUString sId;
 
-    MetaBitmapActionSet::const_iterator it = mEmbeddedBitmapActionSet.begin();
-    MetaBitmapActionSet::const_iterator end = mEmbeddedBitmapActionSet.end();
-    for( ; it != end; ++it)
+    for (auto const& embeddedBitmapAction : mEmbeddedBitmapActionSet)
     {
-        const GDIMetaFile& aMtf = it->GetRepresentation();
+        const GDIMetaFile& aMtf = embeddedBitmapAction.GetRepresentation();
 
         if( aMtf.GetActionSize() == 1 )
         {
@@ -1277,7 +1270,7 @@ void SVGFilter::implExportTextEmbeddedBitmaps()
                 sId = "bitmap(" + OUString::number( nId ) + ")";
                 mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "id", sId );
 
-                const Reference< XInterface >& rxShape = it->GetObject();
+                const Reference< XInterface >& rxShape = embeddedBitmapAction.GetObject();
                 Reference< XPropertySet > xShapePropSet( rxShape, UNO_QUERY );
                 css::awt::Rectangle    aBoundRect;
                 if( xShapePropSet.is() && ( xShapePropSet->getPropertyValue( "BoundRect" ) >>= aBoundRect ) )
@@ -2168,11 +2161,10 @@ IMPL_LINK( SVGFilter, CalcFieldHdl, EditFieldInfo*, pInfo, void )
                 {
                     SvxDateFormat eDateFormat = SvxDateFormat::B, eCurDateFormat;
                     const UCharSet & aCharSet = (*pCharSetMap)[ aVariableDateTimeId ];
-                    UCharSet::const_iterator aChar = aCharSet.begin();
                     // we look for the most verbose date format
-                    for( ; aChar != aCharSet.end(); ++aChar )
+                    for (auto const& elem : aCharSet)
                     {
-                        eCurDateFormat = static_cast<SvxDateFormat>( static_cast<int>( *aChar ) & 0x0f );
+                        eCurDateFormat = static_cast<SvxDateFormat>( static_cast<int>(elem) & 0x0f );
                         switch( eDateFormat )
                         {
                             case SvxDateFormat::StdSmall:
@@ -2284,10 +2276,9 @@ IMPL_LINK( SVGFilter, CalcFieldHdl, EditFieldInfo*, pInfo, void )
             {
                 if( pCharSet != nullptr )
                 {
-                    UCharSet::const_iterator aChar = pCharSet->begin();
-                    for( ; aChar != pCharSet->end(); ++aChar )
+                    for (auto const& elem : *pCharSet)
                     {
-                        aRepresentation += OUStringLiteral1( *aChar );
+                        aRepresentation += OUStringLiteral1(elem);
                     }
                 }
                 pInfo->SetRepresentation( aRepresentation );

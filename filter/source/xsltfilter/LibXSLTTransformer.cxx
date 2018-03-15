@@ -271,14 +271,13 @@ namespace XSLT
         OSL_ASSERT(m_transformer->getInputStream().is());
         OSL_ASSERT(m_transformer->getOutputStream().is());
         OSL_ASSERT(!m_transformer->getStyleSheetURL().isEmpty());
-        ::std::map<const char*, OString>::iterator pit;
         ::std::map<const char*, OString> pmap = m_transformer->getParameters();
         ::std::vector< const char* > params( pmap.size() * 2 + 1 ); // build parameters
         int paramIndex = 0;
-        for (pit = pmap.begin(); pit != pmap.end(); ++pit)
+        for (auto const& elem : pmap)
         {
-            params[paramIndex++] = (*pit).first;
-            params[paramIndex++] = (*pit).second.getStr();
+            params[paramIndex++] = elem.first;
+            params[paramIndex++] = elem.second.getStr();
         }
         params[paramIndex] = nullptr;
         xmlDocPtr doc = xmlReadIO(&ParserInputBufferCallback::on_read,
@@ -422,11 +421,10 @@ namespace XSLT
     void
     LibXSLTTransformer::start()
     {
-        ListenerList::iterator it;
         ListenerList* l = &m_listeners;
-        for (it = l->begin(); it != l->end(); ++it)
+        for (auto const& elem : *l)
         {
-            css::uno::Reference<XStreamListener> xl = *it;
+            css::uno::Reference<XStreamListener> xl = elem;
             xl.get()->started();
         }
         OSL_ENSURE(!m_Reader.is(), "Somebody forgot to call terminate *and* holds a reference to this LibXSLTTransformer instance");
@@ -440,9 +438,9 @@ namespace XSLT
         ListenerList* l = &m_listeners;
         Any arg;
         arg <<= Exception(msg, *this);
-        for (ListenerList::iterator it = l->begin(); it != l->end(); ++it)
+        for (auto const& elem : *l)
         {
-            css::uno::Reference<XStreamListener> xl = *it;
+            css::uno::Reference<XStreamListener> xl = elem;
             if (xl.is())
             {
                 xl.get()->error(arg);
@@ -454,9 +452,9 @@ namespace XSLT
     LibXSLTTransformer::done()
     {
         ListenerList* l = &m_listeners;
-        for (ListenerList::iterator it = l->begin(); it != l->end(); ++it)
+        for (auto const& elem : *l)
         {
-            css::uno::Reference<XStreamListener> xl = *it;
+            css::uno::Reference<XStreamListener> xl = elem;
             if (xl.is())
             {
                 xl.get()->closed();

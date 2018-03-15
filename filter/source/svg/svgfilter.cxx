@@ -264,11 +264,11 @@ sal_Bool SAL_CALL SVGFilter::filter( const Sequence< PropertyValue >& rDescripto
             }
             // Later we move them to a uno::Sequence so we can get them by index
             mMasterPageTargets.resize( aMasterPageTargetSet.size() );
-            ObjectSet::const_iterator aElem = aMasterPageTargetSet.begin();
-            for( sal_Int32 i = 0; aElem != aMasterPageTargetSet.end(); ++aElem, ++i)
+            sal_Int32 i = 0;
+            for (auto const& masterPageTarget : aMasterPageTargetSet)
             {
-                uno::Reference< drawing::XDrawPage > xMasterPage( *aElem,  uno::UNO_QUERY );
-                mMasterPageTargets[i] = xMasterPage;
+                uno::Reference< drawing::XDrawPage > xMasterPage( masterPageTarget,  uno::UNO_QUERY );
+                mMasterPageTargets[i++] = xMasterPage;
             }
 
             bRet = implExport( rDescriptor );

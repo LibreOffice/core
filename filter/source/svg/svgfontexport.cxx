@@ -72,15 +72,14 @@ SVGFontExport::GlyphSet& SVGFontExport::implGetGlyphSet( const vcl::Font& rFont 
 void SVGFontExport::implCollectGlyphs()
 {
     ScopedVclPtrInstance< VirtualDevice > pVDev;
-    ObjectVector::const_iterator aIter( maObjects.begin() );
 
     pVDev->EnableOutput( false );
 
-    while( aIter != maObjects.end() )
+    for (auto const& elem : maObjects)
     {
-        if( (*aIter).HasRepresentation() )
+        if( elem.HasRepresentation() )
         {
-            const GDIMetaFile& rMtf = (*aIter).GetRepresentation();
+            const GDIMetaFile& rMtf = elem.GetRepresentation();
 
             pVDev->Push();
 
@@ -163,8 +162,6 @@ void SVGFontExport::implCollectGlyphs()
 
             pVDev->Pop();
         }
-
-        ++aIter;
     }
 }
 
@@ -177,7 +174,6 @@ void SVGFontExport::implEmbedFont( const vcl::Font& rFont )
 
         if( !rGlyphSet.empty() )
         {
-            GlyphSet::const_iterator    aIter( rGlyphSet.begin() );
             const OUString              aEmbeddedFontStr( "EmbeddedFont_" );
 
             {
@@ -237,11 +233,9 @@ void SVGFontExport::implEmbedFont( const vcl::Font& rFont )
                             SvXMLElementExport  aExp4( mrExport, XML_NAMESPACE_NONE, "missing-glyph", true, true );
                         }
                     }
-
-                    while( aIter != rGlyphSet.end() )
+                    for (auto const& glyph : rGlyphSet)
                     {
-                        implEmbedGlyph( *pVDev.get(), *aIter );
-                        ++aIter;
+                        implEmbedGlyph( *pVDev.get(), glyph);
                     }
                 }
             }
@@ -288,35 +282,23 @@ void SVGFontExport::EmbedFonts()
 {
     implCollectGlyphs();
 
-    GlyphTree::const_iterator aGlyphTreeIter( maGlyphTree.begin() );
-
-    while( aGlyphTreeIter != maGlyphTree.end() )
+    for (auto const& glyph : maGlyphTree)
     {
-        const FontWeightMap&            rFontWeightMap = (*aGlyphTreeIter).second;
-        FontWeightMap::const_iterator   aFontWeightIter( rFontWeightMap.begin() );
-
-        while( aFontWeightIter != rFontWeightMap.end() )
+        const FontWeightMap&            rFontWeightMap = glyph.second;
+        for (auto const& fontWeight : rFontWeightMap)
         {
-            const FontItalicMap&            rFontItalicMap = (*aFontWeightIter).second;
-            FontItalicMap::const_iterator   aFontItalicIter( rFontItalicMap.begin() );
-
-            while( aFontItalicIter != rFontItalicMap.end() )
+            const FontItalicMap&            rFontItalicMap = fontWeight.second;
+            for (auto const& fontItalic : rFontItalicMap)
             {
                 vcl::Font aFont;
 
-                aFont.SetFamilyName( (*aGlyphTreeIter).first );
-                aFont.SetWeight( (*aFontWeightIter).first );
-                aFont.SetItalic( (*aFontItalicIter).first );
+                aFont.SetFamilyName( glyph.first );
+                aFont.SetWeight( fontWeight.first );
+                aFont.SetItalic( fontItalic.first );
 
                 implEmbedFont( aFont );
-
-                ++aFontItalicIter;
             }
-
-            ++aFontWeightIter;
         }
-
-        ++aGlyphTreeIter;
     }
 }
 

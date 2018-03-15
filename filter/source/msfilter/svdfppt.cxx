@@ -5416,10 +5416,10 @@ void PPTStyleTextPropReader::Init( SvStream& rIn, const DffRecordHeader& rTextHe
 
 PPTStyleTextPropReader::~PPTStyleTextPropReader()
 {
-    for ( PPTParaPropSetList::const_iterator it = aParaPropList.begin(); it != aParaPropList.end(); ++it )
-        delete *it;
-    for ( PPTCharPropSetList::const_iterator it = aCharPropList.begin(); it != aCharPropList.end(); ++it )
-        delete *it;
+    for (auto const& paraProp : aParaPropList)
+        delete paraProp;
+    for (auto const& charProp : aCharPropList)
+        delete charProp;
 }
 
 PPTPortionObj::PPTPortionObj( const PPTStyleSheet& rStyleSheet, TSS_Type nInstance, sal_uInt32 nDepth ) :
@@ -7514,11 +7514,10 @@ void ApplyCellLineAttributes( const SdrObject* pLine, Reference< XTable > const 
                 }
             break;
         }
-        std::vector< sal_Int32 >::const_iterator aIter( vPositions.begin() );
-        while( aIter != vPositions.end() )
+        for (auto const& vPos : vPositions)
         {
-            sal_Int32 nPosition = *aIter & 0xffffff;
-            sal_Int32 nFlags = *aIter &~0xffffff;
+            sal_Int32 nPosition = vPos & 0xffffff;
+            sal_Int32 nFlags = vPos &~0xffffff;
             sal_Int32 nRow = nPosition / nColumns;
             sal_Int32 nColumn = nPosition - ( nRow * nColumns );
             Reference< XCell > xCell( xTable->getCellByPosition( nColumn, nRow ) );
@@ -7536,7 +7535,6 @@ void ApplyCellLineAttributes( const SdrObject* pLine, Reference< XTable > const 
                 xPropSet->setPropertyValue( "DiagonalTLBR", Any( true ) );
             if ( nFlags & LinePositionBLTR )
                 xPropSet->setPropertyValue( "DiagonalBLTR", Any( true ) );
-            ++aIter;
         }
     }
     catch( const Exception& )
@@ -7642,13 +7640,12 @@ SdrObject* SdrPowerPointImport::CreateTable( SdrObject* pGroup, const sal_uInt32
                 GetLinePositions( pObj, aRows, aColumns, vPositions, pGroup->GetSnapRect() );
 
                 // correcting merged cell position
-                std::vector< sal_Int32 >::iterator aIter( vPositions.begin() );
-                while( aIter != vPositions.end() )
+                for (auto & vPos : vPositions)
                 {
-                    sal_Int32 nOldPosition = *aIter & 0xffff;
-                    sal_Int32 nOldFlags = *aIter & 0xffff0000;
+                    sal_Int32 nOldPosition = vPos & 0xffff;
+                    sal_Int32 nOldFlags = vPos & 0xffff0000;
                     sal_Int32 nNewPosition = pMergedCellIndexTable[ nOldPosition ] | nOldFlags;
-                    *aIter++ = nNewPosition;
+                    vPos = nNewPosition;
                 }
                 ApplyCellLineAttributes( pObj, xTable, vPositions, aColumns.size() );
             }

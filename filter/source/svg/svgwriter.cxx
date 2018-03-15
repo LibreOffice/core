@@ -1363,22 +1363,20 @@ void SVGTextWriter::implWriteBulletChars()
     mrExport.AddAttribute( XML_NAMESPACE_NONE, "class", "BulletChars" );
     SvXMLElementExport aGroupElem( mrExport, XML_NAMESPACE_NONE, aXMLElemG, true, true );
 
-    BulletListItemInfoMap::const_iterator it = maBulletListItemMap.begin();
-    BulletListItemInfoMap::const_iterator end = maBulletListItemMap.end();
     OUString sId, sPosition, sScaling, sRefId;
-    for( ; it != end; ++it )
+    for (auto const& bulletListItem : maBulletListItemMap)
     {
         // <g id="?" > (used by animations)
         // As id we use the id of the text portion placeholder with prefix
         // bullet-char-*
-        sId = "bullet-char-" + it->first;
+        sId = "bullet-char-" + bulletListItem.first;
         mrExport.AddAttribute( XML_NAMESPACE_NONE, "id", sId );
         mrExport.AddAttribute( XML_NAMESPACE_NONE, "class", "BulletChar" );
         SvXMLElementExport aBulletCharElem( mrExport, XML_NAMESPACE_NONE, aXMLElemG, true, true );
 
         // <g transform="translate(x,y)" >
         {
-            const BulletListItemInfo& rInfo = it->second;
+            const BulletListItemInfo& rInfo = bulletListItem.second;
 
             // Add positioning attribute through a translation
             sPosition = "translate(" +

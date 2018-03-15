@@ -437,12 +437,14 @@ MacroResolvedInfo resolveVBAMacro( SfxObjectShell* pShell, const OUString& Macro
 #endif
     }
 
-    std::vector< OUString >::iterator it_end = sSearchList.end();
-    for ( std::vector< OUString >::iterator it = sSearchList.begin(); !aRes.mbFound && (it != it_end); ++it )
+    for (auto const& search : sSearchList)
     {
-        aRes.mbFound = hasMacro( pShell, *it, sModule, sProcedure );
+        aRes.mbFound = hasMacro( pShell, search, sModule, sProcedure );
         if ( aRes.mbFound )
-            sContainer = *it;
+        {
+            sContainer = search;
+            break;
+        }
     }
     //aRes.msResolvedMacro = sProcedure.Insert( '.', 0 ).Insert( sModule, 0).Insert( '.', 0 ).Insert( sContainer, 0 );
     aRes.msResolvedMacro = sContainer + "." + sModule + "." + sProcedure;
