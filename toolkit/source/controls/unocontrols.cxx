@@ -74,15 +74,7 @@ using namespace ::toolkit;
 uno::Reference< graphic::XGraphic >
 ImageHelper::getGraphicAndGraphicObjectFromURL_nothrow( uno::Reference< graphic::XGraphicObject >& xOutGraphicObj, const OUString& _rURL )
 {
-    if ( _rURL.startsWith( UNO_NAME_GRAPHOBJ_URLPREFIX ) )
-    {
-        // graphic manager uniqueid
-        OUString sID = _rURL.copy( sizeof( UNO_NAME_GRAPHOBJ_URLPREFIX ) - 1 );
-        xOutGraphicObj = graphic::GraphicObject::createWithId( ::comphelper::getProcessComponentContext(), sID );
-    }
-    else // linked
-        xOutGraphicObj = nullptr; // release the GraphicObject
-
+    xOutGraphicObj = nullptr;
     return ImageHelper::getGraphicFromURL_nothrow( _rURL );
 }
 
