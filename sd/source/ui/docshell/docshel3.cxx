@@ -147,11 +147,7 @@ void DrawDocShell::Execute( SfxRequest& rReq )
             {
                 const SvxSearchItem* pSearchItem = static_cast<const SvxSearchItem*>( &pReqArgs->Get(SID_SEARCH_ITEM) );
 
-                // would be nice to have an assign operation at SearchItem
-                SvxSearchItem* pAppSearchItem = SD_MOD()->GetSearchItem();
-                delete pAppSearchItem;
-                pAppSearchItem = static_cast<SvxSearchItem*>( pSearchItem->Clone() );
-                SD_MOD()->SetSearchItem(pAppSearchItem);
+                SD_MOD()->SetSearchItem(std::unique_ptr<SvxSearchItem>(static_cast<SvxSearchItem*>(pSearchItem->Clone())));
             }
 
             rReq.Done();
@@ -215,11 +211,7 @@ void DrawDocShell::Execute( SfxRequest& rReq )
                     const SvxSearchItem* pSearchItem =
                         static_cast<const SvxSearchItem*>( &pReqArgs->Get(SID_SEARCH_ITEM) );
 
-                    // would be nice to have an assign operation at SearchItem
-                    SvxSearchItem* pAppSearchItem = SD_MOD()->GetSearchItem();
-                    delete pAppSearchItem;
-                    pAppSearchItem = static_cast<SvxSearchItem*>( pSearchItem->Clone() );
-                    SD_MOD()->SetSearchItem(pAppSearchItem);
+                    SD_MOD()->SetSearchItem(std::unique_ptr<SvxSearchItem>(static_cast<SvxSearchItem*>( pSearchItem->Clone() )));
                     xFuSearch->SearchAndReplace(pSearchItem);
                 }
             }
