@@ -691,7 +691,7 @@ SwAccessibleTable::~SwAccessibleTable()
 {
     SolarMutexGuard aGuard;
 
-    delete mpTableData;
+    mpTableData.reset();
 }
 
 void SwAccessibleTable::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew)
@@ -794,23 +794,21 @@ uno::Sequence< sal_Int8 > SAL_CALL SwAccessibleTable::getImplementationId()
 }
 
 // #i77106#
-SwAccessibleTableData_Impl* SwAccessibleTable::CreateNewTableData()
+std::unique_ptr<SwAccessibleTableData_Impl> SwAccessibleTable::CreateNewTableData()
 {
     const SwTabFrame* pTabFrame = static_cast<const SwTabFrame*>( GetFrame() );
-    return new SwAccessibleTableData_Impl( *GetMap(), pTabFrame, IsInPagePreview() );
+    return std::unique_ptr<SwAccessibleTableData_Impl>(new SwAccessibleTableData_Impl( *GetMap(), pTabFrame, IsInPagePreview() ));
 }
 
 void SwAccessibleTable::UpdateTableData()
 {
     // #i77106# - usage of new method <CreateNewTableData()>
-    delete mpTableData;
     mpTableData = CreateNewTableData();
 }
 
 void SwAccessibleTable::ClearTableData()
 {
-    delete mpTableData;
-    mpTableData = nullptr;
+    mpTableData.reset();
 }
 
 OUString SAL_CALL SwAccessibleTable::getAccessibleDescription()
@@ -1260,11 +1258,10 @@ void SwAccessibleTable::InvalidatePosOrSize( const SwRect& rOldBox )
     SolarMutexGuard aGuard;
 
     //need to update children
-    SwAccessibleTableData_Impl *pNewTableData = CreateNewTableData();
+    std::unique_ptr<SwAccessibleTableData_Impl> pNewTableData = CreateNewTableData();
     if( !pNewTableData->CompareExtents( GetTableData() ) )
     {
-        delete mpTableData;
-        mpTableData = pNewTableData;
+        mpTableData = std::move(pNewTableData);
         FireTableChangeEvent(*mpTableData);
     }
     if( HasTableData() )
@@ -1315,7 +1312,7 @@ void SwAccessibleTable::InvalidateChildPosOrSize( const SwAccessibleChild& rChil
                 "sw.a11y", "table has invalid position" );
         if( HasTableData() )
         {
-            SwAccessibleTableData_Impl *pNewTableData = CreateNewTableData(); // #i77106#
+            std::unique_ptr<SwAccessibleTableData_Impl> pNewTableData = CreateNewTableData(); // #i77106#
             if( !pNewTableData->CompareExtents( GetTableData() ) )
             {
                 if (pNewTableData->GetRowCount() != mpTableData->GetRowCount()
@@ -1347,11 +1344,7 @@ void SwAccessibleTable::InvalidateChildPosOrSize( const SwAccessibleChild& rChil
                 else
                     FireTableChangeEvent( GetTableData() );
                 ClearTableData();
-                mpTableData = pNewTableData;
-            }
-            else
-            {
-                delete pNewTableData;
+                mpTableData = std::move(pNewTableData);
             }
         }
     }
@@ -1739,10 +1732,10 @@ SwAccessibleTableColHeaders::SwAccessibleTableColHeaders(
     NotRegisteredAtAccessibleMap(); // #i85634#
 }
 
-SwAccessibleTableData_Impl* SwAccessibleTableColHeaders::CreateNewTableData()
+std::unique_ptr<SwAccessibleTableData_Impl> SwAccessibleTableColHeaders::CreateNewTableData()
 {
     const SwTabFrame* pTabFrame = static_cast<const SwTabFrame*>( GetFrame() );
-    return new SwAccessibleTableData_Impl( *(GetMap()), pTabFrame, IsInPagePreview(), true );
+    return std::unique_ptr<SwAccessibleTableData_Impl>(new SwAccessibleTableData_Impl( *(GetMap()), pTabFrame, IsInPagePreview(), true ));
 }
 
 void SwAccessibleTableColHeaders::Modify( const SfxPoolItem * /*pOld*/, const SfxPoolItem * /*pNew*/ )
