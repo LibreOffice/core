@@ -114,7 +114,7 @@ private:
     void WriteAnimationNodeEffect( const ::sax_fastparser::FSHelperPtr& pFS, const css::uno::Reference< css::animations::XAnimationNode >& rXNode, sal_Int32 nXmlNodeType, bool bMainSeqChild );
     void WriteAnimationNodeCommand(const ::sax_fastparser::FSHelperPtr& pFS, const css::uno::Reference< css::animations::XAnimationNode >& rXNode, sal_Int32 nXmlNodeType, bool bMainSeqChild );
     void WriteAnimationNodeCommonPropsStart( const ::sax_fastparser::FSHelperPtr& pFS, const css::uno::Reference< css::animations::XAnimationNode >& rXNode, bool bSingle, bool bMainSeqChild );
-    static void WriteAnimationProperty( const ::sax_fastparser::FSHelperPtr& pFS, const css::uno::Any& rAny );
+    static void WriteAnimationProperty( const ::sax_fastparser::FSHelperPtr& pFS, const css::uno::Any& rAny, sal_Int32 nToken = 0 );
     void WriteAnimationTarget( const ::sax_fastparser::FSHelperPtr& pFS, const css::uno::Any& rTarget );
     bool WriteComments( sal_uInt32 nPageNum );
     void ImplWriteBackground( const ::sax_fastparser::FSHelperPtr& pFS, const css::uno::Reference< css::beans::XPropertySet >& aXBackgroundPropSet );
