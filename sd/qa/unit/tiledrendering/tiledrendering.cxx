@@ -109,11 +109,11 @@ public:
     void testDocumentRepair();
     void testLanguageStatus();
     void testDefaultView();
+    void testIMESupport();
     void testTdf115783();
+    void testPasteTextOnSlide();
     void testTdf115873();
     void testTdf115873Group();
-    void testIMESupport();
-    void testPasteTextOnSlide();
     void testCutSelectionChange();
 
     CPPUNIT_TEST_SUITE(SdTiledRenderingTest);
@@ -155,11 +155,11 @@ public:
     CPPUNIT_TEST(testDocumentRepair);
     CPPUNIT_TEST(testLanguageStatus);
     CPPUNIT_TEST(testDefaultView);
+    CPPUNIT_TEST(testIMESupport);
     CPPUNIT_TEST(testTdf115783);
+    CPPUNIT_TEST(testPasteTextOnSlide);
     CPPUNIT_TEST(testTdf115873);
     CPPUNIT_TEST(testTdf115873Group);
-    CPPUNIT_TEST(testIMESupport);
-    CPPUNIT_TEST(testPasteTextOnSlide);
     CPPUNIT_TEST(testCutSelectionChange);
 
     CPPUNIT_TEST_SUITE_END();
@@ -339,6 +339,7 @@ xmlDocPtr SdTiledRenderingTest::parseXmlDump()
 
 void SdTiledRenderingTest::testRegisterCallback()
 {
+    comphelper::LibreOfficeKit::setActive();
     SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
     pViewShell->GetViewShellBase().registerLibreOfficeKitViewCallback(&SdTiledRenderingTest::callback, this);
@@ -354,6 +355,7 @@ void SdTiledRenderingTest::testRegisterCallback()
     CPPUNIT_ASSERT(!m_aInvalidation.IsEmpty());
     ::tools::Rectangle aTopLeft(0, 0, 256*15, 256*15); // 1 px = 15 twips, assuming 96 DPI.
     CPPUNIT_ASSERT(m_aInvalidation.IsOver(aTopLeft));
+    comphelper::LibreOfficeKit::setActive(false);
 }
 
 void SdTiledRenderingTest::testPostKeyEvent()
@@ -423,6 +425,7 @@ void SdTiledRenderingTest::testPostMouseEvent()
 
 void SdTiledRenderingTest::testSetTextSelection()
 {
+    comphelper::LibreOfficeKit::setActive();
     SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
     uno::Reference<container::XIndexAccess> xDrawPage(pXImpressDocument->getDrawPages()->getByIndex(0), uno::UNO_QUERY);
     uno::Reference<text::XTextRange> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
@@ -447,10 +450,12 @@ void SdTiledRenderingTest::testSetTextSelection()
     pXImpressDocument->setTextSelection(LOK_SETTEXTSELECTION_END, aEnd.getX(), aEnd.getY());
     // The new selection must include the ending dot, too -- but not the first word.
     CPPUNIT_ASSERT_EQUAL(OUString("bbb."), rEditView.GetSelected());
+    comphelper::LibreOfficeKit::setActive(false);
 }
 
 void SdTiledRenderingTest::testGetTextSelection()
 {
+    comphelper::LibreOfficeKit::setActive();
     SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
     uno::Reference<container::XIndexAccess> xDrawPage(pXImpressDocument->getDrawPages()->getByIndex(0), uno::UNO_QUERY);
     uno::Reference<text::XTextRange> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
@@ -471,10 +476,12 @@ void SdTiledRenderingTest::testGetTextSelection()
 
     // Make sure returned RTF is not empty.
     CPPUNIT_ASSERT(!pXImpressDocument->getTextSelection("text/rtf", aUsedFormat).isEmpty());
+    comphelper::LibreOfficeKit::setActive(false);
 }
 
 void SdTiledRenderingTest::testSetGraphicSelection()
 {
+    comphelper::LibreOfficeKit::setActive();
     SdXImpressDocument* pXImpressDocument = createDoc("shape.odp");
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
     SdPage* pPage = pViewShell->GetActualPage();
@@ -504,10 +511,13 @@ void SdTiledRenderingTest::testSetGraphicSelection()
     // Check that a resize happened, but aspect ratio is not kept.
     CPPUNIT_ASSERT_EQUAL(aShapeBefore.getWidth(), aShapeAfter.getWidth());
     CPPUNIT_ASSERT(aShapeBefore.getHeight() < aShapeAfter.getHeight());
+
+    comphelper::LibreOfficeKit::setActive(false);
 }
 
 void SdTiledRenderingTest::testUndoShells()
 {
+    comphelper::LibreOfficeKit::setActive();
     // Load a document and set the page size.
     SdXImpressDocument* pXImpressDocument = createDoc("shape.odp");
     uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
@@ -525,10 +535,12 @@ void SdTiledRenderingTest::testUndoShells()
     sal_Int32 nView1 = SfxLokHelper::getView();
     // This was -1, SdUndoGroup did not track what view shell created it.
     CPPUNIT_ASSERT_EQUAL(ViewShellId(nView1), pUndoManager->GetUndoAction()->GetViewShellId());
+    comphelper::LibreOfficeKit::setActive(false);
 }
 
 void SdTiledRenderingTest::testResetSelection()
 {
+    comphelper::LibreOfficeKit::setActive();
     SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
     uno::Reference<container::XIndexAccess> xDrawPage(pXImpressDocument->getDrawPages()->getByIndex(0), uno::UNO_QUERY);
     uno::Reference<text::XTextRange> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
@@ -549,6 +561,7 @@ void SdTiledRenderingTest::testResetSelection()
     // Now use resetSelection() to reset the selection.
     pXImpressDocument->resetSelection();
     CPPUNIT_ASSERT(!pView->GetTextEditObject());
+    comphelper::LibreOfficeKit::setActive(false);
 }
 
 static void lcl_search(const OUString& rKey, bool bFindAll = false)
@@ -662,6 +675,7 @@ void SdTiledRenderingTest::testSearchAllFollowedBySearch()
     // This used to give wrong result: 'search' after 'search all' still
     // returned 'third'
     CPPUNIT_ASSERT_EQUAL(OString("match"), pXImpressDocument->getTextSelection("text/plain;charset=utf-8", aUsedFormat));
+    comphelper::LibreOfficeKit::setActive(false);
 }
 
 void SdTiledRenderingTest::testDontSearchInMasterPages()
@@ -1555,6 +1569,7 @@ void SdTiledRenderingTest::testTdf104405()
 
 void SdTiledRenderingTest::testTdf81754()
 {
+    comphelper::LibreOfficeKit::setActive();
     SdXImpressDocument* pXImpressDocument = createDoc("tdf81754.pptx");
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
     SdPage* pActualPage = pViewShell->GetActualPage();
@@ -1584,6 +1599,7 @@ void SdTiledRenderingTest::testTdf81754()
     CPPUNIT_ASSERT_EQUAL(OUString("Somethingxx"), aEdit.GetText(0));
 
     xDocShRef->DoClose();
+    comphelper::LibreOfficeKit::setActive(false);
 }
 
 void SdTiledRenderingTest::testTdf105502()
@@ -1955,6 +1971,47 @@ void SdTiledRenderingTest::testDefaultView()
     comphelper::LibreOfficeKit::setActive(false);
 }
 
+void SdTiledRenderingTest::testIMESupport()
+{
+    // Load the document with notes view.
+    comphelper::LibreOfficeKit::setActive();
+
+    SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
+    VclPtr<vcl::Window> pDocWindow = pXImpressDocument->getDocWindow();
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    SdrObject* pObject = pViewShell->GetActualPage()->GetObj(0);
+    SdrTextObj* pTextObj = static_cast<SdrTextObj*>(pObject);
+    SdrView* pView = pViewShell->GetView();
+    pView->MarkObj(pTextObj, pView->GetSdrPageView());
+    SfxStringItem aInputString(SID_ATTR_CHAR, "x");
+    pViewShell->GetViewFrame()->GetDispatcher()->ExecuteList(SID_ATTR_CHAR,
+                                                             SfxCallMode::SYNCHRON, { &aInputString });
+
+    // sequence of chinese IME compositions when 'nihao' is typed in an IME
+    const std::vector<OString> aUtf8Inputs{ "年", "你", "你好", "你哈", "你好", "你好" };
+    std::vector<OUString> aInputs;
+    std::transform(aUtf8Inputs.begin(), aUtf8Inputs.end(),
+                   std::back_inserter(aInputs), [](OString aInput) {
+                       return OUString::fromUtf8(aInput);
+                   });
+    for (const auto& aInput: aInputs)
+    {
+        pDocWindow->PostExtTextInputEvent(VclEventId::ExtTextInput, aInput);
+    }
+    pDocWindow->PostExtTextInputEvent(VclEventId::EndExtTextInput, "");
+
+    // the cursor should be at position 3rd
+    EditView& rEditView = pView->GetTextEditOutlinerView()->GetEditView();
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(3), rEditView.GetSelection().nStartPos);
+
+    ESelection aWordSelection(0, 0, 0, 3); // start para, start char, end para, end char.
+    rEditView.SetSelection(aWordSelection);
+    // content contains only the last IME composition, not all
+    CPPUNIT_ASSERT_EQUAL(OUString("x").concat(aInputs[aInputs.size() - 1]), rEditView.GetSelected());
+
+    comphelper::LibreOfficeKit::setActive(false);
+}
+
 void SdTiledRenderingTest::testTdf115783()
 {
     // Load the document.
@@ -2024,97 +2081,6 @@ void SdTiledRenderingTest::testTdf115783()
     comphelper::LibreOfficeKit::setActive(false);
 }
 
-void SdTiledRenderingTest::testTdf115873()
-{
-    // Initialize the navigator.
-    SdXImpressDocument* pXImpressDocument = createDoc("tdf115873.fodp");
-    SfxViewShell* pViewShell = SfxViewShell::Current();
-    CPPUNIT_ASSERT(pViewShell);
-    SfxBindings& rBindings = pViewShell->GetViewFrame()->GetBindings();
-    ScopedVclPtrInstance<SdNavigatorWin> pNavigator(nullptr, &rBindings);
-    pNavigator->InitTreeLB(pXImpressDocument->GetDoc());
-    pNavigator->Show();
-    VclPtr<SdPageObjsTLB> pObjects = pNavigator->GetObjects();
-    pObjects->Select(pObjects->GetEntry(0));
-    sd::ViewShell* pSdViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
-    SdrView* pSdrView = pSdViewShell->GetView();
-    pSdrView->UnmarkAllObj(pSdrView->GetSdrPageView());
-
-    // Make sure that no shapes are selected.
-    const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
-    Scheduler::ProcessEventsToIdle();
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), rMarkList.GetMarkCount());
-
-    // Single-click with the mouse.
-    short nHeight = pObjects->GetEntryHeight();
-    // Position of the center of the 2nd entry (first is the slide, second is
-    // the shape).
-    Point aPoint(pObjects->GetOutputWidthPixel() / 2, nHeight * 1.5);
-    MouseEvent aMouseEvent(aPoint, /*nClicks=*/1, MouseEventModifiers::NONE, MOUSE_LEFT);
-    pObjects->MouseButtonDown(aMouseEvent);
-    pObjects->MouseButtonUp(aMouseEvent);
-    Scheduler::ProcessEventsToIdle();
-    // This failed, single-click did not result in a shape selection (only
-    // double-click did).
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rMarkList.GetMarkCount());
-}
-
-void SdTiledRenderingTest::testTdf115873Group()
-{
-    // Initialize the navigator.
-    SdXImpressDocument* pXImpressDocument = createDoc("tdf115873-group.fodp");
-    SfxViewShell* pViewShell = SfxViewShell::Current();
-    CPPUNIT_ASSERT(pViewShell);
-    SfxBindings& rBindings = pViewShell->GetViewFrame()->GetBindings();
-    ScopedVclPtrInstance<SdNavigatorWin> pNavigator(nullptr, &rBindings);
-    pNavigator->InitTreeLB(pXImpressDocument->GetDoc());
-    VclPtr<SdPageObjsTLB> pObjects = pNavigator->GetObjects();
-    // This failed, Fill() and IsEqualToDoc() were out of sync for group
-    // shapes.
-    CPPUNIT_ASSERT(pObjects->IsEqualToDoc(pXImpressDocument->GetDoc()));
-}
-
-void SdTiledRenderingTest::testIMESupport()
-{
-    // Load the document with notes view.
-    comphelper::LibreOfficeKit::setActive();
-
-    SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
-    VclPtr<vcl::Window> pDocWindow = pXImpressDocument->getDocWindow();
-    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
-    SdrObject* pObject = pViewShell->GetActualPage()->GetObj(0);
-    SdrTextObj* pTextObj = static_cast<SdrTextObj*>(pObject);
-    SdrView* pView = pViewShell->GetView();
-    pView->MarkObj(pTextObj, pView->GetSdrPageView());
-    SfxStringItem aInputString(SID_ATTR_CHAR, "x");
-    pViewShell->GetViewFrame()->GetDispatcher()->ExecuteList(SID_ATTR_CHAR,
-                                                             SfxCallMode::SYNCHRON, { &aInputString });
-
-    // sequence of chineese IME compositions when 'nihao' is typed in an IME
-    const std::vector<OString> aUtf8Inputs{ "年", "你", "你好", "你哈", "你好", "你好" };
-    std::vector<OUString> aInputs;
-    std::transform(aUtf8Inputs.begin(), aUtf8Inputs.end(),
-                   std::back_inserter(aInputs), [](OString aInput) {
-                       return OUString::fromUtf8(aInput);
-                   });
-    for (const auto& aInput: aInputs)
-    {
-        pDocWindow->PostExtTextInputEvent(VclEventId::ExtTextInput, aInput);
-    }
-    pDocWindow->PostExtTextInputEvent(VclEventId::EndExtTextInput, "");
-
-    // the cursor should be at position 3rd
-    EditView& rEditView = pView->GetTextEditOutlinerView()->GetEditView();
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(3), rEditView.GetSelection().nStartPos);
-
-    ESelection aWordSelection(0, 0, 0, 3); // start para, start char, end para, end char.
-    rEditView.SetSelection(aWordSelection);
-    // content contains only the last IME composition, not all
-    CPPUNIT_ASSERT_EQUAL(OUString("x").concat(aInputs[aInputs.size() - 1]), rEditView.GetSelected());
-
-    comphelper::LibreOfficeKit::setActive(false);
-}
-
 void SdTiledRenderingTest::testPasteTextOnSlide()
 {
     // Load the document.
@@ -2177,6 +2143,60 @@ void SdTiledRenderingTest::testPasteTextOnSlide()
     CPPUNIT_ASSERT_DOUBLES_EQUAL(static_cast<long>(12990), aPos.getX(), 100);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(static_cast<long>(7393), aPos.getY(), 100);
 
+    comphelper::LibreOfficeKit::setActive(false);
+}
+
+void SdTiledRenderingTest::testTdf115873()
+{
+    comphelper::LibreOfficeKit::setActive();
+    // Initialize the navigator.
+    SdXImpressDocument* pXImpressDocument = createDoc("tdf115873.fodp");
+    SfxViewShell* pViewShell = SfxViewShell::Current();
+    CPPUNIT_ASSERT(pViewShell);
+    SfxBindings& rBindings = pViewShell->GetViewFrame()->GetBindings();
+    ScopedVclPtrInstance<SdNavigatorWin> pNavigator(nullptr, &rBindings);
+    pNavigator->InitTreeLB(pXImpressDocument->GetDoc());
+    pNavigator->Show();
+    VclPtr<SdPageObjsTLB> pObjects = pNavigator->GetObjects();
+    pObjects->Select(pObjects->GetEntry(0));
+    sd::ViewShell* pSdViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    SdrView* pSdrView = pSdViewShell->GetView();
+    pSdrView->UnmarkAllObj(pSdrView->GetSdrPageView());
+
+    // Make sure that no shapes are selected.
+    const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), rMarkList.GetMarkCount());
+
+    // Single-click with the mouse.
+    short nHeight = pObjects->GetEntryHeight();
+    // Position of the center of the 2nd entry (first is the slide, second is
+    // the shape).
+    Point aPoint(pObjects->GetOutputWidthPixel() / 2, nHeight * 1.5);
+    MouseEvent aMouseEvent(aPoint, /*nClicks=*/1, MouseEventModifiers::NONE, MOUSE_LEFT);
+    pObjects->MouseButtonDown(aMouseEvent);
+    pObjects->MouseButtonUp(aMouseEvent);
+    Scheduler::ProcessEventsToIdle();
+    // This failed, single-click did not result in a shape selection (only
+    // double-click did).
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rMarkList.GetMarkCount());
+    comphelper::LibreOfficeKit::setActive(false);
+}
+
+void SdTiledRenderingTest::testTdf115873Group()
+{
+    comphelper::LibreOfficeKit::setActive();
+    // Initialize the navigator.
+    SdXImpressDocument* pXImpressDocument = createDoc("tdf115873-group.fodp");
+    SfxViewShell* pViewShell = SfxViewShell::Current();
+    CPPUNIT_ASSERT(pViewShell);
+    SfxBindings& rBindings = pViewShell->GetViewFrame()->GetBindings();
+    ScopedVclPtrInstance<SdNavigatorWin> pNavigator(nullptr, &rBindings);
+    pNavigator->InitTreeLB(pXImpressDocument->GetDoc());
+    VclPtr<SdPageObjsTLB> pObjects = pNavigator->GetObjects();
+    // This failed, Fill() and IsEqualToDoc() were out of sync for group
+    // shapes.
+    CPPUNIT_ASSERT(pObjects->IsEqualToDoc(pXImpressDocument->GetDoc()));
     comphelper::LibreOfficeKit::setActive(false);
 }
 
