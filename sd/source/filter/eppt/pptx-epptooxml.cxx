@@ -991,23 +991,19 @@ void PowerPointExport::WriteAnimationAttributeName( const FSHelperPtr& pFS, cons
 
     SAL_INFO("sd.eppt", "write attribute name: " << USS(rAttributeName));
 
+    const char* pAttribute = nullptr;
+
     if (rAttributeName == "Visibility")
     {
-        pFS->startElementNS(XML_p, XML_attrName, FSEND);
-        pFS->writeEscaped("style.visibility");
-        pFS->endElementNS(XML_p, XML_attrName);
+        pAttribute = "style.visibility";
     }
     else if (rAttributeName == "X")
     {
-        pFS->startElementNS(XML_p, XML_attrName, FSEND);
-        pFS->writeEscaped("ppt_x");
-        pFS->endElementNS(XML_p, XML_attrName);
+        pAttribute = "ppt_x";
     }
     else if (rAttributeName == "Y")
     {
-        pFS->startElementNS(XML_p, XML_attrName, FSEND);
-        pFS->writeEscaped("ppt_y");
-        pFS->endElementNS(XML_p, XML_attrName);
+        pAttribute = "ppt_y";
     }
     else if (rAttributeName == "X;Y")
     {
@@ -1021,58 +1017,53 @@ void PowerPointExport::WriteAnimationAttributeName( const FSHelperPtr& pFS, cons
     }
     else if (rAttributeName == "Width")
     {
-        pFS->startElementNS(XML_p, XML_attrName, FSEND);
-        pFS->writeEscaped("ppt_w");
-        pFS->endElementNS(XML_p, XML_attrName);
+        pAttribute = "ppt_w";
     }
     else if (rAttributeName == "Height")
     {
-        pFS->startElementNS(XML_p, XML_attrName, FSEND);
-        pFS->writeEscaped("ppt_h");
-        pFS->endElementNS(XML_p, XML_attrName);
+        pAttribute = "ppt_h";
     }
     else if (rAttributeName == "Rotate")
     {
-        pFS->startElementNS(XML_p, XML_attrName, FSEND);
-        pFS->writeEscaped("r");
-        pFS->endElementNS(XML_p, XML_attrName);
+        pAttribute = "r";
     }
     else if (rAttributeName == "FillStyle")
     {
-        pFS->startElementNS(XML_p, XML_attrName, FSEND);
-        pFS->writeEscaped("fill.type");
-        pFS->endElementNS(XML_p, XML_attrName);
+        pAttribute = "fill.type";
     }
     else if (rAttributeName == "FillOn")
     {
-        pFS->startElementNS(XML_p, XML_attrName, FSEND);
-        pFS->writeEscaped("fill.on");
-        pFS->endElementNS(XML_p, XML_attrName);
+        pAttribute = "fill.on";
     }
     else if (rAttributeName == "FillColor")
     {
-        pFS->startElementNS(XML_p, XML_attrName, FSEND);
-        pFS->writeEscaped("fillcolor");
-        pFS->endElementNS(XML_p, XML_attrName);
+        pAttribute = "fillcolor";
     }
     else if (rAttributeName == "CharColor")
     {
-        pFS->startElementNS(XML_p, XML_attrName, FSEND);
-        pFS->writeEscaped("style.color");
-        pFS->endElementNS(XML_p, XML_attrName);
+        pAttribute = "style.color";
     }
-    if (rAttributeName == "SkewX")
+    else if (rAttributeName == "Opacity")
     {
-        pFS->startElementNS(XML_p, XML_attrName, FSEND);
-        pFS->writeEscaped("xshear");
-        pFS->endElementNS(XML_p, XML_attrName);
+        pAttribute = "style.opacity";
+    }
+    else if (rAttributeName == "SkewX")
+    {
+        pAttribute = "xshear";
     }
     else
     {
         SAL_INFO("sd.eppt", "unhandled animation attribute name: " << rAttributeName);
     }
 
-    pFS->endElementNS( XML_p, XML_attrNameLst );
+    if (pAttribute)
+    {
+        pFS->startElementNS(XML_p, XML_attrName, FSEND);
+        pFS->writeEscaped(pAttribute);
+        pFS->endElementNS(XML_p, XML_attrName);
+    }
+
+    pFS->endElementNS(XML_p, XML_attrNameLst);
 }
 
 void PowerPointExport::WriteAnimationTarget( const FSHelperPtr& pFS, const Any& rTarget )
