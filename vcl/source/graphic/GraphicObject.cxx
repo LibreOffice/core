@@ -1071,11 +1071,9 @@ IMPL_LINK_NOARG(GraphicObject, ImplAutoSwapOutHdl, Timer *, void)
         mxSwapOutTimer->Start();
 }
 
-#define UNO_NAME_GRAPHOBJ_URLPREFIX "vnd.sun.star.GraphicObject:"
-
 bool GraphicObject::isGraphicObjectUniqueIdURL(OUString const & rURL)
 {
-    const OUString aPrefix(UNO_NAME_GRAPHOBJ_URLPREFIX);
+    const OUString aPrefix("vnd.sun.star.GraphicObject:");
     return rURL.startsWith(aPrefix);
 }
 
