@@ -1623,13 +1623,13 @@ void ScDBFunc::DataPilotInput( const ScAddress& rPos, const OUString& rString )
 
 static void lcl_MoveToEnd( ScDPSaveDimension& rDim, const OUString& rItemName )
 {
-    ScDPSaveMember* pNewMember = nullptr;
+    std::unique_ptr<ScDPSaveMember> pNewMember;
     const ScDPSaveMember* pOldMember = rDim.GetExistingMemberByName( rItemName );
     if ( pOldMember )
-        pNewMember = new ScDPSaveMember( *pOldMember );
+        pNewMember.reset(new ScDPSaveMember( *pOldMember ));
     else
-        pNewMember = new ScDPSaveMember( rItemName );
-    rDim.AddMember( pNewMember );
+        pNewMember.reset(new ScDPSaveMember( rItemName ));
+    rDim.AddMember( std::move(pNewMember) );
     // AddMember takes ownership of the new pointer,
     // puts it to the end of the list even if it was in the list before.
 }
@@ -1748,8 +1748,7 @@ void ScDBFunc::DataPilotSort(ScDPObject* pDPObj, long nDimIndex, bool bAscending
                 // All members are supposed to be present.
                 continue;
 
-            ScDPSaveMember* pNewMem = new ScDPSaveMember(*pOldMem);
-            pSaveDim->AddMember(pNewMem);
+            pSaveDim->AddMember(std::unique_ptr<ScDPSaveMember>(new ScDPSaveMember(*pOldMem)));
         }
 
         // Set the sorting mode to manual for now.  We may introduce a new sorting
