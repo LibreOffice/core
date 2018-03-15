@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "ba2be162_37fe0d6c",
+        "filename": "vcl/inc/win/saldata.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 218,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2018-03-15T12:54:47Z",
+      "side": 1,
+      "message": "If you are the main thread, you simply call GetDC.\n\nIf you\u0027re not the main thread, the main thread has to call GetDCEx( ..., DCX_CACHE) for you, so you have a valid DC. And with those interesting \"max 3 cached DCs in Windows 98\", according to a comment in the code. Don\u0027t know if this limit still exists.\n\nI\u0027m up for different naming, but actually you don\u0027t want to get the main thread DC (from GetDC). That\u0027s the whole point, I was originally missing, because I didn\u0027t look at the code handling SAL_MSG_GETDC.",
+      "parentUuid": "ba2be162_b7dbdd1a",
+      "revId": "a46169f0eaff7216dbe6e9da41fa8c769abe2242",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ba2be162_57ec61c7",
         "filename": "vcl/inc/win/salframe.h",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2018-03-15T12:32:39Z",
       "side": 1,
       "message": "maybe we could rename these to something like:\n\n  mpMainThreadGraphics\n  mpOtherThreadGraphics\n?\nat least the current mpLocalGraphics makes me think it\u0027s thread-local, when it\u0027s exactly not.",
+      "revId": "a46169f0eaff7216dbe6e9da41fa8c769abe2242",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba2be162_b7203df9",
+        "filename": "vcl/inc/win/salframe.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2018-03-15T12:54:47Z",
+      "side": 1,
+      "message": "I also thought about Local \u003d\u003e Main. But mpOtherThreadGraphics doesn\u0027t help much when reading code - what is the \"other\" thread; \"Other\" \u003d\u003e \"NonMain\" or \"NotMain\"…\n\nNaming is hard.\n\nEverything is better then the original pGraphics and pGraphics2…",
+      "parentUuid": "ba2be162_57ec61c7",
       "revId": "a46169f0eaff7216dbe6e9da41fa8c769abe2242",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
