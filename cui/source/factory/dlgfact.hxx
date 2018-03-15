@@ -324,9 +324,16 @@ private:
 class SvxObjectNameDialog;
 class SvxObjectTitleDescDialog;
 
-class AbstractSvxObjectNameDialog_Impl :public AbstractSvxObjectNameDialog
+class AbstractSvxObjectNameDialog_Impl : public AbstractSvxObjectNameDialog
 {
-    DECL_ABSTDLG_BASE(AbstractSvxObjectNameDialog_Impl, SvxObjectNameDialog)
+protected:
+    std::unique_ptr<SvxObjectNameDialog> m_xDlg;
+public:
+    explicit AbstractSvxObjectNameDialog_Impl(SvxObjectNameDialog* p)
+        : m_xDlg(p)
+    {
+    }
+    virtual short Execute() override;
     virtual void GetName(OUString& rName) override ;
     virtual void SetCheckNameHdl(const Link<AbstractSvxObjectNameDialog&,bool>& rLink) override;
 
@@ -566,7 +573,7 @@ public:
     virtual VclPtr<AbstractSvxNameDialog> CreateSvxNameDialog(weld::Window* pParent,
                                             const OUString& rName, const OUString& rDesc) override;
     // #i68101#
-    virtual VclPtr<AbstractSvxObjectNameDialog> CreateSvxObjectNameDialog(const OUString& rName ) override;
+    virtual VclPtr<AbstractSvxObjectNameDialog> CreateSvxObjectNameDialog(weld::Window* pParent, const OUString& rName) override;
     virtual VclPtr<AbstractSvxObjectTitleDescDialog> CreateSvxObjectTitleDescDialog(const OUString& rTitle, const OUString& rDescription) override;
 
     virtual VclPtr<AbstractSvxMultiPathDialog>    CreateSvxMultiPathDialog(vcl::Window* pParent) override;

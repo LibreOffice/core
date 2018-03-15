@@ -72,28 +72,26 @@ public:
 /** #i68101#
     Dialog for editing Object name
     plus uniqueness-callback-linkHandler */
-class SvxObjectNameDialog : public ModalDialog
+class SvxObjectNameDialog : public weld::GenericDialogController
 {
 private:
     // name
-    VclPtr<Edit>           pEdtName;
+    std::unique_ptr<weld::Entry> m_xEdtName;
 
     // buttons
-    VclPtr<OKButton>       pBtnOK;
+    std::unique_ptr<weld::Button> m_xBtnOK;
 
     // callback link for name uniqueness
     Link<SvxObjectNameDialog&,bool> aCheckNameHdl;
 
-    DECL_LINK(ModifyHdl, Edit&, void);
+    DECL_LINK(ModifyHdl, weld::Entry&, void);
 
 public:
     // constructor
-    SvxObjectNameDialog(vcl::Window* pWindow, const OUString& rName);
-    virtual ~SvxObjectNameDialog() override;
-    virtual void dispose() override;
+    SvxObjectNameDialog(weld::Window* pWindow, const OUString& rName);
 
     // data access
-    void GetName(OUString& rName) {rName = pEdtName->GetText(); }
+    OUString GetName() { return m_xEdtName->get_text(); }
 
     // set handler
     void SetCheckNameHdl(const Link<SvxObjectNameDialog&,bool>& rLink)
