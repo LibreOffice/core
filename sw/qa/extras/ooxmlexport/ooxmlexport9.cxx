@@ -648,7 +648,7 @@ DECLARE_OOXMLEXPORT_TEST(testGraphicObjectFliph, "graphic-object-fliph.docx")
     CPPUNIT_ASSERT(getProperty<bool>(getShape(1), "HoriMirroredOnOddPages"));
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTdf112118, "tdf112118.docx")
+DECLARE_OOXMLEXPORT_TEST(testTdf112118_DOCX, "tdf112118.docx")
 {
     auto xStyles = getStyles("PageStyles");
     auto testProc = [&](const OUString& sStyleName, sal_Int32 nMargin, sal_Int32 nBorderDistance,
