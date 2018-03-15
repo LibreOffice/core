@@ -67,10 +67,10 @@
                     "type": "shell"
                 },
                 {
-                    "url": "https://dev-www.libreoffice.org/src/pdfium-3312.tar.bz2",
-                    "sha256": "baa103ab9b72cf3be5ae80106e7ca56110a150fc60a9a3d897e5b26631355b0f",
+                    "url": "https://dev-www.libreoffice.org/src/pdfium-3358.tar.bz2",
+                    "sha256": "0cd451fb1b301dc1df55f91e644092e505032dcddbdeaf3e2744039377d1bfd0",
                     "type": "file",
-                    "dest-filename": "external/tarballs/pdfium-3312.tar.bz2"
+                    "dest-filename": "external/tarballs/pdfium-3358.tar.bz2"
                 },
                 {
                     "url": "https://dev-www.libreoffice.org/src/0168229624cfac409e766913506961a8-ucpp-1.3.2.tar.gz",
@@ -265,10 +265,10 @@
                     "dest-filename": "external/tarballs/liblangtag-0.6.2.tar.bz2"
                 },
                 {
-                    "url": "https://dev-www.libreoffice.org/src/libmspub-0.1.3.tar.xz",
-                    "sha256": "f0225f0ff03f6bec4847d7c2d8719a36cafc4b97a09e504b610372cc5b981c97",
+                    "url": "https://dev-www.libreoffice.org/src/libmspub-0.1.4.tar.xz",
+                    "sha256": "ef36c1a1aabb2ba3b0bedaaafe717bf4480be2ba8de6f3894be5fd3702b013ba",
                     "type": "file",
-                    "dest-filename": "external/tarballs/libmspub-0.1.3.tar.xz"
+                    "dest-filename": "external/tarballs/libmspub-0.1.4.tar.xz"
                 },
                 {
                     "url": "https://dev-www.libreoffice.org/src/libmwaw-0.3.13.tar.xz",
@@ -373,10 +373,10 @@
                     "dest-filename": "external/tarballs/openldap-2.4.45.tgz"
                 },
                 {
-                    "url": "https://dev-www.libreoffice.org/src/liborcus-0.13.3.tar.gz",
-                    "sha256": "62e76de1fd3101e77118732b860354121b40a87bbb1ebfeb8203477fffac16e9",
+                    "url": "https://dev-www.libreoffice.org/src/liborcus-0.13.4.tar.gz",
+                    "sha256": "bc01b1b3e9091416f498840d3c19a1aa2704b448100e7f6b80eefe88aab06d5b",
                     "type": "file",
-                    "dest-filename": "external/tarballs/liborcus-0.13.3.tar.gz"
+                    "dest-filename": "external/tarballs/liborcus-0.13.4.tar.gz"
                 },
                 {
                     "url": "https://dev-www.libreoffice.org/src/poppler-0.59.0.tar.xz",
