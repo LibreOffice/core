@@ -339,6 +339,7 @@ xmlDocPtr SdTiledRenderingTest::parseXmlDump()
 
 void SdTiledRenderingTest::testRegisterCallback()
 {
+    comphelper::LibreOfficeKit::setActive();
     SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
     pViewShell->GetViewShellBase().registerLibreOfficeKitViewCallback(&SdTiledRenderingTest::callback, this);
@@ -354,6 +355,7 @@ void SdTiledRenderingTest::testRegisterCallback()
     CPPUNIT_ASSERT(!m_aInvalidation.IsEmpty());
     ::tools::Rectangle aTopLeft(0, 0, 256*15, 256*15); // 1 px = 15 twips, assuming 96 DPI.
     CPPUNIT_ASSERT(m_aInvalidation.IsOver(aTopLeft));
+    comphelper::LibreOfficeKit::setActive(false);
 }
 
 void SdTiledRenderingTest::testPostKeyEvent()
@@ -423,6 +425,7 @@ void SdTiledRenderingTest::testPostMouseEvent()
 
 void SdTiledRenderingTest::testSetTextSelection()
 {
+    comphelper::LibreOfficeKit::setActive();
     SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
     uno::Reference<container::XIndexAccess> xDrawPage(pXImpressDocument->getDrawPages()->getByIndex(0), uno::UNO_QUERY);
     uno::Reference<text::XTextRange> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
@@ -447,10 +450,12 @@ void SdTiledRenderingTest::testSetTextSelection()
     pXImpressDocument->setTextSelection(LOK_SETTEXTSELECTION_END, aEnd.getX(), aEnd.getY());
     // The new selection must include the ending dot, too -- but not the first word.
     CPPUNIT_ASSERT_EQUAL(OUString("bbb."), rEditView.GetSelected());
+    comphelper::LibreOfficeKit::setActive(false);
 }
 
 void SdTiledRenderingTest::testGetTextSelection()
 {
+    comphelper::LibreOfficeKit::setActive();
     SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
     uno::Reference<container::XIndexAccess> xDrawPage(pXImpressDocument->getDrawPages()->getByIndex(0), uno::UNO_QUERY);
     uno::Reference<text::XTextRange> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
@@ -471,10 +476,12 @@ void SdTiledRenderingTest::testGetTextSelection()
 
     // Make sure returned RTF is not empty.
     CPPUNIT_ASSERT(!pXImpressDocument->getTextSelection("text/rtf", aUsedFormat).isEmpty());
+    comphelper::LibreOfficeKit::setActive(false);
 }
 
 void SdTiledRenderingTest::testSetGraphicSelection()
 {
+    comphelper::LibreOfficeKit::setActive();
     SdXImpressDocument* pXImpressDocument = createDoc("shape.odp");
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
     SdPage* pPage = pViewShell->GetActualPage();
@@ -504,10 +511,13 @@ void SdTiledRenderingTest::testSetGraphicSelection()
     // Check that a resize happened, but aspect ratio is not kept.
     CPPUNIT_ASSERT_EQUAL(aShapeBefore.getWidth(), aShapeAfter.getWidth());
     CPPUNIT_ASSERT(aShapeBefore.getHeight() < aShapeAfter.getHeight());
+
+    comphelper::LibreOfficeKit::setActive(false);
 }
 
 void SdTiledRenderingTest::testUndoShells()
 {
+    comphelper::LibreOfficeKit::setActive();
     // Load a document and set the page size.
     SdXImpressDocument* pXImpressDocument = createDoc("shape.odp");
     uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
@@ -525,10 +535,12 @@ void SdTiledRenderingTest::testUndoShells()
     sal_Int32 nView1 = SfxLokHelper::getView();
     // This was -1, SdUndoGroup did not track what view shell created it.
     CPPUNIT_ASSERT_EQUAL(ViewShellId(nView1), pUndoManager->GetUndoAction()->GetViewShellId());
+    comphelper::LibreOfficeKit::setActive(false);
 }
 
 void SdTiledRenderingTest::testResetSelection()
 {
+    comphelper::LibreOfficeKit::setActive();
     SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
     uno::Reference<container::XIndexAccess> xDrawPage(pXImpressDocument->getDrawPages()->getByIndex(0), uno::UNO_QUERY);
     uno::Reference<text::XTextRange> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
@@ -549,6 +561,7 @@ void SdTiledRenderingTest::testResetSelection()
     // Now use resetSelection() to reset the selection.
     pXImpressDocument->resetSelection();
     CPPUNIT_ASSERT(!pView->GetTextEditObject());
+    comphelper::LibreOfficeKit::setActive(false);
 }
 
 static void lcl_search(const OUString& rKey, bool bFindAll = false)
@@ -662,6 +675,7 @@ void SdTiledRenderingTest::testSearchAllFollowedBySearch()
     // This used to give wrong result: 'search' after 'search all' still
     // returned 'third'
     CPPUNIT_ASSERT_EQUAL(OString("match"), pXImpressDocument->getTextSelection("text/plain;charset=utf-8", aUsedFormat));
+    comphelper::LibreOfficeKit::setActive(false);
 }
 
 void SdTiledRenderingTest::testDontSearchInMasterPages()
@@ -1555,6 +1569,7 @@ void SdTiledRenderingTest::testTdf104405()
 
 void SdTiledRenderingTest::testTdf81754()
 {
+    comphelper::LibreOfficeKit::setActive();
     SdXImpressDocument* pXImpressDocument = createDoc("tdf81754.pptx");
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
     SdPage* pActualPage = pViewShell->GetActualPage();
@@ -1584,6 +1599,7 @@ void SdTiledRenderingTest::testTdf81754()
     CPPUNIT_ASSERT_EQUAL(OUString("Somethingxx"), aEdit.GetText(0));
 
     xDocShRef->DoClose();
+    comphelper::LibreOfficeKit::setActive(false);
 }
 
 void SdTiledRenderingTest::testTdf105502()
@@ -2136,6 +2152,7 @@ void SdTiledRenderingTest::testPasteTextOnSlide()
 
 void SdTiledRenderingTest::testTdf115873()
 {
+    comphelper::LibreOfficeKit::setActive();
     // Initialize the navigator.
     SdXImpressDocument* pXImpressDocument = createDoc("tdf115873.fodp");
     SfxViewShell* pViewShell = SfxViewShell::Current();
@@ -2167,10 +2184,12 @@ void SdTiledRenderingTest::testTdf115873()
     // This failed, single-click did not result in a shape selection (only
     // double-click did).
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rMarkList.GetMarkCount());
+    comphelper::LibreOfficeKit::setActive(false);
 }
 
 void SdTiledRenderingTest::testTdf115873Group()
 {
+    comphelper::LibreOfficeKit::setActive();
     // Initialize the navigator.
     SdXImpressDocument* pXImpressDocument = createDoc("tdf115873-group.fodp");
     SfxViewShell* pViewShell = SfxViewShell::Current();
@@ -2182,6 +2201,7 @@ void SdTiledRenderingTest::testTdf115873Group()
     // This failed, Fill() and IsEqualToDoc() were out of sync for group
     // shapes.
     CPPUNIT_ASSERT(pObjects->IsEqualToDoc(pXImpressDocument->GetDoc()));
+    comphelper::LibreOfficeKit::setActive(false);
 }
 
 void SdTiledRenderingTest::testCutSelectionChange()
