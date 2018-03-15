@@ -27,6 +27,7 @@
 #include <IMark.hxx>
 #include "docxexport.hxx"
 
+#include <editeng/boxitem.hxx>
 #include <sax/fshelper.hxx>
 #include <sax/fastattribs.hxx>
 #include <vcl/vclenum.hxx>
@@ -67,8 +68,6 @@ enum DocxColBreakStatus
     COLBRK_WRITE
 };
 
-struct BorderDistances;
-
 /**
  * A structure that holds information about the options selected
  * when outputting a border to DOCX.
@@ -87,21 +86,7 @@ struct OutputBorderOptions
     bool                bWriteInsideHV = false;
     bool                bWriteDistance = false;
     SvxShadowLocation   aShadowLocation = SvxShadowLocation::NONE;
-    std::shared_ptr<BorderDistances> pDistances;
-};
-
-/**
- * A structure that holds information about the page margins.
- *
- */
-struct PageMargins
-{
-    sal_uInt16 nPageMarginLeft;
-    sal_uInt16 nPageMarginRight;
-    sal_uInt16 nPageMarginTop;
-    sal_uInt16 nPageMarginBottom;
-
-    PageMargins() : nPageMarginLeft(0), nPageMarginRight(0), nPageMarginTop(0), nPageMarginBottom(0) {}
+    std::shared_ptr<editeng::WordBorderDistances> pDistances;
 };
 
 /**
@@ -935,7 +920,7 @@ private:
     /// Is fake rotation detected, so rotation with 90 degrees should be ignored in this cell?
     bool m_bBtLr;
 
-    PageMargins m_pageMargins;
+    editeng::WordPageMargins m_pageMargins;
 
     std::shared_ptr<DocxTableStyleExport> m_pTableStyleExport;
     // flag to check if auto spacing was set in original file

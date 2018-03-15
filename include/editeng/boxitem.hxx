@@ -229,6 +229,36 @@ public:
                                          : ( nValidFlags &= ~nValid ); }
     void                    ResetFlags();
 };
+
+namespace editeng
+{
+
+void EDITENG_DLLPUBLIC BorderDistanceFromWord(bool bFromEdge, sal_Int32& nMargin,
+    sal_Int32& nBorderDistance, sal_Int32 nBorderWidth);
+
+struct EDITENG_DLLPUBLIC WordPageMargins final
+{
+    sal_uInt16 nLeft = 0;
+    sal_uInt16 nRight = 0;
+    sal_uInt16 nTop = 0;
+    sal_uInt16 nBottom = 0;
+};
+
+struct EDITENG_DLLPUBLIC WordBorderDistances final
+{
+    bool bFromEdge = false;
+    sal_uInt16 nLeft = 0;
+    sal_uInt16 nRight = 0;
+    sal_uInt16 nTop = 0;
+    sal_uInt16 nBottom = 0;
+};
+
+// Heuristics to decide if we need to use "from edge" offset of borders. All sizes in twips
+void EDITENG_DLLPUBLIC BorderDistancesToWord(const SvxBoxItem& rBox, const WordPageMargins& rMargins,
+    WordBorderDistances& rDistances);
+
+}
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

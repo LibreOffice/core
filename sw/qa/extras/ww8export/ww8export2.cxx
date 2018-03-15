@@ -793,6 +793,37 @@ DECLARE_WW8EXPORT_TEST(testTdf118412, "tdf118412.doc")
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1251), nBottomMargin);
 }
 
+DECLARE_WW8EXPORT_TEST(testTdf112118_DOC, "tdf112118.doc")
+{
+    auto xStyles = getStyles("PageStyles");
+    auto testProc = [&](const OUString& sStyleName, sal_Int32 nMargin, sal_Int32 nBorderDistance,
+        sal_Int16 nBorderWidth)
+    {
+        typedef std::initializer_list<OUStringLiteral> StringList;
+        uno::Reference<beans::XPropertySet> xStyle(xStyles->getByName(sStyleName), uno::UNO_QUERY_THROW);
+        for (const auto& side : StringList{ "Top", "Left", "Bottom", "Right" })
+        {
+            table::BorderLine aBorder = getProperty<table::BorderLine>(xStyle, side + "Border");
+            CPPUNIT_ASSERT_EQUAL(sal_Int16(nBorderWidth), aBorder.OuterLineWidth);
+            CPPUNIT_ASSERT_EQUAL(sal_Int16(0), aBorder.InnerLineWidth);
+            CPPUNIT_ASSERT_EQUAL(sal_Int16(0), aBorder.LineDistance);
+
+            sal_Int32 nMarginActual = getProperty<sal_Int32>(xStyle, side + "Margin");
+            CPPUNIT_ASSERT_EQUAL(nMargin, nMarginActual);
+
+            sal_Int32 nBorderDistanceActual = getProperty<sal_Int32>(xStyle, side + "BorderDistance");
+            CPPUNIT_ASSERT_EQUAL(nBorderDistance, nBorderDistanceActual);
+        }
+    };
+
+    // For both styles used in document, the total distance from page edge to text must be 2.54 cm.
+    // The first style uses "from edge" border distance; the second uses "from text" border distance
+    // Border distances in both cases are 24 pt = 847 mm100; line widths are 6 pt = 212 mm100.
+    // 1482 + 847 + 212 = 2541
+    testProc("Standard", 847, 1482, 212);
+    testProc("Convert 1", 1482, 847, 212);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

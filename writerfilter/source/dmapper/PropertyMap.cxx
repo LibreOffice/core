@@ -20,6 +20,7 @@
 #include <ooxml/resourceids.hxx>
 #include "DomainMapper_Impl.hxx"
 #include "ConversionHelper.hxx"
+#include <editeng/boxitem.hxx>
 #include <i18nutil/paper.hxx>
 #include <osl/diagnose.h>
 #include <rtl/ustring.hxx>
@@ -646,8 +647,6 @@ void SectionPropertyMap::SetBorderDistance( const uno::Reference< beans::XProper
                                             BorderOffsetFrom eOffsetFrom,
                                             sal_uInt32 nLineWidth )
 {
-    // See https://wiki.openoffice.org/wiki/Writer/MSInteroperability/PageBorder
-
     if (!xStyle.is())
         return;
     const OUString sMarginName = getPropertyName( eMarginId );
@@ -655,35 +654,12 @@ void SectionPropertyMap::SetBorderDistance( const uno::Reference< beans::XProper
     uno::Any aMargin = xStyle->getPropertyValue( sMarginName );
     sal_Int32 nMargin = 0;
     aMargin >>= nMargin;
-    sal_Int32 nNewMargin = nMargin;
-    sal_Int32 nNewDist = nDistance;
+    editeng::BorderDistanceFromWord(eOffsetFrom == BorderOffsetFrom::Edge, nMargin, nDistance,
+                                    nLineWidth);
 
-    switch (eOffsetFrom)
-    {
-    case BorderOffsetFrom::Text:
-        nNewMargin -= nDistance + nLineWidth;
-        break;
-    case BorderOffsetFrom::Edge:
-        nNewMargin = nDistance;
-        nNewDist = nMargin - nDistance - nLineWidth;
-        break;
-    }
-    // Ensure corrent distance from page edge to text in cases not supported by us:
-    // when border is outside entire page area (eOffsetFrom == Text && nDistance > nMargin),
-    // and when border is inside page body area (eOffsetFrom == Edge && nDistance > nMargin)
-    if (nNewMargin < 0)
-    {
-        nNewMargin = 0;
-        nNewDist = std::max<sal_Int32>(nMargin - nLineWidth, 0);
-    }
-    else if (nNewDist < 0)
-    {
-        nNewMargin = std::max<sal_Int32>(nMargin - nLineWidth, 0);
-        nNewDist = 0;
-    }
     // Change the margins with the border distance
-    xStyle->setPropertyValue( sMarginName, uno::makeAny( nNewMargin ) );
-    xStyle->setPropertyValue( sBorderDistanceName, uno::makeAny( nNewDist ) );
+    xStyle->setPropertyValue( sMarginName, uno::makeAny( nMargin ) );
+    xStyle->setPropertyValue( sBorderDistanceName, uno::makeAny( nDistance ) );
 }
 
 void SectionPropertyMap::DontBalanceTextColumns()

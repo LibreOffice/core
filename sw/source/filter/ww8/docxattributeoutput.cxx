@@ -74,7 +74,6 @@
 #include <editeng/colritem.hxx>
 #include <editeng/hyphenzoneitem.hxx>
 #include <editeng/ulspitem.hxx>
-#include <editeng/boxitem.hxx>
 #include <editeng/contouritem.hxx>
 #include <editeng/shdditem.hxx>
 #include <editeng/emphasismarkitem.hxx>
@@ -3043,98 +3042,6 @@ static OutputBorderOptions lcl_getBoxBorderOptions()
     rOptions.bWriteDistance = true;
 
     return rOptions;
-}
-
-struct BorderDistances
-{
-    bool bFromEdge = false;
-    sal_uInt16 nTop = 0;
-    sal_uInt16 nLeft = 0;
-    sal_uInt16 nBottom = 0;
-    sal_uInt16 nRight = 0;
-};
-
-// Heuristics to decide if we need to use "from edge" offset of borders
-//
-// There are two cases when we can safely use "from text" or "from edge" offset without distorting
-// border position (modulo rounding errors):
-// 1. When distance of all borders from text is no greater than 31 pt, we use "from text"
-// 2. Otherwise, if distance of all borders from edge is no greater than 31 pt, we use "from edge"
-// In all other cases, the position of borders would be distirted on export, because Word doesn't
-// support the offset of >31 pts (https://msdn.microsoft.com/en-us/library/ff533820), and we need
-// to decide which type of offset would provide less wrong result (i.e., the result would look
-// closer to original). Here, we just check sum of distances from text to borders, and if it is
-// less than sum of distances from borders to edges. The alternative would be to compare total areas
-// between text-and-borders and between borders-and-edges (taking into account different lengths of
-// borders, and visual impact of that).
-static void CalculateExportDistances(const SvxBoxItem& rBox, const PageMargins& rMargins,
-                                     OutputBorderOptions& rOptions)
-{
-    rOptions.pDistances = std::make_shared<BorderDistances>();
-
-    const sal_uInt16 nT = rBox.GetDistance(SvxBoxItemLine::TOP);
-    const sal_uInt16 nL = rBox.GetDistance(SvxBoxItemLine::LEFT);
-    const sal_uInt16 nB = rBox.GetDistance(SvxBoxItemLine::BOTTOM);
-    const sal_uInt16 nR = rBox.GetDistance(SvxBoxItemLine::RIGHT);
-
-    // Only take into account existing borders
-    const SvxBorderLine* pLnT = rBox.GetLine(SvxBoxItemLine::TOP);
-    const SvxBorderLine* pLnL = rBox.GetLine(SvxBoxItemLine::LEFT);
-    const SvxBorderLine* pLnB = rBox.GetLine(SvxBoxItemLine::BOTTOM);
-    const SvxBorderLine* pLnR = rBox.GetLine(SvxBoxItemLine::RIGHT);
-
-    // We need to take border widths into account
-    const sal_uInt16 nWidthT = pLnT ? pLnT->GetWidth() : 0;
-    const sal_uInt16 nWidthL = pLnL ? pLnL->GetWidth() : 0;
-    const sal_uInt16 nWidthB = pLnB ? pLnB->GetWidth() : 0;
-    const sal_uInt16 nWidthR = pLnR ? pLnR->GetWidth() : 0;
-
-    // Resulting distances from text to borders
-    const sal_uInt16 nT2BT = pLnT ? nT : 0;
-    const sal_uInt16 nT2BL = pLnL ? nL : 0;
-    const sal_uInt16 nT2BB = pLnB ? nB : 0;
-    const sal_uInt16 nT2BR = pLnR ? nR : 0;
-
-    // Resulting distances from edge to borders
-    const sal_uInt16 nE2BT = pLnT ? rMargins.nPageMarginTop - nT - nWidthT : 0;
-    const sal_uInt16 nE2BL = pLnL ? rMargins.nPageMarginLeft - nL - nWidthL : 0;
-    const sal_uInt16 nE2BB = pLnB ? rMargins.nPageMarginBottom - nB - nWidthB : 0;
-    const sal_uInt16 nE2BR = pLnR ? rMargins.nPageMarginRight - nR - nWidthR : 0;
-
-    // 1. If all borders are in range of 31 pts from text
-    if ((nT2BT / 20) <= 31 && (nT2BL / 20) <= 31 && (nT2BB / 20) <= 31 && (nT2BR / 20) <= 31)
-    {
-        rOptions.pDistances->bFromEdge = false;
-    }
-    else
-    {
-        // 2. If all borders are in range of 31 pts from edge
-        if ((nE2BT / 20) <= 31 && (nE2BL / 20) <= 31 && (nE2BB / 20) <= 31 && (nE2BR / 20) <= 31)
-        {
-            rOptions.pDistances->bFromEdge = true;
-        }
-        else
-        {
-            // Let's try to guess which would be the best approximation
-            rOptions.pDistances->bFromEdge =
-                (nT2BT + nT2BL + nT2BB + nT2BR) > (nE2BT + nE2BL + nE2BB + nE2BR);
-        }
-    }
-
-    if (rOptions.pDistances->bFromEdge)
-    {
-        rOptions.pDistances->nTop = nE2BT;
-        rOptions.pDistances->nLeft = nE2BL;
-        rOptions.pDistances->nBottom = nE2BB;
-        rOptions.pDistances->nRight = nE2BR;
-    }
-    else
-    {
-        rOptions.pDistances->nTop = nT2BT;
-        rOptions.pDistances->nLeft = nT2BL;
-        rOptions.pDistances->nBottom = nT2BB;
-        rOptions.pDistances->nRight = nT2BR;
-    }
 }
 
 static void impl_borders( FSHelperPtr const & pSerializer, const SvxBoxItem& rBox, const OutputBorderOptions& rOptions,
@@ -6123,15 +6030,16 @@ void DocxAttributeOutput::SectionPageBorders( const SwFrameFormat* pFormat, cons
     }
 
     // By top margin, impl_borders() means the distance between the top of the page and the header frame.
-    PageMargins aMargins = m_pageMargins;
+    editeng::WordPageMargins aMargins = m_pageMargins;
     HdFtDistanceGlue aGlue(pFormat->GetAttrSet());
     if (aGlue.HasHeader())
-        aMargins.nPageMarginTop = aGlue.dyaHdrTop;
+        aMargins.nTop = aGlue.dyaHdrTop;
     // Ditto for bottom margin.
     if (aGlue.HasFooter())
-        aMargins.nPageMarginBottom = aGlue.dyaHdrBottom;
+        aMargins.nBottom = aGlue.dyaHdrBottom;
 
-    CalculateExportDistances(rBox, aMargins, aOutputBorderOptions);
+    aOutputBorderOptions.pDistances = std::make_shared<editeng::WordBorderDistances>();
+    editeng::BorderDistancesToWord(rBox, aMargins, *aOutputBorderOptions.pDistances);
 
     // All distances are relative to the text margins
     m_pSerializer->startElementNS(XML_w, XML_pgBorders,
@@ -7965,24 +7873,21 @@ void DocxAttributeOutput::FormatLRSpace( const SvxLRSpaceItem& rLRSpace )
     }
     else if ( m_rExport.m_bOutPageDescs )
     {
-        m_pageMargins.nPageMarginLeft = 0;
-        m_pageMargins.nPageMarginRight = 0;
+        m_pageMargins.nLeft = 0;
+        m_pageMargins.nRight = 0;
 
-        const SfxPoolItem* pItem = m_rExport.HasItem( RES_BOX );
-        if ( pItem )
+        if ( auto pBoxItem = static_cast<const SvxBoxItem*>(m_rExport.HasItem( RES_BOX )) )
         {
-            m_pageMargins.nPageMarginRight = static_cast<const SvxBoxItem*>(pItem)->CalcLineSpace( SvxBoxItemLine::LEFT, /*bEvenIfNoLine*/true );
-            m_pageMargins.nPageMarginLeft = static_cast<const SvxBoxItem*>(pItem)->CalcLineSpace( SvxBoxItemLine::RIGHT, /*bEvenIfNoLine*/true );
+            m_pageMargins.nRight = pBoxItem->CalcLineSpace( SvxBoxItemLine::LEFT, /*bEvenIfNoLine*/true );
+            m_pageMargins.nLeft = pBoxItem->CalcLineSpace( SvxBoxItemLine::RIGHT, /*bEvenIfNoLine*/true );
         }
-        else
-            m_pageMargins.nPageMarginLeft = m_pageMargins.nPageMarginRight = 0;
 
-        m_pageMargins.nPageMarginLeft = m_pageMargins.nPageMarginLeft + (sal_uInt16)rLRSpace.GetLeft();
-        m_pageMargins.nPageMarginRight = m_pageMargins.nPageMarginRight + (sal_uInt16)rLRSpace.GetRight();
+        m_pageMargins.nLeft += (sal_uInt16)rLRSpace.GetLeft();
+        m_pageMargins.nRight += (sal_uInt16)rLRSpace.GetRight();
 
         AddToAttrList( m_pSectionSpacingAttrList, 2,
-                FSNS( XML_w, XML_left ), OString::number( m_pageMargins.nPageMarginLeft ).getStr(),
-                FSNS( XML_w, XML_right ), OString::number( m_pageMargins.nPageMarginRight ).getStr() );
+                FSNS( XML_w, XML_left ), OString::number( m_pageMargins.nLeft ).getStr(),
+                FSNS( XML_w, XML_right ), OString::number( m_pageMargins.nRight ).getStr() );
     }
     else
     {
@@ -8034,20 +7939,20 @@ void DocxAttributeOutput::FormatULSpace( const SvxULSpaceItem& rULSpace )
             nHeader = sal_Int32( aDistances.dyaHdrTop );
 
         // Page top
-        m_pageMargins.nPageMarginTop = aDistances.dyaTop;
+        m_pageMargins.nTop = aDistances.dyaTop;
 
         sal_Int32 nFooter = 0;
         if ( aDistances.HasFooter() )
             nFooter = sal_Int32( aDistances.dyaHdrBottom );
 
         // Page Bottom
-        m_pageMargins.nPageMarginBottom = aDistances.dyaBottom;
+        m_pageMargins.nBottom = aDistances.dyaBottom;
 
         AddToAttrList( m_pSectionSpacingAttrList, 5,
                 FSNS( XML_w, XML_header ), OString::number( nHeader ).getStr(),
-                FSNS( XML_w, XML_top ), OString::number( m_pageMargins.nPageMarginTop ).getStr(),
+                FSNS( XML_w, XML_top ), OString::number( m_pageMargins.nTop ).getStr(),
                 FSNS( XML_w, XML_footer ), OString::number( nFooter ).getStr(),
-                FSNS( XML_w, XML_bottom ), OString::number( m_pageMargins.nPageMarginBottom ).getStr(),
+                FSNS( XML_w, XML_bottom ), OString::number( m_pageMargins.nBottom ).getStr(),
                 // FIXME Page Gutter is not handled ATM, setting to 0 as it's mandatory for OOXML
                 FSNS( XML_w, XML_gutter ), "0" );
     }

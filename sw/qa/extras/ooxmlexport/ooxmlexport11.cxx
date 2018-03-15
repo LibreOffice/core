@@ -254,7 +254,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf116801, "tdf116801.docx")
     CPPUNIT_ASSERT_EQUAL(OUString("D1"), xCell->getString());
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTdf112118, "tdf112118.docx")
+DECLARE_OOXMLEXPORT_TEST(testTdf112118_DOCX, "tdf112118.docx")
 {
     auto xStyles = getStyles("PageStyles");
     auto testProc = [&](const OUString& sStyleName, sal_Int32 nMargin, sal_Int32 nBorderDistance,

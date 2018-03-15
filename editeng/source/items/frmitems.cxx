@@ -2610,6 +2610,131 @@ bool SvxBoxInfoItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
     return true;
 }
 
+
+namespace editeng
+{
+
+void BorderDistanceFromWord(bool bFromEdge, sal_Int32& nMargin, sal_Int32& nBorderDistance,
+    sal_Int32 nBorderWidth)
+{
+    // See https://wiki.openoffice.org/wiki/Writer/MSInteroperability/PageBorder
+
+    sal_Int32 nNewMargin = nMargin;
+    sal_Int32 nNewBorderDistance = nBorderDistance;
+
+    if (bFromEdge)
+    {
+        nNewMargin = nBorderDistance;
+        nNewBorderDistance = nMargin - nBorderDistance - nBorderWidth;
+    }
+    else
+    {
+        nNewMargin -= nBorderDistance + nBorderWidth;
+    }
+
+    // Ensure correct distance from page edge to text in cases not supported by us:
+    // when border is outside entire page area (!bFromEdge && BorderDistance > Margin),
+    // and when border is inside page body area (bFromEdge && BorderDistance > Margin)
+    if (nNewMargin < 0)
+    {
+        nNewMargin = 0;
+        nNewBorderDistance = std::max<sal_Int32>(nMargin - nBorderWidth, 0);
+    }
+    else if (nNewBorderDistance < 0)
+    {
+        nNewMargin = std::max<sal_Int32>(nMargin - nBorderWidth, 0);
+        nNewBorderDistance = 0;
+    }
+
+    nMargin = nNewMargin;
+    nBorderDistance = nNewBorderDistance;
+}
+
+// Heuristics to decide if we need to use "from edge" offset of borders
+//
+// There are two cases when we can safely use "from text" or "from edge" offset without distorting
+// border position (modulo rounding errors):
+// 1. When distance of all borders from text is no greater than 31 pt, we use "from text"
+// 2. Otherwise, if distance of all borders from edge is no greater than 31 pt, we use "from edge"
+// In all other cases, the position of borders would be distirted on export, because Word doesn't
+// support the offset of >31 pts (https://msdn.microsoft.com/en-us/library/ff533820), and we need
+// to decide which type of offset would provide less wrong result (i.e., the result would look
+// closer to original). Here, we just check sum of distances from text to borders, and if it is
+// less than sum of distances from borders to edges. The alternative would be to compare total areas
+// between text-and-borders and between borders-and-edges (taking into account different lengths of
+// borders, and visual impact of that).
+void BorderDistancesToWord(const SvxBoxItem& rBox, const WordPageMargins& rMargins,
+    WordBorderDistances& rDistances)
+{
+    // Use signed sal_Int32 that can hold sal_uInt16, to prevent overflow at substraction below
+    const sal_Int32 nT = rBox.GetDistance(SvxBoxItemLine::TOP);
+    const sal_Int32 nL = rBox.GetDistance(SvxBoxItemLine::LEFT);
+    const sal_Int32 nB = rBox.GetDistance(SvxBoxItemLine::BOTTOM);
+    const sal_Int32 nR = rBox.GetDistance(SvxBoxItemLine::RIGHT);
+
+    // Only take into account existing borders
+    const SvxBorderLine* pLnT = rBox.GetLine(SvxBoxItemLine::TOP);
+    const SvxBorderLine* pLnL = rBox.GetLine(SvxBoxItemLine::LEFT);
+    const SvxBorderLine* pLnB = rBox.GetLine(SvxBoxItemLine::BOTTOM);
+    const SvxBorderLine* pLnR = rBox.GetLine(SvxBoxItemLine::RIGHT);
+
+    // We need to take border widths into account
+    const long nWidthT = pLnT ? pLnT->GetWidth() : 0;
+    const long nWidthL = pLnL ? pLnL->GetWidth() : 0;
+    const long nWidthB = pLnB ? pLnB->GetWidth() : 0;
+    const long nWidthR = pLnR ? pLnR->GetWidth() : 0;
+
+    // Resulting distances from text to borders
+    const sal_Int32 nT2BT = pLnT ? nT : 0;
+    const sal_Int32 nT2BL = pLnL ? nL : 0;
+    const sal_Int32 nT2BB = pLnB ? nB : 0;
+    const sal_Int32 nT2BR = pLnR ? nR : 0;
+
+    // Resulting distances from edge to borders
+    const sal_Int32 nE2BT = pLnT ? std::max<sal_Int32>(rMargins.nTop - nT - nWidthT, 0) : 0;
+    const sal_Int32 nE2BL = pLnL ? std::max<sal_Int32>(rMargins.nLeft - nL - nWidthL, 0) : 0;
+    const sal_Int32 nE2BB = pLnB ? std::max<sal_Int32>(rMargins.nBottom - nB - nWidthB, 0) : 0;
+    const sal_Int32 nE2BR = pLnR ? std::max<sal_Int32>(rMargins.nRight - nR - nWidthR, 0) : 0;
+
+    const sal_Int32 n32pt = 32 * 20;
+    // 1. If all borders are in range of 31 pts from text
+    if (nT2BT < n32pt && nT2BL < n32pt && nT2BB < n32pt && nT2BR < n32pt)
+    {
+        rDistances.bFromEdge = false;
+    }
+    else
+    {
+        // 2. If all borders are in range of 31 pts from edge
+        if (nE2BT < n32pt && nE2BL < n32pt && nE2BB < n32pt && nE2BR < n32pt)
+        {
+            rDistances.bFromEdge = true;
+        }
+        else
+        {
+            // Let's try to guess which would be the best approximation
+            rDistances.bFromEdge =
+                (nT2BT + nT2BL + nT2BB + nT2BR) > (nE2BT + nE2BL + nE2BB + nE2BR);
+        }
+    }
+
+    if (rDistances.bFromEdge)
+    {
+        rDistances.nTop = sal::static_int_cast<sal_uInt16>(nE2BT);
+        rDistances.nLeft = sal::static_int_cast<sal_uInt16>(nE2BL);
+        rDistances.nBottom = sal::static_int_cast<sal_uInt16>(nE2BB);
+        rDistances.nRight = sal::static_int_cast<sal_uInt16>(nE2BR);
+    }
+    else
+    {
+        rDistances.nTop = sal::static_int_cast<sal_uInt16>(nT2BT);
+        rDistances.nLeft = sal::static_int_cast<sal_uInt16>(nT2BL);
+        rDistances.nBottom = sal::static_int_cast<sal_uInt16>(nT2BB);
+        rDistances.nRight = sal::static_int_cast<sal_uInt16>(nT2BR);
+    }
+}
+
+}
+
 // class SvxFormatBreakItem -------------------------------------------------
 
 bool SvxFormatBreakItem::operator==( const SfxPoolItem& rAttr ) const
