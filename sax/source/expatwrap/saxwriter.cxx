@@ -566,6 +566,16 @@ inline void SaxWriterHelper::startDocument()
         nCurrentPos = writeSequence();
 }
 
+#ifndef NDEBUG
+namespace
+{
+    bool inrange(sal_Unicode c, sal_Unicode start, sal_Unicode end)
+    {
+        return c >= start && c <= end;
+    }
+}
+#endif
+
 void CheckValidName(OUString const& rName)
 {
 #ifdef NDEBUG
@@ -583,10 +593,17 @@ void CheckValidName(OUString const& rName)
             else
                 hasColon = true;
         }
-        else if (!rtl::isAsciiAlphanumeric(c) && c != '_' && c != '-' && c != '.')
-        {   // note: this will also warn about non-ASCII characters which
-            // are allowed by XML but surely unexpected in LO filters
-            // (OTOH we don't warn about invalid start chars)
+        else if (!rtl::isAsciiAlphanumeric(c) && c != '_' && c != '-' && c != '.' &&
+                 !inrange(c, 0x00C0, 0x00D6) && !inrange(c, 0x00D8, 0x00F6) &&
+                 !inrange(c, 0x00F8, 0x02FF) && !inrange(c, 0x0370, 0x037D) &&
+                 !inrange(c, 0x037F, 0x1FFF) && !inrange(c, 0x200C, 0x200D) &&
+                 !inrange(c, 0x2070, 0x218F) && !inrange(c, 0x2C00, 0x2FEF) &&
+                 !inrange(c, 0x3001, 0xD7FF) && !inrange(c, 0xF900, 0xFDCF) &&
+                 !inrange(c, 0xFDF0, 0xFFFD) && c != 0x00B7 &&
+                 !inrange(c, 0x0300, 0x036F) && !inrange(c, 0x203F, 0x2040))
+        {
+            // https://www.w3.org/TR/xml11/#NT-NameChar
+            // (currently we don't warn about invalid start chars)
             assert(!"unexpected character in attribute name");
         }
     }
