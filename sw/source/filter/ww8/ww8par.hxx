@@ -743,7 +743,7 @@ class SwMSDffManager : public SvxMSDffManager
 private:
     SwWW8ImplReader& rReader;
     SvStream *pFallbackStream;
-    std::map<sal_uInt32,OString> aOldEscherBlipCache;
+    std::unordered_map<sal_uInt32, Graphic> aOldEscherBlipCache;
 
     virtual bool GetOLEStorageName( sal_uInt32 nOLEId, OUString& rStorageName,
         tools::SvRef<SotStorage>& rSrcStorage, css::uno::Reference < css::embed::XStorage >& rDestStorage ) const override;
