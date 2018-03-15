@@ -42,9 +42,9 @@ protected:
     virtual void Redo();
 
 private:
-    SfxUndoAction*  mpUndoUsercall;
-    SfxUndoAction*  mpUndoAnimation;
-    SfxUndoAction*  mpUndoPresObj;
+    std::unique_ptr<SfxUndoAction>  mpUndoUsercall;
+    std::unique_ptr<SfxUndoAction>  mpUndoAnimation;
+    std::unique_ptr<SfxUndoAction>  mpUndoPresObj;
 };
 
 class UndoRemoveObject : public SdrUndoRemoveObj, public UndoRemovePresObjectImpl
