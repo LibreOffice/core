@@ -19,6 +19,7 @@
 
 #include <vcl/bitmapaccess.hxx>
 #include <bitmapscalesuper.hxx>
+#include <bitmapwriteaccess.hxx>
 
 #include <algorithm>
 #include <memory>
@@ -949,7 +950,7 @@ bool BitmapScaleSuperFilter::execute(Bitmap& rBitmap)
     Bitmap::ScopedReadAccess pReadAccess(rBitmap);
 
     Bitmap aOutBmp(Size(nDstW, nDstH), 24);
-    Bitmap::ScopedWriteAccess pWriteAccess(aOutBmp);
+    BitmapScopedWriteAccess pWriteAccess(aOutBmp);
 
     const long nStartY = 0;
     const long nEndY   = nDstH - 1;
