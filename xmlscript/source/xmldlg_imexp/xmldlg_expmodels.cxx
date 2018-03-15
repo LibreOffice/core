@@ -187,8 +187,7 @@ void ElementDescriptor::readButtonModel( StyleBag * all_styles )
     readAlignAttr( "Align", XMLNS_DIALOGS_PREFIX ":align" );
     readVerticalAlignAttr( "VerticalAlign", XMLNS_DIALOGS_PREFIX ":valign" );
     readButtonTypeAttr( "PushButtonType", XMLNS_DIALOGS_PREFIX ":button-type" );
-    readImageURLAttr( "ImageURL", XMLNS_DIALOGS_PREFIX ":image-src" );
-
+    readImageOrGraphicAttr(XMLNS_DIALOGS_PREFIX ":image-src");
     readImagePositionAttr( "ImagePosition", XMLNS_DIALOGS_PREFIX ":image-position" );
     readImageAlignAttr( "ImageAlign", XMLNS_DIALOGS_PREFIX ":image-align" );
 
@@ -247,7 +246,7 @@ void ElementDescriptor::readCheckBoxModel( StyleBag * all_styles )
     readStringAttr( "Label", XMLNS_DIALOGS_PREFIX ":value" );
     readAlignAttr( "Align",  XMLNS_DIALOGS_PREFIX ":align" );
     readVerticalAlignAttr( "VerticalAlign", XMLNS_DIALOGS_PREFIX ":valign" );
-    readImageURLAttr( "ImageURL", XMLNS_DIALOGS_PREFIX ":image-src" );
+    readImageOrGraphicAttr(XMLNS_DIALOGS_PREFIX ":image-src");
     readImagePositionAttr( "ImagePosition", XMLNS_DIALOGS_PREFIX ":image-position" );
     readBoolAttr( "MultiLine", XMLNS_DIALOGS_PREFIX ":multiline" );
 
@@ -417,7 +416,7 @@ void ElementDescriptor::readRadioButtonModel( StyleBag * all_styles  )
     readStringAttr( "Label", XMLNS_DIALOGS_PREFIX ":value" );
     readAlignAttr( "Align", XMLNS_DIALOGS_PREFIX ":align" );
     readVerticalAlignAttr( "VerticalAlign", XMLNS_DIALOGS_PREFIX ":valign" );
-    readImageURLAttr( "ImageURL", XMLNS_DIALOGS_PREFIX ":image-src" );
+    readImageOrGraphicAttr(XMLNS_DIALOGS_PREFIX ":image-src");
     readImagePositionAttr( "ImagePosition", XMLNS_DIALOGS_PREFIX ":image-position" );
     readBoolAttr( "MultiLine", XMLNS_DIALOGS_PREFIX ":multiline" );
     readStringAttr( "GroupName", XMLNS_DIALOGS_PREFIX ":group-name" );
@@ -594,7 +593,7 @@ void ElementDescriptor::readImageControlModel( StyleBag * all_styles )
     readBoolAttr( "ScaleImage", XMLNS_DIALOGS_PREFIX ":scale-image" );
     readImageScaleModeAttr( "ScaleMode", XMLNS_DIALOGS_PREFIX ":scale-mode" );
     readBoolAttr( "Tabstop", XMLNS_DIALOGS_PREFIX ":tabstop" );
-    readImageURLAttr( "ImageURL", XMLNS_DIALOGS_PREFIX ":src" );
+    readImageOrGraphicAttr(XMLNS_DIALOGS_PREFIX ":src");
     readEvents();
 }
 
@@ -1042,7 +1041,7 @@ void ElementDescriptor::readDialogModel( StyleBag * all_styles )
     bool bDecoration = false;
     if ( (aDecorationAny >>= bDecoration) && !bDecoration )
         addAttribute( XMLNS_DIALOGS_PREFIX ":withtitlebar", "false" );
-    readImageURLAttr( "ImageURL", XMLNS_DIALOGS_PREFIX ":image-src" );
+    readImageOrGraphicAttr(XMLNS_DIALOGS_PREFIX ":image-src");
     readEvents();
 }
 

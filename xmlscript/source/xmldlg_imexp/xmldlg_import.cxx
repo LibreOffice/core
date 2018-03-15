@@ -54,7 +54,9 @@
 #include <com/sun/star/table/CellAddress.hpp>
 #include <com/sun/star/table/CellRangeAddress.hpp>
 #include <com/sun/star/document/XGraphicObjectResolver.hpp>
+#include <com/sun/star/document/XGraphicStorageHandler.hpp>
 #include <com/sun/star/document/XStorageBasedDocument.hpp>
+#include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/util/NumberFormatsSupplier.hpp>
 
 using namespace ::com::sun::star;
@@ -840,14 +842,16 @@ bool ImportContext::importVerticalAlignProperty(
     return false;
 }
 
-bool ImportContext::importImageURLProperty(
-    OUString const & rPropName, OUString const & rAttrName,
+bool ImportContext::importGraphicOrImageProperty(
+    OUString const & rAttrName,
     Reference< xml::input::XAttributes > const & xAttributes )
 {
     OUString sURL = xAttributes->getValueByUidName( _pImport->XMLNS_DIALOGS_UID, rAttrName );
     if ( !sURL.isEmpty() )
     {
         Reference< document::XStorageBasedDocument > xDocStorage( _pImport->getDocOwner(), UNO_QUERY );
+
+        uno::Reference<graphic::XGraphic> xGraphic;
 
         uno::Reference< document::XGraphicObjectResolver > xGraphicResolver;
         if ( xDocStorage.is() )
@@ -857,29 +861,28 @@ bool ImportContext::importImageURLProperty(
             xGraphicResolver.set(
                 _pImport->getComponentContext()->getServiceManager()->createInstanceWithArgumentsAndContext( "com.sun.star.comp.Svx.GraphicImportHelper" , aArgs, _pImport->getComponentContext() ),
                 UNO_QUERY );
-            if ( xGraphicResolver.is() )
+            uno::Reference<document::XGraphicStorageHandler> xGraphicStorageHandler;
+            xGraphicStorageHandler.set(xGraphicResolver, uno::UNO_QUERY);
+            if (xGraphicStorageHandler.is())
             {
                 OUString aTmp("vnd.sun.star.Package:");
                 aTmp += sURL;
                 try
                 {
-                    aTmp = xGraphicResolver->resolveGraphicObjectURL( aTmp );
-                    if ( !aTmp.isEmpty() )
-                        sURL = aTmp;
+                    xGraphic = xGraphicStorageHandler->loadGraphic(sURL);
                 }
                 catch( const uno::Exception& )
                 {
                     return false;
                 }
-
             }
         }
-        if ( !sURL.isEmpty() )
+        if (xGraphic.is())
         {
-            Reference< beans::XPropertySet > xProps( getControlModel(), UNO_QUERY );
-            if ( xProps.is() )
+            Reference<beans::XPropertySet> xProps( getControlModel(), UNO_QUERY );
+            if (xProps.is())
             {
-                xProps->setPropertyValue( rPropName, makeAny( sURL ) );
+                xProps->setPropertyValue("Graphic", makeAny(xGraphic));
                 return true;
             }
         }
