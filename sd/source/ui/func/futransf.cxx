@@ -67,12 +67,6 @@ void setUndo(::sd::View* pView, const SfxItemSet* pArgs)
 
 void FuTransform::DoExecute( SfxRequest& rReq )
 {
-    comphelper::ScopeGuard guard([&]() {
-        // cleanup when leaving
-        mpViewShell->Invalidate(SID_RULER_OBJECT);
-        mpViewShell->Cancel();
-    });
-
     if (!mpView->AreObjectsMarked())
         return;
 
@@ -124,7 +118,6 @@ void FuTransform::DoExecute( SfxRequest& rReq )
 
     std::shared_ptr<SfxRequest> pRequest(new SfxRequest(rReq));
     rReq.Ignore(); // the 'old' request is not relevant any more
-    guard.dismiss(); // we'll invalidate explicitly after the dialog ends
 
     pDlg->StartExecuteAsync([=](sal_Int32 nResult){
         if (nResult == RET_OK)
@@ -133,6 +126,7 @@ void FuTransform::DoExecute( SfxRequest& rReq )
             setUndo(mpView, pRequest->GetArgs());
         }
 
+        // deferred until the dialog ends
         mpViewShell->Invalidate(SID_RULER_OBJECT);
         mpViewShell->Cancel();
     });
