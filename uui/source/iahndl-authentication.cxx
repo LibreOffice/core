@@ -518,11 +518,11 @@ executePasswordDialog(
         {
             if (bIsSimplePasswordRequest)
             {
-                ScopedVclPtrInstance<PasswordDialog> xDialog(pParent, nMode, aResLocale, aDocName,
-                    bIsPasswordToModify, bIsSimplePasswordRequest);
+                std::unique_ptr<PasswordDialog> xDialog(new PasswordDialog(pParent ? pParent->GetFrameWeld() : nullptr, nMode,
+                    aResLocale, aDocName, bIsPasswordToModify, bIsSimplePasswordRequest));
                 xDialog->SetMinLen(0);
 
-                rInfo.SetResult(xDialog->Execute() == RET_OK ? DialogMask::ButtonsOk : DialogMask::ButtonsCancel);
+                rInfo.SetResult(xDialog->run() == RET_OK ? DialogMask::ButtonsOk : DialogMask::ButtonsCancel);
                 rInfo.SetPassword(xDialog->GetPassword());
             }
             else
@@ -541,11 +541,11 @@ executePasswordDialog(
         }
         else // enter password or reenter password
         {
-            ScopedVclPtrInstance<PasswordDialog> xDialog(pParent, nMode, aResLocale, aDocName,
-                bIsPasswordToModify, bIsSimplePasswordRequest);
+            std::unique_ptr<PasswordDialog> xDialog(new PasswordDialog(pParent ? pParent->GetFrameWeld() : nullptr, nMode,
+                aResLocale, aDocName, bIsPasswordToModify, bIsSimplePasswordRequest));
             xDialog->SetMinLen(0);
 
-            rInfo.SetResult(xDialog->Execute() == RET_OK ? DialogMask::ButtonsOk : DialogMask::ButtonsCancel);
+            rInfo.SetResult(xDialog->run() == RET_OK ? DialogMask::ButtonsOk : DialogMask::ButtonsCancel);
             rInfo.SetPassword(bIsPasswordToModify ? OUString() : xDialog->GetPassword());
             rInfo.SetPasswordToModify(bIsPasswordToModify ? xDialog->GetPassword() : OUString());
         }

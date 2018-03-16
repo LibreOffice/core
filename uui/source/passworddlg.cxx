@@ -27,100 +27,84 @@
 
 using namespace ::com::sun::star;
 
-PasswordDialog::PasswordDialog(vcl::Window* _pParent,
+PasswordDialog::PasswordDialog(weld::Window* pParent,
     task::PasswordRequestMode nDlgMode, const std::locale& rLocale,
     const OUString& aDocURL, bool bOpenToModify, bool bIsSimplePasswordRequest)
-    : ModalDialog(_pParent, "PasswordDialog", "uui/ui/password.ui")
+    : GenericDialogController(pParent, "uui/ui/password.ui", "PasswordDialog")
+    , m_xFTPassword(m_xBuilder->weld_label("newpassFT"))
+    , m_xEDPassword(m_xBuilder->weld_entry("newpassEntry"))
+    , m_xFTConfirmPassword(m_xBuilder->weld_label("confirmpassFT"))
+    , m_xEDConfirmPassword(m_xBuilder->weld_entry("confirmpassEntry"))
+    , m_xOKBtn(m_xBuilder->weld_button("ok"))
     , nMinLen(1)
     , aPasswdMismatch(Translate::get(STR_PASSWORD_MISMATCH, rLocale))
     , nDialogMode(nDlgMode)
     , rResLocale(rLocale)
 {
-    get(m_pFTPassword, "newpassFT");
-    get(m_pEDPassword, "newpassEntry");
-    get(m_pFTConfirmPassword, "confirmpassFT");
-    get(m_pEDConfirmPassword, "confirmpassEntry");
-    get(m_pOKBtn, "ok");
-
     if( nDialogMode == task::PasswordRequestMode_PASSWORD_REENTER )
     {
         const char* pOpenToModifyErrStrId = bOpenToModify ? STR_ERROR_PASSWORD_TO_MODIFY_WRONG : STR_ERROR_PASSWORD_TO_OPEN_WRONG;
         const char* pErrStrId = bIsSimplePasswordRequest ? STR_ERROR_SIMPLE_PASSWORD_WRONG : pOpenToModifyErrStrId;
         OUString aErrorMsg(Translate::get(pErrStrId, rResLocale));
-        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(_pParent ? _pParent->GetFrameWeld() : nullptr,
+        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(pParent,
                                                   VclMessageType::Warning, VclButtonsType::Ok, aErrorMsg));
         xBox->run();
     }
 
     // default settings for enter password or reenter passwd...
     OUString aTitle(Translate::get(STR_TITLE_ENTER_PASSWORD, rResLocale));
-    m_pFTConfirmPassword->Hide();
-    m_pEDConfirmPassword->Hide();
-    m_pFTConfirmPassword->Enable( false );
-    m_pEDConfirmPassword->Enable( false );
+    m_xFTConfirmPassword->hide();
+    m_xEDConfirmPassword->hide();
+    m_xFTConfirmPassword->set_sensitive(false);
+    m_xEDConfirmPassword->set_sensitive(false);
 
     // settings for create password
     if (nDialogMode == task::PasswordRequestMode_PASSWORD_CREATE)
     {
         aTitle = Translate::get(STR_TITLE_CREATE_PASSWORD, rResLocale);
 
-        m_pFTConfirmPassword->SetText(Translate::get(STR_CONFIRM_SIMPLE_PASSWORD, rResLocale));
+        m_xFTConfirmPassword->set_label(Translate::get(STR_CONFIRM_SIMPLE_PASSWORD, rResLocale));
 
-        m_pFTConfirmPassword->Show();
-        m_pEDConfirmPassword->Show();
-        m_pFTConfirmPassword->Enable();
-        m_pEDConfirmPassword->Enable();
+        m_xFTConfirmPassword->show();
+        m_xEDConfirmPassword->show();
+        m_xFTConfirmPassword->set_sensitive(true);
+        m_xEDConfirmPassword->set_sensitive(true);
     }
 
-    SetText( aTitle );
+    m_xDialog->set_title(aTitle);
 
     const char* pStrId = bOpenToModify ? STR_ENTER_PASSWORD_TO_MODIFY : STR_ENTER_PASSWORD_TO_OPEN;
     OUString aMessage(Translate::get(pStrId, rResLocale));
     INetURLObject url(aDocURL);
     aMessage += url.HasError()
         ? aDocURL : url.GetMainURL(INetURLObject::DecodeMechanism::Unambiguous);
-    m_pFTPassword->SetText(aMessage);
+    m_xFTPassword->set_label(aMessage);
 
     if (bIsSimplePasswordRequest)
     {
         DBG_ASSERT( aDocURL.isEmpty(), "A simple password request should not have a document URL! Use document password request instead." );
-        m_pFTPassword->SetText(Translate::get(STR_ENTER_SIMPLE_PASSWORD, rResLocale));
+        m_xFTPassword->set_label(Translate::get(STR_ENTER_SIMPLE_PASSWORD, rResLocale));
     }
 
-    m_pOKBtn->SetClickHdl( LINK( this, PasswordDialog, OKHdl_Impl ) );
+    m_xOKBtn->connect_clicked(LINK(this, PasswordDialog, OKHdl_Impl));
 }
 
-PasswordDialog::~PasswordDialog()
+IMPL_LINK_NOARG(PasswordDialog, OKHdl_Impl, weld::Button&, void)
 {
-    disposeOnce();
-}
+    bool bEDPasswdValid = m_xEDPassword->get_text().getLength() >= nMinLen;
+    bool bPasswdMismatch = m_xEDConfirmPassword->get_text() != m_xEDPassword->get_text();
+    bool bValid = (!m_xEDConfirmPassword->get_visible() && bEDPasswdValid) ||
+            (m_xEDConfirmPassword->get_visible() && bEDPasswdValid && !bPasswdMismatch);
 
-void PasswordDialog::dispose()
-{
-    m_pFTPassword.clear();
-    m_pEDPassword.clear();
-    m_pFTConfirmPassword.clear();
-    m_pEDConfirmPassword.clear();
-    m_pOKBtn.clear();
-    ModalDialog::dispose();
-}
-
-IMPL_LINK_NOARG(PasswordDialog, OKHdl_Impl, Button*, void)
-{
-    bool bEDPasswdValid = m_pEDPassword->GetText().getLength() >= nMinLen;
-    bool bPasswdMismatch = m_pEDConfirmPassword->GetText() != m_pEDPassword->GetText();
-    bool bValid = (!m_pEDConfirmPassword->IsVisible() && bEDPasswdValid) ||
-            (m_pEDConfirmPassword->IsVisible() && bEDPasswdValid && !bPasswdMismatch);
-
-    if (m_pEDConfirmPassword->IsVisible() && bPasswdMismatch)
+    if (m_xEDConfirmPassword->get_visible() && bPasswdMismatch)
     {
-        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetFrameWeld(),
+        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(m_xDialog.get(),
                                                   VclMessageType::Warning, VclButtonsType::Ok,
                                                   aPasswdMismatch));
         xBox->run();
     }
     else if (bValid)
-        EndDialog( RET_OK );
+        m_xDialog->response(RET_OK);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
