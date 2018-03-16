@@ -63,7 +63,7 @@ private:
 
 public:
     SdrPathObj(SdrObjKind eNewKind);
-    SdrPathObj(SdrObjKind eNewKind, const basegfx::B2DPolyPolygon& rPathPoly, double dBrightness = 0.0);
+    SdrPathObj(SdrObjKind eNewKind, const basegfx::B2DPolyPolygon& rPathPoly);
     virtual ~SdrPathObj() override;
 
     virtual void TakeObjInfo(SdrObjTransformInfoRec& rInfo) const override;
