@@ -77,8 +77,6 @@ public:
     virtual Point       LogicToPixel( const Point&, const MapMode& ) const override;
     virtual Point       PixelToLogic( const Point&, const MapMode& ) const override;
 
-    void ChangeModel( SdrModel* pNewModel );
-
     void UpdateOutliner();
 
 private:
