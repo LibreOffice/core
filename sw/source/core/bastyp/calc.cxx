@@ -180,7 +180,7 @@ CalcOp* FindOperator( const OUString& rSrch )
                               OperatorCompare ));
 }
 
-SwHash* Find( const OUString& rStr, SwHash* const * ppTable,
+SwHash* Find( const OUString& rStr, SwCalcVarTable const & rTable,
               sal_uInt16 nTableSize, sal_uInt16* pPos )
 {
     sal_uLong ii = 0;
@@ -193,7 +193,7 @@ SwHash* Find( const OUString& rStr, SwHash* const * ppTable,
     if( pPos )
         *pPos = static_cast<sal_uInt16>(ii);
 
-    for( SwHash* pEntry = *(ppTable+ii); pEntry; pEntry = pEntry->pNext.get() )
+    for( SwHash* pEntry = rTable[ii].get(); pEntry; pEntry = pEntry->pNext.get() )
     {
         if( rStr == pEntry->aStr )
         {
@@ -236,7 +236,6 @@ SwCalc::SwCalc( SwDoc& rD )
     , m_eError( SwCalcError::NONE )
 {
     m_aErrExpr.aStr = "~C_ERR~";
-    memset( m_aVarTable, 0, sizeof(m_aVarTable) );
     LanguageType eLang = GetDocAppScriptLang( m_rDoc );
 
     if( eLang != m_pLocaleDataWrapper->getLanguageTag().getLanguageType() ||
@@ -328,27 +327,27 @@ SwCalc::SwCalc( SwDoc& rD )
     for( n = 0; n < 25; ++n )
     {
         sTmpStr = OUString::createFromAscii(sNTypeTab[n]);
-        m_aVarTable[ aHashValue[ n ] ] = new SwCalcExp( sTmpStr, nVal, nullptr );
+        m_aVarTable[ aHashValue[ n ] ].reset( new SwCalcExp( sTmpStr, nVal, nullptr ) );
     }
 
-    static_cast<SwCalcExp*>(m_aVarTable[ aHashValue[ 0 ] ])->nValue.PutBool( false );
-    static_cast<SwCalcExp*>(m_aVarTable[ aHashValue[ 1 ] ])->nValue.PutBool( true );
-    static_cast<SwCalcExp*>(m_aVarTable[ aHashValue[ 2 ] ])->nValue.PutDouble( F_PI );
-    static_cast<SwCalcExp*>(m_aVarTable[ aHashValue[ 3 ] ])->nValue.PutDouble( 2.7182818284590452354 );
+    static_cast<SwCalcExp*>(m_aVarTable[ aHashValue[ 0 ] ].get())->nValue.PutBool( false );
+    static_cast<SwCalcExp*>(m_aVarTable[ aHashValue[ 1 ] ].get())->nValue.PutBool( true );
+    static_cast<SwCalcExp*>(m_aVarTable[ aHashValue[ 2 ] ].get())->nValue.PutDouble( F_PI );
+    static_cast<SwCalcExp*>(m_aVarTable[ aHashValue[ 3 ] ].get())->nValue.PutDouble( 2.7182818284590452354 );
 
     for( n = 0; n < 3; ++n )
-        static_cast<SwCalcExp*>(m_aVarTable[ aHashValue[ n + 4 ] ])->nValue.PutLong( rDocStat.*aDocStat1[ n ]  );
+        static_cast<SwCalcExp*>(m_aVarTable[ aHashValue[ n + 4 ] ].get())->nValue.PutLong( rDocStat.*aDocStat1[ n ]  );
     for( n = 0; n < 4; ++n )
-        static_cast<SwCalcExp*>(m_aVarTable[ aHashValue[ n + 7 ] ])->nValue.PutLong( rDocStat.*aDocStat2[ n ]  );
+        static_cast<SwCalcExp*>(m_aVarTable[ aHashValue[ n + 7 ] ].get())->nValue.PutLong( rDocStat.*aDocStat2[ n ]  );
 
     SvtUserOptions& rUserOptions = SW_MOD()->GetUserOptions();
 
-    static_cast<SwCalcExp*>(m_aVarTable[ aHashValue[ 11 ] ])->nValue.PutString( rUserOptions.GetFirstName() );
-    static_cast<SwCalcExp*>(m_aVarTable[ aHashValue[ 12 ] ])->nValue.PutString( rUserOptions.GetLastName() );
-    static_cast<SwCalcExp*>(m_aVarTable[ aHashValue[ 13 ] ])->nValue.PutString( rUserOptions.GetID() );
+    static_cast<SwCalcExp*>(m_aVarTable[ aHashValue[ 11 ] ].get())->nValue.PutString( rUserOptions.GetFirstName() );
+    static_cast<SwCalcExp*>(m_aVarTable[ aHashValue[ 12 ] ].get())->nValue.PutString( rUserOptions.GetLastName() );
+    static_cast<SwCalcExp*>(m_aVarTable[ aHashValue[ 13 ] ].get())->nValue.PutString( rUserOptions.GetID() );
 
     for( n = 0; n < 11; ++n )
-        static_cast<SwCalcExp*>(m_aVarTable[ aHashValue[ n + 14 ] ])->nValue.PutString(
+        static_cast<SwCalcExp*>(m_aVarTable[ aHashValue[ n + 14 ] ].get())->nValue.PutString(
                                         rUserOptions.GetToken( aAdrToken[ n ] ));
 
     nVal.PutString( rUserOptions.GetToken( aAdrToken[ 11 ] ));
@@ -359,9 +358,6 @@ SwCalc::SwCalc( SwDoc& rD )
 
 SwCalc::~SwCalc()
 {
-    for(SwHash* p : m_aVarTable)
-        delete p;
-
     if( m_pLocaleDataWrapper != m_aSysLocale.GetLocaleDataPtr() )
         delete m_pLocaleDataWrapper;
     if( m_pCharClass != &GetAppCharClass() )
@@ -449,8 +445,8 @@ SwCalcExp* SwCalc::VarLook( const OUString& rStr, bool bIns )
                 // then insert here
                 pFnd = new SwCalcExp( aStr, SwSbxValue(),
                                     static_cast<SwCalcFieldType*>(pEntry)->pFieldType );
-                pFnd->pNext.reset( *(m_aVarTable+ii) );
-                *(m_aVarTable+ii) = pFnd;
+                pFnd->pNext = std::move( m_aVarTable[ii] );
+                m_aVarTable[ii].reset(pFnd);
                 break;
             }
         }
@@ -564,8 +560,8 @@ SwCalcExp* SwCalc::VarLook( const OUString& rStr, bool bIns )
     }
 
     SwCalcExp* pNewExp = new SwCalcExp( aStr, SwSbxValue(), nullptr );
-    pNewExp->pNext.reset( m_aVarTable[ ii ] );
-    m_aVarTable[ ii ] = pNewExp;
+    pNewExp->pNext = std::move( m_aVarTable[ ii ] );
+    m_aVarTable[ ii ].reset(pNewExp);
 
     OUString sColumnName( GetColumnName( sTmpName ));
     OSL_ENSURE( !sColumnName.isEmpty(), "Missing DB column name" );
@@ -609,8 +605,8 @@ void SwCalc::VarChange( const OUString& rStr, const SwSbxValue& rValue )
     if( !pFnd )
     {
         pFnd = new SwCalcExp( aStr, SwSbxValue( rValue ), nullptr );
-        pFnd->pNext.reset( m_aVarTable[ nPos ] );
-        m_aVarTable[ nPos ] = pFnd;
+        pFnd->pNext = std::move(m_aVarTable[ nPos ]);
+        m_aVarTable[ nPos ].reset(pFnd);
     }
     else
     {
