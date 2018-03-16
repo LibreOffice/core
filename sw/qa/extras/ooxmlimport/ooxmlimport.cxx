@@ -1558,6 +1558,14 @@ DECLARE_OOXMLIMPORT_TEST(testTdf112443, "tdf112443.docx")
 
 }
 
+// DOCX: Textbox wrap differs in MSO and LO
+// Both should layout text regardless of existing text box
+// and as result only one page should be generated.
+DECLARE_OOXMLIMPORT_TEST(testTdf113182, "tdf113182.docx")
+{
+    CPPUNIT_ASSERT_EQUAL(getPages(), 1);
+}
+
 DECLARE_OOXMLIMPORT_TEST(testTdf113946, "tdf113946.docx")
 {
     OUString aTop = parseDump("/root/page/body/txt/anchored/SwAnchoredDrawObject/bounds", "top");
