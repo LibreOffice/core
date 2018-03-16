@@ -31,10 +31,10 @@
 #define STR_PASSWORD_MISMATCH                   NC_("STR_PASSWORD_MISMATCH", "The confirmation password did not match the password. Set the password again by entering the same password in both boxes.")
 
 #define STR_ALREADYOPEN_TITLE                   NC_("STR_ALREADYOPEN_TITLE", "Document in Use")
-#define STR_ALREADYOPEN_MSG                     NC_("STR_ALREADYOPEN_MSG", "Document file '$(ARG1)' is locked for editing by yourself on a different system since $(ARG2)\n\nOpen document read-only, or ignore own file locking and open the document for editing.\n\n")
+#define STR_ALREADYOPEN_MSG                     NC_("STR_ALREADYOPEN_MSG", "Document file '$(ARG1)' is locked for editing by yourself on a different system since $(ARG2)\n\nOpen document read-only, or ignore own file locking and open the document for editing.")
 #define STR_ALREADYOPEN_READONLY_BTN            NC_("STR_ALREADYOPEN_READONLY_BTN", "Open ~Read-Only")
 #define STR_ALREADYOPEN_OPEN_BTN                NC_("STR_ALREADYOPEN_OPEN_BTN", "~Open")
-#define STR_ALREADYOPEN_SAVE_MSG                NC_("STR_ALREADYOPEN_SAVE_MSG", "Document file '$(ARG1)' is locked for editing by yourself on a different system since $(ARG2)\n\nClose document on other system and retry saving or ignore own file locking and save current document.\n\n")
+#define STR_ALREADYOPEN_SAVE_MSG                NC_("STR_ALREADYOPEN_SAVE_MSG", "Document file '$(ARG1)' is locked for editing by yourself on a different system since $(ARG2)\n\nClose document on other system and retry saving or ignore own file locking and save current document.")
 #define STR_ALREADYOPEN_RETRY_SAVE_BTN          NC_("STR_ALREADYOPEN_RETRY_SAVE_BTN", "~Retry Saving")
 #define STR_ALREADYOPEN_SAVE_BTN                NC_("STR_ALREADYOPEN_SAVE_BTN", "~Save")
 
@@ -48,18 +48,18 @@
 
 #define STR_OPENLOCKED_TITLE                    NC_("STR_OPENLOCKED_TITLE", "Document in Use")
 #define STR_OPENLOCKED_MSG                      NC_("STR_OPENLOCKED_MSG", "Document file '$(ARG1)' is locked for editing by:\n\n$(ARG2)\n\nOpen document read-only or open a copy of the document for editing.\n\n$(ARG3)")
-#define STR_OPENLOCKED_ALLOWIGNORE_MSG          NC_("STR_OPENLOCKED_ALLOWIGNORE_MSG", "You may also ignore the file locking and open the document for editing.\n\n")
+#define STR_OPENLOCKED_ALLOWIGNORE_MSG          NC_("STR_OPENLOCKED_ALLOWIGNORE_MSG", "You may also ignore the file locking and open the document for editing.")
 #define STR_OPENLOCKED_OPENREADONLY_BTN         NC_("STR_OPENLOCKED_OPENREADONLY_BTN", "Open ~Read-Only")
 #define STR_OPENLOCKED_OPENCOPY_BTN             NC_("STR_OPENLOCKED_OPENCOPY_BTN", "Open ~Copy")
 #define STR_UNKNOWNUSER                         NC_("STR_UNKNOWNUSER", "Unknown User")
 
 #define STR_FILECHANGED_TITLE                   NC_("STR_FILECHANGED_TITLE", "Document Has Been Changed by Others")
-#define STR_FILECHANGED_MSG                     NC_("STR_FILECHANGED_MSG", "The file has been changed since it was opened for editing in %PRODUCTNAME. Saving your version of the document will overwrite changes made by others.\n\nDo you want to save anyway?\n\n")
+#define STR_FILECHANGED_MSG                     NC_("STR_FILECHANGED_MSG", "The file has been changed since it was opened for editing in %PRODUCTNAME. Saving your version of the document will overwrite changes made by others.\n\nDo you want to save anyway?")
 #define STR_FILECHANGED_SAVEANYWAY_BTN          NC_("STR_FILECHANGED_SAVEANYWAY_BTN", "~Save Anyway")
 
 #define STR_TRYLATER_TITLE                      NC_("STR_TRYLATER_TITLE", "Document in Use")
-#define STR_TRYLATER_MSG                        NC_("STR_TRYLATER_MSG", "Document file '$(ARG1)' is locked for editing by:\n\n$(ARG2)\n\nTry again later to save document or save a copy of that document.\n\n")
-#define STR_OVERWRITE_IGNORELOCK_MSG            NC_("STR_OVERWRITE_IGNORELOCK_MSG", "Document file '$(ARG1)' is locked for editing by:\n\n$(ARG2)\n\nYou may try to ignore the file locking and overwrite the existing document.\n\n")
+#define STR_TRYLATER_MSG                        NC_("STR_TRYLATER_MSG", "Document file '$(ARG1)' is locked for editing by:\n\n$(ARG2)\n\nTry again later to save document or save a copy of that document.")
+#define STR_OVERWRITE_IGNORELOCK_MSG            NC_("STR_OVERWRITE_IGNORELOCK_MSG", "Document file '$(ARG1)' is locked for editing by:\n\n$(ARG2)\n\nYou may try to ignore the file locking and overwrite the existing document.")
 #define STR_TRYLATER_RETRYSAVING_BTN            NC_("STR_TRYLATER_RETRYSAVING_BTN", "~Retry Saving")
 #define STR_TRYLATER_SAVEAS_BTN                 NC_("STR_TRYLATER_SAVEAS_BTN", "~Save As...")
 
