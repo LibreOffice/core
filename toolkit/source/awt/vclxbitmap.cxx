@@ -24,6 +24,7 @@
 #include <tools/stream.hxx>
 #include <rtl/uuid.h>
 #include <vcl/dibtools.hxx>
+#include <vcl/BitmapTools.hxx>
 
 
 //  class VCLXBitmap
@@ -72,9 +73,7 @@ css::uno::Sequence< sal_Int8 > VCLXBitmap::getMaskDIB()
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
-    SvMemoryStream aMem;
-    WriteDIB(maBitmap.GetMask(), aMem, false, true);
-    return css::uno::Sequence<sal_Int8>( static_cast<sal_Int8 const *>(aMem.GetData()), aMem.Tell() );
+    return vcl::bitmap::GetMaskDIB(maBitmap);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
