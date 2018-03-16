@@ -74,14 +74,7 @@ BitmapEx ImageList::GetAsHorizontalStrip() const
     }
 
     BitmapEx aTempl = mpImplData->maImages[ 0 ]->maBitmapEx;
-    BitmapEx aResult;
-    Bitmap aPixels( aSize, aTempl.GetBitmap().GetBitCount() );
-    if( aTempl.IsAlpha() )
-        aResult = BitmapEx( aPixels, AlphaMask( aSize ) );
-    else if( aTempl.IsTransparent() )
-        aResult = BitmapEx( aPixels, Bitmap( aSize, aTempl.GetMask().GetBitCount() ) );
-    else
-        aResult = BitmapEx( aPixels );
+    BitmapEx aResult( aTempl, Point(), aSize );
 
     tools::Rectangle aSrcRect( Point( 0, 0 ), mpImplData->maImageSize );
     for (sal_uInt16 nIdx = 0; nIdx < nCount; nIdx++)
