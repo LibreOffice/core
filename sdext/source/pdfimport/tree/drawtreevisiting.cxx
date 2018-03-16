@@ -458,7 +458,6 @@ void DrawXmlOptimizer::visit( PolyPolyElement& elem, const std::list< std::uniqu
 #else
         elem.Parent->Children.erase(next_it);
 #endif
-        delete pNext;
     }
 }
 
