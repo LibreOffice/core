@@ -116,6 +116,10 @@ public:
         return ErrCode(m_value & ~ERRCODE_DYNAMIC_MASK);
     }
 
+    constexpr ErrCode StripWarningAndDynamic() const {
+        return ErrCode(m_value & ~(ERRCODE_DYNAMIC_MASK | ERRCODE_WARNING_MASK));
+    }
+
     constexpr ErrCodeArea GetArea() const {
         return static_cast<ErrCodeArea>((m_value >> ERRCODE_AREA_SHIFT) & 0x01fff);
     }
@@ -124,8 +128,8 @@ public:
         return static_cast<ErrCodeClass>((m_value >> ERRCODE_CLASS_SHIFT) & 0x1f);
     }
 
-    constexpr sal_uInt16 GetRest() const {
-        return m_value & 0x7fff;
+    constexpr sal_uInt8 GetCode() const {
+        return static_cast<sal_uInt8>(m_value & 0xff);
     }
 
     OUString toHexString() const {
