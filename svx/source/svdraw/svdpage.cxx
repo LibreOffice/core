@@ -244,24 +244,6 @@ void SdrObjList::SetPage(SdrPage* pNewPage)
     }
 }
 
-// SdrModel* SdrObjList::GetModel() const
-// {
-//     return pModel;
-// }
-
-// TTTT needed?
-// void SdrObjList::SetModel(SdrModel* pNewModel)
-// {
-//     if (pModel!=pNewModel) {
-//         pModel=pNewModel;
-//         const size_t nCount = GetObjCount();
-//         for (size_t i=0; i<nCount; ++i) {
-//             SdrObject* pObj=GetObj(i);
-//             pObj->SetModel(pModel);
-//         }
-//     }
-// }
-
 void SdrObjList::RecalcObjOrdNums()
 {
     const size_t nCount = GetObjCount();
@@ -1212,7 +1194,7 @@ SdrPage::~SdrPage()
 void SdrPage::lateInit(const SdrPage& rSrcPage)
 {
     assert(!mpViewContact);
-    // TTTT SdrPageProperties get set by SdrPage::SdrPage already
+    // SdrPageProperties get set by SdrPage::SdrPage already, so do not assert anymore
     // assert(!mpSdrPageProperties);
     assert(!mxUnoPage.is());
 
@@ -1260,12 +1242,6 @@ void SdrPage::lateInit(const SdrPage& rSrcPage)
     // will be changed by the SdrObjList::lateInit before...
     eListKind = (mbMaster) ? SdrObjListKind::MasterPage : SdrObjListKind::DrawPage;
 }
-
-// TTTT
-// SdrPage* SdrPage::Clone() const
-// {
-//     return Clone(nullptr);
-// }
 
 SdrPage* SdrPage::Clone(SdrModel* pNewModel) const
 {
@@ -1420,50 +1396,6 @@ sal_Int32 SdrPage::GetLowerBorder() const
 {
     return mnBorderLower;
 }
-
-// TTTT needed?
-// void SdrPage::SetModel(SdrModel* pNewModel)
-// {
-//     SdrModel* pOldModel=pModel;
-//     SdrObjList::SetModel(pNewModel);
-
-//     if (pNewModel!=pOldModel)
-//     {
-//         impl_setModelForLayerAdmin( pNewModel );
-
-//         // create new SdrPageProperties with new model (due to SfxItemSet there)
-//         // and copy ItemSet and StyleSheet
-//         std::unique_ptr<SdrPageProperties> pNew(new SdrPageProperties(*this));
-
-//         if(!IsMasterPage())
-//         {
-//             const SfxItemSet& rOldSet = getSdrPageProperties().GetItemSet();
-//             SfxItemSet* pNewSet = rOldSet.Clone(false, &pNewModel->GetItemPool());
-//             //ensure checkForUniqueItem is called so new pages which have e.g.
-//             //XFillBitmapItem set, do not conflict with an existing XFillBitmapItem
-//             //with the same name but different properties
-//             SdrModel::MigrateItemSet(&rOldSet, pNewSet, pNewModel);
-//             pNew->PutItemSet(*pNewSet);
-//             delete pNewSet;
-//         }
-
-//         pNew->SetStyleSheet(getSdrPageProperties().GetStyleSheet());
-
-//         mpSdrPageProperties = std::move(pNew);
-//     }
-
-//     // update listeners at possible API wrapper object
-//     if( pOldModel != pNewModel )
-//     {
-//         if( mxUnoPage.is() )
-//         {
-//             SvxDrawPage* pPage2 = SvxDrawPage::getImplementation( mxUnoPage );
-//             if( pPage2 )
-//                 pPage2->ChangeModel( pNewModel );
-//         }
-//     }
-// }
-
 
 // #i68775# React on PageNum changes (from Model in most cases)
 void SdrPage::SetPageNum(sal_uInt16 nNew)

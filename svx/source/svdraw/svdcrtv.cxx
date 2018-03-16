@@ -412,10 +412,6 @@ bool SdrCreateView::ImpBegCreateObj(SdrInventor nInvent, sal_uInt16 nIdent, cons
                 {
                     pCurrentCreate->SetPage(pCreatePV->GetPage());
                 }
-                else if (mpModel)
-                {
-                    // TTTT pCurrentCreate->SetModel(mpModel);
-                }
             }
             else
             {

@@ -82,13 +82,6 @@ void SdrVirtObj::NbcSetAnchorPos(const Point& rAnchorPos)
     aAnchor=rAnchorPos;
 }
 
-// TTTT not needed
-// void SdrVirtObj::SetModel(SdrModel* pNewModel)
-// {
-//     SdrObject::SetModel(pNewModel);
-//     rRefObj.SetModel(pNewModel);
-// }
-
 void SdrVirtObj::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
 {
     rRefObj.TakeObjInfo(rInfo);

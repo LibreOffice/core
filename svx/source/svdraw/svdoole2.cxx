@@ -665,10 +665,10 @@ sdr::contact::ViewContact* SdrOle2Obj::CreateObjectSpecificViewContact()
 
 void SdrOle2Obj::Init()
 {
-    // TTTT stuff from old SetModel:
+    // Stuff that was done from old SetModel:
     // #i43086# #i85304 redo the change for charts for the above bugfix, as #i43086# does not occur anymore
-    //so maybe the ImpSetVisAreaSize call can be removed here completely
-    //Nevertheless I leave it in for other objects as I am not sure about the side effects when removing now
+    // so maybe the ImpSetVisAreaSize call can be removed here completely
+    // Nevertheless I leave it in for other objects as I am not sure about the side effects when removing now
     if(!getSdrModelFromSdrObject().isLocked() && !IsChart())
     {
         ImpSetVisAreaSize();
@@ -1225,77 +1225,6 @@ SdrObject* SdrOle2Obj::DoConvertToPolyObj(bool bBezier, bool bAddText) const
 
     return nullptr;
 }
-
-// TTTT needed?
-// void SdrOle2Obj::SetModel(SdrModel* pNewModel)
-// {
-//     ::comphelper::IEmbeddedHelper* pDestPers = pNewModel ? pNewModel->GetPersist() : nullptr;
-//     ::comphelper::IEmbeddedHelper* pSrcPers  = pModel ? pModel->GetPersist() : nullptr;
-
-//     if ( pNewModel == pModel )
-//     {
-//         // don't know if this is necessary or if it will ever happen, but who knows?!
-//         SdrRectObj::SetModel( pNewModel );
-//         return;
-//     }
-
-//     // assignment to model has changed
-//     DBG_ASSERT( pSrcPers || !mpImpl->mbConnected, "Connected object without a model?!" );
-
-//     DBG_ASSERT( pDestPers, "The destination model must have a persistence! Please submit an issue!" );
-//     DBG_ASSERT( pDestPers != pSrcPers, "The source and the destination models should have different persistences! Problems are possible!" );
-
-//     // this is a bug if the target model has no persistence
-//     // no error handling is possible so just do nothing in this method
-//     if ( !pDestPers )
-//         return;
-
-//     RemoveListeners_Impl();
-
-//     if( pDestPers && pSrcPers && !IsEmptyPresObj() )
-//     {
-//         try
-//         {
-//             // move the object's storage; ObjectRef remains the same, but PersistName may change
-//             OUString aTmp;
-//             comphelper::EmbeddedObjectContainer& rContainer = pSrcPers->getEmbeddedObjectContainer();
-//             uno::Reference < embed::XEmbeddedObject > xObj = rContainer.GetEmbeddedObject( mpImpl->aPersistName );
-//             DBG_ASSERT( !mpImpl->mxObjRef.is() || mpImpl->mxObjRef.GetObject() == xObj, "Wrong object identity!" );
-//             if ( xObj.is() )
-//             {
-//                 pDestPers->getEmbeddedObjectContainer().MoveEmbeddedObject( rContainer, xObj, aTmp );
-//                 mpImpl->aPersistName = aTmp;
-//                 mpImpl->mxObjRef.AssignToContainer( &pDestPers->getEmbeddedObjectContainer(), aTmp );
-//             }
-//             DBG_ASSERT( !aTmp.isEmpty(), "Copying embedded object failed!" );
-//         }
-//         catch( css::uno::Exception& )
-//         {
-//             SAL_WARN( "svx",  "SdrOle2Obj::SetModel(), exception caught: "
-//                     << comphelper::anyToString( cppu::getCaughtException() ) );
-//         }
-//     }
-
-//     SdrRectObj::SetModel( pNewModel );
-
-//     // #i43086#
-//     // #i85304 redo the change for charts for the above bugfix, as #i43086# does not occur anymore
-//     //so maybe the ImpSetVisAreaSize call can be removed here completely
-//     //Nevertheless I leave it in for other objects as I am not sure about the side effects when removing now
-//     if( pModel && !pModel->isLocked() && !IsChart() )
-//         ImpSetVisAreaSize();
-
-//     if( pDestPers && !IsEmptyPresObj() )
-//     {
-//         if ( !pSrcPers || IsEmptyPresObj() )
-//             // object wasn't connected, now it should be
-//             Connect_Impl();
-//         else
-//             Reconnect_Impl();
-//     }
-
-//     AddListeners_Impl();
-// }
 
 void SdrOle2Obj::SetPage(SdrPage* pNewPage)
 {

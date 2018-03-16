@@ -167,13 +167,6 @@ namespace sdr
             // Get the installed StyleSheet.
             virtual SfxStyleSheet* GetStyleSheet() const = 0;
 
-            // Move local items to a new ItemPool.
-            // Override this to do it for hierarchical objects like e.g. groups.
-            // TTTT virtual void MoveToItemPool(SfxItemPool* pSrcPool, SfxItemPool* pDestPool, SdrModel* pNewModel);
-
-            // Initialize for new SdrModel
-            // TTTT virtual void SetModel(SdrModel& rNewModel);
-
             // force all attributes which come from styles to hard attributes
             // to be able to live without the style.
             virtual void ForceStyleToHardAttributes();

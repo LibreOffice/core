@@ -2624,8 +2624,10 @@ bool SvxTableController::GetMarkedObjModel( SdrPage* pNewPage )
         sdr::table::SdrTableObj& rTableObj(*mxTableObj.get());
         CellPos aStart, aEnd;
         getSelectedCells(aStart, aEnd);
+
+        // Clone to new SdrModel
         SdrTableObj* pNewTableObj(
-            rTableObj.CloneRange( // TTTT clone to new SdrModel
+            rTableObj.CloneRange(
                 aStart,
                 aEnd,
                 pNewPage->getSdrModelFromSdrPage()));

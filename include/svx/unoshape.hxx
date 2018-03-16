@@ -206,9 +206,6 @@ public:
     void TakeSdrObjectOwnership();
     bool HasSdrObjectOwnership() const;
 
-    // TTTT needed?
-    // void ChangeModel( SdrModel* pNewModel );
-
     void InvalidateSdrObject() { mpObj.reset( nullptr ); };
     SdrObject* GetSdrObject() const {return mpObj.get();}
     void SetShapeType( const OUString& ShapeType ) { maShapeType = ShapeType; }

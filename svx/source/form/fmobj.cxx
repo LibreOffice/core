@@ -72,7 +72,7 @@ FmFormObj::FmFormObj(SdrModel& rSdrModel)
     ,m_nPos(-1)
     ,m_pLastKnownRefDevice(nullptr)
 {
-    // TTTT stuff from old SetModel:
+    // Stuff that old SetModel also did:
     impl_checkRefDevice_nothrow();
 }
 
@@ -584,15 +584,6 @@ Reference< XInterface >  FmFormObj::ensureModelEnv(const Reference< XInterface >
 
     return Reference<XInterface>( xDestContainer, UNO_QUERY );
 }
-
-
-// TTTT needed?
-// void FmFormObj::SetModel( SdrModel* _pNewModel )
-// {
-//     SdrUnoObj::SetModel( _pNewModel );
-//     impl_checkRefDevice_nothrow();
-// }
-
 
 FmFormObj* FmFormObj::GetFormObject( SdrObject* _pSdrObject )
 {

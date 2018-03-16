@@ -80,20 +80,6 @@ namespace sdr
             ClearObjectItem(nWhich);
         }
 
-        // TTTT
-        // void BaseProperties::MoveToItemPool(SfxItemPool* /*pSrcPool*/, SfxItemPool* /*pDestPool*/, SdrModel* /*pNewModel*/)
-        // {
-        //     // Move properties to a new ItemPool. Default implementation does nothing.
-        //     // Override where an ItemSet is implemented.
-        // }
-
-        // TTTT
-        // void BaseProperties::SetModel(SdrModel& /*rNewModel*/)
-        // {
-        //     // Set new model. Default implementation does nothing.
-        //     // Override where an ItemSet is implemented.
-        // }
-
         void BaseProperties::ForceStyleToHardAttributes()
         {
             // force all attributes which come from styles to hard attributes

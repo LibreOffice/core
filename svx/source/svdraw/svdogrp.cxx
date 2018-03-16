@@ -70,11 +70,6 @@ SdrObjGroup::SdrObjGroup(SdrModel& rSdrModel)
     maSdrObjList.SetOwnerObj(this);
     maSdrObjList.SetListKind(SdrObjListKind::GroupObj);
     bClosedObj=false;
-
-    // TTTT stuff from SetModel:
-    // Needed - creates the properties and sets a StyleSheet (!)
-    // TTTT NOT in constructor - will lead to wrong class casts (!)
-    // GetProperties().SetModel(rSdrModel);
 }
 
 SdrObjGroup::~SdrObjGroup()
@@ -178,36 +173,6 @@ void SdrObjGroup::SetPage(SdrPage* pNewPage)
     maSdrObjList.SetPage(pNewPage);
 }
 
-// TTTT needed?
-// void SdrObjGroup::SetModel(SdrModel* pNewModel)
-// {
-//     if(pNewModel!=pModel)
-//     {
-//         // #i30648#
-//         // This method also needs to migrate the used ItemSet
-//         // when the destination model uses a different pool
-//         // than the current one. Else it is possible to create
-//         // SdrObjGroups which reference the old pool which might
-//         // be destroyed (as the bug shows).
-//         SdrModel* pOldModel = pModel;
-
-//         // test for correct pool in ItemSet; move to new pool if necessary
-//         if(pNewModel && &GetObjectItemPool() != &pNewModel->GetItemPool())
-//         {
-//             MigrateItemPool(&GetObjectItemPool(), &pNewModel->GetItemPool(), pNewModel);
-//         }
-
-//         // call parent
-//         SdrObject::SetModel(pNewModel);
-
-//         // set new model at content
-//         pSub->SetModel(pNewModel);
-
-//         // modify properties
-//         GetProperties().SetModel(pOldModel, pNewModel);
-//     }
-// }
-
 SdrObjList* SdrObjGroup::GetSubList() const
 {
     return const_cast< SdrObjList* >(&maSdrObjList);
@@ -254,10 +219,6 @@ SdrObjGroup& SdrObjGroup::operator=(const SdrObjGroup& rObj)
     // copy SubList, init model and page first
     SdrObjList& rSourceSubList = *rObj.GetSubList();
     maSdrObjList.SetPage(rSourceSubList.GetPage());
-
-    // TTTT maybe check SdrModels/need to clone?
-    // pSub->SetModel(rSourceSubList.GetModel());
-
     maSdrObjList.CopyObjects(*rObj.GetSubList());
 
     // copy local parameters

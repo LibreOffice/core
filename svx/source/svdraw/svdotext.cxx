@@ -474,40 +474,6 @@ void SdrTextObj::SetPage(SdrPage* pNewPage)
     }
 }
 
-// TTTT needed?
-// void SdrTextObj::SetModel(SdrModel* pNewModel)
-// {
-//     SdrModel* pOldModel=pModel;
-//     bool bLinked=IsLinkedText();
-//     bool bChg=pNewModel!=pModel;
-
-//     if (bLinked && bChg)
-//     {
-//         ImpDeregisterLink();
-//     }
-
-//     SdrAttrObj::SetModel(pNewModel);
-
-//     if( bChg )
-//     {
-//         if( pNewModel != nullptr && pOldModel != nullptr )
-//             SetTextSizeDirty();
-
-//         sal_Int32 nCount = getTextCount();
-//         for( sal_Int32 nText = 0; nText < nCount; nText++ )
-//         {
-//             SdrText* pText = getText( nText );
-//             if( pText )
-//                 pText->SetModel( pNewModel );
-//         }
-//     }
-
-//     if (bLinked && bChg)
-//     {
-//         ImpRegisterLink();
-//     }
-// }
-
 void SdrTextObj::NbcSetEckenradius(long nRad)
 {
     SetObjectItem(makeSdrEckenradiusItem(nRad));

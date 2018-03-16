@@ -42,9 +42,6 @@ class REPORTDESIGN_DLLPUBLIC OReportPage : public SdrPage
     bool                    m_bSpecialInsertMode;
     std::vector<SdrObject*> m_aTemporaryObjectList;
 
-    // TTTT
-    // OReportPage(const OReportPage&);
-
     // method to remove temporary objects, created by 'special mode'
     // (BegDragObj)
     void removeTempObject(SdrObject const *_pToRemoveObj);
@@ -60,8 +57,6 @@ public:
     OReportPage( OReportModel& rModel
                 ,const css::uno::Reference< css::report::XSection >& _xSection );
 
-    // TTTT
-    // virtual SdrPage* Clone() const override;
     virtual SdrPage* Clone(SdrModel* pNewModel = nullptr) const override;
 
     virtual void NbcInsertObject(SdrObject* pObj, size_t nPos=SAL_MAX_SIZE) override;

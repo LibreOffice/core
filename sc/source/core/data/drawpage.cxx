@@ -30,21 +30,9 @@ ScDrawPage::ScDrawPage(ScDrawLayer& rNewModel, bool bMasterPage)
     SetSize( Size( RECT_MAX, RECT_MAX ) );
 }
 
-// TTTT
-// ScDrawPage::ScDrawPage(const ScDrawPage& rSrcPage)
-// :   FmFormPage(rSrcPage)
-// {
-// }
-
 ScDrawPage::~ScDrawPage()
 {
 }
-
-// TTTT
-// ScDrawPage* ScDrawPage::Clone() const
-// {
-//     return Clone(nullptr);
-// }
 
 ScDrawPage* ScDrawPage::Clone(SdrModel* const pNewModel) const
 {

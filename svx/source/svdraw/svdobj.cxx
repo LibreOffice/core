@@ -226,7 +226,7 @@ sdr::properties::BaseProperties& SdrObject::GetProperties() const
 {
     if(!mpProperties)
     {
-        // TTTT CAUTION(!) Do *not* vall this during SdrObject construction,
+        // CAUTION(!) Do *not* call this during SdrObject construction,
         // that will lead to wrong type-casts (dependent on costructor-level)
         // and thus eventually create the wrong sdr::properties (!). Is there
         // a way to check if on the stack is a SdrObject-constructor (?)
@@ -397,29 +397,6 @@ void SdrObject::SetRectsDirty(bool bNotMyself)
     }
 }
 
-// TTTT clone?
-// void SdrObject::SetModel(SdrModel* pNewModel)
-// {
-//     if(pNewModel && pPage)
-//     {
-//         if(pPage->GetModel() != pNewModel)
-//         {
-//             pPage = nullptr;
-//         }
-//     }
-
-//     // update listeners at possible API wrapper object
-//     if( pModel != pNewModel )
-//     {
-//         SvxShape* pShape = getSvxShape();
-//         if( pShape )
-//             pShape->ChangeModel( pNewModel );
-//     }
-
-//     pModel = pNewModel;
-// }
-
-
 void SdrObject::SetObjList(SdrObjList* pNewObjList)
 {
     pObjList=pNewObjList;
@@ -433,15 +410,18 @@ void SdrObject::SetPage(SdrPage* pNewPage)
 
     pPage = pNewPage;
 
-    if(nullptr != pPage)
-    {
-        SdrModel* pMod(&pPage->getSdrModelFromSdrPage());
-
-        if(pMod != &getSdrModelFromSdrObject())
-        {
-            // TTTT model change? Clone needed? SetModel(pMod);
-        }
-    }
+    // TTTT Possibility here to add a warning for the future -> SdrModel
+    // of SdrObject (this) and SdrPage it it added to *have* to have the
+    // same SdrModel
+    // if(nullptr != pPage)
+    // {
+    //     SdrModel* pMod(&pPage->getSdrModelFromSdrPage());
+    //
+    //     if(pMod != &getSdrModelFromSdrObject())
+    //     {
+    //         SetModel(pMod);
+    //     }
+    // }
 
     // The creation of the UNO shape in SdrObject::getUnoShape is influenced
     // by pPage, so when the page changes we need to discard the cached UNO
@@ -524,9 +504,6 @@ sal_Int16 SdrObject::GetRelativeHeightRelation() const
 SfxItemPool& SdrObject::GetObjectItemPool() const
 {
     return getSdrModelFromSdrObject().GetItemPool();
-
-    // use a static global default pool
-    // TTTT needed? return SdrObject::GetGlobalDrawObjectItemPool();
 }
 
 SdrInventor SdrObject::GetObjInventor()   const
@@ -907,7 +884,11 @@ void SdrObject::SetChanged()
     // notification now.
     ActionChanged();
 
-    if(IsInserted()) // TTTT IsInserted->no model stuff, but SdrPage (?)
+    // TTTT Need to check meaning/usage of IsInserted in one
+    // of the next changes. It should not mean to have a SdrModel
+    // set (this is guaranteed now), but should be connected to
+    // being added to a SdrPage (?)
+    if(IsInserted())
     {
         getSdrModelFromSdrObject().SetChanged();
     }
@@ -2731,16 +2712,6 @@ void SdrObject::SendUserCall(SdrUserCallType eUserCall, const tools::Rectangle& 
         break;
     }
 }
-
-// change ItemPool for this object
-// TTTT
-// void SdrObject::MigrateItemPool(SfxItemPool* pSrcPool, SfxItemPool* pDestPool, SdrModel* pNewModel)
-// {
-//     if(pSrcPool && pDestPool && (pSrcPool != pDestPool))
-//     {
-//         GetProperties().MoveToItemPool(pSrcPool, pDestPool, pNewModel);
-//     }
-// }
 
 void SdrObject::impl_setUnoShape( const uno::Reference< uno::XInterface >& _rxUnoShape )
 {

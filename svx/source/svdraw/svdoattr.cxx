@@ -83,10 +83,6 @@ sdr::properties::BaseProperties* SdrAttrObj::CreateObjectSpecificProperties()
 SdrAttrObj::SdrAttrObj(SdrModel& rSdrModel)
 :   SdrObject(rSdrModel)
 {
-    // TTTT stuff from SetModel:
-    // Needed - creates the properties and sets a StyleSheet (!)
-    // TTTT NOT in constructor - will lead to wrong class casts (!)
-    // GetProperties().SetModel(rSdrModel);
 }
 
 SdrAttrObj::~SdrAttrObj()
@@ -104,27 +100,7 @@ const tools::Rectangle& SdrAttrObj::GetSnapRect() const
     return maSnapRect;
 }
 
-// TTTT clone?
-// void SdrAttrObj::SetModel(SdrModel* pNewModel)
-// {
-//     SdrModel* pOldModel = pModel;
-
-//     // test for correct pool in ItemSet; move to new pool if necessary
-//     if(pNewModel && &GetObjectItemPool() != &pNewModel->GetItemPool())
-//     {
-//         MigrateItemPool(&GetObjectItemPool(), &pNewModel->GetItemPool(), pNewModel);
-//     }
-
-//     // call parent
-//     SdrObject::SetModel(pNewModel);
-
-//     // modify properties
-//     GetProperties().SetModel(pOldModel, pNewModel);
-// }
-
-
 // syntactical sugar for ItemSet accesses
-
 void SdrAttrObj::Notify(SfxBroadcaster& /*rBC*/, const SfxHint& rHint)
 {
     bool bDataChg(SfxHintId::DataChanged == rHint.GetId());

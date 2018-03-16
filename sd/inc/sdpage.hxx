@@ -148,7 +148,6 @@ friend class sd::UndoAttrObject;
     sal_Int32 mnTransitionFadeColor;
     double mfTransitionDuration;
 
-    // TTTT SdPage(const SdPage& rSrcPage);
     void lateInit(const SdPage& rSrcPage);
 
 public:
@@ -156,8 +155,6 @@ public:
     SdPage(SdDrawDocument& rNewDoc, bool bMasterPage);
     virtual ~SdPage() override;
 
-    // TTTT
-    // virtual SdrPage* Clone() const override;
     virtual SdrPage* Clone(SdrModel* pNewModel = nullptr) const override;
 
     virtual void    SetSize(const Size& aSize) override;
@@ -166,10 +163,6 @@ public:
     virtual void    SetRightBorder(sal_Int32 nBorder) override;
     virtual void    SetUpperBorder(sal_Int32 nBorder) override;
     virtual void    SetLowerBorder(sal_Int32 nBorder) override;
-
-    // TTTT
-    // virtual void    SetModel(SdrModel* pNewModel) override;
-
     virtual bool    IsReadOnly() const override;
 
     sd::ShapeList&  GetPresentationShapeList() { return maPresentationShapeList; }
@@ -394,7 +387,7 @@ private:
     sal_uInt16 mnPageId;
 
     /** clone the animations from this and set them to rTargetPage
-     *  TTTT what is strange, should be the other way around by
+     *  TTTT: Order is strange, should be the other way around by
      *  convention/convenience and makes usage a little dangerous...
     */
     void cloneAnimations( SdPage& rTargetPage ) const;

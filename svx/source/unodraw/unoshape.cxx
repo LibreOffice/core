@@ -448,40 +448,6 @@ void SvxShape::Create( SdrObject* pNewObj, SvxDrawPage* /*pNewPage*/ )
     }
 }
 
-// TTTT needed?
-// void SvxShape::ChangeModel( SdrModel* pNewModel )
-// {
-//     DBG_TESTSOLARMUTEX();
-//     if( mpObj.is() && mpObj->GetModel() )
-//     {
-//         if( mpObj->GetModel() != pNewModel )
-//         {
-//             EndListening( *mpObj->GetModel() );
-//         }
-//     }
-
-//     // Always listen to new model (#i52126#)
-//     if( pNewModel )
-//     {
-//         StartListening( *pNewModel );
-//     }
-
-//     // HACK #i53696# ChangeModel should be virtual, but it isn't. can't change that for 2.0.1
-//     SvxShapeText* pShapeText = dynamic_cast< SvxShapeText* >( this );
-//     if( pShapeText )
-//     {
-//         SvxTextEditSource* pTextEditSource = dynamic_cast< SvxTextEditSource* >( pShapeText->GetEditSource() );
-//         if( pTextEditSource )
-//             pTextEditSource->ChangeModel( pNewModel );
-//     }
-
-//     mpModel = pNewModel;
-
-//     if( mpImpl->mpMaster )
-//         mpImpl->mpMaster->modelChanged( pNewModel );
-// }
-
-
 void SvxShape::ForceMetricToItemPoolMetric(Pair& rPoint) const throw()
 {
     DBG_TESTSOLARMUTEX();

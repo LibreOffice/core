@@ -32,23 +32,10 @@ DlgEdPage::DlgEdPage(DlgEdModel& rModel, bool bMasterPage)
 {
 }
 
-// TTTT
-// DlgEdPage::DlgEdPage(const DlgEdPage& rSrcPage)
-// :   SdrPage(rSrcPage)
-//     ,pDlgEdForm(nullptr)
-// {
-// }
-
 DlgEdPage::~DlgEdPage()
 {
     Clear();
 }
-
-// TTTT
-// SdrPage* DlgEdPage::Clone() const
-// {
-//     return Clone(nullptr);
-// }
 
 SdrPage* DlgEdPage::Clone(SdrModel* const pNewModel) const
 {

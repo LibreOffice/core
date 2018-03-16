@@ -1324,9 +1324,6 @@ void SdrModel::InsertPage(SdrPage* pPage, sal_uInt16 nPos)
     pPage->SetInserted();
     pPage->SetPageNum(nPos);
 
-    // TTTT
-    // pPage->SetModel(this);
-
     if (nPos<nCount) bPagNumsDirty=true;
     SetChanged();
     SdrHint aHint(SdrHintKind::PageOrderChange, pPage);
@@ -1376,12 +1373,10 @@ void SdrModel::InsertMasterPage(SdrPage* pPage, sal_uInt16 nPos)
     pPage->SetInserted();
     pPage->SetPageNum(nPos);
 
-    // TTTT
-    // pPage->SetModel(this);
-
     if (nPos<nCount) {
         bMPgNumsDirty=true;
     }
+
     SetChanged();
     SdrHint aHint(SdrHintKind::PageOrderChange, pPage);
     Broadcast(aHint);
@@ -1482,7 +1477,10 @@ void SdrModel::CopyPages(sal_uInt16 nFirstPageNum, sal_uInt16 nLastPageNum,
         if (!bMoveNoCopy)
         {
             const SdrPage* pPg1=GetPage(nPageNum2);
-            pPg=pPg1->Clone(nullptr); // TTTT copy to local model
+
+            // Clone to local model
+            pPg=pPg1->Clone();
+
             InsertPage(pPg,nDestNum);
             if (bUndo)
                 AddUndo(GetSdrUndoFactory().CreateUndoCopyPage(*pPg));
@@ -1585,7 +1583,7 @@ void SdrModel::Merge(SdrModel& rSourceModel,
             i--;
             if (pMasterNeed[i])
             {
-                // TTTT always clone to new model
+                // Always Clone to new model
                 const SdrPage* pPg1(rSourceModel.GetMasterPage(i));
                 SdrPage* pPg(pPg1->Clone(this));
 
@@ -1602,10 +1600,6 @@ void SdrModel::Merge(SdrModel& rSourceModel,
                     maMaPag.insert(maMaPag.begin()+nDstMasterPageCnt, pPg);
                     MasterPageListChanged();
                     pPg->SetInserted();
-
-                    // TTTT
-                    // pPg->SetModel(this);
-
                     bMPgNumsDirty=true;
                     if (bUndo) AddUndo(GetSdrUndoFactory().CreateUndoNewPage(*pPg));
                 } else {
@@ -1622,7 +1616,7 @@ void SdrModel::Merge(SdrModel& rSourceModel,
         if (nDestPos>GetPageCount()) nDestPos=GetPageCount();
         while (nMergeCount>0)
         {
-            // TTTT always clone to new model
+            // Always Clone to new model
             const SdrPage* pPg1(rSourceModel.GetPage(nSourcePos));
             SdrPage* pPg(pPg1->Clone(this));
 

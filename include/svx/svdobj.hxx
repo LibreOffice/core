@@ -808,10 +808,6 @@ public:
     // removes the record from the list and performs delete (FreeMem+Dtor).
     void DeleteUserData(sal_uInt16 nNum);
 
-    // switch ItemPool for this object
-    // TTTT will no longer ber needed
-    // void MigrateItemPool(SfxItemPool* pSrcPool, SfxItemPool* pDestPool, SdrModel* pNewModel);
-
     // access to the UNO representation of the shape
     virtual css::uno::Reference< css::uno::XInterface > getUnoShape();
 

@@ -260,7 +260,8 @@ void SAL_CALL GalleryTheme::update(  )
                 if (pOrigPage && pOrigModel)
                 {
                     FmFormModel* pTmpModel = new FmFormModel(&pOrigModel->GetItemPool());
-                    SdrPage* pNewPage = pOrigPage->Clone(pTmpModel); // TTTT clone to new target
+                    // Clone to new target SdrModel
+                    SdrPage* pNewPage = pOrigPage->Clone(pTmpModel);
                     pTmpModel->InsertPage(pNewPage, 0);
 
                     uno::Reference< lang::XComponent > xDrawing( new GalleryDrawingModel( pTmpModel ) );

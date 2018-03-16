@@ -50,9 +50,28 @@ namespace sdr
 {
     namespace properties
     {
+        SfxStyleSheet* AttributeProperties::ImpGetDefaultStyleSheet() const
+        {
+            // use correct default stylesheet #119287#
+            const SdrGrafObj* pIsSdrGrafObj(dynamic_cast< const SdrGrafObj* >(&GetSdrObject()));
+            const SdrOle2Obj* pIsSdrOle2Obj(dynamic_cast< const SdrOle2Obj* >(&GetSdrObject()));
+            SfxStyleSheet* pRetval(nullptr);
+
+            if(pIsSdrGrafObj || pIsSdrOle2Obj)
+            {
+                pRetval = GetSdrObject().getSdrModelFromSdrObject().GetDefaultStyleSheetForSdrGrafObjAndSdrOle2Obj();
+            }
+            else
+            {
+                pRetval = GetSdrObject().getSdrModelFromSdrObject().GetDefaultStyleSheet();
+            }
+
+            return pRetval;
+        }
+
         void AttributeProperties::ImpSetParentAtSfxItemSet(bool bDontRemoveHardAttr)
         {
-            if(mpItemSet && mpStyleSheet)
+            if(HasSfxItemSet() && mpStyleSheet)
             {
                 // Delete hard attributes where items are set in the style sheet
                 if(!bDontRemoveHardAttr)
@@ -89,21 +108,20 @@ namespace sdr
 
             if(pNewStyleSheet)
             {
+                // local remember
                 mpStyleSheet = pNewStyleSheet;
 
-                // local ItemSet is needed here, force it
-                // TTTT better not - do NOT call ::CreateObjectSpecificItemSet
-                // implementations in constructor -> wrong calls (!)
-                // GetObjectItemSet();
-
-                // register as listener
-                StartListening(pNewStyleSheet->GetPool());
-                StartListening(*pNewStyleSheet);
-
-                // only apply the following when we have an SfxItemSet already, else
-                if(nullptr != mpItemSet && GetStyleSheet())
+                if(HasSfxItemSet())
                 {
-                    ImpSetParentAtSfxItemSet(bDontRemoveHardAttr);
+                    // register as listener
+                    StartListening(pNewStyleSheet->GetPool());
+                    StartListening(*pNewStyleSheet);
+
+                    // only apply the following when we have an SfxItemSet already, else
+                    if(GetStyleSheet())
+                    {
+                        ImpSetParentAtSfxItemSet(bDontRemoveHardAttr);
+                    }
                 }
             }
         }
@@ -117,7 +135,7 @@ namespace sdr
                 EndListening(mpStyleSheet->GetPool());
 
                 // reset parent of ItemSet
-                if(mpItemSet)
+                if(HasSfxItemSet())
                 {
                     mpItemSet->SetParent(nullptr);
                 }
@@ -145,24 +163,11 @@ namespace sdr
         :   DefaultProperties(rObj),
             mpStyleSheet(nullptr)
         {
-            // use correct default stylesheet #119287#
-            SfxStyleSheet* pTargetStyleSheet(nullptr);
-            const SdrGrafObj* pIsSdrGrafObj(dynamic_cast< const SdrGrafObj* >(&rObj));
-            const SdrOle2Obj* pIsSdrOle2Obj(dynamic_cast< const SdrOle2Obj* >(&rObj));
-
-            if(pIsSdrGrafObj || pIsSdrOle2Obj)
-            {
-                pTargetStyleSheet = rObj.getSdrModelFromSdrObject().GetDefaultStyleSheetForSdrGrafObjAndSdrOle2Obj();
-            }
-            else
-            {
-                pTargetStyleSheet = rObj.getSdrModelFromSdrObject().GetDefaultStyleSheet();
-            }
-
-            if(pTargetStyleSheet)
-            {
-                ImpAddStyleSheet(pTargetStyleSheet, true);
-            }
+            // Do nothing else, esp. do *not* try to get and set
+            // a default SfxStyle sheet. Nothing is allowed to be done
+            // that may lead to calls to virtual functions like
+            // CreateObjectSpecificItemSet - these would go *wrong*.
+            // Thus the rest is lazy-init from here.
         }
 
         AttributeProperties::AttributeProperties(const AttributeProperties& rProps, SdrObject& rObj)
@@ -171,25 +176,22 @@ namespace sdr
         {
             SfxStyleSheet* pTargetStyleSheet(rProps.GetStyleSheet());
 
-            if(!pTargetStyleSheet)
+            if(pTargetStyleSheet)
             {
-                // use correct default stylesheet #119287#
-                const SdrGrafObj* pIsSdrGrafObj(dynamic_cast< const SdrGrafObj* >(&rObj));
-                const SdrOle2Obj* pIsSdrOle2Obj(dynamic_cast< const SdrOle2Obj* >(&rObj));
-
-                if(pIsSdrGrafObj || pIsSdrOle2Obj)
+                if(HasSfxItemSet())
                 {
-                    pTargetStyleSheet = rObj.getSdrModelFromSdrObject().GetDefaultStyleSheetForSdrGrafObjAndSdrOle2Obj();
+                    // The SfxItemSet has been cloned and exists,
+                    // we can directly set the SfxStyleSheet at it
+                    ImpAddStyleSheet(pTargetStyleSheet, true);
                 }
                 else
                 {
-                    pTargetStyleSheet = rObj.getSdrModelFromSdrObject().GetDefaultStyleSheet();
+                    // No SfxItemSet exists yet (there is none in
+                    // the source, so none was cloned). Remember the
+                    // SfxStyleSheet to set it when the SfxItemSet
+                    // got constructed on-demand
+                    mpStyleSheet = pTargetStyleSheet;
                 }
-            }
-
-            if(pTargetStyleSheet)
-            {
-                ImpAddStyleSheet(pTargetStyleSheet, true);
             }
         }
 
@@ -205,13 +207,35 @@ namespace sdr
 
         const SfxItemSet& AttributeProperties::GetObjectItemSet() const
         {
-            // call parent
+            // remember if we had a SfxItemSet already
+            const bool bHadSfxItemSet(HasSfxItemSet());
+
+            // call parent - this will then guarantee
+            // SfxItemSet existance
             DefaultProperties::GetObjectItemSet();
 
-            // Late-Init of setting parent to SfxStyleSheet after it's creation, same as in constructor
-            if(GetStyleSheet() && !mpItemSet->GetParent())
+            if(!bHadSfxItemSet)
             {
-                const_cast< AttributeProperties* >(this)->ImpSetParentAtSfxItemSet(true);
+                if(GetStyleSheet())
+                {
+                    // Late-Init of setting parent to SfxStyleSheet after
+                    // it's creation. See copy-constructor and how it remembers
+                    // the SfxStyleSheet there.
+                    // It is necessary to reset mpStyleSheet to nullptr to
+                    // not trigger alarm insde ImpAddStyleSheet (!)
+                    SfxStyleSheet* pNew(mpStyleSheet);
+                    const_cast< AttributeProperties* >(this)->mpStyleSheet = nullptr;
+                    const_cast< AttributeProperties* >(this)->ImpAddStyleSheet(
+                        pNew,
+                        true);
+                }
+                else
+                {
+                    // Set missing defaults and do not RemoveHardAttributes
+                    const_cast< AttributeProperties* >(this)->ImpAddStyleSheet(
+                        ImpGetDefaultStyleSheet(),
+                        true);
+                }
             }
 
             return *mpItemSet;
@@ -276,21 +300,28 @@ namespace sdr
                 }
 
                 // set item
-                GetObjectItemSet();
+                if(!HasSfxItemSet())
+                {
+                    GetObjectItemSet();
+                }
+
                 if(pResultItem)
                 {
                     // force ItemSet
                     mpItemSet->Put(*pResultItem);
+
                     // delete item if it was a generated one
                     delete pResultItem;
                 }
                 else
+                {
                     mpItemSet->Put(*pNewItem);
+                }
             }
             else
             {
                 // clear item if ItemSet exists
-                if(mpItemSet)
+                if(HasSfxItemSet())
                 {
                     mpItemSet->ClearItem(nWhich);
                 }
@@ -299,6 +330,12 @@ namespace sdr
 
         void AttributeProperties::SetStyleSheet(SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHardAttr)
         {
+            // guarantee SfxItemSet existance here
+            if(!HasSfxItemSet())
+            {
+                GetObjectItemSet();
+            }
+
             ImpRemoveStyleSheet();
             ImpAddStyleSheet(pNewStyleSheet, bDontRemoveHardAttr);
 
@@ -312,85 +349,18 @@ namespace sdr
             return mpStyleSheet;
         }
 
-        // TTTT
-        // void AttributeProperties::MoveToItemPool(SfxItemPool* pSrcPool, SfxItemPool* pDestPool, SdrModel* pNewModel)
-        // {
-        //     OSL_ASSERT(pNewModel!=nullptr);
-
-        //     if(pSrcPool && pDestPool && (pSrcPool != pDestPool))
-        //     {
-        //         if(mpItemSet)
-        //         {
-        //             // migrate ItemSet to new pool. Scaling is NOT necessary
-        //             // because this functionality is used by UNDO only. Thus
-        //             // objects and ItemSets would be moved back to their original
-        //             // pool before usage.
-        //             SfxStyleSheet* pStySheet = GetStyleSheet();
-
-        //             if(pStySheet)
-        //             {
-        //                 ImpRemoveStyleSheet();
-        //             }
-
-        //             auto pOldSet = std::move(mpItemSet);
-        //             mpItemSet.reset(pOldSet->Clone(false, pDestPool));
-        //             SdrModel::MigrateItemSet(pOldSet.get(), mpItemSet.get(), pNewModel);
-
-        //             // set stylesheet (if used)
-        //             if(pStySheet)
-        //             {
-        //                 // #i109515#
-        //                 SfxItemPool* pStyleSheetPool = &pStySheet->GetPool().GetPool();
-
-        //                 if(pStyleSheetPool == pDestPool)
-        //                 {
-        //                     // just re-set stylesheet
-        //                     ImpAddStyleSheet(pStySheet, true);
-        //                 }
-        //                 else
-        //                 {
-        //                     // StyleSheet is NOT from the correct pool.
-        //                     // Look one up in the right pool with the same
-        //                     // name or use the default.
-
-        //                     // Look up the style in the new document.
-        //                     OSL_ASSERT(pNewModel->GetStyleSheetPool() != nullptr);
-        //                     SfxStyleSheet* pNewStyleSheet = dynamic_cast<SfxStyleSheet*>(
-        //                         pNewModel->GetStyleSheetPool()->Find(
-        //                             pStySheet->GetName(),
-        //                             SfxStyleFamily::All));
-        //                     if (pNewStyleSheet == nullptr
-        //                         || &pNewStyleSheet->GetPool().GetPool() != pDestPool)
-        //                     {
-        //                         // There is no copy of the style in the new
-        //                         // document.  Use the default as a fallback.
-        //                         pNewStyleSheet = pNewModel->GetDefaultStyleSheet();
-        //                     }
-        //                     ImpAddStyleSheet(pNewStyleSheet, true);
-        //                 }
-        //             }
-        //         }
-        //     }
-        // }
-
-        // TTTT
-        // void AttributeProperties::SetModel(SdrModel& rNewModel)
-        // {
-        //     // each object gets the default Style if there is none set yet.
-        //     if(!GetStyleSheet())
-        //     {
-        //         GetObjectItemSet(); // #118414 force ItemSet to allow style to be set
-        //         SetStyleSheet(rNewModel.GetDefaultStyleSheet(), true);
-        //     }
-        // }
-
         void AttributeProperties::ForceStyleToHardAttributes()
         {
             if(!GetStyleSheet() || dynamic_cast<const SfxStyleSheet *>(mpStyleSheet) == nullptr)
                 return;
 
+            // force SfxItemSet existence
+            if(!HasSfxItemSet())
+            {
+                GetObjectItemSet();
+            }
+
             // prepare copied, new itemset, but WITHOUT parent
-            GetObjectItemSet();
             SfxItemSet* pDestItemSet = new SfxItemSet(*mpItemSet);
             pDestItemSet->SetParent(nullptr);
 

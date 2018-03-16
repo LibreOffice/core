@@ -1118,9 +1118,6 @@ void SwWW8ImplReader::InsertTxbxText(SdrTextObj* pTextObj,
 
                                 GrafikCtor();
 
-                                // TTTT already in constructor, also in ImportOleBase
-                                // which may trigger xShape creation, too
-                                // pNew->SetModel( m_pDrawModel );
                                 pNew->SetLogicRect( pTextObj->GetCurrentBoundRect() );
                                 pNew->SetLayer( pTextObj->GetLayer() );
 

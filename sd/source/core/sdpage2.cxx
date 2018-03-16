@@ -282,23 +282,6 @@ void SdPage::EndListenOutlineText()
 
 /*************************************************************************
 |*
-|* Set new model
-|*
-\************************************************************************/
-
-// TTTT
-// void SdPage::SetModel(SdrModel* pNewModel)
-// {
-//     DisconnectLink();
-
-//     // assign model
-//     FmFormPage::SetModel(pNewModel);
-
-//     ConnectLink();
-// }
-
-/*************************************************************************
-|*
 |* Is this page read-only?
 |*
 \************************************************************************/
@@ -361,53 +344,37 @@ void SdPage::DisconnectLink()
     }
 }
 
-/*************************************************************************
-|*
-|* Copy-Ctor
-|*
-\************************************************************************/
-
-// TTTT
-// SdPage::SdPage(const SdPage& rSrcPage)
-// :   FmFormPage(rSrcPage)
-// ,   SdrObjUserCall()
-// ,   mpItems(nullptr)
-// ,   mnPageId(mnLastPageId++)
-// {
-//     mePageKind           = rSrcPage.mePageKind;
-//     meAutoLayout         = rSrcPage.meAutoLayout;
-
-//     mbSelected           = false;
-//     mnTransitionType    = rSrcPage.mnTransitionType;
-//     mnTransitionSubtype = rSrcPage.mnTransitionSubtype;
-//     mbTransitionDirection = rSrcPage.mbTransitionDirection;
-//     mnTransitionFadeColor = rSrcPage.mnTransitionFadeColor;
-//     mfTransitionDuration = rSrcPage.mfTransitionDuration;
-//     mePresChange            = rSrcPage.mePresChange;
-//     mfTime               = rSrcPage.mfTime;
-//     mbSoundOn            = rSrcPage.mbSoundOn;
-//     mbExcluded           = rSrcPage.mbExcluded;
-
-//     maLayoutName         = rSrcPage.maLayoutName;
-//     maSoundFile          = rSrcPage.maSoundFile;
-//     mbLoopSound          = rSrcPage.mbLoopSound;
-//     mbStopSound          = rSrcPage.mbStopSound;
-//     maCreatedPageName.clear();
-//     maFileName           = rSrcPage.maFileName;
-//     maBookmarkName       = rSrcPage.maBookmarkName;
-//     mbScaleObjects       = rSrcPage.mbScaleObjects;
-//     mbBackgroundFullSize = rSrcPage.mbBackgroundFullSize;
-//     meCharSet            = rSrcPage.meCharSet;
-//     mnPaperBin           = rSrcPage.mnPaperBin;
-
-//     mpPageLink           = nullptr;    // is set when inserting via ConnectLink()
-
-//     mbIsPrecious         = false;
-// }
-
 void SdPage::lateInit(const SdPage& rSrcPage)
 {
+    // call parent
     FmFormPage::lateInit(rSrcPage);
+
+    // copy local variables (former stuff from copy constructor)
+    mePageKind = rSrcPage.mePageKind;
+    meAutoLayout = rSrcPage.meAutoLayout;
+    mbSelected = false;
+    mnTransitionType = rSrcPage.mnTransitionType;
+    mnTransitionSubtype = rSrcPage.mnTransitionSubtype;
+    mbTransitionDirection = rSrcPage.mbTransitionDirection;
+    mnTransitionFadeColor = rSrcPage.mnTransitionFadeColor;
+    mfTransitionDuration = rSrcPage.mfTransitionDuration;
+    mePresChange = rSrcPage.mePresChange;
+    mfTime = rSrcPage.mfTime;
+    mbSoundOn = rSrcPage.mbSoundOn;
+    mbExcluded = rSrcPage.mbExcluded;
+    maLayoutName = rSrcPage.maLayoutName;
+    maSoundFile = rSrcPage.maSoundFile;
+    mbLoopSound = rSrcPage.mbLoopSound;
+    mbStopSound = rSrcPage.mbStopSound;
+    maCreatedPageName.clear();
+    maFileName = rSrcPage.maFileName;
+    maBookmarkName = rSrcPage.maBookmarkName;
+    mbScaleObjects = rSrcPage.mbScaleObjects;
+    mbBackgroundFullSize = rSrcPage.mbBackgroundFullSize;
+    meCharSet = rSrcPage.meCharSet;
+    mnPaperBin = rSrcPage.mnPaperBin;
+    mpPageLink = nullptr;    // is set when inserting via ConnectLink()
+    mbIsPrecious = false;
 
     // use shape list directly to preserve constness of rSrcPage
     const std::list< SdrObject* >& rShapeList = rSrcPage.maPresentationShapeList.getList();
@@ -442,12 +409,6 @@ void SdPage::lateInit(const SdPage& rSrcPage)
 |* Clone
 |*
 \************************************************************************/
-
-// TTTT
-// SdrPage* SdPage::Clone() const
-// {
-//     return Clone(nullptr);
-// }
 
 SdrPage* SdPage::Clone(SdrModel* pNewModel) const
 {
@@ -618,7 +579,10 @@ void SdPage::addAnnotation( const Reference< XAnnotation >& xAnnotation, int nIn
     SetChanged();
     getSdrModelFromSdrPage().SetChanged();
     // TTTT NotifyDocumentEvent shbe ref?
-    NotifyDocumentEvent( static_cast< SdDrawDocument* >(&getSdrModelFromSdrPage()), "OnAnnotationInserted", Reference<XInterface>( xAnnotation, UNO_QUERY ) );
+    NotifyDocumentEvent(
+        static_cast< SdDrawDocument* >(&getSdrModelFromSdrPage()),
+        "OnAnnotationInserted",
+        Reference<XInterface>(xAnnotation, UNO_QUERY));
 }
 
 void SdPage::removeAnnotation( const Reference< XAnnotation >& xAnnotation )

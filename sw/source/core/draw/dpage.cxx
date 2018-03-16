@@ -56,19 +56,6 @@ SwDPage::SwDPage(SwDrawModel& rNewModel, bool bMasterPage)
 {
 }
 
-// TTTT
-// SwDPage::SwDPage(const SwDPage& rSrcPage)
-// :   FmFormPage(rSrcPage),
-//     pDoc( nullptr )
-// {
-//     if ( rSrcPage.pGridLst )
-//     {
-//         pGridLst.reset( new SdrPageGridFrameList );
-//         for ( sal_uInt16 i = 0; i != rSrcPage.pGridLst->GetCount(); ++i )
-//             pGridLst->Insert( ( *rSrcPage.pGridLst )[ i ] );
-//     }
-// }
-
 SwDPage::~SwDPage()
 {
 }
@@ -84,12 +71,6 @@ void SwDPage::lateInit(const SwDPage& rSrcPage)
             pGridLst->Insert( ( *rSrcPage.pGridLst )[ i ] );
     }
 }
-
-// TTTT
-// SwDPage* SwDPage::Clone() const
-// {
-//     return Clone( nullptr );
-// }
 
 SwDPage* SwDPage::Clone(SdrModel* const pNewModel) const
 {

@@ -31,6 +31,9 @@ namespace sdr
     {
         class AttributeProperties : public DefaultProperties, public SfxListener, public svl::StyleSheetUser
         {
+            // get the correct (#119287#) default SfyStyleSheet from SdrObject's SdrModel
+            SfxStyleSheet* ImpGetDefaultStyleSheet() const;
+
             // core to set parent at SfxItemSet and to execute the hard attribute computations
             void ImpSetParentAtSfxItemSet(bool bDontRemoveHardAttr);
 
@@ -75,12 +78,6 @@ namespace sdr
 
             // get the installed StyleSheet
             virtual SfxStyleSheet* GetStyleSheet() const override;
-
-            // Move properties to a new ItemPool.
-            // TTTT virtual void MoveToItemPool(SfxItemPool* pSrcPool, SfxItemPool* pDestPool, SdrModel* pNewModel) override;
-
-            // Initialize for new SdrModel
-            // virtual void SetModel(SdrModel& rNewModel) override;
 
             // force all attributes which come from styles to hard attributes
             // to be able to live without the style.
