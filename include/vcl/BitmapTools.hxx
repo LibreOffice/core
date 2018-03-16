@@ -96,6 +96,8 @@ VCL_DLLPUBLIC void DrawAlphaBitmapAndAlphaGradient(BitmapEx & rBitmapEx, bool bF
 
 VCL_DLLPUBLIC void DrawAndClipBitmap(const Point& rPos, const Size& rSize, const BitmapEx& rBitmap, BitmapEx & aBmpEx, basegfx::B2DPolyPolygon const & rClipPath);
 
+VCL_DLLPUBLIC css::uno::Sequence< sal_Int8 > GetMaskDIB(BitmapEx const & aBmpEx);
+
 }} // end vcl::bitmap
 
 #endif // INCLUDED_VCL_BITMAP_TOOLS_HXX
