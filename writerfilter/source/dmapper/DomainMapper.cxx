@@ -2967,6 +2967,8 @@ void DomainMapper::markLastSectionGroup( )
 
 void DomainMapper::lcl_startShape(uno::Reference<drawing::XShape> const& xShape)
 {
+    assert(xShape.is());
+
     if (m_pImpl->GetTopContext())
     {
         // If there is a deferred page break, handle it now, so that the

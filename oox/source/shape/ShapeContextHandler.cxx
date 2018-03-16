@@ -138,7 +138,13 @@ uno::Reference<xml::sax::XFastContextHandler> const & ShapeContextHandler::getWp
         switch (getBaseToken(nStartElement))
         {
             case XML_wsp:
-                mxWpsContext.set(new WpsContext(*rFragmentHandler, xShape));
+                mxWpsContext.set(new WpsContext(
+                                     *rFragmentHandler,
+                                     xShape,
+                                     pMasterShape,
+                                     ShapePtr(
+                                         new oox::drawingml::Shape(
+                                             "com.sun.star.drawing.CustomShape"))));
                 break;
             default:
                 break;

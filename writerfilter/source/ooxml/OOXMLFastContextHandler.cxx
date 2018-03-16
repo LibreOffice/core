@@ -18,6 +18,7 @@
  */
 
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/xml/sax/FastShapeContextHandler.hpp>
 #include <com/sun/star/xml/sax/SAXException.hpp>
 #include <ooxml/resourceids.hxx>
@@ -47,6 +48,7 @@ namespace ooxml
 using namespace ::com::sun::star;
 using namespace oox;
 using namespace ::std;
+using namespace ::com::sun::star::xml::sax;
 
 /*
   class OOXMLFastContextHandler
@@ -1652,6 +1654,22 @@ void OOXMLFastContextHandlerShape::setToken(Token_t nToken)
         mrShapeContext->setStartToken(nToken);
 }
 
+/// assume shapes are added consecutively, find the bottom-rightmost entry in the tree
+static uno::Reference<drawing::XShape> lcl_findLeafNodeShape( const uno::Reference<drawing::XShape>& xShape )
+{
+    // depth-first, rightmost-first tree traversal. still returns
+    // groupshape, if it's empty and the last-added shape
+    uno::Reference<container::XIndexAccess> xIndexAccess(xShape, uno::UNO_QUERY);
+    if( !xIndexAccess.is() || !xIndexAccess->getCount() )
+        return xShape;
+    else
+        return lcl_findLeafNodeShape(
+            uno::Reference<drawing::XShape>(
+                xIndexAccess->getByIndex(
+                    xIndexAccess->getCount()-1),
+                uno::UNO_QUERY));
+}
+
 void OOXMLFastContextHandlerShape::sendShape( Token_t Element )
 {
     if ( mrShapeContext.is() && !m_bShapeSent )
@@ -1671,7 +1689,15 @@ void OOXMLFastContextHandlerShape::sendShape( Token_t Element )
             // Notify the dmapper that the shape is ready to use
             if ( !bIsPicture )
             {
-                mpStream->startShape( xShape );
+                // did we just add a group shape? then we probably
+                // want to add the text to the last inner shape
+                // instead
+                uno::Reference<lang::XServiceInfo> xServiceInfo(xShape,
+                                                                uno::UNO_QUERY);
+                if (xServiceInfo->supportsService("com.sun.star.drawing.GroupShape"))
+                    mpStream->startShape( lcl_findLeafNodeShape(xShape) );
+                else
+                    mpStream->startShape( xShape );
                 m_bShapeStarted = true;
             }
         }
@@ -1731,14 +1757,17 @@ OOXMLFastContextHandlerShape::lcl_createFastChildContext
                         mrShapeContext->createFastChildContext(Element, Attribs);
 
                     OOXMLFastContextHandlerWrapper * pWrapper =
-                        new OOXMLFastContextHandlerWrapper(this, pChildContext);
+                        new OOXMLFastContextHandlerWrapper(this,
+                                                           pChildContext,
+                                                           this);
 
-                    if (!bGroupShape)
+                    if (!bGroupShape || Element == Token_t(NMSP_wps | XML_wsp) )
                     {
                         pWrapper->addNamespace(NMSP_doc);
                         pWrapper->addNamespace(NMSP_vmlWord);
                         pWrapper->addNamespace(NMSP_vmlOffice);
                         pWrapper->addToken( NMSP_vml|XML_textbox );
+                        pWrapper->addToken( NMSP_doc|XML_txbxContent );
                     }
 
                     xContextHandler.set(pWrapper);
@@ -1788,8 +1817,11 @@ void OOXMLFastContextHandlerShape::lcl_characters
 
 OOXMLFastContextHandlerWrapper::OOXMLFastContextHandlerWrapper
 (OOXMLFastContextHandler * pParent,
- uno::Reference<XFastContextHandler> const & xContext)
-: OOXMLFastContextHandler(pParent), mxContext(xContext)
+ uno::Reference<XFastContextHandler> const & xContext,
+ rtl::Reference<OOXMLFastContextHandlerShape> const & xShapeHandler)
+    : OOXMLFastContextHandler(pParent),
+      mxWrappedContext(xContext),
+      mxShapeHandler(xShapeHandler)
 {
     setId(pParent->getId());
     setToken(pParent->getToken());
@@ -1805,16 +1837,16 @@ void SAL_CALL OOXMLFastContextHandlerWrapper::startUnknownElement
  const OUString & Name,
  const uno::Reference< xml::sax::XFastAttributeList > & Attribs)
 {
-    if (mxContext.is())
-        mxContext->startUnknownElement(Namespace, Name, Attribs);
+    if (mxWrappedContext.is())
+        mxWrappedContext->startUnknownElement(Namespace, Name, Attribs);
 }
 
 void SAL_CALL OOXMLFastContextHandlerWrapper::endUnknownElement
 (const OUString & Namespace,
  const OUString & Name)
 {
-    if (mxContext.is())
-        mxContext->endUnknownElement(Namespace, Name);
+    if (mxWrappedContext.is())
+        mxWrappedContext->endUnknownElement(Namespace, Name);
 }
 
 uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
@@ -1825,8 +1857,8 @@ OOXMLFastContextHandlerWrapper::createUnknownChildContext
 {
     uno::Reference< xml::sax::XFastContextHandler > xResult;
 
-    if (mxContext.is())
-        xResult = mxContext->createUnknownChildContext
+    if (mxWrappedContext.is())
+        xResult = mxWrappedContext->createUnknownChildContext
             (Namespace, Name, Attribs);
     else
         xResult.set(this);
@@ -1837,7 +1869,7 @@ OOXMLFastContextHandlerWrapper::createUnknownChildContext
 void OOXMLFastContextHandlerWrapper::attributes
 (const uno::Reference< xml::sax::XFastAttributeList > & Attribs)
 {
-    if (mxContext.is())
+    if (mxWrappedContext.is())
     {
         OOXMLFastContextHandler * pHandler = getFastContextHandler();
         if (pHandler != nullptr)
@@ -1865,15 +1897,15 @@ void OOXMLFastContextHandlerWrapper::lcl_startFastElement
 (Token_t Element,
  const uno::Reference< xml::sax::XFastAttributeList > & Attribs)
 {
-    if (mxContext.is())
-        mxContext->startFastElement(Element, Attribs);
+    if (mxWrappedContext.is())
+        mxWrappedContext->startFastElement(Element, Attribs);
 }
 
 void OOXMLFastContextHandlerWrapper::lcl_endFastElement
 (Token_t Element)
 {
-    if (mxContext.is())
-        mxContext->endFastElement(Element);
+    if (mxWrappedContext.is())
+        mxWrappedContext->endFastElement(Element);
 }
 
 uno::Reference< xml::sax::XFastContextHandler >
@@ -1895,22 +1927,32 @@ OOXMLFastContextHandlerWrapper::lcl_createFastChildContext
     bool bSkipImages = getDocument()->IsSkipImages() && oox::getNamespace(Element) == static_cast<sal_Int32>(NMSP_dml) &&
         !((oox::getBaseToken(Element) == XML_linkedTxbx) || (oox::getBaseToken(Element) == XML_txbx));
 
-    if ( bInNamespaces && ((!bIsWrap && !bIsSignatureLine) || dynamic_cast<OOXMLFastContextHandlerShape&>(*mpParent).isShapeSent()) )
-        xResult.set(OOXMLFactory::createFastChildContextFromStart(this, Element));
-    else if (mxContext.is()  && !bSkipImages)
+    if ( bInNamespaces && ((!bIsWrap && !bIsSignatureLine)
+                           || mxShapeHandler->isShapeSent()) )
     {
+        SAL_DEBUG( "lcl_createFastChildContext case #1: " << fastTokenToId(Element) );
+        xResult.set(OOXMLFactory::createFastChildContextFromStart(this, Element));
+    }
+    else if (mxWrappedContext.is()  && !bSkipImages)
+    {
+        SAL_DEBUG( "lcl_createFastChildContext case #2: " << fastTokenToId(Element) );
         OOXMLFastContextHandlerWrapper * pWrapper =
             new OOXMLFastContextHandlerWrapper
-            (this, mxContext->createFastChildContext(Element, Attribs));
+            (this, mxWrappedContext->createFastChildContext(Element, Attribs),
+             mxShapeHandler);
         pWrapper->mMyNamespaces = mMyNamespaces;
+        pWrapper->mMyTokens = mMyTokens;
         pWrapper->setPropertySet(getPropertySet());
         xResult.set(pWrapper);
     }
     else
+    {
+        SAL_DEBUG( "lcl_createFastChildContext case #3: " << fastTokenToId(Element) );
         xResult.set(this);
+    }
 
     if ( bInTokens )
-        static_cast<OOXMLFastContextHandlerShape*>(mpParent)->sendShape( Element );
+        mxShapeHandler->sendShape( Element );
 
     return xResult;
 }
@@ -1918,15 +1960,15 @@ OOXMLFastContextHandlerWrapper::lcl_createFastChildContext
 void OOXMLFastContextHandlerWrapper::lcl_characters
 (const OUString & aChars)
 {
-    if (mxContext.is())
-        mxContext->characters(aChars);
+    if (mxWrappedContext.is())
+        mxWrappedContext->characters(aChars);
 }
 
 OOXMLFastContextHandler *
 OOXMLFastContextHandlerWrapper::getFastContextHandler() const
 {
-    if (mxContext.is())
-        return dynamic_cast<OOXMLFastContextHandler *>(mxContext.get());
+    if (mxWrappedContext.is())
+        return dynamic_cast<OOXMLFastContextHandler *>(mxWrappedContext.get());
 
     return nullptr;
 }
@@ -1934,7 +1976,7 @@ OOXMLFastContextHandlerWrapper::getFastContextHandler() const
 void OOXMLFastContextHandlerWrapper::newProperty
 (Id nId, const OOXMLValue::Pointer_t& pVal)
 {
-    if (mxContext.is())
+    if (mxWrappedContext.is())
     {
         OOXMLFastContextHandler * pHandler = getFastContextHandler();
         if (pHandler != nullptr)
@@ -1945,7 +1987,7 @@ void OOXMLFastContextHandlerWrapper::newProperty
 void OOXMLFastContextHandlerWrapper::setPropertySet
 (const OOXMLPropertySet::Pointer_t& pPropertySet)
 {
-    if (mxContext.is())
+    if (mxWrappedContext.is())
     {
         OOXMLFastContextHandler * pHandler = getFastContextHandler();
         if (pHandler != nullptr)
@@ -1960,7 +2002,7 @@ OOXMLPropertySet::Pointer_t OOXMLFastContextHandlerWrapper::getPropertySet()
 {
     OOXMLPropertySet::Pointer_t pResult(mpPropertySet);
 
-    if (mxContext.is())
+    if (mxWrappedContext.is())
     {
         OOXMLFastContextHandler * pHandler = getFastContextHandler();
         if (pHandler != nullptr)
@@ -1974,7 +2016,7 @@ string OOXMLFastContextHandlerWrapper::getType() const
 {
     string sResult = "Wrapper(";
 
-    if (mxContext.is())
+    if (mxWrappedContext.is())
     {
         OOXMLFastContextHandler * pHandler = getFastContextHandler();
         if (pHandler != nullptr)
@@ -1990,7 +2032,7 @@ void OOXMLFastContextHandlerWrapper::setId(Id rId)
 {
     OOXMLFastContextHandler::setId(rId);
 
-    if (mxContext.is())
+    if (mxWrappedContext.is())
     {
         OOXMLFastContextHandler * pHandler = getFastContextHandler();
         if (pHandler != nullptr)
@@ -2002,7 +2044,7 @@ Id OOXMLFastContextHandlerWrapper::getId() const
 {
     Id nResult = OOXMLFastContextHandler::getId();
 
-    if (mxContext.is())
+    if (mxWrappedContext.is())
     {
         OOXMLFastContextHandler * pHandler = getFastContextHandler();
         if (pHandler != nullptr && pHandler->getId() != 0)
@@ -2016,7 +2058,7 @@ void OOXMLFastContextHandlerWrapper::setToken(Token_t nToken)
 {
     OOXMLFastContextHandler::setToken(nToken);
 
-    if (mxContext.is())
+    if (mxWrappedContext.is())
     {
         OOXMLFastContextHandler * pHandler = getFastContextHandler();
         if (pHandler != nullptr)
@@ -2028,7 +2070,7 @@ Token_t OOXMLFastContextHandlerWrapper::getToken() const
 {
     Token_t nResult = OOXMLFastContextHandler::getToken();
 
-    if (mxContext.is())
+    if (mxWrappedContext.is())
     {
         OOXMLFastContextHandler * pHandler = getFastContextHandler();
         if (pHandler != nullptr)
