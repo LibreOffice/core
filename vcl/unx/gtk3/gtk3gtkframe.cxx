@@ -75,6 +75,8 @@
 #  include <cstdio>
 #endif
 
+#include <i18nlangtag/mslangid.hxx>
+
 #include <cstdlib>
 #include <cmath>
 
@@ -488,6 +490,7 @@ bool GtkSalFrame::doKeyCallback( guint state,
 
 GtkSalFrame::GtkSalFrame( SalFrame* pParent, SalFrameStyleFlags nStyle )
     : m_nXScreen( getDisplay()->GetDefaultXScreen() )
+    , m_pHeaderBar(nullptr)
     , m_pGraphics(nullptr)
     , m_bGraphics(false)
 {
@@ -500,6 +503,7 @@ GtkSalFrame::GtkSalFrame( SalFrame* pParent, SalFrameStyleFlags nStyle )
 
 GtkSalFrame::GtkSalFrame( SystemParentData* pSysData )
     : m_nXScreen( getDisplay()->GetDefaultXScreen() )
+    , m_pHeaderBar(nullptr)
     , m_pGraphics(nullptr)
     , m_bGraphics(false)
 {
@@ -1249,6 +1253,27 @@ void GtkSalFrame::Init( SalFrame* pParent, SalFrameStyleFlags nStyle )
         gtk_window_set_type_hint( GTK_WINDOW(m_pWindow), eType );
         gtk_window_set_gravity( GTK_WINDOW(m_pWindow), GDK_GRAVITY_STATIC );
         gtk_window_set_resizable( GTK_WINDOW(m_pWindow), bool(nStyle & SalFrameStyleFlags::SIZEABLE) );
+
+#if defined(GDK_WINDOWING_WAYLAND)
+        //rhbz#1392145 under wayland/csd if we've overridden the default widget direction in order to set LibreOffice's
+        //UI to the configured ui language but the system ui locale is a different text direction, then the toplevel
+        //built-in close button of the titlebar follows the overridden direction rather than continue in the same
+        //direction as every other titlebar on the user's desktop. So if they don't match set an explicit
+        //header bar with the desired 'outside' direction
+        if ((eType == GDK_WINDOW_TYPE_HINT_NORMAL || eType == GDK_WINDOW_TYPE_HINT_DIALOG) && GDK_IS_WAYLAND_DISPLAY(GtkSalFrame::getGdkDisplay()))
+        {
+            const bool bDesktopIsRTL = MsLangId::isRightToLeft(MsLangId::getSystemUILanguage());
+            const bool bAppIsRTL = gtk_widget_get_default_direction() == GTK_TEXT_DIR_RTL;
+            if (bDesktopIsRTL != bAppIsRTL)
+            {
+                m_pHeaderBar = GTK_HEADER_BAR(gtk_header_bar_new());
+                gtk_widget_set_direction(GTK_WIDGET(m_pHeaderBar), bDesktopIsRTL ? GTK_TEXT_DIR_RTL : GTK_TEXT_DIR_LTR);
+                gtk_header_bar_set_show_close_button(m_pHeaderBar, true);
+                gtk_window_set_titlebar(GTK_WINDOW(m_pWindow), GTK_WIDGET(m_pHeaderBar));
+                gtk_widget_show(GTK_WIDGET(m_pHeaderBar));
+            }
+        }
+#endif
     }
     else if( nStyle & SalFrameStyleFlags::FLOAT )
         gtk_window_set_type_hint( GTK_WINDOW(m_pWindow), GDK_WINDOW_TYPE_HINT_POPUP_MENU );
@@ -1340,7 +1365,12 @@ void GtkSalFrame::SetTitle( const OUString& rTitle )
 {
     m_aTitle = rTitle;
     if( m_pWindow && ! isChild() )
-        gtk_window_set_title( GTK_WINDOW(m_pWindow), OUStringToOString( rTitle, RTL_TEXTENCODING_UTF8 ).getStr() );
+    {
+        OString sTitle(OUStringToOString(rTitle, RTL_TEXTENCODING_UTF8));
+        gtk_window_set_title(GTK_WINDOW(m_pWindow), sTitle.getStr());
+        if (m_pHeaderBar)
+            gtk_header_bar_set_title(m_pHeaderBar, sTitle.getStr());
+    }
 }
 
 void GtkSalFrame::SetIcon( sal_uInt16 nIcon )
