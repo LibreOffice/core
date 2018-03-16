@@ -3822,12 +3822,9 @@ SdrObject* SvxMSDffManager::ImportGraphic( SvStream& rSt, SfxItemSet& rSet, cons
 
                 if ( aGraf.GetType() == GraphicType::Bitmap )
                 {
-                    BitmapEx    aBitmapEx( aGraf.GetBitmapEx() );
-                    Bitmap      aBitmap( aBitmapEx.GetBitmap() );
-                    Bitmap      aMask( aBitmap.CreateMask( MSO_CLR_ToColor( nTransColor, DFF_Prop_pictureTransparent ), 9 ) );
-                    if ( aBitmapEx.IsTransparent() )
-                        aMask.CombineSimple( aBitmapEx.GetMask(), BmpCombine::Or );
-                    aGraf = BitmapEx( aBitmap, aMask );
+                    BitmapEx aBitmapEx( aGraf.GetBitmapEx() );
+                    aBitmapEx.CombineMaskOr( MSO_CLR_ToColor( nTransColor, DFF_Prop_pictureTransparent ), 9 );
+                    aGraf = aBitmapEx;
                 }
             }
 
