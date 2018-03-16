@@ -120,74 +120,73 @@ static OUString lcl_GetColumnValueOf(const OUString& rColumn, Reference < contai
 
 class SwSaveWarningBox_Impl : public SwMessageAndEditDialog
 {
-    DECL_LINK( ModifyHdl, Edit&, void);
+    DECL_LINK( ModifyHdl, weld::Entry&, void);
 public:
-    SwSaveWarningBox_Impl(vcl::Window* pParent, const OUString& rFileName);
+    SwSaveWarningBox_Impl(weld::Window* pParent, const OUString& rFileName);
 
     OUString        GetFileName() const
     {
-        return m_pEdit->GetText();
+        return m_xEdit->get_text();
     }
 };
 
 class SwSendQueryBox_Impl : public SwMessageAndEditDialog
 {
     bool            bIsEmptyAllowed;
-    DECL_LINK( ModifyHdl, Edit&, void);
+    DECL_LINK( ModifyHdl, weld::Entry&, void);
 public:
-    SwSendQueryBox_Impl(vcl::Window* pParent, const OUString& rID,
+    SwSendQueryBox_Impl(weld::Window* pParent, const OString& rID,
         const OUString& rUIXMLDescription);
 
     void SetValue(const OUString& rSet)
     {
-        m_pEdit->SetText(rSet);
-        ModifyHdl(*m_pEdit);
+        m_xEdit->set_text(rSet);
+        ModifyHdl(*m_xEdit);
     }
 
     OUString GetValue() const
     {
-        return m_pEdit->GetText();
+        return m_xEdit->get_text();
     }
 
     void SetIsEmptyTextAllowed(bool bSet)
     {
         bIsEmptyAllowed = bSet;
-        ModifyHdl(*m_pEdit);
+        ModifyHdl(*m_xEdit);
     }
 };
 
-SwSaveWarningBox_Impl::SwSaveWarningBox_Impl(vcl::Window* pParent, const OUString& rFileName)
+SwSaveWarningBox_Impl::SwSaveWarningBox_Impl(weld::Window* pParent, const OUString& rFileName)
     : SwMessageAndEditDialog(pParent, "AlreadyExistsDialog",
         "modules/swriter/ui/alreadyexistsdialog.ui")
 {
-    m_pEdit->SetText(rFileName);
-    m_pEdit->SetModifyHdl(LINK(this, SwSaveWarningBox_Impl, ModifyHdl));
+    m_xEdit->set_text(rFileName);
+    m_xEdit->connect_changed(LINK(this, SwSaveWarningBox_Impl, ModifyHdl));
 
     INetURLObject aTmp(rFileName);
-    m_pPrimaryMessage->SetText(m_pPrimaryMessage->GetText().replaceAll("%1", aTmp.getName(
+    m_xDialog->set_primary_text(m_xDialog->get_primary_text().replaceAll("%1", aTmp.getName(
             INetURLObject::LAST_SEGMENT, true, INetURLObject::DecodeMechanism::WithCharset)));
 
-    ModifyHdl(*m_pEdit);
+    ModifyHdl(*m_xEdit);
 }
 
-IMPL_LINK( SwSaveWarningBox_Impl, ModifyHdl, Edit&, rEdit, void)
+IMPL_LINK( SwSaveWarningBox_Impl, ModifyHdl, weld::Entry&, rEdit, void)
 {
-    m_pOKPB->Enable(!rEdit.GetText().isEmpty());
+    m_xOKPB->set_sensitive(!rEdit.get_text().isEmpty());
 }
 
-SwSendQueryBox_Impl::SwSendQueryBox_Impl(vcl::Window* pParent, const OUString& rID,
+SwSendQueryBox_Impl::SwSendQueryBox_Impl(weld::Window* pParent, const OString& rID,
         const OUString& rUIXMLDescription)
     : SwMessageAndEditDialog(pParent, rID, rUIXMLDescription)
     , bIsEmptyAllowed(true)
 {
-    m_pImageIM->SetImage(GetStandardQueryBoxImage());
-    m_pEdit->SetModifyHdl(LINK(this, SwSendQueryBox_Impl, ModifyHdl));
-    ModifyHdl(*m_pEdit);
+    m_xEdit->connect_changed(LINK(this, SwSendQueryBox_Impl, ModifyHdl));
+    ModifyHdl(*m_xEdit);
 }
 
-IMPL_LINK( SwSendQueryBox_Impl, ModifyHdl, Edit&, rEdit, void)
+IMPL_LINK( SwSendQueryBox_Impl, ModifyHdl, weld::Entry&, rEdit, void)
 {
-    m_pOKPB->Enable(bIsEmptyAllowed  || !rEdit.GetText().isEmpty());
+    m_xOKPB->set_sensitive(bIsEmptyAllowed  || !rEdit.get_text().isEmpty());
 }
 
 class SwCopyToDialog : public SfxModalDialog
@@ -734,9 +733,9 @@ IMPL_LINK(SwMMResultSaveDialog, SaveOutputHdl_Impl, Button*, pButton, void)
 
                 if(bFailed)
                 {
-                    ScopedVclPtrInstance< SwSaveWarningBox_Impl > aWarning( pButton, sOutPath );
-                    if(RET_OK == aWarning->Execute())
-                        sOutPath = aWarning->GetFileName();
+                    std::unique_ptr<SwSaveWarningBox_Impl> xWarning(new SwSaveWarningBox_Impl(pButton->GetFrameWeld(), sOutPath));
+                    if (RET_OK == xWarning->run())
+                        sOutPath = xWarning->GetFileName();
                     else
                     {
                         xTempDocShell->DoClose();
@@ -1011,26 +1010,26 @@ IMPL_LINK(SwMMResultEmailDialog, SendDocumentsHdl_Impl, Button*, pButton, void)
 
     if(m_pSubjectED->GetText().isEmpty())
     {
-        ScopedVclPtrInstance<SwSendQueryBox_Impl> aQuery(pButton, "SubjectDialog",
-                                                         "modules/swriter/ui/subjectdialog.ui");
-        aQuery->SetIsEmptyTextAllowed(true);
-        aQuery->SetValue("");
-        if(RET_OK == aQuery->Execute())
+        std::unique_ptr<SwSendQueryBox_Impl> xQuery(new SwSendQueryBox_Impl(pButton->GetFrameWeld(), "SubjectDialog",
+                                                         "modules/swriter/ui/subjectdialog.ui"));
+        xQuery->SetIsEmptyTextAllowed(true);
+        xQuery->SetValue("");
+        if(RET_OK == xQuery->run())
         {
-            if(!aQuery->GetValue().isEmpty())
-                m_pSubjectED->SetText(aQuery->GetValue());
+            if(!xQuery->GetValue().isEmpty())
+                m_pSubjectED->SetText(xQuery->GetValue());
         }
         else
             return; // back to the dialog
     }
     if(!bAsBody && m_pAttachmentED->GetText().isEmpty())
     {
-        ScopedVclPtrInstance<SwSendQueryBox_Impl> aQuery(pButton, "AttachNameDialog",
-                                                         "modules/swriter/ui/attachnamedialog.ui");
-        aQuery->SetIsEmptyTextAllowed(false);
-        if(RET_OK == aQuery->Execute())
+        std::unique_ptr<SwSendQueryBox_Impl> xQuery(new SwSendQueryBox_Impl(pButton->GetFrameWeld(), "AttachNameDialog",
+                                                         "modules/swriter/ui/attachnamedialog.ui"));
+        xQuery->SetIsEmptyTextAllowed(false);
+        if (RET_OK == xQuery->run())
         {
-            OUString sAttach(aQuery->GetValue());
+            OUString sAttach(xQuery->GetValue());
             sal_Int32 nTokenCount = comphelper::string::getTokenCount(sAttach, '.');
             if (2 > nTokenCount)
             {

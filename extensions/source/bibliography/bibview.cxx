@@ -41,6 +41,21 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 
+namespace
+{
+    class MessageWithCheck : public weld::MessageDialogController
+    {
+    private:
+        std::unique_ptr<weld::CheckButton> m_xWarningOnBox;
+    public:
+        MessageWithCheck(weld::Window *pParent)
+            : weld::MessageDialogController(pParent, "modules/sbibliography/ui/querydialog.ui", "QueryDialog", "ask")
+            , m_xWarningOnBox(m_xBuilder->weld_check_button("ask"))
+        {
+        }
+        bool get_active() const { return m_xWarningOnBox->get_active(); }
+    };
+}
 
 namespace bib
 {
@@ -139,24 +154,11 @@ namespace bib
                 sErrorString += "\n";
                 sErrorString += BibResId(RID_MAP_QUESTION);
 
-                std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetFrameWeld(), "modules/sbibliography/ui/querydialog.ui"));
-                std::unique_ptr<weld::MessageDialog> xQueryBox(xBuilder->weld_message_dialog("QueryDialog"));
-                xQueryBox->set_primary_text(sErrorString);
-                std::unique_ptr<weld::CheckButton> xWarningOnBox(xBuilder->weld_check_button("ask"));
+                MessageWithCheck aQueryBox(GetFrameWeld());
+                aQueryBox.set_primary_text(sErrorString);
 
-                //fdo#75121, a bit tricky because the widgets we want to align with
-                //don't actually exist in the ui description, they're implied
-                std::unique_ptr<weld::Container> xOrigParent(xWarningOnBox->weld_parent());
-                std::unique_ptr<weld::Container> xContentArea(xQueryBox->weld_message_area());
-                xOrigParent->remove(xWarningOnBox.get());
-                xContentArea->add(xWarningOnBox.get());
-
-                short nResult = xQueryBox->run();
-                BibModul::GetConfig()->SetShowColumnAssignmentWarning(!xWarningOnBox->get_active());
-
-                //put them back as they were
-                xContentArea->remove(xWarningOnBox.get());
-                xOrigParent->add(xWarningOnBox.get());
+                short nResult = aQueryBox.run();
+                BibModul::GetConfig()->SetShowColumnAssignmentWarning(!aQueryBox.get_active());
 
                 if( RET_YES != nResult )
                 {

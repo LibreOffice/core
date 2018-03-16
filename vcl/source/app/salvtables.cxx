@@ -1598,13 +1598,31 @@ namespace weld
 
     Dialog* MessageDialogController::getDialog() { return m_xDialog.get(); }
 
-    MessageDialogController::MessageDialogController(weld::Widget* pParent, const OUString &rUIFile, const OString& rDialogId)
+    MessageDialogController::MessageDialogController(weld::Widget* pParent, const OUString &rUIFile, const OString& rDialogId,
+            const OString& rRelocateId)
         : m_xBuilder(Application::CreateBuilder(pParent, rUIFile))
         , m_xDialog(m_xBuilder->weld_message_dialog(rDialogId))
+        , m_xContentArea(m_xDialog->weld_message_area())
     {
+        if (!rRelocateId.isEmpty())
+        {
+            m_xRelocate.reset(m_xBuilder->weld_container(rRelocateId));
+            m_xOrigParent.reset(m_xRelocate->weld_parent());
+            //fdo#75121, a bit tricky because the widgets we want to align with
+            //don't actually exist in the ui description, they're implied
+            m_xOrigParent->remove(m_xRelocate.get());
+            m_xContentArea->add(m_xRelocate.get());
+        }
     }
 
-    MessageDialogController::~MessageDialogController() = default;
+    MessageDialogController::~MessageDialogController()
+    {
+        if (m_xRelocate)
+        {
+            m_xContentArea->remove(m_xRelocate.get());
+            m_xOrigParent->add(m_xRelocate.get());
+        }
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

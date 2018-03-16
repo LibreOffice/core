@@ -27,26 +27,12 @@
 
 ScReplaceWarnBox::ScReplaceWarnBox(weld::Window* pParent)
     : MessageDialogController(pParent, "modules/scalc/ui/checkwarningdialog.ui",
-            "CheckWarningDialog")
+            "CheckWarningDialog", "ask")
     // By default, the check box is ON, and the user needs to un-check it to
     // disable all future warnings.
     , m_xWarningOnBox(m_xBuilder->weld_check_button("ask"))
-    , m_xOrigParent(m_xWarningOnBox->weld_parent())
-    , m_xContentArea(m_xDialog->weld_message_area())
 {
     m_xDialog->set_default_response(RET_YES);
-
-    //fdo#75121, a bit tricky because the widgets we want to align with
-    //don't actually exist in the ui description, they're implied
-    m_xOrigParent->remove(m_xWarningOnBox.get());
-    m_xContentArea->add(m_xWarningOnBox.get());
-}
-
-ScReplaceWarnBox::~ScReplaceWarnBox()
-{
-    //put them back as they were
-    m_xContentArea->remove(m_xWarningOnBox.get());
-    m_xOrigParent->add(m_xWarningOnBox.get());
 }
 
 short ScReplaceWarnBox::execute()

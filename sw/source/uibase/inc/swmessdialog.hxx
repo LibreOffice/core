@@ -10,26 +10,16 @@
 #ifndef INCLUDED_SW_SOURCE_UIBASE_INC_SWMESSDIALOG_HXX
 #define INCLUDED_SW_SOURCE_UIBASE_INC_SWMESSDIALOG_HXX
 
-#include <vcl/dialog.hxx>
+#include <vcl/weld.hxx>
 
-class Edit;
-class FixedImage;
-class OKButton;
-class VclMultiLineEdit;
-
-class SwMessageAndEditDialog : public ModalDialog
+class SwMessageAndEditDialog : public weld::MessageDialogController
 {
 protected:
-    VclPtr<OKButton>         m_pOKPB;
-    VclPtr<FixedImage>       m_pImageIM;
-    VclPtr<VclMultiLineEdit> m_pPrimaryMessage;
-    VclPtr<VclMultiLineEdit> m_pSecondaryMessage;
-    VclPtr<Edit>             m_pEdit;
+    std::unique_ptr<weld::Entry> m_xEdit;
+    std::unique_ptr<weld::Button> m_xOKPB;
 public:
-    SwMessageAndEditDialog(vcl::Window* pParent, const OUString& rID,
+    SwMessageAndEditDialog(weld::Window* pParent, const OString& rID,
         const OUString& rUIXMLDescription);
-    virtual ~SwMessageAndEditDialog() override;
-    virtual void dispose() override;
 };
 
 #endif // INCLUDED_SW_SOURCE_UIBASE_INC_SWMESSDIALOG_HXX
