@@ -939,6 +939,59 @@ void CanvasCairoExtractBitmapData( BitmapEx & aBmpEx, Bitmap & aBitmap, unsigned
 
 }
 
+    uno::Sequence< sal_Int8 > CanvasExtractBitmapData(BitmapEx & rBitmapEx, const geometry::IntegerRectangle2D& rect)
+    {
+        Bitmap aBitmap( rBitmapEx.GetBitmap() );
+        Bitmap aAlpha( rBitmapEx.GetAlpha().GetBitmap() );
+
+        Bitmap::ScopedReadAccess pReadAccess( aBitmap );
+        Bitmap::ScopedReadAccess pAlphaReadAccess( aAlpha.IsEmpty() ?
+                                                 nullptr : aAlpha.AcquireReadAccess(),
+                                                 aAlpha );
+
+        assert( pReadAccess );
+
+        // TODO(F1): Support more formats.
+        const Size aBmpSize( aBitmap.GetSizePixel() );
+
+        // for the time being, always return as BGRA
+        uno::Sequence< sal_Int8 > aRes( 4*aBmpSize.Width()*aBmpSize.Height() );
+        sal_Int8* pRes = aRes.getArray();
+
+        int nCurrPos(0);
+        for( long y=rect.Y1;
+             y<aBmpSize.Height() && y<rect.Y2;
+             ++y )
+        {
+            Scanline pScanlineReadAlpha = pAlphaReadAccess->GetScanline( y );
+            if( pAlphaReadAccess.get() != nullptr )
+            {
+                for( long x=rect.X1;
+                     x<aBmpSize.Width() && x<rect.X2;
+                     ++x )
+                {
+                    pRes[ nCurrPos++ ] = pReadAccess->GetColor( y, x ).GetRed();
+                    pRes[ nCurrPos++ ] = pReadAccess->GetColor( y, x ).GetGreen();
+                    pRes[ nCurrPos++ ] = pReadAccess->GetColor( y, x ).GetBlue();
+                    pRes[ nCurrPos++ ] = pAlphaReadAccess->GetIndexFromData( pScanlineReadAlpha, x );
+                }
+            }
+            else
+            {
+                for( long x=rect.X1;
+                     x<aBmpSize.Width() && x<rect.X2;
+                     ++x )
+                {
+                    pRes[ nCurrPos++ ] = pReadAccess->GetColor( y, x ).GetRed();
+                    pRes[ nCurrPos++ ] = pReadAccess->GetColor( y, x ).GetGreen();
+                    pRes[ nCurrPos++ ] = pReadAccess->GetColor( y, x ).GetBlue();
+                    pRes[ nCurrPos++ ] = sal_uInt8(255);
+                }
+            }
+        }
+        return aRes;
+    }
+
 }} // end vcl::bitmap
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

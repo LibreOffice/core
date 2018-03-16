@@ -104,6 +104,8 @@ VCL_DLLPUBLIC css::uno::Sequence< sal_Int8 > GetMaskDIB(BitmapEx const & aBmpEx)
  **/
 VCL_DLLPUBLIC void CanvasCairoExtractBitmapData( BitmapEx & rBmpEx, Bitmap & rBitmap, unsigned char*& data, bool& bHasAlpha );
 
+VCL_DLLPUBLIC css::uno::Sequence< sal_Int8 > CanvasExtractBitmapData(BitmapEx & rBitmapEx, const css::geometry::IntegerRectangle2D& rect);
+
 }} // end vcl::bitmap
 
 #endif // INCLUDED_VCL_BITMAP_TOOLS_HXX
