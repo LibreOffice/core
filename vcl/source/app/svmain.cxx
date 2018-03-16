@@ -31,7 +31,7 @@
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/asyncnotification.hxx>
-
+#include <i18nlangtag/mslangid.hxx>
 #include <unotools/syslocaleoptions.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/vclmain.hxx>
@@ -335,6 +335,7 @@ bool InitVCL()
         OUString aLocaleString(SvtSysLocaleOptions().GetRealUILanguageTag().getGlibcLocaleString(".UTF-8"));
         if (!aLocaleString.isEmpty())
         {
+            MsLangId::getSystemUILanguage(); //call this now to pin what the system UI really was
             OUString envVar("LANGUAGE");
             osl_setEnvironment(envVar.pData, aLocaleString.pData);
         }
