@@ -28,6 +28,8 @@
 #include <vcl/pngread.hxx>
 #include <tools/stream.hxx>
 #include <tools/urlobj.hxx>
+#include <com/sun/star/beans/NamedValue.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
@@ -51,10 +53,66 @@ void SetMessageFont(vcl::RenderContext& rRenderContext)
     rRenderContext.SetFont(aFont);
 }
 
+bool IsDocEncrypted(const OUString& rURL)
+{
+    uno::Reference< uno::XComponentContext > xContext(::comphelper::getProcessComponentContext());
+    bool bIsEncrypted = false;
+
+    try
+    {
+        uno::Reference<lang::XSingleServiceFactory> xStorageFactory = embed::StorageFactory::create(xContext);
+
+        uno::Sequence<uno::Any> aArgs (2);
+        aArgs[0] <<= rURL;
+        aArgs[1] <<= embed::ElementModes::READ;
+        uno::Reference<embed::XStorage> xDocStorage (
+            xStorageFactory->createInstanceWithArguments(aArgs),
+            uno::UNO_QUERY);
+        uno::Reference< beans::XPropertySet > xStorageProps( xDocStorage, uno::UNO_QUERY );
+        if ( xStorageProps.is() )
+        {
+            try
+            {
+                xStorageProps->getPropertyValue("HasEncryptedEntries")
+                    >>= bIsEncrypted;
+            } catch( uno::Exception& ) {}
+        }
+    }
+    catch (const uno::Exception& rException)
+    {
+        SAL_WARN("sfx",
+            "caught exception trying to find out if doc is encrypted"
+            << rURL << ": " << rException);
+    }
+
+    return bIsEncrypted;
+}
+
 }
 
 namespace sfx2
 {
+
+static std::map<ApplicationType,OUString> BitmapForExtension =
+{
+    { ApplicationType::TYPE_WRITER, SFX_FILE_THUMBNAIL_TEXT },
+    { ApplicationType::TYPE_CALC, SFX_FILE_THUMBNAIL_SHEET },
+    { ApplicationType::TYPE_IMPRESS, SFX_FILE_THUMBNAIL_PRESENTATION },
+    { ApplicationType::TYPE_DRAW, SFX_FILE_THUMBNAIL_DRAWING },
+    { ApplicationType::TYPE_DATABASE, SFX_FILE_THUMBNAIL_DATABASE },
+    { ApplicationType::TYPE_MATH, SFX_FILE_THUMBNAIL_MATH }
+};
+
+static std::map<ApplicationType,OUString> EncryptedBitmapForExtension =
+{
+    { ApplicationType::TYPE_WRITER, BMP_128X128_WRITER_DOC },
+    { ApplicationType::TYPE_CALC, BMP_128X128_CALC_DOC },
+    { ApplicationType::TYPE_IMPRESS, BMP_128X128_IMPRESS_DOC },
+    { ApplicationType::TYPE_DRAW, BMP_128X128_DRAW_DOC },
+    // FIXME: icon for encrypted db doc doesn't exist
+    { ApplicationType::TYPE_DATABASE, BMP_128X128_CALC_DOC },
+    { ApplicationType::TYPE_MATH, BMP_128X128_MATH_DOC }
+};
 
 RecentDocsView::RecentDocsView( vcl::Window* pParent )
     : ThumbnailView(pParent)
@@ -140,18 +198,16 @@ BitmapEx RecentDocsView::getDefaultThumbnail(const OUString &rURL)
     INetURLObject aUrl(rURL);
     OUString aExt = aUrl.getExtension();
 
-    if (typeMatchesExtension(ApplicationType::TYPE_WRITER, aExt))
-        aImg = BitmapEx(SFX_FILE_THUMBNAIL_TEXT);
-    else if (typeMatchesExtension(ApplicationType::TYPE_CALC, aExt))
-        aImg = BitmapEx(SFX_FILE_THUMBNAIL_SHEET);
-    else if (typeMatchesExtension(ApplicationType::TYPE_IMPRESS, aExt))
-        aImg = BitmapEx(SFX_FILE_THUMBNAIL_PRESENTATION);
-    else if (typeMatchesExtension(ApplicationType::TYPE_DRAW, aExt))
-        aImg = BitmapEx(SFX_FILE_THUMBNAIL_DRAWING);
-    else if (typeMatchesExtension(ApplicationType::TYPE_DATABASE, aExt))
-        aImg = BitmapEx(SFX_FILE_THUMBNAIL_DATABASE);
-    else if (typeMatchesExtension(ApplicationType::TYPE_MATH, aExt))
-        aImg = BitmapEx(SFX_FILE_THUMBNAIL_MATH);
+    const std::map<ApplicationType,OUString>& rWhichMap = IsDocEncrypted( rURL) ?
+        EncryptedBitmapForExtension : BitmapForExtension;
+
+    std::map<ApplicationType,OUString>::const_iterator mIt =
+        std::find_if( rWhichMap.begin(), rWhichMap.end(),
+              [aExt] ( const std::pair<ApplicationType,OUString>& aEntry )
+              { return typeMatchesExtension( aEntry.first, aExt); } );
+
+    if (mIt != rWhichMap.end())
+        aImg = BitmapEx(mIt->second);
     else
         aImg = BitmapEx(SFX_FILE_THUMBNAIL_DEFAULT);
 
