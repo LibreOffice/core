@@ -173,6 +173,7 @@ class GtkSalFrame : public SalFrame
     SalX11Screen                    m_nXScreen;
     GtkWidget*                      m_pWindow;
 #if GTK_CHECK_VERSION(3,0,0)
+    GtkHeaderBar*                   m_pHeaderBar;
     GtkGrid*                        m_pTopLevelGrid;
 #endif
     GtkEventBox*                    m_pEventBox;
