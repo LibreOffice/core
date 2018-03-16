@@ -123,6 +123,7 @@ public:
     void testGroupsPosition();
     void testGroupsRotatedPosition();
     void testAccentColor();
+    void testThemeColors();
     void testTdf114848();
     void testTdf68759();
     void testTdf90626();
@@ -186,6 +187,7 @@ public:
     CPPUNIT_TEST(testGroupsPosition);
     CPPUNIT_TEST(testGroupsRotatedPosition);
     CPPUNIT_TEST(testAccentColor);
+    CPPUNIT_TEST(testThemeColors);
     CPPUNIT_TEST(testTdf114848);
     CPPUNIT_TEST(testTdf68759);
     CPPUNIT_TEST(testTdf90626);
@@ -1327,6 +1329,18 @@ void SdOOXMLExportTest2::testAccentColor()
     assertXPath(pXmlDocTheme1, "/a:theme/a:themeElements/a:clrScheme/a:accent6/a:srgbClr", "val", "70ad47");
     xmlDocPtr pXmlDocTheme2 = parseExport(tempFile, "ppt/theme/theme2.xml");
     assertXPath(pXmlDocTheme2, "/a:theme/a:themeElements/a:clrScheme/a:accent6/a:srgbClr", "val", "deb340");
+}
+
+void SdOOXMLExportTest2::testThemeColors()
+{
+    ::sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/pptx/tdf84205.pptx"), PPTX);
+    utl::TempFile tempFile;
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
+    xDocShRef->DoClose();
+
+    xmlDocPtr pXmlDocTheme2 = parseExport(tempFile, "ppt/theme/theme2.xml");
+    assertXPath(pXmlDocTheme2, "/a:theme/a:themeElements/a:clrScheme/a:dk2/a:srgbClr", "val", "44546a");
+    assertXPath(pXmlDocTheme2, "/a:theme/a:themeElements/a:clrScheme/a:accent3/a:srgbClr", "val", "a5a5a5");
 }
 
 void SdOOXMLExportTest2::testTdf114848()
