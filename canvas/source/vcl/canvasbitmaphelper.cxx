@@ -194,28 +194,14 @@ namespace vclcanvas
         ENSURE_ARG_OR_THROW( pos.Y >= 0 && pos.Y < aBmpSize.Height(),
                          "Y coordinate out of bounds" );
 
-        Bitmap aBitmap( mpBackBuffer->getBitmapReference().GetBitmap() );
-        Bitmap aAlpha( mpBackBuffer->getBitmapReference().GetAlpha().GetBitmap() );
-
-        Bitmap::ScopedReadAccess pReadAccess( aBitmap );
-        Bitmap::ScopedReadAccess pAlphaReadAccess( aAlpha.IsEmpty() ?
-                                                 nullptr : aAlpha.AcquireReadAccess(),
-                                                 aAlpha );
-        ENSURE_OR_THROW( pReadAccess.get() != nullptr,
-                         "Could not acquire read access to bitmap" );
+        ::Color aColor = mpBackBuffer->getBitmapReference().GetPixelColor(pos.X, pos.Y);
 
         uno::Sequence< sal_Int8 > aRes( 4 );
         sal_Int8* pRes = aRes.getArray();
-
-        const BitmapColor aColor( pReadAccess->GetColor( pos.Y, pos.X ) );
         pRes[ 0 ] = aColor.GetRed();
         pRes[ 1 ] = aColor.GetGreen();
         pRes[ 2 ] = aColor.GetBlue();
-
-        if( pAlphaReadAccess.get() != nullptr )
-            pRes[ 3 ] = pAlphaReadAccess->GetPixel( pos.Y, pos.X ).GetIndex();
-        else
-            pRes[ 3 ] = sal_uInt8(255);
+        pRes[ 3 ] = aColor.GetTransparency();
 
         return aRes;
     }
