@@ -1,4 +1,4 @@
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4; fill-column: 100 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -16,6 +16,11 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+
+// Documentation pointers for recent work:
+//
+// https://www.codeproject.com/Articles/9014/Understanding-COM-Event-Handling
+// https://blogs.msdn.microsoft.com/ericlippert/2005/02/15/why-does-wscript-connectobject-not-always-work/
 
 // See https://blogs.msdn.microsoft.com/vcblog/2017/12/08/c17-feature-removals-and-deprecations/
 #define _SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING 1
@@ -50,12 +55,16 @@
 #include <com/sun/star/script/XInvocation2.hpp>
 #include <com/sun/star/script/MemberType.hpp>
 #include <com/sun/star/reflection/XIdlReflection.hpp>
+#include <ooo/vba/XConnectable.hpp>
+#include <ooo/vba/XConnectionPoint.hpp>
+#include <ooo/vba/XSink.hpp>
 #include <ooo/vba/msforms/XCheckBox.hpp>
 #include <osl/interlck.h>
 #include <com/sun/star/uno/genfunc.h>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/profilezone.hxx>
 #include <comphelper/windowsdebugoutput.hxx>
+#include <comphelper/windowserrorstring.hxx>
 #include <o3tl/char16_t2wchar_t.hxx>
 
 #include "comifaces.hxx"
@@ -80,6 +89,73 @@ std::unordered_map<sal_uIntPtr, WeakReference<XInterface> > UnoObjToWrapperMap;
 static bool writeBackOutParameter(VARIANTARG* pDest, VARIANT* pSource);
 static bool writeBackOutParameter2( VARIANTARG* pDest, VARIANT* pSource);
 static HRESULT mapCannotConvertException(const CannotConvertException &e, unsigned int * puArgErr);
+
+static std::string DumpTypeInfo(ITypeInfo *pTypeInfo, int indentLevel)
+{
+    std::ostringstream os;
+    os << std::string(indentLevel, ' ') << "ITypeInfo@" << std::hex << (void*) pTypeInfo;
+
+    BSTR sName;
+    if (SUCCEEDED(pTypeInfo->GetDocumentation(MEMBERID_NIL, &sName, NULL, NULL, NULL)))
+    {
+        os << ":" << std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t>().to_bytes(sName);
+    }
+
+    return os.str();
+}
+
+static std::string DumpDispatch(IDispatch *pDispatch, int indentLevel)
+{
+    std::ostringstream os;
+    os << std::string(indentLevel, ' ') << "IDispatch@" << (void*) pDispatch;
+#if 0 // Doesn't work anyway, see comment "Sadly" below
+    // We "know" that we call this on the IUnknown passed to IConnectionPoint::Advise(), so check
+    // the event names we "know" are used in my Events.vbs test script. I.e. this is debug code very
+    // specific to the author's arbitrary transient development environment.
+    LPOLESTR vNames[] = {
+        L"DocumentOpen",
+        L"DocumentChange",
+        L"DocumentBeforeClose",
+        L"Foobar"
+        L"Quit",
+        L"WindowActivate"
+    };
+    for (int i = 0; i < SAL_N_ELEMENTS(vNames); i++)
+    {
+        DISPID nDispId;
+        HRESULT hr;
+        // Sadly it turns out that the IUnknown passed to IConnectionPoint::Advise does have an
+        // IDispatch, but its GetIDsOfNames() returns E_NOTIMPL?! How is the COM object supposed to
+        // be able to invoke events in the outgoing interface when it can't look them up by name?
+        // Need to google harder for informative articles from the early 2000s.
+        hr = pDispatch->GetIDsOfNames(IID_NULL, vNames+i, 1, LOCALE_USER_DEFAULT, &nDispId);
+        if (SUCCEEDED(hr))
+        {
+            os << "\n" << std::string(indentLevel+2, ' ')
+               << std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t>().to_bytes(vNames[i])
+               << ": " << nDispId;
+        }
+        else if (hr == DISP_E_UNKNOWNNAME)
+        {
+            os << "\n" << std::string(indentLevel+2, ' ')
+               << std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t>().to_bytes(vNames[i])
+               << ": unknown";
+        }
+    }
+#endif
+
+    UINT nTypeInfoCount = 0;
+    if (SUCCEEDED(pDispatch->GetTypeInfoCount(&nTypeInfoCount)) && nTypeInfoCount == 1)
+    {
+        ITypeInfo *pTypeInfo = NULL;
+        if (SUCCEEDED(pDispatch->GetTypeInfo(0, LOCALE_USER_DEFAULT, &pTypeInfo)) && pTypeInfo != NULL)
+        {
+            os << "\n" << DumpTypeInfo(pTypeInfo, indentLevel);
+        }
+    }
+
+    return os.str();
+}
 
 /* Does not throw any exceptions.
    Param pInfo can be NULL.
@@ -123,16 +199,35 @@ STDMETHODIMP InterfaceOleWrapper::QueryInterface(REFIID riid, LPVOID FAR * ppv)
     {
         AddRef();
         *ppv = static_cast<IUnknown*>(static_cast<IDispatch*>(this));
+        SAL_INFO("extensions.olebridge", "  " << *ppv);
     }
     else if (IsEqualIID(riid, IID_IDispatch))
     {
         AddRef();
         *ppv = static_cast<IDispatch*>(this);
+        SAL_INFO("extensions.olebridge", "  " << *ppv);
+    }
+    else if (IsEqualIID(riid, IID_IProvideClassInfo) &&
+             m_sImplementationName == "SwVbaApplication")
+    {
+        AddRef();
+        *ppv = static_cast<IProvideClassInfo*>(this);
+        SAL_INFO("extensions.olebridge", "  " << *ppv);
+    }
+    else if (IsEqualIID(riid, IID_IConnectionPointContainer))
+    {
+        Reference<ooo::vba::XConnectable> xConnectable(m_xOrigin, UNO_QUERY);
+        if (!xConnectable.is())
+            return E_NOINTERFACE;
+        AddRef();
+        *ppv = static_cast<IConnectionPointContainer*>(this);
+        SAL_INFO("extensions.olebridge", "  " << *ppv);
     }
     else if( IsEqualIID( riid, __uuidof( IUnoObjectWrapper)))
     {
         AddRef();
         *ppv= static_cast<IUnoObjectWrapper*>(this);
+        SAL_INFO("extensions.olebridge", "  " << *ppv);
     }
     else
         ret= E_NOINTERFACE;
@@ -200,229 +295,678 @@ class CXTypeInfo : public ITypeInfo,
                    public CComObjectRoot
 {
 public:
+    enum class Kind { COCLASS, MAIN, OUTGOING };
+
     BEGIN_COM_MAP(CXTypeInfo)
         COM_INTERFACE_ENTRY(ITypeInfo)
     END_COM_MAP()
 
     DECLARE_NOT_AGGREGATABLE(CXTypeInfo)
 
-    void Init(InterfaceOleWrapper* pInterfaceOleWrapper)
-    {
-        SAL_INFO("extensions.olebridge", "CXTypeInfo::Init() this=" << this << " for " << pInterfaceOleWrapper->getImplementationName());
-        mpInterfaceOleWrapper = pInterfaceOleWrapper;
-    }
-
-    virtual HRESULT STDMETHODCALLTYPE GetTypeAttr(TYPEATTR **ppTypeAttr) override
-    {
-        (void) ppTypeAttr;
-        SAL_WARN("extensions.olebridge", "CXTypeInfo::GetTypeAttr: NOTIMPL");
-        return E_NOTIMPL;
-    }
-
-    virtual HRESULT STDMETHODCALLTYPE GetTypeComp(ITypeComp **ppTComp) override
-    {
-        (void) ppTComp;
-        SAL_WARN("extensions.olebridge", "CXTypeInfo::GetTypeComp: NOTIMPL");
-        return E_NOTIMPL;
-    }
-
+    void InitForCoclass(Reference<XInterface> xOrigin,
+                        const OUString& sImplementationName,
+                        const IID& rIID,
+                        Reference<XMultiServiceFactory> xMSF);
+    void InitForClassItself(Reference<XInterface> xOrigin,
+                            const OUString& sImplementationName,
+                            const IID& rIID);
+    void InitForOutgoing(Reference<XInterface> xOrigin,
+                         const OUString& sInterfaceName,
+                         const IID& rIID,
+                         Reference<XMultiServiceFactory> xMSF,
+                         Type aType);
+    virtual HRESULT STDMETHODCALLTYPE GetTypeAttr(TYPEATTR **ppTypeAttr) override;
+    virtual HRESULT STDMETHODCALLTYPE GetTypeComp(ITypeComp **ppTComp) override;
     virtual HRESULT STDMETHODCALLTYPE GetFuncDesc(UINT index,
-                                                  FUNCDESC **ppFuncDesc) override
-    {
-        (void) index;
-        (void) ppFuncDesc;
-        SAL_WARN("extensions.olebridge", "CXTypeInfo::GetFuncDesc: NOTIMPL");
-        return E_NOTIMPL;
-    }
-
+                                                  FUNCDESC **ppFuncDesc) override;
     virtual HRESULT STDMETHODCALLTYPE GetVarDesc(UINT index,
-                                                 VARDESC **ppVarDesc) override
-    {
-        (void) index;
-        (void) ppVarDesc;
-        SAL_WARN("extensions.olebridge", "CXTypeInfo::GetVarDesc: NOTIMPL");
-        return E_NOTIMPL;
-    }
-
+                                                 VARDESC **ppVarDesc) override;
     virtual HRESULT STDMETHODCALLTYPE GetNames(MEMBERID memid,
                                                BSTR *rgBstrNames,
                                                UINT cMaxNames,
-                                               UINT *pcNames) override
-    {
-        (void) memid;
-        (void) rgBstrNames;
-        (void) cMaxNames;
-        (void) pcNames;
-        SAL_WARN("extensions.olebridge", "CXTypeInfo::GetNames: NOTIMPL");
-        return E_NOTIMPL;
-    }
-
+                                               UINT *pcNames) override;
     virtual HRESULT STDMETHODCALLTYPE GetRefTypeOfImplType(UINT index,
-                                                           HREFTYPE *pRefType) override
-    {
-        (void) index;
-        (void) pRefType;
-        SAL_WARN("extensions.olebridge", "CXTypeInfo::GetRefTypeOfImplType: NOTIMPL");
-        return E_NOTIMPL;
-    }
-
+                                                           HREFTYPE *pRefType) override;
     virtual HRESULT STDMETHODCALLTYPE GetImplTypeFlags(UINT index,
-                                                       INT *pImplTypeFlags) override
-    {
-        (void) index;
-        (void) pImplTypeFlags;
-        SAL_WARN("extensions.olebridge", "CXTypeInfo::GetImplTypeFlags: NOTIMPL");
-        return E_NOTIMPL;
-    }
-
+                                                       INT *pImplTypeFlags) override;
     virtual HRESULT STDMETHODCALLTYPE GetIDsOfNames(LPOLESTR *rgszNames,
                                                     UINT cNames,
-                                                    MEMBERID *pMemId) override
-    {
-        (void) rgszNames;
-        (void) cNames;
-        (void) pMemId;
-        SAL_WARN("extensions.olebridge", "CXTypeInfo::GetIDsOfNames: NOTIMPL");
-        return E_NOTIMPL;
-    }
-
+                                                    MEMBERID *pMemId) override;
     virtual HRESULT STDMETHODCALLTYPE Invoke(PVOID pvInstance,
                                              MEMBERID memid,
                                              WORD wFlags,
                                              DISPPARAMS *pDispParams,
                                              VARIANT *pVarResult,
                                              EXCEPINFO *pExcepInfo,
-                                             UINT *puArgErr) override
+                                             UINT *puArgErr) override;
+    virtual HRESULT STDMETHODCALLTYPE GetDocumentation(MEMBERID memid,
+                                                       BSTR *pBstrName,
+                                                       BSTR *pBstrDocString,
+                                                       DWORD *pdwHelpContext,
+                                                       BSTR *pBstrHelpFile) override;
+    virtual HRESULT STDMETHODCALLTYPE GetDllEntry(MEMBERID memid,
+                                                  INVOKEKIND invKind,
+                                                  BSTR *pBstrDllName,
+                                                  BSTR *pBstrName,
+                                                  WORD *pwOrdinal) override;
+    virtual HRESULT STDMETHODCALLTYPE GetRefTypeInfo(HREFTYPE hRefType,
+                                                     ITypeInfo **ppTInfo) override;
+    virtual HRESULT STDMETHODCALLTYPE AddressOfMember(MEMBERID memid,
+                                                      INVOKEKIND invKind,
+                                                      PVOID *ppv) override;
+    virtual HRESULT STDMETHODCALLTYPE CreateInstance(IUnknown *pUnkOuter,
+                                                     REFIID riid,
+                                                     PVOID *ppvObj) override;
+    virtual HRESULT STDMETHODCALLTYPE GetMops(MEMBERID memid,
+                                              BSTR *pBstrMops) override;
+    virtual HRESULT STDMETHODCALLTYPE GetContainingTypeLib(ITypeLib **ppTLib,
+                                                           UINT *pIndex) override;
+    virtual void STDMETHODCALLTYPE ReleaseTypeAttr(TYPEATTR *pTypeAttr) override;
+    virtual void STDMETHODCALLTYPE ReleaseFuncDesc(FUNCDESC *pFuncDesc) override;
+    virtual void STDMETHODCALLTYPE ReleaseVarDesc(VARDESC *pVarDesc) override;
+
+private:
+    Kind meKind;
+    Reference<XInterface> mxOrigin;
+    OUString msImplementationName;
+    OUString msInterfaceName;
+    IID maIID;
+    Reference<XMultiServiceFactory> mxMSF;
+    Type maType;
+};
+
+class CXTypeLib : public ITypeLib,
+                  public CComObjectRoot
+{
+public:
+    BEGIN_COM_MAP(CXTypeLib)
+        COM_INTERFACE_ENTRY(ITypeLib)
+    END_COM_MAP()
+
+    DECLARE_NOT_AGGREGATABLE(CXTypeLib)
+
+    void Init(Reference<XInterface> xOrigin,
+              const OUString& sImplementationName,
+              Reference<XMultiServiceFactory> xMSF)
     {
-        (void) pvInstance;
-        (void) memid;
-        (void) wFlags;
-        (void) pDispParams;
-        (void) pVarResult;
-        (void) pExcepInfo;
-        (void) puArgErr;
-        SAL_WARN("extensions.olebridge", "CXTypeInfo::Invoke: NOTIMPL");
+        SAL_INFO("extensions.olebridge", "CXTypeLib::Init() this=" << this << " for " << sImplementationName);
+        mxOrigin = xOrigin;
+        msImplementationName = sImplementationName;
+        mxMSF = xMSF;
+    }
+
+    virtual UINT STDMETHODCALLTYPE GetTypeInfoCount() override
+    {
+        SAL_WARN("extensions.olebridge", "CXTypeLib@" << this << "::GetTypeInfoCount()");
+        return 1;
+    }
+
+    virtual HRESULT STDMETHODCALLTYPE GetTypeInfo(UINT index,
+                                                  ITypeInfo **ppTInfo) override
+    {
+        (void) index;
+        (void) ppTInfo;
+        SAL_WARN("extensions.olebridge", "CXTypeLib@" << this << "::GetTypeInfo: NOTIMPL");
         return E_NOTIMPL;
     }
 
-    virtual HRESULT STDMETHODCALLTYPE GetDocumentation(MEMBERID memid,
+    virtual HRESULT STDMETHODCALLTYPE GetTypeInfoType(UINT index,
+                                                      TYPEKIND *pTKind) override
+    {
+        (void) index;
+        (void) pTKind;
+        SAL_WARN("extensions.olebridge", "CXTypeLib@" << this << "::GetTypeInfoType: NOTIMPL");
+        return E_NOTIMPL;
+    }
+
+    virtual HRESULT STDMETHODCALLTYPE GetTypeInfoOfGuid(REFGUID guid,
+                                                        ITypeInfo **ppTInfo) override
+    {
+        SAL_INFO("extensions.olebridge", "CXTypeLib@" << this << "::GetTypeInfoOfGuid(" << guid << ")");
+        if (!ppTInfo)
+            return E_POINTER;
+
+        Reference<ooo::vba::XConnectable> xConnectable(mxOrigin, UNO_QUERY);
+        if (!xConnectable.is())
+            return TYPE_E_ELEMENTNOTFOUND;
+
+        IID aIID;
+        if (SUCCEEDED(IIDFromString((LPOLESTR)xConnectable->getIID().pData->buffer, &aIID)))
+        {
+            if (IsEqualIID(guid, aIID))
+            {
+                HRESULT ret;
+
+                CComObject<CXTypeInfo>* pTypeInfo;
+
+                ret = CComObject<CXTypeInfo>::CreateInstance(&pTypeInfo);
+                if (FAILED(ret))
+                    return ret;
+
+                pTypeInfo->AddRef();
+
+                pTypeInfo->InitForCoclass(mxOrigin, msImplementationName, aIID, mxMSF);
+
+                *ppTInfo = pTypeInfo;
+
+                return S_OK;
+            }
+        }
+
+#if 0
+        ooo::vba::TypeAndIID aTypeAndIID = xConnectable->GetConnectionPoint();
+
+        IID aIID;
+        if (SUCCEEDED(IIDFromString((LPOLESTR)aTypeAndIID.IID.pData->buffer, &aIID)))
+        {
+            HRESULT ret;
+
+            CComObject<CXTypeInfo>* pTypeInfo;
+
+            ret = CComObject<CXTypeInfo>::CreateInstance(&pTypeInfo);
+            if (FAILED(ret))
+                return ret;
+
+            pTypeInfo->AddRef();
+
+            pTypeInfo->InitForOutgoing(mxOrigin, msImplementationName, aIID, mxMSF);
+
+            *ppTInfo = pTypeInfo;
+
+            return S_OK;
+        }
+#else
+        SAL_WARN("extensions.olebridge", "Not implemented: GetTypeInfoOfGuid(" << guid << ")");
+#endif
+
+        return TYPE_E_ELEMENTNOTFOUND;
+
+    }
+
+    virtual HRESULT STDMETHODCALLTYPE GetLibAttr(TLIBATTR **ppTLibAttr) override
+    {
+        (void) ppTLibAttr;
+        SAL_WARN("extensions.olebridge", "CXTypeLib@" << this << "::GetLibAttr: NOTIMPL");
+        return E_NOTIMPL;
+    }
+
+    virtual HRESULT STDMETHODCALLTYPE GetTypeComp(ITypeComp **ppTComp) override
+    {
+        (void) ppTComp;
+        SAL_WARN("extensions.olebridge", "CXTypeLib@" << this << "::GetTypeComp: NOTIMPL");
+        return E_NOTIMPL;
+    }
+
+    virtual HRESULT STDMETHODCALLTYPE GetDocumentation(INT index,
                                                        BSTR *pBstrName,
                                                        BSTR *pBstrDocString,
                                                        DWORD *pdwHelpContext,
                                                        BSTR *pBstrHelpFile) override
     {
-        SAL_INFO("extensions.olebridge", "CXTypeInfo::GetDocumentation(" << memid << ")");
-        if (pBstrName)
-        {
-            if (memid == MEMBERID_NIL)
-            {
-                *pBstrName = SysAllocString(o3tl::toW(mpInterfaceOleWrapper->getImplementationName().getStr()));
-            }
-            else if (memid == DISPID_VALUE)
-            {
-                // MEMBERIDs are the same as DISPIDs, apparently?
-                *pBstrName = SysAllocString(L"Value");
-            }
-            else
-            {
-                *pBstrName = SysAllocString(L"Unknown");
-            }
-        }
-        if (pBstrDocString)
-            *pBstrDocString = SysAllocString(L"");;
-        if (pdwHelpContext)
-            *pdwHelpContext = 0;
-        if (pBstrHelpFile)
-            *pBstrHelpFile = NULL;
-
-        return S_OK;
-    }
-
-    virtual HRESULT STDMETHODCALLTYPE GetDllEntry(MEMBERID memid,
-                                                  INVOKEKIND invKind,
-                                                  BSTR *pBstrDllName,
-                                                  BSTR *pBstrName,
-                                                  WORD *pwOrdinal) override
-    {
-        (void) memid;
-        (void) invKind;
-        (void) pBstrDllName;
+        (void) index;
         (void) pBstrName;
-        (void) pwOrdinal;
-        SAL_WARN("extensions.olebridge", "CXTypeInfo::GetDllEntry: NOTIMPL");
+        (void) pBstrDocString;
+        (void) pdwHelpContext;
+        (void) pBstrHelpFile;
+        SAL_WARN("extensions.olebridge", "CXTypeLib@" << this << "::GetDocumentation: NOTIMPL");
         return E_NOTIMPL;
     }
 
-    virtual HRESULT STDMETHODCALLTYPE GetRefTypeInfo(HREFTYPE hRefType,
-                                                     ITypeInfo **ppTInfo) override
+    virtual HRESULT STDMETHODCALLTYPE IsName(LPOLESTR szNameBuf,
+                                             ULONG lHashVal,
+                                             BOOL *pfName) override
     {
-        (void) hRefType;
+        (void) szNameBuf;
+        (void) lHashVal;
+        (void) pfName;
+        SAL_WARN("extensions.olebridge", "CXTypeLib@" << this << "::IsName: NOTIMPL");
+        return E_NOTIMPL;
+    }
+
+    virtual HRESULT STDMETHODCALLTYPE FindName(LPOLESTR szNameBuf,
+                                               ULONG lHashVal,
+                                               ITypeInfo **ppTInfo,
+                                               MEMBERID *rgMemId,
+                                               USHORT *pcFound) override
+    {
+        (void) szNameBuf;
+        (void) lHashVal;
         (void) ppTInfo;
-        SAL_WARN("extensions.olebridge", "CXTypeInfo::GetRefTypeInfo: NOTIMPL");
+        (void) rgMemId;
+        (void) pcFound;
+        SAL_WARN("extensions.olebridge", "CXTypeLib@" << this << "::FindName: NOTIMPL");
         return E_NOTIMPL;
     }
 
-    virtual HRESULT STDMETHODCALLTYPE AddressOfMember(MEMBERID memid,
-                                                      INVOKEKIND invKind,
-                                                      PVOID *ppv) override
+    virtual void STDMETHODCALLTYPE ReleaseTLibAttr(TLIBATTR *pTLibAttr) override
     {
-        (void) memid;
-        (void) invKind;
-        (void) ppv;
-        SAL_WARN("extensions.olebridge", "CXTypeInfo::AddressOfMember: NOTIMPL");
-        return E_NOTIMPL;
-    }
-
-    virtual HRESULT STDMETHODCALLTYPE CreateInstance(IUnknown *pUnkOuter,
-                                                     REFIID riid,
-                                                     PVOID *ppvObj) override
-    {
-        (void) pUnkOuter;
-        (void) riid;
-        (void) ppvObj;
-        SAL_WARN("extensions.olebridge", "CXTypeInfo::CreateInstance: NOTIMPL");
-        return E_NOTIMPL;
-    }
-
-    virtual HRESULT STDMETHODCALLTYPE GetMops(MEMBERID memid,
-                                              BSTR *pBstrMops) override
-    {
-        (void) memid;
-        (void) pBstrMops;
-        SAL_WARN("extensions.olebridge", "CXTypeInfo::GetMops: NOTIMPL");
-        return E_NOTIMPL;
-    }
-
-    virtual HRESULT STDMETHODCALLTYPE GetContainingTypeLib(ITypeLib **ppTLib,
-                                                           UINT *pIndex) override
-    {
-        (void) ppTLib;
-        (void) pIndex;
-        SAL_WARN("extensions.olebridge", "CXTypeInfo::GetContainingTypeLib: NOTIMPL");
-        return E_NOTIMPL;
-    }
-
-    virtual void STDMETHODCALLTYPE ReleaseTypeAttr(TYPEATTR *pTypeAttr) override
-    {
-        (void) pTypeAttr;
-        SAL_WARN("extensions.olebridge", "CXTypeInfo::ReleaseTypeAttr: NOTIMPL");
-    }
-
-    virtual void STDMETHODCALLTYPE ReleaseFuncDesc(FUNCDESC *pFuncDesc) override
-    {
-        (void) pFuncDesc;
-        SAL_WARN("extensions.olebridge", "CXTypeInfo::ReleaseFuncDesc: NOTIMPL");
-    }
-
-    virtual void STDMETHODCALLTYPE ReleaseVarDesc(VARDESC *pVarDesc) override
-    {
-        (void) pVarDesc;
-        SAL_WARN("extensions.olebridge", "CXTypeInfo::ReleaseVarDesc: NOTIMPL");
+        (void) pTLibAttr;
+        SAL_WARN("extensions.olebridge", "CXTypeLib@" << this << "::ReleaseTLibAttr: NOTIMPL");
     }
 
 private:
-    InterfaceOleWrapper* mpInterfaceOleWrapper;
+    Reference<XInterface> mxOrigin;
+    OUString msImplementationName;
+    Reference<XMultiServiceFactory> mxMSF;
 };
+
+void CXTypeInfo::InitForCoclass(Reference<XInterface> xOrigin,
+                                const OUString& sImplementationName,
+                                const IID& rIID,
+                                Reference<XMultiServiceFactory> xMSF)
+{
+    SAL_INFO("extensions.olebridge", "CXTypeInfo::InitForCoclass() this=" << this << " for " << rIID << " (" << sImplementationName << ")");
+    meKind = Kind::COCLASS;
+    mxOrigin = xOrigin;
+    msImplementationName = sImplementationName;
+    maIID = rIID;
+    mxMSF = xMSF;
+}
+
+void CXTypeInfo::InitForClassItself(Reference<XInterface> xOrigin,
+                                    const OUString& sImplementationName,
+                                    const IID& rIID)
+{
+    SAL_INFO("extensions.olebridge", "CXTypeInfo::InitForClassItself() this=" << this << " for " << rIID << " (" << sImplementationName << ")");
+    meKind = Kind::MAIN;
+    mxOrigin = xOrigin;
+    msImplementationName = sImplementationName;
+    maIID = rIID;
+}
+
+void CXTypeInfo::InitForOutgoing(Reference<XInterface> xOrigin,
+                                 const OUString& sInterfaceName,
+                                 const IID& rIID,
+                                 Reference<XMultiServiceFactory> xMSF,
+                                 Type aType)
+{
+    SAL_INFO("extensions.olebridge", "CXTypeInfo::InitForOutgoing() this=" << this << " for " << rIID << " (" << sInterfaceName << ")");
+    meKind = Kind::OUTGOING;
+    mxOrigin = xOrigin;
+    msInterfaceName = sInterfaceName;
+    maIID = rIID;
+    mxMSF = xMSF;
+    maType = aType;
+}
+
+HRESULT STDMETHODCALLTYPE CXTypeInfo::GetTypeAttr(TYPEATTR **ppTypeAttr)
+{
+    SAL_INFO("extensions.olebridge", "CXTypeInfo@" << this << "::GetTypeAttr()");
+
+    if (!ppTypeAttr)
+        return E_POINTER;
+
+    assert(!IsEqualIID(maIID, IID_NULL));
+
+    TYPEATTR *pTypeAttr = new TYPEATTR();
+    memset(pTypeAttr, 0, sizeof(*pTypeAttr));
+
+    pTypeAttr->guid = maIID;
+
+    if (meKind == Kind::COCLASS)
+    {
+        pTypeAttr->typekind = TKIND_COCLASS;
+        pTypeAttr->cFuncs = 0;
+        pTypeAttr->cVars = 0;
+        pTypeAttr->cImplTypes = 3;
+        pTypeAttr->cbSizeVft = 0;
+        pTypeAttr->cbAlignment = 8;
+        pTypeAttr->wTypeFlags = TYPEFLAG_FCANCREATE;
+    }
+    else if (meKind == Kind::MAIN)
+    {
+        pTypeAttr->typekind = TKIND_DISPATCH;
+        pTypeAttr->cFuncs = 10; // FIXME, dummy
+        pTypeAttr->cVars = 0;
+        pTypeAttr->cImplTypes = 1;
+        // FIXME: I think this is always supposed to be as if just for the seven methods in
+        // IDIspatch?
+        pTypeAttr->cbSizeVft = 7 * sizeof(void*);
+        pTypeAttr->cbAlignment = 8;
+        pTypeAttr->wTypeFlags = TYPEFLAG_FHIDDEN|TYPEFLAG_FDISPATCHABLE;
+    }
+    else if (meKind == Kind::OUTGOING)
+    {
+        pTypeAttr->typekind = TKIND_DISPATCH;
+
+        Reference<XIdlReflection> xRefl = theCoreReflection::get(comphelper::getComponentContext(mxMSF));
+        assert(xRefl.is());
+
+        Reference<XIdlClass> xClass = xRefl->forName(maType.getTypeName());
+        assert(xClass.is());
+
+        auto aMethods = xClass->getMethods();
+        assert(xClass->getTypeClass() == TypeClass_INTERFACE &&
+               aMethods.getLength() > 0);
+
+        // Drop the three XInterface methods, add the three corresponding IUnknown ones plus the
+        // four IDispatch ones on top of that.
+        pTypeAttr->cFuncs = aMethods.getLength() - 3 + 3 + 4;
+        pTypeAttr->cVars = 0;
+        pTypeAttr->cImplTypes = 1;
+        // FIXME: I think this, too, is always supposed to be as if just for the seven methods in
+        // IDIspatch?
+        pTypeAttr->cbSizeVft = 7 * sizeof(void*);
+        pTypeAttr->cbAlignment = 8;
+        pTypeAttr->wTypeFlags = TYPEFLAG_FHIDDEN|TYPEFLAG_FNONEXTENSIBLE|TYPEFLAG_FDISPATCHABLE;
+    }
+    else
+        assert(false);
+
+    pTypeAttr->lcid = LOCALE_USER_DEFAULT;
+    pTypeAttr->memidConstructor = MEMBERID_NIL;
+    pTypeAttr->memidDestructor = MEMBERID_NIL;
+    // FIXME: Is this correct, just the vtable pointer, right?
+    pTypeAttr->cbSizeInstance = sizeof(void*);
+    pTypeAttr->wMajorVerNum = 0;
+    pTypeAttr->wMinorVerNum = 0;
+    pTypeAttr->idldescType.wIDLFlags = IDLFLAG_NONE;
+
+    SAL_INFO("extensions.olebridge", "CXTypeInfo@" << this << "::GetTypeAttr(): " << pTypeAttr);
+
+    *ppTypeAttr = pTypeAttr;
+
+    return S_OK;
+}
+
+HRESULT STDMETHODCALLTYPE CXTypeInfo::GetTypeComp(ITypeComp **ppTComp)
+{
+    (void) ppTComp;
+    SAL_WARN("extensions.olebridge", "CXTypeInfo@" << this << "::GetTypeComp: NOTIMPL");
+    return E_NOTIMPL;
+}
+
+HRESULT STDMETHODCALLTYPE CXTypeInfo::GetFuncDesc(UINT index,
+                                                  FUNCDESC **ppFuncDesc)
+{
+    (void) index;
+    (void) ppFuncDesc;
+    SAL_WARN("extensions.olebridge", "CXTypeInfo@" << this << "::GetFuncDesc: NOTIMPL");
+    return E_NOTIMPL;
+}
+
+HRESULT STDMETHODCALLTYPE CXTypeInfo::GetVarDesc(UINT index,
+                                                 VARDESC **ppVarDesc)
+{
+    (void) index;
+    (void) ppVarDesc;
+    SAL_WARN("extensions.olebridge", "CXTypeInfo@" << this << "::GetVarDesc: NOTIMPL");
+    return E_NOTIMPL;
+}
+
+HRESULT STDMETHODCALLTYPE CXTypeInfo::GetNames(MEMBERID memid,
+                                               BSTR *rgBstrNames,
+                                               UINT cMaxNames,
+                                               UINT *pcNames)
+{
+    SAL_WARN("extensions.olebridge", "CXTypeInfo@" << this << "::GetNames(" << memid << ")");
+    assert(meKind != Kind::COCLASS);
+
+    if (!rgBstrNames)
+        return E_POINTER;
+
+    if (!pcNames)
+        return E_POINTER;
+
+    if (memid < 1)
+        return E_INVALIDARG;
+
+    if (cMaxNames < 1)
+        return E_INVALIDARG;
+
+    if (meKind == Kind::MAIN)
+    {
+        SAL_WARN("extensions.olebridge", "GetNames() for MAIN not implemented");
+        return E_NOTIMPL;
+    }
+
+    Reference<XIdlReflection> xRefl = theCoreReflection::get(comphelper::getComponentContext(mxMSF));
+    assert(xRefl.is());
+
+    Reference<XIdlClass> xClass = xRefl->forName(maType.getTypeName());
+    assert(xClass.is());
+
+    auto aMethods = xClass->getMethods();
+    assert(xClass->getTypeClass() == TypeClass_INTERFACE &&
+           aMethods.getLength() > 0);
+
+    // Subtract the three XInterface methods. Memid for the first following method is 1.
+    if (memid > aMethods.getLength() - 3)
+        return E_INVALIDARG;
+
+    rgBstrNames[0] = SysAllocString((LPOLESTR) aMethods[memid + 2]->getName().pData->buffer);
+    *pcNames = 1;
+
+    return S_OK;
+}
+
+HRESULT STDMETHODCALLTYPE CXTypeInfo::GetRefTypeOfImplType(UINT index,
+                                                           HREFTYPE *pRefType)
+{
+    SAL_INFO("extensions.olebridge", "CXTypeInfo@" << this << "::GetRefTypeOfImplType(" << index << ")");
+
+    if (!pRefType)
+        return E_POINTER;
+
+    assert(index == 0 || index == 1);
+
+    *pRefType = 1000+index;
+
+    return S_OK;
+}
+
+HRESULT STDMETHODCALLTYPE CXTypeInfo::GetImplTypeFlags(UINT index,
+                                                       INT *pImplTypeFlags)
+{
+    SAL_INFO("extensions.olebridge", "CXTypeInfo@" << this << "::GetImplTypeFlags(" << index << ")");
+
+    if (!pImplTypeFlags)
+        return E_POINTER;
+
+    assert(meKind == Kind::COCLASS);
+    assert(index == 0 || index == 1);
+
+    if (index == 0)
+        *pImplTypeFlags = IMPLTYPEFLAG_FDEFAULT;
+    else if (index == 1)
+        *pImplTypeFlags = IMPLTYPEFLAG_FDEFAULT|IMPLTYPEFLAG_FSOURCE;
+
+    return S_OK;
+}
+
+HRESULT STDMETHODCALLTYPE CXTypeInfo::GetIDsOfNames(LPOLESTR *rgszNames,
+                                                    UINT cNames,
+                                                    MEMBERID *pMemId)
+{
+    (void) rgszNames;
+    (void) cNames;
+    (void) pMemId;
+    SAL_WARN("extensions.olebridge", "CXTypeInfo@" << this << "::GetIDsOfNames: NOTIMPL");
+    return E_NOTIMPL;
+}
+
+HRESULT STDMETHODCALLTYPE CXTypeInfo::Invoke(PVOID pvInstance,
+                                             MEMBERID memid,
+                                             WORD wFlags,
+                                             DISPPARAMS *pDispParams,
+                                             VARIANT *pVarResult,
+                                             EXCEPINFO *pExcepInfo,
+                                             UINT *puArgErr)
+{
+    (void) pvInstance;
+    (void) memid;
+    (void) wFlags;
+    (void) pDispParams;
+    (void) pVarResult;
+    (void) pExcepInfo;
+    (void) puArgErr;
+    SAL_WARN("extensions.olebridge", "CXTypeInfo@" << this << "::Invoke: NOTIMPL");
+    return E_NOTIMPL;
+}
+
+HRESULT STDMETHODCALLTYPE CXTypeInfo::GetDocumentation(MEMBERID memid,
+                                                       BSTR *pBstrName,
+                                                       BSTR *pBstrDocString,
+                                                       DWORD *pdwHelpContext,
+                                                       BSTR *pBstrHelpFile)
+{
+    SAL_INFO("extensions.olebridge", "CXTypeInfo@" << this << "::GetDocumentation(" << memid << ")");
+    if (pBstrName)
+    {
+        if (memid == MEMBERID_NIL)
+        {
+            *pBstrName = SysAllocString(o3tl::toW(msImplementationName.getStr()));
+        }
+        else if (memid == DISPID_VALUE)
+        {
+            // MEMBERIDs are the same as DISPIDs, apparently?
+            *pBstrName = SysAllocString(L"Value");
+        }
+        else
+        {
+            *pBstrName = SysAllocString(L"Unknown");
+        }
+    }
+    if (pBstrDocString)
+        *pBstrDocString = SysAllocString(L"");;
+    if (pdwHelpContext)
+        *pdwHelpContext = 0;
+    if (pBstrHelpFile)
+        *pBstrHelpFile = NULL;
+
+    return S_OK;
+}
+
+HRESULT STDMETHODCALLTYPE CXTypeInfo::GetDllEntry(MEMBERID memid,
+                                                  INVOKEKIND invKind,
+                                                  BSTR *pBstrDllName,
+                                                  BSTR *pBstrName,
+                                                  WORD *pwOrdinal)
+{
+    (void) memid;
+    (void) invKind;
+    (void) pBstrDllName;
+    (void) pBstrName;
+    (void) pwOrdinal;
+    SAL_WARN("extensions.olebridge", "CXTypeInfo@" << this << "::GetDllEntry: NOTIMPL");
+    return E_NOTIMPL;
+}
+
+HRESULT STDMETHODCALLTYPE CXTypeInfo::GetRefTypeInfo(HREFTYPE hRefType,
+                                                     ITypeInfo **ppTInfo)
+{
+    SAL_INFO("extensions.olebridge", "CXTypeInfo@" << this << "::GetRefTypeInfo(" << hRefType << ")");
+
+    if (!ppTInfo)
+        return E_POINTER;
+
+    // FIXME: Is it correct to assume that the only interfaces on which GetRefTypeInfo() would be
+    // called are those that implement ooo::vba::XConnectable?
+
+    Reference<ooo::vba::XConnectable> xConnectable(mxOrigin, UNO_QUERY);
+    if (!xConnectable.is())
+        return E_NOTIMPL;
+
+    ooo::vba::TypeAndIID aTypeAndIID = xConnectable->GetConnectionPoint();
+
+    IID aIID;
+    if (!SUCCEEDED(IIDFromString((LPOLESTR)aTypeAndIID.IID.pData->buffer, &aIID)))
+        return E_NOTIMPL;
+
+    HRESULT ret;
+
+    CComObject<CXTypeInfo>* pTypeInfo;
+
+    ret = CComObject<CXTypeInfo>::CreateInstance(&pTypeInfo);
+    if (FAILED(ret))
+        return ret;
+
+    pTypeInfo->AddRef();
+
+    pTypeInfo->InitForOutgoing(mxOrigin, aTypeAndIID.Type.getTypeName(), aIID, mxMSF, aTypeAndIID.Type);
+
+    *ppTInfo = pTypeInfo;
+
+    return S_OK;
+}
+
+HRESULT STDMETHODCALLTYPE CXTypeInfo::AddressOfMember(MEMBERID memid,
+                                                      INVOKEKIND invKind,
+                                                      PVOID *ppv)
+{
+    (void) memid;
+    (void) invKind;
+    (void) ppv;
+    SAL_WARN("extensions.olebridge", "CXTypeInfo@" << this << "::AddressOfMember: NOTIMPL");
+    return E_NOTIMPL;
+}
+
+HRESULT STDMETHODCALLTYPE CXTypeInfo::CreateInstance(IUnknown *pUnkOuter,
+                                                     REFIID riid,
+                                                     PVOID *ppvObj)
+{
+    (void) pUnkOuter;
+    (void) riid;
+    (void) ppvObj;
+    SAL_WARN("extensions.olebridge", "CXTypeInfo@" << this << "::CreateInstance: NOTIMPL");
+    return E_NOTIMPL;
+}
+
+HRESULT STDMETHODCALLTYPE CXTypeInfo::GetMops(MEMBERID memid,
+                                              BSTR *pBstrMops)
+{
+    (void) memid;
+    (void) pBstrMops;
+    SAL_WARN("extensions.olebridge", "CXTypeInfo@" << this << "::GetMops: NOTIMPL");
+    return E_NOTIMPL;
+}
+
+// This is not actually called any more by my vbscript test after I added the IProvideClassInfo
+// thing... so all the CXTypeLib stuff is dead code at the moment.
+
+HRESULT STDMETHODCALLTYPE CXTypeInfo::GetContainingTypeLib(ITypeLib **ppTLib,
+                                                           UINT *pIndex)
+{
+    SAL_INFO("extensions.olebridge", "CXTypeInfo@" << this << "::GetContainingTypeLib");
+
+    if (!ppTLib || !pIndex)
+        return E_POINTER;
+
+    HRESULT ret;
+
+    CComObject<CXTypeLib>* pTypeLib;
+
+    ret = CComObject<CXTypeLib>::CreateInstance(&pTypeLib);
+    if (FAILED(ret))
+        return ret;
+
+    pTypeLib->AddRef();
+
+    pTypeLib->Init(mxOrigin, msImplementationName, mxMSF);
+
+    *ppTLib = pTypeLib;
+
+    return S_OK;
+}
+
+void STDMETHODCALLTYPE CXTypeInfo::ReleaseTypeAttr(TYPEATTR *pTypeAttr)
+{
+    SAL_INFO("extensions.olebridge", "CXTypeInfo@" << this << "::ReleaseTypeAttr(" << pTypeAttr << ")");
+
+    delete pTypeAttr;
+}
+
+void STDMETHODCALLTYPE CXTypeInfo::ReleaseFuncDesc(FUNCDESC *pFuncDesc)
+{
+    (void) pFuncDesc;
+    SAL_WARN("extensions.olebridge", "CXTypeInfo@" << this << "::ReleaseFuncDesc: NOTIMPL");
+}
+
+void STDMETHODCALLTYPE CXTypeInfo::ReleaseVarDesc(VARDESC *pVarDesc)
+{
+    (void) pVarDesc;
+    SAL_WARN("extensions.olebridge", "CXTypeInfo@" << this << "::ReleaseVarDesc: NOTIMPL");
+}
 
 STDMETHODIMP InterfaceOleWrapper::GetTypeInfo(unsigned int iTInfo, LCID, ITypeInfo ** ppTInfo)
 {
@@ -434,7 +978,16 @@ STDMETHODIMP InterfaceOleWrapper::GetTypeInfo(unsigned int iTInfo, LCID, ITypeIn
     if (iTInfo != 0)
         return E_NOTIMPL;
 
-    HRESULT ret = S_OK;
+    Reference<ooo::vba::XConnectable> xConnectable(m_xOrigin, UNO_QUERY);
+    if (!xConnectable.is())
+        return E_NOTIMPL;
+
+    OUString sIID = xConnectable->GetIIDForClassItselfNotCoclass();
+    IID aIID;
+    if (!SUCCEEDED(IIDFromString((LPOLESTR)sIID.pData->buffer, &aIID)))
+        return E_NOTIMPL;
+
+    HRESULT ret;
 
     CComObject<CXTypeInfo>* pTypeInfo;
 
@@ -444,7 +997,7 @@ STDMETHODIMP InterfaceOleWrapper::GetTypeInfo(unsigned int iTInfo, LCID, ITypeIn
 
     pTypeInfo->AddRef();
 
-    pTypeInfo->Init(this);
+    pTypeInfo->InitForClassItself(m_xOrigin, m_sImplementationName, aIID);
 
     *ppTInfo = pTypeInfo;
 
@@ -468,7 +1021,7 @@ STDMETHODIMP InterfaceOleWrapper::GetIDsOfNames(REFIID /*riid*/,
         if( ! rgdispid)
             return E_POINTER;
 
-        // FIXME: Handle the cNames > 1 case
+        // FIXME: Handle the cNames > 1 case? Note that the rest of the names mean the names of *arguments*.
 
         if( ! _wcsicmp( *rgszNames, JSCRIPT_VALUE_FUNC) ||
             ! _wcsicmp( *rgszNames, BRIDGE_VALUE_FUNC))
@@ -1414,6 +1967,182 @@ private:
     Reference<XEnumeration> mxEnumeration;
 };
 
+class Sink : public cppu::WeakImplHelper<ooo::vba::XSink>
+{
+public:
+    Sink(IUnknown* pUnkSink,
+         Reference<XMultiServiceFactory> xMSF,
+         ooo::vba::TypeAndIID aTypeAndIID);
+
+    // XSink
+    void SAL_CALL Call( const OUString& Method, const Sequence< Any >& Arguments ) override;
+
+private:
+    IUnknown* mpUnkSink;
+    Reference<XMultiServiceFactory> mxMSF;
+    ooo::vba::TypeAndIID maTypeAndIID;
+};
+
+Sink::Sink(IUnknown* pUnkSink,
+           Reference<XMultiServiceFactory> xMSF,
+           ooo::vba::TypeAndIID aTypeAndIID) :
+    mpUnkSink(pUnkSink),
+    mxMSF(xMSF),
+    maTypeAndIID(aTypeAndIID)
+{
+    mpUnkSink->AddRef();
+}
+
+void SAL_CALL
+Sink::Call( const OUString& Method, const Sequence< Any >& Arguments )
+{
+    SAL_INFO("extensions.olebridge", "Sink::Call(" << Method << ", " << Arguments.getLength() << " arguments)");
+
+    IDispatch* pDispatch;
+    HRESULT nResult = mpUnkSink->QueryInterface(IID_IDispatch, (void **) &pDispatch);
+    if (!SUCCEEDED(nResult))
+    {
+        SAL_WARN("extensions.olebridge", "Sink::Call: Not IDispatch: " << WindowsErrorStringFromHRESULT(nResult));
+        return;
+    }
+
+    Reference<XIdlReflection> xRefl = theCoreReflection::get(comphelper::getComponentContext(mxMSF));
+    assert(xRefl.is());
+
+    Reference<XIdlClass> xClass = xRefl->forName(maTypeAndIID.Type.getTypeName());
+    assert(xClass.is());
+
+    auto aMethods = xClass->getMethods();
+    assert(xClass->getTypeClass() == TypeClass_INTERFACE &&
+           aMethods.getLength() > 0);
+
+    int nMemId = 1;
+    // Skip the three XInterface methods
+    for (int i = 3; i < aMethods.getLength(); i++)
+    {
+        if (aMethods[i]->getName() == Method)
+        {
+            DISPPARAMS aDispParams;
+            aDispParams.rgvarg = NULL;
+            aDispParams.rgdispidNamedArgs = NULL;
+            aDispParams.cArgs = 0;
+            aDispParams.cNamedArgs = 0;
+            VARIANT aVarResult;
+            VariantInit(&aVarResult);
+            UINT uArgErr;
+            nResult = pDispatch->Invoke(nMemId, IID_NULL, LOCALE_USER_DEFAULT, DISPATCH_METHOD, &aDispParams, &aVarResult, NULL, &uArgErr);
+            SAL_WARN_IF(!SUCCEEDED(nResult), "extensions.olebridge", "Call to " << Method << " failed: " << WindowsErrorStringFromHRESULT(nResult));
+            return;
+        }
+        nMemId++;
+    }
+    SAL_WARN("extensions.olebridge", "Sink::Call: Uknown method '" << Method << "'");
+}
+
+class CXConnectionPoint : public IConnectionPoint,
+                          public CComObjectRoot
+{
+public:
+    BEGIN_COM_MAP(CXConnectionPoint)
+        COM_INTERFACE_ENTRY(IConnectionPoint)
+    END_COM_MAP()
+
+    DECLARE_NOT_AGGREGATABLE(CXConnectionPoint)
+
+    void Init(InterfaceOleWrapper* pInterfaceOleWrapper,
+              Reference<ooo::vba::XConnectionPoint>& xCP,
+              Reference<XMultiServiceFactory>& xMSF,
+              ooo::vba::TypeAndIID aTypeAndIID)
+    {
+        SAL_INFO("extensions.olebridge", "CXConnectionPoint::Init() this=" << this << " for " << pInterfaceOleWrapper->getImplementationName());
+
+        IUnknown *pUnknown;
+        if (SUCCEEDED(QueryInterface(IID_IUnknown, (void **)&pUnknown)))
+        {
+            // In case QI for IUnknown returns a different pointer, but nah, it doesn't
+            SAL_INFO("extensions.olebridge", "  (IUnknown@" << pUnknown << ")");
+        }
+
+        mpInterfaceOleWrapper = pInterfaceOleWrapper;
+        mxCP = xCP;
+        mxMSF = xMSF;
+        maTypeAndIID = aTypeAndIID;
+    }
+
+    virtual HRESULT STDMETHODCALLTYPE GetConnectionInterface(IID *pIID) override
+    {
+        SAL_WARN("extensions.olebridge", "CXConnectionPoint@" << this << "::GetConnectionInterface(" << *pIID << "): NOTIMPL");
+
+        // FIXME: Needed?
+
+        return E_NOTIMPL;
+    }
+
+    virtual HRESULT STDMETHODCALLTYPE GetConnectionPointContainer(IConnectionPointContainer **ppCPC) override
+    {
+        (void) ppCPC;
+        SAL_WARN("extensions.olebridge", "CXConnectionPoint@" << this << "::GetConnectionInterface: NOTIMPL");
+
+        // FIXME: Needed?
+
+        return E_NOTIMPL;
+    }
+
+    virtual HRESULT STDMETHODCALLTYPE Advise(IUnknown *pUnkSink,
+                                             DWORD *pdwCookie) override
+    {
+        SAL_INFO("extensions.olebridge", "CXConnectionPoint@" << this << "::Advise(" << pUnkSink << ")");
+
+        if (!pdwCookie)
+            return E_POINTER;
+
+        Reference<ooo::vba::XSink> xSink(new Sink(pUnkSink, mxMSF, maTypeAndIID));
+
+        mvISinks.push_back(pUnkSink);
+        *pdwCookie = mvISinks.size();
+
+        mvCookies.push_back(mxCP->Advise(xSink));
+
+        mvXSinks.push_back(xSink);
+
+        SAL_INFO("extensions.olebridge", "  *pdwCookie: " << *pdwCookie);
+
+        return S_OK;
+    }
+
+    virtual HRESULT STDMETHODCALLTYPE Unadvise(DWORD dwCookie) override
+    {
+        SAL_INFO("extensions.olebridge", "CXConnectionPoint@" << this << "::Unadvise(" << dwCookie << ")");
+
+        if (dwCookie == 0 || dwCookie > mvISinks.size())
+            return E_POINTER;
+
+        mvISinks[dwCookie-1] = nullptr;
+
+        mxCP->Unadvise(mvCookies[dwCookie-1]);
+
+        mvXSinks[dwCookie-1] = Reference<ooo::vba::XSink>();
+
+        return S_OK;
+    }
+
+    virtual HRESULT STDMETHODCALLTYPE EnumConnections(IEnumConnections **ppEnum) override
+    {
+        (void) ppEnum;
+        SAL_WARN("extensions.olebridge", "CXConnectionPoint@" << this << "::EnumConnections: NOTIMPL");
+        return E_NOTIMPL;
+    }
+
+private:
+    InterfaceOleWrapper* mpInterfaceOleWrapper;
+    std::vector<IUnknown*> mvISinks;
+    std::vector<Reference<ooo::vba::XSink>> mvXSinks;
+    std::vector<sal_uInt32> mvCookies;
+    Reference<XMultiServiceFactory> mxMSF;
+    Reference<ooo::vba::XConnectionPoint> mxCP;
+    ooo::vba::TypeAndIID maTypeAndIID;
+};
+
 HRESULT InterfaceOleWrapper::InvokeGeneral( DISPID dispidMember, unsigned short wFlags,
                          DISPPARAMS * pdispparams, VARIANT * pvarResult, EXCEPINFO * pexcepinfo,
                          unsigned int * /*puArgErr*/, bool& bHandled)
@@ -1545,7 +2274,7 @@ HRESULT InterfaceOleWrapper::InvokeGeneral( DISPID dispidMember, unsigned short 
             pvarResult->vt = VT_UNKNOWN;
             pvarResult->punkVal = NULL;
 
-            ret = pEnumVar->QueryInterface(IID_IUnknown, (void**)&pvarResult->punkVal);
+            ret = pEnumVar->QueryInterface(IID_IUnknown, (void**) &pvarResult->punkVal);
             if (FAILED(ret))
             {
                 pEnumVar->Release();
@@ -1631,6 +2360,96 @@ STDMETHODIMP InterfaceOleWrapper::GetNameSpaceParent(
     /* [out] */ IUnknown __RPC_FAR *__RPC_FAR* /*ppunk*/)
 {
     return ResultFromScode(E_NOTIMPL);
+}
+
+// IProvideClassInfo
+HRESULT STDMETHODCALLTYPE InterfaceOleWrapper::GetClassInfo (
+    /* [out] */ ITypeInfo **ppTI)
+{
+    SAL_INFO("extensions.olebridge", "InterfaceOleWrapper@" << this << "::GetClassInfo");
+
+    if (!ppTI)
+        return E_POINTER;
+
+    Reference<ooo::vba::XInterfaceWithIID> xIID(m_xOrigin, UNO_QUERY);
+    if (!xIID.is())
+        return E_NOTIMPL;
+
+    OUString sIID = xIID->getIID();
+    IID aIID;
+    if (!SUCCEEDED(IIDFromString((LPOLESTR)sIID.pData->buffer, &aIID)))
+        return E_NOTIMPL;
+
+    HRESULT ret;
+
+    CComObject<CXTypeInfo>* pTypeInfo;
+
+    ret = CComObject<CXTypeInfo>::CreateInstance(&pTypeInfo);
+    if (FAILED(ret))
+        return ret;
+
+    pTypeInfo->AddRef();
+
+    pTypeInfo->InitForCoclass(m_xOrigin, m_sImplementationName, aIID, m_smgr);
+
+    *ppTI = pTypeInfo;
+
+    return S_OK;
+}
+
+// IConnectionPointContainer
+HRESULT STDMETHODCALLTYPE InterfaceOleWrapper::EnumConnectionPoints(
+    /* [out] */ IEnumConnectionPoints **ppEnum)
+{
+    (void) ppEnum;
+    SAL_INFO("extensions.olebridge", "InterfaceOleWrapper@" << this << "::EnumConnectionPoints");
+    return ResultFromScode(E_NOTIMPL);
+}
+
+HRESULT STDMETHODCALLTYPE InterfaceOleWrapper::FindConnectionPoint(
+    /* [in] */ REFIID riid,
+    /* [out] */ IConnectionPoint **ppCP)
+{
+    SAL_INFO("extensions.olebridge", "InterfaceOleWrapper@" << this << "::FindConnectionPoint " << riid);
+
+    if (!ppCP)
+        return E_POINTER;
+
+    Reference<ooo::vba::XConnectable> xConnectable(m_xOrigin, UNO_QUERY);
+
+    // We checked already
+    assert(xConnectable.is());
+    if (!xConnectable.is())
+        return E_NOTIMPL;
+
+    ooo::vba::TypeAndIID aTypeAndIID = xConnectable->GetConnectionPoint();
+
+    IID aIID;
+    if (!SUCCEEDED(IIDFromString((LPOLESTR)aTypeAndIID.IID.pData->buffer, &aIID)))
+        return E_INVALIDARG;
+
+    if (!IsEqualIID(riid, aIID))
+        return E_INVALIDARG;
+
+    Reference<ooo::vba::XConnectionPoint> xCP = xConnectable->FindConnectionPoint();
+    if (!xCP.is())
+        return E_INVALIDARG;
+
+    HRESULT ret;
+
+    CComObject<CXConnectionPoint>* pConnectionPoint;
+
+    ret = CComObject<CXConnectionPoint>::CreateInstance(&pConnectionPoint);
+    if (FAILED(ret))
+        return ret;
+
+    pConnectionPoint->AddRef();
+
+    pConnectionPoint->Init(this, xCP, m_smgr, aTypeAndIID);
+
+    *ppCP = pConnectionPoint;
+
+    return S_OK;
 }
 
 // UnoObjectWrapperRemoteOpt ---------------------------------------------------

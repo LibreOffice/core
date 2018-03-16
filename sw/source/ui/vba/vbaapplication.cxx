@@ -27,7 +27,9 @@
 #include "vbadocuments.hxx"
 #include "vbaaddins.hxx"
 #include "vbadialogs.hxx"
+#include <ooo/vba/XConnectionPoint.hpp>
 #include <ooo/vba/word/WdEnableCancelKey.hpp>
+#include <ooo/vba/word/XApplicationOutgoing.hpp>
 #include <basic/sbuno.hxx>
 #include <editeng/acorrcfg.hxx>
 #include "wordvbahelper.hxx"
@@ -38,12 +40,48 @@ using namespace ::ooo;
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
-SwVbaApplication::SwVbaApplication( uno::Reference<uno::XComponentContext >& xContext ): SwVbaApplication_BASE( xContext )
+class SwVbaApplicationOutgoingConnectionPoint : public cppu::WeakImplHelper<XConnectionPoint>
+{
+private:
+    SwVbaApplication* mpApp;
+
+public:
+    SwVbaApplicationOutgoingConnectionPoint( SwVbaApplication* pApp );
+
+    // XConnectionPoint
+    sal_uInt32 SAL_CALL Advise(const uno::Reference< XSink >& Sink ) override;
+    void SAL_CALL Unadvise( sal_uInt32 Cookie ) override;
+};
+
+SwVbaApplication::SwVbaApplication( uno::Reference<uno::XComponentContext >& xContext ):
+    SwVbaApplication_BASE( xContext )
 {
 }
 
 SwVbaApplication::~SwVbaApplication()
 {
+    // FIXME: Sadly this is not the place to do this, this dtor is never called, it seems
+    for (auto& i : mvSinks)
+    {
+        if (i.is())
+            i->Call("Quit", uno::Sequence<uno::Any>());
+    }
+}
+
+sal_uInt32
+SwVbaApplication::AddSink( const css::uno::Reference< XSink >& xSink )
+{
+    mvSinks.push_back(xSink);
+    return mvSinks.size();;
+}
+
+void
+SwVbaApplication::RemoveSink( sal_uInt32 nNumber )
+{
+    if (nNumber < 1 || nNumber > mvSinks.size())
+        return;
+
+    mvSinks[nNumber-1] = uno::Reference< XSink >();
 }
 
 OUString SAL_CALL
@@ -94,6 +132,13 @@ SwVbaApplication::getSelection()
 uno::Any SAL_CALL
 SwVbaApplication::Documents( const uno::Any& index )
 {
+    // FIXME DUMMY just to test calling this somewhere... the dtor is never called
+    for (auto& i : mvSinks)
+    {
+        if (i.is())
+            i->Call("Quit", uno::Sequence<uno::Any>());
+    }
+
     uno::Reference< XCollection > xCol( new SwVbaDocuments( this, mxContext ) );
     if ( index.hasValue() )
         return xCol->Item( index, uno::Any() );
@@ -159,11 +204,47 @@ void SAL_CALL SwVbaApplication::ShowMe()
     // No idea what we should or could do
 }
 
+// XInterfaceWithIID
+
+OUString SAL_CALL
+SwVbaApplication::getIID()
+{
+    return OUString("{82154421-0FBF-11d4-8313-005004526AB4}");
+}
+
 uno::Reference< frame::XModel >
 SwVbaApplication::getCurrentDocument()
 {
     return getCurrentWordDoc( mxContext );
 }
+
+// XConnectable
+
+OUString SAL_CALL
+SwVbaApplication::GetIIDForClassItselfNotCoclass()
+{
+    return OUString("{82154423-0FBF-11D4-8313-005004526AB4}");
+}
+
+TypeAndIID SAL_CALL
+SwVbaApplication::GetConnectionPoint()
+{
+    TypeAndIID aResult =
+        { word::XApplicationOutgoing::static_type(),
+          "{82154422-0FBF-11D4-8313-005004526AB4}"
+        };
+
+    return aResult;
+}
+
+uno::Reference<XConnectionPoint> SAL_CALL
+SwVbaApplication::FindConnectionPoint()
+{
+    uno::Reference<XConnectionPoint> xCP(new SwVbaApplicationOutgoingConnectionPoint(this));
+    return xCP;
+}
+
+// XHelperInterface
 
 OUString
 SwVbaApplication::getServiceImplName()
@@ -181,6 +262,26 @@ SwVbaApplication::getServiceNames()
         aServiceNames[ 0 ] = "ooo.vba.word.Application";
     }
     return aServiceNames;
+}
+
+SwVbaApplicationOutgoingConnectionPoint::SwVbaApplicationOutgoingConnectionPoint( SwVbaApplication* pApp ) :
+    mpApp(pApp)
+{
+}
+
+// SwVbaApplicationOutgoingConnectionPoint
+
+// XConnectionPoint
+sal_uInt32 SAL_CALL
+SwVbaApplicationOutgoingConnectionPoint::Advise( const uno::Reference< XSink >& Sink )
+{
+    return mpApp->AddSink(Sink);
+}
+
+void SAL_CALL
+SwVbaApplicationOutgoingConnectionPoint::Unadvise( sal_uInt32 Cookie )
+{
+    mpApp->RemoveSink( Cookie );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
