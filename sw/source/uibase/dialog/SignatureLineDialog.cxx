@@ -37,16 +37,18 @@ using namespace css::view;
 using namespace css::drawing;
 using namespace css::graphic;
 
-SignatureLineDialog::SignatureLineDialog(vcl::Window* pParent, SwView& rView)
-    : SvxStandardDialog(pParent, "SignatureLineDialog", "modules/swriter/ui/signatureline.ui")
+SignatureLineDialog::SignatureLineDialog(weld::Window* pParent, SwView& rView)
+    : GenericDialogController(pParent, "modules/swriter/ui/signatureline.ui", "SignatureLineDialog")
+    , m_xEditName(m_xBuilder->weld_entry("edit_name"))
+    , m_xEditTitle(m_xBuilder->weld_entry("edit_title"))
+    , m_xEditEmail(m_xBuilder->weld_entry("edit_email"))
+    , m_xEditInstructions(m_xBuilder->weld_text_view("edit_instructions"))
+    , m_xCheckboxCanAddComments(m_xBuilder->weld_check_button("checkbox_can_add_comments"))
+    , m_xCheckboxShowSignDate(m_xBuilder->weld_check_button("checkbox_show_sign_date"))
     , mrView(rView)
 {
-    get(m_pEditName, "edit_name");
-    get(m_pEditTitle, "edit_title");
-    get(m_pEditEmail, "edit_email");
-    get(m_pEditInstructions, "edit_instructions");
-    get(m_pCheckboxCanAddComments, "checkbox_can_add_comments");
-    get(m_pCheckboxShowSignDate, "checkbox_show_sign_date");
+    m_xEditInstructions->set_size_request(m_xEditInstructions->get_approximate_char_width() * 24,
+                                          m_xEditInstructions->get_text_height() * 5);
 
     // No signature line selected - start with empty dialog and generate a new one
     if (!rView.isSignatureLineSelected())
@@ -60,39 +62,33 @@ SignatureLineDialog::SignatureLineDialog(vcl::Window* pParent, SwView& rView)
     xProps->getPropertyValue("SignatureLineId") >>= m_aSignatureLineId;
     OUString aSuggestedSignerName;
     xProps->getPropertyValue("SignatureLineSuggestedSignerName") >>= aSuggestedSignerName;
-    m_pEditName->SetText(aSuggestedSignerName);
+    m_xEditName->set_text(aSuggestedSignerName);
     OUString aSuggestedSignerTitle;
     xProps->getPropertyValue("SignatureLineSuggestedSignerTitle") >>= aSuggestedSignerTitle;
-    m_pEditTitle->SetText(aSuggestedSignerTitle);
+    m_xEditTitle->set_text(aSuggestedSignerTitle);
     OUString aSuggestedSignerEmail;
     xProps->getPropertyValue("SignatureLineSuggestedSignerEmail") >>= aSuggestedSignerEmail;
-    m_pEditEmail->SetText(aSuggestedSignerEmail);
+    m_xEditEmail->set_text(aSuggestedSignerEmail);
     OUString aSigningInstructions;
     xProps->getPropertyValue("SignatureLineSigningInstructions") >>= aSigningInstructions;
-    m_pEditInstructions->SetText(aSigningInstructions);
+    m_xEditInstructions->set_text(aSigningInstructions);
     bool bCanAddComments = false;
     xProps->getPropertyValue("SignatureLineShowSignDate") >>= bCanAddComments;
-    m_pCheckboxCanAddComments->Check(bCanAddComments);
+    m_xCheckboxCanAddComments->set_active(bCanAddComments);
     bool bShowSignDate = false;
     xProps->getPropertyValue("SignatureLineShowSignDate") >>= bShowSignDate;
-    m_pCheckboxShowSignDate->Check(bShowSignDate);
+    m_xCheckboxShowSignDate->set_active(bShowSignDate);
 
     // Mark this as existing shape
     m_xExistingShapeProperties = xProps;
 }
 
-SignatureLineDialog::~SignatureLineDialog() { disposeOnce(); }
-
-void SignatureLineDialog::dispose()
+short SignatureLineDialog::execute()
 {
-    m_pEditName.clear();
-    m_pEditTitle.clear();
-    m_pEditEmail.clear();
-    m_pEditInstructions.clear();
-    m_pCheckboxCanAddComments.clear();
-    m_pCheckboxShowSignDate.clear();
-
-    SvxStandardDialog::dispose();
+    short nRet = run();
+    if (nRet == RET_OK)
+        Apply();
+    return nRet;
 }
 
 void SignatureLineDialog::Apply()
@@ -100,12 +96,12 @@ void SignatureLineDialog::Apply()
     if (m_aSignatureLineId.isEmpty())
         m_aSignatureLineId
             = OStringToOUString(comphelper::xml::generateGUIDString(), RTL_TEXTENCODING_ASCII_US);
-    OUString aSignerName(m_pEditName->GetText());
-    OUString aSignerTitle(m_pEditTitle->GetText());
-    OUString aSignerEmail(m_pEditEmail->GetText());
-    OUString aSigningInstructions(m_pEditInstructions->GetText());
-    bool bCanAddComments(m_pCheckboxCanAddComments->IsChecked());
-    bool bShowSignDate(m_pCheckboxShowSignDate->IsChecked());
+    OUString aSignerName(m_xEditName->get_text());
+    OUString aSignerTitle(m_xEditTitle->get_text());
+    OUString aSignerEmail(m_xEditEmail->get_text());
+    OUString aSigningInstructions(m_xEditInstructions->get_text());
+    bool bCanAddComments(m_xCheckboxCanAddComments->get_active());
+    bool bShowSignDate(m_xCheckboxShowSignDate->get_active());
 
     // Read svg and replace placeholder texts
     OUString aSvgImage(getSignatureImage());

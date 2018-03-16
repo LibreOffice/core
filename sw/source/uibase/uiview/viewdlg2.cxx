@@ -44,7 +44,7 @@
 
 void SwView::ExecDlgExt(SfxRequest const &rReq)
 {
-    vcl::Window *pMDI = &GetViewFrame()->GetWindow();
+    vcl::Window& rMDI = GetViewFrame()->GetWindow();
 
     switch ( rReq.GetSlot() )
     {
@@ -53,7 +53,7 @@ void SwView::ExecDlgExt(SfxRequest const &rReq)
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
             assert(pFact && "SwAbstractDialogFactory fail!");
 
-            ScopedVclPtr<VclAbstractDialog> pDialog(pFact->CreateSwCaptionDialog( pMDI, *this ));
+            ScopedVclPtr<VclAbstractDialog> pDialog(pFact->CreateSwCaptionDialog( &rMDI, *this ));
             assert(pDialog && "Dialog creation failed!");
             if ( pDialog )
             {
@@ -67,7 +67,7 @@ void SwView::ExecDlgExt(SfxRequest const &rReq)
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
             assert(pFact && "SwAbstractDialogFactory fail!");
 
-            ScopedVclPtr<VclAbstractDialog> pDialog(pFact->CreateSignatureLineDialog(pMDI, *this));
+            ScopedVclPtr<VclAbstractDialog> pDialog(pFact->CreateSignatureLineDialog(rMDI.GetFrameWeld(), *this));
             assert(pDialog && "Dialog creation failed!");
             if (pDialog)
                 pDialog->Execute();
@@ -78,7 +78,7 @@ void SwView::ExecDlgExt(SfxRequest const &rReq)
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
             assert(pFact && "Dialog creation failed!");
             ScopedVclPtr<AbstractInsFootNoteDlg> pDlg(pFact->CreateInsFootNoteDlg(
-                pMDI, *m_pWrtShell, true));
+                &rMDI, *m_pWrtShell, true));
             assert(pDlg && "Dialog creation failed!");
 
             pDlg->SetHelpId(GetStaticInterface()->GetSlot(FN_EDIT_FOOTNOTE)->GetCommand());
