@@ -21,6 +21,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmapex.hxx>
+#include <vcl/BitmapTools.hxx>
 #include <tools/stream.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <vcl/dibtools.hxx>
@@ -74,22 +75,8 @@ Sequence< sal_Int8 > SAL_CALL ImageWrapper::getDIB()
 Sequence< sal_Int8 > SAL_CALL ImageWrapper::getMaskDIB()
 {
     SolarMutexGuard aGuard;
-    BitmapEx    aBmpEx( m_aImage.GetBitmapEx() );
 
-    if ( aBmpEx.IsAlpha() )
-    {
-        SvMemoryStream aMem;
-        WriteDIB(aBmpEx.GetAlpha().GetBitmap(), aMem, false, true);
-        return Sequence< sal_Int8 >( static_cast<sal_Int8 const *>(aMem.GetData()), aMem.Tell() );
-    }
-    else if ( aBmpEx.IsTransparent() )
-    {
-        SvMemoryStream aMem;
-        WriteDIB(aBmpEx.GetMask(), aMem, false, true);
-        return Sequence< sal_Int8 >( static_cast<sal_Int8 const *>(aMem.GetData()), aMem.Tell() );
-    }
-
-    return Sequence< sal_Int8 >();
+    return vcl::bitmap::GetMaskDIB(m_aImage.GetBitmapEx());
 }
 
 // XUnoTunnel

@@ -22,6 +22,7 @@
 #include <com/sun/star/rendering/XIntegerReadOnlyBitmap.hpp>
 
 #include <unotools/resmgr.hxx>
+#include <vcl/dibtools.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/salbtype.hxx>
@@ -626,6 +627,25 @@ void DrawAndClipBitmap(const Point& rPos, const Size& rSize, const BitmapEx& rBi
         // this allows the drawn mask being processed with AntiAliasing (AAed)
         aBmpEx = BitmapEx(rBitmap.GetBitmap(), aVDevMask);
     }
+}
+
+
+css::uno::Sequence< sal_Int8 > GetMaskDIB(BitmapEx const & aBmpEx)
+{
+    if ( aBmpEx.IsAlpha() )
+    {
+        SvMemoryStream aMem;
+        WriteDIB(aBmpEx.GetAlpha().GetBitmap(), aMem, false, true);
+        return css::uno::Sequence< sal_Int8 >( static_cast<sal_Int8 const *>(aMem.GetData()), aMem.Tell() );
+    }
+    else if ( aBmpEx.IsTransparent() )
+    {
+        SvMemoryStream aMem;
+        WriteDIB(aBmpEx.GetMask(), aMem, false, true);
+        return css::uno::Sequence< sal_Int8 >( static_cast<sal_Int8 const *>(aMem.GetData()), aMem.Tell() );
+    }
+
+    return css::uno::Sequence< sal_Int8 >();
 }
 
 }} // end vcl::bitmap
