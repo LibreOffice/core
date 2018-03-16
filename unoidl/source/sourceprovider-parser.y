@@ -1699,7 +1699,7 @@ interfaceAttribute:
           error(
               @2, yyscanner,
               ("interface attribute can only be flagged as [attribute,"
-               " optional]"));
+               " bound, readonly]"));
           YYERROR;
       }
       switch (t.type) {
