@@ -80,11 +80,11 @@ class SvxTextEditSourceImpl : public SfxListener, public SfxBroadcaster, public 
 private:
     oslInterlockedCount maRefCount;
 
-    SdrObject*                      mpObject;
+    SdrObject*                      mpObject;           // TTTT could be reference (?)
     SdrText*                        mpText;
     SdrView*                        mpView;
     VclPtr<const vcl::Window>       mpWindow;
-    SdrModel*                       mpModel;
+    SdrModel*                       mpModel;            // TTTT probably not needed -> use SdrModel from SdrObject (?)
     SdrOutliner*                    mpOutliner;
     SvxOutlinerForwarder*           mpTextForwarder;
     SvxDrawOutlinerViewForwarder*   mpViewForwarder;    // if non-NULL, use GetViewModeTextForwarder text forwarder
@@ -146,8 +146,6 @@ public:
     DECL_LINK( NotifyHdl, EENotify&, void );
 
     virtual void ObjectInDestruction(const SdrObject& rObject) override;
-
-    void ChangeModel( SdrModel* pNewModel );
 
     void                    UpdateOutliner();
 };
@@ -263,51 +261,6 @@ void SvxTextEditSourceImpl::release()
     if( ! osl_atomic_decrement( &maRefCount ) )
         delete this;
 }
-
-void SvxTextEditSourceImpl::ChangeModel( SdrModel* pNewModel )
-{
-    if( mpModel != pNewModel )
-    {
-        if( mpModel )
-            EndListening( *mpModel );
-
-        if( mpOutliner )
-        {
-            if( mpModel )
-                mpModel->disposeOutliner( mpOutliner );
-            else
-                delete mpOutliner;
-            mpOutliner = nullptr;
-        }
-
-        if( mpView )
-        {
-            EndListening( *mpView );
-            mpView = nullptr;
-        }
-
-        mpWindow = nullptr;
-        m_xLinguServiceManager.clear();
-
-        mpModel = pNewModel;
-
-        if( mpTextForwarder )
-        {
-            delete mpTextForwarder;
-            mpTextForwarder = nullptr;
-        }
-
-        if( mpViewForwarder )
-        {
-            delete mpViewForwarder;
-            mpViewForwarder = nullptr;
-        }
-
-        if( mpModel )
-            StartListening( *mpModel );
-    }
-}
-
 
 void SvxTextEditSourceImpl::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
 {
@@ -1100,11 +1053,6 @@ void SvxTextEditSource::removeRange( SvxUnoTextRangeBase* pOldRange )
 const SvxUnoTextRangeBaseList& SvxTextEditSource::getRanges() const
 {
     return mpImpl->getRanges();
-}
-
-void SvxTextEditSource::ChangeModel( SdrModel* pNewModel )
-{
-    mpImpl->ChangeModel( pNewModel );
 }
 
 void SvxTextEditSource::UpdateOutliner()

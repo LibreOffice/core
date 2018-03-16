@@ -845,21 +845,6 @@ SvxShape* CreateSvxShapeByTypeAndInventor(sal_uInt16 nType, SdrInventor nInvento
     return SvxDrawPage::CreateShapeByTypeAndInventor( nType, nInventor, nullptr, nullptr, referer );
 }
 
-void SvxDrawPage::ChangeModel( SdrModel* pNewModel )
-{
-    if( pNewModel != mpModel )
-    {
-        mpModel = pNewModel;
-
-        if( mpView )
-        {
-            delete mpView;
-            mpView = new SdrView(*mpModel);
-            mpView->SetDesignMode();
-        }
-    }
-}
-
 /** returns a StarOffice API wrapper for the given SdrPage */
 uno::Reference< drawing::XDrawPage > GetXDrawPageForSdrPage( SdrPage* pPage ) throw ()
 {
