@@ -1501,12 +1501,18 @@ WW8_CP WW8ScannerBase::WW8Fc2Cp( WW8_FC nFcPos ) const
                     SAL_WARN("sw.ww8", "broken offset, ignoring");
                     return WW8_CP_MAX;
                 }
-                if (nFcPos < nFcStart + nLen)
+                WW8_FC nFcEnd;
+                if (o3tl::checked_add(nFcStart, nLen, nFcEnd))
+                {
+                    SAL_WARN("sw.ww8", "broken offset, ignoring");
+                    return WW8_CP_MAX;
+                }
+                if (nFcPos < nFcEnd)
                 {
                     m_pPieceIter->SetIdx( nOldPos );
                     return nTempCp;
                 }
-                else if (nFcPos == nFcStart + nLen)
+                else if (nFcPos == nFcEnd)
                 {
                     //Keep this cp as its on a piece boundary because we might
                     //need it if tests fail
