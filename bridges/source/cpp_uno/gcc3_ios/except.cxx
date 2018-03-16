@@ -338,6 +338,9 @@ void raiseException( uno_Any * pUnoExc, uno_Mapping * pUno2Cpp )
     }
     }
 
+    // void __cxa_throw(void* thrown_exception,
+    //                  struct std::type_info * tinfo,
+    //                  void (*dest)(void*));
     __cxxabiv1::__cxa_throw( pCppExc, rtti, deleteException );
 }
 
