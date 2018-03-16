@@ -84,10 +84,8 @@ void ScDocument::TransferDrawPage(ScDocument* pSrcDoc, SCTAB nSrcPos, SCTAB nDes
             SdrObject* pOldObject = aIter.Next();
             while (pOldObject)
             {
-                // TTTT clone to target SdrModel
+                // Clone to target SdrModel
                 SdrObject* pNewObject = pOldObject->Clone(mpDrawLayer);
-                // SdrObject* pNewObject = pOldObject->Clone( pNewPage, mpDrawLayer );
-                // pNewObject->SetModel(mpDrawLayer);
                 pNewObject->SetPage(pNewPage);
                 pNewObject->NbcMove(Size(0,0));
                 pNewPage->InsertObject( pNewObject );

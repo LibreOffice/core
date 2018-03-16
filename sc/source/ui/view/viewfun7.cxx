@@ -153,7 +153,7 @@ void ScViewFunc::PasteDraw( const Point& rLogicPos, SdrModel* pModel,
                 const SdrMark* pM=aMark.GetMark(nm);
                 const SdrObject* pObj=pM->GetMarkedSdrObj();
 
-                // TTTT directly clone to taget  SdrModel
+                // Directly Clone to taget  SdrModel
                 SdrObject* pNewObj(pObj->Clone(pDrawModel));
 
                 if (pNewObj!=nullptr)
@@ -194,7 +194,8 @@ void ScViewFunc::PasteDraw( const Point& rLogicPos, SdrModel* pModel,
     else
     {
         bPasteIsMove = false;       // no internal move happened
-        // TTTT hide all non-direct SdrView constr to disable construct in-between classes
+        // TTTT hide all non-direct SdrView constr to disable construct
+        // in-between classes in one of the next steps (!)
         SdrView aView(*pModel);     // #i71529# never create a base class of SdrView directly!
         SdrPageView* pPv = aView.ShowSdrPage(aView.GetModel()->GetPage(0));
         aView.MarkAllObj(pPv);

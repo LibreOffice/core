@@ -91,7 +91,6 @@ public:
 private:
     E3dObjList &operator=(const E3dObjList& rSrcList) = delete;
     E3dObjList(const E3dObjList& rSrcList) = delete;
-// TTTT    SVX_DLLPUBLIC E3dObjList(const E3dObjList& rSrcList);
 };
 
 /*************************************************************************

@@ -521,7 +521,7 @@ public:
                 continue;
 
             SdrRectObj* pObject = new SdrRectObj(
-                *m_rDrawViewShell.GetDoc(), // TTTT
+                *m_rDrawViewShell.GetDoc(), // TTTT shbe ref
                 OBJ_TEXT);
             pObject->SetMergedItem(makeSdrTextAutoGrowWidthItem(true));
             pObject->SetOutlinerParaObject(pOutliner->CreateParaObject());

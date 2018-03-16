@@ -1048,29 +1048,6 @@ void SdrGrafObj::SetPage( SdrPage* pNewPage )
         ImpRegisterLink();
 }
 
-// TTTT needed?
-// void SdrGrafObj::SetModel( SdrModel* pNewModel )
-// {
-//     bool bChg = pNewModel != pModel;
-
-//     if( bChg )
-//     {
-//         if( mpGraphicObject->HasUserData() )
-//         {
-//             ForceSwapIn();
-//         }
-
-//         if( pGraphicLink != nullptr )
-//             ImpDeregisterLink();
-//     }
-
-//     // realize model
-//     SdrRectObj::SetModel(pNewModel);
-
-//     if (bChg && !aFileName.isEmpty())
-//         ImpRegisterLink();
-// }
-
 void SdrGrafObj::StartAnimation()
 {
     SetGrafAnimationAllowed(true);

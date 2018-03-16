@@ -406,11 +406,11 @@ Cell::Cell(
     ,mnColSpan( 1 )
     ,mxTable( rTableObj.getTable() )
 {
-    // TTTT Caution: SetModel() indirectly did a very necessary thing here,
+    // Caution: Old SetModel() indirectly did a very necessary thing here,
     // it created a valid SvxTextEditSource which is needed to bind contained
     // Text to the UNO API and thus to save/load and more. Added version without
     // model change.
-    // Also done was (for reference):
+    // Also done was (not needed, for reference):
     //         SetStyleSheet( nullptr, true );
     //         ForceOutlinerParaObject( OutlinerMode::TextObject );
     if(nullptr == GetEditSource())
@@ -449,37 +449,6 @@ void Cell::dispose()
     }
     SetOutlinerParaObject( nullptr );
 }
-
-// TTTT should not be needed - not intended to change. Maybe parts needed at construction time
-// void Cell::SetModel(SdrModel* pNewModel)
-// {
-//     SvxTextEditSource* pTextEditSource = dynamic_cast< SvxTextEditSource* >( GetEditSource() );
-//     if( (GetModel() != pNewModel) || ( pNewModel && !pTextEditSource) )
-//     {
-//         if( mpProperties )
-//         {
-//             SfxItemPool* pItemPool = mpProperties->GetObjectItemSet().GetPool();
-
-//             // test for correct pool in ItemSet; move to new pool if necessary
-//             if( pNewModel && pItemPool && pItemPool != &pNewModel->GetItemPool())
-//                 mpProperties->MoveToItemPool(pItemPool, &pNewModel->GetItemPool(), pNewModel);
-//         }
-
-//         if( pTextEditSource )
-//         {
-//             pTextEditSource->ChangeModel( pNewModel );
-//         }
-//         else
-//         {
-//             SetEditSource( new SvxTextEditSource( &GetObject(), this ) );
-//         }
-
-//         SetStyleSheet( nullptr, true );
-//         SdrText::SetModel( pNewModel );
-//         ForceOutlinerParaObject( OutlinerMode::TextObject );
-//     }
-// }
-
 
 void Cell::merge( sal_Int32 nColumnSpan, sal_Int32 nRowSpan )
 {
@@ -553,6 +522,7 @@ void Cell::replaceContentAndFormating( const CellRef& xSourceCell )
         if(&rSourceTableObj.getSdrModelFromSdrObject() != &rTableObj.getSdrModelFromSdrObject())
         {
             // TTTT should not happen - if, then a clone may be needed
+            // Maybe add a assertion here later
             SetStyleSheet( nullptr, true );
         }
     }
@@ -580,6 +550,7 @@ void Cell::copyFormatFrom( const CellRef& xSourceCell )
         if(&rSourceTableObj.getSdrModelFromSdrObject() != &rTableObj.getSdrModelFromSdrObject())
         {
             // TTTT should not happen - if, then a clone may be needed
+            // Maybe add a assertion here later
             SetStyleSheet( nullptr, true );
         }
 

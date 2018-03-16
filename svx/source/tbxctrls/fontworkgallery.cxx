@@ -197,7 +197,7 @@ void FontWorkGalleryDialog::insertSelectedFontwork()
             SdrPage* pPage = pModel->GetPage(0);
             if( pPage && pPage->GetObjCount() )
             {
-                // TTTT clone directly to target SdrModel
+                // Clone directly to target SdrModel
                 SdrObject* pNewObject(pPage->GetObj(0)->Clone(mpDestModel));
 
                 // center shape on current view

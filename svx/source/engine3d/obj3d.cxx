@@ -86,12 +86,6 @@ E3dObjList::E3dObjList()
 {
 }
 
-// TTTT
-// E3dObjList::E3dObjList(const E3dObjList& rSrcList)
-// :   SdrObjList(rSrcList.getSdrModelFromSdrPage())
-// {
-// }
-
 E3dObjList* E3dObjList::CloneSdrObjList(SdrModel* pNewModel) const
 {
     E3dObjList* pObjList = new E3dObjList();

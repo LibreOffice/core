@@ -54,17 +54,12 @@ FmFormPage::FmFormPage(FmFormModel& rModel, bool bMasterPage)
 {
 }
 
-// TTTT
-// FmFormPage::FmFormPage(const FmFormPage& rPage)
-// :   SdrPage(rPage)
-//     ,m_pImpl(new FmFormPageImpl( *this ) )
-// {
-// }
-
 void FmFormPage::lateInit(const FmFormPage& rPage)
 {
+    // call parent
     SdrPage::lateInit( rPage );
 
+    // copy local variables (former stuff from copy constructor)
     m_pImpl->initFrom( rPage.GetImpl() );
     m_sPageName = rPage.m_sPageName;
 }
@@ -73,46 +68,6 @@ void FmFormPage::lateInit(const FmFormPage& rPage)
 FmFormPage::~FmFormPage()
 {
 }
-
-// TTTT
-// void FmFormPage::SetModel(SdrModel* pNewModel)
-// {
-//     /* #35055# */
-//     // we want to call the super's "SetModel" method even if the model is the
-//     // same, in case code somewhere in the system depends on it.  But our code
-//     // doesn't, so get the old model to do a check.
-//     SdrModel *pOldModel = GetModel();
-
-//     SdrPage::SetModel( pNewModel );
-
-//     /* #35055# */
-//     if ( ( pOldModel != pNewModel ) && m_pImpl )
-//     {
-//         try
-//         {
-//             Reference< css::form::XForms > xForms( m_pImpl->getForms( false ) );
-//             if ( xForms.is() )
-//             {
-//                 // we want to keep the current collection, just reset the model
-//                 // with which it's associated.
-//                 FmFormModel* pDrawModel = static_cast<FmFormModel*>( GetModel() );
-//                 SfxObjectShell* pObjShell = pDrawModel->GetObjectShell();
-//                 if ( pObjShell )
-//                     xForms->setParent( pObjShell->GetModel() );
-//             }
-//         }
-//         catch( css::uno::Exception const& )
-//         {
-//             OSL_FAIL( "UNO Exception caught resetting model for m_pImpl (FmFormPageImpl) in FmFormPage::SetModel" );
-//         }
-//     }
-// }
-
-// TTTT
-// SdrPage* FmFormPage::Clone() const
-// {
-//     return Clone(nullptr);
-// }
 
 SdrPage* FmFormPage::Clone(SdrModel* pNewModel) const
 {
