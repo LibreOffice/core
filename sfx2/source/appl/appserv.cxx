@@ -1616,7 +1616,8 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
                 if ( pSet && pSet->GetItemState( pSetPool->GetWhich( SID_AUTO_CORRECT_DLG ), false, &pItem ) == SfxItemState::SET )
                     aSet.Put( *pItem );
 
-                ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateAutoCorrTabDialog( &aSet ));
+                const SfxViewFrame* pViewFrame = SfxViewFrame::Current();
+                ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateAutoCorrTabDialog(pViewFrame? &pViewFrame->GetWindow(): nullptr, &aSet));
                 pDlg->Execute();
             }
 
