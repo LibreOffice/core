@@ -26,6 +26,7 @@ class SwAsciiFilterDlg;
 class Dialog;
 class SwBreakDlg;
 class SwSortDlg;
+class SignatureLineDialog;
 class SfxTabDialog;
 class SwConvertTableDlg;
 class SwInsertDBColAutoPilot;
@@ -108,6 +109,18 @@ protected:
     std::unique_ptr<SwSortDlg> m_xDlg;
 public:
     explicit AbstractSwSortDlg_Impl(SwSortDlg* p)
+        : m_xDlg(p)
+    {
+    }
+    virtual short Execute() override;
+};
+
+class AbstractSignatureLineDialog_Impl : public VclAbstractDialog
+{
+protected:
+    std::unique_ptr<SignatureLineDialog> m_xDlg;
+public:
+    explicit AbstractSignatureLineDialog_Impl(SignatureLineDialog* p)
         : m_xDlg(p)
     {
     }
@@ -438,8 +451,7 @@ public:
         SwCharDlgMode nDialogMode, const OUString* pFormatStr = nullptr) override;
     virtual VclPtr<AbstractSwConvertTableDlg> CreateSwConvertTableDlg(SwView& rView, bool bToTable) override;
     virtual VclPtr<VclAbstractDialog> CreateSwCaptionDialog ( vcl::Window *pParent, SwView &rV) override;
-    virtual VclPtr<VclAbstractDialog> CreateSignatureLineDialog(vcl::Window* pParent,
-                                                                SwView& rView) override;
+    virtual VclPtr<VclAbstractDialog> CreateSignatureLineDialog(weld::Window* pParent, SwView& rView) override;
 
     virtual VclPtr<AbstractSwInsertDBColAutoPilot> CreateSwInsertDBColAutoPilot(SwView& rView,
         css::uno::Reference< css::sdbc::XDataSource> rxSource,

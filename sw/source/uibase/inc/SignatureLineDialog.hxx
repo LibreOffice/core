@@ -11,36 +11,33 @@
 
 #include <svx/stddlg.hxx>
 #include <swdllapi.h>
-#include <vcl/button.hxx>
-#include <vcl/edit.hxx>
+#include <vcl/weld.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 
 class SwView;
 
-class SW_DLLPUBLIC SignatureLineDialog : public SvxStandardDialog
+class SW_DLLPUBLIC SignatureLineDialog : public weld::GenericDialogController
 {
 public:
-    SignatureLineDialog(vcl::Window* pParent, SwView& rView);
-    virtual ~SignatureLineDialog() override;
-    virtual void dispose() override;
+    SignatureLineDialog(weld::Window* pParent, SwView& rView);
 
-    virtual void Apply() override;
+    short execute();
 
 private:
-    OUString getSignatureImage();
-
+    std::unique_ptr<weld::Entry> m_xEditName;
+    std::unique_ptr<weld::Entry> m_xEditTitle;
+    std::unique_ptr<weld::Entry> m_xEditEmail;
+    std::unique_ptr<weld::TextView> m_xEditInstructions;
+    std::unique_ptr<weld::CheckButton> m_xCheckboxCanAddComments;
+    std::unique_ptr<weld::CheckButton> m_xCheckboxShowSignDate;
     SwView& mrView;
-
     css::uno::Reference<css::beans::XPropertySet> m_xExistingShapeProperties;
     OUString m_aSignatureLineId;
-    VclPtr<Edit> m_pEditName;
-    VclPtr<Edit> m_pEditTitle;
-    VclPtr<Edit> m_pEditEmail;
-    VclPtr<Edit> m_pEditInstructions;
-    VclPtr<CheckBox> m_pCheckboxCanAddComments;
-    VclPtr<CheckBox> m_pCheckboxShowSignDate;
+
+    OUString getSignatureImage();
+    void Apply();
 };
 
 #endif
