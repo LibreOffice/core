@@ -769,6 +769,27 @@ sal_uInt8 BitmapEx::GetTransparency(sal_Int32 nX, sal_Int32 nY) const
     return nTransparency;
 }
 
+
+Color BitmapEx::GetPixelColor(sal_Int32 nX, sal_Int32 nY) const
+{
+        Bitmap aAlpha( GetAlpha().GetBitmap() );
+
+        Bitmap aTestBitmap(maBitmap);
+        Bitmap::ScopedReadAccess pReadAccess( aTestBitmap );
+        assert( pReadAccess );
+
+        Color aColor = pReadAccess->GetColor( nY, nX ).GetColor();
+
+        if (!aAlpha.IsEmpty())
+        {
+            Bitmap::ScopedReadAccess pAlphaReadAccess( aAlpha.AcquireReadAccess(), aAlpha );
+            aColor.SetTransparency( pAlphaReadAccess->GetPixel( nY, nX ).GetIndex() );
+        }
+        else
+            aColor.SetTransparency(255);
+        return aColor;
+}
+
 // Shift alpha transparent pixels between cppcanvas/ implementations
 // and vcl in a generally grotesque and under-performing fashion
 bool BitmapEx::Create( const css::uno::Reference< css::rendering::XBitmapCanvas > &xBitmapCanvas,
