@@ -199,6 +199,8 @@ _privateSnippetExecutor:
     .cfi_offset w29, -16
 
     // _privateSnippetExecutor is jumped to from codeSnippet_*
+    stp    x29, x30, [sp, #-0x10]!
+    mov    x29, sp
 
     // push all GP, FP/SIMD registers to the stack
     stp     x6, x7, [sp, #-16]!
@@ -220,9 +222,12 @@ _privateSnippetExecutor:
     mov     x2, sp
 
     bl      _cpp_vtable_call
-    ldp     x8, lr, [sp, #0]
+//    ldp     x8, lr, [sp, #0]
+//    add     sp, sp, #144
+//    ret     lr
     add     sp, sp, #144
-    ret     lr
+    ldp    x29, x30, [sp], #0x10
+    ret
     .cfi_endproc
 
 // vim:set shiftwidth=4 softtabstop=4 expandtab:

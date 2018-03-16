@@ -418,8 +418,8 @@ namespace
  * (called by asm snippets)
  */
 
-extern "C" sal_Int64 cpp_vtable_call( sal_Int32 func, sal_Int32 offset,
-                                      void **pCallStack )
+extern "C" void cpp_vtable_call( sal_Int32 func, sal_Int32 offset,
+                                 void **pCallStack )
 {
     sal_Int64 nRegReturn;
     typelib_TypeClass aType = cpp_mediate( func, offset, pCallStack, &nRegReturn );
@@ -444,8 +444,6 @@ extern "C" sal_Int64 cpp_vtable_call( sal_Int32 func, sal_Int32 offset,
         default:
             break;
     }
-
-    return nRegReturn;
 }
 
 namespace
