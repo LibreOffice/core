@@ -1937,10 +1937,7 @@ bool SVGFilter::implCreateObjectsFromShape( const Reference< css::drawing::XDraw
 
         if( pObj )
         {
-            Graphic aGraphic(
-                SdrExchangeView::GetObjGraphic(
-                    &pObj->getSdrModelFromSdrObject(),
-                    pObj));
+            const Graphic aGraphic(SdrExchangeView::GetObjGraphic(*pObj));
 
             if( aGraphic.GetType() != GraphicType::NONE )
             {
