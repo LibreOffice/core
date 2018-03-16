@@ -448,6 +448,7 @@ public:
 
     void                AdjustTransparency( sal_uInt8 cTrans );
 
+    void                CombineMaskOr(Color maskColor, sal_uInt8 nTol);
 public:
 
     SAL_DLLPRIVATE std::shared_ptr<ImpBitmap> const & ImplGetBitmapImpBitmap() const { return maBitmap.ImplGetImpBitmap(); }
