@@ -292,12 +292,12 @@ namespace
         if ( !_rxManager.is() )
             return;
 
-        ::std::vector< Sequence< ScriptEventDescriptor > >::const_iterator aLoop = _rSave.begin();
-        ::std::vector< Sequence< ScriptEventDescriptor > >::const_iterator aEnd = _rSave.end();
-        for ( sal_Int32 i=0; aLoop != aEnd; ++aLoop, ++i )
+        sal_Int32 i=0;
+        for (auto const& elem : _rSave)
         {
             _rxManager->revokeScriptEvents( i );
-            _rxManager->registerScriptEvents( i, *aLoop );
+            _rxManager->registerScriptEvents(i, elem);
+            ++i;
         }
     }
 }
@@ -427,13 +427,12 @@ void SAL_CALL OInterfaceContainer::readEvents(const Reference<XObjectInputStream
     // Read Attachment
     if ( m_xEventAttacher.is() )
     {
-        OInterfaceArray::const_iterator aAttach = m_aItems.begin();
-        OInterfaceArray::const_iterator aAttachEnd = m_aItems.end();
-        for ( sal_Int32 i=0; aAttach != aAttachEnd; ++aAttach, ++i )
+        sal_Int32 i=0;
+        for (auto const& item : m_aItems)
         {
-            Reference< XInterface > xAsIFace( *aAttach, UNO_QUERY );    // important to normalize this ....
+            Reference< XInterface > xAsIFace( item, UNO_QUERY );    // important to normalize this ....
             Reference< XPropertySet > xAsSet( xAsIFace, UNO_QUERY );
-            m_xEventAttacher->attach( i, xAsIFace, makeAny( xAsSet ) );
+            m_xEventAttacher->attach( i++, xAsIFace, makeAny( xAsSet ) );
         }
     }
 }
