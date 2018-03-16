@@ -777,13 +777,8 @@ void AnimationWindow::AddObj (::sd::View& rView )
 
                 for( size_t nObject = 0; nObject < pObjList->GetObjCount(); ++nObject )
                 {
-                    SdrObject* pSnapShot = pObjList->GetObj( nObject );
-
-                    BitmapEx *const pBitmapEx = new BitmapEx(
-                        SdrExchangeView::GetObjGraphic(
-                            &pSnapShot->getSdrModelFromSdrObject(),
-                            pSnapShot).GetBitmapEx() );
-
+                    SdrObject* pSnapShot(pObjList->GetObj(nObject));
+                    BitmapEx *const pBitmapEx = new BitmapEx(SdrExchangeView::GetObjGraphic(*pSnapShot).GetBitmapEx());
                     ::tools::Time* pTime = new ::tools::Time( m_pTimeField->GetTime() );
                     size_t nIndex = m_nCurrentFrame + 1;
                     m_FrameList.insert(
@@ -831,15 +826,9 @@ void AnimationWindow::AddObj (::sd::View& rView )
                 for( size_t nObject= 0; nObject < nMarkCount; ++nObject )
                 {
                     // Clone
-                    SdrObject* pObject = rMarkList.GetMark( nObject )->GetMarkedSdrObj();
-
-                    BitmapEx *const pBitmapEx = new BitmapEx(
-                        SdrExchangeView::GetObjGraphic(
-                            &pObject->getSdrModelFromSdrObject(),
-                            pObject).GetBitmapEx() );
-
+                    SdrObject* pObject(rMarkList.GetMark(nObject)->GetMarkedSdrObj());
+                    BitmapEx *const pBitmapEx = new BitmapEx(SdrExchangeView::GetObjGraphic(*pObject).GetBitmapEx());
                     ::tools::Time* pTime = new ::tools::Time( m_pTimeField->GetTime() );
-
                     size_t nIndex = m_nCurrentFrame + 1;
                     m_FrameList.insert(
                         m_FrameList.begin() + nIndex,

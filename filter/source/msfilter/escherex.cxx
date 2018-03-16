@@ -3774,11 +3774,8 @@ bool EscherPropertyContainer::CreateBlipPropertiesforOLEControl(const uno::Refer
     SdrObject* pShape = GetSdrObjectFromXShape( rXShape );
     if ( pShape )
     {
-        Graphic aGraphic(
-            SdrExchangeView::GetObjGraphic( // TTTT GetObjGraphic may use a SdrObject&
-                &pShape->getSdrModelFromSdrObject(),
-                pShape));
-        GraphicObject aGraphicObject(aGraphic);
+        const Graphic aGraphic(SdrExchangeView::GetObjGraphic(*pShape));
+        const GraphicObject aGraphicObject(aGraphic);
 
         if (!aGraphicObject.GetUniqueID().isEmpty())
         {
