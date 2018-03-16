@@ -1072,23 +1072,24 @@ namespace frm
         assert(s_aEmptyValue.isNull());
         m_nNULLPos = -1;
         m_aConvertedBoundValues.resize(m_aBoundValues.size());
-        ValueList::const_iterator src = m_aBoundValues.begin();
-        const ValueList::const_iterator end = m_aBoundValues.end();
         ValueList::iterator dst = m_aConvertedBoundValues.begin();
-        for (; src != end; ++src, ++dst )
+        sal_Int16 nPos = 0;
+        for (auto const& src : m_aBoundValues)
         {
             if(m_nNULLPos == -1 &&
                !isRequired()    &&
-               (*src == s_aEmptyStringValue || *src == s_aEmptyValue || src->isNull()) )
+               (src == s_aEmptyStringValue || src == s_aEmptyValue || src.isNull()) )
             {
-                m_nNULLPos = src - m_aBoundValues.begin();
+                m_nNULLPos = nPos;
                 dst->setNull();
             }
             else
             {
-                *dst = *src;
+                *dst = src;
             }
             dst->setTypeKind(nFieldType);
+            ++dst;
+            ++nPos;
         }
         m_nConvertedBoundValuesType = nFieldType;
         OSL_ENSURE(dst == m_aConvertedBoundValues.end(), "OListBoxModel::convertBoundValues expected to have overwritten all of m_aConvertedBoundValues, but did not.");
@@ -1118,12 +1119,11 @@ namespace frm
         const std::vector< OUString >& aStringItems( getStringItemList() );
         ValueList aValues( aStringItems.size() );
         ValueList::iterator dst = aValues.begin();
-        std::vector< OUString >::const_iterator src(aStringItems.begin());
-        std::vector< OUString >::const_iterator const end = aStringItems.end();
-        for (; src != end; ++src, ++dst )
+        for (auto const& src : aStringItems)
         {
-            *dst = *src;
+            *dst = src;
             dst->setTypeKind(nFieldType);
+            ++dst;
         }
         m_nConvertedBoundValuesType = nFieldType;
         OSL_ENSURE(dst == aValues.end(), "OListBoxModel::impl_getValues expected to have set all of aValues, but did not.");

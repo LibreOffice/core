@@ -482,15 +482,12 @@ Sequence<sal_Int8> ODatabaseForm::GetDataMultiPartEncoded(const Reference<XContr
 
 
     // Aggregate Liste to OUString
-    for (   HtmlSuccessfulObjList::iterator pSuccObj = aSuccObjList.begin();
-            pSuccObj < aSuccObjList.end();
-            ++pSuccObj
-        )
+    for (auto const& succObj : aSuccObjList)
     {
-        if( pSuccObj->nRepresentation == SUCCESSFUL_REPRESENT_TEXT )
-            InsertTextPart( aParent, pSuccObj->aName, pSuccObj->aValue );
-        else if( pSuccObj->nRepresentation == SUCCESSFUL_REPRESENT_FILE )
-            InsertFilePart( aParent, pSuccObj->aName, pSuccObj->aValue );
+        if( succObj.nRepresentation == SUCCESSFUL_REPRESENT_TEXT )
+            InsertTextPart( aParent, succObj.aName, succObj.aValue );
+        else if( succObj.nRepresentation == SUCCESSFUL_REPRESENT_FILE )
+            InsertFilePart( aParent, succObj.aName, succObj.aValue );
     }
 
 

@@ -293,13 +293,10 @@ namespace frm
 
             if ( pRichTextControl )
             {
-                for (   AttributeDispatchers::iterator aDisposeLoop = m_aDispatchers.begin();
-                        aDisposeLoop != m_aDispatchers.end();
-                        ++aDisposeLoop
-                    )
+                for (auto const& dispatcher : m_aDispatchers)
                 {
-                    pRichTextControl->disableAttributeNotification( aDisposeLoop->first );
-                    aDisposeLoop->second->dispose();
+                    pRichTextControl->disableAttributeNotification(dispatcher.first);
+                    dispatcher.second->dispose();
                 }
             }
 
@@ -382,12 +379,9 @@ namespace frm
             pControl->SetReadOnly( bReadOnly );
 
             // update the dispatchers
-            for (   AttributeDispatchers::iterator aDispatcherLoop = m_aDispatchers.begin();
-                    aDispatcherLoop != m_aDispatchers.end();
-                    ++aDispatcherLoop
-                )
+            for (auto const& dispatcher : m_aDispatchers)
             {
-                aDispatcherLoop->second->invalidate();
+                dispatcher.second->invalidate();
             }
         }
         else if ( _rPropertyName == PROPERTY_HIDEINACTIVESELECTION )
