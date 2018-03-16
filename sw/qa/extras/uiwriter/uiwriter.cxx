@@ -305,6 +305,7 @@ public:
     void testTdf108048();
     void testTdf115132();
     void testXDrawPagesSupplier();
+    void testTdf116403();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest);
     CPPUNIT_TEST(testReplaceForward);
@@ -489,6 +490,7 @@ public:
     CPPUNIT_TEST(testTdf108048);
     CPPUNIT_TEST(testTdf115132);
     CPPUNIT_TEST(testXDrawPagesSupplier);
+    CPPUNIT_TEST(testTdf116403);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -5938,6 +5940,30 @@ void SwUiWriterTest::testXDrawPagesSupplier()
     uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
     CPPUNIT_ASSERT_EQUAL_MESSAGE("The DrawPage accessed using XDrawPages must be the same as using XDrawPageSupplier",
         xDrawPage.get(), xDrawPageFromXDrawPages.get());
+}
+
+void SwUiWriterTest::testTdf116403()
+{
+    createDoc("tdf116403-considerborders.odt");
+    // Check that before ToX update, the tab stop position is the old one
+    uno::Reference<text::XTextRange> xParagraph = getParagraph(2, "1\t1");
+    auto aTabs = getProperty<uno::Sequence<style::TabStop>>(xParagraph, "ParaTabStops");
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), aTabs.getLength());
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(17000), aTabs[0].Position);
+
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+    SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
+    const SwTOXBase* pTOX = pWrtShell->GetTOX(0);
+    CPPUNIT_ASSERT(pTOX);
+    pWrtShell->UpdateTableOf(*pTOX);
+
+    xParagraph = getParagraph(2, "1\t1");
+    aTabs = getProperty<uno::Sequence<style::TabStop>>(xParagraph, "ParaTabStops");
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), aTabs.getLength());
+    // This was still 17000, refreshing ToX didn't take borders spacings and widths into account
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Page borders must be considered for right-aligned tabstop",
+        static_cast<sal_Int32>(17000 - 2 * 500 - 2 * 1), aTabs[0].Position);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest);
