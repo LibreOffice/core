@@ -652,10 +652,10 @@ sub create_simple_package
         my $target = $onelink->{'Target'};
         my $destination = $subfolderdir . $installer::globals::separator . $onelink->{'destination'};
 
-        my $localcall = "ln -sf \'$target\' \'$destination\' \>\/dev\/null 2\>\&1";
-        system($localcall);
+        my @localcall = ('ln', '-sf', $target, $destination);
+        system(@localcall) == 0 or die "system @localcall failed: $?";
 
-        $infoline = "Creating Unix link: \"ln -sf $target $destination\"\n";
+        $infoline = "Creating Unix link: \"@localcall\"\n";
         push(@installer::globals::logfileinfo, $infoline);
     }
 
