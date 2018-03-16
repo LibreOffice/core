@@ -416,7 +416,7 @@ void SvpSalFrame::UpdateSettings( AllSettings& rSettings )
 
     if (comphelper::LibreOfficeKit::isActive()) // TODO: remove this.
     {
-        vcl::Font aStdFont( FAMILY_SWISS, Size( 0, 14 ) );
+        vcl::Font aStdFont( FAMILY_SWISS, Size( 0, 12 ) );
         aStdFont.SetCharSet( osl_getThreadTextEncoding() );
         aStdFont.SetWeight( WEIGHT_NORMAL );
         aStdFont.SetFamilyName( "Liberation Sans" );
