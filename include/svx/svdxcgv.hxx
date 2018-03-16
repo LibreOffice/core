@@ -74,20 +74,16 @@ public:
 
     Graphic         GetAllMarkedGraphic() const;
 
-    /** Generate a Graphic for the given draw object in the given model
+    /** Generate a Graphic for the given draw object
 
-        @param pModel
-        Must not be NULL. Denotes the draw model the object is a part
-        of.
-
-        @param pObj
+        @param rSdrObject
         The object (can also be a group object) to retrieve a Graphic
-        for. Must not be NULL.
+        for.
 
         @return a graphical representation of the given object, as it
         appears on screen (e.g. with rotation, if any, applied).
      */
-    static Graphic  GetObjGraphic( const SdrModel* pModel, const SdrObject* pObj );
+    static Graphic GetObjGraphic(const SdrObject& rSdrObject);
 
     // The new Draw objects are marked for all paste methods.
     // If bAddMark is true, the new Draw objects are added to an existing

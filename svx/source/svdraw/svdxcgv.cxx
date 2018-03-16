@@ -585,7 +585,7 @@ Graphic SdrExchangeView::GetAllMarkedGraphic() const
     if( AreObjectsMarked() )
     {
         if( ( 1 == GetMarkedObjectCount() ) && GetSdrMarkByIndex( 0 ) )
-            aRet = SdrExchangeView::GetObjGraphic( mpModel, GetMarkedObjectByIndex( 0 ) );
+            aRet = SdrExchangeView::GetObjGraphic(*GetMarkedObjectByIndex(0));
         else
             aRet = GetMarkedObjMetaFile();
     }
@@ -594,68 +594,68 @@ Graphic SdrExchangeView::GetAllMarkedGraphic() const
 }
 
 
-Graphic SdrExchangeView::GetObjGraphic( const SdrModel* pModel, const SdrObject* pObj )
+Graphic SdrExchangeView::GetObjGraphic(const SdrObject& rSdrObject)
 {
     Graphic aRet;
 
-    if( pModel && pObj )
+    // try to get a graphic from the object first
+    const SdrGrafObj* pSdrGrafObj(dynamic_cast< const SdrGrafObj* >(&rSdrObject));
+    const SdrOle2Obj* pSdrOle2Obj(dynamic_cast< const SdrOle2Obj* >(&rSdrObject));
+
+    if(pSdrGrafObj)
     {
-        // try to get a graphic from the object first
-        const SdrGrafObj* pSdrGrafObj = dynamic_cast< const SdrGrafObj* >(pObj);
-        const SdrOle2Obj* pSdrOle2Obj = dynamic_cast< const SdrOle2Obj* >(pObj);
-
-        if(pSdrGrafObj)
+        if(pSdrGrafObj->isEmbeddedVectorGraphicData())
         {
-            if(pSdrGrafObj->isEmbeddedVectorGraphicData())
-            {
-                // get Metafile for Svg content
-                aRet = pSdrGrafObj->getMetafileFromEmbeddedVectorGraphicData();
-            }
-            else
-            {
-                // Make behaviour coherent with metafile
-                // recording below (which of course also takes
-                // view-transformed objects)
-                aRet = pSdrGrafObj->GetTransformedGraphic();
-            }
+            // get Metafile for Svg content
+            aRet = pSdrGrafObj->getMetafileFromEmbeddedVectorGraphicData();
         }
-        else if(pSdrOle2Obj)
+        else
         {
-            if ( pSdrOle2Obj->GetGraphic() )
-                aRet = *pSdrOle2Obj->GetGraphic();
+            // Make behaviour coherent with metafile
+            // recording below (which of course also takes
+            // view-transformed objects)
+            aRet = pSdrGrafObj->GetTransformedGraphic();
         }
-
-        // if graphic could not be retrieved => go the hard way and create a MetaFile
-        if( ( GraphicType::NONE == aRet.GetType() ) || ( GraphicType::Default == aRet.GetType() ) )
+    }
+    else if(pSdrOle2Obj)
+    {
+        if(pSdrOle2Obj->GetGraphic())
         {
-            ScopedVclPtrInstance< VirtualDevice > pOut;
-            GDIMetaFile     aMtf;
-            const tools::Rectangle aBoundRect( pObj->GetCurrentBoundRect() );
-            const MapMode   aMap( pModel->GetScaleUnit(),
-                                  Point(),
-                                  pModel->GetScaleFraction(),
-                                  pModel->GetScaleFraction() );
-
-            pOut->EnableOutput( false );
-            pOut->SetMapMode( aMap );
-            aMtf.Record( pOut );
-            pObj->SingleObjectPainter( *pOut.get() );
-            aMtf.Stop();
-            aMtf.WindStart();
-
-            // #i99268# replace the original offset from using XOutDev's SetOffset
-            // NOT (as tried with #i92760#) with another MapMode which gets recorded
-            // by the Metafile itself (what always leads to problems), but by
-            // moving the result directly
-            aMtf.Move(-aBoundRect.Left(), -aBoundRect.Top());
-
-            aMtf.SetPrefMapMode( aMap );
-            aMtf.SetPrefSize( aBoundRect.GetSize() );
-
-            if( aMtf.GetActionSize() )
-                aRet = aMtf;
+            aRet = *pSdrOle2Obj->GetGraphic();
         }
-     }
+    }
+
+    // if graphic could not be retrieved => go the hard way and create a MetaFile
+    if((GraphicType::NONE == aRet.GetType()) || (GraphicType::Default == aRet.GetType()))
+    {
+        ScopedVclPtrInstance< VirtualDevice > pOut;
+        GDIMetaFile aMtf;
+        const tools::Rectangle aBoundRect(rSdrObject.GetCurrentBoundRect());
+        const MapMode aMap(rSdrObject.getSdrModelFromSdrObject().GetScaleUnit(),
+            Point(),
+            rSdrObject.getSdrModelFromSdrObject().GetScaleFraction(),
+            rSdrObject.getSdrModelFromSdrObject().GetScaleFraction());
+
+        pOut->EnableOutput(false);
+        pOut->SetMapMode(aMap);
+        aMtf.Record(pOut);
+        rSdrObject.SingleObjectPainter(*pOut.get());
+        aMtf.Stop();
+        aMtf.WindStart();
+
+        // #i99268# replace the original offset from using XOutDev's SetOffset
+        // NOT (as tried with #i92760#) with another MapMode which gets recorded
+        // by the Metafile itself (what always leads to problems), but by
+        // moving the result directly
+        aMtf.Move(-aBoundRect.Left(), -aBoundRect.Top());
+        aMtf.SetPrefMapMode(aMap);
+        aMtf.SetPrefSize(aBoundRect.GetSize());
+
+        if(aMtf.GetActionSize())
+        {
+            aRet = aMtf;
+        }
+    }
 
      return aRet;
 }
@@ -736,7 +736,7 @@ SdrModel* SdrExchangeView::GetMarkedObjModel() const
                 // virtual connection to referenced page gets lost in new model
                 pNewObj = new SdrGrafObj(
                     *pNeuMod,
-                    GetObjGraphic(mpModel, pObj),
+                    GetObjGraphic(*pObj),
                     pObj->GetLogicRect());
                 pNewObj->SetPage( pNeuPag );
             }

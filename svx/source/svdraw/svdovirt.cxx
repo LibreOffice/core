@@ -277,9 +277,7 @@ SdrObject* SdrVirtObj::getFullDragClone() const
     SdrObject& rReferencedObject = const_cast<SdrVirtObj*>(this)->ReferencedObj();
     return new SdrGrafObj(
         getSdrModelFromSdrObject(),
-        SdrDragView::GetObjGraphic(
-            &getSdrModelFromSdrObject(),
-            &rReferencedObject),
+        SdrDragView::GetObjGraphic(rReferencedObject),
         GetLogicRect());
 }
 
