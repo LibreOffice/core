@@ -138,7 +138,10 @@
 #include <vcl/waitobj.hxx>
 #include <vcl/window.hxx>
 #include <vcl/wrkwin.hxx>
+#include <vcl/weld.hxx>
 #include <Annotation.hxx>
+#include <vcl/GraphicNativeTransform.hxx>
+#include <vcl/GraphicNativeMetadata.hxx>
 #include <CustomAnimationEffect.hxx>
 #include <CustomAnimationPreset.hxx>
 #include <EffectMigration.hxx>

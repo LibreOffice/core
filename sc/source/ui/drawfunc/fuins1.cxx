@@ -31,7 +31,9 @@
 #include <svtools/miscopt.hxx>
 #include <avmedia/mediawindow.hxx>
 #include <vcl/svapp.hxx>
-
+#include <vcl/weld.hxx>
+#include <vcl/GraphicNativeTransform.hxx>
+#include <vcl/GraphicNativeMetadata.hxx>
 #include <fuinsert.hxx>
 #include <tabvwsh.hxx>
 #include <drwlayer.hxx>
@@ -100,6 +102,21 @@ static void lcl_InsertGraphic( const Graphic& rGraphic,
                         ScTabViewShell* pViewSh, const vcl::Window* pWindow, SdrView* pView,
                         ScAnchorType aAnchorType = SCA_CELL )
 {
+    Graphic& rGraphic1 = const_cast<Graphic &>(rGraphic);
+    GraphicNativeMetadata aMetadata;
+    if ( aMetadata.read(rGraphic1) )
+    {
+        const sal_uInt16 aRotation = aMetadata.getRotation();
+        if (aRotation != 0)
+        {
+            std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(nullptr, VclMessageType::Question,VclButtonsType::YesNo,ScResId(STR_QUERYROTATION)));
+            if (xQueryBox->run() == RET_YES)
+            {
+                GraphicNativeTransform aTransform( rGraphic1 );
+                aTransform.rotate( aRotation );
+            }
+        }
+    }
     ScDrawView* pDrawView = pViewSh->GetScDrawView();
 
     // #i123922# check if an existing object is selected; if yes, evtl. replace
@@ -117,7 +134,7 @@ static void lcl_InsertGraphic( const Graphic& rGraphic,
 
             SdrObject* pResult = pDrawView->ApplyGraphicToObject(
                 *pPickObj,
-                rGraphic,
+                rGraphic1,
                 aBeginUndo,
                 bAsLink ? rFileName : OUString(),
                 bAsLink ? rFilterName : OUString());
@@ -160,7 +177,7 @@ static void lcl_InsertGraphic( const Graphic& rGraphic,
 
     tools::Rectangle aRect ( aInsertPos, aLogicSize );
 
-    SdrGrafObj* pObj = new SdrGrafObj( rGraphic, aRect );
+    SdrGrafObj* pObj = new SdrGrafObj( rGraphic1, aRect );
 
     // calling SetGraphicLink here doesn't work
 
