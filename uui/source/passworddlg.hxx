@@ -21,34 +21,27 @@
 #define INCLUDED_UUI_SOURCE_PASSWORDDLG_HXX
 
 #include <com/sun/star/task/PasswordRequestMode.hpp>
-#include <vcl/button.hxx>
-#include <vcl/dialog.hxx>
-#include <vcl/edit.hxx>
-#include <vcl/group.hxx>
-#include <vcl/fixed.hxx>
+#include <vcl/weld.hxx>
 
-
-class PasswordDialog : public ModalDialog
+class PasswordDialog : public weld::GenericDialogController
 {
-    VclPtr<FixedText>      m_pFTPassword;
-    VclPtr<Edit>           m_pEDPassword;
-    VclPtr<FixedText>      m_pFTConfirmPassword;
-    VclPtr<Edit>           m_pEDConfirmPassword;
-    VclPtr<OKButton>       m_pOKBtn;
+    std::unique_ptr<weld::Label> m_xFTPassword;
+    std::unique_ptr<weld::Entry> m_xEDPassword;
+    std::unique_ptr<weld::Label> m_xFTConfirmPassword;
+    std::unique_ptr<weld::Entry> m_xEDConfirmPassword;
+    std::unique_ptr<weld::Button> m_xOKBtn;
     sal_uInt16      nMinLen;
     OUString        aPasswdMismatch;
 
 
-    DECL_LINK(OKHdl_Impl, Button*, void);
+    DECL_LINK(OKHdl_Impl, weld::Button&, void);
 
 public:
-    PasswordDialog(vcl::Window* pParent, css::task::PasswordRequestMode nDlgMode, const std::locale& rLocale, const OUString& aDocURL,
+    PasswordDialog(weld::Window* pParent, css::task::PasswordRequestMode nDlgMode, const std::locale& rLocale, const OUString& aDocURL,
                    bool bOpenToModify, bool bIsSimplePasswordRequest);
-    virtual ~PasswordDialog() override;
-    virtual void dispose() override;
 
     void            SetMinLen( sal_uInt16 nMin ) { nMinLen = nMin; }
-    OUString        GetPassword() const { return m_pEDPassword->GetText(); }
+    OUString        GetPassword() const { return m_xEDPassword->get_text(); }
 
 private:
     css::task::PasswordRequestMode     nDialogMode;
