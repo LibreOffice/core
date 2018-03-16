@@ -75,8 +75,6 @@ public:
                                        const tools::Rectangle* pWorkRect );
 };
 
-SVX_DLLPUBLIC bool DitherBitmap( Bitmap& rBitmap );
-
 #endif // INCLUDED_SVX_XOUTBMP_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

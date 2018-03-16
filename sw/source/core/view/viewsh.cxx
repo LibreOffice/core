@@ -1223,19 +1223,19 @@ bool SwViewShell::SmoothScroll( long lXDiff, long lYDiff, const tools::Rectangle
 #if !defined(MACOSX) && !defined(ANDROID) && !defined(IOS)
     // #i98766# - disable smooth scrolling for Mac
 
-    const sal_uLong nColCnt = mpOut->GetColorCount();
+    const sal_uLong nBitCnt = mpOut->GetBitCount();
     long lMult = 1, lMax = LONG_MAX;
-    if ( nColCnt == 65536 )
+    if ( nBitCnt == 16 )
     {
         lMax = 7000;
         lMult = 2;
     }
-    if ( nColCnt == 16777216 )
+    if ( nBitCnt == 24 )
     {
         lMax = 5000;
         lMult = 6;
     }
-    else if ( nColCnt == 1 )
+    else if ( nBitCnt == 1 )
     {
         lMax = 3000;
         lMult = 12;
