@@ -48,6 +48,7 @@
 #include <tools/diagnose_ex.h>
 #include <vcl/bitmapex.hxx>
 #include <vcl/bitmapaccess.hxx>
+#include <vcl/BitmapTools.hxx>
 #include <vcl/canvastools.hxx>
 #include <vcl/virdev.hxx>
 
@@ -328,71 +329,6 @@ namespace cairocanvas
         return ::BitmapEx();
     }
 
-    static sal_uInt8 lcl_GetColor(BitmapColor const& rColor)
-    {
-        sal_uInt8 nTemp(0);
-        if (rColor.IsIndex())
-        {
-            nTemp = rColor.GetIndex();
-        }
-        else
-        {
-            nTemp = rColor.GetBlue();
-            // greyscale expected here, or what would non-grey colors mean?
-            assert(rColor.GetRed() == nTemp && rColor.GetGreen() == nTemp);
-        }
-        return nTemp;
-    }
-
-    static bool readAlpha( BitmapReadAccess const * pAlphaReadAcc, long nY, const long nWidth, unsigned char* data, long nOff )
-    {
-        bool bIsAlpha = false;
-        long nX;
-        int nAlpha;
-        Scanline pReadScan;
-
-        nOff += 3;
-
-        switch( pAlphaReadAcc->GetScanlineFormat() )
-        {
-            case ScanlineFormat::N8BitTcMask:
-                pReadScan = pAlphaReadAcc->GetScanline( nY );
-                for( nX = 0; nX < nWidth; nX++ )
-                {
-                    nAlpha = data[ nOff ] = 255 - ( *pReadScan++ );
-                    if( nAlpha != 255 )
-                        bIsAlpha = true;
-                    nOff += 4;
-                }
-                break;
-            case ScanlineFormat::N8BitPal:
-                pReadScan = pAlphaReadAcc->GetScanline( nY );
-                for( nX = 0; nX < nWidth; nX++ )
-                {
-                    BitmapColor const& rColor(
-                        pAlphaReadAcc->GetPaletteColor(*pReadScan));
-                    pReadScan++;
-                    nAlpha = data[ nOff ] = 255 - lcl_GetColor(rColor);
-                    if( nAlpha != 255 )
-                        bIsAlpha = true;
-                    nOff += 4;
-                }
-                break;
-            default:
-                SAL_INFO( "canvas.cairo", "fallback to GetColor for alpha - slow, format: " << static_cast<int>(pAlphaReadAcc->GetScanlineFormat()) );
-                for( nX = 0; nX < nWidth; nX++ )
-                {
-                    nAlpha = data[ nOff ] = 255 - pAlphaReadAcc->GetColor( nY, nX ).GetIndex();
-                    if( nAlpha != 255 )
-                        bIsAlpha = true;
-                    nOff += 4;
-                }
-        }
-
-        return bIsAlpha;
-    }
-
-
     /** surfaceFromXBitmap Create a surface from XBitmap
      * @param xBitmap bitmap image that will be used for the surface
      * @param rDevice reference to the device into which we want to draw
@@ -427,232 +363,20 @@ namespace cairocanvas
 
             if( !pSurface )
             {
-                AlphaMask aAlpha = aBmpEx.GetAlpha();
+                vcl::bitmap::CanvasCairoExtractBitmapData(aBmpEx, aBitmap, data, bHasAlpha);
 
-                ::BitmapReadAccess* pBitmapReadAcc = aBitmap.AcquireReadAccess();
-                ::BitmapReadAccess* pAlphaReadAcc = nullptr;
-                const long      nWidth = pBitmapReadAcc->Width();
-                const long      nHeight = pBitmapReadAcc->Height();
-                long nX, nY;
-                bool bIsAlpha = false;
-
-                if( aBmpEx.IsTransparent() || aBmpEx.IsAlpha() )
-                    pAlphaReadAcc = aAlpha.AcquireReadAccess();
-
-                data = static_cast<unsigned char*>(malloc( nWidth*nHeight*4 ));
-
-                long nOff = 0;
-                ::Color aColor;
-                unsigned int nAlpha = 255;
-
-                for( nY = 0; nY < nHeight; nY++ )
-                {
-                    ::Scanline pReadScan;
-
-                    switch( pBitmapReadAcc->GetScanlineFormat() )
-                    {
-                    case ScanlineFormat::N8BitPal:
-                        pReadScan = pBitmapReadAcc->GetScanline( nY );
-                        if( pAlphaReadAcc )
-                            if( readAlpha( pAlphaReadAcc, nY, nWidth, data, nOff ) )
-                                bIsAlpha = true;
-
-                        for( nX = 0; nX < nWidth; nX++ )
-                        {
-#ifdef OSL_BIGENDIAN
-                            if( pAlphaReadAcc )
-                                nAlpha = data[ nOff++ ];
-                            else
-                                nAlpha = data[ nOff++ ] = 255;
-#else
-                            if( pAlphaReadAcc )
-                                nAlpha = data[ nOff + 3 ];
-                            else
-                                nAlpha = data[ nOff + 3 ] = 255;
-#endif
-                            aColor = pBitmapReadAcc->GetPaletteColor(*pReadScan++).GetColor();
-
-#ifdef OSL_BIGENDIAN
-                            data[ nOff++ ] = sal::static_int_cast<unsigned char>(( nAlpha*( aColor.GetRed() ) )/255 );
-                            data[ nOff++ ] = sal::static_int_cast<unsigned char>(( nAlpha*( aColor.GetGreen() ) )/255 );
-                            data[ nOff++ ] = sal::static_int_cast<unsigned char>(( nAlpha*( aColor.GetBlue() ) )/255 );
-#else
-                            data[ nOff++ ] = sal::static_int_cast<unsigned char>(( nAlpha*( aColor.GetBlue() ) )/255 );
-                            data[ nOff++ ] = sal::static_int_cast<unsigned char>(( nAlpha*( aColor.GetGreen() ) )/255 );
-                            data[ nOff++ ] = sal::static_int_cast<unsigned char>(( nAlpha*( aColor.GetRed() ) )/255 );
-                            nOff++;
-#endif
-                        }
-                        break;
-                    case ScanlineFormat::N24BitTcBgr:
-                        pReadScan = pBitmapReadAcc->GetScanline( nY );
-                        if( pAlphaReadAcc )
-                            if( readAlpha( pAlphaReadAcc, nY, nWidth, data, nOff ) )
-                                bIsAlpha = true;
-
-                        for( nX = 0; nX < nWidth; nX++ )
-                        {
-#ifdef OSL_BIGENDIAN
-                            if( pAlphaReadAcc )
-                                nAlpha = data[ nOff ];
-                            else
-                                nAlpha = data[ nOff ] = 255;
-                            data[ nOff + 3 ] = sal::static_int_cast<unsigned char>(( nAlpha*( *pReadScan++ ) )/255 );
-                            data[ nOff + 2 ] = sal::static_int_cast<unsigned char>(( nAlpha*( *pReadScan++ ) )/255 );
-                            data[ nOff + 1 ] = sal::static_int_cast<unsigned char>(( nAlpha*( *pReadScan++ ) )/255 );
-                            nOff += 4;
-#else
-                            if( pAlphaReadAcc )
-                                nAlpha = data[ nOff + 3 ];
-                            else
-                                nAlpha = data[ nOff + 3 ] = 255;
-                            data[ nOff++ ] = sal::static_int_cast<unsigned char>(( nAlpha*( *pReadScan++ ) )/255 );
-                            data[ nOff++ ] = sal::static_int_cast<unsigned char>(( nAlpha*( *pReadScan++ ) )/255 );
-                            data[ nOff++ ] = sal::static_int_cast<unsigned char>(( nAlpha*( *pReadScan++ ) )/255 );
-                            nOff++;
-#endif
-                        }
-                        break;
-                    case ScanlineFormat::N24BitTcRgb:
-                        pReadScan = pBitmapReadAcc->GetScanline( nY );
-                        if( pAlphaReadAcc )
-                            if( readAlpha( pAlphaReadAcc, nY, nWidth, data, nOff ) )
-                                bIsAlpha = true;
-
-                        for( nX = 0; nX < nWidth; nX++ )
-                        {
-#ifdef OSL_BIGENDIAN
-                            if( pAlphaReadAcc )
-                                nAlpha = data[ nOff++ ];
-                            else
-                                nAlpha = data[ nOff++ ] = 255;
-                            data[ nOff++ ] = sal::static_int_cast<unsigned char>(( nAlpha*( *pReadScan++ ) )/255 );
-                            data[ nOff++ ] = sal::static_int_cast<unsigned char>(( nAlpha*( *pReadScan++ ) )/255 );
-                            data[ nOff++ ] = sal::static_int_cast<unsigned char>(( nAlpha*( *pReadScan++ ) )/255 );
-#else
-                            if( pAlphaReadAcc )
-                                nAlpha = data[ nOff + 3 ];
-                            else
-                                nAlpha = data[ nOff + 3 ] = 255;
-                            data[ nOff++ ] = sal::static_int_cast<unsigned char>(( nAlpha*( pReadScan[ 2 ] ) )/255 );
-                            data[ nOff++ ] = sal::static_int_cast<unsigned char>(( nAlpha*( pReadScan[ 1 ] ) )/255 );
-                            data[ nOff++ ] = sal::static_int_cast<unsigned char>(( nAlpha*( pReadScan[ 0 ] ) )/255 );
-                            pReadScan += 3;
-                            nOff++;
-#endif
-                        }
-                        break;
-                    case ScanlineFormat::N32BitTcBgra:
-                        pReadScan = pBitmapReadAcc->GetScanline( nY );
-                        if( pAlphaReadAcc )
-                            if( readAlpha( pAlphaReadAcc, nY, nWidth, data, nOff ) )
-                                bIsAlpha = true;
-
-                        for( nX = 0; nX < nWidth; nX++ )
-                        {
-#ifdef OSL_BIGENDIAN
-                            if( pAlphaReadAcc )
-                                nAlpha = data[ nOff++ ];
-                            else
-                                nAlpha = data[ nOff++ ] = 255;
-                            data[ nOff++ ] = sal::static_int_cast<unsigned char>(( nAlpha*( pReadScan[ 2 ] ) )/255 );
-                            data[ nOff++ ] = sal::static_int_cast<unsigned char>(( nAlpha*( pReadScan[ 1 ] ) )/255 );
-                            data[ nOff++ ] = sal::static_int_cast<unsigned char>(( nAlpha*( pReadScan[ 0 ] ) )/255 );
-                            pReadScan += 4;
-#else
-                            if( pAlphaReadAcc )
-                                nAlpha = data[ nOff + 3 ];
-                            else
-                                nAlpha = data[ nOff + 3 ] = 255;
-                            data[ nOff++ ] = sal::static_int_cast<unsigned char>(( nAlpha*( *pReadScan++ ) )/255 );
-                            data[ nOff++ ] = sal::static_int_cast<unsigned char>(( nAlpha*( *pReadScan++ ) )/255 );
-                            data[ nOff++ ] = sal::static_int_cast<unsigned char>(( nAlpha*( *pReadScan++ ) )/255 );
-                            pReadScan++;
-                            nOff++;
-#endif
-                        }
-                        break;
-                    case ScanlineFormat::N32BitTcRgba:
-                        pReadScan = pBitmapReadAcc->GetScanline( nY );
-                        if( pAlphaReadAcc )
-                            if( readAlpha( pAlphaReadAcc, nY, nWidth, data, nOff ) )
-                                bIsAlpha = true;
-
-                        for( nX = 0; nX < nWidth; nX++ )
-                        {
-#ifdef OSL_BIGENDIAN
-                            if( pAlphaReadAcc )
-                                nAlpha = data[ nOff ++ ];
-                            else
-                                nAlpha = data[ nOff ++ ] = 255;
-                            data[ nOff++ ] = sal::static_int_cast<unsigned char>(( nAlpha*( *pReadScan++ ) )/255 );
-                            data[ nOff++ ] = sal::static_int_cast<unsigned char>(( nAlpha*( *pReadScan++ ) )/255 );
-                            data[ nOff++ ] = sal::static_int_cast<unsigned char>(( nAlpha*( *pReadScan++ ) )/255 );
-                            pReadScan++;
-#else
-                            if( pAlphaReadAcc )
-                                nAlpha = data[ nOff + 3 ];
-                            else
-                                nAlpha = data[ nOff + 3 ] = 255;
-                            data[ nOff++ ] = sal::static_int_cast<unsigned char>(( nAlpha*( pReadScan[ 2 ] ) )/255 );
-                            data[ nOff++ ] = sal::static_int_cast<unsigned char>(( nAlpha*( pReadScan[ 1 ] ) )/255 );
-                            data[ nOff++ ] = sal::static_int_cast<unsigned char>(( nAlpha*( pReadScan[ 0 ] ) )/255 );
-                            pReadScan += 4;
-                            nOff++;
-#endif
-                        }
-                        break;
-                    default:
-                        SAL_INFO( "canvas.cairo", "fallback to GetColor - slow, format: " << static_cast<int>(pBitmapReadAcc->GetScanlineFormat()) );
-
-                        if( pAlphaReadAcc )
-                            if( readAlpha( pAlphaReadAcc, nY, nWidth, data, nOff ) )
-                                bIsAlpha = true;
-
-                        for( nX = 0; nX < nWidth; nX++ )
-                        {
-                            aColor = pBitmapReadAcc->GetColor( nY, nX ).GetColor();
-
-                            // cairo need premultiplied color values
-                            // TODO(rodo) handle endianness
-#ifdef OSL_BIGENDIAN
-                            if( pAlphaReadAcc )
-                                nAlpha = data[ nOff++ ];
-                            else
-                                nAlpha = data[ nOff++ ] = 255;
-                            data[ nOff++ ] = sal::static_int_cast<unsigned char>(( nAlpha*aColor.GetRed() )/255 );
-                            data[ nOff++ ] = sal::static_int_cast<unsigned char>(( nAlpha*aColor.GetGreen() )/255 );
-                            data[ nOff++ ] = sal::static_int_cast<unsigned char>(( nAlpha*aColor.GetBlue() )/255 );
-#else
-                            if( pAlphaReadAcc )
-                                nAlpha = data[ nOff + 3 ];
-                            else
-                                nAlpha = data[ nOff + 3 ] = 255;
-                            data[ nOff++ ] = sal::static_int_cast<unsigned char>(( nAlpha*aColor.GetBlue() )/255 );
-                            data[ nOff++ ] = sal::static_int_cast<unsigned char>(( nAlpha*aColor.GetGreen() )/255 );
-                            data[ nOff++ ] = sal::static_int_cast<unsigned char>(( nAlpha*aColor.GetRed() )/255 );
-                            nOff ++;
-#endif
-                        }
-                    }
-                }
-
-                ::Bitmap::ReleaseAccess( pBitmapReadAcc );
-                if( pAlphaReadAcc )
-                    aAlpha.ReleaseAccess( pAlphaReadAcc );
-
+                const long nWidth = aBmpEx.GetPrefSize().Width();
+                const long nHeight = aBmpEx.GetPrefSize().Height();
                 SurfaceSharedPtr pImageSurface = rSurfaceProvider->getOutputDevice()->CreateSurface(
                     CairoSurfaceSharedPtr(
                         cairo_image_surface_create_for_data(
                             data,
-                            bIsAlpha ? CAIRO_FORMAT_ARGB32 : CAIRO_FORMAT_RGB24,
+                            bHasAlpha ? CAIRO_FORMAT_ARGB32 : CAIRO_FORMAT_RGB24,
                             nWidth, nHeight, nWidth*4 ),
                         &cairo_surface_destroy) );
                 pSurface = pImageSurface;
 
-                bHasAlpha = bIsAlpha;
-
-                SAL_INFO( "canvas.cairo","image: " << nWidth << " x " << nHeight << " alpha: " << bIsAlpha << " alphaRead " << std::hex << pAlphaReadAcc);
+                SAL_INFO( "canvas.cairo","image: " << nWidth << " x " << nHeight << " alpha: " << bHasAlpha);
             }
         }
 
