@@ -746,7 +746,7 @@ EnhancedCustomShape2d::EnhancedCustomShape2d(SdrObjCustomShape& rSdrObjCustomSha
     if ( pAny )
         *pAny >>= bFlipV;
 
-    nRotateAngle = static_cast<sal_Int32>(static_cast< SdrObjCustomShape& >(mrSdrObjCustomShape).GetObjectRotation() * 100.0);
+    nRotateAngle = static_cast<sal_Int32>(mrSdrObjCustomShape.GetObjectRotation() * 100.0);
 
     /*const sal_Int32* pDefData =*/ ApplyShapeAttributes( rGeometryItem );
     SetPathSize();
