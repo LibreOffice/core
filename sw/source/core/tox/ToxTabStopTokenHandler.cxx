@@ -93,6 +93,11 @@ DefaultToxTabStopTokenHandler::CalculatePageMarginFromPageDescription(const SwTe
     const SwFrameFormat& rPgDscFormat = pPageDesc->GetMaster();
     long result = rPgDscFormat.GetFrameSize().GetWidth() - rPgDscFormat.GetLRSpace().GetLeft()
             - rPgDscFormat.GetLRSpace().GetRight();
+    // Also consider borders
+    const SvxBoxItem& rBox = rPgDscFormat.GetBox();
+    for (SvxBoxItemLine eLine : { SvxBoxItemLine::LEFT, SvxBoxItemLine::RIGHT })
+        if (const editeng::SvxBorderLine* pBorder = rBox.GetLine(eLine))
+            result -= pBorder->GetWidth() + rBox.GetDistance(eLine);
     return result;
 }
 
