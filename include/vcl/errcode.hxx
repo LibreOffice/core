@@ -64,11 +64,17 @@ enum class WarningFlag { Yes };
 class SAL_WARN_UNUSED ErrCode final
 {
 public:
-    explicit constexpr ErrCode(WarningFlag, ErrCodeArea nArea, ErrCodeClass nClass, sal_uInt16 nCode)
-        : m_value(ERRCODE_WARNING_MASK | (sal_uInt32(nArea) << ERRCODE_AREA_SHIFT) | (sal_uInt32(nClass) << ERRCODE_CLASS_SHIFT) | nCode) {}
-    explicit constexpr ErrCode(ErrCodeArea nArea, ErrCodeClass nClass, sal_uInt16 nCode)
-        : m_value((sal_uInt32(nArea) << ERRCODE_AREA_SHIFT) | (sal_uInt32(nClass) << ERRCODE_CLASS_SHIFT) | nCode) {}
-    explicit constexpr ErrCode(ErrCodeArea nArea, sal_uInt32 nClassAndCode)
+    explicit ErrCode(WarningFlag, ErrCodeArea nArea, ErrCodeClass nClass, sal_uInt16 nCode)
+        : m_value(ERRCODE_WARNING_MASK | (sal_uInt32(nArea) << ERRCODE_AREA_SHIFT) | (sal_uInt32(nClass) << ERRCODE_CLASS_SHIFT) | nCode)
+    {
+        assert(nCode <= 0xff && "code out of range");
+    }
+    explicit ErrCode(ErrCodeArea nArea, ErrCodeClass nClass, sal_uInt16 nCode)
+        : m_value((sal_uInt32(nArea) << ERRCODE_AREA_SHIFT) | (sal_uInt32(nClass) << ERRCODE_CLASS_SHIFT) | nCode)
+    {
+        assert(nCode <= 0xff && "code out of range");
+    }
+    explicit constexpr ErrCode(ErrCodeArea nArea, sal_uInt16 nClassAndCode)
         : m_value((sal_uInt32(nArea) << ERRCODE_AREA_SHIFT) | nClassAndCode) {}
     explicit constexpr ErrCode(sal_uInt32 nValue)
         : m_value(nValue) {}
@@ -116,6 +122,10 @@ public:
         return ErrCode(m_value & ~ERRCODE_DYNAMIC_MASK);
     }
 
+    constexpr ErrCode StripWarningAndDynamic() const {
+        return ErrCode(m_value & ~(ERRCODE_DYNAMIC_MASK | ERRCODE_WARNING_MASK));
+    }
+
     constexpr ErrCodeArea GetArea() const {
         return static_cast<ErrCodeArea>((m_value >> ERRCODE_AREA_SHIFT) & 0x01fff);
     }
@@ -124,8 +134,8 @@ public:
         return static_cast<ErrCodeClass>((m_value >> ERRCODE_CLASS_SHIFT) & 0x1f);
     }
 
-    constexpr sal_uInt16 GetRest() const {
-        return m_value & 0x7fff;
+    constexpr sal_uInt8 GetCode() const {
+        return static_cast<sal_uInt8>(m_value & 0xff);
     }
 
     OUString toHexString() const {

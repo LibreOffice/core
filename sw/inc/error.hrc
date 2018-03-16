@@ -24,8 +24,8 @@
 
 #define NC_(Context, String) (Context "\004" u8##String)
 
-#define ERR_CODE( class, err )  ErrCode(ErrCodeArea::Sw, class, err.GetRest())
-#define WARN_CODE( class, err ) ErrCode(ErrCodeArea::Sw, class, err.GetRest())
+#define ERR_CODE( class, err )  ErrCode(ErrCodeArea::Sw, class, err.GetCode())
+#define WARN_CODE( class, err ) ErrCode(ErrCodeArea::Sw, class, err.GetCode())
 
 const ErrMsgCode RID_SW_ERRHDL[] =
 {
