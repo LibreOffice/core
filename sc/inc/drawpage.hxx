@@ -33,13 +33,9 @@ public:
     explicit ScDrawPage(ScDrawLayer& rNewModel, bool bMasterPage);
     virtual ~ScDrawPage() override;
 
-    // TTTT virtual ScDrawPage* Clone() const override;
     virtual ScDrawPage* Clone(SdrModel* pNewModel = nullptr) const override;
 
     virtual css::uno::Reference< css::uno::XInterface > createUnoPage() override;
-
-private:
-    // TTTT ScDrawPage(const ScDrawPage& rSrcPage);
 };
 
 #endif

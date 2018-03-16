@@ -680,13 +680,6 @@ Point SdrCaptionObj::GetSnapPoint(sal_uInt32 /*i*/) const
     return Point(0,0);
 }
 
-// TTTT needed?
-// void SdrCaptionObj::SetModel(SdrModel* pNewModel)
-// {
-//     SdrRectObj::SetModel(pNewModel);
-//     ImpRecalcTail();
-// }
-
 void SdrCaptionObj::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
 {
     SdrRectObj::Notify(rBC,rHint);

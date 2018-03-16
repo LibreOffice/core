@@ -130,7 +130,7 @@ SdPage::SdPage(SdDrawDocument& rNewDoc, bool bMasterPage)
     // contains the designator for the outline (STR_LAYOUT_OUTLINE).
     maLayoutName = SdResId(STR_LAYOUT_DEFAULT_NAME)+ SD_LT_SEPARATOR STR_LAYOUT_OUTLINE;
 
-    // TTTT stuff from old SetModel:
+    // Stuff that former SetModel did also:
     ConnectLink();
 }
 

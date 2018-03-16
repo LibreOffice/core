@@ -2806,9 +2806,9 @@ SdrObject* SdrObjCustomShape::DoConvertToPolyObj(bool bBezier, bool bAddText) co
 
     if ( pRenderedCustomShape )
     {
+        // Clone to same SdrModel
         SdrObject* pCandidate = pRenderedCustomShape->Clone();
         DBG_ASSERT(pCandidate, "SdrObjCustomShape::DoConvertToPolyObj: Could not clone SdrObject (!)");
-        // TTTT clone? pCandidate->SetModel(GetModel());
         pRetval = pCandidate->DoConvertToPolyObj(bBezier, bAddText);
         SdrObject::Free( pCandidate );
 

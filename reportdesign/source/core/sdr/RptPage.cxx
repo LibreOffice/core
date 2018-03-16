@@ -38,26 +38,9 @@ OReportPage::OReportPage(
 {
 }
 
-// TTTT
-// OReportPage::OReportPage(const OReportPage& rPage)
-// :   SdrPage(rPage)
-//     ,rModel(rPage.getOReportModelFromOReportPage())
-//     ,m_xSection(rPage.m_xSection)
-//     ,m_bSpecialInsertMode(rPage.m_bSpecialInsertMode)
-//     ,m_aTemporaryObjectList(rPage.m_aTemporaryObjectList)
-// {
-// }
-
-
 OReportPage::~OReportPage()
 {
 }
-
-// TTTT
-// SdrPage* OReportPage::Clone() const
-// {
-//     return Clone(nullptr);
-// }
 
 SdrPage* OReportPage::Clone(SdrModel* pNewModel) const
 {

@@ -780,14 +780,14 @@ void SdrTableObj::init( sal_Int32 nColumns, sal_Int32 nRows )
     mpImpl = new SdrTableObjImpl;
     mpImpl->init( this, nColumns, nRows );
 
-    // TTTT from old SetModel:
+    // Stuff done from old SetModel:
     if( !maLogicRect.IsEmpty() )
     {
         maRect = maLogicRect;
         mpImpl->LayoutTable( maRect, false, false );
     }
 
-    // TTTT also init from SetModel:
+    // Also init from old SetModel:
     mpImpl->SetModel(&getSdrModelFromSdrObject());
 }
 
@@ -1358,28 +1358,6 @@ sal_uInt16 SdrTableObj::GetObjIdentifier() const
 {
     return static_cast<sal_uInt16>(OBJ_TABLE);
 }
-
-// TTTT needed?
-// void SdrTableObj::SetModel(SdrModel* pNewModel)
-// {
-//     SdrModel* pOldModel = GetModel();
-//     if( pNewModel != pOldModel )
-//     {
-//         SdrTextObj::SetModel(pNewModel);
-
-//         if( mpImpl.is() )
-//         {
-//             mpImpl->SetModel( pNewModel );
-
-//             if( !maLogicRect.IsEmpty() )
-//             {
-//                 maRect = maLogicRect;
-//                 mpImpl->LayoutTable( maRect, false, false );
-//             }
-//         }
-//     }
-// }
-
 
 void SdrTableObj::TakeTextRect( SdrOutliner& rOutliner, tools::Rectangle& rTextRect, bool bNoEditText, tools::Rectangle* pAnchorRect, bool /*bLineWidth*/ ) const
 {

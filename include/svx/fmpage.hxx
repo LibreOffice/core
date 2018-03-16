@@ -53,11 +53,6 @@ public:
     explicit FmFormPage(FmFormModel& rModel, bool bMasterPage=false);
     virtual ~FmFormPage() override;
 
-    // TTTT
-    // virtual void    SetModel(SdrModel* pNewModel) override;
-
-    // TTTT
-    // virtual SdrPage* Clone() const override;
     virtual SdrPage* Clone(SdrModel* pNewModel = nullptr) const override;
 
     virtual void    InsertObject(SdrObject* pObj, size_t nPos = SAL_MAX_SIZE) override;
@@ -78,8 +73,7 @@ public:
                             const HelpEvent& rEvt );
 
 protected:
-    // TTTT FmFormPage(const FmFormPage& rPage);
-
+    // lateInit -> copyValuesToClonedInstance (?)
     void lateInit(const FmFormPage& rPage);
 };
 

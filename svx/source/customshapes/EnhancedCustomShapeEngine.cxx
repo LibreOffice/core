@@ -237,9 +237,6 @@ SdrObject* EnhancedCustomShapeEngine::ImplForceGroupWithText( const SdrObjCustom
                 static_cast<SdrObjGroup*>(pRenderedShape)->GetSubList()->NbcInsertObject( pTmp );
             }
             pRenderedShape->SetPage( pCustoObj->GetPage() );
-
-            // TTTT
-            // pRenderedShape->SetModel( pCustoObj->GetModel() );
         }
     }
     return pRenderedShape;

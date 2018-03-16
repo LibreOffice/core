@@ -602,8 +602,8 @@ void SvxMeasurePage::Construct()
     // pMeasureObj is member of SvxXMeasurePreview and can only be accessed due to
     // SvxMeasurePage being a friend. It has it's own SdrModel (also in SvxXMeasurePreview)
     // and 'setting' the SdrModel is a hack. The comment above about 'notify unit and
-    // floatingpoint-values' is not clear, but has to be done another way.
-    // Checked on aw080, is just commented out there, too.
+    // floatingpoint-values' is not clear, but has to be done another way - if needed.
+    // Checked on original aw080, is just commented out there, too.
 
     // m_pCtlPreview->pMeasureObj->SetModel( pView->GetModel() );
     m_pCtlPreview->Invalidate();

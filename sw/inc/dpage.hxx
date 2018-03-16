@@ -39,7 +39,6 @@ public:
     explicit SwDPage(SwDrawModel& rNewModel, bool bMasterPage);
     virtual ~SwDPage() override;
 
-    // TTTT virtual SwDPage* Clone() const override;
     virtual SwDPage* Clone(SdrModel* pNewModel = nullptr) const override;
 
     // #i3694#
@@ -56,8 +55,6 @@ public:
 
 private:
     void lateInit(const SwDPage& rSrcPage);
-
-    // TTTT SwDPage(const SwDPage& rSrcPage);
 };
 
 #endif // INCLUDED_SW_INC_DPAGE_HXX

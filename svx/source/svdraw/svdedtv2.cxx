@@ -1134,7 +1134,7 @@ void SdrEditView::MergeMarkedObjects(SdrMergeMode eMode)
 
         // #i124760# To have a correct selection with only the new object it is necessary to
         // unmark all objects first. If not doing so, there may remain invalid pointers to objects
-        //TTTT:Not needed for aw080 (!)
+        // TTTT:Not needed for aw080 (!)
         UnmarkAllObj(pInsPV);
 
         MarkObj(pPath, pInsPV, false, true);
@@ -1590,7 +1590,6 @@ void SdrEditView::ImpDismantleOneObject(const SdrObject* pObj, SdrObjList& rOL, 
             {
                 SdrObject* pCandidate = pReplacement->Clone();
                 DBG_ASSERT(pCandidate, "SdrEditView::ImpDismantleOneObject: Could not clone SdrObject (!)");
-                // TTTT pCandidate->SetModel(pCustomShape->GetModel());
 
                 if(pCustomShape->GetMergedItem(SDRATTR_SHADOW).GetValue())
                 {

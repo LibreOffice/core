@@ -265,11 +265,10 @@ void OReportSection::Paste(const uno::Sequence< beans::NamedValue >& _aAllreadyC
                         SdrObject* pObject = pShape ? pShape->GetSdrObject() : nullptr;
                         if ( pObject )
                         {
-                            // TTTT clone to target SdrModel
+                            // Clone to target SdrModel
                             SdrObject* pNewObj(pObject->Clone(m_pModel.get()));
 
                             pNewObj->SetPage( m_pPage );
-                            //pNewObj->SetModel( m_pModel.get() );
                             m_pPage->InsertObject(pNewObj, SAL_MAX_SIZE);
 
                             tools::Rectangle aRet(VCLPoint((*pCopiesIter)->getPosition()),VCLSize((*pCopiesIter)->getSize()));
