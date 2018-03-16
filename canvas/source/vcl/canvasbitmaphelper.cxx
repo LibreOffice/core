@@ -117,60 +117,15 @@ namespace vclcanvas
             return uno::Sequence< sal_Int8 >(); // we're disposed
 
         rLayout = getMemoryLayout();
-        Bitmap aBitmap( mpBackBuffer->getBitmapReference().GetBitmap() );
-        Bitmap aAlpha( mpBackBuffer->getBitmapReference().GetAlpha().GetBitmap() );
-
-        Bitmap::ScopedReadAccess pReadAccess( aBitmap );
-        Bitmap::ScopedReadAccess pAlphaReadAccess( aAlpha.IsEmpty() ?
-                                                 nullptr : aAlpha.AcquireReadAccess(),
-                                                 aAlpha );
-
-        ENSURE_OR_THROW( pReadAccess.get() != nullptr,
-                         "Could not acquire read access to bitmap" );
 
         // TODO(F1): Support more formats.
-        const Size aBmpSize( aBitmap.GetSizePixel() );
+        const Size aBmpSize( mpBackBuffer->getBitmapReference().GetSizePixel() );
 
         rLayout.ScanLines = aBmpSize.Height();
         rLayout.ScanLineBytes = aBmpSize.Width()*4;
         rLayout.ScanLineStride = rLayout.ScanLineBytes;
 
-        // for the time being, always return as BGRA
-        uno::Sequence< sal_Int8 > aRes( 4*aBmpSize.Width()*aBmpSize.Height() );
-        sal_Int8* pRes = aRes.getArray();
-
-        int nCurrPos(0);
-        for( long y=rect.Y1;
-             y<aBmpSize.Height() && y<rect.Y2;
-             ++y )
-        {
-            Scanline pScanlineReadAlpha = pAlphaReadAccess->GetScanline( y );
-            if( pAlphaReadAccess.get() != nullptr )
-            {
-                for( long x=rect.X1;
-                     x<aBmpSize.Width() && x<rect.X2;
-                     ++x )
-                {
-                    pRes[ nCurrPos++ ] = pReadAccess->GetColor( y, x ).GetRed();
-                    pRes[ nCurrPos++ ] = pReadAccess->GetColor( y, x ).GetGreen();
-                    pRes[ nCurrPos++ ] = pReadAccess->GetColor( y, x ).GetBlue();
-                    pRes[ nCurrPos++ ] = pAlphaReadAccess->GetIndexFromData( pScanlineReadAlpha, x );
-                }
-            }
-            else
-            {
-                for( long x=rect.X1;
-                     x<aBmpSize.Width() && x<rect.X2;
-                     ++x )
-                {
-                    pRes[ nCurrPos++ ] = pReadAccess->GetColor( y, x ).GetRed();
-                    pRes[ nCurrPos++ ] = pReadAccess->GetColor( y, x ).GetGreen();
-                    pRes[ nCurrPos++ ] = pReadAccess->GetColor( y, x ).GetBlue();
-                    pRes[ nCurrPos++ ] = sal_uInt8(255);
-                }
-            }
-        }
-
+        uno::Sequence< sal_Int8 > aRes = vcl::bitmap::CanvasExtractBitmapData(mpBackBuffer->getBitmapReference(), rect);
         return aRes;
     }
 
