@@ -107,6 +107,9 @@
                 <property name="editable">False</property>
                 <property name="cursor_visible">False</property>
                 <property name="accepts_tab">False</property>
+                <accessibility>
+                  <relation type="labelled-by" target="descriptionlabel"/>
+                </accessibility>
               </object>
             </child>
           </object>
@@ -121,7 +124,12 @@
             <property name="can_focus">False</property>
             <property name="halign">start</property>
             <property name="valign">start</property>
-            <property name="label" translatable="yes" context="menuassignpage|label33">Description</property>
+            <property name="label" translatable="yes" context="menuassignpage|label33">D_escription</property>
+            <property name="use_underline">True</property>
+            <property name="mnemonic_widget">desc:border</property>
+            <accessibility>
+              <relation type="label-for" target="desc:border"/>
+            </accessibility>
           </object>
           <packing>
             <property name="left_attach">0</property>
