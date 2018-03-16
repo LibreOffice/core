@@ -632,6 +632,18 @@ sub run {
 
         installer::scpzipfiles::resolving_scpzip_replace_flag($filesinproductlanguageresolvedarrayref, $allvariableshashref, "File", $languagestringref);
 
+        #########################################################
+        # language dependent unix links part
+        #########################################################
+
+        installer::logger::print_message( "... analyzing unix links ...\n" );
+
+        my $unixlinksinproductlanguageresolvedarrayref = installer::scriptitems::resolving_all_languages_in_productlists($unixlinksinproductarrayref, $languagesarrayref);
+
+        installer::scriptitems::changing_name_of_language_dependent_keys($unixlinksinproductlanguageresolvedarrayref);
+
+        installer::scriptitems::get_Destination_Directory_For_Item_From_Directorylist($unixlinksinproductlanguageresolvedarrayref, $dirsinproductarrayref);
+
         ############################################
         # Collecting directories for epm list file
         ############################################
@@ -645,8 +657,7 @@ sub run {
         # It will be possible, that in the setup script only those directoies have to be defined,
         # that have a CREATE flag. All other directories are created, if they contain at least one file.
 
-        my ($directoriesforepmarrayref, $alldirectoryhash) = installer::scriptitems::collect_directories_from_filesarray($filesinproductlanguageresolvedarrayref);
-
+        my ($directoriesforepmarrayref, $alldirectoryhash) = installer::scriptitems::collect_directories_from_filesarray($filesinproductlanguageresolvedarrayref, $unixlinksinproductlanguageresolvedarrayref);
         ($directoriesforepmarrayref, $alldirectoryhash) = installer::scriptitems::collect_directories_with_create_flag_from_directoryarray($dirsinproductlanguageresolvedarrayref, $alldirectoryhash);
 
         #########################################################
@@ -684,18 +695,6 @@ sub run {
         $linksinproductlanguageresolvedarrayref = installer::scriptitems::remove_workstation_only_items($linksinproductlanguageresolvedarrayref);
 
         installer::scriptitems::resolve_links_with_flag_relative($linksinproductlanguageresolvedarrayref);
-
-        #########################################################
-        # language dependent unix links part
-        #########################################################
-
-        installer::logger::print_message( "... analyzing unix links ...\n" );
-
-        my $unixlinksinproductlanguageresolvedarrayref = installer::scriptitems::resolving_all_languages_in_productlists($unixlinksinproductarrayref, $languagesarrayref);
-
-        installer::scriptitems::changing_name_of_language_dependent_keys($unixlinksinproductlanguageresolvedarrayref);
-
-        installer::scriptitems::get_Destination_Directory_For_Item_From_Directorylist($unixlinksinproductlanguageresolvedarrayref, $dirsinproductarrayref);
 
         #########################################################
         # language dependent part for profiles and profileitems
@@ -810,7 +809,7 @@ sub run {
             @{$folderitemsinproductlanguageresolvedarrayref} = (); # no folderitems in languagepacks
 
             # Collecting the directories again, to include only the language specific directories
-            ($directoriesforepmarrayref, $alldirectoryhash) = installer::scriptitems::collect_directories_from_filesarray($filesinproductlanguageresolvedarrayref);
+            ($directoriesforepmarrayref, $alldirectoryhash) = installer::scriptitems::collect_directories_from_filesarray($filesinproductlanguageresolvedarrayref, $unixlinksinproductlanguageresolvedarrayref);
             ($directoriesforepmarrayref, $alldirectoryhash) = installer::scriptitems::collect_directories_with_create_flag_from_directoryarray($dirsinproductlanguageresolvedarrayref, $alldirectoryhash);
             @$directoriesforepmarrayref = sort { $a->{"HostName"} cmp $b->{"HostName"} } @$directoriesforepmarrayref;
 
@@ -831,7 +830,7 @@ sub run {
             @{$folderitemsinproductlanguageresolvedarrayref} = (); # no folderitems in helppacks
 
             # Collecting the directories again, to include only the language specific directories
-            ($directoriesforepmarrayref, $alldirectoryhash) = installer::scriptitems::collect_directories_from_filesarray($filesinproductlanguageresolvedarrayref);
+            ($directoriesforepmarrayref, $alldirectoryhash) = installer::scriptitems::collect_directories_from_filesarray($filesinproductlanguageresolvedarrayref, $unixlinksinproductlanguageresolvedarrayref);
             ($directoriesforepmarrayref, $alldirectoryhash) = installer::scriptitems::collect_directories_with_create_flag_from_directoryarray($dirsinproductlanguageresolvedarrayref, $alldirectoryhash);
             @$directoriesforepmarrayref = sort { $a->{"HostName"} cmp $b->{"HostName"} } @$directoriesforepmarrayref;
 

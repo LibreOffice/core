@@ -1584,7 +1584,10 @@ sub optimize_list
 
 sub collect_directories_from_filesarray
 {
-    my ($filesarrayref) = @_;
+    my ($filesarrayref, $unixlinksarrayref) = @_;
+    my @allfiles;
+    push @allfiles, @{$filesarrayref};
+    push @allfiles, @{$unixlinksarrayref};
 
     my @alldirectories = ();
     my %alldirectoryhash = ();
@@ -1594,9 +1597,9 @@ sub collect_directories_from_filesarray
     # Preparing this already as hash, although the only needed value at the moment is the HostName
     # But also adding: "specificlanguage" and "Dir" (for instance gid_Dir_Program)
 
-    for ( my $i = 0; $i <= $#{$filesarrayref}; $i++ )
+    for ( my $i = 0; $i <= $#allfiles; $i++ )
     {
-        my $onefile = ${$filesarrayref}[$i];
+        my $onefile = $allfiles[$i];
         my $destinationpath = $onefile->{'destination'};
         installer::pathanalyzer::get_path_from_fullqualifiedname(\$destinationpath);
         $destinationpath =~ s/\Q$installer::globals::separator\E\s*$//;     # removing ending slashes or backslashes
