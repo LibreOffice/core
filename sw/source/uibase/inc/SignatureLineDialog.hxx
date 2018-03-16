@@ -21,7 +21,7 @@ class SwView;
 class SW_DLLPUBLIC SignatureLineDialog : public weld::GenericDialogController
 {
 public:
-    SignatureLineDialog(weld::Window* pParent, SwView& rView);
+    SignatureLineDialog(SwView& rView);
 
     short execute();
 

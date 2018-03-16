@@ -67,7 +67,7 @@ void SwView::ExecDlgExt(SfxRequest const &rReq)
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
             assert(pFact && "SwAbstractDialogFactory fail!");
 
-            ScopedVclPtr<VclAbstractDialog> pDialog(pFact->CreateSignatureLineDialog(rMDI.GetFrameWeld(), *this));
+            ScopedVclPtr<VclAbstractDialog> pDialog(pFact->CreateSignatureLineDialog(*this));
             assert(pDialog && "Dialog creation failed!");
             if (pDialog)
                 pDialog->Execute();

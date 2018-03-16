@@ -94,7 +94,7 @@ void SwConvertTableDlg::GetValues(  sal_Unicode& rDelim,
 }
 
 SwConvertTableDlg::SwConvertTableDlg(SwView& rView, bool bToTable)
-    : GenericDialogController(rView.GetViewFrame()->GetWindow().GetFrameWeld(),
+    : GenericDialogController(rView.GetFrameWeld(),
             "modules/swriter/ui/converttexttable.ui", "ConvertTextTableDialog")
     , m_xTabBtn(m_xBuilder->weld_radio_button("tabs"))
     , m_xSemiBtn(m_xBuilder->weld_radio_button("semicolons"))
