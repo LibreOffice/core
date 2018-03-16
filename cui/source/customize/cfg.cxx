@@ -1167,6 +1167,7 @@ SvxConfigPage::SvxConfigPage(vcl::Window *pParent, const SfxItemSet& rSet)
 
     m_pDescriptionField->SetControlBackground( GetSettings().GetStyleSettings().GetDialogColor() );
     m_pDescriptionField->EnableCursor( false );
+    m_pDescriptionField->SetStyle( m_pDescriptionField->GetStyle() | WB_TABSTOP ); // Include in the tab sequence
 
     m_pSearchEdit->SetUpdateDataHdl ( LINK( this, SvxConfigPage, SearchUpdateHdl ));
     m_pSearchEdit->EnableUpdateData();
