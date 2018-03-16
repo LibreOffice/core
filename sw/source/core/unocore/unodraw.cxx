@@ -585,15 +585,9 @@ void SwXDrawPage::add(const uno::Reference< drawing::XShape > & xShape)
                 sal::static_int_cast< sal_IntPtr >( xShapeTunnel->getSomething(SvxShape::getUnoTunnelId()) ));
     }
 
-    if(!pShape || pShape->GetRegisteredIn() || !pShape->m_bDescriptor )
-    {
-        uno::RuntimeException aExcept;
-        if(pShape)
-            aExcept.Message = "object already inserted";
-        else
-            aExcept.Message = "illegal object";
-        throw aExcept;
-    }
+    if(!pShape)
+        throw uno::RuntimeException("illegal object",
+                                    static_cast< cppu::OWeakObject * > ( this ) );
 
     if ( pSvxShape->GetSdrObject() )
     {

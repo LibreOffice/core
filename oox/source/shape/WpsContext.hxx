@@ -11,6 +11,7 @@
 #define INCLUDED_OOX_SOURCE_SHAPE_WPSCONTEXT_HXX
 
 #include <oox/core/contexthandler2.hxx>
+#include <oox/drawingml/shapecontext.hxx>
 #include <oox/drawingml/drawingmltypes.hxx>
 
 namespace com
@@ -33,21 +34,18 @@ namespace shape
 {
 
 /// Wps is the drawingML equivalent of v:shape.
-class WpsContext final : public oox::core::ContextHandler2
+class WpsContext final : public oox::drawingml::ShapeContext
 {
 public:
-    WpsContext(oox::core::ContextHandler2Helper const& rParent, css::uno::Reference<css::drawing::XShape> xShape);
+    WpsContext(oox::core::ContextHandler2Helper const& rParent,
+               css::uno::Reference<css::drawing::XShape> xShape,
+               oox::drawingml::ShapePtr const & pMasterShapePtr,
+               oox::drawingml::ShapePtr const & pShapePtr);
     ~WpsContext() override;
 
     oox::core::ContextHandlerRef onCreateContext(sal_Int32 nElementToken, const oox::AttributeList& rAttribs) override;
 
-    const oox::drawingml::ShapePtr& getShape() const
-    {
-        return mpShape;
-    }
-
 private:
-    oox::drawingml::ShapePtr mpShape;
     css::uno::Reference<css::drawing::XShape> mxShape;
 };
 
