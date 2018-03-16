@@ -28,7 +28,7 @@ typedef bool (*weakref_searchfunc)( const css::uno::WeakReference< css::uno::XIn
 class SvUnoWeakContainer
 {
 private:
-    std::vector< css::uno::WeakReference< css::uno::XInterface >* > maVector;
+    std::vector< css::uno::WeakReference< css::uno::XInterface > > maVector;
 
 public:
     SvUnoWeakContainer() throw();
