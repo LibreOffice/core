@@ -49,7 +49,7 @@ SfxSaveAsTemplateDialog::SfxSaveAsTemplateDialog(weld::Window* pParent, const un
 
     m_xTemplateNameEdit->connect_changed(LINK(this, SfxSaveAsTemplateDialog, TemplateNameEditHdl));
     m_xLBCategory->connect_changed(LINK(this, SfxSaveAsTemplateDialog, SelectCategoryHdl));
-    m_xLBCategory->set_size_request(m_xLBCategory->get_approximate_char_width() * 32,
+    m_xLBCategory->set_size_request(m_xLBCategory->get_approximate_digit_width() * 32,
                                     m_xLBCategory->get_height_rows(8));
     m_xOKButton->connect_clicked(LINK(this, SfxSaveAsTemplateDialog, OkClickHdl));
 

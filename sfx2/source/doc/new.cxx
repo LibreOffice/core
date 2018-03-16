@@ -253,7 +253,7 @@ SfxNewFileDialog::SfxNewFileDialog(weld::Window *pParent, SfxNewFileDialogMode n
     , m_sLoadTemplate(m_xAltTitleFt->get_label())
     , m_nFlags(nFlags)
 {
-    const int nWidth = m_xRegionLb->get_approximate_char_width() * 32;
+    const int nWidth = m_xRegionLb->get_approximate_digit_width() * 32;
     const int nHeight = m_xRegionLb->get_height_rows(8);
     m_xRegionLb->set_size_request(nWidth, nHeight);
     m_xTemplateLb->set_size_request(nWidth, nHeight);

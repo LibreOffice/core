@@ -1138,6 +1138,7 @@ public:
     */
     long                        GetTextHeight() const;
     float                       approximate_char_width() const;
+    float                       approximate_digit_width() const;
 
     void                        DrawTextArray( const Point& rStartPt, const OUString& rStr,
                                                const long* pDXAry,

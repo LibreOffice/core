@@ -238,9 +238,9 @@ public:
         return m_xWidget->get_preferred_size();
     }
 
-    virtual float get_approximate_char_width() const override
+    virtual float get_approximate_digit_width() const override
     {
-        return m_xWidget->approximate_char_width();
+        return m_xWidget->approximate_digit_width();
     }
 
     virtual int get_text_height() const override
