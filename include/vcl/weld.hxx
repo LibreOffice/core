@@ -613,13 +613,19 @@ private:
 protected:
     std::unique_ptr<weld::Builder> m_xBuilder;
     std::unique_ptr<weld::MessageDialog> m_xDialog;
+    std::unique_ptr<weld::Container> m_xContentArea;
+    std::unique_ptr<weld::Widget> m_xRelocate;
+    std::unique_ptr<weld::Container> m_xOrigParent;
 
 public:
     MessageDialogController(weld::Widget* pParent, const OUString& rUIFile,
-                            const OString& rDialogId);
+                            const OString& rDialogId, const OString& rRelocateId = OString());
     ~MessageDialogController() override;
     void set_title(const OUString& rTitle) { m_xDialog->set_title(rTitle); }
     void set_help_id(const OString& rHelpId) { m_xDialog->set_help_id(rHelpId); }
+    void set_primary_text(const OUString& rText) { m_xDialog->set_primary_text(rText); }
+    OUString get_primary_text() const { return m_xDialog->get_primary_text(); }
+    void set_default_response(int response) { m_xDialog->set_default_response(response); }
 };
 }
 #endif

@@ -28,9 +28,6 @@ private:
     std::unique_ptr<weld::Button> m_xUseDefaultFormatBtn;
     std::unique_ptr<weld::CheckButton> m_xWarningOnBox;
 
-    std::unique_ptr<weld::Container> m_xOrigParent;
-    std::unique_ptr<weld::Container> m_xContentArea;
-
 public:
     SfxAlienWarningDialog(weld::Window* pParent, const OUString& _rFormatName,
                           const OUString& _rDefaultExtension, bool rDefaultIsAlien);

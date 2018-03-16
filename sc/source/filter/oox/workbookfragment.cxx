@@ -516,6 +516,19 @@ ScDocShell& getDocShell(const ScDocument& rDoc)
     return static_cast<ScDocShell&>(*rDoc.GetDocumentShell());
 }
 
+class MessageWithCheck : public weld::MessageDialogController
+{
+private:
+    std::unique_ptr<weld::CheckButton> m_xWarningOnBox;
+public:
+    MessageWithCheck(weld::Window *pParent, const OUString& rUIFile, const OString& rDialogId)
+        : weld::MessageDialogController(pParent, rUIFile, rDialogId, "ask")
+        , m_xWarningOnBox(m_xBuilder->weld_check_button("ask"))
+    {
+    }
+    bool get_active() const { return m_xWarningOnBox->get_active(); }
+};
+
 }
 
 void WorkbookFragment::recalcFormulaCells()
@@ -534,27 +547,13 @@ void WorkbookFragment::recalcFormulaCells()
             // Ask the user if full re-calculation is desired.
             vcl::Window* pWin = ScDocShell::GetActiveDialogParent();
 
-            std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(pWin ? pWin->GetFrameWeld() : nullptr,
-                        "modules/scalc/ui/recalcquerydialog.ui"));
-            std::unique_ptr<weld::MessageDialog> xQueryBox(xBuilder->weld_message_dialog("RecalcQueryDialog"));
-            xQueryBox->set_primary_text(ScGlobal::GetRscString(STR_QUERY_FORMULA_RECALC_ONLOAD_XLS));
-            xQueryBox->set_default_response(RET_YES);
-            std::unique_ptr<weld::CheckButton> xWarningOnBox(xBuilder->weld_check_button("ask"));
+            MessageWithCheck aQueryBox(pWin ? pWin->GetFrameWeld() : nullptr, "modules/scalc/ui/recalcquerydialog.ui", "RecalcQueryDialog");
+            aQueryBox.set_primary_text(ScGlobal::GetRscString(STR_QUERY_FORMULA_RECALC_ONLOAD_XLS));
+            aQueryBox.set_default_response(RET_YES);
 
-            //fdo#75121, a bit tricky because the widgets we want to align with
-            //don't actually exist in the ui description, they're implied
-            std::unique_ptr<weld::Container> xOrigParent(xWarningOnBox->weld_parent());
-            std::unique_ptr<weld::Container> xContentArea(xQueryBox->weld_message_area());
-            xOrigParent->remove(xWarningOnBox.get());
-            xContentArea->add(xWarningOnBox.get());
+            bHardRecalc = aQueryBox.run() == RET_YES;
 
-            bHardRecalc = xQueryBox->run() == RET_YES;
-
-            //put them back as they were
-            xContentArea->remove(xWarningOnBox.get());
-            xOrigParent->add(xWarningOnBox.get());
-
-            if (xWarningOnBox->get_active())
+            if (aQueryBox.get_active())
             {
                 // Always perform selected action in the future.
                 std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());

@@ -8,41 +8,13 @@
  */
 
 #include <swmessdialog.hxx>
-#include <vcl/button.hxx>
-#include <vcl/edit.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/messagedialog.hxx>
-#include <vcl/msgbox.hxx>
-#include <vcl/vclmedit.hxx>
 
-SwMessageAndEditDialog::SwMessageAndEditDialog(vcl::Window* pParent, const OUString& rID,
+SwMessageAndEditDialog::SwMessageAndEditDialog(weld::Window* pParent, const OString& rID,
         const OUString& rUIXMLDescription)
-    : ModalDialog(pParent, rID, rUIXMLDescription)
+    : MessageDialogController(pParent, rUIXMLDescription, rID, "grid")
+    , m_xEdit(m_xBuilder->weld_entry("edit"))
+    , m_xOKPB(m_xBuilder->weld_button("ok"))
 {
-    get(m_pOKPB, "ok");
-    get(m_pPrimaryMessage, "primarymessage");
-    m_pPrimaryMessage->SetPaintTransparent(true);
-    get(m_pSecondaryMessage, "secondarymessage");
-    m_pSecondaryMessage->SetPaintTransparent(true);
-    MessageDialog::SetMessagesWidths(this, m_pPrimaryMessage, m_pSecondaryMessage);
-    get(m_pImageIM, "image");
-    m_pImageIM->SetImage(GetStandardWarningBoxImage());
-    get(m_pEdit, "edit");
-}
-
-SwMessageAndEditDialog::~SwMessageAndEditDialog()
-{
-    disposeOnce();
-}
-
-void SwMessageAndEditDialog::dispose()
-{
-    m_pOKPB.clear();
-    m_pImageIM.clear();
-    m_pPrimaryMessage.clear();
-    m_pSecondaryMessage.clear();
-    m_pEdit.clear();
-    ModalDialog::dispose();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

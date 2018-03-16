@@ -27,11 +27,8 @@
 class ScReplaceWarnBox : public weld::MessageDialogController
 {
     std::unique_ptr<weld::CheckButton> m_xWarningOnBox;
-    std::unique_ptr<weld::Container> m_xOrigParent;
-    std::unique_ptr<weld::Container> m_xContentArea;
 public:
     ScReplaceWarnBox(weld::Window* pParent);
-    virtual ~ScReplaceWarnBox() override;
 
     /** Opens dialog if IsDialogEnabled() returns true.
         @descr  If after executing the dialog the checkbox "Do not show again" is set,
