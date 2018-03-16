@@ -728,9 +728,9 @@ VclPtr<VclAbstractDialog> SwAbstractDialogFactory_Impl::CreateSwCaptionDialog ( 
     return VclPtr<VclAbstractDialog_Impl>::Create( pDlg );
 }
 
-VclPtr<VclAbstractDialog> SwAbstractDialogFactory_Impl::CreateSignatureLineDialog(weld::Window* pParent, SwView& rV)
+VclPtr<VclAbstractDialog> SwAbstractDialogFactory_Impl::CreateSignatureLineDialog(SwView& rV)
 {
-    return VclPtr<AbstractSignatureLineDialog_Impl>::Create(new SignatureLineDialog(pParent, rV));
+    return VclPtr<AbstractSignatureLineDialog_Impl>::Create(new SignatureLineDialog(rV));
 }
 
 VclPtr<AbstractSwInsertDBColAutoPilot> SwAbstractDialogFactory_Impl::CreateSwInsertDBColAutoPilot( SwView& rView,

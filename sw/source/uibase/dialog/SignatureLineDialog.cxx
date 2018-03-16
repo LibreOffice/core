@@ -37,8 +37,9 @@ using namespace css::view;
 using namespace css::drawing;
 using namespace css::graphic;
 
-SignatureLineDialog::SignatureLineDialog(weld::Window* pParent, SwView& rView)
-    : GenericDialogController(pParent, "modules/swriter/ui/signatureline.ui", "SignatureLineDialog")
+SignatureLineDialog::SignatureLineDialog(SwView& rView)
+    : GenericDialogController(rView.GetFrameWeld(), "modules/swriter/ui/signatureline.ui",
+                              "SignatureLineDialog")
     , m_xEditName(m_xBuilder->weld_entry("edit_name"))
     , m_xEditTitle(m_xBuilder->weld_entry("edit_title"))
     , m_xEditEmail(m_xBuilder->weld_entry("edit_email"))
