@@ -1634,7 +1634,7 @@ SdrPathObj::SdrPathObj(SdrObjKind eNewKind)
     bClosedObj = IsClosed();
 }
 
-SdrPathObj::SdrPathObj(SdrObjKind eNewKind, const basegfx::B2DPolyPolygon& rPathPoly, double dBrightness)
+SdrPathObj::SdrPathObj(SdrObjKind eNewKind, const basegfx::B2DPolyPolygon& rPathPoly)
 :   maPathPolygon(rPathPoly),
     meKind(eNewKind)
 {
