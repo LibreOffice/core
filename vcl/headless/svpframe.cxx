@@ -421,6 +421,9 @@ void SvpSalFrame::UpdateSettings( AllSettings& rSettings )
         aStdFont.SetWeight( WEIGHT_NORMAL );
         aStdFont.SetFamilyName( "Liberation Sans" );
         aStyleSettings.BatchSetFonts( aStdFont, aStdFont );
+
+        aStdFont.SetFontSize(Size(0, 12));
+        aStyleSettings.SetMenuFont(aStdFont);
     }
 
     rSettings.SetStyleSettings( aStyleSettings );
