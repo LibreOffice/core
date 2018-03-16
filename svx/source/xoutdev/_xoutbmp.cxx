@@ -666,16 +666,4 @@ tools::Polygon XOutBitmap::GetContour( const Bitmap& rBmp, const XOutFlags nFlag
     return aRetPoly;
 }
 
-bool DitherBitmap( Bitmap& rBitmap )
-{
-    bool bRet = false;
-
-    if( ( rBitmap.GetBitCount() >= 8 ) && ( Application::GetDefaultDevice()->GetColorCount() < 257 ) )
-        bRet = rBitmap.Dither( BmpDitherFlags::Floyd );
-    else
-        bRet = false;
-
-    return bRet;
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

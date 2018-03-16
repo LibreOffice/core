@@ -1936,7 +1936,7 @@ ErrCode GraphicFilter::ExportGraphic( const Graphic& rGraphic, const OUString& r
         if( eType != GraphicType::Bitmap )
         {
             Size aSizePixel;
-            sal_uLong nColorCount,nBitsPerPixel,nNeededMem,nMaxMem;
+            sal_uLong nBitsPerPixel,nNeededMem,nMaxMem;
             ScopedVclPtrInstance< VirtualDevice > aVirDev;
 
             nMaxMem = 1024;
@@ -1946,13 +1946,7 @@ ErrCode GraphicFilter::ExportGraphic( const Graphic& rGraphic, const OUString& r
             aSizePixel=aVirDev->LogicToPixel(aGraphic.GetPrefSize(),aGraphic.GetPrefMapMode());
 
             // Calculate how much memory the image will take up
-            nColorCount=aVirDev->GetColorCount();
-            if      (nColorCount<=2)     nBitsPerPixel=1;
-            else if (nColorCount<=4)     nBitsPerPixel=2;
-            else if (nColorCount<=16)    nBitsPerPixel=4;
-            else if (nColorCount<=256)   nBitsPerPixel=8;
-            else if (nColorCount<=65536) nBitsPerPixel=16;
-            else                         nBitsPerPixel=24;
+            nBitsPerPixel=aVirDev->GetBitCount();
             nNeededMem=(static_cast<sal_uLong>(aSizePixel.Width())*static_cast<sal_uLong>(aSizePixel.Height())*nBitsPerPixel+7)/8;
 
             // is the image larger than available memory?

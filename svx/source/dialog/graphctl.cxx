@@ -163,25 +163,7 @@ void GraphCtrl::InitSdrModel()
 
 void GraphCtrl::SetGraphic( const Graphic& rGraphic, bool bNewModel )
 {
-    // If possible we dither bitmaps for the display
-    if ( rGraphic.GetType() == GraphicType::Bitmap  )
-    {
-        if ( rGraphic.IsTransparent() )
-        {
-            Bitmap  aBmp( rGraphic.GetBitmap() );
-
-            DitherBitmap( aBmp );
-            aGraphic = Graphic( BitmapEx( aBmp, rGraphic.GetBitmapEx().GetMask() ) );
-        }
-        else
-        {
-            Bitmap aBmp( rGraphic.GetBitmap() );
-            DitherBitmap( aBmp );
-            aGraphic = aBmp;
-        }
-    }
-    else
-        aGraphic = rGraphic;
+    aGraphic = rGraphic;
 
     if ( aGraphic.GetPrefMapMode().GetMapUnit() == MapUnit::MapPixel )
         aGraphSize = Application::GetDefaultDevice()->PixelToLogic( aGraphic.GetPrefSize(), aMap100 );
