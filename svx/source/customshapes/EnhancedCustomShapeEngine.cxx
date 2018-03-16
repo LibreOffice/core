@@ -205,10 +205,10 @@ SdrObject* EnhancedCustomShapeEngine::ImplForceGroupWithText(
 
             if(bIsSdrObjCustomShape)
             {
-                SdrObjCustomShape& rSdrObjCustomShape(
+                SdrObjCustomShape& rSdrObjCustomShape2(
                     static_cast< SdrObjCustomShape& >(
                         *GetSdrObjectFromXShape(mxShape)));
-                EnhancedCustomShape2d aCustomShape2d(rSdrObjCustomShape);
+                EnhancedCustomShape2d aCustomShape2d(rSdrObjCustomShape2);
                 aTextBounds = aCustomShape2d.GetTextRect();
             }
 
