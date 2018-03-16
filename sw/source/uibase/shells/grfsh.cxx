@@ -158,10 +158,10 @@ void SwGrfShell::Execute(SfxRequest &rReq)
             short nState = RET_CANCEL;
             if (aGraphicAttr != GraphicAttr()) // the image has been modified
             {
-                vcl::Window* pWin = GetView().GetWindow();
+                weld::Window* pWin = GetView().GetFrameWeld();
                 if (pWin)
                 {
-                    nState = GraphicHelper::HasToSaveTransformedImage(pWin->GetFrameWeld());
+                    nState = GraphicHelper::HasToSaveTransformedImage(pWin);
                 }
             }
             else

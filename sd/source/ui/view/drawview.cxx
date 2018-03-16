@@ -433,8 +433,7 @@ bool DrawView::SetStyleSheet(SfxStyleSheet* pStyleSheet, bool bDontRemoveHardAtt
     {
         if (IsPresObjSelected(false))
         {
-            vcl::Window* pWin = mpDrawViewShell->GetActiveWindow();
-            std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr,
+            std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(mpDrawViewShell->GetFrameWeld(),
                                                           VclMessageType::Info, VclButtonsType::Ok,
                                                           SdResId(STR_ACTION_NOTPOSSIBLE)));
             xInfoBox->run();

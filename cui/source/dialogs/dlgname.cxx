@@ -79,36 +79,21 @@ IMPL_LINK_NOARG(SvxObjectNameDialog, ModifyHdl, weld::Entry&, void)
 // #i68101#
 // Dialog for editing Object Title and Description
 
-SvxObjectTitleDescDialog::SvxObjectTitleDescDialog(
-    vcl::Window* pWindow,
-    const OUString& rTitle,
-    const OUString& rDescription) :
-    ModalDialog     ( pWindow, "ObjectTitleDescDialog", "cui/ui/objecttitledescdialog.ui" )
+SvxObjectTitleDescDialog::SvxObjectTitleDescDialog(weld::Window* pParent, const OUString& rTitle,
+    const OUString& rDescription)
+    : GenericDialogController(pParent, "cui/ui/objecttitledescdialog.ui", "ObjectTitleDescDialog")
+    , m_xEdtTitle(m_xBuilder->weld_entry("object_title_entry"))
+    , m_xEdtDescription(m_xBuilder->weld_text_view("desc_entry"))
 {
-    get(pEdtTitle, "object_title_entry");
-    get(pEdtDescription, "desc_entry");
     //lock height to initial height
-    pEdtDescription->set_height_request(pEdtDescription->get_preferred_size().Height());
+    m_xEdtDescription->set_size_request(-1, m_xEdtDescription->get_text_height() * 5);
     // set title & desc
-    pEdtTitle->SetText(rTitle);
-    pEdtDescription->SetText(rDescription);
+    m_xEdtTitle->set_text(rTitle);
+    m_xEdtDescription->set_text(rDescription);
 
     // activate title
-    pEdtTitle->SetSelection(Selection(SELECTION_MIN, SELECTION_MAX));
+    m_xEdtTitle->select_region(0, -1);
 }
-
-SvxObjectTitleDescDialog::~SvxObjectTitleDescDialog()
-{
-    disposeOnce();
-}
-
-void SvxObjectTitleDescDialog::dispose()
-{
-    pEdtTitle.clear();
-    pEdtDescription.clear();
-    ModalDialog::dispose();
-}
-
 
 /*************************************************************************
 |*

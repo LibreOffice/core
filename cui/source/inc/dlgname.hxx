@@ -102,23 +102,21 @@ public:
 
 /** #i68101#
     Dialog for editing Object Title and Description */
-class SvxObjectTitleDescDialog : public ModalDialog
+class SvxObjectTitleDescDialog : public weld::GenericDialogController
 {
 private:
     // title
-    VclPtr<Edit>           pEdtTitle;
+    std::unique_ptr<weld::Entry> m_xEdtTitle;
 
     // description
-    VclPtr<VclMultiLineEdit>  pEdtDescription;
+    std::unique_ptr<weld::TextView> m_xEdtDescription;
 
 public:
     // constructor
-    SvxObjectTitleDescDialog(vcl::Window* pWindow, const OUString& rTitle, const OUString& rDesc);
-    virtual ~SvxObjectTitleDescDialog() override;
-    virtual void dispose() override;
+    SvxObjectTitleDescDialog(weld::Window* pWindow, const OUString& rTitle, const OUString& rDesc);
     // data access
-    void GetTitle(OUString& rTitle) {rTitle = pEdtTitle->GetText(); }
-    void GetDescription(OUString& rDescription) {rDescription = pEdtDescription->GetText(); }
+    OUString GetTitle() const { return m_xEdtTitle->get_text(); }
+    OUString GetDescription() const { return m_xEdtDescription->get_text(); }
 };
 
 enum class SvxMessDialogButton {

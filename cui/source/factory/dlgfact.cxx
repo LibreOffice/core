@@ -127,7 +127,10 @@ short AbstractSvxObjectNameDialog_Impl::Execute()
     return m_xDlg->run();
 }
 
-IMPL_ABSTDLG_BASE(AbstractSvxObjectTitleDescDialog_Impl);
+short AbstractSvxObjectTitleDescDialog_Impl::Execute()
+{
+    return m_xDlg->run();
+}
 
 IMPL_ABSTDLG_BASE(AbstractSvxMultiPathDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractSvxPathSelectDialog_Impl);
@@ -621,12 +624,12 @@ IMPL_LINK_NOARG(AbstractSvxObjectNameDialog_Impl, CheckNameHdl, SvxObjectNameDia
 
 void AbstractSvxObjectTitleDescDialog_Impl::GetTitle(OUString& rTitle)
 {
-    pDlg->GetTitle(rTitle);
+    rTitle = m_xDlg->GetTitle();
 }
 
 void AbstractSvxObjectTitleDescDialog_Impl::GetDescription(OUString& rDescription)
 {
-    pDlg->GetDescription(rDescription);
+    rDescription = m_xDlg->GetDescription();
 }
 
 OUString AbstractSvxMultiPathDialog_Impl::GetPath() const
@@ -1112,9 +1115,9 @@ VclPtr<AbstractSvxObjectNameDialog> AbstractDialogFactory_Impl::CreateSvxObjectN
     return VclPtr<AbstractSvxObjectNameDialog_Impl>::Create(new SvxObjectNameDialog(pParent, rName));
 }
 
-VclPtr<AbstractSvxObjectTitleDescDialog> AbstractDialogFactory_Impl::CreateSvxObjectTitleDescDialog(const OUString& rTitle, const OUString& rDescription)
+VclPtr<AbstractSvxObjectTitleDescDialog> AbstractDialogFactory_Impl::CreateSvxObjectTitleDescDialog(weld::Window* pParent, const OUString& rTitle, const OUString& rDescription)
 {
-    return VclPtr<AbstractSvxObjectTitleDescDialog_Impl>::Create(VclPtr<SvxObjectTitleDescDialog>::Create(nullptr, rTitle, rDescription));
+    return VclPtr<AbstractSvxObjectTitleDescDialog_Impl>::Create(new SvxObjectTitleDescDialog(pParent, rTitle, rDescription));
 }
 
 VclPtr<AbstractSvxMultiPathDialog> AbstractDialogFactory_Impl::CreateSvxMultiPathDialog(vcl::Window* pParent)

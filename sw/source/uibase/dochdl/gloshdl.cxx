@@ -321,7 +321,7 @@ bool SwGlossaryHdl::NewGlossary(const OUString& rName, const OUString& rShortNam
                             rCfg.IsSaveRelFile(), pOnlyText );
     if(nSuccess == sal_uInt16(-1) )
     {
-        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(pWrtShell->GetView().GetWindow()->GetFrameWeld(),
+        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(pWrtShell->GetView().GetFrameWeld(),
                                                                                    VclMessageType::Info, VclButtonsType::Ok, SwResId(STR_ERR_INSERT_GLOS)));
         xBox->run();
     }
@@ -477,8 +477,7 @@ bool SwGlossaryHdl::Expand( const OUString& rShortName,
             }
             OUString aTmp( SwResId(STR_NOGLOS));
             aTmp = aTmp.replaceFirst("%1", aShortName);
-            vcl::Window* pWin = pWrtShell->GetView().GetWindow();
-            std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr,
+            std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(pWrtShell->GetView().GetFrameWeld(),
                                                           VclMessageType::Info, VclButtonsType::Ok,
                                                           aTmp));
             xInfoBox->run();

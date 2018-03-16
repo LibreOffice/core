@@ -228,8 +228,7 @@ ErrCode SwView::InsertGraphic( const OUString &rPath, const OUString &rFilter,
             const sal_uInt16 aRotation = aMetadata.getRotation();
             if (aRotation != 0)
             {
-                vcl::Window* pWin = GetWindow();
-                std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(pWin ? pWin->GetFrameWeld() : nullptr, "modules/swriter/ui/queryrotateintostandarddialog.ui"));
+                std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetFrameWeld(), "modules/swriter/ui/queryrotateintostandarddialog.ui"));
                 std::unique_ptr<weld::MessageDialog> xQueryBox(xBuilder->weld_message_dialog("QueryRotateIntoStandardOrientationDialog"));
                 if (xQueryBox->run() == RET_YES)
                 {
@@ -428,9 +427,8 @@ bool SwView::InsertGraphicDlg( SfxRequest& rReq )
             // really store as link only?
             if( bAsLink && SvtMiscOptions().ShowLinkWarningDialog() )
             {
-                vcl::Window* pWin = GetWindow();
-                SvxLinkWarningDialog aWarnDlg(pWin ? pWin->GetFrameWeld() : nullptr, pFileDlg->GetPath());
-                if(aWarnDlg.run() != RET_OK)
+                SvxLinkWarningDialog aWarnDlg(GetFrameWeld(), pFileDlg->GetPath());
+                if (aWarnDlg.run() != RET_OK)
                     bAsLink=false; // don't store as link
             }
         }
@@ -485,8 +483,7 @@ bool SwView::InsertGraphicDlg( SfxRequest& rReq )
         {
             if( bShowError )
             {
-                vcl::Window* pWin = GetWindow();
-                std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr,
+                std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(GetFrameWeld(),
                                                               VclMessageType::Info, VclButtonsType::Ok,
                                                               SwResId(pResId)));
                 xInfoBox->run();
@@ -563,8 +560,7 @@ void SwView::Execute(SfxRequest &rReq)
                 {
                     OSL_ENSURE( !static_cast<const SfxBoolItem*>(pItem)->GetValue(), "SwView::Execute(): password set an redlining off doesn't match!" );
                     // xmlsec05:    new password dialog
-                    weld::Window* pParent = GetViewFrame()->GetWindow().GetFrameWeld();
-                    SfxPasswordDialog aPasswdDlg(pParent);
+                    SfxPasswordDialog aPasswdDlg(GetFrameWeld());
                     aPasswdDlg.SetMinLen(1);
                     //#i69751# the result of Execute() can be ignored
                     (void)aPasswdDlg.execute();
@@ -604,8 +600,7 @@ void SwView::Execute(SfxRequest &rReq)
 
             // xmlsec05:    new password dialog
             //              message box for wrong password
-            weld::Window* pParent = GetViewFrame()->GetWindow().GetFrameWeld();
-            SfxPasswordDialog aPasswdDlg(pParent);
+            SfxPasswordDialog aPasswdDlg(GetFrameWeld());
             aPasswdDlg.SetMinLen(1);
             if (!aPasswd.getLength())
                 aPasswdDlg.ShowExtras(SfxShowExtras::CONFIRM);
@@ -2286,7 +2281,7 @@ void SwView::GenerateFormLetter(bool bUseCurrentDocument)
             if ( lcl_NeedAdditionalDataSource( xDBContext ) )
             {
                 // no data sources are available - create a new one
-                std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetViewFrame()->GetWindow().GetFrameWeld(), "modules/swriter/ui/datasourcesunavailabledialog.ui"));
+                std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetFrameWeld(), "modules/swriter/ui/datasourcesunavailabledialog.ui"));
                 std::unique_ptr<weld::MessageDialog> xQuery(xBuilder->weld_message_dialog("DataSourcesUnavailableDialog"));
                 // no cancel allowed
                 if (RET_OK != xQuery->run())
@@ -2334,7 +2329,7 @@ void SwView::GenerateFormLetter(bool bUseCurrentDocument)
             OUString sSource;
             if(!GetWrtShell().IsFieldDataSourceAvailable(sSource))
             {
-                std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetViewFrame()->GetWindow().GetFrameWeld(), "modules/swriter/ui/warndatasourcedialog.ui"));
+                std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetFrameWeld(), "modules/swriter/ui/warndatasourcedialog.ui"));
                 std::unique_ptr<weld::MessageDialog> xWarning(xBuilder->weld_message_dialog("WarnDataSourceDialog"));
                 OUString sTmp(xWarning->get_primary_text());
                 xWarning->set_primary_text(sTmp.replaceFirst("%1", sSource));

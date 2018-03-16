@@ -324,17 +324,16 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
                 if ( mpDrawView->GetMarkedObjectList().GetMarkCount() > 0 &&
                     !mpDrawView->IsCrookAllowed( mpDrawView->IsCrookNoContortion() ) )
                 {
-                    ::sd::Window* pWindow = GetActiveWindow();
                     if ( mpDrawView->IsPresObjSelected() )
                     {
-                        std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(pWindow ? pWindow->GetFrameWeld() : nullptr,
+                        std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(GetFrameWeld(),
                                                                       VclMessageType::Info, VclButtonsType::Ok,
                                                                       SdResId(STR_ACTION_NOTPOSSIBLE)));
                         xInfoBox->run();
                     }
                     else
                     {
-                        std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(pWindow ? pWindow->GetFrameWeld() : nullptr,
+                        std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(GetFrameWeld(),
                                                                        VclMessageType::Question, VclButtonsType::YesNo,
                                                                        SdResId(STR_ASK_FOR_CONVERT_TO_BEZIER)));
                         if (xQueryBox->run() == RET_YES )
@@ -368,17 +367,16 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
                 if ( nMarkCnt > 0 && !b3DObjMarked &&
                      (!mpDrawView->IsShearAllowed() || !mpDrawView->IsDistortAllowed()) )
                 {
-                    ::sd::Window* pWindow = GetActiveWindow();
                     if ( mpDrawView->IsPresObjSelected() )
                     {
-                        std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(pWindow ? pWindow->GetFrameWeld() : nullptr,
+                        std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(GetFrameWeld(),
                                                                       VclMessageType::Info, VclButtonsType::Ok,
                                                                       SdResId(STR_ACTION_NOTPOSSIBLE)));
                         xInfoBox->run();
                     }
                     else
                     {
-                        std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(pWindow ? pWindow->GetFrameWeld() : nullptr,
+                        std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(GetFrameWeld(),
                                                                        VclMessageType::Question, VclButtonsType::YesNo,
                                                                        SdResId(STR_ASK_FOR_CONVERT_TO_BEZIER)));
                         if (xQueryBox->run() == RET_YES)
@@ -683,8 +681,7 @@ void DrawViewShell::FuDeleteSelectedObjects()
     // placeholders which cannot be deleted selected
     if (mpDrawView->IsPresObjSelected(false, true, false, true))
     {
-        ::sd::Window* pWindow = GetActiveWindow();
-        std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(pWindow ? pWindow->GetFrameWeld() : nullptr,
+        std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(GetFrameWeld(),
                                                       VclMessageType::Info, VclButtonsType::Ok,
                                                       SdResId(STR_ACTION_NOTPOSSIBLE)));
         xInfoBox->run();
@@ -796,8 +793,7 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
         {
             if ( mpDrawView->IsPresObjSelected(false, true, false, true) )
             {
-                ::sd::Window* pWindow = GetActiveWindow();
-                std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(pWindow ? pWindow->GetFrameWeld() : nullptr,
+                std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(GetFrameWeld(),
                                                               VclMessageType::Info, VclButtonsType::Ok,
                                                               SdResId(STR_ACTION_NOTPOSSIBLE)));
                 xInfoBox->run();
@@ -821,8 +817,7 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
         {
             if ( mpDrawView->IsPresObjSelected(false, true, false, true) )
             {
-                ::sd::Window* pWindow = GetActiveWindow();
-                std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(pWindow ? pWindow->GetFrameWeld() : nullptr,
+                std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(GetFrameWeld(),
                                                               VclMessageType::Info, VclButtonsType::Ok,
                                                               SdResId(STR_ACTION_NOTPOSSIBLE)));
                 xInfoBox->run();

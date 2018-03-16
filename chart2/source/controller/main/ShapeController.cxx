@@ -426,8 +426,9 @@ void ShapeController::executeDispatch_ObjectTitleDescription()
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                 if ( pFact )
                 {
+                    VclPtr<ChartWindow> pChartWindow( m_pChartController->GetChartWindow() );
                     ScopedVclPtr< AbstractSvxObjectTitleDescDialog > pDlg(
-                        pFact->CreateSvxObjectTitleDescDialog( aTitle, aDescription ) );
+                        pFact->CreateSvxObjectTitleDescDialog(pChartWindow ? pChartWindow->GetFrameWeld() : nullptr, aTitle, aDescription ) );
                     if ( pDlg.get() && ( pDlg->Execute() == RET_OK ) )
                     {
                         pDlg->GetTitle( aTitle );
