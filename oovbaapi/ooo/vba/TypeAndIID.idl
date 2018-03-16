@@ -1,0 +1,30 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4; fill-column: 100 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+#ifndef __ooo_vba_TypeAndIID_idl__
+#define __ooo_vba_TypeAndIID_idl__
+
+module ooo {  module vba {
+
+// Despite being here in ooo::vba, this has nothing to do with "VBA" (Visual Basic for
+// Applications), or the VBA compatibility in StarBasic. This is related to using LibreOffice from
+// (OLE) Automation clients. It is here anyway because much of the API available to such clients
+// is identical to that offered to StarBasic code written in a VBA-like fashion.
+
+struct TypeAndIID
+{
+    type Type;
+    string IID;
+};
+
+}; };
+
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

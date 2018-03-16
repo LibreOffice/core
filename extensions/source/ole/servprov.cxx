@@ -24,7 +24,9 @@
 #include "servprov.hxx"
 #include "unoobjw.hxx"
 #include "oleobjw.hxx"
+
 #include <com/sun/star/script/CannotConvertException.hpp>
+#include <comphelper/windowsdebugoutput.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <o3tl/any.hxx>
@@ -44,7 +46,8 @@ using namespace com::sun::star::bridge::ModelDependent;
 // {82154420-0FBF-11d4-8313-005004526AB4}
 DEFINE_GUID(OID_ServiceManager, 0x82154420, 0xfbf, 0x11d4, 0x83, 0x13, 0x0, 0x50, 0x4, 0x52, 0x6a, 0xb4);
 
-// FIXME: This GUID is just the above with the initial part bumped by one. Is that good enough?
+// FIXME: This GUID is just the above OID_ServiceManager with the
+// initial part bumped by one. Is that good enough?
 // {82154421-0FBF-11d4-8313-005004526AB4}
 DEFINE_GUID(OID_LibreOfficeWriterApplication, 0x82154421, 0xfbf, 0x11d4, 0x83, 0x13, 0x0, 0x50, 0x4, 0x52, 0x6a, 0xb4);
 
@@ -129,6 +132,8 @@ STDMETHODIMP OneInstanceOleWrapper::CreateInstance(IUnknown FAR* punkOuter,
                                                    REFIID riid,
                                                    void FAR* FAR* ppv)
 {
+    SAL_INFO("extensions.olebridge", "OneInstanceOleWrapper::CreateInstance(" << riid << ")");
+
     HRESULT ret = ResultFromScode(E_UNEXPECTED);
     punkOuter = nullptr;
 
@@ -150,6 +155,7 @@ STDMETHODIMP OneInstanceOleWrapper::CreateInstance(IUnknown FAR* punkOuter,
 
             if ((pVariant->vt == VT_UNKNOWN) || (pVariant->vt == VT_DISPATCH))
             {
+                SAL_INFO("extensions.olebridge", "OneInstanceOleWrapper::Createbridge: punkVal=" << pVariant->punkVal);
                 ret = pVariant->punkVal->QueryInterface(riid, ppv);
             }
 

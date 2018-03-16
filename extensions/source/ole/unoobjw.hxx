@@ -78,21 +78,21 @@ typedef std::unordered_map
 
 class InterfaceOleWrapper : public WeakImplHelper<XBridgeSupplier2, XInitialization>,
                             public IDispatchEx,
+                            public IProvideClassInfo,
+                            public IConnectionPointContainer,
                             public UnoConversionUtilities<InterfaceOleWrapper>,
                             public IUnoObjectWrapper
 {
 public:
-
-
     InterfaceOleWrapper(Reference<XMultiServiceFactory> const & xFactory, sal_uInt8 unoWrapperClass, sal_uInt8 comWrapperClass);
     ~InterfaceOleWrapper() override;
 
-    /* IUnknown methods */
+    // IUnknown
     STDMETHOD(QueryInterface)(REFIID riid, LPVOID FAR * ppvObj) override;
     STDMETHOD_(ULONG, AddRef)() override;
     STDMETHOD_(ULONG, Release)() override;
 
-    /* IDispatch methods */
+    // IDispatch
     STDMETHOD( GetTypeInfoCount )( unsigned int * pctinfo ) override;
     STDMETHOD( GetTypeInfo )( unsigned int itinfo, LCID lcid, ITypeInfo ** pptinfo ) override;
     STDMETHOD( GetIDsOfNames )( REFIID riid, OLECHAR ** rgszNames, unsigned int cNames,
@@ -101,8 +101,7 @@ public:
                          DISPPARAMS * pdispparams, VARIANT * pvarResult, EXCEPINFO * pexcepinfo,
                          unsigned int * puArgErr ) override;
 
-    /* IDispatchEx methods */
-
+    // IDispatchEx
     virtual HRESULT STDMETHODCALLTYPE GetDispID(
         /* [in] */ BSTR bstrName,
         /* [in] */ DWORD grfdex,
@@ -141,13 +140,24 @@ public:
     virtual HRESULT STDMETHODCALLTYPE GetNameSpaceParent(
         /* [out] */ IUnknown __RPC_FAR *__RPC_FAR *ppunk) override;
 
-    // XBridgeSupplier2 ---------------------------------------------------
+    // IProvideClassInfo
+    virtual HRESULT STDMETHODCALLTYPE GetClassInfo(
+        /* [out] */ ITypeInfo **ppTI) override;
+
+    // IConnectionPointContainer
+    virtual HRESULT STDMETHODCALLTYPE EnumConnectionPoints(
+        /* [out] */ IEnumConnectionPoints **ppEnum) override;
+    virtual HRESULT STDMETHODCALLTYPE FindConnectionPoint(
+        /* [in] */ REFIID riid,
+        /* [out] */ IConnectionPoint **ppCP) override;
+
+    // XBridgeSupplier2
     virtual Any SAL_CALL createBridge(const Any& modelDepObject,
                                 const Sequence<sal_Int8>& ProcessId,
                                 sal_Int16 sourceModelType,
                                 sal_Int16 destModelType) override;
 
-    //XInitialization -----------------------------------------------------
+    // XInitialization
     virtual void SAL_CALL initialize( const Sequence< Any >& aArguments ) override;
 
     // IUnoObjectWrapper
