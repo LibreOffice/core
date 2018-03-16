@@ -104,6 +104,10 @@ short AbstractSwSortDlg_Impl::Execute()
 {
     return m_xDlg->execute();
 }
+short AbstractSignatureLineDialog_Impl::Execute()
+{
+    return m_xDlg->execute();
+}
 IMPL_ABSTDLG_BASE(AbstractTabDialog_Impl);
 short AbstractSwConvertTableDlg_Impl::Execute()
 {
@@ -724,10 +728,9 @@ VclPtr<VclAbstractDialog> SwAbstractDialogFactory_Impl::CreateSwCaptionDialog ( 
     return VclPtr<VclAbstractDialog_Impl>::Create( pDlg );
 }
 
-VclPtr<VclAbstractDialog> SwAbstractDialogFactory_Impl::CreateSignatureLineDialog(vcl::Window* pParent, SwView& rV)
+VclPtr<VclAbstractDialog> SwAbstractDialogFactory_Impl::CreateSignatureLineDialog(weld::Window* pParent, SwView& rV)
 {
-    VclPtr<Dialog> pDlg = VclPtr<SignatureLineDialog>::Create(pParent, rV);
-    return VclPtr<VclAbstractDialog_Impl>::Create(pDlg);
+    return VclPtr<AbstractSignatureLineDialog_Impl>::Create(new SignatureLineDialog(pParent, rV));
 }
 
 VclPtr<AbstractSwInsertDBColAutoPilot> SwAbstractDialogFactory_Impl::CreateSwInsertDBColAutoPilot( SwView& rView,
