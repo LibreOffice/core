@@ -2737,8 +2737,12 @@ void PowerPointExport::WriteTheme(sal_Int32 nThemeNum)
 
     if (!WriteColorSchemes(pFS, sThemePath))
     {
-        // color schemes are required - use default values
-        WriteDefaultColorSchemes(pFS);
+        // if style is not defined, try to use first one
+        if (!WriteColorSchemes(pFS, "ppt/theme/theme1.xml"))
+        {
+            // color schemes are required - use default values
+            WriteDefaultColorSchemes(pFS);
+        }
     }
 
     pFS->endElementNS(XML_a, XML_clrScheme);
