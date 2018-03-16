@@ -20,7 +20,6 @@
 #include <config_features.h>
 
 #include <fuinsert.hxx>
-
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/processfactory.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
@@ -66,6 +65,8 @@
 #include <sot/formats.hxx>
 #include <svx/svdpagv.hxx>
 #include <vcl/msgbox.hxx>
+#include <vcl/GraphicNativeTransform.hxx>
+#include <vcl/GraphicNativeMetadata.hxx>
 #include <sfx2/opengrf.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svx/charthelper.hxx>
@@ -87,6 +88,7 @@
 #include <vcl/svapp.hxx>
 #include <undo/undoobjects.hxx>
 #include <memory>
+#include <vcl/weld.hxx>
 
 using namespace com::sun::star;
 
@@ -153,6 +155,20 @@ void FuInsertGraphic::DoExecute( SfxRequest& rReq )
 
     if( nError == ERRCODE_NONE )
     {
+        GraphicNativeMetadata aMetadata;
+        if ( aMetadata.read(aGraphic) )
+        {
+            const sal_uInt16 aRotation = aMetadata.getRotation();
+            if (aRotation != 0)
+            {
+                std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(nullptr, VclMessageType::Question,VclButtonsType::YesNo,SdResId(STR_QUERYROTATION)));
+                if (xQueryBox->run() == RET_YES)
+                {
+                    GraphicNativeTransform aTransform( aGraphic );
+                    aTransform.rotate( aRotation );
+                }
+            }
+        }
         if( mpViewShell && dynamic_cast< DrawViewShell *>( mpViewShell ) !=  nullptr)
         {
             sal_Int8    nAction = DND_ACTION_COPY;
