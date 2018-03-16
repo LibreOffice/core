@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SW_INC_CALC_HXX
 #define INCLUDED_SW_INC_CALC_HXX
 
+#include <array>
 #include <memory>
 #include <vector>
 #include <basic/sbxvar.hxx>
@@ -136,7 +137,9 @@ struct SwCalcExp : public SwHash
                 const SwFieldType* pFieldType );
 };
 
-SwHash* Find( const OUString& rSrch, SwHash* const * ppTable,
+typedef std::array<std::unique_ptr<SwHash>, TBLSZ> SwCalcVarTable;
+
+SwHash* Find( const OUString& rSrch, SwCalcVarTable const & rTable,
                 sal_uInt16 nTableSize, sal_uInt16* pPos = nullptr );
 
 void DeleteHashTable( SwHash** ppTable, sal_uInt16 nTableSize );
@@ -149,7 +152,9 @@ extern "C" typedef double (*pfCalc)(double);
 
 class SwCalc
 {
-    SwHash*     m_aVarTable[ TBLSZ ];
+public:
+private:
+    SwCalcVarTable m_aVarTable;
     OUString    m_aVarName, m_sCurrSym;
     OUString    m_sCommand;
     std::vector<const SwUserFieldType*> m_aRekurStack;
@@ -193,7 +198,7 @@ public:
     SwCalcExp*  VarLook( const OUString &rStr, bool bIns = false );
     void        VarChange( const OUString& rStr, const SwSbxValue& rValue );
     void        VarChange( const OUString& rStr, double );
-    SwHash**    GetVarTable()                       { return m_aVarTable; }
+    SwCalcVarTable & GetVarTable() { return m_aVarTable; }
 
     bool        Push(const SwUserFieldType* pUserFieldType);
     void        Pop();
