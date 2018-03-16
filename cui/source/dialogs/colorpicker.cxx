@@ -166,7 +166,7 @@ public:
     {
         m_xDrawingArea->connect_size_allocate(LINK(this, ColorPreviewControl, DoResize));
         m_xDrawingArea->connect_draw(LINK(this, ColorPreviewControl, DoPaint));
-        m_xDrawingArea->set_size_request(m_xDrawingArea->get_approximate_char_width() * 10,
+        m_xDrawingArea->set_size_request(m_xDrawingArea->get_approximate_digit_width() * 10,
                                          m_xDrawingArea->get_text_height() * 2);
 
     }
@@ -212,7 +212,7 @@ public:
         , mdX( -1.0 )
         , mdY( -1.0 )
     {
-        m_xDrawingArea->set_size_request(m_xDrawingArea->get_approximate_char_width() * 40,
+        m_xDrawingArea->set_size_request(m_xDrawingArea->get_approximate_digit_width() * 40,
                                          m_xDrawingArea->get_text_height() * 10);
         m_xDrawingArea->connect_size_allocate(LINK(this, ColorFieldControl, DoResize));
         m_xDrawingArea->connect_draw(LINK(this, ColorFieldControl, DoPaint));
@@ -559,7 +559,7 @@ ColorSliderControl::ColorSliderControl(weld::DrawingArea* pDrawingArea)
     , mnLevel( 0 )
     , mdValue( -1.0 )
 {
-    m_xDrawingArea->set_size_request(m_xDrawingArea->get_approximate_char_width() * 3, -1);
+    m_xDrawingArea->set_size_request(m_xDrawingArea->get_approximate_digit_width() * 3, -1);
     m_xDrawingArea->connect_size_allocate(LINK(this, ColorSliderControl, DoResize));
     m_xDrawingArea->connect_draw(LINK(this, ColorSliderControl, DoPaint));
     m_xDrawingArea->connect_mouse_press(LINK(this, ColorSliderControl, DoButtonDown));

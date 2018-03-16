@@ -173,7 +173,7 @@ namespace weld
         m_xSpinButton->get_range(min, max);
         auto width = std::max(m_xSpinButton->get_pixel_size(format_number(min)).Width(),
                               m_xSpinButton->get_pixel_size(format_number(max)).Width());
-        int chars = ceil(width / m_xSpinButton->get_approximate_char_width());
+        int chars = ceil(width / m_xSpinButton->get_approximate_digit_width());
         m_xSpinButton->set_width_chars(chars);
     }
 

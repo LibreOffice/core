@@ -83,7 +83,7 @@ SwAutoFormatDlg::SwAutoFormatDlg(weld::Window* pParent, SwWrtShell* pWrtShell,
     m_xWndPreview->DetectRTL(pWrtShell);
     m_xTableTable->Load();
 
-    const int nWidth = m_xLbFormat->get_approximate_char_width() * 32;
+    const int nWidth = m_xLbFormat->get_approximate_digit_width() * 32;
     const int nHeight = m_xLbFormat->get_height_rows(8);
     m_xLbFormat->set_size_request(nWidth, nHeight);
     m_xWndPreview->set_size_request(nWidth, nHeight);

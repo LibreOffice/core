@@ -42,7 +42,7 @@ public:
     }
     virtual void set_size_request(int nWidth, int nHeight) = 0;
     virtual Size get_preferred_size() const = 0;
-    virtual float get_approximate_char_width() const = 0;
+    virtual float get_approximate_digit_width() const = 0;
     virtual int get_text_height() const = 0;
     virtual Size get_pixel_size(const OUString& rText) const = 0;
     virtual OString get_buildable_name() const = 0;

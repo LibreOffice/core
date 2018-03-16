@@ -47,7 +47,7 @@ SignatureLineDialog::SignatureLineDialog(weld::Window* pParent, SwView& rView)
     , m_xCheckboxShowSignDate(m_xBuilder->weld_check_button("checkbox_show_sign_date"))
     , mrView(rView)
 {
-    m_xEditInstructions->set_size_request(m_xEditInstructions->get_approximate_char_width() * 24,
+    m_xEditInstructions->set_size_request(m_xEditInstructions->get_approximate_digit_width() * 48,
                                           m_xEditInstructions->get_text_height() * 5);
 
     // No signature line selected - start with empty dialog and generate a new one
