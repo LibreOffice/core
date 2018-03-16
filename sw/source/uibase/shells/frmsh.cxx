@@ -635,9 +635,8 @@ void SwFrameShell::Execute(SfxRequest &rReq)
                 OUString aName(rSh.GetFlyName());
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                 assert(pFact);
-                vcl::Window* pWin = GetView().GetWindow();
                 ScopedVclPtr<AbstractSvxObjectNameDialog> pDlg(
-                    pFact->CreateSvxObjectNameDialog(pWin ? pWin->GetFrameWeld() : nullptr, aName));
+                    pFact->CreateSvxObjectNameDialog(GetView().GetFrameWeld(), aName));
 
                 assert(pDlg);
 
@@ -663,8 +662,8 @@ void SwFrameShell::Execute(SfxRequest &rReq)
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                 assert(pFact);
                 ScopedVclPtr<AbstractSvxObjectTitleDescDialog> pDlg(
-                    pFact->CreateSvxObjectTitleDescDialog( aTitle,
-                                                           aDescription ));
+                    pFact->CreateSvxObjectTitleDescDialog(GetView().GetFrameWeld(),
+                        aTitle, aDescription ));
                 assert(pDlg);
 
                 if ( pDlg->Execute() == RET_OK )

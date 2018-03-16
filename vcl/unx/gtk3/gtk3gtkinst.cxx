@@ -2423,6 +2423,15 @@ public:
     {
     }
 
+    virtual void set_size_request(int nWidth, int nHeight) override
+    {
+        GtkWidget* pParent = gtk_widget_get_parent(m_pWidget);
+        if (GTK_IS_SCROLLED_WINDOW(pParent))
+            gtk_widget_set_size_request(pParent, nWidth, nHeight);
+        else
+            gtk_widget_set_size_request(m_pWidget, nWidth, nHeight);
+    }
+
     virtual void set_text(const OUString& rText) override
     {
         GtkTextBuffer* pBuffer = gtk_text_view_get_buffer(m_pTextView);

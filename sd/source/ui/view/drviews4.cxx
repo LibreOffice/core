@@ -105,8 +105,7 @@ void DrawViewShell::DeleteActualLayer()
     // replace placeholder
     aString = aString.replaceFirst("$", rName);
 
-    vcl::Window* pWin = GetActiveWindow();
-    std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr,
+    std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(GetFrameWeld(),
                                                    VclMessageType::Question, VclButtonsType::YesNo,
                                                    aString));
     if (xQueryBox->run() == RET_YES)

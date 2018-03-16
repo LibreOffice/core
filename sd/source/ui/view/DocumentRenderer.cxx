@@ -1282,8 +1282,7 @@ public:
                 // Show warning that the orientation could not be set.
                 if (pViewShell)
                 {
-                    vcl::Window* pWin = pViewShell->GetActiveWindow();
-                    std::unique_ptr<weld::MessageDialog> xWarn(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr,
+                    std::unique_ptr<weld::MessageDialog> xWarn(Application::CreateMessageDialog(pViewShell->GetFrameWeld(),
                                                                VclMessageType::Warning, VclButtonsType::OkCancel,
                                                                SdResId(STR_WARN_PRINTFORMAT_FAILURE)));
                     xWarn->set_default_response(RET_CANCEL);

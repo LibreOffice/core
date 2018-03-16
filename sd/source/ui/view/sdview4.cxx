@@ -377,8 +377,7 @@ IMPL_LINK_NOARG(View, DropInsertFileHdl, Timer *, void)
     if( !mpViewSh )
         return;
 
-    vcl::Window* pWindow = mpViewSh->GetActiveWindow();
-    SfxErrorContext aEc( ERRCTX_ERROR, pWindow ? pWindow->GetFrameWeld() : nullptr, RID_SO_ERRCTX );
+    SfxErrorContext aEc( ERRCTX_ERROR, mpViewSh->GetFrameWeld(), RID_SO_ERRCTX );
     ErrCode nError = ERRCODE_NONE;
 
     ::std::vector< OUString >::const_iterator aIter( maDropFileVector.begin() );
