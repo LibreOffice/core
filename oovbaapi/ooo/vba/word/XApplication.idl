@@ -29,7 +29,7 @@ interface XWindow;
 interface XSystem;
 interface XOptions;
 interface XSelection;
-interface XApplication : com::sun::star::uno::XInterface
+interface XApplication : XConnectable
 {
     [attribute, readonly] XDocument ActiveDocument;
     [attribute, readonly] XWindow ActiveWindow;

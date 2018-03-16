@@ -1,4 +1,4 @@
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4; fill-column: 100 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -19,6 +19,9 @@
 #ifndef INCLUDED_SW_SOURCE_UI_VBA_VBAAPPLICATION_HXX
 #define INCLUDED_SW_SOURCE_UI_VBA_VBAAPPLICATION_HXX
 
+#include <vector>
+
+#include <ooo/vba/XSink.hpp>
 #include <ooo/vba/word/XApplication.hpp>
 #include <ooo/vba/word/XDocument.hpp>
 #include <ooo/vba/word/XWindow.hpp>
@@ -34,9 +37,15 @@ typedef cppu::ImplInheritanceHelper< VbaApplicationBase, ooo::vba::word::XApplic
 
 class SwVbaApplication : public SwVbaApplication_BASE
 {
+    // FIXME: We allow just one sink at a time
+    std::vector<css::uno::Reference< ooo::vba::XSink >> mvSinks;
+
 public:
     explicit SwVbaApplication( css::uno::Reference< css::uno::XComponentContext >& m_xContext );
     virtual ~SwVbaApplication() override;
+
+    sal_uInt32 AddSink( const css::uno::Reference< ooo::vba::XSink >& xSink );
+    void RemoveSink( sal_uInt32 nNumber );
 
     // XApplication
     virtual OUString SAL_CALL getName() override;
@@ -56,6 +65,15 @@ public:
     virtual void SAL_CALL setEnableCancelKey( sal_Int32 _enableCancelKey ) override;
     virtual float SAL_CALL CentimetersToPoints( float Centimeters ) override;
     virtual void SAL_CALL ShowMe() override;
+
+    // XInterfaceWithIID
+    virtual OUString SAL_CALL getIID() override;
+
+    // XConnectable
+    virtual OUString SAL_CALL GetIIDForClassItselfNotCoclass() override;
+    virtual ov::TypeAndIID SAL_CALL GetConnectionPoint() override;
+    virtual css::uno::Reference<ov::XConnectionPoint> SAL_CALL FindConnectionPoint() override;
+
     // XHelperInterface
     virtual OUString getServiceImplName() override;
     virtual css::uno::Sequence<OUString> getServiceNames() override;

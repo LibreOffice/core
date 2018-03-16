@@ -44,6 +44,7 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,oovbaapi,ooo/vba/excel,\
 
 $(eval $(call gb_UnoApi_add_idlfiles,oovbaapi,ooo/vba,\
     FormShowConstants \
+    TypeAndIID \
     VbAppWinStyle \
     VbCalendar \
     VbCallType \
@@ -70,6 +71,8 @@ $(eval $(call gb_UnoApi_add_idlfiles,oovbaapi,ooo/vba,\
 	XCommandBarControls \
 	XCommandBarPopup \
 	XCommandBars \
+	XConnectable \
+	XConnectionPoint \
 	XControlProvider \
 	XDialogBase \
 	XDialogsBase \
@@ -82,8 +85,11 @@ $(eval $(call gb_UnoApi_add_idlfiles,oovbaapi,ooo/vba,\
 	XFontBase \
 	XGlobalsBase \
 	XHelperInterface \
+	XInterfaceWithIID \
 	XPageSetupBase \
 	XPropValue \
+	XSink \
+	XSinkCaller \
 	XVBAToOOEventDescGen \
 	XWindowBase \
 ))
@@ -1028,6 +1034,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,oovbaapi,ooo/vba/word,\
 	XAddin \
 	XAddins \
 	XApplication \
+	XApplicationOutgoing \
 	XAutoTextEntries \
 	XAutoTextEntry \
 	XBookmark \
