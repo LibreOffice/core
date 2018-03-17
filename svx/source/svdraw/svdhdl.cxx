@@ -30,6 +30,7 @@
 #include <vcl/virdev.hxx>
 #include <tools/poly.hxx>
 #include <vcl/bitmapaccess.hxx>
+#include <vcl/BitmapCropper.hxx>
 
 #include <svx/sxekitm.hxx>
 #include <svx/strings.hrc>
@@ -110,10 +111,10 @@ BitmapEx& SdrHdlBitmapSet::impGetOrCreateTargetBitmap(sal_uInt16 nIndex, const t
 {
     BitmapEx& rTargetBitmap = maRealMarkers[nIndex];
 
-    if(rTargetBitmap.IsEmpty())
+    if (rTargetBitmap.IsEmpty())
     {
         rTargetBitmap = maMarkersBitmap;
-        rTargetBitmap.Crop(rRectangle);
+        BitmapFilter::Filter(rTargetBitmap, BitmapCropper(rRectangle));
     }
 
     return rTargetBitmap;
@@ -2335,7 +2336,8 @@ BitmapEx SdrCropHdl::GetBitmapForHandle( const BitmapEx& rBitmap, int nSize )
     tools::Rectangle aSourceRect( Point( nX * nPixelSize + nOffset,  nY * nPixelSize), Size(nPixelSize, nPixelSize) );
 
     BitmapEx aRetval(rBitmap);
-    aRetval.Crop(aSourceRect);
+    BitmapFilter::Filter(aRetval, BitmapCropper(aSourceRect));
+
     return aRetval;
 }
 
