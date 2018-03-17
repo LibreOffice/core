@@ -3964,8 +3964,8 @@ void WW8AttributeOutput::FormatLRSpace( const SvxLRSpaceItem& rLR )
 
         if ( auto pBoxItem = static_cast<const SvxBoxItem*>(m_rWW8Export.HasItem( RES_BOX )) )
         {
-            m_pageMargins.nRight = pBoxItem->CalcLineSpace( SvxBoxItemLine::LEFT, /*bEvenIfNoLine*/true );
-            m_pageMargins.nLeft = pBoxItem->CalcLineSpace( SvxBoxItemLine::RIGHT, /*bEvenIfNoLine*/true );
+            m_pageMargins.nLeft = pBoxItem->CalcLineSpace( SvxBoxItemLine::LEFT, /*bEvenIfNoLine*/true );
+            m_pageMargins.nRight = pBoxItem->CalcLineSpace( SvxBoxItemLine::RIGHT, /*bEvenIfNoLine*/true );
         }
 
         m_pageMargins.nLeft += sal::static_int_cast<sal_uInt16>(rLR.GetLeft());
