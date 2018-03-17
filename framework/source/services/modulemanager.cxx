@@ -229,17 +229,11 @@ void SAL_CALL ModuleManager::replaceByName(const OUString& sName ,
                 static_cast< cppu::OWeakObject * >(this));
     }
 
-    ::comphelper::SequenceAsHashMap::const_iterator pProp;
-    for (  pProp  = lProps.begin();
-           pProp != lProps.end()  ;
-         ++pProp                  )
+    for (auto const& prop : lProps)
     {
-        const OUString& sPropName  = pProp->first;
-        const css::uno::Any&   aPropValue = pProp->second;
-
         // let "NoSuchElementException" out ! We support the same API ...
         // and without a flush() at the end all changed data before will be ignored !
-        xModule->replaceByName(sPropName, aPropValue);
+        xModule->replaceByName(prop.first, prop.second);
     }
 
     ::comphelper::ConfigurationHelper::flush(xCfg);

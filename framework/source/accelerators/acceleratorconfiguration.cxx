@@ -507,10 +507,8 @@ css::uno::Sequence< css::awt::KeyEvent > SAL_CALL XCUBasedAcceleratorConfigurati
 
     AcceleratorCache::TKeyList lSecondaryKeys = impl_getCFG(false).getAllKeys(); //get keys from SecondaryKeys set
     lKeys.reserve(lKeys.size()+lSecondaryKeys.size());
-    AcceleratorCache::TKeyList::const_iterator pIt;
-    AcceleratorCache::TKeyList::const_iterator pEnd = lSecondaryKeys.end();
-    for ( pIt  = lSecondaryKeys.begin(); pIt != pEnd; ++pIt )
-        lKeys.push_back(*pIt);
+    for (auto const& secondaryKey : lSecondaryKeys)
+        lKeys.push_back(secondaryKey);
 
     return comphelper::containerToSequence(lKeys);
 }
@@ -671,9 +669,8 @@ css::uno::Sequence< css::awt::KeyEvent > SAL_CALL XCUBasedAcceleratorConfigurati
     AcceleratorCache::TKeyList lKeys  = rPrimaryCache.getKeysByCommand(sCommand);
 
     AcceleratorCache::TKeyList lSecondaryKeys = rSecondaryCache.getKeysByCommand(sCommand);
-    AcceleratorCache::TKeyList::const_iterator pIt;
-    for (pIt = lSecondaryKeys.begin(); pIt != lSecondaryKeys.end(); ++pIt)
-        lKeys.push_back(*pIt);
+    for (auto const& secondaryKey : lSecondaryKeys)
+        lKeys.push_back(secondaryKey);
 
     return comphelper::containerToSequence(lKeys);
 }
@@ -845,14 +842,14 @@ void SAL_CALL XCUBasedAcceleratorConfiguration::storeToStorage(const css::uno::R
         if (m_pSecondaryWriteCache!=nullptr)
         {
             lKeys = m_pSecondaryWriteCache->getAllKeys();
-            for ( pIt=lKeys.begin(); pIt!=lKeys.end(); ++pIt )
-                aCache.setKeyCommandPair(*pIt, m_pSecondaryWriteCache->getCommandByKey(*pIt));
+            for (auto const& lKey : lKeys)
+                aCache.setKeyCommandPair(lKey, m_pSecondaryWriteCache->getCommandByKey(lKey));
         }
         else
         {
             lKeys = m_aSecondaryReadCache.getAllKeys();
-            for ( pIt=lKeys.begin(); pIt!=lKeys.end(); ++pIt )
-                aCache.setKeyCommandPair(*pIt, m_aSecondaryReadCache.getCommandByKey(*pIt));
+            for (auto const& lKey : lKeys)
+                aCache.setKeyCommandPair(lKey, m_aSecondaryReadCache.getCommandByKey(lKey));
         }
     }
 
@@ -1019,26 +1016,31 @@ void XCUBasedAcceleratorConfiguration::impl_ts_load( bool bPreferred, const css:
             for ( sal_Int32 j=0; j<nLocales; ++j )
                 aLocales.push_back(lLocales[j]);
 
-            ::std::vector< OUString >::const_iterator pFound;
-            for ( pFound = aLocales.begin(); pFound != aLocales.end(); ++pFound )
+            OUString sLocale;
+            for (auto const& locale : aLocales)
             {
-                if ( *pFound == sIsoLang )
+                if ( locale == sIsoLang )
+                {
+                    sLocale = locale;
                     break;
+                }
             }
 
-            if ( pFound == aLocales.end() )
+            if (sLocale.isEmpty())
             {
-                for ( pFound = aLocales.begin(); pFound != aLocales.end(); ++pFound )
+                for (auto const& locale : aLocales)
                 {
-                    if ( *pFound == sDefaultLocale )
+                    if ( locale == sDefaultLocale )
+                    {
+                        sLocale = locale;
                         break;
+                    }
                 }
 
-                if ( pFound == aLocales.end() )
+                if (sLocale.isEmpty())
                     continue;
             }
 
-            OUString sLocale = *pFound;
             OUString sCommand;
             xCommand->getByName(sLocale) >>= sCommand;
             if (sCommand.isEmpty())
@@ -1096,28 +1098,27 @@ void XCUBasedAcceleratorConfiguration::impl_ts_save(bool bPreferred)
 {
     if (bPreferred)
     {
-        AcceleratorCache::TKeyList::const_iterator pIt;
         AcceleratorCache::TKeyList lPrimaryReadKeys  = m_aPrimaryReadCache.getAllKeys();
         AcceleratorCache::TKeyList lPrimaryWriteKeys = m_pPrimaryWriteCache->getAllKeys();
 
-        for ( pIt  = lPrimaryReadKeys.begin(); pIt != lPrimaryReadKeys.end(); ++pIt )
+        for (auto const& primaryReadKey : lPrimaryReadKeys)
         {
-            if (!m_pPrimaryWriteCache->hasKey(*pIt))
-                removeKeyFromConfiguration(*pIt, true);
+            if (!m_pPrimaryWriteCache->hasKey(primaryReadKey))
+                removeKeyFromConfiguration(primaryReadKey, true);
         }
 
-        for ( pIt  = lPrimaryWriteKeys.begin(); pIt != lPrimaryWriteKeys.end(); ++pIt )
+        for (auto const& primaryWriteKey : lPrimaryWriteKeys)
         {
-            OUString sCommand = m_pPrimaryWriteCache->getCommandByKey(*pIt);
-            if (!m_aPrimaryReadCache.hasKey(*pIt))
+            OUString sCommand = m_pPrimaryWriteCache->getCommandByKey(primaryWriteKey);
+            if (!m_aPrimaryReadCache.hasKey(primaryWriteKey))
             {
-                insertKeyToConfiguration(*pIt, sCommand, true);
+                insertKeyToConfiguration(primaryWriteKey, sCommand, true);
             }
             else
             {
-                OUString sReadCommand = m_aPrimaryReadCache.getCommandByKey(*pIt);
+                OUString sReadCommand = m_aPrimaryReadCache.getCommandByKey(primaryWriteKey);
                 if (sReadCommand != sCommand)
-                    insertKeyToConfiguration(*pIt, sCommand, true);
+                    insertKeyToConfiguration(primaryWriteKey, sCommand, true);
             }
         }
 
@@ -1135,28 +1136,27 @@ void XCUBasedAcceleratorConfiguration::impl_ts_save(bool bPreferred)
 
     else
     {
-        AcceleratorCache::TKeyList::const_iterator pIt;
         AcceleratorCache::TKeyList lSecondaryReadKeys  = m_aSecondaryReadCache.getAllKeys();
         AcceleratorCache::TKeyList lSecondaryWriteKeys = m_pSecondaryWriteCache->getAllKeys();
 
-        for ( pIt  = lSecondaryReadKeys.begin(); pIt != lSecondaryReadKeys.end(); ++pIt)
+        for (auto const& secondaryReadKey : lSecondaryReadKeys)
         {
-            if (!m_pSecondaryWriteCache->hasKey(*pIt))
-                removeKeyFromConfiguration(*pIt, false);
+            if (!m_pSecondaryWriteCache->hasKey(secondaryReadKey))
+                removeKeyFromConfiguration(secondaryReadKey, false);
         }
 
-        for ( pIt  = lSecondaryWriteKeys.begin(); pIt != lSecondaryWriteKeys.end(); ++pIt )
+        for (auto const& secondaryWriteKey : lSecondaryWriteKeys)
         {
-            OUString sCommand = m_pSecondaryWriteCache->getCommandByKey(*pIt);
-            if (!m_aSecondaryReadCache.hasKey(*pIt))
+            OUString sCommand = m_pSecondaryWriteCache->getCommandByKey(secondaryWriteKey);
+            if (!m_aSecondaryReadCache.hasKey(secondaryWriteKey))
             {
-                insertKeyToConfiguration(*pIt, sCommand, false);
+                insertKeyToConfiguration(secondaryWriteKey, sCommand, false);
             }
             else
             {
-                OUString sReadCommand = m_aSecondaryReadCache.getCommandByKey(*pIt);
+                OUString sReadCommand = m_aSecondaryReadCache.getCommandByKey(secondaryWriteKey);
                 if (sReadCommand != sCommand)
-                    insertKeyToConfiguration(*pIt, sCommand, false);
+                    insertKeyToConfiguration(secondaryWriteKey, sCommand, false);
             }
         }
 

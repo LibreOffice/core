@@ -1981,13 +1981,10 @@ css::uno::Sequence< css::beans::Property > SAL_CALL Frame::getProperties()
 
     sal_Int32 c = static_cast<sal_Int32>(m_lProps.size());
     css::uno::Sequence< css::beans::Property > lProps(c);
-    TPropInfoHash::const_iterator pIt;
 
-    for (  pIt  = m_lProps.begin();
-           pIt != m_lProps.end();
-         ++pIt                    )
+    for (auto const& elem : m_lProps)
     {
-        lProps[--c] = pIt->second;
+        lProps[--c] = elem.second;
     }
 
     return lProps;

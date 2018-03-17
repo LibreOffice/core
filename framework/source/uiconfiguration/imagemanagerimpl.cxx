@@ -995,24 +995,23 @@ void ImageManagerImpl::reload()
                 GraphicNameAccess* pReplacedImages( nullptr );
                 GraphicNameAccess* pRemovedImages( nullptr );
 
-                const sal_uInt32 nNewCount = aNewUserCmdImageSet.size();
-                for ( j = 0; j < nNewCount; j++ )
+                for (auto const& newUserCmdImage : aNewUserCmdImageSet)
                 {
-                    CommandMap::iterator pIter = aOldUserCmdImageSet.find( aNewUserCmdImageSet[j] );
+                    CommandMap::iterator pIter = aOldUserCmdImageSet.find(newUserCmdImage);
                     if ( pIter != aOldUserCmdImageSet.end() )
                     {
                         pIter->second = true; // mark entry as replaced
                         if ( !pReplacedImages )
                             pReplacedImages = new GraphicNameAccess();
-                        pReplacedImages->addElement( aNewUserCmdImageSet[j],
-                                                     GetXGraphic(pImageList->GetImage(aNewUserCmdImageSet[j])) );
+                        pReplacedImages->addElement( newUserCmdImage,
+                                                     GetXGraphic(pImageList->GetImage(newUserCmdImage)) );
                     }
                     else
                     {
                         if ( !pInsertedImages )
                             pInsertedImages = new GraphicNameAccess();
-                        pInsertedImages->addElement( aNewUserCmdImageSet[j],
-                                                     GetXGraphic(pImageList->GetImage(aNewUserCmdImageSet[j])) );
+                        pInsertedImages->addElement( newUserCmdImage,
+                                                     GetXGraphic(pImageList->GetImage(newUserCmdImage)) );
                     }
                 }
 
@@ -1027,30 +1026,29 @@ void ImageManagerImpl::reload()
                     pDefaultImageList = implts_getDefaultImageList();
                 }
                 uno::Reference<XGraphic> xEmptyGraphic;
-                CommandMap::const_iterator pIter = aOldUserCmdImageSet.begin();
-                while ( pIter != aOldUserCmdImageSet.end() )
+                for (auto const& oldUserCmdImage : aOldUserCmdImageSet)
                 {
-                    if ( !pIter->second )
+                    if ( !oldUserCmdImage.second )
                     {
                         if ( m_bUseGlobal )
                         {
-                            Image aImage = pDefaultImageList->getImageFromCommandURL( i, pIter->first );
+                            Image aImage = pDefaultImageList->getImageFromCommandURL( i, oldUserCmdImage.first );
                             if ( !aImage )
-                                aImage = rGlobalImageList->getImageFromCommandURL( i, pIter->first );
+                                aImage = rGlobalImageList->getImageFromCommandURL( i, oldUserCmdImage.first );
 
                             if ( !aImage )
                             {
                                 // No image in the module/global image list => remove user image
                                 if ( !pRemovedImages )
                                     pRemovedImages = new GraphicNameAccess();
-                                pRemovedImages->addElement( pIter->first, xEmptyGraphic );
+                                pRemovedImages->addElement( oldUserCmdImage.first, xEmptyGraphic );
                             }
                             else
                             {
                                 // Image has been found in the module/global image list => replace user image
                                 if ( !pReplacedImages )
                                     pReplacedImages = new GraphicNameAccess();
-                                pReplacedImages->addElement(pIter->first, GetXGraphic(aImage));
+                                pReplacedImages->addElement(oldUserCmdImage.first, GetXGraphic(aImage));
                             }
                         } // if ( m_bUseGlobal )
                         else
@@ -1058,10 +1056,9 @@ void ImageManagerImpl::reload()
                             // No image in the user image list => remove user image
                             if ( !pRemovedImages )
                                 pRemovedImages = new GraphicNameAccess();
-                            pRemovedImages->addElement( pIter->first, xEmptyGraphic );
+                            pRemovedImages->addElement( oldUserCmdImage.first, xEmptyGraphic );
                         }
                     }
-                    ++pIter;
                 }
 
                 aGuard.clear();
