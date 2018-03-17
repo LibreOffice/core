@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_8d9a65c4",
+        "filename": "sd/inc/strings.hrc",
+        "patchSetId": 2
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-03-17T11:55:45Z",
+      "side": 1,
+      "message": "STR_QUERYROTAION -\u003e STR_QUERYROTATION",
+      "revId": "cb14b00256c2720315ab6155cfd0a10933db7dca",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
