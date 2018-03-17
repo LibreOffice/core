@@ -162,7 +162,7 @@ static void lcl_InsertGraphic( const Graphic& rGraphic,
     tools::Rectangle aRect ( aInsertPos, aLogicSize );
 
     SdrGrafObj* pObj = new SdrGrafObj(
-        pView->getSdrModelFromSdrView(), // TTTT pView shbe ref
+        pView->getSdrModelFromSdrView(), // TTTT pView should be reference
         rGraphic,
         aRect);
 

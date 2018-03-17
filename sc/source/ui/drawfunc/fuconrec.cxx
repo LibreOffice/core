@@ -216,7 +216,7 @@ void FuConstRectangle::Activate()
 
 void FuConstRectangle::SetLineEnds(SfxItemSet& rAttr, const SdrObject* pObj, sal_uInt16 nSlotId)
 {
-    SdrModel& rModel(pObj->getSdrModelFromSdrObject()); // TTTT pObj shbe ref
+    SdrModel& rModel(pObj->getSdrModelFromSdrObject()); // TTTT pObj should be reference
 
     if ( nSlotId == SID_LINE_ARROW_START      ||
          nSlotId == SID_LINE_ARROW_END        ||

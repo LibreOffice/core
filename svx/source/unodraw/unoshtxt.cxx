@@ -157,7 +157,7 @@ SvxTextEditSourceImpl::SvxTextEditSourceImpl( SdrObject* pObject, SdrText* pText
     mpText          ( pText ),
     mpView          ( nullptr ),
     mpWindow        ( nullptr ),
-    mpModel         ( pObject ? &pObject->getSdrModelFromSdrObject() : nullptr ), // TTTT shbe ref
+    mpModel         ( pObject ? &pObject->getSdrModelFromSdrObject() : nullptr ), // TTTT should be reference
     mpOutliner      ( nullptr ),
     mpTextForwarder ( nullptr ),
     mpViewForwarder ( nullptr ),
@@ -193,7 +193,7 @@ SvxTextEditSourceImpl::SvxTextEditSourceImpl( SdrObject& rObject, SdrText* pText
     mpText          ( pText ),
     mpView          ( &rView ),
     mpWindow        ( &rWindow ),
-    mpModel         ( &rObject.getSdrModelFromSdrObject() ), // TTTT shbe ref
+    mpModel         ( &rObject.getSdrModelFromSdrObject() ), // TTTT should be reference
     mpOutliner      ( nullptr ),
     mpTextForwarder ( nullptr ),
     mpViewForwarder ( nullptr ),

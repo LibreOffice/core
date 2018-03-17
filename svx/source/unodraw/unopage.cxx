@@ -61,7 +61,7 @@ using namespace ::com::sun::star::drawing;
 
 UNO3_GETIMPLEMENTATION_IMPL( SvxDrawPage );
 
-SvxDrawPage::SvxDrawPage(SdrPage* pInPage) // TTTT shbe ref
+SvxDrawPage::SvxDrawPage(SdrPage* pInPage) // TTTT should be reference
 :   mrBHelper(getMutex())
     ,mpPage(pInPage)
     ,mpModel(&pInPage->getSdrModelFromSdrPage())  // register at broadcaster
