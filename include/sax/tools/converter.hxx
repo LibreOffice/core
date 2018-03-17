@@ -101,7 +101,7 @@ public:
     static bool convertColor( ::Color& rColor,
                               const OUString&rValue )
     {
-        sal_Int32 n(rColor);
+        sal_Int32 n(rColor.GetColorNumber());
         bool b = convertColor( n, rValue );
         if (b) rColor = n;
         return b;
@@ -112,7 +112,7 @@ public:
                               sal_Int32 nColor );
     static void convertColor( OUStringBuffer &rBuffer,
                               ::Color nColor )
-    { convertColor( rBuffer, sal_Int32(nColor) ); }
+    { convertColor(rBuffer, nColor.GetColorNumber()); }
 
     /** convert string to number with optional min and max values */
     static bool convertNumber( sal_Int32& rValue,

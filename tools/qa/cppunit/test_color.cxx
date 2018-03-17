@@ -36,27 +36,27 @@ void Test::test_asRGBColor()
 {
     Color aColor;
     aColor = COL_BLACK;
-    CPPUNIT_ASSERT_EQUAL(aColor.AsRGBHexString(), OUString("000000"));
+    CPPUNIT_ASSERT_EQUAL(OUString("000000"), aColor.AsRGBHexString());
 
     aColor = COL_WHITE;
-    CPPUNIT_ASSERT_EQUAL(aColor.AsRGBHexString(), OUString("ffffff"));
+    CPPUNIT_ASSERT_EQUAL(OUString("ffffff"), aColor.AsRGBHexString());
 
     aColor = COL_RED;
-    CPPUNIT_ASSERT_EQUAL(aColor.AsRGBHexString(), OUString("800000"));
+    CPPUNIT_ASSERT_EQUAL(OUString("800000"), aColor.AsRGBHexString());
 
     aColor = COL_TRANSPARENT;
-    CPPUNIT_ASSERT_EQUAL(aColor.AsRGBHexString(), OUString("ffffff"));
+    CPPUNIT_ASSERT_EQUAL(OUString("ffffff"), aColor.AsRGBHexString());
 
     aColor = COL_BLUE;
-    CPPUNIT_ASSERT_EQUAL(aColor.AsRGBHexString(), OUString("000080"));
+    CPPUNIT_ASSERT_EQUAL(OUString("000080"), aColor.AsRGBHexString());
 
     aColor.SetRed(0x12);
     aColor.SetGreen(0x34);
     aColor.SetBlue(0x56);
-    CPPUNIT_ASSERT_EQUAL(aColor.AsRGBHexString(), OUString("123456"));
+    CPPUNIT_ASSERT_EQUAL(OUString("123456"), aColor.AsRGBHexString());
 
     aColor = COL_AUTO;
-    CPPUNIT_ASSERT_EQUAL(aColor.AsRGBHexString(), OUString("ffffff"));
+    CPPUNIT_ASSERT_EQUAL(OUString("ffffff"), aColor.AsRGBHexString());
 }
 
 void Test::test_readAndWriteStream()

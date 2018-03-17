@@ -316,13 +316,13 @@ void ProgressBar::impl_paint ( sal_Int32 nX, sal_Int32 nY, const Reference< XGra
 
         // Clear background
         // (same color for line and fill)
-        rGraphics->setFillColor ( sal_Int32(m_nBackgroundColor) );
-        rGraphics->setLineColor ( sal_Int32(m_nBackgroundColor) );
+        rGraphics->setFillColor ( m_nBackgroundColor.GetColorNumber() );
+        rGraphics->setLineColor ( m_nBackgroundColor.GetColorNumber() );
         rGraphics->drawRect     ( nX, nY, impl_getWidth(), impl_getHeight() );
 
         // same color for line and fill for blocks
-        rGraphics->setFillColor ( sal_Int32(m_nForegroundColor) );
-        rGraphics->setLineColor ( sal_Int32(m_nForegroundColor) );
+        rGraphics->setFillColor ( m_nForegroundColor.GetColorNumber() );
+        rGraphics->setLineColor ( m_nForegroundColor.GetColorNumber() );
 
         sal_Int32   nBlockStart     =   0;   // = left site of new block
         sal_Int32   nBlockCount     =   m_nBlockValue!=0.00 ? static_cast<sal_Int32>((m_nValue-m_nMinRange)/m_nBlockValue) : 0;   // = number of next block
