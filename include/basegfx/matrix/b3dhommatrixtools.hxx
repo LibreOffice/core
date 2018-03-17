@@ -32,7 +32,7 @@ namespace basegfx
            B3DHomMatrix. drawing::HomogenMatrix4 is not used by OOo
          */
         BASEGFX_DLLPUBLIC B3DHomMatrix UnoHomogenMatrixToB3DHomMatrix(
-            const com::sun::star::drawing::HomogenMatrix rMatrixIn);
+            const com::sun::star::drawing::HomogenMatrix& rMatrixIn);
 
         BASEGFX_DLLPUBLIC void B3DHomMatrixToUnoHomogenMatrix(
             const B3DHomMatrix& rMatrixIn,
