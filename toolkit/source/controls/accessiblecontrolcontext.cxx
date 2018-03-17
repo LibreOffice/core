@@ -303,11 +303,14 @@ namespace toolkit
         OContextEntryGuard aGuard( this );
 
         VclPtr< vcl::Window > pWindow = implGetWindow();
-        Color nColor;
-        if ( pWindow )
+        Color aColor;
+
+        if (pWindow)
         {
-            if ( pWindow->IsControlForeground() )
-                nColor = pWindow->GetControlForeground();
+            if (pWindow->IsControlForeground())
+            {
+                aColor = pWindow->GetControlForeground();
+            }
             else
             {
                 vcl::Font aFont;
@@ -315,10 +318,11 @@ namespace toolkit
                     aFont = pWindow->GetControlFont();
                 else
                     aFont = pWindow->GetFont();
-                nColor = aFont.GetColor();
+
+                aColor = aFont.GetColor();
             }
         }
-        return sal_Int32(nColor);
+        return aColor.GetColorNumber();
     }
 
 
@@ -329,20 +333,20 @@ namespace toolkit
         OContextEntryGuard aGuard( this );
 
         VclPtr< vcl::Window > pWindow = implGetWindow();
-        Color nColor;
-        if ( pWindow )
+        Color aColor;
+
+        if (pWindow)
         {
-            if ( pWindow->IsControlBackground() )
-                nColor = pWindow->GetControlBackground();
+            if (pWindow->IsControlBackground())
+                aColor = pWindow->GetControlBackground();
             else
-                nColor = pWindow->GetBackground().GetColor();
+                aColor = pWindow->GetBackground().GetColor();
         }
 
-        return sal_Int32(nColor);
+        return aColor.GetColorNumber();
     }
 
 
 }   //namespace toolkit
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

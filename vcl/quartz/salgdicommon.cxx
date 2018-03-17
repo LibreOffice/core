@@ -1493,7 +1493,7 @@ SalColor AquaSalGraphics::getPixel( long nX, long nY )
     if( !mxLayer || (nX < 0) || (nX >= mnWidth) ||
         (nY < 0) || (nY >= mnHeight))
     {
-        return sal_uInt32(COL_BLACK);
+        return COL_BLACK.GetColorNumber();
     }
     // prepare creation of matching a CGBitmapContext
 #if defined OSL_BIGENDIAN
