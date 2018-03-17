@@ -20,7 +20,6 @@
 #define INCLUDED_BASCTL_SOURCE_BASICIDE_BASTYPE3_HXX
 
 #include <svtools/svmedit.hxx>
-#include <iderid.hxx>
 #include <vcl/accel.hxx>
 
 namespace basctl

@@ -20,7 +20,6 @@
 #ifndef INCLUDED_BASCTL_SOURCE_BASICIDE_BASDOC_HXX
 #define INCLUDED_BASCTL_SOURCE_BASICIDE_BASDOC_HXX
 
-#include <iderid.hxx>
 #include <sfx2/docfac.hxx>
 #include <svx/ifaceids.hxx>
 #include <vcl/vclptr.hxx>
