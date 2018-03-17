@@ -41,6 +41,7 @@
 #include <o3tl/make_unique.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/BitmapCropper.hxx>
 
 namespace emfplushelper
 {
@@ -1178,7 +1179,10 @@ namespace emfplushelper
                             if (image.type == ImageDataTypeBitmap)
                             {
                                 BitmapEx aBmp(image.graphic.GetBitmapEx());
-                                aBmp.Crop(aSource);
+                                BitmapCropper aBmpCropper(aSource);
+                                if (aBmpCropper.execute(aBmp).IsEmpty())
+                                    SAL_WARN("vcl.gdi", "crop failed");
+
                                 Size aSize(aBmp.GetSizePixel());
                                 SAL_INFO("drawinglayer", "EMF+ bitmap size: " << aSize.Width() << "x" << aSize.Height());
                                 if (aSize.Width() > 0 && aSize.Height() > 0)

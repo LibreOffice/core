@@ -17,19 +17,30 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <rtl/ref.hxx>
+#include <tools/fract.hxx>
+#include <comphelper/sequence.hxx>
+#include <unotools/resmgr.hxx>
+#include <unotools/ucbstreamhelper.hxx>
+#include <svtools/ehdl.hxx>
+#include <svl/solar.hrc>
+
 #include <vcl/svapp.hxx>
 #include <vcl/image.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/imagerepository.hxx>
-#include <unotools/resmgr.hxx>
-#include <tools/fract.hxx>
-#include <unotools/ucbstreamhelper.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <vcl/wmf.hxx>
-#include <svl/solar.hrc>
 #include <vcl/virdev.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/GraphicObject.hxx>
+#include <vcl/dibtools.hxx>
+#include <vcl/BitmapCropper.hxx>
+
+#include "UnoGraphicDescriptor.hxx"
+#include "UnoGraphic.hxx"
+
 #include <com/sun/star/awt/XBitmap.hpp>
 #include <com/sun/star/graphic/XGraphicProvider2.hpp>
 #include <com/sun/star/io/XStream.hpp>
@@ -41,14 +52,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
-#include "UnoGraphicDescriptor.hxx"
-#include "UnoGraphic.hxx"
-#include <rtl/ref.hxx>
-#include <vcl/GraphicObject.hxx>
-#include <vcl/dibtools.hxx>
-#include <comphelper/sequence.hxx>
 #include <memory>
-#include <svtools/ehdl.hxx>
 
 using namespace com::sun::star;
 
@@ -584,8 +588,12 @@ void ImplApplyFilterData( ::Graphic& rGraphic, uno::Sequence< beans::PropertyVal
             ImplCalculateCropRect( rGraphic, aCropLogic, aCropPixel );
             if ( bRemoveCropArea )
             {
-                BitmapEx aBmpEx( rGraphic.GetBitmapEx() );
-                aBmpEx.Crop( aCropPixel );
+                BitmapEx aBmpEx(rGraphic.GetBitmapEx());
+                BitmapCropper aBmpCropper(aCropPixel);
+
+                if (!aBmpCropper.execute(aBmpEx).IsEmpty())
+                    SAL_WARN("vcl.gdi", "Cropping failed");
+
                 rGraphic = aBmpEx;
             }
             Size aVisiblePixelSize( bRemoveCropArea ? rGraphic.GetSizePixel() : aCropPixel.GetSize() );

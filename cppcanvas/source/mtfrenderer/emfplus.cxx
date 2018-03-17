@@ -36,6 +36,7 @@
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <vcl/canvastools.hxx>
+#include <vcl/BitmapCropper.hxx>
 #include <rtl/ustring.hxx>
 #include <i18nlangtag/languagetag.hxx>
 
@@ -1226,8 +1227,10 @@ namespace cppcanvas
                                     aDstSize = MapSize(dw, dh);
                                 }
 
-                                BitmapEx aBmp( image.graphic.GetBitmapEx () );
-                                aBmp.Crop( aSource );
+                                BitmapEx aBmp(image.graphic.GetBitmapEx());
+                                BitmapCropper aBmpCropper(aSource);
+                                if (aBmpCropper.execute(aBmp).IsEmpty())
+                                    SAL_WARN("vcl.gdi", "crop failed");
 
                                 Size aSize( aBmp.GetSizePixel() );
                                 SAL_INFO("cppcanvas.emf", "EMF+ bitmap size: " << aSize.Width() << "x" << aSize.Height());

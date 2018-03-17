@@ -17,13 +17,17 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <emfreader.hxx>
 #include <osl/endian.h>
 #include <basegfx/matrix/b2dhommatrix.hxx>
+#include <tools/stream.hxx>
 #include <vcl/dibtools.hxx>
+#include <vcl/BitmapCropper.hxx>
+
+#include <emfreader.hxx>
+
 #include <o3tl/make_unique.hxx>
 #include <o3tl/safeint.hxx>
-#include <tools/stream.hxx>
+
 #include <memory>
 
 #ifdef DBG_UTIL
@@ -1364,7 +1368,9 @@ namespace emfio
                                     {
                                         const tools::Rectangle aCropRect( Point( xSrc, ySrc ), Size( cxSrc, cySrc ) );
 
-                                        aBitmapEx.Crop( aCropRect );
+                                        BitmapCropper aBmpCropper(aCropRect);
+                                        if (aBmpCropper.execute(aBitmapEx).IsEmpty())
+                                            SAL_WARN("vcl.gdi", "crop failed");
                                     }
 
     #ifdef DBG_UTIL
@@ -1439,7 +1445,9 @@ namespace emfio
                                      (ySrc <= aBitmap.GetSizePixel().Height() - cySrc) )
                                 {
                                     tools::Rectangle aCropRect( Point( xSrc, ySrc ), Size( cxSrc, cySrc ) );
-                                    aBitmap.Crop( aCropRect );
+                                    BitmapCropper aBmpCropper(aCropRect);
+                                    if (aBmpCropper.execute(aBitmap).IsEmpty())
+                                        SAL_WARN("vcl.gdi", "crop failed");
                                 }
 
                                 maBmpSaveList.emplace_back(new BSaveStruct(aBitmap, aRect, dwRop));
@@ -1509,7 +1517,10 @@ namespace emfio
                                      (ySrc <= aBitmap.GetSizePixel().Height() - cySrc) )
                                 {
                                     tools::Rectangle aCropRect( Point( xSrc, ySrc ), Size( cxSrc, cySrc ) );
-                                    aBitmap.Crop( aCropRect );
+
+                                    BitmapCropper aBmpCropper(aCropRect);
+                                    if (aBmpCropper.execute(aBitmap).IsEmpty())
+                                        SAL_WARN("vcl.gdi", "crop failed");
                                 }
                                 maBmpSaveList.emplace_back(new BSaveStruct(aBitmap, aRect, dwRop));
                             }

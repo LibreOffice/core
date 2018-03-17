@@ -31,6 +31,7 @@
 #include <vcl/virdev.hxx>
 #include <vcl/GraphicObject.hxx>
 #include <vcl/BitmapConverter.hxx>
+#include <vcl/BitmapCropper.hxx>
 
 #include "BitmapDitheringFilter.hxx"
 #include "grfcache.hxx"
@@ -1097,9 +1098,11 @@ static BitmapEx checkMetadataBitmap( const BitmapEx& rBmpEx,
     {
         // crop bitmap to given source rectangle (no
         // need to copy and convert the whole bitmap)
-        const tools::Rectangle aCropRect( rSrcPoint,
-                                   rSrcSize );
-        aBmpEx.Crop( aCropRect );
+        BitmapCropper aBmpCropper(tools::Rectangle(rSrcPoint, rSrcSize));
+
+        if (!aBmpCropper.execute(aBmpEx).IsEmpty())
+            SAL_WARN("vcl.gdi", "Cropping failed");
+
     }
 
     return aBmpEx;
@@ -2017,7 +2020,10 @@ void GraphicObject::ImplTransformBitmap( BitmapEx&          rBmpEx,
     // #104115# Crop the bitmap
     if( rAttr.IsCropped() )
     {
-        rBmpEx.Crop( rCropRect );
+        BitmapCropper aBmpCropper(rCropRect);
+
+        if (!aBmpCropper.execute(rBmpEx).IsEmpty())
+            SAL_WARN("vcl.gdi", "Cropping failed");
 
         // #104115# Negative crop sizes mean: enlarge bitmap and pad
         if( bEnlarge && (

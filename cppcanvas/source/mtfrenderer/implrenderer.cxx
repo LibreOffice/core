@@ -77,6 +77,7 @@
 #include <memory>
 #include "mtftools.hxx"
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <vcl/BitmapCropper.hxx>
 
 using namespace ::com::sun::star;
 
@@ -1562,7 +1563,7 @@ namespace cppcanvas
                         // #i44110# correct null-sized output - there
                         // are metafiles which have zero size in at
                         // least one dimension
-                      
+
                         // Remark the 1L cannot be replaced, that would cause max to compare long/int
                         const Size aMtfSizePix( std::max( aMtfSizePixPre.Width(), 1L ),
                                                 std::max( aMtfSizePixPre.Height(), 1L ) );
@@ -2159,7 +2160,9 @@ namespace cppcanvas
                         ::Bitmap aBmp( pAct->GetBitmap() );
                         const ::tools::Rectangle aCropRect( pAct->GetSrcPoint(),
                                                     pAct->GetSrcSize() );
-                        aBmp.Crop( aCropRect );
+                        BitmapCropper aBmpCropper(aCropRect);
+                        if (aBmpCropper.execute(aBmp).IsEmpty())
+                            SAL_WARN("vcl.gdi", "crop failed");
 
                         std::shared_ptr<Action> pBmpAction(
                                 internal::BitmapActionFactory::createBitmapAction(
@@ -2236,10 +2239,11 @@ namespace cppcanvas
 
                         // crop bitmap to given source rectangle (no
                         // need to copy and convert the whole bitmap)
-                        BitmapEx aBmp( pAct->GetBitmapEx() );
-                        const ::tools::Rectangle aCropRect( pAct->GetSrcPoint(),
-                                                   pAct->GetSrcSize() );
-                        aBmp.Crop( aCropRect );
+                        BitmapEx aBmp(pAct->GetBitmapEx());
+                        const ::tools::Rectangle aCropRect(pAct->GetSrcPoint(), pAct->GetSrcSize());
+                        BitmapCropper aBmpCropper(aCropRect);
+                        if (aBmpCropper.execute(aBmp).IsEmpty())
+                            SAL_WARN("vcl.gdi", "crop failed");
 
                         std::shared_ptr<Action> pBmpAction(
                             internal::BitmapActionFactory::createBitmapAction(
@@ -2334,9 +2338,10 @@ namespace cppcanvas
 
                         // crop bitmap to given source rectangle (no
                         // need to copy and convert the whole bitmap)
-                        const ::tools::Rectangle aCropRect( pAct->GetSrcPoint(),
-                                                   pAct->GetSrcSize() );
-                        aBmp.Crop( aCropRect );
+                        const ::tools::Rectangle aCropRect(pAct->GetSrcPoint(), pAct->GetSrcSize());
+                        BitmapCropper aBmpCropper(aCropRect);
+                        if (aBmpCropper.execute(aBmp).IsEmpty())
+                            SAL_WARN("vcl.gdi", "crop failed");
 
                         std::shared_ptr<Action> pBmpAction(
                             internal::BitmapActionFactory::createBitmapAction(
