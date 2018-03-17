@@ -113,6 +113,12 @@ int main( int argc, char* argv[] )
     aTimes.emplace_back("initialization");
     // coverity[tainted_string] - build time test tool
     Office *pOffice = lok_cpp_init(argv[1]);
+    if (pOffice == nullptr)
+    {
+        fprintf(stderr, "Failed to initialize Office from %s\n", argv[1]);
+        return 1;
+    }
+
     aTimes.emplace_back();
 
     const int max_parts = (argc > 3 ? atoi(argv[3]) : -1);
