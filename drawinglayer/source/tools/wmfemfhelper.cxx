@@ -47,6 +47,7 @@
 #include <tools/fract.hxx>
 #include <vcl/gradient.hxx>
 #include <vcl/hatch.hxx>
+#include <vcl/BitmapCropper.hxx>
 #include <emfplushelper.hxx>
 #include <numeric>
 
@@ -2020,7 +2021,9 @@ namespace wmfemfhelper
 
                         if(!aCropRectangle.IsEmpty())
                         {
-                            aCroppedBitmap.Crop(aCropRectangle);
+                            BitmapCropper aBmpCropper(aCropRectangle);
+                            if (aBmpCropper.execute(aCroppedBitmap).IsEmpty())
+                                SAL_WARN("vcl.gdi", "crop failed");
                         }
 
                         const BitmapEx aCroppedBitmapEx(aCroppedBitmap);
@@ -2062,7 +2065,9 @@ namespace wmfemfhelper
 
                         if(!aCropRectangle.IsEmpty())
                         {
-                            aCroppedBitmapEx.Crop(aCropRectangle);
+                            BitmapCropper aBmpCropper(aCropRectangle);
+                            if (aBmpCropper.execute(aCroppedBitmapEx).IsEmpty())
+                                SAL_WARN("vcl.gdi", "crop failed");
                         }
 
                         createBitmapExPrimitive(aCroppedBitmapEx, pA->GetDestPoint(), pA->GetDestSize(), rTargetHolders.Current(), rPropertyHolders.Current());

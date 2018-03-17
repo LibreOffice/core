@@ -45,6 +45,8 @@
 #include <vcl/help.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/ImageTree.hxx>
+#include <vcl/BitmapCropper.hxx>
+
 #include <bitmapwriteaccess.hxx>
 
 #include <basegfx/numeric/ftools.hxx>
@@ -852,8 +854,10 @@ public:
             BitmapEx aRight(aPageShadowMask);
             sal_Int32 nSlice = (aPageShadowMask.GetSizePixel().Width() - 3) / 4;
             // a width x 1 slice
-            aRight.Crop(tools::Rectangle(Point((nSlice * 3) + 3, (nSlice * 2) + 1),
-                                  Size(nSlice, 1)));
+            BitmapCropper aBmpCropper(tools::Rectangle(Point((nSlice * 3) + 3, (nSlice * 2) + 1),
+                                                        Size(nSlice, 1)));
+            aBmpCropper.execute(aRight);
+
             AlphaMask aAlphaMask(aRight.GetBitmap());
             Bitmap aBlockColor = Bitmap(aAlphaMask.GetSizePixel(), 24);
             aBlockColor.Erase(COL_RED);

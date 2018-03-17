@@ -26,6 +26,7 @@
 #include <vcl/bitmapaccess.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/BitmapConverter.hxx>
+#include <vcl/BitmapCropper.hxx>
 
 #include <svdata.hxx>
 
@@ -821,7 +822,12 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                 {
                     const MetaBmpScalePartAction* pA = static_cast<const MetaBmpScalePartAction*>(pAction);
                     BitmapEx aBitmapEx( pA->GetBitmap() );
-                    aBitmapEx.Crop( tools::Rectangle( pA->GetSrcPoint(), pA->GetSrcSize() ) );
+
+                    BitmapCropper aBmpCropper(tools::Rectangle(pA->GetSrcPoint(), pA->GetSrcSize()));
+
+                    if (!aBmpCropper.execute(aBitmapEx).IsEmpty())
+                        SAL_WARN("vcl.gdi", "Cropping failed");
+
                     Graphic aGraphic = i_pOutDevData ? i_pOutDevData->GetCurrentGraphic() : Graphic();
                     implWriteBitmapEx( pA->GetDestPoint(), pA->GetDestSize(), aBitmapEx, aGraphic, pDummyVDev, i_rContext );
                 }
@@ -850,7 +856,12 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                 {
                     const MetaBmpExScalePartAction* pA = static_cast<const MetaBmpExScalePartAction*>(pAction);
                     BitmapEx aBitmapEx( pA->GetBitmapEx() );
-                    aBitmapEx.Crop( tools::Rectangle( pA->GetSrcPoint(), pA->GetSrcSize() ) );
+
+                    BitmapCropper aBmpCropper(tools::Rectangle(pA->GetSrcPoint(), pA->GetSrcSize()));
+
+                    if (!aBmpCropper.execute(aBitmapEx).IsEmpty())
+                        SAL_WARN("vcl.gdi", "Cropping failed");
+
                     Graphic aGraphic = i_pOutDevData ? i_pOutDevData->GetCurrentGraphic() : Graphic();
                     implWriteBitmapEx( pA->GetDestPoint(), pA->GetDestSize(), aBitmapEx, aGraphic, pDummyVDev, i_rContext );
                 }

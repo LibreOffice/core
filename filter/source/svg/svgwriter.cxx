@@ -26,6 +26,7 @@
 #include <vcl/unohelp.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/BitmapCropper.hxx>
 #include <tools/helpers.hxx>
 #include <xmloff/unointerfacetouniqueidentifiermapper.hxx>
 #include <sax/tools/converter.hxx>
@@ -2717,8 +2718,12 @@ void SVGActionWriter::ImplWriteBmp( const BitmapEx& rBmpEx,
         const tools::Rectangle aBmpRect( Point(), rBmpEx.GetSizePixel() );
         const tools::Rectangle aSrcRect( rSrcPt, rSrcSz );
 
-        if( aSrcRect != aBmpRect )
-            aBmpEx.Crop( aSrcRect );
+        if (aSrcRect != aBmpRect)
+        {
+            BitmapCropper aBmpCropper(aSrcRect);
+            if (aBmpCropper.execute(aBmpEx).IsEmpty())
+                SAL_WARN("vcl.gdi", "crop failed");
+        }
 
         if( !!aBmpEx )
         {
