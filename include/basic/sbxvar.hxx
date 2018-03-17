@@ -188,7 +188,7 @@ public:
     bool Scan( const OUString&, sal_uInt16* );
     void Format( OUString&, const OUString* = nullptr ) const;
 
-    // The following operators are definied for easier handling.
+    // The following operators are defined for easier handling.
     // TODO: Ensure error conditions (overflow, conversions)
     // are taken into consideration in Compute and Compare
 

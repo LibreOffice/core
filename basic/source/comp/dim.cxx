@@ -192,7 +192,7 @@ void SbiParser::TypeDecl( SbiSymDef& rDef, bool bAsNewAlreadyParsed )
     }
 }
 
-// Here variables, arrays and structures were definied.
+// Here variables, arrays and structures were defined.
 // DIM/PRIVATE/PUBLIC/GLOBAL
 
 void SbiParser::Dim()
