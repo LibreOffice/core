@@ -60,8 +60,9 @@ bool HelpIndexer::indexDocuments()
 
         // Index the identified help files
         Document doc;
-        for (std::set<OUString>::iterator i = d_files.begin(); i != d_files.end(); ++i) {
-            helpDocument(*i, &doc);
+        for (auto const& elem : d_files)
+        {
+            helpDocument(elem, &doc);
             writer.addDocument(&doc);
             doc.clear();
         }
