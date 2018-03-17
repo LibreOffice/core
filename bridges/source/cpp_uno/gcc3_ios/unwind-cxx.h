@@ -33,10 +33,6 @@
 #ifndef _UNWIND_CXX_H
 #define _UNWIND_CXX_H 1
 
-#ifndef __LP64__
-#define __LP64__ 0
-#endif
-
 // Level 2: C++ ABI
 
 #include <typeinfo>
@@ -91,7 +87,7 @@ struct __cxa_exception
   // Stack of exceptions in cleanups.
   __cxa_exception* nextPropagatingException;
 
-  // The number of active cleanup handlers for this exception.
+  // The nuber of active cleanup handlers for this exception.
   int propagationCount;
 #else
   // Cache parsed handler data from the personality routine Phase 1
@@ -139,7 +135,7 @@ struct __cxa_dependent_exception
   // Stack of exceptions in cleanups.
   __cxa_exception* nextPropagatingException;
 
-  // The number of active cleanup handlers for this exception.
+  // The nuber of active cleanup handlers for this exception.
   int propagationCount;
 #else
   // Cache parsed handler data from the personality routine Phase 1
@@ -177,7 +173,7 @@ struct __cxa_eh_globals
 extern "C" __cxa_eh_globals *__cxa_get_globals () throw();
 extern "C" __cxa_eh_globals *__cxa_get_globals_fast () throw();
 
-// Allocate memory for the exception plus the thrown object.
+// Allocate memory for the exception plus the thown object.
 extern "C" void *__cxa_allocate_exception(size_t thrown_size) throw();
 
 // Free the space allocated for the exception.
@@ -187,6 +183,12 @@ extern "C" void __cxa_free_exception(void *thrown_exception) throw();
 extern "C" void *__cxa_allocate_dependent_exception() throw();
 extern "C" void __cxa_free_dependent_exception(void *thrown_exception) throw();
 #pragma GCC visibility pop
+
+// Throw the exception.
+extern "C" void __cxa_throw (void *thrown_exception,
+                             std::type_info *tinfo,
+                             void (*dest) (void *))
+     __attribute__((noreturn));
 
 // Used to implement exception handlers.
 extern "C" void *__cxa_get_exception_ptr (void *) throw();
