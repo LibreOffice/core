@@ -114,11 +114,11 @@ public:
 private:
     ScFormulaReferenceHelper
                         m_aHelper;
-    SfxBindings*        pMyBindings;
+    SfxBindings*        m_pMyBindings;
 
-    VclPtr<vcl::Window> pActiveWin;
-    Idle                aIdle;
-    OUString            aDocName;               // document on which the dialog was opened
+    VclPtr<vcl::Window> m_pActiveWin;
+    Idle                m_aIdle;
+    OUString            m_aDocName;               // document on which the dialog was opened
 
     DECL_LINK( UpdateFocusHdl, Timer*, void );
 
