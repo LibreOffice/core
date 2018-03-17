@@ -88,7 +88,7 @@ private:
     bool                         mbSwapOut;
     bool                         mbDummyContext;
     VectorGraphicDataPtr         maVectorGraphicData;
-    css::uno::Sequence<sal_Int8> maPdfData;
+    std::shared_ptr<css::uno::Sequence<sal_Int8>> mpPdfData;
     std::unique_ptr<GraphicID>   mpGraphicID;
     GraphicExternalLink          maGraphicExternalLink;
 
@@ -131,6 +131,11 @@ private:
         if (!mpGraphicID)
             mpGraphicID.reset(new GraphicID(*this));
         return mpGraphicID->getIDString();
+    }
+
+    bool hasPdfData() const
+    {
+        return mpPdfData && mpPdfData->hasElements();
     }
 
     void                ImplCreateSwapInfo();
@@ -214,9 +219,9 @@ private:
 
     const VectorGraphicDataPtr& getVectorGraphicData() const;
 
-    const css::uno::Sequence<sal_Int8>& getPdfData() const;
+    const std::shared_ptr<css::uno::Sequence<sal_Int8>>& getPdfData() const;
 
-    void setPdfData(const css::uno::Sequence<sal_Int8>& rPdfData);
+    void setPdfData(const std::shared_ptr<css::uno::Sequence<sal_Int8>>& rPdfData);
 
     bool ensureAvailable () const;
 

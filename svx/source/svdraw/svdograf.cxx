@@ -433,7 +433,7 @@ const GraphicObject* SdrGrafObj::GetReplacementGraphicObject() const
         {
             const_cast< SdrGrafObj* >(this)->mpReplacementGraphicObject.reset(new GraphicObject(rVectorGraphicDataPtr->getReplacement()));
         }
-        else if (mpGraphicObject->GetGraphic().getPdfData().hasElements() ||
+        else if (mpGraphicObject->GetGraphic().hasPdfData() ||
                  mpGraphicObject->GetGraphic().GetType() == GraphicType::GdiMetafile)
         {
             // Replacement graphic for PDF and metafiles is just the bitmap.
