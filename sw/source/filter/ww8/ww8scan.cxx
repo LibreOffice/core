@@ -1994,13 +1994,25 @@ static bool WW8GetFieldPara(WW8PLCFspecial& rPLCF, WW8FieldDesc& rF)
             if (!rPLCF.Get(rF.nLRes, pData) || rF.nLRes < 0)
                 goto Err;
         }
-        rF.nLen = rF.nLRes - rF.nSCode + 2;         // nLRes is still the final position
+        WW8_CP nTmp;
+        if (o3tl::checked_add<WW8_CP>(rF.nSCode, 2, nTmp))
+        {
+            rF.nLen = 0;
+            goto Err;
+        }
+        rF.nLen = rF.nLRes - nTmp;                  // nLRes is still the final position
         rF.nLRes -= rF.nSRes;                       // now: nLRes = length
         rF.nSRes++;                                 // Endpos including Markers
         rF.nLRes--;
     }else{
         rF.nLRes = 0;                               // no result found
-        rF.nLen = rF.nSRes - rF.nSCode + 2;         // total length
+        WW8_CP nTmp;
+        if (o3tl::checked_add<WW8_CP>(rF.nSCode, 2, nTmp))
+        {
+            rF.nLen = 0;
+            goto Err;
+        }
+        rF.nLen = rF.nSRes - nTmp;                  // total length
     }
 
     if (rF.nLen < 0)
