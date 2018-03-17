@@ -49,7 +49,7 @@ private:
     bool                         mbSwapOut;
     bool                         mbDummyContext;
     VectorGraphicDataPtr         maVectorGraphicData;
-    css::uno::Sequence<sal_Int8> maPdfData;
+    std::shared_ptr<css::uno::Sequence<sal_Int8>> mpPdfData;
     OUString msOriginURL;
 
 private:
@@ -79,6 +79,11 @@ private:
     void setOriginURL(OUString const & rOriginURL)
     {
         msOriginURL = rOriginURL;
+    }
+
+    bool hasPdfData() const
+    {
+        return mpPdfData && mpPdfData->hasElements();
     }
 
     void                ImplCreateSwapInfo();
