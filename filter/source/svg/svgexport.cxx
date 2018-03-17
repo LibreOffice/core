@@ -562,7 +562,7 @@ bool SVGFilter::implExport( const Sequence< PropertyValue >& rDescriptor )
                             mpDefaultSdrPage = pSvxDrawPage->GetSdrPage();
                             mpSdrModel = &mpDefaultSdrPage->getSdrModelFromSdrPage();
 
-                            if( mpSdrModel ) // TTTT shbe ref
+                            if( mpSdrModel ) // TTTT should be reference
                             {
                                 SdrOutliner& rOutl = mpSdrModel->GetDrawOutliner();
 

@@ -578,7 +578,7 @@ void SdPage::addAnnotation( const Reference< XAnnotation >& xAnnotation, int nIn
 
     SetChanged();
     getSdrModelFromSdrPage().SetChanged();
-    // TTTT NotifyDocumentEvent shbe ref?
+    // TTTT NotifyDocumentEvent should be reference
     NotifyDocumentEvent(
         static_cast< SdDrawDocument* >(&getSdrModelFromSdrPage()),
         "OnAnnotationInserted",

@@ -351,7 +351,7 @@ FuInsertOLE::FuInsertOLE(ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawView*
                 aPnt.AdjustX( -(aSize.Width()) );      // move position to left edge
             tools::Rectangle aRect (aPnt, aSize);
             SdrOle2Obj* pObj = new SdrOle2Obj(
-                *pDoc, // TTTT shbe ref
+                *pDoc, // TTTT should be reference
                 aObjRef,
                 aName,
                 aRect);
@@ -593,7 +593,7 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawV
 
     tools::Rectangle aRect (aStart, aSize);
     SdrOle2Obj* pObj = new SdrOle2Obj(
-        *pDoc, // TTTT shbe ref
+        *pDoc, // TTTT should be reference
         svt::EmbeddedObjectRef(xObj, nAspect),
         aName,
         aRect);
@@ -756,7 +756,7 @@ FuInsertChartFromFile::FuInsertChartFromFile( ScTabViewShell* pViewSh, vcl::Wind
     Point aStart = pViewSh->GetChartInsertPos( aSize, aPositionRange );
     tools::Rectangle aRect (aStart, aSize);
     SdrOle2Obj* pObj = new SdrOle2Obj(
-        *pDoc, // TTTT shbe ref
+        *pDoc, // TTTT should be reference
         svt::EmbeddedObjectRef(xObj, nAspect),
         aName,
         aRect);

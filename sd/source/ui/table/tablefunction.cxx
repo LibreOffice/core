@@ -184,7 +184,7 @@ void DrawViewShell::FuTable(SfxRequest& rReq)
         }
 
         sdr::table::SdrTableObj* pObj = new sdr::table::SdrTableObj(
-            *GetDoc(), // TTTT reference?
+            *GetDoc(), // TTTT should be reference
             aRect,
             nColumns,
             nRows);

@@ -541,7 +541,7 @@ void FuConstructRectangle::SetLineEnds(SfxItemSet& rAttr, SdrObject const * pObj
           nSlotId == SID_LINE_SQUARE_ARROW )
     {
         // set attributes of line start and ends
-        SdrModel& rModel(pObj->getSdrModelFromSdrObject()); // TTTT pObj shbe ref
+        SdrModel& rModel(pObj->getSdrModelFromSdrObject()); // TTTT pObj should be reference
 
         // arrowhead
         ::basegfx::B2DPolyPolygon aArrow( getPolygon( RID_SVXSTR_ARROW, rModel ) );

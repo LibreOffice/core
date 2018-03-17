@@ -632,7 +632,7 @@ static void lcl_InitMarks( SdrMarkView& rDest, const SdrMarkView& rSource, SCTAB
 void ScDrawTransferObj::SetDragSource( const ScDrawView* pView )
 {
     DELETEZ( pDragSourceView );
-    pDragSourceView = new SdrView(pView->getSdrModelFromSdrView()); // TTTT pView shbe ref
+    pDragSourceView = new SdrView(pView->getSdrModelFromSdrView()); // TTTT pView should be reference
     lcl_InitMarks( *pDragSourceView, *pView, pView->GetTab() );
 
     //! add as listener with document, delete pDragSourceView if document gone
@@ -641,7 +641,7 @@ void ScDrawTransferObj::SetDragSource( const ScDrawView* pView )
 void ScDrawTransferObj::SetDragSourceObj( SdrObject* pObj, SCTAB nTab )
 {
     DELETEZ( pDragSourceView );
-    pDragSourceView = new SdrView(pObj->getSdrModelFromSdrObject()); // TTTT pObj shbe ref
+    pDragSourceView = new SdrView(pObj->getSdrModelFromSdrObject()); // TTTT pObj should be reference
     pDragSourceView->ShowSdrPage(pDragSourceView->GetModel()->GetPage(nTab));
     SdrPageView* pPV = pDragSourceView->GetSdrPageView();
     pDragSourceView->MarkObj(pObj, pPV);
