@@ -17,11 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <graphic/UnoGraphic.hxx>
+
 #include <vcl/svapp.hxx>
 #include <com/sun/star/graphic/GraphicType.hpp>
 #include <com/sun/star/graphic/XGraphicTransformer.hpp>
 #include <vcl/dibtools.hxx>
-#include "UnoGraphic.hxx"
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/queryinterface.hxx>
