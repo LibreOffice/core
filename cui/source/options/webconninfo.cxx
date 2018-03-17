@@ -18,7 +18,6 @@
  */
 
 #include "webconninfo.hxx"
-#include <dialmgr.hxx>
 #include <sal/macros.h>
 #include <com/sun/star/task/InteractionHandler.hpp>
 #include <com/sun/star/task/PasswordContainer.hpp>

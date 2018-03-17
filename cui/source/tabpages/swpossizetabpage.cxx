@@ -20,7 +20,6 @@
 #include <memory>
 #include <cstddef>
 #include <swpossizetabpage.hxx>
-#include <dialmgr.hxx>
 #include <svx/dlgutil.hxx>
 #include <svx/anchorid.hxx>
 #include <svl/aeitem.hxx>

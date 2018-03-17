@@ -20,7 +20,6 @@
 #include <svl/cjkoptions.hxx>
 #include <svx/flagsdef.hxx>
 #include <sdrcelldlg.hxx>
-#include <dialmgr.hxx>
 #include <cuitabarea.hxx>
 #include <svx/svdmodel.hxx>
 #include <border.hxx>

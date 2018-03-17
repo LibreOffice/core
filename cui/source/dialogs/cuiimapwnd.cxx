@@ -26,7 +26,6 @@
 #include <svtools/imappoly.hxx>
 #include <svl/urlbmk.hxx>
 #include <svx/xoutbmp.hxx>
-#include <dialmgr.hxx>
 #include <cuiimapwnd.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdorect.hxx>

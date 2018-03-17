@@ -24,7 +24,6 @@
 #include <zoom.hxx>
 #include <sfx2/zoomitem.hxx>
 #include <svx/viewlayoutitem.hxx>
-#include <dialmgr.hxx>
 #include <svx/zoom_def.hxx>
 
 namespace

@@ -14,7 +14,6 @@
 #include <svtools/treelistentry.hxx>
 #include <unotools/securityoptions.hxx>
 #include "certpath.hxx"
-#include <dialmgr.hxx>
 
 #include <com/sun/star/mozilla/MozillaBootstrap.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>

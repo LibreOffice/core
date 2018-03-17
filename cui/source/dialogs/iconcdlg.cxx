@@ -19,8 +19,6 @@
 
 #include <sfx2/app.hxx>
 
-#include <dialmgr.hxx>
-
 #include <iconcdlg.hxx>
 #include <cuihyperdlg.hxx>
 

@@ -34,7 +34,6 @@
 
 #include <svl/srchitem.hxx>
 #include <svx/pageitem.hxx>
-#include <dialmgr.hxx>
 #include <svx/dlgutil.hxx>
 #include "optjsearch.hxx"
 #include <editeng/brushitem.hxx>

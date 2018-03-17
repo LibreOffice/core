@@ -35,7 +35,6 @@
 #include <svtools/inettbc.hxx>
 #include <vcl/timer.hxx>
 
-#include "dialmgr.hxx"
 #include <sfx2/docfile.hxx>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <svx/hlnkitem.hxx>

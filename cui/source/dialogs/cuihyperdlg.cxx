@@ -29,6 +29,7 @@
 #include <hldocntp.hxx>
 #include <bitmaps.hlst>
 #include <svx/svxids.hrc>
+#include <dialmgr.hxx>
 #include <strings.hrc>
 #include <vector>
 

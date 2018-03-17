@@ -33,7 +33,6 @@
 #include <svx/drawitem.hxx>
 #include <cuitabarea.hxx>
 #include <dlgname.hxx>
-#include <dialmgr.hxx>
 #include <svx/dlgutil.hxx>
 #include <svl/intitem.hxx>
 #include <sfx2/request.hxx>

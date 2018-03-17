@@ -35,8 +35,6 @@
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 
-#include <dialmgr.hxx>
-
 SvPasteObjectDialog::SvPasteObjectDialog( vcl::Window* pParent )
     : ModalDialog(pParent, "PasteSpecialDialog", "cui/ui/pastespecial.ui")
 {

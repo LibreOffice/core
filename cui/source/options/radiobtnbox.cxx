@@ -18,7 +18,6 @@
  */
 
 #include <radiobtnbox.hxx>
-#include <dialmgr.hxx>
 
 #include <svtools/svlbitm.hxx>
 

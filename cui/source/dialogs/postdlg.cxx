@@ -30,7 +30,6 @@
 
 #include <svx/postattr.hxx>
 #include <postdlg.hxx>
-#include <dialmgr.hxx>
 
 // class SvxPostItDialog -------------------------------------------------
 

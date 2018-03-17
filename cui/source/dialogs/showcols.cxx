@@ -18,9 +18,8 @@
  */
 
 #include <showcols.hxx>
-#include <strings.hrc>
 
-#include <dialmgr.hxx>
+#include <vcl/msgbox.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <comphelper/types.hxx>
 

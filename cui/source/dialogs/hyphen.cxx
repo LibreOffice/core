@@ -18,7 +18,6 @@
  */
 
 #include <hyphen.hxx>
-#include <dialmgr.hxx>
 
 #include <editeng/splwrap.hxx>
 #include <editeng/svxenum.hxx>

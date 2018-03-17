@@ -85,7 +85,6 @@
 #include <hyphen.hxx>
 #include <thesdlg.hxx>
 #include <about.hxx>
-#include <dialmgr.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::frame;

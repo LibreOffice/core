@@ -45,7 +45,6 @@
 #include <editeng/formatbreakitem.hxx>
 #include <editeng/keepitem.hxx>
 #include <svx/dlgutil.hxx>
-#include <dialmgr.hxx>
 #include <sfx2/htmlmode.hxx>
 #include <editeng/paravertalignitem.hxx>
 #include <svl/eitem.hxx>

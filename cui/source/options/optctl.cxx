@@ -18,7 +18,6 @@
  */
 
 #include "optctl.hxx"
-#include <dialmgr.hxx>
 #include <svl/ctloptions.hxx>
 
 // class SvxCTLOptionsPage -----------------------------------------------------

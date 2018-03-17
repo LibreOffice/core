@@ -21,7 +21,6 @@
 #include <svl/intitem.hxx>
 #include <svl/eitem.hxx>
 #include <vcl/svapp.hxx>
-#include <dialmgr.hxx>
 #include <splitcelldlg.hxx>
 
 SvxSplitTableDlg::SvxSplitTableDlg(weld::Window *pParent, bool bIsTableVertical, long nMaxVertical, long nMaxHorizontal)

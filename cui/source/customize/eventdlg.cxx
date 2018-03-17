@@ -44,7 +44,6 @@
 #include <headertablistbox.hxx>
 #include "macropg_impl.hxx"
 
-#include <dialmgr.hxx>
 #include <cfgutil.hxx>
 #include <cfg.hxx>
 

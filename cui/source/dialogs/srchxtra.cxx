@@ -27,7 +27,6 @@
 #include <editeng/flstitem.hxx>
 #include <chardlg.hxx>
 #include <paragrph.hxx>
-#include <dialmgr.hxx>
 #include <backgrnd.hxx>
 #include <svx/dialogs.hrc>
 #include <tools/resary.hxx>

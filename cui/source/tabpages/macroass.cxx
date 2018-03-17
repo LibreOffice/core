@@ -21,7 +21,6 @@
 
 #include <basic/basmgr.hxx>
 #include <comphelper/string.hxx>
-#include <dialmgr.hxx>
 #include <svl/macitem.hxx>
 #include <svx/dialogs.hrc>
 #include <svtools/svmedit.hxx>

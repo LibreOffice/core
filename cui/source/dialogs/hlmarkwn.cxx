@@ -39,6 +39,7 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <svtools/treelistentry.hxx>
 
+#include "dialmgr.hxx"
 #include <strings.hrc>
 #include <hlmarkwn.hxx>
 #include <hltpbase.hxx>
