@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_2a515f63",
+        "filename": "svx/source/dialog/srchdlg.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 826,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2018-03-17T01:01:28Z",
+      "side": 1,
+      "message": "ok in principle, in practice - such a long if-condition is not readable. Can you prettify?",
+      "revId": "bd61c4a70592fccdf6eaad24e46329daeaced42b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
