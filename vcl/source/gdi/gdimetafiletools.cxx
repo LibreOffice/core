@@ -23,6 +23,8 @@
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
+
+#include <vcl/BitmapCropper.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/graphictools.hxx>
@@ -808,7 +810,8 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
                         }
                         else
                         {
-                            aCroppedBitmapEx.Crop(aCropRectangle);
+                            BitmapFilter::Filter(aCroppedBitmapEx, BitmapCropper(aCropRectangle));
+
                             bDone = handleBitmapContent(
                                 aClips.back(),
                                 pA->GetDestPoint(),
