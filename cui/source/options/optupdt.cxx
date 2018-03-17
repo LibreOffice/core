@@ -22,7 +22,6 @@
 #include <sfx2/filedlghelper.hxx>
 #include <svl/zforlist.hxx>
 #include "optupdt.hxx"
-#include <dialmgr.hxx>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>

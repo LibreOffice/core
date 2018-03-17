@@ -19,7 +19,6 @@
 
 #include <unotools/securityoptions.hxx>
 #include <vcl/svapp.hxx>
-#include <dialmgr.hxx>
 #include "securityoptions.hxx"
 
 namespace

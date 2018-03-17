@@ -31,7 +31,6 @@
 #include <editeng/sizeitem.hxx>
 
 #include <transfrm.hxx>
-#include <dialmgr.hxx>
 #include <svx/dlgutil.hxx>
 #include <editeng/svxenum.hxx>
 #include <svx/anchorid.hxx>

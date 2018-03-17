@@ -22,7 +22,6 @@
 #include <sfx2/viewsh.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/request.hxx>
-#include <dialmgr.hxx>
 #include <cuigrfflt.hxx>
 #include <svx/dialogs.hrc>
 

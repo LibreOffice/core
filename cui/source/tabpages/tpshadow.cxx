@@ -27,7 +27,6 @@
 #include <svx/svdattr.hxx>
 #include <svx/drawitem.hxx>
 #include <cuitabarea.hxx>
-#include <dialmgr.hxx>
 #include <svx/dlgutil.hxx>
 #include <cuitabline.hxx>
 #include <svx/xlineit0.hxx>
