@@ -1441,8 +1441,8 @@ case YY_STATE_EOF(INITIAL):
                     if ( ! yy_did_buffer_switch_on_eof )
                         YY_NEW_FILE;
                     }
-                break;
                 }
+                break;
 
             case EOB_ACT_CONTINUE_SCAN:
                 yy_c_buf_p =
@@ -1453,6 +1453,7 @@ case YY_STATE_EOF(INITIAL):
                 yy_cp = yy_c_buf_p;
                 yy_bp = yytext_ptr + YY_MORE_ADJ;
                 goto yy_match;
+                break;
 
             case EOB_ACT_LAST_MATCH:
                 yy_c_buf_p =
@@ -1463,6 +1464,7 @@ case YY_STATE_EOF(INITIAL):
                 yy_cp = yy_c_buf_p;
                 yy_bp = yytext_ptr + YY_MORE_ADJ;
                 goto yy_find_action;
+                break;
             }
         break;
         }
