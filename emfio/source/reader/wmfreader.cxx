@@ -33,6 +33,7 @@
 #include <o3tl/make_unique.hxx>
 #include <vcl/bitmapaccess.hxx>
 #include <vcl/BitmapTools.hxx>
+#include <vcl/BitmapCropper.hxx>
 #include <osl/thread.h>
 
 // MS Windows defines
@@ -739,7 +740,10 @@ namespace emfio
                          ( nSy + nSye <= nHeight ) )
                     {
                         tools::Rectangle aCropRect( Point( nSx, nSy ), Size( nSxe, nSye ) );
-                        aBitmap.Crop( aCropRect );
+
+                        BitmapCropper aBmpCropper(aCropRect);
+                        if (aBmpCropper.execute(aBitmap).IsEmpty())
+                            SAL_WARN("vcl.gdi", "crop failed");
                     }
                     tools::Rectangle aDestRect( aPoint, Size( nSxe, nSye ) );
                     maBmpSaveList.emplace_back(new BSaveStruct(aBitmap, aDestRect, nWinROP));

@@ -113,7 +113,7 @@ public:
         nothing had to be cropped, because e.g. the crop rectangle
         included the bitmap, false is returned, too!
      */
-    bool                Crop( const tools::Rectangle& rRectPixel );
+    bool                Crop( const tools::Rectangle& rRectPixel ) = delete;
 
     /** Expand the bitmap by pixel padding
 
@@ -432,6 +432,8 @@ public:
     void                setAlphaFrom( sal_uInt8 cIndexFrom, sal_Int8 nAlphaTo );
 
     void                AdjustTransparency( sal_uInt8 cTrans );
+
+    void                CombineMaskOr(Color maskColor, sal_uInt8 nTol);
 
 public:
 

@@ -46,6 +46,7 @@
 #include <vcl/menu.hxx>
 #include <vcl/ImageTree.hxx>
 #include <vcl/BitmapScaleFilter.hxx>
+#include <vcl/BitmapCropper.hxx>
 #include <bitmapwriteaccess.hxx>
 
 #include <basegfx/numeric/ftools.hxx>
@@ -853,8 +854,10 @@ public:
             BitmapEx aRight(aPageShadowMask);
             sal_Int32 nSlice = (aPageShadowMask.GetSizePixel().Width() - 3) / 4;
             // a width x 1 slice
-            aRight.Crop(tools::Rectangle(Point((nSlice * 3) + 3, (nSlice * 2) + 1),
-                                  Size(nSlice, 1)));
+            BitmapCropper aBmpCropper(tools::Rectangle(Point((nSlice * 3) + 3, (nSlice * 2) + 1),
+                                                        Size(nSlice, 1)));
+            aBmpCropper.execute(aRight);
+
             AlphaMask aAlphaMask(aRight.GetBitmap());
             Bitmap aBlockColor = Bitmap(aAlphaMask.GetSizePixel(), 24);
             aBlockColor.Erase(COL_RED);
@@ -913,12 +916,7 @@ public:
             maCheckered.RenderRegion(rDev, r, rCtx);
 
             BitmapEx aBitmap(rCtx.mpDemoRenderer->maIntro);
-
-            BitmapScaleFilter aFilter(r.GetSize(), BmpScaleFlag::BestQuality);
-            BitmapEx aTmpBmpEx(aFilter.execute(aBitmap));
-            if (!aTmpBmpEx.IsEmpty())
-                aBitmap = aTmpBmpEx;
-
+            aBitmap.Scale(r.GetSize(), BmpScaleFlag::BestQuality);
             AlphaMask aSemiTransp(aBitmap.GetSizePixel());
             aSemiTransp.Erase(64);
             rDev.DrawBitmapEx(r.TopLeft(), BitmapEx(aBitmap.GetBitmap(),
