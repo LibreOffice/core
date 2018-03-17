@@ -17,25 +17,27 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <com/sun/star/i18n/BreakIterator.hpp>
-#include <com/sun/star/i18n/ScriptType.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <comphelper/processfactory.hxx>
-#include "swfwriter.hxx"
+#include <basegfx/polygon/b2dpolygon.hxx>
+#include <basegfx/polygon/b2dpolypolygon.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <vcl/salbtype.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/bitmapaccess.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/metric.hxx>
-#include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <vcl/graphictools.hxx>
+#include <vcl/BitmapCropper.hxx>
+
+#include <com/sun/star/i18n/BreakIterator.hpp>
+#include <com/sun/star/i18n/ScriptType.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+
+#include "swfwriter.hxx"
 
 #include <zlib.h>
-
-#include <vcl/salbtype.hxx>
-#include <basegfx/polygon/b2dpolygon.hxx>
-#include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <memory>
 
 using namespace ::swf;
@@ -827,7 +829,7 @@ void Writer::Impl_writeImage( const BitmapEx& rBmpEx, const Point& rPt, const Si
                                     static_cast<long>(cropRect.Right()*XScale),
                                     static_cast<long>(cropRect.Bottom()*YScale));
 
-            bmpSource.Crop(cropPixelRect);
+            BitmapFilter::Filter(bmpSource, BitmapCropper(cropPixelRect));
         }
 
         if( !!bmpSource )

@@ -56,6 +56,7 @@
 #include <svx/xlnwtit.hxx>
 #include <svx/xlntrit.hxx>
 #include <svx/xfltrit.hxx>
+#include <vcl/BitmapCropper.hxx>
 
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
@@ -525,7 +526,9 @@ SdrObject* EnhancedCustomShape3d::Create3DObject(
                             Size aSize( static_cast<sal_Int32>( aBmpSize.Width() * fXScale ),
                                                     static_cast<sal_Int32>( aBmpSize.Height() * fYScale ) );
                             tools::Rectangle aCropRect( aPt, aSize );
-                            aFillBmp.Crop( aCropRect );
+
+                            BitmapFilter::Filter(aFillBmp, BitmapCropper(aCropRect));
+
                             p3DObj->SetMergedItem(XFillBitmapItem(OUString(), Graphic(aFillBmp)));
                         }
                     }

@@ -44,6 +44,8 @@
 #include <vcl/vclptr.hxx>
 #include <vcl/BitmapTools.hxx>
 #include <vcl/BitmapConverter.hxx>
+#include <vcl/BitmapCropper.hxx>
+
 #include "viscache.hxx"
 
 // SvxItem-Mapping. Is needed to successfully include the SvxItem-Header
@@ -3753,7 +3755,8 @@ static void lcl_ApplyCropping( const DffPropSet& rPropSet, SfxItemSet* pSet, Gra
         else
         {
             tools::Rectangle aCropRect( nLeft, nTop, aCropSize.Width() - nRight, aCropSize.Height() - nBottom );
-            aCropBitmap.Crop( aCropRect );
+            BitmapFilter::Filter(aCropBitmap, BitmapCropper(aCropRect));
+
             rGraf = aCropBitmap;
         }
     }

@@ -31,6 +31,7 @@
 #include <svl/solar.hrc>
 #include <vcl/virdev.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/BitmapCropper.hxx>
 #include <com/sun/star/awt/XBitmap.hpp>
 #include <com/sun/star/graphic/XGraphicProvider2.hpp>
 #include <com/sun/star/io/XStream.hpp>
@@ -588,7 +589,7 @@ void ImplApplyFilterData( ::Graphic& rGraphic, uno::Sequence< beans::PropertyVal
             if ( bRemoveCropArea )
             {
                 BitmapEx aBmpEx( rGraphic.GetBitmapEx() );
-                aBmpEx.Crop( aCropPixel );
+                BitmapFilter::Filter(aBmpEx, BitmapCropper(aCropPixel));
                 rGraphic = aBmpEx;
             }
             Size aVisiblePixelSize( bRemoveCropArea ? rGraphic.GetSizePixel() : aCropPixel.GetSize() );

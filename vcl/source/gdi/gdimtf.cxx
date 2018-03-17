@@ -34,6 +34,7 @@
 #include <vcl/graphictools.hxx>
 #include <vcl/canvastools.hxx>
 #include <vcl/BitmapConverter.hxx>
+#include <vcl/BitmapCropper.hxx>
 
 #include <svmconverter.hxx>
 
@@ -998,10 +999,12 @@ void GDIMetaFile::Rotate( long nAngle10 )
             {
                 MetaBmpScalePartAction* pAct = static_cast<MetaBmpScalePartAction*>(pAction);
                 tools::Polygon aBmpPoly( ImplGetRotatedPolygon( tools::Rectangle( pAct->GetDestPoint(), pAct->GetDestSize() ), aRotAnchor, aRotOffset, fSin, fCos ) );
-                tools::Rectangle               aBmpRect( aBmpPoly.GetBoundRect() );
-                BitmapEx                aBmpEx( pAct->GetBitmap() );
 
-                aBmpEx.Crop( tools::Rectangle( pAct->GetSrcPoint(), pAct->GetSrcSize() ) );
+                tools::Rectangle aBmpRect( aBmpPoly.GetBoundRect() );
+                BitmapEx aBmpEx( pAct->GetBitmap() );
+                BitmapFilter::Filter(aBmpEx,
+                        BitmapCropper(tools::Rectangle(pAct->GetSrcPoint(), pAct->GetSrcSize())));
+
                 aBmpEx.Rotate( nAngle10, COL_TRANSPARENT );
 
                 aMtf.AddAction( new MetaBmpExScaleAction( aBmpRect.TopLeft(), aBmpRect.GetSize(), aBmpEx ) );
@@ -1025,10 +1028,12 @@ void GDIMetaFile::Rotate( long nAngle10 )
             {
                 MetaBmpExScalePartAction*   pAct = static_cast<MetaBmpExScalePartAction*>(pAction);
                 tools::Polygon aBmpPoly( ImplGetRotatedPolygon( tools::Rectangle( pAct->GetDestPoint(), pAct->GetDestSize() ), aRotAnchor, aRotOffset, fSin, fCos ) );
-                tools::Rectangle                   aBmpRect( aBmpPoly.GetBoundRect() );
-                BitmapEx                    aBmpEx( pAct->GetBitmapEx() );
+                tools::Rectangle aBmpRect( aBmpPoly.GetBoundRect() );
+                BitmapEx aBmpEx( pAct->GetBitmapEx() );
 
-                aBmpEx.Crop( tools::Rectangle( pAct->GetSrcPoint(), pAct->GetSrcSize() ) );
+                BitmapFilter::Filter(aBmpEx,
+                        BitmapCropper(tools::Rectangle(pAct->GetSrcPoint(), pAct->GetSrcSize())));
+
                 aBmpEx.Rotate( nAngle10, COL_TRANSPARENT );
 
                 aMtf.AddAction( new MetaBmpExScaleAction( aBmpRect.TopLeft(), aBmpRect.GetSize(), aBmpEx ) );

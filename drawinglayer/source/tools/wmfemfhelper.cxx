@@ -47,6 +47,7 @@
 #include <tools/fract.hxx>
 #include <vcl/gradient.hxx>
 #include <vcl/hatch.hxx>
+#include <vcl/BitmapCropper.hxx>
 #include <emfplushelper.hxx>
 #include <numeric>
 
@@ -2015,16 +2016,13 @@ namespace wmfemfhelper
 
                     if(!rBitmap.IsEmpty())
                     {
-                        Bitmap aCroppedBitmap(rBitmap);
+                        BitmapEx aCroppedBitmap(rBitmap);
                         const tools::Rectangle aCropRectangle(pA->GetSrcPoint(), pA->GetSrcSize());
 
-                        if(!aCropRectangle.IsEmpty())
-                        {
-                            aCroppedBitmap.Crop(aCropRectangle);
-                        }
+                        if (!aCropRectangle.IsEmpty())
+                            BitmapFilter::Filter(aCroppedBitmap, BitmapCropper(aCropRectangle));
 
-                        const BitmapEx aCroppedBitmapEx(aCroppedBitmap);
-                        createBitmapExPrimitive(aCroppedBitmapEx, pA->GetDestPoint(), pA->GetDestSize(), rTargetHolders.Current(), rPropertyHolders.Current());
+                        createBitmapExPrimitive(aCroppedBitmap, pA->GetDestPoint(), pA->GetDestSize(), rTargetHolders.Current(), rPropertyHolders.Current());
                     }
 
                     break;
@@ -2061,9 +2059,7 @@ namespace wmfemfhelper
                         const tools::Rectangle aCropRectangle(pA->GetSrcPoint(), pA->GetSrcSize());
 
                         if(!aCropRectangle.IsEmpty())
-                        {
-                            aCroppedBitmapEx.Crop(aCropRectangle);
-                        }
+                            BitmapFilter::Filter(aCroppedBitmapEx, BitmapCropper(aCropRectangle));
 
                         createBitmapExPrimitive(aCroppedBitmapEx, pA->GetDestPoint(), pA->GetDestSize(), rTargetHolders.Current(), rPropertyHolders.Current());
                     }

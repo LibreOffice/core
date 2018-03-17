@@ -19,25 +19,28 @@
 
 #include <sal/config.h>
 
-#include <algorithm>
-
-#include "wmfwr.hxx"
-#include <unotools/fontcvt.hxx>
-#include "emfwr.hxx"
 #include <rtl/crc.h>
 #include <rtl/strbuf.hxx>
 #include <rtl/tencinfo.h>
+#include <osl/endian.h>
+#include <basegfx/polygon/b2dpolygon.hxx>
+#include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <tools/bigint.hxx>
 #include <tools/helpers.hxx>
 #include <tools/tenccvt.hxx>
 #include <tools/fract.hxx>
-#include <osl/endian.h>
+#include <unotools/fontcvt.hxx>
+
 #include <vcl/dibtools.hxx>
 #include <vcl/metric.hxx>
-#include <basegfx/polygon/b2dpolygon.hxx>
-#include <basegfx/polygon/b2dpolypolygon.hxx>
-#include <memory>
 #include <vcl/fontcharmap.hxx>
+#include <vcl/BitmapCropper.hxx>
+
+#include "wmfwr.hxx"
+#include "emfwr.hxx"
+
+#include <memory>
+#include <algorithm>
 
 // MS Windows defines
 
@@ -1241,11 +1244,14 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
 
                 case MetaActionType::BMPSCALEPART:
                 {
-                    const MetaBmpScalePartAction*   pA = static_cast<const MetaBmpScalePartAction*>(pMA);
-                    Bitmap                          aTmp( pA->GetBitmap() );
+                    const MetaBmpScalePartAction* pA = static_cast<const MetaBmpScalePartAction*>(pMA);
+                    BitmapEx aTmp( pA->GetBitmap() );
 
-                    if( aTmp.Crop( tools::Rectangle( pA->GetSrcPoint(), pA->GetSrcSize() ) ) )
-                        WMFRecord_StretchDIB( pA->GetDestPoint(), pA->GetDestSize(), aTmp );
+                    if (BitmapFilter::Filter(aTmp,
+                                BitmapCropper(tools::Rectangle( pA->GetSrcPoint(), pA->GetSrcSize()))))
+                    {
+                        WMFRecord_StretchDIB(pA->GetDestPoint(), pA->GetDestSize(), aTmp.GetBitmap());
+                    }
                 }
                 break;
 
@@ -1288,10 +1294,13 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
                 case MetaActionType::BMPEXSCALEPART:
                 {
                     const MetaBmpExScalePartAction* pA = static_cast<const MetaBmpExScalePartAction*>(pMA);
-                    BitmapEx                        aBmpEx( pA->GetBitmapEx() );
-                    aBmpEx.Crop( tools::Rectangle( pA->GetSrcPoint(), pA->GetSrcSize() ) );
-                    Bitmap                          aBmp( aBmpEx.GetBitmap() );
-                    Bitmap                          aMsk( aBmpEx.GetMask() );
+                    BitmapEx aBmpEx(pA->GetBitmapEx());
+
+                    BitmapFilter::Filter(aBmpEx,
+                            BitmapCropper(tools::Rectangle( pA->GetSrcPoint(), pA->GetSrcSize())));
+
+                    Bitmap aBmp( aBmpEx.GetBitmap() );
+                    Bitmap aMsk( aBmpEx.GetMask() );
 
                     if( !!aMsk )
                     {

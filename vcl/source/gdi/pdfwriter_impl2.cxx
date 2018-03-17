@@ -27,6 +27,7 @@
 #include <vcl/graph.hxx>
 #include <vcl/BitmapConverter.hxx>
 #include <vcl/BitmapScaleFilter.hxx>
+#include <vcl/BitmapCropper.hxx>
 
 #include <svdata.hxx>
 
@@ -818,7 +819,10 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                 {
                     const MetaBmpScalePartAction* pA = static_cast<const MetaBmpScalePartAction*>(pAction);
                     BitmapEx aBitmapEx( pA->GetBitmap() );
-                    aBitmapEx.Crop( tools::Rectangle( pA->GetSrcPoint(), pA->GetSrcSize() ) );
+
+                    BitmapFilter::Filter(aBitmapEx,
+                            BitmapCropper(tools::Rectangle(pA->GetSrcPoint(), pA->GetSrcSize())));
+
                     Graphic aGraphic = i_pOutDevData ? i_pOutDevData->GetCurrentGraphic() : Graphic();
                     implWriteBitmapEx( pA->GetDestPoint(), pA->GetDestSize(), aBitmapEx, aGraphic, pDummyVDev, i_rContext );
                 }
@@ -847,7 +851,10 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                 {
                     const MetaBmpExScalePartAction* pA = static_cast<const MetaBmpExScalePartAction*>(pAction);
                     BitmapEx aBitmapEx( pA->GetBitmapEx() );
-                    aBitmapEx.Crop( tools::Rectangle( pA->GetSrcPoint(), pA->GetSrcSize() ) );
+
+                    BitmapFilter::Filter(aBitmapEx,
+                            BitmapCropper(tools::Rectangle(pA->GetSrcPoint(), pA->GetSrcSize())));
+
                     Graphic aGraphic = i_pOutDevData ? i_pOutDevData->GetCurrentGraphic() : Graphic();
                     implWriteBitmapEx( pA->GetDestPoint(), pA->GetDestSize(), aBitmapEx, aGraphic, pDummyVDev, i_rContext );
                 }

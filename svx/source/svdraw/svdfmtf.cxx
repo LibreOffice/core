@@ -72,6 +72,7 @@
 #include <svx/svditer.hxx>
 #include <svx/svdogrp.hxx>
 #include <vcl/BitmapTools.hxx>
+#include <vcl/BitmapCropper.hxx>
 
 using namespace com::sun::star;
 
@@ -1290,7 +1291,8 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaBmpExScalePartAction const & rAct)
 
     aRect.AdjustRight( 1 );
     aRect.AdjustBottom( 1 );
-    aBitmapEx.Crop(tools::Rectangle(rAct.GetSrcPoint(), rAct.GetSrcSize()));
+    BitmapFilter::Filter(aBitmapEx, BitmapCropper(tools::Rectangle(rAct.GetSrcPoint(), rAct.GetSrcSize())));
+
     SdrGrafObj* pGraf = new SdrGrafObj(aBitmapEx, aRect);
 
     // This action is not creating line and fill, set directly, do not use SetAttributes(..)
@@ -1333,7 +1335,9 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaMaskScalePartAction const & rAct)
     BitmapEx aBitmapEx(rAct.GetBitmap(), rAct.GetColor());
 
     aRect.AdjustRight( 1 ); aRect.AdjustBottom( 1 );
-    aBitmapEx.Crop(tools::Rectangle(rAct.GetSrcPoint(), rAct.GetSrcSize()));
+
+    BitmapFilter::Filter(aBitmapEx, BitmapCropper(tools::Rectangle(rAct.GetSrcPoint(), rAct.GetSrcSize())));
+
     SdrGrafObj* pGraf = new SdrGrafObj(aBitmapEx, aRect);
 
     // This action is not creating line and fill, set directly, do not use SetAttributes(..)

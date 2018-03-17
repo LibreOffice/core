@@ -32,6 +32,7 @@
 #include <vcl/GraphicObject.hxx>
 #include <vcl/BitmapConverter.hxx>
 #include <vcl/BitmapScaleFilter.hxx>
+#include <vcl/BitmapCropper.hxx>
 
 #include "grfcache.hxx"
 
@@ -972,7 +973,17 @@ bool GraphicManager::ImplCreateOutput( OutputDevice* pOutputDevice,
                 if( bSimple )
                 {
                     aOutBmpEx = rBitmapEx;
-                    bRet = BitmapFilter::Filter(aOutBmpEx, BitmapScaleFilter(aUnrotatedSizePix));
+                    BitmapScaleFilter aFilter(aUnrotatedSizePix);
+                    BitmapEx aTmpBmpEx(aFilter.execute(aOutBmpEx));
+                    if (!aTmpBmpEx.IsEmpty())
+                    {
+                        bRet = true;
+                        aOutBmpEx = aTmpBmpEx;
+                    }
+                    else
+                    {
+                        bRet = false;
+                    }
 
                     if( bRet )
                         aOutBmpEx.Rotate( nRot10, COL_TRANSPARENT );
@@ -1100,9 +1111,7 @@ static BitmapEx checkMetadataBitmap( const BitmapEx& rBmpEx,
     {
         // crop bitmap to given source rectangle (no
         // need to copy and convert the whole bitmap)
-        const tools::Rectangle aCropRect( rSrcPoint,
-                                   rSrcSize );
-        aBmpEx.Crop( aCropRect );
+        BitmapFilter::Filter(aBmpEx, BitmapCropper(tools::Rectangle(rSrcPoint, rSrcSize)));
     }
 
     return aBmpEx;
@@ -1429,12 +1438,20 @@ void GraphicManager::ImplAdjust( BitmapEx& rBmpEx, const GraphicAttr& rAttr, Gra
         switch (aAttr.GetDrawMode())
         {
             case GraphicDrawMode::Mono:
-                BitmapFilter::Filter(rBmpEx, BitmapConverter(BmpConversion::N1BitThreshold));
-                break;
+            {
+                BitmapConverter aBmpConverter(BmpConversion::N1BitThreshold);
+                BitmapEx aConvertedBmp(aBmpConverter.execute(rBmpEx));
+                SAL_WARN_IF(aConvertedBmp.IsEmpty(), "vcl.gdi", "Conversion failed");
+            }
+            break;
 
             case GraphicDrawMode::Greys:
-                BitmapFilter::Filter(rBmpEx, BitmapConverter(BmpConversion::N8BitGreys));
-                break;
+            {
+                BitmapConverter aBmpConverter(BmpConversion::N8BitGreys);
+                BitmapEx aConvertedBmp(aBmpConverter.execute(rBmpEx));
+                SAL_WARN_IF(aConvertedBmp.IsEmpty(), "vcl.gdi", "Conversion failed");
+            }
+            break;
 
             case GraphicDrawMode::Watermark:
             {
@@ -2012,7 +2029,7 @@ void GraphicObject::ImplTransformBitmap( BitmapEx&          rBmpEx,
     // #104115# Crop the bitmap
     if( rAttr.IsCropped() )
     {
-        rBmpEx.Crop( rCropRect );
+        BitmapFilter::Filter(rBmpEx, BitmapCropper(rCropRect));
 
         // #104115# Negative crop sizes mean: enlarge bitmap and pad
         if( bEnlarge && (
@@ -2049,7 +2066,10 @@ void GraphicObject::ImplTransformBitmap( BitmapEx&          rBmpEx,
                 rBmpEx = aBmpEx2;
             }
 
-            BitmapFilter::Filter(aBmpEx2, BitmapScaleFilter(Size(nPadTotalWidth, nPadTotalHeight)));
+            BitmapScaleFilter aFilter(Size(nPadTotalWidth, nPadTotalHeight));
+            BitmapEx aTmpBmpEx(aFilter.execute(aBmpEx2));
+            if (!aTmpBmpEx.IsEmpty())
+                aBmpEx2 = aTmpBmpEx;
 
             aBmpEx2.Erase( Color(0xFF,0,0,0) );
             aBmpEx2.CopyPixel( tools::Rectangle( Point(nPadLeft, nPadTop), aBmpSize ), tools::Rectangle( Point(0, 0), aBmpSize ), &rBmpEx );
@@ -2075,7 +2095,10 @@ void GraphicObject::ImplTransformBitmap( BitmapEx&          rBmpEx,
     else
         fScaleX = fDstWH * aSizePixel.Height() / aSizePixel.Width();
 
-    BitmapFilter::Filter(rBmpEx, BitmapScaleFilter(fScaleX, fScaleY));
+    BitmapScaleFilter aFilter(Size(fScaleX, fScaleY));
+    BitmapEx aTmpBmpEx(aFilter.execute(rBmpEx));
+    if (!aTmpBmpEx.IsEmpty())
+        rBmpEx = aTmpBmpEx;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
