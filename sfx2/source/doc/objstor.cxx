@@ -74,7 +74,6 @@
 #include <svtools/langtab.hxx>
 #include <svtools/sfxecode.hxx>
 #include <unotools/configmgr.hxx>
-#include <unotools/securityoptions.hxx>
 #include <cppuhelper/weak.hxx>
 #include <unotools/streamwrap.hxx>
 
