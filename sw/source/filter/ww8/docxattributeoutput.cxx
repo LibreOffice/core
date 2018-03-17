@@ -7878,8 +7878,8 @@ void DocxAttributeOutput::FormatLRSpace( const SvxLRSpaceItem& rLRSpace )
 
         if ( auto pBoxItem = static_cast<const SvxBoxItem*>(m_rExport.HasItem( RES_BOX )) )
         {
-            m_pageMargins.nRight = pBoxItem->CalcLineSpace( SvxBoxItemLine::LEFT, /*bEvenIfNoLine*/true );
-            m_pageMargins.nLeft = pBoxItem->CalcLineSpace( SvxBoxItemLine::RIGHT, /*bEvenIfNoLine*/true );
+            m_pageMargins.nLeft = pBoxItem->CalcLineSpace( SvxBoxItemLine::LEFT, /*bEvenIfNoLine*/true );
+            m_pageMargins.nRight = pBoxItem->CalcLineSpace( SvxBoxItemLine::RIGHT, /*bEvenIfNoLine*/true );
         }
 
         m_pageMargins.nLeft += (sal_uInt16)rLRSpace.GetLeft();

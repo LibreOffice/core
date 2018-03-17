@@ -2679,10 +2679,10 @@ void BorderDistancesToWord(const SvxBoxItem& rBox, const WordPageMargins& rMargi
     const SvxBorderLine* pLnR = rBox.GetLine(SvxBoxItemLine::RIGHT);
 
     // We need to take border widths into account
-    const long nWidthT = pLnT ? pLnT->GetWidth() : 0;
-    const long nWidthL = pLnL ? pLnL->GetWidth() : 0;
-    const long nWidthB = pLnB ? pLnB->GetWidth() : 0;
-    const long nWidthR = pLnR ? pLnR->GetWidth() : 0;
+    const long nWidthT = pLnT ? pLnT->GetScaledWidth() : 0;
+    const long nWidthL = pLnL ? pLnL->GetScaledWidth() : 0;
+    const long nWidthB = pLnB ? pLnB->GetScaledWidth() : 0;
+    const long nWidthR = pLnR ? pLnR->GetScaledWidth() : 0;
 
     // Resulting distances from text to borders
     const sal_Int32 nT2BT = pLnT ? nT : 0;

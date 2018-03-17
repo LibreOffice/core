@@ -256,33 +256,63 @@ DECLARE_OOXMLEXPORT_TEST(testTdf116801, "tdf116801.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf112118_DOCX, "tdf112118.docx")
 {
-    auto xStyles = getStyles("PageStyles");
-    auto testProc = [&](const OUString& sStyleName, sal_Int32 nMargin, sal_Int32 nBorderDistance,
-                        sal_Int16 nBorderWidth)
-    {
-        typedef std::initializer_list<OUStringLiteral> StringList;
-        uno::Reference<beans::XPropertySet> xStyle(xStyles->getByName(sStyleName), uno::UNO_QUERY_THROW);
-        for (const auto& side : StringList{ "Top", "Left", "Bottom", "Right" })
+    // The resulting left margin width (2081) differs from its DOC counterpart from ww8export2.cxx,
+    // because DOCX import does two conversions between mm/100 and twips on the route, loosing one
+    // twip on the road and arriving with a value that is 2 mm/100 less. I don't see an obvious way
+    // to avoid that.
+    struct {
+        const char* styleName;
+        struct {
+            const char* sideName;
+            sal_Int32 nMargin;
+            sal_Int32 nBorderDistance;
+            sal_Int32 nBorderWidth;
+        } sideParams[4];
+    } styleParams[] = {                      // Margin (MS-style), border distance, border width
         {
-            table::BorderLine aBorder = getProperty<table::BorderLine>(xStyle, side + "Border");
-            CPPUNIT_ASSERT_EQUAL(sal_Int16(nBorderWidth), aBorder.OuterLineWidth);
-            CPPUNIT_ASSERT_EQUAL(sal_Int16(0), aBorder.InnerLineWidth);
-            CPPUNIT_ASSERT_EQUAL(sal_Int16(0), aBorder.LineDistance);
-
-            sal_Int32 nMarginActual = getProperty<sal_Int32>(xStyle, side + "Margin");
-            CPPUNIT_ASSERT_EQUAL(nMargin, nMarginActual);
-
-            sal_Int32 nBorderDistanceActual = getProperty<sal_Int32>(xStyle, side + "BorderDistance");
-            CPPUNIT_ASSERT_EQUAL(nBorderDistance, nBorderDistanceActual);
+            "Standard",
+            {
+                { "Top", 496, 847, 159 },    //  851 twip, 24 pt (from text), 4.5 pt
+                { "Left", 2081, 706, 212 },  // 1701 twip, 20 pt (from text), 6.0 pt
+                { "Bottom", 1401, 564, 35 }, // 1134 twip, 16 pt (from text), 1.0 pt
+                { "Right", 3471, 423, 106 }  // 2268 twip, 12 pt (from text), 3.0 pt
+            }
+        },
+        {
+            "Converted1",
+            {
+                { "Top", 847, 496, 159 },    //  851 twip, 24 pt (from edge), 4.5 pt
+                { "Left", 706, 2081, 212 },  // 1701 twip, 20 pt (from edge), 6.0 pt
+                { "Bottom", 564, 1401, 35 }, // 1134 twip, 16 pt (from edge), 1.0 pt
+                { "Right", 423, 3471, 106 }  // 2268 twip, 12 pt (from edge), 3.0 pt
+            }
         }
     };
+    auto xStyles = getStyles("PageStyles");
 
-    // For both styles used in document, the total distance from page edge to text must be 2.54 cm.
-    // The first style uses "from edge" border distance; the second uses "from text" border distance
-    // Border distances in both cases are 24 pt = 847 mm100; line widths are 6 pt = 212 mm100.
-    // 1482 + 847 + 212 = 2541
-    testProc("Standard", 847, 1482, 212);
-    testProc("Converted1", 1482, 847, 212);
+    for (const auto& style : styleParams)
+    {
+        const OUString sName = OUString::createFromAscii(style.styleName);
+        uno::Reference<beans::XPropertySet> xStyle(xStyles->getByName(sName), uno::UNO_QUERY_THROW);
+        for (const auto& side : style.sideParams)
+        {
+            const OUString sSide = OUString::createFromAscii(side.sideName);
+            const OString sStage = OString(style.styleName) + " " + side.sideName;
+
+            sal_Int32 nMargin = getProperty<sal_Int32>(xStyle, sSide + "Margin");
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(OString(sStage + " margin width").getStr(),
+                side.nMargin, nMargin);
+
+            sal_Int32 nBorderDistance = getProperty<sal_Int32>(xStyle, sSide + "BorderDistance");
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(OString(sStage + " border distance").getStr(),
+                side.nBorderDistance, nBorderDistance);
+
+            table::BorderLine aBorder = getProperty<table::BorderLine>(xStyle, sSide + "Border");
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(OString(sStage + " border width").getStr(),
+                side.nBorderWidth,
+                sal_Int32(aBorder.OuterLineWidth + aBorder.InnerLineWidth + aBorder.LineDistance));
+        }
+    }
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
