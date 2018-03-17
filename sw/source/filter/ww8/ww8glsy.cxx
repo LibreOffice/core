@@ -139,7 +139,7 @@ bool WW8Glossary::MakeEntries(SwDoc *pD, SwTextBlocks &rBlocks,
             aPam.GetPoint()->nContent.Assign( pCNd, pCNd->Len() );
 
             // now we have the right selection for one entry.  Copy this to
-            // the definied TextBlock, but only if it is not an autocorrection
+            // the defined TextBlock, but only if it is not an autocorrection
             // entry (== -1) otherwise the group indicates the group in the
             // sttbfglsystyle list that this entry belongs to. Unused at the
             // moment
