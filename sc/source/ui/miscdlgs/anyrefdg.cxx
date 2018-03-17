@@ -752,11 +752,11 @@ ScRefHandler::ScRefHandler( vcl::Window &rWindow, SfxBindings* pB, bool bBindRef
         m_rWindow( &rWindow ),
         m_bInRefMode( false ),
         m_aHelper(this,pB),
-        pMyBindings( pB ),
-        pActiveWin(nullptr)
+        m_pMyBindings( pB ),
+        m_pActiveWin(nullptr)
 {
     m_aHelper.SetWindow(m_rWindow.get());
-    aIdle.SetInvokeHandler(LINK( this, ScRefHandler, UpdateFocusHdl));
+    m_aIdle.SetInvokeHandler(LINK( this, ScRefHandler, UpdateFocusHdl));
 
     if( bBindRef ) EnterRefMode();
 }
@@ -773,9 +773,9 @@ bool ScRefHandler::EnterRefMode()
     // even if it's not the current view
 
     SfxObjectShell* pParentDoc = nullptr;
-    if ( pMyBindings )
+    if ( m_pMyBindings )
     {
-        SfxDispatcher* pMyDisp = pMyBindings->GetDispatcher();
+        SfxDispatcher* pMyDisp = m_pMyBindings->GetDispatcher();
         if (pMyDisp)
         {
             SfxViewFrame* pMyViewFrm = pMyDisp->GetFrame();
@@ -791,7 +791,7 @@ bool ScRefHandler::EnterRefMode()
     if ( !pParentDoc && pScViewShell )                  // use current only if above fails
         pParentDoc = pScViewShell->GetObjectShell();
     if ( pParentDoc )
-        aDocName = pParentDoc->GetTitle();
+        m_aDocName = pParentDoc->GetTitle();
 
     ScInputHandler* pInputHdl = SC_MOD()->GetInputHdl(pScViewShell);
 
@@ -819,7 +819,7 @@ ScRefHandler::~ScRefHandler()
 void ScRefHandler::disposeRefHandler()
 {
     m_rWindow.clear();
-    pActiveWin.clear();
+    m_pActiveWin.clear();
     LeaveRefMode();
     m_aHelper.dispose();
 }
@@ -850,7 +850,7 @@ void ScRefHandler::SwitchToDocument()
     if (pCurrent)
     {
         SfxObjectShell* pObjSh = pCurrent->GetObjectShell();
-        if ( pObjSh && pObjSh->GetTitle() == aDocName )
+        if ( pObjSh && pObjSh->GetTitle() == m_aDocName )
         {
             //  right document already visible -> nothing to do
             return;
@@ -861,7 +861,7 @@ void ScRefHandler::SwitchToDocument()
     while ( pSh )
     {
         SfxObjectShell* pObjSh = pSh->GetObjectShell();
-        if ( pObjSh && pObjSh->GetTitle() == aDocName )
+        if ( pObjSh && pObjSh->GetTitle() == m_aDocName )
         {
             //  switch to first TabViewShell for document
             static_cast<ScTabViewShell*>(pSh)->SetActive();
@@ -879,7 +879,7 @@ bool ScRefHandler::IsDocAllowed(SfxObjectShell* pDocSh) const   // pDocSh may be
         aCmpName = pDocSh->GetTitle();
 
     //  if aDocName isn't initialized, allow
-    return ( aDocName.isEmpty() || aDocName == aCmpName );
+    return ( m_aDocName.isEmpty() || m_aDocName == aCmpName );
 }
 
 bool ScRefHandler::IsRefInputMode() const
@@ -930,9 +930,9 @@ void ScRefHandler::ToggleCollapsed( formula::RefEdit* pEdit, formula::RefButton*
 
 IMPL_LINK_NOARG(ScRefHandler, UpdateFocusHdl, Timer *, void)
 {
-    if (pActiveWin)
+    if (m_pActiveWin)
     {
-        pActiveWin->GrabFocus();
+        m_pActiveWin->GrabFocus();
     }
 }
 
