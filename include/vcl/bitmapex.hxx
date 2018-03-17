@@ -100,22 +100,6 @@ public:
      */
     void GetSplitData( std::vector<sal_uInt8>& rvColorData, std::vector<sal_uInt8>& rvAlphaData ) const;
 
-    /** Crop the bitmap
-
-        @param rRectPixel
-        A rectangle specifying the crop amounts on all four sides of
-        the bitmap. If the upper left corner of the bitmap is assigned
-        (0,0), then this method cuts out the given rectangle from the
-        bitmap. Note that the rectangle is clipped to the bitmap's
-        dimension, i.e. negative left,top rectangle coordinates or
-        exceeding width or height is ignored.
-
-        @return true, if cropping was performed successfully. If
-        nothing had to be cropped, because e.g. the crop rectangle
-        included the bitmap, false is returned, too!
-     */
-    bool                Crop( const tools::Rectangle& rRectPixel );
-
     /** Expand the bitmap by pixel padding
 
         @param nDX
