@@ -156,14 +156,14 @@ void XMLGraphicsDefaultStyle::SetDefaults()
                     bIsAOO4 ? Color(128, 128, 128) : COL_BLACK);
             xDefaults->setPropertyValue("LineColor", makeAny(nStroke));
         }
-        Color const nFillColor( bIsAOO4
+        Color const aFillColor( bIsAOO4
             ? Color(0xCF, 0xE7, 0xF5) : Color(153, 204, 255));
         sal_Int32 const nFillIndex(
             pImpPrMap->GetEntryIndex(XML_NAMESPACE_DRAW, "fill-color", 0));
         if (std::none_of(GetProperties().begin(), GetProperties().end(),
                          XMLPropertyByIndex(nFillIndex)))
         {
-            xDefaults->setPropertyValue("FillColor", makeAny(nFillColor));
+            xDefaults->setPropertyValue("FillColor", makeAny(aFillColor.GetColorNumber()));
         }
         if (xInfo->hasPropertyByName("FillColor2"))
         {
@@ -172,7 +172,7 @@ void XMLGraphicsDefaultStyle::SetDefaults()
             if (std::none_of(GetProperties().begin(), GetProperties().end(),
                              XMLPropertyByIndex(nFill2Index)))
             {
-                xDefaults->setPropertyValue("FillColor2", makeAny(sal_Int32(nFillColor)));
+                xDefaults->setPropertyValue("FillColor2", makeAny(aFillColor.GetColorNumber()));
             }
         }
     }

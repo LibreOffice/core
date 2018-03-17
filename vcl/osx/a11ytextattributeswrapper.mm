@@ -168,7 +168,7 @@ using namespace ::com::sun::star::uno;
 }
 
 +(void)addColor:(SalColor)nSalColor forAttribute:(NSString *)attribute andRange:(NSRange)range toString:(NSMutableAttributedString *)string {
-    if( nSalColor == sal_uInt32(COL_TRANSPARENT) )
+    if( nSalColor == COL_TRANSPARENT.GetColorNumber() )
         return;
     const RGBAColor aRGBAColor( nSalColor);
     CGColorRef aColorRef = CGColorCreate ( CGColorSpaceCreateWithName ( kCGColorSpaceGenericRGB ), aRGBAColor.AsArray() );

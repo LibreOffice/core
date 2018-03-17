@@ -151,7 +151,7 @@ void XMLTransGradientStyleImport::importXML(
                     ( (100 - aStartTransparency) * 255 ) / 100 );
 
                 Color aColor( n, n, n );
-                aGradient.StartColor = static_cast<sal_Int32>( aColor );
+                aGradient.StartColor = aColor.GetColorNumber();
             }
             break;
         case XML_TOK_GRADIENT_END:
@@ -163,7 +163,7 @@ void XMLTransGradientStyleImport::importXML(
                     ( (100 - aEndTransparency) * 255 ) / 100 );
 
                 Color aColor( n, n, n );
-                aGradient.EndColor = static_cast<sal_Int32>( aColor );
+                aGradient.EndColor = aColor.GetColorNumber();
             }
             break;
         case XML_TOK_GRADIENT_ANGLE:
