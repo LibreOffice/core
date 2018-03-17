@@ -1256,15 +1256,15 @@ void VCLXWindow::getStyles( sal_Int16 nType, css::awt::FontDescriptor& Font, sal
             case css::awt::Style::FRAME:
             {
                 Font = VCLUnoHelper::CreateFontDescriptor( rStyleSettings.GetAppFont() );
-                ForegroundColor = sal_Int32(rStyleSettings.GetWindowTextColor());
-                BackgroundColor = sal_Int32(rStyleSettings.GetWindowColor());
+                ForegroundColor = rStyleSettings.GetWindowTextColor().GetColorNumber();
+                BackgroundColor = rStyleSettings.GetWindowColor().GetColorNumber();
             }
             break;
             case css::awt::Style::DIALOG:
             {
                 Font = VCLUnoHelper::CreateFontDescriptor( rStyleSettings.GetAppFont() );
-                ForegroundColor = sal_Int32(rStyleSettings.GetDialogTextColor());
-                BackgroundColor = sal_Int32(rStyleSettings.GetDialogColor());
+                ForegroundColor = rStyleSettings.GetDialogTextColor().GetColorNumber();
+                BackgroundColor = rStyleSettings.GetDialogColor().GetColorNumber();
             }
             break;
             default: OSL_FAIL( "VCLWindow::getStyles() - unknown Type" );
@@ -1279,8 +1279,8 @@ namespace toolkit
         void (StyleSettings::*pSetter)( const Color& ), const Color& (StyleSettings::*pGetter)( ) const )
     {
         sal_Int32 nColor = 0;
-        if ( !( _rValue >>= nColor ) )
-            nColor = sal_Int32((Application::GetSettings().GetStyleSettings().*pGetter)());
+        if (!(_rValue >>= nColor))
+            nColor = (Application::GetSettings().GetStyleSettings().*pGetter)().GetColorNumber();
 
         AllSettings aSettings = _pWindow->GetSettings();
         StyleSettings aStyleSettings = aSettings.GetStyleSettings();

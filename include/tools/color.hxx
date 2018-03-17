@@ -62,14 +62,9 @@ public:
     {}
 
     /** Primarily used when passing Color objects to UNO API */
-    constexpr explicit operator sal_uInt32() const
+    sal_uInt32 GetColorNumber() const
     {
-        return mnColor;
-    }
-
-    constexpr explicit operator sal_Int32() const
-    {
-        return sal_Int32(mnColor);
+        return (mnColor & 0x00FFFFFF);
     }
 
     bool operator<(const Color& b) const
@@ -222,15 +217,17 @@ inline bool operator >>=( const css::uno::Any & rAny, Color & value )
   value = Color(nTmp);
   return true;
 }
+
 inline void operator <<=( css::uno::Any & rAny, Color value )
 {
-    rAny <<= sal_Int32(value);
+    rAny <<= value.GetColorNumber();
 }
+
 namespace com { namespace sun { namespace star { namespace uno {
     template<>
     inline Any makeAny( Color const & value )
     {
-        return Any(sal_Int32(value));
+        return Any(value.GetColorNumber());
     }
 } } } }
 

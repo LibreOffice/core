@@ -154,8 +154,8 @@ namespace toolkit
 
     Any getButtonLikeFaceColor( const vcl::Window* _pWindow )
     {
-        Color nBackgroundColor = _pWindow->GetSettings().GetStyleSettings().GetFaceColor();
-        return makeAny( sal_Int32(nBackgroundColor) );
+        Color aBackgroundColor = _pWindow->GetSettings().GetStyleSettings().GetFaceColor();
+        return makeAny(aBackgroundColor.GetColorNumber());
     }
 
     static void adjustBooleanWindowStyle( const Any& _rValue, vcl::Window* _pWindow, WinBits _nBits, bool _bInverseSemantics )

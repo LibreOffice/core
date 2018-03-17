@@ -456,12 +456,12 @@ void SVTXGridControl::impl_checkTableModelInit()
 
 namespace
 {
-    void lcl_convertColor( ::boost::optional< ::Color > const & i_color, Any & o_colorValue )
+    void lcl_convertColor(::boost::optional< ::Color > const& aColor, Any& xColorValue)
     {
-        if ( !i_color )
-            o_colorValue.clear();
+        if (!aColor)
+            xColorValue.clear();
         else
-            o_colorValue <<= sal_Int32(*i_color);
+            xColorValue <<= aColor->GetColorNumber();
     }
 }
 
@@ -545,9 +545,9 @@ Any SVTXGridControl::getProperty( const OUString& PropertyName )
         else
         {
             Sequence< css::util::Color > aAPIColors( aColors->size() );
-            for ( size_t i=0; i<aColors->size(); ++i )
+            for (size_t i=0; i<aColors->size(); ++i)
             {
-                aAPIColors[i] = sal_Int32(aColors->at(i));
+                aAPIColors[i] = aColors->at(i).GetColorNumber();
             }
             aPropertyValue <<= aAPIColors;
         }
