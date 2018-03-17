@@ -140,9 +140,8 @@ struct Data
     std::string getString() const
     {
         std::string ret;
-        cIter aEnd = _idList.end();
-        for (cIter aIter = _idList.begin(); aIter != aEnd; ++aIter)
-            ret += *aIter + ";";
+        for (auto const& elem : _idList)
+            ret += elem + ";";
         return ret;
     }
 };
@@ -190,9 +189,8 @@ public:
         if( pFile == nullptr )
             return;
 
-        DataHashtable::const_iterator aEnd = _hash.end();
-        for (DataHashtable::const_iterator aIter = _hash.begin(); aIter != aEnd; ++aIter)
-            writeKeyValue_DBHelp( pFile, aIter->first, aIter->second.getString() );
+        for (auto const& elem : _hash)
+            writeKeyValue_DBHelp( pFile, elem.first, elem.second.getString() );
 
         fclose( pFile );
     }
@@ -310,13 +308,12 @@ void HelpLinker::link()
             initIndexerPreProcessor();
 
         // here we start our loop over the hzip files.
-        HashSet::iterator end = helpFiles.end();
-        for (HashSet::iterator iter = helpFiles.begin(); iter != end; ++iter)
+        for (auto const& helpFile : helpFiles)
         {
             // process one file
             // streamTable contains the streams in the hzip file
             StreamTable streamTable;
-            const std::string &xhpFileName = *iter;
+            const std::string &xhpFileName = helpFile;
 
             if (!bExtensionMode && xhpFileName.rfind(".xhp") != xhpFileName.length()-4)
             {
@@ -390,11 +387,9 @@ void HelpLinker::link()
             if (hidlist && !hidlist->empty())
             {
                 // now iterate over all elements of the hidlist
-                HashSet::const_iterator aEnd = hidlist->end();
-                for (HashSet::const_iterator hidListIter = hidlist->begin();
-                    hidListIter != aEnd; ++hidListIter)
+                for (auto & elem : *hidlist)
                 {
-                    std::string thishid = *hidListIter;
+                    std::string thishid = elem;
 
                     std::string anchorB;
                     size_t index = thishid.rfind('#');
@@ -412,21 +407,17 @@ void HelpLinker::link()
             if (anchorToLL && !anchorToLL->empty())
             {
                 std::string fakedHid = URLEncoder::encode(documentPath);
-                Hashtable::const_iterator aEnd = anchorToLL->end();
-                for (Hashtable::const_iterator enumer = anchorToLL->begin();
-                    enumer != aEnd; ++enumer)
+                for (auto const& elemAnchor : *anchorToLL)
                 {
-                    const std::string &anchor = enumer->first;
+                    const std::string &anchor = elemAnchor.first;
                     addBookmark(pFileDbBase_DBHelp, documentPath, fileB,
                                 anchor, jarfileB, titleB);
                     std::string totalId = fakedHid + "#" + anchor;
                     // std::cerr << hzipFileName << std::endl;
-                    const LinkedList& ll = enumer->second;
-                    LinkedList::const_iterator aOtherEnd = ll.end();
-                    for (LinkedList::const_iterator llIter = ll.begin();
-                        llIter != aOtherEnd; ++llIter)
+                    const LinkedList& ll = elemAnchor.second;
+                    for (auto const& elem : ll)
                     {
-                            helpKeyword.insert(*llIter, totalId);
+                            helpKeyword.insert(elem, totalId);
                     }
                 }
 
@@ -436,12 +427,10 @@ void HelpLinker::link()
             const Stringtable *helpTextHash = streamTable.appl_helptexts;
             if (helpTextHash && !helpTextHash->empty())
             {
-                Stringtable::const_iterator aEnd = helpTextHash->end();
-                for (Stringtable::const_iterator helpTextIter = helpTextHash->begin();
-                    helpTextIter != aEnd; ++helpTextIter)
+                for (auto const& elem : *helpTextHash)
                 {
-                    std::string helpTextId = helpTextIter->first;
-                    const std::string& helpTextText = helpTextIter->second;
+                    std::string helpTextId = elem.first;
+                    const std::string& helpTextText = elem.second;
 
                     helpTextId = URLEncoder::encode(helpTextId);
 
@@ -486,12 +475,10 @@ void HelpLinker::link()
     if( !bExtensionMode )
     {
         // New index
-        Stringtable::iterator aEnd = additionalFiles.end();
-        for (Stringtable::iterator enumer = additionalFiles.begin(); enumer != aEnd;
-            ++enumer)
+        for (auto const& additionalFile : additionalFiles)
         {
-            const std::string &additionalFileName = enumer->second;
-            const std::string &additionalFileKey = enumer->first;
+            const std::string &additionalFileName = additionalFile.second;
+            const std::string &additionalFileKey = additionalFile.first;
 
             fs::path fsAdditionalFileName( additionalFileName, fs::native );
             HCDBG({

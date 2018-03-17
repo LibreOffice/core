@@ -82,7 +82,7 @@ void BasicCodeTagger::getBasicCodeContainerNodes()
     }
     while ( !m_pXmlTreeWalker->end() )
     {
-          m_pXmlTreeWalker->nextNode();
+        m_pXmlTreeWalker->nextNode();
         if ( !( xmlStrcmp( m_pXmlTreeWalker->currentNode()->name, reinterpret_cast<const xmlChar*>("bascode") ) ) )
         { //Found <bascode>
             m_BasicCodeContainerTags.push_back( m_pXmlTreeWalker->currentNode() ); //it goes to the end of the list
@@ -139,14 +139,13 @@ void BasicCodeTagger::tagParagraph( xmlNodePtr paragraph )
                                 RTL_TEXTENCODING_UTF8 );
     std::vector<HighlightPortion> portions;
     m_Highlighter.getHighlightPortions( strLine, portions );
-    for (std::vector<HighlightPortion>::iterator i(portions.begin());
-         i != portions.end(); ++i)
+    for (auto const& portion : portions)
     {
-        OString sToken(OUStringToOString(strLine.copy(i->nBegin, i->nEnd-i->nBegin), RTL_TEXTENCODING_UTF8));
+        OString sToken(OUStringToOString(strLine.copy(portion.nBegin, portion.nEnd-portion.nBegin), RTL_TEXTENCODING_UTF8));
         xmlNodePtr text = xmlNewText(reinterpret_cast<const xmlChar*>(sToken.getStr()));
-        if ( i->tokenType != TokenType::Whitespace )
+        if ( portion.tokenType != TokenType::Whitespace )
         {
-            xmlChar* typeStr = getTypeString( i->tokenType );
+            xmlChar* typeStr = getTypeString( portion.tokenType );
             curNode = xmlNewTextChild( paragraph, nullptr, reinterpret_cast<xmlChar const *>("item"), nullptr );
             xmlNewProp( curNode, reinterpret_cast<xmlChar const *>("type"), typeStr );
             xmlAddChild( curNode, text );
