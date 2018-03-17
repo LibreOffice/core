@@ -99,7 +99,7 @@ public:
      * @brief extract the bitmap and alpha data separately. Used by the SWF filter.
      */
     void GetSplitData( std::vector<sal_uInt8>& rvColorData, std::vector<sal_uInt8>& rvAlphaData ) const;
-    
+
     /** Crop the bitmap
 
         @param rRectPixel
@@ -421,6 +421,8 @@ public:
     void                setAlphaFrom( sal_uInt8 cIndexFrom, sal_Int8 nAlphaTo );
 
     void                AdjustTransparency( sal_uInt8 cTrans );
+
+    void                CombineMaskOr(Color maskColor, sal_uInt8 nTol);
 
 public:
 
