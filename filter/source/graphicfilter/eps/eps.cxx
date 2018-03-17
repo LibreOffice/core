@@ -40,6 +40,7 @@
 #include <vcl/graphictools.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/BitmapConverter.hxx>
+#include <vcl/BitmapCropper.hxx>
 #include <strings.hrc>
 
 #include <math.h>
@@ -858,16 +859,21 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
 
             case MetaActionType::BMPEXSCALEPART :
             {
-                BitmapEx    aBitmapEx( static_cast<const MetaBmpExScalePartAction*>(pMA)->GetBitmapEx() );
-                aBitmapEx.Crop( tools::Rectangle( static_cast<const MetaBmpExScalePartAction*>(pMA)->GetSrcPoint(),
-                    static_cast<const MetaBmpExScalePartAction*>(pMA)->GetSrcSize() ) );
-                Bitmap      aBitmap( aBitmapEx.GetBitmap() );
-                if ( mbGrayScale )
-                    aBitmap.Convert( BmpConversion::N8BitGreys );
-                Bitmap      aMask( aBitmapEx.GetMask() );
+                BitmapEx aBitmapEx(static_cast<const MetaBmpExScalePartAction*>(pMA)->GetBitmapEx());
+                BitmapCropper aBmpCropper(tools::Rectangle(
+                            static_cast<const MetaBmpExScalePartAction*>(pMA)->GetSrcPoint(),
+                            static_cast<const MetaBmpExScalePartAction*>(pMA)->GetSrcSize()));
+                if (aBmpCropper.execute(aBitmapEx).IsEmpty())
+                    SAL_WARN("vcl.gdi", "crop failed");
+
+                Bitmap aBitmap(aBitmapEx.GetBitmap());
+                if (mbGrayScale)
+                    aBitmap.Convert(BmpConversion::N8BitGreys);
+
+                Bitmap aMask(aBitmapEx.GetMask());
                 Point aPoint = static_cast<const MetaBmpExScalePartAction*>(pMA)->GetDestPoint();
                 Size aSize = static_cast<const MetaBmpExScalePartAction*>(pMA)->GetDestSize();
-                ImplBmp( &aBitmap, &aMask, aPoint, aSize.Width(), aSize.Height() );
+                ImplBmp(&aBitmap, &aMask, aPoint, aSize.Width(), aSize.Height());
             }
             break;
 

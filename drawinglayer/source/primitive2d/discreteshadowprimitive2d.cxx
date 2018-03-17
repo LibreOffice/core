@@ -17,10 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <vcl/BitmapCropper.hxx>
+
 #include <drawinglayer/primitive2d/discreteshadowprimitive2d.hxx>
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
 #include <drawinglayer/primitive2d/bitmapprimitive2d.hxx>
-#include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 
@@ -55,8 +57,10 @@ namespace drawinglayer
             {
                 const sal_Int32 nQuarter((getBitmapEx().GetSizePixel().Width() - 3) >> 2);
                 const_cast< DiscreteShadow* >(this)->maTopLeft = getBitmapEx();
-                const_cast< DiscreteShadow* >(this)->maTopLeft.Crop(
-                    ::tools::Rectangle(Point(0, 0), Size((nQuarter * 2) + 1, (nQuarter * 2) + 1)));
+                tools::Rectangle aCropRect(Point(0, 0), Size((nQuarter * 2) + 1, (nQuarter * 2) + 1));
+                BitmapCropper aBmpCropper(aCropRect);
+                if (aBmpCropper.execute(const_cast< DiscreteShadow* >(this)->maTopLeft).IsEmpty())
+                    SAL_WARN("vcl.gdi", "crop failed");
             }
 
             return maTopLeft;
@@ -68,8 +72,10 @@ namespace drawinglayer
             {
                 const sal_Int32 nQuarter((getBitmapEx().GetSizePixel().Width() - 3) >> 2);
                 const_cast< DiscreteShadow* >(this)->maTop = getBitmapEx();
-                const_cast< DiscreteShadow* >(this)->maTop.Crop(
-                    ::tools::Rectangle(Point((nQuarter * 2) + 1, 0), Size(1, nQuarter)));
+                tools::Rectangle aCropRect(Point((nQuarter * 2) + 1, 0), Size(1, nQuarter));
+                BitmapCropper aBmpCropper(aCropRect);
+                if (aBmpCropper.execute(const_cast< DiscreteShadow* >(this)->maTop).IsEmpty())
+                    SAL_WARN("vcl.gdi", "crop failed");
             }
 
             return maTop;
@@ -81,8 +87,10 @@ namespace drawinglayer
             {
                 const sal_Int32 nQuarter((getBitmapEx().GetSizePixel().Width() - 3) >> 2);
                 const_cast< DiscreteShadow* >(this)->maTopRight = getBitmapEx();
-                const_cast< DiscreteShadow* >(this)->maTopRight.Crop(
-                    ::tools::Rectangle(Point((nQuarter * 2) + 2, 0), Size((nQuarter * 2) + 1, (nQuarter * 2) + 1)));
+                tools::Rectangle aCropRect(Point((nQuarter * 2) + 2, 0), Size((nQuarter * 2) + 1, (nQuarter * 2) + 1));
+                BitmapCropper aBmpCropper(aCropRect);
+                if (aBmpCropper.execute(const_cast< DiscreteShadow* >(this)->maTopRight).IsEmpty())
+                    SAL_WARN("vcl.gdi", "crop failed");
             }
 
             return maTopRight;
@@ -94,8 +102,10 @@ namespace drawinglayer
             {
                 const sal_Int32 nQuarter((getBitmapEx().GetSizePixel().Width() - 3) >> 2);
                 const_cast< DiscreteShadow* >(this)->maRight = getBitmapEx();
-                const_cast< DiscreteShadow* >(this)->maRight.Crop(
-                    ::tools::Rectangle(Point((nQuarter * 3) + 3, (nQuarter * 2) + 1), Size(nQuarter, 1)));
+                tools::Rectangle aCropRect(Point((nQuarter * 3) + 3, (nQuarter * 2) + 1), Size(nQuarter, 1));
+                BitmapCropper aBmpCropper(aCropRect);
+                if (aBmpCropper.execute(const_cast< DiscreteShadow* >(this)->maRight).IsEmpty())
+                    SAL_WARN("vcl.gdi", "crop failed");
             }
 
             return maRight;
@@ -107,8 +117,10 @@ namespace drawinglayer
             {
                 const sal_Int32 nQuarter((getBitmapEx().GetSizePixel().Width() - 3) >> 2);
                 const_cast< DiscreteShadow* >(this)->maBottomRight = getBitmapEx();
-                const_cast< DiscreteShadow* >(this)->maBottomRight.Crop(
-                    ::tools::Rectangle(Point((nQuarter * 2) + 2, (nQuarter * 2) + 2), Size((nQuarter * 2) + 1, (nQuarter * 2) + 1)));
+                tools::Rectangle aCropRect(Point((nQuarter * 2) + 2, (nQuarter * 2) + 2), Size((nQuarter * 2) + 1, (nQuarter * 2) + 1));
+                BitmapCropper aBmpCropper(aCropRect);
+                if (aBmpCropper.execute(const_cast< DiscreteShadow* >(this)->maBottomRight).IsEmpty())
+                    SAL_WARN("vcl.gdi", "crop failed");
             }
 
             return maBottomRight;
@@ -120,8 +132,10 @@ namespace drawinglayer
             {
                 const sal_Int32 nQuarter((getBitmapEx().GetSizePixel().Width() - 3) >> 2);
                 const_cast< DiscreteShadow* >(this)->maBottom = getBitmapEx();
-                const_cast< DiscreteShadow* >(this)->maBottom.Crop(
-                    ::tools::Rectangle(Point((nQuarter * 2) + 1, (nQuarter * 3) + 3), Size(1, nQuarter)));
+                tools::Rectangle aCropRect(Point((nQuarter * 2) + 1, (nQuarter * 3) + 3), Size(1, nQuarter));
+                BitmapCropper aBmpCropper(aCropRect);
+                if (aBmpCropper.execute(const_cast< DiscreteShadow* >(this)->maBottom).IsEmpty())
+                    SAL_WARN("vcl.gdi", "crop failed");
             }
 
             return maBottom;
@@ -133,8 +147,10 @@ namespace drawinglayer
             {
                 const sal_Int32 nQuarter((getBitmapEx().GetSizePixel().Width() - 3) >> 2);
                 const_cast< DiscreteShadow* >(this)->maBottomLeft = getBitmapEx();
-                const_cast< DiscreteShadow* >(this)->maBottomLeft.Crop(
-                    ::tools::Rectangle(Point(0, (nQuarter * 2) + 2), Size((nQuarter * 2) + 1, (nQuarter * 2) + 1)));
+                tools::Rectangle aCropRect(Point(0, (nQuarter * 2) + 2), Size((nQuarter * 2) + 1, (nQuarter * 2) + 1));
+                BitmapCropper aBmpCropper(aCropRect);
+                if (aBmpCropper.execute(const_cast< DiscreteShadow* >(this)->maBottomLeft).IsEmpty())
+                    SAL_WARN("vcl.gdi", "crop failed");
             }
 
             return maBottomLeft;
@@ -146,8 +162,10 @@ namespace drawinglayer
             {
                 const sal_Int32 nQuarter((getBitmapEx().GetSizePixel().Width() - 3) >> 2);
                 const_cast< DiscreteShadow* >(this)->maLeft = getBitmapEx();
-                const_cast< DiscreteShadow* >(this)->maLeft.Crop(
-                    ::tools::Rectangle(Point(0, (nQuarter * 2) + 1), Size(nQuarter, 1)));
+                tools::Rectangle aCropRect(Point(0, (nQuarter * 2) + 1), Size(nQuarter, 1));
+                BitmapCropper aBmpCropper(aCropRect);
+                if (aBmpCropper.execute(const_cast< DiscreteShadow* >(this)->maLeft).IsEmpty())
+                    SAL_WARN("vcl.gdi", "crop failed");
             }
 
             return maLeft;
