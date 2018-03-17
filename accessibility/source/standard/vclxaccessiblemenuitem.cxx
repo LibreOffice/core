@@ -18,8 +18,6 @@
  */
 
 #include <standard/vclxaccessiblemenuitem.hxx>
-#include <helper/accresmgr.hxx>
-#include <strings.hrc>
 #include <toolkit/helper/convert.hxx>
 #include <helper/characterattributeshelper.hxx>
 #include <comphelper/accessiblekeybindinghelper.hxx>

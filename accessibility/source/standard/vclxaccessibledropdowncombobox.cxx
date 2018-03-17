@@ -21,8 +21,6 @@
 #include <standard/vclxaccessiblecombobox.hxx>
 #include <standard/vclxaccessibletextfield.hxx>
 #include <standard/vclxaccessiblelist.hxx>
-#include <helper/accresmgr.hxx>
-#include <strings.hrc>
 
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>

@@ -20,8 +20,6 @@
 #include <standard/accessiblemenuitemcomponent.hxx>
 
 
-#include <helper/accresmgr.hxx>
-#include <strings.hrc>
 #include <toolkit/awt/vclxwindows.hxx>
 #include <toolkit/helper/convert.hxx>
 
