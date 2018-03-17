@@ -764,14 +764,14 @@ OUString SvXMLGraphicHelper::implSaveGraphic(css::uno::Reference<css::graphic::X
             std::unique_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream(aStream.xStream));
             if (bUseGfxLink && aGfxLink.GetDataSize() && aGfxLink.GetData())
             {
-                const uno::Sequence<sal_Int8>& rPdfData = aGraphic.getPdfData();
-                if (rPdfData.hasElements())
+                if (aGraphic.hasPdfData())
                 {
                     // The graphic has PDF data attached to it, use that.
                     // vcl::ImportPDF() possibly downgraded the PDF data from a
                     // higher PDF version, while aGfxLink still contains the
                     // original data provided by the user.
-                    pStream->WriteBytes(rPdfData.getConstArray(), rPdfData.getLength());
+                    std::shared_ptr<uno::Sequence<sal_Int8>> pPdfData = aGraphic.getPdfData();
+                    pStream->WriteBytes(pPdfData->getConstArray(), pPdfData->getLength());
                 }
                 else
                 {
