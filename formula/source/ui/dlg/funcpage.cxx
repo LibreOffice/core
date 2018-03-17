@@ -144,16 +144,12 @@ void FuncPage::UpdateFunctionList(const OUString& aStr)
         }
         else // LRU-List
         {
-            ::std::vector< TFunctionDesc >::iterator aIter = aLRUList.begin();
-            ::std::vector< TFunctionDesc >::iterator aEnd = aLRUList.end();
-
-            for ( ; aIter != aEnd; ++aIter )
+            for (auto const& elem : aLRUList)
             {
-                const IFunctionDescription* pDesc = *aIter;
-                if (pDesc)  // may be null if a function is no longer available
+                if (elem)  // may be null if a function is no longer available
                 {
                     m_pLbFunction->SetEntryData(
-                        m_pLbFunction->InsertEntry( pDesc->getFunctionName() ), const_cast<IFunctionDescription *>(pDesc) );
+                        m_pLbFunction->InsertEntry( elem->getFunctionName() ), const_cast<IFunctionDescription *>(elem) );
                 }
             }
         }
