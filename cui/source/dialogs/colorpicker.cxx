@@ -45,7 +45,6 @@
 #include <svx/hexcolorcontrol.hxx>
 #include <sax/tools/converter.hxx>
 #include <basegfx/color/bcolortools.hxx>
-#include <dialmgr.hxx>
 #include <colorpicker.hxx>
 #include <bitmaps.hlst>
 #include <cmath>

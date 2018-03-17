@@ -20,7 +20,6 @@
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>
 #include "optsave.hxx"
-#include <dialmgr.hxx>
 #include <comphelper/processfactory.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <unotools/saveopt.hxx>

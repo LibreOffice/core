@@ -33,6 +33,7 @@
 #include <macroass.hxx>
 #include <svx/svxdlg.hxx>
 #include <strings.hrc>
+#include <dialmgr.hxx>
 #include <bitmaps.hlst>
 #include <vcl/builderfactory.hxx>
 

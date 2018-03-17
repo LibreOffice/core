@@ -20,7 +20,6 @@
 #include <vcl/svapp.hxx>
 #include <dlgname.hxx>
 #include <defdlgname.hxx>
-#include <dialmgr.hxx>
 
 /*************************************************************************
 |*

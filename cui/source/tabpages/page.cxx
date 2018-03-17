@@ -44,7 +44,6 @@
 #include <editeng/frmdiritem.hxx>
 #include <svx/dlgutil.hxx>
 #include <editeng/paperinf.hxx>
-#include <dialmgr.hxx>
 #include <sfx2/module.hxx>
 #include <svl/stritem.hxx>
 #include <editeng/eerdll.hxx>

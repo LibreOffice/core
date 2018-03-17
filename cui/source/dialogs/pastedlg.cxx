@@ -35,8 +35,6 @@
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 
-#include <dialmgr.hxx>
-
 SvPasteObjectDialog::SvPasteObjectDialog(weld::Window* pParent)
     : GenericDialogController(pParent, "cui/ui/pastespecial.ui", "PasteSpecialDialog")
     , m_xFtObjectSource(m_xBuilder->weld_label("source"))

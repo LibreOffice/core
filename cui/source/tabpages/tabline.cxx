@@ -24,7 +24,6 @@
 #include <cuitabarea.hxx>
 #include <cuitabline.hxx>
 #include <dlgname.hxx>
-#include <dialmgr.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/xtable.hxx>
 #include <svx/drawitem.hxx>

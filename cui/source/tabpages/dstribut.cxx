@@ -21,7 +21,6 @@
 #include <dstribut.hxx>
 #include <svx/dialogs.hrc>
 #include <svx/svddef.hxx>
-#include <dialmgr.hxx>
 
 /*************************************************************************
 |*
