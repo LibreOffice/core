@@ -25,9 +25,6 @@
 		3941EF22204B4C8A00082486 /* config in Resources */ = {isa = PBXBuildFile; fileRef = 3941EF13204B4C8900082486 /* config */; };
 		3941EF23204B4C8A00082486 /* share in Resources */ = {isa = PBXBuildFile; fileRef = 3941EF14204B4C8900082486 /* share */; };
 		39514E002057DC55005599D0 /* shared in Resources */ = {isa = PBXBuildFile; fileRef = 39514DFF2057DC55005599D0 /* shared */; };
-		39514E022057DC92005599D0 /* gcc3_ios in Resources */ = {isa = PBXBuildFile; fileRef = 39514E012057DC92005599D0 /* gcc3_ios */; };
-		39514E042057DCE7005599D0 /* gcc3_macosx_x86-64 in Resources */ = {isa = PBXBuildFile; fileRef = 39514E032057DCE7005599D0 /* gcc3_macosx_x86-64 */; };
-		39514E062057DD17005599D0 /* gcc3_linux_aarch64 in Resources */ = {isa = PBXBuildFile; fileRef = 39514E052057DD17005599D0 /* gcc3_linux_aarch64 */; };
 		39514E082057E4A8005599D0 /* inc in Resources */ = {isa = PBXBuildFile; fileRef = 39514E072057E4A8005599D0 /* inc */; };
 		396F92F71E7AE62400A28C82 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 396F92F61E7AE62400A28C82 /* Settings.bundle */; };
 		397868D61E59A3EA007F9248 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 397868D81E59A3EA007F9248 /* LaunchScreen.xib */; };
@@ -343,7 +340,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				39514E042057DCE7005599D0 /* gcc3_macosx_x86-64 in Resources */,
 				3941EF15204B4C8A00082486 /* unorc in Resources */,
 				3941EF19204B4C8A00082486 /* oovbaapi.rdb in Resources */,
 				3941EF1D204B4C8A00082486 /* filter in Resources */,
@@ -351,7 +347,6 @@
 				397868D61E59A3EA007F9248 /* LaunchScreen.xib in Resources */,
 				39514E002057DC55005599D0 /* shared in Resources */,
 				3941EF1A204B4C8A00082486 /* registry in Resources */,
-				39514E062057DD17005599D0 /* gcc3_linux_aarch64 in Resources */,
 				3941EF18204B4C8A00082486 /* services.rdb in Resources */,
 				3941EF1C204B4C8A00082486 /* offapi.rdb in Resources */,
 				3941EF22204B4C8A00082486 /* config in Resources */,
@@ -362,7 +357,6 @@
 				3941EF21204B4C8A00082486 /* welcome.odt in Resources */,
 				397E09031E597BD8001374E0 /* Main.storyboard in Resources */,
 				3941EF20204B4C8A00082486 /* icudt60l.dat in Resources */,
-				39514E022057DC92005599D0 /* gcc3_ios in Resources */,
 				3941EF16204B4C8A00082486 /* fundamentalrc in Resources */,
 				39514E082057E4A8005599D0 /* inc in Resources */,
 				3941EF1F204B4C8A00082486 /* udkapi.rdb in Resources */,
