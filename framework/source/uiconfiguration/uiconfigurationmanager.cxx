@@ -253,11 +253,10 @@ void UIConfigurationManager::impl_fillSequenceWithElementTypeInfo( UIElementInfo
     impl_preloadUIElementTypeList( nElementType );
 
     UIElementDataHashMap& rUserElements = m_aUIElements[nElementType].aElementsHashMap;
-    UIElementDataHashMap::const_iterator pUserIter = rUserElements.begin();
 
-    while ( pUserIter != rUserElements.end() )
+    for (auto const& elem : rUserElements)
     {
-        UIElementData* pDataSettings = impl_findUIElementData( pUserIter->second.aResourceURL, nElementType );
+        UIElementData* pDataSettings = impl_findUIElementData( elem.second.aResourceURL, nElementType );
         if ( pDataSettings && !pDataSettings->bDefault )
         {
             // Retrieve user interface name from XPropertySet interface
@@ -269,10 +268,9 @@ void UIConfigurationManager::impl_fillSequenceWithElementTypeInfo( UIElementInfo
                 a >>= aUIName;
             }
 
-            UIElementInfo aInfo( pUserIter->second.aResourceURL, aUIName );
-            aUIElementInfoCollection.emplace( pUserIter->second.aResourceURL, aInfo );
+            UIElementInfo aInfo( elem.second.aResourceURL, aUIName );
+            aUIElementInfoCollection.emplace( elem.second.aResourceURL, aInfo );
         }
-        ++pUserIter;
     }
 }
 
@@ -450,11 +448,10 @@ UIConfigurationManager::UIElementData* UIConfigurationManager::impl_findUIElemen
 void UIConfigurationManager::impl_storeElementTypeData( Reference< XStorage > const & xStorage, UIElementType& rElementType, bool bResetModifyState )
 {
     UIElementDataHashMap& rHashMap          = rElementType.aElementsHashMap;
-    UIElementDataHashMap::iterator pIter    = rHashMap.begin();
 
-    while ( pIter != rHashMap.end() )
+    for (auto & elem : rHashMap)
     {
-        UIElementData& rElement = pIter->second;
+        UIElementData& rElement = elem.second;
         if ( rElement.bModified )
         {
             if ( rElement.bDefault )
@@ -520,8 +517,6 @@ void UIConfigurationManager::impl_storeElementTypeData( Reference< XStorage > co
                     rElement.bModified = false;
             }
         }
-
-        ++pIter;
     }
 
     // commit element type storage
@@ -539,16 +534,15 @@ void UIConfigurationManager::impl_resetElementTypeData(
     ConfigEventNotifyContainer& rRemoveNotifyContainer )
 {
     UIElementDataHashMap& rHashMap          = rDocElementType.aElementsHashMap;
-    UIElementDataHashMap::iterator pIter    = rHashMap.begin();
 
     Reference< XUIConfigurationManager > xThis( static_cast< OWeakObject* >( this ), UNO_QUERY );
     Reference< XInterface > xIfac( xThis, UNO_QUERY );
 
     // Make copies of the event structures to be thread-safe. We have to unlock our mutex before calling
     // our listeners!
-    while ( pIter != rHashMap.end() )
+    for (auto & elem : rHashMap)
     {
-        UIElementData& rElement = pIter->second;
+        UIElementData& rElement = elem.second;
         if ( !rElement.bDefault )
         {
             // Remove user-defined settings from document
@@ -566,8 +560,6 @@ void UIConfigurationManager::impl_resetElementTypeData(
         }
         else
             rElement.bModified = false;
-
-        ++pIter;
     }
 
     // Remove all settings from our user interface elements
@@ -580,16 +572,15 @@ void UIConfigurationManager::impl_reloadElementTypeData(
     ConfigEventNotifyContainer& rReplaceNotifyContainer )
 {
     UIElementDataHashMap& rHashMap          = rDocElementType.aElementsHashMap;
-    UIElementDataHashMap::iterator pIter    = rHashMap.begin();
     Reference< XStorage > xElementStorage( rDocElementType.xStorage );
 
     Reference< XUIConfigurationManager > xThis( static_cast< OWeakObject* >( this ), UNO_QUERY );
     Reference< XInterface > xIfac( xThis, UNO_QUERY );
     sal_Int16 nType = rDocElementType.nElementType;
 
-    while ( pIter != rHashMap.end() )
+    for (auto & elem : rHashMap)
     {
-        UIElementData& rElement = pIter->second;
+        UIElementData& rElement = elem.second;
         if ( rElement.bModified )
         {
             if ( xElementStorage->hasByName( rElement.aName ))
@@ -627,7 +618,6 @@ void UIConfigurationManager::impl_reloadElementTypeData(
                 rElement.bDefault  = true;
             }
         }
-        ++pIter;
     }
 
     rDocElementType.bModified = false;
@@ -870,15 +860,12 @@ Sequence< Sequence< PropertyValue > > SAL_CALL UIConfigurationManager::getUIElem
     aUIElementInfo[1].Name = m_aPropUIName;
 
     aElementInfoSeq.resize( aUIElementInfoCollection.size() );
-    UIElementInfoHashMap::const_iterator pIter = aUIElementInfoCollection.begin();
-
     sal_Int32 n = 0;
-    while ( pIter != aUIElementInfoCollection.end() )
+    for (auto const& elem : aUIElementInfoCollection)
     {
-        aUIElementInfo[0].Value <<= pIter->second.aResourceURL;
-        aUIElementInfo[1].Value <<= pIter->second.aUIName;
+        aUIElementInfo[0].Value <<= elem.second.aResourceURL;
+        aUIElementInfo[1].Value <<= elem.second.aUIName;
         aElementInfoSeq[n++] = aUIElementInfo;
-        ++pIter;
     }
 
     return comphelper::containerToSequence(aElementInfoSeq);

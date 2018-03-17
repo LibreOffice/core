@@ -278,17 +278,16 @@ void ModuleUIConfigurationManager::impl_fillSequenceWithElementTypeInfo( UIEleme
     impl_preloadUIElementTypeList( LAYER_DEFAULT, nElementType );
 
     UIElementDataHashMap& rUserElements = m_aUIElements[LAYER_USERDEFINED][nElementType].aElementsHashMap;
-    UIElementDataHashMap::const_iterator pUserIter = rUserElements.begin();
 
     OUString aCustomUrlPrefix( "custom_" );
-    while ( pUserIter != rUserElements.end() )
+    for (auto const& userElement : rUserElements)
     {
-        sal_Int32 nIndex = pUserIter->second.aResourceURL.indexOf( aCustomUrlPrefix, RESOURCEURL_PREFIX_SIZE );
+        sal_Int32 nIndex = userElement.second.aResourceURL.indexOf( aCustomUrlPrefix, RESOURCEURL_PREFIX_SIZE );
         if ( nIndex > RESOURCEURL_PREFIX_SIZE )
         {
             // Performance: Retrieve user interface name only for custom user interface elements.
             // It's only used by them!
-            UIElementData* pDataSettings = impl_findUIElementData( pUserIter->second.aResourceURL, nElementType );
+            UIElementData* pDataSettings = impl_findUIElementData( userElement.second.aResourceURL, nElementType );
             if ( pDataSettings )
             {
                 // Retrieve user interface name from XPropertySet interface
@@ -300,33 +299,31 @@ void ModuleUIConfigurationManager::impl_fillSequenceWithElementTypeInfo( UIEleme
                     a >>= aUIName;
                 }
 
-                UIElementInfo aInfo( pUserIter->second.aResourceURL, aUIName );
-                aUIElementInfoCollection.emplace( pUserIter->second.aResourceURL, aInfo );
+                UIElementInfo aInfo( userElement.second.aResourceURL, aUIName );
+                aUIElementInfoCollection.emplace( userElement.second.aResourceURL, aInfo );
             }
         }
         else
         {
             // The user interface name for standard user interface elements is stored in the WindowState.xcu file
-            UIElementInfo aInfo( pUserIter->second.aResourceURL, OUString() );
-            aUIElementInfoCollection.emplace( pUserIter->second.aResourceURL, aInfo );
+            UIElementInfo aInfo( userElement.second.aResourceURL, OUString() );
+            aUIElementInfoCollection.emplace( userElement.second.aResourceURL, aInfo );
         }
-        ++pUserIter;
     }
 
     UIElementDataHashMap& rDefaultElements = m_aUIElements[LAYER_DEFAULT][nElementType].aElementsHashMap;
-    UIElementDataHashMap::const_iterator pDefIter = rDefaultElements.begin();
 
-    while ( pDefIter != rDefaultElements.end() )
+    for (auto const& defaultElement : rDefaultElements)
     {
-        UIElementInfoHashMap::const_iterator pIterInfo = aUIElementInfoCollection.find( pDefIter->second.aResourceURL );
+        UIElementInfoHashMap::const_iterator pIterInfo = aUIElementInfoCollection.find( defaultElement.second.aResourceURL );
         if ( pIterInfo == aUIElementInfoCollection.end() )
         {
-            sal_Int32 nIndex = pDefIter->second.aResourceURL.indexOf( aCustomUrlPrefix, RESOURCEURL_PREFIX_SIZE );
+            sal_Int32 nIndex = defaultElement.second.aResourceURL.indexOf( aCustomUrlPrefix, RESOURCEURL_PREFIX_SIZE );
             if ( nIndex > RESOURCEURL_PREFIX_SIZE )
             {
                 // Performance: Retrieve user interface name only for custom user interface elements.
                 // It's only used by them!
-                UIElementData* pDataSettings = impl_findUIElementData( pDefIter->second.aResourceURL, nElementType );
+                UIElementData* pDataSettings = impl_findUIElementData( defaultElement.second.aResourceURL, nElementType );
                 if ( pDataSettings )
                 {
                     // Retrieve user interface name from XPropertySet interface
@@ -337,20 +334,17 @@ void ModuleUIConfigurationManager::impl_fillSequenceWithElementTypeInfo( UIEleme
                         Any a = xPropSet->getPropertyValue( m_aPropUIName );
                         a >>= aUIName;
                     }
-
-                    UIElementInfo aInfo( pDefIter->second.aResourceURL, aUIName );
-                    aUIElementInfoCollection.emplace( pDefIter->second.aResourceURL, aInfo );
+                    UIElementInfo aInfo( defaultElement.second.aResourceURL, aUIName );
+                    aUIElementInfoCollection.emplace( defaultElement.second.aResourceURL, aInfo );
                 }
             }
             else
             {
                 // The user interface name for standard user interface elements is stored in the WindowState.xcu file
-                UIElementInfo aInfo( pDefIter->second.aResourceURL, OUString() );
-                aUIElementInfoCollection.emplace( pDefIter->second.aResourceURL, aInfo );
+                UIElementInfo aInfo( defaultElement.second.aResourceURL, OUString() );
+                aUIElementInfoCollection.emplace( defaultElement.second.aResourceURL, aInfo );
             }
         }
-
-        ++pDefIter;
     }
 }
 
@@ -542,11 +536,10 @@ ModuleUIConfigurationManager::UIElementData*  ModuleUIConfigurationManager::impl
 void ModuleUIConfigurationManager::impl_storeElementTypeData( const Reference< XStorage >& xStorage, UIElementType& rElementType, bool bResetModifyState )
 {
     UIElementDataHashMap& rHashMap          = rElementType.aElementsHashMap;
-    UIElementDataHashMap::iterator pIter    = rHashMap.begin();
 
-    while ( pIter != rHashMap.end() )
+    for (auto & elem : rHashMap)
     {
-        UIElementData& rElement = pIter->second;
+        UIElementData& rElement = elem.second;
         if ( rElement.bModified )
         {
             if ( rElement.bDefault )
@@ -612,8 +605,6 @@ void ModuleUIConfigurationManager::impl_storeElementTypeData( const Reference< X
                     rElement.bModified = false;
             }
         }
-
-        ++pIter;
     }
 
     // commit element type storage
@@ -634,7 +625,6 @@ void ModuleUIConfigurationManager::impl_resetElementTypeData(
     ConfigEventNotifyContainer& rReplaceNotifyContainer )
 {
     UIElementDataHashMap& rHashMap          = rUserElementType.aElementsHashMap;
-    UIElementDataHashMap::iterator pIter    = rHashMap.begin();
 
     Reference< XUIConfigurationManager > xThis( static_cast< OWeakObject* >( this ), UNO_QUERY );
     Reference< XInterface >  xIfac( xThis, UNO_QUERY );
@@ -643,9 +633,9 @@ void ModuleUIConfigurationManager::impl_resetElementTypeData(
 
     // Make copies of the event structures to be thread-safe. We have to unlock our mutex before calling
     // our listeners!
-    while ( pIter != rHashMap.end() )
+    for (auto & elem : rHashMap)
     {
-        UIElementData& rElement = pIter->second;
+        UIElementData& rElement = elem.second;
         if ( !rElement.bDefault )
         {
             if ( xDefaultNameAccess->hasByName( rElement.aName ))
@@ -685,8 +675,6 @@ void ModuleUIConfigurationManager::impl_resetElementTypeData(
                 rElement.bDefault  = true;
             }
         }
-
-        ++pIter;
     }
 
     // Remove all settings from our user interface elements
@@ -700,7 +688,6 @@ void ModuleUIConfigurationManager::impl_reloadElementTypeData(
     ConfigEventNotifyContainer& rReplaceNotifyContainer )
 {
     UIElementDataHashMap& rHashMap          = rUserElementType.aElementsHashMap;
-    UIElementDataHashMap::iterator pIter    = rHashMap.begin();
     Reference< XNameAccess > xUserNameAccess( rUserElementType.xStorage, UNO_QUERY );
     Reference< XNameAccess > xDefaultNameAccess( rDefaultElementType.xStorage, UNO_QUERY );
 
@@ -708,9 +695,9 @@ void ModuleUIConfigurationManager::impl_reloadElementTypeData(
     Reference< XInterface > xIfac( xThis, UNO_QUERY );
     sal_Int16 nType = rUserElementType.nElementType;
 
-    while ( pIter != rHashMap.end() )
+    for (auto & elem : rHashMap)
     {
-        UIElementData& rElement = pIter->second;
+        UIElementData& rElement = elem.second;
         if ( rElement.bModified )
         {
             if ( xUserNameAccess->hasByName( rElement.aName ))
@@ -770,7 +757,6 @@ void ModuleUIConfigurationManager::impl_reloadElementTypeData(
                 rElement.bDefault  = true;
             }
         }
-        ++pIter;
     }
 
     rUserElementType.bModified = false;
@@ -1096,15 +1082,13 @@ Sequence< Sequence< PropertyValue > > SAL_CALL ModuleUIConfigurationManager::get
     aUIElementInfo[1].Name = m_aPropUIName;
 
     aElementInfoSeq.resize( aUIElementInfoCollection.size() );
-    UIElementInfoHashMap::const_iterator pIter = aUIElementInfoCollection.begin();
 
     sal_Int32 n = 0;
-    while ( pIter != aUIElementInfoCollection.end() )
+    for (auto const& elem : aUIElementInfoCollection)
     {
-        aUIElementInfo[0].Value <<= pIter->second.aResourceURL;
-        aUIElementInfo[1].Value <<= pIter->second.aUIName;
+        aUIElementInfo[0].Value <<= elem.second.aResourceURL;
+        aUIElementInfo[1].Value <<= elem.second.aUIName;
         aElementInfoSeq[n++] = aUIElementInfo;
-        ++pIter;
     }
 
     return comphelper::containerToSequence(aElementInfoSeq);

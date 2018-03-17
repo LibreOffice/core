@@ -150,9 +150,8 @@ OUString SAL_CALL DispatchRecorder::getRecordedMacro()
     aScriptBuffer.append("document   = ThisComponent.CurrentController.Frame\n");
     aScriptBuffer.append("dispatcher = createUnoService(\"com.sun.star.frame.DispatchHelper\")\n\n");
 
-    std::vector< css::frame::DispatchStatement>::iterator p;
-    for ( p = m_aStatements.begin(); p != m_aStatements.end(); ++p )
-        implts_recordMacro( p->aCommand, p->aArgs, p->bIsComment, aScriptBuffer );
+    for (auto const& statement : m_aStatements)
+        implts_recordMacro( statement.aCommand, statement.aArgs, statement.bIsComment, aScriptBuffer );
     OUString sScript = aScriptBuffer.makeStringAndClear();
     return sScript;
 }

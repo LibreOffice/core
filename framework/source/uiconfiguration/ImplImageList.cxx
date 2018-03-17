@@ -38,9 +38,9 @@ ImplImageList::ImplImageList( const ImplImageList &aSrc )
     , maImageSize(aSrc.maImageSize)
 {
     maImages.reserve( aSrc.maImages.size() );
-    for ( std::vector<ImageAryData *>::const_iterator aIt = aSrc.maImages.begin(), aEnd = aSrc.maImages.end(); aIt != aEnd; ++aIt )
+    for (auto const& elem : aSrc.maImages)
     {
-        ImageAryData* pAryData = new ImageAryData( **aIt );
+        ImageAryData* pAryData = new ImageAryData(*elem);
         maImages.push_back( pAryData );
         if( !pAryData->maName.isEmpty() )
             maNameHash [ pAryData->maName ] = pAryData;
@@ -49,8 +49,8 @@ ImplImageList::ImplImageList( const ImplImageList &aSrc )
 
 ImplImageList::~ImplImageList()
 {
-    for ( std::vector<ImageAryData *>::iterator aIt = maImages.begin(), aEnd = maImages.end(); aIt != aEnd; ++aIt )
-        delete *aIt;
+    for (auto const& elem : maImages)
+        delete elem;
 }
 
 void ImplImageList::AddImage( const OUString &aName,

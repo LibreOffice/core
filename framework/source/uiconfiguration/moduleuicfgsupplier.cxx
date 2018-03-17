@@ -124,13 +124,11 @@ void SAL_CALL ModuleUIConfigurationManagerSupplier::disposing()
     osl::MutexGuard g(rBHelper.rMutex);
 
     // dispose all our module user interface configuration managers
-    ModuleToModuleCfgMgr::iterator pIter = m_aModuleToModuleUICfgMgrMap.begin();
-    while ( pIter != m_aModuleToModuleUICfgMgrMap.end() )
+    for (auto const& elem : m_aModuleToModuleUICfgMgrMap)
     {
-        Reference< XComponent > xComponent( pIter->second, UNO_QUERY );
+        Reference< XComponent > xComponent( elem.second, UNO_QUERY );
         if ( xComponent.is() )
             xComponent->dispose();
-        ++pIter;
     }
     m_aModuleToModuleUICfgMgrMap.clear();
     m_xModuleMgr.clear();

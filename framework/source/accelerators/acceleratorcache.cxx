@@ -71,13 +71,9 @@ AcceleratorCache::TKeyList AcceleratorCache::getAllKeys() const
     TKeyList lKeys;
     lKeys.reserve(m_lKey2Commands.size());
 
-    TKey2Commands::const_iterator pIt;
-    TKey2Commands::const_iterator pEnd = m_lKey2Commands.end();
-    for (  pIt  = m_lKey2Commands.begin();
-           pIt != pEnd;
-         ++pIt                           )
+    for (auto const& key2Command : m_lKey2Commands)
     {
-        lKeys.push_back(pIt->first);
+        lKeys.push_back(key2Command.first);
     }
 
     return lKeys;
@@ -141,13 +137,9 @@ void AcceleratorCache::removeCommand(const OUString& sCommand)
     SolarMutexGuard g;
 
     const TKeyList&                            lKeys = getKeysByCommand(sCommand);
-    AcceleratorCache::TKeyList::const_iterator pKey;
-    for (  pKey  = lKeys.begin();
-           pKey != lKeys.end();
-         ++pKey                 )
+    for (auto const& lKey : lKeys)
     {
-        const css::awt::KeyEvent& rKey = *pKey;
-        removeKey(rKey);
+        removeKey(lKey);
     }
     m_lCommand2Keys.erase(sCommand);
 }

@@ -87,8 +87,8 @@ uno::Sequence< OUString > SAL_CALL
 {
     uno::Sequence< OUString > aDisabledURLs(maDisabledURLs.size());
     sal_Int32 n = 0;
-    for (auto i = maDisabledURLs.begin(); i != maDisabledURLs.end(); ++i)
-        aDisabledURLs[n++] = *i;
+    for (auto const& disabledURL : maDisabledURLs)
+        aDisabledURLs[n++] = disabledURL;
     return aDisabledURLs;
 }
 
