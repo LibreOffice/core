@@ -598,7 +598,7 @@ void SvxMeasurePage::Construct()
 {
     DBG_ASSERT( pView, "No valid View transferred!" );
 
-    // TTTT
+    // TTTT TTTT
     // pMeasureObj is member of SvxXMeasurePreview and can only be accessed due to
     // SvxMeasurePage being a friend. It has it's own SdrModel (also in SvxXMeasurePreview)
     // and 'setting' the SdrModel is a hack. The comment above about 'notify unit and
