@@ -31,6 +31,9 @@ private:
     OUString m_sSecondaryString;
     void create_owned_areas();
 
+    static void SetMessagesWidths(vcl::Window const* pParent, VclMultiLineEdit* pPrimaryMessage,
+                                  VclMultiLineEdit* pSecondaryMessage);
+
     friend class VclPtr<MessageDialog>;
     MessageDialog(vcl::Window* pParent, WinBits nStyle);
 
@@ -49,9 +52,6 @@ public:
 
     void create_message_area();
     VclContainer* get_message_area() const { return m_pMessageBox.get(); }
-
-    static void SetMessagesWidths(vcl::Window const* pParent, VclMultiLineEdit* pPrimaryMessage,
-                                  VclMultiLineEdit* pSecondaryMessage);
 };
 
 #endif
