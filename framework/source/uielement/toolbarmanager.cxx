@@ -355,20 +355,17 @@ void ToolBarManager::UpdateControllers()
     if ( !m_bUpdateControllers )
     {
         m_bUpdateControllers = true;
-        ToolBarControllerMap::iterator pIter = m_aControllerMap.begin();
-
-        while ( pIter != m_aControllerMap.end() )
+        for (auto const& controller : m_aControllerMap)
         {
             try
             {
-                Reference< XUpdatable > xUpdatable( pIter->second, UNO_QUERY );
+                Reference< XUpdatable > xUpdatable( controller.second, UNO_QUERY );
                 if ( xUpdatable.is() )
                     xUpdatable->update();
             }
             catch (const Exception&)
             {
             }
-            ++pIter;
         }
     }
     m_bUpdateControllers = false;

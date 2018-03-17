@@ -199,19 +199,17 @@ void LanguageSelectionMenuController::fillPopupMenu( Reference< css::awt::XPopup
     sal_Int16 nItemId = 1;  // in this control the item id is not important for executing the command
     const OUString sAsterisk("*");  // multiple languages in current selection
     const OUString sNone( SvtLanguageTable::GetLanguageString( LANGUAGE_NONE ));
-    std::set< OUString >::const_iterator it;
-    for (it = aLangItems.begin(); it != aLangItems.end(); ++it)
+    for (auto const& langItem : aLangItems)
     {
-        const OUString & rStr( *it );
-        if (rStr != sNone &&
-            rStr != sAsterisk &&
-            !rStr.isEmpty()) // 'no language found' from language guessing
+        if (langItem != sNone &&
+            langItem != sAsterisk &&
+            !langItem.isEmpty()) // 'no language found' from language guessing
         {
-            pPopupMenu->InsertItem( nItemId, rStr );
+            pPopupMenu->InsertItem( nItemId, langItem);
             aCmd = aCmd_Language;
-            aCmd += rStr;
+            aCmd += langItem;
             pPopupMenu->SetItemCommand( nItemId, aCmd );
-            if (rStr == m_aCurLang && eMode == MODE_SetLanguageSelectionMenu )
+            if (langItem == m_aCurLang && eMode == MODE_SetLanguageSelectionMenu )
             {
                 //make a sign for the current language
                 pPopupMenu->CheckItem( nItemId );

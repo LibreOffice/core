@@ -242,16 +242,16 @@ css::uno::Reference< css::frame::XFrame > FrameContainer::searchOnAllChildrens( 
     // Step over all child frames. But if direct child isn't the right one search on his children first - before
     // you go to next direct child of this container!
     css::uno::Reference< css::frame::XFrame > xSearchedFrame;
-    for( TFrameContainer::const_iterator pIterator=m_aContainer.begin(); pIterator!=m_aContainer.end(); ++pIterator )
+    for (auto const& container : m_aContainer)
     {
-        if ((*pIterator)->getName()==sName)
+        if (container->getName()==sName)
         {
-            xSearchedFrame = *pIterator;
+            xSearchedFrame = container;
             break;
         }
         else
         {
-            xSearchedFrame = (*pIterator)->findFrame( sName, css::frame::FrameSearchFlag::CHILDREN );
+            xSearchedFrame = container->findFrame( sName, css::frame::FrameSearchFlag::CHILDREN );
             if (xSearchedFrame.is())
                 break;
         }
@@ -274,11 +274,11 @@ css::uno::Reference< css::frame::XFrame > FrameContainer::searchOnDirectChildren
 {
     SolarMutexGuard g;
     css::uno::Reference< css::frame::XFrame > xSearchedFrame;
-    for( TFrameContainer::const_iterator pIterator=m_aContainer.begin(); pIterator!=m_aContainer.end(); ++pIterator )
+    for (auto const& container : m_aContainer)
     {
-        if ((*pIterator)->getName()==sName)
+        if (container->getName()==sName)
         {
-            xSearchedFrame = *pIterator;
+            xSearchedFrame = container;
             break;
         }
     }

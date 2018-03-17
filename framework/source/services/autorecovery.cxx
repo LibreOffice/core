@@ -1502,13 +1502,9 @@ void SAL_CALL AutoRecovery::addStatusListener(const css::uno::Reference< css::fr
     /* SAFE */ {
     osl::ResettableMutexGuard g(cppu::WeakComponentImplHelperBase::rBHelper.rMutex);
 
-    AutoRecovery::TDocumentList::iterator pIt;
-    for(  pIt  = m_lDocCache.begin();
-          pIt != m_lDocCache.end();
-        ++pIt                       )
+    for (auto const& elem : m_lDocCache)
     {
-        AutoRecovery::TDocumentInfo&  rInfo = *pIt;
-        css::frame::FeatureStateEvent aEvent = AutoRecovery::implst_createFeatureStateEvent(m_eJob, OPERATION_UPDATE, &rInfo);
+        css::frame::FeatureStateEvent aEvent = AutoRecovery::implst_createFeatureStateEvent(m_eJob, OPERATION_UPDATE, &elem);
 
         // } /* SAFE */
         g.clear();
@@ -1980,13 +1976,10 @@ void AutoRecovery::implts_persistAllActiveViewNames()
     osl::MutexGuard g(cppu::WeakComponentImplHelperBase::rBHelper.rMutex);
 
     // This list will be filled with every document
-    AutoRecovery::TDocumentList::iterator pIt;
-    for (  pIt  = m_lDocCache.begin();
-           pIt != m_lDocCache.end();
-         ++pIt                       )
+    for (auto & elem : m_lDocCache)
     {
-        implts_collectActiveViewNames( *pIt );
-        implts_flushConfigItem( *pIt );
+        implts_collectActiveViewNames(elem);
+        implts_flushConfigItem(elem);
     }
 }
 
@@ -2749,39 +2742,34 @@ void AutoRecovery::implts_prepareSessionShutdown()
     /* SAFE */ {
     CacheLockGuard aCacheLock(this, cppu::WeakComponentImplHelperBase::rBHelper.rMutex, m_nDocCacheLock, LOCK_FOR_CACHE_USE);
 
-    AutoRecovery::TDocumentList::iterator pIt;
-    for (  pIt  = m_lDocCache.begin();
-           pIt != m_lDocCache.end();
-         ++pIt                       )
+    for (auto & info : m_lDocCache)
     {
-        AutoRecovery::TDocumentInfo& rInfo = *pIt;
-
         // WORKAROUND... Since the documents are not closed the lock file must be removed explicitly
         // it is not done on documents saving since shutdown can be cancelled
-        lc_removeLockFile( rInfo );
+        lc_removeLockFile( info );
 
         // Prevent us from deregistration of these documents.
         // Because we close these documents by ourself (see XClosable below) ...
         // it's fact, that we reach our deregistration method. There we
         // must not(!) update our configuration ... Otherwise all
         // session data are lost !!!
-        rInfo.IgnoreClosing = true;
+        info.IgnoreClosing = true;
 
         // reset modified flag of these documents (ignoring the notification about it!)
         // Otherwise a message box is shown on closing these models.
-        implts_stopModifyListeningOnDoc(rInfo);
+        implts_stopModifyListeningOnDoc(info);
 
         // if the session save is still running the documents should not be thrown away,
         // actually that would be a bad sign, that means that the SessionManager tries
         // to kill the session before the saving is ready
         if ((m_eJob & AutoRecovery::E_SESSION_SAVE) != AutoRecovery::E_SESSION_SAVE)
         {
-            css::uno::Reference< css::util::XModifiable > xModify(rInfo.Document, css::uno::UNO_QUERY);
+            css::uno::Reference< css::util::XModifiable > xModify(info.Document, css::uno::UNO_QUERY);
             if (xModify.is())
                 xModify->setModified(false);
 
             // close the model.
-            css::uno::Reference< css::util::XCloseable > xClose(rInfo.Document, css::uno::UNO_QUERY);
+            css::uno::Reference< css::util::XCloseable > xClose(info.Document, css::uno::UNO_QUERY);
             if (xClose.is())
             {
                 try
@@ -2794,7 +2782,7 @@ void AutoRecovery::implts_prepareSessionShutdown()
                     // So it seems to be possible to ignore any error here .-)
                 }
 
-                rInfo.Document.clear();
+                info.Document.clear();
             }
         }
     }
@@ -2978,12 +2966,9 @@ AutoRecovery::ETimerType AutoRecovery::implts_saveDocs(       bool        bAllow
 
     // Did we have some "dangerous candidates" ?
     // Try to save it ... but may be it will fail !
-    ::std::vector< AutoRecovery::TDocumentList::iterator >::iterator pIt2;
-    for (  pIt2  = lDangerousDocs.begin();
-           pIt2 != lDangerousDocs.end();
-         ++pIt2                          )
+    for (auto const& dangerousDoc : lDangerousDocs)
     {
-        pIt = *pIt2;
+        pIt = dangerousDoc;
         AutoRecovery::TDocumentInfo aInfo = *pIt;
 
         // } /* SAFE */
@@ -3154,21 +3139,16 @@ AutoRecovery::ETimerType AutoRecovery::implts_openDocs(const DispatchParams& aPa
     osl::ResettableMutexGuard g(cppu::WeakComponentImplHelperBase::rBHelper.rMutex);
 
     sal_Int32                             eJob = m_eJob;
-    AutoRecovery::TDocumentList::iterator pIt;
-    for (  pIt  = m_lDocCache.begin();
-           pIt != m_lDocCache.end();
-         ++pIt                       )
+    for (auto & info : m_lDocCache)
     {
-        AutoRecovery::TDocumentInfo& rInfo = *pIt;
-
         // Such documents are already loaded by the last loop.
         // Don't check E_SUCCEDED here! It may be the final state of an AutoSave
         // operation before!!!
-        if ((rInfo.DocumentState & AutoRecovery::E_HANDLED) == AutoRecovery::E_HANDLED)
+        if ((info.DocumentState & AutoRecovery::E_HANDLED) == AutoRecovery::E_HANDLED)
             continue;
 
         // a1,b1,c1,d2,e2,f2)
-        if ((rInfo.DocumentState & AutoRecovery::E_DAMAGED) == AutoRecovery::E_DAMAGED)
+        if ((info.DocumentState & AutoRecovery::E_DAMAGED) == AutoRecovery::E_DAMAGED)
         {
             // don't forget to inform listener! May be this document was
             // damaged on last saving time ...
@@ -3178,7 +3158,7 @@ AutoRecovery::ETimerType AutoRecovery::implts_openDocs(const DispatchParams& aPa
             // } /* SAFE */
             g.clear();
             implts_informListener(eJob,
-                AutoRecovery::implst_createFeatureStateEvent(eJob, OPERATION_UPDATE, &rInfo));
+                AutoRecovery::implst_createFeatureStateEvent(eJob, OPERATION_UPDATE, &info));
             g.reset();
             // /* SAFE */ {
             continue;
@@ -3197,21 +3177,21 @@ AutoRecovery::ETimerType AutoRecovery::implts_openDocs(const DispatchParams& aPa
             lDescriptor[utl::MediaDescriptor::PROP_STATUSINDICATOR()] <<= aParams.m_xProgress;
 
         bool bBackupWasTried   = (
-                                        ((rInfo.DocumentState & AutoRecovery::E_TRY_LOAD_BACKUP  ) == AutoRecovery::E_TRY_LOAD_BACKUP) || // temp. state!
-                                        ((rInfo.DocumentState & AutoRecovery::E_INCOMPLETE       ) == AutoRecovery::E_INCOMPLETE     )    // transport TRY_LOAD_BACKUP from last loop to this new one!
+                                        ((info.DocumentState & AutoRecovery::E_TRY_LOAD_BACKUP  ) == AutoRecovery::E_TRY_LOAD_BACKUP) || // temp. state!
+                                        ((info.DocumentState & AutoRecovery::E_INCOMPLETE       ) == AutoRecovery::E_INCOMPLETE     )    // transport TRY_LOAD_BACKUP from last loop to this new one!
                                      );
-        bool bOriginalWasTried = ((rInfo.DocumentState & AutoRecovery::E_TRY_LOAD_ORIGINAL) == AutoRecovery::E_TRY_LOAD_ORIGINAL);
+        bool bOriginalWasTried = ((info.DocumentState & AutoRecovery::E_TRY_LOAD_ORIGINAL) == AutoRecovery::E_TRY_LOAD_ORIGINAL);
 
         if (bBackupWasTried)
         {
             if (!bOriginalWasTried)
             {
-                rInfo.DocumentState |= AutoRecovery::E_INCOMPLETE;
+                info.DocumentState |= AutoRecovery::E_INCOMPLETE;
                 // try original URL ... ! don't continue with next item here ...
             }
             else
             {
-                rInfo.DocumentState |= AutoRecovery::E_DAMAGED;
+                info.DocumentState |= AutoRecovery::E_DAMAGED;
                 continue;
             }
         }
@@ -3220,21 +3200,21 @@ AutoRecovery::ETimerType AutoRecovery::implts_openDocs(const DispatchParams& aPa
         OUString sLoadBackupURL;
 
         if (!bBackupWasTried)
-            sLoadBackupURL = rInfo.OldTempURL;
+            sLoadBackupURL = info.OldTempURL;
 
-        if (!rInfo.OrgURL.isEmpty())
+        if (!info.OrgURL.isEmpty())
         {
-            sLoadOriginalURL = rInfo.OrgURL;
+            sLoadOriginalURL = info.OrgURL;
         }
-        else if (!rInfo.TemplateURL.isEmpty())
+        else if (!info.TemplateURL.isEmpty())
         {
-            sLoadOriginalURL = rInfo.TemplateURL;
+            sLoadOriginalURL = info.TemplateURL;
             lDescriptor[utl::MediaDescriptor::PROP_ASTEMPLATE()]   <<= true;
-            lDescriptor[utl::MediaDescriptor::PROP_TEMPLATENAME()] <<= rInfo.TemplateURL;
+            lDescriptor[utl::MediaDescriptor::PROP_TEMPLATENAME()] <<= info.TemplateURL;
         }
-        else if (!rInfo.FactoryURL.isEmpty())
+        else if (!info.FactoryURL.isEmpty())
         {
-            sLoadOriginalURL = rInfo.FactoryURL;
+            sLoadOriginalURL = info.FactoryURL;
             lDescriptor[utl::MediaDescriptor::PROP_ASTEMPLATE()] <<= true;
         }
 
@@ -3244,13 +3224,13 @@ AutoRecovery::ETimerType AutoRecovery::implts_openDocs(const DispatchParams& aPa
         if (!sLoadBackupURL.isEmpty())
         {
             sURL = sLoadBackupURL;
-            rInfo.DocumentState |= AutoRecovery::E_TRY_LOAD_BACKUP;
+            info.DocumentState |= AutoRecovery::E_TRY_LOAD_BACKUP;
             lDescriptor[utl::MediaDescriptor::PROP_SALVAGEDFILE()] <<= sLoadOriginalURL;
         }
         else if (!sLoadOriginalURL.isEmpty())
         {
             sURL = sLoadOriginalURL;
-            rInfo.DocumentState |= AutoRecovery::E_TRY_LOAD_ORIGINAL;
+            info.DocumentState |= AutoRecovery::E_TRY_LOAD_ORIGINAL;
         }
         else
             continue; // TODO ERROR!
@@ -3260,32 +3240,32 @@ AutoRecovery::ETimerType AutoRecovery::implts_openDocs(const DispatchParams& aPa
         // } /* SAFE */
         g.clear();
 
-        implts_flushConfigItem(rInfo);
+        implts_flushConfigItem(info);
         implts_informListener(eJob,
-            AutoRecovery::implst_createFeatureStateEvent(eJob, OPERATION_UPDATE, &rInfo));
+            AutoRecovery::implst_createFeatureStateEvent(eJob, OPERATION_UPDATE, &info));
 
         try
         {
-            implts_openOneDoc(sURL, lDescriptor, rInfo);
+            implts_openOneDoc(sURL, lDescriptor, info);
         }
         catch(const css::uno::Exception&)
         {
-            rInfo.DocumentState &= ~AutoRecovery::E_TRY_LOAD_BACKUP;
-            rInfo.DocumentState &= ~AutoRecovery::E_TRY_LOAD_ORIGINAL;
+            info.DocumentState &= ~AutoRecovery::E_TRY_LOAD_BACKUP;
+            info.DocumentState &= ~AutoRecovery::E_TRY_LOAD_ORIGINAL;
             if (!sLoadBackupURL.isEmpty())
             {
-                rInfo.DocumentState |= AutoRecovery::E_INCOMPLETE;
+                info.DocumentState |= AutoRecovery::E_INCOMPLETE;
                 eTimer               = AutoRecovery::E_CALL_ME_BACK;
             }
             else
             {
-                rInfo.DocumentState |=  AutoRecovery::E_HANDLED;
-                rInfo.DocumentState |=  AutoRecovery::E_DAMAGED;
+                info.DocumentState |=  AutoRecovery::E_HANDLED;
+                info.DocumentState |=  AutoRecovery::E_DAMAGED;
             }
 
-            implts_flushConfigItem(rInfo, true);
+            implts_flushConfigItem(info, true);
             implts_informListener(eJob,
-                AutoRecovery::implst_createFeatureStateEvent(eJob, OPERATION_UPDATE, &rInfo));
+                AutoRecovery::implst_createFeatureStateEvent(eJob, OPERATION_UPDATE, &info));
 
             // /* SAFE */ {
             // Needed for next loop!
@@ -3293,31 +3273,31 @@ AutoRecovery::ETimerType AutoRecovery::implts_openDocs(const DispatchParams& aPa
             continue;
         }
 
-        if (!rInfo.RealFilter.isEmpty())
+        if (!info.RealFilter.isEmpty())
         {
-            utl::MediaDescriptor lPatchDescriptor(rInfo.Document->getArgs());
-            lPatchDescriptor[utl::MediaDescriptor::PROP_FILTERNAME()] <<= rInfo.RealFilter;
-            rInfo.Document->attachResource(rInfo.Document->getURL(), lPatchDescriptor.getAsConstPropertyValueList());
+            utl::MediaDescriptor lPatchDescriptor(info.Document->getArgs());
+            lPatchDescriptor[utl::MediaDescriptor::PROP_FILTERNAME()] <<= info.RealFilter;
+            info.Document->attachResource(info.Document->getURL(), lPatchDescriptor.getAsConstPropertyValueList());
                 // do *not* use sURL here. In case this points to the recovery file, it has already been passed
                 // to recoverFromFile. Also, passing it here is logically wrong, as attachResource is intended
                 // to take the logical file URL.
         }
 
-        css::uno::Reference< css::util::XModifiable > xModify(rInfo.Document, css::uno::UNO_QUERY);
+        css::uno::Reference< css::util::XModifiable > xModify(info.Document, css::uno::UNO_QUERY);
         if ( xModify.is() )
         {
-            bool bModified = ((rInfo.DocumentState & AutoRecovery::E_MODIFIED) == AutoRecovery::E_MODIFIED);
+            bool bModified = ((info.DocumentState & AutoRecovery::E_MODIFIED) == AutoRecovery::E_MODIFIED);
             xModify->setModified(bModified);
         }
 
-        rInfo.DocumentState &= ~AutoRecovery::E_TRY_LOAD_BACKUP;
-        rInfo.DocumentState &= ~AutoRecovery::E_TRY_LOAD_ORIGINAL;
-        rInfo.DocumentState |=  AutoRecovery::E_HANDLED;
-        rInfo.DocumentState |=  AutoRecovery::E_SUCCEDED;
+        info.DocumentState &= ~AutoRecovery::E_TRY_LOAD_BACKUP;
+        info.DocumentState &= ~AutoRecovery::E_TRY_LOAD_ORIGINAL;
+        info.DocumentState |=  AutoRecovery::E_HANDLED;
+        info.DocumentState |=  AutoRecovery::E_SUCCEDED;
 
-        implts_flushConfigItem(rInfo);
+        implts_flushConfigItem(info);
         implts_informListener(eJob,
-            AutoRecovery::implst_createFeatureStateEvent(eJob, OPERATION_UPDATE, &rInfo));
+            AutoRecovery::implst_createFeatureStateEvent(eJob, OPERATION_UPDATE, &info));
 
         /* Normally we listen as XModifyListener on a document to know if a document was changed
            since our last AutoSave. And we deregister us in case we know this state.
@@ -3326,7 +3306,7 @@ AutoRecovery::ETimerType AutoRecovery::implts_openDocs(const DispatchParams& aPa
            on the document via API. And currently we don't listen for any events (not at theGlobalEventBroadcaster
            nor at any document!).
         */
-        implts_startModifyListeningOnDoc(rInfo);
+        implts_startModifyListeningOnDoc(info);
 
         // /* SAFE */ {
         // Needed for next loop. Don't unlock it again!
@@ -3392,10 +3372,7 @@ void AutoRecovery::implts_openOneDoc(const OUString&               sURL       ,
         if ( aViewsToRestore.empty() )
             aViewsToRestore.emplace_back( );
 
-        for (   ::std::vector< OUString >::const_iterator viewName = aViewsToRestore.begin();
-                viewName != aViewsToRestore.end();
-                ++viewName
-            )
+        for (auto const& viewToRestore : aViewsToRestore)
         {
             // create a frame
             Reference< XFrame > xTargetFrame = xDesktop->findFrame( SPECIALTARGET_BLANK, 0 );
@@ -3403,9 +3380,9 @@ void AutoRecovery::implts_openOneDoc(const OUString&               sURL       ,
 
             // create a view to the document
             Reference< XController2 > xController;
-            if ( viewName->getLength() )
+            if ( viewToRestore.getLength() )
             {
-                xController.set( xModel->createViewController( *viewName, Sequence< css::beans::PropertyValue >(), xTargetFrame ), UNO_SET_THROW );
+                xController.set( xModel->createViewController( viewToRestore, Sequence< css::beans::PropertyValue >(), xTargetFrame ), UNO_SET_THROW );
             }
             else
             {
@@ -3431,16 +3408,13 @@ void AutoRecovery::implts_openOneDoc(const OUString&               sURL       ,
         Any aCaughtException( ::cppu::getCaughtException() );
 
         // clean up
-        for (   ::std::vector< Reference< XComponent > >::const_iterator component = aCleanup.begin();
-                component != aCleanup.end();
-                ++component
-            )
+        for (auto const& component : aCleanup)
         {
-            css::uno::Reference< css::util::XCloseable > xClose( *component, css::uno::UNO_QUERY );
+            css::uno::Reference< css::util::XCloseable > xClose(component, css::uno::UNO_QUERY);
             if ( xClose.is() )
                 xClose->close( true );
             else
-                (*component)->dispose();
+                component->dispose();
         }
 
         // re-throw
@@ -3615,18 +3589,14 @@ void AutoRecovery::implts_resetHandleStates()
     /* SAFE */ {
     osl::ResettableMutexGuard g(cppu::WeakComponentImplHelperBase::rBHelper.rMutex);
 
-    AutoRecovery::TDocumentList::iterator pIt;
-    for (  pIt  = m_lDocCache.begin();
-           pIt != m_lDocCache.end();
-         ++pIt                       )
+    for (auto & info : m_lDocCache)
     {
-        AutoRecovery::TDocumentInfo& rInfo = *pIt;
-        rInfo.DocumentState &= ~AutoRecovery::E_HANDLED;
-        rInfo.DocumentState &= ~AutoRecovery::E_POSTPONED;
+        info.DocumentState &= ~AutoRecovery::E_HANDLED;
+        info.DocumentState &= ~AutoRecovery::E_POSTPONED;
 
         // } /* SAFE */
         g.clear();
-        implts_flushConfigItem(rInfo);
+        implts_flushConfigItem(info);
         g.reset();
         // /* SAFE */ {
     }
@@ -3811,23 +3781,19 @@ void AutoRecovery::implts_backupWorkingEntry(const DispatchParams& aParams)
 {
     CacheLockGuard aCacheLock(this, cppu::WeakComponentImplHelperBase::rBHelper.rMutex, m_nDocCacheLock, LOCK_FOR_CACHE_USE);
 
-    AutoRecovery::TDocumentList::iterator pIt;
-    for (  pIt  = m_lDocCache.begin();
-           pIt != m_lDocCache.end();
-         ++pIt                       )
+    for (auto const& info : m_lDocCache)
     {
-        const AutoRecovery::TDocumentInfo& rInfo = *pIt;
-        if (rInfo.ID != aParams.m_nWorkingEntryID)
+        if (info.ID != aParams.m_nWorkingEntryID)
             continue;
 
         OUString sSourceURL;
         // Prefer temp file. It contains the changes against the original document!
-        if (!rInfo.OldTempURL.isEmpty())
-            sSourceURL = rInfo.OldTempURL;
-        else if (!rInfo.NewTempURL.isEmpty())
-            sSourceURL = rInfo.NewTempURL;
-        else if (!rInfo.OrgURL.isEmpty())
-            sSourceURL = rInfo.OrgURL;
+        if (!info.OldTempURL.isEmpty())
+            sSourceURL = info.OldTempURL;
+        else if (!info.NewTempURL.isEmpty())
+            sSourceURL = info.NewTempURL;
+        else if (!info.OrgURL.isEmpty())
+            sSourceURL = info.OrgURL;
         else
             continue; // nothing real to save! An unmodified but new created document.
 

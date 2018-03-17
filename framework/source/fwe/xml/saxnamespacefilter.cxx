@@ -84,12 +84,10 @@ void SAL_CALL SaxNamespaceFilter::startElement(
     try
     {
         // apply namespaces to all remaining attributes
-        for ( ::std::vector< sal_Int16 >::const_iterator i(
-                  aAttributeIndexes.begin());
-              i != aAttributeIndexes.end(); ++i )
+        for (auto const& attributeIndex : aAttributeIndexes)
         {
-            OUString aAttributeName           = xAttribs->getNameByIndex( *i );
-            OUString aValue                   = xAttribs->getValueByIndex( *i );
+            OUString aAttributeName           = xAttribs->getNameByIndex(attributeIndex);
+            OUString aValue                   = xAttribs->getValueByIndex(attributeIndex);
             OUString aNamespaceAttributeName = aXMLNamespaces.applyNSToAttributeName( aAttributeName );
             pNewList->AddAttribute( aNamespaceAttributeName, m_aXMLAttributeType, aValue );
         }

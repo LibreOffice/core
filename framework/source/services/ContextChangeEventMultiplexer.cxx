@@ -119,24 +119,18 @@ void SAL_CALL ContextChangeEventMultiplexer::disposing()
 
     cssu::Reference<cssu::XInterface> xThis (static_cast<XWeak*>(this));
     css::lang::EventObject aEvent (xThis);
-    for (ListenerMap::const_iterator iContainer(aListeners.begin()), iEnd(aListeners.end());
-         iContainer!=iEnd;
-         ++iContainer)
+    for (auto const& container : aListeners)
     {
         // Unregister from the focus object.
-        Reference<lang::XComponent> xComponent (iContainer->first, UNO_QUERY);
+        Reference<lang::XComponent> xComponent (container.first, UNO_QUERY);
         if (xComponent.is())
             xComponent->removeEventListener(this);
 
         // Tell all listeners that we are being disposed.
-        const FocusDescriptor& rFocusDescriptor (iContainer->second);
-        for (ListenerContainer::const_iterator
-                 iListener(rFocusDescriptor.maListeners.begin()),
-                 iContainerEnd(rFocusDescriptor.maListeners.end());
-             iListener!=iContainerEnd;
-             ++iListener)
+        const FocusDescriptor& rFocusDescriptor (container.second);
+        for (auto const& listener : rFocusDescriptor.maListeners)
         {
-            (*iListener)->disposing(aEvent);
+            listener->disposing(aEvent);
         }
     }
 }
@@ -259,13 +253,9 @@ void ContextChangeEventMultiplexer::BroadcastEventToSingleContainer (
         // Create a copy of the listener container to avoid problems
         // when one of the called listeners calls add... or remove...
         ListenerContainer aContainer (pFocusDescriptor->maListeners);
-        for (ListenerContainer::const_iterator
-                 iListener(aContainer.begin()),
-                 iEnd(aContainer.end());
-             iListener!=iEnd;
-             ++iListener)
+        for (auto const& listener : aContainer)
         {
-            (*iListener)->notifyContextChangeEvent(rEventObject);
+            listener->notifyContextChangeEvent(rEventObject);
         }
     }
 }

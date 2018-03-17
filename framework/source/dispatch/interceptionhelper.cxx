@@ -54,13 +54,12 @@ css::uno::Reference< css::frame::XDispatch > SAL_CALL InterceptionHelper::queryD
     //    Find first interceptor w/o pattern, so we need to query it
     if (!xInterceptor.is() && m_lInterceptionRegs.size()>0)
     {
-        InterceptorList::const_iterator pIt2;
-        for (pIt2=m_lInterceptionRegs.begin(); pIt2!=m_lInterceptionRegs.end(); ++pIt2)
+        for (auto const& lInterceptionReg : m_lInterceptionRegs)
         {
-            if (!pIt2->lURLPattern.getLength())
+            if (!lInterceptionReg.lURLPattern.getLength())
             {
                 // no pattern -> need to ask this guy!
-                xInterceptor = pIt2->xInterceptor;
+                xInterceptor = lInterceptionReg.xInterceptor;
                 break;
             }
         }
@@ -229,17 +228,13 @@ void SAL_CALL InterceptionHelper::disposing(const css::lang::EventObject& aEvent
     aReadLock.clear();
     // <- SAFE
 
-    InterceptionHelper::InterceptorList::iterator pIt;
-    for (  pIt  = aCopy.begin();
-           pIt != aCopy.end();
-         ++pIt                 )
+    for (auto & elem : aCopy)
     {
-        InterceptionHelper::InterceptorInfo& rInfo = *pIt;
-        if (rInfo.xInterceptor.is())
+        if (elem.xInterceptor.is())
         {
-            css::uno::Reference< css::frame::XDispatchProviderInterceptor > xInterceptor(rInfo.xInterceptor, css::uno::UNO_QUERY_THROW);
+            css::uno::Reference< css::frame::XDispatchProviderInterceptor > xInterceptor(elem.xInterceptor, css::uno::UNO_QUERY_THROW);
             releaseDispatchProviderInterceptor(xInterceptor);
-            rInfo.xInterceptor.clear();
+            elem.xInterceptor.clear();
         }
     }
 

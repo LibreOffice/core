@@ -293,17 +293,14 @@ void SAL_CALL JobExecutor::notifyEvent( const css::document::EventObject& aEvent
     } /* SAFE */
 
     // step over all enabled jobs and execute it
-    ::std::vector< JobData::TJob2DocEventBinding >::const_iterator pIt;
-    for (  pIt  = lJobs.begin();
-           pIt != lJobs.end();
-         ++pIt                 )
+    for (auto const& lJob : lJobs)
     {
         rtl::Reference<Job> pJob;
 
         /* SAFE */ {
         SolarMutexGuard g2;
 
-        const JobData::TJob2DocEventBinding& rBinding = *pIt;
+        const JobData::TJob2DocEventBinding& rBinding = lJob;
 
         JobData aCfg(m_xContext);
         aCfg.setEvent(rBinding.m_sDocEvent, rBinding.m_sJobName);

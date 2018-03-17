@@ -313,10 +313,9 @@ void ToolbarsMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu > co
         Sequence< Sequence< css::beans::PropertyValue > > aSeqFrameToolBars = getLayoutManagerToolbars( xLayoutManager );
         fillHashMap( aSeqFrameToolBars, aToolbarHashMap );
 
-        ToolbarHashMap::const_iterator pIter = aToolbarHashMap.begin();
-        while ( pIter != aToolbarHashMap.end() )
+        for (auto const& toolbar : aToolbarHashMap)
         {
-            OUString aUIName = pIter->second;
+            OUString aUIName = toolbar.second;
             bool      bHideFromMenu( false );
             bool      bContextSensitive( false );
             if ( aUIName.isEmpty() &&
@@ -327,7 +326,7 @@ void ToolbarsMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu > co
                 try
                 {
                     Sequence< PropertyValue > aWindowState;
-                    Any                       a( m_xPersistentWindowState->getByName( pIter->first ));
+                    Any                       a( m_xPersistentWindowState->getByName( toolbar.first ));
 
                     if ( a >>= aWindowState )
                     {
@@ -358,13 +357,12 @@ void ToolbarsMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu > co
             {
                 ToolBarEntry aTbEntry;
                 aTbEntry.aUIName = aUIName;
-                aTbEntry.aCommand = pIter->first;
-                aTbEntry.bVisible = xLayoutManager->isElementVisible( pIter->first );
+                aTbEntry.aCommand = toolbar.first;
+                aTbEntry.bVisible = xLayoutManager->isElementVisible( toolbar.first );
                 aTbEntry.bContextSensitive = bContextSensitive;
                 aTbEntry.pCollatorWrapper = m_aIntlWrapper.getCaseCollator();
                 aSortedTbs.push_back( aTbEntry );
             }
-            ++pIter;
         }
 
         // sort toolbars
