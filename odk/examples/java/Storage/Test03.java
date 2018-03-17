@@ -87,7 +87,7 @@ public class Test03 implements StorageTest {
                 return false;
 
 
-            // check storage hyerarchy tree
+            // check storage hierarchy tree
 
 
             // check that isStorageElement() and isStreamElement reacts to nonexisting object correctly
