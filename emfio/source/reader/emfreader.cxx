@@ -17,13 +17,17 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <emfreader.hxx>
 #include <osl/endian.h>
 #include <basegfx/matrix/b2dhommatrix.hxx>
+#include <tools/stream.hxx>
 #include <vcl/dibtools.hxx>
+#include <vcl/BitmapCropper.hxx>
+
+#include <emfreader.hxx>
+
 #include <o3tl/make_unique.hxx>
 #include <o3tl/safeint.hxx>
-#include <tools/stream.hxx>
+
 #include <memory>
 
 #ifdef DBG_UTIL
@@ -1364,7 +1368,7 @@ namespace emfio
                                     {
                                         const tools::Rectangle aCropRect( Point( xSrc, ySrc ), Size( cxSrc, cySrc ) );
 
-                                        aBitmapEx.Crop( aCropRect );
+                                        BitmapFilter::Filter(aBitmapEx, BitmapCropper(aCropRect));
                                     }
 
     #ifdef DBG_UTIL
@@ -1439,7 +1443,9 @@ namespace emfio
                                      (ySrc <= aBitmap.GetSizePixel().Height() - cySrc) )
                                 {
                                     tools::Rectangle aCropRect( Point( xSrc, ySrc ), Size( cxSrc, cySrc ) );
-                                    aBitmap.Crop( aCropRect );
+                                    BitmapEx aBitmapEx(aBitmap);
+                                    BitmapFilter::Filter(aBitmapEx, BitmapCropper(aCropRect));
+                                    aBitmap = aBitmapEx.GetBitmap();
                                 }
 
                                 maBmpSaveList.emplace_back(new BSaveStruct(aBitmap, aRect, dwRop));
@@ -1508,8 +1514,11 @@ namespace emfio
                                      (aBitmap.GetSizePixel().Height() >= cySrc) &&
                                      (ySrc <= aBitmap.GetSizePixel().Height() - cySrc) )
                                 {
+                                    BitmapEx aBitmapEx(aBitmap);
                                     tools::Rectangle aCropRect( Point( xSrc, ySrc ), Size( cxSrc, cySrc ) );
-                                    aBitmap.Crop( aCropRect );
+
+                                    BitmapFilter::Filter(aBitmapEx, BitmapCropper(aCropRect));
+                                    aBitmap = aBitmapEx.GetBitmap();
                                 }
                                 maBmpSaveList.emplace_back(new BSaveStruct(aBitmap, aRect, dwRop));
                             }
