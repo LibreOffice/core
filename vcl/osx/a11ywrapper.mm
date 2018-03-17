@@ -986,7 +986,7 @@ Reference < XAccessibleContext > hitTestRunner ( css::awt::Point point,
             }
         }
 
-        // iterate the hirerachy looking doing recursive hit testing.
+        // iterate the hierarchy looking doing recursive hit testing.
         // apparently necessary as a special treatment for e.g. comboboxes
         if ( !hitChild.is() ) {
             bool bSafeToIterate = true;
