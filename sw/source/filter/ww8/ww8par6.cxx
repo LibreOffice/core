@@ -439,7 +439,7 @@ long SetBorderDistance(bool bFromEdge, SvxBoxItem& aBox, SvxBoxItemLine eLine, l
         return nMSMargin;
     sal_Int32 nNewMargin = nMSMargin;
     sal_Int32 nNewDist = aBox.GetDistance(eLine);
-    sal_Int32 nLineWidth = pLine->GetWidth();
+    sal_Int32 nLineWidth = pLine->GetScaledWidth();
 
     editeng::BorderDistanceFromWord(bFromEdge, nNewMargin, nNewDist, nLineWidth);
     aBox.SetDistance(nNewDist, eLine);
