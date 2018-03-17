@@ -329,10 +329,10 @@ void RemoteFilesDialog::dispose()
         Sequence< OUString > placesNamesList( m_aServices.size() );
 
         int i = 0;
-        for( std::vector< ServicePtr >::const_iterator it = m_aServices.begin(); it != m_aServices.end(); ++it )
+        for (auto const& service : m_aServices)
         {
-            placesUrlsList[i] = ( *it )->GetUrl();
-            placesNamesList[i] = ( *it )->GetName();
+            placesUrlsList[i] = service->GetUrl();
+            placesNamesList[i] = service->GetName();
             ++i;
         }
 

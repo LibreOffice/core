@@ -177,38 +177,32 @@ void SvtFilePicker::prepareExecute()
     {
         ::svt::OControlAccess aAccess( getDialog(), getDialog()->GetView() );
 
-        ElementList::iterator aListIter;
-        for ( aListIter = m_pElemList->begin();
-              aListIter != m_pElemList->end(); ++aListIter )
+        for (auto const& elem : *m_pElemList)
         {
-            ElementEntry_Impl& rEntry = *aListIter;
-            if ( rEntry.m_bHasValue )
-                aAccess.setValue( rEntry.m_nElementID, rEntry.m_nControlAction, rEntry.m_aValue );
-            if ( rEntry.m_bHasLabel )
-                aAccess.setLabel( rEntry.m_nElementID, rEntry.m_aLabel );
-            if ( rEntry.m_bHasEnabled )
-                aAccess.enableControl( rEntry.m_nElementID, rEntry.m_bEnabled );
+            if ( elem.m_bHasValue )
+                aAccess.setValue( elem.m_nElementID, elem.m_nControlAction, elem.m_aValue );
+            if ( elem.m_bHasLabel )
+                aAccess.setLabel( elem.m_nElementID, elem.m_aLabel );
+            if ( elem.m_bHasEnabled )
+                aAccess.enableControl( elem.m_nElementID, elem.m_bEnabled );
         }
 
     }
 
     if ( m_pFilterList && !m_pFilterList->empty() )
     {
-        for (   FilterList::iterator aListIter = m_pFilterList->begin();
-                aListIter != m_pFilterList->end();
-                ++aListIter
-            )
+        for (auto & elem : *m_pFilterList)
         {
-            if ( aListIter->hasSubFilters() )
+            if ( elem.hasSubFilters() )
             {   // it's a filter group
                 UnoFilterList aSubFilters;
-                aListIter->getSubFilters( aSubFilters );
+                elem.getSubFilters( aSubFilters );
 
-                getDialog()->AddFilterGroup( aListIter->getTitle(), aSubFilters );
+                getDialog()->AddFilterGroup( elem.getTitle(), aSubFilters );
              }
             else
                 // it's a single filter
-                getDialog()->AddFilter( aListIter->getTitle(), aListIter->getFilter() );
+                getDialog()->AddFilter( elem.getTitle(), elem.getFilter() );
         }
     }
 
@@ -623,17 +617,14 @@ void SAL_CALL SvtFilePicker::setValue( sal_Int16 nElementID,
             m_pElemList.reset( new ElementList );
 
         bool bFound = false;
-        ElementList::iterator aListIter;
 
-        for ( aListIter = m_pElemList->begin();
-              aListIter != m_pElemList->end(); ++aListIter )
+        for (auto & elem : *m_pElemList)
         {
-            ElementEntry_Impl& rEntry = *aListIter;
-            if ( ( rEntry.m_nElementID == nElementID ) &&
-                 ( !rEntry.m_bHasValue || ( rEntry.m_nControlAction == nControlAction ) ) )
+            if ( ( elem.m_nElementID == nElementID ) &&
+                 ( !elem.m_bHasValue || ( elem.m_nControlAction == nControlAction ) ) )
             {
-                rEntry.setAction( nControlAction );
-                rEntry.setValue( rValue );
+                elem.setAction( nControlAction );
+                elem.setValue( rValue );
                 bFound = true;
             }
         }
@@ -664,16 +655,13 @@ Any SAL_CALL SvtFilePicker::getValue( sal_Int16 nElementID, sal_Int16 nControlAc
     }
     else if ( m_pElemList && !m_pElemList->empty() )
     {
-        ElementList::iterator aListIter;
-        for ( aListIter = m_pElemList->begin();
-              aListIter != m_pElemList->end(); ++aListIter )
+        for (auto const& elem : *m_pElemList)
         {
-            ElementEntry_Impl& rEntry = *aListIter;
-            if ( ( rEntry.m_nElementID == nElementID ) &&
-                 ( rEntry.m_bHasValue ) &&
-                 ( rEntry.m_nControlAction == nControlAction ) )
+            if ( ( elem.m_nElementID == nElementID ) &&
+                 ( elem.m_bHasValue ) &&
+                 ( elem.m_nControlAction == nControlAction ) )
             {
-                aAny = rEntry.m_aValue;
+                aAny = elem.m_aValue;
                 break;
             }
         }
@@ -699,15 +687,12 @@ void SAL_CALL SvtFilePicker::setLabel( sal_Int16 nLabelID, const OUString& rValu
             m_pElemList.reset( new ElementList );
 
         bool bFound = false;
-        ElementList::iterator aListIter;
 
-        for ( aListIter = m_pElemList->begin();
-              aListIter != m_pElemList->end(); ++aListIter )
+        for (auto & elem : *m_pElemList)
         {
-            ElementEntry_Impl& rEntry = *aListIter;
-            if ( rEntry.m_nElementID == nLabelID )
+            if ( elem.m_nElementID == nLabelID )
             {
-                rEntry.setLabel( rValue );
+                elem.setLabel( rValue );
                 bFound = true;
             }
         }
@@ -736,15 +721,12 @@ OUString SAL_CALL SvtFilePicker::getLabel( sal_Int16 nLabelID )
     }
     else if ( m_pElemList && !m_pElemList->empty() )
     {
-        ElementList::iterator aListIter;
-        for ( aListIter = m_pElemList->begin();
-              aListIter != m_pElemList->end(); ++aListIter )
+        for (auto const& elem : *m_pElemList)
         {
-            ElementEntry_Impl& rEntry = *aListIter;
-            if ( rEntry.m_nElementID == nLabelID )
+            if ( elem.m_nElementID == nLabelID )
             {
-                if ( rEntry.m_bHasLabel )
-                    aLabel = rEntry.m_aLabel;
+                if ( elem.m_bHasLabel )
+                    aLabel = elem.m_aLabel;
                 break;
             }
         }
@@ -770,15 +752,12 @@ void SAL_CALL SvtFilePicker::enableControl( sal_Int16 nElementID, sal_Bool bEnab
             m_pElemList.reset( new ElementList );
 
         bool bFound = false;
-        ElementList::iterator aListIter;
 
-        for ( aListIter = m_pElemList->begin();
-              aListIter != m_pElemList->end(); ++aListIter )
+        for (auto & elem : *m_pElemList)
         {
-            ElementEntry_Impl& rEntry = *aListIter;
-            if ( rEntry.m_nElementID == nElementID )
+            if ( elem.m_nElementID == nElementID )
             {
-                rEntry.setEnabled( bEnable );
+                elem.setEnabled( bEnable );
                 bFound = true;
             }
         }
