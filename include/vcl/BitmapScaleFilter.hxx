@@ -29,9 +29,6 @@ public:
         , mnScaleFlag(nScaleFlag)
     {
     }
-    ~BitmapScaleFilter() override
-    {
-    }
 
     virtual BitmapEx execute(BitmapEx const& rBitmapEx) override;
 
