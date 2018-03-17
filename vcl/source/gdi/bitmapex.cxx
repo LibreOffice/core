@@ -375,26 +375,6 @@ bool BitmapEx::Rotate( long nAngle10, const Color& rFillColor )
     return bRet;
 }
 
-bool BitmapEx::Crop( const tools::Rectangle& rRectPixel )
-{
-    bool bRet = false;
-
-    if( !!maBitmap )
-    {
-        bRet = maBitmap.Crop( rRectPixel );
-
-        if( bRet && ( meTransparent == TransparentType::Bitmap ) && !!maMask )
-            maMask.Crop( rRectPixel );
-
-        SetSizePixel(maBitmap.GetSizePixel());
-
-        SAL_WARN_IF( !!maMask && maBitmap.GetSizePixel() != maMask.GetSizePixel(), "vcl",
-                    "BitmapEx::Crop(): size mismatch for bitmap and alpha mask." );
-    }
-
-    return bRet;
-}
-
 void BitmapEx::Expand( sal_uLong nDX, sal_uLong nDY, bool bExpandTransparent )
 {
     bool bRet = false;
