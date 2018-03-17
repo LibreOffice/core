@@ -24,7 +24,7 @@ namespace basegfx
     namespace utils
     {
         B3DHomMatrix UnoHomogenMatrixToB3DHomMatrix(
-            const com::sun::star::drawing::HomogenMatrix rMatrixIn)
+            const com::sun::star::drawing::HomogenMatrix& rMatrixIn)
         {
             B3DHomMatrix aRetval;
 
