@@ -502,10 +502,11 @@ void SvtFileDialog::dispose()
         Sequence< OUString > placesUrlsList(pImpl->_pPlaces->GetNbEditablePlaces());
         Sequence< OUString > placesNamesList(pImpl->_pPlaces->GetNbEditablePlaces());
         int i(0);
-        for(std::vector<PlacePtr>::const_iterator it = aPlaces.begin(); it != aPlaces.end(); ++it) {
-            if((*it)->IsEditable()) {
-                placesUrlsList[i] = (*it)->GetUrl();
-                placesNamesList[i] = (*it)->GetName();
+        for (auto const& place : aPlaces)
+        {
+            if(place->IsEditable()) {
+                placesUrlsList[i] = place->GetUrl();
+                placesNamesList[i] = place->GetName();
                 ++i;
             }
         }

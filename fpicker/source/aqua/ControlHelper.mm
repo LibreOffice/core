@@ -157,19 +157,19 @@ ControlHelper::~ControlHelper()
         [m_pFilterControl setTarget:nil];
     }
 
-    for(std::list<NSControl *>::iterator control = m_aActiveControls.begin(); control != m_aActiveControls.end(); ++control) {
-        NSControl* pControl = (*control);
-        NSString* sLabelName = m_aMapListLabels[pControl];
+    for (auto const& activeControl : m_aActiveControls)
+    {
+        NSString* sLabelName = m_aMapListLabels[activeControl];
         if (sLabelName != nil) {
             [sLabelName release];
         }
-        if ([pControl class] == [NSPopUpButton class]) {
-            NSTextField* pField = m_aMapListLabelFields[static_cast<NSPopUpButton*>(pControl)];
+        if ([activeControl class] == [NSPopUpButton class]) {
+            NSTextField* pField = m_aMapListLabelFields[static_cast<NSPopUpButton*>(activeControl)];
             if (pField != nil) {
                 [pField release];
             }
         }
-        [pControl release];
+        [activeControl release];
     }
 
     [pool release];
@@ -396,38 +396,39 @@ void ControlHelper::createUserPane()
     int nPopupMaxWidth = 0;
     int nPopupLabelMaxWidth = 0;
 
-    for (::std::list<NSControl*>::iterator child = m_aActiveControls.begin(); child != m_aActiveControls.end(); child++) {
+    size_t nLoop = 0;
+    for (auto const& activeControl : m_aActiveControls)
+    {
         SAL_INFO("fpicker.aqua","currentHeight: " << currentHeight);
 
-        NSControl* pControl = *child;
-
         //let the control calculate its size
-        [pControl sizeToFit];
+        [activeControl sizeToFit];
 
-        NSRect frame = [pControl frame];
-        SAL_INFO("fpicker.aqua","frame for control " << [[pControl description] UTF8String] << " is {" << frame.origin.x << ", " << frame.origin.y << ", " << frame.size.width << ", " << frame.size.height << "}");
+        NSRect frame = [activeControl frame];
+        SAL_INFO("fpicker.aqua","frame for control " << [[activeControl description] UTF8String] << " is {" << frame.origin.x << ", " << frame.origin.y << ", " << frame.size.width << ", " << frame.size.height << "}");
 
         int nControlHeight = frame.size.height;
         int nControlWidth = frame.size.width;
 
         // Note: controls are grouped by kind, first all popup menus, then checkboxes
-        if ([pControl class] == [NSPopUpButton class]) {
+        if ([activeControl class] == [NSPopUpButton class]) {
             if (bPopupControlPresent) {
                 //this is not the first popup
                 currentHeight += kAquaSpaceBetweenPopupMenus;
             }
-            else if (child != m_aActiveControls.begin()){
+            else if (nLoop)
+            {
                 currentHeight += kAquaSpaceBetweenControls;
             }
 
             bPopupControlPresent = true;
 
             // we have to add the label text width
-            NSString *label = m_aMapListLabels[pControl];
+            NSString *label = m_aMapListLabels[activeControl];
 
             NSTextField *textField = createLabelWithString(label);
             [textField sizeToFit];
-            m_aMapListLabelFields[static_cast<NSPopUpButton*>(pControl)] = textField;
+            m_aMapListLabelFields[static_cast<NSPopUpButton*>(activeControl)] = textField;
             [m_pUserPane addSubview:textField];
 
             NSRect tfRect = [textField frame];
@@ -444,13 +445,13 @@ void ControlHelper::createUserPane()
             if (nControlWidth < POPUP_WIDTH_MIN) {
                 nControlWidth = POPUP_WIDTH_MIN;
                 frame.size.width = nControlWidth;
-                [pControl setFrame:frame];
+                [activeControl setFrame:frame];
             }
 
             if (nControlWidth > POPUP_WIDTH_MAX) {
                 nControlWidth = POPUP_WIDTH_MAX;
                 frame.size.width = nControlWidth;
-                [pControl setFrame:frame];
+                [activeControl setFrame:frame];
             }
 
             //set the max size
@@ -466,8 +467,9 @@ void ControlHelper::createUserPane()
 
             nControlHeight -= kAquaSpacePopupMenuFrameBoundsDiffV;
         }
-        else if ([pControl class] == [NSButton class]) {
-            if (child != m_aActiveControls.begin()){
+        else if ([activeControl class] == [NSButton class]) {
+            if (nLoop)
+            {
                 currentHeight += kAquaSpaceBetweenControls;
             }
 
@@ -486,7 +488,8 @@ void ControlHelper::createUserPane()
 
         currentHeight += nControlHeight;
 
-        [m_pUserPane addSubview:pControl];
+        [m_pUserPane addSubview:activeControl];
+        ++nLoop;
     }
 
     SAL_INFO("fpicker.aqua","height after adding all controls: " << currentHeight);
@@ -778,18 +781,18 @@ void ControlHelper::layoutControls()
     int nPopupLabelMaxWidth = 0;
 
     //first loop to determine max sizes
-    for (::std::list<NSControl*>::iterator child = m_aActiveControls.begin(); child != m_aActiveControls.end(); child++) {
-        NSControl* pControl = *child;
+    for (auto const& activeControl : m_aActiveControls)
+    {
 
-        NSRect controlRect = [pControl frame];
+        NSRect controlRect = [activeControl frame];
         int nControlWidth = controlRect.size.width;
 
-        Class aSubType = [pControl class];
+        Class aSubType = [activeControl class];
         if (aSubType == [NSPopUpButton class]) {
             if (nPopupMaxWidth < nControlWidth) {
                 nPopupMaxWidth = nControlWidth;
             }
-            NSTextField *label = m_aMapListLabelFields[static_cast<NSPopUpButton*>(pControl)];
+            NSTextField *label = m_aMapListLabelFields[static_cast<NSPopUpButton*>(activeControl)];
             NSRect labelFrame = [label frame];
             int nLabelWidth = labelFrame.size.width;
             if (nPopupLabelMaxWidth < nLabelWidth) {
@@ -809,32 +812,31 @@ void ControlHelper::layoutControls()
 
     int nDistBetweenControls = 0;
 
-    for (::std::list<NSControl*>::iterator child = m_aActiveControls.begin(); child != m_aActiveControls.end(); child++) {
-        NSControl* pControl = *child;
-
+    for (auto const& activeControl : m_aActiveControls)
+    {
         //get the control's bounds
-        NSRect controlRect = [pControl frame];
+        NSRect controlRect = [activeControl frame];
         int nControlHeight = controlRect.size.height;
         int nControlWidth = controlRect.size.width;
 
         //subtract the height from the current vertical position, because the control's bounds origin rect will be its lower left hand corner
         currenttop -= nControlHeight;
 
-        Class aSubType = [pControl class];
+        Class aSubType = [activeControl class];
 
         //add space between the previous control and this control according to Apple's HIG
-        nDistBetweenControls = getVerticalDistance(previousControl, pControl);
+        nDistBetweenControls = getVerticalDistance(previousControl, activeControl);
         SAL_INFO("fpicker.aqua","vertical distance: " << nDistBetweenControls);
         currenttop -= nDistBetweenControls;
 
-        previousControl = pControl;
+        previousControl = activeControl;
 
         if (aSubType == [NSPopUpButton class]) {
             //move vertically up some pixels to space the controls between their real (visual) bounds
             currenttop += kAquaSpacePopupMenuFrameBoundsDiffTop;//from top
 
             //get the corresponding popup label
-            NSTextField *label = m_aMapListLabelFields[static_cast<NSPopUpButton*>(pControl)];
+            NSTextField *label = m_aMapListLabelFields[static_cast<NSPopUpButton*>(activeControl)];
             NSRect labelFrame = [label frame];
             int totalWidth = nPopupMaxWidth + labelFrame.size.width + kAquaSpaceBetweenControls - kAquaSpacePopupMenuFrameBoundsDiffLeft - kAquaSpaceLabelFrameBoundsDiffH;
             SAL_INFO("fpicker.aqua","totalWidth: " << totalWidth);
@@ -850,7 +852,7 @@ void ControlHelper::layoutControls()
             controlRect.origin.y = currenttop;
             controlRect.size.width = nPopupMaxWidth;
             SAL_INFO("fpicker.aqua","setting popup at: {" << controlRect.origin.x << ", " << controlRect.origin.y << ", " << controlRect.size.width << ", " << controlRect.size.height << "}");
-            [pControl setFrame:controlRect];
+            [activeControl setFrame:controlRect];
 
             //add some space to place the vertical position right below the popup's visual bounds
             currenttop += kAquaSpacePopupMenuFrameBoundsDiffBottom;
@@ -862,7 +864,7 @@ void ControlHelper::layoutControls()
             controlRect.origin.x = left;
             controlRect.origin.y = currenttop;
             controlRect.size.width = nPopupMaxWidth;
-            [pControl setFrame:controlRect];
+            [activeControl setFrame:controlRect];
             SAL_INFO("fpicker.aqua","setting checkbox at: {" << controlRect.origin.x << ", " << controlRect.origin.y << ", " << controlRect.size.width << ", " << controlRect.size.height << "}");
 
             currenttop += kAquaSpaceSwitchButtonFrameBoundsDiff;
@@ -883,8 +885,8 @@ void ControlHelper::createFilterControl()
 
     NSMenu *menu = [m_pFilterControl menu];
 
-    for (NSStringList::iterator iter = m_pFilterHelper->getFilterNames()->begin(); iter != m_pFilterHelper->getFilterNames()->end(); ++iter) {
-        NSString *filterName = *iter;
+    for (auto const& filterName : *m_pFilterHelper->getFilterNames())
+    {
         SAL_INFO("fpicker.aqua","adding filter name: " << [filterName UTF8String]);
         if ([filterName isEqualToString:@"-"]) {
             [menu addItem:[NSMenuItem separatorItem]];
