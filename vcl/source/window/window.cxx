@@ -45,8 +45,8 @@
 #include <vcl/sysdata.hxx>
 #include <vcl/IDialogRenderable.hxx>
 
-#include <vcl/uitest/uiobject.hxx>
 #include <vcl/uitest/uitest.hxx>
+#include <vcl/uitest/uiobject.hxx>
 
 #include <salframe.hxx>
 #include <salobj.hxx>
