@@ -736,7 +736,6 @@ void DrawXmlOptimizer::optimizeTextElements(Element& rParent)
                     pCur->Children.splice( pCur->Children.end(), pNext->Children );
                     // get rid of the now useless element
                     rParent.Children.erase( next );
-                    delete pNext;
                     bConcat = true;
                 }
             }
