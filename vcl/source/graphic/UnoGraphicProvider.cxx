@@ -41,8 +41,8 @@
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
-#include "UnoGraphicDescriptor.hxx"
-#include "UnoGraphic.hxx"
+#include <graphic/UnoGraphicDescriptor.hxx>
+#include <graphic/UnoGraphic.hxx>
 #include <rtl/ref.hxx>
 #include <vcl/GraphicObject.hxx>
 #include <vcl/dibtools.hxx>

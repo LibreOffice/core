@@ -31,6 +31,7 @@
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <cppuhelper/typeprovider.hxx>
+#include <graphic/UnoGraphic.hxx>
 
 using namespace ::com::sun::star;
 
@@ -360,25 +361,18 @@ const BitmapEx& Graphic::GetBitmapExRef() const
     return mxImpGraphic->ImplGetBitmapExRef();
 }
 
-uno::Reference< graphic::XGraphic > Graphic::GetXGraphic() const
+uno::Reference<graphic::XGraphic> Graphic::GetXGraphic() const
 {
-    uno::Reference< graphic::XGraphic > xRet;
+    uno::Reference<graphic::XGraphic> xGraphic;
 
-    if( GetType() != GraphicType::NONE )
+    if (GetType() != GraphicType::NONE)
     {
-        uno::Reference < uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
-        uno::Reference< graphic::XGraphicProvider > xProv( graphic::GraphicProvider::create( xContext ) );
-
-        uno::Sequence< beans::PropertyValue > aLoadProps( 1 );
-        OUString aURL = "private:memorygraphic/" + OUString::number( reinterpret_cast< sal_Int64 >( this ) );
-
-        aLoadProps[ 0 ].Name = "URL";
-        aLoadProps[ 0 ].Value <<= aURL;
-
-        xRet = xProv->queryGraphic( aLoadProps );
+        unographic::Graphic* pUnoGraphic = new unographic::Graphic;
+        pUnoGraphic->init(*this);
+        xGraphic = pUnoGraphic;
     }
 
-    return xRet;
+    return xGraphic;
 }
 
 Size Graphic::GetPrefSize() const

@@ -25,8 +25,8 @@
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/awt/XBitmap.hpp>
 
-#include "UnoGraphicDescriptor.hxx"
-#include "UnoGraphicTransformer.hxx"
+#include <graphic/UnoGraphicDescriptor.hxx>
+#include <graphic/UnoGraphicTransformer.hxx>
 
 #include <vcl/graph.hxx>
 

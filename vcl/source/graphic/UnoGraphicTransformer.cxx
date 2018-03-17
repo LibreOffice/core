@@ -18,6 +18,8 @@
  */
 
 
+#include <graphic/UnoGraphicTransformer.hxx>
+
 #include <vcl/svapp.hxx>
 #include <vcl/image.hxx>
 #include <vcl/metaact.hxx>
@@ -26,8 +28,6 @@
 #include <vcl/virdev.hxx>
 #include <vcl/bitmapaccess.hxx>
 #include <com/sun/star/text/GraphicCrop.hpp>
-
-#include "UnoGraphicTransformer.hxx"
 
 using namespace com::sun::star;
 

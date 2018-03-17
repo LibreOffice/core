@@ -17575,6 +17575,9 @@ vcl/inc/fontattributes.hxx
 vcl/inc/fontinstance.hxx
 vcl/inc/fontselect.hxx
 vcl/inc/fontsubset.hxx
+vcl/inc/graphic/UnoGraphic.hxx
+vcl/inc/graphic/UnoGraphicDescriptor.hxx
+vcl/inc/graphic/UnoGraphicTransformer.hxx
 vcl/inc/headless/svpbmp.hxx
 vcl/inc/headless/svpcairotextrender.hxx
 vcl/inc/headless/svpdummies.hxx
@@ -18207,13 +18210,10 @@ vcl/source/gdi/wall.cxx
 vcl/source/graphic/GraphicObject.cxx
 vcl/source/graphic/GraphicObject2.cxx
 vcl/source/graphic/UnoGraphic.cxx
-vcl/source/graphic/UnoGraphic.hxx
 vcl/source/graphic/UnoGraphicDescriptor.cxx
-vcl/source/graphic/UnoGraphicDescriptor.hxx
 vcl/source/graphic/UnoGraphicObject.cxx
 vcl/source/graphic/UnoGraphicProvider.cxx
 vcl/source/graphic/UnoGraphicTransformer.cxx
-vcl/source/graphic/UnoGraphicTransformer.hxx
 vcl/source/graphic/grfattr.cxx
 vcl/source/graphic/grfcache.cxx
 vcl/source/graphic/grfcache.hxx
