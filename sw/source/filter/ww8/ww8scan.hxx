@@ -194,13 +194,13 @@ void WW8ReadSTTBF(bool bVer8, SvStream& rStrm, sal_uInt32 nStart, sal_Int32 nLen
 
 struct WW8FieldDesc
 {
-    long nLen;              ///< total length (to skip over text)
+    WW8_CP nLen;            ///< total length (to skip over text)
     WW8_CP nSCode;          ///< start of instructions code
     WW8_CP nLCode;          ///< length
     WW8_CP nSRes;           ///< start of result
     WW8_CP nLRes;           ///< length ( == 0, if no result )
-    sal_uInt16 nId;             ///< WW-id for fields
-    sal_uInt8 nOpt;              ///< WW-Flags ( e.g.: changed by user )
+    sal_uInt16 nId;         ///< WW-id for fields
+    sal_uInt8 nOpt;         ///< WW-Flags ( e.g.: changed by user )
     bool bCodeNest:1;       ///< instruction used recursively
     bool bResNest:1;        ///< instruction inserted into result
 };

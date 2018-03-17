@@ -1617,7 +1617,7 @@ private:
     void MakeTagString( OUString& rStr, const OUString& rOrg );
     void UpdateFields();
     OUString ConvertFFileName(const OUString& rRaw);
-    long Read_F_Tag( WW8FieldDesc* pF );
+    WW8_CP Read_F_Tag(WW8FieldDesc* pF);
     void InsertTagField( const sal_uInt16 nId, const OUString& rTagText );
     long ImportExtSprm(WW8PLCFManResult* pRes);
     void EndExtSprm(sal_uInt16 nSprmId);

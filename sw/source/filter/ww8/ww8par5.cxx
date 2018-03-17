@@ -1131,12 +1131,12 @@ void SwWW8ImplReader::InsertTagField( const sal_uInt16 nId, const OUString& rTag
     }
 }
 
-long SwWW8ImplReader::Read_F_Tag( WW8FieldDesc* pF )
+WW8_CP SwWW8ImplReader::Read_F_Tag( WW8FieldDesc* pF )
 {
     long nOldPos = m_pStrm->Tell();
 
     WW8_CP nStart = pF->nSCode - 1;         // starting with 0x19
-    long nL = pF->nLen;                     // Total length with result and nest
+    WW8_CP nL = pF->nLen;                     // Total length with result and nest
     if( nL > MAX_FIELDLEN )
         nL = MAX_FIELDLEN;                  // MaxLength, by quoting
                                             // max. 4 times as big
@@ -1196,7 +1196,7 @@ OUString SwWW8ImplReader::GetFieldResult( WW8FieldDesc const * pF )
     long nOldPos = m_pStrm->Tell();
 
     WW8_CP nStart = pF->nSRes;              // result start
-    long nL = pF->nLRes;                    // result length
+    WW8_CP nL = pF->nLRes;                    // result length
     if( !nL )
         return OUString();                  // no result
 
