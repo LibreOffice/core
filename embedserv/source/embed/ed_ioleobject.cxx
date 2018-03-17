@@ -90,11 +90,10 @@ HRESULT EmbedDocument_Impl::OLENotifyClosing()
 {
     AdviseSinkHashMap aAHM(m_aAdviseHashMap);
 
-    for ( AdviseSinkHashMapIterator iAdvise = aAHM.begin();
-          iAdvise != aAHM.end(); iAdvise++ )
+    for (auto const& advise : aAHM)
     {
-        if ( iAdvise->second )
-            iAdvise->second->OnClose();
+        if (advise.second)
+            advise.second->OnClose();
     }
 
     return S_OK;
@@ -405,12 +404,9 @@ HRESULT EmbedDocument_Impl::SaveObject()
     if(m_pClientSite) {
         hr = m_pClientSite->SaveObject();
 
-        for ( AdviseSinkHashMapIterator iAdvise =
-                  m_aAdviseHashMap.begin();
-              iAdvise != m_aAdviseHashMap.end();
-              iAdvise++ )
-            if ( iAdvise->second )
-                iAdvise->second->OnSave( );
+        for (auto const& advise : m_aAdviseHashMap)
+            if (advise.second)
+                advise.second->OnSave();
     }
     else if ( m_aFileName.getLength() && IsDirty() == S_OK )
     {
@@ -440,12 +436,9 @@ HRESULT EmbedDocument_Impl::ShowObject()
 
 void EmbedDocument_Impl::notify( bool bDataChanged )
 {
-    for ( AdviseSinkHashMapIterator iAdvise =
-              m_aAdviseHashMap.begin();
-          iAdvise != m_aAdviseHashMap.end();
-          iAdvise++ )
-        if ( iAdvise->second )
-            iAdvise->second->OnViewChange( DVASPECT_CONTENT, -1 );
+    for (auto const& advise : m_aAdviseHashMap)
+        if (advise.second)
+            advise.second->OnViewChange( DVASPECT_CONTENT, -1 );
 
     if ( m_pDAdviseHolder && bDataChanged )
         m_pDAdviseHolder->SendOnDataChange( static_cast<IDataObject*>(this), 0, 0 );

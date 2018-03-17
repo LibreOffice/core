@@ -702,10 +702,10 @@ STDMETHODIMP EmbedDocument_Impl::SaveCompleted( IStorage *pStgNew )
                                         &m_pExtStream );
     if ( FAILED( hr ) || !m_pExtStream ) return E_OUTOFMEMORY;
 
-    for ( AdviseSinkHashMapIterator iAdvise = m_aAdviseHashMap.begin(); iAdvise != m_aAdviseHashMap.end(); iAdvise++ )
+    for (auto const& advise : m_aAdviseHashMap)
     {
-        if ( iAdvise->second )
-            iAdvise->second->OnSave();
+        if ( advise.second )
+            advise.second->OnSave();
     }
 
     return S_OK;
