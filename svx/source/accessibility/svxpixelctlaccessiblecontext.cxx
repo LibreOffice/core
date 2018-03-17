@@ -261,16 +261,16 @@ void SvxPixelCtlAccessible::grabFocus(  )
     mrPixelCtl.GrabFocus();
 }
 
-sal_Int32 SvxPixelCtlAccessible::getForeground(  )
+sal_Int32 SvxPixelCtlAccessible::getForeground()
 {
-    ::osl::MutexGuard   aGuard( m_aMutex );
-    return sal_Int32(mrPixelCtl.GetControlForeground());
+    ::osl::MutexGuard aGuard(m_aMutex);
+    return mrPixelCtl.GetControlForeground().GetColorNumber();
 }
 
-sal_Int32 SvxPixelCtlAccessible::getBackground(  )
+sal_Int32 SvxPixelCtlAccessible::getBackground()
 {
-    ::osl::MutexGuard   aGuard( m_aMutex );
-    return sal_Int32(mrPixelCtl.GetControlBackground());
+    ::osl::MutexGuard aGuard(m_aMutex);
+    return mrPixelCtl.GetControlBackground().GetColorNumber();
 }
 
 OUString SvxPixelCtlAccessible::getImplementationName(  )
@@ -592,18 +592,19 @@ void SAL_CALL SvxPixelCtlAccessibleChild::grabFocus()
 {
 }
 
-sal_Int32 SvxPixelCtlAccessibleChild::getForeground(  )
+sal_Int32 SvxPixelCtlAccessibleChild::getForeground()
 {
-    ::osl::MutexGuard   aGuard( m_aMutex );
+    ::osl::MutexGuard aGuard(m_aMutex);
     ThrowExceptionIfNotAlive();
-    return sal_Int32(mrParentWindow.GetControlForeground());
+    return mrParentWindow.GetControlForeground().GetColorNumber();
 }
-sal_Int32 SvxPixelCtlAccessibleChild::getBackground(  )
+
+sal_Int32 SvxPixelCtlAccessibleChild::getBackground()
 {
-    ::osl::MutexGuard   aGuard( m_aMutex );
+    ::osl::MutexGuard aGuard( m_aMutex );
 
     ThrowExceptionIfNotAlive();
-    return sal_Int32(mrParentWindow.GetControlBackground());
+    return mrParentWindow.GetControlBackground().GetColorNumber();
 }
 
 // XAccessibleContext

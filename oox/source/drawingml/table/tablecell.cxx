@@ -77,7 +77,7 @@ void applyLineAttributes( const ::oox::core::XmlFilterBase& rFilterBase,
     if ( rLineProperties.maLineFill.moFillType.differsFrom( XML_noFill ))
     {
         Color aColor = rLineProperties.maLineFill.getBestSolidColor();
-        aBorderLine.Color = sal_Int32(aColor.getColor( rFilterBase.getGraphicHelper() ));
+        aBorderLine.Color = aColor.getColor( rFilterBase.getGraphicHelper() ).GetColorNumber();
         aBorderLine.OuterLineWidth = static_cast< sal_Int16 >( GetCoordinate( rLineProperties.moLineWidth.get( 0 ) ) / 4 );
         aBorderLine.InnerLineWidth = static_cast< sal_Int16 >( GetCoordinate( rLineProperties.moLineWidth.get( 0 ) ) / 4 );
         aBorderLine.LineWidth = static_cast< sal_Int16 >( GetCoordinate( rLineProperties.moLineWidth.get( 0 ) ) / 2 );
@@ -450,7 +450,7 @@ void TableCell::pushToXCell( const ::oox::core::XmlFilterBase& rFilterBase, cons
         ::Color nCellColor( rCellColor.getColor(rFilterBase.getGraphicHelper()) );
         ::Color aResult( basegfx::interpolate(nBgColor.getBColor(), nCellColor.getBColor(), 1.0 - fTransparency) );
         aFillProperties.maFillColor.clearTransformations();
-        aFillProperties.maFillColor.setSrgbClr(sal_Int32(aResult.GetRGBColor()));
+        aFillProperties.maFillColor.setSrgbClr(aResult.GetRGBColor().GetColorNumber());
         aFillProperties.moFillType.set(XML_solidFill);
     }
     if (!aFillProperties.moFillType.has())

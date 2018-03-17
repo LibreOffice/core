@@ -64,7 +64,7 @@ public:
     {
         if ( Index < 0 || Index >= getCount() )
             throw lang::IndexOutOfBoundsException();
-        return uno::makeAny( sal_Int32( spnDefColorTable8[ Index ] ) );
+        return uno::makeAny(spnDefColorTable8[Index].GetColorNumber());
     }
 
     // Methods XElementAccess

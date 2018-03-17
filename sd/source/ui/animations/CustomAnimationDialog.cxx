@@ -232,7 +232,7 @@ void ColorPropertyBox::setValue( const Any& rValue, const OUString& )
 
 Any ColorPropertyBox::getValue()
 {
-    return makeAny( sal_Int32(mpControl->GetSelectEntryColor().GetRGBColor()) );
+    return makeAny(mpControl->GetSelectEntryColor().GetRGBColor().GetColorNumber());
 }
 
 Control* ColorPropertyBox::getControl()

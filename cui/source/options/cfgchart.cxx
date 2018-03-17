@@ -257,7 +257,7 @@ void SvxChartOptions::ImplCommit()
         for( size_t i=0; i < nCount; i++ )
         {
             Color aData = maDefColors.getColor( i );
-            aColors[ i ] = sal_uInt32(aData);
+            aColors[i] = aData.GetColorNumber();
         }
 
         aValues[ 0 ] <<= aColors;

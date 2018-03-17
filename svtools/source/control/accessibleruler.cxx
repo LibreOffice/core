@@ -282,21 +282,21 @@ void SAL_CALL SvtRulerAccessible::grabFocus()
     mpRepr->GrabFocus();
 }
 
-sal_Int32 SvtRulerAccessible::getForeground(  )
+sal_Int32 SvtRulerAccessible::getForeground()
 {
-    SolarMutexGuard     aSolarGuard;
-    ::osl::MutexGuard   aGuard( m_aMutex );
+    SolarMutexGuard aSolarGuard;
+    ::osl::MutexGuard aGuard(m_aMutex);
     ThrowExceptionIfNotAlive();
 
-    return sal_Int32(mpRepr->GetControlForeground());
+    return mpRepr->GetControlForeground().GetColorNumber();
 }
-sal_Int32 SvtRulerAccessible::getBackground(  )
+sal_Int32 SvtRulerAccessible::getBackground()
 {
-    SolarMutexGuard     aSolarGuard;
-    ::osl::MutexGuard   aGuard( m_aMutex );
+    SolarMutexGuard aSolarGuard;
+    ::osl::MutexGuard aGuard(m_aMutex);
     ThrowExceptionIfNotAlive();
 
-    return sal_Int32(mpRepr->GetControlBackground());
+    return mpRepr->GetControlBackground().GetColorNumber();
 }
 
 // XServiceInfo

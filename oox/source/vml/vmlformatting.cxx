@@ -871,7 +871,7 @@ void ShadowModel::pushToPropMap(ShapePropertyMap& rPropMap, const GraphicHelper&
     }
 
     table::ShadowFormat aFormat;
-    aFormat.Color = sal_Int32(aColor.getColor(rGraphicHelper));
+    aFormat.Color = aColor.getColor(rGraphicHelper).GetColorNumber();
     aFormat.Location = table::ShadowLocation_BOTTOM_RIGHT;
     // The width of the shadow is the average of the x and y values, see SwWW8ImplReader::MatchSdrItemsIntoFlySet().
     aFormat.ShadowWidth = ((nOffsetX + nOffsetY) / 2);

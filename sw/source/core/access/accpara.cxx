@@ -1029,11 +1029,11 @@ sal_Int32 SAL_CALL SwAccessibleParagraph::getForeground()
     {
         if ( aBackgroundCol.IsDark() )
         {
-            return sal_Int32(COL_WHITE);
+            return COL_WHITE.GetColorNumber();
         }
         else
         {
-            return sal_Int32(COL_BLACK);
+            return COL_BLACK.GetColorNumber();
         }
     }
 
@@ -1048,7 +1048,7 @@ sal_Int32 SAL_CALL SwAccessibleParagraph::getBackground()
 
     if ( lcl_GetBackgroundColor( aBackgroundCol, GetFrame(), GetCursorShell() ) )
     {
-        return sal_Int32(aBackgroundCol);
+        return aBackgroundCol.GetColorNumber();
     }
 
     return SwAccessibleContext::getBackground();
@@ -2181,7 +2181,12 @@ void SwAccessibleParagraph::_correctValues( const sal_Int32 nIndex,
                 if (xComponent.is())
                 {
                     Color cr(xComponent->getBackground());
-                    crChar = sal_uInt32(cr.IsDark() ? COL_WHITE : COL_BLACK);
+
+                    if (cr.IsDark())
+                        crChar = COL_WHITE.GetColorNumber();
+                    else
+                        crChar = COL_BLACK.GetColorNumber();
+
                     rValue.Value <<= crChar;
                 }
             }
@@ -2237,7 +2242,12 @@ void SwAccessibleParagraph::_correctValues( const sal_Int32 nIndex,
                 if (xComponent.is())
                 {
                     Color cr(xComponent->getBackground());
-                    crUnderline = sal_uInt32(cr.IsDark() ? COL_WHITE : COL_BLACK);
+
+                    if (cr.IsDark())
+                        crUnderline = COL_WHITE.GetColorNumber();
+                    else
+                        crUnderline = COL_BLACK.GetColorNumber();
+
                     rValue.Value <<= crUnderline;
                 }
             }

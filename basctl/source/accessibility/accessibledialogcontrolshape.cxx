@@ -445,44 +445,52 @@ void AccessibleDialogControlShape::grabFocus(  )
 
 sal_Int32 AccessibleDialogControlShape::getForeground(  )
 {
-    OExternalLockGuard aGuard( this );
+    OExternalLockGuard aGuard(this);
 
-    Color nColor;
+    Color aColor;
+
     vcl::Window* pWindow = GetWindow();
-    if ( pWindow )
+
+    if (pWindow)
     {
-        if ( pWindow->IsControlForeground() )
-            nColor = pWindow->GetControlForeground();
+        if (pWindow->IsControlForeground())
+        {
+            aColor = pWindow->GetControlForeground();
+        }
         else
         {
             vcl::Font aFont;
-            if ( pWindow->IsControlFont() )
+
+            if (pWindow->IsControlFont() )
                 aFont = pWindow->GetControlFont();
             else
                 aFont = pWindow->GetFont();
-            nColor = aFont.GetColor();
+
+            aColor = aFont.GetColor();
         }
     }
 
-    return sal_Int32(nColor);
+    return aColor.GetColorNumber();
 }
 
 
 sal_Int32 AccessibleDialogControlShape::getBackground(  )
 {
-    OExternalLockGuard aGuard( this );
+    OExternalLockGuard aGuard(this);
 
-    Color nColor;
+    Color aColor;
+
     vcl::Window* pWindow = GetWindow();
-    if ( pWindow )
+
+    if (pWindow)
     {
-        if ( pWindow->IsControlBackground() )
-            nColor = pWindow->GetControlBackground();
+        if (pWindow->IsControlBackground())
+            aColor = pWindow->GetControlBackground();
         else
-            nColor = pWindow->GetBackground().GetColor();
+            aColor = pWindow->GetBackground().GetColor();
     }
 
-    return sal_Int32(nColor);
+    return aColor.GetColorNumber();
 }
 
 

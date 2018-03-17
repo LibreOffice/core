@@ -42,14 +42,14 @@ const Color defaultPreferredColor = COL_LIGHTBLUE;
 void lcl_fillRanges(
     Sequence< chart2::data::HighlightedRange > & rOutRanges,
     const Sequence< OUString >& aRangeStrings,
-    Color nPreferredColor,
-    sal_Int32 nIndex = -1 )
+    Color aPreferredColor,
+    sal_Int32 nIndex = -1)
 {
-    rOutRanges.realloc( aRangeStrings.getLength());
-    for( sal_Int32 i=0; i<aRangeStrings.getLength(); ++i )
+    rOutRanges.realloc(aRangeStrings.getLength());
+    for (sal_Int32 i=0; i<aRangeStrings.getLength(); ++i)
     {
         rOutRanges[i].RangeRepresentation = aRangeStrings[i];
-        rOutRanges[i].PreferredColor = sal_Int32(nPreferredColor);
+        rOutRanges[i].PreferredColor = aPreferredColor.GetColorNumber();
         rOutRanges[i].AllowMerginigWithOtherRanges = false;
         rOutRanges[i].Index = nIndex;
     }
@@ -196,7 +196,7 @@ void RangeHighlighter::fillRangesForDiagram( const Reference< chart2::XDiagram >
     {
         m_aSelectedRanges[i].RangeRepresentation = aSelectedRanges[i];
         m_aSelectedRanges[i].Index = -1;
-        m_aSelectedRanges[i].PreferredColor = sal_Int32(defaultPreferredColor);
+        m_aSelectedRanges[i].PreferredColor = defaultPreferredColor.GetColorNumber();
         m_aSelectedRanges[i].AllowMerginigWithOtherRanges = true;
     }
 }
@@ -264,7 +264,7 @@ void RangeHighlighter::fillRangesForDataPoint( const Reference< uno::XInterface 
         Reference< chart2::data::XDataSource > xSource( xDataSeries, uno::UNO_QUERY );
         if( xSource.is() )
         {
-            Color nPreferredColor = defaultPreferredColor;
+            Color aPreferredColor = defaultPreferredColor;
             std::vector< chart2::data::HighlightedRange > aHilightedRanges;
             Sequence< Reference< chart2::data::XLabeledDataSequence > > aLSeqSeq( xSource->getDataSequences());
             for( sal_Int32 i=0; i<aLSeqSeq.getLength(); ++i )
@@ -272,20 +272,20 @@ void RangeHighlighter::fillRangesForDataPoint( const Reference< uno::XInterface 
                 Reference< chart2::data::XDataSequence > xLabel( aLSeqSeq[i]->getLabel());
                 Reference< chart2::data::XDataSequence > xValues( aLSeqSeq[i]->getValues());
 
-                if( xLabel.is())
+                if (xLabel.is())
                     aHilightedRanges.emplace_back(
                             xLabel->getSourceRangeRepresentation(),
                             -1,
-                            sal_Int32(nPreferredColor),
-                            false );
+                            aPreferredColor.GetColorNumber(),
+                            false);
 
                 sal_Int32 nUnhiddenIndex = DataSeriesHelper::translateIndexFromHiddenToFullSequence( nIndex, xValues, !m_bIncludeHiddenCells );
-                if( xValues.is())
+                if (xValues.is())
                     aHilightedRanges.emplace_back(
                             xValues->getSourceRangeRepresentation(),
                             nUnhiddenIndex,
-                            sal_Int32(nPreferredColor),
-                            false );
+                            aPreferredColor.GetColorNumber(),
+                            false);
             }
             m_aSelectedRanges = comphelper::containerToSequence( aHilightedRanges );
         }

@@ -109,7 +109,7 @@ bool XMLShadowPropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue
     if( bRet && ( bColorFound || bOffsetFound ) )
     {
         aShadow.IsTransparent = aColor.GetTransparency() > 0;
-        aShadow.Color = sal_Int32(aColor);
+        aShadow.Color = aColor.GetColorNumber();
         bRet = true;
     }
 

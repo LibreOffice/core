@@ -254,7 +254,7 @@ void MakeBorderLine( sal_Int32 nLineThickness,   sal_Int32 nLineToken,
     if(!nLineColor)
         ++nLineColor;
     if(!bIsOOXML && sal::static_int_cast<sal_uInt32>(nLineColor) < SAL_N_ELEMENTS(aBorderDefColor))
-        nLineColor = sal_Int32(aBorderDefColor[nLineColor]);
+        nLineColor = aBorderDefColor[nLineColor].GetColorNumber();
 
     sal_Int32 nLineType = lcl_convertBorderStyleFromToken(nLineToken);
 

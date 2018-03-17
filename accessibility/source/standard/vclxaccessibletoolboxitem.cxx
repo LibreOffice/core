@@ -578,26 +578,26 @@ void SAL_CALL VCLXAccessibleToolBoxItem::grabFocus(  )
     }
 }
 
-sal_Int32 SAL_CALL VCLXAccessibleToolBoxItem::getForeground(  )
+sal_Int32 SAL_CALL VCLXAccessibleToolBoxItem::getForeground()
 {
-    OExternalLockGuard aGuard( this );
+    OExternalLockGuard aGuard(this);
 
-    Color nColor;
-    if ( m_pToolBox )
-       nColor = m_pToolBox->GetControlForeground();
+    Color aColor;
+    if (m_pToolBox)
+       aColor = m_pToolBox->GetControlForeground();
 
-    return sal_Int32(nColor);
+    return aColor.GetColorNumber();
 }
 
-sal_Int32 SAL_CALL VCLXAccessibleToolBoxItem::getBackground(  )
+sal_Int32 SAL_CALL VCLXAccessibleToolBoxItem::getBackground()
 {
-    OExternalLockGuard aGuard( this );
+    OExternalLockGuard aGuard(this);
 
-    Color nColor;
-    if ( m_pToolBox )
-       nColor = m_pToolBox->GetControlBackground();
+    Color aColor;
+    if (m_pToolBox)
+       aColor = m_pToolBox->GetControlBackground();
 
-    return sal_Int32(nColor);
+    return aColor.GetColorNumber();
 }
 
 // XAccessibleExtendedComponent

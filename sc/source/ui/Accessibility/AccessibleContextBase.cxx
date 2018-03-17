@@ -213,12 +213,12 @@ void SAL_CALL ScAccessibleContextBase::grabFocus(  )
 
 sal_Int32 SAL_CALL ScAccessibleContextBase::getForeground(  )
 {
-    return sal_Int32(COL_BLACK);
+    return COL_BLACK.GetColorNumber();
 }
 
 sal_Int32 SAL_CALL ScAccessibleContextBase::getBackground(  )
 {
-    return sal_Int32(COL_WHITE);
+    return COL_WHITE.GetColorNumber();
 }
 
 //=====  XAccessibleContext  ==================================================

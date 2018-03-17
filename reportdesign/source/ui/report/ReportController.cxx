@@ -950,7 +950,7 @@ namespace
     */
     util::Color lcl_extractBackgroundColor( const Sequence< PropertyValue >& _rDispatchArgs )
     {
-        util::Color aColor( COL_TRANSPARENT );
+        util::Color aColor( COL_TRANSPARENT.GetColorNumber() );
         if ( _rDispatchArgs.getLength() == 1 )
         {
             OSL_VERIFY( _rDispatchArgs[0].Value >>= aColor );
@@ -2439,7 +2439,7 @@ void OReportController::openPageDialog(const uno::Reference<report::XSection>& _
                 {
                     const SfxPoolItem* pItem;
                     if ( SfxItemState::SET == pSet->GetItemState( RPTUI_ID_BRUSH,true,&pItem))
-                        _xSection->setBackColor(sal_Int32(static_cast<const SvxBrushItem*>(pItem)->GetColor()));
+                        _xSection->setBackColor(static_cast<const SvxBrushItem*>(pItem)->GetColor().GetColorNumber());
                 }
                 else
                 {

@@ -1294,40 +1294,94 @@ sal_uInt16 GetBestIndex(const BitmapPalette& rPalette, const BitmapColor& rBitma
 sal_uInt8 TransColToIco( const Color& rCol )
 {
     sal_uInt8 nCol = 0;      // ->Auto
-    switch( sal_uInt32(rCol) )
-    {
-    case sal_uInt32(COL_BLACK):         nCol = 1;   break;
-    case sal_uInt32(COL_BLUE):          nCol = 9;   break;
-    case sal_uInt32(COL_GREEN):         nCol = 11;  break;
-    case sal_uInt32(COL_CYAN):          nCol = 10;  break;
-    case sal_uInt32(COL_RED):           nCol = 13;  break;
-    case sal_uInt32(COL_MAGENTA):       nCol = 12;  break;
-    case sal_uInt32(COL_BROWN):         nCol = 14;  break;
-    case sal_uInt32(COL_GRAY):          nCol = 15;  break;
-    case sal_uInt32(COL_LIGHTGRAY):     nCol = 16;  break;
-    case sal_uInt32(COL_LIGHTBLUE):     nCol = 2;   break;
-    case sal_uInt32(COL_LIGHTGREEN):    nCol = 4;   break;
-    case sal_uInt32(COL_LIGHTCYAN):     nCol = 3;   break;
-    case sal_uInt32(COL_LIGHTRED):      nCol = 6;   break;
-    case sal_uInt32(COL_LIGHTMAGENTA):  nCol = 5;   break;
-    case sal_uInt32(COL_YELLOW):        nCol = 7;   break;
-    case sal_uInt32(COL_WHITE):         nCol = 8;   break;
-    case sal_uInt32(COL_AUTO):          nCol = 0;   break;
 
-    default:
+    if (rCol.GetColorNumber() ==  COL_BLACK.GetColorNumber())
+    {
+        nCol = 1;
+    }
+    else if (rCol.GetColorNumber() ==  COL_BLUE.GetColorNumber())
+    {
+        nCol = 9;
+    }
+    else if (rCol.GetColorNumber() ==  COL_GREEN.GetColorNumber())
+    {
+        nCol = 11;
+    }
+    else if (rCol.GetColorNumber() ==  COL_CYAN.GetColorNumber())
+    {
+        nCol = 10;
+    }
+    else if (rCol.GetColorNumber() ==  COL_RED.GetColorNumber())
+    {
+        nCol = 13;
+    }
+    else if (rCol.GetColorNumber() ==  COL_MAGENTA.GetColorNumber())
+    {
+        nCol = 12;
+    }
+    else if (rCol.GetColorNumber() ==  COL_BROWN.GetColorNumber())
+    {
+        nCol = 14;
+    }
+    else if (rCol.GetColorNumber() ==  COL_GRAY.GetColorNumber())
+    {
+        nCol = 15;
+    }
+    else if (rCol.GetColorNumber() ==  COL_LIGHTGRAY.GetColorNumber())
+    {
+        nCol = 16;
+    }
+    else if (rCol.GetColorNumber() ==  COL_LIGHTBLUE.GetColorNumber())
+    {
+        nCol = 2;
+    }
+    else if (rCol.GetColorNumber() ==  COL_LIGHTGREEN.GetColorNumber())
+    {
+        nCol = 4;
+    }
+    else if (rCol.GetColorNumber() ==  COL_LIGHTCYAN.GetColorNumber())
+    {
+        nCol = 3;
+    }
+    else if (rCol.GetColorNumber() ==  COL_LIGHTRED.GetColorNumber())
+    {
+        nCol = 6;
+    }
+    else if (rCol.GetColorNumber() ==  COL_LIGHTMAGENTA.GetColorNumber())
+    {
+        nCol = 5;
+    }
+    else if (rCol.GetColorNumber() ==  COL_YELLOW.GetColorNumber())
+    {
+        nCol = 7;
+    }
+    else if (rCol.GetColorNumber() ==  COL_WHITE.GetColorNumber())
+    {
+        nCol = 8;
+    }
+    else if (rCol.GetColorNumber() ==  COL_AUTO.GetColorNumber())
+    {
+        nCol = 0;
+    }
+    else
+    {
         static const Color aColArr[ 16 ] = {
             COL_BLACK,      COL_LIGHTBLUE,  COL_LIGHTCYAN,  COL_LIGHTGREEN,
             COL_LIGHTMAGENTA,COL_LIGHTRED,  COL_YELLOW,     COL_WHITE,
             COL_BLUE,       COL_CYAN,       COL_GREEN,      COL_MAGENTA,
             COL_RED,        COL_BROWN,      COL_GRAY,       COL_LIGHTGRAY
         };
+
         BitmapPalette aBmpPal(16);
+
         for( sal_uInt16 i = 0; i < 16; ++i )
+        {
             aBmpPal[i] = aColArr[ i ];
+        }
 
         nCol = static_cast< sal_uInt8 >(GetBestIndex(aBmpPal, rCol) + 1);
-        break;
     }
+
     return nCol;
 }
 

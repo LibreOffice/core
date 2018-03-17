@@ -2046,8 +2046,8 @@ bool XFillGradientItem::QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId ) c
 
             const XGradient& aXGradient = GetGradientValue();
             aGradient2.Style = aXGradient.GetGradientStyle();
-            aGradient2.StartColor = static_cast<sal_Int32>(aXGradient.GetStartColor());
-            aGradient2.EndColor = static_cast<sal_Int32>(aXGradient.GetEndColor());
+            aGradient2.StartColor = aXGradient.GetStartColor().GetColorNumber();
+            aGradient2.EndColor = aXGradient.GetEndColor().GetColorNumber();
             aGradient2.Angle = static_cast<short>(aXGradient.GetAngle());
             aGradient2.Border = aXGradient.GetBorder();
             aGradient2.XOffset = aXGradient.GetXOffset();
@@ -2070,8 +2070,8 @@ bool XFillGradientItem::QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId ) c
             css::awt::Gradient aGradient2;
 
             aGradient2.Style = aXGradient.GetGradientStyle();
-            aGradient2.StartColor = static_cast<sal_Int32>(aXGradient.GetStartColor());
-            aGradient2.EndColor = static_cast<sal_Int32>(aXGradient.GetEndColor());
+            aGradient2.StartColor = aXGradient.GetStartColor().GetColorNumber();
+            aGradient2.EndColor = aXGradient.GetEndColor().GetColorNumber();
             aGradient2.Angle = static_cast<short>(aXGradient.GetAngle());
             aGradient2.Border = aXGradient.GetBorder();
             aGradient2.XOffset = aXGradient.GetXOffset();
@@ -2463,7 +2463,7 @@ bool XFillHatchItem::QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId ) cons
             css::drawing::Hatch aUnoHatch;
 
             aUnoHatch.Style = aHatch.GetHatchStyle();
-            aUnoHatch.Color = sal_Int32(aHatch.GetColor());
+            aUnoHatch.Color = aHatch.GetColor().GetColorNumber();
             aUnoHatch.Distance = aHatch.GetDistance();
             aUnoHatch.Angle = aHatch.GetAngle();
 
@@ -2480,7 +2480,7 @@ bool XFillHatchItem::QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId ) cons
             css::drawing::Hatch aUnoHatch;
 
             aUnoHatch.Style = aHatch.GetHatchStyle();
-            aUnoHatch.Color = sal_Int32(aHatch.GetColor());
+            aUnoHatch.Color = aHatch.GetColor().GetColorNumber();
             aUnoHatch.Distance = aHatch.GetDistance();
             aUnoHatch.Angle = aHatch.GetAngle();
             rVal <<= aUnoHatch;

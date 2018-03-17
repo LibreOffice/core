@@ -181,11 +181,11 @@ sal_Int16 VCLXAccessibleMenuBar::getAccessibleRole(  )
 // XAccessibleExtendedComponent
 
 
-sal_Int32 VCLXAccessibleMenuBar::getBackground(  )
+sal_Int32 VCLXAccessibleMenuBar::getBackground()
 {
-    OExternalLockGuard aGuard( this );
+    OExternalLockGuard aGuard(this);
 
-    return sal_Int32(Application::GetSettings().GetStyleSettings().GetMenuBarColor());
+    return Application::GetSettings().GetStyleSettings().GetMenuBarColor().GetColorNumber();
 }
 
 

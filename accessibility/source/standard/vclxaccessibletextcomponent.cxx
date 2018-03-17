@@ -170,8 +170,8 @@ Sequence< PropertyValue > VCLXAccessibleTextComponent::getCharacterAttributes( s
     {
         vcl::Font aFont = GetWindow()->GetControlFont();
 
-        Color nBackColor = GetWindow()->GetControlBackground();
-        Color nColor = GetWindow()->GetControlForeground();
+        Color aBackColor = GetWindow()->GetControlBackground();
+        Color aColor = GetWindow()->GetControlForeground();
 
         // MT: Code with default font was introduced with the IA2 CWS, but I am not convinced that this is the correct font...
         // Decide what to do when we have a concrete issue.
@@ -222,8 +222,8 @@ Sequence< PropertyValue > VCLXAccessibleTextComponent::getCharacterAttributes( s
         }
         */
 
-        aValues = CharacterAttributesHelper( aFont, sal_Int32(nBackColor), sal_Int32(nColor) )
-            .GetCharacterAttributes( aRequestedAttributes );
+        aValues = CharacterAttributesHelper(aFont, aBackColor.GetColorNumber(), aColor.GetColorNumber())
+            .GetCharacterAttributes(aRequestedAttributes);
     }
 
     return aValues;

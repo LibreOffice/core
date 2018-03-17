@@ -99,7 +99,7 @@ uno::Any lcl_ConvertShd(sal_Int32 nIntValue)
 
 void CellColorHandler::lcl_attribute(Id rName, Value & rVal)
 {
-    sal_Int32 nIntValue = rVal.getInt();
+    sal_uInt32 nIntValue = rVal.getInt();
     switch( rName )
     {
         case NS_ooxml::LN_CT_Shd_val:
@@ -110,7 +110,7 @@ void CellColorHandler::lcl_attribute(Id rName, Value & rVal)
         break;
         case NS_ooxml::LN_CT_Shd_fill:
             createGrabBag("fill", uno::makeAny(OUString::fromUtf8(msfilter::util::ConvertColor(nIntValue))));
-            if( nIntValue == sal_Int32(COL_AUTO) )
+            if( nIntValue == COL_AUTO.GetColorNumber() )
                 nIntValue = 0xffffff; //fill color auto means white
             else
                 m_bAutoFillColor = false;
@@ -119,7 +119,7 @@ void CellColorHandler::lcl_attribute(Id rName, Value & rVal)
         break;
         case NS_ooxml::LN_CT_Shd_color:
             createGrabBag("color", uno::makeAny(OUString::fromUtf8(msfilter::util::ConvertColor(nIntValue))));
-            if( nIntValue == sal_Int32(COL_AUTO) )
+            if( nIntValue == COL_AUTO.GetColorNumber() )
                 nIntValue = 0; //shading color auto means black
             //color of the shading
             m_nColor = nIntValue;

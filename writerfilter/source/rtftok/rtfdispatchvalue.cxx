@@ -416,7 +416,7 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         case RTF_CF:
         {
             RTFSprms aAttributes;
-            auto pValue = std::make_shared<RTFValue>(sal_uInt32(getColorTable(nParam)));
+            auto pValue = std::make_shared<RTFValue>(getColorTable(nParam).GetColorNumber());
             aAttributes.set(NS_ooxml::LN_CT_Color_val, pValue);
             m_aStates.top().aCharacterSprms.set(NS_ooxml::LN_EG_RPrBase_color,
                                                 std::make_shared<RTFValue>(aAttributes));
@@ -504,8 +504,8 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         break;
         case RTF_CHCBPAT:
         {
-            auto pValue
-                = std::make_shared<RTFValue>(sal_uInt32(nParam ? getColorTable(nParam) : COL_AUTO));
+            auto pValue = std::make_shared<RTFValue>(nParam ? getColorTable(nParam).GetColorNumber()
+                                                            : COL_AUTO.GetColorNumber());
             putNestedAttribute(m_aStates.top().aCharacterSprms, NS_ooxml::LN_EG_RPrBase_shd,
                                NS_ooxml::LN_CT_Shd_fill, pValue);
         }
@@ -513,7 +513,7 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         case RTF_CLCBPAT:
         case RTF_CLCBPATRAW:
         {
-            auto pValue = std::make_shared<RTFValue>(sal_uInt32(getColorTable(nParam)));
+            auto pValue = std::make_shared<RTFValue>(getColorTable(nParam).GetColorNumber());
             putNestedAttribute(m_aStates.top().aTableCellSprms, NS_ooxml::LN_CT_TcPrBase_shd,
                                NS_ooxml::LN_CT_Shd_fill, pValue);
         }
@@ -521,21 +521,21 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         case RTF_CBPAT:
             if (nParam)
             {
-                auto pValue = std::make_shared<RTFValue>(sal_uInt32(getColorTable(nParam)));
+                auto pValue = std::make_shared<RTFValue>(getColorTable(nParam).GetColorNumber());
                 putNestedAttribute(m_aStates.top().aParagraphSprms, NS_ooxml::LN_CT_PrBase_shd,
                                    NS_ooxml::LN_CT_Shd_fill, pValue);
             }
             break;
         case RTF_ULC:
         {
-            auto pValue = std::make_shared<RTFValue>(sal_uInt32(getColorTable(nParam)));
+            auto pValue = std::make_shared<RTFValue>(getColorTable(nParam).GetColorNumber());
             m_aStates.top().aCharacterSprms.set(0x6877, pValue);
         }
         break;
         case RTF_HIGHLIGHT:
         {
-            auto pValue
-                = std::make_shared<RTFValue>(sal_uInt32(nParam ? getColorTable(nParam) : COL_AUTO));
+            auto pValue = std::make_shared<RTFValue>(nParam ? getColorTable(nParam).GetColorNumber()
+                                                            : COL_AUTO.GetColorNumber());
             m_aStates.top().aCharacterSprms.set(NS_ooxml::LN_EG_RPrBase_highlight, pValue);
         }
         break;
@@ -627,7 +627,7 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         break;
         case RTF_BRDRCF:
         {
-            auto pValue = std::make_shared<RTFValue>(sal_uInt32(getColorTable(nParam)));
+            auto pValue = std::make_shared<RTFValue>(getColorTable(nParam).GetColorNumber());
             putBorderProperty(m_aStates, NS_ooxml::LN_CT_Border_color, pValue);
         }
         break;

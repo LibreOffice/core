@@ -115,7 +115,7 @@ void PPTExCharSheet::Write( SvStream& rSt, sal_uInt16 nLev, bool bSimpleText,
     if ( bSimpleText )
     {
         rSt.WriteUInt16( rLev.mnFontHeight )
-           .WriteUInt32( sal_uInt32(nFontColor) );
+           .WriteUInt32( nFontColor.GetColorNumber() );
     }
     else
     {
@@ -123,7 +123,7 @@ void PPTExCharSheet::Write( SvStream& rSt, sal_uInt16 nLev, bool bSimpleText,
            .WriteUInt16( 0xffff )       // unknown
            .WriteUInt16( 0xffff )       // unknown
            .WriteUInt16( rLev.mnFontHeight )
-           .WriteUInt32( sal_uInt32(nFontColor) )
+           .WriteUInt32( nFontColor.GetColorNumber() )
            .WriteUInt16( rLev.mnEscapement );
     }
 }
@@ -345,7 +345,7 @@ void PPTExParaSheet::Write( SvStream& rSt, sal_uInt16 nLev, bool bSimpleText,
     if ( bSimpleText )
         nParaFlags &= 0x7fff;
     sal_uInt32 nBulletColor = rLev.mnBulletColor;
-    if ( nBulletColor == sal_uInt32(COL_AUTO) )
+    if ( nBulletColor == COL_AUTO.GetColorNumber() )
     {
         bool bIsDark = false;
         css::uno::Any aAny;
@@ -484,7 +484,7 @@ void PPTExStyleSheet::WriteTxCFStyleAtom( SvStream& rSt )
        .WriteUInt16( nCharFlags )
        .WriteInt32( -1 )                            // ?
        .WriteUInt16( rCharStyle.mnFontHeight )
-       .WriteUInt32( sal_uInt32(rCharStyle.mnFontColor) );
+       .WriteUInt32( rCharStyle.mnFontColor.GetColorNumber() );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

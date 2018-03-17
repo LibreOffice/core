@@ -392,21 +392,22 @@ void SAL_CALL SvxRectCtlAccessibleContext::grabFocus()
     mpRepr->GrabFocus();
 }
 
-sal_Int32 SvxRectCtlAccessibleContext::getForeground(  )
+sal_Int32 SvxRectCtlAccessibleContext::getForeground()
 {
     ::SolarMutexGuard aSolarGuard;
-    ::osl::MutexGuard   aGuard( m_aMutex );
+    ::osl::MutexGuard aGuard( m_aMutex );
     ThrowExceptionIfNotAlive();
 
-    return sal_Int32(mpRepr->GetControlForeground());
+    return mpRepr->GetControlForeground().GetColorNumber();
 }
-sal_Int32 SvxRectCtlAccessibleContext::getBackground(  )
+
+sal_Int32 SvxRectCtlAccessibleContext::getBackground()
 {
     ::SolarMutexGuard aSolarGuard;
-    ::osl::MutexGuard   aGuard( m_aMutex );
+    ::osl::MutexGuard aGuard(m_aMutex);
     ThrowExceptionIfNotAlive();
 
-    return sal_Int32(mpRepr->GetControlBackground());
+    return mpRepr->GetControlBackground().GetColorNumber();
 }
 
 // XServiceInfo
@@ -703,20 +704,21 @@ void SAL_CALL SvxRectCtlChildAccessibleContext::grabFocus()
 {
 }
 
-sal_Int32 SvxRectCtlChildAccessibleContext::getForeground(  )
+sal_Int32 SvxRectCtlChildAccessibleContext::getForeground()
 {
     ::SolarMutexGuard aSolarGuard;
-    ::osl::MutexGuard   aGuard( maMutex );
+    ::osl::MutexGuard aGuard(maMutex);
     ThrowExceptionIfNotAlive();
-    return sal_Int32(mrParentWindow.GetControlForeground());
+    return mrParentWindow.GetControlForeground().GetColorNumber();
 }
-sal_Int32 SvxRectCtlChildAccessibleContext::getBackground(  )
+
+sal_Int32 SvxRectCtlChildAccessibleContext::getBackground()
 {
     ::SolarMutexGuard aSolarGuard;
-    ::osl::MutexGuard   aGuard( maMutex );
+    ::osl::MutexGuard aGuard(maMutex);
 
     ThrowExceptionIfNotAlive();
-    return sal_Int32(mrParentWindow.GetControlBackground());
+    return mrParentWindow.GetControlBackground().GetColorNumber();
 }
 
 // XAccessibleContext

@@ -284,7 +284,7 @@ void PaletteManager::AddRecentColor(const Color& rRecentColor, const OUString& r
     css::uno::Sequence< OUString > aColorNameList(maRecentColors.size());
     for (size_t i = 0; i < maRecentColors.size(); ++i)
     {
-        aColorList[i] = static_cast<sal_Int32>(maRecentColors[i].first);
+        aColorList[i] = maRecentColors[i].first.GetColorNumber();
         aColorNameList[i] = maRecentColors[i].second;
     }
     std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create(m_context));
@@ -341,7 +341,7 @@ void PaletteManager::DispatchColorCommand(const OUString& aCommand, const NamedC
 
         Sequence<PropertyValue> aArgs(1);
         aArgs[0].Name = aObj.GetURLPath();
-        aArgs[0].Value <<= sal_Int32(rColor.first);
+        aArgs[0].Value <<= rColor.first.GetColorNumber();
 
         URL aTargetURL;
         aTargetURL.Complete = aCommand;

@@ -243,7 +243,7 @@ void Color::setAuto()
 void Color::setRgb( ::Color nRgbValue, double fTint )
 {
     clearTransformations();
-    setSrgbClr( sal_uInt32(nRgbValue) & 0xFFFFFF );
+    setSrgbClr(nRgbValue.GetColorNumber() & 0xFFFFFF );
     if( fTint != 0.0 ) addExcelTintTransformation( fTint );
 }
 
@@ -271,7 +271,7 @@ void Color::importColor( const AttributeList& rAttribs )
     if( rAttribs.hasAttribute( XML_theme ) )
         setTheme( rAttribs.getInteger( XML_theme, -1 ), rAttribs.getDouble( XML_tint, 0.0 ) );
     else if( rAttribs.hasAttribute( XML_rgb ) )
-        setRgb( rAttribs.getIntegerHex( XML_rgb, sal_Int32(API_RGB_TRANSPARENT) ), rAttribs.getDouble( XML_tint, 0.0 ) );
+        setRgb(rAttribs.getIntegerHex(XML_rgb, API_RGB_TRANSPARENT.GetColorNumber()), rAttribs.getDouble(XML_tint, 0.0));
     else if( rAttribs.hasAttribute( XML_indexed ) )
         setIndexed( rAttribs.getInteger( XML_indexed, -1 ), rAttribs.getDouble( XML_tint, 0.0 ) );
     else if( rAttribs.getBool( XML_auto, false ) )
@@ -371,7 +371,7 @@ ColorPalette::ColorPalette( const WorkbookHelper& rHelper )
 
 void ColorPalette::importPaletteColor( const AttributeList& rAttribs )
 {
-    appendColor( rAttribs.getIntegerHex( XML_rgb, sal_Int32(API_RGB_WHITE) ) );
+    appendColor(rAttribs.getIntegerHex(XML_rgb, API_RGB_WHITE.GetColorNumber()));
 }
 
 void ColorPalette::importPaletteColor( SequenceInputStream& rStrm )
@@ -1541,7 +1541,7 @@ bool Border::convertBorderLine( BorderLine2& rBorderLine, const BorderLineModel&
 {
     // Document: sc/qa/unit/data/README.cellborders
 
-    rBorderLine.Color = sal_Int32(rModel.maColor.getColor( getBaseFilter().getGraphicHelper(), API_RGB_BLACK ));
+    rBorderLine.Color = rModel.maColor.getColor(getBaseFilter().getGraphicHelper(), API_RGB_BLACK).GetColorNumber();
     switch( rModel.mnStyle )
     {
         case XML_dashDot:

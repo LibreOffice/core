@@ -386,46 +386,51 @@ css::uno::Reference<css::accessibility::XAccessible > SAL_CALL AccessibleGridCon
     return nullptr;
 }
 
-sal_Int32 SAL_CALL AccessibleGridControlBase::getForeground(  )
+sal_Int32 SAL_CALL AccessibleGridControlBase::getForeground()
 {
     SolarMutexGuard aSolarGuard;
 
     ensureIsAlive();
 
-    Color nColor;
+    Color aColor;
     vcl::Window* pInst = m_aTable.GetWindowInstance();
-    if ( pInst )
+
+    if (pInst)
     {
-        if ( pInst->IsControlForeground() )
-            nColor = pInst->GetControlForeground();
+        if (pInst->IsControlForeground())
+            aColor = pInst->GetControlForeground();
+    }
     else
     {
         vcl::Font aFont;
-        if ( pInst->IsControlFont() )
+        if (pInst->IsControlFont())
             aFont = pInst->GetControlFont();
         else
             aFont = pInst->GetFont();
-        nColor = aFont.GetColor();
+
+        aColor = aFont.GetColor();
     }
-    }
-    return sal_Int32(nColor);
+
+    return aColor.GetColorNumber();
 }
 
-sal_Int32 SAL_CALL AccessibleGridControlBase::getBackground(  )
+sal_Int32 SAL_CALL AccessibleGridControlBase::getBackground()
 {
     SolarMutexGuard aSolarGuard;
 
     ensureIsAlive();
-    Color nColor;
+    Color aColor;
+
     vcl::Window* pInst = m_aTable.GetWindowInstance();
-    if ( pInst )
+    if (pInst)
     {
-        if ( pInst->IsControlBackground() )
-            nColor = pInst->GetControlBackground();
-    else
-            nColor = pInst->GetBackground().GetColor();
+        if (pInst->IsControlBackground())
+            aColor = pInst->GetControlBackground();
+        else
+            aColor = pInst->GetBackground().GetColor();
     }
-    return sal_Int32(nColor);
+
+    return aColor.GetColorNumber();
 }
 
 

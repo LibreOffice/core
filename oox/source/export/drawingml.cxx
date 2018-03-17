@@ -178,10 +178,10 @@ bool DrawingML::GetPropertyAndState( const Reference< XPropertySet >& rXProperty
     return false;
 }
 
-void DrawingML::WriteColor( ::Color nColor, sal_Int32 nAlpha )
+void DrawingML::WriteColor( ::Color aColor, sal_Int32 nAlpha )
 {
     // Transparency is a separate element.
-    OString sColor = OString::number(  sal_uInt32(nColor) & 0x00FFFFFF, 16 );
+    OString sColor = OString::number( aColor.GetColorNumber() & 0x00FFFFFF, 16 );
     if( sColor.getLength() < 6 )
     {
         OStringBuffer sBuf( "0" );
@@ -1589,27 +1589,27 @@ void DrawingML::WriteRunProperties( const Reference< XPropertySet >& rRun, bool 
     // mso doesn't like text color to be placed after typeface
     if( CGETAD( CharColor ) )
     {
-        ::Color color( *o3tl::doAccess<sal_uInt32>(mAny) );
-        SAL_INFO("oox.shape", "run color: " << sal_uInt32(color) << " auto: " << sal_uInt32(COL_AUTO));
+        ::Color aColor( *o3tl::doAccess<sal_uInt32>(mAny) );
+        SAL_INFO("oox.shape", "run color: " << aColor.GetColorNumber() << " auto: " << COL_AUTO.GetColorNumber());
 
         // tdf#104219 In LibreOffice and MS Office, there are two types of colors:
         // Automatic and Fixed. OOXML is setting automatic color, by not providing color.
-        if( color != COL_AUTO )
+        if( aColor != COL_AUTO )
         {
-            color.SetTransparency(0);
+            aColor.SetTransparency(0);
             // TODO: special handle embossed/engraved
-            WriteSolidFill( color );
+            WriteSolidFill( aColor );
         }
     }
 
     if( ( underline != nullptr ) && CGETAD( CharUnderlineColor ) )
     {
-        ::Color color = ::Color(*o3tl::doAccess<sal_uInt32>(mAny));
+        ::Color aColor = ::Color(*o3tl::doAccess<sal_uInt32>(mAny));
         // if color is automatic, then we shouldn't write information about color but to take color from character
-        if( color != COL_AUTO )
+        if( aColor != COL_AUTO )
         {
             mpFS->startElementNS( XML_a, XML_uFill, FSEND);
-            WriteSolidFill( color );
+            WriteSolidFill( aColor );
             mpFS->endElementNS( XML_a, XML_uFill );
         }
         else

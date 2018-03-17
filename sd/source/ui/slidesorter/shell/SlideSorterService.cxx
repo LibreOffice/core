@@ -302,10 +302,9 @@ util::Color SAL_CALL SlideSorterService::getBackgroundColor()
 {
     ThrowIfDisposed();
     if (mpSlideSorter.get() == nullptr || ! mpSlideSorter->IsValid())
-        return util::Color();
+        return COL_BLACK.GetColorNumber();
     else
-        return util::Color(
-            mpSlideSorter->GetProperties()->GetBackgroundColor());
+        return mpSlideSorter->GetProperties()->GetBackgroundColor().GetColorNumber();
 }
 
 void SAL_CALL SlideSorterService::setBackgroundColor (util::Color aBackgroundColor)
@@ -319,10 +318,9 @@ util::Color SAL_CALL SlideSorterService::getTextColor()
 {
     ThrowIfDisposed();
     if (mpSlideSorter.get() == nullptr || ! mpSlideSorter->IsValid())
-        return util::Color();
+        return COL_BLACK.GetColorNumber();
     else
-        return util::Color(
-            mpSlideSorter->GetProperties()->GetTextColor());
+        return mpSlideSorter->GetProperties()->GetTextColor().GetColorNumber();
 }
 
 void SAL_CALL SlideSorterService::setTextColor (util::Color aTextColor)
@@ -336,10 +334,9 @@ util::Color SAL_CALL SlideSorterService::getSelectionColor()
 {
     ThrowIfDisposed();
     if (mpSlideSorter.get() == nullptr || ! mpSlideSorter->IsValid())
-        return util::Color();
+        return COL_BLACK.GetColorNumber();
     else
-        return util::Color(
-            mpSlideSorter->GetProperties()->GetSelectionColor());
+        return mpSlideSorter->GetProperties()->GetSelectionColor().GetColorNumber();
 }
 
 void SAL_CALL SlideSorterService::setSelectionColor (util::Color aSelectionColor)
@@ -353,10 +350,9 @@ util::Color SAL_CALL SlideSorterService::getHighlightColor()
 {
     ThrowIfDisposed();
     if (mpSlideSorter.get() == nullptr || ! mpSlideSorter->IsValid())
-        return util::Color();
+        return COL_BLACK.GetColorNumber();
     else
-        return util::Color(
-            mpSlideSorter->GetProperties()->GetHighlightColor());
+        return mpSlideSorter->GetProperties()->GetHighlightColor().GetColorNumber();
 }
 
 void SAL_CALL SlideSorterService::setHighlightColor (util::Color aHighlightColor)

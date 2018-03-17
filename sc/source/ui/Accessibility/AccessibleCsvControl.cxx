@@ -344,14 +344,14 @@ sal_Int32 SAL_CALL ScAccessibleCsvRuler::getForeground(  )
 {
     SolarMutexGuard aGuard;
     ensureAlive();
-    return sal_Int32(implGetRuler().GetSettings().GetStyleSettings().GetLabelTextColor());
+    return implGetRuler().GetSettings().GetStyleSettings().GetLabelTextColor().GetColorNumber();
 }
 
 sal_Int32 SAL_CALL ScAccessibleCsvRuler::getBackground(  )
 {
     SolarMutexGuard aGuard;
     ensureAlive();
-    return sal_Int32(implGetRuler().GetSettings().GetStyleSettings().GetFaceColor());
+    return implGetRuler().GetSettings().GetStyleSettings().GetFaceColor().GetColorNumber();
 }
 
 // XAccessibleContext ---------------------------------------------------------
@@ -878,14 +878,14 @@ sal_Int32 SAL_CALL ScAccessibleCsvGrid::getForeground(  )
 {
     SolarMutexGuard aGuard;
     ensureAlive();
-    return sal_Int32(implGetGrid().GetSettings().GetStyleSettings().GetButtonTextColor());
+    return implGetGrid().GetSettings().GetStyleSettings().GetButtonTextColor().GetColorNumber();
 }
 
 sal_Int32 SAL_CALL ScAccessibleCsvGrid::getBackground(  )
 {
     SolarMutexGuard aGuard;
     ensureAlive();
-    return sal_Int32(SC_MOD()->GetColorConfig().GetColorValue( ::svtools::DOCCOLOR ).nColor);
+    return SC_MOD()->GetColorConfig().GetColorValue( ::svtools::DOCCOLOR ).nColor.GetColorNumber();
 }
 
 // XAccessibleContext ---------------------------------------------------------
@@ -1395,14 +1395,14 @@ sal_Int32 SAL_CALL ScAccessibleCsvCell::getForeground(  )
 {
     SolarMutexGuard aGuard;
     ensureAlive();
-    return sal_Int32(implGetGrid().GetSettings().GetStyleSettings().GetButtonTextColor());
+    return implGetGrid().GetSettings().GetStyleSettings().GetButtonTextColor().GetColorNumber();
 }
 
 sal_Int32 SAL_CALL ScAccessibleCsvCell::getBackground(  )
 {
     SolarMutexGuard aGuard;
     ensureAlive();
-    return sal_Int32(SC_MOD()->GetColorConfig().GetColorValue( ::svtools::DOCCOLOR ).nColor);
+    return SC_MOD()->GetColorConfig().GetColorValue( ::svtools::DOCCOLOR ).nColor.GetColorNumber();
 }
 
 // XAccessibleContext -----------------------------------------------------

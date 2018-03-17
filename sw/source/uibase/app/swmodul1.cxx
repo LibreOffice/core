@@ -445,7 +445,7 @@ boost::property_tree::ptree lcl_AuthorToJson(const OUString& rAuthor, std::size_
     boost::property_tree::ptree aRet;
     aRet.put("index", nIndex);
     aRet.put("name", rAuthor.toUtf8().getStr());
-    aRet.put("color", sal_uInt32(lcl_GetAuthorColor(nIndex)));
+    aRet.put("color", lcl_GetAuthorColor(nIndex).GetColorNumber());
     return aRet;
 }
 

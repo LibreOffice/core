@@ -432,7 +432,7 @@ sal_Int32 SAL_CALL SwAccessibleCell::getBackground()
             }
         }
     }
-    return sal_Int32(crBack);
+    return crBack.GetColorNumber();
 }
 
 // XAccessibleSelection

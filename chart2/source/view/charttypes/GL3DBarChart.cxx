@@ -919,7 +919,7 @@ sal_uInt32 GL3DBarChart::barIdAtPosition(const Point& rPos)
         mpWindow->getContext().makeCurrent();
         mpRenderer->SetPickingMode(true);
         renderFrame();
-        nId = sal_uInt32(mpRenderer->GetPixelColorFromPoint(rPos.X(), rPos.Y()));
+        nId = mpRenderer->GetPixelColorFromPoint(rPos.X(), rPos.Y()).GetColorNumber();
         mpRenderer->SetPickingMode(false);
         mpWindow->getContext().resetCurrent();
     }
@@ -1454,18 +1454,18 @@ void GL3DBarChart::updateScroll()
     }
 }
 
-void GL3DBarChart::processAutoFly(sal_uInt32 nId, Color nColor)
+void GL3DBarChart::processAutoFly(sal_uInt32 nId, Color aColor)
 {
     //record the color
-    Color nPreColor = maBarColorMap[nId];
-    maBarColorMap[nId] = nColor;
+    Color aPreColor = maBarColorMap[nId];
+    maBarColorMap[nId] = aColor;
     //if has manul event, just record the color and process manul event first
     if (maRenderEvent != EVENT_NONE)
     {
         return;
     }
     //calc the percentage of color change
-    int nColorRate = (sal_uInt32(nColor) - sal_uInt32(nPreColor)) * 100 / sal_uInt32(nPreColor);
+    int nColorRate = (aColor.GetColorNumber() - aPreColor.GetColorNumber()) * 100 / aPreColor.GetColorNumber();
     nColorRate = abs(nColorRate);
     if (nColorRate >= FLY_THRESHOLD)
     {

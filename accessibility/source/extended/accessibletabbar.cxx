@@ -410,44 +410,49 @@ namespace accessibility
     }
 
 
-    sal_Int32 AccessibleTabBar::getForeground(  )
+    sal_Int32 AccessibleTabBar::getForeground()
     {
-        OExternalLockGuard aGuard( this );
+        OExternalLockGuard aGuard(this);
 
-        Color nColor;
-        if ( m_pTabBar )
+        Color aColor;
+
+        if (m_pTabBar)
         {
-            if ( m_pTabBar->IsControlForeground() )
-                nColor = m_pTabBar->GetControlForeground();
+            if (m_pTabBar->IsControlForeground())
+            {
+                aColor = m_pTabBar->GetControlForeground();
+            }
             else
             {
                 vcl::Font aFont;
-                if ( m_pTabBar->IsControlFont() )
+
+                if (m_pTabBar->IsControlFont())
                     aFont = m_pTabBar->GetControlFont();
                 else
                     aFont = m_pTabBar->GetFont();
-                nColor = aFont.GetColor();
+
+                aColor = aFont.GetColor();
             }
         }
 
-        return sal_Int32(nColor);
+        return aColor.GetColorNumber();
     }
 
 
-    sal_Int32 AccessibleTabBar::getBackground(  )
+    sal_Int32 AccessibleTabBar::getBackground()
     {
-        OExternalLockGuard aGuard( this );
+        OExternalLockGuard aGuard(this);
 
-        Color nColor;
-        if ( m_pTabBar )
+        Color aColor;
+        if (m_pTabBar)
         {
-            if ( m_pTabBar->IsControlBackground() )
-                nColor = m_pTabBar->GetControlBackground();
+            if (m_pTabBar->IsControlBackground())
+                aColor = m_pTabBar->GetControlBackground();
             else
-                nColor = m_pTabBar->GetBackground().GetColor();
+                aColor = m_pTabBar->GetBackground().GetColor();
         }
 
-        return sal_Int32(nColor);
+        return aColor.GetColorNumber();
     }
 
 

@@ -756,42 +756,48 @@ uno::Reference< css::accessibility::XAccessible > SAL_CALL SvxShowCharSetItemAcc
     return uno::Reference< css::accessibility::XAccessible >();
 }
 
-sal_Int32 SAL_CALL SvxShowCharSetVirtualAcc::getForeground(  )
+sal_Int32 SAL_CALL SvxShowCharSetVirtualAcc::getForeground()
 {
-    OExternalLockGuard aGuard( this );
+    OExternalLockGuard aGuard(this);
 
-    Color nColor;
-    if ( mpParent )
+    Color aColor;
+
+    if (mpParent)
     {
-        if ( mpParent->IsControlForeground() )
-            nColor = mpParent->GetControlForeground();
+        if (mpParent->IsControlForeground())
+        {
+            aColor = mpParent->GetControlForeground();
+        }
         else
         {
             vcl::Font aFont;
-            if ( mpParent->IsControlFont() )
+            if (mpParent->IsControlFont())
                 aFont = mpParent->GetControlFont();
             else
                 aFont = mpParent->GetFont();
-            nColor = aFont.GetColor();
+
+            aColor = aFont.GetColor();
         }
     }
 
-    return sal_Int32(nColor);
+    return aColor.GetColorNumber();
 }
 
-sal_Int32 SAL_CALL SvxShowCharSetVirtualAcc::getBackground(  )
+sal_Int32 SAL_CALL SvxShowCharSetVirtualAcc::getBackground()
 {
-    OExternalLockGuard aGuard( this  );
-    Color nColor;
-    if ( mpParent )
+    OExternalLockGuard aGuard(this);
+
+    Color aColor;
+
+    if (mpParent)
     {
-        if ( mpParent->IsControlBackground() )
-            nColor = mpParent->GetControlBackground();
+        if (mpParent->IsControlBackground())
+            aColor = mpParent->GetControlBackground();
         else
-            nColor = mpParent->GetBackground().GetColor();
+            aColor = mpParent->GetBackground().GetColor();
     }
 
-    return sal_Int32(nColor);
+    return aColor.GetColorNumber();
 }
 
 sal_Int32 SAL_CALL SvxShowCharSetAcc::getForeground(  )

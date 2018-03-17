@@ -829,14 +829,14 @@ css::uno::Sequence< css::uno::Any >
 
 sal_Int32 SAL_CALL AccessibleDocumentViewBase::getForeground(  )
 {
-    return sal_Int32(COL_BLACK);
+    return COL_BLACK.GetColorNumber();
 }
 
 sal_Int32 SAL_CALL AccessibleDocumentViewBase::getBackground(  )
 {
-     ThrowIfDisposed ();
+    ThrowIfDisposed ();
     ::osl::MutexGuard aGuard (maMutex);
-    return sal_Int32(mpViewShell->GetView()->getColorConfig().GetColorValue( ::svtools::DOCCOLOR ).nColor);
+    return mpViewShell->GetView()->getColorConfig().GetColorValue( ::svtools::DOCCOLOR ).nColor.GetColorNumber();
 }
 } // end of namespace accessibility
 

@@ -218,11 +218,11 @@ namespace frm
             }
             if ( nNonVoids & PERSIST_TEXTCOLOR )
             {
-               _rxOutStream->writeLong( sal_Int32(getTextColor()) );
+               _rxOutStream->writeLong(getTextColor().GetColorNumber());
             }
             if ( nNonVoids & PERSIST_TEXTLINECOLOR )
             {
-                _rxOutStream->writeLong( sal_Int32(getTextLineColor()) );
+                _rxOutStream->writeLong( getTextLineColor().GetColorNumber() );
             }
         }
 

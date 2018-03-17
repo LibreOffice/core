@@ -394,15 +394,13 @@ void SAL_CALL ThumbnailViewAcc::grabFocus()
 sal_Int32 SAL_CALL ThumbnailViewAcc::getForeground(  )
 {
     ThrowIfDisposed();
-    Color nColor = Application::GetSettings().GetStyleSettings().GetWindowTextColor();
-    return static_cast<sal_Int32>(nColor);
+    return Application::GetSettings().GetStyleSettings().GetWindowTextColor().GetColorNumber();
 }
 
 sal_Int32 SAL_CALL ThumbnailViewAcc::getBackground(  )
 {
     ThrowIfDisposed();
-    Color nColor = Application::GetSettings().GetStyleSettings().GetWindowColor();
-    return static_cast<sal_Int32>(nColor);
+    return Application::GetSettings().GetStyleSettings().GetWindowColor().GetColorNumber();
 }
 
 void SAL_CALL ThumbnailViewAcc::selectAccessibleChild( sal_Int32 nChildIndex )
@@ -882,15 +880,14 @@ void SAL_CALL ThumbnailViewItemAcc::grabFocus()
     // nothing to do
 }
 
-sal_Int32 SAL_CALL ThumbnailViewItemAcc::getForeground(  )
+sal_Int32 SAL_CALL ThumbnailViewItemAcc::getForeground()
 {
-    Color nColor = Application::GetSettings().GetStyleSettings().GetWindowTextColor();
-    return static_cast<sal_Int32>(nColor);
+    return Application::GetSettings().GetStyleSettings().GetWindowTextColor().GetColorNumber();
 }
 
-sal_Int32 SAL_CALL ThumbnailViewItemAcc::getBackground(  )
+sal_Int32 SAL_CALL ThumbnailViewItemAcc::getBackground()
 {
-    return static_cast<sal_Int32>(Application::GetSettings().GetStyleSettings().GetWindowColor());
+    return Application::GetSettings().GetStyleSettings().GetWindowColor().GetColorNumber();
 }
 
 sal_Int64 SAL_CALL ThumbnailViewItemAcc::getSomething( const uno::Sequence< sal_Int8 >& rId )

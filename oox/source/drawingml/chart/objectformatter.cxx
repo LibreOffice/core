@@ -882,11 +882,10 @@ TextFormatter::TextFormatter( ObjectFormatterData& rData, const AutoTextEntry* p
         if( const Theme* pTheme = mrData.mrFilter.getCurrentTheme() )
             if( const TextCharacterProperties* pTextProps = pTheme->getFontStyle( pAutoTextEntry->mnThemedFont ) )
                 *mxAutoText = *pTextProps;
-        ::Color nTextColor = getPhColor( -1 );
-        if( sal_Int32(nTextColor) >= 0 ) {
-            mxAutoText->maFillProperties.maFillColor.setSrgbClr( nTextColor );
-            mxAutoText->maFillProperties.moFillType.set(XML_solidFill);
-        }
+
+        ::Color nTextColor = getPhColor( -1 ).GetColorNumber();
+        mxAutoText->maFillProperties.maFillColor.setSrgbClr( nTextColor );
+        mxAutoText->maFillProperties.moFillType.set(XML_solidFill);
         mxAutoText->moHeight = pAutoTextEntry->mnDefFontSize;
         mxAutoText->moBold = pAutoTextEntry->mbBold;
 

@@ -202,22 +202,22 @@ Color::Color() :
 {
 }
 
-::Color Color::getDmlPresetColor( sal_Int32 nToken, ::Color nDefaultRgb )
+::Color Color::getDmlPresetColor( sal_Int32 nToken, ::Color /* nDefaultRgb */ )
 {
     /*  Do not pass nDefaultRgb to ContainerHelper::getVectorElement(), to be
         able to catch the existing vector entries without corresponding XML
         token identifier. */
     ::Color nRgbValue = ContainerHelper::getVectorElement( StaticPresetColorsPool::get().maDmlColors, nToken, API_RGB_TRANSPARENT );
-    return (sal_Int32(nRgbValue) >= 0) ? nRgbValue : nDefaultRgb;
+    return nRgbValue;
 }
 
-::Color Color::getVmlPresetColor( sal_Int32 nToken, ::Color nDefaultRgb )
+::Color Color::getVmlPresetColor( sal_Int32 nToken, ::Color /* nDefaultRgb */ )
 {
     /*  Do not pass nDefaultRgb to ContainerHelper::getVectorElement(), to be
         able to catch the existing vector entries without corresponding XML
         token identifier. */
     ::Color nRgbValue = ContainerHelper::getVectorElement( StaticPresetColorsPool::get().maVmlColors, nToken, API_RGB_TRANSPARENT );
-    return (sal_Int32(nRgbValue) >= 0) ? nRgbValue : nDefaultRgb;
+    return nRgbValue;
 }
 
 void Color::setUnused()
@@ -227,7 +227,7 @@ void Color::setUnused()
 
 void Color::setSrgbClr( ::Color nRgb )
 {
-    setSrgbClr(sal_Int32(nRgb));
+    setSrgbClr(nRgb.GetColorNumber());
 }
 
 void Color::setSrgbClr( sal_Int32 nRgb )
@@ -262,9 +262,7 @@ void Color::setHslClr( sal_Int32 nHue, sal_Int32 nSat, sal_Int32 nLum )
 void Color::setPrstClr( sal_Int32 nToken )
 {
     ::Color nRgbValue = getDmlPresetColor( nToken, API_RGB_TRANSPARENT );
-    OSL_ENSURE( sal_Int32(nRgbValue) >= 0, "Color::setPrstClr - invalid preset color token" );
-    if( sal_Int32(nRgbValue) >= 0 )
-        setSrgbClr( nRgbValue );
+    setSrgbClr( nRgbValue );
 }
 
 void Color::setSchemeClr( sal_Int32 nToken )
@@ -444,7 +442,7 @@ void Color::clearTransparence()
 
     switch( meMode )
     {
-        case COLOR_UNUSED:  mnC1 = sal_Int32(API_RGB_TRANSPARENT); break;
+        case COLOR_UNUSED:  mnC1 = API_RGB_TRANSPARENT.GetColorNumber(); break;
 
         case COLOR_RGB:     break;  // nothing to do
         case COLOR_CRGB:    break;  // nothing to do
@@ -585,7 +583,7 @@ void Color::clearTransparence()
     }
     else // if( meMode != COLOR_UNUSED )
     {
-        mnC1 = sal_Int32(API_RGB_TRANSPARENT);
+        mnC1 = API_RGB_TRANSPARENT.GetColorNumber();
     }
 
     sal_Int32 nRet = mnC1;
@@ -621,7 +619,8 @@ sal_Int16 Color::getTransparency() const
 
 void Color::setResolvedRgb( ::Color nRgb ) const
 {
-    meMode = (sal_Int32(nRgb) < 0) ? COLOR_UNUSED : COLOR_RGB;
+    meMode = COLOR_RGB;
+
     lclRgbToRgbComponents( mnC1, mnC2, mnC3, nRgb );
 }
 

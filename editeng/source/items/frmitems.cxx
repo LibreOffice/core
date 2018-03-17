@@ -1078,9 +1078,9 @@ bool SvxShadowItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
         default: ; // prevent warning
     }
     aShadow.Location = eSet;
-    aShadow.ShadowWidth =   bConvert ? convertTwipToMm100(nWidth) : nWidth;
+    aShadow.ShadowWidth = bConvert ? convertTwipToMm100(nWidth) : nWidth;
     aShadow.IsTransparent = aShadowColor.GetTransparency() > 0;
-    aShadow.Color = sal_Int32(aShadowColor);
+    aShadow.Color = aShadowColor.GetColorNumber();
 
     sal_Int8 nTransparence = rtl::math::round(float(aShadowColor.GetTransparency() * 100) / 255);
 
@@ -1132,7 +1132,7 @@ bool SvxShadowItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             {
                 Color aColor(aShadow.Color);
                 aColor.SetTransparency(rtl::math::round(float(nTransparence * 255) / 100));
-                aShadow.Color = sal_Int32(aColor);
+                aShadow.Color = aColor.GetColorNumber();
             }
             break;
         }
@@ -1429,7 +1429,7 @@ table::BorderLine2 SvxBoxItem::SvxLineToLine(const SvxBorderLine* pLine, bool bC
     table::BorderLine2 aLine;
     if(pLine)
     {
-        aLine.Color          = sal_Int32(pLine->GetColor());
+        aLine.Color          = pLine->GetColor().GetColorNumber();
         aLine.InnerLineWidth = sal_uInt16( bConvert ? convertTwipToMm100(pLine->GetInWidth() ): pLine->GetInWidth() );
         aLine.OuterLineWidth = sal_uInt16( bConvert ? convertTwipToMm100(pLine->GetOutWidth()): pLine->GetOutWidth() );
         aLine.LineDistance   = sal_uInt16( bConvert ? convertTwipToMm100(pLine->GetDistance()): pLine->GetDistance() );

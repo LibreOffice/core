@@ -2105,7 +2105,7 @@ IMPL_LINK( SlideshowImpl, ContextMenuSelectHdl, Menu *, pMenu, bool )
         if (aColorDlg.Execute() )
         {
             aColor = aColorDlg.GetColor();
-            setPenColor(sal_Int32(aColor));
+            setPenColor(aColor.GetColorNumber());
         }
         mbWasPaused = false;
     }

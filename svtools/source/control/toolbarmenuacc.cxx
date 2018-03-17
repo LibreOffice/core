@@ -394,15 +394,13 @@ void SAL_CALL ToolbarMenuAcc::grabFocus()
 sal_Int32 SAL_CALL ToolbarMenuAcc::getForeground()
 {
     ThrowIfDisposed();
-    Color nColor = Application::GetSettings().GetStyleSettings().GetMenuTextColor();
-    return static_cast<sal_Int32>(nColor);
+    return Application::GetSettings().GetStyleSettings().GetMenuTextColor().GetColorNumber();
 }
 
 sal_Int32 SAL_CALL ToolbarMenuAcc::getBackground()
 {
     ThrowIfDisposed();
-    Color nColor = Application::GetSettings().GetStyleSettings().GetMenuColor();
-    return static_cast<sal_Int32>(nColor);
+    return Application::GetSettings().GetStyleSettings().GetMenuColor().GetColorNumber();
 }
 
 void SAL_CALL ToolbarMenuAcc::selectAccessibleChild( sal_Int32 nChildIndex )
@@ -818,12 +816,12 @@ void SAL_CALL ToolbarMenuEntryAcc::grabFocus()
 
 sal_Int32 SAL_CALL ToolbarMenuEntryAcc::getForeground(  )
 {
-    return static_cast<sal_Int32>(Application::GetSettings().GetStyleSettings().GetMenuTextColor());
+    return Application::GetSettings().GetStyleSettings().GetMenuTextColor().GetColorNumber();
 }
 
 sal_Int32 SAL_CALL ToolbarMenuEntryAcc::getBackground(  )
 {
-    return static_cast<sal_Int32>(Application::GetSettings().GetStyleSettings().GetMenuColor());
+    return Application::GetSettings().GetStyleSettings().GetMenuColor().GetColorNumber();
 }
 
 }

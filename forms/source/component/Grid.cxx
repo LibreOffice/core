@@ -843,7 +843,7 @@ void OGridControlModel::write(const Reference<XObjectOutputStream>& _rxOutStream
         _rxOutStream->writeBoolean(getBOOL(m_aTabStop));
     _rxOutStream->writeBoolean(m_bNavigation);
     if (nAnyMask & TEXTCOLOR)
-        _rxOutStream->writeLong( sal_Int32(getTextColor()) );
+        _rxOutStream->writeLong( getTextColor().GetColorNumber() );
     // new since version 6
     _rxOutStream << m_sHelpText;
     if (nAnyMask & FONTDESCRIPTOR)

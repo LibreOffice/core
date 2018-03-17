@@ -237,12 +237,16 @@ void SAL_CALL OImageControl::setHyperLinkName(const OUString & the_value)
 ::sal_Int32 SAL_CALL OImageControl::getControlBackground()
 {
     ::osl::MutexGuard aGuard(m_aMutex);
-    return sal_Int32(m_aProps.aFormatProperties.m_bBackgroundTransparent ? COL_TRANSPARENT : m_aProps.aFormatProperties.nBackgroundColor);
+
+    if (m_aProps.aFormatProperties.m_bBackgroundTransparent)
+       return COL_TRANSPARENT.GetColorNumber();
+
+    return m_aProps.aFormatProperties.nBackgroundColor;
 }
 
 void SAL_CALL OImageControl::setControlBackground( ::sal_Int32 _backgroundcolor )
 {
-    bool bTransparent = _backgroundcolor == static_cast<sal_Int32>(COL_TRANSPARENT);
+    bool bTransparent = static_cast<sal_uInt32>(_backgroundcolor) == COL_TRANSPARENT.GetColorNumber();
     setControlBackgroundTransparent(bTransparent);
     if ( !bTransparent )
         set(PROPERTY_CONTROLBACKGROUND,_backgroundcolor,m_aProps.aFormatProperties.nBackgroundColor);
@@ -258,7 +262,7 @@ void SAL_CALL OImageControl::setControlBackgroundTransparent( sal_Bool _controlb
 {
     set(PROPERTY_CONTROLBACKGROUNDTRANSPARENT,_controlbackgroundtransparent,m_aProps.aFormatProperties.m_bBackgroundTransparent);
     if ( _controlbackgroundtransparent )
-        set(PROPERTY_CONTROLBACKGROUND,static_cast<sal_Int32>(COL_TRANSPARENT),m_aProps.aFormatProperties.nBackgroundColor);
+        set(PROPERTY_CONTROLBACKGROUND,static_cast<sal_Int32>(COL_TRANSPARENT.GetColorNumber()),m_aProps.aFormatProperties.nBackgroundColor);
 }
 
 

@@ -1080,7 +1080,7 @@ namespace wwUtility
     inline sal_uInt32 RGBToBGR(::Color nColour)
     {
         // we can use this because the translation is symmetric
-        return msfilter::util::BGRToRGB(sal_uInt32(nColour));
+        return msfilter::util::BGRToRGB(nColour.GetColorNumber());
     }
 }
 

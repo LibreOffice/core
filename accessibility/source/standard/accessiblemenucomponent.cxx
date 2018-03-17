@@ -277,9 +277,7 @@ sal_Int32 OAccessibleMenuComponent::getForeground(  )
     OExternalLockGuard aGuard( this );
 
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
-    Color nColor = rStyleSettings.GetMenuTextColor();
-
-    return sal_Int32(nColor);
+    return rStyleSettings.GetMenuTextColor().GetColorNumber();
 }
 
 

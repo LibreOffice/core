@@ -478,7 +478,7 @@ void TypeGroupConverter::convertMarker( PropertySet& rPropSet, sal_Int32 nOoxSym
         if(xShapeProps.is())
         {
             Color aFillColor = xShapeProps->getFillProperties().maFillColor;
-            aSymbol.FillColor = sal_Int32(aFillColor.getColor(getFilter().getGraphicHelper()));
+            aSymbol.FillColor = aFillColor.getColor(getFilter().getGraphicHelper()).GetColorNumber();
             rPropSet.setProperty(PROP_Color, aSymbol.FillColor);
         }
 

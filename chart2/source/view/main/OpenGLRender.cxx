@@ -880,7 +880,7 @@ void OpenGLRender::SetBackGroundColor(::Color color1, ::Color color2, css::drawi
     m_BackgroundColor[13] = static_cast<float>(g) / 255.0f;
     m_BackgroundColor[14] = static_cast<float>(b) / 255.0f;
     m_BackgroundColor[15] = fillStyle != css::drawing::FillStyle_NONE ? 1.0 : 0.0;
-    SAL_INFO("chart2.opengl", "color1 = " << sal_uInt32(color1) << ", color2 = " << sal_uInt32(color2));
+    SAL_INFO("chart2.opengl", "color1 = " << color1.GetColorNumber() << ", color2 = " << color2.GetColorNumber());
 
 }
 

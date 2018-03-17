@@ -1581,7 +1581,7 @@ sal_Int32 SAL_CALL SwAccessibleTable::getBackground()
             }
         }
     }
-    return sal_Int32(crBack);
+    return crBack.GetColorNumber();
 }
 
 void SwAccessibleTable::FireSelectionEvent( )

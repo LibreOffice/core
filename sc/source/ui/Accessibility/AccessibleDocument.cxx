@@ -2437,14 +2437,14 @@ css::uno::Sequence< css::uno::Any >
 
 sal_Int32 SAL_CALL ScAccessibleDocument::getForeground(  )
 {
-    return sal_Int32(COL_BLACK);
+    return COL_BLACK.GetColorNumber();
 }
 
 sal_Int32 SAL_CALL ScAccessibleDocument::getBackground(  )
 {
     SolarMutexGuard aGuard;
     IsObjectValid();
-    return sal_Int32(SC_MOD()->GetColorConfig().GetColorValue( ::svtools::DOCCOLOR ).nColor);
+    return SC_MOD()->GetColorConfig().GetColorValue( ::svtools::DOCCOLOR ).nColor.GetColorNumber();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

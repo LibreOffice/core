@@ -254,7 +254,8 @@ sal_Int32 SAL_CALL SmGraphicAccessible::getForeground()
 
     if (!pWin)
         throw RuntimeException();
-    return static_cast<sal_Int32>(pWin->GetTextColor());
+
+    return pWin->GetTextColor().GetColorNumber();
 }
 
 sal_Int32 SAL_CALL SmGraphicAccessible::getBackground()
@@ -263,13 +264,16 @@ sal_Int32 SAL_CALL SmGraphicAccessible::getBackground()
 
     if (!pWin)
         throw RuntimeException();
+
     Wallpaper aWall( pWin->GetDisplayBackground() );
-    Color nCol;
+    Color aCol;
+
     if (aWall.IsBitmap() || aWall.IsGradient())
-        nCol = pWin->GetSettings().GetStyleSettings().GetWindowColor();
+        aCol = pWin->GetSettings().GetStyleSettings().GetWindowColor();
     else
-        nCol = aWall.GetColor();
-    return static_cast<sal_Int32>(nCol);
+        aCol = aWall.GetColor();
+
+    return aCol.GetColorNumber();
 }
 
 sal_Int32 SAL_CALL SmGraphicAccessible::getAccessibleChildCount()
@@ -1677,7 +1681,8 @@ sal_Int32 SAL_CALL SmEditAccessible::getForeground()
 
     if (!pWin)
         throw RuntimeException();
-    return static_cast<sal_Int32>(pWin->GetTextColor());
+
+    return pWin->GetTextColor().GetColorNumber();
 }
 
 sal_Int32 SAL_CALL SmEditAccessible::getBackground()
@@ -1686,13 +1691,16 @@ sal_Int32 SAL_CALL SmEditAccessible::getBackground()
 
     if (!pWin)
         throw RuntimeException();
+
     Wallpaper aWall( pWin->GetDisplayBackground() );
-    Color nCol;
+    Color aCol;
+
     if (aWall.IsBitmap() || aWall.IsGradient())
-        nCol = pWin->GetSettings().GetStyleSettings().GetWindowColor();
+        aCol = pWin->GetSettings().GetStyleSettings().GetWindowColor();
     else
-        nCol = aWall.GetColor();
-    return static_cast<sal_Int32>(nCol);
+        aCol = aWall.GetColor();
+
+    return aCol.GetColorNumber();
 }
 
 // XAccessibleContext

@@ -160,11 +160,11 @@ void Theme::UpdateTheme()
 
         setPropertyValue(
             maPropertyIdToNameMap[Paint_DeckBackground],
-            Any(sal_Int32(aBaseBackgroundColor.GetRGBColor())));
+            Any(aBaseBackgroundColor.GetRGBColor().GetColorNumber()));
 
         setPropertyValue(
             maPropertyIdToNameMap[Paint_DeckTitleBarBackground],
-            Any(sal_Int32(aBaseBackgroundColor.GetRGBColor())));
+            Any(aBaseBackgroundColor.GetRGBColor().GetColorNumber()));
         setPropertyValue(
             maPropertyIdToNameMap[Int_DeckLeftPadding],
             Any(sal_Int32(2)));
@@ -188,7 +188,7 @@ void Theme::UpdateTheme()
             Any(sal_Int32(3)));
         setPropertyValue(
             maPropertyIdToNameMap[Color_DeckTitleFont],
-            Any(sal_Int32(rStyle.GetFontColor().GetRGBColor())));
+            Any(sal_Int32(rStyle.GetFontColor().GetRGBColor().GetColorNumber())));
         setPropertyValue(
             maPropertyIdToNameMap[Int_DeckTitleBarHeight],
             Any(sal_Int32(Alternatives(
@@ -197,14 +197,14 @@ void Theme::UpdateTheme()
                         rStyle.GetFloatTitleHeight()))));
         setPropertyValue(
             maPropertyIdToNameMap[Paint_PanelBackground],
-            Any(sal_Int32(aBaseBackgroundColor.GetRGBColor())));
+            Any(sal_Int32(aBaseBackgroundColor.GetRGBColor().GetColorNumber())));
 
         setPropertyValue(
             maPropertyIdToNameMap[Paint_PanelTitleBarBackground],
             Any(Tools::VclToAwtGradient(Gradient(
                         GradientStyle::Linear,
-                        aSecondColor.GetRGBColor(),
-                        aBaseBackgroundColor.GetRGBColor()
+                        aSecondColor.GetRGBColor().GetColorNumber(),
+                        aBaseBackgroundColor.GetRGBColor().GetColorNumber()
                         ))));
         setPropertyValue(
             maPropertyIdToNameMap[Color_PanelTitleFont],
@@ -217,7 +217,7 @@ void Theme::UpdateTheme()
                         rStyle.GetTitleHeight()))));
         setPropertyValue(
             maPropertyIdToNameMap[Paint_TabBarBackground],
-            Any(sal_Int32(aBaseBackgroundColor.GetRGBColor())));
+            Any(sal_Int32(aBaseBackgroundColor.GetRGBColor().GetColorNumber())));
         setPropertyValue(
             maPropertyIdToNameMap[Int_TabBarLeftPadding],
             Any(sal_Int32(2)));
@@ -236,7 +236,7 @@ void Theme::UpdateTheme()
             Any(sal_Int32(6)));
         setPropertyValue(
             maPropertyIdToNameMap[Color_TabMenuSeparator],
-            Any(sal_Int32(aBorderColor.GetRGBColor())));
+            Any(sal_Int32(aBorderColor.GetRGBColor().GetColorNumber())));
         setPropertyValue(
             maPropertyIdToNameMap[Int_TabMenuSeparatorPadding],
             Any(sal_Int32(7)));
@@ -249,36 +249,36 @@ void Theme::UpdateTheme()
             Any(sal_Int32(32)));
         setPropertyValue(
             maPropertyIdToNameMap[Color_TabItemBorder],
-            Any(sal_Int32(rStyle.GetActiveBorderColor().GetRGBColor())));
+            Any(sal_Int32(rStyle.GetActiveBorderColor().GetRGBColor().GetColorNumber())));
 
         setPropertyValue(
             maPropertyIdToNameMap[Paint_DropDownBackground],
-            Any(sal_Int32(aBaseBackgroundColor.GetRGBColor())));
+            Any(sal_Int32(aBaseBackgroundColor.GetRGBColor().GetColorNumber())));
         setPropertyValue(
             maPropertyIdToNameMap[Color_DropDownBorder],
-            Any(sal_Int32(rStyle.GetActiveBorderColor().GetRGBColor())));
+            Any(sal_Int32(rStyle.GetActiveBorderColor().GetRGBColor().GetColorNumber())));
 
         setPropertyValue(
             maPropertyIdToNameMap[Color_Highlight],
-            Any(sal_Int32(rStyle.GetHighlightColor().GetRGBColor())));
+            Any(sal_Int32(rStyle.GetHighlightColor().GetRGBColor().GetColorNumber())));
         setPropertyValue(
             maPropertyIdToNameMap[Color_HighlightText],
-            Any(sal_Int32(rStyle.GetHighlightTextColor().GetRGBColor())));
+            Any(sal_Int32(rStyle.GetHighlightTextColor().GetRGBColor().GetColorNumber())));
 
         setPropertyValue(
             maPropertyIdToNameMap[Paint_TabItemBackgroundNormal],
             Any());
         setPropertyValue(
             maPropertyIdToNameMap[Paint_TabItemBackgroundHighlight],
-            Any(sal_Int32(rStyle.GetActiveTabColor().GetRGBColor())));
+            Any(sal_Int32(rStyle.GetActiveTabColor().GetRGBColor().GetColorNumber())));
 
         setPropertyValue(
             maPropertyIdToNameMap[Paint_HorizontalBorder],
-            Any(sal_Int32(aBorderColor.GetRGBColor())));
+            Any(sal_Int32(aBorderColor.GetRGBColor().GetColorNumber())));
 
         setPropertyValue(
             maPropertyIdToNameMap[Paint_VerticalBorder],
-            Any(sal_Int32(aBorderColor.GetRGBColor())));
+            Any(sal_Int32(aBorderColor.GetRGBColor().GetColorNumber())));
         setPropertyValue(
             maPropertyIdToNameMap[Image_Grip],
             Any(OUString("private:graphicrepository/sfx2/res/grip.png")));
@@ -317,17 +317,17 @@ void Theme::UpdateTheme()
             maPropertyIdToNameMap[Paint_ToolBoxBorderTopLeft],
             mbIsHighContrastMode
                 ? Any(util::Color(sal_uInt32(0x00ff00)))
-                : Any(util::Color(aToolBoxBorderColor.GetRGBColor())));
+                : Any(util::Color(aToolBoxBorderColor.GetRGBColor().GetColorNumber())));
         setPropertyValue(
             maPropertyIdToNameMap[Paint_ToolBoxBorderCenterCorners],
             mbIsHighContrastMode
                 ? Any(util::Color(sal_uInt32(0x00ff00)))
-                : Any(util::Color(aToolBoxBorderColor.GetRGBColor())));
+                : Any(util::Color(aToolBoxBorderColor.GetRGBColor().GetColorNumber())));
         setPropertyValue(
             maPropertyIdToNameMap[Paint_ToolBoxBorderBottomRight],
             mbIsHighContrastMode
                 ? Any(util::Color(sal_uInt32(0x00ff00)))
-                : Any(util::Color(aToolBoxBorderColor.GetRGBColor())));
+                : Any(util::Color(aToolBoxBorderColor.GetRGBColor().GetColorNumber())));
         setPropertyValue(
             maPropertyIdToNameMap[Rect_ToolBoxPadding],
             Any(awt::Rectangle(2,2,2,2)));

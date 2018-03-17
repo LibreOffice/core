@@ -349,18 +349,18 @@ void AccFrameSelector::grabFocus(  )
     mpFrameSel->GrabFocus();
 }
 
-sal_Int32 AccFrameSelector::getForeground(  )
+sal_Int32 AccFrameSelector::getForeground()
 {
     SolarMutexGuard aGuard;
     IsValid();
-    return sal_Int32(mpFrameSel->GetControlForeground());
+    return mpFrameSel->GetControlForeground().GetColorNumber();
 }
 
-sal_Int32 AccFrameSelector::getBackground(  )
+sal_Int32 AccFrameSelector::getBackground()
 {
     SolarMutexGuard aGuard;
     IsValid();
-    return sal_Int32(mpFrameSel->GetControlBackground());
+    return mpFrameSel->GetControlBackground().GetColorNumber();
 }
 
 void AccFrameSelector::addAccessibleEventListener( const Reference< XAccessibleEventListener >& xListener )

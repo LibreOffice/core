@@ -950,7 +950,7 @@ void XclChPropSetHelper::WriteLineProperties(
     }
 
     // line color
-    sal_Int32 nApiColor = sal_Int32( rLineFmt.maColor );
+    sal_Int32 nApiColor = rLineFmt.maColor.GetColorNumber();
 
     // try to insert the dash style and receive its name
     uno::Any aDashNameAny;
@@ -1082,9 +1082,9 @@ void XclChPropSetHelper::WriteMarkerProperties(
     aApiSymbol.Size = awt::Size( nApiSize, nApiSize );
 
     // symbol colors
-    aApiSymbol.FillColor = sal_Int32( rMarkerFmt.maFillColor );
+    aApiSymbol.FillColor = rMarkerFmt.maFillColor.GetColorNumber();
     aApiSymbol.BorderColor = ::get_flag( rMarkerFmt.mnFlags, EXC_CHMARKERFORMAT_NOLINE ) ?
-        aApiSymbol.FillColor : sal_Int32( rMarkerFmt.maLineColor );
+        aApiSymbol.FillColor : rMarkerFmt.maLineColor.GetColorNumber();
 
     // set the property
     rPropSet.SetProperty( EXC_CHPROP_SYMBOL, aApiSymbol );

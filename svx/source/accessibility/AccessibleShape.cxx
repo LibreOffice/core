@@ -684,21 +684,23 @@ sal_Int32 SAL_CALL AccessibleShape::getForeground()
 
 sal_Int32 SAL_CALL AccessibleShape::getBackground()
 {
-    ThrowIfDisposed ();
-    Color nColor;
+    ThrowIfDisposed();
+    Color aColor;
 
     try
     {
-        uno::Reference<beans::XPropertySet> aSet (mxShape, uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> aSet(mxShape, uno::UNO_QUERY);
+
         if (aSet.is())
         {
-            uno::Any aColor;
-            aColor = aSet->getPropertyValue ("FillColor");
-            aColor >>= nColor;
-            aColor = aSet->getPropertyValue ("FillTransparence");
+            uno::Any aColorAny;
+            aColorAny = aSet->getPropertyValue ("FillColor");
+            aColorAny >>= aColor;
+            aColorAny = aSet->getPropertyValue ("FillTransparence");
             short nTrans=0;
-            aColor >>= nTrans;
-            Color crBk(nColor);
+            aColorAny >>= nTrans;
+
+            Color crBk(aColor);
             if (nTrans == 0 )
             {
                 crBk.SetTransparency(0xff);
@@ -708,14 +710,15 @@ sal_Int32 SAL_CALL AccessibleShape::getBackground()
                 nTrans = short(256 - nTrans / 100. * 256);
                 crBk.SetTransparency(sal_uInt8(nTrans));
             }
-            nColor = crBk;
+
+            aColor = crBk;
         }
     }
     catch (const css::beans::UnknownPropertyException &)
     {
         // Ignore exception and return default color.
     }
-    return sal_Int32(nColor);
+    return aColor.GetColorNumber();
 }
 
 // XAccessibleEventBroadcaster

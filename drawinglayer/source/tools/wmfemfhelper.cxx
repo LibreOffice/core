@@ -106,7 +106,7 @@ namespace wmfemfhelper
         maMapUnit(MapUnit::Map100thMM),
         maLineColor(),
         maFillColor(),
-        maTextColor(sal_uInt32(COL_BLACK)),
+        maTextColor(COL_BLACK.GetColorNumber()),
         maTextFillColor(),
         maTextLineColor(),
         maOverlineColor(),

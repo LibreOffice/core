@@ -466,18 +466,16 @@ void SAL_CALL ValueSetAcc::grabFocus()
     mpParent->GrabFocus();
 }
 
-sal_Int32 SAL_CALL ValueSetAcc::getForeground(  )
+sal_Int32 SAL_CALL ValueSetAcc::getForeground()
 {
     ThrowIfDisposed();
-    Color nColor = Application::GetSettings().GetStyleSettings().GetWindowTextColor();
-    return static_cast<sal_Int32>(nColor);
+    return Application::GetSettings().GetStyleSettings().GetWindowTextColor().GetColorNumber();
 }
 
-sal_Int32 SAL_CALL ValueSetAcc::getBackground(  )
+sal_Int32 SAL_CALL ValueSetAcc::getBackground()
 {
     ThrowIfDisposed();
-    Color nColor = Application::GetSettings().GetStyleSettings().GetWindowColor();
-    return static_cast<sal_Int32>(nColor);
+    return Application::GetSettings().GetStyleSettings().GetWindowColor().GetColorNumber();
 }
 
 void SAL_CALL ValueSetAcc::selectAccessibleChild( sal_Int32 nChildIndex )
@@ -1008,20 +1006,21 @@ void SAL_CALL ValueItemAcc::grabFocus()
     // nothing to do
 }
 
-sal_Int32 SAL_CALL ValueItemAcc::getForeground(  )
+sal_Int32 SAL_CALL ValueItemAcc::getForeground()
 {
-    Color nColor = Application::GetSettings().GetStyleSettings().GetWindowTextColor();
-    return static_cast<sal_Int32>(nColor);
+    return Application::GetSettings().GetStyleSettings().GetWindowTextColor().GetColorNumber();
 }
 
 sal_Int32 SAL_CALL ValueItemAcc::getBackground(  )
 {
-    Color nColor;
+    Color aColor;
+
     if (mpParent && mpParent->meType == VALUESETITEM_COLOR)
-        nColor = mpParent->maColor;
+        aColor = mpParent->maColor;
     else
-        nColor = Application::GetSettings().GetStyleSettings().GetWindowColor();
-    return static_cast<sal_Int32>(nColor);
+        aColor = Application::GetSettings().GetStyleSettings().GetWindowColor();
+
+    return aColor.GetColorNumber();
 }
 
 sal_Int64 SAL_CALL ValueItemAcc::getSomething( const uno::Sequence< sal_Int8 >& rId )

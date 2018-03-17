@@ -1010,8 +1010,7 @@ ScColorScaleEntry* ScColorScaleEntryObj::getCoreObject()
 
 util::Color ScColorScaleEntryObj::getColor()
 {
-    Color aColor = getCoreObject()->GetColor();
-    return sal_Int32(aColor);
+    return getCoreObject()->GetColor().GetColorNumber();
 }
 
 void ScColorScaleEntryObj::setColor(util::Color aColor)

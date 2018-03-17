@@ -585,7 +585,7 @@ OOXMLHexColorValue::OOXMLHexColorValue(const char * pValue)
 {
     if (!strcmp(pValue, "auto"))
     {
-        mnValue = sal_uInt32(COL_AUTO);
+        mnValue = COL_AUTO.GetColorNumber();
     }
     else
     {

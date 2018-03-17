@@ -133,7 +133,7 @@ uno::Any SAL_CALL SvxUnoColorTable::getByName( const OUString& aName )
         throw container::NoSuchElementException();
 
     const XColorEntry* pEntry = pList->GetColor(nIndex);
-    return uno::Any( static_cast<sal_Int32>(pEntry->GetColor().GetRGBColor()) );
+    return uno::Any(pEntry->GetColor().GetRGBColor().GetColorNumber());
 }
 
 uno::Sequence< OUString > SAL_CALL SvxUnoColorTable::getElementNames()

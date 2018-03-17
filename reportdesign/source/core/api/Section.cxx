@@ -113,7 +113,7 @@ OSection::OSection(const uno::Reference< report::XReportDefinition >& xParentDef
 ,m_xGroup(xParentGroup)
 ,m_xReportDefinition(xParentDef)
 ,m_nHeight(3000)
-,m_nBackgroundColor(COL_TRANSPARENT)
+,m_nBackgroundColor(COL_TRANSPARENT.GetColorNumber())
 ,m_nForceNewPage(report::ForceNewPage::NONE)
 ,m_nNewRowOrCol(report::ForceNewPage::NONE)
 ,m_bKeepTogether(false)
@@ -252,12 +252,16 @@ void SAL_CALL OSection::setHeight( ::sal_uInt32 _height )
 ::sal_Int32 SAL_CALL OSection::getBackColor()
 {
     ::osl::MutexGuard aGuard(m_aMutex);
-    return sal_Int32(m_bBacktransparent ? COL_TRANSPARENT : m_nBackgroundColor);
+
+    if (m_bBacktransparent)
+       return COL_TRANSPARENT.GetColorNumber();
+
+    return m_nBackgroundColor;
 }
 
 void SAL_CALL OSection::setBackColor( ::sal_Int32 _backgroundcolor )
 {
-    bool bTransparent = _backgroundcolor == static_cast<sal_Int32>(COL_TRANSPARENT);
+    bool bTransparent = _backgroundcolor == static_cast<sal_Int32>(COL_TRANSPARENT.GetColorNumber());
     setBackTransparent(bTransparent);
     if ( !bTransparent )
         set(PROPERTY_BACKCOLOR,_backgroundcolor,m_nBackgroundColor);
@@ -273,7 +277,7 @@ void SAL_CALL OSection::setBackTransparent( sal_Bool _backtransparent )
 {
     set(PROPERTY_BACKTRANSPARENT,_backtransparent,m_bBacktransparent);
     if ( _backtransparent )
-        set(PROPERTY_BACKCOLOR,static_cast<sal_Int32>(COL_TRANSPARENT),m_nBackgroundColor);
+        set(PROPERTY_BACKCOLOR,static_cast<sal_Int32>(COL_TRANSPARENT.GetColorNumber()),m_nBackgroundColor);
 }
 
 OUString SAL_CALL OSection::getConditionalPrintExpression()

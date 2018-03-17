@@ -968,8 +968,7 @@ uno::Reference< drawing::XShape > SwHTMLParser::InsertControl(
                                                      &pItem ) &&
             xPropSetInfo->hasPropertyByName( sPropName ) )
         {
-            aTmp <<= static_cast<sal_Int32>(static_cast<const SvxColorItem *>(pItem)->GetValue()
-                                                         .GetRGBColor());
+            aTmp <<= static_cast<const SvxColorItem *>(pItem)->GetValue().GetRGBColor().GetColorNumber();
             rFCompPropSet->setPropertyValue( sPropName, aTmp );
         }
 

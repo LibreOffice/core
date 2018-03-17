@@ -321,25 +321,24 @@ namespace accessibility
                                     ( static_cast< XAccessible* > (this) ) );   // disambiguate hierarchy
     }
 
-    sal_Int32 SAL_CALL AccessibleImageBullet::getForeground(  )
+    sal_Int32 SAL_CALL AccessibleImageBullet::getForeground()
     {
 
         // #104444# Added to XAccessibleComponent interface
         svtools::ColorConfig aColorConfig;
-        Color nColor = aColorConfig.GetColorValue( svtools::FONTCOLOR ).nColor;
-        return static_cast<sal_Int32>(nColor);
+        return aColorConfig.GetColorValue(svtools::FONTCOLOR).nColor.GetColorNumber();
     }
 
-    sal_Int32 SAL_CALL AccessibleImageBullet::getBackground(  )
+    sal_Int32 SAL_CALL AccessibleImageBullet::getBackground()
     {
 
         // #104444# Added to XAccessibleComponent interface
-        Color aColor( Application::GetSettings().GetStyleSettings().GetWindowColor() );
+        Color aColor(Application::GetSettings().GetStyleSettings().GetWindowColor());
 
         // the background is transparent
-        aColor.SetTransparency( 0xFF);
+        aColor.SetTransparency(0xFF);
 
-        return static_cast<sal_Int32>( aColor );
+        return aColor.GetColorNumber();
     }
 
     OUString SAL_CALL AccessibleImageBullet::getImplementationName()

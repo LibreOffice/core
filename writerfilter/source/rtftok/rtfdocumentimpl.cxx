@@ -87,9 +87,9 @@ void putNestedAttribute(RTFSprms& rSprms, Id nParent, Id nId, const RTFValue::Po
         {
             // RTF default is 'auto', see writerfilter::dmapper::CellColorHandler
             aAttributes.set(NS_ooxml::LN_CT_Shd_color,
-                            std::make_shared<RTFValue>(sal_uInt32(COL_AUTO)));
+                            std::make_shared<RTFValue>(COL_AUTO.GetColorNumber()));
             aAttributes.set(NS_ooxml::LN_CT_Shd_fill,
-                            std::make_shared<RTFValue>(sal_uInt32(COL_AUTO)));
+                            std::make_shared<RTFValue>(COL_AUTO.GetColorNumber()));
         }
         auto pParentValue = std::make_shared<RTFValue>(aAttributes);
         rSprms.set(nParent, pParentValue, eOverwrite);

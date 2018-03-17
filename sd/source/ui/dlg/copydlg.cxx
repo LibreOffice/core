@@ -100,10 +100,10 @@ void CopyDlg::dispose()
     rStr += OUString::number(m_pMtrFldHeight->GetValue());
     rStr += OUString( TOKEN );
 
-    rStr += OUString::number( sal_uInt32(m_pLbStartColor->GetSelectEntryColor()) );
+    rStr += OUString::number(m_pLbStartColor->GetSelectEntryColor().GetColorNumber());
     rStr += OUString( TOKEN );
 
-    rStr += OUString::number( sal_uInt32(m_pLbEndColor->GetSelectEntryColor()) );
+    rStr += OUString::number(m_pLbEndColor->GetSelectEntryColor().GetColorNumber());
 
     m_pNumFldCopies.clear();
     m_pBtnSetViewData.clear();

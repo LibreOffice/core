@@ -74,11 +74,11 @@ sal_Int16 VCLXAccessiblePopupMenu::getAccessibleRole(  )
 // XAccessibleExtendedComponent
 
 
-sal_Int32 VCLXAccessiblePopupMenu::getBackground(  )
+sal_Int32 VCLXAccessiblePopupMenu::getBackground()
 {
-    OExternalLockGuard aGuard( this );
+    OExternalLockGuard aGuard(this);
 
-    return sal_Int32(Application::GetSettings().GetStyleSettings().GetMenuColor());
+    return Application::GetSettings().GetStyleSettings().GetMenuColor().GetColorNumber();
 }
 
 
