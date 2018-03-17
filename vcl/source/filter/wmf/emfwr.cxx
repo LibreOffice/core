@@ -21,14 +21,18 @@
 
 #include <algorithm>
 
-#include "emfwr.hxx"
 #include <rtl/strbuf.hxx>
 #include <tools/helpers.hxx>
 #include <tools/fract.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
+
 #include <vcl/lineinfo.hxx>
 #include <vcl/dibtools.hxx>
+#include <vcl/BitmapCropper.hxx>
+
+#include "emfwr.hxx"
+
 #include <memory>
 
 #define WIN_EMR_POLYGON                     3
@@ -1252,10 +1256,11 @@ void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
 
             case MetaActionType::BMPSCALEPART:
             {
-                const MetaBmpScalePartAction*   pA = static_cast<const MetaBmpScalePartAction*>(pAction);
-                Bitmap                          aTmp( pA->GetBitmap() );
+                const MetaBmpScalePartAction* pA = static_cast<const MetaBmpScalePartAction*>(pAction);
+                Bitmap aTmp(pA->GetBitmap());
 
-                if( aTmp.Crop( tools::Rectangle( pA->GetSrcPoint(), pA->GetSrcSize() ) ) )
+                BitmapCropper aBmpCropper(tools::Rectangle(pA->GetSrcPoint(), pA->GetSrcSize()));
+                if (!aBmpCropper.execute(aTmp).IsEmpty())
                     ImplWriteBmpRecord( aTmp, pA->GetDestPoint(), pA->GetDestSize(), WIN_SRCCOPY );
             }
             break;
@@ -1299,10 +1304,14 @@ void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
             case MetaActionType::BMPEXSCALEPART:
             {
                 const MetaBmpExScalePartAction* pA = static_cast<const MetaBmpExScalePartAction*>(pAction);
-                BitmapEx                        aBmpEx( pA->GetBitmapEx() );
-                aBmpEx.Crop( tools::Rectangle( pA->GetSrcPoint(), pA->GetSrcSize() ) );
-                Bitmap                          aBmp( aBmpEx.GetBitmap() );
-                Bitmap                          aMsk( aBmpEx.GetMask() );
+                BitmapEx aBmpEx( pA->GetBitmapEx() );
+
+                BitmapCropper aBmpCropper(tools::Rectangle(pA->GetSrcPoint(), pA->GetSrcSize()));
+                if (aBmpCropper.execute(aBmpEx).IsEmpty())
+                   SAL_WARN("vcl.gdi", "Cropping failed");
+
+                Bitmap aBmp( aBmpEx.GetBitmap() );
+                Bitmap aMsk( aBmpEx.GetMask() );
 
                 if( !!aMsk )
                 {

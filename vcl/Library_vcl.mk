@@ -320,7 +320,6 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/bitmap/BitmapConverter \
     vcl/source/bitmap/BitmapDitheringFilter \
     vcl/source/bitmap/bitmappaint \
-	vcl/source/bitmap/BitmapScaleFilter \
     vcl/source/bitmap/BitmapScaleSuperFilter \
     vcl/source/bitmap/BitmapScaleConvolutionFilter \
     vcl/source/bitmap/BitmapSymmetryCheck \
