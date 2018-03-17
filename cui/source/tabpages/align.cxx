@@ -28,7 +28,6 @@
 #include <svx/algitem.hxx>
 #include <editeng/frmdiritem.hxx>
 #include <editeng/justifyitem.hxx>
-#include <dialmgr.hxx>
 #include <svx/dlgutil.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/module.hxx>

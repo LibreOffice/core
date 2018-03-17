@@ -40,6 +40,7 @@
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 
 #include <bitmaps.hlst>
+#include <dialmgr.hxx>
 #include <strings.hrc>
 
 using namespace ::com::sun::star::lang;

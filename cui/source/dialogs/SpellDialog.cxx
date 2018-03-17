@@ -50,7 +50,6 @@
 #include <SpellDialog.hxx>
 #include <svx/dlgutil.hxx>
 #include <optlingu.hxx>
-#include <dialmgr.hxx>
 #include <svx/svxerr.hxx>
 #include <treeopt.hxx>
 #include <svtools/langtab.hxx>

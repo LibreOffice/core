@@ -26,7 +26,6 @@
 #include <vcl/wrkwin.hxx>
 #include <svtools/fontsubstconfig.hxx>
 #include "fontsubs.hxx"
-#include <dialmgr.hxx>
 #include <helpids.h>
 #include <o3tl/make_unique.hxx>
 

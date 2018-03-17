@@ -31,7 +31,6 @@
 #include <svx/drawitem.hxx>
 #include <cuitabarea.hxx>
 #include <dlgname.hxx>
-#include <dialmgr.hxx>
 
 SvxAreaTabDialog::SvxAreaTabDialog
 (

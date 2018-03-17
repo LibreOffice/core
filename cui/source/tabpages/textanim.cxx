@@ -24,7 +24,6 @@
 
 #include <textanim.hxx>
 #include <textattr.hxx>
-#include <dialmgr.hxx>
 #include <svx/dlgutil.hxx>
 #include <svx/svdmark.hxx>
 #include <svx/svdview.hxx>
