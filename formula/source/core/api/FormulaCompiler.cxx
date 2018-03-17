@@ -577,11 +577,11 @@ uno::Sequence< sheet::FormulaOpCodeMapEntry > FormulaCompiler::OpCodeMap::create
             // If AddIn functions are present in this mapping, use them, and only those.
             if (hasExternals())
             {
-                for (ExternalHashMap::const_iterator it( maExternalHashMap.begin());it != maExternalHashMap.end(); ++it)
+                for (auto const& elem : maExternalHashMap)
                 {
                     FormulaOpCodeMapEntry aEntry;
-                    aEntry.Name = (*it).first;
-                    aEntry.Token.Data <<= (*it).second;
+                    aEntry.Name = elem.first;
+                    aEntry.Token.Data <<= elem.second;
                     aEntry.Token.OpCode = ocExternal;
                     aVec.push_back( aEntry);
                 }

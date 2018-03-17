@@ -462,12 +462,9 @@ OleComponent::~OleComponent()
         } catch( const uno::Exception& ) {}
     }
 
-    for ( FormatEtcList::iterator aIter = m_pNativeImpl->m_aFormatsList.begin();
-          aIter != m_pNativeImpl->m_aFormatsList.end();
-          ++aIter )
+    for (auto const& format : m_pNativeImpl->m_aFormatsList)
     {
-        delete *aIter;
-        (*aIter) = nullptr;
+        delete format;
     }
     m_pNativeImpl->m_aFormatsList.clear();
 
