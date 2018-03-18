@@ -19,7 +19,6 @@
 
 
 #include <memory>
-#include <dp_shared.hxx>
 #include "dp_gui.h"
 #include "dp_gui_theextmgr.hxx"
 #include <cppuhelper/implbase.hxx>

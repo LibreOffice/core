@@ -20,6 +20,7 @@
 #include <svtools/controldims.hxx>
 
 #include <dp_shared.hxx>
+#include <strings.hrc>
 #include "dp_gui.h"
 #include "dp_gui_extlistbox.hxx"
 #include "dp_gui_theextmgr.hxx"
