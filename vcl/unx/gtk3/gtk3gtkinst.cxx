@@ -2091,17 +2091,24 @@ public:
     {
     }
 
-    virtual void append(const OUString& rText) override
-    {
-        insert(rText, -1);
-    }
-
-    virtual void insert(const OUString& rText, int pos) override
+    virtual void insert_text(const OUString& rText, int pos) override
     {
         disable_notify_events();
         GtkTreeIter iter;
         gtk_list_store_insert(m_pListStore, &iter, pos);
         gtk_list_store_set(m_pListStore, &iter, 0, OUStringToOString(rText, RTL_TEXTENCODING_UTF8).getStr(), -1);
+        enable_notify_events();
+    }
+
+    virtual void insert(int pos, const OUString& rId, const OUString& rText) override
+    {
+        disable_notify_events();
+        GtkTreeIter iter;
+        gtk_list_store_insert(m_pListStore, &iter, pos);
+        gtk_list_store_set(m_pListStore, &iter,
+                0, OUStringToOString(rText, RTL_TEXTENCODING_UTF8).getStr(),
+                1, OUStringToOString(rId, RTL_TEXTENCODING_UTF8).getStr(),
+                -1);
         enable_notify_events();
     }
 
@@ -2730,28 +2737,20 @@ public:
         return get(pos, id_column);
     }
 
-    virtual void append_text(const OUString& rStr) override
-    {
-        gtk_combo_box_text_append_text(m_pComboBoxText, OUStringToOString(rStr, RTL_TEXTENCODING_UTF8).getStr());
-    }
-
     virtual void insert_text(int pos, const OUString& rStr) override
     {
+        disable_notify_events();
         gtk_combo_box_text_insert_text(m_pComboBoxText, pos, OUStringToOString(rStr, RTL_TEXTENCODING_UTF8).getStr());
-    }
-
-    virtual void append(const OUString& rId, const OUString& rStr) override
-    {
-        gtk_combo_box_text_append(m_pComboBoxText,
-                                  OUStringToOString(rId, RTL_TEXTENCODING_UTF8).getStr(),
-                                  OUStringToOString(rStr, RTL_TEXTENCODING_UTF8).getStr());
+        enable_notify_events();
     }
 
     virtual void insert(int pos, const OUString& rId, const OUString& rStr) override
     {
+        disable_notify_events();
         gtk_combo_box_text_insert(m_pComboBoxText, pos,
                                   OUStringToOString(rId, RTL_TEXTENCODING_UTF8).getStr(),
                                   OUStringToOString(rStr, RTL_TEXTENCODING_UTF8).getStr());
+        enable_notify_events();
     }
 
     virtual int get_count() const override

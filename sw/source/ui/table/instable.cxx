@@ -132,14 +132,14 @@ void SwInsTableDlg::InitAutoTableFormat()
     pTableTable->Load();
 
     // Add "- none -" style autoformat table.
-    m_xLbFormat->append( SwViewShell::GetShellRes()->aStrNone ); // Insert to listbox
+    m_xLbFormat->append_text(SwViewShell::GetShellRes()->aStrNone); // Insert to listbox
 
     // Add other styles of autoformat tables.
     for (sal_uInt8 i = 0, nCount = static_cast<sal_uInt8>(pTableTable->size());
             i < nCount; i++)
     {
         SwTableAutoFormat const& rFormat = (*pTableTable)[ i ];
-        m_xLbFormat->append(rFormat.GetName());
+        m_xLbFormat->append_text(rFormat.GetName());
         if (pTAutoFormat && rFormat.GetName() == pTAutoFormat->GetName())
             lbIndex = i;
     }
