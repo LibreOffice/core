@@ -25,7 +25,6 @@
 #include <svl/intitem.hxx>
 #include <editeng/forbiddencharacterstable.hxx>
 
-#include <unotools/ucbstreamhelper.hxx>
 #include <svx/xtable.hxx>
 #include <svx/drawitem.hxx>
 #include <viewsh.hxx>

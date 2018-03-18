@@ -39,7 +39,6 @@
 
 #include <CustomAnimationPreset.hxx>
 #include <TransitionPreset.hxx>
-#include <unotools/ucbstreamhelper.hxx>
 
 #include <algorithm>
 

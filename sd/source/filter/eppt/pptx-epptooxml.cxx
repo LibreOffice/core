@@ -37,7 +37,6 @@
 #include <rtl/ustrbuf.hxx>
 #include <filter/msfilter/escherex.hxx>
 #include <tools/poly.hxx>
-#include <unotools/ucbstreamhelper.hxx>
 
 #include <com/sun/star/animations/AnimationAdditiveMode.hpp>
 #include <com/sun/star/animations/AnimationCalcMode.hpp>

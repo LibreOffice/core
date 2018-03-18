@@ -30,7 +30,6 @@
 #include <svtools/javainteractionhandler.hxx>
 #include <svl/itempool.hxx>
 #include <tools/urlobj.hxx>
-#include <toolkit/helper/vclunohelper.hxx>
 #include <com/sun/star/awt/FontDescriptor.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>

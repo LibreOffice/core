@@ -110,7 +110,6 @@
 #include <editeng/svxfont.hxx>
 #include <editeng/frmdiritem.hxx>
 #include <svx/sdtfchim.hxx>
-#include <unotools/ucbstreamhelper.hxx>
 #include <editeng/scripttypeitem.hxx>
 #include <com/sun/star/awt/Gradient.hpp>
 #include <com/sun/star/table/XMergeableCellRange.hpp>

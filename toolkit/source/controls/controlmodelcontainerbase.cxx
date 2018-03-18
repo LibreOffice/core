@@ -44,7 +44,6 @@
 #include <vcl/outdev.hxx>
 #include <comphelper/types.hxx>
 
-#include <unotools/ucbstreamhelper.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/image.hxx>
 

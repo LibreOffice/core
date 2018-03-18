@@ -26,7 +26,6 @@
 #include <comphelper/processfactory.hxx>
 #include <unotools/tempfile.hxx>
 #include <unotools/localfilehelper.hxx>
-#include <unotools/ucbstreamhelper.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/instance.hxx>
 #include <osl/detail/file.h>

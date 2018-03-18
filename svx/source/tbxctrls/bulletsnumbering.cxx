@@ -14,7 +14,6 @@
 #include <i18nlangtag/mslangid.hxx>
 #include <svtools/popupwindowcontroller.hxx>
 #include <svtools/toolbarmenu.hxx>
-#include <toolkit/helper/vclunohelper.hxx>
 #include <svx/strings.hrc>
 #include <svx/dialmgr.hxx>
 #include <svx/numvset.hxx>

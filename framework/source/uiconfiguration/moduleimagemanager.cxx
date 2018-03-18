@@ -39,7 +39,6 @@
 #include <rtl/ustrbuf.hxx>
 #include <osl/file.hxx>
 #include <comphelper/sequence.hxx>
-#include <unotools/ucbstreamhelper.hxx>
 
 //  namespaces
 

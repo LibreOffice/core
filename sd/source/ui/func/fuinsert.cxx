@@ -51,7 +51,6 @@
 #include <svx/linkwarn.hxx>
 #include <svx/svdetc.hxx>
 #include <avmedia/mediawindow.hxx>
-#include <unotools/ucbstreamhelper.hxx>
 #include <sfx2/printer.hxx>
 #include <comphelper/classids.hxx>
 #include <svtools/sfxecode.hxx>

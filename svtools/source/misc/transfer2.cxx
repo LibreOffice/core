@@ -18,7 +18,6 @@
  */
 
 #include <osl/mutex.hxx>
-#include <unotools/ucbstreamhelper.hxx>
 #include <sot/exchange.hxx>
 #include <sot/storage.hxx>
 #include <vcl/bitmap.hxx>

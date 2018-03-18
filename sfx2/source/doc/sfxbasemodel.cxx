@@ -86,7 +86,6 @@
 #include <framework/interaction.hxx>
 #include <framework/titlehelper.hxx>
 #include <comphelper/numberedcollection.hxx>
-#include <unotools/ucbstreamhelper.hxx>
 #include <unotools/ucbhelper.hxx>
 
 #include <sfx2/sfxbasecontroller.hxx>

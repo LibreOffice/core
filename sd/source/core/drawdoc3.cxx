@@ -28,7 +28,6 @@
 #include <sfx2/app.hxx>
 #include <svl/itemset.hxx>
 
-#include <unotools/ucbstreamhelper.hxx>
 #include <sfx2/fcontnr.hxx>
 #include <svx/svdopath.hxx>
 #include <svx/svditer.hxx>

@@ -48,7 +48,6 @@
 #include <editeng/editeng.hxx>
 #include <editeng/flditem.hxx>
 #include <editeng/shaditem.hxx>
-#include <unotools/ucbstreamhelper.hxx>
 #include <svx/fmglob.hxx>
 #include <svx/svdouno.hxx>
 #include <svx/unoapi.hxx>

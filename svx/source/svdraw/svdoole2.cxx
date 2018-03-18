@@ -39,7 +39,6 @@
 
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/exc_hlp.hxx>
-#include <unotools/ucbstreamhelper.hxx>
 
 #include <toolkit/helper/vclunohelper.hxx>
 #include <toolkit/awt/vclxwindow.hxx>

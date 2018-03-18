@@ -21,7 +21,6 @@
 
 #include <sot/storage.hxx>
 #include <unotools/streamwrap.hxx>
-#include <unotools/ucbstreamhelper.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 #include <ucbhelper/content.hxx>

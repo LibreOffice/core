@@ -23,6 +23,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 #include <svl/outstrm.hxx>
+#include <unotools/ucbstreamhelper.hxx>
 #include <vcl/FilterConfigItem.hxx>
 #include <memory>
 

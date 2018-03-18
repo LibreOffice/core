@@ -26,6 +26,7 @@
 #include <unotools/historyoptions.hxx>
 #include <vcl/builderfactory.hxx>
 #include <vcl/pngread.hxx>
+#include <tools/stream.hxx>
 #include <tools/urlobj.hxx>
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/frame/Desktop.hpp>

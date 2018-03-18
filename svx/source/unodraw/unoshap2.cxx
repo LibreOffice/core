@@ -65,7 +65,6 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/fcontnr.hxx>
-#include <toolkit/helper/vclunohelper.hxx>
 
 
 #include <memory>

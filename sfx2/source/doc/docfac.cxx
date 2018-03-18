@@ -28,7 +28,6 @@
 #include <comphelper/processfactory.hxx>
 #include <unotools/pathoptions.hxx>
 #include <unotools/moduleoptions.hxx>
-#include <unotools/ucbstreamhelper.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/configurationhelper.hxx>
 
