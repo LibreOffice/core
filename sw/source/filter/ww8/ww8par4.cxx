@@ -476,8 +476,8 @@ void SwWW8ImplReader::Read_CRevisionMark(RedlineType_t eType,
     const sal_uInt8* pSprmCDttmRMark;
     if( nsRedlineType_t::REDLINE_FORMAT == eType )
     {
-        pSprmCIbstRMark = pData+1;
-        pSprmCDttmRMark = pData+3;
+        pSprmCIbstRMark = nLen >= 3 ? pData+1 : nullptr;
+        pSprmCDttmRMark = nLen >= 7 ? pData+3 : nullptr;
     }
     else
     {
