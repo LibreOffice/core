@@ -44,7 +44,8 @@
 #include <svx/svdmodel.hxx>
 #include <svx/svdtrans.hxx>
 #include <svx/svdpage.hxx>
-
+#include <svx/svdograf.hxx>
+#include <svx/svdoole2.hxx>
 
 namespace sdr
 {
