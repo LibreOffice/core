@@ -1907,7 +1907,7 @@ namespace accessibility
                 sal_Int32 nLength = sText.getLength();
 
                 // get word at index
-                implGetWordBoundary( aBoundary, nIndex );
+                implGetWordBoundary( sText, aBoundary, nIndex );
 
 
                 //sal_Int32 curWordStart = aBoundary.startPos;
@@ -1926,7 +1926,7 @@ namespace accessibility
                 while ( (preWordStart >= 0 && !bWord ) || ( aBoundary.endPos > curWordStart ) )
                     {
                     preWordStart--;
-                    bWord = implGetWordBoundary( aBoundary, preWordStart );
+                    bWord = implGetWordBoundary( sText, aBoundary, preWordStart );
                 }
                 if ( bWord && implIsValidBoundary( aBoundary, nLength ) )
                 {
@@ -2036,7 +2036,7 @@ namespace accessibility
                 sal_Int32 nLength = sText.getLength();
 
                 // get word at index
-                bool bWord = implGetWordBoundary( aBoundary, nIndex );
+                bool bWord = implGetWordBoundary( sText, aBoundary, nIndex );
 
                 // real current world
                 sal_Int32 nextWord = nIndex;
@@ -2045,7 +2045,7 @@ namespace accessibility
                 {
                     nextWord =  aBoundary.endPos;
                     if( sText[nextWord] == u' ' ) nextWord++;
-                    bWord = implGetWordBoundary( aBoundary, nextWord );
+                    bWord = implGetWordBoundary( sText, aBoundary, nextWord );
                 }
 
                 if ( bWord && implIsValidBoundary( aBoundary, nLength ) )
