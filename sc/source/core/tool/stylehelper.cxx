@@ -36,6 +36,13 @@
 #define SC_STYLE_PROG_HEADLINE1     "Heading1"
 #define SC_STYLE_PROG_REPORT        "Report"
 
+#define SC_PIVOT_STYLE_PROG_INNER                  "Pivot Table Value"
+#define SC_PIVOT_STYLE_PROG_RESULT                 "Pivot Table Result"
+#define SC_PIVOT_STYLE_PROG_CATEGORY               "Pivot Table Category"
+#define SC_PIVOT_STYLE_PROG_TITLE                  "Pivot Table Title"
+#define SC_PIVOT_STYLE_PROG_FIELDNAME              "Pivot Table Field"
+#define SC_PIVOT_STYLE_PROG_TOP                    "Pivot Table Corner"
+
 struct ScDisplayNameMap
 {
     OUString  aDispName;
@@ -47,7 +54,7 @@ static const ScDisplayNameMap* lcl_GetStyleNameMap( SfxStyleFamily nType )
     if ( nType == SfxStyleFamily::Para )
     {
         static bool bCellMapFilled = false;
-        static ScDisplayNameMap aCellMap[6];
+        static ScDisplayNameMap aCellMap[12];
         if ( !bCellMapFilled )
         {
             aCellMap[0].aDispName = ScGlobal::GetRscString( STR_STYLENAME_STANDARD );
@@ -64,6 +71,24 @@ static const ScDisplayNameMap* lcl_GetStyleNameMap( SfxStyleFamily nType )
 
             aCellMap[4].aDispName = ScGlobal::GetRscString( STR_STYLENAME_HEADLINE1 );
             aCellMap[4].aProgName = SC_STYLE_PROG_HEADLINE1;
+
+            aCellMap[5].aDispName = ScGlobal::GetRscString( STR_PIVOT_STYLENAME_INNER );
+            aCellMap[5].aProgName = SC_PIVOT_STYLE_PROG_INNER;
+
+            aCellMap[6].aDispName = ScGlobal::GetRscString( STR_PIVOT_STYLENAME_RESULT );
+            aCellMap[6].aProgName = SC_PIVOT_STYLE_PROG_RESULT;
+
+            aCellMap[7].aDispName = ScGlobal::GetRscString( STR_PIVOT_STYLENAME_CATEGORY );
+            aCellMap[7].aProgName = SC_PIVOT_STYLE_PROG_CATEGORY;
+
+            aCellMap[8].aDispName = ScGlobal::GetRscString( STR_PIVOT_STYLENAME_TITLE );
+            aCellMap[8].aProgName = SC_PIVOT_STYLE_PROG_TITLE;
+
+            aCellMap[9].aDispName = ScGlobal::GetRscString( STR_PIVOT_STYLENAME_FIELDNAME );
+            aCellMap[9].aProgName = SC_PIVOT_STYLE_PROG_FIELDNAME;
+
+            aCellMap[10].aDispName = ScGlobal::GetRscString( STR_PIVOT_STYLENAME_TOP );
+            aCellMap[10].aProgName = SC_PIVOT_STYLE_PROG_TOP;
 
             //  last entry remains empty
 
