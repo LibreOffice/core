@@ -749,28 +749,28 @@ bool checkMapping( const OUString& rStr1, const OUString& rStr2 )
 void TestLanguageTag::testAllIsoLangEntries()
 {
     const ::std::vector< MsLangId::LanguagetagMapping > aList( MsLangId::getDefinedLanguagetags());
-    for (::std::vector< MsLangId::LanguagetagMapping >::const_iterator it( aList.begin()); it != aList.end(); ++it)
+    for (auto const& elem : aList)
     {
         bool b=false;
-        if ((*it).maBcp47 == "la-VA")
+        if (elem.maBcp47 == "la-VA")
             b=true;
         (void)b;
 
-        LanguageTag aTagString( (*it).maBcp47, true);
-        LanguageTag aTagID( (*it).mnLang);
-        if (!checkMapping( (*it).maBcp47, aTagString.getBcp47()))
+        LanguageTag aTagString( elem.maBcp47, true);
+        LanguageTag aTagID( elem.mnLang);
+        if (!checkMapping( elem.maBcp47, aTagString.getBcp47()))
         {
-            OString aMessage( OUStringToOString( (*it).maBcp47, RTL_TEXTENCODING_ASCII_US));
+            OString aMessage( OUStringToOString( elem.maBcp47, RTL_TEXTENCODING_ASCII_US));
             aMessage += " -> " + OUStringToOString( aTagString.getBcp47(), RTL_TEXTENCODING_ASCII_US);
-            CPPUNIT_ASSERT_EQUAL_MESSAGE( aMessage.getStr(), aTagString.getBcp47(), (*it).maBcp47 );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE( aMessage.getStr(), aTagString.getBcp47(), elem.maBcp47 );
         }
-        if ((*it).maBcp47 != aTagID.getBcp47())
+        if (elem.maBcp47 != aTagID.getBcp47())
         {
             // There are multiple mappings, ID must be equal after conversions.
             LanguageTag aTagBack( aTagID.getBcp47(), true);
             if (aTagString.getLanguageType() != aTagBack.getLanguageType())
             {
-                OString aMessage( OUStringToOString( (*it).maBcp47, RTL_TEXTENCODING_ASCII_US));
+                OString aMessage( OUStringToOString( elem.maBcp47, RTL_TEXTENCODING_ASCII_US));
                 aMessage += " " + OUStringToOString( aTagString.getBcp47(), RTL_TEXTENCODING_ASCII_US) + ": " +
                     OUStringToOString( aTagString.getBcp47(), RTL_TEXTENCODING_ASCII_US) + " " +
                     OString::number( static_cast<sal_uInt16>(aTagString.getLanguageType()), 16) +
@@ -783,13 +783,13 @@ void TestLanguageTag::testAllIsoLangEntries()
         // This does not hold, there are cases like 'ar'
         // LANGUAGE_ARABIC_PRIMARY_ONLY that when mapped back results in
         // 'ar-SA' as default locale.
-        if ((*it).mnLang != aTagString.getLanguageType())
+        if (elem.mnLang != aTagString.getLanguageType())
         {
             // There are multiple mappings, string must be equal after conversions.
             LanguageTag aTagBack( aTagString.getLanguageType());
             if (aTagID.getBcp47() != aTagBack.getBcp47())
             {
-                OString aMessage( OUStringToOString( (*it).maBcp47, RTL_TEXTENCODING_ASCII_US));
+                OString aMessage( OUStringToOString( elem.maBcp47, RTL_TEXTENCODING_ASCII_US));
                 aMessage += " " + OUStringToOString( aTagID.getBcp47(), RTL_TEXTENCODING_ASCII_US) +
                     " -> " + OUStringToOString( aTagBack.getBcp47(), RTL_TEXTENCODING_ASCII_US);
                 CPPUNIT_ASSERT_MESSAGE( aMessage.getStr(), aTagID.getBcp47() == aTagBack.getBcp47());

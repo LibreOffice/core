@@ -95,21 +95,18 @@ static bool cleanPath()
 {
     if ( pCreatedDirectories )
     {
-        std::list< OString >::iterator iter = pCreatedDirectories->begin();
-        std::list< OString >::iterator end = pCreatedDirectories->end();
-        while ( iter != end )
+        for (auto const& createdDirectory : *pCreatedDirectories)
         {
 //#ifdef SAL_UNX
-//          if (rmdir((char*)(*iter).getStr(), 0777) == -1)
+//          if (rmdir((char*)createdDirectory.getStr(), 0777) == -1)
 //#else
-            if (rmdir((*iter).getStr()) == -1)
+            if (rmdir(createdDirectory.getStr()) == -1)
 //#endif
             {
                 fprintf(stderr, "%s: cannot remove directory '%s'\n",
-                        idlc()->getOptions()->getProgramName().getStr(), (*iter).getStr());
+                        idlc()->getOptions()->getProgramName().getStr(), createdDirectory.getStr());
                 return false;
             }
-            ++iter;
         }
         delete pCreatedDirectories;
     }

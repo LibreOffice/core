@@ -30,11 +30,10 @@ AstStruct::AstStruct(
     , AstScope(NT_struct)
     , m_pBaseType(pBaseType)
 {
-    for (std::vector< OString >::const_iterator i(typeParameters.begin());
-         i != typeParameters.end(); ++i)
+    for (auto const& elem : typeParameters)
     {
         m_typeParameters.push_back(
-            new AstType(NT_type_parameter, *i, nullptr));
+            new AstType(NT_type_parameter, elem, nullptr));
     }
 }
 
@@ -50,21 +49,19 @@ AstStruct::AstStruct(const NodeType type,
 
 AstStruct::~AstStruct()
 {
-    for (DeclList::iterator i(m_typeParameters.begin());
-         i != m_typeParameters.end(); ++i)
+    for (auto const& elem : m_typeParameters)
     {
-        delete *i;
+        delete elem;
     }
 }
 
 AstDeclaration const * AstStruct::findTypeParameter(OString const & name)
     const
 {
-    for (DeclList::const_iterator i(m_typeParameters.begin());
-         i != m_typeParameters.end(); ++i)
+    for (auto const& elem : m_typeParameters)
     {
-        if ((*i)->getLocalName() == name) {
-            return *i;
+        if (elem->getLocalName() == name) {
+            return elem;
         }
     }
     return nullptr;
@@ -148,13 +145,12 @@ bool AstStruct::dump(RegistryKey& rKey)
     }
 
     sal_uInt16 index = 0;
-    for (DeclList::iterator i(m_typeParameters.begin());
-         i != m_typeParameters.end(); ++i)
+    for (auto const& elem : m_typeParameters)
     {
         aBlob.setReferenceData(
             index++, "", RTReferenceType::TYPE_PARAMETER, RTFieldAccess::INVALID,
             OStringToOUString(
-                (*i)->getLocalName(), RTL_TEXTENCODING_UTF8));
+                elem->getLocalName(), RTL_TEXTENCODING_UTF8));
     }
 
     sal_uInt32 aBlobSize;

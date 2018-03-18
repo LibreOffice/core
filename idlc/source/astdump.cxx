@@ -394,13 +394,12 @@ void AstAttribute::dumpExceptions(
             "void", 0,
             static_cast< sal_uInt16 >(exceptions.size()));
         sal_uInt16 exceptionIndex = 0;
-        for (DeclList::const_iterator i(exceptions.begin());
-             i != exceptions.end(); ++i)
+        for (auto const& elem : exceptions)
         {
             writer.setMethodExceptionTypeName(
                 idx, exceptionIndex++,
                 OStringToOUString(
-                    (*i)->getRelativName(), RTL_TEXTENCODING_UTF8));
+                    elem->getRelativName(), RTL_TEXTENCODING_UTF8));
         }
     }
 }

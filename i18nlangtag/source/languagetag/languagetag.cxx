@@ -61,16 +61,15 @@ static const KnownTagSet & getKnowns()
         if (rKnowns.empty())
         {
             ::std::vector< MsLangId::LanguagetagMapping > aDefined( MsLangId::getDefinedLanguagetags());
-            for (::std::vector< MsLangId::LanguagetagMapping >::const_iterator it( aDefined.begin());
-                    it != aDefined.end(); ++it)
+            for (auto const& elemDefined : aDefined)
             {
                 // Do not use the BCP47 string here to initialize the
                 // LanguageTag because then canonicalize() would call this
                 // getKnowns() again..
-                ::std::vector< OUString > aFallbacks( LanguageTag( (*it).mnLang).getFallbackStrings( true));
-                for (::std::vector< OUString >::const_iterator fb( aFallbacks.begin()); fb != aFallbacks.end(); ++fb)
+                ::std::vector< OUString > aFallbacks( LanguageTag( elemDefined.mnLang).getFallbackStrings( true));
+                for (auto const& fallback : aFallbacks)
                 {
-                    rKnowns.insert( *fb);
+                    rKnowns.insert(fallback);
                 }
             }
         }
@@ -2101,9 +2100,9 @@ LanguageTag & LanguageTag::makeFallback()
                 // "en-US" is the last resort fallback, try if we get a better
                 // one for the fallback hierarchy of a non-"en" locale.
                 ::std::vector< OUString > aFallbacks( getFallbackStrings( false));
-                for (::std::vector< OUString >::const_iterator it( aFallbacks.begin()); it != aFallbacks.end(); ++it)
+                for (auto const& fallback : aFallbacks)
                 {
-                    lang::Locale aLocale3( LanguageTag( *it).getLocale());
+                    lang::Locale aLocale3( LanguageTag(fallback).getLocale());
                     aLocale2 = MsLangId::Conversion::lookupFallbackLocale( aLocale3);
                     if (aLocale2.Language != "en" || aLocale2.Country != "US")
                         break;  // for, success
@@ -2652,21 +2651,22 @@ LanguageTagImpl::Extraction LanguageTagImpl::simpleExtract( const OUString& rBcp
     ::std::vector< OUString > aFallbacks( LanguageTag( rReference).getFallbackStrings( false));
     ::std::vector< ::std::vector< OUString > > aListFallbacks( rList.size());
     size_t i = 0;
-    for (it = rList.begin(); it != rList.end(); ++it, ++i)
+    for (auto const& elem : rList)
     {
-        ::std::vector< OUString > aTmp( LanguageTag( *it).getFallbackStrings( true));
-        aListFallbacks[i] = aTmp;
+        ::std::vector< OUString > aTmp( LanguageTag(elem).getFallbackStrings( true));
+        aListFallbacks[i++] = aTmp;
     }
-    for (::std::vector< OUString >::const_iterator rfb( aFallbacks.begin()); rfb != aFallbacks.end(); ++rfb)
+    for (auto const& rfb : aFallbacks)
     {
-        for (::std::vector< ::std::vector< OUString > >::const_iterator lfb( aListFallbacks.begin());
-                lfb != aListFallbacks.end(); ++lfb)
+        size_t nPosFb = 0;
+        for (auto const& lfb : aListFallbacks)
         {
-            for (::std::vector< OUString >::const_iterator fb( (*lfb).begin()); fb != (*lfb).end(); ++fb)
+            for (auto const& fb : lfb)
             {
-                if (*rfb == *fb)
-                    return rList.begin() + (lfb - aListFallbacks.begin());
+                if (rfb == fb)
+                    return rList.begin() + nPosFb;
             }
+            ++nPosFb;
         }
     }
 

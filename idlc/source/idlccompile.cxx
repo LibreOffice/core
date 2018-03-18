@@ -317,12 +317,10 @@ sal_Int32 compileFile(const OString * pathname)
     rtl_uString** pCmdArgs = nullptr;
     pCmdArgs = static_cast<rtl_uString**>(rtl_allocateZeroMemory(nCmdArgs * sizeof(rtl_uString*)));
 
-    ::std::vector< OUString >::iterator iter = lCppArgs.begin();
-    ::std::vector< OUString >::iterator end = lCppArgs.end();
     int i = 0;
-    while ( iter != end ) {
-        pCmdArgs[i++] = (*iter).pData;
-        ++iter;
+    for (auto const& elem : lCppArgs)
+    {
+        pCmdArgs[i++] = elem.pData;
     }
 
     procError = osl_executeProcess( cpp.pData, pCmdArgs, nCmdArgs, osl_Process_WAIT,
