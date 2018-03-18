@@ -794,6 +794,10 @@ DECLARE_WW8EXPORT_TEST(testTdf112118_DOC, "tdf112118.doc")
             CPPUNIT_ASSERT_EQUAL_MESSAGE(OString(sStage + " border width").getStr(),
                 side.nBorderWidth,
                 sal_Int32(aBorder.OuterLineWidth + aBorder.InnerLineWidth + aBorder.LineDistance));
+
+            // Check that AUTO border color is imported as black
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(OString(sStage + " border color").getStr(),
+                sal_Int32(COL_BLACK), aBorder.Color);
         }
     }
 }
