@@ -40,6 +40,8 @@ public class LOEvent implements Comparable<LOEvent> {
     public static final int UPDATE_ZOOM_CONSTRAINTS = 19;
     public static final int UPDATE_CALC_HEADERS = 20;
     public static final int REFRESH = 21;
+    public static final int UNO_COMMAND_NOTIFY = 22;
+
 
     public final int mType;
     public int mPriority = 0;
@@ -57,6 +59,7 @@ public class LOEvent implements Comparable<LOEvent> {
     public RectF mInvalidationRect;
     public SelectionHandle.HandleType mHandleType;
     public String mValue;
+    public boolean mNotify;
 
     public LOEvent(int type) {
         mType = type;
@@ -73,6 +76,14 @@ public class LOEvent implements Comparable<LOEvent> {
         mTypeString = "String";
         mString = someString;
         mValue = null;
+    }
+
+    public LOEvent(int type, String someString, boolean notify) {
+        mType = type;
+        mTypeString = "String";
+        mString = someString;
+        mValue = null;
+        mNotify = notify;
     }
 
     public LOEvent(int type, String key, String value) {

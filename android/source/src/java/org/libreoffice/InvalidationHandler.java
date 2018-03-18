@@ -62,6 +62,9 @@ public class InvalidationHandler implements Document.MessageCallback, Office.Mes
             case Document.CALLBACK_INVALIDATE_TILES:
                 invalidateTiles(payload);
                 break;
+            case Document.CALLBACK_UNO_COMMAND_RESULT:
+                unoCommandResult(payload);
+                break;
             case Document.CALLBACK_INVALIDATE_VISIBLE_CURSOR:
                 invalidateCursor(payload);
                 break;
@@ -114,7 +117,21 @@ public class InvalidationHandler implements Document.MessageCallback, Office.Mes
                 documentPassword();
                 break;
             default:
+
                 Log.d(LOGTAG, "LOK_CALLBACK uncaught: " + messageID + " : " + payload);
+        }
+    }
+
+    private void unoCommandResult(String payload) {
+        try {
+            JSONObject payloadObject = new JSONObject(payload);
+            if (payloadObject.getString("commandName").equals(".uno:Save")) {
+                if (payloadObject.getString("success").equals("true")) {
+                    mContext.saveFilesToCloud();
+                }
+            }
+        }catch(JSONException e){
+            e.printStackTrace();
         }
     }
 
