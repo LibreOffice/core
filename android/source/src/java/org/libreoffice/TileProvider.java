@@ -124,6 +124,14 @@ public interface TileProvider {
     void postUnoCommand(String command, String arguments);
 
     /**
+     * This is the actual reference to the function in LOK, used for getting notified when uno:save event finishes
+     * @param command
+     * @param arguments
+     * @param notifyWhenFinished
+     */
+    void postUnoCommand(String command, String arguments, boolean notifyWhenFinished);
+
+    /**
      * Send text selection start coordinate.
      * @param documentCoordinate
      */

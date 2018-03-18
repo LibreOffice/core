@@ -366,6 +366,12 @@ class LOKitThread extends Thread {
             case LOEvent.UPDATE_CALC_HEADERS:
                 updateCalcHeaders();
                 break;
+            case LOEvent.UNO_COMMAND_NOTIFY:
+                if (null == mTileProvider)
+                    Log.e(LOGTAG, "no mTileProvider when trying to process "+event.mValue+" from UNO_COMMAND "+event.mString);
+                else
+                    mTileProvider.postUnoCommand(event.mString, event.mValue, event.mNotify);
+                break;
             case LOEvent.REFRESH:
                 refresh();
                 break;
