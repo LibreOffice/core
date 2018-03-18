@@ -318,17 +318,19 @@ void OMarkableOutputStream::checkMarksAndFlush()
 
     // find the smallest mark
     sal_Int32 nNextFound = m_nCurrentPos;
-    for( ii = m_mapMarks.begin() ; ii != m_mapMarks.end() ; ++ii ) {
-        if( (*ii).second <= nNextFound )  {
-            nNextFound = (*ii).second;
+    for (auto const& mark : m_mapMarks)
+    {
+        if( mark.second <= nNextFound )  {
+            nNextFound = mark.second;
         }
     }
 
     if( nNextFound ) {
         // some data must be released !
         m_nCurrentPos -= nNextFound;
-        for( ii = m_mapMarks.begin() ; ii != m_mapMarks.end() ; ++ii ) {
-            (*ii).second -= nNextFound;
+        for (auto & mark : m_mapMarks)
+        {
+            mark.second -= nNextFound;
         }
 
         Sequence<sal_Int8> seq(nNextFound);
@@ -733,17 +735,19 @@ void OMarkableInputStream::checkMarksAndFlush()
 
     // find the smallest mark
     sal_Int32 nNextFound = m_nCurrentPos;
-    for( ii = m_mapMarks.begin() ; ii != m_mapMarks.end() ; ++ii ) {
-        if( (*ii).second <= nNextFound )  {
-            nNextFound = (*ii).second;
+    for (auto const& mark : m_mapMarks)
+    {
+        if( mark.second <= nNextFound )  {
+            nNextFound = mark.second;
         }
     }
 
     if( nNextFound ) {
         // some data must be released !
         m_nCurrentPos -= nNextFound;
-        for( ii = m_mapMarks.begin() ; ii != m_mapMarks.end() ; ++ii ) {
-            (*ii).second -= nNextFound;
+        for (auto & mark : m_mapMarks)
+        {
+            mark.second -= nNextFound;
         }
 
         m_pBuffer->forgetFromStart( nNextFound );

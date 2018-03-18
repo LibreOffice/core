@@ -101,16 +101,13 @@ void AstOperation::dumpBlob(typereg::Writer & rBlob, sal_uInt16 index)
 
     if ( nExcep )
     {
-        DeclList::iterator iter = m_exceptions.begin();
-        DeclList::iterator end = m_exceptions.end();
         sal_uInt16 exceptIndex = 0;
-        while ( iter != end )
+        for (auto const& exception : m_exceptions)
         {
             rBlob.setMethodExceptionTypeName(
                 index, exceptIndex++,
                 OStringToOUString(
-                    (*iter)->getRelativName(), RTL_TEXTENCODING_UTF8));
-            ++iter;
+                    exception->getRelativName(), RTL_TEXTENCODING_UTF8));
         }
     }
 }

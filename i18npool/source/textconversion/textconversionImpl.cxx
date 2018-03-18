@@ -87,9 +87,9 @@ TextConversionImpl::getLocaleSpecificTextConversion(const Locale& rLocale)
         if (!xI.is())
         {
             ::std::vector< OUString > aFallbacks( LocaleDataImpl::getFallbackLocaleServiceNames( aLocale));
-            for (::std::vector< OUString >::const_iterator it( aFallbacks.begin()); it != aFallbacks.end(); ++it)
+            for (auto const& fallback : aFallbacks)
             {
-                xI = m_xContext->getServiceManager()->createInstanceWithContext( aPrefix + *it, m_xContext);
+                xI = m_xContext->getServiceManager()->createInstanceWithContext( aPrefix + fallback, m_xContext);
                 if (xI.is())
                     break;
             }

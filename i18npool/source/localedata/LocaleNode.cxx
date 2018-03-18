@@ -920,11 +920,13 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
         else
         {
             bool bHaveAbbr = false;
-            for (::std::vector< OUString >::const_iterator it( theDateAcceptancePatterns.begin());
-                    !bHaveAbbr && it != theDateAcceptancePatterns.end(); ++it)
+            for (auto const& elem : theDateAcceptancePatterns)
             {
-                if ((*it).indexOf('D') > -1 && (*it).indexOf('M') > -1 && (*it).indexOf('Y') <= -1)
+                if (elem.indexOf('D') > -1 && elem.indexOf('M') > -1 && elem.indexOf('Y') <= -1)
+                {
                     bHaveAbbr = true;
+                    break;
+                }
             }
             if (!bHaveAbbr)
                 incError( "No abbreviated DateAcceptancePattern present. For example M/D or D.M.\n");
@@ -1257,17 +1259,16 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
         {
             nIndex = 0;
             sal_uInt32 cDecSep = aDecSep.iterateCodePoints( &nIndex);
-            for (vector<OUString>::const_iterator aIt = theDateAcceptancePatterns.begin();
-                    aIt != theDateAcceptancePatterns.end(); ++aIt)
+            for (auto const& elem : theDateAcceptancePatterns)
             {
-                if ((*aIt).getLength() == (cDecSep <= 0xffff ? 3 : 4))
+                if (elem.getLength() == (cDecSep <= 0xffff ? 3 : 4))
                 {
                     nIndex = 1;
-                    if ((*aIt).iterateCodePoints( &nIndex) == cDecSep)
+                    if (elem.iterateCodePoints( &nIndex) == cDecSep)
                     {
                         ++nError;
                         fprintf( stderr, "Error: Date acceptance pattern '%s' matches decimal number '#%s#'\n",
-                                OSTR( *aIt), OSTR( aDecSep));
+                                OSTR(elem), OSTR( aDecSep));
                     }
                 }
             }
