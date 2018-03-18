@@ -101,6 +101,7 @@ public:
     SvxSearchDialog *getDialog () { return dialog;}
     static void SetSearchLabel(const SearchLabel& rSL);
     static void SetSearchLabel(const OUString& sStr);
+    static OUString GetSearchLabel();
     SFX_DECL_CHILDWINDOW_WITHID(SvxSearchDialogWrapper);
 };
 
