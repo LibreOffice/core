@@ -18,9 +18,7 @@
  */
 
 #include <dlg_ChartType.hxx>
-#include <ResId.hxx>
 #include "TabPageIds.h"
-#include <strings.hrc>
 #include "tp_ChartType.hxx"
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <vcl/layout.hxx>

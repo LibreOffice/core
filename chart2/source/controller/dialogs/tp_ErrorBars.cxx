@@ -18,7 +18,6 @@
  */
 
 #include "tp_ErrorBars.hxx"
-#include <ResId.hxx>
 #include "TabPageIds.h"
 #include <TabPageNotifiable.hxx>
 #include <vcl/settings.hxx>

@@ -19,7 +19,6 @@
 
 #include <dlg_InsertErrorBars.hxx>
 #include <res_ErrorBar.hxx>
-#include <ResId.hxx>
 #include <chartview/ExplicitValueProvider.hxx>
 #include <ChartModelHelper.hxx>
 #include <ObjectIdentifier.hxx>

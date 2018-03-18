@@ -21,7 +21,6 @@
 #include <ObjectNameProvider.hxx>
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
 
-#include <ResId.hxx>
 
 using namespace ::com::sun::star;
 

@@ -18,7 +18,6 @@
  */
 
 #include "tp_LegendPosition.hxx"
-#include <ResId.hxx>
 #include "TabPageIds.h"
 #include <res_LegendPosition.hxx>
 #include <chartview/ChartSfxItemIds.hxx>

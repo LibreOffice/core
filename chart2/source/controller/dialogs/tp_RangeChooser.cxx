@@ -18,8 +18,6 @@
  */
 
 #include "tp_RangeChooser.hxx"
-#include <strings.hrc>
-#include <ResId.hxx>
 #include <DataSourceHelper.hxx>
 #include <DiagramHelper.hxx>
 #include "ChartTypeTemplateProvider.hxx"

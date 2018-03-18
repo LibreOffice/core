@@ -18,7 +18,6 @@
  */
 
 #include <dlg_ShapeParagraph.hxx>
-#include <ResId.hxx>
 #include "TabPageIds.h"
 
 #include <svl/cjkoptions.hxx>

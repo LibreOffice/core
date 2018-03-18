@@ -19,7 +19,6 @@
 
 #include <dlg_InsertTitle.hxx>
 #include <res_Titles.hxx>
-#include <ResId.hxx>
 #include <ObjectNameProvider.hxx>
 
 namespace chart

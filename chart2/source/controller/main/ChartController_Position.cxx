@@ -24,7 +24,6 @@
 #include <PositionAndSizeHelper.hxx>
 #include <ChartModelHelper.hxx>
 #include "UndoGuard.hxx"
-#include <strings.hrc>
 #include <ObjectNameProvider.hxx>
 #include <DiagramHelper.hxx>
 #include <chartview/ExplicitValueProvider.hxx>

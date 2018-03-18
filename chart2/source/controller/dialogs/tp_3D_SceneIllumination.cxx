@@ -18,7 +18,6 @@
  */
 
 #include "tp_3D_SceneIllumination.hxx"
-#include <ResId.hxx>
 #include <bitmaps.hlst>
 #include <CommonConverters.hxx>
 

@@ -37,8 +37,6 @@
 #include <RegressionCurveHelper.hxx>
 #include <VLegendSymbolFactory.hxx>
 #include <FormattedStringHelper.hxx>
-#include <ResId.hxx>
-#include <strings.hrc>
 #include <RelativePositionHelper.hxx>
 #include <DateHelper.hxx>
 #include <DiagramHelper.hxx>

@@ -18,7 +18,6 @@
  */
 
 #include "tp_Trendline.hxx"
-#include <ResId.hxx>
 #include "TabPageIds.h"
 #include <vcl/settings.hxx>
 

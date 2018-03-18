@@ -18,10 +18,8 @@
  */
 
 #include <dlg_DataEditor.hxx>
-#include <strings.hrc>
 #include "DataBrowser.hxx"
 
-#include <ResId.hxx>
 #include <sfx2/dispatch.hxx>
 #include <vcl/taskpanelist.hxx>
 #include <svtools/miscopt.hxx>
