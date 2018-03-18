@@ -3567,7 +3567,7 @@ void ScInterpreter::ScModalValue_MS()
                 nMaxIndex = i - 1;
                 nCount = 1;
             }
-            while ( nOldVal == aArray[ i ] && i < nSize - 1 )
+            while ( (i < (nSize - 1)) && (nOldVal == aArray[ i ]) )
                 i++;
             if ( ( nSize - i ) > nMax )
             {
