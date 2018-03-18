@@ -91,12 +91,10 @@ namespace osl {
         {
             size_t nItems = rStrings.size();
             const sal_Char** pStrings = new const sal_Char*[ nItems+1 ];
-            std::list< rtl::OString >::const_iterator it = rStrings.begin();
             nItems = 0;
-            while( it != rStrings.end() )
+            for (auto const& elem : rStrings)
             {
-                pStrings[ nItems++ ] = it->getStr();
-                ++it;
+                pStrings[ nItems++ ] = elem.getStr();
             }
             pStrings[ nItems ] = NULL;
             sal_uInt32 nRet = osl_readProfileIdent(profile, rSection.getStr(), rEntry.getStr(), nFirstId, pStrings, nDefault);
@@ -121,12 +119,10 @@ namespace osl {
         {
             size_t nItems = rStrings.size();
             const sal_Char** pStrings = new const sal_Char*[ nItems+1 ];
-            std::list< rtl::OString >::const_iterator it = rStrings.begin();
             nItems = 0;
-            while( it != rStrings.end() )
+            for (auto const& elem : rStrings)
             {
-                pStrings[ nItems++ ] = it->getStr();
-                ++it;
+                pStrings[ nItems++ ] = elem.getStr();
             }
             pStrings[ nItems ] = NULL;
             bool bRet =

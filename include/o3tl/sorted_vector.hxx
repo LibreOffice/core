@@ -164,9 +164,9 @@ public:
        }
        else
        {
-           for (const_iterator it = rOther.m_vector.begin(); it != rOther.m_vector.end(); ++it)
+           for (auto const& elem : rOther.m_vector)
            {
-               insert(*it);
+               insert(elem);
            }
        }
     }
@@ -174,9 +174,9 @@ public:
     /* Clear() elements in the vector, and free them one by one. */
     void DeleteAndDestroyAll()
     {
-        for (const_iterator it = m_vector.begin(); it != m_vector.end(); ++it)
+        for (auto const& elem : m_vector)
         {
-            delete *it;
+            delete elem;
         }
 
         clear();
