@@ -300,9 +300,9 @@ void lcl_SetStyleById(ScDocument* pDoc, SCTAB nTab,
                                                     SFXSTYLEBIT_USERDEF ) );
         pStyle->SetParent( ScGlobal::GetRscString(STR_STYLENAME_STANDARD) );
         SfxItemSet& rSet = pStyle->GetItemSet();
-        if (strcmp(pStrId, STR_PIVOT_STYLE_RESULT) == 0 || strcmp(pStrId, STR_PIVOT_STYLE_TITLE) == 0)
+        if (strcmp(pStrId, STR_PIVOT_STYLENAME_RESULT) == 0 || strcmp(pStrId, STR_PIVOT_STYLENAME_TITLE) == 0)
             rSet.Put( SvxWeightItem( WEIGHT_BOLD, ATTR_FONT_WEIGHT ) );
-        if (strcmp(pStrId, STR_PIVOT_STYLE_CATEGORY) == 0 || strcmp(pStrId, STR_PIVOT_STYLE_TITLE) == 0)
+        if (strcmp(pStrId, STR_PIVOT_STYLENAME_CATEGORY) == 0 || strcmp(pStrId, STR_PIVOT_STYLENAME_TITLE) == 0)
             rSet.Put( SvxHorJustifyItem( SvxCellHorJustify::Left, ATTR_HOR_JUSTIFY ) );
     }
 
@@ -788,17 +788,17 @@ void ScDPOutput::HeaderCell( SCCOL nCol, SCROW nRow, SCTAB nTab,
             outputimp.OutputBlockFrame( nCol,nMemberStartRow+static_cast<SCROW>(nLevel), nCol,nDataStartRow-1 );
 
             lcl_SetStyleById( pDoc,nTab, nCol,nMemberStartRow+static_cast<SCROW>(nLevel), nCol,nDataStartRow-1,
-                                    STR_PIVOT_STYLE_TITLE );
+                                    STR_PIVOT_STYLENAME_TITLE );
             lcl_SetStyleById( pDoc,nTab, nCol,nDataStartRow, nCol,nTabEndRow,
-                                    STR_PIVOT_STYLE_RESULT );
+                                    STR_PIVOT_STYLENAME_RESULT );
         }
         else
         {
             outputimp.OutputBlockFrame( nMemberStartCol+static_cast<SCCOL>(nLevel),nRow, nDataStartCol-1,nRow );
             lcl_SetStyleById( pDoc,nTab, nMemberStartCol+static_cast<SCCOL>(nLevel),nRow, nDataStartCol-1,nRow,
-                                    STR_PIVOT_STYLE_TITLE );
+                                    STR_PIVOT_STYLENAME_TITLE );
             lcl_SetStyleById( pDoc,nTab, nDataStartCol,nRow, nTabEndCol,nRow,
-                                    STR_PIVOT_STYLE_RESULT );
+                                    STR_PIVOT_STYLENAME_RESULT );
         }
     }
 }
@@ -835,7 +835,7 @@ void ScDPOutput::FieldCell(
         pDoc->ApplyFlagsTab(nCol, nRow, nCol, nRow, nTab, nMergeFlag);
     }
 
-    lcl_SetStyleById( pDoc,nTab, nCol,nRow, nCol,nRow, STR_PIVOT_STYLE_FIELDNAME );
+    lcl_SetStyleById( pDoc,nTab, nCol,nRow, nCol,nRow, STR_PIVOT_STYLENAME_FIELDNAME );
 }
 
 static void lcl_DoFilterButton( ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB nTab )
@@ -998,13 +998,13 @@ void ScDPOutput::Output()
     }
     pDoc->SetString(nTabStartCol, nTabStartRow, nTab, aDataDescription);
 
-    //  set STR_PIVOT_STYLE_INNER for whole data area (subtotals are overwritten)
+    //  set STR_PIVOT_STYLENAME_INNER for whole data area (subtotals are overwritten)
 
     if ( nDataStartRow > nTabStartRow )
         lcl_SetStyleById( pDoc, nTab, nTabStartCol, nTabStartRow, nTabEndCol, nDataStartRow-1,
-                            STR_PIVOT_STYLE_TOP );
+                            STR_PIVOT_STYLENAME_TOP );
     lcl_SetStyleById( pDoc, nTab, nDataStartCol, nDataStartRow, nTabEndCol, nTabEndRow,
-                        STR_PIVOT_STYLE_INNER );
+                        STR_PIVOT_STYLENAME_INNER  );
 
     //  output column headers:
     ScDPOutputImpl outputimp( pDoc, nTab,
@@ -1042,10 +1042,10 @@ void ScDPOutput::Output()
                     else
                         outputimp.OutputBlockFrame( nColPos,nRowPos, nEndColPos,nRowPos );
 
-                    lcl_SetStyleById( pDoc, nTab, nColPos,nRowPos, nEndColPos,nDataStartRow-1, STR_PIVOT_STYLE_CATEGORY );
+                    lcl_SetStyleById( pDoc, nTab, nColPos,nRowPos, nEndColPos,nDataStartRow-1, STR_PIVOT_STYLENAME_CATEGORY );
                 }
                 else
-                    lcl_SetStyleById( pDoc, nTab, nColPos,nRowPos, nColPos,nDataStartRow-1, STR_PIVOT_STYLE_CATEGORY );
+                    lcl_SetStyleById( pDoc, nTab, nColPos,nRowPos, nColPos,nDataStartRow-1, STR_PIVOT_STYLENAME_CATEGORY );
             }
             else if (  pArray[nCol].Flags & sheet::MemberResultFlags::SUBTOTAL )
                 outputimp.AddCol( nColPos );
@@ -1095,10 +1095,10 @@ void ScDPOutput::Output()
                     if ( nField == pRowFields.size() - 2 )
                         outputimp.OutputBlockFrame( nColPos+1, nRowPos, nColPos+1, nEndRowPos );
 
-                    lcl_SetStyleById( pDoc, nTab, nColPos,nRowPos, nDataStartCol-1,nEndRowPos, STR_PIVOT_STYLE_CATEGORY );
+                    lcl_SetStyleById( pDoc, nTab, nColPos,nRowPos, nDataStartCol-1,nEndRowPos, STR_PIVOT_STYLENAME_CATEGORY );
                 }
                 else
-                    lcl_SetStyleById( pDoc, nTab, nColPos,nRowPos, nDataStartCol-1,nRowPos, STR_PIVOT_STYLE_CATEGORY );
+                    lcl_SetStyleById( pDoc, nTab, nColPos,nRowPos, nDataStartCol-1,nRowPos, STR_PIVOT_STYLENAME_CATEGORY );
             }
             else if (  pArray[nRow].Flags & sheet::MemberResultFlags::SUBTOTAL )
                 outputimp.AddRow( nRowPos );
