@@ -35,7 +35,6 @@
 #include <ucbhelper/content.hxx>
 
 #include <comphelper/storagehelper.hxx>
-#include <mediamisc.hxx>
 
 using namespace ::com::sun::star;
 
