@@ -1102,8 +1102,8 @@ void SdrPageProperties::SetStyleSheet(SfxStyleSheet* pStyleSheet)
 
 
 SdrPage::SdrPage(SdrModel& rModel, bool bMasterPage)
-:   SdrObjList(this),
-    tools::WeakBase(),
+:   tools::WeakBase(),
+    SdrObjList(this),
     maPageUsers(),
     mpViewContact(nullptr),
     mrSdrModelFromSdrPage(rModel),
@@ -1129,30 +1129,6 @@ SdrPage::SdrPage(SdrModel& rModel, bool bMasterPage)
 
     mpSdrPageProperties.reset(new SdrPageProperties(*this));
 }
-
-// SdrPage::SdrPage(const SdrPage& rSrcPage)
-// :   SdrObjList(this),
-//     tools::WeakBase(),
-//     maPageUsers(),
-//     mpViewContact(nullptr),
-//     mrSdrModelFromSdrPage(rSrcPage.getSdrModelFromSdrPage()),
-//     mnWidth(rSrcPage.mnWidth),
-//     mnHeight(rSrcPage.mnHeight),
-//     mnBorderLeft(rSrcPage.mnBorderLeft),
-//     mnBorderUpper(rSrcPage.mnBorderUpper),
-//     mnBorderRight(rSrcPage.mnBorderRight),
-//     mnBorderLower(rSrcPage.mnBorderLower),
-//     mpLayerAdmin(new SdrLayerAdmin(rSrcPage.getSdrModelFromSdrPage().GetLayerAdmin())),
-//     mpSdrPageProperties(nullptr),
-//     mpMasterPageDescriptor(nullptr),
-//     nPageNum(rSrcPage.nPageNum),
-//     mbMaster(rSrcPage.mbMaster),
-//     mbInserted(false),
-//     mbObjectsNotPersistent(rSrcPage.mbObjectsNotPersistent),
-//     mbPageBorderOnlyLeftRight(rSrcPage.mbPageBorderOnlyLeftRight)
-// {
-//     aPrefVisiLayers.SetAll();
-// }
 
 SdrPage::~SdrPage()
 {
