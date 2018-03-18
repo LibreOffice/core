@@ -23,24 +23,29 @@
 
 #include <com/sun/star/task/XInteractionRequest.hpp>
 #include <com/sun/star/task/PDFExportException.hpp>
+#include <comphelper/namedvaluecollection.hxx>
 #include <cppuhelper/supportsservice.hxx>
-
+#include <toolkit/helper/vclunohelper.hxx>
 
 PDFInteractionHandler::PDFInteractionHandler()
 {
 }
 
-
 PDFInteractionHandler::~PDFInteractionHandler()
 {
 }
-
 
 void SAL_CALL PDFInteractionHandler::handle( const Reference< task::XInteractionRequest >& i_xRequest )
 {
     handleInteractionRequest( i_xRequest );
 }
 
+void SAL_CALL PDFInteractionHandler::initialize(const css::uno::Sequence<css::uno::Any>& rArguments)
+{
+    comphelper::NamedValueCollection aProperties(rArguments);
+    if (aProperties.has("Parent"))
+        aProperties.get("Parent") >>= m_xParent;
+}
 
 sal_Bool SAL_CALL PDFInteractionHandler::handleInteractionRequest( const Reference< task::XInteractionRequest >& i_xRequest )
 {
@@ -54,7 +59,9 @@ sal_Bool SAL_CALL PDFInteractionHandler::handleInteractionRequest( const Referen
         sal_Int32 nCodes = aExc.ErrorCodes.getLength();
         for( sal_Int32 i = 0; i < nCodes; i++ )
             aCodes.insert( static_cast<vcl::PDFWriter::ErrorCode>(aExc.ErrorCodes.getConstArray()[i]) );
-        ImplErrorDialog aDlg(nullptr, aCodes);
+
+        vcl::Window* pParent = VCLUnoHelper::GetWindow(m_xParent);
+        ImplErrorDialog aDlg(pParent ? pParent->GetFrameWeld() : nullptr, aCodes);
         aDlg.run();
         bHandled = true;
     }
