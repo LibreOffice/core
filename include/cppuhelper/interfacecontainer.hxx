@@ -91,7 +91,7 @@ OInterfaceContainerHelper * OMultiTypeInterfaceContainerHelperVar< key , hashImp
 {
     ::osl::MutexGuard aGuard( rMutex );
 
-     typename InterfaceMap::iterator iter = find( rKey );
+    typename InterfaceMap::iterator iter = find( rKey );
     if( iter != m_pMap->end() )
             return static_cast<OInterfaceContainerHelper*>( (*iter).second );
     return NULL;
