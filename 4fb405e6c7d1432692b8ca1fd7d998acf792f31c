@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_30a0ee90",
+        "filename": "sc/qa/uitest/calc_tests/tdf114992.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2018-03-18T15:09:24Z",
+      "side": 1,
+      "message": "Can you remove unused imports from the test?",
+      "revId": "4fb405e6c7d1432692b8ca1fd7d998acf792f31c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
