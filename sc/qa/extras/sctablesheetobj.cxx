@@ -10,6 +10,7 @@
 #include <test/calc_unoapi_test.hxx>
 #include <test/sheet/scenario.hxx>
 #include <test/sheet/sheetcellrange.hxx>
+#include <test/sheet/spreadsheet.hxx>
 #include <test/sheet/xcellformatrangessupplier.hxx>
 #include <test/sheet/xcellrangeaddressable.hxx>
 #include <test/sheet/xcellseries.hxx>
@@ -45,6 +46,7 @@ namespace sc_apitest
 
 class ScTableSheetObj : public CalcUnoApiTest, public apitest::Scenario,
                                                public apitest::SheetCellRange,
+                                               public apitest::Spreadsheet,
                                                public apitest::XCellFormatRangesSupplier,
                                                public apitest::XCellRangeAddressable,
                                                public apitest::XCellSeries,
@@ -76,6 +78,7 @@ public:
     virtual OUString getFileURL() override;
 
     virtual uno::Reference< uno::XInterface > init() override;
+    virtual uno::Reference< uno::XInterface > getXSpreadsheetDocument() override;
     virtual uno::Reference< uno::XInterface > getXSpreadsheet() override;
     virtual uno::Reference< uno::XInterface > getScenarioSpreadsheet() override;
 
@@ -86,6 +89,9 @@ public:
 
     // SheetCellRange
     CPPUNIT_TEST(testSheetCellRangeProperties);
+
+    // Spreadsheet
+    CPPUNIT_TEST(testSpreadsheetProperties);
 
     // XCellFormatRangesSupplier
     CPPUNIT_TEST(testGetCellFormatRanges);
@@ -209,6 +215,13 @@ uno::Reference< uno::XInterface > ScTableSheetObj::init()
     xSheets->getByName("Scenario");
 
     return xSheet;
+}
+
+uno::Reference<uno::XInterface> ScTableSheetObj::getXSpreadsheetDocument()
+{
+    uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_MESSAGE("no calc document", xDoc.is());
+    return xDoc;
 }
 
 uno::Reference<uno::XInterface> ScTableSheetObj::getScenarioSpreadsheet()
