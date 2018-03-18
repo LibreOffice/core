@@ -138,6 +138,9 @@
 #define SPINNER_64_12                                "vcl/res/spinner-64-12.png"
 //end, Throbber::getDefaultImageURLs
 
+#define IMG_WARN "res/ballgreen_7.png"
+#define IMG_ERR  "res/ballred_7.png"
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

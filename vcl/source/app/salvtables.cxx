@@ -38,6 +38,7 @@
 #include <vcl/tabctrl.hxx>
 #include <vcl/tabpage.hxx>
 #include <vcl/weld.hxx>
+#include <bitmaps.hlst>
 
 SalFrame::SalFrame()
     : m_pWindow(nullptr)
@@ -862,10 +863,22 @@ public:
         m_xTreeView->InsertEntry(rText, pos);
     }
 
-    virtual void insert(int pos, const OUString& rId, const OUString& rStr) override
+    virtual void insert(int pos, const OUString& rId, const OUString& rStr, const OUString& rImage) override
     {
-        m_xTreeView->SetEntryData(m_xTreeView->InsertEntry(rStr, pos == -1 ? COMBOBOX_APPEND : pos),
-                                      new OUString(rId));
+        sal_Int32 nInsertedAt;
+        if (rImage.isEmpty())
+            nInsertedAt = m_xTreeView->InsertEntry(rStr, pos == -1 ? COMBOBOX_APPEND : pos);
+        else
+        {
+            assert((rImage == "dialog-warning" || rImage == "dialog-error") && "unknown stock image");
+            Image aImage;
+            if (rImage == "dialog-warning")
+                aImage = Image(BitmapEx(IMG_WARN));
+            else if (rImage == "dialog-error")
+                aImage = Image(BitmapEx(IMG_ERR));
+            nInsertedAt = m_xTreeView->InsertEntry(rStr, aImage, pos == -1 ? COMBOBOX_APPEND : pos);
+        }
+        m_xTreeView->SetEntryData(nInsertedAt, new OUString(rId));
     }
 
     using SalInstanceContainer::remove;

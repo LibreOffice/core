@@ -33,6 +33,7 @@
 #include <vcl/group.hxx>
 #include <vcl/pdfwriter.hxx>
 #include <vcl/FilterConfigItem.hxx>
+#include <vcl/weld.hxx>
 
 #include "pdffilter.hxx"
 
@@ -43,19 +44,16 @@ class ImpPDFTabViewerPage;
 class ImpPDFTabOpnFtrPage;
 class ImpPDFTabLinksPage;
 
-class ImplErrorDialog : public MessageDialog
+class ImplErrorDialog : public weld::MessageDialogController
 {
 private:
-    VclPtr<ListBox>             m_pErrors;
-    VclPtr<FixedText>           m_pExplanation;
+    std::unique_ptr<weld::TreeView> m_xErrors;
+    std::unique_ptr<weld::Label> m_xExplanation;
 
-    DECL_LINK(SelectHdl, ListBox&, void);
+    DECL_LINK(SelectHdl, weld::TreeView&, void);
 
 public:
-    explicit                    ImplErrorDialog( const std::set< vcl::PDFWriter::ErrorCode >& );
-    virtual                     ~ImplErrorDialog() override;
-
-    virtual void                dispose() override;
+    explicit ImplErrorDialog(weld::Window* pParent, const std::set<vcl::PDFWriter::ErrorCode>& rErrorCodes);
 };
 
 
