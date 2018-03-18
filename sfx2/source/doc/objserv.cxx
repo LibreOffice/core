@@ -593,9 +593,14 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                 const SfxUnoAnyItem* pInteractionHandlerItem = rReq.GetArg<SfxUnoAnyItem>(SID_INTERACTIONHANDLER);
                 if ( !pInteractionHandlerItem )
                 {
+                    uno::Reference<css::awt::XWindow> xParentWindow;
+                    uno::Reference<frame::XController> xCtrl(GetModel()->getCurrentController());
+                    if (xCtrl.is())
+                        xParentWindow = xCtrl->getFrame()->getContainerWindow();
+
                     uno::Reference< uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
                     uno::Reference< task::XInteractionHandler2 > xInteract(
-                        task::InteractionHandler::createWithParent(xContext, nullptr) );
+                        task::InteractionHandler::createWithParent(xContext, xParentWindow) );
 
                     SfxUnoAnyItem aInteractionItem( SID_INTERACTIONHANDLER, uno::makeAny( xInteract ) );
                     if ( nId == SID_SAVEDOC )
