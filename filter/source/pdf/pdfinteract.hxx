@@ -22,7 +22,9 @@
 
 #include <cppuhelper/implbase.hxx>
 
+#include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/task/XInteractionHandler2.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
@@ -31,19 +33,25 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 
 
-class PDFInteractionHandler : public cppu::WeakImplHelper < task::XInteractionHandler2,
-                                                             XServiceInfo >
+class PDFInteractionHandler : public cppu::WeakImplHelper<css::lang::XInitialization,
+                                                          css::task::XInteractionHandler2,
+                                                          XServiceInfo>
 {
+private:
+    css::uno::Reference<css::awt::XWindow> m_xParent;
 protected:
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
-    // XIniteractionHandler
+    // XInitialization
+    virtual void SAL_CALL initialize(const css::uno::Sequence<css::uno::Any>& rArguments) override;
+
+    // XInteractionHandler
     virtual void SAL_CALL handle( const Reference< task::XInteractionRequest >& ) override;
 
-    // XIniteractionHandler2
+    // XInteractionHandler2
     virtual sal_Bool SAL_CALL handleInteractionRequest( const Reference< task::XInteractionRequest >& ) override;
 
 public:
