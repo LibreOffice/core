@@ -42,7 +42,7 @@ namespace drawinglayer
 
             // OperationSmiley: Added to be able to define a FillGeometry different from local
             // geometry. It is ignored when empty and/or equal to UnitPolyPolygon.
-            // If used and there is a fill, object's geomery (maUnitPolyPolygon) will be filled,
+            // If used and there is a fill, object geometry (maUnitPolyPolygon) will be filled,
             // but UnitDefinitionPolyPolygon will be used to define the FillStyle. Thus when
             // using the 'same' UnitDefinitionPolyPolygon for multiple definitions,
             // all filled stuff using it will fit seamless together.
