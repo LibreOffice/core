@@ -857,14 +857,15 @@ public:
         m_xTreeView->SetDoubleClickHdl(LINK(this, SalInstanceTreeView, DoubleClickHdl));
     }
 
-    virtual void append(const OUString& rText) override
-    {
-        m_xTreeView->InsertEntry(rText);
-    }
-
-    virtual void insert(const OUString& rText, int pos) override
+    virtual void insert_text(const OUString& rText, int pos) override
     {
         m_xTreeView->InsertEntry(rText, pos);
+    }
+
+    virtual void insert(int pos, const OUString& rId, const OUString& rStr) override
+    {
+        m_xTreeView->SetEntryData(m_xTreeView->InsertEntry(rStr, pos == -1 ? COMBOBOX_APPEND : pos),
+                                      new OUString(rId));
     }
 
     using SalInstanceContainer::remove;
@@ -906,17 +907,30 @@ public:
             m_xTreeView->SelectEntryPos(pos);
     }
 
-    virtual OUString get_selected() override
+    virtual OUString get_selected() const override
     {
         return m_xTreeView->GetSelectedEntry();
     }
 
-    virtual OUString get(int pos) override
+    virtual OUString get(int pos) const override
     {
         return m_xTreeView->GetEntry(pos);
     }
 
-    virtual int get_selected_index() override
+    const OUString* getEntryData(int index) const
+    {
+        return static_cast<const OUString*>(m_xTreeView->GetEntryData(index));
+    }
+
+    virtual OUString get_id(int pos) const override
+    {
+        const OUString* pRet = getEntryData(pos);
+        if (!pRet)
+            return OUString();
+        return *pRet;
+    }
+
+    virtual int get_selected_index() const override
     {
         const sal_Int32 nRet = m_xTreeView->GetSelectedEntryPos();
         if (nRet == LISTBOX_ENTRY_NOTFOUND)
@@ -1278,24 +1292,15 @@ public:
         return *pRet;
     }
 
-    virtual void append_text(const OUString& rStr) override
-    {
-        m_xComboBoxText->InsertEntry(rStr);
-    }
-
     virtual void insert_text(int pos, const OUString& rStr) override
     {
-        m_xComboBoxText->InsertEntry(rStr, pos);
-    }
-
-    virtual void append(const OUString& rId, const OUString& rStr) override
-    {
-        m_xComboBoxText->SetEntryData(m_xComboBoxText->InsertEntry(rStr), new OUString(rId));
+        m_xComboBoxText->InsertEntry(rStr, pos == -1 ? COMBOBOX_APPEND : pos);
     }
 
     virtual void insert(int pos, const OUString& rId, const OUString& rStr) override
     {
-        m_xComboBoxText->SetEntryData(m_xComboBoxText->InsertEntry(rStr, pos), new OUString(rId));
+        m_xComboBoxText->SetEntryData(m_xComboBoxText->InsertEntry(rStr, pos == -1 ? COMBOBOX_APPEND : pos),
+                                      new OUString(rId));
     }
 
     virtual int get_count() const override

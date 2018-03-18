@@ -188,9 +188,9 @@ IMPL_LINK( SfxNewFileDialog, RegionSelect, weld::TreeView&, rBox, void )
     if (nc != -1 && nc != 0)
         aSel = aSel.replaceAt(nc-1, 1, "");
     if ( aSel.compareToIgnoreAsciiCase( SfxResId(STR_STANDARD) ) == 0 )
-        m_xTemplateLb->append(SfxResId(STR_NONE));
+        m_xTemplateLb->append_text(SfxResId(STR_NONE));
     for (sal_uInt16 i = 0; i < nCount; ++i)
-        m_xTemplateLb->append(m_aTemplates.GetName(nRegion, i));
+        m_xTemplateLb->append_text(m_aTemplates.GetName(nRegion, i));
     m_xTemplateLb->thaw();
     m_xTemplateLb->select(0);
     TemplateSelect(*m_xTemplateLb);
@@ -303,7 +303,7 @@ SfxNewFileDialog::SfxNewFileDialog(weld::Window *pParent, SfxNewFileDialogMode n
     if (nCount)
     {
         for(sal_uInt16 i = 0; i < nCount; ++i)
-            m_xRegionLb->append(m_aTemplates.GetFullRegionName(i));
+            m_xRegionLb->append_text(m_aTemplates.GetFullRegionName(i));
         m_xRegionLb->connect_changed(LINK(this, SfxNewFileDialog, RegionSelect));
     }
 

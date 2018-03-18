@@ -167,10 +167,10 @@ public:
     virtual void set_active_id(const OUString& rStr) = 0;
     virtual OUString get_text(int pos) const = 0;
     virtual OUString get_id(int pos) const = 0;
-    virtual void append_text(const OUString& rStr) = 0;
     virtual void insert_text(int pos, const OUString& rStr) = 0;
-    virtual void append(const OUString& rId, const OUString& rStr) = 0;
+    void append_text(const OUString& rStr) { insert_text(-1, rStr); }
     virtual void insert(int pos, const OUString& rId, const OUString& rStr) = 0;
+    void append(const OUString& rId, const OUString& rStr) { insert(-1, rId, rStr); }
     virtual int find_text(const OUString& rStr) const = 0;
     virtual int find_id(const OUString& rId) const = 0;
     virtual int get_count() const = 0;
@@ -199,8 +199,10 @@ protected:
     void signal_row_activated() { m_aRowActivatedHdl.Call(*this); }
 
 public:
-    virtual void append(const OUString& rText) = 0;
-    virtual void insert(const OUString& rText, int pos) = 0;
+    virtual void insert_text(const OUString& rText, int pos) = 0;
+    virtual void append_text(const OUString& rText) { insert_text(rText, -1); }
+    virtual void insert(int pos, const OUString& rId, const OUString& rStr) = 0;
+    virtual void append(const OUString& rId, const OUString& rStr) { insert(-1, rId, rStr); }
     virtual int n_children() const = 0;
     virtual void select(int pos) = 0;
     using Container::remove;
@@ -208,9 +210,10 @@ public:
     virtual int find(const OUString& rText) const = 0;
     virtual void set_top_entry(int pos) = 0;
     virtual void clear() = 0;
-    virtual OUString get_selected() = 0;
-    virtual int get_selected_index() = 0;
-    virtual OUString get(int pos) = 0;
+    virtual OUString get_selected() const = 0;
+    virtual int get_selected_index() const = 0;
+    virtual OUString get(int pos) const = 0;
+    virtual OUString get_id(int pos) const = 0;
     virtual int get_height_rows(int nRows) const = 0;
 
     virtual void freeze() = 0;
