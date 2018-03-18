@@ -190,27 +190,23 @@ public:
     {
         css::uno::Sequence< OUString > sNames( mXNamedVec.size() );
         OUString* pString = sNames.getArray();
-        typename XNamedVec::iterator it = mXNamedVec.begin();
-        typename XNamedVec::iterator it_end = mXNamedVec.end();
-
-        for ( ; it != it_end; ++it, ++pString )
+        for (auto const& elem : mXNamedVec)
         {
-            css::uno::Reference< css::container::XNamed > xName( *it, css::uno::UNO_QUERY_THROW );
+            css::uno::Reference< css::container::XNamed > xName( elem, css::uno::UNO_QUERY_THROW );
             *pString = xName->getName();
+            ++pString;
         }
         return sNames;
     }
     virtual sal_Bool SAL_CALL hasByName( const OUString& aName ) override
     {
-        cachePos = mXNamedVec.begin();
-        typename XNamedVec::iterator it_end = mXNamedVec.end();
-        for ( ; cachePos != it_end; ++cachePos )
+        for (auto const& elem : mXNamedVec)
         {
-            css::uno::Reference< css::container::XNamed > xName( *cachePos, css::uno::UNO_QUERY_THROW );
+            css::uno::Reference< css::container::XNamed > xName( elem, css::uno::UNO_QUERY_THROW );
             if ( aName == xName->getName() )
-                break;
+                return true;
         }
-        return ( cachePos != it_end );
+        return false;
     }
 
     // XElementAccess
