@@ -41,6 +41,8 @@ public class LOEvent implements Comparable<LOEvent> {
     public static final int UPDATE_CALC_HEADERS = 20;
     public static final int REFRESH = 21;
     public static final int PAGE_SIZE_CHANGED = 22;
+    public static final int UNO_COMMAND_NOTIFY = 23;
+
 
     public final int mType;
     public int mPriority = 0;
@@ -60,6 +62,7 @@ public class LOEvent implements Comparable<LOEvent> {
     public String mValue;
     public int mPageWidth;
     public int mPageHeight;
+    public boolean mNotify;
 
     public LOEvent(int type) {
         mType = type;
@@ -76,6 +79,14 @@ public class LOEvent implements Comparable<LOEvent> {
         mTypeString = "String";
         mString = someString;
         mValue = null;
+    }
+
+    public LOEvent(int type, String someString, boolean notify) {
+        mType = type;
+        mTypeString = "String";
+        mString = someString;
+        mValue = null;
+        mNotify = notify;
     }
 
     public LOEvent(int type, String key, String value) {

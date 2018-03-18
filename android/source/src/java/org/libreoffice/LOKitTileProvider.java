@@ -584,7 +584,17 @@ class LOKitTileProvider implements TileProvider {
      */
     @Override
     public void postUnoCommand(String command, String arguments) {
-        mDocument.postUnoCommand(command, arguments);
+        postUnoCommand(command, arguments, false);
+    }
+
+    /**
+     * @param command
+     * @param arguments
+     * @param notifyWhenFinished
+     */
+    @Override
+    public void postUnoCommand(String command, String arguments, boolean notifyWhenFinished) {
+        mDocument.postUnoCommand(command, arguments, notifyWhenFinished);
     }
 
     private void setTextSelection(int type, PointF documentCoordinate) {

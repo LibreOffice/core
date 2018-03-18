@@ -213,7 +213,7 @@ public class Document {
      * @param command - the command, like ".uno:Bold"
      * @param arguments
      */
-    public native void postUnoCommand(String command, String arguments);
+    public native void postUnoCommand(String command, String arguments, boolean notifyWhenFinished);
 
     /**
      * Change text selection.

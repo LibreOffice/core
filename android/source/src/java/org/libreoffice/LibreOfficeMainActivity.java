@@ -118,6 +118,8 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
     private boolean isSearchToolbarOpen = false;
     private static boolean isDocumentChanged = false;
     public boolean isNewDocument = false;
+    private long lastModified = 0;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         Log.w(LOGTAG, "onCreate..");
@@ -215,6 +217,8 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
             mDrawerList.setAdapter(mDocumentPartViewListAdapter);
             mDrawerList.setOnItemClickListener(new DocumentPartClickListener());
         }
+
+        lastModified = mInputFile.lastModified();
 
         mToolbarController.setupToolbars();
 
@@ -314,13 +318,15 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
         if (!mInputFile.exists()) {
             // Needed for handling null in case new document is not created.
             mInputFile = new File(DEFAULT_DOC_PATH);
+            lastModified = mInputFile.lastModified();
         }
-        final long lastModified = mInputFile.lastModified();
-        final Activity activity = LibreOfficeMainActivity.this;
         Toast.makeText(this, R.string.message_saving, Toast.LENGTH_SHORT).show();
         // local save
-        LOKitShell.sendEvent(new LOEvent(LOEvent.UNO_COMMAND, ".uno:Save"));
+        LOKitShell.sendEvent(new LOEvent(LOEvent.UNO_COMMAND_NOTIFY, ".uno:Save", true));
+    }
 
+    public void saveFilesToCloud(){
+        final Activity activity = LibreOfficeMainActivity.this;
         final AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... params) {
@@ -348,35 +354,16 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
             protected void onPostExecute(Void param) {
                 Toast.makeText(activity, R.string.message_saved,
                         Toast.LENGTH_SHORT).show();
-                isDocumentChanged=false;
+                setDocumentChanged(false);
             }
         };
-        // Delay the call to document provider save operation and check the
-        // modification time periodically to ensure the local file has been saved.
-        // TODO: ideally the save operation should have a callback
-        Runnable runTask = new Runnable() {
-            private int timesRun = 0;
 
-            @Override
-            public void run() {
-                if (lastModified < mInputFile.lastModified()) {
-                    // we are sure local save is complete, push changes to cloud
-                    task.execute();
-                }
-                else {
-                    timesRun++;
-                    if(timesRun < 4) {
-                        new Handler().postDelayed(this, 5000);
-                    }
-                    else {
-                        // 20 seconds later, the local file has not changed,
-                        // maybe there were no changes at all
-                        Toast.makeText(activity, R.string.message_save_incomplete, Toast.LENGTH_LONG).show();
-                    }
-                }
-            }
-        };
-        new Handler().postDelayed(runTask, 5000);
+        if (lastModified < mInputFile.lastModified()) {
+            task.execute();
+            lastModified = mInputFile.lastModified();
+        } else {
+            Toast.makeText(activity, R.string.message_save_incomplete, Toast.LENGTH_LONG).show();
+        }
     }
 
     @Override
