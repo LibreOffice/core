@@ -38,6 +38,7 @@
 #include <comphelper/anytostring.hxx>
 #include <comphelper/servicedecl.hxx>
 #include <xmlscript/xml_helper.hxx>
+#include <comphelper/lok.hxx>
 #include <svl/inettype.hxx>
 #include <com/sun/star/configuration/Update.hpp>
 #include <com/sun/star/ucb/NameClash.hpp>
@@ -360,6 +361,7 @@ void BackendImpl::configmgrini_verify_init(
     if (transientMode())
         return;
     const ::osl::MutexGuard guard( getMutex() );
+    SAL_DEBUG("Reading configmgr.ini!");
     if (! m_configmgrini_inited)
     {
         // common rc:
@@ -377,6 +379,7 @@ void BackendImpl::configmgrini_verify_init(
                 do {
                     OUString token( line.getToken( 0, ' ', index ).trim() );
                     if (!token.isEmpty()) {
+                        SAL_DEBUG("schema: " << token);
                         //The  file may not exist anymore if a shared or bundled
                         //extension was removed, but it can still be in the configmgrini.
                         //After running XExtensionManager::synchronize, the configmgrini is
@@ -393,6 +396,7 @@ void BackendImpl::configmgrini_verify_init(
                     OUString token( line.getToken( 0, ' ', index ).trim() );
                     if (!token.isEmpty())
                     {
+                        SAL_DEBUG("data: " << token);
                         if (token[ 0 ] == '?')
                             token = token.copy( 1 );
                         //The  file may not exist anymore if a shared or bundled
@@ -708,8 +712,8 @@ void BackendImpl::PackageImpl::processPackage_(
             }
             //No need for live-deployment for bundled extension, because OOo
             //restarts after installation
-            if (that->m_eContext != Context::Bundled
-                && !startup)
+            if ((that->m_eContext != Context::Bundled && !startup)
+                 || comphelper::LibreOfficeKit::isActive())
             {
                 if (m_isSchema)
                 {
