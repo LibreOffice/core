@@ -118,7 +118,7 @@ void SwAutoFormatDlg::Init( const SwTableAutoFormat* pSelFormat )
     if( !bSetAutoFormat )
     {
         // Then the list to be expanded by the entry "- none -".
-        m_xLbFormat->append(SwViewShell::GetShellRes()->aStrNone);
+        m_xLbFormat->append_text(SwViewShell::GetShellRes()->aStrNone);
         nDfltStylePos = 1;
         m_nIndex = 255;
     }
@@ -127,7 +127,7 @@ void SwAutoFormatDlg::Init( const SwTableAutoFormat* pSelFormat )
             i < nCount; i++)
     {
         SwTableAutoFormat const& rFormat = (*m_xTableTable)[ i ];
-        m_xLbFormat->append(rFormat.GetName());
+        m_xLbFormat->append_text(rFormat.GetName());
         if (pSelFormat && rFormat.GetName() == pSelFormat->GetName())
             m_nIndex = i;
     }
@@ -229,7 +229,7 @@ IMPL_LINK_NOARG(SwAutoFormatDlg, AddHdl, weld::Button&, void)
                             break;
 
                     m_xTableTable->InsertAutoFormat(n, std::move(pNewData));
-                    m_xLbFormat->insert(aFormatName, nDfltStylePos + n);
+                    m_xLbFormat->insert_text(aFormatName, nDfltStylePos + n);
                     m_xLbFormat->select(nDfltStylePos + n);
                     bFormatInserted = true;
                     m_xBtnAdd->set_sensitive(false);
@@ -329,7 +329,7 @@ IMPL_LINK_NOARG(SwAutoFormatDlg, RenameHdl, weld::Button&, void)
                         }
 
                     m_xTableTable->InsertAutoFormat( n, std::move(p) );
-                    m_xLbFormat->insert(aFormatName, nDfltStylePos + n);
+                    m_xLbFormat->insert_text(aFormatName, nDfltStylePos + n);
                     m_xLbFormat->select(nDfltStylePos + n);
 
                     if ( !bCoreDataChanged )
