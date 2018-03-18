@@ -338,6 +338,10 @@ DECLARE_OOXMLEXPORT_TEST(testTdf112118_DOCX, "tdf112118.docx")
             CPPUNIT_ASSERT_EQUAL_MESSAGE(OString(sStage + " border width").getStr(),
                 side.nBorderWidth,
                 sal_Int32(aBorder.OuterLineWidth + aBorder.InnerLineWidth + aBorder.LineDistance));
+
+            // tdf#116472: check that AUTO border color is imported as black
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(OString(sStage + " border color").getStr(),
+                sal_Int32(COL_BLACK), aBorder.Color);
         }
     }
 }
