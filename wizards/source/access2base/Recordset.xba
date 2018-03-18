@@ -117,7 +117,7 @@ Property Get EOF() As Boolean
 End Property		&apos;	EOF (get)
 
 REM -----------------------------------------------------------------------------------------------------------------------
-Property Get EditMode() As Boolean
+Property Get EditMode() As Integer
 	EditMode = _PropertyGet(&quot;EditMode&quot;)
 End Property		&apos;	EditMode (get)
 
