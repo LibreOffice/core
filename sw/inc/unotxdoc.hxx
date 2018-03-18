@@ -201,7 +201,7 @@ private:
 
 protected:
     /** abstract SdrModel provider */
-    virtual SdrModel* getSdrModelFromUnoModel() const;
+    virtual SdrModel* getSdrModelFromUnoModel() const override;
 
     virtual ~SwXTextDocument() override;
 public:
