@@ -614,10 +614,9 @@ bool getJavaInfoFromRegistry(const wchar_t* szRegKey,
                         {
                             bool bAppend= true;
                             //iterate over the vector with java home strings
-                            for(auto itHome= vecJavaHome.begin();
-                                itHome != vecJavaHome.end(); ++itHome)
+                            for (auto const& javaHome : vecJavaHome)
                             {
-                                if(usHomeUrl.equals(*itHome))
+                                if(usHomeUrl.equals(javaHome))
                                 {
                                     bAppend= false;
                                     break;

@@ -84,12 +84,9 @@ int main(int argc, char *argv[])
 
         outputStream << encoding << '\n' << entries.size() << '\n';
 
-        for (multimap<string, size_t>::const_iterator ii(entries.begin());
-                ii != entries.end();
-                ++ii
-        )
+        for (auto const& entry : entries)
         {
-                outputStream << ii->first << '|' << ii->second << '\n';
+                outputStream << entry.first << '|' << entry.second << '\n';
         }
 }
 

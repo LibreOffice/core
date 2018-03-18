@@ -296,8 +296,8 @@ MergeDataFile::MergeDataFile(
 
 MergeDataFile::~MergeDataFile()
 {
-    for (MergeDataHashMap::iterator aI = aMap.begin(), aEnd = aMap.end(); aI != aEnd; ++aI)
-        delete aI->second;
+    for (auto const& elem : aMap)
+        delete elem.second;
 }
 
 std::vector<OString> MergeDataFile::GetLanguages() const

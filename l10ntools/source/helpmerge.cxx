@@ -52,9 +52,9 @@
 #if OSL_DEBUG_LEVEL > 2
 void HelpParser::Dump(XMLHashMap* rElem_in)
 {
-    for(XMLHashMap::iterator pos = rElem_in->begin();pos != rElem_in->end(); ++pos)
+    for (auto const& pos : *rElem_in)
     {
-        Dump(pos->second,pos->first);
+        Dump(pos.second,pos.first);
     }
 }
 
@@ -63,10 +63,10 @@ void HelpParser::Dump(LangHashMap* rElem_in,const OString & sKey_in)
     OString x;
     OString y;
     fprintf(stdout,"+------------%s-----------+\n",sKey_in.getStr() );
-    for(LangHashMap::iterator posn=rElem_in->begin();posn!=rElem_in->end();++posn)
+    for (auto const& posn : *rElem_in)
     {
-        x=posn->first;
-        y=posn->second->ToOString();
+        x=posn.first;
+        y=posn.second->ToOString();
         fprintf(stdout,"key=%s value=%s\n",x.getStr(),y.getStr());
     }
     fprintf(stdout,"+--------------------------+\n");
@@ -110,12 +110,10 @@ bool HelpParser::CreatePO(
     XMLHashMap* aXMLStrHM = file->GetStrings();
 
     std::vector<OString> order = file->getOrder();
-    std::vector<OString>::iterator pos;
-    XMLHashMap::iterator posm;
 
-    for( pos = order.begin(); pos != order.end() ; ++pos )
+    for (auto const& pos : order)
     {
-        posm = aXMLStrHM->find( *pos );
+        auto posm = aXMLStrHM->find(pos);
         LangHashMap* pElem = posm->second;
 
         XMLElement* pXMLElement = (*pElem)[ "en-US" ];
@@ -173,12 +171,10 @@ bool HelpParser::MergeSingleFile( XMLFile* file , MergeDataFile* pMergeDataFile 
     s_ResData.sResTyp   = "help";
 
     std::vector<OString> order = file->getOrder();
-    std::vector<OString>::iterator pos;
-    XMLHashMap::iterator posm;
 
-    for( pos = order.begin(); pos != order.end() ; ++pos ) // Merge every l10n related string in the same order as export
+    for (auto const& pos : order) // Merge every l10n related string in the same order as export
     {
-        posm = aXMLStrHM->find( *pos );
+        auto posm = aXMLStrHM->find(pos);
         LangHashMap*  aLangHM = posm->second;
 #if OSL_DEBUG_LEVEL > 2
         printf("*********************DUMPING HASHMAP***************************************");
