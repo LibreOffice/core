@@ -57,8 +57,8 @@ namespace comphelper
             if (!--s_nRefCount)
             {
                 // delete the element
-                for (OIdPropertyArrayMap::iterator i = s_pMap->begin(); i != s_pMap->end(); ++i)
-                    delete (*i).second;
+                for (auto const& elem : *s_pMap)
+                    delete elem.second;
                 delete s_pMap;
                 s_pMap = nullptr;
             }
