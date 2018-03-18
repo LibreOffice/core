@@ -10362,8 +10362,8 @@ elif test "$_os" = "Linux" -o "$_os" = "Darwin" -o "$_os" = "WINNT" ; then
         AC_MSG_RESULT([yes])
         AC_PATH_PROG(GPGCONF, gpgconf)
         AC_MSG_CHECKING([for gpgconf --create-socketdir... ])
-        if $(GPGCONF) --dump-options > /dev/null ; then
-          if $(GPGCONF) --dump-options | grep -q create-socketdir ; then
+        if $GPGCONF --dump-options > /dev/null ; then
+          if $GPGCONF --dump-options | grep -q create-socketdir ; then
 	    AC_MSG_RESULT([yes])
             AC_DEFINE([HAVE_GPGCONF_SOCKETDIR])
           else
