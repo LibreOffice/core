@@ -326,14 +326,12 @@ void ConvDicXMLExport::ExportContent_()
 {
     // acquire sorted list of all keys
     ConvMapKeySet   aKeySet;
-    ConvMap::iterator aIt;
-    for (aIt = rDic.aFromLeft.begin();  aIt != rDic.aFromLeft.end();  ++aIt)
-        aKeySet.insert( (*aIt).first );
+    for (auto const& elem : rDic.aFromLeft)
+        aKeySet.insert( elem.first );
 
-    ConvMapKeySet::iterator aKeyIt;
-    for (aKeyIt = aKeySet.begin();  aKeyIt != aKeySet.end();  ++aKeyIt)
+    for (auto const& elem : aKeySet)
     {
-        OUString aLeftText( *aKeyIt );
+        OUString aLeftText(elem);
         AddAttribute( XML_NAMESPACE_TCD, "left-text", aLeftText );
         if (rDic.pConvPropType.get())   // property-type list available?
         {
@@ -350,10 +348,10 @@ void ConvDicXMLExport::ExportContent_()
                 "entry" , true, true );
 
         pair< ConvMap::iterator, ConvMap::iterator > aRange =
-                rDic.aFromLeft.equal_range( *aKeyIt );
-        for (aIt = aRange.first;  aIt != aRange.second;  ++aIt)
+                rDic.aFromLeft.equal_range(elem);
+        for (auto aIt = aRange.first;  aIt != aRange.second;  ++aIt)
         {
-            DBG_ASSERT( *aKeyIt == (*aIt).first, "key <-> entry mismatch" );
+            DBG_ASSERT( elem == (*aIt).first, "key <-> entry mismatch" );
             OUString aRightText( (*aIt).second );
             SvXMLElementExport aEntryRightText( *this, XML_NAMESPACE_TCD,
                     "right-text" , true, false );
