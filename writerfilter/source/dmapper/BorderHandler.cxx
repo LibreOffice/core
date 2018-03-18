@@ -66,7 +66,7 @@ void BorderHandler::lcl_attribute(Id rName, Value & rVal)
             appendGrabBag("val", TDefTableHandler::getBorderTypeString(nIntValue));
         break;
         case NS_ooxml::LN_CT_Border_color:
-            m_nLineColor = nIntValue;
+            m_nLineColor = nIntValue == sal_Int32(COL_AUTO) ? sal_Int32(COL_BLACK) : nIntValue;
             appendGrabBag("color", OUString::fromUtf8(msfilter::util::ConvertColor(nIntValue)));
         break;
         case NS_ooxml::LN_CT_Border_space: // border distance in points
