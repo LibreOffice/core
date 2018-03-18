@@ -56,7 +56,7 @@ private:
 
 protected:
     // SvxUnoDrawMSFactory
-    virtual SdrModel* getSdrModelFromUnoModel() const;
+    virtual SdrModel* getSdrModelFromUnoModel() const override;
 
 public:
     SvxUnoDrawingModel( SdrModel* pDoc ) throw();
