@@ -201,8 +201,12 @@ protected:
 public:
     virtual void insert_text(const OUString& rText, int pos) = 0;
     virtual void append_text(const OUString& rText) { insert_text(rText, -1); }
-    virtual void insert(int pos, const OUString& rId, const OUString& rStr) = 0;
-    virtual void append(const OUString& rId, const OUString& rStr) { insert(-1, rId, rStr); }
+    virtual void insert(int pos, const OUString& rId, const OUString& rStr, const OUString& rImage)
+        = 0;
+    virtual void append(const OUString& rId, const OUString& rStr, const OUString& rImage)
+    {
+        insert(-1, rId, rStr, rImage);
+    }
     virtual int n_children() const = 0;
     virtual void select(int pos) = 0;
     using Container::remove;
@@ -211,6 +215,7 @@ public:
     virtual void set_top_entry(int pos) = 0;
     virtual void clear() = 0;
     virtual OUString get_selected() const = 0;
+    OUString get_selected_id() const { return get_id(get_selected_index()); }
     virtual int get_selected_index() const = 0;
     virtual OUString get(int pos) const = 0;
     virtual OUString get_id(int pos) const = 0;
