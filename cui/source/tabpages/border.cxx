@@ -306,6 +306,8 @@ SvxBorderTabPage::SvxBorderTabPage(vcl::Window* pParent, const SfxItemSet& rCore
         nFlags |= FrameSelFlags::DontCare;
     m_pFrameSel->Initialize( nFlags );
 
+    m_pLbLineColor->SetAutoDisplayColor(SvxBorderLine::GetAutoColor());
+
     m_pFrameSel->SetSelectHdl(LINK(this, SvxBorderTabPage, LinesChanged_Impl));
     m_pLbLineStyle->SetSelectHdl( LINK( this, SvxBorderTabPage, SelStyleHdl_Impl ) );
     m_pLbLineColor->SetSelectHdl( LINK( this, SvxBorderTabPage, SelColHdl_Impl ) );

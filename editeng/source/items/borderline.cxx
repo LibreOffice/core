@@ -36,6 +36,9 @@ namespace {
 
     Color lcl_compute3DColor( Color aMain, int nLight, int nMedium, int nDark )
     {
+        if (aMain == COL_AUTO)
+            aMain = editeng::SvxBorderLine::GetAutoColor();
+
         basegfx::BColor color = aMain.getBColor( );
         basegfx::BColor hsl = basegfx::utils::rgb2hsl( color );
 
@@ -57,14 +60,23 @@ namespace {
 
 namespace editeng {
 
+Color SvxBorderLine::GetAutoColor()
+{
+    // TODO: do something clever here. See ImpEditEngine::GetAutoColor() for inspiration.
+    // For now, just return black.
+    return COL_BLACK;
+}
+
 Color SvxBorderLine::darkColor( Color aMain )
 {
-    return aMain;
+    return aMain == COL_AUTO ? GetAutoColor() : aMain;
 }
 
 Color SvxBorderLine::lightColor( Color aMain )
 {
 
+    if (aMain == COL_AUTO)
+        aMain = GetAutoColor();
     // Divide Luminance by 2
     basegfx::BColor color = aMain.getBColor( );
     basegfx::BColor hsl = basegfx::utils::rgb2hsl( color );
@@ -567,7 +579,7 @@ void SvxBorderLine::SetBorderLineStyle( SvxBorderLineStyle nNew )
 
 Color SvxBorderLine::GetColorOut( bool bLeftOrTop ) const
 {
-    Color aResult = aColor;
+    Color aResult = aColor == COL_AUTO ? GetAutoColor() : aColor;
 
     if ( m_aWidthImpl.IsDouble() && m_pColorOutFn != nullptr )
     {
@@ -582,7 +594,7 @@ Color SvxBorderLine::GetColorOut( bool bLeftOrTop ) const
 
 Color SvxBorderLine::GetColorIn( bool bLeftOrTop ) const
 {
-    Color aResult = aColor;
+    Color aResult = aColor == COL_AUTO ? GetAutoColor() : aColor;
 
     if ( m_aWidthImpl.IsDouble() && m_pColorInFn != nullptr )
     {
@@ -597,7 +609,7 @@ Color SvxBorderLine::GetColorIn( bool bLeftOrTop ) const
 
 Color SvxBorderLine::GetColorGap( ) const
 {
-    Color aResult = aColor;
+    Color aResult = aColor == COL_AUTO ? GetAutoColor() : aColor;
 
     if ( m_aWidthImpl.IsDouble() && m_pColorGapFn != nullptr )
     {

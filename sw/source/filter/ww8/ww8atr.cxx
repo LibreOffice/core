@@ -1535,11 +1535,22 @@ bool WW8Export::TransBrush(const Color& rCol, WW8_SHD& rShd)
     return !rCol.GetTransparency();
 }
 
+namespace {
+
 sal_uInt32 SuitableBGColor(Color nIn)
 {
     if (nIn == COL_AUTO)
         return 0xFF000000;
     return wwUtility::RGBToBGR(nIn);
+}
+
+sal_uInt32 SuitableBorderColor(Color nIn)
+{
+    if (nIn == COL_AUTO)
+        return 0xFF000000;
+    return wwUtility::RGBToBGR(nIn.GetRGBColor());
+}
+
 }
 
 void WW8AttributeOutput::CharColor( const SvxColorItem& rColor )
@@ -4285,7 +4296,7 @@ WW8_BRCVer9 WW8Export::TranslateBorderLine(const SvxBorderLine& rLine,
             nWidth = 1;                         // don't omit
 
         // BRC.cv
-        nColBGR = wwUtility::RGBToBGR(rLine.GetColor().GetRGBColor());
+        nColBGR = SuitableBorderColor(rLine.GetColor());
     }
 
     // BRC.dptSpace

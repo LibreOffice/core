@@ -233,6 +233,8 @@ public:
     static Color threeDDarkColor( Color aMain );
 
     static BorderWidthImpl getWidthImpl( SvxBorderLineStyle nStyle );
+
+    static Color GetAutoColor();
 };
 
 EDITENG_DLLPUBLIC bool operator!=( const SvxBorderLine& rLeft, const SvxBorderLine& rRight );
