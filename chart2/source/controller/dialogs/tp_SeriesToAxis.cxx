@@ -19,7 +19,6 @@
 
 #include "tp_SeriesToAxis.hxx"
 
-#include <ResId.hxx>
 #include <chartview/ChartSfxItemIds.hxx>
 
 #include <editeng/sizeitem.hxx>

@@ -18,7 +18,6 @@
  */
 
 #include <res_Titles.hxx>
-#include <ResId.hxx>
 #include <TitleDialogData.hxx>
 #include <svtools/controldims.hxx>
 

@@ -20,7 +20,6 @@
 #include "tp_DataLabel.hxx"
 
 #include "TabPageIds.h"
-#include <ResId.hxx>
 
 namespace chart
 {

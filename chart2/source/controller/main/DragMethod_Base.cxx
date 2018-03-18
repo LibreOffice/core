@@ -19,8 +19,6 @@
 
 #include "DragMethod_Base.hxx"
 
-#include <strings.hrc>
-#include <ResId.hxx>
 #include <ObjectNameProvider.hxx>
 #include <ObjectIdentifier.hxx>
 

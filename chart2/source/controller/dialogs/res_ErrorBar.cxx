@@ -18,7 +18,6 @@
  */
 
 #include <res_ErrorBar.hxx>
-#include <ResId.hxx>
 #include <bitmaps.hlst>
 #include <RangeSelectionHelper.hxx>
 #include <TabPageNotifiable.hxx>

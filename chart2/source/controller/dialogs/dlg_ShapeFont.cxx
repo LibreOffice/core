@@ -19,7 +19,6 @@
 
 #include <dlg_ShapeFont.hxx>
 #include <ViewElementListProvider.hxx>
-#include <ResId.hxx>
 #include "TabPageIds.h"
 
 #include <svl/intitem.hxx>

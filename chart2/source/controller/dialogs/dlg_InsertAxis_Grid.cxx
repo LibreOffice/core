@@ -19,7 +19,6 @@
 
 #include <dlg_InsertAxis_Grid.hxx>
 
-#include <ResId.hxx>
 #include <chartview/ChartSfxItemIds.hxx>
 #include <ObjectNameProvider.hxx>
 

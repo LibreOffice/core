@@ -18,7 +18,6 @@
  */
 
 #include "tp_PolarOptions.hxx"
-#include <ResId.hxx>
 #include <chartview/ChartSfxItemIds.hxx>
 
 #include <editeng/sizeitem.hxx>
