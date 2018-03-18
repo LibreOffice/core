@@ -106,8 +106,10 @@ public:
     void testODFBrokenStreamGPG();
     /// Test a typical broken ODF signature where the XML dsig hash is corrupted.
     void testODFBrokenDsigGPG();
+#if HAVE_GPGCONF_SOCKETDIR
     /// Test loading an encrypted ODF document
     void testODFEncryptedGPG();
+#endif
 #endif
     CPPUNIT_TEST_SUITE(SigningTest);
     CPPUNIT_TEST(testDescription);
@@ -136,7 +138,9 @@ public:
     CPPUNIT_TEST(testODFUntrustedGoodGPG);
     CPPUNIT_TEST(testODFBrokenStreamGPG);
     CPPUNIT_TEST(testODFBrokenDsigGPG);
+#if HAVE_GPGCONF_SOCKETDIR
     CPPUNIT_TEST(testODFEncryptedGPG);
+#endif
 #endif
     CPPUNIT_TEST_SUITE_END();
 
@@ -736,6 +740,8 @@ void SigningTest::testODFBrokenDsigGPG()
     CPPUNIT_ASSERT_EQUAL(static_cast<int>(SignatureState::BROKEN), static_cast<int>(pObjectShell->GetDocumentSignatureState()));
 }
 
+#if HAVE_GPGCONF_SOCKETDIR
+
 void SigningTest::testODFEncryptedGPG()
 {
     createDoc(m_directories.getURLFromSrc(DATA_DIRECTORY) + "encryptedGPG.odt");
@@ -744,6 +750,8 @@ void SigningTest::testODFEncryptedGPG()
     SfxObjectShell* pObjectShell = pBaseModel->GetObjectShell();
     CPPUNIT_ASSERT(pObjectShell);
 }
+
+#endif
 
 #endif
 
