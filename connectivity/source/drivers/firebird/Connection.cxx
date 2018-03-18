@@ -51,7 +51,6 @@
 #include <cppuhelper/exc_hlp.hxx>
 #include <unotools/tempfile.hxx>
 #include <unotools/localfilehelper.hxx>
-#include <unotools/ucbstreamhelper.hxx>
 
 #include <rtl/strbuf.hxx>
 

@@ -26,7 +26,6 @@
 #include <sfx2/app.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <sfx2/thumbnailview.hxx>
-#include <unotools/ucbstreamhelper.hxx>
 #include <vcl/image.hxx>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/StorageFactory.hpp>

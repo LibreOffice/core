@@ -35,7 +35,6 @@
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/uno/Reference.h>
 #include <unotools/configmgr.hxx>
-#include <unotools/ucbstreamhelper.hxx>
 #include <framework/menuconfiguration.hxx>
 #include <comphelper/processfactory.hxx>
 #include <unotools/localfilehelper.hxx>

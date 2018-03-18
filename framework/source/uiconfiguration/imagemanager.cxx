@@ -34,7 +34,6 @@
 #include <rtl/ref.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <comphelper/sequence.hxx>
-#include <unotools/ucbstreamhelper.hxx>
 
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::XInterface;

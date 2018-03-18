@@ -35,7 +35,6 @@
 #include <comphelper/sequence.hxx>
 #include <vcl/outdev.hxx>
 
-#include <unotools/ucbstreamhelper.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/image.hxx>
 #include <toolkit/controls/geometrycontrolmodel.hxx>

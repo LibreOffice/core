@@ -70,7 +70,6 @@
 #include <comphelper/extract.hxx>
 #include <rtl/crc.h>
 #include <comphelper/classids.hxx>
-#include <unotools/ucbstreamhelper.hxx>
 #include <com/sun/star/text/FontRelief.hpp>
 #include <editeng/frmdiritem.hxx>
 #include <vcl/fltcall.hxx>

@@ -17,7 +17,6 @@
 #include <vector>
 
 #include <unotools/streamwrap.hxx>
-#include <unotools/ucbstreamhelper.hxx>
 
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/bootstrap.hxx>

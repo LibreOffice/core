@@ -25,7 +25,6 @@
 #include <osl/thread.h>
 #include <tools/urlobj.hxx>
 #include <unotools/bootstrap.hxx>
-#include <unotools/ucbstreamhelper.hxx>
 #include <unotools/textsearch.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/processfactory.hxx>

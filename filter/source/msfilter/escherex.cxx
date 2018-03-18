@@ -90,7 +90,6 @@
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/localfilehelper.hxx>
 #include <comphelper/string.hxx>
-#include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/virdev.hxx>
 #include <rtl/crc.h>
 #include <rtl/strbuf.hxx>

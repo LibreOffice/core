@@ -38,7 +38,6 @@
 #include <comphelper/processfactory.hxx>
 #include <unotools/tempfile.hxx>
 #include <unotools/localfilehelper.hxx>
-#include <unotools/ucbstreamhelper.hxx>
 #include <unotools/streamwrap.hxx>
 
 using namespace ::com::sun::star;

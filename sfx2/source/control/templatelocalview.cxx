@@ -19,7 +19,6 @@
 #include <sfx2/docfac.hxx>
 #include <svl/inettype.hxx>
 #include <tools/urlobj.hxx>
-#include <unotools/ucbstreamhelper.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <vcl/builderfactory.hxx>
 #include <vcl/help.hxx>

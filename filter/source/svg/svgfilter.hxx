@@ -40,7 +40,6 @@
 #include <comphelper/processfactory.hxx>
 #include <editeng/flditem.hxx>
 #include <unotools/tempfile.hxx>
-#include <unotools/ucbstreamhelper.hxx>
 #include <unotools/streamwrap.hxx>
 #include <vcl/cvtgrf.hxx>
 #include <vcl/svapp.hxx>

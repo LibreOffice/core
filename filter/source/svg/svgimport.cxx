@@ -40,6 +40,7 @@
 #include <com/sun/star/task/XStatusIndicator.hpp>
 
 #include <unotools/mediadescriptor.hxx>
+#include <unotools/ucbstreamhelper.hxx>
 #include <tools/zcodec.hxx>
 
 #include <memory>

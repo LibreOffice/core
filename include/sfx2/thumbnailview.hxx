@@ -16,7 +16,6 @@
 #include <functional>
 
 #include <comphelper/processfactory.hxx>
-#include <unotools/ucbstreamhelper.hxx>
 #include <sfx2/thumbnailviewitem.hxx>
 #include <vcl/ctrl.hxx>
 #include <vcl/timer.hxx>

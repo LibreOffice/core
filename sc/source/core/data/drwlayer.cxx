@@ -53,7 +53,6 @@
 #include <vcl/settings.hxx>
 #include <unotools/configmgr.hxx>
 #include <unotools/pathoptions.hxx>
-#include <unotools/ucbstreamhelper.hxx>
 
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>

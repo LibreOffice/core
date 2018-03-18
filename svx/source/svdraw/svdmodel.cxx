@@ -31,7 +31,6 @@
 #include <com/sun/star/document/XStorageBasedDocument.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 
-#include <unotools/ucbstreamhelper.hxx>
 #include <unotools/configmgr.hxx>
 
 #include <svl/whiter.hxx>
