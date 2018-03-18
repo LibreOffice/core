@@ -443,7 +443,6 @@ protected:
     // to call lateInit() after copy-construction of a new object. Any initialization in derived
     // classes that needs access to the page objects must be deferred to lateInit. And it must
     // call lateInit() of its parent class.
-//    SdrPage(const SdrPage& rSrcPage);
     void lateInit(const SdrPage& rSrcPage);
 
 public:
