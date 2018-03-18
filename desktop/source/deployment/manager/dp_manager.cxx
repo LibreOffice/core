@@ -21,6 +21,7 @@
 
 #include <dp_registry.hxx>
 #include <dp_shared.hxx>
+#include <strings.hrc>
 #include <dp_ucb.h>
 #include <dp_resource.h>
 #include <dp_platform.hxx>

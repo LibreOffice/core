@@ -70,6 +70,7 @@
 #include "dp_gui_dependencydialog.hxx"
 #include "dp_gui_dialog2.hxx"
 #include <dp_shared.hxx>
+#include <strings.hrc>
 #include "dp_gui_theextmgr.hxx"
 #include "dp_gui_updatedialog.hxx"
 #include "dp_gui_updateinstalldialog.hxx"

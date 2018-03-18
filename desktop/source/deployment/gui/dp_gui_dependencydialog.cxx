@@ -26,9 +26,7 @@
 #include <rtl/ustring.hxx>
 #include <vcl/dialog.hxx>
 
-#include <strings.hrc>
 #include "dp_gui_dependencydialog.hxx"
-#include <dp_shared.hxx>
 
 namespace vcl { class Window; }
 

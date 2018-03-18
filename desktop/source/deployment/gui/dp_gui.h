@@ -22,7 +22,6 @@
 
 #include "dp_gui_updatedata.hxx"
 #include <dp_misc.h>
-#include <strings.hrc>
 #include <rtl/ref.hxx>
 #include <rtl/instance.hxx>
 #include <osl/thread.hxx>
