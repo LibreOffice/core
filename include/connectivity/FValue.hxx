@@ -512,8 +512,8 @@ namespace connectivity
         OValueRefVector(){}
         OValueRefVector(size_t _st) : ODeleteVector< ORowSetValueDecoratorRef >(_st)
         {
-            for(OValueRefVector::Vector::iterator aIter = get().begin() ; aIter != get().end() ;++aIter)
-                *aIter = new ORowSetValueDecorator;
+            for (auto & elem : get())
+                elem = new ORowSetValueDecorator;
         }
     };
 
