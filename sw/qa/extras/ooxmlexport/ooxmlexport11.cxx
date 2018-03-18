@@ -284,7 +284,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf107035, "tdf107035.docx")
 DECLARE_OOXMLEXPORT_TEST(testTdf112118_DOCX, "tdf112118.docx")
 {
     // The resulting left margin width (2081) differs from its DOC counterpart from ww8export2.cxx,
-    // because DOCX import does two conversions between mm/100 and twips on the route, loosing one
+    // because DOCX import does two conversions between mm/100 and twips on the route, losing one
     // twip on the road and arriving with a value that is 2 mm/100 less. I don't see an obvious way
     // to avoid that.
     struct {

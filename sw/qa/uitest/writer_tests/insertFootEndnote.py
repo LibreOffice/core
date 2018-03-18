@@ -27,7 +27,7 @@ class insertFootEndnote(UITestCase):
         self.assertEqual(document.Footnotes.getCount(), 1)
         self.xUITest.executeCommand(".uno:Undo")
         self.assertEqual(document.Footnotes.getCount(), 0)
-#Automatic - Endtnote
+#Automatic - Endnote
         self.ui_test.execute_dialog_through_command(".uno:InsertFootnoteDialog")
         xDialog = self.xUITest.getTopFocusWindow()
 

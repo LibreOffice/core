@@ -2318,7 +2318,7 @@ SdrObject* EnhancedCustomShape2d::CreatePathObj( bool bLineGeometryNeededOnly )
 
                     // OperationSmiley: when we have access to the SdrObjCustomShape and the
                     // CustomShape is built with more than a single filled Geometry, use it
-                    // to define that all helper geometites defined here (SdrObjects currently)
+                    // to define that all helper geometries defined here (SdrObjects currently)
                     // will use the same FillGeometryDefinition (from the referenced SdrObjCustomShape).
                     // This will all same-filled objects look like filled smoothly with the same style.
                     pObj->setFillGeometryDefiningShape(&mrSdrObjCustomShape);
