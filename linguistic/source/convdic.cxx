@@ -449,18 +449,16 @@ uno::Sequence< OUString > SAL_CALL ConvDic::getConversionEntries(
                                 aFromLeft : *pFromRight;
     uno::Sequence< OUString > aRes( rConvMap.size() );
     OUString *pRes = aRes.getArray();
-    ConvMap::iterator aIt = rConvMap.begin();
     sal_Int32 nIdx = 0;
-    while (aIt != rConvMap.end())
+    for (auto const& elem : rConvMap)
     {
-        OUString aCurEntry( (*aIt).first );
+        OUString aCurEntry( elem.first );
         // skip duplicate entries ( duplicate = duplicate entries
         // respective to the evaluated side (FROM_LEFT or FROM_RIGHT).
         // Thus if FROM_LEFT is evaluated for pairs (A,B) and (A,C)
         // only one entry for A will be returned in the result)
         if (nIdx == 0 || !lcl_SeqHasEntry( pRes, nIdx, aCurEntry ))
             pRes[ nIdx++ ] = aCurEntry;
-        ++aIt;
     }
     aRes.realloc( nIdx );
 
@@ -510,25 +508,21 @@ sal_Int16 SAL_CALL ConvDic::getMaxCharCount( ConversionDirection eDirection )
     if (!bMaxCharCountIsValid)
     {
         nMaxLeftCharCount   = 0;
-        ConvMap::iterator aIt = aFromLeft.begin();
-        while (aIt != aFromLeft.end())
+        for (auto const& elem : aFromLeft)
         {
-            sal_Int16 nTmp = static_cast<sal_Int16>((*aIt).first.getLength());
+            sal_Int16 nTmp = static_cast<sal_Int16>(elem.first.getLength());
             if (nTmp > nMaxLeftCharCount)
                 nMaxLeftCharCount = nTmp;
-            ++aIt;
         }
 
         nMaxRightCharCount  = 0;
         if (pFromRight.get())
         {
-            aIt = pFromRight->begin();
-            while (aIt != pFromRight->end())
+            for (auto const& elem : *pFromRight)
             {
-                sal_Int16 nTmp = static_cast<sal_Int16>((*aIt).first.getLength());
+                sal_Int16 nTmp = static_cast<sal_Int16>(elem.first.getLength());
                 if (nTmp > nMaxRightCharCount)
                     nMaxRightCharCount = nTmp;
-                ++aIt;
             }
         }
 

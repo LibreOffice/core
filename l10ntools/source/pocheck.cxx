@@ -71,21 +71,21 @@ static void checkStyleNames(const OString& aLanguage)
     }
     aPoInput.close();
 
-    for( std::map<OString,sal_uInt16>::iterator it=aLocalizedStyleNames.begin(); it!=aLocalizedStyleNames.end(); ++it)
+    for (auto const& localizedStyleName : aLocalizedStyleNames)
     {
-        if( it->second > 1 )
+        if( localizedStyleName.second > 1 )
         {
             std::cout << "ERROR: Style name translations must be unique in:\n" <<
-                aPoPath << "\nLanguage: " << aLanguage << "\nDuplicated translation is: " << it->first <<
+                aPoPath << "\nLanguage: " << aLanguage << "\nDuplicated translation is: " << localizedStyleName.first <<
                 "\nSee STR_POOLCOLL_*\n\n";
         }
     }
-    for( std::map<OString,sal_uInt16>::iterator it=aLocalizedNumStyleNames.begin(); it!=aLocalizedNumStyleNames.end(); ++it)
+    for (auto const& localizedNumStyleName : aLocalizedNumStyleNames)
     {
-        if( it->second > 1 )
+        if( localizedNumStyleName.second > 1 )
         {
             std::cout << "ERROR: Style name translations must be unique in:\n" <<
-                aPoPath << "\nLanguage: " << aLanguage << "\nDuplicated translation is: " << it->first <<
+                aPoPath << "\nLanguage: " << aLanguage << "\nDuplicated translation is: " << localizedNumStyleName.first <<
                 "\nSee STR_POOLNUMRULE_*\n\n";
         }
     }
@@ -268,14 +268,14 @@ static void checkFunctionNames(const OString& aLanguage)
         }
     }
     aPoInput.close();
-    for( std::map<OString,sal_uInt16>::iterator it=aLocalizedFunctionNames.begin(); it!=aLocalizedFunctionNames.end(); ++it)
+    for (auto const& localizedFunctionName : aLocalizedFunctionNames)
     {
-        if( it->second > 1 )
+        if( localizedFunctionName.second > 1 )
         {
             std::cout
                 << ("ERROR: Spreadsheet function name translations must be"
                     " unique.\nLanguage: ")
-                << aLanguage << "\nDuplicated translation is: " << it->first
+                << aLanguage << "\nDuplicated translation is: " << localizedFunctionName.first
                 << "\n\n";
         }
     }

@@ -131,11 +131,10 @@ static uno::Sequence< lang::Locale > GetAvailLocales(
         sal_Int32 nLanguages = static_cast< sal_Int32 >(aLanguages.size());
         aRes.realloc( nLanguages );
         lang::Locale *pRes = aRes.getArray();
-        std::set< LanguageType >::const_iterator aIt( aLanguages.begin() );
-        for (i = 0;  aIt != aLanguages.end();  ++aIt, ++i)
+        i=0;
+        for (auto const& language : aLanguages)
         {
-            LanguageType nLang = *aIt;
-            pRes[i] = LanguageTag::convertToLocale( nLang );
+            pRes[i++] = LanguageTag::convertToLocale(language);
         }
     }
 
@@ -745,16 +744,14 @@ void LngSvcMgr::UpdateAll()
             OUString aSubNodeName( OUString::createFromAscii(pSubNodeName) );
 
             list_entry_map_t &rCurMap = (i == 0) ? aCurSvcs[k] : aLastFoundSvcs[k];
-            list_entry_map_t::const_iterator aIt( rCurMap.begin() );
             sal_Int32 nVals = static_cast< sal_Int32 >( rCurMap.size() );
             Sequence< PropertyValue > aNewValues( nVals );
             PropertyValue *pNewValue = aNewValues.getArray();
-            while (aIt != rCurMap.end())
+            for (auto const& elem : rCurMap)
             {
-                pNewValue->Name = aSubNodeName + "/" + (*aIt).first;
-                pNewValue->Value <<= (*aIt).second;
+                pNewValue->Name = aSubNodeName + "/" + elem.first;
+                pNewValue->Value <<= elem.second;
                 ++pNewValue;
-                ++aIt;
             }
             OSL_ENSURE( pNewValue - aNewValues.getArray() == nVals,
                     "possible mismatch of sequence size and property number" );
