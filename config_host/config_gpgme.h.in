@@ -19,6 +19,9 @@
 // Defined if gpg and gpgme signature verification is available
 #define HAVE_FEATURE_GPGVERIFY 0
 
+// Defined if gpgconf --create-socketdir works
+#define HAVE_GPGCONF_SOCKETDIR 0
+
 #if HAVE_FEATURE_GPGME
 # include "config_lgpl.h"
 #endif
