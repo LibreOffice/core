@@ -19,7 +19,6 @@
 
 #include <dlgsize.hxx>
 #include <dbu_dlg.hxx>
-#include <core_resource.hxx>
 
 namespace dbaui
 {

@@ -27,7 +27,6 @@
 #include <com/sun/star/sdbc/XRowSet.hpp>
 
 #include <svtools/genericunodialog.hxx>
-#include <core_resource.hxx>
 #include <apitools.hxx>
 
 namespace dbaui

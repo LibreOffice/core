@@ -23,7 +23,6 @@
 #include <vcl/lstbox.hxx>
 #include <vcl/svapp.hxx>
 #include "SqlNameEdit.hxx"
-#include <core_resource.hxx>
 
 namespace dbaui
 {

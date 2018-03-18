@@ -20,7 +20,6 @@
 #include <textconnectionsettings.hxx>
 #include <uiservices.hxx>
 #include <dbu_reghelper.hxx>
-#include <core_resource.hxx>
 #include <apitools.hxx>
 #include <unoadmin.hxx>
 #include <stringconstants.hxx>

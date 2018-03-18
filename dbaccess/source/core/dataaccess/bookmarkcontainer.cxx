@@ -20,8 +20,6 @@
 #include <bookmarkcontainer.hxx>
 #include <stringconstants.hxx>
 #include <apitools.hxx>
-#include <core_resource.hxx>
-#include <strings.hrc>
 
 #include <osl/diagnose.h>
 #include <comphelper/sequence.hxx>

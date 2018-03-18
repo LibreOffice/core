@@ -20,7 +20,6 @@
 #define INCLUDED_DBACCESS_SOURCE_UI_INC_TOKENWRITER_HXX
 
 #include "DExport.hxx"
-#include <core_resource.hxx>
 #include "commontypes.hxx"
 
 #include <com/sun/star/awt/FontDescriptor.hpp>

@@ -31,7 +31,6 @@
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <RelControliFace.hxx>
-#include <strings.hrc>
 #include <helpids.h>
 #include <osl/diagnose.h>
 

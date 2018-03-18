@@ -21,7 +21,6 @@
 #include <osl/diagnose.h>
 #include <querycontroller.hxx>
 #include <JoinDesignView.hxx>
-#include <strings.hrc>
 #include <TableWindow.hxx>
 #include <TableWindowListBox.hxx>
 #include <TableConnection.hxx>

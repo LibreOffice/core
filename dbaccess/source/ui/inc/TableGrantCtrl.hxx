@@ -27,7 +27,6 @@
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #include <com/sun/star/sdbcx/XAuthorizable.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <core_resource.hxx>
 
 class Edit;
 namespace dbaui

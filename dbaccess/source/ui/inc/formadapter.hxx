@@ -58,7 +58,6 @@
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/implbase12.hxx>
 #include <cppuhelper/implbase10.hxx>
-#include <core_resource.hxx>
 
 namespace dbaui
 {

@@ -18,6 +18,8 @@
  */
 
 #include "macromigrationwizard.hxx"
+#include <core_resource.hxx>
+#include <strings.hrc>
 
 namespace dbmm
 {

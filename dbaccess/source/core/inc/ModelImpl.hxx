@@ -23,7 +23,6 @@
 #include <apitools.hxx>
 #include "bookmarkcontainer.hxx"
 #include "ContentHelper.hxx"
-#include <core_resource.hxx>
 #include "documentevents.hxx"
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>

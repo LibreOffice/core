@@ -27,7 +27,6 @@
 #include <stringconstants.hxx>
 #include <TableWindowListBox.hxx>
 #include <TableConnection.hxx>
-#include <strings.hrc>
 #include <QueryDesignView.hxx>
 #include <JoinController.hxx>
 

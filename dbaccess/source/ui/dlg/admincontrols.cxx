@@ -20,7 +20,6 @@
 #include "admincontrols.hxx"
 #include <dbu_dlg.hxx>
 #include <dsitems.hxx>
-#include <core_resource.hxx>
 
 #include <svl/eitem.hxx>
 #include <svl/stritem.hxx>

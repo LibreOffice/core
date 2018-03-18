@@ -25,7 +25,6 @@
 #include <vcl/split.hxx>
 #include "dbtreeview.hxx"
 #include <stringconstants.hxx>
-#include <strings.hrc>
 #include <strings.hxx>
 #include <com/sun/star/form/XLoadable.hpp>
 #include <com/sun/star/awt/XControlContainer.hpp>

@@ -21,7 +21,6 @@
 
 #include "singledoccontroller.hxx"
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <core_resource.hxx>
 #include "JoinTableView.hxx"
 #include "JoinDesignView.hxx"
 #include "TableConnectionData.hxx"

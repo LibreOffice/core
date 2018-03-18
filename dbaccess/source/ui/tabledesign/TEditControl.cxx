@@ -25,6 +25,7 @@
 #include <com/sun/star/sdbcx/XAppend.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/util/XNumberFormatTypes.hpp>
+#include <core_resource.hxx>
 #include <strings.hrc>
 #include <strings.hxx>
 #include <stringconstants.hxx>

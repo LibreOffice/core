@@ -20,7 +20,6 @@
 #ifndef INCLUDED_DBACCESS_SOURCE_UI_INC_INDEXFIELDSCONTROL_HXX
 #define INCLUDED_DBACCESS_SOURCE_UI_INC_INDEXFIELDSCONTROL_HXX
 
-#include <core_resource.hxx>
 #include <svtools/editbrowsebox.hxx>
 #include "indexcollection.hxx"
 #include <com/sun/star/uno/Sequence.hxx>

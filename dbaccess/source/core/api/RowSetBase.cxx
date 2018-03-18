@@ -22,6 +22,7 @@
 #include <connectivity/sdbcx/VCollection.hxx>
 #include "RowSetCache.hxx"
 #include <stringconstants.hxx>
+#include <core_resource.hxx>
 #include <strings.hrc>
 #include <strings.hxx>
 #include <com/sun/star/lang/DisposedException.hpp>

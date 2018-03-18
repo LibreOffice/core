@@ -46,6 +46,7 @@
 #include "querydlg.hxx"
 #include <JoinExchange.hxx>
 #include <comphelper/extract.hxx>
+#include <core_resource.hxx>
 #include <strings.hrc>
 #include <strings.hxx>
 #include <svtools/treelistentry.hxx>

@@ -30,6 +30,7 @@
 #include <comphelper/string.hxx>
 #include <comphelper/types.hxx>
 #include "TableFieldInfo.hxx"
+#include <core_resource.hxx>
 #include <strings.hrc>
 #include <strings.hxx>
 #include <helpids.h>
