@@ -91,7 +91,7 @@ OInterfaceContainerHelper * OMultiTypeInterfaceContainerHelperVar< key , hashImp
 {
     ::osl::MutexGuard aGuard( rMutex );
 
-     typename InterfaceMap::iterator iter = find( rKey );
+    typename InterfaceMap::iterator iter = find( rKey );
     if( iter != m_pMap->end() )
             return static_cast<OInterfaceContainerHelper*>( (*iter).second );
     return NULL;
@@ -148,14 +148,10 @@ void OMultiTypeInterfaceContainerHelperVar< key , hashImpl , equalImpl >::dispos
             typedef OInterfaceContainerHelper* ppp;
             ppListenerContainers = new ppp[nSize];
 
-            typename InterfaceMap::iterator iter = m_pMap->begin();
-            typename InterfaceMap::iterator end = m_pMap->end();
-
             typename InterfaceMap::size_type i = 0;
-            while( iter != end )
+            for (auto const& elem : *m_pMap)
             {
-                ppListenerContainers[i++] = static_cast<OInterfaceContainerHelper*>((*iter).second);
-                ++iter;
+                ppListenerContainers[i++] = static_cast<OInterfaceContainerHelper*>(elem.second);
             }
         }
     }
@@ -175,13 +171,9 @@ template< class key , class hashImpl , class equalImpl >
 void OMultiTypeInterfaceContainerHelperVar< key , hashImpl , equalImpl >::clear()
 {
     ::osl::MutexGuard aGuard( rMutex );
-    typename InterfaceMap::iterator iter = m_pMap->begin();
-    typename InterfaceMap::iterator end = m_pMap->end();
-
-    while( iter != end )
+    for (auto const& elem : *m_pMap)
     {
-        static_cast<OInterfaceContainerHelper*>((*iter).second)->clear();
-        ++iter;
+        static_cast<OInterfaceContainerHelper*>(elem.second)->clear();
     }
 }
 
