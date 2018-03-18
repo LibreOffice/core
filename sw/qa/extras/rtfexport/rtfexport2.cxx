@@ -1298,7 +1298,8 @@ DECLARE_RTFEXPORT_TEST(testNestedTable, "rhbz1065629.rtf")
     xTable.set(xTables->getByIndex(2), uno::UNO_QUERY);
     xCell.set(xTable->getCellByName("A1"), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xCell.is());
-    table::BorderLine2 fullPtSolid(1, 0, 35, 0, table::BorderLineStyle::SOLID, 35);
+    table::BorderLine2 fullPtSolid(sal_Int32(COL_BLACK), 0, 35, 0, table::BorderLineStyle::SOLID,
+                                   35);
     CPPUNIT_ASSERT_BORDER_EQUAL(fullPtSolid, getProperty<table::BorderLine2>(xCell, "LeftBorder"));
     CPPUNIT_ASSERT_BORDER_EQUAL(fullPtSolid, getProperty<table::BorderLine2>(xCell, "RightBorder"));
     CPPUNIT_ASSERT_BORDER_EQUAL(fullPtSolid, getProperty<table::BorderLine2>(xCell, "TopBorder"));
@@ -1307,7 +1308,8 @@ DECLARE_RTFEXPORT_TEST(testNestedTable, "rhbz1065629.rtf")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0xCC0000), getProperty<sal_Int32>(xCell, "BackColor"));
     xCell.set(xTable->getCellByName("A2"), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xCell.is());
-    table::BorderLine2 halfPtSolid(/*0*/ 1, 0, 18, 0, table::BorderLineStyle::SOLID, 18);
+    table::BorderLine2 halfPtSolid(sal_Int32(COL_BLACK), 0, 18, 0, table::BorderLineStyle::SOLID,
+                                   18);
     CPPUNIT_ASSERT_BORDER_EQUAL(halfPtSolid, getProperty<table::BorderLine2>(xCell, "LeftBorder"));
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0xffffffff),
                          getProperty<sal_Int32>(xCell, "BackColor"));
@@ -1372,7 +1374,7 @@ DECLARE_RTFEXPORT_TEST(testTableBorderDefaults, "fdo68779.rtf")
     uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
     uno::Reference<text::XTextRange> xCell(xTable->getCellByName("A1"), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xCell.is());
-    table::BorderLine2 solid(1, 0, 26, 0, table::BorderLineStyle::SOLID, 26);
+    table::BorderLine2 solid(sal_Int32(COL_BLACK), 0, 26, 0, table::BorderLineStyle::SOLID, 26);
     CPPUNIT_ASSERT_BORDER_EQUAL(solid, getProperty<table::BorderLine2>(xCell, "LeftBorder"));
     CPPUNIT_ASSERT_BORDER_EQUAL(solid, getProperty<table::BorderLine2>(xCell, "RightBorder"));
     CPPUNIT_ASSERT_BORDER_EQUAL(solid, getProperty<table::BorderLine2>(xCell, "TopBorder"));
@@ -1381,7 +1383,7 @@ DECLARE_RTFEXPORT_TEST(testTableBorderDefaults, "fdo68779.rtf")
     xTable.set(xTables->getByIndex(1), uno::UNO_QUERY);
     xCell.set(xTable->getCellByName("A1"), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xCell.is());
-    table::BorderLine2 dotted(1, 0, 26, 0, table::BorderLineStyle::DOTTED, 26);
+    table::BorderLine2 dotted(sal_Int32(COL_BLACK), 0, 26, 0, table::BorderLineStyle::DOTTED, 26);
     CPPUNIT_ASSERT_BORDER_EQUAL(dotted, getProperty<table::BorderLine2>(xCell, "LeftBorder"));
     CPPUNIT_ASSERT_BORDER_EQUAL(dotted, getProperty<table::BorderLine2>(xCell, "RightBorder"));
     CPPUNIT_ASSERT_BORDER_EQUAL(dotted, getProperty<table::BorderLine2>(xCell, "TopBorder"));
@@ -1390,7 +1392,8 @@ DECLARE_RTFEXPORT_TEST(testTableBorderDefaults, "fdo68779.rtf")
     xTable.set(xTables->getByIndex(2), uno::UNO_QUERY);
     xCell.set(xTable->getCellByName("A1"), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xCell.is());
-    table::BorderLine2 doubled(1, 26, 26, 26, table::BorderLineStyle::DOUBLE, 79);
+    table::BorderLine2 doubled(sal_Int32(COL_BLACK), 26, 26, 26, table::BorderLineStyle::DOUBLE,
+                               79);
     CPPUNIT_ASSERT_BORDER_EQUAL(doubled, getProperty<table::BorderLine2>(xCell, "LeftBorder"));
     CPPUNIT_ASSERT_BORDER_EQUAL(doubled, getProperty<table::BorderLine2>(xCell, "RightBorder"));
     CPPUNIT_ASSERT_BORDER_EQUAL(doubled, getProperty<table::BorderLine2>(xCell, "TopBorder"));
@@ -1399,7 +1402,8 @@ DECLARE_RTFEXPORT_TEST(testTableBorderDefaults, "fdo68779.rtf")
     xTable.set(xTables->getByIndex(3), uno::UNO_QUERY);
     xCell.set(xTable->getCellByName("A1"), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xCell.is());
-    table::BorderLine2 thinThickMG(1, 14, 26, 14, table::BorderLineStyle::THINTHICK_MEDIUMGAP, 53);
+    table::BorderLine2 thinThickMG(sal_Int32(COL_BLACK), 14, 26, 14,
+                                   table::BorderLineStyle::THINTHICK_MEDIUMGAP, 53);
     CPPUNIT_ASSERT_BORDER_EQUAL(thinThickMG, getProperty<table::BorderLine2>(xCell, "LeftBorder"));
     CPPUNIT_ASSERT_BORDER_EQUAL(thinThickMG, getProperty<table::BorderLine2>(xCell, "RightBorder"));
     CPPUNIT_ASSERT_BORDER_EQUAL(thinThickMG, getProperty<table::BorderLine2>(xCell, "TopBorder"));
