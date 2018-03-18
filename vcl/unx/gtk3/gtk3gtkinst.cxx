@@ -2116,15 +2116,28 @@ public:
         enable_notify_events();
     }
 
-    virtual void insert(int pos, const OUString& rId, const OUString& rText) override
+    virtual void insert(int pos, const OUString& rId, const OUString& rText, const OUString& rImage) override
     {
         disable_notify_events();
         GtkTreeIter iter;
         gtk_list_store_insert(m_pListStore, &iter, pos);
-        gtk_list_store_set(m_pListStore, &iter,
-                0, OUStringToOString(rText, RTL_TEXTENCODING_UTF8).getStr(),
-                1, OUStringToOString(rId, RTL_TEXTENCODING_UTF8).getStr(),
-                -1);
+        if (rImage.isEmpty())
+        {
+            gtk_list_store_set(m_pListStore, &iter,
+                    0, OUStringToOString(rText, RTL_TEXTENCODING_UTF8).getStr(),
+                    1, OUStringToOString(rId, RTL_TEXTENCODING_UTF8).getStr(),
+                    -1);
+        }
+        else
+        {
+            assert((rImage == "dialog-warning" || rImage == "dialog-error") && "unknown stock image");
+
+            gtk_list_store_set(m_pListStore, &iter,
+                    0, OUStringToOString(rText, RTL_TEXTENCODING_UTF8).getStr(),
+                    1, OUStringToOString(rId, RTL_TEXTENCODING_UTF8).getStr(),
+                    2, OUStringToOString(rImage, RTL_TEXTENCODING_UTF8).getStr(),
+                    -1);
+        }
         enable_notify_events();
     }
 

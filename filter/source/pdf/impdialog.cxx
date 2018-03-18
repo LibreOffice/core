@@ -21,7 +21,6 @@
 
 #include "impdialog.hxx"
 #include <strings.hrc>
-#include <bitmaps.hlst>
 #include <officecfg/Office/Common.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
@@ -1586,102 +1585,54 @@ IMPL_LINK_NOARG(ImpPDFTabLinksPage, ClickRbOpnLnksBrowserHdl, Button*, void)
 }
 
 
-ImplErrorDialog::ImplErrorDialog(const std::set< vcl::PDFWriter::ErrorCode >& rErrors)
-    : MessageDialog(nullptr, "WarnPDFDialog", "filter/ui/warnpdfdialog.ui")
+ImplErrorDialog::ImplErrorDialog(weld::Window* pParent, const std::set<vcl::PDFWriter::ErrorCode>& rErrors)
+    : MessageDialogController(pParent, "filter/ui/warnpdfdialog.ui", "WarnPDFDialog", "grid")
+    , m_xErrors(m_xBuilder->weld_tree_view("errors"))
+    , m_xExplanation(m_xBuilder->weld_label("message"))
 {
-    get(m_pErrors, "errors");
-    get(m_pExplanation, "message");
-
-    Size aSize(LogicToPixel(Size(100, 75), MapMode(MapUnit::MapAppFont)));
-    m_pErrors->set_width_request(aSize.Width());
-    m_pErrors->set_height_request(aSize.Height());
-    m_pExplanation->set_width_request(aSize.Width());
-    m_pExplanation->set_height_request(aSize.Height());
-
-    // load images
-    Image aWarnImg(BitmapEx(IMG_WARN));
-    Image aErrImg(BitmapEx(IMG_ERR));
+    int nWidth = m_xErrors->get_approximate_digit_width() * 26;
+    int nHeight = m_xErrors->get_height_rows(9);
+    m_xErrors->set_size_request(nWidth, nHeight);
+    m_xExplanation->set_size_request(nWidth, nHeight);
 
     for (auto const& error : rErrors)
     {
         switch(error)
         {
         case vcl::PDFWriter::Warning_Transparency_Omitted_PDFA:
-        {
-            sal_uInt16 nPos = m_pErrors->InsertEntry( PDFFilterResId( STR_WARN_TRANSP_PDFA_SHORT ),
-                                                aWarnImg );
-            m_pErrors->SetEntryData( nPos, new OUString( PDFFilterResId( STR_WARN_TRANSP_PDFA ) ) );
-        }
-        break;
+            m_xErrors->append(PDFFilterResId(STR_WARN_TRANSP_PDFA), PDFFilterResId(STR_WARN_TRANSP_PDFA_SHORT), "dialog-warning");
+            break;
         case vcl::PDFWriter::Warning_Transparency_Omitted_PDF13:
-        {
-            sal_uInt16 nPos = m_pErrors->InsertEntry( PDFFilterResId( STR_WARN_TRANSP_VERSION_SHORT ),
-                                                aWarnImg );
-            m_pErrors->SetEntryData( nPos, new OUString( PDFFilterResId( STR_WARN_TRANSP_VERSION ) ) );
-        }
-        break;
+            m_xErrors->append(PDFFilterResId(STR_WARN_TRANSP_VERSION), PDFFilterResId(STR_WARN_TRANSP_VERSION_SHORT), "dialog-warning");
+            break;
         case vcl::PDFWriter::Warning_FormAction_Omitted_PDFA:
-        {
-            sal_uInt16 nPos = m_pErrors->InsertEntry( PDFFilterResId( STR_WARN_FORMACTION_PDFA_SHORT ),
-                                                aWarnImg );
-            m_pErrors->SetEntryData( nPos, new OUString( PDFFilterResId( STR_WARN_FORMACTION_PDFA ) ) );
-        }
-        break;
+            m_xErrors->append(PDFFilterResId(STR_WARN_FORMACTION_PDFA), PDFFilterResId(STR_WARN_FORMACTION_PDFA_SHORT), "dialog-warning");
+            break;
         case vcl::PDFWriter::Warning_Transparency_Converted:
-        {
-            sal_uInt16 nPos = m_pErrors->InsertEntry( PDFFilterResId( STR_WARN_TRANSP_CONVERTED_SHORT ),
-                                                aWarnImg );
-            m_pErrors->SetEntryData( nPos, new OUString( PDFFilterResId( STR_WARN_TRANSP_CONVERTED ) ) );
-        }
-        break;
+            m_xErrors->append(PDFFilterResId(STR_WARN_TRANSP_CONVERTED), PDFFilterResId(STR_WARN_TRANSP_CONVERTED_SHORT), "dialog-warning");
+            break;
         case vcl::PDFWriter::Error_Signature_Failed:
-        {
-            sal_uInt16 nPos = m_pErrors->InsertEntry( PDFFilterResId( STR_ERR_SIGNATURE_FAILED ),
-                                                aErrImg );
-            m_pErrors->SetEntryData( nPos, new OUString( PDFFilterResId( STR_ERR_PDF_EXPORT_ABORTED ) ) );
-        }
-        break;
+            m_xErrors->append(PDFFilterResId(STR_ERR_PDF_EXPORT_ABORTED), PDFFilterResId(STR_ERR_SIGNATURE_FAILED), "dialog-error");
+            break;
         default:
             break;
         }
     }
 
-    if( m_pErrors->GetEntryCount() > 0 )
+    if (m_xErrors->n_children() > 0)
     {
-        m_pErrors->SelectEntryPos( 0 );
-        OUString* pStr = static_cast<OUString*>(m_pErrors->GetEntryData( 0 ));
-        m_pExplanation->SetText( pStr ? *pStr : OUString() );
+        m_xErrors->select(0);
+        m_xExplanation->set_label(m_xErrors->get_id(0));
     }
 
-    m_pErrors->SetSelectHdl( LINK( this, ImplErrorDialog, SelectHdl ) );
-
-    create_message_area();
+    m_xErrors->connect_changed(LINK(this, ImplErrorDialog, SelectHdl));
 }
 
-
-ImplErrorDialog::~ImplErrorDialog()
+IMPL_LINK_NOARG(ImplErrorDialog, SelectHdl, weld::TreeView&, void)
 {
-    disposeOnce();
+    OUString aExplanation = m_xErrors->get_selected_id();
+    m_xExplanation->set_label(aExplanation);
 }
-
-
-void ImplErrorDialog::dispose()
-{
-    // free strings again
-    for( sal_Int32 n = 0; n < m_pErrors->GetEntryCount(); n++ )
-        delete static_cast<OUString*>(m_pErrors->GetEntryData( n ));
-    m_pErrors.clear();
-    m_pExplanation.clear();
-    MessageDialog::dispose();
-}
-
-
-IMPL_LINK_NOARG(ImplErrorDialog, SelectHdl, ListBox&, void)
-{
-    OUString* pStr = static_cast<OUString*>(m_pErrors->GetSelectedEntryData());
-    m_pExplanation->SetText( pStr ? *pStr : OUString() );
-}
-
 
 /// The digital signatures tab page
 ImpPDFTabSigningPage::ImpPDFTabSigningPage(vcl::Window* pParent, const SfxItemSet& rCoreSet)
