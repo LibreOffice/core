@@ -28,7 +28,6 @@
 #include <memory>
 #include <svtools/roadmapwizard.hxx>
 #include <connectivity/dbtools.hxx>
-#include <core_resource.hxx>
 
 namespace com { namespace sun { namespace star {
     namespace beans {

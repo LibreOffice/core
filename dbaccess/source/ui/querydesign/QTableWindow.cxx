@@ -27,7 +27,6 @@
 #include <querycontroller.hxx>
 #include <vcl/image.hxx>
 #include <TableWindowListBox.hxx>
-#include <strings.hrc>
 #include <strings.hxx>
 #include <com/sun/star/sdbcx/XKeysSupplier.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>

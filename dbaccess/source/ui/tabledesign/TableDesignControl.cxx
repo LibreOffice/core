@@ -18,7 +18,6 @@
  */
 
 #include <TableDesignControl.hxx>
-#include <strings.hrc>
 #include <TableDesignView.hxx>
 #include <TableController.hxx>
 #include <browserids.hxx>

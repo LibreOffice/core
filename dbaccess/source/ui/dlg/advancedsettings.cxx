@@ -23,7 +23,6 @@
 
 #include "advancedsettings.hxx"
 #include <advancedsettingsdlg.hxx>
-#include <core_resource.hxx>
 #include <dsitems.hxx>
 #include "DbAdminImpl.hxx"
 #include "DriverSettings.hxx"

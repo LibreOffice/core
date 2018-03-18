@@ -32,7 +32,6 @@
 #include <com/sun/star/sdb/XInteractionSupplyParameters.hpp>
 #include <com/sun/star/sdb/XInteractionDocumentSave.hpp>
 #include <sfx2/QuerySaveDocument.hxx>
-#include <strings.hrc>
 #include <paramdialog.hxx>
 #include <vcl/svapp.hxx>
 #include <CollectionView.hxx>

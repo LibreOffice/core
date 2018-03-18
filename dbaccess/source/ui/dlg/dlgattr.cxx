@@ -30,7 +30,6 @@
 #include <svx/svxids.hrc>
 #include <svx/flagsdef.hxx>
 #include <svl/intitem.hxx>
-#include <core_resource.hxx>
 using namespace dbaui;
 
 

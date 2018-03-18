@@ -23,7 +23,6 @@
 #include <comphelper/enumhelper.hxx>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <strings.hrc>
 #include <strings.hxx>
 #include <stringconstants.hxx>
 #include <connectivity/dbexception.hxx>

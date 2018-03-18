@@ -24,7 +24,6 @@
 #include <undosqledit.hxx>
 #include <browserids.hxx>
 #include <querycontroller.hxx>
-#include <strings.hrc>
 #include <stringconstants.hxx>
 #include <vcl/split.hxx>
 #include <vcl/svapp.hxx>

@@ -20,7 +20,6 @@
 #include <FieldDescriptions.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
-#include <strings.hrc>
 #include <strings.hxx>
 #include <com/sun/star/sdbc/ColumnValue.hpp>
 #include <stringconstants.hxx>

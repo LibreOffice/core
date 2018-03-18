@@ -19,8 +19,6 @@
 
 #include "commandcontainer.hxx"
 #include "connection.hxx"
-#include <strings.hrc>
-#include <core_resource.hxx>
 #include <databasecontext.hxx>
 #include "databasedocument.hxx"
 #include "datasource.hxx"

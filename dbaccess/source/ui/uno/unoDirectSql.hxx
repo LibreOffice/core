@@ -25,7 +25,6 @@
 #include <com/sun/star/sdb/XSQLQueryComposer.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/sdbc/XRowSet.hpp>
-#include <core_resource.hxx>
 #include <com/sun/star/sdbc/XConnection.hpp>
 
 namespace dbaui

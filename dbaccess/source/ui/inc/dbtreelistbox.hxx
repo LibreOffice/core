@@ -20,7 +20,6 @@
 #define INCLUDED_DBACCESS_SOURCE_UI_INC_DBTREELISTBOX_HXX
 
 #include "ScrollHelper.hxx"
-#include <core_resource.hxx>
 
 #include <com/sun/star/frame/XPopupMenuController.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>

@@ -24,7 +24,6 @@
 #include <adtabdlg.hxx>
 #include <vcl/svapp.hxx>
 #include <browserids.hxx>
-#include <strings.hrc>
 #include <comphelper/types.hxx>
 #include <connectivity/dbtools.hxx>
 #include <com/sun/star/sdbc/DataType.hpp>

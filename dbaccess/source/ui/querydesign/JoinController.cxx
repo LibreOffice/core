@@ -18,7 +18,6 @@
  */
 
 #include <sfx2/sfxsids.hrc>
-#include <strings.hrc>
 #include <browserids.hxx>
 #include <comphelper/types.hxx>
 #include <stringconstants.hxx>

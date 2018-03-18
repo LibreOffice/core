@@ -19,7 +19,6 @@
 
 #include "AppSwapWindow.hxx"
 #include <helpids.h>
-#include <strings.hrc>
 #include "AppView.hxx"
 #include <vcl/svapp.hxx>
 #include <vcl/syswin.hxx>

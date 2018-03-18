@@ -23,8 +23,6 @@
 #include <tools/wldcrd.hxx>
 #include <osl/file.hxx>
 #include <stringconstants.hxx>
-#include <core_resource.hxx>
-#include <strings.hrc>
 #include <comphelper/documentconstants.hxx>
 #include <comphelper/string.hxx>
 

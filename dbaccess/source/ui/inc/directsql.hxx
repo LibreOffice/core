@@ -32,7 +32,6 @@
 
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <unotools/eventlisteneradapter.hxx>
-#include <core_resource.hxx>
 #include <osl/mutex.hxx>
 
 #include <svtools/editbrowsebox.hxx>

@@ -18,7 +18,6 @@
  */
 
 #include <queryfilter.hxx>
-#include <core_resource.hxx>
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/util/DateTime.hpp>

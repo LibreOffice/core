@@ -26,7 +26,6 @@
 #include <dsntypes.hxx>
 #include <dbaccess/genericcontroller.hxx>
 #include <linkeddocuments.hxx>
-#include <core_resource.hxx>
 #include <TableCopyHelper.hxx>
 
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>

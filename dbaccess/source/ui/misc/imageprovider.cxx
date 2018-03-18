@@ -19,7 +19,6 @@
 
 #include <imageprovider.hxx>
 #include <dbu_pageids.hxx>
-#include <core_resource.hxx>
 #include <stringconstants.hxx>
 #include <bitmaps.hlst>
 

@@ -22,7 +22,6 @@
 
 #include <svtools/genericunodialog.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <core_resource.hxx>
 
 namespace dbaui
 {

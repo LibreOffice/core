@@ -21,7 +21,6 @@
 
 #include <LimitBox.hxx>
 #include <dbu_reghelper.hxx>
-#include <core_resource.hxx>
 
 
 using namespace ::com::sun::star;

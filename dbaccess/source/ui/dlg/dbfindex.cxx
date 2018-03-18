@@ -22,7 +22,6 @@
 #include <osl/file.hxx>
 #include <tools/config.hxx>
 #include <sfx2/app.hxx>
-#include <core_resource.hxx>
 #include <dbu_dlg.hxx>
 #include <osl/diagnose.h>
 #include <unotools/localfilehelper.hxx>

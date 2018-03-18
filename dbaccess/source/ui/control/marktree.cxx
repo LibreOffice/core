@@ -18,7 +18,6 @@
  */
 
 #include <marktree.hxx>
-#include <strings.hrc>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 
