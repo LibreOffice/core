@@ -137,13 +137,15 @@ void LwpStory::XFConvert(XFContentContainer* pCont)
 void LwpStory::RegisterStyle()
 {
     rtl::Reference<LwpPara> xPara(dynamic_cast<LwpPara*>(GetFirstPara().obj().get()));
+    std::set<LwpPara*> aSeen;
     while (xPara.is())
     {
-        if (xPara->GetFoundry())
-            throw std::runtime_error("loop in register style");
+        aSeen.insert(xPara.get());
         xPara->SetFoundry(m_pFoundry);
         xPara->DoRegisterStyle();
         xPara.set(dynamic_cast<LwpPara*>(xPara->GetNext().obj().get()));
+        if (aSeen.find(xPara.get()) != aSeen.end())
+            throw std::runtime_error("loop in register style");
     }
 }
 
