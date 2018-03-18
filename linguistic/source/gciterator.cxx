@@ -797,13 +797,11 @@ sal_Int32 GrammarCheckingIterator::GetSuggestedEndOfSentence(
 
 void SAL_CALL GrammarCheckingIterator::resetIgnoreRules(  )
 {
-    GCReferences_t::iterator aIt( m_aGCReferencesByService.begin() );
-    while (aIt != m_aGCReferencesByService.end())
+    for (auto const& elem : m_aGCReferencesByService)
     {
-        uno::Reference< linguistic2::XProofreader > xGC( aIt->second );
+        uno::Reference< linguistic2::XProofreader > xGC(elem.second);
         if (xGC.is())
             xGC->resetIgnoreRules();
-        ++aIt;
     }
 }
 

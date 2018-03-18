@@ -83,10 +83,9 @@ Sequence< Locale > SAL_CALL
 
     Sequence< Locale > aLocales( static_cast< sal_Int32 >(aSvcMap.size()) );
     Locale *pLocales = aLocales.getArray();
-    ThesSvcByLangMap_t::const_iterator aIt;
-    for (aIt = aSvcMap.begin();  aIt != aSvcMap.end();  ++aIt)
+    for (auto const& elem : aSvcMap)
     {
-        *pLocales++ = LanguageTag::convertToLocale( aIt->first );
+        *pLocales++ = LanguageTag::convertToLocale(elem.first);
     }
     return aLocales;
 }

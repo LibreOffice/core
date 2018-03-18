@@ -251,10 +251,9 @@ Sequence< Locale > SAL_CALL HyphenatorDispatcher::getLocales()
 
     Sequence< Locale > aLocales( static_cast< sal_Int32 >(aSvcMap.size()) );
     Locale *pLocales = aLocales.getArray();
-    HyphSvcByLangMap_t::const_iterator aIt;
-    for (aIt = aSvcMap.begin();  aIt != aSvcMap.end();  ++aIt)
+    for (auto const& elem : aSvcMap)
     {
-        *pLocales++ = LanguageTag::convertToLocale( aIt->first );
+        *pLocales++ = LanguageTag::convertToLocale(elem.first);
     }
     return aLocales;
 }
