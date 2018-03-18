@@ -54,13 +54,13 @@ namespace comphelper
         static bool                      implIsValidIndex( sal_Int32 nIndex, sal_Int32 nLength );
         static bool                      implIsValidRange( sal_Int32 nStartIndex, sal_Int32 nEndIndex, sal_Int32 nLength );
         static sal_Unicode               implGetCharacter( const OUString& rText, sal_Int32 nIndex );
-        static OUString                  implGetTextRange( const OUString& rTest, sal_Int32 nStartIndex, sal_Int32 nEndIndex );
+        static OUString                  implGetTextRange( const OUString& rText, sal_Int32 nStartIndex, sal_Int32 nEndIndex );
         virtual OUString                 implGetText() = 0;
         virtual css::lang::Locale        implGetLocale() = 0;
         virtual void                     implGetSelection( sal_Int32& nStartIndex, sal_Int32& nEndIndex ) = 0;
-        void                             implGetGlyphBoundary( css::i18n::Boundary& rBoundary, sal_Int32 nIndex );
-        bool                             implGetWordBoundary( css::i18n::Boundary& rBoundary, sal_Int32 nIndex );
-        void                             implGetSentenceBoundary( css::i18n::Boundary& rBoundary, sal_Int32 nIndex );
+        void                             implGetGlyphBoundary( const OUString& rText, css::i18n::Boundary& rBoundary, sal_Int32 nIndex );
+        bool                             implGetWordBoundary( const OUString& rText, css::i18n::Boundary& rBoundary, sal_Int32 nIndex );
+        void                             implGetSentenceBoundary( const OUString& rText, css::i18n::Boundary& rBoundary, sal_Int32 nIndex );
         virtual void                     implGetParagraphBoundary( css::i18n::Boundary& rBoundary, sal_Int32 nIndex );
         virtual void                     implGetLineBoundary( css::i18n::Boundary& rBoundary, sal_Int32 nIndex );
 
