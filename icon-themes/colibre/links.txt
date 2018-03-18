@@ -675,7 +675,6 @@ cmd/sc_gridvisible.png cmd/sc_grid.png
 
 # Crop
 cmd/lc_grafattrcrop.png cmd/lc_crop.png
-cmd/sc_transformdialog.png cmd/sc_crop.png
 cmd/sc_grafattrcrop.png cmd/sc_crop.png
 
 # Group
