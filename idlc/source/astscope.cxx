@@ -196,15 +196,10 @@ AstDeclaration* AstScope::lookupByName(const OString& scopedName)
 
 AstDeclaration* AstScope::lookupByNameLocal(const OString& name) const
 {
-    DeclList::const_iterator iter(m_declarations.begin());
-    DeclList::const_iterator end(m_declarations.end());
-
-    while ( iter != end )
+    for (auto const& declaration : m_declarations)
     {
-        AstDeclaration* pDecl = *iter;
-        if ( pDecl->getLocalName() == name )
-            return pDecl;
-        ++iter;
+        if ( declaration->getLocalName() == name )
+            return declaration;
     }
     return nullptr;
 }
@@ -223,20 +218,15 @@ AstDeclaration* AstScope::lookupInInherited(const OString& scopedName) const
     }
 
     // OK, loop through inherited interfaces. Stop when you find it
-    AstInterface::InheritedInterfaces::const_iterator iter(
-        pInterface->getAllInheritedInterfaces().begin());
-    AstInterface::InheritedInterfaces::const_iterator end(
-        pInterface->getAllInheritedInterfaces().end());
-    while ( iter != end )
+    for (auto const& elem : pInterface->getAllInheritedInterfaces())
     {
-        AstInterface const * resolved = iter->getResolved();
+        AstInterface const * resolved = elem.getResolved();
         AstDeclaration* pDecl = resolved->lookupByNameLocal(scopedName);
         if ( pDecl )
             return pDecl;
         pDecl = resolved->lookupInInherited(scopedName);
         if ( pDecl )
             return pDecl;
-        ++iter;
     }
     // Not found
     return nullptr;

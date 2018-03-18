@@ -96,11 +96,9 @@ void checkIdentifier(::rtl::OString const * id)
 void reportDoubleMemberDeclarations(
     AstInterface::DoubleMemberDeclarations const & doubleMembers)
 {
-    for (AstInterface::DoubleMemberDeclarations::const_iterator i(
-             doubleMembers.begin());
-         i != doubleMembers.end(); ++i)
+    for (auto const& doubleMember : doubleMembers)
     {
-        ErrorHandler::error2(ErrorCode::DoubleMember, i->first, i->second);
+        ErrorHandler::error2(ErrorCode::DoubleMember, doubleMember.first, doubleMember.second);
     }
 }
 
@@ -127,12 +125,10 @@ void addInheritedInterface(
                         static_cast< AstType * >(decl), optional,
                         documentation);
                 } else {
-                    for (AstInterface::DoubleInterfaceDeclarations::iterator i(
-                             doubleDecls.interfaces.begin());
-                         i != doubleDecls.interfaces.end(); ++i)
+                    for (auto const& elem : doubleDecls.interfaces)
                     {
                         ErrorHandler::error1(
-                            ErrorCode::DoubleInheritance, *i);
+                            ErrorCode::DoubleInheritance, elem);
                     }
                     reportDoubleMemberDeclarations(doubleDecls.members);
                 }
@@ -1618,12 +1614,9 @@ service_export :
              */
             if ( pScope && $2 )
             {
-                std::list< OString >::iterator iter = $2->begin();
-                std::list< OString >::iterator end = $2->end();
-
-                while ( iter != end )
+                for (auto const& elem : *($2))
                 {
-                    pDecl = pScope->lookupByName(*iter);
+                    pDecl = pScope->lookupByName(elem);
                     if ( pDecl && (pDecl->getNodeType() == NT_interface) )
                     {
                         /* we relax the strict published check and allow to add new
@@ -1633,14 +1626,13 @@ service_export :
                         if ( ErrorHandler::checkPublished(pDecl, bOptional) )
                         {
                             pIMember = new AstInterfaceMember(
-                                $1, static_cast<AstInterface*>(pDecl), *iter, pScope);
+                                $1, static_cast<AstInterface*>(pDecl), elem, pScope);
                             pScope->addDeclaration(pIMember);
                         }
                     } else
                     {
-                        ErrorHandler::lookupError(ErrorCode::InterfaceMemberLookup, *iter, scopeAsDecl(pScope));
+                        ErrorHandler::lookupError(ErrorCode::InterfaceMemberLookup, elem, scopeAsDecl(pScope));
                     }
-                    ++iter;
                 }
             }
         }
@@ -1662,12 +1654,9 @@ service_export :
          */
         if ( pScope && $2 )
         {
-            std::list< OString >::iterator iter = $2->begin();
-            std::list< OString >::iterator end = $2->end();
-
-            while ( iter != end )
+            for (auto const& elem : *($2))
             {
-                pDecl = pScope->lookupByName(*iter);
+                pDecl = pScope->lookupByName(elem);
                 if ( pDecl && (pDecl->getNodeType() == NT_service) )
                 {
                     if ( static_cast< AstService * >(pDecl)->isSingleInterfaceBasedService() || (pScope->getScopeNodeType() == NT_singleton && pScope->nMembers() > 0) )
@@ -1675,14 +1664,13 @@ service_export :
                     else if ( ErrorHandler::checkPublished(pDecl) )
                     {
                         pSMember = new AstServiceMember(
-                            $1, static_cast<AstService*>(pDecl), *iter, pScope);
+                            $1, static_cast<AstService*>(pDecl), elem, pScope);
                         pScope->addDeclaration(pSMember);
                     }
                 } else
                 {
-                    ErrorHandler::lookupError(ErrorCode::ServiceMemberLookup, *iter, scopeAsDecl(pScope));
+                    ErrorHandler::lookupError(ErrorCode::ServiceMemberLookup, elem, scopeAsDecl(pScope));
                 }
-                ++iter;
             }
         }
         delete $2;
@@ -1708,21 +1696,17 @@ service_export :
              */
             if ( pScope && $2 )
             {
-                std::list< OString >::iterator iter = $2->begin();
-                std::list< OString >::iterator end = $2->end();
-
-                while ( iter != end )
+                for (auto const& elem : *($2))
                 {
-                    pDecl = pScope->lookupByName(*iter);
+                    pDecl = pScope->lookupByName(elem);
                     if ( pDecl && (pDecl->getNodeType() == NT_interface) )
                     {
-                        pObserves = new AstObserves(static_cast<AstInterface*>(pDecl), *iter, pScope);
+                        pObserves = new AstObserves(static_cast<AstInterface*>(pDecl), elem, pScope);
                         pScope->addDeclaration(pObserves);
                     } else
                     {
-                        ErrorHandler::lookupError(ErrorCode::InterfaceMemberLookup, *iter, scopeAsDecl(pScope));
+                        ErrorHandler::lookupError(ErrorCode::InterfaceMemberLookup, elem, scopeAsDecl(pScope));
                     }
-                    ++iter;
                 }
             }
         }
@@ -1749,21 +1733,17 @@ service_export :
              */
             if ( pScope && $2 )
             {
-                std::list< OString >::iterator iter = $2->begin();
-                std::list< OString >::iterator end = $2->end();
-
-                while ( iter != end )
+                for (auto const& elem : *($2))
                 {
-                    pDecl = pScope->lookupByName(*iter);
+                    pDecl = pScope->lookupByName(elem);
                     if ( pDecl && (pDecl->getNodeType() == NT_service) )
                     {
-                        pNeeds = new AstNeeds(static_cast<AstService*>(pDecl), *iter, pScope);
+                        pNeeds = new AstNeeds(static_cast<AstService*>(pDecl), elem, pScope);
                         pScope->addDeclaration(pNeeds);
                     } else
                     {
-                        ErrorHandler::lookupError(ErrorCode::ServiceMemberLookup, *iter, scopeAsDecl(pScope));
+                        ErrorHandler::lookupError(ErrorCode::ServiceMemberLookup, elem, scopeAsDecl(pScope));
                     }
-                    ++iter;
                 }
             }
         }

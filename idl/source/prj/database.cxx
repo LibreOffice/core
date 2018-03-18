@@ -264,17 +264,17 @@ bool SvIdlDataBase::ReadIdFile( const OString& rOFileName )
 SvMetaType * SvIdlDataBase::FindType( const SvMetaType * pPType,
                                     SvRefMemberList<SvMetaType *>& rList )
 {
-    for( SvRefMemberList<SvMetaType *>::const_iterator it = rList.begin(); it != rList.end(); ++it )
-        if( *it == pPType )
-            return *it;
+    for (auto const& elem : rList)
+        if( elem == pPType )
+            return elem;
     return nullptr;
 }
 
 SvMetaType * SvIdlDataBase::FindType( const OString& rName )
 {
-    for( SvRefMemberList<SvMetaType *>::const_iterator it = aTypeList.begin(); it != aTypeList.end(); ++it )
-        if( rName == (*it)->GetName() )
-            return *it;
+    for (auto const& elem : aTypeList)
+        if( rName == elem->GetName() )
+            return elem;
     return nullptr;
 }
 
