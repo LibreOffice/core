@@ -3616,6 +3616,14 @@ static void lo_status_indicator_callback(void *data, comphelper::LibreOfficeKit:
 /// Used only by LibreOfficeKit when used by Online to pre-initialize
 static void preloadData()
 {
+    std::cerr << "Preloading dictionaries: ";
+
+    // (re-)register the bundled extensions - for dictionaries
+    desktop::Desktop::SynchronizeExtensionRepositories(true);
+    bool bAbort = desktop::Desktop::CheckExtensionDependencies();
+    if(bAbort)
+        std::cerr << "CheckExtensionDependencies failed" << std::endl;
+
     // preload all available dictionaries
     css::uno::Reference<css::linguistic2::XLinguServiceManager> xLngSvcMgr =
         css::linguistic2::LinguServiceManager::create(comphelper::getProcessComponentContext());
@@ -3752,6 +3760,7 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char
 
             if (eStage == PRE_INIT)
             {
+
                 std::cerr << "Init vcl\n";
                 InitVCL();
 
