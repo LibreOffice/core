@@ -2406,6 +2406,35 @@ static void lcl_SetSearchLabelWindow(const OUString& rStr)
     pToolBox->Resize();
 }
 
+OUString SvxSearchDialogWrapper::GetSearchLabel()
+{
+    SfxViewFrame* pViewFrame = SfxViewFrame::Current();
+    if (!pViewFrame)
+        return OUString();
+
+    css::uno::Reference< css::beans::XPropertySet > xPropSet(
+            pViewFrame->GetFrame().GetFrameInterface(), css::uno::UNO_QUERY_THROW);
+    css::uno::Reference< css::frame::XLayoutManager > xLayoutManager;
+    xPropSet->getPropertyValue("LayoutManager") >>= xLayoutManager;
+    css::uno::Reference< css::ui::XUIElement > xUIElement =
+        xLayoutManager->getElement("private:resource/toolbar/findbar");
+    if (!xUIElement.is())
+        return OUString();
+    css::uno::Reference< css::awt::XWindow > xWindow(
+            xUIElement->getRealInterface(), css::uno::UNO_QUERY_THROW);
+    VclPtr< ToolBox > pToolBox = static_cast<ToolBox*>( VCLUnoHelper::GetWindow(xWindow).get() );
+    for (ToolBox::ImplToolItems::size_type i = 0; pToolBox && i < pToolBox->GetItemCount(); ++i)
+    {
+        sal_uInt16 id = pToolBox->GetItemId(i);
+        if (pToolBox->GetItemCommand(id) == ".uno:SearchLabel")
+        {
+            vcl::Window* pSearchLabel = pToolBox->GetItemWindow(id);
+            return pSearchLabel ? pSearchLabel->GetText() : OUString();
+        }
+    }
+    return OUString();
+}
+
 void SvxSearchDialogWrapper::SetSearchLabel(const SearchLabel& rSL)
 {
     OUString sStr;
