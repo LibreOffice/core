@@ -93,9 +93,9 @@ jobjectArray jvmaccess::ClassPath::translateToUrls(
         return nullptr;
     }
     jsize idx = 0;
-    for (std::vector< jobject >::iterator i(urls.begin()); i != urls.end(); ++i)
+    for (auto const& url : urls)
     {
-        environment->SetObjectArrayElement(result, idx++, *i);
+        environment->SetObjectArrayElement(result, idx++, url);
     }
     return result;
 }

@@ -247,8 +247,8 @@ void handleFilesOfDir(
     ///Handle files in lexical order
     std::sort(aFiles.begin(), aFiles.end());
 
-    for( auto aIt = aFiles.begin(); aIt != aFiles.end(); ++aIt )
-        handleFile(rProject, *aIt, rPotDir);
+    for (auto const& elem : aFiles)
+        handleFile(rProject, elem, rPotDir);
 }
 
 bool includeProject(const OString& rProject) {

@@ -192,10 +192,9 @@ Sequence< Locale > SAL_CALL SpellCheckerDispatcher::getLocales()
 
     Sequence< Locale > aLocales( static_cast< sal_Int32 >(m_aSvcMap.size()) );
     Locale *pLocales = aLocales.getArray();
-    SpellSvcByLangMap_t::const_iterator aIt;
-    for (aIt = m_aSvcMap.begin();  aIt != m_aSvcMap.end();  ++aIt)
+    for (auto const& elem : m_aSvcMap)
     {
-        *pLocales++ = LanguageTag::convertToLocale( aIt->first );
+        *pLocales++ = LanguageTag::convertToLocale(elem.first);
     }
     return aLocales;
 }

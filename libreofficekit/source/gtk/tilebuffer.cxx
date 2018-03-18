@@ -50,10 +50,9 @@ void Tile::setSurface(cairo_surface_t *buffer)
 */
 void TileBuffer::resetAllTiles()
 {
-    std::map<int, Tile>::iterator it = m_mTiles.begin();
-    for (; it != m_mTiles.end(); ++it)
+    for (auto & tile : m_mTiles)
     {
-        it->second.valid = false;
+        tile.second.valid = false;
     }
 }
 
