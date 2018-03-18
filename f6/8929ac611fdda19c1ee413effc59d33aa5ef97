@@ -1,0 +1,8 @@
+Verified+1: Rene Engelhard <rene@debian.org>
+Verified+1: Jenkins <ci@libreoffice.org>
+Code-Review+2: Thorsten Behrens <Thorsten.Behrens@CIB.de>
+Submitted-by: Thorsten Behrens <Thorsten.Behrens@CIB.de>
+Submitted-at: Sun, 18 Mar 2018 17:20:52 +0100
+Reviewed-on: https://gerrit.libreoffice.org/50978
+Project: core
+Branch: refs/heads/master
