@@ -18,7 +18,6 @@
  */
 
 #include <tools/urlobj.hxx>
-#include <vcl/msgbox.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/weld.hxx>
 #include <unotools/pathoptions.hxx>
@@ -239,16 +238,14 @@ void SvxLineDefTabPage::CheckChanges_Impl()
         m_pLbType2->IsValueChangedFromSaved() ||
         m_pMtrDistance->IsValueChangedFromSaved() )
     {
-        Image aWarningBoxImage = GetStandardWarningBoxImage();
-        ScopedVclPtrInstance<SvxMessDialog> aMessDlg( GetParentDialog(),
-                                                      SvxResId( RID_SVXSTR_LINESTYLE ),
-                                                      CuiResId(RID_SVXSTR_ASK_CHANGE_LINESTYLE),
-                                                      &aWarningBoxImage );
-        DBG_ASSERT(aMessDlg, "Dialog creation failed!");
-        aMessDlg->SetButtonText( SvxMessDialogButton::N1, CuiResId(RID_SVXSTR_CHANGE) );
-        aMessDlg->SetButtonText( SvxMessDialogButton::N2, CuiResId(RID_SVXSTR_ADD) );
+        std::unique_ptr<weld::MessageDialog> xMessDlg(Application::CreateMessageDialog(GetFrameWeld(),
+                                                      VclMessageType::Warning, VclButtonsType::Cancel,
+                                                      CuiResId(RID_SVXSTR_ASK_CHANGE_LINESTYLE)));
+        xMessDlg->set_title(SvxResId(RID_SVXSTR_LINESTYLE));
+        xMessDlg->add_button(CuiResId(RID_SVXSTR_CHANGE), RET_BTN_1);
+        xMessDlg->add_button(CuiResId(RID_SVXSTR_ADD), RET_BTN_2);
 
-        short nRet = aMessDlg->Execute();
+        short nRet = xMessDlg->run();
 
         switch( nRet )
         {
