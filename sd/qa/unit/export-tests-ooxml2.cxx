@@ -124,6 +124,7 @@ public:
     void testGroupsRotatedPosition();
     void testAccentColor();
     void testTdf114848();
+    void testTdf115005();
     /// SmartArt animated elements
     void testTdf104792();
     void testTdf90627();
@@ -178,6 +179,7 @@ public:
     CPPUNIT_TEST(testGroupsRotatedPosition);
     CPPUNIT_TEST(testAccentColor);
     CPPUNIT_TEST(testTdf114848);
+    CPPUNIT_TEST(testTdf115005);
     CPPUNIT_TEST(testTdf104792);
     CPPUNIT_TEST(testTdf90627);
     CPPUNIT_TEST(testTdf104786);
@@ -1322,6 +1324,26 @@ void SdOOXMLExportTest2::testTdf114848()
     assertXPath(pXmlDocTheme1, "/a:theme/a:themeElements/a:clrScheme/a:dk2/a:srgbClr", "val", "1f497d");
     xmlDocPtr pXmlDocTheme2 = parseExport(tempFile, "ppt/theme/theme2.xml");
     assertXPath(pXmlDocTheme2, "/a:theme/a:themeElements/a:clrScheme/a:dk2/a:srgbClr", "val", "1f497d");
+}
+
+void SdOOXMLExportTest2::testTdf115005()
+{
+    sd::DrawDocShellRef xDocShRefOriginal = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/odp/tdf115005.odp"), ODP);
+    utl::TempFile tempFile;
+    sd::DrawDocShellRef xDocShRefResaved = saveAndReload(xDocShRefOriginal.get(), ODP, &tempFile);
+
+    // additional checks of the output file
+    uno::Reference<packages::zip::XZipFileAccess2> xNameAccess = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory), tempFile.GetURL());
+
+    // check that the document contains original vector images
+    const uno::Sequence<OUString> names = xNameAccess->getElementNames();
+    int nSVMFiles = 0;
+    for (int i=0; i<names.getLength(); i++)
+    {
+        if(names[i].endsWith(".svm"))
+            nSVMFiles++;
+    }
+    CPPUNIT_ASSERT_EQUAL(3, nSVMFiles);
 }
 
 void SdOOXMLExportTest2::testTdf104792()
