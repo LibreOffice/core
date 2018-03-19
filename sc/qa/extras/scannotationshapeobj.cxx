@@ -9,6 +9,7 @@
 
 #include <test/calc_unoapi_test.hxx>
 #include <test/text/xtext.hxx>
+#include <test/drawing/captionshape.hxx>
 
 #include <com/sun/star/sheet/XSheetAnnotationAnchor.hpp>
 #include <com/sun/star/sheet/XSheetAnnotationsSupplier.hpp>
@@ -22,7 +23,7 @@ using namespace css::uno;
 
 namespace sc_apitest {
 
-class ScAnnotationShapeObj : public CalcUnoApiTest, public apitest::XText
+class ScAnnotationShapeObj : public CalcUnoApiTest, public apitest::XText, public apitest::CaptionShape
 {
 public:
     ScAnnotationShapeObj();
@@ -36,6 +37,9 @@ public:
 
     // XText
     CPPUNIT_TEST(testInsertRemoveTextContent);
+
+    // CaptionShape
+    CPPUNIT_TEST(testCaptionShapeProperties);
 
     CPPUNIT_TEST_SUITE_END();
 
