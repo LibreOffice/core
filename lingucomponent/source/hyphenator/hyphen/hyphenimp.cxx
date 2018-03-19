@@ -284,7 +284,7 @@ Reference< XHyphenatedWord > SAL_CALL Hyphenator::hyphenate( const OUString& aWo
     }
 
     // if we have a hyphenation dictionary matching this locale
-    if (k != -1)
+    if (k >= 0)
     {
         int nHyphenationPos = -1;
         int nHyphenationPosAlt = -1;
