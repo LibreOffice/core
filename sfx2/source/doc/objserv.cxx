@@ -801,7 +801,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
         {
             // save as document templates
             SfxSaveAsTemplateDialog aDlg(rReq.GetFrameWeld(), GetModel());
-            aDlg.run();
+            (void)aDlg.run();
             break;
         }
 
