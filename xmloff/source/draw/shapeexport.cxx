@@ -2425,8 +2425,6 @@ void XMLShapeExport::ImpExportGraphicObjectShape(
                 }
             }
 
-            ImpExportSignatureLine(xShape);
-
             SvXMLElementExport aElement(mrExport, XML_NAMESPACE_DRAW, XML_IMAGE, true, true);
 
             // optional office:binary-data
@@ -2480,6 +2478,8 @@ void XMLShapeExport::ImpExportGraphicObjectShape(
     GetExport().GetImageMapExport().Export( xPropSet );
     ImpExportDescription( xShape ); // #i68101#
 
+    // Signature Line - needs to be after the images!
+    ImpExportSignatureLine(xShape);
 }
 
 void XMLShapeExport::ImpExportChartShape(
