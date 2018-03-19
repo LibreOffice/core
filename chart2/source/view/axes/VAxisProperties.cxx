@@ -173,6 +173,7 @@ AxisProperties::AxisProperties( const uno::Reference< XAxis >& xAxisModel
     , m_bComplexCategories(false)
     , m_pExplicitCategoriesProvider(pExplicitCategoriesProvider)
     , m_xAxisTextProvider(nullptr)
+    , m_bLimitSpaceForLabels(false)
 {
 }
 
