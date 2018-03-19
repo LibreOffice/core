@@ -529,6 +529,7 @@ IMPL_LINK( SvxGrfCropPage, CropHdl, SpinField&, rField, void )
         if(bZoom && ( ( ( aOrigSize.Height() - (nTop + nBottom )) * nHeightZoom)
                                             / 100 >= aPageSize.Height()))
         {
+            assert(nHeightZoom && "div-by-zero");
             if(&rField == m_pTopMF)
             {
                 nTop = aOrigSize.Height() -

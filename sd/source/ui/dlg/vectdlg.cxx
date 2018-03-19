@@ -172,7 +172,9 @@ void SdVectorizeDlg::Calculate( Bitmap const & rBmp, GDIMetaFile& rMtf )
                 const long      nHeight = pRAcc->Height();
                 const long      nTileX = static_cast<long>(m_pMtFillHoles->GetValue());
                 const long      nTileY = static_cast<long>(m_pMtFillHoles->GetValue());
+                assert(nTileX && "div-by-zero");
                 const long      nCountX = nWidth / nTileX;
+                assert(nTileY && "div-by-zero");
                 const long      nCountY = nHeight / nTileY;
                 const long      nRestX = nWidth % nTileX;
                 const long      nRestY = nHeight % nTileY;

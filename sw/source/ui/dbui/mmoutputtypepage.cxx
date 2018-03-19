@@ -573,8 +573,11 @@ void SwSendMailDialog::UpdateTransferStatus()
     sStatus = m_sErrorStatus.replaceFirst("%1", OUString::number(m_nErrorCount) );
     m_pErrorStatus->SetText(sStatus);
 
-    if(m_pImpl->aDescriptors.size())
+    if (m_pImpl->aDescriptors.size())
+    {
+        assert(m_nExpectedCount && "div-by-zero");
         m_pProgressBar->SetValue(static_cast<sal_uInt16>(m_nSendCount * 100 / m_nExpectedCount));
+    }
     else
         m_pProgressBar->SetValue(0);
 }

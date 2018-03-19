@@ -201,6 +201,7 @@ ScRange ScSamplingDialog::PerformPeriodicSampling(ScDocShell* pDocShell)
             outRow = mOutputAddress.Row();
             for (SCROW inRow = aStart.Row(); inRow <= aEnd.Row(); inRow++)
             {
+                assert(aPeriod && "div-by-zero");
                 if (i % aPeriod == aPeriod - 1 ) // Sample the last of period
                 {
                     double aValue = mDocument->GetValue(ScAddress(inCol, inRow, inTab));

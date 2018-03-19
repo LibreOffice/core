@@ -558,8 +558,12 @@ void ScDrawView::FitToCellSize()
     // For graphic objects, we want to keep the aspect ratio
     if (pObj->shouldKeepAspectRatio())
     {
-        double fScaleX = static_cast<double>(aCellRect.GetWidth()) / static_cast<double>(aGraphicRect.GetWidth());
-        double fScaleY = static_cast<double>(aCellRect.GetHeight()) / static_cast<double>(aGraphicRect.GetHeight());
+        long nWidth = aGraphicRect.GetWidth();
+        assert(nWidth && "div-by-zero");
+        double fScaleX = static_cast<double>(aCellRect.GetWidth()) / static_cast<double>(nWidth);
+        long nHeight = aGraphicRect.GetHeight();
+        assert(nHeight && "div-by-zero");
+        double fScaleY = static_cast<double>(aCellRect.GetHeight()) / static_cast<double>(nHeight);
         double fScaleMin = std::min(fScaleX, fScaleY);
 
         aCellRect.setWidth(static_cast<double>(aGraphicRect.GetWidth()) * fScaleMin);
