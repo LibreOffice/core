@@ -20,8 +20,6 @@
 #include "mmoutputtypepage.hxx"
 #include <mailmergewizard.hxx>
 #include <mmconfigitem.hxx>
-#include <vcl/msgbox.hxx>
-#include <vcl/messagedialog.hxx>
 #include <dbui.hrc>
 #include <strings.hrc>
 #include <bitmaps.hlst>
@@ -29,8 +27,9 @@
 
 #include <rtl/ref.hxx>
 #include <com/sun/star/mail/XSmtpService.hpp>
-#include <vcl/svapp.hxx>
 #include <vcl/idle.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/weld.hxx>
 
 #include <cmdid.h>
 #include <swunohelper.hxx>
@@ -213,29 +212,19 @@ void SwMailDispatcherListener_Impl::DeleteAttachments( uno::Reference< mail::XMa
     }
 }
 
-class SwSendWarningBox_Impl : public MessageDialog
+class SwSendWarningBox_Impl : public weld::MessageDialogController
 {
-    VclPtr<VclMultiLineEdit> m_pDetailED;
+    std::unique_ptr<weld::TextView> m_xDetailED;
 public:
-    SwSendWarningBox_Impl(vcl::Window* pParent, const OUString& rDetails);
-    virtual ~SwSendWarningBox_Impl() override { disposeOnce(); }
-    virtual void dispose() override
+    SwSendWarningBox_Impl(weld::Window* pParent, const OUString& rDetails)
+        : MessageDialogController(pParent, "modules/swriter/ui/warnemaildialog.ui", "WarnEmailDialog", "grid")
+        , m_xDetailED(m_xBuilder->weld_text_view("errors"))
     {
-        m_pDetailED.clear();
-        MessageDialog::dispose();
+        m_xDetailED->set_size_request(80 * m_xDetailED->get_approximate_digit_width(),
+                                      8 * m_xDetailED->get_text_height());
+        m_xDetailED->set_text(rDetails);
     }
 };
-
-SwSendWarningBox_Impl::SwSendWarningBox_Impl(vcl::Window* pParent, const OUString& rDetails)
-    : MessageDialog(pParent, "WarnEmailDialog", "modules/swriter/ui/warnemaildialog.ui")
-{
-    get(m_pDetailED, "errors");
-    m_pDetailED->SetMaxTextWidth(80 * m_pDetailED->approximate_char_width());
-    m_pDetailED->set_width_request(80 * m_pDetailED->approximate_char_width());
-    m_pDetailED->set_height_request(8 * m_pDetailED->GetTextHeight());
-    m_pDetailED->SetText(rDetails);
-    create_message_area();
-}
 
 #define ITEMID_TASK     1
 #define ITEMID_STATUS   2
@@ -558,8 +547,8 @@ void SwSendMailDialog::DocumentSent( uno::Reference< mail::XMailMessage> const &
 
     if (pError)
     {
-        VclPtrInstance< SwSendWarningBox_Impl > pDlg(nullptr, *pError);
-        pDlg->Execute();
+        SwSendWarningBox_Impl aDlg(GetFrameWeld(), *pError);
+        aDlg.run();
     }
 }
 
