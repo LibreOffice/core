@@ -385,7 +385,7 @@ TaskManager::endTask( sal_Int32 CommandId,
                       const OUString& aUncPath,
                       BaseContent* pContent)
 {
-    osl::MutexGuard aGuard( m_aMutex );
+    osl::ClearableMutexGuard aGuard( m_aMutex );
     TaskMap::iterator it = m_aTaskMap.find( CommandId );
     if( it == m_aTaskMap.end() )
         return;
@@ -398,6 +398,8 @@ TaskManager::endTask( sal_Int32 CommandId,
         = it->second.getCommandEnvironment();
 
     m_aTaskMap.erase( it );
+
+    aGuard.clear();
 
     if( ErrorCode != TASKHANDLER_NO_ERROR )
         throw_handler(
