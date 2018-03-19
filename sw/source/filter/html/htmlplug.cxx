@@ -1456,16 +1456,26 @@ Writer& OutHTML_FrameFormatOLENodeGrf( Writer& rWrt, const SwFrameFormat& rFrame
     }
 
     OUString aGraphicURL;
+    OUString aMimeType;
     if(!rHTMLWrt.mbEmbedImages)
     {
         const OUString* pTempFileName = rHTMLWrt.GetOrigFileName();
         if(pTempFileName)
             aGraphicURL = *pTempFileName;
 
+        OUString aFilterName("JPG");
+        XOutFlags nFlags = XOutFlags::UseGifIfPossible | XOutFlags::UseNativeIfPossible;
+
+        if (bObjectOpened)
+        {
+            aFilterName = "PNG";
+            nFlags = XOutFlags::NONE;
+            aMimeType = "image/png";
+        }
+
         sal_uInt16 nErr = XOutBitmap::WriteGraphic( aGraphic, aGraphicURL,
-                                    "JPG",
-                                    (XOutFlags::UseGifIfPossible |
-                                     XOutFlags::UseNativeIfPossible) );
+                                    aFilterName,
+                                    nFlags );
         if( nErr )              // fehlerhaft, da ist nichts auszugeben
         {
             rHTMLWrt.m_nWarn = WARN_SWG_POOR_LOAD | WARN_SW_WRITE_BASE;
@@ -1482,7 +1492,7 @@ Writer& OutHTML_FrameFormatOLENodeGrf( Writer& rWrt, const SwFrameFormat& rFrame
         nFlags |= HtmlFrmOpts::Replacement;
     OutHTML_Image( rWrt, rFrameFormat, aGraphicURL, aGraphic,
             pOLENd->GetTitle(), pOLENd->GetTwipSize(),
-            nFlags, "ole" );
+            nFlags, "ole", nullptr, aMimeType );
 
     if (bObjectOpened)
         // Close native data.
