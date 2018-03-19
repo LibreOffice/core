@@ -10,12 +10,10 @@
 #ifndef INCLUDED_VCL_INC_MESSAGEDIALOG_HXX
 #define INCLUDED_VCL_INC_MESSAGEDIALOG_HXX
 
-#include <vcl/dllapi.h>
-
 #include <vcl/dialog.hxx>
 #include <vcl/layout.hxx>
 
-class VCL_DLLPUBLIC MessageDialog : public Dialog
+class MessageDialog : public Dialog
 {
 private:
     VclButtonsType m_eButtonsType;

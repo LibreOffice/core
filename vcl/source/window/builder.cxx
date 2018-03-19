@@ -43,7 +43,7 @@
 #include <vcl/commandinfoprovider.hxx>
 #include <svdata.hxx>
 #include <bitmaps.hlst>
-#include <vcl/messagedialog.hxx>
+#include <messagedialog.hxx>
 #include <window.h>
 #include <xmlreader/xmlreader.hxx>
 #include <desktop/crashreport.hxx>
