@@ -213,7 +213,6 @@ class OOXMLHexValue : public OOXMLValue
 {
 protected:
     sal_uInt32 mnValue;
-    OOXMLHexValue() {}
 public:
     explicit OOXMLHexValue(sal_uInt32 nValue);
     explicit OOXMLHexValue(const char * pValue);
