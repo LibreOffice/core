@@ -97,6 +97,7 @@
 #define RID_SVXSTR_SELECTOR_RUN                     NC_("RID_SVXSTR_SELECTOR_RUN", "Run")
 #define RID_SVXSTR_ROW                              NC_("RID_SVXSTR_ROW", "Insert Rows")
 #define RID_SVXSTR_REMOVE_FAVORITES                 NC_("RID_SVXSTR_REMOVE_FAVORITES", "Remove from Favorites")
+#define RID_SVXSTR_MISSING_GLYPH                    NC_("RID_SVXSTR_MISSING_GLYPH", "Missing Glyph")
 #define RID_SVXSTR_ADD_FAVORITES                    NC_("RID_SVXSTR_ADD_FAVORITES", "Add to Favorites")
 // PPI is pixel per inch, %1 is a number
 #define RID_SVXSTR_PPI                              NC_("RID_SVXSTR_PPI", "(%1 PPI)")
