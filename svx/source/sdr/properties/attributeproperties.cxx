@@ -177,6 +177,30 @@ namespace sdr
         {
             SfxStyleSheet* pTargetStyleSheet(rProps.GetStyleSheet());
 
+            if(pTargetStyleSheet && &rObj.getSdrModelFromSdrObject() != &GetSdrObject().getSdrModelFromSdrObject())
+            {
+                // TTTT It is a clone to another model, thus the TargetStyleSheet
+                // is probably also from another SdrModel, so do *not* simply use it.
+                //
+                // The DefaultProperties::Clone already has cloned the ::SET items
+                // to a new SfxItemSet in the new SfxItemPool. There are quite some
+                // possibilities to continue:
+                // - Do not use StyleSheet (will do this for now)
+                // - Search for same StyleSheet in Target-SdrModel and use if found
+                //   (use e.g. Name)
+                // - Clone used StyleSheet(s) to Target-SdrModel and use
+                // - Set all Attributes from the StyleSheet as hard attributes at the
+                //   SfxItemSet
+                // The original AW080 uses 'ImpModelChange' (see there) which Clones
+                // and uses the used StyleSheets if there is a Target-SfxItemPool
+                // and sets to hard attributes if not. This may be used later if needed,
+                // but for now only a single UnitTest uses this Clone-scenario and works
+                // well with not using the TargetStyleSheet. The logic Cloning
+                // StyleSheets *should* - if needed - be on a higher level where it is
+                // potentially better known what would be the correct thing to do.
+                pTargetStyleSheet = nullptr;
+            }
+
             if(pTargetStyleSheet)
             {
                 if(HasSfxItemSet())
