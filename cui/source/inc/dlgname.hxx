@@ -119,32 +119,6 @@ public:
     OUString GetDescription() const { return m_xEdtDescription->get_text(); }
 };
 
-enum class SvxMessDialogButton {
-    N1, N2
-};
-
-/// Dialog to cancel, save, or add
-class SvxMessDialog : public ModalDialog
-{
-private:
-    VclPtr<FixedText>      pFtDescription;
-    VclPtr<PushButton>     pBtn1;
-    VclPtr<PushButton>     pBtn2;
-    VclPtr<FixedImage>     pFtImage;
-    Image*          pImage;
-
-    DECL_LINK(Button1Hdl, Button*, void);
-    DECL_LINK(Button2Hdl, Button*, void);
-
-public:
-    SvxMessDialog( vcl::Window* pWindow, const OUString& rText, const OUString& rDesc, Image const * pImg );
-    virtual ~SvxMessDialog() override;
-    virtual void dispose() override;
-
-    void    SetButtonText( SvxMessDialogButton nBtnId, const OUString& rNewTxt );
-};
-
-
 #endif // INCLUDED_CUI_SOURCE_INC_DLGNAME_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

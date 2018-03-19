@@ -98,7 +98,6 @@ $(eval $(call gb_UIConfig_add_uifiles,cui,\
 	cui/uiconfig/ui/macroassignpage \
 	cui/uiconfig/ui/macroselectordialog \
 	cui/uiconfig/ui/menuassignpage \
-	cui/uiconfig/ui/messbox \
 	cui/uiconfig/ui/mosaicdialog \
 	cui/uiconfig/ui/movemenu \
 	cui/uiconfig/ui/multipathdialog \
