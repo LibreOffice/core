@@ -2758,7 +2758,7 @@ static Writer& OutHTML_SwCrossedOut( Writer& rWrt, const SfxPoolItem& rHt )
 
     // Because of Netscape, we output STRIKE and not S!
     const FontStrikeout nStrike = static_cast<const SvxCrossedOutItem&>(rHt).GetStrikeout();
-    if( STRIKEOUT_NONE != nStrike )
+    if( STRIKEOUT_NONE != nStrike && !rHTMLWrt.mbReqIF )
     {
         HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_strike, rHTMLWrt.m_bTagOn );
     }

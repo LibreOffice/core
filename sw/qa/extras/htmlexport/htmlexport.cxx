@@ -360,6 +360,9 @@ DECLARE_HTMLEXPORT_TEST(testReqIfParagraph, "reqif-p.xhtml")
 
     // This was <strong>, namespace prefix was missing.
     CPPUNIT_ASSERT(aStream.indexOf("<reqif-xhtml:strong>") != -1);
+
+    // This was "<strike>" instead of CSS.
+    CPPUNIT_ASSERT(aStream.indexOf("<reqif-xhtml:span style=\"text-decoration: line-through\"") != -1);
 }
 
 DECLARE_HTMLEXPORT_ROUNDTRIP_TEST(testReqIfOleData, "reqif-ole-data.xhtml")
