@@ -23,6 +23,7 @@
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
 #include <tools/link.hxx>
+#include <tools/gen.hxx>
 
 using namespace css;
 using namespace css::uno;
@@ -109,6 +110,19 @@ bool SidebarDockingWindow::EventNotify(NotifyEvent& rEvent)
     MouseNotifyEvent nType = rEvent.GetType();
     if (MouseNotifyEvent::KEYINPUT == nType)
         return true;
+
+    if ( MouseNotifyEvent::MOUSEBUTTONDOWN == nType)
+    {
+        const MouseEvent *mEvt = rEvent.GetMouseEvent();
+        if (mEvt->IsLeft())
+        {
+            tools::Rectangle aGrip = mpSidebarController->GetDeckDragArea();
+            if ( aGrip.IsInside( mEvt->GetPosPixel() ) )
+                SetReadyToDrag( true );
+                //SAL_WARN("sfx.sidebar", "whereismouse: " << aPt.getX() << " " << aPt.getY());
+        }
+        return true;
+    }
 
     return Window::EventNotify(rEvent);
 }

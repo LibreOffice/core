@@ -18,6 +18,7 @@
  */
 
 #include <sfx2/sidebar/DeckTitleBar.hxx>
+#include <sfx2/sidebar/SidebarDockingWindow.hxx>
 #include <sfx2/sidebar/Theme.hxx>
 #include <sfx2/sfxresid.hxx>
 #include <sfx2/strings.hrc>
@@ -79,6 +80,15 @@ tools::Rectangle DeckTitleBar::GetTitleArea (const tools::Rectangle& rTitleBarBo
         rTitleBarBox.Top(),
         rTitleBarBox.Right(),
         rTitleBarBox.Bottom());
+}
+
+tools::Rectangle DeckTitleBar::GetDragArea() const
+{
+    Image aGripImage (Theme::GetImage(Theme::Image_Grip));
+    return tools::Rectangle(0,0,
+               aGripImage.GetSizePixel().Width() + gaLeftGripPadding + gaRightGripPadding,
+               aGripImage.GetSizePixel().Height()
+    );
 }
 
 void DeckTitleBar::PaintDecoration(vcl::RenderContext& rRenderContext, const tools::Rectangle& /*rTitleBarBox*/)
