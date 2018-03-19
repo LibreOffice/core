@@ -44,7 +44,6 @@
 #include <unotools/securityoptions.hxx>
 
 #include <vcl/virdev.hxx>
-#include <vcl/msgbox.hxx>
 #include <vcl/weld.hxx>
 
 #include <inputopt.hxx>

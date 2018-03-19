@@ -29,7 +29,6 @@
 #include <com/sun/star/security/CertificateCharacters.hpp>
 
 #include <resourcemanager.hxx>
-#include <vcl/msgbox.hxx>
 #include <svtools/treelistentry.hxx>
 #include <unotools/useroptions.hxx>
 

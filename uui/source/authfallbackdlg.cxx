@@ -9,7 +9,6 @@
 
 #include "authfallbackdlg.hxx"
 
-#include <vcl/msgbox.hxx>
 #include <iostream>
 
 using namespace boost;

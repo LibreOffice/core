@@ -33,7 +33,6 @@
 
 #include <sfx2/app.hxx>
 
-#include <vcl/msgbox.hxx>
 #include <vcl/settings.hxx>
 #include <formula/errorcodes.hxx>
 #include <o3tl/make_unique.hxx>

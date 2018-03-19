@@ -19,7 +19,6 @@
 
 #include <vcl/svapp.hxx>
 #include <vcl/mnemonic.hxx>
-#include <vcl/msgbox.hxx>
 #include <unotools/charclass.hxx>
 #include <unotools/viewoptions.hxx>
 #include <formula/formdata.hxx>

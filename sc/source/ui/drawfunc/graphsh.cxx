@@ -29,7 +29,6 @@
 #include <svx/grafctrl.hxx>
 #include <svx/compressgraphicdialog.hxx>
 #include <svx/graphichelper.hxx>
-#include <vcl/msgbox.hxx>
 
 #include <graphsh.hxx>
 #include <strings.hrc>

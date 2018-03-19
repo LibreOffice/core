@@ -29,7 +29,6 @@
 #include <vcl/graphicfilter.hxx>
 #include <svl/stritem.hxx>
 #include <svtools/miscopt.hxx>
-#include <vcl/msgbox.hxx>
 #include <avmedia/mediawindow.hxx>
 #include <vcl/svapp.hxx>
 

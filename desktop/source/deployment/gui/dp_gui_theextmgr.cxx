@@ -18,7 +18,6 @@
  */
 
 #include <vcl/svapp.hxx>
-#include <vcl/msgbox.hxx>
 
 #include <toolkit/helper/vclunohelper.hxx>
 

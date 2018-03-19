@@ -22,7 +22,6 @@
 
 #include <vcl/dialog.hxx>
 
-#include <vcl/msgbox.hxx>
 #include <vcl/lstbox.hxx>
 
 #include <vcl/button.hxx>

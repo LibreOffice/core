@@ -25,7 +25,6 @@
 #include <globstr.hrc>
 
 #include <highred.hxx>
-#include <vcl/msgbox.hxx>
 #include <sfx2/app.hxx>
 
 //  class ScHighlightChgDlg

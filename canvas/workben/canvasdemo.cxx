@@ -48,7 +48,6 @@
 #include <rtl/bootstrap.hxx>
 #include <sal/macros.h>
 #include <vcl/canvastools.hxx>
-#include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/unowrap.hxx>
 #include <vcl/virdev.hxx>

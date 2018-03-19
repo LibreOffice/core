@@ -19,7 +19,6 @@
 
 #undef SC_DLLIMPLEMENTATION
 
-#include <vcl/msgbox.hxx>
 #include <vcl/weld.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <svtools/collatorres.hxx>

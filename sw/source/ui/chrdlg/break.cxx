@@ -20,7 +20,6 @@
 #include <sfx2/request.hxx>
 #include <svl/stritem.hxx>
 #include <vcl/layout.hxx>
-#include <vcl/msgbox.hxx>
 
 #include <cmdid.h>
 #include <uitool.hxx>

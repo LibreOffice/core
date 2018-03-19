@@ -31,7 +31,6 @@
 #include <dbmgr.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <wrtsh.hxx>
-#include <vcl/msgbox.hxx>
 #include <svx/dataaccessdescriptor.hxx>
 
 #include <helpids.h>

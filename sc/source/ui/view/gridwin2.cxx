@@ -18,7 +18,6 @@
  */
 
 #include <scitems.hxx>
-#include <vcl/msgbox.hxx>
 #include <vcl/settings.hxx>
 #include <comphelper/lok.hxx>
 

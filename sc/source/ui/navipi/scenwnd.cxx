@@ -22,7 +22,6 @@
 #include <sfx2/viewfrm.hxx>
 #include <svl/slstitm.hxx>
 #include <svl/stritem.hxx>
-#include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/settings.hxx>

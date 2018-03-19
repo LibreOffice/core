@@ -27,7 +27,6 @@
 #include <editeng/outliner.hxx>
 #include <sfx2/lnkbase.hxx>
 #include <fmtfld.hxx>
-#include <vcl/msgbox.hxx>
 #include <svl/itempool.hxx>
 #include <unotools/useroptions.hxx>
 #include <svl/whiter.hxx>
