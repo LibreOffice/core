@@ -32,6 +32,7 @@
 #include <svx/svdpool.hxx>
 #include <editeng/eeitem.hxx>
 #include <libxml/xmlwriter.h>
+#include <svx/svdmodel.hxx>
 
 
 namespace sdr
