@@ -317,7 +317,6 @@ $(eval $(call gb_Jar_add_sourcefiles,OOoRunner,\
     qadevOOo/tests/java/ifc/document/_XTypeDetection \
     qadevOOo/tests/java/ifc/document/_XViewDataSupplier \
     qadevOOo/tests/java/ifc/drawing/_AreaShapeDescriptor \
-    qadevOOo/tests/java/ifc/drawing/_CaptionShape \
     qadevOOo/tests/java/ifc/drawing/_ConnectorProperties \
     qadevOOo/tests/java/ifc/drawing/_ConnectorShape \
     qadevOOo/tests/java/ifc/drawing/_ConnectorShapeDescriptor \
