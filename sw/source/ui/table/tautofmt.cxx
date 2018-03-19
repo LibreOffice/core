@@ -93,8 +93,14 @@ SwAutoFormatDlg::SwAutoFormatDlg(weld::Window* pParent, SwWrtShell* pWrtShell,
 
 SwAutoFormatDlg::~SwAutoFormatDlg()
 {
-    if (bCoreDataChanged)
-        m_xTableTable->Save();
+    try
+    {
+        if (bCoreDataChanged)
+            m_xTableTable->Save();
+    }
+    catch (...)
+    {
+    }
     m_xTableTable.reset();
 }
 
