@@ -56,6 +56,8 @@ public:
     /// Also insert default values to override attributes of style
     /// (yes, really; that's what Word does).
     RTFSprms cloneAndDeduplicate(RTFSprms& rReference) const;
+    /// Inserts default values to override attributes of pAbstract.
+    void duplicateList(RTFValue::Pointer_t pAbstract);
     std::size_t size() const { return m_pSprms->size(); }
     bool empty() const { return m_pSprms->empty(); }
     Entry_t& back() { return m_pSprms->back(); }

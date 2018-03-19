@@ -335,6 +335,10 @@ public:
     int nCurrentStyleIndex;
     /// Index of the current character style.
     int nCurrentCharacterStyleIndex;
+    /// Current listid, points to a listtable entry.
+    int nCurrentListIndex = -1;
+    /// Current ls, points to a listoverridetable entry.
+    int nCurrentListOverrideIndex = -1;
 
     /// Points to the active buffer, if there is one.
     RTFBuffer_t* pCurrentBuffer;
@@ -394,8 +398,11 @@ void putNestedAttribute(RTFSprms& rSprms, Id nParent, Id nId, const RTFValue::Po
                         RTFOverwrite eOverwrite = RTFOverwrite::YES, bool bAttribute = true);
 bool eraseNestedAttribute(RTFSprms& rSprms, Id nParent, Id nId);
 
-/// Looks up the nParent then the nested nId key in rSprms.
+/// Looks up the nParent then the nested nId attribute in rSprms.
 RTFValue::Pointer_t getNestedAttribute(RTFSprms& rSprms, Id nParent, Id nId);
+
+/// Looks up the nParent then the nested nId sprm in rSprms.
+RTFValue::Pointer_t getNestedSprm(RTFSprms& rSprms, Id nParent, Id nId);
 
 /// Checks if rName is contained at least once in rProperties as a key.
 bool findPropertyName(const std::vector<css::beans::PropertyValue>& rProperties,
@@ -556,6 +563,10 @@ private:
     bool m_bNeedFinalPar;
     /// The list table and list override table combined.
     RTFSprms m_aListTableSprms;
+    /// Maps between listoverridetable and listtable indexes.
+    std::map<int, int> m_aListOverrideTable;
+    /// Maps listtable indexes to listtable entries.
+    std::map<int, RTFValue::Pointer_t> m_aListTable;
     /// The settings table attributes.
     RTFSprms m_aSettingsTableAttributes;
     /// The settings table sprms.
