@@ -62,7 +62,7 @@ SvxUnoTextContentEnumeration::SvxUnoTextContentEnumeration( const SvxUnoTextBase
             ESelection aCurrentParaSel = ESelection( currentPara, nStartPos, currentPara, nEndPos );
             for (auto const& elemRange : rRanges)
             {
-                if (!pContent)
+                if (pContent)
                     break;
                 SvxUnoTextContent* pIterContent = dynamic_cast< SvxUnoTextContent* >( elemRange );
                 if( pIterContent && (pIterContent->mnParagraph == currentPara) )
@@ -409,7 +409,7 @@ SvxUnoTextRangeEnumeration::SvxUnoTextRangeEnumeration(const SvxUnoTextBase& rTe
             SvxUnoTextRange* pRange = nullptr;
             for (auto const& elemRange : rRanges)
             {
-                if (!pRange)
+                if (pRange)
                     break;
                 SvxUnoTextRange* pIterRange = dynamic_cast< SvxUnoTextRange* >( elemRange );
                 if( pIterRange && pIterRange->mbPortion && (aSel == pIterRange->maSelection) )
