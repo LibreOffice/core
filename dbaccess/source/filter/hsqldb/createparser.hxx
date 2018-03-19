@@ -15,7 +15,7 @@
 
 namespace dbahsql
 {
-class CreateStmtParser
+class SAL_DLLPUBLIC_EXPORT CreateStmtParser
 {
 private:
     std::vector<ColumnDefinition> m_aColumns;
