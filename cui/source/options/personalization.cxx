@@ -153,16 +153,35 @@ IMPL_LINK( SelectPersonaDialog, SearchPersonas, Button*, pButton, void )
     if( searchTerm.isEmpty( ) )
         return;
 
-    // 15 results so that invalid and duplicate search results whose names can't be retrieved can be skipped
-    OUString rSearchURL = "https://services.addons.mozilla.org/en-US/firefox/api/1.5/search/" + searchTerm + "/9/15";
 
-    if ( searchTerm.startsWith( "https://addons.mozilla.org/" ) )
+    if ( searchTerm.startsWith( "https://" ) || searchTerm.startsWith( "http://" ) )
     {
-        searchTerm = "https://addons.mozilla.org/en-US/" + searchTerm.copy( searchTerm.indexOf( "firefox" ) );
-        m_pSearchThread = new SearchAndParseThread( this, searchTerm, true );
+        if ( searchTerm.startsWith( "https://addons.mozilla.org/en-US/firefox/addon/" ) )
+        {
+            // 15 results so that invalid and duplicate search results whose names can't be retrieved can be skipped
+            OUString rSearchURL = "https://addons.mozilla.org/en-US/firefox/addon/" + searchTerm + "/9/15";
+            m_pSearchThread = new SearchAndParseThread( this, rSearchURL, false );
+        }
+        else
+        {
+            // in case of a returned CommandFailedException
+            // SimpleFileAccess serves it, returning an empty stream
+            SolarMutexGuard aGuard;
+            OUString sError = CuiResId(RID_SVXSTR_SEARCHERROR);
+            sError = sError.replaceAll("%1", searchTerm);
+
+            std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(nullptr,
+               VclMessageType::Error, VclButtonsType::Ok, sError));
+            xBox->run();
+            return;
+        }
     }
     else
+    {
+        // 15 results so that invalid and duplicate search results whose names can't be retrieved can be skipped
+        OUString rSearchURL = "https://services.addons.mozilla.org/en-US/firefox/api/1.5/search/" + searchTerm + "/9/15";
         m_pSearchThread = new SearchAndParseThread( this, rSearchURL, false );
+    }
 
     m_pSearchThread->launch();
 }
