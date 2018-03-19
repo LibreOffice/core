@@ -693,7 +693,7 @@ Point Window::GetVisibleCenter()
         aWinSize.setWidth( maViewSize.Width() );
 
     Point aPos;
-    aPos = ::tools::Rectangle(aPos, aWinSize).Center();
+    aPos = ::tools::Rectangle(aPos, GetOutputSizePixel()).Center();
 
     // For LOK
     bool bMapModeWasEnabled(IsMapModeEnabled());
