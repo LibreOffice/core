@@ -34,6 +34,7 @@
 #include <vcl/virdev.hxx>
 #include <vcl/settings.hxx>
 
+#include <sfx2/sfxhelp.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/sfxdlg.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -1769,19 +1770,20 @@ IMPL_LINK_NOARG( SvxConfigPage, SelectFunctionHdl, SvTreeListBox *, void )
         m_pAddCommandButton->Enable();
         m_pRemoveCommandButton->Enable();
 
-        m_pDescriptionField->SetText( m_pFunctions->GetHelpText() );
+        m_pDescriptionField->SetText( m_pFunctions->GetHelpText( false ) );
     }
     else
     {
+
         m_pAddCommandButton->Disable();
         m_pRemoveCommandButton->Disable();
 
         m_pDescriptionField->SetText("");
     }
 
-    // Disable the description field and its label if there is no help text to display
+    // Disable the description field and its label if the local help is not installed
     // And inform the user via tooltips
-    if ( m_pDescriptionField->GetText().isEmpty() )
+    if ( !SfxHelp::IsHelpInstalled() )
     {
         m_pDescriptionField->Disable();
         m_pDescriptionFieldLb->Disable();

@@ -314,7 +314,7 @@ OUString SfxConfigFunctionListBox::GetSelectedScriptURI()
     return OUString();
 }
 
-OUString SfxConfigFunctionListBox::GetHelpText()
+OUString SfxConfigFunctionListBox::GetHelpText( bool bConsiderParent )
 {
     SvTreeListEntry *pEntry = FirstSelected();
     if ( pEntry )
@@ -324,7 +324,10 @@ OUString SfxConfigFunctionListBox::GetHelpText()
         {
             if ( pData->nKind == SfxCfgKind::FUNCTION_SLOT )
             {
-                return Application::GetHelp()->GetHelpText( pData->sCommand, this );
+                if (bConsiderParent)
+                    return Application::GetHelp()->GetHelpText( pData->sCommand, this );
+                else
+                    return Application::GetHelp()->GetHelpText( pData->sCommand, nullptr );
             }
             else if ( pData->nKind == SfxCfgKind::FUNCTION_SCRIPT )
             {
