@@ -11,6 +11,7 @@
 #include <ooxml/resourceids.hxx>
 #include <ooxml/QNameToString.hxx>
 #include <rtl/strbuf.hxx>
+#include "rtfdocumentimpl.hxx"
 
 namespace writerfilter
 {
@@ -145,6 +146,7 @@ static RTFValue::Pointer_t getDefaultSPRM(Id const id)
         case NS_ooxml::LN_EG_RPrBase_b:
         case NS_ooxml::LN_CT_Ind_left:
         case NS_ooxml::LN_CT_Ind_right:
+        case NS_ooxml::LN_CT_Ind_firstLine:
             return std::make_shared<RTFValue>(0);
 
         default:
@@ -235,6 +237,61 @@ static void cloneAndDeduplicateSprm(std::pair<Id, RTFValue::Pointer_t> const& rS
             {
                 ret.set(rSprm.first, std::make_shared<RTFValue>(attributes, sprms));
             }
+        }
+    }
+}
+
+/// Extracts the list level matching nLevel from pAbstract.
+static RTFValue::Pointer_t getListLevel(RTFValue::Pointer_t pAbstract, int nLevel)
+{
+    for (const auto& rPair : pAbstract->getSprms())
+    {
+        if (rPair.first != NS_ooxml::LN_CT_AbstractNum_lvl)
+            continue;
+
+        RTFValue::Pointer_t pLevel = rPair.second->getAttributes().find(NS_ooxml::LN_CT_Lvl_ilvl);
+        if (!pLevel)
+            continue;
+
+        if (pLevel->getInt() != nLevel)
+            continue;
+
+        return rPair.second;
+    }
+
+    return RTFValue::Pointer_t();
+}
+
+void RTFSprms::duplicateList(RTFValue::Pointer_t pAbstract)
+{
+    int nLevel = 0;
+    RTFValue::Pointer_t pLevelId
+        = getNestedSprm(*this, NS_ooxml::LN_CT_PPrBase_numPr, NS_ooxml::LN_CT_NumPr_ilvl);
+    if (pLevelId)
+        nLevel = pLevelId->getInt();
+
+    RTFValue::Pointer_t pLevel = getListLevel(pAbstract, nLevel);
+    if (!pLevel)
+        return;
+
+    RTFValue::Pointer_t pLevelInd = pLevel->getSprms().find(NS_ooxml::LN_CT_PPrBase_ind);
+    if (!pLevelInd)
+        return;
+
+    for (const auto& rListLevelPair : pLevelInd->getAttributes())
+    {
+        switch (rListLevelPair.first)
+        {
+            case NS_ooxml::LN_CT_Ind_left:
+            case NS_ooxml::LN_CT_Ind_right:
+            case NS_ooxml::LN_CT_Ind_firstLine:
+                RTFValue::Pointer_t pParagraphValue
+                    = getNestedAttribute(*this, NS_ooxml::LN_CT_PPrBase_ind, rListLevelPair.first);
+                if (!pParagraphValue)
+                    putNestedAttribute(*this, NS_ooxml::LN_CT_PPrBase_ind, rListLevelPair.first,
+                                       getDefaultSPRM(rListLevelPair.first));
+
+                break;
         }
     }
 }
