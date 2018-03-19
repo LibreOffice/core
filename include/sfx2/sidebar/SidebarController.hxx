@@ -164,6 +164,8 @@ public:
     void FadeIn();
     void FadeOut();
 
+    tools::Rectangle GetDeckDragArea() const;
+
 private:
     SidebarController(
         SidebarDockingWindow* pParentWindow,
