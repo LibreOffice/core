@@ -44,7 +44,6 @@
 #include <vcl/event.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
-#include <vcl/msgbox.hxx>
 #include <vcl/button.hxx>
 
 #include <comphelper/processfactory.hxx>

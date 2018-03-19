@@ -22,7 +22,6 @@
 #include <rtl/strbuf.hxx>
 #include <vcl/wrkwin.hxx>
 #include <vcl/dialog.hxx>
-#include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
 
 #include <tools/stream.hxx>

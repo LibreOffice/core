@@ -16,7 +16,6 @@
 #include <svl/intitem.hxx>
 #include <svx/xtable.hxx>
 #include <svx/drawitem.hxx>
-#include <vcl/msgbox.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/builderfactory.hxx>
 #include <libxml/tree.h>

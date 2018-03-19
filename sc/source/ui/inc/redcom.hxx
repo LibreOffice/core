@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SC_SOURCE_UI_INC_REDCOM_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_REDCOM_HXX
 
+#include <vcl/dialog.hxx>
 #include <chgtrack.hxx>
 
 class ScDocShell;

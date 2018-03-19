@@ -41,7 +41,6 @@
 #include <vcl/fixed.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/lstbox.hxx>
-#include <vcl/msgbox.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/waitobj.hxx>

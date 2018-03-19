@@ -27,7 +27,6 @@
 #include <sfx2/request.hxx>
 #include <vcl/EnumContext.hxx>
 #include <svl/whiter.hxx>
-#include <vcl/msgbox.hxx>
 
 #include <chartsh.hxx>
 #include <drwlayer.hxx>

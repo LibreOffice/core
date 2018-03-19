@@ -28,7 +28,6 @@
 #include <com/sun/star/sheet/DataPilotFieldShowItemsMode.hpp>
 
 #include <vcl/builderfactory.hxx>
-#include <vcl/msgbox.hxx>
 
 #include <scresid.hxx>
 #include <dpobject.hxx>

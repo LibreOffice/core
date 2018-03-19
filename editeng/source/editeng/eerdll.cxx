@@ -21,7 +21,6 @@
 #include <unotools/resmgr.hxx>
 #include <vcl/wrkwin.hxx>
 #include <vcl/dialog.hxx>
-#include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <com/sun/star/linguistic2/LanguageGuessing.hpp>

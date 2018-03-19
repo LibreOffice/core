@@ -22,7 +22,6 @@
 #include <swdll.hxx>
 #include <unoprnms.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/msgbox.hxx>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #include <comphelper/propertysequence.hxx>

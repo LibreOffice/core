@@ -28,7 +28,6 @@
 #include <editeng/spltitem.hxx>
 #include <editeng/widwitem.hxx>
 #include <sot/exchange.hxx>
-#include <vcl/msgbox.hxx>
 #include <svtools/transfer.hxx>
 
 #include <sc.hrc>

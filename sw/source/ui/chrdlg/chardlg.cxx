@@ -21,7 +21,6 @@
 #include <hintids.hxx>
 
 #include <comphelper/fileurl.hxx>
-#include <vcl/msgbox.hxx>
 #include <svl/urihelper.hxx>
 #include <svl/stritem.hxx>
 #include <editeng/flstitem.hxx>

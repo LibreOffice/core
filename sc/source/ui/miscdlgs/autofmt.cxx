@@ -31,7 +31,6 @@
 #include <editeng/wghtitem.hxx>
 #include <vcl/svapp.hxx>
 #include <svl/zforlist.hxx>
-#include <vcl/msgbox.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/builderfactory.hxx>
 #include <sfx2/viewfrm.hxx>

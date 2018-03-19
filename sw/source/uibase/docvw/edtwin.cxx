@@ -33,7 +33,6 @@
 
 #include <vcl/help.hxx>
 #include <vcl/graph.hxx>
-#include <vcl/msgbox.hxx>
 #include <vcl/weld.hxx>
 #include <sot/storage.hxx>
 #include <svl/macitem.hxx>

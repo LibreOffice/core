@@ -24,7 +24,6 @@
 #include <sfx2/bindings.hxx>
 #include <svl/aeitem.hxx>
 #include <svx/svdview.hxx>
-#include <vcl/msgbox.hxx>
 #include <svl/srchitem.hxx>
 #include <svl/whiter.hxx>
 #include <svx/swframevalidation.hxx>

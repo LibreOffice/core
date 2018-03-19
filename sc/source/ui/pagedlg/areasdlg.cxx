@@ -22,7 +22,6 @@
 #include <comphelper/string.hxx>
 #include <sfx2/dispatch.hxx>
 #include <svl/stritem.hxx>
-#include <vcl/msgbox.hxx>
 #include <vcl/weld.hxx>
 #include <unotools/charclass.hxx>
 #include <stdlib.h>

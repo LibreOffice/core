@@ -28,7 +28,6 @@
 #include <sfx2/request.hxx>
 #include <basic/sbxcore.hxx>
 #include <svl/whiter.hxx>
-#include <vcl/msgbox.hxx>
 
 #include <tabvwsh.hxx>
 #include <client.hxx>

@@ -30,7 +30,6 @@
 #include <sfx2/viewfrm.hxx>
 #include <svl/cjkoptions.hxx>
 #include <unotools/localedatawrapper.hxx>
-#include <vcl/msgbox.hxx>
 #include <vcl/settings.hxx>
 
 IMPL_STATIC_LINK_NOARG(SwWordCountFloatDlg, CloseHdl, Button*, void)

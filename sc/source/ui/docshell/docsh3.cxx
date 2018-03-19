@@ -33,7 +33,6 @@
 #include <svx/postattr.hxx>
 #include <unotools/misccfg.hxx>
 #include <vcl/virdev.hxx>
-#include <vcl/msgbox.hxx>
 #include <vcl/weld.hxx>
 
 #include <docsh.hxx>

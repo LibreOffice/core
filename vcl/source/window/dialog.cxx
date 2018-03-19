@@ -50,7 +50,6 @@
 #include <vcl/tabctrl.hxx>
 #include <vcl/tabpage.hxx>
 #include <vcl/decoview.hxx>
-#include <vcl/msgbox.hxx>
 #include <vcl/unowrap.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/uitest/uiobject.hxx>

@@ -18,7 +18,6 @@
  */
 
 #include <comphelper/string.hxx>
-#include <vcl/msgbox.hxx>
 
 #include <conflictsdlg.hxx>
 #include <strings.hrc>

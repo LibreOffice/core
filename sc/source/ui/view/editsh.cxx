@@ -53,7 +53,6 @@
 #include <sot/exchange.hxx>
 #include <svtools/cliplistener.hxx>
 #include <svl/whiter.hxx>
-#include <vcl/msgbox.hxx>
 #include <sot/formats.hxx>
 #include <svtools/transfer.hxx>
 #include <svl/stritem.hxx>

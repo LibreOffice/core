@@ -56,7 +56,6 @@
 #include <unotools/textsearch.hxx>
 #include <editeng/unolingu.hxx>
 #include <vcl/weld.hxx>
-#include <vcl/msgbox.hxx>
 #include <editeng/tstpitem.hxx>
 #include <sfx2/event.hxx>
 #include <sfx2/docfile.hxx>
