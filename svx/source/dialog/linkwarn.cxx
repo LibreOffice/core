@@ -42,11 +42,17 @@ SvxLinkWarningDialog::SvxLinkWarningDialog(weld::Widget* pParent, const OUString
 
 SvxLinkWarningDialog::~SvxLinkWarningDialog()
 {
-    // save value of "warning off" checkbox, if necessary
-    SvtMiscOptions aMiscOpt;
-    bool bChecked = m_xWarningOnBox->get_active();
-    if (aMiscOpt.ShowLinkWarningDialog() != bChecked)
-        aMiscOpt.SetShowLinkWarningDialog(bChecked);
+    try
+    {
+        // save value of "warning off" checkbox, if necessary
+        SvtMiscOptions aMiscOpt;
+        bool bChecked = m_xWarningOnBox->get_active();
+        if (aMiscOpt.ShowLinkWarningDialog() != bChecked)
+            aMiscOpt.SetShowLinkWarningDialog(bChecked);
+    }
+    catch (...)
+    {
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
