@@ -41,7 +41,7 @@ ImplImageList::ImplImageList( const ImplImageList &aSrc )
     for (auto const& elem : aSrc.maImages)
     {
         ImageAryData* pAryData = new ImageAryData(*elem);
-        maImages.push_back( pAryData );
+        maImages.emplace_back( pAryData );
         if( !pAryData->maName.isEmpty() )
             maNameHash [ pAryData->maName ] = pAryData;
     }
@@ -49,22 +49,20 @@ ImplImageList::ImplImageList( const ImplImageList &aSrc )
 
 ImplImageList::~ImplImageList()
 {
-    for (auto const& elem : maImages)
-        delete elem;
 }
 
 void ImplImageList::AddImage( const OUString &aName,
                               sal_uInt16 nId, const BitmapEx &aBitmapEx )
 {
     ImageAryData *pImg = new ImageAryData( aName, nId, aBitmapEx );
-    maImages.push_back( pImg );
+    maImages.emplace_back( pImg );
     if( !aName.isEmpty() )
         maNameHash [ aName ] = pImg;
 }
 
 void ImplImageList::RemoveImage( sal_uInt16 nPos )
 {
-    ImageAryData *pImg = maImages[ nPos ];
+    ImageAryData *pImg = maImages[ nPos ].get();
     if( !pImg->maName.isEmpty() )
         maNameHash.erase( pImg->maName );
     maImages.erase( maImages.begin() + nPos );
