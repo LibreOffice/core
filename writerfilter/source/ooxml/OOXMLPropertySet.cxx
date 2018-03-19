@@ -582,12 +582,9 @@ string OOXMLHexValue::toString() const
   class OOXMLHexColorValue
 */
 OOXMLHexColorValue::OOXMLHexColorValue(const char * pValue)
+    : OOXMLHexValue(sal_uInt32(COL_AUTO))
 {
-    if (!strcmp(pValue, "auto"))
-    {
-        mnValue = sal_uInt32(COL_AUTO);
-    }
-    else
+    if (strcmp(pValue, "auto"))
     {
         mnValue = rtl_str_toUInt32(pValue, 16);
     }
