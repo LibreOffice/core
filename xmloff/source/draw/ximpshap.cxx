@@ -69,6 +69,7 @@
 #include "sdpropls.hxx"
 #include "eventimp.hxx"
 #include "descriptionimp.hxx"
+#include "SignatureLineContext.hxx"
 #include "ximpcustomshape.hxx"
 #include <XMLEmbeddedObjectImportContext.hxx>
 #include <xmloff/xmlerror.hxx>
@@ -178,6 +179,10 @@ SvXMLImportContextRef SdXMLShapeContext::CreateChildContext( sal_uInt16 p_nPrefi
         (IsXMLToken( rLocalName, XML_TITLE ) || IsXMLToken( rLocalName, XML_DESC ) ) )
     {
         xContext = new SdXMLDescriptionContext( GetImport(), p_nPrefix, rLocalName, xAttrList, mxShape );
+    }
+    else if( p_nPrefix == XML_NAMESPACE_LO_EXT && IsXMLToken( rLocalName, XML_SIGNATURELINE ) )
+    {
+        xContext = new SignatureLineContext( GetImport(), p_nPrefix, rLocalName, xAttrList, mxShape );
     }
     else if( p_nPrefix == XML_NAMESPACE_OFFICE && IsXMLToken( rLocalName, XML_EVENT_LISTENERS ) )
     {
