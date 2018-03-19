@@ -1052,14 +1052,11 @@ struct StyleTextProp9
     void Read( SvStream& rSt );
 };
 
-typedef std::vector<PPTParaPropSet*> PPTParaPropSetList;
-typedef std::vector<PPTCharPropSet*> PPTCharPropSetList;
-
 struct PPTStyleTextPropReader
 {
     std::vector< sal_uInt32 >  aSpecMarkerList;    // hiword -> Flags, loword -> Position
-    PPTParaPropSetList         aParaPropList;
-    PPTCharPropSetList         aCharPropList;
+    std::vector<std::unique_ptr<PPTParaPropSet>> aParaPropList;
+    std::vector<std::unique_ptr<PPTCharPropSet>> aCharPropList;
 
             PPTStyleTextPropReader(
                 SvStream& rIn,
