@@ -49,7 +49,6 @@ cui/ui/macroassigndialog.ui
 cui/ui/macroassignpage.ui
 cui/ui/macroselectordialog.ui
 cui/ui/menuassignpage.ui
-cui/ui/messbox.ui
 cui/ui/mosaicdialog.ui
 cui/ui/movemenu.ui
 cui/ui/multipathdialog.ui
