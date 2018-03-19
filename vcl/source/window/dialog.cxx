@@ -353,6 +353,7 @@ void Dialog::ImplInitDialogData()
 {
     mpWindowImpl->mbDialog  = true;
     mbInExecute             = false;
+    mbInSyncExecute         = false;
     mbInClose               = false;
     mbModalMode             = false;
     mbPaintComplete         = false;
