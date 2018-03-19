@@ -22,8 +22,6 @@
 
 
 GUI := UNX
-COM := S5ABI
-COMID := s5abi
 #COM := S5ABI
 #COMID := s5abi
 
