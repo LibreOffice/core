@@ -2391,6 +2391,12 @@ void GetTTFontMetrics(const std::vector<uint8_t>& hhea,
         info->descender     = GetInt16(hhea.data(), 6);
         info->linegap       = GetInt16(hhea.data(), 8);
     }
+
+    // tdf#116498 Some fonts don't have linegap set, so try to calculate it.
+    if (info->typoLineGap == 0)
+        info->typoLineGap = info->winAscent + info->winDescent;
+    if (info->linegap == 0)
+        info->linegap = info->ascender + info->descender;
 }
 
 void GetTTGlobalFontInfo(TrueTypeFont *ttf, TTGlobalFontInfo *info)
