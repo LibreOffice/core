@@ -935,6 +935,17 @@ IMPL_LINK_NOARG(SvxCharacterMap, CharHighlightHdl, SvxShowCharSet*, void)
     {
         // using the new UCS4 constructor
         aText = OUString( &cChar, 1 );
+        // Get the hexadecimal code
+        aHexText = OUString::number(cChar, 16).toAsciiUpperCase();
+        // Get the decimal code
+        aDecimalText = OUString::number(cChar);
+        setCharName(cChar);
+
+        // Update the hex and decimal codes only if necessary
+        if (m_xHexCodeText->get_text() != aHexText)
+            m_xHexCodeText->set_text( aHexText );
+        if (m_xDecimalCodeText->get_text() != aDecimalText)
+            m_xDecimalCodeText->set_text( aDecimalText );
 
         const Subset* pSubset = nullptr;
         if( pSubsetMap )
@@ -945,7 +956,7 @@ IMPL_LINK_NOARG(SvxCharacterMap, CharHighlightHdl, SvxShowCharSet*, void)
             m_xSubsetLB->set_active(-1);
     }
 
-    if (m_xShowSet->HasFocus())
+    if(m_xShowSet->HasFocus() || m_xHexCodeText->has_focus() || m_xDecimalCodeText->has_focus() )
     {
         m_xShowChar->SetText( aText );
         m_xShowChar->SetFont( aFont );
@@ -953,22 +964,6 @@ IMPL_LINK_NOARG(SvxCharacterMap, CharHighlightHdl, SvxShowCharSet*, void)
 
         setFavButtonState(aText, aFont.GetFamilyName());
     }
-
-    // show char codes
-    if ( bSelect )
-    {
-        // Get the hexadecimal code
-        aHexText = OUString::number(cChar, 16).toAsciiUpperCase();
-        // Get the decimal code
-        aDecimalText = OUString::number(cChar);
-        setCharName(cChar);
-    }
-
-    // Update the hex and decimal codes only if necessary
-    if (m_xHexCodeText->get_text() != aHexText)
-        m_xHexCodeText->set_text( aHexText );
-    if (m_xDecimalCodeText->get_text() != aDecimalText)
-        m_xDecimalCodeText->set_text( aDecimalText );
 }
 
 IMPL_LINK_NOARG(SvxCharacterMap, SearchCharHighlightHdl, SvxShowCharSet*, void)
@@ -1034,6 +1029,19 @@ void SvxCharacterMap::selectCharByCode(Radix radix)
     if (xFontCharMap->HasChar(cChar))
         // Select the corresponding character
         SetChar(cChar);
+    else {
+        m_xCharName->set_label(CuiResId(RID_SVXSTR_MISSING_GLYPH));
+        m_xShowChar->SetText(" ");
+        switch(radix)
+        {
+            case Radix::decimal:
+                m_xHexCodeText->set_text(OUString::number(cChar, 16));
+                break;
+            case Radix::hexadecimal:
+                m_xDecimalCodeText->set_text(OUString::number(cChar));
+                break;
+        }
+    }
 }
 
 IMPL_LINK_NOARG(SvxCharacterMap, DecimalCodeChangeHdl, weld::Entry&, void)
