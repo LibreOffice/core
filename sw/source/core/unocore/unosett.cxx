@@ -1414,24 +1414,18 @@ uno::Sequence<beans::PropertyValue> SwXNumberingRules::GetPropertiesForNumFormat
         }
         if (SVX_NUM_BITMAP == rFormat.GetNumberingType())
         {
-            //GraphicURL
             const SvxBrushItem* pBrush = rFormat.GetBrush();
-            uno::Reference<graphic::XGraphic> xGraphic;
-            if (pBrush)
-            {
-                xGraphic = pBrush->GetGraphic()->GetXGraphic();
-                aPropertyValues.push_back(comphelper::makePropertyValue(UNO_NAME_GRAPHIC, xGraphic));
-            }
-
-            //GraphicBitmap
-            const Graphic* pGraphic = nullptr;
-            if (pBrush)
-                pGraphic = pBrush->GetGraphic();
+            const Graphic* pGraphic = pBrush ? pBrush->GetGraphic() : nullptr;
             if (pGraphic)
             {
+                uno::Reference<graphic::XGraphic> xGraphic(pGraphic->GetXGraphic());
+                //GraphicURL
+                aPropertyValues.push_back(comphelper::makePropertyValue(UNO_NAME_GRAPHIC, xGraphic));
+                //GraphicBitmap
                 uno::Reference<awt::XBitmap> xBitmap(pGraphic->GetXGraphic(), uno::UNO_QUERY);
                 aPropertyValues.push_back(comphelper::makePropertyValue(UNO_NAME_GRAPHIC_BITMAP, xBitmap));
             }
+
             Size aSize = rFormat.GetGraphicSize();
             // #i101131#
             // adjust conversion due to type mismatch between <Size> and <awt::Size>
