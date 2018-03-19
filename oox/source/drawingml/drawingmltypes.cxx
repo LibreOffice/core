@@ -90,14 +90,18 @@ float GetTextSize( const OUString& sValue )
 sal_Int32 GetTextSpacingPoint( const OUString& sValue )
 {
     sal_Int32 nRet;
-    if( ::sax::Converter::convertNumber( nRet, sValue ) )
+    if( ::sax::Converter::convertNumber( nRet, sValue, (SAL_MIN_INT32 + 360) / 254, (SAL_MAX_INT32 - 360) / 254 ) )
         nRet = GetTextSpacingPoint( nRet );
     return nRet;
 }
 
-sal_Int32 GetTextSpacingPoint( const sal_Int32 nValue )
+sal_Int32 GetTextSpacingPoint(sal_Int32 nValue)
 {
-    return ( nValue * 254 + 360 ) / 720;
+    if (nValue > 0)
+        nValue = (nValue * 254 + 360);
+    else if (nValue < 0)
+        nValue = (nValue * 254 - 360);
+    return nValue / 720;
 }
 
 float GetFontHeight( sal_Int32 nHeight )
