@@ -750,7 +750,7 @@ OUString ScViewFunc::GetAutoSumFormula( const ScRangeList& rRangeList, bool bSub
     {
         ScRangeList aRangeList = rRangeList;
         size_t ListSize = aRangeList.size();
-        for ( size_t i = 1; i < ListSize; ++i )
+        for ( size_t i = 0; i < ListSize; ++i )
         {
             const ScRange & r = aRangeList[i];
             if (i != 0)

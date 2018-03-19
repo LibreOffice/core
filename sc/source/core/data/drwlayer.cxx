@@ -1510,13 +1510,13 @@ static bool lcl_MoveRanges( ::std::vector< ScRangeList >& rRangesVector, const S
         ScRangeList& rRanges = *aIt;
         for ( size_t i = 0, nCount = rRanges.size(); i < nCount; i++ )
         {
-            ScRange aRange = rRanges[ i ];
-            if ( rSourceRange.In( aRange ) )
+            ScRange & rRange = rRanges[ i ];
+            if ( rSourceRange.In( rRange ) )
             {
                 SCCOL nDiffX = rDestPos.Col() - rSourceRange.aStart.Col();
                 SCROW nDiffY = rDestPos.Row() - rSourceRange.aStart.Row();
                 SCTAB nDiffZ = rDestPos.Tab() - rSourceRange.aStart.Tab();
-                if (!aRange.Move( nDiffX, nDiffY, nDiffZ, aErrorRange))
+                if (!rRange.Move( nDiffX, nDiffY, nDiffZ, aErrorRange))
                 {
                     assert(!"can't move range");
                 }
