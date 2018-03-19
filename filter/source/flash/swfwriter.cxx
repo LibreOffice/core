@@ -248,7 +248,7 @@ void Writer::endTag()
 
     if( mpSprite && ( (nTag == TAG_END) || (nTag == TAG_SHOWFRAME) || (nTag == TAG_DOACTION) || (nTag == TAG_STARTSOUND) || (nTag == TAG_PLACEOBJECT) || (nTag == TAG_PLACEOBJECT2) || (nTag == TAG_REMOVEOBJECT2) || (nTag == TAG_FRAMELABEL) ) )
     {
-        mpSprite->addTag( mpTag.release() );
+        mpSprite->addTag( std::move(mpTag) );
     }
     else
     {
