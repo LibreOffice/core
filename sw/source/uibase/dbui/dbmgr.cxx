@@ -115,7 +115,6 @@
 
 #include <unomailmerge.hxx>
 #include <sfx2/event.hxx>
-#include <vcl/msgbox.hxx>
 #include <svx/dataaccessdescriptor.hxx>
 #include <osl/mutex.hxx>
 #include <rtl/textenc.h>

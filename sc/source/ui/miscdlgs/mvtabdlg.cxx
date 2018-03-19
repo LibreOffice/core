@@ -19,8 +19,6 @@
 
 #undef SC_DLLIMPLEMENTATION
 
-#include <vcl/msgbox.hxx>
-
 #include <mvtabdlg.hxx>
 #include <document.hxx>
 #include <docsh.hxx>

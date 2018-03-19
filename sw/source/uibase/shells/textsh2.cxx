@@ -25,7 +25,6 @@
 #include <sfx2/event.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <vcl/msgbox.hxx>
 #include <svl/stritem.hxx>
 #include <svl/itemset.hxx>
 #include <sfx2/request.hxx>

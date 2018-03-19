@@ -26,7 +26,6 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <comphelper/weakeventlistener.hxx>
 #include <comphelper/types.hxx>
-#include <vcl/msgbox.hxx>
 #include "iodlg.hxx"
 
 

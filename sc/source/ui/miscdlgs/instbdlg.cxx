@@ -25,7 +25,6 @@
 #include <sfx2/filedlghelper.hxx>
 #include <svtools/ehdl.hxx>
 #include <svtools/sfxecode.hxx>
-#include <vcl/msgbox.hxx>
 #include <vcl/weld.hxx>
 
 #include <global.hxx>

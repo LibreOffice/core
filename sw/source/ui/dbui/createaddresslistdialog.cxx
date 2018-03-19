@@ -27,7 +27,6 @@
 #include <mmconfigitem.hxx>
 #include <comphelper/string.hxx>
 #include <vcl/scrbar.hxx>
-#include <vcl/msgbox.hxx>
 #include <vcl/builderfactory.hxx>
 #include <svtools/controldims.hxx>
 #include <unotools/pathoptions.hxx>

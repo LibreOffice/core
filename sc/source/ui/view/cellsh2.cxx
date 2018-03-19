@@ -29,7 +29,6 @@
 #include <basic/sbxcore.hxx>
 #include <svl/whiter.hxx>
 #include <svl/zforlist.hxx>
-#include <vcl/msgbox.hxx>
 #include <svl/stritem.hxx>
 #include <svl/visitem.hxx>
 #include <svtools/miscopt.hxx>

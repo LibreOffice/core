@@ -19,7 +19,6 @@
 
 #include <hintids.hxx>
 
-#include <vcl/msgbox.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svx/hdft.hxx>
 #include <editeng/flstitem.hxx>

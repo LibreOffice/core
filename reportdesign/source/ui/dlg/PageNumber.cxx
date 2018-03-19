@@ -21,7 +21,6 @@
 #include <strings.hrc>
 #include <rptui_slotid.hrc>
 #include <RptDef.hxx>
-#include <vcl/msgbox.hxx>
 #include <vcl/settings.hxx>
 
 #include <UITools.hxx>
