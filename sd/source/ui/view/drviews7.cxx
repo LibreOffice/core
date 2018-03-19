@@ -1679,8 +1679,8 @@ void DrawViewShell::GetModeSwitchingMenuState (SfxItemSet &rSet)
         rSet.DisableItem( SID_NOTES_MASTER_MODE );
     }
 
-    svx::ExtrusionBar::getState( mpDrawView, rSet );
-    svx::FontworkBar::getState( mpDrawView, rSet );
+    svx::ExtrusionBar::getState( mpDrawView.get(), rSet );
+    svx::FontworkBar::getState( mpDrawView.get(), rSet );
 }
 
 void DrawViewShell::GetPageProperties( SfxItemSet &rSet )

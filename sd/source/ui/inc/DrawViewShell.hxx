@@ -355,7 +355,7 @@ public:
 
     virtual css::uno::Reference<css::drawing::XDrawSubController> CreateSubController() override;
 
-    DrawView*   GetDrawView() const { return mpDrawView; }
+    DrawView*   GetDrawView() const { return mpDrawView.get(); }
 
     /** Relocation to a new parent window is not supported for DrawViewShell
         objects so this method always returns <FALSE/>.
@@ -369,7 +369,7 @@ public:
     //move this method to ViewShell.
     //void  NotifyAccUpdate();
 protected:
-    DrawView*           mpDrawView;
+    std::unique_ptr<DrawView> mpDrawView;
     SdPage*             mpActualPage;
     ::tools::Rectangle           maMarkRect;
     Point               maMousePos;
