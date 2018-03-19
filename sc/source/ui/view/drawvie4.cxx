@@ -550,8 +550,14 @@ void ScDrawView::FitToCellSize()
         return;
     }
 
-    SdrUndoGroup* pUndoGroup = new SdrUndoGroup(*GetModel());
     ScDrawObjData* pObjData = ScDrawLayer::GetObjData(pObj);
+    if (!pObjData)
+    {
+        SAL_WARN("sc.ui", "Missing ScDrawObjData!");
+        return;
+    }
+
+    SdrUndoGroup* pUndoGroup = new SdrUndoGroup(*GetModel());
     tools::Rectangle aGraphicRect = pObj->GetSnapRect();
     tools::Rectangle aCellRect = ScDrawLayer::GetCellRect( *pDoc, pObjData->maStart, true);
 
