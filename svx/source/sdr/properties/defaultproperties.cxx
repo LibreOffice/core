@@ -56,7 +56,13 @@ namespace sdr
         {
             if(rProps.mpItemSet)
             {
-                mpItemSet.reset(rProps.mpItemSet->Clone());
+                // TTTT Clone may be to another model and thus another ItemPool
+                // SfxItemSet supports that thus we are able to Clone all
+                // SfxItemState::SET items to the target pool.
+                mpItemSet.reset(
+                    rProps.mpItemSet->Clone(
+                        true,
+                        &rObj.getSdrModelFromSdrObject().GetItemPool()));
 
                 // do not keep parent info, this may be changed by later constructors.
                 // This class just copies the ItemSet, ignore parent.
