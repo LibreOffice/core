@@ -29,7 +29,7 @@
 #include <salobj.hxx>
 #include <salmenu.hxx>
 #include <svdata.hxx>
-#include <vcl/messagedialog.hxx>
+#include <messagedialog.hxx>
 #include <vcl/builder.hxx>
 #include <vcl/combobox.hxx>
 #include <vcl/lstbox.hxx>
