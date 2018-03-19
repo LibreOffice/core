@@ -557,12 +557,14 @@ VclPtr<vcl::Window> ScModelObj::getDocWindow()
     ScViewData* pViewData = ScDocShell::GetViewData();
     VclPtr<vcl::Window> pWindow;
     if (pViewData)
+    {
         pWindow = pViewData->GetActiveWin();
 
-    LokChartHelper aChartHelper(pViewData->GetViewShell());
-    vcl::Window* pChartWindow = aChartHelper.GetWindow();
-    if (pChartWindow)
-        pWindow = pChartWindow;
+        LokChartHelper aChartHelper(pViewData->GetViewShell());
+        vcl::Window* pChartWindow = aChartHelper.GetWindow();
+        if (pChartWindow)
+            pWindow = pChartWindow;
+    }
 
     return pWindow;
 }
