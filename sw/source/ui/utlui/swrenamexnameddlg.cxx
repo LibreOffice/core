@@ -23,7 +23,6 @@
 #include <strings.hrc>
 #include <unoprnms.hxx>
 #include <osl/diagnose.h>
-#include <vcl/msgbox.hxx>
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
 #include <com/sun/star/view/XScreenCursor.hpp>
 #include <com/sun/star/view/DocumentZoomType.hpp>

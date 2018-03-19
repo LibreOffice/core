@@ -22,7 +22,6 @@
 #include <svx/svxids.hrc>
 #include <svx/tabline.hxx>
 #include <svx/xenum.hxx>
-#include <vcl/msgbox.hxx>
 #include <svl/intitem.hxx>
 #include <svl/stritem.hxx>
 #include <sfx2/request.hxx>

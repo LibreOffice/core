@@ -24,7 +24,6 @@
 #include <sfx2/objsh.hxx>
 #include <sfx2/request.hxx>
 #include <svl/whiter.hxx>
-#include <vcl/msgbox.hxx>
 #include <vcl/EnumContext.hxx>
 
 #include <sc.hrc>

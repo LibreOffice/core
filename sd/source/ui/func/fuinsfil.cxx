@@ -26,7 +26,6 @@
 #include <svl/stritem.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/app.hxx>
-#include <vcl/msgbox.hxx>
 #include <vcl/weld.hxx>
 #include <sfx2/printer.hxx>
 #include <svx/svdorect.hxx>

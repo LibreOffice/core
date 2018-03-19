@@ -40,7 +40,6 @@
 #include <editeng/cmapitem.hxx>
 #include <editeng/colritem.hxx>
 #include <editeng/brushitem.hxx>
-#include <vcl/msgbox.hxx>
 #include <svl/cjkoptions.hxx>
 #include <swmodule.hxx>
 #include <swtypes.hxx>

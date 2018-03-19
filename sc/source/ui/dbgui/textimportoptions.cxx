@@ -21,7 +21,6 @@
 
 #include <textimportoptions.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/msgbox.hxx>
 #include <vcl/window.hxx>
 #include <vcl/settings.hxx>
 

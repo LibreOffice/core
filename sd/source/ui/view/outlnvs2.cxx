@@ -29,7 +29,6 @@
 #include <svl/eitem.hxx>
 #include <sfx2/zoomitem.hxx>
 #include <svx/svxids.hrc>
-#include <vcl/msgbox.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/flditem.hxx>
 #include <editeng/editstat.hxx>

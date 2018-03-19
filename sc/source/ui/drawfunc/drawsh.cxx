@@ -33,7 +33,6 @@
 #include <sfx2/request.hxx>
 #include <sfx2/dispatch.hxx>
 #include <svl/whiter.hxx>
-#include <vcl/msgbox.hxx>
 
 #include <drawsh.hxx>
 #include <drwlayer.hxx>

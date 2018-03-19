@@ -25,7 +25,6 @@
 #include <editeng/fontitem.hxx>
 #include <editeng/langitem.hxx>
 #include <svx/svdview.hxx>
-#include <vcl/msgbox.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/objface.hxx>
 #include <svx/svdotext.hxx>

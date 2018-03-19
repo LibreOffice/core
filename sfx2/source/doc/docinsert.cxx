@@ -34,7 +34,6 @@
 #include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <tools/urlobj.hxx>
-#include <vcl/msgbox.hxx>
 #include <svl/itemset.hxx>
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>

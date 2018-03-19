@@ -24,7 +24,6 @@
 
 #include <hintids.hxx>
 #include <o3tl/make_unique.hxx>
-#include <vcl/msgbox.hxx>
 #include <svl/eitem.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/app.hxx>

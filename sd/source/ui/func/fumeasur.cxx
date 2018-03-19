@@ -18,7 +18,6 @@
  */
 
 #include <fumeasur.hxx>
-#include <vcl/msgbox.hxx>
 #include <sfx2/request.hxx>
 #include <View.hxx>
 #include <ViewShell.hxx>

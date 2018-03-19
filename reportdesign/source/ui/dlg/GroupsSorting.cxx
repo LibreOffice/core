@@ -39,7 +39,6 @@
 
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/property.hxx>
-#include <vcl/msgbox.hxx>
 #include <vcl/settings.hxx>
 
 #include <algorithm>

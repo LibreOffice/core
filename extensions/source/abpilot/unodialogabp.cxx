@@ -22,7 +22,6 @@
 #include "abspilot.hxx"
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
-#include <vcl/msgbox.hxx>
 
 #define PROPERTY_ID_DATASOURCENAME  3
 

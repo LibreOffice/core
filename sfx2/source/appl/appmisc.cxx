@@ -21,7 +21,6 @@
 
 #include <vcl/canvastools.hxx>
 #include <vcl/status.hxx>
-#include <vcl/msgbox.hxx>
 #include <svl/whiter.hxx>
 #include <svl/stritem.hxx>
 #include <svl/intitem.hxx>

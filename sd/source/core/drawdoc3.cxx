@@ -36,7 +36,6 @@
 #include <svx/svdpagv.hxx>
 #include <svx/svdogrp.hxx>
 #include <svx/svdundo.hxx>
-#include <vcl/msgbox.hxx>
 #include <vcl/weld.hxx>
 #include <sot/formats.hxx>
 #include <xmloff/autolayout.hxx>

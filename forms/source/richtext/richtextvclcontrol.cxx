@@ -24,7 +24,6 @@
 #include <svl/languageoptions.hxx>
 #if OSL_DEBUG_LEVEL > 0
     #include <unotools/ucbstreamhelper.hxx>
-    #include <vcl/msgbox.hxx>
     #include <sfx2/filedlghelper.hxx>
     #include <tools/urlobj.hxx>
     #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>

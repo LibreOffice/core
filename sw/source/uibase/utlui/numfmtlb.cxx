@@ -26,7 +26,6 @@
 #include <svl/eitem.hxx>
 #include <svx/svxids.hrc>
 #include <svx/numinf.hxx>
-#include <vcl/msgbox.hxx>
 #include <vcl/builderfactory.hxx>
 #include <svx/flagsdef.hxx>
 #include <svl/itemset.hxx>

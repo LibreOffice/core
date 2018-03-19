@@ -18,7 +18,6 @@
  */
 
 #include <svx/svxids.hrc>
-#include <vcl/msgbox.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/dispatch.hxx>
 #include <svx/svdview.hxx>

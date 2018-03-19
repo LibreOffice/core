@@ -20,7 +20,6 @@
 #include <fuvect.hxx>
 #include <tools/poly.hxx>
 #include <svx/svdograf.hxx>
-#include <vcl/msgbox.hxx>
 #include <svx/svdedtv.hxx>
 
 #include <View.hxx>

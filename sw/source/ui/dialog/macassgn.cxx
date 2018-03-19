@@ -22,7 +22,6 @@
 #include <sfx2/htmlmode.hxx>
 #include <svx/svxids.hrc>
 #include <sfx2/app.hxx>
-#include <vcl/msgbox.hxx>
 
 #include <swtypes.hxx>
 #include <wrtsh.hxx>

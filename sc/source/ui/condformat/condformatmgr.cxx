@@ -11,7 +11,6 @@
 #include <scresid.hxx>
 #include <globstr.hrc>
 #include <condformatdlg.hxx>
-#include <vcl/msgbox.hxx>
 #include <document.hxx>
 
 ScCondFormatManagerWindow::ScCondFormatManagerWindow(SvSimpleTableContainer& rParent,

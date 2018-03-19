@@ -19,7 +19,6 @@
 
 #include <memory>
 #include <DrawDocShell.hxx>
-#include <vcl/msgbox.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/svxdlg.hxx>
 #include <svx/dialogs.hrc>

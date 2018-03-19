@@ -57,7 +57,6 @@
 #include <svx/modctrl.hxx>
 #include <svx/pszctrl.hxx>
 #include <svx/zoomsliderctrl.hxx>
-#include <vcl/msgbox.hxx>
 #include <svl/inethist.hxx>
 #include <vcl/waitobj.hxx>
 #include <svx/svxerr.hxx>

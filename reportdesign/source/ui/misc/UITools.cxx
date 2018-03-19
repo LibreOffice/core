@@ -97,7 +97,6 @@
 #include <com/sun/star/sdb/SQLContext.hpp>
 #include <i18nlangtag/languagetag.hxx>
 #include <dlgpage.hxx>
-#include <vcl/msgbox.hxx>
 #include <rptui_slotid.hrc>
 #include <strings.hxx>
 #include <core_resource.hxx>

@@ -22,7 +22,6 @@
 #include "modulepcr.hxx"
 #include <strings.hrc>
 #include "formstrings.hxx"
-#include <vcl/msgbox.hxx>
 #include <comphelper/sequence.hxx>
 
 namespace pcr

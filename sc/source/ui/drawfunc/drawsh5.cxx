@@ -35,7 +35,6 @@
 #include <svx/svdpage.hxx>
 #include <svx/svdundo.hxx>
 #include <svx/xdef.hxx>
-#include <vcl/msgbox.hxx>
 #include <svx/extrusionbar.hxx>
 #include <svx/fontworkbar.hxx>
 #include <sfx2/docfile.hxx>

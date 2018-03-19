@@ -19,7 +19,6 @@
 
 #include <svl/whiter.hxx>
 #include <svl/style.hxx>
-#include <vcl/msgbox.hxx>
 
 #include <sfx2/styledlg.hxx>
 #include <sfx2/mgetempl.hxx>

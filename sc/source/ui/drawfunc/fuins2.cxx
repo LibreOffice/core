@@ -29,7 +29,6 @@
 #include <svl/stritem.hxx>
 #include <svx/svdoole2.hxx>
 #include <tools/urlobj.hxx>
-#include <vcl/msgbox.hxx>
 #include <vcl/syschild.hxx>
 #include <svl/urihelper.hxx>
 #include <unotools/moduleoptions.hxx>

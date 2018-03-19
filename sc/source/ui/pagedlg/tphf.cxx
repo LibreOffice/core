@@ -23,7 +23,6 @@
 #include <sfx2/basedlgs.hxx>
 #include <svl/style.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/msgbox.hxx>
 
 #include <attrib.hxx>
 #include <tphf.hxx>

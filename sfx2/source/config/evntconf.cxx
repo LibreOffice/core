@@ -20,7 +20,6 @@
 
 #include <memory>
 
-#include <vcl/msgbox.hxx>
 #include <svl/lstner.hxx>
 #include <basic/basmgr.hxx>
 #include <basic/sbmod.hxx>

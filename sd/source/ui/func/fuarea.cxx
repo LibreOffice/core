@@ -20,7 +20,6 @@
 #include <fuarea.hxx>
 
 #include <svx/svxids.hrc>
-#include <vcl/msgbox.hxx>
 #include <svl/intitem.hxx>
 #include <svl/stritem.hxx>
 #include <sfx2/request.hxx>

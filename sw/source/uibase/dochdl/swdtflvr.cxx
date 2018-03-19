@@ -43,7 +43,6 @@
 #include <tools/urlobj.hxx>
 #include <vcl/wrkwin.hxx>
 #include <vcl/weld.hxx>
-#include <vcl/msgbox.hxx>
 #include <sfx2/dispatch.hxx>
 #include <svl/stritem.hxx>
 #include <svtools/imap.hxx>

@@ -23,8 +23,6 @@
 #include <document.hxx>
 #include <tabprotection.hxx>
 
-#include <vcl/msgbox.hxx>
-
 ScRetypePassDlg::ScRetypePassDlg(vcl::Window* pParent) :
     ModalDialog(pParent, "RetypePass", "modules/scalc/ui/retypepassdialog.ui"),
 

@@ -67,7 +67,6 @@
 #include <sfx2/docfile.hxx>
 #include <svx/svxids.hrc>
 #include <svx/strings.hrc>
-#include <vcl/msgbox.hxx>
 #include <tools/urlobj.hxx>
 #include <rtl/ustring.hxx>
 #include <vcl/svapp.hxx>

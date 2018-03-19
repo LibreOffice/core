@@ -62,7 +62,6 @@
 #include <basic/sbuno.hxx>
 #include <basic/sbstar.hxx>
 #include <basic/basmgr.hxx>
-#include <vcl/msgbox.hxx>
 #include <vcl/weld.hxx>
 #include <basic/sbx.hxx>
 #include <svtools/sfxecode.hxx>

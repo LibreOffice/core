@@ -43,7 +43,6 @@
 #include <editeng/langitem.hxx>
 #include <svl/numuno.hxx>
 #include <svl/stritem.hxx>
-#include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/mnemonic.hxx>
 #include <svl/style.hxx>

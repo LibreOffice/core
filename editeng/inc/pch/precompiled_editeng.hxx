@@ -115,7 +115,6 @@
 #include <vcl/mapmod.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/metric.hxx>
-#include <vcl/msgbox.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/region.hxx>
 #include <vcl/salgtype.hxx>

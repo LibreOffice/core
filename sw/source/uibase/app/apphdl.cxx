@@ -43,7 +43,6 @@
 #include <svl/stritem.hxx>
 #include <svl/ctloptions.hxx>
 #include <unotools/useroptions.hxx>
-#include <vcl/msgbox.hxx>
 #include <vcl/sysdata.hxx>
 #include <vcl/wrkwin.hxx>
 #include <svx/insctrl.hxx>

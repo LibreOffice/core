@@ -26,7 +26,6 @@
 #include <editeng/eeitem.hxx>
 #include <editeng/colritem.hxx>
 #include <editeng/brushitem.hxx>
-#include <vcl/msgbox.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/request.hxx>
 #include <View.hxx>

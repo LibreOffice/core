@@ -96,7 +96,6 @@
 #include <svx/svxids.hrc>
 #include <vcl/unohelp.hxx>
 #include <tools/diagnose_ex.h>
-#include <vcl/msgbox.hxx>
 #include <vcl/stdtext.hxx>
 #include <vcl/wrkwin.hxx>
 #include <sal/macros.h>

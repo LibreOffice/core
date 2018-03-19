@@ -19,7 +19,6 @@
 
 #include <fuconnct.hxx>
 #include <sfx2/request.hxx>
-#include <vcl/msgbox.hxx>
 #include <View.hxx>
 #include <ViewShell.hxx>
 #include <drawdoc.hxx>

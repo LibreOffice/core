@@ -32,7 +32,6 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/request.hxx>
-#include <vcl/msgbox.hxx>
 
 #include <global.hxx>
 #include <attrib.hxx>

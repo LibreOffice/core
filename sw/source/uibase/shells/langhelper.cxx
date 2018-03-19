@@ -49,8 +49,6 @@
 
 #include <swabstdlg.hxx>
 
-#include <vcl/msgbox.hxx>
-
 #include <langhelper.hxx>
 #include <memory>
 

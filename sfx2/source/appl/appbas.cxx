@@ -39,7 +39,6 @@
 #include <basic/sbmeth.hxx>
 #include <basic/sbstar.hxx>
 #include <vcl/wrkwin.hxx>
-#include <vcl/msgbox.hxx>
 #include <basic/sbuno.hxx>
 #include <svtools/sfxecode.hxx>
 #include <svtools/ehdl.hxx>

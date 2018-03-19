@@ -19,7 +19,6 @@
 
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <hintids.hxx>
-#include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
 #include <svl/urihelper.hxx>
 #include <view.hxx>

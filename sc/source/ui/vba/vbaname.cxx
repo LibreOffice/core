@@ -27,7 +27,6 @@
 #include "vbaglobals.hxx"
 #include <vector>
 #include <rangenam.hxx>
-#include <vcl/msgbox.hxx>
 #include <tabvwsh.hxx>
 #include <viewdata.hxx>
 #include <nameuno.hxx>

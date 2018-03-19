@@ -22,7 +22,6 @@
 #include "chldwrap.hxx"
 #include <redline.hxx>
 #include <tools/datetime.hxx>
-#include <vcl/msgbox.hxx>
 #include <svl/eitem.hxx>
 #include <svx/sidebar/PanelLayout.hxx>
 #include <sfx2/basedlgs.hxx>

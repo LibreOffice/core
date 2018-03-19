@@ -33,7 +33,6 @@
 #include <rtl/ustrbuf.hxx>
 #include <sal/config.h>
 #include <sal/macros.h>
-#include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 #include <vcl/wrkwin.hxx>

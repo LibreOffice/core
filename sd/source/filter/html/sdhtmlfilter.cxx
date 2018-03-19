@@ -19,7 +19,6 @@
 
 #include <unotools/localfilehelper.hxx>
 #include <vcl/errinf.hxx>
-#include <vcl/msgbox.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/FilterConfigItem.hxx>
