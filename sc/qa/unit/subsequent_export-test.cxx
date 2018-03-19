@@ -3415,8 +3415,8 @@ void ScExportTest::testSheetCondensedCharacterSpaceXLSX()
     OUString CondensedCharSpace = getXPath(pDoc,
         "/xdr:wsDr[1]/xdr:twoCellAnchor[1]/xdr:sp[1]/xdr:txBody[1]/a:p[1]/a:r[1]/a:rPr[1]","spc");
 
-    // make sure that the CondensedCharSpace is -996.
-    CPPUNIT_ASSERT_EQUAL(OUString("-996"), CondensedCharSpace);
+    // make sure that the CondensedCharSpace is -1002.
+    CPPUNIT_ASSERT_EQUAL(OUString("-1002"), CondensedCharSpace);
 
     xDocSh->DoClose();
 }
