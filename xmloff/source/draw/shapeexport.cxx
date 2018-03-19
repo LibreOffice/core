@@ -1269,39 +1269,39 @@ void XMLShapeExport::ImpExportSignatureLine(const uno::Reference<drawing::XShape
 
     OUString aSignatureLineId;
     xPropSet->getPropertyValue("SignatureLineId") >>= aSignatureLineId;
-    mrExport.AddAttribute(XML_NAMESPACE_LO_EXT, "id", aSignatureLineId);
+    mrExport.AddAttribute(XML_NAMESPACE_LO_EXT, XML_ID, aSignatureLineId);
 
     OUString aSuggestedSignerName;
     xPropSet->getPropertyValue("SignatureLineSuggestedSignerName") >>= aSuggestedSignerName;
     if (!aSuggestedSignerName.isEmpty())
-        mrExport.AddAttribute(XML_NAMESPACE_LO_EXT, "suggested-signer-name", aSuggestedSignerName);
+        mrExport.AddAttribute(XML_NAMESPACE_LO_EXT, XML_SUGGESTED_SIGNER_NAME, aSuggestedSignerName);
 
     OUString aSuggestedSignerTitle;
     xPropSet->getPropertyValue("SignatureLineSuggestedSignerTitle") >>= aSuggestedSignerTitle;
     if (!aSuggestedSignerTitle.isEmpty())
-        mrExport.AddAttribute(XML_NAMESPACE_LO_EXT, "suggested-signer-title", aSuggestedSignerTitle);
+        mrExport.AddAttribute(XML_NAMESPACE_LO_EXT, XML_SUGGESTED_SIGNER_TITLE, aSuggestedSignerTitle);
 
     OUString aSuggestedSignerEmail;
     xPropSet->getPropertyValue("SignatureLineSuggestedSignerEmail") >>= aSuggestedSignerEmail;
     if (!aSuggestedSignerEmail.isEmpty())
-        mrExport.AddAttribute(XML_NAMESPACE_LO_EXT, "suggested-signer-email", aSuggestedSignerEmail);
+        mrExport.AddAttribute(XML_NAMESPACE_LO_EXT, XML_SUGGESTED_SIGNER_EMAIL, aSuggestedSignerEmail);
 
     OUString aSigningInstructions;
     xPropSet->getPropertyValue("SignatureLineSigningInstructions") >>= aSigningInstructions;
     if (!aSigningInstructions.isEmpty())
-        mrExport.AddAttribute(XML_NAMESPACE_LO_EXT, "signing-instructions", aSigningInstructions);
+        mrExport.AddAttribute(XML_NAMESPACE_LO_EXT, XML_SIGNING_INSTRUCTIONS, aSigningInstructions);
 
     bool bShowSignDate = false;
     xPropSet->getPropertyValue("SignatureLineShowSignDate") >>= bShowSignDate;
-    mrExport.AddAttribute(XML_NAMESPACE_LO_EXT, "show-sign-date",
-                          bShowSignDate ? OUString("true") : OUString("false"));
+    mrExport.AddAttribute(XML_NAMESPACE_LO_EXT, XML_SHOW_SIGN_DATE,
+                          bShowSignDate ? XML_TRUE : XML_FALSE);
 
     bool bCanAddComment = false;
     xPropSet->getPropertyValue("SignatureLineCanAddComment") >>= bCanAddComment;
-    mrExport.AddAttribute(XML_NAMESPACE_LO_EXT, "can-add-comment",
-                          bCanAddComment ? OUString("true") : OUString("false"));
+    mrExport.AddAttribute(XML_NAMESPACE_LO_EXT, XML_CAN_ADD_COMMENT,
+                          bCanAddComment ? XML_TRUE : XML_FALSE);
 
-    SvXMLElementExport aSignatureLineElement(mrExport, XML_NAMESPACE_LO_EXT, "signatureline", true,
+    SvXMLElementExport aSignatureLineElement(mrExport, XML_NAMESPACE_LO_EXT, XML_SIGNATURELINE, true,
                                              true);
 }
 

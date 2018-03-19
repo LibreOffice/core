@@ -3070,4 +3070,11 @@ max-numerator-digits
 zeros-numerator-digits
 zeros-denominator-digits
 integer-fraction-delimiter
+signatureline
+suggested-signer-name
+suggested-signer-title
+suggested-signer-email
+signing-instructions
+can-add-comment
+show-sign-date
 TOKEN_END_DUMMY
