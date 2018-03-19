@@ -83,7 +83,7 @@ private:
     Reference<rendering::XBitmap> mxBitmap;
     cppcanvas::CanvasSharedPtr mpCanvas;
     VclPtr<VirtualDevice> mpOutputDevice;
-    EditEngine* mpEditEngine;
+    std::unique_ptr<EditEngine> mpEditEngine;
     SfxItemPool* mpEditEngineItemPool;
     Size maSize;
     Color maBackgroundColor;
@@ -92,7 +92,6 @@ private:
     sal_Int32 mnTop;
     sal_Int32 mnTotalHeight;
 
-    EditEngine* CreateEditEngine();
     void CheckTop();
 };
 
@@ -242,83 +241,70 @@ PresenterTextView::Implementation::Implementation()
 {
     mpOutputDevice->SetMapMode(MapMode(MapUnit::MapPixel));
 
-    mpEditEngine = CreateEditEngine ();
+    // set fonts to be used
+    SvtLinguOptions aOpt;
+    SvtLinguConfig().GetOptions( aOpt );
+
+    struct FontDta {
+        LanguageType    nFallbackLang;
+        LanguageType    nLang;
+        DefaultFontType nFontType;
+        sal_uInt16      nFontInfoId;
+        } aTable[3] =
+    {
+        // info to get western font to be used
+        {   LANGUAGE_ENGLISH_US,    LANGUAGE_NONE,
+            DefaultFontType::SERIF,      EE_CHAR_FONTINFO },
+        // info to get CJK font to be used
+        {   LANGUAGE_JAPANESE,      LANGUAGE_NONE,
+            DefaultFontType::CJK_TEXT,   EE_CHAR_FONTINFO_CJK },
+        // info to get CTL font to be used
+        {   LANGUAGE_ARABIC_SAUDI_ARABIA,  LANGUAGE_NONE,
+            DefaultFontType::CTL_TEXT,   EE_CHAR_FONTINFO_CTL }
+    };
+    aTable[0].nLang = MsLangId::resolveSystemLanguageByScriptType(aOpt.nDefaultLanguage, css::i18n::ScriptType::LATIN);
+    aTable[1].nLang = MsLangId::resolveSystemLanguageByScriptType(aOpt.nDefaultLanguage_CJK, css::i18n::ScriptType::ASIAN);
+    aTable[2].nLang = MsLangId::resolveSystemLanguageByScriptType(aOpt.nDefaultLanguage_CTL, css::i18n::ScriptType::COMPLEX);
+
+    for (FontDta & rFntDta : aTable)
+    {
+        LanguageType nLang = (LANGUAGE_NONE == rFntDta.nLang) ?
+            rFntDta.nFallbackLang : rFntDta.nLang;
+        vcl::Font aFont = OutputDevice::GetDefaultFont(
+            rFntDta.nFontType, nLang, GetDefaultFontFlags::OnlyOne);
+        mpEditEngineItemPool->SetPoolDefaultItem(
+            SvxFontItem(
+                aFont.GetFamilyType(),
+                aFont.GetFamilyName(),
+                aFont.GetStyleName(),
+                aFont.GetPitch(),
+                aFont.GetCharSet(),
+                rFntDta.nFontInfoId));
+    }
+
+    mpEditEngine.reset( new EditEngine (mpEditEngineItemPool) );
+
+    mpEditEngine->EnableUndo (true);
+    mpEditEngine->SetDefTab (sal_uInt16(
+        Application::GetDefaultDevice()->GetTextWidth("XXXX")));
+
+    mpEditEngine->SetControlWord(
+            EEControlBits(mpEditEngine->GetControlWord() | EEControlBits::AUTOINDENTING) &
+            EEControlBits(~EEControlBits::UNDOATTRIBS) &
+            EEControlBits(~EEControlBits::PASTESPECIAL) );
+
+    mpEditEngine->SetWordDelimiters (" .=+-*/(){}[];\"");
+    mpEditEngine->SetRefMapMode(MapMode(MapUnit::MapPixel));
+    mpEditEngine->SetPaperSize (Size(800, 0));
+    mpEditEngine->EraseVirtualDevice();
+    mpEditEngine->ClearModifyFlag();
 }
 
 PresenterTextView::Implementation::~Implementation()
 {
-    delete mpEditEngine;
+    mpEditEngine.reset();
     SfxItemPool::Free(mpEditEngineItemPool);
     mpOutputDevice.disposeAndClear();
-}
-
-EditEngine* PresenterTextView::Implementation::CreateEditEngine()
-{
-    EditEngine* pEditEngine = mpEditEngine;
-    if (pEditEngine == nullptr)
-    {
-
-        // set fonts to be used
-
-        SvtLinguOptions aOpt;
-        SvtLinguConfig().GetOptions( aOpt );
-
-        struct FontDta {
-            LanguageType    nFallbackLang;
-            LanguageType    nLang;
-            DefaultFontType nFontType;
-            sal_uInt16      nFontInfoId;
-            } aTable[3] =
-        {
-            // info to get western font to be used
-            {   LANGUAGE_ENGLISH_US,    LANGUAGE_NONE,
-                DefaultFontType::SERIF,      EE_CHAR_FONTINFO },
-            // info to get CJK font to be used
-            {   LANGUAGE_JAPANESE,      LANGUAGE_NONE,
-                DefaultFontType::CJK_TEXT,   EE_CHAR_FONTINFO_CJK },
-            // info to get CTL font to be used
-            {   LANGUAGE_ARABIC_SAUDI_ARABIA,  LANGUAGE_NONE,
-                DefaultFontType::CTL_TEXT,   EE_CHAR_FONTINFO_CTL }
-        };
-        aTable[0].nLang = MsLangId::resolveSystemLanguageByScriptType(aOpt.nDefaultLanguage, css::i18n::ScriptType::LATIN);
-        aTable[1].nLang = MsLangId::resolveSystemLanguageByScriptType(aOpt.nDefaultLanguage_CJK, css::i18n::ScriptType::ASIAN);
-        aTable[2].nLang = MsLangId::resolveSystemLanguageByScriptType(aOpt.nDefaultLanguage_CTL, css::i18n::ScriptType::COMPLEX);
-
-        for (FontDta & rFntDta : aTable)
-        {
-            LanguageType nLang = (LANGUAGE_NONE == rFntDta.nLang) ?
-                rFntDta.nFallbackLang : rFntDta.nLang;
-            vcl::Font aFont = OutputDevice::GetDefaultFont(
-                rFntDta.nFontType, nLang, GetDefaultFontFlags::OnlyOne);
-            mpEditEngineItemPool->SetPoolDefaultItem(
-                SvxFontItem(
-                    aFont.GetFamilyType(),
-                    aFont.GetFamilyName(),
-                    aFont.GetStyleName(),
-                    aFont.GetPitch(),
-                    aFont.GetCharSet(),
-                    rFntDta.nFontInfoId));
-        }
-
-        pEditEngine = new EditEngine (mpEditEngineItemPool);
-
-        pEditEngine->EnableUndo (true);
-        pEditEngine->SetDefTab (sal_uInt16(
-            Application::GetDefaultDevice()->GetTextWidth("XXXX")));
-
-        pEditEngine->SetControlWord(
-                EEControlBits(pEditEngine->GetControlWord() | EEControlBits::AUTOINDENTING) &
-                EEControlBits(~EEControlBits::UNDOATTRIBS) &
-                EEControlBits(~EEControlBits::PASTESPECIAL) );
-
-        pEditEngine->SetWordDelimiters (" .=+-*/(){}[];\"");
-        pEditEngine->SetRefMapMode(MapMode(MapUnit::MapPixel));
-        pEditEngine->SetPaperSize (Size(800, 0));
-        pEditEngine->EraseVirtualDevice();
-        pEditEngine->ClearModifyFlag();
-    }
-
-    return pEditEngine;
 }
 
 void PresenterTextView::Implementation::SetCanvas (const cppcanvas::CanvasSharedPtr& rpCanvas)
