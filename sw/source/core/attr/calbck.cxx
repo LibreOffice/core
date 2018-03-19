@@ -28,8 +28,8 @@
 sw::LegacyModifyHint::~LegacyModifyHint() {}
 sw::ModifyChangedHint::~ModifyChangedHint() {}
 
-
 SwClient::SwClient(SwClient&& o)
+    : m_pRegisteredIn(nullptr)
 {
     if(o.m_pRegisteredIn)
     {
@@ -37,7 +37,6 @@ SwClient::SwClient(SwClient&& o)
         o.EndListeningAll();
     }
 }
-
 
 SwClient::~SwClient()
 {
