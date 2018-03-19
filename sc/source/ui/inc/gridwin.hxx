@@ -448,6 +448,8 @@ public:
     ScViewData* getViewData();
     virtual FactoryFunction GetUITestFactory() const override;
 
+    void updateLOKValListButton(bool bVisible, const ScAddress& rPos) const;
+
 protected:
     void ImpCreateOverlayObjects();
     void ImpDestroyOverlayObjects();
