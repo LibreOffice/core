@@ -2289,7 +2289,7 @@ static Writer& OutCSS1_SvxTextLn_SvxCrOut_SvxBlink( Writer& rWrt,
             {
                 // this also works in HTML does not need to be written as
                 // a STYLE-Options, and must not be written as Hint
-                OSL_ENSURE( !rHTMLWrt.IsCSS1Source(CSS1_OUTMODE_HINT),
+                OSL_ENSURE( !rHTMLWrt.IsCSS1Source(CSS1_OUTMODE_HINT) || rHTMLWrt.mbReqIF,
                         "write crossedOut as Hint?" );
                 pCOStr = sCSS1_PV_line_through;
             }
