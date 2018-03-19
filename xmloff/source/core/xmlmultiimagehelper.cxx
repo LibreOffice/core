@@ -58,6 +58,10 @@ namespace
         }
 
         // vector formats, prefer always
+        if (rMimeType == "image/x-vclgraphic") // MIMETYPE_VCLGRAPHIC
+        {
+            return 990;
+        }
         if (rMimeType == "image/x-svm")
         {
             return 1000;
