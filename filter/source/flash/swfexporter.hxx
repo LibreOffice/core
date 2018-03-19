@@ -60,12 +60,8 @@ struct PageInfo
     sal_uInt16      mnObjectsID;
     sal_uInt16      mnForegroundID;
 
-    ::std::vector<ShapeInfo*>
-                    maShapesVector;
-
     PageInfo();
     ~PageInfo();
-
 };
 
 

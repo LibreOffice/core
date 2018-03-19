@@ -61,10 +61,6 @@ PageInfo::PageInfo()
 
 PageInfo::~PageInfo()
 {
-    for (auto const& shape : maShapesVector)
-    {
-        delete shape;
-    }
 }
 
 
