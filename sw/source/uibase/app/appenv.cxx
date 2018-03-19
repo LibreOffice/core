@@ -31,7 +31,6 @@
 #include <sfx2/app.hxx>
 #include <sfx2/docfac.hxx>
 #include <sfx2/printer.hxx>
-#include <vcl/msgbox.hxx>
 #include <sfx2/dispatch.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/lrspitem.hxx>

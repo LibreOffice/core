@@ -28,7 +28,6 @@
 #include <editeng/flditem.hxx>
 #include <svx/svdpagv.hxx>
 #include <sfx2/app.hxx>
-#include <vcl/msgbox.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/svdotext.hxx>

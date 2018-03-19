@@ -22,7 +22,6 @@
 #include <sfx2/new.hxx>
 #include <vcl/builderfactory.hxx>
 #include <vcl/layout.hxx>
-#include <vcl/msgbox.hxx>
 #include <vcl/idle.hxx>
 #include <svtools/svmedit.hxx>
 #include <svl/itemset.hxx>

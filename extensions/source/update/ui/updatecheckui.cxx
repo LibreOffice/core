@@ -41,7 +41,6 @@
 #include <vcl/menu.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/weld.hxx>
-#include <vcl/msgbox.hxx>
 #include <vcl/lineinfo.hxx>
 #include <vcl/button.hxx>
 #include <vcl/settings.hxx>

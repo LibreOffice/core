@@ -20,7 +20,6 @@
 #include <hintids.hxx>
 
 #include <o3tl/make_unique.hxx>
-#include <vcl/msgbox.hxx>
 #include <svl/whiter.hxx>
 #include <svl/stritem.hxx>
 #include <svl/itemiter.hxx>

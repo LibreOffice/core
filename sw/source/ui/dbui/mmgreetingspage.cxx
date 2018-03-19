@@ -22,7 +22,6 @@
 #include <mmconfigitem.hxx>
 #include "mmaddressblockpage.hxx"
 #include <swtypes.hxx>
-#include <vcl/msgbox.hxx>
 #include <dbui.hrc>
 #include <com/sun/star/sdb/XColumn.hpp>
 #include <com/sun/star/sdbc/SQLException.hpp>

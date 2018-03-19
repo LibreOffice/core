@@ -37,7 +37,6 @@
 #include <unotools/resmgr.hxx>
 #include <vcl/errcode.hxx>
 #include <vcl/errinf.hxx>
-#include <vcl/msgbox.hxx>
 #include <vcl/abstdlg.hxx>
 #include <vcl/svapp.hxx>
 

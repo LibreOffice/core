@@ -19,7 +19,6 @@
 
 #include <hintids.hxx>
 #include <vcl/menu.hxx>
-#include <vcl/msgbox.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/builderfactory.hxx>
 

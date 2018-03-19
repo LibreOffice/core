@@ -53,7 +53,6 @@
 #include <svl/ctloptions.hxx>
 #include <svtools/langtab.hxx>
 #include <svl/languageoptions.hxx>
-#include <vcl/msgbox.hxx>
 #include <editeng/flditem.hxx>
 #include <editeng/editstat.hxx>
 #include <svx/hlnkitem.hxx>

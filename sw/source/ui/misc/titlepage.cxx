@@ -8,7 +8,6 @@
  */
 
 #include <sfx2/viewfrm.hxx>
-#include <vcl/msgbox.hxx>
 #include <view.hxx>
 #include <swmodule.hxx>
 #include <wrtsh.hxx>

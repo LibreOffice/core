@@ -65,7 +65,6 @@
 #include <svx/svxdlg.hxx>
 #include <svx/svxids.hrc>
 #include <tools/diagnose_ex.h>
-#include <vcl/msgbox.hxx>
 
 #include <map>
 #include <algorithm>

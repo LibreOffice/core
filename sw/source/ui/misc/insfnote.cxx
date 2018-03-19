@@ -22,7 +22,6 @@
 #include <svl/stritem.hxx>
 #include <sfx2/request.hxx>
 #include <editeng/fontitem.hxx>
-#include <vcl/msgbox.hxx>
 #include <fmtftn.hxx>
 #include <swundo.hxx>
 #include <cmdid.h>

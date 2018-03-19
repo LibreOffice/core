@@ -30,7 +30,6 @@
 #include <vcl/metric.hxx>
 #include <vcl/font.hxx>
 #include <vcl/virdev.hxx>
-#include <vcl/msgbox.hxx>
 #include <vcl/cvtgrf.hxx>
 #include <vcl/gradient.hxx>
 #include <vcl/settings.hxx>

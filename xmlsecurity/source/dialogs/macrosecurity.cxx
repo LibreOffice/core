@@ -39,8 +39,6 @@
 #include <tools/urlobj.hxx>
 #include <svtools/treelistentry.hxx>
 
-#include <vcl/msgbox.hxx>
-
 #include <strings.hrc>
 #include <resourcemanager.hxx>
 

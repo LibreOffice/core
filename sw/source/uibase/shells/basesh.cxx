@@ -40,7 +40,6 @@
 #include <svx/contdlg.hxx>
 #include <vcl/graph.hxx>
 #include <svl/slstitm.hxx>
-#include <vcl/msgbox.hxx>
 #include <svl/ptitem.hxx>
 #include <svl/itemiter.hxx>
 #include <svl/stritem.hxx>

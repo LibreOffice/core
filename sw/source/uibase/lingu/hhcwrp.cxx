@@ -24,7 +24,6 @@
 #include <globals.hrc>
 #include <splargs.hxx>
 
-#include <vcl/msgbox.hxx>
 #include <editeng/unolingu.hxx>
 #include <editeng/langitem.hxx>
 #include <editeng/fontitem.hxx>

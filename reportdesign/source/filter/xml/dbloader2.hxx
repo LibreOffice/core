@@ -52,7 +52,6 @@
 #include <sfx2/docfile.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <comphelper/storagehelper.hxx>
-#include <vcl/msgbox.hxx>
 
 
 namespace rptxml

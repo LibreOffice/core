@@ -28,7 +28,6 @@
 #include <sfx2/objsh.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <vcl/msgbox.hxx>
 #include <svl/aeitem.hxx>
 #include <svx/xtable.hxx>
 

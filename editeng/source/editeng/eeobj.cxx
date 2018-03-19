@@ -22,7 +22,6 @@
 #include <com/sun/star/datatransfer/UnsupportedFlavorException.hpp>
 #include <vcl/wrkwin.hxx>
 #include <vcl/dialog.hxx>
-#include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
 #include "eeobj.hxx"
 #include <sot/exchange.hxx>

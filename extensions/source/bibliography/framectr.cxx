@@ -19,7 +19,6 @@
 
 #include <vcl/waitobj.hxx>
 #include <com/sun/star/util/URL.hpp>
-#include <vcl/msgbox.hxx>
 #include <vcl/stdtext.hxx>
 #include <comphelper/types.hxx>
 #include <comphelper/sequence.hxx>

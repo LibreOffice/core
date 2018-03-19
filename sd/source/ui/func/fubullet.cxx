@@ -31,7 +31,6 @@
 #include <strings.hrc>
 #include <sdresid.hxx>
 #include <svx/svdoutl.hxx>
-#include <vcl/msgbox.hxx>
 #include <sfx2/request.hxx>
 #include <svl/ctloptions.hxx>
 #include <svl/itempool.hxx>

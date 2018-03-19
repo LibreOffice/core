@@ -29,7 +29,6 @@
 #include <com/sun/star/ui/dialogs/XFilePickerListener.hpp>
 #include <com/sun/star/ui/dialogs/XFilePickerNotifier.hpp>
 #include <com/sun/star/ui/dialogs/XFilePicker3.hpp>
-#include <vcl/msgbox.hxx>
 #include <vcl/idle.hxx>
 #include <sal/types.h>
 #include <osl/thread.hxx>

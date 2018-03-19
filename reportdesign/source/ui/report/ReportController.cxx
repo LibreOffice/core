@@ -78,7 +78,6 @@
 #include <com/sun/star/document/XUndoManagerSupplier.hpp>
 
 #include <vcl/svapp.hxx>
-#include <vcl/msgbox.hxx>
 #include <vcl/waitobj.hxx>
 
 #include <svx/fmview.hxx>

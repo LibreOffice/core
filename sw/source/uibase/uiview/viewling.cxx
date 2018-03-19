@@ -30,7 +30,6 @@
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/scopeguard.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
-#include <vcl/msgbox.hxx>
 #include <vcl/weld.hxx>
 #include <svtools/ehdl.hxx>
 #include <svl/stritem.hxx>

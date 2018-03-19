@@ -21,7 +21,6 @@
 
 #include "swuilabimp.hxx"
 #include <labimg.hxx>
-#include <vcl/msgbox.hxx>
 #include <vcl/idle.hxx>
 class SwLabFormatPage;
 

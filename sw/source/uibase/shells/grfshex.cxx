@@ -34,7 +34,6 @@
 #include <docsh.hxx>
 #include <frmfmt.hxx>
 #include <frmmgr.hxx>
-#include <vcl/msgbox.hxx>
 #include <vcl/weld.hxx>
 #include <svx/svdomedia.hxx>
 #include <svx/svdview.hxx>

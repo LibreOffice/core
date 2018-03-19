@@ -23,7 +23,6 @@
 #include <svx/svdedtv.hxx>
 #include <svx/svdetc.hxx>
 #include <sfx2/app.hxx>
-#include <vcl/msgbox.hxx>
 #include <vcl/weld.hxx>
 
 #include <sdattr.hxx>

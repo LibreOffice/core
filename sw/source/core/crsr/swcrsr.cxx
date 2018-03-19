@@ -44,7 +44,6 @@
 #include <viewsh.hxx>
 #include <frmatr.hxx>
 #include <breakit.hxx>
-#include <vcl/msgbox.hxx>
 #include <mdiexp.hxx>
 #include <strings.hrc>
 #include <redline.hxx>

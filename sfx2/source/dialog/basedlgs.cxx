@@ -25,7 +25,6 @@
 #include <osl/file.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/help.hxx>
-#include <vcl/msgbox.hxx>
 #include <svl/eitem.hxx>
 #include <unotools/viewoptions.hxx>
 #include <svtools/controldims.hxx>

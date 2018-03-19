@@ -64,7 +64,6 @@
 #include <sot/storage.hxx>
 #include <sot/formats.hxx>
 #include <svx/svdpagv.hxx>
-#include <vcl/msgbox.hxx>
 #include <sfx2/opengrf.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svx/charthelper.hxx>

@@ -74,7 +74,6 @@
 #include <sfx2/zoomitem.hxx>
 #include <svx/svxdlg.hxx>
 #include <svx/dialogs.hrc>
-#include <vcl/msgbox.hxx>
 #include <svl/intitem.hxx>
 #include <svl/whiter.hxx>
 #include <svl/itempool.hxx>

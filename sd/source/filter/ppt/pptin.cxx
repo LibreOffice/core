@@ -30,7 +30,6 @@
 #include <sfx2/app.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/svdlayer.hxx>
-#include <vcl/msgbox.hxx>
 #include <svl/style.hxx>
 #include <svx/xflclit.hxx>
 #include <editeng/eeitem.hxx>

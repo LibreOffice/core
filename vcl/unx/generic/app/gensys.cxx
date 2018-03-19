@@ -21,7 +21,6 @@
 
 #include <unx/gensys.h>
 
-#include <vcl/msgbox.hxx>
 #include <vcl/button.hxx>
 
 #include <svdata.hxx>

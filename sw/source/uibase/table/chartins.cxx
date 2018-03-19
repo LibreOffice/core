@@ -18,7 +18,6 @@
  */
 
 #include <sfx2/viewfrm.hxx>
-#include <vcl/msgbox.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/basedlgs.hxx>
 #include <IDocumentUndoRedo.hxx>

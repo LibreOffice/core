@@ -19,8 +19,6 @@
 
 #undef SC_DLLIMPLEMENTATION
 
-#include <vcl/msgbox.hxx>
-
 #include <shtabdlg.hxx>
 #include <scresid.hxx>
 #include <strings.hrc>

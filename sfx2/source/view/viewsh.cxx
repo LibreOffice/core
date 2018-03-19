@@ -22,7 +22,6 @@
 #include <svl/stritem.hxx>
 #include <svl/eitem.hxx>
 #include <svl/whiter.hxx>
-#include <vcl/msgbox.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/weld.hxx>
 #include <svl/intitem.hxx>

@@ -20,7 +20,6 @@
 #include <dbmgr.hxx>
 #include <sfx2/app.hxx>
 #include <vcl/builderfactory.hxx>
-#include <vcl/msgbox.hxx>
 #include <vcl/settings.hxx>
 
 #include <swwait.hxx>

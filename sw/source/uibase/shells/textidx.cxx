@@ -18,7 +18,6 @@
  */
 
 #include <hintids.hxx>
-#include <vcl/msgbox.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svl/stritem.hxx>

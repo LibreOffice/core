@@ -61,7 +61,6 @@
 #include <svl/cjkoptions.hxx>
 #include <svl/ctloptions.hxx>
 #include <unotools/useroptions.hxx>
-#include <vcl/msgbox.hxx>
 #include <editeng/flditem.hxx>
 #include <editeng/editstat.hxx>
 #include <svx/hlnkitem.hxx>

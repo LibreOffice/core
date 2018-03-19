@@ -19,7 +19,6 @@
 
 #include <vcl/virdev.hxx>
 #include <vcl/metric.hxx>
-#include <vcl/msgbox.hxx>
 #include <unotools/printwarningoptions.hxx>
 #include <svtools/printoptions.hxx>
 

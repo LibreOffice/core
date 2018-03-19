@@ -33,7 +33,6 @@
 
 #include <unotools/resmgr.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/msgbox.hxx>
 
 #include <strings.hrc>
 #include "getcontinuations.hxx"

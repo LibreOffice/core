@@ -20,7 +20,6 @@
 
 #include <vcl/graph.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/msgbox.hxx>
 #include <vcl/bitmapaccess.hxx>
 #include <svl/solar.hrc>
 #include <vcl/fltcall.hxx>

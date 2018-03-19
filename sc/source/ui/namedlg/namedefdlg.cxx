@@ -9,7 +9,6 @@
 
 #include <namedefdlg.hxx>
 
-#include <vcl/msgbox.hxx>
 #include <vcl/settings.hxx>
 #include <formula/errorcodes.hxx>
 #include <sfx2/app.hxx>

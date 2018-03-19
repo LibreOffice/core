@@ -35,7 +35,6 @@
 #include <tools/globname.hxx>
 #include <com/sun/star/awt/PosSize.hpp>
 #include <comphelper/processfactory.hxx>
-#include <vcl/msgbox.hxx>
 
 #include <appdata.hxx>
 #include <sfx2/app.hxx>

@@ -21,7 +21,6 @@
 #include <scitems.hxx>
 #include <sfx2/dispatch.hxx>
 #include <svl/zforlist.hxx>
-#include <vcl/msgbox.hxx>
 #include <vcl/weld.hxx>
 
 #include <uiitems.hxx>

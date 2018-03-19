@@ -22,7 +22,6 @@
 #include <svx/colorbox.hxx>
 #include <svx/xtable.hxx>
 #include <svx/drawitem.hxx>
-#include <vcl/msgbox.hxx>
 #include <vcl/settings.hxx>
 #include <formula/token.hxx>
 #include <formula/errorcodes.hxx>

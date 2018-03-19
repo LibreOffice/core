@@ -22,7 +22,6 @@
 
 #include <cmdid.h>
 #include <hintids.hxx>
-#include <vcl/msgbox.hxx>
 #include <vcl/mnemonic.hxx>
 #include <svl/urihelper.hxx>
 #include <svl/stritem.hxx>

@@ -21,7 +21,6 @@
 #include "commonpagesdbp.hxx"
 #include <tools/debug.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/msgbox.hxx>
 #include "optiongrouplayouter.hxx"
 #include <helpids.h>
 #include <comphelper/processfactory.hxx>

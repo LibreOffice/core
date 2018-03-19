@@ -169,7 +169,6 @@
 #include <vcl/metaactiontypes.hxx>
 #include <vcl/metric.hxx>
 #include <vcl/mnemonicengine.hxx>
-#include <vcl/msgbox.hxx>
 #include <vcl/notebookbar.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/outdevmap.hxx>

@@ -38,7 +38,6 @@
 #include <vcl/svapp.hxx>
 #include <vcl/help.hxx>
 #include <vcl/weld.hxx>
-#include <vcl/msgbox.hxx>
 #include <vcl/gradient.hxx>
 #include <vcl/scrbar.hxx>
 #include <vcl/settings.hxx>

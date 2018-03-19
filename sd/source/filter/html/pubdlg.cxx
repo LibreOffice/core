@@ -29,7 +29,6 @@
 #include <svl/aeitem.hxx>
 #include <svl/itemset.hxx>
 #include <svl/stritem.hxx>
-#include <vcl/msgbox.hxx>
 #include <vcl/weld.hxx>
 #include <svtools/valueset.hxx>
 #include <vcl/graph.hxx>

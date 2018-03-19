@@ -65,7 +65,6 @@
 #include <vcl/image.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/mnemonicengine.hxx>
-#include <vcl/msgbox.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/quickselectionengine.hxx>
 #include <vcl/salnativewidgets.hxx>

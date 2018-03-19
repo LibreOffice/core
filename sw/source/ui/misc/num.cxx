@@ -18,7 +18,6 @@
  */
 
 #include <hintids.hxx>
-#include <vcl/msgbox.hxx>
 #include <sfx2/app.hxx>
 #include <svx/gallery.hxx>
 #include <editeng/brushitem.hxx>

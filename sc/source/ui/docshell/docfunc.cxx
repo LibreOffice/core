@@ -24,7 +24,6 @@
 #include <editeng/editobj.hxx>
 #include <sfx2/linkmgr.hxx>
 #include <sfx2/bindings.hxx>
-#include <vcl/msgbox.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/waitobj.hxx>

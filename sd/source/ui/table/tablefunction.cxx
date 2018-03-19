@@ -41,7 +41,6 @@
 #include <svx/sdrpagewindow.hxx>
 #include <svx/sdr/table/tabledesign.hxx>
 #include <svx/svxdlg.hxx>
-#include <vcl/msgbox.hxx>
 
 #include <svl/itempool.hxx>
 #include <sfx2/viewfrm.hxx>

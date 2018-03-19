@@ -23,7 +23,6 @@
 #include <vcl/metaact.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/dispatch.hxx>
-#include <vcl/msgbox.hxx>
 #include <vcl/weld.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svx/svdograf.hxx>

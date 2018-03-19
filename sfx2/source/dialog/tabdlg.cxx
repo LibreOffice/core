@@ -38,7 +38,6 @@
 #include <uitest/sfx_uiobject.hxx>
 #include <unotools/viewoptions.hxx>
 #include <vcl/builder.hxx>
-#include <vcl/msgbox.hxx>
 #include <vcl/IDialogRenderable.hxx>
 
 #include <sfx2/strings.hrc>
