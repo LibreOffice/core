@@ -14,7 +14,7 @@
 
 namespace dbahsql
 {
-class FbCreateStmtParser : public CreateStmtParser
+class SAL_DLLPUBLIC_EXPORT FbCreateStmtParser : public CreateStmtParser
 {
 public:
     FbCreateStmtParser() {}
