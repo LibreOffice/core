@@ -1769,7 +1769,7 @@ IMPL_LINK_NOARG( SvxConfigPage, SelectFunctionHdl, SvTreeListBox *, void )
         m_pAddCommandButton->Enable();
         m_pRemoveCommandButton->Enable();
 
-        m_pDescriptionField->SetText( m_pFunctions->GetHelpText() );
+        m_pDescriptionField->SetText( m_pFunctions->GetHelpText( false ) );
     }
     else
     {
@@ -1779,9 +1779,9 @@ IMPL_LINK_NOARG( SvxConfigPage, SelectFunctionHdl, SvTreeListBox *, void )
         m_pDescriptionField->SetText("");
     }
 
-    // Disable the description field and its label if there is no help text to display
+    // Disable the description field and its label if the local help is not installed
     // And inform the user via tooltips
-    if ( m_pDescriptionField->GetText().isEmpty() )
+    if ( Application::GetHelp() == nullptr )
     {
         m_pDescriptionField->Disable();
         m_pDescriptionFieldLb->Disable();

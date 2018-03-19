@@ -120,7 +120,7 @@ public:
     OUString      GetCurCommand();
     OUString      GetCurLabel();
     OUString      GetSelectedScriptURI();
-    OUString      GetHelpText();
+    OUString      GetHelpText( bool bConsiderParent = true );
 };
 
 struct SvxConfigGroupBoxResource_Impl;
