@@ -79,7 +79,7 @@ inline bool isValidBitCount( sal_uInt16 nBitCount )
     return (nBitCount == 1) || (nBitCount == 4) || (nBitCount == 8) || (nBitCount == 16) || (nBitCount == 24) || (nBitCount == 32);
 }
 
-sal_uInt16 lclBytesPerRow(sal_uInt16 nBits, int nWidth)
+sal_uInt32 lclBytesPerRow(sal_uInt16 nBits, int nWidth)
 {
     assert ((nBits == 1 || nBits == 4 || nBits == 8 || nBits == 16 || nBits == 24 || nBits == 32)
             && "vcl::OpenGLSalBitmap::AllocateUserData(), illegal bitcount!");
@@ -256,7 +256,7 @@ bool OpenGLSalBitmap::AllocateUserData()
     {
         try
         {
-            size_t nToAllocate = static_cast<sal_uInt32>(mnBytesPerRow) * mnHeight;
+            size_t nToAllocate = mnBytesPerRow * mnHeight;
 #if OSL_DEBUG_LEVEL > 0
             nToAllocate += sizeof(CANARY);
 #endif
@@ -580,7 +580,7 @@ bool OpenGLSalBitmap::ReadTexture()
 #if OSL_DEBUG_LEVEL > 0
         // If we read over the end of pData we have a real hidden memory
         // corruption problem !
-        size_t nCanary = static_cast<sal_uInt32>(mnBytesPerRow) * mnHeight;
+        size_t nCanary = mnBytesPerRow * mnHeight;
         assert(!memcmp(pData + nCanary, CANARY, sizeof (CANARY)));
 #endif
         return true;
@@ -592,7 +592,7 @@ bool OpenGLSalBitmap::ReadTexture()
         sal_uInt8* pBuffer = aBuffer.data();
         determineTextureFormat(24, nFormat, nType);
         maTexture.Read(nFormat, nType, pBuffer);
-        sal_uInt16 nSourceBytesPerRow = lclBytesPerRow(24, mnWidth);
+        sal_uInt32 nSourceBytesPerRow = lclBytesPerRow(24, mnWidth);
 
         std::unique_ptr<ScanlineWriter> pWriter;
         switch(mnBits)
@@ -757,7 +757,7 @@ BitmapBuffer* OpenGLSalBitmap::AcquireBuffer( BitmapAccessMode nMode )
 
         mpUserBuffer.reset();
         AllocateUserData();
-        memcpy(mpUserBuffer.get(), aBuffer.get(), static_cast<sal_uInt32>(mnBytesPerRow) * mnHeight);
+        memcpy(mpUserBuffer.get(), aBuffer.get(), mnBytesPerRow * mnHeight);
     }
 
     BitmapBuffer* pBuffer = new BitmapBuffer;

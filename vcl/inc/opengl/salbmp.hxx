@@ -41,7 +41,7 @@ private:
     BitmapPalette                       maPalette;
     std::shared_ptr<sal_uInt8>          mpUserBuffer;
     sal_uInt16                          mnBits;
-    sal_uInt16                          mnBytesPerRow;
+    sal_uInt32                          mnBytesPerRow;
     int                                 mnWidth;
     int                                 mnHeight;
 
