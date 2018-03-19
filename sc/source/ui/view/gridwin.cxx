@@ -4585,7 +4585,19 @@ void ScGridWindow::UpdateListValPos( bool bVisible, const ScAddress& rPos )
         if ( !bOldButton || aListValPos != aOldPos )
         {
             // paint area of new button
-            Invalidate( PixelToLogic( GetListValButtonRect( aListValPos ) ) );
+            if (comphelper::LibreOfficeKit::isActive())
+            {
+                SCCOL nX = aListValPos.Col();
+                SCROW nY = aListValPos.Row();
+                std::stringstream ss;
+                ss << nX << ", " << nY << ", " << 1;
+                ScTabViewShell* pViewShell = pViewData->GetViewShell();
+                pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_VALIDITY_LIST_BUTTON, ss.str().c_str());
+            }
+            else
+            {
+                Invalidate( PixelToLogic( GetListValButtonRect( aListValPos ) ) );
+            }
         }
     }
     if ( bOldButton )
@@ -4593,7 +4605,19 @@ void ScGridWindow::UpdateListValPos( bool bVisible, const ScAddress& rPos )
         if ( !bListValButton || aListValPos != aOldPos )
         {
             // paint area of old button
-            Invalidate( PixelToLogic( GetListValButtonRect( aOldPos ) ) );
+            if (comphelper::LibreOfficeKit::isActive())
+            {
+                SCCOL nX = aOldPos.Col();
+                SCROW nY = aOldPos.Row();
+                std::stringstream ss;
+                ss << nX << ", " << nY << ", " << 0;
+                ScTabViewShell* pViewShell = pViewData->GetViewShell();
+                pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_VALIDITY_LIST_BUTTON, ss.str().c_str());
+            }
+            else
+            {
+                Invalidate( PixelToLogic( GetListValButtonRect( aOldPos ) ) );
+            }
         }
     }
 }
