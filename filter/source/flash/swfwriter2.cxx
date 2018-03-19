@@ -334,8 +334,6 @@ Sprite::Sprite( sal_uInt16 nId )
 
 Sprite::~Sprite()
 {
-    for (auto const& tag : maTags)
-        delete tag;
 }
 
 
@@ -358,15 +356,12 @@ void Sprite::write( SvStream& out )
 }
 
 
-void Sprite::addTag( Tag* pNewTag )
+void Sprite::addTag( std::unique_ptr<Tag> pNewTag )
 {
-    if( pNewTag )
-    {
-        if( pNewTag->getTagId() == TAG_SHOWFRAME )
-            mnFrames++;
+    if( pNewTag->getTagId() == TAG_SHOWFRAME )
+        mnFrames++;
 
-        maTags.push_back( pNewTag );
-    }
+    maTags.push_back( std::move(pNewTag) );
 }
 
 
