@@ -50,19 +50,19 @@ class SwAutoFormatDlg : public weld::GenericDialogController
     std::unique_ptr<weld::Button> m_xBtnRename;
     std::unique_ptr<AutoFormatPreview> m_xWndPreview;
     std::unique_ptr<SwTableAutoFormatTable> m_xTableTable;
-    OUString        aStrTitle;
-    OUString        aStrLabel;
-    OUString        aStrClose;
-    OUString        aStrDelTitle;
-    OUString        aStrDelMsg;
-    OUString        aStrRenameTitle;
-    OUString        aStrInvalidFormat;
+    OUString        m_aStrTitle;
+    OUString        m_aStrLabel;
+    OUString        m_aStrClose;
+    OUString        m_aStrDelTitle;
+    OUString        m_aStrDelMsg;
+    OUString        m_aStrRenameTitle;
+    OUString        m_aStrInvalidFormat;
 
-    SwWrtShell*     pShell;
+    SwWrtShell*     m_pShell;
     sal_uInt8       m_nIndex;
-    sal_uInt8       nDfltStylePos;
-    bool            bCoreDataChanged : 1;
-    bool            bSetAutoFormat : 1;
+    sal_uInt8       m_nDfltStylePos;
+    bool            m_bCoreDataChanged : 1;
+    bool            m_bSetAutoFormat : 1;
 
     void Init( const SwTableAutoFormat* pSelFormat );
     void UpdateChecks( const SwTableAutoFormat&, bool bEnableBtn );
