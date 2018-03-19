@@ -568,6 +568,16 @@ typedef enum
      * - "close" - window is closed
      */
     LOK_CALLBACK_WINDOW = 36,
+
+    /**
+     * When for the current cell is defined a validity list we need to show
+     * a drop down button in the form of a marker.
+     *
+     * The payload format is: "x, y, visible" where x, y are the current
+     * cell cursor coordinates and visible is set to 0 or 1.
+     */
+    LOK_CALLBACK_VALIDITY_LIST_BUTTON = 37,
+
 }
 LibreOfficeKitCallbackType;
 
