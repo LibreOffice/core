@@ -291,6 +291,7 @@ c
 calculation-settings
 calendar
 capitalize-entries
+can-add-comment
 caption
 caption-point-x
 caption-point-y
@@ -1861,8 +1862,14 @@ type
 dot-dash
 dot-dot-dash
 long-dash
+show-sign-date
+signatureline
+signing-instructions
 single
 small-wave
+suggested-signer-email
+suggested-signer-name
+suggested-signer-title
 wave
 unformatted-text
 union
