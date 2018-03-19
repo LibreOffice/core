@@ -295,7 +295,8 @@ inline std::basic_ostream<charT, traits>& operator<<(std::basic_ostream<charT, t
                 stream << *(double*)rVariant.byref;
                 break; // FIXME
             case VT_BSTR:
-                stream << (OLECHAR*)rVariant.byref;
+                stream << std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t>().to_bytes(
+                    *(OLECHAR**)rVariant.byref);
                 break;
             case VT_DISPATCH:
                 stream << rVariant.byref;
@@ -419,7 +420,8 @@ inline std::basic_ostream<charT, traits>& operator<<(std::basic_ostream<charT, t
             stream << (double)rVariant.date;
             break; // FIXME
         case VT_BSTR:
-            stream << rVariant.bstrVal;
+            stream << std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t>().to_bytes(
+                rVariant.bstrVal);
             break;
         case VT_DISPATCH:
             stream << rVariant.pdispVal;
