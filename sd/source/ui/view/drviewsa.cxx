@@ -183,10 +183,10 @@ DrawViewShell::~DrawViewShell()
         mxClipEvtLstnr.clear();
     }
 
-    delete mpDrawView;
+    mpDrawView.reset();
     // Set mpView to NULL so that the destructor of the ViewShell base class
     // does not access it.
-    mpView = mpDrawView = nullptr;
+    mpView = nullptr;
 
     mpFrameView->Disconnect();
     maTabControl.disposeAndClear();
@@ -212,8 +212,8 @@ void DrawViewShell::Construct(DrawDocShell* pDocSh, PageKind eInitialPageKind)
 
     GetDoc()->CreateFirstPages();
 
-    mpDrawView = new DrawView(pDocSh, GetActiveWindow(), this);
-    mpView = mpDrawView;             // Pointer of base class ViewShell
+    mpDrawView.reset( new DrawView(pDocSh, GetActiveWindow(), this) );
+    mpView = mpDrawView.get();             // Pointer of base class ViewShell
     mpDrawView->SetSwapAsynchron(); // Asynchronous load of graphics
 
     // We do not read the page kind from the frame view anymore so we have
@@ -777,7 +777,7 @@ OUString const & DrawViewShell::GetSidebarContextName() const
 
 void DrawViewShell::ExecGoToNextPage (SfxRequest& rReq)
 {
-    SetCurrentFunction( FuNavigation::Create( this, GetActiveWindow(), mpDrawView, GetDoc(), rReq) );
+    SetCurrentFunction( FuNavigation::Create( this, GetActiveWindow(), mpDrawView.get(), GetDoc(), rReq) );
     Cancel();
 }
 
@@ -792,7 +792,7 @@ void DrawViewShell::GetStateGoToNextPage (SfxItemSet& rSet)
 
 void DrawViewShell::ExecGoToPreviousPage (SfxRequest& rReq)
 {
-    SetCurrentFunction( FuNavigation::Create( this, GetActiveWindow(), mpDrawView, GetDoc(), rReq) );
+    SetCurrentFunction( FuNavigation::Create( this, GetActiveWindow(), mpDrawView.get(), GetDoc(), rReq) );
     Cancel();
 }
 
@@ -807,7 +807,7 @@ void DrawViewShell::GetStateGoToPreviousPage (SfxItemSet& rSet)
 
 void DrawViewShell::ExecGoToFirstPage (SfxRequest& rReq)
 {
-    SetCurrentFunction( FuNavigation::Create( this, GetActiveWindow(), mpDrawView, GetDoc(), rReq) );
+    SetCurrentFunction( FuNavigation::Create( this, GetActiveWindow(), mpDrawView.get(), GetDoc(), rReq) );
     Cancel();
 }
 
@@ -821,7 +821,7 @@ void DrawViewShell::GetStateGoToFirstPage (SfxItemSet& rSet)
 
 void DrawViewShell::ExecGoToLastPage (SfxRequest& rReq)
 {
-    SetCurrentFunction( FuNavigation::Create( this, GetActiveWindow(), mpDrawView, GetDoc(), rReq) );
+    SetCurrentFunction( FuNavigation::Create( this, GetActiveWindow(), mpDrawView.get(), GetDoc(), rReq) );
     Cancel();
 }
 
