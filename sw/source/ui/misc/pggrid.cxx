@@ -417,7 +417,9 @@ IMPL_LINK(SwTextGridPage, CharorLineChangedHdl, SpinField&, rField, void)
         }
         else if (m_pCharsPerLineNF == &rField)
         {
-            long nWidth = static_cast< sal_Int32 >(m_aPageSize.Width() / m_pCharsPerLineNF->GetValue());
+            auto nValue = m_pCharsPerLineNF->GetValue();
+            assert(nValue && "div-by-zero");
+            long nWidth = static_cast< sal_Int32 >(m_aPageSize.Width() / nValue);
             m_pCharWidthMF->SetValue(m_pCharWidthMF->Normalize(nWidth), FUNIT_TWIP);
             SetLinesOrCharsRanges( *m_pCharsRangeFT , m_pCharsPerLineNF->GetMax() );
         }

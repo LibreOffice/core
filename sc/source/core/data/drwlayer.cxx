@@ -678,10 +678,14 @@ void ScDrawLayer::ResizeLastRectFromAnchor(const SdrObject* pObj, ScDrawObjData&
                 tools::Rectangle aRectIncludingOffset = aRect;
                 aRectIncludingOffset.setWidth(aRect.GetWidth() + rData.maStartOffset.X());
                 aRectIncludingOffset.setHeight(aRect.GetHeight() + rData.maStartOffset.Y());
+                long nWidth = aRectIncludingOffset.GetWidth();
+                assert(nWidth && "div-by-zero");
                 double fMaxWidthFactor = static_cast<double>(aCurrentCellRect.GetWidth())
-                                         / static_cast<double>(aRectIncludingOffset.GetWidth());
+                                         / static_cast<double>(nWidth);
+                long nHeight = aRectIncludingOffset.GetHeight();
+                assert(nHeight && "div-by-zero");
                 double fMaxHeightFactor = static_cast<double>(aCurrentCellRect.GetHeight())
-                                          / static_cast<double>(aRectIncludingOffset.GetHeight());
+                                          / static_cast<double>(nHeight);
                 double fMaxFactor = std::min(fMaxHeightFactor, fMaxWidthFactor);
 
                 if (bIsGrowingLarger) // cell is growing larger
