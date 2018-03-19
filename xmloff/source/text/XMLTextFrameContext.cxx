@@ -1458,7 +1458,9 @@ SvXMLImportContextRef XMLTextFrameContext::CreateChildContext(
             if( IsXMLToken( rLocalName, XML_TEXT_BOX ) )
                 nFrameType = XML_TEXT_FRAME_TEXTBOX;
             else if( IsXMLToken( rLocalName, XML_IMAGE ) )
+            {
                 nFrameType = XML_TEXT_FRAME_GRAPHIC;
+            }
             else if( IsXMLToken( rLocalName, XML_OBJECT ) )
                 nFrameType = XML_TEXT_FRAME_OBJECT;
             else if( IsXMLToken( rLocalName, XML_OBJECT_OLE ) )
@@ -1665,6 +1667,15 @@ SvXMLImportContextRef XMLTextFrameContext::CreateChildContext(
             m_xImplContext = solveMultipleImages();
         }
         xContext = m_xImplContext->CreateChildContext( p_nPrefix, rLocalName, xAttrList );
+    }
+    else if (p_nPrefix == XML_NAMESPACE_LO_EXT && (IsXMLToken(rLocalName, XML_SIGNATURELINE)))
+    {
+        if (getSupportsMultipleContents())
+        {   // tdf#103567 ensure props are set on surviving shape
+            // note: no more draw:image can be added once we get here
+            m_xImplContext = solveMultipleImages();
+        }
+        xContext = m_xImplContext->CreateChildContext(p_nPrefix, rLocalName, xAttrList);
     }
     else
     {
