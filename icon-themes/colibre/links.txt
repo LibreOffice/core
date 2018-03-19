@@ -1077,8 +1077,8 @@ sc/res/sc26050.png cmd/sc_cancel.png
 sc/res/sc26051.png cmd/sc_ok.png
 sc/res/dropurl.png cmd/sc_inserthyperlink.png
 sc/res/na03.png cmd/sc_dataranges.png
-sc/res/na05.png cmd/sc_movepageup.png
-sc/res/na06.png cmd/sc_movepagedown.png
+sc/res/na05.png cmd/sc_upsearch.png
+sc/res/na06.png cmd/sc_downsearch.png
 sc/res/na07.png cmd/sc_thesaurus.png
 
 sc/res/date.png cmd/sc_datefield.png
