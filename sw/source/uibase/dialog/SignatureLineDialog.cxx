@@ -74,7 +74,7 @@ SignatureLineDialog::SignatureLineDialog(SwView& rView)
     xProps->getPropertyValue("SignatureLineSigningInstructions") >>= aSigningInstructions;
     m_xEditInstructions->set_text(aSigningInstructions);
     bool bCanAddComments = false;
-    xProps->getPropertyValue("SignatureLineShowSignDate") >>= bCanAddComments;
+    xProps->getPropertyValue("SignatureLineCanAddComment") >>= bCanAddComments;
     m_xCheckboxCanAddComments->set_active(bCanAddComments);
     bool bShowSignDate = false;
     xProps->getPropertyValue("SignatureLineShowSignDate") >>= bShowSignDate;
