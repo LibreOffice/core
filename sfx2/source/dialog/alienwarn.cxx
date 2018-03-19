@@ -63,11 +63,17 @@ SfxAlienWarningDialog::SfxAlienWarningDialog(weld::Window* pParent, const OUStri
 
 SfxAlienWarningDialog::~SfxAlienWarningDialog()
 {
-    // save value of "warning off" checkbox, if necessary
-    SvtSaveOptions aSaveOpt;
-    bool bChecked = m_xWarningOnBox->get_active();
-    if (aSaveOpt.IsWarnAlienFormat() != bChecked)
-        aSaveOpt.SetWarnAlienFormat(bChecked);
+    try
+    {
+        // save value of "warning off" checkbox, if necessary
+        SvtSaveOptions aSaveOpt;
+        bool bChecked = m_xWarningOnBox->get_active();
+        if (aSaveOpt.IsWarnAlienFormat() != bChecked)
+            aSaveOpt.SetWarnAlienFormat(bChecked);
+    }
+    catch (...)
+    {
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
