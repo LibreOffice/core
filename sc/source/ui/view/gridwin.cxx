@@ -4762,6 +4762,16 @@ void ScGridWindow::UpdateAutoFillMark(bool bMarked, const ScRange& rMarkRange)
     }
 }
 
+void ScGridWindow::updateLOKValListButton( bool bVisible, const ScAddress& rPos ) const
+{
+    SCCOL nX = rPos.Col();
+    SCROW nY = rPos.Row();
+    std::stringstream ss;
+    ss << nX << ", " << nY << ", " << static_cast<unsigned int>(bVisible);
+    ScTabViewShell* pViewShell = pViewData->GetViewShell();
+    pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_VALIDITY_LIST_BUTTON, ss.str().c_str());
+}
+
 void ScGridWindow::UpdateListValPos( bool bVisible, const ScAddress& rPos )
 {
     bool bOldButton = bListValButton;
@@ -4775,7 +4785,14 @@ void ScGridWindow::UpdateListValPos( bool bVisible, const ScAddress& rPos )
         if ( !bOldButton || aListValPos != aOldPos )
         {
             // paint area of new button
-            Invalidate( PixelToLogic( GetListValButtonRect( aListValPos ) ) );
+            if ( comphelper::LibreOfficeKit::isActive() )
+            {
+                updateLOKValListButton( true, aListValPos );
+            }
+            else
+            {
+                Invalidate( PixelToLogic( GetListValButtonRect( aListValPos ) ) );
+            }
         }
     }
     if ( bOldButton )
@@ -4783,7 +4800,14 @@ void ScGridWindow::UpdateListValPos( bool bVisible, const ScAddress& rPos )
         if ( !bListValButton || aListValPos != aOldPos )
         {
             // paint area of old button
-            Invalidate( PixelToLogic( GetListValButtonRect( aOldPos ) ) );
+            if ( comphelper::LibreOfficeKit::isActive() )
+            {
+                updateLOKValListButton( false, aOldPos );
+            }
+            else
+            {
+                Invalidate( PixelToLogic( GetListValButtonRect( aOldPos ) ) );
+            }
         }
     }
 }
@@ -5827,9 +5851,16 @@ void ScGridWindow::updateLibreOfficeKitCellCursor(SfxViewShell* pOtherShell) con
     if (pOtherShell)
     {
         if (pOtherShell == pViewShell)
+        {
             pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_CELL_CURSOR, aCursor.getStr());
+
+            if (bListValButton && aListValPos == pViewData->GetCurPos())
+                updateLOKValListButton(true, aListValPos);
+        }
         else
+        {
             SfxLokHelper::notifyOtherView(pViewShell, pOtherShell, LOK_CALLBACK_CELL_VIEW_CURSOR, "rectangle", aCursor);
+        }
     }
     else
     {
