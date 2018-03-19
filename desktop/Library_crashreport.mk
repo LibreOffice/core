@@ -30,12 +30,15 @@ $(eval $(call gb_Library_add_libs,crashreport,\
     ) \
 ))
 
+$(eval $(call gb_Library_use_sdk_api,crashreport))
+
 $(eval $(call gb_Library_use_libraries,crashreport,\
     comphelper \
     cppu \
     cppuhelper \
     sal \
     salhelper \
+    ucbhelper \
     utl \
 ))
 

@@ -10,6 +10,8 @@
 #include <desktop/crashreport.hxx>
 #include <rtl/bootstrap.hxx>
 #include <osl/file.hxx>
+#include <comphelper/processfactory.hxx>
+#include <ucbhelper/proxydecider.hxx>
 #include <unotools/bootstrap.hxx>
 #include <o3tl/char16_t2wchar_t.hxx>
 
@@ -70,13 +72,28 @@ void CrashReporter::AddKeyValue(const OUString& rKey, const OUString& rValue)
 void CrashReporter::writeCommonInfo()
 {
     osl::MutexGuard aGuard(maMutex);
+
+    ucbhelper::InternetProxyDecider proxy_decider(::comphelper::getProcessComponentContext());
+
+    const OUString protocol = "https";
+    const OUString url = "crashreport.libreoffice.org";
+    const sal_Int32 port = 443;
+
+    const ucbhelper::InternetProxyServer proxy_server = proxy_decider.getProxy(protocol, url, port);
+
     // limit the amount of code that needs to be executed before the crash reporting
     std::string ini_path = CrashReporter::getIniFileName();
     std::ofstream minidump_file(ini_path, std::ios_base::trunc);
     minidump_file << "ProductName=LibreOffice\n";
     minidump_file << "Version=" LIBO_VERSION_DOTTED "\n";
     minidump_file << "BuildID=" << utl::Bootstrap::getBuildIdData("") << "\n";
-    minidump_file << "URL=https://crashreport.libreoffice.org/submit/\n";
+    minidump_file << "URL=" << protocol << "://" << url << "/submit/\n";
+
+    if (proxy_server.aName != OUString())
+    {
+        minidump_file << "Proxy=" << proxy_server.aName << ":" << proxy_server.nPort << "\n";
+    }
+
     for (auto& keyValue : maKeyValues)
     {
         writeToStream(minidump_file, keyValue.first, keyValue.second);
