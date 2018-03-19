@@ -665,12 +665,16 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                                                      pIntValue);
             else if (m_aStates.top().eDestination == Destination::LISTOVERRIDEENTRY)
                 m_aStates.top().aTableSprms.set(NS_ooxml::LN_CT_Num_abstractNumId, pIntValue);
+            m_aStates.top().nCurrentListIndex = nParam;
         }
         break;
         case RTF_LS:
         {
             if (m_aStates.top().eDestination == Destination::LISTOVERRIDEENTRY)
+            {
                 m_aStates.top().aTableAttributes.set(NS_ooxml::LN_CT_AbstractNum_nsid, pIntValue);
+                m_aStates.top().nCurrentListOverrideIndex = nParam;
+            }
             else
             {
                 // Insert at the start, so properties inherited from the list
