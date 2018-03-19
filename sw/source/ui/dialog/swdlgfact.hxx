@@ -40,8 +40,8 @@ class SwTOXMark;
 class SwSplitTableDlg;
 
 #include <itabenum.hxx>
-
 #include <boost/optional.hpp>
+#include <o3tl/deleter.hxx>
 
 namespace sw
 {
@@ -237,7 +237,7 @@ class AbstractSwSelGlossaryDlg_Impl : public AbstractSwSelGlossaryDlg
 class AbstractSwAutoFormatDlg_Impl : public AbstractSwAutoFormatDlg
 {
 protected:
-    std::unique_ptr<SwAutoFormatDlg> m_xDlg;
+    std::unique_ptr<SwAutoFormatDlg, o3tl::default_delete<SwAutoFormatDlg>> m_xDlg;
 public:
     explicit AbstractSwAutoFormatDlg_Impl(SwAutoFormatDlg* p)
         : m_xDlg(p)
