@@ -92,7 +92,6 @@ cmd/sc_insertformula.png cmd/sc_dbviewfunctions.png
 cmd/sc_insertformvscroll.png cmd/sc_scrollbar.png
 cmd/sc_insertframeinteract.png cmd/sc_insertframe.png
 cmd/sc_insertframeinteractnocolumns.png cmd/sc_insertframe.png
-cmd/sc_insertgraphic.png cmd/sc_gallery.png
 cmd/sc_insertimagecontrol.png cmd/sc_drawchart.png
 cmd/sc_insertobjectchart.png cmd/sc_drawchart.png
 cmd/sc_insertnumericfield.png cmd/sc_numberformatstandard.png
@@ -179,7 +178,7 @@ cmd/sc_formattextmenu.png cmd/sc_color.png
 cmd/sc_formatspacingmenu.png cmd/sc_spacepara15.png
 cmd/sc_textalign.png cmd/sc_alignblock.png
 cmd/sc_formatbulletsmenu.png cmd/sc_defaultbullet.png
-cmd/sc_formatimagemenu.png cmd/sc_insertgraphic.png
+cmd/sc_formatimagemenu.png cmd/sc_gallery.png
 cmd/sc_formatframemenu.png cmd/sc_framedialog.png
 
 # Url
