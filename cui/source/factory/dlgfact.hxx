@@ -41,7 +41,6 @@ class SvxNameDialog;
 class SvxObjectNameDialog;
 class SvxObjectTitleDescDialog;
 
-class SvxMessDialog;
 class SvxMultiPathDialog;
 class SvxHpLinkDlg;
 class FmSearchDialog;
