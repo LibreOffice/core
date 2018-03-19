@@ -331,11 +331,11 @@ HashStr::HashStr( const OUString& rName, const OUString& rText,
 }
 
 /// Look up the Name, if it is present, return its String, otherwise return an empty String
-OUString LookString( SwHash** ppTable, sal_uInt16 nSize, const OUString& rName )
+OUString LookString( SwHashTable<HashStr> const & rTable, const OUString& rName )
 {
-    SwHash* pFnd = Find( comphelper::string::strip(rName, ' '), ppTable, nSize );
+    HashStr* pFnd = rTable.Find( comphelper::string::strip(rName, ' ') );
     if( pFnd )
-        return static_cast<HashStr*>(pFnd)->aSetStr;
+        return pFnd->aSetStr;
 
     return OUString();
 }
@@ -1098,7 +1098,7 @@ void SwDocUpdateField::InsertFieldType( const SwFieldType& rType )
         sFieldName = GetAppCharClass().lowercase( sFieldName );
         sal_uInt16 n;
 
-        SwHash* pFnd = Find( sFieldName, GetFieldTypeTable(), TBLSZ, &n );
+        SwCalcFieldType* pFnd = GetFieldTypeTable().Find( sFieldName, &n );
 
         if( !pFnd )
         {
@@ -1130,7 +1130,7 @@ void SwDocUpdateField::RemoveFieldType( const SwFieldType& rType )
         sFieldName = GetAppCharClass().lowercase( sFieldName );
         sal_uInt16 n;
 
-        SwHash* pFnd = Find( sFieldName, GetFieldTypeTable(), TBLSZ, &n );
+        SwCalcFieldType* pFnd = GetFieldTypeTable().Find( sFieldName, &n );
         if( pFnd )
         {
             if( aFieldTypeTable[ n ].get() == pFnd )
@@ -1150,7 +1150,8 @@ void SwDocUpdateField::RemoveFieldType( const SwFieldType& rType )
 }
 
 SwDocUpdateField::SwDocUpdateField(SwDoc* pDoc)
-    : nNodes(0)
+    : aFieldTypeTable(TBLSZ)
+    , nNodes(0)
     , nFieldLstGetMode(0)
     , pDocument(pDoc)
     , bInUpdateFields(false)

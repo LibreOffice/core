@@ -136,10 +136,42 @@ struct SwCalcExp : public SwHash
                 const SwFieldType* pFieldType );
 };
 
-SwHash* Find( const OUString& rSrch, SwHash* const * ppTable,
-                sal_uInt16 nTableSize, sal_uInt16* pPos = nullptr );
+/// T should be a subclass of SwHash
+template<class T>
+class SwHashTable
+{
+    std::vector<std::unique_ptr<T>> aData;
+public:
+    SwHashTable(size_t nSize) : aData(nSize) {}
+    std::unique_ptr<T> & operator[](size_t idx) { return aData[idx]; }
+    std::unique_ptr<T> const & operator[](size_t idx) const { return aData[idx]; }
+    void resize(size_t nSize) { aData.resize(nSize); }
 
-void DeleteHashTable( SwHash** ppTable, sal_uInt16 nTableSize );
+    T* Find( const OUString& rStr, sal_uInt16* pPos = nullptr ) const
+    {
+        size_t nTableSize = aData.size();
+        sal_uLong ii = 0;
+        for( sal_Int32 n = 0; n < rStr.getLength(); ++n )
+        {
+            ii = ii << 1 ^ rStr[n];
+        }
+        ii %= nTableSize;
+
+        if( pPos )
+            *pPos = static_cast<sal_uInt16>(ii);
+
+        for( T* pEntry = aData[ii].get(); pEntry; pEntry = static_cast<T*>(pEntry->pNext.get()) )
+        {
+            if( rStr == pEntry->aStr )
+            {
+                return pEntry;
+            }
+        }
+        return nullptr;
+    }
+
+};
+
 
 // if CalcOp != 0, this is a valid operator
 struct CalcOp;
@@ -149,7 +181,7 @@ extern "C" typedef double (*pfCalc)(double);
 
 class SwCalc
 {
-    SwHash*     m_aVarTable[ TBLSZ ];
+    SwHashTable<SwCalcExp> m_aVarTable;
     OUString    m_aVarName, m_sCurrSym;
     OUString    m_sCommand;
     std::vector<const SwUserFieldType*> m_aRekurStack;
@@ -193,7 +225,7 @@ public:
     SwCalcExp*  VarLook( const OUString &rStr, bool bIns = false );
     void        VarChange( const OUString& rStr, const SwSbxValue& rValue );
     void        VarChange( const OUString& rStr, double );
-    SwHash**    GetVarTable()                       { return m_aVarTable; }
+    SwHashTable<SwCalcExp> & GetVarTable() { return m_aVarTable; }
 
     bool        Push(const SwUserFieldType* pUserFieldType);
     void        Pop();
