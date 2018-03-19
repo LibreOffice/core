@@ -1340,6 +1340,17 @@ void SidebarController::FadeIn()
         mpSplitWindow->FadeIn();
 }
 
+tools::Rectangle SidebarController::GetDeckDragArea() const
+{
+    tools::Rectangle aRect;
+
+    VclPtr<DeckTitleBar> pTitleBar = mpCurrentDeck->GetTitleBar();
+    if ( pTitleBar)
+        aRect = pTitleBar->GetDragArea();
+
+    return aRect;
+}
+
 void SidebarController::frameAction(const css::frame::FrameActionEvent& rEvent)
 {
     if (rEvent.Frame == mxFrame)
