@@ -133,6 +133,7 @@ public:
     void testTdf115394();
     void testTdf115394Zero();
     void testBulletsAsImage();
+    void testTdf115005();
     void testTdf111789();
     /// SmartArt animated elements
     void testTdf104792();
@@ -197,6 +198,7 @@ public:
     CPPUNIT_TEST(testTdf115394);
     CPPUNIT_TEST(testTdf115394Zero);
     CPPUNIT_TEST(testBulletsAsImage);
+    CPPUNIT_TEST(testTdf115005);
     CPPUNIT_TEST(testTdf111789);
     CPPUNIT_TEST(testTdf104792);
     CPPUNIT_TEST(testTdf90627);
@@ -1522,6 +1524,26 @@ void SdOOXMLExportTest2::testBulletsAsImage()
     CPPUNIT_ASSERT_MESSAGE("No bitmap for the bullets", xBitmap.is());
 
     xDocShRef->DoClose();
+}
+
+void SdOOXMLExportTest2::testTdf115005()
+{
+    sd::DrawDocShellRef xDocShRefOriginal = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/odp/tdf115005.odp"), ODP);
+    utl::TempFile tempFile;
+    sd::DrawDocShellRef xDocShRefResaved = saveAndReload(xDocShRefOriginal.get(), ODP, &tempFile);
+
+    // additional checks of the output file
+    uno::Reference<packages::zip::XZipFileAccess2> xNameAccess = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory), tempFile.GetURL());
+
+    // check that the document contains original vector images
+    const uno::Sequence<OUString> names = xNameAccess->getElementNames();
+    int nSVMFiles = 0;
+    for (int i=0; i<names.getLength(); i++)
+    {
+        if(names[i].endsWith(".svm"))
+            nSVMFiles++;
+    }
+    CPPUNIT_ASSERT_EQUAL(3, nSVMFiles);
 }
 
 void SdOOXMLExportTest2::testTdf111789()
