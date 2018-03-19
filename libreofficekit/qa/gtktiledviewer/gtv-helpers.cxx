@@ -148,4 +148,23 @@ const std::string GtvHelpers::getDirPath(const std::string& filePath)
     return dirPath;
 }
 
+const std::vector<int> GtvHelpers::splitIntoIntegers(const std::string& aPayload, const std::string& aDelim, const int nItems)
+{
+    std::vector<int> aRet;
+
+    if (!aPayload.empty())
+    {
+        gchar** ppCoordinates = g_strsplit(aPayload.c_str(), aDelim.c_str(), nItems);
+        gchar** ppCoordinate  = ppCoordinates;
+        while (*ppCoordinate)
+        {
+            aRet.push_back(atoi(*ppCoordinate));
+            ++ppCoordinate;
+        }
+        g_strfreev(ppCoordinates);
+    }
+
+    return aRet;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
