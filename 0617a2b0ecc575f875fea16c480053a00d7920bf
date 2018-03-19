@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_5b03c3b8",
+        "filename": "svx/inc/sdr/primitive2d/sdrpathprimitive2d.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2018-03-19T09:01:04Z",
+      "side": 1,
+      "message": "I wouldn’t remove the possessive “’s”, but that may be just me",
+      "revId": "0617a2b0ecc575f875fea16c480053a00d7920bf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
