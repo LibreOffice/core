@@ -3322,7 +3322,8 @@ namespace xmloff { namespace token {
             while (pEntry < pEntryEnd)
             {
                 assert(nPos == static_cast<sal_uInt16>(pEntry->eToken));
-                    // "xmloff::GetXMLToken: inconsistency in the token list!"
+                    // Inconsistency in the token list!
+                    // The positions in xmltoken.hxx and xmltoken.cxx need to match.
                 ++pEntry;
                 ++nPos;
             }
