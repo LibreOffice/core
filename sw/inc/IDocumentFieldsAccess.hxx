@@ -37,6 +37,8 @@ class SetGetExpField;
 struct SwHash;
 class SwNode;
 enum class SwFieldIds : sal_uInt16;
+template <class T> class SwHashTable;
+struct HashStr;
 
 namespace rtl { class OUString; }
 using rtl::OUString;
@@ -123,7 +125,7 @@ namespace com { namespace sun { namespace star { namespace uno { class Any; } } 
 
     virtual void FieldsToCalc(SwCalc& rCalc, const SetGetExpField& rToThisField) = 0;
 
-    virtual void FieldsToExpand(SwHash**& ppTable, sal_uInt16& rTableSize, const SetGetExpField& rToThisField) = 0;
+    virtual void FieldsToExpand(SwHashTable<HashStr> & rTable, const SetGetExpField& rToThisField) = 0;
 
     virtual bool IsNewFieldLst() const = 0;
 

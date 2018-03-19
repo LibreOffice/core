@@ -125,7 +125,7 @@ struct SwCalcFieldType : public SwHash
 };
 
 // search for the string that was saved under rName in the hash table
-OUString LookString( SwHash** ppTable, sal_uInt16 nSize, const OUString& rName );
+OUString LookString( SwHashTable<HashStr> const & rTable, const OUString& rName );
 
 const int GETFLD_ALL        = 3;        // combine flags via OR
 const int GETFLD_CALC       = 1;
@@ -134,7 +134,7 @@ const int GETFLD_EXPAND     = 2;
 class SwDocUpdateField
 {
     std::unique_ptr<SetGetExpFields> pFieldSortLst;    // current field list for calculation
-    std::unique_ptr<SwCalcFieldType> aFieldTypeTable[ TBLSZ ];
+    SwHashTable<SwCalcFieldType> aFieldTypeTable;
 
     sal_uLong nNodes;               // if the node count is different
     sal_uInt8 nFieldLstGetMode;
@@ -174,7 +174,7 @@ public:
         }
     }
 
-    SwHash* const * GetFieldTypeTable() const { return reinterpret_cast<SwHash* const *>(aFieldTypeTable); }
+    SwHashTable<SwCalcFieldType> const & GetFieldTypeTable() const { return aFieldTypeTable; }
 };
 
 #endif

@@ -357,11 +357,9 @@ void SwGetExpField::ChangeExpansion( const SwFrame& rFrame, const SwTextField& r
     SetGetExpField aEndField( aPos.nNode, &rField, &aPos.nContent );
     if(GetSubType() & nsSwGetSetExpType::GSE_STRING)
     {
-        SwHash** ppHashTable;
-        sal_uInt16 nSize;
-        rDoc.getIDocumentFieldsAccess().FieldsToExpand( ppHashTable, nSize, aEndField );
-        sExpand = LookString( ppHashTable, nSize, GetFormula() );
-        ::DeleteHashTable( ppHashTable, nSize );
+        SwHashTable<HashStr> aHashTable(0);
+        rDoc.getIDocumentFieldsAccess().FieldsToExpand( aHashTable, aEndField );
+        sExpand = LookString( aHashTable, GetFormula() );
     }
     else
     {
