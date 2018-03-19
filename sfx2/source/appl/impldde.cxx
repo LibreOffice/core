@@ -30,7 +30,7 @@
 #include <vcl/fixed.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/button.hxx>
-#include <vcl/msgbox.hxx>
+#include <vcl/dialog.hxx>
 #include <sot/exchange.hxx>
 #include <rtl/strbuf.hxx>
 #include <rtl/ustring.hxx>

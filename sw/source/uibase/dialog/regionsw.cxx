@@ -22,7 +22,6 @@
 #include <comphelper/string.hxx>
 #include <svl/urihelper.hxx>
 #include <svl/PasswordHelper.hxx>
-#include <vcl/msgbox.hxx>
 #include <svl/stritem.hxx>
 #include <svl/eitem.hxx>
 #include <sot/formats.hxx>

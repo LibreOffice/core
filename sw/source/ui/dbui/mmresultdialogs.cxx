@@ -39,7 +39,6 @@
 #include <svtools/ehdl.hxx>
 #include <svtools/sfxecode.hxx>
 #include <vcl/layout.hxx>
-#include <vcl/msgbox.hxx>
 #include <vcl/weld.hxx>
 #include <sfx2/dinfdlg.hxx>
 #include <sfx2/printer.hxx>

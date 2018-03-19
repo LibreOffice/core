@@ -31,7 +31,6 @@
 #include <com/sun/star/mail/MailServiceType.hpp>
 #include <com/sun/star/mail/XMailService.hpp>
 #include <com/sun/star/mail/MailServiceProvider.hpp>
-#include <vcl/msgbox.hxx>
 #include <globals.hrc>
 #include <dbui.hrc>
 #include <bitmaps.hlst>

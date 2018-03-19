@@ -64,7 +64,6 @@
 #include <com/sun/star/inspection/XNumericControl.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 
-#include <vcl/msgbox.hxx>
 #include <vcl/waitobj.hxx>
 #include <tools/fldunit.hxx>
 #include <vcl/stdtext.hxx>

@@ -56,7 +56,6 @@
 #include <svtools/transfer.hxx>
 #include <svl/whiter.hxx>
 #include <svl/languageoptions.hxx>
-#include <vcl/msgbox.hxx>
 
 #include <svx/svxdlg.hxx>
 #include <svx/dialogs.hrc>

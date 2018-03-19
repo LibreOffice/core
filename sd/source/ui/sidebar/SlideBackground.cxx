@@ -40,7 +40,6 @@
 #include <svx/gallery.hxx>
 #include <svx/drawitem.hxx>
 #include <unotools/pathoptions.hxx>
-#include <vcl/msgbox.hxx>
 #include <tools/urlobj.hxx>
 #include <sfx2/sidebar/Theme.hxx>
 #include <app.hrc>

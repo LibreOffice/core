@@ -33,7 +33,6 @@
 #include <svl/zforlist.hxx>
 #include <svl/sharedstringpool.hxx>
 #include <vcl/weld.hxx>
-#include <vcl/msgbox.hxx>
 #include <rtl/math.hxx>
 
 #include <scitems.hxx>

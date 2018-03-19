@@ -58,7 +58,6 @@
 #include <vcl/group.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/edit.hxx>
-#include <vcl/msgbox.hxx>
 #include <tools/debug.hxx>
 #include "datman.hxx"
 #include "bibresid.hxx"

@@ -27,7 +27,6 @@
 #include <dbmgr.hxx>
 #include <dbconfig.hxx>
 #include <unotools/tempfile.hxx>
-#include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
 #include <tools/urlobj.hxx>
 #include <comphelper/processfactory.hxx>

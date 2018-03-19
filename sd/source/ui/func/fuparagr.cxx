@@ -19,7 +19,6 @@
 
 #include <fuparagr.hxx>
 #include <editeng/eeitem.hxx>
-#include <vcl/msgbox.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/viewfrm.hxx>

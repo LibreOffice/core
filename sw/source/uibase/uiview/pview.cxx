@@ -35,7 +35,6 @@
 #include <sfx2/bindings.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/dispatch.hxx>
-#include <vcl/msgbox.hxx>
 #include <svx/stddlg.hxx>
 #include <editeng/paperinf.hxx>
 #include <svl/srchitem.hxx>

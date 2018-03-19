@@ -19,7 +19,6 @@
 
 #include <comphelper/string.hxx>
 #include <vcl/weld.hxx>
-#include <vcl/msgbox.hxx>
 #include <vcl/field.hxx>
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>

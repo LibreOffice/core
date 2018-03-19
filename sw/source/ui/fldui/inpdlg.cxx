@@ -18,7 +18,6 @@
  */
 
 #include <comphelper/string.hxx>
-#include <vcl/msgbox.hxx>
 #include <unotools/charclass.hxx>
 #include <editeng/unolingu.hxx>
 #include <wrtsh.hxx>

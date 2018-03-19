@@ -40,7 +40,6 @@
 #include <svx/svdopage.hxx>
 #include <sfx2/progress.hxx>
 #include <svx/svdobj.hxx>
-#include <vcl/msgbox.hxx>
 #include <sfx2/bindings.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/svdetc.hxx>

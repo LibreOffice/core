@@ -30,7 +30,6 @@
 #include <svx/dlgutil.hxx>
 #include <svx/xtable.hxx>
 #include <vcl/weld.hxx>
-#include <vcl/msgbox.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/printer.hxx>
 #include <svx/svxerr.hxx>

@@ -30,7 +30,6 @@
 #include <svl/stritem.hxx>
 #include <tools/urlobj.hxx>
 #include <sfx2/objface.hxx>
-#include <vcl/msgbox.hxx>
 #include <vcl/vclenum.hxx>
 
 #include <globstr.hrc>

@@ -96,7 +96,6 @@
 #include <vcl/weld.hxx>
 
 #include <ucbhelper/content.hxx>
-#include <vcl/msgbox.hxx>
 #include <vcl/waitobj.hxx>
 #include <unotools/ucbhelper.hxx>
 

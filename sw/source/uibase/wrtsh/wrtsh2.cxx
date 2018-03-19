@@ -20,7 +20,6 @@
 #include <hintids.hxx>
 #include <svl/macitem.hxx>
 #include <sfx2/frame.hxx>
-#include <vcl/msgbox.hxx>
 #include <svl/urihelper.hxx>
 #include <svl/eitem.hxx>
 #include <svl/stritem.hxx>

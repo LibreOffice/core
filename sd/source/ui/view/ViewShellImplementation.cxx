@@ -46,7 +46,6 @@
 #include <sfx2/sidebar/Sidebar.hxx>
 #include <svl/aeitem.hxx>
 #include <svx/imapdlg.hxx>
-#include <vcl/msgbox.hxx>
 #include <basic/sbstar.hxx>
 #include <xmloff/autolayout.hxx>
 

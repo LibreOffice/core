@@ -25,7 +25,6 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <comphelper/propertysequence.hxx>
 #include <cppuhelper/bootstrap.hxx>
-#include <vcl/msgbox.hxx>
 #include <svl/style.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/langitem.hxx>

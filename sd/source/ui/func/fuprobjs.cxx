@@ -19,7 +19,6 @@
 
 #include <fuprobjs.hxx>
 
-#include <vcl/msgbox.hxx>
 #include <svl/style.hxx>
 #include <editeng/outliner.hxx>
 #include <svl/hint.hxx>

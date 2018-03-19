@@ -19,7 +19,6 @@
 
 
 #include <sal/macros.h>
-#include <vcl/msgbox.hxx>
 #include <unotools/printwarningoptions.hxx>
 #include <svtools/printoptions.hxx>
 #include <svtools/restartdialog.hxx>

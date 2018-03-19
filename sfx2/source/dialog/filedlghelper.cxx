@@ -58,7 +58,6 @@
 #include <osl/security.hxx>
 #include <osl/thread.hxx>
 #include <vcl/cvtgrf.hxx>
-#include <vcl/msgbox.hxx>
 #include <vcl/mnemonic.hxx>
 #include <unotools/pathoptions.hxx>
 #include <unotools/saveopt.hxx>

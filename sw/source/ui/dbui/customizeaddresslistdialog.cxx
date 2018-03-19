@@ -21,7 +21,6 @@
 #include "customizeaddresslistdialog.hxx"
 #include "createaddresslistdialog.hxx"
 #include <vcl/scrbar.hxx>
-#include <vcl/msgbox.hxx>
 #include <dbui.hrc>
 
 SwCustomizeAddressListDialog::SwCustomizeAddressListDialog(

@@ -11,7 +11,6 @@
 #include "PlacesListBox.hxx"
 #include <svtools/PlaceEditDialog.hxx>
 
-#include <vcl/msgbox.hxx>
 #include <svtools/headbar.hxx>
 #include <svtools/svtresid.hxx>
 #include <bitmaps.hlst>

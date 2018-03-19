@@ -23,7 +23,6 @@
 #include <vcl/event.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
-#include <vcl/msgbox.hxx>
 #include <vcl/lstbox.hxx>
 
 #include <cppuhelper/implbase.hxx>

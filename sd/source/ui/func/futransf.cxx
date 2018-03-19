@@ -21,7 +21,6 @@
 
 #include <comphelper/scopeguard.hxx>
 #include <svx/dialogs.hrc>
-#include <vcl/msgbox.hxx>
 #include <sfx2/request.hxx>
 
 #include <strings.hrc>

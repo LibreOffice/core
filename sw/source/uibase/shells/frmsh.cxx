@@ -42,7 +42,6 @@
 #include <vcl/EnumContext.hxx>
 #include <svx/hlnkitem.hxx>
 #include <svx/svdview.hxx>
-#include <vcl/msgbox.hxx>
 #include <vcl/commandinfoprovider.hxx>
 
 #include <doc.hxx>

@@ -22,7 +22,6 @@
 #include <vector>
 #include <com/sun/star/embed/XEmbedPersist.hpp>
 #include <tools/urlobj.hxx>
-#include <vcl/msgbox.hxx>
 #include <svx/svdetc.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/svdograf.hxx>

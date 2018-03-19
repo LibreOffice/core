@@ -29,7 +29,6 @@
 #include <svl/stritem.hxx>
 #include <svl/eitem.hxx>
 #include <svl/urlbmk.hxx>
-#include <vcl/msgbox.hxx>
 #include <svtools/sfxecode.hxx>
 #include <svtools/ehdl.hxx>
 

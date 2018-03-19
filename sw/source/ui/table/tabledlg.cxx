@@ -20,7 +20,6 @@
 #include <hintids.hxx>
 #include <comphelper/string.hxx>
 #include <vcl/weld.hxx>
-#include <vcl/msgbox.hxx>
 #include <svl/stritem.hxx>
 #include <svl/intitem.hxx>
 #include <editeng/keepitem.hxx>

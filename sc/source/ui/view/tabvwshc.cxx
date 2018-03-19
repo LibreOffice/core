@@ -20,7 +20,6 @@
 #include <config_mpl.h>
 
 #include <scitems.hxx>
-#include <vcl/msgbox.hxx>
 #include <sfx2/childwin.hxx>
 #include <sfx2/dispatch.hxx>
 #include <editeng/editview.hxx>

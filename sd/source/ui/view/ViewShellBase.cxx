@@ -70,7 +70,6 @@
 #include <sfx2/viewfrm.hxx>
 #include <svl/whiter.hxx>
 #include <vcl/commandinfoprovider.hxx>
-#include <vcl/msgbox.hxx>
 #include <vcl/settings.hxx>
 
 #include <sfx2/notebookbar/SfxNotebookBar.hxx>

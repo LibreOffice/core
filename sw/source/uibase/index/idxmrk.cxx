@@ -20,7 +20,6 @@
 #include <hintids.hxx>
 #include <comphelper/processfactory.hxx>
 #include <svl/stritem.hxx>
-#include <vcl/msgbox.hxx>
 #include <sfx2/dispatch.hxx>
 #include <svl/eitem.hxx>
 #include <editeng/scripttypeitem.hxx>

@@ -24,7 +24,6 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <sfx2/dispatch.hxx>
 #include <svx/svxids.hrc>
-#include <vcl/msgbox.hxx>
 #include <svx/svddef.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/request.hxx>

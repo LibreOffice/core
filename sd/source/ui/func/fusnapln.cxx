@@ -19,7 +19,6 @@
 
 #include <fusnapln.hxx>
 #include <svl/aeitem.hxx>
-#include <vcl/msgbox.hxx>
 #include <sfx2/request.hxx>
 #include <svx/svxids.hrc>
 

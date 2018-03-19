@@ -27,7 +27,6 @@
 #include <vcl/errinf.hxx>
 #include <editeng/langitem.hxx>
 #include <editeng/editdata.hxx>
-#include <vcl/msgbox.hxx>
 #include <vcl/weld.hxx>
 #include <editeng/svxenum.hxx>
 #include <sfx2/dispatch.hxx>

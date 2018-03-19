@@ -32,7 +32,6 @@
 #include <svl/ptitem.hxx>
 #include <svl/stritem.hxx>
 #include <unotools/moduleoptions.hxx>
-#include <vcl/msgbox.hxx>
 #include <sfx2/fcontnr.hxx>
 #include <svx/hlnkitem.hxx>
 #include <svl/srchitem.hxx>

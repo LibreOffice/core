@@ -18,7 +18,6 @@
  */
 
 #include <editeng/hangulhanja.hxx>
-#include <vcl/msgbox.hxx>
 #include <vcl/button.hxx>
 #include <unotools/lingucfg.hxx>
 #include <unotools/linguprops.hxx>

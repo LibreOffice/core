@@ -18,7 +18,6 @@
  */
 
 #include <comphelper/string.hxx>
-#include <vcl/msgbox.hxx>
 #include "logindlg.hxx"
 
 #include <strings.hrc>

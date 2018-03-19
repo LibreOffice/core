@@ -19,7 +19,6 @@
 
 #undef SC_DLLIMPLEMENTATION
 
-#include <vcl/msgbox.hxx>
 #include <tpsort.hxx>
 #include <sortdlg.hxx>
 #include <scresid.hxx>

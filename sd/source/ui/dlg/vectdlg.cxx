@@ -27,7 +27,6 @@
 #include <sdiocmpt.hxx>
 #include <vectdlg.hxx>
 #include <vcl/bitmapaccess.hxx>
-#include <vcl/msgbox.hxx>
 #include <vcl/metaact.hxx>
 
 #define VECTORIZE_MAX_EXTENT 512

@@ -37,7 +37,6 @@
 #include <vcl/scrbar.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/svdopage.hxx>
-#include <vcl/msgbox.hxx>
 #include <sot/storage.hxx>
 #include <svx/fmshell.hxx>
 #include <svx/globl3d.hxx>

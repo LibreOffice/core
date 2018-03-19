@@ -20,7 +20,6 @@
 #undef SC_DLLIMPLEMENTATION
 
 #include <scitems.hxx>
-#include <vcl/msgbox.hxx>
 #include <vcl/weld.hxx>
 
 #include <global.hxx>

@@ -78,7 +78,6 @@
 #include <unotools/streamhelper.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <utility>
-#include <vcl/msgbox.hxx>
 #include <svl/stritem.hxx>
 #include <svl/eitem.hxx>
 #include <svl/lckbitem.hxx>

@@ -18,7 +18,6 @@
  */
 
 #include <fuolbull.hxx>
-#include <vcl/msgbox.hxx>
 #include <svl/intitem.hxx>
 #include <editeng/outliner.hxx>
 #include <editeng/eeitem.hxx>

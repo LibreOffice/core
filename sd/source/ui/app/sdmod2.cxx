@@ -28,7 +28,6 @@
 #include <svl/flagitem.hxx>
 #include <unotools/useroptions.hxx>
 #include <sfx2/bindings.hxx>
-#include <vcl/msgbox.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/request.hxx>

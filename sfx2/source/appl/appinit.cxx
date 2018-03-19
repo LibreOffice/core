@@ -36,7 +36,6 @@
 #include <svl/intitem.hxx>
 #include <svl/eitem.hxx>
 #include <svl/stritem.hxx>
-#include <vcl/msgbox.hxx>
 #include <svtools/ehdl.hxx>
 #include <comphelper/processfactory.hxx>
 #include <rtl/ustrbuf.hxx>

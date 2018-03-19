@@ -18,7 +18,6 @@
  */
 
 #include <vcl/wrkwin.hxx>
-#include <vcl/msgbox.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/stream.hxx>
 #include <sot/formats.hxx>

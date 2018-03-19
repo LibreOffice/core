@@ -27,7 +27,6 @@
 #include <svl/itemset.hxx>
 #include <unotools/useroptions.hxx>
 #include <vcl/layout.hxx>
-#include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <tools/datetime.hxx>

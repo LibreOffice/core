@@ -21,8 +21,6 @@
 
 #include <unotools/charclass.hxx>
 
-#include <vcl/msgbox.hxx>
-
 #include <editeng/boxitem.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/formatbreakitem.hxx>

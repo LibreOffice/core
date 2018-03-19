@@ -23,7 +23,6 @@
 #include <svl/zforlist.hxx>
 #include <vcl/builderfactory.hxx>
 #include <vcl/commandinfoprovider.hxx>
-#include <vcl/msgbox.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/svapp.hxx>
 

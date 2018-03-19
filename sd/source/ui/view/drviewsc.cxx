@@ -24,7 +24,6 @@
 #include <svx/svxids.hrc>
 #include <svx/dialogs.hrc>
 #include <svx/imapdlg.hxx>
-#include <vcl/msgbox.hxx>
 #include <sfx2/request.hxx>
 #include <svx/svdogrp.hxx>
 #include <svx/svdoole2.hxx>

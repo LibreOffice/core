@@ -120,7 +120,6 @@
 #include <vcl/menu.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/metaactiontypes.hxx>
-#include <vcl/msgbox.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/outdevmap.hxx>
 #include <vcl/outdevstate.hxx>

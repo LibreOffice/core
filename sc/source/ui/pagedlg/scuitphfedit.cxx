@@ -28,7 +28,6 @@
 #include <editeng/flditem.hxx>
 #include <sfx2/basedlgs.hxx>
 #include <sfx2/objsh.hxx>
-#include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 

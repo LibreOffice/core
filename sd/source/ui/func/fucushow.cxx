@@ -27,7 +27,6 @@
 #include <Window.hxx>
 #include <drawdoc.hxx>
 #include <sdpage.hxx>
-#include <vcl/msgbox.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
 

@@ -41,7 +41,6 @@
 #include <svl/zformat.hxx>
 #include <sfx2/bindings.hxx>
 #include <vcl/weld.hxx>
-#include <vcl/msgbox.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/objface.hxx>
