@@ -68,7 +68,8 @@ void XTableImportExportTest::testImportExport()
 
     {
         XBitmapList xBitmapList(aTempURL, "REF");
-        xBitmapList.Load();
+        bool bResult = xBitmapList.Load();
+        CPPUNIT_ASSERT(bResult);
         uno::Reference<container::XNameContainer> xNameContainer(xBitmapList.createInstance());
         CPPUNIT_ASSERT(xNameContainer.is());
 
