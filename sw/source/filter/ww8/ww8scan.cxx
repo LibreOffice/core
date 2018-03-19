@@ -7522,9 +7522,14 @@ void WW8PLCF_HdFt::GetTextPosExact(short nIdx, WW8_CP& rStart, WW8_CP& rLen)
     if (nEnd < rStart)
     {
         SAL_WARN("sw.ww8", "End " << nEnd << " before Start " << rStart);
+        rLen = 0;
         return;
     }
-    rLen = nEnd - rStart;
+    if (o3tl::checked_sub(nEnd, rStart, rLen))
+    {
+        SAL_WARN("sw.ww8", "GetTextPosExact overflow");
+        rLen = 0;
+    }
 }
 
 void WW8PLCF_HdFt::UpdateIndex( sal_uInt8 grpfIhdt )
