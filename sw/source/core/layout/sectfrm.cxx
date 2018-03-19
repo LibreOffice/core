@@ -1594,7 +1594,7 @@ SwLayoutFrame *SwFrame::GetNextSctLeaf( MakePageType eMakePage )
 
 #ifndef NDEBUG
     std::vector<SwFrame *> parents;
-    for (SwFrame * pTmp = GetUpper(); !pTmp->IsPageFrame(); pTmp = pTmp->GetUpper())
+    for (SwFrame * pTmp = GetUpper(); pTmp && !pTmp->IsPageFrame(); pTmp = pTmp->GetUpper())
     {
         parents.push_back(pTmp);
     }
@@ -1761,7 +1761,15 @@ SwLayoutFrame *SwFrame::GetNextSctLeaf( MakePageType eMakePage )
 
                 for ( ; iter != parents.end(); ++iter)
                 {
-                    assert(!pTmp->IsPageFrame());
+                    if (pTmp->IsPageFrame())
+                    {
+                        if ((*iter)->IsColumnFrame() &&
+                            (iter + 1) != parents.end() && (*(iter + 1))->IsBodyFrame())
+                        {   // page style has columns - evidently these are
+                            break; // added later?
+                        }
+                        assert(!pTmp->IsPageFrame());
+                    }
                     assert(pTmp->GetType() == (*iter)->GetType());
                     // for cell frames and table frames:
                     // 1) there may be multiple follow frames of the old one
@@ -1802,7 +1810,11 @@ SwLayoutFrame *SwFrame::GetNextSctLeaf( MakePageType eMakePage )
                     }
                     pTmp = pTmp->GetUpper();
                 }
-                assert(pTmp->IsPageFrame());
+                assert(pTmp == nullptr /* SwFlyAtContentFrame case */
+                    || pTmp->IsPageFrame() // usual case
+                       // the new page has columns, but the old page did not
+                    || (pTmp->IsColumnFrame() && pTmp->GetUpper()->IsBodyFrame()
+                        && pTmp->GetUpper()->GetUpper()->IsPageFrame()));
             }
 #endif
 
