@@ -631,7 +631,7 @@ IMPL_LINK_NOARG(SvxSecurityTabPage, SecurityOptionsHdl, Button*, void)
 {
     if (!m_xSecOptDlg)
         m_xSecOptDlg.reset(new svx::SecurityOptionsDialog(GetFrameWeld(), mpSecOptions));
-    m_xSecOptDlg->run();
+    (void)m_xSecOptDlg->run();
 }
 
 IMPL_LINK_NOARG(SvxSecurityTabPage, SavePasswordHdl, Button*, void)
