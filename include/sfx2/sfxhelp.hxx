@@ -50,6 +50,8 @@ public:
     static OUString         CreateHelpURL( const OUString& aCommandURL, const OUString& rModuleName );
     static OUString         GetDefaultHelpModule();
     static OUString         GetCurrentModuleIdentifier();
+    // Check for built-in help
+    static bool             IsHelpInstalled();
 };
 
 #endif // INCLUDED_SFX2_SFXHELP_HXX
