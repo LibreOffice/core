@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_9b49bb91",
+        "filename": "sw/source/filter/ww8/ww8par4.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 480,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2018-03-19T12:14:32Z",
+      "side": 1,
+      "message": "does nLen somehow exclude the 1st byte of pData? i\u0027d expect this to be \u003e\u003d3, as the sprm is 16 bit in line 514",
+      "revId": "6694fc60130abf82328f6a75b46f816bf33ddded",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
