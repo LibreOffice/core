@@ -111,9 +111,16 @@ bool uploadContent(std::map<std::string, std::string>& parameters, std::string& 
     curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, false);
     // Set proxy information if necessary.
     if (!proxy.empty())
+    {
         curl_easy_setopt(curl, CURLOPT_PROXY, proxy.c_str());
-    if (!proxy_user_pwd.empty())
-        curl_easy_setopt(curl, CURLOPT_PROXYUSERPWD, proxy_user_pwd.c_str());
+
+        curl_easy_setopt(curl, CURLOPT_PROXYAUTH, CURLAUTH_ANYSAFE);
+
+        if (!proxy_user_pwd.empty())
+            curl_easy_setopt(curl, CURLOPT_PROXYUSERPWD, proxy_user_pwd.c_str());
+        else
+            curl_easy_setopt(curl, CURLOPT_PROXYUSERPWD, ":");
+    }
 
     if (!ca_certificate_file.empty())
         curl_easy_setopt(curl, CURLOPT_CAINFO, ca_certificate_file.c_str());
