@@ -5079,7 +5079,7 @@ void PPTStyleTextPropReader::ReadParaProps( SvStream& rIn, const DffRecordHeader
         }
         PPTParaPropSet* pPara = new PPTParaPropSet( aParaPropSet );
         pPara->mnOriginalTextPos = nCharReadCnt;
-        aParaPropList.push_back( pPara );
+        aParaPropList.emplace_back( pPara );
         if ( nCharCount )
         {
             sal_uInt32   nCount;
@@ -5090,7 +5090,7 @@ void PPTStyleTextPropReader::ReadParaProps( SvStream& rIn, const DffRecordHeader
                 {
                     pPara = new PPTParaPropSet( aParaPropSet );
                     pPara->mnOriginalTextPos = nCharReadCnt + nCount + 1;
-                    aParaPropList.push_back( pPara );
+                    aParaPropList.emplace_back( pPara );
                 }
             }
         }
@@ -5294,7 +5294,7 @@ void PPTStyleTextPropReader::Init( SvStream& rIn, const DffRecordHeader& rTextHe
                            bTextPropAtom, nExtParaPos, aStyleTextProp9, nExtParaFlags,
                            nBuBlip, nHasAnm, nAnmScheme );
 
-            aCharPropList.push_back( new PPTCharPropSet( aCharPropSet, 0 ) );
+            aCharPropList.emplace_back( new PPTCharPropSet( aCharPropSet, 0 ) );
         }
     }
 
@@ -5334,7 +5334,7 @@ void PPTStyleTextPropReader::Init( SvStream& rIn, const DffRecordHeader& rTextHe
             {
                 if ( nExtParaPos && ( nLatestParaUpdate != nCurrentPara ) && ( nCurrentPara < aParaPropList.size() ) )
                 {
-                    PPTParaPropSet* pPropSet = aParaPropList[ nCurrentPara ];
+                    PPTParaPropSet* pPropSet = aParaPropList[ nCurrentPara ].get();
                     pPropSet->mxParaSet->mnExtParagraphMask = nExtParaFlags;
                     if ( nExtParaFlags & 0x800000 )
                         pPropSet->mxParaSet->mnBuBlip = nBuBlip;
@@ -5355,7 +5355,7 @@ void PPTStyleTextPropReader::Init( SvStream& rIn, const DffRecordHeader& rTextHe
                         else if ( bEmptyParaPossible )
                             aCharPropSet.maString.clear();
                         if ( nLen || bEmptyParaPossible )
-                            aCharPropList.push_back( new PPTCharPropSet( aCharPropSet, nCurrentPara ) );
+                            aCharPropList.emplace_back( new PPTCharPropSet( aCharPropSet, nCurrentPara ) );
                         nCurrentPara++;
                         nLen++;
                         nCharReadCnt += nLen;
@@ -5368,7 +5368,7 @@ void PPTStyleTextPropReader::Init( SvStream& rIn, const DffRecordHeader& rTextHe
                         {
                             nLen = ( nCurrentSpecMarker & 0xffff ) - nCharReadCnt;
                             aCharPropSet.maString = aString.copy(nCharReadCnt, nLen);
-                            aCharPropList.push_back( new PPTCharPropSet( aCharPropSet, nCurrentPara ) );
+                            aCharPropList.emplace_back( new PPTCharPropSet( aCharPropSet, nCurrentPara ) );
                             nCharCount -= nLen;
                             nCharReadCnt += nLen;
                         }
@@ -5376,7 +5376,7 @@ void PPTStyleTextPropReader::Init( SvStream& rIn, const DffRecordHeader& rTextHe
                         pCPropSet->maString = aString.copy(nCharReadCnt, 1);
                         if ( aCharPropSet.mpImplPPTCharPropSet->mnAttrSet & ( 1 << PPT_CharAttr_Symbol ) )
                             pCPropSet->SetFont( aCharPropSet.mpImplPPTCharPropSet->mnSymbolFont );
-                        aCharPropList.push_back( pCPropSet );
+                        aCharPropList.emplace_back( pCPropSet );
                         nCharCount--;
                         nCharReadCnt++;
                         bEmptyParaPossible = false;
@@ -5395,7 +5395,7 @@ void PPTStyleTextPropReader::Init( SvStream& rIn, const DffRecordHeader& rTextHe
                             nStrLen = nMaxStrLen;
                         aCharPropSet.maString = aString.copy(nCharReadCnt, nStrLen);
                     }
-                    aCharPropList.push_back( new PPTCharPropSet( aCharPropSet, nCurrentPara ) );
+                    aCharPropList.emplace_back( new PPTCharPropSet( aCharPropSet, nCurrentPara ) );
                     nCharReadCnt += nCharCount;
                     bEmptyParaPossible = false;
                     break;
@@ -5407,7 +5407,7 @@ void PPTStyleTextPropReader::Init( SvStream& rIn, const DffRecordHeader& rTextHe
             PPTCharPropSet* pCharPropSet = new PPTCharPropSet( *aCharPropList.back(), nCurrentPara );
             pCharPropSet->maString.clear();
             pCharPropSet->mnOriginalTextPos = nStringLen - 1;
-            aCharPropList.push_back( pCharPropSet );
+            aCharPropList.emplace_back( pCharPropSet );
         }
     }
     rIn.Seek( nMerk );
@@ -5415,10 +5415,6 @@ void PPTStyleTextPropReader::Init( SvStream& rIn, const DffRecordHeader& rTextHe
 
 PPTStyleTextPropReader::~PPTStyleTextPropReader()
 {
-    for (auto const& paraProp : aParaPropList)
-        delete paraProp;
-    for (auto const& charProp : aCharPropList)
-        delete charProp;
 }
 
 PPTPortionObj::PPTPortionObj( const PPTStyleSheet& rStyleSheet, TSS_Type nInstance, sal_uInt32 nDepth ) :
@@ -5855,7 +5851,7 @@ PPTParagraphObj::PPTParagraphObj( PPTStyleTextPropReader& rPropReader,
              ++rnCurCharPos)
         {
             PPTCharPropSet *const pCharPropSet =
-                rPropReader.aCharPropList[rnCurCharPos];
+                rPropReader.aCharPropList[rnCurCharPos].get();
             std::unique_ptr<PPTPortionObj> pPPTPortion(new PPTPortionObj(
                     *pCharPropSet, rStyleSheet, nInstance, mxParaSet->mnDepth));
             if (!mbTab)
@@ -6692,7 +6688,7 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                                 if ( aTextSpecInfoAtomInterpreter.Read( rIn, aTextSpecInfoHd, PPT_PST_TextSpecInfoAtom,
                                         &(rSdrPowerPointImport.pPPTStyleSheet->maTxSI) ) )
                                 {
-                                    PPTCharPropSetList::size_type nI = 0;
+                                    size_t nI = 0;
                                     for (PPTTextSpecInfo& rSpecInfo : aTextSpecInfoAtomInterpreter.aList)
                                     {
                                         sal_uInt32 nCharIdx = rSpecInfo.nCharIdx;
@@ -6700,7 +6696,7 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                                         // portions and text have to been splitted in some cases
                                         for ( ; nI < aStyleTextPropReader.aCharPropList.size(); ++nI)
                                         {
-                                            PPTCharPropSet* pSet = aStyleTextPropReader.aCharPropList[nI];
+                                            PPTCharPropSet* pSet = aStyleTextPropReader.aCharPropList[nI].get();
                                             if (pSet->mnOriginalTextPos >= nCharIdx)
                                                 break;
                                             pSet->mnLanguage[0] = rSpecInfo.nLanguage[0];
@@ -6721,7 +6717,7 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                                             pSet->maString = aString.copy(0, nOldLen);
                                             pNew->maString = aString.copy(nOldLen, nNewLen);
                                             pNew->mnOriginalTextPos += nOldLen;
-                                            aStyleTextPropReader.aCharPropList.insert(aStyleTextPropReader.aCharPropList.begin() + nI + 1, pNew);
+                                            aStyleTextPropReader.aCharPropList.emplace(aStyleTextPropReader.aCharPropList.begin() + nI + 1, pNew);
                                         }
                                     }
                                 }
@@ -6930,7 +6926,7 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                             if ( !FieldList.empty() )
                             {
                                 ::std::vector< PPTFieldEntry* >::iterator FE = FieldList.begin();
-                                PPTCharPropSetList& aCharPropList = aStyleTextPropReader.aCharPropList;
+                                auto& aCharPropList = aStyleTextPropReader.aCharPropList;
 
                                 sal_Int32   i = nParagraphs - 1;
                                 sal_Int32   n = aCharPropList.size() - 1;
@@ -6939,7 +6935,7 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                                 // the next while loop tries to resolve the list of fields(pFieldList)
                                 while( ( FE < FieldList.end() ) && ( n >= 0 ) && ( i >= 0 ) )
                                 {
-                                    PPTCharPropSet* pSet  = aCharPropList[n];
+                                    PPTCharPropSet* pSet  = aCharPropList[n].get();
                                     OUString aString( pSet->maString );
                                     sal_uInt32 nCount = aString.getLength();
                                     sal_uInt32 nPos = pSet->mnOriginalTextPos + nCount;
@@ -6961,23 +6957,23 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                                                 {
                                                     PPTCharPropSet* pNewCPS = new PPTCharPropSet( *pSet );
                                                     pNewCPS->maString = aString.copy( nCount + 1, nBehind );
-                                                    aCharPropList.insert( aCharPropList.begin() + n + 1, pNewCPS );
+                                                    aCharPropList.emplace( aCharPropList.begin() + n + 1, pNewCPS );
                                                 }
                                                 if ( (*FE)->xField2 )
                                                 {
                                                     PPTCharPropSet* pNewCPS = new PPTCharPropSet( *pSet );
                                                     pNewCPS->mpFieldItem = std::move((*FE)->xField2);
-                                                    aCharPropList.insert( aCharPropList.begin() + n + 1, pNewCPS );
+                                                    aCharPropList.emplace( aCharPropList.begin() + n + 1, pNewCPS );
 
                                                     pNewCPS = new PPTCharPropSet( *pSet );
                                                     pNewCPS->maString = " ";
-                                                    aCharPropList.insert( aCharPropList.begin() + n + 1, pNewCPS );
+                                                    aCharPropList.emplace( aCharPropList.begin() + n + 1, pNewCPS );
                                                 }
                                                 if ( nCount )
                                                 {
                                                     PPTCharPropSet* pNewCPS = new PPTCharPropSet( *pSet );
                                                     pNewCPS->maString = aString.copy( 0, nCount );
-                                                    aCharPropList.insert( aCharPropList.begin() + n++, pNewCPS );
+                                                    aCharPropList.emplace( aCharPropList.begin() + n++, pNewCPS );
                                                 }
                                                 if ( (*FE)->xField1 )
                                                 {
@@ -7007,7 +7003,7 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                                                             // the textrange hyperlink can take more than 1 paragraph
                                                             // the solution here is to clone the hyperlink...
 
-                                                            PPTCharPropSet* pCurrent = aCharPropList[ nIdx ];
+                                                            PPTCharPropSet* pCurrent = aCharPropList[ nIdx ].get();
                                                             sal_Int32       nNextStringLen = pCurrent->maString.getLength();
 
                                                             DBG_ASSERT( (*FE)->xField1, "missing field!" );
@@ -7040,7 +7036,7 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                                                                         // the textrange is to decrease (because of the LineBreak character)
                                                                         if ( aCharPropList.size() > ( nIdx + 1 ) )
                                                                         {
-                                                                            PPTCharPropSet* pNext = aCharPropList[ nIdx + 1 ];
+                                                                            PPTCharPropSet* pNext = aCharPropList[ nIdx + 1 ].get();
                                                                             if ( pNext->mnParagraph > pCurrent->mnParagraph )
                                                                                 nHyperLenLeft--;
                                                                         }
@@ -7050,7 +7046,7 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                                                                 {
                                                                     PPTCharPropSet* pNewCPS = new PPTCharPropSet( *pCurrent );
                                                                     pNewCPS->maString = pCurrent->maString.copy( nHyperLenLeft,( nNextStringLen - nHyperLenLeft ) );
-                                                                    aCharPropList.insert( aCharPropList.begin() + nIdx + 1, pNewCPS );
+                                                                    aCharPropList.emplace( aCharPropList.begin() + nIdx + 1, pNewCPS );
                                                                     OUString aRepresentation = pCurrent->maString.copy( 0, nHyperLenLeft );
                                                                     pCurrent->mpFieldItem.reset( new SvxFieldItem( SvxURLField( pField->GetURL(), aRepresentation, SvxURLFormat::Repr ), EE_FEATURE_FIELD ) );
                                                                     nHyperLenLeft = 0;
@@ -7065,7 +7061,7 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                                                         if ( pBefCPS )
                                                         {
                                                             pBefCPS->maString = aString.copy( 0, nCount );
-                                                            aCharPropList.insert( aCharPropList.begin() + n, pBefCPS );
+                                                            aCharPropList.emplace( aCharPropList.begin() + n, pBefCPS );
                                                             n++;
                                                         }
                                                     }
