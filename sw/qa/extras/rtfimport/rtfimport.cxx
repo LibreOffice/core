@@ -656,6 +656,14 @@ DECLARE_RTFIMPORT_TEST(testFdo81033, "fdo81033.rtf")
     CPPUNIT_ASSERT_EQUAL(u'_', tabs[1].FillChar);
 }
 
+DECLARE_RTFIMPORT_TEST(testTdf116269, "tdf116269.rtf")
+{
+    // This was 2540, implicit 0 left margin was ignored on import (inherited
+    // value from list definition is repeated if it's not 0).
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0),
+                         getProperty<sal_Int32>(getParagraph(1), "ParaLeftMargin"));
+}
+
 DECLARE_RTFIMPORT_TEST(testFdo66565, "fdo66565.rtf")
 {
     uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);

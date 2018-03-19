@@ -114,6 +114,15 @@ RTFValue::Pointer_t getNestedAttribute(RTFSprms& rSprms, Id nParent, Id nId)
     return rAttributes.find(nId);
 }
 
+RTFValue::Pointer_t getNestedSprm(RTFSprms& rSprms, Id nParent, Id nId)
+{
+    RTFValue::Pointer_t pParent = rSprms.find(nParent);
+    if (!pParent)
+        return RTFValue::Pointer_t();
+    RTFSprms& rInner = pParent->getSprms();
+    return rInner.find(nId);
+}
+
 bool eraseNestedAttribute(RTFSprms& rSprms, Id nParent, Id nId)
 {
     RTFValue::Pointer_t pParent = rSprms.find(nParent);
@@ -470,8 +479,24 @@ RTFDocumentImpl::getProperties(RTFSprms& rAttributes, RTFSprms& rSprms, Id nStyl
         RTFSprms const attributes(rAttributes.cloneAndDeduplicate(aStyleAttributes));
         return std::make_shared<RTFReferenceProperties>(attributes, sprms);
     }
+
+    RTFSprms aSprms(rSprms);
+    RTFValue::Pointer_t pNumId
+        = getNestedSprm(aSprms, NS_ooxml::LN_CT_PPrBase_numPr, NS_ooxml::LN_CT_NumPr_numId);
+    if (pNumId)
+    {
+        // We have a numbering, see if defaults has to be inserted for not
+        // repeated direct formatting.
+        auto itNumId = m_aListOverrideTable.find(pNumId->getInt());
+        if (itNumId != m_aListOverrideTable.end())
+        {
+            auto itAbstract = m_aListTable.find(itNumId->second);
+            if (itAbstract != m_aListTable.end())
+                aSprms.duplicateList(itAbstract->second);
+        }
+    }
     writerfilter::Reference<Properties>::Pointer_t pRet
-        = std::make_shared<RTFReferenceProperties>(rAttributes, rSprms);
+        = std::make_shared<RTFReferenceProperties>(rAttributes, aSprms);
     return pRet;
 }
 
@@ -2996,6 +3021,7 @@ RTFError RTFDocumentImpl::popState()
             auto pValue = std::make_shared<RTFValue>(aState.aTableAttributes, aState.aTableSprms);
             m_aListTableSprms.set(NS_ooxml::LN_CT_Numbering_abstractNum, pValue,
                                   RTFOverwrite::NO_APPEND);
+            m_aListTable[aState.nCurrentListIndex] = pValue;
         }
         break;
         case Destination::PARAGRAPHNUMBERING:
@@ -3146,6 +3172,8 @@ RTFError RTFDocumentImpl::popState()
                         = std::make_shared<RTFValue>(aState.aTableAttributes, aState.aTableSprms);
                     m_aListTableSprms.set(NS_ooxml::LN_CT_Numbering_num, pValue,
                                           RTFOverwrite::NO_APPEND);
+                    m_aListOverrideTable[aState.nCurrentListOverrideIndex]
+                        = aState.nCurrentListIndex;
                 }
             }
             break;
