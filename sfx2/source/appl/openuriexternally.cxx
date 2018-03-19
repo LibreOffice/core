@@ -39,6 +39,10 @@ private:
     DECL_LINK(onOpenURI, Timer*, void);
 
 public:
+    URITools()
+        : mbHandleSystemShellExecuteException(false)
+    {
+    }
     void openURI(const OUString& sURI, bool bHandleSystemShellExecuteException);
 };
 
