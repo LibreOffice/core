@@ -48,7 +48,7 @@ struct ImplImageList
     typedef std::unordered_map< OUString, ImageAryData * >
         ImageAryDataNameHash;
 
-    std::vector<ImageAryData *>        maImages;
+    std::vector< std::unique_ptr<ImageAryData> >  maImages;
     ImageAryDataNameHash   maNameHash;
     OUString               maPrefix;
     Size                   maImageSize;

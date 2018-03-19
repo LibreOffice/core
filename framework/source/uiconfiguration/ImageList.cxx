@@ -68,7 +68,7 @@ BitmapEx ImageList::GetAsHorizontalStrip() const
     // Load any stragglers
     for (sal_uInt16 nIdx = 0; nIdx < nCount; nIdx++)
     {
-        ImageAryData *pData = mpImplData->maImages[ nIdx ];
+        ImageAryData *pData = mpImplData->maImages[ nIdx ].get();
         if( pData->IsLoadable() )
             pData->Load( mpImplData->maPrefix );
     }
@@ -81,7 +81,7 @@ BitmapEx ImageList::GetAsHorizontalStrip() const
     {
         tools::Rectangle aDestRect( Point( nIdx * mpImplData->maImageSize.Width(), 0 ),
                              mpImplData->maImageSize );
-        ImageAryData *pData = mpImplData->maImages[ nIdx ];
+        ImageAryData *pData = mpImplData->maImages[ nIdx ].get();
         aResult.CopyPixel( aDestRect, aSrcRect, &pData->maBitmapEx);
     }
 
@@ -214,7 +214,7 @@ void ImageList::GetImageNames( std::vector< OUString >& rNames ) const
 
     if( mpImplData )
     {
-        for(const ImageAryData* pImage : mpImplData->maImages)
+        for(auto const & pImage : mpImplData->maImages)
         {
             const OUString& rName( pImage->maName );
             if( !rName.isEmpty())
