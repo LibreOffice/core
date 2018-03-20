@@ -5037,7 +5037,7 @@ void ScDocFunc::SetNewRangeNames( ScRangeName* pNewRanges, bool bModifyDoc, SCTA
     if (nTab >= 0)
         rDoc.SetRangeName( nTab, pNewRanges ); // takes ownership
     else
-        rDoc.SetRangeName( pNewRanges );       // takes ownership
+        rDoc.SetRangeName( std::unique_ptr<ScRangeName>(pNewRanges) );       // takes ownership
     if ( bCompile )
         rDoc.CompileHybridFormula();
 

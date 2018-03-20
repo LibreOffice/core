@@ -1775,7 +1775,7 @@ void ScFormatShell::ExecuteAttr( SfxRequest& rReq )
 
                 ScMarkData aFuncMark( pViewData->GetMarkData() );
                 ScViewUtil::UnmarkFiltered( aFuncMark, pDoc );
-                pDoc->SetPreviewFont( aSetItem.GetItemSet().Clone() );
+                pDoc->SetPreviewFont( std::unique_ptr<SfxItemSet>(aSetItem.GetItemSet().Clone()) );
                 aFuncMark.MarkToMulti();
 
                 if ( !aFuncMark.IsMarked() && !aFuncMark.IsMultiMarked() )

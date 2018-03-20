@@ -912,7 +912,7 @@ void ScUndoDetective::Undo()
     if (bIsDelete)
     {
         if ( pOldList )
-            rDoc.SetDetOpList( new ScDetOpList(*pOldList) );
+            rDoc.SetDetOpList( std::unique_ptr<ScDetOpList>(new ScDetOpList(*pOldList)) );
     }
     else
     {
@@ -999,14 +999,14 @@ void ScUndoRangeNames::DoChange( bool bUndo )
         if (mnTab >= 0)
             rDoc.SetRangeName( mnTab, new ScRangeName( *pOldRanges ) );
         else
-            rDoc.SetRangeName( new ScRangeName( *pOldRanges ) );
+            rDoc.SetRangeName( std::unique_ptr<ScRangeName>(new ScRangeName( *pOldRanges )) );
     }
     else
     {
         if (mnTab >= 0)
             rDoc.SetRangeName( mnTab, new ScRangeName( *pNewRanges ) );
         else
-            rDoc.SetRangeName( new ScRangeName( *pNewRanges ) );
+            rDoc.SetRangeName( std::unique_ptr<ScRangeName>(new ScRangeName( *pNewRanges )) );
     }
 
     rDoc.CompileHybridFormula();
