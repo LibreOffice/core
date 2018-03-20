@@ -457,6 +457,19 @@ DECLARE_HTMLEXPORT_TEST(testReqIfJpgImg, "reqif-jpg-img.xhtml")
     CPPUNIT_ASSERT(aStream.indexOf("type=\"image/png\"") != -1);
 }
 
+DECLARE_HTMLEXPORT_TEST(testReqIfTable, "reqif-table.xhtml")
+{
+    htmlDocPtr pDoc = parseHtml(maTempFile);
+    CPPUNIT_ASSERT(pDoc);
+
+    assertXPath(pDoc, "/html/body/table/tr/th", 1);
+    OUString aStyle = getXPath(pDoc, "/html/body/table/tr/th", "style");
+    CPPUNIT_ASSERT(aStyle.indexOf("background") != -1);
+    // This failed, there were 2 style attributes, so as a best effort the
+    // parser took the value of the first.
+    CPPUNIT_ASSERT(aStyle.indexOf("border") != -1);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

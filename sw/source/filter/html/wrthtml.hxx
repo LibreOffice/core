@@ -474,7 +474,7 @@ public:
     void writeFrameFormatOptions(HtmlWriter& aHtml, const SwFrameFormat& rFrameFormat, const OUString& rAltText, HtmlFrmOpts nFrameOpts);
 
     void OutCSS1_TableFrameFormatOptions( const SwFrameFormat& rFrameFormat );
-    void OutCSS1_TableCellBorderHack(const SwFrameFormat& rFrameFormat);
+    void OutCSS1_TableCellBorderHack(const SwFrameFormat& rFrameFormat, bool bClose);
     void OutCSS1_SectionFormatOptions( const SwFrameFormat& rFrameFormat, const SwFormatCol *pCol );
     void OutCSS1_FrameFormatOptions( const SwFrameFormat& rFrameFormat, HtmlFrmOpts nFrameOpts,
                                      const SdrObject *pSdrObj=nullptr,
@@ -672,7 +672,7 @@ Writer& OutCSS1_ParaTagStyleOpt( Writer& rWrt, const SfxItemSet& rItemSet );
 Writer& OutCSS1_HintSpanTag( Writer& rWrt, const SfxPoolItem& rHt );
 Writer& OutCSS1_HintStyleOpt( Writer& rWrt, const SfxPoolItem& rHt );
 
-Writer& OutCSS1_TableBGStyleOpt( Writer& rWrt, const SfxPoolItem& rHt );
+Writer& OutCSS1_TableBGStyleOpt( Writer& rWrt, const SfxPoolItem& rHt, bool bClose );
 Writer& OutCSS1_NumBulListStyleOpt( Writer& rWrt, const SwNumRule& rNumRule,
                                     sal_uInt8 nLevel );
 

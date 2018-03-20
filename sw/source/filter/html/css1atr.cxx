@@ -1818,7 +1818,7 @@ Writer& OutCSS1_ParaTagStyleOpt( Writer& rWrt, const SfxItemSet& rItemSet )
 }
 
 // Wrapper for Table background
-Writer& OutCSS1_TableBGStyleOpt( Writer& rWrt, const SfxPoolItem& rHt )
+Writer& OutCSS1_TableBGStyleOpt( Writer& rWrt, const SfxPoolItem& rHt, bool bClose )
 {
     SwHTMLWriter& rHTMLWrt = static_cast<SwHTMLWriter&>(rWrt);
 
@@ -1827,7 +1827,7 @@ Writer& OutCSS1_TableBGStyleOpt( Writer& rWrt, const SfxPoolItem& rHt )
                                    CSS1_OUTMODE_TABLEBOX, nullptr );
     OutCSS1_SvxBrush( rWrt, rHt, Css1Background::Table, nullptr );
 
-    if( !rHTMLWrt.m_bFirstCSS1Property )
+    if( !rHTMLWrt.m_bFirstCSS1Property && bClose )
         rWrt.Strm().WriteChar( '\"' );
 
     return rWrt;
@@ -2085,12 +2085,19 @@ void SwHTMLWriter::OutCSS1_TableFrameFormatOptions( const SwFrameFormat& rFrameF
         Strm().WriteChar( '\"' );
 }
 
-void SwHTMLWriter::OutCSS1_TableCellBorderHack(SwFrameFormat const& rFrameFormat)
+void SwHTMLWriter::OutCSS1_TableCellBorderHack(SwFrameFormat const& rFrameFormat, bool bClose)
 {
+    bool bFirstCSS1Property = m_bFirstCSS1Property;
+
     SwCSS1OutMode const aMode( *this,
         CSS1_OUTMODE_STYLE_OPT_ON|CSS1_OUTMODE_ENCODE|CSS1_OUTMODE_TABLEBOX, nullptr );
+
+    if (!bFirstCSS1Property)
+        // Don't start the style attribute again if it was started already.
+        m_bFirstCSS1Property = bFirstCSS1Property;
+
     OutCSS1_SvxBox(*this, rFrameFormat.GetBox());
-    if (!m_bFirstCSS1Property)
+    if (!m_bFirstCSS1Property && bClose)
     {
         Strm().WriteChar( cCSS1_style_opt_end );
     }
