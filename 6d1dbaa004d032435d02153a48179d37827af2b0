@@ -1,0 +1,157 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_9c4c5178",
+        "filename": "test/source/drawing/captionshape.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000723
+      },
+      "writtenOn": "2018-03-20T06:41:58Z",
+      "side": 1,
+      "message": "The nCornerRadiusGet value here doesn\u0027t makes any sense, because you are setting the property to the same value. Therefore you cannot find out if the set operation worked. You should use a different value or add something to nCornerRadiusGet.",
+      "revId": "6d1dbaa004d032435d02153a48179d37827af2b0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_bc511511",
+        "filename": "test/source/drawing/captionshape.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1000723
+      },
+      "writtenOn": "2018-03-20T06:41:58Z",
+      "side": 1,
+      "message": "Same as above.",
+      "revId": "6d1dbaa004d032435d02153a48179d37827af2b0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_dc56c905",
+        "filename": "test/source/drawing/captionshape.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1000723
+      },
+      "writtenOn": "2018-03-20T06:41:58Z",
+      "side": 1,
+      "message": "Same as above and also it shouldn\u0027t be necessary to cast. And if you use cast you should prefer the new style cast like static_cast\u003ctype\u003e(), etc.",
+      "revId": "6d1dbaa004d032435d02153a48179d37827af2b0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_fc5b8d2c",
+        "filename": "test/source/drawing/captionshape.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1000723
+      },
+      "writtenOn": "2018-03-20T06:41:58Z",
+      "side": 1,
+      "message": "Same as above.",
+      "revId": "6d1dbaa004d032435d02153a48179d37827af2b0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_1c41413a",
+        "filename": "test/source/drawing/captionshape.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1000723
+      },
+      "writtenOn": "2018-03-20T06:41:58Z",
+      "side": 1,
+      "message": "Same as above",
+      "revId": "6d1dbaa004d032435d02153a48179d37827af2b0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_3c3e05b9",
+        "filename": "test/source/drawing/captionshape.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1000723
+      },
+      "writtenOn": "2018-03-20T06:41:58Z",
+      "side": 1,
+      "message": "Same as above",
+      "revId": "6d1dbaa004d032435d02153a48179d37827af2b0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_5c4bb959",
+        "filename": "test/source/drawing/captionshape.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1000723
+      },
+      "writtenOn": "2018-03-20T06:41:58Z",
+      "side": 1,
+      "message": "Same as above",
+      "revId": "6d1dbaa004d032435d02153a48179d37827af2b0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_7c487d5c",
+        "filename": "test/source/drawing/captionshape.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 146,
+      "author": {
+        "id": 1000723
+      },
+      "writtenOn": "2018-03-20T06:41:58Z",
+      "side": 1,
+      "message": "Same as above",
+      "revId": "6d1dbaa004d032435d02153a48179d37827af2b0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_9c7371b4",
+        "filename": "test/source/drawing/captionshape.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 158,
+      "author": {
+        "id": 1000723
+      },
+      "writtenOn": "2018-03-20T06:41:58Z",
+      "side": 1,
+      "message": "Same as above",
+      "revId": "6d1dbaa004d032435d02153a48179d37827af2b0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
