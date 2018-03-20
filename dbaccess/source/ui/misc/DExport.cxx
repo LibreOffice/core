@@ -748,9 +748,9 @@ void ODatabaseExport::showErrorDialog(const css::sdbc::SQLException& e)
         OUString aMsg = e.Message
                       + "\n"
                       + DBA_RES( STR_QRY_CONTINUE );
-        ScopedVclPtrInstance< OSQLWarningBox > aBox( nullptr, aMsg, MessBoxStyle::YesNo | MessBoxStyle::DefaultNo );
+        OSQLWarningBox aBox(nullptr, aMsg, MessBoxStyle::YesNo | MessBoxStyle::DefaultNo);
 
-        if (aBox->Execute() == RET_YES)
+        if (aBox.run() == RET_YES)
             m_bDontAskAgain = true;
         else
             m_bError = true;
