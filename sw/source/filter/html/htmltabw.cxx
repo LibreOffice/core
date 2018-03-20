@@ -420,7 +420,9 @@ void SwHTMLWrtTable::OutTableCell( SwHTMLWriter& rWrt,
     if( pBrushItem )
     {
         // Hintergrund ausgeben
-        rWrt.OutBackground( pBrushItem, false );
+        if (!rWrt.mbReqIF)
+            // Avoid non-CSS version in the ReqIF case.
+            rWrt.OutBackground( pBrushItem, false );
 
         if( rWrt.m_bCfgOutStyles )
             OutCSS1_TableBGStyleOpt( rWrt, *pBrushItem, /*bClose=*/false );
