@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_1049258c",
+        "filename": "sc/source/core/data/table1.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 1331,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-03-20T22:09:31Z",
+      "side": 1,
+      "message": "This actually doesn\u0027t need an extra variable.",
+      "range": {
+        "startLine": 1331,
+        "startChar": 8,
+        "endLine": 1331,
+        "endChar": 18
+      },
+      "revId": "01220f48e97551040dc9b72d9f5b96275eb63bbd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_90a7d54e",
+        "filename": "sc/source/core/data/table1.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 1336,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-03-20T22:09:31Z",
+      "side": 1,
+      "message": "This is a confusing notation, rather prefer\n\n rRow \u003d (bUp ? nUsedY : MAXROW + nMovY);",
+      "range": {
+        "startLine": 1336,
+        "startChar": 12,
+        "endLine": 1336,
+        "endChar": 55
+      },
+      "revId": "01220f48e97551040dc9b72d9f5b96275eb63bbd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_70aa611b",
+        "filename": "sc/source/core/data/table1.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 1399,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-03-20T22:09:31Z",
+      "side": 1,
+      "message": "This is a confusing notation, rather prefer\n\n nCol \u003d (bSheetProtected ? nUsedX : MAXCOL);",
+      "range": {
+        "startLine": 1399,
+        "startChar": 16,
+        "endLine": 1399,
+        "endChar": 63
+      },
+      "revId": "01220f48e97551040dc9b72d9f5b96275eb63bbd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
