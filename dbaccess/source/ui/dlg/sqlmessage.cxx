@@ -24,8 +24,11 @@
 #include <bitmaps.hlst>
 #include <com/sun/star/sdbc/SQLException.hpp>
 #include <com/sun/star/sdb/SQLContext.hpp>
+#include <vcl/button.hxx>
+#include <vcl/dialog.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/weld.hxx>
+#include <vcl/svapp.hxx>
 #include <osl/diagnose.h>
 #include <svtools/treelistbox.hxx>
 #include <svtools/treelistentry.hxx>
@@ -39,12 +42,6 @@
 #include <tools/urlobj.hxx>
 
 #define RET_MORE   RET_RETRY + 1
-
-#define DIALOG_WIDTH    220
-#define OUTER_MARGIN    6
-#define IMAGE_SIZE      20
-#define INNER_PADDING   3
-#define TEXT_POS_X      ( OUTER_MARGIN + IMAGE_SIZE + INNER_PADDING )
 
 using namespace dbtools;
 using namespace com::sun::star::uno;
@@ -371,35 +368,47 @@ struct SQLMessageBox_Impl
 
 namespace
 {
-    void lcl_positionInAppFont( const vcl::Window& _rParent, vcl::Window& _rChild, long _nX, long _nY, long Width, long Height )
-    {
-        Point aPos = _rParent.LogicToPixel(Point(_nX, _nY), MapMode(MapUnit::MapAppFont));
-        Size aSize = _rParent.LogicToPixel(Size(Width, Height), MapMode(MapUnit::MapAppFont));
-        _rChild.SetPosSizePixel( aPos, aSize );
-    }
-
-    void lcl_addButton( ButtonDialog& _rDialog, StandardButtonType _eType, bool _bDefault )
+    void lcl_addButton(weld::MessageDialog* pDialog, StandardButtonType eType, bool bDefault)
     {
         sal_uInt16 nButtonID = 0;
-        switch ( _eType )
+        switch (eType)
         {
-        case StandardButtonType::Yes:    nButtonID = RET_YES; break;
-        case StandardButtonType::No:     nButtonID = RET_NO; break;
-        case StandardButtonType::OK:     nButtonID = RET_OK; break;
-        case StandardButtonType::Cancel: nButtonID = RET_CANCEL; break;
-        case StandardButtonType::Retry:  nButtonID = RET_RETRY; break;
-        case StandardButtonType::Help:   nButtonID = RET_HELP; break;
-        default:
-            OSL_FAIL( "lcl_addButton: invalid button id!" );
-            break;
+            case StandardButtonType::Yes:
+                nButtonID = RET_YES;
+                pDialog->add_button(Button::GetStandardText(StandardButtonType::Yes), nButtonID);
+                break;
+            case StandardButtonType::No:
+                nButtonID = RET_NO;
+                pDialog->add_button(Button::GetStandardText(StandardButtonType::No), nButtonID);
+                break;
+            case StandardButtonType::OK:
+                nButtonID = RET_OK;
+                pDialog->add_button(Button::GetStandardText(StandardButtonType::OK), nButtonID);
+                break;
+            case StandardButtonType::Cancel:
+                nButtonID = RET_CANCEL;
+                pDialog->add_button(Button::GetStandardText(StandardButtonType::Cancel), nButtonID);
+                break;
+            case StandardButtonType::Retry:
+                nButtonID = RET_RETRY;
+                pDialog->add_button(Button::GetStandardText(StandardButtonType::Retry), nButtonID);
+                break;
+            case StandardButtonType::Help:
+                nButtonID = RET_HELP;
+                pDialog->add_button(Button::GetStandardText(StandardButtonType::Help), nButtonID);
+                break;
+            default:
+                OSL_FAIL( "lcl_addButton: invalid button id!" );
+                break;
         }
-        _rDialog.AddButton( _eType, nButtonID, _bDefault ? ButtonDialogFlags::Default | ButtonDialogFlags::Focus : ButtonDialogFlags::NONE );
+        if (bDefault)
+           pDialog->set_default_response(nButtonID);
     }
 }
 
-void OSQLMessageBox::impl_positionControls()
+void OSQLMessageBox::impl_fillMessages()
 {
-    OSL_PRECOND( !m_pImpl->aDisplayInfo.empty(), "OSQLMessageBox::impl_positionControls: nothing to display at all?" );
+    OSL_PRECOND( !m_pImpl->aDisplayInfo.empty(), "OSQLMessageBox::impl_fillMessages: nothing to display at all?" );
 
     if ( m_pImpl->aDisplayInfo.empty() )
         return;
@@ -427,107 +436,44 @@ void OSQLMessageBox::impl_positionControls()
             sSecondary = pSecondInfo->sMessage;
     }
 
-    // image
-    lcl_positionInAppFont( *this, *m_aInfoImage.get(), OUTER_MARGIN, OUTER_MARGIN, IMAGE_SIZE, IMAGE_SIZE );
-    m_aInfoImage->Show();
-
     // primary text
-    lcl_positionInAppFont( *this, *m_aTitle.get(), TEXT_POS_X, OUTER_MARGIN, DIALOG_WIDTH - TEXT_POS_X - 2 * OUTER_MARGIN, 16 );
-    sPrimary = lcl_stripOOoBaseVendor( sPrimary );
-    m_aTitle->SetText( sPrimary );
-    m_aTitle->Show();
-
-    tools::Rectangle aPrimaryRect( m_aTitle->GetPosPixel(), m_aTitle->GetSizePixel() );
+    m_xDialog->set_primary_text(lcl_stripOOoBaseVendor(sPrimary));
 
     // secondary text (if applicable)
-    m_aMessage->SetStyle( m_aMessage->GetStyle() | WB_NOLABEL );
-    sSecondary = lcl_stripOOoBaseVendor( sSecondary );
-    m_aMessage->SetText( sSecondary );
-
-    lcl_positionInAppFont( *this, *m_aMessage.get(), TEXT_POS_X, OUTER_MARGIN + 16 + 3, DIALOG_WIDTH - TEXT_POS_X - 2 * OUTER_MARGIN, 8 );
-    tools::Rectangle aSecondaryRect( m_aMessage->GetPosPixel(), m_aMessage->GetSizePixel() );
-
-    bool bHaveSecondaryText = !sSecondary.isEmpty();
-
-    // determine which space the secondary text would occupy
-    if ( bHaveSecondaryText )
-        aSecondaryRect = GetTextRect( aSecondaryRect, sSecondary, DrawTextFlags::WordBreak | DrawTextFlags::MultiLine | DrawTextFlags::Left );
-    else
-        aSecondaryRect.SetBottom( aSecondaryRect.Top() - 1 );
-
-    // adjust secondary control height accordingly
-    m_aMessage->SetSizePixel( aSecondaryRect.GetSize() );
-    m_aMessage->Show( aSecondaryRect.GetHeight() > 0 );
-
-    // if there's no secondary text ...
-    if ( !bHaveSecondaryText )
-    {   // then give the primary text as much horizontal space as it needs
-        tools::Rectangle aSuggestedRect( GetTextRect( aPrimaryRect, sPrimary, DrawTextFlags::WordBreak | DrawTextFlags::MultiLine | DrawTextFlags::Center ) );
-        aPrimaryRect.SetRight( aPrimaryRect.Left() + aSuggestedRect.GetWidth() );
-        aPrimaryRect.SetBottom( aPrimaryRect.Top() + aSuggestedRect.GetHeight() );
-        // and center it horizontally
-        m_aTitle->SetStyle( ( m_aTitle->GetStyle() & ~WB_LEFT ) | WB_CENTER );
-
-        tools::Rectangle aInfoRect( m_aInfoImage->GetPosPixel(), m_aInfoImage->GetSizePixel() );
-        // also, if it's not as high as the image ...
-        if ( aPrimaryRect.GetHeight() < m_aInfoImage->GetSizePixel().Height() )
-        {   // ... make it fit the image height
-            aPrimaryRect.AdjustBottom(aInfoRect.GetHeight() - aPrimaryRect.GetHeight() );
-            // and center it vertically
-            m_aTitle->SetStyle( m_aTitle->GetStyle() | WB_VCENTER );
-        }
-        else
-        {   // ... otherwise, center the image vertically, relative to the primary text
-            aInfoRect.Move( 0, ( aPrimaryRect.GetHeight() - aInfoRect.GetHeight() ) / 2 );
-            m_aInfoImage->SetPosSizePixel( aInfoRect.TopLeft(), aInfoRect.GetSize() );
-        }
-
-        m_aTitle->SetPosSizePixel( aPrimaryRect.TopLeft(), aPrimaryRect.GetSize() );
-    }
-
-    // adjust dialog size accordingly
-    const tools::Rectangle& rBottomTextRect( bHaveSecondaryText ? aSecondaryRect : aPrimaryRect );
-    Size aBorderSize = LogicToPixel(Size(OUTER_MARGIN, OUTER_MARGIN), MapMode(MapUnit::MapAppFont));
-    Size aDialogSize( LogicToPixel(Size(DIALOG_WIDTH, 30), MapMode(MapUnit::MapAppFont)));
-    aDialogSize.setHeight( rBottomTextRect.Bottom() + aBorderSize.Height() );
-    aDialogSize.setWidth( aPrimaryRect.Right() + aBorderSize.Width() );
-
-    SetSizePixel( aDialogSize );
-    SetPageSizePixel( aDialogSize );
+    m_xDialog->set_secondary_text(lcl_stripOOoBaseVendor(sSecondary));
 }
 
 void OSQLMessageBox::impl_createStandardButtons( MessBoxStyle _nStyle )
 {
     if ( _nStyle & MessBoxStyle::YesNoCancel )
     {
-        lcl_addButton( *this, StandardButtonType::Yes,    bool(_nStyle & MessBoxStyle::DefaultYes) );
-        lcl_addButton( *this, StandardButtonType::No,     bool( _nStyle & MessBoxStyle::DefaultNo ) );
-        lcl_addButton( *this, StandardButtonType::Cancel, bool( _nStyle & MessBoxStyle::DefaultCancel ) );
+        lcl_addButton(m_xDialog.get(), StandardButtonType::Yes,    bool(_nStyle & MessBoxStyle::DefaultYes));
+        lcl_addButton(m_xDialog.get(), StandardButtonType::No,     bool(_nStyle & MessBoxStyle::DefaultNo));
+        lcl_addButton(m_xDialog.get(), StandardButtonType::Cancel, bool(_nStyle & MessBoxStyle::DefaultCancel));
     }
     else if ( _nStyle & MessBoxStyle::OkCancel )
     {
-        lcl_addButton( *this, StandardButtonType::OK,     bool( _nStyle & MessBoxStyle::DefaultOk ) );
-        lcl_addButton( *this, StandardButtonType::Cancel, bool( _nStyle & MessBoxStyle::DefaultCancel ) );
+        lcl_addButton(m_xDialog.get(), StandardButtonType::OK,     bool(_nStyle & MessBoxStyle::DefaultOk));
+        lcl_addButton(m_xDialog.get(), StandardButtonType::Cancel, bool(_nStyle & MessBoxStyle::DefaultCancel));
     }
     else if ( _nStyle & MessBoxStyle::YesNo )
     {
-        lcl_addButton( *this, StandardButtonType::Yes,    bool( _nStyle & MessBoxStyle::DefaultYes ) );
-        lcl_addButton( *this, StandardButtonType::No,     bool( _nStyle & MessBoxStyle::DefaultNo ) );
+        lcl_addButton(m_xDialog.get(), StandardButtonType::Yes,    bool(_nStyle & MessBoxStyle::DefaultYes));
+        lcl_addButton(m_xDialog.get(), StandardButtonType::No,     bool(_nStyle & MessBoxStyle::DefaultNo));
     }
     else if ( _nStyle & MessBoxStyle::RetryCancel )
     {
-        lcl_addButton( *this, StandardButtonType::Retry,  bool( _nStyle & MessBoxStyle::DefaultRetry ) );
-        lcl_addButton( *this, StandardButtonType::Cancel, bool( _nStyle & MessBoxStyle::DefaultCancel ) );
+        lcl_addButton(m_xDialog.get(), StandardButtonType::Retry,  bool(_nStyle & MessBoxStyle::DefaultRetry));
+        lcl_addButton(m_xDialog.get(), StandardButtonType::Cancel, bool(_nStyle & MessBoxStyle::DefaultCancel));
     }
-    else
+    else if ( _nStyle & MessBoxStyle::Ok )
     {
-        OSL_ENSURE( MessBoxStyle::Ok & _nStyle, "OSQLMessageBox::impl_createStandardButtons: unsupported dialog style requested!" );
-        AddButton( StandardButtonType::OK, RET_OK, ButtonDialogFlags::Default | ButtonDialogFlags::Focus );
+        lcl_addButton(m_xDialog.get(), StandardButtonType::OK,     true);
     }
 
     if ( !m_sHelpURL.isEmpty() )
     {
-        lcl_addButton( *this, StandardButtonType::Help, false );
+        lcl_addButton(m_xDialog.get(), StandardButtonType::Help, false);
 
         OUString aTmp;
         INetURLObject aHID( m_sHelpURL );
@@ -536,13 +482,13 @@ void OSQLMessageBox::impl_createStandardButtons( MessBoxStyle _nStyle )
         else
             aTmp = m_sHelpURL;
 
-        SetHelpId( OUStringToOString( aTmp, RTL_TEXTENCODING_UTF8 ) );
+        m_xDialog->set_help_id(OUStringToOString(aTmp, RTL_TEXTENCODING_UTF8));
     }
 }
 
 void OSQLMessageBox::impl_addDetailsButton()
 {
-    size_t nFirstPageVisible = m_aMessage->IsVisible() ? 2 : 1;
+    size_t nFirstPageVisible = m_xDialog->get_secondary_text().isEmpty() ? 1 : 2;
 
     bool bMoreDetailsAvailable = m_pImpl->aDisplayInfo.size() > nFirstPageVisible;
     if ( !bMoreDetailsAvailable )
@@ -561,20 +507,14 @@ void OSQLMessageBox::impl_addDetailsButton()
 
     if ( bMoreDetailsAvailable )
     {
-        AddButton( StandardButtonType::More, RET_MORE);
-        PushButton* pButton = GetPushButton( RET_MORE );
-        OSL_ENSURE( pButton, "OSQLMessageBox::impl_addDetailsButton: just added this button, why isn't it there?" );
-        pButton->SetClickHdl( LINK( this, OSQLMessageBox, ButtonClickHdl ) );
+        m_xDialog->add_button(Button::GetStandardText(StandardButtonType::More), RET_MORE);
+        m_xMoreButton.reset(m_xDialog->get_widget_for_response(RET_MORE));
+        m_xMoreButton->connect_clicked(LINK(this, OSQLMessageBox, ButtonClickHdl));
     }
 }
 
-void OSQLMessageBox::Construct( MessBoxStyle _nStyle, MessageType _eImage )
+void OSQLMessageBox::Construct(weld::Window* pParent, MessBoxStyle _nStyle, MessageType _eImage)
 {
-    SetText( utl::ConfigManager::getProductName() + " Base" );
-
-    // position and size the controls and the dialog, depending on whether we have one or two texts to display
-    impl_positionControls();
-
     // init the image
     MessageType eType( _eImage );
     if ( eType == AUTO )
@@ -587,87 +527,77 @@ void OSQLMessageBox::Construct( MessBoxStyle _nStyle, MessageType _eImage )
         default: OSL_FAIL( "OSQLMessageBox::Construct: invalid type!" );
         }
     }
+    VclMessageType eMessageType;
     switch (eType)
     {
         default:
             OSL_FAIL( "OSQLMessageBox::impl_initImage: unsupported image type!" );
             SAL_FALLTHROUGH;
         case Info:
-            m_aInfoImage->SetImage(GetStandardInfoBoxImage());
+            eMessageType = VclMessageType::Info;
             break;
         case Warning:
-            m_aInfoImage->SetImage(GetStandardWarningBoxImage());
+            eMessageType = VclMessageType::Warning;
             break;
         case Error:
-            m_aInfoImage->SetImage(GetStandardErrorBoxImage());
+            eMessageType = VclMessageType::Error;
             break;
         case Query:
-            m_aInfoImage->SetImage(GetStandardQueryBoxImage());
+            eMessageType = VclMessageType::Question;
             break;
     }
+
+    m_xDialog.reset(Application::CreateMessageDialog(pParent, eMessageType, VclButtonsType::NONE, ""));
+    m_xDialog->set_title(utl::ConfigManager::getProductName() + " Base");
+
+    impl_fillMessages();
 
     // create buttons
     impl_createStandardButtons( _nStyle );
     impl_addDetailsButton();
 }
 
-OSQLMessageBox::OSQLMessageBox(vcl::Window* _pParent, const SQLExceptionInfo& _rException, MessBoxStyle _nStyle, const OUString& _rHelpURL )
-    :ButtonDialog( _pParent, WB_HORZ | WB_STDDIALOG )
-    ,m_aInfoImage( VclPtr<FixedImage>::Create(this) )
-    ,m_aTitle( VclPtr<FixedText>::Create(this, WB_WORDBREAK | WB_LEFT) )
-    ,m_aMessage( VclPtr<FixedText>::Create(this, WB_WORDBREAK | WB_LEFT) )
-    ,m_sHelpURL( _rHelpURL )
-    ,m_pImpl( new SQLMessageBox_Impl( _rException ) )
+OSQLMessageBox::OSQLMessageBox(weld::Window* pParent, const SQLExceptionInfo& rException, MessBoxStyle nStyle, const OUString& rHelpURL)
+    : m_pImpl(new SQLMessageBox_Impl(rException))
+    , m_sHelpURL(rHelpURL)
 {
-    Construct( _nStyle, AUTO );
+    Construct(pParent, nStyle, AUTO);
 }
 
-OSQLMessageBox::OSQLMessageBox( vcl::Window* _pParent, const OUString& _rTitle, const OUString& _rMessage, MessBoxStyle _nStyle, MessageType _eType, const ::dbtools::SQLExceptionInfo* _pAdditionalErrorInfo )
-    :ButtonDialog( _pParent, WB_HORZ | WB_STDDIALOG )
-    ,m_aInfoImage( VclPtr<FixedImage>::Create(this) )
-    ,m_aTitle( VclPtr<FixedText>::Create(this, WB_WORDBREAK | WB_LEFT) )
-    ,m_aMessage( VclPtr<FixedText>::Create(this, WB_WORDBREAK | WB_LEFT) )
+OSQLMessageBox::OSQLMessageBox(weld::Window* pParent, const OUString& rTitle, const OUString& rMessage, MessBoxStyle nStyle, MessageType eType, const ::dbtools::SQLExceptionInfo* pAdditionalErrorInfo )
 {
     SQLContext aError;
-    aError.Message = _rTitle;
-    aError.Details = _rMessage;
-    if ( _pAdditionalErrorInfo )
-        aError.NextException = _pAdditionalErrorInfo->get();
+    aError.Message = rTitle;
+    aError.Details = rMessage;
+    if (pAdditionalErrorInfo)
+        aError.NextException = pAdditionalErrorInfo->get();
 
-    m_pImpl.reset( new SQLMessageBox_Impl( SQLExceptionInfo( aError ) ) );
+    m_pImpl.reset(new SQLMessageBox_Impl(SQLExceptionInfo(aError)));
 
-    Construct( _nStyle, _eType );
+    Construct(pParent, nStyle, eType);
 }
 
 OSQLMessageBox::~OSQLMessageBox()
 {
-    disposeOnce();
 }
 
-void OSQLMessageBox::dispose()
+IMPL_LINK_NOARG(OSQLMessageBox, ButtonClickHdl, weld::Button&, void)
 {
-    m_aInfoImage.disposeAndClear();
-    m_aTitle.disposeAndClear();
-    m_aMessage.disposeAndClear();
-    ButtonDialog::dispose();
-}
-
-IMPL_LINK_NOARG( OSQLMessageBox, ButtonClickHdl, Button *, void )
-{
-    OExceptionChainDialog aDlg(GetFrameWeld(), m_pImpl->aDisplayInfo);
+    OExceptionChainDialog aDlg(m_xDialog.get(), m_pImpl->aDisplayInfo);
     aDlg.run();
 }
 
 // OSQLWarningBox
-OSQLWarningBox::OSQLWarningBox( vcl::Window* _pParent, const OUString& _rMessage, MessBoxStyle _nStyle,
-    const ::dbtools::SQLExceptionInfo* _pAdditionalErrorInfo )
-    :OSQLMessageBox( _pParent, DBA_RES( STR_EXCEPTION_WARNING ), _rMessage, _nStyle, OSQLMessageBox::Warning, _pAdditionalErrorInfo )
+OSQLWarningBox::OSQLWarningBox(weld::Window* pParent, const OUString& rMessage, MessBoxStyle nStyle,
+                               const ::dbtools::SQLExceptionInfo* pAdditionalErrorInfo )
+    : OSQLMessageBox(pParent, DBA_RES(STR_EXCEPTION_WARNING), rMessage, nStyle, MessageType::Warning, pAdditionalErrorInfo)
 {
 }
 
 // OSQLErrorBox
-OSQLErrorBox::OSQLErrorBox( vcl::Window* _pParent, const OUString& _rMessage )
-    :OSQLMessageBox( _pParent, DBA_RES( STR_EXCEPTION_ERROR ), _rMessage, MessBoxStyle::Ok | MessBoxStyle::DefaultOk, OSQLMessageBox::Error, nullptr )
+OSQLErrorBox::OSQLErrorBox(weld::Window* pParent, const OUString& rMessage)
+    : OSQLMessageBox(pParent, DBA_RES(STR_EXCEPTION_ERROR), rMessage, MessBoxStyle::Ok | MessBoxStyle::DefaultOk,
+                     MessageType::Error, nullptr)
 {
 }
 
