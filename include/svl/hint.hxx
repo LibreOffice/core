@@ -19,6 +19,8 @@
 #ifndef INCLUDED_SVL_HINT_HXX
 #define INCLUDED_SVL_HINT_HXX
 
+#include <ostream>
+
 #include <sal/types.h>
 #include <svl/svldllapi.h>
 
@@ -113,6 +115,88 @@ enum class SfxHintId {
     SwDrawViewsCreated,
     SwSplitNodeOperation,
 };
+
+template< typename charT, typename traits >
+inline std::basic_ostream<charT, traits> & operator <<(
+    std::basic_ostream<charT, traits> & stream, const SfxHintId& id )
+{
+    switch(id)
+    {
+    case SfxHintId::NONE: return stream << "NONE";
+    case SfxHintId::Dying: return stream << "Dying";
+    case SfxHintId::NameChanged: return stream << "NameChanged";
+    case SfxHintId::TitleChanged: return stream << "TitleChanged";
+    case SfxHintId::DataChanged: return stream << "DataChanged";
+    case SfxHintId::DocChanged: return stream << "DocChanged";
+    case SfxHintId::UpdateDone: return stream << "UpdateDone";
+    case SfxHintId::Deinitializing: return stream << "Deinitializing";
+    case SfxHintId::ModeChanged: return stream << "ModeChanged";
+    case SfxHintId::ColorsChanged: return stream << "ColorsChanged";
+    case SfxHintId::LanguageChanged: return stream << "LanguageChanged";
+    case SfxHintId::RedlineChanged: return stream << "RedlineChanged";
+    case SfxHintId::DocumentRepair: return stream << "DocumentRepair";
+    case SfxHintId::TextParaInserted: return stream << "TextParaInserted";
+    case SfxHintId::TextParaRemoved: return stream << "TextParaRemoved";
+    case SfxHintId::TextParaContentChanged: return stream << "TextParaContentChanged";
+    case SfxHintId::TextHeightChanged: return stream << "TextHeightChanged";
+    case SfxHintId::TextFormatPara: return stream << "TextFormatPara";
+    case SfxHintId::TextFormatted: return stream << "TextFormatted";
+    case SfxHintId::TextModified: return stream << "TextModified";
+    case SfxHintId::TextBlockNotificationStart: return stream << "TextBlockNotificationStart";
+    case SfxHintId::TextBlockNotificationEnd: return stream << "TextBlockNotificationEnd";
+    case SfxHintId::TextInputStart: return stream << "TextInputStart";
+    case SfxHintId::TextInputEnd: return stream << "TextInputEnd";
+    case SfxHintId::TextViewScrolled: return stream << "TextViewScrolled";
+    case SfxHintId::TextViewSelectionChanged: return stream << "TextViewSelectionChanged";
+    case SfxHintId::TextViewCaretChanged: return stream << "TextViewCaretChanged";
+    case SfxHintId::BasicDataWanted: return stream << "BasicDataWanted";
+    case SfxHintId::BasicDataChanged: return stream << "BasicDataChanged";
+    case SfxHintId::BasicInfoWanted: return stream << "BasicInfoWanted";
+    case SfxHintId::BasicStart: return stream << "BasicStart";
+    case SfxHintId::BasicStop: return stream << "BasicStop";
+    case SfxHintId::EditSourceParasMoved: return stream << "EditSourceParasMoved";
+    case SfxHintId::EditSourceSelectionChanged: return stream << "EditSourceSelectionChanged";
+    case SfxHintId::ScDataChanged: return stream << "ScDataChanged";
+    case SfxHintId::ScTableOpDirty: return stream << "ScTableOpDirty";
+    case SfxHintId::ScCalcAll: return stream << "ScCalcAll";
+    case SfxHintId::ScReference: return stream << "ScReference";
+    case SfxHintId::ScDrawLayerNew: return stream << "ScDrawLayerNew";
+    case SfxHintId::ScDbAreasChanged: return stream << "ScDbAreasChanged";
+    case SfxHintId::ScAreasChanged: return stream << "ScAreasChanged";
+    case SfxHintId::ScTablesChanged: return stream << "ScTablesChanged";
+    case SfxHintId::ScDrawChanged: return stream << "ScDrawChanged";
+    case SfxHintId::ScDocNameChanged: return stream << "ScDocNameChanged";
+    case SfxHintId::ScAreaLinksChanged: return stream << "ScAreaLinksChanged";
+    case SfxHintId::ScShowRangeFinder: return stream << "ScShowRangeFinder";
+    case SfxHintId::ScDocSaved: return stream << "ScDocSaved";
+    case SfxHintId::ScForceSetTab: return stream << "ScForceSetTab";
+    case SfxHintId::ScNavigatorUpdateAll: return stream << "ScNavigatorUpdateAll";
+    case SfxHintId::ScAnyDataChanged: return stream << "ScAnyDataChanged";
+    case SfxHintId::ScPrintOptions: return stream << "ScPrintOptions";
+    case SfxHintId::ScRefModeChanged: return stream << "ScRefModeChanged";
+    case SfxHintId::ScKillEditView: return stream << "ScKillEditView";
+    case SfxHintId::ScKillEditViewNoPaint: return stream << "ScKillEditViewNoPaint";
+    case SfxHintId::ScHiddenRowsChanged: return stream << "ScHiddenRowsChanged";
+    case SfxHintId::ScSelectionChanged: return stream << "ScSelectionChanged";
+    case SfxHintId::ScClearCache: return stream << "ScClearCache";
+    case SfxHintId::ScAccTableChanged: return stream << "ScAccTableChanged";
+    case SfxHintId::ScAccCursorChanged: return stream << "ScAccCursorChanged";
+    case SfxHintId::ScAccVisAreaChanged: return stream << "ScAccVisAreaChanged";
+    case SfxHintId::ScAccEnterEditMode: return stream << "ScAccEnterEditMode";
+    case SfxHintId::ScAccLeaveEditMode: return stream << "ScAccLeaveEditMode";
+    case SfxHintId::ScAccMakeDrawLayer: return stream << "ScAccMakeDrawLayer";
+    case SfxHintId::ScAccWindowResized: return stream << "ScAccWindowResized";
+    case SfxHintId::StyleSheetCreated: return stream << "StyleSheetCreated";
+    case SfxHintId::StyleSheetModified: return stream << "StyleSheetModified";
+    case SfxHintId::StyleSheetChanged: return stream << "StyleSheetChanged";
+    case SfxHintId::StyleSheetErased: return stream << "StyleSheetErased";
+    case SfxHintId::StyleSheetInDestruction: return stream << "StyleSheetInDestruction";
+    case SfxHintId::MathFormatChanged: return stream << "MathFormatChanged";
+    case SfxHintId::SwDrawViewsCreated: return stream << "SwDrawViewsCreated";
+    case SfxHintId::SwSplitNodeOperation: return stream << "SwSplitNodeOperation";
+    default: return stream << "unk(" << std::to_string(int(id)) << ")";
+    }
+}
 
 class SVL_DLLPUBLIC SfxHint
 {
