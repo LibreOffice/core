@@ -26,7 +26,6 @@
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <comphelper/property.hxx>
-#include <vcl/msgbox.hxx>
 
 // --- needed because of the solar mutex
 #include <osl/mutex.hxx>

@@ -22,7 +22,6 @@
 #include <RelationController.hxx>
 #include <svl/undo.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/msgbox.hxx>
 #include <browserids.hxx>
 #include <strings.hrc>
 #include <comphelper/types.hxx>

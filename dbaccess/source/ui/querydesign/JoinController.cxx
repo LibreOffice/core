@@ -44,7 +44,6 @@
 #include <com/sun/star/io/XActiveDataSink.hpp>
 #include <sqlmessage.hxx>
 #include <JoinController.hxx>
-#include <vcl/msgbox.hxx>
 #include <TableWindowData.hxx>
 #include <TableWindow.hxx>
 #include <TableConnectionData.hxx>

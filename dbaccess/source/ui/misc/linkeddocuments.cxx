@@ -35,7 +35,6 @@
 #include <com/sun/star/task/XJobExecutor.hpp>
 #include <comphelper/extract.hxx>
 #include <comphelper/types.hxx>
-#include <vcl/msgbox.hxx>
 #include <ucbhelper/content.hxx>
 #include <strings.hrc>
 #include <strings.hxx>

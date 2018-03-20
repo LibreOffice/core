@@ -69,7 +69,6 @@
 #include <comphelper/servicehelper.hxx>
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
-#include <vcl/msgbox.hxx>
 #include <browserids.hxx>
 #include <stringconstants.hxx>
 #include <strings.hrc>

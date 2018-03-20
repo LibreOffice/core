@@ -28,7 +28,6 @@
 #include <svl/intitem.hxx>
 #include <dsitems.hxx>
 #include <osl/process.h>
-#include <vcl/msgbox.hxx>
 #include <dbadmin.hxx>
 #include <comphelper/types.hxx>
 #include <vcl/stdtext.hxx>

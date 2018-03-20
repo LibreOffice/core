@@ -28,7 +28,6 @@
 #include <QueryDesignView.hxx>
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
 #include <RelationControl.hxx>
-#include <vcl/msgbox.hxx>
 #include <vcl/settings.hxx>
 
 #define ID_INNER_JOIN       1

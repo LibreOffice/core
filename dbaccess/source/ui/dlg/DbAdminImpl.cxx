@@ -65,7 +65,6 @@
 #include <osl/diagnose.h>
 #include <typelib/typedescription.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/msgbox.hxx>
 #include <vcl/stdtext.hxx>
 #include <vcl/waitobj.hxx>
 #include <vcl/weld.hxx>

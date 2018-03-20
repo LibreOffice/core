@@ -63,7 +63,6 @@
 #include <com/sun/star/sdb/application/CopyTableOperation.hpp>
 #include <sqlmessage.hxx>
 #include "UpdateHelperImpl.hxx"
-#include <vcl/msgbox.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 
 using namespace dbaui;

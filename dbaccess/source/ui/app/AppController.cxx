@@ -79,7 +79,6 @@
 #include <comphelper/interaction.hxx>
 #include <comphelper/processfactory.hxx>
 
-#include <vcl/msgbox.hxx>
 #include <vcl/stdtext.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/menu.hxx>

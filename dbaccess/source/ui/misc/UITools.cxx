@@ -84,7 +84,6 @@
 #include <svx/numinf.hxx>
 #include <svl/zforlist.hxx>
 #include <dlgattr.hxx>
-#include <vcl/msgbox.hxx>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/util/NumberFormatter.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>

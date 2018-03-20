@@ -41,7 +41,6 @@
 #include <com/sun/star/sdbcx/XDrop.hpp>
 #include <com/sun/star/sdbcx/XDataDefinitionSupplier.hpp>
 #include <sqlmessage.hxx>
-#include <vcl/msgbox.hxx>
 #include <UITools.hxx>
 #include <osl/diagnose.h>
 #include <svtools/imgdef.hxx>

@@ -68,7 +68,6 @@
 #include <tools/diagnose_ex.h>
 #include <ucbhelper/commandenvironment.hxx>
 #include <ucbhelper/content.hxx>
-#include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
 
 using namespace ::ucbhelper;

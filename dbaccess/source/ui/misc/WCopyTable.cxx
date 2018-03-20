@@ -58,7 +58,6 @@
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <vcl/lstbox.hxx>
-#include <vcl/msgbox.hxx>
 #include <vcl/waitobj.hxx>
 
 #include <functional>

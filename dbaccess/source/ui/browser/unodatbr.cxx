@@ -119,7 +119,6 @@
 #include <tools/multisel.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/confignode.hxx>
-#include <vcl/msgbox.hxx>
 #include <vcl/split.hxx>
 #include <vcl/stdtext.hxx>
 #include <vcl/svapp.hxx>

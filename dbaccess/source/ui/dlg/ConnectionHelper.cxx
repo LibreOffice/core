@@ -32,7 +32,6 @@
 #include <dsitems.hxx>
 #include <osl/process.h>
 #include <osl/diagnose.h>
-#include <vcl/msgbox.hxx>
 #include <vcl/weld.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <dbadmin.hxx>

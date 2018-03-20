@@ -25,7 +25,6 @@
 #include <dbwizsetup.hxx>
 #include <com/sun/star/sdb/XOfficeDatabaseDocument.hpp>
 #include <com/sun/star/sdbc/XDataSource.hpp>
-#include <vcl/msgbox.hxx>
 #include <comphelper/processfactory.hxx>
 
 using namespace dbaui;

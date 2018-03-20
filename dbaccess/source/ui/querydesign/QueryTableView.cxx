@@ -48,7 +48,6 @@
 #include <comphelper/extract.hxx>
 #include <strings.hrc>
 #include <strings.hxx>
-#include <vcl/msgbox.hxx>
 #include <svtools/treelistentry.hxx>
 
 using namespace dbaui;

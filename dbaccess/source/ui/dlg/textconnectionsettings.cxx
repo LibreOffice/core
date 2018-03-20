@@ -24,8 +24,6 @@
 #include <dsitems.hxx>
 #include <stringconstants.hxx>
 
-#include <vcl/msgbox.hxx>
-
 namespace dbaui
 {
     // TextConnectionSettingsDialog

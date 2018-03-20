@@ -23,7 +23,6 @@
 #include <vcl/button.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/fixed.hxx>
-#include <vcl/msgbox.hxx>
 #include "JoinTableView.hxx"
 #include "RelControliFace.hxx"
 #include <core_resource.hxx>

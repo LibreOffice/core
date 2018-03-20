@@ -20,7 +20,6 @@
 #include <TablesSingleDlg.hxx>
 #include "DbAdminImpl.hxx"
 #include "tablespage.hxx"
-#include <vcl/msgbox.hxx>
 #include <dsitems.hxx>
 #include <comphelper/processfactory.hxx>
 

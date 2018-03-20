@@ -18,7 +18,6 @@
  */
 
 #include <dlgsave.hxx>
-#include <vcl/msgbox.hxx>
 #include <core_resource.hxx>
 #include <dbu_dlg.hxx>
 #include <strings.hrc>
