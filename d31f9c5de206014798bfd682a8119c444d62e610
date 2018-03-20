@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_b07859fa",
+        "filename": "vcl/inc/impgraph.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-03-20T18:24:42Z",
+      "side": 1,
+      "message": "this seems a little weird, since uno::Sequence is already internally a ref-counted data type?",
+      "revId": "d31f9c5de206014798bfd682a8119c444d62e610",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
