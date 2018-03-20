@@ -173,7 +173,7 @@ private:
 
     OutlineViewShell&   mrOutlineViewShell;
     SdrOutliner&        mrOutliner;
-    OutlinerView*       mpOutlinerView[MAX_OUTLINERVIEWS];
+    std::unique_ptr<OutlinerView> mpOutlinerViews[MAX_OUTLINERVIEWS];
 
     std::vector<Paragraph*> maOldParaOrder;
     std::vector<Paragraph*> maSelectedParas;
@@ -185,7 +185,7 @@ private:
 
     sal_uLong               mnPaperWidth;
 
-    SfxProgress*        mpProgress;
+    std::unique_ptr<SfxProgress> mpProgress;
 
     /** stores the last used document color.
         this is changed in onUpdateStyleSettings()
