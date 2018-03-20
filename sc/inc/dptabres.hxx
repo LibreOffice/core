@@ -341,8 +341,8 @@ class ScDPResultMember
 private:
     const ScDPResultData*   pResultData;
     ScDPParentDimData        aParentDimData;
-    ScDPResultDimension*    pChildDimension;
-    ScDPDataMember*         pDataRoot;
+    std::unique_ptr<ScDPResultDimension>  pChildDimension;
+    std::unique_ptr<ScDPDataMember>       pDataRoot;
     bool                    bHasElements:1;
     bool                    bForceSubTotal:1;
     bool                    bHasHiddenDetails:1;
@@ -418,10 +418,10 @@ public:
 #endif
 
                         //! this will be removed!
-    const ScDPResultDimension*  GetChildDimension() const   { return pChildDimension; }
-    ScDPResultDimension*        GetChildDimension()         { return pChildDimension; }
+    const ScDPResultDimension*  GetChildDimension() const   { return pChildDimension.get(); }
+    ScDPResultDimension*        GetChildDimension()         { return pChildDimension.get(); }
 
-    ScDPDataMember*         GetDataRoot() const             { return pDataRoot; }
+    ScDPDataMember*         GetDataRoot() const             { return pDataRoot.get(); }
 
     const ScDPDimension*  GetParentDim() const               { return aParentDimData.mpParentDim; }     //! Ref
     const ScDPLevel*         GetParentLevel() const         { return aParentDimData.mpParentLevel; }   //! Ref

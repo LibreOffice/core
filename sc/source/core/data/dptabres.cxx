@@ -968,8 +968,6 @@ ScDPResultMember::ScDPResultMember(
 }
 ScDPResultMember::~ScDPResultMember()
 {
-    delete pChildDimension;
-    delete pDataRoot;
 }
 
 OUString ScDPResultMember::GetName() const
@@ -1056,7 +1054,7 @@ void ScDPResultMember::InitFrom( const vector<ScDPDimension*>& ppDim, const vect
             if (  ppDim[nPos]->getIsDataLayoutDimension() )
             {
                  if ( !pChildDimension )
-                        pChildDimension = new ScDPResultDimension( pResultData );
+                        pChildDimension.reset( new ScDPResultDimension( pResultData ) );
                     pChildDimension->InitFrom( ppDim, ppLev, nPos, rInitState , false );
                     return;
             }
@@ -1072,7 +1070,7 @@ void ScDPResultMember::InitFrom( const vector<ScDPDimension*>& ppDim, const vect
 
     if ( bInitChild )
     {
-        pChildDimension = new ScDPResultDimension( pResultData );
+        pChildDimension.reset( new ScDPResultDimension( pResultData ) );
         pChildDimension->InitFrom(ppDim, ppLev, nPos, rInitState);
     }
 }
@@ -1100,7 +1098,7 @@ void ScDPResultMember::LateInitFrom(
             if (  rParams.GetDim( nPos )->getIsDataLayoutDimension() )
             {
                 if ( !pChildDimension )
-                    pChildDimension = new ScDPResultDimension( pResultData );
+                    pChildDimension.reset( new ScDPResultDimension( pResultData ) );
 
                 // #i111462# reset InitChild flag only for this child dimension's LateInitFrom call,
                 // not for following members of parent dimensions
@@ -1124,7 +1122,7 @@ void ScDPResultMember::LateInitFrom(
     if ( rParams.GetInitChild() )
     {
         if ( !pChildDimension )
-            pChildDimension = new ScDPResultDimension( pResultData );
+            pChildDimension.reset( new ScDPResultDimension( pResultData ) );
         pChildDimension->LateInitFrom( rParams, pItemData, nPos, rInitState );
     }
 }
@@ -1261,7 +1259,7 @@ void ScDPResultMember::ProcessData( const vector< SCROW >& aChildMembers, const 
 
     if ( !pDataRoot )
     {
-        pDataRoot = new ScDPDataMember( pResultData, nullptr );
+        pDataRoot.reset( new ScDPDataMember( pResultData, nullptr ) );
         if ( pDataDim )
             pDataRoot->InitFrom( pDataDim );            // recursive
     }
@@ -1511,7 +1509,7 @@ void ScDPResultMember::FillMemberResults(
                     uno::Sequence<sheet::MemberResult>* pLayoutSeq = pSequences;
                     if (!bRoot)
                         ++pLayoutSeq;
-                    ScDPResultDimension* pLayoutDim = pChildDimension;
+                    ScDPResultDimension* pLayoutDim = pChildDimension.get();
                     while ( pLayoutDim && !pLayoutDim->IsDataLayout() )
                     {
                         pLayoutDim = pLayoutDim->GetFirstChildDimension();
