@@ -570,19 +570,28 @@ void FormulaDlg_Impl::UpdateValues( bool bForceRecalcStruct )
     // Only necessary if it's not a matrix formula anyway.
     if (!m_pBtnMatrix->IsChecked())
     {
-        const sal_Int32 nPos = m_aFuncSel.Min();
-        assert( 0 <= nPos && nPos < m_pHelper->getCurrentFormula().getLength());
-        OUStringBuffer aBuf;
+        /* TODO: we probably don't even need to ask a compiler instance if
+         * m_pBtnMatrix is hidden. */
         std::unique_ptr<FormulaCompiler> pCompiler( m_pHelper->createCompiler( *m_pTokenArray.get()));
-        const FormulaToken* pToken = nullptr;
-        for (pToken = m_pTokenArrayIterator->First(); pToken; pToken = m_pTokenArrayIterator->Next())
+        // In the case of the reportdesign dialog there is no currently active
+        // OpCode symbol mapping that could be used to create strings from
+        // tokens, it's all dreaded API mapping. However, in that case there's
+        // no array/matrix support anyway.
+        if (pCompiler->GetCurrentOpCodeMap().get())
         {
-            pCompiler->CreateStringFromToken( aBuf, pToken);
-            if (nPos < aBuf.getLength())
-                break;
+            const sal_Int32 nPos = m_aFuncSel.Min();
+            assert( 0 <= nPos && nPos < m_pHelper->getCurrentFormula().getLength());
+            OUStringBuffer aBuf;
+            const FormulaToken* pToken = nullptr;
+            for (pToken = m_pTokenArrayIterator->First(); pToken; pToken = m_pTokenArrayIterator->Next())
+            {
+                pCompiler->CreateStringFromToken( aBuf, pToken);
+                if (nPos < aBuf.getLength())
+                    break;
+            }
+            if (pToken && nPos < aBuf.getLength())
+                bForceArray = pToken->IsInForceArray();
         }
-        if (pToken && nPos < aBuf.getLength())
-            bForceArray = pToken->IsInForceArray();
     }
 
     OUString aStrResult;
