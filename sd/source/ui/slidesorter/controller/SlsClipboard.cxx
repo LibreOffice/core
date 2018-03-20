@@ -445,12 +445,12 @@ void Clipboard::CreateSlideTransferable (
 
         pDocument->CreatingDataObj (pTransferable);
         pTransferable->SetWorkDocument(pDocument->AllocSdDrawDocument());
-        TransferableObjectDescriptor aObjDesc;
+        std::unique_ptr<TransferableObjectDescriptor> pObjDesc(new TransferableObjectDescriptor);
         pTransferable->GetWorkDocument()->GetDocSh()
-            ->FillTransferableObjectDescriptor (aObjDesc);
+            ->FillTransferableObjectDescriptor (*pObjDesc);
 
         if (pDataDocSh != nullptr)
-            aObjDesc.maDisplayName = pDataDocSh->GetMedium()->GetURLObject().GetURLNoPass();
+            pObjDesc->maDisplayName = pDataDocSh->GetMedium()->GetURLObject().GetURLNoPass();
 
         vcl::Window* pActionWindow = pWindow;
         if (pActionWindow == nullptr)
@@ -462,7 +462,7 @@ void Clipboard::CreateSlideTransferable (
 
         pTransferable->SetStartPos (pActionWindow->PixelToLogic(
             pActionWindow->GetPointerPosPixel()));
-        pTransferable->SetObjectDescriptor (aObjDesc);
+        pTransferable->SetObjectDescriptor (std::move(pObjDesc));
 
         {
             TemporarySlideTrackingDeactivator aDeactivator (mrController);

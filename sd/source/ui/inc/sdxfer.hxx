@@ -53,7 +53,7 @@ public:
     void                            SetView(const ::sd::View* pView);
     const ::sd::View*               GetView() const { return mpSdView; }
 
-    void                            SetObjectDescriptor( const TransferableObjectDescriptor& rObjDesc );
+    void                            SetObjectDescriptor( std::unique_ptr<TransferableObjectDescriptor> pObjDesc );
 
     void                            SetStartPos( const Point& rStartPos ) { maStartPos = rStartPos; }
     const Point&                    GetStartPos() const { return maStartPos; }
@@ -116,17 +116,17 @@ private:
     SfxObjectShellRef               maDocShellRef;
     ::sd::DrawDocShell*             mpPageDocShell;
     std::vector<OUString>      maPageBookmarks;
-    TransferableDataHelper*         mpOLEDataHelper;
-    TransferableObjectDescriptor*   mpObjDesc;
+    std::unique_ptr<TransferableDataHelper>  mpOLEDataHelper;
+    std::unique_ptr<TransferableObjectDescriptor>  mpObjDesc;
     const ::sd::View*               mpSdView;
     ::sd::View*                     mpSdViewIntern;
     SdDrawDocument*                 mpSdDrawDocument;
     SdDrawDocument*                 mpSdDrawDocumentIntern;
     SdDrawDocument*                 mpSourceDoc;
     VclPtr<VirtualDevice>           mpVDev;
-    INetBookmark*                   mpBookmark;
-    Graphic*                        mpGraphic;
-    ImageMap*                       mpImageMap;
+    std::unique_ptr<INetBookmark>   mpBookmark;
+    std::unique_ptr<Graphic>        mpGraphic;
+    std::unique_ptr<ImageMap>       mpImageMap;
     ::tools::Rectangle                       maVisArea;
     Point                           maStartPos;
     bool                            mbInternalMove               : 1;
