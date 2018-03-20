@@ -1077,7 +1077,8 @@ bool LoadEnv::impl_loadContent()
             }));
             xHandler->initialize(aArguments);
             //show the frame now, unless (tdf#116277) its the labels/business cards slave frame
-            if (m_aURL.Arguments.indexOf("slot=") == -1)
+            //or (tdf#114648) an Interactive case such as the new database wizard
+            if (m_aURL.Arguments != "Interactive" && m_aURL.Arguments.indexOf("slot=") == -1)
                 impl_makeFrameWindowVisible(xWindow, false);
         }
     }
