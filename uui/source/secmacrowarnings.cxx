@@ -23,10 +23,9 @@
 #include <comphelper/sequence.hxx>
 #include <comphelper/documentconstants.hxx>
 #include <comphelper/processfactory.hxx>
+#include <osl/file.h>
 #include <sal/macros.h>
-
-#include <vcl/fixed.hxx>
-#include <vcl/msgbox.hxx>
+#include <unotools/resmgr.hxx>
 #include <com/sun/star/security/NoPasswordException.hpp>
 
 using namespace ::com::sun::star::security;
@@ -62,58 +61,37 @@ namespace
     }
 }
 
-
-MacroWarning::MacroWarning( vcl::Window* _pParent, bool _bWithSignatures )
-    :ModalDialog            ( _pParent, "MacroWarnMedium", "uui/ui/macrowarnmedium.ui" )
-    ,mpInfos                ( nullptr )
-    ,mbSignedMode           ( true )
-    ,mbShowSignatures       ( _bWithSignatures )
-    ,mnActSecLevel          ( 0 )
+MacroWarning::MacroWarning(weld::Window* pParent, bool _bWithSignatures)
+    : MessageDialogController(pParent, "uui/ui/macrowarnmedium.ui", "MacroWarnMedium", "grid")
+    , mxGrid(m_xBuilder->weld_widget("grid"))
+    , mxSignsFI(m_xBuilder->weld_label("signsLabel"))
+    , mxViewSignsBtn(m_xBuilder->weld_button("viewSignsButton"))
+    , mxAlwaysTrustCB(m_xBuilder->weld_check_button("alwaysTrustCheckbutton"))
+    , mxEnableBtn(m_xBuilder->weld_button("ok"))
+    , mxDisableBtn(m_xBuilder->weld_button("cancel"))
+    , mpInfos                ( nullptr )
+    , mbSignedMode           ( true )
+    , mbShowSignatures       ( _bWithSignatures )
+    , mnActSecLevel          ( 0 )
 {
-    get(mpSymbolImg, "symbolImage");
-    get(mpDocNameFI, "docNameLabel");
-    get(mpDescr1FI, "descr1Label");
-    get(mpDescr1aFI, "descr1aLabel");
-    get(mpSignsFI, "signsLabel");
-    get(mpViewSignsBtn, "viewSignsButton");
-    get(mpDescr2FI, "descr2Label");
-    get(mpAlwaysTrustCB, "alwaysTrustCheckbutton");
-    get(mpEnableBtn, "ok");
-    get(mpDisableBtn, "cancel");
+    m_xDialog->set_title(Translate::GetReadStringHook()(m_xDialog->get_title()));
 
     InitControls();
 
-    mpDisableBtn->SetClickHdl( LINK( this, MacroWarning, DisableBtnHdl ) );
-    mpEnableBtn->SetClickHdl( LINK( this, MacroWarning, EnableBtnHdl ) );
-    mpDisableBtn->GrabFocus(); // Default button, but focus is on view button
-}
-
-MacroWarning::~MacroWarning()
-{
-    disposeOnce();
-}
-
-void MacroWarning::dispose()
-{
-    mpSymbolImg.clear();
-    mpDocNameFI.clear();
-    mpDescr1aFI.clear();
-    mpDescr1FI.clear();
-    mpSignsFI.clear();
-    mpViewSignsBtn.clear();
-    mpDescr2FI.clear();
-    mpAlwaysTrustCB.clear();
-    mpEnableBtn.clear();
-    mpDisableBtn.clear();
-    ModalDialog::dispose();
+    mxEnableBtn->connect_clicked(LINK(this, MacroWarning, EnableBtnHdl));
+    mxDisableBtn->grab_focus(); // Default button, but focus is on view button
 }
 
 void MacroWarning::SetDocumentURL( const OUString& rDocURL )
 {
-    mpDocNameFI->SetText( rDocURL );
+    OUString aAbbreviatedPath;
+    osl_abbreviateSystemPath(rDocURL.pData, &aAbbreviatedPath.pData, 50, nullptr);
+    fprintf(stderr, "in %s, out %s\n", OUStringToOString(rDocURL, RTL_TEXTENCODING_UTF8).getStr(),
+            OUStringToOString(aAbbreviatedPath, RTL_TEXTENCODING_UTF8).getStr());
+    m_xDialog->set_primary_text(aAbbreviatedPath);
 }
 
-IMPL_LINK_NOARG(MacroWarning, ViewSignsBtnHdl, Button*, void)
+IMPL_LINK_NOARG(MacroWarning, ViewSignsBtnHdl, weld::Button&, void)
 {
     DBG_ASSERT( mxCert.is(), "*MacroWarning::ViewSignsBtnHdl(): no certificate set!" );
 
@@ -128,9 +106,9 @@ IMPL_LINK_NOARG(MacroWarning, ViewSignsBtnHdl, Button*, void)
     }
 }
 
-IMPL_LINK_NOARG(MacroWarning, EnableBtnHdl, Button*, void)
+IMPL_LINK_NOARG(MacroWarning, EnableBtnHdl, weld::Button&, void)
 {
-    if( mbSignedMode && mpAlwaysTrustCB->IsChecked() )
+    if (mbSignedMode && mxAlwaysTrustCB->get_active())
     {   // insert path into trusted path list
         uno::Reference< security::XDocumentDigitalSignatures > xD(
             security::DocumentDigitalSignatures::createWithVersion(comphelper::getProcessComponentContext(), maODFVersion));
@@ -145,56 +123,32 @@ IMPL_LINK_NOARG(MacroWarning, EnableBtnHdl, Button*, void)
                 xD->addAuthorToTrustedSources( (*mpInfos)[ i ].Signer );
         }
     }
-
-    EndDialog( RET_OK );
+    m_xDialog->response(RET_OK);
 }
 
-IMPL_LINK_NOARG(MacroWarning, DisableBtnHdl, Button*, void)
+IMPL_LINK_NOARG(MacroWarning, AlwaysTrustCheckHdl, weld::Button&, void)
 {
-    EndDialog();
-}
-
-IMPL_LINK_NOARG(MacroWarning, AlwaysTrustCheckHdl, Button*, void)
-{
-    bool bEnable = ( mnActSecLevel < 2 || mpAlwaysTrustCB->IsChecked() );
-    mpEnableBtn->Enable( bEnable );
-    mpDisableBtn->Enable( !mpAlwaysTrustCB->IsChecked() );
+    const bool bEnable = (mnActSecLevel < 2 || mxAlwaysTrustCB->get_active());
+    mxEnableBtn->set_sensitive(bEnable);
+    mxDisableBtn->set_sensitive(!mxAlwaysTrustCB->get_active());
 }
 
 void MacroWarning::InitControls()
 {
-    // set warning image
-    Image aImg(GetStandardWarningBoxImage());
-    mpSymbolImg->SetImage( aImg );
-    mpSymbolImg->SetSizePixel( aImg.GetSizePixel() );
-    // set bold font and path ellipsis for docname fixedtext
-    vcl::Font aTmpFont = mpDocNameFI->GetControlFont();
-    aTmpFont.SetWeight( WEIGHT_BOLD );
-    mpDocNameFI->SetControlFont( aTmpFont );
-    WinBits nStyle = mpDocNameFI->GetStyle();
-    nStyle |= WB_PATHELLIPSIS;
-    mpDocNameFI->SetStyle( nStyle );
     // show signature controls?
-    if( mbShowSignatures )
+    if (mbShowSignatures)
     {
-        mpViewSignsBtn->SetClickHdl( LINK( this, MacroWarning, ViewSignsBtnHdl ) );
-        mpViewSignsBtn->Disable();   // default
-        mpAlwaysTrustCB->SetClickHdl( LINK( this, MacroWarning, AlwaysTrustCheckHdl ) );
+        mxViewSignsBtn->connect_clicked(LINK(this, MacroWarning, ViewSignsBtnHdl));
+        mxViewSignsBtn->set_sensitive(false);   // default
+        mxAlwaysTrustCB->connect_clicked(LINK(this, MacroWarning, AlwaysTrustCheckHdl));
 
         mnActSecLevel = SvtSecurityOptions().GetMacroSecurityLevel();
         if ( mnActSecLevel >= 2 )
-            mpEnableBtn->Disable();
+            mxEnableBtn->set_sensitive(false);
     }
     else
     {
-        mpDescr1FI->Hide();
-        mpDescr1aFI->Show();
-        mpSignsFI->Hide();
-        mpViewSignsBtn->Hide();
-        mpAlwaysTrustCB->Hide();
-
-        // move hint up to position of signer list
-        mpDescr2FI->SetPosPixel( mpSignsFI->GetPosPixel() );
+        mxGrid->hide();
     }
 }
 
@@ -218,8 +172,8 @@ void MacroWarning::SetStorage( const css::uno::Reference < css::embed::XStorage 
             s += GetContentPart( rInfos[ i ].Signer->getSubjectName(), aCN_Id );
         }
 
-        mpSignsFI->SetText( s );
-        mpViewSignsBtn->Enable();
+        mxSignsFI->set_label(s);
+        mxViewSignsBtn->set_sensitive(true);
     }
 }
 
@@ -229,8 +183,8 @@ void MacroWarning::SetCertificate( const css::uno::Reference< css::security::XCe
     if( mxCert.is() )
     {
         OUString s = GetContentPart( mxCert->getSubjectName(), "CN" );
-        mpSignsFI->SetText( s );
-        mpViewSignsBtn->Enable();
+        mxSignsFI->set_label(s);
+        mxViewSignsBtn->set_sensitive(true);
     }
 }
 

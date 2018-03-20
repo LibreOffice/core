@@ -1173,20 +1173,20 @@ UUIInteractionHelper::handleMacroConfirmRequest(
     bool bApprove = false;
 
     bool bShowSignatures = aSignInfo.getLength() > 0;
-    ScopedVclPtrInstance<MacroWarning> aWarning(
-        getParentProperty(), bShowSignatures );
+    vcl::Window* pWin = getParentProperty();
+    MacroWarning aWarning(pWin ? pWin->GetFrameWeld() : nullptr, bShowSignatures);
 
-    aWarning->SetDocumentURL( aDocumentURL );
+    aWarning.SetDocumentURL(aDocumentURL);
     if ( aSignInfo.getLength() > 1 )
     {
-        aWarning->SetStorage( xZipStorage, aDocumentVersion, aSignInfo );
+        aWarning.SetStorage(xZipStorage, aDocumentVersion, aSignInfo);
     }
     else if ( aSignInfo.getLength() == 1 )
     {
-        aWarning->SetCertificate( aSignInfo[ 0 ].Signer );
+        aWarning.SetCertificate(aSignInfo[0].Signer);
     }
 
-    bApprove = aWarning->Execute() == RET_OK;
+    bApprove = aWarning.run() == RET_OK;
 
     if ( bApprove && xApprove.is() )
         xApprove->select();
