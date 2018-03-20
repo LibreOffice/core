@@ -111,7 +111,7 @@ bool SidebarDockingWindow::EventNotify(NotifyEvent& rEvent)
     if (MouseNotifyEvent::KEYINPUT == nType)
         return true;
 
-    if ( MouseNotifyEvent::MOUSEBUTTONDOWN == nType)
+    if (MouseNotifyEvent::MOUSEBUTTONDOWN == nType)
     {
         const MouseEvent *mEvt = rEvent.GetMouseEvent();
         if (mEvt->IsLeft())
@@ -122,6 +122,24 @@ bool SidebarDockingWindow::EventNotify(NotifyEvent& rEvent)
                 //SAL_WARN("sfx.sidebar", "whereismouse: " << aPt.getX() << " " << aPt.getY());
         }
         return true;
+    }
+    else if (MouseNotifyEvent::MOUSEMOVE == nType)
+    {
+        const MouseEvent *mEvt = rEvent.GetMouseEvent();
+        tools::Rectangle aGrip = mpSidebarController->GetDeckDragArea();
+        if (mEvt->IsLeft() && aGrip.IsInside( mEvt->GetPosPixel() ) && IsReadyToDrag() )
+        {
+            //SAL_WARN("sfx.sidebar", "moving mouse with left button pressed over grip");
+
+            Point aPos = mEvt->GetPosPixel();
+            vcl::Window* pWindow = rEvent.GetWindow();
+            //if ( pWindow != this )
+            {
+                aPos = pWindow->OutputToScreenPixel( aPos );
+                aPos = ScreenToOutputPixel( aPos );
+            }
+            ImplStartDocking( aPos );
+        }
     }
 
     return Window::EventNotify(rEvent);
