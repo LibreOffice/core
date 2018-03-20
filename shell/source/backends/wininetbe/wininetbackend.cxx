@@ -125,8 +125,8 @@ WinInetBackend::WinInetBackend()
                 DWORD err = GetLastError();
                 if (err == ERROR_INSUFFICIENT_BUFFER)
                 {
-                    // allocate sufficient space on the heap
-                    // insufficient space on the heap results
+                    // allocate sufficient space on the stack
+                    // insufficient space on the stack results
                     // in a stack overflow exception, we assume
                     // this never happens, because of the relatively
                     // small amount of memory we need
