@@ -151,10 +151,12 @@ void SwSectionFrame::DestroyImpl()
                     pMaster->InvalidateSize();
             }
         }
+#if defined DBG_UTIL
         else if( HasFollow() )
         {
             PROTOCOL( this, PROT::Section, DbgAction::DelMaster, GetFollow() )
         }
+#endif
     }
 
     SwLayoutFrame::DestroyImpl();
