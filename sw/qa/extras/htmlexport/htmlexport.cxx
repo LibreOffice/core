@@ -341,7 +341,8 @@ DECLARE_HTMLEXPORT_TEST(testReqIfParagraph, "reqif-p.xhtml")
     sal_uInt64 nLength = pStream->Tell();
     pStream->Seek(0);
 
-    OString aExpected("<reqif-xhtml:p>aaa<reqif-xhtml:br/>\nbbb</reqif-xhtml:p>" SAL_NEWLINE_STRING);
+    OString aExpected("<reqif-xhtml:div><reqif-xhtml:p>aaa<reqif-xhtml:br/>\nbbb"
+                      "</reqif-xhtml:p>" SAL_NEWLINE_STRING);
 
     // This was '<table' instead.
     aExpected += "<reqif-xhtml:table";
@@ -462,8 +463,10 @@ DECLARE_HTMLEXPORT_TEST(testReqIfTable, "reqif-table.xhtml")
     htmlDocPtr pDoc = parseHtml(maTempFile);
     CPPUNIT_ASSERT(pDoc);
 
-    assertXPath(pDoc, "/html/body/table/tr/th", 1);
-    OUString aStyle = getXPath(pDoc, "/html/body/table/tr/th", "style");
+    // <div> was missing, so the XHTML fragment wasn't a valid
+    // xhtml.BlkStruct.class type anymore.
+    assertXPath(pDoc, "/html/body/div/table/tr/th", 1);
+    OUString aStyle = getXPath(pDoc, "/html/body/div/table/tr/th", "style");
     CPPUNIT_ASSERT(aStyle.indexOf("background") != -1);
     // This failed, there were 2 style attributes, so as a best effort the
     // parser took the value of the first.

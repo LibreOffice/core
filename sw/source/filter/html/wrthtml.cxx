@@ -452,6 +452,9 @@ ErrCode SwHTMLWriter::WriteStream()
         OutNewLine();
         HTMLOutFuncs::Out_AsciiTag( Strm(), GetNamespace() + OOO_STRING_SVTOOLS_HTML_html, false );
     }
+    else if (mbReqIF)
+        // ReqIF: end xhtml.BlkStruct.class.
+        HTMLOutFuncs::Out_AsciiTag(Strm(), GetNamespace() + OOO_STRING_SVTOOLS_HTML_division, false);
 
     // delete the table with floating frames
     OSL_ENSURE( !m_pHTMLPosFlyFrames, "Were not all frames output?" );
@@ -1076,6 +1079,9 @@ const SwPageDesc *SwHTMLWriter::MakeHeader( sal_uInt16 &rHeaderAttrs )
 
         Strm().WriteChar( '>' );
     }
+    else if (mbReqIF)
+        // ReqIF: start xhtml.BlkStruct.class.
+        HTMLOutFuncs::Out_AsciiTag(Strm(), GetNamespace() + OOO_STRING_SVTOOLS_HTML_division);
 
     return pPageDesc;
 }
