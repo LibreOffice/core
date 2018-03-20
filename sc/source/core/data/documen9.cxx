@@ -519,8 +519,7 @@ void ScDocument::Clear( bool bFromDestructor )
         delete *it;
 
     maTabs.clear();
-    delete pSelectionAttr;
-    pSelectionAttr = nullptr;
+    pSelectionAttr.reset();
 
     if (mpDrawLayer)
     {

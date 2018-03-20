@@ -28,14 +28,14 @@ void ScRefreshTimerControl::SetAllowRefresh( bool b )
         ++nBlockRefresh;
 }
 
-ScRefreshTimerProtector::ScRefreshTimerProtector( ScRefreshTimerControl * const & rp )
+ScRefreshTimerProtector::ScRefreshTimerProtector( std::unique_ptr<ScRefreshTimerControl> const & rp )
         :
         m_rpControl( rp )
 {
     if ( m_rpControl )
     {
         m_rpControl->SetAllowRefresh( false );
-        // wait for any running refresh in another thread to finnish
+        // wait for any running refresh in another thread to finish
         ::osl::MutexGuard aGuard( m_rpControl->GetMutex() );
     }
 }
@@ -84,7 +84,7 @@ bool ScRefreshTimer::operator!=( const ScRefreshTimer& r ) const
     return !ScRefreshTimer::operator==( r );
 }
 
-void ScRefreshTimer::SetRefreshControl( ScRefreshTimerControl * const * pp )
+void ScRefreshTimer::SetRefreshControl( std::unique_ptr<ScRefreshTimerControl> const * pp )
 {
     ppControl = pp;
 }

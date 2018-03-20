@@ -4437,7 +4437,7 @@ ScChangeTrack* ScChangeTrack::Clone( ScDocument* pDocument ) const
         return nullptr;
     }
 
-    ScChangeTrack* pClonedTrack = new ScChangeTrack( pDocument );
+    std::unique_ptr<ScChangeTrack> pClonedTrack(new ScChangeTrack( pDocument ));
     pClonedTrack->SetTimeNanoSeconds( IsTimeNanoSeconds() );
 
     // clone generated actions
@@ -4517,7 +4517,7 @@ ScChangeTrack* ScChangeTrack::Clone( ScDocument* pDocument ) const
                         pAction->GetComment(),
                         eType,
                         nD,
-                        pClonedTrack );
+                        pClonedTrack.get() );
                 }
                 break;
             case SC_CAT_MOVE:
@@ -4534,7 +4534,7 @@ ScChangeTrack* ScChangeTrack::Clone( ScDocument* pDocument ) const
                         pAction->GetDateTimeUTC(),
                         pAction->GetComment(),
                         pMove->GetFromRange(),
-                        pClonedTrack );
+                        pClonedTrack.get() );
                 }
                 break;
             case SC_CAT_CONTENT:
@@ -4687,9 +4687,10 @@ ScChangeTrack* ScChangeTrack::Clone( ScDocument* pDocument ) const
         pClonedTrack->SetLastSavedActionNumber( pClonedTrack->GetLast()->GetActionNumber() );
     }
 
-    pDocument->SetChangeTrack( pClonedTrack );
+    auto tmp = pClonedTrack.get();
+    pDocument->SetChangeTrack( std::move(pClonedTrack) );
 
-    return pClonedTrack;
+    return tmp;
 }
 
 void ScChangeTrack::MergeActionState( ScChangeAction* pAct, const ScChangeAction* pOtherAct )

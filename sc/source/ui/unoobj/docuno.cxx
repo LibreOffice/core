@@ -2328,7 +2328,7 @@ void SAL_CALL ScModelObj::consolidate(
     {
         const ScConsolidateParam& rParam = xImpl->GetParam();
         pDocShell->DoConsolidate( rParam );
-        pDocShell->GetDocument().SetConsolidateDlgData( &rParam );
+        pDocShell->GetDocument().SetConsolidateDlgData( std::unique_ptr<ScConsolidateParam>(new ScConsolidateParam(rParam)) );
     }
 }
 

@@ -54,7 +54,7 @@ private:
     XclImpChTrRecHeader         aRecHeader;
     OUString                    sOldUsername;
 
-    ScChangeTrack*              pChangeTrack;
+    std::unique_ptr<ScChangeTrack> pChangeTrack;
     tools::SvRef<SotStorageStream>          xInStrm;        // input stream
     XclImpStream*               pStrm;          // stream import class
     sal_uInt16                  nTabIdCount;

@@ -269,7 +269,7 @@ void RevisionHeadersFragment::finalizeImport()
 
     pCT->SetUser(aSelfUser); // set the default user to the document owner.
     pCT->SetUseFixDateTime(false);
-    rDoc.SetChangeTrack(pCT.release());
+    rDoc.SetChangeTrack(std::move(pCT));
 
     // Turn on visibility of tracked changes.
     ScChangeViewSettings aSettings;

@@ -358,48 +358,48 @@ private:
     ScCalcConfig        maCalcConfig;
 
     SfxUndoManager*     mpUndoManager;
-    ScFieldEditEngine*  mpEditEngine;                   // uses pEditPool from xPoolHelper
-    ScNoteEditEngine*   mpNoteEngine;                   // uses pEditPool from xPoolHelper
+    std::unique_ptr<ScFieldEditEngine>  mpEditEngine;                   // uses pEditPool from xPoolHelper
+    std::unique_ptr<ScNoteEditEngine>   mpNoteEngine;                   // uses pEditPool from xPoolHelper
     SfxObjectShell*     mpShell;
     VclPtr<SfxPrinter>  mpPrinter;
     VclPtr<VirtualDevice> mpVirtualDevice_100th_mm;
     ScDrawLayer*        mpDrawLayer;                    // SdrModel
     rtl::Reference<XColorList> pColorList;
     ScValidationDataList* pValidationList;              // validity
-    SvNumberFormatterIndexTable*    pFormatExchangeList;    // for application of number formats
+    SvNumberFormatterIndexTable* pFormatExchangeList;    // for application of number formats
     TableContainer maTabs;
     std::vector<OUString> maTabNames;               // for undo document, we need the information tab name <-> index
-    mutable ScRangeName* pRangeName;
-    ScDBCollection*     pDBCollection;
-    ScDPCollection*     pDPCollection;
+    mutable std::unique_ptr<ScRangeName>    pRangeName;
+    std::unique_ptr<ScDBCollection>         pDBCollection;
+    std::unique_ptr<ScDPCollection>         pDPCollection;
     std::unique_ptr< ScTemporaryChartLock > apTemporaryChartLock;
-    ScPatternAttr*      pSelectionAttr;                 // Attributes of a block
+    std::unique_ptr<ScPatternAttr>          pSelectionAttr;                 // Attributes of a block
     ScFormulaCell*      pFormulaTree;                   // formula tree (start)
     ScFormulaCell*      pEOFormulaTree;                 // formula tree (end), last cell
     ScFormulaCell*      pFormulaTrack;                  // BroadcastTrack (start)
     ScFormulaCell*      pEOFormulaTrack;                // BroadcastTrack (end), last cell
-    ScBroadcastAreaSlotMachine* pBASM;                  // BroadcastAreas
+    std::unique_ptr<ScBroadcastAreaSlotMachine> pBASM;                  // BroadcastAreas
     ScChartListenerCollection* pChartListenerCollection;
-    SvMemoryStream*     pClipData;
-    ScDetOpList*        pDetOpList;
-    ScChangeTrack*      pChangeTrack;
-    SfxBroadcaster*     pUnoBroadcaster;
-    ScUnoListenerCalls* pUnoListenerCalls;
-    ScUnoRefList*       pUnoRefUndoList;
-    ScChangeViewSettings* pChangeViewSettings;
-    ScScriptTypeData*   pScriptTypeData;
-    ScRefreshTimerControl* pRefreshTimerControl;
+    std::unique_ptr<SvMemoryStream>     pClipData;
+    std::unique_ptr<ScDetOpList>        pDetOpList;
+    std::unique_ptr<ScChangeTrack>      pChangeTrack;
+    std::unique_ptr<SfxBroadcaster>     pUnoBroadcaster;
+    std::unique_ptr<ScUnoListenerCalls> pUnoListenerCalls;
+    std::unique_ptr<ScUnoRefList>       pUnoRefUndoList;
+    std::unique_ptr<ScChangeViewSettings> pChangeViewSettings;
+    std::unique_ptr<ScScriptTypeData>   pScriptTypeData;
+    std::unique_ptr<ScRefreshTimerControl> pRefreshTimerControl;
     std::shared_ptr<SvxForbiddenCharactersTable> xForbiddenCharacters;
-    ScDBData*           mpAnonymousDBData;
+    std::unique_ptr<ScDBData>               mpAnonymousDBData;
     std::unique_ptr<sc::ExternalDataMapper> mpDataMapper;
 
-    ScFieldEditEngine*  pCacheFieldEditEngine;
+    std::unique_ptr<ScFieldEditEngine>    pCacheFieldEditEngine;
 
-    std::unique_ptr<ScDocProtection> pDocProtection;
-    std::unique_ptr<ScClipParam>     mpClipParam;
+    std::unique_ptr<ScDocProtection>      pDocProtection;
+    std::unique_ptr<ScClipParam>          mpClipParam;
 
     std::unique_ptr<ScExternalRefManager> pExternalRefMgr;
-    std::unique_ptr<ScMacroManager> mpMacroMgr;
+    std::unique_ptr<ScMacroManager>       mpMacroMgr;
 
     // mutable for lazy construction
     mutable std::unique_ptr< ScFormulaParserPool >
@@ -415,11 +415,11 @@ private:
     ScDocOptions*       pDocOptions;                    // document options
     ScExtDocOptions*    pExtDocOptions;                 // for import etc.
     std::unique_ptr<ScClipOptions> mpClipOptions;       // clipboard options
-    ScConsolidateParam* pConsolidateDlgData;
+    std::unique_ptr<ScConsolidateParam> pConsolidateDlgData;
 
     ScAutoNameCache*    pAutoNameCache;                 // for automatic name lookup during CompileXML
 
-    SfxItemSet*         pPreviewFont; // convert to std::unique_ptr or whatever
+    std::unique_ptr<SfxItemSet> pPreviewFont; // convert to std::unique_ptr or whatever
     ScStyleSheet*       pPreviewCellStyle;
     ScMarkData          maPreviewSelection;
     sal_Int64           nUnoObjectId;                   // counted up for UNO objects
@@ -596,13 +596,13 @@ public:
     SC_DLLPUBLIC void           GetLanguage( LanguageType& rLatin, LanguageType& rCjk, LanguageType& rCtl ) const;
     void                        SetLanguage( LanguageType eLatin, LanguageType eCjk, LanguageType eCtl );
 
-    void                        SetConsolidateDlgData( const ScConsolidateParam* pData );
-    const ScConsolidateParam*   GetConsolidateDlgData() const { return pConsolidateDlgData; }
+    void                        SetConsolidateDlgData( std::unique_ptr<ScConsolidateParam> pData );
+    const ScConsolidateParam*   GetConsolidateDlgData() const { return pConsolidateDlgData.get(); }
 
     void                        Clear( bool bFromDestructor = false );
 
-    ScFieldEditEngine*          CreateFieldEditEngine();
-    void                        DisposeFieldEditEngine(ScFieldEditEngine*& rpEditEngine);
+    std::unique_ptr<ScFieldEditEngine> CreateFieldEditEngine();
+    void                        DisposeFieldEditEngine(std::unique_ptr<ScFieldEditEngine>& rpEditEngine);
 
     /**
      * Get all range names that are local to each table.  It only returns
@@ -614,7 +614,7 @@ public:
     SC_DLLPUBLIC ScRangeName*  GetRangeName(SCTAB nTab) const;
     SC_DLLPUBLIC ScRangeName*  GetRangeName() const;
     void                       SetRangeName(SCTAB nTab, ScRangeName* pNew);
-    void                       SetRangeName( ScRangeName* pNewRangeName );
+    void                       SetRangeName( std::unique_ptr<ScRangeName> pNewRangeName );
     bool                       IsAddressInRangeName( RangeNameScope eScope, ScAddress& rAddress);
 
     /** Find a named expression / range name in either global or a local scope.
@@ -761,8 +761,8 @@ public:
     ScRangePairListRef& GetColNameRangesRef() { return xColNameRanges; }
     ScRangePairListRef& GetRowNameRangesRef() { return xRowNameRanges; }
 
-    SC_DLLPUBLIC ScDBCollection* GetDBCollection() const { return pDBCollection;}
-    void                         SetDBCollection( ScDBCollection* pNewDBCollection,
+    SC_DLLPUBLIC ScDBCollection* GetDBCollection() const { return pDBCollection.get();}
+    void                         SetDBCollection( std::unique_ptr<ScDBCollection> pNewDBCollection,
                                                   bool bRemoveAutoFilter = false );
     const ScDBData*              GetDBAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab, ScDBDataPortion ePortion) const;
     ScDBData*                    GetDBAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab, ScDBDataPortion ePortion);
@@ -825,7 +825,7 @@ public:
         used if the corresponding sheet-local anonymous database range is
         already used with AutoFilter and range differs. Not stored in document
         files. */
-    SC_DLLPUBLIC void             SetAnonymousDBData(ScDBData* pDBData);
+    SC_DLLPUBLIC void             SetAnonymousDBData(std::unique_ptr<ScDBData> pDBData);
     SC_DLLPUBLIC ScDBData*        GetAnonymousDBData();
 
     SC_DLLPUBLIC SCTAB            GetTableCount() const;
@@ -995,7 +995,8 @@ public:
 
     void            BeginUnoRefUndo();
     bool            HasUnoRefUndo() const       { return ( pUnoRefUndoList != nullptr ); }
-    ScUnoRefList*   EndUnoRefUndo();            // must be deleted by caller!
+    SAL_WARN_UNUSED_RESULT
+    std::unique_ptr<ScUnoRefList> EndUnoRefUndo();            // must be deleted by caller!
     sal_Int64       GetNewUnoId() { return ++nUnoObjectId; }
     void            AddUnoRefChange( sal_Int64 nId, const ScRangeList& rOldRanges );
 
@@ -1262,8 +1263,8 @@ public:
     bool CompileErrorCells(FormulaError nErrCode);
 
     ScAutoNameCache*     GetAutoNameCache()     { return pAutoNameCache; }
-    void                 SetPreviewFont( SfxItemSet* pFontSet );
-    SfxItemSet*          GetPreviewFont() { return pPreviewFont; }
+    void                 SetPreviewFont( std::unique_ptr<SfxItemSet> pFontSet );
+    SfxItemSet*          GetPreviewFont() { return pPreviewFont.get(); }
     SfxItemSet*          GetPreviewFont( SCCOL nCol, SCROW nRow, SCTAB nTab );
     const ScMarkData&    GetPreviewSelection() const { return maPreviewSelection; }
     void                 SetPreviewSelection( const ScMarkData& rSel );
@@ -1635,7 +1636,7 @@ public:
     SC_DLLPUBLIC const ScPatternAttr*       GetPattern( const ScAddress& rPos ) const;
     SC_DLLPUBLIC const ScPatternAttr*       GetMostUsedPattern( SCCOL nCol, SCROW nStartRow, SCROW nEndRow, SCTAB nTab ) const;
     const ScPatternAttr*                    GetSelectionPattern( const ScMarkData& rMark );
-    ScPatternAttr*                          CreateSelectionPattern( const ScMarkData& rMark, bool bDeep = true );
+    std::unique_ptr<ScPatternAttr>          CreateSelectionPattern( const ScMarkData& rMark, bool bDeep = true );
     SC_DLLPUBLIC void                       AddCondFormatData( const ScRangeList& rRange, SCTAB nTab, sal_uInt32 nIndex );
     void                                    RemoveCondFormatData( const ScRangeList& rRange, SCTAB nTab, sal_uInt32 nIndex );
 
@@ -1661,8 +1662,8 @@ public:
     bool            HasDetectiveOperations() const;
     void            AddDetectiveOperation( const ScDetOpData& rData );
     void            ClearDetectiveOperations();
-    ScDetOpList*    GetDetOpList() const                { return pDetOpList; }
-    void            SetDetOpList(ScDetOpList* pNew);
+    ScDetOpList*    GetDetOpList() const { return pDetOpList.get(); }
+    void            SetDetOpList(std::unique_ptr<ScDetOpList> pNew);
 
     bool            HasDetectiveObjects(SCTAB nTab) const;
 
@@ -2035,7 +2036,7 @@ public:
     bool            IsCalcingAfterLoad() const { return bCalcingAfterLoad; }
     void            SetNoListening( bool bVal ) { bNoListening = bVal; }
     bool            GetNoListening() const { return bNoListening; }
-    ScBroadcastAreaSlotMachine* GetBASM() const { return pBASM; }
+    ScBroadcastAreaSlotMachine* GetBASM() const { return pBASM.get(); }
 
     SC_DLLPUBLIC ScChartListenerCollection* GetChartListenerCollection() const { return pChartListenerCollection;}
     void                  SetChartListenerCollection( ScChartListenerCollection*,
@@ -2047,7 +2048,7 @@ public:
     void                  SetChartListenerCollectionNeedsUpdate( bool bFlg ) { bChartListenerCollectionNeedsUpdate = bFlg; }
     void                  AddOLEObjectToCollection(const OUString& rName);
 
-    ScChangeViewSettings* GetChangeViewSettings() const     { return pChangeViewSettings; }
+    ScChangeViewSettings* GetChangeViewSettings() const     { return pChangeViewSettings.get(); }
     SC_DLLPUBLIC void     SetChangeViewSettings(const ScChangeViewSettings& rNew);
 
     const std::shared_ptr<SvxForbiddenCharactersTable>& GetForbiddenCharacters();
@@ -2292,11 +2293,11 @@ public:
 
     void            KeyInput();      // TimerDelays etc.
 
-    ScChangeTrack*  GetChangeTrack() const { return pChangeTrack; }
+    ScChangeTrack*  GetChangeTrack() const { return pChangeTrack.get(); }
 
     //! only for import filter, deletes any existing ChangeTrack via
     //! EndChangeTracking() and takes ownership of new ChangeTrack pTrack
-    SC_DLLPUBLIC void  SetChangeTrack( ScChangeTrack* pTrack );
+    SC_DLLPUBLIC void  SetChangeTrack( std::unique_ptr<ScChangeTrack> pTrack );
 
     void               StartChangeTracking();
     void               EndChangeTracking();
@@ -2318,7 +2319,7 @@ public:
     SC_DLLPUBLIC ScFieldEditEngine& GetEditEngine();
     SC_DLLPUBLIC ScNoteEditEngine&  GetNoteEngine();
 
-    ScRefreshTimerControl * const & GetRefreshTimerControlAddress() const
+    std::unique_ptr<ScRefreshTimerControl> const & GetRefreshTimerControlAddress() const
                                        { return pRefreshTimerControl; }
 
     void              SetPastingDrawFromOtherDoc( bool bVal )

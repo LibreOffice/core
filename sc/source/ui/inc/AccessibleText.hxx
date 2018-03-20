@@ -245,7 +245,7 @@ public:
 private:
     ScPreviewViewForwarder* mpViewForwarder;
     ScPreviewShell*         mpViewShell;
-    ScEditEngineDefaulter*  mpEditEngine;
+    std::unique_ptr<ScEditEngineDefaulter> mpEditEngine;
     SvxEditEngineForwarder* mpForwarder;
     ScDocShell*             mpDocSh;
     OUString                msText;
