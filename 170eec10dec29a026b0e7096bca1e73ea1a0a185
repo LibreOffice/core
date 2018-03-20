@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_7c46bdc0",
+        "filename": "vcl/qa/cppunit/pdfexport/pdfexport.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 783,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2018-03-20T10:59:38Z",
+      "side": 1,
+      "message": "How is the object referenced normally, does a page object refer to it? If so, aDocument.GetPages(), then you can navigate from there, that\u0027s what other tests do.",
+      "revId": "170eec10dec29a026b0e7096bca1e73ea1a0a185",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_9c11b1b2",
+        "filename": "vcl/qa/cppunit/pdfexport/pdfexport.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 797,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2018-03-20T10:59:38Z",
+      "side": 1,
+      "message": "vcl::filter::PDFDocument is just a simple tokenizer, it does no parsing of object streams. So either you can say this is just fine, or in case pdfium provides a public API to expose the parsed CMAP, then you can use that. pdfium API lives at workdir/UnpackedTarball/pdfium/public/.",
+      "revId": "170eec10dec29a026b0e7096bca1e73ea1a0a185",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_bc1675a5",
+        "filename": "vcl/qa/cppunit/pdfexport/pdfexport.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 813,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2018-03-20T10:59:38Z",
+      "side": 1,
+      "message": "Is this copy\u0026pasted and you forgot to document how the test failed without the fix or just my eyes are not trained to translate the above numbers into \"hello\"? :-)",
+      "revId": "170eec10dec29a026b0e7096bca1e73ea1a0a185",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
