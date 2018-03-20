@@ -2202,8 +2202,8 @@ void SwFEShell::SetColRowWidthHeight( TableChgWidthHeightType eType, sal_uInt16 
         pTab->GetFormat()->SetFormatAttr( aSz );
     }
 
-    if( extractPosition(eType) == TableChgWidthHeightType::ColLeft &&
-        (eType & (TableChgWidthHeightType::BiggerMode | TableChgWidthHeightType::InsertDeleteMode)) )
+    if( (eType & TableChgWidthHeightType::BiggerMode) &&
+        (eType & TableChgWidthHeightType::InsertDeleteMode) )
     {
         nDiff = sal_uInt16(aRectFnSet.GetWidth(pFrame->getFrameArea()));
 
