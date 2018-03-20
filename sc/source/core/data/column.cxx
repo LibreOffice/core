@@ -100,7 +100,6 @@ ScColumn::ScColumn() :
 ScColumn::~ScColumn() COVERITY_NOEXCEPT_FALSE
 {
     FreeAll();
-    delete pAttrArray;
 }
 
 void ScColumn::Init(SCCOL nNewCol, SCTAB nNewTab, ScDocument* pDoc, bool bEmptyAttrArray)
@@ -108,9 +107,9 @@ void ScColumn::Init(SCCOL nNewCol, SCTAB nNewTab, ScDocument* pDoc, bool bEmptyA
     nCol = nNewCol;
     nTab = nNewTab;
     if ( bEmptyAttrArray )
-        pAttrArray = new ScAttrArray( nCol, nTab, pDoc, nullptr );
+        pAttrArray.reset(new ScAttrArray( nCol, nTab, pDoc, nullptr ));
     else
-        pAttrArray = new ScAttrArray( nCol, nTab, pDoc, &pDoc->maTabs[nTab]->aDefaultColAttrArray );
+        pAttrArray.reset(new ScAttrArray( nCol, nTab, pDoc, &pDoc->maTabs[nTab]->aDefaultColAttrArray ));
 }
 
 SCROW ScColumn::GetNextUnprotected( SCROW nRow, bool bUp ) const
@@ -384,7 +383,7 @@ const ScPatternAttr* ScColumn::GetMostUsedPattern( SCROW nStartRow, SCROW nEndRo
     const ScPatternAttr* pMaxPattern = nullptr;
     size_t nMaxCount = 0;
 
-    ScAttrIterator aAttrIter( pAttrArray, nStartRow, nEndRow, GetDoc()->GetDefPattern() );
+    ScAttrIterator aAttrIter( pAttrArray.get(), nStartRow, nEndRow, GetDoc()->GetDefPattern() );
     const ScPatternAttr* pPattern;
     SCROW nAttrRow1 = 0, nAttrRow2 = 0;
 
@@ -626,7 +625,7 @@ const ScStyleSheet* ScColumn::GetSelectionStyle( const ScMarkData& rMark, bool& 
     SCROW nBottom;
     while (bEqual && aMultiIter.Next( nTop, nBottom ))
     {
-        ScAttrIterator aAttrIter( pAttrArray, nTop, nBottom, pDocument->GetDefPattern() );
+        ScAttrIterator aAttrIter( pAttrArray.get(), nTop, nBottom, pDocument->GetDefPattern() );
         SCROW nRow;
         SCROW nDummy;
         const ScPatternAttr* pPattern;
@@ -652,7 +651,7 @@ const ScStyleSheet* ScColumn::GetAreaStyle( bool& rFound, SCROW nRow1, SCROW nRo
     const ScStyleSheet* pStyle = nullptr;
     const ScStyleSheet* pNewStyle;
 
-    ScAttrIterator aAttrIter( pAttrArray, nRow1, nRow2, GetDoc()->GetDefPattern() );
+    ScAttrIterator aAttrIter( pAttrArray.get(), nRow1, nRow2, GetDoc()->GetDefPattern() );
     SCROW nRow;
     SCROW nDummy;
     const ScPatternAttr* pPattern;
@@ -1765,7 +1764,7 @@ void ScColumn::CopyScenarioFrom( const ScColumn& rSrcCol )
 {
     //  This is the scenario table, the data is copied into it
     ScDocument* pDocument = GetDoc();
-    ScAttrIterator aAttrIter( pAttrArray, 0, MAXROW, pDocument->GetDefPattern() );
+    ScAttrIterator aAttrIter( pAttrArray.get(), 0, MAXROW, pDocument->GetDefPattern() );
     SCROW nStart = -1, nEnd = -1;
     const ScPatternAttr* pPattern = aAttrIter.Next( nStart, nEnd );
     while (pPattern)
@@ -1794,7 +1793,7 @@ void ScColumn::CopyScenarioTo( ScColumn& rDestCol ) const
 {
     //  This is the scenario table, the data is copied to the other
     ScDocument* pDocument = GetDoc();
-    ScAttrIterator aAttrIter( pAttrArray, 0, MAXROW, pDocument->GetDefPattern() );
+    ScAttrIterator aAttrIter( pAttrArray.get(), 0, MAXROW, pDocument->GetDefPattern() );
     SCROW nStart = -1, nEnd = -1;
     const ScPatternAttr* pPattern = aAttrIter.Next( nStart, nEnd );
     while (pPattern)
@@ -1819,7 +1818,7 @@ void ScColumn::CopyScenarioTo( ScColumn& rDestCol ) const
 bool ScColumn::TestCopyScenarioTo( const ScColumn& rDestCol ) const
 {
     bool bOk = true;
-    ScAttrIterator aAttrIter( pAttrArray, 0, MAXROW, GetDoc()->GetDefPattern() );
+    ScAttrIterator aAttrIter( pAttrArray.get(), 0, MAXROW, GetDoc()->GetDefPattern() );
     SCROW nStart = 0, nEnd = 0;
     const ScPatternAttr* pPattern = aAttrIter.Next( nStart, nEnd );
     while (pPattern && bOk)
@@ -1837,7 +1836,7 @@ void ScColumn::MarkScenarioIn( ScMarkData& rDestMark ) const
 {
     ScRange aRange( nCol, 0, nTab );
 
-    ScAttrIterator aAttrIter( pAttrArray, 0, MAXROW, GetDoc()->GetDefPattern() );
+    ScAttrIterator aAttrIter( pAttrArray.get(), 0, MAXROW, GetDoc()->GetDefPattern() );
     SCROW nStart = -1, nEnd = -1;
     const ScPatternAttr* pPattern = aAttrIter.Next( nStart, nEnd );
     while (pPattern)
@@ -1945,9 +1944,7 @@ void ScColumn::SwapCol(ScColumn& rCol)
     UpdateNoteCaptions(0, MAXROW);
     rCol.UpdateNoteCaptions(0, MAXROW);
 
-    ScAttrArray* pTempAttr = rCol.pAttrArray;
-    rCol.pAttrArray = pAttrArray;
-    pAttrArray = pTempAttr;
+    std::swap(pAttrArray, rCol.pAttrArray);
 
     // AttrArray needs to have the right column number
     pAttrArray->SetCol(nCol);
