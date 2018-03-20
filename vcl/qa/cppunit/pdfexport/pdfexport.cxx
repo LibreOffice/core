@@ -27,6 +27,7 @@
 #include <fpdf_edit.h>
 #include <fpdfview.h>
 #endif
+#include <config_test.h>
 
 using namespace ::com::sun::star;
 
@@ -67,6 +68,9 @@ public:
     void testTdf99680();
     void testTdf99680_2();
     void testTdf108963();
+#if !TEST_FONTS_MISSING
+    void testTdf115117();
+#endif
 #endif
 
     CPPUNIT_TEST_SUITE(PdfExportTest);
@@ -85,6 +89,9 @@ public:
     CPPUNIT_TEST(testTdf99680);
     CPPUNIT_TEST(testTdf99680_2);
     CPPUNIT_TEST(testTdf108963);
+#if !TEST_FONTS_MISSING
+    CPPUNIT_TEST(testTdf115117);
+#endif
 #endif
     CPPUNIT_TEST_SUITE_END();
 };
@@ -676,6 +683,7 @@ void PdfExportTest::testTdf99680_2()
     }
 }
 
+
 void PdfExportTest::testTdf108963()
 {
     // Import the bugdoc and export as PDF.
@@ -760,6 +768,52 @@ void PdfExportTest::testTdf108963()
 
     CPPUNIT_ASSERT_EQUAL(1, nYellowPathCount);
 }
+
+
+#if !TEST_FONTS_MISSING
+// This requires Carlito font, if it is missing the test will most likely
+// break.
+void PdfExportTest::testTdf115117()
+{
+    vcl::filter::PDFDocument aDocument;
+    load("tdf115117-1.odt", aDocument);
+
+    // Get access to ToUnicode of the first font
+    // FIXME: find a better way than using object number
+    auto pToUnicode = aDocument.LookupObject(8);
+    CPPUNIT_ASSERT(pToUnicode);
+    auto pStream = pToUnicode->GetStream();
+    CPPUNIT_ASSERT(pStream);
+    SvMemoryStream aObjectStream;
+    ZCodec aZCodec;
+    aZCodec.BeginCompression();
+    pStream->GetMemory().Seek(0);
+    aZCodec.Decompress(pStream->GetMemory(), aObjectStream);
+    CPPUNIT_ASSERT(aZCodec.EndCompression());
+    aObjectStream.Seek(0);
+    // FIXME: is there away to parse the CMAP instead of doing direct string
+    // comparison?
+    // FIXME: <01> <02> etc. are glyph ids, they might change order if we
+    // changed how font subsets are created.
+    OString aCmap("9 beginbfchar\n"
+                  "<01> <00740069>\n"
+                  "<02> <0020>\n"
+                  "<03> <0074>\n"
+                  "<04> <0065>\n"
+                  "<05> <0073>\n"
+                  "<06> <00660069>\n"
+                  "<07> <0066006C>\n"
+                  "<08> <006600660069>\n"
+                  "<09> <00660066006C>\n"
+                  "endbfchar\n"
+                  "endcmap");
+    auto pStart = static_cast<const char*>(aObjectStream.GetData());
+    const char* pEnd = pStart + aObjectStream.GetSize();
+    auto it = std::search(pStart, pEnd, aCmap.getStr(), aCmap.getStr() + aCmap.getLength());
+    // This failed, 'Hello' was part only a mixed compressed/uncompressed stream, i.e. garbage.
+    CPPUNIT_ASSERT(it != pEnd);
+}
+#endif
 #endif
 
 CPPUNIT_TEST_SUITE_REGISTRATION(PdfExportTest);
