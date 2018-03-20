@@ -19,6 +19,7 @@
 #ifndef INCLUDED_SW_INC_SWFLTOPT_HXX
 #define INCLUDED_SW_INC_SWFLTOPT_HXX
 
+#include "swdllapi.h"
 #include <unotools/configitem.hxx>
 
 class SW_DLLPUBLIC SwFilterOptions : public utl::ConfigItem

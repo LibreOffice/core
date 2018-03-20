@@ -126,6 +126,7 @@
 
 #include <sfx2/fcontnr.hxx>
 #include <svx/ClassificationDialog.hxx>
+#include <svtools/embedhlp.hxx>
 
 #include <swabstdlg.hxx>
 #include <watermarkdialog.hxx>

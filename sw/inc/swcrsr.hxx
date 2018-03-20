@@ -19,8 +19,6 @@
 #ifndef INCLUDED_SW_INC_SWCRSR_HXX
 #define INCLUDED_SW_INC_SWCRSR_HXX
 
-#include <com/sun/star/i18n/WordType.hpp>
-
 #include "pam.hxx"
 #include "tblsel.hxx"
 #include "cshtyp.hxx"

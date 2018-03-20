@@ -20,19 +20,12 @@
 #define INCLUDED_SW_INC_SWABSTDLG_HXX
 
 #include <rtl/ustring.hxx>
-#include <tools/solar.h>
 #include <sfx2/sfxdlg.hxx>
-#include <svx/svxdlg.hxx>
-#include <vcl/syswin.hxx>
-#include "globals.hrc"
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/frame/XModel.hpp>
-#include <com/sun/star/text/XTextCursor.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
-#include <com/sun/star/awt/XControl.hpp>
 #include <com/sun/star/container/XNamed.hpp>
-#include "itabenum.hxx"
 #include <boost/optional.hpp>
 #include "dbmgr.hxx"
 #include <cnttab.hxx>
@@ -73,6 +66,7 @@ class SwChildWinWrapper;
 struct SfxChildWinInfo;
 class SwTOXMark;
 struct SwDocStat;
+struct SwInsertTableOptions;
 enum class SwBorderModes;
 enum class SwCharDlgMode;
 enum class SfxStyleFamily;

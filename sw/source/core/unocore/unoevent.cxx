@@ -28,6 +28,7 @@
 #include <fmtinfmt.hxx>
 #include <svl/macitem.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <sfx2/event.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

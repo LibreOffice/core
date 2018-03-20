@@ -40,6 +40,7 @@
 #include <SwXMLBlockImport.hxx>
 #include <SwXMLBlockExport.hxx>
 #include <xmloff/xmlnmspe.hxx>
+#include <sfx2/event.hxx>
 #include <swevent.hxx>
 #include <swerror.h>
 

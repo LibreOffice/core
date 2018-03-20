@@ -101,6 +101,7 @@
 #include <SwStyleNameMapper.hxx>
 #include <sortopt.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
+#include <com/sun/star/i18n/WordType.hpp>
 #include <memory>
 #include <unoparaframeenum.hxx>
 #include <unoparagraph.hxx>

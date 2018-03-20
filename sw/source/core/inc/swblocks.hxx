@@ -21,6 +21,8 @@
 
 #include <tools/datetime.hxx>
 #include <o3tl/sorted_vector.hxx>
+#include <vcl/errcode.hxx>
+#include <rtl/ref.hxx>
 
 class SwPaM;
 class SwDoc;

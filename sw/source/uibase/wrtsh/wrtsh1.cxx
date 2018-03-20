@@ -102,6 +102,7 @@
 
 #include <sfx2/msgpool.hxx>
 #include <comphelper/lok.hxx>
+#include <svtools/embedhlp.hxx>
 #include <memory>
 
 using namespace sw::mark;

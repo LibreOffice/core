@@ -22,7 +22,6 @@
 #include <memory>
 #include "swdllapi.h"
 #include <rtl/ustring.hxx>
-#include <vcl/bitmap.hxx>
 
 struct SW_DLLPUBLIC ShellResource
 {

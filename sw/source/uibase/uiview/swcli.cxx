@@ -27,6 +27,7 @@
 #include <swcli.hxx>
 #include <cmdid.h>
 #include <cfgitems.hxx>
+#include <svtools/embedhlp.hxx>
 
 #include <toolkit/helper/vclunohelper.hxx>
 

@@ -21,6 +21,7 @@
 
 #include <rtl/ustring.hxx>
 #include <tools/link.hxx>
+#include <tools/solar.h>
 #include <i18nlangtag/lang.h>
 #include <com/sun/star/util/Date.hpp>
 #include "swdllapi.h"

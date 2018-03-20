@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SW_INC_SWDBDATA_HXX
 #define INCLUDED_SW_INC_SWDBDATA_HXX
 
-#include <tools/solar.h>
+#include <sal/types.h>
 #include <rtl/ustring.hxx>
 
 // contains the description of a data source

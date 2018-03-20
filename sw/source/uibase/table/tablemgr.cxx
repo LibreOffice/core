@@ -27,6 +27,7 @@
 #include <sot/storage.hxx>
 #include <comphelper/classids.hxx>
 #include <svx/charthelper.hxx>
+#include <svtools/embedhlp.hxx>
 
 #include <edtwin.hxx>
 #include <wrtsh.hxx>

@@ -10,6 +10,8 @@
 #include <sal/config.h>
 #include <test/bootstrapfixture.hxx>
 
+#include <com/sun/star/i18n/WordType.hpp>
+
 #include <rtl/strbuf.hxx>
 #include <osl/file.hxx>
 
