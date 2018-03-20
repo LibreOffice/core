@@ -384,16 +384,19 @@ XclExpHyperlink::XclExpHyperlink( const XclExpRoot& rRoot, const SvxURLField& rU
 
         msTarget = XclXmlUtils::ToOUString( aLink );
 
-        if( bRel )
+        if( eProtocol != INetProtocol::Smb )
         {
-            for( int i = 0; i < nLevel; ++i )
-                msTarget = "../" + msTarget;
-        }
-        else
-        {
-            // ooxml expects the file:/// part appended ( or at least
-            // ms2007 does, ms2010 is more tolerant )
-            msTarget = "file:///" + msTarget;
+            if( bRel )
+            {
+                for( int i = 0; i < nLevel; ++i )
+                    msTarget = "../" + msTarget;
+            }
+            else
+            {
+                // ooxml expects the file:/// part appended ( or at least
+                // ms2007 does, ms2010 is more tolerant )
+                msTarget = "file:///" + msTarget;
+            }
         }
     }
     else if( eProtocol != INetProtocol::NotValid )

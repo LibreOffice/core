@@ -1063,8 +1063,9 @@ bool XclExpXmlStream::exportDocument()
     aData.mpCompileFormulaCxt.reset( new sc::CompileFormulaContext(&rDoc) );
     // set target path to get correct relative links to target document, not source
     INetURLObject aPath(getFileUrl());
-    aData.maBasePath = aPath.GetPath() + "\\";
-    aData.maBasePath = "file:///" + aData.maBasePath.replace('\\', '/');
+    if ( aPath.removeSegment() )
+        aPath.setFinalSlash();
+    aData.maBasePath = aPath.GetMainURL(INetURLObject::DecodeMechanism::NONE);
 
     XclExpRoot aRoot( aData );
 
