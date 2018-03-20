@@ -346,6 +346,7 @@ struct DialogImpl
 
     DialogImpl() : mnResult( -1 ), mbStartedModal( false ) {}
 
+#ifndef NDEBUG
     short get_response(vcl::Window *pWindow) const
     {
         auto aFind = maResponses.find(pWindow);
@@ -353,6 +354,7 @@ struct DialogImpl
             return aFind->second;
         return RET_CANCEL;
     }
+#endif
 
     ~DialogImpl()
     {
