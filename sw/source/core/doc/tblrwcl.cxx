@@ -3851,11 +3851,13 @@ bool SwTable::SetColWidth( SwTableBox& rCurrentBox, TableChgWidthHeightType eTyp
         }
     }
 
+#if defined DBG_UTIL
     if( bRet )
     {
         CHECKBOXWIDTH
         CHECKTABLELAYOUT
     }
+#endif
 
     return bRet;
 }
