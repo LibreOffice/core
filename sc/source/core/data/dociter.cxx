@@ -204,7 +204,7 @@ bool ScValueIterator::GetThis(double& rValue, FormulaError& rErr)
                 if (bCalcAsShown)
                 {
                     ScAttrArray_IterGetNumberFormat(nNumFormat, pAttrArray,
-                        nAttrEndRow, pCol->pAttrArray, nCurRow, pDoc);
+                        nAttrEndRow, pCol->pAttrArray.get(), nCurRow, pDoc);
                     rValue = pDoc->RoundValueAsShown(rValue, nNumFormat);
                 }
                 return true; // Found it!
@@ -323,7 +323,7 @@ const ScAttrArray* ScDBQueryDataIterator::GetAttrArrayByCol(ScDocument& rDoc, SC
     if (nTab >= rDoc.GetTableCount())
         OSL_FAIL("try to access index out of bounds, FIX IT");
     ScColumn* pCol = &rDoc.maTabs[nTab]->aCol[nCol];
-    return pCol->pAttrArray;
+    return pCol->pAttrArray.get();
 }
 
 bool ScDBQueryDataIterator::IsQueryValid(
@@ -2219,7 +2219,7 @@ bool ScHorizontalValueIterator::GetNext( double& rValue, FormulaError& rErr )
                     {
                         ScColumn* pCol = &pDoc->maTabs[nCurTab]->aCol[nCurCol];
                         ScAttrArray_IterGetNumberFormat( nNumFormat, pAttrArray,
-                                nAttrEndRow, pCol->pAttrArray, nCurRow, pDoc );
+                                nAttrEndRow, pCol->pAttrArray.get(), nCurRow, pDoc );
                         rValue = pDoc->RoundValueAsShown( rValue, nNumFormat );
                     }
                     bFound = true;
@@ -2284,7 +2284,7 @@ void ScHorizontalAttrIterator::InitForNextRow(bool bInitialization)
         SCCOL nPos = i - nStartCol;
         if ( bInitialization || pNextEnd[nPos] < nRow )
         {
-            const ScAttrArray* pArray = pDoc->maTabs[nTab]->aCol[i].pAttrArray;
+            const ScAttrArray* pArray = pDoc->maTabs[nTab]->aCol[i].pAttrArray.get();
             OSL_ENSURE( pArray, "pArray == 0" );
 
             SCSIZE nIndex;

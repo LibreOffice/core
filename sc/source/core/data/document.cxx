@@ -5451,7 +5451,7 @@ void ScDocument::ExtendOverlapped( SCCOL& rStartCol, SCROW& rStartRow,
 
             //TODO: pass on ?
 
-            ScAttrArray* pAttrArray = maTabs[nTab]->aCol[nOldCol].pAttrArray;
+            ScAttrArray* pAttrArray = maTabs[nTab]->aCol[nOldCol].pAttrArray.get();
             SCSIZE nIndex;
             if ( pAttrArray->Count() )
                 pAttrArray->Search( nOldRow, nIndex );

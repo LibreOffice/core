@@ -786,7 +786,7 @@ void ScColumn::GetOptimalHeight(
 {
     ScDocument* pDocument = GetDoc();
     ScFlatUInt16RowSegments& rHeights = rCxt.getHeightArray();
-    ScAttrIterator aIter( pAttrArray, nStartRow, nEndRow, pDocument->GetDefPattern() );
+    ScAttrIterator aIter( pAttrArray.get(), nStartRow, nEndRow, pDocument->GetDefPattern() );
 
     SCROW nStart = -1;
     SCROW nEnd = -1;
