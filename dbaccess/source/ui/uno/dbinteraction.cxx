@@ -22,7 +22,6 @@
 #include <uiservices.hxx>
 #include <tools/diagnose_ex.h>
 #include <osl/diagnose.h>
-#include <vcl/msgbox.hxx>
 #include <connectivity/dbexception.hxx>
 #include <sqlmessage.hxx>
 #include <com/sun/star/task/InteractionHandler.hpp>

@@ -41,7 +41,6 @@
 #include <vcl/menu.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/weld.hxx>
-#include <vcl/msgbox.hxx>
 #include <vcl/lineinfo.hxx>
 #include <vcl/button.hxx>
 #include <vcl/settings.hxx>
@@ -269,7 +268,7 @@ Image UpdateCheckUI::GetBubbleImage( OUString const &rURL )
     }
 
     if ( aImage.GetSizePixel().Width() == 0 )
-        aImage = GetStandardInfoBoxImage();
+        aImage = Image(BitmapEx(SV_RESID_BITMAP_INFOBOX));
 
     return aImage;
 }

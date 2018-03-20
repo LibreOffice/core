@@ -69,7 +69,6 @@
 #include <svtools/genericunodialog.hxx>
 #include <tools/diagnose_ex.h>
 #include <unotools/sharedunocomponent.hxx>
-#include <vcl/msgbox.hxx>
 #include <vcl/waitobj.hxx>
 
 namespace dbaui

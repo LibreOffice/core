@@ -48,6 +48,7 @@
 #define RID_EXTBMP_AUTOFILTER_LC            "res/lc10716.png"
 #define RID_EXTBMP_FILTERCRIT_LC            "res/lc10715.png"
 #define RID_EXTBMP_REMOVE_FILTER_SORT_LC    "res/lc10711.png"
+#define SV_RESID_BITMAP_INFOBOX             "vcl/res/infobox.png"
 
 #endif
 

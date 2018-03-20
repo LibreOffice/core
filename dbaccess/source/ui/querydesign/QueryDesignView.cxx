@@ -30,7 +30,6 @@
 #include <adtabdlg.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/combobox.hxx>
-#include <vcl/msgbox.hxx>
 #include <vcl/weld.hxx>
 #include <browserids.hxx>
 #include "SelectionBrowseBox.hxx"

@@ -35,7 +35,6 @@
 #include <dsitems.hxx>
 #include <helpids.h>
 #include <osl/process.h>
-#include <vcl/msgbox.hxx>
 #include <dbadmin.hxx>
 #include <comphelper/types.hxx>
 #include <vcl/stdtext.hxx>

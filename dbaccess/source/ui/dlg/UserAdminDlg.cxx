@@ -36,7 +36,6 @@
 #include <svl/intitem.hxx>
 #include <svl/stritem.hxx>
 #include <tools/diagnose_ex.h>
-#include <vcl/msgbox.hxx>
 #include <vcl/stdtext.hxx>
 
 namespace dbaui

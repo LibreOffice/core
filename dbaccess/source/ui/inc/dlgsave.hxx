@@ -24,7 +24,6 @@
 #include <vcl/dialog.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <vcl/msgbox.hxx>
 #include <memory>
 #include <o3tl/typed_flags_set.hxx>
 

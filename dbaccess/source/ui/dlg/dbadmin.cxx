@@ -36,7 +36,6 @@
 #include <stringlistitem.hxx>
 
 #include <unotools/confignode.hxx>
-#include <vcl/msgbox.hxx>
 
 namespace dbaui
 {

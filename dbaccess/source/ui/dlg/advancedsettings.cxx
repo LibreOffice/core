@@ -35,8 +35,6 @@
 #include <svl/intitem.hxx>
 #include <svl/stritem.hxx>
 
-#include <vcl/msgbox.hxx>
-
 namespace dbaui
 {
 

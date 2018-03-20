@@ -31,7 +31,6 @@
 #include <svl/stritem.hxx>
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>
-#include <vcl/msgbox.hxx>
 #include <stringconstants.hxx>
 #include "adminpages.hxx"
 #include <sfx2/docfilt.hxx>

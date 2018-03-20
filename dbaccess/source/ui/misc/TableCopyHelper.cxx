@@ -23,7 +23,6 @@
 #include <strings.hrc>
 #include <strings.hxx>
 #include <sqlmessage.hxx>
-#include <vcl/msgbox.hxx>
 #include <WCopyTable.hxx>
 #include <dbaccess/genericcontroller.hxx>
 #include <WCPage.hxx>

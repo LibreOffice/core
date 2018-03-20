@@ -36,7 +36,6 @@
 #include <svtools/rtftoken.h>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <strings.hrc>
-#include <vcl/msgbox.hxx>
 #include <connectivity/dbconversion.hxx>
 #include <connectivity/dbtools.hxx>
 #include <comphelper/extract.hxx>

@@ -34,7 +34,6 @@
 #include <comphelper/types.hxx>
 #include <FieldDescControl.hxx>
 #include <FieldDescriptions.hxx>
-#include <vcl/msgbox.hxx>
 #include "TableUndo.hxx"
 #include <TableController.hxx>
 #include <connectivity/dbmetadata.hxx>

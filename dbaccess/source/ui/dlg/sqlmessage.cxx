@@ -31,7 +31,6 @@
 #include <svtools/svmedit.hxx>
 #include <connectivity/dbexception.hxx>
 #include <connectivity/sqlerror.hxx>
-#include <vcl/msgbox.hxx>
 #include <unotools/configmgr.hxx>
 #include <sfx2/sfxuno.hxx>
 #include <UITools.hxx>

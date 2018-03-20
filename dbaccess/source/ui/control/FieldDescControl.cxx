@@ -26,7 +26,6 @@
 #include <vcl/button.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/fixed.hxx>
-#include <vcl/msgbox.hxx>
 #include <vector>
 #include <FieldDescriptions.hxx>
 #include <dlgattr.hxx>
