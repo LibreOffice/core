@@ -618,7 +618,8 @@ bool OSelectionBrowseBox::fillColumnRef(const OUString& _sColumnName, const OUSt
         {
             OUString sErrorMsg(DBA_RES(RID_STR_FIELD_DOESNT_EXIST));
             sErrorMsg = sErrorMsg.replaceFirst("$name$",_sColumnName);
-            ScopedVclPtrInstance<OSQLErrorBox>(this, sErrorMsg)->Execute();
+            OSQLErrorBox aWarning(GetFrameWeld(), sErrorMsg);
+            aWarning.run();
             bError = true;
         }
         else
@@ -722,7 +723,8 @@ bool OSelectionBrowseBox::saveField(OUString& _sFieldName ,OTableFieldDescRef co
         // something different which we have to check
         OUString sErrorMessage( DBA_RES( STR_QRY_COLUMN_NOT_FOUND ) );
         sErrorMessage = sErrorMessage.replaceFirst("$name$",_sFieldName);
-        ScopedVclPtrInstance<OSQLErrorBox>(this, sErrorMessage)->Execute();
+        OSQLErrorBox aWarning(GetFrameWeld(), sErrorMessage);
+        aWarning.run();
 
         return true;
     }
@@ -878,7 +880,8 @@ bool OSelectionBrowseBox::saveField(OUString& _sFieldName ,OTableFieldDescRef co
             { // the field could not be inserted
                 OUString sErrorMessage( DBA_RES( RID_STR_FIELD_DOESNT_EXIST ) );
                 sErrorMessage = sErrorMessage.replaceFirst("$name$",aSelEntry->GetField());
-                ScopedVclPtrInstance<OSQLErrorBox>(this, sErrorMessage)->Execute();
+                OSQLErrorBox aWarning(GetFrameWeld(), sErrorMessage);
+                aWarning.run();
                 bError = true;
             }
         }
@@ -1145,7 +1148,8 @@ bool OSelectionBrowseBox::SaveModified()
                             {
                                 if ( !m_bDisableErrorBox )
                                 {
-                                    ScopedVclPtrInstance<OSQLWarningBox>(this, aErrorMsg)->Execute();
+                                    OSQLWarningBox aWarning(GetFrameWeld(), aErrorMsg);
+                                    aWarning.run();
                                 }
                                 bError = true;
                             }
@@ -1154,7 +1158,8 @@ bool OSelectionBrowseBox::SaveModified()
                         {
                             if ( !m_bDisableErrorBox )
                             {
-                                ScopedVclPtrInstance<OSQLWarningBox>(this, aErrorMsg)->Execute();
+                                OSQLWarningBox aWarning(GetFrameWeld(), aErrorMsg);
+                                aWarning.run();
                             }
                             bError = true;
                         }

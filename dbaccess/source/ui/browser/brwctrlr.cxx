@@ -1259,8 +1259,8 @@ IMPL_LINK_NOARG( SbaXDataBrowserController, OnAsyncDisplayError, void*, void )
 {
     if ( m_aCurrentError.isValid() )
     {
-        ScopedVclPtrInstance< OSQLMessageBox > aDlg( getBrowserView(), m_aCurrentError );
-        aDlg->Execute();
+        OSQLMessageBox aDlg(getFrameWeld(), m_aCurrentError);
+        aDlg.run();
     }
 }
 

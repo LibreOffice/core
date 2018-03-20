@@ -162,7 +162,8 @@ void ORelationController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue
                 if(!::dbaui::checkDataSourceAvailable(::comphelper::getString(getDataSource()->getPropertyValue(PROPERTY_NAME)), getORB()))
                 {
                     OUString aMessage(DBA_RES(STR_DATASOURCE_DELETED));
-                    ScopedVclPtrInstance<OSQLWarningBox>(getView(), aMessage)->Execute();
+                    OSQLWarningBox aWarning(getFrameWeld(), aMessage);
+                    aWarning.run();
                 }
                 else
                 {
@@ -207,8 +208,8 @@ void ORelationController::impl_initialize()
         {
             OUString sTitle(DBA_RES(STR_RELATIONDESIGN));
             sTitle = sTitle.copy(3);
-            ScopedVclPtrInstance< OSQLMessageBox > aDlg(nullptr,sTitle,DBA_RES(STR_RELATIONDESIGN_NOT_AVAILABLE));
-            aDlg->Execute();
+            OSQLMessageBox aDlg(getFrameWeld(), sTitle, DBA_RES(STR_RELATIONDESIGN_NOT_AVAILABLE));
+            aDlg.run();
         }
         disconnect();
         throw SQLException();

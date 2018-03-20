@@ -120,7 +120,7 @@ void OApplicationController::deleteTables(const std::vector< OUString>& _rList)
 
                 sal_Int32 nResult = RET_YES;
                 if ( bConfirm )
-                    nResult = ::dbaui::askForUserAction(getView(),STR_TITLE_CONFIRM_DELETION ,STR_QUERY_DELETE_TABLE,_rList.size() > 1 && (aIter+1) != _rList.end(),sTableName);
+                    nResult = ::dbaui::askForUserAction(getFrameWeld(), STR_TITLE_CONFIRM_DELETION, STR_QUERY_DELETE_TABLE, _rList.size() > 1 && (aIter+1) != _rList.end(), sTableName);
 
                 bool bUserConfirmedDelete =
                             ( RET_YES == nResult )

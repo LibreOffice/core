@@ -1242,7 +1242,7 @@ Reference< XPropertySet > OCopyTableWizard::createTable()
         {
             xSuppDestinationColumns.set( xTable, UNO_QUERY_THROW );
             // insert new table name into table filter
-            ::dbaui::appendToFilter( m_xDestConnection, m_sName, GetComponentContext(), this );
+            ::dbaui::appendToFilter(m_xDestConnection, m_sName, GetComponentContext(), GetFrameWeld());
 
             // copy ui settings
             m_rSourceObject.copyUISettingsTo( xTable );

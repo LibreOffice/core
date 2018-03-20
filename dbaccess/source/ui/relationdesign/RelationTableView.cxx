@@ -323,8 +323,8 @@ void ORelationTableView::AddTabWin(const OUString& _rComposedName, const OUStrin
 
 void ORelationTableView::RemoveTabWin( OTableWindow* pTabWin )
 {
-    ScopedVclPtrInstance< OSQLWarningBox > aDlg( this, DBA_RES( STR_QUERY_REL_DELETE_WINDOW ), MessBoxStyle::YesNo | MessBoxStyle::DefaultYes );
-    if ( m_bInRemove || aDlg->Execute() == RET_YES )
+    OSQLWarningBox aDlg(GetFrameWeld(), DBA_RES(STR_QUERY_REL_DELETE_WINDOW), MessBoxStyle::YesNo | MessBoxStyle::DefaultYes);
+    if (m_bInRemove || aDlg.run() == RET_YES)
     {
         m_pView->getController().ClearUndoManager();
         OJoinTableView::RemoveTabWin( pTabWin );
@@ -341,14 +341,14 @@ void ORelationTableView::lookForUiActivities()
     {
         OUString sTitle(DBA_RES(STR_RELATIONDESIGN));
         sTitle = sTitle.copy(3);
-        ScopedVclPtrInstance< OSQLMessageBox > aDlg(this,DBA_RES(STR_QUERY_REL_EDIT_RELATION),OUString(),MessBoxStyle::NONE);
-        aDlg->SetText(sTitle);
-        aDlg->RemoveButton(aDlg->GetButtonId(0));
-        aDlg->AddButton( DBA_RES(STR_QUERY_REL_EDIT), RET_OK, ButtonDialogFlags::Default | ButtonDialogFlags::Focus);
-        aDlg->AddButton( DBA_RES(STR_QUERY_REL_CREATE), RET_YES);
-        aDlg->AddButton( StandardButtonType::Cancel,RET_CANCEL);
-        sal_uInt16 nRet = aDlg->Execute();
-        if( nRet == RET_CANCEL)
+        OSQLMessageBox aDlg(GetFrameWeld(), DBA_RES(STR_QUERY_REL_EDIT_RELATION), OUString(), MessBoxStyle::NONE);
+        aDlg.set_title(sTitle);
+        aDlg.add_button(DBA_RES(STR_QUERY_REL_EDIT), RET_OK);
+        aDlg.set_default_response(RET_OK);
+        aDlg.add_button(DBA_RES(STR_QUERY_REL_CREATE), RET_YES);
+        aDlg.add_button(Button::GetStandardText(StandardButtonType::Cancel), RET_CANCEL);
+        sal_uInt16 nRet = aDlg.run();
+        if (nRet == RET_CANCEL)
         {
             m_pCurrentlyTabConnData.reset();
         }

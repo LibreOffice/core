@@ -180,9 +180,9 @@ namespace dbaui
         }
 
         // execute the dialog
-        ScopedVclPtrInstance< OSQLMessageBox > aDialog(nullptr, _rSqlInfo, nDialogStyle);
+        OSQLMessageBox aDialog(nullptr, _rSqlInfo, nDialogStyle);
         // TODO: need a way to specify the parent window
-        sal_Int16 nResult = aDialog->Execute();
+        sal_Int16 nResult = aDialog.run();
         try
         {
             switch (nResult)
