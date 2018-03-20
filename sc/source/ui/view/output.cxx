@@ -61,6 +61,7 @@
 #include <scmod.hxx>
 #include <appoptio.hxx>
 #include <postit.hxx>
+#include <viewopti.hxx>
 
 #include <scresid.hxx>
 #include <colorscale.hxx>
@@ -295,9 +296,10 @@ void ScOutputData::SetSyntaxMode( bool bNewMode )
     if (bNewMode)
         if (!pValueColor)
         {
-            pValueColor = new Color(COL_LIGHTBLUE);
-            pTextColor = new Color(COL_BLACK);
-            pFormulaColor = new Color(COL_GREEN);
+            const ScViewOptions& rOptions = mpDoc->GetViewOptions();
+            pValueColor = new Color(rOptions.GetValueColor());
+            pTextColor = new Color(rOptions.GetTextColor());
+            pFormulaColor = new Color(rOptions.GetFormulaColor());
         }
 }
 
