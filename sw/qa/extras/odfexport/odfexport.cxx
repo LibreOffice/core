@@ -1941,6 +1941,26 @@ DECLARE_ODFEXPORT_TEST(testBulletAsImage, "BulletAsImage.odt")
     CPPUNIT_ASSERT(xBitmap.is());
 }
 
+DECLARE_ODFEXPORT_TEST(testSignatureLineProperties, "signatureline-properties.fodt")
+{
+    uno::Reference<drawing::XShape> xShape = getShape(1);
+    CPPUNIT_ASSERT(xShape.is());
+
+    CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xShape, "IsSignatureLine"));
+    CPPUNIT_ASSERT_EQUAL(OUString("{3C24159B-3B98-4F60-AB52-00E7721758E9}"),
+                         getProperty<OUString>(xShape, "SignatureLineId"));
+    CPPUNIT_ASSERT_EQUAL(OUString("John Doe"),
+                         getProperty<OUString>(xShape, "SignatureLineSuggestedSignerName"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Farmer"),
+                         getProperty<OUString>(xShape, "SignatureLineSuggestedSignerTitle"));
+    CPPUNIT_ASSERT_EQUAL(OUString("john@farmers.org"),
+                         getProperty<OUString>(xShape, "SignatureLineSuggestedSignerEmail"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Please farm here."),
+                         getProperty<OUString>(xShape, "SignatureLineSigningInstructions"));
+    CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xShape, "SignatureLineCanAddComment"));
+    CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xShape, "SignatureLineShowSignDate"));
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
