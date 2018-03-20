@@ -20,7 +20,6 @@
 #define INCLUDED_SW_INC_SPLARGS_HXX
 
 #include <i18nlangtag/lang.h>
-#include <tools/solar.h>
 #include <tools/gen.hxx>
 
 #include <com/sun/star/linguistic2/XSpellAlternatives.hpp>
@@ -28,7 +27,6 @@
 #include <com/sun/star/linguistic2/XHyphenatedWord.hpp>
 
 #include <functional>
-#include <limits.h>
 
 class SwTextFrame;
 class SwTextNode;

@@ -75,6 +75,7 @@
 #include <swabstdlg.hxx>
 
 #include <svx/dialogs.hrc>
+#include <svx/svxdlg.hxx>
 
 #include <docsh.hxx>
 #include <svx/drawitem.hxx>

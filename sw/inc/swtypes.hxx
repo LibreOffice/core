@@ -19,27 +19,19 @@
 #ifndef INCLUDED_SW_INC_SWTYPES_HXX
 #define INCLUDED_SW_INC_SWTYPES_HXX
 #include <rtl/ustring.hxx>
-#include <tools/solar.h>
-#include <tools/mapunit.hxx>
-#include "SwGetPoolIdFromName.hxx"
 
 #include <limits.h>
 #include <com/sun/star/uno/Reference.h>
 #include "swdllapi.h"
-#include <i18nlangtag/languagetag.hxx>
 #include <o3tl/typed_flags_set.hxx>
-#include <svx/swframetypes.hxx>
+#include <i18nlangtag/lang.h>
 
 namespace com { namespace sun { namespace star {
     namespace linguistic2{
-        class XDictionaryList;
         class XLinguProperties;
         class XSpellChecker1;
         class XHyphenator;
         class XThesaurus;
-    }
-    namespace beans{
-        class XPropertySet;
     }
 }}}
 namespace utl{
@@ -51,8 +43,8 @@ class SwPathFinder;
 class Graphic;
 class OutputDevice;
 class CharClass;
-class LocaleDataWrapper;
 class CollatorWrapper;
+class LanguageTag;
 
 typedef long SwTwips;
 #define INVALID_TWIPS   LONG_MAX

@@ -24,6 +24,7 @@
 #include <svl/macitem.hxx>
 #include <unotools/charclass.hxx>
 #include <editeng/scripttypeitem.hxx>
+#include <sfx2/event.hxx>
 #include <cmdid.h>
 #include <view.hxx>
 #include <basesh.hxx>

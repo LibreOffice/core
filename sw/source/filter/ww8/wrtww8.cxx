@@ -114,6 +114,7 @@
 #include <sfx2/docfilt.hxx>
 #include "WW8Sttbf.hxx"
 #include <editeng/charrotateitem.hxx>
+#include <svx/swframetypes.hxx>
 #include "WW8FibData.hxx"
 #include <numrule.hxx>
 #include <fmtclds.hxx>

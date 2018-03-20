@@ -60,6 +60,7 @@
 #include <tgrditem.hxx>
 #include <unotools/configmgr.hxx>
 #include <unotools/syslocale.hxx>
+#include <svx/swframetypes.hxx>
 
 using namespace com::sun::star;
 

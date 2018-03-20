@@ -32,6 +32,7 @@
 #include <com/sun/star/style/LineSpacingMode.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/drawing/XControlShape.hpp>
+#include <com/sun/star/text/TextContentAnchorType.hpp>
 
 #include <ftninfo.hxx>
 #include <sfx2/docfile.hxx>

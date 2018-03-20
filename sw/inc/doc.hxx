@@ -174,6 +174,7 @@ class SetGetExpFields;
 struct SwInsertTableOptions;
 enum class SvMacroItemId : sal_uInt16;
 enum class SvxFrameDirection;
+enum class RndStdIds;
 
 namespace sw { namespace mark {
     class MarkManager;

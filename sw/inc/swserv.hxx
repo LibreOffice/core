@@ -20,13 +20,13 @@
 #define INCLUDED_SW_INC_SWSERV_HXX
 
 #include <sfx2/linksrc.hxx>
-#include "IMark.hxx"
 
 class SwSectionNode;
 class SwBaseLink;
 class SwTableNode;
 struct SwPosition;
 class SwPaM;
+namespace sw { namespace mark { class IMark; } }
 
 class SwServerObject final : public ::sfx2::SvLinkSource
 {

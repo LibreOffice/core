@@ -107,6 +107,7 @@ using namespace ::com::sun::star;
 #include <IDocumentDrawModelAccess.hxx>
 #include <drawdoc.hxx>
 #include <svtools/embedhlp.hxx>
+#include <sfx2/event.hxx>
 
 SFX_IMPL_INTERFACE(SwTextShell, SwBaseShell)
 

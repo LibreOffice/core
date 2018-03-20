@@ -52,6 +52,7 @@ class SotDataObject;
 class SwFrameFormat;
 struct SwSortOptions;
 class SdrMarkList;
+enum class RndStdIds;
 
 namespace svx
 {

@@ -33,6 +33,7 @@ class SwObjPositioningInProgress;
 
 class SwFrameFormat;
 class SwFormatAnchor;
+enum class RndStdIds;
 
 /** wrapper class for the positioning of Writer fly frames and drawing objects
 

@@ -22,6 +22,7 @@
 #include <com/sun/star/drawing/XControlShape.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>
 #include <com/sun/star/text/WrapTextMode.hpp>
+#include <com/sun/star/text/TextContentAnchorType.hpp>
 
 #include <ftninfo.hxx>
 #include <pagedesc.hxx>

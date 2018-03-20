@@ -114,6 +114,7 @@
 #include <config_features.h>
 #include <sfx2/watermarkitem.hxx>
 #include <sfx2/fcontnr.hxx>
+#include <sfx2/docfile.hxx>
 #include <fmthdft.hxx>
 #include <iodetect.hxx>
 

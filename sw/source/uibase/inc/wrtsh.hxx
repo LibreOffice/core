@@ -27,6 +27,7 @@
 #include "navmgr.hxx"
 #include <boost/optional.hpp>
 #include <o3tl/typed_flags_set.hxx>
+#include <svx/swframetypes.hxx>
 
 namespace vcl { class Window; }
 class SbxArray;

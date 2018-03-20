@@ -61,6 +61,7 @@
 #include <strings.hrc>
 #include <sfx2/app.hxx>
 #include <svx/dialogs.hrc>
+#include <sfx2/event.hxx>
 #include <swabstdlg.hxx>
 #include <doc.hxx>
 #include <app.hrc>

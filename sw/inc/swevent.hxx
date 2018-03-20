@@ -20,8 +20,6 @@
 #ifndef INCLUDED_SW_INC_SWEVENT_HXX
 #define INCLUDED_SW_INC_SWEVENT_HXX
 
-#include <sfx2/event.hxx>
-#include <tools/solar.h>
 #include "calbck.hxx"
 #include "frmfmt.hxx"
 #include "hints.hxx"
@@ -40,7 +38,6 @@
 #define     STR_SW_EVENT_FRM_RESIZE           11
 #define     STR_SW_EVENT_FRM_MOVE             12
 
-class SwFrameFormat;
 class SwFormatINetFormat;
 class IMapObject;
 
