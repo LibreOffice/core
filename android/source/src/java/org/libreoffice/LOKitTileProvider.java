@@ -21,6 +21,9 @@ import org.mozilla.gecko.gfx.BufferedCairoImage;
 import org.mozilla.gecko.gfx.CairoImage;
 import org.mozilla.gecko.gfx.IntSize;
 
+import java.io.File;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.nio.ByteBuffer;
 
 /**
@@ -65,7 +68,16 @@ class LOKitTileProvider implements TileProvider {
         mInputFile = input;
 
         Log.i(LOGTAG, "====> Loading file '" + input + "'");
-        mDocument = mOffice.documentLoad(input);
+        File fileToBeEncoded = new File(input);
+        String encodedFileName = "";
+        try {
+            encodedFileName = URLEncoder.encode(fileToBeEncoded.getName(),"UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        mDocument = mOffice.documentLoad(
+                (new File(fileToBeEncoded.getParent(),encodedFileName)).getPath()
+        );
 
         if (mDocument == null && !mContext.isPasswordProtected()) {
             Log.i(LOGTAG, "====> mOffice.documentLoad() returned null, trying to restart 'Office' and loading again");
@@ -78,7 +90,9 @@ class LOKitTileProvider implements TileProvider {
             mOffice.setMessageCallback(messageCallback);
             mOffice.setOptionalFeatures(Document.LOK_FEATURE_DOCUMENT_PASSWORD);
             Log.i(LOGTAG, "====> setup Lokit callback and optional features (password support)");
-            mDocument = mOffice.documentLoad(input);
+            mDocument = mOffice.documentLoad(
+                    (new File(fileToBeEncoded.getParent(),encodedFileName)).getPath()
+            );
         }
 
         Log.i(LOGTAG, "====> mDocument = " + mDocument);
