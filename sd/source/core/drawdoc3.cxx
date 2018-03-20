@@ -81,12 +81,10 @@ void InsertBookmarkAsPage_FindDuplicateLayouts::operator()( SdDrawDocument& rDoc
 {
     // now check for duplicate masterpage and layout names
 
-    OUString aFullNameLayout( pBMMPage->GetLayoutName() );
-    sal_Int32 nIndex = aFullNameLayout.indexOf( SD_LT_SEPARATOR );
+    OUString aLayout( pBMMPage->GetLayoutName() );
+    sal_Int32 nIndex = aLayout.indexOf( SD_LT_SEPARATOR );
     if( nIndex != -1 )
-        aFullNameLayout = aFullNameLayout.copy(0, nIndex);
-
-    OUString aLayout(aFullNameLayout);
+        aLayout = aLayout.copy(0, nIndex);
 
     std::vector<OUString>::const_iterator pIter =
             find(mrLayoutsToTransfer.begin(),mrLayoutsToTransfer.end(),aLayout);
