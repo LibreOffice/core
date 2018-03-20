@@ -25,6 +25,7 @@
 #include <vcl/lstbox.hxx>
 #include <vcl/menubtn.hxx>
 #include <vcl/toolbox.hxx>
+#include <vcl/weld.hxx>
 #include <svtools/imgdef.hxx>
 #include <svtools/miscopt.hxx>
 #include <svtools/treelistbox.hxx>
@@ -51,7 +52,6 @@
 #include <sfx2/tabdlg.hxx>
 #include <memory>
 #include <vector>
-#include <vcl/msgbox.hxx>
 
 #include "cfgutil.hxx"
 #include "CommandCategoryListBox.hxx"
@@ -637,15 +637,12 @@ public:
 };
 
 //added for issue83555
-class SvxIconChangeDialog : public ModalDialog
+class SvxIconChangeDialog : public weld::MessageDialogController
 {
 private:
-    VclPtr<FixedImage>         pFImageInfo;
-    VclPtr<VclMultiLineEdit>   pLineEditDescription;
+    std::unique_ptr<weld::TextView> m_xLineEditDescription;
 public:
-    SvxIconChangeDialog(vcl::Window *pWindow, const OUString& aMessage);
-    virtual ~SvxIconChangeDialog() override;
-    virtual void dispose() override;
+    SvxIconChangeDialog(weld::Window *pWindow, const OUString& rMessage);
 };
 
 #endif // INCLUDED_CUI_SOURCE_INC_CFG_HXX
