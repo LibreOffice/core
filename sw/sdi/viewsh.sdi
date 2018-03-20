@@ -36,13 +36,13 @@ interface TextEditView : BaseTextEditView
         StateMethod = GetState ;
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
-    FN_INSERT_SIGNATURELINE // status()
+    SID_INSERT_SIGNATURELINE // status()
     [
         ExecMethod = ExecDlgExt ;
         StateMethod = GetState ;
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
-    FN_EDIT_SIGNATURELINE // status()
+    SID_EDIT_SIGNATURELINE // status()
     [
         ExecMethod = ExecDlgExt ;
         StateMethod = GetState ;

@@ -7,13 +7,13 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <SignatureLineDialog.hxx>
+#include <svx/SignatureLineDialog.hxx>
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/xmltools.hxx>
 #include <tools/stream.hxx>
 #include <unotools/streamwrap.hxx>
-#include <view.hxx>
+#include <vcl/weld.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
@@ -29,34 +29,34 @@
 using namespace css;
 using namespace css::uno;
 using namespace css::beans;
+using namespace css::frame;
 using namespace css::io;
 using namespace css::lang;
 using namespace css::frame;
 using namespace css::text;
-using namespace css::view;
 using namespace css::drawing;
 using namespace css::graphic;
 
-SignatureLineDialog::SignatureLineDialog(SwView& rView)
-    : GenericDialogController(rView.GetFrameWeld(), "modules/swriter/ui/signatureline.ui",
-                              "SignatureLineDialog")
+SignatureLineDialog::SignatureLineDialog(weld::Widget* pParent, Reference<XModel> xModel,
+                                         bool bEditExisting)
+    : GenericDialogController(pParent, "svx/ui/signatureline.ui", "SignatureLineDialog")
     , m_xEditName(m_xBuilder->weld_entry("edit_name"))
     , m_xEditTitle(m_xBuilder->weld_entry("edit_title"))
     , m_xEditEmail(m_xBuilder->weld_entry("edit_email"))
     , m_xEditInstructions(m_xBuilder->weld_text_view("edit_instructions"))
     , m_xCheckboxCanAddComments(m_xBuilder->weld_check_button("checkbox_can_add_comments"))
     , m_xCheckboxShowSignDate(m_xBuilder->weld_check_button("checkbox_show_sign_date"))
-    , mrView(rView)
+    , m_xModel(xModel)
 {
     m_xEditInstructions->set_size_request(m_xEditInstructions->get_approximate_digit_width() * 48,
                                           m_xEditInstructions->get_text_height() * 5);
 
     // No signature line selected - start with empty dialog and generate a new one
-    if (!rView.isSignatureLineSelected())
+    if (!bEditExisting)
         return;
 
-    Reference<XModel> const xModel(rView.GetCurrentDocument());
-    Reference<container::XIndexAccess> xIndexAccess(xModel->getCurrentSelection(), UNO_QUERY_THROW);
+    Reference<container::XIndexAccess> xIndexAccess(m_xModel->getCurrentSelection(),
+                                                    UNO_QUERY_THROW);
     Reference<XPropertySet> xProps(xIndexAccess->getByIndex(0), UNO_QUERY_THROW);
 
     // Read properties from selected signature line
@@ -127,13 +127,12 @@ void SignatureLineDialog::Apply()
     aMediaProperties[0].Value <<= xInputStream;
     Reference<XGraphic> xGraphic(xProvider->queryGraphic(aMediaProperties));
 
-    Reference<XModel> const xModel(mrView.GetCurrentDocument());
     bool bIsExistingSignatureLine = m_xExistingShapeProperties.is();
     Reference<XPropertySet> xShapeProps;
     if (bIsExistingSignatureLine)
         xShapeProps = m_xExistingShapeProperties;
     else
-        xShapeProps.set(Reference<lang::XMultiServiceFactory>(xModel, UNO_QUERY)
+        xShapeProps.set(Reference<lang::XMultiServiceFactory>(m_xModel, UNO_QUERY)
                             ->createInstance("com.sun.star.drawing.GraphicObjectShape"),
                         UNO_QUERY);
 
@@ -168,7 +167,7 @@ void SignatureLineDialog::Apply()
 
         // Insert into document
         Reference<XTextRange> const xEnd
-            = Reference<XTextDocument>(xModel, UNO_QUERY)->getText()->getEnd();
+            = Reference<XTextDocument>(m_xModel, UNO_QUERY)->getText()->getEnd();
         Reference<XTextContent> const xShapeContent(xShapeProps, UNO_QUERY);
         xShapeContent->attach(xEnd);
     }
