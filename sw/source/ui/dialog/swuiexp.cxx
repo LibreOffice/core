@@ -39,7 +39,7 @@
 #include <selglos.hxx>
 #include <splittbl.hxx>
 #include <tautofmt.hxx>
-#include <SignatureLineDialog.hxx>
+#include <svx/SignatureLineDialog.hxx>
 #include <swmodalredlineacceptdlg.hxx>
 #include <swrenamexnameddlg.hxx>
 #include <swuiidxmrk.hxx>

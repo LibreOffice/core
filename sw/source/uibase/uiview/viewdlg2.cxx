@@ -21,6 +21,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/objface.hxx>
 #include <svx/svdograf.hxx>
+#include <svx/SignatureLineDialog.hxx>
 #include <fldmgr.hxx>
 #include <expfld.hxx>
 #include <modcfg.hxx>
@@ -42,6 +43,8 @@
 
 #include <memory>
 
+using namespace css;
+
 void SwView::ExecDlgExt(SfxRequest const &rReq)
 {
     vcl::Window& rMDI = GetViewFrame()->GetWindow();
@@ -61,14 +64,17 @@ void SwView::ExecDlgExt(SfxRequest const &rReq)
             }
             break;
         }
-        case FN_INSERT_SIGNATURELINE:
-        case FN_EDIT_SIGNATURELINE:
+        case SID_INSERT_SIGNATURELINE:
+        case SID_EDIT_SIGNATURELINE:
         {
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
             assert(pFact && "SwAbstractDialogFactory fail!");
 
-            ScopedVclPtr<VclAbstractDialog> pDialog(pFact->CreateSignatureLineDialog(*this));
+            const uno::Reference<frame::XModel> xModel(GetCurrentDocument());
+            ScopedVclPtr<VclAbstractDialog> pDialog(
+                pFact->CreateSignatureLineDialog(*this, xModel, rReq.GetSlot() == SID_EDIT_SIGNATURELINE));
             assert(pDialog && "Dialog creation failed!");
+
             if (pDialog)
                 pDialog->Execute();
             break;
