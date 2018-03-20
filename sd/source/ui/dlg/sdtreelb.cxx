@@ -1351,7 +1351,7 @@ void SdPageObjsTLB::AddShapeToTransferable (
     SdTransferable& rTransferable,
     SdrObject& rObject) const
 {
-    TransferableObjectDescriptor aObjectDescriptor;
+    std::unique_ptr<TransferableObjectDescriptor> pObjectDescriptor(new TransferableObjectDescriptor);
     bool bIsDescriptorFillingPending (true);
 
     const SdrOle2Obj* pOleObject = dynamic_cast<const SdrOle2Obj*>(&rObject);
@@ -1364,7 +1364,7 @@ void SdPageObjsTLB::AddShapeToTransferable (
             if (xPersObj.is() && xPersObj->hasEntry())
             {
                 SvEmbedTransferHelper::FillTransferableObjectDescriptor(
-                    aObjectDescriptor,
+                    *pObjectDescriptor,
                     pOleObject->GetObjRef(),
                     pOleObject->GetGraphic(),
                     pOleObject->GetAspect());
@@ -1379,20 +1379,20 @@ void SdPageObjsTLB::AddShapeToTransferable (
     ::sd::DrawDocShell* pDocShell = mpDoc->GetDocSh();
     if (bIsDescriptorFillingPending && pDocShell!=nullptr)
     {
-        pDocShell->FillTransferableObjectDescriptor(aObjectDescriptor);
+        pDocShell->FillTransferableObjectDescriptor(*pObjectDescriptor);
     }
 
     Point aDragPos (rObject.GetCurrentBoundRect().Center());
     //Point aDragPos (0,0);
-    aObjectDescriptor.maDragStartPos = aDragPos;
+    pObjectDescriptor->maDragStartPos = aDragPos;
     //  aObjectDescriptor.maSize = GetAllMarkedRect().GetSize();
     if (pDocShell != nullptr)
-        aObjectDescriptor.maDisplayName = pDocShell->GetMedium()->GetURLObject().GetURLNoPass();
+        pObjectDescriptor->maDisplayName = pDocShell->GetMedium()->GetURLObject().GetURLNoPass();
     else
-        aObjectDescriptor.maDisplayName.clear();
+        pObjectDescriptor->maDisplayName.clear();
 
     rTransferable.SetStartPos(aDragPos);
-    rTransferable.SetObjectDescriptor( aObjectDescriptor );
+    rTransferable.SetObjectDescriptor( std::move(pObjectDescriptor) );
 }
 
 ::sd::ViewShell* SdPageObjsTLB::GetViewShellForDocShell (::sd::DrawDocShell& rDocShell)
