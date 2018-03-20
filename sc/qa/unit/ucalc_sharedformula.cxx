@@ -1473,11 +1473,11 @@ void Test::testSharedFormulaUpdateOnNamedRangeChange()
     aName.mpName = pName;
     aName.mpExpr = pExpr1;
     aName.mnIndex = 1;
-    ScRangeName* pNames = new ScRangeName;
-    bool bSuccess = insertRangeNames(m_pDoc, pNames, &aName, &aName + 1);
+    std::unique_ptr<ScRangeName> pNames(new ScRangeName);
+    bool bSuccess = insertRangeNames(m_pDoc, pNames.get(), &aName, &aName + 1);
     CPPUNIT_ASSERT(bSuccess);
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pNames->size());
-    m_pDoc->SetRangeName(pNames);
+    m_pDoc->SetRangeName(std::move(pNames));
 
     // Set values to A1:A4.
     m_pDoc->SetValue(ScAddress(0,0,0), 1.0);
@@ -1525,9 +1525,9 @@ void Test::testSharedFormulaUpdateOnNamedRangeChange()
     CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(ScAddress(2,0,0)));
 
     // Update the range of MyRange.
-    pNames = new ScRangeName;
+    pNames.reset(new ScRangeName);
     aName.mpExpr = pExpr2;
-    bSuccess = insertRangeNames(m_pDoc, pNames, &aName, &aName + 1);
+    bSuccess = insertRangeNames(m_pDoc, pNames.get(), &aName, &aName + 1);
     CPPUNIT_ASSERT(bSuccess);
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pNames->size());
     ScDocFunc& rFunc = getDocShell().GetDocFunc();
@@ -1535,7 +1535,7 @@ void Test::testSharedFormulaUpdateOnNamedRangeChange()
     typedef std::map<OUString, std::unique_ptr<ScRangeName>> NameMapType;
     NameMapType aNewNames;
     OUString aScope(STR_GLOBAL_RANGE_NAME);
-    aNewNames.insert(std::make_pair(aScope, std::unique_ptr<ScRangeName>(pNames)));
+    aNewNames.insert(std::make_pair(aScope, std::move(pNames)));
     rFunc.ModifyAllRangeNames(aNewNames);
 
     // Check to make sure all displayed formulas are still good.

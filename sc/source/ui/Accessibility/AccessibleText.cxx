@@ -1251,7 +1251,7 @@ SvxTextForwarder* ScAccessiblePreviewHeaderCellTextData::GetTextForwarder()
         {
             SfxItemPool* pEnginePool = EditEngine::CreatePool();
             pEnginePool->FreezeIdRanges();
-            pEditEngine = new ScFieldEditEngine(nullptr, pEnginePool, nullptr, true);
+            pEditEngine.reset( new ScFieldEditEngine(nullptr, pEnginePool, nullptr, true) );
         }
         pEditEngine->EnableUndo( false );
         if (pDocShell)
@@ -1443,7 +1443,7 @@ ScAccessibleNoteTextData::~ScAccessibleNoteTextData()
         mpDocSh->GetDocument().RemoveUnoObject(*this);
     if (mpEditEngine)
         mpEditEngine->SetNotifyHdl(Link<EENotify&,void>());
-    delete mpEditEngine;
+    mpEditEngine.reset();
     delete mpForwarder;
 }
 
@@ -1476,7 +1476,7 @@ SvxTextForwarder* ScAccessibleNoteTextData::GetTextForwarder()
         {
             SfxItemPool* pEnginePool = EditEngine::CreatePool();
             pEnginePool->FreezeIdRanges();
-            mpEditEngine = new ScFieldEditEngine(nullptr, pEnginePool, nullptr, true);
+            mpEditEngine.reset( new ScFieldEditEngine(nullptr, pEnginePool, nullptr, true) );
         }
         mpEditEngine->EnableUndo( false );
         if (mpDocSh)

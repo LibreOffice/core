@@ -1485,12 +1485,10 @@ ScCellRangesBase::~ScCellRangesBase()
 
 void ScCellRangesBase::ForgetCurrentAttrs()
 {
-    delete pCurrentFlat;
-    delete pCurrentDeep;
+    pCurrentFlat.reset();
+    pCurrentDeep.reset();
     delete pCurrentDataSet;
     delete pNoDfltCurrentDataSet;
-    pCurrentFlat = nullptr;
-    pCurrentDeep = nullptr;
     pCurrentDataSet = nullptr;
     pNoDfltCurrentDataSet = nullptr;
 
@@ -1512,7 +1510,7 @@ const ScPatternAttr* ScCellRangesBase::GetCurrentAttrsFlat()
         ScDocument& rDoc = pDocShell->GetDocument();
         pCurrentFlat = rDoc.CreateSelectionPattern( *GetMarkData(), false );
     }
-    return pCurrentFlat;
+    return pCurrentFlat.get();
 }
 
 const ScPatternAttr* ScCellRangesBase::GetCurrentAttrsDeep()
@@ -1524,7 +1522,7 @@ const ScPatternAttr* ScCellRangesBase::GetCurrentAttrsDeep()
         ScDocument& rDoc = pDocShell->GetDocument();
         pCurrentDeep = rDoc.CreateSelectionPattern( *GetMarkData() );
     }
-    return pCurrentDeep;
+    return pCurrentDeep.get();
 }
 
 SfxItemSet* ScCellRangesBase::GetCurrentDataSet(bool bNoDflt)

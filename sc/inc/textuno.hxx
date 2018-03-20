@@ -325,7 +325,7 @@ class ScCellTextData : public SfxListener
 protected:
     ScDocShell*             pDocShell;
     ScAddress               aCellPos;
-    ScFieldEditEngine*      pEditEngine;
+    std::unique_ptr<ScFieldEditEngine> pEditEngine;
     SvxEditEngineForwarder* pForwarder;
     ScCellEditSource* pOriginalSource;
     bool                    bDataValid;
@@ -342,7 +342,7 @@ public:
                             // helper functions for ScSharedCellEditSource:
     virtual SvxTextForwarder* GetTextForwarder();
     void                    UpdateData();
-    ScFieldEditEngine*      GetEditEngine() { GetTextForwarder(); return pEditEngine; }
+    ScFieldEditEngine*      GetEditEngine() { GetTextForwarder(); return pEditEngine.get(); }
 
     ScCellEditSource* GetOriginalSource();        // used as argument for SvxUnoText ctor
 

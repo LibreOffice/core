@@ -163,7 +163,7 @@ bool ScDBDocFunc::RenameDBRange( const OUString& rOld, const OUString& rNew )
 
         ScDBData* pNewData = new ScDBData(rNew, **iterOld);
 
-        ScDBCollection* pUndoColl = new ScDBCollection( *pDocColl );
+        std::unique_ptr<ScDBCollection> pUndoColl( new ScDBCollection( *pDocColl ) );
 
         rDoc.PreprocessDBDataUpdate();
         rDBs.erase(iterOld);
@@ -171,7 +171,7 @@ bool ScDBDocFunc::RenameDBRange( const OUString& rOld, const OUString& rNew )
         if (!bInserted)                             // error -> restore old state
         {
             delete pNewData;
-            rDoc.SetDBCollection(pUndoColl);       // belongs to the document then
+            rDoc.SetDBCollection(std::move(pUndoColl));       // belongs to the document then
         }
 
         rDoc.CompileHybridFormula();
@@ -182,10 +182,10 @@ bool ScDBDocFunc::RenameDBRange( const OUString& rOld, const OUString& rNew )
             {
                 ScDBCollection* pRedoColl = new ScDBCollection( *pDocColl );
                 rDocShell.GetUndoManager()->AddUndoAction(
-                                new ScUndoDBData( &rDocShell, pUndoColl, pRedoColl ) );
+                                new ScUndoDBData( &rDocShell, pUndoColl.release(), pRedoColl ) );
             }
             else
-                delete pUndoColl;
+                pUndoColl.reset();
 
             aModificator.SetDocumentModified();
             SfxGetpApp()->Broadcast( SfxHint( SfxHintId::ScDbAreasChanged ) );
@@ -264,7 +264,7 @@ void ScDBDocFunc::ModifyAllDBData( const ScDBCollection& rNewColl, const std::ve
     //  register target in SBA no longer necessary
 
     rDoc.PreprocessDBDataUpdate();
-    rDoc.SetDBCollection( new ScDBCollection( rNewColl ) );
+    rDoc.SetDBCollection( std::unique_ptr<ScDBCollection>(new ScDBCollection( rNewColl )) );
     rDoc.CompileHybridFormula();
     pOldColl = nullptr;
     rDocShell.PostPaint(ScRange(0, 0, 0, MAXCOL, MAXROW, MAXTAB), PaintPartFlags::Grid);

@@ -58,7 +58,7 @@ XclImpChangeTrack::XclImpChangeTrack( const XclImpRoot& rRoot, const XclImpStrea
             xInStrm->Seek( STREAM_SEEK_TO_BEGIN );
             pStrm = new XclImpStream( *xInStrm, GetRoot() );
             pStrm->CopyDecrypterFrom( rBookStrm );
-            pChangeTrack = new ScChangeTrack( &GetDocRef() );
+            pChangeTrack.reset(new ScChangeTrack( &GetDocRef() ));
 
             sOldUsername = pChangeTrack->GetUser();
             pChangeTrack->SetUseFixDateTime( true );
@@ -70,7 +70,7 @@ XclImpChangeTrack::XclImpChangeTrack( const XclImpRoot& rRoot, const XclImpStrea
 
 XclImpChangeTrack::~XclImpChangeTrack()
 {
-    delete pChangeTrack;
+    pChangeTrack.reset();
     delete pStrm;
 }
 
@@ -491,8 +491,7 @@ void XclImpChangeTrack::Apply()
         pChangeTrack->SetUser( sOldUsername );
         pChangeTrack->SetUseFixDateTime( false );
 
-        GetDoc().SetChangeTrack( pChangeTrack );
-        pChangeTrack = nullptr;
+        GetDoc().SetChangeTrack( std::move(pChangeTrack) );
 
         ScChangeViewSettings aSettings;
         aSettings.SetShowChanges( true );

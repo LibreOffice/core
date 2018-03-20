@@ -176,8 +176,8 @@ private:
     const SfxItemPropertySet* pPropSet;
     ScDocShell*             pDocShell;
     ScLinkListener*         pValueListener;
-    ScPatternAttr*          pCurrentFlat;
-    ScPatternAttr*          pCurrentDeep;
+    std::unique_ptr<ScPatternAttr> pCurrentFlat;
+    std::unique_ptr<ScPatternAttr> pCurrentDeep;
     SfxItemSet*             pCurrentDataSet;
     SfxItemSet*             pNoDfltCurrentDataSet;
     ScMarkData*             pMarkData;
