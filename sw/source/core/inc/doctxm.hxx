@@ -85,38 +85,18 @@ public:
 
 struct SwDefTOXBase_Impl
 {
-    SwTOXBase* pContBase;
-    SwTOXBase* pIdxBase;
-    SwTOXBase* pUserBase;
-    SwTOXBase* pTableBase;
-    SwTOXBase* pObjBase;
-    SwTOXBase* pIllBase;
-    SwTOXBase* pAuthBase;
-    SwTOXBase* pBiblioBase;
+    std::unique_ptr<SwTOXBase> pContBase;
+    std::unique_ptr<SwTOXBase> pIdxBase;
+    std::unique_ptr<SwTOXBase> pUserBase;
+    std::unique_ptr<SwTOXBase> pTableBase;
+    std::unique_ptr<SwTOXBase> pObjBase;
+    std::unique_ptr<SwTOXBase> pIllBase;
+    std::unique_ptr<SwTOXBase> pAuthBase;
+    std::unique_ptr<SwTOXBase> pBiblioBase;
 
-    SwDefTOXBase_Impl() :
-    pContBase(nullptr),
-    pIdxBase(nullptr),
-    pUserBase(nullptr),
-    pTableBase(nullptr),
-    pObjBase(nullptr),
-    pIllBase(nullptr),
-    pAuthBase(nullptr),
-    pBiblioBase(nullptr)
+    SwDefTOXBase_Impl()
     {
     }
-    ~SwDefTOXBase_Impl()
-    {
-        delete pContBase;
-        delete pIdxBase;
-        delete pUserBase;
-        delete pTableBase;
-        delete pObjBase;
-        delete pIllBase;
-        delete pAuthBase;
-        delete pBiblioBase;
-    }
-
 };
 
 #endif

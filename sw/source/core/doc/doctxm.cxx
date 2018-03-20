@@ -449,7 +449,7 @@ const SwAttrSet& SwDoc::GetTOXBaseAttrSet(const SwTOXBase& rTOXBase)
 
 const SwTOXBase* SwDoc::GetDefaultTOXBase( TOXTypes eTyp, bool bCreate )
 {
-    SwTOXBase** prBase = nullptr;
+    std::unique_ptr<SwTOXBase>* prBase = nullptr;
     switch(eTyp)
     {
     case  TOX_CONTENT:          prBase = &mpDefTOXBases->pContBase; break;
@@ -468,14 +468,14 @@ const SwTOXBase* SwDoc::GetDefaultTOXBase( TOXTypes eTyp, bool bCreate )
     {
         SwForm aForm(eTyp);
         const SwTOXType* pType = GetTOXType(eTyp, 0);
-        (*prBase) = new SwTOXBase(pType, aForm, SwTOXElement::NONE, pType->GetTypeName());
+        prBase->reset(new SwTOXBase(pType, aForm, SwTOXElement::NONE, pType->GetTypeName()));
     }
-    return (*prBase);
+    return prBase->get();
 }
 
 void    SwDoc::SetDefaultTOXBase(const SwTOXBase& rBase)
 {
-    SwTOXBase** prBase = nullptr;
+    std::unique_ptr<SwTOXBase>* prBase = nullptr;
     switch(rBase.GetType())
     {
     case  TOX_CONTENT:          prBase = &mpDefTOXBases->pContBase; break;
@@ -490,8 +490,7 @@ void    SwDoc::SetDefaultTOXBase(const SwTOXBase& rBase)
     }
     if (!prBase)
         return;
-    delete *prBase;
-    (*prBase) = new SwTOXBase(rBase);
+    prBase->reset(new SwTOXBase(rBase));
 }
 
 /// Delete table of contents
