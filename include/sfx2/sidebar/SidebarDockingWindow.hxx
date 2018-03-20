@@ -37,6 +37,7 @@ public:
     virtual ~SidebarDockingWindow() override;
     virtual void dispose() override;
     virtual bool EventNotify(NotifyEvent& rEvent) override;
+    virtual bool Close() override;
 
     using SfxDockingWindow::Close;
 

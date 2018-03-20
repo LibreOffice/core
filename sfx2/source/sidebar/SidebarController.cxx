@@ -104,6 +104,7 @@ SidebarController::SidebarController (
       maAsynchronousDeckSwitch(),
       mbIsDeckRequestedOpen(),
       mbIsDeckOpen(),
+      mbFloatingDeckClosed(!pParentWindow->IsFloatingMode()),
       mnSavedSidebarWidth(pParentWindow->GetSizePixel().Width()),
       maFocusManager([this](const Panel& rPanel){ return this->ShowPanel(rPanel); }),
       mxReadOnlyModeDispatch(),
@@ -523,12 +524,17 @@ void SidebarController::OpenThenToggleDeck (
     else if ( IsDeckVisible( rsDeckId ) )
     {
         if ( pSplitWindow )
+        {
             // tdf#67627 Clicking a second time on a Deck icon will close the Deck
             RequestCloseDeck();
-        else
+            return;
+        }
+        else if( !WasFloatingDeckClosed() )
+        {
             // tdf#88241 Summoning an undocked sidebar a second time should close sidebar
             mpParentWindow->Close();
-        return;
+            return;
+        }
     }
     RequestOpenDeck();
     SwitchToDeck(rsDeckId);
