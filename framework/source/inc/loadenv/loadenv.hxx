@@ -547,6 +547,11 @@ private:
      */
     void impl_jumpToMark(const css::uno::Reference< css::frame::XFrame >& xFrame,
                          const css::util::URL&                            aURL  );
+
+    /** @short  determine if this loader has an interactive dialog shown before
+                loading the document.
+     */
+    bool impl_filterHasInteractiveDialog() const;
 };
 
 } // namespace framework
