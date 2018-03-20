@@ -77,11 +77,11 @@ void SAL_CALL ScXMLConsolidationContext::endFastElement( sal_Int32 /*nElement*/ 
 {
     if (bTargetAddr)
     {
-        ScConsolidateParam aConsParam;
-        aConsParam.nCol = aTargetAddr.Col();
-        aConsParam.nRow = aTargetAddr.Row();
-        aConsParam.nTab = aTargetAddr.Tab();
-        aConsParam.eFunction = eFunction;
+        std::unique_ptr<ScConsolidateParam> pConsParam(new ScConsolidateParam);
+        pConsParam->nCol = aTargetAddr.Col();
+        pConsParam->nRow = aTargetAddr.Row();
+        pConsParam->nTab = aTargetAddr.Tab();
+        pConsParam->eFunction = eFunction;
 
         sal_uInt16 nCount = static_cast<sal_uInt16>(std::min( ScRangeStringConverter::GetTokenCount( sSourceList ), sal_Int32(0xFFFF) ));
         ScArea** ppAreas = nCount ? new ScArea*[ nCount ] : nullptr;
@@ -99,7 +99,7 @@ void SAL_CALL ScXMLConsolidationContext::endFastElement( sal_Int32 /*nElement*/ 
                 }
             }
 
-            aConsParam.SetAreas( ppAreas, nCount );
+            pConsParam->SetAreas( ppAreas, nCount );
 
             // array is copied in SetAreas
             for( nIndex = 0; nIndex < nCount; ++nIndex )
@@ -107,19 +107,19 @@ void SAL_CALL ScXMLConsolidationContext::endFastElement( sal_Int32 /*nElement*/ 
             delete[] ppAreas;
         }
 
-        aConsParam.bByCol = aConsParam.bByRow = false;
+        pConsParam->bByCol = pConsParam->bByRow = false;
         if( IsXMLToken(sUseLabel, XML_COLUMN ) )
-            aConsParam.bByCol = true;
+            pConsParam->bByCol = true;
         else if( IsXMLToken( sUseLabel, XML_ROW ) )
-            aConsParam.bByRow = true;
+            pConsParam->bByRow = true;
         else if( IsXMLToken( sUseLabel, XML_BOTH ) )
-            aConsParam.bByCol = aConsParam.bByRow = true;
+            pConsParam->bByCol = pConsParam->bByRow = true;
 
-        aConsParam.bReferenceData = bLinkToSource;
+        pConsParam->bReferenceData = bLinkToSource;
 
         ScDocument* pDoc = GetScImport().GetDocument();
         if( pDoc )
-            pDoc->SetConsolidateDlgData( &aConsParam );
+            pDoc->SetConsolidateDlgData( std::move(pConsParam) );
     }
 }
 

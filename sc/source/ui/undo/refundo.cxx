@@ -80,7 +80,6 @@ ScRefUndoData::~ScRefUndoData()
     delete pDetOpList;
     delete pChartListenerCollection;
     delete pAreaLinks;
-    delete pUnoRefs;
 }
 
 void ScRefUndoData::DeleteUnchanged( const ScDocument* pDoc )
@@ -140,7 +139,7 @@ void ScRefUndoData::DeleteUnchanged( const ScDocument* pDoc )
         pUnoRefs = const_cast<ScDocument*>(pDoc)->EndUnoRefUndo();
         if ( pUnoRefs && pUnoRefs->IsEmpty() )
         {
-            DELETEZ( pUnoRefs );
+            pUnoRefs.reset();
         }
     }
 }
@@ -148,9 +147,9 @@ void ScRefUndoData::DeleteUnchanged( const ScDocument* pDoc )
 void ScRefUndoData::DoUndo( ScDocument* pDoc, bool bUndoRefFirst )
 {
     if (pDBCollection)
-        pDoc->SetDBCollection( new ScDBCollection(*pDBCollection) );
+        pDoc->SetDBCollection( std::unique_ptr<ScDBCollection>(new ScDBCollection(*pDBCollection)) );
     if (pRangeName)
-        pDoc->SetRangeName( new ScRangeName(*pRangeName) );
+        pDoc->SetRangeName( std::unique_ptr<ScRangeName>(new ScRangeName(*pRangeName)) );
 
     if (pPrintRanges)
         pDoc->RestorePrintRanges(*pPrintRanges);
@@ -163,7 +162,7 @@ void ScRefUndoData::DoUndo( ScDocument* pDoc, bool bUndoRefFirst )
     }
 
     if (pDetOpList)
-        pDoc->SetDetOpList( new ScDetOpList(*pDetOpList) );
+        pDoc->SetDetOpList( std::unique_ptr<ScDetOpList>(new ScDetOpList(*pDetOpList)) );
 
     // bUndoRefFirst is bSetChartRangeLists
     if ( pChartListenerCollection )

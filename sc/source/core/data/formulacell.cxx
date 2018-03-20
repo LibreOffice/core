@@ -462,8 +462,8 @@ void adjustDBRange(formula::FormulaToken* pToken, ScDocument& rNewDoc, const ScD
     ScDBCollection* pNewDBCollection = rNewDoc.GetDBCollection();
     if (!pNewDBCollection)
     {
-        pNewDBCollection = new ScDBCollection(&rNewDoc);
-        rNewDoc.SetDBCollection(pNewDBCollection);
+        rNewDoc.SetDBCollection(std::unique_ptr<ScDBCollection>(new ScDBCollection(&rNewDoc)));
+        pNewDBCollection = rNewDoc.GetDBCollection();
     }
     ScDBCollection::NamedDBs& aNewNamedDBs = pNewDBCollection->getNamedDBs();
     ScDBData* pNewDBData = aNewNamedDBs.findByUpperName(aDBName);

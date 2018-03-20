@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SC_SOURCE_UI_INC_REFUNDO_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_REFUNDO_HXX
 
+#include <memory>
 
 class ScDocument;
 class ScDBCollection;
@@ -41,7 +42,7 @@ private:
     ScDetOpList*                pDetOpList;
     ScChartListenerCollection*  pChartListenerCollection;
     ScAreaLinkSaveCollection*   pAreaLinks;
-    ScUnoRefList*               pUnoRefs;
+    std::unique_ptr<ScUnoRefList> pUnoRefs;
 
 public:
                 ScRefUndoData( const ScDocument* pDoc );
