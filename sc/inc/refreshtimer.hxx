@@ -41,7 +41,7 @@ public:
 
 class ScRefreshTimer : public AutoTimer
 {
-    ScRefreshTimerControl * const * ppControl;
+    std::unique_ptr<ScRefreshTimerControl> const * ppControl;
 
 public:
     ScRefreshTimer();
@@ -53,7 +53,7 @@ public:
     bool operator==( const ScRefreshTimer& r ) const;
     bool operator!=( const ScRefreshTimer& r ) const;
 
-    void SetRefreshControl( ScRefreshTimerControl * const * pp );
+    void SetRefreshControl( std::unique_ptr<ScRefreshTimerControl> const * pp );
     void SetRefreshHandler( const Link<Timer *, void>& rLink );
     sal_uLong GetRefreshDelay() const;
     void StopRefreshTimer();

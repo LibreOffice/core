@@ -232,9 +232,9 @@ ScDBData* ScDocShell::GetDBData( const ScRange& rMarked, ScGetDBMode eMode, ScGe
                 pNoNameData = aDocument.GetAnonymousDBData();
                 if (!pNoNameData)
                 {
-                    pNoNameData = new ScDBData( STR_DB_LOCAL_NONAME,
-                            nTab, nStartCol, nStartRow, nEndCol, nEndRow, true, bHasHeader);
-                    aDocument.SetAnonymousDBData( pNoNameData);
+                    aDocument.SetAnonymousDBData( std::unique_ptr<ScDBData>(new ScDBData( STR_DB_LOCAL_NONAME,
+                            nTab, nStartCol, nStartRow, nEndCol, nEndRow, true, bHasHeader) ) );
+                    pNoNameData = aDocument.GetAnonymousDBData();
                 }
                 // ScDocShell::CancelAutoDBRange() would restore the
                 // sheet-local anonymous DBData from pOldAutoDBRange, unset so

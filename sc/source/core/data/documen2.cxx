@@ -235,17 +235,15 @@ ScDocument::ScDocument( ScDocumentMode eMode, SfxObjectShell* pDocShell ) :
     {
         mxPoolHelper = new ScPoolHelper( this );
 
-        pBASM = new ScBroadcastAreaSlotMachine( this );
+        pBASM.reset( new ScBroadcastAreaSlotMachine( this ) );
         pChartListenerCollection = new ScChartListenerCollection( this );
-        pRefreshTimerControl = new ScRefreshTimerControl;
+        pRefreshTimerControl.reset( new ScRefreshTimerControl );
     }
     else
     {
-        pBASM       = nullptr;
         pChartListenerCollection = nullptr;
-        pRefreshTimerControl = nullptr;
     }
-    pDBCollection = new ScDBCollection(this);
+    pDBCollection.reset( new ScDBCollection(this) );
     pSelectionAttr = nullptr;
     apTemporaryChartLock.reset( new ScTemporaryChartLock(this) );
     xColNameRanges = new ScRangePairList;
@@ -306,22 +304,21 @@ sal_uInt32 ScDocument::GetDocumentID() const
 void ScDocument::StartChangeTracking()
 {
     if (!pChangeTrack)
-        pChangeTrack = new ScChangeTrack( this );
+        pChangeTrack.reset( new ScChangeTrack( this ) );
 }
 
 void ScDocument::EndChangeTracking()
 {
-    delete pChangeTrack;
-    pChangeTrack = nullptr;
+    pChangeTrack.reset();
 }
 
-void ScDocument::SetChangeTrack( ScChangeTrack* pTrack )
+void ScDocument::SetChangeTrack( std::unique_ptr<ScChangeTrack> pTrack )
 {
     OSL_ENSURE( pTrack->GetDocument() == this, "SetChangeTrack: different documents" );
     if ( !pTrack || pTrack == pChangeTrack || pTrack->GetDocument() != this )
         return ;
     EndChangeTracking();
-    pChangeTrack = pTrack;
+    pChangeTrack = std::move(pTrack);
 }
 
 IMPL_LINK_NOARG(ScDocument, TrackTimeHdl, Timer *, void)
@@ -378,8 +375,7 @@ ScDocument::~ScDocument()
     {   // To be sure there isn't anything running do it with a protector,
         // this ensures also that nothing needs the control anymore.
         ScRefreshTimerProtector aProt( GetRefreshTimerControlAddress() );
-        delete pRefreshTimerControl;
-        pRefreshTimerControl = nullptr;
+        pRefreshTimerControl.reset();
     }
 
     if (IsClipboardSource())
@@ -407,14 +403,12 @@ ScDocument::~ScDocument()
     DELETEZ(maThreadSpecific.pLookupCacheMapImpl);
 
     // destroy BroadcastAreas first to avoid un-needed Single-EndListenings of Formula-Cells
-    delete pBASM;       // BroadcastAreaSlotMachine
-    pBASM = nullptr;
+    pBASM.reset();       // BroadcastAreaSlotMachine
 
-    delete pUnoBroadcaster;     // broadcasts SfxHintId::Dying again
-    pUnoBroadcaster = nullptr;
+    pUnoBroadcaster.reset();     // broadcasts SfxHintId::Dying again
 
-    delete pUnoRefUndoList;
-    delete pUnoListenerCalls;
+    pUnoRefUndoList.reset();
+    pUnoListenerCalls.reset();
 
     Clear( true );              // true = from destructor (needed for SdrModel::ClearModel)
 
@@ -425,38 +419,37 @@ ScDocument::~ScDocument()
         pValidationList->clear();
         DELETEZ(pValidationList);
     }
-    delete pRangeName;
-    delete pDBCollection;
-    delete pSelectionAttr;
+    pRangeName.reset();
+    pDBCollection.reset();
+    pSelectionAttr.reset();
     apTemporaryChartLock.reset();
     DeleteDrawLayer();
-    delete pFormatExchangeList;
     mpPrinter.disposeAndClear();
     ImplDeleteOptions();
-    delete pConsolidateDlgData;
-    delete pClipData;
-    delete pDetOpList;                  // also deletes entries
-    delete pChangeTrack;
-    delete mpEditEngine;
-    delete mpNoteEngine;
-    delete pChangeViewSettings;         // and delete
+    pConsolidateDlgData.reset();
+    pClipData.reset();
+    pDetOpList.reset();                  // also deletes entries
+    pChangeTrack.reset();
+    mpEditEngine.reset();
+    mpNoteEngine.reset();
+    pChangeViewSettings.reset();         // and delete
     mpVirtualDevice_100th_mm.disposeAndClear();
 
-    delete pDPCollection;
-    delete mpAnonymousDBData;
+    pDPCollection.reset();
+    mpAnonymousDBData.reset();
 
     // delete the EditEngine before destroying the mxPoolHelper
-    delete pCacheFieldEditEngine;
+    pCacheFieldEditEngine.reset();
 
     if ( mxPoolHelper.is() && !bIsClip && !bIsUndo)
         mxPoolHelper->SourceDocumentGone();
     mxPoolHelper.clear();
 
-    delete pScriptTypeData;
+    pScriptTypeData.reset();
     delete maNonThreaded.pRecursionHelper;
     delete maThreadSpecific.pRecursionHelper;
 
-    delete pPreviewFont;
+    pPreviewFont.reset();
     SAL_WARN_IF( pAutoNameCache, "sc.core", "AutoNameCache still set in dtor" );
 
     mpFormulaGroupCxt.reset();
@@ -488,14 +481,12 @@ void ScDocument::InitClipPtrs( ScDocument* pSourceDoc )
         pValidationList = new ScValidationDataList(this, *pSourceValid);
 
     // store Links in Stream
-    delete pClipData;
+    pClipData.reset();
     if (pSourceDoc->GetDocLinkManager().hasDdeLinks())
     {
-        pClipData = new SvMemoryStream;
+        pClipData.reset( new SvMemoryStream );
         pSourceDoc->SaveDdeLinks(*pClipData);
     }
-    else
-        pClipData = nullptr;
 
     // Options pointers exist (ImplCreateOptions) for any document.
     // Must be copied for correct results in OLE objects (#i42666#).
@@ -523,7 +514,7 @@ ScFieldEditEngine& ScDocument::GetEditEngine()
 {
     if ( !mpEditEngine )
     {
-        mpEditEngine = new ScFieldEditEngine(this, GetEnginePool(), GetEditPool());
+        mpEditEngine.reset( new ScFieldEditEngine(this, GetEnginePool(), GetEditPool()) );
         mpEditEngine->SetUpdateMode( false );
         mpEditEngine->EnableUndo( false );
         mpEditEngine->SetRefMapMode(MapMode(MapUnit::Map100thMM));
@@ -537,7 +528,7 @@ ScNoteEditEngine& ScDocument::GetNoteEngine()
     if ( !mpNoteEngine )
     {
         ScMutationGuard aGuard(this, ScMutationGuardFlags::CORE);
-        mpNoteEngine = new ScNoteEditEngine( GetEnginePool(), GetEditPool() );
+        mpNoteEngine.reset( new ScNoteEditEngine( GetEnginePool(), GetEditPool() ) );
         mpNoteEngine->SetUpdateMode( false );
         mpNoteEngine->EnableUndo( false );
         mpNoteEngine->SetRefMapMode(MapMode(MapUnit::Map100thMM));
@@ -1036,7 +1027,7 @@ sal_uLong ScDocument::TransferTab( ScDocument* pSrcDoc, SCTAB nSrcPos,
             sc::CopyToDocContext aCxt(*this);
             nDestPos = std::min(nDestPos, static_cast<SCTAB>(GetTableCount() - 1));
             {   // scope for bulk broadcast
-                ScBulkBroadcast aBulkBroadcast( pBASM, SfxHintId::ScDataChanged);
+                ScBulkBroadcast aBulkBroadcast( pBASM.get(), SfxHintId::ScDataChanged);
                 if (!bResultsOnly)
                 {
                     const bool bGlobalNamesToLocal = false;
@@ -1173,33 +1164,26 @@ bool ScDocument::SetFormulaCells( const ScAddress& rPos, std::vector<ScFormulaCe
     return pTab->SetFormulaCells(rPos.Col(), rPos.Row(), rCells);
 }
 
-void ScDocument::SetConsolidateDlgData( const ScConsolidateParam* pData )
+void ScDocument::SetConsolidateDlgData( std::unique_ptr<ScConsolidateParam> pData )
 {
-    delete pConsolidateDlgData;
-
-    if ( pData )
-        pConsolidateDlgData = new ScConsolidateParam( *pData );
-    else
-        pConsolidateDlgData = nullptr;
+    pConsolidateDlgData = std::move(pData);
 }
 
 void ScDocument::SetChangeViewSettings(const ScChangeViewSettings& rNew)
 {
     if (pChangeViewSettings==nullptr)
-        pChangeViewSettings = new ScChangeViewSettings;
-
-    OSL_ENSURE( pChangeViewSettings, "Oops. No ChangeViewSettings :-( by!" );
+        pChangeViewSettings.reset( new ScChangeViewSettings );
 
     *pChangeViewSettings=rNew;
 }
 
-ScFieldEditEngine* ScDocument::CreateFieldEditEngine()
+std::unique_ptr<ScFieldEditEngine> ScDocument::CreateFieldEditEngine()
 {
-    ScFieldEditEngine* pNewEditEngine = nullptr;
+    std::unique_ptr<ScFieldEditEngine> pNewEditEngine;
     if (!pCacheFieldEditEngine)
     {
-        pNewEditEngine = new ScFieldEditEngine(
-            this, GetEnginePool(), GetEditPool(), false);
+        pNewEditEngine.reset( new ScFieldEditEngine(
+            this, GetEnginePool(), GetEditPool(), false) );
     }
     else
     {
@@ -1211,22 +1195,20 @@ ScFieldEditEngine* ScDocument::CreateFieldEditEngine()
                 pCacheFieldEditEngine->SetUpdateMode(true);
         }
 
-        pNewEditEngine = pCacheFieldEditEngine;
-        pCacheFieldEditEngine = nullptr;
+        pNewEditEngine = std::move(pCacheFieldEditEngine);
     }
     return pNewEditEngine;
 }
 
-void ScDocument::DisposeFieldEditEngine(ScFieldEditEngine*& rpEditEngine)
+void ScDocument::DisposeFieldEditEngine(std::unique_ptr<ScFieldEditEngine>& rpEditEngine)
 {
     if (!pCacheFieldEditEngine && rpEditEngine)
     {
-        pCacheFieldEditEngine = rpEditEngine;
+        pCacheFieldEditEngine = std::move( rpEditEngine );
         pCacheFieldEditEngine->Clear();
     }
     else
-        delete rpEditEngine;
-    rpEditEngine = nullptr;
+        rpEditEngine.reset();
 }
 
 ScRecursionHelper* ScDocument::CreateRecursionHelperInstance()
@@ -1491,10 +1473,9 @@ void ScDocument::GetCellChangeTrackNote( const ScAddress &aCellPos, OUString &aT
     }
 }
 
-void ScDocument::SetPreviewFont( SfxItemSet* pFont )
+void ScDocument::SetPreviewFont( std::unique_ptr<SfxItemSet> pFont )
 {
-    delete pPreviewFont;
-    pPreviewFont = pFont;
+    pPreviewFont = std::move(pFont);
 }
 
 void  ScDocument::SetPreviewSelection( const ScMarkData& rSel )
@@ -1509,7 +1490,7 @@ SfxItemSet* ScDocument::GetPreviewFont( SCCOL nCol, SCROW nRow, SCTAB nTab )
     {
         ScMarkData aSel = GetPreviewSelection();
         if ( aSel.IsCellMarked( nCol, nRow ) && aSel.GetFirstSelected() == nTab )
-            pRet = pPreviewFont;
+            pRet = pPreviewFont.get();
     }
     return pRet;
 }

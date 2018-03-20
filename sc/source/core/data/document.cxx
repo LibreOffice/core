@@ -319,15 +319,14 @@ void ScDocument::SetAnonymousDBData(SCTAB nTab, ScDBData* pDBData)
         maTabs[nTab]->SetAnonymousDBData(pDBData);
 }
 
-void ScDocument::SetAnonymousDBData( ScDBData* pDBData )
+void ScDocument::SetAnonymousDBData( std::unique_ptr<ScDBData> pDBData )
 {
-    delete mpAnonymousDBData;
-    mpAnonymousDBData = pDBData;
+    mpAnonymousDBData = std::move(pDBData);
 }
 
 ScDBData* ScDocument::GetAnonymousDBData()
 {
-    return mpAnonymousDBData;
+    return mpAnonymousDBData.get();
 }
 
 bool ScDocument::ValidTabName( const OUString& rName )
@@ -2449,7 +2448,7 @@ void ScDocument::CopyRangeNamesToClip(ScDocument* pClipDoc, const ScRange& rClip
 
     /* TODO: handle also sheet-local names */
     sc::UpdatedRangeNames::NameIndicesType aUsedGlobalNames( aUsedNames.getUpdatedNames(-1));
-    copyUsedNamesToClip(pClipDoc->GetRangeName(), pRangeName, aUsedGlobalNames);
+    copyUsedNamesToClip(pClipDoc->GetRangeName(), pRangeName.get(), aUsedGlobalNames);
 }
 
 ScDocument::NumFmtMergeHandler::NumFmtMergeHandler(ScDocument* pDoc, const ScDocument* pSrcDoc) :
@@ -5033,7 +5032,7 @@ void ScDocument::SetPattern( const ScAddress& rPos, const ScPatternAttr& rAttr )
         maTabs[nTab]->SetPattern( rPos, rAttr );
 }
 
-ScPatternAttr* ScDocument::CreateSelectionPattern( const ScMarkData& rMark, bool bDeep )
+std::unique_ptr<ScPatternAttr> ScDocument::CreateSelectionPattern( const ScMarkData& rMark, bool bDeep )
 {
     ScMergePatternState aState;
 
@@ -5061,21 +5060,20 @@ ScPatternAttr* ScDocument::CreateSelectionPattern( const ScMarkData& rMark, bool
     OSL_ENSURE( aState.pItemSet, "SelectionPattern Null" );
     if (aState.pItemSet)
     {
-        ScPatternAttr* pPattern = new ScPatternAttr( std::move(aState.pItemSet) );
+        std::unique_ptr<ScPatternAttr> pPattern(new ScPatternAttr( std::move(aState.pItemSet) ));
         if (aState.mbValidPatternId)
             pPattern->SetKey(aState.mnPatternId);
 
         return pPattern;
     }
     else
-        return new ScPatternAttr( GetPool() );      // empty
+        return std::unique_ptr<ScPatternAttr>(new ScPatternAttr( GetPool() )); // empty
 }
 
 const ScPatternAttr* ScDocument::GetSelectionPattern( const ScMarkData& rMark )
 {
-    delete pSelectionAttr;
     pSelectionAttr = CreateSelectionPattern( rMark );
-    return pSelectionAttr;
+    return pSelectionAttr.get();
 }
 
 void ScDocument::GetSelectionFrame( const ScMarkData& rMark,

@@ -42,7 +42,7 @@ using namespace com::sun::star;
 const uno::Reference< i18n::XBreakIterator >& ScDocument::GetBreakIterator()
 {
     if ( !pScriptTypeData )
-        pScriptTypeData = new ScScriptTypeData;
+        pScriptTypeData.reset( new ScScriptTypeData );
     if ( !pScriptTypeData->xBreakIter.is() )
     {
         pScriptTypeData->xBreakIter = i18n::BreakIterator::create( comphelper::getProcessComponentContext() );

@@ -1511,10 +1511,10 @@ void Test::testNamedRange()
 
     m_pDoc->SetValue (0, 0, 0, 101);
 
-    ScRangeName* pNames = new ScRangeName;
-    bool bSuccess = insertRangeNames(m_pDoc, pNames, aNames, aNames + SAL_N_ELEMENTS(aNames));
+    std::unique_ptr<ScRangeName> pNames(new ScRangeName);
+    bool bSuccess = insertRangeNames(m_pDoc, pNames.get(), aNames, aNames + SAL_N_ELEMENTS(aNames));
     CPPUNIT_ASSERT_MESSAGE("Failed to insert range names.", bSuccess);
-    m_pDoc->SetRangeName(pNames);
+    m_pDoc->SetRangeName(std::move(pNames));
 
     ScRangeName* pNewRanges = m_pDoc->GetRangeName();
     CPPUNIT_ASSERT(pNewRanges);
@@ -1537,12 +1537,12 @@ void Test::testNamedRange()
     ASSERT_DOUBLES_EQUAL_MESSAGE ("calculation failed", 1.0, result);
 
     // Test copy-ability of range names.
-    ScRangeName* pCopiedRanges = new ScRangeName(*pNewRanges);
-    m_pDoc->SetRangeName(pCopiedRanges);
+    std::unique_ptr<ScRangeName> pCopiedRanges(new ScRangeName(*pNewRanges));
+    m_pDoc->SetRangeName(std::move(pCopiedRanges));
     // Make sure the index lookup still works.
     for (size_t i = 0; i < SAL_N_ELEMENTS(aNames); ++i)
     {
-        const ScRangeData* p = pCopiedRanges->findByIndex(aNames[i].mnIndex);
+        const ScRangeData* p = m_pDoc->GetRangeName()->findByIndex(aNames[i].mnIndex);
         CPPUNIT_ASSERT_MESSAGE("lookup of range name by index failed with the copied instance.", p);
         OUString aName = p->GetName();
         CPPUNIT_ASSERT_MESSAGE("wrong range name is retrieved with the copied instance.", aName.equalsAscii(aNames[i].mpName));
@@ -1588,10 +1588,10 @@ void Test::testInsertNameList()
         { "MyRange3", "$Test.$C$1:$C$100", 3 }
     };
 
-    ScRangeName* pNames = new ScRangeName;
-    bool bSuccess = insertRangeNames(m_pDoc, pNames, aNames, aNames + SAL_N_ELEMENTS(aNames));
+    std::unique_ptr<ScRangeName> pNames(new ScRangeName);
+    bool bSuccess = insertRangeNames(m_pDoc, pNames.get(), aNames, aNames + SAL_N_ELEMENTS(aNames));
     CPPUNIT_ASSERT_MESSAGE("Failed to insert range names.", bSuccess);
-    m_pDoc->SetRangeName(pNames);
+    m_pDoc->SetRangeName(std::move(pNames));
 
     ScDocFunc& rDocFunc = getDocShell().GetDocFunc();
     ScAddress aPos(1,1,0);
@@ -3282,7 +3282,7 @@ void Test::testCopyPaste()
     ScRangeData* pGlobal = new ScRangeData( m_pDoc, "global", aAdr);
     const OUString aGlobal2Symbol("$Sheet1.$A$1:$A$23");
     ScRangeData* pGlobal2 = new ScRangeData( m_pDoc, "global2", aGlobal2Symbol);
-    ScRangeName* pGlobalRangeName = new ScRangeName();
+    std::unique_ptr<ScRangeName> pGlobalRangeName(new ScRangeName());
     pGlobalRangeName->insert(pGlobal);
     pGlobalRangeName->insert(pGlobal2);
     ScRangeName* pLocalRangeName1 = new ScRangeName();
@@ -3291,7 +3291,7 @@ void Test::testCopyPaste()
     pLocalRangeName1->insert(pLocal3);
     pLocalRangeName1->insert(pLocal4);
     pLocalRangeName1->insert(pLocal5);
-    m_pDoc->SetRangeName(pGlobalRangeName);
+    m_pDoc->SetRangeName(std::move(pGlobalRangeName));
     m_pDoc->SetRangeName(0, pLocalRangeName1);
 
     // Add formula to B1.

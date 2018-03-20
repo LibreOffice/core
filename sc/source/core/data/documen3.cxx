@@ -131,12 +131,10 @@ void ScDocument::SetAllRangeNames(const std::map<OUString, std::unique_ptr<ScRan
     {
         if (itr->first == STR_GLOBAL_RANGE_NAME)
         {
-            delete pRangeName;
+            pRangeName.reset();
             const ScRangeName *const pName = itr->second.get();
-            if (pName->empty())
-                pRangeName = nullptr;
-            else
-                pRangeName = new ScRangeName( *pName );
+            if (!pName->empty())
+                pRangeName.reset( new ScRangeName( *pName ) );
         }
         else
         {
@@ -170,10 +168,10 @@ void ScDocument::GetRangeNameMap(std::map<OUString, ScRangeName*>& aRangeNameMap
     }
     if (!pRangeName)
     {
-        pRangeName = new ScRangeName();
+        pRangeName.reset(new ScRangeName());
     }
     OUString aGlobal(STR_GLOBAL_RANGE_NAME);
-    aRangeNameMap.insert(std::pair<OUString, ScRangeName*>(aGlobal, pRangeName));
+    aRangeNameMap.insert(std::pair<OUString, ScRangeName*>(aGlobal, pRangeName.get()));
 }
 
 ScRangeName* ScDocument::GetRangeName(SCTAB nTab) const
@@ -187,8 +185,8 @@ ScRangeName* ScDocument::GetRangeName(SCTAB nTab) const
 ScRangeName* ScDocument::GetRangeName() const
 {
     if (!pRangeName)
-        pRangeName = new ScRangeName;
-    return pRangeName;
+        pRangeName.reset(new ScRangeName);
+    return pRangeName.get();
 }
 
 void ScDocument::SetRangeName(SCTAB nTab, ScRangeName* pNew)
@@ -199,13 +197,9 @@ void ScDocument::SetRangeName(SCTAB nTab, ScRangeName* pNew)
     return maTabs[nTab]->SetRangeName(pNew);
 }
 
-void ScDocument::SetRangeName( ScRangeName* pNewRangeName )
+void ScDocument::SetRangeName( std::unique_ptr<ScRangeName> pNewRangeName )
 {
-    if (pRangeName == pNewRangeName)
-        return;
-
-    delete pRangeName;
-    pRangeName = pNewRangeName;
+    pRangeName = std::move(pNewRangeName);
 }
 
 bool ScDocument::IsAddressInRangeName( RangeNameScope eScope, ScAddress& rAddress )
@@ -270,7 +264,7 @@ ScRangeData* ScDocument::FindRangeNameBySheetAndIndex( SCTAB nTab, sal_uInt16 nI
     return (pRN ? pRN->findByIndex( nIndex) : nullptr);
 }
 
-void ScDocument::SetDBCollection( ScDBCollection* pNewDBCollection, bool bRemoveAutoFilter )
+void ScDocument::SetDBCollection( std::unique_ptr<ScDBCollection> pNewDBCollection, bool bRemoveAutoFilter )
 {
     if (pDBCollection && bRemoveAutoFilter)
     {
@@ -315,9 +309,7 @@ void ScDocument::SetDBCollection( ScDBCollection* pNewDBCollection, bool bRemove
         }
     }
 
-    delete pDBCollection;
-
-    pDBCollection = pNewDBCollection;
+    pDBCollection = std::move(pNewDBCollection);
 }
 
 const ScDBData* ScDocument::GetDBAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab, ScDBDataPortion ePortion) const
@@ -366,13 +358,13 @@ bool ScDocument::HasPivotTable() const
 ScDPCollection* ScDocument::GetDPCollection()
 {
     if (!pDPCollection)
-        pDPCollection = new ScDPCollection(this);
-    return pDPCollection;
+        pDPCollection.reset( new ScDPCollection(this) );
+    return pDPCollection.get();
 }
 
 const ScDPCollection* ScDocument::GetDPCollection() const
 {
-    return pDPCollection;
+    return pDPCollection.get();
 }
 
 ScDPObject* ScDocument::GetDPAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab) const
@@ -898,7 +890,7 @@ bool ScDocument::TestCopyScenario( SCTAB nSrcTab, SCTAB nDestTab ) const
 void ScDocument::AddUnoObject( SfxListener& rObject )
 {
     if (!pUnoBroadcaster)
-        pUnoBroadcaster = new SfxBroadcaster;
+        pUnoBroadcaster.reset( new SfxBroadcaster );
 
     rObject.StartListening( *pUnoBroadcaster );
 }
@@ -980,23 +972,20 @@ void ScDocument::AddUnoListenerCall( const uno::Reference<util::XModifyListener>
     OSL_ENSURE( bInUnoBroadcast, "AddUnoListenerCall is supposed to be called from BroadcastUno only" );
 
     if ( !pUnoListenerCalls )
-        pUnoListenerCalls = new ScUnoListenerCalls;
+        pUnoListenerCalls.reset( new ScUnoListenerCalls );
     pUnoListenerCalls->Add( rListener, rEvent );
 }
 
 void ScDocument::BeginUnoRefUndo()
 {
     OSL_ENSURE( !pUnoRefUndoList, "BeginUnoRefUndo twice" );
-    delete pUnoRefUndoList;
-
-    pUnoRefUndoList = new ScUnoRefList;
+    pUnoRefUndoList.reset( new ScUnoRefList );
 }
 
-ScUnoRefList* ScDocument::EndUnoRefUndo()
+std::unique_ptr<ScUnoRefList> ScDocument::EndUnoRefUndo()
 {
-    ScUnoRefList* pRet = pUnoRefUndoList;
-    pUnoRefUndoList = nullptr;
-    return pRet; // Must be deleted by caller!
+    return std::move(pUnoRefUndoList);
+    // Must be deleted by caller!
 }
 
 void ScDocument::AddUnoRefChange( sal_Int64 nId, const ScRangeList& rOldRanges )
