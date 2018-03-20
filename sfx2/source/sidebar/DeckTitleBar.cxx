@@ -125,6 +125,21 @@ void DeckTitleBar::DataChanged (const DataChangedEvent& rEvent)
     TitleBar::DataChanged(rEvent);
 }
 
+
+void DeckTitleBar::MouseMove (const MouseEvent& rMouseEvent)
+{
+    tools::Rectangle aGrip = GetDragArea();
+    PointerStyle eStyle = PointerStyle::Arrow;
+
+    if ( aGrip.IsInside( rMouseEvent.GetPosPixel() ) )
+        eStyle = PointerStyle::Move;
+
+    Pointer aPtr( eStyle );
+    SetPointer( aPtr );
+
+    Window::MouseMove( rMouseEvent );
+}
+
 } } // end of namespace sfx2::sidebar
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
