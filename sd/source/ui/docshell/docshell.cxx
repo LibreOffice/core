@@ -116,16 +116,16 @@ void DrawDocShell::Construct( bool bClipboard )
 
     SetBaseModel( new SdXImpressDocument( this, bClipboard ) );
     SetPool( &mpDoc->GetItemPool() );
-    sd::UndoManager* pUndoManager = new sd::UndoManager;
+    std::unique_ptr<sd::UndoManager> pUndoManager(new sd::UndoManager);
     pUndoManager->SetDocShell(this);
-    mpUndoManager = pUndoManager;
+    mpUndoManager = std::move(pUndoManager);
 
     if (!utl::ConfigManager::IsFuzzing()
         && officecfg::Office::Common::Undo::Steps::get() < 1)
     {
         mpUndoManager->EnableUndo(false); // tdf#108863 disable if 0 steps
     }
-    mpDoc->SetSdrUndoManager( mpUndoManager );
+    mpDoc->SetSdrUndoManager( mpUndoManager.get() );
     mpDoc->SetSdrUndoFactory( new sd::UndoFactory );
     UpdateTablePointers();
     SetStyleFamily(SfxStyleFamily::Pseudo);
@@ -189,11 +189,11 @@ DrawDocShell::~DrawDocShell()
 
     SetDocShellFunction(nullptr);
 
-    delete mpFontList;
+    mpFontList.reset();
 
     if( mpDoc )
         mpDoc->SetSdrUndoManager( nullptr );
-    delete mpUndoManager;
+    mpUndoManager.reset();
 
     if (mbOwnPrinter)
         mpPrinter.disposeAndClear();
@@ -231,7 +231,7 @@ void DrawDocShell::GetState(SfxItemSet &rSet)
         switch ( nSlotId )
         {
             case SID_ATTR_CHAR_FONTLIST:
-                rSet.Put( SvxFontListItem( mpFontList, nSlotId ) );
+                rSet.Put( SvxFontListItem( mpFontList.get(), nSlotId ) );
             break;
 
             case SID_SEARCH_ITEM:
@@ -401,7 +401,7 @@ void DrawDocShell::Deactivate( bool )
 
 ::svl::IUndoManager* DrawDocShell::GetUndoManager()
 {
-    return mpUndoManager;
+    return mpUndoManager.get();
 }
 
 void DrawDocShell::UpdateTablePointers()
