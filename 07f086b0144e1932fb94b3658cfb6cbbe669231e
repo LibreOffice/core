@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_e1e76aaa",
+        "filename": "include/test/drawing/captionshape.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000723
+      },
+      "writtenOn": "2018-03-20T01:41:46Z",
+      "side": 1,
+      "message": "The file is missing the lines at beginning and end for vim.",
+      "revId": "07f086b0144e1932fb94b3658cfb6cbbe669231e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_2102623f",
+        "filename": "test/source/drawing/captionshape.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000723
+      },
+      "writtenOn": "2018-03-20T01:41:46Z",
+      "side": 1,
+      "message": "Also missing the lines for modes (vim).",
+      "revId": "07f086b0144e1932fb94b3658cfb6cbbe669231e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_41ff5634",
+        "filename": "test/source/drawing/captionshape.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000723
+      },
+      "writtenOn": "2018-03-20T01:41:46Z",
+      "side": 1,
+      "message": "These comments aren\u0027t necessary",
+      "revId": "07f086b0144e1932fb94b3658cfb6cbbe669231e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_a19492e8",
+        "filename": "test/source/drawing/captionshape.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1000723
+      },
+      "writtenOn": "2018-03-20T01:41:46Z",
+      "side": 1,
+      "message": "For the properties of type long you now can use the testLongProperty() from include/test/unoapi_property_testers.hxx. Less to type. See https://cgit.freedesktop.org/libreoffice/core/diff/test/source/sheet/spreadsheet.cxx?id\u003dd97120c6f35e4c14a71df63b91dcbf67d9f310cc",
+      "revId": "07f086b0144e1932fb94b3658cfb6cbbe669231e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_c1998621",
+        "filename": "test/source/drawing/captionshape.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1000723
+      },
+      "writtenOn": "2018-03-20T01:41:46Z",
+      "side": 1,
+      "message": "For the properties of type short you now can use the testShortProperty() from include/test/unoapi_property_testers.hxx. Less to type. See https://cgit.freedesktop.org/libreoffice/core/diff/test/source/sheet/spreadsheet.cxx?id\u003dd97120c6f35e4c14a71df63b91dcbf67d9f310cc",
+      "revId": "07f086b0144e1932fb94b3658cfb6cbbe669231e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_e19e8a06",
+        "filename": "test/source/drawing/captionshape.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1000723
+      },
+      "writtenOn": "2018-03-20T01:41:46Z",
+      "side": 1,
+      "message": "For the properties of type boolean you now can use the testBooleanProperty() from include/test/unoapi_property_testers.hxx. Less to type. See https://cgit.freedesktop.org/libreoffice/core/diff/test/source/sheet/spreadsheet.cxx?id\u003dd97120c6f35e4c14a71df63b91dcbf67d9f310cc",
+      "revId": "07f086b0144e1932fb94b3658cfb6cbbe669231e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
