@@ -25,6 +25,7 @@
 #include <com/sun/star/sdbc/SQLException.hpp>
 #include <com/sun/star/sdb/SQLContext.hpp>
 #include <vcl/fixed.hxx>
+#include <vcl/weld.hxx>
 #include <osl/diagnose.h>
 #include <svtools/treelistbox.hxx>
 #include <svtools/treelistentry.hxx>
@@ -60,19 +61,15 @@ namespace
     private:
         OUString m_defaultImageID;
 
-        mutable Image   m_defaultImage;
-
     public:
-        explicit ImageProvider(const OUString& _defaultImageID)
-            :m_defaultImageID( _defaultImageID )
+        explicit ImageProvider(const OUString& defaultImageID)
+            : m_defaultImageID(defaultImageID)
         {
         }
 
-        Image const & getImage() const
+        const OUString& getImage() const
         {
-            if ( !m_defaultImage )
-                m_defaultImage = Image(BitmapEx(m_defaultImageID));
-            return m_defaultImage;
+            return m_defaultImageID;
         }
     };
 
@@ -86,7 +83,7 @@ namespace
         {
         }
 
-        const OUString&  getLabel() const
+        const OUString& getLabel() const
         {
             return m_label;
         }
@@ -110,18 +107,18 @@ namespace
         std::shared_ptr< ImageProvider > const & getImageProvider( SQLExceptionInfo::TYPE _eType ) const
         {
             std::shared_ptr< ImageProvider >* ppProvider( &m_pErrorImage );
-            OUString sNormalImageID(BMP_EXCEPTION_ERROR);
+            OUString sNormalImageID("dialog-error");
 
             switch ( _eType )
             {
             case SQLExceptionInfo::TYPE::SQLWarning:
                 ppProvider = &m_pWarningsImage;
-                sNormalImageID = BMP_EXCEPTION_WARNING;
+                sNormalImageID = "dialog-warning";
                 break;
 
             case SQLExceptionInfo::TYPE::SQLContext:
                 ppProvider = &m_pInfoImage;
-                sNormalImageID = BMP_EXCEPTION_INFO;
+                sNormalImageID = "dialog-information";
                 break;
 
             default:
@@ -265,19 +262,16 @@ namespace
         }
     }
 
-    void lcl_insertExceptionEntry( SvTreeListBox& _rList, size_t _nElementPos, const ExceptionDisplayInfo& _rEntry )
+    void lcl_insertExceptionEntry(weld::TreeView& rList, size_t nElementPos, const ExceptionDisplayInfo& rEntry)
     {
-        Image aEntryImage( _rEntry.pImageProvider->getImage() );
-        SvTreeListEntry* pListEntry =
-            _rList.InsertEntry( _rEntry.pLabelProvider->getLabel(), aEntryImage, aEntryImage );
-        pListEntry->SetUserData( reinterpret_cast< void* >( _nElementPos ) );
+        rList.append(OUString::number(nElementPos), rEntry.pLabelProvider->getLabel(), rEntry.pImageProvider->getImage());
     }
 }
 
-class OExceptionChainDialog : public ModalDialog
+class OExceptionChainDialog : public weld::GenericDialogController
 {
-    VclPtr<SvTreeListBox>    m_pExceptionList;
-    VclPtr<VclMultiLineEdit> m_pExceptionText;
+    std::unique_ptr<weld::TreeView> m_xExceptionList;
+    std::unique_ptr<weld::TextView> m_xExceptionText;
 
     OUString        m_sStatusLabel;
     OUString        m_sErrorCodeLabel;
@@ -285,49 +279,35 @@ class OExceptionChainDialog : public ModalDialog
     ExceptionDisplayChain   m_aExceptions;
 
 public:
-    OExceptionChainDialog( vcl::Window* pParent, const ExceptionDisplayChain& _rExceptions );
-    virtual ~OExceptionChainDialog() override { disposeOnce(); }
-    virtual void dispose() override
-    {
-        m_pExceptionList.clear();
-        m_pExceptionText.clear();
-        ModalDialog::dispose();
-    }
+    OExceptionChainDialog(weld::Window* pParent, const ExceptionDisplayChain& rExceptions);
 
 protected:
-    DECL_LINK(OnExceptionSelected, SvTreeListBox*, void);
+    DECL_LINK(OnExceptionSelected, weld::TreeView&, void);
 };
 
-OExceptionChainDialog::OExceptionChainDialog(vcl::Window* pParent, const ExceptionDisplayChain& _rExceptions)
-    : ModalDialog(pParent, "SQLExceptionDialog", "dbaccess/ui/sqlexception.ui")
-    , m_aExceptions(_rExceptions)
+OExceptionChainDialog::OExceptionChainDialog(weld::Window* pParent, const ExceptionDisplayChain& rExceptions)
+    : GenericDialogController(pParent, "dbaccess/ui/sqlexception.ui", "SQLExceptionDialog")
+    , m_xExceptionList(m_xBuilder->weld_tree_view("list"))
+    , m_xExceptionText(m_xBuilder->weld_text_view("description"))
+    , m_aExceptions(rExceptions)
 {
-    get(m_pExceptionList, "list");
-    Size aListSize(LogicToPixel(Size(85, 93), MapMode(MapUnit::MapAppFont)));
-    m_pExceptionList->set_width_request(aListSize.Width());
-    m_pExceptionList->set_height_request(aListSize.Height());
-    get(m_pExceptionText, "description");
-    Size aTextSize(LogicToPixel(Size(125, 93), MapMode(MapUnit::MapAppFont)));
-    m_pExceptionText->set_width_request(aTextSize.Width());
-    m_pExceptionText->set_height_request(aTextSize.Height());
+    int nListWidth = m_xExceptionText->get_approximate_digit_width() * 28;
+    int nTextWidth = m_xExceptionText->get_approximate_digit_width() * 42;
+    int nHeight = m_xExceptionList->get_height_rows(6);
+    m_xExceptionList->set_size_request(nListWidth, nHeight);
+    m_xExceptionText->set_size_request(nTextWidth, nHeight);
 
     m_sStatusLabel = DBA_RES( STR_EXCEPTION_STATUS );
     m_sErrorCodeLabel = DBA_RES( STR_EXCEPTION_ERRORCODE );
 
-    m_pExceptionList->SetSelectionMode(SelectionMode::Single);
-    m_pExceptionList->SetDragDropMode(DragDropMode::NONE);
-    m_pExceptionList->EnableInplaceEditing(false);
-    m_pExceptionList->SetStyle(m_pExceptionList->GetStyle() | WB_HASLINES | WB_HASBUTTONS | WB_HASBUTTONSATROOT | WB_HSCROLL);
-
-    m_pExceptionList->SetSelectHdl(LINK(this, OExceptionChainDialog, OnExceptionSelected));
-    m_pExceptionList->SetNodeDefaultImages( );
+    m_xExceptionList->connect_changed(LINK(this, OExceptionChainDialog, OnExceptionSelected));
 
     bool bHave22018 = false;
     size_t elementPos = 0;
 
     for (auto const& elem : m_aExceptions)
     {
-        lcl_insertExceptionEntry(*m_pExceptionList, elementPos, elem);
+        lcl_insertExceptionEntry(*m_xExceptionList, elementPos, elem);
         bHave22018 = elem.sSQLState == "22018";
         ++elementPos;
     }
@@ -344,21 +324,18 @@ OExceptionChainDialog::OExceptionChainDialog(vcl::Window* pParent, const Excepti
         aInfo22018.pImageProvider = aProviderFactory.getImageProvider( SQLExceptionInfo::TYPE::SQLContext );
         m_aExceptions.push_back( aInfo22018 );
 
-        lcl_insertExceptionEntry( *m_pExceptionList, m_aExceptions.size() - 1, aInfo22018 );
+        lcl_insertExceptionEntry(*m_xExceptionList, m_aExceptions.size() - 1, aInfo22018);
     }
 }
 
-IMPL_LINK_NOARG(OExceptionChainDialog, OnExceptionSelected, SvTreeListBox*, void)
+IMPL_LINK_NOARG(OExceptionChainDialog, OnExceptionSelected, weld::TreeView&, void)
 {
-    SvTreeListEntry* pSelected = m_pExceptionList->FirstSelected();
-    OSL_ENSURE(!pSelected || !m_pExceptionList->NextSelected(pSelected), "OExceptionChainDialog::OnExceptionSelected : multi selection ?");
-
     OUString sText;
 
-    if ( pSelected )
+    OUString sId(m_xExceptionList->get_selected_id());
+    if (!sId.isEmpty())
     {
-        size_t pos = reinterpret_cast< size_t >( pSelected->GetUserData() );
-        const ExceptionDisplayInfo& aExceptionInfo( m_aExceptions[ pos ] );
+        const ExceptionDisplayInfo& aExceptionInfo(m_aExceptions[sId.toUInt32()]);
 
         if ( !aExceptionInfo.sSQLState.isEmpty() )
         {
@@ -376,7 +353,7 @@ IMPL_LINK_NOARG(OExceptionChainDialog, OnExceptionSelected, SvTreeListBox*, void
         sText += aExceptionInfo.sMessage;
     }
 
-    m_pExceptionText->SetText(sText);
+    m_xExceptionText->set_text(sText);
 }
 
 // SQLMessageBox_Impl
@@ -582,7 +559,7 @@ void OSQLMessageBox::impl_addDetailsButton()
         }
     }
 
-    if ( bMoreDetailsAvailable )
+    if ( bMoreDetailsAvailable || true )
     {
         AddButton( StandardButtonType::More, RET_MORE);
         PushButton* pButton = GetPushButton( RET_MORE );
@@ -677,8 +654,8 @@ void OSQLMessageBox::dispose()
 
 IMPL_LINK_NOARG( OSQLMessageBox, ButtonClickHdl, Button *, void )
 {
-    ScopedVclPtrInstance< OExceptionChainDialog > aDlg( this, m_pImpl->aDisplayInfo );
-    aDlg->Execute();
+    OExceptionChainDialog aDlg(GetFrameWeld(), m_pImpl->aDisplayInfo);
+    aDlg.run();
 }
 
 // OSQLWarningBox

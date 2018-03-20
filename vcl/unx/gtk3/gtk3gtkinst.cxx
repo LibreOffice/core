@@ -2130,7 +2130,7 @@ public:
         }
         else
         {
-            assert((rImage == "dialog-warning" || rImage == "dialog-error") && "unknown stock image");
+            assert((rImage == "dialog-warning" || rImage == "dialog-error" || rImage == "dialog-information") && "unknown stock image");
 
             gtk_list_store_set(m_pListStore, &iter,
                     0, OUStringToOString(rText, RTL_TEXTENCODING_UTF8).getStr(),
@@ -2268,24 +2268,34 @@ public:
 
     virtual int get_height_rows(int nRows) const override
     {
-        GtkTreeViewColumn* pColumn = gtk_tree_view_get_column(m_pTreeView, 0);
-        GList *pRenderers = gtk_cell_layout_get_cells(GTK_CELL_LAYOUT(pColumn));
-        GtkCellRenderer* pRenderer = GTK_CELL_RENDERER(g_list_nth_data(pRenderers, 0));
-        gint nRowHeight;
-        gtk_cell_renderer_get_preferred_height(pRenderer, GTK_WIDGET(m_pTreeView), nullptr, &nRowHeight);
-        g_list_free(pRenderers);
+        gint nMaxRowHeight = 0;
+        GList *pColumns = gtk_tree_view_get_columns(m_pTreeView);
+        for (GList* pEntry = g_list_first(pColumns); pEntry; pEntry = g_list_next(pEntry))
+        {
+            GtkTreeViewColumn* pColumn = GTK_TREE_VIEW_COLUMN(pEntry->data);
+            GList *pRenderers = gtk_cell_layout_get_cells(GTK_CELL_LAYOUT(pColumn));
+            GtkCellRenderer* pRenderer = GTK_CELL_RENDERER(g_list_nth_data(pRenderers, 0));
+            gint nRowHeight;
+            gtk_cell_renderer_get_preferred_height(pRenderer, GTK_WIDGET(m_pTreeView), nullptr, &nRowHeight);
+            nMaxRowHeight = std::max(nMaxRowHeight, nRowHeight);
+            g_list_free(pRenderers);
+        }
+        g_list_free(pColumns);
 
         gint nVerticalSeparator;
         gtk_widget_style_get(GTK_WIDGET(m_pTreeView), "vertical-separator", &nVerticalSeparator, nullptr);
 
-        return (nRowHeight * nRows) + (nVerticalSeparator * (nRows + 1));
+        return (nMaxRowHeight * nRows) + (nVerticalSeparator * (nRows + 1));
     }
 
     virtual void set_size_request(int nWidth, int nHeight) override
     {
         GtkWidget* pParent = gtk_widget_get_parent(m_pWidget);
         if (GTK_IS_SCROLLED_WINDOW(pParent))
-            gtk_widget_set_size_request(pParent, nWidth, nHeight);
+        {
+            gtk_scrolled_window_set_min_content_width(GTK_SCROLLED_WINDOW(pParent), nWidth);
+            gtk_scrolled_window_set_min_content_height(GTK_SCROLLED_WINDOW(pParent), nHeight);
+        }
         else
             gtk_widget_set_size_request(m_pWidget, nWidth, nHeight);
     }
@@ -2461,7 +2471,10 @@ public:
     {
         GtkWidget* pParent = gtk_widget_get_parent(m_pWidget);
         if (GTK_IS_SCROLLED_WINDOW(pParent))
-            gtk_widget_set_size_request(pParent, nWidth, nHeight);
+        {
+            gtk_scrolled_window_set_min_content_width(GTK_SCROLLED_WINDOW(pParent), nWidth);
+            gtk_scrolled_window_set_min_content_height(GTK_SCROLLED_WINDOW(pParent), nHeight);
+        }
         else
             gtk_widget_set_size_request(m_pWidget, nWidth, nHeight);
     }
