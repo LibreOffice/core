@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_dc43296b",
+        "filename": "sc/source/filter/excel/xestream.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1066,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-03-20T13:31:17Z",
+      "side": 1,
+      "message": "INetURLObject::GetPath internally calls removeSegment with default arguments nIndex \u003d LAST_SEGMENT and bIgnoreFinalSlash \u003d true.  So if getFileUrl() returns \u003cfile:///a/b/c/\u003e then the original code produced \u003cfile:///a/b/\u003e but the new code produces \u003cfile:///a/b/c/\u003e.  It is probably unlikely that FilterBase::getFileUrl() will return such a directory URL with final slash, and I\u0027d stick to the simpler code producing the original result,\n\n  aPath.removeSegment();\n  aPath.setFinalSlash();",
+      "revId": "e9b6c7f907e41da46b51b82300e2b6708dd577ee",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_5c2f39a1",
+        "filename": "sc/source/filter/excel/xestream.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1068,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-03-20T13:31:17Z",
+      "side": 1,
+      "message": "Whether DecodeMechanism NONE or ToIUri (\"to internationalized URI\") is the right choice depends on what\u0027s done with the resulting value.  If it\u0027s e.g. intended to be displayed to humans, ToIUri is likely the better choice.  If it\u0027s meant to be a file URL to be passed on to other software/stored in a file format/etc., it is better to retain a valid \"non-internationalized\" URI and use NONE.  (I assume the latter here.)",
+      "revId": "e9b6c7f907e41da46b51b82300e2b6708dd577ee",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
