@@ -522,7 +522,8 @@ void SwFEShell::InsertLabel( const SwLabelType eType, const OUString &rText, con
             SvxCharHiddenItem aHidden(true, RES_CHRATR_HIDDEN);
             SfxItemSet aSet(GetDoc()->GetAttrPool(), {{aHidden.Which(), aHidden.Which()}});
             aSet.Put(aHidden);
-            pTextNode->SetAttr(aSet, nIndex, nIndex + 1);
+            SwPaM aPam(*pTextNode, nIndex, *pTextNode, nIndex + 1);
+            SetAttrSet(aSet, SetAttrMode::DEFAULT, &aPam);
         }
     }
 
