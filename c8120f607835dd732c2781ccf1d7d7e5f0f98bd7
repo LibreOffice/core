@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_70e501a7",
+        "filename": "sc/inc/globstr.hrc",
+        "patchSetId": 4
+      },
+      "lineNbr": 356,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-03-20T20:13:25Z",
+      "side": 1,
+      "message": "Nitpick: it would be nice to preserve the alignment.",
+      "revId": "c8120f607835dd732c2781ccf1d7d7e5f0f98bd7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
