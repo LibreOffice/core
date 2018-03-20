@@ -694,6 +694,49 @@ bool CommonSalLayout::LayoutText(ImplLayoutArgs& rArgs)
             for (int i = 0; i < nRunGlyphCount; ++i) {
                 int32_t nGlyphIndex = pHbGlyphInfos[i].codepoint;
                 int32_t nCharPos = pHbGlyphInfos[i].cluster;
+                int32_t nCharCount = 0;
+
+                // Find the number of characters that make up this glyph.
+                if (!bRightToLeft)
+                {
+                    // If the cluster is the same as previous glyph, then this
+                    // already consumed, skip.
+                    if (i > 0 && pHbGlyphInfos[i].cluster == pHbGlyphInfos[i - 1].cluster)
+                        nCharCount = 0;
+                    else
+                    {
+                        // Find the next glyph with a different cluster, or the
+                        // end of text.
+                        int j = i;
+                        int32_t nNextCharPos = nCharPos;
+                        while (nNextCharPos == nCharPos && j < nRunGlyphCount)
+                            nNextCharPos = pHbGlyphInfos[j++].cluster;
+
+                        if (nNextCharPos == nCharPos)
+                            nNextCharPos = rArgs.mnEndCharPos;
+                        nCharCount = nNextCharPos - nCharPos;
+                    }
+                }
+                else
+                {
+                    // If the cluster is the same as previous glyph, then this
+                    // will be consumed later, skip.
+                    if (i < nRunGlyphCount - 1 && pHbGlyphInfos[i].cluster == pHbGlyphInfos[i + 1].cluster)
+                        nCharCount = 0;
+                    else
+                    {
+                        // Find the previous glyph with a different cluster, or
+                        // the end of text.
+                        int j = i;
+                        int32_t nNextCharPos = nCharPos;
+                        while (nNextCharPos == nCharPos && j >= 0)
+                            nNextCharPos = pHbGlyphInfos[j--].cluster;
+
+                        if (nNextCharPos == nCharPos)
+                            nNextCharPos = rArgs.mnEndCharPos;
+                        nCharCount = nNextCharPos - nCharPos;
+                    }
+                }
 
                 // if needed request glyph fallback by updating LayoutArgs
                 if (!nGlyphIndex)
@@ -759,7 +802,7 @@ bool CommonSalLayout::LayoutText(ImplLayoutArgs& rArgs)
                 nYOffset = std::lround(nYOffset * nYScale);
 
                 Point aNewPos(aCurrPos.X() + nXOffset, aCurrPos.Y() + nYOffset);
-                const GlyphItem aGI(nCharPos, nGlyphIndex, aNewPos, nGlyphFlags,
+                const GlyphItem aGI(nCharPos, nCharCount, nGlyphIndex, aNewPos, nGlyphFlags,
                                     nAdvance, nXOffset);
                 AppendGlyph(aGI);
 

@@ -27,6 +27,7 @@
 #include <fpdf_edit.h>
 #include <fpdfview.h>
 #endif
+#include <config_test.h>
 
 using namespace ::com::sun::star;
 
@@ -67,6 +68,12 @@ public:
     void testTdf99680();
     void testTdf99680_2();
     void testTdf108963();
+#if !TEST_FONTS_MISSING
+    /// Test writing ToUnicode CMAP for LTR ligatures.
+    void testTdf115117_1();
+    /// Test writing ToUnicode CMAP for RTL ligatures.
+    void testTdf115117_2();
+#endif
 #endif
 
     CPPUNIT_TEST_SUITE(PdfExportTest);
@@ -85,6 +92,10 @@ public:
     CPPUNIT_TEST(testTdf99680);
     CPPUNIT_TEST(testTdf99680_2);
     CPPUNIT_TEST(testTdf108963);
+#if !TEST_FONTS_MISSING
+    CPPUNIT_TEST(testTdf115117_1);
+    CPPUNIT_TEST(testTdf115117_2);
+#endif
 #endif
     CPPUNIT_TEST_SUITE_END();
 };
@@ -676,6 +687,7 @@ void PdfExportTest::testTdf99680_2()
     }
 }
 
+
 void PdfExportTest::testTdf108963()
 {
     // Import the bugdoc and export as PDF.
@@ -760,6 +772,116 @@ void PdfExportTest::testTdf108963()
 
     CPPUNIT_ASSERT_EQUAL(1, nYellowPathCount);
 }
+
+
+#if !TEST_FONTS_MISSING
+// This requires Carlito font, if it is missing the test will most likely
+// fail.
+void PdfExportTest::testTdf115117_1()
+{
+    vcl::filter::PDFDocument aDocument;
+    load("tdf115117-1.odt", aDocument);
+
+    vcl::filter::PDFObjectElement* pToUnicode = nullptr;
+
+    // Get access to ToUnicode of the first font
+    for (const auto& aElement : aDocument.GetElements())
+    {
+        auto pObject = dynamic_cast<vcl::filter::PDFObjectElement*>(aElement.get());
+        if (!pObject)
+            continue;
+        auto pType = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("Type"));
+        if (pType && pType->GetValue() == "Font")
+        {
+            auto pToUnicodeRef = dynamic_cast<vcl::filter::PDFReferenceElement*>(pObject->Lookup("ToUnicode"));
+            CPPUNIT_ASSERT(pToUnicodeRef);
+            pToUnicode = pToUnicodeRef->LookupObject();
+            break;
+        }
+    }
+
+    CPPUNIT_ASSERT(pToUnicode);
+    auto pStream = pToUnicode->GetStream();
+    CPPUNIT_ASSERT(pStream);
+    SvMemoryStream aObjectStream;
+    ZCodec aZCodec;
+    aZCodec.BeginCompression();
+    pStream->GetMemory().Seek(0);
+    aZCodec.Decompress(pStream->GetMemory(), aObjectStream);
+    CPPUNIT_ASSERT(aZCodec.EndCompression());
+    aObjectStream.Seek(0);
+    // <01> <02> etc. are glyph ids, they might change order if we changed how
+    // font subsets are created.
+    OString aCmap("9 beginbfchar\n"
+                  "<01> <00740069>\n"
+                  "<02> <0020>\n"
+                  "<03> <0074>\n"
+                  "<04> <0065>\n"
+                  "<05> <0073>\n"
+                  "<06> <00660069>\n"
+                  "<07> <0066006C>\n"
+                  "<08> <006600660069>\n"
+                  "<09> <00660066006C>\n"
+                  "endbfchar");
+    auto pStart = static_cast<const char*>(aObjectStream.GetData());
+    const char* pEnd = pStart + aObjectStream.GetSize();
+    auto it = std::search(pStart, pEnd, aCmap.getStr(), aCmap.getStr() + aCmap.getLength());
+    CPPUNIT_ASSERT(it != pEnd);
+}
+
+
+// This requires DejaVu Sans font, if it is missing the test will most likely
+// fail.
+void PdfExportTest::testTdf115117_2()
+{
+    vcl::filter::PDFDocument aDocument;
+    load("tdf115117-2.odt", aDocument);
+
+    vcl::filter::PDFObjectElement* pToUnicode = nullptr;
+
+    // Get access to ToUnicode of the first font
+    for (const auto& aElement : aDocument.GetElements())
+    {
+        auto pObject = dynamic_cast<vcl::filter::PDFObjectElement*>(aElement.get());
+        if (!pObject)
+            continue;
+        auto pType = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("Type"));
+        if (pType && pType->GetValue() == "Font")
+        {
+            auto pToUnicodeRef = dynamic_cast<vcl::filter::PDFReferenceElement*>(pObject->Lookup("ToUnicode"));
+            CPPUNIT_ASSERT(pToUnicodeRef);
+            pToUnicode = pToUnicodeRef->LookupObject();
+            break;
+        }
+    }
+
+    CPPUNIT_ASSERT(pToUnicode);
+    auto pStream = pToUnicode->GetStream();
+    CPPUNIT_ASSERT(pStream);
+    SvMemoryStream aObjectStream;
+    ZCodec aZCodec;
+    aZCodec.BeginCompression();
+    pStream->GetMemory().Seek(0);
+    aZCodec.Decompress(pStream->GetMemory(), aObjectStream);
+    CPPUNIT_ASSERT(aZCodec.EndCompression());
+    aObjectStream.Seek(0);
+    // <01> <02> etc. are glyph ids, they might change order if we changed how
+    // font subsets are created.
+    OString aCmap("7 beginbfchar\n"
+                  "<01> <06440627>\n"
+                  "<02> <0020>\n"
+                  "<03> <0641>\n"
+                  "<04> <0642>\n"
+                  "<05> <0648>\n"
+                  "<06> <06440627>\n"
+                  "<07> <0628>\n"
+                  "endbfchar");
+    auto pStart = static_cast<const char*>(aObjectStream.GetData());
+    const char* pEnd = pStart + aObjectStream.GetSize();
+    auto it = std::search(pStart, pEnd, aCmap.getStr(), aCmap.getStr() + aCmap.getLength());
+    CPPUNIT_ASSERT(it != pEnd);
+}
+#endif
 #endif
 
 CPPUNIT_TEST_SUITE_REGISTRATION(PdfExportTest);
