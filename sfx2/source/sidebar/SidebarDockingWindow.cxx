@@ -77,6 +77,12 @@ void SidebarDockingWindow::GetFocus()
         SfxDockingWindow::GetFocus();
 }
 
+bool SidebarDockingWindow::Close()
+{
+    mpSidebarController->SetFloatingDeckClosed( true );
+    return SfxDockingWindow::Close();
+}
+
 SfxChildAlignment SidebarDockingWindow::CheckAlignment (
     SfxChildAlignment eCurrentAlignment,
     SfxChildAlignment eRequestedAlignment)
