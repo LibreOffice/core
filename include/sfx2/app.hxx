@@ -112,6 +112,8 @@ public:
                              GetValue() const { return aLink; }
 };
 
+// This is a singleton class. Sad that there apparently is no other
+// way than a comment like this to indicate that to the code reader.
 class SFX2_DLLPUBLIC SfxApplication: public SfxShell
 {
     std::unique_ptr<SfxAppData_Impl>            pImpl;
