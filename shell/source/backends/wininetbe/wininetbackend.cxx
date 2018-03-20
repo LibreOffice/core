@@ -159,10 +159,14 @@ WinInetBackend::WinInetBackend()
             // an empty proxy list, so we don't have to check if
             // proxy is enabled or not
 
-            // We use a W-version of InternetQueryOption; it returns struct with pointers to wide strings
-            // There's no INTERNET_PROXY_INFOW, so we simply cast returned struct's members
-            OUString aProxyList       = reinterpret_cast<const sal_Unicode*>( lpi->lpszProxy );
-            OUString aProxyBypassList = reinterpret_cast<const sal_Unicode*>( lpi->lpszProxyBypass );
+            // We use InternetQueryOptionW (see https://msdn.microsoft.com/en-us/library/aa385101);
+            // it fills INTERNET_PROXY_INFO struct which is definned in WinInet.h to have LPCTSTR
+            // (i.e., the UNICODE-dependent generic string type expanding to const wchar_t* when
+            // UNICODE is defined, and InternetQueryOption macro expands to InternetQueryOptionW).
+            // Thus, it's natural to expect that W version would return wide strings. But it's not
+            // true. The W version still returns const char* in INTERNET_PROXY_INFO.
+            OUString aProxyList       = OUString::createFromAscii( lpi->lpszProxy );
+            OUString aProxyBypassList = OUString::createFromAscii( lpi->lpszProxyBypass );
 
             // override default for ProxyType, which is "0" meaning "No proxies".
             valueProxyType_.IsPresent = true;
