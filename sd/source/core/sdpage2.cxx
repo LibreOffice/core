@@ -558,24 +558,34 @@ void SdPage::setTransitionDuration ( double fTranstionDuration )
 
 bool SdPage::Equals(const SdPage& rOtherPage) const
 {
-    bool isEqual = GetObjCount() == rOtherPage.GetObjCount();
-    if( isEqual )
-    {
-        for(size_t i = 0; i < GetObjCount(); ++i)
-            isEqual = isEqual && GetObj(i)->Equals(*(rOtherPage.GetObj(i)));
-    }
+    if (GetObjCount() != rOtherPage.GetObjCount() ||
+        mePageKind != rOtherPage.mePageKind ||
+        meAutoLayout != rOtherPage.meAutoLayout ||
+        mePresChange != rOtherPage.mePresChange ||
+        !rtl::math::approxEqual(mfTime, rOtherPage.mfTime) ||
+        mbSoundOn != rOtherPage.mbSoundOn ||
+        mbExcluded != rOtherPage.mbExcluded ||
+        maLayoutName != rOtherPage.maLayoutName ||
+        maSoundFile != rOtherPage.maSoundFile ||
+        mbLoopSound != rOtherPage.mbLoopSound ||
+        mbStopSound != rOtherPage.mbStopSound ||
+        maBookmarkName != rOtherPage.maBookmarkName ||
+        mbScaleObjects != rOtherPage.mbScaleObjects ||
+        mbBackgroundFullSize != rOtherPage.mbBackgroundFullSize ||
+        meCharSet != rOtherPage.meCharSet ||
+        mnPaperBin != rOtherPage.mnPaperBin ||
+        mnTransitionType != rOtherPage.mnTransitionType ||
+        mnTransitionSubtype != rOtherPage.mnTransitionSubtype ||
+        mbTransitionDirection != rOtherPage.mbTransitionDirection ||
+        mnTransitionFadeColor != rOtherPage.mnTransitionFadeColor ||
+        !rtl::math::approxEqual(mfTransitionDuration, rOtherPage.mfTransitionDuration))
+        return false;
 
-    return (isEqual && mePageKind == rOtherPage.mePageKind && meAutoLayout == rOtherPage.meAutoLayout &&
-            mePresChange == rOtherPage.mePresChange && rtl::math::approxEqual(mfTime, rOtherPage.mfTime) &&
-            mbSoundOn == rOtherPage.mbSoundOn && mbExcluded == rOtherPage.mbExcluded &&
-            maLayoutName == rOtherPage.maLayoutName && maSoundFile == rOtherPage.maSoundFile &&
-            mbLoopSound == rOtherPage.mbLoopSound && mbStopSound == rOtherPage.mbStopSound &&
-            maBookmarkName == rOtherPage.maBookmarkName && mbScaleObjects == rOtherPage.mbScaleObjects &&
-            mbBackgroundFullSize == rOtherPage.mbBackgroundFullSize && meCharSet == rOtherPage.meCharSet &&
-            mnPaperBin == rOtherPage.mnPaperBin && mnTransitionType == rOtherPage.mnTransitionType &&
-            mnTransitionSubtype == rOtherPage.mnTransitionSubtype && mbTransitionDirection == rOtherPage.mbTransitionDirection &&
-            mnTransitionFadeColor == rOtherPage.mnTransitionFadeColor &&
-            rtl::math::approxEqual(mfTransitionDuration, rOtherPage.mfTransitionDuration));
+    for(size_t i = 0; i < GetObjCount(); ++i)
+        if (!GetObj(i)->Equals(*(rOtherPage.GetObj(i))))
+            return false;
+
+    return true;
  }
 
 void SdPage::createAnnotation( css::uno::Reference< css::office::XAnnotation >& xAnnotation )
