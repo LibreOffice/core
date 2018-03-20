@@ -559,7 +559,7 @@ void OSQLMessageBox::impl_addDetailsButton()
         }
     }
 
-    if ( bMoreDetailsAvailable || true )
+    if ( bMoreDetailsAvailable )
     {
         AddButton( StandardButtonType::More, RET_MORE);
         PushButton* pButton = GetPushButton( RET_MORE );
