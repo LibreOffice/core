@@ -2431,13 +2431,6 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
                 assert(0 <= nLen);
 
                 OUString aSnippet( aAttrIter.GetSnippet( aStr, nAktPos + ofs, nLen ) );
-                if ( ( m_nTextTyp == TXT_EDN || m_nTextTyp == TXT_FTN ) && nAktPos == 0 && nLen > 0 )
-                {
-                    // Insert tab for aesthetic purposes #i24762#
-                    if ( aSnippet[0] != 0x09 )
-                        aSnippet = "\x09" + aSnippet;
-                }
-
                 if ( bPostponeWritingText && ( FLY_POSTPONED != nStateOfFlyFrame ) )
                 {
                     bPostponeWritingText = true ;
