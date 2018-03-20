@@ -469,7 +469,7 @@ void ScDocument::FillInfo(
 
                 if (nX+1 >= nCol1)                                // Attribute/Blockmark from nX1-1
                 {
-                    ScAttrArray* pThisAttrArr = pThisCol->pAttrArray;       // Attribute
+                    ScAttrArray* pThisAttrArr = pThisCol->pAttrArray.get();       // Attribute
                     nArrRow = 0;
 
                     SCROW nCurRow=nRow1;                  // single rows
