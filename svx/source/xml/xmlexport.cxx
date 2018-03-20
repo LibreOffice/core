@@ -27,6 +27,7 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/io/XActiveDataSource.hpp>
 #include <com/sun/star/xml/sax/SAXParseException.hpp>
+#include <com/sun/star/xml/sax/XFastParser.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/document/XExporter.hpp>
@@ -204,6 +205,8 @@ bool SvxDrawingLayerImport( SdrModel* pModel, const uno::Reference<io::XInputStr
 
         // get filter
         Reference< xml::sax::XDocumentHandler > xFilter( xContext->getServiceManager()->createInstanceWithArgumentsAndContext( OUString::createFromAscii( pImportService ), aFilterArgs, xContext), UNO_QUERY );
+        uno::Reference< xml::sax::XFastParser > xFastParser = dynamic_cast<
+                            xml::sax::XFastParser* >( xFilter.get() );
         DBG_ASSERT( xFilter.is(), "Can't instantiate filter component." );
 
         bRet = false;
@@ -217,7 +220,10 @@ bool SvxDrawingLayerImport( SdrModel* pModel, const uno::Reference<io::XInputStr
             xImporter->setTargetDocument( xTargetDocument );
 
             // finally, parser the stream
-            xParser->parseStream( aParserInput );
+            if( xFastParser.is() )
+                xFastParser->parseStream( aParserInput );
+            else
+                xParser->parseStream( aParserInput );
 
             bRet = true;
         }
