@@ -228,15 +228,15 @@ InitProgressUIStrings()
     WCHAR filename[MAX_PATH];
     if (!GetStringsFile(filename))
     {
-        strcpy(sUIStrings.title, "LibreOffice Updater");
-        strcpy(sUIStrings.info, "This program is updating your LibreOffice installation.");
+        strcpy(sUIStrings.title, "LibreOffice Update");
+        strcpy(sUIStrings.info, "Please wait while we update your installation.");
         return 0;
     }
 
     if (_waccess(filename, 04))
     {
-        strcpy(sUIStrings.title, "LibreOffice Updater");
-        strcpy(sUIStrings.info, "This program is updating your LibreOffice installation.");
+        strcpy(sUIStrings.title, "LibreOffice Update");
+        strcpy(sUIStrings.info, "Please wait while we update your installation.");
         return 0;
     }
 
@@ -244,8 +244,8 @@ InitProgressUIStrings()
     // bother showing UI.
     if (ReadStrings(filename, &sUIStrings) != OK)
     {
-        strcpy(sUIStrings.title, "LibreOffice Updater");
-        strcpy(sUIStrings.info, "This program is updating your LibreOffice installation.");
+        strcpy(sUIStrings.title, "LibreOffice Update");
+        strcpy(sUIStrings.info, "Please wait while we update your installation.");
     }
 
     return 0;

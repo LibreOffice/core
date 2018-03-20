@@ -79,8 +79,8 @@ ShowProgressUI()
     StringTable strings;
     if (ReadStrings(ini_path, &strings) != OK)
     {
-        strcpy(strings.title, "LibreOffice Updater");
-        strcpy(strings.info, "This program is updating your LibreOffice installation.");
+        strcpy(strings.title, "LibreOffice Update");
+        strcpy(strings.info, "Please wait while we update your installation.");
     }
 
     sWin = gtk_window_new(GTK_WINDOW_TOPLEVEL);
