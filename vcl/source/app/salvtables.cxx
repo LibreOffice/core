@@ -870,12 +870,14 @@ public:
             nInsertedAt = m_xTreeView->InsertEntry(rStr, pos == -1 ? COMBOBOX_APPEND : pos);
         else
         {
-            assert((rImage == "dialog-warning" || rImage == "dialog-error") && "unknown stock image");
+            assert((rImage == "dialog-warning" || rImage == "dialog-error" || rImage == "dialog-information") && "unknown stock image");
             Image aImage;
             if (rImage == "dialog-warning")
                 aImage = Image(BitmapEx(IMG_WARN));
             else if (rImage == "dialog-error")
-                aImage = Image(BitmapEx(IMG_ERR));
+                aImage = Image(BitmapEx(IMG_ERROR));
+            else if (rImage == "dialog-information")
+                aImage = Image(BitmapEx(IMG_INFO));
             nInsertedAt = m_xTreeView->InsertEntry(rStr, aImage, pos == -1 ? COMBOBOX_APPEND : pos);
         }
         m_xTreeView->SetEntryData(nInsertedAt, new OUString(rId));
