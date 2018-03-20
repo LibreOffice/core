@@ -141,7 +141,7 @@ class ScColumn
     // Cell values.
     sc::CellStoreType maCells;
 
-    ScAttrArray* pAttrArray;
+    std::unique_ptr<ScAttrArray> pAttrArray;
 
     size_t mnBlkCountFormula;
 

@@ -1625,7 +1625,7 @@ void ScColumn::MixData(
 
 ScAttrIterator* ScColumn::CreateAttrIterator( SCROW nStartRow, SCROW nEndRow ) const
 {
-    return new ScAttrIterator( pAttrArray, nStartRow, nEndRow, GetDoc()->GetDefPattern() );
+    return new ScAttrIterator( pAttrArray.get(), nStartRow, nEndRow, GetDoc()->GetDefPattern() );
 }
 
 namespace {
@@ -2440,7 +2440,7 @@ void ScColumn::RemoveProtected( SCROW nStartRow, SCROW nEndRow )
     FormulaToValueHandler aFunc;
     sc::CellStoreType::const_iterator itPos = maCells.begin();
 
-    ScAttrIterator aAttrIter( pAttrArray, nStartRow, nEndRow, GetDoc()->GetDefPattern() );
+    ScAttrIterator aAttrIter( pAttrArray.get(), nStartRow, nEndRow, GetDoc()->GetDefPattern() );
     SCROW nTop = -1;
     SCROW nBottom = -1;
     const ScPatternAttr* pPattern = aAttrIter.Next( nTop, nBottom );
