@@ -73,8 +73,8 @@ class SwAccessibleParagraph :
     // string.
     // pPortionData may be NULL; it should only be accessed through the
     // Get/Clear/Has/UpdatePortionData() methods
-    SwAccessiblePortionData* m_pPortionData;
-    SwAccessibleHyperTextData *m_pHyperTextData;
+    std::unique_ptr<SwAccessiblePortionData> m_pPortionData;
+    std::unique_ptr<SwAccessibleHyperTextData> m_pHyperTextData;
 
     sal_Int32 m_nOldCaretPos; // The 'old' caret pos. It's only valid as long
                             // as the cursor is inside this object (protected by
@@ -86,7 +86,7 @@ class SwAccessibleParagraph :
     // implementation for XAccessibleSelection
     SwAccessibleSelectionHelper m_aSelectionHelper;
 
-    SwParaChangeTrackingInfo* mpParaChangeTrackInfo; // #i108125#
+    std::unique_ptr<SwParaChangeTrackingInfo> mpParaChangeTrackInfo; // #i108125#
 
     /// get the SwTextNode (requires frame; check before)
     const SwTextNode* GetTextNode() const;
