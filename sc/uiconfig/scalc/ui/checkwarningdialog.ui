@@ -3,12 +3,11 @@
 <interface domain="sc">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkMessageDialog" id="CheckWarningDialog">
+    <property name="can_focus">False</property>
     <property name="resizable">False</property>
     <property name="modal">True</property>
-    <property name="can_focus">False</property>
     <property name="type_hint">dialog</property>
     <property name="message_type">warning</property>
-    <property name="buttons">ok</property>
     <property name="text" translatable="yes" context="checkwarningdialog|CheckWarningDialog">You are pasting data into cells that already contain data.</property>
     <property name="secondary_text" translatable="yes" context="checkwarningdialog|CheckWarningDialog">Do you really want to overwrite the existing data?</property>
     <child internal-child="vbox">
@@ -20,6 +19,51 @@
           <object class="GtkButtonBox">
             <property name="can_focus">False</property>
             <property name="homogeneous">True</property>
+            <child>
+              <object class="GtkButton" id="help">
+                <property name="label">gtk-help</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <property name="use_stock">True</property>
+              </object>
+              <packing>
+                <property name="expand">True</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+                <property name="secondary">True</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="no">
+                <property name="label">gtk-no</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <property name="use_stock">True</property>
+              </object>
+              <packing>
+                <property name="expand">True</property>
+                <property name="fill">True</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="yes">
+                <property name="label">gtk-yes</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="can_default">True</property>
+                <property name="has_default">True</property>
+                <property name="receives_default">True</property>
+                <property name="use_stock">True</property>
+              </object>
+              <packing>
+                <property name="expand">True</property>
+                <property name="fill">True</property>
+                <property name="position">2</property>
+              </packing>
+            </child>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -33,6 +77,7 @@
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">False</property>
+            <property name="xalign">0</property>
             <property name="active">True</property>
             <property name="draw_indicator">True</property>
           </object>
@@ -44,6 +89,11 @@
         </child>
       </object>
     </child>
+    <action-widgets>
+      <action-widget response="-11">help</action-widget>
+      <action-widget response="-9">no</action-widget>
+      <action-widget response="-8">yes</action-widget>
+    </action-widgets>
     <child>
       <placeholder/>
     </child>
