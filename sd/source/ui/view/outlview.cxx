@@ -105,16 +105,10 @@ OutlineView::OutlineView( DrawDocShell& rDocSh, vcl::Window* pWindow, OutlineVie
         mnPaperWidth = 19000;
     }
 
-    // insert View into Outliner
-    for (OutlinerView* & rp : mpOutlinerView)
-    {
-        rp = nullptr;
-    }
-
-    mpOutlinerView[0] = new OutlinerView(&mrOutliner, pWindow);
-    mpOutlinerView[0]->SetOutputArea(::tools::Rectangle());
+    mpOutlinerViews[0].reset( new OutlinerView(&mrOutliner, pWindow) );
+    mpOutlinerViews[0]->SetOutputArea(::tools::Rectangle());
     mrOutliner.SetUpdateMode(false);
-    mrOutliner.InsertView(mpOutlinerView[0], EE_APPEND);
+    mrOutliner.InsertView(mpOutlinerViews[0].get(), EE_APPEND);
 
     onUpdateStyleSettings( true );
 
@@ -163,16 +157,15 @@ OutlineView::~OutlineView()
     mrOutlineViewShell.GetViewShellBase().GetEventMultiplexer()->RemoveEventListener( aLink );
     DisconnectFromApplication();
 
-    delete mpProgress;
+    mpProgress.reset();
 
     // unregister OutlinerViews and destroy them
-    for (OutlinerView* & rpView : mpOutlinerView)
+    for (auto & rpView : mpOutlinerViews)
     {
-        if (rpView != nullptr)
+        if (rpView)
         {
-            mrOutliner.RemoveView( rpView );
-            delete rpView;
-            rpView = nullptr;
+            mrOutliner.RemoveView( rpView.get() );
+            rpView.reset();
         }
     }
 
