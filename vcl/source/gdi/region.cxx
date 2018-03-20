@@ -1589,13 +1589,12 @@ SvStream& ReadRegion(SvStream& rIStrm, vcl::Region& rRegion)
             bool bSuccess = pNewRegionBand->load(rIStrm);
             rRegion.mpRegionBand.reset(pNewRegionBand);
 
-            if(aCompat.GetVersion() >= 2)
+            bool bHasPolyPolygon(false);
+            if (aCompat.GetVersion() >= 2)
             {
-                bool bHasPolyPolygon(false);
-
                 rIStrm.ReadCharAsBool( bHasPolyPolygon );
 
-                if(bHasPolyPolygon)
+                if (bHasPolyPolygon)
                 {
                     tools::PolyPolygon* pNewPoly = new tools::PolyPolygon();
                     ReadPolyPolygon( rIStrm, *pNewPoly );
@@ -1603,9 +1602,9 @@ SvStream& ReadRegion(SvStream& rIStrm, vcl::Region& rRegion)
                 }
             }
 
-            if (!bSuccess)
+            if (!bSuccess && !bHasPolyPolygon)
             {
-                SAL_WARN("vcl.gdi", "bad region band");
+                SAL_WARN("vcl.gdi", "bad region band:" << bHasPolyPolygon);
                 rRegion.SetNull();
             }
 
