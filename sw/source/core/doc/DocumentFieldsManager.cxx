@@ -1072,11 +1072,13 @@ void DocumentFieldsManager::UpdateExpFields( SwTextField* pUpdateField, bool bUp
                         // Modify entry in the hash table
                         pFnd->aSetStr = pSField->GetExpStr();
                     else
+                    {
                         // insert new entry
                         aHashStrTable[nPos].reset( new HashStr( aNew,
                                         pSField->GetExpStr(),
                                         aHashStrTable[nPos].release() ) );
                         pFnd = aHashStrTable[nPos].get();
+                    }
 
                     // Extension for calculation with Strings
                     SwSbxValue aValue;
