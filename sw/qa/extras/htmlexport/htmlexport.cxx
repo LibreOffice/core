@@ -471,6 +471,9 @@ DECLARE_HTMLEXPORT_TEST(testReqIfTable, "reqif-table.xhtml")
     // This failed, there were 2 style attributes, so as a best effort the
     // parser took the value of the first.
     CPPUNIT_ASSERT(aStyle.indexOf("border") != -1);
+
+    // The attribute was present, which is not valid in reqif-xhtml.
+    assertXPathNoAttribute(pDoc, "/html/body/div/table/tr/th", "bgcolor");
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
