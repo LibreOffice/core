@@ -557,9 +557,9 @@ SwAccessibleParagraph::~SwAccessibleParagraph()
 {
     SolarMutexGuard aGuard;
 
-    delete m_pPortionData;
-    delete m_pHyperTextData;
-    delete mpParaChangeTrackInfo; // #i108125#
+    m_pPortionData.reset();
+    m_pHyperTextData.reset();
+    mpParaChangeTrackInfo.reset(); // #i108125#
     EndListeningAll();
 }
 
@@ -577,9 +577,8 @@ void SwAccessibleParagraph::UpdatePortionData()
     const SwTextFrame* pFrame = static_cast<const SwTextFrame*>( GetFrame() );
 
     // build new portion data
-    delete m_pPortionData;
-    m_pPortionData = new SwAccessiblePortionData(
-        pFrame->GetTextNode(), GetMap()->GetShell()->GetViewOptions() );
+    m_pPortionData.reset( new SwAccessiblePortionData(
+        pFrame->GetTextNode(), GetMap()->GetShell()->GetViewOptions() ) );
     pFrame->VisitPortions( *m_pPortionData );
 
     OSL_ENSURE( m_pPortionData != nullptr, "UpdatePortionData() failed" );
@@ -587,11 +586,8 @@ void SwAccessibleParagraph::UpdatePortionData()
 
 void SwAccessibleParagraph::ClearPortionData()
 {
-    delete m_pPortionData;
-    m_pPortionData = nullptr;
-
-    delete m_pHyperTextData;
-    m_pHyperTextData = nullptr;
+    m_pPortionData.reset();
+    m_pHyperTextData.reset();
 }
 
 void SwAccessibleParagraph::ExecuteAtViewShell( sal_uInt16 nSlot )
@@ -3057,7 +3053,7 @@ uno::Reference< XAccessibleHyperlink > SAL_CALL
                 if( pHt )
                 {
                     if( !m_pHyperTextData )
-                        m_pHyperTextData = new SwAccessibleHyperTextData;
+                        m_pHyperTextData.reset( new SwAccessibleHyperTextData );
                     SwAccessibleHyperTextData::iterator aIter =
                         m_pHyperTextData ->find( pHt );
                     if( aIter != m_pHyperTextData->end() )
