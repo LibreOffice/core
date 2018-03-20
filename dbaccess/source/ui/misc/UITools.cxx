@@ -898,9 +898,9 @@ std::shared_ptr<const SfxFilter> getStandardDatabaseFilter()
 }
 
 bool appendToFilter(const Reference<XConnection>& _xConnection,
-                        const OUString& _sName,
-                        const Reference< XComponentContext >& _rxContext,
-                        vcl::Window* _pParent)
+                    const OUString& _sName,
+                    const Reference< XComponentContext >& _rxContext,
+                    weld::Window* pParent)
 {
     bool bRet = false;
     Reference< XChild> xChild(_xConnection,UNO_QUERY);
@@ -931,7 +931,8 @@ bool appendToFilter(const Reference<XConnection>& _xConnection,
                 if(! ::dbaui::checkDataSourceAvailable(::comphelper::getString(xProp->getPropertyValue(PROPERTY_NAME)),_rxContext))
                 {
                     OUString aMessage(DBA_RES(STR_TABLEDESIGN_DATASOURCE_DELETED));
-                    ScopedVclPtrInstance<OSQLWarningBox>(_pParent, aMessage)->Execute();
+                    OSQLWarningBox aWarning(pParent, aMessage);
+                    aWarning.run();
                     bRet = false;
                 }
                 else
@@ -1197,18 +1198,17 @@ TOTypeInfoSP queryTypeInfoByType(sal_Int32 _nDataType,const OTypeInfoMap& _rType
     return pTypeInfo;
 }
 
-sal_Int32 askForUserAction(vcl::Window* _pParent, const char* pTitle, const char* pText, bool _bAll, const OUString& _sName)
+sal_Int32 askForUserAction(weld::Window* pParent, const char* pTitle, const char* pText, bool _bAll, const OUString& _sName)
 {
     SolarMutexGuard aGuard;
     OUString aMsg = DBA_RES(pText);
     aMsg = aMsg.replaceFirst("%1", _sName);
-    ScopedVclPtrInstance<OSQLMessageBox> aAsk(_pParent, DBA_RES(pTitle), aMsg,MessBoxStyle::YesNo | MessBoxStyle::DefaultYes,OSQLMessageBox::Query);
+    OSQLMessageBox aAsk(pParent, DBA_RES(pTitle), aMsg, MessBoxStyle::YesNo | MessBoxStyle::DefaultYes, MessageType::Query);
     if ( _bAll )
     {
-        aAsk->AddButton(DBA_RES(STR_BUTTON_TEXT_ALL), RET_ALL);
-        aAsk->GetPushButton(RET_ALL)->SetHelpId(HID_CONFIRM_DROP_BUTTON_ALL);
+        aAsk.add_button(DBA_RES(STR_BUTTON_TEXT_ALL), RET_ALL, HID_CONFIRM_DROP_BUTTON_ALL);
     }
-    return aAsk->Execute();
+    return aAsk.run();
 }
 
 namespace

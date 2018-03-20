@@ -940,9 +940,8 @@ void OQueryController::impl_initialize()
             {
                 OUString aTitle(DBA_RES(STR_QUERYDESIGN_NO_VIEW_SUPPORT));
                 OUString aMessage(DBA_RES(STR_QUERYDESIGN_NO_VIEW_ASK));
-                ODataView* pWindow = getView();
-                ScopedVclPtrInstance< OSQLMessageBox > aDlg( pWindow, aTitle, aMessage, MessBoxStyle::YesNo | MessBoxStyle::DefaultYes, OSQLMessageBox::Query );
-                bClose = aDlg->Execute() == RET_NO;
+                OSQLMessageBox aDlg(getFrameWeld(), aTitle, aMessage, MessBoxStyle::YesNo | MessBoxStyle::DefaultYes, MessageType::Query);
+                bClose = aDlg.run() == RET_NO;
             }
             if ( bClose )
                 throw VetoException();
@@ -1013,8 +1012,8 @@ void OQueryController::impl_initialize()
         {
             m_bGraphicalDesign = false;
             getContainer()->initialize();
-            ODataView* pWindow = getView();
-            ScopedVclPtrInstance<OSQLMessageBox>(pWindow,e)->Execute();
+            OSQLMessageBox aBox(getFrameWeld(), e);
+            aBox.run();
         }
         throw;
     }
@@ -1365,7 +1364,8 @@ bool OQueryController::doSaveAsDoc(bool _bSaveAs)
     if ( !editingCommand() && !haveDataSource() )
     {
         OUString aMessage(DBA_RES(STR_DATASOURCE_DELETED));
-        ScopedVclPtrInstance<OSQLWarningBox>(getView(), aMessage)->Execute();
+        OSQLWarningBox aBox(getFrameWeld(), aMessage);
+        aBox.run();
         return false;
     }
 
@@ -1496,7 +1496,7 @@ bool OQueryController::doSaveAsDoc(bool _bSaveAs)
                     m_xAlterView.set( xElements->getByName( m_sName ), UNO_QUERY );
 
                 // now check if our datasource has set a tablefilter and if so, append the new table name to it
-                ::dbaui::appendToFilter( getConnection(), m_sName, getORB(), getView() );
+                ::dbaui::appendToFilter(getConnection(), m_sName, getORB(), getFrameWeld());
             }
             Reference< XTitleChangeListener> xEventListener(impl_getTitleHelper_throw(),UNO_QUERY);
             if ( xEventListener.is() )
@@ -1854,8 +1854,8 @@ void OQueryController::impl_reset( const bool i_bForceCurrentControllerSettings 
                     if ( !i_bForceCurrentControllerSettings && !editingView() )
                     {
                         OUString aTitle(DBA_RES(STR_SVT_SQL_SYNTAX_ERROR));
-                        ScopedVclPtrInstance< OSQLMessageBox > aDlg(getView(),aTitle,aErrorMsg);
-                        aDlg->Execute();
+                        OSQLMessageBox aDlg(getFrameWeld(), aTitle, aErrorMsg);
+                        aDlg.run();
                     }
                     bError = true;
                 }
