@@ -3315,8 +3315,8 @@ void SvxIconSelectorDialog::ImportGraphics(
             message += fPath + rejected[i] + "\n";
         }
 
-        ScopedVclPtrInstance< SvxIconChangeDialog > aDialog(this, message);
-        aDialog->Execute();
+        SvxIconChangeDialog aDialog(GetFrameWeld(), message);
+        aDialog.run();
     }
 }
 
@@ -3402,32 +3402,13 @@ bool SvxIconSelectorDialog::ImportGraphic( const OUString& aURL )
 * The SvxIconChangeDialog class added for issue83555
 *
 *******************************************************************************/
-SvxIconChangeDialog::SvxIconChangeDialog(
-    vcl::Window *pWindow, const OUString& aMessage)
-    :ModalDialog(pWindow, "IconChange", "cui/ui/iconchangedialog.ui")
+SvxIconChangeDialog::SvxIconChangeDialog(weld::Window *pWindow, const OUString& rMessage)
+    : MessageDialogController(pWindow, "cui/ui/iconchangedialog.ui", "IconChange", "grid")
+    , m_xLineEditDescription(m_xBuilder->weld_text_view("addrTextview"))
 {
-    get(pFImageInfo, "infoImage");
-    get(pLineEditDescription, "addrTextview");
-
-    Size aSize(LogicToPixel(Size(140, 83), MapMode(MapUnit::MapAppFont)));
-    pLineEditDescription->set_width_request(aSize.Width());
-    pLineEditDescription->set_height_request(aSize.Height());
-
-    pFImageInfo->SetImage(GetStandardInfoBoxImage());
-    pLineEditDescription->SetControlBackground( GetSettings().GetStyleSettings().GetDialogColor() );
-    pLineEditDescription->SetText(aMessage);
-}
-
-SvxIconChangeDialog::~SvxIconChangeDialog()
-{
-    disposeOnce();
-}
-
-void SvxIconChangeDialog::dispose()
-{
-    pFImageInfo.clear();
-    pLineEditDescription.clear();
-    ModalDialog::dispose();
+    m_xLineEditDescription->set_size_request(m_xLineEditDescription->get_approximate_digit_width() * 48,
+                                             m_xLineEditDescription->get_text_height() * 8);
+    m_xLineEditDescription->set_text(rMessage);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
