@@ -2192,8 +2192,9 @@ void SwFEShell::SetColRowWidthHeight( TableChgWidthHeightType eType, sal_uInt16 
     const SwFormatFrameSize& rTableFrameSz = pTab->GetFormat()->GetFrameSize();
     SwRectFnSet aRectFnSet(pTab);
     long nPrtWidth = aRectFnSet.GetWidth(pTab->getFramePrintArea());
+    TableChgWidthHeightType eTypePos = extractPosition(eType);
     if( TableChgMode::VarWidthChangeAbs == pTab->GetTable()->GetTableChgMode() &&
-        ( eType & TableChgWidthHeightType::ColLeft || eType & TableChgWidthHeightType::ColRight ) &&
+        ( eTypePos == TableChgWidthHeightType::ColLeft || eTypePos == TableChgWidthHeightType::ColRight ) &&
         text::HoriOrientation::NONE == pTab->GetFormat()->GetHoriOrient().GetHoriOrient() &&
         nPrtWidth != rTableFrameSz.GetWidth() )
     {
@@ -2209,7 +2210,7 @@ void SwFEShell::SetColRowWidthHeight( TableChgWidthHeightType eType, sal_uInt16 
 
         // we must move the cursor outside the current cell before
         // deleting the cells.
-        switch( extractPosition(eType) )
+        switch( eTypePos )
         {
         case TableChgWidthHeightType::RowTop:
             lcl_GoTableRow( this, true );
