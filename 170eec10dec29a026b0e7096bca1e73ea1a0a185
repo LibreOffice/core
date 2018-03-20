@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "9a30ddce_907435fe",
+        "filename": "vcl/qa/cppunit/pdfexport/pdfexport.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 783,
+      "author": {
+        "id": 1000381
+      },
+      "writtenOn": "2018-03-20T18:39:30Z",
+      "side": 1,
+      "message": "I did something that looks a bit convoluted, let me know if there is a simpler way.",
+      "parentUuid": "9a30ddce_7c46bdc0",
+      "revId": "170eec10dec29a026b0e7096bca1e73ea1a0a185",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a30ddce_9c11b1b2",
         "filename": "vcl/qa/cppunit/pdfexport/pdfexport.cxx",
         "patchSetId": 3
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "9a30ddce_7077c102",
+        "filename": "vcl/qa/cppunit/pdfexport/pdfexport.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 797,
+      "author": {
+        "id": 1000381
+      },
+      "writtenOn": "2018-03-20T18:39:30Z",
+      "side": 1,
+      "message": "Thanks. pdfium does not provide a public API to parsing ToUnicode (there is a private class, though). I guess the current approach is good enough.",
+      "parentUuid": "9a30ddce_9c11b1b2",
+      "revId": "170eec10dec29a026b0e7096bca1e73ea1a0a185",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a30ddce_bc1675a5",
         "filename": "vcl/qa/cppunit/pdfexport/pdfexport.cxx",
         "patchSetId": 3
@@ -47,6 +83,24 @@
       "writtenOn": "2018-03-20T10:59:38Z",
       "side": 1,
       "message": "Is this copy\u0026pasted and you forgot to document how the test failed without the fix or just my eyes are not trained to translate the above numbers into \"hello\"? :-)",
+      "revId": "170eec10dec29a026b0e7096bca1e73ea1a0a185",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_30e70914",
+        "filename": "vcl/qa/cppunit/pdfexport/pdfexport.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 813,
+      "author": {
+        "id": 1000381
+      },
+      "writtenOn": "2018-03-20T18:39:30Z",
+      "side": 1,
+      "message": "Copy\u0026paste, removed.",
+      "parentUuid": "9a30ddce_bc1675a5",
       "revId": "170eec10dec29a026b0e7096bca1e73ea1a0a185",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
