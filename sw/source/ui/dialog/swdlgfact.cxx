@@ -83,9 +83,11 @@
 #include <mailconfigpage.hxx>
 #include <uiborder.hxx>
 #include <mmresultdialogs.hxx>
-#include <SignatureLineDialog.hxx>
+#include <svx/SignatureLineDialog.hxx>
 
 using namespace ::com::sun::star;
+using namespace css::frame;
+using namespace css::uno;
 
 IMPL_ABSTDLG_BASE(AbstractSwWordCountFloatDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractSwInsertAbstractDlg_Impl);
@@ -728,9 +730,12 @@ VclPtr<VclAbstractDialog> SwAbstractDialogFactory_Impl::CreateSwCaptionDialog ( 
     return VclPtr<VclAbstractDialog_Impl>::Create( pDlg );
 }
 
-VclPtr<VclAbstractDialog> SwAbstractDialogFactory_Impl::CreateSignatureLineDialog(SwView& rV)
+VclPtr<VclAbstractDialog>
+SwAbstractDialogFactory_Impl::CreateSignatureLineDialog(SwView& rV, Reference<XModel> xModel,
+                                                        bool bEditExisting)
 {
-    return VclPtr<AbstractSignatureLineDialog_Impl>::Create(new SignatureLineDialog(rV));
+    return VclPtr<AbstractSignatureLineDialog_Impl>::Create(
+        new SignatureLineDialog(rV.GetFrameWeld(), xModel, bEditExisting));
 }
 
 VclPtr<AbstractSwInsertDBColAutoPilot> SwAbstractDialogFactory_Impl::CreateSwInsertDBColAutoPilot( SwView& rView,
