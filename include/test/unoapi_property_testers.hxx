@@ -34,7 +34,7 @@ void OOO_DLLPUBLIC_TEST testBooleanProperty(
  */
 void OOO_DLLPUBLIC_TEST
 testLongProperty(css::uno::Reference<css::beans::XPropertySet>& xPropertySet, const OUString& name,
-                 const sal_Int32& nValue);
+                 const sal_Int32& nValue = 42);
 
 /** @brief Tester for property type 'short' of a @see com::sun::star::beans::XPropertySet.
  *
@@ -44,7 +44,7 @@ testLongProperty(css::uno::Reference<css::beans::XPropertySet>& xPropertySet, co
  */
 void OOO_DLLPUBLIC_TEST
 testShortProperty(css::uno::Reference<css::beans::XPropertySet>& xPropertySet, const OUString& name,
-                  const sal_Int16& nValue);
+                  const sal_Int16& nValue = 42);
 
 /** @brief Tester for property type 'string' of a @see com::sun::star::beans::XPropertySet.
  *

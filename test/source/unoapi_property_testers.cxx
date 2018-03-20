@@ -40,7 +40,7 @@ void testBooleanProperty(uno::Reference<beans::XPropertySet>& xPropertySet, cons
 }
 
 void testLongProperty(uno::Reference<beans::XPropertySet>& xPropertySet, const OUString& name,
-                      const sal_Int32& nValue = 42)
+                      const sal_Int32& nValue)
 {
     uno::Any aNewValue;
 
@@ -60,7 +60,7 @@ void testLongProperty(uno::Reference<beans::XPropertySet>& xPropertySet, const O
 }
 
 void testShortProperty(uno::Reference<beans::XPropertySet>& xPropertySet, const OUString& name,
-                       const sal_Int16& nValue = 42)
+                       const sal_Int16& nValue)
 {
     uno::Any aNewValue;
 
