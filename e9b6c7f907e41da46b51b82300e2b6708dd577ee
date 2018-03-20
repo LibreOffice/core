@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "9a30ddce_50cb9d72",
+        "filename": "sc/source/filter/excel/xestream.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1066,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2018-03-20T18:11:33Z",
+      "side": 1,
+      "message": "In theory, I expect that there should NEVER be a non-file URL here, so this default form should be fine.  IF for some reason we get a non-file form, we probably want the whole path. But for now I have gone back to matching the existing code.\n\nIn the unit tests, there ARE examples where removeSegment returns false (stream:something). In those cases, adding the final slash would be inappropriate so I kept the if statement there.",
+      "parentUuid": "9a30ddce_dc43296b",
+      "revId": "e9b6c7f907e41da46b51b82300e2b6708dd577ee",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a30ddce_5c2f39a1",
         "filename": "sc/source/filter/excel/xestream.cxx",
         "patchSetId": 1
