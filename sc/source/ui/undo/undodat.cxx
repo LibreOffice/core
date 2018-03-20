@@ -656,9 +656,9 @@ void ScUndoSubTotals::Undo()
                                             aParam.nCol2,aParam.nRow2,nTab );
 
     if (xUndoRange)
-        rDoc.SetRangeName(new ScRangeName(*xUndoRange));
+        rDoc.SetRangeName(std::unique_ptr<ScRangeName>(new ScRangeName(*xUndoRange)));
     if (xUndoDB)
-        rDoc.SetDBCollection(new ScDBCollection(*xUndoDB), true);
+        rDoc.SetDBCollection(std::unique_ptr<ScDBCollection>(new ScDBCollection(*xUndoDB)), true);
 
     SCTAB nVisTab = pViewShell->GetViewData().GetTabNo();
     if ( nVisTab != nTab )
@@ -796,7 +796,7 @@ void ScUndoQuery::Undo()
                                  InsertDeleteFlags::NONE, false, rDoc);
 
     if (xUndoDB)
-        rDoc.SetDBCollection(new ScDBCollection(*xUndoDB ), true);
+        rDoc.SetDBCollection(std::unique_ptr<ScDBCollection>(new ScDBCollection(*xUndoDB )), true);
 
     if (!bCopy)
     {
@@ -980,7 +980,7 @@ void ScUndoDBData::Undo()
     bool bOldAutoCalc = rDoc.GetAutoCalc();
     rDoc.SetAutoCalc( false );         // Avoid unnecessary calculations
     rDoc.PreprocessDBDataUpdate();
-    rDoc.SetDBCollection( new ScDBCollection(*pUndoColl), true );
+    rDoc.SetDBCollection( std::unique_ptr<ScDBCollection>(new ScDBCollection(*pUndoColl)), true );
     rDoc.CompileHybridFormula();
     rDoc.SetAutoCalc( bOldAutoCalc );
 
@@ -998,7 +998,7 @@ void ScUndoDBData::Redo()
     bool bOldAutoCalc = rDoc.GetAutoCalc();
     rDoc.SetAutoCalc( false );         // Avoid unnecessary calculations
     rDoc.PreprocessDBDataUpdate();
-    rDoc.SetDBCollection( new ScDBCollection(*pRedoColl), true );
+    rDoc.SetDBCollection( std::unique_ptr<ScDBCollection>(new ScDBCollection(*pRedoColl)), true );
     rDoc.CompileHybridFormula();
     rDoc.SetAutoCalc( bOldAutoCalc );
 
@@ -1333,9 +1333,9 @@ void ScUndoRepeatDB::Undo()
                                             aBlockEnd.Col(),aBlockEnd.Row(),nTab );
 
     if (xUndoRange)
-        rDoc.SetRangeName(new ScRangeName(*xUndoRange));
+        rDoc.SetRangeName(std::unique_ptr<ScRangeName>(new ScRangeName(*xUndoRange)));
     if (xUndoDB)
-        rDoc.SetDBCollection(new ScDBCollection(*xUndoDB), true);
+        rDoc.SetDBCollection(std::unique_ptr<ScDBCollection>(new ScDBCollection(*xUndoDB)), true);
 
     SCTAB nVisTab = pViewShell->GetViewData().GetTabNo();
     if ( nVisTab != nTab )

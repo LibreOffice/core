@@ -889,7 +889,7 @@ ScCellTextData::~ScCellTextData()
         pDocShell->GetDocument().DisposeFieldEditEngine(pEditEngine);
     }
     else
-        delete pEditEngine;
+        pEditEngine.reset();
 
     delete pForwarder;
 
@@ -916,7 +916,7 @@ SvxTextForwarder* ScCellTextData::GetTextForwarder()
         {
             SfxItemPool* pEnginePool = EditEngine::CreatePool();
             pEnginePool->FreezeIdRanges();
-            pEditEngine = new ScFieldEditEngine(nullptr, pEnginePool, nullptr, true);
+            pEditEngine.reset( new ScFieldEditEngine(nullptr, pEnginePool, nullptr, true) );
         }
         //  currently, GetPortions doesn't work if UpdateMode is sal_False,
         //  this will be fixed (in EditEngine) by src600
@@ -1004,7 +1004,7 @@ void ScCellTextData::Notify( SfxBroadcaster&, const SfxHint& rHint )
             pDocShell = nullptr;                       // invalid now
 
             DELETEZ( pForwarder );
-            DELETEZ( pEditEngine );     // EditEngine uses document's pool
+            pEditEngine.reset();     // EditEngine uses document's pool
         }
         else if ( nId == SfxHintId::DataChanged )
         {

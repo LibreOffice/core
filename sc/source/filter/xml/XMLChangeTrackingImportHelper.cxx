@@ -887,7 +887,7 @@ void ScXMLChangeTrackingImportHelper::CreateChangeTrack(ScDocument* pTempDoc)
         if ( pTrack->GetLast() )
             pTrack->SetLastSavedActionNumber(pTrack->GetLast()->GetActionNumber());
 
-        pDoc->SetChangeTrack(pTrack);
+        pDoc->SetChangeTrack(std::unique_ptr<ScChangeTrack>(pTrack));
     }
 }
 

@@ -361,7 +361,7 @@ long ScColumn::GetNeededSize(
         MapMode aHMMMode( MapUnit::Map100thMM, Point(), rZoomX, rZoomY );
 
         // save in document ?
-        ScFieldEditEngine* pEngine = pDocument->CreateFieldEditEngine();
+        std::unique_ptr<ScFieldEditEngine> pEngine = pDocument->CreateFieldEditEngine();
 
         pEngine->SetUpdateMode( false );
         bool bTextWysiwyg = ( pDev->GetOutDevType() == OUTDEV_PRINTER );

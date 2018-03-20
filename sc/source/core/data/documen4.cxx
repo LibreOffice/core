@@ -908,21 +908,19 @@ bool ScDocument::HasDetectiveOperations() const
 void ScDocument::AddDetectiveOperation( const ScDetOpData& rData )
 {
     if (!pDetOpList)
-        pDetOpList = new ScDetOpList;
+        pDetOpList.reset(new ScDetOpList);
 
     pDetOpList->Append( new ScDetOpData( rData ) );
 }
 
 void ScDocument::ClearDetectiveOperations()
 {
-    delete pDetOpList;      // deletes also the entries
-    pDetOpList = nullptr;
+    pDetOpList.reset();      // deletes also the entries
 }
 
-void ScDocument::SetDetOpList(ScDetOpList* pNew)
+void ScDocument::SetDetOpList(std::unique_ptr<ScDetOpList> pNew)
 {
-    delete pDetOpList;      // deletes also the entries
-    pDetOpList = pNew;
+    pDetOpList = std::move(pNew);
 }
 
 // Comparison of Documents

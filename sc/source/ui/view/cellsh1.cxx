@@ -1851,7 +1851,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                             static_cast<const ScConsolidateItem*>(pItem)->GetData();
 
                     pTabViewShell->Consolidate( rParam );
-                    GetViewData()->GetDocument()->SetConsolidateDlgData( &rParam );
+                    GetViewData()->GetDocument()->SetConsolidateDlgData( std::unique_ptr<ScConsolidateParam>(new ScConsolidateParam(rParam)) );
 
                     rReq.Done();
                 }
