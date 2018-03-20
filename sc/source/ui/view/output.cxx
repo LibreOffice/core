@@ -42,28 +42,29 @@
 #include <vcl/settings.hxx>
 #include <svx/unoapi.hxx>
 
-#include "output.hxx"
-#include "document.hxx"
-#include "drwlayer.hxx"
-#include "formulacell.hxx"
-#include "attrib.hxx"
-#include "patattr.hxx"
-#include "docpool.hxx"
-#include "tabvwsh.hxx"
-#include "progress.hxx"
-#include "pagedata.hxx"
-#include "chgtrack.hxx"
-#include "chgviset.hxx"
-#include "viewutil.hxx"
-#include "gridmerg.hxx"
-#include "invmerge.hxx"
-#include "fillinfo.hxx"
-#include "scmod.hxx"
-#include "appoptio.hxx"
-#include "postit.hxx"
+#include <output.hxx>
+#include <document.hxx>
+#include <drwlayer.hxx>
+#include <formulacell.hxx>
+#include <attrib.hxx>
+#include <patattr.hxx>
+#include <docpool.hxx>
+#include <tabvwsh.hxx>
+#include <progress.hxx>
+#include <pagedata.hxx>
+#include <chgtrack.hxx>
+#include <chgviset.hxx>
+#include <viewutil.hxx>
+#include <gridmerg.hxx>
+#include <invmerge.hxx>
+#include <fillinfo.hxx>
+#include <scmod.hxx>
+#include <appoptio.hxx>
+#include <postit.hxx>
+#include <viewopti.hxx>
 
-#include "scresid.hxx"
-#include "colorscale.hxx"
+#include <scresid.hxx>
+#include <colorscale.hxx>
 
 #include <math.h>
 #include <iostream>
@@ -301,9 +302,10 @@ void ScOutputData::SetSyntaxMode( bool bNewMode )
     if (bNewMode)
         if (!pValueColor)
         {
-            pValueColor = new Color( COL_LIGHTBLUE );
-            pTextColor = new Color( COL_BLACK );
-            pFormulaColor = new Color( COL_GREEN );
+            const ScViewOptions& rOptions = mpDoc->GetViewOptions();
+            pValueColor = new Color(rOptions.GetValueColor());
+            pTextColor = new Color(rOptions.GetTextColor());
+            pFormulaColor = new Color(rOptions.GetFormulaColor());
         }
 }
 
