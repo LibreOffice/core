@@ -567,16 +567,15 @@ void FormulaDlg_Impl::UpdateValues( bool bForceRecalcStruct )
     // Take a force-array context into account. RPN creation propagated those
     // to tokens that are ref-counted so also available in the token array.
     bool bForceArray = false;
-    // Only necessary if it's not a matrix formula anyway.
-    if (!m_pBtnMatrix->IsChecked())
+    // Only necessary if it's not a matrix formula anyway and matrix evaluation
+    // is supported, i.e. the button is visible.
+    if (m_pBtnMatrix->IsVisible() && !m_pBtnMatrix->IsChecked())
     {
-        /* TODO: we probably don't even need to ask a compiler instance if
-         * m_pBtnMatrix is hidden. */
         std::unique_ptr<FormulaCompiler> pCompiler( m_pHelper->createCompiler( *m_pTokenArray.get()));
         // In the case of the reportdesign dialog there is no currently active
         // OpCode symbol mapping that could be used to create strings from
         // tokens, it's all dreaded API mapping. However, in that case there's
-        // no array/matrix support anyway.
+        // no array/matrix support anyway, but ensure checking.
         if (pCompiler->GetCurrentOpCodeMap().get())
         {
             const sal_Int32 nPos = m_aFuncSel.Min();
