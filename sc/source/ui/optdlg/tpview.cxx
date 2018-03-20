@@ -49,6 +49,10 @@ ScTpContentOptions::ScTpContentOptions( vcl::Window*         pParent,
     get(pBreakCB,"break");
     get(pGuideLineCB,"guideline");
 
+    get(pValueColorLB, "value_color");
+    get(pFormulaColorLB, "formula_color");
+    get(pTextColorLB, "text_color");
+
     get(pFormulaCB,"formula");
     get(pNilCB,"nil");
     get(pAnnotCB,"annot");
@@ -107,6 +111,9 @@ void ScTpContentOptions::dispose()
     pColorLB.clear();
     pBreakCB.clear();
     pGuideLineCB.clear();
+    pValueColorLB.clear();
+    pFormulaColorLB.clear();
+    pTextColorLB.clear();
     pFormulaCB.clear();
     pNilCB.clear();
     pAnnotCB.clear();
@@ -152,10 +159,16 @@ bool    ScTpContentOptions::FillItemSet( SfxItemSet* rCoreSet )
         pOutlineCB     ->IsValueChangedFromSaved() ||
         pColorLB       ->IsValueChangedFromSaved() ||
         pBreakCB       ->IsValueChangedFromSaved() ||
-        pGuideLineCB   ->IsValueChangedFromSaved())
+        pGuideLineCB   ->IsValueChangedFromSaved() ||
+        pValueColorLB  ->IsValueChangedFromSaved() ||
+        pFormulaColorLB->IsValueChangedFromSaved() ||
+        pTextColorLB   ->IsValueChangedFromSaved() )
     {
         NamedColor aNamedColor = pColorLB->GetSelectedEntry();
         pLocalOptions->SetGridColor(aNamedColor.first, aNamedColor.second);
+        pLocalOptions->SetValueColor(pValueColorLB->GetSelectedEntry().first);
+        pLocalOptions->SetFormulaColor(pFormulaColorLB->GetSelectedEntry().first);
+        pLocalOptions->SetTextColor(pTextColorLB->GetSelectedEntry().first);
         rCoreSet->Put(ScTpViewItem(*pLocalOptions));
         bRet = true;
     }
@@ -199,6 +212,7 @@ void    ScTpContentOptions::Reset( const SfxItemSet* rCoreSet )
     pOutlineCB->Check( pLocalOptions->GetOption(VOPT_OUTLINER) );
 
     InitGridOpt();
+    InitColors();
 
     pBreakCB->Check( pLocalOptions->GetOption(VOPT_PAGEBREAKS) );
     pGuideLineCB->Check( pLocalOptions->GetOption(VOPT_HELPLINES) );
@@ -229,6 +243,9 @@ void    ScTpContentOptions::Reset( const SfxItemSet* rCoreSet )
     pColorLB->SaveValue();
     pBreakCB->SaveValue();
     pGuideLineCB->SaveValue();
+    pValueColorLB->SaveValue();
+    pFormulaColorLB->SaveValue();
+    pTextColorLB->SaveValue();
 }
 
 void ScTpContentOptions::ActivatePage( const SfxItemSet& rSet)
@@ -313,6 +330,18 @@ void ScTpContentOptions::InitGridOpt()
         aName = ScGlobal::GetRscString(STR_GRIDCOLOR);
 
     pColorLB->SelectEntry(std::make_pair(aCol, aName));
+}
+
+void ScTpContentOptions::InitColors()
+{
+    Color aCol = pLocalOptions->GetValueColor();
+    pValueColorLB->SelectEntry(aCol);
+
+    aCol = pLocalOptions->GetFormulaColor();
+    pFormulaColorLB->SelectEntry(aCol);
+
+    aCol = pLocalOptions->GetTextColor();
+    pTextColorLB->SelectEntry(aCol);
 }
 
 IMPL_LINK( ScTpContentOptions, GridHdl, ListBox&, rLb, void )
