@@ -199,8 +199,6 @@ _privateSnippetExecutor:
     .cfi_offset w29, -16
 
     // _privateSnippetExecutor is jumped to from codeSnippet_*
-    stp x29, x30, [sp, #-0x10]!
-    mov x29, sp
 
     // push all GP, FP/SIMD registers to the stack
     stp x6, x7, [sp, #-16]!
@@ -221,10 +219,14 @@ _privateSnippetExecutor:
     mov x1, x15
     mov x2, sp
     bl  _cpp_vtable_call
-    .globl _jantest
-    ldp     x8, lr, [sp, #0]
+
+    // restore x8 (RC pointer) and lr (skip RC from cpp_vtable_call)
+    ldp x8, lr, [sp, #0]
+
+    // restore stack
     add sp, sp, #144
-    ldp x29, x30, [sp], #0x10
+
+    // continue with throw/catch
     ret lr
     .cfi_endproc
 
