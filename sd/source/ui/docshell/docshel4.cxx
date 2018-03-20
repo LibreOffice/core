@@ -161,14 +161,14 @@ void DrawDocShell::SetPrinter(SfxPrinter *pNewPrinter)
 
 void DrawDocShell::UpdateFontList()
 {
-    delete mpFontList;
+    mpFontList.reset();
     OutputDevice* pRefDevice = nullptr;
     if ( mpDoc->GetPrinterIndependentLayout() == css::document::PrinterIndependentLayout::DISABLED )
         pRefDevice = GetPrinter(true);
     else
         pRefDevice = SD_MOD()->GetVirtualRefDevice();
-    mpFontList = new FontList(pRefDevice, nullptr);
-    SvxFontListItem aFontListItem( mpFontList, SID_ATTR_CHAR_FONTLIST );
+    mpFontList.reset( new FontList(pRefDevice, nullptr) );
+    SvxFontListItem aFontListItem( mpFontList.get(), SID_ATTR_CHAR_FONTLIST );
     PutItem( aFontListItem );
 }
 

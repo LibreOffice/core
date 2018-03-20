@@ -209,10 +209,10 @@ public:
 protected:
 
     SdDrawDocument*         mpDoc;
-    SfxUndoManager*         mpUndoManager;
+    std::unique_ptr<SfxUndoManager> mpUndoManager;
     VclPtr<SfxPrinter>      mpPrinter;
     ::sd::ViewShell*        mpViewShell;
-    FontList*               mpFontList;
+    std::unique_ptr<FontList> mpFontList;
     rtl::Reference<FuPoor> mxDocShellFunction;
     DocumentType            meDocType;
     SfxStyleFamily          mnStyleFamily;
