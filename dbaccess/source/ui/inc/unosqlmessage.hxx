@@ -70,6 +70,8 @@ private:
     virtual sal_Bool SAL_CALL convertFastPropertyValue( css::uno::Any& _rConvertedValue, css::uno::Any& _rOldValue, sal_Int32 _nHandle, const css::uno::Any& _rValue) override;
 
 // OGenericUnoDialog overridables
+// //TODO
+    //virtual weld::DialogController* createDialog(weld::Window* _pParent) override;
     virtual VclPtr<Dialog> createDialog(vcl::Window* _pParent) override;
 };
 

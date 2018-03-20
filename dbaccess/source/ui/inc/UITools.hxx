@@ -200,16 +200,16 @@ namespace dbaui
                                     SvxCellHorJustify& _eJustify,
                                     bool  _bHasFormat);
     /** append a name to tablefilter of a datasource
-        @param  _xConnection    the connection is need to get the datasource
-        @param  _sName          the name which should be appended
-        @param  _rxContext      needed to check if datasource is available
-        @param  _pParent        needed when an error must be shown
+        @param  xConnection    the connection is need to get the datasource
+        @param  rName          the name which should be appended
+        @param  rxContext      needed to check if datasource is available
+        @param  pParent        needed when an error must be shown
         @return false when datsource is not available otherwise true
     */
-    bool appendToFilter(const css::uno::Reference< css::sdbc::XConnection>& _xConnection,
-                            const OUString& _sName,
-                            const css::uno::Reference< css::uno::XComponentContext >& _rxContext,
-                            vcl::Window* _pParent);
+    bool appendToFilter(const css::uno::Reference< css::sdbc::XConnection>& xConnection,
+                        const OUString& rName,
+                        const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+                        weld::Window* pParent);
 
     /** notifySystemWindow adds or remove the given window _pToRegister at the Systemwindow found when search _pWindow.
         @param  _pWindow
@@ -307,21 +307,21 @@ namespace dbaui
     */
 
     /** returns the result of the user action when view the query dialog.
-        @param  _pParent
+        @param  pParent
             The parent of the dialog
         @param  pTitle
             A string resource id for the text which will be displayed as title.
         @param  pText
             A string resource id for the text which will be displayed above the buttons.
             When the string contains a #1. This will be replaced by the name.
-        @param  _bAll
+        @param  bAll
             When set to <TRUE/>, the all button will be appended.
-        @param  _sName
+        @param  rName
             The name of the object to ask for.
         @return
             RET_YES, RET_NO, RET_ALL
     */
-    sal_Int32 askForUserAction(vcl::Window* _pParent, const char* pTitle, const char* pText, bool _bAll, const OUString& _sName);
+    sal_Int32 askForUserAction(weld::Window* pParent, const char* pTitle, const char* pText, bool bAll, const OUString& rName);
 
     /** creates a new view from a query or table
         @param  _sName
