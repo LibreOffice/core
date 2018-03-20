@@ -331,7 +331,7 @@ EditEngine& SmDocShell::GetEditEngine()
 
         SetEditEngineDefaultFonts(*mpEditEngineItemPool, maLinguOptions);
 
-        mpEditEngine = new EditEngine( mpEditEngineItemPool );
+        mpEditEngine.reset( new EditEngine( mpEditEngineItemPool ) );
 
         mpEditEngine->SetAddExtLeading(true);
 
@@ -639,7 +639,7 @@ SmDocShell::~SmDocShell()
     EndListening(*pp->GetConfig());
 
     mpCursor.reset();
-    delete mpEditEngine;
+    mpEditEngine.reset();
     SfxItemPool::Free(mpEditEngineItemPool);
     mpPrinter.disposeAndClear();
 }
