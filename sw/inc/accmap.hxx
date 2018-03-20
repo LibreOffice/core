@@ -104,7 +104,7 @@ class SwAccessibleMap : public ::accessibility::IAccessibleViewForwarder,
     SwViewShell *mpVSh;
     /// for page preview: store preview data, VisArea, and mapping of
     /// preview-to-display coordinates
-    SwAccPreviewData* mpPreview;
+    std::unique_ptr<SwAccPreviewData> mpPreview;
 
     css::uno::WeakReference < css::accessibility::XAccessible > mxCursorContext;
 
@@ -120,7 +120,7 @@ class SwAccessibleMap : public ::accessibility::IAccessibleViewForwarder,
     void InvalidateShapeSelection();
 
     //mpSelectedFrameMap contains the old selected objects.
-    SwAccessibleContextMap_Impl *mpSeletedFrameMap;
+    std::unique_ptr<SwAccessibleContextMap_Impl> mpSeletedFrameMap;
 
     OUString maDocName;
 
