@@ -91,9 +91,9 @@ Reference<XPropertySetInfo>  SAL_CALL OUserSettingsDialog::getPropertySetInfo()
     return new ::cppu::OPropertyArrayHelper(aProps);
 }
 
-VclPtr<Dialog> OUserSettingsDialog::createDialog(vcl::Window* _pParent)
+svt::OGenericUnoDialog::Dialog OUserSettingsDialog::createDialog(vcl::Window* _pParent)
 {
-    return VclPtr<OUserAdminDlg>::Create(_pParent, m_pDatasourceItems, m_aContext, m_aInitialSelection, m_xActiveConnection);
+    return svt::OGenericUnoDialog::Dialog(VclPtr<OUserAdminDlg>::Create(_pParent, m_pDatasourceItems, m_aContext, m_aInitialSelection, m_xActiveConnection));
 }
 
 }   // namespace dbaui

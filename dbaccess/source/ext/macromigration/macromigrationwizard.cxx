@@ -32,10 +32,10 @@ namespace dbmm
     {
         // we do this here cause the base class' call to destroyDialog won't reach us anymore: we're within an dtor,
         // so this virtual-method-call the base class does not work, we're already dead then...
-        if ( m_pDialog )
+        if (m_aDialog)
         {
             ::osl::MutexGuard aGuard( m_aMutex );
-            if ( m_pDialog )
+            if (m_aDialog)
                 destroyDialog();
         }
     }
@@ -45,9 +45,9 @@ namespace dbmm
         return *(new MacroMigrationDialogService( _rxContext ) );
     }
 
-    VclPtr<Dialog> MacroMigrationDialogService::createDialog( vcl::Window* _pParent )
+    svt::OGenericUnoDialog::Dialog MacroMigrationDialogService::createDialog(vcl::Window* _pParent)
     {
-        return VclPtr<MacroMigrationDialog>::Create( _pParent, m_aContext, m_xDocument );
+        return svt::OGenericUnoDialog::Dialog(VclPtr<MacroMigrationDialog>::Create(_pParent, m_aContext, m_xDocument));
     }
 
     Sequence< sal_Int8 > SAL_CALL MacroMigrationDialogService::getImplementationId()

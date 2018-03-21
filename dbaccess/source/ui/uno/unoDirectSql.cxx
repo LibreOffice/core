@@ -77,7 +77,7 @@ namespace dbaui
 
     IMPLEMENT_PROPERTYCONTAINER_DEFAULTS( ODirectSQLDialog )
 
-    VclPtr<Dialog> ODirectSQLDialog::createDialog(vcl::Window* _pParent)
+    svt::OGenericUnoDialog::Dialog ODirectSQLDialog::createDialog(vcl::Window* _pParent)
     {
         // obtain all the objects needed for the dialog
         Reference< XConnection > xConnection = m_xActiveConnection;
@@ -94,12 +94,15 @@ namespace dbaui
                 DBG_UNHANDLED_EXCEPTION();
             }
         }
-        if ( !xConnection.is() )
+        if (!xConnection.is())
+        {
             // can't create the dialog if I have improper settings
-            return nullptr;
+            return svt::OGenericUnoDialog::Dialog(nullptr);
+        }
 
-        return VclPtr<DirectSQLDialog>::Create( _pParent, xConnection );
+        return svt::OGenericUnoDialog::Dialog(VclPtr<DirectSQLDialog>::Create(_pParent, xConnection));
     }
+
     void ODirectSQLDialog::implInitialize(const Any& _rValue)
     {
         PropertyValue aProperty;

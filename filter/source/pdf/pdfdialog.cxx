@@ -83,19 +83,17 @@ Sequence< OUString > SAL_CALL PDFDialog::getSupportedServiceNames()
     return PDFDialog_getSupportedServiceNames();
 }
 
-
-VclPtr<Dialog> PDFDialog::createDialog( vcl::Window* pParent )
+svt::OGenericUnoDialog::Dialog PDFDialog::createDialog( vcl::Window* pParent )
 {
     if( mxSrcDoc.is() )
-        return VclPtr<ImpPDFTabDialog>::Create( pParent, maFilterData, mxSrcDoc );
-    return VclPtr<Dialog>();
+        return svt::OGenericUnoDialog::Dialog(VclPtr<ImpPDFTabDialog>::Create(pParent, maFilterData, mxSrcDoc));
+    return svt::OGenericUnoDialog::Dialog(VclPtr<::Dialog>());
 }
-
 
 void PDFDialog::executedDialog( sal_Int16 nExecutionResult )
 {
-    if( nExecutionResult && m_pDialog )
-        maFilterData = static_cast< ImpPDFTabDialog* >( m_pDialog.get() )->GetFilterData();
+    if (nExecutionResult && m_aDialog)
+        maFilterData = static_cast< ImpPDFTabDialog* >( m_aDialog.m_xVclDialog.get() )->GetFilterData();
     destroyDialog();
 }
 

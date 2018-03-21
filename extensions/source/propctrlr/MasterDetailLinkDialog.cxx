@@ -97,11 +97,10 @@ namespace pcr
         return new ::cppu::OPropertyArrayHelper(aProps);
     }
 
-
-    VclPtr<Dialog> MasterDetailLinkDialog::createDialog(vcl::Window* _pParent)
+    svt::OGenericUnoDialog::Dialog MasterDetailLinkDialog::createDialog(vcl::Window* _pParent)
     {
-        return VclPtr<FormLinkDialog>::Create(_pParent,m_xDetail,m_xMaster, m_aContext
-            ,m_sExplanation,m_sDetailLabel,m_sMasterLabel);
+        return svt::OGenericUnoDialog::Dialog(VclPtr<FormLinkDialog>::Create(_pParent,m_xDetail,m_xMaster, m_aContext
+            ,m_sExplanation,m_sDetailLabel,m_sMasterLabel));
     }
 
     void MasterDetailLinkDialog::implInitialize(const Any& _rValue)

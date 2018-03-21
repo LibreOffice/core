@@ -115,20 +115,18 @@ Sequence< OUString > SAL_CALL SVGDialog::getSupportedServiceNames()
     return SVGDialog_getSupportedServiceNames();
 }
 
-
-VclPtr<Dialog> SVGDialog::createDialog( vcl::Window* pParent )
+svt::OGenericUnoDialog::Dialog SVGDialog::createDialog( vcl::Window* pParent )
 {
     if( mxSrcDoc.is() )
-        return VclPtr<ImpSVGDialog>::Create( pParent, maFilterData );
+        return svt::OGenericUnoDialog::Dialog(VclPtr<ImpSVGDialog>::Create( pParent, maFilterData ));
     else
-        return VclPtr<Dialog>();
+        return svt::OGenericUnoDialog::Dialog(VclPtr<::Dialog>());
 }
-
 
 void SVGDialog::executedDialog( sal_Int16 nExecutionResult )
 {
-    if( nExecutionResult && m_pDialog )
-        maFilterData = static_cast< ImpSVGDialog* >( m_pDialog.get() )->GetFilterData();
+    if (nExecutionResult && m_aDialog)
+        maFilterData = static_cast< ImpSVGDialog* >(m_aDialog.m_xVclDialog.get())->GetFilterData();
 
     destroyDialog();
 }

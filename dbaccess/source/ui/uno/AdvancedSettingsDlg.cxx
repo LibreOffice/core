@@ -65,7 +65,7 @@ namespace dbaui
         virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const override;
     protected:
     // OGenericUnoDialog overridables
-        virtual VclPtr<Dialog> createDialog(vcl::Window* _pParent) override;
+        virtual svt::OGenericUnoDialog::Dialog createDialog(vcl::Window* _pParent) override;
     };
 
     OAdvancedSettingsDialog::OAdvancedSettingsDialog(const Reference< XComponentContext >& _rxORB)
@@ -120,9 +120,10 @@ namespace dbaui
         describeProperties(aProps);
         return new ::cppu::OPropertyArrayHelper(aProps);
     }
-    VclPtr<Dialog> OAdvancedSettingsDialog::createDialog(vcl::Window* _pParent)
+
+    svt::OGenericUnoDialog::Dialog OAdvancedSettingsDialog::createDialog(vcl::Window* _pParent)
     {
-        return VclPtr<AdvancedSettingsDialog>::Create(_pParent, m_pDatasourceItems, m_aContext, m_aInitialSelection);
+        return svt::OGenericUnoDialog::Dialog(VclPtr<AdvancedSettingsDialog>::Create(_pParent, m_pDatasourceItems, m_aContext, m_aInitialSelection));
     }
 
 }   // namespace dbaui

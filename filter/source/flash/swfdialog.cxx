@@ -117,9 +117,9 @@ Sequence< OUString > SAL_CALL SWFDialog::getSupportedServiceNames()
 }
 
 
-VclPtr<Dialog> SWFDialog::createDialog( vcl::Window* pParent )
+svt::OGenericUnoDialog::Dialog SWFDialog::createDialog( vcl::Window* pParent )
 {
-    VclPtr<Dialog> pRet;
+    VclPtr<::Dialog> pRet;
 
     if (mxSrcDoc.is())
     {
@@ -146,14 +146,14 @@ VclPtr<Dialog> SWFDialog::createDialog( vcl::Window* pParent )
         pRet.reset( VclPtr<ImpSWFDialog>::Create( pParent, maFilterData ) );
     }
 
-    return pRet;
+    return svt::OGenericUnoDialog::Dialog(pRet);
 }
 
 
 void SWFDialog::executedDialog( sal_Int16 nExecutionResult )
 {
-    if( nExecutionResult && m_pDialog )
-        maFilterData = static_cast< ImpSWFDialog* >( m_pDialog.get() )->GetFilterData();
+    if (nExecutionResult && m_aDialog)
+        maFilterData = static_cast< ImpSWFDialog* >(m_aDialog.m_xVclDialog.get())->GetFilterData();
 
     destroyDialog();
 }

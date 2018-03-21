@@ -125,12 +125,10 @@ namespace svxform
         return createPropertySetInfo( getInfoHelper() );
     }
 
-
     ::cppu::IPropertyArrayHelper& OAddConditionDialog::getInfoHelper()
     {
         return *getArrayHelper();
     }
-
 
     ::cppu::IPropertyArrayHelper* OAddConditionDialog::createArrayHelper( ) const
     {
@@ -139,25 +137,20 @@ namespace svxform
         return new ::cppu::OPropertyArrayHelper( aProperties );
     }
 
-
-    VclPtr<Dialog> OAddConditionDialog::createDialog(vcl::Window* _pParent)
+    svt::OGenericUnoDialog::Dialog OAddConditionDialog::createDialog(vcl::Window* _pParent)
     {
         if ( !m_xBinding.is() || m_sFacetName.isEmpty() )
             throw RuntimeException( OUString(), *this );
 
-        return VclPtr<AddConditionDialog>::Create( _pParent, m_sFacetName, m_xBinding );
+        return svt::OGenericUnoDialog::Dialog(VclPtr<AddConditionDialog>::Create(_pParent, m_sFacetName, m_xBinding));
     }
-
 
     void OAddConditionDialog::executedDialog( sal_Int16 _nExecutionResult )
     {
         OAddConditionDialogBase::executedDialog( _nExecutionResult );
         if ( _nExecutionResult == RET_OK )
-            m_sConditionValue = static_cast< AddConditionDialog* >( m_pDialog.get() )->GetCondition();
+            m_sConditionValue = static_cast< AddConditionDialog* >( m_aDialog.m_xVclDialog.get() )->GetCondition();
     }
-
-
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

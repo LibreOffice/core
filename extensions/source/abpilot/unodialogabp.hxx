@@ -71,7 +71,7 @@ namespace abp
 
         using svt::OGenericUnoDialog::execute;
         // OGenericUnoDialog overridables
-        virtual VclPtr<Dialog> createDialog(vcl::Window* _pParent) override;
+        virtual svt::OGenericUnoDialog::Dialog createDialog(vcl::Window* _pParent) override;
         virtual void executedDialog(sal_Int16 _nExecutionResult) override;
     };
 
