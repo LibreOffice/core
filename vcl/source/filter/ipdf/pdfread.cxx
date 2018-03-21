@@ -25,7 +25,6 @@ using namespace com::sun::star;
 
 namespace
 {
-
 #if HAVE_FEATURE_PDFIUM
 
 /// Callback class to be used with FPDF_SaveWithVersion().
@@ -33,7 +32,8 @@ struct CompatibleWriter : public FPDF_FILEWRITE
 {
 public:
     CompatibleWriter();
-    static int WriteBlockCallback(FPDF_FILEWRITE* pFileWrite, const void* pData, unsigned long nSize);
+    static int WriteBlockCallback(FPDF_FILEWRITE* pFileWrite, const void* pData,
+                                  unsigned long nSize);
 
     SvMemoryStream m_aStream;
 };
@@ -44,7 +44,8 @@ CompatibleWriter::CompatibleWriter()
     FPDF_FILEWRITE::WriteBlock = CompatibleWriter::WriteBlockCallback;
 }
 
-int CompatibleWriter::WriteBlockCallback(FPDF_FILEWRITE* pFileWrite, const void* pData, unsigned long nSize)
+int CompatibleWriter::WriteBlockCallback(FPDF_FILEWRITE* pFileWrite, const void* pData,
+                                         unsigned long nSize)
 {
     auto pImpl = static_cast<CompatibleWriter*>(pFileWrite);
     pImpl->m_aStream.WriteBytes(pData, nSize);
@@ -52,15 +53,11 @@ int CompatibleWriter::WriteBlockCallback(FPDF_FILEWRITE* pFileWrite, const void*
 }
 
 /// Convert to inch, then assume 96 DPI.
-double pointToPixel(double fPoint)
-{
-    return fPoint / 72 * 96;
-}
+double pointToPixel(double fPoint) { return fPoint / 72 * 96; }
 
 /// Does PDF to bitmap conversion using pdfium.
-size_t generatePreview(SvStream& rStream, std::vector<Bitmap>& rBitmaps,
-                       sal_uInt64 nPos, sal_uInt64 nSize,
-                       const size_t nFirstPage = 0, int nPages = 1)
+size_t generatePreview(SvStream& rStream, std::vector<Bitmap>& rBitmaps, sal_uInt64 nPos,
+                       sal_uInt64 nSize, const size_t nFirstPage = 0, int nPages = 1)
 {
     FPDF_LIBRARY_CONFIG aConfig;
     aConfig.version = 2;
@@ -75,7 +72,8 @@ size_t generatePreview(SvStream& rStream, std::vector<Bitmap>& rBitmaps,
     aInBuffer.WriteStream(rStream, nSize);
 
     // Load the buffer using pdfium.
-    FPDF_DOCUMENT pPdfDocument = FPDF_LoadMemDocument(aInBuffer.GetData(), aInBuffer.GetSize(), /*password=*/nullptr);
+    FPDF_DOCUMENT pPdfDocument
+        = FPDF_LoadMemDocument(aInBuffer.GetData(), aInBuffer.GetSize(), /*password=*/nullptr);
     if (!pPdfDocument)
         return 0;
 
@@ -99,7 +97,8 @@ size_t generatePreview(SvStream& rStream, std::vector<Bitmap>& rBitmaps,
 
         const FPDF_DWORD nColor = FPDFPage_HasTransparency(pPdfPage) ? 0x00000000 : 0xFFFFFFFF;
         FPDFBitmap_FillRect(pPdfBitmap, 0, 0, nPageWidth, nPageHeight, nColor);
-        FPDF_RenderPageBitmap(pPdfBitmap, pPdfPage, /*start_x=*/0, /*start_y=*/0, nPageWidth, nPageHeight, /*rotate=*/0, /*flags=*/0);
+        FPDF_RenderPageBitmap(pPdfBitmap, pPdfPage, /*start_x=*/0, /*start_y=*/0, nPageWidth,
+                              nPageHeight, /*rotate=*/0, /*flags=*/0);
 
         // Save the buffer as a bitmap.
         Bitmap aBitmap(Size(nPageWidth, nPageHeight), 24);
@@ -139,7 +138,8 @@ bool isCompatible(SvStream& rInStream, sal_uInt64 nPos, sal_uInt64 nSize)
     if (nRead < 8)
         return false;
 
-    if (aFirstBytes[0] != '%' || aFirstBytes[1] != 'P' || aFirstBytes[2] != 'D' || aFirstBytes[3] != 'F' || aFirstBytes[4] != '-')
+    if (aFirstBytes[0] != '%' || aFirstBytes[1] != 'P' || aFirstBytes[2] != 'D'
+        || aFirstBytes[3] != 'F' || aFirstBytes[4] != '-')
         return false;
 
     sal_Int32 nMajor = OString(aFirstBytes[5]).toInt32();
@@ -149,8 +149,8 @@ bool isCompatible(SvStream& rInStream, sal_uInt64 nPos, sal_uInt64 nSize)
 
 /// Takes care of transparently downgrading the version of the PDF stream in
 /// case it's too new for our PDF export.
-bool getCompatibleStream(SvStream& rInStream, SvStream& rOutStream,
-                         sal_uInt64 nPos, sal_uInt64 nSize)
+bool getCompatibleStream(SvStream& rInStream, SvStream& rOutStream, sal_uInt64 nPos,
+                         sal_uInt64 nSize)
 {
     bool bCompatible = isCompatible(rInStream, nPos, nSize);
     rInStream.Seek(nPos);
@@ -172,7 +172,8 @@ bool getCompatibleStream(SvStream& rInStream, SvStream& rOutStream,
         aInBuffer.WriteStream(rInStream, nSize);
 
         // Load the buffer using pdfium.
-        FPDF_DOCUMENT pPdfDocument = FPDF_LoadMemDocument(aInBuffer.GetData(), aInBuffer.GetSize(), /*password=*/nullptr);
+        FPDF_DOCUMENT pPdfDocument
+            = FPDF_LoadMemDocument(aInBuffer.GetData(), aInBuffer.GetSize(), /*password=*/nullptr);
         if (!pPdfDocument)
             return false;
 
@@ -191,29 +192,25 @@ bool getCompatibleStream(SvStream& rInStream, SvStream& rOutStream,
     return rOutStream.good();
 }
 #else
-size_t generatePreview(SvStream&, std::vector<Bitmap>&,
-                     sal_uInt64 nPos, sal_uInt64 nSize,
-                     size_t nFirstPage = 0, int nLastPage = 0)
+size_t generatePreview(SvStream&, std::vector<Bitmap>&, sal_uInt64 nPos, sal_uInt64 nSize,
+                       size_t nFirstPage = 0, int nLastPage = 0)
 {
     return false;
 }
 
-bool getCompatibleStream(SvStream& rInStream, SvStream& rOutStream,
-                         sal_uInt64 nPos, sal_uInt64 nSize)
+bool getCompatibleStream(SvStream& rInStream, SvStream& rOutStream, sal_uInt64 nPos,
+                         sal_uInt64 nSize)
 {
     rInStream.Seek(nPos);
     rOutStream.WriteStream(rInStream, nSize);
     return rOutStream.good();
 }
 #endif // HAVE_FEATURE_PDFIUM
-
 }
 
 namespace vcl
 {
-
-bool ImportPDF(SvStream& rStream, Bitmap& rBitmap,
-               css::uno::Sequence<sal_Int8>& rPdfData,
+bool ImportPDF(SvStream& rStream, Bitmap& rBitmap, css::uno::Sequence<sal_Int8>& rPdfData,
                sal_uInt64 nPos, sal_uInt64 nSize)
 {
     // Get the preview of the first page.
@@ -236,7 +233,6 @@ bool ImportPDF(SvStream& rStream, Bitmap& rBitmap,
     return true;
 }
 
-
 bool ImportPDF(SvStream& rStream, Graphic& rGraphic)
 {
     uno::Sequence<sal_Int8> aPdfData;
@@ -246,7 +242,6 @@ bool ImportPDF(SvStream& rStream, Graphic& rGraphic)
     rGraphic.setPdfData(aPdfData);
     return bRet;
 }
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
