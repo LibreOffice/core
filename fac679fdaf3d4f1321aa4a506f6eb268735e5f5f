@@ -22,6 +22,24 @@
       "revId": "fac679fdaf3d4f1321aa4a506f6eb268735e5f5f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_f3af3b7b",
+        "filename": "sdext/source/pdfimport/wrapper/wrapper.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 1124,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2018-03-21T10:38:05Z",
+      "side": 1,
+      "message": "vcl::ImportPDF() in vcl/source/filter/ipdf/pdfread.cxx:233 currently takes a uno::Sequence\u003csal_Int8\u003e, that\u0027s the native PDF data. You could change that to a std::shared_ptr\u003cuno::Sequence\u003csal_Int8\u003e\u003e, that way in case we import multiple pages from the same pdf, in fact we only store the PDF file only once.\n\nThe idea is that we always work with a Graphic (which can contain a metafile or a bitmap -- in the pdfium case currently it contains a bitmap), and that has the original PDF as metadata; so later during the PDF export it is possible to write the original (vector) PDF, not the bitmap. I hope that\u0027s enough info to get you started.",
+      "parentUuid": "9a30ddce_b3b5c3d1",
+      "revId": "fac679fdaf3d4f1321aa4a506f6eb268735e5f5f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
