@@ -8,7 +8,7 @@
  */
 
 #include <test/sheet/spreadsheet.hxx>
-#include <test/unoapi_property_testers.hxx>
+#include <unoapi_property_testers.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
