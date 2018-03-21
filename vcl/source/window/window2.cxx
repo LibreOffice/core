@@ -34,6 +34,7 @@
 #include <vcl/dockwin.hxx>
 #include <vcl/tabctrl.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/builder.hxx>
 
 #include <window.h>
 #include <fontinstance.hxx>
@@ -43,6 +44,8 @@
 #include <salgdi.hxx>
 #include <salframe.hxx>
 #include <scrwnd.hxx>
+
+#include <com/sun/star/accessibility/AccessibleRole.hpp>
 
 using namespace com::sun::star;
 
@@ -1581,6 +1584,12 @@ bool Window::set_property(const OString &rKey, const OUString &rValue)
     else if (rKey == "accessible-description")
     {
         SetAccessibleDescription(rValue);
+    }
+    else if (rKey == "accessible-role")
+    {
+        sal_Int16 role = BuilderUtils::getRoleFromName(rValue.toUtf8());
+        if (role != com::sun::star::accessibility::AccessibleRole::UNKNOWN)
+            SetAccessibleRole(role);
     }
     else if (rKey == "use-markup")
     {

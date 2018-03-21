@@ -354,7 +354,8 @@ private:
     void        applyPackingProperty(vcl::Window *pCurrent, vcl::Window *pParent, xmlreader::XmlReader &reader);
     void        collectProperty(xmlreader::XmlReader &reader, stringmap &rVec) const;
     static void collectPangoAttribute(xmlreader::XmlReader &reader, stringmap &rMap);
-    static void collectAtkAttribute(xmlreader::XmlReader &reader, stringmap &rMap);
+    static void collectAtkRelationAttribute(xmlreader::XmlReader &reader, stringmap &rMap);
+    static void collectAtkRoleAttribute(xmlreader::XmlReader &reader, stringmap &rMap);
     static void collectAccelerator(xmlreader::XmlReader &reader, accelmap &rMap);
 
     void        insertMenuObject(
@@ -411,6 +412,9 @@ namespace BuilderUtils
     //Helpers to retrofit all the existing code to the builder
     VCL_DLLPUBLIC void reorderWithinParent(std::vector< vcl::Window*>& rChilds, bool bIsButtonBox);
     VCL_DLLPUBLIC void reorderWithinParent(vcl::Window &rWindow, sal_uInt16 nNewPosition);
+
+    //Convert an accessibility role name to accessibility role number
+    VCL_DLLPUBLIC sal_Int16 getRoleFromName(const OString& roleName);
 }
 
 template <typename T>

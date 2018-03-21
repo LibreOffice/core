@@ -8,6 +8,7 @@
  */
 
 #include <memory>
+#include <unordered_map>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/packages/zip/ZipFileAccess.hpp>
 
@@ -369,7 +370,7 @@ VclBuilder::VclBuilder(vcl::Window *pParent, const OUString& sUIDir, const OUStr
             pOne->set_mnemonic_widget(pOther);
     }
 
-    //Set a11y relations when everything has been imported
+    //Set a11y relations and role when everything has been imported
     for (auto const& elemAtk : m_pParserState->m_aAtkInfo)
     {
         vcl::Window *pSource = elemAtk.first;
@@ -377,21 +378,30 @@ VclBuilder::VclBuilder(vcl::Window *pParent, const OUString& sUIDir, const OUStr
 
         for (auto const& elemMap : rMap)
         {
-            const OUString &rTarget = elemMap.second;
-            vcl::Window *pTarget = get<vcl::Window>(rTarget.toUtf8());
-            SAL_WARN_IF(!pTarget, "vcl", "missing member of a11y relation: " << rTarget);
-            if (!pTarget)
-                continue;
             const OString &rType = elemMap.first;
-            if (rType == "labelled-by")
-                pSource->SetAccessibleRelationLabeledBy(pTarget);
-            else if (rType == "label-for")
-                pSource->SetAccessibleRelationLabelFor(pTarget);
-            else if (rType == "member-of")
-                pSource->SetAccessibleRelationMemberOf(pTarget);
+            const OUString &rParam = elemMap.second;
+            if (rType == "role")
+            {
+                sal_Int16 role = BuilderUtils::getRoleFromName(rParam.toUtf8());
+                if (role != com::sun::star::accessibility::AccessibleRole::UNKNOWN)
+                    pSource->SetAccessibleRole(role);
+            }
             else
             {
-                SAL_INFO("vcl.layout", "unhandled a11y relation :" << rType);
+                vcl::Window *pTarget = get<vcl::Window>(rParam.toUtf8());
+                SAL_WARN_IF(!pTarget, "vcl", "missing parameter of a11y relation: " << rParam);
+                if (!pTarget)
+                    continue;
+                if (rType == "labelled-by")
+                    pSource->SetAccessibleRelationLabeledBy(pTarget);
+                else if (rType == "label-for")
+                    pSource->SetAccessibleRelationLabelFor(pTarget);
+                else if (rType == "member-of")
+                    pSource->SetAccessibleRelationMemberOf(pTarget);
+                else
+                {
+                    SAL_WARN("vcl.layout", "unhandled a11y relation :" << rType);
+                }
             }
         }
     }
@@ -2085,6 +2095,143 @@ namespace BuilderUtils
             rChilds[i]->SetStyle(nBits);
         }
     }
+
+    sal_Int16 getRoleFromName(const OString& roleName)
+    {
+        using namespace com::sun::star::accessibility;
+
+        static const std::unordered_map<OString, sal_Int16, OStringHash> aAtkRoleToAccessibleRole = {
+            /* This is in atkobject.h's AtkRole order */
+            { "invalid",               AccessibleRole::UNKNOWN },
+            { "accelerator label",     AccessibleRole::UNKNOWN },
+            { "alert",                 AccessibleRole::ALERT },
+            { "animation",             AccessibleRole::UNKNOWN },
+            { "arrow",                 AccessibleRole::UNKNOWN },
+            { "calendar",              AccessibleRole::UNKNOWN },
+            { "canvas",                AccessibleRole::CANVAS },
+            { "check box",             AccessibleRole::CHECK_BOX },
+            { "check menu item",       AccessibleRole::CHECK_MENU_ITEM },
+            { "color chooser",         AccessibleRole::COLOR_CHOOSER },
+            { "column header",         AccessibleRole::COLUMN_HEADER },
+            { "combo box",             AccessibleRole::COMBO_BOX },
+            { "date editor",           AccessibleRole::DATE_EDITOR },
+            { "desktop icon",          AccessibleRole::DESKTOP_ICON },
+            { "desktop frame",         AccessibleRole::DESKTOP_PANE }, // ?
+            { "dial",                  AccessibleRole::UNKNOWN },
+            { "dialog",                AccessibleRole::DIALOG },
+            { "directory pane",        AccessibleRole::DIRECTORY_PANE },
+            { "drawing area",          AccessibleRole::UNKNOWN },
+            { "file chooser",          AccessibleRole::FILE_CHOOSER },
+            { "filler",                AccessibleRole::FILLER },
+            { "font chooser",          AccessibleRole::FONT_CHOOSER },
+            { "frame",                 AccessibleRole::FRAME },
+            { "glass pane",            AccessibleRole::GLASS_PANE },
+            { "html container",        AccessibleRole::UNKNOWN },
+            { "icon",                  AccessibleRole::ICON },
+            { "image",                 AccessibleRole::GRAPHIC },
+            { "internal frame",        AccessibleRole::INTERNAL_FRAME },
+            { "label",                 AccessibleRole::LABEL },
+            { "layered pane",          AccessibleRole::LAYERED_PANE },
+            { "list",                  AccessibleRole::LIST },
+            { "list item",             AccessibleRole::LIST_ITEM },
+            { "menu",                  AccessibleRole::MENU },
+            { "menu bar",              AccessibleRole::MENU_BAR },
+            { "menu item",             AccessibleRole::MENU_ITEM },
+            { "option pane",           AccessibleRole::OPTION_PANE },
+            { "page tab",              AccessibleRole::PAGE_TAB },
+            { "page tab list",         AccessibleRole::PAGE_TAB_LIST },
+            { "panel",                 AccessibleRole::PANEL }, // or SHAPE or TEXT_FRAME ?
+            { "password text",         AccessibleRole::PASSWORD_TEXT },
+            { "popup menu",            AccessibleRole::POPUP_MENU },
+            { "progress bar",          AccessibleRole::PROGRESS_BAR },
+            { "push button",           AccessibleRole::PUSH_BUTTON }, // or BUTTON_DROPDOWN or BUTTON_MENU
+            { "radio button",          AccessibleRole::RADIO_BUTTON },
+            { "radio menu item",       AccessibleRole::RADIO_MENU_ITEM },
+            { "root pane",             AccessibleRole::ROOT_PANE },
+            { "row header",            AccessibleRole::ROW_HEADER },
+            { "scroll bar",            AccessibleRole::SCROLL_BAR },
+            { "scroll pane",           AccessibleRole::SCROLL_PANE },
+            { "separator",             AccessibleRole::SEPARATOR },
+            { "slider",                AccessibleRole::SLIDER },
+            { "split pane",            AccessibleRole::SPLIT_PANE },
+            { "spin button",           AccessibleRole::SPIN_BOX }, // ?
+            { "statusbar",             AccessibleRole::STATUS_BAR },
+            { "table",                 AccessibleRole::TABLE },
+            { "table cell",            AccessibleRole::TABLE_CELL },
+            { "table column header",   AccessibleRole::COLUMN_HEADER }, // approximate
+            { "table row header",      AccessibleRole::ROW_HEADER }, // approximate
+            { "tear off menu item",    AccessibleRole::UNKNOWN },
+            { "terminal",              AccessibleRole::UNKNOWN },
+            { "text",                  AccessibleRole::TEXT },
+            { "toggle button",         AccessibleRole::TOGGLE_BUTTON },
+            { "tool bar",              AccessibleRole::TOOL_BAR },
+            { "tool tip",              AccessibleRole::TOOL_TIP },
+            { "tree",                  AccessibleRole::TREE },
+            { "tree table",            AccessibleRole::TREE_TABLE },
+            { "unknown",               AccessibleRole::UNKNOWN },
+            { "viewport",              AccessibleRole::VIEW_PORT },
+            { "window",                AccessibleRole::WINDOW },
+            { "header",                AccessibleRole::HEADER },
+            { "footer",                AccessibleRole::FOOTER },
+            { "paragraph",             AccessibleRole::PARAGRAPH },
+            { "ruler",                 AccessibleRole::RULER },
+            { "application",           AccessibleRole::UNKNOWN },
+            { "autocomplete",          AccessibleRole::UNKNOWN },
+            { "edit bar",              AccessibleRole::EDIT_BAR },
+            { "embedded",              AccessibleRole::EMBEDDED_OBJECT },
+            { "entry",                 AccessibleRole::UNKNOWN },
+            { "chart",                 AccessibleRole::CHART },
+            { "caption",               AccessibleRole::CAPTION },
+            { "document frame",        AccessibleRole::DOCUMENT },
+            { "heading",               AccessibleRole::HEADING },
+            { "page",                  AccessibleRole::PAGE },
+            { "section",               AccessibleRole::SECTION },
+            { "redundant object",      AccessibleRole::UNKNOWN },
+            { "form",                  AccessibleRole::FORM },
+            { "link",                  AccessibleRole::HYPER_LINK },
+            { "input method window",   AccessibleRole::UNKNOWN },
+            { "table row",             AccessibleRole::UNKNOWN },
+            { "tree item",             AccessibleRole::TREE_ITEM },
+            { "document spreadsheet",  AccessibleRole::DOCUMENT_SPREADSHEET },
+            { "document presentation", AccessibleRole::DOCUMENT_PRESENTATION },
+            { "document text",         AccessibleRole::DOCUMENT_TEXT },
+            { "document web",          AccessibleRole::DOCUMENT }, // approximate
+            { "document email",        AccessibleRole::DOCUMENT }, // approximate
+            { "comment",               AccessibleRole::COMMENT }, // or NOTE or END_NOTE or FOOTNOTE or SCROLL_PANE
+            { "list box",              AccessibleRole::UNKNOWN },
+            { "grouping",              AccessibleRole::GROUP_BOX },
+            { "image map",             AccessibleRole::IMAGE_MAP },
+            { "notification",          AccessibleRole::UNKNOWN },
+            { "info bar",              AccessibleRole::UNKNOWN },
+            { "level bar",             AccessibleRole::UNKNOWN },
+            { "title bar",             AccessibleRole::UNKNOWN },
+            { "block quote",           AccessibleRole::UNKNOWN },
+            { "audio",                 AccessibleRole::UNKNOWN },
+            { "video",                 AccessibleRole::UNKNOWN },
+            { "definition",            AccessibleRole::UNKNOWN },
+            { "article",               AccessibleRole::UNKNOWN },
+            { "landmark",              AccessibleRole::UNKNOWN },
+            { "log",                   AccessibleRole::UNKNOWN },
+            { "marquee",               AccessibleRole::UNKNOWN },
+            { "math",                  AccessibleRole::UNKNOWN },
+            { "rating",                AccessibleRole::UNKNOWN },
+            { "timer",                 AccessibleRole::UNKNOWN },
+            { "description list",      AccessibleRole::UNKNOWN },
+            { "description term",      AccessibleRole::UNKNOWN },
+            { "description value",     AccessibleRole::UNKNOWN },
+            { "static",                AccessibleRole::STATIC },
+            { "math fraction",         AccessibleRole::UNKNOWN },
+            { "math root",             AccessibleRole::UNKNOWN },
+            { "subscript",             AccessibleRole::UNKNOWN },
+            { "superscript",           AccessibleRole::UNKNOWN },
+            { "footnote",              AccessibleRole::FOOTNOTE },
+        };
+
+        auto it = aAtkRoleToAccessibleRole.find(roleName);
+        if (it == aAtkRoleToAccessibleRole.end())
+            return AccessibleRole::UNKNOWN;
+        return it->second;
+    }
 }
 
 VclPtr<vcl::Window> VclBuilder::insertObject(vcl::Window *pParent, const OString &rClass,
@@ -2458,7 +2605,7 @@ void VclBuilder::collectPangoAttribute(xmlreader::XmlReader &reader, stringmap &
         rMap[sProperty] = OUString::fromUtf8(sValue);
 }
 
-void VclBuilder::collectAtkAttribute(xmlreader::XmlReader &reader, stringmap &rMap)
+void VclBuilder::collectAtkRelationAttribute(xmlreader::XmlReader &reader, stringmap &rMap)
 {
     xmlreader::Span span;
     int nsId;
@@ -2485,6 +2632,26 @@ void VclBuilder::collectAtkAttribute(xmlreader::XmlReader &reader, stringmap &rM
 
     if (!sProperty.isEmpty())
         rMap[sProperty] = OUString::fromUtf8(sValue);
+}
+
+void VclBuilder::collectAtkRoleAttribute(xmlreader::XmlReader &reader, stringmap &rMap)
+{
+    xmlreader::Span span;
+    int nsId;
+
+    OString sProperty;
+
+    while (reader.nextAttribute(&nsId, &span))
+    {
+        if (span.equals("type"))
+        {
+            span = reader.getAttributeValue(false);
+            sProperty = OString(span.begin, span.length);
+        }
+    }
+
+    if (!sProperty.isEmpty())
+        rMap["role"] = OUString::fromUtf8(sProperty);
 }
 
 void VclBuilder::handleRow(xmlreader::XmlReader &reader, const OString &rID)
@@ -3162,7 +3329,9 @@ VclPtr<vcl::Window> VclBuilder::handleObject(vcl::Window *pParent, xmlreader::Xm
                 else if (name.equals("attribute"))
                     collectPangoAttribute(reader, aPangoAttributes);
                 else if (name.equals("relation"))
-                    collectAtkAttribute(reader, aAtkAttributes);
+                    collectAtkRelationAttribute(reader, aAtkAttributes);
+                else if (name.equals("role"))
+                    collectAtkRoleAttribute(reader, aAtkAttributes);
                 else if (name.equals("action-widget"))
                     handleActionWidget(reader);
             }
