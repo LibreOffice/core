@@ -6578,7 +6578,6 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
     bool bVertical = m_aCurrentPDFState.m_aFont.IsVertical();
     int nGlyphs;
     int nIndex = 0;
-    int nMaxCharPos = rText.getLength()-1;
     double fXScale = 1.0;
     double fSkew = 0.0;
     sal_Int32 nPixelFontHeight = m_pReferenceDevice->mpFontInstance->maFontSelData.mnHeight;
@@ -6697,48 +6696,25 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
     FontMetric aRefDevFontMetric = m_pReferenceDevice->GetFontMetric();
 
     // collect the glyphs into a single array
-    const int nTmpMaxGlyphs = rLayout.GetOrientation() ? 1 : nMaxGlyphs; // #i97991# temporary workaround for #i87686#
     std::vector< PDFGlyph > aGlyphs;
-    aGlyphs.reserve( nTmpMaxGlyphs );
+    aGlyphs.reserve( nMaxGlyphs );
     // first get all the glyphs and register them; coordinates still in Pixel
     Point aGNGlyphPos;
-    while ((nGlyphs = rLayout.GetNextGlyphs(nTmpMaxGlyphs, pGlyphs, aGNGlyphPos, nIndex, pFallbackFonts)) != 0)
+    while ((nGlyphs = rLayout.GetNextGlyphs(nMaxGlyphs, pGlyphs, aGNGlyphPos, nIndex, pFallbackFonts)) != 0)
     {
         aCodeUnits.clear();
+        aCodeUnitsPerGlyph.clear();
         for( int i = 0; i < nGlyphs; i++ )
         {
-            // default case: 1 glyph is one unicode
-            aCodeUnitsPerGlyph.push_back(1);
-            if (pGlyphs[i]->mnCharPos >= 0 && pGlyphs[i]->mnCharPos <= nMaxCharPos)
-            {
-                int nChars = 1;
-                // try to handle ligatures and such
-                if( i < nGlyphs-1 )
-                {
-                    nChars = pGlyphs[i+1]->mnCharPos - pGlyphs[i]->mnCharPos;
-                    int start = pGlyphs[i]->mnCharPos;
-                    // #i115618# fix for simple RTL+CTL cases
-                    // supports RTL ligatures. TODO: more complex CTL, etc.
-                    if( nChars < 0 )
-                    {
-                        nChars = -nChars;
-                        start = pGlyphs[i+1]->mnCharPos + 1;
-                    }
-                    else if (nChars == 0)
-                        nChars = 1;
-                    aCodeUnitsPerGlyph.back() = nChars;
-                    for( int n = 0; n < nChars; n++ )
-                        aCodeUnits.push_back( rText[ start + n ] );
-                }
-                else
-                    aCodeUnits.push_back(rText[pGlyphs[i]->mnCharPos]);
-            }
-            else
-                aCodeUnits.push_back( 0 );
-            // note: in case of ctl one character may result
-            // in multiple glyphs. The current SalLayout
-            // implementations set -1 then to indicate that no direct
-            // mapping is possible
+            // try to handle ligatures and such
+            int nStart = pGlyphs[i]->mnCharPos;
+            int nChars = pGlyphs[i]->mnCharCount;
+            if (nChars < 0)
+                nChars = 0;
+
+            aCodeUnitsPerGlyph.push_back(nChars);
+            for( int n = 0; n < nChars; n++ )
+                aCodeUnits.push_back( rText[ nStart + n ] );
         }
 
         registerGlyphs( nGlyphs, pGlyphs, pGlyphWidths, aCodeUnits.data(), aCodeUnitsPerGlyph.data(), pMappedGlyphs, pMappedFontObjects, pFallbackFonts );

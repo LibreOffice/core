@@ -8,6 +8,7 @@
  */
 
 #include <config_features.h>
+#include <config_test.h>
 
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
@@ -25,6 +26,7 @@
 #include <tools/zcodec.hxx>
 #if HAVE_FEATURE_PDFIUM
 #include <fpdf_edit.h>
+#include <fpdf_text.h>
 #include <fpdfview.h>
 #endif
 
@@ -67,6 +69,16 @@ public:
     void testTdf99680();
     void testTdf99680_2();
     void testTdf108963();
+#if !TEST_FONTS_MISSING
+    /// Test writing ToUnicode CMAP for LTR ligatures.
+    void testTdf115117_1();
+    /// Text extracting LTR text with ligatures.
+    void testTdf115117_1a();
+    /// Test writing ToUnicode CMAP for RTL ligatures.
+    void testTdf115117_2();
+    /// Text extracting RTL text with ligatures.
+    void testTdf115117_2a();
+#endif
 #endif
 
     CPPUNIT_TEST_SUITE(PdfExportTest);
@@ -85,6 +97,12 @@ public:
     CPPUNIT_TEST(testTdf99680);
     CPPUNIT_TEST(testTdf99680_2);
     CPPUNIT_TEST(testTdf108963);
+#if !TEST_FONTS_MISSING
+    CPPUNIT_TEST(testTdf115117_1);
+    CPPUNIT_TEST(testTdf115117_1a);
+    CPPUNIT_TEST(testTdf115117_2);
+    CPPUNIT_TEST(testTdf115117_2a);
+#endif
 #endif
     CPPUNIT_TEST_SUITE_END();
 };
@@ -760,6 +778,205 @@ void PdfExportTest::testTdf108963()
 
     CPPUNIT_ASSERT_EQUAL(1, nYellowPathCount);
 }
+
+#if !TEST_FONTS_MISSING
+// This requires Carlito font, if it is missing the test will most likely
+// fail.
+void PdfExportTest::testTdf115117_1()
+{
+    vcl::filter::PDFDocument aDocument;
+    load("tdf115117-1.odt", aDocument);
+
+    vcl::filter::PDFObjectElement* pToUnicode = nullptr;
+
+    // Get access to ToUnicode of the first font
+    for (const auto& aElement : aDocument.GetElements())
+    {
+        auto pObject = dynamic_cast<vcl::filter::PDFObjectElement*>(aElement.get());
+        if (!pObject)
+            continue;
+        auto pType = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("Type"));
+        if (pType && pType->GetValue() == "Font")
+        {
+            auto pToUnicodeRef = dynamic_cast<vcl::filter::PDFReferenceElement*>(pObject->Lookup("ToUnicode"));
+            CPPUNIT_ASSERT(pToUnicodeRef);
+            pToUnicode = pToUnicodeRef->LookupObject();
+            break;
+        }
+    }
+
+    CPPUNIT_ASSERT(pToUnicode);
+    auto pStream = pToUnicode->GetStream();
+    CPPUNIT_ASSERT(pStream);
+    SvMemoryStream aObjectStream;
+    ZCodec aZCodec;
+    aZCodec.BeginCompression();
+    pStream->GetMemory().Seek(0);
+    aZCodec.Decompress(pStream->GetMemory(), aObjectStream);
+    CPPUNIT_ASSERT(aZCodec.EndCompression());
+    aObjectStream.Seek(0);
+    // The first values, <01> <02> etc., are glyph ids, they might change order
+    // if we changed how font subsets are created.
+    // The second values, <00740069> etc., are Unicode code points in hex,
+    // <00740069> is U+0074 and U+0069 i.e. "ti" which is a ligature in
+    // Carlito/Callibri. This test is failing if any of the second values
+    // changed which means we are not detecting ligatures and writing CMAP
+    // entries for them correctly. If glyph order in the subset changes then
+    // the order here will changes and the PDF has to be carefully inspected to
+    // ensure that the new values are correct before updating the string below.
+    OString aCmap("9 beginbfchar\n"
+                  "<01> <00740069>\n"
+                  "<02> <0020>\n"
+                  "<03> <0074>\n"
+                  "<04> <0065>\n"
+                  "<05> <0073>\n"
+                  "<06> <00660069>\n"
+                  "<07> <0066006C>\n"
+                  "<08> <006600660069>\n"
+                  "<09> <00660066006C>\n"
+                  "endbfchar");
+    auto pStart = static_cast<const char*>(aObjectStream.GetData());
+    const char* pEnd = pStart + aObjectStream.GetSize();
+    auto it = std::search(pStart, pEnd, aCmap.getStr(), aCmap.getStr() + aCmap.getLength());
+    CPPUNIT_ASSERT(it != pEnd);
+}
+
+// This requires DejaVu Sans font, if it is missing the test will most likely
+// fail.
+void PdfExportTest::testTdf115117_2()
+{
+    // See the comments in testTdf115117_1() for explanation.
+
+    vcl::filter::PDFDocument aDocument;
+    load("tdf115117-2.odt", aDocument);
+
+    vcl::filter::PDFObjectElement* pToUnicode = nullptr;
+
+    for (const auto& aElement : aDocument.GetElements())
+    {
+        auto pObject = dynamic_cast<vcl::filter::PDFObjectElement*>(aElement.get());
+        if (!pObject)
+            continue;
+        auto pType = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("Type"));
+        if (pType && pType->GetValue() == "Font")
+        {
+            auto pToUnicodeRef = dynamic_cast<vcl::filter::PDFReferenceElement*>(pObject->Lookup("ToUnicode"));
+            CPPUNIT_ASSERT(pToUnicodeRef);
+            pToUnicode = pToUnicodeRef->LookupObject();
+            break;
+        }
+    }
+
+    CPPUNIT_ASSERT(pToUnicode);
+    auto pStream = pToUnicode->GetStream();
+    CPPUNIT_ASSERT(pStream);
+    SvMemoryStream aObjectStream;
+    ZCodec aZCodec;
+    aZCodec.BeginCompression();
+    pStream->GetMemory().Seek(0);
+    aZCodec.Decompress(pStream->GetMemory(), aObjectStream);
+    CPPUNIT_ASSERT(aZCodec.EndCompression());
+    aObjectStream.Seek(0);
+    OString aCmap("7 beginbfchar\n"
+                  "<01> <06440627>\n"
+                  "<02> <0020>\n"
+                  "<03> <0641>\n"
+                  "<04> <0642>\n"
+                  "<05> <0648>\n"
+                  "<06> <06440627>\n"
+                  "<07> <0628>\n"
+                  "endbfchar");
+    auto pStart = static_cast<const char*>(aObjectStream.GetData());
+    const char* pEnd = pStart + aObjectStream.GetSize();
+    auto it = std::search(pStart, pEnd, aCmap.getStr(), aCmap.getStr() + aCmap.getLength());
+    CPPUNIT_ASSERT(it != pEnd);
+}
+
+void PdfExportTest::testTdf115117_1a()
+{
+    // Import the bugdoc and export as PDF.
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf115117-1.odt";
+    mxComponent = loadFromDesktop(aURL);
+    CPPUNIT_ASSERT(mxComponent.is());
+
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+    utl::TempFile aTempFile;
+    aTempFile.EnableKillingFile();
+    utl::MediaDescriptor aMediaDescriptor;
+    aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
+    xStorable->storeToURL(aTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+
+    // Parse the export result with pdfium.
+    SvFileStream aFile(aTempFile.GetURL(), StreamMode::READ);
+    SvMemoryStream aMemory;
+    aMemory.WriteStream(aFile);
+    mpPdfDocument = FPDF_LoadMemDocument(aMemory.GetData(), aMemory.GetSize(), /*password=*/nullptr);
+    CPPUNIT_ASSERT(mpPdfDocument);
+
+    // The document has one page.
+    CPPUNIT_ASSERT_EQUAL(1, FPDF_GetPageCount(mpPdfDocument));
+    mpPdfPage = FPDF_LoadPage(mpPdfDocument, /*page_index=*/0);
+    CPPUNIT_ASSERT(mpPdfPage);
+
+    auto pPdfTextPage = FPDFText_LoadPage(mpPdfPage);
+    CPPUNIT_ASSERT(pPdfTextPage);
+
+    // Extract the text from the page. This pdfium API is a bit higher level
+    // than we want and might apply heuristic that give false positive, but it
+    // is a good approximation in addition to the check in testTdf115117_1().
+    int nChars = FPDFText_CountChars(pPdfTextPage);
+    CPPUNIT_ASSERT_EQUAL(44, nChars);
+
+    OUString aExpectedText = "ti ti test ti\r\nti test fi fl ffi ffl test fi";
+    std::vector<sal_uInt32> aChars(nChars);
+    for (int i = 0; i < nChars; i++)
+        aChars[i] = FPDFText_GetUnicode(pPdfTextPage, i);
+    OUString aActualText(aChars.data(), aChars.size());
+    CPPUNIT_ASSERT_EQUAL(aExpectedText, aActualText);
+}
+
+void PdfExportTest::testTdf115117_2a()
+{
+    // See the comments in testTdf115117_1a() for explanation.
+
+    // Import the bugdoc and export as PDF.
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf115117-2.odt";
+    mxComponent = loadFromDesktop(aURL);
+    CPPUNIT_ASSERT(mxComponent.is());
+
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+    utl::TempFile aTempFile;
+    aTempFile.EnableKillingFile();
+    utl::MediaDescriptor aMediaDescriptor;
+    aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
+    xStorable->storeToURL(aTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+
+    // Parse the export result with pdfium.
+    SvFileStream aFile(aTempFile.GetURL(), StreamMode::READ);
+    SvMemoryStream aMemory;
+    aMemory.WriteStream(aFile);
+    mpPdfDocument = FPDF_LoadMemDocument(aMemory.GetData(), aMemory.GetSize(), /*password=*/nullptr);
+    CPPUNIT_ASSERT(mpPdfDocument);
+
+    // The document has one page.
+    CPPUNIT_ASSERT_EQUAL(1, FPDF_GetPageCount(mpPdfDocument));
+    mpPdfPage = FPDF_LoadPage(mpPdfDocument, /*page_index=*/0);
+    CPPUNIT_ASSERT(mpPdfPage);
+
+    auto pPdfTextPage = FPDFText_LoadPage(mpPdfPage);
+    CPPUNIT_ASSERT(pPdfTextPage);
+
+    int nChars = FPDFText_CountChars(pPdfTextPage);
+    CPPUNIT_ASSERT_EQUAL(13, nChars);
+
+    OUString aExpectedText = u"\u0627\u0644 \u0628\u0627\u0644 \u0648\u0642\u0641 \u0627\u0644";
+    std::vector<sal_uInt32> aChars(nChars);
+    for (int i = 0; i < nChars; i++)
+        aChars[i] = FPDFText_GetUnicode(pPdfTextPage, i);
+    OUString aActualText(aChars.data(), aChars.size());
+    CPPUNIT_ASSERT_EQUAL(aExpectedText, aActualText);
+}
+#endif
 #endif
 
 CPPUNIT_TEST_SUITE_REGISTRATION(PdfExportTest);
