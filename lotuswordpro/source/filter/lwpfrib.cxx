@@ -451,6 +451,8 @@ XFColor LwpFrib::GetHighlightColor()
 
 void LwpFrib::Register(std::map<LwpFrib*,OUString>* pFribMap)
 {
+    if (m_pFribMap)
+        throw std::runtime_error("registered already");
     m_pFribMap = pFribMap;
 }
 
