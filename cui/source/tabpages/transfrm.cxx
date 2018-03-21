@@ -665,11 +665,6 @@ void SvxSlantTabPage::Reset(const SfxItemSet* rAttrs)
 
     while(true)
     {
-        if(nullptr == pView)
-        {
-            break;
-        }
-
         if(1 != pView->GetMarkedObjectList().GetMarkCount())
         {
             break;
