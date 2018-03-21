@@ -244,6 +244,7 @@ widgets_labels = [
 # GtkPrinterOptionWidget ?
 # GtkStackCombo ?
 # GtkStackSidebar ?
+# GtkStackSwitcher ?
 
 progname = os.path.basename(sys.argv[0])
 
@@ -629,7 +630,8 @@ def is_orphan_label(filename, tree, root, obj, orphan_root, doprint = False):
             return True
 
     # mnemonic_widget
-    mnemonic_for = obj.findall("property[@name='mnemonic_widget']")
+    mnemonic_for = obj.findall("property[@name='mnemonic_widget']") + \
+                   obj.findall("property[@name='mnemonic-widget']")
     for rel in mnemonic_for:
         target = rel.text
         l = mnemonic_for_elm[target]
@@ -648,6 +650,17 @@ def is_orphan_label(filename, tree, root, obj, orphan_root, doprint = False):
     if len(labelled_by) > 0:
         # Oh, a labelled label, probably not to be labelling anything
         return False
+
+    # explicit role?
+    roles = [x.text for x in obj.findall("child[@internal-child='accessible']/object[@class='AtkObject']/property[@name='AtkObject::accessible-role']")]
+    roles += [x.attrib.get("type") for x in obj.findall("accessibility/role")]
+    if len(roles) > 1 and doprint:
+        err(filename, tree, obj, "multiple-role", "has multiple <child internal-child='accessible'><object class='AtkObject'><property name='AtkBoject::accessible-role'>"
+            "%s" % elms_lines(children))
+    for role in roles:
+        if role == 'static' or role == 'ATK_ROLE_STATIC':
+            # This is static text, not meant to label anything
+            return False
 
     parent = elm_parent(root, obj)
     if parent is not None:
@@ -739,14 +752,16 @@ def is_orphan_widget(filename, tree, root, obj, orphan, orphan_root, doprint = F
         return False
 
     # Case 5: Has a <property name="tooltip_text">
-    tooltips = obj.findall("property[@name='tooltip_text']")
+    tooltips = obj.findall("property[@name='tooltip_text']") + \
+               obj.findall("property[@name='tooltip-text']")
     if len(tooltips) > 1 and doprint:
         err(filename, tree, obj, "multiple-tooltip", "has multiple tooltip_text properties")
-    if len(tooltips) >= 1:
+    if len(tooltips) >= 1 and klass != 'GtkCheckButton':
         return False
 
     # Case 6: Has a <property name="placeholder_text">
-    placeholders = obj.findall("property[@name='placeholder_text']")
+    placeholders = obj.findall("property[@name='placeholder_text']") + \
+                   obj.findall("property[@name='placeholder-text']")
     if len(placeholders) > 1 and doprint:
         err(filename, tree, obj, "multiple-placeholder", "has multiple placeholder_text properties")
     if len(placeholders) >= 1:
@@ -887,7 +902,7 @@ def check_props(filename, tree, root, elm, forward):
     """
     Check the given list of relation properties
     """
-    props = elm.findall("property[@name='mnemonic_widget']")
+    props = elm.findall("property[@name='" + forward + "']")
     for prop in props:
         if prop.text not in ids:
             err(filename, tree, elm, "undeclared-target", forward + " uses undeclared target '%s'" % prop.text)
@@ -972,7 +987,8 @@ def check_a11y_relation(filename, tree):
 
         # Labels special case
         if klass in widgets_labels:
-            properties = check_props(filename, tree, root, obj, "mnemonic_widget")
+            properties = check_props(filename, tree, root, obj, "mnemonic_widget") + \
+                         check_props(filename, tree, root, obj, "mnemonic-widget")
             if len(properties) > 1:
                 err(filename, tree, obj, "multiple-mnemonic", "has multiple mnemonic_widgets properties"
                     "%s" % elms_lines(properties))
@@ -1025,7 +1041,8 @@ def check_a11y_relation(filename, tree):
                 else:
                     label_for_elm[target].append(obj)
 
-        mnemonic_for = obj.findall("property[@name='mnemonic_widget']")
+        mnemonic_for = obj.findall("property[@name='mnemonic_widget']") + \
+                       obj.findall("property[@name='mnemonic-widget']")
         for rel in mnemonic_for:
             target = rel.text
             if target is not None:
@@ -1053,15 +1070,16 @@ def check_a11y_relation(filename, tree):
 # Main
 #
 
-def usage():
-    print("%s [-p] [-g SUPPR_FILE] [-s SUPPR_FILE] [-f SUPPR_FILE] [-i WIDGET1,WIDGET2[,...]] [-o LOG_FILE] [file ...]" % progname,
-          file=sys.stderr)
+def usage(fatal = True):
+    print("`%s' checks accessibility of glade .ui files" % progname)
+    print("")
+    print("Usage: %s [-p] [-g SUPPR_FILE] [-s SUPPR_FILE] [-f SUPPR_FILE] [-P PREFIX] [-o LOG_FILE] [file ...]" % progname)
     print("")
     print("  -p Print XML class path instead of line number")
     print("  -g Generate suppression file SUPPR_FILE")
-    print("  -s Suppress warnings given by file SUPPR_FILE")
+    print("  -s Suppress warnings given by file SUPPR_FILE, but count them")
     print("  -f Suppress warnings given by file SUPPR_FILE completely")
-    print("  -i Ignore warnings for widgets of a given class")
+    print("  -P Remove PREFIX from file names in warnings")
     print("  -o Also prints errors and warnings to given file")
     print("")
     print("  --widgets-FOO [+][CLASS1[,CLASS2[,...]]]")
@@ -1101,7 +1119,9 @@ def usage():
     print("")
     print("  --disable-orphan-labels         only warn about orphan labels when there are")
     print("                                  orphan widgets in the same context")
-    sys.exit(2)
+    print("")
+    print("Report bugs to <bugs@hypra.fr>")
+    sys.exit(2 if fatal else 0)
 
 def widgets_opt(widgets_list, arg):
     """
@@ -1128,7 +1148,10 @@ def main():
     global outfile
 
     try:
-        opts, args = getopt.getopt(sys.argv[1:], "piIg:s:f:P:o:L:", [
+        opts, args = getopt.getopt(sys.argv[1:], "hpiIg:s:f:P:o:L:", [
+                "help",
+                "version",
+
                 "widgets-toplevel=",
                 "widgets-ignored=",
                 "widgets-suffixignored=",
@@ -1168,7 +1191,12 @@ def main():
     filelist = None
 
     for o, a in opts:
-        if o == "-p":
+        if o == "--help" or o == "-h":
+            usage(False)
+        if o == "--version":
+            print("0.1")
+            sys.exit(0)
+        elif o == "-p":
             pflag = True
         elif o == "-g":
             gen_suppr = a
