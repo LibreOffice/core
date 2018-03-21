@@ -1751,9 +1751,9 @@ void DomainMapper_Impl::PushFootOrEndnote( bool bIsFootnote )
         // Redlines for the footnote anchor
         CheckRedline( xFootnote->getAnchor( ) );
 
-        // Word has a leading tab on footnotes, but we may implement space
-        // between the footnote number and text using a paragraph margin, not a
-        // tab (Writer default). So ignore that in case there is a margin set.
+        // LO inserts a tab when exporting to MS formats in order to emulate its automatic space
+        // between the footnote number and text using the paragraph margin.
+        // So ignore that tab when there is a margin set.
         uno::Reference<style::XStyleFamiliesSupplier> xStylesSupplier( GetTextDocument(), uno::UNO_QUERY);
         uno::Reference<container::XNameAccess> xStyleFamilies = xStylesSupplier->getStyleFamilies();
         uno::Reference<container::XNameContainer> xStyles;
