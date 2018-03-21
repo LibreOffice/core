@@ -160,7 +160,7 @@ WinInetBackend::WinInetBackend()
             // proxy is enabled or not
 
             // We use InternetQueryOptionW (see https://msdn.microsoft.com/en-us/library/aa385101);
-            // it fills INTERNET_PROXY_INFO struct which is definned in WinInet.h to have LPCTSTR
+            // it fills INTERNET_PROXY_INFO struct which is defined in WinInet.h to have LPCTSTR
             // (i.e., the UNICODE-dependent generic string type expanding to const wchar_t* when
             // UNICODE is defined, and InternetQueryOption macro expands to InternetQueryOptionW).
             // Thus, it's natural to expect that W version would return wide strings. But it's not
