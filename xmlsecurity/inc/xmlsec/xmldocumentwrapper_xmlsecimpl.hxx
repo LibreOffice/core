@@ -211,18 +211,6 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 };
 
-/// @throws css::uno::RuntimeException
-OUString XMLDocumentWrapper_XmlSecImpl_getImplementationName();
-
-/// @throws css::uno::RuntimeException
-css::uno::Sequence< OUString >
-    XMLDocumentWrapper_XmlSecImpl_getSupportedServiceNames(  );
-
-/// @throws css::uno::Exception
-css::uno::Reference< css::uno::XInterface >
-XMLDocumentWrapper_XmlSecImpl_createInstance(
-    const css::uno::Reference< css::uno::XComponentContext > &);
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
