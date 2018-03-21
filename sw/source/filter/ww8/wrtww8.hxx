@@ -558,6 +558,7 @@ public:
     bool m_bExportModeRTF;
     /// Is font size written already as part of the current character properties?
     bool m_bFontSizeWritten;
+    bool m_bAddFootnoteTab;     // only one aesthetic spacing tab per footnote
 
     SwDoc *m_pDoc;
     sal_uLong m_nCurStart, m_nCurEnd;

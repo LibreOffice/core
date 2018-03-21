@@ -2509,8 +2509,9 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
                 if ( ( m_nTextTyp == TXT_EDN || m_nTextTyp == TXT_FTN ) && nAktPos == 0 && nLen > 0 )
                 {
                     // Insert tab for aesthetic purposes #i24762#
-                    if ( aSnippet[0] != 0x09 )
+                    if ( m_bAddFootnoteTab && aSnippet[0] != 0x09 )
                         aSnippet = "\x09" + aSnippet;
+                    m_bAddFootnoteTab = false;
                 }
 
                 if ( bPostponeWritingText && ( FLY_POSTPONED != nStateOfFlyFrame ) )
