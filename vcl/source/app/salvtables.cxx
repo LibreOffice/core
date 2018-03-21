@@ -478,6 +478,8 @@ public:
         m_xDialog->add_button(xButton, nResponse, true);
     }
 
+    virtual weld::Button* get_widget_for_response(int nResponse) override;
+
     virtual void set_default_response(int nResponse) override
     {
         m_xDialog->set_default_response(nResponse);
@@ -663,6 +665,12 @@ IMPL_LINK(SalInstanceButton, ClickHdl, ::Button*, pButton, void)
         return;
     }
     signal_clicked();
+}
+
+weld::Button* SalInstanceDialog::get_widget_for_response(int nResponse)
+{
+    PushButton* pButton = dynamic_cast<PushButton*>(m_xDialog->get_widget_for_response(nResponse));
+    return pButton ? new SalInstanceButton(pButton, false) : nullptr;
 }
 
 class SalInstanceRadioButton : public SalInstanceButton, public virtual weld::RadioButton

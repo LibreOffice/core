@@ -178,6 +178,7 @@ public:
 
     void            add_button(PushButton* pButton, int nResponse, bool bTransferOwnership);
     void            set_default_response(int nResponse);
+    vcl::Window*    get_widget_for_response(int nResponse);
 };
 
 class VCL_DLLPUBLIC ModelessDialog : public Dialog

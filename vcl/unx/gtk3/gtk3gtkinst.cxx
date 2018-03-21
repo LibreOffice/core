@@ -1647,6 +1647,8 @@ public:
         gtk_dialog_set_default_response(m_pDialog, VclToGtk(nResponse));
     }
 
+    virtual weld::Button* get_widget_for_response(int nResponse) override;
+
     virtual ~GtkInstanceDialog() override
     {
         g_signal_handler_disconnect(m_pDialog, m_nCloseSignalId);
@@ -1856,6 +1858,14 @@ public:
         g_signal_handler_disconnect(m_pButton, m_nSignalId);
     }
 };
+
+weld::Button* GtkInstanceDialog::get_widget_for_response(int nResponse)
+{
+    GtkButton* pButton = GTK_BUTTON(gtk_dialog_get_widget_for_response(m_pDialog, nResponse));
+    if (!pButton)
+        return nullptr;
+    return new GtkInstanceButton(pButton, false);
+}
 
 class GtkInstanceToggleButton : public GtkInstanceButton, public virtual weld::ToggleButton
 {
