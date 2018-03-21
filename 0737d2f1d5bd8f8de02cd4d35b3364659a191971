@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_73beeb00",
+        "filename": "dbaccess/CppunitTest_dbaccess_hsqlschema_import.mk",
+        "patchSetId": 3
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2018-03-21T08:11:44Z",
+      "side": 1,
+      "message": "You have a mix of tabs and spaces here.\nAfaik Makefiles should use tabs, but I might be wrong.",
+      "revId": "0737d2f1d5bd8f8de02cd4d35b3364659a191971",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
