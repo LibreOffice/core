@@ -17,7 +17,32 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <o3tl/typed_flags_set.hxx>
 #include <vcl/btndlg.hxx>
+
+// Window-Bits for MessageBoxen
+enum class MessBoxStyle
+{
+    NONE = 0x0000,
+    Ok = 0x0001,
+    OkCancel = 0x0002,
+    YesNo = 0x0004,
+    YesNoCancel = 0x0008,
+    RetryCancel = 0x0010,
+    DefaultOk = 0x0020,
+    DefaultCancel = 0x0040,
+    DefaultRetry = 0x0080,
+    DefaultYes = 0x0100,
+    DefaultNo = 0x0200,
+    AbortRetryIgnore = 0x1000,
+    DefaultIgnore = 0x2000,
+};
+namespace o3tl
+{
+template <> struct typed_flags<MessBoxStyle> : is_typed_flags<MessBoxStyle, 0x3fff>
+{
+};
+}
 
 class MessBox : public ButtonDialog
 {
