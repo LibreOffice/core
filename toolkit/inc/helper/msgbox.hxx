@@ -18,7 +18,7 @@
  */
 
 #include <o3tl/typed_flags_set.hxx>
-#include <vcl/btndlg.hxx>
+#include <helper/btndlg.hxx>
 
 // Window-Bits for MessageBoxen
 enum class MessBoxStyle
