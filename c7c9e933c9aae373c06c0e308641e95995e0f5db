@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_b3bb0375",
+        "filename": "vcl/inc/sallayout.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 258,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-03-21T14:21:43Z",
+      "side": 1,
+      "message": "chracters-\u003echaracters",
+      "revId": "c7c9e933c9aae373c06c0e308641e95995e0f5db",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_d3c077e3",
+        "filename": "vcl/qa/cppunit/pdfexport/pdfexport.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 848,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-03-21T14:21:43Z",
+      "side": 1,
+      "message": "communes?",
+      "revId": "c7c9e933c9aae373c06c0e308641e95995e0f5db",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_f3b57b7e",
+        "filename": "vcl/qa/cppunit/pdfexport/pdfexport.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 940,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-03-21T14:21:43Z",
+      "side": 1,
+      "message": "communes?",
+      "revId": "c7c9e933c9aae373c06c0e308641e95995e0f5db",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
