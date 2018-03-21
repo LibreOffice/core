@@ -22,7 +22,6 @@
 
 #include <cppuhelper/factory.hxx>
 
-#include <xmlsec/xmldocumentwrapper_xmlsecimpl.hxx>
 #include "xsec_xmlsec.hxx"
 
 #include <config_gpgme.h>
@@ -53,15 +52,7 @@ SAL_DLLPUBLIC_EXPORT void* xsec_xmlsec_component_getFactory( const sal_Char* pIm
         {
             xFactory = SEInitializerGpg::impl_createFactory( static_cast< XMultiServiceFactory* >( pServiceManager ) ) ;
         }
-        else
 #endif
-        if( XMLDocumentWrapper_XmlSecImpl_getImplementationName().equalsAscii( pImplName ) )
-        {
-            xFactory = cppu::createSingleComponentFactory(
-                XMLDocumentWrapper_XmlSecImpl_createInstance,
-                OUString::createFromAscii( pImplName ),
-                XMLDocumentWrapper_XmlSecImpl_getSupportedServiceNames() );
-        }
     }
 
     if( xFactory.is() ) {
