@@ -272,10 +272,6 @@ bool QuartzSalBitmap::CreateContext()
         try
         {
             m_pContextBuffer = o3tl::make_shared_array<sal_uInt8>(mnHeight * nContextBytesPerRow);
-#ifdef DBG_UTIL
-            for (size_t i = 0; i < mnHeight * nContextBytesPerRow; i++)
-                m_pContextBuffer.get()[i] = (i & 0xFF);
-#endif
 
             if( !bSkipConversion )
             {
@@ -342,15 +338,6 @@ bool QuartzSalBitmap::AllocateUserData()
         m_pUserBuffer.reset( static_cast<sal_uInt8*>(nullptr) );
         mnBytesPerRow = 0;
     }
-#ifdef DBG_UTIL
-    else
-    {
-        for (size_t i = 0; i < mnBytesPerRow * mnHeight; i++)
-        {
-            m_pUserBuffer.get()[i] = (i & 0xFF);
-        }
-    }
-#endif
 
     return m_pUserBuffer.get() != nullptr;
 }
