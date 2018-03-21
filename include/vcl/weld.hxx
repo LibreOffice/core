@@ -611,6 +611,7 @@ public:
     ~GenericDialogController() override;
     void set_title(const OUString& rTitle) { m_xDialog->set_title(rTitle); }
     void set_help_id(const OString& rHelpId) { m_xDialog->set_help_id(rHelpId); }
+    OString get_help_id() const { return m_xDialog->get_help_id(); }
 };
 
 class VCL_DLLPUBLIC MessageDialogController : public DialogController
@@ -631,6 +632,7 @@ public:
     ~MessageDialogController() override;
     void set_title(const OUString& rTitle) { m_xDialog->set_title(rTitle); }
     void set_help_id(const OString& rHelpId) { m_xDialog->set_help_id(rHelpId); }
+    OString get_help_id() const { return m_xDialog->get_help_id(); }
     void set_primary_text(const OUString& rText) { m_xDialog->set_primary_text(rText); }
     OUString get_primary_text() const { return m_xDialog->get_primary_text(); }
     void set_default_response(int response) { m_xDialog->set_default_response(response); }

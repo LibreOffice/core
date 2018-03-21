@@ -91,7 +91,7 @@ Reference<XPropertySetInfo>  SAL_CALL ODataSourcePropertyDialog::getPropertySetI
     return new ::cppu::OPropertyArrayHelper(aProps);
 }
 
-VclPtr<Dialog> ODataSourcePropertyDialog::createDialog(vcl::Window* _pParent)
+svt::OGenericUnoDialog::Dialog ODataSourcePropertyDialog::createDialog(vcl::Window* _pParent)
 {
     VclPtrInstance<ODbAdminDialog> pDialog(_pParent, m_pDatasourceItems, m_aContext);
 
@@ -99,7 +99,7 @@ VclPtr<Dialog> ODataSourcePropertyDialog::createDialog(vcl::Window* _pParent)
     if ( m_aInitialSelection.hasValue() )
         pDialog->selectDataSource(m_aInitialSelection);
 
-    return pDialog;
+    return svt::OGenericUnoDialog::Dialog(pDialog);
 }
 
 }   // namespace dbaui

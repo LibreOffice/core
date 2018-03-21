@@ -104,16 +104,16 @@ Reference<XPropertySetInfo>  SAL_CALL ODBTypeWizDialogSetup::getPropertySetInfo(
     return new ::cppu::OPropertyArrayHelper(aProps);
 }
 
-VclPtr<Dialog> ODBTypeWizDialogSetup::createDialog(vcl::Window* _pParent)
+svt::OGenericUnoDialog::Dialog ODBTypeWizDialogSetup::createDialog(vcl::Window* _pParent)
 {
-    return VclPtr<ODbTypeWizDialogSetup>::Create(_pParent, m_pDatasourceItems, m_aContext, m_aInitialSelection);
+    return svt::OGenericUnoDialog::Dialog(VclPtr<ODbTypeWizDialogSetup>::Create(_pParent, m_pDatasourceItems, m_aContext, m_aInitialSelection));
 }
 
 void ODBTypeWizDialogSetup::executedDialog(sal_Int16 _nExecutionResult)
 {
     if ( _nExecutionResult == RET_OK )
     {
-        const ODbTypeWizDialogSetup* pDialog = static_cast< ODbTypeWizDialogSetup* >( m_pDialog.get() );
+        const ODbTypeWizDialogSetup* pDialog = static_cast<ODbTypeWizDialogSetup*>(m_aDialog.m_xVclDialog.get());
         m_bOpenDatabase = pDialog->IsDatabaseDocumentToBeOpened();
         m_bStartTableWizard = pDialog->IsTableWizardToBeStarted();
     }

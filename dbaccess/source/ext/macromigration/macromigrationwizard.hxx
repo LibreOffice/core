@@ -87,7 +87,7 @@ namespace dbmm
         virtual ~MacroMigrationDialogService() override;
 
     protected:
-        virtual VclPtr<Dialog> createDialog( vcl::Window* _pParent ) override;
+        virtual svt::OGenericUnoDialog::Dialog createDialog(vcl::Window* _pParent) override;
 
     private:
         Reference< XOfficeDatabaseDocument >    m_xDocument;
