@@ -255,6 +255,7 @@ struct GlyphItem
 {
     int     mnFlags;
     int     mnCharPos;      // index in string
+    int     mnCharCount;    // number of characters making up this glyph
 
     int     mnOrigWidth;    // original glyph width
     int     mnNewWidth;     // width after adjustments
@@ -270,6 +271,7 @@ public:
                 long nFlags, int nOrigWidth )
             :   mnFlags(nFlags)
             ,   mnCharPos(nCharPos)
+            ,   mnCharCount(1)
             ,   mnOrigWidth(nOrigWidth)
             ,   mnNewWidth(nOrigWidth)
             ,   mnXOffset(0)
@@ -278,10 +280,11 @@ public:
             ,   mnFallbackLevel(0)
             { }
 
-            GlyphItem( int nCharPos, sal_GlyphId aGlyphId, const Point& rLinearPos,
+            GlyphItem(int nCharPos, int nCharCount, sal_GlyphId aGlyphId, const Point& rLinearPos,
                 long nFlags, int nOrigWidth, int nXOffset )
             :   mnFlags(nFlags)
             ,   mnCharPos(nCharPos)
+            ,   mnCharCount(nCharCount)
             ,   mnOrigWidth(nOrigWidth)
             ,   mnNewWidth(nOrigWidth)
             ,   mnXOffset(nXOffset)
