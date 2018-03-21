@@ -588,11 +588,18 @@ class VCL_DLLPUBLIC DialogController
 {
 private:
     virtual Dialog* getDialog() = 0;
+    const Dialog* getConstDialog() const
+    {
+        return const_cast<DialogController*>(this)->getDialog();
+    }
 
 public:
     short run() { return getDialog()->run(); }
     static bool runAsync(const std::shared_ptr<DialogController>& rController,
                          const std::function<void(sal_Int32)>&);
+    void set_title(const OUString& rTitle) { getDialog()->set_title(rTitle); }
+    void set_help_id(const OString& rHelpId) { getDialog()->set_help_id(rHelpId); }
+    OString get_help_id() const { return getConstDialog()->get_help_id(); }
     virtual ~DialogController();
 };
 
@@ -608,9 +615,7 @@ protected:
 public:
     GenericDialogController(weld::Widget* pParent, const OUString& rUIFile,
                             const OString& rDialogId);
-    ~GenericDialogController() override;
-    void set_title(const OUString& rTitle) { m_xDialog->set_title(rTitle); }
-    void set_help_id(const OString& rHelpId) { m_xDialog->set_help_id(rHelpId); }
+    virtual ~GenericDialogController() override;
 };
 
 class VCL_DLLPUBLIC MessageDialogController : public DialogController
@@ -628,9 +633,7 @@ protected:
 public:
     MessageDialogController(weld::Widget* pParent, const OUString& rUIFile,
                             const OString& rDialogId, const OString& rRelocateId = OString());
-    ~MessageDialogController() override;
-    void set_title(const OUString& rTitle) { m_xDialog->set_title(rTitle); }
-    void set_help_id(const OString& rHelpId) { m_xDialog->set_help_id(rHelpId); }
+    virtual ~MessageDialogController() override;
     void set_primary_text(const OUString& rText) { m_xDialog->set_primary_text(rText); }
     OUString get_primary_text() const { return m_xDialog->get_primary_text(); }
     void set_default_response(int response) { m_xDialog->set_default_response(response); }
