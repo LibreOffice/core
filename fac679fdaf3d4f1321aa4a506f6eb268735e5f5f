@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_b3b5c3d1",
+        "filename": "sdext/source/pdfimport/wrapper/wrapper.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 1124,
+      "author": {
+        "id": 1000068
+      },
+      "writtenOn": "2018-03-21T10:17:29Z",
+      "side": 1,
+      "message": "Thank you for the updates!\n\nUnfortunately this [and the code that leads to this] is not what I want ;-)  Instead, I want to use the Graphics here, with its setPdfData, which takes care of the roundtrip etc. - especially I don\u0027t want us to generate the PNGs (that are in the end backed by a Graphics anyway - if I\u0027m not mistaken).\n\nCan you please extend the setPdfData in a way that it actually uses a shared stream, and probably also about the page to render?  Miklos - do you have a code pointer or two, please? :-)\n\nWhen we go the \u0027Graphics\u0027 way, it will nicely align with the Tomaz\u0027s new caching rework I hope.",
+      "range": {
+        "startLine": 1123,
+        "startChar": 8,
+        "endLine": 1124,
+        "endChar": 71
+      },
+      "revId": "fac679fdaf3d4f1321aa4a506f6eb268735e5f5f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
