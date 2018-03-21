@@ -1118,13 +1118,16 @@ void XmlFilterBase::exportCustomFragments()
         addRelation(customFragmentTypes[j], customFragmentTargets[j]);
         const OUString aFilename = customFragmentTargets[j];
         Reference<XOutputStream> xOutStream = openOutputStream(aFilename);
-        xOutStream->writeBytes(customFragments[j]);
-        uno::Reference<XPropertySet> xProps(xOutStream, uno::UNO_QUERY);
-        if (xProps.is())
+        if (xOutStream.is())
         {
-            const OUString aType = comphelper::OFOPXMLHelper::GetContentTypeByName(aContentTypes, aFilename);
-            const OUString aContentType = (aType.getLength() ? aType : OUString("application/octet-stream"));
-            xProps->setPropertyValue("MediaType", uno::makeAny(aContentType));
+            xOutStream->writeBytes(customFragments[j]);
+            uno::Reference<XPropertySet> xProps(xOutStream, uno::UNO_QUERY);
+            if (xProps.is())
+            {
+                const OUString aType = comphelper::OFOPXMLHelper::GetContentTypeByName(aContentTypes, aFilename);
+                const OUString aContentType = (aType.getLength() ? aType : OUString("application/octet-stream"));
+                xProps->setPropertyValue("MediaType", uno::makeAny(aContentType));
+            }
         }
     }
 }
