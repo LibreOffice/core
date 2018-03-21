@@ -1632,7 +1632,7 @@ SvTreeListEntry* SvxConfigPage::AddFunction(
             {
                 std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetFrameWeld(),
                                                           VclMessageType::Info, VclButtonsType::Ok, CuiResId(RID_SVXSTR_MNUCFG_ALREADY_INCLUDED)));
-                xBox->run();
+                (void)xBox->run();
                 delete pNewEntryData;
                 return nullptr;
             }
@@ -3316,7 +3316,7 @@ void SvxIconSelectorDialog::ImportGraphics(
         }
 
         SvxIconChangeDialog aDialog(GetFrameWeld(), message);
-        aDialog.run();
+        (void)aDialog.run();
     }
 }
 
