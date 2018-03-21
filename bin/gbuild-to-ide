@@ -945,7 +945,7 @@ class VisualStudioIntegrationGenerator(IdeIntegrationGenerator):
 
     def get_subfilters(self, proj_filter):
         parts = proj_filter.split('\\')
-        subfilters = set([proj_filter])
+        subfilters = set([proj_filter]) if proj_filter else set()
         for i in range(1, len(parts)):
             subfilters.add('\\'.join(parts[:i]))
         return subfilters
