@@ -27,8 +27,8 @@ namespace xmlsecurity
 {
 namespace pdfio
 {
-
-bool ValidateSignature(SvStream& rStream, vcl::filter::PDFObjectElement* pSignature, SignatureInformation& rInformation, bool bLast)
+bool ValidateSignature(SvStream& rStream, vcl::filter::PDFObjectElement* pSignature,
+                       SignatureInformation& rInformation, bool bLast)
 {
     vcl::filter::PDFObjectElement* pValue = pSignature->LookupObject("V");
     if (!pValue)
@@ -53,12 +53,15 @@ bool ValidateSignature(SvStream& rStream, vcl::filter::PDFObjectElement* pSignat
 
     auto pSubFilter = dynamic_cast<vcl::filter::PDFNameElement*>(pValue->Lookup("SubFilter"));
     const bool bNonDetached = pSubFilter && pSubFilter->GetValue() == "adbe.pkcs7.sha1";
-    if (!pSubFilter || (pSubFilter->GetValue() != "adbe.pkcs7.detached" && !bNonDetached && pSubFilter->GetValue() != "ETSI.CAdES.detached"))
+    if (!pSubFilter
+        || (pSubFilter->GetValue() != "adbe.pkcs7.detached" && !bNonDetached
+            && pSubFilter->GetValue() != "ETSI.CAdES.detached"))
     {
         if (!pSubFilter)
             SAL_WARN("xmlsecurity.pdfio", "ValidateSignature: missing sub-filter");
         else
-            SAL_WARN("xmlsecurity.pdfio", "ValidateSignature: unsupported sub-filter: '"<<pSubFilter->GetValue()<<"'");
+            SAL_WARN("xmlsecurity.pdfio", "ValidateSignature: unsupported sub-filter: '"
+                                              << pSubFilter->GetValue() << "'");
         return false;
     }
 
@@ -114,7 +117,8 @@ bool ValidateSignature(SvStream& rStream, vcl::filter::PDFObjectElement* pSignat
         auto pNumber = dynamic_cast<vcl::filter::PDFNumberElement*>(rByteRangeElements[i]);
         if (!pNumber)
         {
-            SAL_WARN("xmlsecurity.pdfio", "ValidateSignature: signature offset and length has to be a number");
+            SAL_WARN("xmlsecurity.pdfio",
+                     "ValidateSignature: signature offset and length has to be a number");
             return false;
         }
 
@@ -142,7 +146,8 @@ bool ValidateSignature(SvStream& rStream, vcl::filter::PDFObjectElement* pSignat
     size_t nSignatureLength = static_cast<size_t>(pContents->GetValue().getLength()) + 2;
     if (aByteRanges[1].first != (aByteRanges[0].second + nSignatureLength))
     {
-        SAL_WARN("xmlsecurity.pdfio", "ValidateSignature: second range start is not the end of the signature");
+        SAL_WARN("xmlsecurity.pdfio",
+                 "ValidateSignature: second range start is not the end of the signature");
         return false;
     }
     rStream.Seek(STREAM_SEEK_TO_END);
@@ -160,7 +165,8 @@ bool ValidateSignature(SvStream& rStream, vcl::filter::PDFObjectElement* pSignat
         return false;
     }
 
-    return svl::crypto::Signing::Verify(rStream, aByteRanges, bNonDetached, aSignature, rInformation);
+    return svl::crypto::Signing::Verify(rStream, aByteRanges, bNonDetached, aSignature,
+                                        rInformation);
 }
 
 } // namespace pdfio

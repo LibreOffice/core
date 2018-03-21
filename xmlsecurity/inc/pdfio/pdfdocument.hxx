@@ -27,13 +27,14 @@ namespace xmlsecurity
 {
 namespace pdfio
 {
-
 /**
  * @param rInformation The actual result.
  * @param bLast If this is the last signature in the file, so it covers the whole file physically.
  * @return If we can determinate a result.
  */
-XMLSECURITY_DLLPUBLIC bool ValidateSignature(SvStream& rStream, vcl::filter::PDFObjectElement* pSignature, SignatureInformation& rInformation, bool bLast);
+XMLSECURITY_DLLPUBLIC bool ValidateSignature(SvStream& rStream,
+                                             vcl::filter::PDFObjectElement* pSignature,
+                                             SignatureInformation& rInformation, bool bLast);
 
 } // namespace pdfio
 } // namespace xmlsecurity

@@ -8009,7 +8009,6 @@ include/vcl/evntpost.hxx
 include/vcl/exceptiontypes.hxx
 include/vcl/extoutdevdata.hxx
 include/vcl/field.hxx
-include/vcl/filter/pdfdocument.hxx
 include/vcl/fixed.hxx
 include/vcl/fixedhyper.hxx
 include/vcl/floatwin.hxx
@@ -17652,7 +17651,6 @@ vcl/inc/outdev.h
 vcl/inc/outdevstatestack.hxx
 vcl/inc/pch/precompiled_vcl.cxx
 vcl/inc/pch/precompiled_vcl.hxx
-vcl/inc/pdfread.hxx
 vcl/inc/print.h
 vcl/inc/printdlg.hxx
 vcl/inc/printerinfomanager.hxx
@@ -18098,8 +18096,6 @@ vcl/source/filter/igif/decode.cxx
 vcl/source/filter/igif/decode.hxx
 vcl/source/filter/igif/gifread.cxx
 vcl/source/filter/igif/gifread.hxx
-vcl/source/filter/ipdf/pdfdocument.cxx
-vcl/source/filter/ipdf/pdfread.cxx
 vcl/source/filter/ixbm/xbmread.cxx
 vcl/source/filter/ixbm/xbmread.hxx
 vcl/source/filter/ixpm/rgbtable.hxx
@@ -19669,7 +19665,6 @@ xmlsecurity/inc/pch/precompiled_xsec_gpg.cxx
 xmlsecurity/inc/pch/precompiled_xsec_gpg.hxx
 xmlsecurity/inc/pch/precompiled_xsec_xmlsec.cxx
 xmlsecurity/inc/pch/precompiled_xsec_xmlsec.hxx
-xmlsecurity/inc/pdfio/pdfdocument.hxx
 xmlsecurity/inc/resourcemanager.hxx
 xmlsecurity/inc/xmlsec-wrapper.h
 xmlsecurity/inc/xmlsec/errorcallback.hxx
@@ -19685,7 +19680,6 @@ xmlsecurity/inc/xsecfwdllapi.h
 xmlsecurity/inc/xsecgpgdllapi.h
 xmlsecurity/inc/xsecxmlsecdllapi.h
 xmlsecurity/qa/certext/SanCertExt.cxx
-xmlsecurity/qa/unit/pdfsigning/pdfsigning.cxx
 xmlsecurity/qa/unit/signing/signing.cxx
 xmlsecurity/qa/unit/xmlsecurity-dialogs-test.cxx
 xmlsecurity/source/component/certificatecontainer.cxx
@@ -19736,7 +19730,6 @@ xmlsecurity/source/helper/xsecparser.cxx
 xmlsecurity/source/helper/xsecparser.hxx
 xmlsecurity/source/helper/xsecsign.cxx
 xmlsecurity/source/helper/xsecverify.cxx
-xmlsecurity/source/pdfio/pdfdocument.cxx
 xmlsecurity/source/xmlsec/biginteger.cxx
 xmlsecurity/source/xmlsec/certificateextension_certextn.cxx
 xmlsecurity/source/xmlsec/certificateextension_certextn.hxx
@@ -19789,4 +19782,3 @@ xmlsecurity/source/xmlsec/xmlsec_init.cxx
 xmlsecurity/source/xmlsec/xmlstreamio.cxx
 xmlsecurity/source/xmlsec/xsec_xmlsec.cxx
 xmlsecurity/source/xmlsec/xsec_xmlsec.hxx
-xmlsecurity/workben/pdfverify.cxx
