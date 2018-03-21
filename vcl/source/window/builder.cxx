@@ -369,7 +369,7 @@ VclBuilder::VclBuilder(vcl::Window *pParent, const OUString& sUIDir, const OUStr
             pOne->set_mnemonic_widget(pOther);
     }
 
-    //Set a11y relations when everything has been imported
+    //Set a11y relations and role when everything has been imported
     for (auto const& elemAtk : m_pParserState->m_aAtkInfo)
     {
         vcl::Window *pSource = elemAtk.first;
@@ -377,21 +377,30 @@ VclBuilder::VclBuilder(vcl::Window *pParent, const OUString& sUIDir, const OUStr
 
         for (auto const& elemMap : rMap)
         {
-            const OUString &rTarget = elemMap.second;
-            vcl::Window *pTarget = get<vcl::Window>(rTarget.toUtf8());
-            SAL_WARN_IF(!pTarget, "vcl", "missing member of a11y relation: " << rTarget);
-            if (!pTarget)
-                continue;
             const OString &rType = elemMap.first;
-            if (rType == "labelled-by")
-                pSource->SetAccessibleRelationLabeledBy(pTarget);
-            else if (rType == "label-for")
-                pSource->SetAccessibleRelationLabelFor(pTarget);
-            else if (rType == "member-of")
-                pSource->SetAccessibleRelationMemberOf(pTarget);
+            const OUString &rParam = elemMap.second;
+            if (rType == "role")
+            {
+                sal_Int16 role = BuilderUtils::getRoleFromName(rParam.toUtf8());
+                if (role != com::sun::star::accessibility::AccessibleRole::UNKNOWN)
+                    pSource->SetAccessibleRole(role);
+            }
             else
             {
-                SAL_INFO("vcl.layout", "unhandled a11y relation :" << rType);
+                vcl::Window *pTarget = get<vcl::Window>(rParam.toUtf8());
+                SAL_WARN_IF(!pTarget, "vcl", "missing parameter of a11y relation: " << rParam);
+                if (!pTarget)
+                    continue;
+                if (rType == "labelled-by")
+                    pSource->SetAccessibleRelationLabeledBy(pTarget);
+                else if (rType == "label-for")
+                    pSource->SetAccessibleRelationLabelFor(pTarget);
+                else if (rType == "member-of")
+                    pSource->SetAccessibleRelationMemberOf(pTarget);
+                else
+                {
+                    SAL_INFO("vcl.layout", "unhandled a11y relation :" << rType);
+                }
             }
         }
     }
@@ -2085,6 +2094,284 @@ namespace BuilderUtils
             rChilds[i]->SetStyle(nBits);
         }
     }
+
+    sal_Int16 getRoleFromName(const OString& roleName)
+    {
+        /* This is in atkobject.h's AtkRole order */
+        if (roleName == "invalid")
+            return com::sun::star::accessibility::AccessibleRole::UNKNOWN;
+#if 0
+        else if (roleName == "accelerator label")
+            return com::sun::star::accessibility::AccessibleRole::UNKNOWN;
+#endif
+        else if (roleName == "alert")
+            return com::sun::star::accessibility::AccessibleRole::ALERT;
+#if 0
+        else if (roleName == "animation")
+            return com::sun::star::accessibility::AccessibleRole::UNKNOWN;
+        else if (roleName == "arrow")
+            return com::sun::star::accessibility::AccessibleRole::UNKNOWN;
+        else if (roleName == "calendar")
+            return com::sun::star::accessibility::AccessibleRole::UNKNOWN;
+#endif
+        else if (roleName == "canvas")
+            return com::sun::star::accessibility::AccessibleRole::CANVAS;
+        else if (roleName == "check box")
+            return com::sun::star::accessibility::AccessibleRole::CHECK_BOX;
+        else if (roleName == "check menu item")
+            return com::sun::star::accessibility::AccessibleRole::CHECK_MENU_ITEM;
+        else if (roleName == "color chooser")
+            return com::sun::star::accessibility::AccessibleRole::COLOR_CHOOSER;
+        else if (roleName == "column header")
+            return com::sun::star::accessibility::AccessibleRole::COLUMN_HEADER;
+        else if (roleName == "combo box")
+            return com::sun::star::accessibility::AccessibleRole::COMBO_BOX;
+        else if (roleName == "date editor")
+            return com::sun::star::accessibility::AccessibleRole::DATE_EDITOR;
+        else if (roleName == "desktop icon")
+            return com::sun::star::accessibility::AccessibleRole::DESKTOP_ICON;
+        else if (roleName == "desktop frame")
+            return com::sun::star::accessibility::AccessibleRole::DESKTOP_PANE; // ?
+#if 0
+        else if (roleName == "dial")
+            return com::sun::star::accessibility::AccessibleRole::UNKNOWN;
+#endif
+        else if (roleName == "dialog")
+            return com::sun::star::accessibility::AccessibleRole::DIALOG;
+        else if (roleName == "directory pane")
+            return com::sun::star::accessibility::AccessibleRole::DIRECTORY_PANE;
+#if 0
+        else if (roleName == "drawing area")
+            return com::sun::star::accessibility::AccessibleRole::UNKNOWN;
+#endif
+        else if (roleName == "file chooser")
+            return com::sun::star::accessibility::AccessibleRole::FILE_CHOOSER;
+        else if (roleName == "filler")
+            return com::sun::star::accessibility::AccessibleRole::FILLER;
+        else if (roleName == "font chooser")
+            return com::sun::star::accessibility::AccessibleRole::FONT_CHOOSER;
+        else if (roleName == "frame")
+            return com::sun::star::accessibility::AccessibleRole::FRAME;
+        else if (roleName == "glass pane")
+            return com::sun::star::accessibility::AccessibleRole::GLASS_PANE;
+#if 0
+        else if (roleName == "html container")
+            return com::sun::star::accessibility::AccessibleRole::UNKNOWN;
+#endif
+        else if (roleName == "icon")
+            return com::sun::star::accessibility::AccessibleRole::ICON;
+        else if (roleName == "image")
+            return com::sun::star::accessibility::AccessibleRole::GRAPHIC;
+        else if (roleName == "internal frame")
+            return com::sun::star::accessibility::AccessibleRole::INTERNAL_FRAME;
+        else if (roleName == "label")
+            return com::sun::star::accessibility::AccessibleRole::LABEL;
+        else if (roleName == "layered pane")
+            return com::sun::star::accessibility::AccessibleRole::LAYERED_PANE;
+        else if (roleName == "list")
+            return com::sun::star::accessibility::AccessibleRole::LIST;
+        else if (roleName == "list item")
+            return com::sun::star::accessibility::AccessibleRole::LIST_ITEM;
+        else if (roleName == "menu")
+            return com::sun::star::accessibility::AccessibleRole::MENU;
+        else if (roleName == "menu bar")
+            return com::sun::star::accessibility::AccessibleRole::MENU_BAR;
+        else if (roleName == "menu item")
+            return com::sun::star::accessibility::AccessibleRole::MENU_ITEM;
+        else if (roleName == "option pane")
+            return com::sun::star::accessibility::AccessibleRole::OPTION_PANE;
+        else if (roleName == "page tab")
+            return com::sun::star::accessibility::AccessibleRole::PAGE_TAB;
+        else if (roleName == "page tab list")
+            return com::sun::star::accessibility::AccessibleRole::PAGE_TAB_LIST;
+        else if (roleName == "panel")
+            return com::sun::star::accessibility::AccessibleRole::PANEL; // or SHAPE or TEXT_FRAME ?
+        else if (roleName == "password text")
+            return com::sun::star::accessibility::AccessibleRole::PASSWORD_TEXT;
+        else if (roleName == "popup menu")
+            return com::sun::star::accessibility::AccessibleRole::POPUP_MENU;
+        else if (roleName == "progress bar")
+            return com::sun::star::accessibility::AccessibleRole::PROGRESS_BAR;
+        else if (roleName == "push button")
+            return com::sun::star::accessibility::AccessibleRole::PUSH_BUTTON; // or BUTTON_DROPDOWN or BUTTON_MENU
+        else if (roleName == "radio button")
+            return com::sun::star::accessibility::AccessibleRole::RADIO_BUTTON;
+        else if (roleName == "radio menu item")
+            return com::sun::star::accessibility::AccessibleRole::RADIO_MENU_ITEM;
+        else if (roleName == "root pane")
+            return com::sun::star::accessibility::AccessibleRole::ROOT_PANE;
+        else if (roleName == "row header")
+            return com::sun::star::accessibility::AccessibleRole::ROW_HEADER;
+        else if (roleName == "scroll bar")
+            return com::sun::star::accessibility::AccessibleRole::SCROLL_BAR;
+        else if (roleName == "scroll pane")
+            return com::sun::star::accessibility::AccessibleRole::SCROLL_PANE;
+        else if (roleName == "separator")
+            return com::sun::star::accessibility::AccessibleRole::SEPARATOR;
+        else if (roleName == "slider")
+            return com::sun::star::accessibility::AccessibleRole::SLIDER;
+        else if (roleName == "split pane")
+            return com::sun::star::accessibility::AccessibleRole::SPLIT_PANE;
+        else if (roleName == "spin button")
+            return com::sun::star::accessibility::AccessibleRole::SPIN_BOX; // ?
+        else if (roleName == "statusbar")
+            return com::sun::star::accessibility::AccessibleRole::STATUS_BAR;
+        else if (roleName == "table")
+            return com::sun::star::accessibility::AccessibleRole::TABLE;
+        else if (roleName == "table cell")
+            return com::sun::star::accessibility::AccessibleRole::TABLE_CELL;
+        else if (roleName == "table column header")
+            return com::sun::star::accessibility::AccessibleRole::COLUMN_HEADER; // approximate
+        else if (roleName == "table row header")
+            return com::sun::star::accessibility::AccessibleRole::ROW_HEADER; // approximate
+#if 0
+        else if (roleName == "tear off menu item")
+            return com::sun::star::accessibility::AccessibleRole::UNKNOWN;
+        else if (roleName == "terminal")
+            return com::sun::star::accessibility::AccessibleRole::UNKNOWN;
+#endif
+        else if (roleName == "text")
+            return com::sun::star::accessibility::AccessibleRole::TEXT;
+        else if (roleName == "toggle button")
+            return com::sun::star::accessibility::AccessibleRole::TOGGLE_BUTTON;
+        else if (roleName == "tool bar")
+            return com::sun::star::accessibility::AccessibleRole::TOOL_BAR;
+        else if (roleName == "tool tip")
+            return com::sun::star::accessibility::AccessibleRole::TOOL_TIP;
+        else if (roleName == "tree")
+            return com::sun::star::accessibility::AccessibleRole::TREE;
+        else if (roleName == "tree table")
+            return com::sun::star::accessibility::AccessibleRole::TREE_TABLE;
+        else if (roleName == "unknown")
+            return com::sun::star::accessibility::AccessibleRole::UNKNOWN;
+        else if (roleName == "viewport")
+            return com::sun::star::accessibility::AccessibleRole::VIEW_PORT;
+        else if (roleName == "window")
+            return com::sun::star::accessibility::AccessibleRole::WINDOW;
+        else if (roleName == "header")
+            return com::sun::star::accessibility::AccessibleRole::HEADER;
+        else if (roleName == "footer")
+            return com::sun::star::accessibility::AccessibleRole::FOOTER;
+        else if (roleName == "paragraph")
+            return com::sun::star::accessibility::AccessibleRole::PARAGRAPH;
+        else if (roleName == "ruler")
+            return com::sun::star::accessibility::AccessibleRole::RULER;
+#if 0
+        else if (roleName == "application")
+            return com::sun::star::accessibility::AccessibleRole::UNKNOWN;
+        else if (roleName == "autocomplete")
+            return com::sun::star::accessibility::AccessibleRole::UNKNOWN;
+#endif
+        else if (roleName == "edit bar")
+            return com::sun::star::accessibility::AccessibleRole::EDIT_BAR;
+        else if (roleName == "embedded")
+            return com::sun::star::accessibility::AccessibleRole::EMBEDDED_OBJECT;
+#if 0
+        else if (roleName == "entry")
+            return com::sun::star::accessibility::AccessibleRole::UNKNOWN;
+#endif
+        else if (roleName == "chart")
+            return com::sun::star::accessibility::AccessibleRole::CHART;
+        else if (roleName == "caption")
+            return com::sun::star::accessibility::AccessibleRole::CAPTION;
+        else if (roleName == "document frame")
+            return com::sun::star::accessibility::AccessibleRole::DOCUMENT;
+        else if (roleName == "heading")
+            return com::sun::star::accessibility::AccessibleRole::HEADING;
+        else if (roleName == "page")
+            return com::sun::star::accessibility::AccessibleRole::PAGE;
+        else if (roleName == "section")
+            return com::sun::star::accessibility::AccessibleRole::SECTION;
+#if 0
+        else if (roleName == "redundant object")
+            return com::sun::star::accessibility::AccessibleRole::UNKNOWN;
+#endif
+        else if (roleName == "form")
+            return com::sun::star::accessibility::AccessibleRole::FORM;
+        else if (roleName == "link")
+            return com::sun::star::accessibility::AccessibleRole::HYPER_LINK;
+#if 0
+        else if (roleName == "input method window")
+            return com::sun::star::accessibility::AccessibleRole::UNKNOWN;
+        else if (roleName == "table row")
+            return com::sun::star::accessibility::AccessibleRole::UNKNOWN;
+#endif
+        else if (roleName == "tree item")
+            return com::sun::star::accessibility::AccessibleRole::TREE_ITEM;
+        else if (roleName == "document spreadsheet")
+            return com::sun::star::accessibility::AccessibleRole::DOCUMENT_SPREADSHEET;
+        else if (roleName == "document presentation")
+            return com::sun::star::accessibility::AccessibleRole::DOCUMENT_PRESENTATION;
+        else if (roleName == "document text")
+            return com::sun::star::accessibility::AccessibleRole::DOCUMENT_TEXT;
+        else if (roleName == "document web")
+            return com::sun::star::accessibility::AccessibleRole::DOCUMENT; // approximate
+        else if (roleName == "document email")
+            return com::sun::star::accessibility::AccessibleRole::DOCUMENT; // approximate
+        else if (roleName == "comment")
+            return com::sun::star::accessibility::AccessibleRole::COMMENT; // or NOTE or END_NOTE or FOOTNOTE or SCROLL_PANE
+#if 0
+        else if (roleName == "list box")
+            return com::sun::star::accessibility::AccessibleRole::UNKNOWN;
+#endif
+        else if (roleName == "grouping")
+            return com::sun::star::accessibility::AccessibleRole::GROUP_BOX;
+        else if (roleName == "image map")
+            return com::sun::star::accessibility::AccessibleRole::IMAGE_MAP;
+#if 0
+        else if (roleName == "notification")
+            return com::sun::star::accessibility::AccessibleRole::UNKNOWN;
+        else if (roleName == "info bar")
+            return com::sun::star::accessibility::AccessibleRole::UNKNOWN;
+        else if (roleName == "level bar")
+            return com::sun::star::accessibility::AccessibleRole::UNKNOWN;
+        else if (roleName == "title bar")
+            return com::sun::star::accessibility::AccessibleRole::UNKNOWN;
+        else if (roleName == "block quote")
+            return com::sun::star::accessibility::AccessibleRole::UNKNOWN;
+        else if (roleName == "audio")
+            return com::sun::star::accessibility::AccessibleRole::UNKNOWN;
+        else if (roleName == "video")
+            return com::sun::star::accessibility::AccessibleRole::UNKNOWN;
+        else if (roleName == "definition")
+            return com::sun::star::accessibility::AccessibleRole::UNKNOWN;
+        else if (roleName == "article")
+            return com::sun::star::accessibility::AccessibleRole::UNKNOWN;
+        else if (roleName == "landmark")
+            return com::sun::star::accessibility::AccessibleRole::UNKNOWN;
+        else if (roleName == "log")
+            return com::sun::star::accessibility::AccessibleRole::UNKNOWN;
+        else if (roleName == "marquee")
+            return com::sun::star::accessibility::AccessibleRole::UNKNOWN;
+        else if (roleName == "math")
+            return com::sun::star::accessibility::AccessibleRole::UNKNOWN;
+        else if (roleName == "rating")
+            return com::sun::star::accessibility::AccessibleRole::UNKNOWN;
+        else if (roleName == "timer")
+            return com::sun::star::accessibility::AccessibleRole::UNKNOWN;
+        else if (roleName == "description list")
+            return com::sun::star::accessibility::AccessibleRole::UNKNOWN;
+        else if (roleName == "description term")
+            return com::sun::star::accessibility::AccessibleRole::UNKNOWN;
+        else if (roleName == "description value")
+            return com::sun::star::accessibility::AccessibleRole::UNKNOWN;
+#endif
+        else if (roleName == "static")
+            return com::sun::star::accessibility::AccessibleRole::STATIC;
+#if 0
+        else if (roleName == "math fraction")
+            return com::sun::star::accessibility::AccessibleRole::UNKNOWN;
+        else if (roleName == "math root")
+            return com::sun::star::accessibility::AccessibleRole::UNKNOWN;
+        else if (roleName == "subscript")
+            return com::sun::star::accessibility::AccessibleRole::UNKNOWN;
+        else if (roleName == "superscript")
+            return com::sun::star::accessibility::AccessibleRole::UNKNOWN;
+#endif
+        else if (roleName == "footnote")
+            return com::sun::star::accessibility::AccessibleRole::FOOTNOTE;
+        return com::sun::star::accessibility::AccessibleRole::UNKNOWN;
+    }
 }
 
 VclPtr<vcl::Window> VclBuilder::insertObject(vcl::Window *pParent, const OString &rClass,
@@ -2458,7 +2745,7 @@ void VclBuilder::collectPangoAttribute(xmlreader::XmlReader &reader, stringmap &
         rMap[sProperty] = OUString::fromUtf8(sValue);
 }
 
-void VclBuilder::collectAtkAttribute(xmlreader::XmlReader &reader, stringmap &rMap)
+void VclBuilder::collectAtkRelationAttribute(xmlreader::XmlReader &reader, stringmap &rMap)
 {
     xmlreader::Span span;
     int nsId;
@@ -2485,6 +2772,26 @@ void VclBuilder::collectAtkAttribute(xmlreader::XmlReader &reader, stringmap &rM
 
     if (!sProperty.isEmpty())
         rMap[sProperty] = OUString::fromUtf8(sValue);
+}
+
+void VclBuilder::collectAtkRoleAttribute(xmlreader::XmlReader &reader, stringmap &rMap)
+{
+    xmlreader::Span span;
+    int nsId;
+
+    OString sProperty;
+
+    while (reader.nextAttribute(&nsId, &span))
+    {
+        if (span.equals("type"))
+        {
+            span = reader.getAttributeValue(false);
+            sProperty = OString(span.begin, span.length);
+        }
+    }
+
+    if (!sProperty.isEmpty())
+        rMap["role"] = OUString::fromUtf8(sProperty);
 }
 
 void VclBuilder::handleRow(xmlreader::XmlReader &reader, const OString &rID)
@@ -3162,7 +3469,9 @@ VclPtr<vcl::Window> VclBuilder::handleObject(vcl::Window *pParent, xmlreader::Xm
                 else if (name.equals("attribute"))
                     collectPangoAttribute(reader, aPangoAttributes);
                 else if (name.equals("relation"))
-                    collectAtkAttribute(reader, aAtkAttributes);
+                    collectAtkRelationAttribute(reader, aAtkAttributes);
+                else if (name.equals("role"))
+                    collectAtkRoleAttribute(reader, aAtkAttributes);
                 else if (name.equals("action-widget"))
                     handleActionWidget(reader);
             }
