@@ -548,7 +548,7 @@ void SwSendMailDialog::DocumentSent( uno::Reference< mail::XMailMessage> const &
     if (pError)
     {
         SwSendWarningBox_Impl aDlg(GetFrameWeld(), *pError);
-        aDlg.run();
+        (void)aDlg.run();
     }
 }
 

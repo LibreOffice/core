@@ -62,7 +62,7 @@ sal_Bool SAL_CALL PDFInteractionHandler::handleInteractionRequest( const Referen
 
         VclPtr<vcl::Window> xParent(VCLUnoHelper::GetWindow(m_xParent));
         ImplErrorDialog aDlg(xParent ? xParent->GetFrameWeld() : nullptr, aCodes);
-        aDlg.run();
+        (void)aDlg.run();
         bHandled = true;
     }
     return bHandled;
