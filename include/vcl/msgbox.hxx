@@ -21,34 +21,6 @@
 #define INCLUDED_VCL_MSGBOX_HXX
 
 #include <vcl/dllapi.h>
-#include <vcl/btndlg.hxx>
-#include <vcl/image.hxx>
-#include <vcl/bitmap.hxx>
-#include <o3tl/typed_flags_set.hxx>
-
-class VclMultiLineEdit;
-class FixedImage;
-class CheckBox;
-
-// Window-Bits for MessageBoxen
-enum class MessBoxStyle {
-    NONE              = 0x0000,
-    Ok                = 0x0001,
-    OkCancel          = 0x0002,
-    YesNo             = 0x0004,
-    YesNoCancel       = 0x0008,
-    RetryCancel       = 0x0010,
-    DefaultOk         = 0x0020,
-    DefaultCancel     = 0x0040,
-    DefaultRetry      = 0x0080,
-    DefaultYes        = 0x0100,
-    DefaultNo         = 0x0200,
-    AbortRetryIgnore  = 0x1000,
-    DefaultIgnore     = 0x2000,
-};
-namespace o3tl {
-    template<> struct typed_flags<MessBoxStyle> : is_typed_flags<MessBoxStyle, 0x3fff> {};
-}
 
 VCL_DLLPUBLIC Image const & GetStandardInfoBoxImage();
 VCL_DLLPUBLIC OUString GetStandardInfoBoxText();
