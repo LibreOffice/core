@@ -146,6 +146,24 @@
       "revId": "6c780de644ff9cccf0307007119b72f7428dd7d8",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_26afd3e4",
+        "filename": "sc/source/core/data/validat.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 576,
+      "author": {
+        "id": 1000119
+      },
+      "writtenOn": "2018-03-21T17:48:27Z",
+      "side": 1,
+      "message": "So let us set up a use case: the user defines a validation check on cell A1 through the validity dialog (Data \u003e Validity...), let\u0027s say Allow:Decimal Data:Equal; now the Value field can be either a numeric value or a formula. In case it is a formula, such a formula (ScConditionEntry::pFormula1/ScConditionEntry::pFCell1) is evaluated by ScConditionEntry::Interpret, invoked by ScConditionEntry::IsCellValid and the computed value sets in ScConditionEntry::nVal1 (I\u0027m supposing that pFCell1 evaluates to a numeric value) which will be used for comparing the content of A1 cell. When the user changes the A1 content with a new numeric value, the formula (pFCell1) will be evaluated again and the evaluated result (nVal1) is compared against the new value entered by the user. Now in case the formula pFCell1 references the cell A1 itself, pFCell1 is evaluated by using the current A1 value, not the one that the user has just entered and needs to be validated. \n\nIf that\u0027s may be fine for the above use case, it is not for CUSTOM case, where the user defines a boolean formula through the Validity Dialog which will be used for validating the A1 cell content: when the formula returns 0 the cell value is not valid otherewise it is valid.\nThe problem is that the formula defined through the Validity Dialog very likely references the A1 cell, however when it is evaluated, the evaluation occurs on the current value of A1 not on the new value entered by the user! This is the meaning of the old comment and the rational of my current implementation.\n\nIs there a way for substituing a cell references in a formula with a given numeric or string value ? So I could substitute any references to (let\u0027s say) A1 in the ScCellFormula (pFCell1) (or in FormulaTokenArray (pFormula1) ?) with the new entered value. (1)\n\n\nAbout your concerns for the curent implementation, I think we can suppose that the content of the cell which is going to be validated (through a custom formula) is a string or a numeric value, that should prevent to break any shared formula. However it remains the problem of changes broadcasting and triggering of any other formula references the cell which is going to be validated. Set up an undo session for restoring the previous value could be a safer and acceptable solution ? (2)\n\n(1) and (2) are the only alternative solutions I was able to think of. Anyaway let\u0027s me know in case you have a better solution or hint right off the top of your head :-)",
+      "parentUuid": "ba2be162_19a4ec55",
+      "revId": "6c780de644ff9cccf0307007119b72f7428dd7d8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
