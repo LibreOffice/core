@@ -819,7 +819,7 @@ void PdfExportTest::testTdf115117_1()
     // if we changed how font subsets are created.
     // The second values, <00740069> etc., are Unicode code points in hex,
     // <00740069> is U+0074 and U+0069 i.e. "ti" which is a ligature in
-    // Carlito/Callibri. This test is failing if any of the second values
+    // Carlito/Calibri. This test is failing if any of the second values
     // changed which means we are not detecting ligatures and writing CMAP
     // entries for them correctly. If glyph order in the subset changes then
     // the order here will changes and the PDF has to be carefully inspected to
