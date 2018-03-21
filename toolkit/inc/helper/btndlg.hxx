@@ -20,7 +20,6 @@
 #ifndef INCLUDED_VCL_BTNDLG_HXX
 #define INCLUDED_VCL_BTNDLG_HXX
 
-#include <vcl/dllapi.h>
 #include <vcl/dialog.hxx>
 #include <o3tl/typed_flags_set.hxx>
 
@@ -47,7 +46,7 @@ namespace o3tl
     template<> struct typed_flags<ButtonDialogFlags> : is_typed_flags<ButtonDialogFlags, 0x001f> {};
 }
 
-class VCL_DLLPUBLIC ButtonDialog : public Dialog
+class ButtonDialog : public Dialog
 {
 public:
                         ButtonDialog( vcl::Window* pParent, WinBits nStyle );
@@ -83,11 +82,11 @@ private:
     sal_uInt16          mnFocusButtonId;
     bool                mbFormat;
 
-    SAL_DLLPRIVATE void             ImplInitButtonDialogData();
-    SAL_DLLPRIVATE VclPtr<PushButton> ImplCreatePushButton( ButtonDialogFlags nBtnFlags );
-    SAL_DLLPRIVATE ImplBtnDlgItem*  ImplGetItem( sal_uInt16 nId ) const;
-    DECL_DLLPRIVATE_LINK(     ImplClickHdl, Button* pBtn, void );
-    SAL_DLLPRIVATE void             ImplPosControls();
+    void             ImplInitButtonDialogData();
+    VclPtr<PushButton> ImplCreatePushButton( ButtonDialogFlags nBtnFlags );
+    ImplBtnDlgItem*  ImplGetItem( sal_uInt16 nId ) const;
+    DECL_LINK( ImplClickHdl, Button* pBtn, void );
+    void             ImplPosControls();
 
 };
 

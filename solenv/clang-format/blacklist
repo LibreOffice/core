@@ -7976,7 +7976,6 @@ include/vcl/animate.hxx
 include/vcl/bitmap.hxx
 include/vcl/bitmapaccess.hxx
 include/vcl/bitmapex.hxx
-include/vcl/btndlg.hxx
 include/vcl/builder.hxx
 include/vcl/builderfactory.hxx
 include/vcl/button.hxx
@@ -16739,6 +16738,7 @@ testtools/source/performance/ubtest.cxx
 toolkit/inc/helper/accessibilityclient.hxx
 toolkit/inc/helper/imagealign.hxx
 toolkit/inc/helper/tkresmgr.hxx
+toolkit/inc/helper/btndlg.hxx
 toolkit/inc/helper/unopropertyarrayhelper.hxx
 toolkit/inc/helper/unowrapper.hxx
 toolkit/source/awt/animatedimagespeer.cxx
@@ -16801,6 +16801,7 @@ toolkit/source/controls/unocontrolcontainermodel.cxx
 toolkit/source/controls/unocontrolmodel.cxx
 toolkit/source/controls/unocontrols.cxx
 toolkit/source/helper/accessibilityclient.cxx
+toolkit/source/helper/btndlg.cxx
 toolkit/source/helper/formpdfexport.cxx
 toolkit/source/helper/imagealign.cxx
 toolkit/source/helper/listenermultiplexer.cxx
@@ -18267,7 +18268,6 @@ vcl/source/window/accel.cxx
 vcl/source/window/accessibility.cxx
 vcl/source/window/accmgr.cxx
 vcl/source/window/brdwin.cxx
-vcl/source/window/btndlg.cxx
 vcl/source/window/builder.cxx
 vcl/source/window/clipping.cxx
 vcl/source/window/commandevent.cxx
