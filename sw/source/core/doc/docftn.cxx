@@ -185,11 +185,10 @@ void SwEndNoteInfo::SwClientNotify( const SwModify& rModify, const SfxHint& rHin
     if (auto pLegacyHint = dynamic_cast<const sw::LegacyModifyHint*>(&rHint))
     {
         const sal_uInt16 nWhich = pLegacyHint->m_pOld ? pLegacyHint->m_pOld->Which() : pLegacyHint->m_pNew ? pLegacyHint->m_pNew->Which() : 0 ;
-        if( RES_ATTRSET_CHG == nWhich ||
-            RES_FMT_CHG == nWhich )
+        if (RES_ATTRSET_CHG == nWhich || RES_FMT_CHG == nWhich)
         {
             auto pFormat = GetCurrentCharFormat(pCharFormat != nullptr);
-            if(!aDepends.IsListeningTo(pFormat) || pFormat->IsFormatInDTOR())
+            if (!pFormat || !aDepends.IsListeningTo(pFormat) || pFormat->IsFormatInDTOR())
                 return;
             SwDoc* pDoc = pFormat->GetDoc();
             SwFootnoteIdxs& rFootnoteIdxs = pDoc->GetFootnoteIdxs();
