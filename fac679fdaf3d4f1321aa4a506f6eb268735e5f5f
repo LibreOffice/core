@@ -40,6 +40,48 @@
       "revId": "fac679fdaf3d4f1321aa4a506f6eb268735e5f5f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_e6dcdb48",
+        "filename": "sdext/source/pdfimport/wrapper/wrapper.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 1124,
+      "author": {
+        "id": 1000871
+      },
+      "writtenOn": "2018-03-21T22:24:14Z",
+      "side": 1,
+      "message": "Thanks for the feedback.\n\nThe above patch actually does save the PDF exactly like the Graphic with setPdfData.\n\nFor sharing, the patch is already done: https://gerrit.libreoffice.org/#/c/51619/",
+      "parentUuid": "9a30ddce_f3af3b7b",
+      "revId": "fac679fdaf3d4f1321aa4a506f6eb268735e5f5f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_c6d7d721",
+        "filename": "sdext/source/pdfimport/wrapper/wrapper.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 1124,
+      "author": {
+        "id": 1000871
+      },
+      "writtenOn": "2018-03-21T22:24:14Z",
+      "side": 1,
+      "message": "Thanks for the feedback. \n\nhttps://gerrit.libreoffice.org/#/c/51619/ does the sharing. That\u0027s already done.\n\nMaybe I\u0027m missing something but my tests show that the above code does survive round-trips. Saving an imported PDF document gives the same result as using a blank document and the Insert \u003e Image function.\n\nInternally the PNGs are converted to Graphic, although probably the PDF is not set (which we should do).\n\nThe other approach is to call the Insert function while loading, but that will not create the correct page size as we do here. Also I feared it would be problematic since during loading I\u0027m not sure we have everything that the Insert function expects (I should check that).",
+      "parentUuid": "9a30ddce_b3b5c3d1",
+      "range": {
+        "startLine": 1123,
+        "startChar": 8,
+        "endLine": 1124,
+        "endChar": 71
+      },
+      "revId": "fac679fdaf3d4f1321aa4a506f6eb268735e5f5f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
