@@ -109,6 +109,7 @@ $(eval $(call gb_Library_add_exception_objects,tk,\
     toolkit/source/controls/unocontrolmodel \
     toolkit/source/controls/unocontrols \
     toolkit/source/helper/accessibilityclient \
+    toolkit/source/helper/btndlg \
     toolkit/source/helper/formpdfexport \
     toolkit/source/helper/imagealign \
     toolkit/source/helper/listenermultiplexer \
