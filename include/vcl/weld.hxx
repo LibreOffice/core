@@ -124,6 +124,8 @@ public:
     ~WaitObject() { m_pWindow->set_busy_cursor(false); }
 };
 
+class Button;
+
 class VCL_DLLPUBLIC Dialog : virtual public Window
 {
 private:
@@ -138,6 +140,7 @@ public:
     virtual void add_button(const OUString& rText, int response, const OString& rHelpId = OString())
         = 0;
     virtual void set_default_response(int response) = 0;
+    virtual Button* get_widget_for_response(int response) = 0;
 };
 
 class VCL_DLLPUBLIC MessageDialog : virtual public Dialog
