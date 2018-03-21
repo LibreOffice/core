@@ -38,10 +38,10 @@
 #include <comphelper/propertycontainer.hxx>
 #include <comphelper/broadcasthelper.hxx>
 #include <tools/link.hxx>
+#include <vcl/dialog.hxx>
 #include <vcl/vclptr.hxx>
+#include <vcl/weld.hxx>
 
-class Dialog;
-namespace vcl { class Window; }
 class VclWindowEvent;
 
 
@@ -55,7 +55,6 @@ namespace svt
 #define     UNODIALOG_PROPERTY_TITLE        "Title"
 #define     UNODIALOG_PROPERTY_PARENT       "ParentWindow"
 
-
     typedef cppu::WeakImplHelper< css::ui::dialogs::XExecutableDialog,
                                   css::lang::XServiceInfo,
                                   css::lang::XInitialization > OGenericUnoDialogBase;
@@ -67,8 +66,58 @@ namespace svt
             ,public ::comphelper::OMutexAndBroadcastHelper
             ,public ::comphelper::OPropertyContainer
     {
+    public:
+        struct Dialog
+        {
+            VclPtr<::Dialog> m_xVclDialog;
+            std::unique_ptr<weld::DialogController> m_xWeldDialog;
+
+            Dialog()
+            {
+            }
+
+            Dialog(const VclPtr<::Dialog>& rVclDialog)
+                : m_xVclDialog(rVclDialog)
+            {
+            }
+
+            Dialog(weld::DialogController* pWeldDialog)
+                : m_xWeldDialog(pWeldDialog)
+            {
+            }
+
+            explicit operator bool() const
+            {
+                return m_xVclDialog || m_xWeldDialog;
+            }
+
+            void set_title(const OUString& rTitle)
+            {
+                if (m_xWeldDialog)
+                    m_xWeldDialog->set_title(rTitle);
+                else if (m_xVclDialog)
+                    m_xVclDialog->SetText(rTitle);
+            }
+
+            OString get_help_id() const
+            {
+                if (m_xWeldDialog)
+                    return m_xWeldDialog->get_help_id();
+                else if (m_xVclDialog)
+                    return m_xVclDialog->GetHelpId();
+                return OString();
+            }
+
+            void set_help_id(const OString& rHelpId)
+            {
+                if (m_xWeldDialog)
+                    return m_xWeldDialog->set_help_id(rHelpId);
+                else if (m_xVclDialog)
+                    return m_xVclDialog->SetHelpId(rHelpId);
+            }
+        };
     protected:
-        VclPtr<Dialog>              m_pDialog;                  /// the dialog to execute
+        OGenericUnoDialog::Dialog   m_aDialog;                  /// the dialog to execute
         bool                        m_bExecuting : 1;           /// we're currently executing the dialog
         bool                        m_bTitleAmbiguous : 1;      /// m_sTitle has not been set yet
         bool                        m_bInitialized : 1;         /// has "initialize" been called?
@@ -118,7 +167,7 @@ namespace svt
             but the application-wide solar mutex is (to guard the not thread-safe ctor of the dialog).
             @param      pParent     the parent window for the new dialog
         */
-        virtual VclPtr<Dialog> createDialog(vcl::Window* _pParent) = 0;
+        virtual OGenericUnoDialog::Dialog createDialog(vcl::Window* _pParent) = 0;
 
         /// called to destroy the dialog used. deletes m_pDialog and resets it to NULL
         void destroyDialog();

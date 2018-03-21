@@ -47,7 +47,6 @@ namespace svt
 
 OGenericUnoDialog::OGenericUnoDialog(const Reference< XComponentContext >& _rxContext)
         :OPropertyContainer(GetBroadcastHelper())
-        ,m_pDialog(nullptr)
         ,m_bExecuting(false)
         ,m_bTitleAmbiguous(true)
         ,m_bInitialized( false )
@@ -63,11 +62,11 @@ OGenericUnoDialog::OGenericUnoDialog(const Reference< XComponentContext >& _rxCo
 
 OGenericUnoDialog::~OGenericUnoDialog()
 {
-    if ( m_pDialog )
+    if (m_aDialog)
     {
         SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( m_aMutex );
-        if ( m_pDialog )
+        if (m_aDialog)
             destroyDialog();
     }
 }
@@ -113,8 +112,8 @@ void OGenericUnoDialog::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, con
         // from now on m_sTitle is valid
         m_bTitleAmbiguous = false;
 
-        if (m_pDialog)
-            m_pDialog->SetText(m_sTitle);
+        if (m_aDialog)
+            m_aDialog.set_title(m_sTitle);
     }
 }
 
@@ -162,7 +161,7 @@ void SAL_CALL OGenericUnoDialog::setTitle( const OUString& _rTitle )
 
 bool OGenericUnoDialog::impl_ensureDialog_lck()
 {
-    if ( m_pDialog )
+    if (m_aDialog)
         return true;
 
     // get the parameters for the dialog from the current settings
@@ -176,30 +175,32 @@ bool OGenericUnoDialog::impl_ensureDialog_lck()
     // the title
     OUString sTitle = m_sTitle;
 
-    VclPtr<Dialog> pDialog = createDialog( pParent );
-    OSL_ENSURE( pDialog, "OGenericUnoDialog::impl_ensureDialog_lck: createDialog returned nonsense!" );
-    if ( !pDialog )
+    OGenericUnoDialog::Dialog aDialog(createDialog(pParent));
+    OSL_ENSURE(aDialog, "OGenericUnoDialog::impl_ensureDialog_lck: createDialog returned nonsense!");
+    if (!aDialog)
         return false;
 
     // do some initialisations
-    if ( !m_bTitleAmbiguous )
-        pDialog->SetText( sTitle );
+    if (!m_bTitleAmbiguous)
+        aDialog.set_title(sTitle);
 
-    // be notified when the dialog is killed by somebody else #i65958#
-    pDialog->AddEventListener( LINK( this, OGenericUnoDialog, OnDialogDying ) );
+    if (aDialog.m_xVclDialog)
+    {
+        // be notified when the dialog is killed by somebody else #i65958#
+        aDialog.m_xVclDialog->AddEventListener(LINK(this, OGenericUnoDialog, OnDialogDying));
+    }
 
-    m_pDialog = pDialog;
+    m_aDialog = std::move(aDialog);
 
     return true;
 }
 
-
-sal_Int16 SAL_CALL OGenericUnoDialog::execute(  )
+sal_Int16 SAL_CALL OGenericUnoDialog::execute()
 {
     // both creation and execution of the dialog must be guarded with the SolarMutex, so be generous here
     SolarMutexGuard aSolarGuard;
 
-    Dialog* pDialogToExecute = nullptr;
+    ::Dialog* pVclDialogToExecute = nullptr;
     // create the dialog, if necessary
     {
         UnoDialogEntryGuard aGuard( *this );
@@ -215,13 +216,15 @@ sal_Int16 SAL_CALL OGenericUnoDialog::execute(  )
         if ( !impl_ensureDialog_lck() )
             return 0;
 
-        pDialogToExecute = m_pDialog;
+        pVclDialogToExecute = m_aDialog.m_xVclDialog;
     }
 
     // start execution
     sal_Int16 nReturn(0);
-    if ( pDialogToExecute )
-        nReturn = pDialogToExecute->Execute();
+    if (pVclDialogToExecute)
+        nReturn = pVclDialogToExecute->Execute();
+    else if (m_aDialog.m_xWeldDialog)
+        nReturn = m_aDialog.m_xWeldDialog->run();
 
     {
         ::osl::MutexGuard aGuard(m_aMutex);
@@ -275,15 +278,16 @@ void SAL_CALL OGenericUnoDialog::initialize( const Sequence< Any >& aArguments )
 void OGenericUnoDialog::destroyDialog()
 {
     SolarMutexGuard aSolarGuard;
-    m_pDialog.disposeAndClear();
+    m_aDialog.m_xVclDialog.disposeAndClear();
+    m_aDialog.m_xWeldDialog.reset();
 }
 
 
 IMPL_LINK( OGenericUnoDialog, OnDialogDying, VclWindowEvent&, _rEvent, void )
 {
-    OSL_ENSURE( _rEvent.GetWindow() == m_pDialog, "OGenericUnoDialog::OnDialogDying: where does this come from?" );
+    OSL_ENSURE( _rEvent.GetWindow() == m_aDialog.m_xVclDialog, "OGenericUnoDialog::OnDialogDying: where does this come from?" );
     if ( _rEvent.GetId() == VclEventId::ObjectDying )
-        m_pDialog = nullptr;
+        m_aDialog.m_xVclDialog = nullptr;
 }
 
 

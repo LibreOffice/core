@@ -143,13 +143,13 @@ Reference<XPropertySetInfo>  SAL_CALL OSQLMessageDialog::getPropertySetInfo()
     return new ::cppu::OPropertyArrayHelper(aProps);
 }
 
-VclPtr<Dialog> OSQLMessageDialog::createDialog(vcl::Window* _pParent)
+svt::OGenericUnoDialog::Dialog OSQLMessageDialog::createDialog(vcl::Window* _pParent)
 {
     if ( m_aException.hasValue() )
-        return VclPtr<OSQLMessageBox>::Create( _pParent, SQLExceptionInfo( m_aException ), MessBoxStyle::Ok | MessBoxStyle::DefaultOk, m_sHelpURL );
+        return svt::OGenericUnoDialog::Dialog(VclPtr<OSQLMessageBox>::Create(_pParent, SQLExceptionInfo(m_aException), MessBoxStyle::Ok | MessBoxStyle::DefaultOk, m_sHelpURL));
 
     OSL_FAIL("OSQLMessageDialog::createDialog : You should use the SQLException property to specify the error to display!");
-    return VclPtr<OSQLMessageBox>::Create(_pParent, SQLException());
+    return svt::OGenericUnoDialog::Dialog(VclPtr<OSQLMessageBox>::Create(_pParent, SQLException()));
 }
 
 }   // namespace dbaui

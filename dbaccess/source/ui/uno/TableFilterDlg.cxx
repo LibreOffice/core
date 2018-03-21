@@ -91,9 +91,9 @@ Reference<XPropertySetInfo>  SAL_CALL OTableFilterDialog::getPropertySetInfo()
     return new ::cppu::OPropertyArrayHelper(aProps);
 }
 
-VclPtr<Dialog> OTableFilterDialog::createDialog(vcl::Window* _pParent)
+svt::OGenericUnoDialog::Dialog OTableFilterDialog::createDialog(vcl::Window* _pParent)
 {
-    return VclPtr<OTableSubscriptionDialog>::Create(_pParent, m_pDatasourceItems, m_aContext, m_aInitialSelection);
+    return svt::OGenericUnoDialog::Dialog(VclPtr<OTableSubscriptionDialog>::Create(_pParent, m_pDatasourceItems, m_aContext, m_aInitialSelection));
 }
 
 }   // namespace dbaui

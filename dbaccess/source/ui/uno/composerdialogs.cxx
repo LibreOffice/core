@@ -76,7 +76,7 @@ namespace dbaui
 
     IMPLEMENT_PROPERTYCONTAINER_DEFAULTS( ComposerDialog )
 
-    VclPtr<Dialog> ComposerDialog::createDialog(vcl::Window* _pParent)
+    svt::OGenericUnoDialog::Dialog ComposerDialog::createDialog(vcl::Window* _pParent)
     {
         // obtain all the objects needed for the dialog
         Reference< XConnection > xConnection;
@@ -117,10 +117,12 @@ namespace dbaui
         }
 
         if ( !xConnection.is() || !xColumns.is() || !m_xComposer.is() )
+        {
             // can't create the dialog if I have improper settings
-            return nullptr;
+            return svt::OGenericUnoDialog::Dialog(nullptr);
+        }
 
-        return createComposerDialog( _pParent, xConnection, xColumns );
+        return svt::OGenericUnoDialog::Dialog(createComposerDialog(_pParent, xConnection, xColumns));
     }
 
     // RowsetFilterDialog
@@ -167,8 +169,8 @@ namespace dbaui
     {
         ComposerDialog::executedDialog( _nExecutionResult );
 
-        if ( _nExecutionResult && m_pDialog )
-            static_cast< DlgFilterCrit* >( m_pDialog.get() )->BuildWherePart();
+        if ( _nExecutionResult && m_aDialog )
+            static_cast< DlgFilterCrit* >( m_aDialog.m_xVclDialog.get() )->BuildWherePart();
     }
 
     // RowsetOrderDialog
@@ -211,13 +213,13 @@ namespace dbaui
     {
         ComposerDialog::executedDialog( _nExecutionResult );
 
-        if ( !m_pDialog )
+        if ( !m_aDialog )
             return;
 
         if ( _nExecutionResult )
-            static_cast< DlgOrderCrit* >( m_pDialog.get() )->BuildOrderPart();
+            static_cast< DlgOrderCrit* >( m_aDialog.m_xVclDialog.get() )->BuildOrderPart();
         else if ( m_xComposer.is() )
-            m_xComposer->setOrder( static_cast< DlgOrderCrit* >( m_pDialog.get() )->GetOrignalOrder() );
+            m_xComposer->setOrder( static_cast< DlgOrderCrit* >( m_aDialog.m_xVclDialog.get() )->GetOrignalOrder() );
     }
 
 }   // namespace dbaui

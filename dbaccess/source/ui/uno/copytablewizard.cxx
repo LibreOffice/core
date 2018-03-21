@@ -192,7 +192,7 @@ namespace dbaui
         virtual ~CopyTableWizard() override;
 
         // OGenericUnoDialog overridables
-        virtual VclPtr<Dialog> createDialog( vcl::Window* _pParent ) override;
+        virtual svt::OGenericUnoDialog::Dialog createDialog(vcl::Window* _pParent) override;
         virtual void executedDialog( sal_Int16 _nExecutionResult ) override;
 
     private:
@@ -546,7 +546,7 @@ void SAL_CALL CopyTableWizard::setTitle( const OUString& _rTitle )
 
 OCopyTableWizard& CopyTableWizard::impl_getDialog_throw()
 {
-    OCopyTableWizard* pWizard = dynamic_cast< OCopyTableWizard* >( m_pDialog.get() );
+    OCopyTableWizard* pWizard = dynamic_cast< OCopyTableWizard* >(m_aDialog.m_xVclDialog.get());
     if ( !pWizard )
         throw DisposedException( OUString(), *this );
     return *pWizard;
@@ -1508,7 +1508,7 @@ void SAL_CALL CopyTableWizard::initialize( const Sequence< Any >& _rArguments )
     return new ::cppu::OPropertyArrayHelper( aProps );
 }
 
-VclPtr<Dialog> CopyTableWizard::createDialog( vcl::Window* _pParent )
+svt::OGenericUnoDialog::Dialog CopyTableWizard::createDialog( vcl::Window* _pParent )
 {
     OSL_PRECOND( isInitialized(), "CopyTableWizard::createDialog: not initialized!" );
         // this should have been prevented in ::execute already
@@ -1526,7 +1526,7 @@ VclPtr<Dialog> CopyTableWizard::createDialog( vcl::Window* _pParent )
 
     impl_attributesToDialog_nothrow( *pWizard );
 
-    return pWizard;
+    return svt::OGenericUnoDialog::Dialog(pWizard);
 }
 
 void CopyTableWizard::executedDialog( sal_Int16 _nExecutionResult )

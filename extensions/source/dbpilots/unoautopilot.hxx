@@ -103,10 +103,10 @@ namespace dbp
         }
 
     private:
-    // OGenericUnoDialog overridables
-        virtual VclPtr<Dialog> createDialog(vcl::Window* _pParent) override
+        // OGenericUnoDialog overridables
+        virtual svt::OGenericUnoDialog::Dialog createDialog(vcl::Window* _pParent) override
         {
-            return VclPtr<TYPE>::Create(_pParent, m_xObjectModel, m_aContext);
+            return svt::OGenericUnoDialog::Dialog(VclPtr<TYPE>::Create(_pParent, m_xObjectModel, m_aContext));
         }
 
         virtual void implInitialize(const css::uno::Any& _rValue) override

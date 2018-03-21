@@ -77,8 +77,8 @@ namespace pcr
         virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const override;
 
     protected:
-    // OGenericUnoDialog overridables
-        virtual VclPtr<Dialog> createDialog(vcl::Window* _pParent) override;
+        // OGenericUnoDialog overridables
+        virtual svt::OGenericUnoDialog::Dialog createDialog(vcl::Window* _pParent) override;
     };
 
 

@@ -51,10 +51,10 @@ ODatabaseAdministrationDialog::ODatabaseAdministrationDialog(const Reference< XC
 
 ODatabaseAdministrationDialog::~ODatabaseAdministrationDialog()
 {
-    if (m_pDialog)
+    if (m_aDialog)
     {
         ::osl::MutexGuard aGuard(m_aMutex);
-        if (m_pDialog)
+        if (m_aDialog)
         {
             destroyDialog();
             ODbAdminDialog::destroyItemSet(m_pDatasourceItems, m_pItemPool, m_pItemPoolDefaults);

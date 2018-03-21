@@ -61,7 +61,7 @@ namespace dbaui
 
     protected:
         // OGenericUnoDialog overridables
-        virtual VclPtr<Dialog> createDialog(vcl::Window* _pParent) override;
+        virtual svt::OGenericUnoDialog::Dialog createDialog(vcl::Window* _pParent) override;
         virtual void implInitialize(const css::uno::Any& _rValue) override;
     };
 

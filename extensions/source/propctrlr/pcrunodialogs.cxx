@@ -58,17 +58,15 @@ namespace pcr
             &m_xTabbingModel, cppu::UnoType<decltype(m_xTabbingModel)>::get() );
     }
 
-
     OTabOrderDialog::~OTabOrderDialog()
     {
-        if ( m_pDialog )
+        if (m_aDialog)
         {
             ::osl::MutexGuard aGuard( m_aMutex );
-            if ( m_pDialog )
+            if (m_aDialog)
                 destroyDialog();
         }
     }
-
 
     Sequence<sal_Int8> SAL_CALL OTabOrderDialog::getImplementationId(  )
     {
@@ -129,10 +127,9 @@ namespace pcr
         return new ::cppu::OPropertyArrayHelper( aProps );
     }
 
-
-    VclPtr<Dialog> OTabOrderDialog::createDialog( vcl::Window* _pParent )
+    svt::OGenericUnoDialog::Dialog OTabOrderDialog::createDialog( vcl::Window* _pParent )
     {
-        return VclPtr<TabOrderDialog>::Create( _pParent, m_xTabbingModel, m_xControlContext, m_aContext );
+        return svt::OGenericUnoDialog::Dialog(VclPtr<TabOrderDialog>::Create( _pParent, m_xTabbingModel, m_xControlContext, m_aContext));
     }
 
     void OTabOrderDialog::initialize( const Sequence< Any >& aArguments )

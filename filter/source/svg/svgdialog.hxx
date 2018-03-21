@@ -49,7 +49,7 @@ private:
     virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
     virtual OUString SAL_CALL getImplementationName() override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
-    virtual VclPtr<Dialog> createDialog( vcl::Window* pParent ) override;
+    virtual svt::OGenericUnoDialog::Dialog createDialog( vcl::Window* pParent ) override;
     virtual void executedDialog( sal_Int16 nExecutionResult ) override;
     virtual css::uno::Reference< css::beans::XPropertySetInfo>  SAL_CALL getPropertySetInfo() override;
     virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
