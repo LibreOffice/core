@@ -267,11 +267,27 @@ sal_uInt32 TIFFReader::ReadIntData()
         break;
         case 11 :
             pTIFF->ReadFloat( nFLOAT );
-            nUINT32a = static_cast<sal_Int32>(nFLOAT);
+            if (!rtl::math::isNan(nFLOAT) && nFLOAT > SAL_MIN_INT32 - 1.0
+                && nFLOAT < SAL_MAX_INT32 + 1.0)
+            {
+                nUINT32a = static_cast<sal_Int32>(nFLOAT);
+            }
+            else
+            {
+                SAL_INFO("filter.tiff", "float " << nFLOAT << " outsider of sal_Int32 range");
+            }
         break;
         case 12 :
             pTIFF->ReadDouble( nDOUBLE );
-            nUINT32a = static_cast<sal_Int32>(nDOUBLE);
+            if (!rtl::math::isNan(nDOUBLE) && nDOUBLE > SAL_MIN_INT32 - 1.0
+                && nDOUBLE < SAL_MAX_INT32 + 1.0)
+            {
+                nUINT32a = static_cast<sal_Int32>(nDOUBLE);
+            }
+            else
+            {
+                SAL_INFO("filter.tiff", "double " << nDOUBLE << " outsider of sal_Int32 range");
+            }
         break;
         default:
             pTIFF->ReadUInt32( nUINT32a );
@@ -282,21 +298,36 @@ sal_uInt32 TIFFReader::ReadIntData()
 
 double TIFFReader::ReadDoubleData()
 {
-    double  nd;
+    switch (nDataType) {
+    case 5:
+        {
+            sal_uInt32 nulong(0);
+            pTIFF->ReadUInt32( nulong );
+            double nd = static_cast<double>(nulong);
+            nulong = 0;
+            pTIFF->ReadUInt32( nulong );
+            if ( nulong != 0 )
+                nd /= static_cast<double>(nulong);
+            return nd;
+        }
 
-    if ( nDataType == 5 )
-    {
-        sal_uInt32 nulong(0);
-        pTIFF->ReadUInt32( nulong );
-        nd = static_cast<double>(nulong);
-        nulong = 0;
-        pTIFF->ReadUInt32( nulong );
-        if ( nulong != 0 )
-            nd /= static_cast<double>(nulong);
+    case 11:
+        {
+            float x = 0;
+            pTIFF->ReadFloat(x);
+            return x;
+        }
+
+    case 12:
+        {
+            double x = 0;
+            pTIFF->ReadDouble(x);
+            return x;
+        }
+
+    default:
+        return static_cast<double>(ReadIntData());
     }
-    else
-        nd = static_cast<double>(ReadIntData());
-    return nd;
 }
 
 void TIFFReader::ReadTagData( sal_uInt16 nTagType, sal_uInt32 nDataLen)
