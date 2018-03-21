@@ -22,11 +22,14 @@ TransliterationFlags RotateTransliteration::getNextMode()
         case 0:
             nMode = TransliterationFlags::TITLE_CASE;
             break;
-        case 1:
+        case 1: //tdf#116315
+            nMode = TransliterationFlags::SENTENCE_CASE;
+            break;
+        case 2:
             nMode = TransliterationFlags::LOWERCASE_UPPERCASE;
             break;
         default:
-        case 2:
+        case 3:
             nMode = TransliterationFlags::UPPERCASE_LOWERCASE;
             nF3ShiftCounter = -1;
             break;
