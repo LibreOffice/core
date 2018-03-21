@@ -1338,7 +1338,6 @@ bool SfxItemSet::Equals(const SfxItemSet &rCmp, bool bComparePool) const
         return false;
 
     // If we reach here and bDifferentPools==true that means bComparePool==false.
-    assert(!bDifferentPools || !bComparePool);
 
     // Counting Ranges takes longer; they also need to be the same, however
     sal_uInt16 nCount1 = TotalCount();
