@@ -135,7 +135,8 @@ private:
 public:
     virtual int run() = 0;
     virtual void response(int response) = 0;
-    virtual void add_button(const OUString& rText, int response) = 0;
+    virtual void add_button(const OUString& rText, int response, const OString& rHelpId = OString())
+        = 0;
     virtual void set_default_response(int response) = 0;
 };
 

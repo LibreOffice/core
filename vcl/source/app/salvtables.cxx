@@ -468,11 +468,12 @@ public:
         m_xDialog->EndDialog(nResponse);
     }
 
-    virtual void add_button(const OUString& rText, int nResponse) override
+    virtual void add_button(const OUString& rText, int nResponse, const OString& rHelpId) override
     {
         VclButtonBox* pBox = m_xDialog->get_action_area();
         VclPtr<PushButton> xButton(VclPtr<PushButton>::Create(pBox, WB_CLIPCHILDREN|WB_CENTER|WB_VCENTER));
         xButton->SetText(rText);
+        xButton->SetHelpId(rHelpId);
         xButton->Show();
         m_xDialog->add_button(xButton, nResponse, true);
     }

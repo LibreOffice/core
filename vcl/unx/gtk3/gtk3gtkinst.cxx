@@ -1635,9 +1635,11 @@ public:
         gtk_dialog_response(m_pDialog, VclToGtk(nResponse));
     }
 
-    virtual void add_button(const OUString& rText, int nResponse) override
+    virtual void add_button(const OUString& rText, int nResponse, const OString& rHelpId) override
     {
-        gtk_dialog_add_button(m_pDialog, MapToGtkAccelerator(rText).getStr(), VclToGtk(nResponse));
+        GtkWidget* pWidget = gtk_dialog_add_button(m_pDialog, MapToGtkAccelerator(rText).getStr(), VclToGtk(nResponse));
+        if (!rHelpId.isEmpty())
+            ::set_help_id(pWidget, rHelpId);
     }
 
     virtual void set_default_response(int nResponse) override
