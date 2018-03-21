@@ -2005,6 +2005,14 @@ bool SwFEShell::ImpEndCreate()
     }
     else
     {
+        if (rSdrObj.GetName().isEmpty())
+        {
+            bool bRestore = GetDoc()->GetIDocumentUndoRedo().DoesDrawUndo();
+            GetDoc()->GetIDocumentUndoRedo().DoDrawUndo(false);
+            rSdrObj.SetName(GetUniqueShapeName());
+            GetDoc()->GetIDocumentUndoRedo().DoDrawUndo(bRestore);
+        }
+
         Point aRelNullPt;
         if( OBJ_CAPTION == nIdent )
             aRelNullPt = static_cast<SdrCaptionObj&>(rSdrObj).GetTailPos();
@@ -2059,9 +2067,6 @@ bool SwFEShell::ImpEndCreate()
             } while( pTmp->IsFollow() );
             pAnch = pTmp;
         }
-
-        if (rSdrObj.GetName().isEmpty())
-            rSdrObj.SetName(GetUniqueShapeName());
 
         pContact->ConnectToLayout();
 
