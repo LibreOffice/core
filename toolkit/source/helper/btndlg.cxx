@@ -18,10 +18,9 @@
  */
 
 #include <memory>
-#include <svdata.hxx>
 
 #include <vcl/button.hxx>
-#include <vcl/btndlg.hxx>
+#include <helper/btndlg.hxx>
 
 
 struct ImplBtnDlgItem
