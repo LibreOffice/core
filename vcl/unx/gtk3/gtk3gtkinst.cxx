@@ -1161,12 +1161,12 @@ namespace
     void set_help_id(const GtkWidget *pWidget, const OString& rHelpId)
     {
         gchar *helpid = g_strdup(rHelpId.getStr());
-        g_object_set_data_full(G_OBJECT(pWidget), "helpid", helpid, g_free);
+        g_object_set_data_full(G_OBJECT(pWidget), "g-lo-helpid", helpid, g_free);
     }
 
     OString get_help_id(const GtkWidget *pWidget)
     {
-        void* pData = g_object_get_data(G_OBJECT(pWidget), "helpid");
+        void* pData = g_object_get_data(G_OBJECT(pWidget), "g-lo-helpid");
         const gchar* pStr = static_cast<const gchar*>(pData);
         return OString(pStr, pStr ? strlen(pStr) : 0);
     }
@@ -1563,6 +1563,8 @@ private:
             help();
             return;
         }
+        else if (has_click_handler(ret))
+            return;
 
         hide();
         m_aFunc(GtkToVcl(ret));
@@ -1595,6 +1597,8 @@ public:
         return true;
     }
 
+    bool has_click_handler(int nResponse);
+
     virtual int run() override
     {
         sort_native_button_order(GTK_BOX(gtk_dialog_get_action_area(m_pDialog)));
@@ -1607,6 +1611,9 @@ public:
                 help();
                 continue;
             }
+            else if (has_click_handler(ret))
+                continue;
+
             break;
         }
         hide();
@@ -1630,10 +1637,7 @@ public:
         return nResponse;
     }
 
-    virtual void response(int nResponse) override
-    {
-        gtk_dialog_response(m_pDialog, VclToGtk(nResponse));
-    }
+    virtual void response(int nResponse) override;
 
     virtual void add_button(const OUString& rText, int nResponse, const OString& rHelpId) override
     {
@@ -1834,12 +1838,14 @@ private:
         GtkInstanceButton* pThis = static_cast<GtkInstanceButton*>(widget);
         pThis->signal_clicked();
     }
+
 public:
     GtkInstanceButton(GtkButton* pButton, bool bTakeOwnership)
         : GtkInstanceContainer(GTK_CONTAINER(pButton), bTakeOwnership)
         , m_pButton(pButton)
         , m_nSignalId(g_signal_connect(pButton, "clicked", G_CALLBACK(signalClicked), this))
     {
+        g_object_set_data(G_OBJECT(m_pButton), "g-lo-GtkInstanceButton", this);
     }
 
     virtual void set_label(const OUString& rText) override
@@ -1853,18 +1859,54 @@ public:
         return OUString(pStr, pStr ? strlen(pStr) : 0, RTL_TEXTENCODING_UTF8);
     }
 
+    // allow us to block buttons with click handlers making dialogs return a response
+    bool has_click_handler() const
+    {
+        return m_aClickHdl.IsSet();
+    }
+
+    void clear_click_handler()
+    {
+        m_aClickHdl = Link<Button&, void>();
+    }
+
     virtual ~GtkInstanceButton() override
     {
+        g_object_steal_data(G_OBJECT(m_pButton), "g-lo-GtkInstanceButton");
         g_signal_handler_disconnect(m_pButton, m_nSignalId);
     }
 };
 
 weld::Button* GtkInstanceDialog::get_widget_for_response(int nResponse)
 {
-    GtkButton* pButton = GTK_BUTTON(gtk_dialog_get_widget_for_response(m_pDialog, nResponse));
+    GtkButton* pButton = GTK_BUTTON(gtk_dialog_get_widget_for_response(m_pDialog, VclToGtk(nResponse)));
     if (!pButton)
         return nullptr;
     return new GtkInstanceButton(pButton, false);
+}
+
+void GtkInstanceDialog::response(int nResponse)
+{
+    //unblock this response now when activated through code
+    if (GtkWidget* pWidget = gtk_dialog_get_widget_for_response(m_pDialog, VclToGtk(nResponse)))
+    {
+        void* pData = g_object_get_data(G_OBJECT(pWidget), "g-lo-GtkInstanceButton");
+        GtkInstanceButton* pButton = static_cast<GtkInstanceButton*>(pData);
+        if (pButton)
+            pButton->clear_click_handler();
+    }
+    gtk_dialog_response(m_pDialog, VclToGtk(nResponse));
+}
+
+bool GtkInstanceDialog::has_click_handler(int nResponse)
+{
+    if (GtkWidget* pWidget = gtk_dialog_get_widget_for_response(m_pDialog, VclToGtk(nResponse)))
+    {
+        void* pData = g_object_get_data(G_OBJECT(pWidget), "g-lo-GtkInstanceButton");
+        GtkInstanceButton* pButton = static_cast<GtkInstanceButton*>(pData);
+        return pButton && pButton->has_click_handler();
+    }
+    return false;
 }
 
 class GtkInstanceToggleButton : public GtkInstanceButton, public virtual weld::ToggleButton
