@@ -3539,50 +3539,89 @@ void ScInterpreter::ScModalValue()
     }
 }
 
-void ScInterpreter::ScModalValue_MS()
+void ScInterpreter::ScModalValue_MS( bool bSingle )
 {
     sal_uInt8 nParamCount = GetByte();
     if ( !MustHaveParamCountMin( nParamCount, 1 ) )
         return;
     vector<double> aArray;
     GetNumberSequenceArray( nParamCount, aArray, false );
-    SCSIZE nSize = aArray.size();
+    vector< double > aSortArray( aArray );
+    QuickSort( aSortArray, nullptr );
+    SCSIZE nSize = aSortArray.size();
     if ( nSize == 0 || nGlobalError != FormulaError::NONE )
         PushNoValue();
     else
     {
-        SCSIZE nMaxIndex = 0, nMax = 1, nCount = 1, i, j;
-        double nOldVal = aArray[ 0 ];
-
-        for ( i = 1; i < nSize ; i++ )
+        SCSIZE nMax = 1, nCount = 1;
+        double nOldVal = aSortArray[ 0 ];
+        vector< double > aResultArray( 1 );
+        SCSIZE i;
+        for ( i = 1; i < nSize; i++ )
         {
-            for ( j = i; j < nSize; j++ )
-            {
-                if ( aArray[ j ] == nOldVal )
-                    nCount++;
-            }
-            if ( nCount > nMax )
-            {
-                nMax = nCount;
-                nMaxIndex = i - 1;
-                nCount = 1;
-            }
-            while ( (i < (nSize - 1)) && (nOldVal == aArray[ i ]) )
-                i++;
-            if ( ( nSize - i ) > nMax )
-            {
-                nOldVal = aArray[ i ];
-                nCount = 1;
-            }
+            if ( aSortArray[ i ] == nOldVal )
+                nCount++;
             else
-                break;
+            {
+                if ( nCount >= nMax && nCount > 1 )
+                {
+                    if ( nCount > nMax )
+                    {
+                        nMax = nCount;
+                        if ( aResultArray.size() != 1 )
+                            vector< double >( 1 ).swap( aResultArray );
+                        aResultArray[ 0 ] = nOldVal;
+                    }
+                    else
+                        aResultArray.emplace_back( nOldVal );
+                }
+                nOldVal = aSortArray[ i ];
+                nCount = 1;
+            }
+        }
+        if ( nCount >= nMax && nCount > 1 )
+        {
+            if ( nCount > nMax )
+                vector< double >().swap( aResultArray );
+            aResultArray.emplace_back( nOldVal );
         }
         if ( nMax == 1 && nCount == 1 )
             PushNoValue();
         else if ( nMax == 1 )
-            PushDouble( nOldVal );
+            PushDouble( nOldVal ); // there is only 1 result, no reordering needed
         else
-            PushDouble( aArray[ nMaxIndex ] );
+        {
+            // sort resultArray according to ordering of aArray
+            vector< vector< double > > aOrder;
+            aOrder.resize( aResultArray.size(), vector< double >( 2 ) );
+            for ( i = 0; i < aResultArray.size(); i++ )
+            {
+                for ( SCSIZE j = 0; j < nSize; j++ )
+                {
+                    if ( aArray[ j ] == aResultArray[ i ] )
+                    {
+                        aOrder[ i ][ 0 ] = aResultArray[ i ];
+                        aOrder[ i ][ 1 ] = j;
+                        break;
+                    }
+                }
+            }
+            sort( aOrder.begin(), aOrder.end(), []( const std::vector< double >& lhs,
+                                                    const std::vector< double >& rhs )
+                                                    { return lhs[ 1 ] < rhs[ 1 ]; } );
+
+            if ( bSingle )
+                PushDouble( aOrder[ 0 ][ 0 ] );
+            else
+            {
+                // put result in correct order in aResultArray
+                for ( i = 0; i < aResultArray.size(); i++ )
+                    aResultArray[ i ] = aOrder[ i ][ 0 ];
+                ScMatrixRef pResMatrix = GetNewMat( 1, aResultArray.size(), true );
+                pResMatrix->PutDoubleVector( aResultArray, 0, 0 );
+                PushMatrix( pResMatrix );
+            }
+        }
     }
 }
 
