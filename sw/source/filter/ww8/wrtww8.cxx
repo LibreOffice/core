@@ -1831,6 +1831,8 @@ void MSWordExportBase::WriteSpecialText( sal_uLong nStart, sal_uLong nEnd, sal_u
     SwPaM* pOldEnd = m_pOrigPam;
     bool bOldPageDescs = m_bOutPageDescs;
     m_bOutPageDescs = false;
+    if ( nTTyp == TXT_FTN || nTTyp == TXT_EDN )
+        m_bAddFootnoteTab = true;   // enable one aesthetic tab for this footnote
 
     SetCurPam(nStart, nEnd);
 
@@ -3614,6 +3616,7 @@ MSWordExportBase::MSWordExportBase( SwDoc *pDocument, SwPaM *pCurrentPam, SwPaM 
     , m_bHideTabLeaderAndPageNumbers(false)
     , m_bExportModeRTF(false)
     , m_bFontSizeWritten(false)
+    , m_bAddFootnoteTab(false)
     , m_pDoc(pDocument)
     , m_nCurStart(pCurrentPam->GetPoint()->nNode.GetIndex())
     , m_nCurEnd(pCurrentPam->GetMark()->nNode.GetIndex())
