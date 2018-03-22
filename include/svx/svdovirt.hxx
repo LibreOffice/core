@@ -143,6 +143,8 @@ public:
     virtual bool DoMacro (const SdrObjMacroHitRec& rRec) override;
     virtual OUString GetMacroPopupComment(const SdrObjMacroHitRec& rRec) const override;
 
+    virtual bool Equals(const SdrObject&) const override;
+
     // #i73248# for default SdrVirtObj, offset is aAnchor, not (0,0)
     virtual const Point GetOffset() const;
 };

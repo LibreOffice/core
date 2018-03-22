@@ -64,6 +64,8 @@ public:
 
     virtual OUString TakeObjNameSingul() const override;
     virtual OUString TakeObjNamePlural() const override;
+
+    virtual bool Equals(const SdrObject&) const override;
 };
 
 

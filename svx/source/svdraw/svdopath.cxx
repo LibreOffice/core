@@ -1842,6 +1842,19 @@ SdrPathObj& SdrPathObj::operator=(const SdrPathObj& rObj)
     return *this;
 }
 
+bool SdrPathObj::Equals(const SdrObject& rOther) const
+{
+    const SdrPathObj* pOther = dynamic_cast<const SdrPathObj*>(&rOther);
+    if (!pOther)
+        return false;
+
+    if (maPathPolygon != pOther->maPathPolygon ||
+        meKind != pOther->meKind)
+        return false;
+
+    return SdrTextObj::Equals(rOther);
+}
+
 OUString SdrPathObj::TakeObjNameSingul() const
 {
     OUStringBuffer sName;

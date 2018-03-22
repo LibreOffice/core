@@ -447,6 +447,21 @@ E3dObject& E3dObject::operator=(const E3dObject& rSource)
     return *this;
 }
 
+bool E3dObject::Equals(const SdrObject& rOther) const
+{
+    const E3dObject* pOther = dynamic_cast<const E3dObject*>(&rOther);
+    if (!pOther)
+        return false;
+
+    if (maLocalBoundVol != pOther->maLocalBoundVol ||
+        maTransformation != pOther->maTransformation ||
+        maFullTransform != pOther->maFullTransform ||
+        !maSubList.Equals(pOther->maSubList))
+        return false;
+
+    return SdrAttrObj::Equals(rOther);
+}
+
 SdrObjGeoData *E3dObject::NewGeoData() const
 {
     return new E3DObjGeoData;
@@ -654,6 +669,18 @@ E3dCompoundObject& E3dCompoundObject::operator=(const E3dCompoundObject& rObj)
     aMaterialAmbientColor = rObj.aMaterialAmbientColor;
 
     return *this;
+}
+
+bool E3dCompoundObject::Equals(const SdrObject& rOther) const
+{
+    const E3dCompoundObject* pOther = dynamic_cast<const E3dCompoundObject*>(&rOther);
+    if (!pOther)
+        return false;
+
+    if (aMaterialAmbientColor != pOther->aMaterialAmbientColor)
+        return false;
+
+    return E3dObject::Equals(rOther);
 }
 
 // convert given basegfx::B3DPolyPolygon to screen coor

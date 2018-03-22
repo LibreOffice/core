@@ -712,4 +712,17 @@ void SdrObjGroup::dumpAsXml(xmlTextWriterPtr pWriter) const
     xmlTextWriterEndElement(pWriter);
 }
 
+bool SdrObjGroup::Equals(const SdrObject& rOther) const
+{
+    const SdrObjGroup* pOther = dynamic_cast<const SdrObjGroup*>(&rOther);
+    if (!pOther)
+        return false;
+
+    if (aRefPoint != pOther->aRefPoint ||
+        !maSdrObjList.Equals(pOther->maSdrObjList))
+        return false;
+
+    return SdrObject::Equals(rOther);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

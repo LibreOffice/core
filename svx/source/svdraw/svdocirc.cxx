@@ -366,6 +366,20 @@ SdrCircObj& SdrCircObj::operator=(const SdrCircObj& rObj)
     return *this;
 }
 
+bool SdrCircObj::Equals(const SdrObject& rOther) const
+{
+    const SdrCircObj* pOther = dynamic_cast<const SdrCircObj*>(&rOther);
+    if (!pOther)
+        return false;
+
+    if (meCircleKind != pOther->meCircleKind ||
+        nStartAngle != pOther->nStartAngle ||
+        nEndAngle != pOther->nEndAngle)
+        return false;
+
+    return SdrRectObj::Equals(rOther);
+}
+
 basegfx::B2DPolyPolygon SdrCircObj::TakeXorPoly() const
 {
     const basegfx::B2DPolygon aCircPolygon(ImpCalcXPolyCirc(meCircleKind, maRect, nStartAngle, nEndAngle));

@@ -142,6 +142,8 @@ public:
     virtual E3dObject* Clone(SdrModel* pTargetModel = nullptr) const override;
     E3dObject& operator=( const E3dObject& rObj );
 
+    virtual bool Equals(const SdrObject&) const override;
+
     virtual SdrObjGeoData *NewGeoData() const override;
     virtual void          SaveGeoData(SdrObjGeoData& rGeo) const override;
     virtual void          RestGeoData(const SdrObjGeoData& rGeo) override;
@@ -202,6 +204,8 @@ public:
 
     // implemented mainly for the purposes of Clone()
     E3dCompoundObject& operator=(const E3dCompoundObject& rObj);
+
+    virtual bool Equals(const SdrObject&) const override;
 
     bool IsAOrdNumRemapCandidate(E3dScene*& prScene) const;
 };

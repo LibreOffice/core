@@ -100,6 +100,8 @@ public:
     // implemented mainly for the purposes of Clone()
     SdrMeasureObj& operator=(const SdrMeasureObj& rObj);
 
+    virtual bool Equals(const SdrObject&) const override;
+
     virtual OUString TakeObjNameSingul() const override;
     virtual OUString TakeObjNamePlural() const override;
 

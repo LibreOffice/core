@@ -1450,4 +1450,43 @@ void SdrGrafObj::addCropHandles(SdrHdlList& rTarget) const
     rTarget.AddHdl(new SdrCropHdl(Point(basegfx::fround(aPos.getX()), basegfx::fround(aPos.getY())), SdrHdlKind::LowerRight, fShearX, fRotate));
 }
 
+namespace {
+
+bool GraphicObjectPtrsEqual(const GraphicObject* p1, const GraphicObject* p2)
+{
+    if (p1 && p2)
+        return p1 == p2
+            || ((p1->GetType() == GraphicType::Default) && (p2->GetType() == GraphicType::Default))
+            || *p1 == *p2;
+    else
+        return (!p1 && !p2);
+}
+
+}
+
+bool SdrGrafObj::Equals(const SdrObject& rOther) const
+{
+    const SdrGrafObj* pOther = dynamic_cast<const SdrGrafObj*>(&rOther);
+    if (!pOther)
+        return false;
+
+    if (bMirrored != pOther->bMirrored ||
+        aFileName != pOther->aFileName ||
+        aReferer != pOther->aReferer ||
+        aFilterName != pOther->aFilterName ||
+        mbIsSignatureLine != pOther->mbIsSignatureLine ||
+        maSignatureLineId != pOther->maSignatureLineId ||
+        maSignatureLineSuggestedSignerName != pOther->maSignatureLineSuggestedSignerName ||
+        maSignatureLineSuggestedSignerTitle != pOther->maSignatureLineSuggestedSignerTitle ||
+        maSignatureLineSuggestedSignerEmail != pOther->maSignatureLineSuggestedSignerEmail ||
+        maSignatureLineSigningInstructions != pOther->maSignatureLineSigningInstructions ||
+        mbIsSignatureLineShowSignDate != pOther->mbIsSignatureLineShowSignDate ||
+        mbIsSignatureLineCanAddComment != pOther->mbIsSignatureLineCanAddComment ||
+        mpSignatureLineUnsignedGraphic != pOther->mpSignatureLineUnsignedGraphic ||
+        !GraphicObjectPtrsEqual(mpGraphicObject.get(), pOther->mpGraphicObject.get()))
+        return false;
+
+    return SdrRectObj::Equals(rOther);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

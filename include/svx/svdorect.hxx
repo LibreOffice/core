@@ -121,6 +121,9 @@ public:
     virtual SdrObject* DoConvertToPolyObj(bool bBezier, bool bAddText) const override;
 
     virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) override;
+
+    virtual bool Equals(const SdrObject&) const override;
+
 };
 
 #endif // INCLUDED_SVX_SVDORECT_HXX

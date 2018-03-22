@@ -78,6 +78,8 @@ public:
     virtual SdrPathObj* Clone(SdrModel* pTargetModel = nullptr) const override;
     SdrPathObj& operator=(const SdrPathObj& rObj);
 
+    virtual bool Equals(const SdrObject&) const override;
+
     virtual OUString TakeObjNameSingul() const override;
     virtual OUString TakeObjNamePlural() const override;
     virtual basegfx::B2DPolyPolygon TakeXorPoly() const override;

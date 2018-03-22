@@ -2590,4 +2590,15 @@ void SdrEdgeObj::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const b
     }
 }
 
+bool SdrEdgeObj::Equals(const SdrObject& rOther) const
+{
+    const SdrEdgeObj* pOther = dynamic_cast<const SdrEdgeObj*>(&rOther);
+    if (!pOther)
+        return false;
+
+    // TODO: define equals conditions
+
+    return SdrTextObj::Equals(rOther);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -61,6 +61,13 @@ bool OutlinerParaObjData::operator==(const OutlinerParaObjData& rCandidate) cons
         && mbIsEditDoc == rCandidate.mbIsEditDoc);
 }
 
+bool OutlinerParaObjData::Equals(const OutlinerParaObjData& rCandidate) const
+{
+    return (mpEditTextObject->Equals(*rCandidate.mpEditTextObject)
+        && maParagraphDataVector == rCandidate.maParagraphDataVector
+        && mbIsEditDoc == rCandidate.mbIsEditDoc);
+}
+
 bool OutlinerParaObjData::isWrongListEqual(const OutlinerParaObjData& rCompare) const
 {
     return mpEditTextObject->isWrongListEqual(*rCompare.mpEditTextObject);
@@ -95,6 +102,11 @@ OutlinerParaObject& OutlinerParaObject::operator=( const OutlinerParaObject& r )
 bool OutlinerParaObject::operator==( const OutlinerParaObject& r ) const
 {
     return r.mpImpl == mpImpl;
+}
+
+bool OutlinerParaObject::Equals(const OutlinerParaObject& r) const
+{
+    return r.mpImpl.same_object(mpImpl) || r.mpImpl->Equals(*mpImpl);
 }
 
 // #i102062#
