@@ -533,12 +533,10 @@ void CffSubsetterContext::readDictOp()
         read2push();
     } else if( c == 29 ) {      // longint
         ++mpReadPtr;            // skip 29
-        int nS32 = mpReadPtr[0] << 24;
+        sal_Int32 nS32 = mpReadPtr[0] << 24;
         nS32 += mpReadPtr[1] << 16;
         nS32 += mpReadPtr[2] << 8;
         nS32 += mpReadPtr[3] << 0;
-        if( (sizeof(nS32) != 4) && (nS32 & (1U<<31)))
-            nS32 |= (~0U) << 31;    // assuming 2s complement
         mpReadPtr += 4;
         ValType nVal = static_cast<ValType>(nS32);
         push( nVal );
@@ -558,9 +556,7 @@ void CffSubsetterContext::read2push()
     const U8*& p = mpReadPtr;
     const U8 c = *p;
     if( c == 28 ) {
-        short nS16 = (p[1] << 8) + p[2];
-        if( (sizeof(nS16) != 2) && (nS16 & (1<<15)))
-            nS16 |= (~0U) << 15;    // assuming 2s complement
+        sal_Int16 nS16 = (p[1] << 8) + p[2];
         aVal = nS16;
         p += 3;
     } else if( c <= 246 ) {     // -107..+107
