@@ -24,6 +24,53 @@
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/string.hxx>
+
+namespace
+{
+using namespace ::comphelper;
+
+using IndexVector = std::vector<sal_Int32>;
+
+class IndexStmtParser
+{
+private:
+    OUString m_sql;
+
+public:
+    IndexStmtParser(const OUString& sSql)
+        : m_sql(sSql)
+    {
+    }
+
+    bool isIndexStatement() const
+    {
+        return m_sql.startsWith("SET TABLE") && m_sql.indexOf("INDEX") >= 0;
+    }
+
+    IndexVector getIndexes() const
+    {
+        assert(isIndexStatement());
+
+        OUString sIndexPart = m_sql.copy(m_sql.indexOf("INDEX") + 5);
+        sal_Int32 nQuotePos = sIndexPart.indexOf("'") + 1;
+        OUString sIndexNums = sIndexPart.copy(nQuotePos, sIndexPart.lastIndexOf("'") - nQuotePos);
+
+        std::vector<OUString> sIndexes = string::split(sIndexNums, u' ');
+        IndexVector indexes;
+        for (const auto& sIndex : sIndexes)
+            indexes.push_back(sIndex.toInt32());
+
+        return indexes;
+    }
+
+    OUString getTableName() const
+    {
+        // SET TABLE <tableName>
+        return string::split(m_sql, u' ')[2];
+    }
+};
+} // anonymous namespace
 
 namespace dbahsql
 {
@@ -62,8 +109,10 @@ SqlStatementVector SchemaParser::parseSchema()
         // every line contains exactly one DDL statement
         OUString sSql = xTextInput->readLine();
 
-        if (sSql.startsWith("SET TABLE") && sSql.indexOf("INDEX") > 0)
-        { // nothing
+        IndexStmtParser indexParser{ sSql };
+        if (indexParser.isIndexStatement())
+        {
+            m_ColumnTypes[indexParser.getTableName()] = indexParser.getIndexes();
         }
         else if (sSql.startsWith("SET") || sSql.startsWith("CREATE USER")
                  || sSql.startsWith("CREATE SCHEMA") || sSql.startsWith("GRANT"))
@@ -82,9 +131,8 @@ SqlStatementVector SchemaParser::parseSchema()
                 colTypes.push_back(colDef.getDataType());
 
             m_ColumnTypes[aCreateParser.getTableName()] = colTypes;
+            parsedStatements.push_back(sSql);
         }
-
-        parsedStatements.push_back(sSql);
     }
 
     return parsedStatements;
@@ -93,6 +141,11 @@ SqlStatementVector SchemaParser::parseSchema()
 ColumnTypeVector SchemaParser::getTableColumnTypes(const OUString& sTableName) const
 {
     return m_ColumnTypes.at(sTableName);
+}
+
+const std::map<OUString, std::vector<sal_Int32>>& SchemaParser::getTableIndexes() const
+{
+    return m_Indexes;
 }
 
 } // namespace dbahsql
