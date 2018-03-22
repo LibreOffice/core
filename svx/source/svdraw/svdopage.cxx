@@ -185,4 +185,28 @@ OUString SdrPageObj::TakeObjNamePlural() const
     return ImpGetResStr(STR_ObjNamePluralPAGE);
 }
 
+namespace {
+
+bool SdrPagePtrsEqual(const SdrPage* p1, const SdrPage* p2)
+{
+    if (p1 && p2)
+        return (p1 == p2) || p1->Equals(*p2);
+    else
+        return (!p1 && !p2);
+}
+
+}
+
+bool SdrPageObj::Equals(const SdrObject& rOther) const
+{
+    const SdrPageObj* pOther = dynamic_cast<const SdrPageObj*>(&rOther);
+    if (!pOther)
+        return false;
+
+    if (!SdrPagePtrsEqual(mpShownPage, pOther->mpShownPage))
+        return false;
+
+    return SdrObject::Equals(rOther);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

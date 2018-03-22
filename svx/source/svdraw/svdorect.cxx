@@ -607,4 +607,28 @@ void SdrRectObj::RestGeoData(const SdrObjGeoData& rGeo)
     SetXPolyDirty();
 }
 
+namespace {
+
+bool XPolygonPtrsEqual(const XPolygon* p1, const XPolygon* p2)
+{
+    if (p1 && p2)
+        return (p1 == p2) || (*p1 == *p2);
+    else
+        return (!p1 && !p2);
+}
+
+}
+
+bool SdrRectObj::Equals(const SdrObject& rOther) const
+{
+    const SdrRectObj* pOther = dynamic_cast<const SdrRectObj*>(&rOther);
+    if (!pOther)
+        return false;
+
+    if (!XPolygonPtrsEqual(mpXPoly.get(), pOther->mpXPoly.get()))
+        return false;
+
+    return SdrTextObj::Equals(rOther);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

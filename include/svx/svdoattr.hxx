@@ -65,6 +65,8 @@ public:
     bool HasLine() const;
 
     virtual const tools::Rectangle& GetSnapRect() const override;
+
+    virtual bool Equals(const SdrObject&) const override;
 };
 
 

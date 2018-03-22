@@ -2180,6 +2180,48 @@ void SdrTextObj::SetObjectItemNoBroadcast(const SfxPoolItem& rItem)
     static_cast< sdr::properties::TextProperties& >(GetProperties()).SetObjectItemNoBroadcast(rItem);
 }
 
+namespace {
+
+bool OutlinerParaObjectPtrsEqual(const OutlinerParaObject* p1, const OutlinerParaObject* p2)
+{
+    if (p1 && p2)
+        return (p1 == p2)
+            || p1->Equals(*p2);
+    else
+        return (!p1 && !p2);
+}
+
+bool SdrTextPtrsEqual(const SdrText* p1, const SdrText* p2)
+{
+    if (p1 && p2)
+        return p1 == p2
+            || OutlinerParaObjectPtrsEqual(p1->GetOutlinerParaObject(), p2->GetOutlinerParaObject());
+    else
+        return (!p1 && !p2);
+}
+
+}
+
+bool SdrTextObj::Equals(const SdrObject& rOther) const
+{
+    const SdrTextObj* pOther = dynamic_cast<const SdrTextObj*>(&rOther);
+    if (!pOther)
+        return false;
+
+    if (maRect != pOther->maRect ||
+        aGeo != pOther->aGeo ||
+        eTextKind != pOther->eTextKind ||
+        bTextFrame != pOther->bTextFrame ||
+        aTextSize != pOther->aTextSize ||
+        bNoShear != pOther->bNoShear ||
+        bNoMirror != pOther->bNoMirror ||
+        bDisableAutoWidthOnDragging != pOther->bDisableAutoWidthOnDragging ||
+        !SdrTextPtrsEqual(mpText.get(), pOther->mpText.get()))
+        return false;
+
+    return SdrAttrObj::Equals(rOther);
+}
+
 
 // The concept of the text object:
 // ~~~~~~~~~~~~~~~~~~~~~~~~

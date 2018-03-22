@@ -85,6 +85,8 @@ public:
     // TakeObjName...() is for the display in the UI, for example "3 frames selected".
     virtual OUString TakeObjNameSingul() const override;
     virtual OUString TakeObjNamePlural() const override;
+
+    virtual bool Equals(const SdrObject&) const override;
 };
 
 #endif // INCLUDED_SVX_CUBE3D_HXX

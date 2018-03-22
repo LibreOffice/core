@@ -246,4 +246,19 @@ void E3dPolygonObj::SetLineOnly(bool bNew)
     }
 }
 
+bool E3dPolygonObj::Equals(const SdrObject& rOther) const
+{
+    const E3dPolygonObj* pOther = dynamic_cast<const E3dPolygonObj*>(&rOther);
+    if (!pOther)
+        return false;
+
+    if (aPolyPoly3D != pOther->aPolyPoly3D ||
+        aPolyNormals3D != pOther->aPolyNormals3D ||
+        aPolyTexture2D != pOther->aPolyTexture2D ||
+        bLineOnly != pOther->bLineOnly)
+        return false;
+
+    return E3dCompoundObject::Equals(rOther);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

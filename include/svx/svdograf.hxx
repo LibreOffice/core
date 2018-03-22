@@ -227,6 +227,8 @@ public:
     // add handles for crop mode when selected
     virtual void addCropHandles(SdrHdlList& rTarget) const override;
 
+    virtual bool Equals(const SdrObject&) const override;
+
     // Signature Line
     void setIsSignatureLine(bool bIsSignatureLine) { mbIsSignatureLine = bIsSignatureLine; };
     bool isSignatureLine() const { return mbIsSignatureLine; };

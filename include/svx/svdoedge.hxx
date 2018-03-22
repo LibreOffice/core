@@ -215,6 +215,9 @@ public:
     virtual void TakeUnrotatedSnapRect(tools::Rectangle& rRect) const override;
     virtual SdrEdgeObj* Clone(SdrModel* pTargetModel = nullptr) const override;
     SdrEdgeObj& operator=(const SdrEdgeObj& rObj);
+
+    virtual bool Equals(const SdrObject&) const override;
+
     virtual OUString TakeObjNameSingul() const override;
     virtual OUString TakeObjNamePlural() const override;
 

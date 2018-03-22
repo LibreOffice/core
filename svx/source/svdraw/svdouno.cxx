@@ -304,6 +304,20 @@ SdrUnoObj& SdrUnoObj::operator= (const SdrUnoObj& rObj)
     return *this;
 }
 
+bool SdrUnoObj::Equals(const SdrObject& rOther) const
+{
+    const SdrUnoObj* pOther = dynamic_cast<const SdrUnoObj*>(&rOther);
+    if (!pOther)
+        return false;
+
+    // TODO: improve comparison
+    if (aUnoControlModelTypeName != pOther->aUnoControlModelTypeName ||
+        aUnoControlTypeName != pOther->aUnoControlTypeName)
+        return false;
+
+    return SdrRectObj::Equals(rOther);
+}
+
 void SdrUnoObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact)
 {
     SdrRectObj::NbcResize(rRef,xFact,yFact);
