@@ -387,21 +387,16 @@ PPTExStyleSheet::PPTExStyleSheet( sal_uInt16 nDefaultTab, PPTExBulletProvider* p
 {
     for ( int nInstance = EPP_TEXTTYPE_Title; nInstance <= EPP_TEXTTYPE_QuarterBody; nInstance++ )
     {
-        mpParaSheet[ nInstance ] = ( nInstance == EPP_TEXTTYPE_notUsed ) ? nullptr : new PPTExParaSheet( nInstance, nDefaultTab, pBuProv );
-        mpCharSheet[ nInstance ] = ( nInstance == EPP_TEXTTYPE_notUsed ) ? nullptr : new PPTExCharSheet( nInstance );
+        if (nInstance != EPP_TEXTTYPE_notUsed)
+        {
+            mpParaSheet[ nInstance ].reset(new PPTExParaSheet( nInstance, nDefaultTab, pBuProv ));
+            mpCharSheet[ nInstance ].reset(new PPTExCharSheet( nInstance ));
+        }
     }
 }
 
 PPTExStyleSheet::~PPTExStyleSheet()
 {
-    for ( int nInstance = EPP_TEXTTYPE_Title; nInstance <= EPP_TEXTTYPE_QuarterBody; nInstance++ )
-    {
-        if ( nInstance == EPP_TEXTTYPE_notUsed )
-            continue;
-
-        delete mpParaSheet[ nInstance ];
-        delete mpCharSheet[ nInstance ];
-    }
 }
 
 void PPTExStyleSheet::SetStyleSheet( const css::uno::Reference< css::beans::XPropertySet > & rXPropSet,
