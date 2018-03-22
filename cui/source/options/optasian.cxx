@@ -215,7 +215,7 @@ bool SvxAsianLayoutPage::FillItemSet( SfxItemSet* )
             OSL_FAIL("exception in XForbiddenCharacters");
         }
     }
-    eLastUsedLanguageTypeForForbiddenCharacters = m_pLanguageLB->GetSelectLanguage();
+    eLastUsedLanguageTypeForForbiddenCharacters = m_pLanguageLB->GetSelectedLanguage();
 
     return false;
 }
@@ -303,7 +303,7 @@ void SvxAsianLayoutPage::Reset( const SfxItemSet* )
 IMPL_LINK_NOARG(SvxAsianLayoutPage, LanguageHdl, ListBox&, void)
 {
     //set current value
-    LanguageType eSelectLanguage = m_pLanguageLB->GetSelectLanguage();
+    LanguageType eSelectLanguage = m_pLanguageLB->GetSelectedLanguage();
     LanguageTag aLanguageTag( eSelectLanguage);
     Locale aLocale( aLanguageTag.getLocale());
 
@@ -376,7 +376,7 @@ IMPL_LINK(SvxAsianLayoutPage, ChangeStandardHdl, Button*, pBox, void)
 
 IMPL_LINK(SvxAsianLayoutPage, ModifyHdl, Edit&, rEdit, void)
 {
-    LanguageType eSelectLanguage = m_pLanguageLB->GetSelectLanguage();
+    LanguageType eSelectLanguage = m_pLanguageLB->GetSelectedLanguage();
     Locale aLocale( LanguageTag::convertToLocale( eSelectLanguage ));
     OUString sStart = m_pStartED->GetText();
     OUString sEnd = m_pEndED->GetText();

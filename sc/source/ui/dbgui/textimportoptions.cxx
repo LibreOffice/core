@@ -56,7 +56,7 @@ LanguageType ScTextImportOptionsDlg::getLanguageType() const
     if (m_pRbAutomatic->IsChecked())
         return LANGUAGE_SYSTEM;
 
-    return m_pLbCustomLang->GetSelectLanguage();
+    return m_pLbCustomLang->GetSelectedLanguage();
 }
 
 bool ScTextImportOptionsDlg::isDateConversionSet() const

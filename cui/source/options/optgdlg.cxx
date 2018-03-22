@@ -1348,7 +1348,7 @@ bool OfaLanguagesTabPage::FillItemSet( SfxItemSet* rSet )
        )
     {
         //sequence checking has to be switched on depending on the selected CTL language
-        LanguageType eCTLLang = m_pComplexLanguageLB->GetSelectLanguage();
+        LanguageType eCTLLang = m_pComplexLanguageLB->GetSelectedLanguage();
         bool bOn = MsLangId::needsSequenceChecking( eCTLLang);
         pLangConfig->aLanguageOptions.SetCTLSequenceCheckingRestricted(bOn);
         pLangConfig->aLanguageOptions.SetCTLSequenceChecking(bOn);
@@ -1365,7 +1365,7 @@ bool OfaLanguagesTabPage::FillItemSet( SfxItemSet* rSet )
 
         /*
         if( m_pUserInterfaceLB->GetSelectedEntryPos() > 0)
-            aLangString = ConvertLanguageToIsoString(m_pUserInterfaceLB->GetSelectLanguage());
+            aLangString = ConvertLanguageToIsoString(m_pUserInterfaceLB->GetSelectedLanguage());
         */
         Reference< XMultiServiceFactory > theConfigProvider(
             css::configuration::theDefaultProvider::get(
@@ -1403,7 +1403,7 @@ bool OfaLanguagesTabPage::FillItemSet( SfxItemSet* rSet )
     LanguageTag aLanguageTag( pLangConfig->aSysLocaleOptions.GetLanguageTag());
     LanguageType eOldLocale = (aLanguageTag.isSystemLocale() ? LANGUAGE_SYSTEM :
             aLanguageTag.makeFallback().getLanguageType());
-    LanguageType eNewLocale = m_pLocaleSettingLB->GetSelectLanguage();
+    LanguageType eNewLocale = m_pLocaleSettingLB->GetSelectedLanguage();
 
     // If the "Default ..." entry was selected that means SYSTEM, the actual
     // eNewLocale value is temporary for the dialog only, do not resolve to
@@ -1461,7 +1461,7 @@ bool OfaLanguagesTabPage::FillItemSet( SfxItemSet* rSet )
     bool bValChanged = m_pWesternLanguageLB->IsValueChangedFromSaved();
     if( (bCurrentDocCBChanged && !bCurrentDocCBChecked) || bValChanged)
     {
-        LanguageType eSelectLang = m_pWesternLanguageLB->GetSelectLanguage();
+        LanguageType eSelectLang = m_pWesternLanguageLB->GetSelectedLanguage();
         if(!bCurrentDocCBChecked)
         {
             Any aValue;
@@ -1480,7 +1480,7 @@ bool OfaLanguagesTabPage::FillItemSet( SfxItemSet* rSet )
     bValChanged = m_pAsianLanguageLB->IsValueChangedFromSaved();
     if( (bCurrentDocCBChanged && !bCurrentDocCBChecked) || bValChanged)
     {
-        LanguageType eSelectLang = m_pAsianLanguageLB->GetSelectLanguage();
+        LanguageType eSelectLang = m_pAsianLanguageLB->GetSelectedLanguage();
         if(!bCurrentDocCBChecked)
         {
             Any aValue;
@@ -1499,7 +1499,7 @@ bool OfaLanguagesTabPage::FillItemSet( SfxItemSet* rSet )
     bValChanged = m_pComplexLanguageLB->IsValueChangedFromSaved();
     if( (bCurrentDocCBChanged && !bCurrentDocCBChecked) || bValChanged)
     {
-        LanguageType eSelectLang = m_pComplexLanguageLB->GetSelectLanguage();
+        LanguageType eSelectLang = m_pComplexLanguageLB->GetSelectedLanguage();
         if(!bCurrentDocCBChecked)
         {
             Any aValue;
@@ -1756,7 +1756,7 @@ namespace
 IMPL_LINK( OfaLanguagesTabPage, LocaleSettingHdl, ListBox&, rListBox, void )
 {
     SvxLanguageBox* pBox = static_cast<SvxLanguageBox*>(&rListBox);
-    LanguageType eLang = pBox->GetSelectLanguage();
+    LanguageType eLang = pBox->GetSelectedLanguage();
     SvtScriptType nType = SvtLanguageOptions::GetScriptTypeOfLanguage(eLang);
     // first check if CTL must be enabled
     // #103299# - if CTL font setting is not readonly

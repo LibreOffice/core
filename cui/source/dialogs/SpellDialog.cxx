@@ -736,7 +736,7 @@ bool SpellDialog::Close()
 
 LanguageType SpellDialog::GetSelectedLang_Impl() const
 {
-    LanguageType nLang = m_pLanguageLB->GetSelectLanguage();
+    LanguageType nLang = m_pLanguageLB->GetSelectedLanguage();
     return nLang;
 }
 
@@ -753,7 +753,7 @@ IMPL_LINK(SpellDialog, LanguageSelectHdl, ListBox&, rBox, void)
     m_pSuggestionLB->Clear();
     if(!sError.isEmpty())
     {
-        LanguageType eLanguage = static_cast<SvxLanguageBox*>(&rBox)->GetSelectLanguage();
+        LanguageType eLanguage = static_cast<SvxLanguageBox*>(&rBox)->GetSelectedLanguage();
         Reference <XSpellAlternatives> xAlt = xSpell->spell( sError, static_cast<sal_uInt16>(eLanguage),
                                             Sequence< PropertyValue >() );
         if( xAlt.is() )
@@ -779,7 +779,7 @@ void SpellDialog::SetTitle_Impl(LanguageType nLang)
 
 int SpellDialog::InitUserDicts()
 {
-    const LanguageType nLang = m_pLanguageLB->GetSelectLanguage();
+    const LanguageType nLang = m_pLanguageLB->GetSelectedLanguage();
 
     const Reference< XDictionary >  *pDic = nullptr;
 
@@ -1601,7 +1601,7 @@ bool SentenceEditWindow_Impl::MarkNextError( bool bIgnoreCurrentError, const css
                 pTextEngine->FindAttrib( TextPaM(0, nOldErrorStart), TEXTATTR_SPELL_ERROR ));
         pAction->SetErrorLanguageSelected(pOldAttrib && pOldAttrib->GetErrorDescription().aSuggestions.getLength() &&
                 LanguageTag( pOldAttrib->GetErrorDescription().aLocale).getLanguageType() ==
-                                        GetSpellDialog()->m_pLanguageLB->GetSelectLanguage());
+                                        GetSpellDialog()->m_pLanguageLB->GetSelectedLanguage());
         AddUndoAction(pAction);
     }
     else

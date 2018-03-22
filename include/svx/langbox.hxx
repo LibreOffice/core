@@ -79,7 +79,7 @@ public:
                                     bool bCheckEntry );
     void            RemoveLanguage( const LanguageType eLangType );
     void            SelectLanguage( const LanguageType eLangType );
-    LanguageType    GetSelectLanguage() const;
+    LanguageType    GetSelectedLanguage() const;
     bool            IsLanguageSelected( const LanguageType eLangType ) const;
 
     void                SetNoSelectionLBB();
@@ -168,7 +168,7 @@ public:
                             bool bCheckSpellAvail = false );
     void            AddLanguages( const std::vector< LanguageType >& rLanguageTypes, SvxLanguageListFlags nLangList );
     void            SelectLanguage( const LanguageType eLangType );
-    LanguageType    GetSelectLanguage() const;
+    LanguageType    GetSelectedLanguage() const;
 
     void connect_changed(const Link<weld::ComboBoxText&, void>& rLink) { m_aChangeHdl = rLink; }
 };

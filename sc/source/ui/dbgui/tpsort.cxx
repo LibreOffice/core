@@ -740,7 +740,7 @@ bool ScTabPageSortOptions::FillItemSet( SfxItemSet* rArgSet )
                                    : 0;
 
     // get locale
-    LanguageType eLang = m_pLbLanguage->GetSelectLanguage();
+    LanguageType eLang = m_pLbLanguage->GetSelectedLanguage();
     aNewSortData.aCollatorLocale = LanguageTag::convertToLocale( eLang, false);
 
     // get algorithm
@@ -940,7 +940,7 @@ IMPL_LINK_NOARG(ScTabPageSortOptions, FillAlgorHdl, ListBox&, void)
     m_pLbAlgorithm->SetUpdateMode( false );
     m_pLbAlgorithm->Clear();
 
-    LanguageType eLang = m_pLbLanguage->GetSelectLanguage();
+    LanguageType eLang = m_pLbLanguage->GetSelectedLanguage();
     if ( eLang == LANGUAGE_SYSTEM )
     {
         //  for LANGUAGE_SYSTEM no algorithm can be selected because

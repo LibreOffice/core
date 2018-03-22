@@ -1242,7 +1242,7 @@ void SwTOXSelectTabPage::FillTOXDescription()
     for(sal_uInt16 i = 0; i < MAXLEVEL; i++)
         rDesc.SetStyleNames(aStyleArr[i], i);
 
-    rDesc.SetLanguage(m_pLanguageLB->GetSelectLanguage());
+    rDesc.SetLanguage(m_pLanguageLB->GetSelectedLanguage());
     const OUString* pEntryData = static_cast<const OUString*>(m_pSortAlgorithmLB->GetSelectedEntryData());
     OSL_ENSURE(pEntryData, "no entry data available");
     if(pEntryData)
@@ -1432,7 +1432,7 @@ IMPL_LINK(SwTOXSelectTabPage, LanguageListBoxHdl, ListBox&, rBox, void)
 }
 void SwTOXSelectTabPage::LanguageHdl( ListBox const * pBox )
 {
-    lang::Locale aLcl( LanguageTag( m_pLanguageLB->GetSelectLanguage() ).getLocale() );
+    lang::Locale aLcl( LanguageTag( m_pLanguageLB->GetSelectedLanguage() ).getLocale() );
     Sequence< OUString > aSeq = pIndexEntryWrapper->GetAlgorithmList( aLcl );
 
     if( !pIndexRes )

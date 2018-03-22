@@ -255,7 +255,7 @@ void SwSortDlg::Apply()
     bAsc2 = m_xSortUp2RB->get_active();
     bAsc3 = m_xSortUp3RB->get_active();
     bCol = m_xColumnRB->get_active();
-    nLang = m_xLangLB->GetSelectLanguage();
+    nLang = m_xLangLB->GetSelectedLanguage();
     cDeli = GetDelimChar();
     bCsSens = m_xCaseCB->get_active();
 
@@ -389,7 +389,7 @@ IMPL_LINK( SwSortDlg, LanguageListBoxHdl, weld::ComboBoxText&, rLBox, void )
 void SwSortDlg::LanguageHdl(weld::ComboBoxText const* pLBox)
 {
     Sequence < OUString > aSeq( GetAppCollator().listCollatorAlgorithms(
-                LanguageTag( m_xLangLB->GetSelectLanguage()).getLocale() ));
+                LanguageTag( m_xLangLB->GetSelectedLanguage()).getLocale() ));
 
     if (!m_xColRes)
         m_xColRes.reset(new CollatorResource);

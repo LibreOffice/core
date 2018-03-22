@@ -302,7 +302,7 @@ Sequence< Locale > SetDefaultLanguageDialog::GetLocales() const
     Sequence< Locale > aLocaleSeq( nSize );
     if ( bNotLocalized )
     {
-        aLocaleSeq[0] = LanguageTag( m_pLanguageLB->GetSelectLanguage() ).getLocale();
+        aLocaleSeq[0] = LanguageTag( m_pLanguageLB->GetSelectedLanguage() ).getLocale();
     }
     else
     {

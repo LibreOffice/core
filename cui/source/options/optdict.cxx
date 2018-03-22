@@ -160,7 +160,7 @@ IMPL_LINK_NOARG(SvxNewDictionaryDialog, OKHdl_Impl, Button*, void)
     }
 
     // create and add
-    LanguageType nLang = pLanguageLB->GetSelectLanguage();
+    LanguageType nLang = pLanguageLB->GetSelectedLanguage();
     try
     {
         // create new dictionary
@@ -447,7 +447,7 @@ IMPL_LINK_NOARG(SvxEditDictionaryDialog, SelectBookHdl_Impl, ListBox&, void)
 IMPL_LINK_NOARG(SvxEditDictionaryDialog, SelectLangHdl_Impl, ListBox&, void)
 {
     sal_Int32 nDicPos = pAllDictsLB->GetSelectedEntryPos();
-    LanguageType nLang = pLangLB->GetSelectLanguage();
+    LanguageType nLang = pLangLB->GetSelectedLanguage();
     Reference< XDictionary >  xDic( aDics.getConstArray()[ nDicPos ], UNO_QUERY );
     LanguageType nOldLang = LanguageTag( xDic->getLocale() ).getLanguageType();
 

@@ -168,7 +168,7 @@ SvxFieldData* SdModifyFieldDlg::GetField()
 
 void SdModifyFieldDlg::FillFormatList()
 {
-    LanguageType eLangType = m_pLbLanguage->GetSelectLanguage();
+    LanguageType eLangType = m_pLbLanguage->GetSelectedLanguage();
 
     m_pLbFormat->Clear();
 
@@ -323,7 +323,7 @@ SfxItemSet SdModifyFieldDlg::GetItemSet()
 
     if( m_pLbLanguage->IsValueChangedFromSaved() )
     {
-        LanguageType eLangType = m_pLbLanguage->GetSelectLanguage();
+        LanguageType eLangType = m_pLbLanguage->GetSelectedLanguage();
         SvxLanguageItem aItem( eLangType, EE_CHAR_LANGUAGE );
         aOutput.Put( aItem );
 

@@ -270,7 +270,7 @@ void SwAsciiFilterDlg::FillOptions( SwAsciiOptions& rOptions )
     if( m_pFontLB->IsVisible() )
     {
         sFont = m_pFontLB->GetSelectedEntry();
-        nLng = m_pLanguageLB->GetSelectLanguage();
+        nLng = m_pLanguageLB->GetSelectedLanguage();
     }
 
     rOptions.SetFontName( sFont );
@@ -326,7 +326,7 @@ IMPL_LINK( SwAsciiFilterDlg, CharSetSelHdl, ListBox&, rListBox, void )
     SvxTextEncodingBox* pBox = static_cast<SvxTextEncodingBox*>(&rListBox);
     LineEnd eOldEnd = GetCRLF(), eEnd = LineEnd(-1);
     LanguageType nLng = m_pFontLB->IsVisible()
-                    ? m_pLanguageLB->GetSelectLanguage()
+                    ? m_pLanguageLB->GetSelectedLanguage()
                     : LANGUAGE_SYSTEM,
                 nOldLng = nLng;
 
