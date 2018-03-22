@@ -34,6 +34,7 @@
 
 namespace svx
 {
+#if 0
     using namespace comphelper;
     using namespace ::com::sun::star;
     using namespace ::com::sun::star::uno;
@@ -71,7 +72,7 @@ void SvxShowCharSetVirtualAcc::fireEvent(
 
 sal_Int32 SvxShowCharSetVirtualAcc::getImplAccessibleChildCount() const
 {
-    return mpParent->getScrollBar().IsVisible() ? 2 : 1;
+    return 1;
 }
 
 sal_Int32 SAL_CALL SvxShowCharSetVirtualAcc::getAccessibleChildCount()
@@ -94,15 +95,6 @@ uno::Reference< css::accessibility::XAccessible > SAL_CALL SvxShowCharSetVirtual
             m_xTable = new SvxShowCharSetAcc(this);
         xRet = m_xTable.get();
     }
-    else if ( mpParent->getScrollBar().IsVisible() )
-    {
-        const Point aOutPos( mpParent->getScrollBar().GetPosPixel() );
-        const Size  aScrollBar = mpParent->getScrollBar().GetOutputSizePixel();
-        tools::Rectangle aRect(aOutPos,aScrollBar);
-
-        if ( aRect.IsInside(VCLPoint(aPoint)) )
-            xRet = mpParent->getScrollBar().GetAccessible();
-    }
     return xRet;
 }
 
@@ -120,9 +112,6 @@ Reference< XAccessible > SAL_CALL SvxShowCharSetVirtualAcc::getAccessibleChild( 
     sal_Int32 nCount = getImplAccessibleChildCount();
     if (i >= nCount)
         throw IndexOutOfBoundsException();
-
-    if (i == 0 && mpParent->getScrollBar().IsVisible())
-        return mpParent->getScrollBar().GetAccessible();
 
     if (!m_xTable.is())
         m_xTable = new SvxShowCharSetAcc(this);
@@ -219,6 +208,7 @@ void SAL_CALL SvxShowCharSetVirtualAcc::disposing()
     m_xTable.clear();
 }
 
+#endif
 
 SvxShowCharSetItem::SvxShowCharSetItem( SvxShowCharSet& rParent,SvxShowCharSetAcc*  _pParent,sal_uInt16 _nPos ) :
     mrParent( rParent )
@@ -226,7 +216,6 @@ SvxShowCharSetItem::SvxShowCharSetItem( SvxShowCharSet& rParent,SvxShowCharSetAc
     ,m_pParent(_pParent)
 {
 }
-
 
 SvxShowCharSetItem::~SvxShowCharSetItem()
 {
@@ -237,6 +226,7 @@ SvxShowCharSetItem::~SvxShowCharSetItem()
     }
 }
 
+#if 0
 
 uno::Reference< css::accessibility::XAccessible > SvxShowCharSetItem::GetAccessible()
 {
@@ -298,15 +288,10 @@ void SvxShowCharSetAcc::implSelect(sal_Int32 nAccessibleChildIndex, bool bSelect
     }
 }
 
-css::awt::Rectangle SvxShowCharSetAcc::implGetBounds(  )
+css::awt::Rectangle SvxShowCharSetAcc::implGetBounds()
 {
     const Point   aOutPos;//( m_pParent->getCharSetControl()->GetPosPixel() );
     Size          aOutSize( m_pParent->getCharSetControl()->GetOutputSizePixel());
-    if ( m_pParent->getCharSetControl()->getScrollBar().IsVisible() )
-    {
-        const Size aScrollBar = m_pParent->getCharSetControl()->getScrollBar().GetOutputSizePixel();
-        aOutSize.AdjustWidth( -(aScrollBar.Width()) );
-    }
 
     awt::Rectangle aRet;
 
@@ -570,6 +555,7 @@ SvxShowCharSetItemAcc::~SvxShowCharSetItemAcc()
 IMPLEMENT_FORWARD_XINTERFACE2( SvxShowCharSetItemAcc, OAccessibleComponentHelper, OAccessibleHelper_Base_3 )
 IMPLEMENT_FORWARD_XTYPEPROVIDER2( SvxShowCharSetItemAcc, OAccessibleComponentHelper, OAccessibleHelper_Base_3 )
 
+#endif
 
 void SvxShowCharSetItemAcc::ParentDestroyed()
 {
@@ -577,6 +563,7 @@ void SvxShowCharSetItemAcc::ParentDestroyed()
     mpParent = nullptr;
 }
 
+#if 0
 
 sal_Int32 SAL_CALL SvxShowCharSetItemAcc::getAccessibleChildCount()
 {
@@ -814,6 +801,7 @@ sal_Int32 SAL_CALL SvxShowCharSetAcc::getBackground(  )
 }
 
 
+#endif
 }
 
 

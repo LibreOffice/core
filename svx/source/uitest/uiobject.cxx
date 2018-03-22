@@ -12,6 +12,8 @@
 
 #include <svx/charmap.hxx>
 
+#if 0
+
 SvxShowCharSetUIObject::SvxShowCharSetUIObject(const VclPtr<SvxShowCharSet>& xCharSet):
     WindowUIObject(xCharSet),
     mxCharSet(xCharSet)
@@ -65,5 +67,7 @@ OUString SvxShowCharSetUIObject::get_name() const
 {
     return OUString("SvxShowCharSetUIObject");
 }
+
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

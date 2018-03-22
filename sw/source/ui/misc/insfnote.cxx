@@ -105,7 +105,7 @@ IMPL_LINK_NOARG(SwInsFootNoteDlg, NumberExtCharHdl, Button*, void)
     aAllSet.Put( rFont );
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-    ScopedVclPtr<SfxAbstractDialog> pDlg(pFact->CreateCharMapDialog( this, aAllSet, false ));
+    ScopedVclPtr<SfxAbstractDialog> pDlg(pFact->CreateCharMapDialog(GetFrameWeld(), aAllSet, false));
     if (RET_OK == pDlg->Execute())
     {
         const SfxStringItem* pItem = SfxItemSet::GetItem<SfxStringItem>(pDlg->GetOutputItemSet(), SID_CHARMAP, false);

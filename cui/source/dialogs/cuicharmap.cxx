@@ -32,6 +32,7 @@
 #include <vcl/builderfactory.hxx>
 #include <vcl/fontcharmap.hxx>
 #include <svl/stritem.hxx>
+#include <o3tl/make_unique.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
@@ -52,71 +53,72 @@
 
 using namespace css;
 
-// class SvxCharacterMap =================================================
-
-SvxCharacterMap::SvxCharacterMap( vcl::Window* pParent, const SfxItemSet* pSet, bool bInsert )
-    : SfxModalDialog(pParent, "SpecialCharactersDialog", "cui/ui/specialcharacters.ui")
+SvxCharacterMap::SvxCharacterMap(weld::Window* pParent, const SfxItemSet* pSet, bool bInsert)
+    : GenericDialogController(pParent, "cui/ui/specialcharacters.ui", "SpecialCharactersDialog")
+    , m_xVirDev(VclPtr<VirtualDevice>::Create())
     , pSubsetMap( nullptr )
     , isSearchMode(true)
     , m_bHasInsert(bInsert)
     , mxContext(comphelper::getProcessComponentContext())
+    , m_xOKBtn(bInsert ? m_xBuilder->weld_button("insert") : m_xBuilder->weld_button("ok"))
+    , m_xFontText(m_xBuilder->weld_label("fontft"))
+    , m_xFontLB(m_xBuilder->weld_combo_box_text("fontlb"))
+    , m_xSubsetText(m_xBuilder->weld_label("subsetft"))
+    , m_xSubsetLB(m_xBuilder->weld_combo_box_text("subsetlb"))
+    , m_xSearchText(m_xBuilder->weld_entry("search"))
+    , m_xHexCodeText(m_xBuilder->weld_entry("hexvalue"))
+    , m_xDecimalCodeText(m_xBuilder->weld_entry("decimalvalue"))
+    , m_xFavouritesBtn(m_xBuilder->weld_button("favbtn"))
+    , m_xCharName(m_xBuilder->weld_label("charname"))
+    , m_xRecentGrid(m_xBuilder->weld_widget("viewgrid"))
+    , m_xFavGrid(m_xBuilder->weld_widget("favgrid"))
+    , m_xShowChar(new SvxShowText(*m_xBuilder, "showchar", m_xVirDev))
+    , m_xRecentCharView{o3tl::make_unique<SvxCharView>(*m_xBuilder, "viewchar1", m_xVirDev),
+                        o3tl::make_unique<SvxCharView>(*m_xBuilder, "viewchar2", m_xVirDev),
+                        o3tl::make_unique<SvxCharView>(*m_xBuilder, "viewchar3", m_xVirDev),
+                        o3tl::make_unique<SvxCharView>(*m_xBuilder, "viewchar4", m_xVirDev),
+                        o3tl::make_unique<SvxCharView>(*m_xBuilder, "viewchar5", m_xVirDev),
+                        o3tl::make_unique<SvxCharView>(*m_xBuilder, "viewchar6", m_xVirDev),
+                        o3tl::make_unique<SvxCharView>(*m_xBuilder, "viewchar7", m_xVirDev),
+                        o3tl::make_unique<SvxCharView>(*m_xBuilder, "viewchar8", m_xVirDev),
+                        o3tl::make_unique<SvxCharView>(*m_xBuilder, "viewchar9", m_xVirDev),
+                        o3tl::make_unique<SvxCharView>(*m_xBuilder, "viewchar10", m_xVirDev),
+                        o3tl::make_unique<SvxCharView>(*m_xBuilder, "viewchar11", m_xVirDev),
+                        o3tl::make_unique<SvxCharView>(*m_xBuilder, "viewchar12", m_xVirDev),
+                        o3tl::make_unique<SvxCharView>(*m_xBuilder, "viewchar13", m_xVirDev),
+                        o3tl::make_unique<SvxCharView>(*m_xBuilder, "viewchar14", m_xVirDev),
+                        o3tl::make_unique<SvxCharView>(*m_xBuilder, "viewchar15", m_xVirDev),
+                        o3tl::make_unique<SvxCharView>(*m_xBuilder, "viewchar16", m_xVirDev)}
+    , m_xFavCharView{o3tl::make_unique<SvxCharView>(*m_xBuilder, "favchar1", m_xVirDev),
+                     o3tl::make_unique<SvxCharView>(*m_xBuilder, "favchar2", m_xVirDev),
+                     o3tl::make_unique<SvxCharView>(*m_xBuilder, "favchar3", m_xVirDev),
+                     o3tl::make_unique<SvxCharView>(*m_xBuilder, "favchar4", m_xVirDev),
+                     o3tl::make_unique<SvxCharView>(*m_xBuilder, "favchar5", m_xVirDev),
+                     o3tl::make_unique<SvxCharView>(*m_xBuilder, "favchar6", m_xVirDev),
+                     o3tl::make_unique<SvxCharView>(*m_xBuilder, "favchar7", m_xVirDev),
+                     o3tl::make_unique<SvxCharView>(*m_xBuilder, "favchar8", m_xVirDev),
+                     o3tl::make_unique<SvxCharView>(*m_xBuilder, "favchar9", m_xVirDev),
+                     o3tl::make_unique<SvxCharView>(*m_xBuilder, "favchar10", m_xVirDev),
+                     o3tl::make_unique<SvxCharView>(*m_xBuilder, "favchar11", m_xVirDev),
+                     o3tl::make_unique<SvxCharView>(*m_xBuilder, "favchar12", m_xVirDev),
+                     o3tl::make_unique<SvxCharView>(*m_xBuilder, "favchar13", m_xVirDev),
+                     o3tl::make_unique<SvxCharView>(*m_xBuilder, "favchar14", m_xVirDev),
+                     o3tl::make_unique<SvxCharView>(*m_xBuilder, "favchar15", m_xVirDev),
+                     o3tl::make_unique<SvxCharView>(*m_xBuilder, "favchar16", m_xVirDev)}
+    , m_xShowSet(new SvxShowCharSet(*m_xBuilder, "showcharset", "showscroll", m_xVirDev))
+    , m_xSearchSet(new SvxSearchCharSet(*m_xBuilder, "searchcharset", "searchscroll", m_xVirDev))
 {
-    get(m_pShowSet, "showcharset");
-    get(m_pSearchSet, "searchcharset");
-    get(m_pShowChar, "showchar");
-    m_pShowChar->SetCentered(true);
-    if (m_bHasInsert) get(m_pOKBtn, "insert");
-    else get(m_pOKBtn, "ok");
-    get(m_pFontText, "fontft");
-    get(m_pFontLB, "fontlb");
-    m_pFontLB->SetStyle(m_pFontLB->GetStyle() | WB_SORT);
-    get(m_pSubsetText, "subsetft");
-    get(m_pSubsetLB, "subsetlb");
+    m_xShowChar->SetCentered(true);
+    m_xFontLB->make_sorted();
     //lock the size request of this widget to the width of all possible entries
-    fillAllSubsets(*m_pSubsetLB);
-    m_pSubsetLB->set_width_request(m_pSubsetLB->get_preferred_size().Width());
-    get(m_pHexCodeText, "hexvalue");    get(m_pDecimalCodeText, "decimalvalue");
-    get(m_pFavouritesBtn, "favbtn");
-    get(m_pCharName, "charname");
-    m_pCharName->set_height_request(m_pCharName->GetTextHeight()*3);
-    m_pCharName->SetPaintTransparent(true);
-    get(m_pSearchText, "search");
+    fillAllSubsets(*m_xSubsetLB);
+    m_xSubsetLB->set_size_request(m_xSubsetLB->get_preferred_size().Width(), -1);
+    m_xCharName->set_size_request(m_xShowChar->get_preferred_size().Width(), m_xCharName->get_text_height() * 4);
     //lock the size request of this widget to the width of the original .ui string
-    m_pHexCodeText->set_width_request(m_pHexCodeText->get_preferred_size().Width());
-
-    get( m_pRecentCharView[0], "viewchar1" );
-    get( m_pRecentCharView[1], "viewchar2" );
-    get( m_pRecentCharView[2], "viewchar3" );
-    get( m_pRecentCharView[3], "viewchar4" );
-    get( m_pRecentCharView[4], "viewchar5" );
-    get( m_pRecentCharView[5], "viewchar6" );
-    get( m_pRecentCharView[6], "viewchar7" );
-    get( m_pRecentCharView[7], "viewchar8" );
-    get( m_pRecentCharView[8], "viewchar9" );
-    get( m_pRecentCharView[9], "viewchar10" );
-    get( m_pRecentCharView[10], "viewchar11" );
-    get( m_pRecentCharView[11], "viewchar12" );
-    get( m_pRecentCharView[12], "viewchar13" );
-    get( m_pRecentCharView[13], "viewchar14" );
-    get( m_pRecentCharView[14], "viewchar15" );
-    get( m_pRecentCharView[15], "viewchar16" );
-
-    get( m_pFavCharView[0], "favchar1" );
-    get( m_pFavCharView[1], "favchar2" );
-    get( m_pFavCharView[2], "favchar3" );
-    get( m_pFavCharView[3], "favchar4" );
-    get( m_pFavCharView[4], "favchar5" );
-    get( m_pFavCharView[5], "favchar6" );
-    get( m_pFavCharView[6], "favchar7" );
-    get( m_pFavCharView[7], "favchar8" );
-    get( m_pFavCharView[8], "favchar9" );
-    get( m_pFavCharView[9], "favchar10" );
-    get( m_pFavCharView[10], "favchar11" );
-    get( m_pFavCharView[11], "favchar12" );
-    get( m_pFavCharView[12], "favchar13" );
-    get( m_pFavCharView[13], "favchar14" );
-    get( m_pFavCharView[14], "favchar15" );
-    get( m_pFavCharView[15], "favchar16" );
+    m_xHexCodeText->set_size_request(m_xHexCodeText->get_preferred_size().Width(), -1);
+    //so things don't jump around if all the children are hidden
+    m_xRecentGrid->set_size_request(-1, m_xRecentCharView[0]->get_preferred_size().Height());
+    m_xFavGrid->set_size_request(-1, m_xFavCharView[0]->get_preferred_size().Height());
 
     init();
 
@@ -144,84 +146,49 @@ SvxCharacterMap::SvxCharacterMap( vcl::Window* pParent, const SfxItemSet* pSet, 
         SetCharFont( aTmpFont );
     }
 
-    CreateOutputItemSet( pSet ? *pSet->GetPool() : SfxGetpApp()->GetPool() );
-    m_pShowSet->Show();
-    m_pSearchSet->Hide();
+    m_xOutputSet.reset(new SfxAllItemSet(pSet ? *pSet->GetPool() : SfxGetpApp()->GetPool()));
+    m_xShowSet->Show();
+    m_xSearchSet->Hide();
 }
 
-SvxCharacterMap::~SvxCharacterMap()
-{
-    disposeOnce();
-}
-
-short SvxCharacterMap::Execute()
+short SvxCharacterMap::execute()
 {
     if( SvxShowCharSet::getSelectedChar() == ' ')
     {
-        m_pOKBtn->Disable();
+        m_xOKBtn->set_sensitive(false);
         setFavButtonState(OUString(), OUString());
     }
     else
     {
-        sal_UCS4 cChar = m_pShowSet->GetSelectCharacter();
+        sal_UCS4 cChar = m_xShowSet->GetSelectCharacter();
         // using the new UCS4 constructor
         OUString aOUStr( &cChar, 1 );
-        m_pShowChar->SetText(aOUStr);
+        m_xShowChar->SetText(aOUStr);
 
-        setFavButtonState(aOUStr, m_pShowChar->GetFont().GetFamilyName());
-        m_pOKBtn->Enable();
+        setFavButtonState(aOUStr, m_xShowChar->GetFont().GetFamilyName());
+        m_xOKBtn->set_sensitive(true);
     }
 
-    return SfxModalDialog::Execute();
+    return run();
 }
-
-void SvxCharacterMap::dispose()
-{
-    for(int i = 0; i < 16; i++)
-        m_pRecentCharView[i].clear();
-
-    m_pShowSet.clear();
-    m_pSearchSet.clear();
-    m_pOKBtn.clear();
-    m_pFontText.clear();
-    m_pFontLB.clear();
-    m_pSubsetText.clear();
-    m_pSubsetLB.clear();
-    m_pShowChar.clear();
-    m_pHexCodeText.clear();
-    m_pDecimalCodeText.clear();
-    m_pCharName.clear();
-
-    maRecentCharList.clear();
-    maRecentCharFontList.clear();
-    maFavCharList.clear();
-    maFavCharFontList.clear();
-
-    m_pFavouritesBtn.clear();
-    m_pSearchText.clear();
-
-    SfxModalDialog::dispose();
-}
-
 
 void SvxCharacterMap::SetChar( sal_UCS4 c )
 {
-    m_pShowSet->SelectCharacter( c );
-
+    m_xShowSet->SelectCharacter( c );
     setFavButtonState(OUString(&c, 1), aFont.GetFamilyName());
 }
 
 
 sal_UCS4 SvxCharacterMap::GetChar() const
 {
-   return (m_pShowChar->GetText()).toChar();
+   return (m_xShowChar->GetText()).toChar();
 }
 
 
 void SvxCharacterMap::DisableFontSelection()
 {
-    m_pFontText->Disable();
-    m_pFontLB->Disable();
+    m_xFontText->set_sensitive(false);
+    m_xFontLB->set_sensitive(false);
 }
 
 
@@ -270,17 +237,17 @@ void SvxCharacterMap::updateRecentCharControl()
         it != maRecentCharList.end() || it2 != maRecentCharFontList.end();
         ++it, ++it2, i++)
     {
-        m_pRecentCharView[i]->SetText(*it);
-        vcl::Font rFont = m_pRecentCharView[i]->GetControlFont();
+        m_xRecentCharView[i]->SetText(*it);
+        vcl::Font rFont = m_xRecentCharView[i]->GetFont();
         rFont.SetFamilyName( *it2 );
-        m_pRecentCharView[i]->SetFont(rFont);
-        m_pRecentCharView[i]->Show();
+        m_xRecentCharView[i]->SetFont(rFont);
+        m_xRecentCharView[i]->Show();
     }
 
     for(; i < 16 ; i++)
     {
-        m_pRecentCharView[i]->SetText(OUString());
-        m_pRecentCharView[i]->Hide();
+        m_xRecentCharView[i]->SetText(OUString());
+        m_xRecentCharView[i]->Hide();
     }
 }
 
@@ -377,22 +344,21 @@ void SvxCharacterMap::updateFavCharControl()
         it != maFavCharList.end() || it2 != maFavCharFontList.end();
         ++it, ++it2, i++)
     {
-        m_pFavCharView[i]->SetText(*it);
-        vcl::Font rFont = m_pFavCharView[i]->GetControlFont();
+        m_xFavCharView[i]->SetText(*it);
+        vcl::Font rFont = m_xFavCharView[i]->GetFont();
         rFont.SetFamilyName( *it2 );
-        m_pFavCharView[i]->SetFont(rFont);
-        m_pFavCharView[i]->Show();
+        m_xFavCharView[i]->SetFont(rFont);
+        m_xFavCharView[i]->Show();
     }
 
     for(; i < 16 ; i++)
     {
-        m_pFavCharView[i]->SetText(OUString());
-        m_pFavCharView[i]->Hide();
+        m_xFavCharView[i]->SetText(OUString());
+        m_xFavCharView[i]->Hide();
     }
-    m_pShowSet->getFavCharacterList();
-    m_pSearchSet->getFavCharacterList();
+    m_xShowSet->getFavCharacterList();
+    m_xSearchSet->getFavCharacterList();
 }
-
 
 void SvxCharacterMap::deleteFavCharacterFromList(const OUString& sTitle, const OUString& rFont)
 {
@@ -426,10 +392,9 @@ void SvxCharacterMap::deleteFavCharacterFromList(const OUString& sTitle, const O
     batch->commit();
 }
 
-
 void SvxCharacterMap::init()
 {
-    aFont = GetFont();
+    aFont = m_xVirDev->GetFont();
     aFont.SetTransparent( true );
     aFont.SetFamily( FAMILY_DONTKNOW );
     aFont.SetPitch( PITCH_DONTKNOW );
@@ -437,28 +402,27 @@ void SvxCharacterMap::init()
 
     OUString aDefStr( aFont.GetFamilyName() );
     OUString aLastName;
-    int nCount = GetDevFontCount();
+    int nCount = m_xVirDev->GetDevFontCount();
     for ( int i = 0; i < nCount; i++ )
     {
-        OUString aFontName( GetDevFont( i ).GetFamilyName() );
-        if ( aFontName != aLastName )
+        OUString aFontName( m_xVirDev->GetDevFont( i ).GetFamilyName() );
+        if (aFontName != aLastName)
         {
             aLastName = aFontName;
-            const sal_Int32 nPos = m_pFontLB->InsertEntry( aFontName );
-            m_pFontLB->SetEntryData( nPos, reinterpret_cast<void*>(i) );
+            m_xFontLB->append(OUString::number(i), aFontName);
         }
     }
     // the font may not be in the list =>
     // try to find a font name token in list and select found font,
     // else select topmost entry
-    bool bFound = (m_pFontLB->GetEntryPos( aDefStr ) == LISTBOX_ENTRY_NOTFOUND );
-    if( !bFound )
+    bool bFound = (m_xFontLB->find_text(aDefStr) == -1);
+    if (!bFound)
     {
         sal_Int32 nIndex = 0;
         do
         {
             OUString aToken = aDefStr.getToken(0, ';', nIndex);
-            if ( m_pFontLB->GetEntryPos( aToken ) != LISTBOX_ENTRY_NOTFOUND )
+            if (m_xFontLB->find_text(aToken) != -1)
             {
                 aDefStr = aToken;
                 bFound = true;
@@ -468,47 +432,46 @@ void SvxCharacterMap::init()
         while ( nIndex >= 0 );
     }
 
-    if ( bFound )
-        m_pFontLB->SelectEntry( aDefStr );
-    else if ( m_pFontLB->GetEntryCount() )
-        m_pFontLB->SelectEntryPos(0);
-    FontSelectHdl(*m_pFontLB);
+    if (bFound)
+        m_xFontLB->set_active(aDefStr);
+    else if (m_xFontLB->get_count() )
+        m_xFontLB->set_active(0);
+    FontSelectHdl(*m_xFontLB);
 
-    m_pFontLB->SetSelectHdl( LINK( this, SvxCharacterMap, FontSelectHdl ) );
-    m_pSubsetLB->SetSelectHdl( LINK( this, SvxCharacterMap, SubsetSelectHdl ) );
-    m_pOKBtn->SetClickHdl( LINK( this, SvxCharacterMap, InsertClickHdl ) );
-    m_pOKBtn->Show();
+    m_xFontLB->connect_changed(LINK( this, SvxCharacterMap, FontSelectHdl));
+    m_xSubsetLB->connect_changed(LINK( this, SvxCharacterMap, SubsetSelectHdl));
+    m_xOKBtn->connect_clicked(LINK(this, SvxCharacterMap, InsertClickHdl));
+    m_xOKBtn->show();
 
+    m_xShowSet->SetDoubleClickHdl( LINK( this, SvxCharacterMap, CharDoubleClickHdl ) );
+    m_xShowSet->SetSelectHdl( LINK( this, SvxCharacterMap, CharSelectHdl ) );
+    m_xShowSet->SetHighlightHdl( LINK( this, SvxCharacterMap, CharHighlightHdl ) );
+    m_xShowSet->SetPreSelectHdl( LINK( this, SvxCharacterMap, CharPreSelectHdl ) );
+    m_xShowSet->SetFavClickHdl( LINK( this, SvxCharacterMap, FavClickHdl ) );
 
-    m_pShowSet->SetDoubleClickHdl( LINK( this, SvxCharacterMap, CharDoubleClickHdl ) );
-    m_pShowSet->SetSelectHdl( LINK( this, SvxCharacterMap, CharSelectHdl ) );
-    m_pShowSet->SetHighlightHdl( LINK( this, SvxCharacterMap, CharHighlightHdl ) );
-    m_pShowSet->SetPreSelectHdl( LINK( this, SvxCharacterMap, CharPreSelectHdl ) );
-    m_pShowSet->SetFavClickHdl( LINK( this, SvxCharacterMap, FavClickHdl ) );
+    m_xSearchSet->SetDoubleClickHdl( LINK( this, SvxCharacterMap, SearchCharDoubleClickHdl ) );
+    m_xSearchSet->SetSelectHdl( LINK( this, SvxCharacterMap, SearchCharSelectHdl ) );
+    m_xSearchSet->SetHighlightHdl( LINK( this, SvxCharacterMap, SearchCharHighlightHdl ) );
+    m_xSearchSet->SetPreSelectHdl( LINK( this, SvxCharacterMap, SearchCharPreSelectHdl ) );
+    m_xSearchSet->SetFavClickHdl( LINK( this, SvxCharacterMap, FavClickHdl ) );
 
-    m_pSearchSet->SetDoubleClickHdl( LINK( this, SvxCharacterMap, SearchCharDoubleClickHdl ) );
-    m_pSearchSet->SetSelectHdl( LINK( this, SvxCharacterMap, SearchCharSelectHdl ) );
-    m_pSearchSet->SetHighlightHdl( LINK( this, SvxCharacterMap, SearchCharHighlightHdl ) );
-    m_pSearchSet->SetPreSelectHdl( LINK( this, SvxCharacterMap, SearchCharPreSelectHdl ) );
-    m_pSearchSet->SetFavClickHdl( LINK( this, SvxCharacterMap, FavClickHdl ) );
-
-    m_pDecimalCodeText->SetModifyHdl( LINK( this, SvxCharacterMap, DecimalCodeChangeHdl ) );
-    m_pHexCodeText->SetModifyHdl( LINK( this, SvxCharacterMap, HexCodeChangeHdl ) );
-    m_pFavouritesBtn->SetClickHdl( LINK(this, SvxCharacterMap, FavSelectHdl));
+    m_xDecimalCodeText->connect_changed( LINK( this, SvxCharacterMap, DecimalCodeChangeHdl ) );
+    m_xHexCodeText->connect_changed( LINK( this, SvxCharacterMap, HexCodeChangeHdl ) );
+    m_xFavouritesBtn->connect_clicked( LINK(this, SvxCharacterMap, FavSelectHdl));
 
     if( SvxShowCharSet::getSelectedChar() == ' ')
     {
-        m_pOKBtn->Disable();
+        m_xOKBtn->set_sensitive(false);
     }
     else
     {
-        sal_UCS4 cChar = m_pShowSet->GetSelectCharacter();
+        sal_UCS4 cChar = m_xShowSet->GetSelectCharacter();
         // using the new UCS4 constructor
         OUString aOUStr( &cChar, 1 );
-        m_pShowChar->SetText(aOUStr);
+        m_xShowChar->SetText(aOUStr);
 
         setFavButtonState(aOUStr, aDefStr);
-        m_pOKBtn->Enable();
+        m_xOKBtn->set_sensitive(true);
     }
 
     getRecentCharacterList();
@@ -519,23 +482,22 @@ void SvxCharacterMap::init()
 
     for(int i = 0; i < 16; i++)
     {
-        m_pRecentCharView[i]->SetHasInsert(m_bHasInsert);
-        m_pRecentCharView[i]->setMouseClickHdl(LINK(this,SvxCharacterMap, CharClickHdl));
-        m_pRecentCharView[i]->setClearClickHdl(LINK(this,SvxCharacterMap, RecentClearClickHdl));
-        m_pRecentCharView[i]->setClearAllClickHdl(LINK(this,SvxCharacterMap, RecentClearAllClickHdl));
-        m_pRecentCharView[i]->SetLoseFocusHdl(LINK(this,SvxCharacterMap, LoseFocusHdl));
-        m_pFavCharView[i]->SetHasInsert(m_bHasInsert);
-        m_pFavCharView[i]->setMouseClickHdl(LINK(this,SvxCharacterMap, CharClickHdl));
-        m_pFavCharView[i]->setClearClickHdl(LINK(this,SvxCharacterMap, FavClearClickHdl));
-        m_pFavCharView[i]->setClearAllClickHdl(LINK(this,SvxCharacterMap, FavClearAllClickHdl));
-        m_pFavCharView[i]->SetLoseFocusHdl(LINK(this,SvxCharacterMap, LoseFocusHdl));
+        m_xRecentCharView[i]->SetHasInsert(m_bHasInsert);
+        m_xRecentCharView[i]->setMouseClickHdl(LINK(this,SvxCharacterMap, CharClickHdl));
+        m_xRecentCharView[i]->setClearClickHdl(LINK(this,SvxCharacterMap, RecentClearClickHdl));
+        m_xRecentCharView[i]->setClearAllClickHdl(LINK(this,SvxCharacterMap, RecentClearAllClickHdl));
+        m_xRecentCharView[i]->connect_focus_out(LINK(this,SvxCharacterMap, LoseFocusHdl));
+        m_xFavCharView[i]->SetHasInsert(m_bHasInsert);
+        m_xFavCharView[i]->setMouseClickHdl(LINK(this,SvxCharacterMap, CharClickHdl));
+        m_xFavCharView[i]->setClearClickHdl(LINK(this,SvxCharacterMap, FavClearClickHdl));
+        m_xFavCharView[i]->setClearAllClickHdl(LINK(this,SvxCharacterMap, FavClearAllClickHdl));
+        m_xFavCharView[i]->connect_focus_out(LINK(this,SvxCharacterMap, LoseFocusHdl));
     }
 
     setCharName(90);
 
-    m_pSearchText->SetGetFocusHdl(LINK( this, SvxCharacterMap, SearchFieldGetFocusHdl ));
-    m_pSearchText->SetUpdateDataHdl(LINK( this, SvxCharacterMap, SearchUpdateHdl ));
-    m_pSearchText->EnableUpdateData();
+    m_xSearchText->connect_focus_in(LINK( this, SvxCharacterMap, SearchFieldGetFocusHdl ));
+    m_xSearchText->connect_changed(LINK(this, SvxCharacterMap, SearchUpdateHdl));
 }
 
 bool SvxCharacterMap::isFavChar(const OUString& sTitle, const OUString& rFont)
@@ -560,24 +522,24 @@ void SvxCharacterMap::setFavButtonState(const OUString& sTitle, const OUString& 
 {
     if(sTitle.isEmpty() || rFont.isEmpty())
     {
-        m_pFavouritesBtn->Disable();
+        m_xFavouritesBtn->set_sensitive(false);
         return;
     }
     else
-        m_pFavouritesBtn->Enable();
+        m_xFavouritesBtn->set_sensitive(true);
 
     if(isFavChar(sTitle, rFont))
     {
-        m_pFavouritesBtn->SetText(CuiResId(RID_SVXSTR_REMOVE_FAVORITES));
+        m_xFavouritesBtn->set_label(CuiResId(RID_SVXSTR_REMOVE_FAVORITES));
     }
     else
     {
         if(maFavCharList.size() == 16)
         {
-            m_pFavouritesBtn->Disable();
+            m_xFavouritesBtn->set_sensitive(false);
         }
 
-        m_pFavouritesBtn->SetText(CuiResId(RID_SVXSTR_ADD_FAVORITES));
+        m_xFavouritesBtn->set_label(CuiResId(RID_SVXSTR_ADD_FAVORITES));
     }
 }
 
@@ -586,33 +548,29 @@ void SvxCharacterMap::SetCharFont( const vcl::Font& rFont )
 {
     // first get the underlying info in order to get font names
     // like "Times New Roman;Times" resolved
-    vcl::Font aTmp( GetFontMetric( rFont ) );
+    vcl::Font aTmp(m_xVirDev->GetFontMetric(rFont));
 
-    if (aTmp.GetFamilyName() == "StarSymbol" && m_pFontLB->GetEntryPos(aTmp.GetFamilyName()) == LISTBOX_ENTRY_NOTFOUND)
+    if (aTmp.GetFamilyName() == "StarSymbol" && m_xFontLB->find_text(aTmp.GetFamilyName()) == -1)
     {
         //if for some reason, like font in an old document, StarSymbol is requested and its not available, then
         //try OpenSymbol instead
         aTmp.SetFamilyName("OpenSymbol");
     }
 
-    if ( m_pFontLB->GetEntryPos( aTmp.GetFamilyName() ) == LISTBOX_ENTRY_NOTFOUND )
+    if (m_xFontLB->find_text(aTmp.GetFamilyName()) == -1)
         return;
 
-    m_pFontLB->SelectEntry( aTmp.GetFamilyName() );
+    m_xFontLB->set_active(aTmp.GetFamilyName());
     aFont = aTmp;
-    FontSelectHdl(*m_pFontLB);
-
-    // for compatibility reasons
-    ModalDialog::SetFont( aFont );
+    FontSelectHdl(*m_xFontLB);
 }
 
-
-void SvxCharacterMap::fillAllSubsets(ListBox &rListBox)
+void SvxCharacterMap::fillAllSubsets(weld::ComboBoxText& rListBox)
 {
     SubsetMap aAll(nullptr);
-    rListBox.Clear();
+    rListBox.clear();
     for (auto & subset : aAll.GetSubsetMap())
-        rListBox.InsertEntry( subset.GetName() );
+        rListBox.append_text(subset.GetName());
 }
 
 
@@ -635,27 +593,21 @@ void SvxCharacterMap::insertCharToDoc(const OUString& sGlyph)
         updateRecentCharacterList(sGlyph, aFont.GetFamilyName());
 
     } else {
-        SfxItemSet* pSet = GetOutputSetImpl();
-        if ( pSet )
-        {
-            sal_Int32 tmp = 0;
-            sal_UCS4 cChar = sGlyph.iterateCodePoints(&tmp);
-            const SfxItemPool* pPool = pSet->GetPool();
-            pSet->Put( SfxStringItem( pPool->GetWhich(SID_CHARMAP), sGlyph ) );
-            pSet->Put( SvxFontItem( aFont.GetFamilyType(), aFont.GetFamilyName(),
-                aFont.GetStyleName(), aFont.GetPitch(), aFont.GetCharSet(), pPool->GetWhich(SID_ATTR_CHAR_FONT) ) );
-            pSet->Put( SfxStringItem( pPool->GetWhich(SID_FONT_NAME), aFont.GetFamilyName() ) );
-            pSet->Put( SfxInt32Item( pPool->GetWhich(SID_ATTR_CHAR), cChar ) );
-        }
+        sal_Int32 tmp = 0;
+        sal_UCS4 cChar = sGlyph.iterateCodePoints(&tmp);
+        const SfxItemPool* pPool = m_xOutputSet->GetPool();
+        m_xOutputSet->Put( SfxStringItem( pPool->GetWhich(SID_CHARMAP), sGlyph ) );
+        m_xOutputSet->Put( SvxFontItem( aFont.GetFamilyType(), aFont.GetFamilyName(),
+            aFont.GetStyleName(), aFont.GetPitch(), aFont.GetCharSet(), pPool->GetWhich(SID_ATTR_CHAR_FONT) ) );
+        m_xOutputSet->Put( SfxStringItem( pPool->GetWhich(SID_FONT_NAME), aFont.GetFamilyName() ) );
+        m_xOutputSet->Put( SfxInt32Item( pPool->GetWhich(SID_ATTR_CHAR), cChar ) );
     }
 }
 
-
-IMPL_LINK_NOARG(SvxCharacterMap, FontSelectHdl, ListBox&, void)
+IMPL_LINK_NOARG(SvxCharacterMap, FontSelectHdl, weld::ComboBoxText&, void)
 {
-    const sal_Int32 nPos = m_pFontLB->GetSelectedEntryPos();
-    const sal_uInt16 nFont = static_cast<sal_uInt16>(reinterpret_cast<sal_uLong>(m_pFontLB->GetEntryData( nPos )));
-    aFont = GetDevFont( nFont );
+    const sal_uInt32 nFont = m_xFontLB->get_active_id().toUInt32();
+    aFont = m_xVirDev->GetDevFont(nFont);
     aFont.SetWeight( WEIGHT_DONTKNOW );
     aFont.SetItalic( ITALIC_NONE );
     aFont.SetWidthType( WIDTH_DONTKNOW );
@@ -663,13 +615,13 @@ IMPL_LINK_NOARG(SvxCharacterMap, FontSelectHdl, ListBox&, void)
     aFont.SetFamily( FAMILY_DONTKNOW );
 
     // notify children using this font
-    m_pShowSet->SetFont( aFont );
-    m_pSearchSet->SetFont( aFont );
-    m_pShowChar->SetFont( aFont );
-    if(isSearchMode)
+    m_xShowSet->SetFont( aFont );
+    m_xSearchSet->SetFont( aFont );
+    m_xShowChar->SetFont( aFont );
+    if (isSearchMode)
     {
-        SearchUpdateHdl(*m_pSearchText);
-        SearchCharHighlightHdl(m_pSearchSet);
+        SearchUpdateHdl(*m_xSearchText);
+        SearchCharHighlightHdl(m_xSearchSet.get());
     }
 
     // setup unicode subset listbar with font specific subsets,
@@ -677,50 +629,50 @@ IMPL_LINK_NOARG(SvxCharacterMap, FontSelectHdl, ListBox&, void)
     // TODO: get info from the Font once it provides it
     delete pSubsetMap;
     pSubsetMap = nullptr;
-    m_pSubsetLB->Clear();
+    m_xSubsetLB->clear();
 
     bool bNeedSubset = (aFont.GetCharSet() != RTL_TEXTENCODING_SYMBOL);
-    if( bNeedSubset )
+    if (bNeedSubset)
     {
         FontCharMapRef xFontCharMap( new FontCharMap() );
-        m_pShowSet->GetFontCharMap( xFontCharMap );
+        m_xShowSet->GetFontCharMap( xFontCharMap );
         pSubsetMap = new SubsetMap( xFontCharMap );
 
         // update subset listbox for new font's unicode subsets
         bool bFirst = true;
         for (auto const& subset : pSubsetMap->GetSubsetMap())
         {
-            const sal_Int32 nPos_ = m_pSubsetLB->InsertEntry( subset.GetName() );
-            m_pSubsetLB->SetEntryData( nPos_, const_cast<Subset *>(&subset) );
+            m_xSubsetLB->append(OUString::number(reinterpret_cast<sal_uInt64>(&subset)), subset.GetName());
             // NOTE: subset must live at least as long as the selected font
-            if( bFirst )
-                m_pSubsetLB->SelectEntryPos( nPos_ );
+            if (bFirst)
+                m_xSubsetLB->set_active(0);
             bFirst = false;
         }
-        if( m_pSubsetLB->GetEntryCount() <= 1 )
+
+        if (m_xSubsetLB->get_count() <= 1)
             bNeedSubset = false;
     }
 
-    m_pSubsetText->Enable(bNeedSubset);
-    m_pSubsetLB->Enable(bNeedSubset);
+    m_xSubsetText->set_sensitive(bNeedSubset);
+    m_xSubsetLB->set_sensitive(bNeedSubset);
 }
 
 void SvxCharacterMap::toggleSearchView(bool state)
 {
     isSearchMode = state;
-    m_pHexCodeText->SetReadOnly(state);
-    m_pDecimalCodeText->SetReadOnly(state);
-    m_pSubsetLB->Enable(!state);
+    m_xHexCodeText->set_editable(!state);
+    m_xDecimalCodeText->set_editable(!state);
+    m_xSubsetLB->set_sensitive(!state);
 
     if(state)
     {
-        m_pSearchSet->Show();
-        m_pShowSet->Hide();
+        m_xSearchSet->Show();
+        m_xShowSet->Hide();
     }
     else
     {
-        m_pSearchSet->Hide();
-        m_pShowSet->Show();
+        m_xSearchSet->Hide();
+        m_xShowSet->Show();
     }
 }
 
@@ -733,34 +685,35 @@ void SvxCharacterMap::setCharName(sal_UCS4 nDecimalValue)
     char buffer[100];
     u_charName(nDecimalValue, U_UNICODE_CHAR_NAME, buffer, sizeof(buffer), &errorCode);
     if (U_SUCCESS(errorCode))
-        m_pCharName->SetText(OUString::createFromAscii(buffer));
+        m_xCharName->set_label(OUString::createFromAscii(buffer));
 }
 
-IMPL_LINK_NOARG(SvxCharacterMap, SubsetSelectHdl, ListBox&, void)
+IMPL_LINK_NOARG(SvxCharacterMap, SubsetSelectHdl, weld::ComboBoxText&, void)
 {
-    const sal_Int32 nPos = m_pSubsetLB->GetSelectedEntryPos();
-    const Subset* pSubset = static_cast<const Subset*> (m_pSubsetLB->GetEntryData(nPos));
+    const sal_Int32 nPos = m_xSubsetLB->get_active();
+    const Subset* pSubset = reinterpret_cast<const Subset*>(m_xSubsetLB->get_active_id().toUInt64());
+
     if( pSubset && !isSearchMode)
     {
         sal_UCS4 cFirst = pSubset->GetRangeMin();
-        m_pShowSet->SelectCharacter( cFirst );
+        m_xShowSet->SelectCharacter( cFirst );
 
         setFavButtonState(OUString(&cFirst, 1), aFont.GetFamilyName());
-        m_pSubsetLB->SelectEntryPos( nPos );
+        m_xSubsetLB->set_active(nPos);
     }
     else if( pSubset && isSearchMode)
     {
-        m_pSearchSet->SelectCharacter( pSubset );
+        m_xSearchSet->SelectCharacter( pSubset );
 
         const Subset* curSubset = nullptr;
         if( pSubsetMap )
-            curSubset = pSubsetMap->GetSubsetByUnicode( m_pSearchSet->GetSelectCharacter() );
+            curSubset = pSubsetMap->GetSubsetByUnicode( m_xSearchSet->GetSelectCharacter() );
         if( curSubset )
-            m_pSubsetLB->SelectEntry( curSubset->GetName() );
+            m_xSubsetLB->set_active(curSubset->GetName());
         else
-            m_pSubsetLB->SetNoSelection();
+            m_xSubsetLB->set_active(-1);
 
-        sal_UCS4 sChar = m_pSearchSet->GetSelectCharacter();
+        sal_UCS4 sChar = m_xSearchSet->GetSelectCharacter();
         setFavButtonState(OUString(&sChar, 1), aFont.GetFamilyName());
     }
 }
@@ -840,23 +793,22 @@ IMPL_LINK_NOARG(SvxCharacterMap, FavClearAllClickHdl, SvxCharView*, void)
     updateFavCharControl();
 }
 
-IMPL_LINK_NOARG(SvxCharacterMap, SearchFieldGetFocusHdl, Control&, void)
+IMPL_LINK_NOARG(SvxCharacterMap, SearchFieldGetFocusHdl, weld::Widget&, void)
 {
-    m_pOKBtn->Disable();
+    m_xOKBtn->set_sensitive(false);
 }
 
-
-IMPL_LINK_NOARG(SvxCharacterMap, SearchUpdateHdl, Edit&, void)
+IMPL_LINK_NOARG(SvxCharacterMap, SearchUpdateHdl, weld::Entry&, void)
 {
-    if(!m_pSearchText->GetText().isEmpty())
+    if (!m_xSearchText->get_text().isEmpty())
     {
-        m_pSearchSet->ClearPreviousData();
-        OUString aKeyword = m_pSearchText->GetText();
+        m_xSearchSet->ClearPreviousData();
+        OUString aKeyword = m_xSearchText->get_text();
 
         toggleSearchView(true);
 
         FontCharMapRef xFontCharMap(new FontCharMap());
-        m_pSearchSet->GetFontCharMap(xFontCharMap);
+        m_xSearchSet->GetFontCharMap(xFontCharMap);
 
         sal_UCS4 sChar = xFontCharMap->GetFirstChar();
         while(sChar != xFontCharMap->GetLastChar())
@@ -868,7 +820,7 @@ IMPL_LINK_NOARG(SvxCharacterMap, SearchUpdateHdl, Edit&, void)
             {
                 OUString sName = OUString::createFromAscii(buffer);
                 if(!sName.isEmpty() && sName.toAsciiLowerCase().indexOf(aKeyword.toAsciiLowerCase()) >= 0)
-                    m_pSearchSet->AppendCharToList(sChar);
+                    m_xSearchSet->AppendCharToList(sChar);
             }
             sChar = xFontCharMap->GetNextChar(sChar);
         }
@@ -880,11 +832,8 @@ IMPL_LINK_NOARG(SvxCharacterMap, SearchUpdateHdl, Edit&, void)
         {
             OUString sName = OUString::createFromAscii(buffer);
             if(!sName.isEmpty() && sName.toAsciiLowerCase().indexOf(aKeyword.toAsciiLowerCase()) >= 0)
-                m_pSearchSet->AppendCharToList(sChar);
+                m_xSearchSet->AppendCharToList(sChar);
         }
-
-        m_pSearchSet->Resize();
-
     }
     else
     {
@@ -895,12 +844,12 @@ IMPL_LINK_NOARG(SvxCharacterMap, SearchUpdateHdl, Edit&, void)
 
 IMPL_LINK(SvxCharacterMap, CharClickHdl, SvxCharView*, rView, void)
 {
-    m_pShowChar->SetText( rView->GetText() );
-    m_pShowChar->SetFont(rView->GetFont());
-    m_pShowChar->Update();
+    m_xShowChar->SetText( rView->GetText() );
+    m_xShowChar->SetFont(rView->GetFont());
+    m_xShowChar->queue_draw();
 
     setFavButtonState(rView->GetText(), rView->GetFont().GetFamilyName());//check state
-    rView->GrabFocus();
+    rView->grab_focus();
 
     // Get the hexadecimal code
     OUString charValue = rView->GetText();
@@ -911,17 +860,17 @@ IMPL_LINK(SvxCharacterMap, CharClickHdl, SvxCharView*, rView, void)
     // Get the decimal code
     OUString aDecimalText = OUString::number(cChar);
 
-    m_pHexCodeText->SetText( aHexText );
-    m_pDecimalCodeText->SetText( aDecimalText );
+    m_xHexCodeText->set_text(aHexText);
+    m_xDecimalCodeText->set_text(aDecimalText);
     setCharName(cChar);
 
-    rView->Invalidate();
-    m_pOKBtn->Enable();
+    rView->queue_draw();
+    m_xOKBtn->set_sensitive(true);
 }
 
 IMPL_LINK_NOARG(SvxCharacterMap, CharDoubleClickHdl, SvxShowCharSet*, void)
 {
-    sal_UCS4 cChar = m_pShowSet->GetSelectCharacter();
+    sal_UCS4 cChar = m_xShowSet->GetSelectCharacter();
     // using the new UCS4 constructor
     OUString aOUStr( &cChar, 1 );
     setFavButtonState(aOUStr, aFont.GetFamilyName());
@@ -930,7 +879,7 @@ IMPL_LINK_NOARG(SvxCharacterMap, CharDoubleClickHdl, SvxShowCharSet*, void)
 
 IMPL_LINK_NOARG(SvxCharacterMap, SearchCharDoubleClickHdl, SvxShowCharSet*, void)
 {
-    sal_UCS4 cChar = m_pSearchSet->GetSelectCharacter();
+    sal_UCS4 cChar = m_xSearchSet->GetSelectCharacter();
     // using the new UCS4 constructor
     OUString aOUStr( &cChar, 1 );
     setFavButtonState(aOUStr, aFont.GetFamilyName());
@@ -939,38 +888,37 @@ IMPL_LINK_NOARG(SvxCharacterMap, SearchCharDoubleClickHdl, SvxShowCharSet*, void
 
 IMPL_LINK_NOARG(SvxCharacterMap, CharSelectHdl, SvxShowCharSet*, void)
 {
-    m_pOKBtn->Enable();
+    m_xOKBtn->set_sensitive(true);
 }
 
 IMPL_LINK_NOARG(SvxCharacterMap, SearchCharSelectHdl, SvxShowCharSet*, void)
 {
-    m_pOKBtn->Enable();
+    m_xOKBtn->set_sensitive(true);
 }
 
-IMPL_LINK_NOARG(SvxCharacterMap, InsertClickHdl, Button*, void)
+IMPL_LINK_NOARG(SvxCharacterMap, InsertClickHdl, weld::Button&, void)
 {
-   insertCharToDoc(m_pShowChar->GetText());
-   EndDialog(RET_OK);
+   insertCharToDoc(m_xShowChar->GetText());
+   m_xDialog->response(RET_OK);
 }
 
-
-IMPL_STATIC_LINK(SvxCharacterMap, LoseFocusHdl, Control&, pItem, void)
+IMPL_STATIC_LINK(SvxCharacterMap, LoseFocusHdl, weld::Widget&, rItem, void)
 {
-    pItem.Invalidate();
+    dynamic_cast<weld::DrawingArea&>(rItem).queue_draw();
 }
 
-IMPL_LINK_NOARG(SvxCharacterMap, FavSelectHdl, Button*, void)
+IMPL_LINK_NOARG(SvxCharacterMap, FavSelectHdl, weld::Button&, void)
 {
-    if(m_pFavouritesBtn->GetText().match(CuiResId(RID_SVXSTR_ADD_FAVORITES)))
+    if (m_xFavouritesBtn->get_label().match(CuiResId(RID_SVXSTR_ADD_FAVORITES)))
     {
-        updateFavCharacterList(m_pShowChar->GetText(), m_pShowChar->GetFont().GetFamilyName());
-        setFavButtonState(m_pShowChar->GetText(), m_pShowChar->GetFont().GetFamilyName());
+        updateFavCharacterList(m_xShowChar->GetText(), m_xShowChar->GetFont().GetFamilyName());
+        setFavButtonState(m_xShowChar->GetText(), m_xShowChar->GetFont().GetFamilyName());
     }
     else
     {
-        deleteFavCharacterFromList(m_pShowChar->GetText(), m_pShowChar->GetFont().GetFamilyName());
-        m_pFavouritesBtn->SetText(CuiResId(RID_SVXSTR_ADD_FAVORITES));
-        m_pFavouritesBtn->Disable();
+        deleteFavCharacterFromList(m_xShowChar->GetText(), m_xShowChar->GetFont().GetFamilyName());
+        m_xFavouritesBtn->set_label(CuiResId(RID_SVXSTR_ADD_FAVORITES));
+        m_xFavouritesBtn->set_sensitive(false);
     }
 
     updateFavCharControl();
@@ -987,7 +935,7 @@ IMPL_LINK_NOARG(SvxCharacterMap, CharHighlightHdl, SvxShowCharSet*, void)
     OUString aText;
     OUString aHexText;
     OUString aDecimalText;
-    sal_UCS4 cChar = m_pShowSet->GetSelectCharacter();
+    sal_UCS4 cChar = m_xShowSet->GetSelectCharacter();
     bool bSelect = (cChar > 0);
 
     // show char sample
@@ -1000,16 +948,16 @@ IMPL_LINK_NOARG(SvxCharacterMap, CharHighlightHdl, SvxShowCharSet*, void)
         if( pSubsetMap )
             pSubset = pSubsetMap->GetSubsetByUnicode( cChar );
         if( pSubset )
-            m_pSubsetLB->SelectEntry( pSubset->GetName() );
+            m_xSubsetLB->set_active(pSubset->GetName());
         else
-            m_pSubsetLB->SetNoSelection();
+            m_xSubsetLB->set_active(-1);
     }
 
-    if(m_pShowSet->HasFocus())
+    if (m_xShowSet->HasFocus())
     {
-        m_pShowChar->SetText( aText );
-        m_pShowChar->SetFont( aFont );
-        m_pShowChar->Update();
+        m_xShowChar->SetText( aText );
+        m_xShowChar->SetFont( aFont );
+        m_xShowChar->queue_draw();
 
         setFavButtonState(aText, aFont.GetFamilyName());
     }
@@ -1025,10 +973,10 @@ IMPL_LINK_NOARG(SvxCharacterMap, CharHighlightHdl, SvxShowCharSet*, void)
     }
 
     // Update the hex and decimal codes only if necessary
-    if (m_pHexCodeText->GetText() != aHexText)
-        m_pHexCodeText->SetText( aHexText );
-    if (m_pDecimalCodeText->GetText() != aDecimalText)
-        m_pDecimalCodeText->SetText( aDecimalText );
+    if (m_xHexCodeText->get_text() != aHexText)
+        m_xHexCodeText->set_text( aHexText );
+    if (m_xDecimalCodeText->get_text() != aDecimalText)
+        m_xDecimalCodeText->set_text( aDecimalText );
 }
 
 IMPL_LINK_NOARG(SvxCharacterMap, SearchCharHighlightHdl, SvxShowCharSet*, void)
@@ -1036,7 +984,7 @@ IMPL_LINK_NOARG(SvxCharacterMap, SearchCharHighlightHdl, SvxShowCharSet*, void)
     OUString aText;
     OUString aHexText;
     OUString aDecimalText;
-    sal_UCS4 cChar = m_pSearchSet->GetSelectCharacter();
+    sal_UCS4 cChar = m_xSearchSet->GetSelectCharacter();
     bool bSelect = (cChar > 0);
 
     // show char sample
@@ -1050,25 +998,25 @@ IMPL_LINK_NOARG(SvxCharacterMap, SearchCharHighlightHdl, SvxShowCharSet*, void)
         setCharName(cChar);
 
         // Update the hex and decimal codes only if necessary
-        if (m_pHexCodeText->GetText() != aHexText)
-            m_pHexCodeText->SetText( aHexText );
-        if (m_pDecimalCodeText->GetText() != aDecimalText)
-            m_pDecimalCodeText->SetText( aDecimalText );
+        if (m_xHexCodeText->get_text() != aHexText)
+            m_xHexCodeText->set_text(aHexText);
+        if (m_xDecimalCodeText->get_text() != aDecimalText)
+            m_xDecimalCodeText->set_text( aDecimalText );
 
         const Subset* pSubset = nullptr;
         if( pSubsetMap )
             pSubset = pSubsetMap->GetSubsetByUnicode( cChar );
         if( pSubset )
-            m_pSubsetLB->SelectEntry( pSubset->GetName() );
+            m_xSubsetLB->set_active(pSubset->GetName());
         else
-            m_pSubsetLB->SetNoSelection();
+            m_xSubsetLB->set_active(-1);
     }
 
-    if(m_pSearchSet->HasFocus())
+    if(m_xSearchSet->HasFocus())
     {
-        m_pShowChar->SetText( aText );
-        m_pShowChar->SetFont( aFont );
-        m_pShowChar->Update();
+        m_xShowChar->SetText( aText );
+        m_xShowChar->SetFont( aFont );
+        m_xShowChar->queue_draw();
 
         setFavButtonState(aText, aFont.GetFamilyName());
     }
@@ -1080,28 +1028,28 @@ void SvxCharacterMap::selectCharByCode(Radix radix)
     switch(radix)
     {
         case Radix::decimal:
-            aCodeString = m_pDecimalCodeText->GetText();
+            aCodeString = m_xDecimalCodeText->get_text();
             break;
         case Radix::hexadecimal:
-            aCodeString = m_pHexCodeText->GetText();
+            aCodeString = m_xHexCodeText->get_text();
             break;
     }
     // Convert the code back to a character using the appropriate radix
     sal_UCS4 cChar = aCodeString.toUInt32(static_cast<sal_Int16> (radix));
     // Use FontCharMap::HasChar(sal_UCS4 cChar) to see if the desired character is in the font
     FontCharMapRef xFontCharMap(new FontCharMap());
-    m_pShowSet->GetFontCharMap(xFontCharMap);
+    m_xShowSet->GetFontCharMap(xFontCharMap);
     if (xFontCharMap->HasChar(cChar))
         // Select the corresponding character
         SetChar(cChar);
 }
 
-IMPL_LINK_NOARG(SvxCharacterMap, DecimalCodeChangeHdl, Edit&, void)
+IMPL_LINK_NOARG(SvxCharacterMap, DecimalCodeChangeHdl, weld::Entry&, void)
 {
     selectCharByCode(Radix::decimal);
 }
 
-IMPL_LINK_NOARG(SvxCharacterMap, HexCodeChangeHdl, Edit&, void)
+IMPL_LINK_NOARG(SvxCharacterMap, HexCodeChangeHdl, weld::Entry&, void)
 {
     selectCharByCode(Radix::hexadecimal);
 }
@@ -1111,15 +1059,15 @@ IMPL_LINK_NOARG(SvxCharacterMap, CharPreSelectHdl, SvxShowCharSet*, void)
     // adjust subset selection
     if( pSubsetMap )
     {
-        sal_UCS4 cChar = m_pShowSet->GetSelectCharacter();
+        sal_UCS4 cChar = m_xShowSet->GetSelectCharacter();
 
         setFavButtonState(OUString(&cChar, 1), aFont.GetFamilyName());
         const Subset* pSubset = pSubsetMap->GetSubsetByUnicode( cChar );
         if( pSubset )
-            m_pSubsetLB->SelectEntry( pSubset->GetName() );
+            m_xSubsetLB->set_active(pSubset->GetName());
     }
 
-    m_pOKBtn->Enable();
+    m_xOKBtn->set_sensitive(true);
 }
 
 IMPL_LINK_NOARG(SvxCharacterMap, SearchCharPreSelectHdl, SvxShowCharSet*, void)
@@ -1127,32 +1075,42 @@ IMPL_LINK_NOARG(SvxCharacterMap, SearchCharPreSelectHdl, SvxShowCharSet*, void)
     // adjust subset selection
     if( pSubsetMap )
     {
-        sal_UCS4 cChar = m_pSearchSet->GetSelectCharacter();
+        sal_UCS4 cChar = m_xSearchSet->GetSelectCharacter();
 
         setFavButtonState(OUString(&cChar, 1), aFont.GetFamilyName());
         const Subset* pSubset = pSubsetMap->GetSubsetByUnicode( cChar );
         if( pSubset )
-            m_pSubsetLB->SelectEntry( pSubset->GetName() );
+            m_xSubsetLB->set_active(pSubset->GetName());
     }
 
-    m_pOKBtn->Enable();
+    m_xOKBtn->set_sensitive(true);
 }
 
-
-
 // class SvxShowText =====================================================
-
-SvxShowText::SvxShowText(vcl::Window* pParent)
-    : Control(pParent, WB_BORDER)
+SvxShowText::SvxShowText(weld::Builder& rBuilder, const OString& rId, const VclPtr<VirtualDevice>& rVirDev)
+    : m_xDrawingArea(rBuilder.weld_drawing_area(rId))
+    , m_xVirDev(rVirDev)
     , mnY(0)
     , mbCenter(false)
-{}
-
-VCL_BUILDER_FACTORY(SvxShowText)
-
-void SvxShowText::Paint(vcl::RenderContext& rRenderContext, const ::tools::Rectangle&)
 {
-    rRenderContext.SetFont(maFont);
+    m_xDrawingArea->connect_size_allocate(LINK(this, SvxShowText, DoResize));
+    m_xDrawingArea->connect_draw(LINK(this, SvxShowText, DoPaint));
+
+    vcl::Font aFont = m_xVirDev->GetFont();
+    Size aFontSize(aFont.GetFontSize().Width() * 5, aFont.GetFontSize().Height() * 5);
+    aFont.SetFontSize(aFontSize);
+    m_xVirDev->Push(PUSH_ALLFONT);
+    m_xVirDev->SetFont(aFont);
+    m_xDrawingArea->set_size_request(m_xVirDev->approximate_digit_width() + 2 * 12,
+                                     m_xVirDev->LogicToPixel(aFontSize).Height() * 2);
+    m_xVirDev->Pop();
+}
+
+IMPL_LINK(SvxShowText, DoPaint, weld::DrawingArea::draw_args, aPayload, void)
+{
+    vcl::RenderContext& rRenderContext = aPayload.first;
+
+    rRenderContext.SetFont(m_aFont);
 
     Color aTextCol = rRenderContext.GetTextColor();
     Color aFillCol = rRenderContext.GetFillColor();
@@ -1164,10 +1122,9 @@ void SvxShowText::Paint(vcl::RenderContext& rRenderContext, const ::tools::Recta
     rRenderContext.SetFillColor(aWindowColor);
 
     const OUString aText = GetText();
-    const Size aSize(GetOutputSizePixel());
 
-    long nAvailWidth = aSize.Width();
-    long nWinHeight = GetOutputSizePixel().Height();
+    long nAvailWidth = m_aSize.Width();
+    long nWinHeight = m_aSize.Height();
 
     bool bGotBoundary = true;
     bool bShrankFont = false;
@@ -1192,14 +1149,14 @@ void SvxShowText::Paint(vcl::RenderContext& rRenderContext, const ::tools::Recta
         aFontSize.setHeight( nFontHeight );
         aFont.SetFontSize(aFontSize);
         rRenderContext.SetFont(aFont);
-        mnY = (nWinHeight - GetTextHeight()) / 2;
+        mnY = (nWinHeight - rRenderContext.GetTextHeight()) / 2;
         bShrankFont = true;
     }
 
     Point aPoint(2, mnY);
     // adjust position using ink boundary if possible
     if (!bGotBoundary)
-        aPoint.setX( (aSize.Width() - rRenderContext.GetTextWidth(aText)) / 2 );
+        aPoint.setX( (m_aSize.Width() - rRenderContext.GetTextWidth(aText)) / 2 );
     else
     {
         // adjust position before it gets out of bounds
@@ -1207,7 +1164,7 @@ void SvxShowText::Paint(vcl::RenderContext& rRenderContext, const ::tools::Recta
 
         // shift back vertically if needed
         int nYLDelta = aBoundRect.Top();
-        int nYHDelta = aSize.Height() - aBoundRect.Bottom();
+        int nYHDelta = m_aSize.Height() - aBoundRect.Bottom();
         if( nYLDelta <= 0 )
             aPoint.AdjustY( -(nYLDelta - 1) );
         else if( nYHDelta <= 0 )
@@ -1216,13 +1173,13 @@ void SvxShowText::Paint(vcl::RenderContext& rRenderContext, const ::tools::Recta
         if (mbCenter)
         {
             // move glyph to middle of cell
-            aPoint.setX( -aBoundRect.Left() + (aSize.Width() - aBoundRect.GetWidth()) / 2 );
+            aPoint.setX( -aBoundRect.Left() + (m_aSize.Width() - aBoundRect.GetWidth()) / 2 );
         }
         else
         {
             // shift back horizontally if needed
             int nXLDelta = aBoundRect.Left();
-            int nXHDelta = aSize.Width() - aBoundRect.Right();
+            int nXHDelta = m_aSize.Width() - aBoundRect.Right();
             if( nXLDelta <= 0 )
                 aPoint.AdjustX( -(nXLDelta - 1) );
             else if( nXHDelta <= 0 )
@@ -1230,7 +1187,7 @@ void SvxShowText::Paint(vcl::RenderContext& rRenderContext, const ::tools::Recta
         }
     }
 
-    rRenderContext.DrawRect(tools::Rectangle(Point(0, 0), Size(GetOutputSizePixel().Width(), GetOutputSizePixel().Height())));
+    rRenderContext.DrawRect(tools::Rectangle(Point(0, 0), m_aSize));
     rRenderContext.DrawText(aPoint, aText);
     rRenderContext.SetTextColor(aTextCol);
     rRenderContext.SetFillColor(aFillCol);
@@ -1241,39 +1198,32 @@ void SvxShowText::Paint(vcl::RenderContext& rRenderContext, const ::tools::Recta
 
 void SvxShowText::SetFont( const vcl::Font& rFont )
 {
-    long nWinHeight = GetOutputSizePixel().Height();
-    maFont = vcl::Font(rFont);
-    maFont.SetWeight(WEIGHT_NORMAL);
-    maFont.SetAlignment(ALIGN_TOP);
-    maFont.SetFontSize(PixelToLogic(Size(0, nWinHeight / 2)));
-    maFont.SetTransparent(true);
-    Control::SetFont(maFont);
+    long nWinHeight = m_aSize.Height();
 
-    mnY = (nWinHeight - GetTextHeight()) / 2;
+    m_aFont = vcl::Font(rFont);
+    m_aFont.SetWeight(WEIGHT_NORMAL);
+    m_aFont.SetAlignment(ALIGN_TOP);
+    m_aFont.SetFontSize(m_xVirDev->PixelToLogic(Size(0, nWinHeight / 2)));
+    m_aFont.SetTransparent(true);
 
-    Invalidate();
+    m_xVirDev->Push(PUSH_ALLFONT);
+    m_xVirDev->SetFont(m_aFont);
+    mnY = (nWinHeight - m_xVirDev->GetTextHeight()) / 2;
+    m_xVirDev->Pop();
+
+    m_xDrawingArea->queue_draw();
 }
 
-Size SvxShowText::GetOptimalSize() const
+IMPL_LINK(SvxShowText, DoResize, const Size&, rSize, void)
 {
-    const vcl::Font &rFont = GetFont();
-    const Size rFontSize = rFont.GetFontSize();
-    long nWinHeight = LogicToPixel(rFontSize).Height() * 2;
-    return Size( GetTextWidth( GetText() ) + 2 * 12, nWinHeight );
-}
-
-void SvxShowText::Resize()
-{
-    Control::Resize();
+    m_aSize = rSize;
     SetFont(GetFont()); //force recalculation of size
 }
 
-
-void SvxShowText::SetText( const OUString& rText )
+void SvxShowText::SetText(const OUString& rText)
 {
-    Control::SetText( rText );
-    Invalidate();
+    m_sText = rText;
+    queue_draw();
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

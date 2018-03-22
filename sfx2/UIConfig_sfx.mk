@@ -14,6 +14,7 @@ $(eval $(call gb_UIConfig_add_uifiles,sfx,\
 	sfx2/uiconfig/ui/bookmarkdialog \
 	sfx2/uiconfig/ui/bookmarkmenu \
 	sfx2/uiconfig/ui/charmapcontrol \
+	sfx2/uiconfig/ui/charviewmenu \
 	sfx2/uiconfig/ui/checkin \
 	sfx2/uiconfig/ui/cmisinfopage \
 	sfx2/uiconfig/ui/cmisline \

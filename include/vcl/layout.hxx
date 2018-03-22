@@ -615,9 +615,11 @@ class VCL_DLLPUBLIC VclDrawingArea : public Control
 private:
     Link<std::pair<vcl::RenderContext&, const tools::Rectangle&>, void> m_aPaintHdl;
     Link<const Size&, void> m_aResizeHdl;
-    Link<const Point&, void> m_aMousePressHdl;
-    Link<const Point&, void> m_aMouseMotionHdl;
-    Link<const Point&, void> m_aMouseReleaseHdl;
+    Link<const MouseEvent&, void> m_aMousePressHdl;
+    Link<const MouseEvent&, void> m_aMouseMotionHdl;
+    Link<const MouseEvent&, void> m_aMouseReleaseHdl;
+    Link<const KeyEvent&, bool> m_aKeyPressHdl;
+    Link<const KeyEvent&, bool> m_aKeyReleaseHdl;
 
     virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override
     {
@@ -629,15 +631,40 @@ private:
     }
     virtual void MouseMove(const MouseEvent& rMEvt) override
     {
-        m_aMouseMotionHdl.Call(rMEvt.GetPosPixel());
+        m_aMouseMotionHdl.Call(rMEvt);
     }
     virtual void MouseButtonDown(const MouseEvent& rMEvt) override
     {
-        m_aMousePressHdl.Call(rMEvt.GetPosPixel());
+        m_aMousePressHdl.Call(rMEvt);
     }
     virtual void MouseButtonUp(const MouseEvent& rMEvt) override
     {
-        m_aMouseReleaseHdl.Call(rMEvt.GetPosPixel());
+        m_aMouseReleaseHdl.Call(rMEvt);
+    }
+    virtual void KeyInput(const KeyEvent& rKEvt) override
+    {
+        if (!m_aKeyPressHdl.Call(rKEvt))
+            Control::KeyInput(rKEvt);
+
+    }
+    virtual void KeyUp(const KeyEvent& rKEvt) override
+    {
+        if (!m_aKeyReleaseHdl.Call(rKEvt))
+            Control::KeyUp(rKEvt);
+    }
+
+    virtual void StateChanged(StateChangedType nType) override
+    {
+        Control::StateChanged(nType);
+        if (nType == StateChangedType::ControlForeground || nType == StateChangedType::ControlBackground)
+            Invalidate();
+    }
+
+    virtual void DataChanged(const DataChangedEvent& rDCEvt) override
+    {
+        Control::DataChanged(rDCEvt);
+        if ((rDCEvt.GetType() == DataChangedEventType::SETTINGS) && (rDCEvt.GetFlags() & AllSettingsFlags::STYLE))
+            Invalidate();
     }
 
 public:
@@ -653,17 +680,25 @@ public:
     {
         m_aResizeHdl = rLink;
     }
-    void SetMousePressHdl(const Link<const Point&, void>& rLink)
+    void SetMousePressHdl(const Link<const MouseEvent&, void>& rLink)
     {
         m_aMousePressHdl = rLink;
     }
-    void SetMouseMoveHdl(const Link<const Point&, void>& rLink)
+    void SetMouseMoveHdl(const Link<const MouseEvent&, void>& rLink)
     {
         m_aMouseMotionHdl = rLink;
     }
-    void SetMouseReleaseHdl(const Link<const Point&, void>& rLink)
+    void SetMouseReleaseHdl(const Link<const MouseEvent&, void>& rLink)
     {
         m_aMouseReleaseHdl = rLink;
+    }
+    void SetKeyPressHdl(const Link<const KeyEvent&, bool>& rLink)
+    {
+        m_aKeyPressHdl = rLink;
+    }
+    void SetKeyReleaseHdl(const Link<const KeyEvent&, bool>& rLink)
+    {
+        m_aKeyReleaseHdl = rLink;
     }
 };
 

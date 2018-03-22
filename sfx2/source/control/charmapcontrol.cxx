@@ -184,7 +184,7 @@ IMPL_STATIC_LINK(SfxCharmapCtrl, LoseFocusHdl, Control&, pItem, void)
 }
 
 
-IMPL_LINK(SfxCharmapCtrl, CharClickHdl, SvxCharView*, rView, void)
+IMPL_LINK(SfxCharmapCtrl, CharClickHdl, SvxCharViewControl*, rView, void)
 {
     rView->GrabFocus();
     rView->Invalidate();
