@@ -32,7 +32,7 @@ AstStruct::AstStruct(
 {
     for (auto const& elem : typeParameters)
     {
-        m_typeParameters.push_back(
+        m_typeParameters.emplace_back(
             new AstType(NT_type_parameter, elem, nullptr));
     }
 }
@@ -49,10 +49,6 @@ AstStruct::AstStruct(const NodeType type,
 
 AstStruct::~AstStruct()
 {
-    for (auto const& elem : m_typeParameters)
-    {
-        delete elem;
-    }
 }
 
 AstDeclaration const * AstStruct::findTypeParameter(OString const & name)
@@ -61,7 +57,7 @@ AstDeclaration const * AstStruct::findTypeParameter(OString const & name)
     for (auto const& elem : m_typeParameters)
     {
         if (elem->getLocalName() == name) {
-            return elem;
+            return elem.get();
         }
     }
     return nullptr;
