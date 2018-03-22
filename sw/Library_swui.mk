@@ -38,7 +38,11 @@ $(eval $(call gb_Library_use_custom_headers,swui,\
 	officecfg/registry \
 ))
 
-$(eval $(call gb_Library_use_sdk_api,swui))
+$(eval $(call gb_Library_use_api,swui,\
+	udkapi \
+	offapi \
+	oovbaapi \
+))
 
 ifneq ($(SYSTEM_LIBXML),)
 $(eval $(call gb_Library_add_cxxflags,swui,\

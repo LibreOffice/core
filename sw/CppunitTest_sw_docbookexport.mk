@@ -43,7 +43,11 @@ $(eval $(call gb_CppunitTest_set_include,sw_docbookexport,\
     $$(INCLUDE) \
 ))
 
-$(eval $(call gb_CppunitTest_use_sdk_api,sw_docbookexport))
+$(eval $(call gb_CppunitTest_use_api,sw_docbookexport,\
+	udkapi \
+	offapi \
+	oovbaapi \
+))
 
 $(eval $(call gb_CppunitTest_use_ure,sw_docbookexport))
 $(eval $(call gb_CppunitTest_use_vcl,sw_docbookexport))

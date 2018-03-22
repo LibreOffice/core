@@ -33,7 +33,11 @@ $(eval $(call gb_Library_set_include,msword,\
     $$(INCLUDE) \
 ))
 
-$(eval $(call gb_Library_use_sdk_api,msword))
+$(eval $(call gb_Library_use_api,msword,\
+	udkapi \
+	offapi \
+	oovbaapi \
+))
 
 $(eval $(call gb_Library_use_libraries,msword,\
     basegfx \

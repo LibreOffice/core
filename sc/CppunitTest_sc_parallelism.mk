@@ -59,7 +59,11 @@ $(eval $(call gb_CppunitTest_set_include,sc_parallelism,\
     $$(INCLUDE) \
 ))
 
-$(eval $(call gb_CppunitTest_use_sdk_api,sc_parallelism))
+$(eval $(call gb_CppunitTest_use_api,sc_parallelism,\
+	udkapi \
+	offapi \
+	oovbaapi \
+))
 
 $(eval $(call gb_CppunitTest_use_custom_headers,sc_parallelism,\
         officecfg/registry \

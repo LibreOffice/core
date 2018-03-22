@@ -22,6 +22,7 @@
 #include <vector>
 
 #include <ooo/vba/XSink.hpp>
+#include <ooo/vba/XSinkCaller.hpp>
 #include <ooo/vba/word/XApplication.hpp>
 #include <ooo/vba/word/XDocument.hpp>
 #include <ooo/vba/word/XWindow.hpp>
@@ -33,7 +34,15 @@
 #include <vbahelper/vbaapplicationbase.hxx>
 #include <cppuhelper/implbase.hxx>
 
-typedef cppu::ImplInheritanceHelper< VbaApplicationBase, ooo::vba::word::XApplication > SwVbaApplication_BASE;
+typedef cppu::ImplInheritanceHelper< VbaApplicationBase, ooo::vba::word::XApplication, ooo::vba::XSinkCaller > SwVbaApplication_BASE;
+
+// This class is currently not a singleton. One instance is created per document with (potential?)
+// StarBasic code in it, I think, and a shared one for all Automation clients connected to the
+// ooo::vba::word::Application (Writer.Application) service. (Of course it probably is not common to
+// have several Automation clients at once.)
+
+// Should it be a true singleton? Hard to say. Anyway, it is actually the SwVbaGlobals class that
+// should be a singleton in that case, I think.
 
 class SwVbaApplication : public SwVbaApplication_BASE
 {
@@ -77,6 +86,10 @@ public:
     // XHelperInterface
     virtual OUString getServiceImplName() override;
     virtual css::uno::Sequence<OUString> getServiceNames() override;
+
+    // XSinkCaller
+    virtual void SAL_CALL CallSinks( const OUString& Method, const css::uno::Sequence< css::uno::Any >& Arguments ) override;
+
 protected:
     virtual css::uno::Reference< css::frame::XModel > getCurrentDocument() override;
 };
