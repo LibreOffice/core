@@ -222,6 +222,23 @@ static void lcl_ReverseTwipsToMM( tools::Rectangle& rRect )
     rRect.SetBottom( HmmToTwips(rRect.Bottom()) );
 }
 
+static ScRange lcl_getClipRangeFromClipDoc(ScDocument* pClipDoc, SCTAB nClipTab)
+{
+    if (!pClipDoc)
+        return ScRange();
+
+    SCCOL nClipStartX;
+    SCROW nClipStartY;
+    SCCOL nClipEndX;
+    SCROW nClipEndY;
+    pClipDoc->GetClipStart(nClipStartX, nClipStartY);
+    pClipDoc->GetClipArea(nClipEndX, nClipEndY, true);
+    nClipEndX = nClipEndX + nClipStartX;
+    nClipEndY += nClipStartY; // GetClipArea returns the difference
+
+    return ScRange(nClipStartX, nClipStartY, nClipTab, nClipEndX, nClipEndY, nClipTab);
+}
+
 ScDrawLayer::ScDrawLayer( ScDocument* pDocument, const OUString& rName ) :
     FmFormModel( !utl::ConfigManager::IsFuzzing() ? SvtPathOptions().GetPalettePath() : OUString(),
                  nullptr,                          // SfxItemPool* Pool
@@ -1443,8 +1460,18 @@ void ScDrawLayer::CopyToClip( ScDocument* pClipDoc, SCTAB nTab, const tools::Rec
         while (pOldObject)
         {
             tools::Rectangle aObjRect = pOldObject->GetCurrentBoundRect();
+
+            bool bObjectInArea = rRange.IsInside(aObjRect);
+            const ScDrawObjData* pObjData = ScDrawLayer::GetObjData(pOldObject);
+            if (pObjData)
+            {
+                ScRange aClipRange = lcl_getClipRangeFromClipDoc(pClipDoc, nTab);
+                bObjectInArea = bObjectInArea || aClipRange.In(pObjData->maStart);
+            }
+
             // do not copy internal objects (detective) and note captions
-            if ( rRange.IsInside( aObjRect ) && (pOldObject->GetLayer() != SC_LAYER_INTERN) && !IsNoteCaption( pOldObject ) )
+            if (bObjectInArea && pOldObject->GetLayer() != SC_LAYER_INTERN
+                && !IsNoteCaption(pOldObject))
             {
                 if ( !pDestModel )
                 {
@@ -1627,7 +1654,16 @@ void ScDrawLayer::CopyFromClip( ScDrawLayer* pClipModel, SCTAB nSourceTab, const
     {
         tools::Rectangle aObjRect = pOldObject->GetCurrentBoundRect();
         // do not copy internal objects (detective) and note captions
-        if ( rSourceRange.IsInside( aObjRect ) && (pOldObject->GetLayer() != SC_LAYER_INTERN) && !IsNoteCaption( pOldObject ) )
+
+        SCTAB nClipTab = bRestoreDestTabName ? nDestTab : nSourceTab;
+        ScRange aClipRange = lcl_getClipRangeFromClipDoc(pClipDoc, nClipTab);
+
+        bool bObjectInArea = rSourceRange.IsInside(aObjRect);
+        const ScDrawObjData* pObjData = ScDrawLayer::GetObjData(pOldObject);
+        if (pObjData) // Consider images anchored to the copied cell
+            bObjectInArea = bObjectInArea || aClipRange.In(pObjData->maStart);
+        if (bObjectInArea && (pOldObject->GetLayer() != SC_LAYER_INTERN)
+            && !IsNoteCaption(pOldObject))
         {
             SdrObject* pNewObject = pOldObject->Clone();
             pNewObject->SetModel(this);
@@ -1672,22 +1708,8 @@ void ScDrawLayer::CopyFromClip( ScDrawLayer* pClipModel, SCTAB nSourceTab, const
                         if( !aRangesVector.empty() )
                         {
                             bool bInSourceRange = false;
-                            ScRange aClipRange;
                             if ( pClipDoc )
                             {
-                                SCCOL nClipStartX;
-                                SCROW nClipStartY;
-                                SCCOL nClipEndX;
-                                SCROW nClipEndY;
-                                pClipDoc->GetClipStart( nClipStartX, nClipStartY );
-                                pClipDoc->GetClipArea( nClipEndX, nClipEndY, true );
-                                nClipEndX = nClipEndX + nClipStartX;
-                                nClipEndY += nClipStartY;   // GetClipArea returns the difference
-
-                                SCTAB nClipTab = bRestoreDestTabName ? nDestTab : nSourceTab;
-                                aClipRange = ScRange( nClipStartX, nClipStartY, nClipTab,
-                                                        nClipEndX, nClipEndY, nClipTab );
-
                                 bInSourceRange = lcl_IsAllInRange( aRangesVector, aClipRange );
                             }
 
