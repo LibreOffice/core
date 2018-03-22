@@ -143,7 +143,12 @@ IMPL_ABSTDLG_BASE(AbstractInsertObjectDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractLinksDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractSpellDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractSvxPostItDialog_Impl);
-IMPL_ABSTDLG_BASE(AbstractPasswordToOpenModifyDialog_Impl);
+
+short AbstractPasswordToOpenModifyDialog_Impl::Execute()
+{
+    return m_xDlg->run();
+}
+
 IMPL_ABSTDLG_BASE(AbstractScreenshotAnnotationDlg_Impl);
 
 
@@ -785,15 +790,17 @@ vcl::Window * AbstractSvxPostItDialog_Impl::GetWindow()
 
 OUString AbstractPasswordToOpenModifyDialog_Impl::GetPasswordToOpen() const
 {
-    return pDlg->GetPasswordToOpen();
+    return m_xDlg->GetPasswordToOpen();
 }
+
 OUString AbstractPasswordToOpenModifyDialog_Impl::GetPasswordToModify() const
 {
-    return pDlg->GetPasswordToModify();
+    return m_xDlg->GetPasswordToModify();
 }
+
 bool AbstractPasswordToOpenModifyDialog_Impl::IsRecommendToOpenReadonly() const
 {
-    return pDlg->IsRecommendToOpenReadonly();
+    return m_xDlg->IsRecommendToOpenReadonly();
 }
 
 // Create dialogs with simplest interface
@@ -1515,11 +1522,9 @@ VclPtr<SvxAbstractInsRowColDlg> AbstractDialogFactory_Impl::CreateSvxInsRowColDl
 }
 
 VclPtr<AbstractPasswordToOpenModifyDialog> AbstractDialogFactory_Impl::CreatePasswordToOpenModifyDialog(
-    vcl::Window * pParent,
-    sal_uInt16 nMaxPasswdLen, bool bIsPasswordToModify )
+    weld::Window * pParent, sal_uInt16 nMaxPasswdLen, bool bIsPasswordToModify)
 {
-    VclPtrInstance<PasswordToOpenModifyDialog> pDlg( pParent, nMaxPasswdLen, bIsPasswordToModify );
-    return VclPtr<AbstractPasswordToOpenModifyDialog_Impl>::Create( pDlg );
+    return VclPtr<AbstractPasswordToOpenModifyDialog_Impl>::Create(new PasswordToOpenModifyDialog(pParent, nMaxPasswdLen, bIsPasswordToModify));
 }
 
 VclPtr<AbstractScreenshotAnnotationDlg> AbstractDialogFactory_Impl::CreateScreenshotAnnotationDlg(

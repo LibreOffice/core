@@ -458,8 +458,14 @@ private:
 class PasswordToOpenModifyDialog;
 class AbstractPasswordToOpenModifyDialog_Impl : public AbstractPasswordToOpenModifyDialog
 {
-    DECL_ABSTDLG_BASE( AbstractPasswordToOpenModifyDialog_Impl, PasswordToOpenModifyDialog )
-
+protected:
+    std::unique_ptr<PasswordToOpenModifyDialog> m_xDlg;
+public:
+    explicit AbstractPasswordToOpenModifyDialog_Impl(PasswordToOpenModifyDialog* p)
+        : m_xDlg(p)
+    {
+    }
+    virtual short Execute() override;
     virtual OUString  GetPasswordToOpen() const override;
     virtual OUString  GetPasswordToModify() const override;
     virtual bool      IsRecommendToOpenReadonly() const override;
@@ -648,7 +654,7 @@ public:
 
     virtual VclPtr<SvxAbstractInsRowColDlg> CreateSvxInsRowColDlg(weld::Window* pParent, bool bCol, const OString& rHelpId) override;
 
-    virtual VclPtr<AbstractPasswordToOpenModifyDialog> CreatePasswordToOpenModifyDialog(vcl::Window * pParent, sal_uInt16 nMaxPasswdLen, bool bIsPasswordToModify) override;
+    virtual VclPtr<AbstractPasswordToOpenModifyDialog> CreatePasswordToOpenModifyDialog(weld::Window * pParent, sal_uInt16 nMaxPasswdLen, bool bIsPasswordToModify) override;
 
     virtual VclPtr<AbstractScreenshotAnnotationDlg> CreateScreenshotAnnotationDlg(vcl::Window * pParent, Dialog& rParentDialog) override;
 };
