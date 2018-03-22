@@ -34,59 +34,6 @@ namespace svx
                                 >   OAccessibleHelper_Base_2;
 
     class SvxShowCharSetAcc;
-    /** The class SvxShowCharSetVirtualAcc is used as a virtual class which contains the table and the scrollbar.
-        In the vcl control, the table and the scrollbar exists in one class. This is not feasible for the accessibility api.
-    */
-    class SvxShowCharSetVirtualAcc : public ::comphelper::OAccessibleComponentHelper,
-                                     public OAccessibleHelper_Base_2
-    {
-        VclPtr<SvxShowCharSet>             mpParent; // the vcl control
-        rtl::Reference<SvxShowCharSetAcc>  m_xTable; // the table, which holds the characters shown by the vcl control
-        sal_Int32 getImplAccessibleChildCount() const;
-    protected:
-        virtual ~SvxShowCharSetVirtualAcc() override;
-
-        virtual void SAL_CALL disposing() override;
-
-        virtual css::awt::Rectangle implGetBounds(  ) override;
-    public:
-        SvxShowCharSetVirtualAcc( SvxShowCharSet* pParent );
-
-        // XInterface
-        DECLARE_XINTERFACE( )
-        DECLARE_XTYPEPROVIDER( )
-
-        // XAccessibleComponent
-        virtual void SAL_CALL grabFocus(  ) override;
-        virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleAtPoint( const css::awt::Point& aPoint ) override;
-        //OAccessibleContextHelper
-        // XAccessibleContext - still waiting to be overwritten
-        virtual sal_Int32 SAL_CALL getAccessibleChildCount(  ) override;
-        virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleChild( sal_Int32 i ) override;
-        virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleParent(  ) override;
-        virtual sal_Int16 SAL_CALL getAccessibleRole(  ) override;
-        virtual OUString SAL_CALL getAccessibleDescription(  ) override;
-        virtual OUString SAL_CALL getAccessibleName(  ) override;
-        virtual css::uno::Reference< css::accessibility::XAccessibleRelationSet > SAL_CALL getAccessibleRelationSet(  ) override;
-        virtual css::uno::Reference< css::accessibility::XAccessibleStateSet > SAL_CALL getAccessibleStateSet(  ) override;
-
-        virtual css::uno::Reference< css::accessibility::XAccessibleContext > SAL_CALL getAccessibleContext(  ) override { return this; }
-        virtual sal_Int32 SAL_CALL getForeground(  ) override;
-        virtual sal_Int32 SAL_CALL getBackground(  ) override;
-
-
-        // call the fireEvent method from the table when it exists.
-        void fireEvent(
-                    const sal_Int16 _nEventId,
-                    const css::uno::Any& _rOldValue,
-                    const css::uno::Any& _rNewValue
-                );
-
-        // simple access methods
-        SvxShowCharSetAcc*   getTable() const { return m_xTable.get(); }
-        SvxShowCharSet*      getCharSetControl() const { return mpParent; }
-    };
-
 
     class SvxShowCharSetItemAcc;
 
@@ -123,11 +70,11 @@ namespace svx
                               public OAccessibleHelper_Base
     {
         ::std::vector< css::uno::Reference< css::accessibility::XAccessible > > m_aChildren;
-        SvxShowCharSetVirtualAcc* m_pParent; // the virtual parent
+        SvxShowCharSet*             m_pParent; // the vcl control
     protected:
         virtual void SAL_CALL disposing() override;
     public:
-        SvxShowCharSetAcc( SvxShowCharSetVirtualAcc* _pParent );
+        SvxShowCharSetAcc(SvxShowCharSet* pParent);
 
         DECLARE_XINTERFACE( )
         DECLARE_XTYPEPROVIDER( )
@@ -138,7 +85,8 @@ namespace svx
 
         //OAccessibleContextHelper
         // XAccessibleContext - still waiting to be overwritten
-        virtual sal_Int32 SAL_CALL getAccessibleChildCount(  ) override;
+        virtual sal_Int32 SAL_CALL getAccessibleIndexInParent() override;
+        virtual sal_Int32 SAL_CALL getAccessibleChildCount() override;
         virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleChild( sal_Int32 i ) override;
         virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleParent(  ) override;
         virtual sal_Int16 SAL_CALL getAccessibleRole(  ) override;
@@ -181,6 +129,8 @@ namespace svx
         {
             NotifyAccessibleEvent(_nEventId,_rOldValue,_rNewValue);
         }
+
+        void clearCharSetControl() { m_pParent = nullptr; }
     protected:
 
         virtual ~SvxShowCharSetAcc() override;

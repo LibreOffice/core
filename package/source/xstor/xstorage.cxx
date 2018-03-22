@@ -1831,6 +1831,13 @@ void OStorage::InternalDispose( bool bNotifyImpl )
     // since the listeners could dispose the object while being notified
     lang::EventObject aSource( static_cast< ::cppu::OWeakObject* >(this) );
     m_pData->m_aListenersContainer.disposeAndClear( aSource );
+
+    if ( !m_pImpl )
+    {
+        SAL_INFO("package.xstor", THROW_WHERE "Disposed!");
+        throw lang::DisposedException( THROW_WHERE );
+    }
+
     m_pImpl->m_nModifiedListenerCount = 0;
 
     if ( m_pData->m_bReadOnlyWrap )

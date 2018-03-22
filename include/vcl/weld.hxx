@@ -71,6 +71,9 @@ public:
     virtual void connect_focus_in(const Link<Widget&, void>& rLink) = 0;
     virtual void connect_focus_out(const Link<Widget&, void>& rLink) = 0;
 
+    virtual void grab_add() = 0;
+    virtual void grab_remove() = 0;
+
     virtual Container* weld_parent() const = 0;
 
     virtual ~Widget() {}
@@ -81,6 +84,26 @@ class VCL_DLLPUBLIC Container : virtual public Widget
 public:
     virtual void remove(weld::Widget* pWidget) = 0;
     virtual void add(weld::Widget* pWidget) = 0;
+};
+
+class VCL_DLLPUBLIC ScrolledWindow : virtual public Container
+{
+protected:
+    Link<ScrolledWindow&, void> m_aVChangeHdl;
+
+    void signal_vadjustment_changed() { m_aVChangeHdl.Call(*this); }
+
+public:
+    virtual void set_user_managed_scrolling() = 0;
+    virtual void vadjustment_configure(int value, int lower, int upper, int step_increment,
+                                       int page_increment, int page_size)
+        = 0;
+    virtual int vadjustment_get_value() const = 0;
+    virtual void vadjustment_set_value(int value) = 0;
+    void connect_vadjustment_changed(const Link<ScrolledWindow&, void>& rLink)
+    {
+        m_aVChangeHdl = rLink;
+    }
 };
 
 class VCL_DLLPUBLIC Frame : virtual public Container
@@ -198,6 +221,12 @@ public:
     void connect_changed(const Link<ComboBoxText&, void>& rLink) { m_aChangeHdl = rLink; }
 
     void set_active(const OUString& rStr) { set_active(find_text(rStr)); }
+
+    virtual void set_entry_text(const OUString& rStr) = 0;
+    virtual void select_entry_region(int nStartPos, int nEndPos) = 0;
+    virtual bool get_entry_selection_bounds(int& rStartPos, int& rEndPos) = 0;
+
+    virtual void unset_entry_completion() = 0;
 
     void save_value() { m_sSavedValue = get_active_text(); }
 
@@ -341,6 +370,7 @@ public:
     virtual void set_width_chars(int nChars) = 0;
     virtual void set_max_length(int nChars) = 0;
     virtual void select_region(int nStartPos, int nEndPos) = 0;
+    virtual bool get_selection_bounds(int& rStartPos, int& rEndPos) = 0;
     virtual void set_position(int nCursorPos) = 0;
     virtual void set_editable(bool bEditable) = 0;
 
@@ -545,21 +575,41 @@ public:
 protected:
     Link<draw_args, void> m_aDrawHdl;
     Link<const Size&, void> m_aSizeAllocateHdl;
-    Link<const Point&, void> m_aMousePressHdl;
-    Link<const Point&, void> m_aMouseMotionHdl;
-    Link<const Point&, void> m_aMouseReleaseHdl;
+    Link<const MouseEvent&, void> m_aMousePressHdl;
+    Link<const MouseEvent&, void> m_aMouseMotionHdl;
+    Link<const MouseEvent&, void> m_aMouseReleaseHdl;
+    Link<const KeyEvent&, bool> m_aKeyPressHdl;
+    Link<const KeyEvent&, bool> m_aKeyReleaseHdl;
 
 public:
     void connect_draw(const Link<draw_args, void>& rLink) { m_aDrawHdl = rLink; }
     void connect_size_allocate(const Link<const Size&, void>& rLink) { m_aSizeAllocateHdl = rLink; }
-    void connect_mouse_press(const Link<const Point&, void>& rLink) { m_aMousePressHdl = rLink; }
-    void connect_mouse_move(const Link<const Point&, void>& rLink) { m_aMouseMotionHdl = rLink; }
-    void connect_mouse_release(const Link<const Point&, void>& rLink)
+    void connect_mouse_press(const Link<const MouseEvent&, void>& rLink)
+    {
+        m_aMousePressHdl = rLink;
+    }
+    void connect_mouse_move(const Link<const MouseEvent&, void>& rLink)
+    {
+        m_aMouseMotionHdl = rLink;
+    }
+    void connect_mouse_release(const Link<const MouseEvent&, void>& rLink)
     {
         m_aMouseReleaseHdl = rLink;
     }
+    void connect_key_press(const Link<const KeyEvent&, bool>& rLink) { m_aKeyPressHdl = rLink; }
+    void connect_key_release(const Link<const KeyEvent&, bool>& rLink) { m_aKeyReleaseHdl = rLink; }
     virtual void queue_draw() = 0;
     virtual void queue_draw_area(int x, int y, int width, int height) = 0;
+    virtual a11yref get_accessible_parent() = 0;
+};
+
+class VCL_DLLPUBLIC Menu
+{
+public:
+    virtual OString popup_at_rect(weld::Widget* pParent, const tools::Rectangle& rRect) = 0;
+    virtual void set_sensitive(const OString& rIdent, bool bSensitive) = 0;
+    virtual void show(const OString& rIdent, bool bShow) = 0;
+    virtual ~Menu() {}
 };
 
 class VCL_DLLPUBLIC Builder
@@ -583,6 +633,8 @@ public:
     virtual Container* weld_container(const OString& id, bool bTakeOwnership = false) = 0;
     virtual Button* weld_button(const OString& id, bool bTakeOwnership = false) = 0;
     virtual Frame* weld_frame(const OString& id, bool bTakeOwnership = false) = 0;
+    virtual ScrolledWindow* weld_scrolled_window(const OString& id, bool bTakeOwnership = false)
+        = 0;
     virtual Notebook* weld_notebook(const OString& id, bool bTakeOwnership = false) = 0;
     virtual RadioButton* weld_radio_button(const OString& id, bool bTakeOwnership = false) = 0;
     virtual CheckButton* weld_check_button(const OString& id, bool bTakeOwnership = false) = 0;
@@ -598,8 +650,10 @@ public:
     virtual Expander* weld_expander(const OString& id, bool bTakeOwnership = false) = 0;
     virtual Entry* weld_entry(const OString& id, bool bTakeOwnership = false) = 0;
     virtual DrawingArea* weld_drawing_area(const OString& id, const a11yref& rA11yImpl = nullptr,
-                                           bool bTakeOwnership = false)
+                                           FactoryFunction pUITestFactoryFunction = nullptr,
+                                           void* pUserData = nullptr, bool bTakeOwnership = false)
         = 0;
+    virtual Menu* weld_menu(const OString& id, bool bTakeOwnership = true) = 0;
     virtual ~Builder() {}
 };
 

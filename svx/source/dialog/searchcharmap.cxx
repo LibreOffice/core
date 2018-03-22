@@ -50,14 +50,13 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
 
 
-SvxSearchCharSet::SvxSearchCharSet(vcl::Window* pParent)
-    : SvxShowCharSet(pParent),
-    nCount(0)
+SvxSearchCharSet::SvxSearchCharSet(weld::Builder& rBuilder, const OString& rDrawingId,
+                  const OString& rScrollId, const VclPtr<VirtualDevice>& rVirDev)
+    : SvxShowCharSet(rBuilder, rDrawingId, rScrollId, rVirDev)
+    , nCount(0)
 {
+    mxDrawingArea->connect_key_press(LINK(this, SvxSearchCharSet, DoKeyDown));
 }
-
-VCL_BUILDER_FACTORY(SvxSearchCharSet)
-
 
 int SvxSearchCharSet::LastInView() const
 {
@@ -69,18 +68,16 @@ int SvxSearchCharSet::LastInView() const
     return nIndex;
 }
 
-
-void SvxSearchCharSet::KeyInput(const KeyEvent& rKEvt)
+IMPL_LINK(SvxSearchCharSet, DoKeyDown, const KeyEvent&, rKEvt, bool)
 {
     vcl::KeyCode aCode = rKEvt.GetKeyCode();
 
     if (aCode.GetModifier())
-    {
-        Control::KeyInput(rKEvt);
-        return;
-    }
+        return false;
 
     int tmpSelected = nSelectedIndex;
+
+    bool bRet = true;
 
     switch (aCode.GetCode())
     {
@@ -114,13 +111,13 @@ void SvxSearchCharSet::KeyInput(const KeyEvent& rKEvt)
         case KEY_TAB:   // some fonts have a character at these unicode control codes
         case KEY_ESCAPE:
         case KEY_RETURN:
-            Control::KeyInput(rKEvt);
+            bRet = false;
             tmpSelected = - 1;  // mark as invalid
             break;
         default:
-            {
-                tmpSelected = -1;
-            }
+            tmpSelected = -1;
+            bRet = false;
+            break;
     }
 
     if ( tmpSelected >= 0 )
@@ -128,12 +125,14 @@ void SvxSearchCharSet::KeyInput(const KeyEvent& rKEvt)
         SelectIndex( tmpSelected, true );
         aPreSelectHdl.Call( this );
     }
+
+    return bRet;
 }
 
 void SvxSearchCharSet::SelectCharacter( const Subset* sub )
 {
-    if ( !mxFontCharMap.is() )
-        RecalculateFont( *this );
+    if (!mxFontCharMap.is())
+        RecalculateFont(*mxVirDev);
 
     // get next available char of current font
     sal_UCS4 cChar = sub->GetRangeMin();
@@ -156,12 +155,13 @@ void SvxSearchCharSet::SelectCharacter( const Subset* sub )
         SelectIndex( nMapIndex );
     aHighHdl.Call(this);
     // move selected item to top row if not in focus
-    aVscrollSB->SetThumbPos( nMapIndex / COLUMN_COUNT );
-    Invalidate();
+    //TO.DO aVscrollSB->SetThumbPos( nMapIndex / COLUMN_COUNT );
+    mxDrawingArea->queue_draw();
 }
 
-void SvxSearchCharSet::Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& )
+IMPL_LINK(SvxSearchCharSet, DoPaint, weld::DrawingArea::draw_args, aPayload, void)
 {
+    vcl::RenderContext& rRenderContext = aPayload.first;
     InitSettings(rRenderContext);
     RecalculateFont(rRenderContext);
     DrawChars_Impl(rRenderContext, FirstInView(), LastInView());
@@ -172,9 +172,7 @@ void SvxSearchCharSet::DrawChars_Impl(vcl::RenderContext& rRenderContext, int n1
     if (n1 > LastInView() || n2 < FirstInView())
         return;
 
-    Size aOutputSize(GetOutputSizePixel());
-    if (aVscrollSB->IsVisible())
-        aOutputSize.AdjustWidth( -(aVscrollSB->GetOptimalSize().Width()) );
+    Size aOutputSize(maSize);
 
     int i;
     for (i = 1; i < COLUMN_COUNT; ++i)
@@ -308,9 +306,7 @@ void SvxSearchCharSet::RecalculateFont(vcl::RenderContext& rRenderContext)
     if (!mbRecalculateFont)
         return;
 
-    Size aSize(GetOutputSizePixel());
-    long nSBWidth = aVscrollSB->GetOptimalSize().Width();
-    aSize.AdjustWidth( -nSBWidth );
+    Size aSize(maSize);
 
     vcl::Font aFont = rRenderContext.GetFont();
     aFont.SetWeight(WEIGHT_LIGHT);
@@ -327,14 +323,8 @@ void SvxSearchCharSet::RecalculateFont(vcl::RenderContext& rRenderContext)
     nY = aSize.Height() / ROW_COUNT;
 
     //scrollbar settings -- error
-    aVscrollSB->setPosSizePixel(aSize.Width(), 0, nSBWidth, aSize.Height());
-    aVscrollSB->SetRangeMin(0);
     int nLastRow = (nCount - 1 + COLUMN_COUNT) / COLUMN_COUNT;
-    aVscrollSB->SetRangeMax(nLastRow);
-    aVscrollSB->SetPageSize(ROW_COUNT - 1);
-    aVscrollSB->SetVisibleSize(ROW_COUNT);
-
-    aVscrollSB->Show();
+    mxScrollArea->vadjustment_configure(mxScrollArea->vadjustment_get_value(), 0, nLastRow, 1, ROW_COUNT - 1, ROW_COUNT);
 
     // rearrange CharSet element in sync with nX- and nY-multiples
     Size aDrawSize(nX * COLUMN_COUNT, nY * ROW_COUNT);
@@ -344,53 +334,52 @@ void SvxSearchCharSet::RecalculateFont(vcl::RenderContext& rRenderContext)
     mbRecalculateFont = false;
 }
 
-void SvxSearchCharSet::SelectIndex( int nNewIndex, bool bFocus )
+void SvxSearchCharSet::SelectIndex(int nNewIndex, bool bFocus)
 {
-    if( !aVscrollSB )
-        return;
-
-    if ( !mxFontCharMap.is() )
-        RecalculateFont( *this );
+    if (!mxFontCharMap.is())
+        RecalculateFont(*mxVirDev);
 
     if( nNewIndex < 0 )
     {
-        aVscrollSB->SetThumbPos( 0 );
+        mxScrollArea->vadjustment_set_value(0);
         nSelectedIndex = bFocus ? 0 : -1;
-        Invalidate();
+        mxDrawingArea->queue_draw();
     }
     else if( nNewIndex < FirstInView() )
     {
         // need to scroll up to see selected item
-        int nOldPos = aVscrollSB->GetThumbPos();
+        int nOldPos = mxScrollArea->vadjustment_get_value();
         int nDelta = (FirstInView() - nNewIndex + COLUMN_COUNT-1) / COLUMN_COUNT;
-        aVscrollSB->SetThumbPos( nOldPos - nDelta );
+        mxScrollArea->vadjustment_set_value(nOldPos - nDelta);
         nSelectedIndex = nNewIndex;
-        Invalidate();
+        mxDrawingArea->queue_draw();
     }
     else if( nNewIndex > LastInView() )
     {
         // need to scroll down to see selected item
-        int nOldPos = aVscrollSB->GetThumbPos();
+        int nOldPos = mxScrollArea->vadjustment_get_value();
         int nDelta = (nNewIndex - LastInView() + COLUMN_COUNT) / COLUMN_COUNT;
-        aVscrollSB->SetThumbPos( nOldPos + nDelta );
+        mxScrollArea->vadjustment_set_value(nOldPos + nDelta);
+
         if( nNewIndex < nCount )
         {
             nSelectedIndex = nNewIndex;
-            Invalidate();
+            mxDrawingArea->queue_draw();
         }
-        else if (nOldPos != aVscrollSB->GetThumbPos())
+        else if (nOldPos != mxScrollArea->vadjustment_get_value())
         {
-            Invalidate();
+            mxDrawingArea->queue_draw();
         }
     }
     else
     {
         nSelectedIndex = nNewIndex;
-        Invalidate();
+        mxDrawingArea->queue_draw();
     }
 
     if( nSelectedIndex >= 0 )
     {
+#if 0
         if( m_xAccessible.is() )
         {
             svx::SvxShowCharSetItem* pItem = ImplGetItem(nSelectedIndex);
@@ -410,20 +399,13 @@ void SvxSearchCharSet::SelectIndex( int nNewIndex, bool bFocus )
             aNewAny <<= AccessibleStateType::SELECTED;
             pItem->m_xItem->fireEvent( AccessibleEventId::STATE_CHANGED, aOldAny, aNewAny );
         }
+#endif
     }
     aHighHdl.Call( this );
 }
 
 SvxSearchCharSet::~SvxSearchCharSet()
 {
-    disposeOnce();
-}
-
-void SvxSearchCharSet::dispose()
-{
-    m_aItemList.clear();
-
-    SvxShowCharSet::dispose();
 }
 
 svx::SvxShowCharSetItem* SvxSearchCharSet::ImplGetItem( int _nPos )
@@ -433,7 +415,7 @@ svx::SvxShowCharSetItem* SvxSearchCharSet::ImplGetItem( int _nPos )
     {
         OSL_ENSURE(m_xAccessible.is(), "Who wants to create a child of my table without a parent?");
         std::shared_ptr<svx::SvxShowCharSetItem> xItem(new svx::SvxShowCharSetItem(*this,
-            m_xAccessible->getTable(), sal::static_int_cast< sal_uInt16 >(_nPos)));
+            m_xAccessible.get(), sal::static_int_cast< sal_uInt16 >(_nPos)));
         aFind = m_aItems.emplace(_nPos, xItem).first;
         OUStringBuffer buf;
         std::unordered_map<sal_Int32,sal_UCS4>::const_iterator got = m_aItemList.find (_nPos);
@@ -456,7 +438,7 @@ void SvxSearchCharSet::ClearPreviousData()
 {
     m_aItemList.clear();
     nCount = 0;
-    Invalidate();
+    mxDrawingArea->queue_draw();
 }
 
 void SvxSearchCharSet::AppendCharToList(sal_UCS4 sChar)

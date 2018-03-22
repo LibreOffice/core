@@ -2036,7 +2036,7 @@ IMPL_LINK_NOARG(SvxNumOptionsTabPage, PopupActivateHdl_Impl, MenuButton *, void)
 
 IMPL_LINK_NOARG(SvxNumOptionsTabPage, BulletHdl_Impl, Button*, void)
 {
-    VclPtrInstance< SvxCharacterMap > pMap( this, nullptr, false );
+    SvxCharacterMap aMap(GetFrameWeld(), nullptr, false);
 
     sal_uInt16 nMask = 1;
     const vcl::Font* pFmtFont = nullptr;
@@ -2065,16 +2065,16 @@ IMPL_LINK_NOARG(SvxNumOptionsTabPage, BulletHdl_Impl, Button*, void)
 
     }
 
-    if(pFmtFont)
-        pMap->SetCharFont(*pFmtFont);
+    if (pFmtFont)
+        aMap.SetCharFont(*pFmtFont);
     else
-        pMap->SetCharFont(aActBulletFont);
-    if(bSameBullet)
-        pMap->SetChar( cBullet );
-    if(pMap->Execute() == RET_OK)
+        aMap.SetCharFont(aActBulletFont);
+    if (bSameBullet)
+        aMap.SetChar(cBullet);
+    if (aMap.execute() == RET_OK)
     {
         // change Font Numrules
-        aActBulletFont = pMap->GetCharFont();
+        aActBulletFont = aMap.GetCharFont();
 
         sal_uInt16 _nMask = 1;
         for(sal_uInt16 i = 0; i < pActNum->GetLevelCount(); i++)
@@ -2083,7 +2083,7 @@ IMPL_LINK_NOARG(SvxNumOptionsTabPage, BulletHdl_Impl, Button*, void)
             {
                 SvxNumberFormat aNumFmt(pActNum->GetLevel(i));
                 aNumFmt.SetBulletFont(&aActBulletFont);
-                aNumFmt.SetBulletChar( static_cast<sal_Unicode>(pMap->GetChar()) );
+                aNumFmt.SetBulletChar( static_cast<sal_Unicode>(aMap.GetChar()) );
                 pActNum->SetLevel(i, aNumFmt);
             }
             _nMask <<= 1;

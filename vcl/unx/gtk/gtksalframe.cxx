@@ -94,7 +94,7 @@ int GtkSalFrame::m_nFloats = 0;
 static GDBusConnection* pSessionBus = nullptr;
 #endif
 
-static sal_uInt16 GetKeyModCode( guint state )
+sal_uInt16 GtkSalFrame::GetKeyModCode( guint state )
 {
     sal_uInt16 nCode = 0;
     if( state & GDK_SHIFT_MASK )
@@ -111,7 +111,7 @@ static sal_uInt16 GetKeyModCode( guint state )
     return nCode;
 }
 
-static sal_uInt16 GetMouseModCode( guint state )
+sal_uInt16 GtkSalFrame::GetMouseModCode( guint state )
 {
     sal_uInt16 nCode = GetKeyModCode( state );
     if( state & GDK_BUTTON1_MASK )
@@ -124,7 +124,7 @@ static sal_uInt16 GetMouseModCode( guint state )
     return nCode;
 }
 
-static sal_uInt16 GetKeyCode( guint keyval )
+sal_uInt16 GtkSalFrame::GetKeyCode(guint keyval)
 {
     sal_uInt16 nCode = 0;
     if( keyval >= GDK_KEY_0 && keyval <= GDK_KEY_9 )
@@ -330,7 +330,7 @@ static sal_uInt16 GetKeyCode( guint keyval )
     return nCode;
 }
 
-static guint GetKeyValFor(GdkKeymap* pKeyMap, guint16 hardware_keycode, guint8 group)
+guint GtkSalFrame::GetKeyValFor(GdkKeymap* pKeyMap, guint16 hardware_keycode, guint8 group)
 {
     guint updated_keyval = 0;
     gdk_keymap_translate_keyboard_state(pKeyMap, hardware_keycode,
