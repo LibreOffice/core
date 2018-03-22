@@ -153,7 +153,7 @@ $(eval $(call gb_Module_add_subsequentcheck_targets,sc,\
 	CppunitTest_sc_autoformatobj \
 	CppunitTest_sc_importdescriptorbaseobj \
 	CppunitTest_sc_documentconfigurationobj \
-	CppunitTest_sc_spreadsheetsettingsobj \
+	CppunitTest_sc_spreadsheetsettings \
 	CppunitTest_sc_shapeobj \
 	CppunitTest_sc_sheetlinkobj \
 ))
