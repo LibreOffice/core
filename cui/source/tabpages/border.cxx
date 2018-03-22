@@ -591,7 +591,7 @@ void SvxBorderTabPage::Reset( const SfxItemSet* rSet )
         SelColHdl_Impl(*m_pLbLineColor);
     }
 
-    bool bEnable = m_pWndShadows->GetSelectItemId() > 1 ;
+    bool bEnable = m_pWndShadows->GetSelectedItemId() > 1 ;
     m_pFtShadowSize->Enable(bEnable);
     m_pEdShadowSize->Enable(bEnable);
     m_pFtShadowColor->Enable(bEnable);
@@ -875,7 +875,7 @@ IMPL_LINK_NOARG(SvxBorderTabPage, SelPreHdl_Impl, ValueSet*, void)
     m_pFrameSel->DeselectAllBorders();
 
     // Using image ID to find correct line in table above.
-    sal_uInt16 nLine = GetPresetImageId( m_pWndPresets->GetSelectItemId() ) - 1;
+    sal_uInt16 nLine = GetPresetImageId( m_pWndPresets->GetSelectedItemId() ) - 1;
 
     // Apply all styles from the table
     for( int nBorder = 0; nBorder < svx::FRAMEBORDERTYPE_COUNT; ++nBorder )
@@ -911,7 +911,7 @@ IMPL_LINK_NOARG(SvxBorderTabPage, SelPreHdl_Impl, ValueSet*, void)
 
 IMPL_LINK_NOARG(SvxBorderTabPage, SelSdwHdl_Impl, ValueSet*, void)
 {
-    bool bEnable = m_pWndShadows->GetSelectItemId() > 1;
+    bool bEnable = m_pWndShadows->GetSelectedItemId() > 1;
     m_pFtShadowSize->Enable(bEnable);
     m_pEdShadowSize->Enable(bEnable);
     m_pFtShadowColor->Enable(bEnable);

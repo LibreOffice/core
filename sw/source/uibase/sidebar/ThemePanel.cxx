@@ -495,7 +495,7 @@ void ThemePanel::DoubleClickHdl()
     if (pDocSh)
     {
         OUString sEntryFonts = mpListBoxFonts->GetSelectedEntry();
-        sal_uInt32 nItemId = mpValueSetColors->GetSelectItemId();
+        sal_uInt32 nItemId = mpValueSetColors->GetSelectedItemId();
         OUString sEntryColors = maColorSets.getColorSet(nItemId).getName();
 
         StyleSet aStyleSet = setupThemes();

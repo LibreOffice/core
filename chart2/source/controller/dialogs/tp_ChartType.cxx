@@ -786,7 +786,7 @@ void ChartTypeTabPage::dispose()
 ChartTypeParameter ChartTypeTabPage::getCurrentParamter() const
 {
     ChartTypeParameter aParameter;
-    aParameter.nSubTypeIndex = static_cast<sal_Int32>( m_pSubTypeList->GetSelectItemId() );
+    aParameter.nSubTypeIndex = static_cast<sal_Int32>( m_pSubTypeList->GetSelectedItemId() );
     m_pDim3DLookResourceGroup->fillParameter( aParameter );
     m_pStackingResourceGroup->fillParameter( aParameter );
     m_pSplineResourceGroup->fillParameter( aParameter );

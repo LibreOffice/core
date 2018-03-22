@@ -337,7 +337,7 @@ bool SvxColorDockingWindow::Close()
 IMPL_LINK_NOARG(SvxColorDockingWindow, SelectHdl, ValueSet*, void)
 {
     SfxDispatcher* pDispatcher = GetBindings().GetDispatcher();
-    sal_uInt16 nPos = aColorSet->GetSelectItemId();
+    sal_uInt16 nPos = aColorSet->GetSelectedItemId();
     Color  aColor( aColorSet->GetItemColor( nPos ) );
     OUString aStr( aColorSet->GetItemText( nPos ) );
 

@@ -284,11 +284,11 @@ void LayoutToolbarMenu::SelectHdl(void const * pControl)
 
     if( pControl == mpLayoutSet1 )
     {
-        eLayout = static_cast< AutoLayout >(mpLayoutSet1->GetSelectItemId()-1);
+        eLayout = static_cast< AutoLayout >(mpLayoutSet1->GetSelectedItemId()-1);
     }
     else if( pControl == mpLayoutSet2 )
     {
-        eLayout = static_cast< AutoLayout >(mpLayoutSet2->GetSelectItemId()-1);
+        eLayout = static_cast< AutoLayout >(mpLayoutSet2->GetSelectedItemId()-1);
     }
 
     if( eLayout != AUTOLAYOUT_END )

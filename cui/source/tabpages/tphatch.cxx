@@ -254,7 +254,7 @@ bool SvxHatchTabPage::FillItemSet( SfxItemSet* rSet )
     if( nPos != VALUESET_ITEM_NOTFOUND )
     {
         pXHatch.reset(new XHatch( m_pHatchingList->GetHatch( static_cast<sal_uInt16>(nPos) )->GetHatch() ));
-        aString = m_pHatchLB->GetItemText( m_pHatchLB->GetSelectItemId() );
+        aString = m_pHatchLB->GetItemText( m_pHatchLB->GetSelectedItemId() );
     }
     // unidentified hatch has been passed
     else
@@ -491,7 +491,7 @@ IMPL_LINK_NOARG(SvxHatchTabPage, ClickAddHdl_Impl, Button*, void)
 
 IMPL_LINK_NOARG(SvxHatchTabPage, ClickModifyHdl_Impl, Button*, void)
 {
-    sal_uInt16 nId = m_pHatchLB->GetSelectItemId();
+    sal_uInt16 nId = m_pHatchLB->GetSelectedItemId();
     size_t nPos = m_pHatchLB->GetSelectItemPos();
 
     if( nPos != VALUESET_ITEM_NOTFOUND )
@@ -523,7 +523,7 @@ IMPL_LINK_NOARG(SvxHatchTabPage, ClickModifyHdl_Impl, Button*, void)
 
 IMPL_LINK_NOARG(SvxHatchTabPage, ClickDeleteHdl_Impl, SvxPresetListBox*, void)
 {
-    sal_uInt16 nId = m_pHatchLB->GetSelectItemId();
+    sal_uInt16 nId = m_pHatchLB->GetSelectedItemId();
     size_t nPos = m_pHatchLB->GetSelectItemPos();
 
     if( nPos != VALUESET_ITEM_NOTFOUND )
@@ -549,7 +549,7 @@ IMPL_LINK_NOARG(SvxHatchTabPage, ClickDeleteHdl_Impl, SvxPresetListBox*, void)
 
 IMPL_LINK_NOARG(SvxHatchTabPage, ClickRenameHdl_Impl, SvxPresetListBox*, void )
 {
-    sal_uInt16 nId = m_pHatchLB->GetSelectItemId();
+    sal_uInt16 nId = m_pHatchLB->GetSelectedItemId();
     size_t nPos = m_pHatchLB->GetSelectItemPos();
 
     if( nPos != VALUESET_ITEM_NOTFOUND )

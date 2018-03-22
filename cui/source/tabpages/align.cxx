@@ -340,7 +340,7 @@ void AlignmentTabPage::DataChanged( const DataChangedEvent& rDCEvt )
 void AlignmentTabPage::InitVsRefEgde()
 {
     // remember selection - is deleted in call to ValueSet::Clear()
-    sal_uInt16 nSel = m_pVsRefEdge->GetSelectItemId();
+    sal_uInt16 nSel = m_pVsRefEdge->GetSelectedItemId();
 
     BitmapEx aBottomLock(RID_SVXBMP_BOTTOMLOCK);
     BitmapEx aTopLock(RID_SVXBMP_TOPLOCK);

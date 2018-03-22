@@ -161,7 +161,7 @@ void NumberingPopup::VSSelectHdl(void const * pControl)
 
     if ( pControl == mpValueSet )
     {
-        sal_uInt16 nSelItem = mpValueSet->GetSelectItemId();
+        sal_uInt16 nSelItem = mpValueSet->GetSelectedItemId();
         if ( mePageType == NumberingPageType::BULLET )
         {
             auto aArgs( comphelper::InitPropertySequence( { { "SetBullet", css::uno::makeAny( nSelItem ) } } ) );

@@ -112,7 +112,7 @@ LineWidthPopup::~LineWidthPopup()
 
 IMPL_LINK(LineWidthPopup, VSSelectHdl, ValueSet*, /*pControl*/, void)
 {
-    sal_uInt16 iPos = m_xVSWidth->GetSelectItemId();
+    sal_uInt16 iPos = m_xVSWidth->GetSelectedItemId();
     if (iPos >= 1 && iPos <= 8)
     {
         sal_IntPtr nVal = LogicToLogic(reinterpret_cast<sal_IntPtr>(m_xVSWidth->GetItemData( iPos )), MapUnit::MapPoint, m_eMapUnit);

@@ -497,7 +497,7 @@ namespace svx
         }
         else
         {
-            sal_uInt16 nPos = m_aValueSet->GetSelectItemId()-1; //itemid == pos+1 (id 0 has special meaning)
+            sal_uInt16 nPos = m_aValueSet->GetSelectedItemId()-1; //itemid == pos+1 (id 0 has special meaning)
             m_aListBox->SelectEntryPos( nPos );
         }
         m_bInSelectionUpdate = false;

@@ -185,7 +185,7 @@ void FontWorkGalleryDialog::SetSdrObjectRef( SdrObject** ppSdrObject, SdrModel* 
 
 void FontWorkGalleryDialog::insertSelectedFontwork()
 {
-    sal_uInt16 nItemId = mpCtlFavorites->GetSelectItemId();
+    sal_uInt16 nItemId = mpCtlFavorites->GetSelectedItemId();
 
     if( nItemId > 0 )
     {

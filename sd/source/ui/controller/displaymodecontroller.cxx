@@ -208,12 +208,12 @@ void DisplayModeToolbarMenu::SelectHdl(void const * pControl)
     OUString sImage;
 
     if( pControl == mpDisplayModeSet1 ) {
-        sCommandURL = OUString::createFromAscii(editmodes[mpDisplayModeSet1->GetSelectItemId() - 1 ].msUnoCommand);
-        sImage = OUString::createFromAscii(editmodes[mpDisplayModeSet1->GetSelectItemId() - 1 ].msBmpResId);
+        sCommandURL = OUString::createFromAscii(editmodes[mpDisplayModeSet1->GetSelectedItemId() - 1 ].msUnoCommand);
+        sImage = OUString::createFromAscii(editmodes[mpDisplayModeSet1->GetSelectedItemId() - 1 ].msBmpResId);
     }
     else if( pControl == mpDisplayModeSet2 ) {
-        sCommandURL = OUString::createFromAscii(mastermodes[mpDisplayModeSet2->GetSelectItemId() - 5 ].msUnoCommand);
-        sImage = OUString::createFromAscii(mastermodes[mpDisplayModeSet2->GetSelectItemId() - 5 ].msBmpResId);
+        sCommandURL = OUString::createFromAscii(mastermodes[mpDisplayModeSet2->GetSelectedItemId() - 5 ].msUnoCommand);
+        sImage = OUString::createFromAscii(mastermodes[mpDisplayModeSet2->GetSelectedItemId() - 5 ].msBmpResId);
     }
 
     if (!sCommandURL.isEmpty())

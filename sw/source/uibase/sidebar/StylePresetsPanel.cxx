@@ -201,7 +201,7 @@ void StylePresetsPanel::dispose()
 
 IMPL_LINK_NOARG(StylePresetsPanel, DoubleClickHdl, ValueSet*, void)
 {
-    sal_Int32 nItemId = mpValueSet->GetSelectItemId();
+    sal_Int32 nItemId = mpValueSet->GetSelectedItemId();
     TemplateEntry* pEntry = static_cast<TemplateEntry*>(mpValueSet->GetItemData(nItemId));
 
     SwDocShell* pDocSh = static_cast<SwDocShell*>(SfxObjectShell::Current());

@@ -168,7 +168,7 @@ void TableDesignWidget::ApplyStyle()
     try
     {
         OUString sStyleName;
-        sal_Int32 nIndex = static_cast< sal_Int32 >( m_pValueSet->GetSelectItemId() ) - 1;
+        sal_Int32 nIndex = static_cast< sal_Int32 >( m_pValueSet->GetSelectedItemId() ) - 1;
 
         if( (nIndex >= 0) && (nIndex < mxTableFamily->getCount()) )
         {
@@ -715,7 +715,7 @@ const BitmapEx CreateDesignPreview( const Reference< XIndexAccess >& xTableStyle
 
 void TableDesignWidget::FillDesignPreviewControl()
 {
-    sal_uInt16 nSelectedItem = m_pValueSet->GetSelectItemId();
+    sal_uInt16 nSelectedItem = m_pValueSet->GetSelectedItemId();
     m_pValueSet->Clear();
     try
     {

@@ -271,7 +271,7 @@ void ExtrusionDirectionWindow::SelectHdl(void const * pControl)
     {
         Sequence< PropertyValue > aArgs( 1 );
         aArgs[0].Name = OUString(g_sExtrusionDirection).copy(5);
-        aArgs[0].Value <<= static_cast<sal_Int32>(gSkewList[mpDirectionSet->GetSelectItemId()-1]);
+        aArgs[0].Value <<= static_cast<sal_Int32>(gSkewList[mpDirectionSet->GetSelectedItemId()-1]);
 
         mrController.dispatchCommand( g_sExtrusionDirection, aArgs );
     }
@@ -785,7 +785,7 @@ void ExtrusionLightingWindow::SelectHdl(void const * pControl)
     }
     else
     {
-        sal_Int32 nDirection = mpLightingSet->GetSelectItemId();
+        sal_Int32 nDirection = mpLightingSet->GetSelectedItemId();
 
         if( (nDirection > 0) && (nDirection < 10) )
         {

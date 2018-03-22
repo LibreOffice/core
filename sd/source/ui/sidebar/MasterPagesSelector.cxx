@@ -205,7 +205,7 @@ void MasterPagesSelector::Command (const CommandEvent& rEvent)
         {
             // Use the currently selected item and show the popup menu in its
             // center.
-            const sal_uInt16 nIndex = PreviewValueSet::GetSelectItemId();
+            const sal_uInt16 nIndex = PreviewValueSet::GetSelectedItemId();
             if (nIndex > 0)
             {
                 // The position of the upper left corner of the context menu is
@@ -305,7 +305,7 @@ void MasterPagesSelector::ExecuteCommand(const OString &rIdent)
             SfxDispatcher* pDispatcher = pViewFrame->GetDispatcher();
             if (pDispatcher != nullptr)
             {
-                sal_uInt16 nIndex = PreviewValueSet::GetSelectItemId();
+                sal_uInt16 nIndex = PreviewValueSet::GetSelectedItemId();
                 pDispatcher->Execute(SID_MASTERPAGE, SfxCallMode::SYNCHRON);
                 PreviewValueSet::SelectItem (nIndex);
                 mrBase.GetDrawController().setCurrentPage(xSelectedMaster);
@@ -324,7 +324,7 @@ SdPage* MasterPagesSelector::GetSelectedMasterPage()
     const ::osl::MutexGuard aGuard (maMutex);
 
     SdPage* pMasterPage = nullptr;
-    sal_uInt16 nIndex = PreviewValueSet::GetSelectItemId();
+    sal_uInt16 nIndex = PreviewValueSet::GetSelectedItemId();
     UserData* pData = GetUserData(nIndex);
     if (pData != nullptr)
     {

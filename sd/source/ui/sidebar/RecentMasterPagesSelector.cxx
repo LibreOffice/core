@@ -129,7 +129,7 @@ void RecentMasterPagesSelector::AssignMasterPageToPageList (
     SdPage* pMasterPage,
     const std::shared_ptr<std::vector<SdPage*> >& rpPageList)
 {
-    sal_uInt16 nSelectedItemId = PreviewValueSet::GetSelectItemId();
+    sal_uInt16 nSelectedItemId = PreviewValueSet::GetSelectedItemId();
 
     MasterPagesSelector::AssignMasterPageToPageList(pMasterPage, rpPageList);
 

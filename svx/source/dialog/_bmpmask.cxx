@@ -530,28 +530,28 @@ void SvxBmpMask::SetColor( const Color& rColor )
 
 void SvxBmpMask::PipetteClicked()
 {
-    if( m_pQSet1->GetSelectItemId() == 1 )
+    if( m_pQSet1->GetSelectedItemId() == 1 )
     {
         m_pCbx1->Check();
         pData->CbxHdl(m_pCbx1);
         m_pQSet1->SetItemColor( 1, aPipetteColor );
         m_pQSet1->SetFormat();
     }
-    else if( m_pQSet2->GetSelectItemId() == 1 )
+    else if( m_pQSet2->GetSelectedItemId() == 1 )
     {
         m_pCbx2->Check();
         pData->CbxHdl(m_pCbx2);
         m_pQSet2->SetItemColor( 1, aPipetteColor );
         m_pQSet2->SetFormat();
     }
-    else if( m_pQSet3->GetSelectItemId() == 1 )
+    else if( m_pQSet3->GetSelectedItemId() == 1 )
     {
         m_pCbx3->Check();
         pData->CbxHdl(m_pCbx3);
         m_pQSet3->SetItemColor( 1, aPipetteColor );
         m_pQSet3->SetFormat();
     }
-    else if( m_pQSet4->GetSelectItemId() == 1 )
+    else if( m_pQSet4->GetSelectedItemId() == 1 )
     {
         m_pCbx4->Check();
         pData->CbxHdl(m_pCbx4);

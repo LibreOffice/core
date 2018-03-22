@@ -112,7 +112,7 @@ IMPL_LINK(DefaultShapesPanel, ShapeSelectHdl, ValueSet*, rValueSet, void)
     {
         if(rValueSet == aSetMap.first)
         {
-            int aSelection = aSetMap.first->GetSelectItemId();
+            int aSelection = aSetMap.first->GetSelectedItemId();
             comphelper::dispatchCommand(aSetMap.second[aSelection], {});
         }
         else

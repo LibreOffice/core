@@ -808,11 +808,11 @@ impl::TransitionEffect SlideTransitionPane::getTransitionEffectFromControls() co
     // check first (aResult might be overwritten)
     if(  mpVS_TRANSITION_ICONS->IsEnabled() &&
         !mpVS_TRANSITION_ICONS->IsNoSelection() &&
-         mpVS_TRANSITION_ICONS->GetSelectItemId() > 0 )
+         mpVS_TRANSITION_ICONS->GetSelectedItemId() > 0 )
     {
         const sd::TransitionPresetList& rPresetList = sd::TransitionPreset::getTransitionPresetList();
         auto aSelected = rPresetList.begin();
-        std::advance( aSelected, mpVS_TRANSITION_ICONS->GetSelectItemId() - 1);
+        std::advance( aSelected, mpVS_TRANSITION_ICONS->GetSelectedItemId() - 1);
 
         if( mpLB_VARIANT->GetSelectedEntryPos() == LISTBOX_ENTRY_NOTFOUND )
         {
@@ -1046,7 +1046,7 @@ IMPL_LINK_NOARG(SlideTransitionPane, PlayButtonClicked, Button*, void)
 
 IMPL_LINK_NOARG(SlideTransitionPane, TransitionSelected, ValueSet *, void)
 {
-    updateVariants( mpVS_TRANSITION_ICONS->GetSelectItemId() - 1 );
+    updateVariants( mpVS_TRANSITION_ICONS->GetSelectedItemId() - 1 );
     applyToSelectedPages();
 }
 

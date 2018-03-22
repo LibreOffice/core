@@ -55,7 +55,7 @@ void SvxPresetListBox::Command( const CommandEvent& rEvent )
     {
         case CommandEventId::ContextMenu:
         {
-            const sal_uInt16 nIndex = GetSelectItemId();
+            const sal_uInt16 nIndex = GetSelectedItemId();
             if(nIndex > 0)
             {
                 Point aPos(rEvent.GetMousePosPixel());
