@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_06400f56",
+        "filename": "sc/source/core/data/table3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2618,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-03-22T13:06:55Z",
+      "side": 1,
+      "message": "Rather use const OUString\u0026 instead.",
+      "range": {
+        "startLine": 2618,
+        "startChar": 20,
+        "endLine": 2618,
+        "endChar": 35
+      },
+      "revId": "3b7680cf3194bbaabe5afd8fef3d4260851a7cb1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
