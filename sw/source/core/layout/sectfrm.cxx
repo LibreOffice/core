@@ -1614,6 +1614,10 @@ SwLayoutFrame *SwFrame::GetNextSctLeaf( MakePageType eMakePage )
     SwLayoutFrame* pCellLeaf = nullptr;
     if (GetUpper()->IsInTab())
     {
+        if (IsTabFrame())
+        {
+            return nullptr; // table in section in table: split disabled for now
+        }
         // We are *in* a table (not an outermost SwTabFrame), see if there
         // is a follow cell frame created already.
         pCellLeaf = GetNextCellLeaf();
