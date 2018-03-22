@@ -88,7 +88,7 @@ SwChartLockController_Helper & DocumentChartDataProviderManager::GetChartControl
 {
     if (!mpChartControllerHelper)
     {
-        mpChartControllerHelper = new SwChartLockController_Helper( & m_rDoc );
+        mpChartControllerHelper.reset(new SwChartLockController_Helper( & m_rDoc ));
     }
     return *mpChartControllerHelper;
 }
@@ -100,7 +100,6 @@ DocumentChartDataProviderManager::~DocumentChartDataProviderManager()
     // since all UNO API related functionality requires an existing SwDocShell
     // this assures that dispose gets called if there is need for it.
     maChartDataProviderImplRef.clear();
-    delete mpChartControllerHelper;
 }
 
 }
