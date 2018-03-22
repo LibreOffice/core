@@ -9,15 +9,15 @@
 #
 #*************************************************************************
 
-$(eval $(call gb_CppunitTest_CppunitTest,sc_spreadsheetsettingsobj))
+$(eval $(call gb_CppunitTest_CppunitTest,sc_spreadsheetsettings))
 
-$(eval $(call gb_CppunitTest_use_external,sc_spreadsheetsettingsobj,boost_headers))
+$(eval $(call gb_CppunitTest_use_external,sc_spreadsheetsettings,boost_headers))
 
-$(eval $(call gb_CppunitTest_add_exception_objects,sc_spreadsheetsettingsobj, \
-	sc/qa/extras/scspreadsheetsettingsobj \
+$(eval $(call gb_CppunitTest_add_exception_objects,sc_spreadsheetsettings, \
+	sc/qa/extras/scspreadsheetsettings \
 ))
 
-$(eval $(call gb_CppunitTest_use_libraries,sc_spreadsheetsettingsobj, \
+$(eval $(call gb_CppunitTest_use_libraries,sc_spreadsheetsettings, \
 	basegfx \
 	comphelper \
 	cppu \
@@ -52,21 +52,21 @@ $(eval $(call gb_CppunitTest_use_libraries,sc_spreadsheetsettingsobj, \
 	xo \
 ))
 
-$(eval $(call gb_CppunitTest_set_include,sc_spreadsheetsettingsobj,\
+$(eval $(call gb_CppunitTest_set_include,sc_spreadsheetsettings,\
 	-I$(SRCDIR)/sc/source/ui/inc \
 	-I$(SRCDIR)/sc/inc \
 	$$(INCLUDE) \
 ))
 
-$(eval $(call gb_CppunitTest_use_sdk_api,sc_spreadsheetsettingsobj))
+$(eval $(call gb_CppunitTest_use_sdk_api,sc_spreadsheetsettings))
 
-$(eval $(call gb_CppunitTest_use_ure,sc_spreadsheetsettingsobj))
-$(eval $(call gb_CppunitTest_use_vcl,sc_spreadsheetsettingsobj))
+$(eval $(call gb_CppunitTest_use_ure,sc_spreadsheetsettings))
+$(eval $(call gb_CppunitTest_use_vcl,sc_spreadsheetsettings))
 
-$(eval $(call gb_CppunitTest_use_components,sc_spreadsheetsettingsobj,\
+$(eval $(call gb_CppunitTest_use_components,sc_spreadsheetsettings,\
     $(sc_unoapi_common_components) \
 ))
 
-$(eval $(call gb_CppunitTest_use_configuration,sc_spreadsheetsettingsobj))
+$(eval $(call gb_CppunitTest_use_configuration,sc_spreadsheetsettings))
 
 # vim: set noet sw=4 ts=4:
