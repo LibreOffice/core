@@ -115,6 +115,12 @@ protected:
     virtual             ~AbstractScreenshotAnnotationDlg() override = default;
 };
 
+class VCL_DLLPUBLIC AbstractSignSignatureLineDialog : public VclAbstractDialog
+{
+protected:
+    virtual ~AbstractSignSignatureLineDialog() override = default;
+};
+
 class VCL_DLLPUBLIC VclAbstractDialogFactory
 {
 public:
@@ -125,6 +131,9 @@ public:
 
     // creates instance of PasswordToOpenModifyDialog from cui
     virtual VclPtr<AbstractPasswordToOpenModifyDialog> CreatePasswordToOpenModifyDialog(weld::Window * pParent, sal_uInt16 nMaxPasswdLen, bool bIsPasswordToModify) = 0;
+
+    // creates instance of SignSignatureDialog from cui
+    virtual VclPtr<AbstractSignSignatureLineDialog> CreateSignSignatureLineDialog(weld::Window * pParent) = 0;
 
     // creates instance of ScreenshotAnnotationDlg from cui
     virtual VclPtr<AbstractScreenshotAnnotationDlg> CreateScreenshotAnnotationDlg(
