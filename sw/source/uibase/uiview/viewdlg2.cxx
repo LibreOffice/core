@@ -79,6 +79,20 @@ void SwView::ExecDlgExt(SfxRequest const &rReq)
                 pDialog->Execute();
             break;
         }
+        case SID_SIGN_SIGNATURELINE:
+        {
+            VclAbstractDialogFactory* pFact = VclAbstractDialogFactory::Create();
+            assert(pFact && "VclAbstractDialogFactory fail!");
+
+            const uno::Reference<frame::XModel> xModel(GetCurrentDocument());
+            VclPtr<AbstractSignSignatureLineDialog> pDialog
+                = pFact->CreateSignSignatureLineDialog(GetFrameWeld(), xModel);
+            assert(pDialog && "Dialog creation failed!");
+
+            if (pDialog)
+                pDialog->Execute();
+            break;
+        }
         case  FN_EDIT_FOOTNOTE:
         {
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();

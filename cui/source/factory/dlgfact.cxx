@@ -60,6 +60,7 @@
 #include <insdlg.hxx>
 #include <pastedlg.hxx>
 #include <linkdlg.hxx>
+#include <SignSignatureLineDialog.hxx>
 #include <SpellDialog.hxx>
 #include <cfg.hxx>
 #include <numpages.hxx>
@@ -189,6 +190,11 @@ const SfxItemSet* AbstractSvxCharacterMapDialog_Impl::GetOutputItemSet() const
 void AbstractSvxCharacterMapDialog_Impl::SetText(const OUString& rStr)
 {
     m_xDlg->set_title(rStr);
+}
+
+short AbstractSignSignatureLineDialog_Impl::Execute()
+{
+    return m_xDlg->execute();
 }
 
 IMPL_ABSTDLG_BASE(AbstractScreenshotAnnotationDlg_Impl);
@@ -1567,6 +1573,14 @@ VclPtr<AbstractScreenshotAnnotationDlg> AbstractDialogFactory_Impl::CreateScreen
 {
     VclPtrInstance<ScreenshotAnnotationDlg> pDlg(pParent, rParentDialog);
     return VclPtr<AbstractScreenshotAnnotationDlg_Impl>::Create(pDlg);
+}
+
+VclPtr<AbstractSignSignatureLineDialog>
+AbstractDialogFactory_Impl::CreateSignSignatureLineDialog(weld::Window* pParent,
+                                                          const Reference<XModel> xModel)
+{
+    return VclPtr<AbstractSignSignatureLineDialog_Impl>::Create(
+        new SignSignatureLineDialog(pParent, xModel));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
