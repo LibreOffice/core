@@ -75,8 +75,8 @@ public:
     ~LwpBookmarkMgr();
     LwpBookmarkMgr();
 private:
-    std::map<OUString,XFBookmarkStart*> m_MapStart;
-    std::map<OUString,XFBookmarkEnd*> m_MapEnd;
+    std::map<OUString, rtl::Reference<XFBookmarkStart>> m_MapStart;
+    std::map<OUString, rtl::Reference<XFBookmarkEnd>> m_MapEnd;
 };
 
 #endif
