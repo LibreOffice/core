@@ -28,7 +28,7 @@
 #include <com/sun/star/sdbc/XParameters.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
 
-#include <comphelper/string.hxx>
+#include <rtl/ustrbuf.hxx>
 
 #include "hsqlimport.hxx"
 #include "parseschema.hxx"
@@ -36,7 +36,6 @@
 
 namespace
 {
-using namespace ::comphelper;
 using namespace css::io;
 using namespace css::uno;
 using namespace css::sdbc;
@@ -44,45 +43,6 @@ using namespace css::sdbc;
 using ColumnTypeVector = std::vector<sal_Int32>;
 using RowVector = std::vector<Any>;
 using IndexVector = std::vector<sal_Int32>;
-
-class IndexStmtParser
-{
-private:
-    OUString m_sql;
-
-public:
-    IndexStmtParser(const OUString& sSql)
-        : m_sql(sSql)
-    {
-    }
-
-    bool isIndexStatement() const
-    {
-        return m_sql.startsWith("SET TABLE") && m_sql.indexOf("INDEX") >= 0;
-    }
-
-    IndexVector getIndexes() const
-    {
-        assert(isIndexStatement());
-
-        OUString sIndexPart = m_sql.copy(m_sql.indexOf("INDEX") + 5);
-        sal_Int32 nQuotePos = sIndexPart.indexOf("'") + 1;
-        OUString sIndexNums = sIndexPart.copy(nQuotePos, sIndexPart.lastIndexOf("'") - nQuotePos);
-
-        std::vector<OUString> sIndexes = string::split(sIndexNums, u' ');
-        IndexVector indexes;
-        for (const auto& sIndex : sIndexes)
-            indexes.push_back(sIndex.toInt32());
-
-        return indexes;
-    }
-
-    OUString getTableName() const
-    {
-        // SET TABLE <tableName>
-        return string::split(m_sql, u' ')[2];
-    }
-};
 
 void lcl_setParams(const RowVector& row, Reference<XParameters>& xParam,
                    const ColumnTypeVector& rColTypes)
@@ -316,26 +276,18 @@ void HsqlImporter::importHsqlDatabase()
     SchemaParser parser(m_xStorage);
     SqlStatementVector statements = parser.parseSchema();
 
+    // schema
     for (auto& sSql : statements)
     {
-        // SET TABLE ... INDEX ...
-        // These statements tell us the position of the data in the binary data
-        // file
-        IndexStmtParser aIndexParser(sSql);
-        if (aIndexParser.isIndexStatement())
-        {
-            IndexVector aIndexes = aIndexParser.getIndexes();
-            OUString sTableName = aIndexParser.getTableName();
-            std::vector<sal_Int32> aColTypes = parser.getTableColumnTypes(sTableName);
+        Reference<XStatement> statement = m_rConnection->createStatement();
+        statement->executeQuery(sSql);
+    }
 
-            parseTableRows(aIndexes, aColTypes, sTableName);
-        }
-        else
-        {
-            // other, "normal" statements
-            Reference<XStatement> statement = m_rConnection->createStatement();
-            statement->executeQuery(sSql);
-        }
+    // data
+    for (const auto& tableIndex : parser.getTableIndexes())
+    {
+        std::vector<sal_Int32> aColTypes = parser.getTableColumnTypes(tableIndex.first);
+        parseTableRows(tableIndex.second, aColTypes, tableIndex.first);
     }
 }
 }

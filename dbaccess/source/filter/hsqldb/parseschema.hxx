@@ -17,7 +17,7 @@
 
 namespace dbahsql
 {
-typedef std::vector<OUString> SqlStatementVector;
+using SqlStatementVector = std::vector<OUString>;
 
 class SchemaParser
 {
@@ -27,12 +27,17 @@ private:
     // column type for each table. It is filled after parsing schema.
     std::map<OUString, std::vector<sal_Int32>> m_ColumnTypes;
 
+    // root element's position of data for each table
+    std::map<OUString, std::vector<sal_Int32>> m_Indexes;
+
 public:
     explicit SchemaParser(css::uno::Reference<css::embed::XStorage>& rStorage);
 
     SqlStatementVector parseSchema();
 
     std::vector<sal_Int32> getTableColumnTypes(const OUString& sTableName) const;
+
+    const std::map<OUString, std::vector<sal_Int32>>& getTableIndexes() const;
 };
 }
 
