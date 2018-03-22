@@ -491,7 +491,7 @@ Dim j As Integer
 	Set ocControl = New Control
 	ocControl._ParentType = CTLPARENTISFORM
 	sParentShortcut = _Shortcut
-	iControlCount = DatabaseForm.getCount()
+	If IsNull(DatabaseForm) Then iControlCount = 0 Else iControlCount = DatabaseForm.getCount()
 	
 	If IsMissing(pvIndex) Then					&apos;	No argument, return Collection pseudo-object
 		Set oCounter = New Collect
@@ -777,7 +777,9 @@ Dim oDoc As Object, oFormsCollection As Object, oDatabase As Object
 				If Not IsNull(Component.CurrentController) Then		&apos;	A form opened then closed afterwards keeps a Component attribute
 					Set ContainerWindow = Component.CurrentController.Frame.ContainerWindow
 					Set oFormsCollection = Component.getDrawPage.Forms
-					If oFormsCollection.hasByName(&quot;MainForm&quot;) Then
+					If oFormsCollection.Count = 0 Then
+						Set DatabaseForm = Nothing
+					ElseIf oFormsCollection.hasByName(&quot;MainForm&quot;) Then
 						Set DatabaseForm = oFormsCollection.getByName(&quot;MainForm&quot;)
 					ElseIf oFormsCollection.hasByName(&quot;Form&quot;) Then
 						Set DatabaseForm = oFormsCollection.getByName(&quot;Form&quot;)
@@ -801,7 +803,7 @@ Dim oDoc As Object, oFormsCollection As Object, oDatabase As Object
 					End If
 				End With
 		End Select
-		_OrderBy = DatabaseForm.Order
+		If IsNull(DatabaseForm) Then _OrderBy = &quot;&quot; Else _OrderBy = DatabaseForm.Order
 	Else
 		Set Component = Nothing
 		Set ContainerWindow = Nothing
@@ -857,17 +859,21 @@ Dim i As Integer, oObject As Object
 
 	Select Case UCase(psProperty)
 		Case UCase(&quot;AllowAdditions&quot;)
-			_PropertyGet = DatabaseForm.AllowInserts
+			If IsNull(DatabaseForm) Then _PropertyGet = False Else _PropertyGet = DatabaseForm.AllowInserts
 		Case UCase(&quot;AllowDeletions&quot;)
-			_PropertyGet = DatabaseForm.AllowDeletes
+			If IsNull(DatabaseForm) Then _PropertyGet = False Else _PropertyGet = DatabaseForm.AllowDeletes
 		Case UCase(&quot;AllowEdits&quot;)
-			_PropertyGet = DatabaseForm.AllowUpdates
+			If IsNull(DatabaseForm) Then _PropertyGet = False Else _PropertyGet = DatabaseForm.AllowUpdates
 		Case UCase(&quot;Bookmark&quot;)
-			On Local Error Resume Next			&apos;	Disable error handler because bookmarking does not always react well in events ...
-			If DatabaseForm.IsBookmarkable Then vBookmark = DatabaseForm.getBookmark() Else vBookmark = Nothing
-			If _ErrorHandler() Then On Local Error Goto Error_Function Else On Local Error Goto 0
-			If IsNull(vBookmark) Then Goto Trace_Error
-			_PropertyGet = vBookmark
+			If IsNull(DatabaseForm) Then
+				_PropertyGet = 0
+			Else
+				On Local Error Resume Next			&apos;	Disable error handler because bookmarking does not always react well in events ...
+				If DatabaseForm.IsBookmarkable Then vBookmark = DatabaseForm.getBookmark() Else vBookmark = Nothing
+				If _ErrorHandler() Then On Local Error Goto Error_Function Else On Local Error Goto 0
+				If IsNull(vBookmark) Then Goto Trace_Error
+				_PropertyGet = vBookmark
+			End If
 		Case UCase(&quot;Caption&quot;)
 			Set odatabase = Application._CurrentDb(_DocEntry, _DbEntry)
 			Select Case oDatabase._DbConnect
@@ -875,11 +881,11 @@ Dim i As Integer, oObject As Object
 				Case DBCONNECTBASE		:	_PropertyGet = Component.CurrentController.Frame.Title
 			End Select
 		Case UCase(&quot;CurrentRecord&quot;)
-			_PropertyGet = DatabaseForm.Row
+			If IsNull(DatabaseForm) Then _PropertyGet = 0 Else _PropertyGet = DatabaseForm.Row
 		Case UCase(&quot;Filter&quot;)
-			_PropertyGet = DatabaseForm.Filter
+			If IsNull(DatabaseForm) Then _PropertyGet = &quot;&quot; Else _PropertyGet = DatabaseForm.Filter
 		Case UCase(&quot;FilterOn&quot;)
-			_PropertyGet = DatabaseForm.ApplyFilter
+			If IsNull(DatabaseForm) Then _PropertyGet = False Else _PropertyGet = DatabaseForm.ApplyFilter
 		Case UCase(&quot;Height&quot;)
 			_PropertyGet = ContainerWindow.getPosSize().Height
 		Case UCase(&quot;IsLoaded&quot;)		&apos;	Only for indirect access from property object
@@ -892,14 +898,15 @@ Dim i As Integer, oObject As Object
 					, UCase(&quot;OnApproveSubmit&quot;), UCase(&quot;OnConfirmDelete&quot;), UCase(&quot;OnCursorMoved&quot;), UCase(&quot;OnErrorOccurred&quot;) _
 					, UCase(&quot;OnLoaded&quot;), UCase(&quot;OnReloaded&quot;), UCase(&quot;OnReloading&quot;), UCase(&quot;OnResetted&quot;), UCase(&quot;OnRowChanged&quot;) _
 					, UCase(&quot;OnUnloaded&quot;), UCase(&quot;OnUnloading&quot;)
-			_PropertyGet = Utils._GetEventScriptCode(DatabaseForm, psProperty, _Name, True)
+			If IsNull(DatabaseForm) Then _PropertyGet = &quot;&quot; Else _PropertyGet = Utils._GetEventScriptCode(DatabaseForm, psProperty, _Name, True)
 		Case UCase(&quot;OpenArgs&quot;)
 			_PropertyGet = _OpenArgs
 		Case UCase(&quot;OrderBy&quot;)
 			_PropertyGet = _OrderBy
 		Case UCase(&quot;OrderByOn&quot;)
-			If DatabaseForm.Order = &quot;&quot; Then _PropertyGet = False Else _PropertyGet = True
+			If IsNull(DatabaseForm) Then _PropertyGet = False Else _PropertyGet = ( DatabaseForm.Order &lt;&gt; &quot;&quot; )
 		Case UCase(&quot;Recordset&quot;)
+			If IsNull(DatabaseForm) Then Goto Trace_Error
 			If DatabaseForm.Command = &quot;&quot; Then Goto Trace_Error		&apos;	No underlying data ??
 			Set oObject = New Recordset
 			With DatabaseForm
@@ -923,7 +930,7 @@ Dim i As Integer, oObject As Object
 			If Not ( oObject._BOF And oObject._EOF ) Then oObject.MoveFirst()		&apos;	Do nothing if resultset empty
 			Set _PropertyGet = oObject
 		Case UCase(&quot;RecordSource&quot;)
-			_PropertyGet = DatabaseForm.Command
+			If IsNull(DatabaseForm) Then _PropertyGet = &quot;&quot; Else _PropertyGet = DatabaseForm.Command
 		Case UCase(&quot;Visible&quot;)
 			_PropertyGet = ContainerWindow.IsVisible()
 		Case UCase(&quot;Width&quot;)
@@ -966,19 +973,23 @@ Dim oDatabase As Object
 	Select Case UCase(psProperty)
 		Case UCase(&quot;AllowAdditions&quot;)
 			If Not Utils._CheckArgument(pvValue, iArgNr, vbBoolean, , False) Then Goto Trace_Error_Value
+			If IsNull(DatabaseForm) Then Goto Trace_Error
 			DatabaseForm.AllowInserts = pvValue
 			DatabaseForm.reload()
 		Case UCase(&quot;AllowDeletions&quot;)
 			If Not Utils._CheckArgument(pvValue,iArgNr, vbBoolean, , False) Then Goto Trace_Error_Value
+			If IsNull(DatabaseForm) Then Goto Trace_Error
 			DatabaseForm.AllowDeletes = pvValue
 			DatabaseForm.reload()
 		Case UCase(&quot;AllowEdits&quot;)
 			If Not Utils._CheckArgument(pvValue, iArgNr, vbBoolean, , False) Then Goto Trace_Error_Value
+			If IsNull(DatabaseForm) Then Goto Trace_Error
 			DatabaseForm.AllowUpdates = pvValue
 			DatabaseForm.reload()
 		Case UCase(&quot;Bookmark&quot;)
 			If Not Utils._CheckArgument(pvValue, iArgNr, Utils._AddNumeric(vbObject), , False) Then Goto Trace_Error_Value
 			If IsNull(pvValue) Then Goto Trace_Error_Value
+			If IsNull(DatabaseForm) Then Goto Trace_Error
 			DatabaseForm.MoveToBookmark(pvValue)
 		Case UCase(&quot;Caption&quot;)
 			If Not Utils._CheckArgument(pvValue, iArgNr, vbString, , False) Then Goto Trace_Error_Value
@@ -990,12 +1001,15 @@ Dim oDatabase As Object
 		Case UCase(&quot;CurrentRecord&quot;)
 			If Not Utils._CheckArgument(pvValue, iArgNr, Utils._AddNumeric(), , False) Then Goto Trace_Error_Value
 			If pvValue &lt; 1 Then Goto Trace_Error_Value
+			If IsNull(DatabaseForm) Then Goto Trace_Error
 			DatabaseForm.absolute(pvValue)
 		Case UCase(&quot;Filter&quot;)
 			If Not Utils._CheckArgument(pvValue, iArgNr, vbString, , False) Then Goto Trace_Error_Value
+			If IsNull(DatabaseForm) Then Goto Trace_Error
 			DatabaseForm.Filter = Application._CurrentDb(_DocEntry, _DbEntry)._ReplaceSquareBrackets(pvValue)
 		Case UCase(&quot;FilterOn&quot;)
 			If Not Utils._CheckArgument(pvValue, iArgNr, vbBoolean, , False) Then Goto Trace_Error_Value
+			If IsNull(DatabaseForm) Then Goto Trace_Error
 			DatabaseForm.ApplyFilter = pvValue
 			DatabaseForm.reload()
 		Case UCase(&quot;Height&quot;)
@@ -1010,6 +1024,7 @@ Dim oDatabase As Object
 					, UCase(&quot;OnLoaded&quot;), UCase(&quot;OnReloaded&quot;), UCase(&quot;OnReloading&quot;), UCase(&quot;OnResetted&quot;), UCase(&quot;OnRowChanged&quot;) _
 					, UCase(&quot;OnUnloaded&quot;), UCase(&quot;OnUnloading&quot;)
 			If Not Utils._CheckArgument(pvValue, iArgNr, vbString, , False) Then Goto Trace_Error_Value
+			If IsNull(DatabaseForm) Then Goto Trace_Error
 			If Not Utils._RegisterEventScript(DatabaseForm _
 						, psProperty _
 						, _GetListener(psProperty) _
@@ -1017,13 +1032,16 @@ Dim oDatabase As Object
 						) Then GoTo Trace_Error
 		Case UCase(&quot;OrderBy&quot;)
 			If Not Utils._CheckArgument(pvValue, iArgNr, vbString, , False) Then Goto Trace_Error_Value
+			If IsNull(DatabaseForm) Then Goto Trace_Error
 			_OrderBy = Application._CurrentDb(_DocEntry, _DbEntry)._ReplaceSquareBrackets(pvValue)
 		Case UCase(&quot;OrderByOn&quot;)
 			If Not Utils._CheckArgument(pvValue, iArgNr, vbBoolean, , False) Then Goto Trace_Error_Value
+			If IsNull(DatabaseForm) Then Goto Trace_Error
 			If pvValue Then DatabaseForm.Order = _OrderBy Else DatabaseForm.Order = &quot;&quot;
 			DatabaseForm.reload()
 		Case UCase(&quot;RecordSource&quot;)
 			If Not Utils._CheckArgument(pvValue, iArgNr, vbString, , False) Then Goto Trace_Error_Value
+			If IsNull(DatabaseForm) Then Goto Trace_Error
 			DatabaseForm.Command = Application._CurrentDb(_DocEntry, _DbEntry)._ReplaceSquareBrackets(pvValue)
 			DatabaseForm.CommandType = com.sun.star.sdb.CommandType.COMMAND
 			DatabaseForm.Filter = &quot;&quot;
