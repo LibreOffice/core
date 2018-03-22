@@ -297,10 +297,10 @@ public:
     virtual vcl::Window *            GetWindow() = 0;
 };
 
-class SvxAbstractSplittTableDialog : public VclAbstractDialog
+class SvxAbstractSplitTableDialog : public VclAbstractDialog
 {
 protected:
-    virtual ~SvxAbstractSplittTableDialog() override = default;
+    virtual ~SvxAbstractSplitTableDialog() override = default;
 public:
     virtual bool IsHorizontal() const = 0;
     virtual bool IsProportional() const = 0;
@@ -469,7 +469,7 @@ public:
 
     virtual VclPtr<SfxAbstractTabDialog> CreateSvxFormatCellsDialog( const SfxItemSet* pAttr, SdrModel* pModel, const SdrObject* pObj )=0;
 
-    virtual VclPtr<SvxAbstractSplittTableDialog> CreateSvxSplittTableDialog(weld::Window* pParent, bool bIsTableVertical, long nMaxVertical) = 0;
+    virtual VclPtr<SvxAbstractSplitTableDialog> CreateSvxSplitTableDialog(weld::Window* pParent, bool bIsTableVertical, long nMaxVertical) = 0;
 
     virtual VclPtr<SvxAbstractNewTableDialog> CreateSvxNewTableDialog() = 0;
 
