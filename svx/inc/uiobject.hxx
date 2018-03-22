@@ -15,6 +15,8 @@
 
 class SvxShowCharSet;
 
+#if 0
+
 class SvxShowCharSetUIObject : public WindowUIObject
 {
     VclPtr<SvxShowCharSet> mxCharSet;
@@ -34,6 +36,8 @@ protected:
 
     OUString get_name() const override;
 };
+
+#endif
 
 #endif // INCLUDED_SVX_INC_UIOBJECT_HXX
 

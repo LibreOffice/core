@@ -3205,12 +3205,12 @@ void SvxCharTwoLinesPage::Initialize()
 void SvxCharTwoLinesPage::SelectCharacter( ListBox* pBox )
 {
     bool bStart = pBox == m_pStartBracketLB;
-    VclPtrInstance< SvxCharacterMap > aDlg( this, nullptr, false );
-    aDlg->DisableFontSelection();
+    SvxCharacterMap aDlg(GetFrameWeld(), nullptr, false);
+    aDlg.DisableFontSelection();
 
-    if ( aDlg->Execute() == RET_OK )
+    if (aDlg.execute() == RET_OK)
     {
-        sal_Unicode cChar = static_cast<sal_Unicode>(aDlg->GetChar());
+        sal_Unicode cChar = static_cast<sal_Unicode>(aDlg.GetChar());
         SetBracket( cChar, bStart );
     }
     else

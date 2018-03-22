@@ -27,7 +27,7 @@
 #include <sfx2/charwin.hxx>
 #include <vcl/button.hxx>
 
-class SvxCharView;
+class SvxCharViewControl;
 
 class SFX2_DLLPUBLIC SfxCharmapCtrl : public SfxPopupWindow
 {
@@ -40,15 +40,15 @@ public:
     virtual void dispose() override;
 
 private:
-    VclPtr<SvxCharView>    m_pRecentCharView[16];
-    VclPtr<SvxCharView>    m_pFavCharView[16];
+    VclPtr<SvxCharViewControl> m_pRecentCharView[16];
+    VclPtr<SvxCharViewControl> m_pFavCharView[16];
     std::deque<OUString>   maRecentCharList;
     std::deque<OUString>   maRecentCharFontList;
     std::deque<OUString>   maFavCharList;
     std::deque<OUString>   maFavCharFontList;
     VclPtr<Button>         maDlgBtn;
 
-    DECL_LINK(CharClickHdl, SvxCharView*, void);
+    DECL_LINK(CharClickHdl, SvxCharViewControl*, void);
     DECL_STATIC_LINK(SfxCharmapCtrl, LoseFocusHdl, Control&, void);
     DECL_LINK(OpenDlgHdl, Button*, void);
 

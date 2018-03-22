@@ -382,62 +382,76 @@ public:
 };
 
 
-class SmShowChar : public Control
+class SmShowChar
 {
-    virtual void    Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&) override;
-    virtual void    Resize() override;
+private:
+    std::unique_ptr<weld::DrawingArea> m_xDrawingArea;
+    OUString m_aText;
+    vcl::Font m_aFont;
+    Size m_aSize;
+
+    DECL_LINK(DoPaint, weld::DrawingArea::draw_args, void);
+    DECL_LINK(DoResize, const Size& rSize, void);
 
 public:
-    SmShowChar(vcl::Window *pParent, WinBits nStyle)
-    : Control(pParent, nStyle)
+    SmShowChar(weld::DrawingArea* pDrawingArea)
+        : m_xDrawingArea(pDrawingArea)
     {
+        m_xDrawingArea->connect_size_allocate(LINK(this, SmShowChar, DoResize));
+        m_xDrawingArea->connect_draw(LINK(this, SmShowChar, DoPaint));
+        m_xDrawingArea->set_size_request(m_xDrawingArea->get_approximate_digit_width() * 7,
+                                         m_xDrawingArea->get_text_height() * 3);
     }
 
-    void    SetSymbol( const SmSym *pSym );
-    void    SetSymbol( sal_UCS4 cChar, const vcl::Font &rFont );
+    void SetSymbol(const SmSym *pSym);
+    void SetSymbol(sal_UCS4 cChar, const vcl::Font &rFont);
+    void SetText(const OUString& rText) { m_aText = rText; }
+    const OUString& GetText() const { return m_aText; }
+    void SetFont(const vcl::Font& rFont) { m_aFont = rFont; }
+    const vcl::Font& GetFont() const { return m_aFont; }
+
+    void queue_draw() { m_xDrawingArea->queue_draw(); }
 };
 
-
-class SmSymDefineDialog : public ModalDialog
+class SmSymDefineDialog : public weld::GenericDialogController
 {
-    VclPtr<ComboBox>        pOldSymbols;
-    VclPtr<ComboBox>        pOldSymbolSets;
-    VclPtr<SvxShowCharSet>  pCharsetDisplay;
-    VclPtr<ComboBox>        pSymbols;
-    VclPtr<ComboBox>        pSymbolSets;
-    VclPtr<ListBox>         pFonts;
-    VclPtr<ListBox>         pFontsSubsetLB;
-    VclPtr<FontStyleBox>    pStyles;
-    VclPtr<FixedText>       pOldSymbolName;
-    VclPtr<SmShowChar>      pOldSymbolDisplay;
-    VclPtr<FixedText>       pOldSymbolSetName;
-    VclPtr<FixedText>       pSymbolName;
-    VclPtr<SmShowChar>      pSymbolDisplay;
-    VclPtr<FixedText>       pSymbolSetName;
-    VclPtr<PushButton>      pAddBtn;
-    VclPtr<PushButton>      pChangeBtn;
-    VclPtr<PushButton>      pDeleteBtn;
+    VclPtr<VirtualDevice> m_xVirDev;
+    SmSymbolManager m_aSymbolMgrCopy;
+    SmSymbolManager& m_rSymbolMgr;
+    std::unique_ptr<SmSym> m_xOrigSymbol;
+    std::unique_ptr<SubsetMap> m_xSubsetMap;
+    std::unique_ptr<FontList> m_xFontList;
+    std::unique_ptr<weld::ComboBoxText> m_xOldSymbols;
+    std::unique_ptr<weld::ComboBoxText> m_xOldSymbolSets;
+    std::unique_ptr<weld::ComboBoxText> m_xSymbols;
+    std::unique_ptr<weld::ComboBoxText> m_xSymbolSets;
+    std::unique_ptr<weld::ComboBoxText> m_xFonts;
+    std::unique_ptr<weld::ComboBoxText> m_xFontsSubsetLB;
+    std::unique_ptr<weld::ComboBoxText> m_xStyles;
+    std::unique_ptr<weld::Label> m_xOldSymbolName;
+    std::unique_ptr<weld::Label> m_xOldSymbolSetName;
+    std::unique_ptr<weld::Label> m_xSymbolName;
+    std::unique_ptr<weld::Label> m_xSymbolSetName;
+    std::unique_ptr<weld::Button> m_xAddBtn;
+    std::unique_ptr<weld::Button> m_xChangeBtn;
+    std::unique_ptr<weld::Button> m_xDeleteBtn;
+    std::unique_ptr<SmShowChar> m_xOldSymbolDisplay;
+    std::unique_ptr<SmShowChar> m_xSymbolDisplay;
+    std::unique_ptr<SvxShowCharSet>  m_xCharsetDisplay;
 
-    SmSymbolManager     aSymbolMgrCopy,
-                       &rSymbolMgr;
-    std::unique_ptr<SmSym> pOrigSymbol;
-
-    std::unique_ptr<SubsetMap> pSubsetMap;
-    FontList           *pFontList;
-
-    DECL_LINK(OldSymbolChangeHdl, ComboBox&, void);
-    DECL_LINK(OldSymbolSetChangeHdl, ComboBox&, void);
-    DECL_LINK(ModifyHdl, Edit&, void);
-    DECL_LINK(FontChangeHdl, ListBox&, void);
-    DECL_LINK(SubsetChangeHdl, ListBox&, void);
-    DECL_LINK(StyleChangeHdl, ComboBox&, void);
+    DECL_LINK(OldSymbolChangeHdl, weld::ComboBoxText&, void);
+    DECL_LINK(OldSymbolSetChangeHdl, weld::ComboBoxText&, void);
+    DECL_LINK(ModifyHdl, weld::ComboBoxText&, void);
+    DECL_LINK(FontChangeHdl, weld::ComboBoxText&, void);
+    DECL_LINK(SubsetChangeHdl, weld::ComboBoxText&, void);
+    DECL_LINK(StyleChangeHdl, weld::ComboBoxText&, void);
     DECL_LINK(CharHighlightHdl, SvxShowCharSet*, void);
-    DECL_LINK(AddClickHdl, Button *, void);
-    DECL_LINK(ChangeClickHdl, Button *, void);
-    DECL_LINK(DeleteClickHdl, Button *, void);
+    DECL_LINK(AddClickHdl, weld::Button&, void);
+    DECL_LINK(ChangeClickHdl, weld::Button&, void);
+    DECL_LINK(DeleteClickHdl, weld::Button&, void);
 
-    void    FillSymbols(ComboBox &rComboBox, bool bDeleteText = true);
-    void    FillSymbolSets(ComboBox &rComboBox, bool bDeleteText = true);
+    void    FillSymbols(weld::ComboBoxText& rComboBox, bool bDeleteText = true);
+    void    FillSymbolSets(weld::ComboBoxText& rComboBox, bool bDeleteText = true);
     void    FillFonts();
     void    FillStyles();
 
@@ -446,49 +460,43 @@ class SmSymDefineDialog : public ModalDialog
     void    SetOrigSymbol(const SmSym *pSymbol, const OUString &rSymbolSetName);
     void    UpdateButtons();
 
-    bool    SelectSymbolSet(ComboBox &rComboBox, const OUString &rSymbolSetName,
+    bool    SelectSymbolSet(weld::ComboBoxText &rComboBox, const OUString &rSymbolSetName,
                             bool bDeleteText);
-    bool    SelectSymbol(ComboBox &rComboBox, const OUString &rSymbolName,
+    bool    SelectSymbol(weld::ComboBoxText& rComboBox, const OUString &rSymbolName,
                             bool bDeleteText);
     bool    SelectFont(const OUString &rFontName, bool bApplyFont);
     bool    SelectStyle(const OUString &rStyleName, bool bApplyFont);
 
-    SmSym       * GetSymbol(const ComboBox &rComboBox);
-    const SmSym * GetSymbol(const ComboBox &rComboBox) const
+    SmSym* GetSymbol(const weld::ComboBoxText& rComboBox);
+    const SmSym* GetSymbol(const weld::ComboBoxText& rComboBox) const
     {
         return const_cast<SmSymDefineDialog *>(this)->GetSymbol(rComboBox);
     }
 
-    virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;
-
 public:
-    SmSymDefineDialog(vcl::Window *pParent, OutputDevice *pFntListDevice, SmSymbolManager &rMgr);
+    SmSymDefineDialog(weld::Window *pParent, OutputDevice *pFntListDevice, SmSymbolManager &rMgr);
     virtual ~SmSymDefineDialog() override;
-    virtual void dispose() override;
 
-    using OutputDevice::SetFont;
-
-    // Dialog
-    virtual short   Execute() override;
+    short execute();
 
     void SelectOldSymbolSet(const OUString &rSymbolSetName)
     {
-        SelectSymbolSet(*pOldSymbolSets, rSymbolSetName, false);
+        SelectSymbolSet(*m_xOldSymbolSets, rSymbolSetName, false);
     }
 
     void SelectOldSymbol(const OUString &rSymbolName)
     {
-        SelectSymbol(*pOldSymbols, rSymbolName, false);
+        SelectSymbol(*m_xOldSymbols, rSymbolName, false);
     }
 
     bool SelectSymbolSet(const OUString &rSymbolSetName)
     {
-        return SelectSymbolSet(*pSymbolSets, rSymbolSetName, false);
+        return SelectSymbolSet(*m_xSymbolSets, rSymbolSetName, false);
     }
 
     bool SelectSymbol(const OUString &rSymbolName)
     {
-        return SelectSymbol(*pSymbols, rSymbolName, false);
+        return SelectSymbol(*m_xSymbols, rSymbolName, false);
     }
 
     bool        SelectFont(const OUString &rFontName)   { return SelectFont(rFontName, true); }
