@@ -57,44 +57,41 @@
 
 void LwpBookmarkMgr::AddXFBookmarkStart(const OUString& sName,XFBookmarkStart* pMark)
 {
-    std::map<OUString,XFBookmarkStart*>::iterator iter;
-    iter = m_MapStart.find(sName);
+    auto iter = m_MapStart.find(sName);
     if (iter == m_MapStart.end())//not find
     {
         m_MapStart[sName] = pMark;
     }
     else //have exist the same bookmark name
     {
-        XFBookmarkStart* pFind = iter->second;
-        OUString totalName = pFind->GetDivision() + ":";
-        totalName += pFind->GetName();
-        pFind->SetName(totalName);
-        m_MapStart[totalName] = pFind;
+        auto xFind = iter->second;
+        OUString totalName = xFind->GetDivision() + ":";
+        totalName += xFind->GetName();
+        xFind->SetName(totalName);
+        m_MapStart[totalName] = xFind;
         m_MapStart[sName] = pMark;
     }
 }
 void LwpBookmarkMgr::AddXFBookmarkEnd(const OUString& sName,XFBookmarkEnd* pMark)
 {
-    std::map<OUString,XFBookmarkEnd*>::iterator iter;
-    iter = m_MapEnd.find(sName);
+    auto iter = m_MapEnd.find(sName);
     if (iter == m_MapEnd.end())//not find
     {
         m_MapEnd[sName] = pMark;
     }
     else //have exist the same bookmark name
     {
-        XFBookmarkEnd* pFind = iter->second;
-        OUString totalName = pFind->GetDivision() + ":";
-        totalName += pFind->GetName();
-        pFind->SetName(totalName);
-        m_MapEnd[totalName] = pFind;
+        auto xFind = iter->second;
+        OUString totalName = xFind->GetDivision() + ":";
+        totalName += xFind->GetName();
+        xFind->SetName(totalName);
+        m_MapEnd[totalName] = xFind;
         m_MapEnd[sName] = pMark;
     }
 }
 bool LwpBookmarkMgr::FindBookmark(const OUString& sName)
 {
-    std::map<OUString,XFBookmarkStart*>::iterator iter;
-    iter = m_MapStart.find(sName);
+    auto iter = m_MapStart.find(sName);
     return iter != m_MapStart.end();
 }
 
