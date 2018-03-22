@@ -154,13 +154,6 @@ public:
     virtual ~PluginSlideChange() override
     {
         mxFactory.clear();
-
-        for( const auto& pCurrView : maTransitions )
-        {
-            delete pCurrView;
-        }
-
-        maTransitions.clear();
     }
 
     bool addTransition( const UnoViewSharedPtr& rView )
@@ -173,7 +166,7 @@ public:
             getEnteringBitmap(ViewEntry(rView))->getXBitmap() );
 
         if( rTransition.is() )
-            maTransitions.push_back( new TransitionViewPair( rTransition, rView ) );
+            maTransitions.emplace_back( new TransitionViewPair( rTransition, rView ) );
         else
             return false;
 
@@ -213,15 +206,11 @@ public:
         SAL_INFO("slideshow", "PluginSlideChange viewRemoved");
         SlideChangeBase::viewRemoved( rView );
 
-        ::std::vector< TransitionViewPair* >::const_iterator aEnd(maTransitions.end());
-        for( ::std::vector< TransitionViewPair* >::iterator aIter =maTransitions.begin();
-             aIter != aEnd;
-             ++aIter )
+        for( auto aIter = maTransitions.begin(); aIter != maTransitions.end(); ++aIter )
         {
             if( ( *aIter )->mpView == rView )
             {
                 SAL_INFO("slideshow", "view removed" );
-                delete *aIter;
                 maTransitions.erase( aIter );
                 break;
             }
@@ -264,7 +253,7 @@ public:
 
 private:
     // One transition object per view
-    std::vector< TransitionViewPair* > maTransitions;
+    std::vector< std::unique_ptr<TransitionViewPair> > maTransitions;
 
     // bool
     bool mbSuccess;
