@@ -201,7 +201,7 @@ private:
 
     DECL_LINK(DeleteHdl, Button*, void);
     DECL_LINK(SignatureHdl, Button*, void);
-    DECL_STATIC_LINK(SfxDocumentPage, ChangePassHdl, Button*, void);
+    DECL_LINK(ChangePassHdl, Button*, void);
     void                ImplUpdateSignatures();
     void                ImplCheckPasswordState();
 
