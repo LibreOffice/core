@@ -35,6 +35,7 @@
 #include <vcl/outdev.hxx>
 #include <vcl/metric.hxx>
 #include <vcl/vclptr.hxx>
+#include <vcl/weld.hxx>
 #include <vcl/window.hxx>
 #include <vcl/textview.hxx>
 
@@ -49,22 +50,25 @@ using namespace ::com::sun::star;
 #define COLUMN_COUNT    16
 #define ROW_COUNT        8
 
-class CommandEvent;
-class ScrollBar;
-
 namespace svx
 {
     struct SvxShowCharSetItem;
     class SvxShowCharSetVirtualAcc;
 }
 
-class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxShowCharSet : public Control
+class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxShowCharSet
 {
+protected:
+    VclPtr<VirtualDevice> mxVirDev;
+    std::unique_ptr<weld::DrawingArea> mxDrawingArea;
+    std::unique_ptr<weld::ScrolledWindow> mxScrollArea;
+    vcl::Font maFont;
+    Size maSize;
 public:
-                    SvxShowCharSet( vcl::Window* pParent );
-                    virtual ~SvxShowCharSet() override;
-    virtual void    dispose() override;
-    virtual void    ApplySettings(vcl::RenderContext& rRenderContext) override;
+    SvxShowCharSet(weld::Builder& rBuilder, const OString& rDrawingId,
+                   const OString& rScrollId, const VclPtr<VirtualDevice>& rVirDev);
+
+    virtual ~SvxShowCharSet();
 
     virtual void            RecalculateFont(vcl::RenderContext& rRenderContext);
 
@@ -79,6 +83,8 @@ public:
     void            SetFavClickHdl( const Link<SvxShowCharSet*,void>& rHdl ) { aFavClickHdl = rHdl; }
     static sal_uInt32& getSelectedChar();
     void            SetFont( const vcl::Font& rFont );
+    vcl::Font       GetFont() const { return mxVirDev->GetFont(); }
+    bool            GetFontCharMap(FontCharMapRef& rxFontCharMap) const { return mxVirDev->GetFontCharMap(rxFontCharMap); }
     bool            isFavChar(const OUString& sTitle, const OUString& rFont);
     void            getFavCharacterList(); //gets both Fav char and Fav char font list
     void            updateFavCharacterList(const OUString& rChar, const OUString& rFont);
@@ -96,27 +102,22 @@ public:
     static sal_uInt16           GetRowPos(sal_uInt16 _nPos);
     static sal_uInt16           GetColumnPos(sal_uInt16 _nPos);
 
-    ScrollBar&                  getScrollBar() { return *aVscrollSB.get();}
-    void                        ReleaseAccessible();
     virtual sal_Int32                   getMaxCharCount() const;
 
-    virtual void    Resize() override;
+    void Show() { mxScrollArea->show(); }
+    void Hide() { mxScrollArea->hide(); }
+    bool HasFocus() const { return mxDrawingArea->has_focus(); }
+private:
+    DECL_LINK(DoPaint, weld::DrawingArea::draw_args, void);
+    DECL_LINK(DoResize, const Size& rSize, void);
+    DECL_LINK(DoMouseButtonDown, const MouseEvent& rMEvt, void);
+    DECL_LINK(DoMouseMove, const MouseEvent& rMEvt, void);
+    DECL_LINK(DoMouseButtonUp, const MouseEvent& rMEvt, void);
+    DECL_LINK(DoKeyDown, const KeyEvent& rKEvt, bool);
+    DECL_LINK(DoGetFocus, weld::Widget&, void);
+    DECL_LINK(DoLoseFocus, weld::Widget&, void);
 
-    virtual FactoryFunction GetUITestFactory() const override;
-
-protected:
-    virtual void    Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& ) override;
-    virtual void    MouseButtonDown( const MouseEvent& rMEvt ) override;
-    virtual void    MouseButtonUp( const MouseEvent& rMEvt ) override;
-    virtual void    MouseMove( const MouseEvent& rMEvt ) override;
-    virtual void    Command( const CommandEvent& rCEvt ) override;
-    virtual void    KeyInput( const KeyEvent& rKEvt ) override;
-    virtual void    GetFocus() override;
-    virtual void    LoseFocus() override;
-    virtual void    StateChanged( StateChangedType nStateChange ) override;
-    virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;
-
-    virtual css::uno::Reference<css::accessibility::XAccessible> CreateAccessible() override;
+    css::uno::Reference<css::accessibility::XAccessible> CreateAccessible();
 
 protected:
     typedef std::map<sal_Int32, std::shared_ptr<svx::SvxShowCharSetItem> > ItemsMap;
@@ -143,7 +144,6 @@ protected:
     FontCharMapRef  mxFontCharMap;
     Size            maFontSize;
     Point           maPosition;
-    VclPtr<ScrollBar>  aVscrollSB;
 
     bool mbRecalculateFont  : 1;
     bool mbUpdateForeground : 1;
@@ -155,8 +155,8 @@ protected:
     void            InitSettings(vcl::RenderContext& rRenderContext);
     // abstraction layers are: Unicode<->MapIndex<->Pixel
     Point           MapIndexToPixel( int) const;
-    DECL_LINK(VscrollHdl, ScrollBar*, void);
-    DECL_LINK(ContextMenuSelectHdl, Menu*, bool);
+    DECL_LINK(VscrollHdl, weld::ScrolledWindow&, void);
+    void ContextMenuSelect(const OString& rIdent);
 
     void            init();
     tools::Rectangle       getGridRectangle(const Point &rPointUL, const Size &rOutputSize);

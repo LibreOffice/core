@@ -727,15 +727,15 @@ IMPL_LINK_NOARG(OfaSwAutoFmtOptionsPage, EditHdl, Button*, void)
     if( nSelEntryPos == REPLACE_BULLETS ||
         nSelEntryPos == APPLY_NUMBERING)
     {
-        ScopedVclPtrInstance< SvxCharacterMap > pMapDlg(this, nullptr, false);
+        SvxCharacterMap aMapDlg(GetFrameWeld(), nullptr, false);
         ImpUserData* pUserData = static_cast<ImpUserData*>(m_pCheckLB->FirstSelected()->GetUserData());
-        pMapDlg->SetCharFont(*pUserData->pFont);
-        pMapDlg->SetChar( (*pUserData->pString)[0] );
-        if(RET_OK == pMapDlg->Execute())
+        aMapDlg.SetCharFont(*pUserData->pFont);
+        aMapDlg.SetChar( (*pUserData->pString)[0] );
+        if (RET_OK == aMapDlg.execute())
         {
-            vcl::Font aFont(pMapDlg->GetCharFont());
+            vcl::Font aFont(aMapDlg.GetCharFont());
             *pUserData->pFont = aFont;
-            sal_UCS4 aChar = pMapDlg->GetChar();
+            sal_UCS4 aChar = aMapDlg.GetChar();
             // using the UCS4 constructor
             OUString aOUStr( &aChar, 1 );
             *pUserData->pString = aOUStr;
@@ -2047,10 +2047,10 @@ IMPL_LINK( OfaQuoteTabPage, QuoteHdl, Button*, pBtn, void )
     else if (pBtn == m_pDblEndQuotePB)
         nMode = DBL_END;
     // start character selection dialog
-    ScopedVclPtrInstance< SvxCharacterMap > pMap( this, nullptr, false );
-    pMap->SetCharFont( OutputDevice::GetDefaultFont(DefaultFontType::LATIN_TEXT,
+    SvxCharacterMap aMap(GetFrameWeld(), nullptr, false);
+    aMap.SetCharFont( OutputDevice::GetDefaultFont(DefaultFontType::LATIN_TEXT,
                         LANGUAGE_ENGLISH_US, GetDefaultFontFlags::OnlyOne ));
-    pMap->SetText(nMode < SGL_END ? CuiResId(RID_SVXSTR_STARTQUOTE)  : CuiResId(RID_SVXSTR_ENDQUOTE) );
+    aMap.set_title(nMode < SGL_END ? CuiResId(RID_SVXSTR_STARTQUOTE)  : CuiResId(RID_SVXSTR_ENDQUOTE));
     sal_UCS4 cDlg;
     SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get().GetAutoCorrect();
     LanguageType eLang = Application::GetSettings().GetLanguageTag().getLanguageType();
@@ -2082,11 +2082,11 @@ IMPL_LINK( OfaQuoteTabPage, QuoteHdl, Button*, pBtn, void )
             break;
 
     }
-    pMap->SetChar(  cDlg );
-    pMap->DisableFontSelection();
-    if(pMap->Execute() == RET_OK)
+    aMap.SetChar(  cDlg );
+    aMap.DisableFontSelection();
+    if (aMap.execute() == RET_OK)
     {
-        sal_UCS4 cNewChar = pMap->GetChar();
+        sal_UCS4 cNewChar = aMap.GetChar();
         switch( nMode )
         {
             case SGL_START:

@@ -557,6 +557,10 @@ public:
 
     static guint32              GetLastInputEventTime();
     static void                 UpdateLastInputEventTime(guint32 nUserInputTime);
+    static sal_uInt16           GetMouseModCode(guint nState);
+    static sal_uInt16           GetKeyCode(guint nKeyVal);
+    static guint                GetKeyValFor(GdkKeymap* pKeyMap, guint16 hardware_keycode, guint8 group);
+    static sal_uInt16           GetKeyModCode(guint nState);
 };
 
 #define OOO_TYPE_FIXED ooo_fixed_get_type()
