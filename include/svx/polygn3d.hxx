@@ -58,6 +58,8 @@ public:
 
     virtual E3dPolygonObj* Clone() const override;
 
+    virtual bool Equals(const SdrObject&) const override;
+
     // LineOnly?
     bool GetLineOnly() const { return bLineOnly; }
     void SetLineOnly(bool bNew);

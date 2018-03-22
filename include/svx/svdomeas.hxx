@@ -94,6 +94,8 @@ public:
     virtual void TakeUnrotatedSnapRect(tools::Rectangle& rRect) const override;
     virtual SdrMeasureObj* Clone() const override;
 
+    virtual bool Equals(const SdrObject&) const override;
+
     virtual OUString TakeObjNameSingul() const override;
     virtual OUString TakeObjNamePlural() const override;
 

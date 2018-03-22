@@ -71,6 +71,9 @@ public:
 
     virtual SdrUnoObj* Clone() const override;
     SdrUnoObj& operator= (const SdrUnoObj& rObj);
+
+    virtual bool Equals(const SdrObject&) const override;
+
     virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact) override;
     virtual void NbcSetLayer(SdrLayerID nLayer) override;
 
