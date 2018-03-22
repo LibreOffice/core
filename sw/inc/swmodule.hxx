@@ -33,6 +33,7 @@
 #include "fldupde.hxx"
 #include <com/sun/star/linguistic2/XLinguServiceEventListener.hpp>
 #include <com/sun/star/linguistic2/XLanguageGuessing.hpp>
+#include <ooo/vba/XSinkCaller.hpp>
 
 class Color;
 class SfxItemSet;
@@ -118,6 +119,8 @@ class SW_DLLPUBLIC SwModule final : public SfxModule, public SfxListener, public
     // Envelopes, labels.
     void                InsertEnv(SfxRequest&);
     void                InsertLab(SfxRequest&, bool bLabel);
+
+    css::uno::Reference< ooo::vba::XSinkCaller > mxAutomationApplicationEventsCaller;
 
 public:
     // public Data - used for internal Clipboard / Drag & Drop / XSelection
@@ -243,6 +246,9 @@ public:
 
     css::uno::Reference< css::linguistic2::XLanguageGuessing > const &
             GetLanguageGuesser();
+
+    void RegisterAutomationApplicationEventsCaller(css::uno::Reference< ooo::vba::XSinkCaller > const& xCaller);
+    void CallAutomationApplicationEventSinks(const OUString& Method, const css::uno::Sequence< css::uno::Any >& Arguments);
 };
 
 inline const css::uno::Reference< css::linguistic2::XLinguServiceEventListener >&

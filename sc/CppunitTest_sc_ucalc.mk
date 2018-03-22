@@ -82,7 +82,11 @@ $(eval $(call gb_CppunitTest_set_include,sc_ucalc,\
     $$(INCLUDE) \
 ))
 
-$(eval $(call gb_CppunitTest_use_sdk_api,sc_ucalc))
+$(eval $(call gb_CppunitTest_use_api,sc_ucalc,\
+	udkapi \
+	offapi \
+	oovbaapi \
+))
 
 $(eval $(call gb_CppunitTest_use_custom_headers,sc_ucalc,\
 	officecfg/registry \

@@ -221,6 +221,7 @@ uno::Reference< linguistic2::XLanguageGuessing > const & SwModule::GetLanguageGu
 
 SwModule::~SwModule()
 {
+    CallAutomationApplicationEventSinks( "Quit", css::uno::Sequence< css::uno::Any >() );
     delete m_pErrorHandler;
     EndListening( *SfxGetpApp() );
 }
@@ -431,6 +432,17 @@ SfxStyleFamilies* SwModule::CreateStyleFamilies()
                                                     RID_TABLESTYLEFAMILY, GetResLocale()));
 
     return pStyleFamilies;
+}
+
+void SwModule::RegisterAutomationApplicationEventsCaller(css::uno::Reference< ooo::vba::XSinkCaller > const& xCaller)
+{
+    mxAutomationApplicationEventsCaller = xCaller;
+}
+
+void SwModule::CallAutomationApplicationEventSinks(const OUString& Method, const css::uno::Sequence< css::uno::Any >& Arguments)
+{
+    if (mxAutomationApplicationEventsCaller.is())
+        mxAutomationApplicationEventsCaller->CallSinks(Method, Arguments);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

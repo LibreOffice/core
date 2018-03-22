@@ -34,6 +34,8 @@
 #include <editeng/acorrcfg.hxx>
 #include "wordvbahelper.hxx"
 #include <docsh.hxx>
+#include <swdll.hxx>
+#include <swmodule.hxx>
 #include "vbalistgalleries.hxx"
 
 using namespace ::ooo;
@@ -60,17 +62,17 @@ SwVbaApplication::SwVbaApplication( uno::Reference<uno::XComponentContext >& xCo
 
 SwVbaApplication::~SwVbaApplication()
 {
-    // FIXME: Sadly this is not the place to do this, this dtor is never called, it seems
-    for (auto& i : mvSinks)
-    {
-        if (i.is())
-            i->Call("Quit", uno::Sequence<uno::Any>());
-    }
 }
 
 sal_uInt32
-SwVbaApplication::AddSink( const css::uno::Reference< XSink >& xSink )
+SwVbaApplication::AddSink( const uno::Reference< XSink >& xSink )
 {
+    {
+        SolarMutexGuard aGuard;
+        SwGlobals::ensure();
+    }
+    // No harm in potentially calling this several times
+    SW_MOD()->RegisterAutomationApplicationEventsCaller( uno::Reference< XSinkCaller >(this) );
     mvSinks.push_back(xSink);
     return mvSinks.size();;
 }
@@ -132,13 +134,6 @@ SwVbaApplication::getSelection()
 uno::Any SAL_CALL
 SwVbaApplication::Documents( const uno::Any& index )
 {
-    // FIXME DUMMY just to test calling this somewhere... the dtor is never called
-    for (auto& i : mvSinks)
-    {
-        if (i.is())
-            i->Call("Quit", uno::Sequence<uno::Any>());
-    }
-
     uno::Reference< XCollection > xCol( new SwVbaDocuments( this, mxContext ) );
     if ( index.hasValue() )
         return xCol->Item( index, uno::Any() );
@@ -267,6 +262,18 @@ SwVbaApplication::getServiceNames()
 SwVbaApplicationOutgoingConnectionPoint::SwVbaApplicationOutgoingConnectionPoint( SwVbaApplication* pApp ) :
     mpApp(pApp)
 {
+}
+
+// XSinkCaller
+
+void SAL_CALL
+SwVbaApplication::CallSinks( const OUString& Method, const uno::Sequence< uno::Any >& Arguments )
+{
+    for (auto& i : mvSinks)
+    {
+        if (i.is())
+            i->Call(Method, Arguments);
+    }
 }
 
 // SwVbaApplicationOutgoingConnectionPoint

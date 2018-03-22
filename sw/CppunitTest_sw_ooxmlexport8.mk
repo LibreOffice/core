@@ -55,7 +55,11 @@ $(eval $(call gb_CppunitTest_use_system_darwin_frameworks,sw_ooxmlexport8,\
 
 endif
 
-$(eval $(call gb_CppunitTest_use_sdk_api,sw_ooxmlexport8))
+$(eval $(call gb_CppunitTest_use_api,sw_ooxmlexport8,\
+	udkapi \
+	offapi \
+	oovbaapi \
+))
 
 $(eval $(call gb_CppunitTest_use_ure,sw_ooxmlexport8))
 $(eval $(call gb_CppunitTest_use_vcl,sw_ooxmlexport8))
