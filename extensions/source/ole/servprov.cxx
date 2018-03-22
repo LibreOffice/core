@@ -476,8 +476,8 @@ OleServer::OleServer( const Reference<XMultiServiceFactory>& smgr):
 
     (void) provideInstance( [&]
                             {
-                                const Reference<XInterface> xWordGlobals = m_smgr->createInstance("ooo.vba.word.Globals");
-                                xWordGlobals->acquire();
+                                // We want just one SwVbaGlobals for all Automation clients
+                                static const Reference<XInterface> xWordGlobals = m_smgr->createInstance("ooo.vba.word.Globals");
                                 const Reference<ooo::vba::XHelperInterface> xHelperInterface(xWordGlobals, UNO_QUERY);
                                 Any aApplication = xHelperInterface->Application();
                                 Reference<XInterface> xApplication;
