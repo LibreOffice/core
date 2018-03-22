@@ -53,6 +53,7 @@ struct OutlinerParaObjData
     ~OutlinerParaObjData();
 
     bool operator==(const OutlinerParaObjData& rCandidate) const;
+    bool Equals(const OutlinerParaObjData& rCandidate) const;
 
     // #i102062#
     bool isWrongListEqual(const OutlinerParaObjData& rCompare) const;
@@ -74,6 +75,8 @@ public:
 
     // compare operator
     bool operator==(const OutlinerParaObject& rCandidate) const;
+    // compare implementation without comparing pools
+    bool Equals(const OutlinerParaObject& rCandidate) const;
 
     // #i102062#
     bool isWrongListEqual(const OutlinerParaObject& rCompare) const;

@@ -148,4 +148,17 @@ OUString E3dSphereObj::TakeObjNamePlural() const
     return ImpGetResStr(STR_ObjNamePluralSphere3d);
 }
 
+bool E3dSphereObj::Equals(const SdrObject& rOther) const
+{
+    const E3dSphereObj* pOther = dynamic_cast<const E3dSphereObj*>(&rOther);
+    if (!pOther)
+        return false;
+
+    if (aCenter != pOther->aCenter ||
+        aSize != pOther->aSize)
+        return false;
+
+    return E3dCompoundObject::Equals(rOther);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

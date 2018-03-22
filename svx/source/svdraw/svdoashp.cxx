@@ -3167,4 +3167,18 @@ OUString SdrObjCustomShape::GetCustomShapeName()
     return sShapeName;
 }
 
+bool SdrObjCustomShape::Equals(const SdrObject& rOther) const
+{
+    const SdrObjCustomShape* pOther = dynamic_cast<const SdrObjCustomShape*>(&rOther);
+    if (!pOther)
+        return false;
+
+    if (fObjectRotation != pOther->fObjectRotation)
+        return false;
+
+    // TODO: refine equals conditions
+
+    return SdrTextObj::Equals(rOther);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

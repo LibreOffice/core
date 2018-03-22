@@ -394,6 +394,22 @@ FmFormObj& FmFormObj::operator= (const FmFormObj& rObj)
     return *this;
 }
 
+bool FmFormObj::Equals(const SdrObject& rOther) const
+{
+    const FmFormObj* pOther = dynamic_cast<const FmFormObj*>(&rOther);
+    if (!pOther)
+        return false;
+
+    if (m_nPos != pOther->m_nPos ||
+        aEvts.getLength() != pOther->aEvts.getLength())
+        return false;
+
+    if (!std::equal(aEvts.begin(), aEvts.end(), pOther->aEvts.begin()))
+        return false;
+
+    return SdrUnoObj::Equals(rOther);
+}
+
 
 void FmFormObj::NbcReformatText()
 {

@@ -593,6 +593,19 @@ OUString SdrVirtObj::GetMacroPopupComment(const SdrObjMacroHitRec& rRec) const
     return rRefObj.GetMacroPopupComment(rRec); // TODO: positioning offset
 }
 
+bool SdrVirtObj::Equals(const SdrObject& rOther) const
+{
+    const SdrVirtObj* pOther = dynamic_cast<const SdrVirtObj*>(&rOther);
+    if (!pOther)
+        return false;
+
+    if (aSnapRect != pOther->aSnapRect ||
+        !rRefObj.Equals(pOther->rRefObj))
+        return false;
+
+    return SdrObject::Equals(rOther);
+}
+
 const Point SdrVirtObj::GetOffset() const
 {
     // #i73248# default offset of SdrVirtObj is aAnchor

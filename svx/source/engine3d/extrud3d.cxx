@@ -217,4 +217,16 @@ SdrAttrObj* E3dExtrudeObj::GetBreakObj()
     return nullptr;
 }
 
+bool E3dExtrudeObj::Equals(const SdrObject& rOther) const
+{
+    const E3dExtrudeObj* pOther = dynamic_cast<const E3dExtrudeObj*>(&rOther);
+    if (!pOther)
+        return false;
+
+    if (maExtrudePolygon != pOther->maExtrudePolygon)
+        return false;
+
+    return E3dCompoundObject::Equals(rOther);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

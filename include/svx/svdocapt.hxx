@@ -80,6 +80,8 @@ public:
     // implemented mainly for the purposes of Clone()
     SdrCaptionObj& operator=(const SdrCaptionObj& rObj);
 
+    virtual bool Equals(const SdrObject&) const override;
+
     // for calc: special shadow only for text box
     void SetSpecialTextBoxShadow() { mbSpecialTextBoxShadow = true; }
     bool GetSpecialTextBoxShadow() const { return mbSpecialTextBoxShadow; }

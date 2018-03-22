@@ -219,6 +219,7 @@ public:
                              css::container::XIndexAccess>& rxOrder);
 
     virtual void dumpAsXml(struct _xmlTextWriter* pWriter) const;
+    virtual bool Equals(const SdrObjList&) const;
 
 private:
     class WeakSdrObjectContainerType;
@@ -479,6 +480,8 @@ public:
     sal_Int32 GetUpperBorder() const;
     sal_Int32 GetRightBorder() const;
     sal_Int32 GetLowerBorder() const;
+
+    virtual bool Equals(const SdrObjList&) const override;
 
     // New MasterPage interface
     bool TRG_HasMasterPage() const { return (nullptr != mpMasterPageDescriptor); }

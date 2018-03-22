@@ -200,4 +200,16 @@ SdrAttrObj* E3dLatheObj::GetBreakObj()
     return pPathObj;
 }
 
+bool E3dLatheObj::Equals(const SdrObject& rOther) const
+{
+    const E3dLatheObj* pOther = dynamic_cast<const E3dLatheObj*>(&rOther);
+    if (!pOther)
+        return false;
+
+    if (maPolyPoly2D != pOther->maPolyPoly2D)
+        return false;
+
+    return E3dCompoundObject::Equals(rOther);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

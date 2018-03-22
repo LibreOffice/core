@@ -149,4 +149,18 @@ OUString E3dCubeObj::TakeObjNamePlural() const
     return ImpGetResStr(STR_ObjNamePluralCube3d);
 }
 
+bool E3dCubeObj::Equals(const SdrObject& rOther) const
+{
+    const E3dCubeObj* pOther = dynamic_cast<const E3dCubeObj*>(&rOther);
+    if (!pOther)
+        return false;
+
+    if (aCubePos != pOther->aCubePos ||
+        aCubeSize != pOther->aCubeSize ||
+        bPosIsCenter != pOther->bPosIsCenter)
+        return false;
+
+    return E3dCompoundObject::Equals(rOther);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

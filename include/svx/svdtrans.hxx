@@ -226,6 +226,15 @@ public:
     double   nCos;      // cos(nRotationAngle)
 
     GeoStat(): nRotationAngle(0),nShearAngle(0),nTan(0.0),nSin(0.0),nCos(1.0) {}
+    bool operator==(const GeoStat& rOther) const
+    {
+        return nRotationAngle == rOther.nRotationAngle
+            && nShearAngle == rOther.nShearAngle;
+    }
+    bool operator!=(const GeoStat& rOther) const
+    {
+        return !operator==(rOther);
+    }
     void RecalcSinCos();
     void RecalcTan();
 };
