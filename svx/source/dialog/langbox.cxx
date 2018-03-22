@@ -445,7 +445,7 @@ void SvxLanguageBoxBase::RemoveLanguage( const LanguageType eLangType )
 }
 
 
-LanguageType SvxLanguageBoxBase::GetSelectLanguage() const
+LanguageType SvxLanguageBoxBase::GetSelectedLanguage() const
 {
     sal_Int32     nPos   = ImplGetSelectEntryPos();
 
@@ -527,7 +527,7 @@ sal_Int32 SvxLanguageBoxBase::GetSavedValueLBB() const
     return ImplGetSavedValue();
 }
 
-LanguageType LanguageBox::GetSelectLanguage() const
+LanguageType LanguageBox::GetSelectedLanguage() const
 {
     OUString sLang = m_xControl->get_active_id();
     if (!sLang.isEmpty())

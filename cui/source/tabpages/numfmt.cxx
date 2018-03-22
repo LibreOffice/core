@@ -1066,7 +1066,7 @@ void SvxNumberFormatTabPage::UpdateFormatListBox_Impl
         pNumFmtShell->CategoryChanged( nTmpCatPos,nFmtLbSelPos, aEntryList );
     }
     else
-        pNumFmtShell->LanguageChanged( m_pLbLanguage->GetSelectLanguage(),
+        pNumFmtShell->LanguageChanged( m_pLbLanguage->GetSelectedLanguage(),
                                        nFmtLbSelPos,aEntryList );
 
     REMOVE_DONTKNOW() // possibly UI-Enable

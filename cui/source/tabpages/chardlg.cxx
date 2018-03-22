@@ -506,7 +506,7 @@ namespace
             aSize.setHeight( 200 );   // default 10pt
         aFontMetrics.SetFontSize( aSize );
 
-        _rFont.SetLanguage(_pLanguageLB->GetSelectLanguage());
+        _rFont.SetLanguage(_pLanguageLB->GetSelectedLanguage());
 
         _rFont.SetFamily( aFontMetrics.GetFamilyType() );
         _rFont.SetFamilyName( aFontMetrics.GetFamilyName() );

@@ -479,7 +479,7 @@ IMPL_LINK_NOARG(HeaderFooterTabPage, LanguageChangeHdl, ListBox&, void)
 
 void HeaderFooterTabPage::FillFormatList( sal_Int32 nSelectedPos )
 {
-    LanguageType eLanguage = mpCBDateTimeLanguage->GetSelectLanguage();
+    LanguageType eLanguage = mpCBDateTimeLanguage->GetSelectedLanguage();
 
     mpCBDateTimeFormat->Clear();
 
@@ -551,7 +551,7 @@ void HeaderFooterTabPage::getData( HeaderFooterSettings& rSettings, bool& rNotOn
         rSettings.meTimeFormat = nDateTimeFormats[nPos].meTimeFormat;
     }
 
-    LanguageType eLanguage = mpCBDateTimeLanguage->GetSelectLanguage();
+    LanguageType eLanguage = mpCBDateTimeLanguage->GetSelectedLanguage();
     if( eLanguage != meOldLanguage )
         GetOrSetDateTimeLanguage( eLanguage, true );
 

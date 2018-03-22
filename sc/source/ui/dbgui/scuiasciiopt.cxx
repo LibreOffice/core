@@ -627,7 +627,7 @@ void ScImportAsciiDlg::GetOptions( ScAsciiOptions& rOpt )
 {
     rOpt.SetCharSet( meCharSet );
     rOpt.SetCharSetSystem( mbCharSetSystem );
-    rOpt.SetLanguage(pLbCustomLang->GetSelectLanguage());
+    rOpt.SetLanguage(pLbCustomLang->GetSelectedLanguage());
     rOpt.SetFixedLen( pRbFixed->IsChecked() );
     rOpt.SetStartRow( static_cast<long>(pNfRow->GetValue()) );
     mpTableBox->FillColumnData( rOpt );
@@ -651,7 +651,7 @@ void ScImportAsciiDlg::SaveParameters()
                      pRbFixed->IsChecked(),
                      static_cast<sal_Int32>(pNfRow->GetValue()),
                      pLbCharSet->GetSelectedEntryPos(),
-                     static_cast<sal_uInt16>(pLbCustomLang->GetSelectLanguage()),
+                     static_cast<sal_uInt16>(pLbCustomLang->GetSelectedLanguage()),
                      pCkbSkipEmptyCells->IsChecked(), pCkbRemoveSpace->IsChecked(), meCall );
 }
 
