@@ -42,7 +42,11 @@ $(eval $(call gb_CppunitTest_set_include,sw_odfexport,\
     $$(INCLUDE) \
 ))
 
-$(eval $(call gb_CppunitTest_use_sdk_api,sw_odfexport))
+$(eval $(call gb_CppunitTest_use_api,sw_odfexport,\
+	udkapi \
+	offapi \
+	oovbaapi \
+))
 
 $(eval $(call gb_CppunitTest_use_ure,sw_odfexport))
 $(eval $(call gb_CppunitTest_use_vcl,sw_odfexport))

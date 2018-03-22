@@ -60,6 +60,7 @@ $(eval $(call gb_CppunitTest_set_include,sc_text_functions_test,\
 $(eval $(call gb_CppunitTest_use_api,sc_text_functions_test,\
     offapi \
     udkapi \
+    oovbaapi \
 ))
 
 $(eval $(call gb_CppunitTest_use_ure,sc_text_functions_test))

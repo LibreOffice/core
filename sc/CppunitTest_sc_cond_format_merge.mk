@@ -59,7 +59,11 @@ $(eval $(call gb_CppunitTest_set_include,sc_cond_format_merge,\
     $$(INCLUDE) \
 ))
 
-$(eval $(call gb_CppunitTest_use_sdk_api,sc_cond_format_merge))
+$(eval $(call gb_CppunitTest_use_api,sc_cond_format_merge,\
+	udkapi \
+	offapi \
+	oovbaapi \
+))
 
 $(eval $(call gb_CppunitTest_use_ure,sc_cond_format_merge))
 $(eval $(call gb_CppunitTest_use_vcl,sc_cond_format_merge))

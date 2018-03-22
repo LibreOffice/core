@@ -41,7 +41,11 @@ $(eval $(call gb_CppunitTest_set_include,sw_ww8import,\
     $$(INCLUDE) \
 ))
 
-$(eval $(call gb_CppunitTest_use_sdk_api,sw_ww8import))
+$(eval $(call gb_CppunitTest_use_api,sw_ww8import,\
+	udkapi \
+	offapi \
+	oovbaapi \
+))
 
 $(eval $(call gb_CppunitTest_use_ure,sw_ww8import))
 $(eval $(call gb_CppunitTest_use_vcl,sw_ww8import))
