@@ -83,6 +83,8 @@ public:
 
     virtual E3dExtrudeObj* Clone() const override;
 
+    virtual bool Equals(const SdrObject&) const override;
+
     // TakeObjName...() is for the display in the UI (for example "3 frames selected")
     virtual OUString TakeObjNameSingul() const override;
     virtual OUString TakeObjNamePlural() const override;

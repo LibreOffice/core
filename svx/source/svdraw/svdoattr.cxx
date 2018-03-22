@@ -158,4 +158,16 @@ bool SdrAttrObj::HasLine() const
     return GetProperties().GetObjectItemSet().Get(XATTR_LINESTYLE).GetValue() != drawing::LineStyle_NONE;
 }
 
+bool SdrAttrObj::Equals(const SdrObject& rOther) const
+{
+    const SdrAttrObj* pOther = dynamic_cast<const SdrAttrObj*>(&rOther);
+    if (!pOther)
+        return false;
+
+    if (maSnapRect != pOther->maSnapRect)
+        return false;
+
+    return SdrObject::Equals(rOther);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
