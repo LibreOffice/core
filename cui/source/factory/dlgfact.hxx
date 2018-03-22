@@ -526,6 +526,20 @@ class AbstractScreenshotAnnotationDlg_Impl : public AbstractScreenshotAnnotation
     DECL_ABSTDLG_BASE(AbstractScreenshotAnnotationDlg_Impl, ScreenshotAnnotationDlg)
 };
 
+class SignSignatureLineDialog;
+class AbstractSignSignatureLineDialog_Impl : public SfxAbstractDialog
+{
+protected:
+    std::unique_ptr<SignSignatureLineDialog> m_xDlg;
+
+public:
+    explicit AbstractSignSignatureLineDialog_Impl(SignSignatureLineDialog* p)
+        : m_xDlg(p)
+    {
+    }
+    virtual short Execute() override;
+};
+
 //AbstractDialogFactory_Impl implementations
 class AbstractDialogFactory_Impl : public SvxAbstractDialogFactory
 {
@@ -704,6 +718,8 @@ public:
     virtual VclPtr<AbstractPasswordToOpenModifyDialog> CreatePasswordToOpenModifyDialog(weld::Window * pParent, sal_uInt16 nMaxPasswdLen, bool bIsPasswordToModify) override;
 
     virtual VclPtr<AbstractScreenshotAnnotationDlg> CreateScreenshotAnnotationDlg(vcl::Window * pParent, Dialog& rParentDialog) override;
+
+    virtual VclPtr<AbstractSignSignatureLineDialog> CreateSignSignatureLineDialog(weld::Window * pParent) override;
 };
 
 #endif

@@ -186,6 +186,11 @@ void AbstractSvxCharacterMapDialog_Impl::SetText(const OUString& rStr)
     m_xDlg->set_title(rStr);
 }
 
+short AbstractSignSignatureLineDialog_Impl::Execute()
+{
+    return m_xDlg->run();
+}
+
 IMPL_ABSTDLG_BASE(AbstractScreenshotAnnotationDlg_Impl);
 
 
@@ -1563,6 +1568,12 @@ VclPtr<AbstractScreenshotAnnotationDlg> AbstractDialogFactory_Impl::CreateScreen
 {
     VclPtrInstance<ScreenshotAnnotationDlg> pDlg(pParent, rParentDialog);
     return VclPtr<AbstractScreenshotAnnotationDlg_Impl>::Create(pDlg);
+}
+
+VclPtr<AbstractSignSignatureLineDialog>
+AbstractDialogFactory_Impl::CreateSignSignatureLineDialog(weld::Window* pParent)
+{
+    return VclPtr<AbstractSignSignatureLineDialog_Impl>::Create(new SignSignatureLineDialog(pParent));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

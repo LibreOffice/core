@@ -79,6 +79,9 @@ void SwView::ExecDlgExt(SfxRequest const &rReq)
                 pDialog->Execute();
             break;
         }
+        case SID_SIGN_SIGNATURELINE:
+            SAL_DEBUG("sign the signatureline!");
+            break;
         case  FN_EDIT_FOOTNOTE:
         {
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
