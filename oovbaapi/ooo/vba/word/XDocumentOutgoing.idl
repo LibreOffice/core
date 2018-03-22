@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef __ooo_vba_word_XApplicationOutgoing_idl__
-#define __ooo_vba_word_XApplicationOutgoing_idl__
+#ifndef __ooo_vba_word_XDocumentOutgoing_idl__
+#define __ooo_vba_word_XDocumentOutgoing_idl__
 
 module ooo {  module vba {  module word {
 
@@ -23,10 +23,9 @@ module ooo {  module vba {  module word {
 // client what the Automation server expects and construct a corresponding COM interface that can
 // receive the callbacks. Or something like that.
 
-interface XApplicationOutgoing : XInterfaceWithIID
+interface XDocumentOutgoing : XInterfaceWithIID
 {
-    void DocumentChange();
-    void Quit();
+    void Close();
 };
 
 }; }; };
