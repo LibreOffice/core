@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.18.3 -->
+<!-- Generated with glade 3.20.4 -->
 <interface domain="sc">
   <requires lib="gtk+" version="3.18"/>
   <requires lib="LibreOffice" version="1.0"/>
@@ -560,10 +560,11 @@
                         </child>
                         <child>
                           <object class="GtkCheckButton" id="skipemptycells">
-                            <property name="label" translatable="yes" context="textimportcsv|skipemtycells">S_kip empty cells</property>
+                            <property name="label" translatable="yes" context="textimportcsv|skipemptycells">S_kip empty cells</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
+                            <property name="tooltip_text" translatable="yes" context="textimportcsv|skipemptycells">If enabled, blank cells in source will not override the target.</property>
                             <property name="use_underline">True</property>
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
