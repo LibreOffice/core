@@ -254,6 +254,21 @@ SdrCaptionObj& SdrCaptionObj::operator=(const SdrCaptionObj& rObj)
     return *this;
 }
 
+bool SdrCaptionObj::Equals(const SdrObject& rOther) const
+{
+    const SdrCaptionObj* pOther = dynamic_cast<const SdrCaptionObj*>(&rOther);
+    if (!pOther)
+        return false;
+
+    if (aTailPoly != pOther->aTailPoly ||
+        mbSpecialTextBoxShadow != pOther->mbSpecialTextBoxShadow ||
+        mbFixedTail != pOther->mbFixedTail ||
+        maFixedTailPos != pOther->maFixedTailPos)
+        return false;
+
+    return SdrRectObj::Equals(rOther);
+}
+
 OUString SdrCaptionObj::TakeObjNameSingul() const
 {
     OUStringBuffer sName(ImpGetResStr(STR_ObjNameSingulCAPTION));

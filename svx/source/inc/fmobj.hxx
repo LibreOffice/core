@@ -77,6 +77,8 @@ public:
     // #116235# virtual SdrObject*  Clone(SdrPage* pPage, SdrModel* pModel) const;
     SAL_DLLPRIVATE FmFormObj& operator= (const FmFormObj& rObj);
 
+    virtual bool Equals(const SdrObject&) const override;
+
     SAL_DLLPRIVATE void clonedFrom(const FmFormObj* _pSource);
 
     SAL_DLLPRIVATE static css::uno::Reference< css::uno::XInterface> ensureModelEnv(

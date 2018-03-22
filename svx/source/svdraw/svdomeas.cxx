@@ -720,6 +720,19 @@ SdrMeasureObj& SdrMeasureObj::operator=(const SdrMeasureObj& rObj)
     return *this;
 }
 
+bool SdrMeasureObj::Equals(const SdrObject& rOther) const
+{
+    const SdrMeasureObj* pOther = dynamic_cast<const SdrMeasureObj*>(&rOther);
+    if (!pOther)
+        return false;
+
+    if (aPt1 != pOther->aPt1 ||
+        aPt2 != pOther->aPt2)
+        return false;
+
+    return SdrTextObj::Equals(rOther);
+}
+
 OUString SdrMeasureObj::TakeObjNameSingul() const
 {
     OUStringBuffer sName(ImpGetResStr(STR_ObjNameSingulMEASURE));

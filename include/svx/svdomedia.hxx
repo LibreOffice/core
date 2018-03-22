@@ -55,6 +55,8 @@ public:
         virtual SdrMediaObj*            Clone(SdrModel* pTargetModel = nullptr) const override;
         SdrMediaObj&                operator=(const SdrMediaObj& rObj);
 
+        virtual bool Equals(const SdrObject&) const override;
+
         virtual void                AdjustToMaxRect( const tools::Rectangle& rMaxRect, bool bShrinkOnly = false ) override;
 
 public:

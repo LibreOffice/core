@@ -141,6 +141,8 @@ public:
     SdrOle2Obj& assignFrom(const SdrOle2Obj& rObj);
     SdrOle2Obj& operator=(const SdrOle2Obj& rObj);
 
+    virtual bool Equals(const SdrObject&) const override;
+
     virtual void NbcMove(const Size& rSize) override;
     virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact) override;
     virtual void NbcSetSnapRect(const tools::Rectangle& rRect) override;

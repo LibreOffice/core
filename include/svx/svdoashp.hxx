@@ -210,6 +210,8 @@ public:
     virtual SdrObjCustomShape* Clone(SdrModel* pTargetModel = nullptr) const override;
     SdrObjCustomShape& operator=(const SdrObjCustomShape& rObj);
 
+    virtual bool Equals(const SdrObject&) const override;
+
     virtual OUString TakeObjNameSingul() const override;
     virtual OUString TakeObjNamePlural() const override;
 

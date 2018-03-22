@@ -939,6 +939,23 @@ void SdrObjList::dumpAsXml(xmlTextWriterPtr pWriter) const
     xmlTextWriterEndElement(pWriter);
 }
 
+bool SdrObjList::Equals(const SdrObjList& rOther) const
+{
+    if (eListKind != rOther.eListKind ||
+        maList.size() != rOther.maList.size())
+        return false;
+
+    return std::equal(maList.begin(), maList.end(), rOther.maList.begin(),
+        [](const SdrObject* p1, const SdrObject* p2) -> bool
+        {
+            if (p1 && p2)
+                return p1 == p2
+                || p1->Equals(*p2);
+            else
+                return (!p1 && !p2);
+        });
+}
+
 
 void SdrPageGridFrameList::Clear()
 {
@@ -1608,6 +1625,25 @@ void SdrPage::ActionChanged()
     {
         TRG_GetMasterPageDescriptorViewContact().ActionChanged();
     }
+}
+
+bool SdrPage::Equals(const SdrObjList& rOther) const
+{
+    const SdrPage* pOther = dynamic_cast<const SdrPage*>(&rOther);
+    if (!pOther)
+        return false;
+
+    if (mnWidth != pOther->mnWidth ||
+        mnHeight != pOther->mnHeight ||
+        mnBorderLeft != pOther->mnBorderLeft ||
+        mnBorderUpper != pOther->mnBorderUpper ||
+        mnBorderRight != pOther->mnBorderRight ||
+        mnBorderLower != pOther->mnBorderLower)
+        return false;
+
+    // TODO: refine equals conditions
+
+    return SdrObjList::Equals(rOther);
 }
 
 SdrPageProperties& SdrPage::getSdrPageProperties()

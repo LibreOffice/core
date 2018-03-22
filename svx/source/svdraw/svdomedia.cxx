@@ -159,6 +159,27 @@ SdrMediaObj& SdrMediaObj::operator=(const SdrMediaObj& rObj)
     return *this;
 }
 
+bool SdrMediaObj::Equals(const SdrObject& rOther) const
+{
+    const SdrMediaObj* pOther = dynamic_cast<const SdrMediaObj*>(&rOther);
+    if (!pOther)
+        return false;
+
+    auto ImplPtrsEqual = [](const Impl* p1, const Impl* p2) -> bool
+    {
+        if (p1 && p2)
+            return (p1 == p2)
+                || (p1->m_MediaProperties == p2->m_MediaProperties &&
+                    p1->m_pTempFile == p2->m_pTempFile);
+        else
+            return (!p1 && !p2);
+    };
+    if (!ImplPtrsEqual(m_xImpl.get(), pOther->m_xImpl.get()))
+        return false;
+
+    return SdrRectObj::Equals(rOther);
+}
+
 uno::Reference< graphic::XGraphic > const & SdrMediaObj::getSnapshot() const
 {
 #if HAVE_FEATURE_AVMEDIA

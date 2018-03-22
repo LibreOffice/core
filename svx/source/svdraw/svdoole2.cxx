@@ -1455,6 +1455,35 @@ SdrOle2Obj& SdrOle2Obj::assignFrom(const SdrOle2Obj& rObj)
     return *this;
 }
 
+namespace {
+
+bool Ole2ObjImplPtrsEqual(const SdrOle2ObjImpl* p1, const SdrOle2ObjImpl* p2)
+{
+    // TODO: improve comparison
+    if (p1 && p2)
+        return (p1 == p2)
+            || (p1->mxGraphic == p2->mxGraphic &&
+                p1->maProgName == p2->maProgName &&
+                p1->aPersistName == p2->aPersistName &&
+                p1->maLinkURL == p2->maLinkURL);
+    else
+        return (!p1 && !p2);
+}
+
+}
+
+bool SdrOle2Obj::Equals(const SdrObject& rOther) const
+{
+    const SdrOle2Obj* pOther = dynamic_cast<const SdrOle2Obj*>(&rOther);
+    if (!pOther)
+        return false;
+
+    if (!Ole2ObjImplPtrsEqual(mpImpl.get(), pOther->mpImpl.get()))
+        return false;
+
+    return SdrRectObj::Equals(rOther);
+}
+
 void SdrOle2Obj::ImpSetVisAreaSize()
 {
     // #i118524# do not again set VisAreaSize when the call comes from OLE client (e.g. ObjectAreaChanged)

@@ -133,6 +133,9 @@ public:
     virtual E3dScene* Clone(SdrModel* pTargetModel = nullptr) const override;
     E3dScene& operator=(const E3dScene&);
 
+    using SdrObjList::Equals;
+    virtual bool Equals(const SdrObject&) const override;
+
     virtual SdrObjGeoData *NewGeoData() const override;
     virtual void          SaveGeoData(SdrObjGeoData& rGeo) const override;
     virtual void          RestGeoData(const SdrObjGeoData& rGeo) override;

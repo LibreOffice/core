@@ -62,6 +62,8 @@ public:
     // implemented mainly for the purposes of Clone()
     E3dPolygonObj& operator=(const E3dPolygonObj& rObj);
 
+    virtual bool Equals(const SdrObject&) const override;
+
     // LineOnly?
     bool GetLineOnly() const { return bLineOnly; }
     void SetLineOnly(bool bNew);
