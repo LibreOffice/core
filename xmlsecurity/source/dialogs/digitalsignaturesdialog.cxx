@@ -636,7 +636,7 @@ void DigitalSignaturesDialog::ImplFillSignaturesBox()
                 maSignatureManager.maCurrentSignatureInformations[n])))
             {
                 aImage = m_pSigsNotvalidatedImg->GetImage();
-                bAllNewSignatures &= false;
+                bAllNewSignatures = false;
             }
             else if (maSignatureManager.meSignatureMode == DocumentSignatureMode::Content
                 && bSigValid && bCertValid && DocumentSignatureHelper::isOOo3_2_Signature(

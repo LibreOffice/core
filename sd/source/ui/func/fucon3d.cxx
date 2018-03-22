@@ -134,7 +134,7 @@ E3dCompoundObject* FuConstruct3dObject::ImpCreateBasic3DShape()
             aXPoly.Insert(0, Point (500*5, 1250*5), PolyFlags::Normal);
             aXPoly.Insert(0, Point (250*5, 1250*5), PolyFlags::Normal);
             aXPoly.Insert(0, Point (50*5, 1250*5), PolyFlags::Normal);
-            aXPoly.Insert(0, Point (0*5, 1250*5), PolyFlags::Normal);
+            aXPoly.Insert(0, Point (0,    1250*5), PolyFlags::Normal);
 
             ::basegfx::B2DPolygon aB2DPolygon(aXPoly.getB2DPolygon());
             if(aB2DPolygon.areControlPointsUsed())
@@ -175,7 +175,7 @@ E3dCompoundObject* FuConstruct3dObject::ImpCreateBasic3DShape()
             aInnerPoly.append(::basegfx::B2DPoint(200*5, -1000*5));
             aInnerPoly.append(::basegfx::B2DPoint(100*5, -1000*5));
             aInnerPoly.append(::basegfx::B2DPoint(50*5, -1000*5));
-            aInnerPoly.append(::basegfx::B2DPoint(0*5, -1000*5));
+            aInnerPoly.append(::basegfx::B2DPoint(0,    -1000*5));
             aInnerPoly.setClosed(true);
 
             p3DObj = new E3dLatheObj(mpView->Get3DDefaultAttributes(), ::basegfx::B2DPolyPolygon(aInnerPoly));
@@ -199,7 +199,7 @@ E3dCompoundObject* FuConstruct3dObject::ImpCreateBasic3DShape()
             aInnerPoly.append(::basegfx::B2DPoint(200*5, 1000*5));
             aInnerPoly.append(::basegfx::B2DPoint(100*5, 1000*5));
             aInnerPoly.append(::basegfx::B2DPoint(50*5, 1000*5));
-            aInnerPoly.append(::basegfx::B2DPoint(0*5, 1000*5));
+            aInnerPoly.append(::basegfx::B2DPoint(0,    1000*5));
             aInnerPoly.setClosed(true);
 
             p3DObj = new E3dLatheObj(mpView->Get3DDefaultAttributes(), ::basegfx::B2DPolyPolygon(aInnerPoly));

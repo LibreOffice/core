@@ -125,7 +125,7 @@ void getOwnUpdateInfos(
         }
         else
         {
-            bAllHaveOwnUpdateInformation &= false;
+            bAllHaveOwnUpdateInformation = false;
         }
     }
     out_allFound = bAllHaveOwnUpdateInformation;
