@@ -512,7 +512,7 @@ void SvxLanguageBoxBase::SaveValueLBB()
     ImplSaveValue();
 }
 
-sal_Int32 SvxLanguageBoxBase::GetSelectEntryPosLBB() const
+sal_Int32 SvxLanguageBoxBase::GetSelectedEntryPosLBB() const
 {
     return ImplGetSelectEntryPos();
 }
