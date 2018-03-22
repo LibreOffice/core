@@ -447,7 +447,7 @@ void SvxLanguageBoxBase::RemoveLanguage( const LanguageType eLangType )
 
 LanguageType SvxLanguageBoxBase::GetSelectedLanguage() const
 {
-    sal_Int32     nPos   = ImplGetSelectEntryPos();
+    sal_Int32     nPos   = ImplGetSelectedEntryPos();
 
     if ( nPos != LISTBOX_ENTRY_NOTFOUND )
         return LanguageType( reinterpret_cast<sal_uIntPtr>(ImplGetEntryData(nPos)) );
@@ -514,7 +514,7 @@ void SvxLanguageBoxBase::SaveValueLBB()
 
 sal_Int32 SvxLanguageBoxBase::GetSelectedEntryPosLBB() const
 {
-    return ImplGetSelectEntryPos();
+    return ImplGetSelectedEntryPos();
 }
 
 void* SvxLanguageBoxBase::GetEntryDataLBB( sal_Int32  nPos ) const
@@ -859,12 +859,12 @@ void SvxLanguageComboBox::ImplSetEntryData( sal_Int32 nPos, void* pData )
 }
 
 
-sal_Int32 SvxLanguageBox::ImplGetSelectEntryPos() const
+sal_Int32 SvxLanguageBox::ImplGetSelectedEntryPos() const
 {
     return GetSelectedEntryPos();
 }
 
-sal_Int32 SvxLanguageComboBox::ImplGetSelectEntryPos() const
+sal_Int32 SvxLanguageComboBox::ImplGetSelectedEntryPos() const
 {
     return GetSelectedEntryPos();
 }
@@ -986,7 +986,7 @@ IMPL_LINK_NOARG( SvxLanguageComboBox, EditModifyHdl, Edit&, void )
             // Select the corresponding listbox entry if not current. This
             // invalidates the Edit Selection thus has to happen between
             // obtaining the Selection and setting the new Selection.
-            sal_Int32 nSelPos = ImplGetSelectEntryPos();
+            sal_Int32 nSelPos = ImplGetSelectedEntryPos();
             bool bSetEditSelection;
             if (nSelPos == nPos)
                 bSetEditSelection = false;
