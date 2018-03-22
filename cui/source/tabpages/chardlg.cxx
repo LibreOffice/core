@@ -1121,7 +1121,7 @@ bool SvxCharNamePage::FillItemSet_Impl( SfxItemSet& rSet, LanguageGroup eLangGrp
         }
     }
 
-    sal_Int32 nLangPos = pLangBox->GetSelectEntryPosLBB();
+    sal_Int32 nLangPos = pLangBox->GetSelectedEntryPosLBB();
     LanguageType eLangType = LanguageType(reinterpret_cast<sal_uLong>(pLangBox->GetEntryDataLBB( nLangPos )));
 
     if ( pOld )

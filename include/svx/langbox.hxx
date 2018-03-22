@@ -86,7 +86,7 @@ public:
     void                HideLBB();
     void                DisableLBB();
     void                SaveValueLBB();
-    sal_Int32           GetSelectEntryPosLBB() const;
+    sal_Int32           GetSelectedEntryPosLBB() const;
     void*               GetEntryDataLBB( sal_Int32  nPos ) const;
     sal_Int32           GetSavedValueLBB() const;
 
