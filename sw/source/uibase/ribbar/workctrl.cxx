@@ -50,6 +50,7 @@
 #include <svx/strings.hrc>
 #include <bitmaps.hlst>
 #include <toolkit/helper/vclunohelper.hxx>
+#include <svx/srchdlg.hxx>
 
 // Size check
 #define NAVI_ENTRIES 20
@@ -750,6 +751,8 @@ void NavElementBox_Impl::Select()
 
     if ( !IsTravelSelect() )
     {
+        SvxSearchDialogWrapper::SetSearchLabel( SearchLabel::Empty );
+
         sal_uInt16 nPos = GetSelectedEntryPos();
         // adjust array index for Ids after NID_PREV in aNavigationInsertIds
         if ( nPos >= NID_COUNT/2 - 1 )

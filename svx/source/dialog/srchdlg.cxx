@@ -2440,6 +2440,10 @@ void SvxSearchDialogWrapper::SetSearchLabel(const SearchLabel& rSL)
         sStr = SvxResId(RID_SVXSTR_SEARCH_END);
     else if (rSL == SearchLabel::Start)
         sStr = SvxResId(RID_SVXSTR_SEARCH_START);
+    else if (rSL == SearchLabel::EndWrapped)
+        sStr = SvxResId(RID_SVXSTR_SEARCH_END_WRAPPED);
+    else if (rSL == SearchLabel::StartWrapped)
+        sStr = SvxResId(RID_SVXSTR_SEARCH_START_WRAPPED);
     else if (rSL == SearchLabel::EndSheet)
         sStr = SvxResId(RID_SVXSTR_SEARCH_END_SHEET);
     else if (rSL == SearchLabel::NotFound)

@@ -1252,9 +1252,11 @@
 #define RID_SVXSTR_SEARCH                                   NC_("RID_SVXSTR_SEARCH", "Search for formatting")
 #define RID_SVXSTR_REPLACE                                  NC_("RID_SVXSTR_REPLACE", "Replace with formatting")
 #define RID_SVXSTR_SEARCH_END                               NC_("RID_SVXSTR_SEARCH_END", "Reached the end of the document")
+#define RID_SVXSTR_SEARCH_END_WRAPPED                       NC_("RID_SVXSTR_SEARCH_END_WRAPPED", "Reached the end of the document, continued from the beginning")
 #define RID_SVXSTR_SEARCH_END_SHEET                         NC_("RID_SVXSTR_SEARCH_END_SHEET", "Reached the end of the sheet")
 #define RID_SVXSTR_SEARCH_NOT_FOUND                         NC_("RID_SVXSTR_SEARCH_NOT_FOUND", "Search key not found")
 #define RID_SVXSTR_SEARCH_START                             NC_("RID_SVXSTR_SEARCH_START", "Reached the beginning of the document")
+#define RID_SVXSTR_SEARCH_START_WRAPPED                     NC_("RID_SVXSTR_SEARCH_START_WRAPPED", "Reached the beginning of the document, continued from the end")
 
 #define RID_SVXDLG_BMPMASK_STR_PALETTE                      NC_("RID_SVXDLG_BMPMASK_STR_PALETTE", "Color Palette")
 
