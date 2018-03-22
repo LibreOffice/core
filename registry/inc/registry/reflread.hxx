@@ -26,6 +26,7 @@
 
 #include <registry/refltype.hxx>
 #include <registry/regtype.h>
+#include "registry/registrydllapi.h"
 #include <rtl/ustring.hxx>
 
 /// Implememetation handle
@@ -86,7 +87,7 @@ struct RegistryTypeReader_Api
 
 /** the API initialization function.
 */
-RegistryTypeReader_Api* TYPEREG_CALLTYPE initRegistryTypeReader_Api(void);
+REGISTRY_DLLPUBLIC RegistryTypeReader_Api* TYPEREG_CALLTYPE initRegistryTypeReader_Api(void);
 
 #ifdef __cplusplus
 }

@@ -26,6 +26,7 @@
 
 #include "registry/types.h"
 #include "registry/version.h"
+#include "registry/registrydllapi.h"
 
 #include "rtl/ustring.h"
 #include "sal/types.h"
@@ -65,7 +66,7 @@ extern "C" {
 
    @since UDK 3.2.0
  */
-sal_Bool SAL_CALL typereg_reader_create(
+REGISTRY_DLLPUBLIC sal_Bool SAL_CALL typereg_reader_create(
     void const * buffer, sal_uInt32 length, sal_Bool copy,
     enum typereg_Version maxVersion, void ** result)
     SAL_THROW_EXTERN_C();
@@ -77,7 +78,7 @@ sal_Bool SAL_CALL typereg_reader_create(
 
    @since UDK 3.2.0
  */
-void SAL_CALL typereg_reader_acquire(void * handle) SAL_THROW_EXTERN_C();
+REGISTRY_DLLPUBLIC void SAL_CALL typereg_reader_acquire(void * handle) SAL_THROW_EXTERN_C();
 
 /**
    Decrements the reference count of a type reader.
@@ -88,7 +89,7 @@ void SAL_CALL typereg_reader_acquire(void * handle) SAL_THROW_EXTERN_C();
 
    @since UDK 3.2.0
  */
-void SAL_CALL typereg_reader_release(void * handle) SAL_THROW_EXTERN_C();
+REGISTRY_DLLPUBLIC void SAL_CALL typereg_reader_release(void * handle) SAL_THROW_EXTERN_C();
 
 /**
    Returns the binary blob version of a type reader.
@@ -101,7 +102,7 @@ void SAL_CALL typereg_reader_release(void * handle) SAL_THROW_EXTERN_C();
 
    @since UDK 3.2.0
  */
-enum typereg_Version SAL_CALL typereg_reader_getVersion(void * handle)
+REGISTRY_DLLPUBLIC enum typereg_Version SAL_CALL typereg_reader_getVersion(void * handle)
     SAL_THROW_EXTERN_C();
 
 /**
@@ -115,7 +116,7 @@ enum typereg_Version SAL_CALL typereg_reader_getVersion(void * handle)
 
    @since UDK 3.2.0
  */
-void SAL_CALL typereg_reader_getDocumentation(
+REGISTRY_DLLPUBLIC void SAL_CALL typereg_reader_getDocumentation(
     void * handle, rtl_uString ** result) SAL_THROW_EXTERN_C();
 
 /**
@@ -130,7 +131,7 @@ void SAL_CALL typereg_reader_getDocumentation(
    @since UDK 3.2.0
    @deprecated
  */
-void SAL_CALL typereg_reader_getFileName(void * handle, rtl_uString ** result)
+REGISTRY_DLLPUBLIC void SAL_CALL typereg_reader_getFileName(void * handle, rtl_uString ** result)
     SAL_THROW_EXTERN_C();
 
 /**
@@ -148,7 +149,7 @@ void SAL_CALL typereg_reader_getFileName(void * handle, rtl_uString ** result)
 
    @since UDK 3.2.0
  */
-enum RTTypeClass SAL_CALL typereg_reader_getTypeClass(void * handle)
+REGISTRY_DLLPUBLIC enum RTTypeClass SAL_CALL typereg_reader_getTypeClass(void * handle)
     SAL_THROW_EXTERN_C();
 
 /**
@@ -161,7 +162,7 @@ enum RTTypeClass SAL_CALL typereg_reader_getTypeClass(void * handle)
 
    @since UDK 3.2.0
  */
-sal_Bool SAL_CALL typereg_reader_isPublished(void * handle)
+REGISTRY_DLLPUBLIC sal_Bool SAL_CALL typereg_reader_isPublished(void * handle)
     SAL_THROW_EXTERN_C();
 
 /**
@@ -175,7 +176,7 @@ sal_Bool SAL_CALL typereg_reader_isPublished(void * handle)
 
    @since UDK 3.2.0
  */
-void SAL_CALL typereg_reader_getTypeName(void * handle, rtl_uString ** result)
+REGISTRY_DLLPUBLIC void SAL_CALL typereg_reader_getTypeName(void * handle, rtl_uString ** result)
     SAL_THROW_EXTERN_C();
 
 /**
@@ -188,7 +189,7 @@ void SAL_CALL typereg_reader_getTypeName(void * handle, rtl_uString ** result)
 
    @since UDK 3.2.0
  */
-sal_uInt16 SAL_CALL typereg_reader_getSuperTypeCount(void * handle)
+REGISTRY_DLLPUBLIC sal_uInt16 SAL_CALL typereg_reader_getSuperTypeCount(void * handle)
     SAL_THROW_EXTERN_C();
 
 /**
@@ -205,7 +206,7 @@ sal_uInt16 SAL_CALL typereg_reader_getSuperTypeCount(void * handle)
 
    @since UDK 3.2.0
  */
-void SAL_CALL typereg_reader_getSuperTypeName(
+REGISTRY_DLLPUBLIC void SAL_CALL typereg_reader_getSuperTypeName(
     void * handle, rtl_uString ** result, sal_uInt16 index)
     SAL_THROW_EXTERN_C();
 
@@ -219,7 +220,7 @@ void SAL_CALL typereg_reader_getSuperTypeName(
 
    @since UDK 3.2.0
  */
-sal_uInt16 SAL_CALL typereg_reader_getFieldCount(void * handle)
+REGISTRY_DLLPUBLIC sal_uInt16 SAL_CALL typereg_reader_getFieldCount(void * handle)
     SAL_THROW_EXTERN_C();
 
 /**
@@ -235,7 +236,7 @@ sal_uInt16 SAL_CALL typereg_reader_getFieldCount(void * handle)
 
    @since UDK 3.2.0
  */
-void SAL_CALL typereg_reader_getFieldDocumentation(
+REGISTRY_DLLPUBLIC void SAL_CALL typereg_reader_getFieldDocumentation(
     void * handle, rtl_uString ** result, sal_uInt16 index)
     SAL_THROW_EXTERN_C();
 
@@ -253,7 +254,7 @@ void SAL_CALL typereg_reader_getFieldDocumentation(
    @since UDK 3.2.0
    @deprecated
  */
-void SAL_CALL typereg_reader_getFieldFileName(
+REGISTRY_DLLPUBLIC void SAL_CALL typereg_reader_getFieldFileName(
     void * handle, rtl_uString ** result, sal_uInt16 index)
     SAL_THROW_EXTERN_C();
 
@@ -268,7 +269,7 @@ void SAL_CALL typereg_reader_getFieldFileName(
 
    @since UDK 3.2.0
  */
-RTFieldAccess SAL_CALL typereg_reader_getFieldFlags(
+REGISTRY_DLLPUBLIC RTFieldAccess SAL_CALL typereg_reader_getFieldFlags(
     void * handle, sal_uInt16 index) SAL_THROW_EXTERN_C();
 
 /**
@@ -284,7 +285,7 @@ RTFieldAccess SAL_CALL typereg_reader_getFieldFlags(
 
    @since UDK 3.2.0
  */
-void SAL_CALL typereg_reader_getFieldName(
+REGISTRY_DLLPUBLIC void SAL_CALL typereg_reader_getFieldName(
     void * handle, rtl_uString ** result, sal_uInt16 index)
     SAL_THROW_EXTERN_C();
 
@@ -301,7 +302,7 @@ void SAL_CALL typereg_reader_getFieldName(
 
    @since UDK 3.2.0
  */
-void SAL_CALL typereg_reader_getFieldTypeName(
+REGISTRY_DLLPUBLIC void SAL_CALL typereg_reader_getFieldTypeName(
     void * handle, rtl_uString ** result, sal_uInt16 index)
     SAL_THROW_EXTERN_C();
 
@@ -323,7 +324,7 @@ void SAL_CALL typereg_reader_getFieldTypeName(
 
    @since UDK 3.2.0
  */
-sal_Bool SAL_CALL typereg_reader_getFieldValue(
+REGISTRY_DLLPUBLIC sal_Bool SAL_CALL typereg_reader_getFieldValue(
     void * handle, sal_uInt16 index, enum RTValueType * type,
     union RTConstValueUnion * value)
     SAL_THROW_EXTERN_C();
@@ -338,7 +339,7 @@ sal_Bool SAL_CALL typereg_reader_getFieldValue(
 
    @since UDK 3.2.0
  */
-sal_uInt16 SAL_CALL typereg_reader_getMethodCount(void * handle)
+REGISTRY_DLLPUBLIC sal_uInt16 SAL_CALL typereg_reader_getMethodCount(void * handle)
     SAL_THROW_EXTERN_C();
 
 /**
@@ -354,7 +355,7 @@ sal_uInt16 SAL_CALL typereg_reader_getMethodCount(void * handle)
 
    @since UDK 3.2.0
  */
-void SAL_CALL typereg_reader_getMethodDocumentation(
+REGISTRY_DLLPUBLIC void SAL_CALL typereg_reader_getMethodDocumentation(
     void * handle, rtl_uString ** result, sal_uInt16 index)
     SAL_THROW_EXTERN_C();
 
@@ -369,7 +370,7 @@ void SAL_CALL typereg_reader_getMethodDocumentation(
 
    @since UDK 3.2.0
  */
-enum RTMethodMode SAL_CALL typereg_reader_getMethodFlags(
+REGISTRY_DLLPUBLIC enum RTMethodMode SAL_CALL typereg_reader_getMethodFlags(
     void * handle, sal_uInt16 index) SAL_THROW_EXTERN_C();
 
 /**
@@ -385,7 +386,7 @@ enum RTMethodMode SAL_CALL typereg_reader_getMethodFlags(
 
    @since UDK 3.2.0
  */
-void SAL_CALL typereg_reader_getMethodName(
+REGISTRY_DLLPUBLIC void SAL_CALL typereg_reader_getMethodName(
     void * handle, rtl_uString ** result, sal_uInt16 index)
     SAL_THROW_EXTERN_C();
 
@@ -402,7 +403,7 @@ void SAL_CALL typereg_reader_getMethodName(
 
    @since UDK 3.2.0
  */
-void SAL_CALL typereg_reader_getMethodReturnTypeName(
+REGISTRY_DLLPUBLIC void SAL_CALL typereg_reader_getMethodReturnTypeName(
     void * handle, rtl_uString ** result, sal_uInt16 index)
     SAL_THROW_EXTERN_C();
 
@@ -417,7 +418,7 @@ void SAL_CALL typereg_reader_getMethodReturnTypeName(
 
    @since UDK 3.2.0
  */
-sal_uInt16 SAL_CALL typereg_reader_getMethodParameterCount(
+REGISTRY_DLLPUBLIC sal_uInt16 SAL_CALL typereg_reader_getMethodParameterCount(
     void * handle, sal_uInt16 index) SAL_THROW_EXTERN_C();
 
 /**
@@ -436,7 +437,7 @@ sal_uInt16 SAL_CALL typereg_reader_getMethodParameterCount(
 
    @since UDK 3.2.0
  */
-enum RTParamMode SAL_CALL typereg_reader_getMethodParameterFlags(
+REGISTRY_DLLPUBLIC enum RTParamMode SAL_CALL typereg_reader_getMethodParameterFlags(
     void * handle, sal_uInt16 methodIndex, sal_uInt16 parameterIndex)
     SAL_THROW_EXTERN_C();
 
@@ -457,7 +458,7 @@ enum RTParamMode SAL_CALL typereg_reader_getMethodParameterFlags(
 
    @since UDK 3.2.0
  */
-void SAL_CALL typereg_reader_getMethodParameterName(
+REGISTRY_DLLPUBLIC void SAL_CALL typereg_reader_getMethodParameterName(
     void * handle, rtl_uString ** result, sal_uInt16 methodIndex,
     sal_uInt16 parameterIndex)
     SAL_THROW_EXTERN_C();
@@ -479,7 +480,7 @@ void SAL_CALL typereg_reader_getMethodParameterName(
 
    @since UDK 3.2.0
  */
-void SAL_CALL typereg_reader_getMethodParameterTypeName(
+REGISTRY_DLLPUBLIC void SAL_CALL typereg_reader_getMethodParameterTypeName(
     void * handle, rtl_uString ** result, sal_uInt16 methodIndex,
     sal_uInt16 parameterIndex)
     SAL_THROW_EXTERN_C();
@@ -495,7 +496,7 @@ void SAL_CALL typereg_reader_getMethodParameterTypeName(
 
    @since UDK 3.2.0
  */
-sal_uInt16 SAL_CALL typereg_reader_getMethodExceptionCount(
+REGISTRY_DLLPUBLIC sal_uInt16 SAL_CALL typereg_reader_getMethodExceptionCount(
     void * handle, sal_uInt16 index) SAL_THROW_EXTERN_C();
 
 /**
@@ -515,7 +516,7 @@ sal_uInt16 SAL_CALL typereg_reader_getMethodExceptionCount(
 
    @since UDK 3.2.0
  */
-void SAL_CALL typereg_reader_getMethodExceptionTypeName(
+REGISTRY_DLLPUBLIC void SAL_CALL typereg_reader_getMethodExceptionTypeName(
     void * handle, rtl_uString ** result, sal_uInt16 methodIndex,
     sal_uInt16 exceptionIndex)
     SAL_THROW_EXTERN_C();
@@ -530,7 +531,7 @@ void SAL_CALL typereg_reader_getMethodExceptionTypeName(
 
    @since UDK 3.2.0
  */
-sal_uInt16 SAL_CALL typereg_reader_getReferenceCount(void * handle)
+REGISTRY_DLLPUBLIC sal_uInt16 SAL_CALL typereg_reader_getReferenceCount(void * handle)
     SAL_THROW_EXTERN_C();
 
 /**
@@ -547,7 +548,7 @@ sal_uInt16 SAL_CALL typereg_reader_getReferenceCount(void * handle)
 
    @since UDK 3.2.0
  */
-void SAL_CALL typereg_reader_getReferenceDocumentation(
+REGISTRY_DLLPUBLIC void SAL_CALL typereg_reader_getReferenceDocumentation(
     void * handle, rtl_uString ** result, sal_uInt16 index)
     SAL_THROW_EXTERN_C();
 
@@ -563,7 +564,7 @@ void SAL_CALL typereg_reader_getReferenceDocumentation(
 
    @since UDK 3.2.0
  */
-RTFieldAccess SAL_CALL typereg_reader_getReferenceFlags(
+REGISTRY_DLLPUBLIC RTFieldAccess SAL_CALL typereg_reader_getReferenceFlags(
     void * handle, sal_uInt16 index) SAL_THROW_EXTERN_C();
 
 /**
@@ -578,7 +579,7 @@ RTFieldAccess SAL_CALL typereg_reader_getReferenceFlags(
 
    @since UDK 3.2.0
  */
-enum RTReferenceType SAL_CALL typereg_reader_getReferenceSort(
+REGISTRY_DLLPUBLIC enum RTReferenceType SAL_CALL typereg_reader_getReferenceSort(
     void * handle, sal_uInt16 index) SAL_THROW_EXTERN_C();
 
 /**
@@ -595,7 +596,7 @@ enum RTReferenceType SAL_CALL typereg_reader_getReferenceSort(
 
    @since UDK 3.2.0
  */
-void SAL_CALL typereg_reader_getReferenceTypeName(
+REGISTRY_DLLPUBLIC void SAL_CALL typereg_reader_getReferenceTypeName(
     void * handle, rtl_uString ** result, sal_uInt16 index)
     SAL_THROW_EXTERN_C();
 

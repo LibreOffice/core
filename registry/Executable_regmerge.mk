@@ -20,24 +20,28 @@
 #**************************************************************
 
 
-PRJ=..
 
-PRJNAME=registry
-TARGET=inc
+$(eval $(call gb_Executable_Executable,regmerge))
 
-# --- Settings -----------------------------------------------------
+$(eval $(call gb_Library_add_package_headers,regmerge,registry_inc))
 
-.INCLUDE :  settings.mk
+$(eval $(call gb_Executable_set_include,regmerge,\
+	$$(INCLUDE) \
+	-I$(SRCDIR)/registry/inc/ \
+	-I$(SRCDIR)/registry/inc/pch \
+))
 
-# --- Files --------------------------------------------------------
-# --- Targets -------------------------------------------------------
+$(eval $(call gb_Executable_add_linked_libs,regmerge,\
+	reg \
+	sal \
+	stl \
+    $(gb_STDLIBS) \
+))
 
-.INCLUDE :  target.mk
+$(eval $(call gb_Executable_add_exception_objects,regmerge,\
+	registry/tools/regmerge \
+	registry/tools/fileurl \
+	registry/tools/options \
+))
 
-.IF "$(ENABLE_PCH)"!=""
-ALLTAR : \
-    $(SLO)$/precompiled.pch \
-    $(SLO)$/precompiled_ex.pch
-    
-.ENDIF			# "$(ENABLE_PCH)"!=""
-
+# vim: set noet sw=4 ts=4:

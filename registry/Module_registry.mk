@@ -21,29 +21,18 @@
 
 
 
-PRJ=..
+$(eval $(call gb_Module_Module,registry))
 
-PRJNAME=registry
-TARGET=regcpp
+$(eval $(call gb_Module_add_targets,registry,\
+	Library_reg \
+	Executable_regmerge \
+	Executable_regview \
+	Executable_regcompare \
+	Executable_checksingleton \
+	Package_inc \
+))
 
-ENABLE_EXCEPTIONS := TRUE
+#	Executable_rdbedit \
 
-# --- Settings -----------------------------------------------------
 
-.INCLUDE :  settings.mk
-.INCLUDE : ..$/version.mk
-
-# ------------------------------------------------------------------
-
-SLOFILES= \
-            $(SLO)$/regimpl.obj		\
-            $(SLO)$/regkey.obj		\
-            $(SLO)$/registry.obj 	\
-            $(SLO)$/keyimpl.obj 	\
-            $(SLO)$/reflread.obj	\
-            $(SLO)$/reflwrit.obj
-
-# ------------------------------------------------------------------
-
-.INCLUDE :  target.mk
-
+# vim: set noet sw=4 ts=4:

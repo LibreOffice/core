@@ -26,6 +26,7 @@
 
 #include <registry/refltype.hxx>
 #include <registry/regtype.h>
+#include "registry/registrydllapi.h"
 #include <rtl/ustring.hxx>
 
 /// Implememetation handle
@@ -65,7 +66,7 @@ struct RegistryTypeWriter_Api
 
 /** the API initialization function.
 */
-RegistryTypeWriter_Api* TYPEREG_CALLTYPE initRegistryTypeWriter_Api(void);
+REGISTRY_DLLPUBLIC RegistryTypeWriter_Api* TYPEREG_CALLTYPE initRegistryTypeWriter_Api(void);
 
 #ifdef __cplusplus
 }

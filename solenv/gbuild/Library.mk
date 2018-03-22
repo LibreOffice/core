@@ -100,6 +100,15 @@ endef
 gb_Library_get_runtime_filename = \
  $(or $(call gb_Library_get_dllname,$(1)),$(call gb_Library_get_filename,$(1)))
 
+# FIXME: is there a better way?
+define gb_Library_is_udk_versioned
+$(or \
+	$(filter $(patsubst %:$(notdir $(1)),%,$(filter %:$(notdir $(1)),$(gb_Library_FILENAMES))),$(gb_Library_RTVERLIBS)),\
+	$(filter $(patsubst %:$(notdir $(1)),%,$(filter %:$(notdir $(1)),$(gb_Library_FILENAMES))),$(gb_Library_UNOVERLIBS)),\
+	$(filter reg,$(patsubst %:$(notdir $(1)),%,$(filter %:$(notdir $(1)),$(gb_Library_FILENAMES)))),\
+	$(filter store,$(patsubst %:$(notdir $(1)),%,$(filter %:$(notdir $(1)),$(gb_Library_FILENAMES)))))
+endef
+
 $(eval $(foreach method,\
 	add_cobject \
 	add_cobjects \

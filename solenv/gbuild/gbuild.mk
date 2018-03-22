@@ -118,6 +118,8 @@ else
 gb_FULLDEPS := $(true)
 endif
 
+gb_UDK_MAJOR := 3
+
 include $(GBUILDDIR)/Helper.mk
 include $(GBUILDDIR)/TargetLocations.mk
 

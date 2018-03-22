@@ -26,6 +26,7 @@
 
 #include <registry/regtype.h>
 #include <rtl/ustring.hxx>
+#include "registry/registrydllapi.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -81,7 +82,7 @@ struct Registry_Api
 
 /** the API initialization function.
 */
-Registry_Api* REGISTRY_CALLTYPE initRegistry_Api(void);
+REGISTRY_DLLPUBLIC Registry_Api* REGISTRY_CALLTYPE initRegistry_Api(void);
 
 #ifdef __cplusplus
 }

@@ -27,6 +27,7 @@
 #include <stddef.h>
 #include <rtl/ustring.h>
 #include <registry/regtype.h>
+#include "registry/registrydllapi.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -43,7 +44,7 @@ extern "C" {
                      reg_closeKey. If the function fails, phNewKey is NULL.
     @return REG_NO_ERROR if succeeds else an error code.
 */
-RegError REGISTRY_CALLTYPE reg_createKey(RegKeyHandle hKey,
+REGISTRY_DLLPUBLIC RegError REGISTRY_CALLTYPE reg_createKey(RegKeyHandle hKey,
                                          rtl_uString* keyName,
                                          RegKeyHandle* phNewKey);
 
@@ -58,7 +59,7 @@ RegError REGISTRY_CALLTYPE reg_createKey(RegKeyHandle hKey,
                      reg_closeKey. If the function fails, phNewKey is NULL.
     @return REG_NO_ERROR if succeeds else an error code.
 */
-RegError REGISTRY_CALLTYPE reg_openKey(RegKeyHandle hKey,
+REGISTRY_DLLPUBLIC RegError REGISTRY_CALLTYPE reg_openKey(RegKeyHandle hKey,
                                          rtl_uString* keyName,
                                          RegKeyHandle* phOpenKey);
 
@@ -76,7 +77,7 @@ RegError REGISTRY_CALLTYPE reg_openKey(RegKeyHandle hKey,
     @param  pnSubKeys specifies the length of the array (the number of open subkeys).
     @return REG_NO_ERROR if succeeds else an error code.
 */
-RegError REGISTRY_CALLTYPE reg_openSubKeys(RegKeyHandle hKey,
+REGISTRY_DLLPUBLIC RegError REGISTRY_CALLTYPE reg_openSubKeys(RegKeyHandle hKey,
                                              rtl_uString* keyName,
                                              RegKeyHandle** pphSubKeys,
                                              sal_uInt32* pnSubKeys);
@@ -89,7 +90,7 @@ RegError REGISTRY_CALLTYPE reg_openSubKeys(RegKeyHandle hKey,
     @param  nSubKeys specifies the length of the array (the number of subkeys to closed).
     @return REG_NO_ERROR if succeeds else an error code.
 */
-RegError REGISTRY_CALLTYPE reg_closeSubKeys(RegKeyHandle* phSubKeys,
+REGISTRY_DLLPUBLIC RegError REGISTRY_CALLTYPE reg_closeSubKeys(RegKeyHandle* phSubKeys,
                                                sal_uInt32 nSubKeys);
 
 
@@ -101,7 +102,7 @@ RegError REGISTRY_CALLTYPE reg_closeSubKeys(RegKeyHandle* phSubKeys,
                     be deleted.
     @return REG_NO_ERROR if succeeds else an error code.
 */
-RegError REGISTRY_CALLTYPE reg_deleteKey(RegKeyHandle hKey,
+REGISTRY_DLLPUBLIC RegError REGISTRY_CALLTYPE reg_deleteKey(RegKeyHandle hKey,
                                          rtl_uString* keyName);
 
 
@@ -111,7 +112,7 @@ RegError REGISTRY_CALLTYPE reg_deleteKey(RegKeyHandle hKey,
                  The memory of the variable specifying the key will be freed.
     @return REG_NO_ERROR if succeeds else an error code.
 */
-RegError REGISTRY_CALLTYPE reg_closeKey(RegKeyHandle hKey);
+REGISTRY_DLLPUBLIC RegError REGISTRY_CALLTYPE reg_closeKey(RegKeyHandle hKey);
 
 
 /** This function returns the name of a key.
@@ -119,7 +120,7 @@ RegError REGISTRY_CALLTYPE reg_closeKey(RegKeyHandle hKey);
     @param  hKey identifies a currently open key which name will be returned.
     @param  pKeyName contains the keyname if succeeds else an empty string.
 */
-RegError REGISTRY_CALLTYPE reg_getKeyName(RegKeyHandle hKey, rtl_uString** pKeyName);
+REGISTRY_DLLPUBLIC RegError REGISTRY_CALLTYPE reg_getKeyName(RegKeyHandle hKey, rtl_uString** pKeyName);
 
 
 /** This function sets a value of a key.
@@ -134,7 +135,7 @@ RegError REGISTRY_CALLTYPE reg_getKeyName(RegKeyHandle hKey, rtl_uString** pKeyN
     @param  valueSize specifies the size of pData in bytes
     @return REG_NO_ERROR if succeeds else an error code.
 */
-RegError REGISTRY_CALLTYPE reg_setValue(RegKeyHandle hKey,
+REGISTRY_DLLPUBLIC RegError REGISTRY_CALLTYPE reg_setValue(RegKeyHandle hKey,
                                            rtl_uString* keyName,
                                            RegValueType valueType,
                                            RegValue pData,
@@ -150,7 +151,7 @@ RegError REGISTRY_CALLTYPE reg_setValue(RegKeyHandle hKey,
     @param  len specifies the len of pValueList.
     @return REG_NO_ERROR if succeeds else an error code.
 */
-RegError REGISTRY_CALLTYPE reg_setLongListValue(RegKeyHandle hKey,
+REGISTRY_DLLPUBLIC RegError REGISTRY_CALLTYPE reg_setLongListValue(RegKeyHandle hKey,
                                                       rtl_uString* keyName,
                                                       sal_Int32* pValueList,
                                                       sal_uInt32 len);
@@ -165,7 +166,7 @@ RegError REGISTRY_CALLTYPE reg_setLongListValue(RegKeyHandle hKey,
     @param  len specifies the len of pValueList.
     @return REG_NO_ERROR if succeeds else an error code.
 */
-RegError REGISTRY_CALLTYPE reg_setStringListValue(RegKeyHandle hKey,
+REGISTRY_DLLPUBLIC RegError REGISTRY_CALLTYPE reg_setStringListValue(RegKeyHandle hKey,
                                                           rtl_uString* keyName,
                                                           sal_Char** pValueList,
                                                           sal_uInt32 len);
@@ -180,7 +181,7 @@ RegError REGISTRY_CALLTYPE reg_setStringListValue(RegKeyHandle hKey,
     @param  len specifies the len of pValueList.
     @return REG_NO_ERROR if succeeds else an error code.
 */
-RegError REGISTRY_CALLTYPE reg_setUnicodeListValue(RegKeyHandle hKey,
+REGISTRY_DLLPUBLIC RegError REGISTRY_CALLTYPE reg_setUnicodeListValue(RegKeyHandle hKey,
                                                             rtl_uString* keyName,
                                                             sal_Unicode** pValueList,
                                                             sal_uInt32 len);
@@ -197,7 +198,7 @@ RegError REGISTRY_CALLTYPE reg_setUnicodeListValue(RegKeyHandle hKey,
     @param  pValueSize returns the size of the value in bytes
     @return REG_NO_ERROR if succeeds else an error code.
 */
-RegError REGISTRY_CALLTYPE reg_getValueInfo(RegKeyHandle hKey,
+REGISTRY_DLLPUBLIC RegError REGISTRY_CALLTYPE reg_getValueInfo(RegKeyHandle hKey,
                                                rtl_uString* keyName,
                                                RegValueType* pValueType,
                                                sal_uInt32* pValueSize);
@@ -213,7 +214,7 @@ RegError REGISTRY_CALLTYPE reg_getValueInfo(RegKeyHandle hKey,
     @param  pData points to an allocated memory block receiving the data of the value.
     @return REG_NO_ERROR if succeeds else an error code.
 */
-RegError REGISTRY_CALLTYPE reg_getValue(RegKeyHandle hKey,
+REGISTRY_DLLPUBLIC RegError REGISTRY_CALLTYPE reg_getValue(RegKeyHandle hKey,
                                            rtl_uString* keyName,
                                            RegValue pData);
 
@@ -227,7 +228,7 @@ RegError REGISTRY_CALLTYPE reg_getValue(RegKeyHandle hKey,
     @param  pLen returns the length of the value list.
     @return REG_NO_ERROR if succeeds else an error code.
 */
-RegError REGISTRY_CALLTYPE reg_getLongListValue(RegKeyHandle hKey,
+REGISTRY_DLLPUBLIC RegError REGISTRY_CALLTYPE reg_getLongListValue(RegKeyHandle hKey,
                                                       rtl_uString* keyName,
                                                       sal_Int32** pValueList,
                                                       sal_uInt32* pLen);
@@ -242,7 +243,7 @@ RegError REGISTRY_CALLTYPE reg_getLongListValue(RegKeyHandle hKey,
     @param  pLen returns the length of the value list.
     @return REG_NO_ERROR if succeeds else an error code.
 */
-RegError REGISTRY_CALLTYPE reg_getStringListValue(RegKeyHandle hKey,
+REGISTRY_DLLPUBLIC RegError REGISTRY_CALLTYPE reg_getStringListValue(RegKeyHandle hKey,
                                                        rtl_uString* keyName,
                                                        sal_Char*** pValueList,
                                                        sal_uInt32* pLen);
@@ -257,7 +258,7 @@ RegError REGISTRY_CALLTYPE reg_getStringListValue(RegKeyHandle hKey,
     @param  pLen returns the length of the value list.
     @return REG_NO_ERROR if succeeds else an error code.
 */
-RegError REGISTRY_CALLTYPE reg_getUnicodeListValue(RegKeyHandle hKey,
+REGISTRY_DLLPUBLIC RegError REGISTRY_CALLTYPE reg_getUnicodeListValue(RegKeyHandle hKey,
                                                          rtl_uString* keyName,
                                                          sal_Unicode*** pValueList,
                                                          sal_uInt32* pLen);
@@ -270,7 +271,7 @@ RegError REGISTRY_CALLTYPE reg_getUnicodeListValue(RegKeyHandle hKey,
     @param  len specifies the length of the value list.
     @return REG_NO_ERROR if succeeds else an error code.
 */
-RegError REGISTRY_CALLTYPE reg_freeValueList(RegValueType valueType,
+REGISTRY_DLLPUBLIC RegError REGISTRY_CALLTYPE reg_freeValueList(RegValueType valueType,
                                                   RegValue pValueList,
                                                   sal_uInt32 len);
 
@@ -280,7 +281,7 @@ RegError REGISTRY_CALLTYPE reg_freeValueList(RegValueType valueType,
 
     @return REG_INVALID_LINK
 */
-RegError REGISTRY_CALLTYPE reg_createLink(RegKeyHandle hKey,
+REGISTRY_DLLPUBLIC RegError REGISTRY_CALLTYPE reg_createLink(RegKeyHandle hKey,
                                                rtl_uString* linkName,
                                           rtl_uString* linkTarget);
 
@@ -290,7 +291,7 @@ RegError REGISTRY_CALLTYPE reg_createLink(RegKeyHandle hKey,
 
     @return REG_INVALID_LINK
 */
-RegError REGISTRY_CALLTYPE reg_deleteLink(RegKeyHandle hKey,
+REGISTRY_DLLPUBLIC RegError REGISTRY_CALLTYPE reg_deleteLink(RegKeyHandle hKey,
                                             rtl_uString* linkName);
 
 /** This function returns the type of a key.
@@ -303,7 +304,7 @@ RegError REGISTRY_CALLTYPE reg_deleteLink(RegKeyHandle hKey,
     @param  pKeyType returns the type of the key.
     @return REG_NO_ERROR if succeeds else an error code.
 */
-RegError REGISTRY_CALLTYPE reg_getKeyType(RegKeyHandle hKey,
+REGISTRY_DLLPUBLIC RegError REGISTRY_CALLTYPE reg_getKeyType(RegKeyHandle hKey,
                                           rtl_uString* keyName,
                                              RegKeyType* pKeyType);
 
@@ -313,7 +314,7 @@ RegError REGISTRY_CALLTYPE reg_getKeyType(RegKeyHandle hKey,
 
     @return REG_INVALID_LINK
 */
-RegError REGISTRY_CALLTYPE reg_getLinkTarget(RegKeyHandle hKey,
+REGISTRY_DLLPUBLIC RegError REGISTRY_CALLTYPE reg_getLinkTarget(RegKeyHandle hKey,
                                              rtl_uString* linkName,
                                                rtl_uString** pLinkTarget);
 
@@ -327,7 +328,7 @@ RegError REGISTRY_CALLTYPE reg_getLinkTarget(RegKeyHandle hKey,
     @param firstLinkOnly ignored
     @return REG_NO_ERROR if succeeds else an error code.
  */
-RegError REGISTRY_CALLTYPE reg_getResolvedKeyName(RegKeyHandle hKey,
+REGISTRY_DLLPUBLIC RegError REGISTRY_CALLTYPE reg_getResolvedKeyName(RegKeyHandle hKey,
                                                     rtl_uString* keyName,
                                                    sal_Bool firstLinkOnly,
                                                       rtl_uString** pResolvedName);
@@ -344,7 +345,7 @@ RegError REGISTRY_CALLTYPE reg_getResolvedKeyName(RegKeyHandle hKey,
                         registry information.
     @return REG_NO_ERROR if succeeds else an error code.
 */
-RegError REGISTRY_CALLTYPE reg_loadKey(RegKeyHandle hKey,
+REGISTRY_DLLPUBLIC RegError REGISTRY_CALLTYPE reg_loadKey(RegKeyHandle hKey,
                                          rtl_uString* keyName,
                                          rtl_uString* regFileName);
 
@@ -361,7 +362,7 @@ RegError REGISTRY_CALLTYPE reg_loadKey(RegKeyHandle hKey,
                         registry information.
     @return REG_NO_ERROR if succeeds else an error code.
 */
-RegError REGISTRY_CALLTYPE reg_saveKey(RegKeyHandle hKey,
+REGISTRY_DLLPUBLIC RegError REGISTRY_CALLTYPE reg_saveKey(RegKeyHandle hKey,
                                          rtl_uString* keyName,
                                          rtl_uString* regFileName);
 
@@ -381,7 +382,7 @@ RegError REGISTRY_CALLTYPE reg_saveKey(RegKeyHandle hKey,
     @param  bReport if TRUE the function reports warnings on stdout if a key already exists.
     @return REG_NO_ERROR if succeeds else an error code.
 */
-RegError REGISTRY_CALLTYPE reg_mergeKey(RegKeyHandle hKey,
+REGISTRY_DLLPUBLIC RegError REGISTRY_CALLTYPE reg_mergeKey(RegKeyHandle hKey,
                                            rtl_uString* keyName,
                                            rtl_uString* regFileName,
                                            sal_Bool bWarnings,
@@ -394,7 +395,7 @@ RegError REGISTRY_CALLTYPE reg_mergeKey(RegKeyHandle hKey,
     @param  phRegistry points to a handle of the new registry if the function succeeds otherwise NULL.
     @return REG_NO_ERROR if succeeds else an error code.
 */
-RegError REGISTRY_CALLTYPE reg_createRegistry(rtl_uString* registryName,
+REGISTRY_DLLPUBLIC RegError REGISTRY_CALLTYPE reg_createRegistry(rtl_uString* registryName,
                                                RegHandle* phRegistry);
 
 
@@ -404,7 +405,7 @@ RegError REGISTRY_CALLTYPE reg_createRegistry(rtl_uString* registryName,
     @param  phRootKey points to a handle of the open root key if the function succeeds otherwise NULL.
     @return REG_NO_ERROR if succeeds else an error code.
 */
-RegError REGISTRY_CALLTYPE reg_openRootKey(RegHandle hRegistry,
+REGISTRY_DLLPUBLIC RegError REGISTRY_CALLTYPE reg_openRootKey(RegHandle hRegistry,
                                              RegKeyHandle* phRootKey);
 
 
@@ -414,7 +415,7 @@ RegError REGISTRY_CALLTYPE reg_openRootKey(RegHandle hRegistry,
     @param  pName returns the name of the registry if the function succeeds otherwise an empty string.
     @return REG_NO_ERROR if succeeds else an error code.
 */
-RegError REGISTRY_CALLTYPE reg_getName(RegHandle hRegistry, rtl_uString** pName);
+REGISTRY_DLLPUBLIC RegError REGISTRY_CALLTYPE reg_getName(RegHandle hRegistry, rtl_uString** pName);
 
 
 /** This function returns the access mode of the registry.
@@ -422,7 +423,7 @@ RegError REGISTRY_CALLTYPE reg_getName(RegHandle hRegistry, rtl_uString** pName)
     @param  hReg identifies a currently open registry.
     @return TRUE if accessmode is read only else FALSE.
 */
-sal_Bool REGISTRY_CALLTYPE reg_isReadOnly(RegHandle hReg);
+REGISTRY_DLLPUBLIC sal_Bool REGISTRY_CALLTYPE reg_isReadOnly(RegHandle hReg);
 
 
 /** This function opens a registry with the specified name.
@@ -432,7 +433,7 @@ sal_Bool REGISTRY_CALLTYPE reg_isReadOnly(RegHandle hReg);
     @param  accessMode specifies the accessmode of the registry, REG_READONLY or REG_READWRITE.
     @return REG_NO_ERROR if succeeds else an error code.
 */
-RegError REGISTRY_CALLTYPE reg_openRegistry(rtl_uString* registryName,
+REGISTRY_DLLPUBLIC RegError REGISTRY_CALLTYPE reg_openRegistry(rtl_uString* registryName,
                                                RegHandle* phRegistry,
                                                RegAccessMode accessMode);
 
@@ -442,7 +443,7 @@ RegError REGISTRY_CALLTYPE reg_openRegistry(rtl_uString* registryName,
     @param  hRegistry identifies a currently open registry which should be closed.
     @return REG_NO_ERROR if succeeds else an error code.
 */
-RegError REGISTRY_CALLTYPE reg_closeRegistry(RegHandle hRegistry);
+REGISTRY_DLLPUBLIC RegError REGISTRY_CALLTYPE reg_closeRegistry(RegHandle hRegistry);
 
 
 /** This function destroys a registry.
@@ -452,7 +453,7 @@ RegError REGISTRY_CALLTYPE reg_closeRegistry(RegHandle hRegistry);
                          name is NULL the registry itselfs will be destroyed.
     @return REG_NO_ERROR if succeeds else an error code.
 */
-RegError REGISTRY_CALLTYPE reg_destroyRegistry(RegHandle hRegistry,
+REGISTRY_DLLPUBLIC RegError REGISTRY_CALLTYPE reg_destroyRegistry(RegHandle hRegistry,
                                                rtl_uString* registryName);
 
 
@@ -463,7 +464,7 @@ RegError REGISTRY_CALLTYPE reg_destroyRegistry(RegHandle hRegistry,
     @param  hKey identifies a currently open key which content will be reported.
     @return REG_NO_ERROR if succeeds else an error code.
 */
-RegError REGISTRY_CALLTYPE reg_dumpRegistry(RegKeyHandle hKey);
+REGISTRY_DLLPUBLIC RegError REGISTRY_CALLTYPE reg_dumpRegistry(RegKeyHandle hKey);
 
 #ifdef __cplusplus
 }
