@@ -933,7 +933,7 @@ void SwTextShell::InsertSymbol( SfxRequest& rReq )
             aAllSet.Put( SfxStringItem( SID_FONT_NAME, aFont.GetFamilyName() ) );
 
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-        ScopedVclPtr<SfxAbstractDialog> pDlg(pFact->CreateCharMapDialog( GetView().GetWindow(), aAllSet, true ));
+        ScopedVclPtr<SfxAbstractDialog> pDlg(pFact->CreateCharMapDialog(GetView().GetFrameWeld(), aAllSet, true));
         pDlg->Execute();
         return;
     }

@@ -1424,15 +1424,15 @@ IMPL_LINK_NOARG( SmSymbolDialog, SymbolChangeHdl, SmShowSymbolSetWindow&, void )
 
 IMPL_LINK_NOARG(SmSymbolDialog, EditClickHdl, Button*, void)
 {
-    ScopedVclPtrInstance<SmSymDefineDialog> pDialog(this, pFontListDev, rSymbolMgr);
+    SmSymDefineDialog aDialog(GetFrameWeld(), pFontListDev, rSymbolMgr);
 
     // set current symbol and SymbolSet for the new dialog
     const OUString  aSymSetName (m_pSymbolSets->GetSelectedEntry()),
                     aSymName    (m_pSymbolName->GetText());
-    pDialog->SelectOldSymbolSet(aSymSetName);
-    pDialog->SelectOldSymbol(aSymName);
-    pDialog->SelectSymbolSet(aSymSetName);
-    pDialog->SelectSymbol(aSymName);
+    aDialog.SelectOldSymbolSet(aSymSetName);
+    aDialog.SelectOldSymbol(aSymName);
+    aDialog.SelectSymbolSet(aSymSetName);
+    aDialog.SelectSymbol(aSymName);
 
     // remember old SymbolSet
     OUString  aOldSymbolSet (m_pSymbolSets->GetSelectedEntry());
@@ -1440,7 +1440,7 @@ IMPL_LINK_NOARG(SmSymbolDialog, EditClickHdl, Button*, void)
     sal_uInt16 nSymPos = m_pSymbolSetDisplay->GetSelectSymbol();
 
     // adapt dialog to data of the SymbolSet manager, which might have changed
-    if (pDialog->Execute() == RET_OK  &&  rSymbolMgr.IsModified())
+    if (aDialog.execute() == RET_OK  &&  rSymbolMgr.IsModified())
     {
         rSymbolMgr.Save();
         FillSymbolSets();
@@ -1607,22 +1607,49 @@ const SmSym* SmSymbolDialog::GetSymbol() const
     return bValid ? aSymbolSet[ nSymbolNo ] : nullptr;
 }
 
-VCL_BUILDER_FACTORY_CONSTRUCTOR(SmShowChar, 0)
-
-void SmShowChar::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle &rRect)
+IMPL_LINK(SmShowChar, DoResize, const Size&, rSize, void)
 {
-    Control::Paint(rRenderContext, rRect);
+    m_aSize = rSize;
 
-    OUString aText( GetText() );
-    if (!aText.isEmpty())
-    {
-        Size aTextSize(rRenderContext.GetTextWidth(aText), rRenderContext.GetTextHeight());
-
-        rRenderContext.DrawText(Point((GetOutputSize().Width()  - aTextSize.Width())  / 2,
-                                      (GetOutputSize().Height() * 7/10)), aText);
-    }
+    const OUString &rText = GetText();
+    if (rText.isEmpty())
+        return;
+    sal_Int32 nStrIndex = 0;
+    sal_UCS4 cChar = rText.iterateCodePoints(&nStrIndex);
+    SetSymbol(cChar, GetFont()); //force recalculation of size
 }
 
+IMPL_LINK(SmShowChar, DoPaint, weld::DrawingArea::draw_args, aPayload, void)
+{
+    vcl::RenderContext& rRenderContext = aPayload.first;
+
+    Color aTextCol = rRenderContext.GetTextColor();
+    Color aFillCol = rRenderContext.GetFillColor();
+
+    const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
+    const Color aWindowTextColor(rStyleSettings.GetDialogTextColor());
+    const Color aWindowColor(rStyleSettings.GetWindowColor());
+    rRenderContext.SetTextColor(aWindowTextColor);
+    rRenderContext.SetFillColor(aWindowColor);
+
+    rRenderContext.DrawRect(tools::Rectangle(Point(0, 0), m_aSize));
+
+    OUString aText(GetText());
+    if (!aText.isEmpty())
+    {
+        vcl::Font aFont(m_aFont);
+        aFont.SetAlignment(ALIGN_TOP);
+        rRenderContext.SetFont(aFont);
+
+        Size aTextSize(rRenderContext.GetTextWidth(aText), rRenderContext.GetTextHeight());
+
+        rRenderContext.DrawText(Point((m_aSize.Width()  - aTextSize.Width()) / 2,
+                                      (m_aSize.Height() - aTextSize.Height()) / 2), aText);
+    }
+
+    rRenderContext.SetTextColor(aTextCol);
+    rRenderContext.SetFillColor(aFillCol);
+}
 
 void SmShowChar::SetSymbol( const SmSym *pSym )
 {
@@ -1634,191 +1661,168 @@ void SmShowChar::SetSymbol( const SmSym *pSym )
 void SmShowChar::SetSymbol( sal_UCS4 cChar, const vcl::Font &rFont )
 {
     vcl::Font aFont( rFont );
-    aFont.SetFontSize( Size(0, GetOutputSize().Height() - GetOutputSize().Height() / 3) );
+    aFont.SetFontSize(Size(0, m_aSize.Height() - m_aSize.Height() / 3));
     aFont.SetAlignment(ALIGN_BASELINE);
     SetFont(aFont);
-    aFont.SetTransparent(true);
 
     OUString aText(&cChar, 1);
     SetText( aText );
 
-    Invalidate();
+    m_xDrawingArea->queue_draw();
 }
 
-void SmShowChar::Resize()
+void SmSymDefineDialog::FillSymbols(weld::ComboBoxText& rComboBox, bool bDeleteText)
 {
-    Control::Resize();
-    const OUString &rText = GetText();
-    if (rText.isEmpty())
-        return;
-    sal_Int32 nStrIndex = 0;
-    sal_UCS4 cChar = rText.iterateCodePoints(&nStrIndex);
-    SetSymbol(cChar, GetFont()); //force recalculation of size
-}
+    assert((&rComboBox == m_xOldSymbols.get() || &rComboBox == m_xSymbols.get()) && "Sm : wrong ComboBox");
 
-void SmSymDefineDialog::FillSymbols(ComboBox &rComboBox, bool bDeleteText)
-{
-    assert((&rComboBox == pOldSymbols || &rComboBox == pSymbols) && "Sm : wrong ComboBox");
-
-    rComboBox.Clear();
+    rComboBox.clear();
     if (bDeleteText)
-        rComboBox.SetText(OUString());
+        rComboBox.set_entry_text(OUString());
 
-    ComboBox &rBox = &rComboBox == pOldSymbols ? *pOldSymbolSets : *pSymbolSets;
-    SymbolPtrVec_t aSymSet( aSymbolMgrCopy.GetSymbolSet( rBox.GetText() ) );
+    weld::ComboBoxText& rBox = &rComboBox == m_xOldSymbols.get() ? *m_xOldSymbolSets : *m_xSymbolSets;
+    SymbolPtrVec_t aSymSet(m_aSymbolMgrCopy.GetSymbolSet(rBox.get_active_text()));
     for (const SmSym* i : aSymSet)
-        rComboBox.InsertEntry( i->GetName() );
+        rComboBox.append_text(i->GetName());
 }
 
-
-void SmSymDefineDialog::FillSymbolSets(ComboBox &rComboBox, bool bDeleteText)
+void SmSymDefineDialog::FillSymbolSets(weld::ComboBoxText& rComboBox, bool bDeleteText)
 {
-    assert((&rComboBox == pOldSymbolSets || &rComboBox == pSymbolSets) && "Sm : wrong ComboBox");
+    assert((&rComboBox == m_xOldSymbolSets.get() || &rComboBox == m_xSymbolSets.get()) && "Sm : wrong ComboBox");
 
-    rComboBox.Clear();
+    rComboBox.clear();
     if (bDeleteText)
-        rComboBox.SetText(OUString());
+        rComboBox.set_entry_text(OUString());
 
-    const std::set< OUString >  aSymbolSetNames( aSymbolMgrCopy.GetSymbolSetNames() );
+    const std::set< OUString >  aSymbolSetNames( m_aSymbolMgrCopy.GetSymbolSetNames() );
     std::set< OUString >::const_iterator aIt( aSymbolSetNames.begin() );
     for ( ;  aIt != aSymbolSetNames.end();  ++aIt)
-        rComboBox.InsertEntry( *aIt );
+        rComboBox.append_text(*aIt);
 }
-
 
 void SmSymDefineDialog::FillFonts()
 {
-    pFonts->Clear();
-    pFonts->SetNoSelection();
+    m_xFonts->clear();
+    m_xFonts->set_active(-1);
 
     // Include all fonts of FontList into the font list.
     // If there are duplicates, only include one entry of each font since the style will be
     // already selected using the FontStyleBox.
-    if (pFontList)
+    if (m_xFontList)
     {
-        sal_uInt16  nCount = pFontList->GetFontNameCount();
-        for (sal_uInt16 i = 0;  i < nCount;  i++)
-            pFonts->InsertEntry( pFontList->GetFontName(i).GetFamilyName() );
+        sal_uInt16  nCount = m_xFontList->GetFontNameCount();
+        for (sal_uInt16 i = 0; i < nCount; ++i)
+            m_xFonts->append_text(m_xFontList->GetFontName(i).GetFamilyName());
     }
 }
 
-
 void SmSymDefineDialog::FillStyles()
 {
-    pStyles->Clear();
-    pStyles->SetText(OUString());
+    m_xStyles->clear();
+//    pStyles->SetText(OUString());
 
-    OUString aText (pFonts->GetSelectedEntry());
+    OUString aText(m_xFonts->get_active_text());
     if (!aText.isEmpty())
     {
         // use own StyleNames
         const SmFontStyles &rStyles = GetFontStyles();
-        for (sal_uInt16 i = 0;  i < SmFontStyles::GetCount();  i++)
-            pStyles->InsertEntry( rStyles.GetStyleName(i) );
+        for (sal_uInt16 i = 0; i < SmFontStyles::GetCount(); ++i)
+            m_xStyles->append_text(rStyles.GetStyleName(i));
 
-        assert(pStyles->GetEntryCount() > 0 && "Sm : no styles available");
-        pStyles->SetText( pStyles->GetEntry(0) );
+        assert(m_xStyles->get_count() > 0 && "Sm : no styles available");
+        m_xStyles->set_active(0);
     }
 }
 
-
-SmSym * SmSymDefineDialog::GetSymbol(const ComboBox &rComboBox)
+SmSym* SmSymDefineDialog::GetSymbol(const weld::ComboBoxText& rComboBox)
 {
-    assert((&rComboBox == pOldSymbols || &rComboBox == pSymbols) && "Sm : wrong combobox");
-    return aSymbolMgrCopy.GetSymbolByName(rComboBox.GetText());
+    assert((&rComboBox == m_xOldSymbols.get() || &rComboBox == m_xSymbols.get()) && "Sm : wrong combobox");
+    return m_aSymbolMgrCopy.GetSymbolByName(rComboBox.get_active_text());
 }
 
-
-IMPL_LINK( SmSymDefineDialog, OldSymbolChangeHdl, ComboBox&, rComboBox, void )
+IMPL_LINK(SmSymDefineDialog, OldSymbolChangeHdl, weld::ComboBoxText&, rComboBox, void)
 {
     (void) rComboBox;
-    assert(&rComboBox == pOldSymbols && "Sm : wrong argument");
-    SelectSymbol(*pOldSymbols, pOldSymbols->GetText(), false);
+    assert(&rComboBox == m_xOldSymbols.get() && "Sm : wrong argument");
+    SelectSymbol(*m_xOldSymbols, m_xOldSymbols->get_active_text(), false);
 }
 
-
-IMPL_LINK( SmSymDefineDialog, OldSymbolSetChangeHdl, ComboBox&, rComboBox, void )
+IMPL_LINK( SmSymDefineDialog, OldSymbolSetChangeHdl, weld::ComboBoxText&, rComboBox, void )
 {
     (void) rComboBox;
-    assert(&rComboBox == pOldSymbolSets && "Sm : wrong argument");
-    SelectSymbolSet(*pOldSymbolSets, pOldSymbolSets->GetText(), false);
+    assert(&rComboBox == m_xOldSymbolSets.get() && "Sm : wrong argument");
+    SelectSymbolSet(*m_xOldSymbolSets, m_xOldSymbolSets->get_active_text(), false);
 }
 
-
-IMPL_LINK( SmSymDefineDialog, ModifyHdl, Edit&, rEdit, void )
+IMPL_LINK(SmSymDefineDialog, ModifyHdl, weld::ComboBoxText&, rComboBox, void)
 {
-    ComboBox& rComboBox = static_cast<ComboBox&>(rEdit);
     // remember cursor position for later restoring of it
-    Selection  aSelection (rComboBox.GetSelection());
+    int nStartPos, nEndPos;
+    rComboBox.get_entry_selection_bounds(nStartPos, nEndPos);
 
-    if (&rComboBox == pSymbols)
-        SelectSymbol(*pSymbols, pSymbols->GetText(), false);
-    else if (&rComboBox == pSymbolSets)
-        SelectSymbolSet(*pSymbolSets, pSymbolSets->GetText(), false);
-    else if (&rComboBox == pOldSymbols)
+    if (&rComboBox == m_xSymbols.get())
+        SelectSymbol(*m_xSymbols, m_xSymbols->get_active_text(), false);
+    else if (&rComboBox == m_xSymbolSets.get())
+        SelectSymbolSet(*m_xSymbolSets, m_xSymbolSets->get_active_text(), false);
+    else if (&rComboBox == m_xOldSymbols.get())
         // allow only names from the list
-        SelectSymbol(*pOldSymbols, pOldSymbols->GetText(), true);
-    else if (&rComboBox == pOldSymbolSets)
+        SelectSymbol(*m_xOldSymbols, m_xOldSymbols->get_active_text(), true);
+    else if (&rComboBox == m_xOldSymbolSets.get())
         // allow only names from the list
-        SelectSymbolSet(*pOldSymbolSets, pOldSymbolSets->GetText(), true);
-    else if (&rComboBox == pStyles)
+        SelectSymbolSet(*m_xOldSymbolSets, m_xOldSymbolSets->get_active_text(), true);
+    else if (&rComboBox == m_xStyles.get())
         // allow only names from the list (that's the case here anyway)
-        SelectStyle(pStyles->GetText(), true);
+        SelectStyle(m_xStyles->get_active_text(), true);
     else
         SAL_WARN("starmath", "wrong combobox argument");
 
-    rComboBox.SetSelection(aSelection);
+    rComboBox.select_entry_region(nStartPos, nEndPos);
 
     UpdateButtons();
 }
 
-IMPL_LINK( SmSymDefineDialog, FontChangeHdl, ListBox&, rListBox, void )
+IMPL_LINK(SmSymDefineDialog, FontChangeHdl, weld::ComboBoxText&, rListBox, void)
 {
     (void) rListBox;
-    assert(&rListBox == pFonts && "Sm : wrong argument");
+    assert(&rListBox == m_xFonts.get() && "Sm : wrong argument");
 
-    SelectFont(pFonts->GetSelectedEntry());
+    SelectFont(m_xFonts->get_active_text());
 }
 
-
-IMPL_LINK_NOARG( SmSymDefineDialog, SubsetChangeHdl, ListBox&, void )
+IMPL_LINK_NOARG(SmSymDefineDialog, SubsetChangeHdl, weld::ComboBoxText&, void)
 {
-    sal_Int32 nPos = pFontsSubsetLB->GetSelectedEntryPos();
-    if (LISTBOX_ENTRY_NOTFOUND != nPos)
+    int nPos = m_xFontsSubsetLB->get_active();
+    if (nPos != -1)
     {
-        const Subset* pSubset = static_cast<const Subset*> (pFontsSubsetLB->GetEntryData( nPos ));
+        const Subset* pSubset = reinterpret_cast<const Subset*>(m_xFontsSubsetLB->get_active_id().toUInt64());
         if (pSubset)
         {
-            pCharsetDisplay->SelectCharacter( pSubset->GetRangeMin() );
+            m_xCharsetDisplay->SelectCharacter( pSubset->GetRangeMin() );
         }
     }
 }
 
-
-IMPL_LINK( SmSymDefineDialog, StyleChangeHdl, ComboBox&, rComboBox, void )
+IMPL_LINK( SmSymDefineDialog, StyleChangeHdl, weld::ComboBoxText&, rComboBox, void )
 {
     (void) rComboBox;
-    assert(&rComboBox == pStyles && "Sm : wrong argument");
+    assert(&rComboBox == m_xStyles.get() && "Sm : wrong argument");
 
-    SelectStyle(pStyles->GetText());
+    SelectStyle(m_xStyles->get_active_text());
 }
-
 
 IMPL_LINK_NOARG(SmSymDefineDialog, CharHighlightHdl, SvxShowCharSet*, void)
 {
-   sal_UCS4 cChar = pCharsetDisplay->GetSelectCharacter();
+    sal_UCS4 cChar = m_xCharsetDisplay->GetSelectCharacter();
 
-    assert(pSubsetMap && "SubsetMap missing");
-    if (pSubsetMap)
+    if (m_xSubsetMap)
     {
-        const Subset* pSubset = pSubsetMap->GetSubsetByUnicode( cChar );
+        const Subset* pSubset = m_xSubsetMap->GetSubsetByUnicode(cChar);
         if (pSubset)
-            pFontsSubsetLB->SelectEntry( pSubset->GetName() );
+            m_xFontsSubsetLB->set_active(pSubset->GetName());
         else
-            pFontsSubsetLB->SetNoSelection();
+            m_xFontsSubsetLB->set_active(-1);
     }
 
-    pSymbolDisplay->SetSymbol( cChar, pCharsetDisplay->GetFont() );
+    m_xSymbolDisplay->SetSymbol(cChar, m_xCharsetDisplay->GetFont());
 
     UpdateButtons();
 
@@ -1827,311 +1831,260 @@ IMPL_LINK_NOARG(SmSymDefineDialog, CharHighlightHdl, SvxShowCharSet*, void)
     const OUString aPattern( (aHex.getLength() > 4) ? OUString("Ux000000") : OUString("Ux0000") );
     OUString aUnicodePos( aPattern.copy( 0, aPattern.getLength() - aHex.getLength() ) );
     aUnicodePos += aHex;
-    pSymbols->SetText( aUnicodePos );
-    pSymbolName->SetText( aUnicodePos );
+    m_xSymbols->set_entry_text(aUnicodePos);
+    m_xSymbolName->set_label(aUnicodePos);
 }
 
-
-IMPL_LINK( SmSymDefineDialog, AddClickHdl, Button *, pButton, void )
+IMPL_LINK( SmSymDefineDialog, AddClickHdl, weld::Button&, rButton, void )
 {
-    (void) pButton;
-    assert(pButton == pAddBtn && "Sm : wrong argument");
-    assert(pButton->IsEnabled() && "Sm : requirements met ??");
+    (void) rButton;
+    assert(&rButton == m_xAddBtn.get() && "Sm : wrong argument");
+    assert(rButton.get_sensitive() && "Sm : requirements met ??");
 
     // add symbol
-    const SmSym aNewSymbol( pSymbols->GetText(), pCharsetDisplay->GetFont(),
-            pCharsetDisplay->GetSelectCharacter(), pSymbolSets->GetText() );
-    //OSL_ENSURE( aSymbolMgrCopy.GetSymbolByName(aTmpSymbolName) == NULL, "symbol already exists" );
-    aSymbolMgrCopy.AddOrReplaceSymbol( aNewSymbol );
+    const SmSym aNewSymbol(m_xSymbols->get_active_text(), m_xCharsetDisplay->GetFont(),
+            m_xCharsetDisplay->GetSelectCharacter(), m_xSymbolSets->get_active_text());
+    //OSL_ENSURE( m_aSymbolMgrCopy.GetSymbolByName(aTmpSymbolName) == NULL, "symbol already exists" );
+    m_aSymbolMgrCopy.AddOrReplaceSymbol( aNewSymbol );
 
     // update display of new symbol
-    pSymbolDisplay->SetSymbol( &aNewSymbol );
-    pSymbolName->SetText( aNewSymbol.GetName() );
-    pSymbolSetName->SetText( aNewSymbol.GetSymbolSetName() );
+    m_xSymbolDisplay->SetSymbol( &aNewSymbol );
+    m_xSymbolName->set_label(aNewSymbol.GetName());
+    m_xSymbolSetName->set_label(aNewSymbol.GetSymbolSetName());
 
     // update list box entries
-    FillSymbolSets(*pOldSymbolSets, false);
-    FillSymbolSets(*pSymbolSets,    false);
-    FillSymbols(*pOldSymbols ,false);
-    FillSymbols(*pSymbols    ,false);
+    FillSymbolSets(*m_xOldSymbolSets, false);
+    FillSymbolSets(*m_xSymbolSets, false);
+    FillSymbols(*m_xOldSymbols, false);
+    FillSymbols(*m_xSymbols, false);
 
     UpdateButtons();
 }
 
-
-IMPL_LINK( SmSymDefineDialog, ChangeClickHdl, Button *, pButton, void )
+IMPL_LINK( SmSymDefineDialog, ChangeClickHdl, weld::Button&, rButton, void )
 {
-    (void) pButton;
-    assert(pButton == pChangeBtn && "Sm : wrong argument");
-    assert(pChangeBtn->IsEnabled() && "Sm : requirements met ??");
+    (void) rButton;
+    assert(&rButton == m_xChangeBtn.get() && "Sm : wrong argument");
+    assert(m_xChangeBtn->get_sensitive() && "Sm : requirements met ??");
 
     // get new Sybol to use
     //! get font from symbol-disp lay since charset-display does not keep
     //! the bold attribute.
-    const SmSym aNewSymbol( pSymbols->GetText(), pCharsetDisplay->GetFont(),
-            pCharsetDisplay->GetSelectCharacter(), pSymbolSets->GetText() );
+    const SmSym aNewSymbol(m_xSymbols->get_active_text(), m_xCharsetDisplay->GetFont(),
+            m_xCharsetDisplay->GetSelectCharacter(), m_xSymbolSets->get_active_text());
 
     // remove old symbol if the name was changed then add new one
-    const bool bNameChanged       = pOldSymbols->GetText() != pSymbols->GetText();
+    const bool bNameChanged = m_xOldSymbols->get_active_text() != m_xSymbols->get_active_text();
     if (bNameChanged)
-        aSymbolMgrCopy.RemoveSymbol( pOldSymbols->GetText() );
-    aSymbolMgrCopy.AddOrReplaceSymbol( aNewSymbol, true );
+        m_aSymbolMgrCopy.RemoveSymbol(m_xOldSymbols->get_active_text());
+    m_aSymbolMgrCopy.AddOrReplaceSymbol( aNewSymbol, true );
 
     // clear display for original symbol if necessary
     if (bNameChanged)
         SetOrigSymbol(nullptr, OUString());
 
     // update display of new symbol
-    pSymbolDisplay->SetSymbol( &aNewSymbol );
-    pSymbolName->SetText( aNewSymbol.GetName() );
-    pSymbolSetName->SetText( aNewSymbol.GetSymbolSetName() );
+    m_xSymbolDisplay->SetSymbol(&aNewSymbol);
+    m_xSymbolName->set_label(aNewSymbol.GetName());
+    m_xSymbolSetName->set_label(aNewSymbol.GetSymbolSetName());
 
     // update list box entries
-    FillSymbolSets(*pOldSymbolSets, false);
-    FillSymbolSets(*pSymbolSets,    false);
-    FillSymbols(*pOldSymbols ,false);
-    FillSymbols(*pSymbols    ,false);
+    FillSymbolSets(*m_xOldSymbolSets, false);
+    FillSymbolSets(*m_xSymbolSets, false);
+    FillSymbols(*m_xOldSymbols, false);
+    FillSymbols(*m_xSymbols, false);
 
     UpdateButtons();
 }
 
-
-IMPL_LINK( SmSymDefineDialog, DeleteClickHdl, Button *, pButton, void )
+IMPL_LINK(SmSymDefineDialog, DeleteClickHdl, weld::Button&, rButton, void)
 {
-    (void) pButton;
-    assert(pButton == pDeleteBtn && "Sm : wrong argument");
-    assert(pDeleteBtn->IsEnabled() && "Sm : requirements met ??");
+    (void) rButton;
+    assert(&rButton == m_xDeleteBtn.get() && "Sm : wrong argument");
+    assert(m_xDeleteBtn->get_sensitive() && "Sm : requirements met ??");
 
-    if (pOrigSymbol)
+    if (m_xOrigSymbol)
     {
-        aSymbolMgrCopy.RemoveSymbol( pOrigSymbol->GetName() );
+        m_aSymbolMgrCopy.RemoveSymbol(m_xOrigSymbol->GetName());
 
         // clear display for original symbol
         SetOrigSymbol(nullptr, OUString());
 
         // update list box entries
-        FillSymbolSets(*pOldSymbolSets, false);
-        FillSymbolSets(*pSymbolSets,    false);
-        FillSymbols(*pOldSymbols ,false);
-        FillSymbols(*pSymbols    ,false);
+        FillSymbolSets(*m_xOldSymbolSets, false);
+        FillSymbolSets(*m_xSymbolSets,    false);
+        FillSymbols(*m_xOldSymbols ,false);
+        FillSymbols(*m_xSymbols    ,false);
     }
 
     UpdateButtons();
 }
-
 
 void SmSymDefineDialog::UpdateButtons()
 {
     bool  bAdd    = false,
           bChange = false,
           bDelete = false;
-    OUString aTmpSymbolName    (pSymbols->GetText()),
-              aTmpSymbolSetName (pSymbolSets->GetText());
+    OUString aTmpSymbolName(m_xSymbols->get_active_text()),
+             aTmpSymbolSetName(m_xSymbolSets->get_active_text());
 
     if (!aTmpSymbolName.isEmpty() && !aTmpSymbolSetName.isEmpty())
     {
         // are all settings equal?
         //! (Font-, Style- and SymbolSet name comparison is not case sensitive)
-        bool bEqual = pOrigSymbol
-                    && aTmpSymbolSetName.equalsIgnoreAsciiCase(pOldSymbolSetName->GetText())
-                    && aTmpSymbolName == pOrigSymbol->GetName()
-                    && pFonts->GetSelectedEntry().equalsIgnoreAsciiCase(
-                            pOrigSymbol->GetFace().GetFamilyName())
-                    && pStyles->GetText().equalsIgnoreAsciiCase(
-                            GetFontStyles().GetStyleName(pOrigSymbol->GetFace()))
-                    && pCharsetDisplay->GetSelectCharacter() == pOrigSymbol->GetCharacter();
+        bool bEqual = m_xOrigSymbol
+                    && aTmpSymbolSetName.equalsIgnoreAsciiCase(m_xOldSymbolSetName->get_label())
+                    && aTmpSymbolName == m_xOrigSymbol->GetName()
+                    && m_xFonts->get_active_text().equalsIgnoreAsciiCase(
+                            m_xOrigSymbol->GetFace().GetFamilyName())
+                    && m_xStyles->get_active_text().equalsIgnoreAsciiCase(
+                            GetFontStyles().GetStyleName(m_xOrigSymbol->GetFace()))
+                    && m_xCharsetDisplay->GetSelectCharacter() == m_xOrigSymbol->GetCharacter();
 
         // only add it if there isn't already a symbol with the same name
-        bAdd    = aSymbolMgrCopy.GetSymbolByName(aTmpSymbolName) == nullptr;
+        bAdd    = m_aSymbolMgrCopy.GetSymbolByName(aTmpSymbolName) == nullptr;
 
         // only delete it if all settings are equal
-        bDelete = bool(pOrigSymbol);
+        bDelete = bool(m_xOrigSymbol);
 
         // only change it if the old symbol exists and the new one is different
-        bChange = pOrigSymbol && !bEqual;
+        bChange = m_xOrigSymbol && !bEqual;
     }
 
-    pAddBtn   ->Enable(bAdd);
-    pChangeBtn->Enable(bChange);
-    pDeleteBtn->Enable(bDelete);
+    m_xAddBtn->set_sensitive(bAdd);
+    m_xChangeBtn->set_sensitive(bChange);
+    m_xDeleteBtn->set_sensitive(bDelete);
 }
 
-SmSymDefineDialog::SmSymDefineDialog(vcl::Window * pParent,
-        OutputDevice *pFntListDevice, SmSymbolManager &rMgr) :
-    ModalDialog         (pParent, "EditSymbols", "modules/smath/ui/symdefinedialog.ui"),
-    rSymbolMgr          (rMgr),
-    pOrigSymbol         (),
-    pSubsetMap          (),
-    pFontList           (nullptr)
+SmSymDefineDialog::SmSymDefineDialog(weld::Window* pParent, OutputDevice *pFntListDevice, SmSymbolManager &rMgr)
+    : GenericDialogController(pParent, "modules/smath/ui/symdefinedialog.ui", "EditSymbols")
+    , m_xVirDev(VclPtr<VirtualDevice>::Create())
+    , m_rSymbolMgr(rMgr)
+    , m_xFontList(new FontList(pFntListDevice))
+    , m_xOldSymbols(m_xBuilder->weld_combo_box_text("oldSymbols"))
+    , m_xOldSymbolSets(m_xBuilder->weld_combo_box_text("oldSymbolSets"))
+    , m_xSymbols(m_xBuilder->weld_combo_box_text("symbols"))
+    , m_xSymbolSets(m_xBuilder->weld_combo_box_text("symbolSets"))
+    , m_xFonts(m_xBuilder->weld_combo_box_text("fonts"))
+    , m_xFontsSubsetLB(m_xBuilder->weld_combo_box_text("fontsSubsetLB"))
+    , m_xStyles(m_xBuilder->weld_combo_box_text("styles"))
+    , m_xOldSymbolName(m_xBuilder->weld_label("oldSymbolName"))
+    , m_xOldSymbolSetName(m_xBuilder->weld_label("oldSymbolSetName"))
+    , m_xSymbolName(m_xBuilder->weld_label("symbolName"))
+    , m_xSymbolSetName(m_xBuilder->weld_label("symbolSetName"))
+    , m_xAddBtn(m_xBuilder->weld_button("add"))
+    , m_xChangeBtn(m_xBuilder->weld_button("modify"))
+    , m_xDeleteBtn(m_xBuilder->weld_button("delete"))
+    , m_xOldSymbolDisplay(new SmShowChar(m_xBuilder->weld_drawing_area("oldSymbolDisplay")))
+    , m_xSymbolDisplay(new SmShowChar(m_xBuilder->weld_drawing_area("symbolDisplay")))
+    , m_xCharsetDisplay(new SvxShowCharSet(*m_xBuilder, "charsetDisplay", "showscroll", m_xVirDev))
 {
-    get(pOldSymbols, "oldSymbols");
-    get(pOldSymbolSets, "oldSymbolSets");
-    get(pCharsetDisplay, "charsetDisplay");
-    get(pSymbols, "symbols");
-    get(pSymbolSets, "symbolSets");
-    get(pFonts, "fonts");
-    get(pFontsSubsetLB, "fontsSubsetLB");
-    get(pStyles, "styles");
-    get(pOldSymbolName, "oldSymbolName");
-    get(pOldSymbolDisplay, "oldSymbolDisplay");
-    get(pOldSymbolSetName, "oldSymbolSetName");
-    get(pSymbolName, "symbolName");
-    get(pSymbolDisplay, "symbolDisplay");
-    get(pSymbolSetName, "symbolSetName");
-    get(pAddBtn, "add");
-    get(pChangeBtn, "modify");
-    get(pDeleteBtn, "delete");
-
-    pFontList = new FontList( pFntListDevice );
-
     // auto completion is troublesome since that symbols character also gets automatically selected in the
     // display and if the user previously selected a character to define/redefine that one this is bad
-   pOldSymbols->EnableAutocomplete( false, true );
-   pSymbols->EnableAutocomplete( false, true );
+    m_xOldSymbols->unset_entry_completion();
+    m_xSymbols->unset_entry_completion();
 
     FillFonts();
-    if (pFonts->GetEntryCount() > 0)
-        SelectFont(pFonts->GetEntry(0));
+    if (m_xFonts->get_count() > 0)
+        SelectFont(m_xFonts->get_text(0));
 
-    SetSymbolSetManager(rSymbolMgr);
+    SetSymbolSetManager(m_rSymbolMgr);
 
-    pOldSymbols     ->SetSelectHdl(LINK(this, SmSymDefineDialog, OldSymbolChangeHdl));
-    pOldSymbolSets  ->SetSelectHdl(LINK(this, SmSymDefineDialog, OldSymbolSetChangeHdl));
-    pSymbolSets     ->SetModifyHdl(LINK(this, SmSymDefineDialog, ModifyHdl));
-    pOldSymbolSets  ->SetModifyHdl(LINK(this, SmSymDefineDialog, ModifyHdl));
-    pSymbols        ->SetModifyHdl(LINK(this, SmSymDefineDialog, ModifyHdl));
-    pOldSymbols     ->SetModifyHdl(LINK(this, SmSymDefineDialog, ModifyHdl));
-    pStyles         ->SetModifyHdl(LINK(this, SmSymDefineDialog, ModifyHdl));
-    pFonts          ->SetSelectHdl(LINK(this, SmSymDefineDialog, FontChangeHdl));
-    pFontsSubsetLB  ->SetSelectHdl(LINK(this, SmSymDefineDialog, SubsetChangeHdl));
-    pStyles         ->SetSelectHdl(LINK(this, SmSymDefineDialog, StyleChangeHdl));
-    pAddBtn         ->SetClickHdl (LINK(this, SmSymDefineDialog, AddClickHdl));
-    pChangeBtn      ->SetClickHdl (LINK(this, SmSymDefineDialog, ChangeClickHdl));
-    pDeleteBtn      ->SetClickHdl (LINK(this, SmSymDefineDialog, DeleteClickHdl));
-    pCharsetDisplay ->SetHighlightHdl( LINK( this, SmSymDefineDialog, CharHighlightHdl ) );
-
-    // preview like controls should have a 2D look
-    pOldSymbolDisplay->SetBorderStyle( WindowBorderStyle::MONO );
-    pSymbolDisplay   ->SetBorderStyle( WindowBorderStyle::MONO );
+    m_xOldSymbols->connect_changed(LINK(this, SmSymDefineDialog, OldSymbolChangeHdl));
+    m_xOldSymbolSets->connect_changed(LINK(this, SmSymDefineDialog, OldSymbolSetChangeHdl));
+    m_xSymbolSets->connect_changed(LINK(this, SmSymDefineDialog, ModifyHdl));
+    m_xOldSymbolSets->connect_changed(LINK(this, SmSymDefineDialog, ModifyHdl));
+    m_xSymbols->connect_changed(LINK(this, SmSymDefineDialog, ModifyHdl));
+    m_xOldSymbols->connect_changed(LINK(this, SmSymDefineDialog, ModifyHdl));
+    m_xStyles->connect_changed(LINK(this, SmSymDefineDialog, ModifyHdl));
+    m_xFonts->connect_changed(LINK(this, SmSymDefineDialog, FontChangeHdl));
+    m_xFontsSubsetLB->connect_changed(LINK(this, SmSymDefineDialog, SubsetChangeHdl));
+    m_xStyles->connect_changed(LINK(this, SmSymDefineDialog, StyleChangeHdl));
+    m_xAddBtn->connect_clicked(LINK(this, SmSymDefineDialog, AddClickHdl));
+    m_xChangeBtn->connect_clicked(LINK(this, SmSymDefineDialog, ChangeClickHdl));
+    m_xDeleteBtn->connect_clicked(LINK(this, SmSymDefineDialog, DeleteClickHdl));
+    m_xCharsetDisplay->SetHighlightHdl( LINK( this, SmSymDefineDialog, CharHighlightHdl ) );
 }
-
 
 SmSymDefineDialog::~SmSymDefineDialog()
 {
-    disposeOnce();
 }
 
-void SmSymDefineDialog::dispose()
+short SmSymDefineDialog::execute()
 {
-    pSubsetMap.reset();
-    pOrigSymbol.reset();
-    pOldSymbols.clear();
-    pOldSymbolSets.clear();
-    pCharsetDisplay.clear();
-    pSymbols.clear();
-    pSymbolSets.clear();
-    pFonts.clear();
-    pFontsSubsetLB.clear();
-    pStyles.clear();
-    pOldSymbolName.clear();
-    pOldSymbolDisplay.clear();
-    pOldSymbolSetName.clear();
-    pSymbolName.clear();
-    pSymbolDisplay.clear();
-    pSymbolSetName.clear();
-    pAddBtn.clear();
-    pChangeBtn.clear();
-    pDeleteBtn.clear();
-    ModalDialog::dispose();
-}
-
-void SmSymDefineDialog::DataChanged( const DataChangedEvent& rDCEvt )
-{
-    if (rDCEvt.GetType() == DataChangedEventType::SETTINGS  && (rDCEvt.GetFlags() & AllSettingsFlags::STYLE))
-    {
-        Invalidate();
-    }
-    ModalDialog::DataChanged( rDCEvt );
-}
-
-
-short SmSymDefineDialog::Execute()
-{
-    short nResult = ModalDialog::Execute();
+    short nResult = m_xDialog->run();
 
     // apply changes if dialog was closed by clicking OK
-    if (aSymbolMgrCopy.IsModified()  &&  nResult == RET_OK)
-        rSymbolMgr = aSymbolMgrCopy;
+    if (m_aSymbolMgrCopy.IsModified() && nResult == RET_OK)
+        m_rSymbolMgr = m_aSymbolMgrCopy;
 
     return nResult;
 }
 
-
 void SmSymDefineDialog::SetSymbolSetManager(const SmSymbolManager &rMgr)
 {
-    aSymbolMgrCopy = rMgr;
+    m_aSymbolMgrCopy = rMgr;
 
     // Set the modified flag of the copy to false so that
     // we can check later on if anything has been changed
-    aSymbolMgrCopy.SetModified(false);
+    m_aSymbolMgrCopy.SetModified(false);
 
-    FillSymbolSets(*pOldSymbolSets);
-    if (pOldSymbolSets->GetEntryCount() > 0)
-        SelectSymbolSet(pOldSymbolSets->GetEntry(0));
-    FillSymbolSets(*pSymbolSets);
-    if (pSymbolSets->GetEntryCount() > 0)
-        SelectSymbolSet(pSymbolSets->GetEntry(0));
-    FillSymbols(*pOldSymbols);
-    if (pOldSymbols->GetEntryCount() > 0)
-        SelectSymbol(pOldSymbols->GetEntry(0));
-    FillSymbols(*pSymbols);
-    if (pSymbols->GetEntryCount() > 0)
-        SelectSymbol(pSymbols->GetEntry(0));
+    FillSymbolSets(*m_xOldSymbolSets);
+    if (m_xOldSymbolSets->get_count() > 0)
+        SelectSymbolSet(m_xOldSymbolSets->get_text(0));
+    FillSymbolSets(*m_xSymbolSets);
+    if (m_xSymbolSets->get_count() > 0)
+        SelectSymbolSet(m_xSymbolSets->get_text(0));
+    FillSymbols(*m_xOldSymbols);
+    if (m_xOldSymbols->get_count() > 0)
+        SelectSymbol(m_xOldSymbols->get_text(0));
+    FillSymbols(*m_xSymbols);
+    if (m_xSymbols->get_count() > 0)
+        SelectSymbol(m_xSymbols->get_text(0));
 
     UpdateButtons();
 }
 
-
-bool SmSymDefineDialog::SelectSymbolSet(ComboBox &rComboBox,
+bool SmSymDefineDialog::SelectSymbolSet(weld::ComboBoxText& rComboBox,
         const OUString &rSymbolSetName, bool bDeleteText)
 {
-    assert((&rComboBox == pOldSymbolSets || &rComboBox == pSymbolSets) && "Sm : wrong ComboBox");
+    assert((&rComboBox == m_xOldSymbolSets.get() || &rComboBox == m_xSymbolSets.get()) && "Sm : wrong ComboBox");
 
     // trim SymbolName (no leading and trailing blanks)
     OUString  aNormName (rSymbolSetName);
     aNormName = comphelper::string::stripStart(aNormName, ' ');
     aNormName = comphelper::string::stripEnd(aNormName, ' ');
     // and remove possible deviations within the input
-    rComboBox.SetText(aNormName);
+    rComboBox.set_entry_text(aNormName);
 
     bool   bRet = false;
-    sal_Int32 nPos = rComboBox.GetEntryPos(aNormName);
+    int nPos = rComboBox.find_text(aNormName);
 
-    if (nPos != COMBOBOX_ENTRY_NOTFOUND)
+    if (nPos != -1)
     {
-        rComboBox.SetText(rComboBox.GetEntry(nPos));
+        rComboBox.set_active(nPos);
         bRet = true;
     }
     else if (bDeleteText)
-        rComboBox.SetText(OUString());
+        rComboBox.set_entry_text(OUString());
 
-    bool  bIsOld = &rComboBox == pOldSymbolSets;
+    bool  bIsOld = &rComboBox == m_xOldSymbolSets.get();
 
     // setting the SymbolSet name at the associated display
-    FixedText &rFT = bIsOld ? *pOldSymbolSetName : *pSymbolSetName;
-    rFT.SetText(rComboBox.GetText());
+    weld::Label& rFT = bIsOld ? *m_xOldSymbolSetName : *m_xSymbolSetName;
+    rFT.set_label(rComboBox.get_active_text());
 
     // set the symbol name which belongs to the SymbolSet at the associated combobox
-    ComboBox  &rCB = bIsOld ? *pOldSymbols : *pSymbols;
+    weld::ComboBoxText& rCB = bIsOld ? *m_xOldSymbols : *m_xSymbols;
     FillSymbols(rCB, false);
 
     // display a valid respectively no symbol when changing the SymbolSets
     if (bIsOld)
     {
-        OUString  aTmpOldSymbolName;
-        if (pOldSymbols->GetEntryCount() > 0)
-            aTmpOldSymbolName = pOldSymbols->GetEntry(0);
-        SelectSymbol(*pOldSymbols, aTmpOldSymbolName, true);
+        OUString aTmpOldSymbolName;
+        if (m_xOldSymbols->get_count() > 0)
+            aTmpOldSymbolName = m_xOldSymbols->get_text(0);
+        SelectSymbol(*m_xOldSymbols, aTmpOldSymbolName, true);
     }
 
     UpdateButtons();
@@ -2139,56 +2092,55 @@ bool SmSymDefineDialog::SelectSymbolSet(ComboBox &rComboBox,
     return bRet;
 }
 
-
 void SmSymDefineDialog::SetOrigSymbol(const SmSym *pSymbol,
                                       const OUString &rSymbolSetName)
 {
     // clear old symbol
-    pOrigSymbol.reset();
+    m_xOrigSymbol.reset();
 
     OUString   aSymName,
                 aSymSetName;
     if (pSymbol)
     {
         // set new symbol
-        pOrigSymbol.reset(new SmSym( *pSymbol ));
+        m_xOrigSymbol.reset(new SmSym(*pSymbol));
 
         aSymName    = pSymbol->GetName();
         aSymSetName = rSymbolSetName;
-        pOldSymbolDisplay->SetSymbol( pSymbol );
+        m_xOldSymbolDisplay->SetSymbol( pSymbol );
     }
     else
     {   // delete displayed symbols
-        pOldSymbolDisplay->SetText(OUString());
-        pOldSymbolDisplay->Invalidate();
+        m_xOldSymbolDisplay->SetText(OUString());
+        m_xOldSymbolDisplay->queue_draw();
     }
-    pOldSymbolName->SetText(aSymName);
-    pOldSymbolSetName->SetText(aSymSetName);
+    m_xOldSymbolName->set_label(aSymName);
+    m_xOldSymbolSetName->set_label(aSymSetName);
 }
 
 
-bool SmSymDefineDialog::SelectSymbol(ComboBox &rComboBox,
+bool SmSymDefineDialog::SelectSymbol(weld::ComboBoxText& rComboBox,
         const OUString &rSymbolName, bool bDeleteText)
 {
-    assert((&rComboBox == pOldSymbols || &rComboBox == pSymbols) && "Sm : wrong ComboBox");
+    assert((&rComboBox == m_xOldSymbols.get() || &rComboBox == m_xSymbols.get()) && "Sm : wrong ComboBox");
 
     // trim SymbolName (no blanks)
     OUString  aNormName = rSymbolName.replaceAll(" ", "");
     // and remove possible deviations within the input
-    rComboBox.SetText(aNormName);
+    rComboBox.set_entry_text(aNormName);
 
     bool   bRet = false;
-    sal_Int32 nPos = rComboBox.GetEntryPos(aNormName);
+    int nPos = rComboBox.find_text(aNormName);
 
-    bool  bIsOld = &rComboBox == pOldSymbols;
+    bool  bIsOld = &rComboBox == m_xOldSymbols.get();
 
-    if (nPos != COMBOBOX_ENTRY_NOTFOUND)
+    if (nPos != -1)
     {
-        rComboBox.SetText(rComboBox.GetEntry(nPos));
+        rComboBox.set_active(nPos);
 
         if (!bIsOld)
         {
-            const SmSym *pSymbol = GetSymbol(*pSymbols);
+            const SmSym *pSymbol = GetSymbol(*m_xSymbols);
             if (pSymbol)
             {
                 // choose font and style accordingly
@@ -2199,22 +2151,22 @@ bool SmSymDefineDialog::SelectSymbol(ComboBox &rComboBox,
                 // Since setting the Font via the Style name of the SymbolFonts doesn't
                 // work really well (e.g. it can be empty even though the font itself is
                 // bold or italic) we're manually setting the Font with respect to the Symbol
-                pCharsetDisplay->SetFont(rFont);
-                pSymbolDisplay->SetFont(rFont);
+                m_xCharsetDisplay->SetFont(rFont);
+                m_xSymbolDisplay->SetFont(rFont);
 
                 // select associated character
                 SelectChar(pSymbol->GetCharacter());
 
                 // since SelectChar will also set the unicode point as text in the
                 // symbols box, we have to set the symbol name again to get that one displayed
-                pSymbols->SetText( pSymbol->GetName() );
+                m_xSymbols->set_entry_text(pSymbol->GetName());
             }
         }
 
         bRet = true;
     }
     else if (bDeleteText)
-        rComboBox.SetText(OUString());
+        rComboBox.set_entry_text(OUString());
 
     if (bIsOld)
     {
@@ -2223,13 +2175,13 @@ bool SmSymDefineDialog::SelectSymbol(ComboBox &rComboBox,
         OUString     aTmpOldSymbolSetName;
         if (nPos != COMBOBOX_ENTRY_NOTFOUND)
         {
-            pOldSymbol        = aSymbolMgrCopy.GetSymbolByName(aNormName);
-            aTmpOldSymbolSetName = pOldSymbolSets->GetText();
+            pOldSymbol        = m_aSymbolMgrCopy.GetSymbolByName(aNormName);
+            aTmpOldSymbolSetName = m_xOldSymbolSets->get_active_text();
         }
         SetOrigSymbol(pOldSymbol, aTmpOldSymbolSetName);
     }
     else
-        pSymbolName->SetText(rComboBox.GetText());
+        m_xSymbolName->set_label(rComboBox.get_active_text());
 
     UpdateButtons();
 
@@ -2241,54 +2193,52 @@ void SmSymDefineDialog::SetFont(const OUString &rFontName, const OUString &rStyl
 {
     // get Font (FontInfo) matching name and style
     FontMetric aFontMetric;
-    if (pFontList)
-        aFontMetric = pFontList->Get(rFontName, WEIGHT_NORMAL, ITALIC_NONE);
+    if (m_xFontList)
+        aFontMetric = m_xFontList->Get(rFontName, WEIGHT_NORMAL, ITALIC_NONE);
     SetFontStyle(rStyleName, aFontMetric);
 
-    pCharsetDisplay->SetFont(aFontMetric);
-    pSymbolDisplay->SetFont(aFontMetric);
+    m_xCharsetDisplay->SetFont(aFontMetric);
+    m_xSymbolDisplay->SetFont(aFontMetric);
 
     // update subset listbox for new font's unicode subsets
     FontCharMapRef xFontCharMap;
-    pCharsetDisplay->GetFontCharMap( xFontCharMap );
-    pSubsetMap.reset(new SubsetMap( xFontCharMap ));
+    m_xCharsetDisplay->GetFontCharMap( xFontCharMap );
+    m_xSubsetMap.reset(new SubsetMap( xFontCharMap ));
 
-    pFontsSubsetLB->Clear();
+    m_xFontsSubsetLB->clear();
     bool bFirst = true;
-    for (auto & subset : pSubsetMap->GetSubsetMap())
+    for (auto & subset : m_xSubsetMap->GetSubsetMap())
     {
-        const sal_Int32 nPos = pFontsSubsetLB->InsertEntry( subset.GetName());
-        pFontsSubsetLB->SetEntryData( nPos, const_cast<Subset *>(&subset) );
+        m_xFontsSubsetLB->append(OUString::number(reinterpret_cast<sal_uInt64>(&subset)), subset.GetName());
         // subset must live at least as long as the selected font !!!
-        if( bFirst )
-            pFontsSubsetLB->SelectEntryPos( nPos );
+        if (bFirst)
+            m_xFontsSubsetLB->set_active(0);
         bFirst = false;
     }
-    if( bFirst )
-        pFontsSubsetLB->SetNoSelection();
-    pFontsSubsetLB->Enable( !bFirst );
+    if (bFirst)
+        m_xFontsSubsetLB->set_active(-1);
+    m_xFontsSubsetLB->set_sensitive(!bFirst);
 }
-
 
 bool SmSymDefineDialog::SelectFont(const OUString &rFontName, bool bApplyFont)
 {
     bool   bRet = false;
-    sal_Int32 nPos = pFonts->GetEntryPos(rFontName);
+    int nPos = m_xFonts->find_text(rFontName);
 
-    if (nPos != LISTBOX_ENTRY_NOTFOUND)
+    if (nPos != -1)
     {
-        pFonts->SelectEntryPos(nPos);
-        if (pStyles->GetEntryCount() > 0)
-            SelectStyle(pStyles->GetEntry(0));
+        m_xFonts->set_active(nPos);
+        if (m_xStyles->get_count() > 0)
+            SelectStyle(m_xStyles->get_text(0));
         if (bApplyFont)
         {
-            SetFont(pFonts->GetSelectedEntry(), pStyles->GetText());
-            pSymbolDisplay->SetSymbol( pCharsetDisplay->GetSelectCharacter(), pCharsetDisplay->GetFont() );
+            SetFont(m_xFonts->get_active_text(), m_xStyles->get_active_text());
+            m_xSymbolDisplay->SetSymbol(m_xCharsetDisplay->GetSelectCharacter(), m_xCharsetDisplay->GetFont());
         }
         bRet = true;
     }
     else
-        pFonts->SetNoSelection();
+        m_xFonts->set_active(-1);
     FillStyles();
 
     UpdateButtons();
@@ -2300,40 +2250,36 @@ bool SmSymDefineDialog::SelectFont(const OUString &rFontName, bool bApplyFont)
 bool SmSymDefineDialog::SelectStyle(const OUString &rStyleName, bool bApplyFont)
 {
     bool   bRet = false;
-    sal_Int32 nPos = pStyles->GetEntryPos(rStyleName);
+    int nPos = m_xStyles->find_text(rStyleName);
 
     // if the style is not available take the first available one (if existent)
-    if (nPos == COMBOBOX_ENTRY_NOTFOUND  &&  pStyles->GetEntryCount() > 0)
+    if (nPos == -1 && m_xStyles->get_count() > 0)
         nPos = 0;
 
-    if (nPos != COMBOBOX_ENTRY_NOTFOUND)
+    if (nPos != -1)
     {
-        pStyles->SetText(pStyles->GetEntry(nPos));
+        m_xStyles->set_active(nPos);
         if (bApplyFont)
         {
-            SetFont(pFonts->GetSelectedEntry(), pStyles->GetText());
-            pSymbolDisplay->SetSymbol( pCharsetDisplay->GetSelectCharacter(), pCharsetDisplay->GetFont() );
+            SetFont(m_xFonts->get_active_text(), m_xStyles->get_active_text());
+            m_xSymbolDisplay->SetSymbol(m_xCharsetDisplay->GetSelectCharacter(), m_xCharsetDisplay->GetFont());
         }
         bRet = true;
     }
     else
-        pStyles->SetText(OUString());
+        m_xStyles->set_entry_text(OUString());
 
     UpdateButtons();
 
     return bRet;
 }
 
-
 void SmSymDefineDialog::SelectChar(sal_Unicode cChar)
 {
-    pCharsetDisplay->SelectCharacter( cChar );
-    pSymbolDisplay->SetSymbol( cChar, pCharsetDisplay->GetFont() );
+    m_xCharsetDisplay->SelectCharacter( cChar );
+    m_xSymbolDisplay->SetSymbol(cChar, m_xCharsetDisplay->GetFont());
 
     UpdateButtons();
 }
-
-
-/**************************************************************************/
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

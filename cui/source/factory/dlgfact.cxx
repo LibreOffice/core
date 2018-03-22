@@ -149,6 +149,21 @@ short AbstractPasswordToOpenModifyDialog_Impl::Execute()
     return m_xDlg->run();
 }
 
+short AbstractSvxCharacterMapDialog_Impl::Execute()
+{
+    return m_xDlg->run();
+}
+
+const SfxItemSet* AbstractSvxCharacterMapDialog_Impl::GetOutputItemSet() const
+{
+    return m_xDlg->GetOutputItemSet();
+}
+
+void AbstractSvxCharacterMapDialog_Impl::SetText(const OUString& rStr)
+{
+    m_xDlg->set_title(rStr);
+}
+
 IMPL_ABSTDLG_BASE(AbstractScreenshotAnnotationDlg_Impl);
 
 
@@ -1217,12 +1232,9 @@ VclPtr<SfxAbstractTabDialog> AbstractDialogFactory_Impl::CreateSvxLineTabDialog(
     return VclPtr<CuiAbstractTabDialog_Impl>::Create( pDlg );
 }
 
-VclPtr<SfxAbstractDialog> AbstractDialogFactory_Impl::CreateCharMapDialog( vcl::Window* pParent,
-                                                                        const SfxItemSet& rAttr,
-                                                                        bool bInsert )
+VclPtr<SfxAbstractDialog> AbstractDialogFactory_Impl::CreateCharMapDialog(weld::Window* pParent, const SfxItemSet& rAttr, bool bInsert)
 {
-    SfxModalDialog* pDlg = VclPtr<SvxCharacterMap>::Create(pParent, &rAttr, bInsert);
-    return VclPtr<CuiAbstractSfxDialog_Impl>::Create(pDlg);
+    return VclPtr<AbstractSvxCharacterMapDialog_Impl>::Create(new SvxCharacterMap(pParent, &rAttr, bInsert));
 }
 
 VclPtr<SfxAbstractDialog> AbstractDialogFactory_Impl::CreateEventConfigDialog( vcl::Window* pParent,
