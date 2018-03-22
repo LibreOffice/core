@@ -119,12 +119,12 @@ void PPTWriter::exportPPTPre( const std::vector< css::beans::PropertyValue >& rM
     if ( !ImplCreateCurrentUserStream() )
         return;
 
-    mpStrm = mrStg->OpenSotStream( "PowerPoint Document" );
+    mpStrm.reset( mrStg->OpenSotStream( "PowerPoint Document" ) );
     if ( !mpStrm )
         return;
 
     if ( !mpPicStrm )
-        mpPicStrm = mrStg->OpenSotStream( "Pictures" );
+        mpPicStrm.reset( mrStg->OpenSotStream( "Pictures" ) );
 
     for (std::vector< css::beans::PropertyValue >::const_iterator aIter( rMediaData.begin() ), aEnd( rMediaData.end() );
         aIter != aEnd ; ++aIter)
@@ -135,7 +135,7 @@ void PPTWriter::exportPPTPre( const std::vector< css::beans::PropertyValue >& rM
             break;
         }
     }
-    mpPptEscherEx = new PptEscherEx( *mpStrm, maBaseURI );
+    mpPptEscherEx.reset( new PptEscherEx( *mpStrm, maBaseURI ) );
 }
 
 void PPTWriter::exportPPTPost( )
@@ -457,33 +457,27 @@ void PPTWriter::ImplWriteSlideMaster( sal_uInt32 nPageNum, Reference< XPropertyS
 
     if ( aBuExMasterStream.Tell() )
     {
-        ImplProgTagContainer( mpStrm, &aBuExMasterStream );
+        ImplProgTagContainer( mpStrm.get(), &aBuExMasterStream );
     }
     mpPptEscherEx->CloseContainer();    // EPP_MainMaster
 };
 
 PPTWriter::~PPTWriter()
 {
-    delete mpExEmbed;
-    delete mpPptEscherEx;
-    delete mpCurUserStrm;
-    delete mpPicStrm;
-    delete mpStrm;
-
-    std::vector< PPTExStyleSheet* >::iterator aStyleSheetIter( maStyleSheetList.begin() );
-    while( aStyleSheetIter < maStyleSheetList.end() )
-        delete *aStyleSheetIter++;
-
-    for ( std::vector<PPTExOleObjEntry*>::const_iterator it = maExOleObj.begin(); it != maExOleObj.end(); ++it )
-        delete *it;
-
+    mpExEmbed.reset();
+    mpPptEscherEx.reset();
+    mpCurUserStrm.reset();
+    mpPicStrm.reset();
+    mpStrm.reset();
+    maStyleSheetList.clear();
+    maExOleObj.clear();
     if ( mbStatusIndicator )
         mXStatusIndicator->end();
 }
 
 bool PPTWriter::ImplCreateCurrentUserStream()
 {
-    mpCurUserStrm = mrStg->OpenSotStream( "Current User" );
+    mpCurUserStrm.reset( mrStg->OpenSotStream( "Current User" ) );
     if ( !mpCurUserStrm )
         return false;
     char pUserName[] = "Current User";
@@ -1190,7 +1184,7 @@ void PPTWriter::ImplWriteBackground( css::uno::Reference< css::beans::XPropertyS
     // #i121183# Use real PageSize in 100th mm
     ::tools::Rectangle aRect(Point(0, 0), Size(maPageSize.Width, maPageSize.Height));
 
-    EscherPropertyContainer aPropOpt( mpPptEscherEx->GetGraphicProvider(), mpPicStrm, aRect );
+    EscherPropertyContainer aPropOpt( mpPptEscherEx->GetGraphicProvider(), mpPicStrm.get(), aRect );
     aPropOpt.AddOpt( ESCHER_Prop_fillType, ESCHER_FillSolid );
     css::drawing::FillStyle aFS( css::drawing::FillStyle_NONE );
     if ( ImplGetPropertyValue( rXPropSet, "FillStyle" ) )
@@ -1262,9 +1256,9 @@ void PPTWriter::ImplWriteOLE( )
 
     SvxMSExportOLEObjects aOleExport( mnCnvrtFlags );
 
-    for ( std::vector<PPTExOleObjEntry*>::const_iterator it = maExOleObj.begin(); it != maExOleObj.end(); ++it )
+    for ( auto it = maExOleObj.begin(); it != maExOleObj.end(); ++it )
     {
-        PPTExOleObjEntry* pPtr = *it;
+        PPTExOleObjEntry* pPtr = it->get();
         SvMemoryStream* pStrm = nullptr;
         pPtr->nOfsB = mpStrm->Tell();
         switch ( pPtr->eType )
@@ -1386,9 +1380,9 @@ bool PPTWriter::ImplWriteAtomEnding()
         }
     }
     // Ole persists
-    for ( std::vector<PPTExOleObjEntry*>::const_iterator it = maExOleObj.begin(); it != maExOleObj.end(); ++it )
+    for ( auto it = maExOleObj.begin(); it != maExOleObj.end(); ++it )
     {
-        PPTExOleObjEntry* pPtr = *it;
+        PPTExOleObjEntry* pPtr = it->get();
         nOfs = mpPptEscherEx->PtGetOffsetByID( EPP_Persist_ExObj );
         if ( nOfs )
         {

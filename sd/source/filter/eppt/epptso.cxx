@@ -535,8 +535,8 @@ bool PPTWriter::ImplCloseDocument()
         mpStrm->WriteBytes(aTxMasterStyleAtomStrm.GetData(), aTxMasterStyleAtomStrm.Tell());
         maSoundCollection.Write( *mpStrm );
         mpPptEscherEx->WriteDrawingGroupContainer( *mpStrm );
-        ImplMasterSlideListContainer( mpStrm );
-        ImplDocumentListContainer( mpStrm );
+        ImplMasterSlideListContainer( mpStrm.get() );
+        ImplDocumentListContainer( mpStrm.get() );
 
         sal_uInt32 nOldPos = mpPptEscherEx->PtGetOffsetByID( EPP_Persist_CurrentPos );
         if ( nOldPos )
@@ -828,7 +828,7 @@ void PPTWriter::ImplWritePortions( SvStream& rOut, TextObj& rTextObj )
                     case css::drawing::FillStyle_GRADIENT :
                     {
                         ::tools::Rectangle aRect( Point(), Size( 28000, 21000 ) );
-                        EscherPropertyContainer aPropOpt( mpPptEscherEx->GetGraphicProvider(), mpPicStrm, aRect );
+                        EscherPropertyContainer aPropOpt( mpPptEscherEx->GetGraphicProvider(), mpPicStrm.get(), aRect );
                         aPropOpt.CreateGradientProperties( mXPropSet );
                         aPropOpt.GetOpt( ESCHER_Prop_fillColor, nBackgroundColor );
                     }
@@ -850,7 +850,7 @@ void PPTWriter::ImplWritePortions( SvStream& rOut, TextObj& rTextObj )
                             case css::drawing::FillStyle_GRADIENT :
                             {
                                 ::tools::Rectangle aRect( Point(), Size( 28000, 21000 ) );
-                                EscherPropertyContainer aPropOpt( mpPptEscherEx->GetGraphicProvider(), mpPicStrm, aRect );
+                                EscherPropertyContainer aPropOpt( mpPptEscherEx->GetGraphicProvider(), mpPicStrm.get(), aRect );
                                 aPropOpt.CreateGradientProperties( mXBackgroundPropSet );
                                 aPropOpt.GetOpt( ESCHER_Prop_fillColor, nBackgroundColor );
                             }
@@ -1693,7 +1693,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
             const css::awt::Size   aSize100thmm( mXShape->getSize() );
             const css::awt::Point  aPoint100thmm( mXShape->getPosition() );
             ::tools::Rectangle   aRect100thmm( Point( aPoint100thmm.X, aPoint100thmm.Y ), Size( aSize100thmm.Width, aSize100thmm.Height ) );
-            EscherPropertyContainer aPropOpt( mpPptEscherEx->GetGraphicProvider(), mpPicStrm, aRect100thmm );
+            EscherPropertyContainer aPropOpt( mpPptEscherEx->GetGraphicProvider(), mpPicStrm.get(), aRect100thmm );
 
             if ( bGroup )
             {
@@ -1957,10 +1957,10 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                 mpExEmbed->WriteUInt32( EPP_ExControlAtom << 16 )
                            .WriteUInt32( 4 )
                            .WriteUInt32( nPageId );
-                PPTExOleObjEntry* pEntry = new PPTExOleObjEntry( OCX_CONTROL, mpExEmbed->Tell() );
+                std::unique_ptr<PPTExOleObjEntry> pEntry( new PPTExOleObjEntry( OCX_CONTROL, mpExEmbed->Tell() ) );
                 pEntry->xControlModel = aXControlModel;
                 pEntry->xShape = mXShape;
-                maExOleObj.push_back( pEntry );
+                maExOleObj.push_back( std::move(pEntry) );
 
                 mnExEmbed++;
 
@@ -2409,7 +2409,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                                 else
                                     mpStrm->WriteUInt32( EPP_TEXTTYPE_Body );
                                 mnTextSize = aTextObj.Count();
-                                aTextObj.Write( mpStrm );
+                                aTextObj.Write( mpStrm.get() );
                                 mpPptEscherEx->BeginAtom();
                                 for ( sal_uInt32 i = 0; i < aTextObj.ParagraphCount() ; ++i )
                                 {
@@ -2516,9 +2516,9 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                                .WriteUChar( 0 )     // (bool)is object a world table
                                .WriteUChar( 0 );    // pad byte
 
-                    PPTExOleObjEntry* pE = new PPTExOleObjEntry( NORMAL_OLE_OBJECT, mpExEmbed->Tell() );
+                    std::unique_ptr<PPTExOleObjEntry> pE( new PPTExOleObjEntry( NORMAL_OLE_OBJECT, mpExEmbed->Tell() ) );
                     pE->xShape = mXShape;
-                    maExOleObj.push_back( pE );
+                    maExOleObj.push_back( std::move(pE) );
 
                     mnExEmbed++;
 
@@ -3105,8 +3105,8 @@ void PPTWriter::ImplCreateTable( uno::Reference< drawing::XShape > const & rXSha
                 if ( y == nRowCount - 1 && nPosition != maRect.Bottom())
                     maRect.SetBottom( nPosition );
             }
-            std::unique_ptr<ContainerGuard> xSpgrContainer(new ContainerGuard(mpPptEscherEx, ESCHER_SpgrContainer));
-            std::unique_ptr<ContainerGuard> xSpContainer(new ContainerGuard(mpPptEscherEx, ESCHER_SpContainer));
+            std::unique_ptr<ContainerGuard> xSpgrContainer(new ContainerGuard(mpPptEscherEx.get(), ESCHER_SpgrContainer));
+            std::unique_ptr<ContainerGuard> xSpContainer(new ContainerGuard(mpPptEscherEx.get(), ESCHER_SpContainer));
             mpPptEscherEx->AddAtom( 16, ESCHER_Spgr, 1 );
             mpStrm    ->WriteInt32( maRect.Left() ) // Bounding box for the grouped shapes to which they are attached
                        .WriteInt32( maRect.Top() )
@@ -3164,7 +3164,7 @@ void PPTWriter::ImplCreateTable( uno::Reference< drawing::XShape > const & rXSha
                             aAny >>= mbFontIndependentLineSpacing;
 
                         EscherPropertyContainer aPropOptSp;
-                        std::unique_ptr<ContainerGuard> xCellContainer(new ContainerGuard(mpPptEscherEx, ESCHER_SpContainer));
+                        std::unique_ptr<ContainerGuard> xCellContainer(new ContainerGuard(mpPptEscherEx.get(), ESCHER_SpContainer));
                         ImplCreateShape( ESCHER_ShpInst_Rectangle,
                                          ShapeFlag::HaveAnchor | ShapeFlag::HaveShapeProperty | ShapeFlag::Child,
                                          aSolverContainer );
