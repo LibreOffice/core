@@ -292,8 +292,8 @@ class PPTExStyleSheet
 
     public:
 
-                PPTExCharSheet*     mpCharSheet[ PPTEX_STYLESHEETENTRYS ];
-                PPTExParaSheet*     mpParaSheet[ PPTEX_STYLESHEETENTRYS ];
+                std::unique_ptr<PPTExCharSheet>  mpCharSheet[ PPTEX_STYLESHEETENTRYS ];
+                std::unique_ptr<PPTExParaSheet>  mpParaSheet[ PPTEX_STYLESHEETENTRYS ];
 
                 PPTExStyleSheet( sal_uInt16 nDefaultTab, PPTExBulletProvider* pBuProv );
                 ~PPTExStyleSheet();
