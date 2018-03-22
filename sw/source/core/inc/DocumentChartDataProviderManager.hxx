@@ -21,8 +21,8 @@
 #define INCLUDED_SW_SOURCE_CORE_INC_DOCUMENTCHARTDATAPROVIDEMANAGER_HXX
 
 #include <IDocumentChartDataProviderAccess.hxx>
-
 #include <rtl/ref.hxx>
+#include <memory>
 
 namespace com { namespace sun { namespace star { namespace frame {
     class XModel;
@@ -58,8 +58,8 @@ private:
 
     SwDoc& m_rDoc;
 
-    mutable rtl::Reference<SwChartDataProvider> maChartDataProviderImplRef;
-    SwChartLockController_Helper  *mpChartControllerHelper;
+mutable rtl::Reference<SwChartDataProvider> maChartDataProviderImplRef;
+    std::unique_ptr<SwChartLockController_Helper> mpChartControllerHelper;
 };
 
 }
