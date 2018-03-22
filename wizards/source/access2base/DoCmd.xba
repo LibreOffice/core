@@ -365,8 +365,9 @@ Const cstProgressMeterLimit = 100
 								oOutput._EditMode = dbEditNone
 								lInputRecs = lInputRecs + 1
 								If bProgressMeter Then
-									If lInputRecs Mod (lInputMax / 100) = 0 Then _
+									If lInputRecs Mod (lInputMax / 100) = 0 Then
 										Application.SysCmd acSysCmdUpdateMeter, pvNewName &amp; &quot; &quot; &amp; CStr(CLng(lInputRecs * 100 / lInputMax)) &amp; &quot;%&quot;, lInputRecs
+									End If
 								End If
 								.MoveNext
 							Loop
