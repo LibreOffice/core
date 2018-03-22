@@ -19,33 +19,43 @@
 #ifndef INCLUDED_CUI_SOURCE_INC_PASSWDOMDLG_HXX
 #define INCLUDED_CUI_SOURCE_INC_PASSWDOMDLG_HXX
 
-
-#include <sfx2/basedlgs.hxx>
-
+#include <vcl/weld.hxx>
 #include <memory>
 
 
-struct PasswordToOpenModifyDialog_Impl;
-
-class PasswordToOpenModifyDialog : public SfxModalDialog
+class PasswordToOpenModifyDialog : public weld::GenericDialogController
 {
-    std::unique_ptr< PasswordToOpenModifyDialog_Impl >  m_pImpl;
+    std::unique_ptr<weld::Entry> m_xPasswdToOpenED;
+    std::unique_ptr<weld::Entry> m_xReenterPasswdToOpenED;
+    std::unique_ptr<weld::Expander> m_xOptionsExpander;
+    std::unique_ptr<weld::Button> m_xOk;
+    std::unique_ptr<weld::CheckButton> m_xOpenReadonlyCB;
+    std::unique_ptr<weld::Entry> m_xPasswdToModifyED;
+    std::unique_ptr<weld::Entry> m_xReenterPasswdToModifyED;
+
+    OUString                    m_aOneMismatch;
+    OUString                    m_aTwoMismatch;
+    OUString                    m_aInvalidStateForOkButton;
+    OUString                    m_aInvalidStateForOkButton_v2;
+
+    bool                        m_bIsPasswordToModify;
+
+
+    DECL_LINK(OkBtnClickHdl, weld::Button&, void);
 
     PasswordToOpenModifyDialog( const PasswordToOpenModifyDialog & ) = delete;
     PasswordToOpenModifyDialog & operator = ( const PasswordToOpenModifyDialog & ) = delete;
 
 public:
-    PasswordToOpenModifyDialog( vcl::Window * pParent,
+    PasswordToOpenModifyDialog(weld::Window* pParent,
             sal_uInt16 nMaxPasswdLen /* 0 -> no max len enforced */,
             bool bIsPasswordToModify );
-    virtual ~PasswordToOpenModifyDialog() override;
 
     // AbstractPasswordToOpenModifyDialog
     OUString  GetPasswordToOpen() const;
     OUString  GetPasswordToModify() const;
     bool    IsRecommendToOpenReadonly() const;
 };
-
 
 #endif
 
