@@ -175,6 +175,7 @@ public:
     void testDeleteTableRedlines();
     void testXFlatParagraph();
     void testTdf81995();
+    void testForcepoint3();
     void testExportToPicture();
     void testTdf77340();
     void testTdf79236();
@@ -360,6 +361,7 @@ public:
     CPPUNIT_TEST(testDeleteTableRedlines);
     CPPUNIT_TEST(testXFlatParagraph);
     CPPUNIT_TEST(testTdf81995);
+    CPPUNIT_TEST(testForcepoint3);
     CPPUNIT_TEST(testExportToPicture);
     CPPUNIT_TEST(testTdf77340);
     CPPUNIT_TEST(testTdf79236);
@@ -1899,6 +1901,19 @@ void SwUiWriterTest::testTdf81995()
             }
         }
     }
+}
+
+void SwUiWriterTest::testForcepoint3()
+{
+    createDoc("flowframe_null_ptr_deref.sample");
+    uno::Sequence<beans::PropertyValue> aDescriptor( comphelper::InitPropertySequence({
+        { "FilterName", uno::Any(OUString("writer_pdf_Export")) },
+    }));
+    utl::TempFile aTempFile;
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+    // printing asserted in SwFrame::GetNextSctLeaf()
+    xStorable->storeToURL(aTempFile.GetURL(), aDescriptor);
+    aTempFile.EnableKillingFile();
 }
 
 void SwUiWriterTest::testExportToPicture()
