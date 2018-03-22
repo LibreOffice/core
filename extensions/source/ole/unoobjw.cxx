@@ -207,9 +207,11 @@ STDMETHODIMP InterfaceOleWrapper::QueryInterface(REFIID riid, LPVOID FAR * ppv)
         *ppv = static_cast<IDispatch*>(this);
         SAL_INFO("extensions.olebridge", "  " << *ppv);
     }
-    else if (IsEqualIID(riid, IID_IProvideClassInfo) &&
-             m_sImplementationName == "SwVbaApplication")
+    else if (IsEqualIID(riid, IID_IProvideClassInfo))
     {
+        Reference<ooo::vba::XConnectable> xConnectable(m_xOrigin, UNO_QUERY);
+        if (!xConnectable.is())
+            return E_NOINTERFACE;
         AddRef();
         *ppv = static_cast<IProvideClassInfo*>(this);
         SAL_INFO("extensions.olebridge", "  " << *ppv);
