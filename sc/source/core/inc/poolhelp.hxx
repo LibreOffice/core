@@ -38,7 +38,7 @@ private:
     ScDocOptions        aOpt;
     ScDocumentPool*     pDocPool;
     rtl::Reference< ScStyleSheetPool > mxStylePool;
-    mutable SvNumberFormatter*  pFormTable;
+    mutable std::unique_ptr<SvNumberFormatter> pFormTable;
     mutable SfxItemPool*        pEditPool;                      // EditTextObjectPool
     mutable SfxItemPool*        pEnginePool;                    // EditEnginePool
     ScDocument*         m_pSourceDoc;
@@ -59,7 +59,7 @@ public:
 
     void                SetFormTableOpt(const ScDocOptions& rOpt);
 
-    SvNumberFormatter* CreateNumberFormatter() const;
+    std::unique_ptr<SvNumberFormatter> CreateNumberFormatter() const;
 };
 
 #endif
