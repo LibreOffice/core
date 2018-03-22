@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_a9039475",
+        "filename": "sc/uiconfig/scalc/ui/pastespecial.ui",
+        "patchSetId": 2
+      },
+      "lineNbr": 476,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2018-03-22T20:00:07Z",
+      "side": 1,
+      "message": "Shouldn’t these complete sentences end with a period?",
+      "range": {
+        "startLine": 476,
+        "startChar": 167,
+        "endLine": 476,
+        "endChar": 173
+      },
+      "revId": "0c584f10908361737655518f187ba097b6d11aac",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_89d8901f",
+        "filename": "sc/uiconfig/scalc/ui/textimportcsv.ui",
+        "patchSetId": 2
+      },
+      "lineNbr": 567,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2018-03-22T20:00:07Z",
+      "side": 1,
+      "message": "“emty” → “empty”. Not your fault, I see this typo three lines above as well.",
+      "range": {
+        "startLine": 567,
+        "startChar": 100,
+        "endLine": 567,
+        "endChar": 113
+      },
+      "revId": "0c584f10908361737655518f187ba097b6d11aac",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
