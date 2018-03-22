@@ -323,6 +323,16 @@ public:
         m_aFocusOutHdl = rLink;
     }
 
+    virtual void grab_add() override
+    {
+        m_xWidget->CaptureMouse();
+    }
+
+    virtual void grab_remove() override
+    {
+        m_xWidget->ReleaseMouse();
+    }
+
     virtual weld::Container* weld_parent() const override;
 
     virtual ~SalInstanceWidget() override
@@ -356,6 +366,41 @@ IMPL_LINK_NOARG(SalInstanceWidget, FocusOutHdl, Control&, void)
     signal_focus_out();
 }
 
+class SalInstanceMenu : public weld::Menu
+{
+private:
+    VclPtr<PopupMenu> m_xMenu;
+
+    bool m_bTakeOwnership;
+
+public:
+    SalInstanceMenu(PopupMenu* pMenu, bool bTakeOwnership)
+        : m_xMenu(pMenu)
+        , m_bTakeOwnership(bTakeOwnership)
+    {
+    }
+    virtual OString popup_at_rect(weld::Widget* pParent, const tools::Rectangle &rRect) override
+    {
+        SalInstanceWidget* pVclWidget = dynamic_cast<SalInstanceWidget*>(pParent);
+        assert(pVclWidget);
+        m_xMenu->Execute(pVclWidget->getWidget(), rRect, PopupMenuFlags::ExecuteDown);
+        return m_xMenu->GetCurItemIdent();
+    }
+    virtual void set_sensitive(const OString& rIdent, bool bSensitive) override
+    {
+        m_xMenu->EnableItem(rIdent, bSensitive);
+    }
+    virtual void show(const OString& rIdent, bool bShow) override
+    {
+        m_xMenu->ShowItem(m_xMenu->GetItemId(rIdent), bShow);
+    }
+    virtual ~SalInstanceMenu() override
+    {
+        if (m_bTakeOwnership)
+            m_xMenu.disposeAndClear();
+    }
+};
+
 class SalInstanceContainer : public SalInstanceWidget, public virtual weld::Container
 {
 private:
@@ -368,15 +413,15 @@ public:
     }
     virtual void remove(weld::Widget* pWidget) override
     {
-        SalInstanceWidget* pGtkWidget = dynamic_cast<SalInstanceWidget*>(pWidget);
-        assert(pGtkWidget);
-        pGtkWidget->getWidget()->SetParent(nullptr);
+        SalInstanceWidget* pVclWidget = dynamic_cast<SalInstanceWidget*>(pWidget);
+        assert(pVclWidget);
+        pVclWidget->getWidget()->SetParent(nullptr);
     }
     virtual void add(weld::Widget* pWidget) override
     {
-        SalInstanceWidget* pGtkWidget = dynamic_cast<SalInstanceWidget*>(pWidget);
-        assert(pGtkWidget);
-        pGtkWidget->getWidget()->SetParent(m_xContainer);
+        SalInstanceWidget* pVclWidget = dynamic_cast<SalInstanceWidget*>(pWidget);
+        assert(pVclWidget);
+        pVclWidget->getWidget()->SetParent(m_xContainer);
     }
 };
 
@@ -576,6 +621,64 @@ public:
         return m_xFrame->get_label();
     }
 };
+
+class SalInstanceScrolledWindow : public SalInstanceContainer, public virtual weld::ScrolledWindow
+{
+private:
+    VclPtr<VclScrolledWindow> m_xScrolledWindow;
+
+    DECL_LINK(VscrollHdl, ScrollBar*, void);
+
+public:
+    SalInstanceScrolledWindow(VclScrolledWindow* pScrolledWindow, bool bTakeOwnership)
+        : SalInstanceContainer(pScrolledWindow, bTakeOwnership)
+        , m_xScrolledWindow(pScrolledWindow)
+    {
+        ScrollBar& rVertScrollBar = m_xScrolledWindow->getVertScrollBar();
+        rVertScrollBar.SetScrollHdl(LINK(this, SalInstanceScrolledWindow, VscrollHdl));
+    }
+
+    virtual void vadjustment_configure(int value, int lower, int upper,
+                                       int step_increment, int page_increment,
+                                       int page_size) override
+    {
+        ScrollBar& rVertScrollBar = m_xScrolledWindow->getVertScrollBar();
+        rVertScrollBar.SetRangeMin(lower);
+        rVertScrollBar.SetRangeMax(upper);
+        rVertScrollBar.SetLineSize(step_increment);
+        rVertScrollBar.SetPageSize(page_increment);
+        rVertScrollBar.SetThumbPos(value);
+        rVertScrollBar.SetVisibleSize(page_size);
+    }
+
+    virtual int vadjustment_get_value() const override
+    {
+        ScrollBar& rVertScrollBar = m_xScrolledWindow->getVertScrollBar();
+        return rVertScrollBar.GetThumbPos();
+    }
+
+    virtual void vadjustment_set_value(int value) override
+    {
+        ScrollBar& rVertScrollBar = m_xScrolledWindow->getVertScrollBar();
+        rVertScrollBar.SetThumbPos(value);
+    }
+
+    virtual void set_user_managed_scrolling() override
+    {
+        m_xScrolledWindow->setUserManagedScrolling(true);
+    }
+
+    virtual ~SalInstanceScrolledWindow() override
+    {
+        ScrollBar& rVertScrollBar = m_xScrolledWindow->getVertScrollBar();
+        rVertScrollBar.SetScrollHdl(Link<ScrollBar*, void>());
+    }
+};
+
+IMPL_LINK_NOARG(SalInstanceScrolledWindow, VscrollHdl, ScrollBar*, void)
+{
+    signal_vadjustment_changed();
+}
 
 class SalInstanceNotebook : public SalInstanceContainer, public virtual weld::Notebook
 {
@@ -860,6 +963,14 @@ public:
     virtual void select_region(int nStartPos, int nEndPos) override
     {
         m_xEntry->SetSelection(Selection(nStartPos, nEndPos < 0 ? SELECTION_MAX : nEndPos));
+    }
+
+    bool get_selection_bounds(int& rStartPos, int &rEndPos) override
+    {
+        const Selection& rSelection = m_xEntry->GetSelection();
+        rStartPos = rSelection.Min();
+        rEndPos = rSelection.Max();
+        return rSelection.Len();
     }
 
     virtual void set_position(int nCursorPos) override
@@ -1219,21 +1330,27 @@ private:
     typedef std::pair<vcl::RenderContext&, const tools::Rectangle&> target_and_area;
     DECL_LINK(PaintHdl, target_and_area, void);
     DECL_LINK(ResizeHdl, const Size&, void);
-    DECL_LINK(MousePressHdl, const Point&, void);
-    DECL_LINK(MouseMoveHdl, const Point&, void);
-    DECL_LINK(MouseReleaseHdl, const Point&, void);
+    DECL_LINK(MousePressHdl, const MouseEvent&, void);
+    DECL_LINK(MouseMoveHdl, const MouseEvent&, void);
+    DECL_LINK(MouseReleaseHdl, const MouseEvent&, void);
+    DECL_LINK(KeyPressHdl, const KeyEvent&, bool);
+    DECL_LINK(KeyReleaseHdl, const KeyEvent&, bool);
 
 public:
-    SalInstanceDrawingArea(VclDrawingArea* pDrawingArea, const a11yref& rAlly, bool bTakeOwnership)
+    SalInstanceDrawingArea(VclDrawingArea* pDrawingArea, const a11yref& rAlly,
+            FactoryFunction pUITestFactoryFunction, void* pUserData, bool bTakeOwnership)
         : SalInstanceWidget(pDrawingArea, bTakeOwnership)
         , m_xDrawingArea(pDrawingArea)
     {
         m_xDrawingArea->SetAccessible(rAlly);
+        m_xDrawingArea->SetUITestFactory(pUITestFactoryFunction, pUserData);
         m_xDrawingArea->SetPaintHdl(LINK(this, SalInstanceDrawingArea, PaintHdl));
         m_xDrawingArea->SetResizeHdl(LINK(this, SalInstanceDrawingArea, ResizeHdl));
         m_xDrawingArea->SetMousePressHdl(LINK(this, SalInstanceDrawingArea, MousePressHdl));
         m_xDrawingArea->SetMouseMoveHdl(LINK(this, SalInstanceDrawingArea, MouseMoveHdl));
         m_xDrawingArea->SetMouseReleaseHdl(LINK(this, SalInstanceDrawingArea, MouseReleaseHdl));
+        m_xDrawingArea->SetKeyPressHdl(LINK(this, SalInstanceDrawingArea, KeyPressHdl));
+        m_xDrawingArea->SetKeyReleaseHdl(LINK(this, SalInstanceDrawingArea, KeyReleaseHdl));
     }
 
     virtual void queue_draw() override
@@ -1246,8 +1363,21 @@ public:
         m_xDrawingArea->Invalidate(tools::Rectangle(Point(x, y), Size(width, height)));
     }
 
+    virtual a11yref get_accessible_parent() override
+    {
+        vcl::Window* pParent = m_xDrawingArea->GetParent();
+        if (pParent)
+            return pParent->GetAccessible();
+        return css::uno::Reference<css::accessibility::XAccessible>();
+    }
+
     virtual ~SalInstanceDrawingArea() override
     {
+        m_xDrawingArea->SetMousePressHdl(Link<const MouseEvent&, void>());
+        m_xDrawingArea->SetMouseMoveHdl(Link<const MouseEvent&, void>());
+        m_xDrawingArea->SetMouseReleaseHdl(Link<const MouseEvent&, void>());
+        m_xDrawingArea->SetKeyPressHdl(Link<const KeyEvent&, bool>());
+        m_xDrawingArea->SetKeyReleaseHdl(Link<const KeyEvent&, bool>());
         m_xDrawingArea->SetResizeHdl(Link<const Size&, void>());
         m_xDrawingArea->SetPaintHdl(Link<std::pair<vcl::RenderContext&, const tools::Rectangle&>, void>());
     }
@@ -1263,19 +1393,29 @@ IMPL_LINK(SalInstanceDrawingArea, ResizeHdl, const Size&, rSize, void)
     m_aSizeAllocateHdl.Call(rSize);
 }
 
-IMPL_LINK(SalInstanceDrawingArea, MousePressHdl, const Point&, rPos, void)
+IMPL_LINK(SalInstanceDrawingArea, MousePressHdl, const MouseEvent&, rEvent, void)
 {
-    m_aMousePressHdl.Call(rPos);
+    m_aMousePressHdl.Call(rEvent);
 }
 
-IMPL_LINK(SalInstanceDrawingArea, MouseMoveHdl, const Point&, rPos, void)
+IMPL_LINK(SalInstanceDrawingArea, MouseMoveHdl, const MouseEvent&, rEvent, void)
 {
-    m_aMouseMotionHdl.Call(rPos);
+    m_aMouseMotionHdl.Call(rEvent);
 }
 
-IMPL_LINK(SalInstanceDrawingArea, MouseReleaseHdl, const Point&, rPos, void)
+IMPL_LINK(SalInstanceDrawingArea, MouseReleaseHdl, const MouseEvent&, rEvent, void)
 {
-    m_aMouseReleaseHdl.Call(rPos);
+    m_aMouseReleaseHdl.Call(rEvent);
+}
+
+IMPL_LINK(SalInstanceDrawingArea, KeyPressHdl, const KeyEvent&, rEvent, bool)
+{
+    return m_aKeyPressHdl.Call(rEvent);
+}
+
+IMPL_LINK(SalInstanceDrawingArea, KeyReleaseHdl, const KeyEvent&, rEvent, bool)
+{
+    return m_aKeyReleaseHdl.Call(rEvent);
 }
 
 //ComboBox and ListBox have similar apis, ComboBoxes in LibreOffice have an edit box and ListBoxes
@@ -1429,6 +1569,27 @@ public:
         assert(false);
     }
 
+    virtual void set_entry_text(const OUString& /*rText*/) override
+    {
+        assert(false);
+    }
+
+    virtual void select_entry_region(int /*nStartPos*/, int /*nEndPos*/) override
+    {
+        assert(false);
+    }
+
+    virtual bool get_entry_selection_bounds(int& /*rStartPos*/, int& /*rEndPos*/) override
+    {
+        assert(false);
+        return false;
+    }
+
+    virtual void unset_entry_completion() override
+    {
+        assert(false);
+    }
+
     virtual ~SalInstanceComboBoxTextWithoutEdit() override
     {
         m_xComboBoxText->SetSelectHdl(Link<ListBox&, void>());
@@ -1457,6 +1618,29 @@ public:
             m_xComboBoxText->SetControlForeground(Color(0xf0, 0, 0));
         else
             m_xComboBoxText->SetControlForeground();
+    }
+
+    virtual void set_entry_text(const OUString& rText) override
+    {
+        m_xComboBoxText->SetText(rText);
+    }
+
+    virtual void unset_entry_completion() override
+    {
+        m_xComboBoxText->EnableAutocomplete(false);
+    }
+
+    virtual void select_entry_region(int nStartPos, int nEndPos) override
+    {
+        m_xComboBoxText->SetSelection(Selection(nStartPos, nEndPos < 0 ? SELECTION_MAX : nEndPos));
+    }
+
+    virtual bool get_entry_selection_bounds(int& rStartPos, int& rEndPos) override
+    {
+        const Selection& rSelection = m_xComboBoxText->GetSelection();
+        rStartPos = rSelection.Min();
+        rEndPos = rSelection.Max();
+        return rSelection.Len();
     }
 
     virtual ~SalInstanceComboBoxTextWithEdit() override
@@ -1532,6 +1716,12 @@ public:
         return pFrame ? new SalInstanceFrame(pFrame, bTakeOwnership) : nullptr;
     }
 
+    virtual weld::ScrolledWindow* weld_scrolled_window(const OString &id, bool bTakeOwnership) override
+    {
+        VclScrolledWindow* pScrolledWindow = m_xBuilder->get<VclScrolledWindow>(id);
+        return pScrolledWindow ? new SalInstanceScrolledWindow(pScrolledWindow, bTakeOwnership) : nullptr;
+    }
+
     virtual weld::Notebook* weld_notebook(const OString &id, bool bTakeOwnership) override
     {
         TabControl* pNotebook = m_xBuilder->get<TabControl>(id);
@@ -1602,10 +1792,18 @@ public:
         return pExpander ? new SalInstanceExpander(pExpander, bTakeOwnership) : nullptr;
     }
 
-    virtual weld::DrawingArea* weld_drawing_area(const OString &id, const a11yref& rA11yImpl, bool bTakeOwnership) override
+    virtual weld::DrawingArea* weld_drawing_area(const OString &id, const a11yref& rA11yImpl,
+            FactoryFunction pUITestFactoryFunction, void* pUserData, bool bTakeOwnership) override
     {
         VclDrawingArea* pDrawingArea = m_xBuilder->get<VclDrawingArea>(id);
-        return pDrawingArea ? new SalInstanceDrawingArea(pDrawingArea, rA11yImpl, bTakeOwnership) : nullptr;
+        return pDrawingArea ? new SalInstanceDrawingArea(pDrawingArea, rA11yImpl,
+                pUITestFactoryFunction, pUserData, bTakeOwnership) : nullptr;
+    }
+
+    virtual weld::Menu* weld_menu(const OString &id, bool bTakeOwnership) override
+    {
+        PopupMenu* pMenu = m_xBuilder->get_menu(id);
+        return pMenu ? new SalInstanceMenu(pMenu, bTakeOwnership) : nullptr;
     }
 
     virtual ~SalInstanceBuilder() override

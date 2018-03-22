@@ -17,11 +17,10 @@ class SvxShowCharSet;
 
 class SvxShowCharSetUIObject : public WindowUIObject
 {
-    VclPtr<SvxShowCharSet> mxCharSet;
+    SvxShowCharSet* mpCharSet;
 
 public:
-
-    SvxShowCharSetUIObject(const VclPtr<SvxShowCharSet>& xCharSet);
+    SvxShowCharSetUIObject(const VclPtr<vcl::Window>& xCharSetWin, SvxShowCharSet* pCharSet);
 
     virtual StringMap get_state() override;
 

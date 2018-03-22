@@ -39,8 +39,8 @@
 #include <com/sun/star/accessibility/AccessibleEventObject.hpp>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
-#include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
 #include <com/sun/star/datatransfer/clipboard/XFlushableClipboard.hpp>
+#include <com/sun/star/datatransfer/clipboard/SystemClipboard.hpp>
 #include <officecfg/Office/Common.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/dispatchcommand.hxx>
@@ -61,21 +61,34 @@ sal_uInt32& SvxShowCharSet::getSelectedChar()
     return cSelectedChar;
 }
 
-SvxShowCharSet::SvxShowCharSet(vcl::Window* pParent)
-    : Control(pParent, WB_TABSTOP | WB_BORDER)
+SvxShowCharSet::SvxShowCharSet(weld::Builder& rBuilder, const OString& rDrawingId,
+                               const OString& rScrollId, const VclPtr<VirtualDevice>& rVirDev)
+    : mxVirDev(rVirDev)
     , mxContext(comphelper::getProcessComponentContext())
     , maFontSize(0, 0)
     , maPosition(0,0)
-    , aVscrollSB( VclPtr<ScrollBar>::Create(this, WB_VERT) )
     , mbRecalculateFont(true)
     , mbUpdateForeground(true)
     , mbUpdateBackground(true)
 {
-    init();
-}
+    mxDrawingArea.reset(rBuilder.weld_drawing_area(rDrawingId, CreateAccessible(), SvxShowCharSetUIObject::create, this));
+    mxScrollArea.reset(rBuilder.weld_scrolled_window(rScrollId));
 
-void SvxShowCharSet::ApplySettings(vcl::RenderContext& /*rRenderContext*/ )
-{
+    init();
+
+    mxScrollArea->set_user_managed_scrolling();
+
+    mxDrawingArea->connect_size_allocate(LINK(this, SvxShowCharSet, DoResize));
+    mxDrawingArea->connect_draw(LINK(this, SvxShowCharSet, DoPaint));
+    mxDrawingArea->connect_mouse_press(LINK(this, SvxShowCharSet, DoMouseButtonDown));
+    mxDrawingArea->connect_mouse_move(LINK(this, SvxShowCharSet, DoMouseMove));
+    mxDrawingArea->connect_mouse_release(LINK(this, SvxShowCharSet, DoMouseButtonUp));
+    mxDrawingArea->connect_key_press(LINK(this, SvxShowCharSet, DoKeyDown));
+    mxDrawingArea->connect_focus_in(LINK(this, SvxShowCharSet, DoGetFocus));
+    mxDrawingArea->connect_focus_out(LINK(this, SvxShowCharSet, DoLoseFocus));
+
+    mxScrollArea->set_size_request(COLUMN_COUNT * mxDrawingArea->get_approximate_digit_width() * 4,
+                                   ROW_COUNT * mxDrawingArea->get_text_height() * 2);
 }
 
 void SvxShowCharSet::init()
@@ -84,76 +97,39 @@ void SvxShowCharSet::init()
     m_nXGap = 0;
     m_nYGap = 0;
 
-    SetStyle(GetStyle() | WB_CLIPCHILDREN);
-    aVscrollSB->SetScrollHdl( LINK( this, SvxShowCharSet, VscrollHdl ) );
-    aVscrollSB->EnableDrag();
+    mxScrollArea->connect_vadjustment_changed(LINK(this, SvxShowCharSet, VscrollHdl));
     getFavCharacterList();
-    // other settings like aVscroll depend on selected font => see RecalculateFont
+    // other settings depend on selected font => see RecalculateFont
 
     bDrag = false;
 }
 
-void SvxShowCharSet::Resize()
+IMPL_LINK(SvxShowCharSet, DoResize, const Size&, rSize, void)
 {
-    Control::Resize();
+    maSize = rSize;
     mbRecalculateFont = true;
-    Invalidate();
+    mxDrawingArea->queue_draw();
 }
 
-VCL_BUILDER_FACTORY(SvxShowCharSet)
-
-void SvxShowCharSet::GetFocus()
+IMPL_LINK_NOARG(SvxShowCharSet, DoGetFocus, weld::Widget&, void)
 {
-    Control::GetFocus();
-    SelectIndex( nSelectedIndex, true );
+    SelectIndex(nSelectedIndex, true);
 }
 
-
-void SvxShowCharSet::LoseFocus()
+IMPL_LINK_NOARG(SvxShowCharSet, DoLoseFocus, weld::Widget&, void)
 {
-    Control::LoseFocus();
-    SelectIndex( nSelectedIndex );
+    SelectIndex(nSelectedIndex);
 }
 
-
-void SvxShowCharSet::StateChanged(StateChangedType nType)
-{
-    if (nType == StateChangedType::ControlForeground)
-        mbUpdateForeground = true;
-    else if (nType == StateChangedType::ControlBackground)
-        mbUpdateBackground = true;
-
-    Invalidate();
-
-    Control::StateChanged( nType );
-
-}
-
-
-void SvxShowCharSet::DataChanged( const DataChangedEvent& rDCEvt )
-{
-    if ((rDCEvt.GetType() == DataChangedEventType::SETTINGS)
-     && (rDCEvt.GetFlags() & AllSettingsFlags::STYLE))
-    {
-        mbUpdateForeground = true;
-        mbUpdateBackground = true;
-    }
-    else
-    {
-        Control::DataChanged(rDCEvt);
-    }
-}
-
-
-void SvxShowCharSet::MouseButtonDown( const MouseEvent& rMEvt )
+IMPL_LINK(SvxShowCharSet, DoMouseButtonDown, const MouseEvent&, rMEvt, void)
 {
     if ( rMEvt.IsLeft() )
     {
         if ( rMEvt.GetClicks() == 1 )
         {
-            GrabFocus();
+            mxDrawingArea->grab_focus();
             bDrag = true;
-            CaptureMouse();
+            mxDrawingArea->grab_add();
 
             int nIndex = PixelToMapIndex( rMEvt.GetPosPixel() );
             // Fire the focus event
@@ -175,26 +151,24 @@ void SvxShowCharSet::MouseButtonDown( const MouseEvent& rMEvt )
     }
 }
 
-
-void SvxShowCharSet::MouseButtonUp( const MouseEvent& rMEvt )
+IMPL_LINK(SvxShowCharSet, DoMouseButtonUp, const MouseEvent&, rMEvt, void)
 {
     if ( bDrag && rMEvt.IsLeft() )
     {
         // released mouse over character map
-        if ( tools::Rectangle(Point(), GetOutputSize()).IsInside(rMEvt.GetPosPixel()))
+        if ( tools::Rectangle(Point(), maSize).IsInside(rMEvt.GetPosPixel()))
             aSelectHdl.Call( this );
-        ReleaseMouse();
+        mxDrawingArea->grab_remove();
         bDrag = false;
     }
 }
 
-
-void SvxShowCharSet::MouseMove( const MouseEvent& rMEvt )
+IMPL_LINK(SvxShowCharSet, DoMouseMove, const MouseEvent&, rMEvt, void)
 {
     if ( rMEvt.IsLeft() && bDrag )
     {
         Point aPos  = rMEvt.GetPosPixel();
-        Size  aSize = GetSizePixel();
+        Size  aSize = maSize;
 
         if ( aPos.X() < 0 )
             aPos.setX( 0 );
@@ -210,14 +184,6 @@ void SvxShowCharSet::MouseMove( const MouseEvent& rMEvt )
         SelectIndex( nIndex, true );
     }
 }
-
-
-void SvxShowCharSet::Command( const CommandEvent& rCEvt )
-{
-    if( !HandleScrollCommand( rCEvt, nullptr, aVscrollSB.get() ) )
-        Control::Command( rCEvt );
-}
-
 
 sal_uInt16 SvxShowCharSet::GetRowPos(sal_uInt16 _nPos)
 {
@@ -262,64 +228,51 @@ bool SvxShowCharSet::isFavChar(const OUString& sTitle, const OUString& rFont)
 
 void SvxShowCharSet::createContextMenu()
 {
-    ScopedVclPtrInstance<PopupMenu> pItemMenu;
-    pItemMenu->InsertItem(0,SvxResId(RID_INSERT));
+    std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(mxDrawingArea.get(), "svx/ui/charsetmenu.ui"));
+    std::unique_ptr<weld::Menu> xItemMenu(xBuilder->weld_menu("charsetmenu"));
+
     sal_UCS4 cChar = GetSelectCharacter();
     OUString aOUStr( &cChar, 1 );
-    if(!isFavChar(aOUStr, GetFont().GetFamilyName()))
-    {
-        if(maFavCharList.size() < 16)
-            pItemMenu->InsertItem(1,SvxResId(RID_ADD_TO_FAVORITES));
-    }
+    if (isFavChar(aOUStr, mxVirDev->GetFont().GetFamilyName()) || maFavCharList.size() >= 16)
+        xItemMenu->show("add", false);
     else
-        pItemMenu->InsertItem(1,SvxResId(RID_REMOVE_FAVORITES));
+        xItemMenu->show("remove", false);
 
-    pItemMenu->InsertItem(2, SvxResId(RID_COPY_CLIPBOARD ));
-    pItemMenu->SetSelectHdl(LINK(this, SvxShowCharSet, ContextMenuSelectHdl));
-    pItemMenu->Execute(this, tools::Rectangle(maPosition,Size(1,1)), PopupMenuFlags::ExecuteDown);
-    GrabFocus();
-    Invalidate();
+    ContextMenuSelect(xItemMenu->popup_at_rect(mxDrawingArea.get(), tools::Rectangle(maPosition, Size(1,1))));
+    mxDrawingArea->grab_focus();
+    mxDrawingArea->queue_draw();
 }
 
-
-IMPL_LINK(SvxShowCharSet, ContextMenuSelectHdl, Menu*, pMenu, bool)
+void SvxShowCharSet::ContextMenuSelect(const OString& rIdent)
 {
-    sal_uInt16 nMenuId = pMenu->GetCurItemId();
     sal_UCS4 cChar = GetSelectCharacter();
-    OUString aOUStr( &cChar, 1 );
+    OUString aOUStr(&cChar, 1);
 
-    switch(nMenuId)
-    {
-    case 0:
+    if (rIdent == "insert")
         aDoubleClkHdl.Call(this);
-        break;
-    case 1:
-        updateFavCharacterList(aOUStr, GetFont().GetFamilyName());
+    else if (rIdent == "add" || rIdent == "remove")
+    {
+        updateFavCharacterList(aOUStr, mxVirDev->GetFont().GetFamilyName());
         aFavClickHdl.Call(this);
-        break;
-    case 2:
-        CopyToClipboard(aOUStr);
-        break;
-    default:
-        break;
     }
-    return false;
+    else if (rIdent == "copy")
+        CopyToClipboard(aOUStr);
 }
 
-
-void SvxShowCharSet::CopyToClipboard(const OUString& aOUStr)
+void SvxShowCharSet::CopyToClipboard(const OUString& rOUStr)
 {
-    css::uno::Reference<css::datatransfer::clipboard::XClipboard> rxClipboard(GetClipboard());
+    css::uno::Reference<css::datatransfer::clipboard::XClipboard> xClipboard =
+        css::datatransfer::clipboard::SystemClipboard::create(comphelper::getProcessComponentContext());
 
-    if ( rxClipboard.is() )
+    if (xClipboard.is())
     {
-        TETextDataObject* pDataObj = new TETextDataObject( aOUStr );
+        TETextDataObject* pDataObj = new TETextDataObject(rOUStr);
 
         try
         {
-            rxClipboard->setContents( pDataObj, nullptr );
+            xClipboard->setContents( pDataObj, nullptr );
 
-            css::uno::Reference< css::datatransfer::clipboard::XFlushableClipboard > xFlushableClipboard( rxClipboard, css::uno::UNO_QUERY );
+            css::uno::Reference<css::datatransfer::clipboard::XFlushableClipboard> xFlushableClipboard(xClipboard, css::uno::UNO_QUERY);
             if( xFlushableClipboard.is() )
                 xFlushableClipboard->flushClipboard();
         }
@@ -328,7 +281,6 @@ void SvxShowCharSet::CopyToClipboard(const OUString& aOUStr)
         }
     }
 }
-
 
 void SvxShowCharSet::updateFavCharacterList(const OUString& sTitle, const OUString& rFont)
 {
@@ -404,21 +356,15 @@ void SvxShowCharSet::updateFavCharacterList(const OUString& sTitle, const OUStri
     batch->commit();
 }
 
-
 sal_uInt16 SvxShowCharSet::GetColumnPos(sal_uInt16 _nPos)
 {
     return _nPos % COLUMN_COUNT ;
 }
 
-
 int SvxShowCharSet::FirstInView() const
 {
-    int nIndex = 0;
-    if (aVscrollSB->IsVisible())
-        nIndex += aVscrollSB->GetThumbPos() * COLUMN_COUNT;
-    return nIndex;
+    return mxScrollArea->vadjustment_get_value() * COLUMN_COUNT;
 }
-
 
 int SvxShowCharSet::LastInView() const
 {
@@ -429,7 +375,6 @@ int SvxShowCharSet::LastInView() const
         nIndex = nCompare;
     return nIndex;
 }
-
 
 Point SvxShowCharSet::MapIndexToPixel( int nIndex ) const
 {
@@ -446,16 +391,14 @@ int SvxShowCharSet::PixelToMapIndex( const Point& point) const
     return (nBase + ((point.X() - m_nXGap)/nX) + ((point.Y() - m_nYGap)/nY) * COLUMN_COUNT);
 }
 
-
-void SvxShowCharSet::KeyInput(const KeyEvent& rKEvt)
+IMPL_LINK(SvxShowCharSet, DoKeyDown, const KeyEvent&, rKEvt, bool)
 {
     vcl::KeyCode aCode = rKEvt.GetKeyCode();
 
     if (aCode.GetModifier())
-    {
-        Control::KeyInput(rKEvt);
-        return;
-    }
+        return false;
+
+    bool bRet = true;
 
     int tmpSelected = nSelectedIndex;
 
@@ -491,20 +434,21 @@ void SvxShowCharSet::KeyInput(const KeyEvent& rKEvt)
         case KEY_TAB:   // some fonts have a character at these unicode control codes
         case KEY_ESCAPE:
         case KEY_RETURN:
-            Control::KeyInput(rKEvt);
             tmpSelected = - 1;  // mark as invalid
+            bRet = false;
             break;
         default:
+        {
+            sal_UCS4 cChar = rKEvt.GetCharCode();
+            sal_UCS4 cNext = mxFontCharMap->GetNextChar(cChar - 1);
+            tmpSelected = mxFontCharMap->GetIndexFromChar(cNext);
+            if (tmpSelected < 0 || (cChar != cNext))
             {
-                sal_UCS4 cChar = rKEvt.GetCharCode();
-                sal_UCS4 cNext = mxFontCharMap->GetNextChar(cChar - 1);
-                tmpSelected = mxFontCharMap->GetIndexFromChar(cNext);
-                if (tmpSelected < 0 || (cChar != cNext))
-                {
-                    Control::KeyInput(rKEvt);
-                    tmpSelected = - 1;  // mark as invalid
-                }
+                tmpSelected = - 1;  // mark as invalid
+                bRet = false;
             }
+            break;
+        }
     }
 
     if ( tmpSelected >= 0 )
@@ -512,11 +456,13 @@ void SvxShowCharSet::KeyInput(const KeyEvent& rKEvt)
         SelectIndex( tmpSelected, true );
         aPreSelectHdl.Call( this );
     }
+
+    return bRet;
 }
 
-
-void SvxShowCharSet::Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& )
+IMPL_LINK(SvxShowCharSet, DoPaint, weld::DrawingArea::draw_args, aPayload, void)
 {
+    vcl::RenderContext& rRenderContext = aPayload.first;
     InitSettings(rRenderContext);
     RecalculateFont(rRenderContext);
     DrawChars_Impl(rRenderContext, FirstInView(), LastInView());
@@ -524,14 +470,14 @@ void SvxShowCharSet::Paint( vcl::RenderContext& rRenderContext, const tools::Rec
 
 void SvxShowCharSet::SetFont( const vcl::Font& rFont )
 {
-    Control::SetFont(rFont);
+    maFont = rFont;
     mbRecalculateFont = true;
-    Invalidate();
+    mxDrawingArea->queue_draw();
 }
 
 void SvxShowCharSet::DeSelect()
 {
-    Invalidate();
+    mxDrawingArea->queue_draw();
 }
 
 // stretch a grid rectangle if its at the edge to fill unused space
@@ -570,9 +516,7 @@ void SvxShowCharSet::DrawChars_Impl(vcl::RenderContext& rRenderContext, int n1, 
     if (n1 > LastInView() || n2 < FirstInView())
         return;
 
-    Size aOutputSize(GetOutputSizePixel());
-    if (aVscrollSB->IsVisible())
-        aOutputSize.AdjustWidth( -(aVscrollSB->GetOptimalSize().Width()) );
+    Size aOutputSize(maSize);
 
     int i;
     for (i = 1; i < COLUMN_COUNT; ++i)
@@ -686,33 +630,23 @@ void SvxShowCharSet::InitSettings(vcl::RenderContext& rRenderContext)
 
     if (mbUpdateForeground)
     {
-        Color aTextColor(rStyleSettings.GetDialogTextColor());
-
-        if (IsControlForeground())
-            aTextColor = GetControlForeground();
-        rRenderContext.SetTextColor(aTextColor);
+        rRenderContext.SetTextColor(rStyleSettings.GetDialogTextColor());
         mbUpdateForeground = false;
     }
 
     if (mbUpdateBackground)
     {
-        if (IsControlBackground())
-            rRenderContext.SetBackground(GetControlBackground());
-        else
-            rRenderContext.SetBackground(rStyleSettings.GetWindowColor());
-
+        rRenderContext.SetBackground(rStyleSettings.GetWindowColor());
         mbUpdateBackground = false;
     }
 
-    vcl::Font aFont(rRenderContext.GetFont());
+    vcl::Font aFont(maFont);
     aFont.SetWeight(WEIGHT_LIGHT);
     aFont.SetAlignment(ALIGN_TOP);
     aFont.SetFontSize(maFontSize);
     aFont.SetTransparent(true);
     rRenderContext.SetFont(aFont);
-
 }
-
 
 sal_UCS4 SvxShowCharSet::GetSelectCharacter() const
 {
@@ -731,11 +665,9 @@ void SvxShowCharSet::RecalculateFont(vcl::RenderContext& rRenderContext)
     if (nSelectedIndex >= 0)
         getSelectedChar() = mxFontCharMap->GetCharFromIndex(nSelectedIndex);
 
-    Size aSize(GetOutputSizePixel());
-    long nSBWidth = aVscrollSB->GetOptimalSize().Width();
-    aSize.AdjustWidth( -nSBWidth );
+    Size aSize(maSize);
 
-    vcl::Font aFont = rRenderContext.GetFont();
+    vcl::Font aFont = maFont;
     aFont.SetWeight(WEIGHT_LIGHT);
     aFont.SetAlignment(ALIGN_TOP);
     int nFontHeight = (aSize.Height() - 5) * 2 / (3 * ROW_COUNT);
@@ -749,18 +681,12 @@ void SvxShowCharSet::RecalculateFont(vcl::RenderContext& rRenderContext)
     nX = aSize.Width() / COLUMN_COUNT;
     nY = aSize.Height() / ROW_COUNT;
 
-    aVscrollSB->setPosSizePixel(aSize.Width(), 0, nSBWidth, aSize.Height());
-    aVscrollSB->SetRangeMin(0);
     int nLastRow = (mxFontCharMap->GetCharCount() - 1 + COLUMN_COUNT) / COLUMN_COUNT;
-    aVscrollSB->SetRangeMax(nLastRow);
-    aVscrollSB->SetPageSize(ROW_COUNT - 1);
-    aVscrollSB->SetVisibleSize(ROW_COUNT);
+    mxScrollArea->vadjustment_configure(mxScrollArea->vadjustment_get_value(), 0, nLastRow, 1, ROW_COUNT - 1, ROW_COUNT);
 
     // restore last selected unicode
     int nMapIndex = mxFontCharMap->GetIndexFromChar(getSelectedChar());
     SelectIndex(nMapIndex);
-
-    aVscrollSB->Show();
 
     // rearrange CharSet element in sync with nX- and nY-multiples
     Size aDrawSize(nX * COLUMN_COUNT, nY * ROW_COUNT);
@@ -770,14 +696,10 @@ void SvxShowCharSet::RecalculateFont(vcl::RenderContext& rRenderContext)
     mbRecalculateFont = false;
 }
 
-
-void SvxShowCharSet::SelectIndex( int nNewIndex, bool bFocus )
+void SvxShowCharSet::SelectIndex(int nNewIndex, bool bFocus)
 {
-    if( !aVscrollSB )
-        return;
-
-    if ( !mxFontCharMap.is() )
-        RecalculateFont( *this );
+    if (!mxFontCharMap.is())
+        RecalculateFont(*mxVirDev);
 
     if( nNewIndex < 0 )
     {
@@ -785,39 +707,39 @@ void SvxShowCharSet::SelectIndex( int nNewIndex, bool bFocus )
         sal_uInt32 cPrev = mxFontCharMap->GetPrevChar( getSelectedChar() );
         int nMapIndex = mxFontCharMap->GetIndexFromChar( cPrev );
         int nNewPos = nMapIndex / COLUMN_COUNT;
-        aVscrollSB->SetThumbPos( nNewPos );
+        mxScrollArea->vadjustment_set_value(nNewPos);
         nSelectedIndex = bFocus ? nMapIndex+1 : -1;
-        Invalidate();
+        mxDrawingArea->queue_draw();
     }
     else if( nNewIndex < FirstInView() )
     {
         // need to scroll up to see selected item
-        int nOldPos = aVscrollSB->GetThumbPos();
+        int nOldPos = mxScrollArea->vadjustment_get_value();
         int nDelta = (FirstInView() - nNewIndex + COLUMN_COUNT-1) / COLUMN_COUNT;
-        aVscrollSB->SetThumbPos( nOldPos - nDelta );
+        mxScrollArea->vadjustment_set_value(nOldPos - nDelta);
         nSelectedIndex = nNewIndex;
-        Invalidate();
+        mxDrawingArea->queue_draw();
     }
     else if( nNewIndex > LastInView() )
     {
         // need to scroll down to see selected item
-        int nOldPos = aVscrollSB->GetThumbPos();
+        int nOldPos = mxScrollArea->vadjustment_get_value();
         int nDelta = (nNewIndex - LastInView() + COLUMN_COUNT) / COLUMN_COUNT;
-        aVscrollSB->SetThumbPos( nOldPos + nDelta );
+        mxScrollArea->vadjustment_set_value(nOldPos + nDelta);
         if( nNewIndex < mxFontCharMap->GetCharCount() )
         {
             nSelectedIndex = nNewIndex;
-            Invalidate();
+            mxDrawingArea->queue_draw();
         }
-        else if (nOldPos != aVscrollSB->GetThumbPos())
+        else if (nOldPos != mxScrollArea->vadjustment_get_value())
         {
-            Invalidate();
+            mxDrawingArea->queue_draw();
         }
     }
     else
     {
         nSelectedIndex = nNewIndex;
-        Invalidate();
+        mxDrawingArea->queue_draw();
     }
 
     if( nSelectedIndex >= 0 )
@@ -846,7 +768,6 @@ void SvxShowCharSet::SelectIndex( int nNewIndex, bool bFocus )
     aHighHdl.Call( this );
 }
 
-
 void SvxShowCharSet::OutputIndex( int nNewIndex )
 {
     SelectIndex( nNewIndex, true );
@@ -857,7 +778,7 @@ void SvxShowCharSet::OutputIndex( int nNewIndex )
 void SvxShowCharSet::SelectCharacter( sal_UCS4 cNew )
 {
     if ( !mxFontCharMap.is() )
-        RecalculateFont( *this );
+        RecalculateFont(*mxVirDev);
 
     // get next available char of current font
     sal_UCS4 cNext = mxFontCharMap->GetNextChar( (cNew > 0) ? cNew - 1 : cNew );
@@ -865,12 +786,11 @@ void SvxShowCharSet::SelectCharacter( sal_UCS4 cNew )
     int nMapIndex = mxFontCharMap->GetIndexFromChar( cNext );
     SelectIndex( nMapIndex );
     // move selected item to top row if not in focus
-    aVscrollSB->SetThumbPos( nMapIndex / COLUMN_COUNT );
-    Invalidate();
+    mxScrollArea->vadjustment_set_value(nMapIndex / COLUMN_COUNT);
+    mxDrawingArea->queue_draw();
 }
 
-
-IMPL_LINK_NOARG(SvxShowCharSet, VscrollHdl, ScrollBar*, void)
+IMPL_LINK_NOARG(SvxShowCharSet, VscrollHdl, weld::ScrolledWindow&, void)
 {
     if( nSelectedIndex < FirstInView() )
     {
@@ -891,33 +811,23 @@ IMPL_LINK_NOARG(SvxShowCharSet, VscrollHdl, ScrollBar*, void)
         SelectIndex( (LastInView() - COLUMN_COUNT + 1) + (nSelectedIndex % COLUMN_COUNT) );
     }
 
-    Invalidate();
+    mxDrawingArea->queue_draw();
 }
-
 
 SvxShowCharSet::~SvxShowCharSet()
 {
-    disposeOnce();
-}
-
-void SvxShowCharSet::dispose()
-{
-    if ( m_xAccessible.is() )
-        ReleaseAccessible();
-    aVscrollSB.disposeAndClear();
-    Control::dispose();
-}
-
-void SvxShowCharSet::ReleaseAccessible()
-{
-    m_aItems.clear();
-    m_xAccessible.clear();
+    if (m_xAccessible.is())
+    {
+        m_aItems.clear();
+        m_xAccessible->clearCharSetControl();
+        m_xAccessible.clear();
+    }
 }
 
 css::uno::Reference< XAccessible > SvxShowCharSet::CreateAccessible()
 {
     OSL_ENSURE(!m_xAccessible.is(),"Accessible already created!");
-    m_xAccessible = new svx::SvxShowCharSetVirtualAcc(this);
+    m_xAccessible = new svx::SvxShowCharSetAcc(this);
     return m_xAccessible.get();
 }
 
@@ -928,7 +838,7 @@ svx::SvxShowCharSetItem* SvxShowCharSet::ImplGetItem( int _nPos )
     {
         OSL_ENSURE(m_xAccessible.is(), "Who wants to create a child of my table without a parent?");
         std::shared_ptr<svx::SvxShowCharSetItem> xItem(new svx::SvxShowCharSetItem(*this,
-            m_xAccessible->getTable(), sal::static_int_cast< sal_uInt16 >(_nPos)));
+            m_xAccessible.get(), sal::static_int_cast< sal_uInt16 >(_nPos)));
         aFind = m_aItems.emplace(_nPos, xItem).first;
         OUStringBuffer buf;
         buf.appendUtf32( mxFontCharMap->GetCharFromIndex( _nPos ) );
@@ -944,11 +854,6 @@ svx::SvxShowCharSetItem* SvxShowCharSet::ImplGetItem( int _nPos )
 sal_Int32 SvxShowCharSet::getMaxCharCount() const
 {
     return mxFontCharMap->GetCharCount();
-}
-
-FactoryFunction SvxShowCharSet::GetUITestFactory() const
-{
-    return SvxShowCharSetUIObject::create;
 }
 
 // TODO: should be moved into Font Attributes stuff

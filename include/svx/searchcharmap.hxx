@@ -50,18 +50,12 @@ namespace vcl { class Font; }
 class CommandEvent;
 class ScrollBar;
 
-namespace svx
-{
-    struct SvxShowCharSetItem;
-    class SvxShowCharSetVirtualAcc;
-}
-
 class SVX_DLLPUBLIC SvxSearchCharSet : public SvxShowCharSet
 {
 public:
-    SvxSearchCharSet( vcl::Window* pParent );
+    SvxSearchCharSet(weld::Builder& rBuilder, const OString& rDrawingId,
+                     const OString& rScrollId, const VclPtr<VirtualDevice> &rDevice);
     virtual ~SvxSearchCharSet() override;
-    virtual void                        dispose() override;
 
     virtual void                        RecalculateFont(vcl::RenderContext& rRenderContext) override;
 
@@ -76,10 +70,6 @@ public:
 
     virtual sal_Int32                   getMaxCharCount() const override;
 
-protected:
-    virtual void    Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& ) override;
-    virtual void    KeyInput( const KeyEvent& rKEvt ) override;
-
 private:
     sal_Int32     nCount;
 
@@ -88,6 +78,8 @@ private:
     std::unordered_map<sal_Int32, sal_UCS4> m_aItemList;
 private:
     virtual void            DrawChars_Impl(vcl::RenderContext& rRenderContext, int n1, int n2) override;
+    DECL_LINK(DoPaint, weld::DrawingArea::draw_args, void);
+    DECL_LINK(DoKeyDown, const KeyEvent&, bool);
 };
 
 #endif

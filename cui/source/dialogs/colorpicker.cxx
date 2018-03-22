@@ -227,9 +227,9 @@ public:
 
     DECL_LINK(DoPaint, weld::DrawingArea::draw_args, void);
     DECL_LINK(DoResize, const Size& rSize, void);
-    DECL_LINK(DoButtonDown, const Point& rMEvt, void);
-    DECL_LINK(DoMouseMove, const Point& rMEvt, void);
-    DECL_LINK(DoButtonUp, const Point& rMEvt, void);
+    DECL_LINK(DoButtonDown, const MouseEvent& rMEvt, void);
+    DECL_LINK(DoMouseMove, const MouseEvent& rMEvt, void);
+    DECL_LINK(DoButtonUp, const MouseEvent& rMEvt, void);
 
     void UpdateBitmap();
     void ShowPosition( const Point& rPos, bool bUpdate );
@@ -438,22 +438,24 @@ void ColorFieldControl::ShowPosition( const Point& rPos, bool bUpdate )
     }
 }
 
-IMPL_LINK(ColorFieldControl, DoButtonDown, const Point&, rMEvt, void)
+IMPL_LINK(ColorFieldControl, DoButtonDown, const MouseEvent&, rMEvt, void)
 {
     m_xDrawingArea->connect_mouse_move(LINK(this, ColorFieldControl, DoMouseMove));
-    ShowPosition(rMEvt, true);
+    m_xDrawingArea->grab_add();
+    ShowPosition(rMEvt.GetPosPixel(), true);
     Modify();
 }
 
-IMPL_LINK(ColorFieldControl, DoMouseMove, const Point&, rMEvt, void)
+IMPL_LINK(ColorFieldControl, DoMouseMove, const MouseEvent&, rMEvt, void)
 {
-    ShowPosition(rMEvt, true);
+    ShowPosition(rMEvt.GetPosPixel(), true);
     Modify();
 }
 
-IMPL_LINK_NOARG(ColorFieldControl, DoButtonUp, const Point&, void)
+IMPL_LINK_NOARG(ColorFieldControl, DoButtonUp, const MouseEvent&, void)
 {
-    m_xDrawingArea->connect_mouse_move(Link<const Point&, void>());
+    m_xDrawingArea->grab_remove();
+    m_xDrawingArea->connect_mouse_move(Link<const MouseEvent&, void>());
 }
 
 IMPL_LINK(ColorFieldControl, DoPaint, weld::DrawingArea::draw_args, aPayload, void)
@@ -522,9 +524,9 @@ public:
     ColorSliderControl(weld::DrawingArea* pDrawingArea);
     ~ColorSliderControl();
 
-    DECL_LINK(DoButtonDown, const Point& rMEvt, void);
-    DECL_LINK(DoMouseMove, const Point& rMEvt, void);
-    DECL_LINK(DoButtonUp, const Point& rMEvt, void);
+    DECL_LINK(DoButtonDown, const MouseEvent& rMEvt, void);
+    DECL_LINK(DoMouseMove, const MouseEvent& rMEvt, void);
+    DECL_LINK(DoButtonUp, const MouseEvent& rMEvt, void);
     DECL_LINK(DoPaint, weld::DrawingArea::draw_args, void);
     DECL_LINK(DoResize, const Size& rSize, void);
 
@@ -661,24 +663,23 @@ void ColorSliderControl::ChangePosition(long nY)
     mdValue = double(nHeight - nY) / double(nHeight);
 }
 
-IMPL_LINK(ColorSliderControl, DoButtonDown, const Point&, rMEvt, void)
+IMPL_LINK(ColorSliderControl, DoButtonDown, const MouseEvent&, rMEvt, void)
 {
     m_xDrawingArea->connect_mouse_move(LINK(this, ColorSliderControl, DoMouseMove));
-    ChangePosition(rMEvt.Y());
+    ChangePosition(rMEvt.GetPosPixel().Y());
     Modify();
 }
 
-IMPL_LINK(ColorSliderControl, DoMouseMove, const Point&, rMEvt, void)
+IMPL_LINK(ColorSliderControl, DoMouseMove, const MouseEvent&, rMEvt, void)
 {
-    ChangePosition(rMEvt.Y());
+    ChangePosition(rMEvt.GetPosPixel().Y());
     Modify();
 }
 
-IMPL_LINK_NOARG(ColorSliderControl, DoButtonUp, const Point&, void)
+IMPL_LINK_NOARG(ColorSliderControl, DoButtonUp, const MouseEvent&, void)
 {
-    m_xDrawingArea->connect_mouse_move(Link<const Point&, void>());
+    m_xDrawingArea->connect_mouse_move(Link<const MouseEvent&, void>());
 }
-
 
 IMPL_LINK(ColorSliderControl, DoPaint, weld::DrawingArea::draw_args, aPayload, void)
 {

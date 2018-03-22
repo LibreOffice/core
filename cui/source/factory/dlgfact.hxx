@@ -471,6 +471,21 @@ public:
     virtual bool      IsRecommendToOpenReadonly() const override;
 };
 
+class SvxCharacterMap;
+class AbstractSvxCharacterMapDialog_Impl : public SfxAbstractDialog
+{
+protected:
+    std::unique_ptr<SvxCharacterMap> m_xDlg;
+public:
+    explicit AbstractSvxCharacterMapDialog_Impl(SvxCharacterMap* p)
+        : m_xDlg(p)
+    {
+    }
+    virtual short Execute() override;
+    virtual const SfxItemSet* GetOutputItemSet() const override;
+    virtual void  SetText(const OUString& rStr) override;
+};
+
 class ScreenshotAnnotationDlg;
 class AbstractScreenshotAnnotationDlg_Impl : public AbstractScreenshotAnnotationDlg
 {
@@ -487,9 +502,9 @@ public:
                                             const SfxItemSet& rAttr,
                                             const SdrView* pView,
                                             sal_uInt32 nResId ) override;
-    virtual VclPtr<SfxAbstractDialog>    CreateCharMapDialog( vcl::Window* pParent,
+    virtual VclPtr<SfxAbstractDialog>    CreateCharMapDialog(weld::Window* pParent,
                                                              const SfxItemSet& rAttr,
-                                                             bool bInsert ) override;
+                                                             bool bInsert) override;
     virtual VclPtr<SfxAbstractDialog>    CreateEventConfigDialog( vcl::Window* pParent,
                                                              const SfxItemSet& rAttr,
                                                              const css::uno::Reference< css::frame::XFrame >& _rxFrame

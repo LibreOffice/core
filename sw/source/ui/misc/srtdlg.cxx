@@ -338,8 +338,7 @@ IMPL_LINK_NOARG(SwSortDlg, DelimCharHdl, weld::Button&, void)
     {
         SfxAllItemSet aSet( rSh.GetAttrPool() );
         aSet.Put( SfxInt32Item( SID_ATTR_CHAR, GetDelimChar() ) );
-//TODO        ScopedVclPtr<SfxAbstractDialog> pMap(pFact->CreateCharMapDialog( m_xDelimPB, aSet, false ));
-        ScopedVclPtr<SfxAbstractDialog> pMap(pFact->CreateCharMapDialog(nullptr, aSet, false));
+        ScopedVclPtr<SfxAbstractDialog> pMap(pFact->CreateCharMapDialog(m_xDialog.get(), aSet, false));
         if( RET_OK == pMap->Execute() )
         {
             const SfxInt32Item* pItem = SfxItemSet::GetItem<SfxInt32Item>(pMap->GetOutputItemSet(), SID_ATTR_CHAR, false);

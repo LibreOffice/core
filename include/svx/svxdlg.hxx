@@ -438,9 +438,7 @@ public:
                                                                         const SfxItemSet& rAttr,
                                                                         const SdrView* pView,
                                                                         sal_uInt32 nResId )=0;
-    virtual VclPtr<SfxAbstractDialog>       CreateCharMapDialog( vcl::Window* pParent,
-                                                                        const SfxItemSet& rAttr,
-                                                                        bool bInsert )=0;
+    virtual VclPtr<SfxAbstractDialog>       CreateCharMapDialog(weld::Window* pParent, const SfxItemSet& rAttr, bool bInsert) = 0;
     virtual VclPtr<SfxAbstractDialog>       CreateEventConfigDialog( vcl::Window* pParent,
                                                                         const SfxItemSet& rAttr,
                                     const css::uno::Reference< css::frame::XFrame >& _rxFrame )=0;

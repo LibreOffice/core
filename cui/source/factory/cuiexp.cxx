@@ -38,6 +38,7 @@
 #include <postdlg.hxx>
 #include <passwdomdlg.hxx>
 #include <screenshotannotationdlg.hxx>
+#include <cuicharmap.hxx>
 #include <cuihyperdlg.hxx>
 #include <cfgutil.hxx>
 #include <SpellDialog.hxx>
