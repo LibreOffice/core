@@ -68,7 +68,7 @@ class SW_DLLPUBLIC SwCursor : public SwPaM
 {
     friend class SwCursorSaveState;
 
-    SwCursor_SavePos* m_pSavePos;
+    std::vector<SwCursor_SavePos> m_vSavePos; // the current entry is the last element
     long m_nRowSpanOffset;        // required for travelling in tabs with rowspans
     sal_uInt8 m_nCursorBidiLevel; // bidi level of the cursor
     bool m_bColumnSelection;      // true: cursor is aprt of a column selection
@@ -83,7 +83,7 @@ protected:
     void SaveState();
     void RestoreState();
 
-    const SwCursor_SavePos* GetSavePos() const { return m_pSavePos; }
+    const SwCursor_SavePos* GetSavePos() const { return m_vSavePos.empty() ? nullptr : &m_vSavePos.back(); }
 
     virtual const SwContentFrame* DoSetBidiLevelLeftRight(
         bool & io_rbLeft, bool bVisualAllowed, bool bInsertCursor);
@@ -242,15 +242,11 @@ struct SwCursor_SavePos final
 {
     sal_uLong nNode;
     sal_Int32 nContent;
-    SwCursor_SavePos* pNext;
 
     SwCursor_SavePos( const SwCursor& rCursor )
         : nNode( rCursor.GetPoint()->nNode.GetIndex() ),
-        nContent( rCursor.GetPoint()->nContent.GetIndex() ),
-        pNext( nullptr )
+          nContent( rCursor.GetPoint()->nContent.GetIndex() )
     {}
-
-    DECL_FIXEDMEMPOOL_NEWDEL( SwCursor_SavePos )
 };
 
 class SwTableCursor : public virtual SwCursor
