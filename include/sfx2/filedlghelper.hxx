@@ -255,7 +255,7 @@ ErrCode FileOpenDialog_Impl( const vcl::Window* pParent,
                              const css::uno::Sequence< OUString >& rBlackList = css::uno::Sequence< OUString >());
 
 
-ErrCode RequestPassword(const std::shared_ptr<const SfxFilter>& pCurrentFilter, OUString const & aURL, SfxItemSet* pSet);
+ErrCode RequestPassword(const std::shared_ptr<const SfxFilter>& pCurrentFilter, OUString const & aURL, SfxItemSet* pSet, vcl::Window* pParent);
 }
 
 #endif

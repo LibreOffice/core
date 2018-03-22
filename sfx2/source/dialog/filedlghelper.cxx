@@ -1513,7 +1513,7 @@ ErrCode FileDialogHelper_Impl::execute( std::vector<OUString>& rpURLList,
                 {
                     // ask for a password
                     OUString aDocName(rpURLList[0]);
-                    ErrCode errCode = RequestPassword(pCurrentFilter, aDocName, rpSet);
+                    ErrCode errCode = RequestPassword(pCurrentFilter, aDocName, rpSet, mpPreferredParentWindow);
                     if (errCode != ERRCODE_NONE)
                         return errCode;
                 }
@@ -2662,9 +2662,9 @@ ErrCode FileOpenDialog_Impl( const vcl::Window* pParent,
     return nRet;
 }
 
-ErrCode RequestPassword(const std::shared_ptr<const SfxFilter>& pCurrentFilter, OUString const & aURL, SfxItemSet* pSet)
+ErrCode RequestPassword(const std::shared_ptr<const SfxFilter>& pCurrentFilter, OUString const & aURL, SfxItemSet* pSet, vcl::Window* pPreferredParentWindow)
 {
-    uno::Reference < task::XInteractionHandler2 > xInteractionHandler = task::InteractionHandler::createWithParent( ::comphelper::getProcessComponentContext(), nullptr );
+    uno::Reference<task::XInteractionHandler2> xInteractionHandler = task::InteractionHandler::createWithParent(::comphelper::getProcessComponentContext(), VCLUnoHelper::GetInterface(pPreferredParentWindow));
     // TODO: need a save way to distinguish MS filters from other filters
     // for now MS-filters are the only alien filters that support encryption
     bool bMSType = !pCurrentFilter->IsOwnFormat();

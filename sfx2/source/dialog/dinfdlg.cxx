@@ -855,7 +855,7 @@ IMPL_LINK_NOARG(SfxDocumentPage, SignatureHdl, Button*, void)
     }
 }
 
-IMPL_STATIC_LINK_NOARG(SfxDocumentPage, ChangePassHdl, Button*, void)
+IMPL_LINK_NOARG(SfxDocumentPage, ChangePassHdl, Button*, void)
 {
     SfxObjectShell* pShell = SfxObjectShell::Current();
     do
@@ -869,7 +869,7 @@ IMPL_STATIC_LINK_NOARG(SfxDocumentPage, ChangePassHdl, Button*, void)
         if (!pFilter)
             break;
 
-        sfx2::RequestPassword(pFilter, OUString(), pMedSet);
+        sfx2::RequestPassword(pFilter, OUString(), pMedSet, GetParentDialog());
         pShell->SetModified();
     }
     while (false);
