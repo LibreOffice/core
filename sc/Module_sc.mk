@@ -156,6 +156,7 @@ $(eval $(call gb_Module_add_subsequentcheck_targets,sc,\
 	CppunitTest_sc_spreadsheetsettings \
 	CppunitTest_sc_shapeobj \
 	CppunitTest_sc_sheetlinkobj \
+	CppunitTest_sc_spreadsheetsettingsobj \
 ))
 
 $(eval $(call gb_Module_add_perfcheck_targets,sc,\
