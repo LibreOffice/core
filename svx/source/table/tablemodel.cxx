@@ -1028,7 +1028,7 @@ void TableModel::optimize()
                     Reference< XPropertySet > xSet2( static_cast< XCellRange* >( maRows[nRow-1].get() ), UNO_QUERY_THROW );
                     xSet1->getPropertyValue( sHeight ) >>= nHeight1;
                     xSet2->getPropertyValue( sHeight ) >>= nHeight2;
-                    nHeight1 += nHeight2;
+                    nHeight1 = o3tl::saturating_add(nHeight1, nHeight2);
                     xSet2->setPropertyValue( sHeight, Any( nHeight1 ) );
                 }
                 catch( Exception& )
