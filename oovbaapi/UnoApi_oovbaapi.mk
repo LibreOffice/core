@@ -1049,6 +1049,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,oovbaapi,ooo/vba/word,\
 	XDialog \
 	XDialogs \
 	XDocument \
+	XDocumentOutgoing \
 	XDocuments \
 	XField \
 	XFields \
