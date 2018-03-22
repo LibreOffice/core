@@ -39,6 +39,45 @@ void testBooleanProperty(uno::Reference<beans::XPropertySet>& xPropertySet, cons
     CPPUNIT_ASSERT_EQUAL_MESSAGE(msgSet.getStr(), !bPropertyGet, bPropertySet);
 }
 
+void testBooleanReadonlyProperty(uno::Reference<beans::XPropertySet>& xPropertySet,
+                                 const OUString& name)
+{
+    uno::Any aNewValue;
+
+    bool bPropertyGet = false;
+    bool bPropertySet = false;
+
+    OString msgGet
+        = "Unable to get PropertyValue: " + OUStringToOString(name, RTL_TEXTENCODING_UTF8);
+    CPPUNIT_ASSERT_MESSAGE(msgGet.getStr(), xPropertySet->getPropertyValue(name) >>= bPropertyGet);
+
+    aNewValue <<= !bPropertyGet;
+    xPropertySet->setPropertyValue(name, aNewValue);
+    CPPUNIT_ASSERT(xPropertySet->getPropertyValue(name) >>= bPropertySet);
+    OString msgSet = "Able to set PropertyValue: " + OUStringToOString(name, RTL_TEXTENCODING_UTF8);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(msgSet.getStr(), bPropertyGet, bPropertySet);
+}
+
+void testDoubleProperty(uno::Reference<beans::XPropertySet>& xPropertySet, const OUString& name,
+                        const double& dValue)
+{
+    uno::Any aNewValue;
+
+    double nPropertyGet;
+    double nPropertySet;
+
+    OString msgGet
+        = "Unable to get PropertyValue: " + OUStringToOString(name, RTL_TEXTENCODING_UTF8);
+    CPPUNIT_ASSERT_MESSAGE(msgGet.getStr(), xPropertySet->getPropertyValue(name) >>= nPropertyGet);
+
+    aNewValue <<= dValue;
+    xPropertySet->setPropertyValue(name, aNewValue);
+    CPPUNIT_ASSERT(xPropertySet->getPropertyValue(name) >>= nPropertySet);
+    OString msgSet
+        = "Unable to set PropertyValue: " + OUStringToOString(name, RTL_TEXTENCODING_UTF8);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE(msgSet.getStr(), dValue, nPropertySet, 0.5);
+}
+
 void testLongProperty(uno::Reference<beans::XPropertySet>& xPropertySet, const OUString& name,
                       const sal_Int32& nValue)
 {
