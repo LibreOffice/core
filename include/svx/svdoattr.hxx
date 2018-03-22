@@ -73,6 +73,9 @@ public:
     virtual const tools::Rectangle& GetSnapRect() const override;
 
     virtual void SetModel(SdrModel* pNewModel) override;
+
+    virtual bool Equals(const SdrObject&) const override;
+
 };
 
 

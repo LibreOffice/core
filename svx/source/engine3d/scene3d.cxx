@@ -463,6 +463,19 @@ E3dScene& E3dScene::operator=(const E3dScene& rObj)
     return *this;
 }
 
+bool E3dScene::Equals(const SdrObject& rOther) const
+{
+    const E3dScene* pOther = dynamic_cast<const E3dScene*>(&rOther);
+    if (!pOther)
+        return false;
+
+    // TODO: compare cameras
+    if (bDrawOnlySelected != pOther->bDrawOnlySelected)
+        return false;
+
+    return E3dObject::Equals(rOther);
+}
+
 // Rebuild Light- and label- object lists rebuild (after loading, allocation)
 
 void E3dScene::RebuildLists()

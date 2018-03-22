@@ -81,6 +81,8 @@ public:
     virtual sal_uInt16 GetObjIdentifier() const override;
     virtual SdrCaptionObj* Clone() const override;
 
+    virtual bool Equals(const SdrObject&) const override;
+
     // for calc: special shadow only for text box
     void SetSpecialTextBoxShadow() { mbSpecialTextBoxShadow = true; }
     bool GetSpecialTextBoxShadow() const { return mbSpecialTextBoxShadow; }

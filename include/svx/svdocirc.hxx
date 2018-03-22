@@ -84,6 +84,9 @@ public:
     virtual OUString TakeObjNamePlural() const override;
 
     virtual SdrCircObj* Clone() const override;
+
+    virtual bool Equals(const SdrObject&) const override;
+
     virtual void RecalcSnapRect() override;
     virtual void NbcSetSnapRect(const tools::Rectangle& rRect) override;
     virtual basegfx::B2DPolyPolygon TakeXorPoly() const override;

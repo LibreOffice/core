@@ -188,6 +188,8 @@ public:
     virtual E3dObject* Clone() const override;
     E3dObject& operator=( const E3dObject& rObj );
 
+    virtual bool Equals(const SdrObject&) const override;
+
     virtual SdrObjGeoData *NewGeoData() const override;
     virtual void          SaveGeoData(SdrObjGeoData& rGeo) const override;
     virtual void          RestGeoData(const SdrObjGeoData& rGeo) override;
@@ -245,6 +247,8 @@ public:
     virtual void RecalcSnapRect() override;
 
     virtual E3dCompoundObject* Clone() const override;
+
+    virtual bool Equals(const SdrObject&) const override;
 
     bool IsAOrdNumRemapCandidate(E3dScene*& prScene) const;
 };
