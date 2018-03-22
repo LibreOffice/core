@@ -89,6 +89,8 @@ public:
 
     virtual E3dLatheObj* Clone() const override;
 
+    virtual bool Equals(const SdrObject&) const override;
+
     virtual SdrObject* DoConvertToPolyObj(bool bBezier, bool bAddText) const override;
 
     // TakeObjName...() is for the display in the UI, for example "3 frames selected".
