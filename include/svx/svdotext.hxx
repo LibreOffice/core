@@ -315,6 +315,8 @@ protected:
 
     virtual ~SdrTextObj() override;
 
+    virtual bool Equals(const SdrObject&) const override;
+
 public:
 
     bool IsInEditMode() const { return mbInEditMode; }
