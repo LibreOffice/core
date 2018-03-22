@@ -161,16 +161,16 @@ class PPTWriter final : public PPTWriterBase, public PPTExBulletProvider
         sal_uInt32          mnTextSize;
 
         tools::SvRef<SotStorage>        mrStg;
-        SvStream*           mpCurUserStrm;
-        SvStream*           mpStrm;
-        SvStream*           mpPicStrm;
-        PptEscherEx*        mpPptEscherEx;
+        std::unique_ptr<SvStream>       mpCurUserStrm;
+        std::unique_ptr<SvStream>       mpStrm;
+        std::unique_ptr<SvStream>       mpPicStrm;
+        std::unique_ptr<PptEscherEx>    mpPptEscherEx;
 
-        std::vector<PPTExOleObjEntry*> maExOleObj;
+        std::vector<std::unique_ptr<PPTExOleObjEntry>> maExOleObj;
         sal_uInt32          mnVBAOleOfs;
         SvMemoryStream*     mpVBA;
         sal_uInt32          mnExEmbed;
-        SvMemoryStream*     mpExEmbed;
+        std::unique_ptr<SvMemoryStream> mpExEmbed;
 
         sal_uInt32          mnPagesWritten;
         sal_uInt32          mnTxId;             // Identifier determined by the HOST (PP) ????

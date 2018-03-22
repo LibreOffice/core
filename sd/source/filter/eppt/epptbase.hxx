@@ -344,7 +344,7 @@ protected:
     css::awt::Size     maNotesPageSize;
 
     PageType                        meLatestPageType;
-    std::vector< PPTExStyleSheet* > maStyleSheetList;
+    std::vector< std::unique_ptr<PPTExStyleSheet> > maStyleSheetList;
     PPTExStyleSheet*                mpStyleSheet;
 
     FontCollection      maFontCollection;
