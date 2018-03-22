@@ -31,7 +31,11 @@
 namespace vcl { class Window; }
 class Dialog;
 class Bitmap;
-namespace weld { class DialogController; }
+namespace weld
+{
+    class DialogController;
+    class Window;
+}
 
 /**
 * Some things multiple-inherit from VclAbstractDialog and OutputDevice,
@@ -120,7 +124,7 @@ public:
     virtual VclPtr<VclAbstractDialog> CreateVclDialog(vcl::Window* pParent, sal_uInt32 nId) = 0;
 
     // creates instance of PasswordToOpenModifyDialog from cui
-    virtual VclPtr<AbstractPasswordToOpenModifyDialog> CreatePasswordToOpenModifyDialog( vcl::Window * pParent, sal_uInt16 nMaxPasswdLen, bool bIsPasswordToModify ) = 0;
+    virtual VclPtr<AbstractPasswordToOpenModifyDialog> CreatePasswordToOpenModifyDialog(weld::Window * pParent, sal_uInt16 nMaxPasswdLen, bool bIsPasswordToModify) = 0;
 
     // creates instance of ScreenshotAnnotationDlg from cui
     virtual VclPtr<AbstractScreenshotAnnotationDlg> CreateScreenshotAnnotationDlg(

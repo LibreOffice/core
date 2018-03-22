@@ -17,163 +17,111 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <vcl/svapp.hxx>
 #include <passwdomdlg.hxx>
-
 #include <strings.hrc>
 #include <dialmgr.hxx>
 
-#include <sfx2/tabdlg.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/edit.hxx>
-#include <vcl/button.hxx>
-#include <vcl/weld.hxx>
-#include <vcl/settings.hxx>
-
-struct PasswordToOpenModifyDialog_Impl
+IMPL_LINK_NOARG(PasswordToOpenModifyDialog, OkBtnClickHdl, weld::Button&, void)
 {
-    VclPtr<PasswordToOpenModifyDialog>    m_pParent;
-
-    VclPtr<Edit>                       m_pPasswdToOpenED;
-    VclPtr<Edit>                       m_pReenterPasswdToOpenED;
-    VclPtr<VclExpander>                m_pOptionsExpander;
-    VclPtr<OKButton>                   m_pOk;
-    VclPtr<CheckBox>                   m_pOpenReadonlyCB;
-    VclPtr<Edit>                       m_pPasswdToModifyED;
-    VclPtr<Edit>                       m_pReenterPasswdToModifyED;
-
-    OUString                    m_aOneMismatch;
-    OUString                    m_aTwoMismatch;
-    OUString                    m_aInvalidStateForOkButton;
-    OUString                    m_aInvalidStateForOkButton_v2;
-
-    bool                        m_bIsPasswordToModify;
-
-
-    DECL_LINK( OkBtnClickHdl, Button*, void );
-
-    PasswordToOpenModifyDialog_Impl( PasswordToOpenModifyDialog * pParent,
-            sal_uInt16 nMaxPasswdLen, bool bIsPasswordToModify );
-};
-
-PasswordToOpenModifyDialog_Impl::PasswordToOpenModifyDialog_Impl(
-        PasswordToOpenModifyDialog * pParent,
-        sal_uInt16 nMaxPasswdLen,
-        bool bIsPasswordToModify )
-    : m_pParent( pParent )
-    , m_aOneMismatch( CuiResId( RID_SVXSTR_ONE_PASSWORD_MISMATCH ) )
-    , m_aTwoMismatch( CuiResId( RID_SVXSTR_TWO_PASSWORDS_MISMATCH ) )
-    , m_aInvalidStateForOkButton( CuiResId( RID_SVXSTR_INVALID_STATE_FOR_OK_BUTTON ) )
-    , m_aInvalidStateForOkButton_v2( CuiResId( RID_SVXSTR_INVALID_STATE_FOR_OK_BUTTON_V2 ) )
-    , m_bIsPasswordToModify( bIsPasswordToModify )
-{
-    pParent->get(m_pPasswdToOpenED, "newpassEntry");
-    pParent->get(m_pReenterPasswdToOpenED, "confirmpassEntry");
-    pParent->get(m_pOk, "ok");
-    pParent->get(m_pOpenReadonlyCB, "readonly");
-    pParent->get(m_pPasswdToModifyED, "newpassroEntry");
-    pParent->get(m_pReenterPasswdToModifyED, "confirmropassEntry");
-    pParent->get(m_pOptionsExpander, "expander");
-
-    m_pOk->SetClickHdl( LINK( this, PasswordToOpenModifyDialog_Impl, OkBtnClickHdl ) );
-
-    if (nMaxPasswdLen)
-    {
-        m_pPasswdToOpenED->SetMaxTextLen( nMaxPasswdLen );
-        m_pReenterPasswdToOpenED->SetMaxTextLen( nMaxPasswdLen );
-        m_pPasswdToModifyED->SetMaxTextLen( nMaxPasswdLen );
-        m_pReenterPasswdToModifyED->SetMaxTextLen( nMaxPasswdLen );
-    }
-
-    m_pPasswdToOpenED->GrabFocus();
-
-    m_pOptionsExpander->Enable(bIsPasswordToModify);
-    if (!bIsPasswordToModify)
-        m_pOptionsExpander->Hide();
-}
-
-IMPL_LINK(PasswordToOpenModifyDialog_Impl, OkBtnClickHdl, Button *, pButton, void)
-{
-    bool bInvalidState = !m_pOpenReadonlyCB->IsChecked() &&
-            m_pPasswdToOpenED->GetText().isEmpty() &&
-            m_pPasswdToModifyED->GetText().isEmpty();
+    bool bInvalidState = !m_xOpenReadonlyCB->get_active() &&
+            m_xPasswdToOpenED->get_text().isEmpty() &&
+            m_xPasswdToModifyED->get_text().isEmpty();
     if (bInvalidState)
     {
-        std::unique_ptr<weld::MessageDialog> xErrorBox(Application::CreateMessageDialog(pButton->GetFrameWeld(),
+        std::unique_ptr<weld::MessageDialog> xErrorBox(Application::CreateMessageDialog(m_xDialog.get(),
                                                        VclMessageType::Warning, VclButtonsType::Ok,
                                                        m_bIsPasswordToModify? m_aInvalidStateForOkButton : m_aInvalidStateForOkButton_v2));
         xErrorBox->run();
     }
     else // check for mismatched passwords...
     {
-        const bool bToOpenMatch     = m_pPasswdToOpenED->GetText()   == m_pReenterPasswdToOpenED->GetText();
-        const bool bToModifyMatch   = m_pPasswdToModifyED->GetText() == m_pReenterPasswdToModifyED->GetText();
+        const bool bToOpenMatch     = m_xPasswdToOpenED->get_text()   == m_xReenterPasswdToOpenED->get_text();
+        const bool bToModifyMatch   = m_xPasswdToModifyED->get_text() == m_xReenterPasswdToModifyED->get_text();
         const int nMismatch = (bToOpenMatch? 0 : 1) + (bToModifyMatch? 0 : 1);
         if (nMismatch > 0)
         {
-            std::unique_ptr<weld::MessageDialog> xErrorBox(Application::CreateMessageDialog(pButton->GetFrameWeld(),
+            std::unique_ptr<weld::MessageDialog> xErrorBox(Application::CreateMessageDialog(m_xDialog.get(),
                                                            VclMessageType::Warning, VclButtonsType::Ok,
                                                            nMismatch == 1 ? m_aOneMismatch : m_aTwoMismatch));
             xErrorBox->run();
 
-            Edit* pEdit = !bToOpenMatch ? m_pPasswdToOpenED.get() : m_pPasswdToModifyED.get();
-            Edit* pRepeatEdit = !bToOpenMatch? m_pReenterPasswdToOpenED.get() : m_pReenterPasswdToModifyED.get();
+            weld::Entry* pEdit = !bToOpenMatch ? m_xPasswdToOpenED.get() : m_xPasswdToModifyED.get();
+            weld::Entry* pRepeatEdit = !bToOpenMatch? m_xReenterPasswdToOpenED.get() : m_xReenterPasswdToModifyED.get();
             if (nMismatch == 1)
             {
-                pEdit->SetText( "" );
-                pRepeatEdit->SetText( "" );
+                pEdit->set_text( "" );
+                pRepeatEdit->set_text( "" );
             }
             else if (nMismatch == 2)
             {
-                m_pPasswdToOpenED->SetText( "" );
-                m_pReenterPasswdToOpenED->SetText( "" );
-                m_pPasswdToModifyED->SetText( "" );
-                m_pReenterPasswdToModifyED->SetText( "" );
+                m_xPasswdToOpenED->set_text( "" );
+                m_xReenterPasswdToOpenED->set_text( "" );
+                m_xPasswdToModifyED->set_text( "" );
+                m_xReenterPasswdToModifyED->set_text( "" );
             }
-            pEdit->GrabFocus();
+            pEdit->grab_focus();
         }
         else
         {
-            m_pParent->EndDialog( RET_OK );
+            m_xDialog->response(RET_OK);
         }
     }
 }
 
-PasswordToOpenModifyDialog::PasswordToOpenModifyDialog(
-    vcl::Window * pParent,
-    sal_uInt16 nMaxPasswdLen, bool bIsPasswordToModify)
-    : SfxModalDialog( pParent, "PasswordDialog", "cui/ui/password.ui" )
+PasswordToOpenModifyDialog::PasswordToOpenModifyDialog(weld::Window * pParent, sal_uInt16 nMaxPasswdLen, bool bIsPasswordToModify)
+    : GenericDialogController(pParent, "cui/ui/password.ui", "PasswordDialog")
+    , m_xPasswdToOpenED(m_xBuilder->weld_entry("newpassEntry"))
+    , m_xReenterPasswdToOpenED(m_xBuilder->weld_entry("confirmpassEntry"))
+    , m_xOptionsExpander(m_xBuilder->weld_expander("expander"))
+    , m_xOk(m_xBuilder->weld_button("ok"))
+    , m_xOpenReadonlyCB(m_xBuilder->weld_check_button("readonly"))
+    , m_xPasswdToModifyED(m_xBuilder->weld_entry("newpassroEntry"))
+    , m_xReenterPasswdToModifyED(m_xBuilder->weld_entry("confirmropassEntry"))
+    , m_aOneMismatch( CuiResId( RID_SVXSTR_ONE_PASSWORD_MISMATCH ) )
+    , m_aTwoMismatch( CuiResId( RID_SVXSTR_TWO_PASSWORDS_MISMATCH ) )
+    , m_aInvalidStateForOkButton( CuiResId( RID_SVXSTR_INVALID_STATE_FOR_OK_BUTTON ) )
+    , m_aInvalidStateForOkButton_v2( CuiResId( RID_SVXSTR_INVALID_STATE_FOR_OK_BUTTON_V2 ) )
+    , m_bIsPasswordToModify( bIsPasswordToModify )
 {
-    m_pImpl.reset(new PasswordToOpenModifyDialog_Impl(this,
-        nMaxPasswdLen, bIsPasswordToModify ) );
-}
+    m_xOk->connect_clicked(LINK(this, PasswordToOpenModifyDialog, OkBtnClickHdl));
 
+    if (nMaxPasswdLen)
+    {
+        m_xPasswdToOpenED->set_max_length( nMaxPasswdLen );
+        m_xReenterPasswdToOpenED->set_max_length( nMaxPasswdLen );
+        m_xPasswdToModifyED->set_max_length( nMaxPasswdLen );
+        m_xReenterPasswdToModifyED->set_max_length( nMaxPasswdLen );
+    }
 
-PasswordToOpenModifyDialog::~PasswordToOpenModifyDialog()
-{
-    disposeOnce();
+    m_xPasswdToOpenED->grab_focus();
+
+    m_xOptionsExpander->set_sensitive(bIsPasswordToModify);
+    if (!bIsPasswordToModify)
+        m_xOptionsExpander->hide();
 }
 
 OUString PasswordToOpenModifyDialog::GetPasswordToOpen() const
 {
     const bool bPasswdOk =
-            !m_pImpl->m_pPasswdToOpenED->GetText().isEmpty() &&
-            m_pImpl->m_pPasswdToOpenED->GetText() == m_pImpl->m_pReenterPasswdToOpenED->GetText();
-    return bPasswdOk ? m_pImpl->m_pPasswdToOpenED->GetText() : OUString();
+            !m_xPasswdToOpenED->get_text().isEmpty() &&
+            m_xPasswdToOpenED->get_text() == m_xReenterPasswdToOpenED->get_text();
+    return bPasswdOk ? m_xPasswdToOpenED->get_text() : OUString();
 }
 
 
 OUString PasswordToOpenModifyDialog::GetPasswordToModify() const
 {
     const bool bPasswdOk =
-            !m_pImpl->m_pPasswdToModifyED->GetText().isEmpty() &&
-            m_pImpl->m_pPasswdToModifyED->GetText() == m_pImpl->m_pReenterPasswdToModifyED->GetText();
-    return bPasswdOk ? m_pImpl->m_pPasswdToModifyED->GetText() : OUString();
+            !m_xPasswdToModifyED->get_text().isEmpty() &&
+            m_xPasswdToModifyED->get_text() == m_xReenterPasswdToModifyED->get_text();
+    return bPasswdOk ? m_xPasswdToModifyED->get_text() : OUString();
 }
 
 
 bool PasswordToOpenModifyDialog::IsRecommendToOpenReadonly() const
 {
-    return m_pImpl->m_pOpenReadonlyCB->IsChecked();
+    return m_xOpenReadonlyCB->get_active();
 }
 
 

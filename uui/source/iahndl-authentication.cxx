@@ -500,7 +500,7 @@ handleMasterPasswordRequest_(
 
 void
 executePasswordDialog(
-    vcl::Window * pParent,
+    weld::Window * pParent,
     LoginErrorInfo & rInfo,
     task::PasswordRequestMode nMode,
     const OUString& aDocName,
@@ -517,7 +517,7 @@ executePasswordDialog(
         {
             if (bIsSimplePasswordRequest)
             {
-                std::unique_ptr<PasswordDialog> xDialog(new PasswordDialog(pParent ? pParent->GetFrameWeld() : nullptr, nMode,
+                std::unique_ptr<PasswordDialog> xDialog(new PasswordDialog(pParent, nMode,
                     aResLocale, aDocName, bIsPasswordToModify, bIsSimplePasswordRequest));
                 xDialog->SetMinLen(0);
 
@@ -540,7 +540,7 @@ executePasswordDialog(
         }
         else // enter password or reenter password
         {
-            std::unique_ptr<PasswordDialog> xDialog(new PasswordDialog(pParent ? pParent->GetFrameWeld() : nullptr, nMode,
+            std::unique_ptr<PasswordDialog> xDialog(new PasswordDialog(pParent, nMode,
                 aResLocale, aDocName, bIsPasswordToModify, bIsSimplePasswordRequest));
             xDialog->SetMinLen(0);
 
@@ -558,7 +558,7 @@ executePasswordDialog(
 
 void
 handlePasswordRequest_(
-    vcl::Window * pParent,
+    weld::Window * pParent,
     task::PasswordRequestMode nMode,
     uno::Sequence< uno::Reference< task::XInteractionContinuation > > const &
         rContinuations,
@@ -723,7 +723,7 @@ UUIInteractionHelper::handlePasswordRequest(
 
     if (bDoHandleRequest)
     {
-        handlePasswordRequest_( pParent, nMode, rContinuations,
+        handlePasswordRequest_( pParent ? pParent->GetFrameWeld() : nullptr, nMode, rContinuations,
                 aDocumentName, bMSCryptoMode, bIsPasswordToModify );
         return true;
     }
@@ -731,7 +731,7 @@ UUIInteractionHelper::handlePasswordRequest(
     task::PasswordRequest aPasswordRequest;
     if( aAnyRequest >>= aPasswordRequest )
     {
-        handlePasswordRequest_(getParentProperty(),
+        handlePasswordRequest_(pParent ? pParent->GetFrameWeld() : nullptr,
                                aPasswordRequest.Mode,
                                rRequest->getContinuations(),
                                OUString(),
