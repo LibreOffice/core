@@ -645,7 +645,7 @@ public:
 
     virtual VclPtr<SfxAbstractTabDialog> CreateSvxFormatCellsDialog( const SfxItemSet* pAttr, SdrModel* pModel, const SdrObject* pObj ) override;
 
-    virtual VclPtr<SvxAbstractSplittTableDialog> CreateSvxSplittTableDialog(weld::Window* pParent, bool bIsTableVertical, long nMaxVertical) override;
+    virtual VclPtr<SvxAbstractSplitTableDialog> CreateSvxSplitTableDialog(weld::Window* pParent, bool bIsTableVertical, long nMaxVertical) override;
 
     virtual VclPtr<SvxAbstractNewTableDialog> CreateSvxNewTableDialog() override ;
 

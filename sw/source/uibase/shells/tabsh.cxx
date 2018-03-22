@@ -987,7 +987,7 @@ void SwTableShell::Execute(SfxRequest &rReq)
                 if( pFact )
                 {
                     const long nMaxVert = rSh.GetAnyCurRect( CurRectType::Frame ).Width() / MINLAY;
-                    ScopedVclPtr<SvxAbstractSplittTableDialog> pDlg(pFact->CreateSvxSplittTableDialog(GetView().GetFrameWeld(), rSh.IsTableVertical(), nMaxVert));
+                    ScopedVclPtr<SvxAbstractSplitTableDialog> pDlg(pFact->CreateSvxSplitTableDialog(GetView().GetFrameWeld(), rSh.IsTableVertical(), nMaxVert));
                     if( pDlg && (pDlg->Execute() == RET_OK) )
                     {
                         nCount = pDlg->GetCount();

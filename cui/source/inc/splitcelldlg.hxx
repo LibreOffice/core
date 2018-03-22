@@ -22,7 +22,7 @@
 #include <svx/svxdlg.hxx>
 #include <vcl/weld.hxx>
 
-class SvxSplitTableDlg : public SvxAbstractSplittTableDialog, public weld::GenericDialogController
+class SvxSplitTableDlg : public SvxAbstractSplitTableDialog, public weld::GenericDialogController
 {
 private:
     std::unique_ptr<weld::SpinButton> m_xCountEdit;
