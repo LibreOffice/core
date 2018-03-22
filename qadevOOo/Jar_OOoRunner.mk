@@ -566,7 +566,6 @@ $(eval $(call gb_Jar_add_sourcefiles,OOoRunner,\
     qadevOOo/tests/java/ifc/sheet/_FunctionDescription \
     qadevOOo/tests/java/ifc/sheet/_SheetSortDescriptor \
     qadevOOo/tests/java/ifc/sheet/_SpreadsheetDocument \
-    qadevOOo/tests/java/ifc/sheet/_SpreadsheetDocumentSettings \
     qadevOOo/tests/java/ifc/sheet/_TableAutoFormatField \
     qadevOOo/tests/java/ifc/sheet/_XActivationBroadcaster \
     qadevOOo/tests/java/ifc/sheet/_XArrayFormulaRange \

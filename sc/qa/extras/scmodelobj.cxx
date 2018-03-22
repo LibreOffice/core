@@ -8,6 +8,7 @@
  */
 
 #include <test/unoapi_test.hxx>
+#include <test/sheet/spreadsheetdocumentsettings.hxx>
 #include <test/sheet/xconsolidatable.hxx>
 #include <test/sheet/xgoalseek.hxx>
 
@@ -21,8 +22,10 @@ using namespace css::uno;
 
 namespace sc_apitest {
 
-class ScModelObj : public UnoApiTest, public apitest::XConsolidatable,
-                                      public apitest::XGoalSeek
+class ScModelObj : public UnoApiTest,
+                   public apitest::SpreadsheetDocumentSettings,
+                   public apitest::XConsolidatable,
+                   public apitest::XGoalSeek
 {
 public:
     virtual void setUp() override;
@@ -33,6 +36,9 @@ public:
     ScModelObj();
 
     CPPUNIT_TEST_SUITE(ScModelObj);
+
+    // SpreadsheetDocumentSettings
+    CPPUNIT_TEST(testSpreadsheetDocumentSettingsProperties);
 
     // XConsolidatable
     CPPUNIT_TEST(testCreateConsolidationDescriptor);
