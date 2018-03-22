@@ -86,7 +86,9 @@ enum class SearchLabel
     End,
     Start,
     EndSheet,
-    NotFound
+    NotFound,
+    StartWrapped,
+    EndWrapped
 };
 
 class SvxSearchDialog;

@@ -70,6 +70,7 @@
 #include <unotools/intlwrapper.hxx>
 #include <vcl/window.hxx>
 #include <docufld.hxx>
+#include <svx/srchdlg.hxx>
 
 using namespace ::com::sun::star;
 
@@ -940,16 +941,27 @@ bool SwCursorShell::GotoOutline( const OUString& rName )
 /// jump to next node with outline num.
 bool SwCursorShell::GotoNextOutline()
 {
-    SwCursor* pCursor = getShellCursor( true );
     const SwNodes& rNds = GetDoc()->GetNodes();
 
+    if ( rNds.GetOutLineNds().size() == 0 )
+    {
+        SvxSearchDialogWrapper::SetSearchLabel( SearchLabel::Empty );
+        return false;
+    }
+
+    SwCursor* pCursor = getShellCursor( true );
     SwNode* pNd = &(pCursor->GetNode());
     SwOutlineNodes::size_type nPos;
     if( rNds.GetOutLineNds().Seek_Entry( pNd, &nPos ))
         ++nPos;
 
     if( nPos == rNds.GetOutLineNds().size() )
-        return false;
+    {
+        nPos = 0;
+        SvxSearchDialogWrapper::SetSearchLabel( SearchLabel::EndWrapped );
+    }
+    else
+        SvxSearchDialogWrapper::SetSearchLabel( SearchLabel::Empty );
 
     pNd = rNds.GetOutLineNds()[ nPos ];
 
@@ -968,20 +980,31 @@ bool SwCursorShell::GotoNextOutline()
 /// jump to previous node with outline num.
 bool SwCursorShell::GotoPrevOutline()
 {
-    SwCursor* pCursor = getShellCursor( true );
     const SwNodes& rNds = GetDoc()->GetNodes();
 
+    if ( rNds.GetOutLineNds().size() == 0 )
+    {
+        SvxSearchDialogWrapper::SetSearchLabel( SearchLabel::Empty );
+        return false;
+    }
+
+    SwCursor* pCursor = getShellCursor( true );
     SwNode* pNd = &(pCursor->GetNode());
     SwOutlineNodes::size_type nPos;
     bool bRet = false;
-    (void)rNds.GetOutLineNds().Seek_Entry(pNd, &nPos);
+    if ( rNds.GetOutLineNds().Seek_Entry(pNd, &nPos) && nPos == 0 )
+    {
+        nPos = rNds.GetOutLineNds().size();
+        SvxSearchDialogWrapper::SetSearchLabel( SearchLabel::StartWrapped );
+    }
+    else
+        SvxSearchDialogWrapper::SetSearchLabel( SearchLabel::Empty );
+
     if (nPos)
     {
         --nPos; // before
 
         pNd = rNds.GetOutLineNds()[ nPos ];
-        if( pNd->GetIndex() > pCursor->GetPoint()->nNode.GetIndex() )
-            return false;
 
         SET_CURR_SHELL( this );
         SwCallLink aLk( *this ); // watch Cursor-Moves
