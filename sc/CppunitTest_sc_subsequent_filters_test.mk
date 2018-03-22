@@ -62,7 +62,11 @@ $(eval $(call gb_CppunitTest_set_include,sc_subsequent_filters_test,\
     $$(INCLUDE) \
 ))
 
-$(eval $(call gb_CppunitTest_use_sdk_api,sc_subsequent_filters_test))
+$(eval $(call gb_CppunitTest_use_api,sc_subsequent_filters_test,\
+	udkapi \
+	offapi \
+	oovbaapi \
+))
 
 $(eval $(call gb_CppunitTest_use_ure,sc_subsequent_filters_test))
 $(eval $(call gb_CppunitTest_use_vcl,sc_subsequent_filters_test))

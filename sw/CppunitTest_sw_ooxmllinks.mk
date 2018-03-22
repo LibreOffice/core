@@ -31,7 +31,11 @@ $(eval $(call gb_CppunitTest_set_include,sw_ooxmllinks,\
     $$(INCLUDE) \
 ))
 
-$(eval $(call gb_CppunitTest_use_sdk_api,sw_ooxmllinks))
+$(eval $(call gb_CppunitTest_use_api,sw_ooxmllinks,\
+	udkapi \
+	offapi \
+	oovbaapi \
+))
 
 $(eval $(call gb_CppunitTest_use_ure,sw_ooxmllinks))
 $(eval $(call gb_CppunitTest_use_vcl,sw_ooxmllinks))

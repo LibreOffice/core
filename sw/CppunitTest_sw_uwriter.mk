@@ -72,7 +72,11 @@ $(eval $(call gb_CppunitTest_set_include,sw_uwriter,\
     $$(INCLUDE) \
 ))
 
-$(eval $(call gb_CppunitTest_use_sdk_api,sw_uwriter))
+$(eval $(call gb_CppunitTest_use_api,sw_uwriter,\
+	udkapi \
+	offapi \
+	oovbaapi \
+))
 
 $(eval $(call gb_CppunitTest_use_ure,sw_uwriter))
 $(eval $(call gb_CppunitTest_use_vcl,sw_uwriter))
