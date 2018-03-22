@@ -1312,7 +1312,7 @@ DeactivateRC SwColumnPage::DeactivatePage(SfxItemSet *_pSet)
 
 IMPL_LINK( SwColumnPage, SetDefaultsHdl, ValueSet *, pVS, void )
 {
-    const sal_uInt16 nItem = pVS->GetSelectItemId();
+    const sal_uInt16 nItem = pVS->GetSelectedItemId();
     if( nItem < 4 )
     {
         m_pCLNrEdt->SetValue( nItem );

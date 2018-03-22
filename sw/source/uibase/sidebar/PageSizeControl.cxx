@@ -223,7 +223,7 @@ IMPL_LINK(PageSizeControl, ImplSizeHdl, ValueSet*, pControl, void)
     mpSizeValueSet->SetNoSelection();
     if ( pControl == mpSizeValueSet )
     {
-        const sal_uInt16 nSelectedPaper = mpSizeValueSet->GetSelectItemId();
+        const sal_uInt16 nSelectedPaper = mpSizeValueSet->GetSelectedItemId();
         const Paper ePaper = maPaperList[nSelectedPaper - 1];
         ExecuteSizeChange( ePaper );
     }

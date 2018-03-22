@@ -925,7 +925,7 @@ sal_uInt32 GalleryBrowser2::ImplGetSelectedItemId( const Point* pSelPos, Point& 
 
     if( GALLERYBROWSERMODE_PREVIEW == GetMode() )
     {
-        nRet = ( ( GALLERYBROWSERMODE_ICON == meLastMode ) ? mpIconView->GetSelectItemId() : ( mpListView->FirstSelectedRow() + 1 ) );
+        nRet = ( ( GALLERYBROWSERMODE_ICON == meLastMode ) ? mpIconView->GetSelectedItemId() : ( mpListView->FirstSelectedRow() + 1 ) );
 
         if( pSelPos )
             rSelPos = GetPointerPosPixel();
@@ -941,7 +941,7 @@ sal_uInt32 GalleryBrowser2::ImplGetSelectedItemId( const Point* pSelPos, Point& 
         }
         else
         {
-            nRet = mpIconView->GetSelectItemId();
+            nRet = mpIconView->GetSelectedItemId();
             rSelPos = mpIconView->GetItemRect(nRet).Center();
         }
     }

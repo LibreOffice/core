@@ -335,7 +335,7 @@ IMPL_LINK_NOARG(SvxDefaultColorOptPage, BoxClickedHdl, ValueSet*, void)
     sal_Int32 nIdx = m_pLbChartColors->GetSelectedEntryPos();
     if( nIdx != LISTBOX_ENTRY_NOTFOUND )
     {
-        const XColorEntry aEntry( m_pValSetColorBox->GetItemColor( m_pValSetColorBox->GetSelectItemId() ), m_pLbChartColors->GetSelectedEntry() );
+        const XColorEntry aEntry( m_pValSetColorBox->GetItemColor( m_pValSetColorBox->GetSelectedItemId() ), m_pLbChartColors->GetSelectedEntry() );
 
         ModifyColorEntry(aEntry, nIdx);
         pColorConfig->ReplaceColorByIndex( nIdx, aEntry );

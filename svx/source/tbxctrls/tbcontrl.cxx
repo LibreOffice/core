@@ -1385,8 +1385,8 @@ void SvxColorWindow::KeyInput( const KeyEvent& rKEvt )
 
 NamedColor SvxColorWindow::GetSelectEntryColor(ValueSet const * pColorSet)
 {
-    Color aColor = pColorSet->GetItemColor(pColorSet->GetSelectItemId());
-    OUString sColorName = pColorSet->GetItemText(pColorSet->GetSelectItemId());
+    Color aColor = pColorSet->GetItemColor(pColorSet->GetSelectedItemId());
+    OUString sColorName = pColorSet->GetItemText(pColorSet->GetSelectedItemId());
     return std::make_pair(aColor, sColorName);
 }
 
@@ -1804,7 +1804,7 @@ IMPL_LINK_NOARG(SvxFrameWindow_Impl, SelectHdl, ValueSet*, void)
                         *pRight = nullptr,
                         *pTop = nullptr,
                         *pBottom = nullptr;
-    sal_uInt16           nSel = aFrameSet->GetSelectItemId();
+    sal_uInt16           nSel = aFrameSet->GetSelectedItemId();
     sal_uInt16           nModifier = aFrameSet->GetModifier();
     FrmValidFlags        nValidFlags = FrmValidFlags::NONE;
 

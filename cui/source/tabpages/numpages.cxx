@@ -323,7 +323,7 @@ IMPL_LINK_NOARG(SvxSingleNumPickTabPage, NumSelectHdl_Impl, ValueSet*, void)
     {
         bPreset = false;
         bModified = true;
-        sal_uInt16 nIdx = m_pExamplesVS->GetSelectItemId() - 1;
+        sal_uInt16 nIdx = m_pExamplesVS->GetSelectedItemId() - 1;
         DBG_ASSERT(aNumSettingsArr.size() > nIdx, "wrong index");
         if(aNumSettingsArr.size() <= nIdx)
             return;
@@ -487,7 +487,7 @@ IMPL_LINK_NOARG(SvxBulletPickTabPage, NumSelectHdl_Impl, ValueSet*, void)
     {
         bPreset = false;
         bModified = true;
-        sal_Unicode cChar = aBulletTypes[m_pExamplesVS->GetSelectItemId() - 1];
+        sal_Unicode cChar = aBulletTypes[m_pExamplesVS->GetSelectedItemId() - 1];
         const vcl::Font& rActBulletFont = lcl_GetDefaultBulletFont();
 
         sal_uInt16 nMask = 1;
@@ -691,7 +691,7 @@ IMPL_LINK_NOARG(SvxNumPickTabPage, NumSelectHdl_Impl, ValueSet*, void)
 
         const FontList*  pList = nullptr;
 
-        SvxNumSettingsArr_Impl& rItemArr = aNumSettingsArrays[m_pExamplesVS->GetSelectItemId() - 1];
+        SvxNumSettingsArr_Impl& rItemArr = aNumSettingsArrays[m_pExamplesVS->GetSelectedItemId() - 1];
 
         const vcl::Font& rActBulletFont = lcl_GetDefaultBulletFont();
         SvxNumSettings_Impl* pLevelSettings = nullptr;
@@ -944,7 +944,7 @@ IMPL_LINK_NOARG(SvxBitmapPickTabPage, NumSelectHdl_Impl, ValueSet*, void)
     {
         bPreset = false;
         bModified = true;
-        sal_uInt16 nIdx = m_pExamplesVS->GetSelectItemId() - 1;
+        sal_uInt16 nIdx = m_pExamplesVS->GetSelectedItemId() - 1;
 
         sal_uInt16 nMask = 1;
         for(sal_uInt16 i = 0; i < pActNum->GetLevelCount(); i++)

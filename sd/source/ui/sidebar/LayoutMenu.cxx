@@ -219,9 +219,9 @@ AutoLayout LayoutMenu::GetSelectedAutoLayout()
 {
     AutoLayout aResult = AUTOLAYOUT_NONE;
 
-    if ( ! IsNoSelection() && GetSelectItemId()!=0)
+    if ( ! IsNoSelection() && GetSelectedItemId()!=0)
     {
-        AutoLayout* pLayout = static_cast<AutoLayout*>(GetItemData(GetSelectItemId()));
+        AutoLayout* pLayout = static_cast<AutoLayout*>(GetItemData(GetSelectedItemId()));
         if (pLayout != nullptr)
             aResult = *pLayout;
     }
@@ -579,9 +579,9 @@ void LayoutMenu::Command (const CommandEvent& rEvent)
                 }
                 else
                 {
-                    if (GetSelectItemId() == sal_uInt16(-1))
+                    if (GetSelectedItemId() == sal_uInt16(-1))
                         return;
-                    ::tools::Rectangle aBBox (GetItemRect(GetSelectItemId()));
+                    ::tools::Rectangle aBBox (GetItemRect(GetSelectedItemId()));
                     aMenuPosition = aBBox.Center();
                 }
 
@@ -675,7 +675,7 @@ void LayoutMenu::UpdateSelection()
             if (*static_cast<AutoLayout*>(GetItemData(nId)) == aLayout)
             {
                 // do not set selection twice to the same item
-                if (GetSelectItemId() != nId)
+                if (GetSelectedItemId() != nId)
                 {
                     SetNoSelection();
                     SelectItem(nId);

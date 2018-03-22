@@ -434,7 +434,7 @@ IMPL_LINK_NOARG(SvxColorTabPage, ClickWorkOnHdl_Impl, Button*, void)
 
 IMPL_LINK_NOARG(SvxColorTabPage, ClickDeleteHdl_Impl, Button*, void)
 {
-    sal_uInt16 nId = m_pValSetColorList->GetSelectItemId();
+    sal_uInt16 nId = m_pValSetColorList->GetSelectedItemId();
     size_t nPos = m_pValSetColorList->GetSelectItemPos();
     if(m_pSelectPalette->GetSelectedEntryPos() == 0 && nPos != VALUESET_ITEM_NOTFOUND )
     {
@@ -500,7 +500,7 @@ IMPL_LINK_NOARG(SvxColorTabPage, SelectPaletteLBHdl, ListBox&, void)
 
 IMPL_LINK(SvxColorTabPage, SelectValSetHdl_Impl, ValueSet*, pValSet, void)
 {
-    sal_Int32 nPos = pValSet->GetSelectItemId();
+    sal_Int32 nPos = pValSet->GetSelectedItemId();
     if( nPos != 0 )
     {
         Color aColor = pValSet->GetItemColor( nPos );
@@ -513,7 +513,7 @@ IMPL_LINK(SvxColorTabPage, SelectValSetHdl_Impl, ValueSet*, pValSet, void)
         if(pValSet == m_pValSetColorList)
         {
             m_pValSetRecentList->SetNoSelection();
-            if(m_pSelectPalette->GetSelectedEntryPos() == 0 && m_pValSetColorList->GetSelectItemId() != 0)
+            if(m_pSelectPalette->GetSelectedEntryPos() == 0 && m_pValSetColorList->GetSelectedItemId() != 0)
                 m_pBtnDelete->Enable();
             else
                 m_pBtnDelete->Disable();

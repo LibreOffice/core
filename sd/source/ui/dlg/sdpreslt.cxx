@@ -110,7 +110,7 @@ void SdPresLayoutDlg::Reset()
  */
 void SdPresLayoutDlg::GetAttr(SfxItemSet& rOutAttrs)
 {
-    short nId = m_pVS->GetSelectItemId();
+    short nId = m_pVS->GetSelectedItemId();
     bool bLoad = nId > mnLayoutCount;
     rOutAttrs.Put( SfxBoolItem( ATTR_PRESLAYOUT_LOAD, bLoad ) );
 

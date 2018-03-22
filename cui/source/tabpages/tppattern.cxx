@@ -211,7 +211,7 @@ bool SvxPatternTabPage::FillItemSet( SfxItemSet* _rOutAttrs )
     if(VALUESET_ITEM_NOTFOUND != nPos)
     {
         const XBitmapEntry* pXBitmapEntry = m_pPatternList->GetBitmap( static_cast<sal_uInt16>(nPos) );
-        const OUString aString( m_pPatternLB->GetItemText( m_pPatternLB->GetSelectItemId() ) );
+        const OUString aString( m_pPatternLB->GetItemText( m_pPatternLB->GetSelectedItemId() ) );
 
         _rOutAttrs->Put(XFillBitmapItem(aString, pXBitmapEntry->GetGraphicObject()));
     }
@@ -430,7 +430,7 @@ IMPL_LINK_NOARG(SvxPatternTabPage, ClickAddHdl_Impl, Button*, void)
 
 IMPL_LINK_NOARG(SvxPatternTabPage, ClickModifyHdl_Impl, Button*, void)
 {
-    sal_uInt16 nId = m_pPatternLB->GetSelectItemId();
+    sal_uInt16 nId = m_pPatternLB->GetSelectedItemId();
     size_t nPos = m_pPatternLB->GetSelectItemPos();
 
     if ( nPos != VALUESET_ITEM_NOTFOUND )
@@ -455,7 +455,7 @@ IMPL_LINK_NOARG(SvxPatternTabPage, ClickModifyHdl_Impl, Button*, void)
 IMPL_LINK_NOARG(SvxPatternTabPage, ClickRenameHdl_Impl, SvxPresetListBox*, void)
 {
     size_t nPos = m_pPatternLB->GetSelectItemPos();
-    sal_Int32 nId = m_pPatternLB->GetSelectItemId();
+    sal_Int32 nId = m_pPatternLB->GetSelectedItemId();
 
     if ( nPos != VALUESET_ITEM_NOTFOUND )
     {
@@ -498,7 +498,7 @@ IMPL_LINK_NOARG(SvxPatternTabPage, ClickRenameHdl_Impl, SvxPresetListBox*, void)
 
 IMPL_LINK_NOARG(SvxPatternTabPage, ClickDeleteHdl_Impl, SvxPresetListBox*, void)
 {
-    sal_uInt16 nId = m_pPatternLB->GetSelectItemId();
+    sal_uInt16 nId = m_pPatternLB->GetSelectedItemId();
     size_t nPos = m_pPatternLB->GetSelectItemPos();
 
     if( nPos != VALUESET_ITEM_NOTFOUND )

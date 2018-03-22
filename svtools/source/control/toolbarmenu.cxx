@@ -366,7 +366,7 @@ void ToolbarMenu_Impl::notifyHighlightedEntry()
         // todo: if other controls than ValueSet are allowed, adapt this code
         ValueSet* pValueSet = dynamic_cast< ValueSet* >( pEntry->mpControl.get() );
         if( pValueSet )
-            nChildIndex = static_cast< sal_Int32 >( pValueSet->GetItemPos( pValueSet->GetSelectItemId() ) );
+            nChildIndex = static_cast< sal_Int32 >( pValueSet->GetItemPos( pValueSet->GetSelectedItemId() ) );
 
         if( (nChildIndex >= pEntry->getAccessibleChildCount()) || (nChildIndex < 0) )
             return;
@@ -925,7 +925,7 @@ static bool implCheckSubControlCursorMove( Control* pControl, bool bUp, int& nLa
     ValueSet* pValueSet = dynamic_cast< ValueSet* >( pControl );
     if( pValueSet )
     {
-        size_t nItemPos = pValueSet->GetItemPos( pValueSet->GetSelectItemId() );
+        size_t nItemPos = pValueSet->GetItemPos( pValueSet->GetSelectedItemId() );
         if( nItemPos != VALUESET_ITEM_NOTFOUND )
         {
             const sal_uInt16 nColCount = pValueSet->GetColCount();

@@ -85,7 +85,7 @@ WB_NAMEFIELD        There is a namefield, where the name of an item will be
                     shown.
 WB_NONEFIELD        There is a NoSelection field which can be selected if
                     0 is passed along with SelectItem. Respectively
-                    GetSelectItemId() returns 0 if this field or nothing
+                    GetSelectedItemId() returns 0 if this field or nothing
                     is selected. This field shows the text which is specified
                     by SetText() respectively no one, if no text was set. With
                     SetNoSelection() the selection can be disabled.
@@ -337,7 +337,7 @@ public:
     void           RecalculateItemSizes();
 
     void           SelectItem( sal_uInt16 nItemId );
-    sal_uInt16     GetSelectItemId() const
+    sal_uInt16     GetSelectedItemId() const
     {
         return mnSelItemId;
     }

@@ -206,7 +206,7 @@ bool SvxBitmapTabPage::FillItemSet( SfxItemSet* rAttrs )
     if(VALUESET_ITEM_NOTFOUND != nPos)
     {
         const XBitmapEntry* pXBitmapEntry = m_pBitmapList->GetBitmap(nPos);
-        const OUString aString(m_pBitmapLB->GetItemText( m_pBitmapLB->GetSelectItemId() ));
+        const OUString aString(m_pBitmapLB->GetItemText( m_pBitmapLB->GetSelectedItemId() ));
         rAttrs->Put(XFillBitmapItem(aString, pXBitmapEntry->GetGraphicObject()));
     }
 
@@ -552,7 +552,7 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ModifyBitmapHdl, ValueSet*, void)
 
 IMPL_LINK_NOARG(SvxBitmapTabPage, ClickRenameHdl, SvxPresetListBox*, void)
 {
-    sal_uInt16 nId = m_pBitmapLB->GetSelectItemId();
+    sal_uInt16 nId = m_pBitmapLB->GetSelectedItemId();
     size_t nPos = m_pBitmapLB->GetSelectItemPos();
 
     if( nPos != VALUESET_ITEM_NOTFOUND )
@@ -594,7 +594,7 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickRenameHdl, SvxPresetListBox*, void)
 
 IMPL_LINK_NOARG(SvxBitmapTabPage, ClickDeleteHdl, SvxPresetListBox*, void)
 {
-    sal_uInt16 nId = m_pBitmapLB->GetSelectItemId();
+    sal_uInt16 nId = m_pBitmapLB->GetSelectedItemId();
     size_t nPos = m_pBitmapLB->GetSelectItemPos();
 
     if( nPos != VALUESET_ITEM_NOTFOUND )

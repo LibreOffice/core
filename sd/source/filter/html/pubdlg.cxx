@@ -887,7 +887,7 @@ void SdPublishingDlg::GetParameterSequence( Sequence< PropertyValue >& rParams )
     if( !pPage5_TextOnly->IsChecked() )
     {
         aValue.Name = "UseButtonSet";
-        aValue.Value <<= static_cast<sal_Int32>(pPage5_Buttons->GetSelectItemId() - 1);
+        aValue.Value <<= static_cast<sal_Int32>(pPage5_Buttons->GetSelectedItemId() - 1);
         aProps.push_back( aValue );
     }
 
@@ -1479,7 +1479,7 @@ void SdPublishingDlg::GetDesign( SdPublishingDesign* pDesign )
     if(pPage5_TextOnly->IsChecked())
         pDesign->m_nButtonThema = -1;
     else
-        pDesign->m_nButtonThema = pPage5_Buttons->GetSelectItemId() - 1;
+        pDesign->m_nButtonThema = pPage5_Buttons->GetSelectedItemId() - 1;
 
     pDesign->m_bUserAttr = pPage6_User->IsChecked();
     pDesign->m_aBackColor = m_aBackColor;

@@ -228,7 +228,7 @@ bool SvxGradientTabPage::FillItemSet( SfxItemSet* rSet )
     if( nPos != VALUESET_ITEM_NOTFOUND )
     {
         pXGradient.reset(new XGradient( m_pGradientList->GetGradient( static_cast<sal_uInt16>(nPos) )->GetGradient() ));
-        aString = m_pGradientLB->GetItemText( m_pGradientLB->GetSelectItemId() );
+        aString = m_pGradientLB->GetItemText( m_pGradientLB->GetSelectedItemId() );
     }
     else
     // gradient was passed (unidentified)
@@ -432,7 +432,7 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ClickAddHdl_Impl, Button*, void)
 
 IMPL_LINK_NOARG(SvxGradientTabPage, ClickModifyHdl_Impl, Button*, void)
 {
-    sal_uInt16 nId = m_pGradientLB->GetSelectItemId();
+    sal_uInt16 nId = m_pGradientLB->GetSelectedItemId();
     size_t nPos = m_pGradientLB->GetSelectItemPos();
 
     if ( nPos != VALUESET_ITEM_NOTFOUND )
@@ -463,7 +463,7 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ClickModifyHdl_Impl, Button*, void)
 
 IMPL_LINK_NOARG(SvxGradientTabPage, ClickDeleteHdl_Impl, SvxPresetListBox*, void)
 {
-    sal_uInt16 nId = m_pGradientLB->GetSelectItemId();
+    sal_uInt16 nId = m_pGradientLB->GetSelectedItemId();
     size_t nPos = m_pGradientLB->GetSelectItemPos();
 
     if( nPos != VALUESET_ITEM_NOTFOUND )
@@ -492,7 +492,7 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ClickDeleteHdl_Impl, SvxPresetListBox*, void
 
 IMPL_LINK_NOARG(SvxGradientTabPage, ClickRenameHdl_Impl, SvxPresetListBox*, void)
 {
-    sal_uInt16 nId = m_pGradientLB->GetSelectItemId();
+    sal_uInt16 nId = m_pGradientLB->GetSelectedItemId();
     size_t nPos = m_pGradientLB->GetSelectItemPos();
 
     if ( nPos != VALUESET_ITEM_NOTFOUND )

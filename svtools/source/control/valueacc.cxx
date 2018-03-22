@@ -861,7 +861,7 @@ uno::Reference< accessibility::XAccessibleStateSet > SAL_CALL ValueItemAcc::getA
         //      pStateSet->AddState( accessibility::AccessibleStateType::FOCUSABLE );
 
         // SELECTED
-        if( mpParent->mrParent.GetSelectItemId() == mpParent->mnId )
+        if( mpParent->mrParent.GetSelectedItemId() == mpParent->mnId )
         {
             pStateSet->AddState( accessibility::AccessibleStateType::SELECTED );
             //              pStateSet->AddState( accessibility::AccessibleStateType::FOCUSED );

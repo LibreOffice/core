@@ -506,7 +506,7 @@ void ListBoxWrapper< ValueT >::SetControlValue( ValueT nValue )
 template< typename ValueT >
 ValueT ValueSetWrapper< ValueT >::GetControlValue() const
 {
-    return this->GetValueFromPos( this->GetControl().GetSelectItemId() );
+    return this->GetValueFromPos( this->GetControl().GetSelectedItemId() );
 }
 
 template< typename ValueT >

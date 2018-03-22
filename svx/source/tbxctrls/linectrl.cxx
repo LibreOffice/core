@@ -312,7 +312,7 @@ IMPL_LINK_NOARG(SvxLineEndWindow, SelectHdl, ValueSet*, void)
 {
     std::unique_ptr<XLineEndItem> pLineEndItem;
     std::unique_ptr<XLineStartItem> pLineStartItem;
-    sal_uInt16 nId = mpLineEndSet->GetSelectItemId();
+    sal_uInt16 nId = mpLineEndSet->GetSelectedItemId();
 
     if( nId == 1 )
     {
