@@ -60,6 +60,7 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
     padmin \
     package \
     rdbmaker \
+    registry \
     reportdesign \
     remotebridges \
     sane \
