@@ -19,6 +19,7 @@
 #ifndef INCLUDED_VCL_ABSTDLG_HXX
 #define INCLUDED_VCL_ABSTDLG_HXX
 
+#include <sal/types.h>
 #include <rtl/ustring.hxx>
 #include <tools/link.hxx>
 #include <vcl/dllapi.h>
@@ -27,6 +28,9 @@
 #include <vector>
 #include <functional>
 #include <memory>
+
+#include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/frame/XModel.hpp>
 
 namespace vcl { class Window; }
 class Dialog;
@@ -115,6 +119,12 @@ protected:
     virtual             ~AbstractScreenshotAnnotationDlg() override = default;
 };
 
+class VCL_DLLPUBLIC AbstractSignSignatureLineDialog : public VclAbstractDialog
+{
+protected:
+    virtual ~AbstractSignSignatureLineDialog() override = default;
+};
+
 class VCL_DLLPUBLIC VclAbstractDialogFactory
 {
 public:
@@ -125,6 +135,12 @@ public:
 
     // creates instance of PasswordToOpenModifyDialog from cui
     virtual VclPtr<AbstractPasswordToOpenModifyDialog> CreatePasswordToOpenModifyDialog(weld::Window * pParent, sal_uInt16 nMaxPasswdLen, bool bIsPasswordToModify) = 0;
+
+    // creates instance of SignSignatureDialog from cui
+    virtual VclPtr<AbstractSignSignatureLineDialog>
+    CreateSignSignatureLineDialog(weld::Window* pParent,
+                                  const css::uno::Reference<css::frame::XModel> xModel)
+        = 0;
 
     // creates instance of ScreenshotAnnotationDlg from cui
     virtual VclPtr<AbstractScreenshotAnnotationDlg> CreateScreenshotAnnotationDlg(
