@@ -104,6 +104,7 @@ void SwView::GetState(SfxItemSet &rSet)
                 }
                 break;
             case SID_EDIT_SIGNATURELINE:
+            case SID_SIGN_SIGNATURELINE:
                 if (!isSignatureLineSelected())
                     rSet.DisableItem(nWhich);
                 break;
