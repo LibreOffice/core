@@ -254,6 +254,9 @@ void SwDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
     if( xVbaEvents.is() )
         lcl_processCompatibleSfxHint( xVbaEvents, rHint );
 
+    if ( rHint.GetId() == SfxHintId::DocChanged )
+        SW_MOD()->CallAutomationApplicationEventSinks( "DocumentChange", css::uno::Sequence< css::uno::Any >() );
+
     sal_uInt16 nAction = 0;
     auto pEventHint = dynamic_cast<const SfxEventHint*>(&rHint);
     if( pEventHint && pEventHint->GetEventId() == SfxEventHintId::LoadFinished )

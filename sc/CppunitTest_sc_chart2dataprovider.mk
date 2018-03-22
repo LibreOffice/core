@@ -62,7 +62,11 @@ $(eval $(call gb_CppunitTest_set_include,sc_chart2dataprovider,\
     $$(INCLUDE) \
 ))
 
-$(eval $(call gb_CppunitTest_use_sdk_api,sc_chart2dataprovider))
+$(eval $(call gb_CppunitTest_use_api,sc_chart2dataprovider,\
+	udkapi \
+	offapi \
+	oovbaapi \
+))
 
 $(eval $(call gb_CppunitTest_use_ure,sc_chart2dataprovider))
 $(eval $(call gb_CppunitTest_use_vcl,sc_chart2dataprovider))

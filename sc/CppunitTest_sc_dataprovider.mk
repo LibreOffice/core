@@ -67,7 +67,11 @@ $(eval $(call gb_CppunitTest_use_custom_headers,sc_dataprovider,\
 	officecfg/registry \
 ))
 
-$(eval $(call gb_CppunitTest_use_sdk_api,sc_dataprovider))
+$(eval $(call gb_CppunitTest_use_api,sc_dataprovider,\
+	udkapi \
+	offapi \
+	oovbaapi \
+))
 
 $(eval $(call gb_CppunitTest_use_ure,sc_dataprovider))
 $(eval $(call gb_CppunitTest_use_vcl,sc_dataprovider))

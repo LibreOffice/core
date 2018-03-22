@@ -48,7 +48,11 @@ $(eval $(call gb_CppunitTest_add_cxxflags,sw_rtfexport2,\
 ))
 endif
 
-$(eval $(call gb_CppunitTest_use_sdk_api,sw_rtfexport2))
+$(eval $(call gb_CppunitTest_use_api,sw_rtfexport2,\
+	udkapi \
+	offapi \
+	oovbaapi \
+))
 
 $(eval $(call gb_CppunitTest_use_ure,sw_rtfexport2))
 $(eval $(call gb_CppunitTest_use_vcl,sw_rtfexport2))
