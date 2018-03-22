@@ -37,7 +37,6 @@ typedef cppu::ImplInheritanceHelper< VbaApplicationBase, ooo::vba::word::XApplic
 
 class SwVbaApplication : public SwVbaApplication_BASE
 {
-    // FIXME: We allow just one sink at a time
     std::vector<css::uno::Reference< ooo::vba::XSink >> mvSinks;
 
 public:
