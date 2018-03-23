@@ -45,30 +45,6 @@ bool isRedundantConstCast(CXXConstCastExpr const * expr) {
             || sub->getValueKind() == VK_XValue);
 }
 
-bool isArithmeticOp(Expr const * expr) {
-    expr = expr->IgnoreParenImpCasts();
-    if (auto const e = dyn_cast<BinaryOperator>(expr)) {
-        switch (e->getOpcode()) {
-        case BO_Mul:
-        case BO_Div:
-        case BO_Rem:
-        case BO_Add:
-        case BO_Sub:
-        case BO_Shl:
-        case BO_Shr:
-        case BO_And:
-        case BO_Xor:
-        case BO_Or:
-            return true;
-        case BO_Comma:
-            return isArithmeticOp(e->getRHS());
-        default:
-            return false;
-        }
-    }
-    return isa<UnaryOperator>(expr) || isa<AbstractConditionalOperator>(expr);
-}
-
 bool canConstCastFromTo(Expr const * from, Expr const * to) {
     auto const k1 = from->getValueKind();
     auto const k2 = to->getValueKind();
@@ -150,7 +126,6 @@ public:
 
 private:
     bool visitBinOp(BinaryOperator const * expr);
-    bool isOkToRemoveArithmeticCast(QualType t1, QualType t2, const Expr* subExpr);
     bool isOverloadedFunction(FunctionDecl const * decl);
 };
 
@@ -297,7 +272,8 @@ bool RedundantCast::VisitCStyleCastExpr(CStyleCastExpr const * expr) {
     if (!t1->isBuiltinType() && !loplugin::TypeCheck(t1).Enum() && !loplugin::TypeCheck(t1).Typedef()) {
         return true;
     }
-    if (!isOkToRemoveArithmeticCast(t1, t2, expr->getSubExpr())) {
+    if (!loplugin::isOkToRemoveArithmeticCast(compiler.getASTContext(), t1, t2, expr->getSubExpr()))
+    {
         return true;
     }
     // Ignore FD_ISSET expanding to "...(SOCKET)(fd)..." in some Microsoft
@@ -326,26 +302,6 @@ bool RedundantCast::VisitCStyleCastExpr(CStyleCastExpr const * expr) {
         DiagnosticsEngine::Warning,
         "redundant cstyle cast from %0 to %1", expr->getExprLoc())
         << t1 << t2 << expr->getSourceRange();
-    return true;
-}
-
-bool RedundantCast::isOkToRemoveArithmeticCast(QualType t1, QualType t2, const Expr* subExpr) {
-    // Don't warn if the types are arithmetic (in the C++ meaning), and: either
-    // at least one is a typedef (and if both are typedefs,they're different),
-    // or the sub-expression involves some operation that is likely to change
-    // types through promotion, or the sub-expression is an integer literal (so
-    // its type generally depends on its value and suffix if any---even with a
-    // suffix like L it could still be either long or long long):
-    if ((t1->isIntegralType(compiler.getASTContext())
-         || t1->isRealFloatingType())
-        && ((t1 != t2
-             && (loplugin::TypeCheck(t1).Typedef()
-                 || loplugin::TypeCheck(t2).Typedef()))
-            || isArithmeticOp(subExpr)
-            || isa<IntegerLiteral>(subExpr->IgnoreParenImpCasts())))
-    {
-        return false;
-    }
     return true;
 }
 
@@ -396,7 +352,8 @@ bool RedundantCast::VisitCXXStaticCastExpr(CXXStaticCastExpr const * expr) {
             << expr->getSourceRange();
         return true;
     }
-    if (!isOkToRemoveArithmeticCast(t1, t2, expr->getSubExpr())) {
+    if (!loplugin::isOkToRemoveArithmeticCast(compiler.getASTContext(), t1, t2, expr->getSubExpr()))
+    {
         return true;
     }
     // Don't warn if the types are 'void *' and at least one involves a typedef
@@ -698,7 +655,7 @@ bool RedundantCast::VisitCXXFunctionalCastExpr(CXXFunctionalCastExpr const * exp
     auto const t2 = sub->getType();
     if (t1.getCanonicalType() != t2.getCanonicalType())
         return true;
-    if (!isOkToRemoveArithmeticCast(t1, t2, expr->getSubExpr()))
+    if (!loplugin::isOkToRemoveArithmeticCast(compiler.getASTContext(), t1, t2, expr->getSubExpr()))
         return true;
     report(
         DiagnosticsEngine::Warning,
