@@ -437,7 +437,8 @@ svx::SvxShowCharSetItem* SvxSearchCharSet::ImplGetItem( int _nPos )
         aFind = m_aItems.emplace(_nPos, xItem).first;
         OUStringBuffer buf;
         std::unordered_map<sal_Int32,sal_UCS4>::const_iterator got = m_aItemList.find (_nPos);
-        buf.appendUtf32( got->second );
+        if (got != m_aItemList.end())
+            buf.appendUtf32(got->second);
         aFind->second->maText = buf.makeStringAndClear();
         Point pix = MapIndexToPixel( _nPos );
         aFind->second->maRect = tools::Rectangle( Point( pix.X() + 1, pix.Y() + 1 ), Size(nX-1,nY-1) );
