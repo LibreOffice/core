@@ -493,8 +493,7 @@ void Test::createInstance(
                     {"com.sun.star.comp.report.OFormattedField", "TextColor"},
                     {"com.sun.star.comp.report.OFormattedField", "TextLineColor"},
                     {"com.sun.star.comp.report.OFormattedField", "TreatAsNumber"},
-                    {"stardiv.Toolkit.UnoControlRoadmapModel", "Interactive"},
-                    {"stardiv.UnoControls.FrameControl", "ComponentUrl"}};
+                    {"stardiv.Toolkit.UnoControlRoadmapModel", "Interactive"}};
                 if (blacklist.find({implementationName, prop->getName()}) != blacklist.end()) {
                     continue;
                 }
