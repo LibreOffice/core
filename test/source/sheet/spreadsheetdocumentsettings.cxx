@@ -53,7 +53,7 @@ void SpreadsheetDocumentSettings::testSpreadsheetDocumentSettingsProperties()
     aNewValue <<= util::Date(1, 1, 2000);
     xSpreadsheetDocumentSettings->setPropertyValue(propName, aNewValue);
     CPPUNIT_ASSERT(xSpreadsheetDocumentSettings->getPropertyValue(propName) >>= aNullDateSet);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Unabel to set PropertyValue: NullDate", sal_Int16(2000),
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to set PropertyValue: NullDate", sal_Int16(2000),
                                  aNullDateSet.Year);
 
     propName = "DefaultTabStop";
