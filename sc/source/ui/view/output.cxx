@@ -292,12 +292,13 @@ void ScOutputData::SetMetaFileMode( bool bNewMode )
 void ScOutputData::SetSyntaxMode( bool bNewMode )
 {
     mbSyntaxMode = bNewMode;
-    if (bNewMode)
-        if (!pValueColor)
+    if ( bNewMode )
+        if ( !pValueColor )
         {
-            pValueColor = new Color(COL_LIGHTBLUE);
-            pTextColor = new Color(COL_BLACK);
-            pFormulaColor = new Color(COL_GREEN);
+            const svtools::ColorConfig& rColorCfg = SC_MOD()->GetColorConfig();
+            pValueColor = new Color( rColorCfg.GetColorValue( svtools::CALCVALUE ).nColor );
+            pTextColor = new Color( rColorCfg.GetColorValue( svtools::CALCTEXT ).nColor );
+            pFormulaColor = new Color( rColorCfg.GetColorValue( svtools::CALCFORMULA ).nColor );
         }
 }
 
@@ -1026,6 +1027,10 @@ void ScOutputData::DrawBackground(vcl::RenderContext& rRenderContext)
 
     long nPosY = nScrY;
 
+    const svtools::ColorConfig& rColorCfg = SC_MOD()->GetColorConfig();
+    Color aProtectedColor( rColorCfg.GetColorValue( svtools::CALCPROTECTEDBACKGROUND ).nColor );
+    std::shared_ptr<SvxBrushItem> pProtectedBackground( new SvxBrushItem( aProtectedColor, ATTR_BACKGROUND ) );
+
     // iterate through the rows to show
     for (SCSIZE nArrY=1; nArrY+1<nArrCount; nArrY++)
     {
@@ -1060,7 +1065,7 @@ void ScOutputData::DrawBackground(vcl::RenderContext& rRenderContext)
                     aRect = rRenderContext.PixelToLogic(aRect); // internal data in pixels, but we'll be drawing in logic units
 
                 const SvxBrushItem* pOldBackground = nullptr;
-                const SvxBrushItem* pBackground;
+                const SvxBrushItem* pBackground = nullptr;
                 const Color* pOldColor = nullptr;
                 const ScDataBarInfo* pOldDataBarInfo = nullptr;
                 const ScIconSetInfo* pOldIconSetInfo = nullptr;
@@ -1085,7 +1090,7 @@ void ScOutputData::DrawBackground(vcl::RenderContext& rRenderContext)
                         {
                             const ScProtectionAttr& rProt = pP->GetItem(ATTR_PROTECTION);
                             if (rProt.GetProtection() || rProt.GetHideCell())
-                                pBackground = ScGlobal::GetProtectedBrushItem();
+                                pBackground = pProtectedBackground.get();
                             else
                                 pBackground = ScGlobal::GetEmptyBrushItem();
                         }
@@ -1096,7 +1101,7 @@ void ScOutputData::DrawBackground(vcl::RenderContext& rRenderContext)
                         pBackground = pInfo->pBackground;
 
                     if ( bPagebreakMode && !pInfo->bPrinted )
-                        pBackground = ScGlobal::GetProtectedBrushItem();
+                        pBackground = pProtectedBackground.get();
 
                     if ( pInfo->nRotateDir > ScRotateDir::Standard &&
                             pBackground->GetColor().GetTransparency() != 255 &&
