@@ -72,6 +72,7 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
     slideshow \
     sot \
     starmath \
+    store \
     svgio \
     svl \
     svtools \
