@@ -498,19 +498,27 @@ protected:
         return aValue;
     }
 
-    /// Get number of paragraphs of the document.
-    int getParagraphs()
+    int getParagraphs( uno::Reference<text::XText> const & xText )
     {
-        uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
-        uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xTextDocument->getText(), uno::UNO_QUERY);
-        uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
         int nRet = 0;
+        if ( ! xText.is() )
+            return nRet;
+
+        uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xText->getText(), uno::UNO_QUERY);
+        uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
         while (xParaEnum->hasMoreElements())
         {
             xParaEnum->nextElement();
             nRet++;
         }
         return nRet;
+    }
+
+    /// Get number of paragraphs of the document.
+    int getParagraphs()
+    {
+        uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+        return getParagraphs( xTextDocument->getText() );
     }
 
     uno::Reference<text::XTextContent> getParagraphOrTable(int number, uno::Reference<text::XText> const & xText = uno::Reference<text::XText>()) const
