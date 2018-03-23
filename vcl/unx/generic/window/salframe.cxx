@@ -1426,18 +1426,14 @@ void X11SalFrame::ToTop( SalFrameToTop nFlags )
         && bMapped_ )
     {
         if( m_bXEmbed )
-        {
             askForXEmbedFocus( 0 );
-            return;
-        }
-
-        if ( nFlags & SalFrameToTop::GrabFocus )
-        {
+        else
+            XSetInputFocus( GetXDisplay(), aToTopWindow, RevertToParent, CurrentTime );
+    }
+    else if( ( nFlags & SalFrameToTop::RestoreWhenMin ) || ( nFlags & SalFrameToTop::ForegroundTask ) )
+    {
             Time nTimestamp = pDisplay_->GetX11ServerTime();
             GetDisplay()->getWMAdaptor()->activateWindow( this, nTimestamp );
-        }
-        else if ( nFlags & SalFrameToTop::GrabFocusOnly )
-            XSetInputFocus( GetXDisplay(), aToTopWindow, RevertToParent, CurrentTime );
     }
 }
 
