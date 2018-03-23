@@ -389,47 +389,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
 
             bContinue = false;
         }
-        if( bContinue )
-        {
-            SwTab nTabCols = rSh.WhichMouseTabCol(aPos);
-            const char* pTabRes = nullptr;
-            switch(nTabCols)
-            {
-                case SwTab::COL_HORI:
-                case SwTab::COL_VERT:
-                    pTabRes = STR_TABLE_COL_ADJUST;
-                    break;
-                case SwTab::ROW_HORI:
-                case SwTab::ROW_VERT:
-                    pTabRes = STR_TABLE_ROW_ADJUST;
-                    break;
-                // #i32329# Enhanced table selection
-                case SwTab::SEL_HORI:
-                case SwTab::SEL_HORI_RTL:
-                case SwTab::SEL_VERT:
-                    pTabRes = STR_TABLE_SELECT_ALL;
-                    break;
-                case SwTab::ROWSEL_HORI:
-                case SwTab::ROWSEL_HORI_RTL:
-                case SwTab::ROWSEL_VERT:
-                    pTabRes = STR_TABLE_SELECT_ROW;
-                    break;
-                case SwTab::COLSEL_HORI:
-                case SwTab::COLSEL_VERT:
-                    pTabRes = STR_TABLE_SELECT_COL;
-                    break;
-                case SwTab::COL_NONE: break; // prevent compiler warning
-            }
-            if (pTabRes)
-            {
-                sText = SwResId(pTabRes);
-                Size aTextSize( GetTextWidth(sText), GetTextHeight());
-                tools::Rectangle aRect(rEvt.GetMousePosPixel(), aTextSize);
-                OUString sDisplayText(ClipLongToolTip(sText));
-                Help::ShowQuickHelp(this, aRect, sDisplayText);
-            }
-            bContinue = false;
-        }
+
     }
 
     if( bContinue )
