@@ -330,6 +330,7 @@ public:
     virtual void set_max_length(int nChars) = 0;
     virtual void select_region(int nStartPos, int nEndPos) = 0;
     virtual void set_position(int nCursorPos) = 0;
+    virtual void set_editable(bool bEditable) = 0;
 
     void connect_changed(const Link<Entry&, void>& rLink) { m_aChangeHdl = rLink; }
 
