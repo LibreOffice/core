@@ -5295,6 +5295,14 @@
         </info>
         <value>EmojiOne Color</value>
       </prop>
+      <prop oor:name="FontsUseWinMetrics" oor:type="oor:string-list" oor:nillable="false">
+        <info>
+          <desc>Fonts where the win metrics need to be considered in order to display the font correctly</desc>
+        </info>
+        <value>
+          <it>DIN Light</it>
+        </value>
+      </prop>
       <prop oor:name="PluginsEnabled" oor:type="xs:boolean" oor:nillable="false">
         <!-- OldPath: ? -->
         <!-- OldLocation: soffice.ini -->
