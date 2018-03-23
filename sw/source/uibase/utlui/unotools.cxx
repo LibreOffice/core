@@ -147,7 +147,7 @@ void SwOneExampleFrame::CreateControl()
     xPrSet->setPropertyValue( "LoaderArguments", aArgs );
     //save and set readonly???
 
-    xPrSet->setPropertyValue("ComponentURL", aURL);
+    xPrSet->setPropertyValue("ComponentUrl", aURL);
 
     m_aLoadedIdle.Start();
     m_bServiceAvailable = true;

@@ -344,7 +344,7 @@ IPropertyArrayHelper& FrameControl::getInfoHelper()
     // attention: properties need to be sorted by name!
     static OPropertyArrayHelper ourPropertyInfo(
                 {
-                    Property( "ComponentURL", PropertyHandle::Componenturl, cppu::UnoType<OUString>::get(),
+                    Property( "ComponentUrl", PropertyHandle::Componenturl, cppu::UnoType<OUString>::get(),
                             PropertyAttribute::BOUND | PropertyAttribute::CONSTRAINED ),
                     Property( "Frame", PropertyHandle::Frame, cppu::UnoType<XFrame>::get(),
                             PropertyAttribute::BOUND | PropertyAttribute::TRANSIENT ),
