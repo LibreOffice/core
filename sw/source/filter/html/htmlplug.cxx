@@ -54,6 +54,7 @@
 #include "wrthtml.hxx"
 #include "htmlfly.hxx"
 #include "swcss1.hxx"
+#include "htmlreqifreader.hxx"
 #include <unoframe.hxx>
 #include <com/sun/star/embed/XClassifiedObject.hpp>
 #include <com/sun/star/embed/Aspects.hpp>
@@ -496,7 +497,30 @@ bool SwHTMLParser::InsertEmbed()
         {
             SvFileStream aFileStream(aURLObj.GetMainURL(INetURLObject::DecodeMechanism::NONE),
                                      StreamMode::READ);
-            uno::Reference<io::XInputStream> xInStream(new utl::OStreamWrapper(aFileStream));
+            uno::Reference<io::XInputStream> xInStream;
+            SvMemoryStream aMemoryStream;
+            if (aType == "text/rtf")
+            {
+                OString aMagic("{\\object");
+                OString aHeader(read_uInt8s_ToOString(aFileStream, aMagic.getLength()));
+                aFileStream.Seek(0);
+                if (aHeader == aMagic)
+                {
+                    // OLE2 wrapped in RTF.
+                    if (SwReqIfReader::ExtractOleFromRtf(aFileStream, aMemoryStream))
+                    {
+                        xInStream.set(new utl::OStreamWrapper(aMemoryStream));
+
+                        // The type is now an OLE2 container, not the original XHTML type.
+                        aType = "application/vnd.sun.star.oleobject";
+                    }
+                }
+            }
+
+            if (!xInStream.is())
+                // Non-RTF case.
+                xInStream.set(new utl::OStreamWrapper(aFileStream));
+
             uno::Reference<io::XStream> xOutStream
                 = xStorage->openStreamElement(aObjName, embed::ElementModes::READWRITE);
             comphelper::OStorageHelper::CopyInputToOutput(xInStream, xOutStream->getOutputStream());
