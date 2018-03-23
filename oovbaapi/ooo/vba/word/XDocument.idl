@@ -26,8 +26,11 @@
 
 module ooo {  module vba {  module word {
 
-interface XDocument : com::sun::star::script::XInvocation
+interface XDocument
 {
+    interface com::sun::star::script::XInvocation;
+    interface XConnectable;
+
     [attribute, readonly] XRange Content;
     [attribute] any AttachedTemplate;
     [attribute] long ProtectionType;
