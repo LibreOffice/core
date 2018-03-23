@@ -670,4 +670,14 @@ void SAL_CALL OleEmbeddedObject::setParent( const css::uno::Reference< css::uno:
     m_xParent = xParent;
 }
 
+void OleEmbeddedObject::setStream(const css::uno::Reference<css::io::XStream>& xStream)
+{
+    m_xObjectStream = xStream;
+}
+
+css::uno::Reference<css::io::XStream> OleEmbeddedObject::getStream()
+{
+    return m_xObjectStream;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
