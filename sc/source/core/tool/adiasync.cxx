@@ -48,7 +48,7 @@ ScAddInAsync::ScAddInAsync(sal_uLong nHandleP, LegacyFuncData* pFuncData, ScDocu
     meType(pFuncData->GetAsyncType()),
     bValid( false )
 {
-    pDocs = new ScAddInDocs;
+    pDocs.reset(new ScAddInDocs);
     pDocs->insert( pDoc );
     theAddInAsyncTbl.insert( this );
 }
@@ -59,7 +59,7 @@ ScAddInAsync::~ScAddInAsync()
     mpFuncData->Unadvice( static_cast<double>(nHandle) );
     if ( meType == ParamType::PTR_STRING && pStr )      // include type comparison because of union
         delete pStr;
-    delete pDocs;
+    pDocs.reset();
 }
 
 ScAddInAsync* ScAddInAsync::Get( sal_uLong nHandleP )
@@ -123,7 +123,7 @@ void ScAddInAsync::RemoveDocument( ScDocument* pDocumentP )
         for( ScAddInAsyncs::reverse_iterator iter1 = theAddInAsyncTbl.rbegin(); iter1 != theAddInAsyncTbl.rend(); ++iter1 )
         {   // backwards because of pointer-movement in array
             ScAddInAsync* pAsync = *iter1;
-            ScAddInDocs* p = pAsync->pDocs;
+            ScAddInDocs* p = pAsync->pDocs.get();
             ScAddInDocs::iterator iter2 = p->find( pDocumentP );
             if( iter2 != p->end() )
             {
