@@ -1416,14 +1416,11 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
                 else if ( rLSItem.GetPropLineSpace() && ( rLSItem.GetPropLineSpace() != 100 ) )
                 {
                     sal_uInt16 nTxtHeight = pLine->GetHeight();
-                    sal_Int32 nTxtHeightProp = nTxtHeight * rLSItem.GetPropLineSpace() / 100;
-                    sal_Int32 nHeightProp = pLine->GetHeight() * rLSItem.GetPropLineSpace() / 100;
+                    sal_Int32 nPropTextHeight = nTxtHeight * rLSItem.GetPropLineSpace() / 100;
                     // The Ascent has to be adjusted for the difference:
-                    long nDiff = ( pLine->GetHeight() - nTxtHeightProp ) * 4 / 5;
-                    if ( nDiff > pLine->GetMaxAscent() )
-                        nDiff = pLine->GetMaxAscent() * 4 / 5;
-                    pLine->SetMaxAscent( static_cast<sal_uInt16>( pLine->GetMaxAscent() - nDiff ) ); // 80%
-                    pLine->SetHeight( static_cast<sal_uInt16>( nHeightProp ), nTxtHeightProp );
+                    long nDiff = pLine->GetHeight() - nPropTextHeight;
+                    pLine->SetMaxAscent( static_cast<sal_uInt16>( pLine->GetMaxAscent() - nDiff ) );
+                    pLine->SetHeight( static_cast<sal_uInt16>( nPropTextHeight ), nTxtHeight );
                 }
             }
         }
