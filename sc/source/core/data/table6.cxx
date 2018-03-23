@@ -815,7 +815,7 @@ bool ScTable::SearchAndReplace(
                     ( TransliterationFlags::IGNORE_CASE |
                       TransliterationFlags::IGNORE_WIDTH );
 
-            pSearchText = new utl::TextSearch( aSearchOptions );
+            pSearchText.reset( new utl::TextSearch( aSearchOptions ) );
 
             if (nCommand == SvxSearchCmd::FIND)
                 bFound = Search(rSearchItem, rCol, rRow, rMark, rUndoStr, pUndoDoc);
@@ -826,8 +826,7 @@ bool ScTable::SearchAndReplace(
             else if (nCommand == SvxSearchCmd::REPLACE_ALL)
                 bFound = ReplaceAll(rSearchItem, rMark, rMatchedRanges, rUndoStr, pUndoDoc);
 
-            delete pSearchText;
-            pSearchText = nullptr;
+            pSearchText.reset();
         }
     }
     return bFound;

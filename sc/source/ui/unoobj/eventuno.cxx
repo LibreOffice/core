@@ -74,10 +74,10 @@ void SAL_CALL ScSheetEventsObj::replaceByName( const OUString& aName, const uno:
     if (nEvent == ScSheetEventId::NOTFOUND)
         throw container::NoSuchElementException();
 
-    ScSheetEvents aNewEvents;
+    std::unique_ptr<ScSheetEvents> pNewEvents(new ScSheetEvents);
     const ScSheetEvents* pOldEvents = mpDocShell->GetDocument().GetSheetEvents(mnTab);
     if (pOldEvents)
-        aNewEvents = *pOldEvents;
+        *pNewEvents = *pOldEvents;
 
     OUString aScript;
     if ( aElement.hasValue() )      // empty Any -> reset event
@@ -105,11 +105,11 @@ void SAL_CALL ScSheetEventsObj::replaceByName( const OUString& aName, const uno:
         }
     }
     if (!aScript.isEmpty())
-        aNewEvents.SetScript( nEvent, &aScript );
+        pNewEvents->SetScript( nEvent, &aScript );
     else
-        aNewEvents.SetScript( nEvent, nullptr );       // reset
+        pNewEvents->SetScript( nEvent, nullptr );       // reset
 
-    mpDocShell->GetDocument().SetSheetEvents( mnTab, &aNewEvents );
+    mpDocShell->GetDocument().SetSheetEvents( mnTab, std::move(pNewEvents) );
     mpDocShell->SetDocumentModified();
 }
 

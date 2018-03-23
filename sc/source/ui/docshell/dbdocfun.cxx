@@ -71,9 +71,9 @@ bool ScDBDocFunc::AddDBRange( const OUString& rName, const ScRange& rRange )
     if (bUndo)
         pUndoColl = new ScDBCollection( *pDocColl );
 
-    ScDBData* pNew = new ScDBData( rName, rRange.aStart.Tab(),
+    std::unique_ptr<ScDBData> pNew(new ScDBData( rName, rRange.aStart.Tab(),
                                     rRange.aStart.Col(), rRange.aStart.Row(),
-                                    rRange.aEnd.Col(), rRange.aEnd.Row() );
+                                    rRange.aEnd.Col(), rRange.aEnd.Row() ));
 
     // #i55926# While loading XML, formula cells only have a single string token,
     // so CompileDBFormula would never find any name (index) tokens, and would
@@ -84,12 +84,12 @@ bool ScDBDocFunc::AddDBRange( const OUString& rName, const ScRange& rRange )
         rDoc.PreprocessDBDataUpdate();
     if ( rName == STR_DB_LOCAL_NONAME )
     {
-        rDoc.SetAnonymousDBData(rRange.aStart.Tab() , pNew);
+        rDoc.SetAnonymousDBData(rRange.aStart.Tab(), std::move(pNew));
         bOk = true;
     }
     else
     {
-        bOk = pDocColl->getNamedDBs().insert(pNew);
+        bOk = pDocColl->getNamedDBs().insert(pNew.release());
     }
     if ( bCompile )
         rDoc.CompileHybridFormula();

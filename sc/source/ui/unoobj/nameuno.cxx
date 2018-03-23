@@ -169,7 +169,7 @@ void ScNamedRangeObj::Modify_Impl( const OUString* pNewName, const ScTokenArray*
     if (!pOld)
         return;
 
-    ScRangeName* pNewRanges = new ScRangeName(*pNames);
+    std::unique_ptr<ScRangeName> pNewRanges(new ScRangeName(*pNames));
 
     OUString aInsName = pOld->GetName();
     if (pNewName)
@@ -199,14 +199,13 @@ void ScNamedRangeObj::Modify_Impl( const OUString* pNewName, const ScTokenArray*
     pNewRanges->erase(*pOld);
     if (pNewRanges->insert(pNew))
     {
-        pDocShell->GetDocFunc().SetNewRangeNames(pNewRanges, mxParent->IsModifyAndBroadcast(), nTab);
+        pDocShell->GetDocFunc().SetNewRangeNames(std::move(pNewRanges), mxParent->IsModifyAndBroadcast(), nTab);
 
         aName = aInsName;   //! broadcast?
     }
     else
     {
         pNew = nullptr;        //! uno::Exception/Error or something
-        delete pNewRanges;
     }
 }
 
@@ -492,19 +491,18 @@ void SAL_CALL ScNamedRangesObj::addNewByName( const OUString& aName,
         ScRangeName* pNames = GetRangeName_Impl();
         if (pNames && !pNames->findByUpperName(ScGlobal::pCharClass->uppercase(aName)))
         {
-            ScRangeName* pNewRanges = new ScRangeName( *pNames );
+            std::unique_ptr<ScRangeName> pNewRanges(new ScRangeName( *pNames ));
             // GRAM_API for API compatibility.
             ScRangeData* pNew = new ScRangeData( &rDoc, aName, aContent,
                                                 aPos, nNewType,formula::FormulaGrammar::GRAM_API );
             if ( pNewRanges->insert(pNew) )
             {
-                pDocShell->GetDocFunc().SetNewRangeNames(pNewRanges, mbModifyAndBroadcast, GetTab_Impl());
+                pDocShell->GetDocFunc().SetNewRangeNames(std::move(pNewRanges), mbModifyAndBroadcast, GetTab_Impl());
                 bDone = true;
             }
             else
             {
                 pNew = nullptr;
-                delete pNewRanges;
             }
         }
     }
@@ -549,9 +547,9 @@ void SAL_CALL ScNamedRangesObj::removeByName( const OUString& aName )
             const ScRangeData* pData = pNames->findByUpperName(ScGlobal::pCharClass->uppercase(aName));
             if (pData && lcl_UserVisibleName(*pData))
             {
-                ScRangeName* pNewRanges = new ScRangeName(*pNames);
+                std::unique_ptr<ScRangeName> pNewRanges(new ScRangeName(*pNames));
                 pNewRanges->erase(*pData);
-                pDocShell->GetDocFunc().SetNewRangeNames( pNewRanges, mbModifyAndBroadcast, GetTab_Impl());
+                pDocShell->GetDocFunc().SetNewRangeNames( std::move(pNewRanges), mbModifyAndBroadcast, GetTab_Impl());
                 bDone = true;
             }
         }

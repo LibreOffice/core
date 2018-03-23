@@ -183,7 +183,7 @@ private:
     std::unique_ptr<ScFlatUInt16RowSegments> mpRowHeights;
 
     std::unique_ptr<ScBitMaskCompressedArray<SCCOL, CRFlags>> mpColFlags;
-    ScBitMaskCompressedArray< SCROW, CRFlags>*     pRowFlags;
+    std::unique_ptr<ScBitMaskCompressedArray< SCROW, CRFlags>> pRowFlags;
     std::unique_ptr<ScFlatBoolColSegments>  mpHiddenCols;
     std::unique_ptr<ScFlatBoolRowSegments>  mpHiddenRows;
     std::unique_ptr<ScFlatBoolColSegments>  mpFilteredCols;
@@ -194,16 +194,16 @@ private:
     ::std::set<SCCOL>                      maColPageBreaks;
     ::std::set<SCCOL>                      maColManualBreaks;
 
-    ScOutlineTable* pOutlineTable;
+    std::unique_ptr<ScOutlineTable> pOutlineTable;
 
-    ScSheetEvents*  pSheetEvents;
+    std::unique_ptr<ScSheetEvents>  pSheetEvents;
 
     mutable SCCOL nTableAreaX;
     mutable SCROW nTableAreaY;
 
     SCTAB           nTab;
     ScDocument*     pDocument;
-    utl::TextSearch*    pSearchText;
+    std::unique_ptr<utl::TextSearch> pSearchText;
 
     mutable OUString aUpperName;             // #i62977# filled only on demand, reset in SetName
 
@@ -213,17 +213,17 @@ private:
 
     ScRangeVec      aPrintRanges;
 
-    ScRange*        pRepeatColRange;
-    ScRange*        pRepeatRowRange;
+    std::unique_ptr<ScRange> pRepeatColRange;
+    std::unique_ptr<ScRange> pRepeatRowRange;
 
     sal_uInt16          nLockCount;
 
-    ScRangeList*    pScenarioRanges;
+    std::unique_ptr<ScRangeList> pScenarioRanges;
     Color           aScenarioColor;
     Color           aTabBgColor;
     ScScenarioFlags nScenarioFlags;
-    ScDBData*       pDBDataNoName;
-    mutable ScRangeName* mpRangeName;
+    std::unique_ptr<ScDBData> pDBDataNoName;
+    mutable std::unique_ptr<ScRangeName> mpRangeName;
 
     std::unique_ptr<ScConditionalFormatList> mpCondFormatList;
 
@@ -275,7 +275,7 @@ public:
     const ScDocument& GetDoc() const { return *pDocument;}
     SCTAB GetTab() const { return nTab; }
 
-    ScOutlineTable* GetOutlineTable()               { return pOutlineTable; }
+    ScOutlineTable* GetOutlineTable()               { return pOutlineTable.get(); }
 
     ScColumn& CreateColumnIfNotExists( const SCCOL nScCol )
     {
@@ -307,8 +307,8 @@ public:
     void        RemoveSubTotals( ScSubTotalParam& rParam );
     bool        DoSubTotals( ScSubTotalParam& rParam );
 
-    const ScSheetEvents* GetSheetEvents() const              { return pSheetEvents; }
-    void        SetSheetEvents( const ScSheetEvents* pNew );
+    const ScSheetEvents* GetSheetEvents() const              { return pSheetEvents.get(); }
+    void        SetSheetEvents( std::unique_ptr<ScSheetEvents> pNew );
 
     bool        IsVisible() const                            { return bVisible; }
     void        SetVisible( bool bVis );
@@ -369,8 +369,8 @@ public:
     void        GetName( OUString& rName ) const;
     void        SetName( const OUString& rNewName );
 
-    void        SetAnonymousDBData(ScDBData* pDBData);
-    ScDBData*   GetAnonymousDBData() { return pDBDataNoName;}
+    void        SetAnonymousDBData(std::unique_ptr<ScDBData> pDBData);
+    ScDBData*   GetAnonymousDBData() { return pDBDataNoName.get();}
 
     void        GetCodeName( OUString& rName ) const {  rName = aCodeName; }
     void        SetCodeName( const OUString& rNewName ) { aCodeName = rNewName; }
@@ -749,10 +749,10 @@ public:
     void        ClearSelectionItems( const sal_uInt16* pWhich, const ScMarkData& rMark );
     void        ChangeSelectionIndent( bool bIncrement, const ScMarkData& rMark );
 
-    const ScRange*  GetRepeatColRange() const   { return pRepeatColRange; }
-    const ScRange*  GetRepeatRowRange() const   { return pRepeatRowRange; }
-    void            SetRepeatColRange( const ScRange* pNew );
-    void            SetRepeatRowRange( const ScRange* pNew );
+    const ScRange*  GetRepeatColRange() const   { return pRepeatColRange.get(); }
+    const ScRange*  GetRepeatRowRange() const   { return pRepeatRowRange.get(); }
+    void            SetRepeatColRange( std::unique_ptr<ScRange> pNew );
+    void            SetRepeatRowRange( std::unique_ptr<ScRange> pNew );
 
     sal_uInt16          GetPrintRangeCount() const          { return static_cast< sal_uInt16 >( aPrintRanges.size() ); }
     const ScRange*  GetPrintRange(sal_uInt16 nPos) const;
@@ -854,7 +854,7 @@ public:
     CRFlags    GetRowFlags( SCROW nRow ) const;
 
     const ScBitMaskCompressedArray< SCROW, CRFlags> * GetRowFlagsArray() const
-                    { return pRowFlags; }
+                    { return pRowFlags.get(); }
 
     bool        UpdateOutlineCol( SCCOL nStartCol, SCCOL nEndCol, bool bShow );
     bool        UpdateOutlineRow( SCROW nStartRow, SCROW nEndRow, bool bShow );
@@ -961,7 +961,7 @@ public:
     void        DestroySortCollator();
     void        SetDrawPageSize( bool bResetStreamValid = true, bool bUpdateNoteCaptionPos = true );
 
-    void SetRangeName(ScRangeName* pNew);
+    void SetRangeName(std::unique_ptr<ScRangeName> pNew);
     ScRangeName* GetRangeName() const;
 
     void PreprocessRangeNameUpdate(

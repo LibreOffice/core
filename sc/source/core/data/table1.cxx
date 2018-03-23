@@ -296,7 +296,7 @@ ScTable::ScTable( ScDocument* pDoc, SCTAB nNewTab, const OUString& rNewName,
     if (bRowInfo)
     {
         mpRowHeights.reset(new ScFlatUInt16RowSegments(ScGlobal::nStdRowHeight));
-        pRowFlags  = new ScBitMaskCompressedArray<SCROW, CRFlags>( MAXROW, CRFlags::NONE);
+        pRowFlags.reset(new ScBitMaskCompressedArray<SCROW, CRFlags>( MAXROW, CRFlags::NONE));
     }
 
     if ( pDocument->IsDocVisible() )
@@ -339,15 +339,15 @@ ScTable::~ScTable() COVERITY_NOEXCEPT_FALSE
             pDrawLayer->ScRemovePage( nTab );
     }
 
-    delete pRowFlags;
-    delete pSheetEvents;
-    delete pOutlineTable;
-    delete pSearchText;
-    delete pRepeatColRange;
-    delete pRepeatRowRange;
-    delete pScenarioRanges;
-    delete mpRangeName;
-    delete pDBDataNoName;
+    pRowFlags.reset();
+    pSheetEvents.reset();
+    pOutlineTable.reset();
+    pSearchText.reset();
+    pRepeatColRange.reset();
+    pRepeatRowRange.reset();
+    pScenarioRanges.reset();
+    mpRangeName.reset();
+    pDBDataNoName.reset();
     DestroySortCollator();
 }
 
@@ -488,7 +488,7 @@ bool ScTable::SetOptimalHeight(
 
     rCxt.getHeightArray().enableTreeSearch(true);
     SetRowHeightRangeFunc aFunc(this, rCxt.getPPTY());
-    bool bChanged = SetOptimalHeightsToRows(rCxt, aFunc, pRowFlags, nStartRow, nEndRow);
+    bool bChanged = SetOptimalHeightsToRows(rCxt, aFunc, pRowFlags.get(), nStartRow, nEndRow);
 
     if ( pProgress != pOuterProgress )
         delete pProgress;
@@ -515,7 +515,7 @@ void ScTable::SetOptimalHeightOnly(
     SetRowHeightOnlyFunc aFunc(this);
 
     rCxt.getHeightArray().enableTreeSearch(true);
-    SetOptimalHeightsToRows(rCxt, aFunc, pRowFlags, nStartRow, nEndRow);
+    SetOptimalHeightsToRows(rCxt, aFunc, pRowFlags.get(), nStartRow, nEndRow);
 
     if ( pProgress != pOuterProgress )
         delete pProgress;
@@ -2005,19 +2005,6 @@ public:
     }
 };
 
-void setPrintRange(ScRange*& pRange1, const ScRange* pRange2)
-{
-    if (pRange2)
-    {
-        if (pRange1)
-            *pRange1 = *pRange2;
-        else
-            pRange1 = new ScRange(*pRange2);
-    }
-    else
-        DELETEZ(pRange1);
-}
-
 }
 
 void ScTable::CopyPrintRange(const ScTable& rTable)
@@ -2030,37 +2017,35 @@ void ScTable::CopyPrintRange(const ScTable& rTable)
 
     bPrintEntireSheet = rTable.bPrintEntireSheet;
 
-    delete pRepeatColRange;
-    pRepeatColRange = nullptr;
+    pRepeatColRange.reset();
     if (rTable.pRepeatColRange)
     {
-        pRepeatColRange = new ScRange(*rTable.pRepeatColRange);
+        pRepeatColRange.reset(new ScRange(*rTable.pRepeatColRange));
         pRepeatColRange->aStart.SetTab(nTab);
         pRepeatColRange->aEnd.SetTab(nTab);
     }
 
-    delete pRepeatRowRange;
-    pRepeatRowRange = nullptr;
+    pRepeatRowRange.reset();
     if (rTable.pRepeatRowRange)
     {
-        pRepeatRowRange = new ScRange(*rTable.pRepeatRowRange);
+        pRepeatRowRange.reset(new ScRange(*rTable.pRepeatRowRange));
         pRepeatRowRange->aStart.SetTab(nTab);
         pRepeatRowRange->aEnd.SetTab(nTab);
     }
 }
 
-void ScTable::SetRepeatColRange( const ScRange* pNew )
+void ScTable::SetRepeatColRange( std::unique_ptr<ScRange> pNew )
 {
-    setPrintRange( pRepeatColRange, pNew );
+    pRepeatColRange = std::move(pNew);
 
     SetStreamValid(false);
 
     InvalidatePageBreaks();
 }
 
-void ScTable::SetRepeatRowRange( const ScRange* pNew )
+void ScTable::SetRepeatRowRange( std::unique_ptr<ScRange> pNew )
 {
-    setPrintRange( pRepeatRowRange, pNew );
+    pRepeatRowRange = std::move(pNew);
 
     SetStreamValid(false);
 
@@ -2105,15 +2090,17 @@ const ScRange* ScTable::GetPrintRange(sal_uInt16 nPos) const
 void ScTable::FillPrintSaver( ScPrintSaverTab& rSaveTab ) const
 {
     rSaveTab.SetAreas( aPrintRanges, bPrintEntireSheet );
-    rSaveTab.SetRepeat( pRepeatColRange, pRepeatRowRange );
+    rSaveTab.SetRepeat( pRepeatColRange.get(), pRepeatRowRange.get() );
 }
 
 void ScTable::RestorePrintRanges( const ScPrintSaverTab& rSaveTab )
 {
     aPrintRanges = rSaveTab.GetPrintRanges();
     bPrintEntireSheet = rSaveTab.IsEntireSheet();
-    SetRepeatColRange( rSaveTab.GetRepeatCol() );
-    SetRepeatRowRange( rSaveTab.GetRepeatRow() );
+    auto p = rSaveTab.GetRepeatCol();
+    SetRepeatColRange( std::unique_ptr<ScRange>(p ? new ScRange(*p) : nullptr) );
+    p = rSaveTab.GetRepeatRow();
+    SetRepeatRowRange( std::unique_ptr<ScRange>(p ? new ScRange(*p) : nullptr) );
 
     InvalidatePageBreaks();     // #i117952# forget page breaks for an old print range
     UpdatePageBreaks(nullptr);
@@ -2213,10 +2200,9 @@ ScRefCellValue ScTable::VisibleDataCellIterator::next()
     return ScRefCellValue();
 }
 
-void ScTable::SetAnonymousDBData(ScDBData* pDBData)
+void ScTable::SetAnonymousDBData(std::unique_ptr<ScDBData> pDBData)
 {
-    delete pDBDataNoName;
-    pDBDataNoName = pDBData;
+    pDBDataNoName = std::move(pDBData);
 }
 
 sal_uLong ScTable::AddCondFormat( ScConditionalFormat* pNew )

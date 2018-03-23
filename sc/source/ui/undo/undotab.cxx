@@ -47,6 +47,7 @@
 #include <svx/svdpage.hxx>
 #include <drwlayer.hxx>
 #include <scresid.hxx>
+#include <sheetevents.hxx>
 
 #include <memory>
 #include <utility>
@@ -335,7 +336,8 @@ void ScUndoDeleteTab::Undo()
             }
             rDoc.SetVisible( nTab, pRefUndoDoc->IsVisible( nTab ) );
             rDoc.SetTabBgColor( nTab, pRefUndoDoc->GetTabBgColor(nTab) );
-            rDoc.SetSheetEvents( nTab, pRefUndoDoc->GetSheetEvents( nTab ) );
+            auto pSheetEvents = pRefUndoDoc->GetSheetEvents( nTab );
+            rDoc.SetSheetEvents( nTab, std::unique_ptr<ScSheetEvents>(pSheetEvents ? new ScSheetEvents(*pSheetEvents) : nullptr) );
             rDoc.SetLayoutRTL( nTab, pRefUndoDoc->IsLayoutRTL( nTab ) );
 
             if ( pRefUndoDoc->IsTabProtected( nTab ) )

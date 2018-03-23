@@ -7311,8 +7311,7 @@ void SAL_CALL ScTableSheetObj::setPrintTitleColumns( sal_Bool bPrintTitleColumns
         {
             if ( !rDoc.GetRepeatColRange( nTab ) )         // do not change existing area
             {
-                ScRange aNew( 0, 0, nTab, 0, 0, nTab );
-                rDoc.SetRepeatColRange( nTab, &aNew );     // enable
+                rDoc.SetRepeatColRange( nTab, std::unique_ptr<ScRange>(new ScRange( 0, 0, nTab, 0, 0, nTab )) );     // enable
             }
         }
         else
@@ -7354,9 +7353,9 @@ void SAL_CALL ScTableSheetObj::setTitleColumns( const table::CellRangeAddress& a
 
         ScPrintRangeSaver* pOldRanges = rDoc.CreatePrintRangeSaver();
 
-        ScRange aNew;
-        ScUnoConversion::FillScRange( aNew, aTitleColumns );
-        rDoc.SetRepeatColRange( nTab, &aNew );     // also always enable
+        std::unique_ptr<ScRange> pNew(new ScRange);
+        ScUnoConversion::FillScRange( *pNew, aTitleColumns );
+        rDoc.SetRepeatColRange( nTab, std::move(pNew) );     // also always enable
 
         PrintAreaUndo_Impl( pOldRanges );           // undo, page breaks, modified etc.
     }
@@ -7390,8 +7389,8 @@ void SAL_CALL ScTableSheetObj::setPrintTitleRows( sal_Bool bPrintTitleRows )
         {
             if ( !rDoc.GetRepeatRowRange( nTab ) )         // do not change existing area
             {
-                ScRange aNew( 0, 0, nTab, 0, 0, nTab );
-                rDoc.SetRepeatRowRange( nTab, &aNew );     // enable
+                std::unique_ptr<ScRange> pNew( new ScRange(0, 0, nTab, 0, 0, nTab) );
+                rDoc.SetRepeatRowRange( nTab, std::move(pNew) );     // enable
             }
         }
         else
@@ -7433,9 +7432,9 @@ void SAL_CALL ScTableSheetObj::setTitleRows( const table::CellRangeAddress& aTit
 
         ScPrintRangeSaver* pOldRanges = rDoc.CreatePrintRangeSaver();
 
-        ScRange aNew;
-        ScUnoConversion::FillScRange( aNew, aTitleRows );
-        rDoc.SetRepeatRowRange( nTab, &aNew );     // also always enable
+        std::unique_ptr<ScRange> pNew(new ScRange);
+        ScUnoConversion::FillScRange( *pNew, aTitleRows );
+        rDoc.SetRepeatRowRange( nTab, std::move(pNew) );     // also always enable
 
         PrintAreaUndo_Impl( pOldRanges );           // Undo, page breaks, modified etc.
     }

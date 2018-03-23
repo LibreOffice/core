@@ -313,10 +313,10 @@ SCTAB ScDocument::GetTableCount() const
     return static_cast<SCTAB>(maTabs.size());
 }
 
-void ScDocument::SetAnonymousDBData(SCTAB nTab, ScDBData* pDBData)
+void ScDocument::SetAnonymousDBData(SCTAB nTab, std::unique_ptr<ScDBData> pDBData)
 {
     if (ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
-        maTabs[nTab]->SetAnonymousDBData(pDBData);
+        maTabs[nTab]->SetAnonymousDBData(std::move(pDBData));
 }
 
 void ScDocument::SetAnonymousDBData( std::unique_ptr<ScDBData> pDBData )
@@ -6256,16 +6256,16 @@ void ScDocument::SetPrintEntireSheet( SCTAB nTab )
         maTabs[nTab]->SetPrintEntireSheet();
 }
 
-void ScDocument::SetRepeatColRange( SCTAB nTab, const ScRange* pNew )
+void ScDocument::SetRepeatColRange( SCTAB nTab, std::unique_ptr<ScRange> pNew )
 {
     if (ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
-        maTabs[nTab]->SetRepeatColRange( pNew );
+        maTabs[nTab]->SetRepeatColRange( std::move(pNew) );
 }
 
-void ScDocument::SetRepeatRowRange( SCTAB nTab, const ScRange* pNew )
+void ScDocument::SetRepeatRowRange( SCTAB nTab, std::unique_ptr<ScRange> pNew )
 {
     if (ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
-        maTabs[nTab]->SetRepeatRowRange( pNew );
+        maTabs[nTab]->SetRepeatRowRange( std::move(pNew) );
 }
 
 ScPrintRangeSaver* ScDocument::CreatePrintRangeSaver() const

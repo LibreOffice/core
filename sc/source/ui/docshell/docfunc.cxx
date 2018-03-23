@@ -91,6 +91,7 @@
 #include <cellvalues.hxx>
 #include <undoconvert.hxx>
 #include <docfuncutil.hxx>
+#include <sheetevents.hxx>
 
 #include <memory>
 #include <utility>
@@ -3213,7 +3214,8 @@ bool ScDocFunc::DeleteTable( SCTAB nTab, bool bRecord )
         }
         pUndoDoc->SetVisible( nTab, rDoc.IsVisible( nTab ) );
         pUndoDoc->SetTabBgColor( nTab, rDoc.GetTabBgColor(nTab) );
-        pUndoDoc->SetSheetEvents( nTab, rDoc.GetSheetEvents( nTab ) );
+        auto pSheetEvents = rDoc.GetSheetEvents( nTab );
+        pUndoDoc->SetSheetEvents( nTab, std::unique_ptr<ScSheetEvents>(pSheetEvents ? new ScSheetEvents(*pSheetEvents) : nullptr) );
 
         //  Drawing-Layer has to take care of its own undo!!!
         rDoc.BeginDrawUndo();                          //  DeleteTab generates SdrUndoDelPage
@@ -4985,10 +4987,10 @@ bool ScDocFunc::UnmergeCells( const ScCellMergeOption& rOption, bool bRecord, Sc
 
 void ScDocFunc::ModifyRangeNames( const ScRangeName& rNewRanges, SCTAB nTab )
 {
-    SetNewRangeNames( new ScRangeName(rNewRanges), true, nTab );
+    SetNewRangeNames( std::unique_ptr<ScRangeName>(new ScRangeName(rNewRanges)), true, nTab );
 }
 
-void ScDocFunc::SetNewRangeNames( ScRangeName* pNewRanges, bool bModifyDoc, SCTAB nTab )     // takes ownership of pNewRanges
+void ScDocFunc::SetNewRangeNames( std::unique_ptr<ScRangeName> pNewRanges, bool bModifyDoc, SCTAB nTab )     // takes ownership of pNewRanges
 {
     ScDocShellModificator aModificator( rDocShell );
 
@@ -5021,9 +5023,9 @@ void ScDocFunc::SetNewRangeNames( ScRangeName* pNewRanges, bool bModifyDoc, SCTA
     if ( bCompile )
         rDoc.PreprocessRangeNameUpdate();
     if (nTab >= 0)
-        rDoc.SetRangeName( nTab, pNewRanges ); // takes ownership
+        rDoc.SetRangeName( nTab, std::move(pNewRanges) ); // takes ownership
     else
-        rDoc.SetRangeName( std::unique_ptr<ScRangeName>(pNewRanges) );       // takes ownership
+        rDoc.SetRangeName( std::move(pNewRanges) );       // takes ownership
     if ( bCompile )
         rDoc.CompileHybridFormula();
 
