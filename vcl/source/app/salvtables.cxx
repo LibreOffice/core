@@ -179,6 +179,10 @@ class SalInstanceWidget : public virtual weld::Widget
 {
 private:
     VclPtr<vcl::Window> m_xWidget;
+
+    DECL_LINK(FocusInHdl, Control&, void);
+    DECL_LINK(FocusOutHdl, Control&, void);
+
     bool m_bTakeOwnership;
 
 public:
@@ -305,10 +309,28 @@ public:
         m_xWidget->SetAccessibleName(rName);
     }
 
+    virtual void connect_focus_in(const Link<Widget&, void>& rLink) override
+    {
+        assert(!m_aFocusInHdl.IsSet());
+        dynamic_cast<Control&>(*m_xWidget).SetGetFocusHdl(LINK(this, SalInstanceWidget, FocusInHdl));
+        m_aFocusInHdl = rLink;
+    }
+
+    virtual void connect_focus_out(const Link<Widget&, void>& rLink) override
+    {
+        assert(!m_aFocusOutHdl.IsSet());
+        dynamic_cast<Control&>(*m_xWidget).SetLoseFocusHdl(LINK(this, SalInstanceWidget, FocusOutHdl));
+        m_aFocusOutHdl = rLink;
+    }
+
     virtual weld::Container* weld_parent() const override;
 
     virtual ~SalInstanceWidget() override
     {
+        if (m_aFocusInHdl.IsSet())
+           dynamic_cast<Control&>(*m_xWidget).SetGetFocusHdl(Link<Control&,void>());
+        if (m_aFocusOutHdl.IsSet())
+            dynamic_cast<Control&>(*m_xWidget).SetLoseFocusHdl(Link<Control&,void>());
         if (m_bTakeOwnership)
             m_xWidget.disposeAndClear();
     }
@@ -323,6 +345,16 @@ public:
         return m_xWidget->GetSystemWindow();
     }
 };
+
+IMPL_LINK_NOARG(SalInstanceWidget, FocusInHdl, Control&, void)
+{
+    signal_focus_in();
+}
+
+IMPL_LINK_NOARG(SalInstanceWidget, FocusOutHdl, Control&, void)
+{
+    signal_focus_out();
+}
 
 class SalInstanceContainer : public SalInstanceWidget, public virtual weld::Container
 {
