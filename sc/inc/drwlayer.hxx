@@ -96,7 +96,7 @@ class SC_DLLPUBLIC ScDrawLayer : public FmFormModel
 private:
     OUString        aName;
     ScDocument*     pDoc;
-    SdrUndoGroup*   pUndoGroup;
+    std::unique_ptr<SdrUndoGroup> pUndoGroup;
     bool            bRecording;
     bool            bAdjustEnabled;
     bool            bHyphenatorSet;
@@ -135,7 +135,7 @@ public:
     void            EnableAdjust( bool bSet )    { bAdjustEnabled = bSet; }
 
     void            BeginCalcUndo(bool bDisableTextEditUsesCommonUndoManager);
-    SdrUndoGroup*   GetCalcUndo();
+    std::unique_ptr<SdrUndoGroup> GetCalcUndo();
     bool            IsRecording() const         { return bRecording; }
     void            AddCalcUndo( SdrUndoAction* pUndo );
 

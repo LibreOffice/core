@@ -54,7 +54,7 @@ ScUndoWidthOrHeight::ScUndoWidthOrHeight( ScDocShell* pNewDocShell,
     eMode( eNewMode ),
     pDrawUndo( nullptr )
 {
-    pDrawUndo = GetSdrUndoAction( &pDocShell->GetDocument() );
+    pDrawUndo = GetSdrUndoAction( &pDocShell->GetDocument() ).release();
 }
 
 ScUndoWidthOrHeight::~ScUndoWidthOrHeight()

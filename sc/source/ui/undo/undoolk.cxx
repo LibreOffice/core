@@ -23,7 +23,7 @@
 #include <drwlayer.hxx>
 #include <undoolk.hxx>
 
-SdrUndoAction* GetSdrUndoAction( ScDocument* pDoc )
+std::unique_ptr<SdrUndoAction> GetSdrUndoAction( ScDocument* pDoc )
 {
     ScDrawLayer* pLayer = pDoc->GetDrawLayer();
     if (pLayer)

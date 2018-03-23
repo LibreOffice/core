@@ -75,7 +75,7 @@ ScUndoDeleteContents::ScUndoDeleteContents(
         bMulti      ( bNewMulti )   // unnecessary
 {
     if (bObjects)
-        pDrawUndo = GetSdrUndoAction( &pDocShell->GetDocument() );
+        pDrawUndo = GetSdrUndoAction( &pDocShell->GetDocument() ).release();
 
     if ( !(aMarkData.IsMarked() || aMarkData.IsMultiMarked()) )     // if no cell is selected:
         aMarkData.SetMarkArea( aRange );                            // select cell under cursor

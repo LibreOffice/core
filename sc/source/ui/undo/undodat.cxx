@@ -721,7 +721,7 @@ ScUndoQuery::ScUndoQuery( ScDocShell* pNewDocShell, SCTAB nNewTab, const ScQuery
         aAdvSource = *pAdvSrc;
     }
 
-    pDrawUndo = GetSdrUndoAction( &pDocShell->GetDocument() );
+    pDrawUndo = GetSdrUndoAction( &pDocShell->GetDocument() ).release();
 }
 
 ScUndoQuery::~ScUndoQuery()

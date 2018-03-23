@@ -248,7 +248,6 @@ ScDrawLayer::ScDrawLayer( ScDocument* pDocument, const OUString& rName ) :
                  true ),        // bUseExtColorTable (is set below)
     aName( rName ),
     pDoc( pDocument ),
-    pUndoGroup( nullptr ),
     bRecording( false ),
     bAdjustEnabled( true ),
     bHyphenatorSet( false )
@@ -341,7 +340,7 @@ ScDrawLayer::~ScDrawLayer()
 
     ClearModel(true);
 
-    delete pUndoGroup;
+    pUndoGroup.reset();
     if( !--nInst )
     {
         delete pF3d;
@@ -1205,7 +1204,7 @@ void ScDrawLayer::AddCalcUndo( SdrUndoAction* pUndo )
     if (bRecording)
     {
         if (!pUndoGroup)
-            pUndoGroup = new SdrUndoGroup(*this);
+            pUndoGroup.reset(new SdrUndoGroup(*this));
 
         pUndoGroup->AddAction( pUndo );
     }
@@ -1216,14 +1215,13 @@ void ScDrawLayer::AddCalcUndo( SdrUndoAction* pUndo )
 void ScDrawLayer::BeginCalcUndo(bool bDisableTextEditUsesCommonUndoManager)
 {
     SetDisableTextEditUsesCommonUndoManager(bDisableTextEditUsesCommonUndoManager);
-    DELETEZ(pUndoGroup);
+    pUndoGroup.reset();
     bRecording = true;
 }
 
-SdrUndoGroup* ScDrawLayer::GetCalcUndo()
+std::unique_ptr<SdrUndoGroup> ScDrawLayer::GetCalcUndo()
 {
-    SdrUndoGroup* pRet = pUndoGroup;
-    pUndoGroup = nullptr;
+    std::unique_ptr<SdrUndoGroup> pRet = std::move(pUndoGroup);
     bRecording = false;
     SetDisableTextEditUsesCommonUndoManager(false);
     return pRet;
