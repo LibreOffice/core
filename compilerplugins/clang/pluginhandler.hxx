@@ -55,7 +55,6 @@ public:
             CompilerInstance& compiler, SourceLocation loc = SourceLocation());
     bool ignoreLocation(SourceLocation loc);
     bool isDebugMode() const { return debugMode; }
-    bool isLOOLMode() const { return !loolBasePath.empty(); }
     static bool isUnitTestMode();
     // If we overlap with a previous area we modified, we cannot perform this change
     // without corrupting the source
@@ -72,7 +71,6 @@ private:
     Rewriter rewriter;
     std::string scope;
     std::string warningsOnly;
-    std::string loolBasePath;
     bool warningsAsErrors;
     bool debugMode = false;
     std::vector<std::pair<char const*, char const*>> mvModifiedRanges;
