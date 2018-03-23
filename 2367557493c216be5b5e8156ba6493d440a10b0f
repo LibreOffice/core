@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_5f48062e",
+        "filename": "solenv/bin/modules/installer/windows/file.pm",
+        "patchSetId": 4
+      },
+      "lineNbr": 573,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-03-23T20:42:53Z",
+      "side": 1,
+      "message": "looks like that needs some quoting, cf. \u003chttps://tinderbox.libreoffice.org/cgi-bin/gunzip.cgi?tree\u003dMASTER\u0026brief-log\u003d1521826201.15727\u003e etc.\n\n\u003e Bareword found where operator expected at /tinderbox/buildslave/source/libo-master/solenv/bin/modules/installer/windows/file.pm line 573, near \"s/\\0//gr\"\n\u003e Unquoted string \"r\" may clash with future reserved word at /tinderbox/buildslave/source/libo-master/solenv/bin/modules/installer/windows/file.pm line 573.\n\u003e syntax error at /tinderbox/buildslave/source/libo-master/solenv/bin/modules/installer/windows/file.pm line 573, near \"s/\\0//gr\"",
+      "range": {
+        "startLine": 573,
+        "startChar": 86,
+        "endLine": 573,
+        "endChar": 94
+      },
+      "revId": "2367557493c216be5b5e8156ba6493d440a10b0f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
