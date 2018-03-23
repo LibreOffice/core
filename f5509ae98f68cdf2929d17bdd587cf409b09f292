@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_84f157d0",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/Writer.xcs",
+        "patchSetId": 1
+      },
+      "lineNbr": 1058,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2018-03-23T11:13:40Z",
+      "side": 1,
+      "message": "This section makes the unit test fail (and crashes the app when compiling without)",
+      "revId": "f5509ae98f68cdf2929d17bdd587cf409b09f292",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
