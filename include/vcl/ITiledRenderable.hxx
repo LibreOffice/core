@@ -101,6 +101,9 @@ public:
     static void LOKPostAsyncEvent(void* pEv, void*)
     {
         LOKAsyncEventData* pLOKEv = static_cast<LOKAsyncEventData*>(pEv);
+        if (pLOKEv->mpWindow->IsDisposed())
+            return;
+
         switch (pLOKEv->mnEvent)
         {
         case VclEventId::WindowKeyInput:
