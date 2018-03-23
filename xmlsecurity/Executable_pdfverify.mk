@@ -11,6 +11,8 @@ $(eval $(call gb_Executable_Executable,pdfverify))
 
 $(eval $(call gb_Executable_use_sdk_api,pdfverify))
 
+$(eval $(call gb_Executable_use_external,pdfverify,boost_headers))
+
 $(eval $(call gb_Executable_set_include,pdfverify,\
     $$(INCLUDE) \
     -I$(SRCDIR)/xmlsecurity/inc \
