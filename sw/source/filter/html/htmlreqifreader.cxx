@@ -14,27 +14,10 @@
 #include <svtools/parrtf.hxx>
 #include <svtools/rtftoken.h>
 #include <tools/stream.hxx>
+#include <filter/msfilter/rtfutil.hxx>
 
 namespace
 {
-int AsHex(char ch)
-{
-    int ret = 0;
-    if (rtl::isAsciiDigit(static_cast<unsigned char>(ch)))
-        ret = ch - '0';
-    else
-    {
-        if (ch >= 'a' && ch <= 'f')
-            ret = ch - 'a';
-        else if (ch >= 'A' && ch <= 'F')
-            ret = ch - 'A';
-        else
-            return -1;
-        ret += 10;
-    }
-    return ret;
-}
-
 /// RTF parser that just extracts a single OLE2 object from a file.
 class ReqIfRtfReader : public SvRTFParser
 {
@@ -72,52 +55,7 @@ void ReqIfRtfReader::NextToken(int nToken)
 
 bool ReqIfRtfReader::WriteObjectData(SvStream& rOLE)
 {
-    int b = 0, count = 2;
-
-    SvMemoryStream aBuf;
-    for (int i = 0; i < m_aHex.getLength(); ++i)
-    {
-        char ch = m_aHex[i];
-        if (ch != 0x0d && ch != 0x0a)
-        {
-            b = b << 4;
-            sal_Int8 parsed = AsHex(ch);
-            if (parsed == -1)
-                return false;
-            b += parsed;
-            count--;
-            if (!count)
-            {
-                aBuf.WriteChar(b);
-                count = 2;
-                b = 0;
-            }
-        }
-    }
-
-    // Skip ObjectHeader, see [MS-OLEDS] 2.2.4.
-    if (aBuf.Tell())
-    {
-        aBuf.Seek(0);
-        sal_uInt32 nData;
-        aBuf.ReadUInt32(nData); // OLEVersion
-        aBuf.ReadUInt32(nData); // FormatID
-        aBuf.ReadUInt32(nData); // ClassName
-        aBuf.SeekRel(nData);
-        aBuf.ReadUInt32(nData); // TopicName
-        aBuf.SeekRel(nData);
-        aBuf.ReadUInt32(nData); // ItemName
-        aBuf.SeekRel(nData);
-        aBuf.ReadUInt32(nData); // NativeDataSize
-
-        if (nData)
-        {
-            rOLE.WriteStream(aBuf);
-            rOLE.Seek(0);
-        }
-    }
-
-    return true;
+    return msfilter::rtfutil::ExtractOLE2FromObjdata(m_aHex.makeStringAndClear(), rOLE);
 }
 }
 

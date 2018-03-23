@@ -35,6 +35,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sw_uwriter, \
     i18nlangtag \
     i18nutil \
     lng \
+    msfilter \
     oox \
     sal \
     salhelper \
