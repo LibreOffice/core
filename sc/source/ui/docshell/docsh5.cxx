@@ -316,7 +316,7 @@ ScDBData* ScDocShell::GetDBData( const ScRange& rMarked, ScGetDBMode eMode, ScGe
                 pNoNameData = new ScDBData(STR_DB_LOCAL_NONAME, nTab,
                                 nStartCol,nStartRow, nEndCol,nEndRow,
                                 true, bHasHeader );
-                aDocument.SetAnonymousDBData(nTab, pNoNameData);
+                aDocument.SetAnonymousDBData(nTab, std::unique_ptr<ScDBData>(pNoNameData));
             }
 
             if ( pUndoColl )

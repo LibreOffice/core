@@ -87,6 +87,7 @@
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <comphelper/lok.hxx>
 #include <mergecellsdialog.hxx>
+#include <sheetevents.hxx>
 
 #include <vector>
 #include <memory>
@@ -1009,7 +1010,7 @@ void ScViewFunc::SetPrintRanges( bool bEntireSheet, const OUString* pPrint,
                 rDoc.SetRepeatColRange( nTab, nullptr );
             else
                 if ( aRange.ParseAny( *pRepCol, &rDoc, aDetails ) & ScRefFlags::VALID )
-                    rDoc.SetRepeatColRange( nTab, &aRange );
+                    rDoc.SetRepeatColRange( nTab, std::unique_ptr<ScRange>(new ScRange(aRange)) );
         }
 
         //  repeat rows
@@ -1020,7 +1021,7 @@ void ScViewFunc::SetPrintRanges( bool bEntireSheet, const OUString* pPrint,
                 rDoc.SetRepeatRowRange( nTab, nullptr );
             else
                 if ( aRange.ParseAny( *pRepRow, &rDoc, aDetails ) & ScRefFlags::VALID )
-                    rDoc.SetRepeatRowRange( nTab, &aRange );
+                    rDoc.SetRepeatRowRange( nTab, std::unique_ptr<ScRange>(new ScRange(aRange)) );
         }
     }
 
@@ -2369,7 +2370,8 @@ bool ScViewFunc::DeleteTables(const vector<SCTAB> &TheTabs, bool bRecord )
             }
             pUndoDoc->SetVisible( nTab, rDoc.IsVisible( nTab ) );
             pUndoDoc->SetTabBgColor( nTab, rDoc.GetTabBgColor(nTab) );
-            pUndoDoc->SetSheetEvents( nTab, rDoc.GetSheetEvents( nTab ) );
+            auto pSheetEvents = rDoc.GetSheetEvents( nTab );
+            pUndoDoc->SetSheetEvents( nTab, std::unique_ptr<ScSheetEvents>(pSheetEvents ? new ScSheetEvents(*pSheetEvents) : nullptr) );
             pUndoDoc->SetLayoutRTL( nTab, rDoc.IsLayoutRTL( nTab ) );
 
             if ( rDoc.IsTabProtected( nTab ) )

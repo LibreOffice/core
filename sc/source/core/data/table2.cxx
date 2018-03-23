@@ -101,17 +101,15 @@ bool ScTable::SetOutlineTable( const ScOutlineTable* pNewOutline )
     {
         nOldSizeX = pOutlineTable->GetColArray().GetDepth();
         nOldSizeY = pOutlineTable->GetRowArray().GetDepth();
-        delete pOutlineTable;
+        pOutlineTable.reset();
     }
 
     if (pNewOutline)
     {
-        pOutlineTable = new ScOutlineTable( *pNewOutline );
+        pOutlineTable.reset(new ScOutlineTable( *pNewOutline ));
         nNewSizeX = pOutlineTable->GetColArray().GetDepth();
         nNewSizeY = pOutlineTable->GetRowArray().GetDepth();
     }
-    else
-        pOutlineTable = nullptr;
 
     return ( nNewSizeX != nOldSizeX || nNewSizeY != nOldSizeY );        // changed size?
 }
@@ -119,16 +117,12 @@ bool ScTable::SetOutlineTable( const ScOutlineTable* pNewOutline )
 void ScTable::StartOutlineTable()
 {
     if (!pOutlineTable)
-        pOutlineTable = new ScOutlineTable;
+        pOutlineTable.reset(new ScOutlineTable);
 }
 
-void ScTable::SetSheetEvents( const ScSheetEvents* pNew )
+void ScTable::SetSheetEvents( std::unique_ptr<ScSheetEvents> pNew )
 {
-    delete pSheetEvents;
-    if (pNew)
-        pSheetEvents = new ScSheetEvents(*pNew);
-    else
-        pSheetEvents = nullptr;
+    pSheetEvents = std::move(pNew);
 
     SetCalcNotification( false );       // discard notifications before the events were set
 
@@ -494,7 +488,7 @@ void ScTable::CopyToClip(
     //  copy content
     //local range names need to be copied first for formula cells
     if (!pTable->mpRangeName && mpRangeName)
-        pTable->mpRangeName = new ScRangeName(*mpRangeName);
+        pTable->mpRangeName.reset( new ScRangeName(*mpRangeName) );
 
     SCCOL i;
 
@@ -510,7 +504,7 @@ void ScTable::CopyToClip(
     pTable->CopyColHidden(*this, 0, nCol2);
     pTable->CopyColFiltered(*this, 0, nCol2);
     if (pDBDataNoName)
-        pTable->SetAnonymousDBData(new ScDBData(*pDBDataNoName));
+        pTable->SetAnonymousDBData(std::unique_ptr<ScDBData>(new ScDBData(*pDBDataNoName)));
 
     if (pRowFlags && pTable->pRowFlags && mpRowHeights && pTable->mpRowHeights)
     {
@@ -1150,13 +1144,13 @@ void ScTable::CopyToTable(
 
     if (pDBDataNoName)
     {
-        ScDBData* pNewDBData = new ScDBData(*pDBDataNoName);
+        std::unique_ptr<ScDBData> pNewDBData(new ScDBData(*pDBDataNoName));
         SCCOL aCol1, aCol2;
         SCROW aRow1, aRow2;
         SCTAB aTab;
         pNewDBData->GetArea(aTab, aCol1, aRow1, aCol2, aRow2);
         pNewDBData->MoveTo(pDestTab->nTab, aCol1, aRow1, aCol2, aRow2);
-        pDestTab->SetAnonymousDBData(pNewDBData);
+        pDestTab->SetAnonymousDBData(std::move(pNewDBData));
     }
     //  Charts have to be adjusted when hide/show
     ScChartListenerCollection* pCharts = pDestTab->pDocument->GetChartListenerCollection();
@@ -1249,7 +1243,7 @@ void ScTable::CopyToTable(
     }
 
     if(nFlags & InsertDeleteFlags::OUTLINE) // also only when bColRowFlags
-        pDestTab->SetOutlineTable( pOutlineTable );
+        pDestTab->SetOutlineTable( pOutlineTable.get() );
 
     if (bCopyCaptions && (nFlags & (InsertDeleteFlags::NOTE | InsertDeleteFlags::ADDNOTES)))
     {
@@ -1375,8 +1369,7 @@ bool ScTable::HasScenarioRange( const ScRange& rRange ) const
 
 void ScTable::InvalidateScenarioRanges()
 {
-    delete pScenarioRanges;
-    pScenarioRanges = nullptr;
+    pScenarioRanges.reset();
 }
 
 const ScRangeList* ScTable::GetScenarioRanges() const
@@ -1385,12 +1378,12 @@ const ScRangeList* ScTable::GetScenarioRanges() const
 
     if (!pScenarioRanges)
     {
-        const_cast<ScTable*>(this)->pScenarioRanges = new ScRangeList;
+        const_cast<ScTable*>(this)->pScenarioRanges.reset(new ScRangeList);
         ScMarkData aMark;
         MarkScenarioIn( aMark, ScScenarioFlags::NONE );     // always
-        aMark.FillRangeListWithMarks( pScenarioRanges, false );
+        aMark.FillRangeListWithMarks( pScenarioRanges.get(), false );
     }
-    return pScenarioRanges;
+    return pScenarioRanges.get();
 }
 
 bool ScTable::TestCopyScenarioTo( const ScTable* pDestTab ) const
@@ -3790,10 +3783,9 @@ void ScTable::SetDrawPageSize(bool bResetStreamValid, bool bUpdateNoteCaptionPos
         SetStreamValid(false);
 }
 
-void ScTable::SetRangeName(ScRangeName* pNew)
+void ScTable::SetRangeName(std::unique_ptr<ScRangeName> pNew)
 {
-    delete mpRangeName;
-    mpRangeName = pNew;
+    mpRangeName = std::move(pNew);
 
     //fdo#39792: mark stream as invalid, otherwise new ScRangeName will not be written to file
     SetStreamValid(false);
@@ -3802,8 +3794,8 @@ void ScTable::SetRangeName(ScRangeName* pNew)
 ScRangeName* ScTable::GetRangeName() const
 {
     if (!mpRangeName)
-        mpRangeName = new ScRangeName;
-    return mpRangeName;
+        mpRangeName.reset(new ScRangeName);
+    return mpRangeName.get();
 }
 
 sal_uLong ScTable::GetRowOffset( SCROW nRow, bool bHiddenAsZero ) const

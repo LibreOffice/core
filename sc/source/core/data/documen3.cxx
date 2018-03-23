@@ -114,7 +114,7 @@ void ScDocument::GetAllTabRangeNames(ScRangeName::TabNameCopyMap& rNames) const
             // no more tables to iterate through.
             break;
 
-        const ScRangeName* p = maTabs[i]->mpRangeName;
+        const ScRangeName* p = maTabs[i]->mpRangeName.get();
         if (!p || p->empty())
             // ignore empty ones.
             continue;
@@ -145,7 +145,7 @@ void ScDocument::SetAllRangeNames(const std::map<OUString, std::unique_ptr<ScRan
             if (pName->empty())
                 SetRangeName( nTab, nullptr );
             else
-                SetRangeName( nTab, new ScRangeName( *pName ) );
+                SetRangeName( nTab, std::unique_ptr<ScRangeName>(new ScRangeName( *pName )) );
         }
     }
 }
@@ -160,7 +160,7 @@ void ScDocument::GetRangeNameMap(std::map<OUString, ScRangeName*>& aRangeNameMap
         if (!p )
         {
             p = new ScRangeName();
-            SetRangeName(i, p);
+            SetRangeName(i, std::unique_ptr<ScRangeName>(p));
         }
         OUString aTableName;
         maTabs[i]->GetName(aTableName);
@@ -189,12 +189,12 @@ ScRangeName* ScDocument::GetRangeName() const
     return pRangeName.get();
 }
 
-void ScDocument::SetRangeName(SCTAB nTab, ScRangeName* pNew)
+void ScDocument::SetRangeName(SCTAB nTab, std::unique_ptr<ScRangeName> pNew)
 {
     if (!ValidTab(nTab) || nTab >= static_cast<SCTAB>(maTabs.size()) || !maTabs[nTab])
         return;
 
-    return maTabs[nTab]->SetRangeName(pNew);
+    return maTabs[nTab]->SetRangeName(std::move(pNew));
 }
 
 void ScDocument::SetRangeName( std::unique_ptr<ScRangeName> pNewRangeName )
@@ -654,10 +654,10 @@ const ScSheetEvents* ScDocument::GetSheetEvents( SCTAB nTab ) const
     return nullptr;
 }
 
-void ScDocument::SetSheetEvents( SCTAB nTab, const ScSheetEvents* pNew )
+void ScDocument::SetSheetEvents( SCTAB nTab, std::unique_ptr<ScSheetEvents> pNew )
 {
     if (ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
-        maTabs[nTab]->SetSheetEvents( pNew );
+        maTabs[nTab]->SetSheetEvents( std::move(pNew) );
 }
 
 bool ScDocument::HasSheetEventScript( SCTAB nTab, ScSheetEventId nEvent, bool bWithVbaEvents ) const
