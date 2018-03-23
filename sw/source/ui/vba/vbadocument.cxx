@@ -35,6 +35,7 @@
 #include <com/sun/star/document/XRedlinesSupplier.hpp>
 #include <ooo/vba/XControlProvider.hpp>
 #include <ooo/vba/word/WdProtectionType.hpp>
+#include <ooo/vba/word/XDocumentOutgoing.hpp>
 
 #include <vbahelper/helperdecl.hxx>
 #include "wordvbahelper.hxx"
@@ -58,6 +59,19 @@
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
+class SwVbaDocumentOutgoingConnectionPoint : public cppu::WeakImplHelper<XConnectionPoint>
+{
+private:
+    SwVbaDocument* mpDoc;
+
+public:
+    SwVbaDocumentOutgoingConnectionPoint( SwVbaDocument* pDoc );
+
+    // XConnectionPoint
+    sal_uInt32 SAL_CALL Advise(const uno::Reference< XSink >& Sink ) override;
+    void SAL_CALL Unadvise( sal_uInt32 Cookie ) override;
+};
+
 SwVbaDocument::SwVbaDocument( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, uno::Reference< frame::XModel > const & xModel ): SwVbaDocument_BASE( xParent, xContext, xModel )
 {
     Initialize();
@@ -74,6 +88,23 @@ SwVbaDocument::~SwVbaDocument()
 void SwVbaDocument::Initialize()
 {
     mxTextDocument.set( getModel(), uno::UNO_QUERY_THROW );
+}
+
+sal_uInt32
+SwVbaDocument::AddSink( const uno::Reference< XSink >& xSink )
+{
+    word::getDocShell( mxModel )->RegisterAutomationDocumentEventsCaller( uno::Reference< XSinkCaller >(this) );
+    mvSinks.push_back(xSink);
+    return mvSinks.size();;
+}
+
+void
+SwVbaDocument::RemoveSink( sal_uInt32 nNumber )
+{
+    if (nNumber < 1 || nNumber > mvSinks.size())
+        return;
+
+    mvSinks[nNumber-1] = uno::Reference< XSink >();
 }
 
 uno::Reference< word::XRange > SAL_CALL
@@ -498,6 +529,73 @@ SwVbaDocument::getFormControls()
     {
     }
     return xFormControls;
+}
+
+// XInterfaceWithIID
+
+OUString SAL_CALL
+SwVbaDocument::getIID()
+{
+    return OUString("{82154424-0FBF-11d4-8313-005004526AB4}");
+}
+
+// XConnectable
+
+OUString SAL_CALL
+SwVbaDocument::GetIIDForClassItselfNotCoclass()
+{
+    return OUString("{82154425-0FBF-11D4-8313-005004526AB4}");
+}
+
+TypeAndIID SAL_CALL
+SwVbaDocument::GetConnectionPoint()
+{
+    TypeAndIID aResult =
+        { word::XDocumentOutgoing::static_type(),
+          "{82154426-0FBF-11D4-8313-005004526AB4}"
+        };
+
+    return aResult;
+}
+
+// XSinkCaller
+
+void SAL_CALL
+SwVbaDocument::CallSinks( const OUString& Method, const uno::Sequence< uno::Any >& Arguments )
+{
+    for (auto& i : mvSinks)
+    {
+        if (i.is())
+            i->Call(Method, Arguments);
+    }
+}
+
+uno::Reference<XConnectionPoint> SAL_CALL
+SwVbaDocument::FindConnectionPoint()
+{
+    uno::Reference<XConnectionPoint> xCP(new SwVbaDocumentOutgoingConnectionPoint(this));
+    return xCP;
+}
+
+// SwVbaApplicationOutgoingConnectionPoint
+
+SwVbaDocumentOutgoingConnectionPoint::SwVbaDocumentOutgoingConnectionPoint( SwVbaDocument* pDoc ) :
+    mpDoc(pDoc)
+{
+}
+
+// XConnectionPoint
+
+sal_uInt32 SAL_CALL
+SwVbaDocumentOutgoingConnectionPoint::Advise( const uno::Reference< XSink >& Sink )
+{
+    return mpDoc->AddSink(Sink);
+}
+
+void SAL_CALL
+SwVbaDocumentOutgoingConnectionPoint::Unadvise( sal_uInt32 Cookie )
+{
+    mpDoc->RemoveSink( Cookie );
 }
 
 uno::Sequence< OUString >
