@@ -4755,7 +4755,7 @@ void PaintCharacterBorder(
 
         if( aShadow.GetLocation() != SvxShadowLocation::NONE )
         {
-            lcl_PaintShadow( aAlignedRect, aAlignedRect, aShadow,
+            lcl_PaintShadow( rPaintArea, aAlignedRect, aShadow,
                              false, bTop, bBottom, bLeft, bRight, gProp);
         }
     }
