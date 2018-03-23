@@ -220,13 +220,11 @@ short Compare( const OUString &sInput1, const OUString &sInput2,
 
 }
 
-struct ScSortInfo
+struct ScSortInfo final
 {
     ScRefCellValue maCell;
     SCCOLROW        nOrg;
-    DECL_FIXEDMEMPOOL_NEWDEL( ScSortInfo );
 };
-IMPL_FIXEDMEMPOOL_NEWDEL( ScSortInfo )
 
 class ScSortInfoArray
 {
@@ -258,11 +256,10 @@ public:
 private:
     std::unique_ptr<RowsType> mpRows; /// row-wise data table for sort by row operation.
 
-    ScSortInfo***   pppInfo;
+    std::vector<std::unique_ptr<ScSortInfo[]>> mvppInfo;
     SCSIZE          nCount;
     SCCOLROW        nStart;
     SCCOLROW        mnLastIndex; /// index of last non-empty cell position.
-    sal_uInt16      nUsedSorts;
 
     std::vector<SCCOLROW> maOrderIndices;
     bool mbKeepQuery;
@@ -273,22 +270,17 @@ public:
     const ScSortInfoArray& operator=(const ScSortInfoArray&) = delete;
 
     ScSortInfoArray( sal_uInt16 nSorts, SCCOLROW nInd1, SCCOLROW nInd2 ) :
-        pppInfo(nullptr),
+        mvppInfo(nSorts),
         nCount( nInd2 - nInd1 + 1 ), nStart( nInd1 ),
         mnLastIndex(nInd2),
-        nUsedSorts(nSorts),
         mbKeepQuery(false),
         mbUpdateRefs(false)
     {
-        if (nUsedSorts)
+        if (nSorts)
         {
-            pppInfo = new ScSortInfo**[nUsedSorts];
-            for ( sal_uInt16 nSort = 0; nSort < nUsedSorts; nSort++ )
+            for ( sal_uInt16 nSort = 0; nSort < nSorts; nSort++ )
             {
-                ScSortInfo** ppInfo = new ScSortInfo* [nCount];
-                for ( SCSIZE j = 0; j < nCount; j++ )
-                    ppInfo[j] = new ScSortInfo;
-                pppInfo[nSort] = ppInfo;
+                mvppInfo[nSort].reset(new ScSortInfo[nCount]);
             }
         }
 
@@ -298,18 +290,6 @@ public:
 
     ~ScSortInfoArray()
     {
-        if (pppInfo)
-        {
-            for ( sal_uInt16 nSort = 0; nSort < nUsedSorts; nSort++ )
-            {
-                ScSortInfo** ppInfo = pppInfo[nSort];
-                for ( SCSIZE j = 0; j < nCount; j++ )
-                    delete ppInfo[j];
-                delete [] ppInfo;
-            }
-            delete[] pppInfo;
-        }
-
         if (mpRows)
             std::for_each(mpRows->begin(), mpRows->end(), std::default_delete<Row>());
     }
@@ -325,19 +305,17 @@ public:
     /**
      * Call this only during normal sorting, not from reordering.
      */
-    ScSortInfo** GetFirstArray() const
+    std::unique_ptr<ScSortInfo[]> const & GetFirstArray() const
     {
-        assert(pppInfo);
-        return pppInfo[0];
+        return mvppInfo[0];
     }
 
     /**
      * Call this only during normal sorting, not from reordering.
      */
-    ScSortInfo* Get( sal_uInt16 nSort, SCCOLROW nInd )
+    ScSortInfo & Get( sal_uInt16 nSort, SCCOLROW nInd )
     {
-        assert(pppInfo);
-        return (pppInfo[nSort])[ nInd - nStart ];
+        return mvppInfo[nSort][ nInd - nStart ];
     }
 
     /**
@@ -345,15 +323,12 @@ public:
      */
     void Swap( SCCOLROW nInd1, SCCOLROW nInd2 )
     {
-        assert(pppInfo);
         SCSIZE n1 = static_cast<SCSIZE>(nInd1 - nStart);
         SCSIZE n2 = static_cast<SCSIZE>(nInd2 - nStart);
-        for ( sal_uInt16 nSort = 0; nSort < nUsedSorts; nSort++ )
+        for ( sal_uInt16 nSort = 0; nSort < static_cast<sal_uInt16>(mvppInfo.size()); nSort++ )
         {
-            ScSortInfo** ppInfo = pppInfo[nSort];
-            ScSortInfo* pTmp = ppInfo[n1];
-            ppInfo[n1] = ppInfo[n2];
-            ppInfo[n2] = pTmp;
+            auto & ppInfo = mvppInfo[nSort];
+            std::swap(ppInfo[n1], ppInfo[n2]);
         }
 
         std::swap(maOrderIndices[n1], maOrderIndices[n2]);
@@ -400,7 +375,7 @@ public:
         maOrderIndices.swap(aOrderIndices2);
     }
 
-    sal_uInt16      GetUsedSorts() const { return nUsedSorts; }
+    sal_uInt16      GetUsedSorts() const { return mvppInfo.size(); }
 
     SCCOLROW    GetStart() const { return nStart; }
     SCCOLROW GetLast() const { return mnLastIndex; }
@@ -529,9 +504,9 @@ ScSortInfoArray* ScTable::CreateSortInfoArray(
             pCol->InitBlockPosition(aBlockPos);
             for ( SCROW nRow = nInd1; nRow <= nInd2; nRow++ )
             {
-                ScSortInfo* pInfo = pArray->Get( nSort, nRow );
-                pInfo->maCell = pCol->GetCellValue(aBlockPos, nRow);
-                pInfo->nOrg = nRow;
+                ScSortInfo & rInfo = pArray->Get( nSort, nRow );
+                rInfo.maCell = pCol->GetCellValue(aBlockPos, nRow);
+                rInfo.nOrg = nRow;
             }
         }
 
@@ -547,9 +522,9 @@ ScSortInfoArray* ScTable::CreateSortInfoArray(
             for ( SCCOL nCol = static_cast<SCCOL>(nInd1);
                     nCol <= static_cast<SCCOL>(nInd2); nCol++ )
             {
-                ScSortInfo* pInfo = pArray->Get( nSort, nCol );
-                pInfo->maCell = GetCellValue(nCol, nRow);
-                pInfo->nOrg = nCol;
+                ScSortInfo & rInfo = pArray->Get( nSort, nCol );
+                rInfo.maCell = GetCellValue(nCol, nRow);
+                rInfo.nOrg = nCol;
             }
         }
     }
@@ -1624,24 +1599,24 @@ short ScTable::Compare( ScSortInfoArray* pArray, SCCOLROW nIndex1, SCCOLROW nInd
     sal_uInt16 nSort = 0;
     do
     {
-        ScSortInfo* pInfo1 = pArray->Get( nSort, nIndex1 );
-        ScSortInfo* pInfo2 = pArray->Get( nSort, nIndex2 );
+        ScSortInfo& rInfo1 = pArray->Get( nSort, nIndex1 );
+        ScSortInfo& rInfo2 = pArray->Get( nSort, nIndex2 );
         if ( aSortParam.bByRow )
             nRes = CompareCell( nSort,
-                pInfo1->maCell, static_cast<SCCOL>(aSortParam.maKeyState[nSort].nField), pInfo1->nOrg,
-                pInfo2->maCell, static_cast<SCCOL>(aSortParam.maKeyState[nSort].nField), pInfo2->nOrg );
+                rInfo1.maCell, static_cast<SCCOL>(aSortParam.maKeyState[nSort].nField), rInfo1.nOrg,
+                rInfo2.maCell, static_cast<SCCOL>(aSortParam.maKeyState[nSort].nField), rInfo2.nOrg );
         else
             nRes = CompareCell( nSort,
-                pInfo1->maCell, static_cast<SCCOL>(pInfo1->nOrg), aSortParam.maKeyState[nSort].nField,
-                pInfo2->maCell, static_cast<SCCOL>(pInfo2->nOrg), aSortParam.maKeyState[nSort].nField );
+                rInfo1.maCell, static_cast<SCCOL>(rInfo1.nOrg), aSortParam.maKeyState[nSort].nField,
+                rInfo2.maCell, static_cast<SCCOL>(rInfo2.nOrg), aSortParam.maKeyState[nSort].nField );
     } while ( nRes == 0 && ++nSort < pArray->GetUsedSorts() );
     if( nRes == 0 )
     {
-        ScSortInfo* pInfo1 = pArray->Get( 0, nIndex1 );
-        ScSortInfo* pInfo2 = pArray->Get( 0, nIndex2 );
-        if( pInfo1->nOrg < pInfo2->nOrg )
+        ScSortInfo& rInfo1 = pArray->Get( 0, nIndex1 );
+        ScSortInfo& rInfo2 = pArray->Get( 0, nIndex2 );
+        if( rInfo1.nOrg < rInfo2.nOrg )
             nRes = -1;
-        else if( pInfo1->nOrg > pInfo2->nOrg )
+        else if( rInfo1.nOrg > rInfo2.nOrg )
             nRes = 1;
     }
     return nRes;
@@ -2857,13 +2832,13 @@ void ScTable::TopTenQuery( ScQueryParam& rParam )
                 std::unique_ptr<ScSortInfoArray> pArray(CreateSortInfoArray(aSortParam, nRow1, rParam.nRow2, bGlobalKeepQuery, false));
                 DecoladeRow( pArray.get(), nRow1, rParam.nRow2 );
                 QuickSort( pArray.get(), nRow1, rParam.nRow2 );
-                ScSortInfo** ppInfo = pArray->GetFirstArray();
+                std::unique_ptr<ScSortInfo[]> const & ppInfo = pArray->GetFirstArray();
                 SCSIZE nValidCount = nCount;
                 // Don't count note or blank cells, they are sorted to the end
-                while (nValidCount > 0 && ppInfo[nValidCount-1]->maCell.isEmpty())
+                while (nValidCount > 0 && ppInfo[nValidCount-1].maCell.isEmpty())
                     nValidCount--;
                 // Don't count Strings, they are between Value and blank
-                while (nValidCount > 0 && ppInfo[nValidCount-1]->maCell.hasString())
+                while (nValidCount > 0 && ppInfo[nValidCount-1].maCell.hasString())
                     nValidCount--;
                 if ( nValidCount > 0 )
                 {
@@ -2917,7 +2892,7 @@ void ScTable::TopTenQuery( ScQueryParam& rParam )
                             // added to avoid warnings
                         }
                     }
-                    ScRefCellValue aCell = ppInfo[nOffset]->maCell;
+                    ScRefCellValue aCell = ppInfo[nOffset].maCell;
                     if (aCell.hasNumeric())
                         rItem.mfVal = aCell.getValue();
                     else
