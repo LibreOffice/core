@@ -2,6 +2,57 @@
   "comments": [
     {
       "key": {
+        "uuid": "9a30ddce_6479c32f",
+        "filename": "offapi/com/sun/star/text/ViewSettings.idl",
+        "patchSetId": 1
+      },
+      "lineNbr": 261,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-03-23T12:01:40Z",
+      "side": 1,
+      "message": "new properties need to go at the end, I think",
+      "revId": "f5509ae98f68cdf2929d17bdd587cf409b09f292",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_8476b73c",
+        "filename": "offapi/com/sun/star/text/ViewSettings.idl",
+        "patchSetId": 1
+      },
+      "lineNbr": 263,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-03-23T12:01:40Z",
+      "side": 1,
+      "message": "this comment is apparently shifted to the wrong place",
+      "revId": "f5509ae98f68cdf2929d17bdd587cf409b09f292",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_a473bb4c",
+        "filename": "offapi/type_reference/offapi.idl",
+        "patchSetId": 1
+      },
+      "lineNbr": 15261,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-03-23T12:01:40Z",
+      "side": 1,
+      "message": "do not change this file manually",
+      "revId": "f5509ae98f68cdf2929d17bdd587cf409b09f292",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a30ddce_84f157d0",
         "filename": "officecfg/registry/schema/org/openoffice/Office/Writer.xcs",
         "patchSetId": 1
@@ -13,6 +64,24 @@
       "writtenOn": "2018-03-23T11:13:40Z",
       "side": 1,
       "message": "This section makes the unit test fail (and crashes the app when compiling without)",
+      "revId": "f5509ae98f68cdf2929d17bdd587cf409b09f292",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_c48eef26",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/Writer.xcs",
+        "patchSetId": 1
+      },
+      "lineNbr": 1058,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-03-23T12:01:40Z",
+      "side": 1,
+      "message": "could this be non-nillable?",
+      "parentUuid": "9a30ddce_84f157d0",
       "revId": "f5509ae98f68cdf2929d17bdd587cf409b09f292",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
