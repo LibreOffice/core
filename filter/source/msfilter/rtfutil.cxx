@@ -11,6 +11,9 @@
 #include <rtl/strbuf.hxx>
 #include <osl/diagnose.h>
 #include <svtools/rtfkeywd.hxx>
+#include <rtl/character.hxx>
+#include <tools/stream.hxx>
+#include <unotools/streamwrap.hxx>
 
 namespace msfilter
 {
@@ -181,6 +184,75 @@ OString OutStringUpr(const sal_Char* pToken, const OUString& rStr, rtl_TextEncod
     aRet.append(OutString(rStr, eDestEnc));
     aRet.append("}}}");
     return aRet.makeStringAndClear();
+}
+
+int AsHex(char ch)
+{
+    int ret = 0;
+    if (rtl::isAsciiDigit(static_cast<unsigned char>(ch)))
+        ret = ch - '0';
+    else
+    {
+        if (ch >= 'a' && ch <= 'f')
+            ret = ch - 'a';
+        else if (ch >= 'A' && ch <= 'F')
+            ret = ch - 'A';
+        else
+            return -1;
+        ret += 10;
+    }
+    return ret;
+}
+
+bool ExtractOLE2FromObjdata(const OString& rObjdata, SvStream& rOle2)
+{
+    SvMemoryStream aStream;
+    int b = 0, count = 2;
+
+    // Feed the destination text to a stream.
+    for (int i = 0; i < rObjdata.getLength(); ++i)
+    {
+        char ch = rObjdata[i];
+        if (ch != 0x0d && ch != 0x0a)
+        {
+            b = b << 4;
+            sal_Int8 parsed = msfilter::rtfutil::AsHex(ch);
+            if (parsed == -1)
+                return false;
+            b += parsed;
+            count--;
+            if (!count)
+            {
+                aStream.WriteChar(b);
+                count = 2;
+                b = 0;
+            }
+        }
+    }
+
+    // Skip ObjectHeader, see [MS-OLEDS] 2.2.4.
+    if (aStream.Tell())
+    {
+        aStream.Seek(0);
+        sal_uInt32 nData;
+        aStream.ReadUInt32(nData); // OLEVersion
+        aStream.ReadUInt32(nData); // FormatID
+        aStream.ReadUInt32(nData); // ClassName
+        aStream.SeekRel(nData);
+        aStream.ReadUInt32(nData); // TopicName
+        aStream.SeekRel(nData);
+        aStream.ReadUInt32(nData); // ItemName
+        aStream.SeekRel(nData);
+        aStream.ReadUInt32(nData); // NativeDataSize
+
+        if (nData)
+        {
+            rOle2.WriteStream(aStream);
+            rOle2.Seek(0);
+        }
+    }
+
+    return true;
 }
 }
 }

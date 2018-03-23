@@ -31,7 +31,6 @@ public:
     ~RTFTokenizer();
 
     RTFError resolveParse();
-    static int asHex(char ch);
     /// Number of states on the stack.
     int getGroup() const { return m_nGroup; }
     /// To be invoked by the pushState() callback to signal when the importer enters a group.

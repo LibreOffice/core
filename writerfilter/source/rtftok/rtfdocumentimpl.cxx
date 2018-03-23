@@ -19,6 +19,7 @@
 #include <unotools/streamwrap.hxx>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <filter/msfilter/util.hxx>
+#include <filter/msfilter/rtfutil.hxx>
 #include <comphelper/string.hxx>
 #include <vcl/GraphicObject.hxx>
 #include <tools/globname.hxx>
@@ -816,7 +817,7 @@ void RTFDocumentImpl::resolvePict(bool const bInline, uno::Reference<drawing::XS
             if (ch != 0x0d && ch != 0x0a && ch != 0x20)
             {
                 b = b << 4;
-                sal_Int8 parsed = RTFTokenizer::asHex(ch);
+                sal_Int8 parsed = msfilter::rtfutil::AsHex(ch);
                 if (parsed == -1)
                     return;
                 b += parsed;
@@ -2342,7 +2343,7 @@ RTFError RTFDocumentImpl::popState()
                     if (ch != 0x0d && ch != 0x0a)
                     {
                         b = b << 4;
-                        sal_Int8 parsed = RTFTokenizer::asHex(ch);
+                        sal_Int8 parsed = msfilter::rtfutil::AsHex(ch);
                         if (parsed == -1)
                             return RTFError::HEX_INVALID;
                         b += parsed;
@@ -3319,55 +3320,11 @@ RTFError RTFDocumentImpl::popState()
 
 RTFError RTFDocumentImpl::handleEmbeddedObject()
 {
-    SvMemoryStream aStream;
-    int b = 0, count = 2;
-
-    // Feed the destination text to a stream.
     OString aStr = OUStringToOString(m_aStates.top().pDestinationText->makeStringAndClear(),
                                      RTL_TEXTENCODING_ASCII_US);
-    for (int i = 0; i < aStr.getLength(); ++i)
-    {
-        char ch = aStr[i];
-        if (ch != 0x0d && ch != 0x0a)
-        {
-            b = b << 4;
-            sal_Int8 parsed = RTFTokenizer::asHex(ch);
-            if (parsed == -1)
-                return RTFError::HEX_INVALID;
-            b += parsed;
-            count--;
-            if (!count)
-            {
-                aStream.WriteChar(b);
-                count = 2;
-                b = 0;
-            }
-        }
-    }
-
     std::unique_ptr<SvStream> pStream(new SvMemoryStream());
-
-    // Skip ObjectHeader, see [MS-OLEDS] 2.2.4.
-    if (aStream.Tell())
-    {
-        aStream.Seek(0);
-        sal_uInt32 nData;
-        aStream.ReadUInt32(nData); // OLEVersion
-        aStream.ReadUInt32(nData); // FormatID
-        aStream.ReadUInt32(nData); // ClassName
-        aStream.SeekRel(nData);
-        aStream.ReadUInt32(nData); // TopicName
-        aStream.SeekRel(nData);
-        aStream.ReadUInt32(nData); // ItemName
-        aStream.SeekRel(nData);
-        aStream.ReadUInt32(nData); // NativeDataSize
-
-        if (nData)
-        {
-            pStream->WriteStream(aStream);
-            pStream->Seek(0);
-        }
-    }
+    if (!msfilter::rtfutil::ExtractOLE2FromObjdata(aStr, *pStream))
+        return RTFError::HEX_INVALID;
 
     uno::Reference<io::XInputStream> xInputStream(
         new utl::OSeekableInputStreamWrapper(pStream.release(), /*_bOwner=*/true));

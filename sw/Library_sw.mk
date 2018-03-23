@@ -59,6 +59,7 @@ $(eval $(call gb_Library_use_libraries,sw,\
     i18nlangtag \
     i18nutil \
     lng \
+    msfilter \
     sal \
     salhelper \
 	sax \

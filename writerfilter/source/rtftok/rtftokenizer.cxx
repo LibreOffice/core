@@ -17,6 +17,7 @@
 #include "rtfskipdestination.hxx"
 #include <com/sun/star/io/BufferSizeExceededException.hpp>
 #include <osl/diagnose.h>
+#include <filter/msfilter/rtfutil.hxx>
 
 using namespace com::sun::star;
 
@@ -140,7 +141,7 @@ RTFError RTFTokenizer::resolveParse()
                     {
                         SAL_INFO("writerfilter.rtf", OSL_THIS_FUNC << ": hex internal state");
                         b = b << 4;
-                        sal_Int8 parsed = asHex(ch);
+                        sal_Int8 parsed = msfilter::rtfutil::AsHex(ch);
                         if (parsed == -1)
                             return RTFError::HEX_INVALID;
                         b += parsed;
@@ -165,24 +166,6 @@ RTFError RTFTokenizer::resolveParse()
     if (m_nGroup > 0)
         return RTFError::GROUP_OVER;
     return RTFError::OK;
-}
-
-int RTFTokenizer::asHex(char ch)
-{
-    int ret = 0;
-    if (rtl::isAsciiDigit(static_cast<unsigned char>(ch)))
-        ret = ch - '0';
-    else
-    {
-        if (ch >= 'a' && ch <= 'f')
-            ret = ch - 'a';
-        else if (ch >= 'A' && ch <= 'F')
-            ret = ch - 'A';
-        else
-            return -1;
-        ret += 10;
-    }
-    return ret;
 }
 
 void RTFTokenizer::pushGroup() { m_nGroup++; }
