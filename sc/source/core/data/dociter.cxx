@@ -1288,8 +1288,9 @@ bool ScQueryCellIterator::FindEqualOrSortedLastInRange( SCCOL& nFoundCol,
     bIgnoreMismatchOnLeadingStrings = true;
     bool bLiteral = mpParam->eSearchType == utl::SearchParam::SearchType::Normal &&
         mpParam->GetEntry(0).GetQueryItem().meType == ScQueryEntry::ByString;
-    bool bBinary = bLiteral && mpParam->bByRow && (mpParam->GetEntry(0).eOp ==
-            SC_LESS_EQUAL || mpParam->GetEntry(0).eOp == SC_GREATER_EQUAL);
+    bool bBinary = mpParam->bByRow &&
+        (bLiteral || mpParam->GetEntry(0).GetQueryItem().meType == ScQueryEntry::ByValue) &&
+        (mpParam->GetEntry(0).eOp == SC_LESS_EQUAL || mpParam->GetEntry(0).eOp == SC_GREATER_EQUAL);
     bool bFound = false;
     if (bBinary)
     {
