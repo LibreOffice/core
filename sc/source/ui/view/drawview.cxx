@@ -874,7 +874,7 @@ void ScDrawView::DeleteMarked()
             delete pNote;
             // add the undo action for the note
             if( bUndo )
-                pUndoMgr->AddUndoAction( new ScUndoReplaceNote( *pDocShell, pCaptData->maStart, aNoteData, false, pDrawLayer->GetCalcUndo() ) );
+                pUndoMgr->AddUndoAction( new ScUndoReplaceNote( *pDocShell, pCaptData->maStart, aNoteData, false, pDrawLayer->GetCalcUndo().release() ) );
             // repaint the cell to get rid of the note marker
             if( pDocShell )
                 pDocShell->PostPaintCell( pCaptData->maStart );

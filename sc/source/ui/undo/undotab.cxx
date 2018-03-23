@@ -67,7 +67,7 @@ ScUndoInsertTab::ScUndoInsertTab( ScDocShell* pNewDocShell,
     nTab( nTabNum ),
     bAppend( bApp )
 {
-    pDrawUndo = GetSdrUndoAction( &pDocShell->GetDocument() );
+    pDrawUndo = GetSdrUndoAction( &pDocShell->GetDocument() ).release();
     SetChangeTrack();
 }
 
@@ -159,7 +159,7 @@ ScUndoInsertTables::ScUndoInsertTables( ScDocShell* pNewDocShell,
     aNameList( newNameList ),
     nTab( nTabNum )
 {
-    pDrawUndo = GetSdrUndoAction( &pDocShell->GetDocument() );
+    pDrawUndo = GetSdrUndoAction( &pDocShell->GetDocument() ).release();
 
     SetChangeTrack();
 }
@@ -573,7 +573,7 @@ ScUndoCopyTab::ScUndoCopyTab(
     mpNewNames(pNewNames),
     pDrawUndo( nullptr )
 {
-    pDrawUndo = GetSdrUndoAction( &pDocShell->GetDocument() );
+    pDrawUndo = GetSdrUndoAction( &pDocShell->GetDocument() ).release();
 
     if (mpNewNames && mpNewTabs->size() != mpNewNames->size())
         // The sizes differ.  Something is wrong.
@@ -784,7 +784,7 @@ ScUndoMakeScenario::ScUndoMakeScenario( ScDocShell* pNewDocShell,
     nFlags( nF ),
     pDrawUndo( nullptr )
 {
-    pDrawUndo = GetSdrUndoAction( &pDocShell->GetDocument() );
+    pDrawUndo = GetSdrUndoAction( &pDocShell->GetDocument() ).release();
 }
 
 ScUndoMakeScenario::~ScUndoMakeScenario()
@@ -863,7 +863,7 @@ ScUndoImportTab::ScUndoImportTab(ScDocShell* pShell,
     , nCount(nNewCount)
     , pDrawUndo(nullptr)
 {
-    pDrawUndo = GetSdrUndoAction( &pDocShell->GetDocument() );
+    pDrawUndo = GetSdrUndoAction( &pDocShell->GetDocument() ).release();
 }
 
 ScUndoImportTab::~ScUndoImportTab()

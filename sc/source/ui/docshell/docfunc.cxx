@@ -179,7 +179,7 @@ bool ScDocFunc::DetectiveAddPred(const ScAddress& rPos)
     if (bUndo)
         pModel->BeginCalcUndo(false);
     bool bDone = ScDetectiveFunc( &rDoc,nTab ).ShowPred( nCol, nRow );
-    SdrUndoGroup* pUndo = nullptr;
+    std::unique_ptr<SdrUndoGroup> pUndo;
     if (bUndo)
         pUndo = pModel->GetCalcUndo();
     if (bDone)
@@ -189,15 +189,13 @@ bool ScDocFunc::DetectiveAddPred(const ScAddress& rPos)
         if (bUndo)
         {
             rDocShell.GetUndoManager()->AddUndoAction(
-                        new ScUndoDetective( &rDocShell, pUndo, &aOperation ) );
+                        new ScUndoDetective( &rDocShell, pUndo.release(), &aOperation ) );
         }
         aModificator.SetDocumentModified();
         SfxBindings* pBindings = rDocShell.GetViewBindings();
         if (pBindings)
             pBindings->Invalidate( SID_DETECTIVE_REFRESH );
     }
-    else
-        delete pUndo;
 
     return bDone;
 }
@@ -220,7 +218,7 @@ bool ScDocFunc::DetectiveDelPred(const ScAddress& rPos)
     if (bUndo)
         pModel->BeginCalcUndo(false);
     bool bDone = ScDetectiveFunc( &rDoc,nTab ).DeletePred( nCol, nRow );
-    SdrUndoGroup* pUndo = nullptr;
+    std::unique_ptr<SdrUndoGroup> pUndo;
     if (bUndo)
         pUndo = pModel->GetCalcUndo();
     if (bDone)
@@ -230,15 +228,13 @@ bool ScDocFunc::DetectiveDelPred(const ScAddress& rPos)
         if (bUndo)
         {
             rDocShell.GetUndoManager()->AddUndoAction(
-                        new ScUndoDetective( &rDocShell, pUndo, &aOperation ) );
+                        new ScUndoDetective( &rDocShell, pUndo.release(), &aOperation ) );
         }
         aModificator.SetDocumentModified();
         SfxBindings* pBindings = rDocShell.GetViewBindings();
         if (pBindings)
             pBindings->Invalidate( SID_DETECTIVE_REFRESH );
     }
-    else
-        delete pUndo;
 
     return bDone;
 }
@@ -259,7 +255,7 @@ bool ScDocFunc::DetectiveAddSucc(const ScAddress& rPos)
     if (bUndo)
         pModel->BeginCalcUndo(false);
     bool bDone = ScDetectiveFunc( &rDoc,nTab ).ShowSucc( nCol, nRow );
-    SdrUndoGroup* pUndo = nullptr;
+    std::unique_ptr<SdrUndoGroup> pUndo;
     if (bUndo)
         pUndo = pModel->GetCalcUndo();
     if (bDone)
@@ -269,15 +265,13 @@ bool ScDocFunc::DetectiveAddSucc(const ScAddress& rPos)
         if (bUndo)
         {
             rDocShell.GetUndoManager()->AddUndoAction(
-                        new ScUndoDetective( &rDocShell, pUndo, &aOperation ) );
+                        new ScUndoDetective( &rDocShell, pUndo.release(), &aOperation ) );
         }
         aModificator.SetDocumentModified();
         SfxBindings* pBindings = rDocShell.GetViewBindings();
         if (pBindings)
             pBindings->Invalidate( SID_DETECTIVE_REFRESH );
     }
-    else
-        delete pUndo;
 
     return bDone;
 }
@@ -300,7 +294,7 @@ bool ScDocFunc::DetectiveDelSucc(const ScAddress& rPos)
     if (bUndo)
         pModel->BeginCalcUndo(false);
     bool bDone = ScDetectiveFunc( &rDoc,nTab ).DeleteSucc( nCol, nRow );
-    SdrUndoGroup* pUndo = nullptr;
+    std::unique_ptr<SdrUndoGroup> pUndo;
     if (bUndo)
         pUndo = pModel->GetCalcUndo();
     if (bDone)
@@ -310,15 +304,13 @@ bool ScDocFunc::DetectiveDelSucc(const ScAddress& rPos)
         if (bUndo)
         {
             rDocShell.GetUndoManager()->AddUndoAction(
-                        new ScUndoDetective( &rDocShell, pUndo, &aOperation ) );
+                        new ScUndoDetective( &rDocShell, pUndo.release(), &aOperation ) );
         }
         aModificator.SetDocumentModified();
         SfxBindings* pBindings = rDocShell.GetViewBindings();
         if (pBindings)
             pBindings->Invalidate( SID_DETECTIVE_REFRESH );
     }
-    else
-        delete pUndo;
 
     return bDone;
 }
@@ -339,7 +331,7 @@ bool ScDocFunc::DetectiveAddError(const ScAddress& rPos)
     if (bUndo)
         pModel->BeginCalcUndo(false);
     bool bDone = ScDetectiveFunc( &rDoc,nTab ).ShowError( nCol, nRow );
-    SdrUndoGroup* pUndo = nullptr;
+    std::unique_ptr<SdrUndoGroup> pUndo;
     if (bUndo)
         pUndo = pModel->GetCalcUndo();
     if (bDone)
@@ -349,15 +341,13 @@ bool ScDocFunc::DetectiveAddError(const ScAddress& rPos)
         if (bUndo)
         {
             rDocShell.GetUndoManager()->AddUndoAction(
-                        new ScUndoDetective( &rDocShell, pUndo, &aOperation ) );
+                        new ScUndoDetective( &rDocShell, pUndo.release(), &aOperation ) );
         }
         aModificator.SetDocumentModified();
         SfxBindings* pBindings = rDocShell.GetViewBindings();
         if (pBindings)
             pBindings->Invalidate( SID_DETECTIVE_REFRESH );
     }
-    else
-        delete pUndo;
 
     return bDone;
 }
@@ -379,7 +369,7 @@ bool ScDocFunc::DetectiveMarkInvalid(SCTAB nTab)
         pModel->BeginCalcUndo(false);
     bool bOverflow;
     bool bDone = ScDetectiveFunc( &rDoc,nTab ).MarkInvalid( bOverflow );
-    SdrUndoGroup* pUndo = nullptr;
+    std::unique_ptr<SdrUndoGroup> pUndo;
     if (bUndo)
         pUndo = pModel->GetCalcUndo();
     if (pWaitWin)
@@ -389,7 +379,7 @@ bool ScDocFunc::DetectiveMarkInvalid(SCTAB nTab)
         if (pUndo && bUndo)
         {
             pUndo->SetComment( ScGlobal::GetRscString( STR_UNDO_DETINVALID ) );
-            rDocShell.GetUndoManager()->AddUndoAction( pUndo );
+            rDocShell.GetUndoManager()->AddUndoAction( pUndo.release() );
         }
         aModificator.SetDocumentModified();
         if ( bOverflow )
@@ -400,8 +390,6 @@ bool ScDocFunc::DetectiveMarkInvalid(SCTAB nTab)
             xInfoBox->run();
         }
     }
-    else
-        delete pUndo;
 
     return bDone;
 }
@@ -420,7 +408,7 @@ bool ScDocFunc::DetectiveDelAll(SCTAB nTab)
     if (bUndo)
         pModel->BeginCalcUndo(false);
     bool bDone = ScDetectiveFunc( &rDoc,nTab ).DeleteAll( ScDetectiveDelete::Detective );
-    SdrUndoGroup* pUndo = nullptr;
+    std::unique_ptr<SdrUndoGroup> pUndo;
     if (bUndo)
         pUndo = pModel->GetCalcUndo();
     if (bDone)
@@ -435,15 +423,13 @@ bool ScDocFunc::DetectiveDelAll(SCTAB nTab)
         if (bUndo)
         {
             rDocShell.GetUndoManager()->AddUndoAction(
-                        new ScUndoDetective( &rDocShell, pUndo, nullptr, pUndoList ) );
+                        new ScUndoDetective( &rDocShell, pUndo.release(), nullptr, pUndoList ) );
         }
         aModificator.SetDocumentModified();
         SfxBindings* pBindings = rDocShell.GetViewBindings();
         if (pBindings)
             pBindings->Invalidate( SID_DETECTIVE_REFRESH );
     }
-    else
-        delete pUndo;
 
     return bDone;
 }
@@ -502,13 +488,13 @@ bool ScDocFunc::DetectiveRefresh( bool bAutomatic )
 
         if (bUndo)
         {
-            SdrUndoGroup* pUndo = pModel->GetCalcUndo();
+            std::unique_ptr<SdrUndoGroup> pUndo = pModel->GetCalcUndo();
             if (pUndo)
             {
                 pUndo->SetComment( ScGlobal::GetRscString( STR_UNDO_DETREFRESH ) );
                 // associate with the last action
                 rDocShell.GetUndoManager()->AddUndoAction(
-                                                new ScUndoDraw( pUndo, &rDocShell ),
+                                                new ScUndoDraw( pUndo.release(), &rDocShell ),
                                                 bAutomatic );
             }
         }
@@ -1297,7 +1283,7 @@ void ScDocFunc::ReplaceNote( const ScAddress& rPos, const OUString& rNoteText, c
 
         // create the undo action
         if( pUndoMgr && (aOldData.mxCaption || aNewData.mxCaption) )
-            pUndoMgr->AddUndoAction( new ScUndoReplaceNote( rDocShell, rPos, aOldData, aNewData, pDrawLayer->GetCalcUndo() ) );
+            pUndoMgr->AddUndoAction( new ScUndoReplaceNote( rDocShell, rPos, aOldData, aNewData, pDrawLayer->GetCalcUndo().release() ) );
 
         // repaint cell (to make note marker visible)
         rDocShell.PostPaintCell( rPos );
@@ -4894,9 +4880,9 @@ bool ScDocFunc::MergeCells( const ScCellMergeOption& rOption, bool bContents, bo
 
     if (pUndoDoc)
     {
-        SdrUndoGroup* pDrawUndo = rDoc.GetDrawLayer() ? rDoc.GetDrawLayer()->GetCalcUndo() : nullptr;
+        std::unique_ptr<SdrUndoGroup> pDrawUndo = rDoc.GetDrawLayer() ? rDoc.GetDrawLayer()->GetCalcUndo() : nullptr;
         rDocShell.GetUndoManager()->AddUndoAction(
-            new ScUndoMerge(&rDocShell, rOption, bNeedContentsUndo, pUndoDoc, pDrawUndo) );
+            new ScUndoMerge(&rDocShell, rOption, bNeedContentsUndo, pUndoDoc, pDrawUndo.release()) );
     }
 
     aModificator.SetDocumentModified();

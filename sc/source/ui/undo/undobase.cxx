@@ -245,7 +245,7 @@ ScBlockUndo::ScBlockUndo( ScDocShell* pDocSh, const ScRange& rRange,
     aBlockRange( rRange ),
     eMode( eBlockMode )
 {
-    pDrawUndo = GetSdrUndoAction( &pDocShell->GetDocument() );
+    pDrawUndo = GetSdrUndoAction( &pDocShell->GetDocument() ).release();
 }
 
 ScBlockUndo::~ScBlockUndo()
@@ -346,7 +346,7 @@ ScMultiBlockUndo::ScMultiBlockUndo(
     ScSimpleUndo(pDocSh),
     maBlockRanges(rRanges)
 {
-    mpDrawUndo = GetSdrUndoAction( &pDocShell->GetDocument() );
+    mpDrawUndo = GetSdrUndoAction( &pDocShell->GetDocument() ).release();
 }
 
 ScMultiBlockUndo::~ScMultiBlockUndo()
@@ -416,7 +416,7 @@ ScMoveUndo::ScMoveUndo( ScDocShell* pDocSh, ScDocument* pRefDoc, ScRefUndoData* 
     ScDocument& rDoc = pDocShell->GetDocument();
     if (pRefUndoData)
         pRefUndoData->DeleteUnchanged(&rDoc);
-    pDrawUndo = GetSdrUndoAction( &rDoc );
+    pDrawUndo = GetSdrUndoAction( &rDoc ).release();
 }
 
 ScMoveUndo::~ScMoveUndo()

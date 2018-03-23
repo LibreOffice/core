@@ -77,7 +77,7 @@ void FuText::StopEditMode()
     {
         /*  Put all undo actions already collected (e.g. create caption object)
             and all following undo actions (text changed) together into a ListAction. */
-        SdrUndoGroup* pCalcUndo = pDrawLayer->GetCalcUndo();
+        std::unique_ptr<SdrUndoGroup> pCalcUndo = pDrawLayer->GetCalcUndo();
 
         if(pCalcUndo)
         {
@@ -91,9 +91,9 @@ void FuText::StopEditMode()
 
             // create a "insert note" undo action if needed
             if( bNewNote )
-                pUndoMgr->AddUndoAction( new ScUndoReplaceNote( *pDocShell, aNotePos, pNote->GetNoteData(), true, pCalcUndo ) );
+                pUndoMgr->AddUndoAction( new ScUndoReplaceNote( *pDocShell, aNotePos, pNote->GetNoteData(), true, pCalcUndo.release() ) );
             else
-                pUndoMgr->AddUndoAction( pCalcUndo );
+                pUndoMgr->AddUndoAction( pCalcUndo.release() );
         }
     }
 
@@ -142,7 +142,7 @@ void FuText::StopEditMode()
                 // delete note from document (removes caption, but does not delete it)
                 rDoc.ReleaseNote(aNotePos);
                 // create undo action for removed note
-                pUndoMgr->AddUndoAction( new ScUndoReplaceNote( *pDocShell, aNotePos, aNoteData, false, pDrawLayer->GetCalcUndo() ) );
+                pUndoMgr->AddUndoAction( new ScUndoReplaceNote( *pDocShell, aNotePos, aNoteData, false, pDrawLayer->GetCalcUndo().release() ) );
             }
             else
             {
