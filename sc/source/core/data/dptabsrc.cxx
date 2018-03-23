@@ -98,11 +98,6 @@ ScDPSource::ScDPSource( ScDPTableData* pD ) :
     bIgnoreEmptyRows( false ),
     bRepeatIfEmpty( false ),
     nDupCount( 0 ),
-    pResData( nullptr ),
-    pColResRoot( nullptr ),
-    pRowResRoot( nullptr ),
-    pColResults( nullptr ),
-    pRowResults( nullptr ),
     bResultOverflow( false ),
     bPageFiltered( false )
 {
@@ -113,12 +108,12 @@ ScDPSource::~ScDPSource()
 {
     // free lists
 
-    delete[] pColResults;
-    delete[] pRowResults;
+    pColResults.reset();
+    pRowResults.reset();
 
-    delete pColResRoot;
-    delete pRowResRoot;
-    delete pResData;
+    pColResRoot.reset();
+    pRowResRoot.reset();
+    pResData.reset();
 }
 
 const OUString* ScDPSource::GetGrandTotalName() const
@@ -384,7 +379,7 @@ uno::Sequence< uno::Sequence<sheet::DataResult> > SAL_CALL ScDPSource::getResult
 
     ScDPResultFilterContext aFilterCxt;
     pRowResRoot->FillDataResults(
-        pColResRoot, aFilterCxt, aSeq, pResData->GetRowStartMeasure());
+        pColResRoot.get(), aFilterCxt, aSeq, pResData->GetRowStartMeasure());
 
     maResFilterSet.swap(aFilterCxt.maFilterSet); // Keep this data for GETPIVOTDATA.
 
@@ -518,13 +513,11 @@ void ScDPSource::disposeData()
     {
         //  reset all data...
 
-        DELETEZ(pColResRoot);
-        DELETEZ(pRowResRoot);
-        DELETEZ(pResData);
-        delete[] pColResults;
-        delete[] pRowResults;
-        pColResults = nullptr;
-        pRowResults = nullptr;
+        pColResRoot.reset();
+        pRowResRoot.reset();
+        pResData.reset();
+        pColResults.reset();
+        pRowResults.reset();
         aColLevelList.clear();
         aRowLevelList.clear();
     }
@@ -846,7 +839,7 @@ void ScDPSource::CreateRes_Impl()
             aInfo.aDataSrcCols.push_back(nDimIndex);
     }
 
-    pResData = new ScDPResultData(*this);
+    pResData.reset( new ScDPResultData(*this) );
     pResData->SetMeasureData(aDataFunctions, aDataRefValues, aDataRefOrient, aDataNames);
     pResData->SetDataLayoutOrientation(nDataOrient);
     pResData->SetLateInit( bLateInit );
@@ -873,8 +866,8 @@ void ScDPSource::CreateRes_Impl()
     long nRowDimCount2 = maRowDims.size() - (nDataLayoutOrient == sheet::DataPilotFieldOrientation_ROW ? 1 : 0);
     bool bShowColGrand = bColumnGrand && nColDimCount2 > 0;
     bool bShowRowGrand = bRowGrand && nRowDimCount2 > 0;
-    pColResRoot = new ScDPResultMember(pResData, bShowColGrand);
-    pRowResRoot = new ScDPResultMember(pResData, bShowRowGrand);
+    pColResRoot.reset( new ScDPResultMember(pResData.get(), bShowColGrand) );
+    pRowResRoot.reset( new ScDPResultMember(pResData.get(), bShowRowGrand) );
 
     FillCalcInfo(false, aInfo, bHasAutoShow);
     long nColLevelCount = aInfo.aColLevels.size();
@@ -930,8 +923,8 @@ void ScDPSource::CreateRes_Impl()
         aInfo.aPageDims.push_back(*it);
 
     aInfo.pInitState = &aInitState;
-    aInfo.pColRoot   = pColResRoot;
-    aInfo.pRowRoot   = pRowResRoot;
+    aInfo.pColRoot   = pColResRoot.get();
+    aInfo.pRowRoot   = pRowResRoot.get();
     pData->CalcResults(aInfo, false);
 
     pColResRoot->CheckShowEmpty();
@@ -941,12 +934,12 @@ void ScDPSource::CreateRes_Impl()
 
     //  UpdateDataResults calculates all original results from the collected values,
     //  and stores them as reference values if needed.
-    pRowResRoot->UpdateDataResults( pColResRoot, pResData->GetRowStartMeasure() );
+    pRowResRoot->UpdateDataResults( pColResRoot.get(), pResData->GetRowStartMeasure() );
 
     if ( bHasAutoShow )     // do the double calculation only if AutoShow is used
     {
         //  Find the desired members and set bAutoHidden flag for the others
-        pRowResRoot->DoAutoShow( pColResRoot );
+        pRowResRoot->DoAutoShow( pColResRoot.get() );
 
         //  Reset all results to empty, so they can be built again with data for the
         //  desired members only.
@@ -955,12 +948,12 @@ void ScDPSource::CreateRes_Impl()
         pData->CalcResults(aInfo, true);
 
         //  Call UpdateDataResults again, with the new (limited) values.
-        pRowResRoot->UpdateDataResults( pColResRoot, pResData->GetRowStartMeasure() );
+        pRowResRoot->UpdateDataResults( pColResRoot.get(), pResData->GetRowStartMeasure() );
     }
 
     //  SortMembers does the sorting by a result dimension, using the original results,
     //  but not running totals etc.
-    pRowResRoot->SortMembers( pColResRoot );
+    pRowResRoot->SortMembers( pColResRoot.get() );
 
     //  UpdateRunningTotals calculates running totals along column/row dimensions,
     //  differences from other members (named or relative), and column/row percentages
@@ -969,9 +962,9 @@ void ScDPSource::CreateRes_Impl()
     //  Column/row percentages and index values must be done after sorting, because the
     //  results may no longer be in the right order (row total for percentage of row is
     //  always 1).
-    ScDPRunningTotalState aRunning( pColResRoot, pRowResRoot );
+    ScDPRunningTotalState aRunning( pColResRoot.get(), pRowResRoot.get() );
     ScDPRowTotals aTotals;
-    pRowResRoot->UpdateRunningTotals( pColResRoot, pResData->GetRowStartMeasure(), aRunning, aTotals );
+    pRowResRoot->UpdateRunningTotals( pColResRoot.get(), pResData->GetRowStartMeasure(), aRunning, aTotals );
 
 #if DUMP_PIVOT_TABLE
     DumpResults();
@@ -1047,12 +1040,12 @@ void ScDPSource::FillMemberResults()
         if (nColLevelCount)
         {
             long nColDimSize = pColResRoot->GetSize(pResData->GetColStartMeasure());
-            pColResults = new uno::Sequence<sheet::MemberResult>[nColLevelCount];
+            pColResults.reset(new uno::Sequence<sheet::MemberResult>[nColLevelCount]);
             for (long i=0; i<nColLevelCount; i++)
                 pColResults[i].realloc(nColDimSize);
 
             long nPos = 0;
-            pColResRoot->FillMemberResults( pColResults, nPos, pResData->GetColStartMeasure(),
+            pColResRoot->FillMemberResults( pColResults.get(), nPos, pResData->GetColStartMeasure(),
                                             true, nullptr, nullptr );
         }
 
@@ -1061,12 +1054,12 @@ void ScDPSource::FillMemberResults()
         if (nRowLevelCount)
         {
             long nRowDimSize = pRowResRoot->GetSize(pResData->GetRowStartMeasure());
-            pRowResults = new uno::Sequence<sheet::MemberResult>[nRowLevelCount];
+            pRowResults.reset( new uno::Sequence<sheet::MemberResult>[nRowLevelCount] );
             for (long i=0; i<nRowLevelCount; i++)
                 pRowResults[i].realloc(nRowDimSize);
 
             long nPos = 0;
-            pRowResRoot->FillMemberResults( pRowResults, nPos, pResData->GetRowStartMeasure(),
+            pRowResRoot->FillMemberResults( pRowResults.get(), nPos, pResData->GetRowStartMeasure(),
                                             true, nullptr, nullptr );
         }
     }
@@ -1082,14 +1075,14 @@ const uno::Sequence<sheet::MemberResult>* ScDPSource::GetMemberResults( const Sc
     {
         ScDPLevel* pColLevel = aColLevelList[i];
         if ( pColLevel == pLevel )
-            return pColResults+i;
+            return &pColResults[i];
     }
     long nRowCount = aRowLevelList.size();
     for (i=0; i<nRowCount; i++)
     {
         ScDPLevel* pRowLevel = aRowLevelList[i];
         if ( pRowLevel == pLevel )
-            return pRowResults+i;
+            return &pRowResults[i];
     }
     return nullptr;
 }
