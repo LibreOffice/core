@@ -34,6 +34,24 @@
       "revId": "b39e627be45f847554f11fdac040b6f4da4054ba",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_a4bbbb0d",
+        "filename": "compilerplugins/clang/plugin.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 633,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-03-23T10:19:29Z",
+      "side": 1,
+      "message": "see \u003chttps://gerrit.libreoffice.org/#/c/51774/\u003e \"Revert \u0027Allow compiler plugins for online\u0027\"",
+      "parentUuid": "fa31d9ce_04b00af4",
+      "revId": "b39e627be45f847554f11fdac040b6f4da4054ba",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
