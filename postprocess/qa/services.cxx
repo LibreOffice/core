@@ -467,7 +467,7 @@ void Test::createInstance(
                 }
             }
             if (!propsinfo->hasPropertyByName(prop->getName())) {
-                std::set<std::pair<OUString, OUString>> blacklist{
+                static std::set<std::pair<OUString, OUString>> const blacklist{
                     {"com.sun.star.comp.chart.DataSeries", "BorderDash"},
                     {"com.sun.star.comp.chart2.ChartDocumentWrapper", "UserDefinedAttributes"},
                     {"com.sun.star.comp.dbu.OColumnControlModel", "Tabstop"},
