@@ -3492,7 +3492,7 @@ void SwXTextDocument::postKeyEvent(int nType, int nCharCode, int nKeyCode)
     SolarMutexGuard aGuard;
 
     VclPtr<vcl::Window> pWindow = getDocWindow();
-    if (!pWindow)
+    if (!pWindow || pWindow->IsDisposed())
         return;
 
     LOKAsyncEventData* pLOKEv = new LOKAsyncEventData;
