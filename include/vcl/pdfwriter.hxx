@@ -29,7 +29,6 @@
 #include <vcl/vclenum.hxx>
 #include <vcl/font.hxx>
 #include <vcl/graphictools.hxx>
-#include <vcl/outdevstate.hxx>
 #include <vcl/outdev.hxx>
 
 #include <com/sun/star/io/XOutputStream.hpp>
