@@ -149,7 +149,7 @@ public:
     void UpdateOutlineObject( SdPage* pPage, Paragraph* pPara );
 
 private:
-    OutlineView* pOlView;
+    std::unique_ptr<OutlineView> pOlView;
     SdPage*         pLastPage; // For efficient processing of the preview
     rtl::Reference<TransferableClipboardListener> mxClipEvtLstnr;
     bool            bPastePossible;
