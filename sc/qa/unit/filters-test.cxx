@@ -608,8 +608,8 @@ void ScFiltersTest::testSortWithSharedFormulasODS()
 
     // Set A1:E17 as an anonymous database range to sheet, or else Calc would
     // refuse to sort the range.
-    ScDBData* pDBData = new ScDBData(STR_DB_LOCAL_NONAME, 0, 0, 0, 4, 16, true, true);
-    rDoc.SetAnonymousDBData(0, pDBData);
+    std::unique_ptr<ScDBData> pDBData(new ScDBData(STR_DB_LOCAL_NONAME, 0, 0, 0, 4, 16, true, true));
+    rDoc.SetAnonymousDBData(0, std::move(pDBData));
 
     // Sort ascending by Column E.
 
@@ -722,8 +722,8 @@ void ScFiltersTest::testSortWithSheetExternalReferencesODS_Impl( ScDocShellRef c
     }
 
     // Set as an anonymous database range to sort.
-    ScDBData* pDBData = new ScDBData(STR_DB_LOCAL_NONAME, 0, 0, nRow1, 3, nRow2, true, true);
-    rDoc.SetAnonymousDBData(0, pDBData);
+    std::unique_ptr<ScDBData> pDBData(new ScDBData(STR_DB_LOCAL_NONAME, 0, 0, nRow1, 3, nRow2, true, true));
+    rDoc.SetAnonymousDBData(0, std::move(pDBData));
 
     // Sort descending by Column A.
     ScSortParam aSortData;

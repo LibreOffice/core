@@ -156,7 +156,7 @@ void Test::testSortHorizontal()
 
     // Define A1:D4 as sheet-local anonymous database range.
     m_pDoc->SetAnonymousDBData(
-        0, new ScDBData(STR_DB_LOCAL_NONAME, 0, 0, 0, 3, 3));
+        0, std::unique_ptr<ScDBData>(new ScDBData(STR_DB_LOCAL_NONAME, 0, 0, 0, 3, 3)));
 
     // Sort A1:D4 horizontally, ascending by row 1.
     ScDBDocFunc aFunc(getDocShell());
@@ -223,7 +223,7 @@ void Test::testSortHorizontalWholeColumn()
 
     // Define C:G as sheet-local anonymous database range.
     m_pDoc->SetAnonymousDBData(
-        0, new ScDBData(STR_DB_LOCAL_NONAME, 0, nCol1, nRow1, nCol2, nRow2, false, false));
+        0, std::unique_ptr<ScDBData>(new ScDBData(STR_DB_LOCAL_NONAME, 0, nCol1, nRow1, nCol2, nRow2, false, false)));
 
     // Sort C:G horizontally ascending by row 1.
     ScDBDocFunc aFunc(getDocShell());
@@ -284,7 +284,7 @@ void Test::testSortSingleRow()
 
     // Define A1:B1 as sheet-local anonymous database range.
     m_pDoc->SetAnonymousDBData(
-        0, new ScDBData(STR_DB_LOCAL_NONAME, 0, 0, 0, 1, 0));
+        0, std::unique_ptr<ScDBData>(new ScDBData(STR_DB_LOCAL_NONAME, 0, 0, 0, 1, 0)));
 
     // Sort A1:B1 horizontally, ascending by row 1.
     ScDBDocFunc aFunc(getDocShell());
@@ -319,7 +319,7 @@ void Test::testSortSingleRow()
 
     // Define A1:G1 as sheet-local anonymous database range.
     m_pDoc->SetAnonymousDBData(
-        0, new ScDBData(STR_DB_LOCAL_NONAME, 0, 0, 0, 6, 0, false, true));
+        0, std::unique_ptr<ScDBData>(new ScDBData(STR_DB_LOCAL_NONAME, 0, 0, 0, 6, 0, false, true)));
 
     // Update the sort data.
     aSortData.nCol1 = 0;
@@ -660,7 +660,7 @@ void Test::testSortWithCellFormats()
 
     // Define A1:A4 as sheet-local anonymous database range, else sort wouldn't run.
     m_pDoc->SetAnonymousDBData(
-        0, new ScDBData(STR_DB_LOCAL_NONAME, 0, 0, 0, 0, 3));
+        0, std::unique_ptr<ScDBData>(new ScDBData(STR_DB_LOCAL_NONAME, 0, 0, 0, 0, 3)));
 
     // Sort A1:A4 ascending with cell formats.
     ScDBDocFunc aFunc(getDocShell());
@@ -732,7 +732,7 @@ void Test::testSortRefUpdate()
 
     // Define A1:A10 as sheet-local anonymous database range, else sort wouldn't run.
     m_pDoc->SetAnonymousDBData(
-        0, new ScDBData(STR_DB_LOCAL_NONAME, 0, 0, 0, 0, 9));
+        0, std::unique_ptr<ScDBData>(new ScDBData(STR_DB_LOCAL_NONAME, 0, 0, 0, 0, 9)));
 
     // Sort A1:A10 (with a header row).
     ScSortParam aSortData;
@@ -883,7 +883,7 @@ void Test::testSortRefUpdate2()
 
     // Define A1:B5 as sheet-local anonymous database range, else sort wouldn't run.
     m_pDoc->SetAnonymousDBData(
-        0, new ScDBData(STR_DB_LOCAL_NONAME, 0, 0, 0, 1, 4));
+        0, std::unique_ptr<ScDBData>(new ScDBData(STR_DB_LOCAL_NONAME, 0, 0, 0, 1, 4)));
 
     // Sort A1:B5 by column A (with a row header).
     ScSortParam aSortData;
@@ -968,7 +968,7 @@ void Test::testSortRefUpdate3()
 
     // Sort A1:A6.
     m_pDoc->SetAnonymousDBData(
-        0, new ScDBData(STR_DB_LOCAL_NONAME, 0, 0, 0, 0, 5));
+        0, std::unique_ptr<ScDBData>(new ScDBData(STR_DB_LOCAL_NONAME, 0, 0, 0, 0, 5)));
 
     // Sort A1:A6 by column A (with a row header).
     ScSortParam aSortData;
@@ -1111,8 +1111,8 @@ void Test::testSortRefUpdate4_Impl()
         aSortData.maKeyState[0].nField = 3;             // Average
         aSortData.maKeyState[0].bAscending = false;     // descending
 
-        m_pDoc->SetAnonymousDBData( 0, new ScDBData( STR_DB_LOCAL_NONAME, aSortRange.aStart.Tab(),
-                    aSortData.nCol1, aSortData.nRow1, aSortData.nCol2, aSortData.nRow2));
+        m_pDoc->SetAnonymousDBData( 0, std::unique_ptr<ScDBData>(new ScDBData( STR_DB_LOCAL_NONAME, aSortRange.aStart.Tab(),
+                    aSortData.nCol1, aSortData.nRow1, aSortData.nCol2, aSortData.nRow2)));
 
         bool bSorted = aFunc.Sort(0, aSortData, true, true, true);
         CPPUNIT_ASSERT(bSorted);
@@ -1182,8 +1182,8 @@ void Test::testSortRefUpdate4_Impl()
         aSortData.maKeyState[0].nField = 0;             // Name
         aSortData.maKeyState[0].bAscending = false;     // descending
 
-        m_pDoc->SetAnonymousDBData( 0, new ScDBData( STR_DB_LOCAL_NONAME, aSortRange.aStart.Tab(),
-                    aSortData.nCol1, aSortData.nRow1, aSortData.nCol2, aSortData.nRow2));
+        m_pDoc->SetAnonymousDBData( 0, std::unique_ptr<ScDBData>(new ScDBData( STR_DB_LOCAL_NONAME, aSortRange.aStart.Tab(),
+                    aSortData.nCol1, aSortData.nRow1, aSortData.nCol2, aSortData.nRow2)));
 
         bool bSorted = aFunc.Sort(0, aSortData, true, true, true);
         CPPUNIT_ASSERT(bSorted);
@@ -1273,8 +1273,8 @@ void Test::testSortRefUpdate5()
     ScDBDocFunc aFunc(getDocShell());
 
     // Sort A1:B5.
-    m_pDoc->SetAnonymousDBData( 0, new ScDBData( STR_DB_LOCAL_NONAME, aSortRange.aStart.Tab(),
-                aSortRange.aStart.Col(), aSortRange.aStart.Row(), aSortRange.aEnd.Col(), aSortRange.aEnd.Row()));
+    m_pDoc->SetAnonymousDBData( 0, std::unique_ptr<ScDBData>(new ScDBData( STR_DB_LOCAL_NONAME, aSortRange.aStart.Tab(),
+                aSortRange.aStart.Col(), aSortRange.aStart.Row(), aSortRange.aEnd.Col(), aSortRange.aEnd.Row())));
 
     // Sort by column A.
     ScSortParam aSortData;
@@ -1369,7 +1369,7 @@ void Test::testSortRefUpdate6()
 
     // Sort A1:C4.
     m_pDoc->SetAnonymousDBData(
-        0, new ScDBData(STR_DB_LOCAL_NONAME, 0, 0, 0, 2, 3));
+        0, std::unique_ptr<ScDBData>(new ScDBData(STR_DB_LOCAL_NONAME, 0, 0, 0, 2, 3)));
 
     // Sort A1:A6 by column A (with a row header).
     ScSortParam aSortData;
@@ -1502,7 +1502,7 @@ void Test::testSortBroadcaster()
 
         // Sort A1:B2.
         m_pDoc->SetAnonymousDBData(
-                0, new ScDBData(STR_DB_LOCAL_NONAME, 0, 0, 0, 1, 1));
+                0, std::unique_ptr<ScDBData>(new ScDBData(STR_DB_LOCAL_NONAME, 0, 0, 0, 1, 1)));
 
         ScDBDocFunc aFunc(getDocShell());
 
@@ -1599,7 +1599,7 @@ void Test::testSortBroadcaster()
 
         // Sort A5:B6.
         m_pDoc->SetAnonymousDBData(
-                0, new ScDBData(STR_DB_LOCAL_NONAME, 0, 0, 4, 1, 5));
+                0, std::unique_ptr<ScDBData>(new ScDBData(STR_DB_LOCAL_NONAME, 0, 0, 4, 1, 5)));
 
         ScDBDocFunc aFunc(getDocShell());
 
@@ -1702,7 +1702,7 @@ void Test::testSortBroadcastBroadcaster()
 
         // Sort A1:A2.
         m_pDoc->SetAnonymousDBData(
-                0, new ScDBData(STR_DB_LOCAL_NONAME, 0, 0, 0, 0, 1));
+                0, std::unique_ptr<ScDBData>(new ScDBData(STR_DB_LOCAL_NONAME, 0, 0, 0, 0, 1)));
 
         ScDBDocFunc aFunc(getDocShell());
 
@@ -1772,7 +1772,7 @@ void Test::testSortOutOfPlaceResult()
 
     // Sort A1:A6, and set the result to C2:C7
     m_pDoc->SetAnonymousDBData(
-        0, new ScDBData(STR_DB_LOCAL_NONAME, 0, 0, 0, 0, 5));
+        0, std::unique_ptr<ScDBData>(new ScDBData(STR_DB_LOCAL_NONAME, 0, 0, 0, 0, 5)));
 
     ScSortParam aSortData;
     aSortData.nCol1 = 0;
@@ -1851,7 +1851,7 @@ void Test::testSortPartialFormulaGroup()
 
     // Sort only B2:B4.  This caused crash at one point (c.f. fdo#81617).
 
-    m_pDoc->SetAnonymousDBData(0, new ScDBData(STR_DB_LOCAL_NONAME, 0, 1, 1, 1, 3));
+    m_pDoc->SetAnonymousDBData(0, std::unique_ptr<ScDBData>(new ScDBData(STR_DB_LOCAL_NONAME, 0, 1, 1, 1, 3)));
 
     ScSortParam aSortData;
     aSortData.nCol1 = 1;

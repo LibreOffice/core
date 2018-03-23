@@ -794,7 +794,7 @@ void XclImpAutoFilterData::Apply()
         }
         else
             pCurrDBData->SetAdvancedQuerySource(nullptr);
-        rDoc.SetAnonymousDBData(Tab(), pCurrDBData);
+        rDoc.SetAnonymousDBData(Tab(), std::unique_ptr<ScDBData>(pCurrDBData));
     }
 
     if( bActive )

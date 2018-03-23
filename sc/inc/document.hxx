@@ -613,7 +613,7 @@ public:
     SC_DLLPUBLIC void          GetRangeNameMap(std::map<OUString, ScRangeName*>& rRangeName);
     SC_DLLPUBLIC ScRangeName*  GetRangeName(SCTAB nTab) const;
     SC_DLLPUBLIC ScRangeName*  GetRangeName() const;
-    void                       SetRangeName(SCTAB nTab, ScRangeName* pNew);
+    void                       SetRangeName(SCTAB nTab, std::unique_ptr<ScRangeName> pNew);
     void                       SetRangeName( std::unique_ptr<ScRangeName> pNewRangeName );
     bool                       IsAddressInRangeName( RangeNameScope eScope, ScAddress& rAddress);
 
@@ -818,7 +818,7 @@ public:
 
     OUString GetCopyTabName(SCTAB nTab) const;
 
-    SC_DLLPUBLIC void      SetAnonymousDBData(SCTAB nTab, ScDBData* pDBData);
+    SC_DLLPUBLIC void      SetAnonymousDBData(SCTAB nTab, std::unique_ptr<ScDBData> pDBData);
     SC_DLLPUBLIC ScDBData* GetAnonymousDBData(SCTAB nTab);
 
     /** One document global anonymous database range for temporary operations,
@@ -1016,7 +1016,7 @@ public:
     bool            HasAnyDraw( SCTAB nTab, const tools::Rectangle& rMMRect ) const;
 
     const ScSheetEvents* GetSheetEvents( SCTAB nTab ) const;
-    void                 SetSheetEvents( SCTAB nTab, const ScSheetEvents* pNew );
+    void                 SetSheetEvents( SCTAB nTab, std::unique_ptr<ScSheetEvents> pNew );
     bool                 HasSheetEventScript( SCTAB nTab, ScSheetEventId nEvent, bool bWithVbaEvents = false ) const;
     bool                 HasAnySheetEventScript( ScSheetEventId nEvent, bool bWithVbaEvents = false ) const;  // on any sheet
 
@@ -1929,8 +1929,8 @@ public:
     SC_DLLPUBLIC void            AddPrintRange( SCTAB nTab, const ScRange& rNew );
     /** Marks the specified sheet to be printed completely. Deletes old print ranges on the sheet! */
     SC_DLLPUBLIC void            SetPrintEntireSheet( SCTAB nTab );
-    SC_DLLPUBLIC void            SetRepeatColRange( SCTAB nTab, const ScRange* pNew );
-    SC_DLLPUBLIC void            SetRepeatRowRange( SCTAB nTab, const ScRange* pNew );
+    SC_DLLPUBLIC void            SetRepeatColRange( SCTAB nTab, std::unique_ptr<ScRange> pNew );
+    SC_DLLPUBLIC void            SetRepeatRowRange( SCTAB nTab, std::unique_ptr<ScRange> pNew );
     ScPrintRangeSaver*           CreatePrintRangeSaver() const;
     void                         RestorePrintRanges( const ScPrintRangeSaver& rSaver );
 

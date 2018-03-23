@@ -1553,12 +1553,12 @@ void Test::testNamedRange()
     ScRangeData* pLocal2 = new ScRangeData( m_pDoc, "local2", "$Sheet1.$A$1");
     ScRangeData* pLocal3 = new ScRangeData( m_pDoc, "local3", "Sheet1.$A$1");
     ScRangeData* pLocal4 = new ScRangeData( m_pDoc, "local4", "$A$1"); // implicit relative sheet reference
-    ScRangeName* pLocalRangeName1 = new ScRangeName;
+    std::unique_ptr<ScRangeName> pLocalRangeName1(new ScRangeName);
     pLocalRangeName1->insert(pLocal1);
     pLocalRangeName1->insert(pLocal2);
     pLocalRangeName1->insert(pLocal3);
     pLocalRangeName1->insert(pLocal4);
-    m_pDoc->SetRangeName(0, pLocalRangeName1);
+    m_pDoc->SetRangeName(0, std::move(pLocalRangeName1));
 
     CPPUNIT_ASSERT_MESSAGE ("failed to insert sheet", m_pDoc->InsertTab (1, "Sheet2"));
 
@@ -3045,7 +3045,7 @@ void Test::testAutofilter()
                 m_pDoc->SetString(j, i, 0, OUString::createFromAscii(aData[i][j]));
 
     ScDBData* pDBData = new ScDBData(aDBName, 0, 0, 0, nCols-1, nRows-1);
-    m_pDoc->SetAnonymousDBData(0,pDBData);
+    m_pDoc->SetAnonymousDBData(0, std::unique_ptr<ScDBData>(pDBData));
 
     pDBData->SetAutoFilter(true);
     ScRange aRange;
@@ -3121,7 +3121,7 @@ void Test::testAutoFilterTimeValue()
     m_pDoc->SetValue(ScAddress(0,2,0), 265);
 
     ScDBData* pDBData = new ScDBData(STR_DB_GLOBAL_NONAME, 0, 0, 0, 0, 2);
-    m_pDoc->SetAnonymousDBData(0, pDBData);
+    m_pDoc->SetAnonymousDBData(0, std::unique_ptr<ScDBData>(pDBData));
 
     // Apply the "hour:minute:second" format to A2:A3.
     SvNumberFormatter* pFormatter = m_pDoc->GetFormatTable();
@@ -3196,7 +3196,7 @@ void Test::testAdvancedFilter()
     }
 
     ScDBData* pDBData = new ScDBData(STR_DB_GLOBAL_NONAME, 0, 0, 0, 1, 10);
-    m_pDoc->SetAnonymousDBData(0, pDBData);
+    m_pDoc->SetAnonymousDBData(0, std::unique_ptr<ScDBData>(pDBData));
 
     ScRange aDataRange(0,0,0,1,10,0);
     ScRange aFilterRuleRange(0,12,0,1,13,0);
@@ -3285,14 +3285,14 @@ void Test::testCopyPaste()
     std::unique_ptr<ScRangeName> pGlobalRangeName(new ScRangeName());
     pGlobalRangeName->insert(pGlobal);
     pGlobalRangeName->insert(pGlobal2);
-    ScRangeName* pLocalRangeName1 = new ScRangeName();
+    std::unique_ptr<ScRangeName> pLocalRangeName1(new ScRangeName());
     pLocalRangeName1->insert(pLocal1);
     pLocalRangeName1->insert(pLocal2);
     pLocalRangeName1->insert(pLocal3);
     pLocalRangeName1->insert(pLocal4);
     pLocalRangeName1->insert(pLocal5);
     m_pDoc->SetRangeName(std::move(pGlobalRangeName));
-    m_pDoc->SetRangeName(0, pLocalRangeName1);
+    m_pDoc->SetRangeName(0, std::move(pLocalRangeName1));
 
     // Add formula to B1.
     OUString aFormulaString("=local1+global+SUM($C$1:$D$4)+local3+local4+local5");

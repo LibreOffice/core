@@ -996,17 +996,19 @@ void ScUndoRangeNames::DoChange( bool bUndo )
 
     if ( bUndo )
     {
+        auto p = std::unique_ptr<ScRangeName>(new ScRangeName( *pOldRanges ));
         if (mnTab >= 0)
-            rDoc.SetRangeName( mnTab, new ScRangeName( *pOldRanges ) );
+            rDoc.SetRangeName( mnTab, std::move(p) );
         else
-            rDoc.SetRangeName( std::unique_ptr<ScRangeName>(new ScRangeName( *pOldRanges )) );
+            rDoc.SetRangeName( std::move(p) );
     }
     else
     {
+        auto p = std::unique_ptr<ScRangeName>(new ScRangeName( *pNewRanges ));
         if (mnTab >= 0)
-            rDoc.SetRangeName( mnTab, new ScRangeName( *pNewRanges ) );
+            rDoc.SetRangeName( mnTab, std::move(p) );
         else
-            rDoc.SetRangeName( std::unique_ptr<ScRangeName>(new ScRangeName( *pNewRanges )) );
+            rDoc.SetRangeName( std::move(p) );
     }
 
     rDoc.CompileHybridFormula();

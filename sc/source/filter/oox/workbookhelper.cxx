@@ -455,10 +455,10 @@ Reference< XDatabaseRange > WorkbookGlobals::createUnnamedDatabaseRangeObject( c
         ScDocument& rDoc =  getScDocument();
         if( rDoc.GetTableCount() <= aDestRange.aStart.Tab() )
             throw css::lang::IndexOutOfBoundsException();
-        ScDBData* pNewDBData = new ScDBData( STR_DB_LOCAL_NONAME, aDestRange.aStart.Tab(),
+        std::unique_ptr<ScDBData> pNewDBData(new ScDBData( STR_DB_LOCAL_NONAME, aDestRange.aStart.Tab(),
                                        aDestRange.aStart.Col(), aDestRange.aStart.Row(),
-                                       aDestRange.aEnd.Col(), aDestRange.aEnd.Row() );
-        rDoc.SetAnonymousDBData( aDestRange.aStart.Tab() , pNewDBData );
+                                       aDestRange.aEnd.Col(), aDestRange.aEnd.Row() ));
+        rDoc.SetAnonymousDBData( aDestRange.aStart.Tab() , std::move(pNewDBData) );
         ScDocShell* pDocSh = static_cast< ScDocShell* >(rDoc.GetDocumentShell());
         xDatabaseRange.set(new ScDatabaseRangeObj(pDocSh, aDestRange.aStart.Tab()));
     }

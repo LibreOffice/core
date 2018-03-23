@@ -194,7 +194,7 @@ public:
     bool            UnmergeCells( const ScCellMergeOption& rOption, bool bRecord, ScUndoRemoveMerge* pUndoRemoveMerge );
 
     // takes ownership of pNewRanges, nTab = -1 for local range names
-    void            SetNewRangeNames( ScRangeName* pNewRanges, bool bModifyDoc, SCTAB nTab );
+    void            SetNewRangeNames( std::unique_ptr<ScRangeName> pNewRanges, bool bModifyDoc, SCTAB nTab );
     void            ModifyRangeNames( const ScRangeName& rNewRanges, SCTAB nTab = -1 );
     /**
      * Modify all range names, global scope names as well as sheet local ones,
