@@ -1178,11 +1178,27 @@ protected:
     GtkWidget* m_pWidget;
 private:
     bool m_bTakeOwnership;
+    gulong m_nFocusInSignalId;
+    gulong m_nFocusOutSignalId;
+
+    static void signalFocusIn(GtkWidget*, GdkEvent*, gpointer widget)
+    {
+        GtkInstanceWidget* pThis = static_cast<GtkInstanceWidget*>(widget);
+        pThis->signal_focus_in();
+    }
+
+    static void signalFocusOut(GtkWidget*, GdkEvent*, gpointer widget)
+    {
+        GtkInstanceWidget* pThis = static_cast<GtkInstanceWidget*>(widget);
+        pThis->signal_focus_out();
+    }
 
 public:
     GtkInstanceWidget(GtkWidget* pWidget, bool bTakeOwnership)
         : m_pWidget(pWidget)
         , m_bTakeOwnership(bTakeOwnership)
+        , m_nFocusInSignalId(0)
+        , m_nFocusOutSignalId(0)
     {
     }
 
@@ -1348,8 +1364,26 @@ public:
         return GTK_WINDOW(gtk_widget_get_toplevel(m_pWidget));
     }
 
+    virtual void connect_focus_in(const Link<Widget&, void>& rLink) override
+    {
+        assert(!m_aFocusInHdl.IsSet());
+        m_nFocusInSignalId = g_signal_connect(m_pWidget, "focus-in-event", G_CALLBACK(signalFocusIn), this);
+        m_aFocusInHdl = rLink;
+    }
+
+    virtual void connect_focus_out(const Link<Widget&, void>& rLink) override
+    {
+        assert(!m_aFocusOutHdl.IsSet());
+        m_nFocusOutSignalId = g_signal_connect(m_pWidget, "focus-out-event", G_CALLBACK(signalFocusOut), this);
+        m_aFocusOutHdl = rLink;
+    }
+
     virtual ~GtkInstanceWidget() override
     {
+        if (m_nFocusInSignalId)
+            g_signal_handler_disconnect(m_pWidget, m_nFocusInSignalId);
+        if (m_nFocusOutSignalId)
+            g_signal_handler_disconnect(m_pWidget, m_nFocusOutSignalId);
         if (m_bTakeOwnership)
             gtk_widget_destroy(m_pWidget);
     }
