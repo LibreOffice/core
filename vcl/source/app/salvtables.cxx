@@ -1224,10 +1224,11 @@ private:
     DECL_LINK(MouseReleaseHdl, const Point&, void);
 
 public:
-    SalInstanceDrawingArea(VclDrawingArea* pDrawingArea, bool bTakeOwnership)
+    SalInstanceDrawingArea(VclDrawingArea* pDrawingArea, const a11yref& rAlly, bool bTakeOwnership)
         : SalInstanceWidget(pDrawingArea, bTakeOwnership)
         , m_xDrawingArea(pDrawingArea)
     {
+        m_xDrawingArea->SetAccessible(rAlly);
         m_xDrawingArea->SetPaintHdl(LINK(this, SalInstanceDrawingArea, PaintHdl));
         m_xDrawingArea->SetResizeHdl(LINK(this, SalInstanceDrawingArea, ResizeHdl));
         m_xDrawingArea->SetMousePressHdl(LINK(this, SalInstanceDrawingArea, MousePressHdl));
@@ -1601,10 +1602,10 @@ public:
         return pExpander ? new SalInstanceExpander(pExpander, bTakeOwnership) : nullptr;
     }
 
-    virtual weld::DrawingArea* weld_drawing_area(const OString &id, bool bTakeOwnership) override
+    virtual weld::DrawingArea* weld_drawing_area(const OString &id, const a11yref& rA11yImpl, bool bTakeOwnership) override
     {
         VclDrawingArea* pDrawingArea = m_xBuilder->get<VclDrawingArea>(id);
-        return pDrawingArea ? new SalInstanceDrawingArea(pDrawingArea, bTakeOwnership) : nullptr;
+        return pDrawingArea ? new SalInstanceDrawingArea(pDrawingArea, rA11yImpl, bTakeOwnership) : nullptr;
     }
 
     virtual ~SalInstanceBuilder() override

@@ -8,7 +8,7 @@
  */
 
 #include "../gtk/gtkinst.cxx"
-
+#include "../gtk/a11y/atkwrapper.hxx"
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -2615,6 +2615,8 @@ class GtkInstanceDrawingArea : public GtkInstanceWidget, public virtual weld::Dr
 {
 private:
     GtkDrawingArea* m_pDrawingArea;
+    a11yref m_xAccessible;
+    AtkObject *m_pAccessible;
     ScopedVclPtrInstance<VirtualDevice> m_xDevice;
     std::vector<unsigned char> m_aBuffer;
     cairo_surface_t* m_pSurface;
@@ -2699,9 +2701,11 @@ private:
     }
 
 public:
-    GtkInstanceDrawingArea(GtkDrawingArea* pDrawingArea, bool bTakeOwnership)
+    GtkInstanceDrawingArea(GtkDrawingArea* pDrawingArea, const a11yref& rA11y, bool bTakeOwnership)
         : GtkInstanceWidget(GTK_WIDGET(pDrawingArea), bTakeOwnership)
         , m_pDrawingArea(pDrawingArea)
+        , m_xAccessible(rA11y)
+        , m_pAccessible(nullptr)
         , m_xDevice(nullptr, Size(1, 1), DeviceFormat::DEFAULT)
         , m_pSurface(nullptr)
         , m_nDrawSignalId(g_signal_connect(m_pDrawingArea, "draw", G_CALLBACK(signalDraw), this))
@@ -2710,6 +2714,14 @@ public:
         , m_nMotionSignalId(g_signal_connect(m_pDrawingArea, "motion-notify-event", G_CALLBACK(signalMotion), this))
         , m_nButtonReleaseSignalId(g_signal_connect(m_pDrawingArea, "button-release-event", G_CALLBACK(signalButton), this))
     {
+        g_object_set_data(G_OBJECT(m_pDrawingArea), "g-lo-GtkInstanceDrawingArea", this);
+    }
+
+    AtkObject* GetAtkObject()
+    {
+        if (!m_pAccessible && m_xAccessible.is())
+            m_pAccessible = atk_object_wrapper_new(m_xAccessible);
+        return m_pAccessible;
     }
 
     virtual void queue_draw() override
@@ -2724,6 +2736,9 @@ public:
 
     virtual ~GtkInstanceDrawingArea() override
     {
+        g_object_steal_data(G_OBJECT(m_pDrawingArea), "g-lo-GtkInstanceDrawingArea");
+        if (m_pAccessible)
+            g_object_unref(m_pAccessible);
         if (m_pSurface)
             cairo_surface_destroy(m_pSurface);
         g_signal_handler_disconnect(m_pDrawingArea, m_nButtonPressSignalId);
@@ -3107,6 +3122,37 @@ namespace
     }
 }
 
+namespace
+{
+
+AtkObject* (*default_drawing_area_get_accessible)(GtkWidget *widget);
+
+AtkObject* drawing_area_get_accessibity(GtkWidget *pWidget)
+{
+    void* pData = g_object_get_data(G_OBJECT(pWidget), "g-lo-GtkInstanceDrawingArea");
+    GtkInstanceDrawingArea* pDrawingArea = static_cast<GtkInstanceDrawingArea*>(pData);
+    AtkObject *pAtkObj = pDrawingArea ? pDrawingArea->GetAtkObject() : nullptr;
+    if (pAtkObj)
+        return pAtkObj;
+    return default_drawing_area_get_accessible(pWidget);
+}
+
+void ensure_intercept_drawing_area_accessibility()
+{
+    static bool bDone;
+    if (!bDone)
+    {
+        gpointer pClass = g_type_class_ref(GTK_TYPE_DRAWING_AREA);
+        GtkWidgetClass* pWidgetClass = GTK_WIDGET_CLASS(pClass);
+        default_drawing_area_get_accessible = pWidgetClass->get_accessible;
+        pWidgetClass->get_accessible = drawing_area_get_accessibity;
+        g_type_class_unref(pClass);
+        bDone = true;
+    }
+}
+
+}
+
 class GtkInstanceBuilder : public weld::Builder
 {
 private:
@@ -3120,6 +3166,8 @@ public:
         , m_sHelpRoot(rUIFile)
         , m_pParentWidget(pParent)
     {
+        ensure_intercept_drawing_area_accessibility();
+
         OUString aUri(rUIRoot + rUIFile);
         OUString aPath;
         osl::FileBase::getSystemPathFromFileURL(aUri, aPath);
@@ -3301,13 +3349,13 @@ public:
         return new GtkInstanceExpander(pExpander, bTakeOwnership);
     }
 
-    virtual weld::DrawingArea* weld_drawing_area(const OString &id, bool bTakeOwnership) override
+    virtual weld::DrawingArea* weld_drawing_area(const OString &id, const a11yref& rA11y, bool bTakeOwnership) override
     {
         GtkDrawingArea* pDrawingArea = GTK_DRAWING_AREA(gtk_builder_get_object(m_pBuilder, id.getStr()));
         if (!pDrawingArea)
             return nullptr;
         auto_add_parentless_widgets_to_container(GTK_WIDGET(pDrawingArea));
-        return new GtkInstanceDrawingArea(pDrawingArea, bTakeOwnership);
+        return new GtkInstanceDrawingArea(pDrawingArea, rA11y, bTakeOwnership);
     }
 };
 
