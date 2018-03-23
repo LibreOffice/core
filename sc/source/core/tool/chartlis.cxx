@@ -96,7 +96,6 @@ ScChartListener::ScChartListener( const OUString& rName, ScDocument* pDocP,
     mpExtRefListener(nullptr),
     mpTokens(new vector<ScTokenRef>),
     maName(rName),
-    pUnoData( nullptr ),
     mpDoc( pDocP ),
     bUsed( false ),
     bDirty( false ),
@@ -110,7 +109,6 @@ ScChartListener::ScChartListener( const OUString& rName, ScDocument* pDocP, vect
     mpExtRefListener(nullptr),
     mpTokens(pTokens),
     maName(rName),
-    pUnoData( nullptr ),
     mpDoc( pDocP ),
     bUsed( false ),
     bDirty( false ),
@@ -123,14 +121,13 @@ ScChartListener::ScChartListener( const ScChartListener& r ) :
     mpExtRefListener(nullptr),
     mpTokens(new vector<ScTokenRef>(*r.mpTokens)),
     maName(r.maName),
-    pUnoData( nullptr ),
     mpDoc( r.mpDoc ),
     bUsed( false ),
     bDirty( r.bDirty ),
     bSeriesRangesScheduled( r.bSeriesRangesScheduled )
 {
     if ( r.pUnoData )
-        pUnoData = new ScChartUnoData( *r.pUnoData );
+        pUnoData.reset( new ScChartUnoData( *r.pUnoData ) );
 
     if (r.mpExtRefListener.get())
     {
@@ -153,7 +150,7 @@ ScChartListener::~ScChartListener()
 {
     if ( HasBroadcaster() )
         EndListeningTo();
-    delete pUnoData;
+    pUnoData.reset();
 
     if (mpExtRefListener.get())
     {
@@ -170,8 +167,7 @@ void ScChartListener::SetUno(
         const uno::Reference< chart::XChartDataChangeEventListener >& rListener,
         const uno::Reference< chart::XChartData >& rSource )
 {
-    delete pUnoData;
-    pUnoData = new ScChartUnoData( rListener, rSource );
+    pUnoData.reset( new ScChartUnoData( rListener, rSource ) );
 }
 
 uno::Reference< chart::XChartDataChangeEventListener > ScChartListener::GetUnoListener() const
