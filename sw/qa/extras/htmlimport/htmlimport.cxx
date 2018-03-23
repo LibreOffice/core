@@ -15,6 +15,8 @@
 #include <com/sun/star/drawing/BitmapMode.hpp>
 #include <com/sun/star/document/XEmbeddedObjectSupplier2.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
+#include <com/sun/star/io/XActiveDataStreamer.hpp>
+#include <com/sun/star/io/XSeekable.hpp>
 #include <tools/datetime.hxx>
 #include <unotools/datetime.hxx>
 #include <vcl/GraphicNativeTransform.hxx>
@@ -293,6 +295,23 @@ DECLARE_HTMLIMPORT_TEST(testReqIfBr, "reqif-br.xhtml")
 {
     // <reqif-xhtml:br/> was not recognized as a line break from a ReqIf file.
     CPPUNIT_ASSERT(getParagraph(1)->getString().startsWith("aaa\nbbb"));
+}
+
+DECLARE_HTMLIMPORT_TEST(testReqIfOle2, "reqif-ole2.xhtml")
+{
+    uno::Reference<text::XTextEmbeddedObjectsSupplier> xSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xObjects(xSupplier->getEmbeddedObjects(),
+                                                     uno::UNO_QUERY);
+    uno::Reference<document::XEmbeddedObjectSupplier2> xObject(xObjects->getByIndex(0),
+                                                               uno::UNO_QUERY);
+    uno::Reference<io::XActiveDataStreamer> xEmbeddedObject(xObject->getExtendedControlOverEmbeddedObject(), uno::UNO_QUERY);
+    // This failed, the "RTF fragment" native data was loaded as-is, we had no
+    // filter to handle it, so nothing happened on double-click.
+    CPPUNIT_ASSERT(xEmbeddedObject.is());
+    uno::Reference<io::XSeekable> xStream(xEmbeddedObject->getStream(), uno::UNO_QUERY);
+    // This was 80913, the RTF hexdump -> OLE1 binary -> OLE2 conversion was
+    // missing.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int64>(38912), xStream->getLength());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
