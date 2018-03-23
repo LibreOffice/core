@@ -26,6 +26,7 @@ public:
     void testDir();
     void testMaxDepth();
     void testRotation();
+    void testFlowchart();
 
     CPPUNIT_TEST_SUITE(SdImportTestSmartArt);
 
@@ -36,6 +37,7 @@ public:
     CPPUNIT_TEST(testDir);
     CPPUNIT_TEST(testMaxDepth);
     CPPUNIT_TEST(testRotation);
+    CPPUNIT_TEST(testFlowchart);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -181,6 +183,34 @@ void SdImportTestSmartArt::testRotation()
 
     uno::Reference<beans::XPropertySet> xShape2(xShapeGroup->getByIndex(2), uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(12000), xShape2->getPropertyValue("RotateAngle").get<sal_Int32>());
+
+    xDocShRef->DoClose();
+}
+
+void SdImportTestSmartArt::testFlowchart()
+{
+    sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/pptx/smartart-flowchart.pptx"), PPTX);
+    uno::Reference<drawing::XShapes> xShapeGroup(getShapeFromPage(0, 0, xDocShRef), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(5), xShapeGroup->getCount());
+
+    uno::Reference<text::XText> xText0(xShapeGroup->getByIndex(0), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(OUString("a"), xText0->getString());
+    uno::Reference<text::XText> xText2(xShapeGroup->getByIndex(2), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(OUString("b"), xText2->getString());
+    uno::Reference<text::XText> xText4(xShapeGroup->getByIndex(4), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(OUString("c"), xText4->getString());
+
+    uno::Reference<beans::XPropertySet> xShape0(xShapeGroup->getByIndex(0), uno::UNO_QUERY_THROW);
+
+    sal_Int32 nFillColor1 = 0;
+    xShape0->getPropertyValue("FillColor") >>= nFillColor1;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x4472c4), nFillColor1);
+
+    uno::Reference<beans::XPropertySet> xShape1(xShapeGroup->getByIndex(1), uno::UNO_QUERY_THROW);
+
+    sal_Int32 nFillColor = 0;
+    xShape1->getPropertyValue("FillColor") >>= nFillColor;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0xb0bbde), nFillColor);
 
     xDocShRef->DoClose();
 }
