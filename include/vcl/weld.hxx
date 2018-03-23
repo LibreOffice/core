@@ -17,6 +17,8 @@
 #include <vcl/field.hxx>
 #include <vcl/virdev.hxx>
 
+typedef css::uno::Reference<css::accessibility::XAccessible> a11yref;
+
 namespace weld
 {
 class Container;
@@ -595,7 +597,9 @@ public:
     virtual TextView* weld_text_view(const OString& id, bool bTakeOwnership = false) = 0;
     virtual Expander* weld_expander(const OString& id, bool bTakeOwnership = false) = 0;
     virtual Entry* weld_entry(const OString& id, bool bTakeOwnership = false) = 0;
-    virtual DrawingArea* weld_drawing_area(const OString& id, bool bTakeOwnership = false) = 0;
+    virtual DrawingArea* weld_drawing_area(const OString& id, const a11yref& rA11yImpl = nullptr,
+                                           bool bTakeOwnership = false)
+        = 0;
     virtual ~Builder() {}
 };
 
