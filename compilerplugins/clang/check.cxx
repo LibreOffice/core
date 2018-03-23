@@ -228,6 +228,57 @@ bool isExtraWarnUnusedType(clang::QualType type) {
     return isDerivedFromSomethingInteresting(rec);
 }
 
+namespace {
+
+bool isArithmeticOp(clang::Expr const * expr) {
+    expr = expr->IgnoreParenImpCasts();
+    if (auto const e = llvm::dyn_cast<clang::BinaryOperator>(expr)) {
+        switch (e->getOpcode()) {
+        case clang::BO_Mul:
+        case clang::BO_Div:
+        case clang::BO_Rem:
+        case clang::BO_Add:
+        case clang::BO_Sub:
+        case clang::BO_Shl:
+        case clang::BO_Shr:
+        case clang::BO_And:
+        case clang::BO_Xor:
+        case clang::BO_Or:
+            return true;
+        case clang::BO_Comma:
+            return isArithmeticOp(e->getRHS());
+        default:
+            return false;
+        }
+    }
+    return llvm::isa<clang::UnaryOperator>(expr)
+        || llvm::isa<clang::AbstractConditionalOperator>(expr);
+}
+
+}
+
+bool isOkToRemoveArithmeticCast(
+    clang::ASTContext & context, clang::QualType t1, clang::QualType t2, const clang::Expr* subExpr)
+{
+    // Don't warn if the types are arithmetic (in the C++ meaning), and: either
+    // at least one is a typedef (and if both are typedefs,they're different),
+    // or the sub-expression involves some operation that is likely to change
+    // types through promotion, or the sub-expression is an integer literal (so
+    // its type generally depends on its value and suffix if any---even with a
+    // suffix like L it could still be either long or long long):
+    if ((t1->isIntegralType(context)
+         || t1->isRealFloatingType())
+        && ((t1 != t2
+             && (loplugin::TypeCheck(t1).Typedef()
+                 || loplugin::TypeCheck(t2).Typedef()))
+            || isArithmeticOp(subExpr)
+            || llvm::isa<clang::IntegerLiteral>(subExpr->IgnoreParenImpCasts())))
+    {
+        return false;
+    }
+    return true;
+}
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
