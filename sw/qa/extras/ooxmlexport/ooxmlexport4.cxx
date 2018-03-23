@@ -1053,9 +1053,6 @@ DECLARE_OOXMLEXPORT_TEST(testTdf102466, "tdf102466.docx")
 {
     // the problem was: file is truncated: the first page is missing.
 
-    // check how much pages we have
-    CPPUNIT_ASSERT_EQUAL(10, getPages());
-
     // check content of the first page
     {
         uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);

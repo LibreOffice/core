@@ -556,7 +556,7 @@ DECLARE_OOXMLIMPORT_TEST(testGroupshapeChildRotation, "groupshape-child-rotation
 #if ! TEST_FONTS_MISSING
     xShape.set(xGroupShape->getByIndex(4), uno::UNO_QUERY);
     // This was 887, i.e. border distances were included in the height.
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(686), xShape->getSize().Height);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(688), xShape->getSize().Height);
 #endif
 
     uno::Reference<drawing::XShapeDescriptor> xShapeDescriptor(xGroupShape->getByIndex(5), uno::UNO_QUERY);
@@ -1554,7 +1554,7 @@ DECLARE_OOXMLIMPORT_TEST(testTdf112443, "tdf112443.docx")
     // the position of the flying text frame should be off page
     // 30624 below its anchor
     OUString aTop = parseDump("//fly[1]/infos/bounds", "top");
-    CPPUNIT_ASSERT_EQUAL( OUString("30624"), aTop );
+    CPPUNIT_ASSERT_EQUAL( OUString("30634"), aTop );
 
 }
 
