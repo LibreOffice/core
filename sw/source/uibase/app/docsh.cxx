@@ -1378,4 +1378,15 @@ bool SwDocShell::GetProtectionHash( /*out*/ css::uno::Sequence< sal_Int8 > &rPas
     return bRes;
 }
 
+void SwDocShell::RegisterAutomationDocumentEventsCaller(css::uno::Reference< ooo::vba::XSinkCaller > const& xCaller)
+{
+    mxAutomationDocumentEventsCaller = xCaller;
+}
+
+void SwDocShell::CallAutomationDocumentEventSinks(const OUString& Method, const css::uno::Sequence< css::uno::Any >& Arguments)
+{
+    if (mxAutomationDocumentEventsCaller.is())
+        mxAutomationDocumentEventsCaller->CallSinks(Method, Arguments);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
