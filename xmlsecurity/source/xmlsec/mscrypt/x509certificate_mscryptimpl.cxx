@@ -38,11 +38,6 @@
 #include <vector>
 #include <tools/time.hxx>
 
-// Needed only for Windows XP.
-#ifndef CERT_SHA256_HASH_PROP_ID
-#define CERT_SHA256_HASH_PROP_ID 107
-#endif
-
 using namespace com::sun::star;
 using namespace ::com::sun::star::uno ;
 using namespace ::com::sun::star::security ;
