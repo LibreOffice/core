@@ -323,6 +323,26 @@
             <value xsi:nil="true"/>
           </prop>
         </node>
+        <node oor:name="CalcValue">
+          <prop oor:name="Color">
+            <value xsi:nil="true"/>
+          </prop>
+        </node>
+        <node oor:name="CalcFormula">
+          <prop oor:name="Color">
+            <value xsi:nil="true"/>
+          </prop>
+        </node>
+        <node oor:name="CalcText">
+          <prop oor:name="Color">
+            <value xsi:nil="true"/>
+          </prop>
+        </node>
+        <node oor:name="CalcProtectedBackground">
+          <prop oor:name="Color">
+            <value xsi:nil="true"/>
+          </prop>
+        </node>
         <node oor:name="DrawGrid">
           <prop oor:name="IsVisible">
             <value>true</value>
