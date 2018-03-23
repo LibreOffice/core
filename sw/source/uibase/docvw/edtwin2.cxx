@@ -393,6 +393,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
         {
             SwTab nTabCols = rSh.WhichMouseTabCol(aPos);
             const char* pTabRes = nullptr;
+            //tooltips cleared in strings.hrc to solve tdf#116297
             switch(nTabCols)
             {
                 case SwTab::COL_HORI:
