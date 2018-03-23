@@ -206,15 +206,17 @@ DECLARE_WW8EXPORT_TEST(testTdf108448_endNote, "tdf108448_endNote.odt")
     uno::Reference<text::XText> xEndnote;
     xEndnotes->getByIndex(0) >>= xEndnote;
 
-    uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xEndnote->getText(), uno::UNO_QUERY);
-    uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
-    int nRet = 0;
-    while (xParaEnum->hasMoreElements())
-    {
-        xParaEnum->nextElement();
-        nRet++;
-    }
-    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Number of paragraphs in Endnote i", 1, nRet );
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Number of paragraphs in Endnote i", 1, getParagraphs(xEndnote) );
+}
+
+DECLARE_WW8EXPORT_TEST(testTdf116570_exportFootnote, "tdf116570_exportFootnote.odt")
+{
+    uno::Reference<text::XFootnotesSupplier> xFootnotesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xFootnotes(xFootnotesSupplier->getFootnotes(), uno::UNO_QUERY);
+    uno::Reference<text::XText> xFootnoteText;
+    xFootnotes->getByIndex(0) >>= xFootnoteText;
+
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Number of paragraphs in first footnote", 2, getParagraphs(xFootnoteText) );
 }
 
 DECLARE_WW8EXPORT_TEST(testTdf112074_RTLtableJustification, "tdf112074_RTLtableJustification.doc")

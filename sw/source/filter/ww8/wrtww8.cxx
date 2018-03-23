@@ -2706,7 +2706,7 @@ void MSWordExportBase::WriteText()
         SwNode& rNd = m_pCurPam->GetNode();
 
         // no section breaks exported for Endnotes
-        if ( rNd.IsTextNode() && m_nTextTyp != TXT_EDN )
+        if ( rNd.IsTextNode() && m_nTextTyp != TXT_EDN && m_nTextTyp != TXT_FTN )
         {
             SwSoftPageBreakList breakList;
             // if paragraph need to be split than handle section break somewhere
