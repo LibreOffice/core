@@ -20,6 +20,8 @@
 #ifndef INCLUDED_VCL_INC_WALL2_HXX
 #define INCLUDED_VCL_INC_WALL2_HXX
 
+#include <boost/optional.hpp>
+
 class ImplWallpaper
 {
     friend class Wallpaper;
@@ -28,7 +30,7 @@ private:
     Color                       maColor;
     std::unique_ptr<BitmapEx>   mpBitmap;
     std::unique_ptr<Gradient>   mpGradient;
-    std::unique_ptr<tools::Rectangle>  mpRect;
+    boost::optional<tools::Rectangle>  mpRect;
     WallpaperStyle  meStyle;
     std::unique_ptr<BitmapEx>   mpCache;
 

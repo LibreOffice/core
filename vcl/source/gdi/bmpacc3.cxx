@@ -37,11 +37,11 @@ void BitmapWriteAccess::SetLineColor( const Color& rColor )
     {
         if (HasPalette())
         {
-            mpLineColor.reset(new BitmapColor(static_cast<sal_uInt8>(GetBestPaletteIndex(rColor))));
+            mpLineColor = BitmapColor(static_cast<sal_uInt8>(GetBestPaletteIndex(rColor)));
         }
         else
         {
-            mpLineColor.reset(new BitmapColor(rColor));
+            mpLineColor = BitmapColor(rColor);
         }
     }
 }
@@ -61,11 +61,11 @@ void BitmapWriteAccess::SetFillColor( const Color& rColor )
     {
         if (HasPalette())
         {
-            mpFillColor.reset(new BitmapColor(static_cast<sal_uInt8>(GetBestPaletteIndex(rColor))));
+            mpFillColor = BitmapColor(static_cast<sal_uInt8>(GetBestPaletteIndex(rColor)));
         }
         else
         {
-            mpFillColor.reset(new BitmapColor(rColor));
+            mpFillColor = BitmapColor(rColor);
         }
     }
 }
@@ -84,21 +84,21 @@ void BitmapWriteAccess::Erase( const Color& rColor )
         return;
 
     // use the canonical method to clear the bitmap
-    BitmapColor* pOldFillColor = mpFillColor ? new BitmapColor(*mpFillColor) : nullptr;
+    boost::optional<BitmapColor> pOldFillColor(mpFillColor);
     const Point aPoint;
     const tools::Rectangle aRect(aPoint, maBitmap.GetSizePixel());
 
     SetFillColor(rColor);
     FillRect(aRect);
 
-    mpFillColor.reset(pOldFillColor);
+    mpFillColor = pOldFillColor;
 }
 
 void BitmapWriteAccess::DrawLine( const Point& rStart, const Point& rEnd )
 {
     if (mpLineColor)
     {
-        const BitmapColor& rLineColor = *mpLineColor.get();
+        const BitmapColor& rLineColor = *mpLineColor;
         long nX, nY;
 
         if (rStart.X() == rEnd.X())
@@ -234,7 +234,7 @@ void BitmapWriteAccess::FillRect( const tools::Rectangle& rRect )
 {
     if (mpFillColor)
     {
-        const BitmapColor& rFillColor = *mpFillColor.get();
+        const BitmapColor& rFillColor = *mpFillColor;
         tools::Rectangle aRect(Point(), maBitmap.GetSizePixel());
 
         aRect.Intersection(rRect);
@@ -263,7 +263,7 @@ void BitmapWriteAccess::DrawRect( const tools::Rectangle& rRect )
     if (mpFillColor)
         FillRect(rRect);
 
-    if (mpLineColor && (!mpFillColor || ( *mpFillColor.get() != *mpLineColor.get())))
+    if (mpLineColor && (!mpFillColor || ( *mpFillColor != *mpLineColor)))
     {
         DrawLine(rRect.TopLeft(), rRect.TopRight());
         DrawLine(rRect.TopRight(), rRect.BottomRight());

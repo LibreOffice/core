@@ -751,15 +751,11 @@ WindowImpl::~WindowImpl()
 }
 
 ImplWinData::ImplWinData() :
-    mpExtOldText(nullptr),
     mpExtOldAttrAry(nullptr),
-    mpCursorRect(nullptr),
     mnCursorExtWidth(0),
     mbVertical(false),
     mpCompositionCharRects(nullptr),
     mnCompositionCharRects(0),
-    mpFocusRect(nullptr),
-    mpTrackRect(nullptr),
     mnTrackFlags(ShowTrackFlags::NONE),
     mnIsTopWindow(sal_uInt16(~0)), // not initialized yet, 0/1 will indicate TopWindow (see IsTopWindow())
     mbMouseOver(false),
@@ -769,10 +765,7 @@ ImplWinData::ImplWinData() :
 
 ImplWinData::~ImplWinData()
 {
-    mpCursorRect.reset();
     mpCompositionCharRects.reset();
-    mpFocusRect.reset();
-    mpTrackRect.reset();
 }
 
 ImplFrameData::ImplFrameData( vcl::Window *pWindow )
@@ -2111,16 +2104,14 @@ void Window::SetCursorRect( const tools::Rectangle* pRect, long nExtTextInputWid
     if ( pWinData->mpCursorRect )
     {
         if ( pRect )
-            *pWinData->mpCursorRect = *pRect;
+            pWinData->mpCursorRect = *pRect;
         else
-        {
             pWinData->mpCursorRect.reset();
-        }
     }
     else
     {
         if ( pRect )
-            pWinData->mpCursorRect.reset( new tools::Rectangle( *pRect ) );
+            pWinData->mpCursorRect = *pRect;
     }
 
     pWinData->mnCursorExtWidth = nExtTextInputWidth;
@@ -2131,7 +2122,7 @@ const tools::Rectangle* Window::GetCursorRect() const
 {
 
     ImplWinData* pWinData = ImplGetWinData();
-    return pWinData->mpCursorRect.get();
+    return pWinData->mpCursorRect ? &*pWinData->mpCursorRect : nullptr;
 }
 
 long Window::GetCursorExtTextInputWidth() const

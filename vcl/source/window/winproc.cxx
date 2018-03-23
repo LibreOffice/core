@@ -1141,7 +1141,7 @@ static bool ImplHandleExtTextInput( vcl::Window* pWindow,
     if ( !pChild->ImplGetWindowImpl()->mbExtTextInput )
     {
         pChild->ImplGetWindowImpl()->mbExtTextInput = true;
-        pWinData->mpExtOldText.reset( new OUString );
+        pWinData->mpExtOldText = OUString();
         pWinData->mpExtOldAttrAry.reset();
         pSVData->maWinData.mpExtTextInputWin = pChild;
         ImplCallCommand( pChild, CommandEventId::StartExtTextInput );
