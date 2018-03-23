@@ -15258,6 +15258,7 @@ module com {
      [property, optional] long HorizontalRulerMetric;
      [property, optional] long VerticalRulerMetric;
      [property, optional] boolean ShowContentTips;
+     [property, optional] boolean ShowTableTips;
      [property, optional] boolean ShowScrollBarTips;
      [property, optional] boolean HideWhitespace;
     };

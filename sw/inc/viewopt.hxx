@@ -92,7 +92,8 @@ enum class ViewOptFlags2 {
     ScrollbarTips   = 0x00400000,
     PrintFormat     = 0x00800000,
     ShadowCursor    = 0x01000000,
-    VRulerRight     = 0x02000000
+    VRulerRight     = 0x02000000,
+    TableTips       = 0x04000000
 };
 namespace o3tl {
     template<> struct typed_flags<ViewOptFlags2> : is_typed_flags<ViewOptFlags2, 0x03d7dc00> {};
@@ -468,6 +469,8 @@ public:
         { return bool(m_nUIOptions & ViewOptFlags2::GrfKeepZoom); }
     bool    IsShowContentTips() const
         { return bool(m_nUIOptions & ViewOptFlags2::ContentTips); }
+    bool    IsShowTableTips() const
+        { return bool(m_nUIOptions & ViewOptFlags2::TableTips); }
     bool    IsPrtFormat() const
         { return bool(m_nUIOptions & ViewOptFlags2::PrintFormat); }
     bool    IsShowScrollBarTips() const
@@ -487,6 +490,8 @@ public:
         { b ? (m_nUIOptions |= ViewOptFlags2::GrfKeepZoom ) : ( m_nUIOptions &= ~ViewOptFlags2::GrfKeepZoom); }
     void SetShowContentTips( bool b)
         { b ? (m_nUIOptions |= ViewOptFlags2::ContentTips) : (m_nUIOptions &= ~ViewOptFlags2::ContentTips); }
+    void SetShowTableTips( bool b)
+        { b ? (m_nUIOptions |= ViewOptFlags2::TableTips) : (m_nUIOptions &= ~ViewOptFlags2::TableTips); }
     void SetPrtFormat( bool b)
         { b ? (m_nUIOptions |= ViewOptFlags2::PrintFormat) : (m_nUIOptions &= ~ViewOptFlags2::PrintFormat); }
     void SetShowScrollBarTips( bool b)

@@ -77,6 +77,7 @@ enum SwViewSettingsPropertyHandles
     HANDLE_VIEWSET_ZOOM_TYPE,
     HANDLE_VIEWSET_ZOOM,
     HANDLE_VIEWSET_SHOW_CONTENT_TIPS,
+//    HANDLE_VIEWSET_SHOW_TABLE_TIPS,
     HANDLE_VIEWSET_HELP_URL,
     HANDLE_VIEWSET_VRULER_RIGHT,
     HANDLE_VIEWSET_SHOW_RULER,
@@ -124,6 +125,7 @@ static ChainablePropertySetInfo * lcl_createViewSettingsInfo()
         { OUString( "IsSnapToRaster"),       HANDLE_VIEWSET_IS_SNAP_TO_RASTER,       cppu::UnoType<bool>::get(),   PROPERTY_NONE},
         { OUString( "IsVertRulerRightAligned"),HANDLE_VIEWSET_VRULER_RIGHT         , cppu::UnoType<bool>::get(), PROPERTY_NONE},
         { OUString( "ShowContentTips" ),     HANDLE_VIEWSET_SHOW_CONTENT_TIPS      , cppu::UnoType<bool>::get(), PROPERTY_NONE},
+//        { OUString( "ShowTableTips" ),       HANDLE_VIEWSET_SHOW_TABLE_TIPS      , cppu::UnoType<bool>::get(), PROPERTY_NONE},
         { OUString( "RasterResolutionX"),    HANDLE_VIEWSET_RASTER_RESOLUTION_X,     cppu::UnoType<sal_Int32>::get(),     PROPERTY_NONE},
         { OUString( "RasterResolutionY"),    HANDLE_VIEWSET_RASTER_RESOLUTION_Y,     cppu::UnoType<sal_Int32>::get(),     PROPERTY_NONE},
         { OUString( "RasterSubdivisionX"),   HANDLE_VIEWSET_RASTER_SUBDIVISION_X,    cppu::UnoType<sal_Int32>::get(),     PROPERTY_NONE},
@@ -561,37 +563,38 @@ void SwXViewSettings::_setSingleValue( const comphelper::PropertyInfo & rInfo, c
     // the API flag should not be set to the application's view settings
     switch( rInfo.mnHandle )
     {
-        case  HANDLE_VIEWSET_SHOW_RULER            :   mpViewOption->SetViewAnyRuler(*o3tl::doAccess<bool>(rValue)); break;
-        case  HANDLE_VIEWSET_HRULER                :   mpViewOption->SetViewHRuler(*o3tl::doAccess<bool>(rValue));   break;
-        case  HANDLE_VIEWSET_VRULER                :   mpViewOption->SetViewVRuler(*o3tl::doAccess<bool>(rValue));break;
-        case  HANDLE_VIEWSET_VRULER_RIGHT          :   mpViewOption->SetVRulerRight(*o3tl::doAccess<bool>(rValue));break;
-        case  HANDLE_VIEWSET_HSCROLL               :   mpViewOption->SetViewHScrollBar(*o3tl::doAccess<bool>(rValue));break;
-        case  HANDLE_VIEWSET_VSCROLL               :   mpViewOption->SetViewVScrollBar(*o3tl::doAccess<bool>(rValue));break;
-        case  HANDLE_VIEWSET_GRAPHICS              :   mpViewOption->SetGraphic(*o3tl::doAccess<bool>(rValue));break;
-        case  HANDLE_VIEWSET_TABLES                :   mpViewOption->SetTable(*o3tl::doAccess<bool>(rValue));    break;
-        case  HANDLE_VIEWSET_DRAWINGS              :   mpViewOption->SetDraw(*o3tl::doAccess<bool>(rValue)); break;
-        case  HANDLE_VIEWSET_FIELD_COMMANDS        :   mpViewOption->SetFieldName(*o3tl::doAccess<bool>(rValue));  break;
-        case  HANDLE_VIEWSET_ANNOTATIONS           :   mpViewOption->SetPostIts(*o3tl::doAccess<bool>(rValue));  break;
-        case  HANDLE_VIEWSET_INDEX_MARK_BACKGROUND :   SwViewOption::SetAppearanceFlag(ViewOptFlags::FieldShadings, *o3tl::doAccess<bool>(rValue), true);  break;
-        case  HANDLE_VIEWSET_NONPRINTING_CHARACTERS:   mpViewOption->SetViewMetaChars( *o3tl::doAccess<bool>(rValue) ); break;
-        case  HANDLE_VIEWSET_FOOTNOTE_BACKGROUND   :   SwViewOption::SetAppearanceFlag(ViewOptFlags::FieldShadings, *o3tl::doAccess<bool>(rValue), true); break;
-        case  HANDLE_VIEWSET_TEXT_FIELD_BACKGROUND :   SwViewOption::SetAppearanceFlag(ViewOptFlags::FieldShadings, *o3tl::doAccess<bool>(rValue), true);    break;
-        case  HANDLE_VIEWSET_PARA_BREAKS           :   mpViewOption->SetParagraph(*o3tl::doAccess<bool>(rValue));    break;
-        case  HANDLE_VIEWSET_SOFT_HYPHENS          :   mpViewOption->SetSoftHyph(*o3tl::doAccess<bool>(rValue)); break;
-        case  HANDLE_VIEWSET_SPACES                :   mpViewOption->SetBlank(*o3tl::doAccess<bool>(rValue));    break;
-        case  HANDLE_VIEWSET_PROTECTED_SPACES      :   mpViewOption->SetHardBlank(*o3tl::doAccess<bool>(rValue));    break;
-        case  HANDLE_VIEWSET_TABSTOPS              :   mpViewOption->SetTab(*o3tl::doAccess<bool>(rValue));  break;
-        case  HANDLE_VIEWSET_BREAKS                :   mpViewOption->SetLineBreak(*o3tl::doAccess<bool>(rValue)); break;
-        case  HANDLE_VIEWSET_HIDDEN_TEXT           :   mpViewOption->SetShowHiddenField(*o3tl::doAccess<bool>(rValue));  break;
-        case  HANDLE_VIEWSET_HIDDEN_CHARACTERS     :   mpViewOption->SetShowHiddenChar(*o3tl::doAccess<bool>(rValue)); break;
-        case  HANDLE_VIEWSET_HIDDEN_PARAGRAPHS     :   mpViewOption->SetShowHiddenPara(*o3tl::doAccess<bool>(rValue));   break;
-        case  HANDLE_VIEWSET_TABLE_BOUNDARIES      :   SwViewOption::SetAppearanceFlag(ViewOptFlags::TableBoundaries, *o3tl::doAccess<bool>(rValue), true);    break;
-        case  HANDLE_VIEWSET_TEXT_BOUNDARIES       :   SwViewOption::SetDocBoundaries(*o3tl::doAccess<bool>(rValue));    break;
-        case  HANDLE_VIEWSET_SMOOTH_SCROLLING      :   mpViewOption->SetSmoothScroll(*o3tl::doAccess<bool>(rValue)); break;
-        case  HANDLE_VIEWSET_SHOW_CONTENT_TIPS     :   mpViewOption->SetShowContentTips(*o3tl::doAccess<bool>(rValue)); break;
-        case  HANDLE_VIEWSET_IS_RASTER_VISIBLE     : mpViewOption->SetGridVisible(*o3tl::doAccess<bool>(rValue)); break;
-        case  HANDLE_VIEWSET_IS_SNAP_TO_RASTER     : mpViewOption->SetSnap(*o3tl::doAccess<bool>(rValue)); break;
-        case  HANDLE_VIEWSET_SCROLLBAR_TIPS        : mpViewOption->SetShowScrollBarTips(*o3tl::doAccess<bool>(rValue)); break;
+        case  HANDLE_VIEWSET_SHOW_RULER            :  mpViewOption->SetViewAnyRuler(*o3tl::doAccess<bool>(rValue)); break;
+        case  HANDLE_VIEWSET_HRULER                :  mpViewOption->SetViewHRuler(*o3tl::doAccess<bool>(rValue));   break;
+        case  HANDLE_VIEWSET_VRULER                :  mpViewOption->SetViewVRuler(*o3tl::doAccess<bool>(rValue));break;
+        case  HANDLE_VIEWSET_VRULER_RIGHT          :  mpViewOption->SetVRulerRight(*o3tl::doAccess<bool>(rValue));break;
+        case  HANDLE_VIEWSET_HSCROLL               :  mpViewOption->SetViewHScrollBar(*o3tl::doAccess<bool>(rValue));break;
+        case  HANDLE_VIEWSET_VSCROLL               :  mpViewOption->SetViewVScrollBar(*o3tl::doAccess<bool>(rValue));break;
+        case  HANDLE_VIEWSET_GRAPHICS              :  mpViewOption->SetGraphic(*o3tl::doAccess<bool>(rValue));break;
+        case  HANDLE_VIEWSET_TABLES                :  mpViewOption->SetTable(*o3tl::doAccess<bool>(rValue));    break;
+        case  HANDLE_VIEWSET_DRAWINGS              :  mpViewOption->SetDraw(*o3tl::doAccess<bool>(rValue)); break;
+        case  HANDLE_VIEWSET_FIELD_COMMANDS        :  mpViewOption->SetFieldName(*o3tl::doAccess<bool>(rValue));  break;
+        case  HANDLE_VIEWSET_ANNOTATIONS           :  mpViewOption->SetPostIts(*o3tl::doAccess<bool>(rValue));  break;
+        case  HANDLE_VIEWSET_INDEX_MARK_BACKGROUND :  SwViewOption::SetAppearanceFlag(ViewOptFlags::FieldShadings, *o3tl::doAccess<bool>(rValue), true);  break;
+        case  HANDLE_VIEWSET_NONPRINTING_CHARACTERS:  mpViewOption->SetViewMetaChars( *o3tl::doAccess<bool>(rValue) ); break;
+        case  HANDLE_VIEWSET_FOOTNOTE_BACKGROUND   :  SwViewOption::SetAppearanceFlag(ViewOptFlags::FieldShadings, *o3tl::doAccess<bool>(rValue), true); break;
+        case  HANDLE_VIEWSET_TEXT_FIELD_BACKGROUND :  SwViewOption::SetAppearanceFlag(ViewOptFlags::FieldShadings, *o3tl::doAccess<bool>(rValue), true);    break;
+        case  HANDLE_VIEWSET_PARA_BREAKS           :  mpViewOption->SetParagraph(*o3tl::doAccess<bool>(rValue));    break;
+        case  HANDLE_VIEWSET_SOFT_HYPHENS          :  mpViewOption->SetSoftHyph(*o3tl::doAccess<bool>(rValue)); break;
+        case  HANDLE_VIEWSET_SPACES                :  mpViewOption->SetBlank(*o3tl::doAccess<bool>(rValue));    break;
+        case  HANDLE_VIEWSET_PROTECTED_SPACES      :  mpViewOption->SetHardBlank(*o3tl::doAccess<bool>(rValue));    break;
+        case  HANDLE_VIEWSET_TABSTOPS              :  mpViewOption->SetTab(*o3tl::doAccess<bool>(rValue));  break;
+        case  HANDLE_VIEWSET_BREAKS                :  mpViewOption->SetLineBreak(*o3tl::doAccess<bool>(rValue)); break;
+        case  HANDLE_VIEWSET_HIDDEN_TEXT           :  mpViewOption->SetShowHiddenField(*o3tl::doAccess<bool>(rValue));  break;
+        case  HANDLE_VIEWSET_HIDDEN_CHARACTERS     :  mpViewOption->SetShowHiddenChar(*o3tl::doAccess<bool>(rValue)); break;
+        case  HANDLE_VIEWSET_HIDDEN_PARAGRAPHS     :  mpViewOption->SetShowHiddenPara(*o3tl::doAccess<bool>(rValue));   break;
+        case  HANDLE_VIEWSET_TABLE_BOUNDARIES      :  SwViewOption::SetAppearanceFlag(ViewOptFlags::TableBoundaries, *o3tl::doAccess<bool>(rValue), true);    break;
+        case  HANDLE_VIEWSET_TEXT_BOUNDARIES       :  SwViewOption::SetDocBoundaries(*o3tl::doAccess<bool>(rValue));    break;
+        case  HANDLE_VIEWSET_SMOOTH_SCROLLING      :  mpViewOption->SetSmoothScroll(*o3tl::doAccess<bool>(rValue)); break;
+        case  HANDLE_VIEWSET_SHOW_CONTENT_TIPS     :  mpViewOption->SetShowContentTips(*o3tl::doAccess<bool>(rValue)); break;
+//        case  HANDLE_VIEWSET_SHOW_TABLE_TIPS       :  mpViewOption->SetShowTableTips(*o3tl::doAccess<bool>(rValue)); break;
+        case  HANDLE_VIEWSET_IS_RASTER_VISIBLE     :  mpViewOption->SetGridVisible(*o3tl::doAccess<bool>(rValue)); break;
+        case  HANDLE_VIEWSET_IS_SNAP_TO_RASTER     :  mpViewOption->SetSnap(*o3tl::doAccess<bool>(rValue)); break;
+        case  HANDLE_VIEWSET_SCROLLBAR_TIPS        :  mpViewOption->SetShowScrollBarTips(*o3tl::doAccess<bool>(rValue)); break;
         case  HANDLE_VIEWSET_RASTER_RESOLUTION_X   :
         {
             sal_Int32 nTmp = 0;
@@ -801,35 +804,36 @@ void SwXViewSettings::_getSingleValue( const comphelper::PropertyInfo & rInfo, u
     bool bBoolVal = false;
     switch( rInfo.mnHandle )
     {
-        case  HANDLE_VIEWSET_SHOW_RULER:                bBoolVal = mpConstViewOption->IsViewAnyRuler();   break;
-        case  HANDLE_VIEWSET_HRULER :                   bBoolVal = mpConstViewOption->IsViewHRuler(true);   break;
-        case  HANDLE_VIEWSET_VRULER :                   bBoolVal = mpConstViewOption->IsViewVRuler(true);break;
-        case  HANDLE_VIEWSET_VRULER_RIGHT          :   bBoolVal = mpConstViewOption->IsVRulerRight();break;
-        case  HANDLE_VIEWSET_HSCROLL:                   bBoolVal = mpConstViewOption->IsViewHScrollBar();break;
-        case  HANDLE_VIEWSET_VSCROLL:                   bBoolVal = mpConstViewOption->IsViewVScrollBar();break;
-        case  HANDLE_VIEWSET_GRAPHICS              :    bBoolVal = mpConstViewOption->IsGraphic();break;
-        case  HANDLE_VIEWSET_TABLES                :   bBoolVal = mpConstViewOption->IsTable(); break;
-        case  HANDLE_VIEWSET_DRAWINGS              :   bBoolVal = mpConstViewOption->IsDraw();  break;
-        case  HANDLE_VIEWSET_FIELD_COMMANDS        :   bBoolVal = mpConstViewOption->IsFieldName();   break;
-        case  HANDLE_VIEWSET_ANNOTATIONS           :   bBoolVal = mpConstViewOption->IsPostIts();   break;
-        case  HANDLE_VIEWSET_INDEX_MARK_BACKGROUND :   bBoolVal = SwViewOption::IsFieldShadings();   break;
-        case  HANDLE_VIEWSET_NONPRINTING_CHARACTERS:   bBoolVal = mpConstViewOption->IsViewMetaChars(); break;
-        case  HANDLE_VIEWSET_FOOTNOTE_BACKGROUND   :   bBoolVal = SwViewOption::IsFieldShadings();  break;
-        case  HANDLE_VIEWSET_TEXT_FIELD_BACKGROUND :   bBoolVal = SwViewOption::IsFieldShadings(); break;
-        case  HANDLE_VIEWSET_PARA_BREAKS           :   bBoolVal = mpConstViewOption->IsParagraph(true); break;
-        case  HANDLE_VIEWSET_SOFT_HYPHENS          :   bBoolVal = mpConstViewOption->IsSoftHyph();  break;
-        case  HANDLE_VIEWSET_SPACES                :   bBoolVal = mpConstViewOption->IsBlank(true); break;
-        case  HANDLE_VIEWSET_PROTECTED_SPACES      :   bBoolVal = mpConstViewOption->IsHardBlank(); break;
-        case  HANDLE_VIEWSET_TABSTOPS              :   bBoolVal = mpConstViewOption->IsTab(true);   break;
-        case  HANDLE_VIEWSET_BREAKS                :   bBoolVal = mpConstViewOption->IsLineBreak(true); break;
-        case  HANDLE_VIEWSET_HIDDEN_TEXT           :   bBoolVal = mpConstViewOption->IsShowHiddenField();   break;
-        case  HANDLE_VIEWSET_HIDDEN_CHARACTERS     :   bBoolVal = mpConstViewOption->IsShowHiddenChar(true); break;
-        case  HANDLE_VIEWSET_HIDE_WHITESPACE       :   bBoolVal = mpConstViewOption->IsHideWhitespaceMode(); break;
-        case  HANDLE_VIEWSET_HIDDEN_PARAGRAPHS     :   bBoolVal = mpConstViewOption->IsShowHiddenPara();    break;
-        case  HANDLE_VIEWSET_TABLE_BOUNDARIES      :   bBoolVal = SwViewOption::IsTableBoundaries(); break;
-        case  HANDLE_VIEWSET_TEXT_BOUNDARIES       :   bBoolVal = SwViewOption::IsDocBoundaries(); break;
-        case  HANDLE_VIEWSET_SMOOTH_SCROLLING      :   bBoolVal = mpConstViewOption->IsSmoothScroll();  break;
-        case  HANDLE_VIEWSET_SHOW_CONTENT_TIPS     :   bBoolVal = mpConstViewOption->IsShowContentTips(); break;
+        case  HANDLE_VIEWSET_SHOW_RULER            : bBoolVal = mpConstViewOption->IsViewAnyRuler();   break;
+        case  HANDLE_VIEWSET_HRULER                : bBoolVal = mpConstViewOption->IsViewHRuler(true);   break;
+        case  HANDLE_VIEWSET_VRULER                : bBoolVal = mpConstViewOption->IsViewVRuler(true);break;
+        case  HANDLE_VIEWSET_VRULER_RIGHT          : bBoolVal = mpConstViewOption->IsVRulerRight();break;
+        case  HANDLE_VIEWSET_HSCROLL               : bBoolVal = mpConstViewOption->IsViewHScrollBar();break;
+        case  HANDLE_VIEWSET_VSCROLL               : bBoolVal = mpConstViewOption->IsViewVScrollBar();break;
+        case  HANDLE_VIEWSET_GRAPHICS              : bBoolVal = mpConstViewOption->IsGraphic();break;
+        case  HANDLE_VIEWSET_TABLES                : bBoolVal = mpConstViewOption->IsTable(); break;
+        case  HANDLE_VIEWSET_DRAWINGS              : bBoolVal = mpConstViewOption->IsDraw();  break;
+        case  HANDLE_VIEWSET_FIELD_COMMANDS        : bBoolVal = mpConstViewOption->IsFieldName();   break;
+        case  HANDLE_VIEWSET_ANNOTATIONS           : bBoolVal = mpConstViewOption->IsPostIts();   break;
+        case  HANDLE_VIEWSET_INDEX_MARK_BACKGROUND : bBoolVal = SwViewOption::IsFieldShadings();   break;
+        case  HANDLE_VIEWSET_NONPRINTING_CHARACTERS: bBoolVal = mpConstViewOption->IsViewMetaChars(); break;
+        case  HANDLE_VIEWSET_FOOTNOTE_BACKGROUND   : bBoolVal = SwViewOption::IsFieldShadings();  break;
+        case  HANDLE_VIEWSET_TEXT_FIELD_BACKGROUND : bBoolVal = SwViewOption::IsFieldShadings(); break;
+        case  HANDLE_VIEWSET_PARA_BREAKS           : bBoolVal = mpConstViewOption->IsParagraph(true); break;
+        case  HANDLE_VIEWSET_SOFT_HYPHENS          : bBoolVal = mpConstViewOption->IsSoftHyph();  break;
+        case  HANDLE_VIEWSET_SPACES                : bBoolVal = mpConstViewOption->IsBlank(true); break;
+        case  HANDLE_VIEWSET_PROTECTED_SPACES      : bBoolVal = mpConstViewOption->IsHardBlank(); break;
+        case  HANDLE_VIEWSET_TABSTOPS              : bBoolVal = mpConstViewOption->IsTab(true);   break;
+        case  HANDLE_VIEWSET_BREAKS                : bBoolVal = mpConstViewOption->IsLineBreak(true); break;
+        case  HANDLE_VIEWSET_HIDDEN_TEXT           : bBoolVal = mpConstViewOption->IsShowHiddenField();   break;
+        case  HANDLE_VIEWSET_HIDDEN_CHARACTERS     : bBoolVal = mpConstViewOption->IsShowHiddenChar(true); break;
+        case  HANDLE_VIEWSET_HIDE_WHITESPACE       : bBoolVal = mpConstViewOption->IsHideWhitespaceMode(); break;
+        case  HANDLE_VIEWSET_HIDDEN_PARAGRAPHS     : bBoolVal = mpConstViewOption->IsShowHiddenPara();    break;
+        case  HANDLE_VIEWSET_TABLE_BOUNDARIES      : bBoolVal = SwViewOption::IsTableBoundaries(); break;
+        case  HANDLE_VIEWSET_TEXT_BOUNDARIES       : bBoolVal = SwViewOption::IsDocBoundaries(); break;
+        case  HANDLE_VIEWSET_SMOOTH_SCROLLING      : bBoolVal = mpConstViewOption->IsSmoothScroll();  break;
+        case  HANDLE_VIEWSET_SHOW_CONTENT_TIPS     : bBoolVal = mpConstViewOption->IsShowContentTips(); break;
+//        case  HANDLE_VIEWSET_SHOW_TABLE_TIPS       : bBoolVal = mpConstViewOption->IsShowTableTips(); break;
         case  HANDLE_VIEWSET_IS_RASTER_VISIBLE     : bBoolVal = mpConstViewOption->IsGridVisible(); break;
         case  HANDLE_VIEWSET_IS_SNAP_TO_RASTER     : bBoolVal = mpConstViewOption->IsSnap(); break;
         case  HANDLE_VIEWSET_SCROLLBAR_TIPS        : bBoolVal = mpConstViewOption->IsShowScrollBarTips(); break;

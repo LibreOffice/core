@@ -258,6 +258,13 @@ published service ViewSettings
 
         @since LibreOffice 4.2
      */
+    [optional, property] boolean ShowTableTips;
+
+    /** If this property is `TRUE`, tips for table content are shown,
+        typically in a help balloon when the mouse is over the content.
+
+        @since LibreOffice 6.1
+    */
     [optional, property] boolean ShowScrollBarTips;
 
     /** If this property is `TRUE`, whitespaces around pages are hidden.
