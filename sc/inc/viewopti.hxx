@@ -94,15 +94,6 @@ public:
     void                    SetGridColor( const Color& rCol, const OUString& rName ) { aGridCol = rCol; aGridColName = rName;}
     Color const &           GetGridColor( OUString* pStrName = nullptr ) const;
 
-    void                    SetValueColor( const Color& rCol ) { aValueCol = rCol; }
-    Color const &           GetValueColor() const { return aValueCol; }
-
-    void                    SetFormulaColor(const Color& rCol) { aFormulaCol = rCol; }
-    Color const &           GetFormulaColor() const { return aFormulaCol; }
-
-    void                    SetTextColor(const Color& rCol) { aTextCol = rCol; }
-    Color const &           GetTextColor() const { return aTextCol; }
-
     const ScGridOptions&    GetGridOptions() const                      { return aGridOpt; }
     void                    SetGridOptions( const ScGridOptions& rNew ) { aGridOpt = rNew; }
     SvxGridItem*            CreateGridItem() const;
@@ -117,9 +108,6 @@ private:
     Color           aGridCol;
     OUString        aGridColName;
     ScGridOptions   aGridOpt;
-    Color           aValueCol;
-    Color           aFormulaCol;
-    Color           aTextCol;
 };
 
 // Item for the options dialog - View

@@ -39,10 +39,6 @@ class ScTpContentOptions : public SfxTabPage
     VclPtr<CheckBox>        pBreakCB;
     VclPtr<CheckBox>        pGuideLineCB;
 
-    VclPtr<SvxColorListBox> pValueColorLB;
-    VclPtr<SvxColorListBox> pFormulaColorLB;
-    VclPtr<SvxColorListBox> pTextColorLB;
-
     VclPtr<CheckBox>        pFormulaCB;
     VclPtr<CheckBox>        pNilCB;
     VclPtr<CheckBox>        pAnnotCB;
@@ -66,7 +62,6 @@ class ScTpContentOptions : public SfxTabPage
     ScViewOptions*  pLocalOptions;
 
     void    InitGridOpt();
-    void    InitColors();
     DECL_LINK( GridHdl, ListBox&, void );
     DECL_LINK( SelLbObjHdl, ListBox&, void );
     DECL_LINK( CBHdl, Button*, void );

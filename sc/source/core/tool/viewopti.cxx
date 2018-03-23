@@ -132,10 +132,6 @@ void ScViewOptions::SetDefaults()
     aGridCol     = SC_STD_GRIDCOLOR;
     aGridColName = ScGlobal::GetRscString( STR_GRIDCOLOR );
 
-    aValueCol = COL_LIGHTBLUE;
-    aTextCol = COL_BLACK;
-    aFormulaCol = COL_GREEN;
-
     aGridOpt.SetDefaults();
 }
 
@@ -157,9 +153,6 @@ ScViewOptions& ScViewOptions::operator=( const ScViewOptions& rCpy )
     aGridCol        = rCpy.aGridCol;
     aGridColName    = rCpy.aGridColName;
     aGridOpt        = rCpy.aGridOpt;
-    aValueCol       = rCpy.aValueCol;
-    aTextCol        = rCpy.aTextCol;
-    aFormulaCol     = rCpy.aFormulaCol;
 
     return *this;
 }
@@ -175,9 +168,6 @@ bool ScViewOptions::operator==( const ScViewOptions& rOpt ) const
     bEqual = bEqual && (aGridCol       == rOpt.aGridCol);
     bEqual = bEqual && (aGridColName   == rOpt.aGridColName);
     bEqual = bEqual && (aGridOpt       == rOpt.aGridOpt);
-    bEqual = bEqual && (aValueCol      == rOpt.aValueCol);
-    bEqual = bEqual && (aTextCol       == rOpt.aTextCol);
-    bEqual = bEqual && (aFormulaCol    == rOpt.aFormulaCol);
 
     return bEqual;
 }
@@ -240,9 +230,6 @@ SfxPoolItem* ScTpViewItem::Clone( SfxItemPool * ) const
 #define SCLAYOUTOPT_SHEETTAB        7
 #define SCLAYOUTOPT_OUTLINE         8
 #define SCLAYOUTOPT_GRID_ONCOLOR    9
-#define SCLAYOUTOPT_VALUE_COLOR    10
-#define SCLAYOUTOPT_FORMULA_COLOR  11
-#define SCLAYOUTOPT_TEXT_COLOR     12
 
 #define CFGPATH_DISPLAY     "Office.Calc/Content/Display"
 
@@ -280,10 +267,7 @@ Sequence<OUString> ScViewCfg::GetLayoutPropertyNames()
             "Window/VerticalScroll",    // SCLAYOUTOPT_VERTSCROLL
             "Window/SheetTab",          // SCLAYOUTOPT_SHEETTAB
             "Window/OutlineSymbol",     // SCLAYOUTOPT_OUTLINE
-            "Line/GridOnColoredCells",  // SCLAYOUTOPT_GRID_ONCOLOR
-            "Highlighting/ValueColor",  // SCLAYOUTOPT_VALUE_COLOR
-            "Highlighting/FormulaColor",// SCLAYOUTOPT_FORMULA_COLOR
-            "Highlighting/TextColor"};  // SCLAYOUTOPT_TEXT_COLOR
+            "Line/GridOnColoredCells"}; // SCLAYOUTOPT_GRID_ONCOLOR;
 }
 
 Sequence<OUString> ScViewCfg::GetDisplayPropertyNames()
@@ -370,18 +354,6 @@ ScViewCfg::ScViewCfg() :
                         break;
                     case SCLAYOUTOPT_OUTLINE:
                         SetOption( VOPT_OUTLINER, ScUnoHelpFunctions::GetBoolFromAny( pValues[nProp] ) );
-                        break;
-                    case SCLAYOUTOPT_VALUE_COLOR:
-                        if (pValues[nProp] >>= nIntVal)
-                            SetValueColor(Color(nIntVal));
-                        break;
-                    case SCLAYOUTOPT_FORMULA_COLOR:
-                        if (pValues[nProp] >>= nIntVal)
-                            SetFormulaColor(Color(nIntVal));
-                        break;
-                    case SCLAYOUTOPT_TEXT_COLOR:
-                        if (pValues[nProp] >>= nIntVal)
-                            SetTextColor(Color(nIntVal));
                         break;
                 }
             }
@@ -546,15 +518,6 @@ IMPL_LINK_NOARG(ScViewCfg, LayoutCommitHdl, ScLinkConfigItem&, void)
                 break;
             case SCLAYOUTOPT_OUTLINE:
                 pValues[nProp] <<= GetOption( VOPT_OUTLINER );
-                break;
-            case SCLAYOUTOPT_VALUE_COLOR:
-                pValues[nProp] <<= GetValueColor();
-                break;
-            case SCLAYOUTOPT_FORMULA_COLOR:
-                pValues[nProp] <<= GetFormulaColor();
-                break;
-            case SCLAYOUTOPT_TEXT_COLOR:
-                pValues[nProp] <<= GetTextColor();
                 break;
         }
     }
