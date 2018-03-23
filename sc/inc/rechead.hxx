@@ -53,7 +53,8 @@ private:
     SvStream&           rStream;
     std::unique_ptr<sal_uInt8[]>
                         pBuf;
-    SvMemoryStream*     pMemStream;
+    std::unique_ptr<SvMemoryStream>
+                        pMemStream;
     sal_uLong           nEndPos;
     sal_uLong           nEntryEnd;
     sal_uLong           nTotalEnd;

@@ -41,7 +41,7 @@ ScMultipleReadHeader::ScMultipleReadHeader(SvStream& rNewStream) :
             rStream.SetError( SVSTREAM_FILEFORMAT_ERROR );
 
         //  everything to 0, so  BytesLeft() aborts at least
-        pBuf = nullptr; pMemStream = nullptr;
+        pBuf = nullptr; pMemStream.reset();
         nEntryEnd = nDataPos;
     }
     else
@@ -50,7 +50,7 @@ ScMultipleReadHeader::ScMultipleReadHeader(SvStream& rNewStream) :
         rStream.ReadUInt32( nSizeTableLen );
         pBuf.reset( new sal_uInt8[nSizeTableLen] );
         rStream.ReadBytes( pBuf.get(), nSizeTableLen );
-        pMemStream = new SvMemoryStream( pBuf.get(), nSizeTableLen, StreamMode::READ );
+        pMemStream.reset(new SvMemoryStream( pBuf.get(), nSizeTableLen, StreamMode::READ ));
     }
 
     nEndPos = rStream.Tell();
@@ -65,7 +65,7 @@ ScMultipleReadHeader::~ScMultipleReadHeader()
         if ( rStream.GetError() == ERRCODE_NONE )
             rStream.SetError( SCWARN_IMPORT_INFOLOST );
     }
-    delete pMemStream;
+    pMemStream.reset();
 
     rStream.Seek(nEndPos);
 }
