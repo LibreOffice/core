@@ -27,7 +27,10 @@ $(eval $(call gb_CppunitTest_use_libraries,sfx2_misc, \
 	utl \
 ))
 
-$(eval $(call gb_CppunitTest_use_external,sfx2_misc,libxml2))
+$(eval $(call gb_CppunitTest_use_externals,sfx2_misc,\
+	libxml2 \
+	boost_headers \
+))
 
 $(eval $(call gb_CppunitTest_use_sdk_api,sfx2_misc))
 
