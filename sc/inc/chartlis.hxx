@@ -65,7 +65,7 @@ private:
     std::unique_ptr<std::vector<ScTokenRef> > mpTokens;
 
     OUString maName;
-    ScChartUnoData* pUnoData;
+    std::unique_ptr<ScChartUnoData> pUnoData;
     ScDocument*     mpDoc;
     bool            bUsed:1;  // for ScChartListenerCollection::FreeUnused
     bool            bDirty:1;
