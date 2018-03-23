@@ -310,6 +310,7 @@ namespace fileaccess {
                 case FileBase::E_ROFS:
                     // #i4735# handle ROFS transparently as ACCESS_DENIED
                 case FileBase::E_ACCES:
+                case FileBase::E_PERM:
                     // permission denied<P>
                     ioErrorCode = IOErrorCode_ACCESS_DENIED;
                     break;
