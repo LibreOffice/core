@@ -518,7 +518,6 @@ class ScGlobal
     static SvxBrushItem*    pEmptyBrushItem;
     static SvxBrushItem*    pButtonBrushItem;
     static SvxBrushItem*    pEmbeddedBrushItem;
-    static SvxBrushItem*    pProtectedBrushItem;
 
     static ImageList*       pOutlineBitmaps;
 
@@ -601,7 +600,6 @@ public:
     static void             InitTextHeight(SfxItemPool* pPool);
     static SvxBrushItem*    GetEmptyBrushItem() { return pEmptyBrushItem; }
     static SvxBrushItem*    GetButtonBrushItem();
-    static SvxBrushItem*    GetProtectedBrushItem() { return pProtectedBrushItem; }
     SC_DLLPUBLIC    static const OUString&    GetEmptyOUString();
 
     /** Returns the specified image list with outline symbols. */

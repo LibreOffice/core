@@ -146,6 +146,10 @@ uno::Sequence< OUString> GetPropertyNames(const OUString& rScheme)
         { RTL_CONSTASCII_USTRINGPARAM("/CalcDetectiveError")   ,false },
         { RTL_CONSTASCII_USTRINGPARAM("/CalcReference")   ,false },
         { RTL_CONSTASCII_USTRINGPARAM("/CalcNotesBackground") ,false },
+        { RTL_CONSTASCII_USTRINGPARAM("/CalcValue") ,false },
+        { RTL_CONSTASCII_USTRINGPARAM("/CalcFormula") ,false },
+        { RTL_CONSTASCII_USTRINGPARAM("/CalcText") ,false },
+        { RTL_CONSTASCII_USTRINGPARAM("/CalcProtectedBackground") ,false },
         { RTL_CONSTASCII_USTRINGPARAM("/DrawGrid")        ,true },
         { RTL_CONSTASCII_USTRINGPARAM("/BASICIdentifier"),  false },
         { RTL_CONSTASCII_USTRINGPARAM("/BASICComment")   ,  false },
@@ -434,6 +438,10 @@ Color ColorConfig::GetDefaultColor(ColorConfigEntry eEntry)
         COL_LIGHTRED, // CALCDETECTIVEERROR
         0xef0fff, // CALCREFERENCE
         0xffffc0, // CALCNOTESBACKGROUND
+        COL_LIGHTBLUE, // CALCVALUE
+        COL_GREEN, // CALCFORMULA
+        COL_BLACK, // CALCTEXT
+        COL_LIGHTGRAY, // CALCPROTECTEDBACKGROUND
         COL_LIGHTGRAY, // DRAWGRID
         COL_GREEN, // BASICIDENTIFIER,
         COL_GRAY, // BASICCOMMENT,

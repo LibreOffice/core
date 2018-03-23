@@ -45,6 +45,7 @@
 #include <ctype.h>
 #include <numeric>
 #include <svx/svdmodel.hxx>
+#include <svtools/colorcfg.hxx>
 
 #include <i18nlangtag/mslangid.hxx>
 #include <com/sun/star/lang/Locale.hpp>
@@ -109,7 +110,6 @@ OUString*       ScGlobal::pStrClipDocName = nullptr;
 SvxBrushItem*   ScGlobal::pEmptyBrushItem = nullptr;
 SvxBrushItem*   ScGlobal::pButtonBrushItem = nullptr;
 SvxBrushItem*   ScGlobal::pEmbeddedBrushItem = nullptr;
-SvxBrushItem*   ScGlobal::pProtectedBrushItem = nullptr;
 
 ImageList*      ScGlobal::pOutlineBitmaps = nullptr;
 
@@ -509,7 +509,6 @@ void ScGlobal::Init()
     pEmptyBrushItem = new SvxBrushItem( Color( COL_TRANSPARENT ), ATTR_BACKGROUND );
     pButtonBrushItem = new SvxBrushItem( Color(), ATTR_BACKGROUND );
     pEmbeddedBrushItem = new SvxBrushItem( Color( COL_LIGHTCYAN ), ATTR_BACKGROUND );
-    pProtectedBrushItem = new SvxBrushItem( Color( COL_LIGHTGRAY ), ATTR_BACKGROUND );
 
     InitPPT();
     //ScCompiler::InitSymbolsNative();
@@ -609,7 +608,6 @@ void ScGlobal::Clear()
     DELETEZ(pEmptyBrushItem);
     DELETEZ(pButtonBrushItem);
     DELETEZ(pEmbeddedBrushItem);
-    DELETEZ(pProtectedBrushItem);
     DELETEZ(pOutlineBitmaps);
     DELETEZ(pEnglishFormatter);
     DELETEZ(pCaseTransliteration);

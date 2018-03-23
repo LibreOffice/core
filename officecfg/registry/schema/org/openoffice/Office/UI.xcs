@@ -410,6 +410,46 @@
           </info>
         </prop>
       </group>
+      <group oor:name="CalcValue">
+        <info>
+          <desc>Specifies the settings used for values in Calc.</desc>
+        </info>
+        <prop oor:name="Color" oor:type="xs:int">
+          <info>
+            <desc>Specifies the color used for values.</desc>
+          </info>
+        </prop>
+      </group>
+      <group oor:name="CalcFormula">
+        <info>
+          <desc>Specifies the settings used for formulas in Calc.</desc>
+        </info>
+        <prop oor:name="Color" oor:type="xs:int">
+          <info>
+            <desc>Specifies the color used for formulas.</desc>
+          </info>
+        </prop>
+      </group>
+      <group oor:name="CalcText">
+        <info>
+          <desc>Specifies the settings used for the text in Calc.</desc>
+        </info>
+        <prop oor:name="Color" oor:type="xs:int">
+          <info>
+            <desc>Specifies the color used for the text.</desc>
+          </info>
+        </prop>
+      </group>
+      <group oor:name="CalcProtectedBackground">
+        <info>
+          <desc>Specifies the settings used for the background of protected cells in Calc.</desc>
+        </info>
+        <prop oor:name="Color" oor:type="xs:int">
+          <info>
+            <desc>Specifies the color used for the background of protected cells.</desc>
+          </info>
+        </prop>
+      </group>
       <group oor:name="DrawGrid">
         <info>
           <desc>Specifies the settings used for the grid in Draw/Impress.</desc>
