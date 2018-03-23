@@ -18,6 +18,7 @@
  */
 
 #include <i18nlangtag/mslangid.hxx>
+#include <officecfg/Office/Common.hxx>
 #include <vcl/fontcharmap.hxx>
 #include <vcl/metric.hxx>
 
@@ -27,6 +28,8 @@
 #include <impfontmetricdata.hxx>
 #include <PhysicalFontFace.hxx>
 #include <sft.hxx>
+
+#include <com/sun/star/uno/Sequence.hxx>
 
 #include <vector>
 #include <set>
@@ -398,6 +401,20 @@ void ImplFontMetricData::ImplInitFlags( const OutputDevice* pDev )
     SetFullstopCenteredFlag( bCentered );
 }
 
+bool ImplFontMetricData::ShouldUseWinMetrics()
+{
+    css::uno::Sequence<OUString> rWinMetricFontList(
+        officecfg::Office::Common::Misc::FontsUseWinMetrics::get());
+    for (int i = 0; i < rWinMetricFontList.getLength(); ++i)
+    {
+        if (GetFamilyName() == rWinMetricFontList[i])
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
 /*
  * Calculate line spacing:
  *
@@ -440,7 +457,7 @@ void ImplFontMetricData::ImplCalcLineSpacing(const std::vector<uint8_t>& rHheaDa
     if (rInfo.winAscent || rInfo.winDescent ||
         rInfo.typoAscender || rInfo.typoDescender)
     {
-        if (fAscent == 0 && fDescent == 0)
+        if (ShouldUseWinMetrics() || (fAscent == 0.0 && fDescent == 0.0))
         {
             fAscent     = rInfo.winAscent  * fScale;
             fDescent    = rInfo.winDescent * fScale;
