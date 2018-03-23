@@ -516,7 +516,6 @@ class ScGlobal
     static SvxBrushItem*    pEmptyBrushItem;
     static SvxBrushItem*    pButtonBrushItem;
     static SvxBrushItem*    pEmbeddedBrushItem;
-    static SvxBrushItem*    pProtectedBrushItem;
 
     static ScFunctionList*  pStarCalcFunctionList;
     static ScFunctionMgr*   pStarCalcFunctionMgr;
@@ -596,7 +595,6 @@ public:
     static void             InitTextHeight(const SfxItemPool* pPool);
     static SvxBrushItem*    GetEmptyBrushItem() { return pEmptyBrushItem; }
     static SvxBrushItem*    GetButtonBrushItem();
-    static SvxBrushItem*    GetProtectedBrushItem() { return pProtectedBrushItem; }
     SC_DLLPUBLIC    static const OUString&    GetEmptyOUString();
 
     static bool             HasStarCalcFunctionList();
