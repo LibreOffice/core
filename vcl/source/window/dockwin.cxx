@@ -717,7 +717,10 @@ void DockingWindow::SetFloatingMode( bool bFloatMode )
 
                 VclPtrInstance<ImplDockFloatWin> pWin(
                                          mpImplData->mpParent,
-                                         mnFloatBits & ( WB_MOVEABLE | WB_SIZEABLE | WB_CLOSEABLE ) ?  mnFloatBits | WB_SYSTEMWINDOW : mnFloatBits,
+                                         // tdf#64438: floating windows toolbar-style, i.e. WB_OWNERDRAWDECORATION
+                                         // b/c as WM_SYSTEMWINDOW it ain't possible to dock them back when
+                                         // window manager is a compositing one
+                                         mnFloatBits & ( WB_MOVEABLE | WB_SIZEABLE | WB_CLOSEABLE ) ?  mnFloatBits | WB_OWNERDRAWDECORATION : mnFloatBits,
                                          this );
                 mpFloatWin      = pWin;
                 mpWindowImpl->mpBorderWindow  = nullptr;
