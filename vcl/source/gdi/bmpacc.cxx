@@ -323,8 +323,6 @@ BitmapColor BitmapReadAccess::GetColorWithFallback( double fY, double fX, const 
 
 BitmapWriteAccess::BitmapWriteAccess(Bitmap& rBitmap)
     : BitmapReadAccess(rBitmap, BitmapAccessMode::Write)
-    , mpLineColor()
-    , mpFillColor()
 {
 }
 

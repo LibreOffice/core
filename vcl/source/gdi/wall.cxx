@@ -46,8 +46,7 @@ ImplWallpaper::ImplWallpaper( const ImplWallpaper& rImplWallpaper ) :
         mpGradient = o3tl::make_unique<Gradient>( *rImplWallpaper.mpGradient );
 
     if ( rImplWallpaper.mpRect )
-        mpRect = o3tl::make_unique<tools::Rectangle>( *rImplWallpaper.mpRect );
-
+        mpRect = *rImplWallpaper.mpRect;
 }
 
 ImplWallpaper::~ImplWallpaper()
@@ -77,7 +76,7 @@ SvStream& ReadImplWallpaper( SvStream& rIStm, ImplWallpaper& rImplWallpaper )
 
         if( bRect )
         {
-            rImplWallpaper.mpRect = o3tl::make_unique<tools::Rectangle>();
+            rImplWallpaper.mpRect = tools::Rectangle();
             ReadRectangle( rIStm, *rImplWallpaper.mpRect );
         }
 
@@ -308,17 +307,14 @@ void Wallpaper::SetRect( const tools::Rectangle& rRect )
     }
     else
     {
-        if ( mpImplWallpaper->mpRect )
-            *(mpImplWallpaper->mpRect) = rRect;
-        else
-            mpImplWallpaper->mpRect = o3tl::make_unique<tools::Rectangle>( rRect );
+        mpImplWallpaper->mpRect = rRect;
     }
 }
 
 tools::Rectangle Wallpaper::GetRect() const
 {
     if ( mpImplWallpaper->mpRect )
-        return *(mpImplWallpaper->mpRect);
+        return *mpImplWallpaper->mpRect;
     else
         return tools::Rectangle();
 }

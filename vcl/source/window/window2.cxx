@@ -64,21 +64,18 @@ void Window::ShowFocus( const tools::Rectangle& rRect )
         {
             if ( mpWindowImpl->mbFocusVisible )
             {
-                if ( *(pWinData->mpFocusRect) == rRect )
+                if ( *pWinData->mpFocusRect == rRect )
                 {
                     mpWindowImpl->mbInShowFocus = false;
                     return;
                 }
 
-                ImplInvertFocus( *(pWinData->mpFocusRect) );
+                ImplInvertFocus( *pWinData->mpFocusRect );
             }
 
             ImplInvertFocus( rRect );
         }
-        if ( !pWinData->mpFocusRect )
-            pWinData->mpFocusRect.reset( new tools::Rectangle( rRect ) );
-        else
-            *(pWinData->mpFocusRect) = rRect;
+        pWinData->mpFocusRect = rRect;
         mpWindowImpl->mbFocusVisible = true;
     }
     else
@@ -111,7 +108,7 @@ void Window::HideFocus()
         }
 
         if ( !mpWindowImpl->mbInPaint )
-            ImplInvertFocus( *(ImplGetWinData()->mpFocusRect) );
+            ImplInvertFocus( *ImplGetWinData()->mpFocusRect );
         mpWindowImpl->mbFocusVisible = false;
     }
     else
@@ -134,20 +131,17 @@ void Window::ShowTracking( const tools::Rectangle& rRect, ShowTrackFlags nFlags 
     {
         if ( mpWindowImpl->mbTrackVisible )
         {
-            if ( (*(pWinData->mpTrackRect)  == rRect) &&
+            if ( (*pWinData->mpTrackRect  == rRect) &&
                  (pWinData->mnTrackFlags    == nFlags) )
                 return;
 
-            InvertTracking( *(pWinData->mpTrackRect), pWinData->mnTrackFlags );
+            InvertTracking( *pWinData->mpTrackRect, pWinData->mnTrackFlags );
         }
 
         InvertTracking( rRect, nFlags );
     }
 
-    if ( !pWinData->mpTrackRect )
-        pWinData->mpTrackRect.reset(new tools::Rectangle( rRect ));
-    else
-        *(pWinData->mpTrackRect) = rRect;
+    pWinData->mpTrackRect = rRect;
     pWinData->mnTrackFlags      = nFlags;
     mpWindowImpl->mbTrackVisible              = true;
 }
@@ -158,7 +152,7 @@ void Window::HideTracking()
     {
         ImplWinData* pWinData = ImplGetWinData();
         if ( !mpWindowImpl->mbInPaint || !(pWinData->mnTrackFlags & ShowTrackFlags::TrackWindow) )
-            InvertTracking( *(pWinData->mpTrackRect), pWinData->mnTrackFlags );
+            InvertTracking( *pWinData->mpTrackRect, pWinData->mnTrackFlags );
         mpWindowImpl->mbTrackVisible = false;
     }
 }

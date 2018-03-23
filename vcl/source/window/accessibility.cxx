@@ -98,8 +98,6 @@ using namespace ::com::sun::star;
 ImplAccessibleInfos::ImplAccessibleInfos()
 {
     nAccessibleRole = 0xFFFF;
-    pAccessibleName = nullptr;
-    pAccessibleDescription = nullptr;
     pLabeledByWindow = nullptr;
     pLabelForWindow = nullptr;
     pMemberOfWindow = nullptr;
@@ -422,7 +420,7 @@ void Window::SetAccessibleName( const OUString& rName )
 
     OUString oldName = GetAccessibleName();
 
-    mpWindowImpl->mpAccessibleInfos->pAccessibleName.reset( new OUString( rName ) );
+    mpWindowImpl->mpAccessibleInfos->pAccessibleName = rName;
 
     CallEventListeners( VclEventId::WindowFrameTitleChanged, &oldName );
 }
@@ -503,7 +501,7 @@ void Window::SetAccessibleDescription( const OUString& rDescription )
         mpWindowImpl->mpAccessibleInfos.reset( new ImplAccessibleInfos );
 
     SAL_WARN_IF( mpWindowImpl->mpAccessibleInfos->pAccessibleDescription, "vcl", "AccessibleDescription already set!" );
-    mpWindowImpl->mpAccessibleInfos->pAccessibleDescription.reset( new OUString( rDescription ) );
+    mpWindowImpl->mpAccessibleInfos->pAccessibleDescription = rDescription;
 }
 
 OUString Window::GetAccessibleDescription() const

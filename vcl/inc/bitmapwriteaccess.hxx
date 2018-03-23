@@ -14,6 +14,7 @@
 #include <vcl/alpha.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmapaccess.hxx>
+#include <boost/optional.hpp>
 
 typedef vcl::ScopedBitmapAccess<BitmapWriteAccess, Bitmap, &Bitmap::AcquireWriteAccess>
     BitmapScopedWriteAccess;
@@ -82,8 +83,8 @@ public:
     void DrawRect(const tools::Rectangle& rRect);
 
 private:
-    std::unique_ptr<BitmapColor> mpLineColor;
-    std::unique_ptr<BitmapColor> mpFillColor;
+    boost::optional<BitmapColor> mpLineColor;
+    boost::optional<BitmapColor> mpFillColor;
 
     BitmapWriteAccess() = delete;
     BitmapWriteAccess(const BitmapWriteAccess&) = delete;

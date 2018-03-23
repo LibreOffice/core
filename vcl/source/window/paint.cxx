@@ -510,7 +510,7 @@ void Window::PopPaintHelper(PaintHelper const *pHelper)
     if (mpWindowImpl->mpWinData)
     {
         if (mpWindowImpl->mbFocusVisible)
-            ImplInvertFocus(*(mpWindowImpl->mpWinData->mpFocusRect));
+            ImplInvertFocus(*mpWindowImpl->mpWinData->mpFocusRect);
     }
     mpWindowImpl->mbInPaint = false;
     mbInitClipRegion = true;
@@ -546,7 +546,7 @@ PaintHelper::~PaintHelper()
         /* #98602# need to invert the tracking rect AFTER
         * the children have painted
         */
-        m_pWindow->InvertTracking( *(pWindowImpl->mpWinData->mpTrackRect), pWindowImpl->mpWinData->mnTrackFlags );
+        m_pWindow->InvertTracking( *pWindowImpl->mpWinData->mpTrackRect, pWindowImpl->mpWinData->mnTrackFlags );
 
     // double-buffering: paint in case we created the buffer, the children are
     // already painted inside
@@ -1635,9 +1635,9 @@ void Window::ImplScroll( const tools::Rectangle& rRect,
         if ( mpWindowImpl->mpWinData )
         {
             if ( mpWindowImpl->mbFocusVisible )
-                ImplInvertFocus( *(mpWindowImpl->mpWinData->mpFocusRect) );
+                ImplInvertFocus( *mpWindowImpl->mpWinData->mpFocusRect );
             if ( mpWindowImpl->mbTrackVisible && (mpWindowImpl->mpWinData->mnTrackFlags & ShowTrackFlags::TrackWindow) )
-                InvertTracking( *(mpWindowImpl->mpWinData->mpTrackRect), mpWindowImpl->mpWinData->mnTrackFlags );
+                InvertTracking( *mpWindowImpl->mpWinData->mpTrackRect, mpWindowImpl->mpWinData->mnTrackFlags );
         }
 #ifndef IOS
         // This seems completely unnecessary with tiled rendering, and
@@ -1670,9 +1670,9 @@ void Window::ImplScroll( const tools::Rectangle& rRect,
         if ( mpWindowImpl->mpWinData )
         {
             if ( mpWindowImpl->mbFocusVisible )
-                ImplInvertFocus( *(mpWindowImpl->mpWinData->mpFocusRect) );
+                ImplInvertFocus( *mpWindowImpl->mpWinData->mpFocusRect );
             if ( mpWindowImpl->mbTrackVisible && (mpWindowImpl->mpWinData->mnTrackFlags & ShowTrackFlags::TrackWindow) )
-                InvertTracking( *(mpWindowImpl->mpWinData->mpTrackRect), mpWindowImpl->mpWinData->mnTrackFlags );
+                InvertTracking( *mpWindowImpl->mpWinData->mpTrackRect, mpWindowImpl->mpWinData->mnTrackFlags );
         }
     }
 
