@@ -19,18 +19,22 @@
 #ifndef INCLUDED_SW_SOURCE_UI_VBA_VBADOCUMENT_HXX
 #define INCLUDED_SW_SOURCE_UI_VBA_VBADOCUMENT_HXX
 
+#include <ooo/vba/XSink.hpp>
+#include <ooo/vba/XSinkCaller.hpp>
 #include <ooo/vba/word/XDocument.hpp>
 #include <vbahelper/vbahelperinterface.hxx>
 #include <vbahelper/vbadocumentbase.hxx>
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <cppuhelper/implbase.hxx>
 
-typedef cppu::ImplInheritanceHelper< VbaDocumentBase, ooo::vba::word::XDocument > SwVbaDocument_BASE;
+typedef cppu::ImplInheritanceHelper< VbaDocumentBase, ooo::vba::word::XDocument, ooo::vba::XSinkCaller > SwVbaDocument_BASE;
 
 class SwVbaDocument : public SwVbaDocument_BASE
 {
 private:
     css::uno::Reference< css::text::XTextDocument > mxTextDocument;
+
+    std::vector<css::uno::Reference< ooo::vba::XSink >> mvSinks;
 
     void Initialize();
     css::uno::Any getControlShape( const OUString& sName );
@@ -40,6 +44,9 @@ public:
     SwVbaDocument( const css::uno::Reference< ooo::vba::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& m_xContext, css::uno::Reference< css::frame::XModel > const & xModel );
     SwVbaDocument(  css::uno::Sequence< css::uno::Any > const& aArgs, css::uno::Reference< css::uno::XComponentContext >const& xContext );
     virtual ~SwVbaDocument() override;
+
+    sal_uInt32 AddSink( const css::uno::Reference< ooo::vba::XSink >& xSink );
+    void RemoveSink( sal_uInt32 nNumber );
 
     // XDocument
     virtual css::uno::Reference< ooo::vba::word::XRange > SAL_CALL getContent() override;
@@ -86,9 +93,20 @@ public:
     virtual sal_Bool SAL_CALL hasMethod( const OUString& aName ) override;
     virtual sal_Bool SAL_CALL hasProperty( const OUString& aName ) override;
 
+    // XInterfaceWithIID
+    virtual OUString SAL_CALL getIID() override;
+
+    // XConnectable
+    virtual OUString SAL_CALL GetIIDForClassItselfNotCoclass() override;
+    virtual ov::TypeAndIID SAL_CALL GetConnectionPoint() override;
+    virtual css::uno::Reference<ov::XConnectionPoint> SAL_CALL FindConnectionPoint() override;
+
     // XHelperInterface
     virtual OUString getServiceImplName() override;
     virtual css::uno::Sequence<OUString> getServiceNames() override;
+
+    // XSinkCaller
+    virtual void SAL_CALL CallSinks( const OUString& Method, const css::uno::Sequence< css::uno::Any >& Arguments ) override;
 };
 #endif // INCLUDED_SW_SOURCE_UI_VBA_VBADOCUMENT_HXX
 
