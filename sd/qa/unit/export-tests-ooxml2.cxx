@@ -1451,8 +1451,8 @@ void SdOOXMLExportTest2::testFontScale()
 
     // Rounding errors possible, approximate value
     OUString sScale = getXPath(pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:sp/p:txBody/a:bodyPr/a:normAutofit", "fontScale");
-    if (sScale != "73000" && sScale != "72000" && sScale != "74000")
-        CPPUNIT_ASSERT_EQUAL(OUString("73000"), sScale);
+    if (sScale != "52000" && sScale != "55000" && sScale != "54000")
+        CPPUNIT_ASSERT_EQUAL(OUString("55000"), sScale);
 
     xDocShRef->DoClose();
 }

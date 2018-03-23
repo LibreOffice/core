@@ -562,7 +562,7 @@ DECLARE_OOXMLIMPORT_TEST(testGroupshapeChildRotation, "groupshape-child-rotation
 #if ! TEST_FONTS_MISSING
     xShape.set(xGroupShape->getByIndex(4), uno::UNO_QUERY);
     // This was 887, i.e. border distances were included in the height.
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(686), xShape->getSize().Height);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(766), xShape->getSize().Height);
 #endif
 
     uno::Reference<drawing::XShapeDescriptor> xShapeDescriptor(xGroupShape->getByIndex(5), uno::UNO_QUERY);

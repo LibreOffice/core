@@ -438,12 +438,8 @@ void ImplFontMetricData::ImplCalcLineSpacing(const std::vector<uint8_t>& rHheaDa
     if (rInfo.winAscent || rInfo.winDescent ||
         rInfo.typoAscender || rInfo.typoDescender)
     {
-        if (fAscent == 0 && fDescent == 0)
-        {
-            fAscent     = rInfo.winAscent  * fScale;
-            fDescent    = rInfo.winDescent * fScale;
-            fExtLeading = 0;
-        }
+        fAscent     = rInfo.winAscent  * fScale;
+        fDescent    = rInfo.winDescent * fScale;
 
         const uint16_t kUseTypoMetricsMask = 1 << 7;
         if (rInfo.fsSelection & kUseTypoMetricsMask &&
