@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "9a30ddce_bf73c2b3",
+        "filename": "svx/inc/sdr/primitive2d/sdrpathprimitive2d.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2018-03-23T19:23:37Z",
+      "side": 1,
+      "message": "Oh, and it also needs the definite article \"the\" before \"object\u0027s\"",
+      "parentUuid": "9a30ddce_1f5cce24",
+      "revId": "ab464a3f39ae45a10769a7a29b508e9181cf65e7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a30ddce_ff561a05",
         "filename": "svx/inc/sdr/primitive2d/sdrpathprimitive2d.hxx",
         "patchSetId": 3
