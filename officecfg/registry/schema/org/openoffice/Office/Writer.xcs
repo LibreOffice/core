@@ -1055,6 +1055,14 @@
           </info>
           <value>true</value>
         </prop>
+        <prop oor:name="ShowTableTips" oor:type="xs:boolean">
+          <!-- UIHints: Not accessible via user interface -->
+          <info>
+            <desc>Enables the writer to prevent the display of tips for tables.</desc>
+            <label>Show table tips</label>
+          </info>
+          <value>true</value>
+        </prop>
       </group>
       <group oor:name="NonprintingCharacter">
         <info>
