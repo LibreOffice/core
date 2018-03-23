@@ -103,6 +103,8 @@ public:
                                         int nUPEM);
 
 private:
+    bool            ShouldUseWinMetrics();
+
     // font instance attributes from the font request
     long            mnHeight;                   // Font size
     long            mnWidth;                    // Reference Width
