@@ -4993,18 +4993,32 @@ dnl Testing for required Perl modules
 dnl ===================================================================
 
 AC_MSG_CHECKING([for required Perl modules])
-if `$PERL -e 'use Cwd; use Digest::MD5'>/dev/null 2>&1`; then
+perl_use_string="use Cwd ; use Digest::MD5"
+if test "$_os" = "WINNT"; then
+    if test -n "$PKGFORMAT"; then
+        for i in "$PKGFORMAT"; do
+            case "$i" in
+            msi)
+                # for getting fonts versions to use in MSI
+                perl_use_string="$perl_use_string ; use Font::TTF::Font"
+                ;;
+            esac
+        done
+    fi
+fi
+if `$PERL -e '$perl_use_string'>/dev/null 2>&1`; then
     AC_MSG_RESULT([all modules found])
 else
     AC_MSG_RESULT([failed to find some modules])
     # Find out which modules are missing.
-    if ! `$PERL -e 'use Cwd;'>/dev/null 2>&1`; then
-        missing_perl_modules="$missing_perl_modules Cwd"
-    fi
-    if ! `$PERL -e 'use Digest::MD5;'>/dev/null 2>&1`; then
-        missing_perl_modules="$missing_perl_modules Digest::MD5"
-    fi
-       AC_MSG_ERROR([
+    for i in "$perl_use_string"; do
+        if test "$i" != "use" -a "$i" != ";"; then
+            if ! `$PERL -e 'use $i;'>/dev/null 2>&1`; then
+                missing_perl_modules="$missing_perl_modules $i"
+            fi
+        fi
+    done
+    AC_MSG_ERROR([
     The missing Perl modules are: $missing_perl_modules
     Install them as superuser/administrator with "cpan -i $missing_perl_modules"])
 fi
