@@ -64,7 +64,8 @@ private:
                 pos = pos2;
             }
 #endif
-            auto const dir = compat::take_front(file, pos);
+            auto dir = std::string(compat::take_front(file, pos));
+            loplugin::normalizeDotDotInFilePath(dir);
             shouldUseAngles = !loplugin::isSamePathname(SearchPath, dir);
         }
         if (shouldUseAngles == IsAngled) {
