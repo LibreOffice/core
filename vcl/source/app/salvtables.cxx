@@ -838,6 +838,11 @@ public:
             m_xEntry->SetSelection(Selection(nCursorPos, nCursorPos));
     }
 
+    virtual void set_editable(bool bEditable) override
+    {
+        m_xEntry->SetReadOnly(!bEditable);
+    }
+
     virtual ~SalInstanceEntry() override
     {
         m_xEntry->SetTextFilter(nullptr);

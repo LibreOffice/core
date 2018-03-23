@@ -2068,6 +2068,11 @@ public:
         gtk_editable_set_position(GTK_EDITABLE(m_pEntry), nCursorPos);
     }
 
+    virtual void set_editable(bool bEditable) override
+    {
+        gtk_editable_set_editable(GTK_EDITABLE(m_pEntry), bEditable);
+    }
+
     virtual void disable_notify_events() override
     {
         g_signal_handler_block(m_pEntry, m_nInsertTextSignalId);
