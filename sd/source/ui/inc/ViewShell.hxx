@@ -223,7 +223,7 @@ public:
 
     void    ExecReq( SfxRequest &rReq );
 
-    ZoomList* GetZoomList() { return mpZoomList;}
+    ZoomList* GetZoomList() { return mpZoomList.get();}
 
     FrameView* GetFrameView() { return mpFrameView; }
     /** Setting a frame view triggers ReadFrameViewData() for the new
@@ -463,7 +463,7 @@ protected:
 
     rtl::Reference<FuPoor>   mxCurrentFunction;
     rtl::Reference<FuPoor>   mxOldFunction;
-    ZoomList*   mpZoomList;
+    std::unique_ptr<ZoomList> mpZoomList;
 
     Point       maViewPos;
     Size        maViewSize;

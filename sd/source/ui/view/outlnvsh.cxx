@@ -138,8 +138,8 @@ void OutlineViewShell::Construct()
     GetActiveWindow()->SetMinZoom( MIN_ZOOM );
     GetActiveWindow()->SetMaxZoom( MAX_ZOOM );
     InitWindows(aViewOrigin, aSize, aWinPos);
-    pOlView = new OutlineView(*GetDocSh(), GetActiveWindow(), *this);
-    mpView = pOlView;            // Pointer of base class ViewShell
+    pOlView.reset( new OutlineView(*GetDocSh(), GetActiveWindow(), *this) );
+    mpView = pOlView.get();            // Pointer of base class ViewShell
 
     SetPool( &GetDoc()->GetPool() );
 
@@ -211,7 +211,7 @@ OutlineViewShell::~OutlineViewShell()
 {
     DisposeFunctions();
 
-    delete pOlView;
+    pOlView.reset();
 
     mpFrameView->Disconnect();
 
@@ -469,7 +469,7 @@ void OutlineViewShell::FuSupport(SfxRequest &rReq)
 
         case SID_PASTE:
         {
-            OutlineViewPageChangesGuard aGuard2(pOlView);
+            OutlineViewPageChangesGuard aGuard2(pOlView.get());
 
             if(HasCurrentFunction())
             {
@@ -486,7 +486,7 @@ void OutlineViewShell::FuSupport(SfxRequest &rReq)
 
         case SID_PASTE_UNFORMATTED:
         {
-            OutlineViewPageChangesGuard aGuard2(pOlView);
+            OutlineViewPageChangesGuard aGuard2(pOlView.get());
 
             if(HasCurrentFunction())
             {
@@ -514,7 +514,7 @@ void OutlineViewShell::FuSupport(SfxRequest &rReq)
                 OutlinerView* pOutlView = pOlView->GetViewByWindow(GetActiveWindow());
                 if (pOutlView)
                 {
-                    OutlineViewPageChangesGuard aGuard2(pOlView);
+                    OutlineViewPageChangesGuard aGuard2(pOlView.get());
 
                     vcl::KeyCode aKCode(KEY_DELETE);
                     KeyEvent aKEvt( 0, aKCode );
@@ -634,13 +634,13 @@ void OutlineViewShell::FuSupport(SfxRequest &rReq)
         // added Undo/Redo handling
         case SID_UNDO :
         {
-            OutlineViewPageChangesGuard aGuard2(pOlView);
+            OutlineViewPageChangesGuard aGuard2(pOlView.get());
             ImpSidUndo(rReq);
         }
         break;
         case SID_REDO :
         {
-            OutlineViewPageChangesGuard aGuard2(pOlView);
+            OutlineViewPageChangesGuard aGuard2(pOlView.get());
             ImpSidRedo(rReq);
         }
         break;
@@ -675,7 +675,7 @@ void OutlineViewShell::FuPermanent(SfxRequest &rReq)
             rOutl.GetUndoManager().Clear();
             rOutl.UpdateFields();
 
-            SetCurrentFunction( FuOutlineText::Create(this,GetActiveWindow(),pOlView,GetDoc(),rReq) );
+            SetCurrentFunction( FuOutlineText::Create(this,GetActiveWindow(),pOlView.get(),GetDoc(),rReq) );
 
             rReq.Done();
         }
@@ -1387,7 +1387,7 @@ void OutlineViewShell::Command( const CommandEvent& rCEvt, ::sd::Window* pWin )
 bool OutlineViewShell::KeyInput(const KeyEvent& rKEvt, ::sd::Window* pWin)
 {
     bool bReturn = false;
-    OutlineViewPageChangesGuard aGuard(pOlView);
+    OutlineViewPageChangesGuard aGuard(pOlView.get());
 
     if (pWin == nullptr && HasCurrentFunction())
     {
@@ -1562,7 +1562,7 @@ void OutlineViewShell::UpdatePreview( SdPage* pPage, bool )
     pLastPage = pPage;
     if (bNewPage)
     {
-        OutlineViewPageChangesGuard aGuard(pOlView);
+        OutlineViewPageChangesGuard aGuard(pOlView.get());
         SetCurrentPage(pPage);
     }
 }
@@ -1757,7 +1757,7 @@ ErrCode OutlineViewShell::ReadRtf(SvStream& rInput)
 
     ::Outliner& rOutl = pOlView->GetOutliner();
 
-    OutlineViewPageChangesGuard aGuard( pOlView );
+    OutlineViewPageChangesGuard aGuard( pOlView.get() );
     OutlineViewModelChangeGuard aGuard2( *pOlView );
 
     bRet = rOutl.Read( rInput, OUString(), EETextFormat::Rtf, GetDocSh()->GetHeaderAttributes() );

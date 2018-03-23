@@ -153,7 +153,7 @@ ViewShell::~ViewShell()
     if (mpContentWindow)
         mpContentWindow->SetViewShell(nullptr);
 
-    delete mpZoomList;
+    mpZoomList.reset();
 
     mpLayerTabBar.disposeAndClear();
 
@@ -199,7 +199,7 @@ void ViewShell::construct()
     if (IsMainViewShell())
         GetDocSh()->Connect (this);
 
-    mpZoomList = new ZoomList( this );
+    mpZoomList.reset( new ZoomList( this ) );
 
     mpContentWindow.reset(VclPtr< ::sd::Window >::Create(GetParentWindow()));
     SetActiveWindow (mpContentWindow.get());
