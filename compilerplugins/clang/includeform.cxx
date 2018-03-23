@@ -52,6 +52,8 @@ private:
                    || loplugin::hasPathnamePrefix(
                        SearchPath, WORKDIR "/UnpackedTarball"));
         } else {
+            auto dir1 = std::string(SearchPath);
+            loplugin::normalizeDotDotInFilePath(dir1);
             auto const file = StringRef(
                 compiler.getSourceManager().getPresumedLoc(HashLoc)
                 .getFilename());
@@ -64,9 +66,9 @@ private:
                 pos = pos2;
             }
 #endif
-            auto dir = std::string(compat::take_front(file, pos));
-            loplugin::normalizeDotDotInFilePath(dir);
-            shouldUseAngles = !loplugin::isSamePathname(SearchPath, dir);
+            auto dir2 = std::string(compat::take_front(file, pos));
+            loplugin::normalizeDotDotInFilePath(dir2);
+            shouldUseAngles = !loplugin::isSamePathname(dir1, dir2);
         }
         if (shouldUseAngles == IsAngled) {
             return;
