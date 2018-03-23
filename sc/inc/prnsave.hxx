@@ -31,8 +31,8 @@ class ScPrintSaverTab
     typedef ::std::vector< ScRange > ScRangeVec;
 
     ScRangeVec  maPrintRanges;      ///< Array
-    ScRange*    mpRepeatCol;        ///< single
-    ScRange*    mpRepeatRow;        ///< single
+    std::unique_ptr<ScRange> mpRepeatCol;        ///< single
+    std::unique_ptr<ScRange> mpRepeatRow;        ///< single
     bool        mbEntireSheet;
 
 public:
@@ -44,8 +44,8 @@ public:
 
     const ScRangeVec&   GetPrintRanges() const  { return maPrintRanges; }
     bool                IsEntireSheet() const   { return mbEntireSheet; }
-    const ScRange*      GetRepeatCol() const    { return mpRepeatCol; }
-    const ScRange*      GetRepeatRow() const    { return mpRepeatRow; }
+    const ScRange*      GetRepeatCol() const    { return mpRepeatCol.get(); }
+    const ScRange*      GetRepeatRow() const    { return mpRepeatRow.get(); }
 
     bool    operator==( const ScPrintSaverTab& rCmp ) const;
 };
