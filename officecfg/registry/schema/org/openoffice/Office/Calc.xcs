@@ -262,38 +262,6 @@
       <info>
         <desc>Contains settings that affect the window layout.</desc>
       </info>
-      <group oor:name="Highlighting">
-        <info>
-          <desc>Contains settings that control highlighting.</desc>
-        </info>
-        <prop oor:name="ValueColor" oor:type="xs:int" oor:nillable="false">
-          <!-- UIHints: Tools - Options - LibreOffice Calc - View - [Section] Highlighting -->
-          <!-- Default 255 = LightBlue -->
-          <info>
-            <desc>Specifies the color of highlighted values.</desc>
-            <label>Value Color</label>
-          </info>
-          <value>255</value>
-        </prop>
-        <prop oor:name="FormulaColor" oor:type="xs:int" oor:nillable="false">
-          <!-- UIHints: Tools - Options - LibreOffice Calc - View - [Section] Highlighting -->
-          <!-- Default 32768 = Green -->
-          <info>
-            <desc>Specifies the color of highlighted formulas.</desc>
-            <label>Formula Color</label>
-          </info>
-          <value>32768</value>
-        </prop>
-        <prop oor:name="TextColor" oor:type="xs:int" oor:nillable="false">
-          <!-- UIHints: Tools - Options - LibreOffice Calc - View - [Section] Highlighting -->
-          <!-- Default 0 = Black -->
-          <info>
-            <desc>Specifies the color of the highlighted text.</desc>
-            <label>Text Color</label>
-          </info>
-          <value>0</value>
-        </prop>
-      </group>
       <group oor:name="Line">
         <info>
           <desc>Contains settings that control visual aids.</desc>
