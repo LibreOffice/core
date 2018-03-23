@@ -31,17 +31,9 @@
 #include <salgdi.hxx>
 
 OutDevState::OutDevState()
-    : mpMapMode(nullptr)
-    , mbMapActive(false)
+    : mbMapActive(false)
     , mpClipRegion(nullptr)
-    , mpLineColor(nullptr)
-    , mpFillColor(nullptr)
     , mpFont(nullptr)
-    , mpTextColor(nullptr)
-    , mpTextFillColor(nullptr)
-    , mpTextLineColor(nullptr)
-    , mpOverlineColor(nullptr)
-    , mpRefPoint(nullptr)
     , meTextAlign(ALIGN_TOP)
     , meRasterOp(RasterOp::OverPaint)
     , mnTextLayoutMode(ComplexTextLayoutFlags::Default)
@@ -76,27 +68,27 @@ void OutputDevice::Push( PushFlags nFlags )
 
     if (nFlags & PushFlags::LINECOLOR && mbLineColor)
     {
-        pState->mpLineColor.reset( new Color( maLineColor ) );
+        pState->mpLineColor = maLineColor;
     }
     if (nFlags & PushFlags::FILLCOLOR && mbFillColor)
     {
-        pState->mpFillColor.reset( new Color( maFillColor ) );
+        pState->mpFillColor = maFillColor;
     }
     if ( nFlags & PushFlags::FONT )
         pState->mpFont.reset( new vcl::Font( maFont ) );
     if ( nFlags & PushFlags::TEXTCOLOR )
-        pState->mpTextColor.reset( new Color( GetTextColor() ) );
+        pState->mpTextColor = GetTextColor();
     if (nFlags & PushFlags::TEXTFILLCOLOR && IsTextFillColor())
     {
-        pState->mpTextFillColor.reset( new Color( GetTextFillColor() ) );
+        pState->mpTextFillColor = GetTextFillColor();
     }
     if (nFlags & PushFlags::TEXTLINECOLOR && IsTextLineColor())
     {
-        pState->mpTextLineColor.reset( new Color( GetTextLineColor() ) );
+        pState->mpTextLineColor = GetTextLineColor();
     }
     if (nFlags & PushFlags::OVERLINECOLOR && IsOverlineColor())
     {
-        pState->mpOverlineColor.reset( new Color( GetOverlineColor() ) );
+        pState->mpOverlineColor = GetOverlineColor();
     }
     if ( nFlags & PushFlags::TEXTALIGN )
         pState->meTextAlign = GetTextAlign();
@@ -108,7 +100,7 @@ void OutputDevice::Push( PushFlags nFlags )
         pState->meRasterOp = GetRasterOp();
     if ( nFlags & PushFlags::MAPMODE )
     {
-        pState->mpMapMode.reset( new MapMode( maMapMode ) );
+        pState->mpMapMode = maMapMode;
         pState->mbMapActive = mbMap;
     }
     if (nFlags & PushFlags::CLIPREGION && mbClipRegion)
@@ -117,7 +109,7 @@ void OutputDevice::Push( PushFlags nFlags )
     }
     if (nFlags & PushFlags::REFPOINT && mbRefPoint)
     {
-        pState->mpRefPoint.reset( new Point( maRefPoint ) );
+        pState->mpRefPoint = maRefPoint;
     }
 
     mpOutDevStateStack->push_back( pState );

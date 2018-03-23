@@ -36,7 +36,6 @@
 #include <vcl/gfxlink.hxx>
 #include <vcl/lineinfo.hxx>
 #include <vcl/metaactiontypes.hxx>
-#include <vcl/outdevstate.hxx>
 
 class SvStream;
 enum class DrawTextFlags;
