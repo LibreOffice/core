@@ -22,6 +22,7 @@
 #include <memory>
 #include <rtl/ref.hxx>
 #include <com/sun/star/uno/Sequence.h>
+#include <ooo/vba/XSinkCaller.hpp>
 #include <sfx2/docfac.hxx>
 #include <sfx2/objsh.hxx>
 #include "swdllapi.h"
@@ -85,6 +86,8 @@ class SW_DLLPUBLIC SwDocShell
     bool m_IsRemovedInvisibleContent;
         ///< whether SID_MAIL_PREPAREEXPORT removed content that
         ///< SID_MAIL_EXPORT_FINISHED needs to restore
+
+    css::uno::Reference< ooo::vba::XSinkCaller > mxAutomationDocumentEventsCaller;
 
     /// Methods for access to doc.
     SAL_DLLPRIVATE void                  AddLink();
@@ -309,6 +312,9 @@ public:
     virtual void    SetChangeRecording( bool bActivate ) override;
     virtual void    SetProtectionPassword( const OUString &rPassword ) override;
     virtual bool    GetProtectionHash( /*out*/ css::uno::Sequence< sal_Int8 > &rPasswordHash ) override;
+
+    void RegisterAutomationDocumentEventsCaller(css::uno::Reference< ooo::vba::XSinkCaller > const& xCaller);
+    void CallAutomationDocumentEventSinks(const OUString& Method, const css::uno::Sequence< css::uno::Any >& Arguments);
 };
 
 /** Find the right DocShell and create a new one:
