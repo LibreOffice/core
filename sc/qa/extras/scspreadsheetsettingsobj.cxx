@@ -23,18 +23,18 @@ using namespace com::sun::star;
 
 namespace sc_apitest
 {
-class ScSpreadsheetSettingsobj : public CalcUnoApiTest, public apitest::SpreadsheetDocumentSettings
+class ScSpreadsheetSettingsObj : public CalcUnoApiTest, public apitest::SpreadsheetDocumentSettings
 {
 public:
-    ScSpreadsheetSettingsobj();
+    ScSpreadsheetSettingsObj();
 
     virtual uno::Reference<uno::XInterface> init() override;
     virtual void setUp() override;
     virtual void tearDown() override;
 
-    CPPUNIT_TEST_SUITE(ScSpreadsheetSettingsobj);
+    CPPUNIT_TEST_SUITE(ScSpreadsheetSettingsObj);
 
-    // GlobalSheetSettingsobj
+    // SpreadsheetDocumentSettings
     CPPUNIT_TEST(testSpreadsheetDocumentSettingsProperties);
 
     CPPUNIT_TEST_SUITE_END();
@@ -43,12 +43,12 @@ private:
     uno::Reference<lang::XComponent> mxComponent;
 };
 
-ScSpreadsheetSettingsobj::ScSpreadsheetSettingsobj()
+ScSpreadsheetSettingsObj::ScSpreadsheetSettingsObj()
     : CalcUnoApiTest("/sc/qa/extras/testdocuments")
 {
 }
 
-uno::Reference<uno::XInterface> ScSpreadsheetSettingsobj::init()
+uno::Reference<uno::XInterface> ScSpreadsheetSettingsObj::init()
 {
     uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, UNO_QUERY_THROW);
     CPPUNIT_ASSERT_MESSAGE("no calc document", xDoc.is());
@@ -56,20 +56,20 @@ uno::Reference<uno::XInterface> ScSpreadsheetSettingsobj::init()
     return xDoc;
 }
 
-void ScSpreadsheetSettingsobj::setUp()
+void ScSpreadsheetSettingsObj::setUp()
 {
     CalcUnoApiTest::setUp();
     // create a calc document
     mxComponent = loadFromDesktop("private:factory/scalc");
 }
 
-void ScSpreadsheetSettingsobj::tearDown()
+void ScSpreadsheetSettingsObj::tearDown()
 {
     closeDocument(mxComponent);
     CalcUnoApiTest::tearDown();
 }
 
-CPPUNIT_TEST_SUITE_REGISTRATION(ScSpreadsheetSettingsobj);
+CPPUNIT_TEST_SUITE_REGISTRATION(ScSpreadsheetSettingsObj);
 
 } // end namespace
 
