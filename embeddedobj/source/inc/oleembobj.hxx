@@ -36,6 +36,7 @@
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/util/XCloseListener.hpp>
+#include <com/sun/star/io/XActiveDataStreamer.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <rtl/ref.hxx>
 
@@ -110,7 +111,8 @@ class OleEmbeddedObject : public ::cppu::WeakImplHelper
                         , css::embed::XEmbedPersist
                         , css::embed::XLinkageSupport
                         , css::embed::XInplaceObject
-                        , css::container::XChild >
+                        , css::container::XChild
+                        , css::io::XActiveDataStreamer >
 {
     friend class OleComponent;
 
@@ -431,6 +433,9 @@ public:
     virtual css::uno::Reference< css::uno::XInterface > SAL_CALL getParent(  ) override;
     virtual void SAL_CALL setParent( const css::uno::Reference< css::uno::XInterface >& Parent ) override;
 
+    // XActiveDataStreamer
+    void SAL_CALL setStream(const css::uno::Reference<css::io::XStream>& xStream) override;
+    css::uno::Reference<css::io::XStream> SAL_CALL getStream() override;
 };
 
 #endif
