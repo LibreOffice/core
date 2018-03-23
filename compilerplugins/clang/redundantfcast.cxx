@@ -54,6 +54,11 @@ public:
         auto const t2 = compat::getSubExprAsWritten(cxxFunctionalCastExpr)->getType();
         if (t1.getCanonicalType().getTypePtr() != t2.getCanonicalType().getTypePtr())
             return true;
+        if (!loplugin::isOkToRemoveArithmeticCast(compiler.getASTContext(), t1, t2,
+                                                  cxxFunctionalCastExpr->getSubExpr()))
+        {
+            return true;
+        }
         report(DiagnosticsEngine::Warning, "redundant functional cast from %0 to %1",
                cxxFunctionalCastExpr->getExprLoc())
             << t2 << t1 << cxxFunctionalCastExpr->getSourceRange();

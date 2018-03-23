@@ -283,6 +283,10 @@ template<std::size_t N> ContextCheck ContextCheck::Struct(char const (& id)[N])
 
 bool isExtraWarnUnusedType(clang::QualType type);
 
+bool isOkToRemoveArithmeticCast(
+    clang::ASTContext & context, clang::QualType t1, clang::QualType t2,
+    const clang::Expr* subExpr);
+
 }
 
 #endif
