@@ -137,6 +137,10 @@ const vEntryInfo[] =
     { Group_Calc,    IDS(deterror) },
     { Group_Calc,    IDS(ref) },
     { Group_Calc,    IDS(notes) },
+    { Group_Calc,    IDS(values) },
+    { Group_Calc,    IDS(formulas) },
+    { Group_Calc,    IDS(text) },
+    { Group_Calc,    IDS(protectedcells) },
 
     { Group_Draw,    IDS(drawgrid) },
 
