@@ -30,6 +30,7 @@ use installer::windows::idtglobal;
 use installer::windows::msiglobal;
 use installer::windows::language;
 use installer::windows::component;
+use Font::TTF::Font;
 
 ##########################################################################
 # Assigning one cabinet file to each file. This is requrired,
@@ -552,25 +553,17 @@ sub get_fileversion
         }
     }
     # file version for font files (tdf#76239)
-    if ( $onefile->{'Name'} =~ /\.ttf$|\.TTF$/ )
+    if ( $onefile->{'Name'} =~ /\.(otf|ttf|ttc)$/i )
     {
-        open (TTF, "<$onefile->{'sourcepath'}");
-        binmode TTF;
-        {local $/ = undef; $ttfdata = <TTF>;}
-        close TTF;
+        my $fnt = Font::TTF::Font->open("<$onefile->{'sourcepath'}");
+        # 5 is pre-defined name ID for version string - see
+        # https://docs.microsoft.com/en-us/typography/opentype/spec/name
+        my $ttfdata = $fnt->{'name'}->read->find_name(5);
+        $fnt->release;
 
-        my $ttfversion = "(Version )([0-9]+[.]*([0-9][.])*[0-9]+)";
-        # UTF16-encoded version string
-        my $ttfversionU = "(V\0e\0r\0s\0i\0o\0n\0 \0)(([0-9]\0)+([.]\0([0-9]\0)+)*)";
-
-        if ($ttfdata =~ /$ttfversion/ms)
+        if ($ttfdata =~ /Version ([0-9]+(\.[0-9]+)*)/i)
         {
-            my ($version, $subversion, $microversion, $vervariant) = split(/\./,$2);
-            $fileversion = int($version) . "." . int($subversion) . "." . int($microversion) . "." . int($vervariant);
-        }
-        elsif ($ttfdata =~ /$ttfversionU/ms)
-        {
-            my ($version, $subversion, $microversion, $vervariant) = split(/\./,$2 =~ s/\0//g);
+            my ($version, $subversion, $microversion, $vervariant) = split(/\./,$1);
             $fileversion = int($version) . "." . int($subversion) . "." . int($microversion) . "." . int($vervariant);
         }
         else
