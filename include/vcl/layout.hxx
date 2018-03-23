@@ -610,7 +610,7 @@ public:
     void set_property(const OString &rKey, const OUString &rValue);
 };
 
-class VCL_DLLPUBLIC VclDrawingArea : public vcl::Window
+class VCL_DLLPUBLIC VclDrawingArea : public Control
 {
 private:
     Link<std::pair<vcl::RenderContext&, const tools::Rectangle&>, void> m_aPaintHdl;
@@ -642,7 +642,7 @@ private:
 
 public:
     VclDrawingArea(vcl::Window *pParent, WinBits nStyle)
-        : vcl::Window(pParent, nStyle)
+        : Control(pParent, nStyle)
     {
     }
     void SetPaintHdl(const Link<std::pair<vcl::RenderContext&, const tools::Rectangle&>, void>& rLink)
