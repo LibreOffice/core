@@ -24,6 +24,13 @@ class DialogController;
 
 class VCL_DLLPUBLIC Widget
 {
+protected:
+    Link<Widget&, void> m_aFocusInHdl;
+    Link<Widget&, void> m_aFocusOutHdl;
+
+    void signal_focus_in() { return m_aFocusInHdl.Call(*this); }
+    void signal_focus_out() { return m_aFocusOutHdl.Call(*this); }
+
 public:
     virtual void set_sensitive(bool sensitive) = 0;
     virtual bool get_sensitive() const = 0;
@@ -58,6 +65,9 @@ public:
     virtual void set_margin_bottom(int nMargin) = 0;
 
     virtual void set_accessible_name(const OUString& rName) = 0;
+
+    virtual void connect_focus_in(const Link<Widget&, void>& rLink) = 0;
+    virtual void connect_focus_out(const Link<Widget&, void>& rLink) = 0;
 
     virtual Container* weld_parent() const = 0;
 
