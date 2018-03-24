@@ -14,7 +14,10 @@ $(eval $(call gb_Library_set_include,dbahsql,\
     -I$(WORKDIR)/YaccTarget/connectivity/source/parse \
 ))
 
-$(eval $(call gb_Library_use_external,dbahsql,boost_headers))
+$(eval $(call gb_Library_use_externals,dbahsql,\
+	boost_headers \
+	boost_date_time \
+))
 
 $(eval $(call gb_Library_set_precompiled_header,dbahsql,$(SRCDIR)/dbaccess/inc/pch/precompiled_dbahsql))
 
