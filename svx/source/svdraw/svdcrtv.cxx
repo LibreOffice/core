@@ -184,12 +184,12 @@ void SdrCreateView::ImpClearConnectMarker()
 
 void SdrCreateView::ImpClearVars()
 {
-    nAktInvent=SdrInventor::Default;
-    nAktIdent=OBJ_NONE;
+    nCurrentInvent=SdrInventor::Default;
+    nCurrentIdent=OBJ_NONE;
     pCurrentCreate=nullptr;
     pCreatePV=nullptr;
     b1stPointAsCenter=false;
-    aAktCreatePointer=Pointer(PointerStyle::Cross);
+    aCurrentCreatePointer=Pointer(PointerStyle::Cross);
     bUseIncompatiblePathCreateInterface=false;
     nAutoCloseDistPix=5;
     nFreeHandMinDistPix=10;
@@ -264,10 +264,10 @@ bool SdrCreateView::CheckEdgeMode()
     if (pCurrentCreate!=nullptr)
     {
         // is managed by EdgeObj
-        if (nAktInvent==SdrInventor::Default && nAktIdent==OBJ_EDGE) return false;
+        if (nCurrentInvent==SdrInventor::Default && nCurrentIdent==OBJ_EDGE) return false;
     }
 
-    if (!IsCreateMode() || nAktInvent!=SdrInventor::Default || nAktIdent!=OBJ_EDGE)
+    if (!IsCreateMode() || nCurrentInvent!=SdrInventor::Default || nCurrentIdent!=OBJ_EDGE)
     {
         ImpClearConnectMarker();
         return false;
@@ -328,25 +328,25 @@ bool SdrCreateView::MouseMove(const MouseEvent& rMEvt, vcl::Window* pWin)
 
 bool SdrCreateView::IsTextTool() const
 {
-    return meEditMode==SdrViewEditMode::Create && nAktInvent==SdrInventor::Default && (nAktIdent==OBJ_TEXT || nAktIdent==OBJ_TEXTEXT || nAktIdent==OBJ_TITLETEXT || nAktIdent==OBJ_OUTLINETEXT);
+    return meEditMode==SdrViewEditMode::Create && nCurrentInvent==SdrInventor::Default && (nCurrentIdent==OBJ_TEXT || nCurrentIdent==OBJ_TEXTEXT || nCurrentIdent==OBJ_TITLETEXT || nCurrentIdent==OBJ_OUTLINETEXT);
 }
 
 bool SdrCreateView::IsEdgeTool() const
 {
-    return meEditMode==SdrViewEditMode::Create && nAktInvent==SdrInventor::Default && (nAktIdent==OBJ_EDGE);
+    return meEditMode==SdrViewEditMode::Create && nCurrentInvent==SdrInventor::Default && (nCurrentIdent==OBJ_EDGE);
 }
 
 bool SdrCreateView::IsMeasureTool() const
 {
-    return meEditMode==SdrViewEditMode::Create && nAktInvent==SdrInventor::Default && (nAktIdent==OBJ_MEASURE);
+    return meEditMode==SdrViewEditMode::Create && nCurrentInvent==SdrInventor::Default && (nCurrentIdent==OBJ_MEASURE);
 }
 
 void SdrCreateView::SetCurrentObj(sal_uInt16 nIdent, SdrInventor nInvent)
 {
-    if (nAktInvent!=nInvent || nAktIdent!=nIdent)
+    if (nCurrentInvent!=nInvent || nCurrentIdent!=nIdent)
     {
-        nAktInvent=nInvent;
-        nAktIdent=nIdent;
+        nCurrentInvent=nInvent;
+        nCurrentIdent=nIdent;
         SdrObject * pObj = (nIdent == OBJ_NONE) ? nullptr :
             SdrObjFactory::MakeNewObject(nInvent, nIdent, nullptr);
 
@@ -358,16 +358,16 @@ void SdrCreateView::SetCurrentObj(sal_uInt16 nIdent, SdrInventor nInvent)
             {
                 // Here the correct pointer needs to be used
                 // if the default is set to vertical writing
-                aAktCreatePointer = PointerStyle::Text;
+                aCurrentCreatePointer = PointerStyle::Text;
             }
             else
-                aAktCreatePointer = pObj->GetCreatePointer();
+                aCurrentCreatePointer = pObj->GetCreatePointer();
 
             SdrObject::Free( pObj );
         }
         else
         {
-            aAktCreatePointer = Pointer(PointerStyle::Cross);
+            aCurrentCreatePointer = Pointer(PointerStyle::Cross);
         }
     }
 
@@ -418,9 +418,9 @@ bool SdrCreateView::ImpBegCreateObj(SdrInventor nInvent, sal_uInt16 nIdent, cons
             }
 
             Point aPnt(rPnt);
-            if (nAktInvent!=SdrInventor::Default || (nAktIdent!=sal_uInt16(OBJ_EDGE) &&
-                                            nAktIdent!=sal_uInt16(OBJ_FREELINE) &&
-                                            nAktIdent!=sal_uInt16(OBJ_FREEFILL) )) { // no snapping for Edge and Freehand
+            if (nCurrentInvent!=SdrInventor::Default || (nCurrentIdent!=sal_uInt16(OBJ_EDGE) &&
+                                            nCurrentIdent!=sal_uInt16(OBJ_FREELINE) &&
+                                            nCurrentIdent!=sal_uInt16(OBJ_FREEFILL) )) { // no snapping for Edge and Freehand
                 aPnt=GetSnapPos(aPnt,pCreatePV);
             }
             if (pCurrentCreate!=nullptr)
@@ -508,13 +508,13 @@ bool SdrCreateView::ImpBegCreateObj(SdrInventor nInvent, sal_uInt16 nIdent, cons
 
 bool SdrCreateView::BegCreateObj(const Point& rPnt, OutputDevice* pOut, short nMinMov)
 {
-    return ImpBegCreateObj(nAktInvent,nAktIdent,rPnt,pOut,nMinMov,tools::Rectangle(), nullptr);
+    return ImpBegCreateObj(nCurrentInvent,nCurrentIdent,rPnt,pOut,nMinMov,tools::Rectangle(), nullptr);
 }
 
 bool SdrCreateView::BegCreatePreparedObject(const Point& rPnt, sal_Int16 nMinMov, SdrObject* pPreparedFactoryObject)
 {
-    SdrInventor nInvent(nAktInvent);
-    sal_uInt16 nIdent(nAktIdent);
+    SdrInventor nInvent(nCurrentInvent);
+    sal_uInt16 nIdent(nCurrentIdent);
 
     if(pPreparedFactoryObject)
     {
@@ -630,11 +630,11 @@ bool SdrCreateView::EndCreateObj(SdrCreateCmd eCmd)
                 bool bSceneIntoScene(false);
 
                 E3dScene* pObjScene = dynamic_cast<E3dScene*>(pObjMerk);
-                E3dScene* pAktScene = pObjScene ? dynamic_cast<E3dScene*>(pCreatePV->GetAktGroup()) : nullptr;
-                if (pAktScene)
+                E3dScene* pCurrentScene = pObjScene ? dynamic_cast<E3dScene*>(pCreatePV->GetAktGroup()) : nullptr;
+                if (pCurrentScene)
                 {
                     bool bDidInsert = static_cast<E3dView*>(this)->ImpCloneAll3DObjectsToDestScene(
-                        pObjScene, pAktScene, Point(0, 0));
+                        pObjScene, pCurrentScene, Point(0, 0));
 
                     if(bDidInsert)
                     {
