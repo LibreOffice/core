@@ -27,7 +27,7 @@
 </history>
 </meta>
 <body>
-<bookmark branch="hid/vnd.com.sun.star.wiki:formats" id="bm_id7021088" localize="false"/> 
+<bookmark branch="hid/vnd.com.sun.star.wiki:formats" id="bm_id7021088" localize="false"/>
 <paragraph role="heading" id="hd_id3743095" xml-lang="en-US" level="1" l10n="NEW">MediaWiki Formats</paragraph>
 <paragraph role="paragraph" id="par_id8654133" xml-lang="en-US">The following list gives an overview of the text formats that the Wiki Publisher can upload to the wiki server.</paragraph>
 <paragraph role="paragraph" id="par_id5630664" xml-lang="en-US">The OpenDocument format used by Writer and the MediaWiki format are quite different. Only a subset of all features can be transformed from one format to the other.</paragraph>
@@ -44,8 +44,6 @@
 <paragraph role="paragraph" id="par_id1459395" xml-lang="en-US">A paragraph style with a fixed-width font is transformed as pre-formatted text. Pre-formatted text is shown on the wiki with a border around the text.</paragraph>
 <paragraph role="heading" id="hd_id4834131" xml-lang="en-US" level="2" l10n="NEW">Character styles</paragraph>
 <paragraph role="paragraph" id="par_id6397595" xml-lang="en-US">Character styles modify the appearance of parts of a paragraph. The transformation supports bold, italics, bold/italics, subscript and superscript. All fixed-width fonts are transformed into the wiki typewriter style.</paragraph>
-<paragraph role="heading" id="hd_id5152745" xml-lang="en-US" level="2" l10n="NEW">Footnotes</paragraph>
-<paragraph role="paragraph" id="par_id5238196" xml-lang="en-US">Note: The transformation uses the new style of footnotes with &lt;ref&gt; and &lt;references&gt; tags that requires the Cite.php extension to be installed into MediaWiki. If those tags are shown as plain text in the transformation result, ask the wiki administrator to install this extension.</paragraph>
 <paragraph role="heading" id="hd_id9405499" xml-lang="en-US" level="2" l10n="NEW">Images</paragraph>
 <paragraph role="paragraph" id="par_id3541673" xml-lang="en-US">Images cannot be exported by a transformation producing a single file of wiki text. However, if the image is already uploaded to the target wiki domain (e. g., Wikimedia Commons), then the transformation produces a valid image tag that includes the image. Image captions are also supported.</paragraph>
 <paragraph role="heading" id="hd_id2162236" xml-lang="en-US" level="2" l10n="NEW">Tables</paragraph>
