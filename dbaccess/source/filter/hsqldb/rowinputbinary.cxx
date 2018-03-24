@@ -75,7 +75,7 @@ OUString lcl_double_dabble(const std::vector<sal_uInt8>& bytes)
 
     auto it = scratch.begin();
     /* Remove leading zeros from the scratch space. */
-    while (*it != 0)
+    while (*it == 0)
     {
         it = scratch.erase(it);
     }
@@ -112,6 +112,20 @@ OUString lcl_makeStringFromBigint(const std::vector<sal_uInt8> bytes)
     OUString sNum = lcl_double_dabble(aBytes);
     sRet.append(sNum);
     return sRet.makeStringAndClear();
+}
+
+OUString lcl_putDot(const OUString& sNum, sal_Int32 nScale)
+{
+    OUStringBuffer sBuf{ sNum };
+    if (nScale >= sNum.getLength())
+    {
+        sal_Int32 nNullsToAppend = nScale - sNum.getLength();
+        for (sal_Int32 i = 0; i < nNullsToAppend; ++i)
+            sBuf.insert(0, "0");
+    }
+    if (nScale > 0)
+        sBuf.insert(sBuf.getLength() - 1 - nScale, ".");
+    return sBuf.makeStringAndClear();
 }
 }
 
@@ -296,7 +310,8 @@ std::vector<Any> HsqlRowInputStream::readOneRow(const ColumnTypeVector& nColType
                 m_pStream->ReadInt32(nScale);
 
                 Sequence<Any> result(2);
-                result[0] <<= lcl_makeStringFromBigint(aBytes);
+                OUString sNum = lcl_makeStringFromBigint(aBytes);
+                result[0] <<= lcl_putDot(sNum, nScale);
                 result[1] <<= nSize;
                 aData.push_back(makeAny(result));
             }
