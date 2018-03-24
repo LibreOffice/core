@@ -66,11 +66,11 @@ void old_SdrDownCompat::CloseSubRecord()
     if(rStream.GetError())
         return;
 
-    sal_uInt32 nAktPos(rStream.Tell());
+    sal_uInt32 nCurrentPos(rStream.Tell());
 
     if(nMode == StreamMode::READ)
     {
-        sal_uInt32 nReadCnt(nAktPos - nSubRecPos);
+        sal_uInt32 nReadCnt(nCurrentPos - nSubRecPos);
         if(nReadCnt != nSubRecSiz)
         {
             rStream.Seek(nSubRecPos + nSubRecSiz);
@@ -78,10 +78,10 @@ void old_SdrDownCompat::CloseSubRecord()
     }
     else if(nMode == StreamMode::WRITE)
     {
-        nSubRecSiz = nAktPos - nSubRecPos;
+        nSubRecSiz = nCurrentPos - nSubRecPos;
         rStream.Seek(nSubRecPos);
         Write();
-        rStream.Seek(nAktPos);
+        rStream.Seek(nCurrentPos);
     }
 
     bOpen = false;
