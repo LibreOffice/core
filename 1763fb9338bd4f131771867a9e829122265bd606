@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_fa08e82a",
+        "filename": "sw/source/uibase/uiview/viewmdi.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 560,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-03-24T20:34:05Z",
+      "side": 1,
+      "message": "Supposedly these two might be joined together?",
+      "range": {
+        "startLine": 553,
+        "startChar": 8,
+        "endLine": 560,
+        "endChar": 18
+      },
+      "revId": "1763fb9338bd4f131771867a9e829122265bd606",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
