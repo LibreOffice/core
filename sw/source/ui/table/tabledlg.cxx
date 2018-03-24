@@ -982,7 +982,7 @@ void   SwTableColumnPage::ModifyHdl( MetricField const * pField )
         UpdateCols( aValueTable[i] );
 }
 
-void SwTableColumnPage::UpdateCols( sal_uInt16 nAktPos )
+void SwTableColumnPage::UpdateCols( sal_uInt16 nCurrentPos )
 {
     SwTwips nSum = 0;
 
@@ -1001,9 +1001,9 @@ void SwTableColumnPage::UpdateCols( sal_uInt16 nAktPos )
         sal_uInt16 nLoopCount = 0;
         while( nDiff )
         {
-            if( ++nAktPos == nNoOfVisibleCols)
+            if( ++nCurrentPos == nNoOfVisibleCols)
             {
-                nAktPos = 0;
+                nCurrentPos = 0;
                 ++nLoopCount;
                 //#i101353# in small tables it might not be possible to balance column width
                 if( nLoopCount > 1 )
@@ -1011,25 +1011,25 @@ void SwTableColumnPage::UpdateCols( sal_uInt16 nAktPos )
             }
             if( nDiff < 0 )
             {
-                SetVisibleWidth(nAktPos, GetVisibleWidth(nAktPos) -nDiff);
+                SetVisibleWidth(nCurrentPos, GetVisibleWidth(nCurrentPos) -nDiff);
                 nDiff = 0;
             }
-            else if( GetVisibleWidth(nAktPos) >= nDiff + nMinWidth )
+            else if( GetVisibleWidth(nCurrentPos) >= nDiff + nMinWidth )
             {
-                SetVisibleWidth(nAktPos, GetVisibleWidth(nAktPos) -nDiff);
+                SetVisibleWidth(nCurrentPos, GetVisibleWidth(nCurrentPos) -nDiff);
                 nDiff = 0;
             }
-            if( nDiff > 0 && GetVisibleWidth(nAktPos) > nMinWidth )
+            if( nDiff > 0 && GetVisibleWidth(nCurrentPos) > nMinWidth )
             {
-                if( nDiff >= (GetVisibleWidth(nAktPos) - nMinWidth) )
+                if( nDiff >= (GetVisibleWidth(nCurrentPos) - nMinWidth) )
                 {
-                    nDiff -= (GetVisibleWidth(nAktPos) - nMinWidth);
-                    SetVisibleWidth(nAktPos, nMinWidth);
+                    nDiff -= (GetVisibleWidth(nCurrentPos) - nMinWidth);
+                    SetVisibleWidth(nCurrentPos, nMinWidth);
                 }
                 else
                 {
                     nDiff = 0;
-                    SetVisibleWidth(nAktPos, GetVisibleWidth(nAktPos) -nDiff);
+                    SetVisibleWidth(nCurrentPos, GetVisibleWidth(nCurrentPos) -nDiff);
                 }
                 OSL_ENSURE(nDiff >= 0, "nDiff < 0 cannot be here!");
             }
@@ -1044,7 +1044,7 @@ void SwTableColumnPage::UpdateCols( sal_uInt16 nAktPos )
         if(nDiff > nActSpace)
         {
             nTableWidth = pTableData->GetSpace();
-            SetVisibleWidth(nAktPos, GetVisibleWidth(nAktPos) - nDiff + nActSpace );
+            SetVisibleWidth(nCurrentPos, GetVisibleWidth(nCurrentPos) - nDiff + nActSpace );
         }
         else
         {
@@ -1060,13 +1060,13 @@ void SwTableColumnPage::UpdateCols( sal_uInt16 nAktPos )
         if(nDiff * nNoOfVisibleCols > pTableData->GetSpace() - nTableWidth)
         {
             nAdd = (pTableData->GetSpace() - nTableWidth) / nNoOfVisibleCols;
-            SetVisibleWidth(nAktPos, GetVisibleWidth(nAktPos) - nDiff + nAdd );
+            SetVisibleWidth(nCurrentPos, GetVisibleWidth(nCurrentPos) - nDiff + nAdd );
             nDiff = nAdd;
         }
         if(nAdd)
             for( sal_uInt16 i = 0; i < nNoOfVisibleCols; i++ )
             {
-                if(i == nAktPos)
+                if(i == nCurrentPos)
                     continue;
                 SwTwips nVisWidth;
                 if((nVisWidth = GetVisibleWidth(i)) + nDiff < MINLAY)
