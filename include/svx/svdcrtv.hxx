@@ -44,12 +44,12 @@ protected:
     // compile the apps all the time
     std::unique_ptr<ImpSdrCreateViewExtraData> mpCreateViewExtraData;
 
-    Pointer                     aAktCreatePointer;
+    Pointer                     aCurrentCreatePointer;
 
     sal_Int32                   nAutoCloseDistPix;
     sal_Int32                   nFreeHandMinDistPix;
-    SdrInventor                 nAktInvent;     // set the current ones
-    sal_uInt16                  nAktIdent;      // Obj for re-creating
+    SdrInventor                 nCurrentInvent;     // set the current ones
+    sal_uInt16                  nCurrentIdent;      // Obj for re-creating
 
     bool                        b1stPointAsCenter : 1;
     bool                        bUseIncompatiblePathCreateInterface : 1;
@@ -100,9 +100,9 @@ public:
     bool IsMeasureTool() const;
 
     void SetCurrentObj(sal_uInt16 nIdent, SdrInventor nInvent=SdrInventor::Default);
-    void TakeCurrentObj(sal_uInt16& nIdent, SdrInventor& nInvent) const  { nInvent=nAktInvent; nIdent=nAktIdent; }
-    SdrInventor GetCurrentObjInventor() const { return nAktInvent; }
-    sal_uInt16  GetCurrentObjIdentifier() const { return nAktIdent; }
+    void TakeCurrentObj(sal_uInt16& nIdent, SdrInventor& nInvent) const  { nInvent=nCurrentInvent; nIdent=nCurrentIdent; }
+    SdrInventor GetCurrentObjInventor() const { return nCurrentInvent; }
+    sal_uInt16  GetCurrentObjIdentifier() const { return nCurrentIdent; }
 
     // Beginning the regular Create
     bool BegCreateObj(const Point& rPnt, OutputDevice* pOut=nullptr, short nMinMov=-3);
