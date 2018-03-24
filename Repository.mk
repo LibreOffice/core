@@ -186,13 +186,13 @@ $(eval $(call gb_Helper_register_libraries,RTLIBS, \
     comphelper \
     i18nisolang1 \
     i18nutil \
-    jvmaccess \
     ucbhelper \
     vos3 \
 ))
 
 $(eval $(call gb_Helper_register_libraries,RTVERLIBS, \
     cppuhelper \
+    jvmaccess \
     salhelper \
 ))
 
