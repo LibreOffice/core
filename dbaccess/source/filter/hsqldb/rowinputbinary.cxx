@@ -28,7 +28,8 @@
 #include <unotools/ucbstreamhelper.hxx>
 #include <tools/stream.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <ctime>
+
+#include <boost/date_time/posix_time/posix_time.hpp>
 
 namespace
 {
@@ -75,7 +76,7 @@ OUString lcl_double_dabble(const std::vector<sal_uInt8>& bytes)
 
     auto it = scratch.begin();
     /* Remove leading zeros from the scratch space. */
-    while (*it != 0)
+    while (*it == 0)
     {
         it = scratch.erase(it);
     }
@@ -113,6 +114,20 @@ OUString lcl_makeStringFromBigint(const std::vector<sal_uInt8> bytes)
     sRet.append(sNum);
     return sRet.makeStringAndClear();
 }
+
+OUString lcl_putDot(const OUString& sNum, sal_Int32 nScale)
+{
+    OUStringBuffer sBuf{ sNum };
+    if (nScale >= sNum.getLength())
+    {
+        sal_Int32 nNullsToAppend = nScale - sNum.getLength();
+        for (sal_Int32 i = 0; i < nNullsToAppend; ++i)
+            sBuf.insert(0, "0");
+    }
+    if (nScale > 0)
+        sBuf.insert(sBuf.getLength() - 1 - nScale, ".");
+    return sBuf.makeStringAndClear();
+}
 }
 
 namespace dbahsql
@@ -120,6 +135,8 @@ namespace dbahsql
 using namespace css::uno;
 using namespace css::sdbc;
 using namespace css::io;
+using namespace boost::posix_time;
+using namespace boost::gregorian;
 
 typedef std::vector<sal_Int32> ColumnTypeVector;
 
@@ -296,7 +313,8 @@ std::vector<Any> HsqlRowInputStream::readOneRow(const ColumnTypeVector& nColType
                 m_pStream->ReadInt32(nScale);
 
                 Sequence<Any> result(2);
-                result[0] <<= lcl_makeStringFromBigint(aBytes);
+                OUString sNum = lcl_makeStringFromBigint(aBytes);
+                result[0] <<= lcl_putDot(sNum, nScale);
                 result[1] <<= nSize;
                 aData.push_back(makeAny(result));
             }
@@ -305,11 +323,13 @@ std::vector<Any> HsqlRowInputStream::readOneRow(const ColumnTypeVector& nColType
             {
                 sal_Int64 value = 0;
                 m_pStream->ReadInt64(value); // in millisec, from 1970
-                std::time_t nEpochSec = value / 1000;
-                std::tm* tm = std::gmtime(&nEpochSec);
-                css::util::Date date(tm->tm_mday, tm->tm_mon + 1,
-                                     tm->tm_year + 1900); // day, month, year
-                aData.push_back(makeAny(date));
+                ptime epoch = time_from_string("1970-01-01 00:00:00.000");
+                ptime time = epoch + milliseconds(value);
+                date asDate = time.date();
+
+                css::util::Date loDate(asDate.day(), asDate.month(),
+                                       asDate.year()); // day, month, year
+                aData.push_back(makeAny(loDate));
             }
             break;
             case DataType::TIME:
@@ -324,19 +344,22 @@ std::vector<Any> HsqlRowInputStream::readOneRow(const ColumnTypeVector& nColType
             {
                 sal_Int64 nEpochMillis = 0;
                 m_pStream->ReadInt64(nEpochMillis);
-                std::time_t nEpochSec = nEpochMillis / 1000;
-                std::tm* tm = std::gmtime(&nEpochSec);
+                ptime epoch = time_from_string("1970-01-01 00:00:00.000");
+                ptime time = epoch + milliseconds(nEpochMillis);
+                date asDate = time.date();
 
                 sal_Int32 nNanos = 0;
                 m_pStream->ReadInt32(nNanos);
+
+                // convert into LO internal representation of dateTime
                 css::util::DateTime dateTime;
                 dateTime.NanoSeconds = nNanos;
-                dateTime.Seconds = tm->tm_sec;
-                dateTime.Minutes = tm->tm_min;
-                dateTime.Hours = tm->tm_hour;
-                dateTime.Day = tm->tm_mday;
-                dateTime.Month = tm->tm_mon + 1; // indexed from 0
-                dateTime.Year = 1900 + tm->tm_year;
+                dateTime.Seconds = time.time_of_day().seconds();
+                dateTime.Minutes = time.time_of_day().minutes();
+                dateTime.Hours = time.time_of_day().hours();
+                dateTime.Day = asDate.day();
+                dateTime.Month = asDate.month();
+                dateTime.Year = asDate.year();
                 aData.push_back(makeAny(dateTime));
             }
             break;
