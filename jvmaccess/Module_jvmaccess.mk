@@ -21,42 +21,11 @@
 
 
 
-PRJ = ..
-PRJNAME = jvmaccess
-TARGET = $(PRJNAME)
+$(eval $(call gb_Module_Module,jvmaccess))
 
-ENABLE_EXCEPTIONS = TRUE
+$(eval $(call gb_Module_add_targets,jvmaccess,\
+	Library_jvmaccess \
+	Package_inc \
+))
 
-.IF "$(OS)" != "WNT" && "$(OS)" != "OS2"
-UNIXVERSIONNAMES = UDK
-.ENDIF # WNT
-
-.INCLUDE: settings.mk
-
-.IF "$(UNIXVERSIONNAMES)" == ""
-SHL1TARGET = $(TARGET)$(UDK_MAJOR)$(COMID)
-.ELSE # UNIXVERSIONNAMES
-SHL1TARGET = $(TARGET)$(COMID)
-.ENDIF # UNIXVERSIONNAMES
-
-SHL1IMPLIB = i$(TARGET)
-SHL1LIBS = $(SLB)$/$(TARGET).lib
-SHL1STDLIBS = $(CPPULIB) $(SALLIB) $(SALHELPERLIB)
-.IF "$(OS)" == "WNT"
-SHL1STDLIBS += $(ADVAPI32LIB)
-.ENDIF # WNT
-SHL1RPATH = URELIB
-
-.IF "$(COMNAME)" == "msci"
-SHL1VERSIONMAP = msvc_win32_intel.map
-.ELIF "$(COMNAME)" == "sunpro5"
-SHL1VERSIONMAP = cc5_solaris_sparc.map
-.ELIF "$(GUI)$(COM)" == "WNTGCC"
-SHL1VERSIONMAP = mingw.map
-.ELIF "$(COMNAME)" == "gcc3"
-SHL1VERSIONMAP = gcc3.map
-.ENDIF
-
-DEF1NAME = $(SHL1TARGET)
-
-.INCLUDE: target.mk
+# vim: set noet sw=4 ts=4:

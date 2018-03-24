@@ -19,19 +19,14 @@
 #  
 #**************************************************************
 
+ifeq ($(strip $(SOLARENV)),)
+$(error No environment set!)
+endif
 
+gb_PARTIALBUILD := T
+GBUILDDIR := $(SOLARENV)/gbuild
+include $(GBUILDDIR)/gbuild.mk
 
-PRJ = ..
-PRJNAME = jvmaccess
-TARGET = $(PRJNAME)
+$(eval $(call gb_Module_make_global_targets,$(shell ls $(dir $(realpath $(firstword $(MAKEFILE_LIST))))/Module*.mk)))
 
-ENABLE_EXCEPTIONS = TRUE
-
-.INCLUDE: settings.mk
-
-SLOFILES = \
-    $(SLO)$/classpath.obj \
-    $(SLO)$/unovirtualmachine.obj \
-    $(SLO)$/virtualmachine.obj
-
-.INCLUDE: target.mk
+# vim: set noet sw=4 ts=4:

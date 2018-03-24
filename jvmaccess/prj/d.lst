@@ -1,9 +1,0 @@
-mkdir: %_DEST%\inc%_EXT%\jvmaccess
-..\inc\jvmaccess\classpath.hxx %_DEST%\inc%_EXT%\jvmaccess\classpath.hxx
-..\inc\jvmaccess\unovirtualmachine.hxx %_DEST%\inc%_EXT%\jvmaccess\unovirtualmachine.hxx
-..\inc\jvmaccess\virtualmachine.hxx %_DEST%\inc%_EXT%\jvmaccess\virtualmachine.hxx
-..\%__SRC%\bin\jvmacces*.dll %_DEST%\bin%_EXT%\*
-..\%__SRC%\lib\ijvmaccess.lib %_DEST%\lib%_EXT%\ijvmaccess.lib
-..\%__SRC%\lib\jvmaccess*.lib %_DEST%\lib%_EXT%\jvmaccess*.lib
-..\%__SRC%\lib\libjvmaccess*.*.* %_DEST%\lib%_EXT%\*
-linklib: libjvmaccess*.*.*

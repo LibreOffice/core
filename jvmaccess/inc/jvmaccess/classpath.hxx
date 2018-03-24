@@ -26,6 +26,7 @@
 
 #include "sal/config.h"
 #include "com/sun/star/uno/Reference.hxx"
+#include "jvmaccess/jvmaccessdllapi.h"
 
 #if defined SOLAR_JAVA
 #include "jni.h"
@@ -130,12 +131,12 @@ private:
     // that their mangled C++ names do not depend on the JDK version used at
     // compile time:
 
-    static void * doTranslateToUrls(
+    JVMACCESS_DLLPUBLIC static void * doTranslateToUrls(
         ::com::sun::star::uno::Reference<
         ::com::sun::star::uno::XComponentContext > const & context,
         void * environment, ::rtl::OUString const & classPath);
 
-    static void * doLoadClass(
+    JVMACCESS_DLLPUBLIC static void * doLoadClass(
         ::com::sun::star::uno::Reference<
         ::com::sun::star::uno::XComponentContext > const & context,
         void * environment, ::rtl::OUString const & classPath,

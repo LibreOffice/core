@@ -1,4 +1,2 @@
 jv jvmaccess : offapi ridljar cppu sal salhelper NULL
-jv jvmaccess usr1 - all jv_mkout NULL
-jv jvmaccess\source nmake - all jv_source NULL
-jv jvmaccess\util nmake - all jv_util jv_source NULL
+jv jvmaccess\prj nmake - all jv_prj NULL

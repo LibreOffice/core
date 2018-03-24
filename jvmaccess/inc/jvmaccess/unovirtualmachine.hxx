@@ -27,6 +27,7 @@
 #include "sal/config.h"
 #include "salhelper/simplereferenceobject.hxx"
 #include "rtl/ref.hxx"
+#include "jvmaccess/jvmaccessdllapi.h"
 
 namespace jvmaccess {
 
@@ -35,11 +36,11 @@ class VirtualMachine;
 /** An encapsulating wrapper around a Java virtual machine and an appropriate
     UNO class loader.
  */
-class UnoVirtualMachine: public salhelper::SimpleReferenceObject {
+class JVMACCESS_DLLPUBLIC UnoVirtualMachine: public salhelper::SimpleReferenceObject {
 public:
     /** An exception indicating failure to create a UnoVirtualMachine.
      */
-    class CreationException
+    class JVMACCESS_DLLPUBLIC CreationException
     {
     public:
         CreationException();
