@@ -37,6 +37,42 @@
     },
     {
       "key": {
+        "uuid": "9a30ddce_df2f96f4",
+        "filename": "svx/inc/sdr/primitive2d/sdrpathprimitive2d.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1000638
+      },
+      "writtenOn": "2018-03-24T11:38:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9a30ddce_1f5cce24",
+      "revId": "ab464a3f39ae45a10769a7a29b508e9181cf65e7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_ff345a4b",
+        "filename": "svx/inc/sdr/primitive2d/sdrpathprimitive2d.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1000638
+      },
+      "writtenOn": "2018-03-24T11:38:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9a30ddce_bf73c2b3",
+      "revId": "ab464a3f39ae45a10769a7a29b508e9181cf65e7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a30ddce_ff561a05",
         "filename": "svx/inc/sdr/primitive2d/sdrpathprimitive2d.hxx",
         "patchSetId": 3
@@ -48,6 +84,30 @@
       "writtenOn": "2018-03-23T19:14:57Z",
       "side": 1,
       "message": "Please also change \"seamless\" to \"seamlessly\". Adverbs modify verbs; adjectives modify nouns.",
+      "range": {
+        "startLine": 48,
+        "startChar": 50,
+        "endLine": 48,
+        "endChar": 67
+      },
+      "revId": "ab464a3f39ae45a10769a7a29b508e9181cf65e7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_1f3a0e37",
+        "filename": "svx/inc/sdr/primitive2d/sdrpathprimitive2d.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1000638
+      },
+      "writtenOn": "2018-03-24T11:38:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9a30ddce_ff561a05",
       "range": {
         "startLine": 48,
         "startChar": 50,
