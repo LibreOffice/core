@@ -112,7 +112,15 @@ OUString FbCreateStmtParser::compose() const
         lcl_appendWithSpace(sSql, columnIter->getName());
         lcl_appendWithSpace(sSql, lcl_DataTypetoFbTypeName(columnIter->getDataType()));
 
-        const std::vector<sal_Int32> params = columnIter->getParams();
+        std::vector<sal_Int32> params{ columnIter->getParams() };
+
+        if (columnIter->getDataType() == DataType::NUMERIC
+            || columnIter->getDataType() == DataType::DECIMAL)
+        {
+            // max precision is 18 here
+            if (params.at(0) > 18)
+                params[0] = 18;
+        }
 
         // Firebird SQL dialect does not like parameters for TIMESTAMP
         if (params.size() > 0 && columnIter->getDataType() != DataType::TIMESTAMP)
