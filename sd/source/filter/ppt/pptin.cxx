@@ -769,7 +769,7 @@ bool ImplSdPPTImport::Import()
                 ProcessData aProcessData( (*pList)[ nCurrentPageNum ], SdPageCapsule(pMPage) );
                 sal_uInt32 nFPosMerk = rStCtrl.Tell();
                 DffRecordHeader aPageHd;
-                if ( SeekToAktPage( &aPageHd ) )
+                if ( SeekToCurrentPage( &aPageHd ) )
                 {
                     auto nEndRecPos = SanitizeEndPos(rStCtrl, aPageHd.GetRecEndFilePos());
                     while( ( rStCtrl.GetError() == ERRCODE_NONE ) && ( rStCtrl.Tell() < nEndRecPos ) )
@@ -932,7 +932,7 @@ bool ImplSdPPTImport::Import()
                 // CWS preseng01: pPage->SetPageKind( PageKind::Standard );
 
                 DffRecordHeader aPageHd;
-                if ( SeekToAktPage( &aPageHd ) )
+                if ( SeekToCurrentPage( &aPageHd ) )
                 {
                     bool bNewAnimationsUsed = false;
 
@@ -1525,7 +1525,7 @@ void ImplSdPPTImport::ImportPageEffect( SdPage* pPage, const bool bNewAnimations
             }
         }
         DffRecordHeader aPageRecHd;
-        if ( SeekToAktPage( &aPageRecHd ) )
+        if ( SeekToCurrentPage( &aPageRecHd ) )
         {
             sal_uLong nPageRecEnd = SanitizeEndPos(rStCtrl, aPageRecHd.GetRecEndFilePos());
 

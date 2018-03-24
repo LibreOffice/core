@@ -2417,7 +2417,7 @@ bool SdrPowerPointImport::SeekToContentOfProgTag( sal_Int32 nVersion, SvStream& 
     return bRetValue;
 }
 
-sal_uInt32 SdrPowerPointImport::GetAktPageId()
+sal_uInt32 SdrPowerPointImport::GetCurrentPageId()
 {
     PptSlidePersistList* pList = GetPageList( eCurrentPageKind );
     if ( pList && nCurrentPageNum < pList->size() )
@@ -2425,7 +2425,7 @@ sal_uInt32 SdrPowerPointImport::GetAktPageId()
     return 0;
 }
 
-bool SdrPowerPointImport::SeekToAktPage( DffRecordHeader* pRecHd ) const
+bool SdrPowerPointImport::SeekToCurrentPage( DffRecordHeader* pRecHd ) const
 {
     bool bRet = false;
     PptSlidePersistList* pList = GetPageList( eCurrentPageKind );
@@ -2742,7 +2742,7 @@ void SdrPowerPointImport::ImportPage( SdrPage* pRet, const PptSlidePersistEntry*
         return;
 
     DffRecordHeader aPageHd;
-    if ( SeekToAktPage( &aPageHd ) )
+    if ( SeekToCurrentPage( &aPageHd ) )
     {
         rSlidePersist.xHeaderFooterEntry.reset(new HeaderFooterEntry(pMasterPersist));
         ProcessData aProcessData( rSlidePersist, SdPageCapsule(pRet) );
@@ -3022,7 +3022,7 @@ SdrObject* SdrPowerPointImport::ImportPageBackgroundObject( const SdrPage& rPage
     std::unique_ptr<SfxItemSet> pSet;
     sal_uLong nFPosMerk = rStCtrl.Tell(); // remember FilePos for restoring it later
     DffRecordHeader aPageHd;
-    if ( SeekToAktPage( &aPageHd ) )
+    if ( SeekToCurrentPage( &aPageHd ) )
     {   // and now search for the background attributes of the Page
         sal_uLong nPageRecEnd = aPageHd.GetRecEndFilePos();
         DffRecordHeader aPPDrawHd;
@@ -6554,7 +6554,7 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                 }
                 if ( bStatus )
                 {
-                    sal_uInt32 nSlideId = rSdrPowerPointImport.GetAktPageId();
+                    sal_uInt32 nSlideId = rSdrPowerPointImport.GetCurrentPageId();
                     if ( !nSlideId )
                         bStatus = false;
                     else
