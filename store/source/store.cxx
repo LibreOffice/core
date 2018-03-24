@@ -75,7 +75,7 @@ using namespace store;
 /*
  * store_acquireHandle.
  */
-STORE_DLLPUBLIC storeError SAL_CALL store_acquireHandle (
+storeError SAL_CALL store_acquireHandle (
     storeHandle Handle
 ) SAL_THROW_EXTERN_C()
 {
@@ -90,7 +90,7 @@ STORE_DLLPUBLIC storeError SAL_CALL store_acquireHandle (
 /*
  * store_releaseHandle.
  */
-STORE_DLLPUBLIC storeError SAL_CALL store_releaseHandle (
+storeError SAL_CALL store_releaseHandle (
     storeHandle Handle
 ) SAL_THROW_EXTERN_C()
 {
@@ -110,7 +110,7 @@ STORE_DLLPUBLIC storeError SAL_CALL store_releaseHandle (
 /*
  * store_createMemoryFile.
  */
-STORE_DLLPUBLIC storeError SAL_CALL store_createMemoryFile (
+storeError SAL_CALL store_createMemoryFile (
     sal_uInt16       nPageSize,
     storeFileHandle *phFile
 ) SAL_THROW_EXTERN_C()
@@ -144,7 +144,7 @@ STORE_DLLPUBLIC storeError SAL_CALL store_createMemoryFile (
 /*
  * store_openFile.
  */
-STORE_DLLPUBLIC storeError SAL_CALL store_openFile (
+storeError SAL_CALL store_openFile (
     rtl_uString     *pFilename,
     storeAccessMode  eAccessMode,
     sal_uInt16       nPageSize,
@@ -182,7 +182,7 @@ STORE_DLLPUBLIC storeError SAL_CALL store_openFile (
 /*
  * store_closeFile.
  */
-STORE_DLLPUBLIC storeError SAL_CALL store_closeFile (
+storeError SAL_CALL store_closeFile (
     storeFileHandle Handle
 ) SAL_THROW_EXTERN_C()
 {
@@ -199,7 +199,7 @@ STORE_DLLPUBLIC storeError SAL_CALL store_closeFile (
 /*
  * store_flushFile.
  */
-STORE_DLLPUBLIC storeError SAL_CALL store_flushFile (
+storeError SAL_CALL store_flushFile (
     storeFileHandle Handle
 ) SAL_THROW_EXTERN_C()
 {
@@ -214,7 +214,7 @@ STORE_DLLPUBLIC storeError SAL_CALL store_flushFile (
 /*
  * store_getFileRefererCount.
  */
-STORE_DLLPUBLIC storeError SAL_CALL store_getFileRefererCount (
+storeError SAL_CALL store_getFileRefererCount (
     storeFileHandle  Handle,
     sal_uInt32      *pnRefCount
 ) SAL_THROW_EXTERN_C()
@@ -234,7 +234,7 @@ STORE_DLLPUBLIC storeError SAL_CALL store_getFileRefererCount (
 /*
  * store_getFileSize.
  */
-STORE_DLLPUBLIC storeError SAL_CALL store_getFileSize (
+storeError SAL_CALL store_getFileSize (
     storeFileHandle  Handle,
     sal_uInt32      *pnSize
 ) SAL_THROW_EXTERN_C()
@@ -253,7 +253,7 @@ STORE_DLLPUBLIC storeError SAL_CALL store_getFileSize (
 /*
  * store_rebuildFile.
  */
-STORE_DLLPUBLIC storeError SAL_CALL store_rebuildFile (
+storeError SAL_CALL store_rebuildFile (
     rtl_uString *pSrcFilename,
     rtl_uString *pDstFilename
 ) SAL_THROW_EXTERN_C()
@@ -290,7 +290,7 @@ STORE_DLLPUBLIC storeError SAL_CALL store_rebuildFile (
 /*
  * store_openDirectory.
  */
-STORE_DLLPUBLIC storeError SAL_CALL store_openDirectory (
+storeError SAL_CALL store_openDirectory (
     storeFileHandle       hFile,
     rtl_uString          *pPath,
     rtl_uString          *pName,
@@ -330,7 +330,7 @@ STORE_DLLPUBLIC storeError SAL_CALL store_openDirectory (
 /*
  * store_closeDirectory.
  */
-STORE_DLLPUBLIC storeError SAL_CALL store_closeDirectory (
+storeError SAL_CALL store_closeDirectory (
     storeDirectoryHandle Handle
 ) SAL_THROW_EXTERN_C()
 {
@@ -346,7 +346,7 @@ STORE_DLLPUBLIC storeError SAL_CALL store_closeDirectory (
 /*
  * store_findFirst.
  */
-STORE_DLLPUBLIC storeError SAL_CALL store_findFirst (
+storeError SAL_CALL store_findFirst (
     storeDirectoryHandle  Handle,
     storeFindData        *pFindData
 ) SAL_THROW_EXTERN_C()
@@ -370,7 +370,7 @@ STORE_DLLPUBLIC storeError SAL_CALL store_findFirst (
 /*
  * store_findNext.
  */
-STORE_DLLPUBLIC storeError SAL_CALL store_findNext (
+storeError SAL_CALL store_findNext (
     storeDirectoryHandle  Handle,
     storeFindData        *pFindData
 ) SAL_THROW_EXTERN_C()
@@ -400,7 +400,7 @@ STORE_DLLPUBLIC storeError SAL_CALL store_findNext (
 /*
  * store_openStream
  */
-STORE_DLLPUBLIC storeError SAL_CALL store_openStream (
+storeError SAL_CALL store_openStream (
     storeFileHandle    hFile,
     rtl_uString       *pPath,
     rtl_uString       *pName,
@@ -440,7 +440,7 @@ STORE_DLLPUBLIC storeError SAL_CALL store_openStream (
 /*
  * store_closeStream.
  */
-STORE_DLLPUBLIC storeError SAL_CALL store_closeStream (
+storeError SAL_CALL store_closeStream (
     storeStreamHandle Handle
 ) SAL_THROW_EXTERN_C()
 {
@@ -456,7 +456,7 @@ STORE_DLLPUBLIC storeError SAL_CALL store_closeStream (
 /*
  * store_readStream.
  */
-STORE_DLLPUBLIC storeError SAL_CALL store_readStream (
+storeError SAL_CALL store_readStream (
     storeStreamHandle  Handle,
     sal_uInt32         nOffset,
     void              *pBuffer,
@@ -478,7 +478,7 @@ STORE_DLLPUBLIC storeError SAL_CALL store_readStream (
 /*
  * store_writeStream.
  */
-STORE_DLLPUBLIC storeError SAL_CALL store_writeStream (
+storeError SAL_CALL store_writeStream (
     storeStreamHandle  Handle,
     sal_uInt32         nOffset,
     const void        *pBuffer,
@@ -500,7 +500,7 @@ STORE_DLLPUBLIC storeError SAL_CALL store_writeStream (
 /*
  * store_flushStream.
  */
-STORE_DLLPUBLIC storeError SAL_CALL store_flushStream (
+storeError SAL_CALL store_flushStream (
     storeStreamHandle Handle
 ) SAL_THROW_EXTERN_C()
 {
@@ -515,7 +515,7 @@ STORE_DLLPUBLIC storeError SAL_CALL store_flushStream (
 /*
  * store_getStreamSize.
  */
-STORE_DLLPUBLIC storeError SAL_CALL store_getStreamSize (
+storeError SAL_CALL store_getStreamSize (
     storeStreamHandle  Handle,
     sal_uInt32        *pnSize
 ) SAL_THROW_EXTERN_C()
@@ -534,7 +534,7 @@ STORE_DLLPUBLIC storeError SAL_CALL store_getStreamSize (
 /*
  * store_setStreamSize.
  */
-STORE_DLLPUBLIC storeError SAL_CALL store_setStreamSize (
+storeError SAL_CALL store_setStreamSize (
     storeStreamHandle Handle,
     sal_uInt32        nSize
 ) SAL_THROW_EXTERN_C()
@@ -555,7 +555,7 @@ STORE_DLLPUBLIC storeError SAL_CALL store_setStreamSize (
 /*
  * store_attrib.
  */
-STORE_DLLPUBLIC storeError SAL_CALL store_attrib (
+storeError SAL_CALL store_attrib (
     storeFileHandle Handle,
     rtl_uString    *pPath,
     rtl_uString    *pName,
@@ -596,7 +596,7 @@ STORE_DLLPUBLIC storeError SAL_CALL store_attrib (
 /*
  * store_link.
  */
-STORE_DLLPUBLIC storeError SAL_CALL store_link (
+storeError SAL_CALL store_link (
     storeFileHandle Handle,
     rtl_uString *pSrcPath, rtl_uString *pSrcName,
     rtl_uString *pDstPath, rtl_uString *pDstName
@@ -646,7 +646,7 @@ STORE_DLLPUBLIC storeError SAL_CALL store_link (
 /*
  * store_symlink.
  */
-STORE_DLLPUBLIC storeError SAL_CALL store_symlink (
+storeError SAL_CALL store_symlink (
     storeFileHandle Handle,
     rtl_uString *pSrcPath, rtl_uString *pSrcName,
     rtl_uString *pDstPath, rtl_uString *pDstName
@@ -689,7 +689,7 @@ STORE_DLLPUBLIC storeError SAL_CALL store_symlink (
 /*
  * store_rename.
  */
-STORE_DLLPUBLIC storeError SAL_CALL store_rename (
+storeError SAL_CALL store_rename (
     storeFileHandle Handle,
     rtl_uString *pSrcPath, rtl_uString *pSrcName,
     rtl_uString *pDstPath, rtl_uString *pDstName
@@ -732,7 +732,7 @@ STORE_DLLPUBLIC storeError SAL_CALL store_rename (
 /*
  * store_remove.
  */
-STORE_DLLPUBLIC storeError SAL_CALL store_remove (
+storeError SAL_CALL store_remove (
     storeFileHandle Handle,
     rtl_uString    *pPath,
     rtl_uString    *pName
