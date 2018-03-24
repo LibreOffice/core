@@ -124,7 +124,7 @@ class SwTableColumnPage : public SfxTabPage
     DECL_LINK( DownHdl, SpinField&, void );
     DECL_LINK( LoseFocusHdl, Control&, void );
     DECL_LINK( ModeHdl, Button *, void );
-    void        UpdateCols( sal_uInt16 nAktPos );
+    void        UpdateCols( sal_uInt16 nCurrentPos );
     SwTwips     GetVisibleWidth(sal_uInt16 nPos);
     void        SetVisibleWidth(sal_uInt16 nPos, SwTwips nNewWidth);
 
