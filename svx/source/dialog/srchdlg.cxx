@@ -2394,15 +2394,16 @@ static void lcl_SetSearchLabelWindow(const OUString& rStr)
         {
             vcl::Window* pSearchLabel = pToolBox->GetItemWindow(id);
             assert(pSearchLabel);
-            pSearchLabel->Hide();
-            pSearchLabel->SetText(rStr);
-            if (!rStr.isEmpty())
-            {
-                pSearchLabel->SetSizePixel(pSearchLabel->get_preferred_size());
-                pSearchLabel->Show();
-            }
+            if (rStr.isEmpty())
+                pSearchLabel->SetText("        ");
+            else
+                pSearchLabel->SetText(rStr);
+            pSearchLabel->SetSizePixel(Size(pSearchLabel->get_preferred_size().Width() + 8,
+                                            pSearchLabel->get_preferred_size().Height()));
+            pSearchLabel->SetSizePixel(pSearchLabel->get_preferred_size());
         }
     }
+    xLayoutManager->doLayout();
     pToolBox->Resize();
 }
 
