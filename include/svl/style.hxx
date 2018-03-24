@@ -190,8 +190,8 @@ protected:
 private:
     SVL_DLLPRIVATE bool         IsTrivialSearch() const;
 
-    SfxStyleSheetBase*      pAktStyle;
-    sal_uInt16              nAktPosition;
+    SfxStyleSheetBase*      pCurrentStyle;
+    sal_uInt16              nCurrentPosition;
     bool                    bSearchUsed;
 
 friend class SfxStyleSheetBasePool;

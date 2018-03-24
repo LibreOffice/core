@@ -395,8 +395,8 @@ struct DoesStyleMatchStyleSheetPredicate final : public svl::StyleSheetPredicate
 
 SfxStyleSheetIterator::SfxStyleSheetIterator(SfxStyleSheetBasePool *pBase,
                                              SfxStyleFamily eFam, sal_uInt16 n)
-    : pAktStyle(nullptr)
-    , nAktPosition(0)
+    : pCurrentStyle(nullptr)
+    , nCurrentPosition(0)
 {
     pBasePool=pBase;
     nSearchFamily=eFam;
@@ -439,7 +439,7 @@ SfxStyleSheetBase* SfxStyleSheetIterator::operator[](sal_uInt16 nIdx)
     if( IsTrivialSearch())
     {
         retval = pBasePool->pImpl->mxIndexedStyleSheets->GetStyleSheetByPosition(nIdx).get();
-        nAktPosition = nIdx;
+        nCurrentPosition = nIdx;
     }
     else if(nMask == SFXSTYLEBIT_ALL)
     {
@@ -448,7 +448,7 @@ SfxStyleSheetBase* SfxStyleSheetIterator::operator[](sal_uInt16 nIdx)
                 pBasePool->pImpl->mxIndexedStyleSheets->GetStyleSheetPositionsByFamily(nSearchFamily).at(nIdx))
                 ;
         retval = ref.get();
-        nAktPosition = nIdx;
+        nCurrentPosition = nIdx;
     }
     else
     {
@@ -457,7 +457,7 @@ SfxStyleSheetBase* SfxStyleSheetIterator::operator[](sal_uInt16 nIdx)
                 pBasePool->pImpl->mxIndexedStyleSheets->GetNthStyleSheetThatMatchesPredicate(nIdx, predicate);
         if (ref.get() != nullptr)
         {
-            nAktPosition = pBasePool->pImpl->mxIndexedStyleSheets->FindStyleSheetPosition(*ref);
+            nCurrentPosition = pBasePool->pImpl->mxIndexedStyleSheets->FindStyleSheetPosition(*ref);
             retval = ref.get();
         }
     }
@@ -488,21 +488,21 @@ SfxStyleSheetBase* SfxStyleSheetIterator::Next()
     if ( IsTrivialSearch() )
     {
         unsigned nStyleSheets = pBasePool->pImpl->mxIndexedStyleSheets->GetNumberOfStyleSheets();
-        unsigned newPosition = nAktPosition +1;
+        unsigned newPosition = nCurrentPosition +1;
         if (nStyleSheets > newPosition)
         {
-            nAktPosition = newPosition;
-            retval = pBasePool->pImpl->mxIndexedStyleSheets->GetStyleSheetByPosition(nAktPosition).get();
+            nCurrentPosition = newPosition;
+            retval = pBasePool->pImpl->mxIndexedStyleSheets->GetStyleSheetByPosition(nCurrentPosition).get();
         }
     }
     else if(nMask == SFXSTYLEBIT_ALL)
     {
-        unsigned newPosition = nAktPosition +1;
+        unsigned newPosition = nCurrentPosition +1;
         const std::vector<unsigned>& familyVector =
             pBasePool->pImpl->mxIndexedStyleSheets->GetStyleSheetPositionsByFamily(nSearchFamily);
         if (familyVector.size() > newPosition)
         {
-            nAktPosition = newPosition;
+            nCurrentPosition = newPosition;
             unsigned stylePosition = familyVector.at(newPosition);
             retval = pBasePool->pImpl->mxIndexedStyleSheets->GetStyleSheetByPosition(stylePosition).get();
         }
@@ -512,13 +512,13 @@ SfxStyleSheetBase* SfxStyleSheetIterator::Next()
         DoesStyleMatchStyleSheetPredicate predicate(this);
         rtl::Reference< SfxStyleSheetBase > ref =
                 pBasePool->pImpl->mxIndexedStyleSheets->GetNthStyleSheetThatMatchesPredicate(
-                        0, predicate, nAktPosition+1);
+                        0, predicate, nCurrentPosition+1);
         retval = ref.get();
         if (retval != nullptr) {
-            nAktPosition = pBasePool->pImpl->mxIndexedStyleSheets->FindStyleSheetPosition(*ref);
+            nCurrentPosition = pBasePool->pImpl->mxIndexedStyleSheets->FindStyleSheetPosition(*ref);
         }
     }
-    pAktStyle = retval;
+    pCurrentStyle = retval;
     return retval;
 }
 
@@ -535,9 +535,9 @@ SfxStyleSheetBase* SfxStyleSheetIterator::Find(const OUString& rStr)
 
     unsigned pos = positions.front();
     SfxStyleSheetBase* pStyle = pBasePool->pImpl->mxIndexedStyleSheets->GetStyleSheetByPosition(pos).get();
-    nAktPosition = pos;
-    pAktStyle = pStyle;
-    return pAktStyle;
+    nCurrentPosition = pos;
+    pCurrentStyle = pStyle;
+    return pCurrentStyle;
 }
 
 sal_uInt16 SfxStyleSheetIterator::GetSearchMask() const
