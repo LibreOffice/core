@@ -816,7 +816,7 @@ protected:
     void AddLinkTarget( const OUString& rURL );
     void CollectOutlineBookmarks( const SwDoc &rDoc );
 
-    bool SetAktPageDescFromNode(const SwNode &rNd);
+    bool SetCurrentPageDescFromNode(const SwNode &rNd);
     bool ContentContainsChapterField(const SwFormatContent &rContent) const;
     bool FormatHdFtContainsChapterField(const SwFrameFormat &rFormat) const;
 

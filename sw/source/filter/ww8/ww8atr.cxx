@@ -371,7 +371,7 @@ bool MSWordExportBase::FormatHdFtContainsChapterField(const SwFrameFormat &rForm
     return pFormat && ContentContainsChapterField( pFormat->GetContent() );
 }
 
-bool MSWordExportBase::SetAktPageDescFromNode(const SwNode &rNd)
+bool MSWordExportBase::SetCurrentPageDescFromNode(const SwNode &rNd)
 {
     bool bNewPageDesc = false;
     const SwPageDesc* pCurrent = SwPageDesc::GetPageDescOfNode(rNd);
@@ -513,7 +513,7 @@ void MSWordExportBase::OutputSectionBreaks( const SfxItemSet *pSet, const SwNode
                     if ( pBreak &&
                          pBreak->GetBreak() == SvxBreak::PageBefore )
                     {
-                        bNewPageDesc |= SetAktPageDescFromNode( rNd );
+                        bNewPageDesc |= SetCurrentPageDescFromNode( rNd );
                     }
                     if( isTextNodeEmpty )
                        bNewPageDesc = false;
@@ -555,7 +555,7 @@ void MSWordExportBase::OutputSectionBreaks( const SfxItemSet *pSet, const SwNode
     {
         OSL_ENSURE( m_pCurrentPageDesc, "should not be possible" );
         if ( m_pCurrentPageDesc )
-            bNewPageDesc = SetAktPageDescFromNode( rNd );
+            bNewPageDesc = SetCurrentPageDescFromNode( rNd );
     }
 
     if ( bNewPageDesc && m_pCurrentPageDesc )
