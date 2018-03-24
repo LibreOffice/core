@@ -33,6 +33,24 @@
       "revId": "fcde66ec9391233da221810532fd71bcff87aeae",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_5f3c862f",
+        "filename": "solenv/bin/modules/installer/windows/file.pm",
+        "patchSetId": 3
+      },
+      "lineNbr": 566,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-03-24T11:39:15Z",
+      "side": 1,
+      "message": "Yes - but still, the real-life versions sometimes include the microversion etc: see what I mention in commit message about Liberation family. The two uses of the version field here are: 1. Know when to upgrade the font; and 2. not ignore font installation when OS-detected version is greater than detected by us. Both are better served when we consider the possible extra information, however non-standard it were.\n\nE.g., when Windows thinks that an installed Liberation font has version 2.0.1, and we offer standard-complying 2.0, MSI would not install our font, while removing the existing (as happened with Noto fonts in the tdf#116581). And if a font author would release a minor X.Y.Z+1, it still deserves to be upgraded.",
+      "parentUuid": "9a30ddce_9fefdeaf",
+      "revId": "fcde66ec9391233da221810532fd71bcff87aeae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
