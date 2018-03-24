@@ -685,11 +685,11 @@ public:
     /// has two
     virtual bool CollapseScriptsforWordOk( sal_uInt16 nScript, sal_uInt16 nWhich ) = 0;
 
-    virtual void AppendBookmarks( const SwTextNode& rNd, sal_Int32 nAktPos, sal_Int32 nLen ) = 0;
+    virtual void AppendBookmarks( const SwTextNode& rNd, sal_Int32 nCurrentPos, sal_Int32 nLen ) = 0;
 
     virtual void AppendBookmark( const OUString& rName ) = 0;
 
-    virtual void AppendAnnotationMarks( const SwTextNode& rNd, sal_Int32 nAktPos, sal_Int32 nLen ) = 0;
+    virtual void AppendAnnotationMarks( const SwTextNode& rNd, sal_Int32 nCurrentPos, sal_Int32 nLen ) = 0;
 
     virtual void AppendSmartTags(SwTextNode& /*rTextNode*/) { }
 
@@ -802,10 +802,10 @@ protected:
     virtual void ExportDocument_Impl() = 0;
 
     /// Get the next position in the text node to output
-    sal_Int32 GetNextPos( SwWW8AttrIter const * pAttrIter, const SwTextNode& rNode, sal_Int32 nAktPos );
+    sal_Int32 GetNextPos( SwWW8AttrIter const * pAttrIter, const SwTextNode& rNode, sal_Int32 nCurrentPos );
 
     /// Update the information for GetNextPos().
-    void UpdatePosition( SwWW8AttrIter* pAttrIter, sal_Int32 nAktPos );
+    void UpdatePosition( SwWW8AttrIter* pAttrIter, sal_Int32 nCurrentPos );
 
     /// Output SwTextNode
     virtual void OutputTextNode( SwTextNode& );
@@ -857,18 +857,18 @@ protected:
     /// Find the nearest bookmark from the current position.
     ///
     /// Returns false when there is no bookmark.
-    bool NearestBookmark( sal_Int32& rNearest, const sal_Int32 nAktPos, bool bNextPositionOnly );
+    bool NearestBookmark( sal_Int32& rNearest, const sal_Int32 nCurrentPos, bool bNextPositionOnly );
 
-    void GetSortedBookmarks( const SwTextNode& rNd, sal_Int32 nAktPos, sal_Int32 nLen );
+    void GetSortedBookmarks( const SwTextNode& rNd, sal_Int32 nCurrentPos, sal_Int32 nLen );
 
     bool GetBookmarks( const SwTextNode& rNd, sal_Int32 nStt, sal_Int32 nEnd,
             IMarkVector& rArr );
 
     /// Find the nearest annotation mark from the current position.
     ///
-    void NearestAnnotationMark( sal_Int32& rNearest, const sal_Int32 nAktPos, bool bNextPositionOnly );
+    void NearestAnnotationMark( sal_Int32& rNearest, const sal_Int32 nCurrentPos, bool bNextPositionOnly );
 
-    void GetSortedAnnotationMarks( const SwTextNode& rNd, sal_Int32 nAktPos, sal_Int32 nLen );
+    void GetSortedAnnotationMarks( const SwTextNode& rNd, sal_Int32 nCurrentPos, sal_Int32 nLen );
 
     bool GetAnnotationMarks( const SwTextNode& rNd, sal_Int32 nStt, sal_Int32 nEnd,
             IMarkVector& rArr );
@@ -1053,11 +1053,11 @@ public:
     bool TestOleNeedsGraphic(const SwAttrSet& rSet, tools::SvRef<SotStorage> const & xOleStg,
         tools::SvRef<SotStorage> xObjStg, OUString const &rStorageName, SwOLENode *pOLENd);
 
-    virtual void AppendBookmarks( const SwTextNode& rNd, sal_Int32 nAktPos, sal_Int32 nLen ) override;
+    virtual void AppendBookmarks( const SwTextNode& rNd, sal_Int32 nCurrentPos, sal_Int32 nLen ) override;
     virtual void AppendBookmark( const OUString& rName ) override;
     void AppendBookmarkEndWithCorrection( const OUString& rName );
 
-    virtual void AppendAnnotationMarks( const SwTextNode& rNd, sal_Int32 nAktPos, sal_Int32 nLen ) override;
+    virtual void AppendAnnotationMarks( const SwTextNode& rNd, sal_Int32 nCurrentPos, sal_Int32 nLen ) override;
 
     virtual void AppendSmartTags(SwTextNode& rTextNode) override;
 
@@ -1522,7 +1522,7 @@ public:
     sal_uInt16 GetScript() const { return mnScript; }
     bool IsParaRTL() const { return mbParaIsRTL; }
     rtl_TextEncoding GetCharSet() const { return meChrSet; }
-    OUString GetSnippet(const OUString &rStr, sal_Int32 nAktPos,
+    OUString GetSnippet(const OUString &rStr, sal_Int32 nCurrentPos,
         sal_Int32 nLen) const;
     const SwFormatDrop& GetSwFormatDrop() const { return mrSwFormatDrop; }
 

@@ -1436,12 +1436,12 @@ WW8_CP WW8_WrPct::Fc2Cp( sal_uLong nFc ) const
     return nFc + m_Pcts.back()->GetStartCp();
 }
 
-void WW8Export::AppendBookmarks( const SwTextNode& rNd, sal_Int32 nAktPos, sal_Int32 nLen )
+void WW8Export::AppendBookmarks( const SwTextNode& rNd, sal_Int32 nCurrentPos, sal_Int32 nLen )
 {
     std::vector< const ::sw::mark::IMark* > aArr;
     sal_uInt16 nContent;
-    const sal_Int32 nAktEnd = nAktPos + nLen;
-    if( GetWriter().GetBookmarks( rNd, nAktPos, nAktEnd, aArr ))
+    const sal_Int32 nCurrentEnd = nCurrentPos + nLen;
+    if( GetWriter().GetBookmarks( rNd, nCurrentPos, nCurrentEnd, aArr ))
     {
         sal_uLong nNd = rNd.GetIndex(), nSttCP = Fc2Cp( Strm().Tell() );
         for(const ::sw::mark::IMark* p : aArr)
@@ -1462,33 +1462,33 @@ void WW8Export::AppendBookmarks( const SwTextNode& rNd, sal_Int32 nAktPos, sal_I
             }
 
             if( !pOPos || ( nNd == pPos->nNode.GetIndex() &&
-                ( nContent = pPos->nContent.GetIndex() ) >= nAktPos &&
-                nContent < nAktEnd ) )
+                ( nContent = pPos->nContent.GetIndex() ) >= nCurrentPos &&
+                nContent < nCurrentEnd ) )
             {
-                sal_uLong nCp = nSttCP + pPos->nContent.GetIndex() - nAktPos;
+                sal_uLong nCp = nSttCP + pPos->nContent.GetIndex() - nCurrentPos;
                 m_pBkmks->Append(nCp, BookmarkToWord(rBkmk.GetName()));
             }
             if( pOPos && nNd == pOPos->nNode.GetIndex() &&
-                ( nContent = pOPos->nContent.GetIndex() ) >= nAktPos &&
-                nContent < nAktEnd )
+                ( nContent = pOPos->nContent.GetIndex() ) >= nCurrentPos &&
+                nContent < nCurrentEnd )
             {
-                sal_uLong nCp = nSttCP + pOPos->nContent.GetIndex() - nAktPos;
+                sal_uLong nCp = nSttCP + pOPos->nContent.GetIndex() - nCurrentPos;
                 m_pBkmks->Append(nCp, BookmarkToWord(rBkmk.GetName()));
             }
         }
     }
 }
 
-void WW8Export::AppendAnnotationMarks(const SwTextNode& rNode, sal_Int32 nAktPos, sal_Int32 nLen)
+void WW8Export::AppendAnnotationMarks(const SwTextNode& rNode, sal_Int32 nCurrentPos, sal_Int32 nLen)
 {
     IMarkVector aMarks;
-    if (GetAnnotationMarks(rNode, nAktPos, nAktPos + nLen, aMarks))
+    if (GetAnnotationMarks(rNode, nCurrentPos, nCurrentPos + nLen, aMarks))
     {
         for (IMarkVector::const_iterator it = aMarks.begin(), end = aMarks.end(); it != end; ++it)
         {
             sw::mark::IMark* pMark = (*it);
             const sal_Int32 nStart = pMark->GetMarkStart().nContent.GetIndex();
-            if (nStart == nAktPos)
+            if (nStart == nCurrentPos)
             {
                 m_pAtn->AddRangeStartPosition(pMark->GetName(), Fc2Cp(Strm().Tell()));
             }

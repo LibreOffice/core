@@ -109,23 +109,23 @@ bool RtfExport::CollapseScriptsforWordOk(sal_uInt16 nScript, sal_uInt16 nWhich)
     return true;
 }
 
-void RtfExport::AppendBookmarks(const SwTextNode& rNode, sal_Int32 nAktPos, sal_Int32 nLen)
+void RtfExport::AppendBookmarks(const SwTextNode& rNode, sal_Int32 nCurrentPos, sal_Int32 nLen)
 {
     std::vector<OUString> aStarts;
     std::vector<OUString> aEnds;
 
     IMarkVector aMarks;
-    if (GetBookmarks(rNode, nAktPos, nAktPos + nLen, aMarks))
+    if (GetBookmarks(rNode, nCurrentPos, nCurrentPos + nLen, aMarks))
     {
         for (const auto& pMark : aMarks)
         {
             const sal_Int32 nStart = pMark->GetMarkStart().nContent.GetIndex();
             const sal_Int32 nEnd = pMark->GetMarkEnd().nContent.GetIndex();
 
-            if (nStart == nAktPos)
+            if (nStart == nCurrentPos)
                 aStarts.push_back(pMark->GetName());
 
-            if (nEnd == nAktPos)
+            if (nEnd == nCurrentPos)
                 aEnds.push_back(pMark->GetName());
         }
     }
@@ -144,23 +144,24 @@ void RtfExport::AppendBookmark(const OUString& rName)
     m_pAttrOutput->WriteBookmarks_Impl(aStarts, aEnds);
 }
 
-void RtfExport::AppendAnnotationMarks(const SwTextNode& rNode, sal_Int32 nAktPos, sal_Int32 nLen)
+void RtfExport::AppendAnnotationMarks(const SwTextNode& rNode, sal_Int32 nCurrentPos,
+                                      sal_Int32 nLen)
 {
     std::vector<OUString> aStarts;
     std::vector<OUString> aEnds;
 
     IMarkVector aMarks;
-    if (GetAnnotationMarks(rNode, nAktPos, nAktPos + nLen, aMarks))
+    if (GetAnnotationMarks(rNode, nCurrentPos, nCurrentPos + nLen, aMarks))
     {
         for (const auto& pMark : aMarks)
         {
             const sal_Int32 nStart = pMark->GetMarkStart().nContent.GetIndex();
             const sal_Int32 nEnd = pMark->GetMarkEnd().nContent.GetIndex();
 
-            if (nStart == nAktPos)
+            if (nStart == nCurrentPos)
                 aStarts.push_back(pMark->GetName());
 
-            if (nEnd == nAktPos)
+            if (nEnd == nCurrentPos)
                 aEnds.push_back(pMark->GetName());
         }
     }

@@ -69,11 +69,12 @@ public:
     /// Guess the script (asian/western).
     bool CollapseScriptsforWordOk(sal_uInt16 nScript, sal_uInt16 nWhich) override;
 
-    void AppendBookmarks(const SwTextNode& rNode, sal_Int32 nAktPos, sal_Int32 nLen) override;
+    void AppendBookmarks(const SwTextNode& rNode, sal_Int32 nCurrentPos, sal_Int32 nLen) override;
 
     void AppendBookmark(const OUString& rName) override;
 
-    void AppendAnnotationMarks(const SwTextNode& rNode, sal_Int32 nAktPos, sal_Int32 nLen) override;
+    void AppendAnnotationMarks(const SwTextNode& rNode, sal_Int32 nCurrentPos,
+                               sal_Int32 nLen) override;
 
     //For i120928,add an interface to export graphic of bullet
     void ExportGrfBullet(const SwTextNode& rNd) override;
