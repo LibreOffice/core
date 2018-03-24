@@ -51,6 +51,24 @@
       "revId": "fcde66ec9391233da221810532fd71bcff87aeae",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_1f112ead",
+        "filename": "solenv/bin/modules/installer/windows/file.pm",
+        "patchSetId": 3
+      },
+      "lineNbr": 566,
+      "author": {
+        "id": 1000381
+      },
+      "writtenOn": "2018-03-24T11:43:38Z",
+      "side": 1,
+      "message": "I see, didn’t notice the Liberation version with all the other zeros. Makes sens to support it then.",
+      "parentUuid": "9a30ddce_5f3c862f",
+      "revId": "fcde66ec9391233da221810532fd71bcff87aeae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
