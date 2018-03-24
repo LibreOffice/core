@@ -894,7 +894,7 @@ bool SdrView::DoMouseEvent(const SdrViewEvent& rVEvt)
         case SdrEventKind::BeginDragHelpline: bRet=BegDragHelpLine(rVEvt.nHlplIdx,rVEvt.pPV); break;
         case SdrEventKind::BeginDragObj: bRet=BegDragObj(aLogicPos,nullptr,rVEvt.pHdl,mnMinMovLog); break;
         case SdrEventKind::BeginCreateObj: {
-            if (nAktInvent==SdrInventor::Default && nAktIdent==OBJ_CAPTION) {
+            if (nCurrentInvent==SdrInventor::Default && nCurrentIdent==OBJ_CAPTION) {
                 long nHgt=SdrEngineDefaults::GetFontHeight();
                 bRet=BegCreateCaptionObj(aLogicPos,Size(5*nHgt,2*nHgt));
             } else bRet=BegCreateObj(aLogicPos);
@@ -998,7 +998,7 @@ Pointer SdrView::GetPreferredPointer(const Point& rMousePos, const OutputDevice*
     switch (eEvent)
     {
         case SdrEventKind::BeginCreateObj:
-            return aAktCreatePointer;
+            return aCurrentCreatePointer;
         case SdrEventKind::MarkObj:
             return Pointer(PointerStyle::Move);
         case SdrEventKind::BeginMark:
@@ -1153,7 +1153,7 @@ Pointer SdrView::GetPreferredPointer(const Point& rMousePos, const OutputDevice*
             return Pointer(PointerStyle::Move);
         }
     }
-    if (meEditMode==SdrViewEditMode::Create) return aAktCreatePointer;
+    if (meEditMode==SdrViewEditMode::Create) return aCurrentCreatePointer;
     return Pointer(PointerStyle::Arrow);
 }
 
