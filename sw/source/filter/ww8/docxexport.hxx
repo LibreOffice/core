@@ -137,11 +137,11 @@ public:
     /// Guess the script (asian/western).
     virtual bool CollapseScriptsforWordOk( sal_uInt16 nScript, sal_uInt16 nWhich ) override;
 
-    virtual void AppendBookmarks( const SwTextNode& rNode, sal_Int32 nAktPos, sal_Int32 nLen ) override;
+    virtual void AppendBookmarks( const SwTextNode& rNode, sal_Int32 nCurrentPos, sal_Int32 nLen ) override;
 
     virtual void AppendBookmark( const OUString& rName ) override;
 
-    virtual void AppendAnnotationMarks( const SwTextNode& rNode, sal_Int32 nAktPos, sal_Int32 nLen ) override;
+    virtual void AppendAnnotationMarks( const SwTextNode& rNode, sal_Int32 nCurrentPos, sal_Int32 nLen ) override;
 
     virtual void ExportGrfBullet(const SwTextNode&) override;
 
