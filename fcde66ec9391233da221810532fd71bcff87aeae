@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_7ff22a9c",
+        "filename": "solenv/bin/modules/installer/windows/file.pm",
+        "patchSetId": 3
+      },
+      "lineNbr": 556,
+      "author": {
+        "id": 1000381
+      },
+      "writtenOn": "2018-03-24T11:31:00Z",
+      "side": 1,
+      "message": "While at it, you might want to check for .ttc (font collections) in case we added any in the future.",
+      "revId": "fcde66ec9391233da221810532fd71bcff87aeae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_9fefdeaf",
+        "filename": "solenv/bin/modules/installer/windows/file.pm",
+        "patchSetId": 3
+      },
+      "lineNbr": 566,
+      "author": {
+        "id": 1000381
+      },
+      "writtenOn": "2018-03-24T11:31:00Z",
+      "side": 1,
+      "message": "The font version as defined in the spec has the syntax \"Version ([0-9]+)\\.([0-9]+).*\"; only major and minor versions are defined and anything else should be discarded.",
+      "revId": "fcde66ec9391233da221810532fd71bcff87aeae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
