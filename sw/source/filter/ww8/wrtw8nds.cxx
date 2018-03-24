@@ -1700,13 +1700,13 @@ Convert characters that need to be converted, the basic replacements and the
 ridiculously complicated title case attribute mapping to hardcoded upper case
 because word doesn't have the feature
 */
-OUString SwWW8AttrIter::GetSnippet(const OUString &rStr, sal_Int32 nAktPos,
+OUString SwWW8AttrIter::GetSnippet(const OUString &rStr, sal_Int32 nCurrentPos,
     sal_Int32 nLen) const
 {
     if (!nLen)
         return OUString();
 
-    OUString aSnippet(rStr.copy(nAktPos, nLen));
+    OUString aSnippet(rStr.copy(nCurrentPos, nLen));
     // 0x0a     ( Hard Line Break ) -> 0x0b
     // 0xad     ( soft hyphen )     -> 0x1f
     // 0x2011   ( hard hyphen )     -> 0x1e
@@ -1714,7 +1714,7 @@ OUString SwWW8AttrIter::GetSnippet(const OUString &rStr, sal_Int32 nAktPos,
     aSnippet = aSnippet.replace(CHAR_HARDHYPHEN, 0x1e);
     aSnippet = aSnippet.replace(CHAR_SOFTHYPHEN, 0x1f);
 
-    m_rExport.m_aCurrentCharPropStarts.push( nAktPos );
+    m_rExport.m_aCurrentCharPropStarts.push( nCurrentPos );
     const SfxPoolItem &rItem = GetItem(RES_CHRATR_CASEMAP);
 
     if (SvxCaseMap::Capitalize == static_cast<const SvxCaseMapItem&>(rItem).GetValue())
@@ -1746,10 +1746,10 @@ OUString SwWW8AttrIter::GetSnippet(const OUString &rStr, sal_Int32 nAktPos,
         //not done before doing the casemap because the sequence might start
         //with whitespace
         if (!g_pBreakIt->GetBreakIter()->isBeginWord(
-            rStr, nAktPos, g_pBreakIt->GetLocale(nLanguage),
+            rStr, nCurrentPos, g_pBreakIt->GetLocale(nLanguage),
             i18n::WordType::ANYWORD_IGNOREWHITESPACES ) )
         {
-            aSnippet = OUStringLiteral1(rStr[nAktPos]) + aSnippet.copy(1);
+            aSnippet = OUStringLiteral1(rStr[nCurrentPos]) + aSnippet.copy(1);
         }
     }
     m_rExport.m_aCurrentCharPropStarts.pop();
@@ -1851,32 +1851,32 @@ void WW8AttributeOutput::FormatDrop( const SwTextNode& rNode, const SwFormatDrop
     m_rWW8Export.pO->clear();
 }
 
-sal_Int32 MSWordExportBase::GetNextPos( SwWW8AttrIter const * aAttrIter, const SwTextNode& rNode, sal_Int32 nAktPos )
+sal_Int32 MSWordExportBase::GetNextPos( SwWW8AttrIter const * aAttrIter, const SwTextNode& rNode, sal_Int32 nCurrentPos )
 {
     // Get the bookmarks for the normal run
     const sal_Int32 nNextPos = aAttrIter->WhereNext();
     sal_Int32 nNextBookmark = nNextPos;
     sal_Int32 nNextAnnotationMark = nNextPos;
 
-    if( nNextBookmark > nAktPos ) //no need to search for bookmarks otherwise (checked in UpdatePosition())
+    if( nNextBookmark > nCurrentPos ) //no need to search for bookmarks otherwise (checked in UpdatePosition())
     {
-        GetSortedBookmarks( rNode, nAktPos, nNextBookmark - nAktPos );
-        NearestBookmark( nNextBookmark, nAktPos, false );
-        GetSortedAnnotationMarks( rNode, nAktPos, nNextAnnotationMark - nAktPos );
-        NearestAnnotationMark( nNextAnnotationMark, nAktPos, false );
+        GetSortedBookmarks( rNode, nCurrentPos, nNextBookmark - nCurrentPos );
+        NearestBookmark( nNextBookmark, nCurrentPos, false );
+        GetSortedAnnotationMarks( rNode, nCurrentPos, nNextAnnotationMark - nCurrentPos );
+        NearestAnnotationMark( nNextAnnotationMark, nCurrentPos, false );
     }
     return std::min( nNextPos, std::min( nNextBookmark, nNextAnnotationMark ) );
 }
 
-void MSWordExportBase::UpdatePosition( SwWW8AttrIter* aAttrIter, sal_Int32 nAktPos )
+void MSWordExportBase::UpdatePosition( SwWW8AttrIter* aAttrIter, sal_Int32 nCurrentPos )
 {
     sal_Int32 nNextPos;
 
     // go to next attribute if no bookmark is found or if the bookmark is after the next attribute position
     // It may happened that the WhereNext() wasn't used in the previous increment because there was a
     // bookmark before it. Use that position before trying to find another one.
-    bool bNextBookmark = NearestBookmark( nNextPos, nAktPos, true );
-    if( nAktPos == aAttrIter->WhereNext() && ( !bNextBookmark || nNextPos > aAttrIter->WhereNext() ) )
+    bool bNextBookmark = NearestBookmark( nNextPos, nCurrentPos, true );
+    if( nCurrentPos == aAttrIter->WhereNext() && ( !bNextBookmark || nNextPos > aAttrIter->WhereNext() ) )
         aAttrIter->NextPos();
 }
 
@@ -1964,7 +1964,7 @@ public:
     }
 };
 
-bool MSWordExportBase::NearestBookmark( sal_Int32& rNearest, const sal_Int32 nAktPos, bool bNextPositionOnly )
+bool MSWordExportBase::NearestBookmark( sal_Int32& rNearest, const sal_Int32 nCurrentPos, bool bNextPositionOnly )
 {
     bool bHasBookmark = false;
 
@@ -1972,7 +1972,7 @@ bool MSWordExportBase::NearestBookmark( sal_Int32& rNearest, const sal_Int32 nAk
     {
         IMark* pMarkStart = m_rSortedBookmarksStart.front();
         const sal_Int32 nNext = pMarkStart->GetMarkStart().nContent.GetIndex();
-        if( !bNextPositionOnly || (nNext > nAktPos ))
+        if( !bNextPositionOnly || (nNext > nCurrentPos ))
         {
             rNearest = nNext;
             bHasBookmark = true;
@@ -1983,7 +1983,7 @@ bool MSWordExportBase::NearestBookmark( sal_Int32& rNearest, const sal_Int32 nAk
     {
         IMark* pMarkEnd = m_rSortedBookmarksEnd[0];
         const sal_Int32 nNext = pMarkEnd->GetMarkEnd().nContent.GetIndex();
-        if( !bNextPositionOnly || nNext > nAktPos )
+        if( !bNextPositionOnly || nNext > nCurrentPos )
         {
             if ( !bHasBookmark )
                 rNearest = nNext;
@@ -1996,7 +1996,7 @@ bool MSWordExportBase::NearestBookmark( sal_Int32& rNearest, const sal_Int32 nAk
     return bHasBookmark;
 }
 
-void MSWordExportBase::NearestAnnotationMark( sal_Int32& rNearest, const sal_Int32 nAktPos, bool bNextPositionOnly )
+void MSWordExportBase::NearestAnnotationMark( sal_Int32& rNearest, const sal_Int32 nCurrentPos, bool bNextPositionOnly )
 {
     bool bHasAnnotationMark = false;
 
@@ -2004,7 +2004,7 @@ void MSWordExportBase::NearestAnnotationMark( sal_Int32& rNearest, const sal_Int
     {
         IMark* pMarkStart = m_rSortedAnnotationMarksStart.front();
         const sal_Int32 nNext = pMarkStart->GetMarkStart().nContent.GetIndex();
-        if( !bNextPositionOnly || (nNext > nAktPos ))
+        if( !bNextPositionOnly || (nNext > nCurrentPos ))
         {
             rNearest = nNext;
             bHasAnnotationMark = true;
@@ -2015,7 +2015,7 @@ void MSWordExportBase::NearestAnnotationMark( sal_Int32& rNearest, const sal_Int
     {
         IMark* pMarkEnd = m_rSortedAnnotationMarksEnd[0];
         const sal_Int32 nNext = pMarkEnd->GetMarkEnd().nContent.GetIndex();
-        if( !bNextPositionOnly || nNext > nAktPos )
+        if( !bNextPositionOnly || nNext > nCurrentPos )
         {
             if ( !bHasAnnotationMark )
                 rNearest = nNext;
@@ -2025,10 +2025,10 @@ void MSWordExportBase::NearestAnnotationMark( sal_Int32& rNearest, const sal_Int
     }
 }
 
-void MSWordExportBase::GetSortedAnnotationMarks( const SwTextNode& rNode, sal_Int32 nAktPos, sal_Int32 nLen )
+void MSWordExportBase::GetSortedAnnotationMarks( const SwTextNode& rNode, sal_Int32 nCurrentPos, sal_Int32 nLen )
 {
     IMarkVector aMarksStart;
-    if ( GetAnnotationMarks( rNode, nAktPos, nAktPos + nLen, aMarksStart ) )
+    if ( GetAnnotationMarks( rNode, nCurrentPos, nCurrentPos + nLen, aMarksStart ) )
     {
         IMarkVector aSortedEnd;
         IMarkVector aSortedStart;
@@ -2041,10 +2041,10 @@ void MSWordExportBase::GetSortedAnnotationMarks( const SwTextNode& rNode, sal_In
             const sal_Int32 nStart = pMark->GetMarkStart().nContent.GetIndex();
             const sal_Int32 nEnd = pMark->GetMarkEnd().nContent.GetIndex();
 
-            if ( nStart > nAktPos && ( pMark->GetMarkStart().nNode == rNode.GetIndex()) )
+            if ( nStart > nCurrentPos && ( pMark->GetMarkStart().nNode == rNode.GetIndex()) )
                 aSortedStart.push_back( pMark );
 
-            if ( nEnd > nAktPos && nEnd <= ( nAktPos + nLen ) && (pMark->GetMarkEnd().nNode == rNode.GetIndex()) )
+            if ( nEnd > nCurrentPos && nEnd <= ( nCurrentPos + nLen ) && (pMark->GetMarkEnd().nNode == rNode.GetIndex()) )
                 aSortedEnd.push_back( pMark );
         }
 
@@ -2061,10 +2061,10 @@ void MSWordExportBase::GetSortedAnnotationMarks( const SwTextNode& rNode, sal_In
     }
 }
 
-void MSWordExportBase::GetSortedBookmarks( const SwTextNode& rNode, sal_Int32 nAktPos, sal_Int32 nLen )
+void MSWordExportBase::GetSortedBookmarks( const SwTextNode& rNode, sal_Int32 nCurrentPos, sal_Int32 nLen )
 {
     IMarkVector aMarksStart;
-    if ( GetBookmarks( rNode, nAktPos, nAktPos + nLen, aMarksStart ) )
+    if ( GetBookmarks( rNode, nCurrentPos, nCurrentPos + nLen, aMarksStart ) )
     {
         IMarkVector aSortedEnd;
         IMarkVector aSortedStart;
@@ -2077,10 +2077,10 @@ void MSWordExportBase::GetSortedBookmarks( const SwTextNode& rNode, sal_Int32 nA
             const sal_Int32 nStart = pMark->GetMarkStart().nContent.GetIndex();
             const sal_Int32 nEnd = pMark->GetMarkEnd().nContent.GetIndex();
 
-            if ( nStart > nAktPos && ( pMark->GetMarkStart().nNode == rNode.GetIndex()) )
+            if ( nStart > nCurrentPos && ( pMark->GetMarkStart().nNode == rNode.GetIndex()) )
                 aSortedStart.push_back( pMark );
 
-            if ( nEnd > nAktPos && nEnd <= ( nAktPos + nLen ) && (pMark->GetMarkEnd().nNode == rNode.GetIndex()) )
+            if ( nEnd > nCurrentPos && nEnd <= ( nCurrentPos + nLen ) && (pMark->GetMarkEnd().nNode == rNode.GetIndex()) )
                 aSortedEnd.push_back( pMark );
         }
 
@@ -2209,7 +2209,7 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
     // iterate through portions on different pages
     do
     {
-        sal_Int32 nAktPos = *aBreakIt;
+        sal_Int32 nCurrentPos = *aBreakIt;
 
         if( softBreakList.size() > 1 ) // not for empty paragraph
             ++aBreakIt;
@@ -2259,25 +2259,25 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
 
         do {
 
-            const SwRedlineData* pRedlineData = aAttrIter.GetRunLevelRedline( nAktPos );
+            const SwRedlineData* pRedlineData = aAttrIter.GetRunLevelRedline( nCurrentPos );
             FlyProcessingState nStateOfFlyFrame = FLY_PROCESSED;
             bool bPostponeWritingText    = false ;
             OUString aSavedSnippet ;
 
-            sal_Int32 nNextAttr = GetNextPos( &aAttrIter, rNode, nAktPos );
+            sal_Int32 nNextAttr = GetNextPos( &aAttrIter, rNode, nCurrentPos );
 
             // Skip un-exportable attributes.
-            if (!aAttrIter.IsExportableAttr(nAktPos))
+            if (!aAttrIter.IsExportableAttr(nCurrentPos))
             {
-                nAktPos = nNextAttr;
-                UpdatePosition(&aAttrIter, nAktPos);
+                nCurrentPos = nNextAttr;
+                UpdatePosition(&aAttrIter, nCurrentPos);
                 eChrSet = aAttrIter.GetCharSet();
                 continue;
             }
 
             // Is this the only run in this paragraph and it's empty?
-            bool bSingleEmptyRun = nAktPos == 0 && nNextAttr == 0;
-            AttrOutput().StartRun( pRedlineData, nAktPos, bSingleEmptyRun );
+            bool bSingleEmptyRun = nCurrentPos == 0 && nNextAttr == 0;
+            AttrOutput().StartRun( pRedlineData, nCurrentPos, bSingleEmptyRun );
 
             if( nNextAttr > nEnd )
                 nNextAttr = nEnd;
@@ -2286,8 +2286,8 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
             {
                 if( AttrOutput().FootnoteEndnoteRefTag() )
                 {
-                    AttrOutput().EndRun( &rNode, nAktPos, nNextAttr == nEnd );
-                    AttrOutput().StartRun( pRedlineData, nAktPos, bSingleEmptyRun );
+                    AttrOutput().EndRun( &rNode, nCurrentPos, nNextAttr == nEnd );
+                    AttrOutput().StartRun( pRedlineData, nCurrentPos, bSingleEmptyRun );
                 }
             }
 
@@ -2306,32 +2306,32 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
                 bPostponeWritingText = true ;
             }
 
-            nStateOfFlyFrame = aAttrIter.OutFlys( nAktPos );
+            nStateOfFlyFrame = aAttrIter.OutFlys( nCurrentPos );
             AttrOutput().SetStateOfFlyFrame( nStateOfFlyFrame );
             AttrOutput().SetAnchorIsLinkedToNode( bPostponeWritingText && (FLY_POSTPONED != nStateOfFlyFrame) );
             // Append bookmarks in this range after flys, exclusive of final
             // position of this range
-            AppendBookmarks( rNode, nAktPos, nNextAttr - nAktPos );
-            AppendAnnotationMarks( rNode, nAktPos, nNextAttr - nAktPos );
+            AppendBookmarks( rNode, nCurrentPos, nNextAttr - nCurrentPos );
+            AppendAnnotationMarks( rNode, nCurrentPos, nNextAttr - nCurrentPos );
 
             // At the moment smarttags are only written for paragraphs, at the
             // beginning of the paragraph.
-            if (nAktPos == 0)
+            if (nCurrentPos == 0)
                 AppendSmartTags(rNode);
 
-            bool bTextAtr = aAttrIter.IsTextAttr( nAktPos );
-            nOpenAttrWithRange += aAttrIter.OutAttrWithRange( rNode, nAktPos );
+            bool bTextAtr = aAttrIter.IsTextAttr( nCurrentPos );
+            nOpenAttrWithRange += aAttrIter.OutAttrWithRange( rNode, nCurrentPos );
 
-            sal_Int32 nLen = nNextAttr - nAktPos;
+            sal_Int32 nLen = nNextAttr - nCurrentPos;
             if ( !bTextAtr && nLen )
             {
-                sal_Unicode ch = aStr[nAktPos];
+                sal_Unicode ch = aStr[nCurrentPos];
                 const sal_Int32 ofs = ( ch == CH_TXT_ATR_FIELDSTART || ch == CH_TXT_ATR_FIELDEND || ch == CH_TXT_ATR_FORMELEMENT? 1 : 0 );
 
                 IDocumentMarkAccess* const pMarkAccess = m_pDoc->getIDocumentMarkAccess();
                 if ( ch == CH_TXT_ATR_FIELDSTART )
                 {
-                    SwPosition aPosition( rNode, SwIndex( &rNode, nAktPos ) );
+                    SwPosition aPosition( rNode, SwIndex( &rNode, nCurrentPos ) );
                     ::sw::mark::IFieldmark const * const pFieldmark = pMarkAccess->getFieldmarkFor( aPosition );
                     OSL_ENSURE( pFieldmark, "Looks like this doc is broken...; where is the Fieldmark for the FIELDSTART??" );
 
@@ -2380,7 +2380,7 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
                 }
                 else if ( ch == CH_TXT_ATR_FIELDEND )
                 {
-                    SwPosition aPosition( rNode, SwIndex( &rNode, nAktPos ) );
+                    SwPosition aPosition( rNode, SwIndex( &rNode, nCurrentPos ) );
                     ::sw::mark::IFieldmark const * const pFieldmark = pMarkAccess->getFieldmarkFor( aPosition );
 
                     OSL_ENSURE( pFieldmark, "Looks like this doc is broken...; where is the Fieldmark for the FIELDEND??" );
@@ -2404,7 +2404,7 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
                 }
                 else if ( ch == CH_TXT_ATR_FORMELEMENT )
                 {
-                    SwPosition aPosition( rNode, SwIndex( &rNode, nAktPos ) );
+                    SwPosition aPosition( rNode, SwIndex( &rNode, nCurrentPos ) );
                     ::sw::mark::IFieldmark const * const pFieldmark = pMarkAccess->getFieldmarkFor( aPosition );
                     OSL_ENSURE( pFieldmark, "Looks like this doc is broken...; where is the Fieldmark for the FIELDSTART??" );
 
@@ -2425,13 +2425,13 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
                 nLen -= ofs;
 
                 // if paragraph needs to be split, write only until split position
-                assert(!bNeedParaSplit || nAktPos <= *aBreakIt);
-                if( bNeedParaSplit && nAktPos + ofs + nLen > *aBreakIt)
-                    nLen = *aBreakIt - nAktPos - ofs;
+                assert(!bNeedParaSplit || nCurrentPos <= *aBreakIt);
+                if( bNeedParaSplit && nCurrentPos + ofs + nLen > *aBreakIt)
+                    nLen = *aBreakIt - nCurrentPos - ofs;
                 assert(0 <= nLen);
 
-                OUString aSnippet( aAttrIter.GetSnippet( aStr, nAktPos + ofs, nLen ) );
-                if ( ( m_nTextTyp == TXT_EDN || m_nTextTyp == TXT_FTN ) && nAktPos == 0 && nLen > 0 )
+                OUString aSnippet( aAttrIter.GetSnippet( aStr, nCurrentPos + ofs, nLen ) );
+                if ( ( m_nTextTyp == TXT_EDN || m_nTextTyp == TXT_FTN ) && nCurrentPos == 0 && nLen > 0 )
                 {
                     // Allow MSO to emulate LO footnote text starting at left margin - only meaningful with hanging indent
                     sal_Int32 nFirstLineIndent=0;
@@ -2471,7 +2471,7 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
                 // Output the character attributes
                 // #i51277# do this before writing flys at end of paragraph
                 AttrOutput().StartRunProperties();
-                aAttrIter.OutAttr( nAktPos );
+                aAttrIter.OutAttr( nCurrentPos );
                 AttrOutput().EndRunProperties( pRedlineData );
             }
 
@@ -2514,7 +2514,7 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
                 // do it after WriteCR for an empty paragraph (otherwise
                 // WW8_WrFkp::Append throws SPRMs away...)
                 AttrOutput().StartRunProperties();
-                aAttrIter.OutAttr( nAktPos );
+                aAttrIter.OutAttr( nCurrentPos );
                 AttrOutput().EndRunProperties( pRedlineData );
             }
 
@@ -2524,7 +2524,7 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
                 OSL_ENSURE(nOpenAttrWithRange >= 0,
                         "odd to see this happening, expected >= 0");
                 bool bAttrWithRange = (nOpenAttrWithRange > 0);
-                if ( nAktPos != nEnd )
+                if ( nCurrentPos != nEnd )
                 {
                     nOpenAttrWithRange += aAttrIter.OutAttrWithRange( rNode, nEnd );
                     OSL_ENSURE(nOpenAttrWithRange == 0,
@@ -2575,34 +2575,34 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
 
             if( bPostponeWritingText && FLY_PROCESSED == nStateOfFlyFrame )
             {
-                AttrOutput().EndRun(&rNode, nAktPos, nNextAttr == nEnd);
+                AttrOutput().EndRun(&rNode, nCurrentPos, nNextAttr == nEnd);
                 //write the postponed text run
-                AttrOutput().StartRun( pRedlineData, nAktPos, bSingleEmptyRun );
+                AttrOutput().StartRun( pRedlineData, nCurrentPos, bSingleEmptyRun );
                 AttrOutput().SetAnchorIsLinkedToNode( false );
                 AttrOutput().ResetFlyProcessingFlag();
                 if (0 != nEnd)
                 {
                     AttrOutput().StartRunProperties();
-                    aAttrIter.OutAttr( nAktPos );
+                    aAttrIter.OutAttr( nCurrentPos );
                     AttrOutput().EndRunProperties( pRedlineData );
                 }
                 AttrOutput().RunText( aSavedSnippet, eChrSet );
-                AttrOutput().EndRun(&rNode, nAktPos, nNextAttr == nEnd);
+                AttrOutput().EndRun(&rNode, nCurrentPos, nNextAttr == nEnd);
             }
             else if( bPostponeWritingText && !aSavedSnippet.isEmpty() )
             {
                 //write the postponed text run
                 AttrOutput().RunText( aSavedSnippet, eChrSet );
-                AttrOutput().EndRun(&rNode, nAktPos, nNextAttr == nEnd);
+                AttrOutput().EndRun(&rNode, nCurrentPos, nNextAttr == nEnd);
             }
             else
-                AttrOutput().EndRun(&rNode, nAktPos, nNextAttr == nEnd);
+                AttrOutput().EndRun(&rNode, nCurrentPos, nNextAttr == nEnd);
 
-            nAktPos = nNextAttr;
-            UpdatePosition( &aAttrIter, nAktPos );
+            nCurrentPos = nNextAttr;
+            UpdatePosition( &aAttrIter, nCurrentPos );
             eChrSet = aAttrIter.GetCharSet();
         }
-        while ( nAktPos < nEnd );
+        while ( nCurrentPos < nEnd );
 
         // if paragraph is split, put the section break between the parts
         if( bNeedParaSplit && *aBreakIt != rNode.GetText().getLength() )

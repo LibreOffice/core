@@ -144,13 +144,13 @@ bool DocxExport::CollapseScriptsforWordOk( sal_uInt16 nScript, sal_uInt16 nWhich
     return true;
 }
 
-void DocxExport::AppendBookmarks( const SwTextNode& rNode, sal_Int32 nAktPos, sal_Int32 nLen )
+void DocxExport::AppendBookmarks( const SwTextNode& rNode, sal_Int32 nCurrentPos, sal_Int32 nLen )
 {
     std::vector< OUString > aStarts;
     std::vector< OUString > aEnds;
 
     IMarkVector aMarks;
-    if ( GetBookmarks( rNode, nAktPos, nAktPos + nLen, aMarks ) )
+    if ( GetBookmarks( rNode, nCurrentPos, nCurrentPos + nLen, aMarks ) )
     {
         for ( IMarkVector::const_iterator it = aMarks.begin(), end = aMarks.end();
               it != end; ++it )
@@ -160,10 +160,10 @@ void DocxExport::AppendBookmarks( const SwTextNode& rNode, sal_Int32 nAktPos, sa
             const sal_Int32 nStart = pMark->GetMarkStart().nContent.GetIndex();
             const sal_Int32 nEnd = pMark->GetMarkEnd().nContent.GetIndex();
 
-            if ( nStart == nAktPos )
+            if ( nStart == nCurrentPos )
                 aStarts.push_back( pMark->GetName() );
 
-            if ( nEnd == nAktPos )
+            if ( nEnd == nCurrentPos )
                 aEnds.push_back( pMark->GetName() );
         }
     }
@@ -171,7 +171,7 @@ void DocxExport::AppendBookmarks( const SwTextNode& rNode, sal_Int32 nAktPos, sa
     const OUString& aStr( rNode.GetText() );
     const sal_Int32 nEnd = aStr.getLength();
 
-    if ( nAktPos == nEnd )
+    if ( nCurrentPos == nEnd )
         m_pAttrOutput->WriteFinalBookmarks_Impl( aStarts, aEnds );
     else
         m_pAttrOutput->WriteBookmarks_Impl( aStarts, aEnds );
@@ -188,13 +188,13 @@ void DocxExport::AppendBookmark( const OUString& rName )
     m_pAttrOutput->WriteBookmarks_Impl( aStarts, aEnds );
 }
 
-void DocxExport::AppendAnnotationMarks( const SwTextNode& rNode, sal_Int32 nAktPos, sal_Int32 nLen )
+void DocxExport::AppendAnnotationMarks( const SwTextNode& rNode, sal_Int32 nCurrentPos, sal_Int32 nLen )
 {
     std::vector< OUString > aStarts;
     std::vector< OUString > aEnds;
 
     IMarkVector aMarks;
-    if ( GetAnnotationMarks( rNode, nAktPos, nAktPos + nLen, aMarks ) )
+    if ( GetAnnotationMarks( rNode, nCurrentPos, nCurrentPos + nLen, aMarks ) )
     {
         for ( IMarkVector::const_iterator it = aMarks.begin(), end = aMarks.end();
               it != end; ++it )
@@ -204,10 +204,10 @@ void DocxExport::AppendAnnotationMarks( const SwTextNode& rNode, sal_Int32 nAktP
             const sal_Int32 nStart = pMark->GetMarkStart().nContent.GetIndex();
             const sal_Int32 nEnd = pMark->GetMarkEnd().nContent.GetIndex();
 
-            if ( nStart == nAktPos )
+            if ( nStart == nCurrentPos )
                 aStarts.push_back( pMark->GetName() );
 
-            if ( nEnd == nAktPos )
+            if ( nEnd == nCurrentPos )
                 aEnds.push_back( pMark->GetName() );
         }
     }
@@ -1504,35 +1504,35 @@ void DocxExport::WriteOutliner(const OutlinerParaObject& rParaObj, sal_uInt8 nTy
         AttrOutput().StartParagraph( ww8::WW8TableNodeInfo::Pointer_t());
         rtl_TextEncoding eChrSet = aAttrIter.GetNodeCharSet();
         OUString aStr( rEditObj.GetText( n ));
-        sal_Int32 nAktPos = 0;
+        sal_Int32 nCurrentPos = 0;
         const sal_Int32 nEnd = aStr.getLength();
         do {
             AttrOutput().StartRun( nullptr, 0 );
             const sal_Int32 nNextAttr = std::min(aAttrIter.WhereNext(), nEnd);
             rtl_TextEncoding eNextChrSet = aAttrIter.GetNextCharSet();
 
-            bool bTextAtr = aAttrIter.IsTextAttr( nAktPos );
+            bool bTextAtr = aAttrIter.IsTextAttr( nCurrentPos );
             if( !bTextAtr )
             {
-                if( nAktPos == 0 && nNextAttr - nAktPos == aStr.getLength())
+                if( nCurrentPos == 0 && nNextAttr - nCurrentPos == aStr.getLength())
                     AttrOutput().RunText( aStr, eChrSet );
                 else
                 {
-                    OUString tmp( aStr.copy( nAktPos, nNextAttr - nAktPos ));
+                    OUString tmp( aStr.copy( nCurrentPos, nNextAttr - nCurrentPos ));
                     AttrOutput().RunText( tmp, eChrSet );
                 }
             }
             AttrOutput().StartRunProperties();
-            aAttrIter.OutAttr( nAktPos );
+            aAttrIter.OutAttr( nCurrentPos );
             AttrOutput().EndRunProperties( nullptr );
 
-            nAktPos = nNextAttr;
+            nCurrentPos = nNextAttr;
             eChrSet = eNextChrSet;
             aAttrIter.NextPos();
 
             AttrOutput().EndRun( nullptr, 0 );
 
-        } while( nAktPos < nEnd );
+        } while( nCurrentPos < nEnd );
 //        aAttrIter.OutParaAttr(false);
         AttrOutput().EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t());
     }
