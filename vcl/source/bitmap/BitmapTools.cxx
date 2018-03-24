@@ -963,9 +963,9 @@ void CanvasCairoExtractBitmapData( BitmapEx & aBmpEx, Bitmap & aBitmap, unsigned
              y<aBmpSize.Height() && y<rect.Y2;
              ++y )
         {
-            Scanline pScanlineReadAlpha = pAlphaReadAccess->GetScanline( y );
             if( pAlphaReadAccess.get() != nullptr )
             {
+                Scanline pScanlineReadAlpha = pAlphaReadAccess->GetScanline( y );
                 for( long x=rect.X1;
                      x<aBmpSize.Width() && x<rect.X2;
                      ++x )
