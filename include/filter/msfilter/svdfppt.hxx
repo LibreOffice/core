@@ -578,7 +578,7 @@ protected:
 protected:
     using SdrEscherImport::ReadObjText;
 
-    bool                    SeekToAktPage(DffRecordHeader* pRecHd) const;
+    bool                    SeekToCurrentPage(DffRecordHeader* pRecHd) const;
     bool                    SeekToDocument(DffRecordHeader* pRecHd) const;
     static bool             SeekToContentOfProgTag(
                                 sal_Int32 nVersion,
@@ -607,7 +607,7 @@ protected:
     SdrPage*                MakeBlancPage(bool bMaster) const;
     bool                    ReadFontCollection();
     PptSlidePersistList*    GetPageList(PptPageKind ePageKind) const;
-    sal_uInt32              GetAktPageId();
+    sal_uInt32              GetCurrentPageId();
     sal_uInt32              GetMasterPageId(sal_uInt16 nPageNum, PptPageKind ePageKind) const;
     sal_uInt32              GetNotesPageId(sal_uInt16 nPageNum ) const;
     static SdrOutliner*     GetDrawOutliner( SdrTextObj const * pSdrText );
