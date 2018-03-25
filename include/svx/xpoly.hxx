@@ -54,8 +54,8 @@ class SVX_DLLPUBLIC XPolygon final
 
 public:
     XPolygon( sal_uInt16 nSize=16 );
-    XPolygon( const XPolygon& rXPoly );
-    XPolygon( XPolygon&& rXPoly );
+    XPolygon( const XPolygon& );
+    XPolygon( XPolygon&& );
     XPolygon( const tools::Polygon& rPoly );
     XPolygon( const tools::Rectangle& rRect, long nRx = 0, long nRy = 0 );
     XPolygon( const Point& rCenter, long nRx, long nRy,
@@ -77,8 +77,8 @@ public:
 
     const Point&    operator[]( sal_uInt16 nPos ) const;
           Point&    operator[]( sal_uInt16 nPos );
-    XPolygon&       operator=( const XPolygon& rXPoly );
-    XPolygon&       operator=( XPolygon&& rXPoly );
+    XPolygon&       operator=( const XPolygon& );
+    XPolygon&       operator=( XPolygon&& );
     bool            operator==( const XPolygon& rXPoly ) const;
 
     PolyFlags  GetFlags( sal_uInt16 nPos ) const;
@@ -116,8 +116,8 @@ class SVX_DLLPUBLIC XPolyPolygon final
 
 public:
                     XPolyPolygon();
-                    XPolyPolygon( const XPolyPolygon& rXPolyPoly );
-                    XPolyPolygon( XPolyPolygon&& rXPolyPoly );
+                    XPolyPolygon( const XPolyPolygon& );
+                    XPolyPolygon( XPolyPolygon&& );
 
                     ~XPolyPolygon();
 
@@ -135,8 +135,8 @@ public:
                         { return GetObject( nPos ); }
     XPolygon&       operator[]( sal_uInt16 nPos );
 
-    XPolyPolygon&   operator=( const XPolyPolygon& rXPolyPoly );
-    XPolyPolygon&   operator=( XPolyPolygon&& rXPolyPoly );
+    XPolyPolygon&   operator=( const XPolyPolygon& );
+    XPolyPolygon&   operator=( XPolyPolygon&& );
 
     // transformations
     void Distort(const tools::Rectangle& rRefRect, const XPolygon& rDistortedRect);
