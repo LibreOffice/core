@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_3a952040",
+        "filename": "sw/source/uibase/uiview/viewmdi.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 543,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-03-25T09:38:05Z",
+      "side": 1,
+      "message": "We use n as the numeric value prefix: nDefDlg",
+      "range": {
+        "startLine": 543,
+        "startChar": 15,
+        "endLine": 543,
+        "endChar": 16
+      },
+      "revId": "3ff4615b4d53ab2a7c462329544d5a7f1cb25348",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_7a9f985f",
+        "filename": "sw/source/uibase/uiview/viewmdi.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 556,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-03-25T09:38:05Z",
+      "side": 1,
+      "message": "Interestingly, the page settings dialog (that is eventually invoked in SwBaseShell::ExecDlg) doesn\u0027t take the string item into account at all... :) it just opens the \"page\" tab unconditionally. Possibly better use FN_FORMAT_PAGE_DLG instead of FN_FORMAT_PAGE_SETTING_DLG here, and update SwBaseShell::ExecDlg to take the page name for the latter from the item; otherwise, we have no way to actually show specified pages other than \"page\" (using FN_FORMAT_PAGE_SETTING_DLG) and \"columns\" (using FN_FORMAT_PAGE_COLUMN_DLG).",
+      "range": {
+        "startLine": 556,
+        "startChar": 11,
+        "endLine": 556,
+        "endChar": 30
+      },
+      "revId": "3ff4615b4d53ab2a7c462329544d5a7f1cb25348",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
