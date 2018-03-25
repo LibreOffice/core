@@ -173,8 +173,6 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
 ))
 
 $(eval $(call gb_Helper_register_libraries,PLAINLIBS_URE, \
-    reg \
-    store \
     xmlreader \
 ))
 
@@ -244,7 +242,9 @@ $(eval $(call gb_Helper_register_libraries,UNOLIBS_OOO, \
 $(eval $(call gb_Helper_register_libraries,UNOVERLIBS, \
     cppu \
     jvmfwk \
+    reg \
     sal \
+    store \
 ))
 
 $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
