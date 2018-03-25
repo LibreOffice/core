@@ -2081,9 +2081,17 @@ static void dumpTree( const uno::Reference<xml::dom::XElement> xElem )
 SVGReader::SVGReader(const uno::Reference<uno::XComponentContext>&     xContext,
                      const uno::Reference<io::XInputStream>&           xInputStream,
                      const uno::Reference<xml::sax::XDocumentHandler>& xDocumentHandler) :
+    SVGReader(xContext, xInputStream, xDocumentHandler, dynamic_cast<SvXMLImport *>(xDocumentHandler.get()))
+{
+}
+
+SVGReader::SVGReader(const uno::Reference<uno::XComponentContext>&     xContext,
+                     const uno::Reference<io::XInputStream>&           xInputStream,
+                     const uno::Reference<xml::sax::XDocumentHandler>& xDocumentHandler,
+                     SvXMLImport *pFastHandler) :
     m_xContext( xContext ),
     m_xInputStream( xInputStream ),
-    m_xDocumentHandler( xDocumentHandler )
+    m_xDocumentHandler( pFastHandler != nullptr ? new SvXMLLegacyToFastDocHandler(pFastHandler) : xDocumentHandler )
 {
 }
 
