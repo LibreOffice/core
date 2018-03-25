@@ -36,13 +36,7 @@ public:
     CPPUNIT_TEST_SUITE_END();
 };
 
-void HsqlBinaryImportTest::setUp()
-{
-    DBTestBase::setUp();
-    SvtMiscOptions aMiscOptions;
-    aMiscOptions.SetExperimentalMode(true);
-    osl_setEnvironment(OUString{ "DBACCESS_HSQL_MIGRATION" }.pData, OUString{ "1" }.pData);
-}
+void HsqlBinaryImportTest::setUp() { DBTestBase::setUp(); }
 
 void HsqlBinaryImportTest::testBinaryImport()
 {
