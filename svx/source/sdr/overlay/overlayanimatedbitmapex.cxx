@@ -105,7 +105,7 @@ namespace sdr
                 }
 
                 // re-insert me as event
-                getOverlayManager()->InsertEvent(this);
+                getOverlayManager()->InsertEvent(*this);
 
                 // register change (after change)
                 objectChange();
