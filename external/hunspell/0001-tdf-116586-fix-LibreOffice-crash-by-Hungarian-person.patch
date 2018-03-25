@@ -1,0 +1,62 @@
+From 987fd8c3ed648ca7d637f2dbb86e97c600954d2c Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?L=C3=A1szl=C3=B3=20N=C3=A9meth?= <nemeth@numbertext.org>
+Date: Sun, 25 Mar 2018 23:51:47 +0200
+Subject: [PATCH] tdf#116586 fix LibreOffice crash by Hungarian personal
+ dictionary
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+"AkH. 11. (old orthography)", caused by bad handling of forbidden words
+of alias compressed dictionaries during run-time dictionary extension.
+
+Note: accepting also all – previously forbidden – affixed
+forms of the modified stem is a removed function: "Grammar by" spell
+checking (for example, in LibreOffice via SPELLML interface of Hunspell)
+supports user words with affixation and compounding.
+
+The original idea was to add substandard or interfering words
+as forbidden words – but with flags – to the dictionary, and adding
+the stem to the personal dictionary could “switch on” the affixed
+forms of the word, too. Now the suggested method is using
+"Grammar by" personal dictionaries, as in LibreOffice:
+
+https://wiki.documentfoundation.org/ReleaseNotes/6.0#.E2.80.9CGrammar_By.E2.80.9D_spell_checking
+---
+ src/hunspell/hashmgr.cxx | 20 ++------------------
+ 1 file changed, 2 insertions(+), 18 deletions(-)
+
+diff --git a/src/hunspell/hashmgr.cxx b/src/hunspell/hashmgr.cxx
+index ec3803b..5183f02 100644
+--- a/src/hunspell/hashmgr.cxx
++++ b/src/hunspell/hashmgr.cxx
+@@ -506,24 +506,8 @@ int HashMgr::remove_forbidden_flag(const std::string& word) {
+   if (!dp)
+     return 1;
+   while (dp) {
+-    if (dp->astr && TESTAFF(dp->astr, forbiddenword, dp->alen)) {
+-      if (dp->alen == 1)
+-        dp->alen = 0;  // XXX forbidden words of personal dic.
+-      else {
+-        unsigned short* flags2 =
+-            (unsigned short*)malloc(sizeof(unsigned short) * (dp->alen - 1));
+-        if (!flags2)
+-          return 1;
+-        int i, j = 0;
+-        for (i = 0; i < dp->alen; i++) {
+-          if (dp->astr[i] != forbiddenword)
+-            flags2[j++] = dp->astr[i];
+-        }
+-        dp->alen--;
+-        free(dp->astr);
+-        dp->astr = flags2;  // XXX allowed forbidden words
+-      }
+-    }
++    if (dp->astr && TESTAFF(dp->astr, forbiddenword, dp->alen))
++      dp->alen = 0;  // XXX forbidden words of personal dic.
+     dp = dp->next_homonym;
+   }
+   return 0;
+-- 
+2.7.4
+
