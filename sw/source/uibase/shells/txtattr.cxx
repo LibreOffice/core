@@ -52,7 +52,6 @@
 
 #include <cmdid.h>
 #include <globals.h>
-#include <strings.hrc>
 #include <SwStyleNameMapper.hxx>
 #include <swabstdlg.hxx>
 #include <outline.hxx>

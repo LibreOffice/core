@@ -26,7 +26,6 @@
 #include <cmdid.h>
 #include <globals.hrc>
 #include <uitool.hxx>
-#include <strings.hrc>
 #include <wrtsh.hxx>
 #include <wtabsh.hxx>
 

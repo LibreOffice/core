@@ -59,7 +59,6 @@
 #include <authfld.hxx>
 #include <txtinet.hxx>
 #include <fmtcntnt.hxx>
-#include <strings.hrc>
 
 #include <SwUndoField.hxx>
 #include <calbck.hxx>

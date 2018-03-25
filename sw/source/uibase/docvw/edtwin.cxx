@@ -125,7 +125,6 @@
 
 #include <helpids.h>
 #include <cmdid.h>
-#include <strings.hrc>
 #include <uitool.hxx>
 #include <fmtfollowtextflow.hxx>
 #include <toolkit/helper/vclunohelper.hxx>

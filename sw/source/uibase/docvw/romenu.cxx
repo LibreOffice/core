@@ -44,7 +44,6 @@
 #include <modcfg.hxx>
 
 #include <cmdid.h>
-#include <strings.hrc>
 
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;

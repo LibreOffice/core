@@ -20,7 +20,6 @@
 #include <cppunit/plugin/TestPlugIn.h>
 #include <test/bootstrapfixture.hxx>
 
-#include <strings.hrc>
 #include <swdll.hxx>
 #include <swtypes.hxx>
 #include <SwStyleNameMapper.hxx>

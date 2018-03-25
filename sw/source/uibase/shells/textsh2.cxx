@@ -45,7 +45,6 @@
 #include <swtypes.hxx>
 #include <cmdid.h>
 #include <swevent.hxx>
-#include <strings.hrc>
 #include <textsh.hxx>
 #include <swabstdlg.hxx>
 #include <dbui.hrc>

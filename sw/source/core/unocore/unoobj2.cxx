@@ -55,7 +55,6 @@
 #include <fmtfld.hxx>
 #include <fmtpdsc.hxx>
 #include <pagedesc.hxx>
-#include <strings.hrc>
 #include <poolfmt.hxx>
 #include <edimp.hxx>
 #include <fchrfmt.hxx>

@@ -57,7 +57,6 @@
 
 #include <wview.hxx>
 #include <wdocsh.hxx>
-#include <strings.hrc>
 
 #include <sfx2/request.hxx>
     // needed for -fsanitize=function visibility of typeinfo for functions of

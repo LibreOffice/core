@@ -29,7 +29,6 @@
 #include <swmodule.hxx>
 #include <uitool.hxx>
 #include <docsh.hxx>
-#include <strings.hrc>
 #include <globals.hrc>
 #include <wgrfsh.hxx>
 

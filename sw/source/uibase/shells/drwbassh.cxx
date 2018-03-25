@@ -47,7 +47,6 @@
 #include <svx/svdogrp.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svditer.hxx>
-#include <strings.hrc>
 #define ShellClass_SwDrawBaseShell
 #include <sfx2/msg.hxx>
 #include <swslots.hxx>

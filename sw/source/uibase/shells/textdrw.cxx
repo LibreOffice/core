@@ -32,8 +32,6 @@
 #include <swundo.hxx>
 #include <basesh.hxx>
 
-#include <strings.hrc>
-
 #include <docsh.hxx>
 #include <sfx2/docfile.hxx>
 #include <svl/urihelper.hxx>

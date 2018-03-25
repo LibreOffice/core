@@ -52,7 +52,6 @@
 #include <cmdid.h>
 #include <drawdoc.hxx>
 #include <textboxhelper.hxx>
-#include <strings.hrc>
 #include <frmfmt.hxx>
 #include <frmatr.hxx>
 #include <fmtfsize.hxx>

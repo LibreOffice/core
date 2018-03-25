@@ -53,7 +53,6 @@
 #include <usrpref.hxx>
 #include <edtwin.hxx>
 #include <swwait.hxx>
-#include <strings.hrc>
 
 #include <sfx2/objface.hxx>
 #include <vcl/EnumContext.hxx>

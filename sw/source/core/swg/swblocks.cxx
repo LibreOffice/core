@@ -37,7 +37,6 @@
 #include <docsh.hxx>
 #include <swunohelper.hxx>
 
-#include <strings.hrc>
 #include <swerror.h>
 
 /**

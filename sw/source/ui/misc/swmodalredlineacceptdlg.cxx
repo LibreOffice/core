@@ -32,7 +32,6 @@
 #include <uitool.hxx>
 
 #include <cmdid.h>
-#include <strings.hrc>
 
 #include <vector>
 #include <redlndlg.hxx>
