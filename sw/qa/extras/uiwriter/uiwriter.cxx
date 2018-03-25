@@ -243,6 +243,7 @@ public:
     void testTdf84695NormalChar();
     void testTdf84695Tab();
     void testTableStyleUndo();
+    void testRedlineCopyPaste();
     void testRedlineParam();
     void testRedlineViewAuthor();
     void testTdf91292();
@@ -427,6 +428,7 @@ public:
     CPPUNIT_TEST(testTdf84695NormalChar);
     CPPUNIT_TEST(testTdf84695Tab);
     CPPUNIT_TEST(testTableStyleUndo);
+    CPPUNIT_TEST(testRedlineCopyPaste);
     CPPUNIT_TEST(testRedlineParam);
     CPPUNIT_TEST(testRedlineViewAuthor);
     CPPUNIT_TEST(testTdf91292);
@@ -4759,6 +4761,40 @@ void SwUiWriterTest::testTableStyleUndo()
     pStyle = pDoc->GetTableStyles().FindAutoFormat("Test Style");
     CPPUNIT_ASSERT(pStyle);
     CPPUNIT_ASSERT(bool(pStyle->GetBoxFormat(0).GetBackground() == aBackground2));
+}
+
+void SwUiWriterTest::testRedlineCopyPaste()
+{
+    // regressed in tdf#106746
+    SwDoc* pDoc = createDoc();
+
+    SwNodeIndex aIdx(pDoc->GetNodes().GetEndOfContent(), -1);
+    SwPaM aPaM(aIdx);
+
+    pDoc->getIDocumentContentOperations().InsertString(aPaM, "abzdezgh");
+    SwTextNode* pTextNode = aPaM.GetNode().GetTextNode();
+
+    // Turn on track changes, make changes, turn off track changes
+    uno::Reference<beans::XPropertySet> xPropertySet(mxComponent, uno::UNO_QUERY);
+    xPropertySet->setPropertyValue("RecordChanges", uno::makeAny(true));
+    lcl_selectCharacters(aPaM, 2, 3);
+    pDoc->getIDocumentContentOperations().ReplaceRange(aPaM, "c", false);
+    lcl_selectCharacters(aPaM, 6, 7);
+    pDoc->getIDocumentContentOperations().ReplaceRange(aPaM, "f", false);
+    xPropertySet->setPropertyValue("RecordChanges", uno::makeAny(false));
+
+    // Create the clipboard document.
+    SwDoc aClipboard;
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+
+    // Select the whole content, copy, delete the original and paste the copied content
+    pWrtShell->SelAll();
+    pWrtShell->Copy(&aClipboard);
+    pWrtShell->Delete();
+    pWrtShell->Paste(&aClipboard);
+
+    // With the bug this is "abzcdefgh", ie. contains the first deleted piece, too
+    CPPUNIT_ASSERT_EQUAL(OUString("abcdefgh"), pTextNode->GetText());
 }
 
 void SwUiWriterTest::testRedlineParam()
