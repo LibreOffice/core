@@ -467,7 +467,7 @@ void LwpPageLayout::ConvertFillerPageText(XFContentContainer* pCont)
         //get fillerpage story from division info
         LwpDocument* pDoc = m_pFoundry->GetDocument();
         LwpDivInfo* pDivInfo = dynamic_cast<LwpDivInfo*>(pDoc->GetDivInfoID().obj().get());
-        LwpStory* pStory = dynamic_cast<LwpStory*>(pDivInfo->GetFillerPageTextID().obj().get());
+        LwpStory* pStory = pDivInfo ? dynamic_cast<LwpStory*>(pDivInfo->GetFillerPageTextID().obj().get()) : nullptr;
 
         //parse fillerpage story
         if(pStory)
@@ -772,7 +772,7 @@ void LwpHeaderLayout::ParseMargins(XFHeaderStyle* ph1)
 {
     //Set height: from top of header to top of body, including the spacing between header and body
     double height = GetGeometryHeight()- GetMarginsValue(MARGIN_TOP);
-    if( IsAutoGrowDown() )
+    if (GetIsAutoGrowDown())
     {
         ph1->SetMinHeight(height);
     }
