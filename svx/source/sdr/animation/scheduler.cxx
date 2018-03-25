@@ -19,6 +19,7 @@
 
 #include <svx/sdr/animation/scheduler.hxx>
 
+#include <algorithm>
 #include <vector>
 
 
@@ -44,12 +45,6 @@ namespace sdr
                 mnTime = nNew;
             }
         }
-
-        bool CompareEvent::operator()(Event* const& lhs, Event* const& rhs) const
-        {
-            return lhs->GetTime() < rhs->GetTime();
-        }
-
 
         Scheduler::Scheduler()
         :   mnTime(0),
@@ -78,17 +73,17 @@ namespace sdr
 
         void Scheduler::triggerEvents()
         {
-            if (maList.empty())
+            if (mvEvents.empty())
                 return;
 
             // copy events which need to be executed to a vector. Remove them from
             // the scheduler
             ::std::vector< Event* > aToBeExecutedList;
 
-            while(!maList.empty() && maList[0]->GetTime() <= mnTime)
+            while(!mvEvents.empty() && mvEvents.front()->GetTime() <= mnTime)
             {
-                Event* pNextEvent = maList.front();
-                maList.erase(maList.begin());
+                Event* pNextEvent = mvEvents.front();
+                mvEvents.erase(mvEvents.begin());
                 aToBeExecutedList.push_back(pNextEvent);
             }
 
@@ -105,9 +100,9 @@ namespace sdr
         void Scheduler::checkTimeout()
         {
             // re-start or stop timer according to event list
-            if(!IsPaused() && !maList.empty())
+            if(!IsPaused() && !mvEvents.empty())
             {
-                mnDeltaTime = maList.front()->GetTime() - mnTime;
+                mnDeltaTime = mvEvents.front()->GetTime() - mnTime;
 
                 if(0L != mnDeltaTime)
                 {
@@ -129,11 +124,11 @@ namespace sdr
             Stop();
             mnTime = nTime;
 
-            if (maList.empty())
+            if (mvEvents.empty())
                 return;
 
             // reset event time points
-            for (auto & rEvent : maList)
+            for (auto & rEvent : mvEvents)
             {
                 rEvent->SetTime(nTime);
             }
@@ -148,19 +143,21 @@ namespace sdr
              }
         }
 
-        void Scheduler::InsertEvent(Event* pNew)
+        void Scheduler::InsertEvent(Event& rNew)
         {
-            maList.insert(pNew);
+            // insert maintaining time ordering
+            auto it = mvEvents.begin();
+            while (it != mvEvents.end() && rNew.GetTime() >= (*it)->GetTime())
+                it++;
+            mvEvents.insert(it, &rNew);
             checkTimeout();
         }
 
         void Scheduler::RemoveEvent(Event* pOld)
         {
-            if(!maList.empty())
+            if(!mvEvents.empty())
             {
-                auto it = maList.find(pOld);
-                if (it != maList.end())
-                    maList.erase(it);
+                mvEvents.erase(std::remove(mvEvents.begin(), mvEvents.end(), pOld), mvEvents.end());
                 checkTimeout();
             }
         }
