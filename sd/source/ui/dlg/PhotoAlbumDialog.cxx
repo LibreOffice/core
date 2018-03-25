@@ -182,9 +182,16 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl, Button*, void)
                 aPicPos.Y = (aPageSize.Height - aPicSize.Height)/2;
 
                 xShape->setPosition(aPicPos);
-                xSlide->add(xShape);
-                if(bCreateCaptions)
-                    createCaption( aPageSize );
+                try
+                {
+                    xSlide->add(xShape);
+                    if (bCreateCaptions)
+                        createCaption( aPageSize );
+                }
+                catch (const css::uno::Exception& exc)
+                {
+                    SAL_WARN( "sd", exc );
+                }
             }
         }
         else if( nOpt == TWO_IMAGES )
@@ -250,7 +257,14 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl, Button*, void)
                     aPicPos.Y = aPageSize.Height/2 - aPicSize.Height/2;
 
                     xShape->setPosition(aPicPos);
-                    xSlide->add(xShape);
+                    try
+                    {
+                        xSlide->add(xShape);
+                    }
+                    catch (const css::uno::Exception& exc)
+                    {
+                        SAL_WARN( "sd", exc );
+                    }
                 }
 
                 if( !sUrl2.isEmpty() )
@@ -287,10 +301,17 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl, Button*, void)
                     aPicPos.Y = aPageSize.Height/2 - aPicSize.Height/2;
 
                     xShape->setPosition(aPicPos);
-                    xSlide->add(xShape);
-                    if(bCreateCaptions)
-                        createCaption( aPageSize );
 
+                    try
+                    {
+                        xSlide->add(xShape);
+                        if(bCreateCaptions)
+                            createCaption( aPageSize );
+                    }
+                    catch (const css::uno::Exception& exc)
+                    {
+                        SAL_WARN( "sd", exc );
+                    }
                 }
             }
         }
@@ -369,7 +390,14 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl, Button*, void)
                     aPicPos.Y = aPageSize.Height/4 - aPicSize.Height/2;
 
                     xShape->setPosition(aPicPos);
-                    xSlide->add(xShape);
+                    try
+                    {
+                        xSlide->add(xShape);
+                    }
+                    catch (const css::uno::Exception& exc)
+                    {
+                        SAL_WARN( "sd", exc );
+                    }
                 }
                 if( !sUrl2.isEmpty() )
                 {
@@ -405,7 +433,14 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl, Button*, void)
                     aPicPos.Y = aPageSize.Height/4 - aPicSize.Height/2;
 
                     xShape->setPosition(aPicPos);
-                    xSlide->add(xShape);
+                    try
+                    {
+                        xSlide->add(xShape);
+                    }
+                    catch (const css::uno::Exception& exc)
+                    {
+                        SAL_WARN( "sd", exc );
+                    }
                 }
                 if( !sUrl3.isEmpty() )
                 {
@@ -441,7 +476,14 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl, Button*, void)
                     aPicPos.Y = aPageSize.Height/4 - aPicSize.Height/2 + aPageSize.Height/2;
 
                     xShape->setPosition(aPicPos);
-                    xSlide->add(xShape);
+                    try
+                    {
+                        xSlide->add(xShape);
+                    }
+                    catch (const css::uno::Exception& exc)
+                    {
+                        SAL_WARN( "sd", exc );
+                    }
                 }
                 if( !sUrl4.isEmpty() )
                 {
@@ -477,10 +519,16 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl, Button*, void)
                     aPicPos.Y = aPageSize.Height/4 - aPicSize.Height/2 + aPageSize.Height/2;
 
                     xShape->setPosition(aPicPos);
-                    xSlide->add(xShape);
-                    if(bCreateCaptions)
-                        createCaption( aPageSize );
-
+                    try
+                    {
+                        xSlide->add(xShape);
+                        if(bCreateCaptions)
+                            createCaption( aPageSize );
+                    }
+                    catch (const css::uno::Exception& exc)
+                    {
+                        SAL_WARN( "sd", exc );
+                    }
                 }
             }
         }
