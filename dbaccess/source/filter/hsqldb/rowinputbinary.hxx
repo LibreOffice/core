@@ -16,6 +16,8 @@
 
 #include <com/sun/star/io/XInputStream.hpp>
 
+#include "columndef.hxx"
+
 namespace dbahsql
 {
 class HsqlRowInputStream
@@ -32,7 +34,7 @@ protected:
 
 public:
     HsqlRowInputStream();
-    std::vector<css::uno::Any> readOneRow(const std::vector<sal_Int32>& colTypes);
+    std::vector<css::uno::Any> readOneRow(const std::vector<ColumnDefinition>& colTypes);
     void seek(sal_Int32 nPos);
     void setInputStream(css::uno::Reference<css::io::XInputStream>& rStream);
     SvStream* getInputStream() const;

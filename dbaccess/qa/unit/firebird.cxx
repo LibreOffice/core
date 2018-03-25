@@ -30,20 +30,11 @@ public:
     void testEmptyDBConnection();
     void testIntegerDatabase();
 
-    virtual void setUp() override;
-
     CPPUNIT_TEST_SUITE(FirebirdTest);
     CPPUNIT_TEST(testEmptyDBConnection);
     CPPUNIT_TEST(testIntegerDatabase);
     CPPUNIT_TEST_SUITE_END();
 };
-
-void FirebirdTest::setUp()
-{
-    DBTestBase::setUp();
-    SvtMiscOptions aMiscOptions;
-    aMiscOptions.SetExperimentalMode(true);
-}
 
 /**
  * Test the loading of an "empty" file, i.e. the embedded database has not yet

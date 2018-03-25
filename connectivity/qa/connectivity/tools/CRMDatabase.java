@@ -43,7 +43,7 @@ public class CRMDatabase
     private static final String INTEGER = "INTEGER";
     private static final String VARCHAR50 = "VARCHAR(50)";
     private final XMultiServiceFactory        m_orb;
-    private final HsqlDatabase                m_database;
+    private final FirebirdDatabase            m_database;
     private final Connection                  m_connection;
 
     /** constructs the CRM database
@@ -52,7 +52,7 @@ public class CRMDatabase
     {
         m_orb = _orb;
 
-        m_database = new HsqlDatabase( m_orb );
+        m_database = new FirebirdDatabase( m_orb );
 
         if ( _withUI )
         {
@@ -81,14 +81,14 @@ public class CRMDatabase
     {
         m_orb = _orb;
 
-        m_database = new HsqlDatabase( m_orb, _existingDocumentURL );
+        m_database = new FirebirdDatabase( m_orb, _existingDocumentURL );
         m_connection = m_database.defaultConnection();
     }
 
 
     /** returns the database document underlying the CRM database
      */
-    public final HsqlDatabase getDatabase()
+    public final FirebirdDatabase getDatabase()
     {
         return m_database;
     }
@@ -141,7 +141,7 @@ public class CRMDatabase
                 new HsqlColumnDescriptor( "ID",INTEGER, HsqlColumnDescriptor.PRIMARY ),
                 new HsqlColumnDescriptor( "Name",VARCHAR50),
                 new HsqlColumnDescriptor( "Description", "VARCHAR(1024)" ),
-                new HsqlColumnDescriptor( "Image", "LONGVARBINARY" ) } );
+                new HsqlColumnDescriptor( "Image", "BLOB SUB_TYPE -9546" ) } );
         m_database.createTable( table, true );
 
         m_database.executeSQL( "INSERT INTO \"categories\" ( \"ID\", \"Name\" ) VALUES ( 1, 'Food' )" );
@@ -166,7 +166,7 @@ public class CRMDatabase
                 new HsqlColumnDescriptor( "Address",VARCHAR50),
                 new HsqlColumnDescriptor( "City",VARCHAR50),
                 new HsqlColumnDescriptor( "Postal",VARCHAR50),
-                new HsqlColumnDescriptor( "Comment","LONGVARCHAR")} );
+                new HsqlColumnDescriptor( "Comment","BLOB SUB_TYPE 1")} );
         m_database.createTable( table, true );
 
         m_database.executeSQL( "INSERT INTO \"customers\" VALUES(1,'Food, Inc.','Down Under','Melbourne','509','Preferred') " );
@@ -182,8 +182,8 @@ public class CRMDatabase
                 new HsqlColumnDescriptor( "ShipDate", "DATE" ) } );
         m_database.createTable( table, true );
 
-        m_database.executeSQL( "INSERT INTO \"orders\" (\"ID\", \"CustomerID\", \"OrderDate\") VALUES(1, 1, {D '2009-01-01'})" );
-        m_database.executeSQL( "INSERT INTO \"orders\" VALUES(2, 2, {D '2009-01-01'}, {D '2009-01-23'})" );
+        m_database.executeSQL( "INSERT INTO \"orders\" (\"ID\", \"CustomerID\", \"OrderDate\") VALUES(1, 1, DATE '2009-01-01')" );
+        m_database.executeSQL( "INSERT INTO \"orders\" VALUES(2, 2, DATE '2009-01-01', DATE '2009-01-23')" );
 
         table = new HsqlTableDescriptor( "orders_details",
             new HsqlColumnDescriptor[] {
