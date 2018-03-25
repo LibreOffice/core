@@ -131,7 +131,7 @@ namespace sdr
             // access to maDrawinglayerOpt
             const SvtOptionsDrawinglayer& getDrawinglayerOpt() const { return maDrawinglayerOpt; }
 
-            void InsertEvent(sdr::animation::Event* pNew) { Scheduler::InsertEvent(pNew); }
+            void InsertEvent(sdr::animation::Event& rNew) { Scheduler::InsertEvent(rNew); }
         };
     } // end of namespace overlay
 } // end of namespace sdr

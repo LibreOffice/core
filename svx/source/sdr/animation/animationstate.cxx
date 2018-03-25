@@ -102,7 +102,7 @@ namespace sdr
 
                 // set time and reactivate by re-adding to the scheduler
                 SetTime(nNextTime);
-                mrVOContact.GetObjectContact().getPrimitiveAnimator().InsertEvent(this);
+                mrVOContact.GetObjectContact().getPrimitiveAnimator().InsertEvent(*this);
             }
         }
 
