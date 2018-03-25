@@ -79,6 +79,7 @@ LwpVirtualLayout::LwpVirtualLayout(LwpObjectHeader const &objHdr, LwpSvStream* p
     , m_bGettingMarginsSameAsParent(false)
     , m_bGettingHasProtection(false)
     , m_bGettingIsProtected(false)
+    , m_bGettingIsAutoGrowDown(false)
     , m_bGettingMarginsValue(false)
     , m_bGettingExtMarginsValue(false)
     , m_bGettingUsePrinterSettings(false)
@@ -421,7 +422,7 @@ LwpVirtualLayout* LwpVirtualLayout::FindChildByType(LWP_LAYOUT_TYPE eType)
 */
 bool LwpVirtualLayout::IsFitGraphic()
 {
-    return IsAutoGrowRight() && !IsAutoGrowLeft() && IsAutoGrowDown();
+    return IsAutoGrowRight() && !IsAutoGrowLeft() && GetIsAutoGrowDown();
 }
 
 /**
@@ -1149,7 +1150,7 @@ bool LwpMiddleLayout::IsAutoGrowDown()
         rtl::Reference<LwpObject> xBase(GetBasedOnStyle());
         if (LwpMiddleLayout* pLay = dynamic_cast<LwpMiddleLayout*>(xBase.get()))
         {
-            return pLay->IsAutoGrowDown();
+            return pLay->GetIsAutoGrowDown();
         }
     }
     return LwpVirtualLayout::IsAutoGrowDown();

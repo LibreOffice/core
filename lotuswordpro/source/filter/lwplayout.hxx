@@ -103,7 +103,6 @@ public:
     virtual double GetColGap(sal_uInt16 nIndex);
     virtual bool IsAutoGrow(){ return false;}
     virtual bool IsAutoGrowUp(){ return false;}
-    virtual bool IsAutoGrowDown(){ return false;}
     virtual bool IsAutoGrowLeft(){ return false;}
     virtual bool IsAutoGrowRight(){ return false;}
     bool IsFitGraphic();
@@ -135,6 +134,15 @@ public:
         m_bGettingIsProtected = true;
         bool bRet = IsProtected();
         m_bGettingIsProtected = false;
+        return bRet;
+    }
+    bool GetIsAutoGrowDown()
+    {
+        if (m_bGettingIsAutoGrowDown)
+            throw std::runtime_error("recursion in layout");
+        m_bGettingIsAutoGrowDown = true;
+        bool bRet = IsAutoGrowDown();
+        m_bGettingIsAutoGrowDown = false;
         return bRet;
     }
     bool GetHasProtection()
@@ -216,6 +224,7 @@ protected:
     bool HasProtection();
     virtual bool HonorProtection();
     virtual bool IsProtected();
+    virtual bool IsAutoGrowDown(){ return false;}
     virtual double MarginsValue(sal_uInt8 /*nWhichSide*/){return 0;}
     virtual double ExtMarginsValue(sal_uInt8 /*nWhichSide*/){return 0;}
     virtual bool MarginsSameAsParent();
@@ -224,6 +233,7 @@ protected:
     bool m_bGettingMarginsSameAsParent;
     bool m_bGettingHasProtection;
     bool m_bGettingIsProtected;
+    bool m_bGettingIsAutoGrowDown;
     bool m_bGettingMarginsValue;
     bool m_bGettingExtMarginsValue;
     bool m_bGettingUsePrinterSettings;
@@ -353,7 +363,6 @@ public:
     LwpColor* GetBackColor();
     virtual bool IsAutoGrow() override;
     virtual bool IsAutoGrowUp() override;
-    virtual bool IsAutoGrowDown() override;
     virtual bool IsAutoGrowLeft() override;
     virtual bool IsAutoGrowRight() override;
     virtual sal_uInt8 GetContentOrientation() override;
@@ -388,6 +397,7 @@ protected:
     virtual bool MarginsSameAsParent() override;
     virtual double MarginsValue(sal_uInt8 nWhichSide) override;
     virtual double ExtMarginsValue(sal_uInt8 nWhichSide) override;
+    virtual bool IsAutoGrowDown() override;
 private:
     LwpObjectID m_BasedOnStyle;
     LwpLayoutGeometry* Geometry();
