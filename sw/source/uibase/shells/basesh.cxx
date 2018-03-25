@@ -2448,6 +2448,8 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
                         sPageId = "page";
                         break;
                 }
+                if (pItem)
+                    sPageId = OUStringToOString(static_cast<const SfxStringItem*>(pItem)->GetValue(), RTL_TEXTENCODING_UTF8);
 
                 rTempView.GetDocShell()->FormatPage(rPageDesc.GetName(), sPageId, rSh, &rReq);
                 rTempView.InvalidateRulerPos();
