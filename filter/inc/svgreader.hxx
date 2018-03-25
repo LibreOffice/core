@@ -15,15 +15,22 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
+#include <xmloff/xmlimp.hxx>
 
 namespace svgi
 {
 
 class SVGReader
 {
+private:
     const css::uno::Reference< css::uno::XComponentContext >        m_xContext;
     const css::uno::Reference< css::io::XInputStream >              m_xInputStream;
     const css::uno::Reference< css::xml::sax::XDocumentHandler >    m_xDocumentHandler;
+
+    SVGReader( const css::uno::Reference<css::uno::XComponentContext>&  xContext,
+               const css::uno::Reference< css::io::XInputStream >&               xInputStream,
+               const css::uno::Reference< css::xml::sax::XDocumentHandler >& xDocumentHandler,
+               SvXMLImport *pFastHandler);
 
 public:
     FILTER_DLLPUBLIC SVGReader( const css::uno::Reference<css::uno::XComponentContext>&  xContext,
