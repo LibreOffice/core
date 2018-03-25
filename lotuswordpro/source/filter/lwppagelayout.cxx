@@ -781,7 +781,7 @@ void LwpHeaderLayout::ParseMargins(XFHeaderStyle* ph1)
 {
     //Set height: from top of header to top of body, including the spacing between header and body
     double height = GetGeometryHeight()- GetMarginsValue(MARGIN_TOP);
-    if( IsAutoGrowDown() )
+    if (GetIsAutoGrowDown())
     {
         ph1->SetMinHeight(height);
     }
