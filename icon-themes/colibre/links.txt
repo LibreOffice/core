@@ -924,7 +924,7 @@ dbaccess/res/sc040.png cmd/sc_reload.png
 dbaccess/res/sortdown.png cmd/sc_sortascending.png
 dbaccess/res/sortup.png cmd/sc_sortdescending.png
 dbaccess/res/tables_32.png res/tables_32.png
-
+info_26
 # desktop
 # ==============================================
 desktop/res/caution_16.png dbaccess/res/exwarning.png
@@ -948,9 +948,9 @@ formula/res/fx.png cmd/sc_dbviewfunctions.png
 # fpicker
 # ==============================================
 fpicker/res/fp011.png cmd/sc_firstpage.png
-fpicker/res/fp011.png cmd/sc_open.png
-fpicker/res/fp011.png cmd/sc_starshapes.png
-fpicker/res/fp011.png desktop/res/shared_16.png
+fpicker/res/fp014.png cmd/sc_open.png
+fpicker/res/fp015.png cmd/sc_starshapes.png
+fpicker/res/fp016.png desktop/res/shared_16.png
 
 # reportdesign
 # ==============================================
