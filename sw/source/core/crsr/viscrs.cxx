@@ -41,7 +41,6 @@
 #include <scriptinfo.hxx>
 #include <mdiexp.hxx>
 #include <wrtsh.hxx>
-#include <strings.hrc>
 #include <view.hxx>
 #include <IDocumentLayoutAccess.hxx>
 

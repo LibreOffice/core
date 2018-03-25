@@ -37,7 +37,6 @@
 #include <swmodule.hxx>
 #include <frmatr.hxx>
 #include <globals.hrc>
-#include <strings.hrc>
 #include <uinums.hxx>
 #include <listsh.hxx>
 #include <poolfmt.hxx>

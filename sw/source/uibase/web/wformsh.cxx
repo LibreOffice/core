@@ -29,7 +29,6 @@
 #include <cmdid.h>
 #include <wformsh.hxx>
 #include <globals.hrc>
-#include <strings.hrc>
 
 #include <sfx2/request.hxx>
     // needed for -fsanitize=function visibility of typeinfo for functions of

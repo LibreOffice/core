@@ -22,7 +22,6 @@
 #include <svx/svxids.hrc>
 #include <dbui.hrc>
 #include <globals.hrc>
-#include <strings.hrc>
 
 #include <wordcountdialog.hxx>
 #include <abstract.hxx>

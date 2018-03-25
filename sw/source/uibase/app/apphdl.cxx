@@ -112,8 +112,6 @@ using namespace ::com::sun::star;
 #include <sfx2/msg.hxx>
 #include <swslots.hxx>
 
-#include <strings.hrc>
-
 SFX_IMPL_INTERFACE(SwModule, SfxModule)
 
 void SwModule::InitInterface_Impl()

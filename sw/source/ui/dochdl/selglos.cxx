@@ -21,7 +21,6 @@
 
 #include <selglos.hxx>
 
-#include <strings.hrc>
 #include <vcl/layout.hxx>
 
 SwSelGlossaryDlg::SwSelGlossaryDlg(vcl::Window * pParent, const OUString &rShortName)

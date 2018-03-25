@@ -45,7 +45,6 @@
 #include <wview.hxx>
 
 #include <cmdid.h>
-#include <strings.hrc>
 #include <globals.hrc>
 
 #include <IDocumentSettingAccess.hxx>

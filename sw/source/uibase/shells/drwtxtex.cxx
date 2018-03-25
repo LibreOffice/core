@@ -82,7 +82,6 @@
 #include <langhelper.hxx>
 #include <chrdlgmodes.hxx>
 #include <pardlg.hxx>
-#include <strings.hrc>
 #include <string.h>
 #include <swdtflvr.hxx>
 #include <swmodule.hxx>

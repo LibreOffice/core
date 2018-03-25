@@ -116,7 +116,6 @@
 #include <sfx2/viewfrm.hxx>
 #include <svx/svdobj.hxx>
 
-#include <strings.hrc>
 #include <swerror.h>
 #include <hints.hxx>
 #include <ndole.hxx>

@@ -40,7 +40,6 @@
 #include <vcl/svapp.hxx>
 #include <svtools/treelistentry.hxx>
 
-#include <strings.hrc>
 #include <bitmaps.hlst>
 
 #include <unomid.h>

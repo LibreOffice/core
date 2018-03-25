@@ -42,7 +42,6 @@
 #include <com/sun/star/beans/UnknownPropertyException.hpp>
 #include <breakit.hxx>
 #include "accpara.hxx"
-#include <strings.hrc>
 #include "accportions.hxx"
 #include <sfx2/viewsh.hxx>
 #include <sfx2/viewfrm.hxx>

@@ -25,7 +25,6 @@
 #include <wrtsh.hxx>
 #include <view.hxx>
 #include <globals.hrc>
-#include <strings.hrc>
 #include <wolesh.hxx>
 #include <cmdid.h>
 

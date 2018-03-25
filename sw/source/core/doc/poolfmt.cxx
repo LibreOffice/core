@@ -63,7 +63,6 @@
 #include <fmtcol.hxx>
 #include <ndtxt.hxx>
 #include <fmtline.hxx>
-#include <strings.hrc>
 #include <GetMetricVal.hxx>
 #include <numrule.hxx>
 #include <swtable.hxx>

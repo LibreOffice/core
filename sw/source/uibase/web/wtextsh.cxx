@@ -30,7 +30,6 @@
 #include <wtextsh.hxx>
 #include <basesh.hxx>
 #include <globals.hrc>
-#include <strings.hrc>
 
 #include <unomid.h>
 

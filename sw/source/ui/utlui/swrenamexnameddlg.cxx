@@ -20,7 +20,6 @@
 #include <swtypes.hxx>
 #include <globals.hrc>
 
-#include <strings.hrc>
 #include <unoprnms.hxx>
 #include <osl/diagnose.h>
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>

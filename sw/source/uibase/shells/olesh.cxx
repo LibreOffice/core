@@ -29,7 +29,6 @@
 #include <olesh.hxx>
 
 #include <cmdid.h>
-#include <strings.hrc>
 
 #define ShellClass_SwOleShell
 #include <sfx2/msg.hxx>

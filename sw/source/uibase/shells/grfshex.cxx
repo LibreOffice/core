@@ -24,7 +24,6 @@
 #include <textsh.hxx>
 #include <viewopt.hxx>
 #include <swundo.hxx>
-#include <strings.hrc>
 #include <caption.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <sfx2/htmlmode.hxx>
