@@ -25,16 +25,16 @@ using namespace com::sun::star;
 
 namespace sc_apitest
 {
-class ScTableAutoFormatObj : public CalcUnoApiTest, public apitest::TableAutoFormat
+class ScAutoFormatObj : public CalcUnoApiTest, public apitest::TableAutoFormat
 {
 public:
-    ScTableAutoFormatObj();
+    ScAutoFormatObj();
 
     virtual uno::Reference<uno::XInterface> init() override;
     virtual void setUp() override;
     virtual void tearDown() override;
 
-    CPPUNIT_TEST_SUITE(ScTableAutoFormatObj);
+    CPPUNIT_TEST_SUITE(ScAutoFormatObj);
 
     // TableAutoFormat
     CPPUNIT_TEST(testTableAutoFormatProperties);
@@ -45,12 +45,12 @@ private:
     uno::Reference<lang::XComponent> mxComponent;
 };
 
-ScTableAutoFormatObj::ScTableAutoFormatObj()
+ScAutoFormatObj::ScAutoFormatObj()
     : CalcUnoApiTest("/sc/qa/extras/testdocuments")
 {
 }
 
-uno::Reference<uno::XInterface> ScTableAutoFormatObj::init()
+uno::Reference<uno::XInterface> ScAutoFormatObj::init()
 {
     uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, UNO_QUERY_THROW);
     CPPUNIT_ASSERT_MESSAGE("no calc document", xDoc.is());
@@ -64,19 +64,19 @@ uno::Reference<uno::XInterface> ScTableAutoFormatObj::init()
     return xTableAutoFormat;
 }
 
-void ScTableAutoFormatObj::setUp()
+void ScAutoFormatObj::setUp()
 {
     CalcUnoApiTest::setUp();
     mxComponent = loadFromDesktop("private:factory/scalc");
 }
 
-void ScTableAutoFormatObj::tearDown()
+void ScAutoFormatObj::tearDown()
 {
     closeDocument(mxComponent);
     CalcUnoApiTest::tearDown();
 }
 
-CPPUNIT_TEST_SUITE_REGISTRATION(ScTableAutoFormatObj);
+CPPUNIT_TEST_SUITE_REGISTRATION(ScAutoFormatObj);
 
 } // end namespace
 
