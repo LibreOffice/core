@@ -23,7 +23,7 @@
 #include <sal/types.h>
 #include <vcl/timer.hxx>
 #include <svx/svxdllapi.h>
-#include <o3tl/sorted_vector.hxx>
+#include <vector>
 
 
 namespace sdr
@@ -49,11 +49,6 @@ namespace sdr
             virtual void Trigger(sal_uInt32 nTime) = 0;
         };
 
-        struct CompareEvent
-        {
-            bool operator()(Event* const& lhs, Event* const& rhs) const;
-        };
-
         class SVX_DLLPUBLIC Scheduler : public Timer
         {
             // time in ms
@@ -62,8 +57,8 @@ namespace sdr
             // next delta time
             sal_uInt32                                      mnDeltaTime;
 
-            // list of events
-            o3tl::sorted_vector<Event*, CompareEvent>       maList;
+            // list of events, sorted by time
+            std::vector<Event*>                             mvEvents;
 
             // Flag which remembers if this timer is paused. Default
             // is false.
@@ -90,7 +85,7 @@ namespace sdr
             SAL_DLLPRIVATE void checkTimeout();
 
             // insert/remove events, wrapper to EventList methods
-            void InsertEvent(Event* pNew);
+            void InsertEvent(Event& rNew);
             SAL_DLLPRIVATE void RemoveEvent(Event* pOld);
 
             // get/set pause
