@@ -184,18 +184,15 @@ namespace accessibility
         }
     }
 
-    void AccessibleEditableTextPara::implGetParagraphBoundary( css::i18n::Boundary& rBoundary, sal_Int32 /*nIndex*/ )
+    void AccessibleEditableTextPara::implGetParagraphBoundary( const OUString& rText, css::i18n::Boundary& rBoundary, sal_Int32 /*nIndex*/ )
     {
         SAL_INFO( "editeng", "AccessibleEditableTextPara::implGetParagraphBoundary: only a base implementation, ignoring the index" );
 
         rBoundary.startPos = 0;
-        //rBoundary.endPos = GetTextLen();
-        OUString sText( implGetText() );
-        sal_Int32 nLength = sText.getLength();
-        rBoundary.endPos = nLength;
+        rBoundary.endPos = rText.getLength();
     }
 
-    void AccessibleEditableTextPara::implGetLineBoundary( css::i18n::Boundary& rBoundary, sal_Int32 nIndex )
+    void AccessibleEditableTextPara::implGetLineBoundary( const OUString&, css::i18n::Boundary& rBoundary, sal_Int32 nIndex )
     {
         SvxTextForwarder&   rCacheTF = GetTextForwarder();
         const sal_Int32     nParaIndex = GetParagraphIndex();

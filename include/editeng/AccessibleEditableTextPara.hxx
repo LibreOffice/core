@@ -58,16 +58,15 @@ namespace accessibility
 
     /** This class implements the actual text paragraphs for the EditEngine/Outliner UAA
      */
-    class EDITENG_DLLPUBLIC AccessibleEditableTextPara : public ::cppu::BaseMutex, public AccessibleTextParaInterfaceBase, public ::comphelper::OCommonAccessibleText
+    class EDITENG_DLLPUBLIC AccessibleEditableTextPara final : public ::cppu::BaseMutex, public AccessibleTextParaInterfaceBase, private ::comphelper::OCommonAccessibleText
     {
 
-    protected:
         // override OCommonAccessibleText methods
         virtual OUString                 implGetText() override;
         virtual css::lang::Locale        implGetLocale() override;
         virtual void                     implGetSelection( sal_Int32& nStartIndex, sal_Int32& nEndIndex ) override;
-        virtual void                     implGetParagraphBoundary( css::i18n::Boundary& rBoundary, sal_Int32 nIndex ) override;
-        virtual void                     implGetLineBoundary( css::i18n::Boundary& rBoundary, sal_Int32 nIndex ) override;
+        virtual void                     implGetParagraphBoundary( const OUString& rtext, css::i18n::Boundary& rBoundary, sal_Int32 nIndex ) override;
+        virtual void                     implGetLineBoundary( const OUString& rtext, css::i18n::Boundary& rBoundary, sal_Int32 nIndex ) override;
 
     public:
         /// Create accessible object for given parent

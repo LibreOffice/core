@@ -175,20 +175,18 @@ namespace comphelper
     }
 
 
-    void OCommonAccessibleText::implGetParagraphBoundary( i18n::Boundary& rBoundary, sal_Int32 nIndex )
+    void OCommonAccessibleText::implGetParagraphBoundary( const OUString& rText, i18n::Boundary& rBoundary, sal_Int32 nIndex )
     {
-        OUString sText( implGetText() );
-
-        if ( implIsValidIndex( nIndex, sText.getLength() ) )
+        if ( implIsValidIndex( nIndex, rText.getLength() ) )
         {
             rBoundary.startPos = 0;
-            rBoundary.endPos = sText.getLength();
+            rBoundary.endPos = rText.getLength();
 
-            sal_Int32 nFound = sText.lastIndexOf( '\n', nIndex );
+            sal_Int32 nFound = rText.lastIndexOf( '\n', nIndex );
             if ( nFound != -1 )
                 rBoundary.startPos = nFound + 1;
 
-            nFound = sText.indexOf( '\n', nIndex );
+            nFound = rText.indexOf( '\n', nIndex );
             if ( nFound != -1 )
                 rBoundary.endPos = nFound + 1;
         }
@@ -200,10 +198,9 @@ namespace comphelper
     }
 
 
-    void OCommonAccessibleText::implGetLineBoundary( i18n::Boundary& rBoundary, sal_Int32 nIndex )
+    void OCommonAccessibleText::implGetLineBoundary( const OUString& rText, i18n::Boundary& rBoundary, sal_Int32 nIndex )
     {
-        OUString sText( implGetText() );
-        sal_Int32 nLength = sText.getLength();
+        sal_Int32 nLength = rText.getLength();
 
         if ( implIsValidIndex( nIndex, nLength ) || nIndex == nLength )
         {
@@ -344,7 +341,7 @@ namespace comphelper
             case AccessibleTextType::PARAGRAPH:
             {
                 // get paragraph at index
-                implGetParagraphBoundary( aBoundary, nIndex );
+                implGetParagraphBoundary( sText, aBoundary, nIndex );
                 if ( implIsValidBoundary( aBoundary, nLength ) )
                 {
                     aResult.SegmentText = sText.copy( aBoundary.startPos, aBoundary.endPos - aBoundary.startPos );
@@ -356,7 +353,7 @@ namespace comphelper
             case AccessibleTextType::LINE:
             {
                 // get line at index
-                implGetLineBoundary( aBoundary, nIndex );
+                implGetLineBoundary( sText, aBoundary, nIndex );
                 if ( implIsValidBoundary( aBoundary, nLength ) )
                 {
                     aResult.SegmentText = sText.copy( aBoundary.startPos, aBoundary.endPos - aBoundary.startPos );
@@ -462,11 +459,11 @@ namespace comphelper
             case AccessibleTextType::PARAGRAPH:
             {
                 // get paragraph at index
-                implGetParagraphBoundary( aBoundary, nIndex );
+                implGetParagraphBoundary( sText, aBoundary, nIndex );
                 // get previous paragraph
                 if ( aBoundary.startPos > 0 )
                 {
-                    implGetParagraphBoundary( aBoundary, aBoundary.startPos - 1 );
+                    implGetParagraphBoundary( sText, aBoundary, aBoundary.startPos - 1 );
                     if ( implIsValidBoundary( aBoundary, nLength ) )
                     {
                         aResult.SegmentText = sText.copy( aBoundary.startPos, aBoundary.endPos - aBoundary.startPos );
@@ -479,11 +476,11 @@ namespace comphelper
             case AccessibleTextType::LINE:
             {
                 // get line at index
-                implGetLineBoundary( aBoundary, nIndex );
+                implGetLineBoundary( sText, aBoundary, nIndex );
                 // get previous line
                 if ( aBoundary.startPos > 0 )
                 {
-                    implGetLineBoundary( aBoundary, aBoundary.startPos - 1 );
+                    implGetLineBoundary( sText, aBoundary, aBoundary.startPos - 1 );
                     if ( implIsValidBoundary( aBoundary, nLength ) )
                     {
                         aResult.SegmentText = sText.copy( aBoundary.startPos, aBoundary.endPos - aBoundary.startPos );
@@ -590,11 +587,11 @@ namespace comphelper
             case AccessibleTextType::PARAGRAPH:
             {
                 // get paragraph at index
-                implGetParagraphBoundary( aBoundary, nIndex );
+                implGetParagraphBoundary( sText, aBoundary, nIndex );
                 // get next paragraph
                 if ( aBoundary.endPos < nLength )
                 {
-                    implGetParagraphBoundary( aBoundary, aBoundary.endPos );
+                    implGetParagraphBoundary( sText, aBoundary, aBoundary.endPos );
                     if ( implIsValidBoundary( aBoundary, nLength ) )
                     {
                         aResult.SegmentText = sText.copy( aBoundary.startPos, aBoundary.endPos - aBoundary.startPos );
@@ -607,11 +604,11 @@ namespace comphelper
             case AccessibleTextType::LINE:
             {
                 // get line at index
-                implGetLineBoundary( aBoundary, nIndex );
+                implGetLineBoundary( sText, aBoundary, nIndex );
                 // get next line
                 if ( aBoundary.endPos < nLength )
                 {
-                    implGetLineBoundary( aBoundary, aBoundary.endPos );
+                    implGetLineBoundary( sText, aBoundary, aBoundary.endPos );
                     if ( implIsValidBoundary( aBoundary, nLength ) )
                     {
                         aResult.SegmentText = sText.copy( aBoundary.startPos, aBoundary.endPos - aBoundary.startPos );

@@ -634,10 +634,11 @@ void Paragraph::implGetSelection(::sal_Int32 & rStartIndex,
 }
 
 // virtual
-void Paragraph::implGetParagraphBoundary( css::i18n::Boundary& rBoundary,
-                                              ::sal_Int32 nIndex )
+void Paragraph::implGetParagraphBoundary( const OUString& rText,
+                                          css::i18n::Boundary& rBoundary,
+                                          ::sal_Int32 nIndex )
 {
-    ::sal_Int32 nLength = implGetText().getLength();
+    ::sal_Int32 nLength = rText.getLength();
 
     if ( implIsValidIndex( nIndex, nLength ) )
     {
@@ -652,10 +653,11 @@ void Paragraph::implGetParagraphBoundary( css::i18n::Boundary& rBoundary,
 }
 
 // virtual
-void Paragraph::implGetLineBoundary( css::i18n::Boundary& rBoundary,
-                                         ::sal_Int32 nIndex )
+void Paragraph::implGetLineBoundary( const OUString& rText,
+                                     css::i18n::Boundary& rBoundary,
+                                     ::sal_Int32 nIndex )
 {
-    ::sal_Int32 nLength = implGetText().getLength();
+    ::sal_Int32 nLength = rText.getLength();
 
     if ( implIsValidIndex( nIndex, nLength ) || nIndex == nLength )
     {
