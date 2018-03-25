@@ -580,6 +580,14 @@ Reference< XConnection > ODatabaseSource::buildLowLevelConnection(const OUString
     Reference< XConnection > xReturn;
 
     Reference< XDriverManager > xManager;
+
+    bool bNeedMigration = false;
+    if( m_pImpl->m_sConnectURL == "sdbc:embedded:hsqldb")
+    {
+        m_pImpl->m_sConnectURL = "sdbc:embedded:firebird";
+        bNeedMigration = true;
+    }
+
     try {
         xManager.set( ConnectionPool::create( m_pImpl->m_aContext ), UNO_QUERY_THROW );
     } catch( const Exception& ) {  }
@@ -598,7 +606,6 @@ Reference< XConnection > ODatabaseSource::buildLowLevelConnection(const OUString
     }
 
     const char* pExceptionMessageId = RID_STR_COULDNOTCONNECT_UNSPECIFIED;
-    bool bNeedMigration = false;
     if (xManager.is())
     {
         sal_Int32 nAdditionalArgs(0);
@@ -621,17 +628,6 @@ Reference< XConnection > ODatabaseSource::buildLowLevelConnection(const OUString
         Reference< XDriver > xDriver;
         try
         {
-            // check if migration is needed
-            OUString sMigrEnvValue;
-            osl_getEnvironment(OUString("DBACCESS_HSQL_MIGRATION").pData,
-                    &sMigrEnvValue.pData);
-            if( m_pImpl->m_sConnectURL == "sdbc:embedded:hsqldb" &&
-                    !sMigrEnvValue.isEmpty() )
-            {
-                // TODO target could be anything else
-                m_pImpl->m_sConnectURL = "sdbc:embedded:firebird";
-                bNeedMigration = true;
-            }
 
             // choose driver
             Reference< XDriverAccess > xAccessDrivers( xManager, UNO_QUERY );

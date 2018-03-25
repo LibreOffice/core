@@ -29,7 +29,6 @@
 #include <osl/file.hxx>
 #include <osl/process.h>
 #include <rtl/bootstrap.hxx>
-#include <svtools/miscopt.hxx>
 #include <unotools/localfilehelper.hxx>
 
 using namespace com::sun::star;
@@ -191,10 +190,7 @@ Reference< XConnection > SAL_CALL FirebirdDriver::connect(
 
 sal_Bool SAL_CALL FirebirdDriver::acceptsURL( const OUString& url )
 {
-    SvtMiscOptions aMiscOptions;
-
-    return aMiscOptions.IsExperimentalMode() &&
-        (url == "sdbc:embedded:firebird" || url.startsWith("sdbc:firebird:"));
+    return (url == "sdbc:embedded:firebird" || url.startsWith("sdbc:firebird:"));
 }
 
 Sequence< DriverPropertyInfo > SAL_CALL FirebirdDriver::getPropertyInfo(
