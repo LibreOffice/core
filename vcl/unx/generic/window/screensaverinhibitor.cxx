@@ -14,10 +14,10 @@
 #include <X11/Xutil.h>
 #include <X11/Xatom.h>
 
-#include <config_dbus.h>
+#include <config_gio.h>
 
-#if ENABLE_DBUS
-#include <dbus/dbus-glib.h>
+#if ENABLE_GIO
+#include <gio/gio.h>
 
 #define FDO_DBUS_SERVICE        "org.freedesktop.ScreenSaver"
 #define FDO_DBUS_PATH           "/org/freedesktop/ScreenSaver"
@@ -65,11 +65,11 @@ void ScreenSaverInhibitor::inhibit( bool bInhibit, const OUString& sReason,
     }
 }
 
-#if ENABLE_DBUS
+#if ENABLE_GIO
 void dbusInhibit( bool bInhibit,
                   const gchar* service, const gchar* path, const gchar* interface,
-                  const std::function<bool( DBusGProxy*, guint&, GError*& )>& fInhibit,
-                  const std::function<bool( DBusGProxy*, const guint, GError*& )>& fUnInhibit,
+                  const std::function<GVariant*( GDBusProxy*, GError*& )>& fInhibit,
+                  const std::function<GVariant*( GDBusProxy*, const guint, GError*& )>& fUnInhibit,
                   boost::optional<guint>& rCookie )
 {
     if ( ( !bInhibit && ( rCookie == boost::none ) ) ||
@@ -78,33 +78,48 @@ void dbusInhibit( bool bInhibit,
         return;
     }
 
-    gboolean         res;
     GError          *error = nullptr;
-    DBusGProxy      *proxy = nullptr;
+    GDBusConnection *session_connection = g_bus_get_sync( G_BUS_TYPE_SESSION, nullptr, &error );
+    if (session_connection == nullptr) {
+        SAL_WARN( "vcl.screensaverinhibitor", "failed to connect to dbus session bus" );
 
-    DBusGConnection *session_connection = dbus_g_bus_get( DBUS_BUS_SESSION, &error );
-    if (error != nullptr) {
-        SAL_WARN( "vcl.screensaverinhibitor", "failed to connect to dbus session bus: " << error->message );
-        g_error_free( error );
+        if (error != nullptr) {
+            SAL_WARN( "vcl.screensaverinhibitor", "Error: " << error->message );
+            g_error_free( error );
+        }
+
         return;
     }
 
-    proxy = dbus_g_proxy_new_for_name( session_connection,
-                                       service,
-                                       path,
-                                       interface );
+    GDBusProxy *proxy = g_dbus_proxy_new_sync( session_connection,
+                                               G_DBUS_PROXY_FLAGS_NONE,
+                                               nullptr,
+                                               service,
+                                               path,
+                                               interface,
+                                               nullptr,
+                                               nullptr );
+
+    g_object_unref( G_OBJECT( session_connection ) );
+
     if (proxy == nullptr) {
         SAL_INFO( "vcl.screensaverinhibitor", "could not get dbus proxy: " << service );
         return;
     }
 
+    GVariant *res = nullptr;
+
     if ( bInhibit )
     {
-        guint nCookie;
-        res = fInhibit( proxy, nCookie, error );
+        res = fInhibit( proxy, error );
 
-        if (res)
+        if (res != nullptr)
         {
+            guint nCookie;
+
+            g_variant_get(res, "(u)", &nCookie);
+            g_variant_unref(res);
+
             rCookie = nCookie;
         }
         else
@@ -117,7 +132,11 @@ void dbusInhibit( bool bInhibit,
         res = fUnInhibit( proxy, rCookie.get(), error );
         rCookie = boost::none;
 
-        if (!res)
+        if (res != nullptr)
+        {
+            g_variant_unref(res);
+        }
+        else
         {
             SAL_INFO( "vcl.screensaverinhibitor", service << ".UnInhibit failed" );
         }
@@ -130,30 +149,23 @@ void dbusInhibit( bool bInhibit,
     }
 
     g_object_unref( G_OBJECT( proxy ) );
-
 }
-#endif // ENABLE_DBUS
+#endif // ENABLE_GIO
 
 void ScreenSaverInhibitor::inhibitFDO( bool bInhibit, const char* appname, const char* reason )
 {
-#if ENABLE_DBUS
+#if ENABLE_GIO
     dbusInhibit( bInhibit,
                  FDO_DBUS_SERVICE, FDO_DBUS_PATH, FDO_DBUS_INTERFACE,
-                 [appname, reason] ( DBusGProxy *proxy, guint& nCookie, GError*& error ) -> bool {
-                     return dbus_g_proxy_call( proxy,
-                                               "Inhibit", &error,
-                                               G_TYPE_STRING, appname,
-                                               G_TYPE_STRING, reason,
-                                               G_TYPE_INVALID,
-                                               G_TYPE_UINT, &nCookie,
-                                               G_TYPE_INVALID );
+                 [appname, reason] ( GDBusProxy *proxy, GError*& error ) -> GVariant* {
+                     return g_dbus_proxy_call_sync( proxy, "Inhibit",
+                                                    g_variant_new("(ss)", appname, reason),
+                                                    G_DBUS_CALL_FLAGS_NONE, -1, nullptr, &error );
                  },
-                 [] ( DBusGProxy *proxy, const guint nCookie, GError*& error ) -> bool {
-                     return dbus_g_proxy_call( proxy,
-                                               "UnInhibit", &error,
-                                               G_TYPE_UINT, nCookie,
-                                               G_TYPE_INVALID,
-                                               G_TYPE_INVALID );
+                 [] ( GDBusProxy *proxy, const guint nCookie, GError*& error ) -> GVariant* {
+                     return g_dbus_proxy_call_sync( proxy, "UnInhibit",
+                                                    g_variant_new("(u)", nCookie),
+                                                    G_DBUS_CALL_FLAGS_NONE, -1, nullptr, &error );
                  },
                  mnFDOCookie );
 #else
@@ -161,29 +173,23 @@ void ScreenSaverInhibitor::inhibitFDO( bool bInhibit, const char* appname, const
     (void) bInhibit;
     (void) appname;
     (void) reason;
-#endif // ENABLE_DBUS
+#endif // ENABLE_GIO
 }
 
 void ScreenSaverInhibitor::inhibitFDOPM( bool bInhibit, const char* appname, const char* reason )
 {
-#if ENABLE_DBUS
+#if ENABLE_GIO
     dbusInhibit( bInhibit,
                  FDOPM_DBUS_SERVICE, FDOPM_DBUS_PATH, FDOPM_DBUS_INTERFACE,
-                 [appname, reason] ( DBusGProxy *proxy, guint& nCookie, GError*& error ) -> bool {
-                     return dbus_g_proxy_call( proxy,
-                                               "Inhibit", &error,
-                                               G_TYPE_STRING, appname,
-                                               G_TYPE_STRING, reason,
-                                               G_TYPE_INVALID,
-                                               G_TYPE_UINT, &nCookie,
-                                               G_TYPE_INVALID );
+                 [appname, reason] ( GDBusProxy *proxy, GError*& error ) -> GVariant* {
+                     return g_dbus_proxy_call_sync( proxy, "Inhibit",
+                                                    g_variant_new("(ss)", appname, reason),
+                                                    G_DBUS_CALL_FLAGS_NONE, -1, nullptr, &error );
                  },
-                 [] ( DBusGProxy *proxy, const guint nCookie, GError*& error ) -> bool {
-                     return dbus_g_proxy_call( proxy,
-                                               "UnInhibit", &error,
-                                               G_TYPE_UINT, nCookie,
-                                               G_TYPE_INVALID,
-                                               G_TYPE_INVALID );
+                 [] ( GDBusProxy *proxy, const guint nCookie, GError*& error ) -> GVariant* {
+                     return g_dbus_proxy_call_sync( proxy, "UnInhibit",
+                                                    g_variant_new("(u)", nCookie),
+                                                    G_DBUS_CALL_FLAGS_NONE, -1, nullptr, &error );
                  },
                  mnFDOPMCookie );
 #else
@@ -191,31 +197,28 @@ void ScreenSaverInhibitor::inhibitFDOPM( bool bInhibit, const char* appname, con
     (void) bInhibit;
     (void) appname;
     (void) reason;
-#endif // ENABLE_DBUS
+#endif // ENABLE_GIO
 }
 
 void ScreenSaverInhibitor::inhibitGSM( bool bInhibit, const char* appname, const char* reason, const unsigned int xid )
 {
-#if ENABLE_DBUS
+#if ENABLE_GIO
     dbusInhibit( bInhibit,
                  GSM_DBUS_SERVICE, GSM_DBUS_PATH, GSM_DBUS_INTERFACE,
-                 [appname, reason, xid] ( DBusGProxy *proxy, guint& nCookie, GError*& error ) -> bool {
-                     return dbus_g_proxy_call( proxy,
-                                               "Inhibit", &error,
-                                               G_TYPE_STRING, appname,
-                                               G_TYPE_UINT, xid,
-                                               G_TYPE_STRING, reason,
-                                               G_TYPE_UINT, 8, //Inhibit the session being marked as idle
-                                               G_TYPE_INVALID,
-                                               G_TYPE_UINT, &nCookie,
-                                               G_TYPE_INVALID );
+                 [appname, reason, xid] ( GDBusProxy *proxy, GError*& error ) -> GVariant* {
+                     return g_dbus_proxy_call_sync( proxy, "Inhibit",
+                                                    g_variant_new("(susu)",
+                                                                  appname,
+                                                                  xid,
+                                                                  reason,
+                                                                  8 //Inhibit the session being marked as idle
+                                                                 ),
+                                                    G_DBUS_CALL_FLAGS_NONE, -1, nullptr, &error );
                  },
-                 [] ( DBusGProxy *proxy, const guint nCookie, GError*& error ) -> bool {
-                     return dbus_g_proxy_call( proxy,
-                                               "Uninhibit", &error,
-                                               G_TYPE_UINT, nCookie,
-                                               G_TYPE_INVALID,
-                                               G_TYPE_INVALID );
+                 [] ( GDBusProxy *proxy, const guint nCookie, GError*& error ) -> GVariant* {
+                     return g_dbus_proxy_call_sync( proxy, "Uninhibit",
+                                                    g_variant_new("(u)", nCookie),
+                                                    G_DBUS_CALL_FLAGS_NONE, -1, nullptr, &error );
                  },
                  mnGSMCookie );
 #else
@@ -224,31 +227,28 @@ void ScreenSaverInhibitor::inhibitGSM( bool bInhibit, const char* appname, const
     (void) appname;
     (void) reason;
     (void) xid;
-#endif // ENABLE_DBUS
+#endif // ENABLE_GIO
 }
 
 void ScreenSaverInhibitor::inhibitMSM( bool bInhibit, const char* appname, const char* reason, const unsigned int xid )
 {
-#if ENABLE_DBUS
+#if ENABLE_GIO
     dbusInhibit( bInhibit,
                  MSM_DBUS_SERVICE, MSM_DBUS_PATH, MSM_DBUS_INTERFACE,
-                 [appname, reason, xid] ( DBusGProxy *proxy, guint& nCookie, GError*& error ) -> bool {
-                     return dbus_g_proxy_call( proxy,
-                                               "Inhibit", &error,
-                                               G_TYPE_STRING, appname,
-                                               G_TYPE_UINT, xid,
-                                               G_TYPE_STRING, reason,
-                                               G_TYPE_UINT, 8, //Inhibit the session being marked as idle
-                                               G_TYPE_INVALID,
-                                               G_TYPE_UINT, &nCookie,
-                                               G_TYPE_INVALID );
+                 [appname, reason, xid] ( GDBusProxy *proxy, GError*& error ) -> GVariant* {
+                     return g_dbus_proxy_call_sync( proxy, "Inhibit",
+                                                    g_variant_new("(susu)",
+                                                                  appname,
+                                                                  xid,
+                                                                  reason,
+                                                                  8 //Inhibit the session being marked as idle
+                                                                 ),
+                                                    G_DBUS_CALL_FLAGS_NONE, -1, nullptr, &error );
                  },
-                 [] ( DBusGProxy *proxy, const guint nCookie, GError*& error ) -> bool {
-                     return dbus_g_proxy_call( proxy,
-                                               "Uninhibit", &error,
-                                               G_TYPE_UINT, nCookie,
-                                               G_TYPE_INVALID,
-                                               G_TYPE_INVALID );
+                 [] ( GDBusProxy *proxy, const guint nCookie, GError*& error ) -> GVariant* {
+                     return g_dbus_proxy_call_sync( proxy, "Uninhibit",
+                                                    g_variant_new("(u)", nCookie),
+                                                    G_DBUS_CALL_FLAGS_NONE, -1, nullptr, &error );
                  },
                  mnMSMCookie );
 #else
@@ -257,7 +257,7 @@ void ScreenSaverInhibitor::inhibitMSM( bool bInhibit, const char* appname, const
     (void) appname;
     (void) reason;
     (void) xid;
-#endif // ENABLE_DBUS
+#endif // ENABLE_GIO
 }
 
 /**
