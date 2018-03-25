@@ -32,6 +32,7 @@ $(eval $(call gb_Jar_add_sourcefiles,ConnectivityTools,\
 	connectivity/qa/connectivity/tools/DatabaseAccess \
 	connectivity/qa/connectivity/tools/DataSource \
 	connectivity/qa/connectivity/tools/DbaseDatabase \
+	connectivity/qa/connectivity/tools/FirebirdDatabase \
 	connectivity/qa/connectivity/tools/FlatFileDatabase \
 	connectivity/qa/connectivity/tools/HsqlColumnDescriptor \
 	connectivity/qa/connectivity/tools/HsqlDatabase \

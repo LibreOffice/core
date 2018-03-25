@@ -61,6 +61,11 @@ public:
         for (const auto& sIndex : sIndexes)
             indexes.push_back(sIndex.toInt32());
 
+        // ignore last element
+        // TODO this is an identity peek, which indicates the value of the next
+        // identity. At the current state all migrated identities start with 0.
+        indexes.pop_back();
+
         return indexes;
     }
 
@@ -78,7 +83,7 @@ using namespace css::io;
 using namespace css::uno;
 using namespace css::embed;
 
-typedef std::vector<sal_Int32> ColumnTypeVector;
+typedef std::vector<ColumnDefinition> ColumnTypeVector;
 
 SchemaParser::SchemaParser(Reference<XStorage>& rStorage)
     : m_rStorage(rStorage)
@@ -93,7 +98,7 @@ SqlStatementVector SchemaParser::parseSchema()
     if (!m_rStorage->hasByName(SCHEMA_FILENAME))
     {
         SAL_WARN("dbaccess", "script file does not exist in storage during hsqldb import");
-        assert(false); // TODO throw error
+        return SqlStatementVector{};
     }
 
     Reference<XStream> xStream(m_rStorage->openStreamElement(SCHEMA_FILENAME, ElementModes::READ));
@@ -124,13 +129,8 @@ SqlStatementVector SchemaParser::parseSchema()
 
             sSql = aCreateParser.compose();
 
-            // Store columns for each table
-            ColumnTypeVector colTypes;
-            std::vector<ColumnDefinition> colDefs = aCreateParser.getColumnDef();
-            for (const auto& colDef : colDefs)
-                colTypes.push_back(colDef.getDataType());
-
-            m_ColumnTypes[aCreateParser.getTableName()] = colTypes;
+            // save column definitions
+            m_ColumnTypes[aCreateParser.getTableName()] = aCreateParser.getColumnDef();
             parsedStatements.push_back(sSql);
         }
     }

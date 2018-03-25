@@ -30,7 +30,7 @@ import com.sun.star.sdbcx.XTablesSupplier;
 import com.sun.star.uno.Exception;
 import com.sun.star.uno.UnoRuntime;
 import connectivity.tools.HsqlColumnDescriptor;
-import connectivity.tools.HsqlDatabase;
+import connectivity.tools.FirebirdDatabase;
 import connectivity.tools.HsqlTableDescriptor;
 import java.io.IOException;
 
@@ -47,7 +47,7 @@ import static org.junit.Assert.*;
 public class ApplicationController extends TestCase
 {
 
-    private HsqlDatabase m_database;
+    private FirebirdDatabase m_database;
     private XOfficeDatabaseDocument m_databaseDocument;
     private XDatabaseDocumentUI m_documentUI;
 
@@ -76,8 +76,8 @@ public class ApplicationController extends TestCase
 
         // create/load the new database document
         m_database = (_documentURL == null)
-                ? new HsqlDatabase(getMSF())
-                : new HsqlDatabase(getMSF(), _documentURL);
+                ? new FirebirdDatabase(getMSF())
+                : new FirebirdDatabase(getMSF(), _documentURL);
         m_databaseDocument = m_database.getDatabaseDocument();
 
         // load it into a frame

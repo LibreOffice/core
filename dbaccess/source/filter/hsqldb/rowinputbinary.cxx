@@ -138,7 +138,7 @@ using namespace css::io;
 using namespace boost::posix_time;
 using namespace boost::gregorian;
 
-typedef std::vector<sal_Int32> ColumnTypeVector;
+typedef std::vector<ColumnDefinition> ColumnTypeVector;
 
 HsqlRowInputStream::HsqlRowInputStream() {}
 
@@ -256,7 +256,7 @@ std::vector<Any> HsqlRowInputStream::readOneRow(const ColumnTypeVector& nColType
             continue;
         }
 
-        sal_Int32 nType = nColTypes[i];
+        sal_Int32 nType = nColTypes[i].getDataType();
 
         // TODO throw error on EoF
 
@@ -315,7 +315,7 @@ std::vector<Any> HsqlRowInputStream::readOneRow(const ColumnTypeVector& nColType
                 Sequence<Any> result(2);
                 OUString sNum = lcl_makeStringFromBigint(aBytes);
                 result[0] <<= lcl_putDot(sNum, nScale);
-                result[1] <<= nSize;
+                result[1] <<= nScale;
                 aData.push_back(makeAny(result));
             }
             break;

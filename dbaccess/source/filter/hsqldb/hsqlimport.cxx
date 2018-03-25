@@ -40,7 +40,7 @@ using namespace css::io;
 using namespace css::uno;
 using namespace css::sdbc;
 
-using ColumnTypeVector = std::vector<sal_Int32>;
+using ColumnTypeVector = std::vector<dbahsql::ColumnDefinition>;
 using RowVector = std::vector<Any>;
 using IndexVector = std::vector<sal_Int32>;
 
@@ -48,9 +48,13 @@ void lcl_setParams(const RowVector& row, Reference<XParameters>& xParam,
                    const ColumnTypeVector& rColTypes)
 {
     assert(row.size() == rColTypes.size());
+    size_t nColIndex = 0;
     for (size_t i = 0; i < rColTypes.size(); ++i)
     {
-        switch (rColTypes.at(i))
+        if (!row.at(i).hasValue())
+            xParam->setNull(i + 1, rColTypes.at(i).getDataType());
+
+        switch (rColTypes.at(i).getDataType())
         {
             case DataType::CHAR:
             case DataType::VARCHAR:
@@ -59,7 +63,7 @@ void lcl_setParams(const RowVector& row, Reference<XParameters>& xParam,
                 OUString sVal;
                 if (row.at(i) >>= sVal)
                 {
-                    xParam->setString(i + 1, sVal);
+                    xParam->setString(nColIndex + 1, sVal);
                 }
             }
             break;
@@ -69,7 +73,7 @@ void lcl_setParams(const RowVector& row, Reference<XParameters>& xParam,
                 sal_Int16 nVal;
                 if (row.at(i) >>= nVal)
                 {
-                    xParam->setShort(i + 1, nVal);
+                    xParam->setShort(nColIndex + 1, nVal);
                 }
             }
             break;
@@ -78,7 +82,7 @@ void lcl_setParams(const RowVector& row, Reference<XParameters>& xParam,
                 sal_Int32 nVal;
                 if (row.at(i) >>= nVal)
                 {
-                    xParam->setInt(i + 1, nVal);
+                    xParam->setInt(nColIndex + 1, nVal);
                 }
             }
             break;
@@ -87,7 +91,7 @@ void lcl_setParams(const RowVector& row, Reference<XParameters>& xParam,
                 sal_Int64 nVal;
                 if (row.at(i) >>= nVal)
                 {
-                    xParam->setLong(i + 1, nVal);
+                    xParam->setLong(nColIndex + 1, nVal);
                 }
             }
             break;
@@ -98,7 +102,7 @@ void lcl_setParams(const RowVector& row, Reference<XParameters>& xParam,
                 double nVal;
                 if (row.at(i) >>= nVal)
                 {
-                    xParam->setDouble(i + 1, nVal);
+                    xParam->setDouble(nColIndex + 1, nVal);
                 }
             }
             break;
@@ -110,7 +114,8 @@ void lcl_setParams(const RowVector& row, Reference<XParameters>& xParam,
                 {
                     sal_Int32 nScale = 0;
                     if (aNumeric[1] >>= nScale)
-                        xParam->setObjectWithInfo(i + 1, aNumeric[0], rColTypes.at(i), nScale);
+                        xParam->setObjectWithInfo(nColIndex + 1, aNumeric[0],
+                                                  rColTypes.at(i).getDataType(), nScale);
                 }
             }
             break;
@@ -119,7 +124,7 @@ void lcl_setParams(const RowVector& row, Reference<XParameters>& xParam,
                 css::util::Date date;
                 if (row.at(i) >>= date)
                 {
-                    xParam->setDate(i + 1, date);
+                    xParam->setDate(nColIndex + 1, date);
                 }
             }
             break;
@@ -128,7 +133,7 @@ void lcl_setParams(const RowVector& row, Reference<XParameters>& xParam,
                 css::util::Time time;
                 if (row.at(i) >>= time)
                 {
-                    xParam->setTime(i + 1, time);
+                    xParam->setTime(nColIndex, time);
                 }
             }
             break;
@@ -137,7 +142,7 @@ void lcl_setParams(const RowVector& row, Reference<XParameters>& xParam,
                 css::util::DateTime dateTime;
                 if (row.at(i) >>= dateTime)
                 {
-                    xParam->setTimestamp(i + 1, dateTime);
+                    xParam->setTimestamp(nColIndex + 1, dateTime);
                 }
             }
             break;
@@ -145,7 +150,7 @@ void lcl_setParams(const RowVector& row, Reference<XParameters>& xParam,
             {
                 bool bVal = false;
                 if (row.at(i) >>= bVal)
-                    xParam->setBoolean(i + 1, bVal);
+                    xParam->setBoolean(nColIndex + 1, bVal);
             }
             break;
             case DataType::OTHER:
@@ -158,27 +163,41 @@ void lcl_setParams(const RowVector& row, Reference<XParameters>& xParam,
                 Sequence<sal_Int8> nVal;
                 if (row.at(i) >>= nVal)
                 {
-                    xParam->setBytes(i + 1, nVal);
+                    xParam->setBytes(nColIndex + 1, nVal);
                 }
                 break;
             }
             default:
                 throw WrongFormatException();
         }
+        ++nColIndex;
     }
 }
 
-OUString lcl_createInsertStatement(const OUString& sTableName, sal_Int32 nColumnCount)
+OUString lcl_createInsertStatement(const OUString& sTableName, const ColumnTypeVector& rColTypes)
 {
-    assert(nColumnCount > 0);
+    assert(rColTypes.size() > 0);
     OUStringBuffer sql("INSERT INTO ");
     sql.append(sTableName);
-    sql.append(" VALUES (");
-    for (int i = 0; i < nColumnCount - 1; ++i)
+    sql.append(" (");
+
+    // column names
+    for (size_t i = 0; i < rColTypes.size(); ++i)
     {
-        sql.append("?,");
+        sql.append(rColTypes.at(i).getName());
+        if (i < rColTypes.size() - 1)
+            sql.append(", ");
     }
-    sql.append("?)");
+    sql.append(")");
+
+    sql.append(" VALUES (");
+    for (size_t i = 0; i < rColTypes.size(); ++i)
+    {
+        sql.append("?");
+        if (i < rColTypes.size() - 1)
+            sql.append(", ");
+    }
+    sql.append(")");
     return sql.makeStringAndClear();
 }
 
@@ -198,7 +217,7 @@ HsqlImporter::HsqlImporter(Reference<XConnection>& rConnection, const Reference<
 void HsqlImporter::insertRow(const RowVector& xRows, const OUString& sTableName,
                              const ColumnTypeVector& rColTypes)
 {
-    OUString sStatement = lcl_createInsertStatement(sTableName, xRows.size());
+    OUString sStatement = lcl_createInsertStatement(sTableName, rColTypes);
     Reference<XPreparedStatement> xStatement = m_rConnection->prepareStatement(sStatement);
 
     Reference<XParameters> xParameter(xStatement, UNO_QUERY);
@@ -213,15 +232,15 @@ void HsqlImporter::processTree(HsqlBinaryNode& rNode, HsqlRowInputStream& rStrea
                                const ColumnTypeVector& rColTypes, const OUString& sTableName)
 {
     rNode.readChildren(rStream);
-    std::vector<Any> row = rNode.readRow(rStream, rColTypes);
-    insertRow(row, sTableName, rColTypes);
-
     sal_Int32 nNext = rNode.getLeft();
     if (nNext > 0)
     {
         HsqlBinaryNode aLeft{ nNext };
         processTree(aLeft, rStream, rColTypes, sTableName);
     }
+    std::vector<Any> row = rNode.readRow(rStream, rColTypes);
+    insertRow(row, sTableName, rColTypes);
+
     nNext = rNode.getRight();
     if (nNext > 0)
     {
@@ -241,7 +260,7 @@ void HsqlImporter::processTree(HsqlBinaryNode& rNode, HsqlRowInputStream& rStrea
  * Left/Right/Parent: File position of the Left/Right/Parent child
  */
 void HsqlImporter::parseTableRows(const IndexVector& rIndexes,
-                                  const std::vector<sal_Int32>& rColTypes,
+                                  const std::vector<ColumnDefinition>& rColTypes,
                                   const OUString& sTableName)
 {
     constexpr char BINARY_FILENAME[] = "data";
@@ -258,12 +277,10 @@ void HsqlImporter::parseTableRows(const IndexVector& rIndexes,
     HsqlRowInputStream rowInput;
     Reference<XInputStream> xInput = xStream->getInputStream();
     rowInput.setInputStream(xInput);
-    for (const auto& index : rIndexes)
-    {
-        if (index <= 0)
-            break;
 
-        HsqlBinaryNode aNode{ index };
+    for (const auto& rIndex : rIndexes)
+    {
+        HsqlBinaryNode aNode{ rIndex };
         processTree(aNode, rowInput, rColTypes, sTableName);
     }
     xInput->closeInput();
@@ -276,6 +293,12 @@ void HsqlImporter::importHsqlDatabase()
     SchemaParser parser(m_xStorage);
     SqlStatementVector statements = parser.parseSchema();
 
+    if (statements.size() < 1)
+    {
+        SAL_WARN("dbaccess", "dbashql: there is nothing to import");
+        return; // there is nothing to import
+    }
+
     // schema
     for (auto& sSql : statements)
     {
@@ -286,7 +309,7 @@ void HsqlImporter::importHsqlDatabase()
     // data
     for (const auto& tableIndex : parser.getTableIndexes())
     {
-        std::vector<sal_Int32> aColTypes = parser.getTableColumnTypes(tableIndex.first);
+        std::vector<ColumnDefinition> aColTypes = parser.getTableColumnTypes(tableIndex.first);
         parseTableRows(tableIndex.second, aColTypes, tableIndex.first);
     }
 }

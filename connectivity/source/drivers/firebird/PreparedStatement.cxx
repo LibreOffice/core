@@ -834,6 +834,7 @@ void SAL_CALL OPreparedStatement::setBytes(sal_Int32 nParameterIndex,
     }
     else if( dType == SQL_VARYING )
     {
+            setParameterNull(nParameterIndex, false);
             const sal_Int32 nMaxSize = 0xFFFF;
             Sequence<sal_Int8> xBytesCopy(xBytes);
             // First 2 bytes indicate string size
@@ -848,6 +849,7 @@ void SAL_CALL OPreparedStatement::setBytes(sal_Int32 nParameterIndex,
     }
     else if( dType == SQL_TEXT )
     {
+            setParameterNull(nParameterIndex, false);
             memcpy(pVar->sqldata, xBytes.getConstArray(), xBytes.getLength() );
             // Fill remainder with spaces
             memset(pVar->sqldata + xBytes.getLength(), 0, pVar->sqllen - xBytes.getLength());

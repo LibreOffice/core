@@ -14,6 +14,7 @@
 #include <cppuhelper/implbase.hxx>
 
 #include "rowinputbinary.hxx"
+#include "columndef.hxx"
 
 namespace dbahsql
 {
@@ -30,7 +31,7 @@ public:
     sal_Int32 getLeft() const;
     sal_Int32 getRight() const;
     std::vector<css::uno::Any> readRow(HsqlRowInputStream& rInput,
-                                       const std::vector<sal_Int32>& aColTypes);
+                                       const std::vector<ColumnDefinition>& aColTypes);
 };
 }
 
