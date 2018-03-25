@@ -53,7 +53,7 @@ void ScOverlayDashedBorder::Trigger(sal_uInt32 nTime)
     {
         SetTime(nTime + DASH_UPDATE_INTERVAL);
         mbToggle = !mbToggle;
-        pMgr->InsertEvent(this);
+        pMgr->InsertEvent(*this);
         objectChange();
     }
 }
