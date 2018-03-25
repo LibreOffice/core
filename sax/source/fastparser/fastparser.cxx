@@ -290,7 +290,7 @@ private:
         {
             mpParser->parse();
         }
-        catch (const Exception &)
+        catch (...)
         {
             Entity &rEntity = mpParser->getEntity();
             rEntity.getEvent( EXCEPTION );
@@ -445,7 +445,7 @@ void Entity::startElement( Event const *pEvent )
         maContextStack.top().mxContext.set( xContext.get() );
         xContext.set( nullptr, SAL_NO_ACQUIRE );
     }
-    catch (const Exception&)
+    catch (...)
     {
         saveException( ::cppu::getCaughtException() );
     }
@@ -464,7 +464,7 @@ void Entity::characters( const OUString& sChars )
     {
         xContext->characters( sChars );
     }
-    catch (const Exception&)
+    catch (...)
     {
         saveException( ::cppu::getCaughtException() );
     }
@@ -488,7 +488,7 @@ void Entity::endElement()
         else
             xContext->endUnknownElement( aContext.maNamespace, aContext.maElementName );
     }
-    catch (const Exception&)
+    catch (...)
     {
         saveException( ::cppu::getCaughtException() );
     }
@@ -501,7 +501,7 @@ void Entity::processingInstruction( const OUString& rTarget, const OUString& rDa
     {
         mxDocumentHandler->processingInstruction( rTarget, rData );
     }
-    catch (const Exception&)
+    catch (...)
     {
         saveException( ::cppu::getCaughtException() );
     }
@@ -1225,7 +1225,7 @@ void FastSaxParserImpl::callbackStartElement(const xmlChar *localName , const xm
             rEntity.startElement( &rEvent );
         }
     }
-    catch (const Exception&)
+    catch (...)
     {
         rEntity.saveException( ::cppu::getCaughtException() );
     }
