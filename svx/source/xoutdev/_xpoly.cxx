@@ -209,15 +209,9 @@ XPolygon::XPolygon( sal_uInt16 nSize )
 {
 }
 
-XPolygon::XPolygon( const XPolygon& rXPoly )
-    : pImpXPolygon(rXPoly.pImpXPolygon)
-{
-}
+XPolygon::XPolygon( const XPolygon& ) = default;
 
-XPolygon::XPolygon( XPolygon&& rXPoly )
-    : pImpXPolygon(std::move(rXPoly.pImpXPolygon))
-{
-}
+XPolygon::XPolygon( XPolygon&& ) = default;
 
 /// create a XPolygon out of a standard polygon
 XPolygon::XPolygon( const tools::Polygon& rPoly )
@@ -333,9 +327,7 @@ XPolygon::XPolygon(const Point& rCenter, long nRx, long nRy,
     pImpXPolygon->nPoints = nPos + 1;
 }
 
-XPolygon::~XPolygon()
-{
-}
+XPolygon::~XPolygon() = default;
 
 void XPolygon::SetPointCount( sal_uInt16 nPoints )
 {
@@ -455,17 +447,9 @@ Point& XPolygon::operator[]( sal_uInt16 nPos )
     return pImpXPolygon->pPointAry[nPos];
 }
 
-XPolygon& XPolygon::operator=( const XPolygon& rXPoly )
-{
-    pImpXPolygon = rXPoly.pImpXPolygon;
-    return *this;
-}
+XPolygon& XPolygon::operator=( const XPolygon& ) = default;
 
-XPolygon& XPolygon::operator=( XPolygon&& rXPoly )
-{
-    pImpXPolygon = std::move(rXPoly.pImpXPolygon);
-    return *this;
-}
+XPolygon& XPolygon::operator=( XPolygon&& ) = default;
 
 bool XPolygon::operator==( const XPolygon& rXPoly ) const
 {
@@ -866,30 +850,11 @@ XPolygon::XPolygon(const basegfx::B2DPolygon& rPolygon)
 }
 
 // XPolyPolygon
+XPolyPolygon::XPolyPolygon() = default;
 
-ImpXPolyPolygon::ImpXPolyPolygon( const ImpXPolyPolygon& rImpXPolyPoly )
-    : aXPolyList( rImpXPolyPoly.aXPolyList )
-{
-}
+XPolyPolygon::XPolyPolygon( const XPolyPolygon& ) = default;
 
-ImpXPolyPolygon::~ImpXPolyPolygon()
-{
-}
-
-XPolyPolygon::XPolyPolygon()
-    : pImpXPolyPolygon()
-{
-}
-
-XPolyPolygon::XPolyPolygon( const XPolyPolygon& rXPolyPoly )
-    : pImpXPolyPolygon( rXPolyPoly.pImpXPolyPolygon )
-{
-}
-
-XPolyPolygon::XPolyPolygon( XPolyPolygon&& rXPolyPoly )
-    : pImpXPolyPolygon( std::move(rXPolyPoly.pImpXPolyPolygon) )
-{
-}
+XPolyPolygon::XPolyPolygon( XPolyPolygon&& ) = default;
 
 XPolyPolygon::XPolyPolygon(const basegfx::B2DPolyPolygon& rPolyPolygon)
     : pImpXPolyPolygon()
@@ -901,9 +866,7 @@ XPolyPolygon::XPolyPolygon(const basegfx::B2DPolyPolygon& rPolyPolygon)
     }
 }
 
-XPolyPolygon::~XPolyPolygon()
-{
-}
+XPolyPolygon::~XPolyPolygon() = default;
 
 void XPolyPolygon::Insert( XPolygon&& rXPoly )
 {
@@ -958,17 +921,9 @@ XPolygon& XPolyPolygon::operator[]( sal_uInt16 nPos )
     return pImpXPolyPolygon->aXPolyList[ nPos ];
 }
 
-XPolyPolygon& XPolyPolygon::operator=( const XPolyPolygon& rXPolyPoly )
-{
-    pImpXPolyPolygon = rXPolyPoly.pImpXPolyPolygon;
-    return *this;
-}
+XPolyPolygon& XPolyPolygon::operator=( const XPolyPolygon& ) = default;
 
-XPolyPolygon& XPolyPolygon::operator=( XPolyPolygon&& rXPolyPoly )
-{
-    pImpXPolyPolygon = std::move(rXPolyPoly.pImpXPolyPolygon);
-    return *this;
-}
+XPolyPolygon& XPolyPolygon::operator=( XPolyPolygon&& ) = default;
 
 /**
  * Distort a polygon by scaling its coordinates relative to a reference
