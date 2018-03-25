@@ -55,10 +55,6 @@ class ImpXPolyPolygon
 {
 public:
     ::std::vector< XPolygon > aXPolyList;
-
-                ImpXPolyPolygon() {}
-                ImpXPolyPolygon( const ImpXPolyPolygon& rImpXPolyPoly );
-                ~ImpXPolyPolygon();
 };
 
 
