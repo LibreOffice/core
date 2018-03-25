@@ -219,7 +219,7 @@ const SfxSlot* SfxInterface::GetSlot( sal_uInt16 nFuncId ) const
     if ( !p && pGenoType )
         return pGenoType->GetSlot( nFuncId );
 
-    return p ? static_cast<const SfxSlot*>(p) : nullptr;
+    return static_cast<const SfxSlot*>(p);
 }
 
 const SfxSlot* SfxInterface::GetSlot( const OUString& rCommand ) const
