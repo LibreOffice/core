@@ -540,22 +540,28 @@ int SwView::KillVRuler()
 IMPL_LINK( SwView, ExecRulerClick, Ruler *, pRuler, void )
 {
     OUString sDefPage;
+    sal_uInt16 aDefDlg = SID_PARA_DLG;
     switch( pRuler->GetClickType() )
     {
         case RulerType::DontKnow:
         case RulerType::Outside:
+            sDefPage="labelTP_BORDER";
+            break;
         case RulerType::Indent:
+            sDefPage="labelTP_PARA_STD";
+            break;
         case RulerType::Margin1:
         case RulerType::Margin2:
-            sDefPage = "indents";
-        break;
+            aDefDlg= FN_FORMAT_PAGE_SETTING_DLG;
+            sDefPage = "page";
+            break;
         default:
-            sDefPage = "tabs";
+            sDefPage = "labelTP_TABULATOR";
 
     }
 
-    SfxStringItem aDefPage(SID_PARA_DLG, sDefPage);
-    GetViewFrame()->GetDispatcher()->ExecuteList(SID_PARA_DLG,
+    SfxStringItem aDefPage(aDefDlg, sDefPage);
+    GetViewFrame()->GetDispatcher()->ExecuteList(aDefDlg,
                                 SfxCallMode::SYNCHRON|SfxCallMode::RECORD,
                                 { &aDefPage });
 }
