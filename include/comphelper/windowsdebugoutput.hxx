@@ -91,7 +91,7 @@ inline std::basic_ostream<charT, traits>& operator<<(std::basic_ostream<charT, t
         else if (IsEqualIID(rIid, IID_IdentityUnmarshal))
             stream << "=\"IdentityUnmarshal\"";
         else if (IsEqualIID(rIid, IID_IFastRundown))
-            stream << "=\"IdentityUnmarshal\"";
+            stream << "=\"IFastRundown\"";
         else if (IsEqualIID(rIid, IID_IStdMarshalInfo))
             stream << "=\"IStdMarshalInfo\"";
         else if (IsEqualIID(rIid, IID_IAgileObject))
