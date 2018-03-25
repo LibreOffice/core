@@ -957,9 +957,9 @@ formula/res/fx.svg cmd/sc_dbviewfunctions.svg
 # fpicker
 # ==============================================
 fpicker/res/fp011.svg cmd/sc_firstpage.svg
-fpicker/res/fp011.svg cmd/sc_open.svg
-fpicker/res/fp011.svg cmd/sc_starshapes.svg
-fpicker/res/fp011.svg desktop/res/shared_16.svg
+fpicker/res/fp014.svg cmd/sc_open.svg
+fpicker/res/fp015.svg cmd/sc_starshapes.svg
+fpicker/res/fp016.svg desktop/res/shared_16.svg
 
 # reportdesign
 # ==============================================
