@@ -15,6 +15,7 @@
 
 #include "rowinputbinary.hxx"
 #include "hsqlbinarynode.hxx"
+#include "columndef.hxx"
 
 namespace dbahsql
 {
@@ -26,11 +27,11 @@ private:
 
 protected:
     void insertRow(const std::vector<css::uno::Any>& xRows, const OUString& sTable,
-                   const std::vector<sal_Int32>& rColTypes);
+                   const std::vector<ColumnDefinition>& rColTypes);
     void processTree(HsqlBinaryNode& rNode, HsqlRowInputStream& rStream,
-                     const std::vector<sal_Int32>& rColTypes, const OUString& sTableName);
+                     const std::vector<ColumnDefinition>& rColTypes, const OUString& sTableName);
     void parseTableRows(const std::vector<sal_Int32>& rIndexes,
-                        const std::vector<sal_Int32>& rColTypes, const OUString& sTableName);
+                        const std::vector<ColumnDefinition>& rColTypes, const OUString& sTableName);
 
 public:
     HsqlImporter(css::uno::Reference<css::sdbc::XConnection>& rConnection,

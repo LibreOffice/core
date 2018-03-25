@@ -15,6 +15,8 @@
 #include <vector>
 #include <map>
 
+#include "columndef.hxx"
+
 namespace dbahsql
 {
 using SqlStatementVector = std::vector<OUString>;
@@ -25,7 +27,7 @@ private:
     css::uno::Reference<css::embed::XStorage>& m_rStorage;
 
     // column type for each table. It is filled after parsing schema.
-    std::map<OUString, std::vector<sal_Int32>> m_ColumnTypes;
+    std::map<OUString, std::vector<ColumnDefinition>> m_ColumnTypes;
 
     // root element's position of data for each table
     std::map<OUString, std::vector<sal_Int32>> m_Indexes;
@@ -35,7 +37,7 @@ public:
 
     SqlStatementVector parseSchema();
 
-    std::vector<sal_Int32> getTableColumnTypes(const OUString& sTableName) const;
+    std::vector<ColumnDefinition> getTableColumnTypes(const OUString& sTableName) const;
 
     const std::map<OUString, std::vector<sal_Int32>>& getTableIndexes() const;
 };
