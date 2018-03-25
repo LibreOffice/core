@@ -161,9 +161,11 @@ public:
 
 private:
     // OCommonAccessibleText
-    virtual void implGetParagraphBoundary( css::i18n::Boundary& rBoundary,
+    virtual void implGetParagraphBoundary( const OUString& rText,
+                                           css::i18n::Boundary& rBoundary,
                                            ::sal_Int32 nIndex ) override;
-    virtual void implGetLineBoundary( css::i18n::Boundary& rBoundary,
+    virtual void implGetLineBoundary( const OUString& rText,
+                                      css::i18n::Boundary& rBoundary,
                                       ::sal_Int32 nIndex ) override;
 
     virtual css::uno::Reference< css::accessibility::XAccessibleContext >

@@ -61,8 +61,8 @@ namespace comphelper
         void                             implGetGlyphBoundary( const OUString& rText, css::i18n::Boundary& rBoundary, sal_Int32 nIndex );
         bool                             implGetWordBoundary( const OUString& rText, css::i18n::Boundary& rBoundary, sal_Int32 nIndex );
         void                             implGetSentenceBoundary( const OUString& rText, css::i18n::Boundary& rBoundary, sal_Int32 nIndex );
-        virtual void                     implGetParagraphBoundary( css::i18n::Boundary& rBoundary, sal_Int32 nIndex );
-        virtual void                     implGetLineBoundary( css::i18n::Boundary& rBoundary, sal_Int32 nIndex );
+        virtual void                     implGetParagraphBoundary( const OUString& rText, css::i18n::Boundary& rBoundary, sal_Int32 nIndex );
+        virtual void                     implGetLineBoundary( const OUString& rText, css::i18n::Boundary& rBoundary, sal_Int32 nIndex );
 
         /** non-virtual versions of the methods
 

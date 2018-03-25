@@ -184,61 +184,14 @@ namespace accessibility
         }
     }
 
-    void AccessibleEditableTextPara::implGetParagraphBoundary( css::i18n::Boundary& rBoundary, sal_Int32 /*nIndex*/ )
+    void AccessibleEditableTextPara::implGetParagraphBoundary( const OUString&, css::i18n::Boundary&, sal_Int32)
     {
-        SAL_INFO( "editeng", "AccessibleEditableTextPara::implGetParagraphBoundary: only a base implementation, ignoring the index" );
-
-        rBoundary.startPos = 0;
-        //rBoundary.endPos = GetTextLen();
-        OUString sText( implGetText() );
-        sal_Int32 nLength = sText.getLength();
-        rBoundary.endPos = nLength;
+        std::abort();
     }
 
-    void AccessibleEditableTextPara::implGetLineBoundary( css::i18n::Boundary& rBoundary, sal_Int32 nIndex )
+    void AccessibleEditableTextPara::implGetLineBoundary( const OUString&, css::i18n::Boundary&, sal_Int32 )
     {
-        SvxTextForwarder&   rCacheTF = GetTextForwarder();
-        const sal_Int32     nParaIndex = GetParagraphIndex();
-
-        DBG_ASSERT(nParaIndex >= 0,
-                   "AccessibleEditableTextPara::implGetLineBoundary: paragraph index value overflow");
-
-        const sal_Int32 nTextLen = rCacheTF.GetTextLen( nParaIndex );
-
-        CheckPosition(nIndex);
-
-        rBoundary.startPos = rBoundary.endPos = -1;
-
-        const sal_Int32 nLineCount=rCacheTF.GetLineCount( nParaIndex );
-
-        if( nIndex == nTextLen )
-        {
-            // #i17014# Special-casing one-behind-the-end character
-            if( nLineCount <= 1 )
-                rBoundary.startPos = 0;
-            else
-                rBoundary.startPos = nTextLen - rCacheTF.GetLineLen( nParaIndex,
-                                                                     nLineCount-1 );
-
-            rBoundary.endPos = nTextLen;
-        }
-        else
-        {
-            // normal line search
-            sal_Int32 nLine;
-            sal_Int32 nCurIndex;
-            for( nLine=0, nCurIndex=0; nLine<nLineCount; ++nLine )
-            {
-                nCurIndex += rCacheTF.GetLineLen( nParaIndex, nLine);
-
-                if( nCurIndex > nIndex )
-                {
-                    rBoundary.startPos = nCurIndex - rCacheTF.GetLineLen( nParaIndex, nLine);
-                    rBoundary.endPos = nCurIndex;
-                    break;
-                }
-            }
-        }
+        std::abort();
     }
 
 
