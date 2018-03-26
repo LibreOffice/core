@@ -124,6 +124,12 @@ DECLARE_OOXMLEXPORT_TEST(testTdf115719, "tdf115719.docx")
     CPPUNIT_ASSERT_EQUAL(2, getPages());
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf116410, "tdf116410.docx")
+{
+    // Opposite of the above, was 2 pages, should be 1 page.
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+}
+
 DECLARE_OOXMLEXPORT_TEST(testParagraphSplitOnSectionBorder, "parasplit-on-section-border.odt")
 {
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
