@@ -64,20 +64,11 @@ bool Impl_Gradient::operator==( const Impl_Gradient& rImpl_Gradient ) const
          (maEndColor        == rImpl_Gradient.maEndColor);
 }
 
-Gradient::Gradient() :
-    mpImplGradient()
-{
-}
+Gradient::Gradient() = default;
 
-Gradient::Gradient( const Gradient& rGradient ) :
-    mpImplGradient( rGradient.mpImplGradient )
-{
-}
+Gradient::Gradient( const Gradient& ) = default;
 
-Gradient::Gradient( Gradient&& rGradient ) :
-    mpImplGradient( std::move(rGradient.mpImplGradient) )
-{
-}
+Gradient::Gradient( Gradient&& ) = default;
 
 Gradient::Gradient( GradientStyle eStyle,
                     const Color& rStartColor, const Color& rEndColor ) :
@@ -88,9 +79,7 @@ Gradient::Gradient( GradientStyle eStyle,
     mpImplGradient->maEndColor      = rEndColor;
 }
 
-Gradient::~Gradient()
-{
-}
+Gradient::~Gradient() = default;
 
 void Gradient::SetStyle( GradientStyle eStyle )
 {
@@ -220,18 +209,9 @@ void Gradient::GetBoundRect( const tools::Rectangle& rRect, tools::Rectangle& rB
     }
 }
 
-Gradient& Gradient::operator=( const Gradient& rGradient )
-{
-    mpImplGradient = rGradient.mpImplGradient;
+Gradient& Gradient::operator=( const Gradient& ) = default;
 
-    return *this;
-}
-
-Gradient& Gradient::operator=( Gradient&& rGradient )
-{
-    mpImplGradient = std::move(rGradient.mpImplGradient);
-    return *this;
-}
+Gradient& Gradient::operator=( Gradient&& ) = default;
 
 bool Gradient::operator==( const Gradient& rGradient ) const
 {

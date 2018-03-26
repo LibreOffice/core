@@ -54,15 +54,7 @@ BitmapEx::BitmapEx()
 {
 }
 
-BitmapEx::BitmapEx( const BitmapEx& rBitmapEx ) :
-        maBitmap             ( rBitmapEx.maBitmap ),
-        maMask               ( rBitmapEx.maMask ),
-        maBitmapSize         ( rBitmapEx.maBitmapSize ),
-        maTransparentColor   ( rBitmapEx.maTransparentColor ),
-        meTransparent        ( rBitmapEx.meTransparent ),
-        mbAlpha              ( rBitmapEx.mbAlpha )
-{
-}
+BitmapEx::BitmapEx( const BitmapEx& ) = default;
 
 BitmapEx::BitmapEx( const BitmapEx& rBitmapEx, Point aSrc, Size aSize )
     : meTransparent(TransparentType::NONE)
@@ -173,20 +165,7 @@ BitmapEx::BitmapEx( const Bitmap& rBmp, const Color& rTransparentColor ) :
                 "BitmapEx::BitmapEx(): size mismatch for bitmap and alpha mask." );
 }
 
-BitmapEx& BitmapEx::operator=( const BitmapEx& rBitmapEx )
-{
-    if( &rBitmapEx != this )
-    {
-        maBitmap = rBitmapEx.maBitmap;
-        maMask = rBitmapEx.maMask;
-        maBitmapSize = rBitmapEx.maBitmapSize;
-        maTransparentColor = rBitmapEx.maTransparentColor;
-        meTransparent = rBitmapEx.meTransparent;
-        mbAlpha = rBitmapEx.mbAlpha;
-    }
-
-    return *this;
-}
+BitmapEx& BitmapEx::operator=( const BitmapEx& ) = default;
 
 bool BitmapEx::operator==( const BitmapEx& rBitmapEx ) const
 {

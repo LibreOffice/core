@@ -39,19 +39,6 @@ ImplLineInfo::ImplLineInfo() :
 {
 }
 
-ImplLineInfo::ImplLineInfo( const ImplLineInfo& rImplLineInfo ) :
-    meStyle     ( rImplLineInfo.meStyle ),
-    mnWidth     ( rImplLineInfo.mnWidth ),
-    mnDashCount ( rImplLineInfo.mnDashCount ),
-    mnDashLen   ( rImplLineInfo.mnDashLen ),
-    mnDotCount  ( rImplLineInfo.mnDotCount ),
-    mnDotLen    ( rImplLineInfo.mnDotLen ),
-    mnDistance  ( rImplLineInfo.mnDistance ),
-    meLineJoin  ( rImplLineInfo.meLineJoin ),
-    meLineCap   ( rImplLineInfo.meLineCap )
-{
-}
-
 inline bool ImplLineInfo::operator==( const ImplLineInfo& rB ) const
 {
     return(meStyle == rB.meStyle
@@ -72,29 +59,15 @@ LineInfo::LineInfo( LineStyle eStyle, long nWidth ) : mpImplLineInfo()
     mpImplLineInfo->mnWidth = nWidth;
 }
 
-LineInfo::LineInfo( const LineInfo& rLineInfo ) : mpImplLineInfo(rLineInfo.mpImplLineInfo)
-{
-}
+LineInfo::LineInfo( const LineInfo& ) = default;
 
-LineInfo::LineInfo( LineInfo&& rLineInfo ) : mpImplLineInfo(std::move(rLineInfo.mpImplLineInfo))
-{
-}
+LineInfo::LineInfo( LineInfo&& ) = default;
 
-LineInfo::~LineInfo()
-{
-}
+LineInfo::~LineInfo() = default;
 
-LineInfo& LineInfo::operator=( const LineInfo& rLineInfo )
-{
-    mpImplLineInfo = rLineInfo.mpImplLineInfo;
-    return *this;
-}
+LineInfo& LineInfo::operator=( const LineInfo& ) = default;
 
-LineInfo& LineInfo::operator=( LineInfo&& rLineInfo )
-{
-    mpImplLineInfo = std::move(rLineInfo.mpImplLineInfo);
-    return *this;
-}
+LineInfo& LineInfo::operator=( LineInfo&& ) = default;
 
 bool LineInfo::operator==( const LineInfo& rLineInfo ) const
 {

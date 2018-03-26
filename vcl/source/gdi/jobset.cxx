@@ -162,17 +162,9 @@ void ImplJobSetup::SetValueMap( const OUString& rKey, const OUString& rValue )
     maValueMap [ rKey ] = rValue;
 }
 
-JobSetup& JobSetup::operator=( const JobSetup& rJobSetup )
-{
-    mpData = rJobSetup.mpData;
-    return *this;
-}
+JobSetup& JobSetup::operator=( const JobSetup& ) = default;
 
-JobSetup& JobSetup::operator=( JobSetup&& rJobSetup )
-{
-    mpData = std::move(rJobSetup.mpData);
-    return *this;
-}
+JobSetup& JobSetup::operator=( JobSetup&& ) = default;
 
 bool ImplJobSetup::operator==( const ImplJobSetup& rImplJobSetup ) const
 {
@@ -201,13 +193,9 @@ JobSetup::JobSetup() : mpData(theGlobalDefault::get())
 {
 }
 
-JobSetup::JobSetup( const JobSetup& rJobSetup ) : mpData(rJobSetup.mpData)
-{
-}
+JobSetup::JobSetup( const JobSetup& ) = default;
 
-JobSetup::~JobSetup()
-{
-}
+JobSetup::~JobSetup() = default;
 
 bool JobSetup::operator==( const JobSetup& rJobSetup ) const
 {

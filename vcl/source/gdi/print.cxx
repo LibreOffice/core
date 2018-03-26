@@ -336,19 +336,9 @@ QueueInfo::QueueInfo()
     mnJobs      = 0;
 }
 
-QueueInfo::QueueInfo( const QueueInfo& rInfo ) :
-    maPrinterName( rInfo.maPrinterName ),
-    maDriver( rInfo.maDriver ),
-    maLocation( rInfo.maLocation ),
-    maComment( rInfo.maComment ),
-    mnStatus( rInfo.mnStatus ),
-    mnJobs( rInfo.mnJobs )
-{
-}
+QueueInfo::QueueInfo( const QueueInfo& ) = default;
 
-QueueInfo::~QueueInfo()
-{
-}
+QueueInfo::~QueueInfo() = default;
 
 SalPrinterQueueInfo::SalPrinterQueueInfo()
 {

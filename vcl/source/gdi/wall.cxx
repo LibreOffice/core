@@ -142,15 +142,9 @@ Wallpaper::Wallpaper() : mpImplWallpaper(theGlobalDefault::get())
 {
 }
 
-Wallpaper::Wallpaper( const Wallpaper& rWallpaper )
-    : mpImplWallpaper( rWallpaper.mpImplWallpaper)
-{
-}
+Wallpaper::Wallpaper( const Wallpaper& ) = default;
 
-Wallpaper::Wallpaper( Wallpaper&& rWallpaper )
-    : mpImplWallpaper( std::move(rWallpaper.mpImplWallpaper) )
-{
-}
+Wallpaper::Wallpaper( Wallpaper&& ) = default;
 
 Wallpaper::Wallpaper( const Color& rColor ) : mpImplWallpaper()
 {
@@ -170,9 +164,7 @@ Wallpaper::Wallpaper( const Gradient& rGradient ) : mpImplWallpaper()
     mpImplWallpaper->meStyle    = WallpaperStyle::Tile;
 }
 
-Wallpaper::~Wallpaper()
-{
-}
+Wallpaper::~Wallpaper() = default;
 
 void Wallpaper::ImplSetCachedBitmap( BitmapEx& rBmp ) const
 {
@@ -344,17 +336,9 @@ bool Wallpaper::IsScrollable() const
         return false;
 }
 
-Wallpaper& Wallpaper::operator=( const Wallpaper& rWallpaper )
-{
-    mpImplWallpaper = rWallpaper.mpImplWallpaper;
-    return *this;
-}
+Wallpaper& Wallpaper::operator=( const Wallpaper& ) = default;
 
-Wallpaper& Wallpaper::operator=( Wallpaper&& rWallpaper )
-{
-    mpImplWallpaper = std::move(rWallpaper.mpImplWallpaper);
-    return *this;
-}
+Wallpaper& Wallpaper::operator=( Wallpaper&& ) = default;
 
 bool Wallpaper::operator==( const Wallpaper& rWallpaper ) const
 {

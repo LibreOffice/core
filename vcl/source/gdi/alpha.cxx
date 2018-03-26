@@ -22,9 +22,7 @@
 #include <vcl/alpha.hxx>
 #include <bitmapwriteaccess.hxx>
 
-AlphaMask::AlphaMask()
-{
-}
+AlphaMask::AlphaMask() = default;
 
 AlphaMask::AlphaMask( const Bitmap& rBitmap ) :
     Bitmap( rBitmap )
@@ -33,15 +31,9 @@ AlphaMask::AlphaMask( const Bitmap& rBitmap ) :
         Convert( BmpConversion::N8BitGreys );
 }
 
-AlphaMask::AlphaMask( const AlphaMask& rAlphaMask ) :
-    Bitmap( rAlphaMask )
-{
-}
+AlphaMask::AlphaMask( const AlphaMask& ) = default;
 
-AlphaMask::AlphaMask( AlphaMask&& rAlphaMask ) :
-    Bitmap( std::move(rAlphaMask) )
-{
-}
+AlphaMask::AlphaMask( AlphaMask&& ) = default;
 
 AlphaMask::AlphaMask( const Size& rSizePixel, const sal_uInt8* pEraseTransparency ) :
     Bitmap( rSizePixel, 8, &Bitmap::GetGreyPalette( 256 ) )
@@ -50,9 +42,7 @@ AlphaMask::AlphaMask( const Size& rSizePixel, const sal_uInt8* pEraseTransparenc
         Bitmap::Erase( Color( *pEraseTransparency, *pEraseTransparency, *pEraseTransparency ) );
 }
 
-AlphaMask::~AlphaMask()
-{
-}
+AlphaMask::~AlphaMask() = default;
 
 AlphaMask& AlphaMask::operator=( const Bitmap& rBitmap )
 {
