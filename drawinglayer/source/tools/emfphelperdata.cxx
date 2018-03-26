@@ -938,7 +938,11 @@ namespace emfplushelper
                         rMS.ReadUInt32(brushIndexOrColor);
                         SAL_INFO("drawinglayer", "EMF+ FillPath slot: " << index);
 
-                        EMFPPlusFillPolygon(static_cast<EMFPPath*>(maEMFPObjects[index].get())->GetPolygon(*this), flags & 0x8000, brushIndexOrColor);
+                        EMFPPath* path = static_cast<EMFPPath*>(maEMFPObjects[index].get());
+                        if (path)
+                            EMFPPlusFillPolygon(path->GetPolygon(*this), flags & 0x8000, brushIndexOrColor);
+                        else
+                            SAL_WARN("drawinglayer", "EmfPlusRecordTypeFillPath missing path");
                     }
                     break;
                     case EmfPlusRecordTypeFillRegion:
@@ -1061,10 +1065,12 @@ namespace emfplushelper
                         rMS.ReadUInt32(penIndex);
                         SAL_INFO("drawinglayer", "EMF+ DrawPath");
                         SAL_INFO("drawinglayer", "EMF+\tpen: " << penIndex);
-                        EMFPPath* path = static_cast<EMFPPath*>(maEMFPObjects[flags & 0xff].get());
-                        SAL_WARN_IF(!path, "drawinglayer", "EmfPlusRecordTypeDrawPath missing path");
 
-                        EMFPPlusDrawPolygon(path->GetPolygon(*this), penIndex);
+                        EMFPPath* path = static_cast<EMFPPath*>(maEMFPObjects[flags & 0xff].get());
+                        if (path)
+                            EMFPPlusDrawPolygon(path->GetPolygon(*this), penIndex);
+                        else
+                            SAL_WARN("drawinglayer", "EmfPlusRecordTypeDrawPath missing path");
 
                         break;
                     }
