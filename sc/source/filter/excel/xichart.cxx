@@ -1872,6 +1872,11 @@ void XclImpChSeries::SetDataLabel( const XclImpChTextRef& xLabel )
 void XclImpChSeries::AddChildSeries( const XclImpChSeries& rSeries )
 {
     OSL_ENSURE( !HasParentSeries(), "XclImpChSeries::AddChildSeries - not allowed for child series" );
+    if (&rSeries == this)
+    {
+        SAL_WARN("sc.filter", "self add attempt");
+        return;
+    }
 
     /*  In Excel, trend lines and error bars are stored as own series. In Calc,
         these are properties of the parent series. This function adds the
