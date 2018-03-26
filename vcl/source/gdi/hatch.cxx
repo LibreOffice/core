@@ -29,14 +29,6 @@ ImplHatch::ImplHatch() :
 {
 }
 
-ImplHatch::ImplHatch( const ImplHatch& rImplHatch ) :
-    maColor     ( rImplHatch.maColor ),
-    meStyle     ( rImplHatch.meStyle ),
-    mnDistance  ( rImplHatch.mnDistance ),
-    mnAngle     ( rImplHatch.mnAngle )
-{
-}
-
 bool ImplHatch::operator==( const ImplHatch& rImplHatch ) const
 {
     return maColor == rImplHatch.maColor &&
@@ -45,13 +37,9 @@ bool ImplHatch::operator==( const ImplHatch& rImplHatch ) const
         mnAngle == rImplHatch.mnAngle;
 }
 
-Hatch::Hatch() : mpImplHatch()
-{
-}
+Hatch::Hatch() = default;
 
-Hatch::Hatch( const Hatch& rHatch ) : mpImplHatch( rHatch.mpImplHatch )
-{
-}
+Hatch::Hatch( const Hatch& ) = default;
 
 Hatch::Hatch( HatchStyle eStyle, const Color& rColor,
               long nDistance, sal_uInt16 nAngle10 ) : mpImplHatch()
@@ -62,15 +50,9 @@ Hatch::Hatch( HatchStyle eStyle, const Color& rColor,
     mpImplHatch->mnAngle = nAngle10;
 }
 
-Hatch::~Hatch()
-{
-}
+Hatch::~Hatch() = default;
 
-Hatch& Hatch::operator=( const Hatch& rHatch )
-{
-    mpImplHatch = rHatch.mpImplHatch;
-    return *this;
-}
+Hatch& Hatch::operator=( const Hatch& ) = default;
 
 bool Hatch::operator==( const Hatch& rHatch ) const
 {

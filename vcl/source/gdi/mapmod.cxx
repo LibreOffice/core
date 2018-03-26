@@ -52,14 +52,7 @@ MapMode::ImplMapMode::ImplMapMode() :
     mbSimple = true;
 }
 
-MapMode::ImplMapMode::ImplMapMode( const ImplMapMode& rImplMapMode ) :
-    meUnit( rImplMapMode.meUnit ),
-    maOrigin( rImplMapMode.maOrigin ),
-    maScaleX( rImplMapMode.maScaleX ),
-    maScaleY( rImplMapMode.maScaleY ),
-    mbSimple( rImplMapMode.mbSimple )
-{
-}
+MapMode::ImplMapMode::ImplMapMode( const ImplMapMode& ) = default;
 
 bool MapMode::ImplMapMode::operator==( const ImplMapMode& rImpMapMode ) const
 {
@@ -79,9 +72,7 @@ MapMode::MapMode() : mpImplMapMode(theGlobalDefault::get())
 {
 }
 
-MapMode::MapMode( const MapMode& rMapMode ) : mpImplMapMode( rMapMode.mpImplMapMode )
-{
-}
+MapMode::MapMode( const MapMode& ) = default;
 
 MapMode::MapMode( MapUnit eUnit ) : mpImplMapMode()
 {
@@ -100,9 +91,7 @@ MapMode::MapMode( MapUnit eUnit, const Point& rLogicOrg,
     mpImplMapMode->mbSimple = false;
 }
 
-MapMode::~MapMode()
-{
-}
+MapMode::~MapMode() = default;
 
 void MapMode::SetMapUnit( MapUnit eUnit )
 {
@@ -129,17 +118,9 @@ void MapMode::SetScaleY( const Fraction& rScaleY )
     mpImplMapMode->mbSimple = false;
 }
 
-MapMode& MapMode::operator=( const MapMode& rMapMode )
-{
-    mpImplMapMode = rMapMode.mpImplMapMode;
-    return *this;
-}
+MapMode& MapMode::operator=( const MapMode& ) = default;
 
-MapMode& MapMode::operator=( MapMode&& rMapMode )
-{
-    mpImplMapMode = std::move(rMapMode.mpImplMapMode);
-    return *this;
-}
+MapMode& MapMode::operator=( MapMode&& ) = default;
 
 bool MapMode::operator==( const MapMode& rMapMode ) const
 {
