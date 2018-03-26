@@ -434,6 +434,9 @@
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Manual ~Break...</value>
         </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
       </node>
       <node oor:name=".uno:InsertColumnBreak" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
@@ -2417,6 +2420,9 @@
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">~Line Numbering...</value>
         </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
       </node>
       <node oor:name=".uno:ShowGraphics" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
@@ -3258,6 +3264,9 @@
       <node oor:name=".uno:Watermark" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Watermark...</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
         </prop>
       </node>
       <node oor:name=".uno:FormMoreFieldsMenu" oor:op="replace">
