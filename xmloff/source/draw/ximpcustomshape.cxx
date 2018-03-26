@@ -484,7 +484,7 @@ void GetSizeSequence( std::vector< css::beans::PropertyValue >& rDest,
 
     if ( !vNum.empty() )
     {
-        uno::Sequence< awt::Size > aSizeSeq( vNum.size() / 2 );
+        uno::Sequence< awt::Size > aSizeSeq((vNum.size() + 1) / 2);
         std::vector< sal_Int32 >::const_iterator aIter = vNum.begin();
         std::vector< sal_Int32 >::const_iterator aEnd = vNum.end();
         awt::Size* pValues = aSizeSeq.getArray();
