@@ -160,7 +160,7 @@ SwUndo::SwUndo(SwUndoId const nId, const SwDoc* pDoc)
     : m_nId(nId), nOrigRedlineFlags(RedlineFlags::NONE)
     , m_nViewShellId(CreateViewShellId(pDoc))
     , m_isRepeatIgnored(false)
-    , bCacheComment(true), pComment(nullptr)
+    , bCacheComment(true)
 {
 }
 
@@ -653,16 +653,16 @@ OUString SwUndo::GetComment() const
 
     if (bCacheComment)
     {
-        if (! pComment)
+        if (! maComment)
         {
-            pComment.reset(new OUString(GetUndoComment(GetId())));
+            maComment = GetUndoComment(GetId());
 
             SwRewriter aRewriter = GetRewriter();
 
-            *pComment = aRewriter.Apply(*pComment);
+            maComment = aRewriter.Apply(*maComment);
         }
 
-        aResult = *pComment;
+        aResult = *maComment;
     }
     else
     {

@@ -366,7 +366,7 @@ OUString SwUndoInsLayFormat::GetComment() const
             aResult = SwUndo::GetComment();
     }
     else
-        aResult = *pComment;
+        aResult = *maComment;
 
     return aResult;
 }

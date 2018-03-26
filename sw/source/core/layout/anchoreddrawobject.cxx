@@ -198,8 +198,6 @@ bool SwObjPosOscillationControl::OscillationDetected()
 SwAnchoredDrawObject::SwAnchoredDrawObject() :
     SwAnchoredObject(),
     mbValidPos( false ),
-    // --> #i34748#
-    mpLastObjRect( nullptr ),
     mbNotYetAttachedToAnchorFrame( true ),
     // --> #i28749#
     mbNotYetPositioned( true ),
@@ -724,11 +722,7 @@ void SwAnchoredDrawObject::AdjustPositioningAttr( const SwFrame* _pNewAnchorFram
 // If member <mpLastObjRect> is NULL, create one.
 void SwAnchoredDrawObject::SetLastObjRect( const tools::Rectangle& _rNewLastRect )
 {
-    if ( !mpLastObjRect )
-    {
-        mpLastObjRect.reset( new tools::Rectangle );
-    }
-    *(mpLastObjRect) = _rNewLastRect;
+    maLastObjRect = _rNewLastRect;
 }
 
 void SwAnchoredDrawObject::ObjectAttachedToAnchorFrame()
