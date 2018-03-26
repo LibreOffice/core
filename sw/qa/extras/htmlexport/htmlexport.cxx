@@ -14,6 +14,8 @@
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/document/XEmbeddedObjectSupplier2.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
+#include <com/sun/star/io/XActiveDataStreamer.hpp>
+#include <com/sun/star/io/XSeekable.hpp>
 #include <rtl/byteseq.hxx>
 
 #include <swmodule.hxx>
@@ -474,6 +476,26 @@ DECLARE_HTMLEXPORT_TEST(testReqIfTable, "reqif-table.xhtml")
 
     // The attribute was present, which is not valid in reqif-xhtml.
     assertXPathNoAttribute(pDoc, "/html/body/div/table/tr/th", "bgcolor");
+}
+
+DECLARE_HTMLEXPORT_ROUNDTRIP_TEST(testReqIfOle2, "reqif-ole2.xhtml")
+{
+    uno::Reference<text::XTextEmbeddedObjectsSupplier> xSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xObjects(xSupplier->getEmbeddedObjects(),
+                                                     uno::UNO_QUERY);
+    uno::Reference<document::XEmbeddedObjectSupplier2> xObject(xObjects->getByIndex(0),
+                                                               uno::UNO_QUERY);
+    uno::Reference<io::XActiveDataStreamer> xEmbeddedObject(xObject->getExtendedControlOverEmbeddedObject(), uno::UNO_QUERY);
+    // This failed, the "RTF fragment" native data was loaded as-is, we had no
+    // filter to handle it, so nothing happened on double-click.
+    CPPUNIT_ASSERT(xEmbeddedObject.is());
+    uno::Reference<io::XSeekable> xStream(xEmbeddedObject->getStream(), uno::UNO_QUERY);
+    // This was 80913, the RTF hexdump -> OLE1 binary -> OLE2 conversion was
+    // missing.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int64>(38912), xStream->getLength());
+    // Finally the export also failed as it tried to open the stream from the
+    // document storage, but the embedded object already opened it, so an
+    // exception of type com.sun.star.io.IOException was thrown.
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

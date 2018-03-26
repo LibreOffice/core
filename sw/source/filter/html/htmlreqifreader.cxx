@@ -9,12 +9,15 @@
 
 #include "htmlreqifreader.hxx"
 
+#include <comphelper/scopeguard.hxx>
+#include <filter/msfilter/rtfutil.hxx>
 #include <rtl/character.hxx>
 #include <rtl/strbuf.hxx>
+#include <sot/storage.hxx>
 #include <svtools/parrtf.hxx>
+#include <svtools/rtfkeywd.hxx>
 #include <svtools/rtftoken.h>
 #include <tools/stream.hxx>
-#include <filter/msfilter/rtfutil.hxx>
 
 namespace
 {
@@ -57,6 +60,100 @@ bool ReqIfRtfReader::WriteObjectData(SvStream& rOLE)
 {
     return msfilter::rtfutil::ExtractOLE2FromObjdata(m_aHex.makeStringAndClear(), rOLE);
 }
+
+/// Looks up what OLE1 calls the ClassName, see [MS-OLEDS] 2.3.8 CompObjStream.
+OString ExtractOLEClassName(const tools::SvRef<SotStorage>& xStorage)
+{
+    OString aRet;
+
+    SotStorageStream* pCompObj = xStorage->OpenSotStream("\1CompObj");
+    if (!pCompObj)
+        return aRet;
+
+    pCompObj->Seek(0);
+    pCompObj->SeekRel(28); // Header
+    if (!pCompObj->good())
+        return aRet;
+
+    sal_uInt32 nData;
+    pCompObj->ReadUInt32(nData); // AnsiUserType
+    pCompObj->SeekRel(nData);
+    if (!pCompObj->good())
+        return aRet;
+
+    pCompObj->ReadUInt32(nData); // AnsiClipboardFormat
+    pCompObj->SeekRel(nData);
+    if (!pCompObj->good())
+        return aRet;
+
+    pCompObj->ReadUInt32(nData); // Reserved1
+    return read_uInt8s_ToOString(*pCompObj, nData);
+}
+
+/// Inserts an OLE1 header before an OLE2 storage.
+OString InsertOLE1Header(SvStream& rOle2, SvStream& rOle1)
+{
+    rOle2.Seek(0);
+    tools::SvRef<SotStorage> xStorage(new SotStorage(rOle2));
+    if (xStorage->GetError() != ERRCODE_NONE)
+        return OString();
+
+    OString aClassName = ExtractOLEClassName(xStorage);
+
+    // Write ObjectHeader, see [MS-OLEDS] 2.2.4.
+    rOle1.Seek(0);
+    // OLEVersion.
+    rOle1.WriteUInt32(0);
+
+    // FormatID is EmbeddedObject.
+    rOle1.WriteUInt32(0x00000002);
+
+    // ClassName
+    rOle1.WriteUInt32(aClassName.getLength());
+    rOle1.WriteOString(aClassName);
+    // Null terminated pascal string.
+    rOle1.WriteChar(0);
+
+    // TopicName.
+    rOle1.WriteUInt32(0);
+
+    // ItemName.
+    rOle1.WriteUInt32(0);
+
+    // NativeDataSize
+    rOle2.Seek(STREAM_SEEK_TO_END);
+    rOle1.WriteUInt32(rOle2.Tell());
+
+    // Write the actual native data.
+    rOle2.Seek(0);
+    rOle1.WriteStream(rOle2);
+
+    return aClassName;
+}
+
+/// Writes rData on rSteram as a hexdump.
+void WriteHex(SvStream& rStream, SvMemoryStream& rData)
+{
+    rData.Seek(0);
+    sal_uInt64 nSize = rData.remainingSize();
+
+    sal_uInt32 nLimit = 64;
+    sal_uInt32 nBreak = 0;
+
+    for (sal_uInt64 i = 0; i < nSize; i++)
+    {
+        OString sNo = OString::number(static_cast<const sal_uInt8*>(rData.GetBuffer())[i], 16);
+        if (sNo.getLength() < 2)
+            rStream.WriteChar('0');
+        rStream.WriteCharPtr(sNo.getStr());
+
+        if (++nBreak == nLimit)
+        {
+            rStream.WriteCharPtr(SAL_NEWLINE_STRING);
+            nBreak = 0;
+        }
+    }
+}
 }
 
 namespace SwReqIfReader
@@ -78,6 +175,37 @@ bool ExtractOleFromRtf(SvStream& rRtf, SvStream& rOle)
 
     // Write the OLE2 data.
     return xReader->WriteObjectData(rOle);
+}
+
+bool WrapOleInRtf(SvStream& rOle2, SvStream& rRtf)
+{
+    sal_uInt64 nPos = rOle2.Tell();
+    comphelper::ScopeGuard g([&rOle2, nPos] { rOle2.Seek(nPos); });
+
+    // Write OLE1 header, then the RTF wrapper.
+    SvMemoryStream aOLE1;
+    OString aClassName = InsertOLE1Header(rOle2, aOLE1);
+
+    // Start object.
+    rRtf.WriteCharPtr("{" OOO_STRING_SVTOOLS_RTF_OBJECT);
+    rRtf.WriteCharPtr(OOO_STRING_SVTOOLS_RTF_OBJEMB);
+
+    // Start objclass.
+    rRtf.WriteCharPtr("{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_OBJCLASS " ");
+    rRtf.WriteOString(aClassName);
+    // End objclass.
+    rRtf.WriteCharPtr("}");
+
+    // Start objdata.
+    rRtf.WriteCharPtr(
+        "{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_OBJDATA SAL_NEWLINE_STRING);
+    WriteHex(rRtf, aOLE1);
+    // End objdata.
+    rRtf.WriteCharPtr("}");
+    // End object.
+    rRtf.WriteCharPtr("}");
+
+    return true;
 }
 }
 
