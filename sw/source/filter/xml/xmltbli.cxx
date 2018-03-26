@@ -19,6 +19,7 @@
 
 #include <hintids.hxx>
 
+#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/table/XCellRange.hpp>
@@ -1626,8 +1627,10 @@ void SwXMLTableContext::InsertCell( const OUString& rStyleName,
         for( sal_uInt32 j=nRowSpan; j>0; --j )
         {
             const bool bCovered = i != nColSpan || j != nRowSpan;
-            GetCell( nRowsReq-j, nColsReq-i )
-                ->Set( sStyleName, j, i, pStartNode,
+            SwXMLTableCell_Impl *pCell = GetCell( nRowsReq-j, nColsReq-i );
+            if (!pCell)
+                throw css::lang::IndexOutOfBoundsException();
+            pCell->Set( sStyleName, j, i, pStartNode,
                        pTable, bProtect, pFormula, bHasValue, bCovered, fValue,
                        pStringValue, i_rXmlId );
         }
