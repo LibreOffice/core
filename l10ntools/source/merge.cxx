@@ -111,9 +111,9 @@ OString MergeEntrys::GetQTZText(const ResData& rResData, const OString& rOrigTex
 // class MergeDataHashMap
 
 
-std::pair<MergeDataHashMap::iterator,bool> MergeDataHashMap::insert(const OString& rKey, MergeData* pMergeData)
+std::pair<MergeDataHashMap::iterator,bool> MergeDataHashMap::insert(const OString& rKey, std::unique_ptr<MergeData> pMergeData)
 {
-    std::pair<iterator,bool> aTemp = m_aHashMap.emplace( rKey, pMergeData );
+    std::pair<iterator,bool> aTemp = m_aHashMap.emplace( rKey, std::move(pMergeData) );
     if( m_aHashMap.size() == 1 )
     {
         // When first insert, set an iterator to the first element
@@ -296,8 +296,6 @@ MergeDataFile::MergeDataFile(
 
 MergeDataFile::~MergeDataFile()
 {
-    for (auto const& elem : aMap)
-        delete elem.second;
 }
 
 std::vector<OString> MergeDataFile::GetLanguages() const
@@ -325,7 +323,7 @@ MergeData *MergeDataFile::GetMergeData( ResData *pResData , bool bCaseSensitive 
     {
         pResData->sGId = sOldG;
         pResData->sId = sOldL;
-        return mit->second;
+        return mit->second.get();
     }
     pResData->sGId = sOldG;
     pResData->sId = sOldL;
@@ -366,14 +364,14 @@ void MergeDataFile::InsertEntry(
     {
         MergeDataHashMap::const_iterator mit = aMap.find( sKey );
         if(mit != aMap.end())
-            pData = mit->second;
+            pData = mit->second.get();
 
     }
 
     if( !pData )
     {
         pData = new MergeData;
-        aMap.insert( sKey, pData );
+        aMap.insert( sKey, std::unique_ptr<MergeData>(pData) );
     }
 
 

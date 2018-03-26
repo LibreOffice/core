@@ -151,7 +151,7 @@ class MergeData;
 class MergeDataHashMap
 {
     private:
-        typedef std::unordered_map<OString, MergeData*> HashMap_t;
+        typedef std::unordered_map<OString, std::unique_ptr<MergeData>> HashMap_t;
 
     public:
         MergeDataHashMap()
@@ -165,7 +165,7 @@ class MergeDataHashMap
         typedef HashMap_t::iterator iterator;
         typedef HashMap_t::const_iterator const_iterator;
 
-        std::pair<iterator,bool> insert(const OString& rKey, MergeData* pMergeData);
+        std::pair<iterator,bool> insert(const OString& rKey, std::unique_ptr<MergeData> pMergeData);
         iterator const & find(const OString& rKey);
 
         iterator begin() {return m_aHashMap.begin();}
