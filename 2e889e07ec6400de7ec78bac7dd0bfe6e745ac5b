@@ -1,0 +1,130 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_19f3090c",
+        "filename": "sc/source/core/tool/interpr3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3581,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-03-26T15:13:15Z",
+      "side": 1,
+      "message": "This was already in the code moved here, but I think the clear() is not necessary. This gets resized to 1 element, which is set below.",
+      "range": {
+        "startLine": 3581,
+        "startChar": 0,
+        "endLine": 3581,
+        "endChar": 45
+      },
+      "revId": "2e889e07ec6400de7ec78bac7dd0bfe6e745ac5b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_79da457a",
+        "filename": "sc/source/core/tool/interpr3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3582,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-03-26T15:13:15Z",
+      "side": 1,
+      "message": "Maybe instead we should just empty the vector here, using\n\n std::vector\u003cdouble\u003e().swap(aResultArray);\n\nand ...",
+      "revId": "2e889e07ec6400de7ec78bac7dd0bfe6e745ac5b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_99e7f93f",
+        "filename": "sc/source/core/tool/interpr3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3585,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-03-26T15:13:15Z",
+      "side": 1,
+      "message": "... remove this else path, and ...",
+      "range": {
+        "startLine": 3584,
+        "startChar": 0,
+        "endLine": 3585,
+        "endChar": 52
+      },
+      "revId": "2e889e07ec6400de7ec78bac7dd0bfe6e745ac5b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_d9cfb1b1",
+        "filename": "sc/source/core/tool/interpr3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3586,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-03-26T15:13:15Z",
+      "side": 1,
+      "message": "... append one element here with\n\n aResultArray.emplace_back(nOldVal);",
+      "range": {
+        "startLine": 3586,
+        "startChar": 0,
+        "endLine": 3586,
+        "endChar": 71
+      },
+      "revId": "2e889e07ec6400de7ec78bac7dd0bfe6e745ac5b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_f9d47548",
+        "filename": "sc/source/core/tool/interpr3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3601,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-03-26T15:13:15Z",
+      "side": 1,
+      "message": "Same here as above, swap an empty vector in if (nCount \u003e nMax), remove the else path, emplace_back(nOldVal).",
+      "revId": "2e889e07ec6400de7ec78bac7dd0bfe6e745ac5b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_f930f5a0",
+        "filename": "sc/source/core/tool/interpr3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3624,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-03-26T15:13:15Z",
+      "side": 1,
+      "message": "As lcl_2ndColOnlyCmp() is used only once, maybe better use a lambda? Something like\n\n [](const std::vector\u003cdouble\u003e\u0026 lhs, const std::vector\u003cdouble\u003e\u0026 rhs) { return lhs[1] \u003c rhs[1]; }\n\nwhich makes it more obvious to the reader what is happening here without having to scroll up / lookup lcl_2ndColOnlyCmp.",
+      "range": {
+        "startLine": 3624,
+        "startChar": 48,
+        "endLine": 3624,
+        "endChar": 67
+      },
+      "revId": "2e889e07ec6400de7ec78bac7dd0bfe6e745ac5b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
