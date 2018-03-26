@@ -11,6 +11,7 @@
 
 #ifndef _WIN32
 #include <sys/stat.h>
+#include <unistd.h>
 #endif
 #include <memory>
 
@@ -51,6 +52,7 @@ public:
     virtual void setUp() override;
     void testODFCustomMetadata();
     void testNoThumbnail();
+    void testHardLinks();
 
     virtual void registerNamespaces(xmlXPathContextPtr& pXmlXpathCtx) override
     {
@@ -66,6 +68,7 @@ public:
     CPPUNIT_TEST_SUITE(MiscTest);
     CPPUNIT_TEST(testODFCustomMetadata);
     CPPUNIT_TEST(testNoThumbnail);
+    CPPUNIT_TEST(testHardLinks);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -145,6 +148,35 @@ void MiscTest::testNoThumbnail()
 #endif
 
     xComponent->dispose();
+}
+
+void MiscTest::testHardLinks()
+{
+#ifndef _WIN32
+    OUString aSourceDir = m_directories.getURLFromSrc("/sfx2/qa/cppunit/misc/");
+    OUString aTargetDir = m_directories.getURLFromWorkdir("/CppunitTest/sfx2_misc.test.user/");
+    const OUString aURL(aTargetDir + "hello.odt");
+    osl::File::copy(aSourceDir + "hello.odt", aURL);
+    OUString aTargetPath;
+    osl::FileBase::getSystemPathFromFileURL(aURL, aTargetPath);
+    OString aOld = aTargetPath.toUtf8();
+    aTargetPath += ".2";
+    OString aNew = aTargetPath.toUtf8();
+    link(aOld.getStr(), aNew.getStr());
+
+    uno::Reference<lang::XComponent> xComponent = loadFromDesktop(aURL, "com.sun.star.text.TextDocument");
+    CPPUNIT_ASSERT(xComponent.is());
+
+    uno::Reference<frame::XStorable> xStorable(xComponent, uno::UNO_QUERY);
+    xStorable->store();
+
+    struct stat buf;
+    stat(aOld.getStr(), &buf);
+    // This failed: hard link count was 1, the hard link broke on store.
+    CPPUNIT_ASSERT(buf.st_nlink > 1);
+
+    xComponent->dispose();
+#endif
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(MiscTest);
