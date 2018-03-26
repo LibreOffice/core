@@ -1,0 +1,9 @@
+Verified+1: Jenkins <ci@libreoffice.org>
+Code-Review+1: Khaled Hosny <khaledhosny@eglug.org>
+Code-Review+1: Christian Lohmaier <lohmaier+LibreOffice@googlemail.com>
+Code-Review+2: Mike Kaganski <mike.kaganski@collabora.com>
+Submitted-by: Mike Kaganski <mike.kaganski@collabora.com>
+Submitted-at: Mon, 26 Mar 2018 11:59:29 +0200
+Reviewed-on: https://gerrit.libreoffice.org/51793
+Project: core
+Branch: refs/heads/master
