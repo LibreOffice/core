@@ -1986,7 +1986,7 @@ namespace cppcanvas
 
                             SAL_INFO("cppcanvas.emf", "EMF+ FillPath slot: " << index);
 
-                            EMFPPath* path = static_cast<EMFPPath*>(aObjects[index]);
+                            EMFPPath* path = dynamic_cast<EMFPPath*>(aObjects[index]);
                             if (path)
                                 EMFPPlusFillPolygon(path->GetPolygon (*this), rFactoryParms, rState, rCanvas, flags & 0x8000, brushIndexOrColor);
                             else
@@ -2113,7 +2113,7 @@ namespace cppcanvas
                             SAL_INFO("cppcanvas.emf", "EMF+ DrawPath");
                             SAL_INFO("cppcanvas.emf", "EMF+\tpen: " << penIndex);
 
-                            EMFPPath* path = static_cast<EMFPPath*>( aObjects [flags & 0xff] );
+                            EMFPPath* path = dynamic_cast<EMFPPath*>( aObjects [flags & 0xff] );
                             if (path)
                                 EMFPPlusDrawPolygon(path->GetPolygon (*this), rFactoryParms, rState, rCanvas, penIndex);
                             else
