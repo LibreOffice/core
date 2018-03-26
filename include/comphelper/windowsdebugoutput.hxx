@@ -117,7 +117,7 @@ inline std::basic_ostream<charT, traits>& operator<<(std::basic_ostream<charT, t
     if (rVariant.vt & VT_BYREF)
         stream << "BYREF:";
 
-    switch (rVariant.vt)
+    switch (rVariant.vt & ~(VT_VECTOR | VT_ARRAY | VT_BYREF))
     {
         case VT_EMPTY:
             stream << "EMPTY";
