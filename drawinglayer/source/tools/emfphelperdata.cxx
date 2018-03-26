@@ -938,7 +938,7 @@ namespace emfplushelper
                         rMS.ReadUInt32(brushIndexOrColor);
                         SAL_INFO("drawinglayer", "EMF+ FillPath slot: " << index);
 
-                        EMFPPath* path = static_cast<EMFPPath*>(maEMFPObjects[index].get());
+                        EMFPPath* path = dynamic_cast<EMFPPath*>(maEMFPObjects[index].get());
                         if (path)
                             EMFPPlusFillPolygon(path->GetPolygon(*this), flags & 0x8000, brushIndexOrColor);
                         else
@@ -1066,7 +1066,7 @@ namespace emfplushelper
                         SAL_INFO("drawinglayer", "EMF+ DrawPath");
                         SAL_INFO("drawinglayer", "EMF+\tpen: " << penIndex);
 
-                        EMFPPath* path = static_cast<EMFPPath*>(maEMFPObjects[flags & 0xff].get());
+                        EMFPPath* path = dynamic_cast<EMFPPath*>(maEMFPObjects[flags & 0xff].get());
                         if (path)
                             EMFPPlusDrawPolygon(path->GetPolygon(*this), penIndex);
                         else
