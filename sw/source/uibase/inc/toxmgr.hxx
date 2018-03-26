@@ -24,6 +24,7 @@
 #include <tox.hxx>
 #include <authfld.hxx>
 #include <memory>
+#include <boost/optional.hpp>
 
 class SwWrtShell;
 class SwForm;
@@ -37,10 +38,10 @@ class SW_DLLPUBLIC SwTOXDescription
     OUString            m_sSequenceName;
     OUString            m_sMainEntryCharStyle;
     OUString            m_sAutoMarkURL;
-    std::unique_ptr<OUString>
-                        m_pTitle;
-    std::unique_ptr<OUString>
-                        m_pTOUName;
+    boost::optional<OUString>
+                        m_aTitle;
+    boost::optional<OUString>
+                        m_aTOUName;
     std::unique_ptr<SwForm>
                         m_pForm;
     SwTOXElement        m_nContent;
@@ -72,8 +73,6 @@ public:
     // single argument ctors shall be explicit.
     explicit SwTOXDescription(TOXTypes eType) :
         m_eTOXType(eType),
-        m_pTitle(nullptr),
-        m_pTOUName(nullptr),
         m_pForm(nullptr),
         m_nContent(SwTOXElement::Mark | SwTOXElement::OutlineLevel),
         m_nIndexOptions(SwTOIOptions::SameEntry|SwTOIOptions::FF|SwTOIOptions::CaseSensitive),
@@ -99,11 +98,11 @@ public:
     const OUString& GetAutoMarkURL() const { return m_sAutoMarkURL;}
     void            SetAutoMarkURL(const OUString& rSet) {m_sAutoMarkURL = rSet;}
 
-    void            SetTitle(const OUString& pSet) { m_pTitle.reset( new OUString(pSet) );}
-    const OUString* GetTitle() const {return m_pTitle.get(); }
+    void            SetTitle(const OUString& rSet) { m_aTitle = rSet; }
+    boost::optional<OUString> const & GetTitle() const {return m_aTitle; }
 
-    void            SetTOUName(const OUString& pSet) { m_pTOUName.reset( new OUString(pSet) );}
-    const OUString* GetTOUName() const {return m_pTOUName.get(); }
+    void            SetTOUName(const OUString& rSet) { m_aTOUName = rSet; }
+    boost::optional<OUString> const & GetTOUName() const { return m_aTOUName; }
 
     void            SetForm(const SwForm& rSet) { m_pForm.reset( new SwForm(rSet) );}
     const SwForm*   GetForm() const {return m_pForm.get();}
@@ -174,14 +173,14 @@ class SwTOXMarkDescription
     int         nLevel;
     bool        bMainEntry;
 
-    std::unique_ptr<OUString>  pPrimKey;
-    std::unique_ptr<OUString>  pSecKey;
-    std::unique_ptr<OUString>  pAltStr;
-    std::unique_ptr<OUString>  pTOUName;
+    boost::optional<OUString>  maPrimKey;
+    boost::optional<OUString>  maSecKey;
+    boost::optional<OUString>  maAltStr;
+    boost::optional<OUString>  maTOUName;
 
-    std::unique_ptr<OUString>  pPhoneticReadingOfAltStr;
-    std::unique_ptr<OUString>  pPhoneticReadingOfPrimKey;
-    std::unique_ptr<OUString>  pPhoneticReadingOfSecKey;
+    boost::optional<OUString>  maPhoneticReadingOfAltStr;
+    boost::optional<OUString>  maPhoneticReadingOfPrimKey;
+    boost::optional<OUString>  maPhoneticReadingOfSecKey;
 
     SwTOXMarkDescription(SwTOXMarkDescription&) = delete;
     SwTOXMarkDescription & operator= (SwTOXMarkDescription&) = delete;
@@ -191,14 +190,7 @@ public:
     explicit SwTOXMarkDescription(TOXTypes eType) :
         eTOXType(eType),
         nLevel(0),
-        bMainEntry(false),
-        pPrimKey(nullptr),
-        pSecKey(nullptr),
-        pAltStr(nullptr),
-        pTOUName(nullptr),
-        pPhoneticReadingOfAltStr(nullptr),
-        pPhoneticReadingOfPrimKey(nullptr),
-        pPhoneticReadingOfSecKey(nullptr)
+        bMainEntry(false)
         {
         }
 
@@ -210,33 +202,26 @@ public:
     void            SetMainEntry(bool bSet) {bMainEntry = bSet;}
     bool            IsMainEntry() const {return bMainEntry;}
 
-    void            SetPrimKey(const OUString& rSet)
-                                { pPrimKey.reset( new OUString(rSet) );}
-    const OUString* GetPrimKey() const {return pPrimKey.get();}
+    void            SetPrimKey(const OUString& rSet) { maPrimKey = rSet; }
+    boost::optional<OUString> const & GetPrimKey() const { return maPrimKey; }
 
-    void            SetSecKey(const OUString& rSet)
-                                { pSecKey.reset( new OUString(rSet) );}
-    const OUString* GetSecKey() const { return pSecKey.get(); }
+    void            SetSecKey(const OUString& rSet) { maSecKey = rSet; }
+    boost::optional<OUString> const & GetSecKey() const { return maSecKey; }
 
-    void            SetAltStr(const OUString& rSet)
-                                { pAltStr.reset( new OUString(rSet) );}
-    const OUString* GetAltStr() const { return pAltStr.get(); }
+    void            SetAltStr(const OUString& rSet) { maAltStr = rSet; }
+    boost::optional<OUString> const & GetAltStr() const { return maAltStr; }
 
-    void            SetTOUName(const OUString& rSet)
-                                { pTOUName.reset( new OUString(rSet) );}
-    const OUString* GetTOUName() const {return pTOUName.get();}
+    void            SetTOUName(const OUString& rSet) { maTOUName = rSet; }
+    boost::optional<OUString> const & GetTOUName() const { return maTOUName; }
 
-    void            SetPhoneticReadingOfAltStr(const OUString& rSet)
-                                { pPhoneticReadingOfAltStr.reset( new OUString(rSet) );}
-    const OUString* GetPhoneticReadingOfAltStr() const {    return pPhoneticReadingOfAltStr.get(); }
+    void            SetPhoneticReadingOfAltStr(const OUString& rSet) { maPhoneticReadingOfAltStr = rSet; }
+    boost::optional<OUString> const & GetPhoneticReadingOfAltStr() const { return maPhoneticReadingOfAltStr; }
 
-    void            SetPhoneticReadingOfPrimKey(const OUString& rSet)
-                                { pPhoneticReadingOfPrimKey.reset( new OUString(rSet) );}
-    const OUString* GetPhoneticReadingOfPrimKey() const {   return pPhoneticReadingOfPrimKey.get(); }
+    void            SetPhoneticReadingOfPrimKey(const OUString& rSet) { maPhoneticReadingOfPrimKey = rSet; }
+    boost::optional<OUString> const & GetPhoneticReadingOfPrimKey() const { return maPhoneticReadingOfPrimKey; }
 
-    void            SetPhoneticReadingOfSecKey(const OUString& rSet)
-                                { pPhoneticReadingOfSecKey.reset( new OUString(rSet) );}
-    const OUString* GetPhoneticReadingOfSecKey() const {    return pPhoneticReadingOfSecKey.get(); }
+    void            SetPhoneticReadingOfSecKey(const OUString& rSet) { maPhoneticReadingOfSecKey = rSet; }
+    boost::optional<OUString> const & GetPhoneticReadingOfSecKey() const { return maPhoneticReadingOfSecKey; }
 };
 
 class SW_DLLPUBLIC SwTOXMgr

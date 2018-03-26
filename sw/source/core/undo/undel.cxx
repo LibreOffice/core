@@ -99,8 +99,6 @@ SwUndoDelete::SwUndoDelete(
     : SwUndo(SwUndoId::DELETE, rPam.GetDoc()),
     SwUndRng( rPam ),
     m_pMvStt( nullptr ),
-    m_pSttStr(nullptr),
-    m_pEndStr(nullptr),
     m_pRedlSaveData(nullptr),
     m_nNode(0),
     m_nNdDiff(0),
@@ -383,13 +381,13 @@ bool SwUndoDelete::SaveContent( const SwPosition* pStt, const SwPosition* pEnd,
 
         // delete now also the text (all attribute changes are added to
         // UNDO history)
-        m_pSttStr.reset( new OUString( pSttTextNd->GetText().copy(nSttContent, nLen)) );
+        m_aSttStr = pSttTextNd->GetText().copy(nSttContent, nLen);
         pSttTextNd->EraseText( pStt->nContent, nLen );
         if( pSttTextNd->GetpSwpHints() )
             pSttTextNd->GetpSwpHints()->DeRegister();
 
         // METADATA: store
-        bool emptied( !m_pSttStr->isEmpty() && !pSttTextNd->Len() );
+        bool emptied( !m_aSttStr->isEmpty() && !pSttTextNd->Len() );
         if (!bOneNode || emptied) // merging may overwrite xmlids...
         {
             m_pMetadataUndoStart = emptied
@@ -418,14 +416,13 @@ bool SwUndoDelete::SaveContent( const SwPosition* pStt, const SwPosition* pEnd,
 
         // delete now also the text (all attribute changes are added to
         // UNDO history)
-        m_pEndStr.reset( new OUString( pEndTextNd->GetText().copy( 0,
-                                    pEnd->nContent.GetIndex() )) );
+        m_aEndStr = pEndTextNd->GetText().copy( 0, pEnd->nContent.GetIndex() );
         pEndTextNd->EraseText( aEndIdx, pEnd->nContent.GetIndex() );
         if( pEndTextNd->GetpSwpHints() )
             pEndTextNd->GetpSwpHints()->DeRegister();
 
         // METADATA: store
-        bool emptied = !m_pEndStr->isEmpty() && !pEndTextNd->Len();
+        bool emptied = !m_aEndStr->isEmpty() && !pEndTextNd->Len();
 
         m_pMetadataUndoEnd = emptied
             ? pEndTextNd->CreateUndoForDelete()
@@ -442,7 +439,7 @@ bool SwUndoDelete::SaveContent( const SwPosition* pStt, const SwPosition* pEnd,
 bool SwUndoDelete::CanGrouping( SwDoc* pDoc, const SwPaM& rDelPam )
 {
     // Is Undo greater than one Node (that is Start and EndString)?
-    if( !m_pSttStr || m_pSttStr->isEmpty() || m_pEndStr )
+    if( !m_aSttStr || m_aSttStr->isEmpty() || m_aEndStr )
         return false;
 
     // only the deletion of single char's can be condensed
@@ -478,12 +475,12 @@ bool SwUndoDelete::CanGrouping( SwDoc* pDoc, const SwPaM& rDelPam )
     SwTextNode * pDelTextNd = pStt->nNode.GetNode().GetTextNode();
     if( !pDelTextNd ) return false;
 
-    sal_Int32 nUChrPos = m_bBackSp ? 0 : m_pSttStr->getLength()-1;
+    sal_Int32 nUChrPos = m_bBackSp ? 0 : m_aSttStr->getLength()-1;
     sal_Unicode cDelChar = pDelTextNd->GetText()[ pStt->nContent.GetIndex() ];
     CharClass& rCC = GetAppCharClass();
     if( ( CH_TXTATR_BREAKWORD == cDelChar || CH_TXTATR_INWORD == cDelChar ) ||
         rCC.isLetterNumeric( OUString( cDelChar ), 0 ) !=
-        rCC.isLetterNumeric( *m_pSttStr, nUChrPos ) )
+        rCC.isLetterNumeric( *m_aSttStr, nUChrPos ) )
         return false;
 
     {
@@ -508,7 +505,7 @@ bool SwUndoDelete::CanGrouping( SwDoc* pDoc, const SwPaM& rDelPam )
         nEndContent++;    // Delete: attach char at the end
         nUChrPos++;
     }
-    (*m_pSttStr) = m_pSttStr->replaceAt( nUChrPos, 0, OUString(cDelChar) );
+    m_aSttStr = m_aSttStr->replaceAt( nUChrPos, 0, OUString(cDelChar) );
     pDelTextNd->EraseText( pStt->nContent, 1 );
 
     m_bGroup = true;
@@ -694,22 +691,22 @@ SwRewriter SwUndoDelete::GetRewriter() const
     {
         OUString aStr;
 
-        if (m_pSttStr != nullptr && m_pEndStr != nullptr && m_pSttStr->isEmpty() &&
-            m_pEndStr->isEmpty())
+        if (m_aSttStr && m_aEndStr && m_aSttStr->isEmpty() &&
+            m_aEndStr->isEmpty())
         {
             aStr = SwResId(STR_PARAGRAPH_UNDO);
         }
         else
         {
-            OUString * pStr = nullptr;
-            if (m_pSttStr != nullptr)
-                pStr = m_pSttStr.get();
-            else if (m_pEndStr != nullptr)
-                pStr = m_pEndStr.get();
+            boost::optional<OUString> aTmpStr;
+            if (m_aSttStr)
+                aTmpStr = m_aSttStr;
+            else if (m_aEndStr)
+                aTmpStr = m_aEndStr;
 
-            if (pStr != nullptr)
+            if (aTmpStr)
             {
-                aStr = DenoteSpecialCharacters(*pStr);
+                aStr = DenoteSpecialCharacters(*aTmpStr);
             }
             else
             {
@@ -793,7 +790,7 @@ void SwUndoDelete::UndoImpl(::sw::UndoRedoContext & rContext)
 
         bool bNodeMove = 0 != m_nNode;
 
-        if( m_pEndStr )
+        if( m_aEndStr )
         {
             // discard attributes since they all saved!
             SwTextNode* pTextNd = aPos.nNode.GetNode().GetTextNode();
@@ -804,7 +801,7 @@ void SwUndoDelete::UndoImpl(::sw::UndoRedoContext & rContext)
             if( pTextNd && pTextNd->GetpSwpHints() )
                 pTextNd->ClearSwpHintsArr( true );
 
-            if( m_pSttStr && !m_bFromTableCopy )
+            if( m_aSttStr && !m_bFromTableCopy )
             {
                 sal_uLong nOldIdx = aPos.nNode.GetIndex();
                 rDoc.getIDocumentContentOperations().SplitNode( aPos, false );
@@ -818,15 +815,15 @@ void SwUndoDelete::UndoImpl(::sw::UndoRedoContext & rContext)
             }
             if( pTextNd )
             {
-                OUString const ins( pTextNd->InsertText(*m_pEndStr, aPos.nContent,
+                OUString const ins( pTextNd->InsertText(*m_aEndStr, aPos.nContent,
                         SwInsertFlags::NOHINTEXPAND) );
-                assert(ins.getLength() == m_pEndStr->getLength()); // must succeed
+                assert(ins.getLength() == m_aEndStr->getLength()); // must succeed
                 (void) ins;
                 // METADATA: restore
                 pTextNd->RestoreMetadata(m_pMetadataUndoEnd);
             }
         }
-        else if( m_pSttStr && bNodeMove )
+        else if( m_aSttStr && bNodeMove )
         {
             SwTextNode * pNd = aPos.nNode.GetNode().GetTextNode();
             if( pNd )
@@ -896,7 +893,7 @@ void SwUndoDelete::UndoImpl(::sw::UndoRedoContext & rContext)
         if( pMovedNode )
             lcl_MakeAutoFrames(*rDoc.GetSpzFrameFormats(), pMovedNode->GetIndex());
 
-        if( m_pSttStr )
+        if( m_aSttStr )
         {
             aPos.nNode = nSttNode - m_nNdDiff + ( m_bJoinNext ? 0 : m_nReplaceDummy );
             SwTextNode * pTextNd = aPos.nNode.GetNode().GetTextNode();
@@ -904,7 +901,7 @@ void SwUndoDelete::UndoImpl(::sw::UndoRedoContext & rContext)
             // attributes were saved
             if (pTextNd != nullptr)
             {
-                if( pTextNd->HasSwAttrSet() && bNodeMove && !m_pEndStr )
+                if( pTextNd->HasSwAttrSet() && bNodeMove && !m_aEndStr )
                     pTextNd->ResetAllAttr();
 
                 if( pTextNd->GetpSwpHints() )
@@ -913,9 +910,9 @@ void SwUndoDelete::UndoImpl(::sw::UndoRedoContext & rContext)
                 // SectionNode mode and selection from top to bottom:
                 //  -> in StartNode is still the rest of the Join => delete
                 aPos.nContent.Assign( pTextNd, nSttContent );
-                OUString const ins( pTextNd->InsertText(*m_pSttStr, aPos.nContent,
+                OUString const ins( pTextNd->InsertText(*m_aSttStr, aPos.nContent,
                         SwInsertFlags::NOHINTEXPAND) );
-                assert(ins.getLength() == m_pSttStr->getLength()); // must succeed
+                assert(ins.getLength() == m_aSttStr->getLength()); // must succeed
                 (void) ins;
                 // METADATA: restore
                 pTextNd->RestoreMetadata(m_pMetadataUndoStart);
@@ -1027,7 +1024,7 @@ void SwUndoDelete::RedoImpl(::sw::UndoRedoContext & rContext)
         m_nSetPos = pHistory ? pHistory->Count() : 0;
     }
 
-    if( !m_pSttStr && !m_pEndStr )
+    if( !m_aSttStr && !m_aEndStr )
     {
         SwNodeIndex aSttIdx = ( m_bDelFullPara || m_bJoinNext )
                                     ? rPam.GetMark()->nNode

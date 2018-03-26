@@ -62,9 +62,9 @@ using namespace ::com::sun::star;
 
 // INSERT
 
-OUString * SwUndoInsert::GetTextFromDoc() const
+boost::optional<OUString> SwUndoInsert::GetTextFromDoc() const
 {
-    OUString * pResult = nullptr;
+    boost::optional<OUString> aResult;
 
     SwNodeIndex aNd( pDoc->GetNodes(), nNode);
     SwContentNode* pCNd = aNd.GetNode().GetContentNode();
@@ -85,10 +85,10 @@ OUString * SwUndoInsert::GetTextFromDoc() const
             nStart = 0;
         }
 
-        pResult = new OUString(sText.copy(nStart, nLength));
+        aResult = sText.copy(nStart, nLength);
     }
 
-    return pResult;
+    return aResult;
 }
 
 void SwUndoInsert::Init(const SwNodeIndex & rNd)
@@ -102,7 +102,7 @@ void SwUndoInsert::Init(const SwNodeIndex & rNd)
         SetRedlineFlags( pDoc->getIDocumentRedlineAccess().GetRedlineFlags() );
     }
 
-    pUndoText.reset( GetTextFromDoc() );
+    maUndoText = GetTextFromDoc();
 
     bCacheComment = false;
 }
@@ -142,8 +142,8 @@ bool SwUndoInsert::CanGrouping( sal_Unicode cIns )
         nLen++;
         nContent++;
 
-        if (pUndoText)
-            (*pUndoText) += OUStringLiteral1(cIns);
+        if (maUndoText)
+            (*maUndoText) += OUStringLiteral1(cIns);
 
         return true;
     }
@@ -203,7 +203,7 @@ SwUndoInsert::~SwUndoInsert()
     }
     else     // the inserted text
     {
-        m_pText.reset();
+        maText.reset();
     }
     delete pRedlData;
 }
@@ -260,7 +260,7 @@ void SwUndoInsert::UndoImpl(::sw::UndoRedoContext & rContext)
                         aPaM.GetMark()->nContent.GetIndex());
                 }
                 RemoveIdxFromRange( aPaM, false );
-                m_pText.reset(new OUString(pTextNode->GetText().copy(nContent-nLen, nLen)));
+                maText = pTextNode->GetText().copy(nContent-nLen, nLen);
                 pTextNode->EraseText( aPaM.GetPoint()->nContent, nLen );
             }
             else                // otherwise Graphics/OLE/Text/...
@@ -274,7 +274,7 @@ void SwUndoInsert::UndoImpl(::sw::UndoRedoContext & rContext)
             nNd = aPaM.GetPoint()->nNode.GetIndex();
             nCnt = aPaM.GetPoint()->nContent.GetIndex();
 
-            if (!m_pText)
+            if (!maText)
             {
                 m_pUndoNodeIndex.reset(
                         new SwNodeIndex(pDoc->GetNodes().GetEndOfContent()));
@@ -292,7 +292,7 @@ void SwUndoInsert::UndoImpl(::sw::UndoRedoContext & rContext)
                 pPam->GetPoint()->nNode.GetNode().GetContentNode(), nCnt );
     }
 
-    pUndoText.reset();
+    maUndoText.reset();
 }
 
 void SwUndoInsert::RedoImpl(::sw::UndoRedoContext & rContext)
@@ -334,15 +334,15 @@ void SwUndoInsert::RedoImpl(::sw::UndoRedoContext & rContext)
         {
             const bool bMvBkwrd = MovePtBackward( *pPam );
 
-            if (m_pText)
+            if (maText)
             {
                 SwTextNode *const pTextNode = pCNd->GetTextNode();
                 OSL_ENSURE( pTextNode, "where is my textnode ?" );
                 OUString const ins(
-                    pTextNode->InsertText( *m_pText, pPam->GetMark()->nContent,
+                    pTextNode->InsertText( *maText, pPam->GetMark()->nContent,
                     m_nInsertFlags) );
-                assert(ins.getLength() == m_pText->getLength()); // must succeed
-                m_pText.reset();
+                assert(ins.getLength() == maText->getLength()); // must succeed
+                maText.reset();
                 if (m_bWithRsid) // re-insert RSID
                 {
                     SwPaM pam(*pPam->GetMark(), nullptr); // mark -> point
@@ -375,7 +375,7 @@ void SwUndoInsert::RedoImpl(::sw::UndoRedoContext & rContext)
         }
     }
 
-    pUndoText.reset( GetTextFromDoc() );
+    maUndoText = GetTextFromDoc();
 }
 
 void SwUndoInsert::RepeatImpl(::sw::RepeatContext & rContext)
@@ -458,17 +458,17 @@ void SwUndoInsert::RepeatImpl(::sw::RepeatContext & rContext)
 SwRewriter SwUndoInsert::GetRewriter() const
 {
     SwRewriter aResult;
-    OUString * pStr = nullptr;
+    boost::optional<OUString> aStr;
     bool bDone = false;
 
-    if (m_pText)
-        pStr = m_pText.get();
-    else if (pUndoText)
-        pStr = pUndoText.get();
+    if (maText)
+        aStr = maText;
+    else if (maUndoText)
+        aStr = maUndoText;
 
-    if (pStr)
+    if (aStr)
     {
-        OUString aString = ShortenString(DenoteSpecialCharacters(*pStr),
+        OUString aString = ShortenString(DenoteSpecialCharacters(*aStr),
                                        nUndoStringLength,
                                        SwResId(STR_LDOTS));
 
@@ -810,15 +810,15 @@ void SwUndoReRead::SetAndSave(::sw::UndoRedoContext & rContext)
 
     // cache the old values
     std::unique_ptr<Graphic> pOldGrf( pGrf ? new Graphic(*pGrf) : nullptr);
-    std::unique_ptr<OUString> pOldNm( pNm ? new OUString(*pNm) : nullptr);
-    std::unique_ptr<OUString> pOldFltr( pFltr ? new OUString(*pFltr) : nullptr);
+    boost::optional<OUString> aOldNm = maNm;
+    boost::optional<OUString> aOldFltr = maFltr;
     MirrorGraph nOldMirr = nMirr;
     // since all of them are cleared/modified by SaveGraphicData:
     SaveGraphicData( *pGrfNd );
 
-    if( pOldNm )
+    if( aOldNm )
     {
-        pGrfNd->ReRead( *pOldNm, pFltr ? *pFltr : OUString() );
+        pGrfNd->ReRead( *aOldNm, maFltr ? *maFltr : OUString() );
     }
     else
     {
@@ -845,16 +845,16 @@ void SwUndoReRead::SaveGraphicData( const SwGrfNode& rGrfNd )
 {
     if( rGrfNd.IsGrfLink() )
     {
-        pNm.reset( new OUString );
-        pFltr.reset( new OUString );
-        rGrfNd.GetFileFilterNms( pNm.get(), pFltr.get() );
+        maNm = OUString();
+        maFltr = OUString();
+        rGrfNd.GetFileFilterNms( maNm ? &*maNm : nullptr, maFltr ? &*maFltr : nullptr );
         pGrf.reset();
     }
     else
     {
         pGrf.reset( new Graphic( rGrfNd.GetGrf(true) ) );
-        pNm.reset();
-        pFltr.reset();
+        maNm.reset();
+        maFltr.reset();
     }
     nMirr = rGrfNd.GetSwAttrSet().GetMirrorGrf().GetValue();
 }
