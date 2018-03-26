@@ -1564,28 +1564,25 @@ static int doc_saveAs(LibreOfficeKitDocument* pThis, const char* sUrl, const cha
         // saveAs() is more like save-a-copy, which allows saving to any
         // random format like PDF or PNG.
         // It is not a real filter option, so we have to filter it out.
+        uno::Sequence<OUString> aOptionSeq = comphelper::string::convertCommaSeparated(aFilterOptions);
+        std::vector<OUString> aFilteredOptionVec;
         bool bTakeOwnership = false;
-        int nIndex = -1;
-        if (aFilterOptions == "TakeOwnership")
-        {
-            bTakeOwnership = true;
-            aFilterOptions.clear();
-        }
-        else if ((nIndex = aFilterOptions.indexOf(",TakeOwnership")) >= 0 || (nIndex = aFilterOptions.indexOf("TakeOwnership,")) >= 0)
-        {
-            OUString aFiltered;
-            if (nIndex > 0)
-                aFiltered = aFilterOptions.copy(0, nIndex);
-            if (nIndex + 14 < aFilterOptions.getLength())
-                aFiltered = aFiltered + aFilterOptions.copy(nIndex + 14);
-
-            bTakeOwnership = true;
-            aFilterOptions = aFiltered;
-        }
-
         MediaDescriptor aSaveMediaDescriptor;
+        for (const auto& rOption : aOptionSeq)
+        {
+            if (rOption == "TakeOwnership")
+                bTakeOwnership = true;
+            else if (rOption == "NoFileSync")
+                aSaveMediaDescriptor["NoFileSync"] <<= true;
+            else
+                aFilteredOptionVec.push_back(rOption);
+        }
+
         aSaveMediaDescriptor["Overwrite"] <<= true;
         aSaveMediaDescriptor["FilterName"] <<= aFilterName;
+
+        auto aFilteredOptionSeq = comphelper::containerToSequence<OUString>(aFilteredOptionVec);
+        aFilterOptions = comphelper::string::convertCommaSeparated(aFilteredOptionSeq);
         aSaveMediaDescriptor[MediaDescriptor::PROP_FILTEROPTIONS()] <<= aFilterOptions;
 
         // add interaction handler too
