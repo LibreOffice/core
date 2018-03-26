@@ -16,6 +16,24 @@
       "revId": "84f7b97e4e5e7183fdd98dd2c618a2a25b1cdaed",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_791de50e",
+        "filename": "include/svx/xpoly.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2018-03-26T15:26:27Z",
+      "side": 1,
+      "message": "iirc this is needed to avoid gcc warnings, similar to the one in patch set 1\n\n\u003e /home/tdf/lode/jenkins/workspace/lo_gerrit/Config/linux_gcc_release_64/include/svx/xpoly.hxx:44:21: error: unused parameter ‘rXPoly’ [-Werror\u003dunused-parameter]\n\u003e   class SVX_DLLPUBLIC XPolygon final\n\u003e \n\u003e /home/tdf/lode/jenkins/workspace/lo_gerrit/Config/linux_gcc_release_64/svx/source/xoutdev/_xpoly.cxx:214:43: note: synthesized method ‘XPolygon::XPolygon(XPolygon\u0026\u0026)’ first required here \n\u003e   XPolygon::XPolygon( XPolygon\u0026\u0026 rXPoly ) \u003d default",
+      "parentUuid": "9a30ddce_d5be97d3",
+      "revId": "84f7b97e4e5e7183fdd98dd2c618a2a25b1cdaed",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
