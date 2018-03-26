@@ -32,51 +32,51 @@ class INetImage;
 
 class SwReadOnlyPopup
 {
-    VclBuilder aBuilder;
-    ScopedVclPtr<PopupMenu> xMenu;
-    sal_uInt16 nReadonlyOpenurl;
-    sal_uInt16 nReadonlyOpendoc;
-    sal_uInt16 nReadonlyEditdoc;
-    sal_uInt16 nReadonlySelectionMode;
-    sal_uInt16 nReadonlyReload;
-    sal_uInt16 nReadonlyReloadFrame;
-    sal_uInt16 nReadonlySourceview;
-    sal_uInt16 nReadonlyBrowseBackward;
-    sal_uInt16 nReadonlyBrowseForward;
-    sal_uInt16 nReadonlySaveGraphic;
-    sal_uInt16 nReadonlyGraphictogallery;
-    sal_uInt16 nReadonlyTogallerylink;
-    sal_uInt16 nReadonlyTogallerycopy;
-    sal_uInt16 nReadonlySaveBackground;
-    sal_uInt16 nReadonlyBackgroundtogallery;
-    sal_uInt16 nReadonlyBackgroundTogallerylink;
-    sal_uInt16 nReadonlyBackgroundTogallerycopy;
-    sal_uInt16 nReadonlyCopylink;
-    sal_uInt16 nReadonlyCopyGraphic;
-    sal_uInt16 nReadonlyLoadGraphic;
-    sal_uInt16 nReadonlyGraphicoff;
-    sal_uInt16 nReadonlyFullscreen;
-    sal_uInt16 nReadonlyCopy;
+    VclBuilder m_aBuilder;
+    ScopedVclPtr<PopupMenu> m_xMenu;
+    sal_uInt16 m_nReadonlyOpenurl;
+    sal_uInt16 m_nReadonlyOpendoc;
+    sal_uInt16 m_nReadonlyEditdoc;
+    sal_uInt16 m_nReadonlySelectionMode;
+    sal_uInt16 m_nReadonlyReload;
+    sal_uInt16 m_nReadonlyReloadFrame;
+    sal_uInt16 m_nReadonlySourceview;
+    sal_uInt16 m_nReadonlyBrowseBackward;
+    sal_uInt16 m_nReadonlyBrowseForward;
+    sal_uInt16 m_nReadonlySaveGraphic;
+    sal_uInt16 m_nReadonlyGraphictogallery;
+    sal_uInt16 m_nReadonlyTogallerylink;
+    sal_uInt16 m_nReadonlyTogallerycopy;
+    sal_uInt16 m_nReadonlySaveBackground;
+    sal_uInt16 m_nReadonlyBackgroundtogallery;
+    sal_uInt16 m_nReadonlyBackgroundTogallerylink;
+    sal_uInt16 m_nReadonlyBackgroundTogallerycopy;
+    sal_uInt16 m_nReadonlyCopylink;
+    sal_uInt16 m_nReadonlyCopyGraphic;
+    sal_uInt16 m_nReadonlyLoadGraphic;
+    sal_uInt16 m_nReadonlyGraphicoff;
+    sal_uInt16 m_nReadonlyFullscreen;
+    sal_uInt16 m_nReadonlyCopy;
 
-    SwView &rView;
-    SvxBrushItem aBrushItem;
-    const Point &rDocPos;
-                Graphic aGraphic;
-    OUString    sURL,
-                sTargetFrameName,
-                sDescription;
-    OUString    sGrfName;
-    std::vector<OUString> aThemeList;
-    bool        bGrfToGalleryAsLnk;
-    ImageMap*   pImageMap;
-    INetImage*  pTargetURL;
+    SwView &m_rView;
+    SvxBrushItem m_aBrushItem;
+    const Point &m_rDocPos;
+                Graphic m_aGraphic;
+    OUString    m_sURL,
+                m_sTargetFrameName,
+                m_sDescription;
+    OUString    m_sGrfName;
+    std::vector<OUString> m_aThemeList;
+    bool        m_bGrfToGalleryAsLnk;
+    ImageMap*   m_pImageMap;
+    INetImage*  m_pTargetURL;
 
     void Check( sal_uInt16 nMID, sal_uInt16 nSID, SfxDispatcher const &rDis );
     OUString SaveGraphic( sal_uInt16 nId );
 
 public:
     SwReadOnlyPopup(const Point &rDPos, SwView &rV);
-    PopupMenu& GetMenu() const { return *xMenu; }
+    PopupMenu& GetMenu() const { return *m_xMenu; }
     ~SwReadOnlyPopup();
 
     void Execute( vcl::Window* pWin, const Point &rPPos );
