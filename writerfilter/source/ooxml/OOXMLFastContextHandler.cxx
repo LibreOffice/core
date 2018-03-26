@@ -497,8 +497,6 @@ void OOXMLFastContextHandler::lockField()
 
 void OOXMLFastContextHandler::ftnednref()
 {
-    if (isForwardEvents())
-        mpStream->utext(reinterpret_cast<const sal_uInt8*>(&uFtnEdnRef), 1);
 }
 
 void OOXMLFastContextHandler::ftnednsep()
