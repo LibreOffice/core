@@ -276,6 +276,12 @@ xray ThisComponent.StyleFamilies.PageStyles.Default.Width
     CPPUNIT_ASSERT( pos.X > width / 2 );
 }
 
+DECLARE_OOXMLIMPORT_TEST(testTdf115719b, "tdf115719b.docx")
+{
+    // This was 0, 4th (last) paragraph had no increased spacing.
+    CPPUNIT_ASSERT(getProperty<sal_Int32>(getParagraph(4), "ParaTopMargin") > 0);
+}
+
 DECLARE_OOXMLIMPORT_TEST(testN766477, "n766477.docx")
 {
     /*
