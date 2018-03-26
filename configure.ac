@@ -4996,7 +4996,7 @@ AC_MSG_CHECKING([for required Perl modules])
 perl_use_string="use Cwd ; use Digest::MD5"
 if test "$_os" = "WINNT"; then
     if test -n "$PKGFORMAT"; then
-        for i in "$PKGFORMAT"; do
+        for i in $PKGFORMAT; do
             case "$i" in
             msi)
                 # for getting fonts versions to use in MSI
@@ -6665,7 +6665,7 @@ if test $_os = "WINNT"; then
         else
             VCREDIST_DIR=""
             if test -n "$PKGFORMAT"; then
-               for i in "$PKGFORMAT"; do
+               for i in $PKGFORMAT; do
                    case "$i" in
                    msi)
                        AC_MSG_WARN([--without-vcredist-dir not specified or exe not found - installer will have runtime dependency])
