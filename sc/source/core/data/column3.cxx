@@ -3096,6 +3096,8 @@ public:
                     xPrevGrp->mnLength += xCurGrp->mnLength;
                     pCur->SetCellGroup(xPrevGrp);
                     sc::formula_block::iterator itGrpEnd = it;
+                    if (xCurGrp->mnLength > std::distance(itGrpEnd, itEnd))
+                        throw css::lang::IllegalArgumentException();
                     std::advance(itGrpEnd, xCurGrp->mnLength);
                     for (++it; it != itGrpEnd; ++it)
                     {
