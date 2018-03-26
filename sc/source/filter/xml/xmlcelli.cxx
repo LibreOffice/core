@@ -360,6 +360,8 @@ void ScXMLTableRowCellContext::PushFormat(sal_Int32 nBegin, sal_Int32 nEnd, cons
     sal_Int32 nEntryCount = xMapper->GetEntryCount();
 
     SvXMLStylesContext* pAutoStyles = GetImport().GetAutoStyles();
+    if (!pAutoStyles)
+        return;
 
     // Style name for text span corresponds with the name of an automatic style.
     const XMLPropStyleContext* pStyle = dynamic_cast<const XMLPropStyleContext*>(
