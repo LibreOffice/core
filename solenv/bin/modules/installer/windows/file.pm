@@ -30,7 +30,6 @@ use installer::windows::idtglobal;
 use installer::windows::msiglobal;
 use installer::windows::language;
 use installer::windows::component;
-use Font::TTF::Font;
 
 ##########################################################################
 # Assigning one cabinet file to each file. This is requrired,
@@ -555,6 +554,8 @@ sub get_fileversion
     # file version for font files (tdf#76239)
     if ( $onefile->{'Name'} =~ /\.(otf|ttf|ttc)$/i )
     {
+        require Font::TTF::Font;
+        Font::TTF::Font->import;
         my $fnt = Font::TTF::Font->open("<$onefile->{'sourcepath'}");
         # 5 is pre-defined name ID for version string - see
         # https://docs.microsoft.com/en-us/typography/opentype/spec/name
