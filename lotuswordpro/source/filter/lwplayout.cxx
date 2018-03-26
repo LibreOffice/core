@@ -83,6 +83,7 @@ LwpVirtualLayout::LwpVirtualLayout(LwpObjectHeader const &objHdr, LwpSvStream* p
     , m_bGettingMarginsValue(false)
     , m_bGettingExtMarginsValue(false)
     , m_bGettingUsePrinterSettings(false)
+    , m_bGettingScaleCenter(false)
     , m_bGettingUseWhen(false)
     , m_bGettingStyleLayout(false)
     , m_nAttributes(0)
@@ -953,16 +954,26 @@ sal_uInt16 LwpMiddleLayout::GetScaleTile()
 
 sal_uInt16 LwpMiddleLayout::GetScaleCenter()
 {
+    if (m_bGettingScaleCenter)
+        throw std::runtime_error("recursion in layout");
+    m_bGettingScaleCenter = true;
+
+    sal_uInt16 nRet = 0;
+
     if ((m_nOverrideFlag & OVER_SCALING) && m_LayScale.obj().is() && GetLayoutScale())
     {
-        return (GetLayoutScale()->GetPlacement() & LwpLayoutScale::CENTERED)
+        nRet = (GetLayoutScale()->GetPlacement() & LwpLayoutScale::CENTERED)
             ? 1 : 0;
     }
-    rtl::Reference<LwpObject> xBase(GetBasedOnStyle());
-    if (xBase.is())
-        return dynamic_cast<LwpMiddleLayout&>(*xBase.get()).GetScaleCenter();
     else
-        return 0;
+    {
+        rtl::Reference<LwpObject> xBase(GetBasedOnStyle());
+        if (xBase.is())
+            nRet = dynamic_cast<LwpMiddleLayout&>(*xBase.get()).GetScaleCenter();
+    }
+
+    m_bGettingScaleCenter = false;
+    return nRet;
 }
 
 bool LwpMiddleLayout::CanSizeRight()
