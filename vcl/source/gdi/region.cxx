@@ -365,13 +365,7 @@ Region::Region(const basegfx::B2DPolyPolygon& rPolyPoly)
     }
 }
 
-Region::Region(const vcl::Region& rRegion)
-:   mpB2DPolyPolygon(rRegion.mpB2DPolyPolygon),
-    mpPolyPolygon(rRegion.mpPolyPolygon),
-    mpRegionBand(rRegion.mpRegionBand),
-    mbIsNull(rRegion.mbIsNull)
-{
-}
+Region::Region(const vcl::Region&) = default;
 
 Region::Region(vcl::Region&& rRegion)
 :   mpB2DPolyPolygon(std::move(rRegion.mpB2DPolyPolygon)),
@@ -382,9 +376,7 @@ Region::Region(vcl::Region&& rRegion)
     rRegion.mbIsNull = true;
 }
 
-Region::~Region()
-{
-}
+Region::~Region() = default;
 
 void vcl::Region::ImplCreatePolyPolyRegion( const tools::PolyPolygon& rPolyPoly )
 {
@@ -1445,16 +1437,7 @@ void vcl::Region::SetEmpty()
     mbIsNull = false;
 }
 
-Region& vcl::Region::operator=( const vcl::Region& rRegion )
-{
-    // reset all content
-    mpB2DPolyPolygon = rRegion.mpB2DPolyPolygon;
-    mpPolyPolygon = rRegion.mpPolyPolygon;
-    mpRegionBand = rRegion.mpRegionBand;
-    mbIsNull = rRegion.mbIsNull;
-
-    return *this;
-}
+Region& vcl::Region::operator=( const vcl::Region& ) = default;
 
 Region& vcl::Region::operator=( vcl::Region&& rRegion )
 {
