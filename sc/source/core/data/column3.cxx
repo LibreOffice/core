@@ -3120,6 +3120,8 @@ public:
             {
                 // Previous cell is a regular cell and current cell is a group.
                 nRow += xCurGrp->mnLength;
+                if (xCurGrp->mnLength > std::distance(it, itEnd))
+                    throw css::lang::IllegalArgumentException();
                 std::advance(it, xCurGrp->mnLength);
                 pPrev->SetCellGroup(xCurGrp);
                 xCurGrp->mpTopCell = pPrev;
