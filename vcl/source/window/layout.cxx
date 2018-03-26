@@ -833,11 +833,11 @@ static int getButtonPriority(const OString &rType)
     static const ButtonOrder aDiscardCancelSave[N_TYPES] =
     {
         { "/discard", 0 },
-        { "/no", 0 },
         { "/cancel", 1 },
-        { "/save", 2 },
-        { "/yes", 2 },
-        { "/ok", 2 }
+        { "/no", 2 },
+        { "/save", 3 },
+        { "/yes", 3 },
+        { "/ok", 3 }
     };
 
     static const ButtonOrder aSaveDiscardCancel[N_TYPES] =
