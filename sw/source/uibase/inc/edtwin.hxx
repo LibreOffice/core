@@ -72,8 +72,6 @@ class SwEditWin final : public vcl::Window,
      * regularly.
      */
     AutoTimer       m_aTimer;
-    // timer for overlapping KeyInputs (e.g. for tables)
-    Timer           m_aKeyInputTimer;
     // timer for ANY-KeyInput question without a following KeyInputEvent
     Timer           m_aKeyInputFlushTimer;
 
@@ -113,8 +111,6 @@ class SwEditWin final : public vcl::Window,
                     m_bIsInDrag       : 1, // don't execute StartExecuteDrag twice
                     m_bOldIdle        : 1, // to stop to idle
                     m_bOldIdleSet     : 1, // during QeueryDrop
-                    m_bTableInsDelMode  : 1,
-                    m_bTableIsInsMode   : 1,
                     m_bChainMode      : 1, // connect frames
                     m_bWasShdwCursor    : 1, // ShadowCursor was on in MouseButtonDown
                     m_bLockInput      : 1, // lock while calc panel is active
@@ -163,9 +159,6 @@ class SwEditWin final : public vcl::Window,
 
     // timer for ANY-KeyInut question without a following KeyInputEvent
     DECL_LINK( KeyInputFlushHandler, Timer *, void );
-
-    // timer for overlapping KeyInputs (e.g. for tables)
-    DECL_LINK( KeyInputTimerHandler, Timer *, void );
 
     // timer for ApplyTemplates via mouse (in disguise Drag&Drop)
     DECL_LINK( TemplateTimerHdl, Timer *, void );
