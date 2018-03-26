@@ -930,7 +930,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf105095, "tdf105095.docx")
     uno::Reference<text::XTextRange> xTextRange(xFootnotes->getByIndex(0), uno::UNO_QUERY);
     // This failed, tab between the footnote number and the footnote content
     // was lost on import.
-    CPPUNIT_ASSERT(xTextRange->getString().endsWith("\tfootnote"));
+    CPPUNIT_ASSERT_EQUAL( OUString("\tfootnote"), xTextRange->getString() );
 }
 
 DECLARE_OOXMLEXPORT_TEST( testActiveXTextfield, "activex_textbox.docx" )

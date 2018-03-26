@@ -32,7 +32,6 @@
 #include "Handler.hxx"
 
 static const sal_Unicode uCR = 0xd;
-static const sal_Unicode uFtnEdnRef = 0x2;
 static const sal_Unicode uFtnEdnSep = 0x3;
 static const sal_Unicode uTab = 0x9;
 static const sal_Unicode uPgNum = 0x0;
@@ -501,8 +500,6 @@ void OOXMLFastContextHandler::lockField()
 
 void OOXMLFastContextHandler::ftnednref()
 {
-    if (isForwardEvents())
-        mpStream->utext(reinterpret_cast<const sal_uInt8*>(&uFtnEdnRef), 1);
 }
 
 void OOXMLFastContextHandler::ftnednsep()

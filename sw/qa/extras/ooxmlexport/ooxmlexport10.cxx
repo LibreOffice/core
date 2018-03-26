@@ -962,9 +962,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf90810, "tdf90810short.docx")
     // Original document doesn't have a leading tab in the footnote, but the
     // export adds one unconditionally.
     if (mbExported)
-        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(91), sFootnoteText.getLength());
-    else
         CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(90), sFootnoteText.getLength());
+    else
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(89), sFootnoteText.getLength());
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf89165, "tdf89165.docx")
