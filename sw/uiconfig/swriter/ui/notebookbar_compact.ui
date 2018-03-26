@@ -2380,13 +2380,13 @@
                         <property name="label" translatable="yes" context="notebookbar_compact|fileb">_File</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="focus_on_click">False</property>
                         <property name="receives_default">False</property>
                         <property name="valign">center</property>
                         <property name="vexpand">True</property>
                         <property name="resize_mode">immediate</property>
                         <property name="relief">none</property>
                         <property name="use_underline">True</property>
+                        <property name="focus_on_click">False</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -3143,12 +3143,12 @@
                         <property name="label" translatable="yes" context="notebookbar_compact|menub">_Menu</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="focus_on_click">False</property>
                         <property name="receives_default">False</property>
                         <property name="valign">center</property>
                         <property name="vexpand">True</property>
                         <property name="relief">none</property>
                         <property name="use_underline">True</property>
+                        <property name="focus_on_click">False</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -3342,8 +3342,6 @@
                           <object class="sfxlo-NotebookbarToolBox" id="ExtTop5">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="halign">end</property>
-                            <property name="hexpand">True</property>
                             <property name="toolbar_style">icons</property>
                             <property name="show_arrow">False</property>
                             <child>
@@ -3351,17 +3349,6 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="action_name">.uno:CharFontName</property>
-                              </object>
-                              <packing>
-                                <property name="expand">False</property>
-                                <property name="homogeneous">False</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkToolButton" id="FontHeight1">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="action_name">.uno:FontHeight</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -3392,6 +3379,31 @@
                             <property name="padding">5</property>
                             <property name="pack_type">end</property>
                             <property name="position">1</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="sfxlo-NotebookbarToolBox" id="ExtTop6">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="margin_left">5</property>
+                            <property name="toolbar_style">icons</property>
+                            <property name="show_arrow">False</property>
+                            <child>
+                              <object class="GtkToolButton" id="FontHeight2">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="action_name">.uno:FontHeight</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="homogeneous">False</property>
+                              </packing>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">2</property>
                           </packing>
                         </child>
                         <style>
@@ -4243,12 +4255,12 @@
                         <property name="label" translatable="yes" context="notebookbar_compact|insertb">_Insert</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="focus_on_click">False</property>
                         <property name="receives_default">False</property>
                         <property name="valign">center</property>
                         <property name="vexpand">True</property>
                         <property name="relief">none</property>
                         <property name="use_underline">True</property>
+                        <property name="focus_on_click">False</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -4923,12 +4935,12 @@
                         <property name="label" translatable="yes" context="notebookbar_compact|reviewb">Pag_e</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="focus_on_click">False</property>
                         <property name="receives_default">False</property>
                         <property name="valign">center</property>
                         <property name="vexpand">True</property>
                         <property name="relief">none</property>
                         <property name="use_underline">True</property>
+                        <property name="focus_on_click">False</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -5458,11 +5470,11 @@
                         <property name="label" translatable="yes" context="notebookbar_compact|referenceb">Reference_s</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="focus_on_click">False</property>
                         <property name="receives_default">False</property>
                         <property name="valign">center</property>
                         <property name="relief">none</property>
                         <property name="use_underline">True</property>
+                        <property name="focus_on_click">False</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -6345,12 +6357,12 @@
                         <property name="label" translatable="yes" context="notebookbar_compact|reviewR">_Review</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="focus_on_click">False</property>
                         <property name="receives_default">False</property>
                         <property name="valign">center</property>
                         <property name="vexpand">True</property>
                         <property name="relief">none</property>
                         <property name="use_underline">True</property>
+                        <property name="focus_on_click">False</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -6847,12 +6859,12 @@
                         <property name="label" translatable="yes" context="notebookbar_compact|viewb">_View</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="focus_on_click">False</property>
                         <property name="receives_default">False</property>
                         <property name="valign">center</property>
                         <property name="vexpand">True</property>
                         <property name="relief">none</property>
                         <property name="use_underline">True</property>
+                        <property name="focus_on_click">False</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -6947,11 +6959,11 @@
                         <property name="label" translatable="yes" context="notebookbar_compact|tableT">T_able</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="focus_on_click">False</property>
                         <property name="receives_default">False</property>
                         <property name="valign">center</property>
                         <property name="relief">none</property>
                         <property name="use_underline">True</property>
+                        <property name="focus_on_click">False</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -8036,11 +8048,11 @@
                             <property name="label" translatable="yes" context="notebookbar_compact|wrapb">Wrap</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
-                            <property name="focus_on_click">False</property>
                             <property name="receives_default">False</property>
                             <property name="valign">center</property>
                             <property name="vexpand">True</property>
                             <property name="relief">none</property>
+                            <property name="focus_on_click">False</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -8150,11 +8162,11 @@
                             <property name="label" translatable="yes" context="notebookbar_compact|graphicB">A_lign</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
-                            <property name="focus_on_click">False</property>
                             <property name="receives_default">False</property>
                             <property name="valign">center</property>
                             <property name="relief">none</property>
                             <property name="use_underline">True</property>
+                            <property name="focus_on_click">False</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -8432,11 +8444,11 @@
                         <property name="label" translatable="yes" context="notebookbar_compact|graphicB">_Graphic</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="focus_on_click">False</property>
                         <property name="receives_default">False</property>
                         <property name="valign">center</property>
                         <property name="relief">none</property>
                         <property name="use_underline">True</property>
+                        <property name="focus_on_click">False</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -8869,11 +8881,11 @@
                             <property name="label" translatable="yes" context="notebookbar_compact|wrapb">Wrap</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
-                            <property name="focus_on_click">False</property>
                             <property name="receives_default">False</property>
                             <property name="valign">center</property>
                             <property name="vexpand">True</property>
                             <property name="relief">none</property>
+                            <property name="focus_on_click">False</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -8983,11 +8995,11 @@
                             <property name="label" translatable="yes" context="notebookbar_compact|graphicB">A_lign</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
-                            <property name="focus_on_click">False</property>
                             <property name="receives_default">False</property>
                             <property name="valign">center</property>
                             <property name="relief">none</property>
                             <property name="use_underline">True</property>
+                            <property name="focus_on_click">False</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -9211,12 +9223,12 @@
                         <property name="label" translatable="yes" context="notebookbar_compact|drab">D_raw</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="focus_on_click">False</property>
                         <property name="receives_default">False</property>
                         <property name="valign">center</property>
                         <property name="vexpand">True</property>
                         <property name="relief">none</property>
                         <property name="use_underline">True</property>
+                        <property name="focus_on_click">False</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -9540,11 +9552,11 @@
                             <property name="label" translatable="yes" context="notebookbar_compact|wrapb">Wrap</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
-                            <property name="focus_on_click">False</property>
                             <property name="receives_default">False</property>
                             <property name="valign">center</property>
                             <property name="vexpand">True</property>
                             <property name="relief">none</property>
+                            <property name="focus_on_click">False</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -9654,11 +9666,11 @@
                             <property name="label" translatable="yes" context="notebookbar_compact|graphicB">A_lign</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
-                            <property name="focus_on_click">False</property>
                             <property name="receives_default">False</property>
                             <property name="valign">center</property>
                             <property name="relief">none</property>
                             <property name="use_underline">True</property>
+                            <property name="focus_on_click">False</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -9792,12 +9804,12 @@
                         <property name="label" translatable="yes" context="notebookbar_compact|frame:MenuDraw">Object</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="focus_on_click">False</property>
                         <property name="receives_default">False</property>
                         <property name="valign">center</property>
                         <property name="vexpand">True</property>
                         <property name="relief">none</property>
                         <property name="use_underline">True</property>
+                        <property name="focus_on_click">False</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -9898,12 +9910,12 @@
                         <property name="label" translatable="yes" context="notebookbar_compact|referenceb">_Tools</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="focus_on_click">False</property>
                         <property name="receives_default">False</property>
                         <property name="valign">center</property>
                         <property name="vexpand">True</property>
                         <property name="relief">none</property>
                         <property name="use_underline">True</property>
+                        <property name="focus_on_click">False</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
