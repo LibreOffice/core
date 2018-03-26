@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_556547df",
+        "filename": "sw/source/uibase/shells/basesh.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 2452,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-03-26T03:39:05Z",
+      "side": 1,
+      "message": "please only do that in case of FN_FORMAT_PAGE_DLG - to let the explicit slots in original state",
+      "range": {
+        "startLine": 2451,
+        "startChar": 16,
+        "endLine": 2452,
+        "endChar": 125
+      },
+      "revId": "afa2f6e452cde5187f4f4f1ec23dff521d1f2137",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
