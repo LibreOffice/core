@@ -15,6 +15,9 @@ namespace SwReqIfReader
 {
 /// Extracts an OLE2 container binary from an RTF fragment.
 bool ExtractOleFromRtf(SvStream& rRtf, SvStream& rOle);
+
+/// Wraps an OLE2 container binary in an RTF fragment.
+bool WrapOleInRtf(SvStream& rOle, SvStream& rRtf);
 }
 
 #endif // INCLUDED_SW_SOURCE_FILTER_HTML_HTMLREQIFREADER_HXX
