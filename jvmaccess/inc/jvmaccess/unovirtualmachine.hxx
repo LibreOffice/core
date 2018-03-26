@@ -36,20 +36,20 @@ class VirtualMachine;
 /** An encapsulating wrapper around a Java virtual machine and an appropriate
     UNO class loader.
  */
-class JVMACCESS_DLLPUBLIC UnoVirtualMachine: public salhelper::SimpleReferenceObject {
+class UnoVirtualMachine: public salhelper::SimpleReferenceObject {
 public:
     /** An exception indicating failure to create a UnoVirtualMachine.
      */
-    class JVMACCESS_DLLPUBLIC CreationException
+    class CreationException
     {
     public:
-        CreationException();
+        JVMACCESS_DLLPUBLIC CreationException();
 
-        CreationException(CreationException const &);
+        JVMACCESS_DLLPUBLIC CreationException(CreationException const &);
 
-        virtual ~CreationException();
+        JVMACCESS_DLLPUBLIC virtual ~CreationException();
 
-        CreationException & operator =(CreationException const &);
+        JVMACCESS_DLLPUBLIC CreationException & operator =(CreationException const &);
     };
 
     /** Create a wrapper around a Java virtual machine and an appropriate UNO
@@ -69,7 +69,7 @@ public:
         @exception CreationException
         Thrown in case creation fails (due to a JNI problem).
      */
-    UnoVirtualMachine(
+    JVMACCESS_DLLPUBLIC UnoVirtualMachine(
         rtl::Reference< jvmaccess::VirtualMachine > const & virtualMachine,
         void * classLoader);
 
@@ -78,7 +78,7 @@ public:
         @return
         The Java virtual machine wrapper.  Will never be null.
      */
-    rtl::Reference< jvmaccess::VirtualMachine > getVirtualMachine() const;
+    JVMACCESS_DLLPUBLIC rtl::Reference< jvmaccess::VirtualMachine > getVirtualMachine() const;
 
     /** Get the UNO class loader.
 
@@ -89,7 +89,7 @@ public:
         different for different JDK versions, so that the mangled C++ name of
         the function would depend on the JDK version used at compile time.
      */
-    void * getClassLoader() const;
+    JVMACCESS_DLLPUBLIC void * getClassLoader() const;
 
 private:
     UnoVirtualMachine(UnoVirtualMachine &); // not defined

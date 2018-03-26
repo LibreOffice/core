@@ -41,7 +41,7 @@ namespace jvmaccess {
 
 /** An encapsulating wrapper around a Java virtual machine.
  */
-class JVMACCESS_DLLPUBLIC VirtualMachine: public salhelper::SimpleReferenceObject
+class VirtualMachine: public salhelper::SimpleReferenceObject
 {
 public:
     /** A helper to attach a thread to a Java virtual machine.
@@ -54,21 +54,21 @@ public:
         detach the thread from the virtual machine upon destruction of the guard
         at the bottom of the stack).
      */
-    class JVMACCESS_DLLPUBLIC AttachGuard
+    class AttachGuard
     {
     public:
         /** An exception indicating failure to create an AttachGuard.
          */
-        class JVMACCESS_DLLPUBLIC CreationException
+        class CreationException
         {
         public:
-            CreationException();
+            JVMACCESS_DLLPUBLIC CreationException();
 
-            CreationException(CreationException const &);
+            JVMACCESS_DLLPUBLIC CreationException(CreationException const &);
 
-            virtual ~CreationException();
+            JVMACCESS_DLLPUBLIC virtual ~CreationException();
 
-            CreationException & operator =(CreationException const &);
+            JVMACCESS_DLLPUBLIC CreationException & operator =(CreationException const &);
         };
 
         /** Attach the current thread to a virtual machine.
@@ -79,11 +79,11 @@ public:
             @exception CreationException
             Thrown in case attaching fails (due to a JNI problem).
          */
-        explicit AttachGuard(rtl::Reference< VirtualMachine > const & rMachine);
+        JVMACCESS_DLLPUBLIC explicit AttachGuard(rtl::Reference< VirtualMachine > const & rMachine);
 
         /** Detach the current thread from the virtual machine again.
          */
-        ~AttachGuard();
+        JVMACCESS_DLLPUBLIC ~AttachGuard();
 
         /** Get a JNI environment pointer for the current thread.
 
@@ -135,7 +135,7 @@ public:
         anyway).  This parameter is currently unused (but may be used again in
         the future).
      */
-    VirtualMachine(JavaVM * pVm, int nVersion, bool bDestroy,
+    JVMACCESS_DLLPUBLIC VirtualMachine(JavaVM * pVm, int nVersion, bool bDestroy,
                    JNIEnv * pMainThreadEnv);
 
 private:
