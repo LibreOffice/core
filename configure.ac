@@ -5006,7 +5006,7 @@ if test "$_os" = "WINNT"; then
         done
     fi
 fi
-if $PERL -e '$perl_use_string'>/dev/null 2>&1; then
+if $PERL -e "$perl_use_string">/dev/null 2>&1; then
     AC_MSG_RESULT([all modules found])
 else
     AC_MSG_RESULT([failed to find some modules])
