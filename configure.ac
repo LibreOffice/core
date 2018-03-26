@@ -5006,14 +5006,14 @@ if test "$_os" = "WINNT"; then
         done
     fi
 fi
-if $PERL -e '$perl_use_string'>/dev/null 2>&1; then
+if $PERL -e "$perl_use_string">/dev/null 2>&1; then
     AC_MSG_RESULT([all modules found])
 else
     AC_MSG_RESULT([failed to find some modules])
     # Find out which modules are missing.
-    for i in "$perl_use_string"; do
+    for i in $perl_use_string; do
         if test "$i" != "use" -a "$i" != ";"; then
-            if ! $PERL -e 'use $i;'>/dev/null 2>&1; then
+            if ! $PERL -e "use $i;">/dev/null 2>&1; then
                 missing_perl_modules="$missing_perl_modules $i"
             fi
         fi
