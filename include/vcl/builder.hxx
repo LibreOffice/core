@@ -94,16 +94,12 @@ public:
         return m_sHelpRoot;
     }
 
+    /// Pre-loads all modules containing UI information
+    static void preload();
+
 private:
     VclBuilder(const VclBuilder&) = delete;
     VclBuilder& operator=(const VclBuilder&) = delete;
-
-    typedef std::map<OUString, std::unique_ptr<osl::Module>> ModuleMap;
-
-    //We store these until the builder is deleted, that way we can use the
-    //ui-previewer on custom widgets and guarantee the modules they are from
-    //exist for the duration of the dialog
-    ModuleMap       m_aModuleMap;
 
     //If the toplevel window has any properties which need to be set on it,
     //but the toplevel is the owner of the builder, then its ctor
