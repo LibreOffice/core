@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_190f89e2",
+        "filename": "solenv/bin/modules/installer.pm",
+        "patchSetId": 2
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2018-03-26T14:48:32Z",
+      "side": 1,
+      "message": "\"use\" won\u0027t work in if/that is evaluated before runtime/before it has access to any variables.\n\n\"require\" on the other hand is executed when it hits the codepath.",
+      "range": {
+        "startLine": 53,
+        "startChar": 0,
+        "endLine": 78,
+        "endChar": 1
+      },
+      "revId": "88db28a379e35524d424327b4477140244d37b2e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
