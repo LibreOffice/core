@@ -61,12 +61,14 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
+#include <com/sun/star/io/XActiveDataStreamer.hpp>
 
 #include <comphelper/embeddedobjectcontainer.hxx>
 #include <comphelper/classids.hxx>
 #include <rtl/uri.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <vcl/graphicfilter.hxx>
+#include <unotools/ucbstreamhelper.hxx>
 
 using namespace com::sun::star;
 
@@ -1445,19 +1447,40 @@ Writer& OutHTML_FrameFormatOLENodeGrf( Writer& rWrt, const SwFrameFormat& rFrame
         aFileName = aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE);
 
         // Write the data.
-        OUString aStreamName = pOLENd->GetOLEObj().GetCurrentPersistName();
-        uno::Reference<embed::XStorage> xStorage = pDocSh->GetStorage();
-        uno::Reference<io::XStream> xInStream
-            = xStorage->openStreamElement(aStreamName, embed::ElementModes::READ);
-        SvFileStream aOutStream(aFileName, StreamMode::WRITE);
-        uno::Reference<io::XStream> xOutStream(new utl::OStreamWrapper(aOutStream));
-        comphelper::OStorageHelper::CopyInputToOutput(xInStream->getInputStream(),
-                                                      xOutStream->getOutputStream());
-        aFileName = URIHelper::simpleNormalizedMakeRelative(rWrt.GetBaseURL(), aFileName);
-        uno::Reference<beans::XPropertySet> xOutStreamProps(xInStream, uno::UNO_QUERY);
+        SwOLEObj& rOLEObj = pOLENd->GetOLEObj();
+        uno::Reference<embed::XEmbeddedObject> xEmbeddedObject = rOLEObj.GetOleRef();
         OUString aFileType;
-        if (xOutStreamProps.is())
-            xOutStreamProps->getPropertyValue("MediaType") >>= aFileType;
+        SvFileStream aOutStream(aFileName, StreamMode::WRITE);
+        uno::Reference<io::XActiveDataStreamer> xStreamProvider;
+        if (xEmbeddedObject.is())
+            xStreamProvider.set(xEmbeddedObject, uno::UNO_QUERY);
+        if (xStreamProvider.is())
+        {
+            uno::Reference<io::XInputStream> xStream(xStreamProvider->getStream(), uno::UNO_QUERY);
+            if (xStream.is())
+            {
+                std::unique_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream(xStream));
+                if (SwReqIfReader::WrapOleInRtf(*pStream, aOutStream))
+                {
+                    // OLE2 is always wrapped in RTF.
+                    aFileType = "text/rtf";
+                }
+            }
+        }
+        else
+        {
+            OUString aStreamName = rOLEObj.GetCurrentPersistName();
+            uno::Reference<embed::XStorage> xStorage = pDocSh->GetStorage();
+            uno::Reference<io::XStream> xInStream
+                = xStorage->openStreamElement(aStreamName, embed::ElementModes::READ);
+            uno::Reference<io::XStream> xOutStream(new utl::OStreamWrapper(aOutStream));
+            comphelper::OStorageHelper::CopyInputToOutput(xInStream->getInputStream(),
+                                                          xOutStream->getOutputStream());
+            uno::Reference<beans::XPropertySet> xOutStreamProps(xInStream, uno::UNO_QUERY);
+            if (xOutStreamProps.is())
+                xOutStreamProps->getPropertyValue("MediaType") >>= aFileType;
+        }
+        aFileName = URIHelper::simpleNormalizedMakeRelative(rWrt.GetBaseURL(), aFileName);
 
         // Refer to this data.
         if (rHTMLWrt.m_bLFPossible)
