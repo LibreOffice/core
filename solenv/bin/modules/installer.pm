@@ -47,30 +47,35 @@ use installer::setupscript;
 use installer::simplepackage;
 use installer::strip qw(strip_libraries);
 use installer::systemactions;
-use installer::windows::assembly;
-use installer::windows::binary;
-use installer::windows::component;
-use installer::windows::createfolder;
-use installer::windows::directory;
-use installer::windows::feature;
-use installer::windows::featurecomponent;
-use installer::windows::file;
-use installer::windows::font;
-use installer::windows::icon;
-use installer::windows::idtglobal;
-use installer::windows::inifile;
-use installer::windows::media;
-use installer::windows::mergemodule;
+# installer::windows::msiglobal is used for all platforms when
+# length($loglanguagestring) > $installer::globals::max_lang_length
 use installer::windows::msiglobal;
-use installer::windows::msishortcutproperty;
-use installer::windows::msp;
-use installer::windows::property;
-use installer::windows::removefile;
-use installer::windows::registry;
-use installer::windows::shortcut;
-use installer::windows::strip;
-use installer::windows::update;
-use installer::windows::upgrade;
+if ( $installer::globals::iswindowsbuild || $installer::globals::packageformat eq 'msi' )
+{
+    use installer::windows::assembly;
+    use installer::windows::binary;
+    use installer::windows::component;
+    use installer::windows::createfolder;
+    use installer::windows::directory;
+    use installer::windows::feature;
+    use installer::windows::featurecomponent;
+    use installer::windows::file;
+    use installer::windows::font;
+    use installer::windows::icon;
+    use installer::windows::idtglobal;
+    use installer::windows::inifile;
+    use installer::windows::media;
+    use installer::windows::mergemodule;
+    use installer::windows::msishortcutproperty;
+    use installer::windows::msp;
+    use installer::windows::property;
+    use installer::windows::removefile;
+    use installer::windows::registry;
+    use installer::windows::shortcut;
+    use installer::windows::strip;
+    use installer::windows::update;
+    use installer::windows::upgrade;
+}
 use installer::worker;
 use installer::ziplist qw(read_ziplist);
 
