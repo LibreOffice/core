@@ -201,7 +201,6 @@
             <it>en-GB.dic</it>
             <it>sl.dic</it>
             <it>technical.dic</it>
-            <it>hu_AkH11.dic</it>
           </value>
         </prop>
         <prop oor:name="IsUseDictionaryList" oor:type="xs:boolean" oor:nillable="false">
