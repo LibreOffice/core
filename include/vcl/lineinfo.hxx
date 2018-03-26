@@ -44,7 +44,6 @@ struct ImplLineInfo
     css::drawing::LineCap   meLineCap;
 
                         ImplLineInfo();
-                        ImplLineInfo( const ImplLineInfo& rImplLineInfo );
 
     bool operator==( const ImplLineInfo& ) const;
 };

@@ -37,7 +37,6 @@ struct ImplHatch
     sal_uInt16          mnAngle;
 
     ImplHatch();
-    ImplHatch( const ImplHatch& rImplHatch );
 
     bool operator==( const ImplHatch& rImplHatch ) const;
 };
