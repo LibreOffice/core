@@ -83,7 +83,7 @@ bool MemoryVar::TraverseFunctionDecl(FunctionDecl * decl)
         if (loplugin::hasPathnamePrefix(aFileName, SRCDIR "/vcl/source/filter")) {
            return true;
         }
-        if (loplugin::hasPathnamePrefix(aFileName, SRCDIR "/sw/source/core/layout/frmtool.cxx")) {
+        if (loplugin::isSamePathname(aFileName, SRCDIR "/sw/source/core/layout/frmtool.cxx")) {
            return true;
         }
 

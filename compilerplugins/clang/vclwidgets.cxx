@@ -240,9 +240,9 @@ bool VCLWidgets::VisitCXXDestructorDecl(const CXXDestructorDecl* pCXXDestructorD
         SourceLocation spellingLocation = compiler.getSourceManager().getSpellingLoc(
                               pCXXDestructorDecl->getLocStart());
         StringRef filename = compiler.getSourceManager().getFilename(spellingLocation);
-        if (   !(loplugin::hasPathnamePrefix(filename, SRCDIR "/vcl/source/window/window.cxx"))
-            && !(loplugin::hasPathnamePrefix(filename, SRCDIR "/vcl/source/gdi/virdev.cxx"))
-            && !(loplugin::hasPathnamePrefix(filename, SRCDIR "/vcl/qa/cppunit/lifecycle.cxx")) )
+        if (   !(loplugin::isSamePathname(filename, SRCDIR "/vcl/source/window/window.cxx"))
+            && !(loplugin::isSamePathname(filename, SRCDIR "/vcl/source/gdi/virdev.cxx"))
+            && !(loplugin::isSamePathname(filename, SRCDIR "/vcl/qa/cppunit/lifecycle.cxx")) )
         {
             report(
                 DiagnosticsEngine::Warning,
@@ -670,7 +670,7 @@ bool VCLWidgets::VisitCXXDeleteExpr(const CXXDeleteExpr *pCXXDeleteExpr)
         SourceLocation spellingLocation = compiler.getSourceManager().getSpellingLoc(
                               pCXXDeleteExpr->getLocStart());
         StringRef filename = compiler.getSourceManager().getFilename(spellingLocation);
-        if ( !(loplugin::hasPathnamePrefix(filename, SRCDIR "/include/vcl/vclreferencebase.hxx")))
+        if ( !(loplugin::isSamePathname(filename, SRCDIR "/include/vcl/vclreferencebase.hxx")))
         {
             report(
                 DiagnosticsEngine::Warning,

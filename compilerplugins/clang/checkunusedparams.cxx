@@ -68,16 +68,16 @@ void CheckUnusedParams::run()
     if (loplugin::hasPathnamePrefix(fn, SRCDIR "/xmloff/"))
          return;
     // I believe someone is busy working on this chunk of code
-    if (loplugin::hasPathnamePrefix(fn, SRCDIR "/sc/source/ui/docshell/dataprovider.cxx"))
+    if (loplugin::isSamePathname(fn, SRCDIR "/sc/source/ui/docshell/dataprovider.cxx"))
          return;
     // I think erack is working on stuff here
-    if (loplugin::hasPathnamePrefix(fn, SRCDIR "/sc/source/filter/excel/xiformula.cxx"))
+    if (loplugin::isSamePathname(fn, SRCDIR "/sc/source/filter/excel/xiformula.cxx"))
          return;
     // lots of callbacks here
-    if (loplugin::hasPathnamePrefix(fn, SRCDIR "/sc/source/filter/lotus/op.cxx"))
+    if (loplugin::isSamePathname(fn, SRCDIR "/sc/source/filter/lotus/op.cxx"))
          return;
     // template magic
-    if (loplugin::hasPathnamePrefix(fn, SRCDIR "/sc/source/filter/html/htmlpars.cxx"))
+    if (loplugin::isSamePathname(fn, SRCDIR "/sc/source/filter/html/htmlpars.cxx"))
          return;
 
     m_phase = PluginPhase::FindAddressOf;

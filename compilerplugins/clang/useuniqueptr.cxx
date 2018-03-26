@@ -170,22 +170,22 @@ void UseUniquePtr::CheckDeleteExpr(const CXXDestructorDecl* destructorDecl, cons
     if (loplugin::hasPathnamePrefix(aFileName, WORKDIR))
         return;
     // passes and stores pointers to member fields
-    if (loplugin::hasPathnamePrefix(aFileName, SRCDIR "/sot/source/sdstor/stgdir.hxx"))
+    if (loplugin::isSamePathname(aFileName, SRCDIR "/sot/source/sdstor/stgdir.hxx"))
         return;
     // something platform-specific
-    if (loplugin::hasPathnamePrefix(aFileName, SRCDIR "/hwpfilter/source/htags.h"))
+    if (loplugin::isSamePathname(aFileName, SRCDIR "/hwpfilter/source/htags.h"))
         return;
     // passes pointers to member fields
-    if (loplugin::hasPathnamePrefix(aFileName, SRCDIR "/sd/inc/sdpptwrp.hxx"))
+    if (loplugin::isSamePathname(aFileName, SRCDIR "/sd/inc/sdpptwrp.hxx"))
         return;
     // @TODO intrusive linked-lists here, with some trickiness
-    if (loplugin::hasPathnamePrefix(aFileName, SRCDIR "/sw/source/filter/html/parcss1.hxx"))
+    if (loplugin::isSamePathname(aFileName, SRCDIR "/sw/source/filter/html/parcss1.hxx"))
         return;
     // @TODO SwDoc has some weird ref-counting going on
-    if (loplugin::hasPathnamePrefix(aFileName, SRCDIR "/sw/inc/shellio.hxx"))
+    if (loplugin::isSamePathname(aFileName, SRCDIR "/sw/inc/shellio.hxx"))
         return;
     // @TODO it's sharing pointers with another class
-    if (loplugin::hasPathnamePrefix(aFileName, SRCDIR "/sc/inc/formulacell.hxx"))
+    if (loplugin::isSamePathname(aFileName, SRCDIR "/sc/inc/formulacell.hxx"))
         return;
     // some weird stuff going on here around struct Entity
     if (loplugin::hasPathnamePrefix(aFileName, SRCDIR "/sax/"))
@@ -198,23 +198,23 @@ void UseUniquePtr::CheckDeleteExpr(const CXXDestructorDecl* destructorDecl, cons
     if (loplugin::hasPathnamePrefix(aFileName, SRCDIR "/include/sot/"))
         return;
     // the std::vector is being passed to another class
-    if (loplugin::hasPathnamePrefix(aFileName, SRCDIR "/sfx2/source/explorer/nochaos.cxx"))
+    if (loplugin::isSamePathname(aFileName, SRCDIR "/sfx2/source/explorer/nochaos.cxx"))
         return;
     // ignore std::map and std::unordered_map, MSVC 2015 has problems with mixing these with std::unique_ptr
     auto tc = loplugin::TypeCheck(fieldDecl->getType());
     if (tc.Class("map").StdNamespace() || tc.Class("unordered_map").StdNamespace())
         return;
     // there is a loop in ~ImplPrnQueueList deleting stuff on a global data structure
-    if (loplugin::hasPathnamePrefix(aFileName, SRCDIR "/vcl/inc/print.h"))
+    if (loplugin::isSamePathname(aFileName, SRCDIR "/vcl/inc/print.h"))
         return;
     // painful linked list
-    if (loplugin::hasPathnamePrefix(aFileName, SRCDIR "/basic/source/inc/runtime.hxx"))
+    if (loplugin::isSamePathname(aFileName, SRCDIR "/basic/source/inc/runtime.hxx"))
         return;
     // not sure how the node management is working here
-    if (loplugin::hasPathnamePrefix(aFileName, SRCDIR "/i18npool/source/localedata/saxparser.cxx"))
+    if (loplugin::isSamePathname(aFileName, SRCDIR "/i18npool/source/localedata/saxparser.cxx"))
         return;
     // has a pointer that it only sometimes owns
-    if (loplugin::hasPathnamePrefix(aFileName, SRCDIR "/editeng/source/editeng/impedit.hxx"))
+    if (loplugin::isSamePathname(aFileName, SRCDIR "/editeng/source/editeng/impedit.hxx"))
         return;
 
     report(

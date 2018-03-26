@@ -30,7 +30,7 @@ public:
     {
         StringRef fn( compiler.getSourceManager().getFileEntryForID(
                           compiler.getSourceManager().getMainFileID())->getName() );
-        if (loplugin::hasPathnamePrefix(fn, SRCDIR "/sal/osl/unx/file_misc.cxx"))
+        if (loplugin::isSamePathname(fn, SRCDIR "/sal/osl/unx/file_misc.cxx"))
              return;
 
         TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());

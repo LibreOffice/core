@@ -75,11 +75,11 @@ bool ConvertLong::VisitVarDecl(VarDecl const* varDecl)
     if (ignoreLocation(varDecl))
         return true;
     StringRef fileName{ compiler.getSourceManager().getFilename(varDecl->getLocation()) };
-    if (loplugin::hasPathnamePrefix(fileName, SRCDIR "/include/tools/bigint.hxx"))
+    if (loplugin::isSamePathname(fileName, SRCDIR "/include/tools/bigint.hxx"))
         return true;
-    if (loplugin::hasPathnamePrefix(fileName, SRCDIR "/include/tools/solar.h"))
+    if (loplugin::isSamePathname(fileName, SRCDIR "/include/tools/solar.h"))
         return true;
-    if (loplugin::hasPathnamePrefix(fileName, SRCDIR "/include/o3tl/string_view.hxx"))
+    if (loplugin::isSamePathname(fileName, SRCDIR "/include/o3tl/string_view.hxx"))
         return true;
     if (!varDecl->hasInit())
         return true;
