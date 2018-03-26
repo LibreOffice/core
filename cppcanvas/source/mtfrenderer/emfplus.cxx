@@ -1986,7 +1986,12 @@ namespace cppcanvas
 
                             SAL_INFO("cppcanvas.emf", "EMF+ FillPath slot: " << index);
 
-                            EMFPPlusFillPolygon( static_cast<EMFPPath*>( aObjects [index])->GetPolygon (*this), rFactoryParms, rState, rCanvas, flags & 0x8000, brushIndexOrColor);
+                            EMFPPath* path = static_cast<EMFPPath*>(aObjects[index]);
+                            if (path)
+                                EMFPPlusFillPolygon(path->GetPolygon (*this), rFactoryParms, rState, rCanvas, flags & 0x8000, brushIndexOrColor);
+                            else
+                                SAL_WARN("cppcanvas.emf", "EmfPlusRecordTypeFillPath missing path");
+
                         }
                         break;
                     case EmfPlusRecordTypeDrawEllipse:
@@ -2109,9 +2114,10 @@ namespace cppcanvas
                             SAL_INFO("cppcanvas.emf", "EMF+\tpen: " << penIndex);
 
                             EMFPPath* path = static_cast<EMFPPath*>( aObjects [flags & 0xff] );
-                            SAL_WARN_IF( !path, "cppcanvas.emf", "EmfPlusRecordTypeDrawPath missing path" );
-
-                            EMFPPlusDrawPolygon (path->GetPolygon (*this), rFactoryParms, rState, rCanvas, penIndex);
+                            if (path)
+                                EMFPPlusDrawPolygon(path->GetPolygon (*this), rFactoryParms, rState, rCanvas, penIndex);
+                            else
+                                SAL_WARN("cppcanvas.emf", "EmfPlusRecordTypeDrawPath missing path");
 
                             break;
                         }
