@@ -19,6 +19,10 @@
 
 #include <config_features.h>
 
+#ifdef UNX
+#include <sys/stat.h>
+#endif
+
 #include <sfx2/docfile.hxx>
 #include <sfx2/signaturestate.hxx>
 
@@ -188,6 +192,28 @@ sal_uInt64 GetDefaultFileAttributes(const OUString& rURL)
 
     nRet = aStatus.getAttributes();
     return nRet;
+}
+
+/// Determines if rURL is a non-hard-linked file:// URL.
+bool IsNotHardLinkedFile(const OUString& rURL)
+{
+    if (!comphelper::isFileUrl(rURL))
+        return false;
+
+#ifdef UNX
+    OUString rPath;
+    if (osl::FileBase::getSystemPathFromFileURL(rURL, rPath) != osl::FileBase::E_None)
+        return false;
+
+    struct stat buf;
+    if (stat(rPath.toUtf8().getStr(), &buf) != 0)
+        return false;
+
+    if (buf.st_nlink > 1)
+        return false;
+#endif
+
+    return true;
 }
 
 } // anonymous namespace
@@ -1812,7 +1838,7 @@ void SfxMedium::TransactedTransferForFS_Impl( const INetURLObject& aSource,
                 OUString aDestMainURL = aDest.GetMainURL(INetURLObject::DecodeMechanism::NONE);
 
                 sal_uInt64 nAttributes = GetDefaultFileAttributes(aDestMainURL);
-                if (comphelper::isFileUrl(aDestMainURL) && osl::File::move(aSourceMainURL, aDestMainURL) == osl::FileBase::E_None)
+                if (IsNotHardLinkedFile(aDestMainURL) && osl::File::move(aSourceMainURL, aDestMainURL) == osl::FileBase::E_None)
                 {
                     if (nAttributes)
                         // Adjust attributes, source might be created with
