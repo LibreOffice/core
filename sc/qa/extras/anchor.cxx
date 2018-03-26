@@ -39,11 +39,13 @@ public:
     void testUndoAnchor();
     void testTdf76183();
     void testODFAnchorTypes();
+    void testCopyColumnWithImages();
 
     CPPUNIT_TEST_SUITE(ScAnchorTest);
     CPPUNIT_TEST(testUndoAnchor);
     CPPUNIT_TEST(testTdf76183);
     CPPUNIT_TEST(testODFAnchorTypes);
+    CPPUNIT_TEST(testCopyColumnWithImages);
     CPPUNIT_TEST_SUITE_END();
 private:
 
@@ -229,6 +231,55 @@ void ScAnchorTest::testODFAnchorTypes()
     CPPUNIT_ASSERT(pObject);
     anchorType = ScDrawLayer::GetAnchorType(*pObject);
     CPPUNIT_ASSERT_EQUAL(SCA_CELL, anchorType);
+
+    pDocSh->DoClose();
+}
+
+/// Test that copying a column with an image anchored to it also copies the image
+void ScAnchorTest::testCopyColumnWithImages()
+{
+    OUString aFileURL;
+    createFileURL("3AnchorTypes.ods", aFileURL);
+    // open the document with graphic included
+    uno::Reference<css::lang::XComponent> xComponent = loadFromDesktop(aFileURL);
+    CPPUNIT_ASSERT(xComponent.is());
+
+    // Get the document model
+    SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(xComponent);
+    CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
+
+    ScDocShell* pDocSh = dynamic_cast<ScDocShell*>(pFoundShell);
+    CPPUNIT_ASSERT(pDocSh);
+
+    ScDocument* pDoc = &(pDocSh->GetDocument());
+    ScDrawLayer* pDrawLayer = pDoc->GetDrawLayer();
+    CPPUNIT_ASSERT(pDrawLayer);
+
+    // Get the document controller
+    ScTabViewShell* pViewShell = pDocSh->GetBestViewShell(false);
+    CPPUNIT_ASSERT(pViewShell != nullptr);
+
+    ScDocument aClipDoc(SCDOCMODE_CLIP);
+
+    // 1. Copy source range
+    ScRange aSrcRange;
+    aSrcRange.Parse("A1:A11", pDoc, pDoc->GetAddressConvention());
+    pViewShell->GetViewData().GetMarkData().SetMarkArea(aSrcRange);
+    pViewShell->GetViewData().GetView()->CopyToClip(&aClipDoc, false, false, true, false);
+
+    // 2. Paste to target range
+    ScRange aDstRange;
+    aDstRange.Parse("D1:D11", pDoc, pDoc->GetAddressConvention());
+    pViewShell->GetViewData().GetMarkData().SetMarkArea(aDstRange);
+    pViewShell->GetViewData().GetView()->PasteFromClip(InsertDeleteFlags::ALL, &aClipDoc);
+
+    // 3. Make sure the images have been copied too
+    std::map<SCROW, std::vector<SdrObject*>> aRowObjects
+        = pDrawLayer->GetObjectsAnchoredToRange(0, 3, 0, 11);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("There should be an image anchored to D:3", 1,
+                                 static_cast<int>(aRowObjects[2].size()));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("There should be an image anchored to D:11", 1,
+                                 static_cast<int>(aRowObjects[10].size()));
 
     pDocSh->DoClose();
 }
