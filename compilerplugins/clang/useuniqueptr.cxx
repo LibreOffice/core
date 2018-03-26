@@ -167,7 +167,7 @@ void UseUniquePtr::CheckDeleteExpr(const CXXDestructorDecl* destructorDecl, cons
         return;
     // to ignore things like the CPPUNIT macros
     StringRef aFileName = compiler.getSourceManager().getFilename(compiler.getSourceManager().getSpellingLoc(fieldDecl->getLocStart()));
-    if (loplugin::hasPathnamePrefix(aFileName, WORKDIR))
+    if (loplugin::hasPathnamePrefix(aFileName, WORKDIR "/"))
         return;
     // passes and stores pointers to member fields
     if (loplugin::isSamePathname(aFileName, SRCDIR "/sot/source/sdstor/stgdir.hxx"))

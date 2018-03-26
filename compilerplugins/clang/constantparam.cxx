@@ -121,7 +121,7 @@ void ConstantParam::addToCallSet(const FunctionDecl* functionDecl, int paramInde
         return;
     SourceLocation expansionLoc = compiler.getSourceManager().getExpansionLoc( functionDecl->getLocation() );
     StringRef filename = compiler.getSourceManager().getFilename(expansionLoc);
-    if (!loplugin::hasPathnamePrefix(filename, SRCDIR))
+    if (!loplugin::hasPathnamePrefix(filename, SRCDIR "/"))
         return;
     filename = filename.substr(strlen(SRCDIR)+1);
 

@@ -207,7 +207,7 @@ bool PluginHandler::checkIgnoreLocation(SourceLocation loc)
             // generated into the start of hash.cxx, #if'ed for __GNUC__, but
             // for clang-cl it is an issue)
         return true;
-    if( hasPathnamePrefix(bufferName, WORKDIR) )
+    if( hasPathnamePrefix(bufferName, WORKDIR "/") )
     {
         // workdir/CustomTarget/vcl/unx/kde4/tst_exclude_socket_notifiers.moc
         // includes
@@ -219,11 +219,11 @@ bool PluginHandler::checkIgnoreLocation(SourceLocation loc)
         }
         std::string s(bufferName);
         normalizeDotDotInFilePath(s);
-        if (hasPathnamePrefix(s, WORKDIR))
+        if (hasPathnamePrefix(s, WORKDIR "/"))
             return true;
     }
-    if( hasPathnamePrefix(bufferName, BUILDDIR)
-        || hasPathnamePrefix(bufferName, SRCDIR) )
+    if( hasPathnamePrefix(bufferName, BUILDDIR "/")
+        || hasPathnamePrefix(bufferName, SRCDIR "/") )
         return false; // ok
     return true;
 }

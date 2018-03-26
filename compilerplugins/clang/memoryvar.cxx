@@ -80,7 +80,7 @@ bool MemoryVar::TraverseFunctionDecl(FunctionDecl * decl)
         // I'm not getting accurate results from clang right now
         StringRef aFileName = getFilename(varLoc);
         // TODO these files are doing some weird stuff I don't know how to ignore yet
-        if (loplugin::hasPathnamePrefix(aFileName, SRCDIR "/vcl/source/filter")) {
+        if (loplugin::hasPathnamePrefix(aFileName, SRCDIR "/vcl/source/filter/")) {
            return true;
         }
         if (loplugin::isSamePathname(aFileName, SRCDIR "/sw/source/core/layout/frmtool.cxx")) {

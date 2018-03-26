@@ -84,7 +84,7 @@ public:
             return;
         if (loplugin::isSamePathname(fn, SRCDIR "/svx/source/dialog/rubydialog.cxx"))
             return;
-        if (loplugin::hasPathnamePrefix(fn, SRCDIR "/canvas"))
+        if (loplugin::hasPathnamePrefix(fn, SRCDIR "/canvas/"))
             return;
         if (loplugin::isSamePathname(fn, SRCDIR "/sc/source/ui/view/spelldialog.cxx"))
             return;

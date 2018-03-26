@@ -47,10 +47,10 @@ private:
         bool shouldUseAngles;
         if (uno) {
             shouldUseAngles
-                = (!(loplugin::hasPathnamePrefix(SearchPath, SRCDIR)
-                     || loplugin::hasPathnamePrefix(SearchPath, BUILDDIR))
+                = (!(loplugin::hasPathnamePrefix(SearchPath, SRCDIR "/")
+                     || loplugin::hasPathnamePrefix(SearchPath, BUILDDIR "/"))
                    || loplugin::hasPathnamePrefix(
-                       SearchPath, WORKDIR "/UnpackedTarball"));
+                       SearchPath, WORKDIR "/UnpackedTarball/"));
         } else {
             auto dir1 = std::string(SearchPath);
             loplugin::normalizeDotDotInFilePath(dir1);
