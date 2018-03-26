@@ -17,7 +17,7 @@
 #
 #
 # checknewapi - a perl script to check for new API's
-# using two outputs from regview and dump the interscetion
+# using two outputs from regview and dump the intersection
 # of new types
 #
 
