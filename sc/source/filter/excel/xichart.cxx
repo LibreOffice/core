@@ -3373,15 +3373,19 @@ Reference< XAxis > XclImpChAxis::CreateAxis( const XclImpChTypeGroup& rTypeGroup
         {
             case cssc2::AxisType::CATEGORY:
             case cssc2::AxisType::SERIES:
-                OSL_ENSURE( mxLabelRange, "Missing Label Range" );
                 // #i71684# radar charts have reversed rotation direction
                 if (mxLabelRange)
                     mxLabelRange->Convert( aAxisProp, aScaleData, rTypeInfo.meTypeCateg == EXC_CHTYPECATEG_RADAR );
+                else
+                    SAL_WARN("sc.filter", "missing LabelRange");
             break;
             case cssc2::AxisType::REALNUMBER:
             case cssc2::AxisType::PERCENT:
                 // #i85167# pie/donut charts have reversed rotation direction (at Y axis!)
-                mxValueRange->Convert( aScaleData, rTypeInfo.meTypeCateg == EXC_CHTYPECATEG_PIE );
+                if (mxValueRange)
+                    mxValueRange->Convert( aScaleData, rTypeInfo.meTypeCateg == EXC_CHTYPECATEG_PIE );
+                else
+                    SAL_WARN("sc.filter", "missing ValueRange");
             break;
             default:
                 OSL_FAIL( "XclImpChAxis::CreateAxis - unknown axis type" );
@@ -3430,12 +3434,18 @@ void XclImpChAxis::ConvertAxisPosition( ScfPropertySet& rPropSet, const XclImpCh
 {
     if( ((GetAxisType() == EXC_CHAXIS_X) && rTypeGroup.GetTypeInfo().mbCategoryAxis) || (GetAxisType() == EXC_CHAXIS_Z) )
     {
-        OSL_ENSURE( mxLabelRange, "Missing Label Range" );
         if (mxLabelRange)
             mxLabelRange->ConvertAxisPosition( rPropSet, rTypeGroup.Is3dChart() );
+        else
+            SAL_WARN("sc.filter", "missing LabelRange");
     }
     else
-        mxValueRange->ConvertAxisPosition( rPropSet );
+    {
+        if (mxValueRange)
+            mxValueRange->ConvertAxisPosition( rPropSet );
+        else
+            SAL_WARN("sc.filter", "missing ValueRange");
+    }
 }
 
 void XclImpChAxis::ReadChAxisLine( XclImpStream& rStrm )
