@@ -75,8 +75,6 @@ void SwConvertTableDlg::GetValues(  sal_Unicode& rDelim,
     }
 
     sal_uInt16 nInsMode = 0;
-    if (m_xBorderCB->get_active())
-        nInsMode |= tabopts::DEFAULT_BORDER;
     if (m_xHeaderCB->get_active())
         nInsMode |= tabopts::HEADLINE;
     if (m_xRepeatHeaderCB->get_sensitive() && m_xRepeatHeaderCB->get_active())
@@ -107,7 +105,6 @@ SwConvertTableDlg::SwConvertTableDlg(SwView& rView, bool bToTable)
     , m_xRepeatRows(m_xBuilder->weld_container("repeatrows"))
     , m_xRepeatHeaderNF(m_xBuilder->weld_spin_button("repeatheadersb"))
     , m_xDontSplitCB(m_xBuilder->weld_check_button("dontsplitcb"))
-    , m_xBorderCB(m_xBuilder->weld_check_button("bordercb"))
     , m_xAutoFormatBtn(m_xBuilder->weld_button("autofmt"))
     , sConvertTextTable(SwResId(STR_CONVERT_TEXT_TABLE))
     , pShell(&rView.GetWrtShell())
@@ -166,7 +163,6 @@ SwConvertTableDlg::SwConvertTableDlg(SwView& rView, bool bToTable)
     m_xHeaderCB->set_active(0 != (nInsTableFlags & tabopts::HEADLINE));
     m_xRepeatHeaderCB->set_active(aInsOpts.mnRowsToRepeat > 0);
     m_xDontSplitCB->set_active(0 == (nInsTableFlags & tabopts::SPLIT_LAYOUT));
-    m_xBorderCB->set_active(0!= (nInsTableFlags & tabopts::DEFAULT_BORDER));
 
     m_xHeaderCB->connect_clicked(LINK(this, SwConvertTableDlg, CheckBoxHdl));
     m_xRepeatHeaderCB->connect_clicked(LINK(this, SwConvertTableDlg, ReapeatHeaderCheckBoxHdl));
