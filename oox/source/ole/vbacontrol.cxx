@@ -430,7 +430,13 @@ void VbaFormControl::importStorage( StorageBase& rStrg, const AxClassTable& rCla
 
                 for ( ; it != it_end; ++it )
                 {
-                    if ( (*it)->mxCtrlModel->getControlType() == API_CONTROL_PAGE )
+                    auto& elem = (*it)->mxCtrlModel;
+                    if (!elem)
+                    {
+                        SAL_WARN("oox", "empty control model");
+                        continue;
+                    }
+                    if (elem->getControlType() == API_CONTROL_PAGE)
                     {
                         VbaSiteModelRef xPageSiteRef = (*it)->mxSiteModel;
                         if ( xPageSiteRef.get() )
@@ -438,7 +444,7 @@ void VbaFormControl::importStorage( StorageBase& rStrg, const AxClassTable& rCla
                     }
                     else
                     {
-                        AxTabStripModel* pTabStrip = static_cast<AxTabStripModel*> ( (*it)->mxCtrlModel.get() );
+                        AxTabStripModel* pTabStrip = static_cast<AxTabStripModel*>(elem.get());
                         sCaptions = pTabStrip->maItems;
                         pMultiPage->mnActiveTab = pTabStrip->mnListIndex;
                         pMultiPage->mnTabStyle = pTabStrip->mnTabStyle;
