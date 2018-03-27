@@ -40,7 +40,6 @@
 #include <drawview.hxx>
 #include <tabvwsh.hxx>
 #include <drawpage.hxx>
-#include <globstr.hrc>
 #include <drwlayer.hxx>
 #include <userdat.hxx>
 #include <scmod.hxx>

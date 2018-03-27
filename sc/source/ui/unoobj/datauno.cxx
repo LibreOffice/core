@@ -45,7 +45,6 @@
 #include <dbdocfun.hxx>
 #include <unonames.hxx>
 #include <globalnames.hxx>
-#include <globstr.hrc>
 #include <convuno.hxx>
 #include <hints.hxx>
 #include <attrib.hxx>

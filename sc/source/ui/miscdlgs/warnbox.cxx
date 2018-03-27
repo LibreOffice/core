@@ -21,8 +21,6 @@
 
 #include <scmod.hxx>
 #include <inputopt.hxx>
-#include <scresid.hxx>
-#include <strings.hrc>
 #include <helpids.h>
 
 ScReplaceWarnBox::ScReplaceWarnBox(weld::Window* pParent)

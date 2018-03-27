@@ -30,7 +30,6 @@
 #include <sc.hrc>
 #include <inputhdl.hxx>
 #include <scmod.hxx>
-#include <scresid.hxx>
 #include <inputwin.hxx>
 #include <tabvwsh.hxx>
 #include <docsh.hxx>

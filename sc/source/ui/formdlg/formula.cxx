@@ -37,8 +37,6 @@
 #include <tokenuno.hxx>
 #include <formula.hxx>
 #include <formdata.hxx>
-#include <globstr.hrc>
-#include <scresid.hxx>
 #include <reffact.hxx>
 #include <document.hxx>
 #include <simpleformulacalc.hxx>

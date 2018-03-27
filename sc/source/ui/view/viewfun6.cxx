@@ -34,7 +34,6 @@
 #include <undocell.hxx>
 #include <futext.hxx>
 #include <docfunc.hxx>
-#include <globstr.hrc>
 #include <sc.hrc>
 #include <fusel.hxx>
 #include <reftokenhelper.hxx>

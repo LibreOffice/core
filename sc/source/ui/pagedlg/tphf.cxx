@@ -34,7 +34,6 @@
 #include <document.hxx>
 #include <hfedtdlg.hxx>
 #include <styledlg.hxx>
-#include <scresid.hxx>
 #include <scuitphfedit.hxx>
 #include <memory>
 

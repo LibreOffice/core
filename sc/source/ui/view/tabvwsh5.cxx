@@ -33,7 +33,6 @@
 #include <docsh.hxx>
 #include <document.hxx>
 #include <formulacell.hxx>
-#include <globstr.hrc>
 #include <scmod.hxx>
 #include <uiitems.hxx>
 #include <editsh.hxx>

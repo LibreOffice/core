@@ -11,6 +11,7 @@
 #include <docsh.hxx>
 #include <reffact.hxx>
 #include <CorrelationDialog.hxx>
+#include <scresid.hxx>
 #include <strings.hrc>
 
 ScCorrelationDialog::ScCorrelationDialog(

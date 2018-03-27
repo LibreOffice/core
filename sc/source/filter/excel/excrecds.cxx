@@ -52,7 +52,6 @@
 #include <string.h>
 
 #include <global.hxx>
-#include <globstr.hrc>
 #include <docpool.hxx>
 #include <patattr.hxx>
 #include <formulacell.hxx>

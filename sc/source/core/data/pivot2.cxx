@@ -23,7 +23,6 @@
 #include <svx/algitem.hxx>
 #include <unotools/transliterationwrapper.hxx>
 
-#include <globstr.hrc>
 #include <subtotal.hxx>
 #include <rangeutl.hxx>
 #include <attrib.hxx>

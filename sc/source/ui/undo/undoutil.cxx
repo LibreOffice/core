@@ -23,7 +23,6 @@
 #include <tabvwsh.hxx>
 #include <document.hxx>
 #include <dbdata.hxx>
-#include <globstr.hrc>
 #include <globalnames.hxx>
 #include <global.hxx>
 #include <markdata.hxx>

@@ -48,7 +48,6 @@
 #include <columniterator.hxx>
 #include <types.hxx>
 #include <fillinfo.hxx>
-#include <globstr.hrc>
 #include <tokenarray.hxx>
 #include <scopetools.hxx>
 #include <dociter.hxx>

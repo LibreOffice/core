@@ -37,9 +37,7 @@
 #include <global.hxx>
 #include <attrib.hxx>
 #include <patattr.hxx>
-#include <scresid.hxx>
 #include <sc.hrc>
-#include <globstr.hrc>
 #include <tabvwsh.hxx>
 #include <prevwsh.hxx>
 #include <textdlgs.hxx>

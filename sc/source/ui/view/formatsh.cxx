@@ -68,7 +68,6 @@
 #include <stlsheet.hxx>
 #include <printfun.hxx>
 #include <docpool.hxx>
-#include <scresid.hxx>
 #include <tabvwsh.hxx>
 #include <undostyl.hxx>
 #include <markdata.hxx>

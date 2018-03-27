@@ -18,7 +18,6 @@
 #include <docsh.hxx>
 #include <interpre.hxx>
 #include <sc.hrc>
-#include <scresid.hxx>
 #include <scopetools.hxx>
 #include <viewdata.hxx>
 

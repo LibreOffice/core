@@ -21,8 +21,6 @@
 #include <reffact.hxx>
 #include <document.hxx>
 #include <docsh.hxx>
-#include <scresid.hxx>
-#include <globstr.hrc>
 
 #include <highred.hxx>
 #include <sfx2/app.hxx>

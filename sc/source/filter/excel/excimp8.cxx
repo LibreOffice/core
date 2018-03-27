@@ -75,7 +75,6 @@
 #include <markdata.hxx>
 #include <rangenam.hxx>
 #include <docoptio.hxx>
-#include <globstr.hrc>
 #include <fprogressbar.hxx>
 #include <xltracer.hxx>
 #include <xihelper.hxx>

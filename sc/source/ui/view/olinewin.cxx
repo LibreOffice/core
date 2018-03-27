@@ -25,8 +25,6 @@
 #include <olinetab.hxx>
 #include <document.hxx>
 #include <dbfunc.hxx>
-#include <strings.hrc>
-#include <scresid.hxx>
 #include <bitmaps.hlst>
 
 const long SC_OL_BITMAPSIZE                 = 12;

@@ -25,8 +25,6 @@
 #include <docfunc.hxx>
 #include <docsh.hxx>
 #include <formulacell.hxx>
-#include <scresid.hxx>
-#include <strings.hrc>
 #include <strings.hxx>
 #include <unonames.hxx>
 #include <detfunc.hxx>

@@ -28,7 +28,6 @@
 #include <docsh.hxx>
 #include <document.hxx>
 #include <docoptio.hxx>
-#include <scresid.hxx>
 #include <sc.hrc>
 #include <officecfg/Office/Calc.hxx>
 

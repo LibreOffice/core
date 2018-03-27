@@ -29,7 +29,6 @@
 #include <compiler.hxx>
 #include <formula/funcutl.hxx>
 #include "IAnyRefDialog.hxx"
-#include <scresid.hxx>
 #include <scmod.hxx>
 
 #include <memory>

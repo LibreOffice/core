@@ -72,7 +72,6 @@
 #include <undotab.hxx>
 #include <chartlis.hxx>
 #include <uiitems.hxx>
-#include <globstr.hrc>
 #include <drawview.hxx>
 #include <markdata.hxx>
 #include <gridwin.hxx>

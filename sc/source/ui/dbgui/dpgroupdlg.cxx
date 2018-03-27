@@ -22,7 +22,6 @@
 #endif
 
 #include <dpgroupdlg.hxx>
-#include <scresid.hxx>
 #include <sc.hrc>
 #include <globstr.hrc>
 

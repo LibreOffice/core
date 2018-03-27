@@ -20,8 +20,6 @@
 #undef SC_DLLIMPLEMENTATION
 
 #include <shtabdlg.hxx>
-#include <scresid.hxx>
-#include <strings.hrc>
 
 ScShowTabDlg::ScShowTabDlg(vcl::Window* pParent)
     : ModalDialog(pParent, "ShowSheetDialog", "modules/scalc/ui/showsheetdialog.ui")

@@ -72,7 +72,6 @@
 #include <prnsave.hxx>
 #include <chgtrack.hxx>
 #include <sc.hrc>
-#include <scresid.hxx>
 #include <hints.hxx>
 #include <detdata.hxx>
 #include <dpobject.hxx>

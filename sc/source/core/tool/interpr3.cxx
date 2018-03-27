@@ -29,7 +29,6 @@
 #include <dociter.hxx>
 #include <matrixoperators.hxx>
 #include <scmatrix.hxx>
-#include <globstr.hrc>
 
 #include <math.h>
 #include <memory>

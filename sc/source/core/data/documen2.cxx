@@ -52,7 +52,6 @@
 #include <docpool.hxx>
 #include <stlpool.hxx>
 #include <stlsheet.hxx>
-#include <globstr.hrc>
 #include <chartarr.hxx>
 #include <chartlock.hxx>
 #include <rechead.hxx>

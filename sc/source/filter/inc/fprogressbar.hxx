@@ -22,7 +22,6 @@
 
 #include <vector>
 #include <memory>
-#include <globstr.hrc>
 #include "ftools.hxx"
 #include <scdllapi.h>
 

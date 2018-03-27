@@ -20,7 +20,6 @@
 #undef SC_DLLIMPLEMENTATION
 
 #include <namecrea.hxx>
-#include <scresid.hxx>
 
 ScNameCreateDlg::ScNameCreateDlg(weld::Window * pParent, CreateNameFlags nFlags)
     : GenericDialogController(pParent, "modules/scalc/ui/createnamesdialog.ui", "CreateNamesDialog")

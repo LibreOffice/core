@@ -20,7 +20,6 @@
 #include <consoli.hxx>
 #include <document.hxx>
 #include <olinetab.hxx>
-#include <globstr.hrc>
 #include <subtotal.hxx>
 #include <formula/errorcodes.hxx>
 #include <formulacell.hxx>

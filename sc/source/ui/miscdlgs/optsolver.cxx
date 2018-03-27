@@ -32,7 +32,6 @@
 #include <docfunc.hxx>
 #include <formulacell.hxx>
 #include <rangeutl.hxx>
-#include <scresid.hxx>
 #include <convuno.hxx>
 #include <unonames.hxx>
 #include <solveroptions.hxx>

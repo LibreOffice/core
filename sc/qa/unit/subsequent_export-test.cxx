@@ -42,7 +42,6 @@
 #include <chgtrack.hxx>
 #include <validat.hxx>
 #include <attrib.hxx>
-#include <globstr.hrc>
 #include <global.hxx>
 
 #include <svx/svdoole2.hxx>

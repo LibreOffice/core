@@ -20,7 +20,6 @@
 #undef SC_DLLIMPLEMENTATION
 
 #include <strindlg.hxx>
-#include <scresid.hxx>
 #include <vcl/svapp.hxx>
 
 ScStringInputDlg::ScStringInputDlg(weld::Window* pParent,

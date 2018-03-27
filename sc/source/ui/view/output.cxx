@@ -62,7 +62,6 @@
 #include <appoptio.hxx>
 #include <postit.hxx>
 
-#include <scresid.hxx>
 #include <colorscale.hxx>
 
 #include <math.h>

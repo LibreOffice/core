@@ -34,7 +34,6 @@
 #include <drtxtob.hxx>
 #include <drawview.hxx>
 #include <viewdata.hxx>
-#include <scresid.hxx>
 #include <gridwin.hxx>
 
 #include <scabstdlg.hxx>

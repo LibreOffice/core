@@ -32,10 +32,8 @@
 #include <viewopti.hxx>
 #include <tabvwsh.hxx>
 #include <uiitems.hxx>
-#include <scresid.hxx>
 #include <docsh.hxx>
 #include <sc.hrc>
-#include <globstr.hrc>
 
 #include <opredlin.hxx>
 

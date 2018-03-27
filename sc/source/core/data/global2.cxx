@@ -37,7 +37,6 @@
 #include <calcconfig.hxx>
 
 #include <sc.hrc>
-#include <globstr.hrc>
 
 
 // struct ScImportParam:

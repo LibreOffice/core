@@ -22,6 +22,7 @@
 #include <docfunc.hxx>
 #include <TableFillingAndNavigationTools.hxx>
 #include <ChiSquareTestDialog.hxx>
+#include <scresid.hxx>
 #include <strings.hrc>
 
 ScChiSquareTestDialog::ScChiSquareTestDialog(

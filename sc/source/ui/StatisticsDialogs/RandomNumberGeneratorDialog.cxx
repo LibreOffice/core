@@ -20,6 +20,7 @@
 #include <uiitems.hxx>
 #include <reffact.hxx>
 #include <docfunc.hxx>
+#include <scresid.hxx>
 #include <strings.hrc>
 
 #include <random>

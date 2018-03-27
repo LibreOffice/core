@@ -30,7 +30,6 @@
 #include <userlist.hxx>
 #include <rangeutl.hxx>
 #include <crdlg.hxx>
-#include <scresid.hxx>
 #include <sc.hrc>
 #include <globstr.hrc>
 #include <tpusrlst.hxx>

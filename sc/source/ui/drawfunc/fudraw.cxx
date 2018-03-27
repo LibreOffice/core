@@ -34,11 +34,9 @@
 #include <futext.hxx>
 #include <tabvwsh.hxx>
 #include <drwlayer.hxx>
-#include <scresid.hxx>
 #include <userdat.hxx>
 #include <docsh.hxx>
 #include <postit.hxx>
-#include <globstr.hrc>
 #include <drawview.hxx>
 
 // base class for draw module specific functions

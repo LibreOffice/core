@@ -30,8 +30,6 @@
 #include <prevwsh.hxx>
 #include <miscuno.hxx>
 #include <prevloc.hxx>
-#include <scresid.hxx>
-#include <strings.hrc>
 #include <strings.hxx>
 
 #include <com/sun/star/accessibility/AccessibleRole.hpp>

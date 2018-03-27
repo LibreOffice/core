@@ -131,7 +131,6 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/itemwrapper.hxx>
 #include <sc.hrc>
-#include <globstr.hrc>
 #include <unonames.hxx>
 
 #include "service.hxx"

@@ -21,7 +21,6 @@
 
 #include <map>
 
-#include <globstr.hrc>
 #include <document.hxx>
 #include <rangenam.hxx>
 #include <dbdata.hxx>

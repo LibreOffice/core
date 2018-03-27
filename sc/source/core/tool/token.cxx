@@ -47,7 +47,6 @@
 #include <refupdatecontext.hxx>
 #include <tokenstringcontext.hxx>
 #include <types.hxx>
-#include <globstr.hrc>
 #include <addincol.hxx>
 #include <dbdata.hxx>
 #include <reordermap.hxx>

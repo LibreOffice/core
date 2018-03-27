@@ -33,8 +33,6 @@
 #include <condformatdlgentry.hxx>
 #include <condformatdlgitem.hxx>
 
-#include <globstr.hrc>
-
 ScCondFormatList::ScCondFormatList(vcl::Window* pParent, WinBits nStyle)
     : Control(pParent, nStyle | WB_DIALOGCONTROL)
     , mbHasScrollBar(false)

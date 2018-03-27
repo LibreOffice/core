@@ -39,7 +39,6 @@
 #include <dociter.hxx>
 #include <docoptio.hxx>
 #include <unitconv.hxx>
-#include <globstr.hrc>
 #include <hints.hxx>
 #include <dpobject.hxx>
 #include <postit.hxx>

@@ -27,7 +27,6 @@
 #include <stdlib.h>
 
 #include <areasdlg.hxx>
-#include <scresid.hxx>
 #include <rangenam.hxx>
 #include <reffact.hxx>
 #include <tabvwsh.hxx>

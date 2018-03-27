@@ -19,6 +19,7 @@
 
 #include <fprogressbar.hxx>
 #include <global.hxx>
+#include <globstr.hrc>
 #include <progress.hxx>
 #include <osl/diagnose.h>
 #include <o3tl/make_unique.hxx>

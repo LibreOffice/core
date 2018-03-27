@@ -23,7 +23,6 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <appoptio.hxx>
 #include <rechead.hxx>
-#include <scresid.hxx>
 #include <global.hxx>
 #include <userlist.hxx>
 #include <sc.hrc>
@@ -34,7 +33,7 @@
 using namespace utl;
 using namespace com::sun::star::uno;
 
-//      ScAppOptions - Applikations-Optionen
+//      ScAppOptions - Application Options
 
 ScAppOptions::ScAppOptions() : pLRUList( nullptr )
 {
@@ -64,7 +63,7 @@ void ScAppOptions::SetDefaults()
     bAutoComplete   = true;
     bDetectiveAuto  = true;
 
-    pLRUList.reset( new sal_uInt16[5] );               // sinnvoll vorbelegen
+    pLRUList.reset( new sal_uInt16[5] );               // sensible initialization
     pLRUList[0] = SC_OPCODE_SUM;
     pLRUList[1] = SC_OPCODE_AVERAGE;
     pLRUList[2] = SC_OPCODE_MIN;

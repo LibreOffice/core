@@ -31,7 +31,6 @@
 #include <algorithm>
 
 #include <global.hxx>
-#include <scresid.hxx>
 #include <globstr.hrc>
 
 using namespace com::sun::star;

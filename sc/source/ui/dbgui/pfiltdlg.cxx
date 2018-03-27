@@ -33,7 +33,6 @@
 
 #include <sc.hrc>
 #include <strings.hrc>
-#include <globstr.hrc>
 
 #include <pfiltdlg.hxx>
 #include <svl/zforlist.hxx>

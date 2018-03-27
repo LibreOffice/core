@@ -50,7 +50,6 @@
 #include <callform.hxx>
 #include <addincol.hxx>
 #include <refupdat.hxx>
-#include <scresid.hxx>
 #include <sc.hrc>
 #include <globstr.hrc>
 #include <formulacell.hxx>

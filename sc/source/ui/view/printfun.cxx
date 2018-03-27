@@ -59,7 +59,6 @@
 #include <formulacell.hxx>
 #include <drawutil.hxx>
 #include <globstr.hrc>
-#include <scresid.hxx>
 #include <sc.hrc>
 #include <pagedata.hxx>
 #include <printopt.hxx>

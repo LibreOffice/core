@@ -11,6 +11,7 @@
 #include <docsh.hxx>
 #include <reffact.hxx>
 #include <CovarianceDialog.hxx>
+#include <scresid.hxx>
 #include <strings.hrc>
 
 ScCovarianceDialog::ScCovarianceDialog(

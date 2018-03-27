@@ -20,8 +20,6 @@
 #undef SC_DLLIMPLEMENTATION
 
 #include <delcodlg.hxx>
-#include <scresid.hxx>
-#include <strings.hrc>
 
 bool       ScDeleteContentsDlg::bPreviousAllCheck = false;
 InsertDeleteFlags ScDeleteContentsDlg::nPreviousChecks   = (InsertDeleteFlags::DATETIME | InsertDeleteFlags::STRING  |

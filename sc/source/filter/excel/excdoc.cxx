@@ -35,7 +35,6 @@
 #include <document.hxx>
 #include <dbdata.hxx>
 #include <global.hxx>
-#include <globstr.hrc>
 #include <progress.hxx>
 #include <conditio.hxx>
 #include <dpobject.hxx>

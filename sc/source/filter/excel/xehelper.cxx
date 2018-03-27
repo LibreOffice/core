@@ -43,6 +43,7 @@
 #include <scmatrix.hxx>
 #include <xestyle.hxx>
 #include <fprogressbar.hxx>
+#include <globstr.hrc>
 #include <xltracer.hxx>
 #include <xecontent.hxx>
 #include <xelink.hxx>

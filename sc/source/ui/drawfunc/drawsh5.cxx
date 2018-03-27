@@ -49,7 +49,6 @@
 #include <viewdata.hxx>
 #include <tabvwsh.hxx>
 #include <docsh.hxx>
-#include <scresid.hxx>
 #include <undotab.hxx>
 #include <drwlayer.hxx>
 #include <userdat.hxx>

@@ -51,7 +51,6 @@
 #include <tools/diagnose_ex.h>
 
 #include <tabvwsh.hxx>
-#include <globstr.hrc>
 #include <scmod.hxx>
 #include <document.hxx>
 #include <sc.hrc>
