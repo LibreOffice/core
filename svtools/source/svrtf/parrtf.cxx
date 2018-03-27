@@ -602,8 +602,13 @@ void SvRTFParser::Continue( int nToken )
     if( !nToken )
         nToken = GetNextToken();
 
-    while( IsParserWorking() )
+    bool bLooping = false;
+
+    while (IsParserWorking() && !bLooping)
     {
+        auto nCurrentTokenIndex = m_nTokenIndex;
+        auto nCurrentToken = nToken;
+
         SaveState( nToken );
         switch( nToken )
         {
@@ -660,6 +665,7 @@ NEXTTOKEN:
             SaveState( 0 );         // processed till here,
                                     // continue with new token!
         nToken = GetNextToken();
+        bLooping = nCurrentTokenIndex == m_nTokenIndex && nToken == nCurrentToken;
     }
     if( SvParserState::Accepted == eState && 0 < nOpenBrakets )
         eState = SvParserState::Error;

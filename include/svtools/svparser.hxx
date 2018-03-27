@@ -54,6 +54,7 @@ protected:
     sal_uLong           nlLinePos;          // current column number
 
     std::unique_ptr<SvParser_Impl<T>> pImplData; // internal data
+    long                m_nTokenIndex;      // current token index to detect loops for seeking backwards
     long                nTokenValue;        // additional value (RTF)
     bool                bTokenHasValue;     // indicates whether nTokenValue is valid
     SvParserState       eState;             // status also in derived classes
