@@ -19,6 +19,11 @@
 #
 # Collation of Hungarian letters
 #
+
+[caseLevel on]
+[caseFirst lower]
+[alternate shifted]
+
 & c < cs <<< Cs <<< CS
 & d < dz <<< DZ < dzs <<< Dzs <<< DZS
 & g < gy <<< Gy <<< GY
@@ -30,3 +35,12 @@
 & u < ü <<< Ü <<< ű <<< Ű
 & z < zs <<< Zs <<< ZS
 
+& cs <<< ccs / cs <<< Ccs / cs <<< CCs / cs <<< CCS / cs
+& dz <<< ddz / dz <<< Ddz / dz <<< DDz / dz <<< DDZ / dz
+& dzs <<< ddzs / dzs <<< Ddzs / dzs <<< DDzs / dzs <<< DDZs / dzs <<< DDZS / dzs
+& gy <<< ggy / gy <<< Ggy / gy <<< GGy / gy <<< GGY / gy
+& ly <<< lly / ly <<< Lly / ly <<< LLy / ly <<< LLY / ly
+& ny <<< nny / ny <<< Nny / ny <<< NNy / ny <<< NNY / ny
+& sz <<< ssz / sz <<< Ssz / sz <<< SSz / sz <<< SSZ / sz
+& ty <<< tty / ty <<< Tty / ty <<< TTy / ty <<< TTY / ty
+& zs <<< zzs / zs <<< Zzs / zs <<< ZZs / zs <<< ZZS / zs
