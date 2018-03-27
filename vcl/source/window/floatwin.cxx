@@ -43,6 +43,7 @@ public:
     VclPtr<ToolBox> mpBox;
     Rectangle       maItemEdgeClipRect; // used to clip the common edge between a toolbar item and the border of this window
     Point maPos; // position of the floating window wrt. parent
+    Point maLOKTwipsPos; ///< absolute position of the floating window in the document - in twips (for toplevel floating windows).
 };
 
 FloatingWindow::ImplData::ImplData()
@@ -233,9 +234,9 @@ Point FloatingWindow::CalcFloatingPosition( vcl::Window* pWindow, const Rectangl
     return ImplCalcPos( pWindow, rRect, nFlags, rArrangeIndex );
 }
 
-Point FloatingWindow::ImplCalcPos( vcl::Window* pWindow,
-                                   const Rectangle& rRect, FloatWinPopupFlags nFlags,
-                                   sal_uInt16& rArrangeIndex )
+Point FloatingWindow::ImplCalcPos(vcl::Window* pWindow,
+                                  const Rectangle& rRect, FloatWinPopupFlags nFlags,
+                                  sal_uInt16& rArrangeIndex, Point* pLOKTwipsPos)
 {
     // get window position
     Point       aPos;
@@ -442,6 +443,14 @@ Point FloatingWindow::ImplCalcPos( vcl::Window* pWindow,
             Rectangle( e1, e2 );
     }
 
+    if (bLOKActive && pLOKTwipsPos)
+    {
+        if (pW->IsMapModeEnabled())
+            *pLOKTwipsPos = pW->PixelToLogic(aPos, MapMode(MapUnit::MapTwip));
+        else
+            *pLOKTwipsPos = pW->LogicToLogic(aPos, pW->GetMapMode(), MapMode(MapUnit::MapTwip));
+    }
+
     // caller expects coordinates relative to top-level win
     return pW->OutputToScreenPixel( aPos );
 }
@@ -626,15 +635,16 @@ void FloatingWindow::StateChanged( StateChangedType nType )
                 // dialog - but maybe we'll need a separate type for this
                 // later
                 aItems.emplace_back("type", "dialog");
+                aItems.emplace_back("position", mpImplData->maLOKTwipsPos.toString()); // twips
             }
             else
             {
                 SetLOKNotifier(pParent->GetLOKNotifier());
                 aItems.emplace_back("type", "child");
                 aItems.emplace_back("parentId", OString::number(pParent->GetLOKWindowId()));
+                aItems.emplace_back("position", mpImplData->maPos.toString()); // pixels
             }
             aItems.emplace_back("size", GetSizePixel().toString());
-            aItems.emplace_back("position", mpImplData->maPos.toString());
             if (!GetText().isEmpty())
                 aItems.emplace_back("title", GetText().toUtf8());
             GetLOKNotifier()->notifyWindow(GetLOKWindowId(), "created", aItems);
@@ -721,7 +731,7 @@ void FloatingWindow::StartPopupMode( const Rectangle& rRect, FloatWinPopupFlags 
 
     // compute window position according to flags and arrangement
     sal_uInt16 nArrangeIndex;
-    mpImplData->maPos = ImplCalcPos( this, rRect, nFlags, nArrangeIndex );
+    mpImplData->maPos = ImplCalcPos(this, rRect, nFlags, nArrangeIndex, &mpImplData->maLOKTwipsPos);
     SetPosPixel( mpImplData->maPos );
 
     // set data and display window
