@@ -85,6 +85,7 @@
 #include <comphelper/graphicmimetype.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/storagehelper.hxx>
+#include <officecfg/Office/Common.hxx>
 
 #include <o3tl/any.hxx>
 #include <o3tl/make_unique.hxx>
@@ -2438,7 +2439,8 @@ void XMLShapeExport::ImpExportGraphicObjectShape(
 
         //Resolves: fdo#62461 put preferred image first above, followed by
         //fallback here
-        if( !bIsEmptyPresObj )
+        const bool bAddReplacementImages = officecfg::Office::Common::Save::Graphic::AddReplacementImages::get();
+        if( !bIsEmptyPresObj && bAddReplacementImages)
         {
             uno::Reference<graphic::XGraphic> xReplacementGraphic;
             xPropSet->getPropertyValue("ReplacementGraphic") >>= xReplacementGraphic;
