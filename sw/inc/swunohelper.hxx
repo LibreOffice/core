@@ -19,8 +19,8 @@
 #ifndef INCLUDED_SW_INC_SWUNOHELPER_HXX
 #define INCLUDED_SW_INC_SWUNOHELPER_HXX
 
-#include <tools/solar.h>
 #include <sal/types.h>
+#include <rtl/ustring.hxx>
 #include "swdllapi.h"
 
 #include <vector>
@@ -30,7 +30,6 @@ namespace com { namespace sun { namespace star {
         class Any;
     }
 }}}
-namespace rtl {class OUString;}
 class DateTime;
 class SfxItemSet;
 

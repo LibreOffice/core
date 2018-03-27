@@ -19,10 +19,6 @@
 #ifndef INCLUDED_SW_INC_UNOCRSRHELPER_HXX
 #define INCLUDED_SW_INC_UNOCRSRHELPER_HXX
 
-#include <com/sun/star/beans/XPropertyState.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/uno/DeploymentException.hpp>
-
 #include "swtypes.hxx"
 #include "flyenum.hxx"
 #include "pam.hxx"
@@ -44,11 +40,9 @@ class SwDoc;
 namespace sw { namespace mark { class IMark; } }
 
 namespace com{ namespace sun{ namespace star{
-    namespace uno{
-        class Any;
-    }
     namespace beans{
         struct PropertyValue;
+        enum class PropertyState;
     }
     namespace text {
         class XTextContent;

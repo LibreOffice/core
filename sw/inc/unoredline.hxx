@@ -20,6 +20,7 @@
 #define INCLUDED_SW_INC_UNOREDLINE_HXX
 
 #include "unotext.hxx"
+#include "ndindex.hxx"
 
 class SwRangeRedline;
 

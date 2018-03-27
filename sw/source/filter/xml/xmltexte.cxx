@@ -37,6 +37,7 @@
 #include "xmlexp.hxx"
 #include "xmltexte.hxx"
 #include <SwAppletImpl.hxx>
+#include <ndindex.hxx>
 
 #include <svl/urihelper.hxx>
 #include <sfx2/frmdescr.hxx>

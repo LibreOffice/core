@@ -18,16 +18,13 @@
  */
 #ifndef INCLUDED_SW_INC_UNOCOLL_HXX
 #define INCLUDED_SW_INC_UNOCOLL_HXX
-#include <tools/solar.h>
+#include <limits.h>
 #include "flyenum.hxx"
-#include <vcl/timer.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <cppuhelper/implbase.hxx>
-#include "IMark.hxx"
-#include "unobaseclass.hxx"
 #include "swdllapi.h"
 
 class SwDoc;
@@ -38,15 +35,8 @@ namespace com{namespace sun {namespace star {namespace text
     class XTextSection;
     class XFootnote;
 }}}}
-class SwXFrame;
-class SwFrameFormat;
 class SwFormatFootnote;
-class XBookmark;
-class SwXReferenceMark;
 class SwSectionFormat;
-class SwFormatRefMark;
-class SwXReferenceMark;
-class SwXBookmark;
 struct SvEventDescription;
 
 const SvEventDescription* sw_GetSupportedMacroItems();

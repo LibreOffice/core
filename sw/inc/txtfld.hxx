@@ -21,7 +21,6 @@
 
 #include "txatbase.hxx"
 #include <rtl/ustring.hxx>
-#include <osl/diagnose.h>
 
 #include <memory>
 #include <cassert>

@@ -30,7 +30,6 @@
 
 #include <memory>
 
-#include "hintids.hxx"
 #include <svx/algitem.hxx>
 #include <editeng/fontitem.hxx>
 #include <editeng/fhgtitem.hxx>
@@ -53,14 +52,13 @@
 #include <svl/intitem.hxx>
 #include <editeng/lineitem.hxx>
 #include "fmtpdsc.hxx"
-#include "fmtlsplt.hxx"
-#include "fmtrowsplt.hxx"
 #include "fmtornt.hxx"
 #include "swdllapi.h"
 
 struct SwAfVersions;
 
 class SvNumberFormatter;
+class SwTable;
 
 class SwBoxAutoFormat
 {

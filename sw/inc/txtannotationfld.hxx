@@ -21,9 +21,8 @@
 #define INCLUDED_SW_INC_TXTANNOTATIONFLD_HXX
 
 #include "txtfld.hxx"
-#include "IMark.hxx"
 
-class SwDoc;
+namespace sw { namespace mark { class IMark; } }
 
 class SwTextAnnotationField : public SwTextField
 {
