@@ -2515,9 +2515,7 @@ Writer& OutHTML_SwTextNode( Writer& rWrt, const SwContentNode& rNode )
             HtmlWriter aHtml(rHTMLWrt.Strm(), rHTMLWrt.maNamespace);
             aHtml.single(OOO_STRING_SVTOOLS_HTML_linebreak);
             const SvxULSpaceItem& rULSpace = pNd->GetSwAttrSet().Get(RES_UL_SPACE);
-            if (rULSpace.GetLower() > 0 &&
-                !bEndOfCell &&
-                !rHTMLWrt.IsHTMLMode(HTMLMODE_NO_BR_AT_PAREND) )
+            if (rULSpace.GetLower() > 0 && !bEndOfCell)
             {
                 aHtml.single(OOO_STRING_SVTOOLS_HTML_linebreak);
             }
