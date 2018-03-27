@@ -238,7 +238,7 @@ fetch: get-submodules
 
 ifneq (,$(wildcard $(SRCDIR)/.git))
 get-submodules:
-ifneq ($(foreach i,$(GIT_NEEDED_SUBMODULES),$(i)/.git),$(wildcard $(foreach i,$(GIT_NEEDED_SUBMODULES),$(i)/.git)))
+ifneq ($(foreach i,$(GIT_NEEDED_SUBMODULES),$(SRCDIR)/$(i)/.git),$(wildcard $(foreach i,$(GIT_NEEDED_SUBMODULES),$(SRCDIR)/$(i)/.git)))
 	cd $(SRCDIR) && ./g -f clone
 endif
 ifeq ($(shell test -d $(SRCDIR)/.git; echo $$?),0)
