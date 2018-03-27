@@ -130,30 +130,6 @@ OString InsertOLE1Header(SvStream& rOle2, SvStream& rOle1)
 
     return aClassName;
 }
-
-/// Writes rData on rSteram as a hexdump.
-void WriteHex(SvStream& rStream, SvMemoryStream& rData)
-{
-    rData.Seek(0);
-    sal_uInt64 nSize = rData.remainingSize();
-
-    sal_uInt32 nLimit = 64;
-    sal_uInt32 nBreak = 0;
-
-    for (sal_uInt64 i = 0; i < nSize; i++)
-    {
-        OString sNo = OString::number(static_cast<const sal_uInt8*>(rData.GetBuffer())[i], 16);
-        if (sNo.getLength() < 2)
-            rStream.WriteChar('0');
-        rStream.WriteCharPtr(sNo.getStr());
-
-        if (++nBreak == nLimit)
-        {
-            rStream.WriteCharPtr(SAL_NEWLINE_STRING);
-            nBreak = 0;
-        }
-    }
-}
 }
 
 namespace SwReqIfReader
@@ -199,7 +175,8 @@ bool WrapOleInRtf(SvStream& rOle2, SvStream& rRtf)
     // Start objdata.
     rRtf.WriteCharPtr(
         "{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_OBJDATA SAL_NEWLINE_STRING);
-    WriteHex(rRtf, aOLE1);
+    msfilter::rtfutil::WriteHex(static_cast<const sal_uInt8*>(aOLE1.GetData()), aOLE1.GetSize(),
+                                &rRtf);
     // End objdata.
     rRtf.WriteCharPtr("}");
     // End object.

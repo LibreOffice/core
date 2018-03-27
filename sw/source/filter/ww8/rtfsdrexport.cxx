@@ -431,8 +431,8 @@ void RtfSdrExport::Commit(EscherPropertyContainer& rProps, const tools::Rectangl
                     .append(SAL_NEWLINE_STRING);
                 int nHeaderSize
                     = 25; // The first bytes are WW8-specific, we're only interested in the PNG
-                aBuf.append(RtfAttributeOutput::WriteHex(rOpt.pBuf + nHeaderSize,
-                                                         rOpt.nPropSize - nHeaderSize));
+                aBuf.append(msfilter::rtfutil::WriteHex(rOpt.pBuf + nHeaderSize,
+                                                        rOpt.nPropSize - nHeaderSize));
                 aBuf.append('}');
                 m_aShapeProps.insert(
                     std::pair<OString, OString>("fillBlip", aBuf.makeStringAndClear()));
@@ -534,7 +534,7 @@ void RtfSdrExport::impl_writeGraphic()
     aBuf->append(OOO_STRING_SVTOOLS_RTF_PICH)
         .append(sal_Int32(aMapped.Height()))
         .append(SAL_NEWLINE_STRING);
-    aBuf->append(RtfAttributeOutput::WriteHex(pGraphicAry, nSize));
+    aBuf->append(msfilter::rtfutil::WriteHex(pGraphicAry, nSize));
     aBuf->append('}');
     m_aShapeProps.insert(std::pair<OString, OString>("pib", aBuf.makeStringAndClear()));
 }

@@ -643,10 +643,6 @@ public:
     /// Font pitch.
     void FontPitchType(FontPitch ePitch) const;
 
-    /// Writes binary data as a hex dump.
-    static OString WriteHex(const sal_uInt8* pData, sal_uInt32 nSize, SvStream* pStream = nullptr,
-                            sal_uInt32 nLimit = 64);
-
     void BulletDefinition(int nId, const Graphic& rGraphic, Size aSize) override;
 
     /// Handles just the {\shptxt ...} part of a shape export.

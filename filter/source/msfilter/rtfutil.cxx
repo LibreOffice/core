@@ -204,6 +204,38 @@ int AsHex(char ch)
     return ret;
 }
 
+OString WriteHex(const sal_uInt8* pData, sal_uInt32 nSize, SvStream* pStream, sal_uInt32 nLimit)
+{
+    OStringBuffer aRet;
+
+    sal_uInt32 nBreak = 0;
+    for (sal_uInt32 i = 0; i < nSize; i++)
+    {
+        OString sNo = OString::number(pData[i], 16);
+        if (sNo.getLength() < 2)
+        {
+            if (pStream)
+                pStream->WriteChar('0');
+            else
+                aRet.append('0');
+        }
+        if (pStream)
+            pStream->WriteCharPtr(sNo.getStr());
+        else
+            aRet.append(sNo);
+        if (++nBreak == nLimit)
+        {
+            if (pStream)
+                pStream->WriteCharPtr(SAL_NEWLINE_STRING);
+            else
+                aRet.append(SAL_NEWLINE_STRING);
+            nBreak = 0;
+        }
+    }
+
+    return aRet.makeStringAndClear();
+}
+
 bool ExtractOLE2FromObjdata(const OString& rObjdata, SvStream& rOle2)
 {
     SvMemoryStream aStream;
