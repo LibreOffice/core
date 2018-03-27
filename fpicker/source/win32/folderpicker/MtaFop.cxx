@@ -20,6 +20,7 @@
 #include <osl/diagnose.h>
 #include <osl/thread.h>
 #include <o3tl/char16_t2wchar_t.hxx>
+#include <vcl/svapp.hxx>
 
 #include "MtaFop.hxx"
 #include <wchar.h>
@@ -69,23 +70,6 @@ namespace
     {
         OSL_ASSERT( aRequestContext && aRequestContext->hEvent );
         CloseHandle( aRequestContext->hEvent );
-    }
-
-
-    // Determine if current thread is
-    // an MTA or STA thread
-
-    bool IsMTA()
-    {
-        HRESULT hr = CoInitialize(nullptr);
-
-        if (RPC_E_CHANGED_MODE == hr)
-            return true;
-
-        if(SUCCEEDED(hr))
-            CoUninitialize();
-
-        return false;
     }
 }
 
@@ -224,79 +208,61 @@ bool CMtaFolderPicker::browseForFolder( )
 {
     bool bRet = false;
 
-    if (IsMTA())
+    OSL_ASSERT( m_hEvtThrdReady );
+
+    if ( WaitForSingleObject( m_hEvtThrdReady, MAX_WAITTIME ) != WAIT_OBJECT_0 )
     {
+        OSL_FAIL( "sta thread not ready" );
+        return false;
+    }
 
-        OSL_ASSERT( m_hEvtThrdReady );
+    RequestContext aReqCtx;
 
-        if ( WaitForSingleObject( m_hEvtThrdReady, MAX_WAITTIME ) != WAIT_OBJECT_0 )
+    if ( !InitializeRequestContext( &aReqCtx ) )
+    {
+        OSL_ASSERT( false );
+        return false;
+    }
+
+    // marshall request into the sta thread
+    BOOL const ret = PostMessageW(
+        m_hwndStaRequestWnd,
+        MSG_BROWSEFORFOLDER,
+        0,
+        reinterpret_cast< LPARAM >( &aReqCtx ) );
+    SAL_WARN_IF(0 == ret, "fpicker", "ERROR: PostMessage() failed!");
+
+    // waiting for the event to be signaled or
+    // window messages so that we don't block
+    // our parent window
+
+    bool bContinue = true;
+
+    while ( bContinue )
+    {
+        DWORD dwResult = MsgWaitForMultipleObjects(
+            1, &aReqCtx.hEvent, false, INFINITE, QS_ALLEVENTS );
+
+        switch ( dwResult )
         {
-            OSL_FAIL( "sta thread not ready" );
-            return false;
-        }
+        // the request context event is signaled
+        case WAIT_OBJECT_0:
+            bContinue = false;
+            break;
 
-        RequestContext aReqCtx;
+        // a window message has arrived
+        case WAIT_OBJECT_0 + 1:
+            Application::Reschedule( true );
+            break;
 
-        if ( !InitializeRequestContext( &aReqCtx ) )
-        {
+        // should not happen
+        default:
             OSL_ASSERT( false );
-            return false;
         }
-
-        // marshall request into the sta thread
-        BOOL const ret = PostMessageW(
-            m_hwndStaRequestWnd,
-            MSG_BROWSEFORFOLDER,
-            0,
-            reinterpret_cast< LPARAM >( &aReqCtx ) );
-        SAL_WARN_IF(0 == ret, "fpicker", "ERROR: PostMessage() failed!");
-
-        // waiting for the event to be signaled or
-        // window messages so that we don't block
-        // our parent window
-
-        bool bContinue = true;
-
-        while ( bContinue )
-        {
-            DWORD dwResult = MsgWaitForMultipleObjects(
-                1, &aReqCtx.hEvent, false, INFINITE, QS_ALLEVENTS );
-
-            switch ( dwResult )
-            {
-            // the request context event is signaled
-            case WAIT_OBJECT_0:
-                bContinue = false;
-                break;
-
-            // a window message has arrived
-            case WAIT_OBJECT_0 + 1:
-                {
-                    // dispatching all messages but we expect to
-                    // receive only paint or timer messages that's
-                    // why we don't need to call TranslateMessage or
-                    // TranslateAccelerator, because keyboard or
-                    // mouse messages are for the FolderPicker which
-                    // is in the foreground and should not arrive here
-                    MSG msg;
-                    while ( PeekMessageW( &msg, nullptr, 0, 0, PM_REMOVE ) )
-                        DispatchMessageW(&msg);
-                }
-                break;
-
-            // should not happen
-            default:
-                OSL_ASSERT( false );
-            }
-        }
-
-        /*sal_Bool*/ bRet = aReqCtx.bRet;
-        DeinitializeRequestContext( &aReqCtx );
     }
-    else
-    {
-        bRet = onBrowseForFolder();
-    }
+
+    /*sal_Bool*/ bRet = aReqCtx.bRet;
+    DeinitializeRequestContext( &aReqCtx );
 
     return bRet;
 }
