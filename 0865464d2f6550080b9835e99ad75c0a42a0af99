@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_df25d1ae",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/Impress.xcs",
+        "patchSetId": 1
+      },
+      "lineNbr": 1320,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2018-03-27T10:49:02Z",
+      "side": 1,
+      "message": "This looks unintended?",
+      "revId": "0865464d2f6550080b9835e99ad75c0a42a0af99",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_7f10654f",
+        "filename": "xmloff/source/draw/shapeexport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2442,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2018-03-27T10:49:02Z",
+      "side": 1,
+      "message": "There is an easier way to access the properties, see e.g. https://opengrok.libreoffice.org/xref/core/cui/source/options/optaccessibility.cxx#71",
+      "revId": "0865464d2f6550080b9835e99ad75c0a42a0af99",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
