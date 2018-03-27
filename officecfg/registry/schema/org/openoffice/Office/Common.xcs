@@ -2340,6 +2340,13 @@
           </constraints>
           <value>1</value>
         </prop>
+        <prop oor:name="AddReplacementImages" oor:type="xs:boolean" oor:nillable="false">
+          <info>
+            <desc>Export replacement objects as fallback images for vector graphics (True).</desc>
+            <label>Export replacement objects as fallback images for vector graphics</label>
+          </info>
+          <value>true</value>
+        </prop>
       </group>
       <group oor:name="URL">
         <info>

@@ -1310,7 +1310,7 @@
         <info>
           <desc>Exports related configuration items.</desc>
         </info>
-        <prop oor:name="LastUsed" oor:type="xs:string">
+		  <prop oor:name="LastUsed" oor:type="xs:string">
           <!-- OldPath: STARIMPRESS -->
           <!-- OldLocation: soffice.ini -->
           <!-- UIHints: Set after export -->
