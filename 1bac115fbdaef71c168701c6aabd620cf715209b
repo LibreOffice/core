@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_3f88ade7",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/Impress.xcs",
+        "patchSetId": 2
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2018-03-27T15:37:30Z",
+      "side": 1,
+      "message": "oh this is for impress?\nThe config option applies to all modules, so please move this to a generic file.",
+      "range": {
+        "startLine": 20,
+        "startChar": 178,
+        "endLine": 20,
+        "endChar": 185
+      },
+      "revId": "1bac115fbdaef71c168701c6aabd620cf715209b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
