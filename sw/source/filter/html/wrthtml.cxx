@@ -273,14 +273,6 @@ ErrCode SwHTMLWriter::WriteStream()
     if( IsHTMLMode(HTMLMODE_SOME_STYLES | HTMLMODE_FULL_STYLES) )
         m_nHTMLMode |= HTMLMODE_PRINT_EXT;
 
-    const sal_Char *pHelpHack = getenv( "HelpEx" );
-    if( pHelpHack )
-    {
-        OString aTmp(pHelpHack);
-        if (aTmp.equalsIgnoreAsciiCase("Hilfe"))
-            m_nHTMLMode |= HTMLMODE_NO_BR_AT_PAREND;
-    }
-
     m_eCSS1Unit = SW_MOD()->GetMetric( pDoc->getIDocumentSettingAccess().get(DocumentSettingId::HTML_MODE) );
 
     bool bWriteUTF8 = bWriteClipboardDoc;
