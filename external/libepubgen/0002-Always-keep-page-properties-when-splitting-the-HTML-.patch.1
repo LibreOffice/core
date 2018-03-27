@@ -1,0 +1,181 @@
+From c3bd3bee2f6e01f0b5f5a8fb376ce175573a8e96 Mon Sep 17 00:00:00 2001
+From: Mark Hung <marklh9@gmail.com>
+Date: Sat, 24 Mar 2018 12:50:12 +0800
+Subject: [PATCH 2/3] Always keep page properties when splitting the HTML file.
+
+Those page properties shall be changed only via openPageSpan.
+It was kept only when the layout out method is EPUB_LAYOUT_METHOD_FIXED
+before.
+---
+ src/lib/EPUBGenerator.cpp          |  9 ++--
+ src/test/EPUBTextGeneratorTest.cpp | 98 ++++++++++++++++++++++++++++++++++++--
+ 2 files changed, 99 insertions(+), 8 deletions(-)
+
+diff --git a/src/lib/EPUBGenerator.cpp b/src/lib/EPUBGenerator.cpp
+index 56db4dc..110667f 100644
+--- a/src/lib/EPUBGenerator.cpp
++++ b/src/lib/EPUBGenerator.cpp
+@@ -110,21 +110,20 @@ void EPUBGenerator::setDocumentMetaData(const RVNGPropertyList &props)
+ void EPUBGenerator::startNewHtmlFile()
+ {
+   // close the current HTML file
++  librevenge::RVNGPropertyList pageProperties;
+   if (bool(m_currentHtml))
+   {
+     endHtmlFile();
+     m_currentHtml->endDocument();
++    m_currentHtml->getPageProperties(pageProperties);
+   }
+ 
+   m_splitGuard.onSplit();
+ 
+-  librevenge::RVNGPropertyList pageProperties;
+-  if (m_layoutMethod == EPUB_LAYOUT_METHOD_FIXED && m_currentHtml)
+-    m_currentHtml->getPageProperties(pageProperties);
+   m_currentHtml = m_htmlManager.create(m_imageManager, m_fontManager, m_listStyleManager, m_paragraphStyleManager, m_spanStyleManager, m_tableStyleManager, m_stylesheetPath, m_stylesMethod, m_layoutMethod, m_version);
+ 
+-  if (m_layoutMethod == EPUB_LAYOUT_METHOD_FIXED)
+-    m_currentHtml->setPageProperties(pageProperties);
++  // Splitted html file should keep the same page property.
++  m_currentHtml->setPageProperties(pageProperties);
+ 
+   // restore state in the new file
+   m_currentHtml->startDocument(m_documentProps);
+diff --git a/src/test/EPUBTextGeneratorTest.cpp b/src/test/EPUBTextGeneratorTest.cpp
+index cf5e35f..0946408 100644
+--- a/src/test/EPUBTextGeneratorTest.cpp
++++ b/src/test/EPUBTextGeneratorTest.cpp
+@@ -235,7 +235,10 @@ private:
+   CPPUNIT_TEST(testFixedLayoutSpine);
+   CPPUNIT_TEST(testPageBreak);
+   CPPUNIT_TEST(testPageBreakImage);
+-  CPPUNIT_TEST(testWritingMode);
++  CPPUNIT_TEST(testPageSpanProperties);
++  CPPUNIT_TEST(testSplitOnPageBreakInPageSpan);
++  CPPUNIT_TEST(testSplitOnHeadingInPageSpan);
++  CPPUNIT_TEST(testSplitOnSizeInPageSpan);
+   CPPUNIT_TEST_SUITE_END();
+ 
+ private:
+@@ -275,7 +278,10 @@ private:
+   void testFixedLayoutSpine();
+   void testPageBreak();
+   void testPageBreakImage();
+-  void testWritingMode();
++  void testPageSpanProperties();
++  void testSplitOnPageBreakInPageSpan();
++  void testSplitOnHeadingInPageSpan();
++  void testSplitOnSizeInPageSpan();
+ 
+   /// Asserts that exactly one xpath exists in buffer, and its content equals content.
+   void assertXPathContent(xmlBufferPtr buffer, const std::string &xpath, const std::string &content);
+@@ -1352,7 +1358,7 @@ void EPUBTextGeneratorTest::testPageBreakImage()
+   CPPUNIT_ASSERT(package.m_streams.find("OEBPS/sections/section0002.xhtml") != package.m_streams.end());
+ }
+ 
+-void EPUBTextGeneratorTest::testWritingMode()
++void EPUBTextGeneratorTest::testPageSpanProperties()
+ {
+   StringEPUBPackage package;
+   libepubgen::EPUBTextGenerator generator(&package);
+@@ -1368,11 +1374,97 @@ void EPUBTextGeneratorTest::testWritingMode()
+     generator.openParagraph(para);
+     generator.insertText("Para1");
+     generator.closeParagraph();
++  }
++  generator.endDocument();
++  assertCss(package.m_cssStreams["OEBPS/styles/stylesheet.css"], ".body0", "writing-mode: vertical-rl", true);
++  assertXPath(package.m_streams["OEBPS/sections/section0001.xhtml"], "//xhtml:body", "class", "body0");
++}
++
++void EPUBTextGeneratorTest::testSplitOnPageBreakInPageSpan()
++{
++  StringEPUBPackage package;
++  libepubgen::EPUBTextGenerator generator(&package);
++  generator.setOption(libepubgen::EPUB_GENERATOR_OPTION_SPLIT, libepubgen::EPUB_SPLIT_METHOD_PAGE_BREAK);
++  generator.startDocument(librevenge::RVNGPropertyList());
++
++  {
++    librevenge::RVNGPropertyList page;
++    page.insert("style:writing-mode", "tb");
++    generator.openPageSpan(page);
++
++    librevenge::RVNGPropertyList para;
++    generator.openParagraph(para);
++    generator.insertText("Para1");
++    generator.closeParagraph();
++    // Splitting a new html file inside the page span, the writing-mode shall not change.
++    para.insert("fo:break-before", "page");
++    generator.openParagraph(para);
++    generator.insertText("Para2");
++    generator.closeParagraph();
++    generator.closePageSpan();
++  }
++  generator.endDocument();
++  assertCss(package.m_cssStreams["OEBPS/styles/stylesheet.css"], ".body0", "writing-mode: vertical-rl", true);
++  assertXPath(package.m_streams["OEBPS/sections/section0001.xhtml"], "//xhtml:body", "class", "body0");
++  assertXPath(package.m_streams["OEBPS/sections/section0002.xhtml"], "//xhtml:body", "class", "body0");
++}
++
++void EPUBTextGeneratorTest::testSplitOnHeadingInPageSpan()
++{
++  StringEPUBPackage package;
++  libepubgen::EPUBTextGenerator generator(&package);
++  generator.setOption(libepubgen::EPUB_GENERATOR_OPTION_SPLIT, libepubgen::EPUB_SPLIT_METHOD_HEADING);
++  generator.startDocument(librevenge::RVNGPropertyList());
++
++  {
++    librevenge::RVNGPropertyList page;
++    page.insert("style:writing-mode", "tb");
++    generator.openPageSpan(page);
++
++    librevenge::RVNGPropertyList para;
++    para.insert("text:outline-level", "1");
++    generator.openParagraph(para);
++    generator.insertText("Chapter1");
++    generator.closeParagraph();
++    // Splitting a new html file inside the page span, the writing-mode shall not change.
++    generator.openParagraph(para);
++    generator.insertText("Chapter2");
++    generator.closeParagraph();
++    generator.closePageSpan();
++  }
++  generator.endDocument();
++  assertCss(package.m_cssStreams["OEBPS/styles/stylesheet.css"], ".body0", "writing-mode: vertical-rl", true);
++  assertXPath(package.m_streams["OEBPS/sections/section0001.xhtml"], "//xhtml:body", "class", "body0");
++  assertXPath(package.m_streams["OEBPS/sections/section0002.xhtml"], "//xhtml:body", "class", "body0");
++}
++
++void EPUBTextGeneratorTest::testSplitOnSizeInPageSpan()
++{
++  StringEPUBPackage package;
++  libepubgen::EPUBTextGenerator generator(&package);
++  generator.setOption(libepubgen::EPUB_GENERATOR_OPTION_SPLIT, libepubgen::EPUB_SPLIT_METHOD_SIZE);
++  generator.setSplitSize(5);
++  generator.startDocument(librevenge::RVNGPropertyList());
++
++  {
++    librevenge::RVNGPropertyList page;
++    page.insert("style:writing-mode", "tb");
++    generator.openPageSpan(page);
++
++    librevenge::RVNGPropertyList para;
++    generator.openParagraph(para);
++    generator.insertText("Hello!");
++    generator.closeParagraph();
++    // Splitting a new html file inside the page span, the writing-mode shall not change.
++    generator.openParagraph(para);
++    generator.insertText("Hello!");
++    generator.closeParagraph();
+     generator.closePageSpan();
+   }
+   generator.endDocument();
+   assertCss(package.m_cssStreams["OEBPS/styles/stylesheet.css"], ".body0", "writing-mode: vertical-rl", true);
+   assertXPath(package.m_streams["OEBPS/sections/section0001.xhtml"], "//xhtml:body", "class", "body0");
++  assertXPath(package.m_streams["OEBPS/sections/section0002.xhtml"], "//xhtml:body", "class", "body0");
+ }
+ 
+ CPPUNIT_TEST_SUITE_REGISTRATION(EPUBTextGeneratorTest);
+-- 
+2.14.1
+

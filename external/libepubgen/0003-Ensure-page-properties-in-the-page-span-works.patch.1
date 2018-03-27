@@ -1,0 +1,225 @@
+From 715786e10deaa6849a6e46b5a9884edde44e194b Mon Sep 17 00:00:00 2001
+From: Mark Hung <marklh9@gmail.com>
+Date: Sun, 25 Mar 2018 10:27:07 +0800
+Subject: [PATCH 3/3] Ensure page properties in the page span works.
+
+As the page properties are converted to CSS styles of the
+body element, this patch force it to start a new HTML file
+when openPageSpan is invoked to open the second page span.
+
+This ensures that page properties in every page span works,
+even there are multiple page spans between intentional HTML
+page splits such as on size, on headings, or on page breaks.
+---
+ src/lib/EPUBGenerator.cpp          |  4 +++-
+ src/lib/EPUBSplitGuard.cpp         | 19 ++++++++++++++++++-
+ src/lib/EPUBSplitGuard.h           |  7 ++++++-
+ src/lib/EPUBTextGenerator.cpp      |  5 +++++
+ src/test/EPUBTextGeneratorTest.cpp | 38 ++++++++++++++++++++++++++++++++++++++
+ 5 files changed, 70 insertions(+), 3 deletions(-)
+
+diff --git a/src/lib/EPUBGenerator.cpp b/src/lib/EPUBGenerator.cpp
+index 110667f..9e0c972 100644
+--- a/src/lib/EPUBGenerator.cpp
++++ b/src/lib/EPUBGenerator.cpp
+@@ -44,7 +44,7 @@ EPUBGenerator::EPUBGenerator(EPUBPackage *const package, int version)
+   , m_documentProps()
+   , m_metadata()
+   , m_currentHtml()
+-  , m_splitGuard(EPUB_SPLIT_METHOD_PAGE_BREAK)
++  , m_splitGuard(EPUB_SPLIT_METHOD_PAGE_BREAK,true)
+   , m_version(version)
+   , m_stylesMethod(EPUB_STYLES_METHOD_CSS)
+   , m_layoutMethod(EPUB_LAYOUT_METHOD_REFLOWABLE)
+@@ -173,6 +173,8 @@ void EPUBGenerator::setLayoutMethod(EPUBLayoutMethod layout)
+   if (m_layoutMethod == EPUB_LAYOUT_METHOD_FIXED)
+     // Fixed layout implies split on page break.
+     m_splitGuard.setSplitMethod(EPUB_SPLIT_METHOD_PAGE_BREAK);
++
++  m_splitGuard.setSplitOnSecondPageSpan(m_layoutMethod == EPUB_LAYOUT_METHOD_REFLOWABLE);
+ }
+ 
+ void EPUBGenerator::writeContainer()
+diff --git a/src/lib/EPUBSplitGuard.cpp b/src/lib/EPUBSplitGuard.cpp
+index 4f7531d..5bee515 100644
+--- a/src/lib/EPUBSplitGuard.cpp
++++ b/src/lib/EPUBSplitGuard.cpp
+@@ -15,8 +15,10 @@ namespace libepubgen
+ static const unsigned DEFAULT_SPLIT_HEADING_LEVEL = 1;
+ static const unsigned DEFAULT_SPLIT_SIZE = 1 << 16;
+ 
+-EPUBSplitGuard::EPUBSplitGuard(const EPUBSplitMethod method)
++EPUBSplitGuard::EPUBSplitGuard(const EPUBSplitMethod method,bool splitOnSecondPageSpan)
+   : m_method(method)
++  , m_splitOnSecondPageSpan(splitOnSecondPageSpan)
++  , m_htmlEverInPageSpan(false)
+   , m_headingLevel(DEFAULT_SPLIT_HEADING_LEVEL)
+   , m_currentHeadingLevel(0)
+   , m_size(DEFAULT_SPLIT_SIZE)
+@@ -25,6 +27,11 @@ EPUBSplitGuard::EPUBSplitGuard(const EPUBSplitMethod method)
+ {
+ }
+ 
++void EPUBSplitGuard::setHtmlEverInPageSpan(bool value)
++{
++  m_htmlEverInPageSpan = value;
++}
++
+ void EPUBSplitGuard::setSplitHeadingLevel(const unsigned level)
+ {
+   m_headingLevel = level;
+@@ -45,6 +52,11 @@ void EPUBSplitGuard::setSplitMethod(EPUBSplitMethod method)
+   m_method = method;
+ }
+ 
++void EPUBSplitGuard::setSplitOnSecondPageSpan(bool value)
++{
++  m_splitOnSecondPageSpan = value;
++}
++
+ void EPUBSplitGuard::openLevel()
+ {
+   ++m_nestingLevel;
+@@ -70,6 +82,11 @@ bool EPUBSplitGuard::splitOnHeading(const unsigned level) const
+   return canSplit(EPUB_SPLIT_METHOD_HEADING) && (m_headingLevel >= level);
+ }
+ 
++bool EPUBSplitGuard::splitOnSecondPageSpan() const
++{
++  return m_splitOnSecondPageSpan && m_htmlEverInPageSpan;
++}
++
+ bool EPUBSplitGuard::inHeading(bool any) const
+ {
+   if (!m_currentHeadingLevel)
+diff --git a/src/lib/EPUBSplitGuard.h b/src/lib/EPUBSplitGuard.h
+index ff55846..a55bad3 100644
+--- a/src/lib/EPUBSplitGuard.h
++++ b/src/lib/EPUBSplitGuard.h
+@@ -18,13 +18,15 @@ namespace libepubgen
+ class EPUBSplitGuard
+ {
+ public:
+-  explicit EPUBSplitGuard(EPUBSplitMethod method);
++  explicit EPUBSplitGuard(EPUBSplitMethod method,bool splitOnSecondPageSpan);
+ 
+   void setSplitHeadingLevel(unsigned level);
+   void setCurrentHeadingLevel(unsigned level);
+   void setSplitSize(unsigned size);
++  void setHtmlEverInPageSpan(bool value);
+   /// Allows overwriting the value given in the constructor.
+   void setSplitMethod(EPUBSplitMethod method);
++  void setSplitOnSecondPageSpan(bool value);
+ 
+   void openLevel();
+   void closeLevel();
+@@ -32,6 +34,7 @@ public:
+ 
+   bool splitOnPageBreak() const;
+   bool splitOnHeading(unsigned level) const;
++  bool splitOnSecondPageSpan() const;
+   bool inHeading(bool any) const;
+   bool splitOnSize() const;
+ 
+@@ -42,6 +45,8 @@ private:
+ 
+ private:
+   EPUBSplitMethod m_method;
++  bool m_splitOnSecondPageSpan;
++  bool m_htmlEverInPageSpan;
+   unsigned m_headingLevel;
+   unsigned m_currentHeadingLevel;
+   unsigned m_size;
+diff --git a/src/lib/EPUBTextGenerator.cpp b/src/lib/EPUBTextGenerator.cpp
+index 8e88adb..db9d360 100644
+--- a/src/lib/EPUBTextGenerator.cpp
++++ b/src/lib/EPUBTextGenerator.cpp
+@@ -110,6 +110,7 @@ void EPUBTextGenerator::Impl::startHtmlFile()
+ 
+ void EPUBTextGenerator::Impl::endHtmlFile()
+ {
++  getSplitGuard().setHtmlEverInPageSpan(false);
+   if (m_inPageSpan)
+     getHtml()->openPageSpan(m_pageSpanProps);
+   if (bool(m_currentHeader))
+@@ -206,10 +207,14 @@ void EPUBTextGenerator::openPageSpan(const librevenge::RVNGPropertyList &propLis
+ {
+   assert(!m_impl->m_inPageSpan);
+ 
++  if (m_impl->getSplitGuard().splitOnSecondPageSpan())
++    m_impl->startNewHtmlFile();
++
+   m_impl->m_inPageSpan = true;
+   m_impl->m_pageSpanProps = propList;
+ 
+   m_impl->getHtml()->openPageSpan(propList);
++  m_impl->getSplitGuard().setHtmlEverInPageSpan(true);
+ }
+ 
+ void EPUBTextGenerator::closePageSpan()
+diff --git a/src/test/EPUBTextGeneratorTest.cpp b/src/test/EPUBTextGeneratorTest.cpp
+index 0946408..b5e43a5 100644
+--- a/src/test/EPUBTextGeneratorTest.cpp
++++ b/src/test/EPUBTextGeneratorTest.cpp
+@@ -239,6 +239,7 @@ private:
+   CPPUNIT_TEST(testSplitOnPageBreakInPageSpan);
+   CPPUNIT_TEST(testSplitOnHeadingInPageSpan);
+   CPPUNIT_TEST(testSplitOnSizeInPageSpan);
++  CPPUNIT_TEST(testManyWritingModes);
+   CPPUNIT_TEST_SUITE_END();
+ 
+ private:
+@@ -282,6 +283,7 @@ private:
+   void testSplitOnPageBreakInPageSpan();
+   void testSplitOnHeadingInPageSpan();
+   void testSplitOnSizeInPageSpan();
++  void testManyWritingModes();
+ 
+   /// Asserts that exactly one xpath exists in buffer, and its content equals content.
+   void assertXPathContent(xmlBufferPtr buffer, const std::string &xpath, const std::string &content);
+@@ -1467,6 +1469,42 @@ void EPUBTextGeneratorTest::testSplitOnSizeInPageSpan()
+   assertXPath(package.m_streams["OEBPS/sections/section0002.xhtml"], "//xhtml:body", "class", "body0");
+ }
+ 
++void EPUBTextGeneratorTest::testManyWritingModes()
++{
++  StringEPUBPackage package;
++  libepubgen::EPUBTextGenerator generator(&package);
++  generator.setOption(libepubgen::EPUB_GENERATOR_OPTION_SPLIT, libepubgen::EPUB_SPLIT_METHOD_PAGE_BREAK);
++  generator.startDocument(librevenge::RVNGPropertyList());
++
++  {
++    librevenge::RVNGPropertyList page;
++    page.insert("style:writing-mode", "tb");
++    generator.openPageSpan(page);
++
++    librevenge::RVNGPropertyList para;
++    generator.openParagraph(para);
++    generator.insertText("Para1");
++    generator.closeParagraph();
++    generator.closePageSpan();
++  }
++  {
++    librevenge::RVNGPropertyList page;
++    page.insert("style:writing-mode", "lr");
++    generator.openPageSpan(page);
++
++    librevenge::RVNGPropertyList para;
++    generator.openParagraph(para);
++    generator.insertText("Para1");
++    generator.closeParagraph();
++    generator.closePageSpan();
++  }
++  generator.endDocument();
++  assertCss(package.m_cssStreams["OEBPS/styles/stylesheet.css"], ".body0", "writing-mode: vertical-rl", true);
++  assertCss(package.m_cssStreams["OEBPS/styles/stylesheet.css"], ".body1", "writing-mode: horizontal-tb", true);
++  assertXPath(package.m_streams["OEBPS/sections/section0001.xhtml"], "//xhtml:body", "class", "body0");
++  assertXPath(package.m_streams["OEBPS/sections/section0002.xhtml"], "//xhtml:body", "class", "body1");
++}
++
+ CPPUNIT_TEST_SUITE_REGISTRATION(EPUBTextGeneratorTest);
+ 
+ }
+-- 
+2.14.1
+
