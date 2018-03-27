@@ -526,6 +526,13 @@
         </info>
         <value>true</value>
       </prop>
+      <prop oor:name="AddReplacementImages" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>Export replacement objects as fallback images for vector graphics (True).</desc>
+          <label>Export replacement objects as fallback images for vector graphics</label>
+        </info>
+        <value>true</value>
+      </prop>
       <prop oor:name="Display" oor:type="xs:int" oor:nillable="false">
         <!-- OldPath: -->
         <!-- OldLocation: -->
@@ -1310,7 +1317,7 @@
         <info>
           <desc>Exports related configuration items.</desc>
         </info>
-        <prop oor:name="LastUsed" oor:type="xs:string">
+		  <prop oor:name="LastUsed" oor:type="xs:string">
           <!-- OldPath: STARIMPRESS -->
           <!-- OldLocation: soffice.ini -->
           <!-- UIHints: Set after export -->

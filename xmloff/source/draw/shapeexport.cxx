@@ -85,6 +85,7 @@
 #include <comphelper/graphicmimetype.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/storagehelper.hxx>
+#include <comphelper/configuration.hxx>
 
 #include <o3tl/any.hxx>
 #include <o3tl/make_unique.hxx>
@@ -2438,7 +2439,18 @@ void XMLShapeExport::ImpExportGraphicObjectShape(
 
         //Resolves: fdo#62461 put preferred image first above, followed by
         //fallback here
-        if( !bIsEmptyPresObj )
+        bool bAddReplacementImages = true;
+        {
+            struct AddReplacementImages: public comphelper::ConfigurationProperty<AddReplacementImages, bool> {
+                static rtl::OUString path() { return rtl::OUString("/org.openoffice.Office.Impress/Misc/AddReplacementImages"); }
+            private:
+                AddReplacementImages() = delete; // not defined
+                ~AddReplacementImages() = delete; // not defined
+            };
+
+            bAddReplacementImages = AddReplacementImages::get();
+        }
+        if( !bIsEmptyPresObj && bAddReplacementImages)
         {
             uno::Reference<graphic::XGraphic> xReplacementGraphic;
             xPropSet->getPropertyValue("ReplacementGraphic") >>= xReplacementGraphic;
