@@ -19,10 +19,8 @@
 #ifndef INCLUDED_SW_INC_TXATRITR_HXX
 #define INCLUDED_SW_INC_TXATRITR_HXX
 
-#include <tools/solar.h>
 #include <sal/types.h>
 #include <editeng/langitem.hxx>
-#include "hintids.hxx"
 #include "swtypes.hxx"
 #include <deque>
 

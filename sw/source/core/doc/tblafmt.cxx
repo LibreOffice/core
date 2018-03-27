@@ -41,6 +41,8 @@
 #include <hintids.hxx>
 #include <fmtornt.hxx>
 #include <editsh.hxx>
+#include <fmtlsplt.hxx>
+#include <fmtrowsplt.hxx>
 
 #include <memory>
 #include <vector>

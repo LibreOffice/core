@@ -20,7 +20,6 @@
 #define INCLUDED_SW_INC_SWDDETBL_HXX
 
 #include "swtable.hxx"
-#include "ddefld.hxx"
 
 class SwDDEFieldType;
 

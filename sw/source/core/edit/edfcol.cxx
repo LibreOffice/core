@@ -86,6 +86,7 @@
 #include <undobj.hxx>
 #include <UndoParagraphSignature.hxx>
 #include <txtatr.hxx>
+#include <fmtmeta.hxx>
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 

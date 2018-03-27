@@ -32,8 +32,6 @@
 #include <cppuhelper/implbase6.hxx>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/drawing/HomogenMatrix3.hpp>
-#include <svl/itemprop.hxx>
-#include <set>
 
 class SdrMarkList;
 class SdrView;
@@ -110,7 +108,6 @@ public:
 };
 
 class SwShapeDescriptor_Impl;
-class SwXGroupShape;
 typedef
 cppu::WeakAggImplHelper6
 <

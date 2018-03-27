@@ -30,6 +30,8 @@ class SwFormatChg;
 class SwUpdateAttr;
 class SwAttrSetChg;
 class SwDocPosUpdate;
+class SwFormatMeta;
+class SvXMLAttrContainerItem;
 
 // For SwTextHints without end index the following char is added:
 

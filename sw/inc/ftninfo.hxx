@@ -23,7 +23,6 @@
 #include "swdllapi.h"
 #include "calbck.hxx"
 #include <editeng/numitem.hxx>
-#include "fmtcol.hxx"
 
 class SwTextFormatColl;
 class SwPageDesc;

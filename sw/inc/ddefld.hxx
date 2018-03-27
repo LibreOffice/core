@@ -23,9 +23,10 @@
 #include <svl/hint.hxx>
 #include "swdllapi.h"
 #include "fldbas.hxx"
-#include "ndarr.hxx"
 
 class SwDoc;
+class SwNode;
+class SwNodes;
 
 namespace sw
 {

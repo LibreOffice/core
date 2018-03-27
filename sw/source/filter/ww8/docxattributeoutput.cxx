@@ -127,6 +127,7 @@
 #include <IDocumentRedlineAccess.hxx>
 #include <grfatr.hxx>
 #include <frmatr.hxx>
+#include <txtatr.hxx>
 
 #include <osl/file.hxx>
 #include <vcl/embeddedfontshelper.hxx>

@@ -19,7 +19,6 @@
 #ifndef INCLUDED_SW_INC_TXATBASE_HXX
 #define INCLUDED_SW_INC_TXATBASE_HXX
 
-#include <tools/solar.h>
 #include <svl/poolitem.hxx>
 #include "hintids.hxx"
 #include "fmtautofmt.hxx"
@@ -29,13 +28,10 @@
 #include "fmtfld.hxx"
 #include "fmtflcnt.hxx"
 #include "fmtftn.hxx"
-#include "fmtmeta.hxx"
 #include "fchrfmt.hxx"
 #include "tox.hxx"
 
-
 class SfxItemPool;
-class SvXMLAttrContainerItem;
 
 class SAL_DLLPUBLIC_RTTI SwTextAttr
 {
