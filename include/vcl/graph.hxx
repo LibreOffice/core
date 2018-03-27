@@ -201,6 +201,8 @@ public:
     OUString getOriginURL() const;
     void setOriginURL(OUString const & rOriginURL);
 
+    OString getUniqueID() const;
+
 public:
 
     std::shared_ptr<GraphicReader>& GetContext();
@@ -209,13 +211,6 @@ public:
     bool                            IsDummyContext();
 private:
     friend class GraphicObject;
-
-    bool            SwapOut();
-    void            SwapOutAsLink();
-    bool            SwapOut( SvStream* pOStm );
-    bool            SwapIn();
-    bool            SwapIn( SvStream* pIStm );
-    bool            IsSwapOut() const;
 
 public:
     void            SetLink( const GfxLink& );

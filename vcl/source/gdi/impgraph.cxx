@@ -101,6 +101,76 @@ Size GraphicReader::GetPreviewSize() const
     return aSize;
 }
 
+GraphicID::GraphicID(ImpGraphic & rGraphic)
+{
+    mnID1 = static_cast<sal_uLong>(rGraphic.ImplGetType()) << 28;
+    mnID2 = mnID3 = mnID4 = 0;
+
+    if (rGraphic.ImplGetType() == GraphicType::Bitmap)
+    {
+        if (rGraphic.getVectorGraphicData().get())
+        {
+            const VectorGraphicDataPtr& rVectorGraphicDataPtr = rGraphic.getVectorGraphicData();
+            const basegfx::B2DRange& rRange = rVectorGraphicDataPtr->getRange();
+
+            mnID1 |= rVectorGraphicDataPtr->getVectorGraphicDataArrayLength();
+            mnID2 = basegfx::fround(rRange.getWidth());
+            mnID3 = basegfx::fround(rRange.getHeight());
+            mnID4 = vcl_get_checksum(0, rVectorGraphicDataPtr->getVectorGraphicDataArray().getConstArray(), rVectorGraphicDataPtr->getVectorGraphicDataArrayLength());
+        }
+        else if (rGraphic.ImplIsAnimated())
+        {
+            const Animation aAnimation(rGraphic.ImplGetAnimation());
+
+            mnID1 |= ( aAnimation.Count() & 0x0fffffff );
+            mnID2 = aAnimation.GetDisplaySizePixel().Width();
+            mnID3 = aAnimation.GetDisplaySizePixel().Height();
+            mnID4 = rGraphic.ImplGetChecksum();
+        }
+        else
+        {
+            const BitmapEx aBmpEx(rGraphic.ImplGetBitmapEx(GraphicConversionParameters()));
+
+            mnID1 |= ( ( ( static_cast<sal_uLong>(aBmpEx.GetTransparentType()) << 8 ) | ( aBmpEx.IsAlpha() ? 1 : 0 ) ) & 0x0fffffff );
+            mnID2 = aBmpEx.GetSizePixel().Width();
+            mnID3 = aBmpEx.GetSizePixel().Height();
+            mnID4 = rGraphic.ImplGetChecksum();
+        }
+    }
+    else if (rGraphic.ImplGetType() == GraphicType::GdiMetafile)
+    {
+        const GDIMetaFile& rMtf = rGraphic.ImplGetGDIMetaFile();
+
+        mnID1 |= ( rMtf.GetActionSize() & 0x0fffffff );
+        mnID2 = rMtf.GetPrefSize().Width();
+        mnID3 = rMtf.GetPrefSize().Height();
+        mnID4 = rGraphic.ImplGetChecksum();
+    }
+}
+
+OString GraphicID::getIDString() const
+{
+    static const char aHexData[] = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F' };
+
+    OStringBuffer aHexStr;
+    sal_Int32 nShift, nIndex = 0;
+    aHexStr.setLength(24 + (2 * BITMAP_CHECKSUM_SIZE));
+
+    for( nShift = 28; nShift >= 0; nShift -= 4 )
+        aHexStr[nIndex++] = aHexData[ ( mnID1 >> static_cast<sal_uInt32>(nShift) ) & 0xf ];
+
+    for( nShift = 28; nShift >= 0; nShift -= 4 )
+        aHexStr[nIndex++] = aHexData[ ( mnID2 >> static_cast<sal_uInt32>(nShift) ) & 0xf ];
+
+    for( nShift = 28; nShift >= 0; nShift -= 4 )
+        aHexStr[nIndex++] = aHexData[ ( mnID3 >> static_cast<sal_uInt32>(nShift) ) & 0xf ];
+
+    for( nShift = ( 8 * BITMAP_CHECKSUM_SIZE ) - 4; nShift >= 0; nShift -= 4 )
+        aHexStr[nIndex++] = aHexData[ ( mnID4 >> static_cast<sal_uInt32>(nShift) ) & 0xf ];
+
+    return aHexStr.makeStringAndClear();
+}
+
 ImpGraphic::ImpGraphic() :
         meType          ( GraphicType::NONE ),
         mnSizeBytes     ( 0 ),
@@ -1196,7 +1266,7 @@ bool ImpGraphic::ImplSwapOut()
                 xOStm->SetVersion( SOFFICE_FILEFORMAT_50 );
                 xOStm->SetCompressMode( SvStreamCompressFlags::NATIVE );
 
-                bRet = ImplSwapOut( xOStm.get() );
+                bRet = swapOutFromStream( xOStm.get() );
                 if( bRet )
                 {
                     mpSwapFile = o3tl::make_unique<ImpSwapFile>();
@@ -1242,7 +1312,7 @@ void ImpGraphic::ImplSwapOutAsLink()
     mbSwapOut = true;
 }
 
-bool ImpGraphic::ImplSwapOut( SvStream* xOStm )
+bool ImpGraphic::swapOutFromStream(SvStream* xOStm)
 {
     bool bRet = false;
 
@@ -1297,7 +1367,7 @@ bool ImpGraphic::ImplSwapIn()
                 xIStm->SetVersion( SOFFICE_FILEFORMAT_50 );
                 xIStm->SetCompressMode( SvStreamCompressFlags::NATIVE );
 
-                bRet = ImplSwapIn( xIStm.get() );
+                bRet = swapInFromStream( xIStm.get() );
                 xIStm.reset();
                 setOriginURL(mpSwapFile->maOriginURL);
                 mpSwapFile.reset();
@@ -1308,7 +1378,7 @@ bool ImpGraphic::ImplSwapIn()
     return bRet;
 }
 
-bool ImpGraphic::ImplSwapIn( SvStream* xIStm )
+bool ImpGraphic::swapInFromStream(SvStream* xIStm)
 {
     bool bRet = false;
 
