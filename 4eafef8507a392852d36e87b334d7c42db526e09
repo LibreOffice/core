@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_a23486de",
+        "filename": "sc/source/core/tool/interpr3.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3559,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-03-27T19:21:47Z",
+      "side": 1,
+      "message": "This now needs to start with an empty vector, otherwise there\u0027s an extraneous (arbitrary?) value before the first emplace_back(), which matters if there\u0027s more than one maximum and no swap was done.",
+      "range": {
+        "startLine": 3559,
+        "startChar": 0,
+        "endLine": 3559,
+        "endChar": 33
+      },
+      "revId": "4eafef8507a392852d36e87b334d7c42db526e09",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_e24cbe78",
+        "filename": "sc/source/core/tool/interpr3.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3574,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-03-27T19:21:47Z",
+      "side": 1,
+      "message": "Seeing this now, each time swapping an empty vector and appending is unnecessary if only single maxima are encountered. Maybe this is better (untested)\n\n if ( nCount \u003e nMax )\n {\n     nMax \u003d nCount;\n     if (aResultArray.size() !\u003d 1)\n         vector\u003c double \u003e(1).swap( aResultArray );\n     aResultArray[0] \u003d nOldVal;\n }\n else\n {\n     aResultArray.emplace_back( nOldVal );\n }",
+      "revId": "4eafef8507a392852d36e87b334d7c42db526e09",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
