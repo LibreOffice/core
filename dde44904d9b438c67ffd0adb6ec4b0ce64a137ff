@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_bfee5dea",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2018-03-27T13:27:35Z",
+      "side": 1,
+      "message": "does not seem to match what the code does? half the patch is about size notification?",
+      "revId": "dde44904d9b438c67ffd0adb6ec4b0ce64a137ff",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
