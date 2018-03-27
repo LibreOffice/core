@@ -86,14 +86,17 @@ do { \
 
 void SfxItemPool::AddSfxItemPoolUser(SfxItemPoolUser& rNewUser)
 {
-    pImpl->maSfxItemPoolUsers.push_back(&rNewUser);
+    // maintain sorted to reduce cost of remove
+    const auto insertIt = ::std::lower_bound(
+        pImpl->maSfxItemPoolUsers.begin(), pImpl->maSfxItemPoolUsers.end(), &rNewUser);
+    pImpl->maSfxItemPoolUsers.insert(insertIt, &rNewUser);
 }
 
 void SfxItemPool::RemoveSfxItemPoolUser(SfxItemPoolUser& rOldUser)
 {
-    const std::vector<SfxItemPoolUser*>::iterator aFindResult = ::std::find(
+    const auto aFindResult = ::std::lower_bound(
         pImpl->maSfxItemPoolUsers.begin(), pImpl->maSfxItemPoolUsers.end(), &rOldUser);
-    if(aFindResult != pImpl->maSfxItemPoolUsers.end())
+    if(aFindResult != pImpl->maSfxItemPoolUsers.end() && *aFindResult == &rOldUser)
     {
         pImpl->maSfxItemPoolUsers.erase(aFindResult);
     }
