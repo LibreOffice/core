@@ -62,6 +62,10 @@ MSFILTER_DLLPUBLIC OString OutStringUpr(const sal_Char* pToken, const OUString& 
  */
 MSFILTER_DLLPUBLIC int AsHex(char ch);
 
+/// Writes binary data as a hex dump.
+MSFILTER_DLLPUBLIC OString WriteHex(const sal_uInt8* pData, sal_uInt32 nSize,
+                                    SvStream* pStream = nullptr, sal_uInt32 nLimit = 64);
+
 /**
  * Extract OLE2 data from an \objdata hex dump.
  */

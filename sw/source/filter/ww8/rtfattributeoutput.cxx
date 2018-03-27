@@ -3725,39 +3725,6 @@ static bool StripMetafileHeader(const sal_uInt8*& rpGraphicAry, unsigned long& r
     return false;
 }
 
-OString RtfAttributeOutput::WriteHex(const sal_uInt8* pData, sal_uInt32 nSize, SvStream* pStream,
-                                     sal_uInt32 nLimit)
-{
-    OStringBuffer aRet;
-
-    sal_uInt32 nBreak = 0;
-    for (sal_uInt32 i = 0; i < nSize; i++)
-    {
-        OString sNo = OString::number(pData[i], 16);
-        if (sNo.getLength() < 2)
-        {
-            if (pStream)
-                pStream->WriteChar('0');
-            else
-                aRet.append('0');
-        }
-        if (pStream)
-            pStream->WriteCharPtr(sNo.getStr());
-        else
-            aRet.append(sNo);
-        if (++nBreak == nLimit)
-        {
-            if (pStream)
-                pStream->WriteCharPtr(SAL_NEWLINE_STRING);
-            else
-                aRet.append(SAL_NEWLINE_STRING);
-            nBreak = 0;
-        }
-    }
-
-    return aRet.makeStringAndClear();
-}
-
 static void lcl_AppendSP(OStringBuffer& rBuffer, const char cName[], const OUString& rValue,
                          const RtfExport& rExport)
 {
@@ -3850,9 +3817,9 @@ static OString ExportPICT(const SwFlyFrameFormat* pFlyFrameFormat, const Size& r
         if (pStream)
             pStream->WriteCharPtr(aRet.makeStringAndClear().getStr());
         if (pStream)
-            RtfAttributeOutput::WriteHex(pGraphicAry, nSize, pStream);
+            msfilter::rtfutil::WriteHex(pGraphicAry, nSize, pStream);
         else
-            aRet.append(RtfAttributeOutput::WriteHex(pGraphicAry, nSize));
+            aRet.append(msfilter::rtfutil::WriteHex(pGraphicAry, nSize));
         aRet.append('}');
         if (pStream)
             pStream->WriteCharPtr(aRet.makeStringAndClear().getStr());
@@ -4179,7 +4146,7 @@ void RtfAttributeOutput::BulletDefinition(int /*nId*/, const Graphic& rGraphic, 
     aStream.Seek(STREAM_SEEK_TO_END);
     sal_uInt32 nSize = aStream.Tell();
     pGraphicAry = static_cast<sal_uInt8 const*>(aStream.GetData());
-    RtfAttributeOutput::WriteHex(pGraphicAry, nSize, &m_rExport.Strm());
+    msfilter::rtfutil::WriteHex(pGraphicAry, nSize, &m_rExport.Strm());
     m_rExport.Strm().WriteCharPtr("}}"); // pict, shppict
 }
 
