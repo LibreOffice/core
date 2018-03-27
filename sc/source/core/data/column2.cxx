@@ -1990,7 +1990,7 @@ SvtScriptType ScColumn::GetScriptType( SCROW nRow ) const
 }
 
 SvtScriptType ScColumn::GetRangeScriptType(
-    sc::CellTextAttrStoreType::iterator& itPos, SCROW nRow1, SCROW nRow2, const sc::CellStoreType::iterator& itrCells )
+    sc::CellTextAttrStoreType::iterator& itPos, SCROW nRow1, SCROW nRow2, const sc::CellStoreType::iterator& itrCells_ )
 {
     if (!ValidRow(nRow1) || !ValidRow(nRow2) || nRow1 > nRow2)
         return SvtScriptType::NONE;
@@ -2000,6 +2000,7 @@ SvtScriptType ScColumn::GetRangeScriptType(
         maCellTextAttrs.position(itPos, nRow1);
 
     itPos = aRet.first; // Track the position of cell text attribute array.
+    sc::CellStoreType::iterator itrCells = itrCells_;
 
     SvtScriptType nScriptType = SvtScriptType::NONE;
     bool bUpdated = false;

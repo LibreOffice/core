@@ -713,7 +713,7 @@ private:
 
     void AttachNewFormulaCells( const sc::CellStoreType::position_type& aPos, size_t nLength );
     void BroadcastNewCell( SCROW nRow );
-    bool UpdateScriptType( sc::CellTextAttr& rAttr, SCROW nRow, const sc::CellStoreType::iterator& itr );
+    bool UpdateScriptType( sc::CellTextAttr& rAttr, SCROW nRow, sc::CellStoreType::iterator& itr );
 
     const ScFormulaCell* FetchFormulaCell( SCROW nRow ) const;
 
