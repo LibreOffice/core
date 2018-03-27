@@ -52,6 +52,7 @@
 #include <unordered_map>
 #include <unordered_set>
 #include <vector>
+#include <boost/optional.hpp>
 
 namespace com { namespace sun { namespace star {
     namespace sheet {
@@ -115,7 +116,7 @@ private:
     bool                    bResultOverflow;
     bool                    bPageFiltered;      // set if page field filters have been applied to cache table
 
-    ::std::unique_ptr<OUString> mpGrandTotalName;
+    boost::optional<OUString> mpGrandTotalName;
 
     void                    CreateRes_Impl();
     void                    FillMemberResults();
@@ -150,7 +151,8 @@ public:
     ScDPTableData*          GetData()       { return pData; }
     const ScDPTableData*    GetData() const { return pData; }
 
-    const OUString*  GetGrandTotalName() const;
+    const boost::optional<OUString> &
+                            GetGrandTotalName() const;
 
     css::sheet::DataPilotFieldOrientation
                             GetOrientation(long nColumn);
@@ -273,8 +275,8 @@ class ScDPDimension : public cppu::WeakImplHelper<
     rtl::Reference<ScDPHierarchies> mxHierarchies;
     ScGeneralFunction   nFunction;
     OUString            aName;              // if empty, take from source
-    std::unique_ptr<OUString> mpLayoutName;
-    std::unique_ptr<OUString> mpSubtotalName;
+    boost::optional<OUString> mpLayoutName;
+    boost::optional<OUString> mpSubtotalName;
     long                nSourceDim;         // >=0 if dup'ed
     css::sheet::DataPilotFieldReference
                         aReferenceValue;    // settings for "show data as" / "displayed value"
@@ -296,8 +298,8 @@ public:
     ScDPDimension*          CreateCloneObject();
     ScDPHierarchies*        GetHierarchiesObject();
 
-    SC_DLLPUBLIC const OUString*  GetLayoutName() const;
-    const OUString*  GetSubtotalName() const;
+    SC_DLLPUBLIC const boost::optional<OUString> & GetLayoutName() const;
+    const boost::optional<OUString> & GetSubtotalName() const;
 
                             // XNamed
     virtual OUString SAL_CALL getName() override;
@@ -609,7 +611,7 @@ private:
     long            nLev;
 
     SCROW       mnDataId;
-    std::unique_ptr<OUString> mpLayoutName;
+    boost::optional<OUString> mpLayoutName;
 
     sal_Int32       nPosition;          // manual sorting
     bool            bVisible;
@@ -627,7 +629,7 @@ public:
     SCROW GetItemDataId() const { return mnDataId; }
     bool IsNamedItem(SCROW nIndex) const;
 
-    SC_DLLPUBLIC const OUString* GetLayoutName() const;
+    SC_DLLPUBLIC const boost::optional<OUString> & GetLayoutName() const;
     long GetDim() const { return nDim;}
 
     sal_Int32               Compare( const ScDPMember& rOther ) const;      // visible order

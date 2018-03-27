@@ -155,8 +155,8 @@ ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
 
     rXMLImport.GetTables().AddColumn(bTempIsCovered);
 
-    std::unique_ptr<OUString> xStyleName;
-    std::unique_ptr<OUString> xCurrencySymbol;
+    boost::optional<OUString> xStyleName;
+    boost::optional<OUString> xCurrencySymbol;
     if ( rAttrList.is() )
     {
         for (auto &it : *rAttrList)
@@ -164,7 +164,7 @@ ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
             switch ( it.getToken() )
             {
                 case XML_ELEMENT( TABLE, XML_STYLE_NAME ):
-                    xStyleName.reset( new OUString( it.toString() ) );
+                    xStyleName = it.toString();
                     mbHasStyle = true;
                 break;
                 case XML_ELEMENT( TABLE, XML_CONTENT_VALIDATION_NAME ):
@@ -273,7 +273,7 @@ ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
                 }
                 break;
                 case XML_ELEMENT( OFFICE, XML_CURRENCY ):
-                    xCurrencySymbol.reset( new OUString( it.toString() ) );
+                    xCurrencySymbol = it.toString();
                 break;
                 default:
                     ;
@@ -293,7 +293,7 @@ ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
         if(bIsEmpty)
             bFormulaTextResult = true;
     }
-    rXMLImport.GetStylesImportHelper()->SetAttributes(xStyleName.release(), xCurrencySymbol.release(), nCellType);
+    rXMLImport.GetStylesImportHelper()->SetAttributes(std::move(xStyleName), std::move(xCurrencySymbol), nCellType);
 }
 
 ScXMLTableRowCellContext::~ScXMLTableRowCellContext()

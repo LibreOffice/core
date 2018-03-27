@@ -121,9 +121,9 @@ ScDPSource::~ScDPSource()
     delete pResData;
 }
 
-const OUString* ScDPSource::GetGrandTotalName() const
+const boost::optional<OUString> & ScDPSource::GetGrandTotalName() const
 {
-    return mpGrandTotalName.get();
+    return mpGrandTotalName;
 }
 
 sheet::DataPilotFieldOrientation ScDPSource::GetOrientation(long nColumn)
@@ -1133,7 +1133,7 @@ void SAL_CALL ScDPSource::setPropertyValue( const OUString& aPropertyName, const
     {
         OUString aName;
         if (aValue >>= aName)
-            mpGrandTotalName.reset(new OUString(aName));
+            mpGrandTotalName = aName;
     }
     else
     {
@@ -1163,7 +1163,7 @@ uno::Any SAL_CALL ScDPSource::getPropertyValue( const OUString& aPropertyName )
         aRet <<= static_cast<sal_Int32>(maDataDims.size());
     else if (aPropertyName == SC_UNO_DP_GRANDTOTAL_NAME)
     {
-        if (mpGrandTotalName.get())
+        if (mpGrandTotalName)
             aRet <<= *mpGrandTotalName;
     }
     else
@@ -1302,8 +1302,6 @@ ScDPDimension::ScDPDimension( ScDPSource* pSrc, long nD ) :
     pSource( pSrc ),
     nDim( nD ),
     nFunction( ScGeneralFunction::SUM ),     // sum is default
-    mpLayoutName(nullptr),
-    mpSubtotalName(nullptr),
     nSourceDim( -1 ),
     bHasSelectedPage( false ),
     pSelectedData( nullptr ),
@@ -1326,14 +1324,14 @@ ScDPHierarchies* ScDPDimension::GetHierarchiesObject()
     return mxHierarchies.get();
 }
 
-const OUString* ScDPDimension::GetLayoutName() const
+const boost::optional<OUString> & ScDPDimension::GetLayoutName() const
 {
-    return mpLayoutName.get();
+    return mpLayoutName;
 }
 
-const OUString* ScDPDimension::GetSubtotalName() const
+const boost::optional<OUString> & ScDPDimension::GetSubtotalName() const
 {
-    return mpSubtotalName.get();
+    return mpSubtotalName;
 }
 
 uno::Reference<container::XNameAccess> SAL_CALL ScDPDimension::getHierarchies()
@@ -1517,13 +1515,13 @@ void SAL_CALL ScDPDimension::setPropertyValue( const OUString& aPropertyName, co
     {
         OUString aTmpName;
         if (aValue >>= aTmpName)
-            mpLayoutName.reset(new OUString(aTmpName));
+            mpLayoutName = aTmpName;
     }
     else if (aPropertyName == SC_UNO_DP_FIELD_SUBTOTALNAME)
     {
         OUString aTmpName;
         if (aValue >>= aTmpName)
-            mpSubtotalName.reset(new OUString(aTmpName));
+            mpSubtotalName = aTmpName;
     }
     else if (aPropertyName == SC_UNO_DP_HAS_HIDDEN_MEMBER)
     {
@@ -1620,9 +1618,9 @@ uno::Any SAL_CALL ScDPDimension::getPropertyValue( const OUString& aPropertyName
             aRet <<= uno::Sequence<sheet::TableFilterField>(0);
     }
     else if (aPropertyName == SC_UNO_DP_LAYOUTNAME)
-        aRet <<= mpLayoutName.get() ? *mpLayoutName : OUString();
+        aRet <<= mpLayoutName ? *mpLayoutName : OUString();
     else if (aPropertyName == SC_UNO_DP_FIELD_SUBTOTALNAME)
-        aRet <<= mpSubtotalName.get() ? *mpSubtotalName : OUString();
+        aRet <<= mpSubtotalName ? *mpSubtotalName : OUString();
     else if (aPropertyName == SC_UNO_DP_HAS_HIDDEN_MEMBER)
         aRet <<= mbHasHiddenMember;
     else if (aPropertyName == SC_UNO_DP_FLAGS)
@@ -2189,7 +2187,7 @@ uno::Any SAL_CALL ScDPLevel::getPropertyValue( const OUString& aPropertyName )
         if (!pDim)
             return aRet;
 
-        const OUString* pLayoutName = pDim->GetLayoutName();
+        const boost::optional<OUString> & pLayoutName = pDim->GetLayoutName();
         if (!pLayoutName)
             return aRet;
 
@@ -2489,7 +2487,6 @@ ScDPMember::ScDPMember(
     nHier( nH ),
     nLev( nL ),
     mnDataId( nIndex ),
-    mpLayoutName(nullptr),
     nPosition( -1 ),
     bVisible( true ),
     bShowDet( true )
@@ -2555,9 +2552,9 @@ ScDPItemData ScDPMember::FillItemData() const
     return (pData ? *pData : ScDPItemData());
 }
 
-const OUString* ScDPMember::GetLayoutName() const
+const boost::optional<OUString> & ScDPMember::GetLayoutName() const
 {
-    return mpLayoutName.get();
+    return mpLayoutName;
 }
 
 OUString ScDPMember::GetNameStr( bool bLocaleIndependent ) const
@@ -2609,7 +2606,7 @@ void SAL_CALL ScDPMember::setPropertyValue( const OUString& aPropertyName, const
     {
         OUString aName;
         if (aValue >>= aName)
-            mpLayoutName.reset(new OUString(aName));
+            mpLayoutName = aName;
     }
     else
     {
@@ -2627,7 +2624,7 @@ uno::Any SAL_CALL ScDPMember::getPropertyValue( const OUString& aPropertyName )
     else if ( aPropertyName == SC_UNO_DP_POSITION )
         aRet <<= nPosition;
     else if (aPropertyName == SC_UNO_DP_LAYOUTNAME)
-        aRet <<= mpLayoutName.get() ? *mpLayoutName : OUString();
+        aRet <<= mpLayoutName ? *mpLayoutName : OUString();
     else
     {
         OSL_FAIL("unknown property");

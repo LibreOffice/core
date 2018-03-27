@@ -110,7 +110,7 @@ void ScMyStyleRanges::AddRange(const ScRange& rRange, const sal_Int16 nType)
     }
 }
 
-void ScMyStyleRanges::AddCurrencyRange(const ScRange& rRange, const OUString* pCurrency)
+void ScMyStyleRanges::AddCurrencyRange(const ScRange& rRange, const boost::optional<OUString> & pCurrency)
 {
     if (!pCurrencyList)
         pCurrencyList.reset( new ScMyCurrencyStylesSet );
@@ -238,10 +238,6 @@ ScMyStylesImportHelper::ScMyStylesImportHelper(ScXMLImport& rTempImport)
     :
     aRowDefaultStyle(aCellStyles.end()),
     rImport(rTempImport),
-    pStyleName(nullptr),
-    pPrevStyleName(nullptr),
-    pCurrency(nullptr),
-    pPrevCurrency(nullptr),
     nCellType(0),
     nPrevCellType(0),
     bPrevRangeAdded(true)
@@ -254,13 +250,13 @@ ScMyStylesImportHelper::~ScMyStylesImportHelper()
 
 void ScMyStylesImportHelper::ResetAttributes()
 {
-    pPrevStyleName.reset( pStyleName.release() );
-    pPrevCurrency.reset( pCurrency.release() );
+    pPrevStyleName = std::move(pStyleName);
+    pPrevCurrency = std::move(pCurrency);
     nPrevCellType = nCellType;
     nCellType = 0;
 }
 
-ScMyStylesSet::iterator ScMyStylesImportHelper::GetIterator(const OUString* pStyleNameP)
+ScMyStylesSet::iterator ScMyStylesImportHelper::GetIterator(const boost::optional<OUString> & pStyleNameP)
 {
     ScMyStyle aStyle;
     if (pStyleNameP)
@@ -303,7 +299,7 @@ void ScMyStylesImportHelper::AddDefaultRange(const ScRange& rRange)
                     ScRange aRange(rRange);
                     aRange.aStart.SetCol(nStartCol);
                     aRange.aEnd.SetCol(i - 1);
-                    pPrevStyleName.reset( new OUString(aPrevItr->sStyleName) );
+                    pPrevStyleName = aPrevItr->sStyleName;
                     AddSingleRange(aRange);
                     nStartCol = i;
                     aPrevItr = aColDefaultStyles[i];
@@ -313,7 +309,7 @@ void ScMyStylesImportHelper::AddDefaultRange(const ScRange& rRange)
             {
                 ScRange aRange(rRange);
                 aRange.aStart.SetCol(nStartCol);
-                pPrevStyleName.reset( new OUString(aPrevItr->sStyleName) );
+                pPrevStyleName = aPrevItr->sStyleName;
                 AddSingleRange(aRange);
             }
             else
@@ -328,20 +324,20 @@ void ScMyStylesImportHelper::AddDefaultRange(const ScRange& rRange)
     }
     else
     {
-        pPrevStyleName.reset( new OUString(aRowDefaultStyle->sStyleName) );
+        pPrevStyleName = aRowDefaultStyle->sStyleName;
         AddSingleRange(rRange);
     }
 }
 
 void ScMyStylesImportHelper::AddSingleRange(const ScRange& rRange)
 {
-    ScMyStylesSet::iterator aItr(GetIterator(pPrevStyleName.get()));
+    ScMyStylesSet::iterator aItr(GetIterator(pPrevStyleName));
     if (aItr != aCellStyles.end())
     {
         if (nPrevCellType != util::NumberFormat::CURRENCY)
             aItr->xRanges->AddRange(rRange, nPrevCellType);
         else
-            aItr->xRanges->AddCurrencyRange(rRange, pPrevCurrency.get());
+            aItr->xRanges->AddCurrencyRange(rRange, pPrevCurrency);
     }
 }
 
@@ -357,7 +353,7 @@ void ScMyStylesImportHelper::AddRange()
 void ScMyStylesImportHelper::AddColumnStyle(const OUString& sStyleName, const sal_Int32 nColumn, const sal_Int32 nRepeat)
 {
     OSL_ENSURE(static_cast<sal_uInt32>(nColumn) == aColDefaultStyles.size(), "some columns are absent");
-    ScMyStylesSet::iterator aItr(GetIterator(&sStyleName));
+    ScMyStylesSet::iterator aItr(GetIterator(sStyleName));
     OSL_ENSURE(aItr != aCellStyles.end(), "no column default style");
     aColDefaultStyles.reserve(aColDefaultStyles.size() + nRepeat);
     for (sal_Int32 i = 0; i < nRepeat; ++i)
@@ -366,14 +362,14 @@ void ScMyStylesImportHelper::AddColumnStyle(const OUString& sStyleName, const sa
 
 void ScMyStylesImportHelper::SetRowStyle(const OUString& sStyleName)
 {
-    aRowDefaultStyle = GetIterator(&sStyleName);
+    aRowDefaultStyle = GetIterator(sStyleName);
 }
 
-void ScMyStylesImportHelper::SetAttributes(OUString* pStyleNameP,
-    OUString* pCurrencyP, const sal_Int16 nCellTypeP)
+void ScMyStylesImportHelper::SetAttributes(boost::optional<OUString> pStyleNameP,
+    boost::optional<OUString> pCurrencyP, const sal_Int16 nCellTypeP)
 {
-    pStyleName.reset( pStyleNameP );
-    pCurrency.reset( pCurrencyP );
+    pStyleName = std::move(pStyleNameP);
+    pCurrency = std::move(pCurrencyP);
     nCellType = nCellTypeP;
 }
 
@@ -383,8 +379,8 @@ void ScMyStylesImportHelper::AddRange(const ScRange& rRange)
     {
         bool bAddRange(false);
         if (nCellType == nPrevCellType &&
-            IsEqual(pStyleName.get(), pPrevStyleName.get()) &&
-            IsEqual(pCurrency.get(), pPrevCurrency.get()))
+            pStyleName == pPrevStyleName &&
+            pCurrency == pPrevCurrency)
         {
             if (rRange.aStart.Row() == aPrevRange.aStart.Row())
             {

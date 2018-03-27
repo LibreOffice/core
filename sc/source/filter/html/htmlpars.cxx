@@ -987,12 +987,12 @@ void ScHTMLLayoutParser::TableDataOn( HtmlImportInfo* pInfo )
             break;
             case HtmlOptionId::SDVAL:
             {
-                mxActEntry->pValStr.reset(new OUString(rOption.GetString()));
+                mxActEntry->pValStr = rOption.GetString();
             }
             break;
             case HtmlOptionId::SDNUM:
             {
-                mxActEntry->pNumStr.reset(new OUString(rOption.GetString()));
+                mxActEntry->pNumStr = rOption.GetString();
             }
             break;
             default: break;
@@ -1425,7 +1425,7 @@ void ScHTMLLayoutParser::AnchorOn( HtmlImportInfo* pInfo )
     for (const auto & rOption : rOptions)
     {
         if( rOption.GetToken() == HtmlOptionId::NAME )
-            mxActEntry->pName.reset(new OUString(rOption.GetString()));
+            mxActEntry->pName = rOption.GetString();
     }
 }
 
@@ -2078,7 +2078,7 @@ void ScHTMLTable::DataOn( const HtmlImportInfo& rInfo )
     {
         // read needed options from the <td> tag
         ScHTMLSize aSpanSize( 1, 1 );
-        std::unique_ptr<OUString> pValStr, pNumStr;
+        boost::optional<OUString> pValStr, pNumStr;
         const HTMLOptions& rOptions = static_cast<HTMLParser*>(rInfo.pParser)->GetOptions();
         HTMLOptions::const_iterator itr = rOptions.begin(), itrEnd = rOptions.end();
         sal_uInt32 nNumberFormat = NUMBERFORMAT_ENTRY_NOT_FOUND;
@@ -2093,10 +2093,10 @@ void ScHTMLTable::DataOn( const HtmlImportInfo& rInfo )
                     aSpanSize.mnRows = static_cast<SCROW>( getLimitedValue<sal_Int32>( itr->GetString().toInt32(), 1, 256 ) );
                 break;
                 case HtmlOptionId::SDVAL:
-                    pValStr.reset(new OUString(itr->GetString()));
+                    pValStr = itr->GetString();
                 break;
                 case HtmlOptionId::SDNUM:
-                    pNumStr.reset(new OUString(itr->GetString()));
+                    pNumStr = itr->GetString();
                 break;
                 case HtmlOptionId::CLASS:
                 {
@@ -2132,8 +2132,8 @@ void ScHTMLTable::DataOn( const HtmlImportInfo& rInfo )
 
         ProcessFormatOptions( *mxDataItemSet, rInfo );
         CreateNewEntry( rInfo );
-        mxCurrEntry->pValStr.reset( pValStr.release() );
-        mxCurrEntry->pNumStr.reset( pNumStr.release() );
+        mxCurrEntry->pValStr = std::move(pValStr);
+        mxCurrEntry->pNumStr = std::move(pNumStr);
     }
     else
         CreateNewEntry( rInfo );

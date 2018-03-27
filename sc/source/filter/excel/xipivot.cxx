@@ -1158,7 +1158,7 @@ void XclImpPTField::ConvertRCPField( ScDPSaveData& rSaveData ) const
     pCacheField->ConvertGroupField( rSaveData, mrPTable.GetVisFieldNames() );
 
     // custom subtotal name
-    if (maFieldExtInfo.mpFieldTotalName.get())
+    if (maFieldExtInfo.mpFieldTotalName)
     {
         OUString aSubName = lcl_convertExcelSubtotalName(*maFieldExtInfo.mpFieldTotalName);
         rSaveDim.SetSubtotalName(aSubName);

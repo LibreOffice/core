@@ -850,7 +850,7 @@ OUString ScDPResultData::GetMeasureString(long nMeasure, bool bForce, ScSubTotal
         const ScDPDimension* pDataDim = mrSource.GetDataDimension(nMeasure);
         if (pDataDim)
         {
-            const OUString* pLayoutName = pDataDim->GetLayoutName();
+            const boost::optional<OUString> & pLayoutName = pDataDim->GetLayoutName();
             if (pLayoutName)
                 return *pLayoutName;
         }
@@ -1376,7 +1376,7 @@ void ScDPResultMember::FillMemberResults(
     const ScDPMember* pMemberDesc = GetDPMember();
     if (pMemberDesc)
     {
-        const OUString* pLayoutName = pMemberDesc->GetLayoutName();
+        const boost::optional<OUString> & pLayoutName = pMemberDesc->GetLayoutName();
         if (pLayoutName)
         {
             aCaption = *pLayoutName;
@@ -1478,7 +1478,7 @@ void ScDPResultMember::FillMemberResults(
                     if (pMemberDesc)
                     {
                         // single data field layout.
-                        const OUString* pSubtotalName = pParentDim->GetSubtotalName();
+                        const boost::optional<OUString> & pSubtotalName = pParentDim->GetSubtotalName();
                         if (pSubtotalName)
                             aSubStr = lcl_parseSubtotalName(*pSubtotalName, aCaption);
                         pArray[rPos].Flags &= ~sheet::MemberResultFlags::GRANDTOTAL;
@@ -1486,7 +1486,7 @@ void ScDPResultMember::FillMemberResults(
                     else
                     {
                         // root member - subtotal (grand total?) for multi-data field layout.
-                        const OUString* pGrandTotalName = pResultData->GetSource().GetGrandTotalName();
+                        const boost::optional<OUString> & pGrandTotalName = pResultData->GetSource().GetGrandTotalName();
                         if (pGrandTotalName)
                             aSubStr = *pGrandTotalName;
                         pArray[rPos].Flags |= sheet::MemberResultFlags::GRANDTOTAL;

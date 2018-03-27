@@ -33,6 +33,7 @@
 #include <dpobject.hxx>
 
 #include <memory>
+#include <boost/optional.hpp>
 
 class XclImpStream;
 class XclExpStream;
@@ -625,7 +626,7 @@ struct XclPTFieldExtInfo
     sal_uInt16          mnSortField;    /// Index to data field sorting bases on.
     sal_uInt16          mnShowField;    /// Index to data field AutoShow bases on.
     sal_uInt16          mnNumFmt;
-    std::unique_ptr<OUString> mpFieldTotalName;
+    boost::optional<OUString> mpFieldTotalName;
 
     explicit            XclPTFieldExtInfo();
 

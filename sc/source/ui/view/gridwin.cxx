@@ -417,7 +417,6 @@ ScGridWindow::ScGridWindow( vcl::Window* pParent, ScViewData* pData, ScSplitPos 
             mpOODragRect(),
             mpOOHeader(),
             mpOOShrink(),
-            mpAutoFillRect(static_cast<tools::Rectangle*>(nullptr)),
             pViewData( pData ),
             eWhich( eWhichPos ),
             mpNoteMarker(),
@@ -6087,10 +6086,10 @@ void ScGridWindow::UpdateAutoFillOverlay()
         tools::Rectangle aFillRect(aFillPos, aFillHandleSize);
 
         // expand rect to increase hit area
-        mpAutoFillRect.reset(new tools::Rectangle(aFillRect.Left()   - fScaleFactor,
+        mpAutoFillRect = tools::Rectangle(aFillRect.Left()   - fScaleFactor,
                                            aFillRect.Top()    - fScaleFactor,
                                            aFillRect.Right()  + fScaleFactor,
-                                           aFillRect.Bottom() + fScaleFactor));
+                                           aFillRect.Bottom() + fScaleFactor);
 
         // #i70788# get the OverlayManager safely
         rtl::Reference<sdr::overlay::OverlayManager> xOverlayManager = getOverlayManager();

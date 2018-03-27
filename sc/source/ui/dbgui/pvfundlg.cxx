@@ -833,7 +833,7 @@ ScDPShowDetailDlg::ScDPShowDetailDlg( vcl::Window* pParent, ScDPObject& rDPObj, 
             {
                 if (pDimension)
                 {
-                    const OUString* pLayoutName = pDimension->GetLayoutName();
+                    const boost::optional<OUString> & pLayoutName = pDimension->GetLayoutName();
                     if (pLayoutName)
                         aName = *pLayoutName;
                 }

@@ -97,7 +97,7 @@ void XMLTableShapeImportHelper::finishShape(
             sal_Int32 nEndX(-1);
             sal_Int32 nEndY(-1);
             sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
-            std::unique_ptr<OUString> xRangeList;
+            boost::optional<OUString> xRangeList;
             SdrLayerID nLayerID = SDRLAYER_NOTFOUND;
             for( sal_Int16 i=0; i < nAttrCount; ++i )
             {
@@ -138,7 +138,7 @@ void XMLTableShapeImportHelper::finishShape(
                 else if(nPrefix == XML_NAMESPACE_DRAW)
                 {
                     if (IsXMLToken(aLocalName, XML_NOTIFY_ON_UPDATE_OF_RANGES))
-                        xRangeList.reset(new OUString(rValue));
+                        xRangeList = rValue;
                 }
             }
             SetLayer(rShape, nLayerID, rShape->getShapeType());
