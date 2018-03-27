@@ -502,7 +502,7 @@ void ScColumn::BroadcastNewCell( SCROW nRow )
     Broadcast(nRow);
 }
 
-bool ScColumn::UpdateScriptType( sc::CellTextAttr& rAttr, SCROW nRow, const sc::CellStoreType::iterator& itr )
+bool ScColumn::UpdateScriptType( sc::CellTextAttr& rAttr, SCROW nRow, sc::CellStoreType::iterator& itr )
 {
     if (rAttr.mnScriptType != SvtScriptType::UNKNOWN)
         // Already updated. Nothing to do.
@@ -515,9 +515,9 @@ bool ScColumn::UpdateScriptType( sc::CellTextAttr& rAttr, SCROW nRow, const sc::
         return false;
 
     sc::CellStoreType::position_type pos = maCells.position(itr, nRow);
-    sc::CellStoreType::iterator itr2 = pos.first;
+    itr = pos.first;
     size_t nOffset = pos.second;
-    ScRefCellValue aCell = GetCellValue( itr2, nOffset );
+    ScRefCellValue aCell = GetCellValue( itr, nOffset );
     ScAddress aPos(nCol, nRow, nTab);
 
     ScDocument* pDocument = GetDoc();
