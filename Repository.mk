@@ -46,6 +46,7 @@ $(eval $(call gb_Helper_register_executables,OOO, \
 
 $(eval $(call gb_Helper_register_executables,SDK, \
     regcompare \
+    uno-skeletonmaker \
 ))
 
 $(eval $(call gb_Helper_register_executables,UREBIN, \
@@ -249,6 +250,9 @@ $(eval $(call gb_Helper_register_libraries,UNOVERLIBS, \
 
 $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
     basegfx_s \
+    codemaker \
+    commoncpp \
+    commonjava \
     ooopathutils \
     salcpprt \
     sldshw_s \

@@ -21,41 +21,24 @@
 
 
 
-.IF "$(GUI)"=="WNT"
-UNODEVTOOLSLIBDEPN=unodevtools.lib
-CODEMAKERLIBDEPN=codemaker.lib
-COMMONCPPLIBDEPN=commoncpp.lib
-COMMONJAVALIBDEPN=commonjava.lib
-.IF "$(COM)"=="GCC"
-UNODEVTOOLSLIBST=-lunodevtools
-CODEMAKERLIBST=-lcodemaker
-COMMONCPPLIBST=-lcommoncpp
-COMMONJAVALIBST=-lcommonjava
+PRJ=..
+TARGET=prj
+
+.INCLUDE : settings.mk
+
+.IF "$(VERBOSE)"!=""
+VERBOSEFLAG :=
 .ELSE
-UNODEVTOOLSLIBST=unodevtools.lib
-CODEMAKERLIBST=codemaker.lib
-COMMONCPPLIBST=commoncpp.lib
-COMMONJAVALIBST=commonjava.lib
+VERBOSEFLAG := -s
 .ENDIF
 
-.ELIF "$(GUI)"=="OS2"
-UNODEVTOOLSLIBDEPN=unodevtools.lib
-CODEMAKERLIBDEPN=codemaker.lib
-COMMONCPPLIBDEPN=commoncpp.lib
-COMMONJAVALIBDEPN=commonjava.lib
-UNODEVTOOLSLIBST=-lunodevtools
-CODEMAKERLIBST=-lcodemaker
-COMMONCPPLIBST=-lcommoncpp
-COMMONJAVALIBST=-lcommonjava
+.IF "$(DEBUG)"!=""
+DEBUG_ARGUMENT=DEBUG=$(DEBUG)
+.ELIF "$(debug)"!=""
+DEBUG_ARGUMENT=debug=$(debug)
 .ELSE
-
-UNODEVTOOLSLIBDEPN=libunodevtools.a
-CODEMAKERLIBDEPN=libcodemaker.a
-COMMONCPPLIBDEPN=libcommoncpp.a
-COMMONJAVALIBDEPN=libcommonjava.a
-UNODEVTOOLSLIBST=-lunodevtools
-CODEMAKERLIBST=-lcodemaker
-COMMONCPPLIBST=-lcommoncpp
-COMMONJAVALIBST=-lcommonjava
+DEBUG_ARGUMENT=
 .ENDIF
 
+all:
+    cd $(PRJ) && $(GNUMAKE) $(VERBOSEFLAG) -r -j$(MAXPROCESS) $(gb_MAKETARGET) $(DEBUG_ARGUMENT) && $(GNUMAKE) $(VERBOSEFLAG) -r deliverlog

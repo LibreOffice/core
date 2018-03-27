@@ -20,29 +20,12 @@
 #**************************************************************
 
 
-PRJ=..$/..
 
-PRJNAME=unodevtools
-TARGET=unodevtools
+$(eval $(call gb_Module_Module,unodevtools))
+
+$(eval $(call gb_Module_add_targets,unodevtools,\
+	Executable_uno-skeletonmaker \
+))
 
 
-ENABLE_EXCEPTIONS=TRUE
-
-# --- Settings -----------------------------------------------------
-.INCLUDE :  settings.mk
-
-# ------------------------------------------------------------------
-
-SLOFILES= \
-    $(SLO)$/typemanager.obj	\
-    $(SLO)$/typeblob.obj \
-    $(SLO)$/options.obj
-
-LIB1TARGET=$(LB)$/$(TARGET).lib
-LIB1ARCHIV=$(LB)$/lib$(TARGET).a
-LIB1OBJFILES=$(SLOFILES)
-
-# ------------------------------------------------------------------
-
-.INCLUDE :  target.mk
-
+# vim: set noet sw=4 ts=4:
