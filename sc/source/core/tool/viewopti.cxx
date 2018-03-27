@@ -26,7 +26,6 @@
 #include <globstr.hrc>
 #include <viewopti.hxx>
 #include <rechead.hxx>
-#include <scresid.hxx>
 #include <sc.hrc>
 #include <miscuno.hxx>
 

@@ -91,12 +91,10 @@
 #include <scerrors.hrc>
 #include <scstyles.hrc>
 #include <globstr.hrc>
-#include <strings.hrc>
 #include <bitmaps.hlst>
 #include <inputhdl.hxx>
 #include <inputwin.hxx>
 #include <msgpool.hxx>
-#include <scresid.hxx>
 #include <dwfunctr.hxx>
 #include <formdata.hxx>
 #include <tpprint.hxx>

@@ -20,6 +20,7 @@
 #include <reffact.hxx>
 #include <docfunc.hxx>
 #include <SamplingDialog.hxx>
+#include <scresid.hxx>
 #include <strings.hrc>
 
 ScSamplingDialog::ScSamplingDialog(

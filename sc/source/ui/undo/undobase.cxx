@@ -30,7 +30,6 @@
 #include <queryparam.hxx>
 #include <subtotalparam.hxx>
 #include <bcaslot.hxx>
-#include <globstr.hrc>
 #include <rowheightcontext.hxx>
 #include <column.hxx>
 #include <sortparam.hxx>

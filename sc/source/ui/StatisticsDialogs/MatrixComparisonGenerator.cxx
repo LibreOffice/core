@@ -22,6 +22,7 @@
 #include <docfunc.hxx>
 #include <TableFillingAndNavigationTools.hxx>
 #include <MatrixComparisonGenerator.hxx>
+#include <scresid.hxx>
 #include <strings.hrc>
 
 namespace

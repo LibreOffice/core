@@ -25,11 +25,9 @@
 
 #include <docoptio.hxx>
 #include <rechead.hxx>
-#include <scresid.hxx>
 #include <sc.hrc>
 #include <miscuno.hxx>
 #include <global.hxx>
-#include <globstr.hrc>
 
 using namespace utl;
 using namespace com::sun::star::uno;

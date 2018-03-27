@@ -43,7 +43,6 @@
 #include <formulacell.hxx>
 #include <scmatrix.hxx>
 #include <docoptio.hxx>
-#include <globstr.hrc>
 #include <attrib.hxx>
 #include <jumpmatrix.hxx>
 #include <cellkeytranslator.hxx>

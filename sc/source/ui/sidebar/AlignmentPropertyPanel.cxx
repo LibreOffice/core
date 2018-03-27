@@ -20,7 +20,6 @@
 #include "AlignmentPropertyPanel.hxx"
 #include <editeng/justifyitem.hxx>
 #include <sc.hrc>
-#include <scresid.hxx>
 #include <scitems.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>

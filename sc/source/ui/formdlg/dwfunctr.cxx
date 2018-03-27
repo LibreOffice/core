@@ -27,7 +27,6 @@
 
 #include <sc.hrc>
 #include <global.hxx>
-#include <scresid.hxx>
 #include <reffact.hxx>
 #include <document.hxx>
 #include <formulacell.hxx>

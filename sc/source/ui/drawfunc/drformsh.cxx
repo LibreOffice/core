@@ -32,7 +32,6 @@
 #include <document.hxx>
 #include <docpool.hxx>
 #include <drawview.hxx>
-#include <scresid.hxx>
 #include <svx/svdobj.hxx>
 #include <vcl/EnumContext.hxx>
 

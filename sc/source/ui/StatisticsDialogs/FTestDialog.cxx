@@ -23,6 +23,7 @@
 #include <docfunc.hxx>
 #include <TableFillingAndNavigationTools.hxx>
 #include <FTestDialog.hxx>
+#include <scresid.hxx>
 #include <strings.hrc>
 
 ScFTestDialog::ScFTestDialog(

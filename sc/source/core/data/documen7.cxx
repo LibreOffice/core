@@ -39,8 +39,6 @@
 #include <formulagroup.hxx>
 #include <refhint.hxx>
 
-#include <globstr.hrc>
-
 void ScDocument::StartListeningArea(
     const ScRange& rRange, bool bGroupListening, SvtListener* pListener )
 {

@@ -23,6 +23,7 @@
 #include <docfunc.hxx>
 #include <TableFillingAndNavigationTools.hxx>
 #include <RegressionDialog.hxx>
+#include <scresid.hxx>
 #include <strings.hrc>
 
 namespace

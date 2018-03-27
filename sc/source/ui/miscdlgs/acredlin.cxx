@@ -31,7 +31,6 @@
 #include <document.hxx>
 #include <docsh.hxx>
 #include <scresid.hxx>
-#include <globstr.hrc>
 #include <strings.hrc>
 #include <simpref.hxx>
 #include <scmod.hxx>

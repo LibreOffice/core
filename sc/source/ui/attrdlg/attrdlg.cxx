@@ -27,7 +27,6 @@
 
 #include <tabpages.hxx>
 #include <attrdlg.hxx>
-#include <scresid.hxx>
 #include <svx/svxdlg.hxx>
 #include <svx/dialogs.hrc>
 #include <svx/flagsdef.hxx>

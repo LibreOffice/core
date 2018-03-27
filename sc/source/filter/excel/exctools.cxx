@@ -28,7 +28,6 @@
 #include <document.hxx>
 #include <patattr.hxx>
 #include <attrib.hxx>
-#include <globstr.hrc>
 #include <scextopt.hxx>
 #include <progress.hxx>
 #include <rangenam.hxx>

@@ -18,7 +18,6 @@
  */
 
 #include <protectiondlg.hxx>
-#include <scresid.hxx>
 #include <tabprotection.hxx>
 
 #include <sal/macros.h>

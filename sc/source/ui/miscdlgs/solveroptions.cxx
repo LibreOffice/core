@@ -19,7 +19,6 @@
 
 #include <memory>
 #include <solveroptions.hxx>
-#include <scresid.hxx>
 #include <global.hxx>
 #include <miscuno.hxx>
 #include <solverutil.hxx>

@@ -54,7 +54,6 @@
 #include <reffact.hxx>
 #include <validat.hxx>
 #include <validate.hxx>
-#include <scresid.hxx>
 #include <datamapper.hxx>
 
 #include <scui_def.hxx>

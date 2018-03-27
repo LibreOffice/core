@@ -22,7 +22,6 @@
 #include "xmlfilti.hxx"
 #include "xmlsorti.hxx"
 #include <document.hxx>
-#include <globstr.hrc>
 #include <globalnames.hxx>
 #include <docuno.hxx>
 #include <dbdata.hxx>

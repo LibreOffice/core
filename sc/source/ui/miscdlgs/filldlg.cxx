@@ -26,7 +26,6 @@
 
 #include <scresid.hxx>
 #include <document.hxx>
-#include <globstr.hrc>
 #include <strings.hrc>
 #include <filldlg.hxx>
 

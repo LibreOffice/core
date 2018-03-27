@@ -10,7 +10,6 @@
 #include <xmlsourcedlg.hxx>
 #include <sc.hrc>
 #include <bitmaps.hlst>
-#include <scresid.hxx>
 #include <document.hxx>
 #include <orcusfilters.hxx>
 #include <filter.hxx>

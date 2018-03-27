@@ -28,7 +28,6 @@
 #include <tabvwsh.hxx>
 #include <sc.hrc>
 #include <scres.hrc>
-#include <globstr.hrc>
 #include <global.hxx>
 #include <scmod.hxx>
 #include <docsh.hxx>

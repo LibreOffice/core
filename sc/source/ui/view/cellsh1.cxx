@@ -55,7 +55,6 @@
 #include <document.hxx>
 #include <patattr.hxx>
 #include <scmod.hxx>
-#include <scresid.hxx>
 #include <tabvwsh.hxx>
 #include <impex.hxx>
 #include <reffind.hxx>

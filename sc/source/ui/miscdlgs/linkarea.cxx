@@ -31,7 +31,6 @@
 #include <vcl/waitobj.hxx>
 
 #include <linkarea.hxx>
-#include <scresid.hxx>
 #include <sc.hrc>
 #include <rangeutl.hxx>
 #include <docsh.hxx>

@@ -34,7 +34,6 @@
 #include <tabvwsh.hxx>
 #include <viewdata.hxx>
 #include <document.hxx>
-#include <scresid.hxx>
 #include <scendlg.hxx>
 
 ScNewScenarioDlg::ScNewScenarioDlg( vcl::Window* pParent, const OUString& rName, bool bEdit, bool bSheetProtected)

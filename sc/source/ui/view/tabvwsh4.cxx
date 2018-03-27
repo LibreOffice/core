@@ -60,7 +60,6 @@
 #include <editutil.hxx>
 #include <inputopt.hxx>
 #include <inputwin.hxx>
-#include <scresid.hxx>
 #include <dbdata.hxx>
 #include <reffact.hxx>
 #include <viewuno.hxx>

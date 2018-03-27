@@ -23,6 +23,7 @@
 #include <docfunc.hxx>
 #include <TableFillingAndNavigationTools.hxx>
 #include <ZTestDialog.hxx>
+#include <scresid.hxx>
 #include <strings.hrc>
 
 ScZTestDialog::ScZTestDialog(

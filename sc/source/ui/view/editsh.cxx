@@ -58,7 +58,6 @@
 #include <svl/stritem.hxx>
 
 #include <editsh.hxx>
-#include <scresid.hxx>
 #include <global.hxx>
 #include <sc.hrc>
 #include <scmod.hxx>

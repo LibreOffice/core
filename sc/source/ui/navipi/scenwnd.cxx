@@ -26,9 +26,7 @@
 #include <vcl/weld.hxx>
 #include <vcl/settings.hxx>
 #include <navipi.hxx>
-#include <scresid.hxx>
 #include <sc.hrc>
-#include <strings.hrc>
 #include <globstr.hrc>
 
 // class ScScenarioWindow ------------------------------------------------

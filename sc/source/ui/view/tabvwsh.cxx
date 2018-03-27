@@ -35,7 +35,6 @@
 #include <tabvwsh.hxx>
 #include <docsh.hxx>
 #include <reffact.hxx>
-#include <scresid.hxx>
 #include <dwfunctr.hxx>
 #include <sc.hrc>
 #include <spelldialog.hxx>

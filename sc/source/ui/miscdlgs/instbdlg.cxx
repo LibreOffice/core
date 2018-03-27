@@ -30,7 +30,6 @@
 #include <global.hxx>
 #include <docsh.hxx>
 #include <viewdata.hxx>
-#include <scresid.hxx>
 #include <globstr.hrc>
 #include <instbdlg.hxx>
 

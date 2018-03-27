@@ -27,7 +27,6 @@
 
 #include <pgbrksh.hxx>
 #include <tabvwsh.hxx>
-#include <scresid.hxx>
 #include <document.hxx>
 #include <sc.hrc>
 

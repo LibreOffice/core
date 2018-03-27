@@ -23,7 +23,6 @@
 #include <document.hxx>
 #include <externalrefmgr.hxx>
 
-#include <globstr.hrc>
 #include <osl/diagnose.h>
 
 #include <com/sun/star/frame/XModel.hpp>

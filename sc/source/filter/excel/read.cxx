@@ -22,6 +22,7 @@
 #include <document.hxx>
 #include <scerrors.hxx>
 #include <fprogressbar.hxx>
+#include <globstr.hrc>
 #include <xltracer.hxx>
 #include <xltable.hxx>
 #include <xihelper.hxx>

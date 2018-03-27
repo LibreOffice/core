@@ -24,8 +24,6 @@
 #include <global.hxx>
 #include <dbdata.hxx>
 #include <rangenam.hxx>
-#include <scresid.hxx>
-#include <globstr.hrc>
 #include <convuno.hxx>
 #include <externalrefmgr.hxx>
 #include <compiler.hxx>

@@ -43,7 +43,6 @@
 #include <sc.hrc>
 #include <docsh.hxx>
 #include <attrib.hxx>
-#include <scresid.hxx>
 #include <tabvwsh.hxx>
 #include <impex.hxx>
 #include <formulacell.hxx>

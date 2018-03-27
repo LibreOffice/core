@@ -32,7 +32,6 @@
 #include <miscuno.hxx>
 #include <scerrors.hxx>
 #include <refupdat.hxx>
-#include <scresid.hxx>
 #include <sc.hrc>
 #include <attrib.hxx>
 #include <scitems.hxx>

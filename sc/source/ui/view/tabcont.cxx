@@ -26,7 +26,6 @@
 #include <tabvwsh.hxx>
 #include <docsh.hxx>
 #include <scmod.hxx>
-#include <scresid.hxx>
 #include <sc.hrc>
 #include <globstr.hrc>
 #include <transobj.hxx>

@@ -46,7 +46,6 @@
 #include <patattr.hxx>
 #include <formulacell.hxx>
 #include <table.hxx>
-#include <globstr.hrc>
 #include <global.hxx>
 #include <document.hxx>
 #include <autoform.hxx>

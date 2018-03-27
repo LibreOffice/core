@@ -20,8 +20,6 @@
 #undef SC_DLLIMPLEMENTATION
 
 #include <mtrindlg.hxx>
-#include <scresid.hxx>
-#include <strings.hrc>
 
 ScMetricInputDlg::ScMetricInputDlg( vcl::Window*         pParent,
                                     const OString&  sDialogName,

@@ -50,7 +50,6 @@
 #include <dociter.hxx>
 #include <strings.hrc>
 #include <scresid.hxx>
-#include <globstr.hrc>
 #include <bitmaps.hlst>
 #include <arealink.hxx>
 #include <navicfg.hxx>

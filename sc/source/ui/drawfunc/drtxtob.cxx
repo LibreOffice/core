@@ -70,7 +70,6 @@
 #include <document.hxx>
 #include <drawview.hxx>
 #include <viewutil.hxx>
-#include <scresid.hxx>
 #include <tabvwsh.hxx>
 #include <gridwin.hxx>
 

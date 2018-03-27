@@ -42,7 +42,6 @@
 #include <attrib.hxx>
 #include <zforauto.hxx>
 #include <global.hxx>
-#include <globstr.hrc>
 #include <autoform.hxx>
 #include <autofmt.hxx>
 #include <scresid.hxx>

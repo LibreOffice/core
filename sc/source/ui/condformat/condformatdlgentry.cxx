@@ -31,7 +31,7 @@
 #include <simpleformulacalc.hxx>
 
 #include <colorformat.hxx>
-
+#include <scresid.hxx>
 #include <globstr.hrc>
 #include <strings.hrc>
 

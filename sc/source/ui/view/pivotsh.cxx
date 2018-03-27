@@ -30,7 +30,6 @@
 #include <pivotsh.hxx>
 #include <tabvwsh.hxx>
 #include <docsh.hxx>
-#include <scresid.hxx>
 #include <document.hxx>
 #include <dpobject.hxx>
 #include <dpshttab.hxx>

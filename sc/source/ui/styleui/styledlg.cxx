@@ -29,9 +29,7 @@
 #include <tabpages.hxx>
 #include <tphf.hxx>
 #include <tptable.hxx>
-#include <scresid.hxx>
 #include <scres.hrc>
-#include <strings.hrc>
 #include <svx/svxdlg.hxx>
 #include <svx/svxids.hrc>
 #include <svx/dialogs.hrc>

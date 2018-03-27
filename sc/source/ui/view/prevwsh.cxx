@@ -51,7 +51,6 @@
 #include <tabvwsh.hxx>
 #include <stlpool.hxx>
 #include <editutil.hxx>
-#include <scresid.hxx>
 #include <globstr.hrc>
 #include <sc.hrc>
 #include <ViewSettingsSequenceDefines.hxx>

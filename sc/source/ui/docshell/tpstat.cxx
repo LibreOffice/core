@@ -21,7 +21,6 @@
 
 #include <document.hxx>
 #include <docsh.hxx>
-#include <scresid.hxx>
 
 #include <tpstat.hxx>
 

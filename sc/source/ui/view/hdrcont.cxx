@@ -23,7 +23,6 @@
 #include <tools/poly.hxx>
 #include <svtools/colorcfg.hxx>
 
-#include <scresid.hxx>
 #include <sc.hrc>
 #include <tabvwsh.hxx>
 #include <hdrcont.hxx>

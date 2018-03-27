@@ -26,7 +26,6 @@
 #include <uiitems.hxx>
 #include <reffact.hxx>
 #include <document.hxx>
-#include <scresid.hxx>
 #include <globstr.hrc>
 #include <sc.hrc>
 #include <solvrdlg.hxx>

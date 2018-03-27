@@ -26,7 +26,6 @@
 #include <tptable.hxx>
 #include <global.hxx>
 #include <attrib.hxx>
-#include <scresid.hxx>
 #include <sc.hrc>
 #include <bitmaps.hlst>
 

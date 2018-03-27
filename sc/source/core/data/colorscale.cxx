@@ -13,7 +13,6 @@
 #include <formulacell.hxx>
 #include <fillinfo.hxx>
 #include <bitmaps.hlst>
-#include <scresid.hxx>
 #include <tokenarray.hxx>
 #include <refupdatecontext.hxx>
 

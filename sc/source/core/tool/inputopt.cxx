@@ -23,7 +23,6 @@
 
 #include <inputopt.hxx>
 #include <rechead.hxx>
-#include <scresid.hxx>
 #include <global.hxx>
 #include <sc.hrc>
 #include <miscuno.hxx>

@@ -29,7 +29,6 @@
 #include <unonames.hxx>
 #include <dbdata.hxx>
 #include <document.hxx>
-#include <globstr.hrc>
 #include <globalnames.hxx>
 #include "XMLExportSharedData.hxx"
 #include <rangeutl.hxx>

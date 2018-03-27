@@ -36,7 +36,6 @@
 #include <docpool.hxx>
 #include <drawview.hxx>
 #include <gridwin.hxx>
-#include <scresid.hxx>
 
 #define ShellClass_ScChartShell
 #include <scslots.hxx>

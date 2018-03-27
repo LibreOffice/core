@@ -8,7 +8,6 @@
  */
 
 #include <condformatmgr.hxx>
-#include <scresid.hxx>
 #include <globstr.hrc>
 #include <condformatdlg.hxx>
 #include <document.hxx>

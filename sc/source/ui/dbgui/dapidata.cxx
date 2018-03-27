@@ -33,7 +33,6 @@
 using namespace com::sun::star;
 
 #include <dapidata.hxx>
-#include <scresid.hxx>
 #include <sc.hrc>
 #include <miscuno.hxx>
 #include <dpsdbtab.hxx>
