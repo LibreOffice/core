@@ -16,6 +16,24 @@
       "revId": "15ceba4b3044d572a4d53e8967fff37ff3fbc156",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_dc2a3fe7",
+        "filename": "sw/source/uibase/docvw/edtwin.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 5856,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2018-03-27T07:17:00Z",
+      "side": 0,
+      "message": "No idea. The m_aKeyInputFlushTimer is started on insert flushing the buffer as in this function.",
+      "parentUuid": "9a30ddce_bcd82b1f",
+      "revId": "15ceba4b3044d572a4d53e8967fff37ff3fbc156",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
