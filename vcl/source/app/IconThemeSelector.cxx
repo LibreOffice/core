@@ -16,7 +16,7 @@
 
 namespace vcl {
 
-/*static*/ const OUStringLiteral IconThemeSelector::FALLBACK_ICON_THEME_ID("tango");
+/*static*/ const OUStringLiteral IconThemeSelector::FALLBACK_ICON_THEME_ID("colibre");
 
 namespace {
 
@@ -51,21 +51,15 @@ IconThemeSelector::IconThemeSelector()
 IconThemeSelector::GetIconThemeForDesktopEnvironment(const OUString& desktopEnvironment)
 {
     OUString r;
-    if ( desktopEnvironment.equalsIgnoreAsciiCase("tde") ||
-         desktopEnvironment.equalsIgnoreAsciiCase("kde") ) {
-        r = "crystal";
-    }
-    else if ( desktopEnvironment.equalsIgnoreAsciiCase("kde4") ) {
-        r = "oxygen";
-    }
-    else if ( desktopEnvironment.equalsIgnoreAsciiCase("kde5") ) {
+    if ( desktopEnvironment.equalsIgnoreAsciiCase("kde4") ||
+         desktopEnvironment.equalsIgnoreAsciiCase("kde5") ) {
         r = "breeze";
     }
     else if ( desktopEnvironment.equalsIgnoreAsciiCase("MacOSX") ) {
-        r = "breeze";
+        r = "sifr";
     }
-    else if ( desktopEnvironment.equalsIgnoreAsciiCase("unity") ) {
-        r = "breeze";
+    else if ( desktopEnvironment.equalsIgnoreAsciiCase("gnome") ) {
+        r = "elementary";
     }
     else {
         r = FALLBACK_ICON_THEME_ID;
