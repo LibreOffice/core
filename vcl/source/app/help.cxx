@@ -504,14 +504,13 @@ void ImplShowHelpWindow( vcl::Window* pParent, sal_uInt16 nHelpWinStyle, QuickHe
     {
         SAL_WARN_IF( pHelpWin == pParent, "vcl", "HelpInHelp ?!" );
 
-        if  (   (   ( pHelpWin->GetHelpText() != rHelpText )
+        if  (   (   rHelpText.isEmpty()
                 ||  ( pHelpWin->GetWinStyle() != nHelpWinStyle )
-                ||  ( pHelpWin->GetHelpArea() != rHelpArea )
                 )
             &&  pSVData->maHelpData.mbRequestingHelp
             )
         {
-            // remove help window if no HelpText or other HelpText or
+            // remove help window if no HelpText or
             // other help mode. but keep it if we are scrolling, ie not requesting help
             bool bWasVisible = pHelpWin->IsVisible();
             if ( bWasVisible )
@@ -521,8 +520,9 @@ void ImplShowHelpWindow( vcl::Window* pParent, sal_uInt16 nHelpWinStyle, QuickHe
         }
         else
         {
-            bool const bTextChanged = rHelpText != pHelpWin->GetHelpText();
-            if (bTextChanged)
+            bool const bUpdate = (pHelpWin->GetHelpText() != rHelpText) ||
+                ((pHelpWin->GetHelpArea() != rHelpArea) && pSVData->maHelpData.mbRequestingHelp);
+            if (bUpdate)
             {
                 vcl::Window * pWindow = pHelpWin->GetParent()->ImplGetFrameWindow();
                 tools::Rectangle aInvRect( pHelpWin->GetWindowExtentsRelative( pWindow ) );
