@@ -85,6 +85,7 @@
 #include <comphelper/graphicmimetype.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/storagehelper.hxx>
+#include <officecfg/Office/Common.hxx>
 
 #include <rtl/math.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -2369,7 +2370,8 @@ void XMLShapeExport::ImpExportGraphicObjectShape(
 
             //Resolves: fdo#62461 put preferred image first above, followed by
             //fallback here
-            if( !bIsEmptyPresObj )
+            const bool bAddReplacementImages = officecfg::Office::Common::Save::Graphic::AddReplacementImages::get();
+            if( !bIsEmptyPresObj && bAddReplacementImages )
             {
                 OUString aReplacementUrl;
                 xPropSet->getPropertyValue("ReplacementGraphicURL") >>= aReplacementUrl;

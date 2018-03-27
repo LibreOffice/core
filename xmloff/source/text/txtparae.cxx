@@ -114,6 +114,7 @@
 #include <algorithm>
 #include <iterator>
 #include <comphelper/graphicmimetype.hxx>
+#include <officecfg/Office/Common.hxx>
 
 using namespace ::std;
 using namespace ::com::sun::star;
@@ -3159,7 +3160,8 @@ void XMLTextParagraphExport::_exportTextGraphic(
 
     //Resolves: fdo#62461 put preferred image first above, followed by
     //fallback here
-    if (!sReplacementOrigURL.isEmpty())
+    const bool bAddReplacementImages = officecfg::Office::Common::Save::Graphic::AddReplacementImages::get();
+    if (!sReplacementOrigURL.isEmpty() && bAddReplacementImages)
     {
         const OUString sReplacementURL(GetExport().AddEmbeddedGraphicObject( sReplacementOrigURL ));
 
