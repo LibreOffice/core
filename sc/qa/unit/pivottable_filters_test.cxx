@@ -2308,7 +2308,7 @@ void ScPivotTableFiltersTest::testTdf112106()
     // Check that we have an existing data layout dimension
     const ScDPSaveDimension* pDim = pSaveData->GetExistingDataLayoutDimension();
     CPPUNIT_ASSERT(pDim);
-    const OUString* pLayoutName = pDim->GetLayoutName();
+    const boost::optional<OUString> & pLayoutName = pDim->GetLayoutName();
     CPPUNIT_ASSERT(pLayoutName);
     CPPUNIT_ASSERT_EQUAL(ScGlobal::GetRscString(STR_PIVOT_DATA), (*pLayoutName));
 

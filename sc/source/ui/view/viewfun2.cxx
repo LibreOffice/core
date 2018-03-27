@@ -2052,8 +2052,8 @@ void ScViewFunc::Solve( const ScSolveParam& rParam )
         }
 
         OUString  aTargetValStr;
-        if ( rParam.pStrTargetVal != nullptr )
-            aTargetValStr = *(rParam.pStrTargetVal);
+        if ( rParam.pStrTargetVal )
+            aTargetValStr = *rParam.pStrTargetVal;
 
         OUString  aMsgStr;
         OUString  aResStr;

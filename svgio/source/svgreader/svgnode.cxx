@@ -263,8 +263,6 @@ namespace svgio
             mpParent(pParent),
             mpAlternativeParent(nullptr),
             maChildren(),
-            mpId(nullptr),
-            mpClass(nullptr),
             maXmlSpace(XmlSpace_notset),
             maDisplay(Display_inline),
             maCssStyleVector(),
@@ -422,7 +420,7 @@ namespace svgio
                 {
                     if(!aContent.isEmpty())
                     {
-                        setId(&aContent);
+                        setId(aContent);
                     }
                     break;
                 }
@@ -430,7 +428,7 @@ namespace svgio
                 {
                     if(!aContent.isEmpty())
                     {
-                        setClass(&aContent);
+                        setClass(aContent);
                     }
                     break;
                 }
@@ -629,7 +627,7 @@ namespace svgio
             return getCurrentXHeightInherited();
         }
 
-        void SvgNode::setId(const OUString* pfId)
+        void SvgNode::setId(OUString const & rId)
         {
             if(mpId)
             {
@@ -637,14 +635,11 @@ namespace svgio
                 mpId.reset();
             }
 
-            if(pfId)
-            {
-                mpId.reset( new OUString(*pfId) );
-                mrDocument.addSvgNodeToMapper(*mpId, *this);
-            }
+            mpId = rId;
+            mrDocument.addSvgNodeToMapper(*mpId, *this);
         }
 
-        void SvgNode::setClass(const OUString* pfClass)
+        void SvgNode::setClass(OUString const & rClass)
         {
             if(mpClass)
             {
@@ -652,11 +647,8 @@ namespace svgio
                 mpClass.reset();
             }
 
-            if(pfClass)
-            {
-                mpClass.reset( new OUString(*pfClass) );
-                mrDocument.addSvgNodeToMapper(*mpClass, *this);
-            }
+            mpClass = rClass;
+            mrDocument.addSvgNodeToMapper(*mpClass, *this);
         }
 
         XmlSpace SvgNode::getXmlSpace() const

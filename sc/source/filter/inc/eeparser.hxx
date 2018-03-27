@@ -50,11 +50,11 @@ struct ScEEParseEntry
 {
     SfxItemSet          aItemSet;
     ESelection          aSel;           // Selection in EditEngine
-    std::unique_ptr<OUString>
+    boost::optional<OUString>
                         pValStr;        // HTML possibly SDVAL string
-    std::unique_ptr<OUString>
+    boost::optional<OUString>
                         pNumStr;        // HTML possibly SDNUM string
-    std::unique_ptr<OUString>
+    boost::optional<OUString>
                         pName;          // HTML possibly anchor/RangeName
     OUString            aAltText;       // HTML IMG ALT Text
     std::vector< std::unique_ptr<ScHTMLImage> > maImageList;       // graphics in this cell
@@ -70,16 +70,14 @@ struct ScEEParseEntry
     bool                bEntirePara:1;  // true = use entire paragraph, false = use selection
 
     ScEEParseEntry( SfxItemPool* pPool ) :
-        aItemSet( *pPool ), pValStr( nullptr ),
-        pNumStr( nullptr ), pName( nullptr ),
+        aItemSet( *pPool ),
         nCol(SCCOL_MAX), nRow(SCROW_MAX), nTab(0),
         nTwips(0), nColOverlap(1), nRowOverlap(1),
         nOffset(0), nWidth(0), bHasGraphic(false), bEntirePara(true)
         {}
 
     ScEEParseEntry( const SfxItemSet& rItemSet ) :
-        aItemSet( rItemSet ), pValStr( nullptr ),
-        pNumStr( nullptr ), pName( nullptr ),
+        aItemSet( rItemSet ),
         nCol(SCCOL_MAX), nRow(SCROW_MAX), nTab(0),
         nTwips(0), nColOverlap(1), nRowOverlap(1),
         nOffset(0), nWidth(0), bHasGraphic(false), bEntirePara(true)

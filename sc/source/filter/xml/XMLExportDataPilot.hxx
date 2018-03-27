@@ -25,6 +25,7 @@
 #include <global.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <unotools/textsearch.hxx>
+#include <boost/optional.hpp>
 
 class ScXMLExport;
 class ScDocument;
@@ -62,7 +63,7 @@ class ScXMLExportDataPilot
     void WriteDimension(const ScDPSaveDimension* pDim, const ScDPDimensionSaveData* pDimData);
     void WriteDimensions(const ScDPSaveData* pDPSave);
 
-    void WriteGrandTotal(::xmloff::token::XMLTokenEnum eOrient, bool bVisible, const OUString* pGrandTotal);
+    void WriteGrandTotal(::xmloff::token::XMLTokenEnum eOrient, bool bVisible, const boost::optional<OUString> & pGrandTotal);
 
 public:
     explicit ScXMLExportDataPilot(ScXMLExport& rExport);

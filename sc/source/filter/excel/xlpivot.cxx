@@ -568,8 +568,7 @@ XclPTFieldExtInfo::XclPTFieldExtInfo() :
     mnFlags( EXC_SXVDEX_DEFAULTFLAGS ),
     mnSortField( EXC_SXVDEX_SORT_OWN ),
     mnShowField( EXC_SXVDEX_SHOW_NONE ),
-    mnNumFmt(0),
-    mpFieldTotalName(nullptr)
+    mnNumFmt(0)
 {
 }
 
@@ -637,7 +636,7 @@ XclImpStream& operator>>( XclImpStream& rStrm, XclPTFieldExtInfo& rInfo )
     rStrm.Ignore(10);
     if (nNameLen != 0xFF)
         // Custom field total name is used.  Pick it up.
-        rInfo.mpFieldTotalName.reset(new OUString(rStrm.ReadUniString(nNameLen, 0)));
+        rInfo.mpFieldTotalName = rStrm.ReadUniString(nNameLen, 0);
 
     return rStrm;
 }
@@ -649,7 +648,7 @@ XclExpStream& operator<<( XclExpStream& rStrm, const XclPTFieldExtInfo& rInfo )
             << rInfo.mnShowField
             << EXC_SXVDEX_FORMAT_NONE;
 
-    if (rInfo.mpFieldTotalName.get() && !rInfo.mpFieldTotalName->isEmpty())
+    if (rInfo.mpFieldTotalName && !rInfo.mpFieldTotalName->isEmpty())
     {
         OUString aFinalName = *rInfo.mpFieldTotalName;
         if (aFinalName.getLength() >= 254)
@@ -990,7 +989,7 @@ void XclPTViewEx9Info::Init( const ScDPObject& rDPObj )
     const ScDPSaveData* pData = rDPObj.GetSaveData();
     if (pData)
     {
-        const OUString* pGrandTotal = pData->GetGrandTotalName();
+        const boost::optional<OUString> & pGrandTotal = pData->GetGrandTotalName();
         if (pGrandTotal)
             maGrandTotalName = *pGrandTotal;
     }

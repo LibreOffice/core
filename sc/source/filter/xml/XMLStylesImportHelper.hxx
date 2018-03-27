@@ -28,6 +28,7 @@
 #include <memory>
 #include <set>
 #include <vector>
+#include <boost/optional.hpp>
 
 class ScXMLImport;
 
@@ -99,7 +100,7 @@ public:
     ScMyStyleRanges();
     virtual ~ScMyStyleRanges() override;
     void AddRange(const ScRange& rRange, const sal_Int16 nType);
-    void AddCurrencyRange(const ScRange& rRange, const OUString* pCurrency);
+    void AddCurrencyRange(const ScRange& rRange, const boost::optional<OUString> & pCurrency);
     void InsertCol(const sal_Int32 nCol, const sal_Int32 nTab);
     void SetStylesToRanges(const OUString* pStyleName, ScXMLImport& rImport);
 };
@@ -128,13 +129,13 @@ class ScMyStylesImportHelper
     std::vector<ScMyStylesSet::iterator>  aColDefaultStyles;
     ScMyStylesSet::iterator aRowDefaultStyle;
     ScXMLImport&        rImport;
-    std::unique_ptr<OUString>
+    boost::optional<OUString>
                         pStyleName;
-    std::unique_ptr<OUString>
+    boost::optional<OUString>
                         pPrevStyleName;
-    std::unique_ptr<OUString>
+    boost::optional<OUString>
                         pCurrency;
-    std::unique_ptr<OUString>
+    boost::optional<OUString>
                         pPrevCurrency;
     ScRange             aPrevRange;
     sal_Int16           nCellType;
@@ -142,7 +143,7 @@ class ScMyStylesImportHelper
     bool                bPrevRangeAdded;
 
     void ResetAttributes();
-    ScMyStylesSet::iterator GetIterator(const OUString* pStyleName);
+    ScMyStylesSet::iterator GetIterator(const boost::optional<OUString> & pStyleName);
     void AddDefaultRange(const ScRange& rRange);
     void AddSingleRange(const ScRange& rRange);
     void AddRange();
@@ -158,8 +159,8 @@ public:
     ~ScMyStylesImportHelper();
     void AddColumnStyle(const OUString& rStyleName, const sal_Int32 nColumn, const sal_Int32 nRepeat);
     void SetRowStyle(const OUString& rStyleName);
-    void SetAttributes(OUString* pStyleName,
-        OUString* pCurrency, const sal_Int16 nCellType);
+    void SetAttributes(boost::optional<OUString> pStyleName,
+        boost::optional<OUString> pCurrency, const sal_Int16 nCellType);
     void AddRange(const ScRange& rRange);
     void AddCell(const ScAddress& rAddress);
     void InsertCol(const sal_Int32 nCol, const sal_Int32 nTab); // a col is inserted before nCol

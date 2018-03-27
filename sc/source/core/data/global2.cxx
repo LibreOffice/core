@@ -207,16 +207,13 @@ void ScConsolidateParam::SetAreas( ScArea* const* ppAreas, sal_uInt16 nCount )
 // struct ScSolveParam
 
 ScSolveParam::ScSolveParam()
-    :   pStrTargetVal( nullptr )
 {
 }
 
 ScSolveParam::ScSolveParam( const ScSolveParam& r )
     :   aRefFormulaCell ( r.aRefFormulaCell ),
         aRefVariableCell( r.aRefVariableCell ),
-        pStrTargetVal   ( r.pStrTargetVal
-                            ? new OUString(*r.pStrTargetVal)
-                            : nullptr )
+        pStrTargetVal   ( r.pStrTargetVal )
 {
 }
 
@@ -225,7 +222,7 @@ ScSolveParam::ScSolveParam( const ScAddress& rFormulaCell,
                             const OUString&   rTargetValStr )
     :   aRefFormulaCell ( rFormulaCell ),
         aRefVariableCell( rVariableCell ),
-        pStrTargetVal   ( new OUString(rTargetValStr) )
+        pStrTargetVal   ( rTargetValStr )
 {
 }
 
@@ -237,9 +234,7 @@ ScSolveParam& ScSolveParam::operator=( const ScSolveParam& r )
 {
     aRefFormulaCell  = r.aRefFormulaCell;
     aRefVariableCell = r.aRefVariableCell;
-    pStrTargetVal.reset( r.pStrTargetVal
-                            ? new OUString(*r.pStrTargetVal)
-                            : nullptr);
+    pStrTargetVal = r.pStrTargetVal;
     return *this;
 }
 

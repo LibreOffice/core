@@ -954,7 +954,7 @@ void XclExpXmlPivotTables::SavePivotTableXml( XclExpXmlStream& rStrm, const ScDP
             long nDimIdx = it->mnPos;
             assert(aCachedDims[nDimIdx]); // the loop above should have screened for NULL's.
             const ScDPSaveDimension& rDim = *it->mpDim;
-            const OUString* pName = rDim.GetLayoutName();
+            const boost::optional<OUString> & pName = rDim.GetLayoutName();
             pPivotStrm->write("<")->writeId(XML_dataField);
             if (pName)
                 rStrm.WriteAttributes(XML_name, XclXmlUtils::ToOString(*pName), FSEND);

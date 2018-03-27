@@ -1556,7 +1556,7 @@ void ScDBFunc::DataPilotInput( const ScAddress& rPos, const OUString& rString )
                             if (pDim->GetSubTotalFunc(0) != ScGeneralFunction::AUTO)
                                 break;
 
-                            const OUString* pLayoutName = pMem->GetLayoutName();
+                            const boost::optional<OUString> & pLayoutName = pMem->GetLayoutName();
                             OUString aMemberName;
                             if (pLayoutName)
                                 aMemberName = *pLayoutName;
