@@ -247,22 +247,27 @@ javaFrameworkError jfw_startVM(
         // it contains the classpath and all options set in the
         //options dialog
         std::unique_ptr<JavaVMOption[]> sarJOptions(
-            new JavaVMOption[arOptions.size() + 2 + vmParams.size()]);
+            new JavaVMOption[
+                arOptions.size() + (sUserClassPath.isEmpty() ? 1 : 2) + vmParams.size()]);
         JavaVMOption * arOpt = sarJOptions.get();
         if (! arOpt)
             return JFW_E_ERROR;
 
         //The first argument is the classpath
-        arOpt[0].optionString= const_cast<char*>(sUserClassPath.getStr());
-        arOpt[0].extraInfo = nullptr;
+        int index = 0;
+        if (!sUserClassPath.isEmpty()) {
+            arOpt[index].optionString= const_cast<char*>(sUserClassPath.getStr());
+            arOpt[index].extraInfo = nullptr;
+            ++index;
+        }
         // Set a flag that this JVM has been created via the JNI Invocation API
         // (used, for example, by UNO remote bridges to share a common thread pool
         // factory among Java and native bridge implementations):
-        arOpt[1].optionString = const_cast<char *>("-Dorg.openoffice.native=");
-        arOpt[1].extraInfo = nullptr;
+        arOpt[index].optionString = const_cast<char *>("-Dorg.openoffice.native=");
+        arOpt[index].extraInfo = nullptr;
+        ++index;
 
         //add the options set by options dialog
-        int index = 2;
         for (auto const & vmParam : vmParams)
         {
             arOpt[index].optionString = const_cast<sal_Char*>(vmParam.getStr());
