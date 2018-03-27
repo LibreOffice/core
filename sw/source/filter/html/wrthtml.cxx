@@ -78,6 +78,8 @@
 #include <IDocumentMarkAccess.hxx>
 #include <xmloff/odffields.hxx>
 #include <tools/urlobj.hxx>
+#include <osl/file.hxx>
+#include <comphelper/scopeguard.hxx>
 
 #define MAX_INDENT_LEVEL 20
 
@@ -208,6 +210,24 @@ void SwHTMLWriter::SetupFilterOptions(SfxMedium& rMedium)
 
 ErrCode SwHTMLWriter::WriteStream()
 {
+    // Intercept paste output if requested.
+    char* pPasteEnv = getenv("SW_DEBUG_HTML_PASTE_TO");
+    std::unique_ptr<SvStream> pPasteStream;
+    SvStream* pOldPasteStream = nullptr;
+    if (pPasteEnv)
+    {
+        OUString aPasteStr;
+        if (pPasteEnv
+            && osl::FileBase::getFileURLFromSystemPath(OUString::fromUtf8(pPasteEnv), aPasteStr)
+                   == osl::FileBase::E_None)
+        {
+            pPasteStream.reset(new SvFileStream(aPasteStr, StreamMode::WRITE));
+            pOldPasteStream = &Strm();
+            SetStream(pPasteStream.get());
+        }
+    }
+    comphelper::ScopeGuard g([this, pOldPasteStream] { this->SetStream(pOldPasteStream); });
+
     SvxHtmlOptions& rHtmlOptions = SvxHtmlOptions::Get();
 
     // font heights 1-7
