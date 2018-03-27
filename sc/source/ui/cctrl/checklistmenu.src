@@ -21,11 +21,6 @@
 
 Resource RID_POPUP_FILTER
 {
-    String STR_MENU_TITLE
-    {
-        Text [ en-US ] = "AutoFilter" ;
-    };
-
     String STR_MENU_SORT_ASC
     {
         Text [ en-US ] = "Sort Ascending" ;
