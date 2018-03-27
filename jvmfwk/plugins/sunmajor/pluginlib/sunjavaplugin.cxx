@@ -822,7 +822,7 @@ javaPluginError jfw_plugin_startJavaVirtualMachine(
         if( err < 0)
         {
             fprintf(stderr,"[Java framework] sunjavaplugin" SAL_DLLEXTENSION
-                    "Can not create Java Virtual Machine\n");
+                    "Can not create Java Virtual Machine, %" SAL_PRIdINT32 "\n", sal_Int32(err));
             errorcode = javaPluginError::VmCreationFailed;
         }
         else if( err > 0)
