@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_3cbb5b74",
+        "filename": "sc/inc/dbdata.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 265,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-03-27T09:25:48Z",
+      "side": 1,
+      "message": "I would make this\n    bool insert(std::unique_ptr\u003cScDbData\u003e p)\nsince that mostly compile-time enforces reasonable behaviour, but I\u0027ll get around to fixing that at some point",
+      "revId": "1d0be2bc562f0cabc3c90d7ec52626b1e7748826",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
