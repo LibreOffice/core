@@ -64,6 +64,7 @@
 #include <win/salobj.h>
 #include <win/saltimer.h>
 
+#include <helpwin.hxx>
 #include <impbmp.hxx>
 #include <window.h>
 #include <sallayout.hxx>
@@ -3042,17 +3043,32 @@ static bool ImplHandleMouseMsg( HWND hWnd, UINT nMsg,
             SalData* pSalData = GetSalData();
             if ( pSalData->mhWantLeaveMsg == hWnd )
             {
+                // Mouse-Coordinates are relative to the screen
+                POINT aPt;
+                aPt.x = static_cast<short>(LOWORD(lParam));
+                aPt.y = static_cast<short>(HIWORD(lParam));
+                ScreenToClient(hWnd, &aPt);
+                if (const auto& pHelpWin = ImplGetSVData()->maHelpData.mpHelpWin)
+                {
+                    const tools::Rectangle& rHelpRect = pHelpWin->GetHelpArea();
+                    if (rHelpRect.IsInside(Point(aPt.x, aPt.y)))
+                    {
+                        // We have entered a tooltip (help window). Don't call the handler here; it
+                        // would launch the sequence "Mouse leaves the Control->Control redraws->
+                        // Help window gets destroyed->Mouse enters the Control->Control redraws",
+                        // which takes CPU and may flicker. Just destroy the help window and pretend
+                        // we are still over the original window.
+                        ImplDestroyHelpWindow(true);
+                        bCall = false;
+                        break;
+                    }
+                }
                 pSalData->mhWantLeaveMsg = nullptr;
                 if ( pSalData->mpMouseLeaveTimer )
                 {
                     delete pSalData->mpMouseLeaveTimer;
                     pSalData->mpMouseLeaveTimer = nullptr;
                 }
-                // Mouse-Coordinates are relative to the screen
-                POINT aPt;
-                aPt.x = static_cast<short>(LOWORD( lParam ));
-                aPt.y = static_cast<short>(HIWORD( lParam ));
-                ScreenToClient( hWnd, &aPt );
                 aMouseEvt.mnX = aPt.x;
                 aMouseEvt.mnY = aPt.y;
                 aMouseEvt.mnButton = 0;
