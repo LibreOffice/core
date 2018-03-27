@@ -170,7 +170,6 @@ bool ScDBDocFunc::RenameDBRange( const OUString& rOld, const OUString& rNew )
         bool bInserted = rDBs.insert(pNewData);
         if (!bInserted)                             // error -> restore old state
         {
-            delete pNewData;
             rDoc.SetDBCollection(std::move(pUndoColl));       // belongs to the document then
         }
 
