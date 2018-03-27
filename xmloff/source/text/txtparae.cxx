@@ -117,6 +117,7 @@
 #include <algorithm>
 #include <iterator>
 #include <comphelper/graphicmimetype.hxx>
+#include <officecfg/Office/Common.hxx>
 
 using namespace ::std;
 using namespace ::com::sun::star;
@@ -3153,6 +3154,8 @@ void XMLTextParagraphExport::_exportTextGraphic(
         }
     }
 
+    const bool bAddReplacementImages = officecfg::Office::Common::Save::Graphic::AddReplacementImages::get();
+    if (bAddReplacementImages)
     {
         // replacement graphic for backwards compatibility, but
         // only for SVG and metafiles currently
