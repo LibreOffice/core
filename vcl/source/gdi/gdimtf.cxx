@@ -2632,7 +2632,31 @@ sal_uLong GDIMetaFile::GetSizeBytes() const
     return nSizeBytes;
 }
 
-SvStream& ReadGDIMetaFile( SvStream& rIStm, GDIMetaFile& rGDIMetaFile )
+namespace
+{
+    class DepthGuard
+    {
+    private:
+        ImplMetaReadData& m_rData;
+        rtl_TextEncoding m_eOrigCharSet;
+    public:
+        DepthGuard(ImplMetaReadData& rData, SvStream& rIStm)
+            : m_rData(rData)
+            , m_eOrigCharSet(m_rData.meActualCharSet)
+        {
+            ++m_rData.mnParseDepth;
+            m_rData.meActualCharSet = rIStm.GetStreamCharSet();
+        }
+        bool TooDeep() const { return m_rData.mnParseDepth > 1024; }
+        ~DepthGuard()
+        {
+            --m_rData.mnParseDepth;
+            m_rData.meActualCharSet = m_eOrigCharSet;
+        }
+    };
+}
+
+SvStream& ReadGDIMetaFile(SvStream& rIStm, GDIMetaFile& rGDIMetaFile, ImplMetaReadData* pData)
 {
     if (rIStm.GetError())
     {
@@ -2666,12 +2690,20 @@ SvStream& ReadGDIMetaFile( SvStream& rIStm, GDIMetaFile& rGDIMetaFile )
 
             pCompat.reset(); // destructor writes stuff into the header
 
-            ImplMetaReadData aReadData;
-            aReadData.meActualCharSet = rIStm.GetStreamCharSet();
+            std::unique_ptr<ImplMetaReadData> xReadData;
+            if (!pData)
+            {
+                xReadData.reset(new ImplMetaReadData);
+                pData = xReadData.get();
+            }
+            DepthGuard aDepthGuard(*pData, rIStm);
+
+            if (aDepthGuard.TooDeep())
+                throw std::runtime_error("too much recursion");
 
             for( sal_uInt32 nAction = 0; ( nAction < nCount ) && !rIStm.eof(); nAction++ )
             {
-                MetaAction* pAction = MetaAction::ReadMetaAction( rIStm, &aReadData );
+                MetaAction* pAction = MetaAction::ReadMetaAction(rIStm, pData);
                 if( pAction )
                 {
                     if (pAction->GetType() == MetaActionType::COMMENT)
