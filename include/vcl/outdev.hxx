@@ -1786,14 +1786,6 @@ public:
 
     SAL_DLLPRIVATE DeviceCoordinate LogicWidthToDeviceCoordinate( long nWidth ) const;
 
-protected:
-    /**
-     * Notification about some rectangle of the output device got invalidated.
-     *
-     * @param pRectangle If 0, that means the whole area, otherwise the area in logic coordinates.
-     */
-    virtual void LogicInvalidate(const tools::Rectangle* /*pRectangle*/) {}
-
 private:
 
     /** Convert a logical X coordinate to a device pixel's X coordinate.
