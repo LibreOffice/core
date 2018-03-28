@@ -153,7 +153,7 @@ DocumentFieldsManager::DocumentFieldsManager( SwDoc& i_rSwdoc ) : m_rDoc( i_rSwd
 
 const SwFieldTypes* DocumentFieldsManager::GetFieldTypes() const
 {
-    return mpFieldTypes;
+    return mpFieldTypes.get();
 }
 
 /** Insert field types
@@ -1701,8 +1701,8 @@ void DocumentFieldsManager::UpdateDBNumFields( SwDBNameInfField& rDBField, SwCal
 
 DocumentFieldsManager::~DocumentFieldsManager()
 {
-    delete mpUpdateFields;
-    delete mpFieldTypes;
+    mpUpdateFields.reset();
+    mpFieldTypes.reset();
 }
 
 }
