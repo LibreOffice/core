@@ -474,12 +474,6 @@ void AccessibleContextBase::SetAccessibleName (
 }
 
 
-OUString AccessibleContextBase::CreateAccessibleDescription()
-{
-    return OUString("Empty Description");
-}
-
-
 OUString AccessibleContextBase::CreateAccessibleName()
 {
     return OUString("Empty Name");

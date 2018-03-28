@@ -279,15 +279,6 @@ protected:
     */
     virtual OUString CreateAccessibleName();
 
-    /** Create the accessible object's descriptive string.  May be called
-        more than once.
-        @return
-            Descriptive string.  Not necessarily unique.
-        @throws css::uno::RuntimeException
-    */
-    virtual OUString
-        CreateAccessibleDescription();
-
     void FireEvent (const css::accessibility::AccessibleEventObject& aEvent);
 
     /** Check whether or not the object has been disposed (or is in the

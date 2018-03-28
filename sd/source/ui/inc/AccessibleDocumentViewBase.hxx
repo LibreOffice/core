@@ -294,7 +294,7 @@ protected:
            A description string.
     */
     virtual OUString
-        CreateAccessibleDescription () override;
+        CreateAccessibleDescription ();
 
     /** This method is called when (after) the frame containing this
         document has been activated.  Can be used to send FOCUSED state
