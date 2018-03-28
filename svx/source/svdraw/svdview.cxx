@@ -388,7 +388,12 @@ SdrHitKind SdrView::PickAnything(const Point& rLogicPos, SdrViewEvent& rVEvt) co
                     eHit = SDRHIT_CELL;
                     break;
                 case sdr::table::SDRTABLEHIT_CELLTEXTAREA:
-                    eHit = SDRHIT_TEXTEDITOBJ;
+                    // Keep state on UnmarkedObject to allow the below
+                    // 'check for URL field' to be executed, else popups
+                    // for e.g. URL links when hoovering and clicking
+                    // them will not work. Tried several other changes,
+                    // but this oje safely keeps existing behaviour as-is.
+                    eHit = SDRHIT_UNMARKEDOBJECT;
                     break;
                 default:
                     break;
