@@ -963,8 +963,15 @@ framework/res/addtemplate_32.png cmd/32/newdoc.png
 # reportdesign
 # ==============================================
 reportdesign/res/report_16.png cmd/sc_executereport.png
+reportdesign/res/sc20557.png cmd/sc_cancel.png
+reportdesign/res/sc30768.png cmd/sc_movepageup.png
+reportdesign/res/sc30769.png cmd/sc_movepagedown.png
 reportdesign/res/sc30770.png cmd/sc_cancel.png
+reportdesign/res/sortdown.png cmd/sc_movepagedown.png
+reportdesign/res/sortup.png cmd/sc_movepageup.png
 reportdesign/res/sx11047.png cmd/sc_basicshapes.diamond.png
+reportdesign/res/sx12452.png cmd/sc_config.png
+reportdesign/res/sx12453.png cmd/sc_config.png
 reportdesign/res/sx12454.png cmd/sc_alignright.png
 reportdesign/res/sx12464.png cmd/sc_executereport.png
 reportdesign/res/sx12594.png cmd/sc_dbviewfunctions.png
