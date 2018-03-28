@@ -242,6 +242,8 @@ sal_IntPtr SystemChildWindow::GetParentWindowHandle( sal_Bool bUseJava )
     (void)bUseJava;
 #if defined WNT
     nRet = reinterpret_cast< sal_IntPtr >( GetSystemData()->hWnd );
+#elif defined OS2
+    nRet = reinterpret_cast< sal_IntPtr >( (long)GetSystemData()->hWnd );
 #elif defined QUARTZ
     // FIXME: this is wrong
     nRet = reinterpret_cast< sal_IntPtr >( GetSystemData()->mpNSView );

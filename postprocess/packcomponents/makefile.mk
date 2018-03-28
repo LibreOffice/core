@@ -339,6 +339,7 @@ my_components += \
 .IF "$(OS)" == "OS2"
 my_components += \
     component/dtrans/source/generic/dtrans \
+    component/dtrans/util/dnd \
     component/dtrans/util/sysdtrans
 .END
 

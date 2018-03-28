@@ -21,27 +21,36 @@
 
 
 
-$(eval $(call gb_Module_Module,dtrans))
+$(eval $(call gb_Library_Library,dnd))
 
-$(eval $(call gb_Module_add_targets,dtrans,\
-	Library_dtrans \
-	Library_mcnttype \
-	Package_xml \
+$(eval $(call gb_Library_add_precompiled_header,dnd,$(SRCDIR)/dtrans/inc/pch/precompiled_dtrans))
+
+$(eval $(call gb_Library_set_componentfile,dnd,dtrans/util/dnd))
+
+$(eval $(call gb_Library_set_include,dnd,\
+    $$(INCLUDE) \
+    -I$(SRCDIR)/dtrans/inc/pch \
 ))
 
-ifeq ($(OS),WNT)
-$(eval $(call gb_Module_add_targets,dtrans,\
-	Library_dnd \
-	Library_ftransl \
-	Library_sysdtrans_win \
+$(eval $(call gb_Library_add_api,dnd,\
+    offapi \
+    udkapi \
 ))
-endif
 
-ifeq ($(OS),OS2)
-$(eval $(call gb_Module_add_targets,dtrans,\
-	Library_dnd_os2 \
-	Library_sysdtrans_os2 \
+$(eval $(call gb_Library_add_linked_libs,dnd,\
+    cppuhelper \
+    cppu \
+    sal \
+    stl \
+    $(gb_STDLIBS) \
 ))
-endif
+
+$(eval $(call gb_Library_add_exception_objects,dnd,\
+    dtrans/source/os2/dnd/dndentry \
+    dtrans/source/os2/dnd/globals \
+    dtrans/source/os2/dnd/OTransferable \
+    dtrans/source/os2/dnd/DragSource \
+    dtrans/source/os2/dnd/DropTarget \
+))
 
 # vim: set noet sw=4 ts=4:

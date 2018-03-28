@@ -204,8 +204,12 @@ void ImplReleaseSALIMEData();
 #define SAL_PROFILE_PRINTDJP        ((PSZ)"PrintDJP")
 #define SAL_PROFILE_PRINTRAW        ((PSZ)"PrintRAW")
 
-#define SAL_FRAME_WNDEXTRA          sizeof(ULONG)
-#define SAL_FRAME_THIS              0
+#define SAL_FRAME_WNDEXTRA      (sizeof(ULONG)*3)
+#define SAL_FRAME_THIS          0
+// these offsets are hardcoded in dnd/globals.hxx too to avoid vcl dependancies
+#define SAL_FRAME_DROPTARGET        sizeof(ULONG)
+#define SAL_FRAME_DRAGSOURCE        (sizeof(ULONG)*2)
+
 #define SAL_FRAME_CLASSNAME         "SALFRAME"
 #define SAL_SUBFRAME_CLASSNAME      "SALSUBFRAME"
 #define SAL_OBJECT_WNDEXTRA         sizeof(ULONG)
@@ -274,6 +278,9 @@ void ImplReleaseSALIMEData();
 #define SAL_MSG_DESTROYHWND         (WM_USER+168)
 // POSTTIMER-Message; wparam = 0, lParam == time
 #define SAL_MSG_POSTTIMER           (WM_USER+169)
+
+// drag&drop internal messages (see dnd/globals.hxx)
+#define DM_AOO_ENDCONVERSATION      (WM_USER+170)
 
 // -----------------
 // - Helpfunctions -

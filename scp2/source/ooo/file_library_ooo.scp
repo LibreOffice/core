@@ -408,7 +408,7 @@ File gid_File_Lib_Vbahelper
 End
 
 
-#ifdef WNT
+#if defined WNT || defined OS2
 
 File gid_File_Lib_Dnd
     TXT_FILE_BODY;

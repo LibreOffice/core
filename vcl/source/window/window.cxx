@@ -8611,7 +8611,7 @@ uno::Reference< XDragSource > Window::GetDragSource()
                     {
                         Sequence< Any > aDragSourceAL( 2 ), aDropTargetAL( 2 );
                         OUString aDragSourceSN, aDropTargetSN;
-#if defined WNT
+#if defined WNT || defined OS2
                         aDragSourceSN = OUString::createFromAscii( "com.sun.star.datatransfer.dnd.OleDragSource" );
                         aDropTargetSN = OUString::createFromAscii( "com.sun.star.datatransfer.dnd.OleDropTarget" );
                         aDragSourceAL[ 1 ] = makeAny( (sal_uInt32) pEnvData->hWnd );
