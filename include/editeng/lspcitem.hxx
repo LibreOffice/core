@@ -93,7 +93,7 @@ public:
     SvxInterLineSpaceRule GetInterLineSpaceRule() const { return eInterLineSpaceRule; }
 
     virtual sal_uInt16      GetValueCount() const override;
-    virtual OUString        GetValueTextByPos( sal_uInt16 nPos ) const override;
+    virtual OUString        GetValueTextByPos( sal_uInt16 nPos ) const;
     virtual sal_uInt16      GetEnumValue() const override;
     virtual void            SetEnumValue( sal_uInt16 nNewVal ) override;
 };

@@ -67,18 +67,6 @@ bool SfxEnumItemInterface::PutValue(const css::uno::Any& rVal,
     return false;
 }
 
-OUString SfxEnumItemInterface::GetValueTextByPos(sal_uInt16) const
-{
-    SAL_INFO("svl.items", "SfxEnumItemInterface::GetValueTextByPos(): Pure virtual");
-    return OUString();
-}
-
-// virtual
-sal_uInt16 SfxEnumItemInterface::GetValueByPos(sal_uInt16 nPos) const
-{
-    return nPos;
-}
-
 // virtual
 bool SfxEnumItemInterface::HasBoolValue() const
 {

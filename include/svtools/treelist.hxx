@@ -311,10 +311,6 @@ public:
     sal_uLong           GetChildSelectionCount( SvTreeListEntry* pParent ) const
     { return pModel->GetChildSelectionCount(this,pParent); }
 
-    // Does not call the Select Handler
-    virtual void        SelectAll( bool bSelect, bool /*bPaint*/ = true )
-    { pModel->SelectAll(this, bSelect); }
-
     bool               IsEntryVisible( SvTreeListEntry* pEntry ) const
     { return pModel->IsEntryVisible(this,pEntry); }
 
