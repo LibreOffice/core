@@ -26,6 +26,7 @@
 #include <com/sun/star/container/XContainerListener.hpp>
 #include <sfx2/viewsh.hxx>
 #include <svx/ifaceids.hxx>
+#include <svl/srchitem.hxx>
 #include <vcl/scrbar.hxx>
 #include <map>
 #include <memory>
@@ -61,30 +62,34 @@ private:
     friend class LocalizationMgr;
     friend bool implImportDialog(weld::Window* pWin, const OUString& rCurPath, const ScriptDocument& rDocument, const OUString& rLibName); // defined in baside3.cxx
 
-    WindowTable        aWindowTable;
+    WindowTable         aWindowTable;
     sal_uInt16          nCurKey;
-    VclPtr<BaseWindow>         pCurWin;
+    VclPtr<BaseWindow>  pCurWin;
     ScriptDocument      m_aCurDocument;
     OUString            m_aCurLibName;
     std::shared_ptr<LocalizationMgr> m_pCurLocalizationMgr;
 
-    VclPtr<ScrollBar>         aHScrollBar;
-    VclPtr<ScrollBar>         aVScrollBar;
-    VclPtr<ScrollBarBox>      aScrollBarBox;
-    VclPtr<TabBar> pTabBar; // basctl::TabBar
-    bool                bCreatingWindow;
-    // layout windows
-    VclPtr<ModulWindowLayout> pModulLayout;
-    VclPtr<DialogWindowLayout> pDialogLayout;
-    // the active layout window
-    VclPtr<Layout> pLayout;
-    // common object catalog window
-    VclPtr<ObjectCatalog> aObjectCatalog;
+    VclPtr<ScrollBar>    aHScrollBar;
+    VclPtr<ScrollBar>    aVScrollBar;
+    VclPtr<ScrollBarBox> aScrollBarBox;
+    VclPtr<TabBar>       pTabBar;           // basctl::TabBar
+    bool                 bCreatingWindow;
 
-    bool                m_bAppBasicModified;
+    // layout windows
+    VclPtr<ModulWindowLayout>   pModulLayout;
+    VclPtr<DialogWindowLayout>  pDialogLayout;
+    VclPtr<Layout>              pLayout;    // the active layout window
+    // common object catalog window
+    VclPtr<ObjectCatalog>       aObjectCatalog;
+
+    bool    m_bAppBasicModified;
+    bool    mbJustOpened = false;
+
     DocumentEventNotifier m_aNotifier;
+
     friend class ContainerListenerImpl;
     css::uno::Reference< css::container::XContainerListener > m_xLibListener;
+    std::unique_ptr<SvxSearchItem> mpSearchItem;
 
     void                Init();
     void                InitTabBar();
@@ -170,6 +175,7 @@ public:
 
     void                GetState( SfxItemSet& );
     void                ExecuteGlobal( SfxRequest& rReq );
+    void                ExecuteSearch( SfxRequest& rReq );
     void                ExecuteCurrent( SfxRequest& rReq );
     void                ExecuteBasic( SfxRequest& rReq );
     void                ExecuteDialog( SfxRequest& rReq );
