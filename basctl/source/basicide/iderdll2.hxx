@@ -61,7 +61,7 @@ public:
     bool&             ShellInCriticalSection() { return bShellInCriticalSection; }
 
     SvxSearchItem&    GetSearchItem() const { return *pSearchItem; }
-    void              SetSearchItem( const SvxSearchItem& rItem );
+    void              SetSearchItem( const SvxSearchItem* rItem );
 
     const OUString&   GetAddLibPath() const   { return aAddLibPath; }
     void              SetAddLibPath( const OUString& rPath ) { aAddLibPath = rPath; }
