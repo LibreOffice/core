@@ -81,7 +81,7 @@ protected:
             aDescriptor[2].Name = "TextInsertModeRange";
             aDescriptor[2].Value <<= xTextRange;
         }
-        xFilter->filter(aDescriptor);
+        CPPUNIT_ASSERT(xFilter->filter(aDescriptor));
     }
     AllSettings m_aSavedSettings;
 };
