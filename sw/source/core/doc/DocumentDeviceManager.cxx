@@ -231,7 +231,7 @@ const SwPrintData & DocumentDeviceManager::getPrintData() const
     if(!mpPrtData)
     {
         DocumentDeviceManager * pThis = const_cast< DocumentDeviceManager * >(this);
-        pThis->mpPrtData = new SwPrintData;
+        pThis->mpPrtData.reset(new SwPrintData);
 
         // SwPrintData should be initialized from the configuration,
         // the respective config item is implemented by SwPrintOptions which
@@ -248,13 +248,13 @@ const SwPrintData & DocumentDeviceManager::getPrintData() const
 void DocumentDeviceManager::setPrintData(/*[in]*/ const SwPrintData& rPrtData )
 {
     if(!mpPrtData)
-        mpPrtData = new SwPrintData;
+        mpPrtData.reset(new SwPrintData);
     *mpPrtData = rPrtData;
 }
 
 DocumentDeviceManager::~DocumentDeviceManager()
 {
-    delete mpPrtData;
+    mpPrtData.reset();
     mpVirDev.disposeAndClear();
     mpPrt.disposeAndClear();
 }
