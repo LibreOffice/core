@@ -24,6 +24,8 @@ chart2/res/dataeditor_icon04.png cmd/sc_deletecolumns.png
 chart2/res/dataeditor_icon05.png cmd/sc_insertcellsright.png
 chart2/res/dataeditor_icon06.png cmd/sc_insertcellsdown.png
 chart2/res/dataeditor_icon07.png cmd/sc_insertcolumnsafter.png
+chart2/res/dataeditor_icon08.png cmd/sc_insertcolumns.png
+chart2/res/dataeditor_icon09.png cmd/sc_insertrowsbefore.png
 chart2/res/selectrange.png formula/res/refinp1.png
 
 # cmd
