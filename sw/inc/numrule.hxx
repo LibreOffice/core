@@ -113,7 +113,7 @@ private:
     static SwNumFormat* maLabelAlignmentBaseFormats [ RULE_END ][ MAXLEVEL ];
     static sal_uInt16 mnRefCount;
 
-    SwNumFormat* maFormats[ MAXLEVEL ];
+    std::unique_ptr<SwNumFormat> maFormats[ MAXLEVEL ];
 
     /** container for associated text nodes */
     tTextNodeList maTextNodeList;
