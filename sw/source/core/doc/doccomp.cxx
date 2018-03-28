@@ -67,7 +67,7 @@ public:
                               const SwTextNode& rSrcNd );
 
     bool ChangesInLine( const SwCompareLine& rLine,
-                            SwPaM *& rpInsRing, SwPaM*& rpDelRing ) const;
+                            std::unique_ptr<SwPaM>& rpInsRing, std::unique_ptr<SwPaM>& rpDelRing ) const;
 
     const SwNode& GetNode() const { return rNode; }
 
@@ -86,7 +86,7 @@ private:
     std::unique_ptr<size_t[]> pIndex;
     std::unique_ptr<bool[]> pChangedFlag;
 
-    SwPaM *pInsRing, *pDelRing;
+    std::unique_ptr<SwPaM> pInsRing, pDelRing;
 
     static sal_uLong PrevIdx( const SwNode* pNd );
     static sal_uLong NextIdx( const SwNode* pNd );
@@ -101,7 +101,7 @@ private:
 
 public:
     CompareData(SwDoc& rD, bool bRecordDiff)
-        : rDoc( rD ), pIndex( nullptr ), pChangedFlag( nullptr ), pInsRing(nullptr), pDelRing(nullptr)
+        : rDoc( rD ), pIndex( nullptr ), pChangedFlag( nullptr )
         , m_bRecordDiff(bRecordDiff)
     {
     }
@@ -386,15 +386,15 @@ CompareData::~CompareData()
 {
     if( pDelRing )
     {
-        while( pDelRing->GetNext() != pDelRing )
+        while( pDelRing->GetNext() != pDelRing.get() )
             delete pDelRing->GetNext();
-        delete pDelRing;
+        pDelRing.reset();
     }
     if( pInsRing )
     {
-        while( pInsRing->GetNext() != pInsRing )
+        while( pInsRing->GetNext() != pInsRing.get() )
             delete pInsRing->GetNext();
-        delete pInsRing;
+        pInsRing.reset();
     }
 }
 
@@ -1261,7 +1261,7 @@ bool SwCompareLine::CompareTextNd( const SwTextNode& rDstNd,
 }
 
 bool SwCompareLine::ChangesInLine( const SwCompareLine& rLine,
-                            SwPaM *& rpInsRing, SwPaM*& rpDelRing ) const
+                            std::unique_ptr<SwPaM>& rpInsRing, std::unique_ptr<SwPaM>& rpDelRing ) const
 {
     bool bRet = false;
 
@@ -1356,9 +1356,9 @@ bool SwCompareLine::ChangesInLine( const SwCompareLine& rLine,
 
             if ( nDstFrom < nDstTo )
             {
-                SwPaM* pTmp = new SwPaM( *aPam.GetPoint(), rpInsRing );
+                SwPaM* pTmp = new SwPaM( *aPam.GetPoint(), rpInsRing.get() );
                 if( !rpInsRing )
-                    rpInsRing = pTmp;
+                    rpInsRing.reset(pTmp);
                 pTmp->SetMark();
                 pTmp->GetMark()->nContent = nDstFrom + nSkip;
             }
@@ -1374,9 +1374,9 @@ bool SwCompareLine::ChangesInLine( const SwCompareLine& rLine,
                     /*bCopyAll=*/false, /*bCheckPos=*/true );
                 pDstDoc->GetIDocumentUndoRedo().DoUndo( bUndo );
 
-                SwPaM* pTmp = new SwPaM( *aPam.GetPoint(), rpDelRing );
+                SwPaM* pTmp = new SwPaM( *aPam.GetPoint(), rpDelRing.get() );
                 if( !rpDelRing )
-                    rpDelRing = pTmp;
+                    rpDelRing.reset(pTmp);
 
                 pTmp->SetMark();
                 pTmp->GetMark()->nContent = nDstTo + nSkip;
@@ -1482,9 +1482,9 @@ void CompareData::ShowInsert( sal_uLong nStt, sal_uLong nEnd )
 {
     SwPaM* pTmp = new SwPaM( GetLine( nStt )->GetNode(), 0,
                              GetLine( nEnd-1 )->GetEndNode(), 0,
-                             pInsRing );
+                             pInsRing.get() );
     if( !pInsRing )
-        pInsRing = pTmp;
+        pInsRing.reset( pTmp );
 
     // #i65201#: These SwPaMs are calculated smaller than needed, see comment below
 }
@@ -1538,9 +1538,9 @@ void CompareData::ShowDelete(
     // To avoid unwanted insertions of delete-redlines into these new redlines, what happens
     // especially at the end of the document, I reduce the SwPaM by one node.
     // Before the new redlines are inserted, they have to expand again.
-    SwPaM* pTmp = new SwPaM( aSavePos.GetNode(), aInsPos.GetNode(), 0, -1, pDelRing );
+    SwPaM* pTmp = new SwPaM( aSavePos.GetNode(), aInsPos.GetNode(), 0, -1, pDelRing.get() );
     if( !pDelRing )
-        pDelRing = pTmp;
+        pDelRing.reset(pTmp);
 
     if( pInsRing )
     {
@@ -1608,7 +1608,7 @@ void CompareData::CheckForChangesInLine( const CompareData& rData,
 
 void CompareData::SetRedlinesToDoc( bool bUseDocInfo )
 {
-    SwPaM* pTmp = pDelRing;
+    SwPaM* pTmp = pDelRing.get();
 
     // get the Author / TimeStamp from the "other" document info
     std::size_t nAuthor = rDoc.getIDocumentRedlineAccess().GetRedlineAuthor();
@@ -1680,10 +1680,10 @@ void CompareData::SetRedlinesToDoc( bool bUseDocInfo )
             }
             rDoc.getIDocumentRedlineAccess().AppendRedline( new SwRangeRedline( aRedlnData, *pTmp ), true );
 
-        } while( pDelRing != ( pTmp = pTmp->GetNext()) );
+        } while( pDelRing.get() != ( pTmp = pTmp->GetNext()) );
     }
 
-    pTmp = pInsRing;
+    pTmp = pInsRing.get();
     if( pTmp )
     {
         do {
@@ -1713,12 +1713,12 @@ void CompareData::SetRedlinesToDoc( bool bUseDocInfo )
                     }
                 }
             }
-        } while( pInsRing != ( pTmp = pTmp->GetNext()) );
+        } while( pInsRing.get() != ( pTmp = pTmp->GetNext()) );
         SwRedlineData aRedlnData( nsRedlineType_t::REDLINE_INSERT, nAuthor, aTimeStamp,
                                     OUString(), nullptr );
 
         // combine consecutive
-        if( pTmp->GetNext() != pInsRing )
+        if( pTmp->GetNext() != pInsRing.get() )
         {
             do {
                 SwPosition& rSttEnd = *pTmp->End(),
@@ -1730,12 +1730,12 @@ void CompareData::SetRedlinesToDoc( bool bUseDocInfo )
                     nullptr != ( pCNd = rSttEnd.nNode.GetNode().GetContentNode() ) &&
                     rSttEnd.nContent.GetIndex() == pCNd->Len()))
                 {
-                    if( pTmp->GetNext() == pInsRing )
+                    if( pTmp->GetNext() == pInsRing.get() )
                     {
                         // are consecutive, so combine
                         rEndStt = *pTmp->Start();
                         delete pTmp;
-                        pTmp = pInsRing;
+                        pTmp = pInsRing.get();
                     }
                     else
                     {
@@ -1746,7 +1746,7 @@ void CompareData::SetRedlinesToDoc( bool bUseDocInfo )
                 }
                 else
                     pTmp = pTmp->GetNext();
-            } while( pInsRing != pTmp );
+            } while( pInsRing.get() != pTmp );
         }
 
         do {
@@ -1758,7 +1758,7 @@ void CompareData::SetRedlinesToDoc( bool bUseDocInfo )
                 SwUndo *const pUndo(new SwUndoCompDoc( *pTmp, true ));
                 rDoc.GetIDocumentUndoRedo().AppendUndo(pUndo);
             }
-        } while( pInsRing != ( pTmp = pTmp->GetNext()) );
+        } while( pInsRing.get() != ( pTmp = pTmp->GetNext()) );
     }
 }
 
