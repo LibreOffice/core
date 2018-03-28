@@ -71,6 +71,7 @@ protected:
         SvStream* pStream = utl::UcbStreamHelper::CreateStream(
             m_directories.getURLFromSrc("/sw/qa/extras/rtfimport/data/") + aFilename,
             StreamMode::WRITE);
+        CPPUNIT_ASSERT_EQUAL(ERRCODE_NONE, pStream->GetError());
         uno::Reference<io::XStream> xStream(new utl::OStreamWrapper(*pStream));
         aDescriptor[0].Value <<= xStream;
         aDescriptor[1].Name = "InsertMode";
