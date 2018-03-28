@@ -21,6 +21,7 @@
 
 #include <IDocumentFieldsAccess.hxx>
 #include <sal/types.h>
+#include <memory>
 
 class SwDoc;
 class SwDBNameInfField;
@@ -97,8 +98,8 @@ private:
     SwDoc& m_rDoc;
 
     bool mbNewFieldLst; //< TRUE: Rebuild field-list.
-    SwDocUpdateField    *mpUpdateFields; //< Struct for updating fields
-    SwFieldTypes      *mpFieldTypes;
+    std::unique_ptr<SwDocUpdateField> mpUpdateFields; //< Struct for updating fields
+    std::unique_ptr<SwFieldTypes>     mpFieldTypes;
     sal_Int8    mnLockExpField;  //< If != 0 UpdateExpFields() has no effect!
 };
 
