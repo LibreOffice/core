@@ -205,7 +205,7 @@ private:
     svl::SharedStringPool& mrStrPool;
     formula::FormulaConstTokenRef  xResult;
     ScJumpMatrix*   pJumpMatrix;        // currently active array condition, if any
-    ScTokenMatrixMap* pTokenMatrixMap;  // map FormulaToken* to formula::FormulaTokenRef if in array condition
+    std::unique_ptr<ScTokenMatrixMap> pTokenMatrixMap;  // map FormulaToken* to formula::FormulaTokenRef if in array condition
     ScFormulaCell* pMyFormulaCell;      // the cell of this formula expression
     SvNumberFormatter* pFormatter;
 
@@ -1031,7 +1031,7 @@ inline bool ScInterpreter::MatrixParameterConversion()
 inline ScTokenMatrixMap& ScInterpreter::GetTokenMatrixMap()
 {
     if (!pTokenMatrixMap)
-        pTokenMatrixMap = CreateTokenMatrixMap();
+        pTokenMatrixMap.reset(CreateTokenMatrixMap());
     return *pTokenMatrixMap;
 }
 

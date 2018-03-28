@@ -3861,7 +3861,6 @@ ScInterpreter::~ScInterpreter()
         bGlobalStackInUse = false;
     else
         delete pStackObj;
-    delete pTokenMatrixMap;
 }
 
 ScCalcConfig& ScInterpreter::GetOrCreateGlobalConfig()
