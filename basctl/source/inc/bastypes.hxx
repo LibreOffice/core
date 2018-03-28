@@ -219,7 +219,7 @@ public:
     virtual svl::IUndoManager* GetUndoManager ();
 
     virtual SearchOptionFlags  GetSearchOptions();
-    virtual sal_uInt16  StartSearchAndReplace (SvxSearchItem const&, bool bFromStart = false);
+    virtual sal_uInt16  StartSearchAndReplace (SvxSearchItem const*, bool bFromStart = false);
 
     virtual void    BasicStarted();
     virtual void    BasicStopped();

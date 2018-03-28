@@ -44,7 +44,6 @@
 #include <svx/svxids.hrc>
 #include <svl/aeitem.hxx>
 #include <svl/intitem.hxx>
-#include <svl/srchitem.hxx>
 #include <svl/visitem.hxx>
 #include <svl/whiter.hxx>
 #include <vcl/xtextedt.hxx>
@@ -58,40 +57,53 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;
 
-void Shell::ExecuteCurrent( SfxRequest& rReq )
+void Shell::ExecuteSearch( SfxRequest& rReq )
 {
     if ( !pCurWin )
         return;
 
-    switch ( rReq.GetSlot() )
+    const SfxItemSet* pArgs = rReq.GetArgs();
+    sal_uInt16 nSlot = rReq.GetSlot();
+
+    switch ( nSlot )
     {
-        case SID_BASICIDE_HIDECURPAGE:
-        {
-            pCurWin->StoreData();
-            RemoveWindow( pCurWin, false );
-        }
-        break;
-        case SID_BASICIDE_RENAMECURRENT:
-        {
-            pTabBar->StartEditMode( pTabBar->GetCurPageId() );
-        }
-        break;
+        case SID_SEARCH_OPTIONS:
+            break;
+        case SID_SEARCH_ITEM:
+            delete maSearchItem;
+            maSearchItem = static_cast<SvxSearchItem*>( pArgs->Get(SID_SEARCH_ITEM).Clone() );
+            break;
+        case FID_SEARCH_ON:
+            mbJustOpened = true;
+            GetViewFrame()->GetBindings().Invalidate(SID_SEARCH_ITEM);
+            break;
+        case SID_BASICIDE_REPEAT_SEARCH:
         case FID_SEARCH_NOW:
         {
             if (!pCurWin->HasActiveEditor())
                 break;
-            DBG_ASSERT( rReq.GetArgs(), "arguments expected" );
-            SfxItemSet const& rArgs = *rReq.GetArgs();
-            // unfortunately I don't know the ID:
-            sal_uInt16 nWhich = rArgs.GetWhichByPos( 0 );
-            DBG_ASSERT( nWhich, "Which for SearchItem?" );
-            SfxPoolItem const& rItem = rArgs.Get(nWhich);
-            DBG_ASSERT(dynamic_cast<SvxSearchItem const*>(&rItem), "no searchitem!");
-            SvxSearchItem const& rSearchItem = static_cast<SvxSearchItem const&>(rItem);
+
+            // TODO: It does not work if REPEAT_SEARCH is done the first time
+            if ( nSlot == SID_BASICIDE_REPEAT_SEARCH )
+            {
+                if( !maSearchItem )
+                    maSearchItem = new SvxSearchItem( SID_SEARCH_ITEM );
+            }
+            else
+            {
+                // Get SearchItem from request
+                if ( pArgs )
+                {
+                    delete maSearchItem;
+                    maSearchItem = static_cast<SvxSearchItem*>( pArgs->Get( SID_SEARCH_ITEM ).Clone() );
+                }
+            }
+
             // memorize item because of the adjustments...
-            GetExtraData()->SetSearchItem(rSearchItem);
+            GetExtraData()->SetSearchItem( maSearchItem );
             sal_Int32 nFound = 0;
-            if (rSearchItem.GetCommand() == SvxSearchCmd::REPLACE_ALL)
+
+            if ( maSearchItem->GetCommand() == SvxSearchCmd::REPLACE_ALL )
             {
                 sal_uInt16 nActModWindows = 0;
                 for (auto const& window : aWindowTable)
@@ -116,11 +128,11 @@ void Shell::ExecuteCurrent( SfxRequest& rReq )
                     for (auto const& window : aWindowTable)
                     {
                         BaseWindow* pWin = window.second;
-                        nFound += pWin->StartSearchAndReplace(rSearchItem);
+                        nFound += pWin->StartSearchAndReplace( maSearchItem );
                     }
                 }
                 else
-                    nFound = pCurWin->StartSearchAndReplace(rSearchItem);
+                    nFound = pCurWin->StartSearchAndReplace( maSearchItem );
 
                 OUString aReplStr(IDEResId(RID_STR_SEARCHREPLACES));
                 aReplStr = aReplStr.replaceAll("XX", OUString::number(nFound));
@@ -133,8 +145,8 @@ void Shell::ExecuteCurrent( SfxRequest& rReq )
             else
             {
                 bool bCanceled = false;
-                nFound = pCurWin->StartSearchAndReplace(rSearchItem);
-                if ( !nFound && !rSearchItem.GetSelection() )
+                nFound = pCurWin->StartSearchAndReplace( maSearchItem );
+                if ( !nFound && !maSearchItem->GetSelection() )
                 {
                     // search other modules...
                     bool bChangeCurWindow = false;
@@ -176,7 +188,7 @@ void Shell::ExecuteCurrent( SfxRequest& rReq )
                             {
                                 if ( pCurWin )
                                     pWin->SetSizePixel( pCurWin->GetSizePixel() );
-                                nFound = pWin->StartSearchAndReplace(rSearchItem, true);
+                                nFound = pWin->StartSearchAndReplace( maSearchItem, true );
                             }
                             if ( nFound )
                             {
@@ -194,7 +206,7 @@ void Shell::ExecuteCurrent( SfxRequest& rReq )
                             pWin = nullptr;
                     }
                     if ( !nFound && bSearchedFromStart )
-                        nFound = pCurWin->StartSearchAndReplace(rSearchItem, true);
+                        nFound = pCurWin->StartSearchAndReplace( maSearchItem, true );
                     if ( bChangeCurWindow )
                         SetCurWindow( pWin, true );
                 }
@@ -208,6 +220,29 @@ void Shell::ExecuteCurrent( SfxRequest& rReq )
             }
 
             rReq.Done();
+            break;
+        }
+        default:
+            pCurWin->ExecuteCommand( rReq );
+    }
+}
+
+void Shell::ExecuteCurrent( SfxRequest& rReq )
+{
+    if ( !pCurWin )
+        return;
+
+    switch ( rReq.GetSlot() )
+    {
+        case SID_BASICIDE_HIDECURPAGE:
+        {
+            pCurWin->StoreData();
+            RemoveWindow( pCurWin, false );
+        }
+        break;
+        case SID_BASICIDE_RENAMECURRENT:
+        {
+            pTabBar->StartEditMode( pTabBar->GetCurPageId() );
         }
         break;
         case SID_UNDO:
@@ -869,7 +904,7 @@ void Shell::GetState(SfxItemSet &rSet)
             break;
             case SID_SEARCH_OPTIONS:
             {
-                SearchOptionFlags nOptions = SearchOptionFlags::NONE;
+                SearchOptionFlags nOptions = SearchOptionFlags::ALL;
                 if( pCurWin )
                     nOptions = pCurWin->GetSearchOptions();
                 rSet.Put( SfxUInt16Item( SID_SEARCH_OPTIONS, static_cast<sal_uInt16>(nOptions) ) );
@@ -889,10 +924,21 @@ void Shell::GetState(SfxItemSet &rSet)
             break;
             case SID_SEARCH_ITEM:
             {
-                OUString aSelected = GetSelectionText(true);
-                SvxSearchItem& rItem = GetExtraData()->GetSearchItem();
-                rItem.SetSearchString( aSelected );
-                rSet.Put( rItem );
+                if ( !maSearchItem )
+                {
+                    maSearchItem = new SvxSearchItem( SID_SEARCH_ITEM );
+                    maSearchItem->SetSearchString( GetSelectionText( true ));
+                }
+
+                // TODO: It does not work. The Find & Replace dialog take only first value
+                // from text. Following values don't arrive into dialog.
+                // Also dialog does not save list of used vallues.
+                if ( mbJustOpened )
+                {
+                    maSearchItem->SetSelection( true );
+                }
+
+                rSet.Put( *maSearchItem );
             }
             break;
             case SID_BASICIDE_STAT_DATE:
