@@ -1310,11 +1310,17 @@ void SwContentFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
     SwFrame const* pMoveBwdPre(nullptr);
     bool isMoveBwdPreValid(false);
 
+    SwRect aOldFrame_StopFormat, aOldFrame_StopFormat2;
+    SwRect aOldPrt_StopFormat, aOldPrt_StopFormat2;
+
     while ( !isFrameAreaPositionValid() || !isFrameAreaSizeValid() || !isFramePrintAreaValid() )
     {
         // - loop prevention
-        SwRect aOldFrame_StopFormat( getFrameArea() );
-        SwRect aOldPrt_StopFormat( getFramePrintArea() );
+        aOldFrame_StopFormat2 = aOldFrame_StopFormat;
+        aOldPrt_StopFormat2 = aOldPrt_StopFormat;
+        aOldFrame_StopFormat = getFrameArea();
+        aOldPrt_StopFormat = getFramePrintArea();
+
         bool bMoveable = IsMoveable();
         if (bMoveable)
         {
@@ -1581,8 +1587,8 @@ void SwContentFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
 
         // - loop prevention
         {
-            if ( aOldFrame_StopFormat == getFrameArea() &&
-                 aOldPrt_StopFormat == getFramePrintArea() )
+            if ( (aOldFrame_StopFormat == getFrameArea() || aOldFrame_StopFormat2 == getFrameArea() ) &&
+                 (aOldPrt_StopFormat == getFramePrintArea() || aOldPrt_StopFormat2 == getFramePrintArea()))
             {
                 ++nConsecutiveFormatsWithoutChange;
             }
