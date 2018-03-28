@@ -106,10 +106,13 @@
 #include <editeng/unolingu.hxx>
 #include <config_features.h>
 #include <sfx2/watermarkitem.hxx>
+#include <svtools/htmlout.hxx>
+#include <test/htmltesttools.hxx>
+#include <wrthtml.hxx>
 
 static const char* const DATA_DIRECTORY = "/sw/qa/extras/uiwriter/data/";
 
-class SwUiWriterTest : public SwModelTestBase
+class SwUiWriterTest : public SwModelTestBase, public HtmlTestTools
 {
 
 public:
@@ -251,6 +254,7 @@ public:
     void testCreateDocxAnnotation();
     void testTdf107976();
     void testTdf113790();
+    void testHtmlCopyImages();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest);
     CPPUNIT_TEST(testReplaceForward);
@@ -389,6 +393,7 @@ public:
     CPPUNIT_TEST(testCreateDocxAnnotation);
     CPPUNIT_TEST(testTdf107976);
     CPPUNIT_TEST(testTdf113790);
+    CPPUNIT_TEST(testHtmlCopyImages);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -4985,6 +4990,34 @@ void SwUiWriterTest::testTdf113790()
     // Save it as DOCX & load it again
     reload("Office Open XML Text", "tdf113790.docx");
     CPPUNIT_ASSERT(dynamic_cast<SwXTextDocument *>(mxComponent.get()));
+}
+
+void SwUiWriterTest::testHtmlCopyImages()
+{
+    // Load a document with an image.
+    SwDoc* pDoc = createDoc("image.odt");
+
+    // Trigger the copy part of HTML copy&paste.
+    WriterRef xWrt;
+    xWrt = new SwHTMLWriter( /*rBaseURL=*/OUString() );
+    CPPUNIT_ASSERT(xWrt.is());
+
+    xWrt->bWriteClipboardDoc = true;
+    xWrt->bWriteOnlyFirstTable = false;
+    xWrt->SetShowProgress(false);
+    {
+        SvFileStream aStream(maTempFile.GetURL(), StreamMode::WRITE|StreamMode::TRUNC);
+        SwWriter aWrt(aStream, *pDoc);
+        aWrt.Write(xWrt);
+    }
+    htmlDocPtr pHtmlDoc = parseHtml(maTempFile);
+    CPPUNIT_ASSERT(pHtmlDoc);
+
+    // This failed, image was lost during HTML copy.
+    OUString aImage = getXPath(pHtmlDoc, "/html/body/p/img", "src");
+    // Also make sure that the image is not embedded (e.g. Word doesn't handle
+    // embedded images).
+    CPPUNIT_ASSERT(aImage.startsWith("file:///"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest);

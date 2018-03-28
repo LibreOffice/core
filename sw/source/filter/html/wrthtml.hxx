@@ -60,6 +60,7 @@ class SwTextFootnote;
 enum class HtmlPosition;
 
 typedef std::vector<SwTextFootnote*> SwHTMLTextFootnotes;
+namespace utl { class TempFile; }
 
 extern SwAttrFnTab aHTMLAttrFnTab;
 
@@ -256,7 +257,7 @@ typedef std::set<std::unique_ptr<SwHTMLFormatInfo>,
 
 class IDocumentStylePoolAccess;
 
-class SwHTMLWriter : public Writer
+class SW_DLLPUBLIC SwHTMLWriter : public Writer
 {
     SwHTMLPosFlyFrames *m_pHTMLPosFlyFrames;
     std::unique_ptr<SwHTMLNumRuleInfo> m_pNumRuleInfo;// current numbering
@@ -390,6 +391,8 @@ public:
     /// If HTML header and footer should be written as well, or just the content itself.
     bool mbSkipHeaderFooter : 1;
     bool mbEmbedImages : 1;
+    /// Temporary base URL for paste of images.
+    std::unique_ptr<utl::TempFile> mpTempBaseURL;
     /// If XHTML markup should be written instead of HTML.
     bool mbXHTML = false;
     /// XML namespace, in case of XHTML.

@@ -1220,7 +1220,7 @@ Writer& OutHTML_Image( Writer& rWrt, const SwFrameFormat &rFrameFormat,
     }
 
     OUString aGraphicURL( rGraphicURL );
-    if( !rHTMLWrt.mbEmbedImages && !HTMLOutFuncs::PrivateURLToInternalImg(aGraphicURL) )
+    if( !rHTMLWrt.mbEmbedImages && !HTMLOutFuncs::PrivateURLToInternalImg(aGraphicURL) && !rHTMLWrt.mpTempBaseURL )
         aGraphicURL = URIHelper::simpleNormalizedMakeRelative( rWrt.GetBaseURL(), aGraphicURL);
 
     const SfxPoolItem* pItem;
@@ -1801,6 +1801,8 @@ static Writer& OutHTML_FrameFormatGrfNode( Writer& rWrt, const SwFrameFormat& rF
             // create a (mirrored) jpeg file
             if( rHTMLWrt.GetOrigFileName() )
                 aGraphicURL = *rHTMLWrt.GetOrigFileName();
+            else
+                aGraphicURL = rHTMLWrt.GetBaseURL();
             pGrfNd->GetGrf( true );
 
             XOutFlags nFlags = XOutFlags::UseGifIfSensible |
