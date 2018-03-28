@@ -1401,7 +1401,6 @@ oslSocketResult SAL_CALL osl_connectSocketTo(oslSocket pSocket,
     fd_set   ExcptSet;
     int      ReadyHandles;
     struct timeval  tv;
-    oslSocketResult Result= osl_Socket_Ok;
 
     SAL_WARN_IF( !pSocket, "sal.osl", "undefined socket" );
 
@@ -1490,13 +1489,19 @@ oslSocketResult SAL_CALL osl_connectSocketTo(oslSocket pSocket,
             nSockOpt = getsockopt ( pSocket->m_Socket, SOL_SOCKET, SO_ERROR,
                                     &nErrorCode, &nErrorSize );
             if ( (nSockOpt == 0) && (nErrorCode == 0))
-                Result = osl_Socket_Ok;
+            {
+                osl_enableNonBlockingMode(pSocket, false);
+                return osl_Socket_Ok;
+            }
             else
-                Result = osl_Socket_Error;
+            {
+                pSocket->m_nLastError = (nSockOpt == 0) ? nErrorCode : errno;
+                return osl_Socket_Error;
+            }
         }
         else
         {
-            Result= osl_Socket_Error;
+            return osl_Socket_Error;
         }
     }
     else if (ReadyHandles < 0)  /* error */
@@ -1508,17 +1513,13 @@ oslSocketResult SAL_CALL osl_connectSocketTo(oslSocket pSocket,
             return osl_Socket_Interrupted;
         }
         pSocket->m_nLastError=errno;
-        Result= osl_Socket_Error;
+        return osl_Socket_Error;
     }
     else    /* timeout */
     {
         pSocket->m_nLastError=errno;
-        Result= osl_Socket_TimedOut;
+        return osl_Socket_TimedOut;
     }
-
-    osl_enableNonBlockingMode(pSocket, false);
-
-    return Result;
 }
 
 oslSocket SAL_CALL osl_acceptConnectionOnSocket(oslSocket pSocket,
