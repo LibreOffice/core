@@ -115,12 +115,15 @@
 #include <sfx2/watermarkitem.hxx>
 #include <sfx2/fcontnr.hxx>
 #include <sfx2/docfile.hxx>
+#include <svtools/htmlout.hxx>
+#include <test/htmltesttools.hxx>
 #include <fmthdft.hxx>
 #include <iodetect.hxx>
+#include <wrthtml.hxx>
 
 static char const DATA_DIRECTORY[] = "/sw/qa/extras/uiwriter/data/";
 
-class SwUiWriterTest : public SwModelTestBase
+class SwUiWriterTest : public SwModelTestBase, public HtmlTestTools
 {
 
 public:
@@ -310,6 +313,7 @@ public:
     void testTdf115132();
     void testXDrawPagesSupplier();
     void testTdf116403();
+    void testHtmlCopyImages();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest);
     CPPUNIT_TEST(testReplaceForward);
@@ -496,6 +500,7 @@ public:
     CPPUNIT_TEST(testTdf115132);
     CPPUNIT_TEST(testXDrawPagesSupplier);
     CPPUNIT_TEST(testTdf116403);
+    CPPUNIT_TEST(testHtmlCopyImages);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -6096,6 +6101,34 @@ void SwUiWriterTest::testTdf116403()
     // This was still 17000, refreshing ToX didn't take borders spacings and widths into account
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Page borders must be considered for right-aligned tabstop",
         static_cast<sal_Int32>(17000 - 2 * 500 - 2 * 1), aTabs[0].Position);
+}
+
+void SwUiWriterTest::testHtmlCopyImages()
+{
+    // Load a document with an image.
+    SwDoc* pDoc = createDoc("image.odt");
+
+    // Trigger the copy part of HTML copy&paste.
+    WriterRef xWrt;
+    xWrt = new SwHTMLWriter( /*rBaseURL=*/OUString() );
+    CPPUNIT_ASSERT(xWrt.is());
+
+    xWrt->bWriteClipboardDoc = true;
+    xWrt->bWriteOnlyFirstTable = false;
+    xWrt->SetShowProgress(false);
+    {
+        SvFileStream aStream(maTempFile.GetURL(), StreamMode::WRITE|StreamMode::TRUNC);
+        SwWriter aWrt(aStream, *pDoc);
+        aWrt.Write(xWrt);
+    }
+    htmlDocPtr pHtmlDoc = parseHtml(maTempFile);
+    CPPUNIT_ASSERT(pHtmlDoc);
+
+    // This failed, image was lost during HTML copy.
+    OUString aImage = getXPath(pHtmlDoc, "/html/body/p/img", "src");
+    // Also make sure that the image is not embedded (e.g. Word doesn't handle
+    // embedded images).
+    CPPUNIT_ASSERT(aImage.startsWith("file:///"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest);
