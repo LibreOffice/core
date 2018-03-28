@@ -100,9 +100,6 @@ void ScPivotLayoutTreeListBase::PushEntriesToPivotFieldVector(ScPivotFieldVector
 void ScPivotLayoutTreeListBase::InsertEntryForSourceTarget(SvTreeListEntry* /*pSource*/, SvTreeListEntry* /*pTarget*/)
 {}
 
-void ScPivotLayoutTreeListBase::InsertEntryForItem(ScItemValue* /*pItemValue*/, sal_uLong /*nPosition*/)
-{}
-
 void ScPivotLayoutTreeListBase::RemoveEntryForItem(const ScItemValue* pItemValue)
 {
     SvTreeListEntry* pEachEntry;

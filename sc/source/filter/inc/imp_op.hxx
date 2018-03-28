@@ -51,8 +51,6 @@ protected:
 public:
                         ImportTyp( ScDocument*, rtl_TextEncoding eSrc );
     virtual             ~ImportTyp();
-
-    virtual ErrCode     Read();
 };
 
 class XclImpOutlineDataBuffer : protected XclImpRoot
@@ -201,7 +199,7 @@ public:
 
     virtual                 ~ImportExcel() override;
 
-    virtual ErrCode         Read() override;
+    virtual ErrCode         Read();
 };
 
 #endif

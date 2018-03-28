@@ -45,7 +45,7 @@ public:
         used by the currently selected page of the document in the
         center pane.
     */
-    virtual void UpdateSelection() override;
+    virtual void UpdateSelection();
 
     /** Copy all master pages that are to be shown into the given list.
     */

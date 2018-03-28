@@ -112,13 +112,8 @@ public:
     /// When Mix, it will be called
     virtual std::string GenStringSlidingWindowDeclRef( bool = false ) const;
 
-    virtual bool IsMixedArgument() const;
-
     /// Generate use/references to the argument
     virtual void GenDeclRef( std::stringstream& ss ) const;
-    virtual void GenNumDeclRef( std::stringstream& ss ) const;
-
-    virtual void GenStringDeclRef( std::stringstream& ss ) const;
 
     virtual void GenSlidingWindowFunction( std::stringstream& );
     formula::FormulaToken* GetFormulaToken() const;

@@ -464,10 +464,6 @@ void MasterPagesSelector::SetUserData (int nIndex, UserData* pData)
     }
 }
 
-void MasterPagesSelector::UpdateSelection()
-{
-}
-
 void MasterPagesSelector::SetItem (
     sal_uInt16 nIndex,
     MasterPageContainer::Token aToken)

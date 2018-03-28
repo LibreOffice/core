@@ -70,20 +70,6 @@ public:
 
     sal_Int32 GetPreferredHeight (sal_Int32 nWidth);
 
-    /** Update the selection of previews according to whatever
-        influences them apart from mouse and keyboard.  If, for
-        example, the current page of the main pane changes, then call
-        this method at the CurrentMasterPagesSelector to select the
-        previews of the master pages that are assigned to the new
-        current page.
-
-        The default implementation of this method ignores the call. This is
-        used by e.g. the RecentMasterPagesSelector because it does not show
-        the currently used master pages by default and thus is not
-        influenced by its changes.
-    */
-    virtual void UpdateSelection();
-
     /** Make the selector empty.  This method clear the value set from any
         entries. Override this method to add functionality, especially to
         destroy objects set as data items at the value set.
