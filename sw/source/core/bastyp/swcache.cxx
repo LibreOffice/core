@@ -495,9 +495,4 @@ void SwCacheAccess::Get_()
     }
 }
 
-bool SwCacheAccess::IsAvailable() const
-{
-    return m_pObj != nullptr;
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

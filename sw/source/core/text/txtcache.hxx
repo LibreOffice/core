@@ -54,7 +54,7 @@ public:
 
     SwParaPortion *GetPara();
 
-    virtual bool IsAvailable() const override;
+    bool IsAvailable() const;
 };
 
 #endif

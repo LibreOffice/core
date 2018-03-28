@@ -1834,7 +1834,7 @@ void SwTextFrame::Format( vcl::RenderContext* pRenderContext, const SwBorderAttr
         // We do not want to be interrupted during formatting
         TextFrameLockGuard aLock(this);
         SwTextLineAccess aAccess( this );
-        const bool bNew = !aAccess.SwTextLineAccess::IsAvailable();
+        const bool bNew = !aAccess.IsAvailable();
         const bool bSetOfst =
             (GetOfst() && GetOfst() > GetTextNode()->GetText().getLength());
 

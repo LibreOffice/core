@@ -1374,10 +1374,6 @@ SwContentNode *SwContentNode::JoinNext()
     return this;
 }
 
-void SwContentNode::JoinPrev()
-{
-}
-
 /// Get info from Modify
 bool SwContentNode::GetInfo( SfxPoolItem& rInfo ) const
 {

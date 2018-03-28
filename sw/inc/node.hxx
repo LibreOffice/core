@@ -383,7 +383,6 @@ public:
     virtual SwContentNode *SplitContentNode(const SwPosition & ) = 0;
 
     virtual SwContentNode *JoinNext();
-    virtual void           JoinPrev();
     /** Is it possible to join two nodes?
        In pIdx the second position can be returned. */
     bool CanJoinNext( SwNodeIndex* pIdx =nullptr ) const;
