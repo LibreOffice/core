@@ -80,12 +80,6 @@ namespace sdr
             ClearObjectItem(nWhich);
         }
 
-        void BaseProperties::Scale(const Fraction& /*rScale*/)
-        {
-            // default implementation does nothing; override where
-            // an ItemSet is implemented.
-        }
-
         void BaseProperties::MoveToItemPool(SfxItemPool* /*pSrcPool*/, SfxItemPool* /*pDestPool*/, SdrModel* /*pNewModel*/)
         {
             // Move properties to a new ItemPool. Default implementation does nothing.

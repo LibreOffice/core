@@ -141,10 +141,6 @@ namespace sdr
             // Get the installed StyleSheet.
             virtual SfxStyleSheet* GetStyleSheet() const = 0;
 
-            // Scale the local ItemSet as far as it contains metric items.
-            // Override this to do it for hierarchical objects like e.g. groups.
-            virtual void Scale(const Fraction& rScale);
-
             // Move local items to a new ItemPool.
             // Override this to do it for hierarchical objects like e.g. groups.
             virtual void MoveToItemPool(SfxItemPool* pSrcPool, SfxItemPool* pDestPool, SdrModel* pNewModel);

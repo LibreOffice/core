@@ -88,8 +88,6 @@ public:
     SdrObjList(SdrModel* pNewModel, SdrPage* pNewPage);
     virtual ~SdrObjList();
 
-    virtual SdrObjList* Clone() const;
-
     void CopyObjects(const SdrObjList& rSrcList);
     /// clean up everything (without Undo)
     void    Clear();
@@ -428,7 +426,7 @@ protected:
 public:
     explicit SdrPage(SdrModel& rNewModel, bool bMasterPage=false);
     virtual ~SdrPage() override;
-    virtual SdrPage* Clone() const override;
+    virtual SdrPage* Clone() const;
     virtual SdrPage* Clone(SdrModel* pNewModel) const;
     bool             IsMasterPage() const       { return mbMaster; }
     void             SetInserted(bool bNew = true);

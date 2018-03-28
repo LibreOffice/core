@@ -256,9 +256,6 @@ public:
     // Info about TextEdit. Default is sal_False.
     virtual bool IsTextEdit() const;
 
-    // Info about TextEditPageView. Default is 0L.
-    virtual SdrPageView* GetTextEditPageView() const;
-
     // Must be called for every Window change as well as MapMode (Scaling) change:
     // If the SdrView is shown in multiple windows at the same time (e.g.
     // using the split pane), so that I can convert my pixel values to logical

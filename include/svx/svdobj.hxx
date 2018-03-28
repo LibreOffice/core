@@ -624,10 +624,6 @@ public:
 
     virtual bool HasTextEdit() const;
 
-    // returns true if TextEditMode started
-    virtual bool BegTextEdit(SdrOutliner& rOutl);
-    virtual void EndTextEdit(SdrOutliner& rOutl);
-
     // keep text in outliner's format
     // SetOutlinerParaObject: transfer ownership of *pTextObject!
     void SetOutlinerParaObject(OutlinerParaObject* pTextObject);
