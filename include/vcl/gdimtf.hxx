@@ -38,7 +38,7 @@ namespace tools {
     class PolyPolygon;
 }
 class Gradient;
-
+struct ImplMetaReadData;
 
 #define GDI_METAFILE_END                (size_t(0xFFFFFFFF))
 
@@ -51,6 +51,9 @@ enum class MtfConversion
 
 typedef Color (*ColorExchangeFnc)( const Color& rColor, const void* pColParam );
 typedef BitmapEx (*BmpExchangeFnc)( const BitmapEx& rBmpEx, const void* pBmpParam );
+
+VCL_DLLPUBLIC SvStream& ReadGDIMetaFile(SvStream& rIStm, GDIMetaFile& rGDIMetaFile, ImplMetaReadData* pReadData = nullptr);
+VCL_DLLPUBLIC SvStream& WriteGDIMetaFile( SvStream& rOStm, const GDIMetaFile& rGDIMetaFile );
 
 class VCL_DLLPUBLIC GDIMetaFile final
 {
@@ -185,8 +188,8 @@ public:
 
     // Stream-operators write (still) the old format
     // and read both the old and the new format
-    friend VCL_DLLPUBLIC SvStream& ReadGDIMetaFile( SvStream& rIStm, GDIMetaFile& rGDIMetaFile );
-    friend VCL_DLLPUBLIC SvStream& WriteGDIMetaFile( SvStream& rOStm, const GDIMetaFile& rGDIMetaFile );
+    friend VCL_DLLPUBLIC SvStream& ReadGDIMetaFile(SvStream& rIStm, GDIMetaFile& rGDIMetaFile, ImplMetaReadData* pReadData);
+    friend VCL_DLLPUBLIC SvStream& WriteGDIMetaFile(SvStream& rOStm, const GDIMetaFile& rGDIMetaFile);
 
     /// Creates an antialiased thumbnail
     bool            CreateThumbnail(BitmapEx& rBitmapEx,
