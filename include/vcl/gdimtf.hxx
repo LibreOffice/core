@@ -38,7 +38,7 @@ namespace tools {
     class PolyPolygon;
 }
 class Gradient;
-
+struct ImplMetaReadData;
 
 #define GDI_METAFILE_END                ((size_t)0xFFFFFFFF)
 #define GDI_METAFILE_LABEL_NOTFOUND     ((size_t)0xFFFFFFFF)
@@ -187,7 +187,7 @@ public:
 
     // Stream-operators write (still) the old format
     // and read both the old and the new format
-    friend VCL_DLLPUBLIC SvStream& ReadGDIMetaFile( SvStream& rIStm, GDIMetaFile& rGDIMetaFile );
+    friend VCL_DLLPUBLIC SvStream& ReadGDIMetaFile(SvStream& rIStm, GDIMetaFile& rGDIMetaFile, ImplMetaReadData* pReadData = nullptr);
     friend VCL_DLLPUBLIC SvStream& WriteGDIMetaFile( SvStream& rOStm, const GDIMetaFile& rGDIMetaFile );
 
     /// Creates an antialiased thumbnail
