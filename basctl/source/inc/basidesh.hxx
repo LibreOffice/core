@@ -104,7 +104,7 @@ private:
     static unsigned nShellCount;
 
 private:
-    virtual void        AdjustPosSizePixel( const Point &rPos, const Size &rSize ) override;
+    void                AdjustPosSizePixel( const Point &rPos, const Size &rSize );
     virtual void        OuterResizePixel( const Point &rPos, const Size &rSize ) override;
     sal_uInt16          InsertWindowInTable (BaseWindow* pNewWin);
     virtual bool        PrepareClose( bool bUI = true ) override;

@@ -332,11 +332,6 @@ public:
                                     const css::uno::Reference< css::embed::XStorage >& xStorage );
     virtual void                UpdateLinks();
     virtual bool                LoadExternal( SfxMedium& rMedium );
-    /**
-     * Called when the Options dialog is dismissed with the OK button, to
-     * handle potentially conflicting option settings.
-     */
-    virtual void                CheckConfigOptions();
     bool                        IsConfigOptionsChecked() const;
     void                        SetConfigOptionsChecked( bool bChecked );
 

@@ -858,16 +858,6 @@ void SfxViewShell::Deactivate(bool /*bMDI*/)
 }
 
 
-void SfxViewShell::AdjustPosSizePixel
-(
-    const Point&    /*rToolOffset*/,// Upper left corner Tools in Frame-Window
-    const Size&     /*rSize*/       // All available sizes.
-)
-
-{
-}
-
-
 void SfxViewShell::Move()
 
 /*  [Description]

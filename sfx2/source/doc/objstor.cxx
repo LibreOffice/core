@@ -3521,12 +3521,6 @@ bool SfxObjectShell::InsertGeneratedStream(SfxMedium&,
     return false;
 }
 
-void SfxObjectShell::CheckConfigOptions()
-{
-    // not handled.  Each app's shell needs to overwrite this method to add handler.
-    SetConfigOptionsChecked(true);
-}
-
 bool SfxObjectShell::IsConfigOptionsChecked() const
 {
     return pImpl->m_bConfigOptionsChecked;
