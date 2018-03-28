@@ -129,12 +129,6 @@ protected:
     virtual void notifyResultListener() const
         {};
 
-    /*
-     * checks whether everything is ready.
-     * Any derived class will implement this method respectively.
-     */
-    virtual bool checkReady() const { return true; };
-
 public:
     /* XReferenceResolvedListener */
     virtual void SAL_CALL referenceResolved( sal_Int32 referenceId ) override;

@@ -90,7 +90,7 @@ protected:
 
     virtual void tryToPerform( ) override;
     virtual void clearUp( ) const override;
-    virtual bool checkReady() const override;
+    bool checkReady() const;
 
     /*
      * starts the main function. This method will be implemented by any sub-class.
