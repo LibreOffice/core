@@ -79,18 +79,21 @@ private:
     std::string toString(SourceLocation loc);
 };
 
-std::string niceName(const CXXMethodDecl* functionDecl)
+std::string niceName(const CXXMethodDecl* cxxMethodDecl)
 {
-    std::string s =
-           functionDecl->getParent()->getQualifiedNameAsString() + "::"
-           + functionDecl->getReturnType().getAsString() + "-"
-           + functionDecl->getNameAsString() + "(";
-    for (const ParmVarDecl *pParmVarDecl : compat::parameters(*functionDecl)) {
-        s += pParmVarDecl->getType().getAsString();
+    while (cxxMethodDecl->getTemplateInstantiationPattern())
+        cxxMethodDecl = dyn_cast<CXXMethodDecl>(cxxMethodDecl->getTemplateInstantiationPattern());
+    while (cxxMethodDecl->getInstantiatedFromMemberFunction())
+        cxxMethodDecl = dyn_cast<CXXMethodDecl>(cxxMethodDecl->getInstantiatedFromMemberFunction());
+    // return type not necessary, since we cannot have two otherwise identical functions
+    // with different return types
+    std::string s = cxxMethodDecl->getQualifiedNameAsString() + "(";
+    for (const ParmVarDecl *pParmVarDecl : compat::parameters(*cxxMethodDecl)) {
+        s += pParmVarDecl->getType().getCanonicalType().getAsString();
         s += ",";
     }
     s += ")";
-    if (functionDecl->isConst()) {
+    if (cxxMethodDecl->isConst()) {
         s += "const";
     }
     return s;
