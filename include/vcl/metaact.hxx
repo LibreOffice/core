@@ -43,9 +43,11 @@ enum class DrawTextFlags;
 struct ImplMetaReadData
 {
     rtl_TextEncoding meActualCharSet;
+    int mnParseDepth;
 
-    ImplMetaReadData() :
-        meActualCharSet( RTL_TEXTENCODING_ASCII_US )
+    ImplMetaReadData()
+        : meActualCharSet(RTL_TEXTENCODING_ASCII_US)
+        , mnParseDepth(0)
     {}
 };
 
