@@ -35,3 +35,14 @@ def DefineNamedRange(sheet, x0, y0, width, height, name):
     position.Row = 0
     model.NamedRanges.addNewByName(name, content, position, 0)
     return None
+
+def DeleteNamedRange(name):
+    try:
+        desktop = XSCRIPTCONTEXT.getDesktop()
+        model = desktop.getCurrentComponent()
+        model.NamedRanges.removeByName(name)
+    except Exception as e:
+        print("Caught Exception: " + str(e))
+        tb = e.__traceback__
+        traceback.print_tb(tb)
+    return None
