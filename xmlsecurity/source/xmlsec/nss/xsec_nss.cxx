@@ -26,7 +26,6 @@
 
 #include "seinitializer_nssimpl.hxx"
 #include <xsec_xmlsec.hxx>
-#include "securityenvironment_nssimpl.hxx"
 
 using namespace ::cppu;
 using namespace ::com::sun::star::uno;
@@ -50,10 +49,6 @@ void* nss_component_getFactory( const sal_Char* pImplName , void* pServiceManage
                 static_cast< XMultiServiceFactory * >( pServiceManager ),
                 OUString::createFromAscii( pImplName ),
                 SEInitializer_NssImpl_createInstance, SEInitializer_NssImpl_getSupportedServiceNames() ) );
-        }
-        else if( SecurityEnvironment_NssImpl::impl_getImplementationName().equalsAscii( pImplName ) )
-        {
-            xFactory = SecurityEnvironment_NssImpl::impl_createFactory( static_cast< XMultiServiceFactory* >( pServiceManager ) ) ;
         }
 #else
         if( ONSSInitializer_getImplementationName().equalsAscii( pImplName ) )

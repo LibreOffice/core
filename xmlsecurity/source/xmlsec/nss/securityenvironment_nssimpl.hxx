@@ -79,18 +79,6 @@ private:
 
         virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override ;
 
-        //Helper for XServiceInfo
-        static css::uno::Sequence< OUString > impl_getSupportedServiceNames() ;
-
-        /// @throws css::uno::RuntimeException
-        static OUString impl_getImplementationName() ;
-
-        //Helper for registry
-        /// @throws css::uno::RuntimeException
-        static css::uno::Reference< css::uno::XInterface > SAL_CALL impl_createInstance( const css::uno::Reference< css::lang::XMultiServiceFactory >& aServiceManager ) ;
-
-        static css::uno::Reference< css::lang::XSingleServiceFactory > impl_createFactory( const css::uno::Reference< css::lang::XMultiServiceFactory >& aServiceManager ) ;
-
         virtual ::sal_Int32 SAL_CALL verifyCertificate(
             const css::uno::Reference<
             css::security::XCertificate >& xCert,

@@ -106,7 +106,6 @@ char* GetPasswordFunction( PK11SlotInfo* pSlot, PRBool bRetry, void* /*arg*/ )
 
 SecurityEnvironment_NssImpl::SecurityEnvironment_NssImpl() :
 m_pHandler( nullptr ) , m_tSymKeyList() , m_tPubKeyList() , m_tPriKeyList() {
-
     PK11_SetPasswordFunc( GetPasswordFunction ) ;
 }
 
@@ -143,7 +142,7 @@ SecurityEnvironment_NssImpl::~SecurityEnvironment_NssImpl() {
 
 /* XServiceInfo */
 OUString SAL_CALL SecurityEnvironment_NssImpl::getImplementationName() {
-    return impl_getImplementationName() ;
+    return OUString("com.sun.star.xml.crypto.SecurityEnvironment");
 }
 
 /* XServiceInfo */
@@ -159,27 +158,8 @@ sal_Bool SAL_CALL SecurityEnvironment_NssImpl::supportsService( const OUString& 
 
 /* XServiceInfo */
 Sequence< OUString > SAL_CALL SecurityEnvironment_NssImpl::getSupportedServiceNames() {
-    return impl_getSupportedServiceNames() ;
-}
-
-//Helper for XServiceInfo
-Sequence< OUString > SecurityEnvironment_NssImpl::impl_getSupportedServiceNames() {
-    ::osl::Guard< ::osl::Mutex > aGuard( ::osl::Mutex::getGlobalMutex() ) ;
-    Sequence<OUString> seqServiceNames { "com.sun.star.xml.crypto.SecurityEnvironment" };
-    return seqServiceNames ;
-}
-
-OUString SecurityEnvironment_NssImpl::impl_getImplementationName() {
-    return OUString("com.sun.star.xml.security.bridge.xmlsec.SecurityEnvironment_NssImpl") ;
-}
-
-//Helper for registry
-Reference< XInterface > SAL_CALL SecurityEnvironment_NssImpl::impl_createInstance( const Reference< XMultiServiceFactory >& ) {
-    return Reference< XInterface >( *new SecurityEnvironment_NssImpl ) ;
-}
-
-Reference< XSingleServiceFactory > SecurityEnvironment_NssImpl::impl_createFactory( const Reference< XMultiServiceFactory >& aServiceManager ) {
-    return ::cppu::createSingleFactory( aServiceManager , impl_getImplementationName() , impl_createInstance , impl_getSupportedServiceNames() ) ;
+    Sequence<OUString> seqServiceNames{ "com.sun.star.xml.crypto.SecurityEnvironment" };
+    return seqServiceNames;
 }
 
 /* XUnoTunnel */
@@ -959,6 +939,13 @@ void SecurityEnvironment_NssImpl::destroyKeysManager(xmlSecKeysMngrPtr pKeysMngr
     if( pKeysMngr != nullptr ) {
         xmlSecKeysMngrDestroy( pKeysMngr ) ;
     }
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
+com_sun_star_xml_crypto_SecurityEnvironment_get_implementation(
+    uno::XComponentContext* /*pCtx*/, uno::Sequence<uno::Any> const& /*rSeq*/)
+{
+    return cppu::acquire(new SecurityEnvironment_NssImpl);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
