@@ -34,8 +34,6 @@ namespace basctl
 
 class ExtraData final
 {
-    std::unique_ptr<SvxSearchItem> pSearchItem;
-
     LibInfo        aLibInfo;
 
     EntryDescriptor m_aLastEntryDesc;
@@ -59,9 +57,6 @@ public:
 
     bool&             ChoosingMacro()          { return bChoosingMacro; }
     bool&             ShellInCriticalSection() { return bShellInCriticalSection; }
-
-    SvxSearchItem&    GetSearchItem() const { return *pSearchItem; }
-    void              SetSearchItem( const SvxSearchItem& rItem );
 
     const OUString&   GetAddLibPath() const   { return aAddLibPath; }
     void              SetAddLibPath( const OUString& rPath ) { aAddLibPath = rPath; }
