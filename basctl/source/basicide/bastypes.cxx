@@ -205,7 +205,7 @@ SearchOptionFlags BaseWindow::GetSearchOptions()
     return SearchOptionFlags::NONE;
 }
 
-sal_uInt16 BaseWindow::StartSearchAndReplace (SvxSearchItem const&, bool)
+sal_uInt16 BaseWindow::StartSearchAndReplace (SvxSearchItem const*, bool)
 {
     return 0;
 }
