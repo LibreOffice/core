@@ -870,6 +870,7 @@ guide-distance
 guide-overhang
 h
 hanging
+has-direct-formatting
 has-persistent-data
 hatch
 HATCH_DISTANCE_DUMMY
