@@ -47,7 +47,7 @@ public:
                                     OUString &rText, const IntlWrapper& ) const override;
 
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
-    virtual OUString        GetValueTextByPos( sal_uInt16 nPos ) const override;
+    virtual OUString        GetValueTextByPos( sal_uInt16 nPos ) const;
     virtual sal_uInt16      GetValueCount() const override;
 
     SvxCaseMapItem& operator=(const SvxCaseMapItem& rMap)

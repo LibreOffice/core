@@ -524,7 +524,6 @@ public:
     virtual bool set_property(const OString &rKey, const OUString &rValue) override;
 
 protected:
-    using SvListView::SelectAll;
 
     SVT_DLLPRIVATE void         SetEntryHeight( SvTreeListEntry const * pEntry );
     SVT_DLLPRIVATE void         AdjustEntryHeight( const Image& rBmp );
@@ -721,7 +720,7 @@ public:
     virtual bool    Collapse( SvTreeListEntry* pParent );
     virtual bool    Select( SvTreeListEntry* pEntry, bool bSelect=true );
     sal_uLong       SelectChildren( SvTreeListEntry* pParent, bool bSelect );
-    virtual void    SelectAll( bool bSelect, bool bPaint = true ) override;
+    virtual void    SelectAll( bool bSelect, bool bPaint = true );
 
     void SetCurEntry( SvTreeListEntry* _pEntry );
     SvTreeListEntry* GetCurEntry() const;

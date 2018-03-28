@@ -42,7 +42,7 @@ public:
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
     virtual sal_uInt16      GetVersion( sal_uInt16 nFileVersion ) const override;
 
-    virtual OUString        GetValueTextByPos( sal_uInt16 nPos ) const override;
+    virtual OUString        GetValueTextByPos( sal_uInt16 nPos ) const;
     virtual sal_uInt16      GetValueCount() const override;
 
     virtual bool GetPresentation( SfxItemPresentation ePres,
