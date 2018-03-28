@@ -325,7 +325,7 @@ public:
                                int nTilePosX, int nTilePosY,
                                long nTileWidth, long nTileHeight );
 
-    /// @see OutputDevice::LogicInvalidate().
+    /// @see Window::LogicInvalidate().
     void LogicInvalidate(const tools::Rectangle* pRectangle) override;
 
     /// Update the cell selection according to what handles have been dragged.

@@ -1074,7 +1074,12 @@ public:
     virtual void                        Invalidate( InvalidateFlags nFlags = InvalidateFlags::NONE );
     virtual void                        Invalidate( const tools::Rectangle& rRect, InvalidateFlags nFlags = InvalidateFlags::NONE );
     virtual void                        Invalidate( const vcl::Region& rRegion, InvalidateFlags nFlags = InvalidateFlags::NONE );
-    virtual void                        LogicInvalidate(const tools::Rectangle* pRectangle) override;
+    /**
+     * Notification about some rectangle of the output device got invalidated.
+     *
+     * @param pRectangle If 0, that means the whole area, otherwise the area in logic coordinates.
+     */
+    virtual void                        LogicInvalidate(const tools::Rectangle* pRectangle);
     void                                Validate();
     bool                                HasPaintEvent() const;
     void                                Update();

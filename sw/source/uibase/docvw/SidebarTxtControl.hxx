@@ -41,7 +41,7 @@ class SidebarTextControl : public Control
 
     protected:
         virtual void    Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
-        /// @see OutputDevice::LogicInvalidate().
+        /// @see Window::LogicInvalidate().
         void LogicInvalidate(const tools::Rectangle* pRectangle) override;
         virtual void    Command( const CommandEvent& rCEvt ) override;
         virtual void    LoseFocus() override;

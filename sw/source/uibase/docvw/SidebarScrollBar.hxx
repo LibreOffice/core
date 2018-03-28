@@ -34,7 +34,7 @@ class SidebarScrollBar : public ScrollBar
     SwView& m_rView;
 
 protected:
-    /// @see OutputDevice::LogicInvalidate().
+    /// @see Window::LogicInvalidate().
     void LogicInvalidate(const tools::Rectangle* pRectangle) override;
     void MouseMove(const MouseEvent& rMouseEvent) override;
     void MouseButtonUp(const MouseEvent& rMouseEvent) override;
