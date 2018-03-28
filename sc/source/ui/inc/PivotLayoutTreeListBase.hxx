@@ -61,8 +61,6 @@ public:
 
 protected:
     virtual void InsertEntryForSourceTarget(SvTreeListEntry* pSource, SvTreeListEntry* pTarget);
-
-    virtual void InsertEntryForItem(ScItemValue* pItemValue, sal_uLong nPosition);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

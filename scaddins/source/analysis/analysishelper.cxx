@@ -2254,12 +2254,6 @@ double ConvertData::Convert(
 }
 
 
-double ConvertData::ConvertToBase( double f, sal_Int16 n ) const
-{
-    return ::rtl::math::pow10Exp( f / fConst, n );
-}
-
-
 double ConvertData::ConvertFromBase( double f, sal_Int16 n ) const
 {
     return ::rtl::math::pow10Exp( f * fConst, -n );

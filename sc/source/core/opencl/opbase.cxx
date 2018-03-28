@@ -47,25 +47,10 @@ std::string DynamicKernelArgument::GenStringSlidingWindowDeclRef( bool ) const
     return std::string("");
 }
 
-bool DynamicKernelArgument::IsMixedArgument() const
-{
-    return false;
-}
-
 /// Generate use/references to the argument
 void DynamicKernelArgument::GenDeclRef( std::stringstream& ss ) const
 {
     ss << mSymName;
-}
-
-void DynamicKernelArgument::GenNumDeclRef( std::stringstream& ss ) const
-{
-    ss << ",";
-}
-
-void DynamicKernelArgument::GenStringDeclRef( std::stringstream& ss ) const
-{
-    ss << ",";
 }
 
 void DynamicKernelArgument::GenSlidingWindowFunction( std::stringstream& ) {}

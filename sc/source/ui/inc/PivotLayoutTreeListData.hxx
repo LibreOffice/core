@@ -27,7 +27,7 @@ public:
 
 private:
     virtual void InsertEntryForSourceTarget(SvTreeListEntry* pSource, SvTreeListEntry* pTarget) override;
-    virtual void InsertEntryForItem(ScItemValue* pItemValue, sal_uLong nPosition) override;
+    void InsertEntryForItem(ScItemValue* pItemValue, sal_uLong nPosition);
 
     void AdjustDuplicateCount(ScItemValue* pInputItemValue);
 

@@ -546,10 +546,6 @@ public:
     /// @throws css::lang::IllegalArgumentException
     virtual double          Convert( double fVal, const ConvertData& rTo,
                                 sal_Int16 nMatchLevelFrom, sal_Int16 nMatchLevelTo ) const;
-                                    // converts fVal from this unit to rFrom unit
-                                    // throws exception if not from same class
-                                    // this implementation is for proportional cases only
-    virtual double          ConvertToBase( double fVal, sal_Int16 nMatchLevel ) const;
     virtual double          ConvertFromBase( double fVal, sal_Int16 nMatchLevel ) const;
 
     inline ConvertDataClass Class() const;
@@ -572,7 +568,10 @@ public:
                                 sal_Int16 nMatchLevelFrom, sal_Int16 nMatchLevelTo ) const override;
                                     // for cases where f(x) = a + bx applies (e.g. Temperatures)
 
-    virtual double          ConvertToBase( double fVal, sal_Int16 nMatchLevel ) const override;
+                            // converts fVal from this unit to rFrom unit
+                            // throws exception if not from same class
+                           // this implementation is for proportional cases only
+    virtual double          ConvertToBase( double fVal, sal_Int16 nMatchLevel ) const;
     virtual double          ConvertFromBase( double fVal, sal_Int16 nMatchLevel ) const override;
 };
 

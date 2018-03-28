@@ -99,11 +99,6 @@ ImportTyp::~ImportTyp()
 {
 }
 
-ErrCode ImportTyp::Read()
-{
-    return SCERR_IMPORT_INTERNAL;
-}
-
 ImportExcel::ImportExcel( XclImpRootData& rImpData, SvStream& rStrm ):
     ImportTyp( &rImpData.mrDoc, rImpData.meTextEnc ),
     XclImpRoot( rImpData ),
