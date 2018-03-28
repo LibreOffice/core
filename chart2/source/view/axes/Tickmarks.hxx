@@ -130,7 +130,7 @@ public:
     /**
      * Determine the screen positions of all ticks based on their numeric values.
      */
-    virtual void updateScreenValues( TickInfoArraysType& rAllTickInfos ) const;
+    void updateScreenValues( TickInfoArraysType& rAllTickInfos ) const;
 
     bool  isHorizontalAxis() const;
     bool  isVerticalAxis() const;

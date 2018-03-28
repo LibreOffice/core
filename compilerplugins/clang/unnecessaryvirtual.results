@@ -1,431 +1,341 @@
-basctl/source/basicide/baside2.hxx:372
-    basctl::ModulWindow::_Bool-IsPasteAllowed()
-basctl/source/inc/baside3.hxx:104
-    basctl::DialogWindow::_Bool-IsPasteAllowed()
-basic/source/comp/codegen.cxx:387
-    PCodeVisitor::void-~PCodeVisitor<T>()
+accessibility/inc/standard/accessiblemenuitemcomponent.hxx:41
+    void OAccessibleMenuItemComponent::Select()
+accessibility/inc/standard/accessiblemenuitemcomponent.hxx:42
+    void OAccessibleMenuItemComponent::DeSelect()
 basic/source/comp/codegen.cxx:464
-    OffSetAccumulator::void-start(const sal_uInt8 *,)
+    void OffSetAccumulator::start(const unsigned char *,)
 basic/source/comp/codegen.cxx:465
-    OffSetAccumulator::void-processOpCode0(enum SbiOpcode,)
+    void OffSetAccumulator::processOpCode0(enum SbiOpcode,)
 basic/source/comp/codegen.cxx:466
-    OffSetAccumulator::void-processOpCode1(enum SbiOpcode,T,)
+    void OffSetAccumulator::processOpCode1(enum SbiOpcode,type-parameter-0-0,)
 basic/source/comp/codegen.cxx:467
-    OffSetAccumulator::void-processOpCode2(enum SbiOpcode,T,T,)
+    void OffSetAccumulator::processOpCode2(enum SbiOpcode,type-parameter-0-0,type-parameter-0-0,)
 basic/source/comp/codegen.cxx:468
-    OffSetAccumulator::void-end()
+    void OffSetAccumulator::end()
 basic/source/comp/codegen.cxx:477
-    OffSetAccumulator::_Bool-processParams()
+    _Bool OffSetAccumulator::processParams()
 basic/source/comp/codegen.cxx:488
-    BufferTransformer::void-start(const sal_uInt8 *,)
+    void BufferTransformer::start(const unsigned char *,)
 basic/source/comp/codegen.cxx:489
-    BufferTransformer::void-processOpCode0(enum SbiOpcode,)
+    void BufferTransformer::processOpCode0(enum SbiOpcode,)
 basic/source/comp/codegen.cxx:493
-    BufferTransformer::void-processOpCode1(enum SbiOpcode,T,)
+    void BufferTransformer::processOpCode1(enum SbiOpcode,type-parameter-0-0,)
 basic/source/comp/codegen.cxx:518
-    BufferTransformer::void-processOpCode2(enum SbiOpcode,T,T,)
+    void BufferTransformer::processOpCode2(enum SbiOpcode,type-parameter-0-0,type-parameter-0-0,)
 basic/source/comp/codegen.cxx:528
-    BufferTransformer::_Bool-processParams()
+    _Bool BufferTransformer::processParams()
 basic/source/comp/codegen.cxx:529
-    BufferTransformer::void-end()
+    void BufferTransformer::end()
 chart2/source/inc/WeakListenerAdapter.hxx:58
-    chart::WeakListenerAdapter::void-disposing(const css::lang::EventObject &,)
-connectivity/source/drivers/firebird/SubComponent.hxx:67
-    connectivity::firebird::OPropertyArrayUsageHelper::void-~OPropertyArrayUsageHelper<TYPE>()
+    void chart::WeakListenerAdapter::disposing(const struct com::sun::star::lang::EventObject &,)
+chart2/source/view/axes/Tickmarks.hxx:133
+    void chart::TickFactory2D::updateScreenValues(class std::__debug::vector<class std::__debug::vector<struct chart::TickInfo, class std::allocator<struct chart::TickInfo> >, class std::allocator<class std::__debug::vector<struct chart::TickInfo, class std::allocator<struct chart::TickInfo> > > > &,)const
+dbaccess/source/core/api/CRowSetDataColumn.hxx:73
+    void dbaccess::ORowSetDataColumn::fireValueChange(const class connectivity::ORowSetValue &,)
+dbaccess/source/core/api/KeySet.hxx:190
+    _Bool dbaccess::OKeySet::isBeforeFirst()
+dbaccess/source/core/api/KeySet.hxx:191
+    _Bool dbaccess::OKeySet::isAfterLast()
+dbaccess/source/core/api/RowSet.hxx:238
+    void dbaccess::ORowSet::notifyAllListeners(class osl::ResettableGuard<class osl::Mutex> &,)
+dbaccess/source/core/api/StaticSet.hxx:56
+    _Bool dbaccess::OStaticSet::isBeforeFirst()
+dbaccess/source/core/api/StaticSet.hxx:57
+    _Bool dbaccess::OStaticSet::isAfterLast()
+dbaccess/source/core/recovery/storagexmlstream.hxx:46
+    void dbaccess::StorageXMLOutputStream::close()
+dbaccess/source/ui/inc/RTableConnectionData.hxx:49
+    class rtl::Reference<class dbaui::OConnectionLineData> dbaui::ORelationTableConnectionData::CreateLineDataObj()
+dbaccess/source/ui/inc/unodatbr.hxx:208
+    void dbaui::SbaTableQueryBrowser::InitializeGridModel(const class com::sun::star::uno::Reference<class com::sun::star::form::XFormComponent> &,)
+dbaccess/source/ui/querydesign/QTableConnectionData.hxx:36
+    class rtl::Reference<class dbaui::OConnectionLineData> dbaui::OQueryTableConnectionData::CreateLineDataObj()
 extensions/source/dbpilots/unoautopilot.hxx:98
-    dbp::OUnoAutoPilot::::cppu::IPropertyArrayHelper *-createArrayHelper()const
+    class cppu::IPropertyArrayHelper * dbp::OUnoAutoPilot::createArrayHelper()const
 extensions/source/propctrlr/commoncontrol.hxx:127
-    pcr::CommonBehaviourControl::::sal_Int16-getControlType()
+    short pcr::CommonBehaviourControl::getControlType()
 extensions/source/propctrlr/commoncontrol.hxx:129
-    pcr::CommonBehaviourControl::css::uno::Reference<css::inspection::XPropertyControlContext>-getControlContext()
+    class com::sun::star::uno::Reference<class com::sun::star::inspection::XPropertyControlContext> pcr::CommonBehaviourControl::getControlContext()
 extensions/source/propctrlr/commoncontrol.hxx:131
-    pcr::CommonBehaviourControl::void-setControlContext(const css::uno::Reference<css::inspection::XPropertyControlContext> &,)
+    void pcr::CommonBehaviourControl::setControlContext(const class com::sun::star::uno::Reference<class com::sun::star::inspection::XPropertyControlContext> &,)
 extensions/source/propctrlr/commoncontrol.hxx:133
-    pcr::CommonBehaviourControl::css::uno::Reference<css::awt::XWindow>-getControlWindow()
+    class com::sun::star::uno::Reference<class com::sun::star::awt::XWindow> pcr::CommonBehaviourControl::getControlWindow()
 extensions/source/propctrlr/commoncontrol.hxx:135
-    pcr::CommonBehaviourControl::sal_Bool-isModified()
+    unsigned char pcr::CommonBehaviourControl::isModified()
 extensions/source/propctrlr/commoncontrol.hxx:137
-    pcr::CommonBehaviourControl::void-notifyModifiedValue()
+    void pcr::CommonBehaviourControl::notifyModifiedValue()
 extensions/source/propctrlr/commoncontrol.hxx:141
-    pcr::CommonBehaviourControl::void-disposing()
-forms/source/xforms/collection.hxx:130
-    Collection::_Bool-isValid(const Collection::T &,)const
-forms/source/xforms/collection.hxx:139
-    Collection::void-_insert(const Collection::T &,)
-forms/source/xforms/collection.hxx:139
-    Collection::void-_insert(const Collection<class com::sun::star::uno::Sequence<struct com::sun::star::beans::PropertyValue> >::T &,)
-forms/source/xforms/collection.hxx:142
-    Collection::void-_remove(const Collection<class com::sun::star::uno::Sequence<struct com::sun::star::beans::PropertyValue> >::T &,)
-forms/source/xforms/collection.hxx:142
-    Collection::void-_remove(const Collection::T &,)
+    void pcr::CommonBehaviourControl::disposing()
 forms/source/xforms/datatypes.hxx:234
-    xforms::ODerivedDataType::::cppu::IPropertyArrayHelper *-createArrayHelper()const
+    class cppu::IPropertyArrayHelper * xforms::ODerivedDataType::createArrayHelper()const
 forms/source/xforms/datatypes.hxx:237
-    xforms::ODerivedDataType::css::uno::Reference<css::beans::XPropertySetInfo>-getPropertySetInfo()
+    class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertySetInfo> xforms::ODerivedDataType::getPropertySetInfo()
 forms/source/xforms/datatypes.hxx:238
-    xforms::ODerivedDataType::::cppu::IPropertyArrayHelper &-getInfoHelper()
+    class cppu::IPropertyArrayHelper & xforms::ODerivedDataType::getInfoHelper()
 forms/source/xforms/namedcollection.hxx:87
-    NamedCollection::css::uno::Type-getElementType()
+    class com::sun::star::uno::Type NamedCollection::getElementType()
 forms/source/xforms/namedcollection.hxx:92
-    NamedCollection::sal_Bool-hasElements()
+    unsigned char NamedCollection::hasElements()
 forms/source/xforms/namedcollection.hxx:98
-    NamedCollection::css::uno::Any-getByName(const class rtl::OUString &,)
+    class com::sun::star::uno::Any NamedCollection::getByName(const class rtl::OUString &,)
 forms/source/xforms/namedcollection.hxx:106
-    NamedCollection::css::uno::Sequence<OUString>-getElementNames()
+    class com::sun::star::uno::Sequence<class rtl::OUString> NamedCollection::getElementNames()
 forms/source/xforms/namedcollection.hxx:111
-    NamedCollection::sal_Bool-hasByName(const class rtl::OUString &,)
-include/basic/sbx.hxx:130
-    SbxArray::enum SbxClassType-GetClass()const
-include/comphelper/IdPropArrayHelper.hxx:53
-    comphelper::OIdPropertyArrayUsageHelper::void-~OIdPropertyArrayUsageHelper<TYPE>()
+    unsigned char NamedCollection::hasByName(const class rtl::OUString &,)
+hwpfilter/source/hbox.h:159
+    class std::basic_string<unsigned short, struct std::char_traits<unsigned short>, class std::allocator<unsigned short> > DateCode::GetString()
+hwpfilter/source/hbox.h:834
+    class std::basic_string<unsigned short, struct std::char_traits<unsigned short>, class std::allocator<unsigned short> > MailMerge::GetString()
+include/basegfx/utils/unopolypolygon.hxx:97
+    void basegfx::unotools::UnoPolyPolygon::modifying()const
 include/comphelper/interaction.hxx:55
-    comphelper::OInteraction::void-select()
-include/comphelper/proparrhlp.hxx:48
-    comphelper::OPropertyArrayUsageHelper::void-~OPropertyArrayUsageHelper<TYPE>()
+    void comphelper::OInteraction::select()
 include/comphelper/proparrhlp.hxx:87
-    comphelper::OAggregationArrayUsageHelper::::cppu::IPropertyArrayHelper *-createArrayHelper()const
+    class cppu::IPropertyArrayHelper * comphelper::OAggregationArrayUsageHelper::createArrayHelper()const
 include/comphelper/servicedecl.hxx:165
-    comphelper::service_decl::detail::OwnServiceImpl::class rtl::OUString-getImplementationName()
+    class rtl::OUString comphelper::service_decl::detail::OwnServiceImpl::getImplementationName()
 include/comphelper/servicedecl.hxx:168
-    comphelper::service_decl::detail::OwnServiceImpl::sal_Bool-supportsService(const class rtl::OUString &,)
+    unsigned char comphelper::service_decl::detail::OwnServiceImpl::supportsService(const class rtl::OUString &,)
 include/comphelper/servicedecl.hxx:172
-    comphelper::service_decl::detail::OwnServiceImpl::css::uno::Sequence<OUString>-getSupportedServiceNames()
-include/comphelper/unique_disposing_ptr.hxx:41
-    comphelper::unique_disposing_ptr::void-reset(T *,)
-include/comphelper/unique_disposing_ptr.hxx:41
-    comphelper::unique_disposing_ptr::void-reset(class (anonymous namespace)::ImpTimedRefDev *,)
-include/comphelper/unique_disposing_ptr.hxx:66
-    comphelper::unique_disposing_ptr::void-~unique_disposing_ptr<T>()
+    class com::sun::star::uno::Sequence<class rtl::OUString> comphelper::service_decl::detail::OwnServiceImpl::getSupportedServiceNames()
 include/comphelper/unique_disposing_ptr.hxx:169
-    comphelper::unique_disposing_solar_mutex_reset_ptr::void-reset(T *,)
+    void comphelper::unique_disposing_solar_mutex_reset_ptr::reset(type-parameter-0-0 *,)
 include/comphelper/weakeventlistener.hxx:118
-    comphelper::OWeakListenerAdapter::void-disposing(const css::lang::EventObject &,)
+    void comphelper::OWeakListenerAdapter::disposing(const struct com::sun::star::lang::EventObject &,)
 include/cppcanvas/font.hxx:38
-    cppcanvas::Font::void-~Font()
-include/editeng/adjustitem.hxx:66
-    SvxAdjustItem::class rtl::OUString-GetValueTextByPos(sal_uInt16,)const
-include/editeng/charreliefitem.hxx:45
-    SvxCharReliefItem::class rtl::OUString-GetValueTextByPos(sal_uInt16,)const
-include/editeng/cmapitem.hxx:50
-    SvxCaseMapItem::class rtl::OUString-GetValueTextByPos(sal_uInt16,)const
-include/editeng/crossedoutitem.hxx:51
-    SvxCrossedOutItem::class rtl::OUString-GetValueTextByPos(sal_uInt16,)const
-include/editeng/escapementitem.hxx:101
-    SvxEscapementItem::class rtl::OUString-GetValueTextByPos(sal_uInt16,)const
-include/editeng/formatbreakitem.hxx:54
-    SvxFormatBreakItem::class rtl::OUString-GetValueTextByPos(sal_uInt16,)const
-include/editeng/lspcitem.hxx:96
-    SvxLineSpacingItem::class rtl::OUString-GetValueTextByPos(sal_uInt16,)const
-include/editeng/postitem.hxx:52
-    SvxPostureItem::class rtl::OUString-GetValueTextByPos(sal_uInt16,)const
-include/editeng/shaditem.hxx:79
-    SvxShadowItem::class rtl::OUString-GetValueTextByPos(sal_uInt16,)const
-include/editeng/wghtitem.hxx:52
-    SvxWeightItem::class rtl::OUString-GetValueTextByPos(sal_uInt16,)const
+    void cppcanvas::Font::~Font()
 include/sfx2/controlwrapper.hxx:257
-    sfx::MetricFieldWrapper::_Bool-IsControlDontKnow()const
+    _Bool sfx::MetricFieldWrapper::IsControlDontKnow()const
 include/sfx2/controlwrapper.hxx:258
-    sfx::MetricFieldWrapper::void-SetControlDontKnow(_Bool,)
+    void sfx::MetricFieldWrapper::SetControlDontKnow(_Bool,)
 include/sfx2/controlwrapper.hxx:260
-    sfx::MetricFieldWrapper::ValueT-GetControlValue()const
+    type-parameter-0-0 sfx::MetricFieldWrapper::GetControlValue()const
 include/sfx2/controlwrapper.hxx:261
-    sfx::MetricFieldWrapper::void-SetControlValue(ValueT,)
+    void sfx::MetricFieldWrapper::SetControlValue(type-parameter-0-0,)
 include/sfx2/controlwrapper.hxx:292
-    sfx::ListBoxWrapper::_Bool-IsControlDontKnow()const
+    _Bool sfx::ListBoxWrapper::IsControlDontKnow()const
 include/sfx2/controlwrapper.hxx:294
-    sfx::ListBoxWrapper::void-SetControlDontKnow(_Bool,)
+    void sfx::ListBoxWrapper::SetControlDontKnow(_Bool,)
 include/sfx2/controlwrapper.hxx:297
-    sfx::ListBoxWrapper::ValueT-GetControlValue()const
+    type-parameter-0-0 sfx::ListBoxWrapper::GetControlValue()const
 include/sfx2/controlwrapper.hxx:298
-    sfx::ListBoxWrapper::void-SetControlValue(ValueT,)
+    void sfx::ListBoxWrapper::SetControlValue(type-parameter-0-0,)
 include/sfx2/controlwrapper.hxx:325
-    sfx::ValueSetWrapper::_Bool-IsControlDontKnow()const
+    _Bool sfx::ValueSetWrapper::IsControlDontKnow()const
 include/sfx2/controlwrapper.hxx:327
-    sfx::ValueSetWrapper::void-SetControlDontKnow(_Bool,)
+    void sfx::ValueSetWrapper::SetControlDontKnow(_Bool,)
 include/sfx2/controlwrapper.hxx:330
-    sfx::ValueSetWrapper::ValueT-GetControlValue()const
+    type-parameter-0-0 sfx::ValueSetWrapper::GetControlValue()const
 include/sfx2/controlwrapper.hxx:331
-    sfx::ValueSetWrapper::void-SetControlValue(ValueT,)
-include/sfx2/itemwrapper.hxx:94
-    sfx::SingleItemWrapper::void-~SingleItemWrapper<ItemT, ValueT>()
+    void sfx::ValueSetWrapper::SetControlValue(type-parameter-0-0,)
 include/sfx2/itemwrapper.hxx:136
-    sfx::ValueItemWrapper::ValueT-GetItemValue(const ItemT &,)const
+    type-parameter-0-1 sfx::ValueItemWrapper::GetItemValue(const type-parameter-0-0 &,)const
 include/sfx2/itemwrapper.hxx:138
-    sfx::ValueItemWrapper::void-SetItemValue(ItemT &,ValueT,)const
+    void sfx::ValueItemWrapper::SetItemValue(type-parameter-0-0 &,type-parameter-0-1,)const
 include/sfx2/itemwrapper.hxx:156
-    sfx::IdentItemWrapper::const ItemT &-GetItemValue(const ItemT &,)const
+    const type-parameter-0-0 & sfx::IdentItemWrapper::GetItemValue(const type-parameter-0-0 &,)const
 include/sfx2/itemwrapper.hxx:158
-    sfx::IdentItemWrapper::void-SetItemValue(ItemT &,const ItemT &,)const
-include/svl/aeitem.hxx:63
-    SfxAllEnumItem::sal_uInt16-GetValueByPos(sal_uInt16,)const
-include/svl/aeitem.hxx:64
-    SfxAllEnumItem::class rtl::OUString-GetValueTextByPos(sal_uInt16,)const
+    void sfx::IdentItemWrapper::SetItemValue(type-parameter-0-0 &,const type-parameter-0-0 &,)const
+include/svl/svdde.hxx:244
+    class DdeData * DdeTopic::Get(enum SotClipboardFormatId,)
+include/svl/svdde.hxx:245
+    _Bool DdeTopic::Put(const class DdeData *,)
+include/svl/svdde.hxx:246
+    _Bool DdeTopic::Execute(const class rtl::OUString *,)
+include/svl/svdde.hxx:248
+    _Bool DdeTopic::MakeItem(const class rtl::OUString &,)
+include/svl/svdde.hxx:251
+    _Bool DdeTopic::StartAdviseLoop()
 include/svl/svdde.hxx:307
-    DdeService::void-~DdeService()
-include/svtools/svparser.hxx:128
-    SvParser::void-Continue(T,)
+    void DdeService::~DdeService()
 include/svtools/treelistbox.hxx:723
-    SvTreeListBox::void-SelectAll(_Bool,_Bool,)
-include/svx/obj3d.hxx:84
-    E3dObjList::class E3dObjList *-Clone()const
-include/svx/sdgmoitm.hxx:43
-    SdrGrafModeItem::class rtl::OUString-GetValueTextByPos(sal_uInt16,)const
-include/svx/sdr/properties/defaultproperties.hxx:103
-    sdr::properties::DefaultProperties::void-Scale(const class Fraction &,)
-include/svx/sdr/table/tablecontroller.hxx:54
-    sdr::table::SvxTableController::_Bool-HasMarked()
-include/svx/sdtaditm.hxx:44
-    SdrTextAniDirectionItem::class rtl::OUString-GetValueTextByPos(sal_uInt16,)const
-include/svx/sdtaitm.hxx:46
-    SdrTextVertAdjustItem::class rtl::OUString-GetValueTextByPos(sal_uInt16,)const
-include/svx/sdtaitm.hxx:70
-    SdrTextHorzAdjustItem::class rtl::OUString-GetValueTextByPos(sal_uInt16,)const
-include/svx/sdtakitm.hxx:88
-    SdrTextAniKindItem::class rtl::OUString-GetValueTextByPos(sal_uInt16,)const
-include/svx/sdtfsitm.hxx:47
-    SdrTextFitToSizeTypeItem::class rtl::OUString-GetValueTextByPos(sal_uInt16,)const
-include/svx/svdedxv.hxx:222
-    SdrObjEditView::class SdrPageView *-GetTextEditPageView()const
-include/svx/sxcecitm.hxx:39
-    SdrCaptionEscDirItem::class rtl::OUString-GetValueTextByPos(sal_uInt16,)const
-include/svx/sxctitm.hxx:36
-    SdrCaptionTypeItem::class rtl::OUString-GetValueTextByPos(sal_uInt16,)const
-include/svx/sxekitm.hxx:41
-    SdrEdgeKindItem::class rtl::OUString-GetValueTextByPos(sal_uInt16,)const
-include/svx/sxmtpitm.hxx:41
-    SdrMeasureTextHPosItem::class rtl::OUString-GetValueTextByPos(sal_uInt16,)const
-include/svx/sxmtpitm.hxx:58
-    SdrMeasureTextVPosItem::class rtl::OUString-GetValueTextByPos(sal_uInt16,)const
-include/svx/sxmuitm.hxx:38
-    SdrMeasureUnitItem::class rtl::OUString-GetValueTextByPos(sal_uInt16,)const
+    void SvTreeListBox::SelectAll(_Bool,_Bool,)
 include/toolkit/controls/geometrycontrolmodel.hxx:192
-    OGeometryControlModel::void-fillProperties(css::uno::Sequence<css::beans::Property> &,css::uno::Sequence<css::beans::Property> &,)const
+    void OGeometryControlModel::fillProperties(class com::sun::star::uno::Sequence<struct com::sun::star::beans::Property> &,class com::sun::star::uno::Sequence<struct com::sun::star::beans::Property> &,)const
 include/vbahelper/vbacollectionimpl.hxx:290
-    ScVbaCollectionBase::::sal_Int32-getCount()
+    int ScVbaCollectionBase::getCount()
 include/vbahelper/vbacollectionimpl.hxx:295
-    ScVbaCollectionBase::css::uno::Any-Item(const css::uno::Any &,const css::uno::Any &,)
+    class com::sun::star::uno::Any ScVbaCollectionBase::Item(const class com::sun::star::uno::Any &,const class com::sun::star::uno::Any &,)
 include/vbahelper/vbacollectionimpl.hxx:324
-    ScVbaCollectionBase::sal_Bool-hasElements()
+    unsigned char ScVbaCollectionBase::hasElements()
 include/vbahelper/vbahelperinterface.hxx:77
-    InheritedHelperInterfaceImpl::::sal_Int32-getCreator()
+    int InheritedHelperInterfaceImpl::getCreator()
 include/vbahelper/vbahelperinterface.hxx:81
-    InheritedHelperInterfaceImpl::css::uno::Reference<ov::XHelperInterface>-getParent()
+    class com::sun::star::uno::Reference<class ooo::vba::XHelperInterface> InheritedHelperInterfaceImpl::getParent()
 include/vbahelper/vbahelperinterface.hxx:83
-    InheritedHelperInterfaceImpl::css::uno::Any-Application()
+    class com::sun::star::uno::Any InheritedHelperInterfaceImpl::Application()
 include/vbahelper/vbahelperinterface.hxx:91
-    InheritedHelperInterfaceImpl::class rtl::OUString-getImplementationName()
+    class rtl::OUString InheritedHelperInterfaceImpl::getImplementationName()
 include/vbahelper/vbahelperinterface.hxx:92
-    InheritedHelperInterfaceImpl::sal_Bool-supportsService(const class rtl::OUString &,)
+    unsigned char InheritedHelperInterfaceImpl::supportsService(const class rtl::OUString &,)
 include/vbahelper/vbahelperinterface.hxx:102
-    InheritedHelperInterfaceImpl::css::uno::Sequence<OUString>-getSupportedServiceNames()
+    class com::sun::star::uno::Sequence<class rtl::OUString> InheritedHelperInterfaceImpl::getSupportedServiceNames()
 include/vbahelper/vbareturntypes.hxx:40
-    ooo::vba::DefaultReturnHelper::void-setValue(T1,)
+    void ooo::vba::DefaultReturnHelper::setValue(type-parameter-0-0,)
 include/vbahelper/vbareturntypes.hxx:41
-    ooo::vba::DefaultReturnHelper::T1-getValue()
-include/vcl/vclptr.hxx:110
-    VclPtr::void-~VclPtr<T>()
+    type-parameter-0-0 ooo::vba::DefaultReturnHelper::getValue()
 include/vcl/weld.hxx:219
-    weld::TreeView::void-append_text(const class rtl::OUString &,)
+    void weld::TreeView::append_text(const class rtl::OUString &,)
 include/vcl/weld.hxx:222
-    weld::TreeView::void-append(const class rtl::OUString &,const class rtl::OUString &,const class rtl::OUString &,)
-mysqlc/source/mysqlc_subcomponent.hxx:66
-    connectivity::mysqlc::OPropertyArrayUsageHelper::void-~OPropertyArrayUsageHelper<TYPE>()
-sc/inc/compressedarray.hxx:72
-    ScCompressedArray::void-~ScCompressedArray<A, D>()
-sc/source/core/opencl/formulagroupcl.cxx:856
-    sc::opencl::DynamicKernelMixedArgument::_Bool-IsMixedArgument()const
-sc/source/core/opencl/formulagroupcl.cxx:871
-    sc::opencl::DynamicKernelMixedArgument::void-GenNumDeclRef(std::stringstream &,)const
-sc/source/core/opencl/formulagroupcl.cxx:875
-    sc::opencl::DynamicKernelMixedArgument::void-GenStringDeclRef(std::stringstream &,)const
-sc/source/core/opencl/formulagroupcl.cxx:934
-    sc::opencl::DynamicKernelSlidingArgument::std::string-GenSlidingWindowDeclRef(_Bool,)const
-sc/source/core/opencl/formulagroupcl.cxx:957
-    sc::opencl::DynamicKernelSlidingArgument::size_t-GenReductionLoopHeader(std::stringstream &,_Bool &,)
-sc/source/core/opencl/formulagroupcl.cxx:1121
-    sc::opencl::DynamicKernelMixedSlidingArgument::_Bool-IsMixedArgument()const
-sc/source/core/opencl/formulagroupcl.cxx:1134
-    sc::opencl::DynamicKernelMixedSlidingArgument::void-GenNumDeclRef(std::stringstream &,)const
-sc/source/core/opencl/formulagroupcl.cxx:1138
-    sc::opencl::DynamicKernelMixedSlidingArgument::void-GenStringDeclRef(std::stringstream &,)const
-sc/source/core/opencl/formulagroupcl.cxx:1210
-    sc::opencl::ParallelReductionVectorRef::size_t-GenReductionLoopHeader(std::stringstream &,int,_Bool &,)
-sc/source/filter/inc/lotimpop.hxx:83
-    ImportLotus::class ErrCode-Read()
+    void weld::TreeView::append(const class rtl::OUString &,const class rtl::OUString &,const class rtl::OUString &,)
+sc/source/core/opencl/formulagroupcl.cxx:870
+    void sc::opencl::DynamicKernelMixedArgument::GenNumDeclRef(class std::basic_stringstream<char> &,)const
+sc/source/core/opencl/formulagroupcl.cxx:929
+    class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char> > sc::opencl::DynamicKernelSlidingArgument::GenSlidingWindowDeclRef(_Bool,)const
+sc/source/core/opencl/formulagroupcl.cxx:952
+    unsigned long sc::opencl::DynamicKernelSlidingArgument::GenReductionLoopHeader(class std::basic_stringstream<char> &,_Bool &,)
+sc/source/core/opencl/formulagroupcl.cxx:1190
+    unsigned long sc::opencl::ParallelReductionVectorRef::GenReductionLoopHeader(class std::basic_stringstream<char> &,int,_Bool &,)
 sc/source/ui/inc/anyrefdg.hxx:220
-    ScRefHdlrImpl::void-dispose()
-sc/source/ui/inc/docsh.hxx:302
-    ScDocShell::void-CheckConfigOptions()
-sc/source/ui/inc/PivotLayoutTreeList.hxx:32
-    ScPivotLayoutTreeList::void-InsertEntryForItem(class ScItemValue *,sal_uLong,)
-sc/source/ui/inc/prevwsh.hxx:65
-    ScPreviewShell::void-AdjustPosSizePixel(const class Point &,const class Size &,)
-sc/source/ui/inc/tabvwsh.hxx:193
-    ScTabViewShell::void-AdjustPosSizePixel(const class Point &,const class Size &,)
+    void ScRefHdlrImpl::dispose()
 sc/source/ui/vba/vbacondition.hxx:39
-    ScVbaCondition::class rtl::OUString-Formula1()
+    class rtl::OUString ScVbaCondition::Formula1()
 sc/source/ui/vba/vbacondition.hxx:40
-    ScVbaCondition::class rtl::OUString-Formula2()
-sc/source/ui/vba/vbacondition.hxx:42
-    ScVbaCondition::void-setFormula1(const uno::Any &,)
+    class rtl::OUString ScVbaCondition::Formula2()
 sc/source/ui/vba/vbacondition.hxx:44
-    ScVbaCondition::sal_Int32-Operator(_Bool,)
+    int ScVbaCondition::Operator(_Bool,)
 sc/source/ui/vba/vbaformat.hxx:73
-    ScVbaFormat::css::uno::Any-Borders(const css::uno::Any &,)
+    class com::sun::star::uno::Any ScVbaFormat::Borders(const class com::sun::star::uno::Any &,)
 sc/source/ui/vba/vbaformat.hxx:76
-    ScVbaFormat::css::uno::Reference< ::ooo::vba::excel::XFont>-Font()
+    class com::sun::star::uno::Reference<class ooo::vba::excel::XFont> ScVbaFormat::Font()
 sc/source/ui/vba/vbaformat.hxx:79
-    ScVbaFormat::css::uno::Reference< ::ooo::vba::excel::XInterior>-Interior()
+    class com::sun::star::uno::Reference<class ooo::vba::excel::XInterior> ScVbaFormat::Interior()
 sc/source/ui/vba/vbaformat.hxx:82
-    ScVbaFormat::void-setNumberFormat(const css::uno::Any &,)
+    void ScVbaFormat::setNumberFormat(const class com::sun::star::uno::Any &,)
 sc/source/ui/vba/vbaformat.hxx:85
-    ScVbaFormat::css::uno::Any-getNumberFormat()
+    class com::sun::star::uno::Any ScVbaFormat::getNumberFormat()
 sc/source/ui/vba/vbaformat.hxx:88
-    ScVbaFormat::void-setNumberFormatLocal(const css::uno::Any &,)
+    void ScVbaFormat::setNumberFormatLocal(const class com::sun::star::uno::Any &,)
 sc/source/ui/vba/vbaformat.hxx:91
-    ScVbaFormat::css::uno::Any-getNumberFormatLocal()
+    class com::sun::star::uno::Any ScVbaFormat::getNumberFormatLocal()
 sc/source/ui/vba/vbaformat.hxx:94
-    ScVbaFormat::void-setIndentLevel(const css::uno::Any &,)
+    void ScVbaFormat::setIndentLevel(const class com::sun::star::uno::Any &,)
 sc/source/ui/vba/vbaformat.hxx:97
-    ScVbaFormat::css::uno::Any-getIndentLevel()
+    class com::sun::star::uno::Any ScVbaFormat::getIndentLevel()
 sc/source/ui/vba/vbaformat.hxx:100
-    ScVbaFormat::void-setHorizontalAlignment(const css::uno::Any &,)
+    void ScVbaFormat::setHorizontalAlignment(const class com::sun::star::uno::Any &,)
 sc/source/ui/vba/vbaformat.hxx:103
-    ScVbaFormat::css::uno::Any-getHorizontalAlignment()
+    class com::sun::star::uno::Any ScVbaFormat::getHorizontalAlignment()
 sc/source/ui/vba/vbaformat.hxx:106
-    ScVbaFormat::void-setVerticalAlignment(const css::uno::Any &,)
+    void ScVbaFormat::setVerticalAlignment(const class com::sun::star::uno::Any &,)
 sc/source/ui/vba/vbaformat.hxx:109
-    ScVbaFormat::css::uno::Any-getVerticalAlignment()
+    class com::sun::star::uno::Any ScVbaFormat::getVerticalAlignment()
 sc/source/ui/vba/vbaformat.hxx:112
-    ScVbaFormat::void-setOrientation(const css::uno::Any &,)
+    void ScVbaFormat::setOrientation(const class com::sun::star::uno::Any &,)
 sc/source/ui/vba/vbaformat.hxx:115
-    ScVbaFormat::css::uno::Any-getOrientation()
+    class com::sun::star::uno::Any ScVbaFormat::getOrientation()
 sc/source/ui/vba/vbaformat.hxx:118
-    ScVbaFormat::void-setShrinkToFit(const css::uno::Any &,)
+    void ScVbaFormat::setShrinkToFit(const class com::sun::star::uno::Any &,)
 sc/source/ui/vba/vbaformat.hxx:121
-    ScVbaFormat::css::uno::Any-getShrinkToFit()
+    class com::sun::star::uno::Any ScVbaFormat::getShrinkToFit()
 sc/source/ui/vba/vbaformat.hxx:124
-    ScVbaFormat::void-setWrapText(const css::uno::Any &,)
+    void ScVbaFormat::setWrapText(const class com::sun::star::uno::Any &,)
 sc/source/ui/vba/vbaformat.hxx:127
-    ScVbaFormat::css::uno::Any-getWrapText()
+    class com::sun::star::uno::Any ScVbaFormat::getWrapText()
 sc/source/ui/vba/vbaformat.hxx:130
-    ScVbaFormat::void-setLocked(const css::uno::Any &,)
+    void ScVbaFormat::setLocked(const class com::sun::star::uno::Any &,)
 sc/source/ui/vba/vbaformat.hxx:133
-    ScVbaFormat::css::uno::Any-getLocked()
+    class com::sun::star::uno::Any ScVbaFormat::getLocked()
 sc/source/ui/vba/vbaformat.hxx:136
-    ScVbaFormat::void-setFormulaHidden(const css::uno::Any &,)
+    void ScVbaFormat::setFormulaHidden(const class com::sun::star::uno::Any &,)
 sc/source/ui/vba/vbaformat.hxx:139
-    ScVbaFormat::css::uno::Any-getFormulaHidden()
+    class com::sun::star::uno::Any ScVbaFormat::getFormulaHidden()
 sc/source/ui/vba/vbaformat.hxx:148
-    ScVbaFormat::void-setReadingOrder(const css::uno::Any &,)
+    void ScVbaFormat::setReadingOrder(const class com::sun::star::uno::Any &,)
 sc/source/ui/vba/vbaformat.hxx:151
-    ScVbaFormat::css::uno::Any-getReadingOrder()
+    class com::sun::star::uno::Any ScVbaFormat::getReadingOrder()
 sc/source/ui/vba/vbapagebreak.hxx:45
-    ScVbaPageBreak::sal_Int32-getType()
+    int ScVbaPageBreak::getType()
 sc/source/ui/vba/vbapagebreak.hxx:46
-    ScVbaPageBreak::void-setType(sal_Int32,)
+    void ScVbaPageBreak::setType(int,)
 sc/source/ui/vba/vbapagebreak.hxx:48
-    ScVbaPageBreak::void-Delete()
+    void ScVbaPageBreak::Delete()
 sc/source/ui/vba/vbapagebreak.hxx:49
-    ScVbaPageBreak::css::uno::Reference<ov::excel::XRange>-Location()
-scaddins/source/analysis/analysishelper.hxx:574
-    sca::analysis::ConvertDataLinear::double-ConvertToBase(double,sal_Int16,)const
-sd/source/ui/inc/ShellFactory.hxx:41
-    sd::ShellFactory::void-~ShellFactory<ShellType>()
-sd/source/ui/sidebar/CurrentMasterPagesSelector.hxx:48
-    sd::sidebar::CurrentMasterPagesSelector::void-UpdateSelection()
-sd/source/ui/slidesorter/inc/model/SlsEnumeration.hxx:34
-    sd::slidesorter::model::Enumeration::void-~Enumeration<T>()
+    class com::sun::star::uno::Reference<class ooo::vba::excel::XRange> ScVbaPageBreak::Location()
 slideshow/source/engine/activities/activitiesfactory.cxx:173
-    slideshow::internal::(anonymous namespace)::FromToByActivity::void-startAnimation()
+    void slideshow::internal::(anonymous namespace)::FromToByActivity::startAnimation()
 slideshow/source/engine/activities/activitiesfactory.cxx:241
-    slideshow::internal::(anonymous namespace)::FromToByActivity::void-endAnimation()
+    void slideshow::internal::(anonymous namespace)::FromToByActivity::endAnimation()
 slideshow/source/engine/activities/activitiesfactory.cxx:331
-    slideshow::internal::(anonymous namespace)::FromToByActivity::void-performEnd()
+    void slideshow::internal::(anonymous namespace)::FromToByActivity::performEnd()
 slideshow/source/engine/activities/activitiesfactory.cxx:344
-    slideshow::internal::(anonymous namespace)::FromToByActivity::void-dispose()
+    void slideshow::internal::(anonymous namespace)::FromToByActivity::dispose()
 slideshow/source/engine/activities/activitiesfactory.cxx:526
-    slideshow::internal::(anonymous namespace)::ValuesActivity::void-startAnimation()
+    void slideshow::internal::(anonymous namespace)::ValuesActivity::startAnimation()
 slideshow/source/engine/activities/activitiesfactory.cxx:537
-    slideshow::internal::(anonymous namespace)::ValuesActivity::void-endAnimation()
+    void slideshow::internal::(anonymous namespace)::ValuesActivity::endAnimation()
 slideshow/source/engine/activities/activitiesfactory.cxx:582
-    slideshow::internal::(anonymous namespace)::ValuesActivity::void-performEnd()
+    void slideshow::internal::(anonymous namespace)::ValuesActivity::performEnd()
 slideshow/source/engine/animationfactory.cxx:442
-    slideshow::internal::(anonymous namespace)::GenericAnimation::void-prefetch(const slideshow::internal::AnimatableShapeSharedPtr &,const slideshow::internal::ShapeAttributeLayerSharedPtr &,)
+    void slideshow::internal::(anonymous namespace)::GenericAnimation::prefetch(const class std::shared_ptr<class slideshow::internal::AnimatableShape> &,const class std::shared_ptr<class slideshow::internal::ShapeAttributeLayer> &,)
 slideshow/source/engine/animationfactory.cxx:446
-    slideshow::internal::(anonymous namespace)::GenericAnimation::void-start(const slideshow::internal::AnimatableShapeSharedPtr &,const slideshow::internal::ShapeAttributeLayerSharedPtr &,)
-starmath/inc/view.hxx:258
-    SmViewShell::void-AdjustPosSizePixel(const class Point &,const class Size &,)
-svx/inc/sxcikitm.hxx:39
-    SdrCircKindItem::class rtl::OUString-GetValueTextByPos(sal_uInt16,)const
-svx/inc/sxmkitm.hxx:39
-    SdrMeasureKindItem::class rtl::OUString-GetValueTextByPos(sal_uInt16,)const
-sw/inc/docary.hxx:114
-    SwVectorModifyBase::void-~SwVectorModifyBase<Value>()
+    void slideshow::internal::(anonymous namespace)::GenericAnimation::start(const class std::shared_ptr<class slideshow::internal::AnimatableShape> &,const class std::shared_ptr<class slideshow::internal::ShapeAttributeLayer> &,)
 sw/inc/flypos.hxx:37
-    SwPosFlyFrame::void-~SwPosFlyFrame()
-sw/inc/ring.hxx:44
-    sw::Ring::void-~Ring<value_type>()
-sw/source/core/inc/frame.hxx:893
-    SwFrame::void-dumpTopMostAsXml(xmlTextWriterPtr,)const
-vcl/inc/opengl/BufferObject.hxx:31
-    vcl::BufferObject::void-~BufferObject<TYPE, BUFFER_TYPE>()
+    void SwPosFlyFrame::~SwPosFlyFrame()
+vcl/inc/salframe.hxx:135
+    void SalFrame::SetRepresentedURL(const class rtl::OUString &,)
 vcl/inc/salframe.hxx:179
-    SalFrame::void-Flush(const tools::Rectangle &,)
+    void SalFrame::Flush(const class tools::Rectangle &,)
 vcl/inc/sallayout.hxx:181
-    SalLayout::_Bool-GetBoundRect(class SalGraphics &,tools::Rectangle &,)const
+    _Bool SalLayout::GetBoundRect(class SalGraphics &,class tools::Rectangle &,)const
+vcl/inc/salmenu.hxx:79
+    _Bool SalMenu::AddMenuBarButton(const struct SalMenuButtonItem &,)
+vcl/inc/salmenu.hxx:80
+    void SalMenu::RemoveMenuBarButton(unsigned short,)
 vcl/inc/salmenu.hxx:92
-    SalMenu::tools::Rectangle-GetMenuBarButtonRectPixel(sal_uInt16,class SalFrame *,)
+    class tools::Rectangle SalMenu::GetMenuBarButtonRectPixel(unsigned short,class SalFrame *,)
 vcl/inc/salobj.hxx:46
-    SalObject::void-Enable(_Bool,)
+    void SalObject::Enable(_Bool,)
 vcl/inc/salprn.hxx:111
-    SalPrinter::enum SalPrinterError-GetErrorCode()
+    enum SalPrinterError SalPrinter::GetErrorCode()
+vcl/inc/unx/gtk/gtkdata.hxx:164
+    int GtkSalDisplay::CaptureMouse(class SalFrame *,)
 vcl/inc/unx/saldata.hxx:65
-    X11SalData::void-Init()
+    void X11SalData::Init()
 vcl/inc/unx/saldata.hxx:68
-    X11SalData::void-initNWF()
+    void X11SalData::initNWF()
 vcl/inc/unx/saldata.hxx:69
-    X11SalData::void-deInitNWF()
+    void X11SalData::deInitNWF()
 vcl/inc/unx/saldisp.hxx:166
-    SalXLib::void-~SalXLib()
+    void SalXLib::~SalXLib()
 vcl/inc/unx/saldisp.hxx:167
-    SalXLib::void-Init()
+    void SalXLib::Init()
 vcl/inc/unx/saldisp.hxx:169
-    SalXLib::_Bool-Yield(_Bool,_Bool,)
+    _Bool SalXLib::Yield(_Bool,_Bool,)
 vcl/inc/unx/saldisp.hxx:170
-    SalXLib::void-Wakeup()
+    void SalXLib::Wakeup()
 vcl/inc/unx/saldisp.hxx:173
-    SalXLib::void-Insert(int,void *,YieldFunc,YieldFunc,YieldFunc,)
+    void SalXLib::Insert(int,void *,int (*)(int, void *),int (*)(int, void *),int (*)(int, void *),)
 vcl/inc/unx/saldisp.hxx:177
-    SalXLib::void-Remove(int,)
+    void SalXLib::Remove(int,)
 vcl/inc/unx/saldisp.hxx:179
-    SalXLib::void-StartTimer(sal_uLong,)
+    void SalXLib::StartTimer(unsigned long,)
 vcl/inc/unx/saldisp.hxx:180
-    SalXLib::void-StopTimer()
+    void SalXLib::StopTimer()
 vcl/inc/unx/saldisp.hxx:182
-    SalXLib::_Bool-CheckTimeout(_Bool,)
+    _Bool SalXLib::CheckTimeout(_Bool,)
 vcl/inc/unx/saldisp.hxx:393
-    SalX11Display::void-Yield()
+    void SalX11Display::Yield()
+vcl/inc/unx/salframe.h:210
+    void X11SalFrame::updateGraphics(_Bool,)
 vcl/inc/unx/salinst.h:47
-    X11SalInstance::class SalX11Display *-CreateDisplay()const
+    class SalX11Display * X11SalInstance::CreateDisplay()const
 writerfilter/source/ooxml/OOXMLFactory.hxx:71
-    writerfilter::ooxml::OOXMLFactory_ns::void-startAction(class writerfilter::ooxml::OOXMLFastContextHandler *,)
+    void writerfilter::ooxml::OOXMLFactory_ns::startAction(class writerfilter::ooxml::OOXMLFastContextHandler *,)
 writerfilter/source/ooxml/OOXMLFactory.hxx:72
-    writerfilter::ooxml::OOXMLFactory_ns::void-charactersAction(class writerfilter::ooxml::OOXMLFastContextHandler *,const class rtl::OUString &,)
+    void writerfilter::ooxml::OOXMLFactory_ns::charactersAction(class writerfilter::ooxml::OOXMLFastContextHandler *,const class rtl::OUString &,)
 writerfilter/source/ooxml/OOXMLFactory.hxx:73
-    writerfilter::ooxml::OOXMLFactory_ns::void-endAction(class writerfilter::ooxml::OOXMLFastContextHandler *,)
+    void writerfilter::ooxml::OOXMLFactory_ns::endAction(class writerfilter::ooxml::OOXMLFastContextHandler *,)
 writerfilter/source/ooxml/OOXMLFactory.hxx:74
-    writerfilter::ooxml::OOXMLFactory_ns::void-attributeAction(class writerfilter::ooxml::OOXMLFastContextHandler *,writerfilter::Token_t,const class OOXMLValue::Pointer_t &,)
+    void writerfilter::ooxml::OOXMLFactory_ns::attributeAction(class writerfilter::ooxml::OOXMLFastContextHandler *,int,const class std::shared_ptr<class writerfilter::ooxml::OOXMLValue> &,)
 writerfilter/source/ooxml/OOXMLFactory.hxx:77
-    writerfilter::ooxml::OOXMLFactory_ns::void-~OOXMLFactory_ns()
-writerperfect/inc/ImportFilter.hxx:178
-    writerperfect::detail::ImportFilterImpl::void-doRegisterHandlers(Generator &,)
+    void writerfilter::ooxml::OOXMLFactory_ns::~OOXMLFactory_ns()
 xmloff/source/forms/elementimport.hxx:575
-    xmloff::OContainerImport::SvXMLImportContextRef-CreateChildContext(sal_uInt16,const class rtl::OUString &,const css::uno::Reference<css::xml::sax::XAttributeList> &,)
+    class rtl::Reference<class SvXMLImportContext> xmloff::OContainerImport::CreateChildContext(unsigned short,const class rtl::OUString &,const class com::sun::star::uno::Reference<class com::sun::star::xml::sax::XAttributeList> &,)
 xmloff/source/forms/elementimport.hxx:578
-    xmloff::OContainerImport::void-EndElement()
+    void xmloff::OContainerImport::EndElement()
 xmloff/source/forms/elementimport.hxx:583
-    xmloff::OContainerImport::css::uno::Reference<css::beans::XPropertySet>-createElement()
+    class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertySet> xmloff::OContainerImport::createElement()
 xmloff/source/forms/elementimport.hxx:611
-    xmloff::OColumnImport::css::uno::Reference<css::beans::XPropertySet>-createElement()
+    class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertySet> xmloff::OColumnImport::createElement()
 

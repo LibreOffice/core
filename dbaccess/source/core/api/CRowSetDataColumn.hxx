@@ -70,7 +70,7 @@ namespace dbaccess
         virtual void SAL_CALL getFastPropertyValue( css::uno::Any& rValue, sal_Int32 nHandle ) const override;
         virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const css::uno::Any& rValue ) override;
 
-        virtual void fireValueChange(const ::connectivity::ORowSetValue& _rOldValue);
+        void fireValueChange(const ::connectivity::ORowSetValue& _rOldValue);
     protected:
         using ODataColumn::getFastPropertyValue;
     };

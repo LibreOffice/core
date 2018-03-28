@@ -156,7 +156,7 @@ struct DateCode: public HBox
     DateCode();
     virtual bool Read(HWPFile &hwpf) override;
 
-    virtual hchar_string GetString();
+    hchar_string GetString();
 };
 
 /**
@@ -831,7 +831,7 @@ struct MailMerge: public HBox
     MailMerge();
 
     virtual bool Read(HWPFile &hwpf) override;
-    virtual hchar_string GetString();
+    hchar_string GetString();
 };
 
 // char composition(23)

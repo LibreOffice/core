@@ -188,18 +188,17 @@ bool VirtualDown::TraverseCXXDeductionGuideDecl(CXXDeductionGuideDecl* f)
 }
 #endif
 
-std::string VirtualDown::niceName(const CXXMethodDecl* functionDecl)
+std::string VirtualDown::niceName(const CXXMethodDecl* cxxMethodDecl)
 {
-    // return type not necessary, since we cannot have two otherwise identical functions
-    // with different return types
-    std::string s = functionDecl->getQualifiedNameAsString() + "(";
-    for (const ParmVarDecl* pParmVarDecl : compat::parameters(*functionDecl))
+    std::string s = cxxMethodDecl->getReturnType().getCanonicalType().getAsString() + " "
+                    + cxxMethodDecl->getQualifiedNameAsString() + "(";
+    for (const ParmVarDecl* pParmVarDecl : compat::parameters(*cxxMethodDecl))
     {
         s += pParmVarDecl->getType().getCanonicalType().getAsString();
         s += ",";
     }
     s += ")";
-    if (functionDecl->isConst())
+    if (cxxMethodDecl->isConst())
     {
         s += "const";
     }

@@ -43,10 +43,17 @@ for clazz in (definitionSet - overridingSet):
     if clazz == "GtkSalDisplay::int-CaptureMouse(class SalFrame *,)": continue
     # some test magic
     if clazz.startswith("apitest::"): continue
-    # ignore external code
-    if definitionToSourceLocationMap[clazz].startswith("external/"): continue
 
-    unnecessaryVirtualSet.add((clazz,definitionToSourceLocationMap[clazz] ))
+    loc = definitionToSourceLocationMap[clazz]
+
+    # ignore external code
+    if loc.startswith("external/"): continue
+    # there is a bunch of Windows specific code that we don't see
+    if loc.startswith("include/canvas/"): continue
+    # not sure what the problem is here
+    if loc.startswith("include/test/"): continue
+
+    unnecessaryVirtualSet.add( (clazz,loc) )
 
 
 # sort the results using a "natural order" so sequences like [item1,item2,item10] sort nicely

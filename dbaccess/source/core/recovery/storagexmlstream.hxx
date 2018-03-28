@@ -43,7 +43,7 @@ namespace dbaccess
         );
         virtual ~StorageXMLOutputStream() override;
 
-        virtual void close();
+        void    close();
 
         void    addAttribute( const OUString& i_rName, const OUString& i_rValue ) const;
 

@@ -203,9 +203,10 @@ namespace dbaui
         virtual void SAL_CALL changedDatabaseLocation( const css::sdb::DatabaseRegistrationEvent& Event ) override;
 
     private:
-        // SbaXDataBrowserController overridables
+        // SbaXDataBrowserController overridable
         virtual bool     InitializeForm( const css::uno::Reference< css::beans::XPropertySet >& i_formProperties ) override;
-        virtual void     InitializeGridModel(const css::uno::Reference< css::form::XFormComponent > & xGrid);
+
+        void             InitializeGridModel(const css::uno::Reference< css::form::XFormComponent > & xGrid);
 
         virtual bool     preReloadForm() override;
         virtual void     postReloadForm() override;
