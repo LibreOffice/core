@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_0d0f43e2",
+        "filename": "sw/qa/extras/inc/swmodeltestbase.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 501,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2018-03-28T13:07:57Z",
+      "side": 1,
+      "message": "Nitpick: maybe rename this to getParagraphsOfText() in a follow-up commit, so that there are no two functions with the same name? Just to make this a bit more readable.",
+      "revId": "cf28e267fe6e1255f45d7053b6ead004e334b339",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
