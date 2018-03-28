@@ -1160,6 +1160,24 @@ SfxVoidItem ExecuteSearch FID_SEARCH_NOW
 ]
 
 
+SfxVoidItem RepeatSearch SID_BASICIDE_REPEAT_SEARCH
+(SvxSearchItem SearchItem SID_SEARCH_ITEM, SfxBoolItem Quiet SID_SEARCH_QUIET)
+[
+    AutoUpdate = FALSE,
+    FastCall = TRUE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Asynchron;
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::Edit;
+]
+
 
 SfxBoolItem ExtendedHelp SID_EXTENDEDHELP
 

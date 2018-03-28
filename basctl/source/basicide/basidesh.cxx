@@ -159,7 +159,8 @@ Shell::Shell( SfxViewFrame* pFrame_, SfxViewShell* /* pOldShell */ ) :
     pLayout(nullptr),
     aObjectCatalog(VclPtr<ObjectCatalog>::Create(&GetViewFrame()->GetWindow())),
     m_bAppBasicModified( false ),
-    m_aNotifier( *this )
+    m_aNotifier( *this ),
+    maSearchItem( nullptr )
 {
     m_xLibListener = new ContainerListenerImpl( this );
     Init();
