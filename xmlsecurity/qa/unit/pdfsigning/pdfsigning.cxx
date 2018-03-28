@@ -514,8 +514,7 @@ void PDFSigningTest::testUnknownSubFilter()
     uno::Reference<xml::crypto::XXMLSecurityContext> xSecurityContext
         = xSEInitializer->createSecurityContext(OUString());
     SvStream* pStream = utl::UcbStreamHelper::CreateStream(
-        m_directories.getURLFromSrc(DATA_DIRECTORY) + "cr-comment.pdf",
-        StreamMode::READ | StreamMode::WRITE);
+        m_directories.getURLFromSrc(DATA_DIRECTORY) + "cr-comment.pdf", StreamMode::STD_READ);
     uno::Reference<io::XStream> xStream(new utl::OStreamWrapper(*pStream));
     DocumentSignatureManager aManager(mxComponentContext, DocumentSignatureMode::Content);
     aManager.mxSignatureStream = xStream;
