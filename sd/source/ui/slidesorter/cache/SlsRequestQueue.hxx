@@ -61,7 +61,12 @@ public:
             It is OK when the specified request is not a member of the
             queue.
     */
-    void RemoveRequest (CacheKey aKey);
+#if OSL_DEBUG_LEVEL >=2
+bool
+#else
+void
+#endif
+    RemoveRequest (CacheKey aKey);
 
     /** Change the priority class of the specified request.
     */

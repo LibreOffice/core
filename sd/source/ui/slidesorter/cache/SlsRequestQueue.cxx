@@ -140,11 +140,18 @@ void RequestQueue::PageInDestruction(const SdrPage& rPage)
     RemoveRequest(&rPage);
 }
 
-void RequestQueue::RemoveRequest (
+#if OSL_DEBUG_LEVEL >=2
+bool
+#else
+void
+#endif
+RequestQueue::RemoveRequest(
     CacheKey aKey)
 {
     ::osl::MutexGuard aGuard (maMutex);
-
+#if OSL_DEBUG_LEVEL >=2
+    bool bIsRemoved = false;
+#endif
     while(true)
     {
         Container::const_iterator aRequestIterator = ::std::find_if (
@@ -161,10 +168,16 @@ void RequestQueue::RemoveRequest (
             SdrPage *pPage = const_cast<SdrPage*>(aRequestIterator->maKey);
             pPage->RemovePageUser(*this);
             mpRequestQueue->erase(aRequestIterator);
+#if OSL_DEBUG_LEVEL >=2
+            bIsRemoved = true;
+#endif
         }
         else
             break;
     }
+#if OSL_DEBUG_LEVEL >=2
+    return bIsRemoved;
+#endif
 
 }
 
