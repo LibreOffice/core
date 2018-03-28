@@ -18,7 +18,6 @@
  */
 #include <PageNumber.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <strings.hrc>
 #include <rptui_slotid.hrc>
 #include <RptDef.hxx>
 #include <vcl/settings.hxx>
