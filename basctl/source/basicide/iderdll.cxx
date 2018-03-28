@@ -163,9 +163,9 @@ ExtraData::~ExtraData ()
 //  StarBASIC::setGlobalStarScriptListener( XEngineListenerRef() );
 }
 
-void ExtraData::SetSearchItem (const SvxSearchItem& rItem)
+void ExtraData::SetSearchItem (const SvxSearchItem* rItem)
 {
-    pSearchItem.reset(static_cast<SvxSearchItem*>(rItem.Clone()));
+    pSearchItem.reset(static_cast<SvxSearchItem*>(rItem->Clone()));
 }
 
 IMPL_STATIC_LINK(ExtraData, GlobalBasicBreakHdl, StarBASIC *, pBasic, BasicDebugFlags)
