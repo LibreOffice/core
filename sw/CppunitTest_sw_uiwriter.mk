@@ -45,6 +45,8 @@ $(eval $(call gb_CppunitTest_set_include,sw_uiwriter,\
     -I$(SRCDIR)/sw/inc \
     -I$(SRCDIR)/sw/source/core/inc \
     -I$(SRCDIR)/sw/source/uibase/inc \
+    -I$(SRCDIR)/sw/source/filter/inc \
+    -I$(SRCDIR)/sw/source/filter/html \
     -I$(SRCDIR)/sw/qa/extras/inc \
     $$(INCLUDE) \
 ))

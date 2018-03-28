@@ -80,6 +80,7 @@
 #include <tools/urlobj.hxx>
 #include <osl/file.hxx>
 #include <comphelper/scopeguard.hxx>
+#include <unotools/tempfile.hxx>
 
 #define MAX_INDENT_LEVEL 20
 
@@ -156,6 +157,14 @@ SwHTMLWriter::SwHTMLWriter( const OUString& rBaseURL )
     , m_bParaDotLeaders( false )
 {
     SetBaseURL(rBaseURL);
+
+    if (rBaseURL.isEmpty())
+    {
+        // Paste: set base URL to a tempfile, so images are not lost.
+        mpTempBaseURL.reset(new utl::TempFile());
+        mpTempBaseURL->EnableKillingFile();
+        SetBaseURL(mpTempBaseURL->GetURL());
+    }
 }
 
 SwHTMLWriter::~SwHTMLWriter()
