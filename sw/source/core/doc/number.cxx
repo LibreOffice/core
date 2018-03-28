@@ -93,7 +93,7 @@ const SwNumFormat* SwNumRule::GetNumFormat( sal_uInt16 i ) const
     assert( i < MAXLEVEL && meRuleType < RULE_END );
     if ( i < MAXLEVEL && meRuleType < RULE_END)
     {
-        pResult = maFormats[ i ];
+        pResult = maFormats[ i ].get();
     }
 
     return pResult;
@@ -461,7 +461,6 @@ SwNumRule::SwNumRule( const SwNumRule& rNumRule )
       msDefaultListId( rNumRule.msDefaultListId )
 {
     ++mnRefCount;
-    memset( maFormats, 0, sizeof( maFormats ));
     for( sal_uInt16 n = 0; n < MAXLEVEL; ++n )
         if( rNumRule.maFormats[ n ] )
             Set( n, *rNumRule.maFormats[ n ] );
@@ -469,8 +468,8 @@ SwNumRule::SwNumRule( const SwNumRule& rNumRule )
 
 SwNumRule::~SwNumRule()
 {
-    for(SwNumFormat* p : maFormats)
-        delete p;
+    for (auto & i : maFormats)
+        i.reset();
 
     if (mpNumRuleMap)
     {
@@ -515,7 +514,7 @@ SwNumRule::~SwNumRule()
 
 void SwNumRule::CheckCharFormats( SwDoc* pDoc )
 {
-    for(SwNumFormat*& rpNumFormat : maFormats)
+    for(auto& rpNumFormat : maFormats)
     {
         SwCharFormat* pFormat;
         if( rpNumFormat && nullptr != ( pFormat = rpNumFormat->GetCharFormat() ) &&
@@ -524,8 +523,7 @@ void SwNumRule::CheckCharFormats( SwDoc* pDoc )
             // copy
             SwNumFormat* pNew = new SwNumFormat( *rpNumFormat );
             pNew->SetCharFormat( pDoc->CopyCharFormat( *pFormat ) );
-            delete rpNumFormat;
-            rpNumFormat = pNew;
+            rpNumFormat.reset(pNew);
         }
     }
 }
@@ -535,7 +533,7 @@ SwNumRule& SwNumRule::operator=( const SwNumRule& rNumRule )
     if( this != &rNumRule )
     {
         for( sal_uInt16 n = 0; n < MAXLEVEL; ++n )
-            Set( n, rNumRule.maFormats[ n ] );
+            Set( n, rNumRule.maFormats[ n ].get() );
 
         meRuleType = rNumRule.meRuleType;
         msName = rNumRule.msName;
@@ -580,8 +578,7 @@ void SwNumRule::Set( sal_uInt16 i, const SwNumFormat& rNumFormat )
     {
         if( !maFormats[ i ] || !(rNumFormat == Get( i )) )
         {
-            delete maFormats[ i ];
-            maFormats[ i ] = new SwNumFormat( rNumFormat );
+            maFormats[ i ].reset(new SwNumFormat( rNumFormat ));
             mbInvalidRuleFlag = true;
         }
     }
@@ -592,24 +589,22 @@ void SwNumRule::Set( sal_uInt16 i, const SwNumFormat* pNumFormat )
     OSL_ENSURE( i < MAXLEVEL, "Serious defect" );
     if( i >= MAXLEVEL )
         return;
-    SwNumFormat* pOld = maFormats[ i ];
-    if( !pOld )
+    if( !maFormats[ i ] )
     {
         if( pNumFormat )
         {
-            maFormats[ i ] = new SwNumFormat( *pNumFormat );
+            maFormats[ i ].reset(new SwNumFormat( *pNumFormat ));
             mbInvalidRuleFlag = true;
         }
     }
     else if( !pNumFormat )
     {
-        delete pOld;
-        maFormats[ i ] = nullptr;
+        maFormats[ i ].reset();
         mbInvalidRuleFlag = true;
     }
-    else if( *pOld != *pNumFormat )
+    else if( *maFormats[i] != *pNumFormat )
     {
-        *pOld = *pNumFormat;
+        *maFormats[ i ] = *pNumFormat;
         mbInvalidRuleFlag = true;
     }
 }
@@ -807,7 +802,7 @@ SwNumRule& SwNumRule::CopyNumRule( SwDoc* pDoc, const SwNumRule& rNumRule )
 {
     for( sal_uInt16 n = 0; n < MAXLEVEL; ++n )
     {
-        Set( n, rNumRule.maFormats[ n ] );
+        Set( n, rNumRule.maFormats[ n ].get() );
         if( maFormats[ n ] && maFormats[ n ]->GetCharFormat() &&
             !pDoc->GetCharFormats()->IsAlive(maFormats[n]->GetCharFormat()))
         {
@@ -832,8 +827,7 @@ void SwNumRule::SetSvxRule(const SvxNumRule& rNumRule, SwDoc* pDoc)
     for( sal_uInt16 n = 0; n < MAXLEVEL; ++n )
     {
         const SvxNumberFormat* pSvxFormat = rNumRule.Get(n);
-        delete maFormats[n];
-        maFormats[n] = pSvxFormat ? new SwNumFormat(*pSvxFormat, pDoc) : nullptr;
+        maFormats[n].reset( pSvxFormat ? new SwNumFormat(*pSvxFormat, pDoc) : nullptr );
     }
 
     mbInvalidRuleFlag = true;
