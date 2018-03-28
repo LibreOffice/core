@@ -86,15 +86,14 @@ public:
 
 protected:
     /// Copy&paste helper.
-    void paste(const OUString& aFilename, uno::Reference<text::XTextRange> const& xTextRange
-                                          = uno::Reference<text::XTextRange>())
+    void paste(const OUString& aFilename, uno::Reference<text::XTextRange> const& xTextRange)
     {
         uno::Reference<document::XFilter> xFilter(
             m_xSFactory->createInstance("com.sun.star.comp.Writer.RtfFilter"),
             uno::UNO_QUERY_THROW);
         uno::Reference<document::XImporter> xImporter(xFilter, uno::UNO_QUERY_THROW);
         xImporter->setTargetDocument(mxComponent);
-        uno::Sequence<beans::PropertyValue> aDescriptor(xTextRange.is() ? 3 : 2);
+        uno::Sequence<beans::PropertyValue> aDescriptor(3);
         aDescriptor[0].Name = "InputStream";
         SvStream* pStream = utl::UcbStreamHelper::CreateStream(
             m_directories.getURLFromSrc("/sw/qa/extras/rtfexport/data/") + aFilename,
@@ -103,11 +102,8 @@ protected:
         aDescriptor[0].Value <<= xStream;
         aDescriptor[1].Name = "InsertMode";
         aDescriptor[1].Value <<= true;
-        if (xTextRange.is())
-        {
-            aDescriptor[2].Name = "TextInsertModeRange";
-            aDescriptor[2].Value <<= xTextRange;
-        }
+        aDescriptor[2].Name = "TextInsertModeRange";
+        aDescriptor[2].Value <<= xTextRange;
         xFilter->filter(aDescriptor);
     }
     AllSettings m_aSavedSettings;
@@ -640,7 +636,10 @@ DECLARE_RTFEXPORT_TEST(testCopyPastePageStyle, "copypaste-pagestyle.rtf")
 {
     // The problem was that RTF import during copy&paste did not ignore page styles.
     // Once we have more copy&paste tests, makes sense to refactor this to some helper method.
-    paste("copypaste-pagestyle-paste.rtf");
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xText(xTextDocument->getText(), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xEnd = xText->getEnd();
+    paste("copypaste-pagestyle-paste.rtf", xEnd);
 
     uno::Reference<beans::XPropertySet> xPropertySet(getStyles("PageStyles")->getByName("Standard"),
                                                      uno::UNO_QUERY);
