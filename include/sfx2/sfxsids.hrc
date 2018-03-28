@@ -554,6 +554,7 @@ class SfxDocumentInfoItem;
 
 #define FID_SVX_START                       (SID_LIB_START + 500)
 #define FID_SEARCH_NOW                      (FID_SVX_START + 2)
+#define SID_BASICIDE_REPEAT_SEARCH          (FID_SVX_START + 3)
 
 // SlotIds for Basic -------------------------------------------------------
 #define SID_BASICIDE_TOGGLEBRKPNT           ( SID_BASICIDE_START +  0 )

@@ -8,6 +8,11 @@
           <value xml:lang="en-US">Go to Line...</value>
         </prop>
       </node>
+      <node oor:name=".uno:RepeatSearch" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Repeat Search</value>
+        </prop>
+      </node>
       <node oor:name=".uno:ShowLines" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Line Numbers</value>

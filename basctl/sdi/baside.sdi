@@ -99,28 +99,43 @@ shell basctl_Shell
         StateMethod = GetState;
     ]
 
-    SID_SEARCH_OPTIONS
-    [
-        ExecMethod  = ExecuteCurrent;
-        StateMethod = GetState;
-    ]
-
-    SID_SEARCH_ITEM
-    [
-        ExecMethod  = ExecuteCurrent;
-        StateMethod = GetState;
-    ]
-
     SID_GOTOLINE
     [
         ExecMethod  = ExecuteCurrent;
         StateMethod = GetState;
     ]
 
+
+    // Search in IDE Basic
+
+    SID_SEARCH_OPTIONS
+    [
+        ExecMethod  = ExecuteSearch;
+        StateMethod = GetState;
+    ]
+
+    SID_SEARCH_ITEM
+    [
+        ExecMethod  = ExecuteSearch;
+        StateMethod = GetState;
+    ]
+
     FID_SEARCH_NOW
     [
-        ExecMethod  = ExecuteCurrent;
+        ExecMethod  = ExecuteSearch;
         StateMethod = GetState;
+    ]
+
+    SID_BASICIDE_REPEAT_SEARCH
+    [
+        ExecMethod  = ExecuteSearch;
+        StateMethod = GetState;
+    ]
+
+    FID_SEARCH_ON // status()
+    [
+        ExecMethod = ExecuteSearch;
+        Export = FALSE;
     ]
 
     FID_SEARCH_OFF

@@ -145,7 +145,6 @@ ExtraData* Dll::GetExtraData ()
 
 
 ExtraData::ExtraData () :
-    pSearchItem(new SvxSearchItem(SID_SEARCH_ITEM)),
     bChoosingMacro(false),
     bShellInCriticalSection(false)
 {
@@ -161,11 +160,6 @@ ExtraData::~ExtraData ()
 //  StarBASIC::SetGlobalErrorHdl( Link() );
 //  StarBASIC::SetGlobalBreakHdl( Link() );
 //  StarBASIC::setGlobalStarScriptListener( XEngineListenerRef() );
-}
-
-void ExtraData::SetSearchItem (const SvxSearchItem& rItem)
-{
-    pSearchItem.reset(static_cast<SvxSearchItem*>(rItem.Clone()));
 }
 
 IMPL_STATIC_LINK(ExtraData, GlobalBasicBreakHdl, StarBASIC *, pBasic, BasicDebugFlags)
