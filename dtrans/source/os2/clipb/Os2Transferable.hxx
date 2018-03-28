@@ -38,10 +38,10 @@
 
 #define CHAR_POINTER(THE_OUSTRING) ::rtl::OUStringToOString (THE_OUSTRING, RTL_TEXTENCODING_UTF8).pData->buffer
 
-#if OSL_DEBUG_LEVEL>10
+#if OSL_DEBUG_LEVEL>0
 extern "C" int debug_printf(const char *f, ...);
 #else
-#define debug_printf( ...) { 1; }
+#define debug_printf( ...)
 #endif
 
 #define CPPUTYPE_SEQSALINT8       getCppuType( (const Sequence< sal_Int8 >*) 0 )

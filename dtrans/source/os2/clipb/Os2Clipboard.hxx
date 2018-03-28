@@ -42,9 +42,6 @@
 // the implementation names
 #define OS2_CLIPBOARD_IMPL_NAME "com.sun.star.datatransfer.clipboard.ClipboardW32"
 
-// the registry key names
-#define OS2_CLIPBOARD_REGKEY_NAME "/com.sun.star.datatransfer.clipboard.Os2Clipboard/UNO/SERVICES/com.sun.star.datatransfer.clipboard.SystemClipboard"
-
 namespace os2 {
 
 class Os2Clipboard :

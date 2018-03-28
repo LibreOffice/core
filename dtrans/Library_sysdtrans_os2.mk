@@ -42,8 +42,13 @@ $(eval $(call gb_Library_add_linked_libs,sysdtrans,\
 	cppu \
 	sal \
 	stl \
-	UClip \
+	uclip \
 	$(gb_STDLIBS) \
+))
+
+# YD FIXME this is not working... needs ldflags hack...
+$(eval $(call gb_Library_add_libs,sysdtrans,\
+    -luclip \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,sysdtrans,\
