@@ -53,7 +53,6 @@ public:
     virtual void GetState( SfxItemSet& rSet );
     virtual void Execute( SfxRequest& rReq );
 
-    virtual bool HasMarked();
     virtual bool DeleteMarked();
 
     virtual bool GetAttributes(SfxItemSet& rTargetSet, bool bOnlyHardAttr) const;

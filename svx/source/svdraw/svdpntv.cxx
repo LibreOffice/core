@@ -341,13 +341,6 @@ bool SdrPaintView::IsTextEdit() const
     return false;
 }
 
-// info about TextEditPageView. Default is 0L.
-SdrPageView* SdrPaintView::GetTextEditPageView() const
-{
-    return nullptr;
-}
-
-
 sal_uInt16 SdrPaintView::ImpGetMinMovLogic(short nMinMov, const OutputDevice* pOut) const
 {
     if (nMinMov>=0) return sal_uInt16(nMinMov);
