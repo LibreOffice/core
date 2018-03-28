@@ -295,7 +295,11 @@ public:
     void            ReloadTabLinks();
 
     void            SetFormulaOptions( const ScFormulaOptions& rOpt, bool bForLoading = false );
-    virtual void    CheckConfigOptions() override;
+    /**
+     * Called when the Options dialog is dismissed with the OK button, to
+     * handle potentially conflicting option settings.
+     */
+    virtual void    CheckConfigOptions();
 
     void            PostEditView( ScEditEngineDefaulter* pEditEngine, const ScAddress& rCursorPos );
 

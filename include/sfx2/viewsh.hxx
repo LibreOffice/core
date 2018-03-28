@@ -235,7 +235,6 @@ public:
     vcl::Window*                GetWindow() const { return pWindow; }
     weld::Window*               GetFrameWeld() const;
     void                        SetWindow( vcl::Window *pViewPort );
-    virtual void                AdjustPosSizePixel( const Point &rOfs, const Size &rSize );
     const SvBorder&             GetBorderPixel() const;
     void                        SetBorderPixel( const SvBorder &rBorder );
     void                        InvalidateBorder();
