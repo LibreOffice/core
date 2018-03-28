@@ -953,6 +953,13 @@ fpicker/res/fp014.png cmd/sc_open.png
 fpicker/res/fp015.png cmd/sc_starshapes.png
 fpicker/res/fp016.png desktop/res/shared_16.png
 
+# framework
+# ==============================================
+framework/res/arrow.png cmd/sc_nextrecord.png
+framework/res/extension.png cmd/lc_insertplugin.png
+framework/res/info_26.png cmd/lc_helpindex.png
+framework/res/addtemplate_32.png cmd/32/newdoc.png
+
 # reportdesign
 # ==============================================
 reportdesign/res/report_16.png cmd/sc_executereport.png
