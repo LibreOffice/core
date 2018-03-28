@@ -26,8 +26,6 @@
 #include <com/sun/star/lang/NoSupportException.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <strings.hxx>
-#include <core_resource.hxx>
-#include <strings.hrc>
 #include <Tools.hxx>
 #include <RptModel.hxx>
 #include <RptPage.hxx>

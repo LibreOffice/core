@@ -49,7 +49,6 @@
 #include <RptDef.hxx>
 #include <SectionWindow.hxx>
 #include <helpids.h>
-#include <strings.hrc>
 #include <dlgedclip.hxx>
 #include <UndoActions.hxx>
 #include <rptui_slotid.hrc>
