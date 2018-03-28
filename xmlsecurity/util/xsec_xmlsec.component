@@ -26,7 +26,8 @@
   <implementation name="com.sun.star.xml.security.SEInitializer_Gpg">
     <service name="com.sun.star.xml.crypto.GPGSEInitializer"/>
   </implementation>
-  <implementation name="com.sun.star.xml.security.bridge.xmlsec.SecurityEnvironment_NssImpl">
+  <implementation name="com.sun.star.xml.crypto.SecurityEnvironment"
+    constructor="com_sun_star_xml_crypto_SecurityEnvironment_get_implementation">
     <service name="com.sun.star.xml.crypto.SecurityEnvironment"/>
   </implementation>
   <implementation name="com.sun.star.xml.wrapper.XMLDocumentWrapper"
