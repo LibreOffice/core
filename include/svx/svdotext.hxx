@@ -479,9 +479,10 @@ public:
     virtual void NbcShear(const Point& rRef, long nAngle, double tn, bool bVShear) override;
 
     virtual bool HasTextEdit() const override;
-    virtual bool BegTextEdit(SdrOutliner& rOutl) override;
+    // returns true if TextEditMode started
+    virtual bool BegTextEdit(SdrOutliner& rOutl);
     virtual void TakeTextEditArea(Size* pPaperMin, Size* pPaperMax, tools::Rectangle* pViewInit, tools::Rectangle* pViewMin) const;
-    virtual void EndTextEdit(SdrOutliner& rOutl) override;
+    virtual void EndTextEdit(SdrOutliner& rOutl);
     virtual EEAnchorMode GetOutlinerViewAnchorMode() const;
 
     virtual void NbcSetOutlinerParaObject(OutlinerParaObject* pTextObject) override;

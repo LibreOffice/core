@@ -111,13 +111,6 @@ SdrObjList::~SdrObjList()
     Clear(); // delete contents of container
 }
 
-SdrObjList* SdrObjList::Clone() const
-{
-    SdrObjList* const pObjList = new SdrObjList();
-    pObjList->lateInit(*this);
-    return pObjList;
-}
-
 void SdrObjList::lateInit(const SdrObjList& rSrcList)
 {
     // this function is only supposed to be called once, right after construction

@@ -100,7 +100,7 @@ namespace sdr
             virtual void ForceDefaultAttributes();
 
             // Scale the included ItemSet.
-            virtual void Scale(const Fraction& rScale) override;
+            virtual void Scale(const Fraction& rScale);
         };
     } // end of namespace properties
 } // end of namespace sdr

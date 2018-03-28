@@ -81,7 +81,7 @@ public:
     E3dObjList();
     SVX_DLLPUBLIC virtual ~E3dObjList() override;
 
-    virtual E3dObjList* Clone() const override;
+    virtual E3dObjList* Clone() const;
 
     virtual void NbcInsertObject(SdrObject* pObj, size_t nPos=SAL_MAX_SIZE) override;
     virtual void InsertObject(SdrObject* pObj, size_t nPos=SAL_MAX_SIZE) override;

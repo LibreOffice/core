@@ -1708,15 +1708,6 @@ void SdrObject::dumpAsXml(xmlTextWriterPtr pWriter) const
     xmlTextWriterEndElement(pWriter);
 }
 
-bool SdrObject::BegTextEdit(SdrOutliner& /*rOutl*/)
-{
-    return false;
-}
-
-void SdrObject::EndTextEdit(SdrOutliner& /*rOutl*/)
-{
-}
-
 void SdrObject::SetOutlinerParaObject(OutlinerParaObject* pTextObject)
 {
     tools::Rectangle aBoundRect0; if (pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
