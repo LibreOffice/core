@@ -1492,7 +1492,10 @@ oslSocketResult SAL_CALL osl_connectSocketTo(oslSocket pSocket,
             if ( (nSockOpt == 0) && (nErrorCode == 0))
                 Result = osl_Socket_Ok;
             else
+            {
+                pSocket->m_nLastError = (nSockOpt == 0) ? nErrorCode : errno;
                 Result = osl_Socket_Error;
+            }
         }
         else
         {
