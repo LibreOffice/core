@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_2d87a710",
+        "filename": "include/cppuhelper/interfacecontainer.hxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-03-28T14:15:46Z",
+      "side": 1,
+      "message": "why include such an unrelated change here?",
+      "revId": "370ef5005112d12958bd81c86fb07a4d25fd944d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
