@@ -334,10 +334,16 @@ private:
     std::map< const SfxItemSet*, Node > maRoot;
     // #i86923#
     std::unique_ptr<SfxItemSet> mpIgnorableItems;
+#ifdef DEBUG
+    sal_Int32 mnCount;
+#endif
 public:
     // #i86923#
     explicit StylePoolImpl( SfxItemSet const * pIgnorableItems )
         : maRoot(),
+#ifdef DEBUG
+          mnCount(0),
+#endif
           mpIgnorableItems( pIgnorableItems != nullptr
                             ? pIgnorableItems->Clone( false )
                             : nullptr )
@@ -354,6 +360,7 @@ public:
     IStylePoolIteratorAccess* createIterator( bool bSkipUnusedItemSets,
                                               bool bSkipIgnorableItems );
 };
+
 
 std::shared_ptr<SfxItemSet> StylePoolImpl::insertItemSet( const SfxItemSet& rSet )
 {
@@ -400,6 +407,9 @@ std::shared_ptr<SfxItemSet> StylePoolImpl::insertItemSet( const SfxItemSet& rSet
     {
         pCurNode->setItemSet( rSet );
         bNonPoolable = false; // to avoid a double insertion
+#ifdef DEBUG
+        ++mnCount;
+#endif
     }
     // If rSet contains at least one non poolable item, a new itemset has to be inserted
     if( bNonPoolable )
@@ -407,7 +417,7 @@ std::shared_ptr<SfxItemSet> StylePoolImpl::insertItemSet( const SfxItemSet& rSet
 #ifdef DEBUG
     {
         sal_Int32 nCheck = -1;
-        IStylePoolIteratorAccess* pIter = createIterator();
+        IStylePoolIteratorAccess* pIter = createIterator(false,false);
         std::shared_ptr<SfxItemSet> pTemp;
         do
         {
