@@ -78,7 +78,7 @@
               <object class="GtkLabel" id="label2">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes" context="subjectdialog|label1">Subject:</property>
+                <property name="label" translatable="yes" context="alreadyexistsdialog|label1">Subject:</property>
                 <property name="use_underline">True</property>
                 <property name="xalign">0</property>
               </object>

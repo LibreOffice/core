@@ -2137,7 +2137,7 @@
                         <property name="orientation">vertical</property>
                         <child>
                           <object class="svtlo-ManagedMenuButton" id="filetab:MenuFile">
-                            <property name="label" translatable="yes" context="notebookbar_compact|fileb">_File</property>
+                            <property name="label" translatable="yes" context="notebookbar|fileb">_File</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="receives_default">False</property>
@@ -2156,7 +2156,7 @@
                         </child>
                         <child>
                           <object class="svtlo-ManagedMenuButton" id="helpb:MenuHelp">
-                            <property name="label" translatable="yes" context="notebookbar_compact|fileb">_Help</property>
+                            <property name="label" translatable="yes" context="notebookbar|fileb">_Help</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="receives_default">False</property>
@@ -2948,7 +2948,7 @@
               <object class="GtkLabel" id="FileLabel">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes" context="notebookbar_compact|FileLabel">File</property>
+                <property name="label" translatable="yes" context="notebookbar|FileLabel">File</property>
                 <property name="use_underline">True</property>
               </object>
               <packing>
@@ -3107,7 +3107,7 @@
                         <property name="orientation">vertical</property>
                         <child>
                           <object class="svtlo-ManagedMenuButton" id="menut:MenuHome">
-                            <property name="label" translatable="yes" context="notebookbar_compact|menub">_Menu</property>
+                            <property name="label" translatable="yes" context="notebookbar|menub">_Menu</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="receives_default">False</property>
@@ -4413,7 +4413,7 @@
               <object class="GtkLabel" id="HomeLabel">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes" context="notebookbar_compact|HomeLabel">Home</property>
+                <property name="label" translatable="yes" context="notebookbar|HomeLabel">Home</property>
                 <property name="use_underline">True</property>
                 <style>
                   <class name="context-any"/>
@@ -5382,7 +5382,7 @@
                         <property name="orientation">vertical</property>
                         <child>
                           <object class="svtlo-ManagedMenuButton" id="insertb:MenuInsert">
-                            <property name="label" translatable="yes" context="notebookbar_compact|menub">_Insert</property>
+                            <property name="label" translatable="yes" context="notebookbar|menub">_Insert</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="receives_default">False</property>
@@ -5467,7 +5467,7 @@
               <object class="GtkLabel" id="InsertLabel">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes" context="notebookbar_compact|InsertLabel">Insert</property>
+                <property name="label" translatable="yes" context="notebookbar|InsertLabel">Insert</property>
                 <property name="use_underline">True</property>
               </object>
               <packing>
@@ -5497,7 +5497,7 @@
                         <property name="orientation">vertical</property>
                         <child>
                           <object class="svtlo-ManagedMenuButton" id="reviewb:MenuPage">
-                            <property name="label" translatable="yes" context="notebookbar_compact|reviewb">Pag_e</property>
+                            <property name="label" translatable="yes" context="notebookbar|reviewb">Pag_e</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="receives_default">False</property>
@@ -6153,7 +6153,7 @@
               <object class="GtkLabel" id="LayoutLabel">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes" context="notebookbar_compact|LayoutLabel">Page layout</property>
+                <property name="label" translatable="yes" context="notebookbar|LayoutLabel">Page layout</property>
                 <property name="use_underline">True</property>
               </object>
               <packing>
@@ -6181,7 +6181,7 @@
                         <property name="orientation">vertical</property>
                         <child>
                           <object class="svtlo-ManagedMenuButton" id="referenceb:MenuReference">
-                            <property name="label" translatable="yes" context="notebookbar_compact|referenceb">Reference_s</property>
+                            <property name="label" translatable="yes" context="notebookbar|referenceb">Reference_s</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="receives_default">False</property>
@@ -6760,7 +6760,7 @@
               <object class="GtkLabel" id="ReferencesLabel">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes" context="notebookbar_compact|ReferencesLabel">References</property>
+                <property name="label" translatable="yes" context="notebookbar|ReferencesLabel">References</property>
                 <property name="use_underline">True</property>
               </object>
               <packing>
@@ -7432,7 +7432,7 @@
                         <property name="orientation">vertical</property>
                         <child>
                           <object class="svtlo-ManagedMenuButton" id="reviewR:MenuReview">
-                            <property name="label" translatable="yes" context="notebookbar_compact|reviewR">_Review</property>
+                            <property name="label" translatable="yes" context="notebookbar|reviewR">_Review</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="receives_default">False</property>
@@ -7517,7 +7517,7 @@
               <object class="GtkLabel" id="ReviewLabel">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes" context="notebookbar_compact|ReviewLabel">Review</property>
+                <property name="label" translatable="yes" context="notebookbar|ReviewLabel">Review</property>
                 <property name="use_underline">True</property>
               </object>
               <packing>
@@ -8131,7 +8131,7 @@
                         <property name="orientation">vertical</property>
                         <child>
                           <object class="svtlo-ManagedMenuButton" id="viewb:MenuView">
-                            <property name="label" translatable="yes" context="notebookbar_compact|viewb">_View</property>
+                            <property name="label" translatable="yes" context="notebookbar|viewb">_View</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="receives_default">False</property>
@@ -8216,7 +8216,7 @@
               <object class="GtkLabel" id="ViewLabel">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes" context="notebookbar_compact|ViewLabel">View</property>
+                <property name="label" translatable="yes" context="notebookbar|ViewLabel">View</property>
                 <property name="use_underline">True</property>
               </object>
               <packing>
@@ -9299,7 +9299,7 @@
                         <property name="orientation">vertical</property>
                         <child>
                           <object class="svtlo-ManagedMenuButton" id="tableT:MenuTable">
-                            <property name="label" translatable="yes" context="notebookbar_compact|tableT">T_able</property>
+                            <property name="label" translatable="yes" context="notebookbar|tableT">T_able</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="receives_default">False</property>
@@ -9383,7 +9383,7 @@
               <object class="GtkLabel" id="TableLabel">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes" context="notebookbar_compact|TableLabel">Table</property>
+                <property name="label" translatable="yes" context="notebookbar|TableLabel">Table</property>
                 <property name="use_underline">True</property>
                 <style>
                   <class name="context-Table"/>
@@ -10193,7 +10193,7 @@
                         <property name="orientation">vertical</property>
                         <child>
                           <object class="svtlo-ManagedMenuButton" id="graphicB:MenuGraphic">
-                            <property name="label" translatable="yes" context="notebookbar_compact|graphicB">_Graphic</property>
+                            <property name="label" translatable="yes" context="notebookbar|graphicB">_Graphic</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="receives_default">False</property>
@@ -10279,7 +10279,7 @@
               <object class="GtkLabel" id="ImageLabel">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes" context="notebookbar_compact|ImageLabel">Image</property>
+                <property name="label" translatable="yes" context="notebookbar|ImageLabel">Image</property>
                 <property name="use_underline">True</property>
                 <style>
                   <class name="context-Graphic"/>
@@ -11634,7 +11634,7 @@
                         <property name="orientation">vertical</property>
                         <child>
                           <object class="svtlo-ManagedMenuButton" id="drab:MenuDraw">
-                            <property name="label" translatable="yes" context="notebookbar_compact|drab">D_raw</property>
+                            <property name="label" translatable="yes" context="notebookbar|drab">D_raw</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="receives_default">False</property>
@@ -11746,7 +11746,7 @@
               <object class="GtkLabel" id="ShapeLabel">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes" context="notebookbar_compact|ShapeLabel">Draw</property>
+                <property name="label" translatable="yes" context="notebookbar|ShapeLabel">Draw</property>
                 <style>
                   <class name="context-Draw"/>
                 </style>
@@ -12600,7 +12600,7 @@
                         <property name="orientation">vertical</property>
                         <child>
                           <object class="svtlo-ManagedMenuButton" id="frame:MenuDraw">
-                            <property name="label" translatable="yes" context="notebookbar_compact|frame:MenuDraw">Object</property>
+                            <property name="label" translatable="yes" context="notebookbar|frame:MenuDraw">Object</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="receives_default">False</property>
@@ -12689,7 +12689,7 @@
               <object class="GtkLabel" id="FrameLabel">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes" context="notebookbar_compact|FrameLabel">Object</property>
+                <property name="label" translatable="yes" context="notebookbar|FrameLabel">Object</property>
                 <style>
                   <class name="context-Frame"/>
                   <class name="context-OLE"/>
@@ -12720,7 +12720,7 @@
                         <property name="orientation">vertical</property>
                         <child>
                           <object class="svtlo-ManagedMenuButton" id="develop:MenuTools">
-                            <property name="label" translatable="yes" context="notebookbar_compact|referenceb">_Tools</property>
+                            <property name="label" translatable="yes" context="notebookbar|referenceb">_Tools</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="receives_default">False</property>
@@ -13674,7 +13674,7 @@
               <object class="GtkLabel" id="DevLabel">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes" context="notebookbar_compact|DevLabel">Tools</property>
+                <property name="label" translatable="yes" context="notebookbar|DevLabel">Tools</property>
                 <property name="use_underline">True</property>
               </object>
               <packing>
