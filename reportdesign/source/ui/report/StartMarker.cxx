@@ -19,7 +19,6 @@
 #include <StartMarker.hxx>
 #include <vcl/image.hxx>
 #include <vcl/svapp.hxx>
-#include <strings.hrc>
 #include <bitmaps.hlst>
 #include <ColorChanger.hxx>
 #include <ReportDefines.hxx>

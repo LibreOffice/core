@@ -18,7 +18,6 @@
  */
 #include <DateTime.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <strings.hrc>
 #include <rptui_slotid.hrc>
 #include <connectivity/dbconversion.hxx>
 #include <unotools/syslocale.hxx>
