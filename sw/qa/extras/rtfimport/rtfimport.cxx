@@ -70,7 +70,7 @@ protected:
         aDescriptor[0].Name = "InputStream";
         SvStream* pStream = utl::UcbStreamHelper::CreateStream(
             m_directories.getURLFromSrc("/sw/qa/extras/rtfimport/data/") + aFilename,
-            StreamMode::WRITE);
+            StreamMode::STD_READ);
         CPPUNIT_ASSERT_EQUAL(ERRCODE_NONE, pStream->GetError());
         uno::Reference<io::XStream> xStream(new utl::OStreamWrapper(*pStream));
         aDescriptor[0].Value <<= xStream;
