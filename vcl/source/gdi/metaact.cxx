@@ -3046,10 +3046,10 @@ void MetaFloatTransparentAction::Write( SvStream& rOStm, ImplMetaWriteData* pDat
     WriteGradient( rOStm, maGradient );
 }
 
-void MetaFloatTransparentAction::Read( SvStream& rIStm, ImplMetaReadData* )
+void MetaFloatTransparentAction::Read(SvStream& rIStm, ImplMetaReadData* pData)
 {
     VersionCompat aCompat(rIStm, StreamMode::READ);
-    ReadGDIMetaFile( rIStm, maMtf );
+    ReadGDIMetaFile(rIStm, maMtf, pData);
     ReadPair( rIStm, maPoint );
     ReadPair( rIStm, maSize );
     ReadGradient( rIStm, maGradient );
