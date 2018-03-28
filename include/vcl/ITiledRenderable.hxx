@@ -20,6 +20,7 @@
 #include <vcl/ptrstyle.hxx>
 #include <vcl/virdev.hxx>
 #include <com/sun/star/datatransfer/clipboard/XClipboardEx.hpp>
+#include <sfx2/lokhelper.hxx>
 
 namespace vcl
 {
@@ -96,6 +97,7 @@ public:
         VclEventId mnEvent;
         MouseEvent maMouseEvent;
         KeyEvent maKeyEvent;
+        int mnViewId;
     };
 
     static void LOKPostAsyncEvent(void* pEv, void*)
@@ -103,6 +105,8 @@ public:
         LOKAsyncEventData* pLOKEv = static_cast<LOKAsyncEventData*>(pEv);
         if (pLOKEv->mpWindow->IsDisposed())
             return;
+
+        SfxLokHelper::setView(pLOKEv->mnViewId);
 
         switch (pLOKEv->mnEvent)
         {

@@ -3505,6 +3505,7 @@ void SwXTextDocument::postKeyEvent(int nType, int nCharCode, int nKeyCode)
     }
 
     pLOKEv->maKeyEvent = KeyEvent(nCharCode, nKeyCode, 0);
+    pLOKEv->mnViewId = SfxLokHelper::getView();
     Application::PostUserEvent(Link<void*, void>(pLOKEv, ITiledRenderable::LOKPostAsyncEvent));
 }
 
@@ -3555,6 +3556,7 @@ void SwXTextDocument::postMouseEvent(int nType, int nX, int nY, int nCount, int 
     pLOKEv->maMouseEvent = MouseEvent(Point(nX, nY), nCount,
                                       MouseEventModifiers::SIMPLECLICK,
                                       nButtons, nModifier);
+    pLOKEv->mnViewId = SfxLokHelper::getView();
     Application::PostUserEvent(Link<void*, void>(pLOKEv, ITiledRenderable::LOKPostAsyncEvent));
 }
 

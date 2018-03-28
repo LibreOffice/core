@@ -627,6 +627,7 @@ void ScModelObj::postKeyEvent(int nType, int nCharCode, int nKeyCode)
     }
 
     pLOKEv->maKeyEvent = KeyEvent(nCharCode, nKeyCode, 0);
+    pLOKEv->mnViewId = SfxLokHelper::getView();
     Application::PostUserEvent(Link<void*, void>(pLOKEv, ITiledRenderable::LOKPostAsyncEvent));
 }
 
@@ -684,6 +685,7 @@ void ScModelObj::postMouseEvent(int nType, int nX, int nY, int nCount, int nButt
     pLOKEv->maMouseEvent = MouseEvent(aPos, nCount,
                                       MouseEventModifiers::SIMPLECLICK,
                                       nButtons, nModifier);
+    pLOKEv->mnViewId = SfxLokHelper::getView();
     Application::PostUserEvent(Link<void*, void>(pLOKEv, ITiledRenderable::LOKPostAsyncEvent));
 }
 

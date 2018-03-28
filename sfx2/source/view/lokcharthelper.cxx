@@ -301,6 +301,7 @@ bool LokChartHelper::postMouseEvent(int nType, int nX, int nY,
             Point aPos(nChartWinX * fScaleX, nChartWinY * fScaleY);
             pLOKEv->maMouseEvent = MouseEvent(aPos, nCount,
                     MouseEventModifiers::SIMPLECLICK, nButtons, nModifier);
+            pLOKEv->mnViewId = SfxLokHelper::getView();
 
             Application::PostUserEvent(Link<void*, void>(pLOKEv, vcl::ITiledRenderable::LOKPostAsyncEvent));
 

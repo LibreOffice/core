@@ -122,6 +122,7 @@
 #include <drawinglayer/primitive2d/structuretagprimitive2d.hxx>
 
 #include <sfx2/lokcharthelper.hxx>
+#include <sfx2/lokhelper.hxx>
 
 #define TWIPS_PER_PIXEL 15
 
@@ -2501,6 +2502,7 @@ void SdXImpressDocument::postKeyEvent(int nType, int nCharCode, int nKeyCode)
     }
 
     pLOKEv->maKeyEvent = KeyEvent(nCharCode, nKeyCode, 0);
+    pLOKEv->mnViewId = SfxLokHelper::getView();
     Application::PostUserEvent(Link<void*, void>(pLOKEv, ITiledRenderable::LOKPostAsyncEvent));
 }
 
@@ -2550,6 +2552,7 @@ void SdXImpressDocument::postMouseEvent(int nType, int nX, int nY, int nCount, i
     pLOKEv->maMouseEvent = MouseEvent(aPos, nCount,
                                       MouseEventModifiers::SIMPLECLICK,
                                       nButtons, nModifier);
+    pLOKEv->mnViewId = SfxLokHelper::getView();
     Application::PostUserEvent(Link<void*, void>(pLOKEv, ITiledRenderable::LOKPostAsyncEvent));
 }
 
