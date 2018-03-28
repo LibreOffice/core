@@ -1208,7 +1208,7 @@ void ModulWindow::Deactivating()
     Hide();
 }
 
-sal_uInt16 ModulWindow::StartSearchAndReplace( const SvxSearchItem& rSearchItem, bool bFromStart )
+sal_uInt16 ModulWindow::StartSearchAndReplace( const SvxSearchItem* pSearchItem, bool bFromStart )
 {
     if (IsSuspended())
         return 0;
@@ -1220,26 +1220,26 @@ sal_uInt16 ModulWindow::StartSearchAndReplace( const SvxSearchItem& rSearchItem,
     if ( bFromStart )
     {
         aSel = pView->GetSelection();
-        if ( !rSearchItem.GetBackward() )
+        if ( !pSearchItem->GetBackward() )
             pView->SetSelection( TextSelection() );
         else
             pView->SetSelection( TextSelection( TextPaM( TEXT_PARA_ALL, TEXT_INDEX_ALL ), TextPaM( TEXT_PARA_ALL, TEXT_INDEX_ALL ) ) );
     }
 
-    bool const bForward = !rSearchItem.GetBackward();
+    bool const bForward = !pSearchItem->GetBackward();
     sal_uInt16 nFound = 0;
-    if ( ( rSearchItem.GetCommand() == SvxSearchCmd::FIND ) ||
-         ( rSearchItem.GetCommand() == SvxSearchCmd::FIND_ALL ) )
+    if ( ( pSearchItem->GetCommand() == SvxSearchCmd::FIND ) ||
+         ( pSearchItem->GetCommand() == SvxSearchCmd::FIND_ALL ) )
     {
-        nFound = pView->Search( rSearchItem.GetSearchOptions() , bForward ) ? 1 : 0;
+        nFound = pView->Search( pSearchItem->GetSearchOptions() , bForward ) ? 1 : 0;
     }
-    else if ( ( rSearchItem.GetCommand() == SvxSearchCmd::REPLACE ) ||
-              ( rSearchItem.GetCommand() == SvxSearchCmd::REPLACE_ALL ) )
+    else if ( ( pSearchItem->GetCommand() == SvxSearchCmd::REPLACE ) ||
+              ( pSearchItem->GetCommand() == SvxSearchCmd::REPLACE_ALL ) )
     {
         if ( !IsReadOnly() )
         {
-            bool const bAll = rSearchItem.GetCommand() == SvxSearchCmd::REPLACE_ALL;
-            nFound = pView->Replace( rSearchItem.GetSearchOptions() , bAll , bForward );
+            bool const bAll = pSearchItem->GetCommand() == SvxSearchCmd::REPLACE_ALL;
+            nFound = pView->Replace( pSearchItem->GetSearchOptions() , bAll , bForward );
         }
     }
 

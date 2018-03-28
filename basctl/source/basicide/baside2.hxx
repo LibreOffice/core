@@ -373,7 +373,7 @@ public:
     void            ShowCursor( bool bOn );
 
     virtual SearchOptionFlags GetSearchOptions() override;
-    virtual sal_uInt16  StartSearchAndReplace (SvxSearchItem const&, bool bFromStart = false) override;
+    virtual sal_uInt16  StartSearchAndReplace (SvxSearchItem const*, bool bFromStart = false) override;
 
     EditorWindow&       GetEditorWindow()       { return m_aXEditorWindow->GetEdtWindow(); }
     BreakPointWindow&   GetBreakPointWindow()   { return m_aXEditorWindow->GetBrkWindow(); }
