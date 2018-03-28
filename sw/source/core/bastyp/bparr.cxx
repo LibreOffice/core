@@ -200,7 +200,7 @@ void BigPtrArray::BlockDel( sal_uInt16 nDel )
 
 void BigPtrArray::Insert( BigPtrEntry* pElem, sal_uLong pos )
 {
-    CHECKIDX( ppInf, nBlock, nSize, nCur );
+    CHECKIDX( m_ppInf.get(), m_nBlock, m_nSize, m_nCur );
 
     BlockInfo* p;
     sal_uInt16 cur;
@@ -293,12 +293,12 @@ void BigPtrArray::Insert( BigPtrEntry* pElem, sal_uLong pos )
     if( cur != ( m_nBlock - 1 ) ) UpdIndex( cur );
     m_nCur = cur;
 
-    CHECKIDX( ppInf, nBlock, nSize, nCur );
+    CHECKIDX( m_ppInf.get(), m_nBlock, m_nSize, m_nCur );
 }
 
 void BigPtrArray::Remove( sal_uLong pos, sal_uLong n )
 {
-    CHECKIDX( ppInf, nBlock, nSize, nCur );
+    CHECKIDX( m_ppInf.get(), m_nBlock, m_nSize, m_nCur );
 
     sal_uInt16 nBlkdel = 0;              // deleted blocks
     sal_uInt16 cur = Index2Block( pos ); // current block number
@@ -377,7 +377,7 @@ void BigPtrArray::Remove( sal_uLong pos, sal_uLong n )
     if( m_nBlock > ( m_nSize / ( MAXENTRY / 2 ) ) )
         Compress();
 
-    CHECKIDX( ppInf, nBlock, nSize, nCur );
+    CHECKIDX( m_ppInf.get(), m_nBlock, m_nSize, m_nCur );
 }
 
 void BigPtrArray::Replace( sal_uLong idx, BigPtrEntry* pElem)
@@ -393,7 +393,7 @@ void BigPtrArray::Replace( sal_uLong idx, BigPtrEntry* pElem)
 /** Compress the array */
 sal_uInt16 BigPtrArray::Compress()
 {
-    CHECKIDX( ppInf, nBlock, nSize, nCur );
+    CHECKIDX( m_ppInf.get(), m_nBlock, m_nSize, m_nCur );
 
     // Iterate over InfoBlock array from beginning to end. If there is a deleted
     // block in between so move all following ones accordingly. The pointer <pp>
@@ -490,9 +490,9 @@ sal_uInt16 BigPtrArray::Compress()
     if( m_nCur >= nFirstChgPos )
         m_nCur = 0;
 
-    CHECKIDX( ppInf, nBlock, nSize, nCur );
+    CHECKIDX( m_ppInf.get(), m_nBlock, m_nSize, m_nCur );
 
     return nFirstChgPos;
 }
 
-/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
+/* vim:set shiftwidth=4 softtabstop=4 */
