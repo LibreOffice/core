@@ -112,7 +112,7 @@ SqlStatementVector SchemaParser::parseSchema()
         IndexStmtParser indexParser{ sSql };
         if (indexParser.isIndexStatement())
         {
-            m_ColumnTypes[indexParser.getTableName()] = indexParser.getIndexes();
+            m_Indexes[indexParser.getTableName()] = indexParser.getIndexes();
         }
         else if (sSql.startsWith("SET") || sSql.startsWith("CREATE USER")
                  || sSql.startsWith("CREATE SCHEMA") || sSql.startsWith("GRANT"))
