@@ -177,15 +177,14 @@ public:
 
 class SaveRedlEndPosForRestore
 {
-    std::vector<SwPosition*>* pSavArr;
-    SwNodeIndex* pSavIdx;
+    std::vector<SwPosition*> mvSavArr;
+    std::unique_ptr<SwNodeIndex> pSavIdx;
     sal_Int32 nSavContent;
 
-    void Restore_();
 public:
     SaveRedlEndPosForRestore( const SwNodeIndex& rInsIdx, sal_Int32 nContent );
     ~SaveRedlEndPosForRestore();
-    void Restore() { if( pSavArr ) Restore_(); }
+    void Restore();
 };
 
 #endif // INCLUDED_SW_SOURCE_CORE_INC_MVSAVE_HXX
