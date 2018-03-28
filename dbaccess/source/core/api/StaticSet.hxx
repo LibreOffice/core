@@ -51,10 +51,11 @@ namespace dbaccess
         virtual bool hasOrderedBookmarks(  ) override;
         virtual sal_Int32 hashBookmark( const css::uno::Any& bookmark ) override;
 
+        bool isBeforeFirst(  );
+        bool isAfterLast(  );
+
         // css::sdbc::XResultSet
         virtual bool next() override;
-        virtual bool isBeforeFirst(  );
-        virtual bool isAfterLast(  );
         virtual void beforeFirst(  ) override;
         virtual void afterLast(  ) override;
         virtual bool first() override;

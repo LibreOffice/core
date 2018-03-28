@@ -926,7 +926,7 @@ public:
         bIsEndFixed = mpDVR->IsEndFixed();
     }
 
-    virtual std::string GenSlidingWindowDeclRef( bool nested = false ) const
+    std::string GenSlidingWindowDeclRef( bool nested = false ) const
     {
         size_t nArrayLength = mpDVR->GetArrayLength();
         std::stringstream ss;
@@ -949,7 +949,7 @@ public:
         return ss.str();
     }
     /// Controls how the elements in the DoubleVectorRef are traversed
-    virtual size_t GenReductionLoopHeader(
+    size_t GenReductionLoopHeader(
         std::stringstream& ss, bool& needBody )
     {
         assert(mpDVR);
@@ -1187,7 +1187,7 @@ public:
         bIsEndFixed = mpDVR->IsEndFixed();
     }
     /// Controls how the elements in the DoubleVectorRef are traversed
-    virtual size_t GenReductionLoopHeader(
+    size_t GenReductionLoopHeader(
         std::stringstream& ss, int nResultSize, bool& needBody )
     {
         assert(mpDVR);

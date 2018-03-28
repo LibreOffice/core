@@ -185,10 +185,11 @@ namespace dbaccess
         virtual bool rowUpdated(  ) override;
         virtual bool rowInserted(  ) override;
         virtual bool rowDeleted(  ) override;
+        bool isBeforeFirst(  );
+        bool isAfterLast(  );
+
         // css::sdbc::XResultSet
         virtual bool next() override;
-        virtual bool isBeforeFirst(  );
-        virtual bool isAfterLast(  );
         virtual void beforeFirst(  ) override;
         virtual void afterLast(  ) override;
         virtual bool first() override;

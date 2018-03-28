@@ -33,7 +33,7 @@ namespace dbaui
         bool            m_bNatural;
 
         // for creation and duplication of lines of own type
-        virtual OConnectionLineDataRef CreateLineDataObj();
+        OConnectionLineDataRef CreateLineDataObj();
 
         OQueryTableConnectionData& operator=( const OQueryTableConnectionData& rConnData );
     public:
