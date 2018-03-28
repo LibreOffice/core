@@ -43,7 +43,7 @@ public:
                                    const OUString& rQName,
                                    const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
     virtual void EndElement() override;
-    virtual void ExportContent() override;
+    void ExportContent();
 
 private:
     void AddContent( rtl::Reference<XMLAxisOOoContext> const & pContent );

@@ -54,7 +54,7 @@ public:
     virtual void EndElement() override;
     virtual void Characters( const OUString& rChars ) override;
 
-    virtual void ExportContent() override;
+    void ExportContent();
 
     virtual bool IsPersistent() const override;
 

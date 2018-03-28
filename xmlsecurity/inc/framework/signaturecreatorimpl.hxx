@@ -61,7 +61,7 @@ private:
 
     virtual void notifyResultListener() const override;
     virtual void clearUp( ) const override;
-    virtual bool checkReady() const override;
+    bool checkReady() const;
     virtual void startEngine( const rtl::Reference<XMLSignatureTemplateImpl>& xSignatureTemplate) override;
 
 public:
