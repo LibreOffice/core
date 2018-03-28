@@ -363,10 +363,10 @@ namespace cairocanvas
 
             if( !pSurface )
             {
-                vcl::bitmap::CanvasCairoExtractBitmapData(aBmpEx, aBitmap, data, bHasAlpha);
+                long nWidth;
+                long nHeight;
+                vcl::bitmap::CanvasCairoExtractBitmapData(aBmpEx, aBitmap, data, bHasAlpha, nWidth, nHeight);
 
-                const long nWidth = aBmpEx.GetPrefSize().Width();
-                const long nHeight = aBmpEx.GetPrefSize().Height();
                 SurfaceSharedPtr pImageSurface = rSurfaceProvider->getOutputDevice()->CreateSurface(
                     CairoSurfaceSharedPtr(
                         cairo_image_surface_create_for_data(
