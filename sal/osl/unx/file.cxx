@@ -940,20 +940,6 @@ oslFileError openFilePath(const char *cpFilePath, oslFileHandle* pHandle, sal_uI
 
     /* open the file */
     int fd = open_c( cpFilePath, flags, mode );
-
-#ifdef IOS
-    /* Horrible hack: If opening for RDWR and getting EPERM, just try
-     * again for RDONLY. Quicker this way than to figure out why
-     * we get that oh so useful General Error when trying to open a
-     * read-only document.
-     */
-    if (fd  == -1 && (flags & O_RDWR) && errno == EPERM)
-    {
-        int rdonly_flags = (flags & ~O_ACCMODE) | O_RDONLY;
-        fd = open_c( cpFilePath, rdonly_flags, mode );
-    }
-#endif
-
     if (fd == -1)
     {
         int saved_errno = errno;
