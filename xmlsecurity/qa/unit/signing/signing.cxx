@@ -355,7 +355,12 @@ void SigningTest::testOOXMLRemove()
     // Load the test document as a storage and read its signatures: purpose1 and purpose2.
     DocumentSignatureManager aManager(mxComponentContext, DocumentSignatureMode::Content);
     CPPUNIT_ASSERT(aManager.init());
-    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "multi.docx";
+    utl::TempFile aTempFile;
+    aTempFile.EnableKillingFile();
+    OUString aURL = aTempFile.GetURL();
+    CPPUNIT_ASSERT_EQUAL(
+        osl::File::RC::E_None,
+        osl::File::copy(m_directories.getURLFromSrc(DATA_DIRECTORY) + "multi.docx", aURL));
     uno::Reference <embed::XStorage> xStorage = comphelper::OStorageHelper::GetStorageOfFormatFromURL(ZIP_STORAGE_FORMAT_STRING, aURL, embed::ElementModes::READWRITE);
     CPPUNIT_ASSERT(xStorage.is());
     aManager.mxStore = xStorage;
