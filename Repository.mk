@@ -253,6 +253,7 @@ $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
     codemaker \
     commoncpp \
     commonjava \
+    cosv \
     ooopathutils \
     salcpprt \
     sldshw_s \

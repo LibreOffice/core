@@ -27,6 +27,7 @@
 
 #   include <vos/types.hxx>
 #   include <vos/macros.hxx>
+#   include <vos/vosdllapi.h>
 
 namespace vos
 {
@@ -41,7 +42,7 @@ struct OCreateParam;
     common base class for all framework classes. Used for memory-management
     and runtime type-info.
 */
-class OObject
+class VOS_DLLPUBLIC OObject
 {
 public:
 
@@ -107,7 +108,7 @@ struct OCreateParam
 
 /**
 */
-struct OClassInfo
+struct VOS_DLLPUBLIC OClassInfo
 {
     ///
     const sal_Char  *m_pClassName;

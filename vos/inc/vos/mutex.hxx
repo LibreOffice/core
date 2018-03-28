@@ -27,6 +27,7 @@
 #   include <vos/types.hxx>
 #   include <vos/object.hxx>
 #   include <osl/mutex.h>
+#   include <vos/vosdllapi.h>
 
 namespace vos
 {
@@ -65,7 +66,7 @@ protected:
     @version 1.0
 */
 
-class OMutex : public OObject, public IMutex
+class VOS_DLLPUBLIC OMutex : public OObject, public IMutex
 {
     VOS_DECLARE_CLASSINFO(VOS_NAMESPACE(OMutex, vos));
 

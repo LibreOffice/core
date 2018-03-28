@@ -27,6 +27,7 @@
 #   include <vos/object.hxx>
 #   include <rtl/ustring.hxx>
 #   include <osl/security.h>
+#   include <vos/vosdllapi.h>
 
 namespace vos
 {
@@ -39,7 +40,7 @@ namespace vos
     @version 1.0
 
 */
-class OSecurity : public OObject
+class VOS_DLLPUBLIC OSecurity : public OObject
 {
     VOS_DECLARE_CLASSINFO(VOS_NAMESPACE(OSecurity, vos));
 

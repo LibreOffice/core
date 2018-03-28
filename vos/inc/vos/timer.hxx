@@ -28,6 +28,7 @@
 #   include <vos/refernce.hxx>
 #   include <vos/mutex.hxx>
 #   include <osl/time.h>
+#   include <vos/vosdllapi.h>
 
 
 namespace vos
@@ -129,7 +130,7 @@ class OTimerManager;
 
 /** <code> class OTimer </code> : Interface for the Timer and handling the event
 */
-class OTimer : virtual public OReference , virtual public OObject
+class VOS_DLLPUBLIC OTimer : virtual public OReference , virtual public OObject
 {
     VOS_DECLARE_CLASSINFO(VOS_NAMESPACE(OTimer, vos));
 

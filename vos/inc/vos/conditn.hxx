@@ -30,6 +30,7 @@
 #endif
 #include <osl/time.h>
 #   include <vos/object.hxx>
+#   include <vos/vosdllapi.h>
 
 namespace vos
 {
@@ -93,7 +94,7 @@ public:
     @version 1.0
 
 */
-class OCondition : public OObject, public ICondition
+class VOS_DLLPUBLIC OCondition : public OObject, public ICondition
 {
 
     VOS_DECLARE_CLASSINFO(VOS_NAMESPACE(OCondition, vos));

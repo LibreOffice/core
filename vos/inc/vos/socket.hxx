@@ -33,6 +33,7 @@
 #   include <vos/refobj.hxx>
 #   include <rtl/ustring.hxx>
 #   include <osl/socket.h>
+#   include <vos/vosdllapi.h>
 
 #include <osl/time.h>
 
@@ -198,7 +199,7 @@ public:
     virtual sal_Bool SAL_CALL operator== (oslSocketAddr Addr)= 0;
 };
 
-class OSocketAddr : public vos::ISocketAddr,
+class VOS_DLLPUBLIC OSocketAddr : public vos::ISocketAddr,
             public vos::OObject
 
 {
@@ -270,7 +271,7 @@ protected:
 
 /** Represents an internet-address.
 */
-class OInetSocketAddr : public vos::OSocketAddr
+class VOS_DLLPUBLIC OInetSocketAddr : public vos::OSocketAddr
 {
     VOS_DECLARE_CLASSINFO(vos::OInetSocketAddr);
 public:
@@ -355,7 +356,7 @@ public:
 
 /** Represents an IPX/SPX address.
 */
-class OIpxSocketAddr :  public vos::OSocketAddr
+class VOS_DLLPUBLIC OIpxSocketAddr :  public vos::OSocketAddr
 {
     VOS_DECLARE_CLASSINFO(vos::OIpxSocketAddr);
 public:
@@ -426,7 +427,7 @@ public:
 
 /** Represents a socket.
 */
-class OSocket : public vos::ISocketTypes,
+class VOS_DLLPUBLIC OSocket : public vos::ISocketTypes,
                 public vos::OReference,
                 public vos::OObject
 {
@@ -805,7 +806,7 @@ public:
 
 /** A socket to send or receive a stream of data.
 */
-class OStreamSocket : public vos::OSocket,
+class VOS_DLLPUBLIC OStreamSocket : public vos::OSocket,
                       public vos::IStream
 {
     VOS_DECLARE_CLASSINFO(vos::OStreamSocket);
@@ -948,7 +949,7 @@ protected:
 
 /** A socket to accept incoming connections.
 */
-class OAcceptorSocket : public vos::OSocket
+class VOS_DLLPUBLIC OAcceptorSocket : public vos::OSocket
 {
     VOS_DECLARE_CLASSINFO(vos::OAcceptorSocket);
 public:
@@ -1010,7 +1011,7 @@ public:
 
 /** A socket to initiate a conenction.
 */
-class OConnectorSocket : public vos::OStreamSocket
+class VOS_DLLPUBLIC OConnectorSocket : public vos::OStreamSocket
 {
     VOS_DECLARE_CLASSINFO(vos::OConnectorSocket);
 public:
@@ -1046,7 +1047,7 @@ public:
 
 /** A connectionless socket to send and receive datagrams.
 */
-class ODatagramSocket : public vos::OSocket
+class VOS_DLLPUBLIC ODatagramSocket : public vos::OSocket
 {
     VOS_DECLARE_CLASSINFO(vos::ODatagramSocket);
 public:

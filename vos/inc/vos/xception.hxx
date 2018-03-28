@@ -25,6 +25,7 @@
 #define _XCEPTION_HXX_
 
 #include <vos/object.hxx>
+#include <vos/vosdllapi.h>
 
 #ifdef _MSC_VER
 #pragma warning( disable : 4290 )
@@ -56,7 +57,7 @@ namespace vos
  * just a base class for further exceptions
  */
 
-class OException : public OObject
+class VOS_DLLPUBLIC OException : public OObject
 {
     VOS_DECLARE_CLASSINFO(VOS_NAMESPACE(OException, vos));
 

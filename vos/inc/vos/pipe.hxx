@@ -44,7 +44,7 @@ class OStreamPipe;
 
 /** Represents a pipe.
 */
-class OPipe : public vos::OReference,
+class VOS_DLLPUBLIC OPipe : public vos::OReference,
               public vos::OObject
 {
     VOS_DECLARE_CLASSINFO(vos::OPipe);
@@ -187,7 +187,7 @@ public:
 
 /** A pipe to send or receive a stream of data.
 */
-class OStreamPipe : public vos::OPipe,
+class VOS_DLLPUBLIC OStreamPipe : public vos::OPipe,
                     public vos::IStream
 {
     VOS_DECLARE_CLASSINFO(vos::OStreamPipe);

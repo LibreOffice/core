@@ -21,31 +21,24 @@
 
 
 
-PRJ=..$/..
+PRJ=..
+TARGET=prj
 
-PRJNAME=cosv
-TARGET=cosv_badcast_wnt
-TARGETTYPE=CUI
+.INCLUDE : settings.mk
 
-# --- Settings -----------------------------------------------------
+.IF "$(VERBOSE)"!=""
+VERBOSEFLAG :=
+.ELSE
+VERBOSEFLAG := -s
+.ENDIF
 
-ENABLE_EXCEPTIONS=true
+.IF "$(DEBUG)"!=""
+DEBUG_ARGUMENT=DEBUG=$(DEBUG)
+.ELIF "$(debug)"!=""
+DEBUG_ARGUMENT=debug=$(debug)
+.ELSE
+DEBUG_ARGUMENT=
+.ENDIF
 
-.INCLUDE :  settings.mk
-
-
-
-# --- Files --------------------------------------------------------
-
-OBJFILES= \
-    $(OBJ)$/badcast.obj
-
-
-
-# --- Targets ------------------------------------------------------
-
-
-.INCLUDE :  target.mk
-
-
-
+all:
+    cd $(PRJ) && $(GNUMAKE) $(VERBOSEFLAG) -r -j$(MAXPROCESS) $(gb_MAKETARGET) $(DEBUG_ARGUMENT) && $(GNUMAKE) $(VERBOSEFLAG) -r deliverlog

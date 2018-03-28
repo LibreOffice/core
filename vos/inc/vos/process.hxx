@@ -30,6 +30,7 @@
 #   include <vos/object.hxx>
 #   include <vos/socket.hxx>
 #   include <osl/process.h>
+#   include <vos/vosdllapi.h>
 
 namespace vos
 {
@@ -38,7 +39,7 @@ class OProcess;
 
 /** helper class to fill a vector of command line arguments
  */
-class OArgumentList
+class VOS_DLLPUBLIC OArgumentList
 {
     sal_uInt32 n_Args;
     rtl_uString** m_aVec;
@@ -61,7 +62,7 @@ public:
 
 /** helper class to fill a vector of environment settings
  */
-class OEnvironment
+class VOS_DLLPUBLIC OEnvironment
 {
     sal_Int32 n_Vars;
     rtl_uString** m_aVec;
@@ -91,7 +92,7 @@ public:
     <li>setting user rights and security,
     <li>providing ioresources like file descriptors and sockets.</ul>
 */
-class OProcess : public OObject
+class VOS_DLLPUBLIC OProcess : public OObject
 {
     VOS_DECLARE_CLASSINFO(VOS_NAMESPACE(OProcess, vos));
 
@@ -218,7 +219,7 @@ protected:
 */
 
 
-class OStartupInfo : public OObject
+class VOS_DLLPUBLIC OStartupInfo : public OObject
 {
     VOS_DECLARE_CLASSINFO(VOS_NAMESPACE(OStartupInfo, vos));
 
@@ -277,7 +278,7 @@ public:
 
 class OExtCommandLineImpl;
 
-class OExtCommandLine : public OObject
+class VOS_DLLPUBLIC OExtCommandLine : public OObject
 {
     VOS_DECLARE_CLASSINFO(VOS_NAMESPACE(OExtCommandLine, vos));
     static vos::OExtCommandLineImpl* pExtImpl;

@@ -28,6 +28,7 @@
 #   include <vos/types.hxx>
 #   include <vos/object.hxx>
 #   include <osl/signal.h>
+#   include <vos/vosdllapi.h>
 
 namespace vos
 {
@@ -42,7 +43,7 @@ SignalHandlerFunction_impl signalHandlerFunction_impl;
     @version 1.0
 */
 
-class OSignalHandler : public vos::OObject
+class VOS_DLLPUBLIC OSignalHandler : public vos::OObject
 {
     VOS_DECLARE_CLASSINFO(VOS_NAMESPACE(OSignalHandler, vos));
 

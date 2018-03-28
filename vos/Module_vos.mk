@@ -21,16 +21,12 @@
 
 
 
-# target
-VOS_TARGET=vos
+$(eval $(call gb_Module_Module,vos))
 
-# the major 
-VOS_MAJOR=3
-# the minor 
-VOS_MINOR=0
-# the micro 
-VOS_MICRO=0
+$(eval $(call gb_Module_add_targets,vos,\
+	Library_vos3 \
+	Package_inc \
+))
 
-# this is a c++ compatible library 
-VOS_CPP=1
 
+# vim: set noet sw=4 ts=4:

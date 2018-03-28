@@ -27,6 +27,7 @@
 #   include <vos/types.hxx>
 #   include <osl/interlck.h>
 #   include <vos/object.hxx>
+#   include <vos/vosdllapi.h>
 
 namespace vos
 {
@@ -48,7 +49,7 @@ public:
     virtual RefCount SAL_CALL referenced() const=0;
 };
 
-class ORefCount
+class VOS_DLLPUBLIC ORefCount
 {
 public:
     typedef IReference::RefCount RefCount;
@@ -78,7 +79,7 @@ private:
     ORefCount& SAL_CALL operator= (const ORefCount&);
 };
 
-class OReference : public vos::IReference
+class VOS_DLLPUBLIC OReference : public vos::IReference
 {
 public:
     OReference();

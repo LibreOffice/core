@@ -28,11 +28,12 @@
 #   include <vos/object.hxx>
 #   include <rtl/ustring.hxx>
 #   include <osl/module.h>
+#   include <vos/vosdllapi.h>
 
 namespace vos
 {
 
-class OModule : public OObject
+class VOS_DLLPUBLIC OModule : public OObject
 {
     VOS_DECLARE_CLASSINFO(VOS_NAMESPACE(OModule, vos));
 

@@ -29,6 +29,7 @@
 #   include <osl/thread.h>
 #   include <osl/conditn.h>
 #   include <vos/runnable.hxx>
+#   include <vos/vosdllapi.h>
 
 #include <osl/time.h>
 
@@ -49,7 +50,7 @@ ThreadWorkerFunction_impl threadWorkerFunction_impl;
     @version 1.0
 */
 
-class OThread : public vos::IRunnable,
+class VOS_DLLPUBLIC OThread : public vos::IRunnable,
                 public vos::OObject
 {
 
@@ -199,7 +200,7 @@ protected:
     friend void threadWorkerFunction_impl(void *);
 };
 
-class OThreadData : public vos::OObject
+class VOS_DLLPUBLIC OThreadData : public vos::OObject
 {
     VOS_DECLARE_CLASSINFO(VOS_NAMESPACE(OThreadData, vos));
 

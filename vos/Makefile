@@ -19,36 +19,14 @@
 #  
 #**************************************************************
 
+ifeq ($(strip $(SOLARENV)),)
+$(error No environment set!)
+endif
 
+gb_PARTIALBUILD := T
+GBUILDDIR := $(SOLARENV)/gbuild
+include $(GBUILDDIR)/gbuild.mk
 
-PRJ=..
+$(eval $(call gb_Module_make_global_targets,$(shell ls $(dir $(realpath $(firstword $(MAKEFILE_LIST))))/Module*.mk)))
 
-PRJNAME=cosv
-TARGET=cosv
-
-ENABLE_EXCEPTIONS=true
-
-
-# --- Settings -----------------------------------------------------
-
-.INCLUDE :  settings.mk
-
-
-# --- Files --------------------------------------------------------
-
-LIB1FILES= 	\
-        $(LB)$/cosv_service.lib		\
-        $(LB)$/cosv_storage.lib     	\
-        $(LB)$/cosv_strings.lib		\
-        $(LB)$/cosv_badcast_wnt.lib
-
-
-# --- Targets ------------------------------------------------------
-
-LIB1TARGET= 	$(LB)$/$(TARGET).lib
-LIB1ARCHIV= 	$(LB)$/lib$(TARGET).a
-
-
-.INCLUDE :  target.mk
-
-
+# vim: set noet sw=4 ts=4:

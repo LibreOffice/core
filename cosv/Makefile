@@ -19,47 +19,14 @@
 #  
 #**************************************************************
 
+ifeq ($(strip $(SOLARENV)),)
+$(error No environment set!)
+endif
 
+gb_PARTIALBUILD := T
+GBUILDDIR := $(SOLARENV)/gbuild
+include $(GBUILDDIR)/gbuild.mk
 
-PRJ=..$/..
+$(eval $(call gb_Module_make_global_targets,$(shell ls $(dir $(realpath $(firstword $(MAKEFILE_LIST))))/Module*.mk)))
 
-PRJNAME=cosv
-TARGET=cosv_storage
-
-ENABLE_EXCEPTIONS=true
-
-
-
-# --- Settings -----------------------------------------------------
-
-.INCLUDE :  settings.mk
-
-.INCLUDE : $(PRJ)$/source$/fullcpp.mk
-
-
-
-
-# --- Files --------------------------------------------------------
-
-OBJFILES= \
-    $(OBJ)$/dirchain.obj 	\
-    $(OBJ)$/file.obj 		\
-    $(OBJ)$/mbstream.obj    \
-    $(OBJ)$/persist.obj	    \
-    $(OBJ)$/ploc.obj 	    \
-    $(OBJ)$/ploc_dir.obj    \
-    $(OBJ)$/plocroot.obj
-
-#SLOFILES= \
-#	$(SLO)$/file.obj 		\
-#	$(SLO)$/csfileim.obj 	\
-#	$(SLO)$/memstorg.obj
-
-
-
-# --- Targets ------------------------------------------------------
-
-.INCLUDE :  target.mk
-
-
-
+# vim: set noet sw=4 ts=4:

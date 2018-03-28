@@ -27,6 +27,7 @@
 #   include <vos/types.hxx>
 #   include <vos/object.hxx>
 #   include <vos/istream.hxx>
+#   include <vos/vosdllapi.h>
 
 namespace vos
 {
@@ -71,7 +72,7 @@ protected:
 
 /** Implements IPositionableStream
 */
-class OStream : public vos::OObject,
+class VOS_DLLPUBLIC OStream : public vos::OObject,
                 public vos::IPositionableStream
 {
     VOS_DECLARE_CLASSINFO(VOS_NAMESPACE(OStream, vos));

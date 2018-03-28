@@ -21,35 +21,24 @@
 
 
 
-PRJ=..$/..
+PRJ=..
+TARGET=prj
 
-PRJNAME=cosv
-TARGET=cosv_service
+.INCLUDE : settings.mk
 
-ENABLE_EXCEPTIONS=true
+.IF "$(VERBOSE)"!=""
+VERBOSEFLAG :=
+.ELSE
+VERBOSEFLAG := -s
+.ENDIF
 
+.IF "$(DEBUG)"!=""
+DEBUG_ARGUMENT=DEBUG=$(DEBUG)
+.ELIF "$(debug)"!=""
+DEBUG_ARGUMENT=debug=$(debug)
+.ELSE
+DEBUG_ARGUMENT=
+.ENDIF
 
-# --- Settings -----------------------------------------------------
-
-.INCLUDE :  settings.mk
-
-.INCLUDE : $(PRJ)$/source$/fullcpp.mk
-
-
-
-# --- Files --------------------------------------------------------
-
-OBJFILES= \
-    $(OBJ)$/comdline.obj 	\
-    $(OBJ)$/comfunc.obj 	\
-    $(OBJ)$/csv_ostream.obj \
-    $(OBJ)$/datetime.obj 	\
-    $(OBJ)$/std_outp.obj
-
-
-# --- Targets ------------------------------------------------------
-
-.INCLUDE :  target.mk
-
-
-
+all:
+    cd $(PRJ) && $(GNUMAKE) $(VERBOSEFLAG) -r -j$(MAXPROCESS) $(gb_MAKETARGET) $(DEBUG_ARGUMENT) && $(GNUMAKE) $(VERBOSEFLAG) -r deliverlog

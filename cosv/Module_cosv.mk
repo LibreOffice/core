@@ -21,34 +21,12 @@
 
 
 
-PRJ=..$/..
+$(eval $(call gb_Module_Module,cosv))
 
-PRJNAME=cosv
-TARGET=cosv_strings
-
-ENABLE_EXCEPTIONS=true
-
-
-# --- Settings -----------------------------------------------------
-
-.INCLUDE :  settings.mk
-
-.INCLUDE : $(PRJ)$/source$/fullcpp.mk
+$(eval $(call gb_Module_add_targets,cosv,\
+	StaticLibrary_cosv \
+	Package_inc \
+))
 
 
-
-# --- Files --------------------------------------------------------
-
-OBJFILES= \
-    $(OBJ)$/str_types.obj   \
-    $(OBJ)$/streamstr.obj   \
-    $(OBJ)$/string.obj      
-
-
-
-# --- Targets ------------------------------------------------------
-
-.INCLUDE :  target.mk
-
-
-
+# vim: set noet sw=4 ts=4:
