@@ -347,7 +347,7 @@ public:
     virtual SwContentFrame *MakeFrame( SwFrame* ) override;
     virtual SwContentNode *SplitContentNode( const SwPosition & ) override;
     virtual SwContentNode *JoinNext() override;
-    virtual void JoinPrev() override;
+    void JoinPrev();
 
     SwContentNode *AppendNode( const SwPosition & );
 
