@@ -612,7 +612,7 @@ void ScModelObj::postKeyEvent(int nType, int nCharCode, int nKeyCode)
     if (!pWindow)
         return;
 
-    LOKAsyncEventData* pLOKEv = new LOKAsyncEventData;
+    SfxLokHelper::LOKAsyncEventData* pLOKEv = new SfxLokHelper::LOKAsyncEventData;
     pLOKEv->mpWindow = pWindow;
     switch (nType)
     {
@@ -627,7 +627,8 @@ void ScModelObj::postKeyEvent(int nType, int nCharCode, int nKeyCode)
     }
 
     pLOKEv->maKeyEvent = KeyEvent(nCharCode, nKeyCode, 0);
-    Application::PostUserEvent(Link<void*, void>(pLOKEv, ITiledRenderable::LOKPostAsyncEvent));
+    pLOKEv->mnViewId = SfxLokHelper::getView();
+    Application::PostUserEvent(Link<void*, void>(pLOKEv, SfxLokHelper::LOKPostAsyncEvent));
 }
 
 void ScModelObj::postMouseEvent(int nType, int nX, int nY, int nCount, int nButtons, int nModifier)
@@ -662,7 +663,7 @@ void ScModelObj::postMouseEvent(int nType, int nX, int nY, int nCount, int nButt
             return;
     }
 
-    LOKAsyncEventData* pLOKEv = new LOKAsyncEventData;
+    SfxLokHelper::LOKAsyncEventData* pLOKEv = new SfxLokHelper::LOKAsyncEventData;
     pLOKEv->mpWindow = pGridWindow;
     switch (nType)
     {
@@ -684,7 +685,8 @@ void ScModelObj::postMouseEvent(int nType, int nX, int nY, int nCount, int nButt
     pLOKEv->maMouseEvent = MouseEvent(aPos, nCount,
                                       MouseEventModifiers::SIMPLECLICK,
                                       nButtons, nModifier);
-    Application::PostUserEvent(Link<void*, void>(pLOKEv, ITiledRenderable::LOKPostAsyncEvent));
+    pLOKEv->mnViewId = SfxLokHelper::getView();
+    Application::PostUserEvent(Link<void*, void>(pLOKEv, SfxLokHelper::LOKPostAsyncEvent));
 }
 
 void ScModelObj::setTextSelection(int nType, int nX, int nY)

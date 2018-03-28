@@ -122,6 +122,7 @@
 #include <drawinglayer/primitive2d/structuretagprimitive2d.hxx>
 
 #include <sfx2/lokcharthelper.hxx>
+#include <sfx2/lokhelper.hxx>
 
 #define TWIPS_PER_PIXEL 15
 
@@ -2486,7 +2487,7 @@ void SdXImpressDocument::postKeyEvent(int nType, int nCharCode, int nKeyCode)
     if (!pWindow)
         return;
 
-    LOKAsyncEventData* pLOKEv = new LOKAsyncEventData;
+    SfxLokHelper::LOKAsyncEventData* pLOKEv = new SfxLokHelper::LOKAsyncEventData;
     pLOKEv->mpWindow = pWindow;
     switch (nType)
     {
@@ -2501,7 +2502,8 @@ void SdXImpressDocument::postKeyEvent(int nType, int nCharCode, int nKeyCode)
     }
 
     pLOKEv->maKeyEvent = KeyEvent(nCharCode, nKeyCode, 0);
-    Application::PostUserEvent(Link<void*, void>(pLOKEv, ITiledRenderable::LOKPostAsyncEvent));
+    pLOKEv->mnViewId = SfxLokHelper::getView();
+    Application::PostUserEvent(Link<void*, void>(pLOKEv, SfxLokHelper::LOKPostAsyncEvent));
 }
 
 void SdXImpressDocument::postMouseEvent(int nType, int nX, int nY, int nCount, int nButtons, int nModifier)
@@ -2529,7 +2531,7 @@ void SdXImpressDocument::postMouseEvent(int nType, int nX, int nY, int nCount, i
             return;
     }
 
-    LOKAsyncEventData* pLOKEv = new LOKAsyncEventData;
+    SfxLokHelper::LOKAsyncEventData* pLOKEv = new SfxLokHelper::LOKAsyncEventData;
     pLOKEv->mpWindow = pViewShell->GetActiveWindow();
     switch (nType)
     {
@@ -2550,7 +2552,8 @@ void SdXImpressDocument::postMouseEvent(int nType, int nX, int nY, int nCount, i
     pLOKEv->maMouseEvent = MouseEvent(aPos, nCount,
                                       MouseEventModifiers::SIMPLECLICK,
                                       nButtons, nModifier);
-    Application::PostUserEvent(Link<void*, void>(pLOKEv, ITiledRenderable::LOKPostAsyncEvent));
+    pLOKEv->mnViewId = SfxLokHelper::getView();
+    Application::PostUserEvent(Link<void*, void>(pLOKEv, SfxLokHelper::LOKPostAsyncEvent));
 }
 
 void SdXImpressDocument::setTextSelection(int nType, int nX, int nY)

@@ -210,4 +210,49 @@ void SfxLokHelper::notifyAllViews(int nType, const OString& rPayload)
     }
 }
 
+void SfxLokHelper::LOKPostAsyncEvent(void* pEv, void*)
+{
+    LOKAsyncEventData* pLOKEv = static_cast<LOKAsyncEventData*>(pEv);
+    if (pLOKEv->mpWindow->IsDisposed())
+        return;
+
+    SfxLokHelper::setView(pLOKEv->mnViewId);
+
+    switch (pLOKEv->mnEvent)
+    {
+    case VclEventId::WindowKeyInput:
+        pLOKEv->mpWindow->KeyInput(pLOKEv->maKeyEvent);
+        break;
+    case VclEventId::WindowKeyUp:
+        pLOKEv->mpWindow->KeyUp(pLOKEv->maKeyEvent);
+        break;
+    case VclEventId::WindowMouseButtonDown:
+        pLOKEv->mpWindow->LogicMouseButtonDown(pLOKEv->maMouseEvent);
+        // Invoke the context menu
+        if (pLOKEv->maMouseEvent.GetButtons() & MOUSE_RIGHT)
+        {
+            const CommandEvent aCEvt(pLOKEv->maMouseEvent.GetPosPixel(), CommandEventId::ContextMenu, true, nullptr);
+            pLOKEv->mpWindow->Command(aCEvt);
+        }
+        break;
+    case VclEventId::WindowMouseButtonUp:
+        pLOKEv->mpWindow->LogicMouseButtonUp(pLOKEv->maMouseEvent);
+
+        // sometimes MouseButtonDown captures mouse and starts tracking, and VCL
+        // will not take care of releasing that with tiled rendering
+        if (pLOKEv->mpWindow->IsTracking())
+            pLOKEv->mpWindow->EndTracking(TrackingEventFlags::DontCallHdl);
+
+        break;
+    case VclEventId::WindowMouseMove:
+        pLOKEv->mpWindow->LogicMouseMove(pLOKEv->maMouseEvent);
+        break;
+    default:
+        assert(false);
+        break;
+    }
+
+    delete pLOKEv;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

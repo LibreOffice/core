@@ -55,6 +55,17 @@ public:
     /// A special value to signify 'infinity'.
     /// This value is chosen such that sal_Int32 will not overflow when manipulated.
     static const long MaxTwips = 1e9;
+
+
+    struct LOKAsyncEventData
+    {
+        VclPtr<vcl::Window> mpWindow;
+        VclEventId mnEvent;
+        MouseEvent maMouseEvent;
+        KeyEvent maKeyEvent;
+        int mnViewId;
+    };
+    static void LOKPostAsyncEvent(void* pEv, void*);
 };
 
 template<typename ViewShellType, typename FunctionType>

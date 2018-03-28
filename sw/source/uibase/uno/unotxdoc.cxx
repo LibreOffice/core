@@ -3490,7 +3490,7 @@ void SwXTextDocument::postKeyEvent(int nType, int nCharCode, int nKeyCode)
     if (!pWindow || pWindow->IsDisposed())
         return;
 
-    LOKAsyncEventData* pLOKEv = new LOKAsyncEventData;
+    SfxLokHelper::LOKAsyncEventData* pLOKEv = new SfxLokHelper::LOKAsyncEventData;
     pLOKEv->mpWindow = pWindow;
     switch (nType)
     {
@@ -3505,7 +3505,8 @@ void SwXTextDocument::postKeyEvent(int nType, int nCharCode, int nKeyCode)
     }
 
     pLOKEv->maKeyEvent = KeyEvent(nCharCode, nKeyCode, 0);
-    Application::PostUserEvent(Link<void*, void>(pLOKEv, ITiledRenderable::LOKPostAsyncEvent));
+    pLOKEv->mnViewId = SfxLokHelper::getView();
+    Application::PostUserEvent(Link<void*, void>(pLOKEv, SfxLokHelper::LOKPostAsyncEvent));
 }
 
 void SwXTextDocument::postMouseEvent(int nType, int nX, int nY, int nCount, int nButtons, int nModifier)
@@ -3535,7 +3536,7 @@ void SwXTextDocument::postMouseEvent(int nType, int nX, int nY, int nCount, int 
     SwEditWin& rEditWin = pDocShell->GetView()->GetEditWin();
 
 
-    LOKAsyncEventData* pLOKEv = new LOKAsyncEventData;
+    SfxLokHelper::LOKAsyncEventData* pLOKEv = new SfxLokHelper::LOKAsyncEventData;
     pLOKEv->mpWindow = &rEditWin;
     switch (nType)
     {
@@ -3555,7 +3556,8 @@ void SwXTextDocument::postMouseEvent(int nType, int nX, int nY, int nCount, int 
     pLOKEv->maMouseEvent = MouseEvent(Point(nX, nY), nCount,
                                       MouseEventModifiers::SIMPLECLICK,
                                       nButtons, nModifier);
-    Application::PostUserEvent(Link<void*, void>(pLOKEv, ITiledRenderable::LOKPostAsyncEvent));
+    pLOKEv->mnViewId = SfxLokHelper::getView();
+    Application::PostUserEvent(Link<void*, void>(pLOKEv, SfxLokHelper::LOKPostAsyncEvent));
 }
 
 void SwXTextDocument::setTextSelection(int nType, int nX, int nY)

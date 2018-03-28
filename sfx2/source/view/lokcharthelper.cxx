@@ -8,6 +8,7 @@
  */
 
 #include <sfx2/lokcharthelper.hxx>
+#include <sfx2/lokhelper.hxx>
 
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <sfx2/ipclient.hxx>
@@ -15,7 +16,6 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/fract.hxx>
 #include <tools/mapunit.hxx>
-#include <vcl/ITiledRenderable.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/virdev.hxx>
 
@@ -276,7 +276,7 @@ bool LokChartHelper::postMouseEvent(int nType, int nX, int nY,
         tools::Rectangle rChartBBox = GetChartBoundingBox();
         if (rChartBBox.IsInside(aMousePos))
         {
-            vcl::ITiledRenderable::LOKAsyncEventData* pLOKEv = new vcl::ITiledRenderable::LOKAsyncEventData;
+            SfxLokHelper::LOKAsyncEventData* pLOKEv = new SfxLokHelper::LOKAsyncEventData;
             pLOKEv->mpWindow = pChartWindow;
             switch (nType)
             {
@@ -301,8 +301,9 @@ bool LokChartHelper::postMouseEvent(int nType, int nX, int nY,
             Point aPos(nChartWinX * fScaleX, nChartWinY * fScaleY);
             pLOKEv->maMouseEvent = MouseEvent(aPos, nCount,
                     MouseEventModifiers::SIMPLECLICK, nButtons, nModifier);
+            pLOKEv->mnViewId = SfxLokHelper::getView();
 
-            Application::PostUserEvent(Link<void*, void>(pLOKEv, vcl::ITiledRenderable::LOKPostAsyncEvent));
+            Application::PostUserEvent(Link<void*, void>(pLOKEv, SfxLokHelper::LOKPostAsyncEvent));
 
             return true;
         }
