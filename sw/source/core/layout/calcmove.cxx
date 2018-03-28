@@ -1242,11 +1242,17 @@ void SwContentFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
 
     bool bMoveable;
 
+    SwRect aOldFrame_StopFormat, aOldFrame_StopFormat2;
+    SwRect aOldPrt_StopFormat, aOldPrt_StopFormat2;
+
     while ( !mbValidPos || !mbValidSize || !mbValidPrtArea )
     {
         // - loop prevention
-        SwRect aOldFrame_StopFormat( Frame() );
-        SwRect aOldPrt_StopFormat( Prt() );
+        aOldFrame_StopFormat2 = aOldFrame_StopFormat;
+        aOldPrt_StopFormat2 = aOldPrt_StopFormat;
+        aOldFrame_StopFormat = Frame();
+        aOldPrt_StopFormat = Prt();
+
         if ( (bMoveable = IsMoveable()) )
         {
             SwFrame *pPre = GetIndPrev();
@@ -1492,8 +1498,8 @@ void SwContentFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
 
         // - loop prevention
         {
-            if ( aOldFrame_StopFormat == Frame() &&
-                 aOldPrt_StopFormat == Prt() )
+            if ( (aOldFrame_StopFormat == Frame() || aOldFrame_StopFormat2 == Frame() ) &&
+                 (aOldPrt_StopFormat == Prt() || aOldPrt_StopFormat2 == Prt()))
             {
                 ++nConsecutiveFormatsWithoutChange;
             }
