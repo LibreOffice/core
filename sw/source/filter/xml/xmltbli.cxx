@@ -102,6 +102,7 @@ enum SwXMLTableCellAttrTokens
     XML_TOK_TABLE_PROTECTED,
     XML_TOK_TABLE_STRING_VALUE,
     XML_TOK_TABLE_VALUE_TYPE,
+    XML_TOK_TABLE_HAS_DIRECT_FORMATTING,
 };
 
 static const SvXMLTokenMapEntry aTableElemTokenMap[] =
@@ -145,6 +146,7 @@ static const SvXMLTokenMapEntry aTableCellAttrTokenMap[] =
     { XML_NAMESPACE_TABLE, XML_PROTECT, XML_TOK_TABLE_PROTECTED }, // for backwards compatibility with SRC629 (and before)
     { XML_NAMESPACE_OFFICE, XML_STRING_VALUE, XML_TOK_TABLE_STRING_VALUE },
     { XML_NAMESPACE_OFFICE, XML_VALUE_TYPE, XML_TOK_TABLE_VALUE_TYPE },
+    { XML_NAMESPACE_TABLE, XML_HAS_DIRECT_FORMATTING, XML_TOK_TABLE_HAS_DIRECT_FORMATTING },
     XML_TOKEN_MAP_END
 };
 
@@ -184,6 +186,7 @@ class SwXMLTableCell_Impl
     bool bHasValue; // determines whether dValue attribute is valid
     bool mbCovered;
     bool m_bHasStringValue;
+    bool bHasDirectFormatting;
 
 public:
 
@@ -196,9 +199,10 @@ public:
         bHasValue( false ),
         mbCovered( false )
         , m_bHasStringValue(false)
+        , bHasDirectFormatting(false)
         {}
 
-    inline void Set( const OUString& rStyleName,
+    inline void Set(const OUString& rStyleName,
                       sal_uInt32 nRSpan, sal_uInt32 nCSpan,
                      const SwStartNode *pStNd, SwXMLTableContext *pTable,
                      bool bProtect,
@@ -207,7 +211,8 @@ public:
                      bool bCovered,
                      double dVal,
                      OUString const*const pStringValue,
-                     OUString const& i_rXmlId);
+                     OUString const& i_rXmlId,
+                     bool bHasDirectFormat);
 
     bool IsUsed() const { return pStartNode!=nullptr ||
                                      xSubTable.is() || bProtected;}
@@ -222,6 +227,7 @@ public:
     bool IsProtected() const { return bProtected; }
     bool IsCovered() const { return mbCovered; }
     bool HasStringValue() const { return m_bHasStringValue; }
+    bool HasDirectFormatting() const { return bHasDirectFormatting; }
     OUString const* GetStringValue() const {
         return (m_bHasStringValue) ? &m_StringValue : nullptr;
     }
@@ -234,7 +240,7 @@ public:
     inline void Dispose();
 };
 
-inline void SwXMLTableCell_Impl::Set( const OUString& rStyleName,
+inline void SwXMLTableCell_Impl::Set(const OUString& rStyleName,
                                       sal_uInt32 nRSpan, sal_uInt32 nCSpan,
                                       const SwStartNode *pStNd,
                                       SwXMLTableContext *pTable,
@@ -244,7 +250,8 @@ inline void SwXMLTableCell_Impl::Set( const OUString& rStyleName,
                                       bool bCov,
                                       double dVal,
                                       OUString const*const pStringValue,
-                                      OUString const& i_rXmlId )
+                                      OUString const& i_rXmlId,
+                                      bool bHasDirectFormat)
 {
     aStyleName = rStyleName;
     nRowSpan = nRSpan;
@@ -254,6 +261,7 @@ inline void SwXMLTableCell_Impl::Set( const OUString& rStyleName,
     dValue = dVal;
     bHasValue = bHasVal;
     mbCovered = bCov;
+    bHasDirectFormatting = bHasDirectFormat;
     if (pStringValue)
     {
         m_StringValue = *pStringValue;
@@ -410,6 +418,7 @@ class SwXMLTableCellContext_Impl : public SvXMLImportContext
 
     bool                    bHasTextContent : 1;
     bool                    bHasTableContent : 1;
+    bool bDirectFormat;
 
     SwXMLTableContext *GetTable() { return static_cast<SwXMLTableContext *>(xMyTable.get()); }
 
@@ -449,7 +458,8 @@ SwXMLTableCellContext_Impl::SwXMLTableCellContext_Impl(
     nColSpan( 1 ),
     nColRepeat( 1 ),
     bHasTextContent( false ),
-    bHasTableContent( false )
+    bHasTableContent( false ),
+    bDirectFormat( false )
 {
     sSaveParaDefault = GetImport().GetTextImport()->GetCellParaStyleDefault();
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
@@ -571,6 +581,14 @@ SwXMLTableCellContext_Impl::SwXMLTableCellContext_Impl(
                 // matching value-type and $type-value attributes,
                 // but we've been reading those without checking forever.
             }
+        case XML_TOK_TABLE_HAS_DIRECT_FORMATTING:
+            {
+                bool bTmp(false);
+                if (::sax::Converter::convertBool(bTmp, rValue))
+                {
+                    bDirectFormat = bTmp;
+                }
+            }
             break;
         }
     }
@@ -584,7 +602,7 @@ inline void SwXMLTableCellContext_Impl::InsertContent_()
     GetTable()->InsertCell( aStyleName, nRowSpan, nColSpan,
                             pStartNode,
                             mXmlId,
-                            nullptr, bProtect, &sFormula, bHasValue, fValue,
+                            nullptr, bProtect, bDirectFormat, &sFormula, bHasValue, fValue,
             (m_bHasStringValue && m_bValueTypeIsString) ? &m_StringValue : nullptr);
 }
 
@@ -598,7 +616,7 @@ inline void SwXMLTableCellContext_Impl::InsertContent()
 inline void SwXMLTableCellContext_Impl::InsertContent(
                                                 SwXMLTableContext *pTable )
 {
-    GetTable()->InsertCell( aStyleName, nRowSpan, nColSpan, nullptr, mXmlId, pTable, bProtect );
+    GetTable()->InsertCell( aStyleName, nRowSpan, nColSpan, nullptr, mXmlId, pTable, bProtect, bDirectFormat );
     bHasTableContent = true;
 }
 
@@ -1534,6 +1552,7 @@ void SwXMLTableContext::InsertCell( const OUString& rStyleName,
                                     const OUString & i_rXmlId,
                                     SwXMLTableContext *pTable,
                                     bool bProtect,
+                                    bool bDirectFormat,
                                     const OUString* pFormula,
                                     bool bHasValue,
                                     double fValue,
@@ -1629,7 +1648,7 @@ void SwXMLTableContext::InsertCell( const OUString& rStyleName,
             GetCell( nRowsReq-j, nColsReq-i )
                 ->Set( sStyleName, j, i, pStartNode,
                        pTable, bProtect, pFormula, bHasValue, bCovered, fValue,
-                       pStringValue, i_rXmlId );
+                       pStringValue, i_rXmlId, bDirectFormat );
         }
     }
 
@@ -1697,6 +1716,7 @@ void SwXMLTableContext::InsertRepRows( sal_uInt32 nCount )
                             InsertTableSection(),
                             OUString(),
                             nullptr, pSrcCell->IsProtected(),
+                            pSrcCell->HasDirectFormatting(),
                             &pSrcCell->GetFormula(),
                             pSrcCell->HasValue(), pSrcCell->GetValue(),
                             pSrcCell->GetStringValue() );
@@ -2139,6 +2159,9 @@ SwTableBox *SwXMLTableContext::MakeTableBox(
         pBoxFormat2->UnlockModify();
 
     pBoxFormat2->SetFormatAttr( SwFormatFrameSize( ATT_VAR_SIZE, nColWidth ) );
+
+    if ( pCell->HasDirectFormatting() )
+        pBox->SetDirectFormatting( true );
 
     return pBox;
 }

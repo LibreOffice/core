@@ -165,6 +165,7 @@ public:
                      const OUString & i_rXmlId = OUString(),
                      SwXMLTableContext *pTable=nullptr,
                      bool bIsProtected = false,
+                     bool bHasDirectFormatting = false,
                      const OUString *pFormula=nullptr,
                      bool bHasValue = false,
                      double fValue = 0.0,

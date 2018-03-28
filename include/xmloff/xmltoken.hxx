@@ -947,6 +947,7 @@ namespace xmloff { namespace token {
         XML_GUIDE_OVERHANG,
         XML_H,
         XML_HANGING,
+        XML_HAS_DIRECT_FORMATTING,
         XML_HAS_PERSISTENT_DATA,
         XML_HATCH,
         XML_HATCH_DISTANCE,

@@ -774,6 +774,12 @@ void SwXMLExport::ExportTableBox( const SwTableBox& rBox,
         }
     }
 
+    if ( rBox.HasDirectFormatting() )
+    {
+        AddAttribute( XML_NAMESPACE_TABLE, XML_HAS_DIRECT_FORMATTING, XML_TRUE );
+    }
+
+
     if( nRowSpan != 1 )
     {
         AddAttribute( XML_NAMESPACE_TABLE, XML_NUMBER_ROWS_SPANNED,
