@@ -26,7 +26,7 @@ gb_PythonTest_COMMAND := $(gb_PythonTest_EXECUTABLE) -m unittest
 .PHONY : $(call gb_PythonTest_get_clean_target,%)
 $(call gb_PythonTest_get_clean_target,%) :
 	$(call gb_Helper_abbreviate_dirs,\
-		rm -f $@ $@.log)
+		rm -fr $(WORKDIR)/PythonTest/$*)
 
 ifneq ($(DISABLE_PYTHON),TRUE)
 
