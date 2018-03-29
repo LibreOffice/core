@@ -571,7 +571,7 @@ public:
                             // converts fVal from this unit to rFrom unit
                             // throws exception if not from same class
                            // this implementation is for proportional cases only
-    virtual double          ConvertToBase( double fVal, sal_Int16 nMatchLevel ) const;
+    double                  ConvertToBase( double fVal, sal_Int16 nMatchLevel ) const;
     virtual double          ConvertFromBase( double fVal, sal_Int16 nMatchLevel ) const override;
 };
 

@@ -299,7 +299,7 @@ public:
      * Called when the Options dialog is dismissed with the OK button, to
      * handle potentially conflicting option settings.
      */
-    virtual void    CheckConfigOptions();
+    void            CheckConfigOptions();
 
     void            PostEditView( ScEditEngineDefaulter* pEditEngine, const ScAddress& rCursorPos );
 

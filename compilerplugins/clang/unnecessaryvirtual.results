@@ -1,38 +1,36 @@
-avmedia/source/vlc/inc/wrapper/Instance.hxx:28
-    avmedia::vlc::wrapper::Instance::void-~Instance()
-avmedia/source/vlc/inc/wrapper/Media.hxx:34
-    avmedia::vlc::wrapper::Media::void-~Media()
-avmedia/source/vlc/inc/wrapper/Player.hxx:37
-    avmedia::vlc::wrapper::Player::void-~Player()
-basic/source/comp/codegen.cxx:391
+basctl/source/basicide/baside2.hxx:372
+    basctl::ModulWindow::_Bool-IsPasteAllowed()
+basctl/source/inc/baside3.hxx:104
+    basctl::DialogWindow::_Bool-IsPasteAllowed()
+basic/source/comp/codegen.cxx:387
     PCodeVisitor::void-~PCodeVisitor<T>()
-basic/source/comp/codegen.cxx:468
+basic/source/comp/codegen.cxx:464
     OffSetAccumulator::void-start(const sal_uInt8 *,)
-basic/source/comp/codegen.cxx:469
+basic/source/comp/codegen.cxx:465
     OffSetAccumulator::void-processOpCode0(enum SbiOpcode,)
-basic/source/comp/codegen.cxx:470
+basic/source/comp/codegen.cxx:466
     OffSetAccumulator::void-processOpCode1(enum SbiOpcode,T,)
-basic/source/comp/codegen.cxx:471
+basic/source/comp/codegen.cxx:467
     OffSetAccumulator::void-processOpCode2(enum SbiOpcode,T,T,)
-basic/source/comp/codegen.cxx:472
+basic/source/comp/codegen.cxx:468
     OffSetAccumulator::void-end()
-basic/source/comp/codegen.cxx:487
+basic/source/comp/codegen.cxx:477
     OffSetAccumulator::_Bool-processParams()
-basic/source/comp/codegen.cxx:498
+basic/source/comp/codegen.cxx:488
     BufferTransformer::void-start(const sal_uInt8 *,)
-basic/source/comp/codegen.cxx:499
+basic/source/comp/codegen.cxx:489
     BufferTransformer::void-processOpCode0(enum SbiOpcode,)
-basic/source/comp/codegen.cxx:503
+basic/source/comp/codegen.cxx:493
     BufferTransformer::void-processOpCode1(enum SbiOpcode,T,)
-basic/source/comp/codegen.cxx:528
+basic/source/comp/codegen.cxx:518
     BufferTransformer::void-processOpCode2(enum SbiOpcode,T,T,)
-basic/source/comp/codegen.cxx:538
+basic/source/comp/codegen.cxx:528
     BufferTransformer::_Bool-processParams()
-basic/source/comp/codegen.cxx:539
+basic/source/comp/codegen.cxx:529
     BufferTransformer::void-end()
 chart2/source/inc/WeakListenerAdapter.hxx:58
     chart::WeakListenerAdapter::void-disposing(const css::lang::EventObject &,)
-connectivity/source/drivers/firebird/SubComponent.hxx:72
+connectivity/source/drivers/firebird/SubComponent.hxx:67
     connectivity::firebird::OPropertyArrayUsageHelper::void-~OPropertyArrayUsageHelper<TYPE>()
 extensions/source/dbpilots/unoautopilot.hxx:98
     dbp::OUnoAutoPilot::::cppu::IPropertyArrayHelper *-createArrayHelper()const
@@ -76,6 +74,8 @@ forms/source/xforms/namedcollection.hxx:106
     NamedCollection::css::uno::Sequence<OUString>-getElementNames()
 forms/source/xforms/namedcollection.hxx:111
     NamedCollection::sal_Bool-hasByName(const class rtl::OUString &,)
+include/basic/sbx.hxx:130
+    SbxArray::enum SbxClassType-GetClass()const
 include/comphelper/IdPropArrayHelper.hxx:53
     comphelper::OIdPropertyArrayUsageHelper::void-~OIdPropertyArrayUsageHelper<TYPE>()
 include/comphelper/interaction.hxx:55
@@ -100,6 +100,28 @@ include/comphelper/unique_disposing_ptr.hxx:169
     comphelper::unique_disposing_solar_mutex_reset_ptr::void-reset(T *,)
 include/comphelper/weakeventlistener.hxx:118
     comphelper::OWeakListenerAdapter::void-disposing(const css::lang::EventObject &,)
+include/cppcanvas/font.hxx:38
+    cppcanvas::Font::void-~Font()
+include/editeng/adjustitem.hxx:66
+    SvxAdjustItem::class rtl::OUString-GetValueTextByPos(sal_uInt16,)const
+include/editeng/charreliefitem.hxx:45
+    SvxCharReliefItem::class rtl::OUString-GetValueTextByPos(sal_uInt16,)const
+include/editeng/cmapitem.hxx:50
+    SvxCaseMapItem::class rtl::OUString-GetValueTextByPos(sal_uInt16,)const
+include/editeng/crossedoutitem.hxx:51
+    SvxCrossedOutItem::class rtl::OUString-GetValueTextByPos(sal_uInt16,)const
+include/editeng/escapementitem.hxx:101
+    SvxEscapementItem::class rtl::OUString-GetValueTextByPos(sal_uInt16,)const
+include/editeng/formatbreakitem.hxx:54
+    SvxFormatBreakItem::class rtl::OUString-GetValueTextByPos(sal_uInt16,)const
+include/editeng/lspcitem.hxx:96
+    SvxLineSpacingItem::class rtl::OUString-GetValueTextByPos(sal_uInt16,)const
+include/editeng/postitem.hxx:52
+    SvxPostureItem::class rtl::OUString-GetValueTextByPos(sal_uInt16,)const
+include/editeng/shaditem.hxx:79
+    SvxShadowItem::class rtl::OUString-GetValueTextByPos(sal_uInt16,)const
+include/editeng/wghtitem.hxx:52
+    SvxWeightItem::class rtl::OUString-GetValueTextByPos(sal_uInt16,)const
 include/sfx2/controlwrapper.hxx:257
     sfx::MetricFieldWrapper::_Bool-IsControlDontKnow()const
 include/sfx2/controlwrapper.hxx:258
@@ -108,21 +130,21 @@ include/sfx2/controlwrapper.hxx:260
     sfx::MetricFieldWrapper::ValueT-GetControlValue()const
 include/sfx2/controlwrapper.hxx:261
     sfx::MetricFieldWrapper::void-SetControlValue(ValueT,)
-include/sfx2/controlwrapper.hxx:291
+include/sfx2/controlwrapper.hxx:292
     sfx::ListBoxWrapper::_Bool-IsControlDontKnow()const
-include/sfx2/controlwrapper.hxx:293
+include/sfx2/controlwrapper.hxx:294
     sfx::ListBoxWrapper::void-SetControlDontKnow(_Bool,)
-include/sfx2/controlwrapper.hxx:296
-    sfx::ListBoxWrapper::ValueT-GetControlValue()const
 include/sfx2/controlwrapper.hxx:297
+    sfx::ListBoxWrapper::ValueT-GetControlValue()const
+include/sfx2/controlwrapper.hxx:298
     sfx::ListBoxWrapper::void-SetControlValue(ValueT,)
-include/sfx2/controlwrapper.hxx:324
+include/sfx2/controlwrapper.hxx:325
     sfx::ValueSetWrapper::_Bool-IsControlDontKnow()const
-include/sfx2/controlwrapper.hxx:326
+include/sfx2/controlwrapper.hxx:327
     sfx::ValueSetWrapper::void-SetControlDontKnow(_Bool,)
-include/sfx2/controlwrapper.hxx:329
-    sfx::ValueSetWrapper::ValueT-GetControlValue()const
 include/sfx2/controlwrapper.hxx:330
+    sfx::ValueSetWrapper::ValueT-GetControlValue()const
+include/sfx2/controlwrapper.hxx:331
     sfx::ValueSetWrapper::void-SetControlValue(ValueT,)
 include/sfx2/itemwrapper.hxx:94
     sfx::SingleItemWrapper::void-~SingleItemWrapper<ItemT, ValueT>()
@@ -134,12 +156,48 @@ include/sfx2/itemwrapper.hxx:156
     sfx::IdentItemWrapper::const ItemT &-GetItemValue(const ItemT &,)const
 include/sfx2/itemwrapper.hxx:158
     sfx::IdentItemWrapper::void-SetItemValue(ItemT &,const ItemT &,)const
+include/svl/aeitem.hxx:63
+    SfxAllEnumItem::sal_uInt16-GetValueByPos(sal_uInt16,)const
+include/svl/aeitem.hxx:64
+    SfxAllEnumItem::class rtl::OUString-GetValueTextByPos(sal_uInt16,)const
 include/svl/svdde.hxx:307
     DdeService::void-~DdeService()
-include/svtools/svparser.hxx:92
-    SvParser::void-NextToken(T,)
 include/svtools/svparser.hxx:128
     SvParser::void-Continue(T,)
+include/svtools/treelistbox.hxx:723
+    SvTreeListBox::void-SelectAll(_Bool,_Bool,)
+include/svx/obj3d.hxx:84
+    E3dObjList::class E3dObjList *-Clone()const
+include/svx/sdgmoitm.hxx:43
+    SdrGrafModeItem::class rtl::OUString-GetValueTextByPos(sal_uInt16,)const
+include/svx/sdr/properties/defaultproperties.hxx:103
+    sdr::properties::DefaultProperties::void-Scale(const class Fraction &,)
+include/svx/sdr/table/tablecontroller.hxx:54
+    sdr::table::SvxTableController::_Bool-HasMarked()
+include/svx/sdtaditm.hxx:44
+    SdrTextAniDirectionItem::class rtl::OUString-GetValueTextByPos(sal_uInt16,)const
+include/svx/sdtaitm.hxx:46
+    SdrTextVertAdjustItem::class rtl::OUString-GetValueTextByPos(sal_uInt16,)const
+include/svx/sdtaitm.hxx:70
+    SdrTextHorzAdjustItem::class rtl::OUString-GetValueTextByPos(sal_uInt16,)const
+include/svx/sdtakitm.hxx:88
+    SdrTextAniKindItem::class rtl::OUString-GetValueTextByPos(sal_uInt16,)const
+include/svx/sdtfsitm.hxx:47
+    SdrTextFitToSizeTypeItem::class rtl::OUString-GetValueTextByPos(sal_uInt16,)const
+include/svx/svdedxv.hxx:222
+    SdrObjEditView::class SdrPageView *-GetTextEditPageView()const
+include/svx/sxcecitm.hxx:39
+    SdrCaptionEscDirItem::class rtl::OUString-GetValueTextByPos(sal_uInt16,)const
+include/svx/sxctitm.hxx:36
+    SdrCaptionTypeItem::class rtl::OUString-GetValueTextByPos(sal_uInt16,)const
+include/svx/sxekitm.hxx:41
+    SdrEdgeKindItem::class rtl::OUString-GetValueTextByPos(sal_uInt16,)const
+include/svx/sxmtpitm.hxx:41
+    SdrMeasureTextHPosItem::class rtl::OUString-GetValueTextByPos(sal_uInt16,)const
+include/svx/sxmtpitm.hxx:58
+    SdrMeasureTextVPosItem::class rtl::OUString-GetValueTextByPos(sal_uInt16,)const
+include/svx/sxmuitm.hxx:38
+    SdrMeasureUnitItem::class rtl::OUString-GetValueTextByPos(sal_uInt16,)const
 include/toolkit/controls/geometrycontrolmodel.hxx:192
     OGeometryControlModel::void-fillProperties(css::uno::Sequence<css::beans::Property> &,css::uno::Sequence<css::beans::Property> &,)const
 include/vbahelper/vbacollectionimpl.hxx:290
@@ -166,28 +224,44 @@ include/vbahelper/vbareturntypes.hxx:41
     ooo::vba::DefaultReturnHelper::T1-getValue()
 include/vcl/vclptr.hxx:110
     VclPtr::void-~VclPtr<T>()
-mysqlc/source/mysqlc_subcomponent.hxx:104
+include/vcl/weld.hxx:219
+    weld::TreeView::void-append_text(const class rtl::OUString &,)
+include/vcl/weld.hxx:222
+    weld::TreeView::void-append(const class rtl::OUString &,const class rtl::OUString &,const class rtl::OUString &,)
+mysqlc/source/mysqlc_subcomponent.hxx:66
     connectivity::mysqlc::OPropertyArrayUsageHelper::void-~OPropertyArrayUsageHelper<TYPE>()
 sc/inc/compressedarray.hxx:72
     ScCompressedArray::void-~ScCompressedArray<A, D>()
+sc/source/core/opencl/formulagroupcl.cxx:856
+    sc::opencl::DynamicKernelMixedArgument::_Bool-IsMixedArgument()const
+sc/source/core/opencl/formulagroupcl.cxx:871
+    sc::opencl::DynamicKernelMixedArgument::void-GenNumDeclRef(std::stringstream &,)const
+sc/source/core/opencl/formulagroupcl.cxx:875
+    sc::opencl::DynamicKernelMixedArgument::void-GenStringDeclRef(std::stringstream &,)const
 sc/source/core/opencl/formulagroupcl.cxx:934
-    sc::opencl::DynamicKernelSlidingArgument::_Bool-NeedParallelReduction()const
-sc/source/core/opencl/formulagroupcl.cxx:941
-    sc::opencl::DynamicKernelSlidingArgument::void-GenSlidingWindowFunction(std::stringstream &,)
-sc/source/core/opencl/formulagroupcl.cxx:943
     sc::opencl::DynamicKernelSlidingArgument::std::string-GenSlidingWindowDeclRef(_Bool,)const
-sc/source/core/opencl/formulagroupcl.cxx:966
+sc/source/core/opencl/formulagroupcl.cxx:957
     sc::opencl::DynamicKernelSlidingArgument::size_t-GenReductionLoopHeader(std::stringstream &,_Bool &,)
-sc/source/core/opencl/formulagroupcl.cxx:1219
-    sc::opencl::ParallelReductionVectorRef::void-GenSlidingWindowFunction(std::stringstream &,)
-sc/source/core/opencl/formulagroupcl.cxx:1398
-    sc::opencl::ParallelReductionVectorRef::std::string-GenSlidingWindowDeclRef(_Bool,)const
-sc/source/core/opencl/formulagroupcl.cxx:1408
+sc/source/core/opencl/formulagroupcl.cxx:1121
+    sc::opencl::DynamicKernelMixedSlidingArgument::_Bool-IsMixedArgument()const
+sc/source/core/opencl/formulagroupcl.cxx:1134
+    sc::opencl::DynamicKernelMixedSlidingArgument::void-GenNumDeclRef(std::stringstream &,)const
+sc/source/core/opencl/formulagroupcl.cxx:1138
+    sc::opencl::DynamicKernelMixedSlidingArgument::void-GenStringDeclRef(std::stringstream &,)const
+sc/source/core/opencl/formulagroupcl.cxx:1210
     sc::opencl::ParallelReductionVectorRef::size_t-GenReductionLoopHeader(std::stringstream &,int,_Bool &,)
-sc/source/core/opencl/formulagroupcl.cxx:1432
-    sc::opencl::ParallelReductionVectorRef::size_t-Marshal(cl_kernel,int,int,cl_program,)
+sc/source/filter/inc/lotimpop.hxx:83
+    ImportLotus::class ErrCode-Read()
 sc/source/ui/inc/anyrefdg.hxx:220
     ScRefHdlrImpl::void-dispose()
+sc/source/ui/inc/docsh.hxx:302
+    ScDocShell::void-CheckConfigOptions()
+sc/source/ui/inc/PivotLayoutTreeList.hxx:32
+    ScPivotLayoutTreeList::void-InsertEntryForItem(class ScItemValue *,sal_uLong,)
+sc/source/ui/inc/prevwsh.hxx:65
+    ScPreviewShell::void-AdjustPosSizePixel(const class Point &,const class Size &,)
+sc/source/ui/inc/tabvwsh.hxx:193
+    ScTabViewShell::void-AdjustPosSizePixel(const class Point &,const class Size &,)
 sc/source/ui/vba/vbacondition.hxx:39
     ScVbaCondition::class rtl::OUString-Formula1()
 sc/source/ui/vba/vbacondition.hxx:40
@@ -254,8 +328,12 @@ sc/source/ui/vba/vbapagebreak.hxx:48
     ScVbaPageBreak::void-Delete()
 sc/source/ui/vba/vbapagebreak.hxx:49
     ScVbaPageBreak::css::uno::Reference<ov::excel::XRange>-Location()
+scaddins/source/analysis/analysishelper.hxx:574
+    sca::analysis::ConvertDataLinear::double-ConvertToBase(double,sal_Int16,)const
 sd/source/ui/inc/ShellFactory.hxx:41
     sd::ShellFactory::void-~ShellFactory<ShellType>()
+sd/source/ui/sidebar/CurrentMasterPagesSelector.hxx:48
+    sd::sidebar::CurrentMasterPagesSelector::void-UpdateSelection()
 sd/source/ui/slidesorter/inc/model/SlsEnumeration.hxx:34
     sd::slidesorter::model::Enumeration::void-~Enumeration<T>()
 slideshow/source/engine/activities/activitiesfactory.cxx:173
@@ -276,15 +354,23 @@ slideshow/source/engine/animationfactory.cxx:442
     slideshow::internal::(anonymous namespace)::GenericAnimation::void-prefetch(const slideshow::internal::AnimatableShapeSharedPtr &,const slideshow::internal::ShapeAttributeLayerSharedPtr &,)
 slideshow/source/engine/animationfactory.cxx:446
     slideshow::internal::(anonymous namespace)::GenericAnimation::void-start(const slideshow::internal::AnimatableShapeSharedPtr &,const slideshow::internal::ShapeAttributeLayerSharedPtr &,)
-sw/inc/docary.hxx:116
+starmath/inc/view.hxx:258
+    SmViewShell::void-AdjustPosSizePixel(const class Point &,const class Size &,)
+svx/inc/sxcikitm.hxx:39
+    SdrCircKindItem::class rtl::OUString-GetValueTextByPos(sal_uInt16,)const
+svx/inc/sxmkitm.hxx:39
+    SdrMeasureKindItem::class rtl::OUString-GetValueTextByPos(sal_uInt16,)const
+sw/inc/docary.hxx:114
     SwVectorModifyBase::void-~SwVectorModifyBase<Value>()
 sw/inc/flypos.hxx:37
     SwPosFlyFrame::void-~SwPosFlyFrame()
-sw/inc/ring.hxx:45
+sw/inc/ring.hxx:44
     sw::Ring::void-~Ring<value_type>()
+sw/source/core/inc/frame.hxx:893
+    SwFrame::void-dumpTopMostAsXml(xmlTextWriterPtr,)const
 vcl/inc/opengl/BufferObject.hxx:31
     vcl::BufferObject::void-~BufferObject<TYPE, BUFFER_TYPE>()
-vcl/inc/salframe.hxx:177
+vcl/inc/salframe.hxx:179
     SalFrame::void-Flush(const tools::Rectangle &,)
 vcl/inc/sallayout.hxx:181
     SalLayout::_Bool-GetBoundRect(class SalGraphics &,tools::Rectangle &,)const
@@ -292,6 +378,8 @@ vcl/inc/salmenu.hxx:92
     SalMenu::tools::Rectangle-GetMenuBarButtonRectPixel(sal_uInt16,class SalFrame *,)
 vcl/inc/salobj.hxx:46
     SalObject::void-Enable(_Bool,)
+vcl/inc/salprn.hxx:111
+    SalPrinter::enum SalPrinterError-GetErrorCode()
 vcl/inc/unx/saldata.hxx:65
     X11SalData::void-Init()
 vcl/inc/unx/saldata.hxx:68
@@ -320,24 +408,24 @@ vcl/inc/unx/saldisp.hxx:393
     SalX11Display::void-Yield()
 vcl/inc/unx/salinst.h:47
     X11SalInstance::class SalX11Display *-CreateDisplay()const
-writerfilter/source/ooxml/OOXMLFactory.hxx:70
-    writerfilter::ooxml::OOXMLFactory_ns::void-startAction(class writerfilter::ooxml::OOXMLFastContextHandler *,)
 writerfilter/source/ooxml/OOXMLFactory.hxx:71
-    writerfilter::ooxml::OOXMLFactory_ns::void-charactersAction(class writerfilter::ooxml::OOXMLFastContextHandler *,const class rtl::OUString &,)
+    writerfilter::ooxml::OOXMLFactory_ns::void-startAction(class writerfilter::ooxml::OOXMLFastContextHandler *,)
 writerfilter/source/ooxml/OOXMLFactory.hxx:72
-    writerfilter::ooxml::OOXMLFactory_ns::void-endAction(class writerfilter::ooxml::OOXMLFastContextHandler *,)
+    writerfilter::ooxml::OOXMLFactory_ns::void-charactersAction(class writerfilter::ooxml::OOXMLFastContextHandler *,const class rtl::OUString &,)
 writerfilter/source/ooxml/OOXMLFactory.hxx:73
+    writerfilter::ooxml::OOXMLFactory_ns::void-endAction(class writerfilter::ooxml::OOXMLFastContextHandler *,)
+writerfilter/source/ooxml/OOXMLFactory.hxx:74
     writerfilter::ooxml::OOXMLFactory_ns::void-attributeAction(class writerfilter::ooxml::OOXMLFastContextHandler *,writerfilter::Token_t,const class OOXMLValue::Pointer_t &,)
-writerfilter/source/ooxml/OOXMLFactory.hxx:76
+writerfilter/source/ooxml/OOXMLFactory.hxx:77
     writerfilter::ooxml::OOXMLFactory_ns::void-~OOXMLFactory_ns()
 writerperfect/inc/ImportFilter.hxx:178
     writerperfect::detail::ImportFilterImpl::void-doRegisterHandlers(Generator &,)
-xmloff/source/forms/elementimport.hxx:573
+xmloff/source/forms/elementimport.hxx:575
     xmloff::OContainerImport::SvXMLImportContextRef-CreateChildContext(sal_uInt16,const class rtl::OUString &,const css::uno::Reference<css::xml::sax::XAttributeList> &,)
-xmloff/source/forms/elementimport.hxx:576
+xmloff/source/forms/elementimport.hxx:578
     xmloff::OContainerImport::void-EndElement()
-xmloff/source/forms/elementimport.hxx:581
+xmloff/source/forms/elementimport.hxx:583
     xmloff::OContainerImport::css::uno::Reference<css::beans::XPropertySet>-createElement()
-xmloff/source/forms/elementimport.hxx:609
+xmloff/source/forms/elementimport.hxx:611
     xmloff::OColumnImport::css::uno::Reference<css::beans::XPropertySet>-createElement()
 
