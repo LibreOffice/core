@@ -112,6 +112,7 @@ using namespace oox::core;
 
 #if OSL_DEBUG_LEVEL > 1
 void dump_pset(Reference< XPropertySet > const& rXPropSet);
+OUString RectanglePointToOUString(const css::drawing::RectanglePoint& rp);
 #endif
 
 namespace oox
@@ -2861,6 +2862,30 @@ css_comp_Impress_oox_PowerPointExport(uno::XComponentContext* rxCtxt,
 }
 
 #if OSL_DEBUG_LEVEL > 1
+
+OUString RectanglePointToOUString(const css::drawing::RectanglePoint& rp){
+    if(rp == css::drawing::RectanglePoint::LEFT_TOP)
+        return OUString::createFromAscii("LEFT_TOP");
+    if(rp == css::drawing::RectanglePoint::MIDDLE_TOP)
+        return OUString::createFromAscii("MIDDLE_TOP");
+    if(rp == css::drawing::RectanglePoint::RIGHT_TOP)
+        return OUString::createFromAscii("RIGHT_TOP");
+    if(rp == css::drawing::RectanglePoint::LEFT_MIDDLE)
+        return OUString::createFromAscii("LEFT_MIDDLE");
+    if(rp == css::drawing::RectanglePoint::MIDDLE_MIDDLE)
+        return OUString::createFromAscii("MIDDLE_MIDDLE");
+    if(rp == css::drawing::RectanglePoint::RIGHT_MIDDLE)
+        return OUString::createFromAscii("RIGHT_MIDDLE");
+    if(rp == css::drawing::RectanglePoint::LEFT_BOTTOM)
+        return OUString::createFromAscii("LEFT_BOTTOM");
+    if(rp == css::drawing::RectanglePoint::MIDDLE_BOTTOM)
+        return OUString::createFromAscii("MIDDLE_BOTTOM");
+    if(rp == css::drawing::RectanglePoint::RIGHT_BOTTOM)
+        return OUString::createFromAscii("RIGHT_BOTTOM");
+    SAL_WARN("sd","Unknown RectanglePoint Value");
+    return OUString::createFromAscii("");
+}
+
 void dump_pset(Reference< XPropertySet > const& rXPropSet)
 {
     Reference< XPropertySetInfo > info = rXPropSet->getPropertySetInfo();
@@ -2870,7 +2895,7 @@ void dump_pset(Reference< XPropertySet > const& rXPropSet)
     {
         OString name = OUStringToOString(props [i].Name, RTL_TEXTENCODING_UTF8);
 
-        Any value = rXPropSet->getPropertyValue(props [i].Name);
+        Any value = rXPropSet->getPropertyValue(props[i].Name);
 
         OUString strValue;
         sal_Int32 intValue;
@@ -2884,11 +2909,13 @@ void dump_pset(Reference< XPropertySet > const& rXPropSet)
         else if (value >>= boolValue)
             SAL_INFO("sd.eppt", name << " = " << boolValue << "           (bool)");
         else if (value >>= pointValue)
-            SAL_INFO("sd.eppt", name << " = " << pointValue << "    (RectanglePoint)");
+            SAL_INFO("sd.eppt", name << " = " << RectanglePointToOUString(pointValue) << "    (RectanglePoint)");
         else
             SAL_INFO("sd.eppt", "???          <unhandled type>");
     }
 }
+
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
