@@ -51,24 +51,16 @@ IconThemeSelector::IconThemeSelector()
 IconThemeSelector::GetIconThemeForDesktopEnvironment(const OUString& desktopEnvironment)
 {
     OUString r;
-    if ( desktopEnvironment.equalsIgnoreAsciiCase("tde") ||
-         desktopEnvironment.equalsIgnoreAsciiCase("kde") ) {
-        r = "crystal";
-    }
-    else if ( desktopEnvironment.equalsIgnoreAsciiCase("kde4") ) {
-        r = "oxygen";
-    }
-    else if ( desktopEnvironment.equalsIgnoreAsciiCase("kde5") ) {
+    if ( desktopEnvironment.equalsIgnoreAsciiCase("kde4") ||
+         desktopEnvironment.equalsIgnoreAsciiCase("kde5") ||
+         desktopEnvironment.equalsIgnoreAsciiCase("macosx") ) {
         r = "breeze";
     }
-    else if ( desktopEnvironment.equalsIgnoreAsciiCase("MacOSX") ) {
-        r = "breeze";
-    }
-    else if ( desktopEnvironment.equalsIgnoreAsciiCase("unity") ) {
-        r = "breeze";
+    else if ( desktopEnvironment.equalsIgnoreAsciiCase("gnome") ) {
+        r = "elementary";
     }
     else {
-        r = FALLBACK_ICON_THEME_ID;
+        r = FALLBACK_ICON_THEME_ID; //effective also on Windows
     }
     return r;
 }
