@@ -146,7 +146,7 @@
           <value xml:lang="en-US">~Bibliography Entry...</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
-          <value>8</value>
+          <value>9</value>
         </prop>
       </node>
       <node oor:name=".uno:ShadowCursor" oor:op="replace">
