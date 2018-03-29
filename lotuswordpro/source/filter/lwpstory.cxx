@@ -358,13 +358,17 @@ void LwpStory::XFConvertFrameInFrame(XFContentContainer* pCont)
     while (xLayout.get())
     {
         rtl::Reference<LwpVirtualLayout> xFrameLayout(dynamic_cast<LwpVirtualLayout*>(xLayout->GetChildHead().obj().get()));
+        std::set<LwpVirtualLayout*> aSeen;
         while (xFrameLayout.is())
         {
+            aSeen.insert(xFrameLayout.get());
             if (xFrameLayout->IsAnchorFrame())
             {
                 xFrameLayout->DoXFConvert(pCont);
             }
             xFrameLayout.set(dynamic_cast<LwpVirtualLayout*>(xFrameLayout->GetNext().obj().get()));
+            if (aSeen.find(xFrameLayout.get()) != aSeen.end())
+                throw std::runtime_error("loop in register style");
         }
         xLayout = GetLayout(xLayout.get());
     }
