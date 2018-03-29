@@ -488,8 +488,9 @@ void OConnection::disposing()
     // we noticed that we should be destroyed in near future so we have to dispose our statements
     MutexGuard aGuard(m_aMutex);
 
-    for (OWeakRefArray::iterator i = m_aStatements.begin(); i != m_aStatements.end() ; ++i) {
-        Reference< XComponent > xComp(i->get(), UNO_QUERY);
+    for (auto const& statement : m_aStatements)
+    {
+        Reference< XComponent > xComp(statement.get(), UNO_QUERY);
         if (xComp.is()) {
             xComp->dispose();
         }
