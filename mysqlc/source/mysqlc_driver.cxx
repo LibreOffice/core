@@ -57,9 +57,9 @@ void MysqlCDriver::disposing()
     ::osl::MutexGuard aGuard(m_aMutex);
 
     // when driver will be destroyed so all our connections have to be destroyed as well
-    for (OWeakRefArray::iterator i = m_xConnections.begin(); m_xConnections.end() != i; ++i)
+    for (auto const& connection : m_xConnections)
     {
-        Reference< XComponent > xComp(i->get(), UNO_QUERY);
+        Reference< XComponent > xComp(connection.get(), UNO_QUERY);
         if (xComp.is()) {
             xComp->dispose();
         }
