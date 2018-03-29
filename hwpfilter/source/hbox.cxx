@@ -63,14 +63,6 @@ int HBox::WSize()
 }
 
 
-hchar_string HBox::GetString()
-{
-    hchar_string ret;
-    ret.push_back(hh);
-    return ret;
-}
-
-
 // skip block
 SkipData::SkipData(hchar hch)
     : HBox(hch)

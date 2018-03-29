@@ -1201,10 +1201,6 @@ void ORowSetBase::notifyAllListenersCursorMoved(::osl::ResettableMutexGuard& /*_
 {
 }
 
-void ORowSetBase::notifyAllListeners(::osl::ResettableMutexGuard& /*_rGuard*/)
-{
-}
-
 bool ORowSetBase::isPropertyChangeNotificationEnabled() const
 {
     return true;

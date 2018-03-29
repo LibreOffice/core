@@ -140,11 +140,6 @@ protected:
         }
     }
 
-    virtual void verify()
-    {
-        CPPUNIT_FAIL("verify method must be overridden");
-    }
-
     OUString readExpected(const OUString& sCheck)
     {
         assert(!m_bDumpMode);

@@ -498,16 +498,6 @@ bool OCacheSet::next()
     return m_xDriverSet->next();
 }
 
-bool OCacheSet::isBeforeFirst(  )
-{
-    return m_xDriverSet->isBeforeFirst();
-}
-
-bool OCacheSet::isAfterLast(  )
-{
-    return m_xDriverSet->isAfterLast();
-}
-
 void OCacheSet::beforeFirst(  )
 {
     m_bInserted = m_bUpdated = m_bDeleted = false;

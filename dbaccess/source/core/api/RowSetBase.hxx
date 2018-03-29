@@ -126,8 +126,6 @@ namespace dbaccess
         virtual bool notifyAllListenersCursorBeforeMove(::osl::ResettableMutexGuard& _rGuard);
         // notify cursor moved
         virtual void notifyAllListenersCursorMoved(::osl::ResettableMutexGuard& _rGuard);
-        // notify all that rowset changed
-        virtual void notifyAllListeners(::osl::ResettableMutexGuard& _rGuard);
 
         // cancel the insertion, if necessary (means if we're on the insert row)
         virtual void        doCancelModification( ) = 0;

@@ -103,8 +103,6 @@ namespace dbaccess
         virtual OUString SAL_CALL getName(  ) override;
         virtual void SAL_CALL setName( const OUString& _rName ) override;
 
-        virtual void fireValueChange( const ::connectivity::ORowSetValue& _rOldValue );
-
     protected:
         // IPropertyContainer
         virtual void registerProperty( const OUString& _rName, sal_Int32 _nHandle, sal_Int32 _nAttributes, void* _pPointerToMember, const css::uno::Type& _rMemberType ) override;

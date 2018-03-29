@@ -2607,10 +2607,6 @@ void SbaXDataBrowserController::addColumnListeners(const Reference< css::awt::XC
     }
 }
 
-void SbaXDataBrowserController::InitializeGridModel(const Reference< css::form::XFormComponent > & /*xGrid*/)
-{
-}
-
 }   // namespace dbaui
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

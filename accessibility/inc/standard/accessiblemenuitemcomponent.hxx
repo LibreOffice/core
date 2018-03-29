@@ -38,8 +38,8 @@ protected:
 
     virtual bool            IsEnabled() override;
     virtual bool            IsVisible() override;
-    virtual void            Select() override;
-    virtual void            DeSelect() override;
+    virtual void            Select();
+    virtual void            DeSelect();
     virtual void            Click() override;
 
     void                    SetItemPos( sal_uInt16 nItemPos );

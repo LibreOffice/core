@@ -107,12 +107,6 @@ namespace dbaccess
         virtual bool next();
         /// @throws css::sdbc::SQLException
         /// @throws css::uno::RuntimeException
-        virtual bool isBeforeFirst(  );
-        /// @throws css::sdbc::SQLException
-        /// @throws css::uno::RuntimeException
-        virtual bool isAfterLast(  );
-        /// @throws css::sdbc::SQLException
-        /// @throws css::uno::RuntimeException
         virtual void beforeFirst(  );
         /// @throws css::sdbc::SQLException
         /// @throws css::uno::RuntimeException
