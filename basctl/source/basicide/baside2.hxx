@@ -369,7 +369,7 @@ public:
     BasicStatus&    GetBasicStatus() { return m_aStatus; }
 
     virtual bool    IsModified () override;
-    virtual bool    IsPasteAllowed () override;
+    virtual bool    IsPasteAllowed ();
 
     void            ShowCursor( bool bOn );
 

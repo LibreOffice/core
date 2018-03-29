@@ -101,7 +101,7 @@ public:
 
     virtual void        StoreData() override;
     virtual bool        IsModified() override;
-    virtual bool        IsPasteAllowed() override;
+    virtual bool        IsPasteAllowed();
 
     virtual svl::IUndoManager* GetUndoManager() override;
     // return number of pages to be printed
