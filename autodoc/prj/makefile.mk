@@ -21,38 +21,24 @@
 
 
 
-PRJ=..$/..$/..
+PRJ=..
+TARGET=prj
 
-PRJNAME=autodoc
-TARGET=parser2_s2_dsapi
+.INCLUDE : settings.mk
 
+.IF "$(VERBOSE)"!=""
+VERBOSEFLAG :=
+.ELSE
+VERBOSEFLAG := -s
+.ENDIF
 
-# --- Settings -----------------------------------------------------
+.IF "$(DEBUG)"!=""
+DEBUG_ARGUMENT=DEBUG=$(DEBUG)
+.ELIF "$(debug)"!=""
+DEBUG_ARGUMENT=debug=$(debug)
+.ELSE
+DEBUG_ARGUMENT=
+.ENDIF
 
-ENABLE_EXCEPTIONS=true
-PRJINC=$(PRJ)$/source
-
-.INCLUDE :  settings.mk
-.INCLUDE : $(PRJ)$/source$/mkinc$/fullcpp.mk
-
-
-
-# --- Files --------------------------------------------------------
-
-OBJFILES= \
-    $(OBJ)$/cx_docu2.obj	\
-    $(OBJ)$/cx_dsapi.obj	\
-    $(OBJ)$/docu_pe2.obj	\
-    $(OBJ)$/tk_atag2.obj  	\
-    $(OBJ)$/tk_docw2.obj   	\
-    $(OBJ)$/tk_html.obj   	\
-    $(OBJ)$/tk_xml.obj
-
-
-
-# --- Targets ------------------------------------------------------
-
-.INCLUDE :  target.mk
-
-
-
+all:
+    cd $(PRJ) && $(GNUMAKE) $(VERBOSEFLAG) -r -j$(MAXPROCESS) $(gb_MAKETARGET) $(DEBUG_ARGUMENT) && $(GNUMAKE) $(VERBOSEFLAG) -r deliverlog
