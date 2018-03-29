@@ -24,6 +24,26 @@
 #include <shlobj.h>
 #endif
 
+#include <sot/sotdllapi.h>
+
+struct SotAction_Impl
+{
+    SotClipboardFormatId   nFormatId;          // Clipboard Id
+    sal_uInt16             nAction;            // Action Id
+    SotExchangeActionFlags nFlags;             // Action Id
+    sal_uInt8              nContextCheckId;    // additional check of content in clipboard
+
+    constexpr SotAction_Impl(SotClipboardFormatId _nFormatId, sal_uInt16 _nAction, SotExchangeActionFlags _nFlags, sal_uInt8 _nContextCheckId)
+        : nFormatId(_nFormatId), nAction(_nAction), nFlags(_nFlags), nContextCheckId(_nContextCheckId) {}
+    constexpr SotAction_Impl(SotClipboardFormatId _nFormatId, sal_uInt16 _nAction)
+        : nFormatId(_nFormatId), nAction(_nAction), nFlags(SotExchangeActionFlags::NONE), nContextCheckId(0) {}
+};
+
+namespace sot
+{
+SOT_DLLPUBLIC const SotAction_Impl* GetExchangeDestinationWriterFreeAreaCopy();
+}
+
 #endif // INCLUDED_SOT_SYSFORMATS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -25,6 +25,11 @@ $(eval $(call gb_CppunitTest_use_libraries,sot_test_sot, \
     unotest \
 ))
 
+$(eval $(call gb_CppunitTest_set_include,sot_test_sot,\
+    -I$(SRCDIR)/sot/inc \
+    $$(INCLUDE) \
+))
+
 $(eval $(call gb_CppunitTest_use_sdk_api,sot_test_sot,))
 
 $(eval $(call gb_CppunitTest_use_ure,sot_test_sot))
