@@ -10,3 +10,7 @@ $(eval $(call 	gb_UITest_UITest,writer_tests))
 $(eval $(call gb_UITest_add_modules,writer_tests,$(SRCDIR)/sw/qa/uitest,\
 	writer_tests/ \
 ))
+
+$(eval $(call gb_UITest_set_defs,writer_tests, \
+    TDOC="$(SRCDIR)/sw/qa/uitest/writer_tests/data" \
+))
