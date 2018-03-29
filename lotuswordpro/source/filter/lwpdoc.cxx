@@ -628,14 +628,15 @@ LwpDocument* LwpDocument::GetLastDivisionWithContents()
  LwpDocument* LwpDocument::GetRootDocument()
 {
     LwpDocument* pRoot = this;
-    while(pRoot)
+    std::set<LwpDocument*> aSeen;
+    while (pRoot)
     {
+        aSeen.insert(pRoot);
         if(!pRoot->IsChildDoc())
             return pRoot;
-        LwpDocument* pNextRoot = pRoot->GetParentDivision();
-        if (pNextRoot == pRoot)
-            throw std::runtime_error("loop in ParentDivision");
-        pRoot = pNextRoot;
+        pRoot = pRoot->GetParentDivision();
+        if (aSeen.find(pRoot) != aSeen.end())
+            throw std::runtime_error("loop in conversion");
     }
     return nullptr;
 }
@@ -670,12 +671,12 @@ LwpDocument* LwpDocument::GetLastDivisionWithContents()
     std::set<LwpDocument*> aSeen;
     while (pLastDoc)
     {
-        if (aSeen.find(pLastDoc) != aSeen.end())
-            throw std::runtime_error("loop in conversion");
+        aSeen.insert(pLastDoc);
         if (pLastDoc->GetEnSuperTableLayout().is())
             return pLastDoc;
         pLastDoc = pLastDoc->GetPreviousDivisionWithContents();
-        aSeen.insert(pLastDoc);
+        if (aSeen.find(pLastDoc) != aSeen.end())
+            throw std::runtime_error("loop in conversion");
     }
     return nullptr;
 
