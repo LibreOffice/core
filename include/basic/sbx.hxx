@@ -127,7 +127,7 @@ public:
     virtual void Clear() override;
     sal_uInt16           Count() const;
     virtual SbxDataType  GetType() const override;
-    virtual SbxClassType GetClass() const override;
+    virtual SbxClassType GetClass() const;
     SbxVariableRef&      GetRef( sal_uInt16 );
     SbxVariable*         Get( sal_uInt16 );
     void                 Put( SbxVariable*, sal_uInt16 );

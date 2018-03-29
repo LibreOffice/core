@@ -74,11 +74,6 @@ SbxDataType SbxBase::GetType() const
     return SbxEMPTY;
 }
 
-SbxClassType SbxBase::GetClass() const
-{
-    return SbxClassType::DontCare;
-}
-
 bool SbxBase::IsFixed() const
 {
     return IsSet( SbxFlagBits::Fixed );
