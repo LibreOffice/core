@@ -83,6 +83,7 @@
   <block-list:block block-list:abbreviated-name=":^(:" block-list:name="⁽"/>
   <block-list:block block-list:abbreviated-name=":^):" block-list:name="⁾"/>
   <block-list:block block-list:abbreviated-name=":^+:" block-list:name="⁺"/>
+  <block-list:block block-list:abbreviated-name=":~:" block-list:name="≈"/>
   <block-list:block block-list:abbreviated-name=":_=:" block-list:name="₌"/>
   <block-list:block block-list:abbreviated-name=":_-:" block-list:name="₋"/>
   <block-list:block block-list:abbreviated-name=":_(:" block-list:name="₍"/>
@@ -1132,7 +1133,6 @@
   <block-list:block block-list:abbreviated-name=":прегръдка:" block-list:name="🤗"/>
   <block-list:block block-list:abbreviated-name=":предупреждение:" block-list:name="⚠"/>
   <block-list:block block-list:abbreviated-name=":претцел:" block-list:name="🥨"/>
-  <block-list:block block-list:abbreviated-name=":приблизително равно:" block-list:name="≈"/>
   <block-list:block block-list:abbreviated-name=":призрак:" block-list:name="👻"/>
   <block-list:block block-list:abbreviated-name=":прилеп:" block-list:name="🦇"/>
   <block-list:block block-list:abbreviated-name=":прилошаване:" block-list:name="🤢"/>
