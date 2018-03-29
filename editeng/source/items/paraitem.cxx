@@ -248,30 +248,6 @@ sal_uInt16 SvxLineSpacingItem::GetValueCount() const
 }
 
 
-OUString SvxLineSpacingItem::GetValueTextByPos( sal_uInt16 nPos ) const
-{
-    //! load strings from resource
-    OUString aText;
-    switch ( static_cast<SvxSpecialLineSpace>(nPos) )
-    {
-        case SvxSpecialLineSpace::User:
-            aText = "User";
-            break;
-        case SvxSpecialLineSpace::OneLine:
-            aText = "One line";
-            break;
-        case SvxSpecialLineSpace::OnePointFiveLines:
-            aText = "1.5 line";
-            break;
-        case SvxSpecialLineSpace::TwoLines:
-            aText = "Two lines";
-            break;
-        default: break;
-    }
-    return aText;
-}
-
-
 sal_uInt16 SvxLineSpacingItem::GetEnumValue() const
 {
     SvxSpecialLineSpace nVal;

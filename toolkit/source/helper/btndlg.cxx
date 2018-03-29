@@ -259,27 +259,6 @@ void ButtonDialog::StateChanged( StateChangedType nType )
     Dialog::StateChanged( nType );
 }
 
-void ButtonDialog::AddButton( const OUString& rText, sal_uInt16 nId,
-                              ButtonDialogFlags nBtnFlags, long nSepPixel )
-{
-    // PageItem anlegen
-    std::unique_ptr<ImplBtnDlgItem> pItem(new ImplBtnDlgItem);
-    pItem->mnId             = nId;
-    pItem->mbOwnButton      = true;
-    pItem->mnSepSize        = nSepPixel;
-    pItem->mpPushButton     = ImplCreatePushButton( nBtnFlags );
-
-    if (!rText.isEmpty())
-        pItem->mpPushButton->SetText( rText );
-
-    m_ItemList.push_back(std::move(pItem));
-
-    if ( nBtnFlags & ButtonDialogFlags::Focus )
-        mnFocusButtonId = nId;
-
-    mbFormat = true;
-}
-
 void ButtonDialog::AddButton( StandardButtonType eType, sal_uInt16 nId,
                               ButtonDialogFlags nBtnFlags, long nSepPixel )
 {
@@ -339,24 +318,6 @@ void ButtonDialog::RemoveButton( sal_uInt16 nId )
     }
 
     SAL_WARN( "vcl.window", "ButtonDialog::RemoveButton(): ButtonId invalid" );
-}
-
-sal_uInt16 ButtonDialog::GetButtonId( sal_uInt16 nButton ) const
-{
-    if ( nButton < m_ItemList.size() )
-        return m_ItemList[nButton]->mnId;
-    else
-        return BUTTONDIALOG_BUTTON_NOTFOUND;
-}
-
-PushButton* ButtonDialog::GetPushButton( sal_uInt16 nId ) const
-{
-    ImplBtnDlgItem* pItem = ImplGetItem( nId );
-
-    if ( pItem )
-        return pItem->mpPushButton;
-    else
-        return nullptr;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

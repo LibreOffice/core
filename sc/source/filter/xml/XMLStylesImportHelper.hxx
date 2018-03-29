@@ -147,13 +147,6 @@ class ScMyStylesImportHelper
     void AddDefaultRange(const ScRange& rRange);
     void AddSingleRange(const ScRange& rRange);
     void AddRange();
-    static bool IsEqual(const OUString* pFirst, const OUString* pSecond)
-    {
-        return ((pFirst && pSecond && *pFirst == *pSecond) ||
-                (!pFirst && !pSecond) ||
-                (!pFirst && pSecond && pSecond->isEmpty()) ||
-                (!pSecond && pFirst && pFirst->isEmpty()));
-    }
 public:
     explicit ScMyStylesImportHelper(ScXMLImport& rImport);
     ~ScMyStylesImportHelper();

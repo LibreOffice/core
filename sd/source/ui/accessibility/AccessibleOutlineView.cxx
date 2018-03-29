@@ -243,17 +243,6 @@ OUString
     return SdResId(SID_SD_A11Y_I_OUTLINEVIEW_N);
 }
 
-/** Create a description for this view.  Use the model's description or URL
-    if a description is not available.
-*/
-OUString
-    AccessibleOutlineView::CreateAccessibleDescription()
-{
-    SolarMutexGuard aGuard;
-
-    return SdResId(SID_SD_A11Y_I_OUTLINEVIEW_D);
-}
-
 void AccessibleOutlineView::UpdateChildren()
 {
     SolarMutexGuard aGuard;

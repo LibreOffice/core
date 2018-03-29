@@ -87,11 +87,6 @@ SbxDataType SbxArray::GetType() const
     return static_cast<SbxDataType>( eType | SbxARRAY );
 }
 
-SbxClassType SbxArray::GetClass() const
-{
-    return SbxClassType::Array;
-}
-
 void SbxArray::Clear()
 {
     mVarEntries.clear();

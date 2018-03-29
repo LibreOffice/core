@@ -93,13 +93,6 @@ E3dObjList::E3dObjList(const E3dObjList&)
 {
 }
 
-E3dObjList* E3dObjList::Clone() const
-{
-    E3dObjList* const pObjList = new E3dObjList(*this);
-    pObjList->lateInit(*this);
-    return pObjList;
-}
-
 E3dObjList::~E3dObjList()
 {
 }

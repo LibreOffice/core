@@ -1050,23 +1050,6 @@ bool SvTreeList::Remove( const SvTreeListEntry* pEntry )
     return true;
 }
 
-void SvTreeList::SelectAll( SvListView* pView, bool bSelect )
-{
-    assert(pView && "SelectAll:NoView");
-    SvTreeListEntry* pEntry = First();
-    while ( pEntry )
-    {
-        SvViewDataEntry* pViewData = pView->GetViewData( pEntry );
-        pViewData->SetSelected(bSelect);
-        pEntry = Next( pEntry );
-    }
-    if ( bSelect )
-        pView->m_pImpl->m_nSelectionCount = nEntryCount;
-    else
-        pView->m_pImpl->m_nSelectionCount = 0;
-}
-
-
 SvTreeListEntry* SvTreeList::GetEntryAtAbsPos( sal_uLong nAbsPos ) const
 {
     SvTreeListEntry* pEntry = First();

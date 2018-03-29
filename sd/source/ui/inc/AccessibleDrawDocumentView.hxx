@@ -143,12 +143,6 @@ private:
     virtual OUString
         CreateAccessibleName () override;
 
-    /** Create an accessible description that contains the current
-        view mode.
-    */
-    virtual OUString
-        CreateAccessibleDescription () override;
-
     /** Make sure that the currently focused shape sends a FOCUSED state
         change event indicating that it has (regained) the focus.
     */

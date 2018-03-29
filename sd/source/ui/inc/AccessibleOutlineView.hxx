@@ -108,11 +108,6 @@ private:
     virtual OUString
         CreateAccessibleName () override;
 
-    /// Create an accessible description that contains the current
-    /// view mode.
-    virtual OUString
-        CreateAccessibleDescription () override;
-
     /// Invalidate text helper, updates visible children
     void UpdateChildren();
 

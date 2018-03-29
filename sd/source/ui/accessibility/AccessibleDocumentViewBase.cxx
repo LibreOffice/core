@@ -607,30 +607,6 @@ OUString
     return OUString ("AccessibleDocumentViewBase");
 }
 
-/** Create a description for this view.  Use the model's description or URL
-    if a description is not available.
-*/
-OUString
-    AccessibleDocumentViewBase::CreateAccessibleDescription()
-{
-    OUString sDescription;
-
-    uno::Reference<lang::XServiceInfo> xInfo (mxController, uno::UNO_QUERY);
-    if (xInfo.is())
-    {
-        OUString sFirstService = xInfo->getSupportedServiceNames()[0];
-        if ( sFirstService == "com.sun.star.drawing.DrawingDocumentDrawView" )
-        {
-            sDescription = "Draw Document";
-        }
-        else
-            sDescription = sFirstService;
-    }
-    else
-        sDescription = "Accessible Draw Document";
-    return sDescription;
-}
-
 void AccessibleDocumentViewBase::Activated()
 {
     // Empty.  Overwrite to do something useful.
