@@ -460,6 +460,8 @@ void Clipboard::CreateSlideTransferable (
                 pActionWindow = pViewShell->GetActiveWindow();
         }
 
+        assert(pActionWindow);
+
         pTransferable->SetStartPos (pActionWindow->PixelToLogic(
             pActionWindow->GetPointerPosPixel()));
         pTransferable->SetObjectDescriptor (std::move(pObjDesc));
