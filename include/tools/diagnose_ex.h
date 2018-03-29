@@ -29,7 +29,8 @@
 
 TOOLS_DLLPUBLIC void DbgUnhandledException(const css::uno::Any& caughtException,
         const char* currentFunction, const char* fileAndLineNo,
-        const char* explanatory = nullptr);
+        const char* explanatory = nullptr,
+        const char* area = nullptr);
 
 #if OSL_DEBUG_LEVEL > 0
     #include <com/sun/star/configuration/CorruptedConfigurationException.hpp>
@@ -44,12 +45,12 @@ TOOLS_DLLPUBLIC void DbgUnhandledException(const css::uno::Any& caughtException,
     #define DBG_UNHANDLED_EXCEPTION()   \
         DbgUnhandledException( ::cppu::getCaughtException(), OSL_THIS_FUNC, SAL_DETAIL_WHERE);
 
-    #define DBG_UNHANDLED_EXCEPTION_WHEN(explain)   \
-        DbgUnhandledException( ::cppu::getCaughtException(), OSL_THIS_FUNC, SAL_DETAIL_WHERE, explain);
+    #define DBG_UNHANDLED_EXCEPTION_WHEN(area, explain)   \
+        DbgUnhandledException( ::cppu::getCaughtException(), OSL_THIS_FUNC, SAL_DETAIL_WHERE, explain, area);
 
 #else   // OSL_DEBUG_LEVEL
     #define DBG_UNHANDLED_EXCEPTION()
-    #define DBG_UNHANDLED_EXCEPTION_WHEN(explain)
+    #define DBG_UNHANDLED_EXCEPTION_WHE(area, explain)
 #endif  // OSL_DEBUG_LEVEL
 
 /** This macro asserts the given condition (in debug mode), and throws
