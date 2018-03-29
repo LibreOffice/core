@@ -63,19 +63,38 @@ void testDoubleProperty(uno::Reference<beans::XPropertySet>& xPropertySet, const
 {
     uno::Any aNewValue;
 
-    double nPropertyGet;
-    double nPropertySet;
+    double dPropertyGet;
+    double dPropertySet;
 
     OString msgGet
         = "Unable to get PropertyValue: " + OUStringToOString(name, RTL_TEXTENCODING_UTF8);
-    CPPUNIT_ASSERT_MESSAGE(msgGet.getStr(), xPropertySet->getPropertyValue(name) >>= nPropertyGet);
+    CPPUNIT_ASSERT_MESSAGE(msgGet.getStr(), xPropertySet->getPropertyValue(name) >>= dPropertyGet);
 
     aNewValue <<= dValue;
     xPropertySet->setPropertyValue(name, aNewValue);
-    CPPUNIT_ASSERT(xPropertySet->getPropertyValue(name) >>= nPropertySet);
+    CPPUNIT_ASSERT(xPropertySet->getPropertyValue(name) >>= dPropertySet);
     OString msgSet
         = "Unable to set PropertyValue: " + OUStringToOString(name, RTL_TEXTENCODING_UTF8);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE(msgSet.getStr(), dValue, nPropertySet, 0.5);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE(msgSet.getStr(), dValue, dPropertySet, 0.5);
+}
+
+void testDoubleReadonlyProperty(uno::Reference<beans::XPropertySet>& xPropertySet,
+                                const OUString& name, const double& dValue)
+{
+    uno::Any aNewValue;
+
+    double dPropertyGet;
+    double dPropertySet;
+
+    OString msgGet
+        = "Unable to get PropertyValue: " + OUStringToOString(name, RTL_TEXTENCODING_UTF8);
+    CPPUNIT_ASSERT_MESSAGE(msgGet.getStr(), xPropertySet->getPropertyValue(name) >>= dPropertyGet);
+
+    aNewValue <<= dValue;
+    xPropertySet->setPropertyValue(name, aNewValue);
+    CPPUNIT_ASSERT(xPropertySet->getPropertyValue(name) >>= dPropertySet);
+    OString msgSet = "Able to set PropertyValue: " + OUStringToOString(name, RTL_TEXTENCODING_UTF8);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE(msgSet.getStr(), dPropertyGet, dPropertySet, 0.5);
 }
 
 void testLongProperty(uno::Reference<beans::XPropertySet>& xPropertySet, const OUString& name,
@@ -98,6 +117,25 @@ void testLongProperty(uno::Reference<beans::XPropertySet>& xPropertySet, const O
     CPPUNIT_ASSERT_EQUAL_MESSAGE(msgSet.getStr(), nValue, nPropertySet);
 }
 
+void testLongReadonlyProperty(uno::Reference<beans::XPropertySet>& xPropertySet,
+                              const OUString& name, const sal_Int32& nValue)
+{
+    uno::Any aNewValue;
+
+    sal_Int32 nPropertyGet;
+    sal_Int32 nPropertySet;
+
+    OString msgGet
+        = "Unable to get PropertyValue: " + OUStringToOString(name, RTL_TEXTENCODING_UTF8);
+    CPPUNIT_ASSERT_MESSAGE(msgGet.getStr(), xPropertySet->getPropertyValue(name) >>= nPropertyGet);
+
+    aNewValue <<= nValue;
+    xPropertySet->setPropertyValue(name, aNewValue);
+    CPPUNIT_ASSERT(xPropertySet->getPropertyValue(name) >>= nPropertySet);
+    OString msgSet = "Able to set PropertyValue: " + OUStringToOString(name, RTL_TEXTENCODING_UTF8);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(msgSet.getStr(), nPropertyGet, nPropertySet);
+}
+
 void testShortProperty(uno::Reference<beans::XPropertySet>& xPropertySet, const OUString& name,
                        const sal_Int16& nValue)
 {
@@ -116,6 +154,25 @@ void testShortProperty(uno::Reference<beans::XPropertySet>& xPropertySet, const 
     OString msgSet
         = "Unable to set PropertyValue: " + OUStringToOString(name, RTL_TEXTENCODING_UTF8);
     CPPUNIT_ASSERT_EQUAL_MESSAGE(msgSet.getStr(), nValue, nPropertySet);
+}
+
+void testShortReadonlyProperty(uno::Reference<beans::XPropertySet>& xPropertySet,
+                               const OUString& name, const sal_Int16& nValue)
+{
+    uno::Any aNewValue;
+
+    sal_Int16 nPropertyGet;
+    sal_Int16 nPropertySet;
+
+    OString msgGet
+        = "Unable to get PropertyValue: " + OUStringToOString(name, RTL_TEXTENCODING_UTF8);
+    CPPUNIT_ASSERT_MESSAGE(msgGet.getStr(), xPropertySet->getPropertyValue(name) >>= nPropertyGet);
+
+    aNewValue <<= nValue;
+    xPropertySet->setPropertyValue(name, aNewValue);
+    CPPUNIT_ASSERT(xPropertySet->getPropertyValue(name) >>= nPropertySet);
+    OString msgSet = "Able to set PropertyValue: " + OUStringToOString(name, RTL_TEXTENCODING_UTF8);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(msgSet.getStr(), nPropertyGet, nPropertySet);
 }
 
 void testStringProperty(uno::Reference<beans::XPropertySet>& xPropertySet, const OUString& name,
@@ -137,5 +194,25 @@ void testStringProperty(uno::Reference<beans::XPropertySet>& xPropertySet, const
         = "Unable to set PropertyValue: " + OUStringToOString(name, RTL_TEXTENCODING_UTF8);
     CPPUNIT_ASSERT_EQUAL_MESSAGE(msgSet.getStr(), rValue, sPropertySet);
 }
+
+void testStringReadonlyProperty(uno::Reference<beans::XPropertySet>& xPropertySet,
+                                const OUString& name, const OUString& rValue)
+{
+    uno::Any aNewValue;
+
+    OUString sPropertyGet;
+    OUString sPropertySet;
+
+    OString msgGet
+        = "Unable to get PropertyValue: " + OUStringToOString(name, RTL_TEXTENCODING_UTF8);
+    CPPUNIT_ASSERT_MESSAGE(msgGet.getStr(), xPropertySet->getPropertyValue(name) >>= sPropertyGet);
+
+    aNewValue <<= rValue;
+    xPropertySet->setPropertyValue(name, aNewValue);
+    CPPUNIT_ASSERT(xPropertySet->getPropertyValue(name) >>= sPropertySet);
+    OString msgSet = "Able to set PropertyValue: " + OUStringToOString(name, RTL_TEXTENCODING_UTF8);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(msgSet.getStr(), sPropertyGet, sPropertySet);
 }
+} // namespace apitest
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
