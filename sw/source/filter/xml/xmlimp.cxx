@@ -431,6 +431,11 @@ SwXMLImport::SwXMLImport(
 
 SwXMLImport::~SwXMLImport() throw ()
 {
+    if (HasShapeImport())
+    {
+        SAL_WARN("sw", "endDocument skipped, dropping shapes now to avoid dangling SvTextShapeImportHelper pointing to this");
+        ClearShapeImport();
+    }
     delete m_pDocElemTokenMap;
     delete m_pTableElemTokenMap;
     delete m_pTableCellAttrTokenMap;
