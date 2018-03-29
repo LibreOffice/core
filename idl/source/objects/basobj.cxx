@@ -107,11 +107,6 @@ void SvMetaObject::ReadContextSvIdl( SvIdlDataBase &, SvTokenStream & )
 {
 }
 
-bool SvMetaObject::Test( SvTokenStream & )
-{
-    return true;
-}
-
 bool SvMetaObject::ReadSvIdl( SvIdlDataBase & rBase, SvTokenStream & rInStm )
 {
     sal_uInt32 nTokPos = rInStm.Tell();

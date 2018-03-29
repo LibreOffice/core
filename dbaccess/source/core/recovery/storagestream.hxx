@@ -40,10 +40,6 @@ namespace dbaccess
         );
         virtual ~StorageOutputStream();
 
-        /** simply calls closeOutput on our output stream, override to extend/modify this behavior
-        */
-        virtual void close();
-
     protected:
         const css::uno::Reference< css::io::XOutputStream >&
                                                 getOutputStream() const { return m_xOutputStream; }

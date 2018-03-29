@@ -101,8 +101,6 @@ protected:
     void                    DeSelectAll();
     bool                IsChildSelected( sal_Int32 i );
 
-    virtual void            Select();
-    virtual void            DeSelect();
     virtual void            Click();
     virtual bool            IsPopupMenuOpen();
 

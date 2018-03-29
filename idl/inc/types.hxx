@@ -41,7 +41,7 @@ public:
     const SvIdentifier& GetSlotId() const;
     SvMetaType *        GetType() const;
 
-    virtual bool        Test( SvTokenStream & rInStm ) override;
+    virtual bool        Test( SvTokenStream & rInStm );
     virtual bool        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm ) override;
     sal_uLong           MakeSfx( OStringBuffer& rAtrrArray ) const;
     virtual void        Insert( SvSlotElementList& );
