@@ -963,8 +963,15 @@ framework/res/addtemplate_32.png cmd/32/newdoc.png
 # reportdesign
 # ==============================================
 reportdesign/res/report_16.png cmd/sc_executereport.png
+reportdesign/res/sc20557.png cmd/sc_cancel.png
+reportdesign/res/sc30768.png cmd/sc_upsearch.png
+reportdesign/res/sc30769.png cmd/sc_downsearch.png
 reportdesign/res/sc30770.png cmd/sc_cancel.png
+reportdesign/res/sortdown.png cmd/sc_downsearch.png
+reportdesign/res/sortup.png cmd/sc_upsearch.png
 reportdesign/res/sx11047.png cmd/sc_basicshapes.diamond.png
+reportdesign/res/sx12452.png cmd/sc_config.png
+reportdesign/res/sx12453.png cmd/sc_config.png
 reportdesign/res/sx12454.png cmd/sc_alignright.png
 reportdesign/res/sx12464.png cmd/sc_executereport.png
 reportdesign/res/sx12594.png cmd/sc_dbviewfunctions.png
@@ -1077,8 +1084,10 @@ sc/res/lc26047.png cmd/lc_dbviewfunctions.png
 sc/res/lc26048.png cmd/lc_autosum.png
 sc/res/lc26050.png cmd/lc_cancel.png
 sc/res/lc26051.png cmd/lc_ok.png
+sc/res/na09.png cmd/sc_animationeffects.png
 sc/res/na010.png cmd/sc_selectobject.png
 sc/res/na011.png cmd/lc_ok.png
+sc/res/nc01.png cmd/sc_dbviewtablenames.png
 sc/res/nc02.png cmd/sc_dataranges.png
 sc/res/nc03.png cmd/sc_viewdatasourcebrowser.png
 sc/res/nc04.png cmd/sc_gallery.png
@@ -1102,12 +1111,22 @@ sc/res/file.png cmd/sc_open.png
 sc/res/fx.png cmd/sc_dbviewfunctions.png
 sc/res/page.png cmd/sc_insertpagenumberfield.png
 sc/res/pages.png cmd/sc_insertpagecountfield.png
+sc/res/paste_transpose.png cmd/lc_datadatapilotrun.png
 sc/res/paste_values_formats.png cmd/lc_formatpaintbrush.png
 sc/res/paste_values_only.png cmd/lc_numberformatstandard.png
 sc/res/sf01.png cmd/sc_tabledesign.png
 sc/res/table.png cmd/sc_inserttable.png
 sc/res/text.png cmd/sc_text.png
 sc/res/time.png cmd/sc_timefield.png
+
+sc/res/sidebar/sc_alignbottom.png cmd/sc_alignbottom.png
+sc/res/sidebar/sc_aligncenter_v.png cmd/sc_alignverticalcenter.png
+sc/res/sidebar/sc_aligncenter.png cmd/sc_alignhorizontalcenter.png
+sc/res/sidebar/sc_alignjust.png cmd/sc_alignblock.png
+sc/res/sidebar/sc_alignleft.png cmd/sc_alignleft.png
+sc/res/sidebar/sc_alignright.png cmd/sc_alignright.png
+sc/res/sidebar/sc_aligntop.png cmd/sc_aligntop.png
+sc/res/droplink.png cmd/sc_insertbookmark.png
 
 # sd
 # ==============================================
