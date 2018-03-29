@@ -22,6 +22,7 @@ $(eval $(call gb_CppunitTest_use_external,libreofficekit_tiledrendering,boost_he
 # require any normal LO api/libraries.
 $(eval $(call gb_CppunitTest_use_libraries,libreofficekit_tiledrendering, \
 	sal \
+	vcl \
 	$(gb_UWINAPI) \
 ))
 

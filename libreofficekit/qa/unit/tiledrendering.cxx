@@ -18,6 +18,7 @@
 
 #include <osl/file.hxx>
 #include <rtl/bootstrap.hxx>
+#include <vcl/scheduler.hxx>
 
 #if defined __clang__ && defined __linux__
 #include <cxxabi.h>
