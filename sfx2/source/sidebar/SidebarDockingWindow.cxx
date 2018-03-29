@@ -116,7 +116,7 @@ bool SidebarDockingWindow::EventNotify(NotifyEvent& rEvent)
     if (MouseNotifyEvent::KEYINPUT == nType)
         return true;
 
-    return Window::EventNotify(rEvent);
+    return SfxDockingWindow::EventNotify(rEvent);
 }
 
 } } // end of namespace sfx2::sidebar
