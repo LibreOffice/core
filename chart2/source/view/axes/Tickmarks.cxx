@@ -132,10 +132,6 @@ void TickFactory::getAllTicksShifted( TickInfoArraysType& rAllTickInfos ) const
         EquidistantTickFactory( m_rScale, m_rIncrement ).getAllTicksShifted( rAllTickInfos );
 }
 
-void TickFactory::updateScreenValues( TickInfoArraysType& /*rAllTickInfos*/ ) const
-{
-}
-
 // ___TickFactory_2D___
 TickFactory2D::TickFactory2D(
           const ExplicitScaleData& rScale, const ExplicitIncrementData& rIncrement

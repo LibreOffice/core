@@ -236,8 +236,6 @@ namespace dbaui
             // do any initialization (data source etc.) here. the form should be fully functional after that.
             // return sal_False if you didn't succeed (don't throw exceptions, they won't be caught)
 
-        virtual void InitializeGridModel(const css::uno::Reference< css::form::XFormComponent > & xGrid);
-
         css::uno::Reference< css::form::XFormComponent >  CreateGridModel();
             // our default implementation simply instantiates a stardiv.one.form.component.Grid service
             // you most probably don't want to override this behavior
