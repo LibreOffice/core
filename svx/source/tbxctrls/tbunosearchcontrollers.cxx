@@ -1278,7 +1278,7 @@ void SAL_CALL SearchLabelToolboxController::statusChanged( const css::frame::Fea
 css::uno::Reference< css::awt::XWindow > SAL_CALL SearchLabelToolboxController::createItemWindow( const css::uno::Reference< css::awt::XWindow >& Parent )
 {
     m_pSL = VclPtr<FixedText>::Create(VCLUnoHelper::GetWindow( Parent ));
-    m_pSL->SetSizePixel(Size(300, 25));
+    m_pSL->SetSizePixel(Size(16, 25));
     return VCLUnoHelper::GetInterface(m_pSL);
 }
 
