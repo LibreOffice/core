@@ -383,7 +383,7 @@ void Clipboard::CreateSlideTransferable (
         (model::PageEnumerationProvider::CreateSelectedPagesEnumeration(
             mrSlideSorter.GetModel()));
     SdDrawDocument* const pDocument = mrSlideSorter.GetModel().GetDocument();
-    DrawDocShell* const pDataDocSh = pDocument ? pDocument->GetDocSh() : nullptr;
+    DrawDocShell* const pDataDocSh = pDocument->GetDocSh();
 
     sal_Int32 nUniqueID = 0;
     while (aSelectedPages.HasMoreElements())
