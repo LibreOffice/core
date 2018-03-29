@@ -161,6 +161,7 @@ bool SwDOCXReader::MakeEntries( SwDoc *pD, SwTextBlocks &rBlocks )
             (RES_POOLCOLL_STANDARD, false);
         sal_uInt16 nGlosEntry = 0;
         SwContentNode* pCNd = nullptr;
+        bRet = true;
         do {
             // Get name - first paragraph
             OUString aLNm;
@@ -237,12 +238,15 @@ bool SwDOCXReader::MakeEntries( SwDoc *pD, SwTextBlocks &rBlocks )
                     pD->getIDocumentContentOperations().CopyRange( aPam, aPos, /*bCopyAll=*/false, /*bCheckPos=*/true );
                     rBlocks.PutDoc();
                 }
+                else
+                {
+                    bRet = false;
+                }
             }
 
             aStart = aStart.GetNode().EndOfSectionIndex() + 1;
             ++nGlosEntry;
         } while( aStart < aDocEnd && aStart.GetNode().IsStartNode() );
-        bRet = true;
     }
 
     rBlocks.SetBaseURL( aOldURL );
