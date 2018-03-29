@@ -886,7 +886,7 @@ void ToolBox::SetItemBits( sal_uInt16 nItemId, ToolBoxItemBits nBits )
 {
     ImplToolItems::size_type nPos = GetItemPos( nItemId );
 
-    if ( nPos < mpData->m_aItems.size() )
+    if ( nPos < GetItemCount() )
     {
         ToolBoxItemBits nOldBits = mpData->m_aItems[nPos].mnBits;
         mpData->m_aItems[nPos].mnBits = nBits;
