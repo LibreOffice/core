@@ -46,9 +46,9 @@ extensions/source/scanner/sanedlg.hxx:90
     _Bool SaneDlg::LoadState()
 extensions/source/scanner/sanedlg.hxx:104
     _Bool SaneDlg::SetAdjustedNumericalValue(const char *,double,int)
-filter/source/flash/swfexporter.hxx:88
+filter/source/flash/swfexporter.hxx:84
     _Bool swf::FlashExporter::exportAll(const class com::sun::star::uno::Reference<class com::sun::star::lang::XComponent> &,const class com::sun::star::uno::Reference<class com::sun::star::io::XOutputStream> &,const class com::sun::star::uno::Reference<class com::sun::star::task::XStatusIndicator> &)
-i18nlangtag/source/languagetag/languagetag.cxx:275
+i18nlangtag/source/languagetag/languagetag.cxx:274
     const class rtl::OUString & LanguageTagImpl::getBcp47() const
 include/basegfx/vector/b2dvector.hxx:115
     class basegfx::B2DVector & basegfx::B2DVector::setLength(double)
@@ -208,28 +208,14 @@ lotuswordpro/inc/lwpsvstream.hxx:77
     class LwpSvStream & LwpSvStream::ReadUInt16(unsigned short &)
 lotuswordpro/inc/lwpsvstream.hxx:78
     class LwpSvStream & LwpSvStream::ReadUInt32(unsigned int &)
-sc/inc/dpobject.hxx:107
-    _Bool ScDPObject::FillLabelDataForDimension(const class com::sun::star::uno::Reference<class com::sun::star::container::XIndexAccess> &,int,struct ScDPLabelData &)
 sc/inc/orcusfilters.hxx:44
     _Bool ScOrcusFilters::importODS_Styles(class ScDocument &,class rtl::OUString &) const
-sc/inc/postit.hxx:89
-    _Bool ScCaptionPtr::forget()
-sc/inc/segmenttree.hxx:44
-    _Bool ScFlatBoolRowSegments::ForwardIterator::getValue(int,_Bool &)
-sc/inc/table.hxx:943
-    _Bool ScTable::GetDataEntries(short,int,class std::__debug::set<class ScTypedStrData, struct std::less<class ScTypedStrData>, class std::allocator<class ScTypedStrData> > &,_Bool)
-sc/source/core/opencl/formulagroupcl.cxx:966
+sc/source/core/opencl/formulagroupcl.cxx:957
     unsigned long sc::opencl::DynamicKernelSlidingArgument::GenReductionLoopHeader(class std::basic_stringstream<char> &,_Bool &)
-sc/source/core/opencl/formulagroupcl.cxx:1408
+sc/source/core/opencl/formulagroupcl.cxx:1210
     unsigned long sc::opencl::ParallelReductionVectorRef::GenReductionLoopHeader(class std::basic_stringstream<char> &,int,_Bool &)
-sc/source/filter/inc/fapihelper.hxx:223
-    _Bool ScfPropSetHelper::ReadValue(type-parameter-?-? &)
-sc/source/filter/inc/fapihelper.hxx:225
-    _Bool ScfPropSetHelper::ReadValue(class com::sun::star::uno::Any &)
 sc/source/filter/inc/workbookhelper.hxx:254
     _Bool oox::xls::WorkbookHelper::importOoxFragment(const class rtl::Reference<class oox::core::FragmentHandler> &,class oox::core::FastParser &)
-sc/source/ui/inc/content.hxx:144
-    _Bool ScContentTree::SelectEntryByName(const enum ScContentId,const class rtl::OUString &)
 sc/source/ui/inc/select.hxx:73
     _Bool ScViewFunctionSet::SetCursorAtCell(short,int,_Bool)
 sc/source/ui/vba/vbaformat.hxx:69
@@ -264,7 +250,7 @@ sc/source/ui/vba/vbaformat.hxx:145
     class com::sun::star::uno::Any ScVbaFormat::getMergeCells()
 sc/source/ui/vba/vbaformat.hxx:151
     class com::sun::star::uno::Any ScVbaFormat::getReadingOrder()
-sd/source/filter/eppt/pptx-epptooxml.cxx:136
+sd/source/filter/eppt/pptx-epptooxml.cxx:135
     class oox::drawingml::ShapeExport & oox::core::PowerPointShapeExport::WritePageShape(const class com::sun::star::uno::Reference<class com::sun::star::drawing::XShape> &,enum PageType,_Bool)
 sd/source/ui/inc/OutlineViewShell.hxx:114
     class ErrCode sd::OutlineViewShell::ReadRtf(class SvStream &)
@@ -276,9 +262,9 @@ sfx2/source/appl/appserv.cxx:336
     short (anonymous namespace)::SafeModeQueryDialog::execute()
 sw/inc/calc.hxx:112
     class SwSbxValue & SwSbxValue::MakeDouble()
-sw/inc/doc.hxx:1102
+sw/inc/doc.hxx:1103
     _Bool SwDoc::ReplaceNumRule(const struct SwPosition &,const class rtl::OUString &,const class rtl::OUString &)
-sw/inc/doc.hxx:1284
+sw/inc/doc.hxx:1285
     _Bool SwDoc::SplitTable(const struct SwPosition &,enum SplitTable_HeadlineOption,_Bool)
 sw/inc/editsh.hxx:270
     _Bool SwEditShell::GetPaMParAttr(class SwPaM *,class SfxItemSet &) const
@@ -286,9 +272,9 @@ sw/inc/editsh.hxx:641
     const class GraphicAttr * SwEditShell::GetGraphicAttr(class GraphicAttr &) const
 sw/inc/IDocumentUndoRedo.hxx:180
     _Bool IDocumentUndoRedo::Repeat(class sw::RepeatContext &,const unsigned short)
-sw/inc/swcrsr.hxx:166
+sw/inc/swcrsr.hxx:164
     _Bool SwCursor::ExpandToSentenceBorders()
-sw/inc/tblafmt.hxx:345
+sw/inc/tblafmt.hxx:343
     _Bool SwTableAutoFormatTable::Load(class SvStream &)
 sw/source/core/inc/laycache.hxx:64
     _Bool SwLayoutCache::CompareLayout(const class SwDoc &) const

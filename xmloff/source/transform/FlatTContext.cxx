@@ -49,9 +49,4 @@ void XMLPersTextContentTContext::Characters( const OUString& rChars )
     m_aCharacters += rChars;
 }
 
-void XMLPersTextContentTContext::ExportContent()
-{
-    GetTransformer().GetDocHandler()->characters( m_aCharacters );
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

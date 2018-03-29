@@ -101,7 +101,6 @@ class SVT_DLLPUBLIC SvTreeList final
     SvTreeListEntry*        LastSelected( const SvListView*) const;
 
     static bool         Select( SvListView*,SvTreeListEntry* pEntry, bool bSelect );
-    void                SelectAll( SvListView*, bool bSelect ); // Does not call Select Handler
     sal_uLong           GetChildSelectionCount( const SvListView*,SvTreeListEntry* pParent ) const;
 
     static void         Expand( SvListView*,SvTreeListEntry* pParent );

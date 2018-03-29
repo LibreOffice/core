@@ -55,7 +55,6 @@ private:
     css::uno::Reference< css::xml::crypto::XXMLSecurityContext > m_xXMLSecurityContext;
 
     virtual void notifyResultListener() const override;
-    bool checkReady() const;
     virtual void startEngine( const rtl::Reference<XMLSignatureTemplateImpl>& xSignatureTemplate) override;
 
 public:

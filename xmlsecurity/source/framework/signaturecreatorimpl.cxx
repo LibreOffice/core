@@ -43,30 +43,6 @@ SignatureCreatorImpl::~SignatureCreatorImpl( )
 {
 }
 
-bool SignatureCreatorImpl::checkReady() const
-/****** SignatureCreatorImpl/checkReady **************************************
- *
- *   NAME
- *  checkReady -- checks the conditions for the signature generation.
- *
- *   SYNOPSIS
- *  bReady = checkReady( );
- *
- *   FUNCTION
- *  checks whether all following conditions are satisfied:
- *  1. the result listener is ready;
- *  2. the id of the template blocker is known;
- *  3. the SignatureEngine is ready.
- *
- *   RESULT
- *  bReady - true if all conditions are satisfied, false otherwise
- ******************************************************************************/
-{
-    return (m_xResultListener.is() &&
-            (m_nIdOfBlocker != -1) &&
-            SignatureEngine::checkReady());
-}
-
 void SignatureCreatorImpl::notifyResultListener() const
 /****** SignatureCreatorImpl/notifyResultListener *****************************
  *

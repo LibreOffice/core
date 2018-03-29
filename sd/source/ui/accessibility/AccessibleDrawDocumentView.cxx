@@ -574,58 +574,6 @@ OUString AccessibleDrawDocumentView::CreateAccessibleName()
     return sName;
 }
 
-/** Create a description for this view.  Use the model's description or URL
-    if a description is not available.
-*/
-OUString
-    AccessibleDrawDocumentView::CreateAccessibleDescription()
-{
-    OUString sDescription;
-
-    uno::Reference<lang::XServiceInfo> xInfo (mxController, uno::UNO_QUERY);
-    if (xInfo.is())
-    {
-        uno::Sequence< OUString > aServices( xInfo->getSupportedServiceNames() );
-        OUString sFirstService = aServices[0];
-        if ( sFirstService == "com.sun.star.drawing.DrawingDocumentDrawView" )
-        {
-            if( aServices.getLength() >= 2 && aServices[1] == "com.sun.star.presentation.PresentationView")
-            {
-                SolarMutexGuard aGuard;
-
-                sDescription = SdResId(SID_SD_A11Y_I_DRAWVIEW_D);
-            }
-            else
-            {
-                SolarMutexGuard aGuard;
-
-                sDescription = SdResId(SID_SD_A11Y_D_DRAWVIEW_D);
-            }
-        }
-        else if ( sFirstService == "com.sun.star.presentation.NotesView" )
-        {
-            SolarMutexGuard aGuard;
-
-            sDescription = SdResId(SID_SD_A11Y_I_NOTESVIEW_D);
-        }
-        else if ( sFirstService == "com.sun.star.presentation.HandoutView" )
-        {
-            SolarMutexGuard aGuard;
-
-            sDescription = SdResId(SID_SD_A11Y_I_HANDOUTVIEW_D);
-        }
-        else
-        {
-            sDescription = sFirstService;
-        }
-    }
-    else
-    {
-        sDescription = "Accessible Draw Document";
-    }
-    return sDescription;
-}
-
 /** Return selection state of specified child
 */
 bool

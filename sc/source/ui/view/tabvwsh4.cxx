@@ -330,11 +330,6 @@ void ScTabViewShell::UpdateOleZoom()
     }
 }
 
-void ScTabViewShell::AdjustPosSizePixel( const Point &rPos, const Size &rSize )
-{
-    OuterResizePixel( rPos, rSize );
-}
-
 void ScTabViewShell::InnerResizePixel( const Point &rOfs, const Size &rSize, bool inplaceEditModeChange )
 {
     Size aNewSize( rSize );

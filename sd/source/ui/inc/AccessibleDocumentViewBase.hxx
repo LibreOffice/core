@@ -286,16 +286,6 @@ protected:
     virtual OUString
         CreateAccessibleName () override;
 
-    /** Create a description string.  The current description is not
-        modified and, therefore, no events are send.  This method is usually
-        called once by the <member>getAccessibleDescription</member> method
-        of the base class.
-        @return
-           A description string.
-    */
-    virtual OUString
-        CreateAccessibleDescription ();
-
     /** This method is called when (after) the frame containing this
         document has been activated.  Can be used to send FOCUSED state
         changes for the currently selected element.
