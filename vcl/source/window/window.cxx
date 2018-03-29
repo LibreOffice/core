@@ -2992,15 +2992,20 @@ void Window::Scroll( long nHorzScroll, long nVertScroll,
 
 void Window::Flush()
 {
-
-    const tools::Rectangle aWinRect( Point( mnOutOffX, mnOutOffY ), Size( mnOutWidth, mnOutHeight ) );
-    mpWindowImpl->mpFrame->Flush( aWinRect );
+    if (mpWindowImpl)
+    {
+        const tools::Rectangle aWinRect( Point( mnOutOffX, mnOutOffY ), Size( mnOutWidth, mnOutHeight ) );
+        mpWindowImpl->mpFrame->Flush( aWinRect );
+    }
 }
 
 void Window::SetUpdateMode( bool bUpdate )
 {
-    mpWindowImpl->mbNoUpdate = !bUpdate;
-    CompatStateChanged( StateChangedType::UpdateMode );
+    if (mpWindowImpl)
+    {
+        mpWindowImpl->mbNoUpdate = !bUpdate;
+        CompatStateChanged( StateChangedType::UpdateMode );
+    }
 }
 
 void Window::GrabFocus()
