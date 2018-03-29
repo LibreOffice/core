@@ -314,21 +314,18 @@ void    XFStyleManager::SetEndnoteConfig(XFEndnoteConfig *pENConfig)
 
 void    XFStyleManager::ToXml(IXFStream *pStrm)
 {
-    std::vector<XFFontDecl>::iterator   itDecl;
     IXFAttrList *pAttrList = pStrm->GetAttrList();
 
     pAttrList->Clear();
     pStrm->StartElement( "office:font-decls" );
 
     //font declarations:
-    for( itDecl = s_aFontDecls.begin(); itDecl != s_aFontDecls.end(); ++itDecl )
+    for (auto & fontDecl : s_aFontDecls)
     {
-        XFFontDecl &f = *itDecl;
-
         pAttrList->Clear();
-        pAttrList->AddAttribute( "style:name", f.GetFontName() );
-        pAttrList->AddAttribute( "fo:font-family", f.GetFontFamily() );
-        if( f.GetFontPitchFixed() )
+        pAttrList->AddAttribute( "style:name", fontDecl.GetFontName() );
+        pAttrList->AddAttribute( "fo:font-family", fontDecl.GetFontFamily() );
+        if( fontDecl.GetFontPitchFixed() )
             pAttrList->AddAttribute( "style:font-pitch", "fixed" );
         else
             pAttrList->AddAttribute( "style:font-pitch", "variable" );

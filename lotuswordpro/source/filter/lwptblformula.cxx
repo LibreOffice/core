@@ -448,10 +448,9 @@ OUString LwpFormulaFunc::ToString(LwpTableLayout* pCellsMap)
     aFormula += " ";//Append a blank space
 
     //Append args
-    std::vector<LwpFormulaArg*>::iterator aItr;
-    for (aItr=m_aArgs.begin();aItr!=m_aArgs.end();++aItr)
+    for (auto const& elem : m_aArgs)
     {
-        aFormula += (*aItr)->ToArgString(pCellsMap) + "|"; //separator
+        aFormula += elem->ToArgString(pCellsMap) + "|"; //separator
     }
 
     //erase the last "|"

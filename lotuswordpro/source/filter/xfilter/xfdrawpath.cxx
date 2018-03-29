@@ -67,12 +67,10 @@ OUString XFSvgPathEntry::ToString()
 {
     assert(!m_strCommand.isEmpty());
     OUString str = m_strCommand;
-    std::vector<XFPoint>::iterator it;
 
-    for( it = m_aPoints.begin(); it != m_aPoints.end(); ++it )
+    for (auto const& point : m_aPoints)
     {
-        XFPoint aPt= *it;
-        str += OUString::number(aPt.GetX()*1000) + " " + OUString::number(aPt.GetY()*1000) + " ";
+        str += OUString::number(point.GetX()*1000) + " " + OUString::number(point.GetY()*1000) + " ";
     }
     return str.trim();
 }
@@ -135,11 +133,9 @@ void    XFDrawPath::ToXml(IXFStream *pStrm)
 
     //points
     OUString   strPath;
-    std::vector<XFSvgPathEntry>::iterator it;
-    for( it = m_aPaths.begin(); it != m_aPaths.end(); ++it )
+    for (auto & path : m_aPaths)
     {
-        XFSvgPathEntry  aSvg = *it;
-        strPath += aSvg.ToString();
+        strPath += path.ToString();
     }
     strPath = strPath.trim();
     pAttrList->AddAttribute( "svg:d", strPath);

@@ -208,10 +208,9 @@ void LwpGraphicObject::XFConvert (XFContentContainer* pCont)
 {
     if (m_sServerContextFormat[1]=='s'&&m_sServerContextFormat[2]=='d'&&m_sServerContextFormat[3]=='w')
     {
-        std::vector< rtl::Reference<XFFrame> >::iterator iter;
-        for (iter = m_vXFDrawObjects.begin(); iter != m_vXFDrawObjects.end(); ++iter)
+        for (auto const& vXFDrawObject : m_vXFDrawObjects)
         {
-            pCont->Add(iter->get());
+            pCont->Add(vXFDrawObject.get());
         }
     }
     else if (IsGrafFormatValid() && !m_vXFDrawObjects.empty())

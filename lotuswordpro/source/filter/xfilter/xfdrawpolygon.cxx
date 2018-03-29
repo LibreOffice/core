@@ -78,11 +78,10 @@ void XFDrawPolygon::ToXml(IXFStream *pStrm)
 
     //points
     OUString   strPoints;
-    for( it = m_aPoints.begin(); it != m_aPoints.end(); ++it )
+    for (auto const& point : m_aPoints)
     {
-        XFPoint pt = *it;
-        double  x = (pt.GetX()-rect.GetX())*1000;
-        double  y = (pt.GetY()-rect.GetY())*1000;
+        double  x = (point.GetX()-rect.GetX())*1000;
+        double  y = (point.GetY()-rect.GetY())*1000;
         strPoints += OUString::number(x) + " " + OUString::number(y) + " ";
     }
     strPoints = strPoints.trim();

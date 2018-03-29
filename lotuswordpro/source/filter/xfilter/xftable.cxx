@@ -125,10 +125,10 @@ OUString XFTable::GetTableName()
 sal_uInt16 XFTable::GetRowCount()
 {
     sal_uInt16 rowMax = 0;
-    for(auto it=m_aRows.begin(); it!=m_aRows.end(); ++it )
+    for (auto const& row : m_aRows)
     {
-        if (it->first > rowMax)
-            rowMax = it->first;
+        if (row.first > rowMax)
+            rowMax = row.first;
     }
 
     return rowMax;
@@ -142,11 +142,10 @@ XFRow*  XFTable::GetRow(sal_Int32 row)
 sal_Int32   XFTable::GetColumnCount()
 {
     int     colMax = -1;
-    std::map<sal_Int32,OUString>::iterator it;
-    for( it=m_aColumns.begin(); it!=m_aColumns.end(); ++it )
+    for (auto const& column : m_aColumns)
     {
-        if( it->first>colMax )
-            colMax = it->first;
+        if( column.first>colMax )
+            colMax = column.first;
     }
     return colMax;
 }
@@ -176,10 +175,9 @@ void    XFTable::ToXml(IXFStream *pStrm)
     //output columns:
     {
         int lastCol = 0;
-        std::map<sal_Int32,OUString>::iterator it;
-        for( it=m_aColumns.begin(); it!=m_aColumns.end(); ++it )
+        for (auto const& column : m_aColumns)
         {
-            sal_Int32   col = (*it).first;
+            sal_Int32   col = column.first;
             OUString   style = m_aColumns[col];
 
             //default col repeated:
@@ -217,11 +215,10 @@ void    XFTable::ToXml(IXFStream *pStrm)
     {
         int     lastRow = 0;
 
-        auto it = m_aRows.begin();
-        for( ; it!=m_aRows.end(); ++it )
+        for (auto const& elem : m_aRows)
         {
-            int row = (*it).first;
-            XFRow *pRow = (*it).second.get();
+            int row = elem.first;
+            XFRow *pRow = elem.second.get();
 
             //null row repeated:
             if( row>lastRow+1 )
