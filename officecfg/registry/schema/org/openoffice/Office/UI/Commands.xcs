@@ -59,11 +59,11 @@
       <prop oor:name="Properties" oor:type="xs:int" oor:nillable="false">
         <info>
           <desc>
-            Additional information about a single command.
-            Bit 0 = Command has an image.
-            Bit 1 = Image must be mirrored  (CTL/vertical text).
-            Bit 2 = Image must be rotated (CTL/vertical text).
-            Bit 3 = Command supports a toggle state (Accessibility).
+            Additional information about a single command (a sum (bitwise OR) of following bits).
+            Bit 0 (1) = Command has an image.
+            Bit 1 (2) = Image must be mirrored  (CTL/vertical text).
+            Bit 2 (4) = Image must be rotated (CTL/vertical text).
+            Bit 3 (8) = Command supports a toggle state (Accessibility).
           </desc>
         </info>
         <value>0</value>
