@@ -522,7 +522,12 @@ SwDoc* SwUiWriterTest::createDoc(const char* pName)
 
 std::unique_ptr<SwTextBlocks> SwUiWriterTest::readDOCXAutotext(const OUString& sFileName, bool bEmpty)
 {
-    OUString rURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + sFileName;
+    utl::TempFile tmp;
+    tmp.EnableKillingFile();
+    OUString rURL = tmp.GetURL();
+    CPPUNIT_ASSERT_EQUAL(
+        osl::FileBase::E_None,
+        osl::File::copy(m_directories.getURLFromSrc(DATA_DIRECTORY) + sFileName, rURL));
 
     SfxMedium aSrcMed(rURL, StreamMode::STD_READ);
     SwDoc* pDoc = createDoc();
