@@ -256,20 +256,17 @@ OUString ImplImageTree::getImageUrl(OUString const & rName, OUString const & rSt
 
 OUString ImplImageTree::fallbackStyle(const OUString& rsStyle)
 {
+{
     OUString sResult;
 
-    if (rsStyle == "galaxy")
+    if (rsStyle == "galaxy" || rsStyle == "helpimg")
         sResult = "";
-    else if (rsStyle == "industrial" || rsStyle == "tango" || rsStyle == "breeze")
-        sResult = "galaxy";
-    else if (rsStyle == "sifr" || rsStyle == "breeze_dark")
-        sResult = "breeze";
     else if (rsStyle == "sifr_dark" )
         sResult = "breeze_dark";
-    else if (rsStyle == "helpimg")
-        sResult = "";
+    else if (rsStyle == "sifr" || rsStyle == "breeze_dark")
+        sResult = "breeze";
     else
-        sResult = "tango";
+        sResult = "galaxy"; //to be replaced with Colibre when finished
 
     return sResult;
 }
