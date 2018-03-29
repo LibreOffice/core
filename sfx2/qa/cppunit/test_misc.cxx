@@ -171,7 +171,8 @@ void MiscTest::testHardLinks()
     xStorable->store();
 
     struct stat buf;
-    stat(aOld.getStr(), &buf);
+    int nRet = stat(aOld.getStr(), &buf);
+    CPPUNIT_ASSERT_EQUAL(nRet, 0);
     // This failed: hard link count was 1, the hard link broke on store.
     CPPUNIT_ASSERT(buf.st_nlink > 1);
 
