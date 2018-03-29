@@ -1633,16 +1633,17 @@ uno::Sequence<PropertyValue> SwAccessibleParagraph::getCharacterAttributes(
         //sort property values
         // build sorted index array
         sal_Int32 nLength = aValues.size();
-        std::unique_ptr<sal_Int32[]> pIndices( new sal_Int32[nLength] );
-        for( i = 0; i < nLength; i++ )
-            pIndices[i] = i;
-        sort( &pIndices[0], &pIndices[nLength], IndexCompare(aValues.data()) );
+        std::vector<sal_Int32> aIndices;
+        aIndices.reserve(nLength);
+        for (i = 0; i < nLength; ++i)
+            aIndices.push_back(i);
+        std::sort(aIndices.begin(), aIndices.end(), IndexCompare(aValues.data()));
         // create sorted sequences according to index array
         uno::Sequence<PropertyValue> aNewValues( nLength );
         PropertyValue* pNewValues = aNewValues.getArray();
-        for( i = 0; i < nLength; i++ )
+        for (i = 0; i < nLength; ++i)
         {
-            pNewValues[i] = aValues[pIndices[i]];
+            pNewValues[i] = aValues[aIndices[i]];
         }
         return aNewValues;
     }
@@ -2848,24 +2849,24 @@ sal_Bool SwAccessibleParagraph::setAttributes(
     // build sorted index array
     sal_Int32 nLength = rAttributeSet.getLength();
     const PropertyValue* pPairs = rAttributeSet.getConstArray();
-    sal_Int32* pIndices = new sal_Int32[nLength];
-    sal_Int32 i;
-    for( i = 0; i < nLength; i++ )
-        pIndices[i] = i;
-    sort( &pIndices[0], &pIndices[nLength], IndexCompare(pPairs) );
+    std::vector<sal_Int32> aIndices;
+    aIndices.reserve(nLength);
+    for (sal_Int32 i = 0; i < nLength; ++i)
+        aIndices.push_back(i);
+    std::sort(aIndices.begin(), aIndices.end(), IndexCompare(pPairs));
 
     // create sorted sequences according to index array
     uno::Sequence< OUString > aNames( nLength );
     OUString* pNames = aNames.getArray();
     uno::Sequence< uno::Any > aValues( nLength );
     uno::Any* pValues = aValues.getArray();
-    for( i = 0; i < nLength; i++ )
+    for (sal_Int32 i = 0; i < nLength; ++i)
     {
-        const PropertyValue& rVal = pPairs[pIndices[i]];
+        const PropertyValue& rVal = pPairs[aIndices[i]];
         pNames[i]  = rVal.Name;
         pValues[i] = rVal.Value;
     }
-    delete[] pIndices;
+    aIndices.clear();
 
     // now set the values
     bool bRet = true;
