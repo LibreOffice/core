@@ -76,7 +76,7 @@ void DbgTestSolarMutex()
 #endif
 
 void DbgUnhandledException(const css::uno::Any & caught, const char* currentFunction, const char* fileAndLineNo,
-        const char* explanatory)
+        const char* area, const char* explanatory)
 {
         OString sMessage( "DBG_UNHANDLED_EXCEPTION in " );
         sMessage += currentFunction;
@@ -120,9 +120,12 @@ void DbgUnhandledException(const css::uno::Any & caught, const char* currentFunc
         }
         sMessage += "\n";
 
+        if (area == nullptr)
+            area = "legacy.osl";
+
         SAL_DETAIL_LOG_FORMAT(
             SAL_DETAIL_ENABLE_LOG_WARN, SAL_DETAIL_LOG_LEVEL_WARN,
-            "legacy.osl", fileAndLineNo, "%s", sMessage.getStr());
+            area, fileAndLineNo, "%s", sMessage.getStr());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

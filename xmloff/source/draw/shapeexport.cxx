@@ -554,7 +554,7 @@ void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShap
             }
             catch(const uno::Exception&)
             {
-                DBG_UNHANDLED_EXCEPTION_WHEN( "collecting auto styles for a table" );
+                DBG_UNHANDLED_EXCEPTION( "xmloff", "collecting auto styles for a table" );
             }
             break;
         }
@@ -746,7 +746,7 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
             }
             catch(const uno::Exception&)
             {
-                DBG_UNHANDLED_EXCEPTION_WHEN( "exporting layer name for shape" );
+                DBG_UNHANDLED_EXCEPTION( "xmloff", "exporting layer name for shape" );
             }
         }
     }
@@ -1867,7 +1867,7 @@ void XMLShapeExport::ImpExportDescription( const uno::Reference< drawing::XShape
     }
     catch( uno::Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION_WHEN( "exporting Title and/or Description for shape" );
+        DBG_UNHANDLED_EXCEPTION( "xmloff", "exporting Title and/or Description for shape" );
     }
 }
 
