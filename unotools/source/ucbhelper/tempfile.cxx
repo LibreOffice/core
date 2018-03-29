@@ -409,7 +409,6 @@ OUString TempFile::GetFileName() const
 
 OUString const & TempFile::GetURL() const
 {
-    assert(!aName.isEmpty() && "TempFile::GetURL failed: unit test is leaking temp files, add the ucpfile1 component!");
     return aName;
 }
 
