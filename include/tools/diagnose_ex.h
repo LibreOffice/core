@@ -29,10 +29,9 @@
 
 TOOLS_DLLPUBLIC void DbgUnhandledException(const css::uno::Any& caughtException,
         const char* currentFunction, const char* fileAndLineNo,
-        const char* explanatory = nullptr);
+        const char* area = nullptr, const char* explanatory = nullptr);
 
 #if OSL_DEBUG_LEVEL > 0
-    #include <com/sun/star/configuration/CorruptedConfigurationException.hpp>
     #include <cppuhelper/exc_hlp.hxx>
     #include <osl/thread.h>
 
@@ -40,16 +39,25 @@ TOOLS_DLLPUBLIC void DbgUnhandledException(const css::uno::Any& caughtException,
 
         Note that whenever you use this, it might be an indicator that your error
         handling is not correct ....
+        This takes two optional parameters: area and explanatory
     */
-    #define DBG_UNHANDLED_EXCEPTION()   \
-        DbgUnhandledException( ::cppu::getCaughtException(), OSL_THIS_FUNC, SAL_DETAIL_WHERE);
+    #define DBG_UNHANDLED_EXCEPTION_0_ARGS() \
+        DbgUnhandledException( ::cppu::getCaughtException(), OSL_THIS_FUNC, SAL_DETAIL_WHERE );
+    #define DBG_UNHANDLED_EXCEPTION_1_ARGS(area) \
+        DbgUnhandledException( ::cppu::getCaughtException(), OSL_THIS_FUNC, SAL_DETAIL_WHERE, area );
+    #define DBG_UNHANDLED_EXCEPTION_2_ARGS(area, explanatory) \
+        DbgUnhandledException( ::cppu::getCaughtException(), OSL_THIS_FUNC, SAL_DETAIL_WHERE, area, explanatory );
 
-    #define DBG_UNHANDLED_EXCEPTION_WHEN(explain)   \
-        DbgUnhandledException( ::cppu::getCaughtException(), OSL_THIS_FUNC, SAL_DETAIL_WHERE, explain);
+    #define DBG_UNHANDLED_FUNC_CHOOSER(_f1, _f2, _f3, ...) _f3
+    #define DBG_UNHANDLED_FUNC_RECOMPOSER(argsWithParentheses) DBG_UNHANDLED_FUNC_CHOOSER argsWithParentheses
+    #define DBG_UNHANDLED_CHOOSE_FROM_ARG_COUNT(...) DBG_UNHANDLED_FUNC_RECOMPOSER((__VA_ARGS__, DBG_UNHANDLED_EXCEPTION_2_ARGS, DBG_UNHANDLED_EXCEPTION_1_ARGS, DBG_UNHANDLED_EXCEPTION_0_ARGS, ))
+    #define DBG_UNHANDLED_NO_ARG_EXPANDER() ,,DBG_UNHANDLED_EXCEPTION_0_ARGS
+    #define DBG_UNHANDLED_MACRO_CHOOSER(...) DBG_UNHANDLED_CHOOSE_FROM_ARG_COUNT(DBG_UNHANDLED_NO_ARG_EXPANDER __VA_ARGS__ ())
+    #define DBG_UNHANDLED_EXCEPTION(...) DBG_UNHANDLED_MACRO_CHOOSER(__VA_ARGS__)(__VA_ARGS__)
+
 
 #else   // OSL_DEBUG_LEVEL
-    #define DBG_UNHANDLED_EXCEPTION()
-    #define DBG_UNHANDLED_EXCEPTION_WHEN(explain)
+    #define DBG_UNHANDLED_EXCEPTION(...)
 #endif  // OSL_DEBUG_LEVEL
 
 /** This macro asserts the given condition (in debug mode), and throws
