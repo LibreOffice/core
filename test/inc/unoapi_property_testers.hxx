@@ -18,7 +18,7 @@
 
 namespace apitest
 {
-/** @brief Tester for test property type 'boolean' of a @see com::sun::star::beans::XPropertySet.
+/** @brief Tester for property type 'boolean' of a @see com::sun::star::beans::XPropertySet.
  *
  * @param   xPropertySet    The property set, which contains the property to test against.
  * @param   name            Name of property to test.
@@ -26,7 +26,7 @@ namespace apitest
 void OOO_DLLPUBLIC_TEST testBooleanProperty(
     css::uno::Reference<css::beans::XPropertySet>& xPropertySet, const OUString& name);
 
-/** @brief Tester for test read-only property type 'boolean' of a @see com::sun::star::beans::XPropertySet.
+/** @brief Tester for read-only property type 'boolean' of a @see com::sun::star::beans::XPropertySet.
  *
  * @param   xPropertySet    The property set, which contains the property to test against.
  * @param   name            Name of property to test.
@@ -34,7 +34,7 @@ void OOO_DLLPUBLIC_TEST testBooleanProperty(
 void OOO_DLLPUBLIC_TEST testBooleanReadonlyProperty(
     css::uno::Reference<css::beans::XPropertySet>& xPropertySet, const OUString& name);
 
-/** @brief Tester for test property type 'double' of a @see com::sun::star::beans::XPropertySet.
+/** @brief Tester for property type 'double' of a @see com::sun::star::beans::XPropertySet.
  *
  * @param   xPropertySet    The property set, which contains the property to test against.
  * @param   name            Name of property to test.
@@ -44,7 +44,7 @@ void OOO_DLLPUBLIC_TEST
 testDoubleProperty(css::uno::Reference<css::beans::XPropertySet>& xPropertySet,
                    const OUString& name, const double& dValue = 42.0);
 
-/** @brief Tester for test property type 'long' of a @see com::sun::star::beans::XPropertySet.
+/** @brief Tester for property type 'long' of a @see com::sun::star::beans::XPropertySet.
  *
  * @param   xPropertySet    The property set, which contains the property to test against.
  * @param   name            Name of property to test.
