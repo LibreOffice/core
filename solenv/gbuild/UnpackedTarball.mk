@@ -358,6 +358,7 @@ endef
 define gb_UnpackedTarbal__make_pattern_rule
 $(call gb_UnpackedTarball_get_dir,$(1))/%$(2) :
 	$$(if $$(wildcard $$@),,$$(call gb_Output_error,file $$@ does not exist in the tarball))
+	$$(if $$(UNPACKED_MODE),chmod $$(UNPACKED_MODE) $$@ &&) \
 	touch $$@
 
 $(eval gb_UnpackedTarball_PATTERN_RULES_$(1) += $(2))
@@ -372,6 +373,7 @@ endef
 define gb_UnpackedTarbal__make_file_rule
 $(call gb_UnpackedTarball_get_dir,$(1))/$(2) :
 	$$(if $$(wildcard $$@),,$$(call gb_Output_error,file $$@ does not exist in the tarball))
+	$$(if $$(UNPACKED_MODE),chmod $$(UNPACKED_MODE) $$@ &&) \
 	touch $$@
 
 endef
@@ -388,6 +390,7 @@ endef
 define gb_UnpackedTarball_mark_output_file
 $(call gb_UnpackedTarball_get_final_target,$(1)) : $(call gb_UnpackedTarball_get_dir,$(1))/$(2)
 $(call gb_UnpackedTarball_get_dir,$(1))/$(2) : $(call gb_UnpackedTarball_get_target,$(1))
+$(call gb_UnpackedTarball_get_dir,$(1))/$(2) : UNPACKED_MODE := 644
 $(if $(suffix $(2)),\
 	$(call gb_UnpackedTarbal__ensure_pattern_rule,$(1),$(suffix $(2))),\
 	$(call gb_UnpackedTarbal__make_file_rule,$(1),$(2)) \
