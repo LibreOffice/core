@@ -125,11 +125,6 @@ void SAL_CALL OColumn::setName( const OUString& _rName )
     m_sName = _rName;
 }
 
-void OColumn::fireValueChange(const ::connectivity::ORowSetValue& /*_rOldValue*/)
-{
-    OSL_FAIL( "OColumn::fireValueChange: not implemented!" );
-}
-
 void OColumn::registerProperty( const OUString& _rName, sal_Int32 _nHandle, sal_Int32 _nAttributes, void* _pPointerToMember, const Type& _rMemberType )
 {
     ::comphelper::OPropertyContainer::registerProperty( _rName, _nHandle, _nAttributes, _pPointerToMember, _rMemberType );

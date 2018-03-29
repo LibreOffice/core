@@ -234,7 +234,8 @@ namespace dbaccess
                 void notifyAllListenersRowChanged(::osl::ResettableMutexGuard& _rGuard,const css::sdb::RowsChangeEvent& rEvt);
         virtual bool notifyAllListenersCursorBeforeMove(::osl::ResettableMutexGuard& _rGuard) override;
         virtual void notifyAllListenersCursorMoved(::osl::ResettableMutexGuard& _rGuard) override;
-        virtual void notifyAllListeners(::osl::ResettableMutexGuard& _rGuard) override;
+        // notify all that rowset changed
+        virtual void notifyAllListeners(::osl::ResettableMutexGuard& _rGuard);
 
         virtual void doCancelModification( ) override;
         virtual bool isModification( ) override;

@@ -92,11 +92,6 @@ public:
     void getAllTicks( TickInfoArraysType& rAllTickInfos ) const;
     void getAllTicksShifted( TickInfoArraysType& rAllTickInfos ) const;
 
-    /**
-     * Determine the screen positions of all ticks based on their numeric values.
-     */
-    virtual void updateScreenValues( TickInfoArraysType& rAllTickInfos ) const;
-
 private: //methods
     bool        isDateAxis() const;
 
@@ -132,7 +127,10 @@ public:
         , bool bIncludeFarAwayDistanceIfSo = false
         , bool bIncludeSpaceBetweenTickAndText = true ) const;
 
-    virtual void updateScreenValues( TickInfoArraysType& rAllTickInfos ) const override;
+    /**
+     * Determine the screen positions of all ticks based on their numeric values.
+     */
+    virtual void updateScreenValues( TickInfoArraysType& rAllTickInfos ) const;
 
     bool  isHorizontalAxis() const;
     bool  isVerticalAxis() const;
