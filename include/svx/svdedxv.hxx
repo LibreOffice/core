@@ -219,7 +219,7 @@ public:
     SdrTextObj* GetTextEditObject() const { return mxTextEditObj.get(); }
 
     // info about TextEditPageView. Default is 0L.
-    virtual SdrPageView* GetTextEditPageView() const;
+    SdrPageView* GetTextEditPageView() const;
 
     // Current window of the outliners.
     void SetTextEditWin(vcl::Window* pWin);
