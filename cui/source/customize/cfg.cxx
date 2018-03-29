@@ -161,7 +161,7 @@ void printEntries(SvxEntries* entries)
 {
     for (auto const& entry : *entries)
     {
-        SAL_WARN("cui", "printEntries: " << entry.GetName());
+        SAL_WARN("cui", "printEntries: " << entry->GetName());
     }
 }
 
