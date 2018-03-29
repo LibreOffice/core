@@ -12,8 +12,6 @@
 
 #include <com/sun/star/awt/FontDescriptor.hpp>
 #include <com/sun/star/awt/FontUnderline.hpp>
-#include <com/sun/star/document/XFilter.hpp>
-#include <com/sun/star/document/XImporter.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeSegment.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
@@ -44,7 +42,6 @@
 #include <rtl/ustring.hxx>
 #include <vcl/settings.hxx>
 #include <unotools/ucbstreamhelper.hxx>
-#include <unotools/streamwrap.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/configuration.hxx>
 
@@ -57,32 +54,6 @@ public:
     }
 
 protected:
-    /// Copy&paste helper.
-    void paste(const OUString& aFilename, uno::Reference<text::XTextRange> const& xTextRange
-                                          = uno::Reference<text::XTextRange>())
-    {
-        uno::Reference<document::XFilter> xFilter(
-            m_xSFactory->createInstance("com.sun.star.comp.Writer.RtfFilter"),
-            uno::UNO_QUERY_THROW);
-        uno::Reference<document::XImporter> xImporter(xFilter, uno::UNO_QUERY_THROW);
-        xImporter->setTargetDocument(mxComponent);
-        uno::Sequence<beans::PropertyValue> aDescriptor(xTextRange.is() ? 3 : 2);
-        aDescriptor[0].Name = "InputStream";
-        SvStream* pStream = utl::UcbStreamHelper::CreateStream(
-            m_directories.getURLFromSrc("/sw/qa/extras/rtfimport/data/") + aFilename,
-            StreamMode::STD_READ);
-        CPPUNIT_ASSERT_EQUAL(ERRCODE_NONE, pStream->GetError());
-        uno::Reference<io::XStream> xStream(new utl::OStreamWrapper(*pStream));
-        aDescriptor[0].Value <<= xStream;
-        aDescriptor[1].Name = "InsertMode";
-        aDescriptor[1].Value <<= true;
-        if (xTextRange.is())
-        {
-            aDescriptor[2].Name = "TextInsertModeRange";
-            aDescriptor[2].Value <<= xTextRange;
-        }
-        CPPUNIT_ASSERT(xFilter->filter(aDescriptor));
-    }
     AllSettings m_aSavedSettings;
 };
 
@@ -744,7 +715,7 @@ DECLARE_RTFIMPORT_TEST(testFdo68291, "fdo68291.odt")
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XTextRange> xText(xTextDocument->getText(), uno::UNO_QUERY);
     uno::Reference<text::XTextRange> xEnd = xText->getEnd();
-    paste("fdo68291-paste.rtf", xEnd);
+    paste("rtfimport/data/fdo68291-paste.rtf", xEnd);
 
     // This was "Standard", causing an unwanted page break on next paste.
     CPPUNIT_ASSERT_EQUAL(uno::Any(),
@@ -1133,7 +1104,7 @@ DECLARE_RTFIMPORT_TEST(testTdf90260Par, "hello.rtf")
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XTextRange> xText(xTextDocument->getText(), uno::UNO_QUERY);
     uno::Reference<text::XTextRange> xEnd = xText->getEnd();
-    paste("tdf90260-par.rtf", xEnd);
+    paste("rtfimport/data/tdf90260-par.rtf", xEnd);
     CPPUNIT_ASSERT_EQUAL(2, getParagraphs());
 }
 
@@ -1229,12 +1200,12 @@ DECLARE_RTFIMPORT_TEST(testClassificatonPaste, "hello.rtf")
     uno::Reference<text::XTextRange> xEnd = xText->getEnd();
 
     // Not classified source, not classified destination: OK.
-    paste("classification-no.rtf", xEnd);
+    paste("rtfimport/data/classification-no.rtf", xEnd);
     CPPUNIT_ASSERT_EQUAL(OUString("classification-no"), getParagraph(2)->getString());
 
     // Classified source, not classified destination: nothing should happen.
     OUString aOld = xText->getString();
-    paste("classification-yes.rtf", xEnd);
+    paste("rtfimport/data/classification-yes.rtf", xEnd);
     CPPUNIT_ASSERT_EQUAL(aOld, xText->getString());
 }
 

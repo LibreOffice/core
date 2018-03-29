@@ -11,8 +11,6 @@
 #include <swmodeltestbase.hxx>
 
 #include <com/sun/star/awt/FontWeight.hpp>
-#include <com/sun/star/document/XFilter.hpp>
-#include <com/sun/star/document/XImporter.hpp>
 #include <com/sun/star/graphic/GraphicType.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -46,7 +44,6 @@
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <unotools/ucbstreamhelper.hxx>
-#include <unotools/streamwrap.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/configuration.hxx>
 
@@ -85,27 +82,6 @@ public:
     }
 
 protected:
-    /// Copy&paste helper.
-    void paste(const OUString& aFilename, uno::Reference<text::XTextRange> const& xTextRange)
-    {
-        uno::Reference<document::XFilter> xFilter(
-            m_xSFactory->createInstance("com.sun.star.comp.Writer.RtfFilter"),
-            uno::UNO_QUERY_THROW);
-        uno::Reference<document::XImporter> xImporter(xFilter, uno::UNO_QUERY_THROW);
-        xImporter->setTargetDocument(mxComponent);
-        uno::Sequence<beans::PropertyValue> aDescriptor(3);
-        aDescriptor[0].Name = "InputStream";
-        SvStream* pStream = utl::UcbStreamHelper::CreateStream(
-            m_directories.getURLFromSrc("/sw/qa/extras/rtfexport/data/") + aFilename,
-            StreamMode::WRITE);
-        uno::Reference<io::XStream> xStream(new utl::OStreamWrapper(*pStream));
-        aDescriptor[0].Value <<= xStream;
-        aDescriptor[1].Name = "InsertMode";
-        aDescriptor[1].Value <<= true;
-        aDescriptor[2].Name = "TextInsertModeRange";
-        aDescriptor[2].Value <<= xTextRange;
-        xFilter->filter(aDescriptor);
-    }
     AllSettings m_aSavedSettings;
 };
 
@@ -639,7 +615,7 @@ DECLARE_RTFEXPORT_TEST(testCopyPastePageStyle, "copypaste-pagestyle.rtf")
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XTextRange> xText(xTextDocument->getText(), uno::UNO_QUERY);
     uno::Reference<text::XTextRange> xEnd = xText->getEnd();
-    paste("copypaste-pagestyle-paste.rtf", xEnd);
+    paste("rtfexport/data/copypaste-pagestyle-paste.rtf", xEnd);
 
     uno::Reference<beans::XPropertySet> xPropertySet(getStyles("PageStyles")->getByName("Standard"),
                                                      uno::UNO_QUERY);
@@ -656,7 +632,7 @@ DECLARE_RTFEXPORT_TEST(testCopyPasteFootnote, "copypaste-footnote.rtf")
     uno::Reference<container::XIndexAccess> xFootnotes(xFootnotesSupplier->getFootnotes(),
                                                        uno::UNO_QUERY);
     uno::Reference<text::XTextRange> xTextRange(xFootnotes->getByIndex(0), uno::UNO_QUERY);
-    paste("copypaste-footnote-paste.rtf", xTextRange);
+    paste("rtfexport/data/copypaste-footnote-paste.rtf", xTextRange);
 
     CPPUNIT_ASSERT_EQUAL(OUString("bbb"), xTextRange->getString());
 }
@@ -667,7 +643,7 @@ DECLARE_RTFEXPORT_TEST(testFdo63428, "hello.rtf")
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XTextRange> xText(xTextDocument->getText(), uno::UNO_QUERY);
     uno::Reference<text::XTextRange> xEnd = xText->getEnd();
-    paste("fdo63428.rtf", xEnd);
+    paste("rtfexport/data/fdo63428.rtf", xEnd);
 
     // Additionally, commented range was imported as a normal comment.
     CPPUNIT_ASSERT_EQUAL(OUString("Annotation"),
@@ -689,7 +665,7 @@ DECLARE_RTFEXPORT_TEST(testFdo69384Inserted, "hello.rtf")
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XTextRange> xText(xTextDocument->getText(), uno::UNO_QUERY);
     uno::Reference<text::XTextRange> xEnd = xText->getEnd();
-    paste("fdo69384-paste.rtf", xEnd);
+    paste("rtfexport/data/fdo69384-paste.rtf", xEnd);
 
     // During insert of the RTF document we do not insert new styles
     CPPUNIT_ASSERT(!getStyles("ParagraphStyles")->hasByName("Text body justified"));
@@ -701,7 +677,7 @@ DECLARE_RTFEXPORT_TEST(testFdo61193, "hello.rtf")
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XTextRange> xText(xTextDocument->getText(), uno::UNO_QUERY);
     uno::Reference<text::XTextRange> xEnd = xText->getEnd();
-    paste("fdo61193.rtf", xEnd);
+    paste("rtfexport/data/fdo61193.rtf", xEnd);
 }
 
 DECLARE_RTFEXPORT_TEST(testTdf108123, "hello.rtf")
@@ -711,7 +687,7 @@ DECLARE_RTFEXPORT_TEST(testTdf108123, "hello.rtf")
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XTextRange> xText(xTextDocument->getText(), uno::UNO_QUERY);
     uno::Reference<text::XTextRange> xEnd = xText->getEnd();
-    paste("tdf108123.rtf", xEnd);
+    paste("rtfexport/data/tdf108123.rtf", xEnd);
 }
 
 DECLARE_RTFEXPORT_TEST(testShptxtPard, "shptxt-pard.rtf")
@@ -1060,7 +1036,7 @@ DECLARE_RTFEXPORT_TEST(testFdo62044, "fdo62044.rtf")
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XTextRange> xText(xTextDocument->getText(), uno::UNO_QUERY);
     uno::Reference<text::XTextRange> xEnd = xText->getEnd();
-    paste("fdo62044-paste.rtf", xEnd);
+    paste("rtfexport/data/fdo62044-paste.rtf", xEnd);
 
     uno::Reference<beans::XPropertySet> xPropertySet(
         getStyles("ParagraphStyles")->getByName("Heading 1"), uno::UNO_QUERY);
@@ -1724,7 +1700,7 @@ DECLARE_RTFEXPORT_TEST(testTdf90260Nopar, "hello.rtf")
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XTextRange> xText(xTextDocument->getText(), uno::UNO_QUERY);
     uno::Reference<text::XTextRange> xEnd = xText->getEnd();
-    paste("tdf90260-nopar.rtf", xEnd);
+    paste("rtfexport/data/tdf90260-nopar.rtf", xEnd);
     CPPUNIT_ASSERT_EQUAL(1, getParagraphs());
 }
 
@@ -1869,7 +1845,7 @@ DECLARE_RTFEXPORT_TEST(testClassificatonPasteLevels, "classification-confidentia
     // Classified source and classified destination, but internal only has a
     // higher level than confidential: nothing should happen.
     OUString aOld = xText->getString();
-    paste("classification-yes.rtf", xEnd);
+    paste("rtfexport/data/classification-yes.rtf", xEnd);
     CPPUNIT_ASSERT_EQUAL(aOld, xText->getString());
 }
 
