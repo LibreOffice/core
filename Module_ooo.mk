@@ -27,6 +27,7 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
     MathMLDTD \
     UnoControls \
     animations \
+    autodoc \
     automation \
     avmedia \
     basctl \
@@ -36,6 +37,7 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
     canvas \
     comphelper \
     configmgr \
+    cosv \
     cppcanvas \
     cui \
     dbaccess \
@@ -52,17 +54,18 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
     idl \
     io \
     javaunohelper \
+    jvmaccess \
     linguistic \
     o3tl \
     offapi \
     oovbaapi \
     oox \
-    padmin \
     package \
+    padmin \
     rdbmaker \
     registry \
-    reportdesign \
     remotebridges \
+    reportdesign \
     sane \
     sax \
     sc \
@@ -80,15 +83,19 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
     sw \
     toolkit \
     tools \
+    twain \
+    ucb \
     ucbhelper \
     udkapi \
+    udm \
+    unixODBC \
+    unodevtools \
     unotools \
     unoxml \
     uui \
     vbahelper \
     vcl \
-    udm \
-    unixODBC \
+    vos \
     wizards \
     writerfilter \
     x11_extensions \

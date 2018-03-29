@@ -21,15 +21,6 @@
 
 
 
-PRJ := ..
-PRJNAME := twain
-TARGET := twain
+$(eval $(call gb_Package_Package,twain_inc,$(SRCDIR)/twain))
 
-.INCLUDE: settings.mk
-.INCLUDE: target.mk
-
-ALLTAR: $(OUT)$/inc$/twain.h
-
-$(OUT)$/inc$/%: $(PRJ)$/inc$/%
-    - $(MKDIR) $(@:d)
-    $(COPY) $< $@
+$(eval $(call gb_Package_add_file,twain_inc,inc/external/twain/twain.h,inc/twain.h))
