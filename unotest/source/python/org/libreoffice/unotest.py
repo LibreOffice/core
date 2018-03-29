@@ -14,6 +14,9 @@ import time
 import uuid
 import argparse
 import os
+import shutil
+import urllib.parse
+import urllib.request
 
 try:
     import pyuno
@@ -210,20 +213,15 @@ class UnoInProcess:
         return self.openDocFromTDOC(file, True)
 
     def openDocFromTDOC(self, file, asTemplate = False):
-        path = os.getenv("TDOC")
-        if os.name == "nt":
-            # do not quote drive letter - it must be "X:"
-            url = "file:///" + path + "/" + quote(file)
-        else:
-            url = "file://" + quote(path) + "/" + quote(file)
-        return self.openDocFromURL(url, asTemplate)
+        path = makeCopyFromTDOC(file)
+        return self.openDocFromAbsolutePath(path, asTemplate)
 
-    def openDocFromAbsolutePath(self, file):
+    def openDocFromAbsolutePath(self, file, asTemplate = False):
         if os.name == "nt":
             url = "file:///" + file
         else:
             url = "file://" + file
-        return self.openDocFromURL(url)
+        return self.openDocFromURL(url, asTemplate)
 
     def openDocFromURL(self, url, asTemplate = False):
         props = [("Hidden", True), ("ReadOnly", False), ("AsTemplate", asTemplate)]
@@ -284,6 +282,28 @@ def runConnectionTests(connection, invoker, tests):
             invoker(connection, test)
     finally:
         connection.tearDown()
+
+def makeCopyFromTDOC(file):
+    src = os.getenv("TDOC")
+    assert(src is not None)
+    src = os.path.join(src, file)
+    dst = os.getenv("TestUserDir")
+    assert(dst is not None)
+    uri = urllib.parse.urlparse(dst)
+    assert(uri.scheme.casefold() == "file")
+    assert(uri.netloc == "" or uri.netloc.casefold() == "localhost")
+    assert(uri.params == "")
+    assert(uri.query == "")
+    assert(uri.fragment == "")
+    dst = urllib.request.url2pathname(uri.path)
+    dst = os.path.join(dst, "tmp", file)
+    os.makedirs(os.path.dirname(dst), exist_ok=True)
+    try:
+        os.remove(dst)
+    except FileNotFoundError:
+        pass
+    shutil.copyfile(src, dst)
+    return dst
 
 ### tests ###
 

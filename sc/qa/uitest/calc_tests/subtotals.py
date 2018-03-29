@@ -8,16 +8,17 @@
 from libreoffice.uno.propertyvalue import mkPropertyValues
 from uitest.framework import UITestCase
 from libreoffice.calc.document import get_column
-from uitest.path import get_srcdir_url
 from uitest.uihelper.calc import enter_text_to_cell
 from libreoffice.calc.document import get_cell_by_position
 from uitest.uihelper.common import select_pos
 from uitest.uihelper.common import get_state_as_dict
+import org.libreoffice.unotest
+import pathlib
 import time
 from uitest.debug import sleep
 
 def get_url_for_data_file(file_name):
-    return get_srcdir_url() + "/sc/qa/uitest/calc_tests/data/" + file_name
+    return pathlib.Path(org.libreoffice.unotest.makeCopyFromTDOC(file_name)).as_uri()
 
 class Subtotals(UITestCase):
 

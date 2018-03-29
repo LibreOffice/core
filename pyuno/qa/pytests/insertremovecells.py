@@ -9,7 +9,7 @@ try:
 except ImportError:
     from urllib import pathname2url
 
-from org.libreoffice.unotest import pyuno, mkPropertyValue
+from org.libreoffice.unotest import pyuno, mkPropertyValue, makeCopyFromTDOC
 
 
 class InsertRemoveCells(unittest.TestCase):
@@ -29,8 +29,7 @@ class InsertRemoveCells(unittest.TestCase):
           ('Hidden', True),
           ('ReadOnly', False)
         ))
-        tdoc_dir = getenv('TDOC')
-        tdoc_path = pathname2url(path.join(tdoc_dir, 'fdo74824.ods'))
+        tdoc_path = pathname2url(makeCopyFromTDOC('fdo74824.ods'))
         if platform.system() == 'Windows':
             tdoc_path = re.sub(r'^//(/[A-Za-z]:/)/', r'\1', tdoc_path)
         url = 'file://' + tdoc_path
