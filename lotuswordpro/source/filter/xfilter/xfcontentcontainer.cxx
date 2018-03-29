@@ -128,11 +128,9 @@ enumXFContent   XFContentContainer::GetContentType()
 
 void    XFContentContainer::ToXml(IXFStream *pStrm)
 {
-    std::vector< rtl::Reference<XFContent> >::iterator it;
-
-    for( it = m_aContents.begin(); it != m_aContents.end(); ++it )
+    for (auto const& content : m_aContents)
     {
-        XFContent *pContent = it->get();
+        XFContent *pContent = content.get();
         if( pContent )
             pContent->DoToXml(pStrm);
     }
@@ -140,6 +138,7 @@ void    XFContentContainer::ToXml(IXFStream *pStrm)
 
 rtl::Reference<XFContent> XFContentContainer::GetLastContent()
 {
+    // TODO JNA : if m_aContents size is 0, there's some pb
     sal_uInt32 index = m_aContents.size()-1;
     if(index >0)
     {

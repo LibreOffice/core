@@ -127,11 +127,10 @@ OUString LwpBulletStyleMgr::RegisterBulletStyle(LwpPara* pPara, LwpBulletOverrid
     std::shared_ptr<LwpBulletOverride> pBulletOver(pBullOver->clone());
 
     sal_uInt16 nNameIndex = 0;
-    std::vector <OverridePair>::iterator iter;
-    for(iter = m_vIDsPairList.begin(); iter != m_vIDsPairList.end(); ++iter)
+    for (auto const& vIDsPair : m_vIDsPairList)
     {
-        if (iter->first->GetSilverBullet() == aBulletID && iter->second == aIndentID
-            && iter->first->IsRightAligned() == pBullOver->IsRightAligned())
+        if (vIDsPair.first->GetSilverBullet() == aBulletID && vIDsPair.second == aIndentID
+            && vIDsPair.first->IsRightAligned() == pBullOver->IsRightAligned())
         {
             return m_vStyleNameList[nNameIndex];
         }

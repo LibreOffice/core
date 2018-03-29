@@ -74,11 +74,10 @@ void XFFontFactory::AddFont(rtl::Reference<XFFont> const & pFont)
 
 rtl::Reference<XFFont> XFFontFactory::FindSameFont(rtl::Reference<XFFont> const & pFont)
 {
-    std::vector< rtl::Reference<XFFont> >::iterator it;
-    for( it = s_aFonts.begin(); it != s_aFonts.end(); ++it )
+    for (auto const& font : s_aFonts)
     {
-        if( *pFont == **it )
-            return *it;
+        if( *pFont == *font )
+            return font;
     }
 
     return nullptr;

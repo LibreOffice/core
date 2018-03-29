@@ -72,22 +72,17 @@ XFStyleContainer::XFStyleContainer(const OUString& strStyleNamePrefix)
 
 XFStyleContainer::~XFStyleContainer()
 {
-    std::vector<IXFStyle*>::iterator it;
-    for( it = m_aStyles.begin(); it != m_aStyles.end(); ++it )
+    for (auto const& style : m_aStyles)
     {
-        IXFStyle *pStyle = *it;
-        delete pStyle;
+        delete style;
     }
 }
 
 void    XFStyleContainer::Reset()
 {
-    std::vector<IXFStyle*>::iterator it;
-
-    for( it = m_aStyles.begin(); it != m_aStyles.end(); ++it )
+    for (auto const& style : m_aStyles)
     {
-        IXFStyle *pStyle = *it;
-        delete pStyle;
+        delete style;
     }
     m_aStyles.clear();
 }
@@ -141,13 +136,11 @@ IXFStyleRet XFStyleContainer::AddStyle(IXFStyle *pStyle)
 
 IXFStyle*   XFStyleContainer::FindSameStyle(IXFStyle *pStyle)
 {
-    std::vector<IXFStyle*>::iterator it;
-    for( it = m_aStyles.begin(); it != m_aStyles.end(); ++it )
+    for (auto const& style : m_aStyles)
     {
-        IXFStyle *pConStyle = *it;
-        assert(pConStyle);
-        if( pConStyle->Equal(pStyle) )
-            return pConStyle;
+        assert(style);
+        if( style->Equal(pStyle) )
+            return style;
     }
 
     return nullptr;
@@ -155,13 +148,11 @@ IXFStyle*   XFStyleContainer::FindSameStyle(IXFStyle *pStyle)
 
 IXFStyle*   XFStyleContainer::FindStyle(const OUString& name)
 {
-    std::vector<IXFStyle*>::iterator it;
-    for( it = m_aStyles.begin(); it != m_aStyles.end(); ++it )
+    for (auto const& style : m_aStyles)
     {
-        IXFStyle *pConStyle = *it;
-        assert(pConStyle);
-        if( pConStyle->GetStyleName() == name )
-            return pConStyle;
+        assert(style);
+        if( style->GetStyleName() == name )
+            return style;
     }
 
     return nullptr;
@@ -179,13 +170,10 @@ const IXFStyle* XFStyleContainer::Item(size_t index) const
 
 void    XFStyleContainer::ToXml(IXFStream *pStrm)
 {
-    std::vector<IXFStyle*>::iterator it;
-
-    for( it = m_aStyles.begin(); it != m_aStyles.end(); ++it )
+    for (auto const& style : m_aStyles)
     {
-        IXFStyle *pStyle = *it;
-        assert(pStyle);
-        pStyle->ToXml(pStrm);
+        assert(style);
+        style->ToXml(pStrm);
     }
 }
 
