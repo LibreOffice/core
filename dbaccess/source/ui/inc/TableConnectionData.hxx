@@ -45,8 +45,6 @@ namespace dbaui
 
         void    Init();
 
-        virtual OConnectionLineDataRef CreateLineDataObj();
-
         OTableConnectionData& operator=( const OTableConnectionData& rConnData );
     public:
         OTableConnectionData();

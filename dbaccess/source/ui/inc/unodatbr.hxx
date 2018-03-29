@@ -205,7 +205,7 @@ namespace dbaui
     private:
         // SbaXDataBrowserController overridables
         virtual bool     InitializeForm( const css::uno::Reference< css::beans::XPropertySet >& i_formProperties ) override;
-        virtual void     InitializeGridModel(const css::uno::Reference< css::form::XFormComponent > & xGrid) override;
+        virtual void     InitializeGridModel(const css::uno::Reference< css::form::XFormComponent > & xGrid);
 
         virtual bool     preReloadForm() override;
         virtual void     postReloadForm() override;

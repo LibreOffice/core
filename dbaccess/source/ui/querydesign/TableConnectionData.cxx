@@ -120,11 +120,6 @@ void OTableConnectionData::ResetConnLines()
     OConnectionLineDataVec().swap(m_vConnLineData);
 }
 
-OConnectionLineDataRef OTableConnectionData::CreateLineDataObj()
-{
-    return new OConnectionLineData();
-}
-
 OTableConnectionData* OTableConnectionData::NewInstance() const
 {
     return new OTableConnectionData();

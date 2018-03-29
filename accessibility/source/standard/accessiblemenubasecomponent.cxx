@@ -501,16 +501,6 @@ bool OAccessibleMenuBaseComponent::IsChildSelected( sal_Int32 i )
 }
 
 
-void OAccessibleMenuBaseComponent::Select()
-{
-}
-
-
-void OAccessibleMenuBaseComponent::DeSelect()
-{
-}
-
-
 void OAccessibleMenuBaseComponent::Click()
 {
 }
