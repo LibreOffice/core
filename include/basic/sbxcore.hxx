@@ -73,7 +73,6 @@ public:
     virtual void        SetModified( bool );
 
     virtual SbxDataType GetType()  const;
-    virtual SbxClassType GetClass() const;
 
     virtual void    Clear() = 0;
 

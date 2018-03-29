@@ -195,11 +195,6 @@ bool BaseWindow::IsModified ()
     return true;
 }
 
-bool BaseWindow::IsPasteAllowed ()
-{
-    return false;
-}
-
 ::svl::IUndoManager* BaseWindow::GetUndoManager()
 {
     return nullptr;

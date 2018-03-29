@@ -204,7 +204,6 @@ public:
     virtual EntryDescriptor  CreateEntryDescriptor() = 0;
 
     virtual bool    IsModified();
-    virtual bool    IsPasteAllowed();
 
     virtual bool    AllowUndo();
 
