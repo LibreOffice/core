@@ -945,6 +945,9 @@ IMPL_LINK( SwNavigationPI, MenuSelectHdl, Menu *, pMenu, bool )
 
 void SwNavigationPI::UpdateListBox()
 {
+    if (isDisposed())
+        return;
+
     m_aDocListBox->SetUpdateMode(false);
     m_aDocListBox->Clear();
     SwView *pActView = GetCreateView();
