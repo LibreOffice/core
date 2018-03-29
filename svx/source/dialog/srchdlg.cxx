@@ -2369,7 +2369,6 @@ SfxChildWinInfo SvxSearchDialogWrapper::GetInfo() const
     return aInfo;
 }
 
-
 static void lcl_SetSearchLabelWindow(const OUString& rStr)
 {
     SfxViewFrame* pViewFrame = SfxViewFrame::Current();
@@ -2394,15 +2393,14 @@ static void lcl_SetSearchLabelWindow(const OUString& rStr)
         {
             vcl::Window* pSearchLabel = pToolBox->GetItemWindow(id);
             assert(pSearchLabel);
-            pSearchLabel->Hide();
             pSearchLabel->SetText(rStr);
-            if (!rStr.isEmpty())
-            {
+            if (rStr.isEmpty())
+                pSearchLabel->SetSizePixel(Size(16, pSearchLabel->get_preferred_size().Height()));
+            else
                 pSearchLabel->SetSizePixel(pSearchLabel->get_preferred_size());
-                pSearchLabel->Show();
-            }
         }
     }
+    xLayoutManager->doLayout();
     pToolBox->Resize();
 }
 
