@@ -168,7 +168,6 @@ class MergeDataHashMap
         std::pair<iterator,bool> insert(const OString& rKey, std::unique_ptr<MergeData> pMergeData);
         iterator const & find(const OString& rKey);
 
-        iterator begin() {return m_aHashMap.begin();}
         iterator end() {return m_aHashMap.end();}
 
     private:

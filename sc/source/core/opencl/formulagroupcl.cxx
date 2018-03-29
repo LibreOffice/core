@@ -853,7 +853,6 @@ public:
         ss << ", ";
         mStringArgument.GenSlidingWindowDecl(ss);
     }
-    virtual bool IsMixedArgument() const { return true;}
     virtual void GenSlidingWindowFunction( std::stringstream& ) override { }
     /// Generate declaration
     virtual void GenDecl( std::stringstream& ss ) const override
@@ -871,10 +870,6 @@ public:
     virtual void GenNumDeclRef( std::stringstream& ss ) const
     {
         VectorRef::GenSlidingWindowDecl(ss);
-    }
-    virtual void GenStringDeclRef( std::stringstream& ss ) const
-    {
-        mStringArgument.GenSlidingWindowDecl(ss);
     }
     virtual std::string GenSlidingWindowDeclRef( bool nested ) const override
     {
@@ -1066,12 +1061,6 @@ public:
 
     size_t GetArrayLength() const { return mpDVR->GetArrayLength(); }
 
-    size_t GetWindowSize() const { return mpDVR->GetRefRowSize(); }
-
-    size_t GetStartFixed() const { return bIsStartFixed; }
-
-    size_t GetEndFixed() const { return bIsEndFixed; }
-
 protected:
     bool bIsStartFixed, bIsEndFixed;
     const formula::DoubleVectorRefToken* mpDVR;
@@ -1118,7 +1107,6 @@ public:
         ss << ")";
         return ss.str();
     }
-    virtual bool IsMixedArgument() const { return true;}
     virtual std::string GenDoubleSlidingWindowDeclRef( bool = false ) const override
     {
         std::stringstream ss;
@@ -1130,14 +1118,6 @@ public:
         std::stringstream ss;
         ss << mStringArgument.GenSlidingWindowDeclRef();
         return ss.str();
-    }
-    virtual void GenNumDeclRef( std::stringstream& ss ) const
-    {
-        mDoubleArgument.GenDeclRef(ss);
-    }
-    virtual void GenStringDeclRef( std::stringstream& ss ) const
-    {
-        mStringArgument.GenDeclRef(ss);
     }
     virtual size_t Marshal( cl_kernel k, int argno, int vw, cl_program p ) override
     {

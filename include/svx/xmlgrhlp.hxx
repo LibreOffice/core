@@ -80,11 +80,6 @@ private:
     SVX_DLLPRIVATE static OUString      ImplGetGraphicMimeType( const OUString& rFileName );
     SVX_DLLPRIVATE Graphic                  ImplReadGraphic( const OUString& rPictureStorageName,
                                                  const OUString& rPictureStreamName );
-    SVX_DLLPRIVATE bool                 ImplWriteGraphic( const OUString& rPictureStorageName,
-                                                  const OUString& rPictureStreamName,
-                                                  const OUString& rGraphicId,
-                                                  bool bUseGfxLink );
-    SVX_DLLPRIVATE void                     ImplInsertGraphicURL( const OUString& rURLStr, sal_uInt32 nInsertPos, OUString const & rRequestedFileName );
 
                                 SvXMLGraphicHelper();
                                 virtual ~SvXMLGraphicHelper() override;

@@ -1317,13 +1317,6 @@ sal_uInt16 SvxShadowItem::GetValueCount() const
     return sal_uInt16(SvxShadowLocation::End);  // SvxShadowLocation::BottomRight + 1
 }
 
-OUString SvxShadowItem::GetValueTextByPos( sal_uInt16 nPos ) const
-{
-    static_assert(SAL_N_ELEMENTS(RID_SVXITEMS_SHADOW) == size_t(SvxShadowLocation::End), "unexpected size");
-    assert(nPos < sal_uInt16(SvxShadowLocation::End) && "enum overflow!");
-    return EditResId(RID_SVXITEMS_SHADOW[nPos]);
-}
-
 sal_uInt16 SvxShadowItem::GetEnumValue() const
 {
     return static_cast<sal_uInt16>(GetLocation());

@@ -875,11 +875,6 @@ SFX_IMPL_NAMED_VIEWFACTORY(SmViewShell, "Default")
     SFX_VIEW_REGISTRATION(SmDocShell);
 }
 
-void SmViewShell::AdjustPosSizePixel(const Point &rPos, const Size &rSize)
-{
-    mpGraphic->SetPosSizePixel(rPos, rSize);
-}
-
 void SmViewShell::InnerResizePixel(const Point &rOfs, const Size &rSize, bool)
 {
     Size aObjSize = GetObjectShell()->GetVisArea().GetSize();

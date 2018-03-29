@@ -51,8 +51,6 @@ public:
     // current element.
     virtual void Characters( const OUString& rChars ) override;
 
-    void ExportContent();
-
     const OUString& GetTextContent() const { return m_aCharacters; }
 };
 
