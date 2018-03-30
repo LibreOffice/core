@@ -958,6 +958,15 @@ DECLARE_OOXMLEXPORT_TEST( testActiveXTextfield, "activex_textbox.docx" )
     CPPUNIT_ASSERT_EQUAL( false, getProperty<bool>(xPropertySet2, "MultiLine") );
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf106062_nonHangingFootnote, "tdf106062_nonHangingFootnote.odt")
+{
+    uno::Reference<text::XFootnotesSupplier> xFootnotesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xFootnotes(xFootnotesSupplier->getFootnotes(), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xTextRange(xFootnotes->getByIndex(0), uno::UNO_QUERY);
+    // This failed, tab between the footnote number and the footnote content was lost on import.
+    CPPUNIT_ASSERT_MESSAGE( "Footnote starts with a tab", xTextRange->getString().startsWith("\t") );
+}
+
 DECLARE_OOXMLEXPORT_TEST( testActiveXCheckbox, "activex_checkbox.docx" )
 {
     uno::Reference<drawing::XControlShape> xControlShape( getShape(1), uno::UNO_QUERY );

@@ -930,6 +930,7 @@ public:
     /// If the next newline should be ignored, used by the special footnote separator paragraph.
     bool m_bIgnoreNextPara;
     /// If the next tab should be ignored, used for footnotes.
+    bool m_bCheckFirstFootnoteTab;
     bool m_bIgnoreNextTab;
     bool m_bFrameBtLr; ///< Bottom to top, left to right text frame direction is requested for the current text frame.
     /// Pending floating tables: they may be converted to text frames at the section end.

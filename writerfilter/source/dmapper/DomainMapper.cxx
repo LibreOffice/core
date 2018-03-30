@@ -3389,10 +3389,28 @@ void DomainMapper::lcl_utext(const sal_uInt8 * data_, size_t len)
         m_pImpl->m_bHasFtnSep = true;
         return;
     }
-    else if (len == 1 && sText[0] == '\t' && m_pImpl->m_bIgnoreNextTab)
+    else if (len == 1 && sText[0] == '\t' )
     {
-        m_pImpl->m_bIgnoreNextTab = false;
-        return;
+        if ( m_pImpl->m_bCheckFirstFootnoteTab && m_pImpl->IsInFootOrEndnote() )
+        {
+            // Allow MSO to emulate LO footnote text starting at left margin - only meaningful with hanging indent
+            m_pImpl->m_bCheckFirstFootnoteTab = false;
+            sal_Int32 nFirstLineIndent = 0;
+            m_pImpl->GetPropertyFromStyleSheet(PROP_PARA_FIRST_LINE_INDENT) >>= nFirstLineIndent;
+            PropertyMapPtr pParaContext = m_pImpl->GetTopContextOfType(CONTEXT_PARAGRAPH);
+            boost::optional<PropertyMap::Property> oHangingIndent = pParaContext->getProperty(PROP_PARA_FIRST_LINE_INDENT);
+            if ( oHangingIndent )
+                oHangingIndent->second >>= nFirstLineIndent;
+
+            if ( nFirstLineIndent < 0 )
+                m_pImpl->m_bIgnoreNextTab = true;
+        }
+
+        if ( m_pImpl->m_bIgnoreNextTab )
+        {
+            m_pImpl->m_bIgnoreNextTab = false;
+            return;
+        }
     }
 
     if (!m_pImpl->hasTableManager())

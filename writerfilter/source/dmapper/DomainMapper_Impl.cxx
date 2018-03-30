@@ -241,6 +241,7 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_bHasFtn(false),
         m_bHasFtnSep(false),
         m_bIgnoreNextPara(false),
+        m_bCheckFirstFootnoteTab(false),
         m_bIgnoreNextTab(false),
         m_bFrameBtLr(false),
         m_bIsSplitPara(false),
@@ -1729,6 +1730,7 @@ void DomainMapper_Impl::PopPageHeaderFooter()
 void DomainMapper_Impl::PushFootOrEndnote( bool bIsFootnote )
 {
     m_bInFootOrEndnote = true;
+    m_bCheckFirstFootnoteTab = true;
     try
     {
         // Redlines outside the footnote should not affect footnote content
@@ -1751,20 +1753,6 @@ void DomainMapper_Impl::PushFootOrEndnote( bool bIsFootnote )
         // Redlines for the footnote anchor
         CheckRedline( xFootnote->getAnchor( ) );
 
-        // LO inserts a tab when exporting to MS formats in order to emulate its automatic space
-        // between the footnote number and text using the paragraph margin.
-        // So ignore that tab when there is a margin set.
-        uno::Reference<style::XStyleFamiliesSupplier> xStylesSupplier( GetTextDocument(), uno::UNO_QUERY);
-        uno::Reference<container::XNameAccess> xStyleFamilies = xStylesSupplier->getStyleFamilies();
-        uno::Reference<container::XNameContainer> xStyles;
-        xStyleFamilies->getByName("ParagraphStyles") >>= xStyles;
-        uno::Reference<beans::XPropertySet> xStyle(xStyles->getByName("Footnote"), uno::UNO_QUERY);
-        if (xStyle.is())
-        {
-            sal_Int32 nMargin = 0;
-            xStyle->getPropertyValue("ParaLeftMargin") >>= nMargin;
-            m_bIgnoreNextTab = nMargin > 0;
-        }
     }
     catch( const uno::Exception& e )
     {
