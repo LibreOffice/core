@@ -551,4 +551,109 @@ endef
 
 endif # SYSTEM_COINMP
 
+
+ifeq ($(SYSTEM_HYPH),YES)
+
+define gb_LinkTarget__use_hyphen
+$(call gb_LinkTarget_add_defs,$(1),\
+        -DSYSTEM_HYPH \
+)
+$(call gb_LinkTarget_add_libs,$(1),$(HYPHEN_LIB))
+endef
+
+else # !SYSTEM_HYPH
+
+$(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
+        hyphen \
+))
+
+define gb_LinkTarget__use_hyphen
+$(call gb_LinkTarget_add_linked_static_libs,$(1),\
+        hyphen \
+)
+endef
+
+endif # SYSTEM_HYPH
+
+
+ifeq ($(SYSTEM_LIBTEXTCAT),YES)
+
+define gb_LinkTarget__use_libtextcat
+$(call gb_LinkTarget_add_libs,$(1),-ltextcat)
+endef
+
+else # !SYSTEM_LIBTEXTCAT
+
+$(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
+        libtextcat \
+))
+
+define gb_LinkTarget__use_libtextcat
+ifeq ($(OS),WNT)
+$(call gb_LinkTarget_add_linked_libs,$(1),libtextcat)
+else
+$(call gb_LinkTarget_add_linked_libs,$(1),textcat)
+endif
+endef
+
+endif # SYSTEM_LIBTEXTCAT
+
+
+ifeq ($(SYSTEM_MYTHES),YES)
+
+define gb_LinkTarget__use_mythes
+$(call gb_LinkTarget_set_include,$(1),\
+    $$(INCLUDE) \
+    $(MYTHES_CFLAGS) \
+)
+$(call gb_LinkTarget_add_libs,$(1),$(MYTHES_LIBS))
+endef
+
+else # !SYSTEM_MYTHES
+
+ifeq ($(OS),WNT)
+$(eval $(call gb_Helper_register_static_libraries,PLAINLIBS,libmythes))
+else
+$(eval $(call gb_Helper_register_static_libraries,PLAINLIBS,mythes-1.2))
+endif
+
+define gb_LinkTarget__use_mythes
+ifeq ($(OS),WNT)
+$(call gb_LinkTarget_add_linked_static_libs,$(1),libmythes)
+else
+$(call gb_LinkTarget_add_linked_static_libs,$(1),mythes-1.2)
+endif
+endef
+
+endif # SYSTEM_MYTHES
+
+
+ifeq ($(SYSTEM_HUNSPELL),YES)
+
+define gb_LinkTarget__use_hunspell
+$(call gb_LinkTarget_set_include,$(1),\
+        $$(INCLUDE) \
+        $(HUNSPELL_CFLAGS) \
+)
+$(call gb_LinkTarget_add_libs,$(1),$(HUNSPELL_LIBS))
+endef
+
+else # !SYSTEM_HUNSPELL
+
+$(eval $(call gb_Helper_register_static_libraries,PLAINLIBS,libhunspell))
+
+define gb_LinkTarget__use_hunspell
+$(call gb_LinkTarget_set_include,$(1),\
+    $$(INCLUDE) \
+    -I$(OUTDIR)/inc/hunspell \
+)
+$(call gb_LinkTarget_add_defs,$(1),\
+    -DHUNSPELL_STATIC
+)
+$(call gb_LinkTarget_add_linked_static_libs,$(1),libhunspell)
+endef
+
+endif # SYSTEM_HUNSPELL
+
+
 # vim: set noet sw=4 ts=4:

@@ -22,7 +22,7 @@
 
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_lingucomponent.hxx"
+#include "precompiled_hyphen.hxx"
 
 
 #include <com/sun/star/uno/Reference.h>

@@ -21,34 +21,31 @@
 
 
 
-PRJ = ..$/..
+$(eval $(call gb_Module_Module,lingucomponent))
 
-PRJNAME	= lingucomponent
-TARGET	= ulingu
-LIBTARGET=NO
+$(eval $(call gb_Module_add_targets,lingucomponent,\
+	Package_config \
+	Library_guesslang \
+	Library_lnth \
+	StaticLibrary_ulingu \
+))
 
-ENABLE_EXCEPTIONS=TRUE
+ifeq ($(ENABLE_HYPHEN),YES)
+$(eval $(call gb_Module_add_targets,lingucomponent,\
+	Library_hyphen_uno \
+))
+endif
 
-#----- Settings ---------------------------------------------------------
+ifeq ($(ENABLE_HUNSPELL),YES)
+$(eval $(call gb_Module_add_targets,lingucomponent,\
+	Library_spell \
+))
+endif
 
-.INCLUDE : settings.mk
+ifeq ($(GUIBASE),aqua)
+$(eval $(call gb_Module_add_targets,lingucomponent,\
+	Library_MacOSXSpell \
+))
+endif
 
-
-.IF "$(SYSTEM_DICTS)" == "YES"
-CXXFLAGS += -DSYSTEM_DICTS -DDICT_SYSTEM_DIR=\"$(DICT_SYSTEM_DIR)\" -DHYPH_SYSTEM_DIR=\"$(HYPH_SYSTEM_DIR)\" -DTHES_SYSTEM_DIR=\"$(THES_SYSTEM_DIR)\"
-CFLAGSCXX += -DSYSTEM_DICTS -DDICT_SYSTEM_DIR=\"$(DICT_SYSTEM_DIR)\" -DHYPH_SYSTEM_DIR=\"$(HYPH_SYSTEM_DIR)\" -DTHES_SYSTEM_DIR=\"$(THES_SYSTEM_DIR)\"
-CFLAGSCC += -DSYSTEM_DICTS -DDICT_SYSTEM_DIR=\"$(DICT_SYSTEM_DIR)\" -DHYPH_SYSTEM_DIR=\"$(HYPH_SYSTEM_DIR)\" -DTHES_SYSTEM_DIR=\"$(THES_SYSTEM_DIR)\"
-.ENDIF
-
-
-SLOFILES = $(SLO)$/lingutil.obj
-
-LIB1TARGET= $(SLB)$/lib$(TARGET).lib
-LIB1ARCHIV= $(LB)/lib$(TARGET).a
-LIB1OBJFILES= $(SLOFILES)
-
-
-# --- Targets ------------------------------------------------------
-
-.INCLUDE : target.mk
-
+# vim: set noet sw=4 ts=4:

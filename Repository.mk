@@ -57,6 +57,7 @@ $(eval $(call gb_Helper_register_executables,UREBIN, \
 
 $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     AppleRemote \
+    MacOSXSpell \
     adabas \
     adabasui \
     agg \
@@ -102,6 +103,7 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     fwk \
     fwl \
     fwm \
+    guesslang \
     i18npaper \
     juh \
     juhx \
@@ -220,10 +222,13 @@ $(eval $(call gb_Helper_register_libraries,UNOLIBS_OOO, \
     fsstorage \
     gdipluscanvas \
     hatchwindowfactory \
+    hyphen_uno \
+    lnth \
     nullcanvas \
     passwordcontainer \
     simplecanvas \
     slideshow \
+    spell \
     streams \
     textinstream \
     textoutstream \
@@ -260,6 +265,7 @@ $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
     sldshw_s \
     vclmain \
     udm \
+    ulingu \
 ))
 
 # vim: set noet sw=4 ts=4:

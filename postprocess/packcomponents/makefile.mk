@@ -88,6 +88,8 @@ my_components = \
     component/io/source/TextInputStream/textinstream \
     component/io/source/TextOutputStream/textoutstream \
     component/javaunohelper/util/juh \
+    component/lingucomponent/source/languageguessing/guesslang \
+    component/lingucomponent/source/thesaurus/libnth/lnth \
     component/linguistic/source/lng \
     component/oox/util/oox \
     component/package/source/xstor/xstor \
@@ -154,10 +156,8 @@ my_components = \
     flash \
     flat \
     frm \
-    guesslang \
     i18npool \
     i18nsearch \
-    lnth \
     localebe1 \
     log \
     mailmerge \
@@ -228,11 +228,11 @@ my_components += XSLTFilter.jar \
 .END
 
 .IF "$(ENABLE_HYPHEN)" == "YES"
-my_components += hyphen
+my_components += component/lingucomponent/source/hyphenator/altlinuxhyph/hyphen/hyphen
 .END
 
 .IF "$(ENABLE_HUNSPELL)" == "YES"
-my_components += spell
+my_components += component/lingucomponent/source/spellcheck/spell/spell
 .END
 
 .IF "$(SYSTEM_LIBWPD)" == "YES"
@@ -315,9 +315,9 @@ my_components += \
     component/avmedia/source/macavf/avmediaMacAVF \
     component/avmedia/source/quicktime/avmediaQuickTime \
     component/fpicker/source/aqua/fps_aqua \
+    component/lingucomponent/source/spellcheck/macosxspell/MacOSXSpell \
     macab1 \
-    macbe1 \
-    MacOSXSpell
+    macbe1
 .END
 
 .IF "$(OS)" == "WNT"

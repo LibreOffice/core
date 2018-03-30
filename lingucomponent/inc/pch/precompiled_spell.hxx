@@ -21,24 +21,9 @@
 
 
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_guesslang.hxx"
-#include "altstrfunc.hxx"
+// MARKER(update_precomp.py): Generated on 2006-09-01 17:49:51.030070
 
-#include <sal/types.h>
-
-int start(const std::string &s1, const std::string &s2){
-    size_t i;
-    int ret = 0;
-
-    size_t min = s1.length();
-    if (min > s2.length())
-        min = s2.length();
-
-    for(i = 0; i < min && s2[i] && s1[i] && !ret; i++){
-        ret = toupper(s1[i]) - toupper(s2[i]);
-        if(s1[i] == '.' || s2[i] == '.'){ret = 0;}//. is a neutral character
-    }
-    return ret;
-}
+#ifdef PRECOMPILED_HEADERS
+#include <tools/debug.hxx>
+#endif
 

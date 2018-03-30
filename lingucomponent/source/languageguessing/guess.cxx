@@ -22,7 +22,7 @@
 
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_lingucomponent.hxx"
+#include "precompiled_guesslang.hxx"
 
 #include <iostream>
 #include <string.h>

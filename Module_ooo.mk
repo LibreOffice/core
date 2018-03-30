@@ -55,6 +55,7 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
     io \
     javaunohelper \
     jvmaccess \
+    lingucomponent \
     linguistic \
     o3tl \
     offapi \

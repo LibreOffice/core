@@ -571,7 +571,7 @@ endef
 # The list of libraries is used as is, ie it is not filtered with gb_Library_KNOWNLIBS.
 #
 # An error is signaled, when any of the library names does not look like
-# a base name, ie is prefixed by -l or lib or is folled by .lib or .so.
+# a base name, ie is prefixed by -l or is folled by .lib or .so.
 # 
 # @param target
 # @param libraries
@@ -582,7 +582,7 @@ endef
 define gb_LinkTarget_add_external_libs
 
 # Make sure that all libraries are given as base names.
-ifneq (,$$(filter -l% lib% %.so %.lib, $(2)))
+ifneq (,$$(filter -l% %.so %.lib, $(2)))
 $$(eval $$(call gb_Output_announce,ERROR: Please give only library basenames to gb_LinkTarget_add_external_libs))
 $$(eval $$(call gb_Output_announce,ERROR:    (no prefixes -l% or lib%, no suffixes %.so or %.lib)))
 $$(eval $$(call gb_Output_announce,ERROR:    libraries given: $(2)))
