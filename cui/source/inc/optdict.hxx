@@ -47,27 +47,22 @@ namespace linguistic2{
 
 // class SvxNewDictionaryDialog ------------------------------------------
 
-class SvxNewDictionaryDialog : public ModalDialog
+class SvxNewDictionaryDialog : public weld::GenericDialogController
 {
 private:
-    VclPtr<Edit>                pNameEdit;
-    VclPtr<SvxLanguageBox>      pLanguageLB;
-    VclPtr<CheckBox>            pExceptBtn;
-    VclPtr<OKButton>            pOKBtn;
-    css::uno::Reference<
-        css::linguistic2::XDictionary >    xNewDic;
+    std::unique_ptr<weld::Entry> m_xNameEdit;
+    std::unique_ptr<LanguageBox> m_xLanguageLB;
+    std::unique_ptr<weld::CheckButton> m_xExceptBtn;
+    std::unique_ptr<weld::Button> m_xOKBtn;
+    css::uno::Reference<css::linguistic2::XDictionary> m_xNewDic;
 
-    DECL_LINK(OKHdl_Impl, Button*, void);
-    DECL_LINK(ModifyHdl_Impl, Edit&, void);
+    DECL_LINK(OKHdl_Impl, weld::Button&, void);
+    DECL_LINK(ModifyHdl_Impl, weld::Entry&, void);
 
 public:
-    SvxNewDictionaryDialog( vcl::Window* pParent );
-    virtual ~SvxNewDictionaryDialog() override;
-    virtual void dispose() override;
+    SvxNewDictionaryDialog(weld::Window* pParent);
 
-    const css::uno::Reference<
-        css::linguistic2::XDictionary >&
-                GetNewDictionary() { return xNewDic; }
+    const css::uno::Reference<css::linguistic2::XDictionary>& GetNewDictionary() { return m_xNewDic; }
 };
 
 // class SvxDictEdit ----------------------------------------------------

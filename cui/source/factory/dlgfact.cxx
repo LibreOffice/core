@@ -119,7 +119,11 @@ IMPL_ABSTDLG_BASE(AbstractSvxTransformTabDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractSvxCaptionDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractSvxJSearchOptionsDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractFmInputRecordNoDialog_Impl);
-IMPL_ABSTDLG_BASE(AbstractSvxNewDictionaryDialog_Impl);
+
+short AbstractSvxNewDictionaryDialog_Impl::Execute()
+{
+    return m_xDlg->run();
+}
 
 short AbstractSvxNameDialog_Impl::Execute()
 {
@@ -586,7 +590,7 @@ long AbstractFmInputRecordNoDialog_Impl::GetValue() const
 
 ::Reference< css::linguistic2::XDictionary > AbstractSvxNewDictionaryDialog_Impl::GetNewDictionary()
 {
-    return pDlg->GetNewDictionary();
+    return m_xDlg->GetNewDictionary();
 }
 
 void AbstractSvxNameDialog_Impl::GetName(OUString& rName)
@@ -1116,10 +1120,9 @@ VclPtr<AbstractFmInputRecordNoDialog> AbstractDialogFactory_Impl::CreateFmInputR
     return VclPtr<AbstractFmInputRecordNoDialog_Impl>::Create( pDlg );
 }
 
-VclPtr<AbstractSvxNewDictionaryDialog> AbstractDialogFactory_Impl::CreateSvxNewDictionaryDialog( vcl::Window* pParent )
+VclPtr<AbstractSvxNewDictionaryDialog> AbstractDialogFactory_Impl::CreateSvxNewDictionaryDialog(weld::Window* pParent)
 {
-    VclPtrInstance<SvxNewDictionaryDialog> pDlg( pParent );
-    return VclPtr<AbstractSvxNewDictionaryDialog_Impl>::Create( pDlg );
+    return VclPtr<AbstractSvxNewDictionaryDialog_Impl>::Create(new SvxNewDictionaryDialog(pParent));
 }
 
 VclPtr<VclAbstractDialog> AbstractDialogFactory_Impl::CreateSvxEditDictionaryDialog( vcl::Window* pParent,
