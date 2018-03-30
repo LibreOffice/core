@@ -745,10 +745,6 @@ cmd/sc_arrangeframemenu.png cmd/sc_bringtofront.png
 cmd/lc_setobjecttobackground.png cmd/lc_sendtoback.png
 cmd/sc_setobjecttobackground.png cmd/sc_sendtoback.png
 
-# Bibliography
-cmd/lc_insertauthoritiesentry.png cmd/lc_bibliographycomponent.png
-cmd/sc_insertauthoritiesentry.png cmd/sc_bibliographycomponent.png
-
 # Reload
 cmd/lc_refresh.png cmd/lc_reload.png
 cmd/lc_refreshformcontrol.png cmd/lc_reload.png
