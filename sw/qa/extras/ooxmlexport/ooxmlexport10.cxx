@@ -959,12 +959,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf90810, "tdf90810short.docx")
     uno::Reference<text::XFootnote> xFootnote(xFootnoteIdxAcc->getByIndex(0), uno::UNO_QUERY);
     uno::Reference<text::XText> xFootnoteText(xFootnote, uno::UNO_QUERY);
     rtl::OUString sFootnoteText = xFootnoteText->getString();
-    // Original document doesn't have a leading tab in the footnote, but the
-    // export adds one unconditionally.
-    if (mbExported)
-        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(90), sFootnoteText.getLength());
-    else
-        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(89), sFootnoteText.getLength());
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(89), sFootnoteText.getLength());
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf89165, "tdf89165.docx")

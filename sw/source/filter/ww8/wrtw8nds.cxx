@@ -2508,8 +2508,19 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
                 OUString aSnippet( aAttrIter.GetSnippet( aStr, nAktPos + ofs, nLen ) );
                 if ( ( m_nTextTyp == TXT_EDN || m_nTextTyp == TXT_FTN ) && nAktPos == 0 && nLen > 0 )
                 {
+                    // Allow MSO to emulate LO footnote text starting at left margin - only meaningful with hanging indent
+                    sal_Int32 nFirstLineIndent=0;
+                    SfxItemSet aSet( m_pDoc->GetAttrPool(), svl::Items<RES_LR_SPACE, RES_LR_SPACE>{} );
+                    const SwTextNode* pTextNode( rNode.GetTextNode() );
+                    if ( pTextNode && pTextNode->GetAttr(aSet) )
+                    {
+                        const SvxLRSpaceItem* pLRSpace = aSet.GetItem<SvxLRSpaceItem>(RES_LR_SPACE);
+                        if ( pLRSpace )
+                            nFirstLineIndent = pLRSpace->GetTextFirstLineOfst();
+                    }
+
                     // Insert tab for aesthetic purposes #i24762#
-                    if ( m_bAddFootnoteTab && aSnippet[0] != 0x09 )
+                    if ( m_bAddFootnoteTab && nFirstLineIndent < 0 && aSnippet[0] != 0x09 )
                         aSnippet = "\x09" + aSnippet;
                     m_bAddFootnoteTab = false;
                 }
