@@ -245,10 +245,20 @@ sal_uInt16 SwWW8ImplReader::End_Footnote()
             const OUString &rText = pTNd->GetText();
             if (rText[0] == sChar[0])
             {
+                // Allow MSO to emulate LO footnote text starting at left margin - only meaningful with hanging indent
+                sal_Int32 nFirstLineIndent=0;
+                SfxItemSet aSet( m_rDoc.GetAttrPool(), svl::Items<RES_LR_SPACE, RES_LR_SPACE>{} );
+                if ( pTNd->GetAttr(aSet) )
+                {
+                    const SvxLRSpaceItem* pLRSpace = aSet.GetItem<SvxLRSpaceItem>(RES_LR_SPACE);
+                    if ( pLRSpace )
+                        nFirstLineIndent = pLRSpace->GetTextFirstLineOfst();
+                }
+
                 m_pPaM->GetPoint()->nContent.Assign( pTNd, 0 );
                 m_pPaM->SetMark();
-                // Strip out tabs we may have inserted on export #i24762#
-                if (rText.getLength() > 1 && rText[1] == 0x09)
+                // Strip out aesthetic tabs we may have inserted on export #i24762#
+                if (nFirstLineIndent < 0 && rText.getLength() > 1 && rText[1] == 0x09)
                     ++m_pPaM->GetMark()->nContent;
                 ++m_pPaM->GetMark()->nContent;
                 m_xReffingStck->Delete(*m_pPaM);
