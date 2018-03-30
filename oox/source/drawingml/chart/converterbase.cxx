@@ -274,8 +274,8 @@ void ConverterRoot::convertTitlePositions()
     try
     {
         Reference< cssc::XChartDocument > xChart1Doc( mxData->mxDoc, UNO_QUERY_THROW );
-        for( ConverterData::TitleMap::iterator aIt = mxData->maTitles.begin(), aEnd = mxData->maTitles.end(); aIt != aEnd; ++aIt )
-            aIt->second.convertTitlePos( *this, xChart1Doc );
+        for (auto & title : mxData->maTitles)
+            title.second.convertTitlePos( *this, xChart1Doc );
     }
     catch( Exception& )
     {

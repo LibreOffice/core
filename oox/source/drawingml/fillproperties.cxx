@@ -429,13 +429,12 @@ void FillProperties::pushToPropMap( ShapePropertyMap& rPropMap,
 
                         SAL_INFO("oox.drawingml.gradient", "symmetric: " << (bSymmetric ? "YES" : "NO") <<
                                  ", number of stops: " << aGradientStops.size());
-                        for (GradientFillProperties::GradientStopMap::iterator p(aGradientStops.begin());
-                             p != aGradientStops.end();
-                             ++p)
-                            SAL_INFO("oox.drawingml.gradient", "  " << std::distance(aGradientStops.begin(), p) << ": " <<
-                                     p->first << ": " <<
-                                     std::hex << sal_Int32(p->second.getColor( rGraphicHelper, nPhClr )) << std::dec <<
-                                     "@" << (100-p->second.getTransparency()) << "%");
+                        size_t nIndex = 0;
+                        for (auto const& gradientStop : aGradientStops)
+                            SAL_INFO("oox.drawingml.gradient", "  " << nIndex++ << ": " <<
+                                     gradientStop.first << ": " <<
+                                     std::hex << sal_Int32(gradientStop.second.getColor( rGraphicHelper, nPhClr )) << std::dec <<
+                                     "@" << (100 - gradientStop.second.getTransparency()) << "%");
 
                         // Now estimate the simple LO style gradient (only two stops, at n% and 100%, where n ==
                         // the "border") that best emulates the gradient between begin() and prior(end()).

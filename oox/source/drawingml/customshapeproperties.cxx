@@ -189,25 +189,24 @@ void CustomShapeProperties::pushToPropSet(
                         if ( aGeoPropSeq[ i ].Value >>= aAdjustmentSeq )
                         {
                             int nIndex=0;
-                            for (std::vector< CustomShapeGuide >::const_iterator aIter( maAdjustmentGuideList.begin() ), aEnd(maAdjustmentGuideList.end());
-                             aIter != aEnd; ++aIter)
+                            for (auto const& adjustmentGuide : maAdjustmentGuideList)
                             {
-                                if ( (*aIter).maName.getLength() > 3 )
+                                if ( adjustmentGuide.maName.getLength() > 3 )
                                 {
-                                    sal_Int32 nAdjustmentIndex = (*aIter).maName.copy( 3 ).toInt32() - 1;
+                                    sal_Int32 nAdjustmentIndex = adjustmentGuide.maName.copy( 3 ).toInt32() - 1;
                                     if ( ( nAdjustmentIndex >= 0 ) && ( nAdjustmentIndex < aAdjustmentSeq.getLength() ) )
                                     {
                                         EnhancedCustomShapeAdjustmentValue aAdjustmentVal;
-                                        aAdjustmentVal.Value <<= (*aIter).maFormula.toInt32();
+                                        aAdjustmentVal.Value <<= adjustmentGuide.maFormula.toInt32();
                                         aAdjustmentVal.State = PropertyState_DIRECT_VALUE;
-                                        aAdjustmentVal.Name = (*aIter).maName;
+                                        aAdjustmentVal.Name = adjustmentGuide.maName;
                                         aAdjustmentSeq[ nAdjustmentIndex ] = aAdjustmentVal;
                                     }
                                 } else if ( aAdjustmentSeq.getLength() > 0 ) {
                                     EnhancedCustomShapeAdjustmentValue aAdjustmentVal;
-                                    aAdjustmentVal.Value <<= (*aIter).maFormula.toInt32();
+                                    aAdjustmentVal.Value <<= adjustmentGuide.maFormula.toInt32();
                                     aAdjustmentVal.State = PropertyState_DIRECT_VALUE;
-                                    aAdjustmentVal.Name = (*aIter).maName;
+                                    aAdjustmentVal.Name = adjustmentGuide.maName;
                                     aAdjustmentSeq[ nIndex++ ] = aAdjustmentVal;
                                 }
                             }

@@ -52,10 +52,9 @@ Reference< XDataSequence > DataSequenceConverter::createDataSequence( const OUSt
         mrModel.mnPointCount = std::min<sal_Int32>(mrModel.mnPointCount, 1);
         OUStringBuffer aTitle;
         bool bFirst = true;
-        for(DataSequenceModel::AnyMap::const_iterator itr = mrModel.maData.begin(),
-                itrEnd = mrModel.maData.end(); itr != itrEnd; ++itr)
+        for (auto const& elem : mrModel.maData)
         {
-            Any aAny = itr->second;
+            Any aAny = elem.second;
             if(aAny.has<OUString>())
             {
                 if(!bFirst)
