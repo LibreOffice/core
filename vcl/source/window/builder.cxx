@@ -314,7 +314,12 @@ VclBuilder::VclBuilder(vcl::Window *pParent, const OUString& sUIDir, const OUStr
         RadioButton *pOther = get<RadioButton>(elem.m_sValue);
         SAL_WARN_IF(!pOne || !pOther, "vcl", "missing member of radiobutton group");
         if (pOne && pOther)
-            pOne->group(*pOther);
+        {
+            if (m_bLegacy)
+                pOne->group(*pOther);
+            else
+                pOther->group(*pOne);
+        }
     }
 
     //Set ComboBox models when everything has been imported
