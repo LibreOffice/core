@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_cedc411b",
+        "filename": "drawinglayer/source/tools/emfphelperdata.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 498,
+      "author": {
+        "id": 1001339
+      },
+      "writtenOn": "2018-03-30T01:30:38Z",
+      "side": 1,
+      "message": "I could append (\"mrTargetHolders.Current().append(\") only \"o3tl::make_unique\" pointers, example:\n\n  mrTargetHolders.Current().append(                        o3tl::make_unique\u003cdrawinglayer::primitive2d::PolyPolygonColorPrimitive2D\u003e(\n                \n\nBut I cannot append Primitive2DReference. It needs to be converted to o3tl::make_unique.\n\nWhat I could do is something like:\n\n const drawinglayer::primitive2d::Primitive2DReference aGraphic(\n                new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(\n                            polygon,\n                            color.getBColor()));\n\n            drawinglayer::primitive2d::Primitive2DContainer aCombination(1);\n\n            aCombination[0] \u003d aGraphic;\n            mrTargetHolders.Current().append(\n                o3tl::make_unique\u003cdrawinglayer::primitive2d::UnifiedTransparencePrimitive2D\u003e(\n                    aCombination,\n                    color.GetTransparency() / 255.0));",
+      "revId": "881e1b34dc5fd2be973143e292beb71401667370",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
