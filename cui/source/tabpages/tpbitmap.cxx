@@ -48,12 +48,9 @@ using namespace com::sun::star;
 
 enum BitmapStyle
 {
-    ORIGINAL,
-    FILLED,
-    STRETCHED,
-    ZOOMED,
     CUSTOM,
-    TILED
+    TILED,
+    STRETCHED
 };
 
 enum TileOffset
@@ -221,15 +218,6 @@ bool SvxBitmapTabPage::FillItemSet( SfxItemSet* rAttrs )
         Size aSetBitmapSize;
         switch(eStylePos)
         {
-            case ORIGINAL:
-                aSetBitmapSize = rBitmapSize;
-                break;
-            case FILLED:
-                aSetBitmapSize = rFilledSize;
-                break;
-            case ZOOMED:
-                aSetBitmapSize = rZoomedSize;
-                break;
             case CUSTOM:
             case TILED:
             {
@@ -373,16 +361,7 @@ void SvxBitmapTabPage::Reset( const SfxItemSet* rAttrs )
     }
 
     if(m_pBitmapStyleLB->GetSelectedEntryPos() == 0)
-    {
-        if( nWidth == rBitmapSize.Width() && nHeight == rBitmapSize.Height() )
-            m_pBitmapStyleLB->SelectEntryPos( static_cast<sal_Int32>(ORIGINAL) );
-        else if( nWidth == rFilledSize.Width() && nHeight == rFilledSize.Height() )
-            m_pBitmapStyleLB->SelectEntryPos( static_cast<sal_Int32>(FILLED) );
-        else if( nWidth == rZoomedSize.Width() && nHeight == rZoomedSize.Height() )
-            m_pBitmapStyleLB->SelectEntryPos( static_cast<sal_Int32>(ZOOMED) );
-        else
             m_pBitmapStyleLB->SelectEntryPos( static_cast<sal_Int32>(CUSTOM) );
-    }
 
     if(rBitmapSize.Width() > 0 && rBitmapSize.Height() > 0)
     {
@@ -623,12 +602,6 @@ IMPL_LINK_NOARG( SvxBitmapTabPage, ModifyBitmapSizeHdl, Edit&, void )
         sal_Int64 nWidthPercent = m_pBitmapWidth->Denormalize( m_pBitmapWidth->GetValue() );
         sal_Int64 nHeightPercent = m_pBitmapHeight->Denormalize( m_pBitmapHeight->GetValue() );
         if( nWidthPercent == 100 && nHeightPercent == 100 )
-            m_pBitmapStyleLB->SelectEntryPos( static_cast<sal_Int32>(ORIGINAL) );
-        else if( nWidthPercent == nFilledWidthPercent && nHeightPercent == nFilledHeightPercent )
-            m_pBitmapStyleLB->SelectEntryPos( static_cast<sal_Int32>(FILLED) );
-        else if( nWidthPercent == nZoomedWidthPercent && nHeightPercent == nZoomedHeightPercent )
-            m_pBitmapStyleLB->SelectEntryPos( static_cast<sal_Int32>(ZOOMED) );
-        else
             m_pBitmapStyleLB->SelectEntryPos( static_cast<sal_Int32>(CUSTOM) );
     }
     ModifyBitmapStyleHdl(*m_pBitmapStyleLB);
@@ -662,31 +635,6 @@ IMPL_LINK_NOARG( SvxBitmapTabPage, ModifyBitmapStyleHdl, ListBox&, void )
         Size aSetBitmapSize;
         switch(eStylePos)
         {
-            case ORIGINAL:
-            {
-                m_pBitmapWidth->SetValue(100);
-                m_pBitmapHeight->SetValue(100);
-                aSetBitmapSize = rBitmapSize;
-            }
-            break;
-            case FILLED:
-            {
-                sal_Int64 nWidthPercent = m_pBitmapWidth->Normalize(nFilledWidthPercent);
-                m_pBitmapWidth->SetValue(nWidthPercent);
-                sal_Int64 nHeightPercent = m_pBitmapHeight->Normalize(nFilledHeightPercent);
-                m_pBitmapHeight->SetValue(nHeightPercent);
-                aSetBitmapSize = rFilledSize;
-            }
-            break;
-            case ZOOMED:
-            {
-                sal_Int64 nWidthPercent = m_pBitmapWidth->Normalize(nZoomedWidthPercent);
-                m_pBitmapWidth->SetValue(nWidthPercent);
-                sal_Int64 nHeightPercent = m_pBitmapHeight->Normalize(nZoomedHeightPercent);
-                m_pBitmapHeight->SetValue(nHeightPercent);
-                aSetBitmapSize = rZoomedSize;
-            }
-            break;
             case CUSTOM:
             case TILED:
             {

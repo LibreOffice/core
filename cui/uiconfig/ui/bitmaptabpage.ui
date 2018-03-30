@@ -123,12 +123,9 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <items>
-                          <item translatable="yes" context="bitmaptabpage|bitmapstyle">Original</item>
-                          <item translatable="yes" context="bitmaptabpage|bitmapstyle">Filled</item>
-                          <item translatable="yes" context="bitmaptabpage|bitmapstyle">Stretched</item>
-                          <item translatable="yes" context="bitmaptabpage|bitmapstyle">Zoomed</item>
-                          <item translatable="yes" context="bitmaptabpage|bitmapstyle">Custom</item>
+                          <item translatable="yes" context="bitmaptabpage|bitmapstyle">Custom position/size</item>
                           <item translatable="yes" context="bitmaptabpage|bitmapstyle">Tiled</item>
+                          <item translatable="yes" context="bitmaptabpage|bitmapstyle">Stretched</item>
                         </items>
                       </object>
                       <packing>
