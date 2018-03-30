@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_4e6db131",
+        "filename": "test/source/drawing/captionshape.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1000723
+      },
+      "writtenOn": "2018-03-30T06:25:16Z",
+      "side": 1,
+      "message": "Please change \"Able\" to \"Unable\" in all the CPPUNIT_ASSERT_EQUAL_MESSAGE macros.",
+      "revId": "adae08ffb0469909531c9ce83589952ef78cf798",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_6e6a751c",
+        "filename": "test/source/drawing/captionshape.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1000723
+      },
+      "writtenOn": "2018-03-30T06:25:16Z",
+      "side": 1,
+      "message": "This is weird, but leave it like it is. I tried to change it to the same approach like the other ones, but got a template deduction error in cppunit. Will investigate further.",
+      "revId": "adae08ffb0469909531c9ce83589952ef78cf798",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_2e887de7",
+        "filename": "test/source/drawing/captionshape.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1000723
+      },
+      "writtenOn": "2018-03-30T06:25:16Z",
+      "side": 1,
+      "message": "Change the line to\n\naNewValue \u003c\u003c\u003d captionEscapeAbsoluteGet + 5;",
+      "revId": "adae08ffb0469909531c9ce83589952ef78cf798",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
