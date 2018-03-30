@@ -300,7 +300,14 @@ class AbstractFmInputRecordNoDialog_Impl :public AbstractFmInputRecordNoDialog
 class SvxNewDictionaryDialog;
 class AbstractSvxNewDictionaryDialog_Impl :public AbstractSvxNewDictionaryDialog
 {
-    DECL_ABSTDLG_BASE(AbstractSvxNewDictionaryDialog_Impl,SvxNewDictionaryDialog)
+protected:
+    std::unique_ptr<SvxNewDictionaryDialog> m_xDlg;
+public:
+    explicit AbstractSvxNewDictionaryDialog_Impl(SvxNewDictionaryDialog* p)
+        : m_xDlg(p)
+    {
+    }
+    virtual short Execute() override;
     virtual css::uno::Reference< css::linguistic2::XDictionary >  GetNewDictionary() override;
 };
 
@@ -599,9 +606,8 @@ public:
                                                             const SfxItemSet& rOptionsSet,
                                                             TransliterationFlags nInitialFlags) override;
     virtual VclPtr<AbstractFmInputRecordNoDialog> CreateFmInputRecordNoDialog() override;
-    virtual VclPtr<AbstractSvxNewDictionaryDialog> CreateSvxNewDictionaryDialog( vcl::Window* pParent ) override;
-    virtual VclPtr<VclAbstractDialog>     CreateSvxEditDictionaryDialog( vcl::Window* pParent,
-                                            const OUString& rName) override;
+    virtual VclPtr<AbstractSvxNewDictionaryDialog> CreateSvxNewDictionaryDialog(weld::Window* pParent) override;
+    virtual VclPtr<VclAbstractDialog>     CreateSvxEditDictionaryDialog(vcl::Window* pParent, const OUString& rName) override;
     virtual VclPtr<AbstractSvxNameDialog> CreateSvxNameDialog(weld::Window* pParent,
                                             const OUString& rName, const OUString& rDesc) override;
     // #i68101#
