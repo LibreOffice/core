@@ -1660,7 +1660,7 @@ void SwView::ExecuteStatusLine(SfxRequest &rReq)
                     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                     if(pFact)
                     {
-                        pDlg.disposeAndReset(pFact->CreateSvxZoomDialog(&GetViewFrame()->GetWindow(), aCoreSet));
+                        pDlg.disposeAndReset(pFact->CreateSvxZoomDialog(GetViewFrame()->GetWindow().GetFrameWeld(), aCoreSet));
                         OSL_ENSURE(pDlg, "Zooming fail!");
                         if (pDlg)
                         {

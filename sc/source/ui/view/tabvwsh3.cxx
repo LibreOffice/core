@@ -724,7 +724,8 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                     if(pFact)
                     {
-                        pDlg.disposeAndReset(pFact->CreateSvxZoomDialog(GetDialogParent(), aSet));
+                        vcl::Window* pWin = GetDialogParent();
+                        pDlg.disposeAndReset(pFact->CreateSvxZoomDialog(pWin ? pWin->GetFrameWeld() : nullptr, aSet));
                         OSL_ENSURE(pDlg, "Dialog creation failed!");
                     }
                     if (pDlg)

@@ -2916,7 +2916,7 @@ public:
 
     virtual void enable_notify_events() override
     {
-        GtkInstanceEntry::disable_notify_events();
+        GtkInstanceEntry::enable_notify_events();
         g_signal_handler_unblock(m_pButton, m_nValueChangedSignalId);
     }
 

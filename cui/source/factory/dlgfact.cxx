@@ -104,7 +104,12 @@ IMPL_ABSTDLG_BASE(AbstractHangulHanjaConversionDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractFmShowColsDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractHyphenWordDialog_Impl)
 IMPL_ABSTDLG_BASE(AbstractThesaurusDialog_Impl)
-IMPL_ABSTDLG_BASE(AbstractSvxZoomDialog_Impl)
+
+short AbstractSvxZoomDialog_Impl::Execute()
+{
+    return m_xDlg->run();
+}
+
 IMPL_ABSTDLG_BASE(AbstractTitleDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractScriptSelectorDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractGalleryIdDialog_Impl);
@@ -406,17 +411,17 @@ void  AbstractFmShowColsDialog_Impl::SetColumns(const ::Reference< css::containe
 
 void AbstractSvxZoomDialog_Impl::SetLimits( sal_uInt16 nMin, sal_uInt16 nMax )
 {
-    pDlg->SetLimits( nMin, nMax );
+    m_xDlg->SetLimits( nMin, nMax );
 }
 
 void AbstractSvxZoomDialog_Impl::HideButton( ZoomButtonId nBtnId )
 {
-    pDlg->HideButton( nBtnId );
+    m_xDlg->HideButton( nBtnId );
 }
 
 const SfxItemSet* AbstractSvxZoomDialog_Impl::GetOutputItemSet() const
 {
-    return pDlg->GetOutputItemSet();
+    return m_xDlg->GetOutputItemSet();
 }
 
 void  AbstractSpellDialog_Impl::Invalidate()
@@ -953,11 +958,9 @@ VclPtr<AbstractFmShowColsDialog> AbstractDialogFactory_Impl::CreateFmShowColsDia
     return VclPtr<AbstractFmShowColsDialog_Impl>::Create( pDlg );
 }
 
-VclPtr<AbstractSvxZoomDialog> AbstractDialogFactory_Impl::CreateSvxZoomDialog( vcl::Window* pParent,
-                                            const SfxItemSet& rCoreSet)
+VclPtr<AbstractSvxZoomDialog> AbstractDialogFactory_Impl::CreateSvxZoomDialog(weld::Window* pParent, const SfxItemSet& rCoreSet)
 {
-    VclPtrInstance<SvxZoomDialog> pDlg( pParent, rCoreSet);
-    return VclPtr<AbstractSvxZoomDialog_Impl>::Create( pDlg );
+    return VclPtr<AbstractSvxZoomDialog_Impl>::Create(new SvxZoomDialog(pParent, rCoreSet));
 }
 
 VclPtr<AbstractSpellDialog> AbstractDialogFactory_Impl::CreateSvxSpellDialog(

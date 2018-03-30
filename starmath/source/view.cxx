@@ -1709,7 +1709,7 @@ void SmViewShell::Execute(SfxRequest& rReq)
                     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                     if(pFact)
                     {
-                        ScopedVclPtr<AbstractSvxZoomDialog> xDlg(pFact->CreateSvxZoomDialog(&GetViewFrame()->GetWindow(), aSet));
+                        ScopedVclPtr<AbstractSvxZoomDialog> xDlg(pFact->CreateSvxZoomDialog(GetViewFrame()->GetWindow().GetFrameWeld(), aSet));
                         assert(xDlg);
                         xDlg->SetLimits( MINZOOM, MAXZOOM );
                         if (xDlg->Execute() != RET_CANCEL)
