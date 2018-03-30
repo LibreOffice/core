@@ -1480,9 +1480,35 @@ public:
         //until the gtk menu is destroyed
         GMainLoop* pLoop = g_main_loop_new(nullptr, true);
         gulong nSignalId = g_signal_connect_swapped(G_OBJECT(m_pMenu), "deactivate", G_CALLBACK(g_main_loop_quit), pLoop);
+
+#if GTK_CHECK_VERSION(3,22,0)
         GdkRectangle aRect{static_cast<int>(rRect.Left()), static_cast<int>(rRect.Top()),
                            static_cast<int>(rRect.GetWidth()), static_cast<int>(rRect.GetHeight())};
         gtk_menu_popup_at_rect(m_pMenu, gtk_widget_get_window(pWidget), &aRect, GDK_GRAVITY_NORTH_WEST, GDK_GRAVITY_NORTH_WEST, nullptr);
+#else
+        (void)rRect;
+
+        guint nButton;
+        guint32 nTime;
+
+        //typically there is an event, and we can then distinguish if this was
+        //launched from the keyboard (gets auto-mnemoniced) or the mouse (which
+        //doesn't)
+        GdkEvent *pEvent = gtk_get_current_event();
+        if (pEvent)
+        {
+            gdk_event_get_button(pEvent, &nButton);
+            nTime = gdk_event_get_time(pEvent);
+        }
+        else
+        {
+            nButton = 0;
+            nTime = GtkSalFrame::GetLastInputEventTime();
+        }
+
+        gtk_menu_popup(GTK_MENU(pWidget), nullptr, nullptr, nullptr, nullptr, nButton, nTime);
+#endif
+
         if (g_main_loop_is_running(pLoop))
         {
             gdk_threads_leave();
