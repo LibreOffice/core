@@ -309,21 +309,19 @@ void SvxBitmapTabPage::Reset( const SfxItemSet* rAttrs )
         CalculateBitmapPresetSize();
     }
 
+    bool bTiled = false; bool bStretched = false;
     if(rAttrs->GetItemState( XATTR_FILLBMP_TILE ) != SfxItemState::DONTCARE)
-    {
-        if( rAttrs->Get( XATTR_FILLBMP_TILE ).GetValue() )
-        {
-            m_pBitmapStyleLB->SelectEntryPos(static_cast<sal_Int32>(TILED));
-        }
-    }
+        bTiled = rAttrs->Get( XATTR_FILLBMP_TILE ).GetValue();
 
-    if( m_pBitmapStyleLB->GetSelectedEntryPos() == 0 && rAttrs->GetItemState( XATTR_FILLBMP_STRETCH ) != SfxItemState::DONTCARE)
-    {
-        if( rAttrs->Get( XATTR_FILLBMP_STRETCH ).GetValue() )
-        {
-            m_pBitmapStyleLB->SelectEntryPos( static_cast<sal_Int32>(STRETCHED) );
-        }
-    }
+    if(rAttrs->GetItemState( XATTR_FILLBMP_STRETCH ) != SfxItemState::DONTCARE)
+        bStretched = rAttrs->Get( XATTR_FILLBMP_STRETCH ).GetValue();
+
+    if (bTiled)
+        m_pBitmapStyleLB->SelectEntryPos(static_cast<sal_Int32>(TILED));
+    else if (bStretched)
+        m_pBitmapStyleLB->SelectEntryPos( static_cast<sal_Int32>(STRETCHED) );
+    else
+        m_pBitmapStyleLB->SelectEntryPos( static_cast<sal_Int32>(CUSTOM) );
 
     long nWidth = 0;
     long nHeight = 0;
@@ -359,9 +357,6 @@ void SvxBitmapTabPage::Reset( const SfxItemSet* rAttrs )
         nWidth = (OutputDevice::LogicToLogic(nWidth, mePoolUnit, MapUnit::Map100thMM )) / fUIScale;
         nHeight = (OutputDevice::LogicToLogic(nHeight, mePoolUnit, MapUnit::Map100thMM )) / fUIScale;
     }
-
-    if(m_pBitmapStyleLB->GetSelectedEntryPos() == 0)
-            m_pBitmapStyleLB->SelectEntryPos( static_cast<sal_Int32>(CUSTOM) );
 
     if(rBitmapSize.Width() > 0 && rBitmapSize.Height() > 0)
     {
