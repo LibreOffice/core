@@ -345,8 +345,7 @@ public:
 
     virtual VclPtr<AbstractFmShowColsDialog> CreateFmShowColsDialog() = 0;
 
-    virtual VclPtr<AbstractSvxZoomDialog> CreateSvxZoomDialog( vcl::Window* pParent,
-                                            const SfxItemSet& rCoreSet )=0;
+    virtual VclPtr<AbstractSvxZoomDialog> CreateSvxZoomDialog(weld::Window* pParent, const SfxItemSet& rCoreSet) = 0;
 
     virtual VclPtr<AbstractSpellDialog>   CreateSvxSpellDialog(vcl::Window* pParent,
                                             SfxBindings* pBindings,

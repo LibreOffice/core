@@ -187,11 +187,17 @@ class AbstractFmShowColsDialog_Impl : public AbstractFmShowColsDialog
 class SvxZoomDialog;
 class AbstractSvxZoomDialog_Impl : public AbstractSvxZoomDialog
 {
-    DECL_ABSTDLG_BASE(AbstractSvxZoomDialog_Impl,SvxZoomDialog)
-    virtual void    SetLimits( sal_uInt16 nMin, sal_uInt16 nMax ) override;
-    virtual void    HideButton( ZoomButtonId nBtnId ) override;
+protected:
+    std::unique_ptr<SvxZoomDialog> m_xDlg;
+public:
+    explicit AbstractSvxZoomDialog_Impl(SvxZoomDialog* p)
+        : m_xDlg(p)
+    {
+    }
+    virtual short Execute() override;
+    virtual void  SetLimits( sal_uInt16 nMin, sal_uInt16 nMax ) override;
+    virtual void  HideButton( ZoomButtonId nBtnId ) override;
     virtual const SfxItemSet*   GetOutputItemSet() const override ;
-
 };
 
 namespace svx{ class SpellDialog;}
@@ -547,8 +553,7 @@ public:
                                                 SvxSpellWrapper* pWrapper ) override;
 
     virtual VclPtr<AbstractFmShowColsDialog> CreateFmShowColsDialog() override;
-    virtual VclPtr<AbstractSvxZoomDialog> CreateSvxZoomDialog( vcl::Window* pParent,
-                                            const SfxItemSet& rCoreSet) override;
+    virtual VclPtr<AbstractSvxZoomDialog> CreateSvxZoomDialog(weld::Window* pParent, const SfxItemSet& rCoreSet) override;
    // add for SvxBorderBackgroundDlg
     virtual VclPtr<SfxAbstractTabDialog> CreateSvxBorderBackgroundDlg(
        vcl::Window* pParent,
