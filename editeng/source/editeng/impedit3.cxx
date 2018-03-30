@@ -3149,12 +3149,13 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, tools::Rectangle aClipRect, Po
                                 }
 
 #if OSL_DEBUG_LEVEL > 2
-                                if ( rTextPortion.GetKind() == PORTIONKIND_HYPHENATOR )
+                                // Do we really need this if statement?
+                                if ( rTextPortion.GetKind() == PortionKind::HYPHENATOR )
                                 {
                                     aTmpFont.SetFillColor( COL_LIGHTGRAY );
                                     aTmpFont.SetTransparent( sal_False );
                                 }
-                                if ( rTextPortion.GetRightToLeft()  )
+                                if ( rTextPortion.IsRightToLeft()  )
                                 {
                                     aTmpFont.SetFillColor( COL_LIGHTGRAY );
                                     aTmpFont.SetTransparent( sal_False );
