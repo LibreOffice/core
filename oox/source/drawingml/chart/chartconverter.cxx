@@ -134,8 +134,8 @@ Reference< XDataSequence > ChartConverter::createDataSequence(
         {
             // create a single-row array from constant source data
             Matrix< Any > aMatrix( rDataSeq.mnPointCount, 1 );
-            for( DataSequenceModel::AnyMap::const_iterator aDIt = rDataSeq.maData.begin(), aDEnd = rDataSeq.maData.end(); aDIt != aDEnd; ++aDIt )
-                *aMatrix.at(aDIt->first, 0) = aDIt->second;
+            for (auto const& elem : rDataSeq.maData)
+                *aMatrix.at(elem.first, 0) = elem.second;
 
             aRangeRep = lclGenerateApiArray( aMatrix );
         }

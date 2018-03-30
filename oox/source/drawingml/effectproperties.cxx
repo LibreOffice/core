@@ -80,10 +80,10 @@ css::beans::PropertyValue Effect::getEffect()
 
     css::uno::Sequence< css::beans::PropertyValue > aSeq( maAttribs.size() );
     sal_uInt32 i = 0;
-    for( std::map< OUString, css::uno::Any >::iterator it = maAttribs.begin(); it != maAttribs.end(); ++it )
+    for (auto const& attrib : maAttribs)
     {
-        aSeq[i].Name = it->first;
-        aSeq[i].Value = it->second;
+        aSeq[i].Name = attrib.first;
+        aSeq[i].Value = attrib.second;
         i++;
     }
 

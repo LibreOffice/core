@@ -368,12 +368,12 @@ void DataLabelsConverter::convertFromModel( const Reference< XDataSeries >& rxDa
     }
 
     // data point label settings
-    for( DataLabelsModel::DataLabelVector::iterator aIt = mrModel.maPointLabels.begin(), aEnd = mrModel.maPointLabels.end(); aIt != aEnd; ++aIt )
+    for (auto const& pointLabel : mrModel.maPointLabels)
     {
-        if ((*aIt)->maNumberFormat.maFormatCode.isEmpty())
-            (*aIt)->maNumberFormat = mrModel.maNumberFormat;
+        if (pointLabel->maNumberFormat.maFormatCode.isEmpty())
+            pointLabel->maNumberFormat = mrModel.maNumberFormat;
 
-        DataLabelConverter aLabelConv( *this, **aIt );
+        DataLabelConverter aLabelConv(*this, *pointLabel);
         aLabelConv.convertFromModel( rxDataSeries, rTypeGroup, aPropSet );
     }
 }
@@ -712,16 +712,16 @@ Reference< XDataSeries > SeriesConverter::createDataSeries( const TypeGroupConve
     }
 
     // error bars
-    for( SeriesModel::ErrorBarVector::iterator aIt = mrModel.maErrorBars.begin(), aEnd = mrModel.maErrorBars.end(); aIt != aEnd; ++aIt )
+    for (auto const& errorBar : mrModel.maErrorBars)
     {
-        ErrorBarConverter aErrorBarConv( *this, **aIt );
+        ErrorBarConverter aErrorBarConv(*this, *errorBar);
         aErrorBarConv.convertFromModel( xDataSeries );
     }
 
     // trendlines
-    for( SeriesModel::TrendlineVector::iterator aIt = mrModel.maTrendlines.begin(), aEnd = mrModel.maTrendlines.end(); aIt != aEnd; ++aIt )
+    for (auto const& trendLine : mrModel.maTrendlines)
     {
-        TrendlineConverter aTrendlineConv( *this, **aIt );
+        TrendlineConverter aTrendlineConv(*this, *trendLine);
         aTrendlineConv.convertFromModel( xDataSeries );
     }
 
@@ -775,9 +775,9 @@ Reference< XDataSeries > SeriesConverter::createDataSeries( const TypeGroupConve
     }
 
     // data point settings
-    for( SeriesModel::DataPointVector::iterator aIt = mrModel.maPoints.begin(), aEnd = mrModel.maPoints.end(); aIt != aEnd; ++aIt )
+    for (auto const& point : mrModel.maPoints)
     {
-        DataPointConverter aPointConv( *this, **aIt );
+        DataPointConverter aPointConv(*this, *point);
         aPointConv.convertFromModel( xDataSeries, rTypeGroup, mrModel );
     }
 

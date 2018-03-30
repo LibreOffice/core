@@ -249,15 +249,13 @@ const TableStyle& TableProperties::getUsedTableStyle( const ::oox::core::XmlFilt
         const std::vector< TableStyle >& rTableStyles( rBase.getTableStyles()->getTableStyles() );
         const OUString aStyleId( getStyleId() );
 
-        std::vector< TableStyle >::const_iterator aIter( rTableStyles.begin() );
-        while( aIter != rTableStyles.end() )
+        for (auto const& tableStyle : rTableStyles)
         {
-            if ( const_cast< TableStyle& >( *aIter ).getStyleId() == aStyleId )
+            if ( const_cast< TableStyle& >(tableStyle).getStyleId() == aStyleId )
             {
-                pTableStyle = &const_cast< TableStyle& >( *aIter );
+                pTableStyle = &const_cast< TableStyle& >(tableStyle);
                 break;  // we get the correct style
             }
-            ++aIter;
         }
         //if the pptx just has table style id, but no table style content, we will create the table style ourselves
         if (!pTableStyle)
@@ -285,16 +283,12 @@ void TableProperties::pushToPropSet( const ::oox::core::XmlFilterBase& rFilterBa
     TableStyle* pTableStyleToDelete = nullptr;
     const TableStyle& rTableStyle( getUsedTableStyle( rFilterBase, pTableStyleToDelete ) );
     sal_Int32 nRow = 0;
-    const std::vector< TableRow >::const_iterator aTableRowEnd( mvTableRows.end() );
-    for (std::vector< TableRow >::iterator aTableRowIter( mvTableRows.begin() );
-         aTableRowIter != aTableRowEnd ; ++aTableRowIter, ++nRow)
+    for (auto & tableRow : mvTableRows)
     {
         sal_Int32 nColumn = 0;
-        const std::vector< TableCell >::const_iterator aTableCellEnd( aTableRowIter->getTableCells().end() );
-        for (std::vector< TableCell >::iterator aTableCellIter( aTableRowIter->getTableCells().begin() );
-            aTableCellIter != aTableCellEnd ; ++aTableCellIter, ++nColumn)
+        for (auto & tableCell : tableRow.getTableCells())
         {
-            TableCell& rTableCell( *aTableCellIter );
+            TableCell& rTableCell(tableCell);
             if ( !rTableCell.getvMerge() && !rTableCell.gethMerge() )
             {
                 uno::Reference< XTable > xTable( xColumnRowRange, uno::UNO_QUERY_THROW );
@@ -303,9 +297,11 @@ void TableProperties::pushToPropSet( const ::oox::core::XmlFilterBase& rFilterBa
 
                 Reference< XCellRange > xCellRange( xTable, UNO_QUERY_THROW );
                 rTableCell.pushToXCell( rFilterBase, pMasterTextListStyle, xCellRange->getCellByPosition( nColumn, nRow ), *this, rTableStyle,
-                    nColumn, aTableRowIter->getTableCells().size()-1, nRow, mvTableRows.size()-1 );
+                    nColumn, tableRow.getTableCells().size()-1, nRow, mvTableRows.size()-1 );
             }
+            ++nColumn;
         }
+        ++nRow;
     }
 
     delete pTableStyleToDelete;

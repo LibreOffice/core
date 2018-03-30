@@ -164,8 +164,8 @@ void registerNamespaces( FastParser& rParser )
     for (sal_Int32 i = 0; i < ids.getLength(); ++i)
         aSet.insert(ids[i].Second);
 
-    for (std::set<sal_Int32>::iterator it = aSet.begin(); it != aSet.end(); ++it)
-        rParser.registerNamespace(*it);
+    for (auto const& elem : aSet)
+        rParser.registerNamespace(elem);
 }
 
 } // namespace
