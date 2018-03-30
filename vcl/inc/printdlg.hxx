@@ -39,12 +39,11 @@ namespace vcl
     public:
         class PrintPreviewWindow : public vcl::Window
         {
-            static const sal_Int32 PREVIEW_BITMAP_WIDTH;
-
             GDIMetaFile         maMtf;
             Size                maOrigSize;
             Size                maPreviewSize;
-            VclPtr<VirtualDevice> maPageVDev;
+            sal_Int32           mnDPIX;
+            sal_Int32           mnDPIY;
             Bitmap              maPreviewBitmap;
             OUString            maReplacementString;
             OUString            maToolTipString;
@@ -62,7 +61,6 @@ namespace vcl
             virtual void Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
             virtual void Command( const CommandEvent& ) override;
             virtual void Resize() override;
-            virtual void DataChanged( const DataChangedEvent& ) override;
 
             void setPreview( const GDIMetaFile&, const Size& i_rPaperSize,
                              const OUString& i_rPaperName,

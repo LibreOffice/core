@@ -66,8 +66,13 @@ extern "C" SAL_DLLPUBLIC_EXPORT void makeShowNupOrderWindow(VclPtr<vcl::Window> 
 
 PrintDialog::PrintPreviewWindow::PrintPreviewWindow( vcl::Window* i_pParent )
     : Window( i_pParent, 0 )
+    , maMtf()
     , maOrigSize( 10, 10 )
-    , maPageVDev( VclPtr<VirtualDevice>::Create(*this) )
+    , maPreviewSize()
+    , mnDPIX(Application::GetDefaultDevice()->GetDPIX())
+    , mnDPIY(Application::GetDefaultDevice()->GetDPIY())
+    , maPreviewBitmap()
+    , maReplacementString()
     , maToolTipString(VclResId( SV_PRINT_PRINTPREVIEW_TXT))
     , mbGreyscale( false )
     , maHorzDim(VclPtr<FixedLine>::Create(this, WB_HORZ | WB_CENTER))
@@ -75,7 +80,6 @@ PrintDialog::PrintPreviewWindow::PrintPreviewWindow( vcl::Window* i_pParent )
 {
     SetPaintTransparent( true );
     SetBackground();
-    maPageVDev->SetBackground( Wallpaper(COL_WHITE) );
     maHorzDim->Show();
     maVertDim->Show();
 
@@ -92,20 +96,7 @@ void PrintDialog::PrintPreviewWindow::dispose()
 {
     maHorzDim.disposeAndClear();
     maVertDim.disposeAndClear();
-    maPageVDev.disposeAndClear();
     Window::dispose();
-}
-
-const sal_Int32 PrintDialog::PrintPreviewWindow::PREVIEW_BITMAP_WIDTH = 1600;
-
-void PrintDialog::PrintPreviewWindow::DataChanged( const DataChangedEvent& i_rDCEvt )
-{
-    // react on settings changed
-    if( i_rDCEvt.GetType() == DataChangedEventType::SETTINGS )
-    {
-        maPageVDev->SetBackground( Wallpaper(COL_WHITE) );
-    }
-    Window::DataChanged( i_rDCEvt );
 }
 
 void PrintDialog::PrintPreviewWindow::Resize()
@@ -141,19 +132,6 @@ void PrintDialog::PrintPreviewWindow::Resize()
 
     maPreviewSize = aScaledSize;
 
-    // #i104784# if we render the page too small then rounding issues result in
-    // layout artifacts looking really bad. So scale the page unto a device that is not
-    // full page size but not too small either. This also results in much better visual
-    // quality of the preview, e.g. when its height approaches the number of text lines
-    // find a good scaling factor
-
-    double aAspectRatio = aScaledSize.Height() / static_cast<double>(aScaledSize.Width());
-
-    aScaledSize.setWidth( PREVIEW_BITMAP_WIDTH );
-    aScaledSize.setHeight( PREVIEW_BITMAP_WIDTH * aAspectRatio );
-
-    maPageVDev->SetOutputSizePixel( aScaledSize, false );
-
     // position dimension lines
     Point aRef( nTextHeight + (aNewSize.Width() - maPreviewSize.Width())/2,
                 nTextHeight + (aNewSize.Height() - maPreviewSize.Height())/2 );
@@ -162,6 +140,8 @@ void PrintDialog::PrintPreviewWindow::Resize()
     maVertDim->SetPosSizePixel( Point( aRef.X() - nTextHeight, aRef.Y() ),
                                Size( nTextHeight, maPreviewSize.Height() ) );
 
+    // check and evtl. recreate preview bitmap
+    preparePreviewBitmap();
 }
 
 void PrintDialog::PrintPreviewWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
@@ -186,6 +166,11 @@ void PrintDialog::PrintPreviewWindow::Paint(vcl::RenderContext& rRenderContext, 
     else
     {
         Bitmap aPreviewBitmap(maPreviewBitmap);
+
+        // This explicit force-to-scale allows us to get the
+        // mentioned best quality here. Unfortunately this is
+        // currently not sure when using just ::DrawBitmap with
+        // a defined size or ::DrawOutDev
         aPreviewBitmap.Scale(maPreviewSize, BmpScaleFlag::BestQuality);
         rRenderContext.DrawBitmap(aOffset, aPreviewBitmap);
     }
@@ -224,12 +209,11 @@ void PrintDialog::PrintPreviewWindow::setPreview( const GDIMetaFile& i_rNewPrevi
     aBuf.append( maToolTipString );
     SetQuickHelpText( aBuf.makeStringAndClear() );
     maMtf = i_rNewPreview;
-
+    mnDPIX = i_nDPIX;
+    mnDPIY = i_nDPIY;
     maOrigSize = i_rOrigSize;
     maReplacementString = i_rReplacement;
     mbGreyscale = i_bGreyscale;
-    maPageVDev->SetReferenceDevice( i_nDPIX, i_nDPIY );
-    maPageVDev->EnableOutput();
 
     // use correct measurements
     const LocaleDataWrapper& rLocWrap( GetSettings().GetLocaleDataWrapper() );
@@ -259,17 +243,107 @@ void PrintDialog::PrintPreviewWindow::setPreview( const GDIMetaFile& i_rNewPrevi
     aBuf.appendAscii( eUnit == MapUnit::MapMM ? "mm" : "in" );
     maVertDim->SetText( aBuf.makeStringAndClear() );
 
+    // sets/calculates e.g. maPreviewSize
+    // also triggers preparePreviewBitmap()
     Resize();
-    preparePreviewBitmap();
+
     Invalidate();
 }
 
 void PrintDialog::PrintPreviewWindow::preparePreviewBitmap()
 {
+    if(maPreviewSize.getWidth() < 0 || maPreviewSize.getHeight() < 0)
+    {
+        // not yet fully initialized, no need to prepare anything
+        return;
+    }
+
+    // define an allowed number of pixels, also see
+    // defaults for primitive renderers and similar. This
+    // might be centralized and made dependent of 32/64bit
+    const sal_uInt32 nMaxSquarePixels(500000);
+
+    // check how big (squarePixels) the preview is currently (with
+    // max value of MaxSquarePixels)
+    const sal_uInt32 nCurrentSquarePixels(
+        std::min(
+            nMaxSquarePixels,
+            static_cast<sal_uInt32>(maPreviewBitmap.GetSizePixel().getWidth())
+            * static_cast<sal_uInt32>(maPreviewBitmap.GetSizePixel().getHeight())));
+
+    // check how big (squarePixels) the preview needs to be (with
+    // max value of MaxSquarePixels)
+    const sal_uInt32 nRequiredSquarePixels(
+        std::min(
+            nMaxSquarePixels,
+            static_cast<sal_uInt32>(maPreviewSize.getWidth())
+            * static_cast<sal_uInt32>(maPreviewSize.getHeight())));
+
+    // check if preview is big enough. Use a scaling value in
+    // the comparison to not get bigger at the last possible moment
+    // what may look awkward and pixelated (again). This means
+    // to use a percentage value - if we have at least
+    // that value of required pixels, we are good.
+    static double fPreventAwkwardFactor(1.35); // 35%
+    if(nCurrentSquarePixels >= static_cast<sal_uInt32>(nRequiredSquarePixels * fPreventAwkwardFactor))
+    {
+        // at this place we also could add a mechanism to let the preview
+        // bitmap 'shrink' again if it is currently 'too big' -> bigger
+        // than required. I think this is not necessary for now.
+
+        // already sufficient, done.
+        return;
+    }
+
+    // check if we have enough square pixels e.g for 8x8 pixels
+    if(nRequiredSquarePixels < 64)
+    {
+        // too small preview - let it empty
+        return;
+    }
+
+    // Calculate nPlannedSquarePixels which is the required size
+    // expanded by a percentage (with max value of MaxSquarePixels)
+    static double fExtraSpaceFactor(1.65); // 65%
+    const sal_uInt32 nPlannedSquarePixels(
+        std::min(
+            nMaxSquarePixels,
+            static_cast<sal_uInt32>(maPreviewSize.getWidth() * fExtraSpaceFactor)
+            * static_cast<sal_uInt32>(maPreviewSize.getHeight() * fExtraSpaceFactor)));
+
+    // calculate back new width and height - it might have been
+    // truncated by MaxSquarePixels.
+    // We know that w*h == nPlannedSquarePixels and w/h == ratio
+    const double fRatio(static_cast<double>(maPreviewSize.getWidth()) / static_cast<double>(maPreviewSize.getHeight()));
+    const double fNewWidth(sqrt(static_cast<double>(nPlannedSquarePixels) * fRatio));
+    const double fNewHeight(sqrt(static_cast<double>(nPlannedSquarePixels) / fRatio));
+    const Size aScaledSize(basegfx::fround(fNewWidth), basegfx::fround(fNewHeight));
+
+    // check if this eventual maximum is already reached
+    // due to having hit the MaxSquarePixels. Due to using
+    // an integer AspectRatio, we cannot make a numeric exact
+    // comparison - we need to compare if we are close
+    const double fScaledSizeSquare(static_cast<double>(aScaledSize.getWidth() * aScaledSize.getHeight()));
+    const double fPreviewSizeSquare(static_cast<double>(maPreviewBitmap.GetSizePixel().getWidth() * maPreviewBitmap.GetSizePixel().getHeight()));
+
+    // test as equal up to 0.1% (0.001)
+    if(fabs((fScaledSizeSquare / fPreviewSizeSquare) - 1.0) < 0.001)
+    {
+        // maximum is reached, avoid bigger scaling
+        return;
+    }
+
+    // create temporary VDev and render to it
+    ScopedVclPtrInstance<VirtualDevice> pPrerenderVDev(*Application::GetDefaultDevice());
+    pPrerenderVDev->SetOutputSizePixel(aScaledSize, false);
+    pPrerenderVDev->SetReferenceDevice( mnDPIX, mnDPIY );
+    pPrerenderVDev->EnableOutput();
+    pPrerenderVDev->SetBackground( Wallpaper(COL_WHITE) );
+
     GDIMetaFile aMtf( maMtf );
 
-    Size aVDevSize( maPageVDev->GetOutputSizePixel() );
-    const Size aLogicSize( maPageVDev->PixelToLogic( aVDevSize, MapMode( MapUnit::Map100thMM ) ) );
+    Size aVDevSize( pPrerenderVDev->GetOutputSizePixel() );
+    const Size aLogicSize( pPrerenderVDev->PixelToLogic( aVDevSize, MapMode( MapUnit::Map100thMM ) ) );
     Size aOrigSize( maOrigSize );
     if( aOrigSize.Width() < 1 )
         aOrigSize.setWidth( aLogicSize.Width() );
@@ -277,31 +351,31 @@ void PrintDialog::PrintPreviewWindow::preparePreviewBitmap()
         aOrigSize.setHeight( aLogicSize.Height() );
     double fScale = double(aLogicSize.Width())/double(aOrigSize.Width());
 
-    maPageVDev->Erase();
-    maPageVDev->Push();
-    maPageVDev->SetMapMode(MapMode(MapUnit::Map100thMM));
-    DrawModeFlags nOldDrawMode = maPageVDev->GetDrawMode();
+    pPrerenderVDev->Erase();
+    pPrerenderVDev->Push();
+    pPrerenderVDev->SetMapMode(MapMode(MapUnit::Map100thMM));
+    DrawModeFlags nOldDrawMode = pPrerenderVDev->GetDrawMode();
     if( mbGreyscale )
-        maPageVDev->SetDrawMode( maPageVDev->GetDrawMode() |
+        pPrerenderVDev->SetDrawMode( pPrerenderVDev->GetDrawMode() |
                                 ( DrawModeFlags::GrayLine | DrawModeFlags::GrayFill | DrawModeFlags::GrayText |
                                   DrawModeFlags::GrayBitmap | DrawModeFlags::GrayGradient ) );
     aMtf.WindStart();
     aMtf.Scale( fScale, fScale );
     aMtf.WindStart();
 
-    const AntialiasingFlags nOriginalAA(maPageVDev->GetAntialiasing());
-    maPageVDev->SetAntialiasing(nOriginalAA | AntialiasingFlags::EnableB2dDraw);
-    aMtf.Play( maPageVDev.get(), Point( 0, 0 ), aLogicSize );
-    maPageVDev->SetAntialiasing(nOriginalAA);
+    const AntialiasingFlags nOriginalAA(pPrerenderVDev->GetAntialiasing());
+    pPrerenderVDev->SetAntialiasing(nOriginalAA | AntialiasingFlags::EnableB2dDraw);
+    aMtf.Play( pPrerenderVDev.get(), Point( 0, 0 ), aLogicSize );
+    pPrerenderVDev->SetAntialiasing(nOriginalAA);
 
-    maPageVDev->Pop();
+    pPrerenderVDev->Pop();
 
     SetMapMode(MapMode(MapUnit::MapPixel));
-    maPageVDev->SetMapMode(MapMode(MapUnit::MapPixel));
+    pPrerenderVDev->SetMapMode(MapMode(MapUnit::MapPixel));
 
-    maPreviewBitmap = maPageVDev->GetBitmap(Point(0, 0), aVDevSize);
+    maPreviewBitmap = pPrerenderVDev->GetBitmap(Point(0, 0), aVDevSize);
 
-    maPageVDev->SetDrawMode( nOldDrawMode );
+    pPrerenderVDev->SetDrawMode( nOldDrawMode );
 }
 
 PrintDialog::ShowNupOrderWindow::ShowNupOrderWindow( vcl::Window* i_pParent )
