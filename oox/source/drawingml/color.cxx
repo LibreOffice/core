@@ -461,42 +461,42 @@ void Color::clearTransparence()
     // if color is UNUSED or turns to UNUSED in setResolvedRgb, do not perform transformations
     if( meMode != COLOR_UNUSED )
     {
-        for( TransformVec::const_iterator aIt = maTransforms.begin(), aEnd = maTransforms.end(); aIt != aEnd; ++aIt )
+        for (auto const& transform : maTransforms)
         {
-            switch( aIt->mnToken )
+            switch( transform.mnToken )
             {
-                case XML_red:       toCrgb(); lclSetValue( mnC1, aIt->mnValue );    break;
-                case XML_redMod:    toCrgb(); lclModValue( mnC1, aIt->mnValue );    break;
-                case XML_redOff:    toCrgb(); lclOffValue( mnC1, aIt->mnValue );    break;
-                case XML_green:     toCrgb(); lclSetValue( mnC2, aIt->mnValue );    break;
-                case XML_greenMod:  toCrgb(); lclModValue( mnC2, aIt->mnValue );    break;
-                case XML_greenOff:  toCrgb(); lclOffValue( mnC2, aIt->mnValue );    break;
-                case XML_blue:      toCrgb(); lclSetValue( mnC3, aIt->mnValue );    break;
-                case XML_blueMod:   toCrgb(); lclModValue( mnC3, aIt->mnValue );    break;
-                case XML_blueOff:   toCrgb(); lclOffValue( mnC3, aIt->mnValue );    break;
+                case XML_red:       toCrgb(); lclSetValue( mnC1, transform.mnValue );    break;
+                case XML_redMod:    toCrgb(); lclModValue( mnC1, transform.mnValue );    break;
+                case XML_redOff:    toCrgb(); lclOffValue( mnC1, transform.mnValue );    break;
+                case XML_green:     toCrgb(); lclSetValue( mnC2, transform.mnValue );    break;
+                case XML_greenMod:  toCrgb(); lclModValue( mnC2, transform.mnValue );    break;
+                case XML_greenOff:  toCrgb(); lclOffValue( mnC2, transform.mnValue );    break;
+                case XML_blue:      toCrgb(); lclSetValue( mnC3, transform.mnValue );    break;
+                case XML_blueMod:   toCrgb(); lclModValue( mnC3, transform.mnValue );    break;
+                case XML_blueOff:   toCrgb(); lclOffValue( mnC3, transform.mnValue );    break;
 
-                case XML_hue:       toHsl(); lclSetValue( mnC1, aIt->mnValue, MAX_DEGREE ); break;
-                case XML_hueMod:    toHsl(); lclModValue( mnC1, aIt->mnValue, MAX_DEGREE ); break;
-                case XML_hueOff:    toHsl(); lclOffValue( mnC1, aIt->mnValue, MAX_DEGREE ); break;
-                case XML_sat:       toHsl(); lclSetValue( mnC2, aIt->mnValue );             break;
-                case XML_satMod:    toHsl(); lclModValue( mnC2, aIt->mnValue );             break;
-                case XML_satOff:    toHsl(); lclOffValue( mnC2, aIt->mnValue );             break;
+                case XML_hue:       toHsl(); lclSetValue( mnC1, transform.mnValue, MAX_DEGREE ); break;
+                case XML_hueMod:    toHsl(); lclModValue( mnC1, transform.mnValue, MAX_DEGREE ); break;
+                case XML_hueOff:    toHsl(); lclOffValue( mnC1, transform.mnValue, MAX_DEGREE ); break;
+                case XML_sat:       toHsl(); lclSetValue( mnC2, transform.mnValue );             break;
+                case XML_satMod:    toHsl(); lclModValue( mnC2, transform.mnValue );             break;
+                case XML_satOff:    toHsl(); lclOffValue( mnC2, transform.mnValue );             break;
 
                 case XML_lum:
                     toHsl();
-                    lclSetValue( mnC3, aIt->mnValue );
+                    lclSetValue( mnC3, transform.mnValue );
                     // if color changes to black or white, it will stay gray if luminance changes again
                     if( (mnC3 == 0) || (mnC3 == MAX_PERCENT) ) mnC2 = 0;
                 break;
                 case XML_lumMod:
                     toHsl();
-                    lclModValue( mnC3, aIt->mnValue );
+                    lclModValue( mnC3, transform.mnValue );
                     // if color changes to black or white, it will stay gray if luminance changes again
                     if( (mnC3 == 0) || (mnC3 == MAX_PERCENT) ) mnC2 = 0;
                 break;
                 case XML_lumOff:
                     toHsl();
-                    lclOffValue( mnC3, aIt->mnValue );
+                    lclOffValue( mnC3, transform.mnValue );
                     // if color changes to black or white, it will stay gray if luminance changes again
                     if( (mnC3 == 0) || (mnC3 == MAX_PERCENT) ) mnC2 = 0;
                 break;
@@ -504,10 +504,10 @@ void Color::clearTransparence()
                 case XML_shade:
                     // shade: 0% = black, 100% = original color
                     toCrgb();
-                    OSL_ENSURE( (0 <= aIt->mnValue) && (aIt->mnValue <= MAX_PERCENT), "Color::getColor - invalid shade value" );
-                    if( (0 <= aIt->mnValue) && (aIt->mnValue <= MAX_PERCENT) )
+                    OSL_ENSURE( (0 <= transform.mnValue) && (transform.mnValue <= MAX_PERCENT), "Color::getColor - invalid shade value" );
+                    if( (0 <= transform.mnValue) && (transform.mnValue <= MAX_PERCENT) )
                     {
-                        double fFactor = static_cast< double >( aIt->mnValue ) / MAX_PERCENT;
+                        double fFactor = static_cast< double >( transform.mnValue ) / MAX_PERCENT;
                         mnC1 = static_cast< sal_Int32 >( mnC1 * fFactor );
                         mnC2 = static_cast< sal_Int32 >( mnC2 * fFactor );
                         mnC3 = static_cast< sal_Int32 >( mnC3 * fFactor );
@@ -516,10 +516,10 @@ void Color::clearTransparence()
                 case XML_tint:
                     // tint: 0% = white, 100% = original color
                     toCrgb();
-                    OSL_ENSURE( (0 <= aIt->mnValue) && (aIt->mnValue <= MAX_PERCENT), "Color::getColor - invalid tint value" );
-                    if( (0 <= aIt->mnValue) && (aIt->mnValue <= MAX_PERCENT) )
+                    OSL_ENSURE( (0 <= transform.mnValue) && (transform.mnValue <= MAX_PERCENT), "Color::getColor - invalid tint value" );
+                    if( (0 <= transform.mnValue) && (transform.mnValue <= MAX_PERCENT) )
                     {
-                        double fFactor = static_cast< double >( aIt->mnValue ) / MAX_PERCENT;
+                        double fFactor = static_cast< double >( transform.mnValue ) / MAX_PERCENT;
                         mnC1 = static_cast< sal_Int32 >( MAX_PERCENT - (MAX_PERCENT - mnC1) * fFactor );
                         mnC2 = static_cast< sal_Int32 >( MAX_PERCENT - (MAX_PERCENT - mnC2) * fFactor );
                         mnC3 = static_cast< sal_Int32 >( MAX_PERCENT - (MAX_PERCENT - mnC3) * fFactor );
@@ -528,17 +528,17 @@ void Color::clearTransparence()
                 case XLS_TOKEN( tint ):
                     // Excel tint: move luminance relative to current value
                     toHsl();
-                    OSL_ENSURE( (-MAX_PERCENT <= aIt->mnValue) && (aIt->mnValue <= MAX_PERCENT), "Color::getColor - invalid tint value" );
-                    if( (-MAX_PERCENT <= aIt->mnValue) && (aIt->mnValue < 0) )
+                    OSL_ENSURE( (-MAX_PERCENT <= transform.mnValue) && (transform.mnValue <= MAX_PERCENT), "Color::getColor - invalid tint value" );
+                    if( (-MAX_PERCENT <= transform.mnValue) && (transform.mnValue < 0) )
                     {
                         // negative: luminance towards 0% (black)
-                        lclModValue( mnC3, aIt->mnValue + MAX_PERCENT );
+                        lclModValue( mnC3, transform.mnValue + MAX_PERCENT );
                     }
-                    else if( (0 < aIt->mnValue) && (aIt->mnValue <= MAX_PERCENT) )
+                    else if( (0 < transform.mnValue) && (transform.mnValue <= MAX_PERCENT) )
                     {
                         // positive: luminance towards 100% (white)
                         mnC3 = MAX_PERCENT - mnC3;
-                        lclModValue( mnC3, MAX_PERCENT - aIt->mnValue );
+                        lclModValue( mnC3, MAX_PERCENT - transform.mnValue );
                         mnC3 = MAX_PERCENT - mnC3;
                     }
                 break;

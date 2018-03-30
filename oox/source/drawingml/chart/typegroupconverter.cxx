@@ -270,19 +270,21 @@ Reference< XLabeledDataSequence > TypeGroupConverter::createCategorySequence()
     /*  Find first existing category sequence. The bahaviour of Excel 2007 is
         different to Excel 2003, which always used the category sequence of the
         first series, even if it was empty. */
-    for( TypeGroupModel::SeriesVector::iterator aIt = mrModel.maSeries.begin(), aEnd = mrModel.maSeries.end(); !xLabeledSeq.is() && (aIt != aEnd); ++aIt )
+    for (auto const& elem : mrModel.maSeries)
     {
-        if( (*aIt)->maSources.has( SeriesModel::CATEGORIES ) )
+        if( elem->maSources.has( SeriesModel::CATEGORIES ) )
         {
-            SeriesConverter aSeriesConv( *this, **aIt );
+            SeriesConverter aSeriesConv(*this, *elem);
             xLabeledSeq = aSeriesConv.createCategorySequence( "categories" );
         }
-        else if( nMaxValues <= 0 && (*aIt)->maSources.has( SeriesModel::VALUES ) )
+        else if( nMaxValues <= 0 && elem->maSources.has( SeriesModel::VALUES ) )
         {
-            DataSourceModel *pValues = (*aIt)->maSources.get( SeriesModel::VALUES ).get();
+            DataSourceModel *pValues = elem->maSources.get( SeriesModel::VALUES ).get();
             if( pValues->mxDataSeq.is() )
                 nMaxValues = pValues->mxDataSeq.get()->maData.size();
         }
+        if (xLabeledSeq.is())
+            break;
     }
     /* n#839727 Create Category Sequence when none are found */
     if( !xLabeledSeq.is() && mrModel.maSeries.size() > 0 ) {
@@ -340,8 +342,8 @@ void TypeGroupConverter::convertFromModel( const Reference< XDiagram >& rxDiagra
         // create converter objects for all series models
         typedef RefVector< SeriesConverter > SeriesConvVector;
         SeriesConvVector aSeries;
-        for( TypeGroupModel::SeriesVector::iterator aIt = mrModel.maSeries.begin(), aEnd = mrModel.maSeries.end(); aIt != aEnd; ++aIt )
-            aSeries.push_back( std::make_shared<SeriesConverter>( *this, **aIt ) );
+        for (auto const& elemSeries : mrModel.maSeries)
+            aSeries.push_back( std::make_shared<SeriesConverter>(*this, *elemSeries) );
 
         // reverse series order for some unstacked 2D chart types
         if( maTypeInfo.mbReverseSeries && !mb3dChart && !isStacked() && !isPercent() )
@@ -413,9 +415,9 @@ void TypeGroupConverter::convertFromModel( const Reference< XDiagram >& rxDiagra
         }
         else
         {
-            for( SeriesConvVector::iterator aIt = aSeries.begin(), aEnd = aSeries.end(); aIt != aEnd; ++aIt )
+            for (auto const& elem : aSeries)
             {
-                SeriesConverter& rSeriesConv = **aIt;
+                SeriesConverter& rSeriesConv = *elem;
                 Reference< XDataSeries > xDataSeries = rSeriesConv.createDataSeries( *this, bVaryColorsByPoint );
                 insertDataSeries( xChartType, xDataSeries, nAxesSetIdx );
 

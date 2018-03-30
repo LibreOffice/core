@@ -116,10 +116,9 @@ bool isPercent( const RefVector<TypeGroupConverter>& rTypeGroups )
     if (rTypeGroups.empty())
         return false;
 
-    RefVector<TypeGroupConverter>::const_iterator it = rTypeGroups.begin(), itEnd = rTypeGroups.end();
-    for (; it != itEnd; ++it)
+    for (auto const& typeGroup : rTypeGroups)
     {
-        TypeGroupConverter& rConv = **it;
+        TypeGroupConverter& rConv = *typeGroup;
         if (!rConv.isPercent())
             return false;
     }

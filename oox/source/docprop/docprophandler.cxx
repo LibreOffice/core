@@ -201,9 +201,11 @@ uno::Sequence< OUString > OOXMLDocPropHandler::GetKeywordsSet( const OUString& a
         {
             uno::Sequence< OUString > aResult( aUtf8Result.size() );
             OUString* pResultValues = aResult.getArray();
-            for ( std::vector< std::string >::const_iterator i = aUtf8Result.begin();
-                  i != aUtf8Result.end(); ++i, ++pResultValues )
-                *pResultValues = OUString( i->c_str(), static_cast< sal_Int32 >( i->size() ),RTL_TEXTENCODING_UTF8 );
+            for (auto const& elem : aUtf8Result)
+            {
+                *pResultValues = OUString( elem.c_str(), static_cast< sal_Int32 >( elem.size() ),RTL_TEXTENCODING_UTF8 );
+                ++pResultValues;
+            }
 
             return aResult;
         }

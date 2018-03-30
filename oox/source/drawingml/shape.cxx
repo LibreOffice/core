@@ -429,16 +429,14 @@ Reference< XShape > const & Shape::createAndInsert(
     if ( mpTablePropertiesPtr.get() && rServiceName == "com.sun.star.drawing.TableShape" )
     {
         maSize.Width = 0;
-        for( std::vector< sal_Int32 >::const_iterator aTableColIter(mpTablePropertiesPtr->getTableGrid().begin());
-             aTableColIter != mpTablePropertiesPtr->getTableGrid().end(); ++aTableColIter )
+        for (auto const& elem : mpTablePropertiesPtr->getTableGrid())
         {
-            maSize.Width += *aTableColIter;
+            maSize.Width += elem;
         }
         maSize.Height = 0;
-        for( std::vector< ::oox::drawingml::table::TableRow >::const_iterator aTableRowIter(mpTablePropertiesPtr->getTableRows().begin());
-             aTableRowIter != mpTablePropertiesPtr->getTableRows().end(); ++aTableRowIter )
+        for (auto const& elem : mpTablePropertiesPtr->getTableRows())
         {
-            maSize.Height += (*aTableRowIter).getHeight();
+            maSize.Height += elem.getHeight();
         }
     }
 
@@ -1568,11 +1566,11 @@ uno::Sequence< uno::Sequence< uno::Any > >  Shape::resolveRelationshipsOfTypeFro
         if ( xImageRels )
         {
             xRelListTemp.realloc( xImageRels->size() );
-            for( ::std::map< OUString, core::Relation >::const_iterator aIt = xImageRels->begin(), aEnd = xImageRels->end(); aIt != aEnd; ++aIt )
+            for (auto const& imageRel : *xImageRels)
             {
                 uno::Sequence< uno::Any > diagramRelTuple (3);
                 // [0] => RID, [1] => InputStream [2] => extension
-                OUString sRelId = aIt->second.maId;
+                OUString sRelId = imageRel.second.maId;
 
                 diagramRelTuple[0] <<= sRelId;
                 OUString sTarget = xImageRels->getFragmentPathFromRelId( sRelId );
