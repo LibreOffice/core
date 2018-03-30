@@ -483,6 +483,7 @@ public:
     virtual vcl::Window *get_child() override;
     virtual const vcl::Window *get_child() const override;
     virtual bool set_property(const OString &rKey, const OUString &rValue) override;
+    virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
     ScrollBar& getVertScrollBar() { return *m_pVScroll; }
     ScrollBar& getHorzScrollBar() { return *m_pHScroll; }
     Size getVisibleChildSize() const;
