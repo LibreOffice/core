@@ -157,6 +157,7 @@ private:
     OUString m_sOLE;
 
     OUString m_sIllustration;
+    OUString m_sFigure;
     OUString m_sTable;
     OUString m_sText;
     OUString m_sDrawing;

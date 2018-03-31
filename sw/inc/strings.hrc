@@ -138,6 +138,7 @@
 #define STR_POOLCOLL_LABEL_TABLE                NC_("STR_POOLCOLL_LABEL_TABLE", "Table")
 #define STR_POOLCOLL_LABEL_FRAME                NC_("STR_POOLCOLL_LABEL_FRAME", "Text")
 #define STR_POOLCOLL_LABEL_DRAWING              NC_("STR_POOLCOLL_LABEL_DRAWING", "Drawing")
+#define STR_POOLCOLL_LABEL_FIGURE               NC_("STR_POOLCOLL_LABEL_FIGURE", "Figure")
 #define STR_POOLCOLL_JAKETADRESS                NC_("STR_POOLCOLL_JAKETADRESS", "Addressee")
 #define STR_POOLCOLL_SENDADRESS                 NC_("STR_POOLCOLL_SENDADRESS", "Sender")
 #define STR_POOLCOLL_TOX_IDXH                   NC_("STR_POOLCOLL_TOX_IDXH", "Index Heading")

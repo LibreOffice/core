@@ -1649,6 +1649,8 @@ void DocumentFieldsManager::InitFieldTypes()       // is being called by the CTO
                 SwResId(STR_POOLCOLL_LABEL_FRAME), nsSwGetSetExpType::GSE_SEQ) );
     mpFieldTypes->push_back( new SwSetExpFieldType(&m_rDoc,
                 SwResId(STR_POOLCOLL_LABEL_DRAWING), nsSwGetSetExpType::GSE_SEQ) );
+    mpFieldTypes->push_back( new SwSetExpFieldType(&m_rDoc,
+                SwResId(STR_POOLCOLL_LABEL_FIGURE), nsSwGetSetExpType::GSE_SEQ) );
 
     assert( mpFieldTypes->size() == INIT_FLDTYPES );
 }

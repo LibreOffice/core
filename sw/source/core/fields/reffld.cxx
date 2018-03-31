@@ -812,6 +812,7 @@ bool SwGetRefField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
                 case RES_POOLCOLL_LABEL_TABLE:
                 case RES_POOLCOLL_LABEL_FRAME:
                 case RES_POOLCOLL_LABEL_DRAWING:
+                case RES_POOLCOLL_LABEL_FIGURE:
                     SwStyleNameMapper::FillProgName(nPoolId, sTmp) ;
                 break;
             }
@@ -938,6 +939,9 @@ void SwGetRefField::ConvertProgrammaticToUIName()
                 break;
                 case RES_POOLCOLL_LABEL_DRAWING:
                     pResId = STR_POOLCOLL_LABEL_DRAWING;
+                break;
+                case RES_POOLCOLL_LABEL_FIGURE:
+                    pResId = STR_POOLCOLL_LABEL_FIGURE;
                 break;
             }
             if (pResId)

@@ -157,6 +157,7 @@ const struct SwTableEntry ExtraProgNameTable [] =
     ENTRY( "Illustration" ),
     ENTRY( "Table" ),
     ENTRY( "Text" ),
+    ENTRY( "Figure" ),//RES_POOLCOLL_LABEL_FIGURE
     ENTRY( "Frame contents" ),
     ENTRY( "Footnote" ),
     ENTRY( "Addressee" ),
@@ -364,6 +365,7 @@ lcl_GetSpecialExtraName(const OUString& rExtraName, const bool bIsUIName )
         RES_POOLCOLL_LABEL_ABB - RES_POOLCOLL_EXTRA_BEGIN,
         RES_POOLCOLL_LABEL_TABLE - RES_POOLCOLL_EXTRA_BEGIN,
         RES_POOLCOLL_LABEL_FRAME- RES_POOLCOLL_EXTRA_BEGIN,
+        RES_POOLCOLL_LABEL_FIGURE-RES_POOLCOLL_EXTRA_BEGIN,
         0
     };
     const sal_uInt16 * pIds;

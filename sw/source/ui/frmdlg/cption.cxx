@@ -160,7 +160,7 @@ SwCaptionDialog::SwCaptionDialog( vcl::Window *pParent, SwView &rV ) :
     sal_uInt16 nPoolId = 0;
     if (eType & SelectionType::Graphic)
     {
-        nPoolId = RES_POOLCOLL_LABEL_ABB;
+        nPoolId = RES_POOLCOLL_LABEL_FIGURE;
         sString = ::GetOldGrfCat();
         bCopyAttributes = true;
         sObjectName = rSh.GetFlyName();

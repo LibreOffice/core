@@ -590,6 +590,7 @@ void SAL_CALL SwXFieldMaster::setPropertyValue(
                 RES_POOLCOLL_LABEL_ABB - RES_POOLCOLL_EXTRA_BEGIN,
                 RES_POOLCOLL_LABEL_TABLE - RES_POOLCOLL_EXTRA_BEGIN,
                 RES_POOLCOLL_LABEL_FRAME- RES_POOLCOLL_EXTRA_BEGIN,
+                RES_POOLCOLL_LABEL_FIGURE - RES_POOLCOLL_EXTRA_BEGIN,
                 0
             };
             for(const sal_uInt16 * pIds = nIds; *pIds; ++pIds)
@@ -637,7 +638,8 @@ void SAL_CALL SwXFieldMaster::setPropertyValue(
             ( sTypeName == SwResId(STR_POOLCOLL_LABEL_TABLE) ||
               sTypeName == SwResId(STR_POOLCOLL_LABEL_DRAWING) ||
               sTypeName == SwResId(STR_POOLCOLL_LABEL_FRAME) ||
-              sTypeName == SwResId(STR_POOLCOLL_LABEL_ABB) )))
+              sTypeName == SwResId(STR_POOLCOLL_LABEL_ABB) ||
+              sTypeName == SwResId(STR_POOLCOLL_LABEL_FIGURE) )))
         {
             throw lang::IllegalArgumentException();
         }

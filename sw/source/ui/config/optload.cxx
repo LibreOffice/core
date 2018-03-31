@@ -487,6 +487,7 @@ SwCaptionOptPage::SwCaptionOptPage(vcl::Window* pParent, const SfxItemSet& rSet)
     SwStyleNameMapper::FillUIName(RES_POOLCOLL_LABEL_TABLE, m_sTable);
     SwStyleNameMapper::FillUIName(RES_POOLCOLL_LABEL_FRAME, m_sText);
     SwStyleNameMapper::FillUIName(RES_POOLCOLL_LABEL_DRAWING, m_sDrawing);
+    SwStyleNameMapper::FillUIName(RES_POOLCOLL_LABEL_FIGURE, m_sFigure);
 
     SwWrtShell* pSh = ::GetActiveWrtShell();
 
