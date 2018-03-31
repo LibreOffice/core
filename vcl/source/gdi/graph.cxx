@@ -612,6 +612,14 @@ void Graphic::setOriginURL(OUString const & rOriginURL)
     }
 }
 
+OString Graphic::getUniqueID() const
+{
+    OString aUniqueString;
+    if (mxImpGraphic)
+        aUniqueString = mxImpGraphic->getUniqueID();
+    return aUniqueString;
+}
+
 namespace {
 
 struct Id: public rtl::Static<cppu::OImplementationId, Id> {};

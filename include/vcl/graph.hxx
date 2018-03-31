@@ -201,6 +201,8 @@ public:
     OUString getOriginURL() const;
     void setOriginURL(OUString const & rOriginURL);
 
+    OString getUniqueID() const;
+
 public:
 
     std::shared_ptr<GraphicReader>& GetContext();
