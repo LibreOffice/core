@@ -55,7 +55,6 @@
 #include <editeng/outlobj.hxx>
 #include <CustomAnimationPreset.hxx>
 #include <Outliner.hxx>
-#include <sdresid.hxx>
 #include <comphelper/serviceinfohelper.hxx>
 #include <svx/svdogrp.hxx>
 #include <o3tl/typed_flags_set.hxx>
@@ -71,7 +70,6 @@
 #include <unopage.hxx>
 #include <DrawDocShell.hxx>
 #include <glob.hxx>
-#include <strings.hrc>
 #include "unolayer.hxx"
 #include <imapinfo.hxx>
 #include <EffectMigration.hxx>

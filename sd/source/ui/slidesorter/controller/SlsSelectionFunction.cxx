@@ -56,8 +56,6 @@
 #include <ViewShell.hxx>
 #include <FrameView.hxx>
 #include <app.hrc>
-#include <sdresid.hxx>
-#include <strings.hrc>
 #include <o3tl/deleter.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/dispatch.hxx>

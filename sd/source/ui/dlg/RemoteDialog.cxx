@@ -8,7 +8,6 @@
  */
 
 #include <sdattr.hxx>
-#include <sdresid.hxx>
 #include <cusshow.hxx>
 
 #include "RemoteDialog.hxx"

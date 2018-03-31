@@ -24,7 +24,6 @@
 #include <sfx2/request.hxx>
 
 #include <app.hrc>
-#include <strings.hrc>
 
 #include <Window.hxx>
 #include <drawdoc.hxx>

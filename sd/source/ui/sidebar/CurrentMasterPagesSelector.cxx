@@ -29,7 +29,6 @@
 #include <app.hrc>
 #include <DrawDocShell.hxx>
 
-#include <sdresid.hxx>
 #include <helpids.h>
 
 #include <vcl/image.hxx>

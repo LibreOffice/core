@@ -55,8 +55,6 @@
 #include <DrawDocShell.hxx>
 #include <sdpage.hxx>
 
-#include <sdresid.hxx>
-#include <strings.hrc>
 #include <app.hrc>
 #include <sdmod.hxx>
 #include <sdxfer.hxx>

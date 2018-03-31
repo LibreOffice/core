@@ -33,7 +33,6 @@
 
 #include <sdpage.hxx>
 #include <drawdoc.hxx>
-#include <sdresid.hxx>
 #include <sdattr.hxx>
 #include "htmlex.hxx"
 #include <sdhtmlfilter.hxx>

@@ -46,7 +46,6 @@
 #include <svx/svdotable.hxx>
 
 #include <app.hrc>
-#include <strings.hrc>
 
 #include <GraphicDocShell.hxx>
 #include <sdmod.hxx>

@@ -20,9 +20,7 @@
 #include <svl/itemset.hxx>
 #include <vcl/layout.hxx>
 
-#include <strings.hrc>
 #include <sdattr.hxx>
-#include <sdresid.hxx>
 #include <layeroptionsdlg.hxx>
 
 SdInsertLayerDlg::SdInsertLayerDlg( vcl::Window* pWindow, const SfxItemSet& rInAttrs,

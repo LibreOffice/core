@@ -22,7 +22,6 @@
 
 #include <svtools/transfer.hxx>
 
-#include <sdresid.hxx>
 #include <pres.hxx>
 #include <sddllapi.h>
 #include <svtools/treelistbox.hxx>

@@ -20,8 +20,6 @@
 #include <ImpressViewShellBase.hxx>
 
 #include <DrawDocShell.hxx>
-#include <sdresid.hxx>
-#include <strings.hrc>
 #include <app.hrc>
 #include <framework/FrameworkHelper.hxx>
 #include <framework/ImpressModule.hxx>

@@ -20,8 +20,6 @@
 #include <GraphicViewShellBase.hxx>
 
 #include <GraphicDocShell.hxx>
-#include <sdresid.hxx>
-#include <strings.hrc>
 #include <app.hrc>
 #include <framework/DrawModule.hxx>
 #include <framework/FrameworkHelper.hxx>

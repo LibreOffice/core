@@ -27,8 +27,6 @@
 #include <framework/Pane.hxx>
 #include <DrawController.hxx>
 
-#include <sdresid.hxx>
-#include <strings.hrc>
 #include <Client.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/tabpage.hxx>

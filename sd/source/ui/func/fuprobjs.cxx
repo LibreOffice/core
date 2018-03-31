@@ -25,10 +25,8 @@
 
 #include <app.hrc>
 
-#include <strings.hrc>
 #include <strings.hxx>
 
-#include <sdresid.hxx>
 #include <drawdoc.hxx>
 #include <OutlineViewShell.hxx>
 #include <ViewShell.hxx>

@@ -25,7 +25,6 @@
 
 #include <sdattr.hxx>
 #include <present.hxx>
-#include <sdresid.hxx>
 #include <cusshow.hxx>
 #include <customshowlist.hxx>
 

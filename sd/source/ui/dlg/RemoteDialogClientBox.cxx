@@ -30,6 +30,7 @@
 #include <vcl/settings.hxx>
 #include <vcl/builderfactory.hxx>
 
+#include <sdresid.hxx>
 #include <strings.hrc>
 
 using namespace std;

@@ -23,7 +23,6 @@
 #include <sfx2/objsh.hxx>
 #include <svx/svxdlg.hxx>
 
-#include <sdresid.hxx>
 #include <dlg_char.hxx>
 #include <svx/svxids.hrc>
 #include <svl/intitem.hxx>

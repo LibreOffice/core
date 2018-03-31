@@ -39,7 +39,6 @@
 
 #include <DrawDocShell.hxx>
 #include <tabtempl.hxx>
-#include <sdresid.hxx>
 #include <dlg_char.hxx>
 #include <paragr.hxx>
 #include <svx/flagsdef.hxx>

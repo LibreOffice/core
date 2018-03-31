@@ -30,8 +30,6 @@
 
 #include <editeng/outliner.hxx>
 #include <paragr.hxx>
-#include <sdresid.hxx>
-#include <strings.hrc>
 #include <sdattr.hrc>
 
 class SdParagraphNumTabPage : public SfxTabPage

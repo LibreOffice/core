@@ -45,8 +45,6 @@
 #include <drawdoc.hxx>
 #include <sdpage.hxx>
 #include <Window.hxx>
-#include <sdresid.hxx>
-#include <strings.hrc>
 
 #include <svl/itempool.hxx>
 #include <svx/svdpagv.hxx>

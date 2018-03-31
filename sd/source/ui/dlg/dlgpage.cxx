@@ -21,7 +21,6 @@
 #include <svx/dialogs.hrc>
 #include <svx/drawitem.hxx>
 
-#include <sdresid.hxx>
 #include <dlgpage.hxx>
 
 #include <DrawDocShell.hxx>

@@ -26,8 +26,6 @@
 #include <DrawController.hxx>
 #include <ViewShellBase.hxx>
 #include <ViewShellManager.hxx>
-#include <strings.hrc>
-#include <sdresid.hxx>
 #include <com/sun/star/drawing/framework/XControllerManager.hpp>
 #include <com/sun/star/drawing/framework/XConfigurationController.hpp>
 

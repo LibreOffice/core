@@ -44,9 +44,6 @@
 #include <com/sun/star/i18n/TextConversionOption.hpp>
 #include <sfx2/notebookbar/SfxNotebookBar.hxx>
 
-#include <strings.hrc>
-
-
 #include <sdmod.hxx>
 #include <drawdoc.hxx>
 #include <sdpage.hxx>

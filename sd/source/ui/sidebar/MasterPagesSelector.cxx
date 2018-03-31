@@ -30,7 +30,6 @@
 #include <DrawDocShell.hxx>
 #include <sdpage.hxx>
 #include <glob.hxx>
-#include <strings.hrc>
 #include <app.hrc>
 
 #include <DrawViewShell.hxx>
@@ -39,7 +38,6 @@
 #include "PreviewValueSet.hxx"
 #include <ViewShellBase.hxx>
 #include <sfx2/objface.hxx>
-#include <sdresid.hxx>
 #include <drawview.hxx>
 #include <vcl/image.hxx>
 #include <vcl/floatwin.hxx>

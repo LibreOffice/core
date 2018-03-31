@@ -36,9 +36,6 @@
 #include <svl/style.hxx>
 #include <drawdoc.hxx>
 
-#include <sdresid.hxx>
-
-#include <strings.hrc>
 #include <strings.hxx>
 #include <bulmaper.hxx>
 #include <DrawDocShell.hxx>

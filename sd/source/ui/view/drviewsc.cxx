@@ -39,10 +39,8 @@
 #include <sfx2/viewfrm.hxx>
 
 #include <app.hrc>
-#include <strings.hrc>
 #include <Window.hxx>
 #include <imapinfo.hxx>
-#include <sdresid.hxx>
 #include <drawdoc.hxx>
 #include <DrawDocShell.hxx>
 #include <drawview.hxx>

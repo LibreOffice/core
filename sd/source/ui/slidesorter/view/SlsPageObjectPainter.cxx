@@ -29,7 +29,6 @@
 #include <controller/SlsProperties.hxx>
 #include <Window.hxx>
 #include <sdpage.hxx>
-#include <sdresid.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/vclenum.hxx>
 #include <vcl/virdev.hxx>

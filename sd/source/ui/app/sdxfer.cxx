@@ -58,8 +58,6 @@
 #include <drawview.hxx>
 #include <drawdoc.hxx>
 #include <stlpool.hxx>
-#include <strings.hrc>
-#include <sdresid.hxx>
 #include <imapinfo.hxx>
 #include <sdxfer.hxx>
 #include <unomodel.hxx>
