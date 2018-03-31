@@ -31,9 +31,35 @@ class GfxLink;
 struct ImpSwapFile;
 class GraphicConversionParameters;
 
+class GraphicID
+{
+private:
+    sal_uInt32  mnID1;
+    sal_uInt32  mnID2;
+    sal_uInt32  mnID3;
+    BitmapChecksum  mnID4;
+
+public:
+    GraphicID(ImpGraphic& rGraphic);
+
+    bool operator==(const GraphicID& rID) const
+    {
+        return rID.mnID1 == mnID1 && rID.mnID2 == mnID2 &&
+               rID.mnID3 == mnID3 && rID.mnID4 == mnID4;
+    }
+
+    bool IsEmpty() const
+    {
+        return 0 == mnID4;
+    }
+
+    OString getIDString() const;
+};
+
 class ImpGraphic final
 {
     friend class Graphic;
+    friend class GraphicID;
 
 private:
 
@@ -51,6 +77,7 @@ private:
     VectorGraphicDataPtr         maVectorGraphicData;
     css::uno::Sequence<sal_Int8> maPdfData;
     OUString msOriginURL;
+    std::unique_ptr<GraphicID>   mpGraphicID;
 
 private:
 
@@ -79,6 +106,13 @@ private:
     void setOriginURL(OUString const & rOriginURL)
     {
         msOriginURL = rOriginURL;
+    }
+
+    OString getUniqueID()
+    {
+        if (!mpGraphicID)
+            mpGraphicID.reset(new GraphicID(*this));
+        return mpGraphicID->getIDString();
     }
 
     void                ImplCreateSwapInfo();
