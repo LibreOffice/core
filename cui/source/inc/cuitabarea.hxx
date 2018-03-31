@@ -525,11 +525,13 @@ private:
 
     double                     m_fObjectWidth;
     double                     m_fObjectHeight;
+    bool                       m_bLogicalSize;
 
     XFillAttrSetItem           m_aXFillAttr;
     SfxItemSet&                m_rXFSet;
     const SdrView*             mpView;
     MapUnit                    mePoolUnit;
+    FieldUnit                  meFieldUnit;
     Size                       rBitmapSize;
     Size                       rFilledSize;
     Size                       rZoomedSize;
