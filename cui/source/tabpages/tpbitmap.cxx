@@ -211,7 +211,8 @@ bool SvxBitmapTabPage::FillItemSet( SfxItemSet* rAttrs )
         rAttrs->Put(XFillBitmapItem(aString, pXBitmapEntry->GetGraphicObject()));
     }
 
-    BitmapStyle eStylePos = static_cast<BitmapStyle>(m_pBitmapStyleLB->GetSelectedEntryPos());        bool bIsStretched( eStylePos == STRETCHED );
+    BitmapStyle eStylePos = static_cast<BitmapStyle>(m_pBitmapStyleLB->GetSelectedEntryPos());
+    bool bIsStretched( eStylePos == STRETCHED );
     bool bIsTiled( eStylePos == TILED );
 
     rAttrs->Put( XFillBmpTileItem(bIsTiled) );
@@ -227,15 +228,15 @@ bool SvxBitmapTabPage::FillItemSet( SfxItemSet* rAttrs )
             {
                 sal_Int64 nWidthPercent = m_pBitmapWidth->Denormalize(m_pBitmapWidth->GetValue());
                 sal_Int64 nHeightPercent = m_pBitmapHeight->Denormalize(m_pBitmapHeight->GetValue());
-                if(eStylePos == CUSTOM && m_pTsbScale->IsEnabled() && m_pTsbScale->GetState() == TRISTATE_TRUE)
+                if(m_pTsbScale->IsEnabled() && m_pTsbScale->GetState() == TRISTATE_TRUE)
                 {
                     aSetBitmapSize.setWidth( -nWidthPercent );
                     aSetBitmapSize.setHeight( -nHeightPercent );
                 }
                 else
                 {
-                    aSetBitmapSize.setWidth( static_cast<long>(nWidthPercent*rBitmapSize.Width()/100) );
-                    aSetBitmapSize.setHeight( static_cast<long>(nHeightPercent*rBitmapSize.Height()/100) );
+                    aSetBitmapSize.setWidth( GetCoreValue(*m_pBitmapWidth, mePoolUnit) );
+                    aSetBitmapSize.setHeight( GetCoreValue(*m_pBitmapHeight, mePoolUnit) );
                 }
                 break;
             }
