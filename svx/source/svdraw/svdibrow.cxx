@@ -489,18 +489,18 @@ bool SdrItemBrowserControl::BeginChangeEntry(std::size_t nPos)
         pEditControl->GrabFocus();
         pEditControl->SetSelection(Selection(SELECTION_MIN,SELECTION_MAX));
         vcl::Window* pParent=GetParent();
-        aWNamMerk=pParent->GetText();
-        OUString aNeuNam(aWNamMerk);
-        aNeuNam += " ";
-        aNeuNam += pEntry->GetItemTypeStr();
+        aWNameMemorized=pParent->GetText();
+        OUString aNewName(aWNameMemorized);
+        aNewName += " ";
+        aNewName += pEntry->GetItemTypeStr();
         if (pEntry->bCanNum) {
-            aNeuNam += ": ";
-            aNeuNam += OUString::number(pEntry->nMin);
-            aNeuNam += "..";
-            aNeuNam += OUString::number(pEntry->nMax);
+            aNewName += ": ";
+            aNewName += OUString::number(pEntry->nMin);
+            aNewName += "..";
+            aNewName += OUString::number(pEntry->nMax);
         }
-        aNeuNam += " - Type 'del' to reset to default.";
-        pParent->SetText(aNeuNam);
+        aNewName += " - Type 'del' to reset to default.";
+        pParent->SetText(aNewName);
         pCurrentChangeEntry=new ImpItemListRow(*pEntry);
         bRet = true;
     }
@@ -523,7 +523,7 @@ void SdrItemBrowserControl::BreakChangeEntry()
         delete pCurrentChangeEntry;
         pCurrentChangeEntry=nullptr;
         vcl::Window* pParent=GetParent();
-        pParent->SetText(aWNamMerk);
+        pParent->SetText(aWNameMemorized);
         SetMode(MYBROWSEMODE);
     }
 }
