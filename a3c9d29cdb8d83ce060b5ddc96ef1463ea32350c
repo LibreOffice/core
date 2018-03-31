@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_c506df1f",
+        "filename": "sw/source/core/text/pormulti.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1000821
+      },
+      "writtenOn": "2018-03-31T22:42:18Z",
+      "side": 0,
+      "message": "The code block is removed without any substitution of equivalent functional code block.",
+      "range": {
+        "startLine": 97,
+        "startChar": 0,
+        "endLine": 104,
+        "endChar": 9
+      },
+      "revId": "a3c9d29cdb8d83ce060b5ddc96ef1463ea32350c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_e503e30d",
+        "filename": "sw/source/core/text/pormulti.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1000821
+      },
+      "writtenOn": "2018-03-31T22:42:18Z",
+      "side": 0,
+      "message": "This is used below, please check.",
+      "range": {
+        "startLine": 50,
+        "startChar": 12,
+        "endLine": 50,
+        "endChar": 13
+      },
+      "revId": "a3c9d29cdb8d83ce060b5ddc96ef1463ea32350c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_6517f351",
+        "filename": "sw/source/core/text/pormulti.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 1000821
+      },
+      "writtenOn": "2018-03-31T22:42:18Z",
+      "side": 0,
+      "message": "Why is this removed?",
+      "range": {
+        "startLine": 136,
+        "startChar": 0,
+        "endLine": 136,
+        "endChar": 73
+      },
+      "revId": "a3c9d29cdb8d83ce060b5ddc96ef1463ea32350c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
