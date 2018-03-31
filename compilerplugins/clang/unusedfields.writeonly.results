@@ -54,7 +54,7 @@ canvas/source/cairo/cairo_spritedevicehelper.hxx:77
     cairocanvas::SpriteDeviceHelper mbFullScreen _Bool
 canvas/source/cairo/cairo_spritehelper.hxx:103
     cairocanvas::SpriteHelper mbTextureDirty _Bool
-canvas/source/opengl/ogl_spritedevicehelper.hxx:126
+canvas/source/opengl/ogl_spritedevicehelper.hxx:124
     oglcanvas::SpriteDeviceHelper mpDevice css::rendering::XGraphicDevice *
 chart2/inc/ChartModel.hxx:484
     chart::ChartModel mnStart sal_Int32
@@ -162,7 +162,7 @@ dbaccess/source/core/dataaccess/documentdefinition.cxx:290
     dbaccess::LifetimeCoupler m_xClient Reference<class com::sun::star::uno::XInterface>
 desktop/qa/desktop_lib/test_desktop_lib.cxx:178
     DesktopLOKTest m_bModified _Bool
-desktop/source/deployment/gui/dp_gui_updateinstalldialog.cxx:118
+desktop/source/deployment/gui/dp_gui_updateinstalldialog.cxx:117
     dp_gui::UpdateCommandEnv m_installThread ::rtl::Reference<UpdateInstallDialog::Thread>
 desktop/unx/source/splashx.c:371
      input_mode long
@@ -180,23 +180,23 @@ drawinglayer/source/tools/emfppen.hxx:58
     emfplushelper::EMFPPen dashOffset float
 drawinglayer/source/tools/emfppen.hxx:60
     emfplushelper::EMFPPen alignment sal_Int32
-embeddedobj/source/inc/oleembobj.hxx:127
+embeddedobj/source/inc/oleembobj.hxx:129
     OleEmbeddedObject m_nTargetState sal_Int32
-embeddedobj/source/inc/oleembobj.hxx:139
+embeddedobj/source/inc/oleembobj.hxx:141
     OleEmbeddedObject m_xClosePreventer css::uno::Reference<css::util::XCloseListener>
-embeddedobj/source/inc/oleembobj.hxx:161
-    OleEmbeddedObject m_bHasSizeToSet _Bool
-embeddedobj/source/inc/oleembobj.hxx:162
-    OleEmbeddedObject m_aSizeToSet css::awt::Size
 embeddedobj/source/inc/oleembobj.hxx:163
+    OleEmbeddedObject m_bHasSizeToSet _Bool
+embeddedobj/source/inc/oleembobj.hxx:164
+    OleEmbeddedObject m_aSizeToSet css::awt::Size
+embeddedobj/source/inc/oleembobj.hxx:165
     OleEmbeddedObject m_nAspectToSet sal_Int64
-embeddedobj/source/inc/oleembobj.hxx:168
-    OleEmbeddedObject m_bGotStatus _Bool
-embeddedobj/source/inc/oleembobj.hxx:169
-    OleEmbeddedObject m_nStatus sal_Int64
 embeddedobj/source/inc/oleembobj.hxx:170
+    OleEmbeddedObject m_bGotStatus _Bool
+embeddedobj/source/inc/oleembobj.hxx:171
+    OleEmbeddedObject m_nStatus sal_Int64
+embeddedobj/source/inc/oleembobj.hxx:172
     OleEmbeddedObject m_nStatusAspect sal_Int64
-embeddedobj/source/inc/oleembobj.hxx:184
+embeddedobj/source/inc/oleembobj.hxx:186
     OleEmbeddedObject m_bFromClipboard _Bool
 emfio/inc/mtftools.hxx:121
     emfio::LOGFONTW lfOrientation sal_Int32
@@ -222,6 +222,16 @@ include/basic/basmgr.hxx:52
     BasicError nReason enum BasicErrorReason
 include/basic/sbxvar.hxx:70
     SbxValues::(anonymous) pData void *
+include/canvas/base/canvascustomspritehelper.hxx:207
+    canvas::CanvasCustomSpriteHelper mbAlphaDirty _Bool
+include/canvas/base/canvascustomspritehelper.hxx:210
+    canvas::CanvasCustomSpriteHelper mbPositionDirty _Bool
+include/canvas/base/canvascustomspritehelper.hxx:216
+    canvas::CanvasCustomSpriteHelper mbClipDirty _Bool
+include/canvas/base/canvascustomspritehelper.hxx:219
+    canvas::CanvasCustomSpriteHelper mbPrioDirty _Bool
+include/canvas/base/canvascustomspritehelper.hxx:222
+    canvas::CanvasCustomSpriteHelper mbVisibilityDirty _Bool
 include/editeng/adjustitem.hxx:39
     SvxAdjustItem bLeft _Bool
 include/LibreOfficeKit/LibreOfficeKit.h:108
@@ -242,10 +252,14 @@ include/svx/float3d.hxx:177
     Svx3DWin pControllerItem class Svx3DCtrlItem *
 include/svx/imapdlg.hxx:118
     SvxIMapDlg aIMapItem class SvxIMapDlgItem
-include/svx/srchdlg.hxx:231
-    SvxSearchDialog pSearchController class SvxSearchController *
+include/svx/langbox.hxx:158
+    LanguageBox m_bWithCheckmark _Bool
 include/svx/srchdlg.hxx:232
+    SvxSearchDialog pSearchController class SvxSearchController *
+include/svx/srchdlg.hxx:233
     SvxSearchDialog pOptionsController class SvxSearchController *
+include/svx/xmlgrhlp.hxx:70
+    SvXMLGraphicHelper mbDirect _Bool
 include/vcl/opengl/OpenGLContext.hxx:41
     GLWindow bMultiSampleSupported _Bool
 include/vcl/salnativewidgets.hxx:415
@@ -260,8 +274,6 @@ include/xmloff/shapeimport.hxx:181
     SdXML3DSceneAttributesHelper mbVPNUsed _Bool
 include/xmloff/shapeimport.hxx:182
     SdXML3DSceneAttributesHelper mbVUPUsed _Bool
-include/xmloff/xmlimp.hxx:241
-    SvXMLImport mbIsGraphicLoadOnDemandSupported _Bool
 l10ntools/inc/common.hxx:31
     common::HandledArgs m_bUTF8BOM _Bool
 libreofficekit/qa/gtktiledviewer/gtv-application-window.hxx:61
@@ -316,7 +328,7 @@ sc/inc/compiler.hxx:259
     ScCompiler::AddInMap pEnglish const char *
 sc/inc/compiler.hxx:261
     ScCompiler::AddInMap pUpper const char *
-sc/inc/document.hxx:2512
+sc/inc/document.hxx:2513
     ScMutationDisable mpDocument class ScDocument *
 sc/inc/pivot.hxx:74
     ScDPLabelData mnFlags sal_Int32
@@ -356,7 +368,7 @@ sc/source/filter/excel/xltools.cxx:102
      smD union sal_math_Double
 sc/source/filter/inc/exp_op.hxx:52
     ExportBiff5 pExcRoot struct RootData *
-sc/source/filter/inc/imp_op.hxx:88
+sc/source/filter/inc/imp_op.hxx:86
     ImportExcel::LastFormula mpCell class ScFormulaCell *
 sc/source/filter/inc/orcusinterface.hxx:387
     ScOrcusStyles::xf mnStyleXf size_t
@@ -468,7 +480,7 @@ svx/source/table/tablertfimporter.cxx:53
     sdr::table::RTFCellDefault maItemSet class SfxItemSet
 sw/inc/shellio.hxx:145
     SwReader aFileName class rtl::OUString
-sw/source/core/doc/tblafmt.cxx:184
+sw/source/core/doc/tblafmt.cxx:186
     SwAfVersions m_nVerticalAlignmentVersion sal_uInt16
 sw/source/core/inc/swfont.hxx:978
     SvStatistics nGetStretchTextSize sal_uInt16
@@ -564,5 +576,5 @@ vcl/unx/gtk/hudawareness.cxx:20
     (anonymous) connection GDBusConnection *
 vcl/unx/gtk/hudawareness.cxx:23
     (anonymous) notify GDestroyNotify
-writerfilter/source/dmapper/PropertyMap.hxx:186
+writerfilter/source/dmapper/PropertyMap.hxx:199
     writerfilter::dmapper::SectionPropertyMap m_nDebugSectionNumber sal_Int32

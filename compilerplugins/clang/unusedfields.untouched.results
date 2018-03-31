@@ -46,7 +46,7 @@ cppu/source/threadpool/threadpool.cxx:355
     _uno_ThreadPool dummy sal_Int32
 cppu/source/typelib/typelib.cxx:62
     AlignSize_Impl nInt16 sal_Int16
-cui/source/inc/insrc.hxx:33
+cui/source/inc/insrc.hxx:31
     SvxInsRowColDlg m_xBeforeBtn std::unique_ptr<weld::RadioButton>
 dbaccess/source/sdbtools/inc/connectiondependent.hxx:116
     sdbtools::ConnectionDependentComponent::EntryGuard m_aMutexGuard ::osl::MutexGuard
@@ -70,31 +70,35 @@ include/sfx2/msg.hxx:117
     SfxType0 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
 include/sfx2/msg.hxx:119
     SfxType0 nAttribs sal_uInt16
-include/svtools/genericunodialog.hxx:170
+include/svtools/genericunodialog.hxx:219
     svt::UnoDialogEntryGuard m_aGuard ::osl::MutexGuard
 include/svtools/unoevent.hxx:162
     SvEventDescriptor xParentRef css::uno::Reference<css::uno::XInterface>
 include/svx/ClassificationDialog.hxx:63
     svx::ClassificationDialog m_nInsertMarkings sal_Int16
-include/svx/unoshape.hxx:676
-    SvxGraphicObject referer_ class rtl::OUString
-include/vcl/pdfwriter.hxx:549
+include/svx/xmlgrhlp.hxx:60
+    SvXMLGraphicHelper maGrfURLs SvXMLGraphicHelper::URLPairVector
+include/svx/xmlgrhlp.hxx:61
+    SvXMLGraphicHelper maGrfObjs SvXMLGraphicHelper::GraphicObjectVector
+include/svx/xmlgrhlp.hxx:63
+    SvXMLGraphicHelper maURLSet ::std::set<OUString>
+include/vcl/pdfwriter.hxx:548
     vcl::PDFWriter::PDFSignContext m_pDerEncoded sal_Int8 *
-include/vcl/pdfwriter.hxx:551
+include/vcl/pdfwriter.hxx:550
     vcl::PDFWriter::PDFSignContext m_nDerEncoded sal_Int32
-include/vcl/pdfwriter.hxx:553
+include/vcl/pdfwriter.hxx:552
     vcl::PDFWriter::PDFSignContext m_pByteRange1 void *
-include/vcl/pdfwriter.hxx:555
+include/vcl/pdfwriter.hxx:554
     vcl::PDFWriter::PDFSignContext m_nByteRange1 sal_Int32
-include/vcl/pdfwriter.hxx:557
+include/vcl/pdfwriter.hxx:556
     vcl::PDFWriter::PDFSignContext m_pByteRange2 void *
-include/vcl/pdfwriter.hxx:559
+include/vcl/pdfwriter.hxx:558
     vcl::PDFWriter::PDFSignContext m_nByteRange2 sal_Int32
-include/vcl/pdfwriter.hxx:560
+include/vcl/pdfwriter.hxx:559
     vcl::PDFWriter::PDFSignContext m_aSignTSA class rtl::OUString
-include/vcl/pdfwriter.hxx:561
+include/vcl/pdfwriter.hxx:560
     vcl::PDFWriter::PDFSignContext m_aSignPassword class rtl::OUString
-include/vcl/pdfwriter.hxx:563
+include/vcl/pdfwriter.hxx:562
     vcl::PDFWriter::PDFSignContext m_rCMSHexBuffer class rtl::OStringBuffer &
 include/vcl/uitest/uiobject.hxx:262
     TabPageUIObject mxTabPage VclPtr<class TabPage>
@@ -156,9 +160,9 @@ sc/inc/interpretercontext.hxx:23
     ScInterpreterContext mrDoc const class ScDocument &
 sc/qa/unit/ucalc_column.cxx:103
     aInputs aName const char *
-sc/source/core/data/document.cxx:1263
+sc/source/core/data/document.cxx:1262
     (anonymous namespace)::BroadcastRecalcOnRefMoveHandler aSwitch sc::AutoCalcSwitch
-sc/source/core/data/document.cxx:1264
+sc/source/core/data/document.cxx:1263
     (anonymous namespace)::BroadcastRecalcOnRefMoveHandler aBulk class ScBulkBroadcast
 sc/source/core/data/formulacell.cxx:1741
     (anonymous namespace)::StackCleaner pInt std::unique_ptr<ScInterpreter>
@@ -166,7 +170,7 @@ sc/source/filter/inc/orcusinterface.hxx:559
     ScOrcusFactory maRefResolver class ScOrcusRefResolver
 sc/source/filter/inc/sheetdatacontext.hxx:61
     oox::xls::SheetDataContext aReleaser class SolarMutexReleaser
-sc/source/ui/inc/docsh.hxx:441
+sc/source/ui/inc/docsh.hxx:445
     ScDocShellModificator mpProtector std::unique_ptr<ScRefreshTimerProtector>
 sd/source/ui/remotecontrol/ZeroconfService.hxx:36
     sd::ZeroconfService port uint
@@ -174,7 +178,7 @@ sd/source/ui/slidesorter/view/SlsLayouter.cxx:61
     sd::slidesorter::view::Layouter::Implementation mpTheme std::shared_ptr<view::Theme>
 sd/source/ui/table/TableDesignPane.hxx:113
     sd::TableDesignPane aImpl class sd::TableDesignWidget
-sd/source/ui/view/DocumentRenderer.cxx:1320
+sd/source/ui/view/DocumentRenderer.cxx:1319
     sd::DocumentRenderer::Implementation mxObjectShell SfxObjectShellRef
 sd/source/ui/view/viewshel.cxx:1217
     sd::KeepSlideSorterInSyncWithPageChanges m_aDrawLock sd::slidesorter::view::class SlideSorterView::DrawLock
@@ -184,13 +188,13 @@ sd/source/ui/view/viewshel.cxx:1219
     sd::KeepSlideSorterInSyncWithPageChanges m_aUpdateLock sd::slidesorter::controller::class PageSelector::UpdateLock
 sd/source/ui/view/viewshel.cxx:1220
     sd::KeepSlideSorterInSyncWithPageChanges m_aContext sd::slidesorter::controller::class SelectionObserver::Context
-sd/source/ui/view/ViewShellBase.cxx:194
+sd/source/ui/view/ViewShellBase.cxx:193
     sd::ViewShellBase::Implementation mpPageCacheManager std::shared_ptr<slidesorter::cache::PageCacheManager>
 sfx2/source/doc/doctempl.cxx:115
     DocTempl::DocTempl_EntryData_Impl mxObjShell class SfxObjectShellLock
-sfx2/source/view/viewfrm.cxx:162
+sfx2/source/view/viewfrm.cxx:159
     (anonymous namespace)::SfxEditDocumentDialog m_xEditDocument std::unique_ptr<weld::Button>
-sfx2/source/view/viewfrm.cxx:163
+sfx2/source/view/viewfrm.cxx:160
     (anonymous namespace)::SfxEditDocumentDialog m_xCancel std::unique_ptr<weld::Button>
 starmath/inc/smmod.hxx:69
     SmModule mpLocSymbolData std::unique_ptr<SmLocalizedSymbolData>
@@ -214,17 +218,21 @@ svtools/source/svhtml/htmlkywd.cxx:560
     HTML_OptionEntry::(anonymous) sToken const sal_Char *
 svtools/source/svhtml/htmlkywd.cxx:561
     HTML_OptionEntry::(anonymous) pUToken const class rtl::OUString *
+sw/inc/ddefld.hxx:42
+    sw::InRangeSearchHint m_rNodes class SwNodes &
 sw/source/core/crsr/crbm.cxx:64
     (anonymous namespace)::CursorStateHelper m_aSaveState class SwCursorSaveState
 sw/source/core/frmedt/fetab.cxx:77
     TableWait m_pWait const std::unique_ptr<SwWait>
 sw/source/core/layout/dbg_lay.cxx:164
     SwImplEnterLeave nAction enum DbgAction
-sw/source/uibase/inc/splittbl.hxx:32
+sw/source/uibase/inc/splittbl.hxx:30
     SwSplitTableDlg m_xHorzBox std::unique_ptr<weld::RadioButton>
-sw/source/uibase/inc/splittbl.hxx:33
+sw/source/uibase/inc/splittbl.hxx:31
     SwSplitTableDlg m_xContentCopyRB std::unique_ptr<weld::RadioButton>
-sw/source/uibase/inc/tautofmt.hxx:43
+sw/source/uibase/inc/srtdlg.hxx:32
+    SwSortDlg m_xTypLbl std::unique_ptr<weld::Label>
+sw/source/uibase/inc/tautofmt.hxx:41
     SwAutoFormatDlg m_xFormatting std::unique_ptr<weld::Container>
 sw/source/uibase/inc/uivwimp.hxx:95
     SwView_Impl xTmpSelDocSh class SfxObjectShellLock
@@ -236,7 +244,7 @@ unoidl/source/unoidlprovider.cxx:672
     unoidl::detail::(anonymous namespace)::UnoidlCursor reference1_ rtl::Reference<UnoidlProvider>
 unoidl/source/unoidlprovider.cxx:673
     unoidl::detail::(anonymous namespace)::UnoidlCursor reference2_ rtl::Reference<UnoidlModuleEntity>
-uui/source/unknownauthdlg.hxx:38
+uui/source/unknownauthdlg.hxx:36
     UnknownAuthDialog m_xOptionButtonDontAccept std::unique_ptr<weld::RadioButton>
 vcl/inc/opengl/zone.hxx:46
     OpenGLVCLContextZone aZone class OpenGLZone

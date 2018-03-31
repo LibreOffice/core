@@ -38,7 +38,6 @@ enum AutoFormatLine { TOP_LINE, BOTTOM_LINE, LEFT_LINE, RIGHT_LINE };
 class SwAutoFormatDlg : public weld::GenericDialogController
 {
     std::unique_ptr<weld::TreeView> m_xLbFormat;
-    std::unique_ptr<weld::Container> m_xFormatting;
     std::unique_ptr<weld::CheckButton> m_xBtnNumFormat;
     std::unique_ptr<weld::CheckButton> m_xBtnBorder;
     std::unique_ptr<weld::CheckButton> m_xBtnFont;

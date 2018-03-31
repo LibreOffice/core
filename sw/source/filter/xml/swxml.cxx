@@ -496,8 +496,7 @@ ErrCode XMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, con
         return ERR_SWG_READ_ERROR;
 
     xGraphicHelper = SvXMLGraphicHelper::Create( xStorage,
-                                                 SvXMLGraphicHelperMode::Read,
-                                                 false );
+                                                 SvXMLGraphicHelperMode::Read );
     xGraphicResolver = xGraphicHelper.get();
     SfxObjectShell *pPersist = rDoc.GetPersist();
     if( pPersist )

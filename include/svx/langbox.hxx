@@ -155,7 +155,6 @@ private:
     OUString m_aAllString;
     bool m_bHasLangNone;
     bool m_bLangNoneIsLangAll;
-    bool m_bWithCheckmark;
 
     SVX_DLLPRIVATE int ImplTypeToPos(LanguageType eType) const;
     SVX_DLLPRIVATE void InsertLanguage(const LanguageType nLangType);
@@ -164,8 +163,7 @@ private:
 public:
     LanguageBox(weld::ComboBoxText* pControl);
     void            SetLanguageList( SvxLanguageListFlags nLangList,
-                            bool bHasLangNone, bool bLangNoneIsLangAll = false,
-                            bool bCheckSpellAvail = false );
+                            bool bHasLangNone, bool bLangNoneIsLangAll = false );
     void            AddLanguages( const std::vector< LanguageType >& rLanguageTypes, SvxLanguageListFlags nLangList );
     void            SelectLanguage( const LanguageType eLangType );
     LanguageType    GetSelectedLanguage() const;

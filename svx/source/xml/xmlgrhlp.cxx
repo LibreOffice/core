@@ -374,7 +374,7 @@ SvXMLGraphicHelper::SvXMLGraphicHelper(SvXMLGraphicHelperMode eCreateMode)
                                     document::XGraphicStorageHandler,
                                     document::XBinaryStreamResolver>(maMutex)
 {
-    Init( nullptr, eCreateMode, false );
+    Init( nullptr, eCreateMode );
 }
 
 SvXMLGraphicHelper::SvXMLGraphicHelper()
@@ -382,7 +382,6 @@ SvXMLGraphicHelper::SvXMLGraphicHelper()
                                     document::XGraphicStorageHandler,
                                     document::XBinaryStreamResolver>(maMutex)
     , meCreateMode(SvXMLGraphicHelperMode::Read)
-    , mbDirect(false)
 {
 }
 
@@ -507,22 +506,19 @@ Graphic SvXMLGraphicHelper::ImplReadGraphic( const OUString& rPictureStorageName
 
 void SvXMLGraphicHelper::Init( const uno::Reference < embed::XStorage >& rXMLStorage,
                                SvXMLGraphicHelperMode eCreateMode,
-                               bool bDirect,
                                const OUString& rGraphicMimeType )
 {
     mxRootStorage = rXMLStorage;
     meCreateMode = eCreateMode;
     maOutputMimeType = rGraphicMimeType;
-    mbDirect = meCreateMode != SvXMLGraphicHelperMode::Read || bDirect;
 }
 
 rtl::Reference<SvXMLGraphicHelper> SvXMLGraphicHelper::Create( const uno::Reference < embed::XStorage >& rXMLStorage,
                                                 SvXMLGraphicHelperMode eCreateMode,
-                                                bool bDirect,
                                                 const OUString& rGraphicMimeType )
 {
     rtl::Reference<SvXMLGraphicHelper> pThis = new SvXMLGraphicHelper;
-    pThis->Init( rXMLStorage, eCreateMode, bDirect, rGraphicMimeType );
+    pThis->Init( rXMLStorage, eCreateMode, rGraphicMimeType );
 
     return pThis;
 }
@@ -532,7 +528,7 @@ rtl::Reference<SvXMLGraphicHelper> SvXMLGraphicHelper::Create( SvXMLGraphicHelpe
 {
     rtl::Reference<SvXMLGraphicHelper> pThis = new SvXMLGraphicHelper;
 
-    pThis->Init( nullptr, eCreateMode, false, rGraphicMimeType );
+    pThis->Init( nullptr, eCreateMode, rGraphicMimeType );
 
     return pThis;
 }

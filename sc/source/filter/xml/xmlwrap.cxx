@@ -872,7 +872,7 @@ bool ScXMLImportWrapper::Export(bool bStylesOnly)
 
         if( xStorage.is() )
         {
-            xGraphicHelper = SvXMLGraphicHelper::Create( xStorage, SvXMLGraphicHelperMode::Write, false );
+            xGraphicHelper = SvXMLGraphicHelper::Create( xStorage, SvXMLGraphicHelperMode::Write );
             xGrfContainer = xGraphicHelper.get();
         }
 
