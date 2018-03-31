@@ -133,21 +133,17 @@ void SlidePersist::createXShapes( XmlFilterBase& rFilterBase )
     Reference< XShapes > xShapes( getPage(), UNO_QUERY );
 
     std::vector< oox::drawingml::ShapePtr >& rShapes( maShapesPtr->getChildren() );
-    const std::vector< oox::drawingml::ShapePtr >::const_iterator aShapesEnd( rShapes.end() );
-    for (std::vector< oox::drawingml::ShapePtr >::const_iterator aShapesIter( rShapes.begin() );
-         aShapesIter != aShapesEnd ; ++aShapesIter)
+    for (auto const& shape : rShapes)
     {
-        std::vector< oox::drawingml::ShapePtr >& rChildren( (*aShapesIter)->getChildren() );
-        const std::vector< oox::drawingml::ShapePtr >::const_iterator aChildEnd( rChildren.end() );
-        for (std::vector< oox::drawingml::ShapePtr >::const_iterator aChildIter( rChildren.begin() );
-             aChildIter != aChildEnd ; ++aChildIter)
+        std::vector< oox::drawingml::ShapePtr >& rChildren( shape->getChildren() );
+        for (auto const& child : rChildren)
         {
-            PPTShape* pPPTShape = dynamic_cast< PPTShape* >( (*aChildIter).get() );
+            PPTShape* pPPTShape = dynamic_cast< PPTShape* >( child.get() );
             basegfx::B2DHomMatrix aTransformation;
             if ( pPPTShape )
                 pPPTShape->addShape( rFilterBase, *this, getTheme().get(), xShapes, aTransformation, &getShapeMap() );
             else
-                (*aChildIter)->addShape( rFilterBase, getTheme().get(), xShapes, aTransformation, maShapesPtr->getFillProperties(), &getShapeMap() );
+                child->addShape( rFilterBase, getTheme().get(), xShapes, aTransformation, maShapesPtr->getFillProperties(), &getShapeMap() );
         }
     }
 
@@ -308,19 +304,15 @@ void SlidePersist::applyTextStyles( const XmlFilterBase& rFilterBase )
 void SlidePersist::hideShapesAsMasterShapes()
 {
     std::vector< oox::drawingml::ShapePtr >& rShapes( maShapesPtr->getChildren() );
-    std::vector< oox::drawingml::ShapePtr >::iterator aShapesIter( rShapes.begin() );
-    while( aShapesIter != rShapes.end() )
+    for (auto const& shape : rShapes)
     {
-        while( aShapesIter != rShapes.end() )
+        std::vector< oox::drawingml::ShapePtr >& rChildren( shape->getChildren() );
+        for (auto const& child : rChildren)
         {
-            std::vector< oox::drawingml::ShapePtr >& rChildren( (*aShapesIter++)->getChildren() );
-            std::vector< oox::drawingml::ShapePtr >::iterator aChildIter( rChildren.begin() );
-            while( aChildIter != rChildren.end() ) {
-                PPTShape* pPPTShape = dynamic_cast< PPTShape* >( (*aChildIter++).get() );
-                if (!pPPTShape)
-                    continue;
-                pPPTShape->setHiddenMasterShape( true );
-            }
+            PPTShape* pPPTShape = dynamic_cast< PPTShape* >( child.get() );
+            if (!pPPTShape)
+                continue;
+            pPPTShape->setHiddenMasterShape( true );
         }
     }
 }

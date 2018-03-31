@@ -2589,15 +2589,15 @@ HtmlSelectModel::importBinaryModel( BinaryInputStream& rInStrm )
     {
         msListData.realloc( listValues.size() );
         sal_Int32 index = 0;
-        for( std::vector< OUString >::iterator it = listValues.begin(); it != listValues.end(); ++it, ++index )
-             msListData[ index ] = *it;
+        for (auto const& listValue : listValues)
+             msListData[ index++ ] = listValue;
     }
     if ( !selectedIndices.empty() )
     {
         msIndices.realloc( selectedIndices.size() );
         sal_Int32 index = 0;
-        for( std::vector< sal_Int16 >::iterator it = selectedIndices.begin(); it != selectedIndices.end(); ++it, ++index )
-             msIndices[ index ] = *it;
+        for (auto const& selectedIndice : selectedIndices)
+             msIndices[ index++ ] = selectedIndice;
     }
     return true;
 }

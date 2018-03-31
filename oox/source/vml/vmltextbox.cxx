@@ -68,20 +68,20 @@ const TextFontModel* TextBox::getFirstFont() const
 OUString TextBox::getText() const
 {
     OUStringBuffer aBuffer;
-    for( PortionVector::const_iterator aIt = maPortions.begin(), aEnd = maPortions.end(); aIt != aEnd; ++aIt )
-        aBuffer.append( aIt->maText );
+    for (auto const& portion : maPortions)
+        aBuffer.append( portion.maText );
     return aBuffer.makeStringAndClear();
 }
 
 void TextBox::convert(const uno::Reference<drawing::XShape>& xShape) const
 {
     uno::Reference<text::XTextAppend> xTextAppend(xShape, uno::UNO_QUERY);
-    for (PortionVector::const_iterator aIt = maPortions.begin(), aEnd = maPortions.end(); aIt != aEnd; ++aIt)
+    for (auto const& portion : maPortions)
     {
         beans::PropertyValue aPropertyValue;
         std::vector<beans::PropertyValue> aPropVec;
-        const TextParagraphModel& rParagraph = aIt->maParagraph;
-        const TextFontModel& rFont = aIt->maFont;
+        const TextParagraphModel& rParagraph = portion.maParagraph;
+        const TextFontModel& rFont = portion.maFont;
         if (rFont.moName.has())
         {
             aPropertyValue.Name = "CharFontName";
@@ -135,7 +135,7 @@ void TextBox::convert(const uno::Reference<drawing::XShape>& xShape) const
             aPropertyValue.Value <<= rFont.moColor.get().toUInt32(16);
             aPropVec.push_back(aPropertyValue);
         }
-        xTextAppend->appendTextPortion(aIt->maText, comphelper::containerToSequence(aPropVec));
+        xTextAppend->appendTextPortion(portion.maText, comphelper::containerToSequence(aPropVec));
     }
 
     // Remove the last character of the shape text, if it would be a newline.

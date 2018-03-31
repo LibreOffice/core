@@ -1601,10 +1601,9 @@ void ChartExport::exportLineChart( const Reference< chart2::XChartType >& xChart
 {
     FSHelperPtr pFS = GetFS();
     std::vector<Sequence<Reference<chart2::XDataSeries> > > aSplitDataSeries = splitDataSeriesByAxis(xChartType);
-    for (auto itr = aSplitDataSeries.begin(), itrEnd = aSplitDataSeries.end();
-            itr != itrEnd; ++itr)
+    for (auto & splitDataSeries : aSplitDataSeries)
     {
-        if (itr->getLength() == 0)
+        if (splitDataSeries.getLength() == 0)
             continue;
 
         sal_Int32 nTypeId = XML_lineChart;
@@ -1618,7 +1617,7 @@ void ChartExport::exportLineChart( const Reference< chart2::XChartType >& xChart
         exportVaryColors(xChartType);
         // TODO: show marker symbol in series?
         bool bPrimaryAxes = true;
-        exportSeries(xChartType, *itr, bPrimaryAxes);
+        exportSeries(xChartType, splitDataSeries, bPrimaryAxes);
 
         // show marker?
         sal_Int32 nSymbolType = css::chart::ChartSymbolType::NONE;
@@ -1734,14 +1733,13 @@ void ChartExport::exportScatterChart( const Reference< chart2::XChartType >& xCh
     FSHelperPtr pFS = GetFS();
     std::vector<Sequence<Reference<chart2::XDataSeries> > > aSplitDataSeries = splitDataSeriesByAxis(xChartType);
     bool bExported = false;
-    for (auto itr = aSplitDataSeries.begin(), itrEnd = aSplitDataSeries.end();
-            itr != itrEnd; ++itr)
+    for (auto & splitDataSeries : aSplitDataSeries)
     {
-        if (itr->getLength() == 0)
+        if (splitDataSeries.getLength() == 0)
             continue;
 
         bExported = true;
-        exportScatterChartSeries(xChartType, &(*itr));
+        exportScatterChartSeries(xChartType, &splitDataSeries);
     }
     if (!bExported)
         exportScatterChartSeries(xChartType, nullptr);

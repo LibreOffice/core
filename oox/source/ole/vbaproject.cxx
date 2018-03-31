@@ -431,12 +431,12 @@ void VbaProject::importModulesAndForms( StorageBase& rVbaPrjStrg, const GraphicH
 
     // create empty dummy modules
     VbaModuleMap aDummyModules;
-    for( DummyModuleMap::iterator aIt = maDummyModules.begin(), aEnd = maDummyModules.end(); aIt != aEnd; ++aIt )
+    for (auto const& dummyModule : maDummyModules)
     {
-        OSL_ENSURE( !maModules.has( aIt->first ) && !aDummyModules.has( aIt->first ), "VbaProject::importVba - multiple modules with the same name" );
-        VbaModuleMap::mapped_type& rxModule = aDummyModules[ aIt->first ];
-        rxModule.reset( new VbaModule( mxContext, mxDocModel, aIt->first, eTextEnc, bExecutable ) );
-        rxModule->setType( aIt->second );
+        OSL_ENSURE( !maModules.has( dummyModule.first ) && !aDummyModules.has( dummyModule.first ), "VbaProject::importVba - multiple modules with the same name" );
+        VbaModuleMap::mapped_type& rxModule = aDummyModules[ dummyModule.first ];
+        rxModule.reset( new VbaModule( mxContext, mxDocModel, dummyModule.first, eTextEnc, bExecutable ) );
+        rxModule->setType( dummyModule.second );
     }
 
     /*  Now it is time to load the source code. All modules will be inserted
@@ -483,16 +483,16 @@ void VbaProject::importModulesAndForms( StorageBase& rVbaPrjStrg, const GraphicH
         storages that misses to mention a module for an existing form. */
     ::std::vector< OUString > aElements;
     rVbaPrjStrg.getElementNames( aElements );
-    for( ::std::vector< OUString >::iterator aIt = aElements.begin(), aEnd = aElements.end(); aIt != aEnd; ++aIt )
+    for (auto const& elem : aElements)
     {
         // try to open the element as storage
-        if( *aIt != "VBA" )
+        if( elem != "VBA" )
         {
-            StorageRef xSubStrg = rVbaPrjStrg.openSubStorage( *aIt, false );
+            StorageRef xSubStrg = rVbaPrjStrg.openSubStorage( elem, false );
             if( xSubStrg.get() ) try
             {
                 // resolve module name from storage name (which equals the module stream name)
-                VbaModule* pModule = maModulesByStrm.get( *aIt ).get();
+                VbaModule* pModule = maModulesByStrm.get( elem ).get();
                 OSL_ENSURE( pModule && (pModule->getType() == ModuleType::FORM),
                     "VbaProject::importVba - form substorage without form module" );
                 OUString aModuleName;

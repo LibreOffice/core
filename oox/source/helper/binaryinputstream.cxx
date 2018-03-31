@@ -90,8 +90,8 @@ OUString BinaryInputStream::readUnicodeArray( sal_Int32 nChars )
 
     OUStringBuffer aStringBuffer;
     aStringBuffer.ensureCapacity( nCharsRead );
-    for( ::std::vector< sal_uInt16 >::iterator aIt = aBuffer.begin(), aEnd = aBuffer.end(); aIt != aEnd; ++aIt )
-        aStringBuffer.append( static_cast< sal_Unicode >( *aIt ) );
+    for (auto const& elem : aBuffer)
+        aStringBuffer.append( static_cast< sal_Unicode >(elem) );
     return aStringBuffer.makeStringAndClear();
 }
 

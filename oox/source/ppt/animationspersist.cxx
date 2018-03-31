@@ -186,10 +186,9 @@ namespace oox { namespace ppt {
     Any AnimationCondition::convertList(const SlidePersistPtr & pSlide, const AnimationConditionList & l)
     {
         Any aAny;
-        for( AnimationConditionList::const_iterator iter = l.begin();
-             iter != l.end(); ++iter)
+        for (auto const& elem : l)
         {
-            aAny = addToSequence( aAny, iter->convert(pSlide) );
+            aAny = addToSequence( aAny, elem.convert(pSlide) );
         }
         return aAny;
     }

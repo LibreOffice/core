@@ -95,18 +95,18 @@ SlideFragmentHandler::~SlideFragmentHandler()
         OUString aNotesFragmentPath = getFragmentPathFromFirstTypeFromOfficeDoc( "notesMaster" );
 
         std::vector< SlidePersistPtr >& rMasterPages( rFilter.getMasterPages() );
-        std::vector< SlidePersistPtr >::iterator aIter( rMasterPages.begin() );
-        while( aIter != rMasterPages.end() )
+        bool bNotesFragmentPathFound = false;
+        for (auto const& masterPage : rMasterPages)
         {
-            if( (*aIter)->getPath() == aNotesFragmentPath )
+            if( masterPage->getPath() == aNotesFragmentPath )
             {
                 if( !mpSlidePersistPtr->getMasterPersist() )
-                    mpSlidePersistPtr->setMasterPersist( *aIter );
+                    mpSlidePersistPtr->setMasterPersist(masterPage);
+                bNotesFragmentPathFound=true;
                 break;
             }
-            ++aIter;
         }
-        if( aIter == rMasterPages.end() && !mpSlidePersistPtr->getMasterPersist() )
+        if( !bNotesFragmentPathFound && !mpSlidePersistPtr->getMasterPersist() )
         {
             TextListStylePtr pTextListStyle(new TextListStyle);
             SlidePersistPtr pMasterPersistPtr = std::make_shared<SlidePersist>( rFilter, true, true, mpSlidePersistPtr->getPage(),

@@ -249,9 +249,11 @@ bool AxBinaryPropertyReader::finalizeImport()
     maInStrm.align( 4 );
     if( ensureValid( mnPropFlags == 0 ) && !maLargeProps.empty() )
     {
-        for( ComplexPropVector::iterator aIt = maLargeProps.begin(), aEnd = maLargeProps.end(); ensureValid() && (aIt != aEnd); ++aIt )
+        for (auto const& largeProp : maLargeProps)
         {
-            ensureValid( (*aIt)->readProperty( maInStrm ) );
+            if (!ensureValid())
+                break;
+            ensureValid( largeProp->readProperty( maInStrm ) );
             maInStrm.align( 4 );
         }
     }
@@ -259,8 +261,14 @@ bool AxBinaryPropertyReader::finalizeImport()
 
     // read stream properties (no stream alignment between properties!)
     if( ensureValid() && !maStreamProps.empty() )
-        for( ComplexPropVector::iterator aIt = maStreamProps.begin(), aEnd = maStreamProps.end(); ensureValid() && (aIt != aEnd); ++aIt )
-            ensureValid( (*aIt)->readProperty( maInStrm ) );
+    {
+        for (auto const& streamProp : maStreamProps)
+        {
+            if (!ensureValid())
+                break;
+            ensureValid( streamProp->readProperty( maInStrm ) );
+        }
+    }
 
     return mbValid;
 }

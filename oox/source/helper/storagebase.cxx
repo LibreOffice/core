@@ -224,8 +224,8 @@ void StorageBase::copyStorageToStorage( StorageBase& rDestStrg )
     {
         ::std::vector< OUString > aElements;
         getElementNames( aElements );
-        for( ::std::vector< OUString >::iterator aIt = aElements.begin(), aEnd = aElements.end(); aIt != aEnd; ++aIt )
-            copyToStorage( rDestStrg, *aIt );
+        for (auto const& elem : aElements)
+            copyToStorage(rDestStrg, elem);
     }
 }
 

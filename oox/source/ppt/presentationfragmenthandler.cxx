@@ -85,13 +85,13 @@ PresentationFragmentHandler::PresentationFragmentHandler(XmlFilterBase& rFilter,
     , mpTextListStyle( new TextListStyle )
     , mbCommentAuthorsRead(false)
 {
+    // TODO JNA Typo
     TextParagraphPropertiesVector& rParagraphDefaulsVector( mpTextListStyle->getListStyle() );
-    TextParagraphPropertiesVector::iterator aParagraphDefaultIter( rParagraphDefaulsVector.begin() );
-    while( aParagraphDefaultIter != rParagraphDefaulsVector.end() )
+    for (auto const& elem : rParagraphDefaulsVector)
     {
         // ppt is having zero bottom margin per default, whereas OOo is 0,5cm,
         // so this attribute needs to be set always
-        (*aParagraphDefaultIter++)->getParaBottomMargin() = TextSpacing( 0 );
+        elem->getParaBottomMargin() = TextSpacing( 0 );
     }
 }
 
@@ -105,14 +105,13 @@ void ResolveTextFields( XmlFilterBase const & rFilter )
     if ( !rTextFields.empty() )
     {
         Reference< frame::XModel > xModel( rFilter.getModel() );
-        oox::core::TextFieldStack::const_iterator aIter( rTextFields.begin() );
-        while( aIter != rTextFields.end() )
+        for (auto const& textField : rTextFields)
         {
             const OUString sURL = "URL";
             Reference< drawing::XDrawPagesSupplier > xDPS( xModel, uno::UNO_QUERY_THROW );
             Reference< drawing::XDrawPages > xDrawPages( xDPS->getDrawPages(), uno::UNO_QUERY_THROW );
 
-            const oox::core::TextField& rTextField( *aIter++ );
+            const oox::core::TextField& rTextField( textField );
             Reference< XPropertySet > xPropSet( rTextField.xTextField, UNO_QUERY );
             Reference< XPropertySetInfo > xPropSetInfo( xPropSet->getPropertySetInfo() );
             if ( xPropSetInfo->hasPropertyByName( sURL ) )
@@ -257,15 +256,13 @@ void PresentationFragmentHandler::importSlide(sal_uInt32 nSlide, bool bFirstPage
                 {
                     // check if the corresponding masterpage+layout has already been imported
                     std::vector< SlidePersistPtr >& rMasterPages( rFilter.getMasterPages() );
-                    std::vector< SlidePersistPtr >::iterator aIter( rMasterPages.begin() );
-                    while( aIter != rMasterPages.end() )
+                    for (auto const& masterPage : rMasterPages)
                     {
-                        if ( ( (*aIter)->getPath() == aMasterFragmentPath ) && ( (*aIter)->getLayoutPath() == aLayoutFragmentPath ) )
+                        if ( ( masterPage->getPath() == aMasterFragmentPath ) && ( masterPage->getLayoutPath() == aLayoutFragmentPath ) )
                         {
-                            pMasterPersistPtr = *aIter;
+                            pMasterPersistPtr = masterPage;
                             break;
                         }
-                        ++aIter;
                     }
 
                     if ( !pMasterPersistPtr.get() )
@@ -471,9 +468,7 @@ void PresentationFragmentHandler::finalizeImport()
     }
 
     StringRangeEnumerator aRangeEnumerator( aPageRange, 0, nPageCount - 1 );
-    StringRangeEnumerator::Iterator aIter = aRangeEnumerator.begin();
-    StringRangeEnumerator::Iterator aEnd  = aRangeEnumerator.end();
-    if (aIter!=aEnd)
+    if (aRangeEnumerator.size())
     {
         // todo: localized progress bar text
         const Reference< task::XStatusIndicator >& rxStatusIndicator( getFilter().getStatusIndicator() );
@@ -483,14 +478,13 @@ void PresentationFragmentHandler::finalizeImport()
         try
         {
             int nPagesImported = 0;
-            while (aIter!=aEnd)
+            for (auto const& elem : aRangeEnumerator)
             {
                 if ( rxStatusIndicator.is() )
                     rxStatusIndicator->setValue((nPagesImported * 10000) / aRangeEnumerator.size());
 
-                importSlide(*aIter, !nPagesImported, bImportNotesPages);
+                importSlide(elem, !nPagesImported, bImportNotesPages);
                 nPagesImported++;
-                ++aIter;
             }
             ResolveTextFields( rFilter );
         }

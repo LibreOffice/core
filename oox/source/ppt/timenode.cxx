@@ -269,10 +269,11 @@ namespace oox { namespace ppt {
             {
                 Sequence< NamedValue > aUserDataSeq( static_cast< sal_Int32 >( maUserData.size() ) );
                 NamedValue* pValues = aUserDataSeq.getArray();
-                for( UserDataMap::const_iterator aIt = maUserData.begin(), aEnd = maUserData.end(); aIt != aEnd; ++aIt, ++pValues )
+                for (auto const& elem : maUserData)
                 {
-                    pValues->Name = aIt->first;
-                    pValues->Value = aIt->second;
+                    pValues->Name = elem.first;
+                    pValues->Value = elem.second;
+                    ++pValues;
                 }
                 maNodeProperties[ NP_USERDATA ] <<= aUserDataSeq;
             }

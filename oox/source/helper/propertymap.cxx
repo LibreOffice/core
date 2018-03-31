@@ -153,12 +153,13 @@ Sequence< Property > SAL_CALL GenericPropertySet::getProperties()
 {
     Sequence< Property > aSeq( static_cast< sal_Int32 >( maPropMap.size() ) );
     Property* pProperty = aSeq.getArray();
-    for( PropertyNameMap::iterator aIt = maPropMap.begin(), aEnd = maPropMap.end(); aIt != aEnd; ++aIt, ++pProperty )
+    for (auto const& prop : maPropMap)
     {
-        pProperty->Name = aIt->first;
+        pProperty->Name = prop.first;
         pProperty->Handle = 0;
-        pProperty->Type = aIt->second.getValueType();
+        pProperty->Type = prop.second.getValueType();
         pProperty->Attributes = 0;
+        ++pProperty;
     }
     return aSeq;
 }
@@ -230,8 +231,8 @@ const OUString& PropertyMap::getPropertyName( sal_Int32 nPropId )
 
 void PropertyMap::assignAll( const PropertyMap& rPropMap )
 {
-    for( PropertyMapType::const_iterator it=rPropMap.maProperties.begin(); it != rPropMap.maProperties.end(); ++it )
-        maProperties[it->first] = it->second;
+    for (auto const& prop : rPropMap.maProperties)
+        maProperties[prop.first] = prop.second;
 }
 
 Sequence< PropertyValue > PropertyMap::makePropertyValueSequence() const
@@ -240,12 +241,13 @@ Sequence< PropertyValue > PropertyMap::makePropertyValueSequence() const
     if( !maProperties.empty() )
     {
         PropertyValue* pValues = aSeq.getArray();
-        for( PropertyMapType::const_iterator aIt = maProperties.begin(), aEnd = maProperties.end(); aIt != aEnd; ++aIt, ++pValues )
+        for (auto const& prop : maProperties)
         {
-            OSL_ENSURE( (0 <= aIt->first) && (aIt->first < PROP_COUNT), "PropertyMap::makePropertyValueSequence - invalid property identifier" );
-            pValues->Name = (*mpPropNames)[ aIt->first ];
-            pValues->Value = aIt->second;
+            OSL_ENSURE( (0 <= prop.first) && (prop.first < PROP_COUNT), "PropertyMap::makePropertyValueSequence - invalid property identifier" );
+            pValues->Name = (*mpPropNames)[ prop.first ];
+            pValues->Value = prop.second;
             pValues->State = PropertyState_DIRECT_VALUE;
+            ++pValues;
         }
     }
     return aSeq;
@@ -259,21 +261,22 @@ void PropertyMap::fillSequences( Sequence< OUString >& rNames, Sequence< Any >& 
     {
         OUString* pNames = rNames.getArray();
         Any* pValues = rValues.getArray();
-        for( PropertyMapType::const_iterator aIt = maProperties.begin(), aEnd = maProperties.end(); aIt != aEnd; ++aIt, ++pNames, ++pValues )
+        for (auto const& prop : maProperties)
         {
-            OSL_ENSURE( (0 <= aIt->first) && (aIt->first < PROP_COUNT), "PropertyMap::fillSequences - invalid property identifier" );
-            *pNames = (*mpPropNames)[ aIt->first ];
-            *pValues = aIt->second;
+            OSL_ENSURE( (0 <= prop.first) && (prop.first < PROP_COUNT), "PropertyMap::fillSequences - invalid property identifier" );
+            *pNames = (*mpPropNames)[ prop.first ];
+            *pValues = prop.second;
+            ++pNames;
+            ++pValues;
         }
     }
 }
 
 void PropertyMap::fillPropertyNameMap(PropertyNameMap& rMap) const
 {
-    for(PropertyMapType::const_iterator itr = maProperties.begin(),
-            itrEnd = maProperties.end(); itr != itrEnd; ++itr)
+    for (auto const& prop : maProperties)
     {
-        rMap.insert(std::pair<OUString, Any>((*mpPropNames)[itr->first], itr->second));
+        rMap.insert(std::pair<OUString, Any>((*mpPropNames)[prop.first], prop.second));
     }
 }
 

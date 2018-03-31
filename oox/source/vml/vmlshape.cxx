@@ -964,8 +964,8 @@ Reference< XShape > PolyLineShape::implConvertAndInsert( const Reference< XShape
     if( !maShapeModel.maPoints.empty() && (aCoordSys.Width > 0) && (aCoordSys.Height > 0) )
     {
         ::std::vector< awt::Point > aAbsPoints;
-        for( ShapeModel::PointVector::const_iterator aIt = maShapeModel.maPoints.begin(), aEnd = maShapeModel.maPoints.end(); aIt != aEnd; ++aIt )
-            aAbsPoints.push_back( lclGetAbsPoint( *aIt, rShapeRect, aCoordSys ) );
+        for (auto const& point : maShapeModel.maPoints)
+            aAbsPoints.push_back( lclGetAbsPoint( point, rShapeRect, aCoordSys ) );
         PointSequenceSequence aPointSeq( 1 );
         aPointSeq[ 0 ] = ContainerHelper::vectorToSequence( aAbsPoints );
         PropertySet aPropSet( xShape );
@@ -1068,10 +1068,10 @@ Reference< XShape > BezierShape::implConvertAndInsert( const Reference< XShapes 
             // Parse VML path string and convert to absolute coordinates
             ConversionHelper::decodeVmlPath( aCoordLists, aFlagLists, maShapeModel.maVmlPath );
 
-            for ( SubPathList::iterator aListIt = aCoordLists.begin(); aListIt != aCoordLists.end(); ++aListIt )
-                for ( ::std::vector< awt::Point >::iterator aPointIt = (*aListIt).begin(); aPointIt != (*aListIt).end(); ++aPointIt)
+            for (auto & coordList : aCoordLists)
+                for (auto & point : coordList)
                 {
-                    (*aPointIt) = lclGetAbsPoint( (*aPointIt), rShapeRect, aCoordSys );
+                    point = lclGetAbsPoint( point, rShapeRect, aCoordSys );
                 }
         }
 

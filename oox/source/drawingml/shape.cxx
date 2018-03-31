@@ -386,10 +386,10 @@ void Shape::addChildren(
              << aChildTransformation.get(2, 1) << " "
              << aChildTransformation.get(2, 2));
 
-    std::vector< ShapePtr >::iterator aIter( rMaster.maChildren.begin() );
-    while( aIter != rMaster.maChildren.end() ) {
-        (*aIter)->setMasterTextListStyle( mpMasterTextListStyle );
-        (*aIter++)->addShape( rFilterBase, pTheme, rxShapes, aChildTransformation, getFillProperties(), pShapeMap );
+    for (auto const& child : rMaster.maChildren)
+    {
+        child->setMasterTextListStyle( mpMasterTextListStyle );
+        child->addShape( rFilterBase, pTheme, rxShapes, aChildTransformation, getFillProperties(), pShapeMap );
     }
 }
 

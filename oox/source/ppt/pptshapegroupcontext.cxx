@@ -133,10 +133,9 @@ void PPTShapeGroupContext::importExtDrawings( )
 {
     if( pGraphicShape )
     {
-        for( ::std::vector<OUString>::const_iterator aIt = pGraphicShape->getExtDrawings().begin(), aEnd = pGraphicShape->getExtDrawings().end();
-                    aIt != aEnd; ++aIt )
+        for (auto const& extDrawing : pGraphicShape->getExtDrawings())
             {
-                getFilter().importFragment( new ExtDrawingFragmentHandler( getFilter(), getFragmentPathFromRelId( *aIt ),
+                getFilter().importFragment( new ExtDrawingFragmentHandler( getFilter(), getFragmentPathFromRelId(extDrawing),
                                                                            mpSlidePersistPtr,
                                                                            meShapeLocation,
                                                                            mpGroupShapePtr,
@@ -153,9 +152,9 @@ void PPTShapeGroupContext::applyFontRefColor(const oox::drawingml::ShapePtr& pSh
 {
     pShape->getShapeStyleRefs()[XML_fontRef].maPhClr = rFontRefColor;
     std::vector< oox::drawingml::ShapePtr >& vChildren = pShape->getChildren();
-    for( std::vector< oox::drawingml::ShapePtr >::iterator aIter = vChildren.begin(); aIter != vChildren.end(); ++aIter )
+    for (auto const& child : vChildren)
     {
-        applyFontRefColor( *aIter ,rFontRefColor);
+        applyFontRefColor(child, rFontRefColor);
     }
 }
 

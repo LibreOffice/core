@@ -872,8 +872,8 @@ void NameListBase::includeList( const NameListRef& rxList )
 {
     if( rxList.get() )
     {
-        for( const_iterator aIt = rxList->begin(), aEnd = rxList->end(); aIt != aEnd; ++aIt )
-            maMap[ aIt->first ] = aIt->second;
+        for (auto const& elem : *rxList)
+            maMap[ elem.first ] = elem.second;
         implIncludeList( *rxList );
     }
 }
@@ -915,23 +915,25 @@ void NameListBase::include( const OUString& rListKeys )
 {
     OUStringVector aVec;
     StringHelper::convertStringToStringList( aVec, rListKeys, true );
-    for( OUStringVector::const_iterator aIt = aVec.begin(), aEnd = aVec.end(); aIt != aEnd; ++aIt )
-        includeList( mrCfgData.getNameList( *aIt ) );
+    for (auto const& elem : aVec)
+        includeList( mrCfgData.getNameList(elem) );
 }
 
 void NameListBase::exclude( const OUString& rKeys )
 {
     Int64Vector aVec;
     StringHelper::convertStringToIntList( aVec, rKeys, true );
-    for( Int64Vector::const_iterator aIt = aVec.begin(), aEnd = aVec.end(); aIt != aEnd; ++aIt )
-        maMap.erase( *aIt );
+    for (auto const& elem : aVec)
+        maMap.erase(elem);
 }
 
 void ItemFormatMap::insertFormats( const NameListRef& rxNameList )
 {
     if( Base::isValid( rxNameList ) )
-        for( NameListBase::const_iterator aIt = rxNameList->begin(), aEnd = rxNameList->end(); aIt != aEnd; ++aIt )
-            maMap[ aIt->first ].parse( aIt->second );
+    {
+        for (auto const& elemName : *rxNameList)
+            maMap[ elemName.first ].parse( elemName.second );
+    }
 }
 
 ConstList::ConstList( const SharedConfigData& rCfgData ) :
@@ -993,9 +995,12 @@ MultiList::MultiList( const SharedConfigData& rCfgData ) :
 void MultiList::setNamesFromVec( sal_Int64 nStartKey, const OUStringVector& rNames )
 {
     sal_Int64 nKey = nStartKey;
-    for( OUStringVector::const_iterator aIt = rNames.begin(), aEnd = rNames.end(); aIt != aEnd; ++aIt, ++nKey )
-        if( !mbIgnoreEmpty || !aIt->isEmpty() )
-            insertRawName( nKey, *aIt );
+    for (auto const& name : rNames)
+    {
+        if( !mbIgnoreEmpty || !name.isEmpty() )
+            insertRawName( nKey, name);
+        ++nKey;
+    }
 }
 
 void MultiList::implProcessConfigItemStr(
@@ -1119,13 +1124,12 @@ void CombiList::implSetName( sal_Int64 nKey, const OUString& rName )
 {
     if( (nKey & (nKey - 1)) != 0 )  // more than a single bit set?
     {
-        typedef ::std::set< ExtItemFormatKey > ExtItemFormatKeySet;
         ::std::set< ExtItemFormatKey > aItemKeys;
         ExtItemFormat aItemFmt;
         OUStringVector aRemain = aItemFmt.parse( rName );
-        for( OUStringVector::iterator aIt = aRemain.begin(), aEnd = aRemain.end(); aIt != aEnd; ++aIt )
+        for (auto const& elemRemain : aRemain)
         {
-            OUStringPair aPair = StringHelper::convertStringToPair( *aIt );
+            OUStringPair aPair = StringHelper::convertStringToPair(elemRemain);
             if ( aPair.first == "noshift" )
             {
                 aItemFmt.mbShiftValue = StringHelper::convertStringToBool( aPair.second );
@@ -1145,8 +1149,8 @@ void CombiList::implSetName( sal_Int64 nKey, const OUString& rName )
         }
         if( aItemKeys.empty() )
             aItemKeys.insert( ExtItemFormatKey( nKey ) );
-        for( ExtItemFormatKeySet::iterator aIt = aItemKeys.begin(), aEnd = aItemKeys.end(); aIt != aEnd; ++aIt )
-            maFmtMap[ *aIt ] = aItemFmt;
+        for (auto const& itemKey : aItemKeys)
+            maFmtMap[itemKey] = aItemFmt;
     }
     else
     {
@@ -1159,13 +1163,13 @@ OUString CombiList::implGetName( const Config& rCfg, sal_Int64 nKey ) const
     sal_Int64 nFound = 0;
     OUStringBuffer aName;
     // add known flag fields
-    for( ExtItemFormatMap::const_iterator aIt = maFmtMap.begin(), aEnd = maFmtMap.end(); aIt != aEnd; ++aIt )
+    for (auto const& fmt : maFmtMap)
     {
-        const ExtItemFormatKey& rMapKey = aIt->first;
+        const ExtItemFormatKey& rMapKey = fmt.first;
         sal_Int64 nMask = rMapKey.mnKey;
         if( (nMask != 0) && ((nKey & rMapKey.maFilter.first) == rMapKey.maFilter.second) )
         {
-            const ExtItemFormat& rItemFmt = aIt->second;
+            const ExtItemFormat& rItemFmt = fmt.second;
 
             sal_uInt64 nUFlags = static_cast< sal_uInt64 >( nKey );
             sal_uInt64 nUMask = static_cast< sal_uInt64 >( nMask );
@@ -1877,8 +1881,10 @@ void StorageObjectBase::extractStorage( const StorageRef& rxStrg, const OUString
 
     // process preferred storages and streams in root storage first
     if( rStrgPath.isEmpty() )
-        for( PreferredItemVector::iterator aIt = maPreferred.begin(), aEnd = maPreferred.end(); aIt != aEnd; ++aIt )
-            extractItem( rxStrg, rStrgPath, aIt->maName, rSysPath, aIt->mbStorage, !aIt->mbStorage );
+    {
+        for (auto const& elemPreferred : maPreferred)
+            extractItem( rxStrg, rStrgPath, elemPreferred.maName, rSysPath, elemPreferred.mbStorage, !elemPreferred.mbStorage );
+    }
 
     // process children of the storage
     for( StorageIterator aIt( rxStrg ); aIt.isValid(); ++aIt )
@@ -1887,8 +1893,14 @@ void StorageObjectBase::extractStorage( const StorageRef& rxStrg, const OUString
         OUString aItemName = aIt.getName();
         bool bFound = false;
         if( rStrgPath.isEmpty() )
-            for( PreferredItemVector::iterator aIIt = maPreferred.begin(), aIEnd = maPreferred.end(); !bFound && (aIIt != aIEnd); ++aIIt )
-                bFound = aIIt->maName == aItemName;
+        {
+            for (auto const& elemPreferred : maPreferred)
+            {
+                bFound = elemPreferred.maName == aItemName;
+                if (bFound)
+                    break;
+            }
+        }
         if( !bFound )
             extractItem( rxStrg, rStrgPath, aItemName, rSysPath, aIt.isStorage(), aIt.isStream() );
     }
