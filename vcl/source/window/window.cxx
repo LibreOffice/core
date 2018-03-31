@@ -3404,7 +3404,7 @@ void Window::DrawSelectionBackground( const tools::Rectangle& rRect,
 
     if( !bDark && !bBright && abs( c2-c1 ) < 75 )
     {
-        // constrast too low
+        // contrast too low
         sal_uInt16 h,s,b;
         aSelectionFillCol.RGBtoHSB( h, s, b );
         if( b > 50 )    b -= 40;

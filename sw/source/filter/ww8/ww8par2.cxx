@@ -2168,7 +2168,7 @@ void WW8TabDesc::CalcDefaults()
     }
 
     // 2. pass: Detect number of writer columns. This can exceed the count
-    // of columns in WW by 2, because SW in constrast to WW does not provide
+    // of columns in WW by 2, because SW in contrast to WW does not provide
     // fringed left and right borders and has to fill with empty boxes.
     // Non existent cells can reduce the number of columns.
 
