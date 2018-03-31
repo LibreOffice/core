@@ -112,7 +112,7 @@ bool SdPdfFilter::Import()
     auto pPdfData = std::make_shared<uno::Sequence<sal_Int8>>(aPdfData);
 
     mrDocument.CreateFirstPages();
-    for (int i = 0; i < aBitmaps.size() - 1; ++i)
+    for (size_t i = 0; i < aBitmaps.size() - 1; ++i)
     {
         mrDocument.DuplicatePage(0);
     }

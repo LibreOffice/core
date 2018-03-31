@@ -2362,9 +2362,9 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                     SdrGrafObj*  pGraf= dynamic_cast< SdrGrafObj *>( pObj );
                     SdrOle2Obj*  pOle2= dynamic_cast< SdrOle2Obj *>( pObj );
 
-                    if(pGraf)
+                    if (pGraf != nullptr)
                     {
-                        if(pGraf->HasGDIMetaFile())
+                        if (pGraf->HasGDIMetaFile())
                         {
                             nCount += pGraf->GetGraphic().GetGDIMetaFile().GetActionSize();
                         }
