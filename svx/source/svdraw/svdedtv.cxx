@@ -461,9 +461,10 @@ bool SdrEditView::IsDismantlePossible(bool bMakeLines) const
 
 void SdrEditView::CheckPossibilities()
 {
-    if (mbSomeObjChgdFlag) bPossibilitiesDirty=true;
+    if (mbSomeObjChgdFlag)
+        bPossibilitiesDirty=true;
 
-    if(mbSomeObjChgdFlag)
+    if (mbSomeObjChgdFlag)
     {
         // This call IS necessary to correct the MarkList, in which
         // no longer to the model belonging objects still can reside.
@@ -471,17 +472,20 @@ void SdrEditView::CheckPossibilities()
         CheckMarked();
     }
 
-    if (bPossibilitiesDirty) {
+    if (bPossibilitiesDirty)
+    {
         ImpResetPossibilityFlags();
         SortMarkedObjects();
-        const size_t nMarkCount=GetMarkedObjectCount();
-        if (nMarkCount!=0) {
-            bReverseOrderPossible=nMarkCount>=2;
+        const size_t nMarkCount = GetMarkedObjectCount();
+        if (nMarkCount != 0)
+        {
+            bReverseOrderPossible = (nMarkCount >= 2);
 
             size_t nMovableCount=0;
             bGroupPossible=nMarkCount>=2;
             bCombinePossible=nMarkCount>=2;
-            if (nMarkCount==1) {
+            if (nMarkCount==1)
+            {
                 // check bCombinePossible more thoroughly
                 // still missing ...
                 const SdrObject* pObj=GetMarkedObjectByIndex(0);
