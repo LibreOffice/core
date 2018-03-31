@@ -853,8 +853,8 @@ void SdrEditView::DeleteMarkedObj()
             {
                 // we detected an empty parent, a candidate to leave group/3DScene
                 // if entered
-                if(GetSdrPageView()->GetAktGroup()
-                    && GetSdrPageView()->GetAktGroup() == pParent)
+                if(GetSdrPageView()->GetCurrentGroup()
+                    && GetSdrPageView()->GetCurrentGroup() == pParent)
                 {
                     GetSdrPageView()->LeaveOneGroup();
                 }
