@@ -530,6 +530,7 @@ private:
     SfxItemSet&                m_rXFSet;
     const SdrView*             mpView;
     MapUnit                    mePoolUnit;
+    FieldUnit                  meFieldUnit;
     Size                       rBitmapSize;
     Size                       rFilledSize;
     Size                       rZoomedSize;
