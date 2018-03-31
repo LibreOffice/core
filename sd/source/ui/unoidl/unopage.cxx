@@ -23,7 +23,6 @@
 #include <com/sun/star/presentation/AnimationSpeed.hpp>
 #include <com/sun/star/view/PaperOrientation.hpp>
 #include <cppuhelper/implbase.hxx>
-#include <comphelper/processfactory.hxx>
 #include <comphelper/profilezone.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>

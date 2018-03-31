@@ -43,7 +43,6 @@
 #include <com/sun/star/ui/DockingArea.hpp>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <comphelper/propertysequence.hxx>
-#include <comphelper/processfactory.hxx>
 #include <svtools/imgdef.hxx>
 #include <svtools/toolboxcontroller.hxx>
 #include <toolkit/helper/vclunohelper.hxx>

@@ -22,7 +22,6 @@
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmlimp.hxx>
 #include <com/sun/star/document/XMLOasisBasicImporter.hpp>
-#include <comphelper/processfactory.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

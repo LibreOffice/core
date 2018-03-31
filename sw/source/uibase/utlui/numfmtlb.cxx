@@ -18,7 +18,6 @@
  */
 
 #include <hintids.hxx>
-#include <comphelper/processfactory.hxx>
 #include <editeng/unolingu.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <i18nlangtag/lang.h>

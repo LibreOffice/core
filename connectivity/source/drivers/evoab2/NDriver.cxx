@@ -23,7 +23,6 @@
 #include <connectivity/dbexception.hxx>
 #include <osl/file.hxx>
 #include <osl/security.hxx>
-#include <comphelper/processfactory.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/ucb/XContentAccess.hpp>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>

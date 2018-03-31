@@ -40,7 +40,6 @@
 #include <cppuhelper/queryinterface.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
-#include <comphelper/processfactory.hxx>
 #include <vcl/outdev.hxx>
 #include <comphelper/types.hxx>
 

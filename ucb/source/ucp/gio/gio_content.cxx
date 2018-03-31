@@ -57,7 +57,6 @@
 #include <com/sun/star/ucb/XDynamicResultSet.hpp>
 #include <com/sun/star/ucb/XContentCreator.hpp>
 
-#include <comphelper/processfactory.hxx>
 #include <comphelper/seekableinput.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <ucbhelper/contentidentifier.hxx>

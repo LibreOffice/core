@@ -27,7 +27,6 @@
 #include <com/sun/star/lang/ServiceNotRegisteredException.hpp>
 #include <comphelper/sequence.hxx>
 #include <com/sun/star/uno/XAggregation.hpp>
-#include <comphelper/processfactory.hxx>
 #include <stringconstants.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>

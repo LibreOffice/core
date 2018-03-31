@@ -40,7 +40,6 @@
 #include <com/sun/star/util/XCloneable.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/PropertyChangeEvent.hpp>
-#include <comphelper/processfactory.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/fract.hxx>
 #include <vcl/builder.hxx>

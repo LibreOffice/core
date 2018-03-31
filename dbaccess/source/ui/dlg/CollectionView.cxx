@@ -23,7 +23,6 @@
 #include <core_resource.hxx>
 #include <dbu_dlg.hxx>
 #include <strings.hrc>
-#include <comphelper/processfactory.hxx>
 #include <comphelper/interaction.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <cppuhelper/exc_hlp.hxx>

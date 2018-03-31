@@ -27,7 +27,6 @@
 #include <svl/itemset.hxx>
 #include <svl/eitem.hxx>
 
-#include <comphelper/processfactory.hxx>
 #include <cppuhelper/implbase.hxx>
 
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>

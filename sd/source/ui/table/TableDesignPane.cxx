@@ -25,7 +25,6 @@
 #include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 
-#include <comphelper/processfactory.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/layout.hxx>

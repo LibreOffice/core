@@ -69,8 +69,6 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/app.hxx>
 
-#include <comphelper/processfactory.hxx>
-
 #include <toolkit/awt/vclxwindow.hxx>
 
 #include <tools/diagnose_ex.h>

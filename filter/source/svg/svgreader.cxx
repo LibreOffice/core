@@ -31,7 +31,6 @@
 #include <com/sun/star/xml/dom/DocumentBuilder.hpp>
 #include <com/sun/star/xml/dom/NodeType.hpp>
 
-#include <comphelper/processfactory.hxx>
 #include <basegfx/polygon/b2dpolygoncutandtouch.hxx>
 #include <basegfx/polygon/b2dpolypolygoncutter.hxx>
 #include <unotools/streamwrap.hxx>

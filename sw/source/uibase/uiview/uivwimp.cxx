@@ -24,7 +24,6 @@
 
 #include <com/sun/star/scanner/XScannerManager2.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
-#include <comphelper/processfactory.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>

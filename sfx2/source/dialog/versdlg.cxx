@@ -20,7 +20,6 @@
 #include <sal/config.h>
 
 #include <unotools/localedatawrapper.hxx>
-#include <comphelper/processfactory.hxx>
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>
 #include <svl/stritem.hxx>

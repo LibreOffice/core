@@ -30,7 +30,6 @@
 #include <vcl/svapp.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <osl/mutex.hxx>
-#include <comphelper/processfactory.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
 using namespace com::sun::star;

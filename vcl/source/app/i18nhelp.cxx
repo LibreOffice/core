@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <comphelper/processfactory.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/transliterationwrapper.hxx>
 

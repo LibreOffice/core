@@ -33,7 +33,6 @@
 #include <com/sun/star/awt/PosSize.hpp>
 #include <com/sun/star/view/XViewSettingsSupplier.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
-#include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 #include <sfx2/dispatch.hxx>
 #include <svl/stritem.hxx>

@@ -46,7 +46,6 @@
 
 #include <cppuhelper/bootstrap.hxx>
 #include <cppuhelper/component_context.hxx>
-#include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <com/sun/star/chart2/data/XDataProvider.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>

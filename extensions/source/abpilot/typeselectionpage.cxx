@@ -24,7 +24,6 @@
 #include <vcl/weld.hxx>
 #include <com/sun/star/sdbc/XDriver.hpp>
 #include <com/sun/star/sdbc/DriverManager.hpp>
-#include <comphelper/processfactory.hxx>
 
 namespace abp
 {

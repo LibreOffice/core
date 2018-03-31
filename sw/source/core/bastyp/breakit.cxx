@@ -27,7 +27,6 @@
 #include <editeng/scripttypeitem.hxx>
 #include <unicode/uchar.h>
 #include <unotools/localedatawrapper.hxx>
-#include <comphelper/processfactory.hxx>
 #include <algorithm>
 
 using namespace com::sun::star;

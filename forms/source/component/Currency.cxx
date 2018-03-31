@@ -22,7 +22,6 @@
 #include <unotools/localedatawrapper.hxx>
 #include <vcl/svapp.hxx>
 #include <unotools/syslocale.hxx>
-#include <comphelper/processfactory.hxx>
 
 
 namespace frm

@@ -19,7 +19,6 @@
 
 
 #include <connectivity/predicateinput.hxx>
-#include <comphelper/processfactory.hxx>
 #include <comphelper/types.hxx>
 #include <connectivity/dbtools.hxx>
 #include <com/sun/star/i18n/LocaleData.hpp>

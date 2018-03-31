@@ -54,7 +54,6 @@
 #include <sdpage.hxx>
 #include <view/SlideSorterView.hxx>
 #include <undo/undoobjects.hxx>
-#include <comphelper/processfactory.hxx>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/XEmbedPersist.hpp>
 #include <com/sun/star/embed/Aspects.hpp>

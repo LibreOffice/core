@@ -25,7 +25,6 @@
 #include <com/sun/star/io/XOutputStream.hpp>
 
 
-#include <comphelper/processfactory.hxx>
 #include <comphelper/seekableinput.hxx>
 
 using namespace ::com::sun::star;

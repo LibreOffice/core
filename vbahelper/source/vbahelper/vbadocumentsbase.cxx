@@ -20,7 +20,6 @@
 #include <vbahelper/vbadocumentsbase.hxx>
 
 #include <unotools/mediadescriptor.hxx>
-#include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/container/XEnumerationAccess.hpp>

@@ -38,7 +38,6 @@
 #include <com/sun/star/util/NumberFormat.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 #include <com/sun/star/util/XNumberFormats.hpp>
-#include <comphelper/processfactory.hxx>
 
 #include <fmprop.hxx>
 #include <fmservs.hxx>

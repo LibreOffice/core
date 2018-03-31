@@ -33,7 +33,6 @@
 #include <svtools/valueset.hxx>
 #include <unotools/pathoptions.hxx>
 #include <unotools/viewoptions.hxx>
-#include <comphelper/processfactory.hxx>
 #include <i18nlangtag/mslangid.hxx>
 #include <svx/xlineit0.hxx>
 #include <svx/xlndsit.hxx>

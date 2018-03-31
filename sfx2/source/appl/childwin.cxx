@@ -24,7 +24,6 @@
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
-#include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 #include <cppuhelper/implbase.hxx>
 

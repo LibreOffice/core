@@ -25,7 +25,6 @@
 #include <svx/svdouno.hxx>
 
 
-#include <comphelper/processfactory.hxx>
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
 #include <com/sun/star/container/XContainerListener.hpp>
 #include <com/sun/star/report/XReportComponent.hpp>

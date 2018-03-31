@@ -37,7 +37,6 @@
 #include <editeng/memberids.h>
 
 #include <svx/unomid.hxx>
-#include <comphelper/processfactory.hxx>
 
 #include <hintids.hxx>
 #include <paratr.hxx>

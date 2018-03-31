@@ -23,7 +23,6 @@
 #include <osl/mutex.hxx>
 #include <osl/diagnose.h>
 #include <comphelper/eventattachermgr.hxx>
-#include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
 #include <com/sun/star/beans/theIntrospection.hpp>
 #include <com/sun/star/io/XObjectInputStream.hpp>

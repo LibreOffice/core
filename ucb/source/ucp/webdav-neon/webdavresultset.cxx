@@ -37,7 +37,6 @@
  *************************************************************************/
 #include "webdavresultset.hxx"
 #include "DAVSession.hxx"
-#include <comphelper/processfactory.hxx>
 
 using namespace com::sun::star;
 using namespace webdav_ucp;

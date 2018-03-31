@@ -31,7 +31,6 @@
 
 #include <osl/diagnose.h>
 #include <osl/mutex.hxx>
-#include <comphelper/processfactory.hxx>
 #include <officecfg/Office/Recovery.hxx>
 
 using namespace utl;

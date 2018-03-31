@@ -34,7 +34,6 @@
 #include <swerror.h>
 #include <swtypes.hxx>
 
-#include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <i18nlangtag/lang.h>

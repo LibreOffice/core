@@ -26,7 +26,6 @@
 #include <vcl/svapp.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <svtools/langtab.hxx>
-#include <comphelper/processfactory.hxx>
 #include <helper/mischelper.hxx>
 #include <services.h>
 

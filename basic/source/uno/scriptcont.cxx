@@ -34,7 +34,6 @@
 #include <com/sun/star/embed/XTransactedObject.hpp>
 #include <com/sun/star/task/ErrorCodeIOException.hpp>
 #include <com/sun/star/script/ModuleType.hpp>
-#include <comphelper/processfactory.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <unotools/streamwrap.hxx>
 #include <unotools/ucbstreamhelper.hxx>

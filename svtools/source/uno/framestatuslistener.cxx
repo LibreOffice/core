@@ -23,7 +23,6 @@
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <cppuhelper/queryinterface.hxx>
 #include <vcl/svapp.hxx>
-#include <comphelper/processfactory.hxx>
 
 using namespace ::cppu;
 using namespace css::awt;

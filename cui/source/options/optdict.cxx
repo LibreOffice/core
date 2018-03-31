@@ -23,7 +23,6 @@
 #include <sfx2/sfxuno.hxx>
 #include <svl/eitem.hxx>
 #include <com/sun/star/frame/XStorable.hpp>
-#include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 #include <unotools/intlwrapper.hxx>
 #include <vcl/svapp.hxx>

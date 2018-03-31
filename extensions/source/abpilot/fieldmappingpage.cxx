@@ -21,7 +21,6 @@
 #include "fieldmappingimpl.hxx"
 #include "addresssettings.hxx"
 #include "abspilot.hxx"
-#include <comphelper/processfactory.hxx>
 
 
 namespace abp

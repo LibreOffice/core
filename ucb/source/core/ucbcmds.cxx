@@ -19,7 +19,6 @@
 
 #include <memory>
 #include <osl/diagnose.h>
-#include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/exc_hlp.hxx>

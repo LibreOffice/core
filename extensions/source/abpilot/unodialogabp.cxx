@@ -20,7 +20,6 @@
 #include "unodialogabp.hxx"
 #include <cppuhelper/typeprovider.hxx>
 #include "abspilot.hxx"
-#include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
 
 #define PROPERTY_ID_DATASOURCENAME  3

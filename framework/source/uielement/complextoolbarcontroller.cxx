@@ -27,7 +27,6 @@
 #include <com/sun/star/frame/status/Visibility.hpp>
 #include <com/sun/star/frame/XControlNotificationListener.hpp>
 
-#include <comphelper/processfactory.hxx>
 #include <svtools/toolboxcontroller.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/mnemonic.hxx>

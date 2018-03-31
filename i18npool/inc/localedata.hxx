@@ -21,8 +21,6 @@
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
-#include <comphelper/processfactory.hxx>
-
 #include <com/sun/star/i18n/XLocaleData5.hpp>
 
 

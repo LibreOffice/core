@@ -69,7 +69,6 @@
 #include <comphelper/enumhelper.hxx>
 #include <comphelper/extract.hxx>
 #include <comphelper/interaction.hxx>
-#include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/string.hxx>
 #include <connectivity/dbexception.hxx>

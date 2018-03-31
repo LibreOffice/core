@@ -18,7 +18,6 @@
  */
 #include <docsh.hxx>
 #include "wordvbahelper.hxx"
-#include <comphelper/processfactory.hxx>
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
 #include <com/sun/star/text/XTextTable.hpp>

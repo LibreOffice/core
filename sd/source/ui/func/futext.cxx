@@ -44,7 +44,6 @@
 #include <svx/svdotable.hxx>
 #include <svx/svxids.hrc>
 #include <sfx2/docfile.hxx>
-#include <comphelper/processfactory.hxx>
 #include <editeng/outlobj.hxx>
 #include <svtools/langtab.hxx>
 

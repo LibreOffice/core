@@ -26,7 +26,6 @@
 #include <com/sun/star/i18n/TransliterationModulesExtra.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 
-#include <comphelper/processfactory.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <rtl/instance.hxx>
 #include <rtl/string.h>

@@ -29,7 +29,6 @@
 #include <odbc/OResultSet.hxx>
 #include <odbc/OResultSetMetaData.hxx>
 #include <cppuhelper/typeprovider.hxx>
-#include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <connectivity/dbtools.hxx>

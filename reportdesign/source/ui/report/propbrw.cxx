@@ -47,7 +47,6 @@
 #include <comphelper/stl_types.hxx>
 #include <comphelper/types.hxx>
 #include <comphelper/sequence.hxx>
-#include <comphelper/processfactory.hxx>
 #include <core_resource.hxx>
 #include <SectionView.hxx>
 #include <ReportSection.hxx>

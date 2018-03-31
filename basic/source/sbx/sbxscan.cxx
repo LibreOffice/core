@@ -47,7 +47,6 @@
 #include <rtl/strbuf.hxx>
 #include <rtl/character.hxx>
 #include <svl/zforlist.hxx>
-#include <comphelper/processfactory.hxx>
 
 #include <o3tl/make_unique.hxx>
 

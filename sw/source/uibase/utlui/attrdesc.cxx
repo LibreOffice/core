@@ -25,7 +25,6 @@
 
 #include <editeng/itemtype.hxx>
 #include <unotools/intlwrapper.hxx>
-#include <comphelper/processfactory.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <fmtanchr.hxx>
 #include <fmtfsize.hxx>

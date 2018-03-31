@@ -30,7 +30,6 @@
 #include <com/sun/star/xml/sax/Writer.hpp>
 #include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/io/XActiveDataSource.hpp>
-#include <comphelper/processfactory.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;

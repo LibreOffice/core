@@ -34,7 +34,6 @@
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/frame/DispatchResultState.hpp>
-#include <comphelper/processfactory.hxx>
 #include <itemdel.hxx>
 
 //Includes below due to nInReschedule

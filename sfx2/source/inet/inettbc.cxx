@@ -37,8 +37,6 @@
 #include <svtools/asynclink.hxx>
 #include <svtools/inettbc.hxx>
 
-#include <comphelper/processfactory.hxx>
-
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/objsh.hxx>

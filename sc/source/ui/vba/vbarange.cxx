@@ -22,7 +22,6 @@
 #include <vbahelper/helperdecl.hxx>
 
 #include <comphelper/unwrapargs.hxx>
-#include <comphelper/processfactory.hxx>
 #include <o3tl/any.hxx>
 #include <sfx2/objsh.hxx>
 

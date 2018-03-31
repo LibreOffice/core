@@ -22,7 +22,6 @@
 #include <services.hxx>
 #include <tools/debug.hxx>
 #include <comphelper/basicio.hxx>
-#include <comphelper/processfactory.hxx>
 
 
 namespace frm

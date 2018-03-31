@@ -32,7 +32,6 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/ui/UIElementType.hpp>
 
-#include <comphelper/processfactory.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 
 #include <tools/solar.h>

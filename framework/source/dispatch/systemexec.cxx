@@ -28,7 +28,6 @@
 #include <com/sun/star/frame/DispatchResultState.hpp>
 
 #include <vcl/svapp.hxx>
-#include <comphelper/processfactory.hxx>
 
 namespace framework{
 

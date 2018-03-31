@@ -10,7 +10,6 @@
 #include <memory>
 #include <com/sun/star/packages/zip/ZipFileAccess.hpp>
 
-#include <comphelper/processfactory.hxx>
 #include <i18nutil/unicode.hxx>
 #include <osl/module.hxx>
 #include <osl/file.hxx>

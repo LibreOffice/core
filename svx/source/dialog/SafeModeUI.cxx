@@ -11,7 +11,6 @@
 #include <com/sun/star/frame/XSynchronousDispatch.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
-#include <comphelper/processfactory.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
 #include <vcl/svapp.hxx>

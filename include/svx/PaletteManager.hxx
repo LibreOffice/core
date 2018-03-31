@@ -25,7 +25,6 @@
 #include <svx/tbxcolorupdate.hxx>
 
 #include <tools/urlobj.hxx>
-#include <comphelper/processfactory.hxx>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 

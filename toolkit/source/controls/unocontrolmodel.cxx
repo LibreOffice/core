@@ -42,7 +42,6 @@
 #include <com/sun/star/lang/Locale.hpp>
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/configmgr.hxx>
-#include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/extract.hxx>
 #include <vcl/svapp.hxx>

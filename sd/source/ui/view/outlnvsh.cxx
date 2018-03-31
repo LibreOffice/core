@@ -53,7 +53,6 @@
 #include <sot/formats.hxx>
 #include <com/sun/star/linguistic2/XThesaurus.hpp>
 #include <editeng/unolingu.hxx>
-#include <comphelper/processfactory.hxx>
 #include <editeng/outlobj.hxx>
 #include <svl/cjkoptions.hxx>
 #include <svtools/cliplistener.hxx>

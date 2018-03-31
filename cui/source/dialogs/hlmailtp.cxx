@@ -20,7 +20,6 @@
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <sfx2/request.hxx>
 
-#include <comphelper/processfactory.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <unotools/pathoptions.hxx>
 #include <unotools/moduleoptions.hxx>

@@ -18,7 +18,6 @@
  */
 
 #include <hintids.hxx>
-#include <comphelper/processfactory.hxx>
 #include <svl/stritem.hxx>
 #include <sfx2/dispatch.hxx>
 #include <svl/eitem.hxx>

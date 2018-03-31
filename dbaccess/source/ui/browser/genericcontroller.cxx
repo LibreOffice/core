@@ -29,7 +29,6 @@
 #include <osl/diagnose.h>
 #include <stringconstants.hxx>
 #include <vcl/stdtext.hxx>
-#include <comphelper/processfactory.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <framework/titlehelper.hxx>
 #include <comphelper/sequence.hxx>

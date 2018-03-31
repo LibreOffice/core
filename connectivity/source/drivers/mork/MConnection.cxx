@@ -20,8 +20,6 @@
 
 #include <com/sun/star/sdbc/TransactionIsolation.hpp>
 
-#include <comphelper/processfactory.hxx>
-
 using namespace dbtools;
 
 

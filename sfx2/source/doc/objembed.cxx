@@ -31,7 +31,6 @@
 
 #include <comphelper/fileformat.h>
 #include <comphelper/seqstream.hxx>
-#include <comphelper/processfactory.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <svtools/embedtransfer.hxx>
 #include <tools/fract.hxx>

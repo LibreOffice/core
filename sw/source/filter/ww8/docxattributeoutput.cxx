@@ -40,6 +40,7 @@
 #include <rdfhelper.hxx>
 #include "wrtww8.hxx"
 
+#include <comphelper/processfactory.hxx>
 #include <comphelper/random.hxx>
 #include <comphelper/string.hxx>
 #include <comphelper/flagguard.hxx>

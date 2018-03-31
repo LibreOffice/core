@@ -26,7 +26,6 @@
 
 #include <comphelper/fileformat.h>
 #include <comphelper/mimeconfighelper.hxx>
-#include <comphelper/processfactory.hxx>
 #include <comphelper/classids.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/documentconstants.hxx>

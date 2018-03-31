@@ -44,7 +44,6 @@
 #include <basic/codecompletecache.hxx>
 #include <com/sun/star/reflection/XIdlClass.hpp>
 #include <comphelper/namedvaluecollection.hxx>
-#include <comphelper/processfactory.hxx>
 #include <comphelper/syntaxhighlight.hxx>
 #include <com/sun/star/reflection/XIdlReflection.hpp>
 

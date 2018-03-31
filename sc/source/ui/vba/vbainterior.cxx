@@ -29,7 +29,6 @@
 #include <ooo/vba/excel/XlColorIndex.hpp>
 #include <ooo/vba/excel/XlPattern.hpp>
 
-#include <comphelper/processfactory.hxx>
 #include <cppuhelper/queryinterface.hxx>
 
 #include <map>

@@ -60,7 +60,6 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 
-#include <comphelper/processfactory.hxx>
 #include <comphelper/lok.hxx>
 #include <svtools/imgdef.hxx>
 #include <tools/diagnose_ex.h>

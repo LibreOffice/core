@@ -56,7 +56,6 @@
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/extract.hxx>
-#include <comphelper/processfactory.hxx>
 #include <comphelper/documentconstants.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/propertysequence.hxx>

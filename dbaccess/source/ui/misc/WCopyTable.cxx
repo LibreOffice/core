@@ -47,7 +47,6 @@
 #include <com/sun/star/task/InteractionHandler.hpp>
 
 #include <comphelper/extract.hxx>
-#include <comphelper/processfactory.hxx>
 #include <comphelper/types.hxx>
 #include <comphelper/interaction.hxx>
 #include <connectivity/dbtools.hxx>

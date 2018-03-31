@@ -14,7 +14,6 @@
 #include <vector>
 #include <iostream>
 
-#include <comphelper/processfactory.hxx>
 #include <rtl/strbuf.hxx>
 #include <config_features.h>
 

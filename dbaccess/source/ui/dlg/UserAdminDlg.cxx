@@ -29,7 +29,6 @@
 #include "UserAdmin.hxx"
 #include <UserAdminDlg.hxx>
 
-#include <comphelper/processfactory.hxx>
 #include <connectivity/dbmetadata.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <svl/eitem.hxx>

@@ -65,7 +65,6 @@
 #include <valgrind/callgrind.h>
 #endif
 
-#include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 #include <com/sun/star/beans/XMaterialHolder.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
