@@ -165,7 +165,7 @@ class SwAutoFormat
     bool IsEnumericChar( const SwTextNode&) const;
     static bool IsBlanksInString( const SwTextNode&);
     sal_uInt16 CalcLevel( const SwTextNode&, sal_uInt16 *pDigitLvl = nullptr ) const;
-    sal_Int32 GetBigIndent( sal_Int32& rAktSpacePos ) const;
+    sal_Int32 GetBigIndent( sal_Int32& rCurrentSpacePos ) const;
 
     static OUString DelLeadingBlanks(const OUString& rStr);
     static OUString DelTrailingBlanks( const OUString& rStr );
@@ -478,7 +478,7 @@ sal_uInt16 SwAutoFormat::CalcLevel( const SwTextNode& rNd, sal_uInt16 *pDigitLvl
     return nLvl;
 }
 
-sal_Int32 SwAutoFormat::GetBigIndent( sal_Int32& rAktSpacePos ) const
+sal_Int32 SwAutoFormat::GetBigIndent( sal_Int32& rCurrentSpacePos ) const
 {
     SwTextFrameInfo aFInfo( GetFrame( *m_pCurTextNd ) );
     const SwTextFrame* pNxtFrame = nullptr;
@@ -492,7 +492,7 @@ sal_Int32 SwAutoFormat::GetBigIndent( sal_Int32& rAktSpacePos ) const
         pNxtFrame = GetFrame( *pNxtNd );
     }
 
-    return aFInfo.GetBigIndent( rAktSpacePos, pNxtFrame );
+    return aFInfo.GetBigIndent( rCurrentSpacePos, pNxtFrame );
 }
 
 bool SwAutoFormat::IsNoAlphaLine( const SwTextNode& rNd ) const
