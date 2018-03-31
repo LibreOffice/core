@@ -496,7 +496,7 @@ public class _XAccessibleText {
     }
 
     /**
-     * Calls the method with invalid parameters an with valid parameters.
+     * Calls the method with invalid parameters and with valid parameters.
      * Has OK status if exception was thrown for invalid parameters,
      * if exception wasn't thrown for valid parameters.
      * The following method tests are to be executed before:
@@ -583,7 +583,7 @@ public class _XAccessibleText {
     }
 
     /**
-     * Calls the method with invalid parameters an with valid parameters,
+     * Calls the method with invalid parameters and with valid parameters,
      * checks returned values.
      * Has OK status if exception was thrown for invalid parameters,
      * if exception wasn't thrown for valid parameters and if returned values
@@ -675,7 +675,7 @@ public class _XAccessibleText {
     }
 
     /**
-     * Calls the method with invalid parameters an with valid parameters,
+     * Calls the method with invalid parameters and with valid parameters,
      * checks returned values.
      * Has OK status if exception was thrown for invalid parameters,
      * if exception wasn't thrown for valid parameters and if returned values
@@ -746,7 +746,7 @@ public class _XAccessibleText {
     }
 
     /**
-     * Calls the method with invalid parameters an with valid parameters,
+     * Calls the method with invalid parameters and with valid parameters,
      * checks returned values.
      * Has OK status if exception was thrown for invalid parameters,
      * if exception wasn't thrown for valid parameters and if returned values
@@ -833,7 +833,7 @@ public class _XAccessibleText {
     }
 
     /**
-     * Calls the method with invalid parameters an with valid parameters,
+     * Calls the method with invalid parameters and with valid parameters,
      * checks returned values.
      * Has OK status if exception was thrown for invalid parameters,
      * if exception wasn't thrown for valid parameters and if returned values
@@ -921,7 +921,7 @@ public class _XAccessibleText {
     }
 
     /**
-     * Calls the method with invalid parameters an with valid parameter,
+     * Calls the method with invalid parameters and with valid parameter,
      * checks returned values.
      * Has OK status if exception was thrown for invalid parameters,
      * if exception wasn't thrown for valid parameter and if returned value for

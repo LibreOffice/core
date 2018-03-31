@@ -1140,7 +1140,7 @@ bool WW8AttributeOutput::StartURL( const OUString &rUrl, const OUString &rTarget
     else if ( eProto != INetProtocol::NotValid )
     {
         // version 2 (simple url)
-        // an write some data to the data stream, but don't ask
+        // and write some data to the data stream, but don't ask
         // what the data mean, except for the URL.
         // The First piece is the WW8_PIC structure.
         static sal_uInt8 MAGIC_B[] = {

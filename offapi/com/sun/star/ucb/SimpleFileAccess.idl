@@ -26,7 +26,7 @@
 module com { module sun { module star { module ucb {
 
 /** Offers a simple access to resources, like files and folders located in a
-local file system or on an WebDAV server.
+local file system or on a WebDAV server.
 
     @author Andreas Bregas
     @version 1.0 07/25/2000

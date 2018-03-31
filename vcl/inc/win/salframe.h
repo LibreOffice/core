@@ -57,7 +57,7 @@ public:
     bool                    mbBorder;               // has window a border
     bool                    mbFixBorder;            // has window a fixed border
     bool                    mbSizeBorder;           // has window a sizeable border
-    bool                    mbNoIcon;               // is an window without an icon
+    bool                    mbNoIcon;               // is a window without an icon
     bool                    mbFloatWin;             // is a FloatingWindow
     bool                    mbFullScreen;           // TRUE: in full screen mode
     bool                    mbPresentation;         // TRUE: Presentation Mode running
