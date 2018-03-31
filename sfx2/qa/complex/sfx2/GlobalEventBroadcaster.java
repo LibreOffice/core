@@ -132,7 +132,7 @@ public class GlobalEventBroadcaster {
                proveExpectation(expected));
         System.out.println("... done");
 
-        System.out.println("opening an writer doc via Window-New Window");
+        System.out.println("opening a writer doc via Window-New Window");
         notifyEvents.clear();
         {
             XTextDocument xTextDoc = wHelper.openFromDialog(".uno:NewWindow", "", false);
@@ -140,7 +140,7 @@ public class GlobalEventBroadcaster {
             util.utils.waitForEventIdle(m_xMSF);
             expected = new String[] { "OnUnfocus", "OnCreate", "OnViewCreated", "OnFocus", "OnUnfocus", "OnViewCreated", "OnFocus", };
 
-            assertTrue("Wrong events fired when opening an writer doc via Window-New Window",
+            assertTrue("Wrong events fired when opening a writer doc via Window-New Window",
                    proveExpectation(expected));
             System.out.println("... done");
 

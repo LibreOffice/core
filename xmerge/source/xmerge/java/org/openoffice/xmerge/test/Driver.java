@@ -168,7 +168,7 @@ public final class Driver {
                         docOut.write(fos);
                         fos.flush();
                     } catch (Exception writeExcept) {
-                        System.out.println("\nThere was an writing out file <" +
+                        System.out.println("\nThere was a writing out file <" +
                             fileName + ">");
                         writeExcept.printStackTrace();
                     } finally {

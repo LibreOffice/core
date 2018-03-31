@@ -6031,7 +6031,7 @@ bool SvxMSDffManager::GetShapeGroupContainerData( SvStream& rSt,
     sal_uInt8 nVer;sal_uInt16 nInst;sal_uInt16 nFbt;sal_uInt32 nLength;
     long nStartShapeGroupCont = rSt.Tell();
     // We are now in a shape group container (conditionally multiple per page)
-    // an we now have to iterate through all contained shape containers
+    // and we now have to iterate through all contained shape containers
     bool  bFirst = !bPatriarch;
     sal_uLong nReadSpGrCont = 0;
     do

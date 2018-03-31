@@ -381,7 +381,7 @@ bool DocumentSignatureManager::add(
 
     // We open a signature stream in which the existing and the new
     //signature is written. ImplGetSignatureInformation (later in this function) will
-    //then read the stream an will fill  maCurrentSignatureInformations. The final signature
+    //then read the stream and fill maCurrentSignatureInformations. The final signature
     //is written when the user presses OK. Then only maCurrentSignatureInformation and
     //a sax writer are used to write the information.
     SignatureStreamHelper aStreamHelper
