@@ -21,12 +21,12 @@
 #define INCLUDED_I18NPOOL_INC_NUMBERFORMATCODE_HXX
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <comphelper/processfactory.hxx>
 #include <cppuhelper/implbase.hxx>
 
 #include <com/sun/star/i18n/XNumberFormatCode.hpp>
 #include <com/sun/star/i18n/XLocaleData5.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
 #include <deque>

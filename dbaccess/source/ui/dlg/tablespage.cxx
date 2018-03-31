@@ -47,7 +47,6 @@
 #include <svtools/treelistentry.hxx>
 #include <TablesSingleDlg.hxx>
 #include <tools/diagnose_ex.h>
-#include <comphelper/processfactory.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 
 namespace dbaui

@@ -37,7 +37,6 @@
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/document/XStorageBasedDocument.hpp>
 
-#include <comphelper/processfactory.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 
 #include <toolkit/helper/vclunohelper.hxx>

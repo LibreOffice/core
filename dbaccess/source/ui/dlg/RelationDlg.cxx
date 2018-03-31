@@ -34,7 +34,6 @@
 #include <RTableConnectionData.hxx>
 #include <RelationControl.hxx>
 #include <cppuhelper/exc_hlp.hxx>
-#include <comphelper/processfactory.hxx>
 
 #include <algorithm>
 

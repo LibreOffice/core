@@ -55,7 +55,6 @@
 #include <com/sun/star/xml/dom/XDocument.hpp>
 #include <com/sun/star/xml/dom/DOMException.hpp>
 #include <com/sun/star/form/binding/XValueBinding.hpp>
-#include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 
 using namespace ::com::sun::star::beans;

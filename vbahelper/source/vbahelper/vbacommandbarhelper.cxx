@@ -26,7 +26,6 @@
 #include <com/sun/star/ui/XUIElement.hpp>
 #include <com/sun/star/ui/UIElementType.hpp>
 #include <com/sun/star/ui/theWindowStateConfiguration.hpp>
-#include <comphelper/processfactory.hxx>
 #include <comphelper/random.hxx>
 #include <vbahelper/vbahelper.hxx>
 #include <rtl/ustrbuf.hxx>

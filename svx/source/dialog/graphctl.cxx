@@ -25,7 +25,6 @@
 #include <unotools/syslocale.hxx>
 #include <rtl/math.hxx>
 #include <unotools/localedatawrapper.hxx>
-#include <comphelper/processfactory.hxx>
 #include <vcl/svapp.hxx>
 
 #include <svx/graphctl.hxx>

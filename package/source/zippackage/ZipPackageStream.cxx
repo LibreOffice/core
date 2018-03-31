@@ -45,7 +45,6 @@
 #include <osl/diagnose.h>
 #include "wrapstreamforshare.hxx"
 
-#include <comphelper/processfactory.hxx>
 #include <comphelper/seekableinput.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <cppuhelper/exc_hlp.hxx>

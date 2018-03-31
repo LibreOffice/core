@@ -68,7 +68,6 @@
 #include <svl/zformat.hxx>
 
 #include <test/xmltesttools.hxx>
-#include <comphelper/processfactory.hxx>
 #include <com/sun/star/table/BorderLineStyle.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>

@@ -29,7 +29,6 @@
 #include <com/sun/star/awt/XWindowListener.hpp>
 #include <com/sun/star/ui/XUIElement.hpp>
 
-#include <comphelper/processfactory.hxx>
 #include <unotools/mediadescriptor.hxx>
 #include <vcl/svapp.hxx>
 #include <toolkit/helper/vclunohelper.hxx>

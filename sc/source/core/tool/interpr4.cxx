@@ -41,7 +41,6 @@
 
 #include <com/sun/star/table/XCellRange.hpp>
 #include <com/sun/star/sheet/XSheetCellRange.hpp>
-#include <comphelper/processfactory.hxx>
 
 #include <global.hxx>
 #include <dbdata.hxx>

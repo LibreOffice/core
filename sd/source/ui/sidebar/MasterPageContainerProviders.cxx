@@ -22,7 +22,6 @@
 #include <DrawDocShell.hxx>
 #include <drawdoc.hxx>
 #include <PreviewRenderer.hxx>
-#include <comphelper/processfactory.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <sfx2/thumbnailview.hxx>

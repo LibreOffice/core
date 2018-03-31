@@ -21,7 +21,6 @@
 
 #include <strings.hrc>
 #include "unknownauthdlg.hxx"
-#include <comphelper/processfactory.hxx>
 
 #include <com/sun/star/security/DocumentDigitalSignatures.hpp>
 

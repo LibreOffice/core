@@ -30,7 +30,6 @@
 #include <sfx2/objsh.hxx>
 #include <sfx2/sfxmodelfactory.hxx>
 #include <svl/intitem.hxx>
-#include <comphelper/processfactory.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

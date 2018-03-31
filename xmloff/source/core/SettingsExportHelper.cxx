@@ -27,7 +27,6 @@
 #include <tools/diagnose_ex.h>
 #include <comphelper/base64.hxx>
 #include <comphelper/extract.hxx>
-#include <comphelper/processfactory.hxx>
 
 #include <com/sun/star/linguistic2/XSupportedLocales.hpp>
 #include <com/sun/star/i18n/XForbiddenCharacters.hpp>

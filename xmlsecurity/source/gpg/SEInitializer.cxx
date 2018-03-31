@@ -9,7 +9,6 @@
 
 #include <config_gpgme.h>
 
-#include <comphelper/processfactory.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <gpg/SEInitializer.hxx>
 #include "SecurityEnvironment.hxx"

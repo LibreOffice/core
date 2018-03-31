@@ -39,7 +39,6 @@
 #include <vcl/svapp.hxx>
 #include <vcl/syswin.hxx>
 #include <unotools/moduleoptions.hxx>
-#include <comphelper/processfactory.hxx>
 
 using namespace com::sun::star;
 

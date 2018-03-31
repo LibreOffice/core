@@ -30,7 +30,6 @@
 #include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 
-#include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <vcl/svapp.hxx>

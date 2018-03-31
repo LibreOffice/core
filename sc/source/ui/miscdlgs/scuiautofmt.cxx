@@ -34,7 +34,6 @@
 #include <svl/zforlist.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
-#include <comphelper/processfactory.hxx>
 #include <sfx2/strings.hrc>
 #include <sfx2/sfxresid.hxx>
 #include <strings.hrc>

@@ -52,7 +52,6 @@
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/document/XCodeNameQuery.hpp>
 #include <ooo/vba/XVBAToOOEventDescGen.hpp>
-#include <comphelper/processfactory.hxx>
 
 namespace frm
 {

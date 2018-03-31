@@ -22,8 +22,6 @@
 
 #include <gtk/gtk.h>
 
-#include <comphelper/processfactory.hxx>
-
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/document/XExporter.hpp>

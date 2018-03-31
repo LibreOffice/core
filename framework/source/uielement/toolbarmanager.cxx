@@ -58,7 +58,6 @@
 #include <unotools/cmdoptions.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <unotools/mediadescriptor.hxx>
-#include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
 #include <svtools/miscopt.hxx>
 #include <svtools/imgdef.hxx>

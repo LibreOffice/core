@@ -19,7 +19,6 @@
 
 #include <sal/config.h>
 
-#include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 
 

@@ -47,7 +47,6 @@
 #include <docstat.hxx>
 #include <editsh.hxx>
 #include <viewsh.hxx>
-#include <comphelper/processfactory.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/string.hxx>
 #include <comphelper/types.hxx>

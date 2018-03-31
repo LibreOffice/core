@@ -18,7 +18,6 @@
  */
 #include "vbaheaderfooterhelper.hxx"
 #include "wordvbahelper.hxx"
-#include <comphelper/processfactory.hxx>
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
 #include <com/sun/star/text/XTextRangeCompare.hpp>
 #include <com/sun/star/text/XTextRange.hpp>

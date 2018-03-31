@@ -58,7 +58,6 @@
 #include <com/sun/star/drawing/PolygonFlags.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/drawing/XControlShape.hpp>
-#include <comphelper/processfactory.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/i18n/XBreakIterator.hpp>
 #include <com/sun/star/i18n/XScriptTypeDetector.hpp>

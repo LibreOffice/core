@@ -19,6 +19,7 @@
 
 #include <svx/SvxNumOptionsTabPageHelper.hxx>
 #include <com/sun/star/style/NumberingType.hpp>
+#include <comphelper/processfactory.hxx>
 
 using namespace css;
 using namespace css::uno;

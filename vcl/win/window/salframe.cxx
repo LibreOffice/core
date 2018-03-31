@@ -21,7 +21,6 @@
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/awt/Rectangle.hpp>
-#include <comphelper/processfactory.hxx>
 #include <unotools/misccfg.hxx>
 
 #include <officecfg/Office/Common.hxx>

@@ -24,7 +24,6 @@
 
 #include <comphelper/streamsection.hxx>
 #include <comphelper/basicio.hxx>
-#include <comphelper/processfactory.hxx>
 #include <o3tl/any.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/debug.hxx>

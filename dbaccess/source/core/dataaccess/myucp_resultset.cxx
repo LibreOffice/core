@@ -28,7 +28,6 @@
 
 #include "myucp_datasupplier.hxx"
 #include "myucp_resultset.hxx"
-#include <comphelper/processfactory.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::ucb;

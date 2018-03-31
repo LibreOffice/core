@@ -23,7 +23,6 @@
 #include <utility>
 
 #include <com/sun/star/ucb/UniversalContentBroker.hpp>
-#include <comphelper/processfactory.hxx>
 #include <unotools/tempfile.hxx>
 #include <unotools/localfilehelper.hxx>
 #include <rtl/ustring.hxx>

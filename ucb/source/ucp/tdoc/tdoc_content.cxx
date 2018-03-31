@@ -61,7 +61,6 @@
 #include <com/sun/star/ucb/XCommandInfo.hpp>
 #include <com/sun/star/ucb/XPersistentPropertySet.hpp>
 
-#include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <ucbhelper/cancelcommandexecution.hxx>
 #include <ucbhelper/contentidentifier.hxx>

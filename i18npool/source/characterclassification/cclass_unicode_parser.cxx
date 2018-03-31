@@ -28,7 +28,6 @@
 #include <com/sun/star/i18n/LocaleData2.hpp>
 #include <com/sun/star/i18n/NativeNumberMode.hpp>
 #include <com/sun/star/i18n/NativeNumberSupplier.hpp>
-#include <comphelper/processfactory.hxx>
 
 #include <string.h>
 

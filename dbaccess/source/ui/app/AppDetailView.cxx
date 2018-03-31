@@ -44,7 +44,6 @@
 #include <algorithm>
 #include <dbtreelistbox.hxx>
 #include <imageprovider.hxx>
-#include <comphelper/processfactory.hxx>
 #include "AppController.hxx"
 
 using namespace ::dbaui;

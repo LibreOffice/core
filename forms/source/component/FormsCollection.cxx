@@ -20,7 +20,6 @@
 #include "FormsCollection.hxx"
 #include <services.hxx>
 #include <comphelper/sequence.hxx>
-#include <comphelper/processfactory.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/form/XForm.hpp>
 

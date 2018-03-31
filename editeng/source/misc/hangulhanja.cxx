@@ -24,7 +24,6 @@
 
 #include <set>
 #include <map>
-#include <comphelper/processfactory.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/i18n/BreakIterator.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>

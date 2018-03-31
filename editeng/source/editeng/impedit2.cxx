@@ -57,7 +57,6 @@
 #include <com/sun/star/text/CharacterCompressionType.hpp>
 #include <com/sun/star/i18n/InputSequenceCheckMode.hpp>
 
-#include <comphelper/processfactory.hxx>
 
 #include <sot/exchange.hxx>
 #include <sot/formats.hxx>

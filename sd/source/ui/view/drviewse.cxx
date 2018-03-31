@@ -27,8 +27,6 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/uno/Any.hxx>
 
-#include <comphelper/processfactory.hxx>
-
 #include <undo/undomanager.hxx>
 #include <vcl/waitobj.hxx>
 #include <svl/aeitem.hxx>

@@ -49,7 +49,6 @@
 #include <com/sun/star/text/XSimpleText.hpp>
 #include <com/sun/star/animations/XIterateContainer.hpp>
 #include <com/sun/star/presentation/TextAnimationType.hpp>
-#include <comphelper/processfactory.hxx>
 #include <rtl/ustrbuf.hxx>
 
 #include <vcl/vclenum.hxx>

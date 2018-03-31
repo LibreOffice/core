@@ -22,7 +22,6 @@
 #include <xmloff/xmlmetai.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <comphelper/processfactory.hxx>
 #include <xmloff/xmlimp.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/document/XDocumentProperties.hpp>

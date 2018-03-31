@@ -25,7 +25,6 @@
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/frame/XNotifyingDispatch.hpp>
 
-#include <comphelper/processfactory.hxx>
 #include <comphelper/profilezone.hxx>
 
 namespace framework{

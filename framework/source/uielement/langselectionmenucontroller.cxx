@@ -31,7 +31,6 @@
 #include <vcl/i18nhelp.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <vcl/mnemonic.hxx>
-#include <comphelper/processfactory.hxx>
 
 #include <com/sun/star/document/XDocumentLanguages.hpp>
 

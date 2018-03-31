@@ -38,7 +38,6 @@
 #include <vcl/toolbox.hxx>
 #include <svl/intitem.hxx>
 #include <svl/stritem.hxx>
-#include <comphelper/processfactory.hxx>
 
 #include <ChartModel.hxx>
 #include <DataSeriesHelper.hxx>

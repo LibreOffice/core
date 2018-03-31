@@ -40,7 +40,6 @@
 #include <com/sun/star/i18n/CharacterClassification.hpp>
 #include <com/sun/star/i18n/UnicodeType.hpp>
 #include <basegfx/vector/b3dvector.hxx>
-#include <comphelper/processfactory.hxx>
 
 #include <sax/tools/converter.hxx>
 

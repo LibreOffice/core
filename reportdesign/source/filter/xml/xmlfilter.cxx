@@ -43,7 +43,6 @@
 #include <com/sun/star/xml/sax/XParser.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 
-#include <comphelper/processfactory.hxx>
 #include <comphelper/genericpropertyset.hxx>
 #include <unotools/mediadescriptor.hxx>
 #include <xmloff/ProgressBarHelper.hxx>

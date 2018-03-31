@@ -22,7 +22,6 @@
 
 #include <toolkit/controls/unocontrolbase.hxx>
 #include <toolkit/helper/property.hxx>
-#include <comphelper/processfactory.hxx>
 
 #include <tools/debug.hxx>
 

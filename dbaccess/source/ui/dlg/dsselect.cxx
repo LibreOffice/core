@@ -28,7 +28,6 @@
 #include <stringconstants.hxx>
 #include <comphelper/extract.hxx>
 #include <comphelper/types.hxx>
-#include <comphelper/processfactory.hxx>
 #include <dsitems.hxx>
 #include <svl/stritem.hxx>
 #include <svl/intitem.hxx>

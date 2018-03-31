@@ -37,7 +37,6 @@
 #include <tools/diagnose_ex.h>
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
-#include <comphelper/processfactory.hxx>
 #include <toolkit/helper/property.hxx>
 #include <toolkit/helper/servicenames.hxx>
 #include <toolkit/awt/vclxwindow.hxx>

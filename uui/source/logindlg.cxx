@@ -30,7 +30,6 @@
 
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #include <com/sun/star/ui/dialogs/FolderPicker.hpp>
-#include <comphelper/processfactory.hxx>
 
 using namespace com::sun::star;
 

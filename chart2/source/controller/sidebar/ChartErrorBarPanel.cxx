@@ -32,7 +32,6 @@
 #include <vcl/toolbox.hxx>
 #include <svl/intitem.hxx>
 #include <svl/stritem.hxx>
-#include <comphelper/processfactory.hxx>
 
 using namespace css;
 using namespace css::uno;

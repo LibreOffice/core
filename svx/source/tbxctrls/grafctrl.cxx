@@ -34,7 +34,6 @@
 #include <sfx2/request.hxx>
 #include <sfx2/basedlgs.hxx>
 #include <tools/urlobj.hxx>
-#include <comphelper/processfactory.hxx>
 
 #include <svx/dialogs.hrc>
 #include <svx/svxids.hrc>

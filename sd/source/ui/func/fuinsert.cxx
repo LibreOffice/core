@@ -21,7 +21,6 @@
 
 #include <fuinsert.hxx>
 #include <comphelper/storagehelper.hxx>
-#include <comphelper/processfactory.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <svx/svxdlg.hxx>
 #include <com/sun/star/embed/EmbedVerbs.hpp>

@@ -25,7 +25,6 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/frame/status/ItemStatus.hpp>
 
-#include <comphelper/processfactory.hxx>
 #include <vcl/svapp.hxx>
 
 using namespace css::awt;

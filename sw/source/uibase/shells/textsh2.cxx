@@ -31,7 +31,6 @@
 #include <com/sun/star/sdb/CommandType.hpp>
 #include <com/sun/star/sdbc/XDataSource.hpp>
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
-#include <comphelper/processfactory.hxx>
 #include <sfx2/frame.hxx>
 #include <fldmgr.hxx>
 #include <fldbas.hxx>

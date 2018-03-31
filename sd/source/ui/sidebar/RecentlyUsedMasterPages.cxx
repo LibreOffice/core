@@ -29,7 +29,6 @@
 #include <memory>
 #include <vector>
 
-#include <comphelper/processfactory.hxx>
 #include <unomodel.hxx>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/drawing/XDrawPages.hpp>

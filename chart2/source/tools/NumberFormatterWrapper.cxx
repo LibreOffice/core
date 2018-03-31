@@ -18,7 +18,6 @@
  */
 
 #include <NumberFormatterWrapper.hxx>
-#include <comphelper/processfactory.hxx>
 #include <svl/numuno.hxx>
 #include <svl/zformat.hxx>
 #include <tools/color.hxx>

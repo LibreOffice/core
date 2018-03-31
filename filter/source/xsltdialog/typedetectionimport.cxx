@@ -22,7 +22,6 @@
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 
-#include <comphelper/processfactory.hxx>
 #include "typedetectionimport.hxx"
 #include "xmlfiltersettingsdialog.hxx"
 

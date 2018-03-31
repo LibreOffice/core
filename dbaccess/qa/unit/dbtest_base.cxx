@@ -11,7 +11,6 @@
 
 #include <cppunit/TestAssert.h>
 
-#include <comphelper/processfactory.hxx>
 #include <test/unoapi_test.hxx>
 #include <unotools/tempfile.hxx>
 #include <com/sun/star/sdb/XOfficeDatabaseDocument.hpp>

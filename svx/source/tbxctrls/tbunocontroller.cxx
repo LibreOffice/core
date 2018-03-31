@@ -31,7 +31,6 @@
 #include <svtools/ctrltool.hxx>
 #include <svtools/ctrlbox.hxx>
 #include <svtools/toolboxcontroller.hxx>
-#include <comphelper/processfactory.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/supportsservice.hxx>
 

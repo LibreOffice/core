@@ -21,7 +21,6 @@
 #include <property.hxx>
 #include <services.hxx>
 #include <comphelper/basicio.hxx>
-#include <comphelper/processfactory.hxx>
 
 namespace frm
 {

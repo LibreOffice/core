@@ -39,7 +39,6 @@
 #include <svtools/langtab.hxx>
 #include <unotools/lingucfg.hxx>
 #include <i18nlangtag/mslangid.hxx>
-#include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 #include <osl/file.hxx>
 #include <o3tl/make_unique.hxx>

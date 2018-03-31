@@ -40,7 +40,6 @@
 #include <string.h>
 #include "curl.hxx"
 #include <curl/easy.h>
-#include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <ucbhelper/cancelcommandexecution.hxx>
 #include <ucbhelper/contentidentifier.hxx>

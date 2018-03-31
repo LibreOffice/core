@@ -32,7 +32,6 @@
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>
 
-#include <comphelper/processfactory.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <vcl/svapp.hxx>

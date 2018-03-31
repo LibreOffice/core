@@ -50,7 +50,6 @@
 #include <vcl/svapp.hxx>
 #include <unotools/streamhelper.hxx>
 #include <comphelper/guarding.hxx>
-#include <comphelper/processfactory.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <svl/urihelper.hxx>
 

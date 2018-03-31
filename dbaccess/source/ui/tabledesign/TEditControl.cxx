@@ -18,7 +18,6 @@
  */
 
 #include "TEditControl.hxx"
-#include <comphelper/processfactory.hxx>
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #include <com/sun/star/sdbcx/XAlterTable.hpp>

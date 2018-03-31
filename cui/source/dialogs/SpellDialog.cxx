@@ -35,7 +35,6 @@
 #include <editeng/splwrap.hxx>
 #include <linguistic/lngprops.hxx>
 #include <linguistic/misc.hxx>
-#include <comphelper/processfactory.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XServiceDisplayName.hpp>

@@ -40,7 +40,6 @@
 
 #include <comphelper/container.hxx>
 #include <comphelper/numbers.hxx>
-#include <comphelper/processfactory.hxx>
 
 using namespace dbtools;
 

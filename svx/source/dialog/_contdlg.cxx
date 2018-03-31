@@ -27,7 +27,6 @@
 #include <sfx2/viewfrm.hxx>
 #include <svtools/miscopt.hxx>
 #include <unotools/localedatawrapper.hxx>
-#include <comphelper/processfactory.hxx>
 
 #include <svx/dialmgr.hxx>
 #include <svx/xoutbmp.hxx>

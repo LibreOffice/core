@@ -26,7 +26,6 @@
 #include <HtmlReader.hxx>
 #include <stringconstants.hxx>
 #include <strings.hxx>
-#include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 #include <comphelper/types.hxx>
 #include <connectivity/dbtools.hxx>

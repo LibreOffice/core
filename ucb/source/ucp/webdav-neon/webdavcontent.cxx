@@ -34,7 +34,6 @@
  *************************************************************************/
 
 #include <memory>
-#include <comphelper/processfactory.hxx>
 #include <osl/diagnose.h>
 #include <rtl/uri.hxx>
 #include <rtl/ustrbuf.hxx>

@@ -21,7 +21,6 @@
 #define INCLUDED_SVX_SVXNUMOPTIONSTABPAGEHELPER_HXX
 
 #include <com/sun/star/text/DefaultNumberingProvider.hpp>
-#include <comphelper/processfactory.hxx>
 #include <com/sun/star/text/XNumberingTypeInfo.hpp>
 #include <vcl/lstbox.hxx>
 #include <svx/svxdllapi.h>

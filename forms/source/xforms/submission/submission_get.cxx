@@ -25,7 +25,6 @@
 #include <rtl/strbuf.hxx>
 #include <rtl/string.hxx>
 #include <osl/file.hxx>
-#include <comphelper/processfactory.hxx>
 #include <ucbhelper/content.hxx>
 #include <com/sun/star/io/Pipe.hpp>
 #include <com/sun/star/task/InteractionHandler.hpp>

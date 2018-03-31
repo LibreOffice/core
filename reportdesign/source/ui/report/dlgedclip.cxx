@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include <dlgedclip.hxx>
-#include <comphelper/processfactory.hxx>
 #include <osl/diagnose.h>
 #include <sot/exchange.hxx>
 #include <com/sun/star/datatransfer/XMimeContentType.hpp>
@@ -26,7 +25,6 @@
 namespace rptui
 {
 
-using namespace comphelper;
 using namespace ::com::sun::star;
 
 

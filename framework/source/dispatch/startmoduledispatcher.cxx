@@ -35,7 +35,6 @@
 #include <vcl/window.hxx>
 #include <vcl/svapp.hxx>
 #include <unotools/moduleoptions.hxx>
-#include <comphelper/processfactory.hxx>
 
 namespace framework{
 

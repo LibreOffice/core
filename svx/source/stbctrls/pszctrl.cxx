@@ -45,7 +45,6 @@
 #include <svx/svxids.hrc>
 #include <bitmaps.hlst>
 #include <unotools/localedatawrapper.hxx>
-#include <comphelper/processfactory.hxx>
 
 
 /*  [Description]

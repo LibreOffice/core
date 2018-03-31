@@ -23,7 +23,6 @@
 #include <osl/process.h>
 #include <comphelper/seqstream.hxx>
 #include <comphelper/sequence.hxx>
-#include <comphelper/processfactory.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/bootstrap.hxx>
 #include <cppuhelper/basemutex.hxx>

@@ -17,7 +17,6 @@
 #include <vcl/wrkwin.hxx>
 #include <vcl/canvastools.hxx>
 
-#include <comphelper/processfactory.hxx>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 

@@ -83,7 +83,6 @@
 
 #include <toolkit/helper/vclunohelper.hxx>
 #include <toolkit/awt/vclxwindow.hxx>
-#include <comphelper/processfactory.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <tools/diagnose_ex.h>
 #include <vcl/menu.hxx>

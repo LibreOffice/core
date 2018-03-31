@@ -29,7 +29,6 @@
 #include <vcl/svapp.hxx>
 #include <tools/stream.hxx>
 #include <cppuhelper/weak.hxx>
-#include <comphelper/processfactory.hxx>
 #include <vcl/dibtools.hxx>
 
 const sal_uInt16 START_ITEMID = 1000;

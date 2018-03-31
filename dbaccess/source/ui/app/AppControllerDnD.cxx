@@ -21,7 +21,6 @@
 #include "AppController.hxx"
 #include <comphelper/sequence.hxx>
 #include <comphelper/property.hxx>
-#include <comphelper/processfactory.hxx>
 #include <core_resource.hxx>
 #include <stringconstants.hxx>
 #include <com/sun/star/sdbcx/XDataDescriptorFactory.hpp>

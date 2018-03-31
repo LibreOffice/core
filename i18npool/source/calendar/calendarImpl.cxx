@@ -19,7 +19,6 @@
 
 #include <calendarImpl.hxx>
 #include <localedata.hxx>
-#include <comphelper/processfactory.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
 using namespace ::com::sun::star::uno;

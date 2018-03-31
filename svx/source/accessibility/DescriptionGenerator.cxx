@@ -32,7 +32,6 @@
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/style/XStyle.hpp>
-#include <comphelper/processfactory.hxx>
 #include <vcl/svapp.hxx>
 
 #include <com/sun/star/uno/Exception.hpp>

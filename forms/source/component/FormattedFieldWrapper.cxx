@@ -22,7 +22,6 @@
 #include "FormattedField.hxx"
 #include "EditBase.hxx"
 #include <services.hxx>
-#include <comphelper/processfactory.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <connectivity/dbtools.hxx>

@@ -31,7 +31,6 @@
 #include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 
-#include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
 #include <vcl/svapp.hxx>
 
