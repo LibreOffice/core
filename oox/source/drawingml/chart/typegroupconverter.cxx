@@ -276,6 +276,8 @@ Reference< XLabeledDataSequence > TypeGroupConverter::createCategorySequence()
         {
             SeriesConverter aSeriesConv(*this, *elem);
             xLabeledSeq = aSeriesConv.createCategorySequence( "categories" );
+            if (xLabeledSeq.is())
+                break;
         }
         else if( nMaxValues <= 0 && elem->maSources.has( SeriesModel::VALUES ) )
         {
@@ -283,8 +285,6 @@ Reference< XLabeledDataSequence > TypeGroupConverter::createCategorySequence()
             if( pValues->mxDataSeq.is() )
                 nMaxValues = pValues->mxDataSeq.get()->maData.size();
         }
-        if (xLabeledSeq.is())
-            break;
     }
     /* n#839727 Create Category Sequence when none are found */
     if( !xLabeledSeq.is() && mrModel.maSeries.size() > 0 ) {
