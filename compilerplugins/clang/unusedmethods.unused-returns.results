@@ -188,7 +188,7 @@ include/tools/multisel.hxx:93
     _Bool StringRangeEnumerator::insertRange(int,int,_Bool)
 include/vcl/fontcharmap.hxx:48
     class tools::SvRef<class FontCharMap> FontCharMap::GetDefaultMap(_Bool)
-include/vcl/gdimtf.hxx:183
+include/vcl/gdimtf.hxx:186
     class SvStream & GDIMetaFile::Read(class SvStream &)
 include/vcl/graphicfilter.hxx:255
     class ErrCode GraphicFilter::ExportGraphic(const class Graphic &,const class INetURLObject &,unsigned short,const class com::sun::star::uno::Sequence<struct com::sun::star::beans::PropertyValue> *)
@@ -210,9 +210,9 @@ lotuswordpro/inc/lwpsvstream.hxx:78
     class LwpSvStream & LwpSvStream::ReadUInt32(unsigned int &)
 sc/inc/orcusfilters.hxx:44
     _Bool ScOrcusFilters::importODS_Styles(class ScDocument &,class rtl::OUString &) const
-sc/source/core/opencl/formulagroupcl.cxx:957
+sc/source/core/opencl/formulagroupcl.cxx:952
     unsigned long sc::opencl::DynamicKernelSlidingArgument::GenReductionLoopHeader(class std::basic_stringstream<char> &,_Bool &)
-sc/source/core/opencl/formulagroupcl.cxx:1210
+sc/source/core/opencl/formulagroupcl.cxx:1190
     unsigned long sc::opencl::ParallelReductionVectorRef::GenReductionLoopHeader(class std::basic_stringstream<char> &,int,_Bool &)
 sc/source/filter/inc/workbookhelper.hxx:254
     _Bool oox::xls::WorkbookHelper::importOoxFragment(const class rtl::Reference<class oox::core::FragmentHandler> &,class oox::core::FastParser &)

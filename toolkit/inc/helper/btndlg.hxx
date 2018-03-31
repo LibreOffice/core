@@ -80,7 +80,6 @@ private:
 
     void             ImplInitButtonDialogData();
     VclPtr<PushButton> ImplCreatePushButton( ButtonDialogFlags nBtnFlags );
-    ImplBtnDlgItem*  ImplGetItem( sal_uInt16 nId ) const;
     DECL_LINK( ImplClickHdl, Button* pBtn, void );
     void             ImplPosControls();
 
