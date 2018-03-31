@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.2 -->
+<!-- Generated with glade 3.22.0 -->
 <interface domain="sc">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkMessageDialog" id="SharedWarningDialog">
+    <property name="can_focus">False</property>
     <property name="resizable">False</property>
     <property name="modal">True</property>
-    <property name="can_focus">False</property>
     <property name="type_hint">dialog</property>
     <property name="message_type">warning</property>
     <property name="buttons">ok</property>
@@ -33,6 +33,7 @@
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">False</property>
+            <property name="halign">start</property>
             <property name="draw_indicator">True</property>
           </object>
           <packing>
