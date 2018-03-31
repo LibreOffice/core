@@ -20,6 +20,7 @@
 #include <sal/config.h>
 
 #include <o3tl/string_view.hxx>
+#include <officecfg/Inet.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <officecfg/Office/Security.hxx>
 #include <tools/config.hxx>
@@ -417,7 +418,7 @@ void SvxProxyTabPage::Reset(const SfxItemSet*)
     m_pFtpPortED->SaveValue();
     m_pNoProxyForED->SaveValue();
 
-    EnableControls_Impl( m_pProxyModeLB->GetSelectedEntryPos() == 2 );
+    EnableControls_Impl();
 }
 
 bool SvxProxyTabPage::FillItemSet(SfxItemSet* )
@@ -504,26 +505,30 @@ bool SvxProxyTabPage::FillItemSet(SfxItemSet* )
     return bModified;
 }
 
-void SvxProxyTabPage::EnableControls_Impl(bool bEnable)
+void SvxProxyTabPage::EnableControls_Impl()
 {
-    m_pHttpProxyFT->Enable(bEnable);
-    m_pHttpProxyED->Enable(bEnable);
-    m_pHttpPortFT->Enable(bEnable);
-    m_pHttpPortED->Enable(bEnable);
+    m_pProxyModeLB->Enable(!officecfg::Inet::Settings::ooInetNoProxy::isReadOnly());
 
-    m_pHttpsProxyFT->Enable(bEnable);
-    m_pHttpsProxyED->Enable(bEnable);
-    m_pHttpsPortFT->Enable(bEnable);
-    m_pHttpsPortED->Enable(bEnable);
+    const bool bEnable = m_pProxyModeLB->GetSelectedEntryPos() == 2;
 
-    m_pFtpProxyFT->Enable(bEnable);
-    m_pFtpProxyED->Enable(bEnable);
-    m_pFtpPortFT->Enable(bEnable);
-    m_pFtpPortED->Enable(bEnable);
+    m_pHttpProxyFT->Enable(bEnable && !officecfg::Inet::Settings::ooInetHTTPProxyName::isReadOnly());
+    m_pHttpProxyED->Enable(bEnable && !officecfg::Inet::Settings::ooInetHTTPProxyName::isReadOnly());
+    m_pHttpPortFT->Enable(bEnable && !officecfg::Inet::Settings::ooInetHTTPProxyPort::isReadOnly());
+    m_pHttpPortED->Enable(bEnable && !officecfg::Inet::Settings::ooInetHTTPProxyPort::isReadOnly());
 
-    m_pNoProxyForFT->Enable(bEnable);
-    m_pNoProxyForED->Enable(bEnable);
-    m_pNoProxyDescFT->Enable(bEnable);
+    m_pHttpsProxyFT->Enable(bEnable && !officecfg::Inet::Settings::ooInetHTTPSProxyName::isReadOnly());
+    m_pHttpsProxyED->Enable(bEnable && !officecfg::Inet::Settings::ooInetHTTPSProxyName::isReadOnly());
+    m_pHttpsPortFT->Enable(bEnable && !officecfg::Inet::Settings::ooInetHTTPSProxyPort::isReadOnly());
+    m_pHttpsPortED->Enable(bEnable && !officecfg::Inet::Settings::ooInetHTTPSProxyPort::isReadOnly());
+
+    m_pFtpProxyFT->Enable(bEnable && !officecfg::Inet::Settings::ooInetFTPProxyName::isReadOnly());
+    m_pFtpProxyED->Enable(bEnable && !officecfg::Inet::Settings::ooInetFTPProxyName::isReadOnly());
+    m_pFtpPortFT->Enable(bEnable && !officecfg::Inet::Settings::ooInetFTPProxyPort::isReadOnly());
+    m_pFtpPortED->Enable(bEnable && !officecfg::Inet::Settings::ooInetFTPProxyPort::isReadOnly());
+
+    m_pNoProxyForFT->Enable(bEnable && !officecfg::Inet::Settings::ooInetNoProxy::isReadOnly());
+    m_pNoProxyForED->Enable(bEnable && !officecfg::Inet::Settings::ooInetNoProxy::isReadOnly());
+    m_pNoProxyDescFT->Enable(bEnable && !officecfg::Inet::Settings::ooInetNoProxy::isReadOnly());
 }
 
 
@@ -537,7 +542,7 @@ IMPL_LINK( SvxProxyTabPage, ProxyHdl_Impl, ListBox&, rBox, void )
         ReadConfigDefaults_Impl();
     }
 
-    EnableControls_Impl(nPos == 2);
+    EnableControls_Impl();
 }
 
 
