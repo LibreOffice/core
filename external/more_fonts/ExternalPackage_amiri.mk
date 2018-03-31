@@ -10,11 +10,11 @@
 $(eval $(call gb_ExternalPackage_ExternalPackage,fonts_amiri,font_amiri))
 
 $(eval $(call gb_ExternalPackage_add_unpacked_files,fonts_amiri,$(LIBO_SHARE_FOLDER)/fonts/truetype,\
-	amiri-bold.ttf \
-	amiri-boldslanted.ttf \
-	amiri-quran.ttf \
-	amiri-regular.ttf \
-	amiri-slanted.ttf \
+	Amiri-Bold.ttf \
+	Amiri-BoldSlanted.ttf \
+	AmiriQuran.ttf \
+	Amiri-Regular.ttf \
+	Amiri-Slanted.ttf \
 ))
 
 # vim: set noet sw=4 ts=4:

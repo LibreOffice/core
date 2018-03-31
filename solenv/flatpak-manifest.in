@@ -433,10 +433,10 @@
                     "dest-filename": "external/tarballs/alef-1.001.tar.gz"
                 },
                 {
-                    "url": "https://dev-www.libreoffice.org/src/amiri-0.109.zip",
-                    "sha256": "97ee6e40d87f4b31de15d9a93bb30bf27bf308f0814f4ee9c47365b027402ad6",
+                    "url": "https://dev-www.libreoffice.org/src/Amiri-0.111.zip",
+                    "sha256": "1fbfccced6348b5db2c1c21d5b319cd488e14d055702fa817a0f6cb83d882166",
                     "type": "file",
-                    "dest-filename": "external/tarballs/amiri-0.109.zip"
+                    "dest-filename": "external/tarballs/Amiri-0.111.zip"
                 },
                 {
                     "url": "https://dev-www.libreoffice.org/src/culmus-0.131.tar.gz",
