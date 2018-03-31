@@ -345,6 +345,7 @@ RES_POOLCOLL_LABEL,                                     ///< Base labels.
 RES_POOLCOLL_LABEL_ABB,                                 ///< Label illustration.
 RES_POOLCOLL_LABEL_TABLE,                               ///< Label table.
 RES_POOLCOLL_LABEL_FRAME,                               ///< Label frame.
+RES_POOLCOLL_LABEL_FIGURE,                              ///< Label figure
 
 /// Other stuff.
 RES_POOLCOLL_FRAME,                                     ///< Frames.
