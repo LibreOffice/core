@@ -75,7 +75,7 @@ class OfficeConnection(object):
         except KeyError:
             self.verbose = False
         try:
-            prog = self.args["programm"]
+            prog = self.args["program"]
         except KeyError:
             prog = os.getenv("SOFFICE_BIN")
         if not (prog):
