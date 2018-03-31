@@ -107,7 +107,7 @@ namespace sdr
                 }
             }
 
-            // For group proerties, do not call parent since groups do
+            // For group properties, do not call parent since groups do
             // not have local ItemSets.
             return *mpItemSet;
         }
