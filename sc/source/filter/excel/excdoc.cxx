@@ -19,7 +19,6 @@
 
 #include <scitems.hxx>
 
-#include <comphelper/processfactory.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svditer.hxx>
 #include <svx/svdpage.hxx>

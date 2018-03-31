@@ -23,7 +23,6 @@
 
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <comphelper/processfactory.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <framework/menuconfiguration.hxx>

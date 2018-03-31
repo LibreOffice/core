@@ -32,7 +32,6 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
-#include <comphelper/processfactory.hxx>
 #include <cppuhelper/implbase.hxx>
 
 #include <vcl/window.hxx>

@@ -39,7 +39,6 @@
 #include <com/sun/star/i18n/ScriptType.hpp>
 
 #include <com/sun/star/frame/XFrame.hpp>
-#include <comphelper/processfactory.hxx>
 
 #include <tools/gen.hxx>
 #include <com/sun/star/awt/Command.hpp>

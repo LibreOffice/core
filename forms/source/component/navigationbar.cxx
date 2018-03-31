@@ -23,7 +23,6 @@
 
 #include <comphelper/streamsection.hxx>
 #include <comphelper/basicio.hxx>
-#include <comphelper/processfactory.hxx>
 
 namespace frm
 {

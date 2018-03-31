@@ -32,7 +32,6 @@
 #include "datasource.hxx"
 #include <comphelper/classids.hxx>
 #include <comphelper/mimeconfighelper.hxx>
-#include <comphelper/processfactory.hxx>
 #include <connectivity/sqlerror.hxx>
 #include <core_resource.hxx>
 #include <strings.hrc>

@@ -25,7 +25,6 @@
 #include <core_resource.hxx>
 #include <dbu_pageids.hxx>
 #include <strings.hrc>
-#include <comphelper/processfactory.hxx>
 #include <com/sun/star/util/NumberFormatter.hpp>
 
 using namespace ::dbaui;

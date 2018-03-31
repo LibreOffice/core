@@ -66,7 +66,6 @@
 #include <com/sun/star/drawing/framework/XControllerManager.hpp>
 #include <com/sun/star/drawing/framework/ResourceId.hpp>
 #include <cppuhelper/bootstrap.hxx>
-#include <comphelper/processfactory.hxx>
 
 using namespace ::sd::slidesorter;
 #define ShellClass_SlideSorterViewShell

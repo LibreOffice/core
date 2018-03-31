@@ -22,7 +22,6 @@
 #include <swtypes.hxx>
 #include <hintids.hxx>
 #include <com/sun/star/accessibility/XAccessible.hpp>
-#include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 #include <com/sun/star/i18n/XBreakIterator.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>

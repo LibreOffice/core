@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <comphelper/processfactory.hxx>
-
 #include <com/sun/star/task/DocumentPasswordRequest.hpp>
 #include <com/sun/star/task/DocumentPasswordRequest2.hpp>
 #include <com/sun/star/task/DocumentMSPasswordRequest.hpp>

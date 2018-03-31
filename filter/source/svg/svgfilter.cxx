@@ -43,7 +43,6 @@
 #include <com/sun/star/drawing/framework/XResource.hpp>
 #include <com/sun/star/drawing/framework/XView.hpp>
 #include <com/sun/star/drawing/framework/ResourceId.hpp>
-#include <comphelper/processfactory.hxx>
 
 #include <unotools/mediadescriptor.hxx>
 #include <unotools/ucbstreamhelper.hxx>

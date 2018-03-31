@@ -29,7 +29,6 @@
 #include <osl/file.hxx>
 #include <rtl/bootstrap.hxx>
 #include <rtl/ref.hxx>
-#include <comphelper/processfactory.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
 #include <vcl/svapp.hxx>

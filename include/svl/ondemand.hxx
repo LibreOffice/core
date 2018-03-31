@@ -31,7 +31,6 @@
 #include <unotools/nativenumberwrapper.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <comphelper/processfactory.hxx>
 #include <i18nutil/transliteration.hxx>
 
 /*

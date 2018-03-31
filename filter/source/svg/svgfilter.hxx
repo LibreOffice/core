@@ -37,7 +37,6 @@
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/polygon/b2dpolygonclipper.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
-#include <comphelper/processfactory.hxx>
 #include <editeng/flditem.hxx>
 #include <unotools/tempfile.hxx>
 #include <unotools/streamwrap.hxx>

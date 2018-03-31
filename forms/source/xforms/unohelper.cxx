@@ -29,7 +29,6 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#include <comphelper/processfactory.hxx>
 
 
 using com::sun::star::uno::Reference;

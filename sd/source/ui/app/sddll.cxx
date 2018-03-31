@@ -94,7 +94,6 @@
 #include <sfx2/charmappopup.hxx>
 #include <sfx2/sidebar/SidebarChildWindow.hxx>
 #include <vcl/FilterConfigItem.hxx>
-#include <comphelper/processfactory.hxx>
 #include <o3tl/make_unique.hxx>
 #include <sdabstdlg.hxx>
 

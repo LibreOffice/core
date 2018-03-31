@@ -23,7 +23,6 @@
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
 #include <com/sun/star/container/XContainerListener.hpp>
-#include <comphelper/processfactory.hxx>
 #include <svx/svdouno.hxx>
 
 #include <boost/optional.hpp>

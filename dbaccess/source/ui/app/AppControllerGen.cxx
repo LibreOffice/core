@@ -51,7 +51,6 @@
 #include <com/sun/star/util/XRefreshable.hpp>
 
 #include <cppuhelper/exc_hlp.hxx>
-#include <comphelper/processfactory.hxx>
 #include <connectivity/dbexception.hxx>
 #include <connectivity/dbtools.hxx>
 #include <connectivity/sqlerror.hxx>

@@ -22,7 +22,6 @@
 #include <com/sun/star/xml/sax/Parser.hpp>
 #include <com/sun/star/xml/sax/Writer.hpp>
 
-#include <comphelper/processfactory.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <xmlscript/xml_helper.hxx>
 #include <xmlscript/xmldlg_imexp.hxx>

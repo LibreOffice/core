@@ -27,7 +27,6 @@
 #include <comphelper/container.hxx>
 #include <comphelper/basicio.hxx>
 #include <comphelper/guarding.hxx>
-#include <comphelper/processfactory.hxx>
 
 
 namespace frm

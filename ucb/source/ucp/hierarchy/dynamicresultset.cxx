@@ -28,7 +28,6 @@
  *************************************************************************/
 #include "hierarchydatasupplier.hxx"
 #include "dynamicresultset.hxx"
-#include <comphelper/processfactory.hxx>
 
 using namespace com::sun::star;
 using namespace hierarchy_ucp;

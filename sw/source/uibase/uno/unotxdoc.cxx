@@ -174,7 +174,6 @@
 #include <svx/svdoutl.hxx>
 #include <svl/languageoptions.hxx>
 #include <svx/svdview.hxx>
-#include <comphelper/processfactory.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <SwSpellDialogChildWindow.hxx>
 #include <memory>

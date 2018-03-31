@@ -29,7 +29,6 @@
 #include <svx/svxerr.hxx>
 #include <svx/dialmgr.hxx>
 #include <editeng/unolingu.hxx>
-#include <comphelper/processfactory.hxx>
 #include <app.hrc>
 #include <strings.hrc>
 #include <drawdoc.hxx>

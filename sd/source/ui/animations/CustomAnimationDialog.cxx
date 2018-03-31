@@ -34,7 +34,6 @@
 
 #include <memory>
 
-#include <comphelper/processfactory.hxx>
 #include <i18nutil/unicode.hxx>
 #include <unotools/pathoptions.hxx>
 #include <vcl/tabctrl.hxx>

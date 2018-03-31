@@ -48,7 +48,6 @@
 #include <com/sun/star/text/XDefaultNumberingProvider.hpp>
 #include <com/sun/star/text/XNumberingFormatter.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <comphelper/processfactory.hxx>
 #include <com/sun/star/text/XNumberingTypeInfo.hpp>
 
 #include <algorithm>

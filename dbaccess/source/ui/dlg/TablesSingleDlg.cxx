@@ -21,7 +21,6 @@
 #include "DbAdminImpl.hxx"
 #include "tablespage.hxx"
 #include <dsitems.hxx>
-#include <comphelper/processfactory.hxx>
 
 #include <propertysetitem.hxx>
 

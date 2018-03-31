@@ -27,7 +27,6 @@
 #include <svx/strings.hrc>
 #include <svx/dialmgr.hxx>
 
-#include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/supportsservice.hxx>

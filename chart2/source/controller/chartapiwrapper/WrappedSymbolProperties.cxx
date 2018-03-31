@@ -35,8 +35,6 @@
 #include <vcl/GraphicObject.hxx>
 #include <vcl/outdev.hxx>
 
-#include <comphelper/processfactory.hxx>
-
 using namespace ::com::sun::star;
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Reference;

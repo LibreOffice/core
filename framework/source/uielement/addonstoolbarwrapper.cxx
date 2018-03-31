@@ -34,7 +34,6 @@
 
 #include <toolkit/helper/vclunohelper.hxx>
 #include <toolkit/awt/vclxwindow.hxx>
-#include <comphelper/processfactory.hxx>
 
 #include <svtools/miscopt.hxx>
 #include <vcl/svapp.hxx>

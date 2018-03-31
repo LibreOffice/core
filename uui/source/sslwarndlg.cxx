@@ -22,7 +22,6 @@
 #include <ids.hxx>
 #include "sslwarndlg.hxx"
 
-#include <comphelper/processfactory.hxx>
 #include <com/sun/star/security/DocumentDigitalSignatures.hpp>
 
 using namespace css;

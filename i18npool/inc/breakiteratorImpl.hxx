@@ -20,7 +20,6 @@
 #define INCLUDED_I18NPOOL_INC_BREAKITERATORIMPL_HXX
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <comphelper/processfactory.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/beans/PropertyValues.hpp>
 #include <com/sun/star/i18n/XBreakIterator.hpp>
@@ -30,6 +29,7 @@
 #include <com/sun/star/i18n/CharacterIteratorMode.hpp>
 #include <com/sun/star/i18n/CharType.hpp>
 #include <com/sun/star/i18n/XLocaleData.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/implbase.hxx>
 
 #include <vector>

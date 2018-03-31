@@ -27,7 +27,6 @@
 
 #include <basic/basmgr.hxx>
 #include <tools/diagnose_ex.h>
-#include <comphelper/processfactory.hxx>
 #include <cppuhelper/weak.hxx>
 
 using namespace ::com::sun::star::uno;

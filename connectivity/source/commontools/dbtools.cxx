@@ -66,7 +66,6 @@
 
 #include <comphelper/extract.hxx>
 #include <comphelper/interaction.hxx>
-#include <comphelper/processfactory.hxx>
 #include <comphelper/property.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <connectivity/conncleanup.hxx>

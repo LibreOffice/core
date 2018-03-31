@@ -54,7 +54,6 @@
 #include <swdll.hxx>
 #include <iodetect.hxx>
 #include <osl/module.hxx>
-#include <comphelper/processfactory.hxx>
 #include <rtl/bootstrap.hxx>
 
 using namespace utl;

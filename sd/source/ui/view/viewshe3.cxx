@@ -49,7 +49,6 @@
 #include <svl/intitem.hxx>
 #include <svl/style.hxx>
 #include <unotools/localedatawrapper.hxx>
-#include <comphelper/processfactory.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <stlsheet.hxx>
 #include <WindowUpdater.hxx>

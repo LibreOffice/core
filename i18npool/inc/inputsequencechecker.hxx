@@ -19,11 +19,11 @@
 #ifndef INCLUDED_I18NPOOL_INC_INPUTSEQUENCECHECKER_HXX
 #define INCLUDED_I18NPOOL_INC_INPUTSEQUENCECHECKER_HXX
 
-#include <comphelper/processfactory.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/i18n/XExtendedInputSequenceChecker.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <vector>
 #include <memory>

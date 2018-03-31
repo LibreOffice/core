@@ -31,7 +31,6 @@
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/interfacecontainer.h>
 #include <comphelper/mimeconfighelper.hxx>
-#include <comphelper/processfactory.hxx>
 
 #include <vcl/svapp.hxx>
 

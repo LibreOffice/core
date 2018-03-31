@@ -35,6 +35,7 @@
 #include <frmatr.hxx>
 #include "docxattributeoutput.hxx"
 #include "docxexportfilter.hxx"
+#include <comphelper/processfactory.hxx>
 #include <comphelper/seqstream.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/sequenceashashmap.hxx>

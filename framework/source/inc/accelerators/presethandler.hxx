@@ -27,8 +27,8 @@
 #include <com/sun/star/embed/XStorage.hpp>
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
-#include <comphelper/processfactory.hxx>
 #include <i18nlangtag/languagetag.hxx>
 
 namespace framework

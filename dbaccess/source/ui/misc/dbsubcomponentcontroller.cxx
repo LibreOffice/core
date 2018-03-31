@@ -36,7 +36,6 @@
 #include <com/sun/star/util/NumberFormatter.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 
-#include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/types.hxx>
 #include <connectivity/dbexception.hxx>

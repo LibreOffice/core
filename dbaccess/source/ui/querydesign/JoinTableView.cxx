@@ -42,7 +42,6 @@
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <UITools.hxx>
 #include <cppuhelper/exc_hlp.hxx>
-#include <comphelper/processfactory.hxx>
 #include <tools/diagnose_ex.h>
 #include <algorithm>
 #include <functional>

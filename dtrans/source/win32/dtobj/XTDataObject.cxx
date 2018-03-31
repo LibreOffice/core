@@ -30,7 +30,6 @@
 #include <com/sun/star/awt/AsyncCallback.hpp>
 #include <com/sun/star/awt/XCallback.hpp>
 #include "FmtFilter.hxx"
-#include <comphelper/processfactory.hxx>
 #include <cppuhelper/implbase.hxx>
 
 #if !defined WIN32_LEAN_AND_MEAN

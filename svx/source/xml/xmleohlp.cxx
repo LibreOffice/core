@@ -37,7 +37,6 @@
 
 #include <svtools/embedhlp.hxx>
 #include <unotools/ucbstreamhelper.hxx>
-#include <comphelper/processfactory.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/embeddedobjectcontainer.hxx>
 

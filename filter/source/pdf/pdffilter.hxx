@@ -32,10 +32,10 @@
 #include <comphelper/property.hxx>
 #include <com/sun/star/task/XStatusIndicator.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <osl/diagnose.h>
 #include <rtl/process.h>
-#include <comphelper/processfactory.hxx>
 #include <unotools/tempfile.hxx>
 #include <unotools/localfilehelper.hxx>
 #include <unotools/streamwrap.hxx>

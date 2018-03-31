@@ -19,7 +19,6 @@
 
 #include "gio_datasupplier.hxx"
 #include "gio_resultset.hxx"
-#include <comphelper/processfactory.hxx>
 
 using namespace com::sun::star::lang;
 using namespace com::sun::star::ucb;

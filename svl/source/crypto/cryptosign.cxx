@@ -17,7 +17,6 @@
 #include <comphelper/base64.hxx>
 #include <comphelper/random.hxx>
 #include <comphelper/hash.hxx>
-#include <comphelper/processfactory.hxx>
 #include <com/sun/star/security/XCertificate.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <filter/msfilter/mscodec.hxx>

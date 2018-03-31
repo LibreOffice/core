@@ -48,7 +48,6 @@
 #include <svl/zforlist.hxx>
 #include <svl/intitem.hxx>
 #include <com/sun/star/task/XStatusIndicator.hpp>
-#include <comphelper/processfactory.hxx>
 #include <i18nlangtag/lang.h>
 #include <vcl/outdev.hxx>
 #include <tools/fontenum.hxx>

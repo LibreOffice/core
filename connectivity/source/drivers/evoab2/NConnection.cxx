@@ -26,7 +26,6 @@
 #include "NStatement.hxx"
 #include <comphelper/extract.hxx>
 #include <connectivity/dbexception.hxx>
-#include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
 #include <rtl/ustring.hxx>
 

@@ -34,7 +34,6 @@
 #include <editeng/lineitem.hxx>
 #include <editeng/shaditem.hxx>
 #include <editeng/xmlcnitm.hxx>
-#include <comphelper/processfactory.hxx>
 #include <editeng/adjustitem.hxx>
 #include <editeng/editdata.hxx>
 #include <editeng/writingmodeitem.hxx>

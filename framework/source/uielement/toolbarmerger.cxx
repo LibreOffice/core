@@ -21,7 +21,6 @@
 #include <uielement/generictoolbarcontroller.hxx>
 
 #include <svtools/miscopt.hxx>
-#include <comphelper/processfactory.hxx>
 
 namespace framework
 {

@@ -27,7 +27,6 @@
 #include <unotools/bootstrap.hxx>
 #include <unotools/textsearch.hxx>
 #include <comphelper/sequence.hxx>
-#include <comphelper/processfactory.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <ucbhelper/content.hxx>
 

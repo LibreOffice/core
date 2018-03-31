@@ -35,7 +35,6 @@
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>
 #include <vcl/virdev.hxx>
-#include <comphelper/processfactory.hxx>
 #include <svl/PasswordHelper.hxx>
 #include <svl/sharedstringpool.hxx>
 #include <tools/tenccvt.hxx>

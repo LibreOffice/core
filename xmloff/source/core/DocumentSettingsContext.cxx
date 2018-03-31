@@ -30,7 +30,6 @@
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmluconv.hxx>
-#include <comphelper/processfactory.hxx>
 #include <comphelper/base64.hxx>
 
 #include <vector>

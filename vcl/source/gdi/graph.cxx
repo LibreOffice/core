@@ -23,7 +23,6 @@
 #include <vcl/graph.hxx>
 #include <vcl/metaact.hxx>
 #include <impgraph.hxx>
-#include <comphelper/processfactory.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/graphic/GraphicProvider.hpp>
 #include <com/sun/star/graphic/XGraphicProvider.hpp>

@@ -57,7 +57,6 @@
 #include <SwStyleNameMapper.hxx>
 #include <svl/cjkoptions.hxx>
 #include <svl/ctloptions.hxx>
-#include <comphelper/processfactory.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/intlwrapper.hxx>
 #include <numrule.hxx>

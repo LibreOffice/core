@@ -34,7 +34,6 @@
 #include <unotools/lingucfg.hxx>
 #include <unotools/linguprops.hxx>
 #include <unotools/intlwrapper.hxx>
-#include <comphelper/processfactory.hxx>
 #include <vcl/svapp.hxx>
 
 

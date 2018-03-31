@@ -22,7 +22,6 @@
 #include <ooo/vba/word/XOptions.hpp>
 #include <vbahelper/vbahelperinterface.hxx>
 #include <vbahelper/vbapropvalue.hxx>
-#include <comphelper/processfactory.hxx>
 
 typedef InheritedHelperInterfaceWeakImpl< ooo::vba::word::XOptions > SwVbaOptions_BASE;
 

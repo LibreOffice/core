@@ -28,7 +28,6 @@
  *************************************************************************/
 #include "pkgdatasupplier.hxx"
 #include "pkgresultset.hxx"
-#include <comphelper/processfactory.hxx>
 
 using namespace com::sun::star;
 

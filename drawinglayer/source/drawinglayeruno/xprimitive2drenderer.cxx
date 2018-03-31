@@ -27,7 +27,6 @@
 #include <comphelper/sequence.hxx>
 #include <com/sun/star/xml/sax/XParser.hpp>
 #include <com/sun/star/xml/sax/InputSource.hpp>
-#include <comphelper/processfactory.hxx>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 #include <basegfx/numeric/ftools.hxx>
 #include <vcl/bitmapex.hxx>

@@ -22,7 +22,6 @@
 #include <com/sun/star/style/LineSpacingMode.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <comphelper/fileformat.h>
-#include <comphelper/processfactory.hxx>
 #include <comphelper/extract.hxx>
 #include <osl/diagnose.h>
 #include <unotools/syslocale.hxx>

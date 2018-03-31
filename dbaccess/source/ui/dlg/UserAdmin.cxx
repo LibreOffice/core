@@ -21,7 +21,6 @@
 #include <UITools.hxx>
 #include <dbu_dlg.hxx>
 #include <comphelper/types.hxx>
-#include <comphelper/processfactory.hxx>
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
 #include <com/sun/star/sdbcx/XDataDefinitionSupplier.hpp>
 #include <com/sun/star/sdbcx/XUsersSupplier.hpp>

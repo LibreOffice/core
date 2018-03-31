@@ -80,7 +80,6 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XServiceName.hpp>
-#include <comphelper/processfactory.hxx>
 
 #include <sal/macros.h>
 #include <rtl/strbuf.hxx>

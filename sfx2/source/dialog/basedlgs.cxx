@@ -20,7 +20,6 @@
 #include <stdlib.h>
 
 #include <comphelper/lok.hxx>
-#include <comphelper/processfactory.hxx>
 
 #include <osl/file.hxx>
 #include <vcl/fixed.hxx>

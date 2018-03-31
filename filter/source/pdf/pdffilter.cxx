@@ -19,6 +19,7 @@
 
 #include "pdffilter.hxx"
 #include "pdfexport.hxx"
+#include <comphelper/processfactory.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>

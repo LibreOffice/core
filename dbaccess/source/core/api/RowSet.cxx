@@ -55,7 +55,6 @@
 #include <com/sun/star/uno/XNamingService.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 
-#include <comphelper/processfactory.hxx>
 #include <comphelper/interaction.hxx>
 #include <comphelper/property.hxx>
 #include <comphelper/seqstream.hxx>

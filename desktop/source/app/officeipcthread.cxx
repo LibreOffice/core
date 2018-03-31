@@ -41,7 +41,6 @@
 #include <osl/conditn.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <rtl/strbuf.hxx>
-#include <comphelper/processfactory.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <osl/file.hxx>
 #include <rtl/process.h>

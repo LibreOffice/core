@@ -39,7 +39,6 @@
 
 #include <comphelper/numbers.hxx>
 #include <comphelper/basicio.hxx>
-#include <comphelper/processfactory.hxx>
 #include <connectivity/dbtools.hxx>
 #include <connectivity/dbconversion.hxx>
 #include <cppuhelper/queryinterface.hxx>

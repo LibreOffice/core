@@ -20,7 +20,6 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
-#include <comphelper/processfactory.hxx>
 #include <svl/itemset.hxx>
 #include <vcl/svapp.hxx>
 

@@ -18,7 +18,6 @@
  */
 
 #include <com/sun/star/awt/WindowEvent.hpp>
-#include <comphelper/processfactory.hxx>
 
 #include <toolkit/helper/vclunohelper.hxx>
 #include <toolkit/helper/convert.hxx>

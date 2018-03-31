@@ -18,7 +18,6 @@
  */
 
 #include "Numeric.hxx"
-#include <comphelper/processfactory.hxx>
 
 namespace frm
 {

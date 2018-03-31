@@ -34,8 +34,6 @@
 #include <svtools/toolbarmenu.hxx>
 #include <svtools/valueset.hxx>
 
-#include <comphelper/processfactory.hxx>
-
 #include <xmloff/autolayout.hxx>
 
 #include <app.hrc>

@@ -21,7 +21,6 @@
 #include <com/sun/star/text/ReferenceFieldSource.hpp>
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/charclass.hxx>
-#include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 #include <editeng/unolingu.hxx>
 #include <doc.hxx>

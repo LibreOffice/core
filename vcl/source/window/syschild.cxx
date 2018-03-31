@@ -35,11 +35,6 @@
 
 #if HAVE_FEATURE_JAVA
 #include <jni.h>
-#endif
-
-#include <comphelper/processfactory.hxx>
-
-#if HAVE_FEATURE_JAVA
 #include <jvmaccess/virtualmachine.hxx>
 #include <com/sun/star/java/JavaVirtualMachine.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>

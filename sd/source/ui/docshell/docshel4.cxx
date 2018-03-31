@@ -54,7 +54,6 @@
 #include <unotools/saveopt.hxx>
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/drawing/XDrawView.hpp>
-#include <comphelper/processfactory.hxx>
 
 #include <app.hrc>
 #include <strings.hrc>

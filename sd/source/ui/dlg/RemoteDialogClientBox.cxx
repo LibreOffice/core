@@ -24,7 +24,6 @@
 #include "RemoteDialogClientBox.hxx"
 #include <RemoteServer.hxx>
 
-#include <comphelper/processfactory.hxx>
 #include <com/sun/star/i18n/CollatorOptions.hpp>
 #include <com/sun/star/deployment/DependencyException.hpp>
 #include <com/sun/star/deployment/DeploymentException.hpp>

@@ -43,7 +43,6 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
-#include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
 #include <xmlscript/xml_helper.hxx>
 #include <osl/diagnose.h>
