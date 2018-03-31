@@ -88,8 +88,7 @@ ErrCode SwXMLWriter::Write_( const uno::Reference < task::XStatusIndicator >& xS
 
     OSL_ENSURE( xStg.is(), "Where is my storage?" );
     xGraphicHelper = SvXMLGraphicHelper::Create( xStg,
-                                                 SvXMLGraphicHelperMode::Write,
-                                                 false );
+                                                 SvXMLGraphicHelperMode::Write );
     xGraphicResolver = xGraphicHelper.get();
 
     SfxObjectShell *pPersist = pDoc->GetPersist();

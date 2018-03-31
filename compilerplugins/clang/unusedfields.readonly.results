@@ -152,7 +152,7 @@ cppu/source/uno/check.cxx:138
     (anonymous namespace)::Char4 chars struct (anonymous namespace)::Char3
 cui/source/inc/cuicharmap.hxx:86
     SvxCharacterMap m_pFavCharView VclPtr<class SvxCharView> [16]
-cui/source/options/optcolor.cxx:250
+cui/source/options/optcolor.cxx:254
     ColorConfigWindow_Impl aModuleOptions class SvtModuleOptions
 cui/source/options/optpath.cxx:77
     OptPath_Impl m_aDefOpt class SvtDefaultOptions
@@ -182,31 +182,31 @@ editeng/source/editeng/impedit.hxx:449
     ImpEditEngine maColorConfig svtools::ColorConfig
 embeddedobj/source/inc/commonembobj.hxx:104
     OCommonEmbeddedObject m_aClassName class rtl::OUString
-embeddedobj/source/inc/oleembobj.hxx:119
+embeddedobj/source/inc/oleembobj.hxx:121
     OleEmbeddedObject m_pOleComponent class OleComponent *
-embeddedobj/source/inc/oleembobj.hxx:139
+embeddedobj/source/inc/oleembobj.hxx:141
     OleEmbeddedObject m_xClosePreventer css::uno::Reference<css::util::XCloseListener>
-embeddedobj/source/inc/oleembobj.hxx:161
-    OleEmbeddedObject m_bHasSizeToSet _Bool
-embeddedobj/source/inc/oleembobj.hxx:162
-    OleEmbeddedObject m_aSizeToSet css::awt::Size
 embeddedobj/source/inc/oleembobj.hxx:163
+    OleEmbeddedObject m_bHasSizeToSet _Bool
+embeddedobj/source/inc/oleembobj.hxx:164
+    OleEmbeddedObject m_aSizeToSet css::awt::Size
+embeddedobj/source/inc/oleembobj.hxx:165
     OleEmbeddedObject m_nAspectToSet sal_Int64
-embeddedobj/source/inc/oleembobj.hxx:168
-    OleEmbeddedObject m_bGotStatus _Bool
-embeddedobj/source/inc/oleembobj.hxx:169
-    OleEmbeddedObject m_nStatus sal_Int64
 embeddedobj/source/inc/oleembobj.hxx:170
+    OleEmbeddedObject m_bGotStatus _Bool
+embeddedobj/source/inc/oleembobj.hxx:171
+    OleEmbeddedObject m_nStatus sal_Int64
+embeddedobj/source/inc/oleembobj.hxx:172
     OleEmbeddedObject m_nStatusAspect sal_Int64
-embeddedobj/source/inc/oleembobj.hxx:178
+embeddedobj/source/inc/oleembobj.hxx:180
     OleEmbeddedObject m_aLinkURL class rtl::OUString
-embeddedobj/source/inc/oleembobj.hxx:184
+embeddedobj/source/inc/oleembobj.hxx:186
     OleEmbeddedObject m_bFromClipboard _Bool
 extensions/source/propctrlr/eformshelper.hxx:62
     pcr::EFormsHelper m_aSubmissionUINames pcr::MapStringToPropertySet
 extensions/source/propctrlr/eformshelper.hxx:64
     pcr::EFormsHelper m_aBindingUINames pcr::MapStringToPropertySet
-filter/source/graphicfilter/eps/eps.cxx:114
+filter/source/graphicfilter/eps/eps.cxx:113
     PSWriter pVDev ScopedVclPtrInstance<class VirtualDevice>
 filter/source/graphicfilter/icgm/chart.hxx:44
     DataNode nBoxX1 sal_Int16
@@ -286,7 +286,7 @@ include/sfx2/msg.hxx:108
     SfxType aAttrib struct SfxTypeAttrib [1]
 include/sfx2/msg.hxx:118
     SfxType0 pType const std::type_info *
-include/sfx2/sidebar/ResourceManager.hxx:107
+include/sfx2/sidebar/ResourceManager.hxx:108
     sfx2::sidebar::ResourceManager maMiscOptions class SvtMiscOptions
 include/svl/ondemand.hxx:59
     OnDemandLocaleDataWrapper aSysLocale class SvtSysLocale
@@ -336,7 +336,7 @@ include/vcl/bitmap.hxx:177
     BmpFilterParam::(anonymous) mcSolarGreyThreshold sal_uInt8
 include/vcl/bitmap.hxx:178
     BmpFilterParam::(anonymous) mnRadius double
-include/vcl/filter/pdfdocument.hxx:173
+include/vcl/filter/pdfdocument.hxx:174
     vcl::filter::PDFNameElement m_nLength sal_uInt64
 include/vcl/opengl/OpenGLContext.hxx:57
     OpenGLCapabilitySwitch mbLimitedShaderRegisters _Bool
@@ -516,13 +516,13 @@ svx/source/inc/gridcell.hxx:526
     DbPatternField m_pPaintFormatter ::std::unique_ptr< ::dbtools::FormattedColumnValue>
 sw/inc/acmplwrd.hxx:43
     SwAutoCompleteWord m_LookupTree editeng::Trie
-sw/inc/calc.hxx:162
+sw/inc/calc.hxx:194
     SwCalc m_aSysLocale class SvtSysLocale
 sw/inc/hints.hxx:188
     SwAttrSetChg m_bDelSet _Bool
 sw/inc/shellio.hxx:140
     SwReader pStg tools::SvRef<SotStorage>
-sw/inc/swevent.hxx:74
+sw/inc/swevent.hxx:71
     SwCallMouseEvent::(anonymous union)::(anonymous) pFormat const class SwFrameFormat *
 sw/source/core/access/accfrmobjmap.hxx:100
     SwAccessibleChildMap maMap std::map<key_type, mapped_type, key_compare>
@@ -536,9 +536,9 @@ sw/source/core/text/atrhndl.hxx:48
     SwAttrHandler::SwAttrStack pInitialArray class SwTextAttr *[3]
 sw/source/filter/inc/rtf.hxx:32
     RTFSurround::(anonymous) nVal sal_uInt8
-sw/source/ui/dbui/dbinsdlg.cxx:116
+sw/source/ui/dbui/dbinsdlg.cxx:115
     DB_Column::(anonymous) pText class rtl::OUString *
-sw/source/ui/dbui/dbinsdlg.cxx:118
+sw/source/ui/dbui/dbinsdlg.cxx:117
     DB_Column::(anonymous) nFormat sal_uInt32
 sw/source/uibase/dbui/mmconfigitem.cxx:106
     SwMailMergeConfigItem_Impl m_aFemaleGreetingLines std::vector<OUString>
@@ -644,39 +644,39 @@ vcl/source/fontsubset/sft.cxx:1055
     vcl::_subHeader2 entryCount sal_uInt16
 vcl/source/fontsubset/sft.cxx:1056
     vcl::_subHeader2 idDelta sal_uInt16
-vcl/source/gdi/dibtools.cxx:49
-    (anonymous namespace)::CIEXYZ aXyzX FXPT2DOT30
 vcl/source/gdi/dibtools.cxx:50
-    (anonymous namespace)::CIEXYZ aXyzY FXPT2DOT30
+    (anonymous namespace)::CIEXYZ aXyzX FXPT2DOT30
 vcl/source/gdi/dibtools.cxx:51
+    (anonymous namespace)::CIEXYZ aXyzY FXPT2DOT30
+vcl/source/gdi/dibtools.cxx:52
     (anonymous namespace)::CIEXYZ aXyzZ FXPT2DOT30
-vcl/source/gdi/dibtools.cxx:62
-    (anonymous namespace)::CIEXYZTriple aXyzRed struct (anonymous namespace)::CIEXYZ
 vcl/source/gdi/dibtools.cxx:63
-    (anonymous namespace)::CIEXYZTriple aXyzGreen struct (anonymous namespace)::CIEXYZ
+    (anonymous namespace)::CIEXYZTriple aXyzRed struct (anonymous namespace)::CIEXYZ
 vcl/source/gdi/dibtools.cxx:64
+    (anonymous namespace)::CIEXYZTriple aXyzGreen struct (anonymous namespace)::CIEXYZ
+vcl/source/gdi/dibtools.cxx:65
     (anonymous namespace)::CIEXYZTriple aXyzBlue struct (anonymous namespace)::CIEXYZ
-vcl/source/gdi/dibtools.cxx:104
-    (anonymous namespace)::DIBV5Header nV5RedMask sal_uInt32
 vcl/source/gdi/dibtools.cxx:105
-    (anonymous namespace)::DIBV5Header nV5GreenMask sal_uInt32
+    (anonymous namespace)::DIBV5Header nV5RedMask sal_uInt32
 vcl/source/gdi/dibtools.cxx:106
-    (anonymous namespace)::DIBV5Header nV5BlueMask sal_uInt32
+    (anonymous namespace)::DIBV5Header nV5GreenMask sal_uInt32
 vcl/source/gdi/dibtools.cxx:107
+    (anonymous namespace)::DIBV5Header nV5BlueMask sal_uInt32
+vcl/source/gdi/dibtools.cxx:108
     (anonymous namespace)::DIBV5Header nV5AlphaMask sal_uInt32
-vcl/source/gdi/dibtools.cxx:109
-    (anonymous namespace)::DIBV5Header aV5Endpoints struct (anonymous namespace)::CIEXYZTriple
 vcl/source/gdi/dibtools.cxx:110
-    (anonymous namespace)::DIBV5Header nV5GammaRed sal_uInt32
+    (anonymous namespace)::DIBV5Header aV5Endpoints struct (anonymous namespace)::CIEXYZTriple
 vcl/source/gdi/dibtools.cxx:111
-    (anonymous namespace)::DIBV5Header nV5GammaGreen sal_uInt32
+    (anonymous namespace)::DIBV5Header nV5GammaRed sal_uInt32
 vcl/source/gdi/dibtools.cxx:112
+    (anonymous namespace)::DIBV5Header nV5GammaGreen sal_uInt32
+vcl/source/gdi/dibtools.cxx:113
     (anonymous namespace)::DIBV5Header nV5GammaBlue sal_uInt32
-vcl/source/gdi/dibtools.cxx:114
-    (anonymous namespace)::DIBV5Header nV5ProfileData sal_uInt32
 vcl/source/gdi/dibtools.cxx:115
-    (anonymous namespace)::DIBV5Header nV5ProfileSize sal_uInt32
+    (anonymous namespace)::DIBV5Header nV5ProfileData sal_uInt32
 vcl/source/gdi/dibtools.cxx:116
+    (anonymous namespace)::DIBV5Header nV5ProfileSize sal_uInt32
+vcl/source/gdi/dibtools.cxx:117
     (anonymous namespace)::DIBV5Header nV5Reserved sal_uInt32
 vcl/source/gdi/pdfwriter_impl.hxx:302
     vcl::PDFWriterImpl::TransparencyEmit m_pSoftMaskStream std::unique_ptr<SvMemoryStream>
@@ -694,11 +694,11 @@ vcl/unx/gtk/glomenu.cxx:20
     GLOMenu parent_instance GMenuModel
 writerfilter/source/dmapper/DomainMapper_Impl.hxx:410
     writerfilter::dmapper::DomainMapper_Impl m_aSaveOpt class SvtSaveOptions
-writerfilter/source/ooxml/OOXMLFactory.hxx:61
-    writerfilter::ooxml::AttributeInfo m_nToken writerfilter::Token_t
 writerfilter/source/ooxml/OOXMLFactory.hxx:62
-    writerfilter::ooxml::AttributeInfo m_nResource enum writerfilter::ooxml::ResourceType
+    writerfilter::ooxml::AttributeInfo m_nToken writerfilter::Token_t
 writerfilter/source/ooxml/OOXMLFactory.hxx:63
+    writerfilter::ooxml::AttributeInfo m_nResource enum writerfilter::ooxml::ResourceType
+writerfilter/source/ooxml/OOXMLFactory.hxx:64
     writerfilter::ooxml::AttributeInfo m_nRef Id
 xmloff/inc/MultiPropertySetHelper.hxx:78
     MultiPropertySetHelper aEmptyAny css::uno::Any
@@ -716,5 +716,5 @@ xmloff/source/chart/SchXMLChartContext.hxx:58
     SeriesDefaultsAndStyles maPercentageErrorDefault css::uno::Any
 xmloff/source/chart/SchXMLChartContext.hxx:59
     SeriesDefaultsAndStyles maErrorMarginDefault css::uno::Any
-xmloff/source/core/xmlexp.cxx:254
+xmloff/source/core/xmlexp.cxx:257
     SvXMLExport_Impl maSaveOptions class SvtSaveOptions

@@ -183,7 +183,6 @@ bool SwIntrnlRefLink::IsInRange( sal_uLong nSttNd, sal_uLong nEndNd,
 {
     bool bInRange = false;
     rFieldType.CallSwClientNotify(sw::InRangeSearchHint(
-        rFieldType.GetDoc()->GetNodes(),
         nSttNd, nEndNd, nStt, nEnd,
         bInRange));
     return bInRange;

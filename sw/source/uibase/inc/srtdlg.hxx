@@ -29,7 +29,6 @@ class SwSortDlg : public weld::GenericDialogController
 {
     weld::Window* m_pParent;
     std::unique_ptr<weld::Label> m_xColLbl;
-    std::unique_ptr<weld::Label> m_xTypLbl;
 
     std::unique_ptr<weld::CheckButton> m_xKeyCB1;
     std::unique_ptr<weld::SpinButton> m_xColEdt1;

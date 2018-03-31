@@ -578,13 +578,12 @@ void LanguageBox::ImplClear()
 }
 
 void LanguageBox::SetLanguageList( SvxLanguageListFlags nLangList,
-        bool bHasLangNone, bool bLangNoneIsLangAll, bool bCheckSpellAvail )
+        bool bHasLangNone, bool bLangNoneIsLangAll )
 {
     ImplClear();
 
     m_bHasLangNone          = bHasLangNone;
     m_bLangNoneIsLangAll    = bLangNoneIsLangAll;
-    m_bWithCheckmark        = bCheckSpellAvail;
 
     if ( SvxLanguageListFlags::EMPTY == nLangList )
         return;
@@ -755,7 +754,6 @@ LanguageBox::LanguageBox(weld::ComboBoxText* pControl)
     , m_aAllString(SvxResId(RID_SVXSTR_LANGUAGE_ALL))
     , m_bHasLangNone(false)
     , m_bLangNoneIsLangAll(false)
-    , m_bWithCheckmark(false)
 {
     m_xControl->make_sorted();
     m_xControl->connect_changed(LINK(this, LanguageBox, ChangeHdl));
