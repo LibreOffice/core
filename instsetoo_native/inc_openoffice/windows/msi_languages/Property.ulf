@@ -22,11 +22,8 @@ en-US = "LibreOffice Community"
 [OOO_ARPHELPLINKTEMPLATE]
 en-US = "http://www.libreoffice.org/get-help"
 
-[OOO_ARPHELPTELEPHONETEMPLATE]
-en-US = "x-xxx-xxx-xxx"
-
 [OOO_ARPURLINFOABOUTTEMPLATE]
-en-US = "http://www.documentfoundation.org"
+en-US = "http://www.libreoffice.org/get-help"
 
 [OOO_ARPURLUPDATEINFOTEMPLATE]
 en-US = "http://www.libreoffice.org/download"
