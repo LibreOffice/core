@@ -1070,6 +1070,26 @@
         <property name="action_name">.uno:InsertEnvelope</property>
       </object>
     </child>
+    <child>
+      <object class="GtkSeparatorMenuItem" id="separator4">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="FontworkGalleryFloaterD">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:FontworkGalleryFloater</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="EditGlossaryD">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:EditGlossary</property>
+      </object>
+    </child>
   </object>
   <object class="GtkMenu" id="MenuPage">
     <property name="visible">True</property>
@@ -3890,7 +3910,7 @@
                           </packing>
                         </child>
                         <style>
-                          <class name="priority-3"/>
+                          <class name="priority-4"/>
                         </style>
                       </object>
                       <packing>
@@ -4210,7 +4230,7 @@
                           </packing>
                         </child>
                         <style>
-                          <class name="priority-5"/>
+                          <class name="priority-3"/>
                         </style>
                       </object>
                       <packing>
@@ -4327,7 +4347,7 @@
                           </packing>
                         </child>
                         <style>
-                          <class name="priority-4"/>
+                          <class name="priority-2"/>
                         </style>
                       </object>
                       <packing>
@@ -4442,7 +4462,7 @@
                           </packing>
                         </child>
                         <style>
-                          <class name="priority-3"/>
+                          <class name="priority-1"/>
                         </style>
                       </object>
                       <packing>
@@ -5085,8 +5105,10 @@
                               <object class="sfxlo-NotebookbarToolBox" id="shapes1">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
+                                <property name="toolbar_style">icons</property>
+                                <property name="show_arrow">False</property>
                                 <child>
-                                  <object class="GtkToolButton" id="Line">
+                                  <object class="GtkToolButton" id="Line2">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="action_name">.uno:Line</property>
@@ -5097,24 +5119,35 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkToolButton" id="Freeline_Unfilled">
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">False</property>
-                                    <property name="action_name">.uno:Freeline_Unfilled</property>
-                                  </object>
-                                  <packing>
-                                    <property name="expand">True</property>
-                                    <property name="homogeneous">True</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkToolButton" id="Polygon_Unfilled">
+                                  <object class="GtkToolButton" id="Polygon_Unfilled2">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="action_name">.uno:Polygon_Unfilled</property>
                                   </object>
                                   <packing>
-                                    <property name="expand">True</property>
+                                    <property name="expand">False</property>
+                                    <property name="homogeneous">True</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkToolButton" id="Bezier_Unfilled1">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
+                                    <property name="action_name">.uno:Bezier_Unfilled</property>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="homogeneous">True</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkToolButton" id="ArrowsToolbox1">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
+                                    <property name="action_name">.uno:ArrowsToolbox</property>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">False</property>
                                     <property name="homogeneous">True</property>
                                   </packing>
                                 </child>
@@ -5129,8 +5162,10 @@
                               <object class="sfxlo-NotebookbarToolBox" id="shapes3">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
+                                <property name="toolbar_style">icons</property>
+                                <property name="show_arrow">False</property>
                                 <child>
-                                  <object class="GtkToolButton" id="rectangle">
+                                  <object class="GtkToolButton" id="rectangle2">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="action_name">.uno:BasicShapes.rectangle</property>
@@ -5141,7 +5176,18 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkToolButton" id="ellipse">
+                                  <object class="GtkToolButton" id="BasicShapes.round-rectangle1">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
+                                    <property name="action_name">.uno:BasicShapes.round-rectangle</property>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">True</property>
+                                    <property name="homogeneous">True</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkToolButton" id="ellipse2">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="action_name">.uno:BasicShapes.ellipse</property>
@@ -5152,13 +5198,13 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkToolButton" id="isosceles">
+                                  <object class="GtkToolButton" id="LineToolbox1">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="action_name">.uno:BasicShapes.isosceles-triangle</property>
+                                    <property name="action_name">.uno:LineToolbox</property>
                                   </object>
                                   <packing>
-                                    <property name="expand">True</property>
+                                    <property name="expand">False</property>
                                     <property name="homogeneous">True</property>
                                   </packing>
                                 </child>
@@ -5379,14 +5425,14 @@
                                 <property name="toolbar_style">both-horiz</property>
                                 <property name="show_arrow">False</property>
                                 <child>
-                                  <object class="GtkToolButton" id="FontworkGalleryFloater">
+                                  <object class="GtkToolButton" id="EditGlossary1">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="action_name">.uno:FontworkGalleryFloater</property>
+                                    <property name="action_name">.uno:EditGlossary</property>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
-                                    <property name="homogeneous">True</property>
+                                    <property name="homogeneous">False</property>
                                   </packing>
                                 </child>
                               </object>
