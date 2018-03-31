@@ -103,8 +103,7 @@ REGLIB=-lreg$(UDK_MAJOR)
 .ELSE			# "$(GUI)$(COM)"=="WNTGCC"
 REGLIB=-lreg
 .ENDIF			# "$(GUI)$(COM)"=="WNTGCC"
-.INCLUDE .IGNORE : vos/version.mk
-VOSLIB=-lvos$(VOS_MAJOR)$(COMID)
+VOSLIB=-lvos3$(COMID)
 XMLOFFLIB=-lxo$(DLLPOSTFIX)
 XMLOFFLLIB=-lxol
 .IF "$(GUI)$(COM)"=="WNTGCC" || "$(GUI)"=="OS2"
