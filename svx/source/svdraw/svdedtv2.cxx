@@ -2025,15 +2025,14 @@ void SdrEditView::DoImportMarkedMtf(SvdProgressInfo *pProgrInfo)
     SortMarkedObjects();
     SdrMarkList aForTheDescription;
     SdrMarkList aNewMarked;
-    const size_t nCount=GetMarkedObjectCount();
-
-    for (size_t nm=nCount; nm>0;)
-    { // create Undo objects for all new objects
+    for (size_t nm =GetMarkedObjectCount(); nm > 0; )
+    {
+        // create Undo objects for all new objects
         // check for cancellation between the metafiles
-        if( pProgrInfo != nullptr )
+        if (pProgrInfo != nullptr)
         {
             pProgrInfo->SetNextObject();
-            if(!pProgrInfo->ReportActions(0))
+            if (!pProgrInfo->ReportActions(0))
                 break;
         }
 
@@ -2051,77 +2050,72 @@ void SdrEditView::DoImportMarkedMtf(SvdProgressInfo *pProgrInfo)
         if (pGraf && (pGraf->HasGDIMetaFile() || pGraf->isEmbeddedSvg()))
         {
             GDIMetaFile aMetaFile(GetMetaFile(pGraf));
-            if(aMetaFile.GetActionSize())
+            if (aMetaFile.GetActionSize())
             {
                 aLogicRect = pGraf->GetLogicRect();
                 ImpSdrGDIMetaFileImport aFilter(*mpModel, pObj->GetLayer(), aLogicRect);
                 nInsAnz = aFilter.DoImport(aMetaFile, *pOL, nInsPos, pProgrInfo);
             }
         }
-        if ( pOle2!=nullptr && pOle2->GetGraphic() )
+
+        if (pOle2 != nullptr && pOle2->GetGraphic())
         {
             aLogicRect = pOle2->GetLogicRect();
             ImpSdrGDIMetaFileImport aFilter(*mpModel, pObj->GetLayer(), aLogicRect);
             nInsAnz = aFilter.DoImport(pOle2->GetGraphic()->GetGDIMetaFile(), *pOL, nInsPos, pProgrInfo);
         }
-        if (nInsAnz!=0)
+
+        if (nInsAnz != 0)
         {
             // transformation
             GeoStat aGeoStat(pGraf ? pGraf->GetGeoStat() : pOle2->GetGeoStat());
-            size_t nObj=nInsPos;
+            size_t nObj = nInsPos;
 
-            if(aGeoStat.nShearAngle)
-            {
+            if (aGeoStat.nShearAngle)
                 aGeoStat.RecalcTan();
-            }
 
-            if(aGeoStat.nRotationAngle)
-            {
+            if (aGeoStat.nRotationAngle)
                 aGeoStat.RecalcSinCos();
-            }
 
-            for (sal_uIntPtr i=0; i<nInsAnz; i++)
+            for (sal_uIntPtr i = 0; i < nInsAnz; i++)
             {
-                if( bUndo )
+                if (bUndo)
                     AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoNewObject(*pOL->GetObj(nObj)));
 
                 // update new MarkList
                 SdrObject* pCandidate = pOL->GetObj(nObj);
 
                 // apply original transformation
-                if(aGeoStat.nShearAngle)
-                {
+                if (aGeoStat.nShearAngle)
                     pCandidate->NbcShear(aLogicRect.TopLeft(), aGeoStat.nShearAngle, aGeoStat.nTan, false);
-                }
 
-                if(aGeoStat.nRotationAngle)
-                {
+                if (aGeoStat.nRotationAngle)
                     pCandidate->NbcRotate(aLogicRect.TopLeft(), aGeoStat.nRotationAngle, aGeoStat.nSin, aGeoStat.nCos);
-                }
 
                 SdrMark aNewMark(pCandidate, pPV);
                 aNewMarked.InsertEntry(aNewMark);
 
                 nObj++;
             }
+
             aForTheDescription.InsertEntry(*pM);
 
-            if( bUndo )
+            if (bUndo)
                 AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoDeleteObject(*pObj));
 
             // remove object from selection and delete
             GetMarkedObjectListWriteAccess().DeleteMark(TryToFindMarkedObject(pObj));
             pOL->RemoveObject(nInsPos-1);
 
-            if( !bUndo )
+            if (!bUndo)
                 SdrObject::Free(pObj);
         }
     }
 
-    if(aNewMarked.GetMarkCount())
+    if (aNewMarked.GetMarkCount())
     {
         // create new selection
-        for(size_t a = 0; a < aNewMarked.GetMarkCount(); ++a)
+        for (size_t a = 0; a < aNewMarked.GetMarkCount(); ++a)
         {
             GetMarkedObjectListWriteAccess().InsertEntry(*aNewMarked.GetMark(a));
         }
@@ -2129,7 +2123,7 @@ void SdrEditView::DoImportMarkedMtf(SvdProgressInfo *pProgrInfo)
         SortMarkedObjects();
     }
 
-    if( bUndo )
+    if (bUndo)
     {
         SetUndoComment(ImpGetResStr(STR_EditImportMtf),aForTheDescription.GetMarkDescription());
         EndUndo();

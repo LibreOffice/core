@@ -163,7 +163,7 @@ public:
     void                    StartAnimation(OutputDevice* pOutDev, const Point& rPoint, const Size& rSize);
 
     virtual void            TakeObjInfo(SdrObjTransformInfoRec& rInfo) const override;
-    virtual sal_uInt16          GetObjIdentifier() const override;
+    virtual sal_uInt16      GetObjIdentifier() const override;
 
     virtual OUString        TakeObjNameSingul() const override;
     virtual OUString        TakeObjNamePlural() const override;
@@ -175,7 +175,7 @@ public:
     SdrGrafObj&             operator=(const SdrGrafObj& rObj);
 
     virtual sal_uInt32 GetHdlCount() const override;
-    virtual SdrHdl*         GetHdl(sal_uInt32 nHdlNum) const override;
+    virtual SdrHdl* GetHdl(sal_uInt32 nHdlNum) const override;
 
     virtual void            NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact) override;
     virtual void            NbcMirror(const Point& rRef1, const Point& rRef2) override;
