@@ -49,6 +49,9 @@ using com::sun::star::uno::Sequence;
 using com::sun::star::container::XNameContainer;
 using com::sun::star::beans::XPropertySet;
 
+#define WATERMARK_LUM_OFFSET        50
+#define WATERMARK_CON_OFFSET        -70
+
 namespace vcl
 {
 namespace graphic
@@ -96,7 +99,198 @@ void SearchForGraphics(uno::Reference<uno::XInterface> const & xInterface,
 
 }} // end namespace vcl::graphic
 
-GraphicManager* GraphicObject::mpGlobalMgr = nullptr;
+namespace
+{
+
+bool lclDrawObj( OutputDevice* pOut, const Point& rPt, const Size& rSz,
+                              GraphicObject const & rObj, const GraphicAttr& rAttr)
+{
+    Point   aPt( rPt );
+    Size    aSz( rSz );
+    bool    bRet = false;
+
+    if( ( rObj.GetType() == GraphicType::Bitmap ) || ( rObj.GetType() == GraphicType::GdiMetafile ) )
+    {
+        // simple output of transformed graphic
+        const Graphic aGraphic( rObj.GetTransformedGraphic( &rAttr ) );
+
+        if( aGraphic.IsSupportedGraphic() )
+        {
+            const sal_uInt16 nRot10 = rAttr.GetRotation() % 3600;
+
+            if( nRot10 )
+            {
+                tools::Polygon aPoly( tools::Rectangle( aPt, aSz ) );
+
+                aPoly.Rotate( aPt, nRot10 );
+                const tools::Rectangle aRotBoundRect( aPoly.GetBoundRect() );
+                aPt = aRotBoundRect.TopLeft();
+                aSz = aRotBoundRect.GetSize();
+            }
+
+            aGraphic.Draw( pOut, aPt, aSz );
+        }
+
+        bRet = true;
+    }
+
+    return bRet;
+}
+
+void lclImplAdjust( BitmapEx& rBmpEx, const GraphicAttr& rAttr, GraphicAdjustmentFlags nAdjustmentFlags )
+{
+    GraphicAttr aAttr( rAttr );
+
+    if( ( nAdjustmentFlags & GraphicAdjustmentFlags::DRAWMODE ) && aAttr.IsSpecialDrawMode() )
+    {
+        switch( aAttr.GetDrawMode() )
+        {
+            case GraphicDrawMode::Mono:
+                rBmpEx.Convert( BmpConversion::N1BitThreshold );
+            break;
+
+            case GraphicDrawMode::Greys:
+                rBmpEx.Convert( BmpConversion::N8BitGreys );
+            break;
+
+            case GraphicDrawMode::Watermark:
+            {
+                aAttr.SetLuminance( aAttr.GetLuminance() + WATERMARK_LUM_OFFSET );
+                aAttr.SetContrast( aAttr.GetContrast() + WATERMARK_CON_OFFSET );
+            }
+            break;
+
+            default:
+            break;
+        }
+    }
+
+    if( ( nAdjustmentFlags & GraphicAdjustmentFlags::COLORS ) && aAttr.IsAdjusted() )
+    {
+        rBmpEx.Adjust( aAttr.GetLuminance(), aAttr.GetContrast(),
+                       aAttr.GetChannelR(), aAttr.GetChannelG(), aAttr.GetChannelB(),
+                       aAttr.GetGamma(), aAttr.IsInvert() );
+    }
+
+    if( ( nAdjustmentFlags & GraphicAdjustmentFlags::MIRROR ) && aAttr.IsMirrored() )
+    {
+        rBmpEx.Mirror( aAttr.GetMirrorFlags() );
+    }
+
+    if( ( nAdjustmentFlags & GraphicAdjustmentFlags::ROTATE ) && aAttr.IsRotated() )
+    {
+        rBmpEx.Rotate( aAttr.GetRotation(), COL_TRANSPARENT );
+    }
+
+    if( ( nAdjustmentFlags & GraphicAdjustmentFlags::TRANSPARENCY ) && aAttr.IsTransparent() )
+    {
+        rBmpEx.AdjustTransparency(aAttr.GetTransparency());
+    }
+}
+
+void lclImplAdjust( GDIMetaFile& rMtf, const GraphicAttr& rAttr, GraphicAdjustmentFlags nAdjustmentFlags )
+{
+    GraphicAttr aAttr( rAttr );
+
+    if( ( nAdjustmentFlags & GraphicAdjustmentFlags::DRAWMODE ) && aAttr.IsSpecialDrawMode() )
+    {
+        switch( aAttr.GetDrawMode() )
+        {
+            case GraphicDrawMode::Mono:
+                rMtf.Convert( MtfConversion::N1BitThreshold );
+            break;
+
+            case GraphicDrawMode::Greys:
+                rMtf.Convert( MtfConversion::N8BitGreys );
+            break;
+
+            case GraphicDrawMode::Watermark:
+            {
+                aAttr.SetLuminance( aAttr.GetLuminance() + WATERMARK_LUM_OFFSET );
+                aAttr.SetContrast( aAttr.GetContrast() + WATERMARK_CON_OFFSET );
+            }
+            break;
+
+            default:
+            break;
+        }
+    }
+
+    if( ( nAdjustmentFlags & GraphicAdjustmentFlags::COLORS ) && aAttr.IsAdjusted() )
+    {
+        rMtf.Adjust( aAttr.GetLuminance(), aAttr.GetContrast(),
+                     aAttr.GetChannelR(), aAttr.GetChannelG(), aAttr.GetChannelB(),
+                     aAttr.GetGamma(), aAttr.IsInvert() );
+    }
+
+    if( ( nAdjustmentFlags & GraphicAdjustmentFlags::MIRROR ) && aAttr.IsMirrored() )
+    {
+        rMtf.Mirror( aAttr.GetMirrorFlags() );
+    }
+
+    if( ( nAdjustmentFlags & GraphicAdjustmentFlags::ROTATE ) && aAttr.IsRotated() )
+    {
+        rMtf.Rotate( aAttr.GetRotation() );
+    }
+
+    if( ( nAdjustmentFlags & GraphicAdjustmentFlags::TRANSPARENCY ) && aAttr.IsTransparent() )
+    {
+        OSL_FAIL( "Missing implementation: Mtf-Transparency" );
+    }
+}
+
+void lclImplAdjust( Animation& rAnimation, const GraphicAttr& rAttr, GraphicAdjustmentFlags nAdjustmentFlags )
+{
+    GraphicAttr aAttr( rAttr );
+
+    if( ( nAdjustmentFlags & GraphicAdjustmentFlags::DRAWMODE ) && aAttr.IsSpecialDrawMode() )
+    {
+        switch( aAttr.GetDrawMode() )
+        {
+            case GraphicDrawMode::Mono:
+                rAnimation.Convert( BmpConversion::N1BitThreshold );
+            break;
+
+            case GraphicDrawMode::Greys:
+                rAnimation.Convert( BmpConversion::N8BitGreys );
+            break;
+
+            case GraphicDrawMode::Watermark:
+            {
+                aAttr.SetLuminance( aAttr.GetLuminance() + WATERMARK_LUM_OFFSET );
+                aAttr.SetContrast( aAttr.GetContrast() + WATERMARK_CON_OFFSET );
+            }
+            break;
+
+            default:
+            break;
+        }
+    }
+
+    if( ( nAdjustmentFlags & GraphicAdjustmentFlags::COLORS ) && aAttr.IsAdjusted() )
+    {
+        rAnimation.Adjust( aAttr.GetLuminance(), aAttr.GetContrast(),
+                           aAttr.GetChannelR(), aAttr.GetChannelG(), aAttr.GetChannelB(),
+                           aAttr.GetGamma(), aAttr.IsInvert() );
+    }
+
+    if( ( nAdjustmentFlags & GraphicAdjustmentFlags::MIRROR ) && aAttr.IsMirrored() )
+    {
+        rAnimation.Mirror( aAttr.GetMirrorFlags() );
+    }
+
+    if( ( nAdjustmentFlags & GraphicAdjustmentFlags::ROTATE ) && aAttr.IsRotated() )
+    {
+        OSL_FAIL( "Missing implementation: Animation-Rotation" );
+    }
+
+    if( ( nAdjustmentFlags & GraphicAdjustmentFlags::TRANSPARENCY ) && aAttr.IsTransparent() )
+    {
+        OSL_FAIL( "Missing implementation: Animation-Transparency" );
+    }
+}
+
+} // end anonymous namespace
 
 struct GrfSimpleCacheObj
 {
@@ -107,19 +301,6 @@ struct GrfSimpleCacheObj
                     maGraphic( rGraphic ), maAttr( rAttr ) {}
 };
 
-// unique increasing ID for being able to detect the GraphicObject with the
-// oldest last data changes
-static sal_uLong aIncrementingTimeOfLastDataChange = 1;
-
-void GraphicObject::ImplAfterDataChange()
-{
-    // set unique timestamp ID of last data change
-    mnDataChangeTimeStamp = aIncrementingTimeOfLastDataChange++;
-
-    // check memory footprint of all GraphicObjects managed and evtl. take action
-    mpGlobalMgr->ImplCheckSizeOfSwappedInGraphics(this);
-}
-
 GraphicObject::GraphicObject()
     : mbAutoSwapped(false)
     , mbIsInSwapIn(false)
@@ -127,7 +308,6 @@ GraphicObject::GraphicObject()
 {
     ImplEnsureGraphicManager();
     ImplAssignGraphicData();
-    mpGlobalMgr->ImplRegisterObj(*this, maGraphic, nullptr, nullptr);
 }
 
 GraphicObject::GraphicObject(const Graphic& rGraphic)
@@ -138,7 +318,6 @@ GraphicObject::GraphicObject(const Graphic& rGraphic)
 {
     ImplEnsureGraphicManager();
     ImplAssignGraphicData();
-    mpGlobalMgr->ImplRegisterObj(*this, maGraphic, nullptr, nullptr);
 }
 
 GraphicObject::GraphicObject(const GraphicObject& rGraphicObj)
@@ -152,20 +331,12 @@ GraphicObject::GraphicObject(const GraphicObject& rGraphicObj)
     , mbIsInSwapOut(false)
 {
     ImplAssignGraphicData();
-    mpGlobalMgr->ImplRegisterObj(*this, maGraphic, nullptr, &rGraphicObj);
     if( rGraphicObj.HasUserData() && rGraphicObj.IsSwappedOut() )
         SetSwapState();
 }
 
 GraphicObject::~GraphicObject()
 {
-    mpGlobalMgr->ImplUnregisterObj( *this );
-
-    if (!mpGlobalMgr->ImplHasObjects())
-    {
-        delete mpGlobalMgr;
-        mpGlobalMgr = nullptr;
-    }
 }
 
 void GraphicObject::ImplAssignGraphicData()
@@ -178,33 +349,10 @@ void GraphicObject::ImplAssignGraphicData()
     mbAnimated = maGraphic.IsAnimated();
     mbEPS = maGraphic.IsEPS();
     mnAnimationLoopCount = ( mbAnimated ? maGraphic.GetAnimationLoopCount() : 0 );
-
-    // Handle evtl. needed AfterDataChanges
-    ImplAfterDataChange();
 }
 
 void GraphicObject::ImplEnsureGraphicManager()
 {
-    if (mpGlobalMgr)
-        return;
-
-    sal_uLong nCacheSize = 20000;
-    sal_uLong nMaxObjCacheSize = 20000;
-    sal_uLong nTimeoutSeconds = 20000;
-    if (!utl::ConfigManager::IsFuzzing())
-    {
-        try
-        {
-            nCacheSize = officecfg::Office::Common::Cache::GraphicManager::TotalCacheSize::get();
-            nMaxObjCacheSize = officecfg::Office::Common::Cache::GraphicManager::ObjectCacheSize::get();
-            nTimeoutSeconds = officecfg::Office::Common::Cache::GraphicManager::ObjectReleaseTime::get();
-        }
-        catch (...)
-        {
-        }
-    }
-    mpGlobalMgr = new GraphicManager(nCacheSize, nMaxObjCacheSize);
-    mpGlobalMgr->SetCacheTimeout(nTimeoutSeconds);
 }
 
 void GraphicObject::ImplAutoSwapIn()
@@ -259,9 +407,6 @@ void GraphicObject::ImplAutoSwapIn()
         }
 
         mbIsInSwapIn = false;
-
-        if (!mbAutoSwapped)
-            mpGlobalMgr->ImplGraphicObjectWasSwappedIn( *this );
     }
     ImplAssignGraphicData();
 }
@@ -339,8 +484,6 @@ GraphicObject& GraphicObject::operator=( const GraphicObject& rGraphicObj )
 {
     if( &rGraphicObj != this )
     {
-        mpGlobalMgr->ImplUnregisterObj( *this );
-
         maSwapStreamHdl = Link<const GraphicObject*, SvStream*>();
         mxSimpleCache.reset();
 
@@ -350,7 +493,6 @@ GraphicObject& GraphicObject::operator=( const GraphicObject& rGraphicObj )
         maUserData = rGraphicObj.maUserData;
         ImplAssignGraphicData();
         mbAutoSwapped = false;
-        mpGlobalMgr->ImplRegisterObj( *this, maGraphic, nullptr, &rGraphicObj );
         if( rGraphicObj.HasUserData() && rGraphicObj.IsSwappedOut() )
             SetSwapState();
     }
@@ -370,7 +512,7 @@ OString GraphicObject::GetUniqueID() const
     if ( !IsInSwapIn() && IsEPS() )
         const_cast<GraphicObject*>(this)->FireSwapInRequest();
 
-    return mpGlobalMgr->ImplGetUniqueID(*this);
+    return GetGraphic().getUniqueID();
 }
 
 SvStream* GraphicObject::GetSwapStream() const
@@ -455,29 +597,6 @@ void GraphicObject::FireSwapOutRequest()
     ImplAutoSwapOutHdl( nullptr );
 }
 
-bool GraphicObject::IsCached( OutputDevice const * pOut, const Size& rSz,
-                              const GraphicAttr* pAttr, GraphicManagerDrawFlags nFlags ) const
-{
-    bool bRet;
-
-    if( nFlags & GraphicManagerDrawFlags::CACHED )
-    {
-        Point aPt;
-        Size aSz( rSz );
-        if ( pAttr && pAttr->IsCropped() )
-        {
-            tools::PolyPolygon aClipPolyPoly;
-            bool bRectClip;
-            ImplGetCropParams( pOut, aPt, aSz, pAttr, aClipPolyPoly, bRectClip );
-        }
-        bRet = mpGlobalMgr->IsInCache( pOut, aPt, aSz, *this, ( pAttr ? *pAttr : GetAttr() ) );
-    }
-    else
-        bRet = false;
-
-    return bRet;
-}
-
 bool GraphicObject::Draw( OutputDevice* pOut, const Point& rPt, const Size& rSz,
                           const GraphicAttr* pAttr, GraphicManagerDrawFlags nFlags )
 {
@@ -486,7 +605,6 @@ bool GraphicObject::Draw( OutputDevice* pOut, const Point& rPt, const Size& rSz,
     Size                aSz( rSz );
     const DrawModeFlags nOldDrawMode = pOut->GetDrawMode();
     bool                bCropped = aAttr.IsCropped();
-    bool                bCached = false;
     bool bRet;
 
     // #i29534# Provide output rects for PDF writer
@@ -535,22 +653,12 @@ bool GraphicObject::Draw( OutputDevice* pOut, const Point& rPt, const Size& rSz,
         }
     }
 
-    bRet = mpGlobalMgr->DrawObj( pOut, aPt, aSz, *this, aAttr, nFlags, bCached );
+    bRet = lclDrawObj(pOut, aPt, aSz, *this, aAttr);
 
     if( bCropped )
         pOut->Pop();
 
     pOut->SetDrawMode( nOldDrawMode );
-
-    // #i29534# Moved below OutDev restoration, to avoid multiple swap-ins
-    // (code above needs to call GetGraphic twice)
-    if( bCached )
-    {
-        if (mxSwapOutTimer)
-            mxSwapOutTimer->Start();
-        else
-            FireSwapOutRequest();
-    }
 
     return bRet;
 }
@@ -656,10 +764,8 @@ const Graphic& GraphicObject::GetGraphic() const
     return maGraphic;
 }
 
-void GraphicObject::SetGraphic( const Graphic& rGraphic, const GraphicObject* pCopyObj )
+void GraphicObject::SetGraphic( const Graphic& rGraphic, const GraphicObject* /*pCopyObj*/ )
 {
-    mpGlobalMgr->ImplUnregisterObj( *this );
-
     if (mxSwapOutTimer)
         mxSwapOutTimer->Stop();
 
@@ -669,12 +775,8 @@ void GraphicObject::SetGraphic( const Graphic& rGraphic, const GraphicObject* pC
     maLink.clear();
     mxSimpleCache.reset();
 
-    mpGlobalMgr->ImplRegisterObj( *this, maGraphic, nullptr, pCopyObj);
-
     if (mxSwapOutTimer)
         mxSwapOutTimer->Start();
-
-
 }
 
 void GraphicObject::SetGraphic( const Graphic& rGraphic, const OUString& rLink )
@@ -913,7 +1015,7 @@ Graphic GraphicObject::GetTransformedGraphic( const Size& rDestSize, const MapMo
     return aTransGraphic;
 }
 
-Graphic GraphicObject::GetTransformedGraphic( const GraphicAttr* pAttr ) const // TODO: Change to Impl
+Graphic GraphicObject::GetTransformedGraphic( const GraphicAttr* pAttr ) const
 {
     GetGraphic();
 
@@ -929,21 +1031,21 @@ Graphic GraphicObject::GetTransformedGraphic( const GraphicAttr* pAttr ) const /
                 if( IsAnimated() )
                 {
                     Animation aAnimation( maGraphic.GetAnimation() );
-                    GraphicManager::ImplAdjust( aAnimation, aAttr, GraphicAdjustmentFlags::ALL );
+                    lclImplAdjust( aAnimation, aAttr, GraphicAdjustmentFlags::ALL );
                     aAnimation.SetLoopCount( mnAnimationLoopCount );
                     aGraphic = aAnimation;
                 }
                 else
                 {
                     BitmapEx aBmpEx( maGraphic.GetBitmapEx() );
-                    GraphicManager::ImplAdjust( aBmpEx, aAttr, GraphicAdjustmentFlags::ALL );
+                    lclImplAdjust( aBmpEx, aAttr, GraphicAdjustmentFlags::ALL );
                     aGraphic = aBmpEx;
                 }
             }
             else
             {
                 GDIMetaFile aMtf( maGraphic.GetGDIMetaFile() );
-                GraphicManager::ImplAdjust( aMtf, aAttr, GraphicAdjustmentFlags::ALL );
+                lclImplAdjust( aMtf, aAttr, GraphicAdjustmentFlags::ALL );
                 aGraphic = aMtf;
             }
         }
@@ -967,9 +1069,6 @@ bool GraphicObject::SwapOut()
 {
     const bool bRet = !mbAutoSwapped && maGraphic.SwapOut();
 
-    if (bRet)
-        mpGlobalMgr->ImplGraphicObjectWasSwappedOut( *this );
-
     return bRet;
 }
 
@@ -988,9 +1087,6 @@ bool GraphicObject::SwapOut( SvStream* pOStm )
         {
             bRet = bRet && maGraphic.SwapOut( pOStm );
         }
-
-        if (bRet)
-            mpGlobalMgr->ImplGraphicObjectWasSwappedOut(*this);
     }
     catch(...)
     {
@@ -1012,9 +1108,6 @@ bool GraphicObject::SwapIn()
         else
         {
             bRet = maGraphic.SwapIn();
-
-            if (bRet)
-                mpGlobalMgr->ImplGraphicObjectWasSwappedIn(*this);
         }
 
         if( bRet )
@@ -1035,8 +1128,6 @@ void GraphicObject::SetSwapState()
     if( !IsSwappedOut() )
     {
         mbAutoSwapped = true;
-
-        mpGlobalMgr->ImplGraphicObjectWasSwappedOut(*this);
     }
 }
 
