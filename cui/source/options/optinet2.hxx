@@ -81,7 +81,7 @@ private:
 
     css::uno::Reference< css::uno::XInterface > m_xConfigurationUpdateAccess;
 
-    void EnableControls_Impl(bool bEnable);
+    void EnableControls_Impl();
     void ReadConfigData_Impl();
     void ReadConfigDefaults_Impl();
     void RestoreConfigDefaults_Impl();
