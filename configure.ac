@@ -1542,7 +1542,7 @@ AC_ARG_WITH(galleries,
 AC_ARG_WITH(theme,
     AS_HELP_STRING([--with-theme="theme1 theme2..."],
         [Choose which themes to include. By default those themes with an '*' are included.
-         Possible choices: *breeze, *breeze_dark, crystal, *colibre, *elementary, *galaxy, *hicontrast, oxygen, *sifr, *sifr_dark, *tango, tango_testing.]),
+         Possible choices: *breeze, *breeze_dark, *colibre, *elementary, *galaxy, *hicontrast, oxygen, *sifr, *sifr_dark, *tango, tango_testing.]),
 ,)
 
 libo_FUZZ_ARG_WITH(helppack-integration,
@@ -11186,7 +11186,7 @@ WITH_THEMES=""
 if test "x$with_theme" != "xno"; then
     for theme in $with_theme; do
         case $theme in
-        breeze|breeze_dark|crystal|colibre|elementary|galaxy|hicontrast|oxygen|sifr|sifr_dark|tango|tango_testing) real_theme="$theme" ;;
+        breeze|breeze_dark|colibre|elementary|galaxy|hicontrast|oxygen|sifr|sifr_dark|tango|tango_testing) real_theme="$theme" ;;
         default) real_theme=galaxy ;;
         *) AC_MSG_ERROR([Unknown value for --with-theme: $theme]) ;;
         esac
@@ -12483,7 +12483,7 @@ if test "$enable_mpl_subset" = "yes"; then
     fi
     for theme in $WITH_THEMES; do
         case $theme in
-        breeze|crystal|default|hicontrast|oxygen|sifr)
+        breeze|default|hicontrast|oxygen|sifr)
             AC_MSG_ERROR([need to disable icon themes from '$WITH_THEMES': $theme present, use --with-theme=tango]) ;;
         *) : ;;
         esac
