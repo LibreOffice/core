@@ -1535,7 +1535,7 @@ void SwTOXBaseSection::UpdatePageNum()
         return ;
 
     // Insert the current PageNumber into the TOC
-    SwPageFrame*  pAktPage    = nullptr;
+    SwPageFrame*  pCurrentPage    = nullptr;
     sal_uInt16      nPage       = 0;
     SwDoc* pDoc = GetFormat()->GetDoc();
 
@@ -1595,10 +1595,10 @@ void SwTOXBaseSection::UpdatePageNum()
                     }
 
                     SwPageFrame*  pTmpPage = pFrame->FindPageFrame();
-                    if( pTmpPage != pAktPage )
+                    if( pTmpPage != pCurrentPage )
                     {
                         nPage       = pTmpPage->GetVirtPageNum();
-                        pAktPage    = pTmpPage;
+                        pCurrentPage    = pTmpPage;
                     }
 
                     // Insert as sorted
@@ -1609,7 +1609,7 @@ void SwTOXBaseSection::UpdatePageNum()
                     if( i >= aNums.size() || aNums[ i ] != nPage )
                     {
                         aNums.insert(aNums.begin() + i, nPage);
-                        aDescs.insert(aDescs.begin() + i, pAktPage->GetPageDesc() );
+                        aDescs.insert(aDescs.begin() + i, pCurrentPage->GetPageDesc() );
                     }
                     // is it a main entry?
                     if(TOX_SORT_INDEX == pSortBase->GetType() &&
