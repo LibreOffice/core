@@ -495,4 +495,4 @@ sal_uInt16 BigPtrArray::Compress()
     return nFirstChgPos;
 }
 
-/* vim:set shiftwidth=4 softtabstop=4 */
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
