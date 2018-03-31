@@ -635,7 +635,7 @@ bool SdrCreateView::EndCreateObj(SdrCreateCmd eCmd)
                 bool bSceneIntoScene(false);
 
                 E3dScene* pObjScene = dynamic_cast<E3dScene*>(pObjMerk);
-                E3dScene* pCurrentScene = pObjScene ? dynamic_cast<E3dScene*>(pCreatePV->GetAktGroup()) : nullptr;
+                E3dScene* pCurrentScene = pObjScene ? dynamic_cast<E3dScene*>(pCreatePV->GetCurrentGroup()) : nullptr;
                 if (pCurrentScene)
                 {
                     bool bDidInsert = static_cast<E3dView*>(this)->ImpCloneAll3DObjectsToDestScene(
