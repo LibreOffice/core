@@ -18213,8 +18213,6 @@ vcl/source/graphic/UnoGraphicObject.cxx
 vcl/source/graphic/UnoGraphicProvider.cxx
 vcl/source/graphic/UnoGraphicTransformer.cxx
 vcl/source/graphic/grfattr.cxx
-vcl/source/graphic/grfcache.cxx
-vcl/source/graphic/grfcache.hxx
 vcl/source/helper/canvasbitmap.cxx
 vcl/source/helper/canvastools.cxx
 vcl/source/helper/commandinfoprovider.cxx
