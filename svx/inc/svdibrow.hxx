@@ -36,7 +36,7 @@ friend class ImpItemEdit;
     std::vector<std::unique_ptr<ImpItemListRow>> aList;
     long nCurrentPaintRow;
     VclPtr<Edit> pEditControl;
-    OUString aWNamMerk;
+    OUString aWNameMemorized;
     Link<SdrItemBrowserControl&,void> aEntryChangedHdl;
     Link<SdrItemBrowserControl&,void> aSetDirtyHdl;
     ImpItemListRow* pCurrentChangeEntry;
