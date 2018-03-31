@@ -59,7 +59,11 @@ public:
     public:
         /** An exception indicating failure to create an AttachGuard.
          */
+#if defined _MSC_VER
         class CreationException
+#else
+        class JVMACCESS_DLLPUBLIC CreationException
+#endif
         {
         public:
             JVMACCESS_DLLPUBLIC CreationException();

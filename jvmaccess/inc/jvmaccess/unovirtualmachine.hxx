@@ -40,7 +40,11 @@ class UnoVirtualMachine: public salhelper::SimpleReferenceObject {
 public:
     /** An exception indicating failure to create a UnoVirtualMachine.
      */
+#if defined _MSC_VER
     class CreationException
+#else
+    class JVMACCESS_DLLPUBLIC CreationException
+#endif
     {
     public:
         JVMACCESS_DLLPUBLIC CreationException();

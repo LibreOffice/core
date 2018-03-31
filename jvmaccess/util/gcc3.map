@@ -28,8 +28,8 @@ UDK_3.1 {
         _ZN9jvmaccess14VirtualMachine11AttachGuard17CreationExceptionC1ERKS2_; # jvmaccess::VirtualMachine::AttachGuard::CreationException::CreationException(CreationException const &)
         _ZN9jvmaccess14VirtualMachine11AttachGuard17CreationExceptionD0Ev; # jvmaccess::VirtualMachine::AttachGuard::CreationException::~CreationException()
         _ZN9jvmaccess14VirtualMachine11AttachGuard17CreationExceptionaSERKS2_; # jvmaccess::VirtualMachine::AttachGuard::CreationException::operator =(CreationException const &)
-        # _ZTIN9jvmaccess14VirtualMachine11AttachGuard17CreationExceptionE; # typeinfo for jvmaccess::VirtualMachine::AttachGuard::CreationException
-        # _ZTSN9jvmaccess14VirtualMachine11AttachGuard17CreationExceptionE; # typeinfo name for jvmaccess::VirtualMachine::AttachGuard::CreationException
+        _ZTIN9jvmaccess14VirtualMachine11AttachGuard17CreationExceptionE; # typeinfo for jvmaccess::VirtualMachine::AttachGuard::CreationException
+        _ZTSN9jvmaccess14VirtualMachine11AttachGuard17CreationExceptionE; # typeinfo name for jvmaccess::VirtualMachine::AttachGuard::CreationException
         _ZN9jvmaccess14VirtualMachine11AttachGuardC1ERKN3rtl9ReferenceIS0_EE; # jvmaccess::VirtualMachine::AttachGuard::AttachGuard(rtl::Reference< VirtualMachine > const &)
         _ZN9jvmaccess14VirtualMachine11AttachGuardC2ERKN3rtl9ReferenceIS0_EE; # jvmaccess::VirtualMachine::AttachGuard::AttachGuard(rtl::Reference< VirtualMachine > const &)
         _ZN9jvmaccess14VirtualMachine11AttachGuardD1Ev; # jvmaccess::VirtualMachine::AttachGuard::~AttachGuard()
@@ -68,8 +68,8 @@ UDK_3.3 {
         _ZN9jvmaccess17UnoVirtualMachine17CreationExceptionD1Ev; # jvmaccess::UnoVirtualMachine::CreationException::~CreationException()
         _ZN9jvmaccess17UnoVirtualMachine17CreationExceptionD2Ev; # jvmaccess::UnoVirtualMachine::CreationException::~CreationException()
         _ZN9jvmaccess17UnoVirtualMachine17CreationExceptionaSERKS1_; # jvmaccess::UnoVirtualMachine::CreationException::operator =(CreationException const &)
-        # _ZTIN9jvmaccess17UnoVirtualMachine17CreationExceptionE; # typeinfo for jvmaccess::UnoVirtualMachine::CreationException
-        # _ZTSN9jvmaccess17UnoVirtualMachine17CreationExceptionE; # typeinfo name for jvmaccess::UnoVirtualMachine::CreationException
+        _ZTIN9jvmaccess17UnoVirtualMachine17CreationExceptionE; # typeinfo for jvmaccess::UnoVirtualMachine::CreationException
+        _ZTSN9jvmaccess17UnoVirtualMachine17CreationExceptionE; # typeinfo name for jvmaccess::UnoVirtualMachine::CreationException
         _ZN9jvmaccess17UnoVirtualMachineC1ERKN3rtl9ReferenceINS_14VirtualMachineEEEPv; # jvmaccess::UnoVirtualMachine::UnoVirtualMachine(rtl::Reference< jvmaccess::VirtualMachine > const &, void *)
         _ZN9jvmaccess17UnoVirtualMachineC2ERKN3rtl9ReferenceINS_14VirtualMachineEEEPv; # jvmaccess::UnoVirtualMachine::UnoVirtualMachine(rtl::Reference< jvmaccess::VirtualMachine > const &, void *)
         _ZNK9jvmaccess17UnoVirtualMachine17getVirtualMachineEv; # jvmaccess::UnoVirtualMachine::getVirtualMachine() const
