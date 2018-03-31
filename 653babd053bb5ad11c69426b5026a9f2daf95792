@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_25941b36",
+        "filename": "external/firebird/firebird-vs2017.patch.1",
+        "patchSetId": 10
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-03-31T15:45:31Z",
+      "side": 1,
+      "message": "I think this should be \u003e not \u003e\u003d",
+      "revId": "653babd053bb5ad11c69426b5026a9f2daf95792",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
