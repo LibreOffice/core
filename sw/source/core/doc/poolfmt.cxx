@@ -272,6 +272,7 @@ sal_uInt16 GetPoolParent( sal_uInt16 nId )
             case RES_POOLCOLL_LABEL_TABLE:
             case RES_POOLCOLL_LABEL_FRAME:
             case RES_POOLCOLL_LABEL_DRAWING:
+            case RES_POOLCOLL_LABEL_FIGURE:
                     nRet = RES_POOLCOLL_LABEL;                  break;
             }
             break;
