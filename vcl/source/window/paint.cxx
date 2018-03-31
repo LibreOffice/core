@@ -333,7 +333,7 @@ void RenderTools::DrawSelectionBackground(vcl::RenderContext& rRenderContext, vc
 
     if (!bDark && !bBright && std::abs(c2 - c1) < (pPaintColor ? 40 : 75))
     {
-        // constrast too low
+        // contrast too low
         sal_uInt16 h, s, b;
         aSelectionFillColor.RGBtoHSB( h, s, b );
         if( b > 50 )    b -= 40;
