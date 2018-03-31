@@ -194,26 +194,28 @@ void DffStreamObject::dumpDffOpt()
     }
 
     mxOut->resetItemIndex();
-    for( PropInfoVector::iterator aIt = aPropInfos.begin(), aEnd = aPropInfos.end(); !mxStrm->isEof() && (aIt != aEnd); ++aIt )
+    for (auto const& propInfo : aPropInfos)
     {
+        if (mxStrm->isEof())
+            break;
         mxOut->startMultiItems();
         writeEmptyItem( "#complex-data" );
-        writeHexItem( "id", aIt->mnId, "DFFOPT-PROPERTY-NAMES" );
+        writeHexItem( "id", propInfo.mnId, "DFFOPT-PROPERTY-NAMES" );
         mxOut->endMultiItems();
         IndentGuard aIndent( mxOut );
-        switch( aIt->meType )
+        switch(propInfo.meType)
         {
             case PROPTYPE_BINARY:
-                dumpBinary( aIt->maName, aIt->mnSize );
+                dumpBinary( propInfo.maName, propInfo.mnSize );
             break;
             case PROPTYPE_STRING:
-                dumpUnicodeArray( aIt->maName, aIt->mnSize / 2, true );
+                dumpUnicodeArray( propInfo.maName, propInfo.mnSize / 2, true );
             break;
             case PROPTYPE_BLIP:
-                dumpBinary( aIt->maName, aIt->mnSize );
+                dumpBinary( propInfo.maName, propInfo.mnSize );
             break;
             case PROPTYPE_COLORARRAY:
-                dumpBinary( aIt->maName, aIt->mnSize );
+                dumpBinary( propInfo.maName, propInfo.mnSize );
             break;
         }
     }

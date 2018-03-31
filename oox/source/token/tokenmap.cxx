@@ -56,10 +56,11 @@ TokenMap::TokenMap() :
     };
 
     const sal_Char* const* ppcTokenName = sppcTokenNames;
-    for( TokenNameVector::iterator aIt = maTokenNames.begin(), aEnd = maTokenNames.end(); aIt != aEnd; ++aIt, ++ppcTokenName )
+    for (auto & tokenName : maTokenNames)
     {
         OString aUtf8Token( *ppcTokenName );
-        *aIt = Sequence< sal_Int8 >( reinterpret_cast< const sal_Int8* >( aUtf8Token.getStr() ), aUtf8Token.getLength() );
+        tokenName = Sequence< sal_Int8 >( reinterpret_cast< const sal_Int8* >( aUtf8Token.getStr() ), aUtf8Token.getLength() );
+        ++ppcTokenName;
     }
 
     for (unsigned char c = 'a'; c <= 'z'; c++)

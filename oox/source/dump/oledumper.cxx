@@ -281,8 +281,8 @@ void OlePropertyStreamObject::dumpSection( const OUString& rGuid, sal_uInt32 nSt
     }
 
     // other properties
-    for( PropertyPosMap::const_iterator aIt = aPropMap.begin(), aEnd = aPropMap.end(); aIt != aEnd; ++aIt )
-        dumpProperty( aIt->first, aIt->second );
+    for (auto const& elem : aPropMap)
+        dumpProperty( elem.first, elem.second );
 
     // remove the user defined list of property ID names
     cfg().eraseNameList( "OLEPROP-IDS" );
@@ -1067,14 +1067,16 @@ void AxPropertyObjectBase::dumpLargeProperties()
     {
         writeEmptyItem( "large-properties" );
         IndentGuard aIndGuard( mxOut );
-        for( LargePropertyVector::iterator aIt = maLargeProps.begin(), aEnd = maLargeProps.end(); ensureValid() && (aIt != aEnd); ++aIt )
+        for (auto const& largeProp : maLargeProps)
         {
-            switch( aIt->mePropType )
+            if (!ensureValid())
+                break;
+            switch( largeProp.mePropType )
             {
                 case LargeProperty::PROPTYPE_POS:
                 {
                     MultiItemsGuard aMultiGuard( mxOut );
-                    writeEmptyItem( aIt->maItemName );
+                    writeEmptyItem( largeProp.maItemName );
                     dumpDec< sal_Int32 >( "top", "CONV-HMM-TO-CM" );
                     dumpDec< sal_Int32 >( "left", "CONV-HMM-TO-CM" );
                 }
@@ -1082,31 +1084,31 @@ void AxPropertyObjectBase::dumpLargeProperties()
                 case LargeProperty::PROPTYPE_SIZE:
                 {
                     MultiItemsGuard aMultiGuard( mxOut );
-                    writeEmptyItem( aIt->maItemName );
+                    writeEmptyItem( largeProp.maItemName );
                     dumpDec< sal_Int32 >( "width", "CONV-HMM-TO-CM" );
                     dumpDec< sal_Int32 >( "height", "CONV-HMM-TO-CM" );
                 }
                 break;
                 case LargeProperty::PROPTYPE_GUID:
                 {
-                    OUString aGuid = dumpGuid( aIt->maItemName );
-                    if( aIt->mpItemValue )
-                        *aIt->mpItemValue = cfg().getStringOption( aGuid, OUString() );
+                    OUString aGuid = dumpGuid( largeProp.maItemName );
+                    if( largeProp.mpItemValue )
+                        *largeProp.mpItemValue = cfg().getStringOption( aGuid, OUString() );
                 }
                 break;
                 case LargeProperty::PROPTYPE_STRING:
                 {
-                    OUString aString = dumpString( aIt->maItemName, aIt->mnDataSize, false );
-                    if( aIt->mpItemValue )
-                        *aIt->mpItemValue = aString;
+                    OUString aString = dumpString( largeProp.maItemName, largeProp.mnDataSize, false );
+                    if( largeProp.mpItemValue )
+                        *largeProp.mpItemValue = aString;
                 }
                 break;
                 case LargeProperty::PROPTYPE_STRINGARRAY:
                 {
-                    writeEmptyItem( aIt->maItemName );
+                    writeEmptyItem( largeProp.maItemName );
                     IndentGuard aIndGuard2( mxOut );
                     mxOut->resetItemIndex();
-                    sal_Int64 nEndPos = mxStrm->tell() + aIt->mnDataSize;
+                    sal_Int64 nEndPos = mxStrm->tell() + largeProp.mnDataSize;
                     while( mxStrm->tell() < nEndPos )
                     {
                         MultiItemsGuard aMultiGuard( mxOut );
@@ -1125,10 +1127,12 @@ void AxPropertyObjectBase::dumpLargeProperties()
     {
         writeEmptyItem( "stream-properties" );
         IndentGuard aIndGuard( mxOut );
-        for( StreamPropertyVector::iterator aIt = maStreamProps.begin(), aEnd = maStreamProps.end(); ensureValid() && (aIt != aEnd); ++aIt )
+        for (auto const& streamProp : maStreamProps)
         {
-            writeEmptyItem( aIt->maItemName );
-            if( ensureValid( aIt->mnData == 0xFFFF ) )
+            if (!ensureValid())
+                break;
+            writeEmptyItem( streamProp.maItemName );
+            if( ensureValid( streamProp.mnData == 0xFFFF ) )
             {
                 IndentGuard aIndGuard2( mxOut );
                 OUString aClassName = cfg().getStringOption( dumpGuid(), OUString() );
@@ -1720,16 +1724,18 @@ VbaOStreamObject::VbaOStreamObject( const ObjectBase& rParent,
 
 void VbaOStreamObject::implDump()
 {
-    for( VbaFormSiteInfoVector::iterator aIt = mrFormData.maSiteInfos.begin(), aEnd = mrFormData.maSiteInfos.end(); !mxStrm->isEof() && (aIt != aEnd); ++aIt )
+    for (auto const& siteInfo : mrFormData.maSiteInfos)
     {
-        if( (aIt->mbInStream) && (aIt->mnLength > 0) )
+        if (mxStrm->isEof())
+            break;
+        if( (siteInfo.mbInStream) && (siteInfo.mnLength > 0) )
         {
             mxOut->emptyLine();
-            writeDecItem( "control-id", aIt->mnId );
-            writeInfoItem( "prog-id", aIt->maProgId );
+            writeDecItem( "control-id", siteInfo.mnId );
+            writeInfoItem( "prog-id", siteInfo.maProgId );
             IndentGuard aIndGuard( mxOut );
-            BinaryInputStreamRef xRelStrm( new RelativeInputStream( *mxStrm, aIt->mnLength ) );
-            FormControlStreamObject( *this, xRelStrm, &aIt->maProgId ).dump();
+            BinaryInputStreamRef xRelStrm( new RelativeInputStream( *mxStrm, siteInfo.mnLength ) );
+            FormControlStreamObject( *this, xRelStrm, &siteInfo.maProgId ).dump();
         }
     }
     dumpRemainingStream();
@@ -1833,8 +1839,8 @@ bool VbaContainerStorageObject::isFormStorage( const OUString& rStrgPath ) const
             aId = aId.copy( 1 );
         sal_Int32 nId = aId.toInt32();
         if( (nId > 0) && (OUString::number( nId ) == aId) )
-            for( VbaFormSiteInfoVector::const_iterator aIt = maFormData.maSiteInfos.begin(), aEnd = maFormData.maSiteInfos.end(); aIt != aEnd; ++aIt )
-                if( aIt->mnId == nId )
+            for (auto const& siteInfo : maFormData.maSiteInfos)
+                if( siteInfo.mnId == nId )
                     return true;
     }
     return false;

@@ -138,8 +138,8 @@ void lclProcessAttribs( OStringBuffer& rBuffer, const sal_Char* pcBeg, const sal
 
     // if no error has occurred, build the resulting attribute list
     if( bOk )
-        for( AttributeDataMap::iterator aIt = aAttributes.begin(), aEnd = aAttributes.end(); aIt != aEnd; ++aIt )
-            rBuffer.append( ' ' ).append( aIt->second );
+        for (auto const& attrib : aAttributes)
+            rBuffer.append( ' ' ).append( attrib.second );
     // on error, just append the complete passed string
     else
         lclAppendToBuffer( rBuffer, pcBeg, pcEnd );

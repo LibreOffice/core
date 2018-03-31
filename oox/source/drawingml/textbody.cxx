@@ -67,8 +67,12 @@ void TextBody::insertAt(
 
     Reference<css::beans::XPropertySet> xPropertySet(xAt, UNO_QUERY);
     float nCharHeight = xPropertySet->getPropertyValue("CharHeight").get<float>();
-    for( TextParagraphVector::const_iterator aBeg = maParagraphs.begin(), aIt = aBeg, aEnd = maParagraphs.end(); aIt != aEnd; ++aIt )
-        (*aIt)->insertAt( rFilterBase, xText, xAt, rTextStyleProperties, aCombinedTextStyle, aIt == aBeg, nCharHeight );
+    size_t nIndex = 0;
+    for (auto const& paragraph : maParagraphs)
+    {
+        paragraph->insertAt( rFilterBase, xText, xAt, rTextStyleProperties, aCombinedTextStyle, (nIndex == 0), nCharHeight );
+        ++nIndex;
+    }
 }
 
 bool TextBody::isEmpty() const

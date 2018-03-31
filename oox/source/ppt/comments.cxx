@@ -15,16 +15,16 @@ namespace oox { namespace ppt {
 
 void CommentAuthorList::setValues(const CommentAuthorList& list)
 {
-    std::vector<CommentAuthor>::const_iterator it;
-    for(it = list.cmAuthorLst.begin(); it != list.cmAuthorLst.end(); ++it)
+    for (auto const& author : list.cmAuthorLst)
     {
         CommentAuthor temp;
+        // TODO JNA : why not doing push_back at the end instead of using back()?
         cmAuthorLst.push_back(temp);
-        cmAuthorLst.back().clrIdx = it->clrIdx;
-        cmAuthorLst.back().id = it->id;
-        cmAuthorLst.back().initials = it->initials;
-        cmAuthorLst.back().lastIdx = it->lastIdx;
-        cmAuthorLst.back().name = it->name;
+        cmAuthorLst.back().clrIdx = author.clrIdx;
+        cmAuthorLst.back().id = author.id;
+        cmAuthorLst.back().initials = author.initials;
+        cmAuthorLst.back().lastIdx = author.lastIdx;
+        cmAuthorLst.back().name = author.name;
     }
 }
 
@@ -65,11 +65,10 @@ void Comment::setDateTime (const OUString& _datetime)
 OUString Comment::getAuthor ( const CommentAuthorList& list )
 {
     const sal_Int32 nId = authorId.toInt32();
-    std::vector<CommentAuthor>::const_iterator it;
-    for(it = list.cmAuthorLst.begin(); it != list.cmAuthorLst.end(); ++it)
+    for (auto const& author : list.cmAuthorLst)
     {
-        if(it->id.toInt32() == nId)
-            return it->name;
+        if(author.id.toInt32() == nId)
+            return author.name;
     }
     return OUString("Anonymous");
 }

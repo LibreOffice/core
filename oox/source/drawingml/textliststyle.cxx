@@ -64,18 +64,16 @@ TextListStyle& TextListStyle::operator=(const TextListStyle& rStyle)
 
 void applyStyleList( const TextParagraphPropertiesVector& rSourceListStyle, TextParagraphPropertiesVector& rDestListStyle )
 {
-    TextParagraphPropertiesVector::const_iterator aSourceListStyleIter( rSourceListStyle.begin() );
     TextParagraphPropertiesVector::iterator aDestListStyleIter( rDestListStyle.begin() );
-    while( aSourceListStyleIter != rSourceListStyle.end() )
+    for (auto const& elemSource : rSourceListStyle)
     {
         if ( aDestListStyleIter != rDestListStyle.end() )
         {
-            (*aDestListStyleIter)->apply( **aSourceListStyleIter );
+            (*aDestListStyleIter)->apply(*elemSource);
             ++aDestListStyleIter;
         }
         else
-            rDestListStyle.push_back( std::make_shared<TextParagraphProperties>( **aSourceListStyleIter ) );
-        ++aSourceListStyleIter;
+            rDestListStyle.push_back( std::make_shared<TextParagraphProperties>(*elemSource) );
     }
 }
 

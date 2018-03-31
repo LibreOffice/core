@@ -402,9 +402,9 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const tools::Rectangle&
     bool bAlreadyWritten[ 0xFFF ];
     memset( bAlreadyWritten, 0, sizeof( bAlreadyWritten ) );
     const EscherProperties &rOpts = rProps.GetOpts();
-    for ( EscherProperties::const_iterator it = rOpts.begin(); it != rOpts.end(); ++it )
+    for (auto const& opt : rOpts)
     {
-        sal_uInt16 nId = ( it->nPropId & 0x0FFF );
+        sal_uInt16 nId = ( opt.nPropId & 0x0FFF );
 
         if ( bAlreadyWritten[ nId ] )
             continue;
@@ -414,7 +414,7 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const tools::Rectangle&
             case ESCHER_Prop_WrapText: // 133
                 {
                     const char *pWrapType = nullptr;
-                    switch ( it->nPropValue )
+                    switch ( opt.nPropValue )
                     {
                         case ESCHER_WrapSquare:
                         case ESCHER_WrapByPoints:  pWrapType = "square"; break; // these two are equivalent according to the docu
@@ -438,12 +438,12 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const tools::Rectangle&
 
                     if ( nId == ESCHER_Prop_geoLeft )
                     {
-                        nLeft = it->nPropValue;
+                        nLeft = opt.nPropValue;
                         rProps.GetOpt( ESCHER_Prop_geoTop, nTop );
                     }
                     else
                     {
-                        nTop = it->nPropValue;
+                        nTop = opt.nPropValue;
                         rProps.GetOpt( ESCHER_Prop_geoLeft, nLeft );
                     }
                     if(nTop!=0 && nLeft!=0)
@@ -466,12 +466,12 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const tools::Rectangle&
 
                     if ( nId == ESCHER_Prop_geoRight )
                     {
-                        nRight = it->nPropValue;
+                        nRight = opt.nPropValue;
                         rProps.GetOpt( ESCHER_Prop_geoBottom, nBottom );
                     }
                     else
                     {
-                        nBottom = it->nPropValue;
+                        nBottom = opt.nPropValue;
                         rProps.GetOpt( ESCHER_Prop_geoRight, nRight );
                     }
 
@@ -859,7 +859,7 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const tools::Rectangle&
                 break;
 
             case ESCHER_Prop_fHidden:
-                if ( !it->nPropValue )
+                if ( !opt.nPropValue )
                     m_ShapeStyle.append( ";visibility:hidden" );
                 break;
             case ESCHER_Prop_shadowColor:
@@ -895,9 +895,9 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const tools::Rectangle&
                     if (rProps.GetOpt(ESCHER_Prop_gtextUNICODE, aUnicode))
                     {
                         SvMemoryStream aStream;
-                        aStream.WriteBytes(it->pBuf, it->nPropSize);
+                        aStream.WriteBytes(opt.pBuf, opt.nPropSize);
                         aStream.Seek(0);
-                        OUString aTextPathString = SvxMSDffManager::MSDFFReadZString(aStream, it->nPropSize, true);
+                        OUString aTextPathString = SvxMSDffManager::MSDFFReadZString(aStream, opt.nPropSize, true);
                         aStream.Seek(0);
 
                         m_pSerializer->singleElementNS( XML_v, XML_path,
@@ -939,23 +939,23 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const tools::Rectangle&
             case ESCHER_Prop_Rotation:
                 {
                     // The higher half of the variable contains the angle.
-                    m_ShapeStyle.append(";rotation:").append(double(it->nPropValue >> 16));
+                    m_ShapeStyle.append(";rotation:").append(double(opt.nPropValue >> 16));
                     bAlreadyWritten[ESCHER_Prop_Rotation] = true;
                 }
                 break;
             case ESCHER_Prop_fNoLineDrawDash:
                 {
                     // See DffPropertyReader::ApplyLineAttributes().
-                    impl_AddBool( m_pShapeAttrList, XML_stroked, (it->nPropValue & 8) != 0 );
+                    impl_AddBool( m_pShapeAttrList, XML_stroked, (opt.nPropValue & 8) != 0 );
                     bAlreadyWritten[ESCHER_Prop_fNoLineDrawDash] = true;
                 }
                 break;
             case ESCHER_Prop_wzName:
                 {
                     SvMemoryStream aStream;
-                    aStream.WriteBytes(it->pBuf, it->nPropSize);
+                    aStream.WriteBytes(opt.pBuf, opt.nPropSize);
                     aStream.Seek(0);
-                    OUString idStr = SvxMSDffManager::MSDFFReadZString(aStream, it->nPropSize, true);
+                    OUString idStr = SvxMSDffManager::MSDFFReadZString(aStream, opt.nPropSize, true);
                     aStream.Seek(0);
                     if (!IsWaterMarkShape(m_pSdrObject->GetName()) && !m_bSkipwzName)
                          m_pShapeAttrList->add(XML_ID, OUStringToOString(idStr, RTL_TEXTENCODING_UTF8).getStr());
@@ -966,12 +966,12 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const tools::Rectangle&
             default:
 #if OSL_DEBUG_LEVEL > 0
                 fprintf( stderr, "TODO VMLExport::Commit(), unimplemented id: %d, value: %" SAL_PRIuUINT32 ", data: [%" SAL_PRIuUINT32 ", %p]\n",
-                        nId, it->nPropValue, it->nPropSize, it->pBuf );
-                if ( it->nPropSize )
+                        nId, opt.nPropValue, opt.nPropSize, opt.pBuf );
+                if ( opt.nPropSize )
                 {
-                    const sal_uInt8 *pIt = it->pBuf;
+                    const sal_uInt8 *pIt = opt.pBuf;
                     fprintf( stderr, "    ( " );
-                    for ( int nCount = it->nPropSize; nCount; --nCount )
+                    for ( int nCount = opt.nPropSize; nCount; --nCount )
                     {
                         fprintf( stderr, "%02x ", *pIt );
                         ++pIt;
