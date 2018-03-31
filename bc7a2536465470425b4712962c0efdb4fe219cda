@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_25525b14",
+        "filename": "svx/source/dialog/srchdlg.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 2402,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-03-31T09:12:26Z",
+      "side": 1,
+      "message": "calling SetSizePixel twice in a row seems odd?",
+      "revId": "bc7a2536465470425b4712962c0efdb4fe219cda",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
