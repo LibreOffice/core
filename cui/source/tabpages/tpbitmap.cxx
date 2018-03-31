@@ -671,7 +671,6 @@ IMPL_LINK_NOARG( SvxBitmapTabPage, ModifyBitmapStyleHdl, ListBox&, void )
     bool bIsTiled( eStylePos == TILED );
 
     m_pSizeBox->Enable( !bIsStretched );
-    m_pTsbScale->Enable( eStylePos == CUSTOM );
     m_pPositionBox->Enable( !bIsStretched );
     m_pPositionOffBox->Enable( bIsTiled );
     m_pTileOffBox->Enable( bIsTiled );
@@ -687,7 +686,7 @@ IMPL_LINK_NOARG( SvxBitmapTabPage, ModifyBitmapStyleHdl, ListBox&, void )
             case CUSTOM:
             case TILED:
             {
-                if(eStylePos == CUSTOM && m_pTsbScale->IsEnabled() &&  m_pTsbScale->GetState() == TRISTATE_TRUE)
+                if(m_pTsbScale->IsEnabled() &&  m_pTsbScale->GetState() == TRISTATE_TRUE)
                 {
                     aSetBitmapSize.setWidth( -m_pBitmapWidth->GetValue() );
                     aSetBitmapSize.setHeight( -m_pBitmapWidth->GetValue() );
