@@ -207,11 +207,6 @@ std::vector<fontID> PrintFontManager::addFontFile( const OString& rFileName )
     return aFontIds;
 }
 
-enum fontFormat
-{
-    UNKNOWN, TRUETYPE, CFF
-};
-
 std::vector<std::unique_ptr<PrintFontManager::PrintFont>> PrintFontManager::analyzeFontFile( int nDirID, const OString& rFontFile, const char *pFormat ) const
 {
     std::vector<std::unique_ptr<PrintFontManager::PrintFont>> aNewFonts;
@@ -226,26 +221,24 @@ std::vector<std::unique_ptr<PrintFontManager::PrintFont>> PrintFontManager::anal
     if( access( aFullPath.getStr(), R_OK ) )
         return aNewFonts;
 
-    fontFormat eFormat = UNKNOWN;
+    bool bSupported = false;
     if (pFormat)
     {
-        if (!strcmp(pFormat, "TrueType"))
-            eFormat = TRUETYPE;
-        else if (!strcmp(pFormat, "CFF"))
-            eFormat = CFF;
+        if (!strcmp(pFormat, "TrueType") ||
+            !strcmp(pFormat, "CFF"))
+            bSupported = true;
     }
-    if (eFormat == UNKNOWN)
+    if (!bSupported)
     {
         OString aExt( rFontFile.copy( rFontFile.lastIndexOf( '.' )+1 ) );
         if( aExt.equalsIgnoreAsciiCase("ttf")
              ||  aExt.equalsIgnoreAsciiCase("ttc")
-             ||  aExt.equalsIgnoreAsciiCase("tte") ) // #i33947# for Gaiji support
-            eFormat = TRUETYPE;
-        else if( aExt.equalsIgnoreAsciiCase("otf") ) // check for TTF- and PS-OpenType too
-            eFormat = CFF;
+             ||  aExt.equalsIgnoreAsciiCase("tte")   // #i33947# for Gaiji support
+             ||  aExt.equalsIgnoreAsciiCase("otf") ) // check for TTF- and PS-OpenType too
+            bSupported = true;
     }
 
-    if (eFormat == TRUETYPE || eFormat == CFF)
+    if (bSupported)
     {
         // get number of ttc entries
         int nLength = CountTTCFonts( aFullPath.getStr() );
