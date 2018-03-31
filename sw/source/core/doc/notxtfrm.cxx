@@ -583,29 +583,8 @@ void SwNoTextFrame::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
     case RES_GRF_REREAD_AND_INCACHE:
         if( SwNodeType::Grf == GetNode()->GetNodeType() )
         {
+            // TODO: Remove - due to GraphicObject refactoring
             bComplete = false;
-            SwGrfNode* pNd = static_cast<SwGrfNode*>( GetNode());
-
-            SwViewShell* pVSh = pNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell();
-            if( pVSh )
-            {
-                GraphicAttr aAttr;
-                if( pNd->GetGrfObj().IsCached( pVSh->GetOut(), Point(),
-                            Prt().SSize(), &pNd->GetGraphicAttr( aAttr, this ) ))
-                {
-                    for(SwViewShell& rShell : pVSh->GetRingContainer())
-                    {
-                        SET_CURR_SHELL( &rShell );
-                        if( rShell.GetWin() )
-                        {
-                            if( rShell.IsPreview() )
-                                ::RepaintPagePreview( &rShell, Frame().SVRect() );
-                            else
-                                rShell.GetWin()->Invalidate( Frame().SVRect() );
-                        }
-                    }
-                }
-            }
         }
         break;
 

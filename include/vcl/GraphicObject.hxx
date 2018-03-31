@@ -168,13 +168,9 @@ public:
 
 class VCL_DLLPUBLIC GraphicObject
 {
-    friend class GraphicManager;
     friend class SdrGrafObj;
 
 private:
-
-    static GraphicManager*  mpGlobalMgr;
-
     Graphic                 maGraphic;
     GraphicAttr             maAttr;
     Size                    maPrefSize;
@@ -197,7 +193,6 @@ private:
     bool                    mbEPS           : 1;
     bool                    mbIsInSwapIn    : 1;
     bool                    mbIsInSwapOut   : 1;
-    bool                    mbAlpha         : 1;
 
     void                    VCL_DLLPRIVATE ImplAssignGraphicData();
     static void             VCL_DLLPRIVATE ImplEnsureGraphicManager();
@@ -305,10 +300,6 @@ private:
                             ) const;
 
                             DECL_LINK( ImplAutoSwapOutHdl, Timer*, void );
-
-    // Handle evtl. needed AfterDataChanges, needs to be called when new
-    // graphic data is swapped in/added to the GraphicManager
-    void VCL_DLLPRIVATE     ImplAfterDataChange();
 protected:
 
     SvStream*               GetSwapStream() const;
@@ -317,8 +308,8 @@ protected:
 public:
                             GraphicObject();
                             GraphicObject( const Graphic& rGraphic );
+                            GraphicObject(const OString& rUniqueID);
                             GraphicObject( const GraphicObject& rCacheObj );
-                            explicit GraphicObject( const OString& rUniqueID );
                             ~GraphicObject();
 
     GraphicObject&          operator=( const GraphicObject& rCacheObj );
@@ -330,21 +321,6 @@ public:
 
     void                    FireSwapInRequest();
     void                    FireSwapOutRequest();
-
-    GraphicManager&         GetGraphicManager() const
-    {
-        (void)this; // avoid loplugin:staticmethods because first GraphicManager ctor creates
-                    // mpGlobalMgr and the last GraphicManager dtor destroys it
-        return *mpGlobalMgr;
-    }
-
-    bool                    IsCached(
-                                OutputDevice* pOut,
-                                const Point& rPt,
-                                const Size& rSz,
-                                const GraphicAttr* pAttr,
-                                GraphicManagerDrawFlags nFlags = GraphicManagerDrawFlags::STANDARD
-                            ) const;
 
     const Graphic&          GetGraphic() const;
     void                    SetGraphic( const Graphic& rGraphic, const GraphicObject* pCopyObj = nullptr);
@@ -467,6 +443,8 @@ public:
 
     void                    StopAnimation( OutputDevice* pOut = nullptr, long nExtraData = 0 );
 
+    static bool isGraphicObjectUniqueIdURL(OUString const & rURL);
+
     static GraphicObject    CreateGraphicObjectFromURL( const OUString &rURL );
     // will inspect an object ( e.g. a control ) for any 'ImageURL'
     // properties and return these in a vector. Note: this implementation
@@ -489,128 +467,23 @@ public:
     sal_uLong GetDataChangeTimeStamp() const { return mnDataChangeTimeStamp; }
 };
 
-class VCL_DLLPUBLIC GraphicManager
+namespace vcl
 {
-    friend class GraphicObject;
-    friend class GraphicDisplayCacheEntry;
+namespace graphic
+{
 
-private:
+// Will search an object ( e.g. a control ) for any 'ImageURL' or 'Graphic'
+// properties and return graphics from the properties in a vector. ImageURL
+// will be loaded from the URL.
+//
+// Note: this implementation will cater for XNameContainer objects and deep inspect any containers
+// if they exist
 
-    std::unordered_set< GraphicObject* >    maObjList;
-    sal_uLong               mnUsedSize; // currently used memory footprint of all swapped in graphics
-    GraphicCache*           mpCache;
+VCL_DLLPUBLIC void SearchForGraphics(css::uno::Reference<css::uno::XInterface> const & rxInterface,
+                                     std::vector<css::uno::Reference<css::graphic::XGraphic>> & raGraphicList);
 
-                        GraphicManager( const GraphicManager& ) {}
-    GraphicManager&     operator=( const GraphicManager& ) { return *this; }
-
-    bool VCL_DLLPRIVATE ImplDraw(
-                            OutputDevice* pOut,
-                            const Point& rPt,
-                            const Size& rSz,
-                            GraphicObject& rObj,
-                            const GraphicAttr& rAttr,
-                            const GraphicManagerDrawFlags nFlags,
-                            bool& rCached
-                        );
-
-    static bool VCL_DLLPRIVATE ImplCreateOutput(
-                            OutputDevice* pOut,
-                            const Point& rPt,
-                            const Size& rSz,
-                            const BitmapEx& rBmpEx,
-                            const GraphicAttr& rAttr,
-                            const GraphicManagerDrawFlags nFlags,
-                            BitmapEx* pBmpEx = nullptr
-                        );
-    static bool VCL_DLLPRIVATE ImplCreateOutput(
-                            OutputDevice* pOut,
-                            const Point& rPt,
-                            const Size& rSz,
-                            const GDIMetaFile& rMtf,
-                            const GraphicAttr& rAttr,
-                            const GraphicManagerDrawFlags nFlags,
-                            GDIMetaFile& rOutMtf,
-                            BitmapEx& rOutBmpEx
-                        );
-
-    static void VCL_DLLPRIVATE ImplAdjust(
-                            BitmapEx& rBmpEx,
-                            const GraphicAttr& rAttr,
-                            GraphicAdjustmentFlags nAdjustmentFlags
-                        );
-    static void VCL_DLLPRIVATE ImplAdjust(
-                            GDIMetaFile& rMtf,
-                            const GraphicAttr& rAttr,
-                            GraphicAdjustmentFlags nAdjustmentFlags
-                        );
-    static void VCL_DLLPRIVATE ImplAdjust(
-                            Animation& rAnimation,
-                            const GraphicAttr& rAttr,
-                            GraphicAdjustmentFlags nAdjustmentFlags
-                        );
-
-    static void VCL_DLLPRIVATE ImplDraw(
-                            OutputDevice* pOut,
-                            const Point& rPt,
-                            const Size& rSz,
-                            const GDIMetaFile& rMtf,
-                            const GraphicAttr& rAttr
-                        );
-
-                    // Only used by GraphicObject's Ctor's and Dtor's
-    void VCL_DLLPRIVATE ImplRegisterObj(
-                            const GraphicObject& rObj,
-                            Graphic& rSubstitute,
-                            const OString* pID,
-                            const GraphicObject* pCopyObj
-                        );
-    void VCL_DLLPRIVATE ImplUnregisterObj( const GraphicObject& rObj );
-    bool VCL_DLLPRIVATE ImplHasObjects() const { return !maObjList.empty(); }
-
-                    // Only used in swap case by GraphicObject
-    void VCL_DLLPRIVATE ImplGraphicObjectWasSwappedOut( const GraphicObject& rObj );
-    void VCL_DLLPRIVATE ImplGraphicObjectWasSwappedIn( const GraphicObject& rObj );
-
-    OString VCL_DLLPRIVATE ImplGetUniqueID( const GraphicObject& rObj ) const;
-
-    // This method allows to check memory footprint for all currently swapped in GraphicObjects on this GraphicManager
-    // which are based on Bitmaps. This is needed on 32Bit systems and only does something on those systems. The problem
-    // to solve is that normally the SwapOut is timer-driven, but even with short timer settings there are situations
-    // where this does not trigger - or in other words: A maximum limitation for GraphicManagers was not in place before.
-    // For 32Bit systems this leads to situations where graphics will be missing. This method will actively swap out
-    // the longest swapped in graphics until a maximum memory boundary (derived from user settings in tools/options/memory)
-    // is no longer exceeded
-    void VCL_DLLPRIVATE ImplCheckSizeOfSwappedInGraphics(const GraphicObject* pGraphicToIgnore);
-public:
-
-                        GraphicManager( sal_uLong nCacheSize, sal_uLong nMaxObjCacheSize );
-                        ~GraphicManager();
-
-    void                SetMaxCacheSize( sal_uLong nNewCacheSize );
-    sal_uLong           GetMaxCacheSize() const;
-
-    void                SetMaxObjCacheSize( sal_uLong nNewMaxObjSize );
-
-    void                SetCacheTimeout( sal_uLong nTimeoutSeconds );
-
-    bool                IsInCache(
-                            OutputDevice* pOut,
-                            const Point& rPt,
-                            const Size& rSz,
-                            const GraphicObject& rObj,
-                            const GraphicAttr& rAttr
-                        ) const;
-
-    bool                DrawObj(
-                            OutputDevice* pOut,
-                            const Point& rPt,
-                            const Size& rSz,
-                            GraphicObject& rObj,
-                            const GraphicAttr& rAttr,
-                            const GraphicManagerDrawFlags nFlags,
-                            bool& rCached
-                        );
-};
+}
+} // end namespace vcl::graphic
 
 #endif // INCLUDED_VCL_GRAPHICOBJECT_HXX
 
