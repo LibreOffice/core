@@ -226,11 +226,11 @@ class StatusListener implements com.sun.star.frame.XStatusListener,
 
 
     /**
-     * This is the callback method for the status we listen for an wish to show it
-     * on our UI control. Of course it's a oneway method ... but we don't call back
+     * This is the callback method for the status we listen for and wish to show it
+     * on our UI control. Of course it's a oneway method... but we don't call back
      * to the office synchronously here. We update our UI only. So we don't leave this
      * java process. In such case it's not necessary to use threads to decouple it.
-     * Do it here and now ...
+     * Do it here and now...
      *
      * @param aEvent
      *          describes the status, we can use to update our UI control

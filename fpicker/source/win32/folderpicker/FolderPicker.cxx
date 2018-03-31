@@ -93,7 +93,7 @@ sal_Int16 SAL_CALL CFolderPicker::execute( )
 
     // we should not block in this call else
     // in the case of an event the client can'tgetPImplFromHandle( hWnd )
-    // call another function an we run into a
+    // call another function and we run into a
     // deadlock !!!!!
     return m_pFolderPickerImpl->execute( );
 }
