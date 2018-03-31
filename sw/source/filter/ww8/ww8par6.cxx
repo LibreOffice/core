@@ -1792,7 +1792,7 @@ bToggelPos(false)
         eSurround = css::text::WrapTextMode_PARALLEL;
 
     /*
-     #95905#, #83307# seems to have gone away now, so reenable parallel
+     #95905#, #83307# seems to have gone away now, so re-enable parallel
      wrapping support for frames in headers/footers. I don't know if we truly
      have an explicitly specified behaviour for these circumstances.
     */
@@ -2242,7 +2242,7 @@ SwTwips SwWW8ImplReader::MoveOutsideFly(SwFrameFormat *pFlyFormat,
                                 aSize.SetHeight(MINLAY);
                                 pFlyFormat->SetFormatAttr(aSize);
                                 SwFormatHoriOrient aHori = pTableFormat->GetHoriOrient();
-                                // passing the table orientaion of
+                                // passing the table orientation of
                                 // LEFT_AND_WIDTH to the frame seems to
                                 // work better than FULL, especially if the
                                 // table width exceeds the page width, however

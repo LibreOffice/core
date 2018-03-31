@@ -654,7 +654,7 @@ sub run {
         # 1. Looking for all destination paths in the files array
         # 2. Looking for directories with CREATE flag in the directory array
         # Advantage: Many paths are hidden in zip files, they are not defined in the setup script.
-        # It will be possible, that in the setup script only those directoies have to be defined,
+        # It will be possible, that in the setup script only those directories have to be defined,
         # that have a CREATE flag. All other directories are created, if they contain at least one file.
 
         my ($directoriesforepmarrayref, $alldirectoryhash) = installer::scriptitems::collect_directories_from_filesarray($filesinproductlanguageresolvedarrayref, $unixlinksinproductlanguageresolvedarrayref);

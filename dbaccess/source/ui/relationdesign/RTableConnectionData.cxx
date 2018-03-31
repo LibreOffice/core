@@ -248,7 +248,7 @@ bool ORelationTableConnectionData::Update()
             return false;
     }
 
-    // reassign the keys because the orientaion could be changed
+    // reassign the keys because the orientation could be changed
     Reference<XPropertySet> xTableProp(getReferencingTable()->getTable());
     Reference< XIndexAccess> xKeys ( getReferencingTable()->getKeys());
 

@@ -1160,7 +1160,7 @@ uno::Reference<text::XTextContent> GraphicImport::createGraphicObject(uno::Refer
             for(PropertyIds const & rBorderProp : aBorderProps)
                 xGraphicObjectProperties->setPropertyValue(getPropertyName(rBorderProp), uno::makeAny(aBorderLine));
 
-            // setting graphic object shadow proerties
+            // setting graphic object shadow properties
             if (m_pImpl->bShadow)
             {
                 // Shadow width is approximated by average of X and Y
