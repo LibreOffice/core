@@ -55,12 +55,6 @@ OQueryTableConnectionData::~OQueryTableConnectionData()
 {
 }
 
-OConnectionLineDataRef OQueryTableConnectionData::CreateLineDataObj()
-{
-    // no specializing of LineDatas, so it is an instance of standard class
-    return new OConnectionLineData();
-}
-
 void OQueryTableConnectionData::CopyFrom(const OTableConnectionData& rSource)
 {
     // same as in base class, use of (non-virtual) operator=

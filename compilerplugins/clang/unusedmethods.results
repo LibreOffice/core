@@ -56,6 +56,8 @@ dbaccess/source/ui/inc/indexcollection.hxx:63
     class __gnu_debug::_Safe_iterator<class __gnu_cxx::__normal_iterator<const struct dbaui::OIndex *, class std::__cxx1998::vector<struct dbaui::OIndex, class std::allocator<struct dbaui::OIndex> > >, class std::__debug::vector<struct dbaui::OIndex, class std::allocator<struct dbaui::OIndex> > > dbaui::OIndexCollection::find(const class rtl::OUString &) const
 dbaccess/source/ui/inc/indexcollection.hxx:65
     class __gnu_debug::_Safe_iterator<class __gnu_cxx::__normal_iterator<const struct dbaui::OIndex *, class std::__cxx1998::vector<struct dbaui::OIndex, class std::allocator<struct dbaui::OIndex> > >, class std::__debug::vector<struct dbaui::OIndex, class std::allocator<struct dbaui::OIndex> > > dbaui::OIndexCollection::findOriginal(const class rtl::OUString &) const
+dbaccess/source/ui/querydesign/QTableConnectionData.hxx:36
+    class rtl::Reference<class dbaui::OConnectionLineData> dbaui::OQueryTableConnectionData::CreateLineDataObj()
 desktop/inc/lib/init.hxx:40
     void desktop::CallbackFlushHandler::setEventLatch(const _Bool)
 desktop/inc/lib/init.hxx:45
@@ -244,8 +246,6 @@ include/basegfx/vector/b2ivector.hxx:118
     class basegfx::B2IVector & basegfx::B2IVector::operator*=(const class basegfx::B2DHomMatrix &)
 include/basegfx/vector/b3dvector.hxx:85
     class basegfx::B3DVector & basegfx::B3DVector::operator*=(const class basegfx::B3DVector &)
-include/basic/sbx.hxx:130
-    enum SbxClassType SbxArray::GetClass() const
 include/basic/sbxvar.hxx:133
     struct SbxValues * SbxValue::data()
 include/canvas/rendering/icolorbuffer.hxx:49
@@ -366,10 +366,6 @@ include/drawinglayer/primitive3d/baseprimitive3d.hxx:113
     _Bool drawinglayer::primitive3d::BasePrimitive3D::operator!=(const class drawinglayer::primitive3d::BasePrimitive3D &) const
 include/drawinglayer/texture/texture.hxx:44
     _Bool drawinglayer::texture::GeoTexSvx::operator!=(const class drawinglayer::texture::GeoTexSvx &) const
-include/editeng/lspcitem.hxx:96
-    class rtl::OUString SvxLineSpacingItem::GetValueTextByPos(unsigned short) const
-include/editeng/shaditem.hxx:79
-    class rtl::OUString SvxShadowItem::GetValueTextByPos(unsigned short) const
 include/filter/msfilter/mstoolbar.hxx:98
      Indent::Indent(_Bool)
 include/formula/opcode.hxx:520
@@ -496,8 +492,6 @@ include/svl/itempool.hxx:167
     const type-parameter-?-? * SfxItemPool::GetItem2Default(TypedWhichId<type-parameter-?-?>) const
 include/svl/itempool.hxx:196
     void SfxItemPool::dumpAsXml(struct _xmlTextWriter *) const
-include/svtools/treelist.hxx:104
-    void SvTreeList::SelectAll(class SvListView *,_Bool)
 include/svx/ClassificationEditView.hxx:42
     void svx::ClassificationEditView::SetCharAttributes()
 include/svx/ClassificationEditView.hxx:48
@@ -510,14 +504,8 @@ include/svx/framelink.hxx:201
     _Bool operator>(const class svx::frame::Style &,const class svx::frame::Style &)
 include/svx/framelink.hxx:238
     _Bool svx::frame::StyleVectorCombination::operator<(const class svx::frame::StyleVectorCombination &) const
-include/svx/obj3d.hxx:84
-    class E3dObjList * E3dObjList::Clone() const
 include/svx/svdlayer.hxx:72
     _Bool SdrLayer::operator==(const class SdrLayer &) const
-include/svx/xmlgrhlp.hxx:83
-    _Bool SvXMLGraphicHelper::ImplWriteGraphic(const class rtl::OUString &,const class rtl::OUString &,const class rtl::OUString &,_Bool)
-include/svx/xmlgrhlp.hxx:87
-    void SvXMLGraphicHelper::ImplInsertGraphicURL(const class rtl::OUString &,unsigned int,const class rtl::OUString &)
 include/svx/xpoly.hxx:82
     _Bool XPolygon::operator==(const class XPolygon &) const
 include/tools/bigint.hxx:86
@@ -610,7 +598,7 @@ include/vcl/errcode.hxx:89
     _Bool ErrCode::operator>(const class ErrCode &) const
 include/vcl/errcode.hxx:90
     _Bool ErrCode::operator>=(const class ErrCode &) const
-include/vcl/gdimtf.hxx:108
+include/vcl/gdimtf.hxx:111
     _Bool GDIMetaFile::operator!=(const class GDIMetaFile &) const
 include/vcl/gradient.hxx:104
     _Bool Gradient::operator!=(const class Gradient &) const
@@ -778,10 +766,8 @@ include/vcl/weld.hxx:657
     class rtl::OUString weld::MessageDialogController::get_primary_text() const
 include/vcl/window.hxx:431
     const char * ImplDbgCheckWindow(const void *)
-include/vcl/window.hxx:1230
+include/vcl/window.hxx:1235
     class Size vcl::Window::PaintActiveFloatingWindow(class VirtualDevice &) const
-l10ntools/inc/export.hxx:171
-    class __gnu_debug::_Safe_iterator<struct std::__detail::_Node_iterator<struct std::pair<const class rtl::OString, class std::unique_ptr<class MergeData, struct std::default_delete<class MergeData> > >, false, true>, class std::__debug::unordered_map<class rtl::OString, class std::unique_ptr<class MergeData, struct std::default_delete<class MergeData> >, struct std::hash< ::rtl::OString>, struct std::equal_to<class rtl::OString>, class std::allocator<struct std::pair<const class rtl::OString, class std::unique_ptr<class MergeData, struct std::default_delete<class MergeData> > > > > > MergeDataHashMap::begin()
 libreofficekit/qa/gtktiledviewer/gtv-signal-handlers.hxx:35
     void openLokDialog(struct _GtkWidget *,void *)
 o3tl/qa/cow_wrapper_clients.hxx:140
@@ -856,31 +842,15 @@ sc/qa/unit/ucalc.hxx:509
     void Test::testCondFormatUpdateInsertTab()
 sc/qa/unit/ucalc.hxx:510
     void Test::testCondFormatUpdateReference()
-sc/source/core/opencl/formulagroupcl.cxx:856
-    _Bool sc::opencl::DynamicKernelMixedArgument::IsMixedArgument() const
-sc/source/core/opencl/formulagroupcl.cxx:871
+sc/source/core/opencl/formulagroupcl.cxx:870
     void sc::opencl::DynamicKernelMixedArgument::GenNumDeclRef(class std::basic_stringstream<char> &) const
-sc/source/core/opencl/formulagroupcl.cxx:875
-    void sc::opencl::DynamicKernelMixedArgument::GenStringDeclRef(class std::basic_stringstream<char> &) const
-sc/source/core/opencl/formulagroupcl.cxx:1069
-    unsigned long sc::opencl::DynamicKernelSlidingArgument::GetWindowSize() const
-sc/source/core/opencl/formulagroupcl.cxx:1071
-    unsigned long sc::opencl::DynamicKernelSlidingArgument::GetStartFixed() const
-sc/source/core/opencl/formulagroupcl.cxx:1073
-    unsigned long sc::opencl::DynamicKernelSlidingArgument::GetEndFixed() const
-sc/source/core/opencl/formulagroupcl.cxx:1121
-    _Bool sc::opencl::DynamicKernelMixedSlidingArgument::IsMixedArgument() const
-sc/source/core/opencl/formulagroupcl.cxx:1134
-    void sc::opencl::DynamicKernelMixedSlidingArgument::GenNumDeclRef(class std::basic_stringstream<char> &) const
-sc/source/core/opencl/formulagroupcl.cxx:1138
-    void sc::opencl::DynamicKernelMixedSlidingArgument::GenStringDeclRef(class std::basic_stringstream<char> &) const
-sc/source/core/opencl/formulagroupcl.cxx:1245
+sc/source/core/opencl/formulagroupcl.cxx:1225
     unsigned long sc::opencl::ParallelReductionVectorRef::GetArrayLength() const
-sc/source/core/opencl/formulagroupcl.cxx:1247
+sc/source/core/opencl/formulagroupcl.cxx:1227
     unsigned long sc::opencl::ParallelReductionVectorRef::GetWindowSize() const
-sc/source/core/opencl/formulagroupcl.cxx:1249
+sc/source/core/opencl/formulagroupcl.cxx:1229
     unsigned long sc::opencl::ParallelReductionVectorRef::GetStartFixed() const
-sc/source/core/opencl/formulagroupcl.cxx:1251
+sc/source/core/opencl/formulagroupcl.cxx:1231
     unsigned long sc::opencl::ParallelReductionVectorRef::GetEndFixed() const
 sc/source/core/opencl/op_statistical.hxx:204
      sc::opencl::OpGeoMean::OpGeoMean()
@@ -894,8 +864,6 @@ sc/source/filter/inc/xestream.hxx:106
     class XclExpStream & XclExpStream::operator<<(float)
 sc/source/filter/inc/xiescher.hxx:159
     class Color XclImpDrawObjBase::GetSolidLineColor(const struct XclObjLineData &) const
-sc/source/filter/xml/XMLStylesImportHelper.hxx:150
-    _Bool ScMyStylesImportHelper::IsEqual(const class rtl::OUString *,const class rtl::OUString *)
 sc/source/ui/inc/dataprovider.hxx:68
     _Bool sc::CSVFetchThread::IsRequestedTerminate()
 sc/source/ui/inc/dataprovider.hxx:69
@@ -914,8 +882,6 @@ sc/source/ui/inc/impex.hxx:93
      ScImportExport::ScImportExport(class ScDocument *,const class rtl::OUString &)
 sc/source/ui/inc/RandomNumberGeneratorDialog.hxx:69
     void ScRandomNumberGeneratorDialog::GenerateNumbers(type-parameter-?-? &,const char *,const class boost::optional<signed char>)
-sc/source/ui/inc/tabvwsh.hxx:193
-    void ScTabViewShell::AdjustPosSizePixel(const class Point &,const class Size &)
 scaddins/source/analysis/analysishelper.hxx:821
     _Bool sca::analysis::ScaDate::operator>=(const class sca::analysis::ScaDate &) const
 sccomp/source/solver/DifferentialEvolution.hxx:67
@@ -926,8 +892,6 @@ sd/inc/sddll.hxx:49
      SdDLL::SdDLL()
 sd/source/filter/ppt/pptinanimations.hxx:109
     void ppt::AnimationImporter::dump(const char *,long)
-sd/source/ui/inc/AccessibleDocumentViewBase.hxx:297
-    class rtl::OUString accessibility::AccessibleDocumentViewBase::CreateAccessibleDescription()
 sd/source/ui/inc/filedlg.hxx:54
     _Bool SdOpenSoundFileDialog::IsInsertAsLinkSelected()
 sd/source/ui/inc/optsitem.hxx:176
@@ -970,8 +934,6 @@ slideshow/source/engine/opengl/TransitionImpl.hxx:180
     void OGLTransitionImpl::finish(double,double,double,double,double)
 slideshow/source/inc/shapeattributelayer.hxx:391
     void slideshow::internal::ShapeAttributeLayer::setCharRotationAngle(const double &)
-starmath/inc/view.hxx:258
-    void SmViewShell::AdjustPosSizePixel(const class Point &,const class Size &)
 svgio/inc/svgstyleattributes.hxx:345
     class svgio::svgreader::SvgNumber svgio::svgreader::SvgStyleAttributes::getStrokeDashOffset() const
 svgio/inc/svgstyleattributes.hxx:369
@@ -1072,9 +1034,9 @@ sw/inc/swrect.hxx:134
     void SwRect::SetLowerLeftCorner(const class Point &)
 sw/inc/swrect.hxx:147
     _Bool SwRect::OverStepTop(long) const
-sw/qa/extras/inc/swmodeltestbase.hxx:556
+sw/qa/extras/inc/swmodeltestbase.hxx:590
     class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertySet> SwModelTestBase::getParagraphAnchoredObject(const int,const class com::sun::star::uno::Reference<class com::sun::star::text::XTextRange> &) const
-sw/qa/extras/uiwriter/uiwriter.cxx:6102
+sw/qa/extras/uiwriter/uiwriter.cxx:6140
     int main()
 sw/source/core/inc/frame.hxx:893
     void SwFrame::dumpTopMostAsXml(struct _xmlTextWriter *) const
@@ -1102,12 +1064,8 @@ test/source/sheet/xsubtotalfield.cxx:34
     class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char> > CppUnit::assertion_traits::toString(const class com::sun::star::uno::Sequence<struct com::sun::star::sheet::SubTotalColumn> &)
 toolkit/inc/helper/btndlg.hxx:52
      ButtonDialog::ButtonDialog(class vcl::Window *,long)
-toolkit/inc/helper/btndlg.hxx:61
-    void ButtonDialog::AddButton(const class rtl::OUString &,unsigned short,enum ButtonDialogFlags,long)
-toolkit/inc/helper/btndlg.hxx:65
-    unsigned short ButtonDialog::GetButtonId(unsigned short) const
-toolkit/inc/helper/btndlg.hxx:66
-    class PushButton * ButtonDialog::GetPushButton(unsigned short) const
+toolkit/inc/helper/btndlg.hxx:83
+    struct ImplBtnDlgItem * ButtonDialog::ImplGetItem(unsigned short) const
 ucb/source/inc/regexpmap.hxx:375
     RegexpMapConstIter<type-parameter-?-?> ucb_impl::RegexpMap::begin() const
 ucb/source/inc/regexpmap.hxx:379
@@ -1210,13 +1168,5 @@ writerfilter/source/ooxml/OOXMLPropertySet.hxx:158
     class __gnu_debug::_Safe_iterator<class __gnu_cxx::__normal_iterator<const class std::shared_ptr<class writerfilter::ooxml::OOXMLProperty> *, class std::__cxx1998::vector<class std::shared_ptr<class writerfilter::ooxml::OOXMLProperty>, class std::allocator<class std::shared_ptr<class writerfilter::ooxml::OOXMLProperty> > > >, class std::__debug::vector<class std::shared_ptr<class writerfilter::ooxml::OOXMLProperty>, class std::allocator<class std::shared_ptr<class writerfilter::ooxml::OOXMLProperty> > > > writerfilter::ooxml::OOXMLPropertySet::end() const
 writerfilter/source/ooxml/OOXMLPropertySet.hxx:161
     class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char> > writerfilter::ooxml::OOXMLPropertySet::toString()
-xmloff/source/transform/FlatTContext.hxx:54
-    void XMLPersTextContentTContext::ExportContent()
-xmloff/source/transform/StyleOASISTContext.hxx:57
-    void XMLStyleOASISTContext::ExportContent()
-xmlsecurity/inc/framework/signaturecreatorimpl.hxx:64
-    _Bool SignatureCreatorImpl::checkReady() const
-xmlsecurity/inc/framework/signatureverifierimpl.hxx:58
-    _Bool SignatureVerifierImpl::checkReady() const
 xmlsecurity/source/gpg/XMLEncryption.hxx:27
      XMLEncryptionGpg::XMLEncryptionGpg()

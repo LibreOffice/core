@@ -92,17 +92,6 @@ VclPtr<PushButton> ButtonDialog::ImplCreatePushButton( ButtonDialogFlags nBtnFla
     return pBtn;
 }
 
-ImplBtnDlgItem* ButtonDialog::ImplGetItem( sal_uInt16 nId ) const
-{
-    for (auto & it : m_ItemList)
-    {
-        if (it->mnId == nId)
-            return &(*it);
-    }
-
-    return nullptr;
-}
-
 long ButtonDialog::ImplGetButtonSize()
 {
     if ( !mbFormat )
