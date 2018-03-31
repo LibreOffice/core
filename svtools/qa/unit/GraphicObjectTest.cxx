@@ -38,9 +38,7 @@ class GraphicObjectTest: public test::BootstrapFixture, public unotest::MacrosTe
 
 public:
     void testSwap();
-    void testSizeBasedAutoSwap();
     void testTdf88836();
-    void testTdf88935();
     void testPdf();
 
 
@@ -57,9 +55,7 @@ private:
 private:
     CPPUNIT_TEST_SUITE(GraphicObjectTest);
     CPPUNIT_TEST(testSwap);
-    CPPUNIT_TEST(testSizeBasedAutoSwap);
     CPPUNIT_TEST(testTdf88836);
-    CPPUNIT_TEST(testTdf88935);
     CPPUNIT_TEST(testPdf);
     CPPUNIT_TEST_SUITE_END();
 };
@@ -147,92 +143,6 @@ void GraphicObjectTest::testSwap()
     }
 }
 
-void GraphicObjectTest::testSizeBasedAutoSwap()
-{
-    // Set cache size to a very small value to check what happens
-    {
-        std::shared_ptr< comphelper::ConfigurationChanges > aBatch(comphelper::ConfigurationChanges::create());
-        officecfg::Office::Common::Cache::GraphicManager::TotalCacheSize::set(sal_Int32(1), aBatch);
-        aBatch->commit();
-    }
-
-    uno::Reference< lang::XComponent > xComponent =
-        loadFromDesktop(m_directories.getURLFromSrc("svtools/qa/unit/data/document_with_two_images.odt"), "com.sun.star.text.TextDocument");
-
-    SwXTextDocument* pTxtDoc = dynamic_cast<SwXTextDocument *>(xComponent.get());
-    CPPUNIT_ASSERT(pTxtDoc);
-    SwDoc* pDoc = pTxtDoc->GetDocShell()->GetDoc();
-    CPPUNIT_ASSERT(pDoc);
-    SwNodes& aNodes = pDoc->GetNodes();
-
-    // Find images
-    const GraphicObject* pGrafObj1 = nullptr;
-    const GraphicObject* pGrafObj2 = nullptr;
-    for( sal_uLong nIndex = 0; nIndex < aNodes.Count(); ++nIndex)
-    {
-        if( aNodes[nIndex]->IsGrfNode() )
-        {
-            SwGrfNode* pGrfNode = aNodes[nIndex]->GetGrfNode();
-            CPPUNIT_ASSERT(pGrfNode);
-            if( !pGrafObj1 )
-            {
-                pGrafObj1 = &pGrfNode->GetGrfObj();
-            }
-            else
-            {
-                pGrafObj2 = &pGrfNode->GetGrfObj();
-            }
-        }
-    }
-    CPPUNIT_ASSERT_MESSAGE("Missing image", pGrafObj1 != nullptr && pGrafObj2 != nullptr);
-
-    {
-        // First image should be swapped out
-        CPPUNIT_ASSERT(pGrafObj1->IsSwappedOut());
-        CPPUNIT_ASSERT_EQUAL(sal_uLong(697230), pGrafObj1->GetSizeBytes());
-
-        // Still swapped out: size is cached
-        CPPUNIT_ASSERT(pGrafObj1->IsSwappedOut());
-    }
-
-    {
-        // Second image should be in the memory
-        // Size based swap out is triggered by swap in, so the last swapped in image should be
-        // in the memory despite of size limit is reached.
-        CPPUNIT_ASSERT(!pGrafObj2->IsSwappedOut());
-        CPPUNIT_ASSERT_EQUAL(sal_uLong(1620000), pGrafObj2->GetSizeBytes());
-    }
-
-    // Swap in first image -> second image will be swapped out
-    {
-        pGrafObj1->GetGraphic(); // GetGraphic calls swap in on a const object
-        CPPUNIT_ASSERT(!pGrafObj1->IsSwappedOut());
-        CPPUNIT_ASSERT(pGrafObj2->IsSwappedOut());
-    }
-
-    // Swap in second image -> first image will be swapped out
-    {
-        pGrafObj2->GetGraphic(); // GetGraphic calls swap in on a const object
-        CPPUNIT_ASSERT(!pGrafObj2->IsSwappedOut());
-        CPPUNIT_ASSERT(pGrafObj1->IsSwappedOut());
-    }
-
-    // Use bigger cache
-    {
-        GraphicManager& rGrfMgr = pGrafObj1->GetGraphicManager();
-        rGrfMgr.SetMaxCacheSize((pGrafObj1->GetSizeBytes()+pGrafObj2->GetSizeBytes())*10);
-    }
-    // Swap in both images -> both should be swapped in
-    {
-        pGrafObj1->GetGraphic();
-        pGrafObj2->GetGraphic();
-        CPPUNIT_ASSERT(!pGrafObj1->IsSwappedOut());
-        CPPUNIT_ASSERT(!pGrafObj2->IsSwappedOut());
-    }
-
-    xComponent->dispose();
-}
-
 void GraphicObjectTest::testTdf88836()
 {
     // Construction with empty bitmap -> type should be GraphicType::NONE
@@ -240,73 +150,6 @@ void GraphicObjectTest::testTdf88836()
     CPPUNIT_ASSERT_EQUAL(int(GraphicType::NONE), int(aGraphic.GetType()));
     aGraphic = Graphic(BitmapEx());
     CPPUNIT_ASSERT_EQUAL(int(GraphicType::NONE), int(aGraphic.GetType()));
-}
-
-void GraphicObjectTest::testTdf88935()
-{
-    // Cache size was not updated by deletion of graphic objects
-
-    // Load a file with two images
-    uno::Reference< lang::XComponent > xComponent =
-        loadFromDesktop(m_directories.getURLFromSrc("svtools/qa/unit/data/document_with_two_images.odt"), "com.sun.star.text.TextDocument");
-    SwXTextDocument* pTxtDoc = dynamic_cast<SwXTextDocument *>(xComponent.get());
-    CPPUNIT_ASSERT(pTxtDoc);
-    SwDoc* pDoc = pTxtDoc->GetDocShell()->GetDoc();
-    CPPUNIT_ASSERT(pDoc);
-    SwNodes& aNodes = pDoc->GetNodes();
-
-    // Find images
-    const GraphicObject* pGraphObj1 = nullptr;
-    const GraphicObject* pGraphObj2 = nullptr;
-    for( sal_uLong nIndex = 0; nIndex < aNodes.Count(); ++nIndex)
-    {
-        if( aNodes[nIndex]->IsGrfNode() )
-        {
-            SwGrfNode* pGrfNode = aNodes[nIndex]->GetGrfNode();
-            CPPUNIT_ASSERT(pGrfNode);
-            if( !pGraphObj1 )
-            {
-                pGraphObj1 = &pGrfNode->GetGrfObj();
-            }
-            else
-            {
-                pGraphObj2 = &pGrfNode->GetGrfObj();
-            }
-        }
-    }
-    CPPUNIT_ASSERT_MESSAGE("Missing image", pGraphObj1 != nullptr && pGraphObj2 != nullptr);
-
-    // Set cache size
-    {
-        GraphicManager& rGrfMgr = pGraphObj1->GetGraphicManager();
-        rGrfMgr.SetMaxCacheSize((pGraphObj1->GetSizeBytes()+pGraphObj2->GetSizeBytes())*10);
-    }
-
-    // Both images fit into the cache
-    {
-        pGraphObj1->GetGraphic();
-        pGraphObj2->GetGraphic();
-        CPPUNIT_ASSERT(!pGraphObj1->IsSwappedOut());
-        CPPUNIT_ASSERT(!pGraphObj2->IsSwappedOut());
-    }
-
-    // Create and remove some copy of the first image
-    for( int i = 0; i < 50; ++i )
-    {
-        GraphicObject aGraphObj3(*pGraphObj1);
-        CPPUNIT_ASSERT(aGraphObj3.SwapOut());
-        CPPUNIT_ASSERT(aGraphObj3.SwapIn());
-    }
-
-    // Both images fit into the cache
-    {
-        pGraphObj1->GetGraphic();
-        pGraphObj2->GetGraphic();
-        CPPUNIT_ASSERT(!pGraphObj1->IsSwappedOut());
-        CPPUNIT_ASSERT(!pGraphObj2->IsSwappedOut());
-    }
-
-    xComponent->dispose();
 }
 
 void GraphicObjectTest::testPdf()
