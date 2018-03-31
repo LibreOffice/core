@@ -20,16 +20,13 @@
 en-US = "LibreOffice Community"
 
 [OOO_ARPHELPLINKTEMPLATE]
-en-US = "http://www.libreoffice.org/get-help"
-
-[OOO_ARPHELPTELEPHONETEMPLATE]
-en-US = "x-xxx-xxx-xxx"
+en-US = "https://www.libreoffice.org/get-help"
 
 [OOO_ARPURLINFOABOUTTEMPLATE]
-en-US = "http://www.documentfoundation.org"
+en-US = "https://www.libreoffice.org/"
 
 [OOO_ARPURLUPDATEINFOTEMPLATE]
-en-US = "http://www.libreoffice.org/download"
+en-US = "https://www.libreoffice.org/download"
 
 [OOO_STR_NEW_DISPLAY_NAME]
 en-US = "~New"
