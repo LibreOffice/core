@@ -585,7 +585,8 @@ endef
 else # !SYSTEM_LIBTEXTCAT
 
 $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
-        libtextcat \
+    libtextcat \
+    textcat \
 ))
 
 define gb_LinkTarget__use_libtextcat
@@ -640,7 +641,13 @@ endef
 
 else # !SYSTEM_HUNSPELL
 
+ifeq ($(GUI),WNT)
 $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS,libhunspell))
+else ifeq ($(GUI),OS2)
+$(eval $(call gb_Helper_register_static_libraries,PLAINLIBS,hunspell))
+else
+$(eval $(call gb_Helper_register_static_libraries,PLAINLIBS,hunspell-1.3))
+endif
 
 define gb_LinkTarget__use_hunspell
 $(call gb_LinkTarget_set_include,$(1),\
@@ -650,7 +657,13 @@ $(call gb_LinkTarget_set_include,$(1),\
 $(call gb_LinkTarget_add_defs,$(1),\
     -DHUNSPELL_STATIC
 )
+ifeq ($(GUI),WNT)
 $(call gb_LinkTarget_add_linked_static_libs,$(1),libhunspell)
+else ifeq ($(GUI),OS2)
+$(call gb_LinkTarget_add_linked_static_libs,$(1),hunspell)
+else
+$(call gb_LinkTarget_add_linked_static_libs,$(1),hunspell-1.3)
+endif
 endef
 
 endif # SYSTEM_HUNSPELL
