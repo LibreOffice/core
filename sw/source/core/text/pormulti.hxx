@@ -46,8 +46,7 @@ enum class SwMultiCreatorId
 enum class RubyPosition : sal_uInt16
 {
     ABOVE = 0,
-    BELOW = 1,
-    RIGHT = 2
+    BELOW = 1
 };
 
 struct SwMultiCreator
@@ -133,7 +132,6 @@ public:
     bool IsRuby() const { return bRuby; }
     bool IsBidi() const { return bBidi; }
     bool OnTop() const { return eRubyPosition == RubyPosition::ABOVE; }
-    bool OnRight() const { return eRubyPosition == RubyPosition::RIGHT; }
     RubyPosition GetRubyPosition() const { return eRubyPosition; }
     void ActualizeTabulator();
 

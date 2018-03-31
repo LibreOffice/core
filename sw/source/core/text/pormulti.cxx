@@ -93,15 +93,8 @@ void SwMultiPortion::CalcSize( SwTextFormatter& rLine, SwTextFormatInfo &rInf )
         else
             SetAscent( GetAscent() + pLay->GetAscent() );
 
-        // Increase the line height, except for ruby text on the right.
-        if ( !IsRuby() || !OnRight() || pLay == &GetRoot() )
-            Height( Height() + pLay->Height() );
-        else
-        {
-            // We already added the width after building the portion,
-            // so no need to add it twice.
-            break;
-        }
+        // Increase the line height
+        Height( Height() + pLay->Height() );
 
         if( Width() < pLay->Width() )
             Width( pLay->Width() );
@@ -567,10 +560,6 @@ SwRubyPortion::SwRubyPortion( const SwMultiCreator& rCreate, const SwFont& rFnt,
     const SwTextFrame *pFrame = rInf.GetTextFrame();
     RubyPosition ePos = static_cast<RubyPosition>( rRuby.GetPosition() );
 
-    // RIGHT is designed for horizontal writing mode only.
-    if ( ePos == RubyPosition::RIGHT && pFrame->IsVertical() )
-        ePos = RubyPosition::ABOVE;
-
     // In grid mode we force the ruby text to the upper or lower line
     if ( rInf.SnapToGrid() )
     {
@@ -591,7 +580,7 @@ SwRubyPortion::SwRubyPortion( const SwMultiCreator& rCreate, const SwFont& rFnt,
         pRubyFont->SetDiffFnt( &rSet, &rIDocumentSettingAccess );
 
         // we do not allow a vertical font for the ruby text
-        pRubyFont->SetVertical( rFnt.GetOrientation() , OnRight() );
+        pRubyFont->SetVertical( rFnt.GetOrientation(), false );
     }
     else
         pRubyFont = nullptr;
@@ -1452,13 +1441,6 @@ void SwTextPainter::PaintMultiPortion( const SwRect &rPaint,
             else
                 GetInfo().X( nOfst + AdjustBaseLine( *pLay, pPor ) );
         }
-        else if ( rMulti.IsRuby() && rMulti.OnRight() && GetInfo().IsRuby() )
-        {
-            SwTwips nLineDiff = std::max(( rMulti.GetRoot().Height() - pPor->Width() ) / 2, 0 );
-            GetInfo().Y( nOfst + nLineDiff );
-            // Draw the ruby text on top of the preserved space.
-            GetInfo().X( GetInfo().X() - pPor->Height() );
-        }
         else
             GetInfo().Y( nOfst + AdjustBaseLine( *pLay, pPor ) );
 
@@ -1564,11 +1546,7 @@ void SwTextPainter::PaintMultiPortion( const SwRect &rPaint,
                     nOfst += rMulti.GetRoot().Height();
                 }
             }
-            else if ( rMulti.IsRuby() && rMulti.OnRight() )
-            {
-                GetInfo().SetDirection( DIR_TOP2BOTTOM );
-                GetInfo().SetRuby( true );
-            } else
+            else
             {
                 GetInfo().X( nTmpX );
                 // We switch to the baseline of the next inner line
@@ -1872,15 +1850,6 @@ bool SwTextFormatter::BuildMultiPortion( SwTextFormatInfo &rInf,
                 aTmp.SetSnapToGrid( false );
 
             BuildPortions( aTmp );
-
-            if ( rMulti.OnRight() )
-            {
-                // The ruby text on the right is vertical.
-                // The width and the height are swapped.
-                SwTwips nHeight = rMulti.GetRoot().GetNext()->GetPortion()->Height();
-                // Keep room for the ruby text.
-                rMulti.GetRoot().FindLastPortion()->AddPrtWidth( nHeight );
-            }
 
             aTmp.SetSnapToGrid( bOldGridModeAllowed );
 
