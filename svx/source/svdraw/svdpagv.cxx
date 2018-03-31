@@ -20,7 +20,6 @@
 #include <svx/svdpagv.hxx>
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/awt/PosSize.hpp>
-#include <comphelper/processfactory.hxx>
 #include <svx/svdoutl.hxx>
 #include <svx/xpoly.hxx>
 #include <svx/svdouno.hxx>

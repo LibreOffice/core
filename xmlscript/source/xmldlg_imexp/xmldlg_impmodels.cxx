@@ -31,7 +31,6 @@
 #include <com/sun/star/xml/sax/SAXException.hpp>
 
 #include <sal/log.hxx>
-#include <comphelper/processfactory.hxx>
 #include <i18nlangtag/languagetag.hxx>
 
 using namespace ::com::sun::star;

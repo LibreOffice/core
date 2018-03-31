@@ -22,7 +22,6 @@
 #include <tools/date.hxx>
 #include <connectivity/dbconversion.hxx>
 #include <com/sun/star/sdbc/DataType.hpp>
-#include <comphelper/processfactory.hxx>
 
 using namespace dbtools;
 

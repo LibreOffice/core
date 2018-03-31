@@ -71,7 +71,6 @@
 #include <svl/numuno.hxx>
 #include <connectivity/dbtools.hxx>
 #include <comphelper/types.hxx>
-#include <comphelper/processfactory.hxx>
 #include <fmdocumentclassification.hxx>
 #include <formtoolbars.hxx>
 

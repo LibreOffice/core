@@ -23,7 +23,6 @@
 #include <runtime.hxx>
 
 #include <i18nlangtag/lang.h>
-#include <comphelper/processfactory.hxx>
 #include <svl/zforlist.hxx>
 #include <vcl/svapp.hxx>
 

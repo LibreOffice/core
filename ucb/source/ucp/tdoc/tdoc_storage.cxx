@@ -27,7 +27,6 @@
 #include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/packages/NoEncryptionException.hpp>
 #include <osl/diagnose.h>
-#include <comphelper/processfactory.hxx>
 
 #include "tdoc_uri.hxx"
 #include "tdoc_docmgr.hxx"

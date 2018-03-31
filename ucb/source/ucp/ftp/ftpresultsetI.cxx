@@ -18,7 +18,6 @@
  */
 
 
-#include <comphelper/processfactory.hxx>
 #include <ucbhelper/propertyvalueset.hxx>
 #include <rtl/ref.hxx>
 #include <com/sun/star/ucb/Command.hpp>

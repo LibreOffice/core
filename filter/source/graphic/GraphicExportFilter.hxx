@@ -24,9 +24,9 @@
 #include <com/sun/star/document/XExporter.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <cppuhelper/implbase.hxx>
-#include <comphelper/processfactory.hxx>
 
 namespace com { namespace sun { namespace star {
     namespace drawing {

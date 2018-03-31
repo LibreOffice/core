@@ -13,7 +13,6 @@
 #include <test/primitive2dxmldump.hxx>
 #include <test/xmltesttools.hxx>
 
-#include <comphelper/processfactory.hxx>
 #include <comphelper/seqstream.hxx>
 #include <comphelper/sequence.hxx>
 

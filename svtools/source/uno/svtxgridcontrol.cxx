@@ -27,7 +27,6 @@
 #include <rtl/ref.hxx>
 #include <tools/diagnose_ex.h>
 #include <toolkit/helper/property.hxx>
-#include <comphelper/processfactory.hxx>
 #include <com/sun/star/awt/grid/XGridColumn.hpp>
 #include <com/sun/star/awt/XControl.hpp>
 #include <com/sun/star/awt/grid/GridInvalidDataException.hpp>

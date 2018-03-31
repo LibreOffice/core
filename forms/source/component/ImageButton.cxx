@@ -22,7 +22,6 @@
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
 #include <comphelper/basicio.hxx>
-#include <comphelper/processfactory.hxx>
 #include <com/sun/star/awt/MouseButton.hpp>
 
 namespace frm

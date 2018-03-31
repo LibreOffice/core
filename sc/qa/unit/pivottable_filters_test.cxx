@@ -29,7 +29,6 @@
 #include <globstr.hrc>
 
 #include <test/xmltesttools.hxx>
-#include <comphelper/processfactory.hxx>
 #include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
 #include <com/sun/star/sheet/DataPilotFieldGroupBy.hpp>
 

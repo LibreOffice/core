@@ -18,7 +18,6 @@
  */
 
 
-#include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 #include <i18nlangtag/mslangid.hxx>
 #include <sfx2/bindings.hxx>

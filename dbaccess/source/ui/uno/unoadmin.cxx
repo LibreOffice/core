@@ -23,7 +23,6 @@
 #include <unoadmin.hxx>
 #include <dbadmin.hxx>
 #include <comphelper/extract.hxx>
-#include <comphelper/processfactory.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <comphelper/property.hxx>
 

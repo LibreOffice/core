@@ -38,8 +38,6 @@
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
 
-#include <comphelper/processfactory.hxx>
-
 #include <tools/urlobj.hxx>
 #include <unotools/bootstrap.hxx>
 

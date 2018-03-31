@@ -48,7 +48,6 @@
 #include <com/sun/star/util/Date.hpp>
 #include <TConnection.hxx>
 #include <comphelper/numbers.hxx>
-#include <comphelper/processfactory.hxx>
 #include <connectivity/dbtools.hxx>
 #include <connectivity/dbmetadata.hxx>
 #include <tools/diagnose_ex.h>

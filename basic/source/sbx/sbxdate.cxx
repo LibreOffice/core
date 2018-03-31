@@ -29,7 +29,6 @@
 #include <runtime.hxx>
 #include <sbintern.hxx>
 #include <math.h>
-#include <comphelper/processfactory.hxx>
 #include <memory>
 #include <config_features.h>
 

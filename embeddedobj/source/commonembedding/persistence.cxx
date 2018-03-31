@@ -50,7 +50,6 @@
 #include <com/sun/star/chart2/XChartDocument.hpp>
 
 #include <comphelper/fileformat.h>
-#include <comphelper/processfactory.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/mimeconfighelper.hxx>
 #include <comphelper/namedvaluecollection.hxx>

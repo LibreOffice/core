@@ -68,7 +68,6 @@
 #include <com/sun/star/awt/FontWidth.hpp>
 #include <TypeInfo.hxx>
 #include <FieldDescriptions.hxx>
-#include <comphelper/processfactory.hxx>
 #include <comphelper/stl_types.hxx>
 #include <comphelper/propertysequence.hxx>
 

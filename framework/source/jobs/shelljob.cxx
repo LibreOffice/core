@@ -29,7 +29,6 @@
 #include <osl/process.h>
 #include <vcl/svapp.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <comphelper/processfactory.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 
 // include interfaces

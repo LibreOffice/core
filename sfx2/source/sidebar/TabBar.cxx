@@ -33,7 +33,6 @@
 #include <vcl/gradient.hxx>
 #include <vcl/image.hxx>
 #include <vcl/wrkwin.hxx>
-#include <comphelper/processfactory.hxx>
 #include <tools/svborder.hxx>
 
 #include <com/sun/star/graphic/XGraphicProvider.hpp>

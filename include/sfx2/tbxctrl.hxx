@@ -27,7 +27,6 @@
 #include <vcl/menu.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/floatwin.hxx>
-#include <comphelper/processfactory.hxx>
 #include <sfx2/ctrlitem.hxx>
 #include <sfx2/sfxstatuslistener.hxx>
 #include <svtools/toolboxcontroller.hxx>

@@ -45,7 +45,6 @@
 #include <avmedia/mediawindow.hxx>
 
 #include <comphelper/storagehelper.hxx>
-#include <comphelper/processfactory.hxx>
 
 #include <viewfunc.hxx>
 #include <docsh.hxx>

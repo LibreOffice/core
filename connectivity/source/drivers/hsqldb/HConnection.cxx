@@ -34,7 +34,6 @@
 #include <com/sun/star/sdbc/XDatabaseMetaData2.hpp>
 
 #include <comphelper/listenernotification.hxx>
-#include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <rtl/ustrbuf.hxx>

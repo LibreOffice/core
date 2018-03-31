@@ -9,7 +9,6 @@
 
 #include <com/sun/star/util/URL.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
-#include <comphelper/processfactory.hxx>
 #include <sfx2/sidebar/SidebarController.hxx>
 #include <sfx2/sidebar/TabBar.hxx>
 #include <svx/sidebar/PanelLayout.hxx>

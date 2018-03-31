@@ -22,7 +22,6 @@
 #include <property.hxx>
 #include <services.hxx>
 #include <comphelper/basicio.hxx>
-#include <comphelper/processfactory.hxx>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/awt/XVclWindowPeer.hpp>
 

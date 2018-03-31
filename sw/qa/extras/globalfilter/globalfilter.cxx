@@ -13,7 +13,6 @@
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/graphic/GraphicType.hpp>
 #include <officecfg/Office/Common.hxx>
-#include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <unotxdoc.hxx>
 #include <docsh.hxx>

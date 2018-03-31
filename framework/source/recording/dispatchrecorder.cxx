@@ -26,7 +26,6 @@
 #include <o3tl/any.hxx>
 #include <services.h>
 #include <vcl/svapp.hxx>
-#include <comphelper/processfactory.hxx>
 #include <typelib/typedescription.h>
 
 using namespace ::com::sun::star::uno;

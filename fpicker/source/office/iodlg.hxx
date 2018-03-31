@@ -39,7 +39,6 @@
 #include "OfficeControlAccess.hxx"
 #include "fpsmartcontent.hxx"
 #include <comphelper/configuration.hxx>
-#include <comphelper/processfactory.hxx>
 #include "fpdialogbase.hxx"
 #include <o3tl/typed_flags_set.hxx>
 

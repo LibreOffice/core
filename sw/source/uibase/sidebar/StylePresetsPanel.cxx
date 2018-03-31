@@ -33,7 +33,6 @@
 #include <shellio.hxx>
 #include <docsh.hxx>
 
-#include <comphelper/processfactory.hxx>
 #include <comphelper/documentconstants.hxx>
 #include <comphelper/string.hxx>
 #include <o3tl/make_unique.hxx>

@@ -27,7 +27,6 @@
 #include <com/sun/star/sheet/CellFlags.hpp>
 #include <com/sun/star/reflection/XIdlMethod.hpp>
 #include <com/sun/star/beans/MethodConcept.hpp>
-#include <comphelper/processfactory.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <comphelper/anytostring.hxx>
 

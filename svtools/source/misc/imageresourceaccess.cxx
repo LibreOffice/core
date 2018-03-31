@@ -29,7 +29,6 @@
 #include <tools/stream.hxx>
 #include <unotools/streamwrap.hxx>
 #include <cppuhelper/implbase.hxx>
-#include <comphelper/processfactory.hxx>
 
 namespace svt
 {

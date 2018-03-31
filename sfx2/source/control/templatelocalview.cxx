@@ -9,7 +9,6 @@
 
 #include <sfx2/templatelocalview.hxx>
 
-#include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 #include <sfx2/doctempl.hxx>
 #include <sfx2/inputdlg.hxx>

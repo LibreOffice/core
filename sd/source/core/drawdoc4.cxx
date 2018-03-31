@@ -25,7 +25,6 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/dispatch.hxx>
 #include <Outliner.hxx>
-#include <comphelper/processfactory.hxx>
 #include <editeng/outliner.hxx>
 
 #include <DrawDocShell.hxx>

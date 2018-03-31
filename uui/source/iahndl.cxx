@@ -73,7 +73,6 @@
 #include <svtools/sfxecode.hxx>
 #include <unotools/configmgr.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
-#include <comphelper/processfactory.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <typelib/typedescription.hxx>
 #include <unotools/confignode.hxx>

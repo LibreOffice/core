@@ -28,7 +28,6 @@
 #include <com/sun/star/util/XChangesBatch.hpp>
 
 
-#include <comphelper/processfactory.hxx>
 #include <comphelper/oslfile2streamwrap.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <osl/file.hxx>

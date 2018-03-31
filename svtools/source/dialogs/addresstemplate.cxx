@@ -24,7 +24,6 @@
 #include <svtools/svtresid.hxx>
 #include <tools/debug.hxx>
 #include <comphelper/interaction.hxx>
-#include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 #include <vcl/stdtext.hxx>
 #include <vcl/waitobj.hxx>

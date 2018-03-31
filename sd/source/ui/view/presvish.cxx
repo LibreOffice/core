@@ -19,7 +19,6 @@
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <comphelper/processfactory.hxx>
 
 #include <PresentationViewShell.hxx>
 #include <optsitem.hxx>

@@ -54,7 +54,6 @@
 
 #include <comphelper/guarding.hxx>
 #include <comphelper/interaction.hxx>
-#include <comphelper/processfactory.hxx>
 #include <comphelper/property.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/string.hxx>

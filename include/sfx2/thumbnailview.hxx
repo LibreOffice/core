@@ -15,7 +15,6 @@
 #include <vector>
 #include <functional>
 
-#include <comphelper/processfactory.hxx>
 #include <sfx2/thumbnailviewitem.hxx>
 #include <vcl/ctrl.hxx>
 #include <vcl/timer.hxx>

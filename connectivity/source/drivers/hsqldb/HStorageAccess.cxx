@@ -18,7 +18,6 @@
  */
 
 #include <hsqldb/HStorageAccess.hxx>
-#include <comphelper/processfactory.hxx>
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/io/XStream.hpp>

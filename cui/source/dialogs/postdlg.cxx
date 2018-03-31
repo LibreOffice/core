@@ -25,7 +25,6 @@
 #include <svl/itemset.hxx>
 #include <unotools/useroptions.hxx>
 #include <unotools/localedatawrapper.hxx>
-#include <comphelper/processfactory.hxx>
 #include <svx/svxids.hrc>
 
 #include <svx/postattr.hxx>

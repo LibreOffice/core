@@ -30,7 +30,6 @@
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
-#include <comphelper/processfactory.hxx>
 #include <unotools/streamwrap.hxx>
 
 using namespace ::com::sun::star::uno;

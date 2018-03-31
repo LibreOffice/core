@@ -21,7 +21,6 @@
 
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <tools/debug.hxx>
-#include <comphelper/processfactory.hxx>
 
 
 namespace frm

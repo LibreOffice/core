@@ -23,7 +23,6 @@
 #include <com/sun/star/xml/crypto/NSSInitializer.hpp>
 #endif
 
-#include <comphelper/processfactory.hxx>
 #include <config_oauth2.h>
 #include <rtl/uri.hxx>
 #include <ucbhelper/cancelcommandexecution.hxx>

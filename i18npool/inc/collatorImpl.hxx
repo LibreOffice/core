@@ -19,7 +19,6 @@
 #ifndef INCLUDED_I18NPOOL_INC_COLLATORIMPL_HXX
 #define INCLUDED_I18NPOOL_INC_COLLATORIMPL_HXX
 
-#include <comphelper/processfactory.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/i18n/XLocaleData5.hpp>
 #include <com/sun/star/i18n/XCollator.hpp>
@@ -27,6 +26,7 @@
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <vector>
 #include <memory>

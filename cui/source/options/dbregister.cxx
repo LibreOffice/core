@@ -29,7 +29,6 @@
 #include <vcl/field.hxx>
 #include <vcl/weld.hxx>
 #include <svl/eitem.hxx>
-#include <comphelper/processfactory.hxx>
 #include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/ui/dialogs/XFilePicker.hpp>

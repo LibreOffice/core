@@ -28,7 +28,6 @@
 
 #include <svtools/transfer.hxx>
 #include <sot/filelist.hxx>
-#include <comphelper/processfactory.hxx>
 
 #include <osl/file.hxx>
 #include <vcl/svapp.hxx>

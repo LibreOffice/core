@@ -41,7 +41,6 @@
 #include <comphelper/basicio.hxx>
 #include <comphelper/container.hxx>
 #include <comphelper/numbers.hxx>
-#include <comphelper/processfactory.hxx>
 #include <comphelper/listenernotification.hxx>
 #include <comphelper/sequence.hxx>
 #include <connectivity/dbtools.hxx>

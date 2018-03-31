@@ -25,7 +25,6 @@
 #include <sal/log.hxx>
 #include <tools/tenccvt.hxx>
 #include <osl/diagnose.h>
-#include <comphelper/processfactory.hxx>
 #include <unotools/intlwrapper.hxx>
 #include <svl/hint.hxx>
 #include <svl/poolitem.hxx>

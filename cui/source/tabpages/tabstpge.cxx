@@ -30,7 +30,6 @@
 #include <sfx2/module.hxx>
 #include <svl/cjkoptions.hxx>
 #include <unotools/localedatawrapper.hxx>
-#include <comphelper/processfactory.hxx>
 #include <sfx2/request.hxx>
 #include <svl/intitem.hxx>
 

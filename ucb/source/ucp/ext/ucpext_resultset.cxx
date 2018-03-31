@@ -22,7 +22,6 @@
 #include "ucpext_datasupplier.hxx"
 
 #include <ucbhelper/resultset.hxx>
-#include <comphelper/processfactory.hxx>
 
 
 namespace ucb { namespace ucp { namespace ext

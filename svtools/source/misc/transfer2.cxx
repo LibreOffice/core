@@ -26,7 +26,6 @@
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 #include <comphelper/fileformat.h>
-#include <comphelper/processfactory.hxx>
 #include <com/sun/star/datatransfer/dnd/XDropTargetDragContext.hpp>
 #include <svl/urlbmk.hxx>
 #include <svtools/inetimg.hxx>

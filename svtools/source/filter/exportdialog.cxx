@@ -40,7 +40,6 @@
 #include <vcl/graph.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
-#include <comphelper/processfactory.hxx>
 #include "exportdialog.hxx"
 
 #define FORMAT_UNKNOWN  0

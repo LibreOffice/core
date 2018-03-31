@@ -19,8 +19,6 @@
 
 #include <config_features.h>
 
-#include <comphelper/processfactory.hxx>
-
 #include <osl/module.h>
 #include <osl/file.hxx>
 #include <osl/thread.h>
