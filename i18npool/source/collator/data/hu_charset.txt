@@ -35,12 +35,50 @@
 & u < ü <<< Ü <<< ű <<< Ű
 & z < zs <<< Zs <<< ZS
 
-& cs <<< ccs / cs <<< Ccs / cs <<< CCs / cs <<< CCS / cs
-& dz <<< ddz / dz <<< Ddz / dz <<< DDz / dz <<< DDZ / dz
-& dzs <<< ddzs / dzs <<< Ddzs / dzs <<< DDzs / dzs <<< DDZs / dzs <<< DDZS / dzs
-& gy <<< ggy / gy <<< Ggy / gy <<< GGy / gy <<< GGY / gy
-& ly <<< lly / ly <<< Lly / ly <<< LLy / ly <<< LLY / ly
-& ny <<< nny / ny <<< Nny / ny <<< NNy / ny <<< NNY / ny
-& sz <<< ssz / sz <<< Ssz / sz <<< SSz / sz <<< SSZ / sz
-& ty <<< tty / ty <<< Tty / ty <<< TTy / ty <<< TTY / ty
-& zs <<< zzs / zs <<< Zzs / zs <<< ZZs / zs <<< ZZS / zs
+# We expand simplified double consonants, for example,
+# "ccs" sorted as "cscs". This is still not an error-free
+# method, but better, than the old method, because now
+# it's *possible* to fix all errors in a semi-automatic way,
+# using soft hyphens. Inserting them in bad or ambiguous
+# character positions will fix all automatic sortings later,
+# for example, “arccsont” -> “arc|csont” (“|” signs soft
+# hyphen position).
+
+# Note: Ccs and CCS are capitalized versions of the simplified
+# double consonant “cs”, but CCs is an abbreviation of words
+# beginning with C and Cs (similar to “AkH.”, “MHSz.”).
+
+# To avoid the comparison result “equal” we set a precedence
+# between the simplified and compound-like long forms, too.
+# For example, “ésszerű” (old orthography before 2015) and
+# “észszerű” (not “észszerű”, “ésszerű”), or “mennyelv” and
+# “menynyelv” (words with different meanings), sorted as
+# “észszerű” and “észSzerű”, also “menynyelv” and “menyNyelv”.
+
+& cs <<< ccs / cs <<< cscs / Cs
+& Cs <<< Ccs / cs <<< CsCs / Cs
+& CS <<< CCS / Cs <<< CSCS / CS
+& dz <<< ddz / dz <<< dzdz / Dz
+& Dz <<< Ddz / dz <<< DzDz / Dz
+& DZ <<< DDZ / Dz <<< DZDZ / DZ
+& dzs <<< ddzs / dzs <<< dzsdzs / Dzs
+& Dzs <<< Ddzs / dzs <<< DzsDzs / Dzs
+& DZS <<< DDZS / DZs <<< DZSDZS / DZS
+& gy <<< ggy / gy <<< gygy / Gy
+& Gy <<< Ggy / gy <<< GyGy / Gy
+& GY <<< GGY / Gy <<< GYGY / GY
+& ly <<< lly / ly <<< lyly / Ly
+& Ly <<< Lly / ly <<< LyLy / Ly
+& LY <<< LLY / Ly <<< LYLY / LY
+& ny <<< nny / ny <<< nyny / Ny
+& Ny <<< Nny / ny <<< NyNy / Ny
+& NY <<< NNY / Ny <<< NYNY / NY
+& sz <<< ssz / sz <<< szsz / Sz
+& Sz <<< Ssz / sz <<< SzSz / Sz
+& SZ <<< SSZ / Sz <<< SZSZ / SZ
+& ty <<< tty / ty <<< tyty / Ty
+& Ty <<< Tty / ty <<< TyTy / Ty
+& TY <<< TTY / Ty <<< TYTY / TY
+& zs <<< zzs / zs <<< zszs / Zs
+& Zs <<< Zzs / zs <<< ZsZs / Zs
+& ZS <<< ZZS / Zs <<< ZSZS / ZS
