@@ -74,8 +74,8 @@ private:
     SdrLayerIDSet    aLayerLock;   // Set of non-editable Layers
     SdrLayerIDSet    aLayerPrn;    // Set of printable Layers
 
-    SdrObjList*  pAktList;     // Current List, usually the Page
-    SdrObject*   pAktGroup;    // Current Group; nullptr means none
+    SdrObjList*  pCurrentList;     // Current List, usually the Page
+    SdrObject*   pCurrentGroup;    // Current Group; nullptr means none
 
     SdrHelpLineList aHelpLines; // Helper lines and points
 
@@ -114,8 +114,8 @@ private:
     void SetLayer(const OUString& rName, SdrLayerIDSet& rBS, bool bJa);
     bool IsLayer(const OUString& rName, const SdrLayerIDSet& rBS) const;
 
-    /// Let's see if the current Group (pAktGroup) is still inserted
-    void CheckAktGroup();
+    /// Let's see if the current Group (pCurrentGroup) is still inserted
+    void CheckCurrentGroup();
 
     void AdjHdl();
 
@@ -171,13 +171,13 @@ public:
     SdrPage* GetPage() const { return mpPage; }
 
     /// Return current List
-    SdrObjList* GetObjList() const { return pAktList; }
+    SdrObjList* GetObjList() const { return pCurrentList; }
 
     /// Return current Group
-    SdrObject* GetAktGroup() const { return pAktGroup; }
+    SdrObject* GetCurrentGroup() const { return pCurrentGroup; }
 
     /// Set current Group and List
-    void SetAktGroupAndList(SdrObject* pNewGroup, SdrObjList* pNewList);
+    void SetCurrentGroupAndList(SdrObject* pNewGroup, SdrObjList* pNewList);
 
     bool HasMarkedObjPageView() const { return mbHasMarked; }
     void SetHasMarkedObj(bool bOn) { mbHasMarked = bOn; }

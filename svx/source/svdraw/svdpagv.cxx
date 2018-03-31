@@ -150,9 +150,9 @@ SdrPageView::SdrPageView(SdrPage* pPage1, SdrView& rNewView)
     aLayerPrn.SetAll();
 
     mbVisible = false;
-    pAktList = nullptr;
-    pAktGroup = nullptr;
-    SetAktGroupAndList(nullptr, mpPage);
+    pCurrentList = nullptr;
+    pCurrentGroup = nullptr;
+    SetCurrentGroupAndList(nullptr, mpPage);
 
     for(sal_uInt32 a(0); a < rNewView.PaintWindowCount(); a++)
     {
@@ -199,7 +199,7 @@ css::uno::Reference< css::awt::XControlContainer > SdrPageView::GetControlContai
 
 void SdrPageView::ModelHasChanged()
 {
-    if (GetAktGroup()!=nullptr) CheckAktGroup();
+    if (GetCurrentGroup()!=nullptr) CheckCurrentGroup();
 }
 
 bool SdrPageView::IsReadOnly() const
@@ -751,15 +751,15 @@ void SdrPageView::InsertHelpLine(const SdrHelpLine& rHL)
 }
 
 // set current group and list
-void SdrPageView::SetAktGroupAndList(SdrObject* pNewGroup, SdrObjList* pNewList)
+void SdrPageView::SetCurrentGroupAndList(SdrObject* pNewGroup, SdrObjList* pNewList)
 {
-    if(pAktGroup != pNewGroup)
+    if(pCurrentGroup != pNewGroup)
     {
-        pAktGroup = pNewGroup;
+        pCurrentGroup = pNewGroup;
     }
-    if(pAktList != pNewList)
+    if(pCurrentList != pNewList)
     {
-        pAktList = pNewList;
+        pCurrentList = pNewList;
     }
 }
 
@@ -781,7 +781,7 @@ bool SdrPageView::EnterGroup(SdrObject* pObj)
 
         // set current group and list
         SdrObjList* pNewObjList = pObj->GetSubList();
-        SetAktGroupAndList(pObj, pNewObjList);
+        SetCurrentGroupAndList(pObj, pNewObjList);
 
         // select contained object if only one object is contained,
         // else select nothing and let the user decide what to do next
@@ -814,7 +814,7 @@ bool SdrPageView::EnterGroup(SdrObject* pObj)
 
 void SdrPageView::LeaveOneGroup()
 {
-    if(!GetAktGroup())
+    if(!GetCurrentGroup())
         return;
 
     bool bGlueInvalidate = GetView().ImpIsGlueVisible();
@@ -822,8 +822,8 @@ void SdrPageView::LeaveOneGroup()
     if(bGlueInvalidate)
         GetView().GlueInvalidate();
 
-    SdrObject* pLastGroup = GetAktGroup();
-    SdrObject* pParentGroup = GetAktGroup()->GetUpGroup();
+    SdrObject* pLastGroup = GetCurrentGroup();
+    SdrObject* pParentGroup = GetCurrentGroup()->GetUpGroup();
     SdrObjList* pParentList = GetPage();
 
     if(pParentGroup)
@@ -832,8 +832,8 @@ void SdrPageView::LeaveOneGroup()
     // deselect everything
     GetView().UnmarkAll();
 
-    // allocations, pAktGroup and pAktList need to be set
-    SetAktGroupAndList(pParentGroup, pParentList);
+    // allocations, pCurrentGroup and pCurrentList need to be set
+    SetCurrentGroupAndList(pParentGroup, pParentList);
 
     // select the group we just left
     if(pLastGroup)
@@ -851,20 +851,20 @@ void SdrPageView::LeaveOneGroup()
 
 void SdrPageView::LeaveAllGroup()
 {
-    if(GetAktGroup())
+    if(GetCurrentGroup())
     {
         bool bGlueInvalidate = GetView().ImpIsGlueVisible();
 
         if(bGlueInvalidate)
             GetView().GlueInvalidate();
 
-        SdrObject* pLastGroup = GetAktGroup();
+        SdrObject* pLastGroup = GetCurrentGroup();
 
         // deselect everything
         GetView().UnmarkAll();
 
-        // allocations, pAktGroup and pAktList always need to be set
-        SetAktGroupAndList(nullptr, GetPage());
+        // allocations, pCurrentGroup and pCurrentList always need to be set
+        SetCurrentGroupAndList(nullptr, GetPage());
 
         // find and select uppermost group
         if(pLastGroup)
@@ -889,7 +889,7 @@ void SdrPageView::LeaveAllGroup()
 sal_uInt16 SdrPageView::GetEnteredLevel() const
 {
     sal_uInt16 nCount=0;
-    SdrObject* pGrp=GetAktGroup();
+    SdrObject* pGrp=GetCurrentGroup();
     while (pGrp!=nullptr) {
         nCount++;
         pGrp=pGrp->GetUpGroup();
@@ -897,15 +897,15 @@ sal_uInt16 SdrPageView::GetEnteredLevel() const
     return nCount;
 }
 
-void SdrPageView::CheckAktGroup()
+void SdrPageView::CheckCurrentGroup()
 {
-    SdrObject* pGrp=GetAktGroup();
+    SdrObject* pGrp=GetCurrentGroup();
     while (pGrp!=nullptr &&
            (!pGrp->IsInserted() || pGrp->GetObjList()==nullptr ||
             pGrp->GetPage()==nullptr || pGrp->GetModel()==nullptr)) { // anything outside of the borders?
         pGrp=pGrp->GetUpGroup();
     }
-    if (pGrp!=GetAktGroup()) {
+    if (pGrp!=GetCurrentGroup()) {
         if (pGrp!=nullptr) EnterGroup(pGrp);
         else LeaveAllGroup();
     }
