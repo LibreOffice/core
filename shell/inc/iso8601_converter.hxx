@@ -24,7 +24,7 @@
 
 
 /* Converts ISO 8601 conform date/time
-   represenation to the representation
+   representation to the representation
    conforming to the current locale,
    ignoring the milliseconds part if exists
 */
