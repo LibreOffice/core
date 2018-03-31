@@ -21,7 +21,6 @@
 #include <Window.hxx>
 #include <ViewShellBase.hxx>
 #include <framework/FrameworkHelper.hxx>
-#include <sdresid.hxx>
 
 #include <sfx2/dispatch.hxx>
 #include <vcl/toolbox.hxx>

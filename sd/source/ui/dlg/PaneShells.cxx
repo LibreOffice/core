@@ -21,9 +21,6 @@
 
 #include <PaneChildWindows.hxx>
 
-#include <strings.hrc>
-#include <sdresid.hxx>
-
 #include <sfx2/msg.hxx>
 #include <sfx2/objface.hxx>
 

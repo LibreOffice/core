@@ -25,7 +25,6 @@
 #include <vcl/button.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/dialog.hxx>
-#include <sdresid.hxx>
 
 // SdInsertPasteDlg
 class SD_DLLPUBLIC SdInsertPasteDlg : public ModalDialog

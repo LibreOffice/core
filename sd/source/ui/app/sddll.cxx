@@ -51,7 +51,6 @@
 #include <OutlineViewShell.hxx>
 #include <OutlineViewShellBase.hxx>
 #include <PaneChildWindows.hxx>
-#include <sdresid.hxx>
 #include <SpellDialogChildWindow.hxx>
 #include <SlideSorterViewShell.hxx>
 #include <SlideSorterViewShellBase.hxx>

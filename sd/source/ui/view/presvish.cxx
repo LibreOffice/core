@@ -30,7 +30,6 @@
 #include <svx/svxids.hrc>
 #include <svx/ruler.hxx>
 #include <FrameView.hxx>
-#include <sdresid.hxx>
 #include <DrawDocShell.hxx>
 #include <slideshow.hxx>
 #include <sdattr.hxx>
@@ -38,7 +37,6 @@
 #include <drawdoc.hxx>
 #include <drawview.hxx>
 #include <app.hrc>
-#include <strings.hrc>
 #include <ViewShellBase.hxx>
 #include <FactoryIds.hxx>
 

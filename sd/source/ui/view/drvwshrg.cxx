@@ -37,10 +37,8 @@
 #include <avmedia/mediaplayer.hxx>
 
 #include <app.hrc>
-#include <strings.hrc>
 
 #include <SpellDialogChildWindow.hxx>
-#include <sdresid.hxx>
 #include <DrawDocShell.hxx>
 #include <GraphicDocShell.hxx>
 #include <GraphicViewShell.hxx>

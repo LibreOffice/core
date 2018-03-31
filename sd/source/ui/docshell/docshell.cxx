@@ -59,7 +59,6 @@
 #include <sdmod.hxx>
 #include <strmname.h>
 #include <stlpool.hxx>
-#include <strings.hrc>
 #include <View.hxx>
 #include <drawdoc.hxx>
 #include <sdpage.hxx>
@@ -67,7 +66,6 @@
 #include <fupoor.hxx>
 #include <fusearch.hxx>
 #include <ViewShell.hxx>
-#include <sdresid.hxx>
 #include <slideshow.hxx>
 #include <drawview.hxx>
 #include <FrameView.hxx>

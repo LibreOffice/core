@@ -23,12 +23,10 @@
 #include <svx/svdograf.hxx>
 #include <svx/svdpagv.hxx>
 
-#include <strings.hrc>
 #include <ViewShell.hxx>
 #include <DrawViewShell.hxx>
 #include <View.hxx>
 #include <Window.hxx>
-#include <sdresid.hxx>
 #include <vcl/svapp.hxx>
 
 using namespace com::sun::star;

@@ -56,14 +56,11 @@
 #include <svx/gallery.hxx>
 #include <svl/itempool.hxx>
 
-#include <sdresid.hxx>
 #include <View.hxx>
 #include <sdpage.hxx>
 #include <Window.hxx>
 #include <stlpool.hxx>
 #include <drawdoc.hxx>
-
-#include <strings.hrc>
 
 namespace sd {
 

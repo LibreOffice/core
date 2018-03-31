@@ -28,11 +28,9 @@
 #include <sfx2/objface.hxx>
 
 #include <app.hrc>
-#include <strings.hrc>
 #include <GraphicDocShell.hxx>
 #include <DrawDocShell.hxx>
 #include <drawdoc.hxx>
-#include <sdresid.hxx>
 
 using namespace sd;
 #define ShellClass_GraphicDocShell

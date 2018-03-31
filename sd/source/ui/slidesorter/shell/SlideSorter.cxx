@@ -29,7 +29,6 @@
 #include <view/SlsTheme.hxx>
 #include <model/SlideSorterModel.hxx>
 
-#include <strings.hrc>
 #include <DrawController.hxx>
 #include <ViewShellBase.hxx>
 #include <ViewShellManager.hxx>
@@ -40,7 +39,6 @@
 #include <vcl/settings.hxx>
 
 #include <sfx2/dispatch.hxx>
-#include <sdresid.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;

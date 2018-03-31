@@ -19,8 +19,6 @@
 
 #include <morphdlg.hxx>
 
-#include <strings.hrc>
-#include <sdresid.hxx>
 #include <sdmod.hxx>
 #include <sdiocmpt.hxx>
 #include <svx/xfillit0.hxx>

@@ -31,7 +31,6 @@
 #include <editeng/unolingu.hxx>
 #include <comphelper/processfactory.hxx>
 #include <app.hrc>
-#include <strings.hrc>
 #include <drawdoc.hxx>
 #include <sdmod.hxx>
 #include <View.hxx>
@@ -39,7 +38,6 @@
 #include <DrawViewShell.hxx>
 #include <OutlineViewShell.hxx>
 #include <Window.hxx>
-#include <sdresid.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

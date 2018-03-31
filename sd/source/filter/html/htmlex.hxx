@@ -28,13 +28,11 @@
 #include <svtools/colrdlg.hxx>
 #include <svtools/ehdl.hxx>
 
-#include <strings.hrc>
 #include <DrawDocShell.hxx>
 #include <Window.hxx>
 #include <ViewShell.hxx>
 #include <assclass.hxx>
 
-#include <sdresid.hxx>
 #include "htmlpublishmode.hxx"
 
 #include <memory>

@@ -18,9 +18,7 @@
  */
 
 #include <PresentationViewShellBase.hxx>
-#include <sdresid.hxx>
 #include <DrawDocShell.hxx>
-#include <strings.hrc>
 #include <framework/FrameworkHelper.hxx>
 #include <framework/PresentationModule.hxx>
 

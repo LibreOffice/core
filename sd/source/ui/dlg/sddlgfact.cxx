@@ -19,7 +19,6 @@
 
 #include <sfx2/objsh.hxx>
 #include "sddlgfact.hxx"
-#include <strings.hrc>
 #include <BreakDlg.hxx>
 #include <copydlg.hxx>
 #include <custsdlg.hxx>

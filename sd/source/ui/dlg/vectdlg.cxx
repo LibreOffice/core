@@ -20,8 +20,6 @@
 #include <vcl/vclenum.hxx>
 #include <vcl/wrkwin.hxx>
 
-#include <strings.hrc>
-#include <sdresid.hxx>
 #include <DrawDocShell.hxx>
 #include <sdmod.hxx>
 #include <sdiocmpt.hxx>

@@ -44,6 +44,7 @@
 #include <unotools/pathoptions.hxx>
 
 #include <sdresid.hxx>
+#include <strings.hrc>
 #include <sdattr.hxx>
 #include <pubdlg.hxx>
 #include "htmlattr.hxx"

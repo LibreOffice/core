@@ -18,9 +18,7 @@
  */
 
 #include <OutlineViewShellBase.hxx>
-#include <sdresid.hxx>
 #include <DrawDocShell.hxx>
-#include <strings.hrc>
 #include <framework/FrameworkHelper.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/viewsh.hxx>

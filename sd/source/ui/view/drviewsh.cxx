@@ -28,10 +28,8 @@
 #include <comphelper/lok.hxx>
 
 #include <app.hrc>
-#include <strings.hrc>
 #include <sdpage.hxx>
 #include <FrameView.hxx>
-#include <sdresid.hxx>
 #include <drawdoc.hxx>
 #include <DrawDocShell.hxx>
 #include <Window.hxx>

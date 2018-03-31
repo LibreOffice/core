@@ -53,8 +53,6 @@
 #include <ViewShellBase.hxx>
 #include <DrawViewShell.hxx>
 #include <DrawController.hxx>
-#include <strings.hrc>
-#include <sdresid.hxx>
 #include <EventMultiplexer.hxx>
 
 using namespace ::com::sun::star;

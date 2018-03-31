@@ -23,9 +23,7 @@
 #include <algorithm>
 #include <EventMultiplexer.hxx>
 #include <cache/SlsPageCacheManager.hxx>
-#include <sdresid.hxx>
 #include <app.hrc>
-#include <strings.hrc>
 #include <slideshow.hxx>
 #include <unokywds.hxx>
 #include <svx/svxids.hrc>

@@ -40,9 +40,7 @@
 #include <ViewShellBase.hxx>
 #include <drawdoc.hxx>
 #include <app.hrc>
-#include <strings.hrc>
 #include <sdattr.hrc>
-#include <sdresid.hxx>
 #include <AccessibleSlideSorterView.hxx>
 #include <DrawDocShell.hxx>
 #include <DrawViewShell.hxx>

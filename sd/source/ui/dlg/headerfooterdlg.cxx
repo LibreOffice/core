@@ -26,8 +26,6 @@
 #include <editeng/editeng.hxx>
 #include <sfx2/viewfrm.hxx>
 
-#include <sdresid.hxx>
-
 #include <vcl/button.hxx>
 #include <vcl/combobox.hxx>
 #include <vcl/edit.hxx>

@@ -59,10 +59,7 @@
 #include <pgjump.hxx>
 #include "PaneHider.hxx"
 
-#include <strings.hrc>
-
 #include <bitmaps.hlst>
-#include <sdresid.hxx>
 #include <vcl/canvastools.hxx>
 #include <vcl/commandinfoprovider.hxx>
 #include <vcl/settings.hxx>

@@ -45,7 +45,6 @@
 
 #include <OutlineView.hxx>
 #include <Client.hxx>
-#include <sdresid.hxx>
 #include <DrawDocShell.hxx>
 #include <slideshow.hxx>
 #include <drawdoc.hxx>
@@ -87,7 +86,6 @@
 #include <editeng/editview.hxx>
 #include <editeng/editeng.hxx>
 #include <svl/poolitem.hxx>
-#include <strings.hrc>
 #include <strings.hxx>
 #include <AccessibleDocumentViewBase.hxx>
 

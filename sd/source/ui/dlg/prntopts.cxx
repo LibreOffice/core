@@ -19,7 +19,6 @@
 
 #include <sdattr.hxx>
 #include <optsitem.hxx>
-#include <sdresid.hxx>
 #include <prntopts.hxx>
 #include <app.hrc>
 #include <svl/intitem.hxx>

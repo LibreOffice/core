@@ -53,14 +53,12 @@
 #include <framework/FrameworkHelper.hxx>
 #include "TableDesignPane.hxx"
 #include <app.hrc>
-#include <strings.hrc>
 #include <tablefunction.hxx>
 #include <DrawViewShell.hxx>
 #include <drawdoc.hxx>
 #include <DrawDocShell.hxx>
 #include <Window.hxx>
 #include <drawview.hxx>
-#include <sdresid.hxx>
 #include <undo/undoobjects.hxx>
 
 #include <memory>

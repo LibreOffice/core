@@ -36,8 +36,6 @@
 
 #include <memory>
 
-#include <sdresid.hxx>
-
 namespace sd {
 
 #define SMALL_ICON_SIZE     16

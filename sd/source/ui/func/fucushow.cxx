@@ -22,7 +22,6 @@
 #include <svx/svxids.hrc>
 
 #include <app.hrc>
-#include <sdresid.hxx>
 #include <ViewShell.hxx>
 #include <Window.hxx>
 #include <drawdoc.hxx>

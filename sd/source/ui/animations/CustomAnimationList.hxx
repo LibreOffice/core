@@ -28,7 +28,6 @@
 #include <svtools/treelistbox.hxx>
 #include <CustomAnimationEffect.hxx>
 #include <CustomAnimationPreset.hxx>
-#include <strings.hrc>
 
 namespace sd {
 

@@ -19,9 +19,6 @@
 
 #include <svx/dialogs.hrc>
 
-#include <sdresid.hxx>
-
-#include <strings.hrc>
 #include <masterlayoutdlg.hxx>
 #include <drawdoc.hxx>
 

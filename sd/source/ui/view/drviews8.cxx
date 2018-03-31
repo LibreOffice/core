@@ -32,9 +32,7 @@
 #include <svx/svdpagv.hxx>
 
 #include <app.hrc>
-#include <strings.hrc>
 
-#include <sdresid.hxx>
 #include <Window.hxx>
 #include <drawview.hxx>
 #include <zoomlist.hxx>

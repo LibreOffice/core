@@ -33,7 +33,6 @@
 #include <sdattr.hxx>
 
 #include <View.hxx>
-#include <sdresid.hxx>
 #include <drawdoc.hxx>
 
 

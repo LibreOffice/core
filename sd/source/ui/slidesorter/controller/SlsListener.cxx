@@ -35,7 +35,6 @@
 #include <drawdoc.hxx>
 #include <DrawDocShell.hxx>
 
-#include <strings.hrc>
 #include <ViewShellBase.hxx>
 #include <ViewShellManager.hxx>
 #include <FrameView.hxx>
