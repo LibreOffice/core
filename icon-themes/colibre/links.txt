@@ -1221,9 +1221,20 @@ startmath/res/im21108.png cmd/lc_outlineformat.png
 # FolderTree expanded icon
 svtools/res/back_small.png cmd/sc_prevrecord.png
 svtools/res/back_large.png cmd/lc_prevrecord.png
+svtools/res/bmpfont.png cmd/color.png
 svtools/res/ed06.png dbaccess/res/pkey.png
 svtools/res/folder.png cmd/sc_open.png
 svtools/res/folderop.png cmd/sc_open.png
+svtools/res/info_large.png cmd/lc_alignleft.png
+svtools/res/info_small.png cmd/sc_alignleft.png
+svtools/res/my_docs.png cmd/lc_open.png
+svtools/res/new_doc.png cmd/lc_newdoc.png
+svtools/res/preview_large.png cmd/lc_printpreview.png
+svtools/res/preview_small.png cmd/sc_printpreview.png
+svtools/res/prnfont.png cmd/sc_charfontname.png
+svtools/res/samples.png cmd/lc_choosedesign.png
+svtools/res/scalfont.png cmd/sc_scaletext.png
+svtools/res/template.png cmd/lc_newdoc.png
 
 # svx
 # ==============================================
