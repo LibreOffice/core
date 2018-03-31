@@ -1550,9 +1550,9 @@ void SdrModel::Merge(SdrModel& rSourceModel,
             memset(pMasterNeed.get(), true, nSrcMasterPageCnt * sizeof(bool));
         } else {
             memset(pMasterNeed.get(), false, nSrcMasterPageCnt * sizeof(bool));
-            sal_uInt16 nAnf= bReverse ? nLastPageNum : nFirstPageNum;
+            sal_uInt16 nStart= bReverse ? nLastPageNum : nFirstPageNum;
             sal_uInt16 nEnd= bReverse ? nFirstPageNum : nLastPageNum;
-            for (sal_uInt16 i=nAnf; i<=nEnd; i++) {
+            for (sal_uInt16 i=nStart; i<=nEnd; i++) {
                 const SdrPage* pPg=rSourceModel.GetPage(i);
                 if(pPg->TRG_HasMasterPage())
                 {
@@ -1567,11 +1567,11 @@ void SdrModel::Merge(SdrModel& rSourceModel,
             }
         }
         // now determine the Mapping of the MasterPages
-        sal_uInt16 nAktMaPagNum=nDstMasterPageCnt;
+        sal_uInt16 nCurrentMaPagNum=nDstMasterPageCnt;
         for (sal_uInt16 i=0; i<nSrcMasterPageCnt; i++) {
             if (pMasterNeed[i]) {
-                pMasterMap[i]=nAktMaPagNum;
-                nAktMaPagNum++;
+                pMasterMap[i]=nCurrentMaPagNum;
+                nCurrentMaPagNum++;
                 nMasterNeed++;
             }
         }
