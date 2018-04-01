@@ -859,7 +859,7 @@ void ToolBarManager::CreateControllers()
             }
         }
 
-        //for update Controller via support visiable state
+        //for update Controller via support visible state
         Reference< XPropertySet > xPropSet( xController, UNO_QUERY );
         if ( xPropSet.is() )
         {
