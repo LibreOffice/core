@@ -62,6 +62,7 @@
 #include <drawinglayer/processor2d/objectinfoextractor2d.hxx>
 #include <drawinglayer/primitive2d/objectinfoprimitive2d.hxx>
 #include <memory>
+#include <vcl/GraphicLoader.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -282,7 +283,7 @@ sdr::contact::ViewContact* SdrGrafObj::CreateObjectSpecificViewContact()
 
 void SdrGrafObj::onGraphicChanged()
 {
-    if (!mpGraphicObject || mpGraphicObject->IsSwappedOut()) // don't force swap-in for this
+    if (!mpGraphicObject) // don't force swap-in for this
         return;
 
     const VectorGraphicDataPtr& rVectorGraphicDataPtr = mpGraphicObject->GetGraphic().getVectorGraphicData();
@@ -335,7 +336,6 @@ SdrGrafObj::SdrGrafObj()
     , mbIsSignatureLineShowSignDate(true)
     , mbIsSignatureLineCanAddComment(false)
 {
-    mpGraphicObject->SetSwapStreamHdl( LINK(this, SdrGrafObj, ImpSwapHdl) );
     onGraphicChanged();
 
     // #i118485# Shear allowed and possible now
@@ -361,7 +361,6 @@ SdrGrafObj::SdrGrafObj(const Graphic& rGraphic, const tools::Rectangle& rRect)
     , mbIsSignatureLineShowSignDate(true)
     , mbIsSignatureLineCanAddComment(false)
 {
-    mpGraphicObject->SetSwapStreamHdl( LINK(this, SdrGrafObj, ImpSwapHdl) );
     onGraphicChanged();
 
     // #i118485# Shear allowed and possible now
@@ -387,7 +386,6 @@ SdrGrafObj::SdrGrafObj(const Graphic& rGraphic)
     , mbIsSignatureLineShowSignDate(true)
     , mbIsSignatureLineCanAddComment(false)
 {
-    mpGraphicObject->SetSwapStreamHdl( LINK(this, SdrGrafObj, ImpSwapHdl) );
     onGraphicChanged();
 
     // #i118485# Shear allowed and possible now
@@ -413,7 +411,6 @@ void SdrGrafObj::SetGraphicObject(const GraphicObject& rGraphicObject)
 {
     mpGraphicObject.reset(new GraphicObject(rGraphicObject));
     mpReplacementGraphicObject.reset();
-    mpGraphicObject->SetSwapStreamHdl( LINK(this, SdrGrafObj, ImpSwapHdl) );
     mpGraphicObject->SetUserData();
     mbIsPreview = false;
     SetChanged();
@@ -445,11 +442,6 @@ const GraphicObject* SdrGrafObj::GetReplacementGraphicObject() const
             // Replacement graphic for PDF and metafiles is just the bitmap.
             const_cast<SdrGrafObj*>(this)->mpReplacementGraphicObject.reset(new GraphicObject(mpGraphicObject->GetGraphic().GetBitmapEx()));
         }
-        if (mpReplacementGraphicObject)
-        {
-            mpReplacementGraphicObject->SetSwapStreamHdl(
-                LINK(const_cast<SdrGrafObj*>(this), SdrGrafObj, ReplacementSwapHdl));
-        }
     }
 
     return mpReplacementGraphicObject.get();
@@ -473,7 +465,6 @@ void SdrGrafObj::SetGraphic( const Graphic& rGrf )
 
 const Graphic& SdrGrafObj::GetGraphic() const
 {
-    ForceSwapIn();
     return mpGraphicObject->GetGraphic();
 }
 
@@ -541,9 +532,10 @@ bool SdrGrafObj::IsEPS() const
     return mpGraphicObject->IsEPS();
 }
 
+// TODO Remove
 bool SdrGrafObj::IsSwappedOut() const
 {
-    return mbIsPreview || mpGraphicObject->IsSwappedOut();
+    return false;
 }
 
 const MapMode& SdrGrafObj::GetGrafPrefMapMode() const
@@ -599,32 +591,9 @@ Size SdrGrafObj::getOriginalSize() const
     return aSize;
 }
 
+// TODO Remove
 void SdrGrafObj::ForceSwapIn() const
 {
-    if( mbIsPreview && mpGraphicObject->HasUserData() )
-    {
-        // removing preview graphic
-        const OUString aUserData( mpGraphicObject->GetUserData() );
-
-        Graphic aEmpty;
-        mpGraphicObject->SetGraphic( aEmpty );
-        mpGraphicObject->SetUserData( aUserData );
-
-        const_cast< SdrGrafObj* >( this )->mbIsPreview = false;
-    }
-    if ( pGraphicLink && mpGraphicObject->IsSwappedOut() )
-        ImpUpdateGraphicLink( false );
-    else
-        mpGraphicObject->FireSwapInRequest();
-
-    if( mpGraphicObject->IsSwappedOut() ||
-        ( mpGraphicObject->GetType() == GraphicType::NONE ) ||
-        ( mpGraphicObject->GetType() == GraphicType::Default ) )
-    {
-        Graphic aDefaultGraphic;
-        aDefaultGraphic.SetDefaultType();
-        mpGraphicObject->SetGraphic( aDefaultGraphic );
-    }
 }
 
 void SdrGrafObj::ImpRegisterLink()
@@ -663,7 +632,7 @@ void SdrGrafObj::SetGraphicLink(const OUString& rFileName, const OUString& rRefe
     aFilterName = rFilterName;
     ImpRegisterLink();
     mpGraphicObject->SetUserData();
-    mpGraphicObject->SetSwapState();
+    SetGraphic(vcl::graphic::loadFromURL(aFileName));
 }
 
 void SdrGrafObj::ReleaseGraphicLink()
@@ -887,7 +856,6 @@ SdrObject* SdrGrafObj::getFullDragClone() const
     // temporary interaction object and load graphic
     if(pRetval && IsLinkedGraphic())
     {
-        pRetval->ForceSwapIn();
         pRetval->ReleaseGraphicLink();
     }
 
@@ -1048,11 +1016,6 @@ void SdrGrafObj::SetModel( SdrModel* pNewModel )
 
     if( bChg )
     {
-        if( mpGraphicObject->HasUserData() )
-        {
-            ForceSwapIn();
-        }
-
         if( pGraphicLink != nullptr )
             ImpDeregisterLink();
     }
@@ -1328,144 +1291,6 @@ void SdrGrafObj::AdjustToMaxRect( const tools::Rectangle& rMaxRect, bool bShrink
         aPos.AdjustY( -(aSize.Height() / 2) );
         SetLogicRect( tools::Rectangle( aPos, aSize ) );
     }
-}
-
-IMPL_LINK(SdrGrafObj, ReplacementSwapHdl, const GraphicObject*, pO, SvStream*)
-{
-    // replacement image is always swapped
-    if (pO->IsInSwapOut())
-    {
-        SdrSwapGraphicsMode const nSwapMode(pModel->GetSwapGraphicsMode());
-        if (nSwapMode & SdrSwapGraphicsMode::TEMP)
-        {
-            return GRFMGR_AUTOSWAPSTREAM_TEMP;
-        }
-    }
-    else if (pO->IsInSwapIn())
-    {
-        return GRFMGR_AUTOSWAPSTREAM_TEMP;
-    }
-    else
-    {
-        assert(!"why is swap handler being called?");
-    }
-
-    return GRFMGR_AUTOSWAPSTREAM_NONE;
-}
-
-IMPL_LINK( SdrGrafObj, ImpSwapHdl, const GraphicObject*, pO, SvStream* )
-{
-    SvStream* pRet = GRFMGR_AUTOSWAPSTREAM_NONE;
-
-    if( pO->IsInSwapOut() )
-    {
-        if( pModel && !mbIsPreview && pModel->IsSwapGraphics() && mpGraphicObject->GetSizeBytes() > 20480 )
-        {
-            // test if this object is visualized from someone
-            // ## test only if there are VOCs other than the preview renderer
-            if(!GetViewContact().HasViewObjectContacts())
-            {
-                const SdrSwapGraphicsMode nSwapMode = pModel->GetSwapGraphicsMode();
-
-                if( ( pGraphicLink ) &&
-                    ( nSwapMode & SdrSwapGraphicsMode::PURGE ) )
-                {
-                    pRet = GRFMGR_AUTOSWAPSTREAM_LINK;
-                }
-                else if( nSwapMode & SdrSwapGraphicsMode::TEMP )
-                {
-                    pRet = GRFMGR_AUTOSWAPSTREAM_TEMP;
-                    mpGraphicObject->SetUserData();
-                }
-
-                // #i102380#
-                sdr::contact::ViewContactOfGraphic* pVC = dynamic_cast< sdr::contact::ViewContactOfGraphic* >(&GetViewContact());
-
-                if(pVC)
-                {
-                    pVC->flushGraphicObjects();
-                }
-            }
-        }
-    }
-    else if( pO->IsInSwapIn() )
-    {
-        // can be loaded from the original document stream later
-        if( pModel != nullptr )
-        {
-            if(mpGraphicObject->HasUserData())
-            {
-                ::comphelper::LifecycleProxy proxy;
-                OUString aUserData = mpGraphicObject->GetUserData();
-                uno::Reference<io::XInputStream> const xStream(
-                    pModel->GetDocumentStream(aUserData, proxy));
-
-                std::unique_ptr<SvStream> const pStream( (xStream.is())
-                        ? ::utl::UcbStreamHelper::CreateStream(xStream)
-                        : nullptr );
-
-                if( pStream != nullptr )
-                {
-                    Graphic aGraphic;
-
-                    std::unique_ptr<css::uno::Sequence< css::beans::PropertyValue > > pFilterData;
-
-                    if(mbInsidePaint && !GetViewContact().HasViewObjectContacts())
-                    {
-                        pFilterData.reset(new css::uno::Sequence< css::beans::PropertyValue >( 3 ));
-
-                        const css::awt::Size aPreviewSizeHint( 64, 64 );
-                        const bool bAllowPartialStreamRead = true;
-                        // create <GfxLink> instance also for previews in order to avoid that its corresponding
-                        // data is cleared in the graphic cache entry in case that the preview data equals the complete graphic data
-                        const bool bCreateNativeLink = true;
-                        (*pFilterData)[ 0 ].Name = "PreviewSizeHint";
-                        (*pFilterData)[ 0 ].Value <<= aPreviewSizeHint;
-                        (*pFilterData)[ 1 ].Name = "AllowPartialStreamRead";
-                        (*pFilterData)[ 1 ].Value <<= bAllowPartialStreamRead;
-                        (*pFilterData)[ 2 ].Name = "CreateNativeLink";
-                        (*pFilterData)[ 2 ].Value <<= bCreateNativeLink;
-
-                        mbIsPreview = true;
-                    }
-
-                    if(!GraphicFilter::GetGraphicFilter().ImportGraphic(
-                        aGraphic, aUserData, *pStream,
-                        GRFILTER_FORMAT_DONTKNOW, nullptr, GraphicFilterImportFlags::NONE, pFilterData.get()))
-                    {
-                        const OUString aNewUserData( mpGraphicObject->GetUserData() );
-                        mpGraphicObject->SetGraphic( aGraphic );
-                        if( mbIsPreview )
-                        {
-                            mpGraphicObject->SetUserData(aNewUserData);
-                        }
-                        else
-                        {
-                            mpGraphicObject->SetUserData();
-                        }
-
-                        // Graphic successfully swapped in.
-                        pRet = GRFMGR_AUTOSWAPSTREAM_LOADED;
-                    }
-                    pFilterData.reset();
-
-                    pStream->ResetError();
-                }
-            }
-            else if( !ImpUpdateGraphicLink( false ) )
-            {
-                pRet = GRFMGR_AUTOSWAPSTREAM_TEMP;
-            }
-            else
-            {
-                pRet = GRFMGR_AUTOSWAPSTREAM_LOADED;
-            }
-        }
-        else
-            pRet = GRFMGR_AUTOSWAPSTREAM_TEMP;
-    }
-
-    return pRet;
 }
 
 void SdrGrafObj::SetGrafAnimationAllowed(bool bNew)
