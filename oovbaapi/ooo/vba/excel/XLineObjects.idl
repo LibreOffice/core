@@ -30,7 +30,7 @@ module ooo {  module vba { module excel {
     <p>The following sheet symbols represent collections of line objects, and
     therefore implement this interface:</p>
     <ul><li>Arcs: arc objects, and</li>
-    <li>Lines: straight line ojects.</li></ul>
+    <li>Lines: straight line objects.</li></ul>
 
     <p>This symbol is now deprecated in VBA but kept for compatibility with old
     VBA scripts.</p>
