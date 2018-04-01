@@ -86,7 +86,6 @@ void ScAnchorTest::testUndoAnchor()
     CPPUNIT_ASSERT(pObject->IsLinkedGraphic());
 
     const GraphicObject& rGraphicObj = pObject->GetGraphicObject(true);
-    CPPUNIT_ASSERT(!rGraphicObj.IsSwappedOut());
     CPPUNIT_ASSERT_EQUAL(int(GraphicType::Bitmap), int(rGraphicObj.GetGraphic().GetType()));
     CPPUNIT_ASSERT_EQUAL(sal_uLong(864900), rGraphicObj.GetSizeBytes());
 
