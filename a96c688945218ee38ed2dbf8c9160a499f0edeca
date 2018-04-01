@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_d87ec2ad",
+        "filename": "cui/source/options/optinet2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 514,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-04-01T16:51:12Z",
+      "side": 1,
+      "message": "rather pull the \n    bEnable \u0026\u0026 !officecfg::Inet::Settings::ooInetHTTPProxyName::isReadOnly()\n\nand similar parts out in a couple of local variables",
+      "revId": "a96c688945218ee38ed2dbf8c9160a499f0edeca",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
