@@ -25,7 +25,7 @@
 module com {  module sun {  module star { module script {
 
 /** Allows an UNO sequence that is passed between different language
-    boundries to indicate it prefers to be represented as a multidimensional
+    boundaries to indicate it prefers to be represented as a multidimensional
     array with 0 or 1 based indices. UNO does not natively represent
     Multi-Dimensional arrays, instead a sequence can have elements that are
     themselves sequences (an array of arrays ). <p>Some languages ( example

@@ -2761,7 +2761,7 @@ SvStream& WriteGDIMetaFile( SvStream& rOStm, const GDIMetaFile& rGDIMetaFile )
         {
             SAL_WARN( "vcl", "GDIMetaFile would normally be written in old SVM1 format by this call. "
                 "The current implementation always writes in VCLMTF format. "
-                "Please set environment variable SAL_ENABLE_SVM1 to '1' to reenable old behavior" );
+                "Please set environment variable SAL_ENABLE_SVM1 to '1' to re-enable old behavior" );
         }
 #endif // DEBUG
     }

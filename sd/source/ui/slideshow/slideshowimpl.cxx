@@ -2788,7 +2788,7 @@ void SAL_CALL SlideshowImpl::gotoNextSlide(  )
     else
     {
         // if this is a show, ignore user inputs and
-        // start 20ms timer to reenable inputs to filter
+        // start 20ms timer to re-enable inputs to filter
         // buffered inputs during slide transition
         if( meAnimationMode == ANIMATIONMODE_SHOW )
         {

@@ -283,13 +283,13 @@
     <xsl:template name="field_get_date_format">
         <xsl:param name="field_date_stylename"/>
         <xsl:param name="field_date_value"/>
-        <!-- this template retun null date format ATM-->
+        <!-- this template return null date format ATM-->
         <xsl:text/>
     </xsl:template>
     <xsl:template name="field_get_time_format">
         <xsl:param name="field_time_stylename"/>
         <xsl:param name="field_time_value"/>
-        <!-- this template retun null date format ATM-->
+        <!-- this template return null date format ATM-->
         <xsl:text/>
     </xsl:template>
     <xsl:template match="text:template-name">
