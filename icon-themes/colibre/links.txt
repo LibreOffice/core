@@ -1074,6 +1074,9 @@ res/sx10769.png cmd/sc_scrollbar.png
 res/sx18002.png res/plus.png
 res/sx18003.png res/minus.png
 
+res/basbrk.png cmd/sc_addwatch.png
+res/fp015.png cmd/sc_starshapes.png
+
 # sc
 # ==============================================
 sc/res/lc26047.png cmd/lc_dbviewfunctions.png
@@ -1395,6 +1398,7 @@ sw/res/sr20018.png cmd/sc_inserttable.png
 sw/res/sr20019.png cmd/sc_remove.png
 
 sw/res/sx03.png cmd/sc_dbqueryedit.png
+svx/res/reload.png cmd/sc_reload.png
 
 # res
 sw/res/all_left.png cmd/sc_firstrecord.png
