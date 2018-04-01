@@ -317,7 +317,7 @@ double BesselK( double fNum, sal_Int32 nOrder )
     Chapter 6.3.2 , algorithm 6.24
     The source is in German.
     See #i31656# for a commented version of the implementation, attachment #desc6
-    http://www.openoffice.org/nonav/issues/showattachment.cgi/63609/Comments%20to%20the%20implementation%20of%20the%20Bessel%20functions.odt
+    https://bz.apache.org/ooo/attachment.cgi?id=63609
 */
 
 /// @throws IllegalArgumentException
@@ -372,7 +372,7 @@ double Bessely0( double fX )
 }
 
 // See #i31656# for a commented version of this implementation, attachment #desc6
-// http://www.openoffice.org/nonav/issues/showattachment.cgi/63609/Comments%20to%20the%20implementation%20of%20the%20Bessel%20functions.odt
+// https://bz.apache.org/ooo/attachment.cgi?id=63609
 /// @throws IllegalArgumentException
 /// @throws NoConvergenceException
 double Bessely1( double fX )

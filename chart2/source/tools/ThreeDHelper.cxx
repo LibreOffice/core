@@ -408,8 +408,8 @@ void ThreeDHelper::convertElevationRotationDegToXYZAngleRad(
     double& rfXAngleRad, double& rfYAngleRad, double& rfZAngleRad)
 {
     // for a description of the algorithm see issue 72994
-    //http://www.openoffice.org/issues/show_bug.cgi?id=72994
-    //http://www.openoffice.org/nonav/issues/showattachment.cgi/50608/DescriptionCorrected.odt
+    //https://bz.apache.org/ooo/show_bug.cgi?id=72994
+    //https://bz.apache.org/ooo/attachment.cgi?id=50608
 
     lcl_shiftAngleToIntervalZeroTo360( nElevationDeg );
     lcl_shiftAngleToIntervalZeroTo360( nRotationDeg );
@@ -590,8 +590,8 @@ void ThreeDHelper::convertXYZAngleRadToElevationRotationDeg(
     double fXRad, double fYRad, double fZRad)
 {
     // for a description of the algorithm see issue 72994
-    //http://www.openoffice.org/issues/show_bug.cgi?id=72994
-    //http://www.openoffice.org/nonav/issues/showattachment.cgi/50608/DescriptionCorrected.odt
+    //https://bz.apache.org/ooo/show_bug.cgi?id=72994
+    //https://bz.apache.org/ooo/attachment.cgi?id=50608
 
     double R = 0.0; //Rotation in Rad
     double E = 0.0; //Elevation in Rad

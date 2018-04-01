@@ -117,7 +117,7 @@ namespace sw
             this captures such ones and clips them to values which are
             still outside the document, but of a value that doesn't cause
             problems for writer's layout, e.g. see
-            http://www.openoffice.org/issues/show_bug.cgi?id=i9245
+            https://bz.apache.org/ooo/show_bug.cgi?id=i9245
 
             @param nIn
 
