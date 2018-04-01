@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_bb1d8868",
+        "filename": "svx/source/tbxctrls/tbunosearchcontrollers.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1281,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-04-01T20:19:37Z",
+      "side": 1,
+      "message": "you\u0027re setting the width to 16 in one place, but using spaces in the other? Won\u0027t that lead to unnecessary layout jumping? Just asking, maybe there is a good reason",
+      "revId": "d6a3896237797d79a766f5a704e2e615f51e63ba",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
