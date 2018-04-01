@@ -1591,16 +1591,8 @@ bool ToolBox::ImplCalcItem()
                 // add in drop down arrow
                 if( item.mnBits & ToolBoxItemBits::DROPDOWN )
                 {
-                    if ( meTextPosition == ToolBoxTextPosition::Right )
-                    {
-                        item.maItemSize.AdjustWidth(nDropDownArrowWidth );
-                        item.mnDropDownArrowWidth = nDropDownArrowWidth;
-                    }
-                    else
-                    {
-                        item.maItemSize.AdjustHeight(nDropDownArrowWidth );
-                        item.mnDropDownArrowWidth = nDropDownArrowWidth;
-                    }
+                    item.maItemSize.AdjustWidth(nDropDownArrowWidth );
+                    item.mnDropDownArrowWidth = nDropDownArrowWidth;
                 }
 
                 // text items will be rotated in vertical mode
@@ -2716,7 +2708,7 @@ void ToolBox::ImplDrawItem(vcl::RenderContext& rRenderContext, ImplToolItems::si
             ((pItem->mnBits & ToolBoxItemBits::DROPDOWNONLY) != ToolBoxItemBits::DROPDOWNONLY) )
             || ( ( pItem->mnBits & ToolBoxItemBits::DROPDOWN) && ( meTextPosition == ToolBoxTextPosition::Bottom ) ) )
         {
-            tools::Rectangle aArrowRect = pItem->GetDropDownRect( mbHorz && ( meTextPosition == ToolBoxTextPosition::Right ) );
+            tools::Rectangle aArrowRect = pItem->GetDropDownRect( mbHorz );
             if( aArrowRect.Top() == pItem->maRect.Top() ) // dropdown arrow on right side
                 aBtnSize.AdjustWidth( -(aArrowRect.GetWidth()) );
             else if ( !( (meTextPosition == ToolBoxTextPosition::Bottom)
@@ -2883,16 +2875,10 @@ void ToolBox::ImplDrawItem(vcl::RenderContext& rRenderContext, ImplToolItems::si
             }
             else
             {
-                long nArrowHeight = ( pItem->mnBits & ToolBoxItemBits::DROPDOWN )
-                                        ? TB_DROPDOWNARROWWIDTH : 0;
-
-                // only if button is a "dropdown only" type then is painted as a single button
-                // and we need to move text above the arrow
-                if ( ImplGetSVData()->maNWFData.mbToolboxDropDownSeparate
-                    && (pItem->mnBits & ToolBoxItemBits::DROPDOWNONLY) != ToolBoxItemBits::DROPDOWNONLY )
-                    nArrowHeight = 0;
-
-                nTextOffY += nBtnHeight - aTxtSize.Height() - nArrowHeight;
+                // center horizontally
+                nTextOffX += (nBtnWidth-aTxtSize.Width() - TB_IMAGETEXTOFFSET)/2;
+                // set vertical position
+                nTextOffY += nBtnHeight - aTxtSize.Height();
             }
         }
 
@@ -2918,7 +2904,7 @@ void ToolBox::ImplDrawItem(vcl::RenderContext& rRenderContext, ImplToolItems::si
     // paint optional drop down arrow
     if ( pItem->mnBits & ToolBoxItemBits::DROPDOWN )
     {
-        tools::Rectangle aDropDownRect( pItem->GetDropDownRect( mbHorz && ( meTextPosition == ToolBoxTextPosition::Right ) ) );
+        tools::Rectangle aDropDownRect( pItem->GetDropDownRect( mbHorz ) );
         bool bSetColor = true;
         if ( !pItem->mbEnabled || !IsEnabled() )
         {
@@ -3495,7 +3481,7 @@ void ToolBox::MouseButtonDown( const MouseEvent& rMEvt )
                 if( mpData->m_aItems[nNewPos].mnBits & ToolBoxItemBits::DROPDOWN )
                 {
                     if( ( (mpData->m_aItems[nNewPos].mnBits & ToolBoxItemBits::DROPDOWNONLY) == ToolBoxItemBits::DROPDOWNONLY)
-                        || mpData->m_aItems[nNewPos].GetDropDownRect( mbHorz && ( meTextPosition == ToolBoxTextPosition::Right ) ).IsInside( aMousePos ))
+                        || mpData->m_aItems[nNewPos].GetDropDownRect( mbHorz ).IsInside( aMousePos ))
                     {
                         // dropdownonly always triggers the dropdown handler, over the whole button area
 
