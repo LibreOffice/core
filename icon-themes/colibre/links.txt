@@ -999,6 +999,72 @@ res/lc10715.png cmd/lc_datafilterstandardfilter.png
 res/lc10716.png cmd/lc_datafilterautofilter.png
 res/lc10853.png cmd/lc_recsearch.png
 
+res/lx03127.png res/lx03126.png
+res/lx03130.png res/lx03123.png
+res/lx03137.png res/lx03125.png
+res/lx03140.png res/lx03125.png
+res/lx03145.png res/lx03144.png
+res/lx03152.png res/lx03125.png
+res/lx03153.png res/lx03125.png
+res/lx03154.png res/lx03125.png
+res/lx03155.png res/lx03125.png
+res/lx03158.png res/lx03125.png
+res/lx03160.png res/lx03125.png
+res/lx03219.png res/lx03125.png
+res/lx03162.png res/lx03156.png
+res/lx03163.png res/lx03156.png
+res/lx03188.png res/lx03126.png
+res/lx03218.png res/lx03217.png
+res/lx03220.png res/lx03217.png
+res/lx03221.png res/lx03217.png
+res/lx03222.png res/lx03217.png
+res/lx03227.png res/lx03217.png
+res/lx03228.png res/lx03217.png
+
+res/sx03127.png res/sx03126.png
+res/sx03130.png res/sx03123.png
+res/sx03137.png res/sx03125.png
+res/sx03140.png res/sx03125.png
+res/sx03145.png res/sx03144.png
+res/sx03152.png res/sx03125.png
+res/sx03153.png res/sx03125.png
+res/sx03154.png res/sx03125.png
+res/sx03155.png res/sx03125.png
+res/sx03158.png res/sx03125.png
+res/sx03160.png res/sx03125.png
+res/sx03219.png res/sx03125.png
+res/sx03162.png res/sx03156.png
+res/sx03163.png res/sx03156.png
+res/sx03188.png res/sx03126.png
+res/sx03218.png res/sx03217.png
+res/sx03220.png res/sx03217.png
+res/sx03221.png res/sx03217.png
+res/sx03222.png res/sx03217.png
+res/sx03227.png res/sx03217.png
+res/sx03228.png res/sx03217.png
+
+res/harddisk_16.png cmd/sc_open.png
+res/lx03164.png cmd/lc_open.png
+res/lx03167.png cmd/lc_openremote.png
+res/newdoc.png cmd/lc_open.png
+res/oleobj.png cmd/lc_insertobject.png
+res/lx03256.png cmd/lc_insertplugin.png
+res/plugin.png cmd/lc_insertplugin.png
+res/sx10144.png cmd/sc_checkbox.png
+res/sx10593.png cmd/sc_switchxformsdesignmode.png
+res/sx10597.png cmd/sc_color.png
+res/sx10598.png cmd/sc_group.png
+
+res/sc05500.png cmd/sc_adddirect.png
+res/sc05678.png cmd/sc_inserthyperlink.png
+res/sc10851.png cmd/sc_inserthyperlink.png
+res/sx03164.png cmd/sc_open.png
+res/sx03187.png cmd/sc_inserttable.png
+res/sx03201.png cmd/sc_copy.png
+res/sx03202.png cmd/sc_copy.png
+res/sx03256.png cmd/sc_insertplugin.png
+
+
 res/lx03165.png cmd/lc_save.png
 res/lx03189.png cmd/lc_open.png
 res/sc05501.png cmd/sc_open.png
@@ -1009,8 +1075,7 @@ res/mainapp_16.png cmd/sc_showsinglepage.png
 res/mainapp_16.png cmd/sc_showsinglepage.png
 res/mainapp_16_8.png cmd/sc_showsinglepage.png
 
-res/mainapp.png res/newdoc.png
-res/mainapp_32.png res/newdoc.png
+res/mainapp_32.png res/mainapp_32_8.png
 res/printeradmin_16_8.png res/printeradmin_16.png
 res/printeradmin_32_8.png res/printeradmin_32.png
 res/reload.png cmd/sc_reload.png
