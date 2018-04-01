@@ -222,7 +222,7 @@ void GraphCtrl::Resize()
 
 void GraphCtrl::Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
 {
-    // #i72889# used splitted repaint to be able to paint an own background
+    // #i72889# used split repaint to be able to paint an own background
     // even to the buffered view
     const bool bGraphicValid(GraphicType::NONE != aGraphic.GetType());
 
