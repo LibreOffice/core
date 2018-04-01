@@ -60,7 +60,7 @@ void AccObjectContainerEventListener::HandleStateChangedEvent(Any oldValue, Any 
 }
 /**
  *  handle the VISIBLE_DATA_CHANGED event
- *  For SHAPES, the visiable_data_changed event should be mapped to LOCATION_CHANGED event
+ *  For SHAPES, the visible_data_changed event should be mapped to LOCATION_CHANGED event
   */
 void AccObjectContainerEventListener::HandleVisibleDataChangedEvent()
 {
