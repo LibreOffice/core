@@ -234,7 +234,7 @@ struct BasicTest : public test::BootstrapFixture
     {
         try
         {
-            // We DONT expect exception here, as mxWarningInStream is valid XML Doc
+            // We DON'T expect exception here, as mxWarningInStream is valid XML Doc
             CPPUNIT_ASSERT_MESSAGE("Valid input file did not result in XDocument #2",
                 mxDomBuilder->parse(
                     uno::Reference<io::XInputStream>(
