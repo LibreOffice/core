@@ -164,7 +164,7 @@ static void lcl_CallModify( SwGrfNode& rGrfNd, SfxPoolItem& rItem )
                 bGraphicPieceArrived = false;
             }
 
-            pSwGrfNode->SetGraphic(aGrf, rGrfObj.GetLink());
+            pSwGrfNode->SetGraphic(aGrf, "");
             bUpdate = true;
 
             // In order for the Node to have the right transparency status

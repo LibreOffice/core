@@ -507,41 +507,6 @@ bool Graphic::IsDummyContext()
     return mxImpGraphic->ImplIsDummyContext();
 }
 
-bool Graphic::SwapOut()
-{
-    ImplTestRefCount();
-    return mxImpGraphic->ImplSwapOut();
-}
-
-void Graphic::SwapOutAsLink()
-{
-    ImplTestRefCount();
-    mxImpGraphic->ImplSwapOutAsLink();
-}
-
-bool Graphic::SwapOut( SvStream* pOStream )
-{
-    ImplTestRefCount();
-    return mxImpGraphic->ImplSwapOut( pOStream );
-}
-
-bool Graphic::SwapIn()
-{
-    ImplTestRefCount();
-    return mxImpGraphic->ImplSwapIn();
-}
-
-bool Graphic::SwapIn( SvStream* pStrm )
-{
-    ImplTestRefCount();
-    return mxImpGraphic->ImplSwapIn( pStrm );
-}
-
-bool Graphic::IsSwapOut() const
-{
-    return mxImpGraphic->ImplIsSwapOut();
-}
-
 void Graphic::SetLink( const GfxLink& rGfxLink )
 {
     ImplTestRefCount();
