@@ -39,6 +39,7 @@
 #include <vcl/FilterConfigItem.hxx>
 #include <vcl/graphictools.hxx>
 #include <vcl/weld.hxx>
+#include <vcl/BitmapConverter.hxx>
 #include <strings.hrc>
 
 #include <math.h>
@@ -349,11 +350,13 @@ bool PSWriter::WritePS( const Graphic& rGraphic, SvStream& rTargetStream, Filter
         if ( mbGrayScale )
         {
             BitmapEx aTempBitmapEx( rGraphic.GetBitmapEx() );
-            aTempBitmapEx.Convert( BmpConversion::N8BitGreys );
+            BitmapFilter::Filter(aTempBitmapEx, BitmapConverter(BmpConversion::N8BitGreys));
             nErrCode = GraphicConverter::Export( rTargetStream, aTempBitmapEx, ConvertDataFormat::TIF ) ;
         }
         else
+        {
             nErrCode = GraphicConverter::Export( rTargetStream, rGraphic, ConvertDataFormat::TIF ) ;
+        }
 
         if ( nErrCode == ERRCODE_NONE )
         {
