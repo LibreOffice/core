@@ -15,8 +15,6 @@
 "ScTabViewObj";"com::sun::star::sheet::XCellRangeReferrer";"getReferredCells()"
 "ScTabViewObj";"com::sun::star::container::XElementAccess";"getElementType()"
 "ScTabViewObj";"com::sun::star::container::XElementAccess";"hasElements()"
-"ScTabViewObj";"com::sun::star::sheet::XActivationBroadcaster#optional";"addActivationEventListener()"
-"ScTabViewObj";"com::sun::star::sheet::XActivationBroadcaster#optional";"removeActivationEventListener()"
 "ScTabViewObj";"com::sun::star::sheet::XRangeSelection";"startRangeSelection()"
 "ScTabViewObj";"com::sun::star::sheet::XRangeSelection";"abortRangeSelection()"
 "ScTabViewObj";"com::sun::star::sheet::XRangeSelection";"addRangeSelectionListener()"
