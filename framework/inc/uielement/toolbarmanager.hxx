@@ -133,7 +133,7 @@ class ToolBarManager : public ToolbarManager_Base
         void RemoveControllers();
         void CreateControllers();
         void UpdateControllers();
-        //for update controller via Support Visiable
+        //for update controller via Support Visible
         void UpdateController( const css::uno::Reference< css::frame::XToolbarController >& xController);
         //end
         void AddFrameActionListener();
