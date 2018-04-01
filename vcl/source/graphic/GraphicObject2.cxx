@@ -33,6 +33,7 @@
 #include <vcl/virdev.hxx>
 #include "grfcache.hxx"
 #include <vcl/GraphicObject.hxx>
+#include <vcl/BitmapConverter.hxx>
 #include <bitmapwriteaccess.hxx>
 #include <memory>
 
@@ -1409,18 +1410,18 @@ bool GraphicManager::ImplCreateOutput( OutputDevice* pOut,
 
 void GraphicManager::ImplAdjust( BitmapEx& rBmpEx, const GraphicAttr& rAttr, GraphicAdjustmentFlags nAdjustmentFlags )
 {
-    GraphicAttr aAttr( rAttr );
+    GraphicAttr aAttr(rAttr);
 
-    if( ( nAdjustmentFlags & GraphicAdjustmentFlags::DRAWMODE ) && aAttr.IsSpecialDrawMode() )
+    if ((nAdjustmentFlags & GraphicAdjustmentFlags::DRAWMODE) && aAttr.IsSpecialDrawMode())
     {
-        switch( aAttr.GetDrawMode() )
+        switch (aAttr.GetDrawMode())
         {
             case GraphicDrawMode::Mono:
-                rBmpEx.Convert( BmpConversion::N1BitThreshold );
+                BitmapFilter::Filter(rBmpEx, BitmapConverter(BmpConversion::N1BitThreshold));
             break;
 
             case GraphicDrawMode::Greys:
-                rBmpEx.Convert( BmpConversion::N8BitGreys );
+                BitmapFilter::Filter(rBmpEx, BitmapConverter(BmpConversion::N8BitGreys));
             break;
 
             case GraphicDrawMode::Watermark:
@@ -1431,7 +1432,7 @@ void GraphicManager::ImplAdjust( BitmapEx& rBmpEx, const GraphicAttr& rAttr, Gra
             break;
 
             default:
-            break;
+                break;
         }
     }
 
