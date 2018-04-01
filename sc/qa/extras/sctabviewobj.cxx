@@ -9,15 +9,16 @@
 
 #include <test/calc_unoapi_test.hxx>
 #include <test/sheet/spreadsheetviewsettings.hxx>
+#include <test/sheet/xactivationbroadcaster.hxx>
 #include <test/sheet/xspreadsheetview.hxx>
 #include <test/sheet/xviewfreezable.hxx>
 #include <test/sheet/xviewsplitable.hxx>
 
+#include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
-#include <com/sun/star/sheet/XViewSplitable.hpp>
 
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/uno/Reference.hxx>
@@ -25,10 +26,11 @@
 using namespace css;
 using namespace css::uno;
 
-namespace sc_apitest {
-
+namespace sc_apitest
+{
 class ScTabViewObj : public CalcUnoApiTest,
                      public apitest::SpreadsheetViewSettings,
+                     public apitest::XActivationBroadcaster,
                      public apitest::XSpreadsheetView,
                      public apitest::XViewFreezable,
                      public apitest::XViewSplitable
@@ -37,6 +39,8 @@ public:
     ScTabViewObj();
 
     virtual uno::Reference< uno::XInterface > init() override;
+    virtual uno::Reference<uno::XInterface> getXSpreadsheet(const sal_Int16 nNumber = 0) override;
+
     virtual void setUp() override;
     virtual void tearDown() override;
 
@@ -44,6 +48,9 @@ public:
 
     // SpreadsheetViewSettings
     CPPUNIT_TEST(testSpreadsheetViewSettingsProperties);
+
+    // XActivationBroadcaster
+    CPPUNIT_TEST(testAddRemoveActivationEventListener);
 
     // XSpreadsheetView
     CPPUNIT_TEST(testGetSetActiveSheet);
@@ -67,10 +74,25 @@ ScTabViewObj::ScTabViewObj()
 
 uno::Reference< uno::XInterface > ScTabViewObj::init()
 {
-    uno::Reference< sheet::XSpreadsheetDocument > xSheetDoc(mxComponent, uno::UNO_QUERY_THROW);
-    uno::Reference< frame::XModel > xModel(xSheetDoc, uno::UNO_QUERY_THROW);
+    uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_MESSAGE("no calc document", xDoc.is());
+
+    uno::Reference<frame::XModel> xModel(xDoc, uno::UNO_QUERY_THROW);
 
     return xModel->getCurrentController();
+}
+
+uno::Reference<uno::XInterface> ScTabViewObj::getXSpreadsheet(const sal_Int16 nNumber)
+{
+    uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_MESSAGE("no calc document", xDoc.is());
+
+    uno::Reference<sheet::XSpreadsheets> xSheets(xDoc->getSheets(), UNO_QUERY_THROW);
+    xSheets->insertNewByName("Sheet2", 2);
+    uno::Reference<container::XIndexAccess> xIndex(xDoc->getSheets(), UNO_QUERY_THROW);
+    uno::Reference<sheet::XSpreadsheet> xSheet(xIndex->getByIndex(nNumber), UNO_QUERY_THROW);
+
+    return xSheet;
 }
 
 void ScTabViewObj::setUp()
@@ -87,7 +109,7 @@ void ScTabViewObj::tearDown()
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScTabViewObj);
 
-} // end namespace
+} // namespace sc_apitest
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 

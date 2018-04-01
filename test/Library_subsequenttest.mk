@@ -69,6 +69,7 @@ $(eval $(call gb_Library_add_exception_objects,subsequenttest,\
 	test/source/sheet/spreadsheet \
 	test/source/sheet/tableautoformat \
 	test/source/sheet/tablevalidation \
+	test/source/sheet/xactivationbroadcaster \
 	test/source/sheet/xarealink \
 	test/source/sheet/xarealinks \
 	test/source/sheet/xcalculatable \
