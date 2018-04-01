@@ -184,7 +184,6 @@ void Test::testLinkedGraphicRT()
                 CPPUNIT_ASSERT(pGrfNode);
 
                 const GraphicObject& rGraphicObj = pGrfNode->GetGrfObj(true);
-                CPPUNIT_ASSERT_MESSAGE( sFailedMessage.getStr(), !rGraphicObj.IsSwappedOut());
                 CPPUNIT_ASSERT_EQUAL_MESSAGE( sFailedMessage.getStr(), int(GraphicType::Bitmap), int(rGraphicObj.GetType()));
                 CPPUNIT_ASSERT_EQUAL_MESSAGE( sFailedMessage.getStr(), static_cast<sal_uLong>(864900), rGraphicObj.GetSizeBytes());
                 bImageFound = true;
