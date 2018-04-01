@@ -72,8 +72,8 @@ namespace dbaccess
             static const DocumentEventData s_aData[] = {
                 { "OnCreate",               true  },
                 { "OnLoadFinished",         true  },
-                { "OnNew",                  false },    // compatibility, see http://www.openoffice.org/issues/show_bug.cgi?id=46484
-                { "OnLoad",                 false },    // compatibility, see http://www.openoffice.org/issues/show_bug.cgi?id=46484
+                { "OnNew",                  false },    // compatibility, see https://bz.apache.org/ooo/show_bug.cgi?id=46484
+                { "OnLoad",                 false },    // compatibility, see https://bz.apache.org/ooo/show_bug.cgi?id=46484
                 { "OnSaveAs",               true  },
                 { "OnSaveAsDone",           false },
                 { "OnSaveAsFailed",         false },

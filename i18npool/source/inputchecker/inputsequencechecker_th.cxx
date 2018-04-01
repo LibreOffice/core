@@ -91,7 +91,7 @@ InputSequenceChecker_th::correctInputSequence(OUString& Text,
 {
 /* 9 rules for input sequence correction, see issue i42661 for detail,
 
-http://www.openoffice.org/issues/show_bug.cgi?id=42661
+https://bz.apache.org/ooo/show_bug.cgi?id=42661
 
 <abv> = <av1>|<av2>|<av3>|<bv1>|<bv2>
 <abv1> = <av1>|<bv1>

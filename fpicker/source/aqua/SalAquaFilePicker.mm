@@ -122,7 +122,7 @@ sal_Int16 SAL_CALL SalAquaFilePicker::execute()
     implInitialize();
 
     // if m_pDialog is nil after initialization, something must have gone wrong before
-    // or there was no initialization (see issue http://www.openoffice.org/issues/show_bug.cgi?id=100214)
+    // or there was no initialization (see issue https://bz.apache.org/ooo/show_bug.cgi?id=100214)
     if (m_pDialog == nil) {
         m_nDialogType = NAVIGATIONSERVICES_OPEN;
     }

@@ -1197,7 +1197,7 @@ namespace
             pNodeTmp = pNode->getChild(1);
             ::connectivity::OSQLParseNode::absorptions(pNodeTmp);
             pNodeTmp = pNode->getChild(1);
-            // compress sort the criteria @see http://www.openoffice.org/issues/show_bug.cgi?id=24079
+            // compress sort the criteria @see https://bz.apache.org/ooo/show_bug.cgi?id=24079
             OSQLParseNode::compress(pNodeTmp);
             pNodeTmp = pNode->getChild(1);
 

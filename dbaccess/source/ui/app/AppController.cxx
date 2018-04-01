@@ -1768,7 +1768,7 @@ Reference< XComponent > OApplicationController::openElementWithArguments( const 
     Reference< XComponent > xRet;
     if ( _eOpenMode == E_OPEN_DESIGN )
     {
-        // OJ: http://www.openoffice.org/issues/show_bug.cgi?id=30382
+        // https://bz.apache.org/ooo/show_bug.cgi?id=30382
         getContainer()->showPreview(nullptr);
     }
 

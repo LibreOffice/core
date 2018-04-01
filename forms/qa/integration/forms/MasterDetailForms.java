@@ -265,7 +265,7 @@ public class MasterDetailForms extends complexlib.ComplexTestCase implements com
             impl_waitForLoadedEvent();
 
             // now that we set up this, do the actual tests
-            // First, http://www.openoffice.org/issues/show_bug.cgi?id=105235 described the problem
+            // First, https://bz.apache.org/ooo/show_bug.cgi?id=105235 described the problem
             // that default values in the sub form didn't work when the master form was navigated to a row
             // for which no detail records were present, and the default of the column/control is the same
             // as the last known value.
