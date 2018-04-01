@@ -180,6 +180,7 @@ public:
     void testTdf115394PPT();
     void testTdf51340();
     void testTdf115639();
+    void testTdf77747();
 
     bool checkPattern(sd::DrawDocShellRef const & rDocRef, int nShapeNumber, std::vector<sal_uInt8>& rExpected);
     void testPatternImport();
@@ -261,6 +262,7 @@ public:
     CPPUNIT_TEST(testTdf115394PPT);
     CPPUNIT_TEST(testTdf51340);
     CPPUNIT_TEST(testTdf115639);
+    CPPUNIT_TEST(testTdf77747);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -2514,6 +2516,21 @@ void SdImportTest::testTdf115639()
         CPPUNIT_ASSERT( !pDoc->IsHoriAlignIgnoreTrailingWhitespace() );
         xDocShRef->DoClose();
     }
+}
+
+void SdImportTest::testTdf77747()
+{
+    sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("/sd/qa/unit/data/ppt/tdf77747.ppt"), PPT);
+    CPPUNIT_ASSERT(xDocShRef.is());
+    SdrTextObj *pTxtObj = dynamic_cast<SdrTextObj *>(GetPage(1, xDocShRef)->GetObj(0));
+    CPPUNIT_ASSERT_MESSAGE("No text object", pTxtObj != nullptr);
+    const SvxNumBulletItem *pNumFmt = pTxtObj->GetOutlinerParaObject()->GetTextObject().GetParaAttribs(0).GetItem(EE_PARA_NUMBULLET);
+    CPPUNIT_ASSERT(pNumFmt);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Bullet's suffix is wrong!", pNumFmt->GetNumRule()->GetLevel(0).GetSuffix(), OUString("-") );
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Bullet's numbering type is wrong!", pNumFmt->GetNumRule()->GetLevel(0).GetNumberingType(),
+            SVX_NUM_NUMBER_HEBREW);
+
+    xDocShRef->DoClose();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdImportTest);
