@@ -217,7 +217,7 @@ LogicalFontInstance* ImplFontCache::GetGlyphFallbackFont( PhysicalFontCollection
         //fdo#33898 If someone has EUDC installed then they really want that to
         //be used as the first-choice glyph fallback seeing as it's filled with
         //private area codes with don't make any sense in any other font so
-        //prioritise it here if it's available. Ideally we would remove from
+        //prioritize it here if it's available. Ideally we would remove from
         //rMissingCodes all the glyphs which it is able to resolve as an
         //optimization, but that's tricky to achieve cross-platform without
         //sufficient heavy-weight code that's likely to undo the value of the

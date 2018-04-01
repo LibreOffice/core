@@ -5454,7 +5454,7 @@
                         <property name="valign">center</property>
                         <property name="vexpand">True</property>
                         <child>
-                          <object class="svtlo-ManagedMenuButton" id="wrapp:MenuWrap">
+                          <object class="svtlo-ManagedMenuButton" id="wrap:MenuWrap">
                             <property name="label" translatable="yes" context="notebookbar_compact|wrapb">Wrap</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>

@@ -78,7 +78,7 @@
 		</xs:attribute>
 		<xs:attribute name="Usage" type="PartyNameUsageList">
 			<xs:annotation>
-				<xs:documentation>Tye of use of this data. e.g. data exchange, contact, update, create</xs:documentation>
+				<xs:documentation>Type of use of this data. e.g. data exchange, contact, update, create</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
 		<xs:attribute name="Status" type="ct:StatusList">
