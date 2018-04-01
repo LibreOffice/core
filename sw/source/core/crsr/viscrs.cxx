@@ -220,7 +220,9 @@ void SwVisibleCursor::SetPosAndShow(SfxViewShell const * pViewShell)
         }
         else
         {
-            m_pCursorShell->GetSfxViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR, sRect.getStr());
+            OString sVisibleCursorPayload = OString("{ \"viewId\": \"") + OString::number(SfxLokHelper::getView()) +
+                "\", \"rectangle\": \"" + sRect + "\" }";
+            m_pCursorShell->GetSfxViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR, sVisibleCursorPayload.getStr());
             SfxLokHelper::notifyOtherViews(m_pCursorShell->GetSfxViewShell(), LOK_CALLBACK_INVALIDATE_VIEW_CURSOR, "rectangle", sRect);
         }
     }
