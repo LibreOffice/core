@@ -485,7 +485,7 @@ bool SgaObjectSvDraw::CreateThumb( const FmFormModel& rModel )
                         BitmapFilter::Filter(aThumbBmp,
                                 BitmapScaleFilter(Size(nTargetSizeX, nTargetSizeY),
                                     BmpScaleFlag::BestQuality));
-                        BitmapConverter::Converter(aThumbBmp, BitmapConverter(BmpConversion::N8BitColors));
+                        BitmapConverter::Convert(aThumbBmp, BitmapConverter(BmpConversion::N8BitColors));
                         bRet = true;
                     }
                 }

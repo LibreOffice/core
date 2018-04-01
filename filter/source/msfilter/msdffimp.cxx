@@ -3924,7 +3924,6 @@ SdrObject* SvxMSDffManager::ImportGraphic( SvStream& rSt, SfxItemSet& rSet, cons
                                 BitmapConverter::Convert(aBitmapEx, BitmapConverter(BmpConversion::N8BitGreys));
                             else if ( eDrawMode == GraphicDrawMode::Mono )
                                 BitmapConverter::Convert(aBitmapEx, BitmapConverter(BmpConversion::N1BitThreshold));
-
                             aGraf = aBitmapEx;
 
                         }

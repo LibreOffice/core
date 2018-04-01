@@ -350,14 +350,13 @@ bool PSWriter::WritePS( const Graphic& rGraphic, SvStream& rTargetStream, Filter
 
         if (mbGrayScale)
         {
-            BitmapEx aTempBitmapEx(rGraphic.GetBitmapEx());
-            BitmapFilter::Filter(aTempBitmapEx, BitmapConverter(BmpConversion::N8BitGreys));
-
-            nErrCode = GraphicConverter::Export(rTargetStream, aTempBitmapEx, ConvertDataFormat::TIF);
+            BitmapEx aTempBitmapEx( rGraphic.GetBitmapEx() );
+            BitmapConverter::Convert(aTempBitmapEx, BitmapConverter(BmpConversion::N8BitGreys));
+            nErrCode = GraphicConverter::Export( rTargetStream, aTempBitmapEx, ConvertDataFormat::TIF ) ;
         }
         else
         {
-            nErrCode = GraphicConverter::Export(rTargetStream, rGraphic, ConvertDataFormat::TIF);
+            nErrCode = GraphicConverter::Export( rTargetStream, rGraphic, ConvertDataFormat::TIF ) ;
         }
 
         if ( nErrCode == ERRCODE_NONE )

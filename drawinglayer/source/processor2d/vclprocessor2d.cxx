@@ -444,9 +444,8 @@ namespace drawinglayer
                                     // if color depth is below 24bit, expand before scaling for better quality.
                                     // This is even needed for low colors, else the scale will produce
                                     // a bitmap in gray or Black/White (!)
-                                    if (aBitmapEx.GetBitCount() < 24)
-                                        BitmapFilter::Filter(aBitmapEx,
-                                                BitmapConverter(BmpConversion::N24Bit));
+                                    if(aBitmapEx.GetBitCount() < 24)
+                                        BitmapConverter::Convert(aBitmapEx, BitmapConverter(BmpConversion::N24Bit));
 
                                     BitmapFilter::Filter(aBitmapEx,
                                         BitmapScaleFilter(aNeededBitmapSizePixel, BmpScaleFlag::Interpolate));
