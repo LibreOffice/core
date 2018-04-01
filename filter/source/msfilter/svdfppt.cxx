@@ -3592,6 +3592,12 @@ bool PPTNumberFormatCreator::ImplGetExtNumberFormat( SdrPowerPointImport const &
                 rNumberFormat.SetSuffix( "." );
             }
             break;
+            case 25: // Bidi Hebrew 2 with ANSI minus symbol.
+            {
+                rNumberFormat.SetNumberingType( SVX_NUM_NUMBER_HEBREW );
+                rNumberFormat.SetSuffix( "-" );
+            }
+            break;
             case 26: // Japanese/Korean.
             {
                 rNumberFormat.SetNumberingType( SVX_NUM_NUMBER_LOWER_ZH );
