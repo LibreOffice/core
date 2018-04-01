@@ -502,6 +502,7 @@ void SwTextCursor::GetCharRect_( SwRect* pOrig, const sal_Int32 nOfst,
         SwTwips nTmpFirst = 0;
         SwLinePortion *pPor = m_pCurr->GetFirstPortion();
         SwBidiPortion* pLastBidiPor = nullptr;
+        sal_Int32 nLastBidiIdx = -1;
         SwTwips nLastBidiPorWidth = 0;
         std::deque<sal_uInt16>* pKanaComp = m_pCurr->GetpKanaComp();
         sal_uInt16 nSpaceIdx = 0;
@@ -646,6 +647,7 @@ void SwTextCursor::GetCharRect_( SwRect* pOrig, const sal_Int32 nOfst,
                              aInf.GetIdx() + pPor->GetLen() == nOfst )
                         {
                              pLastBidiPor = static_cast<SwBidiPortion*>(pPor);
+                             nLastBidiIdx = aInf.GetIdx();
                              nLastBidiPorWidth = pLastBidiPor->Width() +
                                                  pLastBidiPor->CalcSpacing( nSpaceAdd, aInf );
                         }
@@ -1122,8 +1124,12 @@ void SwTextCursor::GetCharRect_( SwRect* pOrig, const sal_Int32 nOfst,
                     {
                         OSL_ENSURE( static_cast<const SwMultiPortion*>(pLast)->IsBidi(),
                                  "Non-BidiPortion inside BidiPortion" );
+                        sal_Int32 nIdx = aInf.GetIdx();
+                        // correct the index before using CalcSpacing.
+                        aInf.SetIdx(nLastBidiIdx);
                         pOrig->Pos().AdjustX(pLast->Width() +
                                             pLast->CalcSpacing( nSpaceAdd, aInf ) );
+                        aInf.SetIdx(nIdx);
                     }
                 }
             }
