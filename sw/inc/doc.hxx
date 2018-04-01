@@ -821,7 +821,7 @@ public:
     void ReplaceCompatibilityOptions( const SwDoc& rSource );
 
     /** Replace all user defined document properties with xSourceDocProps.
-        Convenince function used by ReplaceDocumentProperties to skip some UNO calls.
+        Convenience function used by ReplaceDocumentProperties to skip some UNO calls.
      */
     void ReplaceUserDefinedDocumentProperties( const css::uno::Reference< css::document::XDocumentProperties >& xSourceDocProps );
 

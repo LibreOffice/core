@@ -272,7 +272,7 @@ void ScreenSaverInhibitor::inhibitXScreenSaver( bool bInhibit, Display* pDisplay
     XGetScreenSaver( pDisplay, &nTimeout, &nInterval,
                      &bPreferBlanking, &bAllowExposures );
 
-    // To disable/reenable we simply fiddle the timeout, whilst
+    // To disable/re-enable we simply fiddle the timeout, whilst
     // retaining all other properties.
     if ( bInhibit && nTimeout)
     {
