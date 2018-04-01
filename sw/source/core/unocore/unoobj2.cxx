@@ -683,24 +683,27 @@ class SwXTextRange::Impl
     : public SwClient
 {
 public:
-    const SfxItemPropertySet &  m_rPropSet;
-    const enum RangePosition    m_eRangePosition;
-    SwDoc &                     m_rDoc;
+    const SfxItemPropertySet& m_rPropSet;
+    const enum RangePosition m_eRangePosition;
+    SwDoc& m_rDoc;
     uno::Reference<text::XText> m_xParentText;
-    SwDepend            m_ObjectDepend; // register at format of table or frame
-    ::sw::mark::IMark * m_pMark;
+    sw::WriterMultiListener m_aMultiListener;
+    const ::sw::mark::IMark* m_pMark;
+    const SwFrameFormat* m_pTableFormat;
 
-    Impl(   SwDoc & rDoc, const enum RangePosition eRange,
-            SwFrameFormat *const pTableFormat,
-            const uno::Reference< text::XText > & xParent = nullptr)
+    Impl(SwDoc & rDoc, const enum RangePosition eRange,
+            SwFrameFormat* const pTableFormat,
+            const uno::Reference<text::XText>& xParent = nullptr)
         : SwClient()
         , m_rPropSet(*aSwMapProvider.GetPropertySet(PROPERTY_MAP_TEXT_CURSOR))
         , m_eRangePosition(eRange)
         , m_rDoc(rDoc)
         , m_xParentText(xParent)
-        , m_ObjectDepend(this, pTableFormat)
+        , m_aMultiListener(*this)
         , m_pMark(nullptr)
+        , m_pTableFormat(pTableFormat)
     {
+        m_aMultiListener.StartListening(pTableFormat);
     }
 
     virtual ~Impl() override
@@ -722,31 +725,24 @@ public:
 
 protected:
     // SwClient
-    virtual void    Modify(const SfxPoolItem *pOld, const SfxPoolItem *pNew) override;
+    virtual void SwClientNotify(const SwModify&, const SfxHint&) override;
 };
 
-void SwXTextRange::Impl::Modify(const SfxPoolItem *pOld, const SfxPoolItem *pNew)
+void SwXTextRange::Impl::SwClientNotify(const SwModify& rModify, const SfxHint& rHint)
 {
-    const bool bAlreadyRegistered = nullptr != GetRegisteredIn();
-    ClientModify(this, pOld, pNew);
-    if (m_ObjectDepend.GetRegisteredIn())
+    assert(!GetRegisteredIn()); // we should only listen with the WriterMultiListener from now on
+    if(auto pModifyChangedHint = dynamic_cast<const sw::ModifyChangedHint*>(&rHint))
     {
-        ClientModify(&m_ObjectDepend, pOld, pNew);
-        // if the depend was removed then the range must be removed too
-        if (!m_ObjectDepend.GetRegisteredIn())
+        if(pModifyChangedHint->m_pNew == nullptr)
         {
-            EndListeningAll();
+            m_aMultiListener.EndListeningAll();
+            m_pMark = nullptr;
+            m_pTableFormat = nullptr;
         }
-        // or if the range has been removed but the depend is still
-        // connected then the depend must be removed
-        else if (bAlreadyRegistered && !GetRegisteredIn())
-        {
-            m_ObjectDepend.EndListeningAll();
-        }
-    }
-    if (!GetRegisteredIn())
-    {
-        m_pMark = nullptr;
+        else if(&rModify == m_pMark)
+            m_pMark = dynamic_cast<const ::sw::mark::IMark*>(pModifyChangedHint->m_pNew);
+        else if(&rModify == m_pTableFormat)
+            m_pTableFormat = dynamic_cast<const SwFrameFormat*>(pModifyChangedHint->m_pNew);
     }
 }
 
@@ -795,7 +791,7 @@ void SwXTextRange::SetPositions(const SwPaM& rPam)
     IDocumentMarkAccess* const pMA = m_pImpl->m_rDoc.getIDocumentMarkAccess();
     m_pImpl->m_pMark = pMA->makeMark(rPam, OUString(),
         IDocumentMarkAccess::MarkType::UNO_BOOKMARK, sw::mark::InsertMode::New);
-    m_pImpl->m_pMark->Add(m_pImpl.get());
+    m_pImpl->m_aMultiListener.StartListening(const_cast<::sw::mark::IMark*>(m_pImpl->m_pMark));
 }
 
 void SwXTextRange::DeleteAndInsert(
@@ -887,11 +883,9 @@ SwXTextRange::getText()
     if (!m_pImpl->m_xParentText.is())
     {
         if (m_pImpl->m_eRangePosition == RANGE_IS_TABLE &&
-            m_pImpl->m_ObjectDepend.GetRegisteredIn())
+            m_pImpl->m_pTableFormat)
         {
-            SwFrameFormat const*const pTableFormat = static_cast<SwFrameFormat const*>(
-                    m_pImpl->m_ObjectDepend.GetRegisteredIn());
-            SwTable const*const pTable = SwTable::FindTable( pTableFormat );
+            SwTable const*const pTable = SwTable::FindTable( m_pImpl->m_pTableFormat );
             SwTableNode const*const pTableNode = pTable->GetTableNode();
             const SwPosition aPosition( *pTableNode );
             m_pImpl->m_xParentText =
