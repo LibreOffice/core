@@ -1512,32 +1512,33 @@ private:
 public:
 
     uno::WeakReference<uno::XInterface> m_wThis;
-    SfxItemPropertySet const&   m_rPropSet;
-    const TOXTypes              m_eTOXType;
+    SfxItemPropertySet const& m_rPropSet;
+    const TOXTypes m_eTOXType;
     ::comphelper::OInterfaceContainerHelper2 m_EventListeners;
-    bool                        m_bIsDescriptor;
-    SwDepend                    m_TypeDepend;
-    const SwTOXMark *           m_pTOXMark;
-    SwDoc *                     m_pDoc;
+    bool m_bIsDescriptor;
+    sw::WriterMultiListener m_aListener;
+    const SwTOXType* m_pTOXType;
+    const SwTOXMark* m_pTOXMark;
+    SwDoc* m_pDoc;
 
-    bool                    m_bMainEntry;
-    sal_uInt16                  m_nLevel;
-    OUString                    m_aBookmarkName;
-    OUString                    m_aEntryTypeName;
-    OUString                    m_sAltText;
-    OUString                    m_sPrimaryKey;
-    OUString                    m_sSecondaryKey;
-    OUString                    m_sTextReading;
-    OUString                    m_sPrimaryKeyReading;
-    OUString                    m_sSecondaryKeyReading;
-    OUString                    m_sUserIndexName;
-    OUString                    m_sCitaitonText;
+    bool m_bMainEntry;
+    sal_uInt16 m_nLevel;
+    OUString m_aBookmarkName;
+    OUString m_aEntryTypeName;
+    OUString m_sAltText;
+    OUString m_sPrimaryKey;
+    OUString m_sSecondaryKey;
+    OUString m_sTextReading;
+    OUString m_sPrimaryKeyReading;
+    OUString m_sSecondaryKeyReading;
+    OUString m_sUserIndexName;
+    OUString m_sCitaitonText;
 
-    Impl(   SwXDocumentIndexMark & rThis,
-            SwDoc *const pDoc,
+    Impl(SwXDocumentIndexMark& rThis,
+            SwDoc* const pDoc,
             const enum TOXTypes eType,
-            SwTOXType *const pType, SwTOXMark const*const pMark)
-        : SwClient(const_cast<SwTOXMark*>(pMark))
+            SwTOXType* const pType, SwTOXMark const*const pMark)
+        : SwClient()
         , m_rThis(rThis)
         , m_bInReplaceMark(false)
         , m_rPropSet(
@@ -1545,23 +1546,24 @@ public:
         , m_eTOXType(eType)
         , m_EventListeners(m_Mutex)
         , m_bIsDescriptor(nullptr == pMark)
-        , m_TypeDepend(this, pType)
+        , m_aListener(*this)
+        , m_pTOXType(pType)
         , m_pTOXMark(pMark)
         , m_pDoc(pDoc)
         , m_bMainEntry(false)
         , m_nLevel(0)
     {
+        m_aListener.StartListening(const_cast<SwTOXMark*>(pMark));
+        m_aListener.StartListening(pType);
     }
 
-    SwTOXType * GetTOXType() const {
-        return static_cast<SwTOXType*>(
-                const_cast<SwModify *>(m_TypeDepend.GetRegisteredIn()));
+    SwTOXType* GetTOXType() const {
+        return const_cast<SwTOXType*>(m_pTOXType);
     }
 
     void DeleteTOXMark()
     {
-        m_pDoc->DeleteTOXMark(m_pTOXMark); // calls Invalidate() via Modify!
-        m_pTOXMark = nullptr;
+        m_pDoc->DeleteTOXMark(m_pTOXMark); // calls Invalidate() via Notify
     }
 
     void InsertTOXMark(SwTOXType & rTOXType, SwTOXMark & rMark, SwPaM & rPam,
@@ -1586,16 +1588,11 @@ public:
     void    Invalidate();
 protected:
     // SwClient
-    virtual void Modify(const SfxPoolItem *pOld, const SfxPoolItem *pNew) override;
+    virtual void SwClientNotify(const SwModify&, const SfxHint& ) override;
 };
 
 void SwXDocumentIndexMark::Impl::Invalidate()
 {
-    if (GetRegisteredIn())
-    {
-        EndListeningAll();
-        m_TypeDepend.EndListeningAll();
-    }
     if (!m_bInReplaceMark) // #i109983# only dispose on delete, not on replace!
     {
         uno::Reference<uno::XInterface> const xThis(m_wThis);
@@ -1606,17 +1603,21 @@ void SwXDocumentIndexMark::Impl::Invalidate()
             m_EventListeners.disposeAndClear(ev);
         }
     }
+    m_aListener.EndListeningAll();
     m_pDoc = nullptr;
     m_pTOXMark = nullptr;
+    m_pTOXType = nullptr;
 }
 
-void SwXDocumentIndexMark::Impl::Modify(const SfxPoolItem *pOld, const SfxPoolItem *pNew)
+void SwXDocumentIndexMark::Impl::SwClientNotify(const SwModify& rModify, const SfxHint& rHint)
 {
-    ClientModify(this, pOld, pNew);
-
-    if (!GetRegisteredIn()) // removed => dispose
+    assert(!GetRegisteredIn()); // we should only listen with the WriterMultiListener from now on
+    if(auto pModifyChangedHint = dynamic_cast<const sw::ModifyChangedHint*>(&rHint))
     {
-        Invalidate();
+        if(pModifyChangedHint->m_pNew == nullptr || &rModify == m_pTOXMark)
+            Invalidate();
+        else if(&rModify == m_pTOXType)
+            m_pTOXType = dynamic_cast<const SwTOXType*>(pModifyChangedHint->m_pNew);
     }
 }
 
@@ -1985,9 +1986,11 @@ void SwXDocumentIndexMark::Impl::InsertTOXMark(
     }
 
     m_pDoc = pDoc;
-    m_pTOXMark = & pTextAttr->GetTOXMark();
-    const_cast<SwTOXMark*>(m_pTOXMark)->Add(this);
-    rTOXType.Add(& m_TypeDepend);
+    m_pTOXMark = &pTextAttr->GetTOXMark();
+    m_pTOXType = &rTOXType;
+    m_aListener.EndListeningAll();
+    m_aListener.StartListening(const_cast<SwTOXMark*>(m_pTOXMark));
+    m_aListener.StartListening(const_cast<SwTOXType*>(m_pTOXType));
 }
 
 uno::Reference< text::XTextRange > SAL_CALL
