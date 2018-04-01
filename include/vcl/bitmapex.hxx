@@ -79,7 +79,6 @@ public:
     AlphaMask           GetAlpha() const;
 
     const Size          GetSizePixel() const { return maBitmap.GetSizePixel(); }
-    void                SetSizePixel( const Size& rNewSize, BmpScaleFlag nScaleFlag = BmpScaleFlag::Default );
 
     const Size&         GetPrefSize() const { return maBitmap.GetPrefSize(); }
     void                SetPrefSize( const Size& rPrefSize ) { maBitmap.SetPrefSize( rPrefSize ); }
@@ -99,15 +98,6 @@ public:
      * @brief extract the bitmap and alpha data separately. Used by the SWF filter.
      */
     void GetSplitData( std::vector<sal_uInt8>& rvColorData, std::vector<sal_uInt8>& rvAlphaData ) const;
-
-    /** Convert bitmap format
-
-        @param eConversion
-        The format this bitmap should be converted to.
-
-        @return true, if the conversion was completed successfully.
-     */
-    bool                Convert( BmpConversion eConversion );
 
     /** Reduce number of colors for the bitmap using the POPULAR algorithm
 
