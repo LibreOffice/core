@@ -6263,12 +6263,6 @@ void PPTParagraphObj::ApplyTo( SfxItemSet& rSet,  boost::optional< sal_Int16 >& 
 
     if ( bIsHardAttribute )
     {
-        if ( pPortion && ( nVal2 > 200 ) )
-        {
-            sal_uInt32 nFontHeight;
-            pPortion->GetAttrib( PPT_CharAttr_FontHeight, nFontHeight, nDestinationInstance );
-            nVal2 = -static_cast<sal_Int16>( ( nFontHeight * nVal * 8 ) / 100 );
-        }
         SdrTextFixedCellHeightItem aHeightItem(true);
         aHeightItem.SetWhich(SDRATTR_TEXT_USEFIXEDCELLHEIGHT);
         rSet.Put( aHeightItem );
@@ -6279,7 +6273,7 @@ void PPTParagraphObj::ApplyTo( SfxItemSet& rSet,  boost::optional< sal_Int16 >& 
             aItem.SetInterLineSpaceRule(SvxInterLineSpaceRule::Off);
         } else
         {
-            sal_uInt8 nPropLineSpace = static_cast<sal_uInt8>(nVal2);
+            sal_uInt16 nPropLineSpace = static_cast<sal_uInt16>(nVal2);
             aItem.SetPropLineSpace( nPropLineSpace );
             aItem.SetLineSpaceRule( SvxLineSpaceRule::Auto );
         }

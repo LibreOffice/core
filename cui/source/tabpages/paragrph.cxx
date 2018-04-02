@@ -124,7 +124,7 @@ void SetLineSpace_Impl( SvxLineSpacingItem& rLineSpace,
 
         case LLINESPACE_PROP:
             rLineSpace.SetLineSpaceRule( SvxLineSpaceRule::Auto );
-            rLineSpace.SetPropLineSpace( static_cast<sal_uInt8>(lValue) );
+            rLineSpace.SetPropLineSpace( static_cast<sal_uInt16>(lValue) );
             break;
 
         case LLINESPACE_MIN:

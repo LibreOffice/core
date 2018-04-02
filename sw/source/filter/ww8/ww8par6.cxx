@@ -4224,9 +4224,8 @@ void SwWW8ImplReader::Read_LineSpace( sal_uInt16, const sal_uInt8* pData, short 
     {
         long n = nSpace * 10 / 24;  // WW: 240 = 100%, SW: 100 = 100%
 
-        // as discussed with AMA, the limit is nonsensical
-        if( n>200 ) n = 200;        // SW_UI maximum
-        aLSpc.SetPropLineSpace( static_cast<sal_uInt8>(n) );
+        if( n>SAL_MAX_UINT16 ) n = SAL_MAX_UINT16;
+        aLSpc.SetPropLineSpace( static_cast<sal_uInt16>(n) );
         const SvxFontHeightItem* pH = static_cast<const SvxFontHeightItem*>(
             GetFormatAttr( RES_CHRATR_FONTSIZE ));
         nSpaceTw = static_cast<sal_uInt16>( n * pH->GetHeight() / 100 );

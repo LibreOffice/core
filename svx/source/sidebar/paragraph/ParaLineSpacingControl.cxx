@@ -395,7 +395,7 @@ void ParaLineSpacingControl::SetLineSpace(SvxLineSpacingItem& rLineSpace, sal_In
 
         case LLINESPACE_PROP:
             rLineSpace.SetLineSpaceRule( SvxLineSpaceRule::Auto );
-            rLineSpace.SetPropLineSpace( static_cast<sal_uInt8>(lValue) );
+            rLineSpace.SetPropLineSpace( static_cast<sal_uInt16>(lValue) );
             break;
 
         case LLINESPACE_MIN:

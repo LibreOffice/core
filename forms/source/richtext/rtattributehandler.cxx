@@ -229,7 +229,7 @@ namespace frm
         if ( 100 == m_nLineSpace )
             aLineSpacing.SetInterLineSpaceRule( SvxInterLineSpaceRule::Off );
         else
-            aLineSpacing.SetPropLineSpace( static_cast<sal_uInt8>(m_nLineSpace) );
+            aLineSpacing.SetPropLineSpace( m_nLineSpace );
 
         _rNewAttribs.Put( aLineSpacing );
     }
