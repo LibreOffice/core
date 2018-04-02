@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_7bd150fb",
+        "filename": "sc/uiconfig/scalc/ui/solverdlg.ui",
+        "patchSetId": 2
+      },
+      "lineNbr": 548,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2018-04-02T10:19:55Z",
+      "side": 0,
+      "message": "Why do you remove this?",
+      "range": {
+        "startLine": 548,
+        "startChar": 44,
+        "endLine": 548,
+        "endChar": 61
+      },
+      "revId": "a541c989f07fd7cf908915a9f005d32aca6cd953",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
