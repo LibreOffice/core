@@ -140,7 +140,6 @@
                       <object class="GtkSpinButton" id="MTR_TRANSPARENT:0%">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="invisible_char">•</property>
                         <property name="adjustment">adjustmentPercent</property>
                         <accessibility>
                           <relation type="labelled-by" target="RBT_TRANS_LINEAR"/>
@@ -174,7 +173,6 @@
                       <object class="GtkSpinButton" id="MTR_TRGR_END_VALUE:0%">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="invisible_char">•</property>
                         <property name="adjustment">adjustmentPercent</property>
                       </object>
                       <packing>
@@ -186,7 +184,6 @@
                       <object class="GtkSpinButton" id="MTR_TRGR_START_VALUE:0%">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="invisible_char">•</property>
                         <property name="adjustment">adjustmentPercent</property>
                       </object>
                       <packing>
@@ -198,7 +195,6 @@
                       <object class="GtkSpinButton" id="MTR_TRGR_BORDER:0%">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="invisible_char">•</property>
                         <property name="adjustment">adjustmentPercent</property>
                       </object>
                       <packing>
@@ -210,7 +206,6 @@
                       <object class="GtkSpinButton" id="MTR_TRGR_ANGLE:0degree">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="invisible_char">•</property>
                         <property name="adjustment">adjustmentDegrees</property>
                       </object>
                       <packing>
@@ -222,7 +217,6 @@
                       <object class="GtkSpinButton" id="MTR_TRGR_CENTER_Y:0%">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="invisible_char">•</property>
                         <property name="adjustment">adjustmentPercent</property>
                       </object>
                       <packing>
@@ -234,7 +228,6 @@
                       <object class="GtkSpinButton" id="MTR_TRGR_CENTER_X:0%">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="invisible_char">•</property>
                         <property name="adjustment">adjustmentPercent</property>
                       </object>
                       <packing>

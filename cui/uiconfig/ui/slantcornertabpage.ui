@@ -62,7 +62,6 @@
                       <object class="GtkSpinButton" id="controlx1:0.00cm">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="invisible_char">•</property>
                         <property name="digits">2</property>
                       </object>
                       <packing>
@@ -101,7 +100,6 @@
                       <object class="GtkSpinButton" id="controly1:0.00cm">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="invisible_char">•</property>
                         <property name="digits">2</property>
                       </object>
                       <packing>
@@ -172,7 +170,6 @@
                   <object class="GtkSpinButton" id="MTR_FLD_RADIUS:0.00cm">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="invisible_char">•</property>
                     <property name="adjustment">adjustmentRADIUS</property>
                     <property name="digits">2</property>
                   </object>
@@ -237,7 +234,6 @@
                   <object class="GtkSpinButton" id="MTR_FLD_ANGLE:0.00degrees">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="invisible_char">•</property>
                     <property name="adjustment">adjustmentSLANT</property>
                     <property name="digits">2</property>
                   </object>
@@ -310,7 +306,6 @@
                       <object class="GtkSpinButton" id="controlx2:0.00cm">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="invisible_char">•</property>
                         <property name="digits">2</property>
                       </object>
                       <packing>
@@ -349,7 +344,6 @@
                       <object class="GtkSpinButton" id="controly2:0.00cm">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="invisible_char">•</property>
                         <property name="digits">2</property>
                       </object>
                       <packing>

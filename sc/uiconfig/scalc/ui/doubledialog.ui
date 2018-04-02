@@ -75,7 +75,6 @@
                     <property name="can_focus">True</property>
                     <property name="halign">start</property>
                     <property name="valign">start</property>
-                    <property name="invisible_char">•</property>
                   </object>
                 </child>
               </object>

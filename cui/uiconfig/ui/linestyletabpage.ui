@@ -233,7 +233,6 @@
                           <object class="GtkSpinButton" id="NUM_FLD_1">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="invisible_char">•</property>
                             <property name="adjustment">adjustmentNUM</property>
                           </object>
                           <packing>
@@ -247,7 +246,6 @@
                           <object class="GtkSpinButton" id="NUM_FLD_2">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="invisible_char">•</property>
                             <property name="adjustment">adjustmentNUM</property>
                           </object>
                           <packing>
@@ -261,7 +259,6 @@
                           <object class="GtkSpinButton" id="MTR_FLD_LENGTH_1:0.00cm">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="invisible_char">•</property>
                             <property name="adjustment">adjustmentDIST</property>
                             <property name="digits">2</property>
                           </object>
@@ -276,7 +273,6 @@
                           <object class="GtkSpinButton" id="MTR_FLD_LENGTH_2:0.00cm">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="invisible_char">•</property>
                             <property name="adjustment">adjustmentDIST</property>
                             <property name="digits">2</property>
                           </object>
@@ -291,7 +287,6 @@
                           <object class="GtkSpinButton" id="MTR_FLD_DISTANCE:0.00cm">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="invisible_char">•</property>
                             <property name="adjustment">adjustmentDIST</property>
                             <property name="digits">2</property>
                           </object>

@@ -272,7 +272,6 @@
                       <object class="GtkSpinButton" id="text_delay:0.0%">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="invisible_char">●</property>
                         <property name="digits">1</property>
                       </object>
                       <packing>

@@ -170,7 +170,6 @@
                           <object class="GtkSpinButton" id="timeout">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
-                            <property name="invisible_char">●</property>
                             <property name="text" translatable="no">60</property>
                             <property name="adjustment">adjustment1</property>
                             <property name="value">60</property>

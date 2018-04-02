@@ -62,7 +62,6 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="hexpand">True</property>
-                <property name="invisible_char">•</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -200,7 +199,6 @@
               <object class="GtkEntry" id="ED_TIME_BASED_START">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
-                <property name="invisible_char">●</property>
                 <property name="width_chars">5</property>
                 <property name="text" translatable="no">0</property>
                 <property name="input_purpose">number</property>
@@ -216,7 +214,6 @@
               <object class="GtkEntry" id="ED_TIME_BASED_END">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
-                <property name="invisible_char">●</property>
                 <property name="width_chars">5</property>
                 <property name="text" translatable="no">0</property>
               </object>

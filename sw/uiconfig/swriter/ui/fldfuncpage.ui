@@ -194,7 +194,6 @@
               <object class="GtkEntry" id="value">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
-                <property name="invisible_char">•</property>
                 <property name="hexpand">True</property>
               </object>
               <packing>
@@ -238,8 +237,6 @@
               <object class="swlo-ConditionEdit" id="condFunction">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
-                <property name="invisible_char">•</property>
-                <property name="invisible_char_set">True</property>
                 <property name="hexpand">True</property>
               </object>
               <packing>
@@ -283,8 +280,6 @@
               <object class="swlo-ConditionEdit" id="cond1">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
-                <property name="invisible_char">•</property>
-                <property name="invisible_char_set">True</property>
                 <property name="hexpand">True</property>
               </object>
               <packing>
@@ -327,8 +322,6 @@
               <object class="swlo-ConditionEdit" id="cond2">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
-                <property name="invisible_char">•</property>
-                <property name="invisible_char_set">True</property>
                 <property name="hexpand">True</property>
               </object>
               <packing>
@@ -377,8 +370,6 @@
                   <object class="swlo-ReturnActionEdit" id="item">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="invisible_char">•</property>
-                    <property name="invisible_char_set">True</property>
                     <property name="hexpand">True</property>
                   </object>
                   <packing>
@@ -533,8 +524,6 @@
                       <object class="GtkEntry" id="listname">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="invisible_char">•</property>
-                        <property name="invisible_char_set">True</property>
                         <property name="hexpand">True</property>
                       </object>
                       <packing>

@@ -113,7 +113,6 @@
             <child>
               <object class="GtkSpinButton" id="date:yy:mm:dd">
                 <property name="can_focus">True</property>
-                <property name="invisible_char_set">True</property>
                 <property name="update_policy">if-valid</property>
               </object>
               <packing>

@@ -336,7 +336,6 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="halign">start</property>
-                        <property name="invisible_char">●</property>
                         <property name="adjustment">adjustment1</property>
                       </object>
                       <packing>
@@ -459,7 +458,6 @@
                       <object class="GtkEntry" id="phonetic0ed">
                         <property name="can_focus">True</property>
                         <property name="no_show_all">True</property>
-                        <property name="invisible_char">●</property>
                       </object>
                       <packing>
                         <property name="left_attach">4</property>
@@ -470,7 +468,6 @@
                       <object class="GtkEntry" id="phonetic1ed">
                         <property name="can_focus">True</property>
                         <property name="no_show_all">True</property>
-                        <property name="invisible_char">●</property>
                       </object>
                       <packing>
                         <property name="left_attach">4</property>
@@ -481,7 +478,6 @@
                       <object class="GtkEntry" id="phonetic2ed">
                         <property name="can_focus">True</property>
                         <property name="no_show_all">True</property>
-                        <property name="invisible_char">●</property>
                       </object>
                       <packing>
                         <property name="left_attach">4</property>
@@ -517,7 +513,6 @@
                           <object class="GtkEntry" id="comboboxtext-entry2">
                             <property name="sensitive">False</property>
                             <property name="can_focus">False</property>
-                            <property name="invisible_char">●</property>
                           </object>
                         </child>
                       </object>
@@ -543,7 +538,6 @@
                       <object class="GtkEntry" id="entryed">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="invisible_char">●</property>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>

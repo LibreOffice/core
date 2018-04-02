@@ -61,7 +61,6 @@
                         <property name="can_focus">True</property>
                         <property name="valign">center</property>
                         <property name="hexpand">True</property>
-                        <property name="invisible_char">•</property>
                         <property name="width_chars">30</property>
                       </object>
                       <packing>
@@ -100,7 +99,6 @@
                         <property name="can_focus">True</property>
                         <property name="valign">center</property>
                         <property name="hexpand">True</property>
-                        <property name="invisible_char">•</property>
                         <property name="width_chars">30</property>
                       </object>
                       <packing>
@@ -307,7 +305,6 @@
                       <object class="GtkSpinButton" id="interval-spin">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="invisible_char">•</property>
                         <property name="text" translatable="no">2</property>
                         <property name="adjustment">interval-adjustment</property>
                         <property name="value">2</property>

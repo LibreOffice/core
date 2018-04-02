@@ -126,7 +126,6 @@
                               <object class="GtkSpinButton" id="widthmf:0.00cm">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
-                                <property name="invisible_char">•</property>
                                 <property name="adjustment">adjustment1</property>
                                 <property name="digits">2</property>
                               </object>
@@ -258,7 +257,6 @@
                           <object class="GtkSpinButton" id="leftmf:0.00cm">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
-                            <property name="invisible_char">•</property>
                             <property name="adjustment">adjustment2</property>
                             <property name="digits">2</property>
                           </object>
@@ -273,7 +271,6 @@
                           <object class="GtkSpinButton" id="rightmf:0.00cm">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
-                            <property name="invisible_char">•</property>
                             <property name="adjustment">adjustment2</property>
                             <property name="digits">2</property>
                           </object>
@@ -288,7 +285,6 @@
                           <object class="GtkSpinButton" id="abovemf:0.00cm">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
-                            <property name="invisible_char">•</property>
                             <property name="adjustment">adjustment1</property>
                             <property name="digits">2</property>
                           </object>
@@ -303,7 +299,6 @@
                           <object class="GtkSpinButton" id="belowmf:0.00cm">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
-                            <property name="invisible_char">•</property>
                             <property name="adjustment">adjustment1</property>
                             <property name="digits">2</property>
                           </object>

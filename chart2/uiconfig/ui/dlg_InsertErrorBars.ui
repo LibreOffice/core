@@ -438,7 +438,6 @@
                               <object class="GtkSpinButton" id="MF_POSITIVE:0">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="invisible_char">•</property>
                                 <property name="digits">2</property>
                               </object>
                               <packing>
@@ -452,7 +451,6 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="hexpand">True</property>
-                                <property name="invisible_char">•</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -504,7 +502,6 @@
                               <object class="GtkSpinButton" id="MF_NEGATIVE:0">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="invisible_char">•</property>
                                 <property name="digits">2</property>
                               </object>
                               <packing>
@@ -518,7 +515,6 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="hexpand">True</property>
-                                <property name="invisible_char">•</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>

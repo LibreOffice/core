@@ -117,7 +117,6 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="max_length">5</property>
-                        <property name="invisible_char">•</property>
                         <property name="adjustment">adjustmentFirstPage</property>
                         <accessibility>
                           <relation type="labelled-by" target="checkBTN_PAGENO"/>
@@ -411,7 +410,6 @@
                           <object class="GtkSpinButton" id="spinED_SCALEALL:0%">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
-                            <property name="invisible_char">•</property>
                             <property name="adjustment">adjustmentScalingFactor</property>
                           </object>
                           <packing>
@@ -474,7 +472,6 @@
                           <object class="GtkSpinButton" id="spinED_SCALEPAGEWIDTH">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
-                            <property name="invisible_char">•</property>
                             <property name="shadow_type">none</property>
                             <property name="adjustment">adjustmentPage</property>
                             <accessibility>
@@ -490,7 +487,6 @@
                           <object class="GtkSpinButton" id="spinED_SCALEPAGEHEIGHT">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
-                            <property name="invisible_char">•</property>
                             <property name="shadow_type">none</property>
                             <property name="adjustment">adjustmentPage</property>
                             <accessibility>
@@ -533,7 +529,6 @@
                           <object class="GtkSpinButton" id="spinED_SCALEPAGENUM">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
-                            <property name="invisible_char">•</property>
                             <property name="adjustment">adjustmentPage</property>
                             <property name="update_policy">if-valid</property>
                           </object>

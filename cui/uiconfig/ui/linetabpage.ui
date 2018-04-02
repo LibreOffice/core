@@ -198,7 +198,6 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="halign">start</property>
-                            <property name="invisible_char">•</property>
                             <property name="adjustment">adjustmentWIDTH</property>
                             <property name="digits">2</property>
                           </object>
@@ -240,7 +239,6 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="halign">start</property>
-                            <property name="invisible_char">•</property>
                             <property name="adjustment">adjustmentPERCENT</property>
                           </object>
                           <packing>
@@ -389,7 +387,6 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="halign">start</property>
-                                    <property name="invisible_char">•</property>
                                     <property name="adjustment">adjustmentWIDTH</property>
                                     <property name="digits">2</property>
                                   </object>
@@ -450,7 +447,6 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="halign">start</property>
-                                    <property name="invisible_char">•</property>
                                     <property name="adjustment">adjustmentWIDTH</property>
                                     <property name="digits">2</property>
                                   </object>
@@ -683,7 +679,6 @@
                               <object class="GtkSpinButton" id="MF_SYMBOL_WIDTH:0cm">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="invisible_char">•</property>
                                 <property name="adjustment">adjustmentWIDTH_SYMBOL</property>
                                 <property name="digits">2</property>
                               </object>
@@ -730,7 +725,6 @@
                               <object class="GtkSpinButton" id="MF_SYMBOL_HEIGHT:0cm">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="invisible_char">•</property>
                                 <property name="adjustment">adjustmentWIDTH_SYMBOL</property>
                                 <property name="digits">2</property>
                               </object>

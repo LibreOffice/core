@@ -223,7 +223,6 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="hexpand">True</property>
-                        <property name="invisible_char">•</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="sound-atkobject">
                             <property name="AtkObject::accessible-name" translatable="yes" context="interactionpage|sound-atkobject">Path Name</property>
@@ -241,7 +240,6 @@
                         <property name="can_focus">True</property>
                         <property name="no_show_all">True</property>
                         <property name="hexpand">True</property>
-                        <property name="invisible_char">•</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -254,7 +252,6 @@
                         <property name="can_focus">True</property>
                         <property name="no_show_all">True</property>
                         <property name="hexpand">True</property>
-                        <property name="invisible_char">•</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -267,7 +264,6 @@
                         <property name="can_focus">True</property>
                         <property name="no_show_all">True</property>
                         <property name="hexpand">True</property>
-                        <property name="invisible_char">•</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -280,7 +276,6 @@
                         <property name="can_focus">True</property>
                         <property name="no_show_all">True</property>
                         <property name="hexpand">True</property>
-                        <property name="invisible_char">•</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>

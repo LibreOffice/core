@@ -401,7 +401,6 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="halign">start</property>
-                            <property name="invisible_char">●</property>
                             <property name="adjustment">adjustment</property>
                             <property name="digits">2</property>
                           </object>
@@ -415,7 +414,6 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="halign">start</property>
-                            <property name="invisible_char">●</property>
                             <property name="adjustment">adjustment</property>
                             <property name="digits">2</property>
                           </object>
@@ -475,7 +473,6 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="halign">start</property>
-                            <property name="invisible_char">●</property>
                             <property name="adjustment">adjustment</property>
                             <property name="digits">2</property>
                           </object>
@@ -489,7 +486,6 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="halign">start</property>
-                            <property name="invisible_char">●</property>
                             <property name="adjustment">adjustment</property>
                             <property name="digits">2</property>
                           </object>

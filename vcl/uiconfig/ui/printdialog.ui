@@ -217,7 +217,6 @@
                       <object class="GtkSpinButton" id="pageedit-nospin">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="invisible_char">●</property>
                         <property name="xalign">1</property>
                       </object>
                       <packing>
@@ -504,7 +503,6 @@
                                       <object class="GtkSpinButton" id="copycount">
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
-                                        <property name="invisible_char">●</property>
                                         <property name="adjustment">adjustment1</property>
                                       </object>
                                       <packing>
@@ -700,7 +698,6 @@
                                           <object class="GtkEntry" id="pagerange">
                                             <property name="can_focus">True</property>
                                             <property name="no_show_all">True</property>
-                                            <property name="invisible_char">●</property>
                                           </object>
                                           <packing>
                                             <property name="expand">False</property>
@@ -1192,7 +1189,6 @@
                                   <object class="GtkSpinButton" id="pagecols">
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
-                                    <property name="invisible_char">●</property>
                                     <property name="adjustment">adjustment2</property>
                                   </object>
                                   <packing>
@@ -1204,7 +1200,6 @@
                                   <object class="GtkSpinButton" id="pagerows">
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
-                                    <property name="invisible_char">●</property>
                                     <property name="adjustment">adjustment2</property>
                                   </object>
                                   <packing>
@@ -1216,7 +1211,6 @@
                                   <object class="GtkSpinButton" id="pagemarginsb:0mm">
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
-                                    <property name="invisible_char">●</property>
                                     <property name="adjustment">adjustment3</property>
                                   </object>
                                   <packing>
@@ -1228,7 +1222,6 @@
                                   <object class="GtkSpinButton" id="sheetmarginsb:0mm">
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
-                                    <property name="invisible_char">●</property>
                                     <property name="adjustment">adjustment3</property>
                                   </object>
                                   <packing>

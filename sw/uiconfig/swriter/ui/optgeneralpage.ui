@@ -264,7 +264,6 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="halign">start</property>
-                            <property name="invisible_char">●</property>
                             <property name="text" translatable="no">1.25</property>
                             <property name="adjustment">adjustment1</property>
                             <property name="digits">2</property>
@@ -389,7 +388,6 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="hexpand">True</property>
-                            <property name="invisible_char">●</property>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -451,7 +449,6 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="halign">start</property>
-                                    <property name="invisible_char">●</property>
                                     <property name="text" translatable="no">1800</property>
                                     <property name="adjustment">adjustment-sps</property>
                                     <property name="value">1800</property>

@@ -78,7 +78,6 @@
                           <object class="GtkEntry" id="header_text">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
-                            <property name="invisible_char">●</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -152,7 +151,6 @@
                               <object class="GtkEntry" id="datetime_value">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
-                                <property name="invisible_char">●</property>
                                 <accessibility>
                                   <relation type="labelled-by" target="rb_fixed"/>
                                 </accessibility>
@@ -330,7 +328,6 @@
                               <object class="GtkEntry" id="footer_text">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
-                                <property name="invisible_char">●</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>

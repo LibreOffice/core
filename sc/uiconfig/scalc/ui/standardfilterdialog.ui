@@ -725,7 +725,6 @@
                         <property name="can_focus">True</property>
                         <property name="margin_bottom">1</property>
                         <property name="hexpand">True</property>
-                        <property name="invisible_char">●</property>
                         <property name="width_chars">30</property>
                         <accessibility>
                           <relation type="labelled-by" target="copyresult"/>

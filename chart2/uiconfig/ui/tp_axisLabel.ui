@@ -260,7 +260,6 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="margin_top">40</property>
-                        <property name="invisible_char">•</property>
                         <property name="progress_pulse_step">1</property>
                         <property name="adjustment">adjustmentSpinDegrees</property>
                         <property name="wrap">True</property>

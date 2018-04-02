@@ -35,7 +35,6 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="tooltip_text" translatable="yes" context="paralrspacing|beforetextindent|tooltip_text">Before Text Indent</property>
-                <property name="invisible_char">•</property>
                 <property name="text">0</property>
                 <property name="progress_fraction">0.10000000000000001</property>
               </object>
@@ -75,7 +74,6 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="tooltip_text" translatable="yes" context="paralrspacing|aftertextindent|tooltip_text">After Text Indent</property>
-                <property name="invisible_char">•</property>
                 <property name="text">0</property>
               </object>
               <packing>
@@ -113,7 +111,6 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="tooltip_text" translatable="yes" context="paralrspacing|firstlineindent|tooltip_text">First Line Indent</property>
-                <property name="invisible_char">•</property>
                 <property name="text">0</property>
               </object>
               <packing>

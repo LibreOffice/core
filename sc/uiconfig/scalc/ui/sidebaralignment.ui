@@ -276,7 +276,6 @@
                     <property name="can_focus">True</property>
                     <property name="has_tooltip">True</property>
                     <property name="tooltip_text" translatable="yes" context="sidebaralignment|leftindent|tooltip_text">Indents from the left edge.</property>
-                    <property name="invisible_char">•</property>
                     <accessibility>
                       <relation type="labelled-by" target="leftindentlabel"/>
                     </accessibility>

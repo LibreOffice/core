@@ -231,7 +231,6 @@
                             <property name="can_focus">True</property>
                             <property name="hexpand">True</property>
                             <property name="vexpand">True</property>
-                            <property name="invisible_char">●</property>
                           </object>
                         </child>
                       </object>

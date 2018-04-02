@@ -108,7 +108,6 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="hexpand">True</property>
-                    <property name="invisible_char">●</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -154,7 +153,6 @@
                     <child internal-child="entry">
                       <object class="GtkEntry" id="combobox-entry">
                         <property name="can_focus">False</property>
-                        <property name="invisible_char">●</property>
                       </object>
                     </child>
                   </object>
@@ -198,7 +196,6 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="hexpand">True</property>
-                    <property name="invisible_char">●</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -240,7 +237,6 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="hexpand">True</property>
-                    <property name="invisible_char">●</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>

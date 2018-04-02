@@ -99,7 +99,6 @@
       <object class="GtkSpinButton" id="MTR_FLD_PERSPECTIVE:0%">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="invisible_char">•</property>
         <property name="adjustment">adjustmentPERSPECTIVE</property>
         <accessibility>
           <relation type="labelled-by" target="CBX_PERSPECTIVE"/>
@@ -119,7 +118,6 @@
       <object class="GtkSpinButton" id="MTR_FLD_Z_ROTATION:0degrees">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="invisible_char">•</property>
         <property name="input_purpose">alpha</property>
         <property name="adjustment">adjustmentROTATION</property>
         <property name="update_policy">if-valid</property>
@@ -133,7 +131,6 @@
       <object class="GtkSpinButton" id="MTR_FLD_Y_ROTATION:0degrees">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="invisible_char">•</property>
         <property name="adjustment">adjustmentROTATION</property>
       </object>
       <packing>
@@ -145,7 +142,6 @@
       <object class="GtkSpinButton" id="MTR_FLD_X_ROTATION:0degrees">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="invisible_char">•</property>
         <property name="adjustment">adjustmentROTATION</property>
       </object>
       <packing>

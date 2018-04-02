@@ -132,7 +132,6 @@
                           <object class="GtkSpinButton" id="start_date:yy:mm:dd">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
-                            <property name="invisible_char">●</property>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -221,7 +220,6 @@
                           <object class="GtkSpinButton" id="end_date:yy:mm:dd">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
-                            <property name="invisible_char">●</property>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -311,7 +309,6 @@
                           <object class="GtkSpinButton" id="days_value">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
-                            <property name="invisible_char">●</property>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>

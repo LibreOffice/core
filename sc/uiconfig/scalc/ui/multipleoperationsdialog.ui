@@ -81,7 +81,6 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="hexpand">True</property>
-                        <property name="invisible_char">●</property>
                         <property name="width_chars">35</property>
                       </object>
                       <packing>
@@ -94,7 +93,6 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="hexpand">True</property>
-                        <property name="invisible_char">●</property>
                         <property name="width_chars">35</property>
                       </object>
                       <packing>
@@ -107,7 +105,6 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="hexpand">True</property>
-                        <property name="invisible_char">●</property>
                         <property name="width_chars">35</property>
                       </object>
                       <packing>

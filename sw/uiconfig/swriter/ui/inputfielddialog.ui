@@ -126,7 +126,6 @@
                 <property name="can_focus">False</property>
                 <property name="hexpand">True</property>
                 <property name="editable">False</property>
-                <property name="invisible_char">●</property>
                 <property name="width_chars">32</property>
               </object>
               <packing>

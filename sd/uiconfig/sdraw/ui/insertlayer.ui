@@ -93,7 +93,6 @@
                       <object class="GtkEntry" id="name">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="invisible_char">●</property>
                         <property name="width_chars">54</property>
                       </object>
                     </child>
@@ -133,7 +132,6 @@
                       <object class="GtkEntry" id="title">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="invisible_char">●</property>
                         <property name="width_chars">54</property>
                       </object>
                     </child>

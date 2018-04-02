@@ -150,7 +150,6 @@
                       <object class="GtkSpinButton" id="MT_GAP:0%">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="invisible_char">•</property>
                         <property name="adjustment">adjustmentGAP</property>
                       </object>
                       <packing>
@@ -164,7 +163,6 @@
                       <object class="GtkSpinButton" id="MT_OVERLAP:0%">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="invisible_char">•</property>
                         <property name="adjustment">adjustmentOVERLAP</property>
                       </object>
                       <packing>

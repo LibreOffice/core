@@ -224,7 +224,6 @@
                             <property name="can_focus">True</property>
                             <property name="margin_left">12</property>
                             <property name="hexpand">True</property>
-                            <property name="invisible_char">●</property>
                             <accessibility>
                               <relation type="labelled-by" target="dependent"/>
                             </accessibility>

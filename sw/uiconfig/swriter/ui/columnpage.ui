@@ -189,7 +189,6 @@
                     <property name="can_focus">True</property>
                     <property name="halign">center</property>
                     <property name="hexpand">True</property>
-                    <property name="invisible_char">•</property>
                     <property name="adjustment">adjustment2</property>
                     <property name="digits">2</property>
                     <accessibility>
@@ -207,7 +206,6 @@
                     <property name="can_focus">True</property>
                     <property name="halign">center</property>
                     <property name="hexpand">True</property>
-                    <property name="invisible_char">•</property>
                     <property name="adjustment">adjustment2</property>
                     <property name="digits">2</property>
                     <accessibility>
@@ -225,7 +223,6 @@
                     <property name="can_focus">True</property>
                     <property name="halign">center</property>
                     <property name="hexpand">True</property>
-                    <property name="invisible_char">•</property>
                     <property name="adjustment">adjustment2</property>
                     <property name="digits">2</property>
                     <accessibility>
@@ -264,7 +261,6 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="halign">center</property>
-                        <property name="invisible_char">•</property>
                         <property name="adjustment">adjustment3</property>
                         <property name="digits">2</property>
                         <accessibility>
@@ -281,7 +277,6 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="halign">center</property>
-                        <property name="invisible_char">•</property>
                         <property name="adjustment">adjustment3</property>
                         <property name="digits">2</property>
                         <accessibility>
@@ -494,7 +489,6 @@
                   <object class="GtkSpinButton" id="lineheightmf:0%">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="invisible_char">•</property>
                     <property name="adjustment">adjustment5</property>
                   </object>
                   <packing>
@@ -506,7 +500,6 @@
                   <object class="GtkSpinButton" id="linewidthmf:0.00pt">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="invisible_char">•</property>
                     <property name="adjustment">adjustment4</property>
                     <property name="digits">2</property>
                   </object>
@@ -620,7 +613,6 @@
                           <object class="GtkSpinButton" id="colsnf">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
-                            <property name="invisible_char">•</property>
                             <property name="adjustment">adjustment1</property>
                           </object>
                           <packing>

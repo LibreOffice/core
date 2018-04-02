@@ -158,7 +158,6 @@
                       <object class="GtkSpinButton" id="spinDegrees">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="invisible_char">•</property>
                         <property name="progress_pulse_step">1</property>
                         <property name="adjustment">adjustmentSpinDegrees</property>
                         <property name="wrap">True</property>
@@ -402,7 +401,6 @@
                   <object class="GtkSpinButton" id="spinIndentFrom:0.00pt">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="invisible_char">•</property>
                     <property name="adjustment">adjustmentIndent</property>
                     <property name="climb_rate">1</property>
                   </object>

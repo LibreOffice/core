@@ -37,7 +37,6 @@
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="hexpand">True</property>
-            <property name="invisible_char">•</property>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -121,7 +120,6 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="hexpand">True</property>
-                    <property name="invisible_char">•</property>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -147,7 +145,6 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="hexpand">True</property>
-                    <property name="invisible_char">•</property>
                     <property name="numeric">True</property>
                   </object>
                   <packing>
@@ -199,7 +196,6 @@
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="hexpand">True</property>
-            <property name="invisible_char">•</property>
           </object>
           <packing>
             <property name="left_attach">1</property>
@@ -242,7 +238,6 @@
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="hexpand">True</property>
-            <property name="invisible_char">•</property>
           </object>
           <packing>
             <property name="left_attach">1</property>

@@ -120,7 +120,6 @@
                     <property name="can_focus">True</property>
                     <property name="valign">center</property>
                     <property name="hexpand">True</property>
-                    <property name="invisible_char">•</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="company-atkobject">
                         <property name="AtkObject::accessible-name" translatable="yes" context="businessdatapage|company-atkobject">First name</property>
@@ -150,7 +149,6 @@
                     <property name="can_focus">True</property>
                     <property name="valign">center</property>
                     <property name="hexpand">True</property>
-                    <property name="invisible_char">•</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="position-atkobject">
                         <property name="AtkObject::accessible-name" translatable="yes" context="businessdatapage|position-atkobject">Title</property>
@@ -179,7 +177,6 @@
                     <property name="can_focus">True</property>
                     <property name="valign">center</property>
                     <property name="hexpand">True</property>
-                    <property name="invisible_char">•</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="fax-atkobject">
                         <property name="AtkObject::accessible-name" translatable="yes" context="businessdatapage|fax-atkobject">Home telephone number</property>
@@ -210,7 +207,6 @@
                     <property name="can_focus">True</property>
                     <property name="valign">center</property>
                     <property name="hexpand">True</property>
-                    <property name="invisible_char">•</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="url-atkobject">
                         <property name="AtkObject::accessible-name" translatable="yes" context="businessdatapage|url-atkobject">FAX number</property>
@@ -228,7 +224,6 @@
                     <property name="can_focus">True</property>
                     <property name="valign">center</property>
                     <property name="hexpand">True</property>
-                    <property name="invisible_char">•</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="email-atkobject">
                         <property name="AtkObject::accessible-name" translatable="yes" context="businessdatapage|email-atkobject">email address</property>
@@ -271,7 +266,6 @@
                     <property name="can_focus">True</property>
                     <property name="valign">center</property>
                     <property name="hexpand">True</property>
-                    <property name="invisible_char">•</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="company2-atkobject">
                         <property name="AtkObject::accessible-name" translatable="yes" context="businessdatapage|company2-atkobject">Last name</property>
@@ -314,7 +308,6 @@
                     <property name="can_focus">True</property>
                     <property name="valign">center</property>
                     <property name="hexpand">True</property>
-                    <property name="invisible_char">•</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="icity-atkobject">
                         <property name="AtkObject::accessible-name" translatable="yes" context="businessdatapage|icity-atkobject">City</property>
@@ -331,7 +324,6 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="valign">center</property>
-                    <property name="invisible_char">•</property>
                     <property name="width_chars">15</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="izip-atkobject">
@@ -361,7 +353,6 @@
                     <property name="can_focus">True</property>
                     <property name="valign">center</property>
                     <property name="hexpand">True</property>
-                    <property name="invisible_char">•</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -386,7 +377,6 @@
                     <property name="can_focus">True</property>
                     <property name="valign">center</property>
                     <property name="hexpand">True</property>
-                    <property name="invisible_char">•</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -399,7 +389,6 @@
                     <property name="can_focus">True</property>
                     <property name="valign">center</property>
                     <property name="hexpand">True</property>
-                    <property name="invisible_char">•</property>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -438,7 +427,6 @@
                     <property name="can_focus">True</property>
                     <property name="valign">center</property>
                     <property name="hexpand">True</property>
-                    <property name="invisible_char">•</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="phone-atkobject">
                         <property name="AtkObject::accessible-name" translatable="yes" context="businessdatapage|phone-atkobject">Title</property>
@@ -456,7 +444,6 @@
                     <property name="can_focus">True</property>
                     <property name="valign">center</property>
                     <property name="hexpand">True</property>
-                    <property name="invisible_char">•</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="mobile-atkobject">
                         <property name="AtkObject::accessible-name" translatable="yes" context="businessdatapage|mobile-atkobject">Position</property>
@@ -499,7 +486,6 @@
                     <property name="can_focus">True</property>
                     <property name="valign">center</property>
                     <property name="hexpand">True</property>
-                    <property name="invisible_char">•</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>

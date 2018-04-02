@@ -83,7 +83,6 @@
           <object class="GtkSpinButton" id="space-nospin:0.00cm">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
-            <property name="invisible_char">●</property>
             <property name="adjustment">adjustment1</property>
             <property name="digits">2</property>
           </object>
@@ -126,7 +125,6 @@
                     <property name="can_focus">True</property>
                     <property name="halign">center</property>
                     <property name="hexpand">True</property>
-                    <property name="invisible_char">•</property>
                     <property name="adjustment">adjustment2</property>
                     <property name="digits">2</property>
                     <child internal-child="accessible">
@@ -147,7 +145,6 @@
                     <property name="can_focus">True</property>
                     <property name="halign">center</property>
                     <property name="hexpand">True</property>
-                    <property name="invisible_char">•</property>
                     <property name="adjustment">adjustment2</property>
                     <property name="digits">2</property>
                     <child internal-child="accessible">
@@ -168,7 +165,6 @@
                     <property name="can_focus">True</property>
                     <property name="halign">center</property>
                     <property name="hexpand">True</property>
-                    <property name="invisible_char">•</property>
                     <property name="adjustment">adjustment2</property>
                     <property name="digits">2</property>
                     <child internal-child="accessible">
@@ -189,7 +185,6 @@
                     <property name="can_focus">True</property>
                     <property name="halign">center</property>
                     <property name="hexpand">True</property>
-                    <property name="invisible_char">•</property>
                     <property name="adjustment">adjustment2</property>
                     <property name="digits">2</property>
                     <child internal-child="accessible">
@@ -210,7 +205,6 @@
                     <property name="can_focus">True</property>
                     <property name="halign">center</property>
                     <property name="hexpand">True</property>
-                    <property name="invisible_char">•</property>
                     <property name="adjustment">adjustment2</property>
                     <property name="digits">2</property>
                     <child internal-child="accessible">
@@ -316,7 +310,6 @@
                     <property name="can_focus">True</property>
                     <property name="halign">center</property>
                     <property name="hexpand">True</property>
-                    <property name="invisible_char">•</property>
                     <property name="adjustment">adjustment2</property>
                     <property name="digits">2</property>
                     <child internal-child="accessible">

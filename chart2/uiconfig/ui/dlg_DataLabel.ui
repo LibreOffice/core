@@ -457,7 +457,6 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="valign">center</property>
-                                <property name="invisible_char">•</property>
                                 <property name="adjustment">adjustmentDEGREE</property>
                                 <property name="wrap">True</property>
                               </object>

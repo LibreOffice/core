@@ -183,7 +183,6 @@
                       <object class="GtkSpinButton" id="degree">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="invisible_char">●</property>
                         <property name="adjustment">adjustmentDegree</property>
                       </object>
                       <packing>
@@ -223,7 +222,6 @@
                       <object class="GtkSpinButton" id="period">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="invisible_char">●</property>
                         <property name="adjustment">adjustmentPeriod</property>
                       </object>
                       <packing>
@@ -401,7 +399,6 @@
                   <object class="svtlo-FormattedField" id="extrapolateForward">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="invisible_char">●</property>
                     <property name="caps_lock_warning">False</property>
                     <property name="input_purpose">number</property>
                   </object>
@@ -416,7 +413,6 @@
                   <object class="svtlo-FormattedField" id="extrapolateBackward">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="invisible_char">●</property>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -496,7 +492,6 @@
                   <object class="GtkEntry" id="entry_name">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="invisible_char">•</property>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -509,7 +504,6 @@
                   <object class="svtlo-FormattedField" id="interceptValue">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="invisible_char">●</property>
                     <property name="text" translatable="no">0</property>
                     <property name="caps_lock_warning">False</property>
                     <property name="input_purpose">number</property>
@@ -541,7 +535,6 @@
                   <object class="GtkEntry" id="entry_Xname">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="invisible_char">•</property>
                 </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -570,7 +563,6 @@
                   <object class="GtkEntry" id="entry_Yname">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="invisible_char">•</property>
                 </object>
                   <packing>
                     <property name="left_attach">1</property>

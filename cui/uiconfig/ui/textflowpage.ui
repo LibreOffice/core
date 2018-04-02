@@ -73,7 +73,6 @@
                     <property name="can_focus">True</property>
                     <property name="halign">start</property>
                     <property name="margin_left">25</property>
-                    <property name="invisible_char">•</property>
                     <property name="adjustment">adjustment2</property>
                   </object>
                   <packing>
@@ -87,7 +86,6 @@
                     <property name="can_focus">True</property>
                     <property name="halign">start</property>
                     <property name="margin_left">25</property>
-                    <property name="invisible_char">•</property>
                     <property name="adjustment">adjustment1</property>
                   </object>
                   <packing>
@@ -101,7 +99,6 @@
                     <property name="can_focus">True</property>
                     <property name="halign">start</property>
                     <property name="margin_left">25</property>
-                    <property name="invisible_char">•</property>
                     <property name="input_purpose">number</property>
                     <property name="adjustment">adjustment1</property>
                   </object>
@@ -242,7 +239,6 @@
                   <object class="GtkSpinButton" id="spinPageNumber">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="invisible_char">•</property>
                     <property name="adjustment">adjustment3</property>
                     <accessibility>
                       <relation type="labelled-by" target="labelPageNum"/>
@@ -438,7 +434,6 @@
                   <object class="GtkSpinButton" id="spinOrphan">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="invisible_char">•</property>
                     <property name="adjustment">adjustment1</property>
                     <accessibility>
                       <relation type="labelled-by" target="checkOrphan"/>
@@ -453,7 +448,6 @@
                   <object class="GtkSpinButton" id="spinWidow">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="invisible_char">•</property>
                     <property name="adjustment">adjustment1</property>
                     <property name="climb_rate">1</property>
                     <property name="numeric">True</property>

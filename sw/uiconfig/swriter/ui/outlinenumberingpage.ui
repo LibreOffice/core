@@ -195,7 +195,6 @@
                         <property name="visible">True</property>
                         <property name="sensitive">False</property>
                         <property name="can_focus">True</property>
-                        <property name="invisible_char">●</property>
                         <property name="adjustment">adjustment2</property>
                       </object>
                       <packing>
@@ -207,7 +206,6 @@
                       <object class="GtkEntry" id="prefix">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="invisible_char">●</property>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -218,7 +216,6 @@
                       <object class="GtkEntry" id="suffix">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="invisible_char">●</property>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -229,7 +226,6 @@
                       <object class="GtkSpinButton" id="startat">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="invisible_char">●</property>
                         <property name="adjustment">adjustment1</property>
                       </object>
                       <packing>

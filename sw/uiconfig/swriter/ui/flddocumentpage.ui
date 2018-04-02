@@ -233,8 +233,6 @@
               <object class="GtkSpinButton" id="level">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
-                <property name="invisible_char">•</property>
-                <property name="invisible_char_set">True</property>
                 <property name="adjustment">adjustment1</property>
               </object>
               <packing>
@@ -248,8 +246,6 @@
               <object class="GtkSpinButton" id="offset">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
-                <property name="invisible_char">•</property>
-                <property name="invisible_char_set">True</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -323,7 +319,6 @@
               <object class="GtkEntry" id="value">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
-                <property name="invisible_char">•</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>

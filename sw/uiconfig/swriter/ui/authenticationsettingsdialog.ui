@@ -137,7 +137,6 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="hexpand">True</property>
-                <property name="invisible_char">●</property>
                 <property name="width_chars">40</property>
               </object>
               <packing>
@@ -166,7 +165,6 @@
                 <property name="can_focus">True</property>
                 <property name="hexpand">True</property>
                 <property name="visibility">False</property>
-                <property name="invisible_char">●</property>
                 <property name="width_chars">40</property>
               </object>
               <packing>
@@ -227,7 +225,6 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="hexpand">True</property>
-                <property name="invisible_char">●</property>
                 <property name="width_chars">40</property>
               </object>
               <packing>
@@ -254,7 +251,6 @@
               <object class="GtkSpinButton" id="port">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
-                <property name="invisible_char">●</property>
                 <property name="width_chars">3</property>
                 <property name="adjustment">adjustment1</property>
               </object>
@@ -329,7 +325,6 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="hexpand">True</property>
-                <property name="invisible_char">●</property>
                 <property name="width_chars">40</property>
               </object>
               <packing>
@@ -343,7 +338,6 @@
                 <property name="can_focus">True</property>
                 <property name="hexpand">True</property>
                 <property name="visibility">False</property>
-                <property name="invisible_char">●</property>
                 <property name="width_chars">40</property>
               </object>
               <packing>

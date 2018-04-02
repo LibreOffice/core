@@ -289,7 +289,6 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="hexpand">True</property>
-                            <property name="invisible_char">●</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -406,7 +405,6 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="hexpand">True</property>
-                            <property name="invisible_char">●</property>
                             <property name="width_chars">20</property>
                             <child internal-child="accessible">
                               <object class="AtkObject" id="ref1edit-atkobject">
@@ -424,7 +422,6 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="hexpand">True</property>
-                            <property name="invisible_char">●</property>
                             <property name="width_chars">20</property>
                             <child internal-child="accessible">
                               <object class="AtkObject" id="ref2edit-atkobject">
@@ -442,7 +439,6 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="hexpand">True</property>
-                            <property name="invisible_char">●</property>
                             <property name="width_chars">20</property>
                             <child internal-child="accessible">
                               <object class="AtkObject" id="ref3edit-atkobject">
@@ -460,7 +456,6 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="hexpand">True</property>
-                            <property name="invisible_char">●</property>
                             <property name="width_chars">20</property>
                             <child internal-child="accessible">
                               <object class="AtkObject" id="ref4edit-atkobject">
@@ -619,7 +614,6 @@
                             <property name="can_focus">True</property>
                             <property name="margin_left">6</property>
                             <property name="hexpand">True</property>
-                            <property name="invisible_char">●</property>
                             <property name="width_chars">15</property>
                             <child internal-child="accessible">
                               <object class="AtkObject" id="val1edit-atkobject">
@@ -638,7 +632,6 @@
                             <property name="can_focus">True</property>
                             <property name="margin_left">6</property>
                             <property name="hexpand">True</property>
-                            <property name="invisible_char">●</property>
                             <property name="width_chars">15</property>
                             <child internal-child="accessible">
                               <object class="AtkObject" id="val2edit-atkobject">
@@ -657,7 +650,6 @@
                             <property name="can_focus">True</property>
                             <property name="margin_left">6</property>
                             <property name="hexpand">True</property>
-                            <property name="invisible_char">●</property>
                             <property name="width_chars">15</property>
                             <child internal-child="accessible">
                               <object class="AtkObject" id="val3edit-atkobject">
@@ -676,7 +668,6 @@
                             <property name="can_focus">True</property>
                             <property name="margin_left">6</property>
                             <property name="hexpand">True</property>
-                            <property name="invisible_char">●</property>
                             <property name="width_chars">15</property>
                             <child internal-child="accessible">
                               <object class="AtkObject" id="val4edit-atkobject">

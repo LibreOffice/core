@@ -132,7 +132,6 @@
                       <object class="GtkSpinButton" id="raiselowersb:0%">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="invisible_char">●</property>
                         <property name="adjustment">adjustment1</property>
                       </object>
                       <packing>
@@ -144,7 +143,6 @@
                       <object class="GtkSpinButton" id="fontsizesb:0%">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="invisible_char">●</property>
                         <property name="adjustment">adjustment1</property>
                       </object>
                       <packing>
@@ -327,7 +325,6 @@
                       <object class="GtkSpinButton" id="scalewidthsb:0%">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="invisible_char">●</property>
                         <property name="adjustment">adjustment2</property>
                       </object>
                       <packing>
@@ -413,7 +410,6 @@
                   <object class="GtkSpinButton" id="kerningsb:0pt">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="invisible_char">●</property>
                     <property name="adjustment">adjustment3</property>
                     <property name="digits">1</property>
                   </object>

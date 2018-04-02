@@ -214,7 +214,6 @@
                   <object class="svtlo-FormattedField" id="EDT_MIN">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="invisible_char">•</property>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -227,7 +226,6 @@
                   <object class="svtlo-FormattedField" id="EDT_MAX">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="invisible_char">•</property>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -331,7 +329,6 @@
                           <object class="GtkSpinButton" id="MT_MAIN_DATE_STEP:0">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="invisible_char">•</property>
                             <property name="adjustment">adjustmentINTERVAL</property>
                           </object>
                           <packing>
@@ -363,7 +360,6 @@
                       <object class="svtlo-FormattedField" id="EDT_STEP_MAIN">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="invisible_char">•</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -450,8 +446,6 @@
                   <object class="GtkSpinButton" id="MT_STEPHELP:0">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="invisible_char">•</property>
-                    <property name="invisible_char_set">True</property>
                     <property name="adjustment">adjustmentINTERVAL</property>
                   </object>
                   <packing>
@@ -518,7 +512,6 @@
                   <object class="svtlo-FormattedField" id="EDT_ORIGIN:0">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="invisible_char">•</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>

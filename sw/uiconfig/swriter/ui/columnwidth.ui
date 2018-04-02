@@ -126,7 +126,6 @@
                       <object class="GtkSpinButton" id="column">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="invisible_char">•</property>
                         <property name="adjustment">adjustment1</property>
                       </object>
                       <packing>
@@ -138,7 +137,6 @@
                       <object class="GtkSpinButton" id="width:0mm">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="invisible_char">•</property>
                         <property name="climb_rate">0.01</property>
                         <property name="digits">2</property>
                       </object>

@@ -68,7 +68,6 @@
                       <object class="GtkSpinButton" id="MTR_SHADOW_TRANSPARENT:0%">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="invisible_char">•</property>
                         <property name="adjustment">adjustmentPercent</property>
                       </object>
                       <packing>
@@ -80,7 +79,6 @@
                       <object class="GtkSpinButton" id="MTR_FLD_DISTANCE:0cm">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="invisible_char">•</property>
                         <property name="adjustment">adjustmentDistance</property>
                       </object>
                       <packing>

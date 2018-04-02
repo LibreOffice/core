@@ -183,7 +183,6 @@
                       <object class="svxlo-SvxRelativeField" id="spinED_LEFTINDENT:0cm">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="invisible_char">•</property>
                         <property name="adjustment">adjustmentspinED_INDENT</property>
                       </object>
                       <packing>
@@ -195,7 +194,6 @@
                       <object class="svxlo-SvxRelativeField" id="spinED_RIGHTINDENT:0cm">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="invisible_char">•</property>
                         <property name="adjustment">adjustmentspinED_INDENT</property>
                       </object>
                       <packing>
@@ -207,7 +205,6 @@
                       <object class="svxlo-SvxRelativeField" id="spinED_FLINEINDENT:0cm">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="invisible_char">•</property>
                         <property name="adjustment">adjustmentspinED_INDENT</property>
                       </object>
                       <packing>
@@ -301,7 +298,6 @@
                           <object class="svxlo-SvxRelativeField" id="spinED_TOPDIST:0cm">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
-                            <property name="invisible_char">•</property>
                             <property name="adjustment">adjustmentED_DIST</property>
                           </object>
                           <packing>
@@ -313,7 +309,6 @@
                           <object class="svxlo-SvxRelativeField" id="spinED_BOTTOMDIST:0cm">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
-                            <property name="invisible_char">•</property>
                             <property name="adjustment">adjustmentED_DIST</property>
                           </object>
                           <packing>
@@ -424,7 +419,6 @@
                           <object class="GtkSpinButton" id="spinED_LINEDISTPERCENT:0%">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
-                            <property name="invisible_char">•</property>
                             <property name="adjustment">adjustmentLINEDISTPERCENT</property>
                           </object>
                           <packing>
@@ -437,7 +431,6 @@
                           <object class="GtkSpinButton" id="spinED_LINEDISTMETRIC:0cm">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
-                            <property name="invisible_char">•</property>
                             <property name="adjustment">adjustmentED_LINEDISTMETRIC</property>
                             <property name="digits">1</property>
                           </object>

@@ -90,8 +90,6 @@
                 <property name="can_focus">True</property>
                 <property name="valign">center</property>
                 <property name="hexpand">True</property>
-                <property name="invisible_char">•</property>
-                <property name="invisible_char_set">True</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -192,8 +190,6 @@
                 <property name="can_focus">True</property>
                 <property name="valign">center</property>
                 <property name="hexpand">True</property>
-                <property name="invisible_char">•</property>
-                <property name="invisible_char_set">True</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -397,7 +393,6 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="max_length">1</property>
-                            <property name="invisible_char">•</property>
                             <property name="width_chars">2</property>
                             <property name="text" translatable="yes" context="fldvarpage|separator">.</property>
                           </object>

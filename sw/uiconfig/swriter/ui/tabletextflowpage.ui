@@ -233,7 +233,6 @@
                       <object class="GtkSpinButton" id="pagenonf">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="invisible_char">•</property>
                         <property name="adjustment">adjustment1</property>
                         <accessibility>
                           <relation type="labelled-by" target="pagenoft"/>
@@ -405,7 +404,6 @@
                           <object class="GtkSpinButton" id="repeatheadernf">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
-                            <property name="invisible_char">•</property>
                             <property name="adjustment">adjustment2</property>
                           </object>
                           <packing>
