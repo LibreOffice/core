@@ -163,7 +163,7 @@ Reference< css::container::XNameAccess > OPreparedStatement::getColumns()
         }
         catch (const SQLException& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("dbaccess");
         }
         m_pColumns->setInitialized();
     }

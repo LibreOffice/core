@@ -480,7 +480,7 @@ void ODBExport::exportDataSource()
     }
     catch( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("dbaccess");
     }
 }
 
@@ -622,7 +622,7 @@ void ODBExport::exportConnectionData()
                     }
                     catch( const Exception& )
                     {
-                        DBG_UNHANDLED_EXCEPTION();
+                        DBG_UNHANDLED_EXCEPTION("dbaccess");
                     }
 
                     SvXMLElementExport aServerDB(*this,XML_NAMESPACE_DB, XML_SERVER_DATABASE, true, true);
@@ -1022,7 +1022,7 @@ void ODBExport::exportColumns(const Reference<XColumnsSupplier>& _xColSup)
     }
     catch( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("dbaccess");
     }
 }
 
@@ -1161,7 +1161,7 @@ void ODBExport::exportAutoStyle(XPropertySet* _xProp)
         }
         catch(const Exception&)
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("dbaccess");
         }
         m_aCurrentPropertyStates.clear();
     }

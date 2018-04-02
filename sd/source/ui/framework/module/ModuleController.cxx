@@ -94,7 +94,7 @@ ModuleController::ModuleController (const Reference<XComponentContext>& rxContex
     }
     catch (Exception&)
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("sd");
     }
 }
 

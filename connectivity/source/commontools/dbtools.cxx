@@ -252,7 +252,7 @@ Reference< XDataSource > getDataSource(
     }
     catch( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("connectivity.commontools");
     }
 
     return xDS;
@@ -1239,7 +1239,7 @@ Reference< XSingleSelectQueryComposer > getComposedRowSetStatement( const Refere
     }
     catch( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("connectivity.commontools");
     }
 
     return xComposer;

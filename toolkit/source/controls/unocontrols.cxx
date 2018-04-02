@@ -96,7 +96,7 @@ ImageHelper::getGraphicFromURL_nothrow( const OUString& _rURL )
     }
     catch (const Exception&)
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("toolkit.controls");
     }
 
     return xGraphic;
@@ -674,8 +674,8 @@ void SAL_CALL GraphicControlModel::setFastPropertyValue_NoBroadcast( sal_Int32 n
     }
     catch( const css::uno::Exception& )
     {
+        DBG_UNHANDLED_EXCEPTION("toolkit.controls");
         OSL_FAIL( "GraphicControlModel::setFastPropertyValue_NoBroadcast: caught an exception while aligning the ImagePosition/ImageAlign properties!" );
-        DBG_UNHANDLED_EXCEPTION();
         mbAdjustingImagePosition = false;
     }
 }

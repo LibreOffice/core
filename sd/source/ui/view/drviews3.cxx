@@ -399,7 +399,7 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
             }
             catch (RuntimeException&)
             {
-                DBG_UNHANDLED_EXCEPTION();
+                DBG_UNHANDLED_EXCEPTION("sd.view");
             }
 
             // We have to return immediately to avoid accessing this object.

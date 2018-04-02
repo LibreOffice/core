@@ -97,7 +97,7 @@ namespace basctl { namespace docs {
             }
             catch( const Exception& )
             {
-                DBG_UNHANDLED_EXCEPTION();
+                DBG_UNHANDLED_EXCEPTION("basctl.basicide");
             }
         }
 
@@ -143,7 +143,7 @@ namespace basctl { namespace docs {
                 }
                 catch( const Exception& )
                 {
-                    DBG_UNHANDLED_EXCEPTION();
+                    DBG_UNHANDLED_EXCEPTION("basctl.basicide");
                 }
             }
         }
@@ -163,7 +163,7 @@ namespace basctl { namespace docs {
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("basctl.basicide");
         }
     }
 

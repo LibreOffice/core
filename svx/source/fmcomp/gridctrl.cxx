@@ -921,7 +921,7 @@ void DbGridRow::SetState(CursorWrapper* pCur, bool bPaintCursor)
         }
         catch(SQLException&)
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("svx");
             m_aBookmark = Any();
             m_eStatus = GridRowStatus::Invalid;
             m_bIsNew = false;
@@ -1535,7 +1535,7 @@ void DbGridControl::setDataSource(const Reference< XRowSet >& _xCursor, DbGridCo
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("svx");
         }
 
         bool bPermanentCursor = IsPermanentCursorEnabled();
@@ -1599,7 +1599,7 @@ void DbGridControl::setDataSource(const Reference< XRowSet >& _xCursor, DbGridCo
                 }
                 catch( const Exception& )
                 {
-                    DBG_UNHANDLED_EXCEPTION();
+                    DBG_UNHANDLED_EXCEPTION("svx");
                     m_nSeekPos = -1;
                 }
         }
@@ -2143,7 +2143,7 @@ bool DbGridControl::SetCurrent(long nNewRow)
     }
     catch ( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("svx");
         EndCursorAction();
         return false;
     }
@@ -2441,7 +2441,7 @@ bool DbGridControl::SeekCursor(long nRow, bool bAbsolute)
         catch(Exception&)
         {
             OSL_FAIL("DbGridControl::SeekCursor : failed ...");
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("svx");
             m_nSeekPos = -1; // no further data set available
         }
     }
@@ -2523,7 +2523,7 @@ void DbGridControl::MoveToNext()
         }
         catch(SQLException &)
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("svx");
         }
 
         if(!bOk)
@@ -3016,7 +3016,7 @@ void DbGridControl::Undo()
     }
     catch(Exception&)
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("svx");
     }
 
     EndCursorAction();

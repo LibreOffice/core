@@ -622,7 +622,7 @@ void SAL_CALL ODefinitionContainer::propertyChange( const PropertyChangeEvent& e
         }
         catch(const Exception&)
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("dbaccess");
             throw RuntimeException();
         }
         m_bInPropertyChange = false;

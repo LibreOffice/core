@@ -131,7 +131,7 @@ DlgFilterCrit::DlgFilterCrit(vcl::Window * pParent,
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("dbaccess");
         }
         m_pLB_WHEREFIELD1->InsertEntry( *pIter );
         m_pLB_WHEREFIELD2->InsertEntry( *pIter );
@@ -407,7 +407,7 @@ Reference< XPropertySet > DlgFilterCrit::getColumn( const OUString& _rFieldName 
     }
     catch( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("dbaccess");
     }
 
     return xColumn;
@@ -424,7 +424,7 @@ Reference< XPropertySet > DlgFilterCrit::getQueryColumn( const OUString& _rField
     }
     catch( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("dbaccess");
     }
 
     return xColumn;
@@ -782,7 +782,7 @@ void DlgFilterCrit::BuildWherePart()
     }
     catch(const Exception&)
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("dbaccess");
     }
 }
 

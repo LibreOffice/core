@@ -230,7 +230,7 @@ SdPage* DocumentHelper::AddMasterPage (
         catch(const uno::Exception&)
         {
             pClonedMasterPage = nullptr;
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("sd");
         }
         catch(const ::std::exception& e)
         {

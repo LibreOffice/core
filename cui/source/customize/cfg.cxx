@@ -1349,7 +1349,7 @@ void SvxConfigPage::Reset( const SfxItemSet* )
             }
             catch( const uno::Exception& )
             {
-                DBG_UNHANDLED_EXCEPTION();
+                DBG_UNHANDLED_EXCEPTION("cui.customize");
             }
 
             for ( sal_Int32 i = 0; i < aFrameList.getLength(); ++i )
@@ -1467,7 +1467,7 @@ OUString SvxConfigPage::GetFrameWithDefaultAndIdentify( uno::Reference< frame::X
     }
     catch( const uno::Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("cui.customize");
     }
 
     return sModuleID;

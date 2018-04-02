@@ -862,7 +862,7 @@ void BibDataManager::setFilter(const OUString& rQuery)
     }
     catch (const Exception&)
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("extensions.biblio");
     }
 
 
@@ -879,7 +879,7 @@ OUString BibDataManager::getFilter()
     }
     catch (const Exception&)
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("extensions.biblio");
     }
 
 

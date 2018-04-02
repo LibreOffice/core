@@ -206,7 +206,7 @@ IMPL_LINK_NOARG( ORelationDialog, OKClickHdl, Button*, void )
     }
     catch( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("dbaccess");
     }
 
     m_bTriedOneUpdate = true;

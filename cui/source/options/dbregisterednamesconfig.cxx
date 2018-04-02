@@ -63,7 +63,7 @@ namespace svx
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("cui.options");
         }
 
         _rFillItems.Put( DatabaseMapItem( SID_SB_DB_REGISTER, aSettings ) );

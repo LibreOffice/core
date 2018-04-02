@@ -520,7 +520,7 @@ void OImageControlModel::onConnectedDbColumn( const Reference< XInterface >& _rx
     }
     catch( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("forms.component");
     }
 }
 
@@ -654,7 +654,7 @@ IMPL_LINK( OImageControlModel, OnImageImportDone, ::Graphic*, i_pGraphic, void )
     }
     catch ( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("forms.component");
     }
     m_bExternalGraphic = true;
 }
@@ -844,7 +844,7 @@ bool OImageControlControl::impl_isEmptyGraphics_nothrow() const
     }
     catch( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("forms.component");
     }
 
     return bIsEmpty;

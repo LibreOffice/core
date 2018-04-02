@@ -129,7 +129,7 @@ bool ObjectCopySource::isView() const
     }
     catch( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("dbaccess");
     }
     return bIsView;
 }
@@ -285,7 +285,7 @@ bool NamedTableCopySource::isView() const
     }
     catch( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("dbaccess");
     }
     return sTableType == "VIEW";
 }
@@ -360,7 +360,7 @@ Sequence< OUString > NamedTableCopySource::getPrimaryKeyColumnNames() const
     }
     catch( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("dbaccess");
     }
 
     return aPKColNames;
@@ -1327,13 +1327,13 @@ bool OCopyTableWizard::supportsViews( const Reference< XConnection >& _rxConnect
             }
             catch( const SQLException& )
             {
-                DBG_UNHANDLED_EXCEPTION();
+                DBG_UNHANDLED_EXCEPTION("dbaccess");
             }
         }
     }
     catch( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("dbaccess");
     }
     return bSupportsViews;
 }
@@ -1350,7 +1350,7 @@ sal_Int32 OCopyTableWizard::getMaxColumnNameLength() const
         }
         catch(const Exception&)
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("dbaccess");
         }
     }
     return nLen;
@@ -1554,7 +1554,7 @@ void OCopyTableWizard::showError(const Any& _aError)
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("dbaccess");
         }
     }
 }

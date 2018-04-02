@@ -169,7 +169,7 @@ void DocumentStorageAccess::dispose()
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("dbaccess");
         }
     }
 
@@ -204,7 +204,7 @@ Reference< XStorage > DocumentStorageAccess::impl_openSubStorage_nothrow( const 
     }
     catch( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("dbaccess");
     }
 
     return xStorage;
@@ -222,7 +222,7 @@ void DocumentStorageAccess::disposeStorages()
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("dbaccess");
         }
     }
     m_aExposedStorages.clear();
@@ -260,7 +260,7 @@ bool DocumentStorageAccess::commitEmbeddedStorage( bool _bPreventRootCommits )
     }
     catch( Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("dbaccess");
     }
 
     if ( _bPreventRootCommits )
@@ -466,7 +466,7 @@ void ODatabaseModelImpl::impl_construct_nothrow()
     }
     catch( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("dbaccess");
     }
     m_rDBContext.appendAtTerminateListener(*this);
 }
@@ -536,7 +536,7 @@ namespace
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("dbaccess");
             // be on the safe side: If we can't reliably determine whether there are macros,
             // assume there actually are. Better this way, than the other way round.
             bSomeDocHasMacros = true;
@@ -563,7 +563,7 @@ bool ODatabaseModelImpl::objectHasMacros( const Reference< XStorage >& _rxContai
     }
     catch( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("dbaccess");
     }
     return bHasMacros;
 }
@@ -629,7 +629,7 @@ void ODatabaseModelImpl::clearConnections()
             }
             catch(const Exception&)
             {
-                DBG_UNHANDLED_EXCEPTION();
+                DBG_UNHANDLED_EXCEPTION("dbaccess");
             }
         }
     }
@@ -651,7 +651,7 @@ void ODatabaseModelImpl::dispose()
     }
     catch( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("dbaccess");
     }
     m_xDataSource = WeakReference<XDataSource>();
     m_xModel = WeakReference< XModel >();
@@ -680,7 +680,7 @@ void ODatabaseModelImpl::dispose()
     }
     catch( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("dbaccess");
     }
 
     if ( m_pStorageAccess.is() )
@@ -803,7 +803,7 @@ Reference< XStorage > const & ODatabaseModelImpl::getOrCreateRootStorage()
                     }
                     catch( const Exception& )
                     {
-                        DBG_UNHANDLED_EXCEPTION();
+                        DBG_UNHANDLED_EXCEPTION("dbaccess");
                     }
                 }
             }
@@ -855,7 +855,7 @@ bool ODatabaseModelImpl::commitStorageIfWriteable_ignoreErrors( const Reference<
     }
     catch( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("dbaccess");
     }
     return bSuccess;
 }
@@ -875,7 +875,7 @@ void ODatabaseModelImpl::setModified( bool _bModified )
     }
     catch( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("dbaccess");
     }
 }
 
@@ -913,7 +913,7 @@ Reference< XModel > ODatabaseModelImpl::createNewModel_deliverOwnership()
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("dbaccess");
         }
 
         if ( bHadModelBefore )
@@ -1227,7 +1227,7 @@ sal_Int16 ODatabaseModelImpl::getCurrentMacroExecMode() const
     }
     catch( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("dbaccess");
     }
     return nCurrentMode;
 }

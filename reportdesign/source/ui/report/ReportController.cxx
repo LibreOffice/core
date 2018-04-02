@@ -353,7 +353,7 @@ void OReportController::disposing()
         }
         catch(const uno::Exception&)
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("reportdesign");
         }
     }
 
@@ -1712,7 +1712,7 @@ void OReportController::impl_initialize( )
     }
     catch(const SQLException&)
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("reportdesign");
     }
 }
 
@@ -2031,7 +2031,7 @@ void OReportController::impl_onModifyChanged()
     }
     catch(const uno::Exception&)
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("reportdesign");
     }
 }
 
@@ -2214,7 +2214,7 @@ void SAL_CALL OReportController::propertyChange( const beans::PropertyChangeEven
     }
     catch(const uno::Exception&)
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("reportdesign");
     }
 }
 
@@ -2488,7 +2488,7 @@ void OReportController::openPageDialog(const uno::Reference<report::XSection>& _
     }
     catch(const Exception&)
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("reportdesign");
     }
     SfxItemPool::Free(pPool);
 
@@ -2803,7 +2803,7 @@ void SAL_CALL OReportController::restoreViewData(const uno::Any& i_data)
     }
     catch(const IllegalArgumentException&)
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("reportdesign");
     }
 }
 
@@ -2970,7 +2970,7 @@ uno::Reference< sdbc::XRowSet > const & OReportController::getRowSet()
     }
     catch(const uno::Exception&)
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("reportdesign");
     }
 
     return m_xRowSet;
@@ -3004,7 +3004,7 @@ void OReportController::insertGraphic()
     }
     catch(const Exception&)
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("reportdesign");
     }
 }
 
@@ -3370,7 +3370,7 @@ void OReportController::addPairControls(const Sequence< PropertyValue >& aArgs)
                     }
                     catch(const Exception&)
                     {
-                        DBG_UNHANDLED_EXCEPTION();
+                        DBG_UNHANDLED_EXCEPTION("reportdesign");
                     }
                 #endif
 
@@ -3574,7 +3574,7 @@ void OReportController::addPairControls(const Sequence< PropertyValue >& aArgs)
     }
     catch(const Exception&)
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("reportdesign");
     }
 }
 
@@ -3856,7 +3856,7 @@ void OReportController::modifyGroup(const bool _bAppend, const Sequence< Propert
     }
     catch(const Exception&)
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("reportdesign");
     }
 }
 
@@ -4203,7 +4203,7 @@ void OReportController::openZoomDialog()
         }
         catch(const uno::Exception&)
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("reportdesign");
         }
         SfxItemPool::Free(pPool);
 

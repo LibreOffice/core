@@ -300,7 +300,7 @@ TTableWindowData::value_type OJoinTableView::createTableWindowData(const OUStrin
     }
     catch( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("dbaccess");
     }
     return pData;
 }

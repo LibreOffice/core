@@ -126,7 +126,7 @@ OUString TableListFacade::getSelectedName( OUString& _out_rAliasName ) const
     }
     catch ( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("dbaccess");
     }
 
     _out_rAliasName = aTableName;
@@ -210,7 +210,7 @@ void TableListFacade::updateTableObjectList( bool _bAllowViews )
     }
     catch( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("dbaccess");
     }
 }
 
@@ -295,7 +295,7 @@ void QueryListFacade::updateTableObjectList( bool /*_bAllowViews*/ )
     }
     catch( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("dbaccess");
     }
 }
 

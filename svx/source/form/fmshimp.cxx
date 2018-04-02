@@ -339,7 +339,7 @@ namespace
         }
         catch(const Exception&)
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("svx");
         }
         return -1;
     }
@@ -677,7 +677,7 @@ Reference< css::frame::XModel > FmXFormShell::getContextDocument_Lock() const
     }
     catch( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("svx");
     }
     return xModel;
 }
@@ -1239,7 +1239,7 @@ bool FmXFormShell::executeControlConversionSlot_Lock(const Reference<XFormCompon
                     }
                     catch(const Exception&)
                     {
-                        DBG_UNHANDLED_EXCEPTION();
+                        DBG_UNHANDLED_EXCEPTION("svx");
                     }
                 }
             }
@@ -1257,7 +1257,7 @@ bool FmXFormShell::executeControlConversionSlot_Lock(const Reference<XFormCompon
                     }
                     catch(const Exception&)
                     {
-                        DBG_UNHANDLED_EXCEPTION();
+                        DBG_UNHANDLED_EXCEPTION("svx");
                     }
                 }
             }
@@ -2874,7 +2874,7 @@ Reference< XControl> FmXFormShell::impl_getControl_Lock(const Reference<XControl
     }
     catch( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("svx");
     }
 
     OSL_ENSURE( xControl.is(), "FmXFormShell::impl_getControl: no control found!" );
@@ -2934,7 +2934,7 @@ void FmXFormShell::impl_collectFormSearchContexts_nothrow_Lock( const Reference<
     }
     catch( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("svx");
     }
 }
 
@@ -3009,7 +3009,7 @@ void saveFilter(const Reference< runtime::XFormController >& _rxController)
     }
     catch (const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("svx");
     }
 
 }
@@ -3108,7 +3108,7 @@ void FmXFormShell::stopFiltering_Lock(bool bSave)
                     }
                     catch(const Exception&)
                     {
-                        DBG_UNHANDLED_EXCEPTION();
+                        DBG_UNHANDLED_EXCEPTION("svx");
                     }
                 }
             }
@@ -3714,7 +3714,7 @@ void FmXFormShell::impl_defaultCurrentForm_nothrow_Lock()
     }
     catch( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("svx");
     }
 }
 
@@ -3818,7 +3818,7 @@ namespace
         }
         catch(const Exception&)
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("svx");
         }
         return false;
     }
@@ -3880,7 +3880,7 @@ void FmXFormShell::loadForms_Lock(FmFormPage* _pPage, const LoadFormsFlags _nBeh
                 }
                 catch( const Exception& )
                 {
-                    DBG_UNHANDLED_EXCEPTION();
+                    DBG_UNHANDLED_EXCEPTION("svx");
                 }
 
                 // reset the form if it was loaded
@@ -3974,7 +3974,7 @@ bool FmXFormShell::HasControlFocus_Lock() const
     }
     catch( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("svx");
     }
 
     return bHasControlFocus;

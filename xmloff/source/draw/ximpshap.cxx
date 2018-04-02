@@ -3921,7 +3921,7 @@ void SdXMLTableShapeContext::StartElement( const css::uno::Reference< css::xml::
             }
             catch(const Exception&)
             {
-                DBG_UNHANDLED_EXCEPTION();
+                DBG_UNHANDLED_EXCEPTION("xmloff.draw");
             }
 
             const XMLPropertyMapEntry* pEntry = &aXMLTableShapeAttributes[0];
@@ -3934,7 +3934,7 @@ void SdXMLTableShapeContext::StartElement( const css::uno::Reference< css::xml::
                 }
                 catch(const Exception&)
                 {
-                    DBG_UNHANDLED_EXCEPTION();
+                    DBG_UNHANDLED_EXCEPTION("xmloff.draw");
                 }
             }
         }

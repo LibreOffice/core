@@ -1109,7 +1109,7 @@ void ElementDescriptor::readDefaults( bool supportPrintable, bool supportVisible
     }
     catch( Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("xmlscript.xmldlg");
     }
     // force writing of pos/size
     a = _xProps->getPropertyValue( "PositionX" );

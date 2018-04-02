@@ -548,7 +548,7 @@ void ScModule::Execute( SfxRequest& rReq )
             }
             catch( css::uno::RuntimeException& )
             {
-                DBG_UNHANDLED_EXCEPTION();
+                DBG_UNHANDLED_EXCEPTION("sc.ui");
             }
         }
         break;

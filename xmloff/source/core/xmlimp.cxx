@@ -132,8 +132,7 @@ getBuildIdsProperty(uno::Reference<beans::XPropertySet> const& xImportInfo)
         }
         catch (Exception const&)
         {
-            SAL_WARN("xmloff.core", "exception getting BuildId");
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("xmloff.core", "exception getting BuildId");
         }
     }
     return OUString();
@@ -999,8 +998,7 @@ void SAL_CALL SvXMLImport::setTargetDocument( const uno::Reference< lang::XCompo
     }
     catch (uno::Exception const&)
     {
-        SAL_WARN("xmloff.core", "exception caught");
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("xmloff.core");
     }
     if (!mxEventListener.is())
     {
@@ -1591,13 +1589,11 @@ void SvXMLImport::AddNumberStyle(sal_Int32 nKey, const OUString& rName)
         }
         catch ( uno::Exception& )
         {
-            SAL_WARN( "xmloff.core", "Numberformat could not be inserted");
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION( "xmloff.core", "Numberformat could not be inserted");
         }
     }
     else {
-        SAL_WARN( "xmloff.core", "not possible to create NameContainer");
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION( "xmloff.core", "not possible to create NameContainer");
     }
 }
 

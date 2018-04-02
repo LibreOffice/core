@@ -405,7 +405,7 @@ void DlgEdFunc::activateOle(SdrObject* _pObj)
                 }
                 catch( uno::Exception& )
                 {
-                    DBG_UNHANDLED_EXCEPTION();
+                    DBG_UNHANDLED_EXCEPTION("reportdesign");
                 }
             }
         }

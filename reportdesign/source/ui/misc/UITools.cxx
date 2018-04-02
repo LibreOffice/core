@@ -725,7 +725,7 @@ bool openCharDialog( const uno::Reference<report::XReportControlFormat >& _rxRep
     }
     catch(uno::Exception&)
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("reportdesign");
     }
 
     SfxItemPool::Free(pPool);
@@ -764,7 +764,7 @@ bool openAreaDialog( const uno::Reference<report::XShape >& _xShape,const uno::R
     }
     catch(uno::Exception&)
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("reportdesign");
     }
 
     return bSuccess;
@@ -825,7 +825,7 @@ void applyCharacterSettings( const uno::Reference< report::XReportControlFormat 
     }
     catch( const uno::Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("reportdesign");
     }
 }
 
@@ -942,7 +942,7 @@ uno::Sequence< OUString > getParameterNames( const uno::Reference< sdbc::XRowSet
     }
     catch( const uno::Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("reportdesign");
     }
 
     return aNames;

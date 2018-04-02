@@ -707,7 +707,7 @@ ScVbaApplication::setCursor( sal_Int32 _cursor )
     }
     catch (const uno::Exception&)
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("sc.ui");
     }
 }
 

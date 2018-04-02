@@ -67,7 +67,7 @@ OXMLConnectionResource::OXMLConnectionResource( ODBFilter& rImport,
                 }
                 catch(const Exception&)
                 {
-                    DBG_UNHANDLED_EXCEPTION();
+                    DBG_UNHANDLED_EXCEPTION("dbaccess");
                 }
                 break;
             case XML_TOK_TYPE:

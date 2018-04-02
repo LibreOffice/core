@@ -78,7 +78,7 @@ OPropertyMediator::OPropertyMediator(const Reference< XPropertySet>& _xSource
         }
         catch(Exception&)
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("reportdesign");
         }
     }
     osl_atomic_decrement(&m_refCount);

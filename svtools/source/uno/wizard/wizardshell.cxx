@@ -119,7 +119,7 @@ namespace svt { namespace uno
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("svtools.uno");
         }
     }
 
@@ -138,7 +138,7 @@ namespace svt { namespace uno
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("svtools.uno");
         }
 
         return true;
@@ -203,7 +203,7 @@ namespace svt { namespace uno
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("svtools.uno");
         }
         // fallback for ill-behaved clients: the numeric state
         return OUString::number(i_nState);
@@ -219,7 +219,7 @@ namespace svt { namespace uno
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("svtools.uno");
         }
 
         return WizardShell_Base::canAdvance();
@@ -235,7 +235,7 @@ namespace svt { namespace uno
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("svtools.uno");
         }
 
         return WizardShell_Base::onFinish();

@@ -331,7 +331,7 @@ namespace dbmm
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("dbaccess");
             bSuccess = false;
         }
 
@@ -363,7 +363,7 @@ namespace dbmm
             }
             catch( const Exception& )
             {
-                DBG_UNHANDLED_EXCEPTION();
+                DBG_UNHANDLED_EXCEPTION("dbaccess");
             }
             return bEqual;
         }
@@ -530,7 +530,7 @@ namespace dbmm
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("dbaccess");
         }
 
         // close all frames from aViews - the respective controllers have been closed, but
@@ -544,7 +544,7 @@ namespace dbmm
             }
             catch( const Exception& )
             {
-                DBG_UNHANDLED_EXCEPTION();
+                DBG_UNHANDLED_EXCEPTION("dbaccess");
             }
         }
         aViews.clear();

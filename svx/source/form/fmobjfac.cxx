@@ -101,7 +101,7 @@ namespace
         catch( const Exception& )
         {
             OSL_FAIL( "lcl_initProperty: caught an exception!" );
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("svx");
         }
     }
 }

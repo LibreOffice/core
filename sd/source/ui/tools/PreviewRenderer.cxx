@@ -129,7 +129,7 @@ Image PreviewRenderer::RenderPage (
         }
         catch (const css::uno::Exception&)
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("sd.tools");
         }
     }
 
@@ -188,7 +188,7 @@ Image PreviewRenderer::RenderSubstitution (
     }
     catch (const css::uno::Exception&)
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("sd.tools");
     }
 
     return aPreview;
@@ -298,7 +298,7 @@ void PreviewRenderer::PaintPage (
     }
     catch (const css::uno::Exception&)
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("sd.tools");
     }
 
     // Restore the previous online spelling and redlining states.

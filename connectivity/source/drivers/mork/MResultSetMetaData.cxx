@@ -89,7 +89,7 @@ OUString SAL_CALL OResultSetMetaData::getColumnName( sal_Int32 column )
     }
     catch( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("connectivity.mork");
     }
     return sColumnName;
 }

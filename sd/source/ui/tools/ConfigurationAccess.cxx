@@ -78,7 +78,7 @@ void ConfigurationAccess::Initialize (
     }
     catch (Exception&)
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("sd.tools");
     }
 }
 

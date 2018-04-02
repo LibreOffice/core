@@ -362,11 +362,11 @@ Reference< XNameAccess > const & BibliographyLoader::GetDataColumns() const
         }
         catch(const SQLException&)
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("extensions.biblio");
         }
         catch(const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("extensions.biblio");
             bSuccess = false;
         }
 
@@ -484,7 +484,7 @@ Any BibliographyLoader::getByName(const OUString& rName)
     }
     catch(const Exception&)
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("extensions.biblio");
     }
     return aRet;
 }
@@ -517,7 +517,7 @@ Sequence< OUString > BibliographyLoader::getElementNames()
     }
     catch(const Exception&)
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("extensions.biblio");
     }
 
     aRet.realloc(nRealNameCount);
@@ -548,7 +548,7 @@ sal_Bool BibliographyLoader::hasByName(const OUString& rName)
     }
     catch(const Exception&)
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("extensions.biblio");
     }
     return bRet;
 }

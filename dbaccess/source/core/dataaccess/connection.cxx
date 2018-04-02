@@ -291,7 +291,7 @@ OConnection::OConnection(ODatabaseSource& _rDB
     }
     catch(const Exception&)
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("dbaccess");
     }
 
     m_xTableUIProvider.set(m_xMasterConnection, css::uno::UNO_QUERY);
@@ -352,7 +352,7 @@ OConnection::OConnection(ODatabaseSource& _rDB
     }
     catch(const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("dbaccess");
     }
     osl_atomic_decrement( &m_refCount );
 }
@@ -778,7 +778,7 @@ void OConnection::impl_checkTableQueryNames_nothrow()
     }
     catch( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("dbaccess");
     }
 }
 

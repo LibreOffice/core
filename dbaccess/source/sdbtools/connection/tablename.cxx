@@ -133,7 +133,7 @@ namespace sdbtools
         catch( const NoSuchElementException& ) { throw; }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("dbaccess");
             throw NoSuchElementException();
         }
 

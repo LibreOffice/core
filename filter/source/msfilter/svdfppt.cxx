@@ -7376,7 +7376,7 @@ void MergeCells( const Reference< XTable >& xTable, sal_Int32 nCol, sal_Int32 nR
    }
    catch( const Exception& )
    {
-       DBG_UNHANDLED_EXCEPTION();
+       DBG_UNHANDLED_EXCEPTION("filter.ms");
    }
 }
 

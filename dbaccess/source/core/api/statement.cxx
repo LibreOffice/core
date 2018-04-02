@@ -561,7 +561,7 @@ OUString OStatement::impl_doEscapeProcessing_nothrow( const OUString& _rSQL ) co
     }
     catch( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("dbaccess");
     }
 
     return _rSQL;
@@ -580,7 +580,7 @@ bool OStatement::impl_ensureComposer_nothrow() const
     }
     catch( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("dbaccess");
     }
 
     return m_xComposer.is();

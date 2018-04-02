@@ -146,7 +146,7 @@ namespace dbaui
             }
             catch( const Exception& )
             {
-                DBG_UNHANDLED_EXCEPTION();
+                DBG_UNHANDLED_EXCEPTION("dbaccess");
             }
         }
         return xReturn;
@@ -237,7 +237,7 @@ namespace dbaui
         if ( xDialog.is() )
         {
             try { AsyncDialogExecutor::executeModalDialogAsync( xDialog ); }
-            catch( const Exception& ) { DBG_UNHANDLED_EXCEPTION(); }
+            catch( const Exception& ) { DBG_UNHANDLED_EXCEPTION("dbaccess"); }
             return nullptr;
         }
 
@@ -257,7 +257,7 @@ namespace dbaui
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("dbaccess");
         }
         return xDesigner;
     }

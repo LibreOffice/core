@@ -641,7 +641,7 @@ void ControlModelContainerBase::removeByName( const OUString& aName )
         }
         catch (const Exception&)
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("toolkit.controls");
         }
     }
 
@@ -1354,7 +1354,7 @@ void ControlContainerBase::ImplRemoveControl( Reference< XControlModel > const &
         }
         catch (const Exception&)
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("toolkit.controls");
         }
     }
 }
@@ -1553,7 +1553,7 @@ void ControlContainerBase::elementInserted( const ContainerEvent& Event )
     }
     catch (const Exception&)
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("toolkit.controls");
     }
 }
 
@@ -1574,7 +1574,7 @@ void ControlContainerBase::elementRemoved( const ContainerEvent& Event )
     }
     catch (const Exception&)
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("toolkit.controls");
     }
 }
 
@@ -1596,7 +1596,7 @@ void ControlContainerBase::elementReplaced( const ContainerEvent& Event )
     }
     catch (const Exception&)
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("toolkit.controls");
     }
 
     OUString aName;
@@ -1613,7 +1613,7 @@ void ControlContainerBase::elementReplaced( const ContainerEvent& Event )
     }
     catch (const Exception&)
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("toolkit.controls");
     }
 }
 

@@ -412,7 +412,7 @@ bool OTableController::doSaveDoc(bool _bSaveAs)
     catch( const Exception& )
     {
         bError = true;
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("dbaccess");
     }
 
     if ( aInfo.isValid() )
@@ -475,7 +475,7 @@ void OTableController::doEditIndexes()
     }
     catch( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("dbaccess");
     }
 
     if (!xIndexes.is())
@@ -504,7 +504,7 @@ void OTableController::impl_initialize()
     }
     catch( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("dbaccess");
     }
 
     try
@@ -526,7 +526,7 @@ void OTableController::impl_initialize()
     }
     catch( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("dbaccess");
     }
 }
 
@@ -718,7 +718,7 @@ void OTableController::appendColumns(Reference<XColumnsSupplier> const & _rxColS
     }
     catch( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("dbaccess");
     }
 }
 
@@ -1332,7 +1332,7 @@ void OTableController::dropPrimaryKey()
     }
     catch( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("dbaccess");
     }
 
     showError(aInfo);
@@ -1391,7 +1391,7 @@ bool OTableController::isAddAllowed() const
     }
     catch(Exception&)
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("dbaccess");
         bAddAllowed = false;
     }
 
@@ -1482,7 +1482,7 @@ OUString OTableController::getPrivateTitle() const
     }
     catch( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("dbaccess");
     }
     return sTitle;
 }

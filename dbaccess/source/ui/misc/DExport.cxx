@@ -735,7 +735,7 @@ bool ODatabaseExport::executeWizard(const OUString& _rTableName, const Any& _aTe
     }
     catch( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("dbaccess");
     }
 
     return bError;

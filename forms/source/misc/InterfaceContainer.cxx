@@ -157,7 +157,7 @@ void OInterfaceContainer::impl_addVbEvents_nolck_nothrow(  const sal_Int32 i_nIn
     }
     catch( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("forms.misc");
     }
 
 }
@@ -226,7 +226,7 @@ void OInterfaceContainer::impl_createEventAttacher_nothrow()
     }
     catch( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("forms.misc");
     }
 }
 
@@ -400,7 +400,7 @@ void OInterfaceContainer::transformEvents()
     }
     catch( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("forms.misc");
     }
 }
 
@@ -577,7 +577,7 @@ void SAL_CALL OInterfaceContainer::read( const Reference< XObjectInputStream >& 
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("forms.misc");
         }
     }
 }

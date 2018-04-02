@@ -158,7 +158,7 @@ namespace toolkit
             }
             catch( const Exception& )
             {
-                DBG_UNHANDLED_EXCEPTION();
+                DBG_UNHANDLED_EXCEPTION("toolkit");
             }
             return aSizePixel;
         }
@@ -260,7 +260,7 @@ namespace toolkit
             }
             catch( const Exception& )
             {
-                DBG_UNHANDLED_EXCEPTION();
+                DBG_UNHANDLED_EXCEPTION("toolkit");
             }
         }
 
@@ -283,7 +283,7 @@ namespace toolkit
             }
             catch( const Exception& )
             {
-                DBG_UNHANDLED_EXCEPTION();
+                DBG_UNHANDLED_EXCEPTION("toolkit");
             }
         }
     }

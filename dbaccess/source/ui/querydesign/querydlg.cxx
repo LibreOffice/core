@@ -268,7 +268,7 @@ IMPL_LINK_NOARG( DlgQryJoin, NaturalToggleHdl, CheckBox&, void )
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("dbaccess");
         }
         m_pTableControl->NotifyCellChange();
         m_pTableControl->Invalidate();

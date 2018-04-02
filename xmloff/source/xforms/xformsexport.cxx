@@ -795,7 +795,7 @@ void getXFormsSettings( const Reference< XNameAccess >& _rXForms, Sequence< Prop
     }
     catch( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("xmloff");
     }
 }
 

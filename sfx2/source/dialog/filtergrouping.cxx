@@ -830,7 +830,7 @@ namespace sfx2
             }
             catch( const Exception& )
             {
-                DBG_UNHANDLED_EXCEPTION();
+                DBG_UNHANDLED_EXCEPTION("sfx.dialog");
             }
         }
 

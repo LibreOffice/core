@@ -347,7 +347,7 @@ void SAL_CALL OSingleSelectQueryComposer::setCommand( const OUString& Command,sa
                 }
                 catch(Exception&)
                 {
-                    DBG_UNHANDLED_EXCEPTION();
+                    DBG_UNHANDLED_EXCEPTION("dbaccess");
                 }
 
                 sSQL.append(dbtools::composeTableNameForSelect(m_xConnection,xTable));
@@ -606,7 +606,7 @@ void SAL_CALL OSingleSelectQueryComposer::setElementaryQuery( const OUString& _r
     catch( const Exception& )
     {
         SAL_WARN("dbaccess", "OSingleSelectQueryComposer::setElementaryQuery: there should be no error anymore for the additive statement!" );
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("dbaccess");
         // every part of the additive statement should have passed other tests already, and should not
         // be able to cause any errors ... me thinks
     }
@@ -796,7 +796,7 @@ Reference< XNameAccess > SAL_CALL OSingleSelectQueryComposer::getColumns(  )
                 xStatement.reset( Reference< XStatement >( m_xConnection->createStatement(), UNO_QUERY_THROW ) );
                 Reference< XPropertySet > xStatementProps( xStatement, UNO_QUERY_THROW );
                 try { xStatementProps->setPropertyValue( PROPERTY_ESCAPE_PROCESSING, makeAny( false ) ); }
-                catch ( const Exception& ) { DBG_UNHANDLED_EXCEPTION(); }
+                catch ( const Exception& ) { DBG_UNHANDLED_EXCEPTION("dbaccess"); }
                 xResMetaDataSup.set( xStatement->executeQuery( sSQL ), UNO_QUERY_THROW );
                 xResultSetMeta.set( xResMetaDataSup->getMetaData(), UNO_QUERY_THROW );
             }

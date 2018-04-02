@@ -179,7 +179,7 @@ void ConfigurationUpdater::UpdateConfiguration()
     }
     catch(const RuntimeException &)
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("sd");
     }
 
     SAL_INFO("sd.fwk", OSL_THIS_FUNC << ": ConfigurationUpdater::UpdateConfiguration)");
@@ -263,7 +263,7 @@ void ConfigurationUpdater::UpdateCore (const ConfigurationClassifier& rClassifie
     }
     catch(const RuntimeException&)
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("sd");
     }
 }
 

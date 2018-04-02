@@ -215,7 +215,7 @@ void FmFormPageImpl::initFrom( FmFormPageImpl& i_foreignImpl )
     }
     catch( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("svx");
     }
 }
 
@@ -292,7 +292,7 @@ Reference< XMap > FmFormPageImpl::impl_createControlShapeMap_nothrow()
     }
     catch( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("svx");
     }
     return xMap;
 }
@@ -384,7 +384,7 @@ Reference< XForm >  FmFormPageImpl::getDefaultForm()
             }
             catch( const Exception& )
             {
-                DBG_UNHANDLED_EXCEPTION();
+                DBG_UNHANDLED_EXCEPTION("svx");
             }
         }
     }
@@ -430,7 +430,7 @@ Reference< XForm >  FmFormPageImpl::getDefaultForm()
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("svx");
             xForm.clear();
         }
 
@@ -625,7 +625,7 @@ OUString FmFormPageImpl::setUniqueName(const Reference< XFormComponent > & xForm
     }
     catch( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("svx");
     }
 #endif
     OUString sName;
@@ -671,7 +671,7 @@ void FmFormPageImpl::formModelAssigned( const FmFormObj& _object )
     }
     catch( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("svx");
     }
 }
 
@@ -689,7 +689,7 @@ void FmFormPageImpl::formObjectInserted( const FmFormObj& _object )
     }
     catch( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("svx");
     }
 }
 
@@ -707,7 +707,7 @@ void FmFormPageImpl::formObjectRemoved( const FmFormObj& _object )
     }
     catch( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("svx");
     }
 }
 

@@ -93,7 +93,7 @@ namespace dbtools
                 }
                 catch( const Exception& )
                 {
-                    DBG_UNHANDLED_EXCEPTION();
+                    DBG_UNHANDLED_EXCEPTION("connectivity.commontools");
                 }
             }
             _rData.xComposer.clear();
@@ -222,7 +222,7 @@ namespace dbtools
             }
             catch( const Exception& )
             {
-                DBG_UNHANDLED_EXCEPTION();
+                DBG_UNHANDLED_EXCEPTION("connectivity.commontools");
             }
 
             return _rData.xComposer.is();

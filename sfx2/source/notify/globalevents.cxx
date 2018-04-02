@@ -381,7 +381,7 @@ void SfxGlobalEvents_Impl::implts_checkAndExecuteEventBindings(const document::D
     }
     catch ( uno::Exception const & )
     {
-       DBG_UNHANDLED_EXCEPTION();
+       DBG_UNHANDLED_EXCEPTION("sfx.notify");
     }
 }
 

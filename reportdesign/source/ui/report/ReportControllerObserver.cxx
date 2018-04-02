@@ -181,7 +181,7 @@ void OXReportControllerObserver::AddSection(const uno::Reference< report::XSecti
     }
     catch(const uno::Exception&)
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("reportdesign");
     }
 }
 
@@ -199,7 +199,7 @@ void OXReportControllerObserver::RemoveSection(const uno::Reference< report::XSe
     }
     catch(uno::Exception&)
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("reportdesign");
     }
 }
 
@@ -236,7 +236,7 @@ void OXReportControllerObserver::switchListening( const uno::Reference< containe
     }
     catch( const uno::Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("reportdesign");
     }
 }
 
@@ -267,7 +267,7 @@ void OXReportControllerObserver::switchListening( const uno::Reference< uno::XIn
     }
     catch( const uno::Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("reportdesign");
     }
 }
 

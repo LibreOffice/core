@@ -155,7 +155,7 @@ namespace utl
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("unotools");
         }
         return sLocalName;
     }
@@ -177,7 +177,7 @@ namespace utl
                 }
                 catch(Exception&)
                 {
-                    DBG_UNHANDLED_EXCEPTION();
+                    DBG_UNHANDLED_EXCEPTION("unotools");
                 }
             }
         }
@@ -247,7 +247,7 @@ namespace utl
             }
             catch(const Exception&)
             {
-                DBG_UNHANDLED_EXCEPTION();
+                DBG_UNHANDLED_EXCEPTION("unotools");
             }
 
             // dispose the child if it has already been created, but could not be inserted
@@ -273,7 +273,7 @@ namespace utl
             }
             catch(const Exception&)
             {
-                DBG_UNHANDLED_EXCEPTION();
+                DBG_UNHANDLED_EXCEPTION("unotools");
             }
             return insertNode(_rName,xNewChild);
         }
@@ -441,7 +441,7 @@ namespace utl
         }
         catch(const NoSuchElementException&)
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("unotools");
         }
         return aReturn;
     }
@@ -468,7 +468,7 @@ namespace utl
             }
             catch ( const Exception& )
             {
-                DBG_UNHANDLED_EXCEPTION();
+                DBG_UNHANDLED_EXCEPTION("unotools");
             }
             return nullptr;
         }
@@ -495,7 +495,7 @@ namespace utl
             }
             catch ( const Exception& )
             {
-                DBG_UNHANDLED_EXCEPTION();
+                DBG_UNHANDLED_EXCEPTION("unotools");
             }
             return nullptr;
         }
@@ -541,7 +541,7 @@ namespace utl
         }
         catch(const Exception&)
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("unotools");
         }
         return false;
     }

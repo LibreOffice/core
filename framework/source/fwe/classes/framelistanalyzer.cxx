@@ -124,7 +124,7 @@ void FrameListAnalyzer::impl_analyze()
         }
         catch(const css::uno::Exception&)
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("fwk");
         }
     }
 

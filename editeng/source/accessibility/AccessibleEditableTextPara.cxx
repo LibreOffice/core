@@ -2651,7 +2651,7 @@ namespace accessibility
                 catch (const lang::IndexOutOfBoundsException&)
                 {
                     // this is not the exception that should be raised in this function ...
-                    DBG_UNHANDLED_EXCEPTION();
+                    DBG_UNHANDLED_EXCEPTION("editeng");
                 }
             }
         }

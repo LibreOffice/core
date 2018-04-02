@@ -1063,7 +1063,7 @@ void SmDocShell::Execute(SfxRequest& rReq)
                 }
                 catch( const Exception& )
                 {
-                    DBG_UNHANDLED_EXCEPTION();
+                    DBG_UNHANDLED_EXCEPTION("starmath");
                 }
             }
             Repaint();

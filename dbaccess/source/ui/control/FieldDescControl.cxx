@@ -806,7 +806,7 @@ void OFieldDescControl::ActivateAggregate( EControlType eType )
             }
             catch (const Exception&)
             {
-                DBG_UNHANDLED_EXCEPTION();
+                DBG_UNHANDLED_EXCEPTION("dbaccess");
             }
             m_pColumnNameText = CreateText(STR_TAB_FIELD_NAME);
             m_pColumnName = VclPtr<OPropColumnEditCtrl>::Create( this,

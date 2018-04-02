@@ -897,7 +897,7 @@ bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
             }
             catch( const Exception& )
             {
-                DBG_UNHANDLED_EXCEPTION();
+                DBG_UNHANDLED_EXCEPTION("dbaccess");
             }
         }
 
@@ -911,7 +911,7 @@ bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
                 if ( m_xDesktop.is() )
                     m_xDesktop->addTerminateListener( this );
             }
-            catch( const Exception& ) { DBG_UNHANDLED_EXCEPTION(); }
+            catch( const Exception& ) { DBG_UNHANDLED_EXCEPTION("dbaccess"); }
 
             m_aAsyncCaller.Call();
         }
@@ -947,7 +947,7 @@ bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
                 if ( m_xDesktop.is() )
                     m_xDesktop->removeTerminateListener( this );
             }
-            catch( const Exception& ) { DBG_UNHANDLED_EXCEPTION(); }
+            catch( const Exception& ) { DBG_UNHANDLED_EXCEPTION("dbaccess"); }
 
             release();
         }
@@ -984,7 +984,7 @@ bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
             }
             catch( const Exception& )
             {
-                DBG_UNHANDLED_EXCEPTION();
+                DBG_UNHANDLED_EXCEPTION("dbaccess");
             }
 
             return true;

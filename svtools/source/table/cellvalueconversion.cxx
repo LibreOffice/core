@@ -124,7 +124,7 @@ namespace svt
             }
             catch( const Exception& )
             {
-                DBG_UNHANDLED_EXCEPTION();
+                DBG_UNHANDLED_EXCEPTION("svtools.table");
             }
         }
 
@@ -318,7 +318,7 @@ namespace svt
             }
             catch( const Exception& )
             {
-                DBG_UNHANDLED_EXCEPTION();
+                DBG_UNHANDLED_EXCEPTION("svtools.table");
             }
 
             return io_data.xNumberFormatter.is();
@@ -419,7 +419,7 @@ namespace svt
                     }
                     catch( const Exception& )
                     {
-                        DBG_UNHANDLED_EXCEPTION();
+                        DBG_UNHANDLED_EXCEPTION("svtools.table");
                     }
                 }
             }

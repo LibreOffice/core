@@ -275,7 +275,7 @@ namespace
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("dbaccess");
         }
         _rGuard.reset();
             // note that |reset| can throw a DisposedException
@@ -309,7 +309,7 @@ namespace
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("dbaccess");
         }
     }
 
@@ -433,7 +433,7 @@ void ODatabaseDocument::impl_reset_nothrow()
     }
     catch(const Exception&)
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("dbaccess");
     }
     m_pImpl->m_bDocumentReadOnly = false;
 }
@@ -623,7 +623,7 @@ sal_Bool SAL_CALL ODatabaseDocument::wasModifiedSinceLastSave()
     }
     catch( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("dbaccess");
     }
 
     return false;
@@ -917,7 +917,7 @@ void SAL_CALL ODatabaseDocument::setCurrentController( const Reference< XControl
     }
     catch( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("dbaccess");
     }
 }
 
@@ -1442,7 +1442,7 @@ void ODatabaseDocument::impl_closeControllerFrames_nolck_throw( bool _bDeliverOw
         catch( const CloseVetoException& ) { throw; }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("dbaccess");
         }
     }
 }
@@ -1463,7 +1463,7 @@ void ODatabaseDocument::impl_disposeControllerFrames_nothrow()
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("dbaccess");
         }
     }
 }
@@ -1687,7 +1687,7 @@ void ODatabaseDocument::impl_writeStorage_throw( const Reference< XStorage >& _r
        }
        catch ( const Exception& )
        {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("dbaccess");
        }
     }
     m_pImpl->storeLibraryContainersTo( _rxTargetStorage );

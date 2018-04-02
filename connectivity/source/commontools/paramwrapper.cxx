@@ -167,7 +167,7 @@ namespace param
             }
             catch( const Exception& )
             {
-                DBG_UNHANDLED_EXCEPTION();
+                DBG_UNHANDLED_EXCEPTION("connectivity.commontools");
             }
 
             m_pInfoHelper.reset( new ::cppu::OPropertyArrayHelper( aProperties, false ) );

@@ -238,7 +238,7 @@ namespace dbmm
             }
             catch( const Exception& )
             {
-                DBG_UNHANDLED_EXCEPTION();
+                DBG_UNHANDLED_EXCEPTION("dbaccess");
             }
             return sMimeType;
         }
@@ -406,7 +406,7 @@ namespace dbmm
             }
             catch( const Exception& )
             {
-                DBG_UNHANDLED_EXCEPTION();
+                DBG_UNHANDLED_EXCEPTION("dbaccess");
                 return false;
             }
             return true;

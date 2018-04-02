@@ -78,7 +78,7 @@ OXMLDataSource::OXMLDataSource( ODBFilter& rImport,
                 }
                 catch(const Exception&)
                 {
-                    DBG_UNHANDLED_EXCEPTION();
+                    DBG_UNHANDLED_EXCEPTION("dbaccess");
                 }
                 break;
             case XML_TOK_SUPPRESS_VERSION_COLUMNS:
@@ -89,7 +89,7 @@ OXMLDataSource::OXMLDataSource( ODBFilter& rImport,
                 }
                 catch(const Exception&)
                 {
-                    DBG_UNHANDLED_EXCEPTION();
+                    DBG_UNHANDLED_EXCEPTION("dbaccess");
                 }
                 break;
             case XML_TOK_JAVA_DRIVER_CLASS:
@@ -193,7 +193,7 @@ OXMLDataSource::OXMLDataSource( ODBFilter& rImport,
             }
             catch(const Exception&)
             {
-                DBG_UNHANDLED_EXCEPTION();
+                DBG_UNHANDLED_EXCEPTION("dbaccess");
             }
         }
     }

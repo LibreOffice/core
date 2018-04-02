@@ -2758,7 +2758,7 @@ void SfxURLRelocator_Impl::implExpandURL( OUString& io_url )
     }
     catch( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("sfx.doc");
     }
 }
 

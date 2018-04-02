@@ -176,7 +176,7 @@ uno::Reference< uno::XInterface > SAL_CALL WindowContentFactoryManager::createIn
                     }
                     catch ( uno::Exception& )
                     {
-                        DBG_UNHANDLED_EXCEPTION();
+                        DBG_UNHANDLED_EXCEPTION("fwk");
                     }
                 }
             }

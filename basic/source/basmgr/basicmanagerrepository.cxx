@@ -402,7 +402,7 @@ namespace basic
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("basic");
         }
     }
 
@@ -513,7 +513,7 @@ namespace basic
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("basic");
             return false;
         }
         return true;
@@ -533,7 +533,7 @@ namespace basic
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("basic");
         }
         return _out_rxBasicLibraries.is() && _out_rxDialogLibraries.is();
     }

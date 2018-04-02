@@ -1007,7 +1007,7 @@ void UnoControlModel::read( const css::uno::Reference< css::io::XObjectInputStre
     }
     catch ( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("toolkit.controls");
     }
 
     if ( pFD )

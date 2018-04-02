@@ -189,7 +189,7 @@ IMPL_LINK( OInterceptor, OnDispatch, void*, _pDispatcher, void )
     }
     catch ( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("dbaccess");
     }
 }
 
