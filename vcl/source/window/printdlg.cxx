@@ -243,6 +243,10 @@ void PrintDialog::PrintPreviewWindow::setPreview( const GDIMetaFile& i_rNewPrevi
     aBuf.appendAscii( eUnit == MapUnit::MapMM ? "mm" : "in" );
     maVertDim->SetText( aBuf.makeStringAndClear() );
 
+    // We have a new Metafile and evtl. a new page, so we need to reset
+    // the PreviewBitmap to force new creation
+    maPreviewBitmap = Bitmap();
+
     // sets/calculates e.g. maPreviewSize
     // also triggers preparePreviewBitmap()
     Resize();
