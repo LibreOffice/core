@@ -38,6 +38,7 @@
 #include <comphelper/anytostring.hxx>
 #include <comphelper/servicedecl.hxx>
 #include <xmlscript/xml_helper.hxx>
+#include <comphelper/lok.hxx>
 #include <svl/inettype.hxx>
 #include <com/sun/star/configuration/Update.hpp>
 #include <com/sun/star/ucb/NameClash.hpp>
@@ -708,8 +709,8 @@ void BackendImpl::PackageImpl::processPackage_(
             }
             //No need for live-deployment for bundled extension, because OOo
             //restarts after installation
-            if (that->m_eContext != Context::Bundled
-                && !startup)
+            if ((that->m_eContext != Context::Bundled && !startup)
+                 || comphelper::LibreOfficeKit::isActive())
             {
                 if (m_isSchema)
                 {
