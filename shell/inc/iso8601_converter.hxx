@@ -23,15 +23,15 @@
 #include <string>
 
 
-/* Converts ISO 8601 conform date/time
-   represenation to the representation
+/* Converts ISO 8601 compliant date/time
+   representation to the representation
    conforming to the current locale,
    ignoring the milliseconds part if exists
 */
 std::wstring iso8601_date_to_local_date(const std::wstring& iso8601date);
 
 
-/* Converts ISO 8601 conform duration
+/* Converts ISO 8601 compliant duration
    representation to the representation
    conforming to the current locale
 */

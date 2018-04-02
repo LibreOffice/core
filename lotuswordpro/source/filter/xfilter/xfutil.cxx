@@ -146,7 +146,7 @@ OUString   GetUnderlineName(enumXFUnderline type)
         return OUString("double-wave");
         break;
     case enumXFUnderlineSmallWave:
-        return OUString("samll-wave");
+        return OUString("small-wave");
         break;
     }
     return OUString();
