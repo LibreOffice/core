@@ -546,18 +546,18 @@ bool Graphic::IsSwapOut() const
     return mxImpGraphic->ImplIsSwapOut();
 }
 
-void Graphic::SetLink( const GfxLink& rGfxLink )
+void Graphic::SetGfxLink( const GfxLink& rGfxLink )
 {
     ImplTestRefCount();
     mxImpGraphic->ImplSetLink( rGfxLink );
 }
 
-GfxLink Graphic::GetLink() const
+GfxLink Graphic::GetGfxLink() const
 {
     return mxImpGraphic->ImplGetLink();
 }
 
-bool Graphic::IsLink() const
+bool Graphic::IsGfxLink() const
 {
     return mxImpGraphic->ImplIsLink();
 }

@@ -741,7 +741,7 @@ void SwGrfNode::ReleaseLink()
     {
         const OUString aFileName(maGrfObj.GetLink());
         const Graphic aLocalGraphic(maGrfObj.GetGraphic());
-        const bool bHasOriginalData(aLocalGraphic.IsLink());
+        const bool bHasOriginalData(aLocalGraphic.IsGfxLink());
 
         {
             bInSwapIn = true;

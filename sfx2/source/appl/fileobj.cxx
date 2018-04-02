@@ -299,9 +299,9 @@ bool SvFileObject::GetGraphic_Impl( Graphic& rGrf, SvStream* pStream )
     int nRes;
 
     // To avoid that a native link is created
-    if( !rGrf.IsLink() &&
+    if( !rGrf.IsGfxLink() &&
         !rGrf.GetContext() && !bNativFormat )
-        rGrf.SetLink( GfxLink() );
+        rGrf.SetGfxLink( GfxLink() );
 
     if( !pStream )
         nRes = xMed.Is() ? GRFILTER_OPENERROR

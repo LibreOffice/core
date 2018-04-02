@@ -846,7 +846,7 @@ bool GalleryTheme::InsertGraphic( const Graphic& rGraphic, sal_uIntPtr nInsertPo
     if( rGraphic.GetType() != GraphicType::NONE )
     {
         ConvertDataFormat nExportFormat = ConvertDataFormat::Unknown;
-        const GfxLink     aGfxLink( ( (Graphic&) rGraphic ).GetLink() );
+        const GfxLink     aGfxLink( rGraphic.GetGfxLink() );
 
         if( aGfxLink.GetDataSize() )
         {

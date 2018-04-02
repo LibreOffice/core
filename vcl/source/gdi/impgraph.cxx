@@ -1464,7 +1464,7 @@ SvStream& ReadImpGraphic( SvStream& rIStm, ImpGraphic& rImpGraphic )
 
         // set dummy link to avoid creation of additional link after filtering;
         // we set a default link to avoid unnecessary swapping of native data
-        aGraphic.SetLink( GfxLink() );
+        aGraphic.SetGfxLink( GfxLink() );
 
         if( !rIStm.GetError() && aLink.LoadNative( aGraphic ) )
         {

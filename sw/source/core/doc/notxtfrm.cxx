@@ -791,7 +791,7 @@ void paintGraphicUsingPrimitivesHelper(vcl::RenderContext & rOutputDevice,
     // - it's indeed a jpeg graphic (could be checked by the url ending, but is more reliable to check later)
     // In all other cases (normal repaint, print, etc...) use the available Graphic with the
     // already loaded pixel graphic as before this change.
-    if (rOutputDevice.GetExtOutDevData() && rGrfObj.HasLink() && !rGrfObj.GetGraphic().IsLink())
+    if (rOutputDevice.GetExtOutDevData() && rGrfObj.HasLink() && !rGrfObj.GetGraphic().IsGfxLink())
     {
         const vcl::PDFExtOutDevData* pPDFExt = dynamic_cast< const vcl::PDFExtOutDevData* >(rOutputDevice.GetExtOutDevData());
 
@@ -802,7 +802,7 @@ void paintGraphicUsingPrimitivesHelper(vcl::RenderContext & rOutputDevice,
 
             if (GRFILTER_OK == GraphicFilter::GetGraphicFilter().ImportGraphic(aTempGraphic, aURL))
             {
-                if(aTempGraphic.IsLink() && GfxLinkType::NativeJpg == aTempGraphic.GetLink().GetType())
+                if(aTempGraphic.IsGfxLink() && GfxLinkType::NativeJpg == aTempGraphic.GetGfxLink().GetType())
                 {
                     aContent[0] = new drawinglayer::primitive2d::GraphicPrimitive2D(
                         aTargetTransform,

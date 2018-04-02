@@ -210,9 +210,9 @@ private:
     bool            IsSwapOut() const;
 
 public:
-    void            SetLink( const GfxLink& );
-    GfxLink         GetLink() const;
-    bool            IsLink() const;
+    void            SetGfxLink(const GfxLink& rGfxLink);
+    GfxLink         GetGfxLink() const;
+    bool            IsGfxLink() const;
 
     bool            ExportNative( SvStream& rOStream ) const;
 

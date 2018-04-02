@@ -4228,9 +4228,9 @@ sal_uInt32 EscherGraphicProvider::GetBlibID( SvStream& rPicOutStrm, const OStrin
 
         const sal_uInt8*    pGraphicAry = nullptr;
 
-        if ( p_EscherBlibEntry->mbIsNativeGraphicPossible && aGraphic.IsLink() )
+        if ( p_EscherBlibEntry->mbIsNativeGraphicPossible && aGraphic.IsGfxLink() )
         {
-            aGraphicLink = aGraphic.GetLink();
+            aGraphicLink = aGraphic.GetGfxLink();
 
             p_EscherBlibEntry->mnSize = aGraphicLink.GetDataSize();
             pGraphicAry = aGraphicLink.GetData();

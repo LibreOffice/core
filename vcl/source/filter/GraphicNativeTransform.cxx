@@ -36,7 +36,7 @@ GraphicNativeTransform::~GraphicNativeTransform()
 
 bool GraphicNativeTransform::canBeRotated()
 {
-    GfxLink aLink = mrGraphic.GetLink();
+    GfxLink aLink = mrGraphic.GetGfxLink();
 
     // Don't allow rotation on animations for now
     if (mrGraphic.IsAnimated())
@@ -69,7 +69,7 @@ bool GraphicNativeTransform::rotate(sal_uInt16 aInputRotation)
         return false;
     }
 
-    GfxLink aLink = mrGraphic.GetLink();
+    GfxLink aLink = mrGraphic.GetGfxLink();
     if ( aLink.GetType() == GfxLinkType::NativeJpg )
     {
         return rotateJPEG(aRotation);
@@ -149,7 +149,7 @@ bool GraphicNativeTransform::rotateJPEG(sal_uInt16 aRotation)
     }
     else
     {
-        GfxLink aLink = mrGraphic.GetLink();
+        GfxLink aLink = mrGraphic.GetGfxLink();
 
         SvMemoryStream aSourceStream;
         aSourceStream.WriteBytes(aLink.GetData(), aLink.GetDataSize());

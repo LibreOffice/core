@@ -260,8 +260,8 @@ bool GraphicCacheEntry::ImplInit( const GraphicObject& rObj )
             break;
         }
 
-        if( rGraphic.IsLink() )
-            maGfxLink = ( (Graphic&) rGraphic ).GetLink();
+        if( rGraphic.IsGfxLink() )
+            maGfxLink = rGraphic.GetGfxLink();
         else
             maGfxLink = GfxLink();
 
@@ -280,8 +280,8 @@ void GraphicCacheEntry::ImplFillSubstitute( Graphic& rSubstitute )
     const GraphicType   eOldType = rSubstitute.GetType();
     const bool          bDefaultType = ( rSubstitute.GetType() == GraphicType::Default );
 
-    if( rSubstitute.IsLink() && ( GfxLinkType::NONE == maGfxLink.GetType() ) )
-        maGfxLink = rSubstitute.GetLink();
+    if( rSubstitute.IsGfxLink() && ( GfxLinkType::NONE == maGfxLink.GetType() ) )
+        maGfxLink = rSubstitute.GetGfxLink();
 
     if(maSvgData.get())
     {
@@ -315,7 +315,7 @@ void GraphicCacheEntry::ImplFillSubstitute( Graphic& rSubstitute )
 
     if( GfxLinkType::NONE != maGfxLink.GetType() )
     {
-        rSubstitute.SetLink( maGfxLink );
+        rSubstitute.SetGfxLink( maGfxLink );
     }
 
     if( bDefaultType )

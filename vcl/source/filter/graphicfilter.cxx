@@ -1336,7 +1336,7 @@ sal_uInt16 GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPat
     std::shared_ptr<GraphicReader> pContext = rGraphic.GetContext();
     GfxLinkType                    eLinkType = GfxLinkType::NONE;
     bool                           bDummyContext = rGraphic.IsDummyContext();
-    const bool                     bLinkSet = rGraphic.IsLink();
+    const bool                     bLinkSet = rGraphic.IsGfxLink();
     FilterConfigItem*              pFilterConfigItem = nullptr;
 
     Size                aPreviewSizeHint( 0, 0 );
@@ -1778,7 +1778,7 @@ sal_uInt16 GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPat
         }
         if( nStatus == GRFILTER_OK )
         {
-            rGraphic.SetLink( GfxLink( std::move(pGraphicContent), nGraphicContentSize, eLinkType ) );
+            rGraphic.SetGfxLink( GfxLink( std::move(pGraphicContent), nGraphicContentSize, eLinkType ) );
         }
     }
 

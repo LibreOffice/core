@@ -839,7 +839,7 @@ const char* DrawingML::GetRelationCompPrefix()
 
 OUString DrawingML::WriteImage( const Graphic& rGraphic , bool bRelPathToMedia )
 {
-    GfxLink aLink = rGraphic.GetLink ();
+    GfxLink aLink = rGraphic.GetGfxLink ();
     OUString sMediaType;
     const char* pExtension = "";
     OUString sRelId;

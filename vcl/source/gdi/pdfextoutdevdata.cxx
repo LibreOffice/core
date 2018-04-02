@@ -437,10 +437,10 @@ bool PageSyncData::PlaySyncPageAct( PDFWriter& rWriter, sal_uInt32& rCurGDIMtfAc
                     else if ( aBeg->eAct == PDFExtOutDevDataSync::EndGroupGfxLink )
                     {
                         Graphic& rGraphic = mGraphics.front();
-                        if ( rGraphic.IsLink() )
+                        if ( rGraphic.IsGfxLink() && mParaRects.size() >= 2 )
                         {
-                            GfxLinkType eType = rGraphic.GetLink().GetType();
-                            if ( eType == GfxLinkType::NativeJpg && mParaRects.size() >= 2 )
+                            GfxLinkType eType = rGraphic.GetGfxLink().GetType();
+                            if ( eType == GfxLinkType::NativeJpg )
                             {
                                 mbGroupIgnoreGDIMtfActions =
                                 rOutDevData.HasAdequateCompression(
@@ -448,7 +448,7 @@ bool PageSyncData::PlaySyncPageAct( PDFWriter& rWriter, sal_uInt32& rCurGDIMtfAc
                                 if ( !mbGroupIgnoreGDIMtfActions )
                                     mCurrentGraphic = rGraphic;
                             }
-                            else if ((eType == GfxLinkType::NativePng || eType == GfxLinkType::NativePdf) && mParaRects.size() >= 2)
+                            else if ( eType == GfxLinkType::NativePng || eType == GfxLinkType::NativePdf )
                             {
                                 if ( rOutDevData.HasAdequateCompression(rGraphic, mParaRects[0], mParaRects[1]) || eType == GfxLinkType::NativePdf )
                                     mCurrentGraphic = rGraphic;
@@ -482,7 +482,7 @@ bool PageSyncData::PlaySyncPageAct( PDFWriter& rWriter, sal_uInt32& rCurGDIMtfAc
                 {
                     bool bClippingNeeded = ( aOutputRect != aVisibleOutputRect ) && !aVisibleOutputRect.IsEmpty();
 
-                    GfxLink   aGfxLink( aGraphic.GetLink() );
+                    GfxLink   aGfxLink( aGraphic.GetGfxLink() );
                     if ( aGfxLink.GetType() == GfxLinkType::NativeJpg )
                     {
                         if ( bClippingNeeded )
@@ -862,10 +862,10 @@ bool PDFExtOutDevData::HasAdequateCompression( const Graphic &rGraphic,
 {
     bool bReduceResolution = false;
 
-    assert(rGraphic.IsLink() &&
-           (rGraphic.GetLink().GetType() == GfxLinkType::NativeJpg ||
-            rGraphic.GetLink().GetType() == GfxLinkType::NativePng ||
-            rGraphic.GetLink().GetType() == GfxLinkType::NativePdf));
+    assert(rGraphic.IsGfxLink() &&
+           (rGraphic.GetGfxLink().GetType() == GfxLinkType::NativeJpg ||
+            rGraphic.GetGfxLink().GetType() == GfxLinkType::NativePng ||
+            rGraphic.GetGfxLink().GetType() == GfxLinkType::NativePdf));
 
     // small items better off as PNG anyway
     if ( rGraphic.GetSizePixel().Width() < 32 &&
@@ -876,7 +876,7 @@ bool PDFExtOutDevData::HasAdequateCompression( const Graphic &rGraphic,
 
     Size aSize = rGraphic.GetSizePixel();
     sal_Int32 nCurrentRatio = (100 * aSize.Width() * aSize.Height() * 4) /
-                               rGraphic.GetLink().GetDataSize();
+                               rGraphic.GetGfxLink().GetDataSize();
 
     if ( GetIsLosslessCompression() )
         return !bReduceResolution && !GetIsReduceImageResolution();
