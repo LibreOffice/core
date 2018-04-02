@@ -20,18 +20,10 @@
 #ifndef INCLUDED_SD_SOURCE_UI_INC_BREAKDLG_HXX
 #define INCLUDED_SD_SOURCE_UI_INC_BREAKDLG_HXX
 
-#include <vcl/group.hxx>
-#include <vcl/button.hxx>
-#include <svx/dlgctrl.hxx>
-#include <vcl/field.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/prgsbar.hxx>
-#include <vcl/edit.hxx>
-#include <sfx2/basedlgs.hxx>
+#include <sfx2/progress.hxx>
+#include <svx/svdetc.hxx>
 #include <vcl/idle.hxx>
-
-class SvdProgressInfo;
-class SfxProgress;
+#include <vcl/weld.hxx>
 
 namespace sd {
 
@@ -41,38 +33,31 @@ class DrawView;
 /**
  * dialog to break meta files
  */
-class BreakDlg
-    : public SfxModalDialog
+class BreakDlg : public weld::GenericDialogController
 {
 public:
-    BreakDlg (
-        vcl::Window* pWindow,
-        DrawView* pDrView,
-        DrawDocShell* pShell,
-        sal_uLong nSumActionCount,
-        sal_uLong nObjCount);
-    virtual ~BreakDlg() override;
-    virtual void dispose() override;
+    BreakDlg(weld::Window* pWindow, DrawView* pDrView, DrawDocShell* pShell,
+             sal_uLong nSumActionCount, sal_uLong nObjCount);
 
-    short Execute() override;
+    short execute();
 
 private:
-    VclPtr<FixedText>      m_pFiObjInfo;
-    VclPtr<FixedText>      m_pFiActInfo;
-    VclPtr<FixedText>      m_pFiInsInfo;
-    VclPtr<CancelButton>   m_pBtnCancel;
+    std::unique_ptr<weld::Label> m_xFiObjInfo;
+    std::unique_ptr<weld::Label> m_xFiActInfo;
+    std::unique_ptr<weld::Label> m_xFiInsInfo;
+    std::unique_ptr<weld::Button> m_xBtnCancel;
 
-    DrawView*   pDrView;
+    DrawView* m_pDrView;
 
-    bool            bCancel;
+    bool      m_bCancel;
 
-    Idle            m_aUpdateIdle;
-    SvdProgressInfo *pProgrInfo;
-    SfxProgress     *mpProgress;
+    Idle      m_aUpdateIdle;
+    std::unique_ptr<SvdProgressInfo> m_xProgrInfo;
+    std::unique_ptr<SfxProgress> m_xProgress;
 
-    DECL_LINK( CancelButtonHdl, Button*, void );
-    DECL_LINK( UpDate, void*, bool );
-    DECL_LINK( InitialUpdate, Timer*, void );
+    DECL_LINK(CancelButtonHdl, weld::Button&, void);
+    DECL_LINK(UpDate, void*, bool);
+    DECL_LINK(InitialUpdate, Timer*, void);
 };
 
 } // end of namespace sd

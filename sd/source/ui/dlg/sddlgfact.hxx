@@ -63,6 +63,15 @@ class SdVclAbstractDialog_Impl : public VclAbstractDialog
     DECL_ABSTDLG_BASE(SdVclAbstractDialog_Impl,Dialog)
 };
 
+class AbstractBreakDlg_Impl : public VclAbstractDialog
+{
+private:
+    std::unique_ptr<sd::BreakDlg> m_xDlg;
+public:
+    AbstractBreakDlg_Impl(::sd::BreakDlg* pDlg);
+    virtual short Execute() override;
+};
+
 class AbstractCopyDlg_Impl : public AbstractCopyDlg
 {
     DECL_ABSTDLG_BASE(AbstractCopyDlg_Impl,::sd::CopyDlg)
@@ -209,7 +218,7 @@ class SdAbstractDialogFactory_Impl : public SdAbstractDialogFactory
 public:
     virtual ~SdAbstractDialogFactory_Impl() {}
 
-    virtual VclPtr<VclAbstractDialog>          CreateBreakDlg(vcl::Window* pWindow, ::sd::DrawView* pDrView, ::sd::DrawDocShell* pShell, sal_uLong nSumActionCount, sal_uLong nObjCount) override;
+    virtual VclPtr<VclAbstractDialog>          CreateBreakDlg(weld::Window* pWindow, ::sd::DrawView* pDrView, ::sd::DrawDocShell* pShell, sal_uLong nSumActionCount, sal_uLong nObjCount) override;
     virtual VclPtr<AbstractCopyDlg>            CreateCopyDlg(vcl::Window* pParent, const SfxItemSet& rInAttrs, ::sd::View* pView) override;
     virtual VclPtr<AbstractSdCustomShowDlg>    CreateSdCustomShowDlg(vcl::Window* pParent, SdDrawDocument& rDrawDoc) override;
     virtual VclPtr<SfxAbstractTabDialog>       CreateSdTabCharDialog(vcl::Window* pWindow, const SfxItemSet* pAttr, SfxObjectShell* pDocShell) override;

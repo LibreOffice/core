@@ -65,6 +65,16 @@ IMPL_ABSTDLG_BASE(AbstractSdPublishingDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractHeaderFooterDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractBulletDialog_Impl);
 
+AbstractBreakDlg_Impl::AbstractBreakDlg_Impl(::sd::BreakDlg* pDlg)
+    : m_xDlg(pDlg)
+{
+}
+
+short AbstractBreakDlg_Impl::Execute()
+{
+    return m_xDlg->execute();
+}
+
 void AbstractCopyDlg_Impl::GetAttr( SfxItemSet& rOutAttrs )
 {
     pDlg->GetAttr( rOutAttrs );
@@ -284,13 +294,13 @@ void AbstractSdPublishingDlg_Impl::GetParameterSequence( css::uno::Sequence< css
 //-------------- SdAbstractDialogFactory implementation--------------
 
 VclPtr<VclAbstractDialog> SdAbstractDialogFactory_Impl::CreateBreakDlg(
-                                            vcl::Window* pParent,
+                                            weld::Window* pParent,
                                             ::sd::DrawView* pDrView,
                                             ::sd::DrawDocShell* pShell,
                                             sal_uLong nSumActionCount,
                                             sal_uLong nObjCount )
 {
-    return VclPtr<SdVclAbstractDialog_Impl>::Create( VclPtr<::sd::BreakDlg>::Create( pParent, pDrView, pShell, nSumActionCount, nObjCount ) );
+    return VclPtr<AbstractBreakDlg_Impl>::Create(new ::sd::BreakDlg(pParent, pDrView, pShell, nSumActionCount, nObjCount));
 }
 
 VclPtr<AbstractCopyDlg> SdAbstractDialogFactory_Impl::CreateCopyDlg(vcl::Window* pParent,
