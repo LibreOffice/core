@@ -32,7 +32,7 @@ Sub TestDB
     Dim sDBName as String, sTable as String, sCurrentMessage as String
     Dim nRowCount as Integer
     Dim bResult as Boolean
-    Const sTestString = &quot;Automatical Test&quot;
+    Const sTestString = &quot;Automatic Test&quot;
 
     On Local Error GoTo DBERROR
 
