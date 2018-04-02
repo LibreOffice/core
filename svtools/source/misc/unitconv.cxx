@@ -19,6 +19,60 @@
 
 #include <svtools/unitconv.hxx>
 
+void SetFieldUnit(weld::MetricSpinButton& rField, FieldUnit eUnit, bool bAll)
+{
+    int nMin, nMax;
+    rField.get_range(nMin, nMax, FUNIT_TWIP);
+    nMin = rField.denormalize(nMin);
+    nMax = rField.denormalize(nMax);
+
+    if (!bAll)
+    {
+        switch (eUnit)
+        {
+            case FUNIT_M:
+            case FUNIT_KM:
+                eUnit = FUNIT_CM;
+                break;
+            case FUNIT_FOOT:
+            case FUNIT_MILE:
+                eUnit = FUNIT_INCH;
+                break;
+            default: //prevent warning
+                break;
+        }
+    }
+
+    rField.set_unit(eUnit);
+
+    if (FUNIT_POINT == eUnit && rField.get_digits() > 1)
+        rField.set_digits(1);
+    else
+        rField.set_digits(2);
+
+    switch (eUnit)
+    {
+        // _CHAR and _LINE sets the step of "char" and "line" unit, they are same as FUNIT_MM
+        case FUNIT_CHAR:
+        case FUNIT_LINE:
+        case FUNIT_MM:
+            rField.set_increments(50, 500, eUnit);
+            break;
+        case FUNIT_INCH:
+            rField.set_increments(2, 20, eUnit);
+            break;
+        default:
+            rField.set_increments(10, 100, eUnit);
+            break;
+    }
+
+    if (!bAll)
+    {
+        nMin = rField.normalize(nMin);
+        nMax = rField.normalize(nMax);
+        rField.set_range(nMin, nMax, FUNIT_TWIP);
+    }
+}
 
 void SetFieldUnit( MetricField& rField, FieldUnit eUnit, bool bAll )
 {

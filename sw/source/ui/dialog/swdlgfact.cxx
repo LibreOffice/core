@@ -32,6 +32,7 @@
 #include <break.hxx>
 #include <changedb.hxx>
 #include <chrdlg.hxx>
+#include <colwd.hxx>
 #include <convert.hxx>
 #include <cption.hxx>
 #include <dbinsdlg.hxx>
@@ -99,6 +100,10 @@ short AbstractSplitTableDialog_Impl::Execute()
     return m_xDlg->execute();
 }
 short AbstractSwBreakDlg_Impl::Execute()
+{
+    return m_xDlg->execute();
+}
+short AbstractSwTableWidthDlg_Impl::Execute()
 {
     return m_xDlg->execute();
 }
@@ -841,10 +846,9 @@ VclPtr<SfxAbstractDialog> SwAbstractDialogFactory_Impl::CreateSwWrapDlg ( vcl::W
     return VclPtr<SwAbstractSfxDialog_Impl>::Create( pDlg );
 }
 
-VclPtr<VclAbstractDialog> SwAbstractDialogFactory_Impl::CreateSwTableWidthDlg(vcl::Window *pParent, SwTableFUNC &rFnc)
+VclPtr<VclAbstractDialog> SwAbstractDialogFactory_Impl::CreateSwTableWidthDlg(weld::Window *pParent, SwTableFUNC &rFnc)
 {
-    VclPtr<Dialog> pDlg = VclPtr<SwTableWidthDlg>::Create(pParent, rFnc);
-    return VclPtr<VclAbstractDialog_Impl>::Create( pDlg );
+    return VclPtr<AbstractSwTableWidthDlg_Impl>::Create(new SwTableWidthDlg(pParent, rFnc));
 }
 
 VclPtr<SfxAbstractTabDialog> SwAbstractDialogFactory_Impl::CreateSwTableTabDlg(vcl::Window* pParent,

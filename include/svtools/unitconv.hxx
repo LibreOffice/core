@@ -20,6 +20,7 @@
 #define INCLUDED_SVTOOLS_UNITCONV_HXX
 
 #include <vcl/field.hxx>
+#include <vcl/weld.hxx>
 #include <svtools/svtdllapi.h>
 #include <svl/poolitem.hxx>
 
@@ -31,6 +32,7 @@ typedef long (*FUNC_CONVERT)(long);
 
 // Functions -------------------------------------------------------------
 
+SVT_DLLPUBLIC void      SetFieldUnit(weld::MetricSpinButton& rCtrl, FieldUnit eUnit, bool bAll = false);
 SVT_DLLPUBLIC void      SetFieldUnit( MetricField& rCtrl, FieldUnit eUnit, bool bAll = false );
 SVT_DLLPUBLIC void      SetFieldUnit( MetricBox& rCtrl, FieldUnit eUnit );
 

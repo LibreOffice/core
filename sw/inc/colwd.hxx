@@ -19,24 +19,22 @@
 #ifndef INCLUDED_SW_INC_COLWD_HXX
 #define INCLUDED_SW_INC_COLWD_HXX
 
-#include <svx/stddlg.hxx>
-#include <vcl/field.hxx>
+#include <vcl/weld.hxx>
 
 class SwTableFUNC;
 
-class SwTableWidthDlg final : public SvxStandardDialog
+class SwTableWidthDlg final : public weld::GenericDialogController
 {
-    VclPtr<NumericField>   m_pColNF;
-    VclPtr<MetricField>    m_pWidthMF;
-    SwTableFUNC     &rFnc;
+    SwTableFUNC &m_rFnc;
 
-    virtual void    Apply() override;
-    DECL_LINK(LoseFocusHdl, Edit&, void);
+    std::unique_ptr<weld::SpinButton> m_xColNF;
+    std::unique_ptr<weld::MetricSpinButton> m_xWidthMF;
+
+    DECL_LINK(LoseFocusHdl, weld::SpinButton&, void);
 
 public:
-    SwTableWidthDlg(vcl::Window *pParent, SwTableFUNC &rFnc );
-    virtual ~SwTableWidthDlg() override;
-    virtual void dispose() override;
+    SwTableWidthDlg(weld::Window *pParent, SwTableFUNC &rFnc);
+    short execute();
 };
 
 #endif

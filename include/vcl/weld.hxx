@@ -493,6 +493,20 @@ public:
         max = ConvertValue(max, m_eSrcUnit, eDestUnit);
     }
 
+    void set_min(int min, FieldUnit eValueUnit)
+    {
+        int dummy, max;
+        get_range(dummy, max, eValueUnit);
+        set_range(min, max, eValueUnit);
+    }
+
+    void set_max(int max, FieldUnit eValueUnit)
+    {
+        int min, dummy;
+        get_range(min, dummy, eValueUnit);
+        set_range(min, max, eValueUnit);
+    }
+
     void set_increments(int step, int page, FieldUnit eValueUnit)
     {
         step = ConvertValue(step, eValueUnit, m_eSrcUnit);

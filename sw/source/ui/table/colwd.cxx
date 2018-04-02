@@ -30,57 +30,48 @@
 
 #include <cmdid.h>
 
-IMPL_LINK_NOARG(SwTableWidthDlg, LoseFocusHdl, Edit&, void)
+IMPL_LINK_NOARG(SwTableWidthDlg, LoseFocusHdl, weld::SpinButton&, void)
 {
-    sal_uInt16 nId = static_cast<sal_uInt16>(m_pColNF->GetValue())-1;
-    const SwTwips lWidth = rFnc.GetColWidth(nId);
-    m_pWidthMF->SetMax(m_pWidthMF->Normalize(rFnc.GetMaxColWidth(nId)), FUNIT_TWIP);
-    m_pWidthMF->SetValue(m_pWidthMF->Normalize(lWidth), FUNIT_TWIP);
+    sal_uInt16 nId = static_cast<sal_uInt16>(m_xColNF->get_value()) - 1;
+    const SwTwips lWidth = m_rFnc.GetColWidth(nId);
+    m_xWidthMF->set_max(m_xWidthMF->normalize(m_rFnc.GetMaxColWidth(nId)), FUNIT_TWIP);
+    m_xWidthMF->set_value(m_xWidthMF->normalize(lWidth), FUNIT_TWIP);
 }
 
-SwTableWidthDlg::SwTableWidthDlg(vcl::Window *pParent, SwTableFUNC &rTableFnc )
-    : SvxStandardDialog( pParent, "ColumnWidthDialog", "modules/swriter/ui/columnwidth.ui" )
-    , rFnc(rTableFnc)
+SwTableWidthDlg::SwTableWidthDlg(weld::Window *pParent, SwTableFUNC &rTableFnc)
+    : GenericDialogController(pParent, "modules/swriter/ui/columnwidth.ui", "ColumnWidthDialog")
+    , m_rFnc(rTableFnc)
+    , m_xColNF(m_xBuilder->weld_spin_button("column"))
+    , m_xWidthMF(m_xBuilder->weld_metric_spin_button("width"))
 {
-    get(m_pColNF, "column");
-    get(m_pWidthMF, "width");
-
     bool bIsWeb = rTableFnc.GetShell()
                   && (dynamic_cast< const SwWebDocShell* >(
                                      rTableFnc.GetShell()->GetView().GetDocShell()) != nullptr );
     FieldUnit eFieldUnit = SW_MOD()->GetUsrPref( bIsWeb )->GetMetric();
-    ::SetFieldUnit(*m_pWidthMF, eFieldUnit);
+    ::SetFieldUnit(*m_xWidthMF, eFieldUnit);
 
-    m_pColNF->SetValue( rFnc.GetCurColNum() +1 );
-    m_pWidthMF->SetMin(m_pWidthMF->Normalize(MINLAY), FUNIT_TWIP);
-    if(!m_pWidthMF->GetMin())
-        m_pWidthMF->SetMin(1);
+    m_xColNF->set_max(m_rFnc.GetColCount() + 1);
+    m_xColNF->set_value(m_rFnc.GetCurColNum() + 1);
 
-    if(rFnc.GetColCount() == 0)
-        m_pWidthMF->SetMin(m_pWidthMF->Normalize(rFnc.GetColWidth(0)), FUNIT_TWIP);
-    m_pColNF->SetMax(rFnc.GetColCount() +1 );
-    m_pColNF->SetModifyHdl(LINK(this,SwTableWidthDlg, LoseFocusHdl));
-    LoseFocusHdl(*m_pColNF);
+    if (m_rFnc.GetColCount() == 0)
+        m_xWidthMF->set_min(m_xWidthMF->normalize(m_rFnc.GetColWidth(0)), FUNIT_TWIP);
+    else
+        m_xWidthMF->set_min(m_xWidthMF->normalize(MINLAY), FUNIT_TWIP);
+    m_xColNF->connect_value_changed(LINK(this, SwTableWidthDlg, LoseFocusHdl));
+    LoseFocusHdl(*m_xColNF);
 }
 
-SwTableWidthDlg::~SwTableWidthDlg()
+short SwTableWidthDlg::execute()
 {
-    disposeOnce();
-}
-
-void SwTableWidthDlg::dispose()
-{
-    m_pColNF.clear();
-    m_pWidthMF.clear();
-    SvxStandardDialog::dispose();
-}
-
-void SwTableWidthDlg::Apply()
-{
-    rFnc.InitTabCols();
-    rFnc.SetColWidth(
-            static_cast< sal_uInt16 >(m_pColNF->GetValue() - 1),
-            static_cast< sal_uInt16 >(m_pWidthMF->Denormalize(m_pWidthMF->GetValue(FUNIT_TWIP))));
+    short nRet = run();
+    if (nRet == RET_OK)
+    {
+        m_rFnc.InitTabCols();
+        m_rFnc.SetColWidth(
+                static_cast<sal_uInt16>(m_xColNF->get_value() - 1),
+                static_cast<sal_uInt16>(m_xWidthMF->denormalize(m_xWidthMF->get_value(FUNIT_TWIP))));
+    }
+    return nRet;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

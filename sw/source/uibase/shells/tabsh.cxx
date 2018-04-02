@@ -1158,7 +1158,7 @@ void SwTableShell::Execute(SfxRequest &rReq)
         case FN_TABLE_SET_COL_WIDTH:
         {
             SwTableFUNC aMgr( &rSh );
-            aMgr.ColWidthDlg(GetView().GetWindow());
+            aMgr.ColWidthDlg(GetView().GetFrameWeld());
             break;
         }
         case SID_TABLE_VERT_NONE:
