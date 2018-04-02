@@ -11,6 +11,7 @@
 #include <test/sheet/scenario.hxx>
 #include <test/sheet/sheetcellrange.hxx>
 #include <test/sheet/spreadsheet.hxx>
+#include <test/sheet/xarrayformularange.hxx>
 #include <test/sheet/xcellformatrangessupplier.hxx>
 #include <test/sheet/xcellrangeaddressable.hxx>
 #include <test/sheet/xcellseries.hxx>
@@ -47,6 +48,7 @@ namespace sc_apitest
 class ScTableSheetObj : public CalcUnoApiTest, public apitest::Scenario,
                                                public apitest::SheetCellRange,
                                                public apitest::Spreadsheet,
+                                               public apitest::XArrayFormulaRange,
                                                public apitest::XCellFormatRangesSupplier,
                                                public apitest::XCellRangeAddressable,
                                                public apitest::XCellSeries,
@@ -92,6 +94,11 @@ public:
 
     // Spreadsheet
     CPPUNIT_TEST(testSpreadsheetProperties);
+
+    // XArrayFormulaRange
+#if 0 // disable, because it makes no sense to set an ArrayFormula over the whole sheet
+    CPPUNIT_TEST(testGetSetArrayFormula);
+#endif
 
     // XCellFormatRangesSupplier
     CPPUNIT_TEST(testGetCellFormatRanges);

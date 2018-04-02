@@ -10,6 +10,7 @@
 #include <test/calc_unoapi_test.hxx>
 #include <test/sheet/cellproperties.hxx>
 #include <test/sheet/sheetcellrange.hxx>
+#include <test/sheet/xarrayformularange.hxx>
 #include <test/sheet/xcellformatrangessupplier.hxx>
 #include <test/sheet/xcellrangeaddressable.hxx>
 #include <test/sheet/xcellrangedata.hxx>
@@ -49,6 +50,7 @@ namespace sc_apitest {
 
 class ScCellRangeObj : public CalcUnoApiTest, public apitest::CellProperties,
                                               public apitest::SheetCellRange,
+                                              public apitest::XArrayFormulaRange,
                                               public apitest::XCellFormatRangesSupplier,
                                               public apitest::XCellRangeAddressable,
                                               public apitest::XCellRangeData,
@@ -82,6 +84,9 @@ public:
 
     // SheetCellRange
     CPPUNIT_TEST(testSheetCellRangeProperties);
+
+    // XArrayFormulaRange
+    CPPUNIT_TEST(testGetSetArrayFormula);
 
     // XCellFormatRangesSupplier
     CPPUNIT_TEST(testGetCellFormatRanges);

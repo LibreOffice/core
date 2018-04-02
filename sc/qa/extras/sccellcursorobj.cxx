@@ -9,6 +9,7 @@
 
 #include <test/calc_unoapi_test.hxx>
 #include <test/sheet/sheetcellrange.hxx>
+#include <test/sheet/xarrayformularange.hxx>
 #include <test/sheet/xcellformatrangessupplier.hxx>
 #include <test/sheet/xcellrangeaddressable.hxx>
 #include <test/sheet/xcellseries.hxx>
@@ -18,8 +19,8 @@
 #include <test/sheet/xsheetfilterableex.hxx>
 #include <test/sheet/xsheetoperation.hxx>
 #include <test/sheet/xsubtotalcalculatable.hxx>
-#include <test/sheet/xusedareacursor.hxx>
 #include <test/sheet/xuniquecellformatrangessupplier.hxx>
+#include <test/sheet/xusedareacursor.hxx>
 
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
@@ -31,6 +32,7 @@ using namespace css::uno;
 namespace sc_apitest {
 
 class ScCellCursorObj : public CalcUnoApiTest, public apitest::SheetCellRange,
+                                               public apitest::XArrayFormulaRange,
                                                public apitest::XCellFormatRangesSupplier,
                                                public apitest::XCellRangeAddressable,
                                                public apitest::XCellSeries,
@@ -40,8 +42,8 @@ class ScCellCursorObj : public CalcUnoApiTest, public apitest::SheetCellRange,
                                                public apitest::XSheetFilterableEx,
                                                public apitest::XSheetOperation,
                                                public apitest::XSubTotalCalculatable,
-                                               public apitest::XUsedAreaCursor,
-                                               public apitest::XUniqueCellFormatRangesSupplier
+                                               public apitest::XUniqueCellFormatRangesSupplier,
+                                               public apitest::XUsedAreaCursor
 {
 public:
     ScCellCursorObj();
@@ -56,9 +58,8 @@ public:
     // SheetCellRange
     CPPUNIT_TEST(testSheetCellRangeProperties);
 
-    // XUsedAreaCursor
-    CPPUNIT_TEST(testGotoStartOfUsedArea);
-    CPPUNIT_TEST(testGotoEndOfUsedArea);
+    // XArrayFormulaRange
+    CPPUNIT_TEST(testGetSetArrayFormula);
 
     // XMultipleOperation
     CPPUNIT_TEST(testSetTableOperation);
@@ -90,6 +91,10 @@ public:
     // XSubTotalCalculatable
     CPPUNIT_TEST(testCreateSubTotalDescriptor);
     CPPUNIT_TEST(testApplyRemoveSubTotals);
+
+    // XUsedAreaCursor
+    CPPUNIT_TEST(testGotoStartOfUsedArea);
+    CPPUNIT_TEST(testGotoEndOfUsedArea);
 
     // XUniqueCellFormatRangesSupplier
     CPPUNIT_TEST(testGetUniqueCellFormatRanges);
