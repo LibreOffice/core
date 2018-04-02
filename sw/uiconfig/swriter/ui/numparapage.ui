@@ -250,8 +250,6 @@
                         <property name="can_focus">True</property>
                         <property name="halign">start</property>
                         <property name="hexpand">True</property>
-                        <property name="invisible_char">•</property>
-                        <property name="invisible_char_set">True</property>
                         <property name="adjustment">adjustmentSTART_WITH</property>
                       </object>
                       <packing>
@@ -388,8 +386,6 @@
                         <property name="can_focus">True</property>
                         <property name="halign">start</property>
                         <property name="hexpand">True</property>
-                        <property name="invisible_char">•</property>
-                        <property name="invisible_char_set">True</property>
                         <property name="adjustment">adjustmentNF_RESTART_PARA</property>
                       </object>
                       <packing>

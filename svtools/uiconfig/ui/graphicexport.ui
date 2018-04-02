@@ -198,7 +198,6 @@
                           <object class="GtkSpinButton" id="widthmf-nospin">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
-                            <property name="invisible_char">●</property>
                             <property name="xalign">1</property>
                             <property name="adjustment">adjustment3</property>
                             <property name="digits">2</property>
@@ -212,7 +211,6 @@
                           <object class="GtkSpinButton" id="heightmf-nospin">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
-                            <property name="invisible_char">●</property>
                             <property name="xalign">1</property>
                             <property name="adjustment">adjustment3</property>
                             <property name="digits">2</property>
@@ -226,7 +224,6 @@
                           <object class="GtkSpinButton" id="resolutionmf-nospin">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
-                            <property name="invisible_char">●</property>
                             <property name="xalign">1</property>
                             <property name="adjustment">adjustment3</property>
                           </object>
@@ -337,7 +334,6 @@
                           <object class="GtkSpinButton" id="compressionjpgnf">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
-                            <property name="invisible_char">●</property>
                             <property name="xalign">1</property>
                             <property name="adjustment">adjustment1</property>
                           </object>
@@ -400,7 +396,6 @@
                           <object class="GtkSpinButton" id="compressionpngnf">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
-                            <property name="invisible_char">●</property>
                             <property name="xalign">1</property>
                             <property name="adjustment">adjustment2</property>
                           </object>

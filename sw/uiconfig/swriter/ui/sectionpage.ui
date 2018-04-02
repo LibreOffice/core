@@ -141,7 +141,6 @@
                         <property name="sensitive">False</property>
                         <property name="can_focus">True</property>
                         <property name="hexpand">True</property>
-                        <property name="invisible_char">●</property>
                         <property name="width_chars">18</property>
                       </object>
                       <packing>

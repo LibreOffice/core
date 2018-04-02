@@ -284,7 +284,6 @@
                       <object class="GtkSpinButton" id="anglemtr:0degrees">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="invisible_char">●</property>
                         <property name="adjustment">angleadjustment</property>
                       </object>
                       <packing>
@@ -317,7 +316,6 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="hexpand">True</property>
-                            <property name="invisible_char">●</property>
                             <property name="adjustment">percentadjustment</property>
                           </object>
                           <packing>
@@ -331,7 +329,6 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="hexpand">True</property>
-                            <property name="invisible_char">●</property>
                             <property name="adjustment">percentadjustment</property>
                           </object>
                           <packing>
@@ -393,7 +390,6 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="halign">end</property>
-                        <property name="invisible_char">●</property>
                         <property name="adjustment">percentadjustment</property>
                       </object>
                       <packing>
@@ -449,7 +445,6 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="margin_left">6</property>
-                        <property name="invisible_char">●</property>
                         <property name="adjustment">percentadjustment</property>
                       </object>
                       <packing>
@@ -491,7 +486,6 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="margin_left">6</property>
-                        <property name="invisible_char">●</property>
                         <property name="adjustment">percentadjustment</property>
                       </object>
                       <packing>

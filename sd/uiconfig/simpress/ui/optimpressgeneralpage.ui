@@ -242,7 +242,6 @@
                       <object class="GtkSpinButton" id="metricFields:0.00mm">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="invisible_char">•</property>
                         <property name="adjustment">adjustment1</property>
                         <property name="digits">2</property>
                       </object>
@@ -463,7 +462,6 @@
                   <object class="GtkSpinButton" id="metricWidthFields:0.00mm">
                     <property name="can_focus">False</property>
                     <property name="no_show_all">True</property>
-                    <property name="invisible_char">•</property>
                     <property name="digits">2</property>
                   </object>
                   <packing>
@@ -475,7 +473,6 @@
                   <object class="GtkSpinButton" id="metricHeightFields:0.00mm">
                     <property name="can_focus">False</property>
                     <property name="no_show_all">True</property>
-                    <property name="invisible_char">•</property>
                     <property name="digits">2</property>
                   </object>
                   <packing>
@@ -501,7 +498,6 @@
                   <object class="GtkSpinButton" id="metricInfo1Fields:0.00mm">
                     <property name="can_focus">False</property>
                     <property name="no_show_all">True</property>
-                    <property name="invisible_char">•</property>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -526,7 +522,6 @@
                   <object class="GtkSpinButton" id="metricInfo2Fields:0.00mm">
                     <property name="can_focus">False</property>
                     <property name="no_show_all">True</property>
-                    <property name="invisible_char">•</property>
                   </object>
                   <packing>
                     <property name="left_attach">3</property>
@@ -546,7 +541,6 @@
                     <child internal-child="entry">
                       <object class="GtkEntry" id="combobox-entry">
                         <property name="can_focus">False</property>
-                        <property name="invisible_char">●</property>
                         <property name="xalign">0.5</property>
                         <property name="shadow_type">none</property>
                         <property name="caps_lock_warning">False</property>

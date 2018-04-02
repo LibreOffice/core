@@ -149,7 +149,6 @@
               <object class="GtkSpinButton" id="otherfld">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
-                <property name="invisible_char">•</property>
                 <property name="adjustment">adjustment1</property>
               </object>
               <packing>
@@ -161,7 +160,6 @@
               <object class="GtkSpinButton" id="longerfld">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
-                <property name="invisible_char">•</property>
                 <property name="adjustment">adjustment1</property>
               </object>
               <packing>
@@ -173,7 +171,6 @@
               <object class="GtkSpinButton" id="shorterfld">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
-                <property name="invisible_char">•</property>
                 <property name="adjustment">adjustment1</property>
               </object>
               <packing>

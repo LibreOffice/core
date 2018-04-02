@@ -144,7 +144,6 @@
                         <property name="can_focus">True</property>
                         <property name="hexpand">True</property>
                         <property name="visibility">False</property>
-                        <property name="invisible_char">•</property>
                         <property name="width_chars">24</property>
                       </object>
                       <packing>
@@ -158,7 +157,6 @@
                         <property name="can_focus">True</property>
                         <property name="hexpand">True</property>
                         <property name="visibility">False</property>
-                        <property name="invisible_char">•</property>
                         <property name="width_chars">24</property>
                       </object>
                       <packing>

@@ -130,7 +130,6 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="halign">start</property>
-                        <property name="invisible_char">•</property>
                         <property name="adjustment">adjustmentFLD_DROPCAPS</property>
                       </object>
                       <packing>
@@ -143,7 +142,6 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="halign">start</property>
-                        <property name="invisible_char">•</property>
                         <property name="adjustment">adjustmentFLD_LINES</property>
                       </object>
                       <packing>
@@ -156,7 +154,6 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="halign">start</property>
-                        <property name="invisible_char">•</property>
                         <property name="adjustment">adjustmentFLD_DISTANCE</property>
                         <property name="digits">2</property>
                       </object>
@@ -236,7 +233,6 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="max_length">9</property>
-                        <property name="invisible_char">•</property>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>

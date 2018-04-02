@@ -178,7 +178,6 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="halign">start</property>
-                        <property name="invisible_char">●</property>
                         <property name="adjustment">ResolutionAdjustment</property>
                       </object>
                       <packing>
@@ -191,7 +190,6 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="halign">start</property>
-                        <property name="invisible_char">●</property>
                         <property name="adjustment">PolynomialsAdjustment</property>
                       </object>
                       <packing>

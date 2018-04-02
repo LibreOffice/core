@@ -153,7 +153,6 @@
                           <object class="GtkEntry" id="min_value">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
-                            <property name="invisible_char">●</property>
                           </object>
                           <packing>
                             <property name="left_attach">2</property>
@@ -164,7 +163,6 @@
                           <object class="GtkEntry" id="max_value">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
-                            <property name="invisible_char">●</property>
                           </object>
                           <packing>
                             <property name="left_attach">2</property>
@@ -457,7 +455,6 @@
                           <object class="GtkEntry" id="min_length">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
-                            <property name="invisible_char">●</property>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -468,7 +465,6 @@
                           <object class="GtkEntry" id="max_length">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
-                            <property name="invisible_char">●</property>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>

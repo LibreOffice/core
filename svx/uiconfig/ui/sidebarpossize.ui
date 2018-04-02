@@ -55,8 +55,6 @@
                     <property name="can_focus">True</property>
                     <property name="has_tooltip">True</property>
                     <property name="tooltip_text" translatable="yes" context="sidebarpossize|horizontalpos|tooltip_text">Enter the value for the horizontal position.</property>
-                    <property name="invisible_char">•</property>
-                    <property name="invisible_char_set">True</property>
                     <accessibility>
                       <relation type="labelled-by" target="horizontallabel"/>
                     </accessibility>
@@ -95,8 +93,6 @@
                     <property name="can_focus">True</property>
                     <property name="has_tooltip">True</property>
                     <property name="tooltip_text" translatable="yes" context="sidebarpossize|verticalpos|tooltip_text">Enter the value for the vertical position.</property>
-                    <property name="invisible_char">•</property>
-                    <property name="invisible_char_set">True</property>
                     <accessibility>
                       <relation type="labelled-by" target="verticallabel"/>
                     </accessibility>
@@ -136,8 +132,6 @@
                     <property name="can_focus">True</property>
                     <property name="has_tooltip">True</property>
                     <property name="tooltip_text" translatable="yes" context="sidebarpossize|selectwidth|tooltip_text">Enter a width for the selected object.</property>
-                    <property name="invisible_char">•</property>
-                    <property name="invisible_char_set">True</property>
                     <accessibility>
                       <relation type="labelled-by" target="widthlabel"/>
                     </accessibility>
@@ -177,8 +171,6 @@
                     <property name="can_focus">True</property>
                     <property name="has_tooltip">True</property>
                     <property name="tooltip_text" translatable="yes" context="sidebarpossize|selectheight|tooltip_text">Enter a height for the selected object.</property>
-                    <property name="invisible_char">•</property>
-                    <property name="invisible_char_set">True</property>
                     <accessibility>
                       <relation type="labelled-by" target="heightlabel"/>
                     </accessibility>

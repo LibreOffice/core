@@ -134,7 +134,6 @@
                         <property name="can_focus">True</property>
                         <property name="valign">center</property>
                         <property name="hexpand">True</property>
-                        <property name="invisible_char">•</property>
                         <property name="width_chars">30</property>
                       </object>
                       <packing>
@@ -148,7 +147,6 @@
                         <property name="can_focus">True</property>
                         <property name="valign">center</property>
                         <property name="hexpand">True</property>
-                        <property name="invisible_char">•</property>
                         <property name="width_chars">30</property>
                       </object>
                       <packing>
@@ -385,7 +383,6 @@
                       <object class="GtkSpinButton" id="alpha-spin">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="invisible_char">•</property>
                         <property name="text" translatable="yes" context="analysisofvariancedialog|alpha-spin">0,05</property>
                         <property name="adjustment">alpha-adjustment</property>
                         <property name="digits">2</property>
@@ -414,7 +411,6 @@
                       <object class="GtkSpinButton" id="rows-per-sample-spin">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="invisible_char">•</property>
                         <property name="text">1</property>
                         <property name="value">1</property>
                       </object>

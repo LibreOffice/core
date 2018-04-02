@@ -207,7 +207,6 @@
                                   <object class="GtkSpinButton" id="spin-quality">
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
-                                    <property name="invisible_char">•</property>
                                     <property name="text" translatable="no">90</property>
                                     <property name="adjustment">quality-adjustment</property>
                                     <property name="numeric">True</property>
@@ -255,7 +254,6 @@
                                   <object class="GtkSpinButton" id="spin-compression">
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
-                                    <property name="invisible_char">•</property>
                                     <property name="text" translatable="no">9</property>
                                     <property name="adjustment">compression-adjustment</property>
                                     <property name="numeric">True</property>

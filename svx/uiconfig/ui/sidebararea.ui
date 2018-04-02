@@ -336,7 +336,6 @@
                 <property name="has_tooltip">True</property>
                 <property name="tooltip_text" translatable="yes" context="sidebararea|settransparency|tooltip_text">Specify 0% for fully opaque through 100% for fully transparent.</property>
                 <property name="max_length">100</property>
-                <property name="invisible_char">•</property>
                 <property name="secondary_icon_activatable">False</property>
                 <property name="adjustment">adjustment1</property>
                 <property name="climb_rate">5</property>

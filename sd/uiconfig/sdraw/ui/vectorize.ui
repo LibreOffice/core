@@ -128,7 +128,6 @@
               <object class="GtkSpinButton" id="colors">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
-                <property name="invisible_char">•</property>
                 <property name="adjustment">adjustment1</property>
               </object>
               <packing>
@@ -154,7 +153,6 @@
               <object class="GtkSpinButton" id="points:0px">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
-                <property name="invisible_char">•</property>
                 <property name="adjustment">adjustment2</property>
               </object>
               <packing>
@@ -182,7 +180,6 @@
               <object class="GtkSpinButton" id="tiles:0px">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
-                <property name="invisible_char">•</property>
                 <property name="adjustment">adjustment3</property>
               </object>
               <packing>

@@ -137,7 +137,6 @@
                             <property name="can_focus">True</property>
                             <property name="halign">start</property>
                             <property name="valign">center</property>
-                            <property name="invisible_char">●</property>
                             <property name="adjustment">adjustment1</property>
                             <property name="numeric">True</property>
                           </object>
@@ -153,7 +152,6 @@
                             <property name="can_focus">True</property>
                             <property name="halign">start</property>
                             <property name="valign">center</property>
-                            <property name="invisible_char">●</property>
                             <property name="progress_fraction">0.040000000000000001</property>
                             <property name="progress_pulse_step">1</property>
                             <property name="adjustment">adjustment1</property>
@@ -333,7 +331,6 @@
                                     <property name="sensitive">False</property>
                                     <property name="can_focus">True</property>
                                     <property name="valign">center</property>
-                                    <property name="invisible_char">●</property>
                                     <property name="adjustment">adjustment1</property>
                                     <property name="numeric">True</property>
                                   </object>
@@ -397,7 +394,6 @@
                                     <property name="sensitive">False</property>
                                     <property name="can_focus">True</property>
                                     <property name="valign">center</property>
-                                    <property name="invisible_char">●</property>
                                     <property name="adjustment">adjustment1</property>
                                     <property name="numeric">True</property>
                                   </object>

@@ -498,7 +498,6 @@
                               <object class="GtkSpinButton" id="aanf:0pixels">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
-                                <property name="invisible_char">•</property>
                                 <property name="adjustment">adjustment2</property>
                               </object>
                               <packing>

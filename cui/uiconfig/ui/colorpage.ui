@@ -652,7 +652,6 @@
                       <object class="GtkSpinButton" id="B_custom">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="invisible_char">•</property>
                         <property name="primary_icon_tooltip_text" translatable="yes" context="colorpage|B_custom">Blue</property>
                         <property name="adjustment">adjustment2</property>
                       </object>
@@ -667,7 +666,6 @@
                       <object class="GtkSpinButton" id="R_custom">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="invisible_char">•</property>
                         <property name="primary_icon_tooltip_text" translatable="yes" context="colorpage|R_custom">Red</property>
                         <property name="adjustment">adjustment2</property>
                       </object>
@@ -724,7 +722,6 @@
                       <object class="GtkSpinButton" id="G_custom">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="invisible_char">•</property>
                         <property name="primary_icon_tooltip_text" translatable="yes" context="colorpage|G_custom">Green</property>
                         <property name="adjustment">adjustment2</property>
                       </object>
@@ -827,7 +824,6 @@
                       <object class="GtkSpinButton" id="C_custom:0%">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="invisible_char">•</property>
                         <property name="adjustment">adjustment1</property>
                       </object>
                       <packing>
@@ -841,7 +837,6 @@
                       <object class="GtkSpinButton" id="K_custom:0%">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="invisible_char">•</property>
                         <property name="adjustment">adjustment1</property>
                       </object>
                       <packing>
@@ -869,7 +864,6 @@
                       <object class="GtkSpinButton" id="Y_custom:0%">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="invisible_char">•</property>
                         <property name="adjustment">adjustment1</property>
                       </object>
                       <packing>
@@ -883,7 +877,6 @@
                       <object class="GtkSpinButton" id="M_custom:0%">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="invisible_char">•</property>
                         <property name="adjustment">adjustment1</property>
                       </object>
                       <packing>

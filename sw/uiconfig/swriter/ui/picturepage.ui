@@ -46,7 +46,6 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="hexpand">True</property>
-                    <property name="invisible_char">•</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -303,7 +302,6 @@
                       <object class="GtkSpinButton" id="NF_ANGLE">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="invisible_char">•</property>
                         <property name="text" translatable="no" context="picturepage">0,00</property>
                         <property name="adjustment">adjustmentANGLE</property>
                         <property name="digits">2</property>

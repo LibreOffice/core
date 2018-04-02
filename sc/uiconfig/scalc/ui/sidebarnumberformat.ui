@@ -148,7 +148,6 @@
                     <property name="can_focus">True</property>
                     <property name="has_tooltip">True</property>
                     <property name="tooltip_text" translatable="yes" context="sidebarnumberformat|decimalplaces|tooltip_text">Enter the number of decimal places that you want to display.</property>
-                    <property name="invisible_char">•</property>
                     <property name="adjustment">adjustment1</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="decimalplaces-atkobject">
@@ -182,7 +181,6 @@
                     <property name="can_focus">True</property>
                     <property name="has_tooltip">True</property>
                     <property name="tooltip_text" translatable="yes" context="sidebarnumberformat|denominatorplaces|tooltip_text">Enter the number of places for the denominator that you want to display.</property>
-                    <property name="invisible_char">•</property>
                     <property name="adjustment">adjustment2</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="denominatorplaces-atkobject">
@@ -230,7 +228,6 @@
                     <property name="can_focus">True</property>
                     <property name="has_tooltip">True</property>
                     <property name="tooltip_text" translatable="yes" context="sidebarnumberformat|leadingzeroes|tooltip_text">Enter the maximum number of zeroes to display before the decimal point.</property>
-                    <property name="invisible_char">•</property>
                     <property name="adjustment">adjustment1</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="leadingzeroes-atkobject">

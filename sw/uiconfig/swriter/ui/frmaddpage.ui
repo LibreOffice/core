@@ -64,7 +64,6 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="halign">start</property>
-                    <property name="invisible_char">●</property>
                     <property name="width_chars">50</property>
                   </object>
                   <packing>
@@ -77,7 +76,6 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="halign">start</property>
-                    <property name="invisible_char">●</property>
                     <property name="width_chars">50</property>
                   </object>
                   <packing>

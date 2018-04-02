@@ -89,7 +89,6 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="editable">False</property>
-                    <property name="invisible_char">●</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -101,7 +100,6 @@
                   <object class="GtkEntry" id="code">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="invisible_char">●</property>
                     <property name="width_chars">0</property>
                   </object>
                   <packing>
@@ -158,7 +156,6 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="max_length">6</property>
-                        <property name="invisible_char">●</property>
                         <property name="width_chars">6</property>
                       </object>
                       <packing>

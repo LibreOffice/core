@@ -359,7 +359,6 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="valign">center</property>
-                            <property name="invisible_char">•</property>
                             <property name="activates_default">True</property>
                             <property name="adjustment">adjustment1</property>
                             <accessibility>
@@ -377,7 +376,6 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="valign">center</property>
-                            <property name="invisible_char">•</property>
                             <property name="activates_default">True</property>
                             <property name="adjustment">adjustment2</property>
                             <accessibility>
@@ -395,7 +393,6 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="valign">center</property>
-                            <property name="invisible_char">•</property>
                             <property name="activates_default">True</property>
                             <property name="adjustment">adjustment3</property>
                             <accessibility>
@@ -636,7 +633,6 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="max_length">1</property>
-                                    <property name="invisible_char">•</property>
                                     <property name="activates_default">True</property>
                                     <property name="width_chars">1</property>
                                     <property name="max_width_chars">1</property>

@@ -265,7 +265,6 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="halign">start</property>
-                                <property name="invisible_char">●</property>
                                 <property name="adjustment">spacingadjustment</property>
                                 <property name="digits">2</property>
                               </object>
@@ -284,7 +283,6 @@
                                   <object class="GtkSpinButton" id="intervalspin">
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
-                                    <property name="invisible_char">●</property>
                                     <property name="adjustment">intervaladjustment</property>
                                   </object>
                                   <packing>
@@ -389,7 +387,6 @@
                                   <object class="GtkEntry" id="textentry">
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
-                                    <property name="invisible_char">●</property>
                                     <property name="width_chars">3</property>
                                   </object>
                                   <packing>
@@ -414,7 +411,6 @@
                                   <object class="GtkSpinButton" id="linesspin">
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
-                                    <property name="invisible_char">●</property>
                                     <property name="adjustment">lineadjustment</property>
                                   </object>
                                   <packing>

@@ -290,7 +290,6 @@
                       <object class="GtkSpinButton" id="MTR_FLD_LEFT:0.00cm">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="invisible_char">•</property>
                         <property name="adjustment">adjustment1</property>
                         <property name="digits">2</property>
                       </object>
@@ -303,7 +302,6 @@
                       <object class="GtkSpinButton" id="MTR_FLD_RIGHT:0.00cm">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="invisible_char">•</property>
                         <property name="adjustment">adjustment1</property>
                         <property name="digits">2</property>
                       </object>
@@ -316,7 +314,6 @@
                       <object class="GtkSpinButton" id="MTR_FLD_TOP:0.00cm">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="invisible_char">•</property>
                         <property name="adjustment">adjustment1</property>
                         <property name="digits">2</property>
                       </object>
@@ -329,7 +326,6 @@
                       <object class="GtkSpinButton" id="MTR_FLD_BOTTOM:0.00cm">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="invisible_char">•</property>
                         <property name="adjustment">adjustment1</property>
                         <property name="digits">2</property>
                       </object>

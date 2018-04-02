@@ -81,7 +81,6 @@
         <property name="can_focus">True</property>
         <property name="margin_left">24</property>
         <property name="hexpand">True</property>
-        <property name="invisible_char">•</property>
         <child internal-child="accessible">
           <object class="AtkObject" id="commentedit-atkobject">
             <property name="AtkObject::accessible-name" translatable="yes" context="redlinefilterpage|commentedit-atkobject">Comment</property>
@@ -177,7 +176,6 @@
             <property name="sensitive">False</property>
             <property name="can_focus">True</property>
             <property name="hexpand">True</property>
-            <property name="invisible_char">•</property>
             <accessibility>
               <relation type="labelled-by" target="range"/>
             </accessibility>
@@ -280,7 +278,6 @@
                 <property name="sensitive">False</property>
                 <property name="can_focus">True</property>
                 <property name="hexpand">True</property>
-                <property name="invisible_char">•</property>
                 <property name="adjustment">adjustment1</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="startdate:yy:mm:dd-atkobject">
@@ -300,7 +297,6 @@
                 <property name="sensitive">False</property>
                 <property name="can_focus">True</property>
                 <property name="hexpand">True</property>
-                <property name="invisible_char">•</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="starttime:hh:mm-atkobject">
                     <property name="AtkObject::accessible-name" translatable="yes" context="redlinefilterpage|starttime-atkobject">Start Time</property>
@@ -334,7 +330,6 @@
                 <property name="sensitive">False</property>
                 <property name="can_focus">True</property>
                 <property name="hexpand">True</property>
-                <property name="invisible_char">•</property>
                 <property name="adjustment">adjustment1</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="enddate:yy:mm:dd-atkobject">
@@ -354,7 +349,6 @@
                 <property name="sensitive">False</property>
                 <property name="can_focus">True</property>
                 <property name="hexpand">True</property>
-                <property name="invisible_char">•</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="endtime:hh:mm-atkobject">
                     <property name="AtkObject::accessible-name" translatable="yes" context="redlinefilterpage|endtime-atkobject">End Time</property>

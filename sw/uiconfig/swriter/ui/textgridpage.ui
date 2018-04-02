@@ -207,7 +207,6 @@
                           <object class="GtkSpinButton" id="spinNF_CHARSPERLINE">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
-                            <property name="invisible_char">•</property>
                             <property name="adjustment">adjustmentCHARSPERLINE</property>
                           </object>
                           <packing>
@@ -246,7 +245,6 @@
                           <object class="GtkSpinButton" id="spinNF_LINESPERPAGE">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
-                            <property name="invisible_char">•</property>
                             <property name="input_purpose">digits</property>
                             <property name="adjustment">adjustmentLINESPERPAGE</property>
                             <property name="numeric">True</property>
@@ -287,7 +285,6 @@
                           <object class="GtkSpinButton" id="spinMF_CHARWIDTH:0pt">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
-                            <property name="invisible_char">•</property>
                             <property name="adjustment">adjustmentMetric</property>
                           </object>
                           <packing>
@@ -327,7 +324,6 @@
                           <object class="GtkSpinButton" id="spinMF_RUBYSIZE:0pt">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
-                            <property name="invisible_char">•</property>
                             <property name="adjustment">adjustmentMetric</property>
                           </object>
                           <packing>
@@ -353,7 +349,6 @@
                           <object class="GtkSpinButton" id="spinMF_TEXTSIZE:0pt">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
-                            <property name="invisible_char">•</property>
                             <property name="adjustment">adjustmentMetric</property>
                           </object>
                           <packing>

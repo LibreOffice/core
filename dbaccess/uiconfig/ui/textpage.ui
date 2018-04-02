@@ -91,7 +91,6 @@
                     <property name="sensitive">False</property>
                     <property name="can_focus">True</property>
                     <property name="vexpand">True</property>
-                    <property name="invisible_char">•</property>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>

@@ -255,7 +255,6 @@
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
                                         <property name="halign">start</property>
-                                        <property name="invisible_char">•</property>
                                         <property name="adjustment">adjustment1</property>
                                       </object>
                                       <packing>
@@ -270,7 +269,6 @@
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
                                         <property name="hexpand">True</property>
-                                        <property name="invisible_char">•</property>
                                         <property name="width_chars">52</property>
                                         <property name="text" translatable="yes" context="insertsheet|nameed">Sheet...</property>
                                       </object>

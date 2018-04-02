@@ -312,7 +312,6 @@
                     <property name="has_tooltip">True</property>
                     <property name="tooltip_text" translatable="yes" context="sidebarparagraph|aboveparaspacing|tooltip_text">Above Paragraph Spacing</property>
                     <property name="hexpand">True</property>
-                    <property name="invisible_char">•</property>
                     <property name="text">0</property>
                     <property name="adjustment">adjustment1</property>
                     <child internal-child="accessible">
@@ -362,7 +361,6 @@
                     <property name="has_tooltip">True</property>
                     <property name="tooltip_text" translatable="yes" context="sidebarparagraph|belowparaspacing|tooltip_text">Below Paragraph Spacing</property>
                     <property name="hexpand">True</property>
-                    <property name="invisible_char">•</property>
                     <property name="text">0</property>
                     <property name="adjustment">adjustment1</property>
                     <child internal-child="accessible">
@@ -523,7 +521,6 @@
                     <property name="can_focus">True</property>
                     <property name="tooltip_text" translatable="yes" context="sidebarparagraph|beforetextindent|tooltip_text">Before Text Indent</property>
                     <property name="hexpand">True</property>
-                    <property name="invisible_char">•</property>
                     <property name="text">0</property>
                     <property name="adjustment">adjustment1</property>
                     <child internal-child="accessible">
@@ -572,7 +569,6 @@
                     <property name="can_focus">True</property>
                     <property name="tooltip_text" translatable="yes" context="sidebarparagraph|aftertextindent|tooltip_text">After Text Indent</property>
                     <property name="hexpand">True</property>
-                    <property name="invisible_char">•</property>
                     <property name="text">0</property>
                     <property name="adjustment">adjustment1</property>
                     <child internal-child="accessible">
@@ -621,7 +617,6 @@
                     <property name="can_focus">True</property>
                     <property name="tooltip_text" translatable="yes" context="sidebarparagraph|firstlineindent|tooltip_text">First Line Indent</property>
                     <property name="hexpand">True</property>
-                    <property name="invisible_char">•</property>
                     <property name="text">0</property>
                     <property name="adjustment">adjustment1</property>
                     <child internal-child="accessible">

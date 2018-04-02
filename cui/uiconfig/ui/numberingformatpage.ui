@@ -110,7 +110,6 @@
                     <property name="can_focus">True</property>
                     <property name="valign">center</property>
                     <property name="hexpand">True</property>
-                    <property name="invisible_char">•</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -178,7 +177,6 @@
                   <object class="GtkEntry" id="commented">
                     <property name="can_focus">True</property>
                     <property name="no_show_all">True</property>
-                    <property name="invisible_char">●</property>
                     <property name="tooltip_text" translatable="yes" context="numberingformatpage|commented|tooltip_text">Comment</property>
                   </object>
                   <packing>
@@ -238,7 +236,6 @@
                       <object class="GtkSpinButton" id="decimalsed">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="invisible_char">•</property>
                         <property name="adjustment">adjustment1</property>
                       </object>
                       <packing>
@@ -251,7 +248,6 @@
                       <object class="GtkSpinButton" id="denominatored">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="invisible_char">•</property>
                         <property name="adjustment">adjustment2</property>
                       </object>
                       <packing>
@@ -270,7 +266,6 @@
                   <object class="GtkSpinButton" id="leadzerosed">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="invisible_char">•</property>
                     <property name="adjustment">adjustment1</property>
                   </object>
                   <packing>

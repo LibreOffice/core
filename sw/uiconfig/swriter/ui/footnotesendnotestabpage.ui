@@ -73,7 +73,6 @@
                           <object class="GtkSpinButton" id="ftnoffset">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
-                            <property name="invisible_char">●</property>
                             <property name="adjustment">adjustment1</property>
                           </object>
                           <packing>
@@ -139,7 +138,6 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="max_length">50</property>
-                            <property name="invisible_char">●</property>
                             <property name="width_chars">6</property>
                           </object>
                           <packing>
@@ -183,7 +181,6 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="max_length">50</property>
-                            <property name="invisible_char">●</property>
                             <property name="width_chars">6</property>
                           </object>
                           <packing>
@@ -342,7 +339,6 @@
                           <object class="GtkSpinButton" id="endoffset">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
-                            <property name="invisible_char">●</property>
                             <property name="adjustment">adjustment1</property>
                           </object>
                           <packing>
@@ -408,7 +404,6 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="max_length">50</property>
-                            <property name="invisible_char">●</property>
                             <property name="width_chars">6</property>
                           </object>
                           <packing>
@@ -452,7 +447,6 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="max_length">50</property>
-                            <property name="invisible_char">●</property>
                             <property name="width_chars">6</property>
                           </object>
                           <packing>

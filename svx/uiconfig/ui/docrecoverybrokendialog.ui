@@ -142,7 +142,6 @@ The documents listed below will be saved in the folder noted below if you click 
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="hexpand">True</property>
-                    <property name="invisible_char">•</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>

@@ -160,7 +160,6 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="halign">end</property>
-                        <property name="invisible_char">●</property>
                         <property name="adjustment">adjustment1</property>
                       </object>
                       <packing>
@@ -175,8 +174,6 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="halign">end</property>
-                        <property name="invisible_char">●</property>
-                        <property name="invisible_char_set">True</property>
                         <property name="adjustment">adjustment2</property>
                       </object>
                       <packing>
