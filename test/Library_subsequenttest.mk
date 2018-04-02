@@ -72,6 +72,7 @@ $(eval $(call gb_Library_add_exception_objects,subsequenttest,\
 	test/source/sheet/xactivationbroadcaster \
 	test/source/sheet/xarealink \
 	test/source/sheet/xarealinks \
+	test/source/sheet/xarrayformularange \
 	test/source/sheet/xcalculatable \
 	test/source/sheet/xcelladdressable \
 	test/source/sheet/xcellformatrangessupplier \
