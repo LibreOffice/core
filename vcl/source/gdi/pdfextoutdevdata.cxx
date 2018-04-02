@@ -398,9 +398,9 @@ bool PageSyncData::PlaySyncPageAct( PDFWriter& rWriter, sal_uInt32& rCurGDIMtfAc
                     if ( aBeg->eAct == PDFExtOutDevDataSync::EndGroupGfxLink )
                     {
                         Graphic& rGraphic = mGraphics.front();
-                        if ( rGraphic.IsLink() && mParaRects.size() >= 2 )
+                        if ( rGraphic.IsGfxLink() && mParaRects.size() >= 2 )
                         {
-                            GfxLinkType eType = rGraphic.GetLink().GetType();
+                            GfxLinkType eType = rGraphic.GetGfxLink().GetType();
                             if ( eType == GfxLinkType::NativeJpg )
                             {
                                 mbGroupIgnoreGDIMtfActions = rOutDevData.HasAdequateCompression(rGraphic);
@@ -436,7 +436,7 @@ bool PageSyncData::PlaySyncPageAct( PDFWriter& rWriter, sal_uInt32& rCurGDIMtfAc
                 {
                     bool bClippingNeeded = ( aOutputRect != aVisibleOutputRect ) && !aVisibleOutputRect.IsEmpty();
 
-                    GfxLink   aGfxLink( aGraphic.GetLink() );
+                    GfxLink   aGfxLink( aGraphic.GetGfxLink() );
                     if ( aGfxLink.GetType() == GfxLinkType::NativeJpg )
                     {
                         if ( bClippingNeeded )
@@ -801,12 +801,12 @@ void PDFExtOutDevData::EndGroup( const Graphic&     rGraphic,
 // Avoids expensive de-compression and re-compression of large images.
 bool PDFExtOutDevData::HasAdequateCompression( const Graphic &rGraphic ) const
 {
-    assert(rGraphic.IsLink() &&
-           (rGraphic.GetLink().GetType() == GfxLinkType::NativeJpg ||
-            rGraphic.GetLink().GetType() == GfxLinkType::NativePng ||
-            rGraphic.GetLink().GetType() == GfxLinkType::NativePdf));
+    assert(rGraphic.IsGfxLink() &&
+           (rGraphic.GetGfxLink().GetType() == GfxLinkType::NativeJpg ||
+            rGraphic.GetGfxLink().GetType() == GfxLinkType::NativePng ||
+            rGraphic.GetGfxLink().GetType() == GfxLinkType::NativePdf));
 
-    if (rGraphic.GetLink().GetDataSize() == 0)
+    if (rGraphic.GetGfxLink().GetDataSize() == 0)
         return false;
 
     Size aSize = rGraphic.GetSizePixel();
@@ -821,7 +821,7 @@ bool PDFExtOutDevData::HasAdequateCompression( const Graphic &rGraphic ) const
 
     // FIXME: ideally we'd also pre-empt the DPI related scaling too.
     sal_Int32 nCurrentRatio = (100 * aSize.Width() * aSize.Height() * 4) /
-                               rGraphic.GetLink().GetDataSize();
+                               rGraphic.GetGfxLink().GetDataSize();
 
     static const struct {
         sal_Int32 mnQuality;

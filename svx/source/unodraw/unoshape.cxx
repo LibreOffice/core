@@ -2821,9 +2821,9 @@ bool SvxShape::getPropertyValueImpl( const OUString&, const SfxItemPropertySimpl
             if( pGraphic )
             {
                 bool bIsWMF = false;
-                if ( pGraphic->IsLink() )
+                if ( pGraphic->IsGfxLink() )
                 {
-                    GfxLink aLnk = pGraphic->GetLink();
+                    GfxLink aLnk = pGraphic->GetGfxLink();
                     if ( aLnk.GetType() == GfxLinkType::NativeWmf )
                     {
                         bIsWMF = true;
