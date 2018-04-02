@@ -6,7 +6,7 @@ Part of the SDK; to build you need to add --enable-odk.
 Testing the examples:
 =====================
 
-* See <http://api.libreoffice.org/docs/install.html> how to set up the SDK.
+* See <https://api.libreoffice.org/docs/install.html> how to set up the SDK.
 
 ** When asked about it during configuration, tell the SDK to do automatic
    deployment of the example extensions that get built.

@@ -22,7 +22,7 @@ class ServiceDocumenter : public ::cppu::WeakImplHelper<
         ServiceDocumenter(css::uno::Reference< css::uno::XComponentContext> const& xContext)
             : m_xContext(xContext)
             , m_sCoreBaseUrl("http://example.com")
-            , m_sServiceBaseUrl("http://api.libreoffice.org/docs/idl/ref")
+            , m_sServiceBaseUrl("https://api.libreoffice.org/docs/idl/ref")
             {};
         // XServiceDocumenter
         virtual ::rtl::OUString SAL_CALL getCoreBaseUrl() override

@@ -18,7 +18,7 @@
 
 /** You can find more
  * information on the following web page:
- * http://api.libreoffice.org/docs/common/ref/com/sun/star/module-ix.html
+ * https://api.libreoffice.org/docs/common/ref/com/sun/star/module-ix.html
  */
 
 /*Java Uno Helper Classes*/

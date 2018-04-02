@@ -181,7 +181,7 @@ void SwCommentRuler::DrawCommentControl(vcl::RenderContext& rRenderContext)
     maVirDev->DrawText( aLabelPos, aLabel );
 
     // Draw arrow
-    // FIXME consistence of button colors. http://opengrok.libreoffice.org/xref/core/vcl/source/control/button.cxx#785
+    // FIXME consistence of button colors. https://opengrok.libreoffice.org/xref/core/vcl/source/control/button.cxx#785
     Color aArrowColor = GetFadedColor(COL_BLACK, rStyleSettings.GetShadowColor());
     ImplDrawArrow(*maVirDev.get(), aArrowPos.X(), aArrowPos.Y(), aArrowColor, bArrowToRight);
 

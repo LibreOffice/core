@@ -212,14 +212,14 @@ namespace DOM
         virtual css::uno::Reference< css::xml::dom::events::XEvent > SAL_CALL createEvent(const OUString& eventType) override;
 
         // XActiveDataControl,
-        // see http://api.libreoffice.org/docs/common/ref/com/sun/star/io/XActiveDataControl.html
+        // see https://api.libreoffice.org/docs/common/ref/com/sun/star/io/XActiveDataControl.html
         virtual void SAL_CALL addListener(const css::uno::Reference< css::io::XStreamListener >& aListener ) override;
         virtual void SAL_CALL removeListener(const css::uno::Reference< css::io::XStreamListener >& aListener ) override;
         virtual void SAL_CALL start() override;
         virtual void SAL_CALL terminate() override;
 
         // XActiveDataSource
-        // see http://api.libreoffice.org/docs/common/ref/com/sun/star/io/XActiveDataSource.html
+        // see https://api.libreoffice.org/docs/common/ref/com/sun/star/io/XActiveDataSource.html
         virtual void SAL_CALL setOutputStream(  const css::uno::Reference< css::io::XOutputStream >& aStream ) override;
         virtual css::uno::Reference< css::io::XOutputStream > SAL_CALL getOutputStream() override;
 
