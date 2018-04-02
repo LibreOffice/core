@@ -107,6 +107,10 @@ short AbstractSwTableWidthDlg_Impl::Execute()
 {
     return m_xDlg->execute();
 }
+short AbstractSwTableHeightDlg_Impl::Execute()
+{
+    return m_xDlg->execute();
+}
 short AbstractSwSortDlg_Impl::Execute()
 {
     return m_xDlg->execute();
@@ -806,10 +810,9 @@ VclPtr<VclAbstractDialog> SwAbstractDialogFactory_Impl::CreateSwColumnDialog(vcl
     return VclPtr<VclAbstractDialog_Impl>::Create( pDlg );
 }
 
-VclPtr<VclAbstractDialog> SwAbstractDialogFactory_Impl::CreateSwTableHeightDialog(vcl::Window *pParent, SwWrtShell &rSh)
+VclPtr<VclAbstractDialog> SwAbstractDialogFactory_Impl::CreateSwTableHeightDialog(weld::Window *pParent, SwWrtShell &rSh)
 {
-    VclPtr<Dialog> pDlg = VclPtr<SwTableHeightDlg>::Create( pParent, rSh);
-    return VclPtr<VclAbstractDialog_Impl>::Create( pDlg );
+    return VclPtr<AbstractSwTableHeightDlg_Impl>::Create(new SwTableHeightDlg(pParent, rSh));
 }
 
 VclPtr<VclAbstractDialog> SwAbstractDialogFactory_Impl::CreateSwSortingDialog(weld::Window *pParent, SwWrtShell &rSh)

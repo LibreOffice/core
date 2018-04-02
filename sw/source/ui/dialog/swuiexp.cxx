@@ -37,6 +37,7 @@
 #include <mailmrge.hxx>
 #include <mailmergewizard.hxx>
 #include <regionsw.hxx>
+#include <rowht.hxx>
 #include <selglos.hxx>
 #include <splittbl.hxx>
 #include <tautofmt.hxx>

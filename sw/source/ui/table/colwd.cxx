@@ -61,16 +61,18 @@ SwTableWidthDlg::SwTableWidthDlg(weld::Window *pParent, SwTableFUNC &rTableFnc)
     LoseFocusHdl(*m_xColNF);
 }
 
+void SwTableWidthDlg::Apply()
+{
+    m_rFnc.InitTabCols();
+    m_rFnc.SetColWidth(static_cast<sal_uInt16>(m_xColNF->get_value() - 1),
+                       static_cast<sal_uInt16>(m_xWidthMF->denormalize(m_xWidthMF->get_value(FUNIT_TWIP))));
+}
+
 short SwTableWidthDlg::execute()
 {
     short nRet = run();
     if (nRet == RET_OK)
-    {
-        m_rFnc.InitTabCols();
-        m_rFnc.SetColWidth(
-                static_cast<sal_uInt16>(m_xColNF->get_value() - 1),
-                static_cast<sal_uInt16>(m_xWidthMF->denormalize(m_xWidthMF->get_value(FUNIT_TWIP))));
-    }
+        Apply();
     return nRet;
 }
 
