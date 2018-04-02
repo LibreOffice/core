@@ -30,7 +30,6 @@
 #include <svtools/fileview.hxx>
 #include <svtools/inettbc.hxx>
 #include "iodlg.hxx"
-#include <strings.hrc>
 #include <bitmaps.hlst>
 #include <svtools/imagemgr.hxx>
 #include <unotools/localfilehelper.hxx>
