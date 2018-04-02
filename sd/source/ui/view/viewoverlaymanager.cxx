@@ -340,7 +340,7 @@ BitmapEx ChangePlaceholderTag::createOverlayImage( int nHighlight )
 
         Size aSize( getButtonImage( 0, bLarge )->GetSizePixel() );
 
-        aRet.SetSizePixel( Size( aSize.Width() << 1, aSize.Height() << 1 ) );
+        aRet.Scale(Size(aSize.Width() << 1, aSize.Height() << 1));
 
         const ::tools::Rectangle aRectSrc( Point( 0, 0 ), aSize );
 
