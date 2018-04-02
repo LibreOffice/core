@@ -347,22 +347,7 @@ SdrObject::~SdrObject()
     // when they get called from ObjectInDestruction().
     mpImpl->maObjectUsers.clear();
 
-    try
-    {
-        SvxShape* pSvxShape = getSvxShape();
-        if ( pSvxShape )
-        {
-            OSL_ENSURE(!pSvxShape->HasSdrObjectOwnership(),"Please check where this call come from and replace it with SdrObject::Free");
-            pSvxShape->InvalidateSdrObject();
-            uno::Reference< lang::XComponent > xShapeComp( getWeakUnoShape(), uno::UNO_QUERY_THROW );
-            xShapeComp->dispose();
-        }
-    }
-    catch( const uno::Exception& )
-    {
-        DBG_UNHANDLED_EXCEPTION();
-    }
-
+    // UserCall
     SendUserCall(SdrUserCallType::Delete, GetLastBoundRect());
     o3tl::reset_preserve_ptr_during(pPlusData);
 
@@ -374,14 +359,38 @@ SdrObject::~SdrObject()
 void SdrObject::Free( SdrObject*& _rpObject )
 {
     SdrObject* pObject = _rpObject; _rpObject = nullptr;
-    if ( pObject == nullptr )
+
+    if(nullptr == pObject)
+    {
         // nothing to do
         return;
+    }
 
-    SvxShape* pShape = pObject->getSvxShape();
-    if ( pShape && pShape->HasSdrObjectOwnership() )
-        // only the shape is allowed to delete me, and will reset the ownership before doing so
-        return;
+    SvxShape* pShape(pObject->getSvxShape());
+
+    if(pShape)
+    {
+        if(pShape->HasSdrObjectOwnership())
+        {
+            // only the SvxShape is allowed to delete me, and will reset
+            // the ownership before doing so
+            return;
+        }
+        else
+        {
+            // not only delete pObject, but also need to dispose uno shape
+            try
+            {
+                pShape->InvalidateSdrObject();
+                uno::Reference< lang::XComponent > xShapeComp( pObject->getWeakUnoShape(), uno::UNO_QUERY_THROW );
+                xShapeComp->dispose();
+            }
+            catch( const uno::Exception& )
+            {
+                DBG_UNHANDLED_EXCEPTION();
+            }
+        }
+    }
 
     delete pObject;
 }
