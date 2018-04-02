@@ -72,6 +72,11 @@ private:
     DECL_DLLPRIVATE_LINK(ImplAsyncCloseHdl, void*, void);
     DECL_DLLPRIVATE_LINK(ResponseHdl, Button*, void);
 
+    // ensureRepaint - triggers Application::Yield until the dialog is
+    // completely repainted. Sometimes needed for dialogs showing progress
+    // during actions
+    void ensureRepaint();
+
 protected:
     using Window::ImplInit;
     void    ImplInit( vcl::Window* pParent, WinBits nStyle, InitFlag eFlag = InitFlag::Default );
@@ -120,11 +125,6 @@ public:
     // paint is finished
     virtual void PrePaint(vcl::RenderContext& rRenderContext) override;
     virtual void PostPaint(vcl::RenderContext& rRenderContext) override;
-
-    // ensureRepaint - triggers Application::Yield until the dialog is
-    // completely repainted. Sometimes needed for dialogs showing progress
-    // during actions
-    void ensureRepaint();
 
     // Screenshot interface
     virtual std::vector<OString> getAllPageUIXMLDescriptions() const;
