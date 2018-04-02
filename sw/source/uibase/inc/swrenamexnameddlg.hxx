@@ -19,34 +19,31 @@
 #ifndef INCLUDED_SW_SOURCE_UIBASE_INC_SWRENAMEXNAMEDDLG_HXX
 #define INCLUDED_SW_SOURCE_UIBASE_INC_SWRENAMEXNAMEDDLG_HXX
 
-#include <vcl/dialog.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/edit.hxx>
-#include <vcl/button.hxx>
+#include <vcl/weld.hxx>
 #include "actctrl.hxx"
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 
-class SwRenameXNamedDlg : public ModalDialog
+class SwRenameXNamedDlg : public weld::GenericDialogController
 {
-    VclPtr<Edit>     m_pNewNameED;
-    TextFilter m_aTextFilter;
-    VclPtr<OKButton> m_pOk;
-
     css::uno::Reference< css::container::XNamed > &   xNamed;
     css::uno::Reference< css::container::XNameAccess > & xNameAccess;
     css::uno::Reference< css::container::XNameAccess >   xSecondAccess;
     css::uno::Reference< css::container::XNameAccess >   xThirdAccess;
 
-    DECL_LINK(OkHdl, Button*, void);
-    DECL_LINK(ModifyHdl, Edit&, void);
+    TextFilter m_aTextFilter;
+
+    std::shared_ptr<weld::Entry> m_xNewNameED;
+    std::shared_ptr<weld::Button> m_xOk;
+
+    DECL_LINK(TextFilterHdl, OUString&, bool);
+    DECL_LINK(OkHdl, weld::Button&, void);
+    DECL_LINK(ModifyHdl, weld::Entry&, void);
 
 public:
-    SwRenameXNamedDlg( vcl::Window* pParent,
-                    css::uno::Reference< css::container::XNamed > & xNamed,
-                    css::uno::Reference< css::container::XNameAccess > & xNameAccess );
-    virtual ~SwRenameXNamedDlg() override;
-    virtual void dispose() override;
+    SwRenameXNamedDlg(weld::Window* pParent,
+                      css::uno::Reference< css::container::XNamed > & xNamed,
+                      css::uno::Reference< css::container::XNameAccess > & xNameAccess );
 
     void SetForbiddenChars(const OUString& rSet)
     {

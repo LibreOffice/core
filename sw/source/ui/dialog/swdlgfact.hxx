@@ -306,8 +306,15 @@ class AbstractSwFieldDlg_Impl : public AbstractSwFieldDlg
 
 class AbstractSwRenameXNamedDlg_Impl : public AbstractSwRenameXNamedDlg
 {
-    DECL_ABSTDLG_BASE(AbstractSwRenameXNamedDlg_Impl,SwRenameXNamedDlg )
-    virtual void    SetForbiddenChars( const OUString& rSet ) override;
+protected:
+    std::unique_ptr<SwRenameXNamedDlg> m_xDlg;
+public:
+    explicit AbstractSwRenameXNamedDlg_Impl(SwRenameXNamedDlg* p)
+        : m_xDlg(p)
+    {
+    }
+    virtual short Execute() override;
+    virtual void SetForbiddenChars( const OUString& rSet ) override;
     virtual void SetAlternativeAccess(
              css::uno::Reference< css::container::XNameAccess > & xSecond,
              css::uno::Reference< css::container::XNameAccess > & xThird ) override;
@@ -531,7 +538,7 @@ public:
         const SfxItemSet* pItemSet, SwWrtShell* pSh) override;
     virtual VclPtr<AbstractSwFieldDlg> CreateSwFieldDlg(SfxBindings* pB, SwChildWinWrapper* pCW, vcl::Window *pParent) override;
     virtual VclPtr<SfxAbstractDialog>   CreateSwFieldEditDlg ( SwView& rVw ) override;
-    virtual VclPtr<AbstractSwRenameXNamedDlg> CreateSwRenameXNamedDlg(vcl::Window* pParent,
+    virtual VclPtr<AbstractSwRenameXNamedDlg> CreateSwRenameXNamedDlg(weld::Window* pParent,
         css::uno::Reference< css::container::XNamed > & xNamed,
         css::uno::Reference< css::container::XNameAccess > & xNameAccess) override;
     virtual VclPtr<AbstractSwModalRedlineAcceptDlg> CreateSwModalRedlineAcceptDlg(vcl::Window *pParent) override;

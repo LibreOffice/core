@@ -137,7 +137,10 @@ short AbstractSwAutoFormatDlg_Impl::Execute()
     return m_xDlg->execute();
 }
 IMPL_ABSTDLG_BASE(AbstractSwFieldDlg_Impl);
-IMPL_ABSTDLG_BASE(AbstractSwRenameXNamedDlg_Impl);
+short AbstractSwRenameXNamedDlg_Impl::Execute()
+{
+    return m_xDlg->run();
+}
 IMPL_ABSTDLG_BASE(AbstractSwModalRedlineAcceptDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractGlossaryDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractFieldInputDlg_Impl);
@@ -400,14 +403,14 @@ void AbstractSwFieldDlg_Impl::ShowReferencePage()
 
 void AbstractSwRenameXNamedDlg_Impl::SetForbiddenChars( const OUString& rSet )
 {
-    pDlg->SetForbiddenChars( rSet );
+    m_xDlg->SetForbiddenChars( rSet );
 }
 
 void    AbstractSwRenameXNamedDlg_Impl::SetAlternativeAccess(
              css::uno::Reference< css::container::XNameAccess > & xSecond,
              css::uno::Reference< css::container::XNameAccess > & xThird )
 {
-    pDlg->SetAlternativeAccess( xSecond, xThird);
+    m_xDlg->SetAlternativeAccess( xSecond, xThird);
 }
 
 void    AbstractSwModalRedlineAcceptDlg_Impl::AcceptAll( bool bAccept )
@@ -877,12 +880,11 @@ VclPtr<SfxAbstractDialog>   SwAbstractDialogFactory_Impl::CreateSwFieldEditDlg (
     return VclPtr<SwAbstractSfxDialog_Impl>::Create( pDlg );
 }
 
-VclPtr<AbstractSwRenameXNamedDlg> SwAbstractDialogFactory_Impl::CreateSwRenameXNamedDlg(vcl::Window* pParent,
+VclPtr<AbstractSwRenameXNamedDlg> SwAbstractDialogFactory_Impl::CreateSwRenameXNamedDlg(weld::Window* pParent,
     css::uno::Reference< css::container::XNamed > & xNamed,
     css::uno::Reference< css::container::XNameAccess > & xNameAccess)
 {
-    VclPtr<SwRenameXNamedDlg> pDlg = VclPtr<SwRenameXNamedDlg>::Create( pParent,xNamed, xNameAccess);
-    return VclPtr<AbstractSwRenameXNamedDlg_Impl>::Create( pDlg );
+    return VclPtr<AbstractSwRenameXNamedDlg_Impl>::Create(new SwRenameXNamedDlg(pParent,xNamed, xNameAccess));
 }
 
 VclPtr<AbstractSwModalRedlineAcceptDlg> SwAbstractDialogFactory_Impl::CreateSwModalRedlineAcceptDlg(vcl::Window *pParent)
