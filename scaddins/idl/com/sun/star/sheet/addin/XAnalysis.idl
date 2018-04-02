@@ -400,7 +400,7 @@ module addin
         double getDuration(
                     [in] com::sun::star::beans::XPropertySet xOptions,
                     [in] long Settlement, [in] long Maturity, [in] double Coupon, [in] double Yield,
-                    [in] long Frequncy, [in] any Base )
+                    [in] long Frequency, [in] any Base )
             raises( com::sun::star::lang::IllegalArgumentException );
 
         /// effect.

@@ -29,8 +29,8 @@
 
 #include <rtl/character.hxx>
 
-/* Converts ISO 8601 conform date/time
-   represenation to the representation
+/* Converts ISO 8601 compliant date/time
+   representation to the representation
    conforming to the current locale
 */
 std::wstring iso8601_date_to_local_date(const std::wstring& isoDate )

@@ -57,7 +57,7 @@ struct FPEntry
     // the starting position to be checked
     sal_Int32       m_nStartIndex;
 
-    // the flag to identify whether the document does automatical grammar checking
+    // the flag to identify whether the document does automatic grammar checking
     bool            m_bAutomatic;
 
     FPEntry()

@@ -1659,7 +1659,7 @@ sal_Bool SAL_CALL CachedContentResultSet
     }
     aGuard.clear();
 
-    //find out whethter the original resultset contains rows or not
+    //find out whether the original resultset contains rows or not
     m_xResultSetOrigin->afterLast();
 
     aGuard.reset();
@@ -1692,7 +1692,7 @@ sal_Bool SAL_CALL CachedContentResultSet
     }
     aGuard.clear();
 
-    //find out whethter the original resultset contains rows or not
+    //find out whether the original resultset contains rows or not
     m_xResultSetOrigin->beforeFirst();
 
     aGuard.reset();
