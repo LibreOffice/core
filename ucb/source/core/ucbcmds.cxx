@@ -215,9 +215,8 @@ public:
 
 
 CommandProcessorInfo::CommandProcessorInfo()
+    : m_pInfo( new uno::Sequence< ucb::CommandInfo >( 3 ) )
 {
-    m_pInfo.reset( new uno::Sequence< ucb::CommandInfo >( 2 ) );
-
     (*m_pInfo)[ 0 ]
         = ucb::CommandInfo(
             GETCOMMANDINFO_NAME, // Name
