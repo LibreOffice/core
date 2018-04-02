@@ -120,6 +120,7 @@
                             <property name="can_focus">True</property>
                             <property name="hexpand">True</property>
                             <property name="visibility">False</property>
+                            <property name="activates_default">True</property>
                             <property name="input_purpose">password</property>
                           </object>
                           <packing>
@@ -176,6 +177,7 @@
                             <property name="can_focus">True</property>
                             <property name="hexpand">True</property>
                             <property name="visibility">False</property>
+                            <property name="activates_default">True</property>
                             <property name="input_purpose">password</property>
                           </object>
                           <packing>
@@ -189,6 +191,7 @@
                             <property name="can_focus">True</property>
                             <property name="hexpand">True</property>
                             <property name="visibility">False</property>
+                            <property name="activates_default">True</property>
                             <property name="input_purpose">password</property>
                           </object>
                           <packing>

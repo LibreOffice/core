@@ -25,6 +25,7 @@
 #include <vcl/commandevent.hxx>
 #include <vcl/button.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/weld.hxx>
 
 #include <svl/whiter.hxx>
 #include <svl/stritem.hxx>
@@ -139,47 +140,31 @@ static void lcl_InvalidateZoomSlots(SfxBindings& rBindings)
 }
 
 // At first the zoom dialog
-class SwPreviewZoomDlg : public SvxStandardDialog
+class SwPreviewZoomDlg : public weld::GenericDialogController
 {
-    VclPtr<NumericField> m_pRowEdit;
-    VclPtr<NumericField> m_pColEdit;
-
-    virtual void  Apply() override;
+    SwPagePreviewWin& m_rParent;
+    std::unique_ptr<weld::SpinButton> m_xRowEdit;
+    std::unique_ptr<weld::SpinButton> m_xColEdit;
 
 public:
-    explicit SwPreviewZoomDlg( SwPagePreviewWin& rParent );
-    virtual ~SwPreviewZoomDlg() override;
-    virtual void dispose() override;
+    SwPreviewZoomDlg(SwPagePreviewWin& rParent)
+        : GenericDialogController(rParent.GetFrameWeld(), "modules/swriter/ui/previewzoomdialog.ui", "PreviewZoomDialog")
+        , m_rParent(rParent)
+        , m_xRowEdit(m_xBuilder->weld_spin_button("rows"))
+        , m_xColEdit(m_xBuilder->weld_spin_button("cols"))
+    {
+        m_xRowEdit->set_value(rParent.GetRow());
+        m_xColEdit->set_value(rParent.GetCol());
+    }
+
+    void execute()
+    {
+        if (run() == RET_OK)
+        {
+            m_rParent.CalcWish(sal_uInt8(m_xRowEdit->get_value()), sal_uInt8(m_xColEdit->get_value()));
+        }
+    }
 };
-
-SwPreviewZoomDlg::SwPreviewZoomDlg( SwPagePreviewWin& rParent )
-    : SvxStandardDialog(&rParent, "PreviewZoomDialog", "modules/swriter/ui/previewzoomdialog.ui")
-{
-    get(m_pRowEdit, "rows");
-    get(m_pColEdit, "cols");
-
-    m_pRowEdit->SetValue( rParent.GetRow() );
-    m_pColEdit->SetValue( rParent.GetCol() );
-}
-
-SwPreviewZoomDlg::~SwPreviewZoomDlg()
-{
-    disposeOnce();
-}
-
-void SwPreviewZoomDlg::dispose()
-{
-    m_pRowEdit.clear();
-    m_pColEdit.clear();
-    SvxStandardDialog::dispose();
-}
-
-void  SwPreviewZoomDlg::Apply()
-{
-    static_cast<SwPagePreviewWin*>(GetParent())->CalcWish(
-                sal_uInt8(m_pRowEdit->GetValue()),
-                sal_uInt8(m_pColEdit->GetValue()) );
-}
 
 // all for SwPagePreviewWin
 SwPagePreviewWin::SwPagePreviewWin( vcl::Window *pParent, SwPagePreview& rPView )
@@ -709,8 +694,10 @@ void  SwPagePreview::Execute( SfxRequest &rReq )
 
             }
             else
-                ScopedVclPtrInstance<SwPreviewZoomDlg>( *m_pViewWin )->Execute();
-
+            {
+                SwPreviewZoomDlg aDlg(*m_pViewWin);
+                aDlg.execute();
+            }
         }
         break;
         case FN_SHOW_BOOKVIEW:
