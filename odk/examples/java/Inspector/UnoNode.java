@@ -128,7 +128,7 @@ public class UnoNode{
         String sAnchor = ""; // TODO find out how the Anchor may be set at the html file;  //_sAnchor;
         boolean bExists = Introspector.getIntrospector().getXSimpleFileAccess().exists(sIDLUrl);
         if (sIDLUrl.equals("") || (!bExists)){
-            sIDLUrl = "http://api.libreoffice.org/" + Inspector.sIDLDOCUMENTSUBFOLDER;
+            sIDLUrl = "https://api.libreoffice.org/" + Inspector.sIDLDOCUMENTSUBFOLDER;
         }
         if (!sIDLUrl.endsWith("/")){
             sIDLUrl += "/";

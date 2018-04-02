@@ -1435,9 +1435,9 @@ void DrawingML::WriteRunProperties( const Reference< XPropertySet >& rRun, bool 
         nCharKerning = static_cast<sal_Int32>(*o3tl::doAccess<sal_Int16>(mAny));
     /**  While setting values in propertymap,
     *    CharKerning converted using GetTextSpacingPoint
-    *    i.e set @ http://opengrok.libreoffice.org/xref/core/oox/source/drawingml/textcharacterproperties.cxx#129
+    *    i.e set @ https://opengrok.libreoffice.org/xref/core/oox/source/drawingml/textcharacterproperties.cxx#129
     *    therefore to get original value CharKerning need to be convert.
-    *    http://opengrok.libreoffice.org/xref/core/oox/source/drawingml/drawingmltypes.cxx#95
+    *    https://opengrok.libreoffice.org/xref/core/oox/source/drawingml/drawingmltypes.cxx#95
     **/
     nCharKerning = ((nCharKerning * 720)-360) / 254;
 
