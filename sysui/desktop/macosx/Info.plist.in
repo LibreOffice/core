@@ -1770,6 +1770,20 @@
             <key>LSHandlerRank</key>
             <string>Owner</string>
         </dict>
+      // -dennis
+        <dict>
+            <key>CFBundleTypeName</key>
+            <string>Office Open XML Text</string>
+            <key>CFBundleTypeRole</key>
+            <string>Editor</string>
+            <key>LSHandlerRank</key>
+            <string>Owner</string>
+            <key>LSItemContentTypes</key>
+            <array>
+                <string>>org.openxmlformats.wordprocessingml.document</string>
+            </array>
+        </dict>
+      // +dennis
         <dict>
             <key>CFBundleTypeName</key>
             <string>3rd party formats</string>
@@ -1788,7 +1802,6 @@
                 <string>com.microsoft.word.dot</string>
                 <string>com.microsoft.excel.xls</string>
                 <string>com.microsoft.powerpoint.ppt</string>
-                <string>org.openxmlformats.wordprocessingml.document</string>
                 <string>org.openxmlformats.wordprocessingml.document.macroEnabled</string>
                 <string>org.openxmlformats.wordprocessingml.template</string>
                 <string>org.openxmlformats.wordprocessingml.template.macroEnabled</string>
