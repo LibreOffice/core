@@ -19,48 +19,38 @@
 #ifndef INCLUDED_SVX_PASSWD_HXX
 #define INCLUDED_SVX_PASSWD_HXX
 
-#include <sfx2/basedlgs.hxx>
-
-#include <vcl/fixed.hxx>
-
-#include <vcl/edit.hxx>
-
-#include <vcl/button.hxx>
+#include <vcl/weld.hxx>
 #include <svx/svxdllapi.h>
 
 // class SvxPasswordDialog -----------------------------------------------
 
-class SVX_DLLPUBLIC SvxPasswordDialog : public SfxModalDialog
+class SVX_DLLPUBLIC SvxPasswordDialog : public weld::GenericDialogController
 {
 private:
-    VclPtr<FixedText> m_pOldFL;
-    VclPtr<FixedText> m_pOldPasswdFT;
-    VclPtr<Edit>      m_pOldPasswdED;
-    VclPtr<Edit>      m_pNewPasswdED;
-    VclPtr<Edit>      m_pRepeatPasswdED;
-    VclPtr<OKButton>  m_pOKBtn;
+    OUString m_aOldPasswdErrStr;
+    OUString m_aRepeatPasswdErrStr;
+    Link<SvxPasswordDialog*,bool> m_aCheckPasswordHdl;
+    bool m_bEmpty;
 
-    OUString          aOldPasswdErrStr;
-    OUString          aRepeatPasswdErrStr;
+    std::unique_ptr<weld::Label> m_xOldFL;
+    std::unique_ptr<weld::Label> m_xOldPasswdFT;
+    std::unique_ptr<weld::Entry> m_xOldPasswdED;
+    std::unique_ptr<weld::Entry> m_xNewPasswdED;
+    std::unique_ptr<weld::Entry> m_xRepeatPasswdED;
+    std::unique_ptr<weld::Button> m_xOKBtn;
 
-    Link<SvxPasswordDialog*,bool> aCheckPasswordHdl;
-
-    bool              bEmpty;
-
-    DECL_LINK(ButtonHdl, Button*, void);
-    DECL_LINK(EditModifyHdl, Edit&, void);
+    DECL_LINK(ButtonHdl, weld::Button&, void);
+    DECL_LINK(EditModifyHdl, weld::Entry&, void);
 
 public:
-                    SvxPasswordDialog( vcl::Window* pParent, bool bAllowEmptyPasswords, bool bDisableOldPassword );
-    virtual         ~SvxPasswordDialog() override;
-    virtual void    dispose() override;
+    SvxPasswordDialog(weld::Window* pParent, bool bAllowEmptyPasswords, bool bDisableOldPassword);
+    virtual ~SvxPasswordDialog() override;
 
-    OUString        GetOldPassword() const { return m_pOldPasswdED->GetText(); }
-    OUString        GetNewPassword() const { return m_pNewPasswdED->GetText(); }
+    OUString        GetOldPassword() const { return m_xOldPasswdED->get_text(); }
+    OUString        GetNewPassword() const { return m_xNewPasswdED->get_text(); }
 
-    void            SetCheckPasswordHdl( const Link<SvxPasswordDialog*,bool>& rLink ) { aCheckPasswordHdl = rLink; }
+    void            SetCheckPasswordHdl( const Link<SvxPasswordDialog*,bool>& rLink ) { m_aCheckPasswordHdl = rLink; }
 };
-
 
 #endif
 

@@ -668,10 +668,10 @@ IMPL_LINK( LibPage, ButtonHdl, Button *, pButton, void )
                 bool const bProtected = xPasswd->isLibraryPasswordProtected( aLibName );
 
                 // change password dialog
-                VclPtrInstance< SvxPasswordDialog > pDlg( this, true, !bProtected );
-                pDlg->SetCheckPasswordHdl( LINK( this, LibPage, CheckPasswordHdl ) );
+                SvxPasswordDialog aDlg(GetFrameWeld(), true, !bProtected);
+                aDlg.SetCheckPasswordHdl(LINK(this, LibPage, CheckPasswordHdl));
 
-                if ( pDlg->Execute() == RET_OK )
+                if (aDlg.run() == RET_OK)
                 {
                     bool const bNewProtected = xPasswd->isLibraryPasswordProtected( aLibName );
 

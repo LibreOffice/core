@@ -24,93 +24,78 @@
 #include <svx/dialmgr.hxx>
 #include <svx/strings.hrc>
 
-IMPL_LINK_NOARG(SvxPasswordDialog, ButtonHdl, Button*, void)
+IMPL_LINK_NOARG(SvxPasswordDialog, ButtonHdl, weld::Button&, void)
 {
     bool bOK = true;
 
-    if ( m_pNewPasswdED->GetText() != m_pRepeatPasswdED->GetText() )
+    if (m_xNewPasswdED->get_text() != m_xRepeatPasswdED->get_text())
     {
-        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetFrameWeld(),
+        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(m_xDialog.get(),
                                                                  VclMessageType::Warning, VclButtonsType::Ok,
-                                                                 aRepeatPasswdErrStr));
+                                                                 m_aRepeatPasswdErrStr));
         xBox->run();
-        m_pNewPasswdED->SetText( "" );
-        m_pRepeatPasswdED->SetText( "" );
-        m_pNewPasswdED->GrabFocus();
+        m_xNewPasswdED->set_text("");
+        m_xRepeatPasswdED->set_text("");
+        m_xNewPasswdED->grab_focus();
         bOK = false;
     }
 
-    if ( bOK && aCheckPasswordHdl.IsSet() && !aCheckPasswordHdl.Call( this ) )
+    if (bOK && m_aCheckPasswordHdl.IsSet() && !m_aCheckPasswordHdl.Call(this))
     {
-        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetFrameWeld(),
+        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(m_xDialog.get(),
                                                                  VclMessageType::Warning, VclButtonsType::Ok,
-                                                                 aOldPasswdErrStr));
+                                                                 m_aOldPasswdErrStr));
         xBox->run();
-        m_pOldPasswdED->SetText( "" );
-        m_pOldPasswdED->GrabFocus();
+        m_xOldPasswdED->set_text("");
+        m_xOldPasswdED->grab_focus();
         bOK = false;
     }
 
-    if ( bOK )
-        EndDialog( RET_OK );
+    if (bOK)
+        m_xDialog->response(RET_OK);
 }
 
-IMPL_LINK_NOARG(SvxPasswordDialog, EditModifyHdl, Edit&, void)
+IMPL_LINK_NOARG(SvxPasswordDialog, EditModifyHdl, weld::Entry&, void)
 {
-    if ( !bEmpty )
+    if (!m_bEmpty)
     {
-        OUString aPasswd = comphelper::string::strip(m_pRepeatPasswdED->GetText(), ' ');
-        if ( aPasswd.isEmpty() && m_pOKBtn->IsEnabled() )
-            m_pOKBtn->Disable();
-        else if ( !aPasswd.isEmpty() && !m_pOKBtn->IsEnabled() )
-            m_pOKBtn->Enable();
+        OUString aPasswd = comphelper::string::strip(m_xRepeatPasswdED->get_text(), ' ');
+        if (aPasswd.isEmpty() && m_xOKBtn->get_sensitive())
+            m_xOKBtn->set_sensitive(false);
+        else if (!aPasswd.isEmpty() && !m_xOKBtn->get_sensitive())
+            m_xOKBtn->set_sensitive(true);
     }
-    else if ( !m_pOKBtn->IsEnabled() )
-        m_pOKBtn->Enable();
+    else if (!m_xOKBtn->get_sensitive())
+        m_xOKBtn->set_sensitive(true);
 }
 
-
-SvxPasswordDialog::SvxPasswordDialog(vcl::Window* pParent, bool bAllowEmptyPasswords, bool bDisableOldPassword)
-    : SfxModalDialog(pParent, "PasswordDialog", "svx/ui/passwd.ui")
-    , aOldPasswdErrStr(SvxResId(RID_SVXSTR_ERR_OLD_PASSWD))
-    , aRepeatPasswdErrStr(SvxResId(RID_SVXSTR_ERR_REPEAT_PASSWD ))
-    , bEmpty(bAllowEmptyPasswords)
+SvxPasswordDialog::SvxPasswordDialog(weld::Window* pParent, bool bAllowEmptyPasswords, bool bDisableOldPassword)
+    : GenericDialogController(pParent, "svx/ui/passwd.ui", "PasswordDialog")
+    , m_aOldPasswdErrStr(SvxResId(RID_SVXSTR_ERR_OLD_PASSWD))
+    , m_aRepeatPasswdErrStr(SvxResId(RID_SVXSTR_ERR_REPEAT_PASSWD ))
+    , m_bEmpty(bAllowEmptyPasswords)
+    , m_xOldFL(m_xBuilder->weld_label("oldpass"))
+    , m_xOldPasswdFT(m_xBuilder->weld_label("oldpassL"))
+    , m_xOldPasswdED(m_xBuilder->weld_entry("oldpassEntry"))
+    , m_xNewPasswdED(m_xBuilder->weld_entry("newpassEntry"))
+    , m_xRepeatPasswdED(m_xBuilder->weld_entry("confirmpassEntry"))
+    , m_xOKBtn(m_xBuilder->weld_button("ok"))
 {
-    get(m_pOldFL, "oldpass");
-    get(m_pOldPasswdFT, "oldpassL");
-    get(m_pOldPasswdED, "oldpassEntry");
-    get(m_pNewPasswdED, "newpassEntry");
-    get(m_pRepeatPasswdED, "confirmpassEntry");
-    get(m_pOKBtn, "ok");
+    m_xOKBtn->connect_clicked(LINK(this, SvxPasswordDialog, ButtonHdl));
+    m_xRepeatPasswdED->connect_changed(LINK(this, SvxPasswordDialog, EditModifyHdl));
+    EditModifyHdl(*m_xRepeatPasswdED);
 
-    m_pOKBtn->SetClickHdl( LINK( this, SvxPasswordDialog, ButtonHdl ) );
-    m_pRepeatPasswdED->SetModifyHdl( LINK( this, SvxPasswordDialog, EditModifyHdl ) );
-    EditModifyHdl( *m_pRepeatPasswdED );
-
-    if ( bDisableOldPassword )
+    if (bDisableOldPassword)
     {
-        m_pOldFL->Disable();
-         m_pOldPasswdFT->Disable();
-        m_pOldPasswdED->Disable();
-        m_pNewPasswdED->GrabFocus();
+        m_xOldFL->set_sensitive(false);
+        m_xOldPasswdFT->set_sensitive(false);
+        m_xOldPasswdED->set_sensitive(false);
+        m_xNewPasswdED->grab_focus();
     }
 }
 
 SvxPasswordDialog::~SvxPasswordDialog()
 {
-    disposeOnce();
 }
-
-void SvxPasswordDialog::dispose()
-{
-    m_pOldFL.clear();
-    m_pOldPasswdFT.clear();
-    m_pOldPasswdED.clear();
-    m_pNewPasswdED.clear();
-    m_pRepeatPasswdED.clear();
-    m_pOKBtn.clear();
-    SfxModalDialog::dispose();
-}
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

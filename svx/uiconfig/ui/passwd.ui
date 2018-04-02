@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.18.3 -->
+<!-- Generated with glade 3.20.4 -->
 <interface domain="svx">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkDialog" id="PasswordDialog">
@@ -7,23 +7,23 @@
     <property name="border_width">6</property>
     <property name="title" translatable="yes" context="passwd|PasswordDialog">Change Password</property>
     <property name="modal">True</property>
+    <property name="default_width">0</property>
+    <property name="default_height">0</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="can_focus">False</property>
+        <property name="orientation">vertical</property>
         <property name="spacing">12</property>
         <child internal-child="action_area">
           <object class="GtkButtonBox" id="dialog-action_area1">
             <property name="can_focus">False</property>
-            <property name="orientation">vertical</property>
-            <property name="layout_style">start</property>
+            <property name="layout_style">end</property>
             <child>
-              <object class="GtkButton" id="ok">
-                <property name="label">gtk-ok</property>
+              <object class="GtkButton" id="cancel">
+                <property name="label">gtk-cancel</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
-                <property name="can_default">True</property>
-                <property name="has_default">True</property>
                 <property name="receives_default">True</property>
                 <property name="use_stock">True</property>
               </object>
@@ -34,10 +34,12 @@
               </packing>
             </child>
             <child>
-              <object class="GtkButton" id="cancel">
-                <property name="label">gtk-cancel</property>
+              <object class="GtkButton" id="ok">
+                <property name="label">gtk-ok</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
+                <property name="can_default">True</property>
+                <property name="has_default">True</property>
                 <property name="receives_default">True</property>
                 <property name="use_stock">True</property>
               </object>
@@ -59,6 +61,7 @@
                 <property name="expand">False</property>
                 <property name="fill">True</property>
                 <property name="position">2</property>
+                <property name="secondary">True</property>
               </packing>
             </child>
           </object>
@@ -100,10 +103,10 @@
                           <object class="GtkLabel" id="oldpassL">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="xalign">1</property>
                             <property name="label" translatable="yes" context="passwd|oldpassL">_Password:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">oldpassEntry</property>
+                            <property name="xalign">1</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -117,6 +120,7 @@
                             <property name="can_focus">True</property>
                             <property name="hexpand">True</property>
                             <property name="visibility">False</property>
+                            <property name="input_purpose">password</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -172,6 +176,7 @@
                             <property name="can_focus">True</property>
                             <property name="hexpand">True</property>
                             <property name="visibility">False</property>
+                            <property name="input_purpose">password</property>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -184,6 +189,7 @@
                             <property name="can_focus">True</property>
                             <property name="hexpand">True</property>
                             <property name="visibility">False</property>
+                            <property name="input_purpose">password</property>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -194,10 +200,10 @@
                           <object class="GtkLabel" id="label4">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="xalign">1</property>
                             <property name="label" translatable="yes" context="passwd|label4">Pa_ssword:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">newpassEntry</property>
+                            <property name="xalign">1</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -208,10 +214,10 @@
                           <object class="GtkLabel" id="label5">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="xalign">1</property>
                             <property name="label" translatable="yes" context="passwd|label5">Confi_rm:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">confirmpassEntry</property>
+                            <property name="xalign">1</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -249,10 +255,13 @@
       </object>
     </child>
     <action-widgets>
-      <action-widget response="-5">ok</action-widget>
       <action-widget response="-6">cancel</action-widget>
+      <action-widget response="-5">ok</action-widget>
       <action-widget response="-11">help</action-widget>
     </action-widgets>
+    <child>
+      <placeholder/>
+    </child>
   </object>
   <object class="GtkSizeGroup" id="sizegroup1">
     <widgets>
