@@ -51,7 +51,6 @@
 #include <tautofmt.hxx>
 #include <tblnumfm.hxx>
 #include <wrap.hxx>
-#include <colwd.hxx>
 #include <tabledlg.hxx>
 #include <fldtdlg.hxx>
 #include <fldedt.hxx>
