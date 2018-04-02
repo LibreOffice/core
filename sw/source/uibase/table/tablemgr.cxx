@@ -50,7 +50,7 @@
 using namespace ::com::sun::star;
 
 // Adjust line height (dialogue)
-void SwTableFUNC::ColWidthDlg( vcl::Window *pParent )
+void SwTableFUNC::ColWidthDlg(weld::Window *pParent)
 {
     InitTabCols();
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();

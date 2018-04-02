@@ -53,7 +53,7 @@ public:
            ~SwTableFUNC();
 
     void    InitTabCols();
-    void    ColWidthDlg(vcl::Window *pParent );
+    void    ColWidthDlg(weld::Window *pParent);
     SwTwips GetColWidth(sal_uInt16 nNum) const;
     SwTwips GetMaxColWidth(sal_uInt16 nNum) const;
     void    SetColWidth(sal_uInt16 nNum, SwTwips nWidth );

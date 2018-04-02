@@ -26,6 +26,7 @@ class SwAsciiFilterDlg;
 class Dialog;
 class SwBreakDlg;
 class SwSortDlg;
+class SwTableWidthDlg;
 class SignatureLineDialog;
 class SfxTabDialog;
 class SwConvertTableDlg;
@@ -140,6 +141,18 @@ public:
     virtual OUString                        GetTemplateName() override;
     virtual sal_uInt16                      GetKind() override;
     virtual ::boost::optional<sal_uInt16>   GetPageNumber() override;
+};
+
+class AbstractSwTableWidthDlg_Impl : public VclAbstractDialog
+{
+protected:
+    std::unique_ptr<SwTableWidthDlg> m_xDlg;
+public:
+    explicit AbstractSwTableWidthDlg_Impl(SwTableWidthDlg* p)
+        : m_xDlg(p)
+    {
+    }
+    virtual short Execute() override;
 };
 
 class AbstractSplitTableDialog_Impl : public AbstractSplitTableDialog // add for
@@ -487,7 +500,7 @@ public:
     virtual VclPtr<SfxAbstractDialog> CreateSwBorderDlg (vcl::Window* pParent, SfxItemSet& rSet, SwBorderModes nType ) override;
 
     virtual VclPtr<SfxAbstractDialog> CreateSwWrapDlg ( vcl::Window* pParent, SfxItemSet& rSet, SwWrtShell* pSh ) override;
-    virtual VclPtr<VclAbstractDialog> CreateSwTableWidthDlg(vcl::Window *pParent, SwTableFUNC &rFnc) override;
+    virtual VclPtr<VclAbstractDialog> CreateSwTableWidthDlg(weld::Window *pParent, SwTableFUNC &rFnc) override;
     virtual VclPtr<SfxAbstractTabDialog> CreateSwTableTabDlg(vcl::Window* pParent,
         const SfxItemSet* pItemSet, SwWrtShell* pSh) override;
     virtual VclPtr<AbstractSwFieldDlg> CreateSwFieldDlg(SfxBindings* pB, SwChildWinWrapper* pCW, vcl::Window *pParent) override;
