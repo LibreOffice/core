@@ -330,6 +330,10 @@ bool wwSectionManager::SetCols(SwFrameFormat &rFormat, const wwSection &rSection
     if (nCols < 2)          //check for no columns or other weird state
         return false;
 
+    const sal_uInt16 nNetWriterWidth = writer_cast<sal_uInt16>(nNetWidth);
+    if (nNetWriterWidth == 0)
+        return false;
+
     SwFormatCol aCol;                      // Create SwFormatCol
 
     //sprmSDxaColumns   - Default distance is 1.25 cm
@@ -346,8 +350,7 @@ bool wwSectionManager::SetCols(SwFrameFormat &rFormat, const wwSection &rSection
         aCol.SetLineWidth(1);
     }
 
-    aCol.Init(nCols, writer_cast<sal_uInt16>(nColSpace),
-        writer_cast<sal_uInt16>(nNetWidth));
+    aCol.Init(nCols, writer_cast<sal_uInt16>(nColSpace), nNetWriterWidth);
 
     // sprmSFEvenlySpaced
     if (!rSep.fEvenlySpaced)
@@ -365,7 +368,7 @@ bool wwSectionManager::SetCols(SwFrameFormat &rFormat, const wwSection &rSection
             pCol->SetLeft(writer_cast<sal_uInt16>(nLeft));
             pCol->SetRight(writer_cast<sal_uInt16>(nRight));
         }
-        aCol.SetWishWidth(writer_cast<sal_uInt16>(nNetWidth));
+        aCol.SetWishWidth(nNetWriterWidth);
     }
     rFormat.SetFormatAttr(aCol);
     return true;
