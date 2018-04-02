@@ -107,7 +107,7 @@ open class ButtonList: UIView
 
     public var buttons: [UIButton]
     {
-        return self.subviews.flatMap({ $0 as? UIButton })
+        return self.subviews.compactMap({ $0 as? UIButton })
     }
 
     open override func layoutSubviews()

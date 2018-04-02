@@ -43,7 +43,7 @@ public class DocumentOverlaysView: UIView
 
         if let srs = searchResults.searchResultSelection
         {
-            let allTheRects = srs.flatMap { $0.rectsAsCGRects }
+            let allTheRects = srs.compactMap { $0.rectsAsCGRects }
                 .flatMap { $0 }
                 .map { documentTiledView.twipsToPixels(rect: $0) }
 

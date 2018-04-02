@@ -254,7 +254,7 @@ public func decodeRects(_ payload: String?) -> [CGRect]?
     var ret = [CGRect]()
     for rectStr in pl.split(separator: ";")
     {
-        let coords = rectStr.split(separator: ",").flatMap { Double($0.trimmingCharacters(in: .whitespacesAndNewlines)) }
+        let coords = rectStr.split(separator: ",").compactMap { Double($0.trimmingCharacters(in: .whitespacesAndNewlines)) }
         if coords.count == 4
         {
             let rect = CGRect(x: coords[0],
