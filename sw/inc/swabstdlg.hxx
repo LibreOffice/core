@@ -446,7 +446,7 @@ public:
         css::uno::Reference< css::container::XNameAccess > & xNameAccess) = 0;
     virtual VclPtr<AbstractSwModalRedlineAcceptDlg> CreateSwModalRedlineAcceptDlg(vcl::Window *pParent) = 0;
 
-    virtual VclPtr<VclAbstractDialog>          CreateTableMergeDialog( vcl::Window* pParent, bool& rWithPrev ) = 0;
+    virtual VclPtr<VclAbstractDialog>          CreateTableMergeDialog(weld::Window* pParent, bool& rWithPrev) = 0;
     virtual VclPtr<SfxAbstractTabDialog>       CreateFrameTabDialog(const OUString &rDialogType,
                                                 SfxViewFrame *pFrame, vcl::Window *pParent,
                                                 const SfxItemSet& rCoreSet,
