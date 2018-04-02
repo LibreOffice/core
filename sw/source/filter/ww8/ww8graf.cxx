@@ -2997,10 +2997,10 @@ SwFlyFrameFormat* SwWW8ImplReader::ImportReplaceableDrawables( SdrObject* &rpObj
     SfxItemSet &rFlySet )
 {
     SwFlyFrameFormat* pRetFrameFormat = nullptr;
-    long nWidthTw  = pF->nXaRight - pF->nXaLeft;
+    sal_Int32 nWidthTw = o3tl::saturating_sub(pF->nXaRight, pF->nXaLeft);
     if (0 > nWidthTw)
         nWidthTw = 0;
-    long nHeightTw = pF->nYaBottom - pF->nYaTop;
+    sal_Int32 nHeightTw = o3tl::saturating_sub(pF->nYaBottom, pF->nYaTop);
     if (0 > nHeightTw)
         nHeightTw = 0;
 
