@@ -3923,9 +3923,9 @@ void RtfAttributeOutput::FlyFrameGraphic(const SwFlyFrameFormat* pFlyFrameFormat
 
     GfxLink aGraphicLink;
     const sal_Char* pBLIPType = nullptr;
-    if (rGraphic.IsLink())
+    if (rGraphic.IsGfxLink())
     {
-        aGraphicLink = rGraphic.GetLink();
+        aGraphicLink = rGraphic.GetGfxLink();
         nSize = aGraphicLink.GetDataSize();
         pGraphicAry = aGraphicLink.GetData();
         switch (aGraphicLink.GetType())

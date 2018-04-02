@@ -1308,10 +1308,10 @@ Reference< XInputStream > SdrGrafObj::getInputStream()
 
     if( pModel )
     {
-        if (mpGraphicObject && GetGraphic().IsLink())
+        if (mpGraphicObject && GetGraphic().IsGfxLink())
         {
             Graphic aGraphic( GetGraphic() );
-            GfxLink aLink( aGraphic.GetLink() );
+            GfxLink aLink( aGraphic.GetGfxLink() );
             sal_uInt32 nSize = aLink.GetDataSize();
             const void* pSourceData = static_cast<const void*>(aLink.GetData());
             if( nSize && pSourceData )
