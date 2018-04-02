@@ -40,9 +40,7 @@
 #include <vector>
 
 #include "fpdialogbase.hxx"
-#include <fpsofficeResMgr.hxx>
 #include "QueryFolderName.hxx"
-#include <strings.hrc>
 
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::task;
