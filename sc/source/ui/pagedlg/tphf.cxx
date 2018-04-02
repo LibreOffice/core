@@ -201,7 +201,6 @@ IMPL_LINK_NOARG(ScHFPage, HFEditHdl, void*, void)
     {
         OUString  aText;
         VclPtrInstance< SfxSingleTabDialog > pDlg(this, aDataSet);
-        const int nSettingsId = 42;
         bool bRightPage =   m_pCntSharedBox->IsChecked()
                          || ( SvxPageUsage::Left != nPageUsage );
 
@@ -209,17 +208,17 @@ IMPL_LINK_NOARG(ScHFPage, HFEditHdl, void*, void)
         {
             aText = ScGlobal::GetRscString( STR_PAGEHEADER );
             if ( bRightPage )
-                pDlg->SetTabPage( ScRightHeaderEditPage::Create( pDlg->get_content_area(), &aDataSet ), nSettingsId );
+                pDlg->SetTabPage( ScRightHeaderEditPage::Create( pDlg->get_content_area(), &aDataSet ) );
             else
-                pDlg->SetTabPage( ScLeftHeaderEditPage::Create( pDlg->get_content_area(), &aDataSet ), nSettingsId );
+                pDlg->SetTabPage( ScLeftHeaderEditPage::Create( pDlg->get_content_area(), &aDataSet ) );
         }
         else
         {
             aText = ScGlobal::GetRscString( STR_PAGEFOOTER );
             if ( bRightPage )
-                pDlg->SetTabPage( ScRightFooterEditPage::Create( pDlg->get_content_area(), &aDataSet ), nSettingsId );
+                pDlg->SetTabPage( ScRightFooterEditPage::Create( pDlg->get_content_area(), &aDataSet ) );
             else
-                pDlg->SetTabPage( ScLeftFooterEditPage::Create( pDlg->get_content_area(), &aDataSet ), nSettingsId );
+                pDlg->SetTabPage( ScLeftFooterEditPage::Create( pDlg->get_content_area(), &aDataSet ) );
         }
 
         SvxNumType eNumType = aDataSet.Get(ATTR_PAGE).GetNumType();
