@@ -22,6 +22,7 @@
 #include <abstract.hxx>
 #include <ascfldlg.hxx>
 #include <break.hxx>
+#include <colwd.hxx>
 #include <convert.hxx>
 #include <srtdlg.hxx>
 #include <dbinsdlg.hxx>
