@@ -48,7 +48,7 @@ void GraphicNativeTransform::rotate(sal_uInt16 aInputRotation)
         return;
     }
 
-    GfxLink aLink = mrGraphic.GetLink();
+    GfxLink aLink = mrGraphic.GetGfxLink();
     if ( aLink.GetType() == GfxLinkType::NativeJpg )
     {
         rotateJPEG(aRotation);
@@ -127,7 +127,7 @@ bool GraphicNativeTransform::rotateJPEG(sal_uInt16 aRotation)
     }
     else
     {
-        GfxLink aLink = mrGraphic.GetLink();
+        GfxLink aLink = mrGraphic.GetGfxLink();
 
         SvMemoryStream aSourceStream;
         aSourceStream.WriteBytes(aLink.GetData(), aLink.GetDataSize());

@@ -102,7 +102,7 @@ void PDFWriterImpl::implWriteBitmapEx( const Point& i_rPoint, const Size& i_rSiz
     bool bIsJpeg = false, bIsPng = false;
     if( i_Graphic.GetType() != GraphicType::NONE && i_Graphic.GetBitmapEx() == aBitmapEx )
     {
-        GfxLinkType eType = i_Graphic.GetLink().GetType();
+        GfxLinkType eType = i_Graphic.GetGfxLink().GetType();
         bIsJpeg = (eType == GfxLinkType::NativeJpg);
         bIsPng = (eType == GfxLinkType::NativePng);
     }

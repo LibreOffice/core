@@ -206,10 +206,10 @@ ErrCode XOutBitmap::WriteGraphic( const Graphic& rGraphic, OUString& rFileName,
             if( ( nFlags & XOutFlags::UseNativeIfPossible ) &&
                 !( nFlags & XOutFlags::MirrorHorz ) &&
                 !( nFlags & XOutFlags::MirrorVert ) &&
-                ( rGraphic.GetType() != GraphicType::GdiMetafile ) && rGraphic.IsLink() )
+                ( rGraphic.GetType() != GraphicType::GdiMetafile ) && rGraphic.IsGfxLink() )
             {
                 // try to write native link
-                const GfxLink aGfxLink( rGraphic.GetLink() );
+                const GfxLink aGfxLink( rGraphic.GetGfxLink() );
 
                 switch( aGfxLink.GetType() )
                 {
@@ -361,7 +361,7 @@ bool XOutBitmap::GraphicToBase64(const Graphic& rGraphic, OUString& rOUString)
 {
     SvMemoryStream aOStm;
     OUString aMimeType;
-    GfxLink aLink = rGraphic.GetLink();
+    GfxLink aLink = rGraphic.GetGfxLink();
     ConvertDataFormat aCvtType;
     switch(  aLink.GetType() )
     {

@@ -116,7 +116,7 @@ GraphicInputStream::GraphicInputStream(GraphicObject const & raGraphicObject, co
         if (pStream)
         {
             Graphic aGraphic(aGraphicObject.GetGraphic());
-            const GfxLink aGfxLink(aGraphic.GetLink());
+            const GfxLink aGfxLink(aGraphic.GetGfxLink());
             bool bRet = false;
 
             if (aGfxLink.GetDataSize() && aGfxLink.GetData())
@@ -640,7 +640,7 @@ OUString SvXMLGraphicHelper::implSaveGraphic(css::uno::Reference<css::graphic::X
 
     if (aGraphicObject.GetType() != GraphicType::NONE)
     {
-        const GfxLink aGfxLink(aGraphic.GetLink());
+        const GfxLink aGfxLink(aGraphic.GetGfxLink());
         OUString aExtension;
         bool bUseGfxLink = true;
 

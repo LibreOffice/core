@@ -772,7 +772,7 @@ namespace drawinglayer
                         // svtools/source/graphic/grfmgr.cxx
                         const Graphic& rGraphic = rGraphicPrimitive.getGraphicObject().GetGraphic();
 
-                        if(rGraphic.IsLink())
+                        if(rGraphic.IsGfxLink())
                         {
                             const GraphicAttr& rAttr = rGraphicPrimitive.getGraphicAttr();
 

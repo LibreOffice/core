@@ -1431,7 +1431,7 @@ void GraphicFilter::ImportGraphics(std::vector< std::shared_ptr<Graphic> >& rGra
             }
 
             if (rContext.m_nStatus == ERRCODE_NONE)
-                rContext.m_pGraphic->SetLink(GfxLink(std::move(pGraphicContent), nGraphicContentSize, rContext.m_eLinkType));
+                rContext.m_pGraphic->SetGfxLink(GfxLink(std::move(pGraphicContent), nGraphicContentSize, rContext.m_eLinkType));
         }
 
         if (rContext.m_nStatus != ERRCODE_NONE)
@@ -1451,7 +1451,7 @@ ErrCode GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPath, 
     sal_uLong                      nStreamBegin;
     ErrCode                        nStatus;
     GfxLinkType                    eLinkType = GfxLinkType::NONE;
-    const bool                     bLinkSet = rGraphic.IsLink();
+    const bool                     bLinkSet = rGraphic.IsGfxLink();
     std::unique_ptr<FilterConfigItem> pFilterConfigItem;
 
     Size                aPreviewSizeHint( 0, 0 );
@@ -1850,7 +1850,7 @@ ErrCode GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPath, 
         }
         if( nStatus == ERRCODE_NONE )
         {
-            rGraphic.SetLink( GfxLink( std::move(pGraphicContent), nGraphicContentSize, eLinkType ) );
+            rGraphic.SetGfxLink( GfxLink( std::move(pGraphicContent), nGraphicContentSize, eLinkType ) );
         }
     }
 
