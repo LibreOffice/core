@@ -79,7 +79,7 @@ public:
     AlphaMask           GetAlpha() const;
 
     const Size&         GetSizePixel() const { return maBitmapSize; }
-    void                SetSizePixel( const Size& rNewSize, BmpScaleFlag nScaleFlag = BmpScaleFlag::Default );
+    void                SetSizePixel(const Size& rNewSize);
 
     const Size&         GetPrefSize() const { return maBitmap.GetPrefSize(); }
     void                SetPrefSize( const Size& rPrefSize ) { maBitmap.SetPrefSize( rPrefSize ); }
