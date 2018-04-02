@@ -58,6 +58,7 @@ cmd/lc_insertformcheck.png cmd/lc_checkbox.png
 cmd/lc_insertformcombo.png cmd/lc_combobox.png
 cmd/lc_insertformlist.png cmd/lc_listbox.png
 cmd/lc_insertformradio.png cmd/lc_radiobutton.png
+cmd/lc_insertformspin.png cmd/lc_spinbutton.png
 cmd/lc_insertformula.png cmd/lc_dbviewfunctions.png
 cmd/lc_insertformvscroll.png cmd/lc_scrollbar.png
 cmd/lc_insertframeinteract.png cmd/lc_insertframe.png
@@ -847,6 +848,19 @@ cmd/sc_showgraphics.png cmd/sc_graphic.png
 # navigator
 cmd/lc_dsbrowserexplorer.png cmd/lc_showfmexplorer.png
 cmd/sc_dsbrowserexplorer.png cmd/sc_showfmexplorer.png
+cmd/lc_dsbdocumentdatasource.png cmd/lc_sbaexecutesql.png
+cmd/sc_dsbdocumentdatasource.png cmd/sc_sbaexecutesql.png
+
+cmd/lc_showbrowser.png cmd/lc_controlproperties.png
+cmd/sc_showbrowser.png cmd/sc_controlproperties.png
+cmd/lc_showpropbrowser.png cmd/lc_controlproperties.png
+cmd/sc_showpropbrowser.png cmd/sc_controlproperties.png
+cmd/lc_inserttoolbox.png cmd/lc_dataimport.png
+cmd/sc_inserttoolbox.png cmd/sc_dataimport.png
+cmd/lc_dsbinsertcolumns.png cmd/lc_insertfieldctrl.png
+cmd/sc_dsbinsertcolumns.png cmd/sc_insertfieldctrl.png
+cmd/lc_sbabrwinsert.png cmd/lc_insertfieldctrl.png
+cmd/sc_sbabrwinsert.png cmd/sc_insertfieldctrl.png
 
 cmd/lc_savesimple.png cmd/lc_save.png
 cmd/sc_savesimple.png cmd/sc_save.png
