@@ -25,12 +25,15 @@ class SwTableFUNC;
 
 class SwTableWidthDlg final : public weld::GenericDialogController
 {
+private:
     SwTableFUNC &m_rFnc;
 
     std::unique_ptr<weld::SpinButton> m_xColNF;
     std::unique_ptr<weld::MetricSpinButton> m_xWidthMF;
 
     DECL_LINK(LoseFocusHdl, weld::SpinButton&, void);
+
+    void Apply();
 
 public:
     SwTableWidthDlg(weld::Window *pParent, SwTableFUNC &rFnc);

@@ -26,6 +26,7 @@ class SwAsciiFilterDlg;
 class Dialog;
 class SwBreakDlg;
 class SwSortDlg;
+class SwTableHeightDlg;
 class SwTableWidthDlg;
 class SignatureLineDialog;
 class SfxTabDialog;
@@ -149,6 +150,18 @@ protected:
     std::unique_ptr<SwTableWidthDlg> m_xDlg;
 public:
     explicit AbstractSwTableWidthDlg_Impl(SwTableWidthDlg* p)
+        : m_xDlg(p)
+    {
+    }
+    virtual short Execute() override;
+};
+
+class AbstractSwTableHeightDlg_Impl : public VclAbstractDialog
+{
+protected:
+    std::unique_ptr<SwTableHeightDlg> m_xDlg;
+public:
+    explicit AbstractSwTableHeightDlg_Impl(SwTableHeightDlg* p)
         : m_xDlg(p)
     {
     }
@@ -490,7 +503,7 @@ public:
     virtual VclPtr<VclAbstractDialog> CreateSwAutoMarkDialog(vcl::Window *pParent, SwWrtShell &rSh) override;
     virtual VclPtr<AbstractSwSelGlossaryDlg> CreateSwSelGlossaryDlg(const OUString &rShortName) override;
     virtual VclPtr<VclAbstractDialog> CreateSwSortingDialog(weld::Window * pParent, SwWrtShell &rSh) override;
-    virtual VclPtr<VclAbstractDialog> CreateSwTableHeightDialog(vcl::Window *pParent, SwWrtShell &rSh) override;
+    virtual VclPtr<VclAbstractDialog> CreateSwTableHeightDialog(weld::Window *pParent, SwWrtShell &rSh) override;
     virtual VclPtr<VclAbstractDialog> CreateSwColumnDialog(vcl::Window *pParent, SwWrtShell &rSh) override;
     virtual VclPtr<AbstractSplitTableDialog> CreateSplitTableDialog(weld::Window* pParent, SwWrtShell &rSh) override;
 

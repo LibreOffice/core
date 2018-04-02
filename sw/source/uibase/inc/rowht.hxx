@@ -26,19 +26,19 @@
 
 class SwWrtShell;
 
-class SwTableHeightDlg : public SvxStandardDialog
+class SwTableHeightDlg : public weld::GenericDialogController
 {
-    VclPtr<MetricField>    m_pHeightEdit;
-    VclPtr<CheckBox>       m_pAutoHeightCB;
-    SwWrtShell      &rSh;
+    SwWrtShell &m_rSh;
 
-protected:
-    virtual void Apply() override;
+    std::unique_ptr<weld::MetricSpinButton> m_xHeightEdit;
+    std::unique_ptr<weld::CheckButton> m_xAutoHeightCB;
+
+private:
+    void Apply();
 
 public:
-    SwTableHeightDlg( vcl::Window *pParent, SwWrtShell &rS );
-    virtual ~SwTableHeightDlg() override;
-    virtual void dispose() override;
+    SwTableHeightDlg(weld::Window *pParent, SwWrtShell &rS);
+    short execute();
 };
 
 #endif

@@ -834,7 +834,7 @@ void SwTableShell::Execute(SfxRequest &rReq)
         {
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
             assert(pFact && "SwAbstractDialogFactory fail!");
-            ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateSwTableHeightDialog(GetView().GetWindow(), rSh));
+            ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateSwTableHeightDialog(GetView().GetFrameWeld(), rSh));
             assert(pDlg && "Dialog creation failed!");
             pDlg->Execute();
             break;
