@@ -508,7 +508,7 @@ bool Graphic::IsDummyContext()
     return mxImpGraphic->ImplIsDummyContext();
 }
 
-void Graphic::SetLink( const GfxLink& rGfxLink )
+void Graphic::SetGfxLink( const GfxLink& rGfxLink )
 {
     ImplTestRefCount();
     mxImpGraphic->ImplSetLink( rGfxLink );

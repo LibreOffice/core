@@ -213,7 +213,7 @@ private:
     friend class GraphicObject;
 
 public:
-    void            SetLink( const GfxLink& );
+    void            SetGfxLink(const GfxLink& rGfxLink);
     GfxLink         GetLink() const;
     bool            IsLink() const;
 
