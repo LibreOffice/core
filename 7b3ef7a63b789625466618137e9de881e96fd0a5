@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_3b8358ce",
+        "filename": "editeng/source/rtf/rtfitem.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 429,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-04-02T13:14:10Z",
+      "side": 1,
+      "message": "isn\u0027t this cast going to limit it to \u003c\u003d 32767 ?",
+      "revId": "7b3ef7a63b789625466618137e9de881e96fd0a5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_7b6dd031",
+        "filename": "filter/source/msfilter/svdfppt.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 6259,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-04-02T13:14:10Z",
+      "side": 1,
+      "message": "and here",
+      "revId": "7b3ef7a63b789625466618137e9de881e96fd0a5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_9b6a8419",
+        "filename": "sw/source/filter/ww8/ww8par6.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 4194,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-04-02T13:14:10Z",
+      "side": 1,
+      "message": "and here",
+      "revId": "7b3ef7a63b789625466618137e9de881e96fd0a5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
