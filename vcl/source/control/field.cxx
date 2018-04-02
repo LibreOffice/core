@@ -1381,7 +1381,7 @@ OUString MetricFormatter::CreateFieldText( sal_Int64 nValue ) const
     {
         double dValue = nValue;
         dValue /= ImplPower10(GetDecimalDigits());
-        return unicode::formatPercent(dValue, Application::GetSettings().GetUILanguageTag());
+        return unicode::formatPercent(dValue, GetLanguageTag());
     }
 
     OUString aStr = NumericFormatter::CreateFieldText( nValue );
