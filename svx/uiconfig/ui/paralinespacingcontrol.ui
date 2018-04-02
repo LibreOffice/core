@@ -2,8 +2,8 @@
 <interface domain="svx">
   <!-- interface-requires gtk+ 3.10 -->
   <object class="GtkAdjustment" id="adjustment1">
-    <property name="lower">50</property>
-    <property name="upper">200</property>
+    <property name="lower">6</property>
+    <property name="upper">65535</property>
     <property name="value">100</property>
     <property name="step_increment">10</property>
     <property name="page_increment">10</property>

@@ -428,10 +428,10 @@ void SvxRTFParser::ReadAttr( int nToken, SfxItemSet* pSet )
 
                     nTokenValue = short( 100L * aLSpace.GetLineHeight() / nTokenValue );
 
-                    if( nTokenValue > 200 )     // Data value for PropLnSp
-                        nTokenValue = 200;      // is one BYTE !!!
+                    if( nTokenValue > SAL_MAX_UINT16 )
+                        nTokenValue = SAL_MAX_UINT16;
 
-                    aLSpace.SetPropLineSpace( static_cast<sal_uInt8>(nTokenValue) );
+                    aLSpace.SetPropLineSpace( static_cast<sal_uInt16>(nTokenValue) );
                     aLSpace.SetLineSpaceRule( SvxLineSpaceRule::Auto );
 
                     pSet->Put( aLSpace );
