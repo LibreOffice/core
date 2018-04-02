@@ -320,7 +320,7 @@ void OButtonModel::impl_resetNoBroadcast_nothrow()
     }
     catch( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("forms.component");
     }
 }
 

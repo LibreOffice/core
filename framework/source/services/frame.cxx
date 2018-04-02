@@ -3017,7 +3017,7 @@ void Frame::implts_setIconOnWindow()
             }
             catch( css::uno::Exception& )
             {
-                DBG_UNHANDLED_EXCEPTION();
+                DBG_UNHANDLED_EXCEPTION("fwk");
             }
         }
 

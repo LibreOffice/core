@@ -321,7 +321,7 @@ namespace sdr { namespace contact {
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("svx");
         }
         _rControl.clear();
     }
@@ -931,7 +931,7 @@ namespace sdr { namespace contact {
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("svx");
         }
     }
 
@@ -1051,7 +1051,7 @@ namespace sdr { namespace contact {
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("svx");
         }
 
         // start listening at all aspects of the control which are interesting to us ...
@@ -1118,7 +1118,7 @@ namespace sdr { namespace contact {
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("svx");
         }
 
         if ( !bSuccess )
@@ -1202,7 +1202,7 @@ namespace sdr { namespace contact {
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("svx");
         }
     }
 
@@ -1233,7 +1233,7 @@ namespace sdr { namespace contact {
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("svx");
         }
     }
 
@@ -1264,7 +1264,7 @@ namespace sdr { namespace contact {
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("svx");
         }
     }
 
@@ -1283,7 +1283,7 @@ namespace sdr { namespace contact {
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("svx");
         }
         return bIsPrintable;
     }
@@ -1378,7 +1378,7 @@ namespace sdr { namespace contact {
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("svx");
         }
     }
 
@@ -1456,7 +1456,7 @@ namespace sdr { namespace contact {
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("svx");
         }
     }
 
@@ -1636,7 +1636,7 @@ namespace sdr { namespace contact {
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("svx");
         }
     }
 

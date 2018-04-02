@@ -314,7 +314,7 @@ void FmFilterAdapter::setText(sal_Int32 nRowPos,
     }
     catch( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("svx");
     }
 }
 
@@ -338,7 +338,7 @@ namespace
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("svx");
         }
         return sLabelName;
     }
@@ -353,7 +353,7 @@ namespace
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("svx");
         }
         return xField;
     }
@@ -607,7 +607,7 @@ void FmFilterModel::Update(const Reference< XIndexAccess > & xControllers, FmPar
     }
     catch( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("svx");
     }
 }
 
@@ -678,7 +678,7 @@ void FmFilterModel::SetCurrentController(const Reference< XFormController > & xC
     }
     catch( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("svx");
     }
 }
 
@@ -707,7 +707,7 @@ void FmFilterModel::AppendFilterItems( FmFormItem& _rFormItem )
     }
     catch( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("svx");
     }
 }
 
@@ -771,7 +771,7 @@ void FmFilterModel::Remove(FmFilterData* pData)
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("svx");
         }
     }
     else // FormItems can not be deleted
@@ -847,7 +847,7 @@ bool FmFilterModel::ValidateText(FmFilterItem const * pItem, OUString& rText, OU
     }
     catch( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("svx");
     }
 
     return false;
@@ -903,7 +903,7 @@ void FmFilterModel::SetCurrentItems(FmFilterItems* pCurrent)
             }
             catch( const Exception& )
             {
-                DBG_UNHANDLED_EXCEPTION();
+                DBG_UNHANDLED_EXCEPTION("svx");
             }
 
             if ( m_xController != pFormItem->GetController() )

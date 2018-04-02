@@ -112,7 +112,7 @@ CSerializationAppXML::serialize_node(const Reference< XNode >& rNode)
     }
     catch( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("forms.xforms");
     }
 }
 

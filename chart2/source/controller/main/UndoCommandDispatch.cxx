@@ -100,7 +100,7 @@ void SAL_CALL UndoCommandDispatch::dispatch(
         }
         catch( const uno::Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("chart2");
         }
         // \--
     }

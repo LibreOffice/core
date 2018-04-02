@@ -151,7 +151,7 @@ namespace dbaccess
             }
             catch( const Exception& )
             {
-                DBG_UNHANDLED_EXCEPTION();
+                DBG_UNHANDLED_EXCEPTION("dbaccess");
             }
             return sContentType;
         }
@@ -390,7 +390,7 @@ OUString ODocumentDefinition::GetDocumentServiceFromMediaType( const OUString& _
     }
     catch ( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("dbaccess");
     }
     return sResult;
 }
@@ -602,7 +602,7 @@ void ODocumentDefinition::impl_onActivateEmbeddedObject_nothrow( const bool i_bR
     }
     catch( const RuntimeException& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("dbaccess");
     }
 }
 
@@ -724,7 +724,7 @@ void ODocumentDefinition::impl_initFormEditView( const Reference< XController >&
     }
     catch( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("dbaccess");
     }
 }
 
@@ -1109,7 +1109,7 @@ namespace
             }
             catch( const Exception& )
             {
-                DBG_UNHANDLED_EXCEPTION();
+                DBG_UNHANDLED_EXCEPTION("dbaccess");
             }
 
             // if the element is a container itself, step down the component hierarchy
@@ -1134,7 +1134,7 @@ namespace
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("dbaccess");
         }
 
     }
@@ -1358,7 +1358,7 @@ void ODocumentDefinition::saveAs()
                     }
                     catch(const Exception&)
                     {
-                        DBG_UNHANDLED_EXCEPTION();
+                        DBG_UNHANDLED_EXCEPTION("dbaccess");
                     }
                 }
                 Reference<XEmbedPersist> xPersist(m_xEmbeddedObject,UNO_QUERY);
@@ -1662,7 +1662,7 @@ void ODocumentDefinition::loadEmbeddedObject( const Reference< XConnection >& i_
             }
             catch( const Exception& )
             {
-                DBG_UNHANDLED_EXCEPTION();
+                DBG_UNHANDLED_EXCEPTION("dbaccess");
             }
         }
     }
@@ -1681,7 +1681,7 @@ void ODocumentDefinition::loadEmbeddedObject( const Reference< XConnection >& i_
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("dbaccess");
         }
     }
 
@@ -1732,7 +1732,7 @@ void ODocumentDefinition::onCommandGetDocumentProperties( Any& _rProps )
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("dbaccess");
         }
     }
 }
@@ -1996,7 +1996,7 @@ bool ODocumentDefinition::prepareClose()
     }
     catch( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("dbaccess");
     }
 
     return true;
@@ -2019,7 +2019,7 @@ void ODocumentDefinition::fillReportData( const Reference< XComponentContext >& 
     }
     catch( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("dbaccess");
     }
 }
 

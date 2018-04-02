@@ -698,7 +698,7 @@ namespace svxform
             }
             catch( const Exception& )
             {
-                DBG_UNHANDLED_EXCEPTION();
+                DBG_UNHANDLED_EXCEPTION("svx");
             }
         }
         else if ( pObj->IsGroupObject() )
@@ -724,7 +724,7 @@ namespace svxform
             }
             catch( const Exception& )
             {
-                DBG_UNHANDLED_EXCEPTION();
+                DBG_UNHANDLED_EXCEPTION("svx");
             }
         }
         else if ( pObj->IsGroupObject() )
@@ -765,7 +765,7 @@ namespace svxform
             }
             catch( const Exception& )
             {
-                DBG_UNHANDLED_EXCEPTION();
+                DBG_UNHANDLED_EXCEPTION("svx");
                 return false;
             }
         }

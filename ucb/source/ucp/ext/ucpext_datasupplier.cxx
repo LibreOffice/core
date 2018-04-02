@@ -166,7 +166,7 @@ namespace ucb { namespace ucp { namespace ext
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("ucb.ucp.ext");
         }
     }
 
@@ -239,7 +239,7 @@ namespace ucb { namespace ucp { namespace ext
             }
             catch ( const IllegalIdentifierException& )
             {
-                DBG_UNHANDLED_EXCEPTION();
+                DBG_UNHANDLED_EXCEPTION("ucb.ucp.ext");
             }
         }
 

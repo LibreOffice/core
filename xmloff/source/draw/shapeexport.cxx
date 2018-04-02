@@ -780,7 +780,7 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
         }
         catch(const uno::Exception&)
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("xmloff.draw");
         }
     }
 
@@ -4880,7 +4880,7 @@ void XMLShapeExport::ImpExportTableShape( const uno::Reference< drawing::XShape 
                             }
                             catch( uno::Exception& )
                             {
-                                DBG_UNHANDLED_EXCEPTION();
+                                DBG_UNHANDLED_EXCEPTION("xmloff.draw");
                             }
                         }
                     }
@@ -4961,9 +4961,9 @@ void XMLShapeExport::ImpExportTableShape( const uno::Reference< drawing::XShape 
                     aBase64Exp.exportOfficeBinaryDataElement( uno::Reference < io::XInputStream >( xPictureStream, uno::UNO_QUERY_THROW ) );
                 }
             }
-            catch( uno::Exception& )
+            catch( uno::Exception const & )
             {
-                DBG_UNHANDLED_EXCEPTION();
+                DBG_UNHANDLED_EXCEPTION("xmloff.draw");
             }
         }
 
@@ -4971,9 +4971,9 @@ void XMLShapeExport::ImpExportTableShape( const uno::Reference< drawing::XShape 
         ImpExportGluePoints( xShape );
         ImpExportDescription( xShape ); // #i68101#
     }
-    catch( uno::Exception& )
+    catch( uno::Exception const & )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("xmloff.draw");
     }
 }
 

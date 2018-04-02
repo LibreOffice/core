@@ -460,7 +460,7 @@ void XMLTextStyleContext::FillPropertySet(
             catch( const RuntimeException& ) { throw; }
             catch( const Exception& )
             {
-                DBG_UNHANDLED_EXCEPTION();
+                DBG_UNHANDLED_EXCEPTION("xmloff.text");
                 bAutomatic = false;
             }
         }

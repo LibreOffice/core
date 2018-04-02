@@ -137,7 +137,7 @@ void FmFormObj::impl_checkRefDevice_nothrow( bool _force )
     }
     catch( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("svx");
     }
 }
 
@@ -159,7 +159,7 @@ void FmFormObj::impl_isolateControlModel_nothrow()
     }
     catch( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("svx");
     }
 }
 
@@ -216,7 +216,7 @@ void FmFormObj::SetPage(SdrPage* _pNewPage)
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("svx");
         }
     }
 
@@ -260,7 +260,7 @@ void FmFormObj::SetPage(SdrPage* _pNewPage)
                     }
                     catch( const Exception& )
                     {
-                        DBG_UNHANDLED_EXCEPTION();
+                        DBG_UNHANDLED_EXCEPTION("svx");
                     }
                 }
             }
@@ -303,7 +303,7 @@ void FmFormObj::SetPage(SdrPage* _pNewPage)
                 }
                 catch( const Exception& )
                 {
-                    DBG_UNHANDLED_EXCEPTION();
+                    DBG_UNHANDLED_EXCEPTION("svx");
                 }
 
             }
@@ -659,7 +659,7 @@ bool FmFormObj::EndCreate( SdrDragStat& rStat, SdrCreateCmd eCmd )
             }
             catch( const Exception& )
             {
-                DBG_UNHANDLED_EXCEPTION();
+                DBG_UNHANDLED_EXCEPTION("svx");
             }
         }
 

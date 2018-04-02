@@ -68,7 +68,7 @@ namespace chart
             }
             catch( const Exception& )
             {
-                DBG_UNHANDLED_EXCEPTION();
+                DBG_UNHANDLED_EXCEPTION("chart2");
             }
             return xResult;
         }
@@ -99,7 +99,7 @@ namespace chart
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("chart2");
         }
     }
 
@@ -121,7 +121,7 @@ namespace chart
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("chart2");
         }
         m_xModelClone.clear();
         m_xDataClone.clear();
@@ -150,7 +150,7 @@ namespace chart
             }
             catch( const Exception& )
             {
-                DBG_UNHANDLED_EXCEPTION();
+                DBG_UNHANDLED_EXCEPTION("chart2");
             }
         }
     }
@@ -238,7 +238,7 @@ namespace chart
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("chart2");
         }
     }
 

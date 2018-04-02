@@ -518,7 +518,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("extensions.propctrlr");
         }
     }
 
@@ -659,7 +659,7 @@ namespace pcr
             }
             catch( const Exception& )
             {
-                DBG_UNHANDLED_EXCEPTION();
+                DBG_UNHANDLED_EXCEPTION("extensions.propctrlr");
             }
         }
 
@@ -728,7 +728,7 @@ namespace pcr
             }
             catch( const Exception& )
             {
-                DBG_UNHANDLED_EXCEPTION();
+                DBG_UNHANDLED_EXCEPTION("extensions.propctrlr");
             }
         }
 
@@ -846,7 +846,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("extensions.propctrlr");
         }
 
         return InteractiveSelectionResult_Success;
@@ -883,7 +883,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("extensions.propctrlr");
         }
 
         return xContextFrame;
@@ -923,7 +923,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("extensions.propctrlr");
         }
     }
 
@@ -953,7 +953,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("extensions.propctrlr");
         }
     }
 
@@ -974,7 +974,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("extensions.propctrlr");
         }
     }
 
@@ -1076,7 +1076,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("extensions.propctrlr");
         }
     }
 
@@ -1115,7 +1115,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("extensions.propctrlr");
         }
     }
 

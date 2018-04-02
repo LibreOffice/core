@@ -443,7 +443,7 @@ bool Binding::getExternalData() const
     }
     catch( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("forms.xforms");
     }
     return bExternalData;
 }

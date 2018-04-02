@@ -82,6 +82,7 @@ certain functionality.
 @li @c connectivity.jdbc
 @li @c connectivity.kab
 @li @c connectivity.macab
+@li @c connectivity.manager
 @li @c connectivity.mork
 @li @c connectivity.mozab
 @li @c connectivity.odbc
@@ -253,6 +254,7 @@ certain functionality.
 @section forms
 
 @li @c forms.component
+@li @c forms.helper
 @li @c forms.misc
 @li @c forms.richtext
 @li @c forms.runtime

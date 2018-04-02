@@ -91,7 +91,7 @@ void OContainerMediator::impl_cleanup_nothrow()
     }
     catch( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("dbaccess");
     }
 }
 
@@ -128,7 +128,7 @@ void SAL_CALL OContainerMediator::elementRemoved( const ContainerEvent& _rEvent 
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("dbaccess");
         }
     }
 }
@@ -157,7 +157,7 @@ void SAL_CALL OContainerMediator::elementReplaced( const ContainerEvent& _rEvent
             }
             catch( const Exception& )
             {
-                DBG_UNHANDLED_EXCEPTION();
+                DBG_UNHANDLED_EXCEPTION("dbaccess");
             }
 
             aFind->second->setName(sNewName);
@@ -184,7 +184,7 @@ void OContainerMediator::impl_initSettings_nothrow( const OUString& _rName, cons
     }
     catch( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("dbaccess");
     }
 }
 
@@ -223,7 +223,7 @@ void OContainerMediator::notifyElementCreated( const OUString& _sName, const Ref
     }
     catch( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("dbaccess");
     }
 
     ::rtl::Reference< OPropertyForward > pForward( new OPropertyForward( _xDest, m_xSettings, _sName, aPropertyList ) );

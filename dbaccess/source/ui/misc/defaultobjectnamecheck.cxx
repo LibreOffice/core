@@ -107,7 +107,7 @@ namespace dbaui
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("dbaccess");
         }
 
         lcl_fillNameExistsError( _rObjectName, _out_rErrorToDisplay );

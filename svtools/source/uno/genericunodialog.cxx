@@ -153,7 +153,7 @@ void SAL_CALL OGenericUnoDialog::setTitle( const OUString& _rTitle )
     }
     catch( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("svtools.uno");
         // not allowed to pass
     }
 }
@@ -256,7 +256,7 @@ void OGenericUnoDialog::implInitialize(const Any& _rValue)
     }
     catch(const Exception&)
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("svtools.uno");
     }
 }
 

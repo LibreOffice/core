@@ -72,7 +72,7 @@ OXMLLogin::OXMLLogin( ODBFilter& rImport,
                         }
                         catch(const Exception&)
                         {
-                            DBG_UNHANDLED_EXCEPTION();
+                            DBG_UNHANDLED_EXCEPTION("dbaccess");
                         }
                     }
                     break;
@@ -83,7 +83,7 @@ OXMLLogin::OXMLLogin( ODBFilter& rImport,
                     }
                     catch(const Exception&)
                     {
-                        DBG_UNHANDLED_EXCEPTION();
+                        DBG_UNHANDLED_EXCEPTION("dbaccess");
                     }
                     break;
                 case XML_TOK_USE_SYSTEM_USER:
@@ -103,14 +103,14 @@ OXMLLogin::OXMLLogin( ODBFilter& rImport,
                     }
                     catch(const Exception&)
                     {
-                        DBG_UNHANDLED_EXCEPTION();
+                        DBG_UNHANDLED_EXCEPTION("dbaccess");
                     }
                     break;
             }
         }
         catch(const Exception&)
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("dbaccess");
         }
     }
 }

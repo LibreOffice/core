@@ -881,7 +881,7 @@ namespace
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("dbaccess");
         }
     }
 }
@@ -988,7 +988,7 @@ void ODatabaseSource::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) con
                 }
                 catch( const Exception& )
                 {
-                    DBG_UNHANDLED_EXCEPTION();
+                    DBG_UNHANDLED_EXCEPTION("dbaccess");
                 }
             }
             break;
@@ -1095,7 +1095,7 @@ Reference< XConnection > ODatabaseSource::connectWithCompletion( const Reference
         }
         catch(Exception&)
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("dbaccess");
         }
 
         if (!pAuthenticate->wasSelected())
@@ -1252,7 +1252,7 @@ void SAL_CALL ODatabaseSource::flush(  )
     }
     catch( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("dbaccess");
     }
 }
 

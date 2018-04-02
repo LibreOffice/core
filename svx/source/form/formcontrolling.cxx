@@ -234,7 +234,7 @@ namespace svx
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("svx");
         }
         osl_atomic_decrement( &m_refCount );
     }
@@ -249,7 +249,7 @@ namespace svx
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("svx");
         }
     }
 
@@ -494,7 +494,7 @@ namespace svx
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("svx");
         }
         return bCanDo;
     }

@@ -507,7 +507,7 @@ void XMLSettingsExportHelper::ManipulateSetting( uno::Any& rAny, const OUString&
             }
             catch( uno::Exception& )
             {
-                DBG_UNHANDLED_EXCEPTION();
+                DBG_UNHANDLED_EXCEPTION("xmloff.core");
             }
         }
 

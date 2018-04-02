@@ -76,7 +76,7 @@ void SfxBasicManagerHolder::reset( BasicManager* _pBasicManager )
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("sfx.appl");
         }
     }
 #endif
@@ -95,7 +95,7 @@ void SfxBasicManagerHolder::storeAllLibraries()
     }
     catch( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("sfx.appl");
     }
 #endif
 }
@@ -114,7 +114,7 @@ void SfxBasicManagerHolder::setStorage( const Reference< XStorage >& _rxStorage 
     }
     catch( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("sfx.appl");
     }
 #endif
 }

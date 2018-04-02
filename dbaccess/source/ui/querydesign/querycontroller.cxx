@@ -639,7 +639,7 @@ void OQueryController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >&
             }
             catch(const Exception&)
             {
-                DBG_UNHANDLED_EXCEPTION();
+                DBG_UNHANDLED_EXCEPTION("dbaccess");
             }
 
             if ( aError.isValid() )
@@ -1007,7 +1007,7 @@ void OQueryController::impl_initialize()
     }
     catch(const SQLException& e)
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("dbaccess");
         // we caught an exception so we switch to text only mode
         {
             m_bGraphicalDesign = false;
@@ -1521,7 +1521,7 @@ bool OQueryController::doSaveAsDoc(bool _bSaveAs)
     {
         if ( !bNew )
             m_sName = sOriginalName;
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("dbaccess");
     }
 
     showError( aInfo );
@@ -1815,7 +1815,7 @@ void OQueryController::impl_reset( const bool i_bForceCurrentControllerSettings 
             }
             catch( const Exception& )
             {
-                DBG_UNHANDLED_EXCEPTION();
+                DBG_UNHANDLED_EXCEPTION("dbaccess");
             }
         }
 

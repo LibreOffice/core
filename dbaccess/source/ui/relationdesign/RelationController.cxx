@@ -181,7 +181,7 @@ void ORelationController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue
                     }
                     catch ( const Exception& )
                     {
-                        DBG_UNHANDLED_EXCEPTION();
+                        DBG_UNHANDLED_EXCEPTION("dbaccess");
                     }
                 }
             }
@@ -235,7 +235,7 @@ void ORelationController::impl_initialize()
     }
     catch( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("dbaccess");
     }
 
 }
@@ -341,7 +341,7 @@ namespace
             }
             catch( const Exception& )
             {
-                DBG_UNHANDLED_EXCEPTION();
+                DBG_UNHANDLED_EXCEPTION("dbaccess");
             }
         }
     }
@@ -479,7 +479,7 @@ IMPL_LINK_NOARG( ORelationController, OnThreadFinished, void*, void )
     }
     catch( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("dbaccess");
     }
     m_pWaitObject.reset();
 }
@@ -525,7 +525,7 @@ void ORelationController::loadData()
     }
     catch(const Exception&)
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("dbaccess");
     }
 }
 

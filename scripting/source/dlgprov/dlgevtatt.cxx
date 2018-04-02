@@ -126,7 +126,7 @@ namespace dlgprov
             }
             catch( const Exception& )
             {
-                DBG_UNHANDLED_EXCEPTION();
+                DBG_UNHANDLED_EXCEPTION("scripting");
             }
         }
 
@@ -144,7 +144,7 @@ namespace dlgprov
             }
             catch( const Exception& )
             {
-                DBG_UNHANDLED_EXCEPTION();
+                DBG_UNHANDLED_EXCEPTION("scripting");
             }
         }
     }
@@ -254,7 +254,7 @@ namespace dlgprov
                     }
                     catch ( const Exception& )
                     {
-                        DBG_UNHANDLED_EXCEPTION();
+                        DBG_UNHANDLED_EXCEPTION("scripting");
                     }
 
                     try
@@ -269,7 +269,7 @@ namespace dlgprov
                     }
                     catch ( const Exception& )
                     {
-                        DBG_UNHANDLED_EXCEPTION();
+                        DBG_UNHANDLED_EXCEPTION("scripting");
                     }
                 }
             }
@@ -503,7 +503,7 @@ namespace dlgprov
         }
         catch ( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("scripting");
         }
     }
 
@@ -602,7 +602,7 @@ namespace dlgprov
             }
             catch( const Exception& )
             {
-                DBG_UNHANDLED_EXCEPTION();
+                DBG_UNHANDLED_EXCEPTION("scripting");
             }
         }
 

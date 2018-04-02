@@ -375,7 +375,7 @@ void Condition::setCondition( const uno::Reference< report::XFormatCondition >& 
     }
     catch( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("reportdesign");
     }
     impl_setCondition( sConditionFormula );
     updateToolbar( _rxCondition.get() );
@@ -409,7 +409,7 @@ void Condition::updateToolbar(const uno::Reference< report::XReportControlFormat
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("reportdesign");
         }
     }
 }

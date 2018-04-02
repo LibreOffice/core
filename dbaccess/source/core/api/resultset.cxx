@@ -309,7 +309,7 @@ namespace
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("dbaccess");
         }
         return xDBMetaData;
     }
@@ -351,7 +351,7 @@ Reference< css::container::XNameAccess > OResultSet::getColumns()
         }
         catch ( const SQLException& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("dbaccess");
         }
         m_pColumns->setInitialized();
 
@@ -375,7 +375,7 @@ Reference< css::container::XNameAccess > OResultSet::getColumns()
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("dbaccess");
         }
     #endif
     }

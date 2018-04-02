@@ -227,7 +227,7 @@ std::shared_ptr<const SfxFilter> SfxFrameLoader_Impl::impl_detectFilterForURL( c
     }
     catch( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("sfx.view");
         sFilter.clear();
     }
 
@@ -277,7 +277,7 @@ std::shared_ptr<const SfxFilter> SfxFrameLoader_Impl::impl_getFilterFromServiceN
     }
     catch( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("sfx.view");
     }
     return nullptr;
 }
@@ -298,7 +298,7 @@ OUString SfxFrameLoader_Impl::impl_askForFilter_nothrow( const Reference< XInter
     }
     catch( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("sfx.view");
     }
 
     return sFilterName;
@@ -495,7 +495,7 @@ void SfxFrameLoader_Impl::impl_handleCaughtError_nothrow( const Any& i_rCaughtEr
     }
     catch( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("sfx.view");
     }
 }
 
@@ -566,7 +566,7 @@ SfxInterfaceId SfxFrameLoader_Impl::impl_determineEffectiveViewId_nothrow( const
     }
     catch( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("sfx.view");
     }
 
     if ( nViewId == SFX_INTERFACE_NONE )
@@ -735,7 +735,7 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const Sequence< PropertyValue >& rA
         }
         catch ( Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("sfx.view");
         }
     }
 

@@ -158,7 +158,7 @@ void ConfigurationControllerResourceManager::ActivateResource (
     }
     catch (RuntimeException&)
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("sd");
     }
 }
 
@@ -220,7 +220,7 @@ void ConfigurationControllerResourceManager::DeactivateResource (
     }
     catch (RuntimeException&)
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("sd");
     }
 
     // 5.  Notify listeners that the resource is being deactivated.

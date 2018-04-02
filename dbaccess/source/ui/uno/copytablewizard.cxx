@@ -396,9 +396,9 @@ CopyTableWizard::~CopyTableWizard()
 
     // protect some members whose dtor might potentially throw
     try { m_xSourceConnection.clear();  }
-    catch( const Exception& ) { DBG_UNHANDLED_EXCEPTION(); }
+    catch( const Exception& ) { DBG_UNHANDLED_EXCEPTION("dbaccess"); }
     try { m_xDestConnection.clear();  }
-    catch( const Exception& ) { DBG_UNHANDLED_EXCEPTION(); }
+    catch( const Exception& ) { DBG_UNHANDLED_EXCEPTION("dbaccess"); }
 
     // TODO: shouldn't we have explicit disposal support? If a listener is registered
     // at our instance, and perhaps holds this our instance by a hard ref, then we'll never
@@ -1036,7 +1036,7 @@ bool CopyTableWizard::impl_processCopyError_nothrow( const CopyTableRowEvent& _r
     }
     catch( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("dbaccess");
     }
 
     // no listener felt responsible for the error, or a listener told to ask the user
@@ -1079,7 +1079,7 @@ bool CopyTableWizard::impl_processCopyError_nothrow( const CopyTableRowEvent& _r
     }
     catch( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("dbaccess");
     }
 
     // cancel copying
@@ -1416,7 +1416,7 @@ void CopyTableWizard::impl_doCopy_nothrow()
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("dbaccess");
         }
     }
 }

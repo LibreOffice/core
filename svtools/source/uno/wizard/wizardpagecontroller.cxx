@@ -68,7 +68,7 @@ namespace svt { namespace uno
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("svtools.uno");
         }
     }
 
@@ -82,7 +82,7 @@ namespace svt { namespace uno
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("svtools.uno");
         }
     }
 
@@ -108,7 +108,7 @@ namespace svt { namespace uno
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("svtools.uno");
         }
         return nullptr;
     }
@@ -125,7 +125,7 @@ namespace svt { namespace uno
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("svtools.uno");
         }
     }
 
@@ -141,7 +141,7 @@ namespace svt { namespace uno
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("svtools.uno");
         }
 
         return true;
@@ -159,7 +159,7 @@ namespace svt { namespace uno
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("svtools.uno");
         }
 
         return true;

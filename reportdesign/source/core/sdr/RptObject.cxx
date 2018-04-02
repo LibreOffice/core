@@ -151,7 +151,7 @@ SdrObject* OObjectBase::createObject(const uno::Reference< report::XReportCompon
             }
             catch(const uno::Exception&)
             {
-                DBG_UNHANDLED_EXCEPTION();
+                DBG_UNHANDLED_EXCEPTION("reportdesign");
             }
             break;
         case OBJ_DLG_SUBREPORT:
@@ -617,7 +617,7 @@ void OUnoObject::impl_initializeModel_nothrow()
     }
     catch( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("reportdesign");
     }
 }
 
@@ -746,7 +746,7 @@ bool OUnoObject::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
             }
             catch(const uno::Exception&)
             {
-                DBG_UNHANDLED_EXCEPTION();
+                DBG_UNHANDLED_EXCEPTION("reportdesign");
             }
 
             impl_initializeModel_nothrow();

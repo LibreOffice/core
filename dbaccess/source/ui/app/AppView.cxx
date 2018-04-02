@@ -513,7 +513,7 @@ void OApplicationView::showPreview( const OUString& _sDataSourceName,
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("dbaccess");
         }
         if ( m_xObject.is() )
             startComponentListening(m_xObject);

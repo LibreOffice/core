@@ -135,7 +135,7 @@ namespace pcr
             catch( const Exception& )
             {
                 // not allowed to leave, so silence it
-                DBG_UNHANDLED_EXCEPTION();
+                DBG_UNHANDLED_EXCEPTION("extensions.propctrlr");
             }
         }
     }
@@ -204,7 +204,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("extensions.propctrlr");
         }
     }
 
@@ -267,7 +267,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("extensions.propctrlr");
             m_xDesigner.clear();
         }
         osl_atomic_decrement(&m_refCount);
@@ -290,7 +290,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("extensions.propctrlr");
         }
         return xFrame;
     }
@@ -331,7 +331,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("extensions.propctrlr");
         }
 
         m_xDesigner.clear();
@@ -348,7 +348,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("extensions.propctrlr");
         }
         return bAllow;
     }

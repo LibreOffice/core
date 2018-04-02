@@ -335,7 +335,7 @@ bool SvxMacroTabPage_::FillItemSet( SfxItemSet* /*rSet*/ )
                 }
                 catch (const Exception&)
                 {
-                    DBG_UNHANDLED_EXCEPTION();
+                    DBG_UNHANDLED_EXCEPTION("cui.customize");
                 }
             }
         }
@@ -350,7 +350,7 @@ bool SvxMacroTabPage_::FillItemSet( SfxItemSet* /*rSet*/ )
                 }
                 catch (const Exception&)
                 {
-                    DBG_UNHANDLED_EXCEPTION();
+                    DBG_UNHANDLED_EXCEPTION("cui.customize");
                 }
             }
             // if we have a valid XModifiable (in the case of doc events)

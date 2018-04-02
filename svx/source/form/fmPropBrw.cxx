@@ -274,7 +274,7 @@ void FmPropBrw::dispose()
     }
     catch (const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("svx");
     }
     ::SfxControllerItem::dispose();
     SfxFloatingWindow::dispose();
@@ -379,7 +379,7 @@ bool FmPropBrw::implIsReadOnlyModel() const
     }
     catch( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("svx");
     }
     return true;
 }
@@ -610,7 +610,7 @@ void FmPropBrw::impl_ensurePropertyBrowser_nothrow( FmFormShell* _pFormShell )
     }
     catch( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("svx");
     }
     m_xLastKnownDocument = xDocument;
 }

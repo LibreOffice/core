@@ -127,7 +127,7 @@ private:
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("toolkit.controls");
         }
         if ( aColumns.size() == i_copySource.m_aColumns.size() )
             m_aColumns.swap( aColumns );
@@ -215,7 +215,7 @@ private:
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("toolkit.controls");
         }
     }
 
@@ -316,7 +316,7 @@ private:
             }
             catch( const Exception& )
             {
-                DBG_UNHANDLED_EXCEPTION();
+                DBG_UNHANDLED_EXCEPTION("toolkit.controls");
             }
         }
     }
@@ -373,7 +373,7 @@ private:
             }
             catch( const Exception& )
             {
-                DBG_UNHANDLED_EXCEPTION();
+                DBG_UNHANDLED_EXCEPTION("toolkit.controls");
             }
 
             m_aColumns.erase( m_aColumns.begin() );

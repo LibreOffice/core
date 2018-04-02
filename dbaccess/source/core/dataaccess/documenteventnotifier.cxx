@@ -189,7 +189,7 @@ namespace dbaccess
         }
         catch(const Exception&)
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("dbaccess");
         }
         try
         {
@@ -197,7 +197,7 @@ namespace dbaccess
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("dbaccess");
         }
     }
 

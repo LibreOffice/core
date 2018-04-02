@@ -880,7 +880,7 @@ void SbaGridControl::SetBrowserAttrs()
     }
     catch( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("dbaccess");
     }
 }
 
@@ -1305,7 +1305,7 @@ sal_Int8 SbaGridControl::AcceptDrop( const BrowserAcceptDropEvent& rEvt )
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("dbaccess");
         }
 
     } while (false);
@@ -1439,7 +1439,7 @@ IMPL_LINK_NOARG(SbaGridControl, AsynchDropEvent, void*, void)
             if (m_pMasterListener)
                 m_pMasterListener->AfterDrop();
             Show();
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("dbaccess");
         }
         if ( !bCountFinal )
             setDataSource(Reference< XRowSet >(xDataSource,UNO_QUERY));

@@ -1222,7 +1222,7 @@ void SfxBaseController::ConnectSfxFrame_Impl( const ConnectSfxFrame i_eConnect )
                     }
                     catch (const uno::Exception&)
                     {
-                        DBG_UNHANDLED_EXCEPTION();
+                        DBG_UNHANDLED_EXCEPTION("sfx.view");
                     }
                 }
             }
@@ -1369,7 +1369,7 @@ void SfxBaseController::ConnectSfxFrame_Impl( const ConnectSfxFrame i_eConnect )
                 }
                 catch (const Exception&)
                 {
-                    DBG_UNHANDLED_EXCEPTION();
+                    DBG_UNHANDLED_EXCEPTION("sfx.view");
                 }
             }
         }

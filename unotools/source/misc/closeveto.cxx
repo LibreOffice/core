@@ -119,7 +119,7 @@ namespace utl
                 catch( const CloseVetoException& ) { }
                 catch( const Exception& )
                 {
-                    DBG_UNHANDLED_EXCEPTION();
+                    DBG_UNHANDLED_EXCEPTION("unotools");
                 }
             }
         }

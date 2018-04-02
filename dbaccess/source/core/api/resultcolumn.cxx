@@ -93,7 +93,7 @@ void OResultColumn::impl_determineIsRowVersion_nothrow()
     }
     catch( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("dbaccess");
     }
 }
 

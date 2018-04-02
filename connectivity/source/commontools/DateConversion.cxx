@@ -409,7 +409,7 @@ double DBTypeConversion::getValue( const Reference< XColumn >& i_column, const D
     }
     catch( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("connectivity.commontools");
         return 0.0;
     }
 }
@@ -479,7 +479,7 @@ OUString DBTypeConversion::getFormattedValue(const Reference<XColumn>& xVariant,
                          }
                          catch( const Exception& )
                          {
-                            DBG_UNHANDLED_EXCEPTION();
+                            DBG_UNHANDLED_EXCEPTION("connectivity.commontools");
                          }
                          // get a value which represents the given date, relative to the null date of the formatter
                          fValue -= toDays( rNullDate, aFormatterNullDate );

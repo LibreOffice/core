@@ -61,7 +61,7 @@ void UndoGuard::commit()
         }
         catch( const uno::Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("chart2");
         }
     }
     m_bActionPosted = true;
@@ -126,7 +126,7 @@ HiddenUndoContext::HiddenUndoContext( const Reference< document::XUndoManager > 
     }
     catch( const uno::Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("chart2");
         m_xUndoManager.clear();
             // prevents the leaveUndoContext in the dtor
     }
@@ -141,7 +141,7 @@ HiddenUndoContext::~HiddenUndoContext()
     }
     catch( const uno::Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("chart2");
     }
 }
 

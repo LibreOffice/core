@@ -109,7 +109,7 @@ PropBrw::PropBrw(const Reference< XComponentContext >& _xORB, vcl::Window* pPare
     catch (Exception&)
     {
         OSL_FAIL("PropBrw::PropBrw: could not create/initialize my frame!");
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("reportdesign");
         m_xMeAsFrame.clear();
     }
 
@@ -154,7 +154,7 @@ PropBrw::PropBrw(const Reference< XComponentContext >& _xORB, vcl::Window* pPare
         catch (Exception&)
         {
             OSL_FAIL("PropBrw::PropBrw: could not create/initialize the browser controller!");
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("reportdesign");
             try
             {
                 ::comphelper::disposeComponent(m_xBrowserController);

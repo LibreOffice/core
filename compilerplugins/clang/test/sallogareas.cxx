@@ -51,7 +51,7 @@ int main()
     }
     catch (std::exception const&)
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION(); // expected-error {{missing log area [loplugin:sallogareas]}}
     }
 }
 

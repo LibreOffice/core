@@ -937,7 +937,7 @@ namespace frm
         catch( const SQLException& ) { throw; }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("forms.runtime");
             bSuccess = false;
         }
 
@@ -1094,7 +1094,7 @@ namespace frm
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("forms.runtime");
         }
 
         m_xController.clear();
@@ -1409,7 +1409,7 @@ namespace frm
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("forms.runtime");
         }
 
         return xField;
@@ -1444,7 +1444,7 @@ namespace frm
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("forms.runtime");
         }
         return -1;
     }
@@ -1534,7 +1534,7 @@ namespace frm
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("forms.runtime");
         }
     }
 

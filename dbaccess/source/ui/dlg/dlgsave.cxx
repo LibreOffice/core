@@ -163,7 +163,7 @@ void lcl_fillComboList( ComboBox& _rList, const Reference< XConnection >& _rxCon
         else
             _rList.SelectEntryPos( 0 );
     } catch( const Exception& ) {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("dbaccess");
     }
 }
 }

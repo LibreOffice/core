@@ -225,7 +225,7 @@ void SdrUnoObj::SetContextWritingMode( const sal_Int16 _nContextWritingMode )
     }
     catch( const uno::Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("svx");
     }
 }
 
@@ -278,7 +278,7 @@ SdrUnoObj& SdrUnoObj::operator= (const SdrUnoObj& rObj)
         }
         catch( const uno::Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("svx");
         }
     }
 

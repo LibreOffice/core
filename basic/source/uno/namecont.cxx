@@ -1826,7 +1826,7 @@ void SfxLibraryContainer::storeLibraries_Impl( const uno::Reference< embed::XSto
         }
         catch( const uno::Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("basic");
             return;
         }
 
@@ -1841,7 +1841,7 @@ void SfxLibraryContainer::storeLibraries_Impl( const uno::Reference< embed::XSto
         }
         catch( const uno::Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("basic");
             return;
         }
     }
@@ -1917,7 +1917,7 @@ void SfxLibraryContainer::storeLibraries_Impl( const uno::Reference< embed::XSto
                 }
                 catch( const uno::Exception& )
                 {
-                    DBG_UNHANDLED_EXCEPTION();
+                    DBG_UNHANDLED_EXCEPTION("basic");
                     // TODO: error handling?
                 }
             }
@@ -1972,7 +1972,7 @@ void SfxLibraryContainer::storeLibraries_Impl( const uno::Reference< embed::XSto
                     }
                     catch(const uno::Exception& )
                     {
-                        DBG_UNHANDLED_EXCEPTION();
+                        DBG_UNHANDLED_EXCEPTION("basic");
                         // TODO: error handling
                         throw;
                     }
@@ -2032,7 +2032,7 @@ void SfxLibraryContainer::storeLibraries_Impl( const uno::Reference< embed::XSto
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("basic");
             throw;
         }
     }
@@ -3096,7 +3096,7 @@ void SfxLibrary::impl_removeWithoutChecks( const OUString& _rElementName )
         }
         catch(const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("basic");
         }
     }
 }

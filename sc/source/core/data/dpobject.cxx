@@ -883,7 +883,7 @@ void ScDPObject::ClearSource()
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("sc.core");
         }
     }
     xSource = nullptr;

@@ -593,7 +593,7 @@ void OComboBoxModel::loadData( bool _bForce )
     }
     catch( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("forms.component");
         return;
     }
 
@@ -661,7 +661,7 @@ void OComboBoxModel::loadData( bool _bForce )
     }
     catch( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("forms.component");
         return;
     }
 

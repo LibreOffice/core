@@ -161,7 +161,7 @@ void OApplicationController::deleteTables(const std::vector< OUString>& _rList)
                     }
                     catch( const Exception& )
                     {
-                        DBG_UNHANDLED_EXCEPTION();
+                        DBG_UNHANDLED_EXCEPTION("dbaccess");
                     }
 
                     if ( aErrorInfo.isValid() )
@@ -272,7 +272,7 @@ void OApplicationController::deleteObjects( ElementType _eType, const std::vecto
                 }
                 catch( const Exception& )
                 {
-                    DBG_UNHANDLED_EXCEPTION();
+                    DBG_UNHANDLED_EXCEPTION("dbaccess");
                 }
             }
 
@@ -385,7 +385,7 @@ const SharedConnection& OApplicationController::ensureConnection( ::dbtools::SQL
             }
             catch( const Exception& )
             {
-                DBG_UNHANDLED_EXCEPTION();
+                DBG_UNHANDLED_EXCEPTION("dbaccess");
             }
             if ( aError.isValid() )
             {
@@ -422,7 +422,7 @@ bool OApplicationController::isConnectionReadOnly() const
         }
         catch(const SQLException&)
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("dbaccess");
         }
     }
     // TODO check configuration
@@ -472,7 +472,7 @@ Reference< XNameAccess > OApplicationController::getElements( ElementType _eType
     }
     catch(const Exception&)
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("dbaccess");
     }
 
     return xElements;
@@ -569,7 +569,7 @@ TransferableHelper* OApplicationController::copyObject()
     }
     catch( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("dbaccess");
     }
     return nullptr;
 }
@@ -626,7 +626,7 @@ bool OApplicationController::paste( ElementType _eType, const svx::ODataAccessDe
                 }
                 catch(const Exception&)
                 {
-                    DBG_UNHANDLED_EXCEPTION();
+                    DBG_UNHANDLED_EXCEPTION("dbaccess");
                 }
 
                 Reference< XPropertySet > xQuery;
@@ -650,7 +650,7 @@ bool OApplicationController::paste( ElementType _eType, const svx::ODataAccessDe
                     catch(SQLException&) { throw; } // caught and handled by the outer catch
                     catch( const Exception& )
                     {
-                        DBG_UNHANDLED_EXCEPTION();
+                        DBG_UNHANDLED_EXCEPTION("dbaccess");
                     }
 
                     if (!bSuccess)
@@ -754,7 +754,7 @@ bool OApplicationController::paste( ElementType _eType, const svx::ODataAccessDe
     catch(const SQLException&) { showError( SQLExceptionInfo( ::cppu::getCaughtException() ) ); }
     catch(const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("dbaccess");
     }
     return false;
 }

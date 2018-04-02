@@ -205,7 +205,7 @@ Any SAL_CALL ODriverEnumeration::nextElement(  )
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("connectivity.manager");
         }
 
         return _rPrecedence.getLength();

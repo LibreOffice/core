@@ -591,7 +591,7 @@ bool getBooleanDataSourceSetting( const Reference< XConnection >& _rxConnection,
     }
     catch( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("connectivity.commontools");
     }
     return bValue;
 }
@@ -648,7 +648,7 @@ bool isDataSourcePropertyEnabled(const Reference<XInterface>& _xProp, const OUSt
     }
     catch(SQLException&)
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("connectivity.commontools");
     }
     return bEnabled;
 }
@@ -672,7 +672,7 @@ Reference< XTablesSupplier> getDataDefinitionByURLAndConnection(
     }
     catch( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("connectivity.commontools");
     }
     return xTablesSup;
 }
@@ -825,7 +825,7 @@ void collectColumnInformation(const Reference< XConnection>& _xConnection,
     }
     catch( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("connectivity.commontools");
     }
 }
 

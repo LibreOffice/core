@@ -616,7 +616,7 @@ namespace connectivity
             }
             catch(Exception&)
             {
-                DBG_UNHANDLED_EXCEPTION();
+                DBG_UNHANDLED_EXCEPTION("connectivity.hsqldb");
             }
         }
     }

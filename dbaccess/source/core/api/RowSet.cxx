@@ -572,7 +572,7 @@ void ORowSet::freeResources( bool _bComplete )
         try { ::comphelper::disposeComponent( m_xComposer ); }
         catch(Exception&)
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("dbaccess");
             m_xComposer = nullptr;
         }
 
@@ -1519,7 +1519,7 @@ Reference< XIndexAccess > SAL_CALL ORowSet::getParameters(  )
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("dbaccess");
         }
     }
 
@@ -1552,7 +1552,7 @@ void ORowSet::approveExecution()
         catch ( const RowSetVetoException& ) { throw; }
         catch ( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("dbaccess");
         }
     }
 }
@@ -1681,7 +1681,7 @@ void ORowSet::impl_ensureStatement_throw()
             OUString sInfo(DBA_RES_PARAM( RID_STR_COMMAND_LEADING_TO_ERROR, "$command$", sCommandToExecute )  );
             aError.append( SQLExceptionInfo::TYPE::SQLContext, sInfo );
         }
-        catch( const Exception& ) { DBG_UNHANDLED_EXCEPTION(); }
+        catch( const Exception& ) { DBG_UNHANDLED_EXCEPTION("dbaccess"); }
 
         // propagate
         aError.doThrow();
@@ -1765,7 +1765,7 @@ void ORowSet::impl_initializeColumnSettings_nothrow( const Reference< XPropertyS
     }
     catch(Exception&)
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("dbaccess");
         return;
     }
 
@@ -1809,7 +1809,7 @@ void ORowSet::impl_initializeColumnSettings_nothrow( const Reference< XPropertyS
     }
     catch( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("dbaccess");
     }
 }
 
@@ -2261,7 +2261,7 @@ Reference< XNameAccess > ORowSet::impl_getTables_throw()
         }
         catch(SQLException&)
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("dbaccess");
         }
 
         m_pTables = new OTableContainer(*this,m_aMutex,m_xActiveConnection,bCase,nullptr,nullptr,m_nInAppend);
@@ -2284,7 +2284,7 @@ void ORowSet::impl_resetTables_nothrow()
     }
     catch( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("dbaccess");
     }
 
     DELETEZ( m_pTables );

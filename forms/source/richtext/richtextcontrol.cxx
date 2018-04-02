@@ -136,7 +136,7 @@ namespace frm
             }
             catch( const Exception& )
             {
-                DBG_UNHANDLED_EXCEPTION();
+                DBG_UNHANDLED_EXCEPTION("forms.richtext");
             }
             return nBits;
         }
@@ -153,7 +153,7 @@ namespace frm
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("forms.richtext");
         }
 
         if ( !bReallyActAsRichText )

@@ -112,7 +112,7 @@ namespace dbaui
         }
         catch(const Exception&)
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("dbaccess");
         }
         short nRet = SfxTabDialog::Execute();
         if ( nRet == RET_OK )

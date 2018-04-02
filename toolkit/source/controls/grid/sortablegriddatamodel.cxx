@@ -560,7 +560,7 @@ void lcl_clear( STLCONTAINER& i_container )
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("toolkit.controls");
             return false;
         }
 

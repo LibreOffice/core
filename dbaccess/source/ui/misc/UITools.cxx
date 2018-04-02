@@ -241,7 +241,7 @@ Reference< XDataSource > getDataSourceByName( const OUString& _rDataSourceName,
     }
     catch( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("dbaccess");
     }
 
     if ( xDatasource.is() )
@@ -773,7 +773,7 @@ void callColumnFormatDialog(const Reference<XPropertySet>& xAffectedCol,
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("dbaccess");
         }
     }
 }
@@ -1068,7 +1068,7 @@ OUString getStrippedDatabaseName(const Reference<XPropertySet>& _xDataSource,OUS
         }
         catch(const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("dbaccess");
         }
     }
     OUString sName = _rsDatabaseName;
@@ -1224,7 +1224,7 @@ namespace
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("dbaccess");
         }
         return sSDBCLevelStatement;
     }
@@ -1387,7 +1387,7 @@ bool insertHierachyElement( vcl::Window* _pParent, const Reference< XComponentCo
     }
     catch( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("dbaccess");
         return false;
     }
 
@@ -1412,7 +1412,7 @@ Reference< XNumberFormatter > getNumberFormatter(const Reference< XConnection >&
     }
     catch(const Exception&)
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("dbaccess");
     }
     return xFormatter;
 }

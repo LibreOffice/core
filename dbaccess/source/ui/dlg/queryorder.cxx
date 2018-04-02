@@ -118,7 +118,7 @@ DlgOrderCrit::DlgOrderCrit(vcl::Window * pParent,
     }
     catch(const Exception&)
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("dbaccess");
     }
     EnableLines();
 
@@ -177,7 +177,7 @@ void DlgOrderCrit::impl_initializeOrderList_nothrow()
     }
     catch( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("dbaccess");
     }
 }
 

@@ -129,7 +129,7 @@ void OApplicationController::convertToView(const OUString& _sName)
     }
     catch( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("dbaccess");
     }
 }
 
@@ -151,7 +151,7 @@ void OApplicationController::pasteFormat(SotClipboardFormatId _nFormatId)
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("dbaccess");
         }
     }
 }
@@ -212,7 +212,7 @@ void OApplicationController::openDialog( const OUString& _sServiceName )
     }
     catch( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("dbaccess");
     }
 }
 
@@ -501,7 +501,7 @@ void OApplicationController::previewChanged( sal_Int32 _nMode )
         }
         catch ( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("dbaccess");
         }
     }
     InvalidateFeature(SID_DB_APP_DISABLE_PREVIEW);
@@ -554,7 +554,7 @@ OUString OApplicationController::getDatabaseName() const
     }
     catch ( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("dbaccess");
     }
     return sDatabaseName;
 }
@@ -585,7 +585,7 @@ void OApplicationController::onDocumentOpened( const OUString& _rName, const sal
     }
     catch( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("dbaccess");
     }
 }
 
@@ -720,7 +720,7 @@ void OApplicationController::doAction(sal_uInt16 _nId, const ElementOpenMode _eO
             }
             catch(const Exception&)
             {
-                DBG_UNHANDLED_EXCEPTION();
+                DBG_UNHANDLED_EXCEPTION("dbaccess");
             }
         }
         if ( !aSendMail.IsEmpty() )

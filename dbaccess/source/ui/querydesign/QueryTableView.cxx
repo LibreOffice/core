@@ -523,7 +523,7 @@ void OQueryTableView::AddTabWin(const OUString& _rComposedName, const OUString& 
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("dbaccess");
         }
 
         } while ( false );

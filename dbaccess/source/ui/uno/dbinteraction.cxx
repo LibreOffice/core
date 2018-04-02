@@ -146,7 +146,7 @@ namespace dbaui
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("dbaccess");
         }
     }
 
@@ -220,7 +220,7 @@ namespace dbaui
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("dbaccess");
         }
     }
     void BasicInteractionHandler::implHandle(const DocumentSaveRequest& _rDocuRequest, const Sequence< Reference< XInteractionContinuation > >& _rContinuations)
@@ -275,7 +275,7 @@ namespace dbaui
                 }
                 catch( const Exception& )
                 {
-                    DBG_UNHANDLED_EXCEPTION();
+                    DBG_UNHANDLED_EXCEPTION("dbaccess");
                 }
             }
             else if ( -1 != nApprovePos )

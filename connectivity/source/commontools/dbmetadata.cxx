@@ -147,7 +147,7 @@ namespace dbtools
             }
             catch( const Exception& )
             {
-                DBG_UNHANDLED_EXCEPTION();
+                DBG_UNHANDLED_EXCEPTION("connectivity.commontools");
             }
             return false;
         }
@@ -164,7 +164,7 @@ namespace dbtools
                 {
                     _cachedSetting.reset( (_metaData.xConnectionMetaData.get()->*_getter)() );
                 }
-                catch( const Exception& ) { DBG_UNHANDLED_EXCEPTION(); }
+                catch( const Exception& ) { DBG_UNHANDLED_EXCEPTION("connectivity.commontools"); }
             }
             return *_cachedSetting;
         }
@@ -231,7 +231,7 @@ namespace dbtools
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("connectivity.commontools");
         }
         return bSupportsSubQueries;
     }
@@ -253,7 +253,7 @@ namespace dbtools
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("connectivity.commontools");
         }
         return bDoesSupportPrimaryKeys;
     }
@@ -338,7 +338,7 @@ namespace dbtools
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("connectivity.commontools");
         }
         try
         {
@@ -350,7 +350,7 @@ namespace dbtools
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("connectivity.commontools");
         }
         return bSupport;
     }
@@ -389,7 +389,7 @@ namespace dbtools
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("connectivity.commontools");
         }
         return isSupported;
     }
@@ -411,7 +411,7 @@ namespace dbtools
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("connectivity.commontools");
         }
 #endif
         return doDisplay;
@@ -428,7 +428,7 @@ namespace dbtools
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("connectivity.commontools");
         }
         return bSupported;
     }

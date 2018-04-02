@@ -241,7 +241,7 @@ namespace
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("sd");
         }
         return pViewShell;
     }
@@ -258,7 +258,7 @@ namespace
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("sd");
         }
         return nullptr;
     }
@@ -635,7 +635,7 @@ void FrameworkHelper::HandleModeChangeSlot (
     }
     catch (RuntimeException&)
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("sd");
     }
 }
 
@@ -743,7 +743,7 @@ void FrameworkHelper::UpdateConfiguration()
         }
         catch (RuntimeException&)
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("sd");
         }
     }
 }
@@ -867,7 +867,7 @@ CallbackCaller::CallbackCaller (
     }
     catch (RuntimeException&)
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("sd");
     }
 }
 
@@ -884,7 +884,7 @@ void CallbackCaller::disposing()
     }
     catch (RuntimeException&)
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("sd");
     }
 }
 

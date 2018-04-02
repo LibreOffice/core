@@ -130,7 +130,7 @@ void OTableCopyHelper::insertTable( const OUString& i_rSourceDataSource, const R
     }
     catch( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("dbaccess");
     }
 }
 
@@ -213,7 +213,7 @@ void OTableCopyHelper::pasteTable( SotClipboardFormatId _nFormatId
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("dbaccess");
         }
     }
     else

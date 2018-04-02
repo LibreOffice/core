@@ -90,7 +90,7 @@ namespace dbaccess
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("dbaccess");
         }
 
         if ( sDisplayMessage.isEmpty() )
@@ -124,7 +124,7 @@ namespace dbaccess
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("dbaccess");
         }
         return ( nMode & ElementModes::WRITE ) != 0;
     }

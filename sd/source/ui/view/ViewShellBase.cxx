@@ -1213,7 +1213,7 @@ void ViewShellBase::Implementation::SetPaneVisibility (
     }
     catch (const Exception&)
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("sd.view");
     }
 }
 
@@ -1344,7 +1344,7 @@ void ViewShellBase::Implementation::GetSlotState (SfxItemSet& rSet)
     }
     catch (const RuntimeException&)
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("sd.view");
     }
 
 }

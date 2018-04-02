@@ -337,7 +337,7 @@ bool UUIInteractionHelper::handleCustomRequest( const Reference< XInteractionReq
     }
     catch( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("uui");
     }
     return false;
 }
@@ -871,7 +871,7 @@ UUIInteractionHelper::handleRequest_impl(
     }
     catch( const uno::Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("uui");
     }
     return false;
 }

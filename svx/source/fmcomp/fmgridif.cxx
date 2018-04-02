@@ -574,7 +574,7 @@ void SAL_CALL FmXGridControl::createPeer(const Reference< css::awt::XToolkit >& 
                                     }
                                     catch( const Exception& )
                                     {
-                                        DBG_UNHANDLED_EXCEPTION();
+                                        DBG_UNHANDLED_EXCEPTION("svx");
                                     }
                                 }
                             }
@@ -596,7 +596,7 @@ void SAL_CALL FmXGridControl::createPeer(const Reference< css::awt::XToolkit >& 
             }
             catch( const Exception& )
             {
-                DBG_UNHANDLED_EXCEPTION();
+                DBG_UNHANDLED_EXCEPTION("svx");
             }
 
             Reference< css::awt::XView >  xPeerView(getPeer(), UNO_QUERY);

@@ -429,7 +429,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("extensions.propctrlr");
         }
         m_aPropertyListeners.notify( aTranslatedEvent, &XPropertyChangeListener::propertyChange );
     }

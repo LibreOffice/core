@@ -93,8 +93,6 @@ bool SalLogAreas::VisitCallExpr( const CallExpr* call )
                 area->getLocStart());
         return true;
         }
-    if( kind == LogCallKind::DbgUnhandledException ) // below checks don't apply
-        return true;
     if( loplugin::DeclCheck(inFunction).Function("log").Namespace("detail").Namespace("sal").GlobalNamespace()
         || loplugin::DeclCheck(inFunction).Function("sal_detail_logFormat").GlobalNamespace() )
         return true; // These functions only forward to sal_detail_log, so ok.

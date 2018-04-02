@@ -352,7 +352,7 @@ void SbaExternalSourceBrowser::Attach(const Reference< XRowSet > & xMaster)
     }
     catch( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("dbaccess");
     }
 
     onStartLoading( Reference< XLoadable >( xMaster, UNO_QUERY ) );

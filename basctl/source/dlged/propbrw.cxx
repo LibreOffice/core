@@ -219,7 +219,7 @@ void PropBrw::ImplDestroyController()
     }
     catch( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("basctl");
     }
 
     m_xBrowserController.clear();
@@ -515,7 +515,7 @@ void PropBrw::ImplUpdate( const Reference< XModel >& _rxContextDocument, SdrView
     catch ( const PropertyVetoException& ) { /* silence */ }
     catch ( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("basctl");
     }
 }
 

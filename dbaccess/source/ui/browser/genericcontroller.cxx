@@ -126,7 +126,7 @@ void UserDefinedFeatures::execute( const URL& _rFeatureURL, const Sequence< Prop
     }
     catch( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("dbaccess");
     }
 }
 
@@ -172,7 +172,7 @@ OGenericUnoController::OGenericUnoController(const Reference< XComponentContext 
     }
     catch(Exception&)
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("dbaccess");
     }
 }
 
@@ -988,7 +988,7 @@ IMPL_LINK_NOARG(OGenericUnoController, OnAsyncCloseTask, void*, void)
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("dbaccess");
         }
     }
 }

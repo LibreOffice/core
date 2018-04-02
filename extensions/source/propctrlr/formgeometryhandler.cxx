@@ -301,7 +301,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("extensions.propctrlr");
         }
 
         if ( m_xAssociatedShape.is() )
@@ -365,7 +365,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("extensions.propctrlr");
         }
         return aReturn;
     }
@@ -432,7 +432,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("extensions.propctrlr");
         }
     }
 
@@ -479,7 +479,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("extensions.propctrlr");
         }
         return aLineDesc;
     }
@@ -582,7 +582,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("extensions.propctrlr");
         }
         return false;
     }
@@ -602,7 +602,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("extensions.propctrlr");
         }
         return false;
     }
@@ -695,7 +695,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("extensions.propctrlr");
         }
     }
 
@@ -776,7 +776,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("extensions.propctrlr");
         }
         osl_atomic_decrement( &m_refCount );
     }
@@ -791,7 +791,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("extensions.propctrlr");
         }
 
         getBroadcastHelper().bDisposed = true;

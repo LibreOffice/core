@@ -238,7 +238,7 @@ bool UnoControl::ImplCheckLocalize( OUString& _rPossiblyLocalizable )
     }
     catch( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("toolkit.controls");
     }
     return false;
 }
@@ -1353,7 +1353,7 @@ sal_Bool UnoControl::setModel( const Reference< XControlModel >& rxModel )
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("toolkit.controls");
             mxModel.clear();
         }
     }

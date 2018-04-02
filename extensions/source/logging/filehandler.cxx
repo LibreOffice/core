@@ -225,7 +225,7 @@ namespace logging
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("extensions.logging");
         }
     }
 

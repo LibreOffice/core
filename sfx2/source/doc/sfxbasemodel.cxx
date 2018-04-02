@@ -2296,7 +2296,7 @@ Reference< document::XEmbeddedScripts > SAL_CALL SfxBaseModel::getScriptContaine
     }
     catch( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("sfx.doc");
         xDocumentScripts = nullptr;
     }
 

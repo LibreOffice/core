@@ -1118,7 +1118,7 @@ OUString SvtLinguConfig::GetVendorImageUrl_Impl(
     }
     catch (uno::Exception &)
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("unotools");
     }
     return aRes;
 }

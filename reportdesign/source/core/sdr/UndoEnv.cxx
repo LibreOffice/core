@@ -278,7 +278,7 @@ void SAL_CALL OXUndoEnvironment::propertyChange( const PropertyChangeEvent& _rEv
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("reportdesign");
         }
         const bool bTransReadOnly =
                     ( ( nPropertyAttributes & PropertyAttribute::READONLY ) != 0 )
@@ -325,7 +325,7 @@ void SAL_CALL OXUndoEnvironment::propertyChange( const PropertyChangeEvent& _rEv
     }
     catch(const Exception&)
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("reportdesign");
     }
 
     if ( pUndo == nullptr )
@@ -380,7 +380,7 @@ void SAL_CALL OXUndoEnvironment::elementInserted(const ContainerEvent& evt)
                 }
                 catch(uno::Exception&)
                 {
-                    DBG_UNHANDLED_EXCEPTION();
+                    DBG_UNHANDLED_EXCEPTION("reportdesign");
                 }
 
             }
@@ -449,7 +449,7 @@ void SAL_CALL OXUndoEnvironment::elementRemoved(const ContainerEvent& evt)
             }
             catch(const uno::Exception&)
             {
-                DBG_UNHANDLED_EXCEPTION();
+                DBG_UNHANDLED_EXCEPTION("reportdesign");
             }
         }
         else
@@ -488,7 +488,7 @@ void OXUndoEnvironment::AddSection(const Reference< report::XSection > & _xSecti
     }
     catch(const uno::Exception&)
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("reportdesign");
     }
 }
 
@@ -540,7 +540,7 @@ void OXUndoEnvironment::switchListening( const Reference< XIndexAccess >& _rxCon
     }
     catch( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("reportdesign");
     }
 }
 

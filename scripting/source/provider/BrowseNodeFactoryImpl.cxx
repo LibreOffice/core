@@ -316,7 +316,7 @@ std::vector< Reference< browse::XBrowseNode > > getAllBrowseNodes( const Referen
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("scripting");
         }
 
     }

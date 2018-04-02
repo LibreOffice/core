@@ -1187,7 +1187,7 @@ void DialogWindow::StoreData()
         }
         catch (const uno::Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("basctl.basicide");
         }
         MarkDocumentModified( GetDocument() );
         m_pEditor->ClearModifyFlag();

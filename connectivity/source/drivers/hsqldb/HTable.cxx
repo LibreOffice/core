@@ -264,7 +264,7 @@ void OHSQLTable::alterColumnType(sal_Int32 nNewType,const OUString& _rColName, c
     }
     catch( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("connectivity.hsqldb");
     }
 #else
     (void)_rColName;

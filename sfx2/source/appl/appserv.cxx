@@ -296,7 +296,7 @@ namespace
             }
             catch (const Exception&)
             {
-                DBG_UNHANDLED_EXCEPTION();
+                DBG_UNHANDLED_EXCEPTION("sfx.appl");
             }
         }
 
@@ -1281,7 +1281,7 @@ namespace
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("sfx.appl");
         }
         return _pFallback;
     }
@@ -1329,7 +1329,7 @@ namespace
         }
         catch( const Exception& )
         {
-               DBG_UNHANDLED_EXCEPTION();
+               DBG_UNHANDLED_EXCEPTION("sfx.appl");
         }
         return nullptr;
     }
@@ -1439,7 +1439,7 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
                 }
                 catch( const Exception& )
                 {
-                    DBG_UNHANDLED_EXCEPTION();
+                    DBG_UNHANDLED_EXCEPTION("sfx.appl");
                 }
 
                 pView = lcl_getBasicIDEViewFrame( pBasicIDE );
@@ -1682,7 +1682,7 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
             }
             catch(const css::uno::Exception&)
             {
-                DBG_UNHANDLED_EXCEPTION();
+                DBG_UNHANDLED_EXCEPTION("sfx.appl");
             }
         }
         break;

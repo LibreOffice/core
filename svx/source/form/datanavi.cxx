@@ -472,7 +472,7 @@ namespace svxform
         }
         catch( Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("svx");
         }
     }
 
@@ -799,7 +799,7 @@ namespace svxform
         }
         catch ( Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("svx");
         }
         return m_pItemList->InsertEntry(
             sName, aImage, aImage, pParent, false, TREELIST_APPEND, _pNewNode );
@@ -1546,7 +1546,7 @@ namespace svxform
                 }
                 catch( const Exception& )
                 {
-                    DBG_UNHANDLED_EXCEPTION();
+                    DBG_UNHANDLED_EXCEPTION("svx");
                 }
                 aDlg->SetModifyDoc( bDocumentData );
 
@@ -1565,7 +1565,7 @@ namespace svxform
                         }
                         catch( const Exception& )
                         {
-                            DBG_UNHANDLED_EXCEPTION();
+                            DBG_UNHANDLED_EXCEPTION("svx");
                         }
                     }
 

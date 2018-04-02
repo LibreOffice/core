@@ -372,7 +372,7 @@ bool ViewTabBar::ActivatePage()
     }
     catch (const RuntimeException&)
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("sd.view");
     }
 
     return false;

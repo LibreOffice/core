@@ -132,7 +132,7 @@ namespace connectivity { namespace hsqldb
         {
             if ( bDropSucceeded )
                 xStatement->execute( sRestoreCommand );
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("connectivity.hsqldb");
         }
     }
 
@@ -186,7 +186,7 @@ namespace connectivity { namespace hsqldb
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("connectivity.hsqldb");
         }
 
         return sCommand;
@@ -210,7 +210,7 @@ namespace connectivity { namespace hsqldb
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("connectivity.hsqldb");
         }
 
         return sCommand;

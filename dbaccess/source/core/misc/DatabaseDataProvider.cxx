@@ -202,7 +202,7 @@ uno::Reference< chart2::data::XDataSource > SAL_CALL DatabaseDataProvider::creat
         }
         catch( const uno::Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("dbaccess");
         }
 
         ::comphelper::NamedValueCollection aArgs( _aArguments );

@@ -1773,7 +1773,7 @@ SfxViewFrame* SfxViewFrame::LoadViewIntoFrame_Impl_NoThrow( const SfxObjectShell
     }
     catch( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("sfx.view");
     }
 
     if ( pSuccessView )
@@ -1787,7 +1787,7 @@ SfxViewFrame* SfxViewFrame::LoadViewIntoFrame_Impl_NoThrow( const SfxObjectShell
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("sfx.view");
         }
     }
 
@@ -1944,7 +1944,7 @@ void SfxViewFrame::SaveCurrentViewData_Impl( const SfxInterfaceId i_nNewViewId )
     }
     catch( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("sfx.view");
     }
 }
 
@@ -2030,7 +2030,7 @@ bool SfxViewFrame::SwitchToViewShell_Impl
     {
         // the SfxCode is not able to cope with exceptions thrown while creating views
         // the code will crash in the stack unwinding procedure, so we shouldn't let exceptions go through here
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("sfx.view");
         return false;
     }
 

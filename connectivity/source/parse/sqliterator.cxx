@@ -318,7 +318,7 @@ void OSQLParseTreeIterator::impl_getQueryParameterColumns( const OSQLTable& _rQu
     }
     catch( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("connectivity.parse");
     }
 
     // parse the sub query
@@ -738,7 +738,7 @@ namespace
                     }
                     catch( const Exception& )
                     {
-                        DBG_UNHANDLED_EXCEPTION();
+                        DBG_UNHANDLED_EXCEPTION("connectivity.parse");
                     }
                 }
             }
@@ -1998,7 +1998,7 @@ Reference< XPropertySet > OSQLParseTreeIterator::findSelectColumn( const OUStrin
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("connectivity.parse");
         }
     }
     return nullptr;

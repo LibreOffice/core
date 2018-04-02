@@ -252,7 +252,7 @@ void TitleBarUpdate::impl_updateIcon(const css::uno::Reference< css::frame::XFra
         }
         catch(const css::uno::Exception&)
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("fwk");
         }
     }
 

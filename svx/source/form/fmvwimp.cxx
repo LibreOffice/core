@@ -178,7 +178,7 @@ FormViewPageWindowAdapter::FormViewPageWindowAdapter( const css::uno::Reference<
         }
         catch (const Exception&)
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("svx");
         }
     }
 }
@@ -212,7 +212,7 @@ void FormViewPageWindowAdapter::dispose()
         }
         catch (const Exception&)
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("svx");
         }
     }
 
@@ -384,7 +384,7 @@ void FormViewPageWindowAdapter::updateTabOrder( const Reference< XForm >& _rxFor
     }
     catch (const Exception&)
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("svx");
     }
 }
 
@@ -510,7 +510,7 @@ void SAL_CALL FmXFormView::elementInserted(const ContainerEvent& evt)
     }
     catch (const Exception&)
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("svx");
     }
 }
 
@@ -849,7 +849,7 @@ bool FmXFormView::isFocusable( const Reference< XControl >& i_rControl )
     }
     catch (const Exception&)
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("svx");
     }
     return false;
 }
@@ -906,7 +906,7 @@ namespace
         }
         catch (const Exception&)
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("svx");
         }
     }
 }
@@ -1003,7 +1003,7 @@ IMPL_LINK_NOARG(FmXFormView, OnAutoFocus, void*, void)
     }
     catch (const Exception&)
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("svx");
     }
 }
 
@@ -1068,7 +1068,7 @@ IMPL_LINK_NOARG( FmXFormView, OnStartControlWizard, void*, void )
     }
     catch (const Exception&)
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("svx");
     }
 
     const sal_Char* pWizardAsciiName = nullptr;
@@ -1101,7 +1101,7 @@ IMPL_LINK_NOARG( FmXFormView, OnStartControlWizard, void*, void )
         }
         catch (const Exception&)
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("svx");
         }
 
         if ( !xWizard.is() )
@@ -1117,7 +1117,7 @@ IMPL_LINK_NOARG( FmXFormView, OnStartControlWizard, void*, void )
             }
             catch (const Exception&)
             {
-                DBG_UNHANDLED_EXCEPTION();
+                DBG_UNHANDLED_EXCEPTION("svx");
             }
         }
     }
@@ -1372,7 +1372,7 @@ SdrObject* FmXFormView::implCreateFieldControl( const svx::ODataAccessDescriptor
     }
     catch (const Exception&)
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("svx");
     }
 
 
@@ -1673,7 +1673,7 @@ bool FmXFormView::createControlLabelPair( OutputDevice const & _rOutDev, sal_Int
         }
         catch (const Exception&)
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("svx");
         }
     }
 

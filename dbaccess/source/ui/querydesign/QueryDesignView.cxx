@@ -155,7 +155,7 @@ namespace
                 }
                 catch( const Exception& )
                 {
-                    DBG_UNHANDLED_EXCEPTION();
+                    DBG_UNHANDLED_EXCEPTION("dbaccess");
                 }
             }
 
@@ -371,7 +371,7 @@ namespace
             }
             catch(const SQLException&)
             {
-                DBG_UNHANDLED_EXCEPTION();
+                DBG_UNHANDLED_EXCEPTION("dbaccess");
             }
         }
         return aDBName;
@@ -3070,7 +3070,7 @@ bool OQueryDesignView::initByParseIterator( ::dbtools::SQLExceptionInfo* _pError
     }
     catch ( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("dbaccess");
     }
     return eErrorCode == eOk;
 }

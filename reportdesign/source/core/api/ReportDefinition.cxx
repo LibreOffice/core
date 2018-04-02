@@ -610,7 +610,7 @@ void OReportDefinition::init()
     }
     catch (const uno::Exception&)
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("reportdesign");
     }
 }
 
@@ -2665,7 +2665,7 @@ uno::Any SAL_CALL OReportDefinition::getTransferData( const datatransfer::DataFl
     }
     catch (const uno::Exception &)
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("reportdesign");
     }
 
 

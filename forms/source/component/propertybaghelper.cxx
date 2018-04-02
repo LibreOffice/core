@@ -274,7 +274,7 @@ namespace frm
         catch( const RuntimeException& ) { throw; }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("forms.component");
         }
         Sequence< PropertyValue > aPropertyValues( aValues.getLength() );
         PropertyValue* pPropertyValue = aPropertyValues.getArray();

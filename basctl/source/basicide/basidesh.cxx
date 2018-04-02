@@ -692,7 +692,7 @@ void Shell::UpdateWindows()
                         }
                         catch (const container::NoSuchElementException& )
                         {
-                            DBG_UNHANDLED_EXCEPTION();
+                            DBG_UNHANDLED_EXCEPTION("basctl.basicide");
                         }
                     }
 
@@ -723,7 +723,7 @@ void Shell::UpdateWindows()
                         }
                         catch (const container::NoSuchElementException& )
                         {
-                            DBG_UNHANDLED_EXCEPTION();
+                            DBG_UNHANDLED_EXCEPTION("basctl.basicide");
                         }
                     }
                 }

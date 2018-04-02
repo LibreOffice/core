@@ -120,7 +120,7 @@ using namespace ::svt;
     }                                                                       \
     catch(Exception&)                                                       \
     {                                                                       \
-        DBG_UNHANDLED_EXCEPTION();                                          \
+        DBG_UNHANDLED_EXCEPTION("dbaccess");                                          \
     }                                                                       \
 
 #define DO_SAFE( action, message ) try { action; } catch(Exception&) { SAL_WARN("dbaccess.ui",message); } ;
@@ -608,7 +608,7 @@ void SbaXDataBrowserController::onStartLoading( const Reference< XLoadable >& _r
         }
         catch(const SQLException& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("dbaccess");
         }
     }
 }
@@ -676,7 +676,7 @@ bool SbaXDataBrowserController::reloadForm( const Reference< XLoadable >& _rxLoa
         }
         catch(const SQLException& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("dbaccess");
         }
     }
 
@@ -1212,7 +1212,7 @@ void SbaXDataBrowserController::disposing()
     }
     catch(Exception&)
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("dbaccess");
     }
     m_xParser.clear();
         // don't dispose, just reset - it's owned by the RowSet
@@ -1352,7 +1352,7 @@ sal_Bool SbaXDataBrowserController::approveParameter(const css::form::DatabasePa
     }
     catch( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("dbaccess");
     }
 
     return true;
@@ -1427,7 +1427,7 @@ FeatureState SbaXDataBrowserController::GetState(sal_uInt16 nId) const
                     }
                     catch( const Exception& )
                     {
-                        DBG_UNHANDLED_EXCEPTION();
+                        DBG_UNHANDLED_EXCEPTION("dbaccess");
                     }
                     aReturn.bEnabled = bInsertPrivilege && bAllowInsertions;
                 }
@@ -1448,7 +1448,7 @@ FeatureState SbaXDataBrowserController::GetState(sal_uInt16 nId) const
                     }
                     catch( const Exception& )
                     {
-                        DBG_UNHANDLED_EXCEPTION();
+                        DBG_UNHANDLED_EXCEPTION("dbaccess");
                     }
                     aReturn.bEnabled = bDeletePrivilege && bAllowDeletions && ( nRowCount != 0 ) && !bInsertionRow;
                 }
@@ -1598,7 +1598,7 @@ FeatureState SbaXDataBrowserController::GetState(sal_uInt16 nId) const
     }
     catch(const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("dbaccess");
     }
 
     return aReturn;
@@ -1730,7 +1730,7 @@ Reference< XSingleSelectQueryComposer > SbaXDataBrowserController::createParser_
     }
     catch ( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("dbaccess");
     }
     return xComposer;
 }
@@ -2386,7 +2386,7 @@ IMPL_LINK(SbaXDataBrowserController, OnCanceledNotFound, FmFoundRecordInformatio
     }
     catch( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("dbaccess");
     }
 
     try
@@ -2400,7 +2400,7 @@ IMPL_LINK(SbaXDataBrowserController, OnCanceledNotFound, FmFoundRecordInformatio
     }
     catch( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("dbaccess");
     }
 }
 
@@ -2432,7 +2432,7 @@ void SbaXDataBrowserController::LoadFinished(bool /*bWasSynch*/)
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("dbaccess");
         }
 
         // switch the control to alive mode
@@ -2462,7 +2462,7 @@ void SbaXDataBrowserController::initializeParser() const
         }
         catch(Exception&)
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("dbaccess");
             m_xParser = nullptr;
             // no further handling, we ignore the error
         }

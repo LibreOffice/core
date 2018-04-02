@@ -123,7 +123,7 @@ namespace dbtools
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("connectivity.commontools");
         }
     }
 
@@ -148,7 +148,7 @@ namespace dbtools
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("connectivity.commontools");
         }
     }
 

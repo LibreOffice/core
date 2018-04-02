@@ -101,7 +101,7 @@ void ConfigurationControllerBroadcaster::NotifyListeners (
         }
         catch (const RuntimeException&)
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("sd");
         }
     }
 }
@@ -179,7 +179,7 @@ void ConfigurationControllerBroadcaster::DisposeAndClear()
                 }
                 catch (const RuntimeException&)
                 {
-                    DBG_UNHANDLED_EXCEPTION();
+                    DBG_UNHANDLED_EXCEPTION("sd");
                 }
             }
             else

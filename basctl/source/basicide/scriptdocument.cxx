@@ -144,7 +144,7 @@ namespace basctl
             }
             catch( const Exception& )
             {
-                DBG_UNHANDLED_EXCEPTION();
+                DBG_UNHANDLED_EXCEPTION("basctl.basicide");
             }
             return false;
         }
@@ -319,7 +319,7 @@ namespace basctl
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("basctl.basicide");
             m_bValid = false;
         }
 
@@ -352,7 +352,7 @@ namespace basctl
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("basctl.basicide");
         }
         return xContainer;
     }
@@ -373,7 +373,7 @@ namespace basctl
             }
             catch( const Exception& )
             {
-                DBG_UNHANDLED_EXCEPTION();
+                DBG_UNHANDLED_EXCEPTION("basctl.basicide");
             }
         }
         return bIsReadOnly;
@@ -449,7 +449,7 @@ namespace basctl
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("basctl.basicide");
         }
 
         return xContainer;
@@ -466,7 +466,7 @@ namespace basctl
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("basctl.basicide");
         }
         return bHas;
     }
@@ -488,7 +488,7 @@ namespace basctl
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("basctl.basicide");
         }
         return xLibrary;
     }
@@ -504,7 +504,7 @@ namespace basctl
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("basctl.basicide");
         }
     }
 
@@ -528,7 +528,7 @@ namespace basctl
             }
             catch( const Exception& )
             {
-                DBG_UNHANDLED_EXCEPTION();
+                DBG_UNHANDLED_EXCEPTION("basctl.basicide");
             }
         }
         return false;
@@ -549,7 +549,7 @@ namespace basctl
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("basctl.basicide");
         }
         return false;
     }
@@ -573,7 +573,7 @@ namespace basctl
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("basctl.basicide");
         }
         return false;
     }
@@ -646,7 +646,7 @@ namespace basctl
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("basctl.basicide");
         }
         return false;
     }
@@ -679,7 +679,7 @@ namespace basctl
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("basctl.basicide");
             return false;
         }
 
@@ -700,7 +700,7 @@ namespace basctl
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("basctl.basicide");
         }
         return false;
     }
@@ -718,7 +718,7 @@ namespace basctl
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("basctl.basicide");
         }
         return false;
     }
@@ -755,7 +755,7 @@ namespace basctl
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("basctl.basicide");
         }
 
         return _out_rDialogProvider.is();
@@ -773,7 +773,7 @@ namespace basctl
             }
             catch( const Exception& )
             {
-                DBG_UNHANDLED_EXCEPTION();
+                DBG_UNHANDLED_EXCEPTION("basctl.basicide");
             }
         }
     }
@@ -791,7 +791,7 @@ namespace basctl
             }
             catch( const Exception& )
             {
-                DBG_UNHANDLED_EXCEPTION();
+                DBG_UNHANDLED_EXCEPTION("basctl.basicide");
             }
         }
         return bIsModified;
@@ -829,7 +829,7 @@ namespace basctl
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("basctl.basicide");
         }
     }
 
@@ -860,7 +860,7 @@ namespace basctl
             }
             catch( const Exception& )
             {
-                DBG_UNHANDLED_EXCEPTION();
+                DBG_UNHANDLED_EXCEPTION("basctl.basicide");
             }
         }
         return sURL;
@@ -879,7 +879,7 @@ namespace basctl
             }
             catch( const Exception& )
             {
-                DBG_UNHANDLED_EXCEPTION();
+                DBG_UNHANDLED_EXCEPTION("basctl.basicide");
             }
         }
         return bAllow;
@@ -901,7 +901,7 @@ namespace basctl
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("basctl.basicide");
         }
 
         return _out_rxFrame.is();
@@ -957,7 +957,7 @@ namespace basctl
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("basctl.basicide");
         }
 
         return bIsShared;
@@ -1141,7 +1141,7 @@ namespace basctl
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("basctl.basicide");
         }
 
         // sort document list by doc title?
@@ -1225,7 +1225,7 @@ namespace basctl
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("basctl.basicide");
         }
 
         // sort
@@ -1505,7 +1505,7 @@ namespace basctl
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("basctl.basicide");
         }
         return bIsActive;
     }

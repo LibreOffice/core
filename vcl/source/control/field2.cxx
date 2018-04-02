@@ -162,7 +162,7 @@ static bool ImplIsPatternChar( sal_Unicode cChar, sal_Char cEditMask )
     catch (const css::uno::Exception&)
     {
         SAL_WARN( "vcl.control", "ImplIsPatternChar: Exception caught!" );
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("vcl.control");
         return false;
     }
 

@@ -700,7 +700,7 @@ bool OSQLParseNode::impl_parseTableNameNodeToString_throw( OUStringBuffer& rStri
     }
     catch( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("connectivity.parse");
     }
     return false;
 }

@@ -311,7 +311,7 @@ void OApplicationController::disconnect()
     }
     catch( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("dbaccess");
     }
 
     m_xDataSourceConnection.clear();
@@ -402,7 +402,7 @@ void SAL_CALL OApplicationController::disposing()
     }
     catch(const Exception&)
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("dbaccess");
     }
 
     clearView();
@@ -927,7 +927,7 @@ FeatureState OApplicationController::GetState(sal_uInt16 _nId) const
     }
     catch(const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("dbaccess");
     }
     return aReturn;
 }
@@ -953,7 +953,7 @@ namespace
             }
             catch( const Exception& )
             {
-                DBG_UNHANDLED_EXCEPTION();
+                DBG_UNHANDLED_EXCEPTION("dbaccess");
             }
 
             bHandled = pApprove->wasSelected();
@@ -1376,7 +1376,7 @@ void OApplicationController::Execute(sal_uInt16 _nId, const Sequence< PropertyVa
     }
     catch( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("dbaccess");
     }
     InvalidateFeature(_nId);
 }
@@ -1607,7 +1607,7 @@ void SAL_CALL OApplicationController::elementReplaced( const ContainerEvent& _rE
         }
         catch( Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("dbaccess");
         }
     }
 }
@@ -1727,7 +1727,7 @@ bool OApplicationController::onEntryDoubleClick( SvTreeListBox const & _rTree )
         }
         catch(const Exception&)
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("dbaccess");
         }
     }
     return false;   // not handled
@@ -1753,7 +1753,7 @@ bool OApplicationController::impl_isAlterableView_nothrow( const OUString& _rTab
     }
     catch( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("dbaccess");
     }
     return bIsAlterableView;
 }
@@ -1996,7 +1996,7 @@ void OApplicationController::addContainerListener(const Reference<XNameAccess>& 
     }
     catch( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("dbaccess");
     }
 }
 
@@ -2137,7 +2137,7 @@ void OApplicationController::renameEntry()
                         }
                         catch(const Exception& )
                         {
-                            DBG_UNHANDLED_EXCEPTION();
+                            DBG_UNHANDLED_EXCEPTION("dbaccess");
                         }
                     }
                     else
@@ -2148,7 +2148,7 @@ void OApplicationController::renameEntry()
     }
     catch(const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("dbaccess");
     }
 }
 
@@ -2215,7 +2215,7 @@ void OApplicationController::showPreviewFor(const ElementType _eType,const OUStr
     }
     catch(const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("dbaccess");
     }
 }
 
@@ -2311,7 +2311,7 @@ bool OApplicationController::requestDrag( sal_Int8 /*_nAction*/, const Point& /*
         }
         catch(const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("dbaccess");
         }
     }
 
@@ -2483,7 +2483,7 @@ void OApplicationController::onAttachedFrame()
     }
     catch( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("dbaccess");
     }
 
     if ( nConnectedControllers > 1 )
@@ -2536,7 +2536,7 @@ void OApplicationController::OnFirstControllerConnected()
     }
     catch( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("dbaccess");
     }
 }
 
@@ -2590,7 +2590,7 @@ sal_Bool SAL_CALL OApplicationController::attachModel(const Reference< XModel > 
     }
     catch( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("dbaccess");
     }
 
     m_xModel = _rxModel;
@@ -2613,7 +2613,7 @@ sal_Bool SAL_CALL OApplicationController::attachModel(const Reference< XModel > 
     }
     catch( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("dbaccess");
     }
 
     // initial preview mode
@@ -2633,7 +2633,7 @@ sal_Bool SAL_CALL OApplicationController::attachModel(const Reference< XModel > 
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("dbaccess");
         }
     }
 
@@ -2652,7 +2652,7 @@ void OApplicationController::containerFound( const Reference< XContainer >& _xCo
     }
     catch(const Exception&)
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("dbaccess");
     }
 }
 
@@ -2671,7 +2671,7 @@ OUString OApplicationController::getCurrentlySelectedName(sal_Int32& _rnCommandT
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("dbaccess");
         }
     }
     return sName;
@@ -2842,7 +2842,7 @@ void OApplicationController::impl_migrateScripts_nothrow()
     }
     catch( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("dbaccess");
     }
 }
 

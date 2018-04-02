@@ -1065,7 +1065,7 @@ void OAppDetailPageHelper::showPreview(const Reference< XContent >& _xContent)
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("dbaccess");
         }
     }
 }

@@ -101,7 +101,7 @@ PresentationFactory::PresentationFactory (
     }
     catch (RuntimeException&)
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("sd");
     }
 }
 
@@ -200,7 +200,7 @@ void SAL_CALL PresentationFactoryProvider::initialize(
         }
         catch (RuntimeException&)
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("sd");
         }
     }
 }

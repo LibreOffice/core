@@ -100,7 +100,7 @@ namespace dbaui
         }
         catch(Exception&)
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("dbaccess");
         }
 
         Construct();
@@ -195,7 +195,7 @@ namespace dbaui
                     }
                     catch(Exception&)
                     {
-                        DBG_UNHANDLED_EXCEPTION();
+                        DBG_UNHANDLED_EXCEPTION("dbaccess");
                     }
 
                     OUString sMessage(DBA_RES(STR_COULD_NOT_CONVERT_PARAM));
@@ -253,7 +253,7 @@ namespace dbaui
                 }
                 catch(Exception&)
                 {
-                    DBG_UNHANDLED_EXCEPTION();
+                    DBG_UNHANDLED_EXCEPTION("dbaccess");
                 }
 
             }

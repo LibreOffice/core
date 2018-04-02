@@ -183,7 +183,7 @@ static void TransferMediaType( const uno::Reference< embed::XStorage >& i_rSourc
     }
     catch( const uno::Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("embeddedobj.common");
     }
 }
 
@@ -556,7 +556,7 @@ uno::Reference< util::XCloseable > OCommonEmbeddedObject::LoadDocumentFromStorag
             }
             catch( const uno::Exception& )
             {
-                DBG_UNHANDLED_EXCEPTION();
+                DBG_UNHANDLED_EXCEPTION("embeddedobj.common");
             }
         }
 

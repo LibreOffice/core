@@ -257,7 +257,7 @@ Reference< XPropertySet > OQueryColumn::impl_determineOriginalTableColumn( const
     }
     catch( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("dbaccess");
     }
     return xOriginalTableColumn;
 }
@@ -307,7 +307,7 @@ void SAL_CALL OQueryColumn::getFastPropertyValue( Any& _rValue, sal_Int32 _nHand
     }
     catch( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("dbaccess");
     }
 }
 
@@ -559,7 +559,7 @@ OTableColumnWrapper::OTableColumnWrapper( const Reference< XPropertySet >& rCol,
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("dbaccess");
         }
     }
     osl_atomic_decrement( &m_refCount );

@@ -187,7 +187,7 @@ IMPL_LINK_NOARG(OCollectionView, Save_Click, Button*, void)
     }
     catch( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("dbaccess");
     }
 }
 
@@ -205,7 +205,7 @@ IMPL_LINK_NOARG(OCollectionView, NewFolder_Click, Button*, void)
     }
     catch( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("dbaccess");
     }
 }
 
@@ -229,7 +229,7 @@ IMPL_LINK_NOARG(OCollectionView, Up_Click, Button*, void)
     }
     catch( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("dbaccess");
     }
 }
 
@@ -259,7 +259,7 @@ IMPL_LINK_NOARG(OCollectionView, Dbl_Click_FileView, SvTreeListBox*, bool)
     }
     catch( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("dbaccess");
     }
     return false;
 }
@@ -288,7 +288,7 @@ void OCollectionView::initCurrentPath()
     }
     catch( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("dbaccess");
     }
     m_pUp->Enable(bEnable);
 }

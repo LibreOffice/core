@@ -399,7 +399,7 @@ TriState ExtTreeListBox::NotifyCopyingMoving( SvTreeListEntry* pTarget, SvTreeLi
         }
         catch (const uno::Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("basctl.basicide");
         }
     }
     else    // copy
@@ -434,7 +434,7 @@ TriState ExtTreeListBox::NotifyCopyingMoving( SvTreeListEntry* pTarget, SvTreeLi
         }
         catch ( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("basctl.basicide");
         }
     }
 
@@ -913,7 +913,7 @@ void ObjectPage::DeleteCurrent()
         }
         catch (const container::NoSuchElementException& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("basctl.basicide");
         }
     }
 }
@@ -1049,7 +1049,7 @@ SbModule* createModImpl(weld::Window* pWin, const ScriptDocument& rDocument,
         }
         catch (const container::NoSuchElementException& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("basctl.basicide");
         }
     }
     return pModule;

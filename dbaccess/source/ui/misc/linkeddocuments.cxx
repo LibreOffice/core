@@ -197,7 +197,7 @@ namespace dbaui
         }
         catch(const Exception&)
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("dbaccess");
         }
     }
     void OLinkedDocumentsAccess::newFormWithPilot( const sal_Int32 _nCommandType,const OUString& _rObjectName )
@@ -297,7 +297,7 @@ namespace dbaui
         }
         catch(const Exception&)
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("dbaccess");
         }
 
         return xNewDocument;

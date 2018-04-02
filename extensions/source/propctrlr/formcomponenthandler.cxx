@@ -1938,7 +1938,7 @@ namespace pcr
         catch( const Exception& )
         {
             OSL_FAIL( "FormComponentPropertyHandler::impl_updateDependentProperty_nothrow: caught an exception!" );
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("extensions.propctrlr");
         }
     }
 
@@ -2015,7 +2015,7 @@ namespace pcr
         catch( const Exception& )
         {
             OSL_FAIL( "FormComponentPropertyHandler::onNewComponent: caught an exception!" );
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("extensions.propctrlr");
         }
     }
 
@@ -2269,7 +2269,7 @@ namespace pcr
         catch( const Exception& )
         {
             OSL_FAIL( "FormComponentPropertyHandler::impl_getRowSet_nothrow: caught an exception!" );
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("extensions.propctrlr");
         }
         return xReturn;
     }
@@ -2304,7 +2304,7 @@ namespace pcr
         catch (const Exception&)
         {
             OSL_FAIL( "FormComponentPropertyHandler::impl_initFieldList_nothrow: caught an exception!" );
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("extensions.propctrlr");
         }
     }
 
@@ -2342,7 +2342,7 @@ namespace pcr
         }
         catch ( const SQLException& ) { aError = SQLExceptionInfo( ::cppu::getCaughtException() ); }
         catch ( const WrappedTargetException& e ) { aError = SQLExceptionInfo( e.TargetException ); }
-        catch ( const Exception& ) { DBG_UNHANDLED_EXCEPTION(); }
+        catch ( const Exception& ) { DBG_UNHANDLED_EXCEPTION("extensions.propctrlr"); }
 
         // report errors, if necessary
         if ( aError.isValid() )
@@ -2355,7 +2355,7 @@ namespace pcr
             catch( const Exception& )
             {
                 OSL_FAIL( "FormComponentPropertyHandler::impl_ensureRowsetConnection_nothrow: caught an exception during error handling!" );
-                DBG_UNHANDLED_EXCEPTION();
+                DBG_UNHANDLED_EXCEPTION("extensions.propctrlr");
             }
             // additional info about what happened
             INetURLObject aParser( sDataSourceName );
@@ -2414,7 +2414,7 @@ namespace pcr
         catch (const Exception&)
         {
             OSL_FAIL("FormComponentPropertyHandler::impl_describeCursorSource_nothrow: caught an exception !");
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("extensions.propctrlr");
         }
     }
 
@@ -2587,7 +2587,7 @@ namespace pcr
         catch( const Exception& )
         {
             OSL_FAIL( "FormComponentPropertyHandler::impl_dialogFilterOrSort_nothrow: caught an exception!" );
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("extensions.propctrlr");
         }
 
         if ( aErrorInfo.isValid() )
@@ -2682,7 +2682,7 @@ namespace pcr
         catch( const Exception& )
         {
             OSL_FAIL( "FormComponentPropertyHandler::impl_dialogFormatting_nothrow: : caught an exception!" );
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("extensions.propctrlr");
         }
         return bChanged;
     }
@@ -3141,7 +3141,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("extensions.propctrlr");
         }
         return m_xCommandDesigner.is();
     }
@@ -3167,7 +3167,7 @@ namespace pcr
             }
             catch( const Exception& )
             {
-                DBG_UNHANDLED_EXCEPTION();
+                DBG_UNHANDLED_EXCEPTION("extensions.propctrlr");
             }
         }
     }
@@ -3197,7 +3197,7 @@ namespace pcr
             catch( const Exception& )
             {
                 OSL_FAIL( "FormComponentPropertyHandler::impl_hasValidDataSourceSignature_nothrow: caught an exception!" );
-                DBG_UNHANDLED_EXCEPTION();
+                DBG_UNHANDLED_EXCEPTION("extensions.propctrlr");
             }
         }
         return bHas;
@@ -3214,7 +3214,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("extensions.propctrlr");
         }
         return sURL;
     }

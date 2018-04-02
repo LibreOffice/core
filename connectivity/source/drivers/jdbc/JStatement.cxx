@@ -650,7 +650,7 @@ sal_Bool java_sql_Statement_Base::convertFastPropertyValue(
     }
     catch(const css::uno::Exception&)
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("connectivity.jdbc");
     }
     return false;
 }

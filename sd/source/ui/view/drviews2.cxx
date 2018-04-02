@@ -2449,7 +2449,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             }
             catch( css::uno::RuntimeException& )
             {
-                DBG_UNHANDLED_EXCEPTION();
+                DBG_UNHANDLED_EXCEPTION("sd.view");
             }
 
             Cancel();

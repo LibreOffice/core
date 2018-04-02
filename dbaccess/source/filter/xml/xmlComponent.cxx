@@ -97,7 +97,7 @@ OXMLComponent::OXMLComponent( ODBFilter& rImport
         }
         catch(Exception&)
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_UNHANDLED_EXCEPTION("dbaccess");
         }
     }
 }

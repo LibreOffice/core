@@ -212,7 +212,7 @@ Reference < XFrame > SfxFrame::CreateBlankFrame()
     }
     catch( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("sfx.view");
     }
     return xFrame;
 }
@@ -268,7 +268,7 @@ SfxFrame* SfxFrame::CreateHidden( SfxObjectShell const & rDoc, vcl::Window& rWin
     }
     catch( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("sfx.view");
     }
 
     return pFrame;

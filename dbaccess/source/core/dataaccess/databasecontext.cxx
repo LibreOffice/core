@@ -132,7 +132,7 @@ namespace dbaccess
             }
             catch( const Exception& )
             {
-                DBG_UNHANDLED_EXCEPTION();
+                DBG_UNHANDLED_EXCEPTION("dbaccess");
             }
         }
 
@@ -415,7 +415,7 @@ void ODatabaseContext::setTransientProperties(const OUString& _sURL, ODatabaseMo
     }
     catch( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("dbaccess");
     }
 }
 
@@ -475,7 +475,7 @@ void ODatabaseContext::storeTransientProperties( ODatabaseModelImpl& _rModelImpl
     }
     catch ( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("dbaccess");
     }
 
     // additionally, remember the "failed password", which is not available as property

@@ -1060,7 +1060,7 @@ void SdOutliner::ProvideNextTextObject()
     }
     catch (const css::uno::Exception&)
     {
-        DBG_UNHANDLED_EXCEPTION();
+        DBG_UNHANDLED_EXCEPTION("sd.view");
     }
     SetUpdateMode(false);
     OutlinerView* pOutlinerView = mpImpl->GetOutlinerView();
