@@ -28,6 +28,7 @@ class SwBreakDlg;
 class SwSortDlg;
 class SwTableHeightDlg;
 class SwTableWidthDlg;
+class SwMergeTableDlg;
 class SignatureLineDialog;
 class SfxTabDialog;
 class SwConvertTableDlg;
@@ -162,6 +163,18 @@ protected:
     std::unique_ptr<SwTableHeightDlg> m_xDlg;
 public:
     explicit AbstractSwTableHeightDlg_Impl(SwTableHeightDlg* p)
+        : m_xDlg(p)
+    {
+    }
+    virtual short Execute() override;
+};
+
+class AbstractSwMergeTableDlg_Impl : public VclAbstractDialog
+{
+protected:
+    std::unique_ptr<SwMergeTableDlg> m_xDlg;
+public:
+    explicit AbstractSwMergeTableDlg_Impl(SwMergeTableDlg* p)
         : m_xDlg(p)
     {
     }
@@ -523,7 +536,7 @@ public:
         css::uno::Reference< css::container::XNameAccess > & xNameAccess) override;
     virtual VclPtr<AbstractSwModalRedlineAcceptDlg> CreateSwModalRedlineAcceptDlg(vcl::Window *pParent) override;
 
-    virtual VclPtr<VclAbstractDialog>          CreateTableMergeDialog(vcl::Window* pParent, bool& rWithPrev) override;
+    virtual VclPtr<VclAbstractDialog>          CreateTableMergeDialog(weld::Window* pParent, bool& rWithPrev) override;
     virtual VclPtr<SfxAbstractTabDialog>       CreateFrameTabDialog( const OUString &rDialogType,
                                                 SfxViewFrame *pFrame, vcl::Window *pParent,
                                                 const SfxItemSet& rCoreSet,

@@ -19,23 +19,19 @@
 #ifndef INCLUDED_SW_SOURCE_UIBASE_INC_MERGETBL_HXX
 #define INCLUDED_SW_SOURCE_UIBASE_INC_MERGETBL_HXX
 
-#include <vcl/button.hxx>
+#include <vcl/weld.hxx>
 
-#include <vcl/fixed.hxx>
-#include <svx/stddlg.hxx>
-
-class SwMergeTableDlg : public SvxStandardDialog
+class SwMergeTableDlg : public weld::GenericDialogController
 {
-    VclPtr<RadioButton> m_pMergePrevRB;
+    bool& m_rMergePrev;
 
-    bool&        m_rMergePrev;
-protected:
-    virtual void Apply() override;
+    std::unique_ptr<weld::RadioButton> m_xMergePrevRB;
+private:
+    void Apply();
 
 public:
-    SwMergeTableDlg( vcl::Window *pParent, bool& rWithPrev );
-    virtual ~SwMergeTableDlg() override;
-    virtual void dispose() override;
+    SwMergeTableDlg(weld::Window *pParent, bool& rWithPrev);
+    short execute();
 };
 
 #endif

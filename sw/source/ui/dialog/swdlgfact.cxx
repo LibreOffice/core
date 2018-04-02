@@ -111,6 +111,10 @@ short AbstractSwTableHeightDlg_Impl::Execute()
 {
     return m_xDlg->execute();
 }
+short AbstractSwMergeTableDlg_Impl::Execute()
+{
+    return m_xDlg->execute();
+}
 short AbstractSwSortDlg_Impl::Execute()
 {
     return m_xDlg->execute();
@@ -887,10 +891,9 @@ VclPtr<AbstractSwModalRedlineAcceptDlg> SwAbstractDialogFactory_Impl::CreateSwMo
     return VclPtr<AbstractSwModalRedlineAcceptDlg_Impl>::Create( pDlg );
 }
 
-VclPtr<VclAbstractDialog> SwAbstractDialogFactory_Impl::CreateTableMergeDialog(vcl::Window* pParent, bool& rWithPrev)
+VclPtr<VclAbstractDialog> SwAbstractDialogFactory_Impl::CreateTableMergeDialog(weld::Window* pParent, bool& rWithPrev)
 {
-    VclPtr<Dialog> pDlg = VclPtr<SwMergeTableDlg>::Create( pParent, rWithPrev );
-    return VclPtr<VclAbstractDialog_Impl>::Create( pDlg );
+    return VclPtr<AbstractSwMergeTableDlg_Impl>::Create(new SwMergeTableDlg(pParent, rWithPrev));
 }
 
 VclPtr<SfxAbstractTabDialog> SwAbstractDialogFactory_Impl::CreateFrameTabDialog(const OUString &rDialogType,

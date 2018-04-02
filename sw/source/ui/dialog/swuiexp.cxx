@@ -36,6 +36,7 @@
 #include <label.hxx>
 #include <mailmrge.hxx>
 #include <mailmergewizard.hxx>
+#include <mergetbl.hxx>
 #include <regionsw.hxx>
 #include <rowht.hxx>
 #include <selglos.hxx>

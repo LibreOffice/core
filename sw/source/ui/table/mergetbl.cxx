@@ -20,29 +20,25 @@
 #include <swtypes.hxx>
 #include <mergetbl.hxx>
 
-SwMergeTableDlg::SwMergeTableDlg( vcl::Window *pParent, bool& rWithPrev )
-    : SvxStandardDialog(pParent, "MergeTableDialog", "modules/swriter/ui/mergetabledialog.ui")
+SwMergeTableDlg::SwMergeTableDlg(weld::Window *pParent, bool& rWithPrev)
+    : GenericDialogController(pParent, "modules/swriter/ui/mergetabledialog.ui", "MergeTableDialog")
     , m_rMergePrev(rWithPrev)
+    , m_xMergePrevRB(m_xBuilder->weld_radio_button("prev"))
 {
-    get(m_pMergePrevRB, "prev");
-    m_pMergePrevRB->Check();
+    m_xMergePrevRB->set_active(true);
 }
-
-SwMergeTableDlg::~SwMergeTableDlg()
-{
-    disposeOnce();
-}
-
-void SwMergeTableDlg::dispose()
-{
-    m_pMergePrevRB.clear();
-    SvxStandardDialog::dispose();
-}
-
 
 void SwMergeTableDlg::Apply()
 {
-    m_rMergePrev = m_pMergePrevRB->IsChecked();
+    m_rMergePrev = m_xMergePrevRB->get_active();
+}
+
+short SwMergeTableDlg::execute()
+{
+    int nRet = run();
+    if (nRet == RET_OK)
+        Apply();
+    return nRet;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
