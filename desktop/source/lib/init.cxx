@@ -93,6 +93,7 @@
 #include <unotools/syslocaleoptions.hxx>
 #include <unotools/mediadescriptor.hxx>
 #include <unotools/pathoptions.hxx>
+#include <unotools/tempfile.hxx>
 #include <osl/module.hxx>
 #include <comphelper/sequence.hxx>
 #include <sfx2/sfxbasemodel.hxx>
@@ -3627,6 +3628,21 @@ static void lo_status_indicator_callback(void *data, comphelper::LibreOfficeKit:
 /// Used only by LibreOfficeKit when used by Online to pre-initialize
 static void preloadData()
 {
+    std::cerr << "Preloading dictionaries: ";
+
+    // Create user profile in the temp directory for loading the dictionaries
+    OUString sUserPath;
+    rtl::Bootstrap::get("UserInstallation", sUserPath);
+    utl::TempFile aTempDir(nullptr, true);
+    aTempDir.EnableKillingFile();
+    rtl::Bootstrap::set("UserInstallation", aTempDir.GetURL());
+
+    // Register the bundled extensions
+    desktop::Desktop::SynchronizeExtensionRepositories(true);
+    bool bAbort = desktop::Desktop::CheckExtensionDependencies();
+    if(bAbort)
+        std::cerr << "CheckExtensionDependencies failed" << std::endl;
+
     // preload all available dictionaries
     css::uno::Reference<css::linguistic2::XLinguServiceManager> xLngSvcMgr =
         css::linguistic2::LinguServiceManager::create(comphelper::getProcessComponentContext());
@@ -3634,7 +3650,6 @@ static void preloadData()
 
     css::uno::Reference<linguistic2::XSupportedLocales> xSpellLocales(xSpellChecker, css::uno::UNO_QUERY_THROW);
     uno::Sequence< css::lang::Locale > aLocales = xSpellLocales->getLocales();
-    std::cerr << "Preloading dictionaries: ";
     for (auto &it : aLocales)
     {
         std::cerr << it.Language << "_" << it.Country << " ";
@@ -3655,6 +3670,9 @@ static void preloadData()
         xThesaurus->queryMeanings("forcefed", it, aNone);
     }
     std::cerr << "\n";
+
+    // Set user profile's path back to the original one
+    rtl::Bootstrap::set("UserInstallation", sUserPath);
 
     css::uno::Reference< css::ui::XAcceleratorConfiguration > xGlobalCfg;
     xGlobalCfg = css::ui::GlobalAcceleratorConfiguration::create(
