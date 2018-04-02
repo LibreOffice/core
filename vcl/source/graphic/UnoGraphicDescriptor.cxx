@@ -279,11 +279,11 @@ void GraphicDescriptor::_getPropertyValues( const comphelper::PropertyMapEntry**
 
                 if( mpGraphic )
                 {
-                    if( mpGraphic->IsLink() )
+                    if( mpGraphic->IsGfxLink() )
                     {
                         const char* pMimeType;
 
-                        switch( mpGraphic->GetLink().GetType() )
+                        switch( mpGraphic->GetGfxLink().GetType() )
                         {
                             case GfxLinkType::NativeGif: pMimeType = MIMETYPE_GIF; break;
 

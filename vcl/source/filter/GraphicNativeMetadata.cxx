@@ -34,7 +34,7 @@ GraphicNativeMetadata::~GraphicNativeMetadata()
 
 bool GraphicNativeMetadata::read(Graphic const & rGraphic)
 {
-    GfxLink aLink = rGraphic.GetLink();
+    GfxLink aLink = rGraphic.GetGfxLink();
     if ( aLink.GetType() != GfxLinkType::NativeJpg )
         return false;
 
