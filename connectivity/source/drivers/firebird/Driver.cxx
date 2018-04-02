@@ -219,7 +219,7 @@ Sequence< DriverPropertyInfo > SAL_CALL FirebirdDriver::getPropertyInfo(
 sal_Int32 SAL_CALL FirebirdDriver::getMajorVersion(  )
 {
     // The major and minor version are sdbc driver specific. Must begin with 1.0
-    // as per http://api.libreoffice.org/docs/common/ref/com/sun/star/sdbc/XDriver.html
+    // as per https://api.libreoffice.org/docs/common/ref/com/sun/star/sdbc/XDriver.html
     return 1;
 }
 

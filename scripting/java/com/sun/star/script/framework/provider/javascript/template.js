@@ -19,7 +19,7 @@
 // Import standard OpenOffice.org API classes. For more information on
 // these classes and the OpenOffice.org API, see the OpenOffice.org
 // Developers Guide at:
-// http://api.libreoffice.org/
+// https://api.libreoffice.org/
 
 importClass(Packages.com.sun.star.uno.UnoRuntime);
 importClass(Packages.com.sun.star.text.XTextDocument);
@@ -42,7 +42,7 @@ importClass(Packages.com.sun.star.frame.XModel);
 // For more information on using this class see the scripting
 // developer guides at:
 
-//   http://api.libreoffice.org/docs/DevelopersGuide/ScriptingFramework/ScriptingFramework.xhtml
+//   https://api.libreoffice.org/docs/DevelopersGuide/ScriptingFramework/ScriptingFramework.xhtml
 
 
 oDoc = UnoRuntime.queryInterface(XModel,XSCRIPTCONTEXT.getInvocationContext());

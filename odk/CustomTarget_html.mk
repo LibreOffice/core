@@ -20,11 +20,11 @@ $(eval $(call gb_CustomTarget_register_targets,odk/html,\
 $(call gb_CustomTarget_get_workdir,odk/html)/%.html : $(SRCDIR)/odk/%.html
 	$(call gb_Output_announce,$*.html,$(true),SED,1)
 	sed -e 's|%PRODUCT_RELEASE%|$(PRODUCTVERSION)|g' \
-	    -e 's|%DOXYGEN_PREFIX0%|$(if $(DOXYGEN),.,http://api.libreoffice.org)|g' \
-	    -e 's|%DOXYGEN_PREFIX1%|$(if $(DOXYGEN),..,http://api.libreoffice.org)|g' \
-	    -e 's|%DOXYGEN_PREFIX2%|$(if $(DOXYGEN),../..,http://api.libreoffice.org)|g' \
-	    -e 's|%JAVADOC_PREFIX0%|$(if $(ENABLE_JAVA),.,http://api.libreoffice.org)|g' \
-	    -e 's|%JAVADOC_PREFIX1%|$(if $(ENABLE_JAVA),..,http://api.libreoffice.org)|g' \
+	    -e 's|%DOXYGEN_PREFIX0%|$(if $(DOXYGEN),.,https://api.libreoffice.org)|g' \
+	    -e 's|%DOXYGEN_PREFIX1%|$(if $(DOXYGEN),..,https://api.libreoffice.org)|g' \
+	    -e 's|%DOXYGEN_PREFIX2%|$(if $(DOXYGEN),../..,https://api.libreoffice.org)|g' \
+	    -e 's|%JAVADOC_PREFIX0%|$(if $(ENABLE_JAVA),.,https://api.libreoffice.org)|g' \
+	    -e 's|%JAVADOC_PREFIX1%|$(if $(ENABLE_JAVA),..,https://api.libreoffice.org)|g' \
 	    < $< > $@
 
 # vim: set noet sw=4 ts=4:

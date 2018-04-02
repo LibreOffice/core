@@ -70,7 +70,7 @@ namespace oox { namespace ppt {
         bool  mbTransitionDirectionNormal;
         css::presentation::AnimationSpeed mnAnimationSpeed;
         double mfTransitionDurationInSeconds;
-        bool  mbMode; /**< http://api.libreoffice.org/docs/common/ref/com/sun/star/animations/XTransitionFilter.html Mode property */
+        bool  mbMode; /**< https://api.libreoffice.org/docs/common/ref/com/sun/star/animations/XTransitionFilter.html Mode property */
         ::sal_Int32 mnAdvanceTime;
     };
 
