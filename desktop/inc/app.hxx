@@ -117,7 +117,7 @@ class Desktop : public Application
         // first-start (ever) related methods
         static bool             CheckExtensionDependencies();
 
-        void                    SynchronizeExtensionRepositories();
+        static void             SynchronizeExtensionRepositories(bool bCleanedExtensionCache, Desktop* pDesktop = nullptr);
         void                    SetSplashScreenText( const OUString& rText );
         void                    SetSplashScreenProgress( sal_Int32 );
 
