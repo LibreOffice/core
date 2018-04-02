@@ -1612,7 +1612,7 @@ static void ParseCSS1_line_height( const CSS1Expression *pExpr,
     OSL_ENSURE( pExpr, "no expression" );
 
     sal_uInt16 nHeight = 0;
-    sal_uInt8 nPropHeight = 0;
+    sal_uInt16 nPropHeight = 0;
 
     switch( pExpr->GetType() )
     {
@@ -1633,14 +1633,12 @@ static void ParseCSS1_line_height( const CSS1Expression *pExpr,
         break;
     case CSS1_PERCENTAGE:
         {
-            sal_uInt16 nPHeight = static_cast<sal_uInt16>(pExpr->GetNumber());
-            nPropHeight = nPHeight <= 200 ? static_cast<sal_uInt8>(nPHeight) : 200;
+            nPropHeight = static_cast<sal_uInt16>(pExpr->GetNumber());
         }
         break;
     case CSS1_NUMBER:
         {
-            sal_uInt16 nPHeight = static_cast<sal_uInt16>(pExpr->GetNumber() * 100);
-            nPropHeight = nPHeight <= 200 ? static_cast<sal_uInt8>(nPHeight) : 200;
+            nPropHeight = static_cast<sal_uInt16>(pExpr->GetNumber() * 100);
         }
         break;
     default:
