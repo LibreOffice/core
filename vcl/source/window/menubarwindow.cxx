@@ -98,7 +98,7 @@ void DecoToolBox::SetImages( long nMaxHeight, bool bForce )
 
     aEraseColor.SetTransparency( 255 );
     aBmpExDst.Erase( aEraseColor );
-    aBmpExDst.SetSizePixel( Size( lastSize, lastSize ) );
+    aBmpExDst.Scale( Size( lastSize, lastSize ) );
 
     tools::Rectangle aSrcRect( Point(0,0), maImage.GetSizePixel() );
     tools::Rectangle aDestRect( Point((lastSize - maImage.GetSizePixel().Width())/2,

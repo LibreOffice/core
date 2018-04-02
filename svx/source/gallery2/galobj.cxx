@@ -118,7 +118,7 @@ bool SgaObject::CreateThumb( const Graphic& rGraphic )
                     else
                         aBmpSize.setHeight( FRound( aBmpSize.Width() / fFactorLog ) );
 
-                    aBmpEx.SetSizePixel( aBmpSize, BmpScaleFlag::BestQuality );
+                    aBmpEx.Scale(aBmpSize, BmpScaleFlag::BestQuality);
                 }
             }
 
