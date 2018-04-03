@@ -4955,7 +4955,33 @@ tools::Rectangle SvxMSDffManager::GetGlobalChildAnchor( const DffRecordHeader& r
                     Scale( r );
                     Scale( u );
                     tools::Rectangle aChild( l, o, r, u );
-                    aChildAnchor.Union( aChild );
+                    if (((sal_Int64(
+                              std::max(
+                                  std::max(aChild.Left(), aChildAnchor.Left()),
+                                  std::max(aChild.Right(), aChildAnchor.Right())))
+                          - sal_Int64(
+                              std::min(
+                                  std::min(aChild.Left(), aChildAnchor.Left()),
+                                  std::min(aChild.Right(), aChildAnchor.Right()))))
+                         <= SAL_MAX_INT32)
+                        && ((sal_Int64(
+                                std::max(
+                                    std::max(aChild.Top(), aChildAnchor.Top()),
+                                    std::max(aChild.Bottom(), aChildAnchor.Bottom())))
+                             - sal_Int64(
+                                 std::min(
+                                     std::min(aChild.Top(), aChildAnchor.Top()),
+                                     std::min(aChild.Bottom(), aChildAnchor.Bottom()))))
+                            <= SAL_MAX_INT32))
+                    {
+                        aChildAnchor.Union( aChild );
+                    } else {
+                        // Careful, `<< aChild` might trigger -fsanitize=signed-integer-overflow:
+                        SAL_WARN(
+                            "filter.ms",
+                            "union of " << aChildAnchor << " and (" << l << ", " << o << ", " << r
+                                << ", " << u << ") too large");
+                    }
                     break;
                 }
                 if (!aShapeAtom.SeekToEndOfRecord(rSt))
