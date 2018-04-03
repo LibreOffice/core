@@ -18,6 +18,7 @@
 #include <olinetab.hxx>
 #include <tabprotection.hxx>
 #include <columniterator.hxx>
+#include <drwlayer.hxx>
 
 bool ScTable::IsMerged( SCCOL nCol, SCROW nRow ) const
 {
@@ -140,6 +141,27 @@ void ScTable::CopyOneCellFromClip(
 
     if (nCol1 == 0 && nCol2 == MAXCOL && mpRowHeights)
         mpRowHeights->setValue(nRow1, nRow2, pSrcTab->GetOriginalHeight(nSrcRow));
+
+    // Copy graphics over too
+    bool bCopyGraphics
+        = (rCxt.getInsertFlag() & InsertDeleteFlags::OBJECTS) != InsertDeleteFlags::NONE;
+    if (bCopyGraphics && rCxt.getClipDoc()->mpDrawLayer)
+    {
+        ScDrawLayer* pDrawLayer = GetDoc().GetDrawLayer();
+        OSL_ENSURE(pDrawLayer, "No drawing layer");
+        if (pDrawLayer)
+        {
+            const ScAddress& rSrcStartPos
+                = rCxt.getClipDoc()->GetClipParam().getWholeRange().aStart;
+            const ScAddress& rSrcEndPos = rCxt.getClipDoc()->GetClipParam().getWholeRange().aEnd;
+            tools::Rectangle aSourceRect = rCxt.getClipDoc()->GetMMRect(
+                rSrcStartPos.Col(), rSrcStartPos.Row(), rSrcEndPos.Col(), rSrcEndPos.Row(),
+                rSrcStartPos.Tab());
+            tools::Rectangle aDestRect = GetDoc().GetMMRect(nCol1, nRow1, nCol2, nRow2, nTab);
+            pDrawLayer->CopyFromClip(rCxt.getClipDoc()->mpDrawLayer, rSrcStartPos.Tab(),
+                                     aSourceRect, ScAddress(nCol1, nRow1, nTab), aDestRect);
+        }
+    }
 }
 
 void ScTable::SetValues( const SCCOL nCol, const SCROW nRow, const std::vector<double>& rVals )
