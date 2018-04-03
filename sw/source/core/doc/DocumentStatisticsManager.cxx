@@ -248,7 +248,6 @@ IMPL_LINK( DocumentStatisticsManager, DoIdleStatsUpdate, Timer *, pIdle, void )
 DocumentStatisticsManager::~DocumentStatisticsManager()
 {
     maStatsUpdateIdle.Stop();
-    delete mpDocStat;
 }
 
 }
