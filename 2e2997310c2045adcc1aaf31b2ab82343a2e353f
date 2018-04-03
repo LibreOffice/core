@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_56bb8372",
+        "filename": "vcl/inc/BitmapScaleConvolution.hxx",
+        "patchSetId": 13
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2018-04-03T03:26:30Z",
+      "side": 1,
+      "message": "Why not 3 subclasses of BitmapScaleConvolutionFilter -BitmapScaleBilinearFilter, BitmapScaleBiCubicFilter and BitmapScaleLanczos3Filter instead of the enum?",
+      "range": {
+        "startLine": 39,
+        "startChar": 79,
+        "endLine": 39,
+        "endChar": 100
+      },
+      "revId": "2e2997310c2045adcc1aaf31b2ab82343a2e353f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
