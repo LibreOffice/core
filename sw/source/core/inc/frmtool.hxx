@@ -46,7 +46,7 @@ class SwPageDesc;
 class SwFrameFormats;
 class SwRegionRects;
 
-#define FAR_AWAY (SAL_MAX_INT32 - 20000)  // initial position of a Fly
+#define FAR_AWAY (SAL_MAX_INT32 - 40000)  // initial position of a Fly
 #define BROWSE_HEIGHT (56700 * 10) // 10 Meters
 #define GRFNUM_NO 0
 #define GRFNUM_YES 1
