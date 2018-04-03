@@ -1,0 +1,8 @@
+---
+assumeFilename: writerfilter/source/filter/WriterFilter.cxx
+blacklist:
+    writerfilter/source/rtftok/rtfsdrimport.hxx:
+    # IWYU assumes std::stack<IncompleteType> in a header is OK, but that's not
+    # the case for all of LO's supported platforms.
+    # See <https://github.com/include-what-you-use/include-what-you-use/issues/175>.
+    - dmapper/GraphicZOrderHelper.hxx
