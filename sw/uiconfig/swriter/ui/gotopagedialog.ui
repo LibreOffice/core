@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.18.3 -->
+<!-- Generated with glade 3.20.4 -->
 <interface domain="sw">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkDialog" id="GotoPageDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
     <property name="title" translatable="yes" context="gotopagedialog|GotoPageDialog">Go to Page</property>
+    <property name="modal">True</property>
+    <property name="default_width">0</property>
+    <property name="default_height">0</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
@@ -67,9 +70,9 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="hexpand">True</property>
-                <property name="xalign">0</property>
                 <property name="label" translatable="yes" context="gotopagedialog|page_count">of $1</property>
                 <property name="use_underline">True</property>
+                <property name="xalign">0</property>
               </object>
               <packing>
                 <property name="left_attach">2</property>
@@ -80,6 +83,7 @@
               <object class="GtkEntry" id="page">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
+                <property name="activates_default">True</property>
                 <property name="width_chars">5</property>
                 <property name="input_purpose">number</property>
               </object>
@@ -93,9 +97,9 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="halign">end</property>
-                <property name="xalign">0</property>
                 <property name="label" translatable="yes" context="gotopagedialog|page_label">Page:</property>
                 <property name="use_underline">True</property>
+                <property name="xalign">0</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -115,6 +119,9 @@
       <action-widget response="-5">ok</action-widget>
       <action-widget response="-6">cancel</action-widget>
     </action-widgets>
+    <child>
+      <placeholder/>
+    </child>
   </object>
   <object class="GtkAdjustment" id="page_value">
     <property name="lower">1</property>
