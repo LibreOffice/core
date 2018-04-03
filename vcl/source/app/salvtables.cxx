@@ -1284,6 +1284,11 @@ public:
     {
         m_xTextView->SetSelection(rSelection);
     }
+
+    virtual void set_editable(bool bEditable) override
+    {
+        m_xTextView->SetReadOnly(!bEditable);
+    }
 };
 
 class SalInstanceExpander : public SalInstanceContainer, public virtual weld::Expander

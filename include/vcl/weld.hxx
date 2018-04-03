@@ -565,6 +565,7 @@ public:
     virtual OUString get_text() const = 0;
     virtual Selection get_selection() const = 0;
     virtual void set_selection(const Selection&) = 0;
+    virtual void set_editable(bool bEditable) = 0;
 };
 
 class VCL_DLLPUBLIC Expander : virtual public Container

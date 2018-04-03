@@ -3010,6 +3010,10 @@ public:
         gtk_text_view_scroll_mark_onscreen(m_pTextView, mark);
     }
 
+    virtual void set_editable(bool bEditable) override
+    {
+        gtk_text_view_set_editable(m_pTextView, bEditable);
+    }
 };
 
 static MouseEventModifiers ImplGetMouseButtonMode(sal_uInt16 nButton, sal_uInt16 nCode)
