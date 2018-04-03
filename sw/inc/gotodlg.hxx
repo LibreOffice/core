@@ -20,34 +20,33 @@
 #ifndef INCLUDED_SW_SOURCE_UIBASE_INC_GOTODLG_HXX
 #define INCLUDED_SW_SOURCE_UIBASE_INC_GOTODLG_HXX
 
-#include <vcl/dialog.hxx>
+#include <vcl/weld.hxx>
 
 class SwView;
 class SwWrtShell;
 
-class SwGotoPageDlg : public ModalDialog
+class SwGotoPageDlg : public weld::GenericDialogController
 {
 public:
-    SwGotoPageDlg(vcl::Window *parent, SfxBindings* _pBindings);
+    SwGotoPageDlg(weld::Window *parent, SfxBindings* _pBindings);
 
-    virtual ~SwGotoPageDlg() override;
-    virtual void dispose() override;
-
-    sal_uInt16 GetPageSelection() const{
-        return (mpMtrPageCtrl->GetText()).toUInt32();}
+    sal_uInt16 GetPageSelection() const
+    {
+        return mxMtrPageCtrl->get_text().toUInt32();
+    }
 
 private:
-    SwView*    GetCreateView() const;
-    sal_uInt16 GetPageInfo();
-
-    DECL_LINK( PageModifiedHdl, Edit&, void );
-
-    VclPtr<Edit> mpMtrPageCtrl;
-    VclPtr<FixedText> mpPageNumberLbl;
-
     SwView       *m_pCreateView;
     SfxBindings  *m_rBindings;
     sal_uInt16   mnMaxPageCnt;
+
+    std::unique_ptr<weld::Entry> mxMtrPageCtrl;
+    std::unique_ptr<weld::Label> mxPageNumberLbl;
+
+    SwView*    GetCreateView() const;
+    sal_uInt16 GetPageInfo();
+
+    DECL_LINK( PageModifiedHdl, weld::Entry&, void );
 };
 
 #endif

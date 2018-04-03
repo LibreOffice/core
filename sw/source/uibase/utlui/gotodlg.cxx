@@ -27,54 +27,39 @@
 
 using namespace com::sun::star;
 
-SwGotoPageDlg::SwGotoPageDlg( vcl::Window* pParent, SfxBindings* _pBindings):
-        ModalDialog(pParent, "GotoPageDialog", "modules/swriter/ui/gotopagedialog.ui"),
-        m_pCreateView(nullptr),
-        m_rBindings(_pBindings),
-        mnMaxPageCnt(1)
+SwGotoPageDlg::SwGotoPageDlg(weld::Window* pParent, SfxBindings* _pBindings)
+    : GenericDialogController(pParent, "modules/swriter/ui/gotopagedialog.ui", "GotoPageDialog")
+    , m_pCreateView(nullptr)
+    , m_rBindings(_pBindings)
+    , mnMaxPageCnt(1)
+    , mxMtrPageCtrl(m_xBuilder->weld_entry("page"))
+    , mxPageNumberLbl(m_xBuilder->weld_label("page_count"))
 {
-    get(mpMtrPageCtrl, "page");
-    get(mpPageNumberLbl, "page_count");
-
     sal_uInt16 nTotalPage = GetPageInfo();
 
     if(nTotalPage)
     {
-        OUString sStr = mpPageNumberLbl->GetText();
-        mpPageNumberLbl->SetText(sStr.replaceFirst("$1", OUString::number(nTotalPage)));
+        OUString sStr = mxPageNumberLbl->get_label();
+        mxPageNumberLbl->set_label(sStr.replaceFirst("$1", OUString::number(nTotalPage)));
         mnMaxPageCnt = nTotalPage;
     }
-    mpMtrPageCtrl->SetModifyHdl(LINK(this, SwGotoPageDlg, PageModifiedHdl));
-    mpMtrPageCtrl->SetCursorAtLast();
-    Selection aSel(0, EDIT_NOLIMIT);
-    mpMtrPageCtrl->SetSelection(aSel);
+    mxMtrPageCtrl->connect_changed(LINK(this, SwGotoPageDlg, PageModifiedHdl));
+    mxMtrPageCtrl->set_position(-1);
+    mxMtrPageCtrl->select_region(0, -1);
 }
 
-SwGotoPageDlg::~SwGotoPageDlg()
+IMPL_LINK_NOARG(SwGotoPageDlg, PageModifiedHdl, weld::Entry&, void)
 {
-    disposeOnce();
-}
-
-void SwGotoPageDlg::dispose()
-{
-    mpMtrPageCtrl.clear();
-    mpPageNumberLbl.clear();
-
-    ModalDialog::dispose();
-}
-
-IMPL_LINK_NOARG(SwGotoPageDlg, PageModifiedHdl, Edit&, void)
-{
-    if(!(mpMtrPageCtrl->GetText()).isEmpty() )
+    if (!mxMtrPageCtrl->get_text().isEmpty())
     {
-        int page_value = (mpMtrPageCtrl->GetText()).toInt32();
+        int page_value = mxMtrPageCtrl->get_text().toInt32();
 
-        if(page_value <= 0.0)
-            mpMtrPageCtrl->SetText(OUString::number(1));
+        if (page_value <= 0)
+            mxMtrPageCtrl->set_text(OUString::number(1));
         else if(page_value > mnMaxPageCnt)
-            mpMtrPageCtrl->SetText(OUString::number(mnMaxPageCnt));
+            mxMtrPageCtrl->set_text(OUString::number(mnMaxPageCnt));
 
-        mpMtrPageCtrl->SetCursorAtLast();
+        mxMtrPageCtrl->set_position(-1);
     }
 }
 
@@ -103,13 +88,13 @@ sal_uInt16 SwGotoPageDlg::GetPageInfo()
 {
     SwView *pView = GetCreateView();
     SwWrtShell *pSh = pView ? &pView->GetWrtShell() : nullptr;
-    mpMtrPageCtrl->SetText(OUString::number(1));
+    mxMtrPageCtrl->set_text(OUString::number(1));
     if (pSh)
     {
         const sal_uInt16 nPageCnt = pSh->GetPageCnt();
         sal_uInt16 nPhyPage, nVirPage;
         pSh->GetPageNum(nPhyPage, nVirPage);
-        mpMtrPageCtrl->SetText(OUString::number(nPhyPage));
+        mxMtrPageCtrl->set_text(OUString::number(nPhyPage));
         return nPageCnt;
     }
     return 0;
