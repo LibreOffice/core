@@ -2106,6 +2106,7 @@ static bool lookupProfile(const sal_Unicode *strPath, const sal_Unicode *strFile
     {
         if ((nPos = rtl_ustr_lastIndexOfChar(strExecutable->buffer, L':')) == -1)
         {
+            rtl_uString_release(strExecutable);
             return false;
         }
         else
