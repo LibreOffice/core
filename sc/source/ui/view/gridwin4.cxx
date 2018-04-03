@@ -1659,7 +1659,7 @@ void ScGridWindow::DrawButtons(SCCOL nX1, SCCOL nX2, const ScTableInfo& rTabInfo
             }
         }
 
-        if ( bListValButton && pRowInfo[nArrY].nRowNo == aListValPos.Row() && pRowInfo[nArrY].bChanged )
+        if ( !comphelper::LibreOfficeKit::isActive() && bListValButton && pRowInfo[nArrY].nRowNo == aListValPos.Row() && pRowInfo[nArrY].bChanged )
         {
             tools::Rectangle aRect = GetListValButtonRect( aListValPos );
             aComboButton.SetPosPixel( aRect.TopLeft() );
