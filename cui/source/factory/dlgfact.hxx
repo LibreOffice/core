@@ -433,8 +433,15 @@ class AbstractInsertObjectDialog_Impl : public SfxAbstractInsertObjectDialog
 
 class AbstractPasteDialog_Impl : public SfxAbstractPasteDialog
 {
+protected:
+    std::unique_ptr<SvPasteObjectDialog> m_xDlg;
 public:
-    DECL_ABSTDLG_BASE(AbstractPasteDialog_Impl, SvPasteObjectDialog )
+    explicit AbstractPasteDialog_Impl(SvPasteObjectDialog* p)
+        : m_xDlg(p)
+    {
+    }
+    virtual short Execute() override;
+public:
     virtual void Insert( SotClipboardFormatId nFormat, const OUString & rFormatName ) override;
     virtual void SetObjName( const SvGlobalName & rClass, const OUString & rObjName ) override;
     virtual SotClipboardFormatId GetFormat( const TransferableDataHelper& aHelper ) override;
@@ -546,7 +553,7 @@ public:
                                             const SvObjectServerList* pList ) override;
     virtual VclPtr<VclAbstractDialog>      CreateEditObjectDialog( const OUString& rCommmand,
                                             const css::uno::Reference < css::embed::XEmbeddedObject >& xObj ) override;
-    virtual VclPtr<SfxAbstractPasteDialog> CreatePasteDialog( vcl::Window* pParent ) override;
+    virtual VclPtr<SfxAbstractPasteDialog> CreatePasteDialog(weld::Window* pParent) override;
     virtual VclPtr<SfxAbstractLinksDialog> CreateLinksDialog( vcl::Window* pParent, sfx2::LinkManager* pMgr, bool bHTML = false, sfx2::SvBaseLink* p=nullptr  ) override;
 
     virtual VclPtr<AbstractHangulHanjaConversionDialog> CreateHangulHanjaConversionDialog( vcl::Window* _pParent,

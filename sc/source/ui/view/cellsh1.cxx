@@ -1570,7 +1570,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                         if ( nFormatCount )
                         {
                             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-                            ScopedVclPtr<SfxAbstractPasteDialog> pDlg(pFact->CreatePasteDialog( pTabViewShell->GetDialogParent() ));
+                            ScopedVclPtr<SfxAbstractPasteDialog> pDlg(pFact->CreatePasteDialog(pTabViewShell->GetFrameWeld()));
                             if ( pDlg )
                             {
                             for (sal_uInt16 i=0; i<nFormatCount; i++)
