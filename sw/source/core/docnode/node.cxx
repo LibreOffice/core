@@ -1012,7 +1012,7 @@ SwContentNode::~SwContentNode()
     // Thus, we need to delete all Frames in the dependency list.
     DelFrames(false);
 
-    delete m_pCondColl;
+    m_pCondColl.reset();
 
     if ( mpAttrSet.get() && mbSetModifyAtAttr )
         const_cast<SwAttrSet*>(static_cast<const SwAttrSet*>(mpAttrSet.get()))->SetModifyAtAttr( nullptr );
@@ -1762,11 +1762,9 @@ void SwContentNode::SetCondFormatColl( SwFormatColl* pColl )
         ( pColl && pColl != m_pCondColl->GetRegisteredIn() ) )
     {
         SwFormatColl* pOldColl = GetCondFormatColl();
-        delete m_pCondColl;
+        m_pCondColl.reset();
         if( pColl )
-            m_pCondColl = new SwDepend( this, pColl );
-        else
-            m_pCondColl = nullptr;
+            m_pCondColl.reset(new SwDepend( this, pColl ));
 
         if( GetpSwAttrSet() )
         {

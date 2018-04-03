@@ -350,7 +350,7 @@ class SW_DLLPUBLIC SwContentNode: public SwModify, public SwNode, public SwIndex
 {
 
 //FEATURE::CONDCOLL
-    SwDepend* m_pCondColl;
+    std::unique_ptr<SwDepend> m_pCondColl;
 //FEATURE::CONDCOLL
     mutable bool mbSetModifyAtAttr;
 
