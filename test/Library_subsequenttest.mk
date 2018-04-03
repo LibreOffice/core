@@ -77,6 +77,7 @@ $(eval $(call gb_Library_add_exception_objects,subsequenttest,\
 	test/source/sheet/xcelladdressable \
 	test/source/sheet/xcellformatrangessupplier \
 	test/source/sheet/xcellrangeaddressable \
+	test/source/sheet/xcellrangeformula \
 	test/source/sheet/xcellrangedata \
 	test/source/sheet/xcellrangereferrer \
 	test/source/sheet/xcellrangesquery \

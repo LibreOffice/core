@@ -12,6 +12,7 @@
 #include <test/sheet/xarrayformularange.hxx>
 #include <test/sheet/xcellformatrangessupplier.hxx>
 #include <test/sheet/xcellrangeaddressable.hxx>
+#include <test/sheet/xcellrangeformula.hxx>
 #include <test/sheet/xcellseries.hxx>
 #include <test/sheet/xmultipleoperation.hxx>
 #include <test/sheet/xsheetcellrange.hxx>
@@ -35,6 +36,7 @@ class ScCellCursorObj : public CalcUnoApiTest, public apitest::SheetCellRange,
                                                public apitest::XArrayFormulaRange,
                                                public apitest::XCellFormatRangesSupplier,
                                                public apitest::XCellRangeAddressable,
+                                               public apitest::XCellRangeFormula,
                                                public apitest::XCellSeries,
                                                public apitest::XMultipleOperation,
                                                public apitest::XSheetCellRange,
@@ -61,18 +63,21 @@ public:
     // XArrayFormulaRange
     CPPUNIT_TEST(testGetSetArrayFormula);
 
-    // XMultipleOperation
-    CPPUNIT_TEST(testSetTableOperation);
-
     // XCellFormatRangesSupplier
     CPPUNIT_TEST(testGetCellFormatRanges);
 
     // XCellRangeAddressable
     CPPUNIT_TEST(testGetRangeAddress);
 
+    // XCellRangeFormula
+    CPPUNIT_TEST(testGetSetFormulaArray);
+
     // XCellSeries
     CPPUNIT_TEST(testFillAuto);
     CPPUNIT_TEST(testFillSeries);
+
+    // XMultipleOperation
+    CPPUNIT_TEST(testSetTableOperation);
 
     // XSheetCellRange
     CPPUNIT_TEST(testGetSpreadsheet);
