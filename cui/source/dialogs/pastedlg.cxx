@@ -37,52 +37,38 @@
 
 #include <dialmgr.hxx>
 
-SvPasteObjectDialog::SvPasteObjectDialog( vcl::Window* pParent )
-    : ModalDialog(pParent, "PasteSpecialDialog", "cui/ui/pastespecial.ui")
+SvPasteObjectDialog::SvPasteObjectDialog(weld::Window* pParent)
+    : GenericDialogController(pParent, "cui/ui/pastespecial.ui", "PasteSpecialDialog")
+    , m_xFtObjectSource(m_xBuilder->weld_label("source"))
+    , m_xLbInsertList(m_xBuilder->weld_tree_view("list"))
+    , m_xOKButton(m_xBuilder->weld_button("ok"))
 {
-    get(m_pFtObjectSource, "source");
-    get(m_pLbInsertList, "list");
-    get(m_pOKButton, "ok");
+    m_xLbInsertList->set_size_request(m_xLbInsertList->get_approximate_digit_width() * 40,
+                                      m_xLbInsertList->get_height_rows(6));
+    m_xOKButton->set_sensitive(false);
 
-    m_pLbInsertList->SetDropDownLineCount(8);
-    m_pLbInsertList->set_width_request(m_pLbInsertList->approximate_char_width() * 32);
-    m_pOKButton->Disable();
-
-    ObjectLB().SetSelectHdl( LINK( this, SvPasteObjectDialog, SelectHdl ) );
-    ObjectLB().SetDoubleClickHdl( LINK( this, SvPasteObjectDialog, DoubleClickHdl ) );
-}
-
-SvPasteObjectDialog::~SvPasteObjectDialog()
-{
-    disposeOnce();
-}
-
-void SvPasteObjectDialog::dispose()
-{
-    m_pFtObjectSource.clear();
-    m_pLbInsertList.clear();
-    m_pOKButton.clear();
-    ModalDialog::dispose();
+    ObjectLB().connect_changed(LINK(this, SvPasteObjectDialog, SelectHdl));
+    ObjectLB().connect_row_activated(LINK( this, SvPasteObjectDialog, DoubleClickHdl));
 }
 
 void SvPasteObjectDialog::SelectObject()
 {
-    if (m_pLbInsertList->GetEntryCount())
+    if (m_xLbInsertList->n_children())
     {
-        m_pLbInsertList->SelectEntryPos(0);
-        SelectHdl(*m_pLbInsertList);
+        m_xLbInsertList->select(0);
+        SelectHdl(*m_xLbInsertList);
     }
 }
 
-IMPL_LINK_NOARG( SvPasteObjectDialog, SelectHdl, ListBox&, void )
+IMPL_LINK_NOARG(SvPasteObjectDialog, SelectHdl, weld::TreeView&, void)
 {
-    if ( !m_pOKButton->IsEnabled() )
-        m_pOKButton->Enable();
+    if (!m_xOKButton->get_sensitive())
+        m_xOKButton->set_sensitive(true);
 }
 
-IMPL_LINK_NOARG( SvPasteObjectDialog, DoubleClickHdl, ListBox&, void )
+IMPL_LINK_NOARG(SvPasteObjectDialog, DoubleClickHdl, weld::TreeView&, void)
 {
-    EndDialog( RET_OK );
+    m_xDialog->response(RET_OK);
 }
 
 /*************************************************************************
@@ -109,7 +95,7 @@ SotClipboardFormatId SvPasteObjectDialog::GetFormat( const TransferableDataHelpe
     SotClipboardFormatId nSelFormat = SotClipboardFormatId::NONE;
     SvGlobalName aEmptyNm;
 
-    ObjectLB().SetUpdateMode( false );
+    ObjectLB().freeze();
 
     for (auto const& format : *pFormats)
     {
@@ -169,9 +155,10 @@ SotClipboardFormatId SvPasteObjectDialog::GetFormat( const TransferableDataHelpe
                     continue;
             }
 
-            if( LISTBOX_ENTRY_NOTFOUND == ObjectLB().GetEntryPos( aName ) )
-                ObjectLB().SetEntryData(
-                    ObjectLB().InsertEntry( aName ), reinterpret_cast<void*>(nFormat) );
+            if (ObjectLB().find(aName) == -1)
+            {
+                ObjectLB().append(OUString::number(static_cast<sal_uInt32>(nFormat)), aName, "");
+            }
         }
     }
 
@@ -190,7 +177,7 @@ SotClipboardFormatId SvPasteObjectDialog::GetFormat( const TransferableDataHelpe
         }
     }
 
-    ObjectLB().SetUpdateMode( true );
+    ObjectLB().thaw();
     SelectObject();
 
     if( !aSourceName.isEmpty() )
@@ -202,11 +189,11 @@ SotClipboardFormatId SvPasteObjectDialog::GetFormat( const TransferableDataHelpe
         aTypeName = convertLineEnd(aTypeName, GetSystemLineEnd());
     }
 
-    m_pFtObjectSource->SetText( aTypeName );
+    m_xFtObjectSource->set_label(aTypeName);
 
-    if( Dialog::Execute() == RET_OK )
+    if (run() == RET_OK)
     {
-        nSelFormat = static_cast<SotClipboardFormatId>(reinterpret_cast<sal_uLong>(ObjectLB().GetSelectedEntryData()));
+        nSelFormat = static_cast<SotClipboardFormatId>(ObjectLB().get_selected_id().toUInt32());
     }
 
     return nSelFormat;

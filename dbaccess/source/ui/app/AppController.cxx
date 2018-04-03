@@ -522,7 +522,7 @@ sal_Bool SAL_CALL OApplicationController::suspend(sal_Bool bSuspend)
                 )
             )
         {
-            switch (ExecuteQuerySaveDocument(getFrameWeld(),getStrippedDatabaseName()))
+            switch (ExecuteQuerySaveDocument(getFrameWeld(), getStrippedDatabaseName()))
             {
                 case RET_YES:
                     Execute(ID_BROWSER_SAVEDOC,Sequence<PropertyValue>());
@@ -1042,7 +1042,7 @@ void OApplicationController::Execute(sal_uInt16 _nId, const Sequence< PropertyVa
                     if ( !aArgs.getLength() )
                     {
                         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-                        ScopedVclPtr<SfxAbstractPasteDialog> pDlg(pFact->CreatePasteDialog( getView() ));
+                        ScopedVclPtr<SfxAbstractPasteDialog> pDlg(pFact->CreatePasteDialog(getFrameWeld()));
                         std::vector<SotClipboardFormatId> aFormatIds;
                         getSupportedFormats(getContainer()->getElementType(),aFormatIds);
                         for (auto const& formatId : aFormatIds)
