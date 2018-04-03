@@ -57,18 +57,15 @@ class SwStyleManager : public IStyleAccess
 {
     StylePool aAutoCharPool;
     StylePool aAutoParaPool;
-    SwStyleCache *mpCharCache;
-    SwStyleCache *mpParaCache;
+    std::unique_ptr<SwStyleCache> mpCharCache;
+    std::unique_ptr<SwStyleCache> mpParaCache;
 
 public:
     // accept empty item set for ignorable paragraph items.
     explicit SwStyleManager( SfxItemSet const * pIgnorableParagraphItems )
         : aAutoCharPool(),
-          aAutoParaPool( pIgnorableParagraphItems ),
-          mpCharCache(nullptr),
-          mpParaCache(nullptr)
+          aAutoParaPool( pIgnorableParagraphItems )
     {}
-    virtual ~SwStyleManager() override;
     virtual std::shared_ptr<SfxItemSet> getAutomaticStyle( const SfxItemSet& rSet,
                                                                IStyleAccess::SwAutoStyleFamily eFamily ) override;
     virtual std::shared_ptr<SfxItemSet> getByName( const OUString& rName,
@@ -85,18 +82,10 @@ IStyleAccess *createStyleManager( SfxItemSet const * pIgnorableParagraphItems )
     return new SwStyleManager( pIgnorableParagraphItems );
 }
 
-SwStyleManager::~SwStyleManager()
-{
-    delete mpCharCache;
-    delete mpParaCache;
-}
-
 void SwStyleManager::clearCaches()
 {
-    delete mpCharCache;
-    mpCharCache = nullptr;
-    delete mpParaCache;
-    mpParaCache = nullptr;
+    mpCharCache.reset();
+    mpParaCache.reset();
 }
 
 std::shared_ptr<SfxItemSet> SwStyleManager::getAutomaticStyle( const SfxItemSet& rSet,
@@ -114,13 +103,13 @@ std::shared_ptr<SfxItemSet> SwStyleManager::cacheAutomaticStyle( const SfxItemSe
     if (eFamily == IStyleAccess::AUTO_STYLE_CHAR)
     {
         if (!mpCharCache)
-            mpCharCache = new SwStyleCache();
+            mpCharCache.reset(new SwStyleCache());
         mpCharCache->addStyleName( pStyle );
     }
     else
     {
         if (!mpParaCache)
-            mpParaCache = new SwStyleCache();
+            mpParaCache.reset(new SwStyleCache());
         mpParaCache->addStyleName( pStyle );
     }
     return pStyle;
@@ -130,9 +119,9 @@ std::shared_ptr<SfxItemSet> SwStyleManager::getByName( const OUString& rName,
                                                            IStyleAccess::SwAutoStyleFamily eFamily )
 {
     StylePool& rAutoPool = eFamily == IStyleAccess::AUTO_STYLE_CHAR ? aAutoCharPool : aAutoParaPool;
-    SwStyleCache* &rpCache = eFamily == IStyleAccess::AUTO_STYLE_CHAR ? mpCharCache : mpParaCache;
+    std::unique_ptr<SwStyleCache> &rpCache = eFamily == IStyleAccess::AUTO_STYLE_CHAR ? mpCharCache : mpParaCache;
     if( !rpCache )
-        rpCache = new SwStyleCache();
+        rpCache.reset(new SwStyleCache());
     std::shared_ptr<SfxItemSet> pStyle = rpCache->getByName( rName );
     if( !pStyle.get() )
     {
