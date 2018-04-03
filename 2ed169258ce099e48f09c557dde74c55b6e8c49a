@@ -16,6 +16,24 @@
       "revId": "2ed169258ce099e48f09c557dde74c55b6e8c49a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_718971ca",
+        "filename": "sw/source/core/doc/SwStyleNameMapper.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 1001838
+      },
+      "writtenOn": "2018-04-03T13:32:13Z",
+      "side": 1,
+      "message": "Ah, this is meant to refer to ENTRY( \"FIGURE\"). I\u0027ll change that",
+      "parentUuid": "9a30ddce_d18dbd7c",
+      "revId": "2ed169258ce099e48f09c557dde74c55b6e8c49a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
