@@ -186,8 +186,7 @@ public:
     {
         ToAllInSection = 0,
         ToFirstPageInSection = 1,
-        ToAllButFirstInSection = 2,
-        ToWholeDocument = 3,
+        ToAllButFirstInSection = 2
     };
     enum class BorderOffsetFrom
     {
