@@ -51,7 +51,6 @@
 #include <uielement/newmenucontroller.hxx>
 #include <uielement/toolbarmodemenucontroller.hxx>
 #include <uielement/toolbarsmenucontroller.hxx>
-#include <uielement/notebookbarmenucontroller.hxx>
 
 COMPONENTGETFACTORY ( fwl,
                         IFFACTORY( ::framework::MediaTypeDetectionHelper                )
