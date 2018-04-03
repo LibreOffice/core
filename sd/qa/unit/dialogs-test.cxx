@@ -283,8 +283,9 @@ VclPtr<VclAbstractDialog> SdDialogsTest::createDialogByID(sal_uInt32 nID)
             // there is no object selected that can be broken up. For better
             // results it might be necessary to add/select an object that
             // delivers a good metafile (which is the base for breaking)
+            auto const parent = Application::GetDefDialogParent();
             pRetval = getSdAbstractDialogFactory()->CreateBreakDlg(
-                Application::GetDefDialogParent(),
+                parent == nullptr ? nullptr : parent->GetFrameWeld(),
                 getDrawView(),
                 getDocShell(),
                 0,
