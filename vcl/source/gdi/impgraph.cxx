@@ -104,7 +104,8 @@ ImpGraphic::ImpGraphic() :
         meType          ( GraphicType::NONE ),
         mnSizeBytes     ( 0 ),
         mbSwapOut       ( false ),
-        mbDummyContext  ( false )
+        mbDummyContext  ( false ),
+        mnPageNumber(-1)
 {
 }
 
@@ -120,6 +121,7 @@ ImpGraphic::ImpGraphic(const ImpGraphic& rImpGraphic)
     , mbDummyContext(rImpGraphic.mbDummyContext)
     , maVectorGraphicData(rImpGraphic.maVectorGraphicData)
     , mpPdfData(rImpGraphic.mpPdfData)
+    , mnPageNumber(-1)
     , maGraphicExternalLink(rImpGraphic.maGraphicExternalLink)
 {
     if( rImpGraphic.mpGfxLink )
@@ -146,6 +148,7 @@ ImpGraphic::ImpGraphic(ImpGraphic&& rImpGraphic)
     , mbDummyContext(rImpGraphic.mbDummyContext)
     , maVectorGraphicData(std::move(rImpGraphic.maVectorGraphicData))
     , mpPdfData(std::move(rImpGraphic.mpPdfData))
+    , mnPageNumber(-1)
     , maGraphicExternalLink(rImpGraphic.maGraphicExternalLink)
 {
     rImpGraphic.ImplClear();
@@ -157,7 +160,8 @@ ImpGraphic::ImpGraphic( const Bitmap& rBitmap ) :
         meType          ( !rBitmap.IsEmpty() ? GraphicType::Bitmap : GraphicType::NONE ),
         mnSizeBytes     ( 0 ),
         mbSwapOut       ( false ),
-        mbDummyContext  ( false )
+        mbDummyContext  ( false ),
+        mnPageNumber(-1)
 {
 }
 
@@ -166,7 +170,8 @@ ImpGraphic::ImpGraphic( const BitmapEx& rBitmapEx ) :
         meType          ( !rBitmapEx.IsEmpty() ? GraphicType::Bitmap : GraphicType::NONE ),
         mnSizeBytes     ( 0 ),
         mbSwapOut       ( false ),
-        mbDummyContext  ( false )
+        mbDummyContext  ( false ),
+        mnPageNumber(-1)
 {
 }
 
@@ -176,6 +181,7 @@ ImpGraphic::ImpGraphic(const VectorGraphicDataPtr& rVectorGraphicDataPtr)
     mbSwapOut( false ),
     mbDummyContext  ( false ),
     maVectorGraphicData(rVectorGraphicDataPtr)
+    mnPageNumber(-1)
 {
 }
 
@@ -185,7 +191,8 @@ ImpGraphic::ImpGraphic( const Animation& rAnimation ) :
         meType          ( GraphicType::Bitmap ),
         mnSizeBytes     ( 0 ),
         mbSwapOut       ( false ),
-        mbDummyContext  ( false )
+        mbDummyContext  ( false ),
+        mnPageNumber(-1)
 {
 }
 
@@ -194,7 +201,8 @@ ImpGraphic::ImpGraphic( const GDIMetaFile& rMtf ) :
         meType          ( GraphicType::GdiMetafile ),
         mnSizeBytes     ( 0 ),
         mbSwapOut       ( false ),
-        mbDummyContext  ( false )
+        mbDummyContext  ( false ),
+        mnPageNumber(-1)
 {
 }
 
@@ -213,6 +221,7 @@ ImpGraphic& ImpGraphic::operator=( const ImpGraphic& rImpGraphic )
         maSwapInfo = rImpGraphic.maSwapInfo;
         mpContext = rImpGraphic.mpContext;
         mbDummyContext = rImpGraphic.mbDummyContext;
+        mnPageNumber = rImpGraphic.mnPageNumber;
         maGraphicExternalLink = rImpGraphic.maGraphicExternalLink;
 
         mpAnimation.reset();
@@ -250,6 +259,7 @@ ImpGraphic& ImpGraphic::operator=(ImpGraphic&& rImpGraphic)
     maSwapInfo = std::move(rImpGraphic.maSwapInfo);
     mpContext = std::move(rImpGraphic.mpContext);
     mbDummyContext = rImpGraphic.mbDummyContext;
+    mnPageNumber = rImpGraphic.mnPageNumber;
     mpAnimation = std::move(rImpGraphic.mpAnimation);
     maEx = std::move(rImpGraphic.maEx);
     mbSwapOut = rImpGraphic.mbSwapOut;
@@ -261,6 +271,8 @@ ImpGraphic& ImpGraphic::operator=(ImpGraphic&& rImpGraphic)
 
     rImpGraphic.ImplClear();
     rImpGraphic.mbDummyContext = false;
+
+    rImpGraphic.mnPageNumber = -1;
 
     return *this;
 }

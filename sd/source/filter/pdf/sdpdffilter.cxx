@@ -123,6 +123,7 @@ bool SdPdfFilter::Import()
         // Create the Graphic and link the original PDF stream.
         Graphic aGraphic(aBitmap);
         aGraphic.setPdfData(pPdfData);
+        aGraphic.setPageNumber(nPageNumber);
         aGraphic.SetLink(aGfxLink);
         aGraphic.setOriginURL(aFileName);
 
