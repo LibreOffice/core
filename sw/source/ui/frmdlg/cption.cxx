@@ -41,6 +41,7 @@
 #include <com/sun/star/text/XTextFramesSupplier.hpp>
 #include <com/sun/star/text/XTextFrame.hpp>
 #include <comphelper/string.hxx>
+#include <vcl/weld.hxx>
 #include <initui.hxx>
 #include <globals.hrc>
 #include <strings.hrc>
@@ -48,36 +49,41 @@
 
 using namespace ::com::sun::star;
 
-class SwSequenceOptionDialog : public SvxStandardDialog
+class SwSequenceOptionDialog : public weld::GenericDialogController
 {
-    VclPtr<ListBox>        m_pLbLevel;
-    VclPtr<Edit>           m_pEdDelim;
+    SwView&         m_rView;
+    OUString        m_aFieldTypeName;
 
-    VclPtr<ListBox>        m_pLbCharStyle;
-    VclPtr<CheckBox>       m_pApplyBorderAndShadowCB;
+    std::unique_ptr<weld::ComboBoxText> m_xLbLevel;
+    std::unique_ptr<weld::Entry> m_xEdDelim;
+
+    std::unique_ptr<weld::ComboBoxText> m_xLbCharStyle;
+    std::unique_ptr<weld::CheckButton> m_xApplyBorderAndShadowCB;
 
     //#i61007# order of captions
-    VclPtr<ListBox>        m_pLbCaptionOrder;
-
-    SwView&         rView;
-    OUString        aFieldTypeName;
+    std::unique_ptr<weld::ComboBoxText> m_xLbCaptionOrder;
 
 public:
-    SwSequenceOptionDialog( vcl::Window *pParent, SwView &rV,
-                            const OUString& rSeqFieldType );
-    virtual ~SwSequenceOptionDialog() override;
-    virtual void dispose() override;
-    virtual void Apply() override;
+    SwSequenceOptionDialog(weld::Window *pParent, SwView &rV, const OUString& rSeqFieldType);
+    void Apply();
 
-    bool IsApplyBorderAndShadow() { return m_pApplyBorderAndShadowCB->IsChecked(); }
-    void SetApplyBorderAndShadow( bool bSet )  { m_pApplyBorderAndShadowCB->Check(bSet); }
+    bool IsApplyBorderAndShadow() { return m_xApplyBorderAndShadowCB->get_active(); }
+    void SetApplyBorderAndShadow( bool bSet )  { m_xApplyBorderAndShadowCB->set_active(bSet); }
 
     //#i61007# order of captions
-    bool IsOrderNumberingFirst() const {return m_pLbCaptionOrder->GetSelectedEntryPos() == 1;}
-    void SetOrderNumberingFirst(bool bSet) { m_pLbCaptionOrder->SelectEntryPos( bSet ? 1 : 0 ); }
+    bool IsOrderNumberingFirst() const { return m_xLbCaptionOrder->get_active() == 1; }
+    void SetOrderNumberingFirst(bool bSet) { m_xLbCaptionOrder->set_active(bSet ? 1 : 0); }
 
     void      SetCharacterStyle(const OUString& rStyle);
     OUString  GetCharacterStyle() const;
+
+    short execute()
+    {
+        int nRet = run();
+        if (nRet == RET_OK)
+            Apply();
+        return nRet;
+    }
 };
 
 OUString SwCaptionDialog::our_aSepTextSave(": "); // Caption separator text
@@ -285,22 +291,22 @@ void SwCaptionDialog::Apply()
     our_aSepTextSave = m_pSepEdit->GetText();
 }
 
-IMPL_LINK( SwCaptionDialog, OptionHdl, Button*, pButton, void )
+IMPL_LINK_NOARG( SwCaptionDialog, OptionHdl, Button*, void )
 {
     OUString sFieldTypeName = m_pCategoryBox->GetText();
     if(sFieldTypeName == m_sNone)
         sFieldTypeName.clear();
-    ScopedVclPtrInstance< SwSequenceOptionDialog > aDlg( pButton, rView, sFieldTypeName );
-    aDlg->SetApplyBorderAndShadow(bCopyAttributes);
-    aDlg->SetCharacterStyle( sCharacterStyle );
-    aDlg->SetOrderNumberingFirst( bOrderNumberingFirst );
-    aDlg->Execute();
-    bCopyAttributes = aDlg->IsApplyBorderAndShadow();
-    sCharacterStyle = aDlg->GetCharacterStyle();
+    SwSequenceOptionDialog aDlg(GetFrameWeld(), rView, sFieldTypeName);
+    aDlg.SetApplyBorderAndShadow(bCopyAttributes);
+    aDlg.SetCharacterStyle( sCharacterStyle );
+    aDlg.SetOrderNumberingFirst( bOrderNumberingFirst );
+    aDlg.execute();
+    bCopyAttributes = aDlg.IsApplyBorderAndShadow();
+    sCharacterStyle = aDlg.GetCharacterStyle();
     //#i61007# order of captions
-    if( bOrderNumberingFirst != aDlg->IsOrderNumberingFirst() )
+    if( bOrderNumberingFirst != aDlg.IsOrderNumberingFirst() )
     {
-        bOrderNumberingFirst = aDlg->IsOrderNumberingFirst();
+        bOrderNumberingFirst = aDlg.IsOrderNumberingFirst();
         SW_MOD()->GetModuleConfig()->SetCaptionOrderNumberingFirst(bOrderNumberingFirst);
         ApplyCaptionOrder();
     }
@@ -433,28 +439,26 @@ void SwCaptionDialog::dispose()
     SvxStandardDialog::dispose();
 }
 
-SwSequenceOptionDialog::SwSequenceOptionDialog( vcl::Window *pParent, SwView &rV,
-                                            const OUString& rSeqFieldType )
-    : SvxStandardDialog( pParent, "CaptionOptionsDialog", "modules/swriter/ui/captionoptions.ui" ),
-    rView( rV ),
-    aFieldTypeName( rSeqFieldType )
+SwSequenceOptionDialog::SwSequenceOptionDialog(weld::Window *pParent, SwView &rV, const OUString& rSeqFieldType )
+    : GenericDialogController(pParent, "modules/swriter/ui/captionoptions.ui", "CaptionOptionsDialog")
+    , m_rView(rV)
+    , m_aFieldTypeName(rSeqFieldType)
+    , m_xLbLevel(m_xBuilder->weld_combo_box_text("level"))
+    , m_xEdDelim(m_xBuilder->weld_entry("separator"))
+    , m_xLbCharStyle(m_xBuilder->weld_combo_box_text("style"))
+    , m_xApplyBorderAndShadowCB(m_xBuilder->weld_check_button("border_and_shadow"))
+    , m_xLbCaptionOrder(m_xBuilder->weld_combo_box_text("caption_order"))
 {
-    get(m_pLbLevel, "level");
-    get(m_pEdDelim, "separator");
-    get(m_pLbCharStyle, "style");
-    get(m_pApplyBorderAndShadowCB, "border_and_shadow");
-    get(m_pLbCaptionOrder, "caption_order");
-
-    SwWrtShell &rSh = rView.GetWrtShell();
+    SwWrtShell &rSh = m_rView.GetWrtShell();
 
     const OUString sNone(SwResId(SW_STR_NONE));
 
-    m_pLbLevel->InsertEntry(sNone);
-    for( sal_uInt16 n = 0; n < MAXLEVEL; ++n )
-        m_pLbLevel->InsertEntry( OUString::number(n+1) );
+    m_xLbLevel->append_text(sNone);
+    for (sal_uInt16 n = 0; n < MAXLEVEL; ++n)
+        m_xLbLevel->append_text(OUString::number(n + 1));
 
     SwSetExpFieldType* pFieldType = static_cast<SwSetExpFieldType*>(rSh.GetFieldType(
-                                        SwFieldIds::SetExp, aFieldTypeName ));
+                                        SwFieldIds::SetExp, m_aFieldTypeName ));
 
     sal_Unicode nLvl = MAXLEVEL;
     OUString sDelim(": ");
@@ -464,38 +468,22 @@ SwSequenceOptionDialog::SwSequenceOptionDialog( vcl::Window *pParent, SwView &rV
         nLvl = pFieldType->GetOutlineLvl();
     }
 
-    m_pLbLevel->SelectEntryPos( nLvl < MAXLEVEL ? nLvl + 1 : 0 );
-    m_pEdDelim->SetText(sDelim);
+    m_xLbLevel->set_active(nLvl < MAXLEVEL ? nLvl + 1 : 0);
+    m_xEdDelim->set_text(sDelim);
 
-    m_pLbCharStyle->InsertEntry(sNone);
-    ::FillCharStyleListBox( *m_pLbCharStyle, rView.GetDocShell(), true, true );
-    m_pLbCharStyle->SelectEntryPos( 0 );
+    m_xLbCharStyle->append_text(sNone);
+    ::FillCharStyleListBox(*m_xLbCharStyle, m_rView.GetDocShell(), true, true);
+    m_xLbCharStyle->set_active(0);
 }
-
-SwSequenceOptionDialog::~SwSequenceOptionDialog()
-{
-    disposeOnce();
-}
-
-void SwSequenceOptionDialog::dispose()
-{
-    m_pLbLevel.clear();
-    m_pEdDelim.clear();
-    m_pLbCharStyle.clear();
-    m_pApplyBorderAndShadowCB.clear();
-    m_pLbCaptionOrder.clear();
-    SvxStandardDialog::dispose();
-}
-
 
 void SwSequenceOptionDialog::Apply()
 {
-    SwWrtShell &rSh = rView.GetWrtShell();
+    SwWrtShell &rSh = m_rView.GetWrtShell();
     SwSetExpFieldType* pFieldType = static_cast<SwSetExpFieldType*>(rSh.GetFieldType(
-                                        SwFieldIds::SetExp, aFieldTypeName ));
+                                        SwFieldIds::SetExp, m_aFieldTypeName ));
 
-    sal_Int8 nLvl = static_cast<sal_Int8>( m_pLbLevel->GetSelectedEntryPos() - 1);
-    sal_Unicode cDelim = m_pEdDelim->GetText()[0];
+    sal_Int8 nLvl = static_cast<sal_Int8>(m_xLbLevel->get_active() - 1);
+    sal_Unicode cDelim = m_xEdDelim->get_text()[0];
 
     bool bUpdate = true;
     if( pFieldType )
@@ -503,10 +491,10 @@ void SwSequenceOptionDialog::Apply()
         pFieldType->SetDelimiter( OUString(cDelim) );
         pFieldType->SetOutlineLvl( nLvl );
     }
-    else if( !aFieldTypeName.isEmpty() && nLvl < MAXLEVEL )
+    else if( !m_aFieldTypeName.isEmpty() && nLvl < MAXLEVEL )
     {
         // then we have to insert that
-        SwSetExpFieldType aFieldType( rSh.GetDoc(), aFieldTypeName, nsSwGetSetExpType::GSE_SEQ );
+        SwSetExpFieldType aFieldType( rSh.GetDoc(), m_aFieldTypeName, nsSwGetSetExpType::GSE_SEQ );
         aFieldType.SetDelimiter( OUString(cDelim) );
         aFieldType.SetOutlineLvl( nLvl );
         rSh.InsertFieldType( aFieldType );
@@ -520,15 +508,18 @@ void SwSequenceOptionDialog::Apply()
 
 OUString  SwSequenceOptionDialog::GetCharacterStyle() const
 {
-    if(m_pLbCharStyle->GetSelectedEntryPos())
-        return m_pLbCharStyle->GetSelectedEntry();
+    if (m_xLbCharStyle->get_active() != -1)
+        return m_xLbCharStyle->get_active_text();
     return OUString();
 }
 
-void    SwSequenceOptionDialog::SetCharacterStyle(const OUString& rStyle)
+void SwSequenceOptionDialog::SetCharacterStyle(const OUString& rStyle)
 {
-    m_pLbCharStyle->SelectEntryPos(0);
-    m_pLbCharStyle->SelectEntry(rStyle);
+    const int nPos = m_xLbCharStyle->find_text(rStyle);
+    if (nPos == -1)
+        m_xLbCharStyle->set_active(0);
+    else
+        m_xLbCharStyle->set_active(nPos);
 }
 
 // #i61007# order of captions

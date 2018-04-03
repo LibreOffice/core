@@ -158,7 +158,7 @@ SwBreakDlg::SwBreakDlg(weld::Window *pParent, SwWrtShell &rS)
     for (size_t i = 0; i < nCount; ++i)
     {
         const SwPageDesc &rPageDesc = rSh.GetPageDesc(i);
-        ::InsertStringSorted(rPageDesc.GetName(), *m_xPageCollBox, 1 );
+        ::InsertStringSorted("", rPageDesc.GetName(), *m_xPageCollBox, 1 );
     }
 
     OUString aFormatName;
@@ -166,12 +166,12 @@ SwBreakDlg::SwBreakDlg(weld::Window *pParent, SwWrtShell &rS)
     {
         aFormatName = SwStyleNameMapper::GetUIName( i, aFormatName );
         if (m_xPageCollBox->find_text(aFormatName) == -1)
-            ::InsertStringSorted(aFormatName, *m_xPageCollBox, 1 );
+            ::InsertStringSorted("", aFormatName, *m_xPageCollBox, 1 );
     }
     //add landscape page
     aFormatName = SwStyleNameMapper::GetUIName( RES_POOLPAGE_LANDSCAPE, aFormatName );
     if (m_xPageCollBox->find_text(aFormatName) == -1)
-        ::InsertStringSorted(aFormatName, *m_xPageCollBox, 1);
+        ::InsertStringSorted("", aFormatName, *m_xPageCollBox, 1);
     CheckEnable();
     m_xPageNumEdit->set_text(OUString());
 }

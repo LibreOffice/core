@@ -678,7 +678,7 @@ sal_Int32 InsertStringSorted(const OUString& rEntry, ListBox& rToFill, sal_Int32
     return rToFill.InsertEntry(rEntry, nOffset);
 }
 
-void InsertStringSorted(const OUString& rEntry, weld::ComboBoxText& rToFill, int nOffset)
+void InsertStringSorted(const OUString& rId, const OUString& rEntry, weld::ComboBoxText& rToFill, int nOffset)
 {
     CollatorWrapper& rCaseColl = ::GetAppCaseCollator();
     const int nCount = rToFill.get_count();
@@ -688,7 +688,7 @@ void InsertStringSorted(const OUString& rEntry, weld::ComboBoxText& rToFill, int
             break;
         ++nOffset;
     }
-    rToFill.insert_text(nOffset, rEntry);
+    rToFill.insert(nOffset, rId, rEntry);
 }
 
 void FillCharStyleListBox(ListBox& rToFill, SwDocShell* pDocSh, bool bSorted, bool bWithDefault)
@@ -726,6 +726,47 @@ void FillCharStyleListBox(ListBox& rToFill, SwDocShell* pDocSh, bool bSorted, bo
                 ? InsertStringSorted(rName, rToFill, nOffset )
                 : rToFill.InsertEntry(rName);
             rToFill.SetEntryData( nPos, reinterpret_cast<void*>(USHRT_MAX));
+        }
+    }
+};
+
+void FillCharStyleListBox(weld::ComboBoxText& rToFill, SwDocShell* pDocSh, bool bSorted, bool bWithDefault)
+{
+    const int nOffset = rToFill.get_count() > 0 ? 1 : 0;
+    SfxStyleSheetBasePool* pPool = pDocSh->GetStyleSheetPool();
+    pPool->SetSearchMask(SfxStyleFamily::Char);
+    SwDoc* pDoc = pDocSh->GetDoc();
+    const SfxStyleSheetBase* pBase = pPool->First();
+    OUString sStandard;
+    SwStyleNameMapper::FillUIName( RES_POOLCOLL_STANDARD, sStandard );
+    while(pBase)
+    {
+        if(bWithDefault || pBase->GetName() !=  sStandard)
+        {
+            sal_IntPtr nPoolId = SwStyleNameMapper::GetPoolIdFromUIName( pBase->GetName(), SwGetPoolIdFromName::ChrFmt );
+            OUString sId(OUString::number(nPoolId));
+            if (bSorted)
+                InsertStringSorted(sId, pBase->GetName(), rToFill, nOffset);
+            else
+                rToFill.append(sId, pBase->GetName());
+        }
+        pBase = pPool->Next();
+    }
+    // non-pool styles
+    const SwCharFormats* pFormats = pDoc->GetCharFormats();
+    for(size_t i = 0; i < pFormats->size(); ++i)
+    {
+        const SwCharFormat* pFormat = (*pFormats)[i];
+        if(pFormat->IsDefault())
+            continue;
+        const OUString& rName = pFormat->GetName();
+        if (rToFill.find_text(rName) == -1)
+        {
+            OUString sId(OUString::number(USHRT_MAX));
+            if (bSorted)
+                InsertStringSorted(sId, rName, rToFill, nOffset);
+            else
+                rToFill.append(sId, rName);
         }
     }
 };
