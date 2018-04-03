@@ -443,6 +443,32 @@ static void lcl_copyFlatten(RTFReferenceProperties& rProps, RTFSprms& rStyleAttr
 writerfilter::Reference<Properties>::Pointer_t
 RTFDocumentImpl::getProperties(RTFSprms& rAttributes, RTFSprms& rSprms, Id nStyleType)
 {
+    RTFSprms aSprms(rSprms);
+    RTFValue::Pointer_t pAbstractList;
+    int nAbstractListId = -1;
+    RTFValue::Pointer_t pNumId
+        = getNestedSprm(aSprms, NS_ooxml::LN_CT_PPrBase_numPr, NS_ooxml::LN_CT_NumPr_numId);
+    if (pNumId)
+    {
+        // We have a numbering, look up the abstract list for property
+        // deduplication and duplication.
+        auto itNumId = m_aListOverrideTable.find(pNumId->getInt());
+        if (itNumId != m_aListOverrideTable.end())
+        {
+            nAbstractListId = itNumId->second;
+            auto itAbstract = m_aListTable.find(nAbstractListId);
+            if (itAbstract != m_aListTable.end())
+                pAbstractList = itAbstract->second;
+        }
+    }
+
+    if (pAbstractList)
+    {
+        auto it = m_aInvalidListTableFirstIndents.find(nAbstractListId);
+        if (it != m_aInvalidListTableFirstIndents.end())
+            aSprms.deduplicateList(it->second);
+    }
+
     int nStyle = 0;
     if (!m_aStates.empty())
         nStyle = m_aStates.top().nCurrentStyleIndex;
@@ -476,26 +502,13 @@ RTFDocumentImpl::getProperties(RTFSprms& rAttributes, RTFSprms& rSprms, Id nStyl
         }
 
         // Get rid of direct formatting what is already in the style.
-        RTFSprms const sprms(rSprms.cloneAndDeduplicate(aStyleSprms));
+        RTFSprms const sprms(aSprms.cloneAndDeduplicate(aStyleSprms));
         RTFSprms const attributes(rAttributes.cloneAndDeduplicate(aStyleAttributes));
         return std::make_shared<RTFReferenceProperties>(attributes, sprms);
     }
 
-    RTFSprms aSprms(rSprms);
-    RTFValue::Pointer_t pNumId
-        = getNestedSprm(aSprms, NS_ooxml::LN_CT_PPrBase_numPr, NS_ooxml::LN_CT_NumPr_numId);
-    if (pNumId)
-    {
-        // We have a numbering, see if defaults has to be inserted for not
-        // repeated direct formatting.
-        auto itNumId = m_aListOverrideTable.find(pNumId->getInt());
-        if (itNumId != m_aListOverrideTable.end())
-        {
-            auto itAbstract = m_aListTable.find(itNumId->second);
-            if (itAbstract != m_aListTable.end())
-                aSprms.duplicateList(itAbstract->second);
-        }
-    }
+    if (pAbstractList)
+        aSprms.duplicateList(pAbstractList);
     writerfilter::Reference<Properties>::Pointer_t pRet
         = std::make_shared<RTFReferenceProperties>(rAttributes, aSprms);
     return pRet;
@@ -3023,6 +3036,10 @@ RTFError RTFDocumentImpl::popState()
             m_aListTableSprms.set(NS_ooxml::LN_CT_Numbering_abstractNum, pValue,
                                   RTFOverwrite::NO_APPEND);
             m_aListTable[aState.nCurrentListIndex] = pValue;
+            m_nListLevel = -1;
+            m_aInvalidListTableFirstIndents[aState.nCurrentListIndex]
+                = m_aInvalidListLevelFirstIndents;
+            m_aInvalidListLevelFirstIndents.clear();
         }
         break;
         case Destination::PARAGRAPHNUMBERING:

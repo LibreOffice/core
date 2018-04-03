@@ -13,6 +13,7 @@
 #include <string>
 #include <utility>
 #include <vector>
+#include <map>
 
 #include <tools/ref.hxx>
 #include "rtfvalue.hxx"
@@ -58,6 +59,8 @@ public:
     RTFSprms cloneAndDeduplicate(RTFSprms& rReference) const;
     /// Inserts default values to override attributes of pAbstract.
     void duplicateList(RTFValue::Pointer_t pAbstract);
+    /// Removes duplicated values based on in-list properties.
+    void deduplicateList(const std::map<int, int>& rInvalidListLevelFirstIndents);
     std::size_t size() const { return m_pSprms->size(); }
     bool empty() const { return m_pSprms->empty(); }
     Entry_t& back() { return m_pSprms->back(); }

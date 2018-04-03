@@ -1477,6 +1477,8 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                 if (m_aStates.top().bLevelNumbersValid)
                     putNestedAttribute(m_aStates.top().aTableSprms, NS_ooxml::LN_CT_PPrBase_ind,
                                        NS_ooxml::LN_CT_Ind_firstLine, pIntValue);
+                else
+                    m_aInvalidListLevelFirstIndents[m_nListLevel] = nParam;
             }
             else
                 putNestedAttribute(m_aStates.top().aParagraphSprms, NS_ooxml::LN_CT_PPrBase_ind,

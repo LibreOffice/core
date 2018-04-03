@@ -636,6 +636,14 @@ DECLARE_RTFIMPORT_TEST(testTdf116269, "tdf116269.rtf")
                          getProperty<sal_Int32>(getParagraph(1), "ParaLeftMargin"));
 }
 
+DECLARE_RTFIMPORT_TEST(testTdf116265, "tdf116265.rtf")
+{
+    // This was -635, \fi as direct formatting has to be ignored due to
+    // matching \fi in list definition (and with invalid level numbers).
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0),
+                         getProperty<sal_Int32>(getParagraph(2), "ParaFirstLineIndent"));
+}
+
 DECLARE_RTFIMPORT_TEST(testFdo66565, "fdo66565.rtf")
 {
     uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);

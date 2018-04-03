@@ -140,6 +140,7 @@ RTFError RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
                 break;
             case RTF_LISTLEVEL:
                 m_aStates.top().eDestination = Destination::LISTLEVEL;
+                ++m_nListLevel;
                 break;
             case RTF_LEVELTEXT:
                 m_aStates.top().eDestination = Destination::LEVELTEXT;
