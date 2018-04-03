@@ -1,0 +1,64 @@
+---
+assumeFilename: sw/source/core/doc/docnew.cxx
+blacklist:
+    sw/inc/extinput.hxx:
+    - vector
+    sw/inc/fmtmeta.hxx:
+    - vector
+    sw/inc/istyleaccess.hxx:
+    - vector
+    sw/inc/shellres.hxx:
+    - memory
+    sw/inc/docary.hxx:
+    # Complete type is needed here:
+    # fldbas.hxx brings in SwTOXType, which is needed by SwTOXTypes, as SwVectorModifyBase's dtor wants to delete it
+    - fldbas.hxx
+    # numrule.hxx brings in SwNumRule, which is needed by SwNumRuleTable, as SwVectorModifyBase's dtor wants to delete it
+    - numrule.hxx
+    # tox.hxx brings in SwTOXType, which is needed by SwTOXTypes, as SwVectorModifyBase's dtor wants to delete it
+    - tox.hxx
+    sw/inc/docfac.hxx:
+    # Complete type is needed by rtl::Reference<SwDoc>.
+    - doc.hxx
+    sw/inc/accmap.hxx:
+    - o3tl/typed_flags_set.hxx
+    sw/inc/crsrsh.hxx:
+    - o3tl/typed_flags_set.hxx
+    sw/inc/cshtyp.hxx:
+    - o3tl/typed_flags_set.hxx
+    sw/inc/fesh.hxx:
+    - o3tl/typed_flags_set.hxx
+    sw/inc/modcfg.hxx:
+    - o3tl/typed_flags_set.hxx
+    sw/inc/ndtyp.hxx:
+    - o3tl/typed_flags_set.hxx
+    sw/inc/swtypes.hxx:
+    - o3tl/typed_flags_set.hxx
+    sw/inc/doc.hxx:
+    - o3tl/deleter.hxx
+    sw/inc/list.hxx:
+    - o3tl/deleter.hxx
+    sw/inc/IDocumentLinksAdministration.hxx:
+    - sal/types.h
+    sw/inc/pagedesc.hxx:
+    - boost/multi_index/identity.hpp
+    sw/inc/rdfhelper.hxx:
+    - com/sun/star/uno/Reference.h
+    sw/inc/ring.hxx:
+    - utility
+    sw/inc/shellid.hxx:
+    - sfx2/shell.hxx
+    sw/inc/swurl.hxx:
+    - o3tl/typed_flags_set.hxx
+    sw/inc/tblenum.hxx:
+    - o3tl/typed_flags_set.hxx
+    sw/inc/tox.hxx:
+    - o3tl/typed_flags_set.hxx
+    sw/inc/undobj.hxx:
+    - o3tl/typed_flags_set.hxx
+    sw/inc/unosett.hxx:
+    # sw::UnoImplPtr typedef
+    - unobaseclass.hxx
+    sw/inc/unotxdoc.hxx:
+    # sw::UnoImplPtr typedef
+    - unobaseclass.hxx

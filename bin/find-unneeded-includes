@@ -1,0 +1,233 @@
+#!/usr/bin/env python3
+#
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+#
+# This parses the output of 'include-what-you-use', focusing on just removing
+# not needed includes and providing a relatively conservative output by
+# filtering out a number of LibreOffice-specific false positives.
+#
+# It assumes you have a 'compile_commands.json' around (similar to clang-tidy),
+# you can generate one with 'make vim-ide-integration'.
+#
+# Design goals:
+# - blacklist mechanism, so a warning is either fixed or blacklisted
+# - works in a plugins-enabled clang build
+# - no custom configure options required
+# - no need to generate a dummy library to build a header
+
+import glob
+import json
+import multiprocessing
+import os
+import queue
+import re
+import subprocess
+import sys
+import threading
+import yaml
+
+
+def ignoreRemoval(include, toAdd, absFileName, moduleRules):
+    # global rules
+
+    # Avoid replacing .hpp with .hdl in the com::sun::star namespace.
+    if include.startswith("com/sun/star") and include.endswith(".hpp"):
+        hdl = include.replace(".hpp", ".hdl")
+        if hdl in toAdd:
+            return True
+
+    # Avoid debug STL.
+    debugStl = {
+        "array": "debug/array",
+        "deque": "debug/deque",
+        "list": "debug/list",
+        "map": "debug/map.h",
+        "set": "debug/set.h",
+        "unordered_map": "debug/unordered_map",
+        "unordered_set": "debug/unordered_set",
+        "vector": "debug/vector",
+    }
+    for k, v in debugStl.items():
+        if include == k and v in toAdd:
+            return True
+
+    # Follow boost documentation.
+    if include == "boost/optional.hpp" and "boost/optional/optional.hpp" in toAdd:
+        return True
+    if include == "boost/intrusive_ptr.hpp" and "boost/smart_ptr/intrusive_ptr.hpp" in toAdd:
+        return True
+
+    # 3rd-party, non-self-contained headers.
+    if include == "libepubgen/libepubgen.h" and "libepubgen/libepubgen-decls.h" in toAdd:
+        return True
+    if include == "librevenge/librevenge.h" and "librevenge/RVNGPropertyList.h" in toAdd:
+        return True
+
+    noRemove = (
+        # <https://www.openoffice.org/tools/CodingGuidelines.sxw> insists on not
+        # removing this.
+        "sal/config.h",
+        # Works around a build breakage specific to the broken Android
+        # toolchain.
+        "android/compatibility.hxx",
+    )
+    if include in noRemove:
+        return True
+
+    # Ignore when <foo> is to be replaced with "foo".
+    if include in toAdd:
+        return True
+
+    fileName = os.path.relpath(absFileName, os.getcwd())
+
+    # yaml rules
+
+    if "blacklist" in moduleRules.keys():
+        blacklistRules = moduleRules["blacklist"]
+        if fileName in blacklistRules.keys():
+            if include in blacklistRules[fileName]:
+                return True
+
+    return False
+
+
+def unwrapInclude(include):
+    # Drop <> or "" around the include.
+    return include[1:-1]
+
+
+def processIWYUOutput(iwyuOutput, moduleRules):
+    inAdd = False
+    toAdd = []
+    inRemove = False
+    toRemove = []
+    currentFileName = None
+    for line in iwyuOutput:
+        line = line.strip()
+
+        if len(line) == 0:
+            if inRemove:
+                inRemove = False
+                continue
+            if inAdd:
+                inAdd = False
+                continue
+
+        match = re.match("(.*) should add these lines:$", line)
+        if match:
+            currrentFileName = match.group(1)
+            inAdd = True
+            continue
+
+        match = re.match("(.*) should remove these lines:$", line)
+        if match:
+            currentFileName = match.group(1)
+            inRemove = True
+            continue
+
+        if inAdd:
+            match = re.match('#include ([^ ]+)', line)
+            if match:
+                include = unwrapInclude(match.group(1))
+                toAdd.append(include)
+            else:
+                # Forward declaration.
+                toAdd.append(line)
+
+        if inRemove:
+            match = re.match("- #include (.*)  // lines (.*)-.*", line)
+            if match:
+                include = unwrapInclude(match.group(1))
+                lineno = match.group(2)
+                if not ignoreRemoval(include, toAdd, currentFileName, moduleRules):
+                    toRemove.append("%s:%s: %s" % (currentFileName, lineno, include))
+                continue
+
+    for remove in toRemove:
+        print("ERROR: %s: remove not needed include" % remove)
+    return len(toRemove)
+
+
+def run_tool(task_queue, failed_files):
+    while True:
+        invocation, moduleRules = task_queue.get()
+        if not len(failed_files):
+            print("[IWYU] " + invocation.split(' ')[-1])
+            p = subprocess.Popen(invocation, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+            retcode = processIWYUOutput(p.communicate()[0].decode('utf-8').splitlines(), moduleRules)
+            if retcode != 0:
+                print("ERROR: '" + invocation + "' found unused includes.")
+                failed_files.append(invocation)
+        task_queue.task_done()
+
+
+def tidy(compileCommands, paths):
+    return_code = 0
+    try:
+        max_task = multiprocessing.cpu_count()
+        task_queue = queue.Queue(max_task)
+        failed_files = []
+        for _ in range(max_task):
+            t = threading.Thread(target=run_tool, args=(task_queue, failed_files))
+            t.daemon = True
+            t.start()
+
+        for path in sorted(paths):
+            moduleName = path.split("/")[0]
+
+            rulePath = os.path.join(moduleName, "IwyuFilter_" + moduleName + ".yaml")
+            moduleRules = {}
+            if os.path.exists(rulePath):
+                moduleRules = yaml.load(open(rulePath))
+            assume = None
+            pathAbs = os.path.abspath(path)
+            compileFile = pathAbs
+            matches = [i for i in compileCommands if i["file"] == compileFile]
+            if not len(matches):
+                if "assumeFilename" in moduleRules.keys():
+                    assume = moduleRules["assumeFilename"]
+                if assume:
+                    assumeAbs = os.path.abspath(assume)
+                    compileFile = assumeAbs
+                    matches = [i for i in compileCommands if i["file"] == compileFile]
+                    if not len(matches):
+                        print("WARNING: no compile commands for '" + path + "' (assumed filename: '" + assume + "'")
+                        continue
+                else:
+                    print("WARNING: no compile commands for '" + path + "'")
+                    continue
+
+            _, _, args = matches[0]["command"].partition(" ")
+            if assume:
+                args = args.replace(assumeAbs, "-x c++ " + pathAbs)
+
+            invocation = "include-what-you-use " + args
+            task_queue.put((invocation, moduleRules))
+
+        task_queue.join()
+        if len(failed_files):
+            return_code = 1
+
+    except KeyboardInterrupt:
+        print('\nCtrl-C detected, goodbye.')
+        os.kill(0, 9)
+
+    sys.exit(return_code)
+
+
+def main(argv):
+    if not len(argv):
+        print("usage: find-unneeded-includes [FILE]...")
+        return
+
+    with open("compile_commands.json", 'r') as compileCommandsSock:
+        compileCommands = json.load(compileCommandsSock)
+
+    tidy(compileCommands, paths=argv)
+
+if __name__ == '__main__':
+    main(sys.argv[1:])
+
+# vim:set shiftwidth=4 softtabstop=4 expandtab:
