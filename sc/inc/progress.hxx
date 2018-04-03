@@ -50,7 +50,7 @@ private:
     static  bool            bIdleWasEnabled;
             bool            bEnabled;
 
-            SfxProgress*    pProgress;
+            std::unique_ptr<SfxProgress> pProgress;
 
                             ScProgress( const ScProgress& ) = delete;
             ScProgress&     operator=( const ScProgress& ) = delete;
