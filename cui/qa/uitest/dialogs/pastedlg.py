@@ -36,8 +36,8 @@ class Test(UITestCase):
             items.append(get_state_as_dict(formats)["SelectEntryText"])
 
         # Make sure there is no RTF vs Richtext duplication.
-        self.assertTrue("Formatted text [RTF]" in items)
-        self.assertFalse("Formatted text [Richtext]" in items)
+        self.assertTrue("Rich text formatting (RTF)" in items)
+        self.assertFalse("Rich text formatting (Richtext)" in items)
 
         # Close the dialog and the document.
         self.ui_test.close_dialog_through_button(pasteSpecial.getChild("cancel"))
