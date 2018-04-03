@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_91ad0534",
+        "filename": "sw/source/core/doc/SwStyleNameMapper.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2018-04-03T13:35:37Z",
+      "side": 1,
+      "message": "Please remove trailing space here.",
+      "revId": "354c59308e8ef62ab2b4bd754a033637619d65b1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
