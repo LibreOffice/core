@@ -9895,6 +9895,8 @@ if test "x$enable_gtk3" = "xyes"; then
     dnl We require egl only for the gtk3 plugin. Otherwise we use glx.
     if test "$with_system_epoxy" != "yes"; then
         AC_CHECK_LIB(EGL, eglMakeCurrent, [:], AC_MSG_ERROR([libEGL required.]))
+        AC_CHECK_HEADER(EGL/eglplatform.h, [],
+                        [AC_MSG_ERROR(EGL headers not found. install mesa-libEGL-devel)], [])
     fi
 fi
 AC_SUBST(GTK3_LIBS)
