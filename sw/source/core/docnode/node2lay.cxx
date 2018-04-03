@@ -36,9 +36,9 @@
  */
 class SwNode2LayImpl
 {
-    SwIterator<SwFrame,SwModify>* pIter;
+    std::unique_ptr<SwIterator<SwFrame,SwModify>> pIter;
     SwModify* pMod;
-    std::vector<SwFrame*>* pUpperFrames; // To collect the Upper
+    std::vector<SwFrame*> mvUpperFrames; // To collect the Upper
     sal_uLong nIndex;        // The Index of the to-be-inserted Nodes
     bool bMaster    : 1; // true => only Master, false => only Frames without Follow
     bool bInit      : 1; // Did we already call First() at SwClient?
@@ -48,7 +48,6 @@ class SwNode2LayImpl
 
 public:
     SwNode2LayImpl( const SwNode& rNode, sal_uLong nIdx, bool bSearch );
-    ~SwNode2LayImpl() { delete pIter; delete pUpperFrames; }
     SwFrame* NextFrame(); // Returns the next "useful" Frame
     SwLayoutFrame* UpperFrame( SwFrame* &rpFrame, const SwNode &rNode );
     void SaveUpperFrames(); // Saves (and locks if needed) the pUpper
@@ -132,7 +131,7 @@ SwNode* GoPreviousWithFrame(SwNodeIndex *pIdx)
  *                          We insert before or after it.
  */
 SwNode2LayImpl::SwNode2LayImpl( const SwNode& rNode, sal_uLong nIdx, bool bSearch )
-    : pUpperFrames( nullptr ), nIndex( nIdx ), bInit( false )
+    : nIndex( nIdx ), bInit( false )
 {
     const SwNode* pNd;
     if( bSearch || rNode.IsSectionNode() )
@@ -170,7 +169,7 @@ SwNode2LayImpl::SwNode2LayImpl( const SwNode& rNode, sal_uLong nIdx, bool bSearc
             OSL_ENSURE( pNd->IsTableNode(), "For Tablenodes only" );
             pMod = pNd->GetTableNode()->GetTable().GetFrameFormat();
         }
-        pIter = new SwIterator<SwFrame,SwModify>( *pMod );
+        pIter.reset(new SwIterator<SwFrame,SwModify>( *pMod ));
     }
     else
     {
@@ -254,7 +253,6 @@ SwFrame* SwNode2LayImpl::NextFrame()
 
 void SwNode2LayImpl::SaveUpperFrames()
 {
-    pUpperFrames = new std::vector<SwFrame*>;
     SwFrame* pFrame;
     while( nullptr != (pFrame = NextFrame()) )
     {
@@ -268,12 +266,11 @@ void SwNode2LayImpl::SaveUpperFrames()
                 pFrame->FindSctFrame()->ColLock();
             if( pPrv && pPrv->IsSctFrame() )
                 static_cast<SwSectionFrame*>(pPrv)->LockJoin();
-            pUpperFrames->push_back( pPrv );
-            pUpperFrames->push_back( pFrame );
+            mvUpperFrames.push_back( pPrv );
+            mvUpperFrames.push_back( pFrame );
         }
     }
-    delete pIter;
-    pIter = nullptr;
+    pIter.reset();
     pMod = nullptr;
 }
 
@@ -339,7 +336,6 @@ SwLayoutFrame* SwNode2LayImpl::UpperFrame( SwFrame* &rpFrame, const SwNode &rNod
 
 void SwNode2LayImpl::RestoreUpperFrames( SwNodes& rNds, sal_uLong nStt, sal_uLong nEnd )
 {
-    OSL_ENSURE( pUpperFrames, "RestoreUpper without SaveUpper?" );
     SwNode* pNd;
     SwDoc *pDoc = rNds.GetDoc();
     bool bFirst = true;
@@ -349,27 +345,27 @@ void SwNode2LayImpl::RestoreUpperFrames( SwNodes& rNds, sal_uLong nStt, sal_uLon
         SwFrame* pNxt;
         SwLayoutFrame* pUp;
         if( (pNd = rNds[nStt])->IsContentNode() )
-            for( std::vector<SwFrame*>::size_type n = 0; n < pUpperFrames->size(); )
+            for( std::vector<SwFrame*>::size_type n = 0; n < mvUpperFrames.size(); )
             {
-                pNxt = (*pUpperFrames)[n++];
+                pNxt = mvUpperFrames[n++];
                 if( bFirst && pNxt && pNxt->IsSctFrame() )
                     static_cast<SwSectionFrame*>(pNxt)->UnlockJoin();
-                pUp = static_cast<SwLayoutFrame*>((*pUpperFrames)[n++]);
+                pUp = static_cast<SwLayoutFrame*>(mvUpperFrames[n++]);
                 if( pNxt )
                     pNxt = pNxt->GetNext();
                 else
                     pNxt = pUp->Lower();
                 pNew = static_cast<SwContentNode*>(pNd)->MakeFrame( pUp );
                 pNew->Paste( pUp, pNxt );
-                (*pUpperFrames)[n-2] = pNew;
+                mvUpperFrames[n-2] = pNew;
             }
         else if( pNd->IsTableNode() )
-            for( std::vector<SwFrame*>::size_type x = 0; x < pUpperFrames->size(); )
+            for( std::vector<SwFrame*>::size_type x = 0; x < mvUpperFrames.size(); )
             {
-                pNxt = (*pUpperFrames)[x++];
+                pNxt = mvUpperFrames[x++];
                 if( bFirst && pNxt && pNxt->IsSctFrame() )
                     static_cast<SwSectionFrame*>(pNxt)->UnlockJoin();
-                pUp = static_cast<SwLayoutFrame*>((*pUpperFrames)[x++]);
+                pUp = static_cast<SwLayoutFrame*>(mvUpperFrames[x++]);
                 if( pNxt )
                     pNxt = pNxt->GetNext();
                 else
@@ -378,28 +374,28 @@ void SwNode2LayImpl::RestoreUpperFrames( SwNodes& rNds, sal_uLong nStt, sal_uLon
                 OSL_ENSURE( pNew->IsTabFrame(), "Table expected" );
                 pNew->Paste( pUp, pNxt );
                 static_cast<SwTabFrame*>(pNew)->RegistFlys();
-                (*pUpperFrames)[x-2] = pNew;
+                mvUpperFrames[x-2] = pNew;
             }
         else if( pNd->IsSectionNode() )
         {
             nStt = pNd->EndOfSectionIndex();
-            for( std::vector<SwFrame*>::size_type x = 0; x < pUpperFrames->size(); )
+            for( std::vector<SwFrame*>::size_type x = 0; x < mvUpperFrames.size(); )
             {
-                pNxt = (*pUpperFrames)[x++];
+                pNxt = mvUpperFrames[x++];
                 if( bFirst && pNxt && pNxt->IsSctFrame() )
                     static_cast<SwSectionFrame*>(pNxt)->UnlockJoin();
-                pUp = static_cast<SwLayoutFrame*>((*pUpperFrames)[x++]);
+                pUp = static_cast<SwLayoutFrame*>(mvUpperFrames[x++]);
                 OSL_ENSURE( pUp->GetUpper() || pUp->IsFlyFrame(), "Lost Upper" );
                 ::InsertCnt_( pUp, pDoc, pNd->GetIndex(), false, nStt+1, pNxt );
                 pNxt = pUp->GetLastLower();
-                (*pUpperFrames)[x-2] = pNxt;
+                mvUpperFrames[x-2] = pNxt;
             }
         }
         bFirst = false;
     }
-    for( std::vector<SwFrame*>::size_type x = 0; x < pUpperFrames->size(); ++x )
+    for( std::vector<SwFrame*>::size_type x = 0; x < mvUpperFrames.size(); ++x )
     {
-        SwFrame* pTmp = (*pUpperFrames)[++x];
+        SwFrame* pTmp = mvUpperFrames[++x];
         if( pTmp->IsFootnoteFrame() )
             static_cast<SwFootnoteFrame*>(pTmp)->ColUnlock();
         else if ( pTmp->IsInSct() )
