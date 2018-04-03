@@ -81,9 +81,9 @@ SwNodes::SwNodes( SwDoc* pDocument )
 
     pTmp = new SwStartNode( *this, nPos++ );
     pTmp->m_pStartOfSection = pSttNd;
-    m_pEndOfContent = new SwEndNode( *this, nPos++, *pTmp );
+    m_pEndOfContent.reset(new SwEndNode( *this, nPos++, *pTmp ));
 
-    m_pOutlineNodes = new SwOutlineNodes;
+    m_pOutlineNodes.reset(new SwOutlineNodes);
 }
 
 /** Destructor
@@ -94,14 +94,14 @@ SwNodes::SwNodes( SwDoc* pDocument )
  */
 SwNodes::~SwNodes()
 {
-    delete m_pOutlineNodes;
+    m_pOutlineNodes.reset();
 
     {
         SwNodeIndex aNdIdx( *this );
         while( true )
         {
             SwNode *pNode = &aNdIdx.GetNode();
-            if( pNode == m_pEndOfContent )
+            if( pNode == m_pEndOfContent.get() )
                 break;
 
             ++aNdIdx;
@@ -110,7 +110,7 @@ SwNodes::~SwNodes()
     }
 
     // here, all SwNodeIndices must be unregistered
-    delete m_pEndOfContent;
+    m_pEndOfContent.reset();
 }
 
 void SwNodes::ChgNode( SwNodeIndex const & rDelPos, sal_uLong nSz,
@@ -1356,7 +1356,7 @@ void SwNodes::DelNodes( const SwNodeIndex & rStart, sal_uLong nCnt )
     {
         // The whole nodes array will be destroyed, you're in the Doc's DTOR!
         // The initial start/end nodes should be only destroyed in the SwNodes' DTOR!
-        SwNode* aEndNdArr[] = { m_pEndOfContent,
+        SwNode* aEndNdArr[] = { m_pEndOfContent.get(),
                                 m_pEndOfPostIts, m_pEndOfInserts,
                                 m_pEndOfAutotext, m_pEndOfRedlines,
                                 nullptr
