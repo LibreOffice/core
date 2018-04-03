@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_11e2f5d5",
+        "filename": "scripting/examples/python/NamedRanges.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2018-04-03T12:13:30Z",
+      "side": 1,
+      "message": "The other option is that you just make this a parameter as well, and then constructing the A1 string is the client\u0027s problem, not your problem. :-)",
+      "revId": "8681d4e27dbd45c4ac904b69795a5ff54e9693f6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
