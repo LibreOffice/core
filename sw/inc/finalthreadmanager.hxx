@@ -73,9 +73,9 @@ private:
     osl::Mutex maMutex;
 
     std::list< css::uno::Reference< css::util::XCancellable > > maThreads;
-    CancelJobsThread* mpCancelJobsThread;
+    std::unique_ptr<CancelJobsThread> mpCancelJobsThread;
     TerminateOfficeThread* mpTerminateOfficeThread;
-    SwPauseThreadStarting* mpPauseThreadStarting;
+    std::unique_ptr<SwPauseThreadStarting> mpPauseThreadStarting;
 
     bool mbRegisteredAtDesktop;
 };
