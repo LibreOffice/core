@@ -96,13 +96,13 @@ private:
     std::unique_ptr<GraphicID>   mpGraphicID;
     GraphicExternalLink          maGraphicExternalLink;
 
+    std::chrono::high_resolution_clock::time_point maLastUsed;
+    bool mbPrepared;
+
     /// Used with GfxLink and/or PdfData when they store original media
     /// which might be multi-page (PDF, f.e.) and we need to re-render
     /// this Graphic (a page) from the source in GfxLink or PdfData.
     sal_Int32                    mnPageNumber;
-
-    std::chrono::high_resolution_clock::time_point maLastUsed;
-    bool mbPrepared;
 
 public:
     ImpGraphic();

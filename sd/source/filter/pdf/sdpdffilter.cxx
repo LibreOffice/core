@@ -123,6 +123,7 @@ bool SdPdfFilter::Import()
         // Create the Graphic and link the original PDF stream.
         Graphic aGraphic(aBitmap);
         aGraphic.setPdfData(std::make_shared<uno::Sequence<sal_Int8>>(aPdfData));
+        aGraphic.setPageNumber(nPageNumber);
         aGraphic.SetLink(aGfxLink);
 
         // Create the page and insert the Graphic.
