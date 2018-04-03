@@ -18,6 +18,7 @@
  */
 
 #include <sal/config.h>
+#include <o3tl/safeint.hxx>
 
 #include <PhysicalFontFace.hxx>
 #include <svdata.hxx>
@@ -62,9 +63,9 @@ FontSelectPatternAttributes::FontSelectPatternAttributes( const vcl::Font& rFont
 
     // normalize width and height
     if( mnHeight < 0 )
-        mnHeight = -mnHeight;
+        mnHeight = o3tl::saturating_toggle_sign(mnHeight);
     if( mnWidth < 0 )
-        mnWidth = -mnWidth;
+        mnWidth = o3tl::saturating_toggle_sign(mnWidth);
 }
 
 
