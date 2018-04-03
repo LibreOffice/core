@@ -94,6 +94,30 @@
     },
     {
       "key": {
+        "uuid": "9a30ddce_4c3a1438",
+        "filename": "sc/inc/strings.hrc",
+        "patchSetId": 2
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2018-04-03T19:17:54Z",
+      "side": 1,
+      "message": "Guess, Calc6 is ODF v1 and Calc8 is v1.2. Kept them to make experts happy that only know calc8 (as it was in the last years).",
+      "parentUuid": "9a30ddce_4cb5b4cb",
+      "range": {
+        "startLine": 27,
+        "startChar": 124,
+        "endLine": 27,
+        "endChar": 129
+      },
+      "revId": "7d29e8f5f43eb930bfc3d8e3ea37fbe96eeaae2d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a30ddce_6cca7851",
         "filename": "sd/inc/strings.hrc",
         "patchSetId": 2
