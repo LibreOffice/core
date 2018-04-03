@@ -89,11 +89,11 @@ void    XFConfigManager::SetEndnoteConfig(XFEndnoteConfig *pENConfig)
 void    XFConfigManager::ToXml(IXFStream *pStrm)
 {
     if( m_pLineNumberConfig )
-        AddStyle(m_pLineNumberConfig.release());
+        AddStyle(std::move(m_pLineNumberConfig));
     if( m_pFootnoteConfig )
-        AddStyle(m_pFootnoteConfig.release());
+        AddStyle(std::move(m_pFootnoteConfig));
     if( m_pEndnoteConfig )
-        AddStyle(m_pEndnoteConfig.release());
+        AddStyle(std::move(m_pEndnoteConfig));
 
     XFStyleContainer::ToXml(pStrm);
     XFStyleContainer::Reset();

@@ -122,83 +122,83 @@ inline void XFDatePart::SetTexture(bool bTexture)
 
 inline void XFDateStyle::AddYear( bool bLongFmt )
 {
-    XFDatePart  *part = new XFDatePart();
+    std::unique_ptr<XFDatePart> part(new XFDatePart());
     part->SetPartType(enumXFDateYear);
     part->SetLongFmt(bLongFmt);
-    m_aParts.AddStyle(part);
+    m_aParts.AddStyle(std::move(part));
 }
 
 inline void XFDateStyle::AddMonth( bool bLongFmt, bool bTexture  )
 {
-    XFDatePart  *part = new XFDatePart();
+    std::unique_ptr<XFDatePart> part(new XFDatePart());
     part->SetPartType(enumXFDateMonth);
     part->SetLongFmt(bLongFmt);
     part->SetTexture(bTexture);
-    m_aParts.AddStyle(part);
+    m_aParts.AddStyle(std::move(part));
 }
 
 inline void XFDateStyle::AddMonthDay( bool bLongFmt )
 {
-    XFDatePart  *part = new XFDatePart();
+    std::unique_ptr<XFDatePart> part(new XFDatePart());
     part->SetPartType(enumXFDateMonthDay);
     part->SetLongFmt(bLongFmt);
-    m_aParts.AddStyle(part);
+    m_aParts.AddStyle(std::move(part));
 }
 
 inline void XFDateStyle::AddWeekDay( bool bLongFmt )
 {
-    XFDatePart  *part = new XFDatePart();
+    std::unique_ptr<XFDatePart> part(new XFDatePart());
     part->SetPartType(enumXFDateWeekDay);
     part->SetLongFmt(bLongFmt);
-    m_aParts.AddStyle(part);
+    m_aParts.AddStyle(std::move(part));
 }
 
 inline void XFDateStyle::AddEra()
 {
-    XFDatePart  *part = new XFDatePart();
+    std::unique_ptr<XFDatePart> part(new XFDatePart());
     part->SetPartType(enumXFDateEra);
     part->SetLongFmt(false);
-    m_aParts.AddStyle(part);
+    m_aParts.AddStyle(std::move(part));
 }
 
 inline void XFDateStyle::AddText( const OUString& text )
 {
-    XFDatePart  *part = new XFDatePart();
+    std::unique_ptr<XFDatePart> part(new XFDatePart());
     part->SetPartType(enumXFDateText);
     part->SetText(text);
-    m_aParts.AddStyle(part);
+    m_aParts.AddStyle(std::move(part));
 }
 
 inline void XFDateStyle::AddHour( bool bLongFmt )
 {
-    XFDatePart  *part = new XFDatePart();
+    std::unique_ptr<XFDatePart> part(new XFDatePart());
     part->SetPartType(enumXFDateHour);
     part->SetLongFmt(bLongFmt);
-    m_aParts.AddStyle(part);
+    m_aParts.AddStyle(std::move(part));
 }
 
 inline void XFDateStyle::AddMinute( bool bLongFmt )
 {
-    XFDatePart  *part = new XFDatePart();
+    std::unique_ptr<XFDatePart> part(new XFDatePart());
     part->SetPartType(enumXFDateMinute);
     part->SetLongFmt(bLongFmt);
-    m_aParts.AddStyle(part);
+    m_aParts.AddStyle(std::move(part));
 }
 
 inline void XFDateStyle::AddSecond( bool bLongFmt )
 {
-    XFDatePart  *part = new XFDatePart();
+    std::unique_ptr<XFDatePart> part(new XFDatePart());
     part->SetPartType(enumXFDateSecond);
     part->SetLongFmt(bLongFmt);
     part->SetDecimalPos(0);
-    m_aParts.AddStyle(part);
+    m_aParts.AddStyle(std::move(part));
 }
 
 inline void XFDateStyle::AddAmPm()
 {
-    XFDatePart  *part = new XFDatePart();
+    std::unique_ptr<XFDatePart> part(new XFDatePart());
     part->SetPartType(enumXFDateAmPm);
-    m_aParts.AddStyle(part);
+    m_aParts.AddStyle(std::move(part));
 }
 
 #endif

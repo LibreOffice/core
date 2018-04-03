@@ -177,7 +177,7 @@ void LwpFribDocVar::RegisterStyle(LwpFoundry* pFoundry)
  */
 void LwpFribDocVar::RegisterDefaultTimeStyle()
 {
-    XFDateStyle* pDateStyle = new XFDateStyle;//use the default format
+    std::unique_ptr<XFDateStyle> pDateStyle(new XFDateStyle);//use the default format
 
     pDateStyle->AddMonth();
     pDateStyle->AddText("/");
@@ -192,15 +192,15 @@ void LwpFribDocVar::RegisterDefaultTimeStyle()
     pDateStyle->AddSecond();
 
     XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
-    m_TimeStyle = pXFStyleManager->AddStyle(pDateStyle).m_pStyle->GetStyleName();
+    m_TimeStyle = pXFStyleManager->AddStyle(std::move(pDateStyle)).m_pStyle->GetStyleName();
 }
 void LwpFribDocVar::RegisterTotalTimeStyle()
 {
-    XFTimeStyle* pTimeStyle = new XFTimeStyle;//use the default format
+    std::unique_ptr<XFTimeStyle> pTimeStyle(new XFTimeStyle);//use the default format
     pTimeStyle->SetTruncate(false);
     pTimeStyle->AddMinute();
     XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
-    m_TimeStyle = pXFStyleManager->AddStyle(pTimeStyle).m_pStyle->GetStyleName();
+    m_TimeStyle = pXFStyleManager->AddStyle(std::move(pTimeStyle)).m_pStyle->GetStyleName();
 }
 
 /**

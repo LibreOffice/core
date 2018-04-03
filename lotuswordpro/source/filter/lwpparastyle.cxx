@@ -673,7 +673,7 @@ void LwpParaStyle::RegisterStyle()
     Apply(xStyle.get());
     //Add style
     LwpStyleManager* pStyleMgr = m_pFoundry->GetStyleManager();
-    pStyleMgr->AddStyle(GetObjectID(), xStyle.release());
+    pStyleMgr->AddStyle(GetObjectID(), std::move(xStyle));
 }
 
 LwpAlignmentOverride* LwpParaStyle::GetAlignment()

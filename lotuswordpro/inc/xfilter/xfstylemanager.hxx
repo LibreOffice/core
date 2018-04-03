@@ -95,7 +95,7 @@ public:
 
     void        AddFontDecl(XFFontDecl const & aFontDecl);
 
-    IXFStyleRet AddStyle(IXFStyle *pStyle);
+    IXFStyleRet AddStyle(std::unique_ptr<IXFStyle> pStyle);
 
     IXFStyle*   FindStyle(const OUString& name);
 

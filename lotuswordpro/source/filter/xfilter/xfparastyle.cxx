@@ -117,8 +117,8 @@ XFParaStyle::XFParaStyle(const XFParaStyle& other)
             const XFTabStyle* pTabStyle = dynamic_cast<const XFTabStyle*>(pStyle);
             if( pTabStyle )
             {
-                XFTabStyle *pCopyStyle = new XFTabStyle(*pTabStyle);
-                m_aTabs.AddStyle(pCopyStyle);
+                std::unique_ptr<XFTabStyle> pCopyStyle(new XFTabStyle(*pTabStyle));
+                m_aTabs.AddStyle(std::move(pCopyStyle));
             }
         }
     }
@@ -171,8 +171,8 @@ XFParaStyle& XFParaStyle::operator=(const XFParaStyle& other)
                 const XFTabStyle *pTabStyle = dynamic_cast<const XFTabStyle*>(pStyle);
                 if( pTabStyle )
                 {
-                    XFTabStyle *pCopyStyle = new XFTabStyle(*pTabStyle);
-                    m_aTabs.AddStyle(pCopyStyle);
+                    std::unique_ptr<XFTabStyle> pCopyStyle(new XFTabStyle(*pTabStyle));
+                    m_aTabs.AddStyle(std::move(pCopyStyle));
                 }
             }
         }
@@ -275,12 +275,12 @@ void    XFParaStyle::SetLineHeight(enumLHType type, double value)
 
 void    XFParaStyle::AddTabStyle(enumXFTab type, double len, sal_Unicode leader, sal_Unicode delimiter)
 {
-    XFTabStyle  *tab = new XFTabStyle();
+    std::unique_ptr<XFTabStyle> tab(new XFTabStyle());
     tab->SetTabType(type);
     tab->SetLength(len);
     tab->SetLeaderChar(leader);
     tab->SetDelimiter(delimiter);
-    m_aTabs.AddStyle(tab);
+    m_aTabs.AddStyle(std::move(tab));
 }
 
 /**

@@ -91,7 +91,7 @@ void LwpVerDocument::Read()
 
 void LwpVerDocument::RegisterStyle()
 {
-    XFDefaultParaStyle* pDefault = new XFDefaultParaStyle;
+    std::unique_ptr<XFDefaultParaStyle> pDefault(new XFDefaultParaStyle);
     double len =static_cast<double>(m_nTabSpacing)/UNITS_PER_INCH*CM_PER_INCH;
     if(len < 0.001)
     {
@@ -99,7 +99,7 @@ void LwpVerDocument::RegisterStyle()
     }
     pDefault->SetTabDistance(len);
     XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
-    pXFStyleManager->AddStyle(pDefault);
+    pXFStyleManager->AddStyle(std::move(pDefault));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

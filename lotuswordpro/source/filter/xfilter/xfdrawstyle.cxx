@@ -104,7 +104,7 @@ void    XFDrawStyle::SetLineDashStyle(enumXFLineStyle style, double len1, double
     m_pLineStyle->SetDot2Length(len2);
     m_pLineStyle->SetSpace(space);
     XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
-    pXFStyleManager->AddStyle(m_pLineStyle);
+    pXFStyleManager->AddStyle(std::unique_ptr<IXFStyle>(m_pLineStyle));
 }
 
 void XFDrawStyle::SetFontWorkStyle(enumXFFWStyle eStyle, enumXFFWAdjust eAdjust)
@@ -143,7 +143,7 @@ void    XFDrawStyle::SetAreaLineStyle(enumXFAreaLineStyle style, sal_Int32 angle
     m_pAreaStyle->SetLineSpace(space);
     m_pAreaStyle->SetLineColor(lineColor);
     XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
-    pXFStyleManager->AddStyle(m_pAreaStyle);
+    pXFStyleManager->AddStyle(std::unique_ptr<IXFStyle>(m_pAreaStyle));
 }
 
 enumXFStyle XFDrawStyle::GetStyleFamily()

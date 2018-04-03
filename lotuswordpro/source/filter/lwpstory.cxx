@@ -466,11 +466,11 @@ OUString LwpStory::RegisterFirstFribStyle()
     XFTextStyle* pBaseStyle = pXFStyleManager->FindTextStyle(pFirstFrib->GetStyleName());
     if (pBaseStyle == nullptr)
         return OUString();
-    XFTextStyle* pStyle = new XFTextStyle;
+    std::unique_ptr<XFTextStyle> pStyle(new XFTextStyle);
     *pStyle = *pBaseStyle;
     OUString sName = "Ruby" + pFirstFrib->GetStyleName();
     pStyle->SetStyleName(sName);
-    pXFStyleManager->AddStyle(pStyle);
+    pXFStyleManager->AddStyle(std::move(pStyle));
     return sName;
 }
 

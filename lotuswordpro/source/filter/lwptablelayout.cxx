@@ -618,7 +618,7 @@ void LwpTableLayout::RegisterColumns()
     xColStyle->SetWidth(static_cast<float>(dDefaultColumn));
 
     XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
-    m_DefaultColumnStyleName =  pXFStyleManager->AddStyle(xColStyle.release()).m_pStyle->GetStyleName();
+    m_DefaultColumnStyleName =  pXFStyleManager->AddStyle(std::move(xColStyle)).m_pStyle->GetStyleName();
 
     // register existed column style
     sal_uInt16 i=0;
@@ -664,7 +664,7 @@ void LwpTableLayout::RegisterRows()
         xRowStyle->SetRowHeight(static_cast<float>(pTable->GetHeight()));
     }
     XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
-    m_DefaultRowStyleName =  pXFStyleManager->AddStyle(xRowStyle.release()).m_pStyle->GetStyleName();
+    m_DefaultRowStyleName =  pXFStyleManager->AddStyle(std::move(xRowStyle)).m_pStyle->GetStyleName();
 
     // register style of rows
     LwpObjectID& rRowID = GetChildHead();
@@ -739,7 +739,7 @@ void LwpTableLayout::RegisterStyle()
         xTableStyle->SetWidth(pSuper->GetTableWidth());
     }
     XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
-    m_StyleName = pXFStyleManager->AddStyle(xTableStyle.release()).m_pStyle->GetStyleName();
+    m_StyleName = pXFStyleManager->AddStyle(std::move(xTableStyle)).m_pStyle->GetStyleName();
 
     //convert to OO table now and register row style traverse
     TraverseTable();
@@ -917,7 +917,7 @@ void LwpTableLayout::SplitRowToCells(XFTable* pTmpTable, rtl::Reference<XFTable>
     {
         xRowStyle->SetRowHeight(static_cast<float>(fHeight));
     }
-    xXFRow->SetStyleName(pXFStyleManager->AddStyle(xRowStyle.release()).m_pStyle->GetStyleName());
+    xXFRow->SetStyleName(pXFStyleManager->AddStyle(std::move(xRowStyle)).m_pStyle->GetStyleName());
 
     //construct heading row
     rtl::Reference<XFCell> xXFCell1(new XFCell);
@@ -1245,7 +1245,7 @@ void LwpTableLayout::PostProcessParagraph(XFCell *pCell, sal_uInt16 nRowID, sal_
                 }
 
                 xOverStyle->SetStyleName("");
-                OUString StyleName = pXFStyleManager->AddStyle(xOverStyle.release()).m_pStyle->GetStyleName();
+                OUString StyleName = pXFStyleManager->AddStyle(std::move(xOverStyle)).m_pStyle->GetStyleName();
 
                 pXFPara->SetStyleName(StyleName);
             }
@@ -1453,7 +1453,7 @@ void LwpColumnLayout::RegisterStyle(double dCalculatedWidth)
     std::unique_ptr<XFColStyle> xColStyle(new XFColStyle);
     xColStyle->SetWidth(static_cast<float>(dCalculatedWidth));
     XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
-    m_StyleName = pXFStyleManager->AddStyle(xColStyle.release()).m_pStyle->GetStyleName();
+    m_StyleName = pXFStyleManager->AddStyle(std::move(xColStyle)).m_pStyle->GetStyleName();
 }
 
 LwpTableHeadingLayout::LwpTableHeadingLayout(LwpObjectHeader const &objHdr, LwpSvStream* pStrm)

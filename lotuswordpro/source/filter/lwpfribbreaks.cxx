@@ -73,7 +73,7 @@ void LwpFribColumnBreak::RegisterBreakStyle(LwpPara * pPara)
     if (pBaseStyle == nullptr) return;
 //    m_StyleName = pBaseStyle->GetStyleName();
 
-    XFParaStyle* pOverStyle = new XFParaStyle;
+    std::unique_ptr<XFParaStyle> pOverStyle( new XFParaStyle );
     *pOverStyle = *pBaseStyle;
     pOverStyle->SetStyleName("");
 
@@ -96,7 +96,7 @@ void LwpFribColumnBreak::RegisterBreakStyle(LwpPara * pPara)
             pOverStyle->SetBreaks(enumXFBreakBefColumn);
     }
     XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
-    m_StyleName = pXFStyleManager->AddStyle(pOverStyle).m_pStyle->GetStyleName();
+    m_StyleName = pXFStyleManager->AddStyle(std::move(pOverStyle)).m_pStyle->GetStyleName();
 }
 
 LwpFribPageBreak::LwpFribPageBreak( LwpPara* pPara )
@@ -126,7 +126,7 @@ void LwpFribPageBreak::RegisterBreakStyle(LwpPara* pPara)
         return;
     }
 
-    XFParaStyle* pOverStyle = new XFParaStyle;
+    std::unique_ptr<XFParaStyle> pOverStyle(new XFParaStyle);
     *pOverStyle = *pBaseStyle;
     pOverStyle->SetStyleName("");
     pOverStyle->SetMasterPage(pBaseStyle->GetMasterPage());
@@ -142,7 +142,7 @@ void LwpFribPageBreak::RegisterBreakStyle(LwpPara* pPara)
         pOverStyle->SetBreaks(enumXFBreakBefPage);
 
     XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
-    m_StyleName = pXFStyleManager->AddStyle(pOverStyle).m_pStyle->GetStyleName();
+    m_StyleName = pXFStyleManager->AddStyle(std::move(pOverStyle)).m_pStyle->GetStyleName();
 }
 
 void LwpFribPageBreak::ParseLayout()

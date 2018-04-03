@@ -283,7 +283,7 @@ void LwpPara::RegisterMasterPage(XFParaStyle const * pBaseStyle)
         if (!m_ParentStyleName.isEmpty())
             xOverStyle->SetParentStyleName(m_ParentStyleName);
         XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
-        m_StyleName = pXFStyleManager->AddStyle(xOverStyle.release()).m_pStyle->GetStyleName();
+        m_StyleName = pXFStyleManager->AddStyle(std::move(xOverStyle)).m_pStyle->GetStyleName();
     }
 }
 /**
@@ -439,7 +439,7 @@ void LwpPara::RegisterStyle()
         }
         if (!m_ParentStyleName.isEmpty())
             xOverStyle->SetParentStyleName(m_ParentStyleName);
-        m_StyleName = pXFStyleManager->AddStyle(xOverStyle.release()).m_pStyle->GetStyleName();
+        m_StyleName = pXFStyleManager->AddStyle(std::move(xOverStyle)).m_pStyle->GetStyleName();
 
     }
     else //use named style
@@ -453,7 +453,7 @@ void LwpPara::RegisterStyle()
                     OverrideIndent(nullptr,m_pIndentOverride.get(),xOverStyle.get());
                     if (!m_ParentStyleName.isEmpty())
                         xOverStyle->SetParentStyleName(m_ParentStyleName);
-                    m_StyleName = pXFStyleManager->AddStyle(xOverStyle.release()).m_pStyle->GetStyleName();
+                    m_StyleName = pXFStyleManager->AddStyle(std::move(xOverStyle)).m_pStyle->GetStyleName();
                 }
             }
     }
@@ -468,7 +468,7 @@ void LwpPara::RegisterStyle()
             xOverStyle->SetAlignType(enumXFAlignStart);
             if (!m_ParentStyleName.isEmpty())
                 xOverStyle->SetParentStyleName(m_ParentStyleName);
-            m_StyleName = pXFStyleManager->AddStyle(xOverStyle.release()).m_pStyle->GetStyleName();
+            m_StyleName = pXFStyleManager->AddStyle(std::move(xOverStyle)).m_pStyle->GetStyleName();
         }
     }
 
@@ -625,7 +625,7 @@ void LwpPara::RegisterStyle()
                             if (pOldStyle)
                             {
                                 std::unique_ptr<XFListStyle> xNewStyle(new XFListStyle(*pOldStyle));
-                                m_aBulletStyleName = pXFStyleManager->AddStyle(xNewStyle.release()).m_pStyle->GetStyleName();
+                                m_aBulletStyleName = pXFStyleManager->AddStyle(std::move(xNewStyle)).m_pStyle->GetStyleName();
                             }
                         }
                     }
@@ -660,7 +660,7 @@ void LwpPara::RegisterStyle()
             pMargin->SetTop(pMargin->GetTop()+pPrePara->GetBelowSpacing());
             if (!m_ParentStyleName.isEmpty())
                     xOverStyle->SetParentStyleName(m_ParentStyleName);
-            m_StyleName = pXFStyleManager->AddStyle(xOverStyle.release()).m_pStyle->GetStyleName();
+            m_StyleName = pXFStyleManager->AddStyle(std::move(xOverStyle)).m_pStyle->GetStyleName();
         }
     }
 
@@ -673,7 +673,7 @@ void LwpPara::RegisterStyle()
         RegisterTabStyle(xNewParaStyle.get());
         if (!m_ParentStyleName.isEmpty())
             xNewParaStyle->SetParentStyleName(m_ParentStyleName);
-        m_StyleName = pXFStyleManager->AddStyle(xNewParaStyle.release()).m_pStyle->GetStyleName();
+        m_StyleName = pXFStyleManager->AddStyle(std::move(xNewParaStyle)).m_pStyle->GetStyleName();
     }
 
     //register master page;
@@ -691,7 +691,7 @@ void LwpPara::RegisterStyle()
         xStyle->SetDropCap(m_nChars-1,m_nLines);
         if (!m_ParentStyleName.isEmpty())
             xStyle->SetParentStyleName(m_ParentStyleName);
-        m_StyleName = pXFStyleManager->AddStyle(xStyle.release()).m_pStyle->GetStyleName();
+        m_StyleName = pXFStyleManager->AddStyle(std::move(xStyle)).m_pStyle->GetStyleName();
     }
     // maybe useful for further version
     // deleted because Leader of Table is not supported in this version
@@ -710,7 +710,7 @@ void LwpPara::RegisterNewSectionStyle(LwpPageLayout *pLayout)
         xSectStyle->SetColumns(pColumns);
     }
     XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
-    m_SectionStyleName = pXFStyleManager->AddStyle(xSectStyle.release()).m_pStyle->GetStyleName();
+    m_SectionStyleName = pXFStyleManager->AddStyle(std::move(xSectStyle)).m_pStyle->GetStyleName();
 }
 
 rtl::Reference<XFSection> LwpPara::CreateXFSection()
