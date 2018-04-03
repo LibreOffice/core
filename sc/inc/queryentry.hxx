@@ -51,8 +51,8 @@ struct SC_DLLPUBLIC ScQueryEntry
     SCCOLROW        nField;
     ScQueryOp       eOp;
     ScQueryConnect  eConnect;
-    mutable utl::SearchParam* pSearchParam;       ///< if Wildcard or RegExp, not saved
-    mutable utl::TextSearch*  pSearchText;        ///< if Wildcard or RegExp, not saved
+    mutable std::unique_ptr<utl::SearchParam> pSearchParam;       ///< if Wildcard or RegExp, not saved
+    mutable std::unique_ptr<utl::TextSearch>  pSearchText;        ///< if Wildcard or RegExp, not saved
 
     ScQueryEntry();
     ScQueryEntry(const ScQueryEntry& r);
