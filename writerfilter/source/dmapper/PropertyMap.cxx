@@ -563,8 +563,6 @@ void SectionPropertyMap::ApplyBorderToPageStyles( const uno::Reference< containe
             if ( !m_sFollowPageStyleName.isEmpty() )
                 xFirst = GetPageStyle( xPageStyles, xTextFactory, false );
             break;
-        case BorderApply::ToWholeDocument: // whole document?
-                // todo: how to apply a border to the whole document - find all sections or access all page styles?
         default:
             return;
     }

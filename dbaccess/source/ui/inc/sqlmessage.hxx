@@ -58,14 +58,12 @@ enum class MessBoxStyle {
     DefaultRetry      = 0x0080,
     DefaultYes        = 0x0100,
     DefaultNo         = 0x0200,
-    AbortRetryIgnore  = 0x1000,
-    DefaultIgnore     = 0x2000,
 };
 
 }
 
 namespace o3tl {
-    template<> struct typed_flags<dbaui::MessBoxStyle> : is_typed_flags<dbaui::MessBoxStyle, 0x3fff> {};
+    template<> struct typed_flags<dbaui::MessBoxStyle> : is_typed_flags<dbaui::MessBoxStyle, 0x0fff> {};
 }
 
 
