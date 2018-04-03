@@ -318,7 +318,7 @@ void Qt5Frame::SetPosSize(long nX, long nY, long nWidth, long nHeight, sal_uInt1
     m_bDefaultPos = false;
 }
 
-void Qt5Frame::GetClientSize(long& rWidth, long& rHeight)
+void Qt5Frame::GetClientSize(sal_Int32& rWidth, sal_Int32& rHeight)
 {
     rWidth = m_pQWidget->width();
     rHeight = m_pQWidget->height();
