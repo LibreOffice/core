@@ -564,49 +564,40 @@ void SwIndexMarkPane::UpdateKeyBoxes()
     }
 }
 
-class SwNewUserIdxDlg : public ModalDialog
+class SwNewUserIdxDlg : public weld::GenericDialogController
 {
-    VclPtr<OKButton>        m_pOKPB;
-    VclPtr<Edit>            m_pNameED;
-
     SwIndexMarkPane* m_pDlg;
 
-    DECL_LINK( ModifyHdl, Edit&, void);
+    std::unique_ptr<weld::Button> m_xOKPB;
+    std::unique_ptr<weld::Entry> m_xNameED;
 
-    public:
-        explicit SwNewUserIdxDlg(SwIndexMarkPane* pPane)
-            : ModalDialog(&(pPane->GetDialog()), "NewUserIndexDialog",
-                "modules/swriter/ui/newuserindexdialog.ui")
-            , m_pDlg(pPane)
-            {
-                get(m_pOKPB, "ok");
-                get(m_pNameED, "entry");
-                m_pNameED->SetModifyHdl(LINK(this, SwNewUserIdxDlg, ModifyHdl));
-                m_pOKPB->Enable(false);
-                m_pNameED->GrabFocus();
-            }
-    virtual ~SwNewUserIdxDlg() override { disposeOnce(); }
-    virtual void dispose() override
+    DECL_LINK(ModifyHdl, weld::Entry&, void);
+
+public:
+    explicit SwNewUserIdxDlg(SwIndexMarkPane* pPane)
+        : GenericDialogController(pPane->GetFrameWeld(), "modules/swriter/ui/newuserindexdialog.ui", "NewUserIndexDialog")
+        , m_pDlg(pPane)
+        , m_xOKPB(m_xBuilder->weld_button("ok"))
+        , m_xNameED(m_xBuilder->weld_entry("entry"))
     {
-        m_pOKPB.clear();
-        m_pNameED.clear();
-        ModalDialog::dispose();
+        m_xNameED->connect_changed(LINK(this, SwNewUserIdxDlg, ModifyHdl));
+        m_xOKPB->set_sensitive(false);
+        m_xNameED->grab_focus();
     }
-
-    OUString  GetName(){return m_pNameED->GetText();}
+    OUString GetName() const { return m_xNameED->get_text(); }
 };
 
-IMPL_LINK( SwNewUserIdxDlg, ModifyHdl, Edit&, rEdit, void)
+IMPL_LINK( SwNewUserIdxDlg, ModifyHdl, weld::Entry&, rEdit, void)
 {
-    m_pOKPB->Enable(!rEdit.GetText().isEmpty() && !m_pDlg->IsTOXType(rEdit.GetText()));
+    m_xOKPB->set_sensitive(!rEdit.get_text().isEmpty() && !m_pDlg->IsTOXType(rEdit.get_text()));
 }
 
 IMPL_LINK_NOARG(SwIndexMarkPane, NewUserIdxHdl, Button*, void)
 {
-    ScopedVclPtrInstance< SwNewUserIdxDlg > pDlg(this);
-    if(RET_OK == pDlg->Execute())
+    SwNewUserIdxDlg aDlg(this);
+    if (aDlg.run() == RET_OK)
     {
-        OUString sNewName(pDlg->GetName());
+        OUString sNewName(aDlg.GetName());
         m_pTypeDCB->InsertEntry(sNewName);
         m_pTypeDCB->SelectEntry(sNewName);
     }

@@ -144,7 +144,7 @@ public:
                     bool bNewDlg,
                     SwWrtShell& rWrtShell);
 
-    Dialog &GetDialog() { return m_rDialog; }
+    weld::Window* GetFrameWeld() { return m_rDialog.GetFrameWeld(); }
 
     ~SwIndexMarkPane();
 
