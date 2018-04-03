@@ -1593,7 +1593,7 @@ void SvXMLImport::AddNumberStyle(sal_Int32 nKey, const OUString& rName)
         }
     }
     else {
-        DBG_UNHANDLED_EXCEPTION( "xmloff.core", "not possible to create NameContainer");
+        SAL_WARN( "xmloff.core", "not possible to create NameContainer");
     }
 }
 

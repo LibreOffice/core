@@ -1094,8 +1094,8 @@ void DbTextField::Init( vcl::Window& rParent, const Reference< XRowSet >& xCurso
     }
     catch( const Exception& )
     {
-        OSL_FAIL( "DbTextField::Init: caught an exception while determining the multi-line capabilities!" );
         DBG_UNHANDLED_EXCEPTION("svx");
+        OSL_FAIL( "DbTextField::Init: caught an exception while determining the multi-line capabilities!" );
     }
 
     m_bIsSimpleEdit = !bIsMultiLine;

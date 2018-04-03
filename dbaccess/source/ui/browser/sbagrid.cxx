@@ -1436,10 +1436,10 @@ IMPL_LINK_NOARG(SbaGridControl, AsynchDropEvent, void*, void)
         }
         catch(const Exception& )
         {
+            DBG_UNHANDLED_EXCEPTION("dbaccess");
             if (m_pMasterListener)
                 m_pMasterListener->AfterDrop();
             Show();
-            DBG_UNHANDLED_EXCEPTION("dbaccess");
         }
         if ( !bCountFinal )
             setDataSource(Reference< XRowSet >(xDataSource,UNO_QUERY));

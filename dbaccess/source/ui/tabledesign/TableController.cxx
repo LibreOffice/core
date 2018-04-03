@@ -411,8 +411,8 @@ bool OTableController::doSaveDoc(bool _bSaveAs)
     }
     catch( const Exception& )
     {
-        bError = true;
         DBG_UNHANDLED_EXCEPTION("dbaccess");
+        bError = true;
     }
 
     if ( aInfo.isValid() )

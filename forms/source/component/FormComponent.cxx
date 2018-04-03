@@ -459,8 +459,8 @@ void OControlModel::readHelpTextCompatibly(const css::uno::Reference< css::io::X
     }
     catch(const Exception&)
     {
-        SAL_WARN("forms.component", "OControlModel::readHelpTextCompatibly: could not forward the property value to the aggregate!");
         DBG_UNHANDLED_EXCEPTION("forms.component");
+        SAL_WARN("forms.component", "OControlModel::readHelpTextCompatibly: could not forward the property value to the aggregate!");
     }
 }
 
@@ -474,8 +474,8 @@ void OControlModel::writeHelpTextCompatibly(const css::uno::Reference< css::io::
     }
     catch(const Exception&)
     {
-        SAL_WARN("forms.component", "OControlModel::writeHelpTextCompatibly: could not retrieve the property value from the aggregate!");
         DBG_UNHANDLED_EXCEPTION("forms.component");
+        SAL_WARN("forms.component", "OControlModel::writeHelpTextCompatibly: could not retrieve the property value from the aggregate!");
     }
     ::comphelper::operator<<( _rxOutStream, sHelpText);
 }
@@ -515,8 +515,8 @@ OControlModel::OControlModel(
                 }
                 catch( const Exception& )
                 {
-                    SAL_WARN("forms.component",  "OControlModel::OControlModel: caught an exception!");
                     DBG_UNHANDLED_EXCEPTION("forms.component");
+                    SAL_WARN("forms.component",  "OControlModel::OControlModel: caught an exception!");
                 }
             }
         }
@@ -1805,8 +1805,8 @@ void SAL_CALL OBoundControlModel::propertyChange( const PropertyChangeEvent& evt
 
         catch( const Exception& )
         {
-            SAL_WARN("forms.component",  "OBoundControlModel::propertyChange: could not adjust my binding-controlled property!");
             DBG_UNHANDLED_EXCEPTION("forms.component");
+            SAL_WARN("forms.component",  "OBoundControlModel::propertyChange: could not adjust my binding-controlled property!");
         }
 
     }
@@ -2146,8 +2146,8 @@ void OBoundControlModel::doSetControlValue( const Any& _rValue )
 
     catch( const Exception& )
     {
-        SAL_WARN("forms.component",  "OBoundControlModel::doSetControlValue: caught an exception!");
         DBG_UNHANDLED_EXCEPTION("forms.component");
+        SAL_WARN("forms.component",  "OBoundControlModel::doSetControlValue: caught an exception!");
     }
 }
 
@@ -2167,8 +2167,8 @@ void OBoundControlModel::onConnectedValidator( )
 
     catch( const Exception& )
     {
-        SAL_WARN("forms.component",  "OBoundControlModel::onConnectedValidator: caught an exception!");
         DBG_UNHANDLED_EXCEPTION("forms.component");
+        SAL_WARN("forms.component",  "OBoundControlModel::onConnectedValidator: caught an exception!");
     }
 
     recheckValidity( false );
@@ -2187,8 +2187,8 @@ void OBoundControlModel::onDisconnectedValidator( )
 
     catch( const Exception& )
     {
-        SAL_WARN("forms.component",  "OBoundControlModel::onDisconnectedValidator: caught an exception!");
         DBG_UNHANDLED_EXCEPTION("forms.component");
+        SAL_WARN("forms.component",  "OBoundControlModel::onDisconnectedValidator: caught an exception!");
     }
 
     recheckValidity( false );
@@ -2265,8 +2265,8 @@ void OBoundControlModel::reset()
 
     catch( const SQLException& )
     {
-        SAL_WARN("forms.component",  "OBoundControlModel::reset: caught an SQL exception!" );
         DBG_UNHANDLED_EXCEPTION("forms.component");
+        SAL_WARN("forms.component",  "OBoundControlModel::reset: caught an SQL exception!" );
     }
 
     // #i24495# - don't count the insert row as "invalid"
@@ -2310,8 +2310,8 @@ void OBoundControlModel::reset()
 
         catch(const Exception&)
         {
-            SAL_WARN("forms.component", "OBoundControlModel::reset: this should have succeeded in all cases!");
             DBG_UNHANDLED_EXCEPTION("forms.component");
+            SAL_WARN("forms.component", "OBoundControlModel::reset: this should have succeeded in all cases!");
         }
 
         bool bNeedValueTransfer = true;
@@ -2461,8 +2461,8 @@ void OBoundControlModel::disconnectExternalValueBinding( )
 
     catch( const Exception& )
     {
-        SAL_WARN("forms.component",  "OBoundControlModel::disconnectExternalValueBinding: caught an exception!");
         DBG_UNHANDLED_EXCEPTION("forms.component");
+        SAL_WARN("forms.component",  "OBoundControlModel::disconnectExternalValueBinding: caught an exception!");
     }
 
     // if the binding also acts as our validator, disconnect the validator, too
@@ -2790,8 +2790,8 @@ void OBoundControlModel::recheckValidity( bool _bForceNotification )
 
     catch( const Exception& )
     {
-        SAL_WARN("forms.component",  "OBoundControlModel::recheckValidity: caught an exception!");
         DBG_UNHANDLED_EXCEPTION("forms.component");
+        SAL_WARN("forms.component",  "OBoundControlModel::recheckValidity: caught an exception!");
     }
 }
 
