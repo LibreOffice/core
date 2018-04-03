@@ -763,7 +763,7 @@
 #define STR_PRIVATETEXT                         NC_("STR_PRIVATETEXT", "%PRODUCTNAME Writer")
 #define STR_PRIVATEGRAPHIC                      NC_("STR_PRIVATEGRAPHIC", "Image [%PRODUCTNAME Writer]")
 #define STR_PRIVATEOLE                          NC_("STR_PRIVATEOLE", "Object [%PRODUCTNAME Writer]")
-#define STR_DDEFORMAT                           NC_("STR_DDEFORMAT", "DDE link")
+#define STR_DDEFORMAT                           NC_("STR_DDEFORMAT", "Reference only (DDE link)")
 
 #define STR_DELETE_ALL_NOTES                    NC_("STR_DELETE_ALL_NOTES", "All Comments")
 #define STR_FORMAT_ALL_NOTES                    NC_("STR_FORMAT_ALL_NOTES", "All Comments")
