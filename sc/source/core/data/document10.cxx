@@ -22,6 +22,7 @@
 #include <cellvalues.hxx>
 #include <docpool.hxx>
 #include <columniterator.hxx>
+#include <drwlayer.hxx>
 
 #include <dociter.hxx>
 #include <patattr.hxx>
