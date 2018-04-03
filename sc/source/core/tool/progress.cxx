@@ -106,8 +106,8 @@ ScProgress::ScProgress(SfxObjectShell* pObjSh, const OUString& rText,
     }
     else
     {
-        pProgress = new SfxProgress( pObjSh, rText, nRange, bWait );
-        pGlobalProgress = pProgress;
+        pProgress.reset(new SfxProgress( pObjSh, rText, nRange, bWait ));
+        pGlobalProgress = pProgress.get();
         nGlobalRange = nRange;
         nGlobalPercent = 0;
     }
@@ -124,7 +124,7 @@ ScProgress::~ScProgress()
 {
     if ( pProgress )
     {
-        delete pProgress;
+        pProgress.reset();
         pGlobalProgress = nullptr;
         nGlobalRange = 0;
         nGlobalPercent = 0;
