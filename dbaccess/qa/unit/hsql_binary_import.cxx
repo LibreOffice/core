@@ -60,7 +60,7 @@ void HsqlBinaryImportTest::testBinaryImport()
     uno::Reference<XRow> xRow(xRes, UNO_QUERY_THROW);
 
     // assert first row
-    xRes->next();
+    CPPUNIT_ASSERT(xRes->next());
     constexpr sal_Int16 idExpected = 1;
     CPPUNIT_ASSERT_EQUAL(idExpected, xRow->getShort(1));
     CPPUNIT_ASSERT_EQUAL(OUString{ "45.32" }, xRow->getString(2)); // numeric
@@ -74,7 +74,7 @@ void HsqlBinaryImportTest::testBinaryImport()
     CPPUNIT_ASSERT_EQUAL(sal_Int16{ 1996 }, date.Year);
 
     // assert second row
-    xRes->next();
+    CPPUNIT_ASSERT(xRes->next());
     constexpr sal_Int16 secondIdExpected = 2;
     CPPUNIT_ASSERT_EQUAL(secondIdExpected, xRow->getShort(1)); // ID
     CPPUNIT_ASSERT_EQUAL(OUString{ "54.12" }, xRow->getString(2)); // numeric
