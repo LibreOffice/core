@@ -48,7 +48,7 @@ class SwAutoCorrDoc : public SvxAutoCorrDoc
 {
     SwEditShell& rEditSh;
     SwPaM& rCursor;
-    SwNodeIndex* pIdx;
+    std::unique_ptr<SwNodeIndex> pIdx;
     int m_nEndUndoCounter;
     bool    bUndoIdInitialized;
 
