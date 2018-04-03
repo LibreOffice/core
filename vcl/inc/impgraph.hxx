@@ -63,9 +63,6 @@ private:
     /// this Graphic (a page) from the source in GfxLink or PdfData.
     sal_Int32                    mnPageNumber;
 
-    std::chrono::high_resolution_clock::time_point maLastUsed;
-    bool mbPrepared;
-
                         ImpGraphic();
                         ImpGraphic( const ImpGraphic& rImpGraphic );
                         ImpGraphic( ImpGraphic&& rImpGraphic );

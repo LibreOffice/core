@@ -21,6 +21,8 @@
 #define INCLUDED_SVX_SVDOGRAF_HXX
 
 #include <com/sun/star/io/XInputStream.hpp>
+#include <com/sun/star/graphic/XGraphic.hpp>
+#include <com/sun/star/uno/Sequence.hxx>
 #include <vcl/graph.hxx>
 #include <svx/svdorect.hxx>
 #include <svtools/grfmgr.hxx>
@@ -190,6 +192,11 @@ public:
 
     bool isEmbeddedSvg() const;
     GDIMetaFile getMetafileFromEmbeddedSvg() const;
+
+    bool isEmbeddedPdfData() const;
+    std::shared_ptr<css::uno::Sequence<sal_Int8>> getEmbeddedPdfData() const;
+    /// Returns the page number of the embedded data (typically to re-render or import it).
+    sal_Int32 getEmbeddedPageNumber() const;
 
     virtual SdrObject*      DoConvertToPolyObj(bool bBezier, bool bAddText) const override;
 

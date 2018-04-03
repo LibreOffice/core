@@ -258,6 +258,7 @@ bool ImportPDF(SvStream& rStream, Graphic& rGraphic)
     bool bRet = ImportPDF(rStream, aBitmap, aPdfData);
     rGraphic = aBitmap;
     rGraphic.setPdfData(std::make_shared<css::uno::Sequence<sal_Int8>>(aPdfData));
+    rGraphic.setPageNumber(0); // We currently import only the first page.
     return bRet;
 }
 

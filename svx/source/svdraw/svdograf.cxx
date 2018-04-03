@@ -1085,6 +1085,21 @@ GDIMetaFile SdrGrafObj::GetMetaFile(GraphicType &rGraphicType) const
     return GDIMetaFile();
 }
 
+bool SdrGrafObj::isEmbeddedPdfData() const
+{
+   return pGraphic->GetGraphic().hasPdfData();
+}
+
+std::shared_ptr<uno::Sequence<sal_Int8>> SdrGrafObj::getEmbeddedPdfData() const
+{
+   return pGraphic->GetGraphic().getPdfData();
+}
+
+sal_Int32 SdrGrafObj::getEmbeddedPageNumber() const
+{
+   return pGraphic->GetGraphic().getPageNumber();
+}
+
 SdrObject* SdrGrafObj::DoConvertToPolyObj(bool bBezier, bool bAddText ) const
 {
     SdrObject* pRetval = nullptr;
