@@ -2440,8 +2440,8 @@ bool DbGridControl::SeekCursor(long nRow, bool bAbsolute)
         }
         catch(Exception&)
         {
-            OSL_FAIL("DbGridControl::SeekCursor : failed ...");
             DBG_UNHANDLED_EXCEPTION("svx");
+            OSL_FAIL("DbGridControl::SeekCursor : failed ...");
             m_nSeekPos = -1; // no further data set available
         }
     }

@@ -605,8 +605,8 @@ void SAL_CALL OSingleSelectQueryComposer::setElementaryQuery( const OUString& _r
     }
     catch( const Exception& )
     {
-        SAL_WARN("dbaccess", "OSingleSelectQueryComposer::setElementaryQuery: there should be no error anymore for the additive statement!" );
         DBG_UNHANDLED_EXCEPTION("dbaccess");
+        SAL_WARN("dbaccess", "OSingleSelectQueryComposer::setElementaryQuery: there should be no error anymore for the additive statement!" );
         // every part of the additive statement should have passed other tests already, and should not
         // be able to cause any errors ... me thinks
     }

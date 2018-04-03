@@ -3041,9 +3041,9 @@ bool ODatabaseForm::impl_approveRowChange_throw( const EventObject& _rEvent, con
         }
         catch (const SQLException&)
         {
+            DBG_UNHANDLED_EXCEPTION("forms.component");
             if ( _bAllowSQLException )
                 throw;
-            DBG_UNHANDLED_EXCEPTION("forms.component");
         }
         catch (const Exception&)
         {

@@ -1796,8 +1796,8 @@ namespace xmloff
         }
         catch( const Exception& )
         {
-            OSL_FAIL( "OControlExport::exportCellBindingAttributes: caught an exception!" );
             DBG_UNHANDLED_EXCEPTION("xmloff.forms");
+            OSL_FAIL( "OControlExport::exportCellBindingAttributes: caught an exception!" );
         }
     }
 
@@ -1838,8 +1838,8 @@ namespace xmloff
         }
         catch( const Exception& )
         {
-            OSL_FAIL( "OControlExport::exportCellListSourceRange: caught an exception!" );
             DBG_UNHANDLED_EXCEPTION("xmloff.forms");
+            OSL_FAIL( "OControlExport::exportCellListSourceRange: caught an exception!" );
         }
     }
 
@@ -1911,8 +1911,8 @@ namespace xmloff
         }
         catch( const Exception& )
         {
-            OSL_FAIL( "OColumnExport::controlHasActiveDataBinding: caught an exception!" );
             DBG_UNHANDLED_EXCEPTION("xmloff.forms");
+            OSL_FAIL( "OColumnExport::controlHasActiveDataBinding: caught an exception!" );
         }
 
         return false;

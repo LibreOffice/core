@@ -1519,9 +1519,9 @@ bool OQueryController::doSaveAsDoc(bool _bSaveAs)
     }
     catch(const Exception&)
     {
+        DBG_UNHANDLED_EXCEPTION("dbaccess");
         if ( !bNew )
             m_sName = sOriginalName;
-        DBG_UNHANDLED_EXCEPTION("dbaccess");
     }
 
     showError( aInfo );
