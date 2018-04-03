@@ -262,7 +262,10 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportXLS(SvStream& rStream)
     {
         bRet = ScFormatFilter::Get().ScImportExcel(aMedium, &rDoc, EIF_AUTO) == ERRCODE_NONE;
     }
-    catch (const css::ucb::ContentCreationException &)
+    catch (const css::ucb::ContentCreationException&)
+    {
+    }
+    catch (const std::out_of_range&)
     {
     }
     xDocShell->DoClose();
