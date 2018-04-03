@@ -248,10 +248,9 @@ void FinalThreadManager::registerAsListenerAtDesktop()
 
 FinalThreadManager::~FinalThreadManager()
 {
-    if ( mpPauseThreadStarting != nullptr )
+    if ( mpPauseThreadStarting )
     {
-        delete mpPauseThreadStarting;
-        mpPauseThreadStarting = nullptr;
+        mpPauseThreadStarting.reset();
     }
 
     if ( mpTerminateOfficeThread != nullptr )
@@ -273,8 +272,7 @@ FinalThreadManager::~FinalThreadManager()
 
         mpCancelJobsThread->stopWhenAllJobsCancelled();
         mpCancelJobsThread->join();
-        delete mpCancelJobsThread;
-        mpCancelJobsThread = nullptr;
+        mpCancelJobsThread.reset();
     }
 }
 
@@ -332,11 +330,10 @@ void SAL_CALL FinalThreadManager::cancelAllJobs()
 
         if ( mpCancelJobsThread == nullptr )
         {
-            mpCancelJobsThread = new CancelJobsThread( aThreads );
+            mpCancelJobsThread.reset(new CancelJobsThread( aThreads ));
             if ( !mpCancelJobsThread->create() )
             {
-                delete mpCancelJobsThread;
-                mpCancelJobsThread = nullptr;
+                mpCancelJobsThread.reset();
                 for (auto const& elem : aThreads)
                 {
                     elem->cancel();
@@ -389,18 +386,13 @@ void SAL_CALL FinalThreadManager::queryTermination( const css::lang::EventObject
         throw css::frame::TerminationVetoException();
     }
 
-    mpPauseThreadStarting = new SwPauseThreadStarting();
+    mpPauseThreadStarting.reset(new SwPauseThreadStarting());
 }
 
 void SAL_CALL FinalThreadManager::cancelTermination( const css::lang::EventObject& )
 {
-    if ( mpPauseThreadStarting != nullptr )
-    {
-        delete mpPauseThreadStarting;
-        mpPauseThreadStarting = nullptr;
-    }
-
-    }
+    mpPauseThreadStarting.reset();
+}
 
 void SAL_CALL FinalThreadManager::notifyTermination( const css::lang::EventObject& )
 {
@@ -421,8 +413,7 @@ void SAL_CALL FinalThreadManager::notifyTermination( const css::lang::EventObjec
     {
         mpCancelJobsThread->stopWhenAllJobsCancelled();
         mpCancelJobsThread->join();
-        delete mpCancelJobsThread;
-        mpCancelJobsThread = nullptr;
+        mpCancelJobsThread.reset();
     }
 
     // get reference of this
