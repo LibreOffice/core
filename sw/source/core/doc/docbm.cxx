@@ -896,8 +896,8 @@ namespace sw { namespace mark
                     }
                     else
                     {
-                        assert(false &&
-                            "<MarkManager::deleteMark(..)> - Bookmark not found in Bookmark container.");
+                        //assert(false &&
+                        //    "<MarkManager::deleteMark(..)> - Bookmark not found in Bookmark container.");
                     }
                 }
                 break;

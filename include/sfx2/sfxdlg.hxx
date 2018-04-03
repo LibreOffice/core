@@ -139,7 +139,7 @@ public:
             const SvObjectServerList* pList )=0;
     virtual VclPtr<VclAbstractDialog>          CreateEditObjectDialog( const OUString& rCommand,
             const css::uno::Reference < css::embed::XEmbeddedObject >& xObj )=0;
-    virtual VclPtr<SfxAbstractPasteDialog>    CreatePasteDialog( vcl::Window* pParent )=0;
+    virtual VclPtr<SfxAbstractPasteDialog>    CreatePasteDialog(weld::Window* pParent) = 0;
     virtual VclPtr<SfxAbstractLinksDialog>    CreateLinksDialog( vcl::Window* pParent, sfx2::LinkManager* pMgr, bool bHTML=false, sfx2::SvBaseLink* p=nullptr )=0;
     virtual VclPtr<VclAbstractDialog>         CreateSvxScriptOrgDialog( vcl::Window* pParent,  const rtl::OUString& rLanguage ) = 0;
 

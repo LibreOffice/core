@@ -147,7 +147,12 @@ IMPL_ABSTDLG_BASE(AbstractSvxHpLinkDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractFmSearchDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractGraphicFilterDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractSvxAreaTabDialog_Impl);
-IMPL_ABSTDLG_BASE(AbstractPasteDialog_Impl);
+
+short AbstractPasteDialog_Impl::Execute()
+{
+    return m_xDlg->run();
+}
+
 IMPL_ABSTDLG_BASE(AbstractInsertObjectDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractLinksDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractSpellDialog_Impl);
@@ -393,19 +398,19 @@ bool AbstractInsertObjectDialog_Impl::IsCreateNew()
    return pDlg->GetIconIfIconified( pGraphicMediaType );
 }
 
-void AbstractPasteDialog_Impl::Insert( SotClipboardFormatId nFormat, const OUString & rFormatName )
+void AbstractPasteDialog_Impl::Insert(SotClipboardFormatId nFormat, const OUString& rFormatName)
 {
-    pDlg->Insert( nFormat, rFormatName );
+    m_xDlg->Insert(nFormat, rFormatName);
 }
 
-void AbstractPasteDialog_Impl::SetObjName( const SvGlobalName & rClass, const OUString & rObjName )
+void AbstractPasteDialog_Impl::SetObjName(const SvGlobalName & rClass, const OUString& rObjName)
 {
-    pDlg->SetObjName( rClass, rObjName );
+    m_xDlg->SetObjName(rClass, rObjName);
 }
 
 SotClipboardFormatId AbstractPasteDialog_Impl::GetFormat( const TransferableDataHelper& aHelper )
 {
-    return pDlg->GetFormat( aHelper );
+    return m_xDlg->GetFormat(aHelper);
 }
 
 void  AbstractFmShowColsDialog_Impl::SetColumns(const ::Reference< css::container::XIndexContainer>& xCols)
@@ -1499,10 +1504,9 @@ VclPtr<VclAbstractDialog> AbstractDialogFactory_Impl::CreateEditObjectDialog( co
     return nullptr;
 }
 
-
-VclPtr<SfxAbstractPasteDialog> AbstractDialogFactory_Impl::CreatePasteDialog( vcl::Window* pParent )
+VclPtr<SfxAbstractPasteDialog> AbstractDialogFactory_Impl::CreatePasteDialog(weld::Window* pParent)
 {
-    return VclPtr<AbstractPasteDialog_Impl>::Create( VclPtr<SvPasteObjectDialog>::Create( pParent ) );
+    return VclPtr<AbstractPasteDialog_Impl>::Create(new SvPasteObjectDialog(pParent));
 }
 
 VclPtr<SfxAbstractLinksDialog> AbstractDialogFactory_Impl::CreateLinksDialog( vcl::Window* pParent, sfx2::LinkManager* pMgr, bool bHTML, sfx2::SvBaseLink* p)

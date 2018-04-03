@@ -239,7 +239,7 @@ void FuInsertClipboard::DoExecute( SfxRequest&  )
     SotClipboardFormatId                        nFormatId;
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-    ScopedVclPtr<SfxAbstractPasteDialog> pDlg(pFact->CreatePasteDialog( mpViewShell->GetActiveWindow() ));
+    ScopedVclPtr<SfxAbstractPasteDialog> pDlg(pFact->CreatePasteDialog(mpViewShell->GetFrameWeld()));
     if ( pDlg )
     {
         pDlg->Insert( SotClipboardFormatId::EMBED_SOURCE, OUString() );
