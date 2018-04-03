@@ -72,12 +72,6 @@ FirebirdDriver::FirebirdDriver(const css::uno::Reference< css::uno::XComponentCo
     , m_firebirdTMPDirectory(nullptr, true)
     , m_firebirdLockDirectory(nullptr, true)
 {
-    // Note: TempFile caches the URL on first access; call this here so that
-    // ~FirebirdDriver is not the first access, because that is called
-    // when the ServiceManager is disposing, so GetURL() would fail!
-    m_firebirdTMPDirectory.GetURL();
-    m_firebirdLockDirectory.GetURL();
-
     // ::utl::TempFile uses a unique temporary directory (subdirectory of
     // /tmp or other user specific tmp directory) per instance in which
     // we can create directories for firebird at will.
