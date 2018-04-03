@@ -23,9 +23,7 @@
 #include <uielement/generictoolbarcontroller.hxx>
 #include <services.h>
 #include <framework/sfxhelperfunctions.hxx>
-#include <classes/fwkresid.hxx>
 #include <classes/resource.hxx>
-#include <strings.hrc>
 #include <framework/addonsoptions.hxx>
 #include <uielement/comboboxtoolbarcontroller.hxx>
 #include <uielement/imagebuttontoolbarcontroller.hxx>

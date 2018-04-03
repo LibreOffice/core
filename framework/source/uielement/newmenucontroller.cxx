@@ -20,8 +20,6 @@
 #include <uielement/newmenucontroller.hxx>
 
 #include <services.h>
-#include <strings.hrc>
-#include <classes/fwkresid.hxx>
 
 #include <com/sun/star/awt/XDevice.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
