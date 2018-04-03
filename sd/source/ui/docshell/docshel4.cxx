@@ -950,13 +950,13 @@ void DrawDocShell::FillClass(SvGlobalName* pClassName,
         {
             *pClassName = SvGlobalName(SO3_SDRAW_CLASSID_60);
             *pFormat = bTemplate ? SotClipboardFormatId::STARDRAW_8_TEMPLATE : SotClipboardFormatId::STARDRAW_8;
-            *pFullTypeName = "Draw 8"; // HACK: method will be removed with new storage API
+            *pFullTypeName = SdResId(STR_GRAPHIC_DOCUMENT_FULLTYPE_80); // HACK: method will be removed with new storage API
         }
         else
         {
             *pClassName = SvGlobalName(SO3_SIMPRESS_CLASSID_60);
             *pFormat = bTemplate ? SotClipboardFormatId::STARIMPRESS_8_TEMPLATE : SotClipboardFormatId::STARIMPRESS_8;
-            *pFullTypeName = "Impress 8"; // HACK: method will be removed with new storage API
+            *pFullTypeName = SdResId(STR_IMPRESS_DOCUMENT_FULLTYPE_80); // HACK: method will be removed with new storage API
         }
     }
 

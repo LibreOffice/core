@@ -189,11 +189,14 @@
 #define STR_NEW_CUSTOMSHOW                              NC_("STR_NEW_CUSTOMSHOW", "New Custom Slide Show")
 #define STR_COPY_CUSTOMSHOW                             NC_("STR_COPY_CUSTOMSHOW", "Copy ")
 #define STR_IMPRESS_DOCUMENT                            NC_("STR_IMPRESS_DOCUMENT", "Presentation")
-#define STR_IMPRESS_DOCUMENT_FULLTYPE_60                NC_("STR_IMPRESS_DOCUMENT_FULLTYPE_60", "%PRODUCTNAME %PRODUCTVERSION Presentation")
+#define STR_IMPRESS_DOCUMENT_FULLTYPE_60                NC_("STR_IMPRESS_DOCUMENT_FULLTYPE_60", "%PRODUCTNAME Presentation format (Impress 6)")
 #define STR_GRAPHIC_DOCUMENT                            NC_("STR_GRAPHIC_DOCUMENT", "Drawing")
-#define STR_GRAPHIC_DOCUMENT_FULLTYPE_60                NC_("STR_GRAPHIC_DOCUMENT_FULLTYPE_60", "%PRODUCTNAME %PRODUCTVERSION Drawing")
+#define STR_GRAPHIC_DOCUMENT_FULLTYPE_60                NC_("STR_GRAPHIC_DOCUMENT_FULLTYPE_60", "%PRODUCTNAME Drawing format (Draw 6)")
 #define STR_BREAK_METAFILE                              NC_("STR_BREAK_METAFILE", "Ungroup Metafile(s)...")
 #define STR_BREAK_FAIL                                  NC_("STR_BREAK_FAIL", "It was not possible to ungroup all drawing objects.")
+#define STR_IMPRESS_DOCUMENT_FULLTYPE_80                NC_("STR_IMPRESS_DOCUMENT_FULLTYPE_80", "%PRODUCTNAME %PRODUCTVERSION Presentation")
+#define STR_GRAPHIC_DOCUMENT_FULLTYPE_80                NC_("STR_GRAPHIC_DOCUMENT_FULLTYPE_80", "%PRODUCTNAME %PRODUCTVERSION Drawing")
+
 // HtmlExport
 #define STR_PUBDLG_SAMENAME                             NC_("STR_PUBDLG_SAMENAME", "A design already exists with this name.\nDo you want to replace it?")
 #define STR_HTMLATTR_TEXT                               NC_("STR_HTMLATTR_TEXT", "Text")

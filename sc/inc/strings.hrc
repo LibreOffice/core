@@ -24,7 +24,8 @@
 
 // Strings for interface names -------------------------------------------
 
-#define SCSTR_LONG_SCDOC_NAME                       NC_("SCSTR_LONG_SCDOC_NAME", "%PRODUCTNAME %PRODUCTVERSION Spreadsheet")
+#define SCSTR_LONG_SCDOC_NAME_60                    NC_("SCSTR_LONG_SCDOC_NAME", "%PRODUCTNAME Spreadsheet format (calc6)")
+#define SCSTR_LONG_SCDOC_NAME_80                    NC_("SCSTR_LONG_SCDOC_NAME", "%PRODUCTNAME %PRODUCTVERSION Spreadsheet")
 #define SCSTR_SHORT_SCDOC_NAME                      NC_("SCSTR_SHORT_SCDOC_NAME", "Spreadsheet")
 #define SCSTR_UNDEFINED                             NC_("SCSTR_UNDEFINED", "- undefined -")
 #define SCSTR_NONE                                  NC_("SCSTR_NONE", "- none -")
