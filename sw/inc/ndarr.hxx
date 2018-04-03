@@ -107,10 +107,10 @@ class SW_DLLPUBLIC SwNodes final
     SwDoc* m_pMyDoc;                      ///< This Doc contains the nodes-array.
 
     SwNode *m_pEndOfPostIts, *m_pEndOfInserts,  ///< These are the fixed ranges.
-           *m_pEndOfAutotext, *m_pEndOfRedlines,
-           *m_pEndOfContent;
+           *m_pEndOfAutotext, *m_pEndOfRedlines;
+    std::unique_ptr<SwNode> m_pEndOfContent;
 
-    mutable SwOutlineNodes* m_pOutlineNodes;        ///< Array of all outline nodes.
+    mutable std::unique_ptr<SwOutlineNodes> m_pOutlineNodes;        ///< Array of all outline nodes.
 
     bool m_bInNodesDel : 1;           /**< In Case of recursive calling.
                                            Do not update Num/Outline. */
