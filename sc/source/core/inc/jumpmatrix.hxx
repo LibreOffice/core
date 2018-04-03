@@ -60,7 +60,7 @@ class ScJumpMatrix
     std::vector<ScJumpMatrixEntry> mvJump;      // the jumps
     ScMatrixRef         pMat;       // the results
     ScRefList           mvRefList;  // array of references result, if any
-    ScTokenVec*         pParams;    // parameter stack
+    ScTokenVec          mvParams;    // parameter stack
     SCSIZE              nCols;
     SCSIZE              nRows;
     SCSIZE              nCurCol;
@@ -103,8 +103,8 @@ public:
     void SetJump( SCSIZE nCol, SCSIZE nRow, double fBool, short nStart, short nNext );
     void GetJump( SCSIZE nCol, SCSIZE nRow, double& rBool, short& rStart, short& rNext, short& rStop ) const;
     void SetAllJumps( double fBool, short nStart, short nNext, short nStop = SHRT_MAX );
-    void SetJumpParameters( ScTokenVec* p );
-    const ScTokenVec* GetJumpParameters() const { return pParams;}
+    void SetJumpParameters( ScTokenVec&& p );
+    const ScTokenVec & GetJumpParameters() const { return mvParams;}
     bool HasResultMatrix() const;
     ScMatrix* GetResultMatrix();        ///< also applies pending buffered values
     void GetPos( SCSIZE& rCol, SCSIZE& rRow ) const;

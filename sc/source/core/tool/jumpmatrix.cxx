@@ -30,7 +30,6 @@ const SCSIZE kBufferThreshold = 128;
 ScJumpMatrix::ScJumpMatrix( OpCode eOp, SCSIZE nColsP, SCSIZE nRowsP )
     : mvJump(nColsP * nRowsP)
     , pMat(new ScFullMatrix(nColsP, nRowsP))
-    , pParams(nullptr)
     , nCols(nColsP)
     , nRows(nRowsP)
     , nCurCol(0)
@@ -53,16 +52,8 @@ ScJumpMatrix::ScJumpMatrix( OpCode eOp, SCSIZE nColsP, SCSIZE nRowsP )
 
 ScJumpMatrix::~ScJumpMatrix()
 {
-    if (pParams)
-    {
-        for (ScTokenVec::iterator i =
-             pParams->begin(); i !=
-                 pParams->end(); ++i)
-        {
-            (*i)->DecRef();
-        }
-        delete pParams;
-    }
+    for (auto & i : mvParams)
+        i->DecRef();
 }
 
 void ScJumpMatrix::GetDimensions(SCSIZE& rCols, SCSIZE& rRows) const
@@ -107,9 +98,9 @@ void ScJumpMatrix::SetAllJumps(double fBool, short nStart, short nNext, short nS
     }
 }
 
-void ScJumpMatrix::SetJumpParameters(ScTokenVec* p)
+void ScJumpMatrix::SetJumpParameters(ScTokenVec&& p)
 {
-    pParams = p;
+    mvParams = std::move(p);
 }
 
 void ScJumpMatrix::GetPos(SCSIZE& rCol, SCSIZE& rRow) const
