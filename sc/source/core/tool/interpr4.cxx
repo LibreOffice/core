@@ -1576,15 +1576,15 @@ bool ScInterpreter::ConvertMatrixParameters()
             std::unique_ptr<ScJumpMatrix> pJumpMat( new ScJumpMatrix( pCur->GetOpCode(), nJumpCols, nJumpRows));
             pJumpMat->SetAllJumps( 1.0, nStart, nNext, nStop);
             // pop parameters and store in ScJumpMatrix, push in JumpMatrix()
-            ScTokenVec* pParams = new ScTokenVec( nParams);
+            ScTokenVec aParams(nParams);
             for ( sal_uInt16 i=1; i <= nParams && sp > 0; ++i )
             {
                 const FormulaToken* p = pStack[ --sp ];
                 p->IncRef();
                 // store in reverse order such that a push may simply iterate
-                (*pParams)[ nParams - i ] = p;
+                aParams[ nParams - i ] = p;
             }
-            pJumpMat->SetJumpParameters( pParams);
+            pJumpMat->SetJumpParameters( std::move(aParams) );
             xNew = new ScJumpMatrixToken( std::move(pJumpMat) );
             GetTokenMatrixMap().emplace(pCur, xNew);
         }
