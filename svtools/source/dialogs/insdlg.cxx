@@ -196,10 +196,10 @@ OUString SvPasteObjectHelper::GetSotFormatUIName( SotClipboardFormatId nId )
 
     static const SotResourcePair aSotResourcePairs[] =
     {
-        { SotClipboardFormatId::STRING,                    STR_FORMAT_STRING },
-        { SotClipboardFormatId::BITMAP,                    STR_FORMAT_BITMAP },
-        { SotClipboardFormatId::GDIMETAFILE,               STR_FORMAT_GDIMETAFILE },
-        { SotClipboardFormatId::RTF,                       STR_FORMAT_RTF },
+        { SotClipboardFormatId::STRING,              STR_FORMAT_STRING },
+        { SotClipboardFormatId::BITMAP,              STR_FORMAT_BITMAP },
+        { SotClipboardFormatId::GDIMETAFILE,         STR_FORMAT_GDIMETAFILE },
+        { SotClipboardFormatId::RTF,                 STR_FORMAT_RTF },
         { SotClipboardFormatId::DRAWING,             STR_FORMAT_ID_DRAWING },
         { SotClipboardFormatId::SVXB,                STR_FORMAT_ID_SVXB },
         { SotClipboardFormatId::INTERNALLINK_STATE,  STR_FORMAT_ID_INTERNALLINK_STATE },
