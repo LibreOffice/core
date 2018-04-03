@@ -155,6 +155,7 @@ private:
     // VectorGraphicData support
     VectorGraphicDataPtr    maVectorGraphicData;
     std::shared_ptr<uno::Sequence<sal_Int8>> mpPdfData;
+    sal_Int32 mnPageNumber; // Embedded data page number.
 
     bool                ImplInit( const GraphicObject& rObj );
     void                ImplFillSubstitute( Graphic& rSubstitute );
@@ -178,7 +179,8 @@ public:
 
 GraphicCacheEntry::GraphicCacheEntry( const GraphicObject& rObj ) :
     maID            ( rObj ),
-    mbSwappedAll    ( true )
+    mbSwappedAll    ( true ),
+    mnPageNumber(-1)
 {
     mbSwappedAll = !ImplInit( rObj );
     maGraphicObjectList.push_back( const_cast<GraphicObject*>(&rObj) );
@@ -220,7 +222,10 @@ bool GraphicCacheEntry::ImplInit( const GraphicObject& rObj )
                 {
                     mpBmpEx.reset(new BitmapEx( rGraphic.GetBitmapEx() ));
                     if (rGraphic.hasPdfData())
+                    {
                         mpPdfData = rGraphic.getPdfData();
+                        mnPageNumber = rGraphic.getPageNumber();
+                    }
                 }
             }
             break;
@@ -267,7 +272,10 @@ void GraphicCacheEntry::ImplFillSubstitute( Graphic& rSubstitute )
     {
         rSubstitute = *mpBmpEx;
         if (mpPdfData && mpPdfData->hasElements())
+        {
             rSubstitute.setPdfData(mpPdfData);
+            rSubstitute.setPageNumber(mnPageNumber);
+        }
     }
     else if( mpAnimation )
     {
@@ -363,6 +371,7 @@ void GraphicCacheEntry::GraphicObjectWasSwappedOut()
     // #119176# also reset VectorGraphicData
     maVectorGraphicData.reset();
     mpPdfData.reset();
+    mnPageNumber = -1;
 }
 
 void GraphicCacheEntry::GraphicObjectWasSwappedIn( const GraphicObject& rObj )
