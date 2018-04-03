@@ -786,16 +786,13 @@ bool ScInterpreter::JumpMatrix( short nStackLevel )
         }
         if ( bCont && nStart != nNext )
         {
-            const ScTokenVec* pParams = pJumpMatrix->GetJumpParameters();
-            if ( pParams )
+            const ScTokenVec & rParams = pJumpMatrix->GetJumpParameters();
+            for ( auto const & i : rParams )
             {
-                for ( ScTokenVec::const_iterator i = pParams->begin(); i != pParams->end(); ++i )
-                {
-                    // This is not the current state of the interpreter, so
-                    // push without error, and elements' errors are coded into
-                    // double.
-                    PushWithoutError( *(*i));
-                }
+                // This is not the current state of the interpreter, so
+                // push without error, and elements' errors are coded into
+                // double.
+                PushWithoutError(*i);
             }
             aCode.Jump( nStart, nNext, nStop );
         }
