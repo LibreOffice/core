@@ -567,6 +567,12 @@ private:
     std::map<int, int> m_aListOverrideTable;
     /// Maps listtable indexes to listtable entries.
     std::map<int, RTFValue::Pointer_t> m_aListTable;
+    /// Index of the current list level in a list table entry.
+    int m_nListLevel = -1;
+    /// Maps List level indexes to removed values in the current list entry.
+    std::map<int, int> m_aInvalidListLevelFirstIndents;
+    /// Maps list table indexes to levels (and their removed values).
+    std::map<int, std::map<int, int>> m_aInvalidListTableFirstIndents;
     /// The settings table attributes.
     RTFSprms m_aSettingsTableAttributes;
     /// The settings table sprms.

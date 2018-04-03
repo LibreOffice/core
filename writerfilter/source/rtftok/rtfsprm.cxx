@@ -262,6 +262,31 @@ static RTFValue::Pointer_t getListLevel(RTFValue::Pointer_t pAbstract, int nLeve
     return RTFValue::Pointer_t();
 }
 
+void RTFSprms::deduplicateList(const std::map<int, int>& rInvalidListLevelFirstIndents)
+{
+    int nLevel = 0;
+    RTFValue::Pointer_t pLevelId
+        = getNestedSprm(*this, NS_ooxml::LN_CT_PPrBase_numPr, NS_ooxml::LN_CT_NumPr_ilvl);
+    if (pLevelId)
+        nLevel = pLevelId->getInt();
+
+    auto it = rInvalidListLevelFirstIndents.find(nLevel);
+    if (it == rInvalidListLevelFirstIndents.end())
+        return;
+
+    int nListValue = it->second;
+
+    RTFValue::Pointer_t pParagraphValue
+        = getNestedAttribute(*this, NS_ooxml::LN_CT_PPrBase_ind, NS_ooxml::LN_CT_Ind_firstLine);
+    if (!pParagraphValue)
+        return;
+
+    int nParagraphValue = pParagraphValue->getInt();
+
+    if (nParagraphValue == nListValue)
+        eraseNestedAttribute(*this, NS_ooxml::LN_CT_PPrBase_ind, NS_ooxml::LN_CT_Ind_firstLine);
+}
+
 void RTFSprms::duplicateList(RTFValue::Pointer_t pAbstract)
 {
     int nLevel = 0;
