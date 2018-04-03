@@ -145,7 +145,7 @@ void LwpTextStyle::RegisterStyle()
         return;
     }
 
-    XFTextStyle* pStyle = new XFTextStyle();
+    std::unique_ptr<XFTextStyle> pStyle(new XFTextStyle());
 
     //Set name
     OUString styleName = GetName().str();
@@ -160,7 +160,7 @@ void LwpTextStyle::RegisterStyle()
 
     //Add style
     LwpStyleManager* pStyleMgr = m_pFoundry->GetStyleManager();
-    pStyleMgr->AddStyle(GetObjectID(), pStyle);
+    pStyleMgr->AddStyle(GetObjectID(), std::move(pStyle));
 
 }
 

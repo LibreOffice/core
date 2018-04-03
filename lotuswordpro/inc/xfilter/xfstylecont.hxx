@@ -62,6 +62,7 @@
 
 #include <xfilter/xfglobal.hxx>
 #include <vector>
+#include <memory>
 
 class IXFStyle;
 
@@ -98,7 +99,7 @@ public:
      * @descr   Add style to container.
      *          If the same style has exist, then pStyle will be deleted, and the same style will be return.
      */
-    IXFStyleRet     AddStyle(IXFStyle *pStyle);
+    IXFStyleRet     AddStyle(std::unique_ptr<IXFStyle> pStyle);
 
     /**
      * @descr   Find the same style.
@@ -135,7 +136,7 @@ public:
 private:
     static void     ManageStyleFont(IXFStyle *pStyle);
 private:
-    std::vector<IXFStyle*>  m_aStyles;
+    std::vector<std::unique_ptr<IXFStyle>>  m_aStyles;
     OUString   m_strStyleNamePrefix;
 };
 

@@ -178,7 +178,7 @@ void LwpSilverBullet::RegisterStyle()
     }
 
     //add style-list to style manager.
-    m_strStyleName = pXFStyleManager->AddStyle(xListStyle.release()).m_pStyle->GetStyleName();
+    m_strStyleName = pXFStyleManager->AddStyle(std::move(xListStyle)).m_pStyle->GetStyleName();
 }
 
 /**

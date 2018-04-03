@@ -152,7 +152,7 @@ OUString LwpBulletStyleMgr::RegisterBulletStyle(LwpPara* pPara, LwpBulletOverrid
         eAlign = enumXFAlignEnd;
     }
 
-    XFListStyle* pListStyle = new XFListStyle();
+    std::unique_ptr<XFListStyle> pListStyle(new XFListStyle());
     XFStyleManager* pXFStyleMgr = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
 
     if (!bIsNumbering)
@@ -174,7 +174,7 @@ OUString LwpBulletStyleMgr::RegisterBulletStyle(LwpPara* pPara, LwpBulletOverrid
             }
         }
 
-        aStyleName = pXFStyleMgr->AddStyle(pListStyle).m_pStyle->GetStyleName();
+        aStyleName = pXFStyleMgr->AddStyle(std::move(pListStyle)).m_pStyle->GetStyleName();
     }
     else
     {
@@ -230,11 +230,8 @@ OUString LwpBulletStyleMgr::RegisterBulletStyle(LwpPara* pPara, LwpBulletOverrid
 
                 pListStyle->SetListPosition(nPos, 0.0, 0.635, 0.0);
             }
-            aStyleName = pXFStyleMgr->AddStyle(pListStyle).m_pStyle->GetStyleName();
+            aStyleName = pXFStyleMgr->AddStyle(std::move(pListStyle)).m_pStyle->GetStyleName();
         }
-        else
-            delete pListStyle;
-
     }
 
     m_vStyleNameList.push_back(aStyleName);

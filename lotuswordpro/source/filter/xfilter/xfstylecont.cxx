@@ -72,22 +72,14 @@ XFStyleContainer::XFStyleContainer(const OUString& strStyleNamePrefix)
 
 XFStyleContainer::~XFStyleContainer()
 {
-    for (auto const& style : m_aStyles)
-    {
-        delete style;
-    }
 }
 
-void    XFStyleContainer::Reset()
+void XFStyleContainer::Reset()
 {
-    for (auto const& style : m_aStyles)
-    {
-        delete style;
-    }
     m_aStyles.clear();
 }
 
-IXFStyleRet XFStyleContainer::AddStyle(IXFStyle *pStyle)
+IXFStyleRet XFStyleContainer::AddStyle(std::unique_ptr<IXFStyle> pStyle)
 {
     IXFStyleRet aRet;
 
@@ -97,14 +89,13 @@ IXFStyleRet XFStyleContainer::AddStyle(IXFStyle *pStyle)
     if( !pStyle )
         return aRet;
     //no matter we want to delete the style or not,XFFont object should be saved first.
-    ManageStyleFont(pStyle);
+    ManageStyleFont(pStyle.get());
 
     if( pStyle->GetStyleName().isEmpty() )
-        pConStyle = FindSameStyle(pStyle);
+        pConStyle = FindSameStyle(pStyle.get());
 
     if( pConStyle )//such a style has exist:
     {
-        delete pStyle;
         aRet.m_pStyle = pConStyle;
         aRet.m_bOrigDeleted = true;
         return aRet;
@@ -127,9 +118,9 @@ IXFStyleRet XFStyleContainer::AddStyle(IXFStyle *pStyle)
             }
         }
 
-        m_aStyles.push_back(pStyle);
         //transform the font object to XFFontFactory
-        aRet.m_pStyle = pStyle;
+        aRet.m_pStyle = pStyle.get();
+        m_aStyles.push_back(std::move(pStyle));
         return aRet;
     }
 }
@@ -140,7 +131,7 @@ IXFStyle*   XFStyleContainer::FindSameStyle(IXFStyle *pStyle)
     {
         assert(style);
         if( style->Equal(pStyle) )
-            return style;
+            return style.get();
     }
 
     return nullptr;
@@ -152,7 +143,7 @@ IXFStyle*   XFStyleContainer::FindStyle(const OUString& name)
     {
         assert(style);
         if( style->GetStyleName() == name )
-            return style;
+            return style.get();
     }
 
     return nullptr;
@@ -163,7 +154,7 @@ const IXFStyle* XFStyleContainer::Item(size_t index) const
     assert(index<m_aStyles.size());
     if (index < m_aStyles.size())
     {
-        return m_aStyles[index];
+        return m_aStyles[index].get();
     }
     return nullptr;
 }
@@ -233,8 +224,8 @@ bool operator==(XFStyleContainer& b1, XFStyleContainer& b2)
         return false;
     for( size_t i=0; i<b1.m_aStyles.size(); ++i )
     {
-        IXFStyle *pS1 = b1.m_aStyles[i];
-        IXFStyle *pS2 = b2.m_aStyles[i];
+        IXFStyle *pS1 = b1.m_aStyles[i].get();
+        IXFStyle *pS2 = b2.m_aStyles[i].get();
 
         if( pS1 )
         {

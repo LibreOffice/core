@@ -132,11 +132,11 @@ void LwpTocSuperLayout::RegisterStyle()
     // Get font info of default text style and set into tab style
     const LwpObjectID *pDefaultTextStyle = m_pFoundry ? m_pFoundry->GetDefaultTextStyle() : nullptr;
     XFParaStyle* pBaseStyle = pDefaultTextStyle ? dynamic_cast<XFParaStyle*>(m_pFoundry->GetStyleManager()->GetStyle(*pDefaultTextStyle)) : nullptr;
-    XFTextStyle*pTextStyle = new XFTextStyle;
+    std::unique_ptr<XFTextStyle> pTextStyle(new XFTextStyle);
     if (pBaseStyle)
         pTextStyle->SetFont(pBaseStyle->GetFont()); // who delete this font?????
     XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
-    m_TabStyleName = pXFStyleManager->AddStyle(pTextStyle).m_pStyle->GetStyleName();
+    m_TabStyleName = pXFStyleManager->AddStyle(std::move(pTextStyle)).m_pStyle->GetStyleName();
 
 }
 /**

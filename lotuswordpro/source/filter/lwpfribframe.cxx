@@ -114,10 +114,10 @@ void LwpFribFrame::RegisterStyle(LwpFoundry* pFoundry)
                 m_StyleName = pOldStyle->GetStyleName();
             else
             {
-                XFParaStyle* pParaStyle = new XFParaStyle;
+                std::unique_ptr<XFParaStyle> pParaStyle(new XFParaStyle);
                 *pParaStyle = *pOldStyle;
                 XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
-                m_StyleName = pXFStyleManager->AddStyle(pParaStyle).m_pStyle->GetStyleName();
+                m_StyleName = pXFStyleManager->AddStyle(std::move(pParaStyle)).m_pStyle->GetStyleName();
             }
         }
         //remember the current paragraph font size which will be used in parsing frame

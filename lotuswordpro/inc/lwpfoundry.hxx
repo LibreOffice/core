@@ -300,7 +300,7 @@ private:
     LwpStyleMap m_StyleList;
 public:
     void SetFoundry(LwpFoundry* pFoundry){m_pFoundry = pFoundry;}
-    void AddStyle(LwpObjectID styleObjID, IXFStyle* pStyle);
+    void AddStyle(LwpObjectID styleObjID, std::unique_ptr<IXFStyle> pStyle);
     IXFStyle* GetStyle(const LwpObjectID &styleObjID);
 };
 #endif

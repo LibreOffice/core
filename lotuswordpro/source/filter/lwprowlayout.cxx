@@ -118,7 +118,7 @@ void LwpRowLayout::SetRowMap()
 void LwpRowLayout::RegisterStyle()
 {
     // register row style
-    XFRowStyle *pRowStyle = new XFRowStyle();
+    std::unique_ptr<XFRowStyle> pRowStyle(new XFRowStyle());
 
     if (m_nDirection & 0x0030)
     {
@@ -129,7 +129,7 @@ void LwpRowLayout::RegisterStyle()
         pRowStyle->SetRowHeight(static_cast<float>(LwpTools::ConvertFromUnitsToMetric(cheight)));
     }
     XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
-    m_StyleName = pXFStyleManager->AddStyle(pRowStyle).m_pStyle->GetStyleName();
+    m_StyleName = pXFStyleManager->AddStyle(std::move(pRowStyle)).m_pStyle->GetStyleName();
 
     LwpTableLayout* pTableLayout = GetParentTableLayout();
     if (pTableLayout)
@@ -265,12 +265,11 @@ void LwpRowLayout::RegisterCurRowStyle(XFRow* pXFRow,sal_uInt16 nRowMark)
         return;
     double fHeight = pRowStyle->GetRowHeight();
 
-    XFRowStyle* pNewStyle = new XFRowStyle;
+    std::unique_ptr<XFRowStyle> pNewStyle(new XFRowStyle);
     *pNewStyle = *pRowStyle;
     LwpTableLayout* pTableLayout = GetParentTableLayout();
     if (!pTableLayout)
     {
-        delete pNewStyle;
         return;
     }
     std::map<sal_uInt16,LwpRowLayout*> RowsMap = pTableLayout->GetRowsMap();
@@ -301,7 +300,7 @@ void LwpRowLayout::RegisterCurRowStyle(XFRow* pXFRow,sal_uInt16 nRowMark)
         pNewStyle->SetRowHeight(static_cast<float>(fHeight));
     }
 
-    pXFRow->SetStyleName(pXFStyleManager->AddStyle(pNewStyle).m_pStyle->GetStyleName());
+    pXFRow->SetStyleName(pXFStyleManager->AddStyle(std::move(pNewStyle)).m_pStyle->GetStyleName());
 }
 
 /**

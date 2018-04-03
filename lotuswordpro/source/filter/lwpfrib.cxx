@@ -261,13 +261,13 @@ void LwpFrib::RegisterStyle(LwpFoundry* pFoundry)
             pCharStyle = dynamic_cast<LwpCharacterStyle*>(m_pModifiers->CharStyleID.obj().get());
         if (pCharStyle)
         {
-            pStyle = new XFTextStyle();
-            *pStyle = *pNamedStyle;
+            std::unique_ptr<XFTextStyle> pNewStyle(new XFTextStyle());
+            *pNewStyle = *pNamedStyle;
 
-            pStyle->SetStyleName("");
+            pNewStyle->SetStyleName("");
             pFont = pFoundry->GetFontManger().CreateOverrideFont(pCharStyle->GetFinalFontID(),m_pModifiers->FontID);
-            pStyle->SetFont(pFont);
-            IXFStyleRet aNewStyle = pXFStyleManager->AddStyle(pStyle);
+            pNewStyle->SetFont(pFont);
+            IXFStyleRet aNewStyle = pXFStyleManager->AddStyle(std::move(pNewStyle));
             m_StyleName = aNewStyle.m_pStyle->GetStyleName();
             pStyle = dynamic_cast<XFTextStyle*>(aNewStyle.m_pStyle);
             if (aNewStyle.m_bOrigDeleted)
@@ -280,10 +280,10 @@ void LwpFrib::RegisterStyle(LwpFoundry* pFoundry)
     {
         if (m_pModifiers->FontID && pFoundry)
         {
-            pStyle = new XFTextStyle();
+            std::unique_ptr<XFTextStyle> pNewStyle(new XFTextStyle());
             pFont = pFoundry->GetFontManger().CreateFont(m_pModifiers->FontID);
-            pStyle->SetFont(pFont);
-            IXFStyleRet aNewStyle = pXFStyleManager->AddStyle(pStyle);
+            pNewStyle->SetFont(pFont);
+            IXFStyleRet aNewStyle = pXFStyleManager->AddStyle(std::move(pNewStyle));
             m_StyleName = aNewStyle.m_pStyle->GetStyleName();
             pStyle = dynamic_cast<XFTextStyle*>(aNewStyle.m_pStyle);
             if (aNewStyle.m_bOrigDeleted)
@@ -298,21 +298,21 @@ void LwpFrib::RegisterStyle(LwpFoundry* pFoundry)
             pStyle->GetFont()->SetBackColor(aColor);
         else //register a new style
         {
-            pStyle = new XFTextStyle();
+            std::unique_ptr<XFTextStyle> pNewStyle(new XFTextStyle());
 
             if (!m_StyleName.isEmpty())
             {
                 XFTextStyle* pOldStyle = pXFStyleManager->FindTextStyle(m_StyleName);
-                *pStyle = *pOldStyle;
-                pStyle->GetFont()->SetBackColor(aColor);
+                *pNewStyle = *pOldStyle;
+                pNewStyle->GetFont()->SetBackColor(aColor);
             }
             else
             {
                 pFont = new XFFont;
                 pFont->SetBackColor(aColor);
-                pStyle->SetFont(pFont);
+                pNewStyle->SetFont(pFont);
             }
-            m_StyleName = pXFStyleManager->AddStyle(pStyle).m_pStyle->GetStyleName();
+            m_StyleName = pXFStyleManager->AddStyle(std::move(pNewStyle)).m_pStyle->GetStyleName();
         }
     }
 }

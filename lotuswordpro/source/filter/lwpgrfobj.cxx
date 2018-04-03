@@ -272,11 +272,11 @@ void LwpGraphicObject::RegisterStyle()
         rtl::Reference<LwpVirtualLayout> xMyLayout(GetLayout(nullptr));
         if (xMyLayout.is() && xMyLayout->IsFrame())
         {
-            XFFrameStyle* pXFFrameStyle = new XFFrameStyle();
+            std::unique_ptr<XFFrameStyle> pXFFrameStyle(new XFFrameStyle());
             pXFFrameStyle->SetXPosType(enumXFFrameXPosFromLeft, enumXFFrameXRelFrame);
             pXFFrameStyle->SetYPosType(enumXFFrameYPosFromTop, enumXFFrameYRelPara);
             XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
-            m_strStyleName = pXFStyleManager->AddStyle(pXFFrameStyle).m_pStyle->GetStyleName();
+            m_strStyleName = pXFStyleManager->AddStyle(std::move(pXFFrameStyle)).m_pStyle->GetStyleName();
         }
     }
 
@@ -628,7 +628,7 @@ void LwpGraphicObject::CreateGrafObject()
 
     // set style for the image
     XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
-    pImage->SetStyleName(pXFStyleManager->AddStyle(xImageStyle.release()).m_pStyle->GetStyleName());
+    pImage->SetStyleName(pXFStyleManager->AddStyle(std::move(xImageStyle)).m_pStyle->GetStyleName());
 
     // set anchor to frame
     pImage->SetAnchorType(enumXFAnchorFrame);
