@@ -391,8 +391,8 @@ IMPL_LINK( SfxVersionDialog, ButtonHdl_Impl, Button*, pButton, void )
     {
         SfxVersionInfo aInfo;
         aInfo.aAuthor = SvtUserOptions().GetFullName();
-        VclPtrInstance< SfxViewVersionDialog_Impl > pDlg(this, aInfo, true);
-        short nRet = pDlg->Execute();
+        SfxViewVersionDialog_Impl aDlg(GetFrameWeld(), aInfo, true);
+        short nRet = aDlg.run();
         if ( nRet == RET_OK )
         {
             SfxStringItem aComment( SID_DOCINFO_COMMENTS, aInfo.aComment );
@@ -423,8 +423,8 @@ IMPL_LINK( SfxVersionDialog, ButtonHdl_Impl, Button*, pButton, void )
     else if (pButton == m_pViewButton && pEntry)
     {
         SfxVersionInfo* pInfo = static_cast<SfxVersionInfo*>(pEntry->GetUserData());
-        VclPtrInstance<SfxViewVersionDialog_Impl> pDlg(this, *pInfo, false);
-        pDlg->Execute();
+        SfxViewVersionDialog_Impl aDlg(GetFrameWeld(), *pInfo, false);
+        aDlg.run();
     }
     else if (pEntry && pButton == m_pCompareButton)
     {
@@ -451,65 +451,48 @@ IMPL_LINK( SfxVersionDialog, ButtonHdl_Impl, Button*, pButton, void )
     }
 }
 
-SfxViewVersionDialog_Impl::SfxViewVersionDialog_Impl(vcl::Window *pParent, SfxVersionInfo& rInfo, bool bEdit)
-    : SfxModalDialog(pParent, "VersionCommentDialog", "sfx/ui/versioncommentdialog.ui")
+SfxViewVersionDialog_Impl::SfxViewVersionDialog_Impl(weld::Window *pParent, SfxVersionInfo& rInfo, bool bEdit)
+    : GenericDialogController(pParent, "sfx/ui/versioncommentdialog.ui", "VersionCommentDialog")
     , m_rInfo(rInfo)
+    , m_xDateTimeText(m_xBuilder->weld_label("timestamp"))
+    , m_xSavedByText(m_xBuilder->weld_label("author"))
+    , m_xEdit(m_xBuilder->weld_text_view("textview"))
+    , m_xOKButton(m_xBuilder->weld_button("ok"))
+    , m_xCancelButton(m_xBuilder->weld_button("cancel"))
+    , m_xCloseButton(m_xBuilder->weld_button("close"))
 {
-    get(m_pDateTimeText, "timestamp");
-    get(m_pSavedByText, "author");
-    get(m_pEdit, "textview");
-    get(m_pOKButton, "ok");
-    get(m_pCancelButton, "cancel");
-    get(m_pCloseButton, "close");
-
     OUString sAuthor = rInfo.aAuthor.isEmpty() ? SfxResId(STR_NO_NAME_SET) : rInfo.aAuthor;
 
     const LocaleDataWrapper& rLocaleWrapper( Application::GetSettings().GetLocaleDataWrapper() );
-    m_pDateTimeText->SetText(m_pDateTimeText->GetText() + formatTime(rInfo.aCreationDate, rLocaleWrapper));
-    m_pSavedByText->SetText(m_pSavedByText->GetText() + sAuthor);
-    m_pEdit->SetText(rInfo.aComment);
-    m_pEdit->set_height_request(7 * m_pEdit->GetTextHeight());
-    m_pEdit->set_width_request(40 * m_pEdit->approximate_char_width());
-    m_pOKButton->SetClickHdl(LINK(this, SfxViewVersionDialog_Impl, ButtonHdl));
+    m_xDateTimeText->set_label(m_xDateTimeText->get_label() + formatTime(rInfo.aCreationDate, rLocaleWrapper));
+    m_xSavedByText->set_label(m_xSavedByText->get_label() + sAuthor);
+    m_xEdit->set_text(rInfo.aComment);
+    m_xEdit->set_size_request(40 * m_xEdit->get_approximate_digit_width(),
+                              7 * m_xEdit->get_text_height());
+    m_xOKButton->connect_clicked(LINK(this, SfxViewVersionDialog_Impl, ButtonHdl));
 
     if (!bEdit)
     {
-        m_pOKButton->Hide();
-        m_pCancelButton->Hide();
-        m_pEdit->SetReadOnly();
-        SetText(SfxResId(STR_VIEWVERSIONCOMMENT));
-        m_pCloseButton->GrabFocus();
+        m_xOKButton->hide();
+        m_xCancelButton->hide();
+        m_xEdit->set_editable(false);
+        m_xDialog->set_title(SfxResId(STR_VIEWVERSIONCOMMENT));
+        m_xCloseButton->grab_focus();
     }
     else
     {
-        m_pDateTimeText->Hide();
-        m_pCloseButton->Hide();
-        m_pEdit->GrabFocus();
+        m_xDateTimeText->hide();
+        m_xCloseButton->hide();
+        m_xEdit->grab_focus();
     }
 }
 
-SfxViewVersionDialog_Impl::~SfxViewVersionDialog_Impl()
+IMPL_LINK(SfxViewVersionDialog_Impl, ButtonHdl, weld::Button&, rButton, void)
 {
-    disposeOnce();
-}
-
-void SfxViewVersionDialog_Impl::dispose()
-{
-    m_pDateTimeText.clear();
-    m_pSavedByText.clear();
-    m_pEdit.clear();
-    m_pOKButton.clear();
-    m_pCancelButton.clear();
-    m_pCloseButton.clear();
-    SfxModalDialog::dispose();
-}
-
-IMPL_LINK(SfxViewVersionDialog_Impl, ButtonHdl, Button*, pButton, void)
-{
-    assert(pButton == m_pOKButton);
-    (void)pButton;
-    m_rInfo.aComment = m_pEdit->GetText();
-    EndDialog(RET_OK);
+    assert(&rButton == m_xOKButton.get());
+    (void)rButton;
+    m_rInfo.aComment = m_xEdit->get_text();
+    m_xDialog->response(RET_OK);
 }
 
 SfxCmisVersionsDialog::SfxCmisVersionsDialog ( SfxViewFrame* pVwFrame )

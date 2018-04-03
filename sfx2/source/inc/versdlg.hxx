@@ -26,6 +26,7 @@
 #include <svtools/svtabbx.hxx>
 #include <vcl/button.hxx>
 #include <vcl/fixed.hxx>
+#include <vcl/weld.hxx>
 
 class SfxViewFrame;
 struct SfxVersionInfo;
@@ -70,22 +71,22 @@ public:
     bool                        IsSaveVersionOnClose() const { return m_bIsSaveVersionOnClose; }
 };
 
-class SfxViewVersionDialog_Impl : public SfxModalDialog
+class SfxViewVersionDialog_Impl : public weld::GenericDialogController
 {
-    VclPtr<FixedText>        m_pDateTimeText;
-    VclPtr<FixedText>        m_pSavedByText;
-    VclPtr<VclMultiLineEdit> m_pEdit;
-    VclPtr<OKButton>         m_pOKButton;
-    VclPtr<CancelButton>     m_pCancelButton;
-    VclPtr<CloseButton>      m_pCloseButton;
+private:
     SfxVersionInfo&   m_rInfo;
 
-    DECL_LINK(ButtonHdl, Button*, void);
+    std::unique_ptr<weld::Label> m_xDateTimeText;
+    std::unique_ptr<weld::Label> m_xSavedByText;
+    std::unique_ptr<weld::TextView> m_xEdit;
+    std::unique_ptr<weld::Button> m_xOKButton;
+    std::unique_ptr<weld::Button> m_xCancelButton;
+    std::unique_ptr<weld::Button> m_xCloseButton;
+
+    DECL_LINK(ButtonHdl, weld::Button&, void);
 
 public:
-    SfxViewVersionDialog_Impl(vcl::Window *pParent, SfxVersionInfo& rInfo, bool bEdit);
-    virtual ~SfxViewVersionDialog_Impl() override;
-    virtual void dispose() override;
+    SfxViewVersionDialog_Impl(weld::Window *pParent, SfxVersionInfo& rInfo, bool bEdit);
 };
 
 class SfxCmisVersionsDialog : public SfxModalDialog
