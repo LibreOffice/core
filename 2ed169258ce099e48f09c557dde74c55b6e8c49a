@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_d18dbd7c",
+        "filename": "sw/source/core/doc/SwStyleNameMapper.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2018-04-03T08:56:29Z",
+      "side": 1,
+      "message": "What does this comment mean?",
+      "revId": "2ed169258ce099e48f09c557dde74c55b6e8c49a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
