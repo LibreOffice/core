@@ -83,7 +83,7 @@ void PaMIntoCursorShellRing::RemoveFromRing( SwPaM& rPam, SwPaM const * pPrev )
 
 SwAutoCorrDoc::SwAutoCorrDoc( SwEditShell& rEditShell, SwPaM& rPam,
                                 sal_Unicode cIns )
-    : rEditSh( rEditShell ), rCursor( rPam ), pIdx( nullptr )
+    : rEditSh( rEditShell ), rCursor( rPam )
     , m_nEndUndoCounter(0)
     , bUndoIdInitialized( cIns == 0 )
 {
@@ -95,7 +95,6 @@ SwAutoCorrDoc::~SwAutoCorrDoc()
     {
         rEditSh.EndUndo();
     }
-    delete pIdx;
 }
 
 void SwAutoCorrDoc::DeleteSel( SwPaM& rDelPam )
@@ -276,7 +275,7 @@ OUString const* SwAutoCorrDoc::GetPrevPara(bool const bAtNormalPos)
     OUString const* pStr(nullptr);
 
     if( bAtNormalPos || !pIdx )
-        pIdx = new SwNodeIndex( rCursor.GetPoint()->nNode, -1 );
+        pIdx.reset(new SwNodeIndex( rCursor.GetPoint()->nNode, -1 ));
     else
         --(*pIdx);
 
@@ -360,7 +359,7 @@ bool SwAutoCorrDoc::ChgAutoCorrWord( sal_Int32& rSttPos, sal_Int32 nEndPos,
                 if( pPara )
                 {
                     OSL_ENSURE( !pIdx, "who has not deleted his Index?" );
-                    pIdx = new SwNodeIndex( rCursor.GetPoint()->nNode, -1 );
+                    pIdx.reset(new SwNodeIndex( rCursor.GetPoint()->nNode, -1 ));
                 }
 
                 SwDoc* pAutoDoc = aTBlks.GetDoc();
