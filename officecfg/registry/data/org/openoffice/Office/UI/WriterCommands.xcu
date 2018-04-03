@@ -329,7 +329,7 @@
       </node>
       <node oor:name=".uno:GotoPage" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Go t~o Page</value>
+          <value xml:lang="en-US">Go t~o Page...</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
