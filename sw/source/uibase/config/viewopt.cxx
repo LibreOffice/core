@@ -43,30 +43,30 @@
 #include <comphelper/configurationlistener.hxx>
 
 #ifdef DBG_UTIL
-bool SwViewOption::m_bTest9 = false;        //DrawingLayerNotLoading
+bool SwViewOption::s_bTest9 = false;        //DrawingLayerNotLoading
 #endif
-Color SwViewOption::m_aDocBoundColor(COL_LIGHTGRAY);
-Color SwViewOption::m_aObjectBoundColor(COL_LIGHTGRAY);
-Color SwViewOption::m_aDocColor(COL_LIGHTGRAY);
-Color SwViewOption::m_aAppBackgroundColor(COL_LIGHTGRAY);
-Color SwViewOption::m_aTableBoundColor(COL_LIGHTGRAY);
-Color SwViewOption::m_aIndexShadingsColor(COL_LIGHTGRAY);
-Color SwViewOption::m_aLinksColor(COL_BLUE);
-Color SwViewOption::m_aVisitedLinksColor(COL_RED);
-Color SwViewOption::m_aDirectCursorColor(COL_BLUE);
-Color SwViewOption::m_aTextGridColor(COL_LIGHTGRAY);
-Color SwViewOption::m_aSpellColor(COL_LIGHTRED);
-Color SwViewOption::m_aSmarttagColor(COL_LIGHTMAGENTA);
-Color SwViewOption::m_aFontColor(COL_BLACK);
-Color SwViewOption::m_aFieldShadingsColor(COL_LIGHTGRAY);
-Color SwViewOption::m_aSectionBoundColor(COL_LIGHTGRAY);
-Color SwViewOption::m_aPageBreakColor(COL_BLUE);
-Color SwViewOption::m_aScriptIndicatorColor(COL_GREEN);
-Color SwViewOption::m_aShadowColor(COL_GRAY);
-Color SwViewOption::m_aHeaderFooterMarkColor(COL_BLUE);
+Color SwViewOption::s_aDocBoundColor(COL_LIGHTGRAY);
+Color SwViewOption::s_aObjectBoundColor(COL_LIGHTGRAY);
+Color SwViewOption::s_aDocColor(COL_LIGHTGRAY);
+Color SwViewOption::s_aAppBackgroundColor(COL_LIGHTGRAY);
+Color SwViewOption::s_aTableBoundColor(COL_LIGHTGRAY);
+Color SwViewOption::s_aIndexShadingsColor(COL_LIGHTGRAY);
+Color SwViewOption::s_aLinksColor(COL_BLUE);
+Color SwViewOption::s_aVisitedLinksColor(COL_RED);
+Color SwViewOption::s_aDirectCursorColor(COL_BLUE);
+Color SwViewOption::s_aTextGridColor(COL_LIGHTGRAY);
+Color SwViewOption::s_aSpellColor(COL_LIGHTRED);
+Color SwViewOption::s_aSmarttagColor(COL_LIGHTMAGENTA);
+Color SwViewOption::s_aFontColor(COL_BLACK);
+Color SwViewOption::s_aFieldShadingsColor(COL_LIGHTGRAY);
+Color SwViewOption::s_aSectionBoundColor(COL_LIGHTGRAY);
+Color SwViewOption::s_aPageBreakColor(COL_BLUE);
+Color SwViewOption::s_aScriptIndicatorColor(COL_GREEN);
+Color SwViewOption::s_aShadowColor(COL_GRAY);
+Color SwViewOption::s_aHeaderFooterMarkColor(COL_BLUE);
 
-ViewOptFlags SwViewOption::m_nAppearanceFlags = ViewOptFlags::DocBoundaries|ViewOptFlags::ObjectBoundaries;
-sal_uInt16 SwViewOption::m_nPixelTwips = 0;   // one pixel on the screen
+ViewOptFlags SwViewOption::s_nAppearanceFlags = ViewOptFlags::DocBoundaries|ViewOptFlags::ObjectBoundaries;
+sal_uInt16 SwViewOption::s_nPixelTwips = 0;   // one pixel on the screen
 
 bool SwViewOption::IsEqualFlags( const SwViewOption &rOpt ) const
 {
@@ -140,13 +140,13 @@ void SwViewOption::PaintPostIts( OutputDevice *pOut, const SwRect &rRect, bool b
             Color aOldLineColor( pOut->GetLineColor() );
         pOut->SetLineColor( COL_GRAY );
         // to make it look nice, we subtract two pixels everywhere
-        sal_uInt16 nPix = m_nPixelTwips * 2;
+        sal_uInt16 nPix = s_nPixelTwips * 2;
         if( rRect.Width() <= 2 * nPix || rRect.Height() <= 2 * nPix )
             nPix = 0;
         const Point aTopLeft(  rRect.Left()  + nPix, rRect.Top()    + nPix );
         const Point aBotRight( rRect.Right() - nPix, rRect.Bottom() - nPix );
         const SwRect aRect( aTopLeft, aBotRight );
-        DrawRect( pOut, aRect, m_aScriptIndicatorColor );
+        DrawRect( pOut, aRect, s_aScriptIndicatorColor );
     pOut->SetLineColor( aOldLineColor );
     }
 }
@@ -217,7 +217,7 @@ SwViewOption::SwViewOption() :
              m_bTest5 = m_bTest6 = m_bTest7 = m_bTest8 = m_bTest10 = false;
 #endif
     if (comphelper::LibreOfficeKit::isActive())
-        m_aAppBackgroundColor = COL_TRANSPARENT;
+        s_aAppBackgroundColor = COL_TRANSPARENT;
 }
 
 SwViewOption::SwViewOption(const SwViewOption& rVOpt)
@@ -311,9 +311,9 @@ SwViewOption::~SwViewOption()
 
 void SwViewOption::Init( vcl::Window const *pWin )
 {
-    if( !m_nPixelTwips && pWin )
+    if( !s_nPixelTwips && pWin )
     {
-        m_nPixelTwips = static_cast<sal_uInt16>(pWin->PixelToLogic( Size(1,1) ).Height());
+        s_nPixelTwips = static_cast<sal_uInt16>(pWin->PixelToLogic( Size(1,1) ).Height());
     }
 }
 
@@ -360,171 +360,171 @@ sal_uInt16      GetHtmlMode(const SwDocShell* pShell)
 
 Color&   SwViewOption::GetDocColor()
 {
-    return m_aDocColor;
+    return s_aDocColor;
 }
 
 Color&   SwViewOption::GetDocBoundariesColor()
 {
-    return m_aDocBoundColor;
+    return s_aDocBoundColor;
 }
 
 Color&   SwViewOption::GetObjectBoundariesColor()
 {
-    return m_aObjectBoundColor;
+    return s_aObjectBoundColor;
 }
 
 Color& SwViewOption::GetAppBackgroundColor()
 {
-    return m_aAppBackgroundColor;
+    return s_aAppBackgroundColor;
 }
 
 Color&   SwViewOption::GetTableBoundariesColor()
 {
-    return m_aTableBoundColor;
+    return s_aTableBoundColor;
 }
 
 Color&   SwViewOption::GetIndexShadingsColor()
 {
-    return m_aIndexShadingsColor;
+    return s_aIndexShadingsColor;
 }
 
 Color&   SwViewOption::GetLinksColor()
 {
-    return m_aLinksColor;
+    return s_aLinksColor;
 }
 
 Color&   SwViewOption::GetVisitedLinksColor()
 {
-    return m_aVisitedLinksColor;
+    return s_aVisitedLinksColor;
 }
 
 Color&   SwViewOption::GetDirectCursorColor()
 {
-    return m_aDirectCursorColor;
+    return s_aDirectCursorColor;
 }
 
 Color&   SwViewOption::GetTextGridColor()
 {
-    return m_aTextGridColor;
+    return s_aTextGridColor;
 }
 
 Color&   SwViewOption::GetSpellColor()
 {
-    return m_aSpellColor;
+    return s_aSpellColor;
 }
 
 Color&   SwViewOption::GetSmarttagColor()
 {
-    return m_aSmarttagColor;
+    return s_aSmarttagColor;
 }
 
 Color&   SwViewOption::GetShadowColor()
 {
-    return m_aShadowColor;
+    return s_aShadowColor;
 }
 
 Color&   SwViewOption::GetFontColor()
 {
-    return m_aFontColor;
+    return s_aFontColor;
 }
 
 Color&   SwViewOption::GetFieldShadingsColor()
 {
-    return m_aFieldShadingsColor;
+    return s_aFieldShadingsColor;
 }
 
 Color&   SwViewOption::GetSectionBoundColor()
 {
-    return m_aSectionBoundColor;
+    return s_aSectionBoundColor;
 }
 
 Color& SwViewOption::GetPageBreakColor()
 {
-    return m_aPageBreakColor;
+    return s_aPageBreakColor;
 }
 
 Color& SwViewOption::GetHeaderFooterMarkColor()
 {
-    return m_aHeaderFooterMarkColor;
+    return s_aHeaderFooterMarkColor;
 }
 
 void SwViewOption::ApplyColorConfigValues(const svtools::ColorConfig& rConfig )
 {
-    m_aDocColor = rConfig.GetColorValue(svtools::DOCCOLOR).nColor;
+    s_aDocColor = rConfig.GetColorValue(svtools::DOCCOLOR).nColor;
 
     svtools::ColorConfigValue aValue = rConfig.GetColorValue(svtools::DOCBOUNDARIES);
-    m_aDocBoundColor = aValue.nColor;
-    m_nAppearanceFlags = ViewOptFlags::NONE;
+    s_aDocBoundColor = aValue.nColor;
+    s_nAppearanceFlags = ViewOptFlags::NONE;
     if(aValue.bIsVisible)
-        m_nAppearanceFlags |= ViewOptFlags::DocBoundaries;
+        s_nAppearanceFlags |= ViewOptFlags::DocBoundaries;
 
-    m_aAppBackgroundColor = rConfig.GetColorValue(svtools::APPBACKGROUND).nColor;
+    s_aAppBackgroundColor = rConfig.GetColorValue(svtools::APPBACKGROUND).nColor;
 
     aValue = rConfig.GetColorValue(svtools::OBJECTBOUNDARIES);
-    m_aObjectBoundColor = aValue.nColor;
+    s_aObjectBoundColor = aValue.nColor;
     if(aValue.bIsVisible)
-        m_nAppearanceFlags |= ViewOptFlags::ObjectBoundaries;
+        s_nAppearanceFlags |= ViewOptFlags::ObjectBoundaries;
 
     aValue = rConfig.GetColorValue(svtools::TABLEBOUNDARIES);
-    m_aTableBoundColor = aValue.nColor;
+    s_aTableBoundColor = aValue.nColor;
     if(aValue.bIsVisible)
-        m_nAppearanceFlags |= ViewOptFlags::TableBoundaries;
+        s_nAppearanceFlags |= ViewOptFlags::TableBoundaries;
 
     aValue = rConfig.GetColorValue(svtools::WRITERIDXSHADINGS);
-    m_aIndexShadingsColor = aValue.nColor;
+    s_aIndexShadingsColor = aValue.nColor;
     if(aValue.bIsVisible)
-        m_nAppearanceFlags |= ViewOptFlags::IndexShadings;
+        s_nAppearanceFlags |= ViewOptFlags::IndexShadings;
 
     aValue = rConfig.GetColorValue(svtools::LINKS);
-    m_aLinksColor = aValue.nColor;
+    s_aLinksColor = aValue.nColor;
     if(aValue.bIsVisible)
-        m_nAppearanceFlags |= ViewOptFlags::Links;
+        s_nAppearanceFlags |= ViewOptFlags::Links;
 
     aValue = rConfig.GetColorValue(svtools::LINKSVISITED);
-    m_aVisitedLinksColor = aValue.nColor;
+    s_aVisitedLinksColor = aValue.nColor;
     if(aValue.bIsVisible)
-        m_nAppearanceFlags |= ViewOptFlags::VisitedLinks;
+        s_nAppearanceFlags |= ViewOptFlags::VisitedLinks;
 
     aValue = rConfig.GetColorValue(svtools::SHADOWCOLOR);
-    m_aShadowColor = aValue.nColor;
+    s_aShadowColor = aValue.nColor;
     if(aValue.bIsVisible)
-        m_nAppearanceFlags |= ViewOptFlags::Shadow;
+        s_nAppearanceFlags |= ViewOptFlags::Shadow;
 
-    m_aDirectCursorColor = rConfig.GetColorValue(svtools::WRITERDIRECTCURSOR).nColor;
+    s_aDirectCursorColor = rConfig.GetColorValue(svtools::WRITERDIRECTCURSOR).nColor;
 
-    m_aTextGridColor = rConfig.GetColorValue(svtools::WRITERTEXTGRID).nColor;
+    s_aTextGridColor = rConfig.GetColorValue(svtools::WRITERTEXTGRID).nColor;
 
-    m_aSpellColor = rConfig.GetColorValue(svtools::SPELL).nColor;
+    s_aSpellColor = rConfig.GetColorValue(svtools::SPELL).nColor;
 
-    m_aSmarttagColor = rConfig.GetColorValue(svtools::SMARTTAGS).nColor;
+    s_aSmarttagColor = rConfig.GetColorValue(svtools::SMARTTAGS).nColor;
 
-    m_aFontColor = rConfig.GetColorValue(svtools::FONTCOLOR).nColor;
+    s_aFontColor = rConfig.GetColorValue(svtools::FONTCOLOR).nColor;
 
     aValue = rConfig.GetColorValue(svtools::WRITERFIELDSHADINGS);
-    m_aFieldShadingsColor = aValue.nColor;
+    s_aFieldShadingsColor = aValue.nColor;
     if(aValue.bIsVisible)
-        m_nAppearanceFlags |= ViewOptFlags::FieldShadings;
+        s_nAppearanceFlags |= ViewOptFlags::FieldShadings;
 
     aValue = rConfig.GetColorValue(svtools::WRITERSECTIONBOUNDARIES);
-    m_aSectionBoundColor = aValue.nColor;
+    s_aSectionBoundColor = aValue.nColor;
     if(aValue.bIsVisible)
-        m_nAppearanceFlags |= ViewOptFlags::SectionBoundaries;
+        s_nAppearanceFlags |= ViewOptFlags::SectionBoundaries;
 
     aValue = rConfig.GetColorValue(svtools::WRITERPAGEBREAKS);
-    m_aPageBreakColor = aValue.nColor;
+    s_aPageBreakColor = aValue.nColor;
 
     aValue = rConfig.GetColorValue(svtools::WRITERHEADERFOOTERMARK);
-    m_aHeaderFooterMarkColor = aValue.nColor;
+    s_aHeaderFooterMarkColor = aValue.nColor;
 
-    m_aScriptIndicatorColor = rConfig.GetColorValue(svtools::WRITERSCRIPTINDICATOR).nColor;
+    s_aScriptIndicatorColor = rConfig.GetColorValue(svtools::WRITERSCRIPTINDICATOR).nColor;
 }
 
 void SwViewOption::SetAppearanceFlag(ViewOptFlags nFlag, bool bSet, bool bSaveInConfig )
 {
     if(bSet)
-        m_nAppearanceFlags |= nFlag;
+        s_nAppearanceFlags |= nFlag;
     else
-        m_nAppearanceFlags &= ~nFlag;
+        s_nAppearanceFlags &= ~nFlag;
     if(bSaveInConfig)
     {
         //create an editable svtools::ColorConfig and store the change
@@ -563,7 +563,7 @@ void SwViewOption::SetAppearanceFlag(ViewOptFlags nFlag, bool bSet, bool bSaveIn
 
 bool SwViewOption::IsAppearanceFlag(ViewOptFlags nFlag)
 {
-    return bool(m_nAppearanceFlags & nFlag);
+    return bool(s_nAppearanceFlags & nFlag);
 }
 
 namespace{
