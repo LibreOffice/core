@@ -60,7 +60,7 @@ private:
     // Our own 'StatsUpdateTimer' calls the following method
     DECL_LINK( DoIdleStatsUpdate, Timer *, void );
 
-    SwDocStat       *mpDocStat;          //< Statistics information
+    std::unique_ptr<SwDocStat> mpDocStat;//< Statistics information
     bool             mbInitialized;      //< allow first time update
     SwDocIdle        maStatsUpdateIdle;  //< Idle for asynchronous stats calculation
 };
