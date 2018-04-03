@@ -180,7 +180,8 @@ ImpGraphic::ImpGraphic() :
         mbSwapOut       ( false ),
         mbDummyContext  ( false ),
         maLastUsed (std::chrono::high_resolution_clock::now()),
-        mbPrepared      ( false )
+        mbPrepared      ( false ),
+        mnPageNumber(-1)
 {
 }
 
@@ -194,6 +195,7 @@ ImpGraphic::ImpGraphic(const ImpGraphic& rImpGraphic)
     , mnSizeBytes(rImpGraphic.mnSizeBytes)
     , mbSwapOut(rImpGraphic.mbSwapOut)
     , mbDummyContext(rImpGraphic.mbDummyContext)
+    , mnPageNumber(-1)
     , maVectorGraphicData(rImpGraphic.maVectorGraphicData)
     , mpPdfData(rImpGraphic.mpPdfData)
     , maGraphicExternalLink(rImpGraphic.maGraphicExternalLink)
@@ -222,6 +224,7 @@ ImpGraphic::ImpGraphic(ImpGraphic&& rImpGraphic)
     , mnSizeBytes(rImpGraphic.mnSizeBytes)
     , mbSwapOut(rImpGraphic.mbSwapOut)
     , mbDummyContext(rImpGraphic.mbDummyContext)
+    , mnPageNumber(-1)
     , maVectorGraphicData(std::move(rImpGraphic.maVectorGraphicData))
     , mpPdfData(std::move(rImpGraphic.mpPdfData))
     , maGraphicExternalLink(rImpGraphic.maGraphicExternalLink)
@@ -239,7 +242,8 @@ ImpGraphic::ImpGraphic(GraphicExternalLink const & rGraphicExternalLink) :
         mbDummyContext  ( false ),
         maGraphicExternalLink(rGraphicExternalLink),
         maLastUsed (std::chrono::high_resolution_clock::now()),
-        mbPrepared (false)
+        mbPrepared (false),
+        mnPageNumber(-1)
 {
 }
 
@@ -250,7 +254,8 @@ ImpGraphic::ImpGraphic( const Bitmap& rBitmap ) :
         mbSwapOut       ( false ),
         mbDummyContext  ( false ),
         maLastUsed (std::chrono::high_resolution_clock::now()),
-        mbPrepared (false)
+        mbPrepared (false),
+        mnPageNumber(-1)
 {
 }
 
@@ -261,7 +266,8 @@ ImpGraphic::ImpGraphic( const BitmapEx& rBitmapEx ) :
         mbSwapOut       ( false ),
         mbDummyContext  ( false ),
         maLastUsed (std::chrono::high_resolution_clock::now()),
-        mbPrepared (false)
+        mbPrepared (false),
+        mnPageNumber(-1)
 {
 }
 
@@ -272,7 +278,8 @@ ImpGraphic::ImpGraphic(const VectorGraphicDataPtr& rVectorGraphicDataPtr)
     mbDummyContext  ( false ),
     maVectorGraphicData(rVectorGraphicDataPtr),
     maLastUsed (std::chrono::high_resolution_clock::now()),
-    mbPrepared (false)
+    mbPrepared (false),
+    mnPageNumber(-1)
 {
 }
 
@@ -284,7 +291,8 @@ ImpGraphic::ImpGraphic( const Animation& rAnimation ) :
         mbSwapOut       ( false ),
         mbDummyContext  ( false ),
         maLastUsed (std::chrono::high_resolution_clock::now()),
-        mbPrepared (false)
+        mbPrepared (false),
+        mnPageNumber(-1)
 {
 }
 
@@ -295,7 +303,8 @@ ImpGraphic::ImpGraphic( const GDIMetaFile& rMtf ) :
         mbSwapOut       ( false ),
         mbDummyContext  ( false ),
         maLastUsed (std::chrono::high_resolution_clock::now()),
-        mbPrepared (false)
+        mbPrepared (false),
+        mnPageNumber(-1)
 {
 }
 
@@ -317,6 +326,7 @@ ImpGraphic& ImpGraphic::operator=( const ImpGraphic& rImpGraphic )
         maSwapInfo = rImpGraphic.maSwapInfo;
         mpContext = rImpGraphic.mpContext;
         mbDummyContext = rImpGraphic.mbDummyContext;
+        mnPageNumber = rImpGraphic.mnPageNumber;
         maGraphicExternalLink = rImpGraphic.maGraphicExternalLink;
 
         mpAnimation.reset();
@@ -360,6 +370,7 @@ ImpGraphic& ImpGraphic::operator=(ImpGraphic&& rImpGraphic)
     maSwapInfo = std::move(rImpGraphic.maSwapInfo);
     mpContext = std::move(rImpGraphic.mpContext);
     mbDummyContext = rImpGraphic.mbDummyContext;
+    mnPageNumber = rImpGraphic.mnPageNumber;
     mpAnimation = std::move(rImpGraphic.mpAnimation);
     maEx = std::move(rImpGraphic.maEx);
     mbSwapOut = rImpGraphic.mbSwapOut;
@@ -375,6 +386,8 @@ ImpGraphic& ImpGraphic::operator=(ImpGraphic&& rImpGraphic)
     maLastUsed = std::chrono::high_resolution_clock::now();
 
     vcl::graphic::Manager::get().changeExisting(this, aOldSizeBytes);
+
+    rImpGraphic.mnPageNumber = -1;
 
     return *this;
 }

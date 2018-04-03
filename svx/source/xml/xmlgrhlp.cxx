@@ -771,7 +771,7 @@ OUString SvXMLGraphicHelper::implSaveGraphic(css::uno::Reference<css::graphic::X
                     // See if we have this PDF already, and avoid duplicate storage.
                     auto aIt = maExportPdf.find(rPdfData.get());
                     if (aIt != maExportPdf.end())
-                        return true;
+                        return aIt->second.first;
 
                     // The graphic has PDF data attached to it, use that.
                     // vcl::ImportPDF() possibly downgraded the PDF data from a
