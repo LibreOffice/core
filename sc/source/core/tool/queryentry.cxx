@@ -59,8 +59,6 @@ ScQueryEntry::ScQueryEntry(const ScQueryEntry& r) :
 
 ScQueryEntry::~ScQueryEntry()
 {
-    delete pSearchParam;
-    delete pSearchText;
 }
 
 ScQueryEntry& ScQueryEntry::operator=( const ScQueryEntry& r )
@@ -71,10 +69,8 @@ ScQueryEntry& ScQueryEntry::operator=( const ScQueryEntry& r )
     nField          = r.nField;
     maQueryItems  = r.maQueryItems;
 
-    delete pSearchParam;
-    delete pSearchText;
-    pSearchParam    = nullptr;
-    pSearchText     = nullptr;
+    pSearchParam.reset();
+    pSearchText.reset();
 
     return *this;
 }
@@ -148,10 +144,8 @@ void ScQueryEntry::Clear()
     maQueryItems.clear();
     maQueryItems.emplace_back();
 
-    delete pSearchParam;
-    delete pSearchText;
-    pSearchParam    = nullptr;
-    pSearchText     = nullptr;
+    pSearchParam.reset();
+    pSearchText.reset();
 }
 
 bool ScQueryEntry::operator==( const ScQueryEntry& r ) const
@@ -170,11 +164,11 @@ utl::TextSearch* ScQueryEntry::GetSearchTextPtr( utl::SearchParam::SearchType eS
     if ( !pSearchParam )
     {
         OUString aStr = maQueryItems[0].maString.getString();
-        pSearchParam = new utl::SearchParam(
-            aStr, eSearchType, bCaseSens, '~', bWildMatchSel);
-        pSearchText = new utl::TextSearch( *pSearchParam, *ScGlobal::pCharClass );
+        pSearchParam.reset(new utl::SearchParam(
+            aStr, eSearchType, bCaseSens, '~', bWildMatchSel));
+        pSearchText.reset(new utl::TextSearch( *pSearchParam, *ScGlobal::pCharClass ));
     }
-    return pSearchText;
+    return pSearchText.get();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
