@@ -1525,8 +1525,6 @@ void ScGridWindow::DrawPagePreview( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, 
 
 void ScGridWindow::DrawButtons(SCCOL nX1, SCCOL nX2, const ScTableInfo& rTabInfo, OutputDevice* pContentDev)
 {
-    bool bIsTiledRendering = comphelper::LibreOfficeKit::isActive();
-
     aComboButton.SetOutputDevice( pContentDev );
 
     ScDocument* pDoc = pViewData->GetDocument();
@@ -1661,7 +1659,7 @@ void ScGridWindow::DrawButtons(SCCOL nX1, SCCOL nX2, const ScTableInfo& rTabInfo
             }
         }
 
-        if ( bListValButton && pRowInfo[nArrY].nRowNo == aListValPos.Row() && pRowInfo[nArrY].bChanged )
+        if ( !comphelper::LibreOfficeKit::isActive() && bListValButton && pRowInfo[nArrY].nRowNo == aListValPos.Row() && pRowInfo[nArrY].bChanged )
         {
             tools::Rectangle aRect = GetListValButtonRect( aListValPos );
             aComboButton.SetPosPixel( aRect.TopLeft() );
@@ -1671,45 +1669,6 @@ void ScGridWindow::DrawButtons(SCCOL nX1, SCCOL nX2, const ScTableInfo& rTabInfo
             pContentDev->SetClipRegion();           // always called from Draw() without clip region
             aComboButton.SetPosPixel( aOldPos );    // restore old state
             aComboButton.SetSizePixel( aOldSize );  // for MouseUp/Down (AutoFilter)
-        }
-
-        if (bIsTiledRendering)
-        {
-            ScTabViewShell* pThisViewShell = pViewData->GetViewShell();
-            SfxViewShell* pViewShell = SfxViewShell::GetFirst();
-
-            while (pViewShell)
-            {
-                if (pViewShell != pThisViewShell)
-                {
-                    ScTabViewShell* pTabViewShell = dynamic_cast<ScTabViewShell*>(pViewShell);
-                    if (pTabViewShell)
-                    {
-                        ScViewData& rOtherViewData = pTabViewShell->GetViewData();
-                        ScGridWindow* pOtherWin = rOtherViewData.GetActiveWin();
-                        if (pOtherWin)
-                        {
-                            bool bOtherListValButton = pOtherWin->bListValButton;
-                            ScAddress aOtherListValPos = pOtherWin->aListValPos;
-
-                            if ( bOtherListValButton && pRowInfo[nArrY].nRowNo == aOtherListValPos.Row() && pRowInfo[nArrY].bChanged )
-                            {
-                                tools::Rectangle aRect = GetListValButtonRect( aOtherListValPos );
-                                aComboButton.SetPosPixel( aRect.TopLeft() );
-                                aComboButton.SetSizePixel( aRect.GetSize() );
-                                pContentDev->SetClipRegion(vcl::Region(aRect));
-                                aComboButton.Draw();
-                                pContentDev->SetClipRegion();           // always called from Draw() without clip region
-                                aComboButton.SetPosPixel( aOldPos );    // restore old state
-                                aComboButton.SetSizePixel( aOldSize );  // for MouseUp/Down (AutoFilter)
-                            }
-
-                        }
-                    }
-                }
-
-                pViewShell = SfxViewShell::GetNext(*pViewShell);
-            }
         }
     }
 
