@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_432bc282",
+        "filename": "cui/source/tabpages/border.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1130,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2018-04-04T14:57:10Z",
+      "side": 1,
+      "message": "Please remove this unrelated change.",
+      "revId": "33795dc88c7042a75297437abe776a6eaca8097b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
