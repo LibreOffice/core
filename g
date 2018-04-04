@@ -152,10 +152,6 @@ get_git_reference()
     if [ -f config_host.mk ]; then
 	REFERENCED_GIT=$(< config_host.mk grep -a GIT_REFERENCE_SRC | sed -e "s/.*=//")
     fi
-    LINKED_GIT=""
-    if [ -f config_host.mk ]; then
-	LINKED_GIT=$(< config_host.mk grep -a GIT_LINK_SRC | sed -e "s/.*=//")
-    fi
 }
 
 do_shortcut_update()
@@ -253,11 +249,6 @@ local configured
     do_shortcut_update
 
     for module in $SUBMODULES_CONFIGURED ; do
-	if [ -n "$LINKED_GIT" ] ; then
-	    if ! [ -d ".git/modules/${module}" ]; then
-		./bin/git-new-module-workdir "${LINKED_GIT}/${module}" "${module}"
-	    fi
-	fi
 	configured=$(git config --local --get submodule."${module}".url)
 	if [ -z "$configured" ] ; then
 	    git submodule init "$module" || return $?
