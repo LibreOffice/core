@@ -396,6 +396,21 @@ bool ImpGraphic::operator==( const ImpGraphic& rImpGraphic ) const
     return bRet;
 }
 
+const VectorGraphicDataPtr& ImpGraphic::getVectorGraphicData() const
+{
+    return maVectorGraphicData;
+}
+
+void ImpGraphic::setPdfData(const uno::Sequence<sal_Int8>& rPdfData)
+{
+    maPdfData = rPdfData;
+}
+
+const uno::Sequence<sal_Int8>& ImpGraphic::getPdfData() const
+{
+    return maPdfData;
+}
+
 void ImpGraphic::ImplCreateSwapInfo()
 {
     if (!ImplIsSwapOut())
