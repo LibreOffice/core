@@ -708,6 +708,10 @@ void Components::parseFiles(
                     parseFileLeniently(
                         parseFile, stat.getFileURL(), layer, nullptr, nullptr, nullptr);
                 } catch (css::container::NoSuchElementException & e) {
+                    if (stat.getFileType() == osl::FileStatus::Link) {
+                        SAL_WARN("configmgr", "dangling link <" << stat.getFileURL() << ">");
+                        continue;
+                    }
                     throw css::uno::RuntimeException(
                         "stat'ed file does not exist: " + e.Message);
                 }
@@ -784,6 +788,10 @@ void Components::parseXcdFiles(int layer, OUString const & url) {
                         stat.getFileURL(),
                         new XcdParser(layer, processedDeps, data_));
                 } catch (css::container::NoSuchElementException & e) {
+                    if (stat.getFileType() == osl::FileStatus::Link) {
+                        SAL_WARN("configmgr", "dangling link <" << stat.getFileURL() << ">");
+                        continue;
+                    }
                     throw css::uno::RuntimeException(
                         "stat'ed file does not exist: " + e.Message);
                 }
