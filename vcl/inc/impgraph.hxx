@@ -20,6 +20,8 @@
 #ifndef INCLUDED_VCL_INC_IMPGRAPH_HXX
 #define INCLUDED_VCL_INC_IMPGRAPH_HXX
 
+#include <vcl/GraphicExternalLink.hxx>
+
 struct ImpSwapInfo
 {
     MapMode     maPrefMapMode;
@@ -51,6 +53,7 @@ private:
     SvgDataPtr                   maSvgData;
     css::uno::Sequence<sal_Int8> maPdfData;
     OUString msOriginURL;
+    GraphicExternalLink          maGraphicExternalLink;
 
 private:
 
@@ -73,12 +76,12 @@ private:
 
     OUString getOriginURL() const
     {
-        return msOriginURL;
+        return maGraphicExternalLink.msURL;
     }
 
     void setOriginURL(OUString const & rOriginURL)
     {
-        msOriginURL = rOriginURL;
+        maGraphicExternalLink.msURL = rOriginURL;
     }
 
     void                ImplCreateSwapInfo();

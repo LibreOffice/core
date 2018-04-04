@@ -120,7 +120,7 @@ ImpGraphic::ImpGraphic(const ImpGraphic& rImpGraphic)
     , mbDummyContext(rImpGraphic.mbDummyContext)
     , maSvgData(rImpGraphic.maSvgData)
     , maPdfData(rImpGraphic.maPdfData)
-    , msOriginURL(rImpGraphic.msOriginURL)
+    , maGraphicExternalLink(rImpGraphic.maGraphicExternalLink)
 {
     if( rImpGraphic.mpGfxLink )
         mpGfxLink = o3tl::make_unique<GfxLink>( *rImpGraphic.mpGfxLink );
@@ -146,7 +146,7 @@ ImpGraphic::ImpGraphic(ImpGraphic&& rImpGraphic)
     , mbDummyContext(rImpGraphic.mbDummyContext)
     , maSvgData(std::move(rImpGraphic.maSvgData))
     , maPdfData(std::move(rImpGraphic.maPdfData))
-    , msOriginURL(rImpGraphic.msOriginURL)
+    , maGraphicExternalLink(rImpGraphic.maGraphicExternalLink)
 {
     rImpGraphic.ImplClear();
     rImpGraphic.mbDummyContext = false;
@@ -213,7 +213,7 @@ ImpGraphic& ImpGraphic::operator=( const ImpGraphic& rImpGraphic )
         maSwapInfo = rImpGraphic.maSwapInfo;
         mpContext = rImpGraphic.mpContext;
         mbDummyContext = rImpGraphic.mbDummyContext;
-        msOriginURL = rImpGraphic.msOriginURL;
+        maGraphicExternalLink = rImpGraphic.maGraphicExternalLink;
 
         mpAnimation.reset();
 
@@ -257,7 +257,7 @@ ImpGraphic& ImpGraphic::operator=(ImpGraphic&& rImpGraphic)
     mpGfxLink = std::move(rImpGraphic.mpGfxLink);
     maSvgData = std::move(rImpGraphic.maSvgData);
     maPdfData = std::move(rImpGraphic.maPdfData);
-    msOriginURL = rImpGraphic.msOriginURL;
+    maGraphicExternalLink = rImpGraphic.maGraphicExternalLink;
 
     rImpGraphic.ImplClear();
     rImpGraphic.mbDummyContext = false;
@@ -384,7 +384,7 @@ void ImpGraphic::ImplClear()
     ImplClearGraphics();
     meType = GraphicType::NONE;
     mnSizeBytes = 0;
-    msOriginURL.clear();
+    maGraphicExternalLink.msURL.clear();
 }
 
 void ImpGraphic::ImplSetDefaultType()
