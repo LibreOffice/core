@@ -275,11 +275,9 @@ javaFrameworkError jfw_startVM(
             index ++;
         }
         //add all options of the arOptions argument
-        std::vector<OString> convertedOptions;
         for (auto const & ii: arOptions)
         {
             OString conv = OUStringToOString(ii, osl_getThreadTextEncoding());
-            convertedOptions.push_back(conv);
             arOpt[index].optionString = const_cast<char *>(conv.getStr());
             arOpt[index].extraInfo = nullptr;
             index++;

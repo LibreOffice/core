@@ -111,13 +111,6 @@ void SdDocPreviewWin::CalcSizeAndPos( Size& rSize, Point& rPoint )
 
 void SdDocPreviewWin::ImpPaint( OutputDevice* pVDev )
 {
-    Point aPoint;
-    Size aSize = pVDev->GetOutputSize();
-    Point bPoint(aSize.Width()-2*FRAME, aSize.Height()-2*FRAME );
-    CalcSizeAndPos( aSize, aPoint );
-    bPoint -= aPoint;
-    aPoint += Point( FRAME, FRAME );
-
     svtools::ColorConfig aColorConfig;
 
     pVDev->SetLineColor();

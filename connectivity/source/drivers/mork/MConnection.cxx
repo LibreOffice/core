@@ -67,7 +67,6 @@ void OConnection::construct(const OUString& url)
     // Get Scheme
     nLen = aAddrbookURI.indexOf(':');
     OUString aAddrbookScheme;
-    OUString sAdditionalInfo;
     if ( nLen == -1 )
     {
         // There isn't any subschema: - but could be just subschema
@@ -84,7 +83,6 @@ void OConnection::construct(const OUString& url)
     else
     {
         aAddrbookScheme = aAddrbookURI.copy(0, nLen);
-        sAdditionalInfo = aAddrbookURI.copy( nLen + 1 );
     }
 
     SAL_INFO("connectivity.mork", "URI = " << aAddrbookURI );

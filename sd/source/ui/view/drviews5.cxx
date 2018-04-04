@@ -105,9 +105,6 @@ void DrawViewShell::ArrangeGUIElements()
     int nScrollBarSize = GetParentWindow()->GetSettings().GetStyleSettings().GetScrollBarSize();
     maScrBarWH = Size (nScrollBarSize, nScrollBarSize);
 
-    Point aHPos = maViewPos;
-    aHPos.AdjustY(maViewSize.Height() );
-
     ViewShell::ArrangeGUIElements ();
 
     maTabControl->Hide();

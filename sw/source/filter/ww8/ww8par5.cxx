@@ -1937,8 +1937,6 @@ eF_ResT SwWW8ImplReader::Read_F_Symbol( WW8FieldDesc*, OUString& rStr )
 // "EMBED"
 eF_ResT SwWW8ImplReader::Read_F_Embedd( WW8FieldDesc*, OUString& rStr )
 {
-    OUString sHost;
-
     WW8ReadFieldParams aReadParam( rStr );
     for (;;)
     {
@@ -1948,7 +1946,7 @@ eF_ResT SwWW8ImplReader::Read_F_Embedd( WW8FieldDesc*, OUString& rStr )
         switch( nRet )
         {
         case -2:
-            sHost = aReadParam.GetResult();
+            // sHost
             break;
 
         case 's':

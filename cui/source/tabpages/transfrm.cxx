@@ -489,7 +489,6 @@ void SvxSlantTabPage::Construct()
 bool SvxSlantTabPage::FillItemSet(SfxItemSet* rAttrs)
 {
     bool  bModified = false;
-    OUString aStr = m_pMtrRadius->GetText();
 
     if( m_pMtrRadius->IsValueChangedFromSaved() )
     {
@@ -499,8 +498,6 @@ bool SvxSlantTabPage::FillItemSet(SfxItemSet* rAttrs)
         rAttrs->Put( makeSdrEckenradiusItem( nTmp ) );
         bModified = true;
     }
-
-    aStr = m_pMtrAngle->GetText();
 
     if( m_pMtrAngle->IsValueChangedFromSaved() )
     {
