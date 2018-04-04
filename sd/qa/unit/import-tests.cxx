@@ -173,6 +173,7 @@ public:
     void testTdf115394();
     void testTdf115394PPT();
     void testTdf115639();
+    void testTdf116266();
 
     bool checkPattern(sd::DrawDocShellRef const & rDocRef, int nShapeNumber, std::vector<sal_uInt8>& rExpected);
     void testPatternImport();
@@ -251,6 +252,7 @@ public:
     CPPUNIT_TEST(testTdf115394);
     CPPUNIT_TEST(testTdf115394PPT);
     CPPUNIT_TEST(testTdf115639);
+    CPPUNIT_TEST(testTdf116266);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -2466,6 +2468,15 @@ void SdImportTest::testTdf115639()
         CPPUNIT_ASSERT( !pDoc->IsHoriAlignIgnoreTrailingWhitespace() );
         xDocShRef->DoClose();
     }
+}
+
+void SdImportTest::testTdf116266()
+{
+    sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("/sd/qa/unit/data/odp/tdf116266.odp"), ODP);
+    SdDrawDocument *pDoc = xDocShRef->GetDoc();
+    sfx2::LinkManager* rLinkManager = pDoc->GetLinkManager();
+    // The document contains one SVG stored as a link.
+    CPPUNIT_ASSERT_EQUAL(size_t(1), rLinkManager->GetLinks().size());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdImportTest);
