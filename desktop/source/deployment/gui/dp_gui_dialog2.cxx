@@ -673,7 +673,7 @@ bool ExtMgrDialog::acceptLicense( const uno::Reference< deployment::XPackage > &
 
 uno::Sequence< OUString > ExtMgrDialog::raiseAddPicker()
 {
-    sfx2::FileDialogHelper aDlgHelper(ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE, FileDialogFlags::NONE, this);
+    sfx2::FileDialogHelper aDlgHelper(ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE, FileDialogFlags::NONE, GetFrameWeld());
     const uno::Reference<ui::dialogs::XFilePicker3> xFilePicker = aDlgHelper.GetFilePicker();
     xFilePicker->setTitle( m_sAddPackages );
 

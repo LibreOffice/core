@@ -53,7 +53,7 @@ public:
     virtual ::sfx2::SvBaseLink::UpdateResult DataChanged(
         const OUString& rMimeType, const css::uno::Any & rValue ) override;
 
-    virtual void    Edit( vcl::Window*, const Link<SvBaseLink&,void>& rEndEditHdl ) override;
+    virtual void    Edit(weld::Window*, const Link<SvBaseLink&,void>& rEndEditHdl) override;
 
     bool    Refresh(const OUString& rNewFile, const OUString& rNewFilter,
                     const OUString* pNewOptions /* = NULL */, sal_uLong nNewRefresh );

@@ -254,7 +254,7 @@ IMPL_LINK_NOARG( SwJavaEditDialog, InsertFileHdl, Button *, void )
     {
         pFileDlg = new ::sfx2::FileDialogHelper(
             ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE,
-            FileDialogFlags::Insert, "swriter", SfxFilterFlags::NONE, SfxFilterFlags::NONE, this);
+            FileDialogFlags::Insert, "swriter", SfxFilterFlags::NONE, SfxFilterFlags::NONE, GetFrameWeld());
     }
 
     pFileDlg->StartExecuteModal( LINK( this, SwJavaEditDialog, DlgClosedHdl ) );

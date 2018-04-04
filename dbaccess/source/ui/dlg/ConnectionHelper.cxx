@@ -219,7 +219,7 @@ namespace dbaui
                     ui::dialogs::TemplateDescription::FILEOPEN_READONLY_VERSION,
                     FileDialogFlags::NONE,
                     aModule.GetFactoryEmptyDocumentURL(SvtModuleOptions::EFactory::CALC)
-                    ,SfxFilterFlags::IMPORT, SfxFilterFlags::NONE, this);
+                    ,SfxFilterFlags::IMPORT, SfxFilterFlags::NONE, GetFrameWeld());
                 askForFileName(aFileDlg);
             }
             break;
@@ -230,7 +230,7 @@ namespace dbaui
                     ui::dialogs::TemplateDescription::FILEOPEN_READONLY_VERSION,
                     FileDialogFlags::NONE,
                     aModule.GetFactoryEmptyDocumentURL(SvtModuleOptions::EFactory::WRITER),
-                    SfxFilterFlags::IMPORT, SfxFilterFlags::NONE, this);
+                    SfxFilterFlags::IMPORT, SfxFilterFlags::NONE, GetFrameWeld());
                 askForFileName(aFileDlg);
             }
             break;
@@ -240,7 +240,7 @@ namespace dbaui
                 OUString sFilterName(DBA_RES (STR_MSACCESS_FILTERNAME));
                 ::sfx2::FileDialogHelper aFileDlg(
                     ui::dialogs::TemplateDescription::FILEOPEN_READONLY_VERSION,
-                    FileDialogFlags::NONE, this);
+                    FileDialogFlags::NONE, GetFrameWeld());
                 aFileDlg.AddFilter(sFilterName,sExt);
                 aFileDlg.SetCurrentFilter(sFilterName);
                 askForFileName(aFileDlg);
@@ -252,7 +252,7 @@ namespace dbaui
                 OUString sFilterName2(DBA_RES (STR_MSACCESS_2007_FILTERNAME));
                 ::sfx2::FileDialogHelper aFileDlg(
                     ui::dialogs::TemplateDescription::FILEOPEN_READONLY_VERSION,
-                    FileDialogFlags::NONE, this);
+                    FileDialogFlags::NONE, GetFrameWeld());
                 aFileDlg.AddFilter(sFilterName2,sAccdb);
                 aFileDlg.SetCurrentFilter(sFilterName2);
                 askForFileName(aFileDlg);
@@ -333,7 +333,7 @@ namespace dbaui
                 OUString sFilterName(DBA_RES (STR_FIREBIRD_FILTERNAME));
                 ::sfx2::FileDialogHelper aFileDlg(
                     ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE,
-                    FileDialogFlags::NONE, this);
+                    FileDialogFlags::NONE, GetFrameWeld());
                 aFileDlg.AddFilter(sFilterName,sExt);
                 aFileDlg.SetCurrentFilter(sFilterName);
                 askForFileName(aFileDlg);
@@ -358,7 +358,7 @@ namespace dbaui
                 OUString sFilterName(DBA_RES (STR_FIREBIRD_FILTERNAME));
                 ::sfx2::FileDialogHelper aFileDlg(
                     ui::dialogs::TemplateDescription::FILESAVE_AUTOEXTENSION,
-                    FileDialogFlags::NONE, this);
+                    FileDialogFlags::NONE, GetFrameWeld());
                 aFileDlg.AddFilter(sFilterName,sExt);
                 aFileDlg.SetCurrentFilter(sFilterName);
                 askForFileName(aFileDlg);

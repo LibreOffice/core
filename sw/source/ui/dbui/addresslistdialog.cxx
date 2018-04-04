@@ -343,7 +343,7 @@ IMPL_LINK_NOARG(SwAddressListDialog, LoadHdl_Impl, Button*, void)
 {
     SwView* pView = m_pAddressPage->GetWizard()->GetSwView();
 
-    const OUString sNewSource = SwDBManager::LoadAndRegisterDataSource(this, pView ? pView->GetDocShell() : nullptr);
+    const OUString sNewSource = SwDBManager::LoadAndRegisterDataSource(GetFrameWeld(), pView ? pView->GetDocShell() : nullptr);
     if(!sNewSource.isEmpty())
     {
         SvTreeListEntry* pNewSource = m_pListLB->InsertEntry(sNewSource);

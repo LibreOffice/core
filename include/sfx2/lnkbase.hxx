@@ -144,7 +144,7 @@ public:
     bool            Update();
     void            Disconnect();
 
-    virtual void    Edit( vcl::Window*, const Link<SvBaseLink&,void>& rEndEditHdl );
+    virtual void    Edit(weld::Window*, const Link<SvBaseLink&,void>& rEndEditHdl);
 
     // should the link appear in the dialog? (to the left in the link in the...)
     bool            IsVisible() const           { return bVisible; }
