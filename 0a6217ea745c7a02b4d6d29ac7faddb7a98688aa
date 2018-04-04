@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_27f33b0c",
+        "filename": "include/svtools/strings.hrc",
+        "patchSetId": 6
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2018-04-04T08:45:35Z",
+      "side": 1,
+      "message": "Maybe rather \"%PRODUCTNAME drawing format\". Native sounds to me like platform specific",
+      "revId": "0a6217ea745c7a02b4d6d29ac7faddb7a98688aa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
