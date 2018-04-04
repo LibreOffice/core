@@ -286,6 +286,7 @@ public:
     void            GetLineBoundaries( /*out*/sal_Int32& rStart, /*out*/sal_Int32& rEnd, sal_Int32 nParagraph, sal_Int32 nLine ) const;
     sal_Int32       GetLineNumberAtIndex( sal_Int32 nPara, sal_Int32 nIndex ) const;
     sal_uInt32      GetLineHeight( sal_Int32 nParagraph );
+    tools::Rectangle GetParaBounds( sal_Int32 nPara );
     ParagraphInfos  GetParagraphInfos( sal_Int32 nPara );
     sal_Int32       FindParagraph( long nDocPosY );
     EPosition       FindDocPosition( const Point& rDocPos ) const;
