@@ -333,11 +333,11 @@ void GraphicObjectTest::testPdf()
     }
     CPPUNIT_ASSERT_MESSAGE("Missing image", pGraphicObject);
 
-    CPPUNIT_ASSERT(pGraphicObject->GetGraphic().getPdfData().hasElements());
+    CPPUNIT_ASSERT(pGraphicObject->GetGraphic().getPdfData()->hasElements());
     CPPUNIT_ASSERT(pGraphicObject->SwapOut());
     CPPUNIT_ASSERT(pGraphicObject->SwapIn());
     // This failed, swap out + swap in lost the PDF data.
-    CPPUNIT_ASSERT(pGraphicObject->GetGraphic().getPdfData().hasElements());
+    CPPUNIT_ASSERT(pGraphicObject->GetGraphic().getPdfData()->hasElements());
 
     xComponent->dispose();
 #endif

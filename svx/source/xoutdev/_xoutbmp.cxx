@@ -175,7 +175,7 @@ sal_uInt16 XOutBitmap::WriteGraphic( const Graphic& rGraphic, OUString& rFileNam
         }
 
         // Write PDF data in original form if possible.
-        if (rGraphic.getPdfData().hasElements() && rFilterName.equalsIgnoreAsciiCase("pdf"))
+        if (rGraphic.hasPdfData() && rFilterName.equalsIgnoreAsciiCase("pdf"))
         {
             if (!(nFlags & XOutFlags::DontAddExtension))
                 aURL.setExtension(rFilterName);
@@ -184,8 +184,8 @@ sal_uInt16 XOutBitmap::WriteGraphic( const Graphic& rGraphic, OUString& rFileNam
             SfxMedium aMedium(aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE), StreamMode::WRITE|StreamMode::SHARE_DENYNONE|StreamMode::TRUNC);
             if (SvStream* pOutStream = aMedium.GetOutStream())
             {
-                uno::Sequence<sal_Int8> aPdfData = rGraphic.getPdfData();
-                pOutStream->WriteBytes(aPdfData.getConstArray(), aPdfData.getLength());
+                std::shared_ptr<uno::Sequence<sal_Int8>> pPdfData = rGraphic.getPdfData();
+                pOutStream->WriteBytes(pPdfData->getConstArray(), pPdfData->getLength());
                 aMedium.Commit();
                 if (!aMedium.GetError())
                     nErr = GRFILTER_OK;
