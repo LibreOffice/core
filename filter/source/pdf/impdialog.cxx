@@ -660,6 +660,8 @@ void ImpPDFTabGeneralPage::SetFilterConfigItem( ImpPDFTabDialog* paParent )
     if( mbIsSpreadsheet )
     {
         mpRbSelection->SetText(get<FixedText>("selectedsheets")->GetText());
+        // tdf#105965 Make Selection/Selected sheets the default PDF export range setting for spreadsheets
+        mpRbSelection->Check();
     }
 
     mpCbExportPlaceholders->Show(mbIsWriter);
