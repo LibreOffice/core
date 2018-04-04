@@ -1029,12 +1029,6 @@
             <value xml:lang="en-US">.uno:GoDownBlock</value>
           </prop>
         </node>
-        <node oor:name="PAGEDOWN_MOD1" oor:op="replace">
-          <prop oor:name="Command">
-            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:JumpToNextTable</value>
-          </prop>
-        </node>
         <node oor:name="PAGEDOWN_SHIFT" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
@@ -1051,12 +1045,6 @@
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="en-US">.uno:GoUpBlock</value>
-          </prop>
-        </node>
-        <node oor:name="PAGEUP_MOD1" oor:op="replace">
-          <prop oor:name="Command">
-            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:JumpToPrevTable</value>
           </prop>
         </node>
         <node oor:name="PAGEUP_SHIFT" oor:op="replace">
@@ -1328,6 +1316,18 @@
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="en-US">.uno:InsertAnnotation</value>
+          </prop>
+        </node>
+        <node oor:name="TAB_MOD1" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="en-US">.uno:JumpToNextTable</value>
+          </prop>
+        </node>
+        <node oor:name="TAB_SHIFT_MOD1" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="en-US">.uno:JumpToPrevTable</value>
           </prop>
         </node>
       </node>
@@ -7406,6 +7406,18 @@
             <value xml:lang="en-US">.uno:Undo</value>
           </prop>
         </node>
+        <node oor:name="PAGEDOWN_MOD1" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="en-US">.uno:JumpToNextTable</value>
+          </prop>
+        </node>
+        <node oor:name="PAGEUP_MOD1" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="en-US">.uno:JumpToPrevTable</value>
+          </prop>
+        </node>
       </node>
       <node oor:name="com.sun.star.chart2.ChartDocument" oor:op="replace">
         <node oor:name="BACKSPACE_MOD2" oor:op="replace">
@@ -7885,18 +7897,6 @@
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="en-US">.uno:Undo</value>
-          </prop>
-        </node>
-        <node oor:name="TAB_MOD1" oor:op="replace">
-          <prop oor:name="Command">
-            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:NextMark</value>
-          </prop>
-        </node>
-        <node oor:name="TAB_SHIFT_MOD1" oor:op="replace">
-          <prop oor:name="Command">
-            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:PrevMark</value>
           </prop>
         </node>
         <node oor:name="SUBTRACT" oor:op="replace">
