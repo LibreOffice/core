@@ -5897,8 +5897,6 @@ void ScInterpreter::IterateParametersIfs( double(*ResultFunc)( const sc::ParamIf
                 if (rItem.meType == ScQueryEntry::ByString)
                     rParam.eSearchType = DetectSearchType(rItem.maString.getString(), pDok);
             }
-            ScAddress aAdr;
-            aAdr.SetTab( nTab1 );
             rParam.nCol1  = nCol1;
             rParam.nCol2  = nCol2;
             rEntry.nField = nCol1;

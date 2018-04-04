@@ -1297,7 +1297,6 @@ void SAL_CALL OReportDefinition::storeToStorage( const uno::Reference< embed::XS
 
     // export sub streams for package, else full stream into a file
     bool bErr = false;
-    OUString sErrFile;
 
     uno::Reference< beans::XPropertySet> xProp(_xStorageToSaveTo,uno::UNO_QUERY);
     if ( xProp.is() )
@@ -1383,7 +1382,6 @@ void SAL_CALL OReportDefinition::storeToStorage( const uno::Reference< embed::XS
                 aDelegatorArguments, aProps, _xStorageToSaveTo ) )
         {
             bErr = true;
-            sErrFile = "content.xml";
         }
     }
 

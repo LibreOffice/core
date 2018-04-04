@@ -119,9 +119,6 @@ namespace xmloff
         {
             DBG_CHECK_PROPERTY_NO_TYPE(*aProperty);
 
-#if OSL_DEBUG_LEVEL > 0
-            const OUString sPropertyName = *aProperty; (void)sPropertyName;
-#endif
             if ( !shouldExportProperty( *aProperty ) )
                 continue;
 

@@ -604,7 +604,7 @@ bool SwHTMLParser::InsertEmbed()
 void SwHTMLParser::NewObject()
 {
     OUString aClassID;
-    OUString aName, aStandBy, aId, aStyle, aClass;
+    OUString aStandBy, aId, aStyle, aClass;
     Size aSize( USHRT_MAX, USHRT_MAX );
     Size aSpace( 0, 0 );
     sal_Int16 eVertOri = text::VertOrientation::TOP;
@@ -666,7 +666,6 @@ void SwHTMLParser::NewObject()
         case HtmlOptionId::USEMAP:
             break;
         case HtmlOptionId::NAME:
-            aName = rOption.GetString();
             break;
         case HtmlOptionId::HSPACE:
             aSpace.setWidth( static_cast<long>(rOption.GetNumber()) );

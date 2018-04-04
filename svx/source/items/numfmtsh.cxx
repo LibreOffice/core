@@ -673,7 +673,6 @@ short SvxNumberFormatShell::FillEListWithFormats_Impl( std::vector<OUString>& rL
     sal_uInt16  nMyType;
 
     sal_uInt32          nNFEntry;
-    OUString            aStrComment;
     OUString            aNewFormNInfo;
 
     long nIndex;
@@ -687,7 +686,6 @@ short SvxNumberFormatShell::FillEListWithFormats_Impl( std::vector<OUString>& rL
         if(pNumEntry==nullptr) continue;
 
         SvNumFormatType nMyCat=pNumEntry->GetMaskedType();
-        aStrComment=pNumEntry->GetComment();
         CategoryToPos_Impl(nMyCat,nMyType);
         aNewFormNInfo=  pNumEntry->GetFormatstring();
 
@@ -709,7 +707,6 @@ short SvxNumberFormatShell::FillEListWithDateTime_Impl( std::vector<OUString>& r
     sal_uInt16  nMyType;
 
     sal_uInt32          nNFEntry;
-    OUString            aStrComment;
     OUString            aNewFormNInfo;
 
     for (long nIndex = NF_DATETIME_START; nIndex <= NF_DATETIME_END; ++nIndex)
@@ -720,7 +717,6 @@ short SvxNumberFormatShell::FillEListWithDateTime_Impl( std::vector<OUString>& r
         if(pNumEntry!=nullptr)
         {
             SvNumFormatType nMyCat=pNumEntry->GetMaskedType();
-            aStrComment=pNumEntry->GetComment();
             CategoryToPos_Impl(nMyCat,nMyType);
             aNewFormNInfo=  pNumEntry->GetFormatstring();
 
@@ -782,7 +778,6 @@ short SvxNumberFormatShell::FillEListWithSysCurrencys( std::vector<OUString>& rL
     DBG_ASSERT( pCurFmtTable != nullptr, "unknown NumberFormat" );
 
     sal_uInt32          nNFEntry;
-    OUString            aStrComment;
     OUString            aNewFormNInfo;
 
     nCurCurrencyEntryPos=0;
@@ -796,7 +791,6 @@ short SvxNumberFormatShell::FillEListWithSysCurrencys( std::vector<OUString>& rL
         if(pNumEntry==nullptr) continue;
 
         SvNumFormatType nMyCat=pNumEntry->GetMaskedType();
-        aStrComment=pNumEntry->GetComment();
         CategoryToPos_Impl(nMyCat,nMyType);
         aNewFormNInfo=  pNumEntry->GetFormatstring();
 
@@ -835,7 +829,6 @@ short SvxNumberFormatShell::FillEListWithSysCurrencys( std::vector<OUString>& rL
                 if(!bUserNewCurrency &&(pNumEntry->GetType() & SvNumFormatType::DEFINED))
                 {
                     SvNumFormatType nMyCat=pNumEntry->GetMaskedType();
-                    aStrComment=pNumEntry->GetComment();
                     CategoryToPos_Impl(nMyCat,nMyType);
                     aNewFormNInfo=  pNumEntry->GetFormatstring();
 
@@ -860,7 +853,6 @@ short SvxNumberFormatShell::FillEListWithUserCurrencys( std::vector<OUString>& r
 
     DBG_ASSERT( pCurFmtTable != nullptr, "unknown NumberFormat" );
 
-    OUString        aStrComment;
     OUString        aNewFormNInfo;
 
     const NfCurrencyEntry* pTmpCurrencyEntry;
@@ -918,7 +910,6 @@ short SvxNumberFormatShell::FillEListWithUserCurrencys( std::vector<OUString>& r
                 pNumEntry->IsAdditionalBuiltin() )
             {
                 SvNumFormatType nMyCat=pNumEntry->GetMaskedType();
-                aStrComment = pNumEntry->GetComment();
                 CategoryToPos_Impl(nMyCat,nMyType);
                 aNewFormNInfo =  pNumEntry->GetFormatstring();
 
@@ -1050,7 +1041,6 @@ short SvxNumberFormatShell::FillEListWithUsD_Impl( std::vector<OUString>& rList,
 
     DBG_ASSERT( pCurFmtTable != nullptr, "unknown NumberFormat" );
 
-    OUString        aStrComment;
     OUString        aNewFormNInfo;
 
     bool            bAdditional = (nPrivCat != CAT_USERDEFINED &&
@@ -1067,7 +1057,6 @@ short SvxNumberFormatShell::FillEListWithUsD_Impl( std::vector<OUString>& rList,
                     (bAdditional && pNumEntry->IsAdditionalBuiltin()) )
             {
                 SvNumFormatType nMyCat=pNumEntry->GetMaskedType();
-                aStrComment=pNumEntry->GetComment();
                 CategoryToPos_Impl(nMyCat,nMyType);
                 aNewFormNInfo=  pNumEntry->GetFormatstring();
 
