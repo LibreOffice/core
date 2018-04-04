@@ -1148,7 +1148,7 @@ void SwXCell::SwClientNotify(const SwModify& rModify, const SfxHint& rHint)
 {
     if(auto pFindHint = dynamic_cast<const FindUnoInstanceHint<SwTableBox, SwXCell>*>(&rHint))
     {
-        if(!pFindHint->m_pCore && pFindHint->m_pCore == GetTableBox())
+        if(!pFindHint->m_pResult && pFindHint->m_pCore == GetTableBox())
             pFindHint->m_pResult = this;
     }
     else
