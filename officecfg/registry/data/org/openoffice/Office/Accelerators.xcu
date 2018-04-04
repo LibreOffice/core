@@ -7890,13 +7890,13 @@
         <node oor:name="TAB_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:NextMark</value>
+            <value xml:lang="en-US">.uno:JumpToNextTable</value>
           </prop>
         </node>
         <node oor:name="TAB_SHIFT_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:PrevMark</value>
+            <value xml:lang="en-US">.uno:JumpToNextTable</value>
           </prop>
         </node>
         <node oor:name="SUBTRACT" oor:op="replace">
