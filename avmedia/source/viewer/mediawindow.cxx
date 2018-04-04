@@ -209,7 +209,7 @@ void MediaWindow::getMediaFilters( FilterNameVector& rFilterNameVector )
 }
 
 
-bool MediaWindow::executeMediaURLDialog(const vcl::Window* pParent, OUString& rURL, bool *const o_pbLink)
+bool MediaWindow::executeMediaURLDialog(weld::Window* pParent, OUString& rURL, bool *const o_pbLink)
 {
     ::sfx2::FileDialogHelper        aDlg(o_pbLink
             ? ui::dialogs::TemplateDescription::FILEOPEN_LINK_PREVIEW
@@ -295,7 +295,7 @@ bool MediaWindow::executeMediaURLDialog(const vcl::Window* pParent, OUString& rU
     return !rURL.isEmpty();
 }
 
-void MediaWindow::executeFormatErrorBox(weld::Widget* pParent)
+void MediaWindow::executeFormatErrorBox(weld::Window* pParent)
 {
     std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(pParent,
                                               VclMessageType::Warning, VclButtonsType::Ok, AvmResId(AVMEDIA_STR_ERR_URL)));

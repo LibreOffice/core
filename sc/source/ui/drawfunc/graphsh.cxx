@@ -266,11 +266,12 @@ void ScGraphicShell::ExecuteSaveGraphic( SAL_UNUSED_PARAMETER SfxRequest& /*rReq
             GraphicAttr aGraphicAttr = pObj->GetGraphicAttr();
             short nState = RET_CANCEL;
             vcl::Window* pWin = GetViewData()->GetActiveWin();
+            weld::Window* pWinFrame = pWin ? pWin->GetFrameWeld() : nullptr;
             if (aGraphicAttr != GraphicAttr()) // the image has been modified
             {
                 if (pWin)
                 {
-                    nState = GraphicHelper::HasToSaveTransformedImage(pWin->GetFrameWeld());
+                    nState = GraphicHelper::HasToSaveTransformedImage(pWinFrame);
                 }
             }
             else
@@ -280,12 +281,12 @@ void ScGraphicShell::ExecuteSaveGraphic( SAL_UNUSED_PARAMETER SfxRequest& /*rReq
 
             if (nState == RET_YES)
             {
-                GraphicHelper::ExportGraphic(pWin, pObj->GetTransformedGraphic(), "");
+                GraphicHelper::ExportGraphic(pWinFrame, pObj->GetTransformedGraphic(), "");
             }
             else if (nState == RET_NO)
             {
                 GraphicObject aGraphicObject(pObj->GetGraphicObject());
-                GraphicHelper::ExportGraphic(pWin, aGraphicObject.GetGraphic(), "");
+                GraphicHelper::ExportGraphic(pWinFrame, aGraphicObject.GetGraphic(), "");
             }
         }
     }
@@ -323,7 +324,7 @@ void ScGraphicShell::ExecuteChangePicture( SAL_UNUSED_PARAMETER SfxRequest& /*rR
         {
             SdrGrafObj* pGraphicObj = static_cast<SdrGrafObj*>(pObj);
             vcl::Window* pWin = GetViewData()->GetActiveWin();
-            SvxOpenGraphicDialog aDlg(ScResId(STR_INSERTGRAPHIC), pWin);
+            SvxOpenGraphicDialog aDlg(ScResId(STR_INSERTGRAPHIC), pWin ? pWin->GetFrameWeld() : nullptr);
 
             if( aDlg.Execute() == ERRCODE_NONE )
             {

@@ -60,7 +60,7 @@ bool SwTextShell::InsertMediaDlg( SfxRequest const & rReq )
 {
     OUString     aURL;
     const SfxItemSet*   pReqArgs = rReq.GetArgs();
-    vcl::Window*             pWindow = &GetView().GetViewFrame()->GetWindow();
+    vcl::Window&        rWindow = GetView().GetViewFrame()->GetWindow();
     bool                bAPI = false, bRet = false;
 
     if( pReqArgs )
@@ -74,20 +74,18 @@ bool SwTextShell::InsertMediaDlg( SfxRequest const & rReq )
     }
 
     bool bLink(true);
-    if (bAPI || ::avmedia::MediaWindow::executeMediaURLDialog(pWindow, aURL, & bLink))
+    if (bAPI || ::avmedia::MediaWindow::executeMediaURLDialog(rWindow.GetFrameWeld(), aURL, & bLink))
     {
         Size aPrefSize;
 
-        if( pWindow )
-            pWindow->EnterWait();
+        rWindow.EnterWait();
 
         if( !::avmedia::MediaWindow::isMediaURL( aURL, "", true, &aPrefSize ) )
         {
-            if( pWindow )
-                pWindow->LeaveWait();
+            rWindow.LeaveWait();
 
             if( !bAPI )
-                ::avmedia::MediaWindow::executeFormatErrorBox(pWindow ? pWindow->GetFrameWeld() : nullptr);
+                ::avmedia::MediaWindow::executeFormatErrorBox(rWindow.GetFrameWeld());
         }
         else
         {
@@ -108,12 +106,7 @@ bool SwTextShell::InsertMediaDlg( SfxRequest const & rReq )
                 aPos.setY( aDocSz.Height() / 2 + rVisArea.Top() );
 
             if( aPrefSize.Width() && aPrefSize.Height() )
-            {
-                if( pWindow )
-                    aSize = pWindow->PixelToLogic(aPrefSize, MapMode(MapUnit::MapTwip));
-                else
-                    aSize = Application::GetDefaultDevice()->PixelToLogic(aPrefSize, MapMode(MapUnit::MapTwip));
-            }
+                aSize = rWindow.PixelToLogic(aPrefSize, MapMode(MapUnit::MapTwip));
             else
                 aSize = Size( 2835, 2835 );
 
@@ -138,8 +131,7 @@ bool SwTextShell::InsertMediaDlg( SfxRequest const & rReq )
             rSh.SwFEShell::InsertDrawObj( *pObj, aPos );
             bRet = true;
 
-            if( pWindow )
-                pWindow->LeaveWait();
+            rWindow.LeaveWait();
         }
     }
 

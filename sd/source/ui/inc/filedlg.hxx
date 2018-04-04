@@ -44,7 +44,7 @@ class SD_DLLPUBLIC SdOpenSoundFileDialog
     SdOpenSoundFileDialog & operator= (const SdOpenSoundFileDialog &) = delete;
 
 public:
-    SdOpenSoundFileDialog(const vcl::Window* pParent);
+    SdOpenSoundFileDialog(weld::Window* pParent);
     ~SdOpenSoundFileDialog();
 
     ErrCode Execute();

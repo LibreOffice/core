@@ -648,8 +648,8 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
         if ( pBlackListItem )
             pBlackListItem->GetStringList( aBlackList );
 
-
-        ErrCode nErr = sfx2::FileOpenDialog_Impl(GetTopWindow(),
+        vcl::Window* pTopWindow = GetTopWindow();
+        ErrCode nErr = sfx2::FileOpenDialog_Impl(pTopWindow ? pTopWindow->GetFrameWeld() : nullptr,
                 nDialogType,
                 eDialogFlags, aURLList,
                 aFilter, pSet, &aPath, nDialog, sStandardDir, aBlackList);

@@ -42,7 +42,7 @@ namespace com { namespace sun { namespace star { namespace mail {
 
 namespace SwMailMergeHelper
 {
-    SW_DLLPUBLIC OUString CallSaveAsDialog(const vcl::Window* pParent, OUString& rFilter);
+    SW_DLLPUBLIC OUString CallSaveAsDialog(weld::Window* pParent, OUString& rFilter);
     SW_DLLPUBLIC bool CheckMailAddress(const OUString& rMailAddress);
     SW_DLLPUBLIC css::uno::Reference<css::mail::XSmtpService> ConnectToSmtpServer(
                             SwMailMergeConfigItem const & rConfigItem,

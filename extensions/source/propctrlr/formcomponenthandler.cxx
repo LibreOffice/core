@@ -2692,9 +2692,10 @@ namespace pcr
         bool bIsLink = true;// reflect the legacy behavior
         OUString aStrTrans = m_pInfoService->getPropertyTranslation( PROPERTY_ID_IMAGE_URL );
 
+        vcl::Window* pWin = impl_getDefaultDialogParent_nothrow();
         ::sfx2::FileDialogHelper aFileDlg(
                 ui::dialogs::TemplateDescription::FILEOPEN_LINK_PREVIEW,
-                FileDialogFlags::Graphic, impl_getDefaultDialogParent_nothrow());
+                FileDialogFlags::Graphic, pWin ? pWin->GetFrameWeld() : nullptr);
 
         aFileDlg.SetTitle(aStrTrans);
         // non-linked images ( e.g. those located in the document
@@ -2759,9 +2760,10 @@ namespace pcr
 
     bool FormComponentPropertyHandler::impl_browseForTargetURL_nothrow( Any& _out_rNewValue, ::osl::ClearableMutexGuard& _rClearBeforeDialog ) const
     {
+        vcl::Window* pWin = impl_getDefaultDialogParent_nothrow();
         ::sfx2::FileDialogHelper aFileDlg(
                 ui::dialogs::TemplateDescription::FILEOPEN_READONLY_VERSION,
-                FileDialogFlags::NONE, impl_getDefaultDialogParent_nothrow());
+                FileDialogFlags::NONE, pWin ? pWin->GetFrameWeld() : nullptr);
 
         OUString sURL;
         OSL_VERIFY( impl_getPropertyValue_throw( PROPERTY_TARGET_URL ) >>= sURL );
@@ -2813,9 +2815,10 @@ namespace pcr
 
     bool FormComponentPropertyHandler::impl_browseForDatabaseDocument_throw( Any& _out_rNewValue, ::osl::ClearableMutexGuard& _rClearBeforeDialog ) const
     {
+        vcl::Window* pWin = impl_getDefaultDialogParent_nothrow();
         ::sfx2::FileDialogHelper aFileDlg(
                 ui::dialogs::TemplateDescription::FILEOPEN_READONLY_VERSION, FileDialogFlags::NONE,
-                "sdatabase", SfxFilterFlags::NONE, SfxFilterFlags::NONE, impl_getDefaultDialogParent_nothrow());
+                "sdatabase", SfxFilterFlags::NONE, SfxFilterFlags::NONE, pWin ? pWin->GetFrameWeld() : nullptr);
 
         OUString sDataSource;
         OSL_VERIFY( impl_getPropertyValue_throw( PROPERTY_DATASOURCE ) >>= sDataSource );
