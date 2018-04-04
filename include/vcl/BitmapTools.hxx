@@ -22,6 +22,7 @@
 #include <com/sun/star/geometry/IntegerRectangle2D.hpp>
 #include <basegfx/range/b2drectangle.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
+#include <o3tl/safeint.hxx>
 
 namespace vcl {
 namespace bitmap {
@@ -37,11 +38,17 @@ friend BitmapEx VCL_DLLPUBLIC CreateFromData( RawBitmap&& rawBitmap );
     sal_uInt8 mnBitCount;
 public:
     RawBitmap(Size const & rSize, sal_uInt8 nBitCount)
-        : mpData(new sal_uInt8[ rSize.getWidth() * nBitCount/8 * rSize.getHeight()]),
-          maSize(rSize),
+        : maSize(rSize),
           mnBitCount(nBitCount)
     {
         assert(nBitCount == 24 || nBitCount == 32);
+        sal_Int32 nRowSize, nDataSize;
+        if (o3tl::checked_multiply<sal_Int32>(rSize.getWidth(), nBitCount/8, nRowSize) ||
+            o3tl::checked_multiply<sal_Int32>(nRowSize, rSize.getHeight(), nDataSize))
+        {
+            throw std::bad_alloc();
+        }
+        mpData.reset(new sal_uInt8[nDataSize]);
     }
     void SetPixel(long nY, long nX, Color nColor)
     {
