@@ -432,7 +432,14 @@ class AbstractSvxAreaTabDialog_Impl :public AbstractSvxAreaTabDialog
 
 class AbstractInsertObjectDialog_Impl : public SfxAbstractInsertObjectDialog
 {
-    DECL_ABSTDLG_BASE(AbstractInsertObjectDialog_Impl, InsertObjectDialog_Impl)
+protected:
+    std::unique_ptr<InsertObjectDialog_Impl> m_xDlg;
+public:
+    explicit AbstractInsertObjectDialog_Impl(InsertObjectDialog_Impl* p)
+        : m_xDlg(p)
+    {
+    }
+    virtual short Execute() override;
     virtual css::uno::Reference < css::embed::XEmbeddedObject > GetObject() override;
     virtual css::uno::Reference< css::io::XInputStream > GetIconIfIconified( OUString* pGraphicMediaType ) override;
     virtual bool IsCreateNew() override;
@@ -555,10 +562,10 @@ public:
     virtual VclPtr<AbstractSvxDistributeDialog>
                                           CreateSvxDistributeDialog(const SfxItemSet& rAttr) override;
     virtual VclPtr<SfxAbstractInsertObjectDialog>
-                                           CreateInsertObjectDialog( vcl::Window* pParent, const OUString& rCommmand,
+                                           CreateInsertObjectDialog(weld::Window* pParent, const OUString& rCommmand,
                                             const css::uno::Reference < css::embed::XStorage >& xStor,
                                             const SvObjectServerList* pList ) override;
-    virtual VclPtr<VclAbstractDialog>      CreateEditObjectDialog( const OUString& rCommmand,
+    virtual VclPtr<VclAbstractDialog>      CreateEditObjectDialog(weld::Window* pParent, const OUString& rCommmand,
                                             const css::uno::Reference < css::embed::XEmbeddedObject >& xObj ) override;
     virtual VclPtr<SfxAbstractPasteDialog> CreatePasteDialog(weld::Window* pParent) override;
     virtual VclPtr<SfxAbstractLinksDialog> CreateLinksDialog( vcl::Window* pParent, sfx2::LinkManager* pMgr, bool bHTML = false, sfx2::SvBaseLink* p=nullptr  ) override;

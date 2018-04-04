@@ -158,7 +158,11 @@ short AbstractPasteDialog_Impl::Execute()
     return m_xDlg->run();
 }
 
-IMPL_ABSTDLG_BASE(AbstractInsertObjectDialog_Impl);
+short AbstractInsertObjectDialog_Impl::Execute()
+{
+    return m_xDlg->execute();
+}
+
 IMPL_ABSTDLG_BASE(AbstractLinksDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractSpellDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractSvxPostItDialog_Impl);
@@ -390,17 +394,17 @@ vcl::Window* AbstractHyphenWordDialog_Impl::GetWindow()
 
 Reference < css::embed::XEmbeddedObject > AbstractInsertObjectDialog_Impl::GetObject()
 {
-   return pDlg->GetObject();
+   return m_xDlg->GetObject();
 }
 
 bool AbstractInsertObjectDialog_Impl::IsCreateNew()
 {
-    return pDlg->IsCreateNew();
+    return m_xDlg->IsCreateNew();
 }
 
 ::Reference< css::io::XInputStream > AbstractInsertObjectDialog_Impl::GetIconIfIconified( OUString* pGraphicMediaType )
 {
-   return pDlg->GetIconIfIconified( pGraphicMediaType );
+   return m_xDlg->GetIconIfIconified( pGraphicMediaType );
 }
 
 void AbstractPasteDialog_Impl::Insert(SotClipboardFormatId nFormat, const OUString& rFormatName)
@@ -1478,15 +1482,14 @@ GetTabPageRanges AbstractDialogFactory_Impl::GetTabPageRangesFunc( sal_uInt16 nI
     return nullptr;
 }
 
-VclPtr<SfxAbstractInsertObjectDialog> AbstractDialogFactory_Impl::CreateInsertObjectDialog( vcl::Window* pParent, const OUString& rCommand,
-            const Reference < css::embed::XStorage >& xStor,
-            const SvObjectServerList* pList )
+VclPtr<SfxAbstractInsertObjectDialog> AbstractDialogFactory_Impl::CreateInsertObjectDialog(weld::Window* pParent, const OUString& rCommand,
+            const Reference <css::embed::XStorage>& xStor, const SvObjectServerList* pList)
 {
     InsertObjectDialog_Impl* pDlg=nullptr;
     if ( rCommand == ".uno:InsertObject" )
-        pDlg = VclPtr<SvInsertOleDlg>::Create( pParent, xStor, pList );
+        pDlg = new SvInsertOleDlg(pParent, xStor, pList);
     else if ( rCommand == ".uno:InsertObjectFloatingFrame" )
-        pDlg = VclPtr<SfxInsertFloatingFrameDialog>::Create( pParent, xStor );
+        pDlg = new SfxInsertFloatingFrameDialog(pParent, xStor);
 
     if ( pDlg )
     {
@@ -1496,14 +1499,14 @@ VclPtr<SfxAbstractInsertObjectDialog> AbstractDialogFactory_Impl::CreateInsertOb
     return nullptr;
 }
 
-VclPtr<VclAbstractDialog> AbstractDialogFactory_Impl::CreateEditObjectDialog( const OUString& rCommand,
-            const Reference < css::embed::XEmbeddedObject >& xObj )
+VclPtr<VclAbstractDialog> AbstractDialogFactory_Impl::CreateEditObjectDialog(weld::Window* pParent, const OUString& rCommand,
+            const Reference<css::embed::XEmbeddedObject>& xObj)
 {
     if ( rCommand == ".uno:InsertObjectFloatingFrame" )
     {
-        VclPtrInstance<SfxInsertFloatingFrameDialog> pDlg( nullptr, xObj );
+        SfxInsertFloatingFrameDialog* pDlg = new SfxInsertFloatingFrameDialog(pParent, xObj);
         pDlg->SetHelpId( OUStringToOString( rCommand, RTL_TEXTENCODING_UTF8 ) );
-        return VclPtr<CuiVclAbstractDialog_Impl>::Create( pDlg );
+        return VclPtr<AbstractInsertObjectDialog_Impl>::Create( pDlg );
     }
     return nullptr;
 }

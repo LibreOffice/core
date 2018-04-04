@@ -30,6 +30,7 @@
 #include <vcl/field.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/lstbox.hxx>
+#include <vcl/weld.hxx>
 #include <svtools/svmedit.hxx>
 #include <comphelper/embeddedobjectcontainer.hxx>
 
@@ -37,52 +38,51 @@ class VclFrame;
 
 class INetURLObject;
 
-class InsertObjectDialog_Impl : public ModalDialog
+class InsertObjectDialog_Impl : public weld::GenericDialogController
 {
 protected:
     css::uno::Reference < css::embed::XEmbeddedObject > m_xObj;
     const css::uno::Reference < css::embed::XStorage > m_xStorage;
     comphelper::EmbeddedObjectContainer aCnt;
 
-    InsertObjectDialog_Impl(vcl::Window * pParent, const OUString& rID,
-        const OUString& rUIXMLDescription,
+    InsertObjectDialog_Impl(weld::Window * pParent,
+        const OUString& rUIXMLDescription, const OString& rID,
         const css::uno::Reference < css::embed::XStorage >& xStorage);
 public:
-    const css::uno::Reference < css::embed::XEmbeddedObject >& GetObject()
-                        { return m_xObj; }
-    virtual css::uno::Reference< css::io::XInputStream > GetIconIfIconified( OUString* pGraphicMediaType );
+    const css::uno::Reference<css::embed::XEmbeddedObject>& GetObject() { return m_xObj; }
+    virtual css::uno::Reference<css::io::XInputStream> GetIconIfIconified(OUString* pGraphicMediaType);
+    void SetHelpId(const OString& rHelpId) { m_xDialog->set_help_id(rHelpId); }
     virtual bool IsCreateNew() const;
+    virtual short execute() = 0;
 };
 
 class SvInsertOleDlg : public InsertObjectDialog_Impl
 {
-    VclPtr<RadioButton> m_pRbNewObject;
-    VclPtr<RadioButton> m_pRbObjectFromfile;
-    VclPtr<VclFrame> m_pObjectTypeFrame;
-    VclPtr<ListBox> m_pLbObjecttype;
-    VclPtr<VclFrame> m_pFileFrame;
-    VclPtr<Edit> m_pEdFilepath;
-    VclPtr<PushButton> m_pBtnFilepath;
-    VclPtr<CheckBox> m_pCbFilelink;
-    VclPtr<CheckBox> m_pCbAsIcon;
     const SvObjectServerList* m_pServers;
 
     css::uno::Sequence< sal_Int8 > m_aIconMetaFile;
     OUString m_aIconMediaType;
 
-    DECL_LINK(DoubleClickHdl, ListBox&, void);
-    DECL_LINK(BrowseHdl, Button*, void);
-    DECL_LINK(RadioHdl, Button*, void);
-    bool IsCreateNew() const override
-        { return m_pRbNewObject->IsChecked(); }
+    std::unique_ptr<weld::RadioButton> m_xRbNewObject;
+    std::unique_ptr<weld::RadioButton> m_xRbObjectFromfile;
+    std::unique_ptr<weld::Frame> m_xObjectTypeFrame;
+    std::unique_ptr<weld::TreeView> m_xLbObjecttype;
+    std::unique_ptr<weld::Frame> m_xFileFrame;
+    std::unique_ptr<weld::Entry> m_xEdFilepath;
+    std::unique_ptr<weld::Button> m_xBtnFilepath;
+    std::unique_ptr<weld::CheckButton> m_xCbFilelink;
+    std::unique_ptr<weld::CheckButton> m_xCbAsIcon;
+
+    DECL_LINK(DoubleClickHdl, weld::TreeView&, void);
+    DECL_LINK(BrowseHdl, weld::Button&, void);
+    DECL_LINK(RadioHdl, weld::Button&, void);
+    bool IsCreateNew() const override { return m_xRbNewObject->get_active(); }
 
 public:
-    SvInsertOleDlg( vcl::Window* pParent,
+    SvInsertOleDlg(weld::Window* pParent,
         const css::uno::Reference < css::embed::XStorage >& xStorage,
         const SvObjectServerList* pServers );
-    virtual ~SvInsertOleDlg() override;
-    virtual void dispose() override;
-    virtual short Execute() override;
+    virtual short execute() override;
 
     /// get replacement for the iconified embedded object and the mediatype of the replacement
     css::uno::Reference< css::io::XInputStream > GetIconIfIconified( OUString* pGraphicMediaType ) override;
@@ -91,37 +91,35 @@ public:
 class SfxInsertFloatingFrameDialog : public InsertObjectDialog_Impl
 {
 private:
-    VclPtr<Edit> m_pEDName;
-    VclPtr<Edit> m_pEDURL;
-    VclPtr<PushButton> m_pBTOpen;
+    std::unique_ptr<weld::Entry> m_xEDName;
+    std::unique_ptr<weld::Entry> m_xEDURL;
+    std::unique_ptr<weld::Button> m_xBTOpen;
 
-    VclPtr<RadioButton> m_pRBScrollingOn;
-    VclPtr<RadioButton> m_pRBScrollingOff;
-    VclPtr<RadioButton> m_pRBScrollingAuto;
+    std::unique_ptr<weld::RadioButton> m_xRBScrollingOn;
+    std::unique_ptr<weld::RadioButton> m_xRBScrollingOff;
+    std::unique_ptr<weld::RadioButton> m_xRBScrollingAuto;
 
-    VclPtr<RadioButton> m_pRBFrameBorderOn;
-    VclPtr<RadioButton> m_pRBFrameBorderOff;
+    std::unique_ptr<weld::RadioButton> m_xRBFrameBorderOn;
+    std::unique_ptr<weld::RadioButton> m_xRBFrameBorderOff;
 
-    VclPtr<FixedText> m_pFTMarginWidth;
-    VclPtr<NumericField> m_pNMMarginWidth;
-    VclPtr<CheckBox> m_pCBMarginWidthDefault;
-    VclPtr<FixedText> m_pFTMarginHeight;
-    VclPtr<NumericField> m_pNMMarginHeight;
-    VclPtr<CheckBox> m_pCBMarginHeightDefault;
+    std::unique_ptr<weld::Label> m_xFTMarginWidth;
+    std::unique_ptr<weld::SpinButton> m_xNMMarginWidth;
+    std::unique_ptr<weld::CheckButton> m_xCBMarginWidthDefault;
+    std::unique_ptr<weld::Label> m_xFTMarginHeight;
+    std::unique_ptr<weld::SpinButton> m_xNMMarginHeight;
+    std::unique_ptr<weld::CheckButton> m_xCBMarginHeightDefault;
 
-    DECL_LINK(OpenHdl, Button*, void );
-    DECL_LINK(CheckHdl, Button*, void );
+    DECL_LINK(OpenHdl, weld::Button&, void);
+    DECL_LINK(CheckHdl, weld::Button&, void);
 
     void Init();
 
 public:
-    SfxInsertFloatingFrameDialog(vcl::Window *pParent,
-        const css::uno::Reference < css::embed::XStorage >& xStorage );
-    SfxInsertFloatingFrameDialog( vcl::Window* pParent,
-        const css::uno::Reference < css::embed::XEmbeddedObject >& xObj );
-    virtual ~SfxInsertFloatingFrameDialog() override;
-    virtual void dispose() override;
-    virtual short Execute() override;
+    SfxInsertFloatingFrameDialog(weld::Window *pParent,
+        const css::uno::Reference<css::embed::XStorage>& xStorage);
+    SfxInsertFloatingFrameDialog(weld::Window* pParent,
+        const css::uno::Reference<css::embed::XEmbeddedObject>& xObj);
+    virtual short execute() override;
 };
 
 #endif // INCLUDED_CUI_SOURCE_INC_INSDLG_HXX

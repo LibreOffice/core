@@ -53,6 +53,7 @@ namespace sfx2
         std::unique_ptr<GraphicFilter> mpGraphicFilter;
         FileDialogHelper*           mpAntiImpl;
         VclPtr<vcl::Window>         mpPreferredParentWindow;
+        weld::Window*               mpFrameWeld;
 
         ::std::vector< OUString > mlLastURLs;
 
@@ -171,7 +172,7 @@ namespace sfx2
                                     const short nDialogType,
                                     FileDialogFlags nFlags,
                                     sal_Int16 nDialog,
-                                    const vcl::Window* _pPreferredParentWindow,
+                                    const vcl::Window* _pPreferredParentWindow, weld::Window* pFrameWeld,
                                     const OUString& sStandardDir = OUString(),
                                     const css::uno::Sequence< OUString >&   rBlackList = css::uno::Sequence< OUString >()
                                 );
@@ -209,6 +210,17 @@ namespace sfx2
 
         bool             isSystemFilePicker() const { return mbSystemPicker; }
         bool             isPasswordEnabled() const { return mbIsPwdEnabled; }
+
+        weld::Window* GetFrameWeld()
+        {
+            if (mpFrameWeld)
+                return mpFrameWeld;
+            if (mpPreferredParentWindow)
+                return mpPreferredParentWindow->GetFrameWeld();
+            return nullptr;
+        }
+
+        css::uno::Reference<css::awt::XWindow> GetFrameInterface();
     };
 
 }   // end of namespace sfx2
