@@ -139,7 +139,7 @@ void FuInsertGraphic::DoExecute( SfxRequest& rReq )
     }
     else
     {
-        SvxOpenGraphicDialog aDlg(SdResId(STR_INSERTGRAPHIC), mpWindow);
+        SvxOpenGraphicDialog aDlg(SdResId(STR_INSERTGRAPHIC), mpWindow ? mpWindow->GetFrameWeld() : nullptr);
 
         if( aDlg.Execute() != ERRCODE_NONE )
             return; // cancel dialog
@@ -707,7 +707,7 @@ void FuInsertAVMedia::DoExecute( SfxRequest& rReq )
     bool bLink(true);
     if (bAPI
 #if HAVE_FEATURE_AVMEDIA
-        || ::avmedia::MediaWindow::executeMediaURLDialog(mpWindow, aURL, & bLink)
+        || ::avmedia::MediaWindow::executeMediaURLDialog(mpWindow ? mpWindow->GetFrameWeld() : nullptr, aURL, & bLink)
 #endif
        )
     {

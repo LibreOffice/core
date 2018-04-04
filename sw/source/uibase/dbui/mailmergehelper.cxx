@@ -52,7 +52,7 @@ using namespace ::com::sun::star::sdbcx;
 namespace SwMailMergeHelper
 {
 
-OUString CallSaveAsDialog(const vcl::Window* pParent, OUString& rFilter)
+OUString CallSaveAsDialog(weld::Window* pParent, OUString& rFilter)
 {
     ::sfx2::FileDialogHelper aDialog( ui::dialogs::TemplateDescription::FILESAVE_AUTOEXTENSION,
                 FileDialogFlags::NONE,

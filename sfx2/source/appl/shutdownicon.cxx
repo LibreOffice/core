@@ -329,7 +329,7 @@ void ShutdownIcon::StartFileDialog()
     if ( !m_pFileDlg )
         m_pFileDlg = new FileDialogHelper(
                 ui::dialogs::TemplateDescription::FILEOPEN_READONLY_VERSION,
-                FileDialogFlags::MultiSelection, OUString(), SfxFilterFlags::NONE, SfxFilterFlags::NONE, static_cast<const vcl::Window*>(nullptr) );
+                FileDialogFlags::MultiSelection, OUString(), SfxFilterFlags::NONE, SfxFilterFlags::NONE, nullptr );
     m_pFileDlg->StartExecuteModal( LINK( this, ShutdownIcon, DialogClosedHdl_Impl ) );
 }
 

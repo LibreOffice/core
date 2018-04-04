@@ -68,7 +68,7 @@ public:
                             bool bSynchron = false ) override;
 
     virtual bool Connect( sfx2::SvBaseLink* ) override;
-    virtual void Edit( vcl::Window *, sfx2::SvBaseLink *, const Link<const OUString&, void>& rEndEditHdl ) override;
+    virtual void Edit(weld::Window *, sfx2::SvBaseLink *, const Link<const OUString&, void>& rEndEditHdl) override;
 
     // Ask whether you can access data directly or whether it has to be triggered
     virtual bool IsPending() const override;

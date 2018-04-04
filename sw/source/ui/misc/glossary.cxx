@@ -559,7 +559,7 @@ IMPL_LINK( SwGlossaryDlg, MenuHdl, Menu *, pMn, bool )
     {
         // call the FileOpenDialog do find WinWord - Files with templates
         FileDialogHelper aDlgHelper(TemplateDescription::FILEOPEN_SIMPLE,
-                                    FileDialogFlags::NONE, this);
+                                    FileDialogFlags::NONE, GetFrameWeld());
         uno::Reference < XFilePicker3 > xFP = aDlgHelper.GetFilePicker();
 
         SvtPathOptions aPathOpt;

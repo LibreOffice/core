@@ -197,7 +197,7 @@ void AreaPropertyPanelBase::SetTransparency(sal_uInt16 nVal)
 
 IMPL_LINK_NOARG(AreaPropertyPanelBase, ClickImportBitmapHdl, Button*, void)
 {
-    SvxOpenGraphicDialog aDlg("Import", this);
+    SvxOpenGraphicDialog aDlg("Import", GetFrameWeld());
     aDlg.EnableLink(false);
     if( aDlg.Execute() == ERRCODE_NONE )
     {
