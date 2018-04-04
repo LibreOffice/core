@@ -191,7 +191,11 @@ private:
     friend void         WriteImpGraphic(SvStream& rOStm, const ImpGraphic& rImpGraphic);
     friend void         ReadImpGraphic(SvStream& rIStm, ImpGraphic& rImpGraphic);
 
-    const VectorGraphicDataPtr& getVectorGraphicData() const { return maVectorGraphicData; }
+    const VectorGraphicDataPtr& getVectorGraphicData() const;
+
+    const css::uno::Sequence<sal_Int8>& getPdfData() const;
+
+    void setPdfData(const css::uno::Sequence<sal_Int8>& rPdfData);
 };
 
 #endif // INCLUDED_VCL_INC_IMPGRAPH_HXX
