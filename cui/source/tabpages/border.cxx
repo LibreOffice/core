@@ -922,7 +922,10 @@ IMPL_LINK(SvxBorderTabPage, SelColHdl_Impl, SvxColorListBox&, rColorBox, void)
 {
     Color aColor = rColorBox.GetSelectEntryColor();
     m_pFrameSel->SetColorToSelection(aColor);
-    m_pLbLineStyle->SetColor(aColor);
+    if(aColor == COL_WHITE)
+      m_pLbLineStyle->SetColor(COL_BLACK);
+    else
+      m_pLbLineStyle->SetColor(aColor);
 }
 
 IMPL_LINK_NOARG(SvxBorderTabPage, ModifyWidthHdl_Impl, Edit&, void)
