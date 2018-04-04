@@ -462,7 +462,6 @@ short SfxInsertFloatingFrameDialog::execute()
                 m_xRBFrameBorderOff->set_active(!bSet);
             }
 
-//TODO            SetUpdateMode( true );
             bOK = true;
         }
         catch ( uno::Exception& )

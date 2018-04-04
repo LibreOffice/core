@@ -393,7 +393,8 @@ void SAL_CALL IFrameObject::removeVetoableChangeListener(const OUString&, const 
 ::sal_Int16 SAL_CALL IFrameObject::execute()
 {
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
-    ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateEditObjectDialog(nullptr, ".uno:InsertObjectFloatingFrame", mxObj)); //TODO
+    //we really should set a parent here
+    ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateEditObjectDialog(nullptr, ".uno:InsertObjectFloatingFrame", mxObj));
     if ( pDlg )
         pDlg->Execute();
     return 0;
