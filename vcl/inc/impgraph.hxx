@@ -21,6 +21,7 @@
 #define INCLUDED_VCL_INC_IMPGRAPH_HXX
 
 #include <vcl/GraphicExternalLink.hxx>
+#include "graphic/Manager.hxx"
 
 struct ImpSwapInfo
 {
@@ -32,6 +33,7 @@ class OutputDevice;
 class GfxLink;
 struct ImpSwapFile;
 class GraphicConversionParameters;
+class ImpGraphic;
 
 class GraphicID
 {
@@ -62,6 +64,7 @@ class ImpGraphic final
 {
     friend class Graphic;
     friend class GraphicID;
+    friend class vcl::graphic::Manager;
 
 private:
 
@@ -81,18 +84,20 @@ private:
     std::unique_ptr<GraphicID>   mpGraphicID;
     GraphicExternalLink          maGraphicExternalLink;
 
-private:
+    std::chrono::high_resolution_clock::time_point maLastUsed;
 
-                        ImpGraphic();
-                        ImpGraphic( const ImpGraphic& rImpGraphic );
-                        ImpGraphic( ImpGraphic&& rImpGraphic );
-                        ImpGraphic( const Bitmap& rBmp );
-                        ImpGraphic( const BitmapEx& rBmpEx );
-                        ImpGraphic(const VectorGraphicDataPtr& rVectorGraphicDataPtr);
-                        ImpGraphic( const Animation& rAnimation );
-                        ImpGraphic( const GDIMetaFile& rMtf );
 public:
-                        ~ImpGraphic();
+    ImpGraphic();
+    ImpGraphic( const ImpGraphic& rImpGraphic );
+    ImpGraphic( ImpGraphic&& rImpGraphic );
+    ImpGraphic( const GraphicExternalLink& rExternalLink);
+    ImpGraphic( const Bitmap& rBmp );
+    ImpGraphic( const BitmapEx& rBmpEx );
+    ImpGraphic(const VectorGraphicDataPtr& rVectorGraphicDataPtr);
+    ImpGraphic( const Animation& rAnimation );
+    ImpGraphic( const GDIMetaFile& rMtf );
+    ~ImpGraphic();
+
 private:
 
     ImpGraphic&         operator=( const ImpGraphic& rImpGraphic );
@@ -196,6 +201,8 @@ private:
     const css::uno::Sequence<sal_Int8>& getPdfData() const;
 
     void setPdfData(const css::uno::Sequence<sal_Int8>& rPdfData);
+
+    bool ensureAvailable () const;
 };
 
 #endif // INCLUDED_VCL_INC_IMPGRAPH_HXX
