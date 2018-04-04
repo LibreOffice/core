@@ -468,28 +468,7 @@ NamedDatabaseObject OTableTreeListBox::describeObject( SvTreeListEntry* _pEntry 
             ||  ( nEntryType == DatabaseObjectContainer::SCHEMA )
             )
     {
-        SvTreeListEntry* pParent = GetParent( _pEntry );
-        sal_Int32 nParentEntryType = pParent ? reinterpret_cast< sal_IntPtr >( pParent->GetUserData() ) : -1;
-
-        OUStringBuffer buffer;
-        if  ( nEntryType == DatabaseObjectContainer::CATALOG )
-        {
-            if ( nParentEntryType == DatabaseObjectContainer::SCHEMA )
-            {
-                buffer.append( GetEntryText( pParent ) );
-                buffer.append( '.' );
-            }
-            buffer.append( GetEntryText( _pEntry ) );
-        }
-        else if ( nEntryType == DatabaseObjectContainer::SCHEMA )
-        {
-            if ( nParentEntryType == DatabaseObjectContainer::CATALOG )
-            {
-                buffer.append( GetEntryText( pParent ) );
-                buffer.append( '.' );
-            }
-            buffer.append( GetEntryText( _pEntry ) );
-        }
+        // nothing useful to be done
     }
     else
     {

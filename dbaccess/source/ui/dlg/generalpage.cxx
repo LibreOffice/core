@@ -238,17 +238,6 @@ namespace dbaui
         getFlags( _rSet, bValid, bReadonly );
 
         // if the selection is invalid, disable everything
-        OUString sName,sConnectURL;
-        if ( bValid )
-        {
-            // collect some items and some values
-            const SfxStringItem* pNameItem = _rSet.GetItem<SfxStringItem>(DSID_NAME);
-            const SfxStringItem* pUrlItem = _rSet.GetItem<SfxStringItem>(DSID_CONNECTURL);
-            assert( pUrlItem );
-            assert( pNameItem );
-            sName = pNameItem->GetValue();
-            sConnectURL = pUrlItem->GetValue();
-        }
 
         implSetCurrentType(  OUString() );
 
@@ -281,7 +270,7 @@ namespace dbaui
         getFlags( _rSet, bValid, bReadonly );
 
         // if the selection is invalid, disable everything
-        OUString sName,sConnectURL;
+        OUString sConnectURL;
         if ( bValid )
         {
             // collect some items and some values
@@ -289,7 +278,6 @@ namespace dbaui
             const SfxStringItem* pUrlItem = _rSet.GetItem<SfxStringItem>(DSID_CONNECTURL);
             assert( pUrlItem );
             assert( pNameItem );
-            sName = pNameItem->GetValue();
             sConnectURL = pUrlItem->GetValue();
         }
 

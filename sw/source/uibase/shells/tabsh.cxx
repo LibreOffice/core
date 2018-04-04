@@ -1128,7 +1128,6 @@ void SwTableShell::Execute(SfxRequest &rReq)
     }
 
     // Now the slots which are working directly on the TableFormat.
-    SwFrameFormat *pFormat = rSh.GetTableFormat();
     switch ( nSlot )
     {
         case SID_ATTR_ULSPACE:
@@ -1147,9 +1146,6 @@ void SwTableShell::Execute(SfxRequest &rReq)
                                             RES_HORI_ORIENT, RES_HORI_ORIENT>{} );
                 SvxLRSpaceItem aLRSpace( *static_cast<const SvxLRSpaceItem*>(pItem) );
                 aLRSpace.SetWhich( RES_LR_SPACE );
-                aSet.Put( aLRSpace );
-                SwFormatHoriOrient aHori( pFormat->GetHoriOrient() );
-                aHori.SetHoriOrient( text::HoriOrientation::NONE );
                 aSet.Put( aLRSpace );
                 rSh.SetTableAttr( aSet );
             }

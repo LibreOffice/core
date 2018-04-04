@@ -228,8 +228,6 @@ void PresenterNotesView::SetSlide (const Reference<drawing::XDrawPage>& rxNotesP
     Reference<container::XIndexAccess> xIndexAccess (rxNotesPage, UNO_QUERY);
     if (xIndexAccess.is())
     {
-        OUString sText;
-
         // Iterate over all shapes and find the one that holds the text.
         sal_Int32 nCount (xIndexAccess->getCount());
         for (sal_Int32 nIndex=0; nIndex<nCount; ++nIndex)
@@ -240,11 +238,6 @@ void PresenterNotesView::SetSlide (const Reference<drawing::XDrawPage>& rxNotesP
             if (xServiceName.is()
                 && xServiceName->getServiceName() == sNotesShapeName)
             {
-                Reference<text::XTextRange> xText (xServiceName, UNO_QUERY);
-                if (xText.is())
-                {
-                    sText += xText->getString();
-                }
             }
             else
             {
@@ -259,7 +252,6 @@ void PresenterNotesView::SetSlide (const Reference<drawing::XDrawPage>& rxNotesP
                             xIndexAccess->getByIndex(nIndex), UNO_QUERY);
                         if (xText.is())
                         {
-                            sText += xText->getString();
                             mpTextView->SetText(Reference<text::XText>(xText, UNO_QUERY));
                         }
                     }

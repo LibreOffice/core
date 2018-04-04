@@ -581,7 +581,6 @@ void ScTabPageSortOptions::Init()
     {
         ScDBCollection* pDBColl     = pDoc->GetDBCollection();
         const SCTAB     nCurTab     = pViewData->GetTabNo();
-        OUString        theDbName   = STR_DB_LOCAL_NONAME;
         const formula::FormulaGrammar::AddressConvention eConv = pDoc->GetAddressConvention();
 
         m_pLbOutPos->Clear();
@@ -604,12 +603,6 @@ void ScTabPageSortOptions::Init()
 
         // Check whether the field that is passed on is a database field:
 
-        ScAddress aScAddress( aSortData.nCol1, aSortData.nRow1, nCurTab );
-        OUString theArea =
-            ScRange( aScAddress,
-                 ScAddress( aSortData.nCol2, aSortData.nRow2, nCurTab )
-               ).Format(ScRefFlags::RANGE_ABS, pDoc, eConv);
-
         if ( pDBColl )
         {
             ScDBData* pDBData
@@ -618,12 +611,9 @@ void ScTabPageSortOptions::Init()
                                             aSortData.nCol2, aSortData.nRow2 );
             if ( pDBData )
             {
-                theDbName = pDBData->GetName();
                 m_pBtnHeader->Check( pDBData->HasHeader() );
             }
         }
-
-        theArea += " (" + theDbName + ")";
 
         m_pBtnHeader->SetText( aStrColLabel );
     }

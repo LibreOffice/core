@@ -865,8 +865,6 @@ bool ImportContext::importGraphicOrImageProperty(
             xGraphicStorageHandler.set(xGraphicResolver, uno::UNO_QUERY);
             if (xGraphicStorageHandler.is())
             {
-                OUString aTmp("vnd.sun.star.Package:");
-                aTmp += sURL;
                 try
                 {
                     xGraphic = xGraphicStorageHandler->loadGraphic(sURL);
