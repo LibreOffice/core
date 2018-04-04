@@ -57,24 +57,23 @@ public:
     void            SetPath( const OUString& rPath );
 };
 
-class SvxPathSelectDialog : public ModalDialog
+class SvxPathSelectDialog : public weld::GenericDialogController
 {
 private:
-    VclPtr<ListBox>                    m_pPathLB;
-    VclPtr<PushButton>                 m_pAddBtn;
-    VclPtr<PushButton>                 m_pDelBtn;
+    std::unique_ptr<weld::TreeView> m_xPathLB;
+    std::unique_ptr<weld::Button> m_xAddBtn;
+    std::unique_ptr<weld::Button> m_xDelBtn;
 
-    DECL_LINK(AddHdl_Impl, Button*, void);
-    DECL_LINK(DelHdl_Impl, Button*, void);
-    DECL_LINK(SelectHdl_Impl, ListBox&, void);
+    DECL_LINK(AddHdl_Impl, weld::Button&, void);
+    DECL_LINK(DelHdl_Impl, weld::Button&, void);
+    DECL_LINK(SelectHdl_Impl, weld::TreeView&, void);
 
 public:
-    SvxPathSelectDialog(vcl::Window* pParent);
-    virtual ~SvxPathSelectDialog() override;
-    virtual void    dispose() override;
+    SvxPathSelectDialog(weld::Window* pParent);
 
     OUString        GetPath() const;
     void            SetPath( const OUString& rPath );
+    void            SetTitle(const OUString& rTitle) { m_xDialog->set_title(rTitle); }
 };
 
 #endif // INCLUDED_CUI_SOURCE_INC_MULTIPAT_HXX

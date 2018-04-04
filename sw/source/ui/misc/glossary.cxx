@@ -1044,12 +1044,12 @@ OUString SwGlossaryDlg::GetCurrGrpName() const
     return OUString();
 }
 
-IMPL_LINK( SwGlossaryDlg, PathHdl, Button *, pBtn, void )
+IMPL_LINK_NOARG( SwGlossaryDlg, PathHdl, Button *, void )
 {
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
     if(pFact)
     {
-        ScopedVclPtr<AbstractSvxMultiPathDialog> pDlg(pFact->CreateSvxPathSelectDialog(pBtn));
+        ScopedVclPtr<AbstractSvxMultiPathDialog> pDlg(pFact->CreateSvxPathSelectDialog(GetFrameWeld()));
         OSL_ENSURE(pDlg, "Dialog creation failed!");
         SvtPathOptions aPathOpt;
         const OUString sGlosPath( aPathOpt.GetAutoTextPath() );

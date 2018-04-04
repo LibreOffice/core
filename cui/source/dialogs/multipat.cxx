@@ -49,12 +49,12 @@ IMPL_LINK_NOARG(SvxMultiPathDialog, SelectHdl_Impl, SvTreeListBox*, void)
     m_pDelBtn->Enable(bEnable && bIsSelected);
 }
 
-IMPL_LINK_NOARG(SvxPathSelectDialog, SelectHdl_Impl, ListBox&, void)
+IMPL_LINK_NOARG(SvxPathSelectDialog, SelectHdl_Impl, weld::TreeView&, void)
 {
-    sal_uLong nCount = m_pPathLB->GetEntryCount();
-    bool bIsSelected = m_pPathLB->GetSelectedEntryPos() != LISTBOX_ENTRY_NOTFOUND;
+    sal_uLong nCount = m_xPathLB->n_children();
+    bool bIsSelected = m_xPathLB->get_selected_index() != -1;
     bool bEnable = nCount > 1;
-    m_pDelBtn->Enable(bEnable && bIsSelected);
+    m_xDelBtn->set_sensitive(bEnable && bIsSelected);
 }
 
 IMPL_LINK( SvxMultiPathDialog, CheckHdl_Impl, SvTreeListBox*, pBox, void )
@@ -102,7 +102,7 @@ IMPL_LINK_NOARG(SvxMultiPathDialog, AddHdl_Impl, Button*, void)
     }
 }
 
-IMPL_LINK_NOARG(SvxPathSelectDialog, AddHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(SvxPathSelectDialog, AddHdl_Impl, weld::Button&, void)
 {
     Reference < XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
     Reference < XFolderPicker2 >  xFolderPicker = FolderPicker::create(xContext);
@@ -115,21 +115,20 @@ IMPL_LINK_NOARG(SvxPathSelectDialog, AddHdl_Impl, Button*, void)
         OUString sInsPath;
         osl::FileBase::getSystemPathFromFileURL(aURL, sInsPath);
 
-        if ( LISTBOX_ENTRY_NOTFOUND != m_pPathLB->GetEntryPos( sInsPath ) )
+        if (m_xPathLB->find(sInsPath) != -1)
         {
             OUString sMsg( CuiResId( RID_MULTIPATH_DBL_ERR ) );
             sMsg = sMsg.replaceFirst( "%1", sInsPath );
-            std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(GetFrameWeld(),
+            std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(m_xDialog.get(),
                                                           VclMessageType::Info, VclButtonsType::Ok, sMsg));
             xInfoBox->run();
         }
         else
         {
-            const sal_Int32 nPos = m_pPathLB->InsertEntry( sInsPath );
-            m_pPathLB->SetEntryData( nPos, new OUString( aURL ) );
+            m_xPathLB->append(aURL, sInsPath, "");
         }
 
-        SelectHdl_Impl( *m_pPathLB );
+        SelectHdl_Impl(*m_xPathLB);
     }
 }
 
@@ -159,22 +158,22 @@ IMPL_LINK_NOARG(SvxMultiPathDialog, DelHdl_Impl, Button*, void)
     SelectHdl_Impl( nullptr );
 }
 
-IMPL_LINK_NOARG(SvxPathSelectDialog, DelHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(SvxPathSelectDialog, DelHdl_Impl, weld::Button&, void)
 {
-    sal_Int32 nPos = m_pPathLB->GetSelectedEntryPos();
-    m_pPathLB->RemoveEntry( nPos );
-    sal_Int32 nCnt = m_pPathLB->GetEntryCount();
+    int nPos = m_xPathLB->get_selected_index();
+    m_xPathLB->remove(nPos);
+    int nCnt = m_xPathLB->n_children();
 
-    if ( nCnt )
+    if (nCnt)
     {
-        nCnt--;
+        --nCnt;
 
         if ( nPos > nCnt )
             nPos = nCnt;
-        m_pPathLB->SelectEntryPos( nPos );
+        m_xPathLB->select(nPos);
     }
 
-    SelectHdl_Impl( *m_pPathLB );
+    SelectHdl_Impl(*m_xPathLB);
 }
 
 SvxMultiPathDialog::SvxMultiPathDialog(vcl::Window* pParent)
@@ -206,21 +205,20 @@ SvxMultiPathDialog::SvxMultiPathDialog(vcl::Window* pParent)
     m_pRadioLB->ShowTable();
 }
 
-SvxPathSelectDialog::SvxPathSelectDialog(vcl::Window* pParent)
-    : ModalDialog(pParent, "SelectPathDialog", "cui/ui/selectpathdialog.ui")
+SvxPathSelectDialog::SvxPathSelectDialog(weld::Window* pParent)
+    : GenericDialogController(pParent, "cui/ui/selectpathdialog.ui", "SelectPathDialog")
+    , m_xPathLB(m_xBuilder->weld_tree_view("paths"))
+    , m_xAddBtn(m_xBuilder->weld_button("add"))
+    , m_xDelBtn(m_xBuilder->weld_button("delete"))
 {
-    get(m_pAddBtn, "add");
-    get(m_pDelBtn, "delete");
-    get(m_pPathLB, "paths");
-    Size aSize(LogicToPixel(Size(189, 80), MapMode(MapUnit::MapAppFont)));
-    m_pPathLB->set_width_request(aSize.Width());
-    m_pPathLB->set_height_request(aSize.Height());
+    m_xPathLB->set_size_request(m_xPathLB->get_approximate_digit_width() * 60,
+                                m_xPathLB->get_text_height() * 10);
 
-    m_pPathLB->SetSelectHdl( LINK( this, SvxPathSelectDialog, SelectHdl_Impl ) );
-    m_pAddBtn->SetClickHdl( LINK( this, SvxPathSelectDialog, AddHdl_Impl ) );
-    m_pDelBtn->SetClickHdl( LINK( this, SvxPathSelectDialog, DelHdl_Impl ) );
+    m_xPathLB->connect_changed(LINK(this, SvxPathSelectDialog, SelectHdl_Impl));
+    m_xAddBtn->connect_clicked(LINK(this, SvxPathSelectDialog, AddHdl_Impl));
+    m_xDelBtn->connect_clicked(LINK(this, SvxPathSelectDialog, DelHdl_Impl));
 
-    SelectHdl_Impl( *m_pPathLB );
+    SelectHdl_Impl(*m_xPathLB);
 }
 
 SvxMultiPathDialog::~SvxMultiPathDialog()
@@ -241,25 +239,6 @@ void SvxMultiPathDialog::dispose()
     }
 
     m_pRadioLB.disposeAndClear();
-    m_pAddBtn.clear();
-    m_pDelBtn.clear();
-    ModalDialog::dispose();
-}
-
-SvxPathSelectDialog::~SvxPathSelectDialog()
-{
-    disposeOnce();
-}
-
-void SvxPathSelectDialog::dispose()
-{
-    if (m_pPathLB)
-    {
-        sal_Int32 nPos = m_pPathLB->GetEntryCount();
-        while ( nPos-- )
-            delete static_cast<OUString*>(m_pPathLB->GetEntryData(nPos));
-    }
-    m_pPathLB.clear();
     m_pAddBtn.clear();
     m_pDelBtn.clear();
     ModalDialog::dispose();
@@ -294,11 +273,11 @@ OUString SvxPathSelectDialog::GetPath() const
 {
     OUString sNewPath;
 
-    for ( sal_Int32 i = 0; i < m_pPathLB->GetEntryCount(); ++i )
+    for (int i = 0; i < m_xPathLB->n_children(); ++i)
     {
         if ( !sNewPath.isEmpty() )
             sNewPath += OUStringLiteral1(SVT_SEARCHPATH_DELIMITER);
-        sNewPath += *static_cast<OUString*>(m_pPathLB->GetEntryData(i));
+        sNewPath += m_xPathLB->get_id(i);
     }
 
     return sNewPath;
@@ -349,13 +328,12 @@ void SvxPathSelectDialog::SetPath(const OUString& rPath)
             bool bIsSystemPath =
                 osl::FileBase::getSystemPathFromFileURL(sPath, sSystemPath) == osl::FileBase::E_None;
 
-            const sal_Int32 nPos = m_pPathLB->InsertEntry( bIsSystemPath ? sSystemPath : sPath );
-            m_pPathLB->SetEntryData( nPos, new OUString( sPath ) );
+            m_xPathLB->append(sPath, bIsSystemPath ? sSystemPath : sPath, "");
         }
         while (nIndex >= 0);
     }
 
-    SelectHdl_Impl( *m_pPathLB );
+    SelectHdl_Impl(*m_xPathLB);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
