@@ -1184,12 +1184,14 @@ private:
     static void signalFocusIn(GtkWidget*, GdkEvent*, gpointer widget)
     {
         GtkInstanceWidget* pThis = static_cast<GtkInstanceWidget*>(widget);
+        SolarMutexGuard aGuard;
         pThis->signal_focus_in();
     }
 
     static void signalFocusOut(GtkWidget*, GdkEvent*, gpointer widget)
     {
         GtkInstanceWidget* pThis = static_cast<GtkInstanceWidget*>(widget);
+        SolarMutexGuard aGuard;
         pThis->signal_focus_out();
     }
 
@@ -1446,6 +1448,7 @@ private:
     static void signalActivate(GtkMenuItem* pItem, gpointer widget)
     {
         GtkInstanceMenu* pThis = static_cast<GtkInstanceMenu*>(widget);
+        SolarMutexGuard aGuard;
         pThis->signal_activate(pItem);
     }
 
@@ -2077,6 +2080,7 @@ private:
     static void signalVAdjustValueChanged(GtkAdjustment*, gpointer widget)
     {
         GtkInstanceScrolledWindow* pThis = static_cast<GtkInstanceScrolledWindow*>(widget);
+        SolarMutexGuard aGuard;
         pThis->signal_vadjustment_changed();
     }
 
@@ -2181,6 +2185,7 @@ private:
     static void signalSwitchPage(GtkNotebook*, GtkWidget*, guint nNewPage, gpointer widget)
     {
         GtkInstanceNotebook* pThis = static_cast<GtkInstanceNotebook*>(widget);
+        SolarMutexGuard aGuard;
         pThis->signal_switch_page(nNewPage);
     }
 
@@ -2278,6 +2283,7 @@ private:
     static void signalClicked(GtkButton*, gpointer widget)
     {
         GtkInstanceButton* pThis = static_cast<GtkInstanceButton*>(widget);
+        SolarMutexGuard aGuard;
         pThis->signal_clicked();
     }
 
@@ -2360,6 +2366,7 @@ private:
     static void signalToggled(GtkToggleButton*, gpointer widget)
     {
         GtkInstanceToggleButton* pThis = static_cast<GtkInstanceToggleButton*>(widget);
+        SolarMutexGuard aGuard;
         pThis->signal_toggled();
     }
 public:
@@ -2438,6 +2445,7 @@ private:
     static void signalChanged(GtkEntry*, gpointer widget)
     {
         GtkInstanceEntry* pThis = static_cast<GtkInstanceEntry*>(widget);
+        SolarMutexGuard aGuard;
         pThis->signal_changed();
     }
 
@@ -2445,6 +2453,7 @@ private:
                                  gint* position, gpointer widget)
     {
         GtkInstanceEntry* pThis = static_cast<GtkInstanceEntry*>(widget);
+        SolarMutexGuard aGuard;
         pThis->signal_insert_text(pEntry, pNewText, nNewTextLength, position);
     }
 
@@ -2580,12 +2589,14 @@ private:
     static void signalChanged(GtkTreeView*, gpointer widget)
     {
         GtkInstanceTreeView* pThis = static_cast<GtkInstanceTreeView*>(widget);
+        SolarMutexGuard aGuard;
         pThis->signal_changed();
     }
 
     static void signalRowActivated(GtkTreeView*, GtkTreePath*, GtkTreeViewColumn*, gpointer widget)
     {
         GtkInstanceTreeView* pThis = static_cast<GtkInstanceTreeView*>(widget);
+        SolarMutexGuard aGuard;
         pThis->signal_row_activated();
     }
 
@@ -2721,6 +2732,8 @@ public:
 
     virtual OUString get_selected() const override
     {
+        assert(gtk_tree_selection_get_mode(gtk_tree_view_get_selection(m_pTreeView)) == GTK_SELECTION_SINGLE);
+
         OUString sRet;
         GtkTreeIter iter;
         GtkTreeModel* pModel;
@@ -2732,6 +2745,23 @@ public:
             g_free(pStr);
         }
         return sRet;
+    }
+
+    virtual std::vector<OUString> get_selected_rows() const override
+    {
+        std::vector<OUString> aRows;
+
+        GtkTreeModel* pModel;
+        GList* pList = gtk_tree_selection_get_selected_rows(gtk_tree_view_get_selection(m_pTreeView), &pModel);
+        for (GList* pItem = g_list_first(pList); pItem; pItem = g_list_next(pItem))
+        {
+            GtkTreePath* path = static_cast<GtkTreePath*>(pItem->data);
+            int nRow = gtk_tree_path_get_indices(path)[0];
+            aRows.push_back(get(nRow));
+        }
+        g_list_free_full(pList, reinterpret_cast<GDestroyNotify>(gtk_tree_path_free));
+
+        return aRows;
     }
 
     virtual OUString get(int pos) const override
@@ -2808,6 +2838,16 @@ public:
             gtk_widget_set_size_request(m_pWidget, nWidth, nHeight);
     }
 
+    virtual void set_selection_mode(bool bMultiple) override
+    {
+        gtk_tree_selection_set_mode(gtk_tree_view_get_selection(m_pTreeView), bMultiple ? GTK_SELECTION_MULTIPLE : GTK_SELECTION_SINGLE);
+    }
+
+    virtual int count_selected_rows() const override
+    {
+        return gtk_tree_selection_count_selected_rows(gtk_tree_view_get_selection(m_pTreeView));
+    }
+
     virtual void disable_notify_events() override
     {
         g_signal_handler_block(gtk_tree_view_get_selection(m_pTreeView), m_nChangedSignalId);
@@ -2840,12 +2880,14 @@ private:
     static void signalValueChanged(GtkSpinButton*, gpointer widget)
     {
         GtkInstanceSpinButton* pThis = static_cast<GtkInstanceSpinButton*>(widget);
+        SolarMutexGuard aGuard;
         pThis->signal_value_changed();
     }
 
     static gboolean signalOutput(GtkSpinButton*, gpointer widget)
     {
         GtkInstanceSpinButton* pThis = static_cast<GtkInstanceSpinButton*>(widget);
+        SolarMutexGuard aGuard;
         return pThis->signal_output();
     }
 
@@ -3078,6 +3120,7 @@ private:
     static gboolean signalDraw(GtkWidget*, cairo_t* cr, gpointer widget)
     {
         GtkInstanceDrawingArea* pThis = static_cast<GtkInstanceDrawingArea*>(widget);
+        SolarMutexGuard aGuard;
         pThis->signal_draw(cr);
         return false;
     }
@@ -3097,6 +3140,7 @@ private:
     static void signalSizeAllocate(GtkWidget*, GdkRectangle* allocation, gpointer widget)
     {
         GtkInstanceDrawingArea* pThis = static_cast<GtkInstanceDrawingArea*>(widget);
+        SolarMutexGuard aGuard;
         pThis->signal_size_allocate(allocation->width, allocation->height);
     }
     void signal_size_allocate(guint nWidth, guint nHeight)
@@ -3119,6 +3163,7 @@ private:
     static gboolean signalButton(GtkWidget*, GdkEventButton* pEvent, gpointer widget)
     {
         GtkInstanceDrawingArea* pThis = static_cast<GtkInstanceDrawingArea*>(widget);
+        SolarMutexGuard aGuard;
         return pThis->signal_button(pEvent);
     }
     bool signal_button(GdkEventButton* pEvent)
@@ -3187,6 +3232,7 @@ private:
     static gboolean signalMotion(GtkWidget*, GdkEventMotion* pEvent, gpointer widget)
     {
         GtkInstanceDrawingArea* pThis = static_cast<GtkInstanceDrawingArea*>(widget);
+        SolarMutexGuard aGuard;
         return pThis->signal_motion(pEvent);
     }
     bool signal_motion(GdkEventMotion* pEvent)
@@ -3202,6 +3248,7 @@ private:
     static gboolean signalKey(GtkWidget*, GdkEventKey* pEvent, gpointer widget)
     {
         GtkInstanceDrawingArea* pThis = static_cast<GtkInstanceDrawingArea*>(widget);
+        SolarMutexGuard aGuard;
         return pThis->signal_key(pEvent);
     }
     gboolean signal_key(GdkEventKey* pEvent)
@@ -3312,12 +3359,51 @@ class GtkInstanceComboBoxText : public GtkInstanceContainer, public virtual weld
 private:
     GtkComboBoxText* m_pComboBoxText;
     std::unique_ptr<comphelper::string::NaturalStringSorter> m_xSorter;
-    gulong m_nSignalId;
+    gboolean m_bPopupActive;
+    gulong m_nChangedSignalId;
+    gulong m_nPopupShownSignalId;
+    gulong m_nEntryActivateSignalId;
 
     static void signalChanged(GtkComboBox*, gpointer widget)
     {
         GtkInstanceComboBoxText* pThis = static_cast<GtkInstanceComboBoxText*>(widget);
+        SolarMutexGuard aGuard;
         pThis->signal_changed();
+    }
+
+    static void signalPopupShown(GtkComboBox*, GParamSpec*, gpointer widget)
+    {
+        GtkInstanceComboBoxText* pThis = static_cast<GtkInstanceComboBoxText*>(widget);
+        pThis->signal_popup_shown();
+    }
+
+    void signal_popup_shown()
+    {
+        gboolean bIsShown(false);
+        g_object_get(m_pComboBoxText, "popup-shown", &bIsShown, nullptr);
+        if (m_bPopupActive != bIsShown)
+        {
+            m_bPopupActive = bIsShown;
+            //restore focus to the entry wieh the popup is gone, which
+            //is what the vcl case does, to ease the transition a little
+            gtk_widget_grab_focus(m_pWidget);
+        }
+    }
+
+    static void signalEntryActivate(GtkComboBox*, gpointer widget)
+    {
+        GtkInstanceComboBoxText* pThis = static_cast<GtkInstanceComboBoxText*>(widget);
+        pThis->signal_entry_activate();
+    }
+
+    void signal_entry_activate()
+    {
+        if (m_aEntryActivateHdl.IsSet())
+        {
+            SolarMutexGuard aGuard;
+            m_aEntryActivateHdl.Call(*this);
+            g_signal_stop_emission_by_name(get_entry(), "activate");
+        }
     }
 
     OUString get(int pos, int col) const
@@ -3358,28 +3444,43 @@ private:
         return -1;
     }
 
-    void setup_completion()
+    GtkEntry* get_entry()
     {
         GtkWidget* pChild = gtk_bin_get_child(GTK_BIN(m_pComboBoxText));
-        if (GTK_IS_ENTRY(pChild))
-        {
-            GtkEntry* pEntry = GTK_ENTRY(pChild);
-            GtkEntryCompletion* pCompletion = gtk_entry_completion_new();
-            gtk_entry_completion_set_model(pCompletion, gtk_combo_box_get_model(GTK_COMBO_BOX(m_pComboBoxText)));
-            gtk_entry_completion_set_text_column(pCompletion, 0);
-            gtk_entry_completion_set_inline_selection(pCompletion, true);
-            gtk_entry_set_completion(pEntry, pCompletion);
-            g_object_unref(pCompletion);
-        }
+        if (!GTK_IS_ENTRY(pChild))
+            return nullptr;
+        return GTK_ENTRY(pChild);
+    }
+
+    void setup_completion(GtkEntry* pEntry)
+    {
+        if (gtk_entry_get_completion(pEntry))
+            return;
+        GtkEntryCompletion* pCompletion = gtk_entry_completion_new();
+        gtk_entry_completion_set_model(pCompletion, gtk_combo_box_get_model(GTK_COMBO_BOX(m_pComboBoxText)));
+        gtk_entry_completion_set_text_column(pCompletion, 0);
+        gtk_entry_completion_set_inline_selection(pCompletion, true);
+        gtk_entry_completion_set_inline_completion(pCompletion, true);
+        gtk_entry_completion_set_popup_completion(pCompletion, false);
+        gtk_entry_set_completion(pEntry, pCompletion);
+        g_object_unref(pCompletion);
     }
 
 public:
     GtkInstanceComboBoxText(GtkComboBoxText* pComboBoxText, bool bTakeOwnership)
         : GtkInstanceContainer(GTK_CONTAINER(pComboBoxText), bTakeOwnership)
         , m_pComboBoxText(pComboBoxText)
-        , m_nSignalId(g_signal_connect(m_pComboBoxText, "changed", G_CALLBACK(signalChanged), this))
+        , m_bPopupActive(false)
+        , m_nChangedSignalId(g_signal_connect(m_pComboBoxText, "changed", G_CALLBACK(signalChanged), this))
+        , m_nPopupShownSignalId(g_signal_connect(m_pComboBoxText, "notify::popup-shown", G_CALLBACK(signalPopupShown), this))
     {
-        setup_completion();
+        if (GtkEntry* pEntry = get_entry())
+        {
+            setup_completion(pEntry);
+            m_nEntryActivateSignalId = g_signal_connect(pEntry, "activate", G_CALLBACK(signalEntryActivate), this);
+        }
+        else
+            m_nEntryActivateSignalId = 0;
     }
 
     virtual int get_active() const override
@@ -3517,29 +3618,40 @@ public:
         return gtk_editable_get_selection_bounds(GTK_EDITABLE(pEntry), &rStartPos, &rEndPos);
     }
 
-    virtual void unset_entry_completion() override
+    virtual void set_entry_completion(bool bEnable) override
     {
-        GtkWidget* pChild = gtk_bin_get_child(GTK_BIN(m_pComboBoxText));
-        assert(pChild && GTK_IS_ENTRY(pChild));
-        GtkEntry* pEntry = GTK_ENTRY(pChild);
-        gtk_entry_set_completion(pEntry, nullptr);
+        GtkEntry* pEntry = get_entry();
+        assert(pEntry);
+        if (bEnable)
+            setup_completion(pEntry);
+        else
+            gtk_entry_set_completion(pEntry, nullptr);
     }
 
     virtual void disable_notify_events() override
     {
-        g_signal_handler_block(m_pComboBoxText, m_nSignalId);
+        if (GtkEntry* pEntry = get_entry())
+            g_signal_handler_block(pEntry, m_nEntryActivateSignalId);
+        g_signal_handler_block(m_pComboBoxText, m_nChangedSignalId);
+        g_signal_handler_block(m_pComboBoxText, m_nPopupShownSignalId);
         GtkInstanceContainer::disable_notify_events();
     }
 
     virtual void enable_notify_events() override
     {
         GtkInstanceContainer::disable_notify_events();
-        g_signal_handler_unblock(m_pComboBoxText, m_nSignalId);
+        g_signal_handler_unblock(m_pComboBoxText, m_nPopupShownSignalId);
+        g_signal_handler_unblock(m_pComboBoxText, m_nChangedSignalId);
+        if (GtkEntry* pEntry = get_entry())
+            g_signal_handler_unblock(pEntry, m_nEntryActivateSignalId);
     }
 
     virtual ~GtkInstanceComboBoxText() override
     {
-        g_signal_handler_disconnect(m_pComboBoxText, m_nSignalId);
+        if (GtkEntry* pEntry = get_entry())
+            g_signal_handler_disconnect(pEntry, m_nEntryActivateSignalId);
+        g_signal_handler_disconnect(m_pComboBoxText, m_nChangedSignalId);
+        g_signal_handler_disconnect(m_pComboBoxText, m_nPopupShownSignalId);
     }
 };
 
@@ -3549,9 +3661,10 @@ private:
     GtkExpander* m_pExpander;
     gulong m_nSignalId;
 
-    static void signalExpanded(GtkExpander* pExpander, GParamSpec *, gpointer widget)
+    static void signalExpanded(GtkExpander* pExpander, GParamSpec*, gpointer widget)
     {
         GtkInstanceExpander* pThis = static_cast<GtkInstanceExpander*>(widget);
+        SolarMutexGuard aGuard;
         pThis->signal_expanded();
 
         GtkWidget *pToplevel = gtk_widget_get_toplevel(GTK_WIDGET(pExpander));

@@ -197,6 +197,7 @@ private:
 
 protected:
     Link<ComboBoxText&, void> m_aChangeHdl;
+    Link<ComboBoxText&, void> m_aEntryActivateHdl;
 
     void signal_changed() { m_aChangeHdl.Call(*this); }
 
@@ -227,8 +228,12 @@ public:
     virtual void set_entry_text(const OUString& rStr) = 0;
     virtual void select_entry_region(int nStartPos, int nEndPos) = 0;
     virtual bool get_entry_selection_bounds(int& rStartPos, int& rEndPos) = 0;
+    virtual void set_entry_completion(bool bEnable) = 0;
 
-    virtual void unset_entry_completion() = 0;
+    void connect_entry_activate(const Link<ComboBoxText&, void>& rLink)
+    {
+        m_aEntryActivateHdl = rLink;
+    }
 
     void save_value() { m_sSavedValue = get_active_text(); }
 
@@ -262,6 +267,7 @@ public:
     virtual void set_top_entry(int pos) = 0;
     virtual void clear() = 0;
     virtual OUString get_selected() const = 0;
+    virtual std::vector<OUString> get_selected_rows() const = 0;
     OUString get_selected_id() const { return get_id(get_selected_index()); }
     virtual int get_selected_index() const = 0;
     virtual OUString get(int pos) const = 0;
@@ -270,6 +276,9 @@ public:
 
     virtual void freeze() = 0;
     virtual void thaw() = 0;
+
+    virtual void set_selection_mode(bool bMultiple) = 0;
+    virtual int count_selected_rows() const = 0;
 
     void connect_changed(const Link<TreeView&, void>& rLink) { m_aChangeHdl = rLink; }
 

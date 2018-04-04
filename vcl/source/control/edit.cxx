@@ -1677,6 +1677,14 @@ bool Edit::ImplHandleKeyEvent( const KeyEvent& rKEvt )
             }
             break;
 
+            case KEY_RETURN:
+                if (maActivateHdl.IsSet())
+                {
+                    maActivateHdl.Call(*this);
+                    bDone = true;
+                }
+            break;
+
             default:
             {
                 if ( IsCharInput( rKEvt ) )
