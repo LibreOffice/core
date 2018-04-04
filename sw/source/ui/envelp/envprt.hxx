@@ -26,6 +26,7 @@
 #include <vcl/fixed.hxx>
 #include <vcl/group.hxx>
 #include <vcl/button.hxx>
+#include <vcl/print.hxx>
 
 #include <envimg.hxx>
 #include <envlop.hxx>

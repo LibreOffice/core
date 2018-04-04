@@ -71,6 +71,7 @@
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/propertyvalue.hxx>
+#include <svl/itemprop.hxx>
 #include <paratr.hxx>
 
 using namespace ::com::sun::star;

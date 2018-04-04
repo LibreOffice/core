@@ -26,14 +26,11 @@
 #include <tools/color.hxx>
 
 #include <sfx2/zoomitem.hxx>
-#include <svx/svxids.hrc>
 #include "swdllapi.h"
-#include "authratr.hxx"
 
 class SwRect;
 namespace vcl { class Window; }
 class OutputDevice;
-class SwViewShell;
 class SwDocShell;
 namespace svtools{ class ColorConfig;}
 

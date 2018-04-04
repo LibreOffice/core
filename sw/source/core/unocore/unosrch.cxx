@@ -34,6 +34,7 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <svl/itemprop.hxx>
 #include <memory>
 
 using namespace ::com::sun::star;

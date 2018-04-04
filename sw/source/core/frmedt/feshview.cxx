@@ -96,6 +96,7 @@
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <calbck.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
+#include <svx/svxids.hrc>
 
 #include <com/sun/star/embed/EmbedMisc.hpp>
 #include <com/sun/star/embed/Aspects.hpp>

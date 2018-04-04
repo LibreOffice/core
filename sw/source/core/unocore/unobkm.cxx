@@ -37,6 +37,7 @@
 #include <xmloff/odffields.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/sequence.hxx>
+#include <svl/itemprop.hxx>
 
 using namespace ::sw::mark;
 using namespace ::com::sun::star;

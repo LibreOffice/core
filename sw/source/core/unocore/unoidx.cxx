@@ -64,6 +64,7 @@
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/string.hxx>
 #include <cppuhelper/implbase.hxx>
+#include <svl/itemprop.hxx>
 
 using namespace ::com::sun::star;
 

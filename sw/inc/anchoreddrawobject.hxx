@@ -19,7 +19,6 @@
 #ifndef INCLUDED_SW_INC_ANCHOREDDRAWOBJECT_HXX
 #define INCLUDED_SW_INC_ANCHOREDDRAWOBJECT_HXX
 
-#include <memory>
 #include "anchoredobject.hxx"
 #include <boost/optional.hpp>
 

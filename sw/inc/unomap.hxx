@@ -19,7 +19,10 @@
 #ifndef INCLUDED_SW_INC_UNOMAP_HXX
 #define INCLUDED_SW_INC_UNOMAP_HXX
 
-#include <svl/itemprop.hxx>
+#include <sal/types.h>
+
+class SfxItemPropertySet;
+struct SfxItemPropertyMapEntry;
 
 #define PROPERTY_NONE 0
 

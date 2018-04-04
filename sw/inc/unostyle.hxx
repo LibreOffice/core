@@ -41,6 +41,7 @@
 
 #include "istyleaccess.hxx"
 #include <memory>
+#include <map>
 
 class SwDocShell;
 class SfxItemPropertySet;

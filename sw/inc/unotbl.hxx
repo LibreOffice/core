@@ -23,9 +23,7 @@
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/util/XSortable.hpp>
-#include <com/sun/star/chart/XChartData.hpp>
 #include <com/sun/star/chart/XChartDataArray.hpp>
-#include <com/sun/star/chart2/data/XLabeledDataSequence.hpp>
 #include <com/sun/star/text/XTextTableCursor.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/table/XCellRange.hpp>
@@ -46,9 +44,6 @@ class SwTable;
 class SwTableBox;
 class SwTableLine;
 class SwTableCursor;
-class SwTableBoxFormat;
-class SwChartDataProvider;
-class SwFrameFormat;
 
 typedef
 cppu::WeakImplHelper
