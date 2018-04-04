@@ -579,7 +579,7 @@ IMPL_LINK(SwMMResultSaveDialog, SaveOutputHdl_Impl, Button*, pButton, void)
     if(m_pSaveAsOneRB->IsChecked())
     {
         OUString sFilter;
-        const OUString sPath = SwMailMergeHelper::CallSaveAsDialog(this, sFilter);
+        const OUString sPath = SwMailMergeHelper::CallSaveAsDialog(GetFrameWeld(), sFilter);
         if (sPath.isEmpty())
         {
             // just return back to the dialog
@@ -629,7 +629,7 @@ IMPL_LINK(SwMMResultSaveDialog, SaveOutputHdl_Impl, Button*, pButton, void)
                 nEnd = documentCount;
         }
         OUString sFilter;
-        OUString sPath = SwMailMergeHelper::CallSaveAsDialog(this, sFilter);
+        OUString sPath = SwMailMergeHelper::CallSaveAsDialog(GetFrameWeld(), sFilter);
         if (sPath.isEmpty())
         {
             // just return back to the dialog

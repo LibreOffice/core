@@ -108,7 +108,7 @@ ScTableLink::~ScTableLink()
             rDoc.SetLink( nTab, ScLinkMode::NONE, "", "", "", "", 0 );
 }
 
-void ScTableLink::Edit( vcl::Window* pParent, const Link<SvBaseLink&,void>& rEndEditHdl )
+void ScTableLink::Edit(weld::Window* pParent, const Link<SvBaseLink&,void>& rEndEditHdl)
 {
     pImpl->m_aEndEditLink = rEndEditHdl;
 

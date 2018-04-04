@@ -401,7 +401,7 @@ IMPL_LINK_NOARG( SvBaseLinksDlg, ChangeSourceClickHdl, Button *, void )
         sal_uLong nPos;
         SvBaseLink* pLink = GetSelEntry( &nPos );
         if ( pLink && !pLink->GetLinkSourceName().isEmpty() )
-            pLink->Edit( this, LINK( this, SvBaseLinksDlg, EndEditHdl ) );
+            pLink->Edit( GetFrameWeld(), LINK( this, SvBaseLinksDlg, EndEditHdl ) );
     }
 }
 

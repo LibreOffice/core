@@ -182,7 +182,7 @@ IMPL_LINK_NOARG(EPUBExportDialog, LayoutSelectHdl, ListBox &, void)
 
 IMPL_LINK_NOARG(EPUBExportDialog, CoverClickHdl, Button *, void)
 {
-    SvxOpenGraphicDialog aDlg("Import", this);
+    SvxOpenGraphicDialog aDlg("Import", GetFrameWeld());
     aDlg.EnableLink(false);
     if (aDlg.Execute() == ERRCODE_NONE)
         m_pCoverPath->SetText(aDlg.GetPath());
