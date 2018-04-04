@@ -139,6 +139,7 @@ public:
     void testTdf104201();
     void testTdf104445();
     void testTdf114488();
+    void testTdf116266();
 
     CPPUNIT_TEST_SUITE(SdImportTest);
 
@@ -198,6 +199,7 @@ public:
     CPPUNIT_TEST(testTdf104201);
     CPPUNIT_TEST(testTdf104445);
     CPPUNIT_TEST(testTdf114488);
+    CPPUNIT_TEST(testTdf116266);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -1710,6 +1712,15 @@ void SdImportTest::testTdf114488()
     xShape->getPropertyValue("GraphicURL") >>= sGraphicUrl;
     OUString sMimeType(comphelper::GraphicMimeTypeHelper::GetMimeTypeForImageUrl(sGraphicUrl));
     CPPUNIT_ASSERT_EQUAL(OUString("image/x-wmf"), sMimeType);
+}
+
+void SdImportTest::testTdf116266()
+{
+    sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("/sd/qa/unit/data/odp/tdf116266.odp"), ODP);
+    SdDrawDocument *pDoc = xDocShRef->GetDoc();
+    sfx2::LinkManager* rLinkManager = pDoc->GetLinkManager();
+    // The document contains one SVG stored as a link.
+    CPPUNIT_ASSERT_EQUAL(size_t(1), rLinkManager->GetLinks().size());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdImportTest);

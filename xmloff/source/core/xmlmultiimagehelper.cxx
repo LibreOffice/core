@@ -33,16 +33,11 @@ namespace
         {
             sMimeType = comphelper::GraphicMimeTypeHelper::GetMimeTypeForImageUrl(rString);
         }
-        else if (rString.startsWith("vnd.sun.star.Package"))
+        else // if (rString.startsWith("vnd.sun.star.Package"))
         {
             sMimeType
                 = comphelper::GraphicMimeTypeHelper::GetMimeTypeForExtension(OUStringToOString(
                     rString.copy(rString.lastIndexOf(".") + 1), RTL_TEXTENCODING_ASCII_US));
-        }
-        else
-        {
-            SAL_WARN("xmloff", "Unknown image source: " << rString);
-            return 0;
         }
 
         // pixel formats first
