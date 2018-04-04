@@ -1025,6 +1025,9 @@
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">C~olumn &amp; Row Headers</value>
         </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
       </node>
       <node oor:name=".uno:Scale" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
@@ -1035,6 +1038,9 @@
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Value ~Highlighting</value>
         </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
       </node>
       <node oor:name=".uno:NormalViewMode" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
@@ -1043,10 +1049,16 @@
         <prop oor:name="ContextLabel" oor:type="xs:string">
           <value xml:lang="en-US">~Normal</value>
         </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
       </node>
       <node oor:name=".uno:PagebreakMode" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">~Page Break</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
         </prop>
       </node>
       <node oor:name=".uno:FunctionBox" oor:op="replace">
@@ -2172,6 +2184,9 @@
       <node oor:name=".uno:ToggleFormula" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Show Formula</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
         </prop>
       </node>
       <node oor:name=".uno:AssignMacro" oor:op="replace">
