@@ -380,7 +380,14 @@ class AbstractSvxMultiPathDialog_Impl : public AbstractSvxMultiPathDialog
 class SvxPathSelectDialog;
 class AbstractSvxPathSelectDialog_Impl : public AbstractSvxMultiPathDialog
 {
-    DECL_ABSTDLG_BASE(AbstractSvxPathSelectDialog_Impl,SvxPathSelectDialog)
+protected:
+    std::unique_ptr<SvxPathSelectDialog> m_xDlg;
+public:
+    explicit AbstractSvxPathSelectDialog_Impl(SvxPathSelectDialog* p)
+        : m_xDlg(p)
+    {
+    }
+    virtual short Execute() override;
     virtual OUString        GetPath() const override;
     virtual void            SetPath( const OUString& rPath ) override;
     virtual void            SetTitle( const OUString& rNewTitle ) override;
@@ -622,7 +629,7 @@ public:
     virtual VclPtr<AbstractSvxObjectTitleDescDialog> CreateSvxObjectTitleDescDialog(weld::Window* pParent, const OUString& rTitle, const OUString& rDescription) override;
 
     virtual VclPtr<AbstractSvxMultiPathDialog>    CreateSvxMultiPathDialog(vcl::Window* pParent) override;
-    virtual VclPtr<AbstractSvxMultiPathDialog>    CreateSvxPathSelectDialog(vcl::Window* pParent) override;
+    virtual VclPtr<AbstractSvxMultiPathDialog>    CreateSvxPathSelectDialog(weld::Window* pParent) override;
     virtual VclPtr<AbstractSvxHpLinkDlg>          CreateSvxHpLinkDlg(vcl::Window* pParent, SfxBindings* pBindings) override;
     virtual VclPtr<AbstractFmSearchDialog>         CreateFmSearchDialog(vcl::Window* pParent,
                                                         const OUString& strInitialText,
