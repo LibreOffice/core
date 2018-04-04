@@ -223,8 +223,10 @@ public:
 
     const SvgDataPtr& getSvgData() const;
 
-    void setPdfData(const css::uno::Sequence<sal_Int8>& rPdfData);
-    const css::uno::Sequence<sal_Int8>& getPdfData() const;
+    void setPdfData(const std::shared_ptr<css::uno::Sequence<sal_Int8>>& rPdfData);
+    void setPdfData(const css::uno::Sequence<sal_Int8>& rPdfData) { setPdfData(std::make_shared<css::uno::Sequence<sal_Int8>>(rPdfData)); }
+    std::shared_ptr<css::uno::Sequence<sal_Int8>> getPdfData() const;
+    bool hasPdfData() const;
 
     static css::uno::Sequence<sal_Int8> getUnoTunnelId();
 };

@@ -565,14 +565,14 @@ bool SvXMLGraphicHelper::ImplWriteGraphic( const OUString& rPictureStorageName,
             std::unique_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream( aStream.xStream ));
             if( bUseGfxLink && aGfxLink.GetDataSize() && aGfxLink.GetData() )
             {
-                const uno::Sequence<sal_Int8>& rPdfData = aGraphic.getPdfData();
-                if (rPdfData.hasElements())
+                const std::shared_ptr<uno::Sequence<sal_Int8>>& rPdfData = aGraphic.getPdfData();
+                if (rPdfData && rPdfData->hasElements())
                 {
                     // The graphic has PDF data attached to it, use that.
                     // vcl::ImportPDF() possibly downgraded the PDF data from a
                     // higher PDF version, while aGfxLink still contains the
                     // original data provided by the user.
-                    pStream->WriteBytes(rPdfData.getConstArray(), rPdfData.getLength());
+                    pStream->WriteBytes(rPdfData->getConstArray(), rPdfData->getLength());
                     bRet = (pStream->GetError() == 0);
                 }
                 else

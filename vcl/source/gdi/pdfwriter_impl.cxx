@@ -12336,7 +12336,7 @@ void PDFWriterImpl::createEmbeddedFile(const Graphic& rGraphic, ReferenceXObject
     // no pdf data.
     rEmit.m_nBitmapObject = nBitmapObject;
 
-    if (!rGraphic.getPdfData().hasElements())
+    if (!rGraphic.hasPdfData())
         return;
 
     if (m_aContext.UseReferenceXObject)
@@ -12344,12 +12344,12 @@ void PDFWriterImpl::createEmbeddedFile(const Graphic& rGraphic, ReferenceXObject
         // Store the original PDF data as an embedded file.
         m_aEmbeddedFiles.push_back(PDFEmbeddedFile());
         m_aEmbeddedFiles.back().m_nObject = createObject();
-        m_aEmbeddedFiles.back().m_aData = rGraphic.getPdfData();
+        m_aEmbeddedFiles.back().m_aData = *rGraphic.getPdfData();
 
         rEmit.m_nEmbeddedObject = m_aEmbeddedFiles.back().m_nObject;
     }
     else
-        rEmit.m_aPDFData = rGraphic.getPdfData();
+        rEmit.m_aPDFData = *rGraphic.getPdfData();
 
     rEmit.m_nFormObject = createObject();
     rEmit.m_aPixelSize = rGraphic.GetBitmap().GetPrefSize();
@@ -12405,7 +12405,7 @@ void PDFWriterImpl::drawJPGBitmap( SvStream& rDCTData, bool bIsTrueColor, const 
     {
         m_aJPGs.emplace( m_aJPGs.begin() );
         JPGEmit& rEmit = m_aJPGs.front();
-        if (!rGraphic.getPdfData().hasElements() || m_aContext.UseReferenceXObject)
+        if (!rGraphic.hasPdfData() || m_aContext.UseReferenceXObject)
             rEmit.m_nObject = createObject();
         rEmit.m_aID         = aID;
         rEmit.m_pStream.reset( pStream );
@@ -12517,7 +12517,7 @@ const PDFWriterImpl::BitmapEmit& PDFWriterImpl::createBitmapEmit( const BitmapEx
         m_aBitmaps.push_front( BitmapEmit() );
         m_aBitmaps.front().m_aID        = aID;
         m_aBitmaps.front().m_aBitmap    = aBitmap;
-        if (!rGraphic.getPdfData().hasElements() || m_aContext.UseReferenceXObject)
+        if (!rGraphic.hasPdfData() || m_aContext.UseReferenceXObject)
             m_aBitmaps.front().m_nObject = createObject();
         createEmbeddedFile(rGraphic, m_aBitmaps.front().m_aReferenceXObject, m_aBitmaps.front().m_nObject);
         it = m_aBitmaps.begin();
