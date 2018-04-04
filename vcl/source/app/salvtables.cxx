@@ -501,6 +501,12 @@ public:
             m_xWindow->LeaveWait();
     }
 
+    virtual css::uno::Reference<css::awt::XWindow> GetXWindow() override
+    {
+        css::uno::Reference<css::awt::XWindow> xWindow(m_xWindow->GetComponentInterface(), css::uno::UNO_QUERY);
+        return xWindow;
+    }
+
     virtual ~SalInstanceWindow() override
     {
         clear_child_help(m_xWindow);
@@ -1017,7 +1023,7 @@ public:
 
     virtual void insert_text(const OUString& rText, int pos) override
     {
-        m_xTreeView->InsertEntry(rText, pos);
+        m_xTreeView->InsertEntry(rText, pos == -1 ? LISTBOX_APPEND : pos);
     }
 
     virtual void insert(int pos, const OUString& rId, const OUString& rStr, const OUString& rImage) override

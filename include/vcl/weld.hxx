@@ -142,6 +142,8 @@ public:
     virtual OUString get_title() const = 0;
     virtual void set_busy_cursor(bool bBusy) = 0;
 
+    virtual css::uno::Reference<css::awt::XWindow> GetXWindow() = 0;
+
     void connect_help(const Link<Widget&, bool>& rLink) { m_aHelpRequestHdl = rLink; }
 };
 

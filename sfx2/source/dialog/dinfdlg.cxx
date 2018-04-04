@@ -30,6 +30,7 @@
 #include <unotools/useroptions.hxx>
 #include <svtools/controldims.hxx>
 #include <svtools/imagemgr.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 
 #include <memory>
 
@@ -869,7 +870,7 @@ IMPL_LINK_NOARG(SfxDocumentPage, ChangePassHdl, Button*, void)
         if (!pFilter)
             break;
 
-        sfx2::RequestPassword(pFilter, OUString(), pMedSet, GetParentDialog());
+        sfx2::RequestPassword(pFilter, OUString(), pMedSet, VCLUnoHelper::GetInterface(GetParentDialog()));
         pShell->SetModified();
     }
     while (false);

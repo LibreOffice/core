@@ -1582,15 +1582,20 @@ void SAL_CALL SalGtkFilePicker::initialize( const uno::Sequence<uno::Any>& aArgu
 
     if (xParentWindow.is())
     {
-        css::uno::Reference<css::awt::XSystemDependentWindowPeer> xSysDepWin(xParentWindow, css::uno::UNO_QUERY);
-        if (xSysDepWin.is())
+        if (SalGtkXWindow* pGtkXWindow = dynamic_cast<SalGtkXWindow*>(xParentWindow.get()))
+            m_pParentWidget = pGtkXWindow->getWidget();
+        else
         {
-            css::uno::Sequence<sal_Int8> aProcessIdent(16);
-            rtl_getGlobalProcessId(reinterpret_cast<sal_uInt8*>(aProcessIdent.getArray()));
-            aAny = xSysDepWin->getWindowHandle(aProcessIdent, css::lang::SystemDependent::SYSTEM_XWINDOW);
-            css::awt::SystemDependentXWindow tmp;
-            aAny >>= tmp;
-            m_pParentWidget = GetGtkSalData()->GetGtkDisplay()->findGtkWidgetForNativeHandle(tmp.WindowHandle);
+            css::uno::Reference<css::awt::XSystemDependentWindowPeer> xSysDepWin(xParentWindow, css::uno::UNO_QUERY);
+            if (xSysDepWin.is())
+            {
+                css::uno::Sequence<sal_Int8> aProcessIdent(16);
+                rtl_getGlobalProcessId(reinterpret_cast<sal_uInt8*>(aProcessIdent.getArray()));
+                aAny = xSysDepWin->getWindowHandle(aProcessIdent, css::lang::SystemDependent::SYSTEM_XWINDOW);
+                css::awt::SystemDependentXWindow tmp;
+                aAny >>= tmp;
+                m_pParentWidget = GetGtkSalData()->GetGtkDisplay()->findGtkWidgetForNativeHandle(tmp.WindowHandle);
+            }
         }
     }
 

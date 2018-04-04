@@ -1577,6 +1577,7 @@ class GtkInstanceWindow : public GtkInstanceContainer, public virtual weld::Wind
 {
 private:
     GtkWindow* m_pWindow;
+    rtl::Reference<SalGtkXWindow> m_xWindow; //uno api
 
     static void help_pressed(GtkAccelGroup*, GObject*, guint, GdkModifierType, gpointer widget)
     {
@@ -1608,6 +1609,13 @@ public:
         return OUString(pStr, pStr ? strlen(pStr) : 0, RTL_TEXTENCODING_UTF8);
     }
 
+    virtual css::uno::Reference<css::awt::XWindow> GetXWindow() override
+    {
+        if (!m_xWindow.is())
+            m_xWindow.set(new SalGtkXWindow(m_pWidget));
+        return css::uno::Reference<css::awt::XWindow>(m_xWindow.get());
+    }
+
     virtual void set_busy_cursor(bool bBusy) override
     {
         gtk_widget_realize(m_pWidget);
@@ -1617,6 +1625,12 @@ public:
         gdk_display_flush(pDisplay);
         if (pCursor)
             g_object_unref(pCursor);
+    }
+
+    virtual ~GtkInstanceWindow() override
+    {
+        if (m_xWindow.is())
+            m_xWindow->clear();
     }
 };
 

@@ -134,10 +134,10 @@ public:
                                             const css::uno::Reference< css::frame::XFrame >& xViewFrame ) = 0;
     virtual CreateTabPage               GetTabPageCreatorFunc( sal_uInt16 nId ) = 0;
     virtual GetTabPageRanges            GetTabPageRangesFunc( sal_uInt16 nId ) = 0;
-    virtual VclPtr<SfxAbstractInsertObjectDialog> CreateInsertObjectDialog( vcl::Window* pParent, const OUString& rCommand,
+    virtual VclPtr<SfxAbstractInsertObjectDialog> CreateInsertObjectDialog(weld::Window* pParent, const OUString& rCommand,
             const css::uno::Reference < css::embed::XStorage >& xStor,
             const SvObjectServerList* pList )=0;
-    virtual VclPtr<VclAbstractDialog>          CreateEditObjectDialog( const OUString& rCommand,
+    virtual VclPtr<VclAbstractDialog>          CreateEditObjectDialog(weld::Window* pParent, const OUString& rCommand,
             const css::uno::Reference < css::embed::XEmbeddedObject >& xObj )=0;
     virtual VclPtr<SfxAbstractPasteDialog>    CreatePasteDialog(weld::Window* pParent) = 0;
     virtual VclPtr<SfxAbstractLinksDialog>    CreateLinksDialog( vcl::Window* pParent, sfx2::LinkManager* pMgr, bool bHTML=false, sfx2::SvBaseLink* p=nullptr )=0;
