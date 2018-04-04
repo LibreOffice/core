@@ -199,6 +199,7 @@ public:
                 || (loplugin::DeclCheck(pVarDecl).Var("aAllListeners")
                     .Class("ScAddInListener").GlobalNamespace()) // not owning
                 || name == "s_pLOKWindowsMap" // LOK only, guarded by assert, and LOK never tries to perform a VCL cleanup
+                || name == "gStaticManager" // vcl/source/graphic/Manager.cxx - stores non-owning pointers
                ) // these variables appear unproblematic
             {
                 return true;
