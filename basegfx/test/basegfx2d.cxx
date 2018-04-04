@@ -692,6 +692,7 @@ public:
         {
             B2DPoint aPoint(aPolygon.getB2DPoint(i));
             aPoint += B2DPoint(0.5-getRandomOrdinal(1),0.5-getRandomOrdinal(1));
+            aPolygonOffset.append(aPoint);
         }
         B2DPolyPolygon aPolyPolygon;
         aPolyPolygon.append(aPolygon);
