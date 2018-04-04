@@ -389,7 +389,7 @@ OUString impl_getFilter( const OUString& _rURL )
     return sFilter;
 }
 
-void SvFileObject::Edit(vcl::Window* pParent, sfx2::SvBaseLink* pLink, const Link<const OUString&, void>& rEndEditHdl)
+void SvFileObject::Edit(weld::Window* pParent, sfx2::SvBaseLink* pLink, const Link<const OUString&, void>& rEndEditHdl)
 {
     aEndEditLink = rEndEditHdl;
     OUString sFile, sRange, sTmpFilter;

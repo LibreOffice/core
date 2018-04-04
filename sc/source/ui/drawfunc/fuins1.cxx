@@ -282,7 +282,7 @@ FuInsertGraphic::FuInsertGraphic( ScTabViewShell*   pViewSh,
     }
     else
     {
-        SvxOpenGraphicDialog aDlg(ScResId(STR_INSERTGRAPHIC), pWin,
+        SvxOpenGraphicDialog aDlg(ScResId(STR_INSERTGRAPHIC), pWin ? pWin->GetFrameWeld() : nullptr,
                                   ui::dialogs::TemplateDescription::FILEOPEN_LINK_PREVIEW_IMAGE_ANCHOR);
 
         Reference<ui::dialogs::XFilePickerControlAccess> xCtrlAcc = aDlg.GetFilePickerControlAccess();
@@ -388,7 +388,7 @@ FuInsertMedia::FuInsertMedia( ScTabViewShell*   pViewSh,
     bool bLink(true);
     if (bAPI
 #if HAVE_FEATURE_AVMEDIA
-        || ::avmedia::MediaWindow::executeMediaURLDialog(pWin, aURL, &bLink)
+        || ::avmedia::MediaWindow::executeMediaURLDialog(pWin ? pWin->GetFrameWeld() : nullptr, aURL, &bLink)
 #endif
        )
     {

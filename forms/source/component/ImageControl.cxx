@@ -774,8 +774,9 @@ bool OImageControlControl::implInsertGraphics()
     try
     {
         Reference< XWindowPeer > xWindowPeer = getPeer();
+        VclPtr<vcl::Window> xWin = VCLUnoHelper::GetWindow(xWindowPeer);
         ::sfx2::FileDialogHelper aDialog(TemplateDescription::FILEOPEN_LINK_PREVIEW, FileDialogFlags::Graphic,
-                                         VCLUnoHelper::GetWindow(xWindowPeer));
+                                         xWin ? xWin->GetFrameWeld() : nullptr);
         aDialog.SetTitle( sTitle );
 
         Reference< XFilePickerControlAccess > xController( aDialog.GetFilePicker(), UNO_QUERY_THROW );

@@ -477,7 +477,7 @@ IMPL_LINK( SwFieldDBPage, TreeSelectHdl, SvTreeListBox *, pBox, void )
 
 IMPL_LINK_NOARG(SwFieldDBPage, AddDBHdl, Button*, void)
 {
-    OUString sNewDB = SwDBManager::LoadAndRegisterDataSource(this);
+    OUString sNewDB = SwDBManager::LoadAndRegisterDataSource(GetFrameWeld());
     if(!sNewDB.isEmpty())
     {
         m_pDatabaseTLB->AddDataSource(sNewDB);

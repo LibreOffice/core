@@ -27,10 +27,7 @@
 
 #include <comphelper/string.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/edit.hxx>
-#include <vcl/button.hxx>
-#include <vcl/dialog.hxx>
+#include <vcl/weld.hxx>
 #include <sot/exchange.hxx>
 #include <rtl/strbuf.hxx>
 #include <rtl/ustring.hxx>
@@ -52,69 +49,52 @@ using namespace ::com::sun::star::uno;
 namespace sfx2
 {
 
-class SvDDELinkEditDialog : public ModalDialog
+class SvDDELinkEditDialog : public weld::GenericDialogController
 {
-    VclPtr<Edit>            m_pEdDdeApp;
-    VclPtr<Edit>            m_pEdDdeTopic;
-    VclPtr<Edit>            m_pEdDdeItem;
-    VclPtr<OKButton>        m_pOKButton;
+    std::unique_ptr<weld::Entry> m_xEdDdeApp;
+    std::unique_ptr<weld::Entry> m_xEdDdeTopic;
+    std::unique_ptr<weld::Entry> m_xEdDdeItem;
+    std::unique_ptr<weld::Button> m_xOKButton;
 
-    DECL_LINK( EditHdl_Impl, Edit&, void );
+    DECL_LINK(EditHdl_Impl, weld::Entry&, void);
 public:
-    SvDDELinkEditDialog( vcl::Window* pParent, SvBaseLink const * );
-    virtual ~SvDDELinkEditDialog() override;
-    virtual void dispose() override;
+    SvDDELinkEditDialog(weld::Window* pParent, SvBaseLink const*);
     OUString GetCmd() const;
 };
 
-SvDDELinkEditDialog::SvDDELinkEditDialog( vcl::Window* pParent, SvBaseLink const * pLink )
-    : ModalDialog( pParent, "LinkEditDialog", "sfx/ui/linkeditdialog.ui" )
+SvDDELinkEditDialog::SvDDELinkEditDialog(weld::Window* pParent, SvBaseLink const * pLink)
+    : GenericDialogController(pParent, "sfx/ui/linkeditdialog.ui", "LinkEditDialog")
+    , m_xEdDdeApp(m_xBuilder->weld_entry("app"))
+    , m_xEdDdeTopic(m_xBuilder->weld_entry("file"))
+    , m_xEdDdeItem(m_xBuilder->weld_entry("category"))
+    , m_xOKButton(m_xBuilder->weld_button("ok"))
 {
-    get(m_pOKButton, "ok");
-    get(m_pEdDdeApp, "app");
-    get(m_pEdDdeTopic, "file");
-    get(m_pEdDdeItem, "category");
-
     OUString sServer, sTopic, sItem;
     sfx2::LinkManager::GetDisplayNames( pLink, &sServer, &sTopic, &sItem );
 
-    m_pEdDdeApp->SetText( sServer );
-    m_pEdDdeTopic->SetText( sTopic );
-    m_pEdDdeItem->SetText( sItem );
+    m_xEdDdeApp->set_text( sServer );
+    m_xEdDdeTopic->set_text( sTopic );
+    m_xEdDdeItem->set_text( sItem );
 
-    m_pEdDdeApp->SetModifyHdl( LINK( this, SvDDELinkEditDialog, EditHdl_Impl));
-    m_pEdDdeTopic->SetModifyHdl( LINK( this, SvDDELinkEditDialog, EditHdl_Impl));
-    m_pEdDdeItem->SetModifyHdl( LINK( this, SvDDELinkEditDialog, EditHdl_Impl));
+    m_xEdDdeApp->connect_changed( LINK( this, SvDDELinkEditDialog, EditHdl_Impl));
+    m_xEdDdeTopic->connect_changed( LINK( this, SvDDELinkEditDialog, EditHdl_Impl));
+    m_xEdDdeItem->connect_changed( LINK( this, SvDDELinkEditDialog, EditHdl_Impl));
 
-    m_pOKButton->Enable( !sServer.isEmpty() && !sTopic.isEmpty() && !sItem.isEmpty() );
-}
-
-SvDDELinkEditDialog::~SvDDELinkEditDialog()
-{
-    disposeOnce();
-}
-
-void SvDDELinkEditDialog::dispose()
-{
-    m_pEdDdeApp.clear();
-    m_pEdDdeTopic.clear();
-    m_pEdDdeItem.clear();
-    m_pOKButton.clear();
-    ModalDialog::dispose();
+    m_xOKButton->set_sensitive(!sServer.isEmpty() && !sTopic.isEmpty() && !sItem.isEmpty());
 }
 
 OUString SvDDELinkEditDialog::GetCmd() const
 {
-    OUString sCmd( m_pEdDdeApp->GetText() ), sRet;
-    ::sfx2::MakeLnkName( sRet, &sCmd, m_pEdDdeTopic->GetText(), m_pEdDdeItem->GetText() );
+    OUString sCmd( m_xEdDdeApp->get_text() ), sRet;
+    ::sfx2::MakeLnkName( sRet, &sCmd, m_xEdDdeTopic->get_text(), m_xEdDdeItem->get_text() );
     return sRet;
 }
 
-IMPL_LINK_NOARG( SvDDELinkEditDialog, EditHdl_Impl, Edit&, void)
+IMPL_LINK_NOARG( SvDDELinkEditDialog, EditHdl_Impl, weld::Entry&, void)
 {
-    m_pOKButton->Enable( !m_pEdDdeApp->GetText().isEmpty() &&
-                         !m_pEdDdeTopic->GetText().isEmpty() &&
-                         !m_pEdDdeItem->GetText().isEmpty() );
+    m_xOKButton->set_sensitive(!m_xEdDdeApp->get_text().isEmpty() &&
+                               !m_xEdDdeTopic->get_text().isEmpty() &&
+                               !m_xEdDdeItem->get_text().isEmpty() );
 }
 
 SvDDEObject::SvDDEObject()
@@ -251,12 +231,12 @@ bool SvDDEObject::Connect( SvBaseLink * pSvLink )
     return true;
 }
 
-void SvDDEObject::Edit( vcl::Window* pParent, sfx2::SvBaseLink* pBaseLink, const Link<const OUString&, void>& rEndEditHdl )
+void SvDDEObject::Edit(weld::Window* pParent, sfx2::SvBaseLink* pBaseLink, const Link<const OUString&, void>& rEndEditHdl)
 {
-    ScopedVclPtrInstance< SvDDELinkEditDialog > aDlg(pParent, pBaseLink);
-    if ( RET_OK == aDlg->Execute() && rEndEditHdl.IsSet() )
+    SvDDELinkEditDialog aDlg(pParent, pBaseLink);
+    if (RET_OK == aDlg.run() && rEndEditHdl.IsSet())
     {
-        OUString sCommand = aDlg->GetCmd();
+        OUString sCommand = aDlg.GetCmd();
         rEndEditHdl.Call( sCommand );
     }
 }

@@ -145,7 +145,7 @@ void FuPage::DoExecute( SfxRequest& )
         if( !mpArgs )
         {
             mpView->SdrEndTextEdit();
-            mpArgs = ExecuteDialog(mpWindow);
+            mpArgs = ExecuteDialog(mpWindow ? mpWindow->GetFrameWeld() : nullptr);
         }
 
         // if we now have arguments, apply them to current page
@@ -203,7 +203,7 @@ void MergePageBackgroundFilling(SdPage *pPage, SdStyleSheet *pStyleSheet, bool b
     }
 }
 
-const SfxItemSet* FuPage::ExecuteDialog( vcl::Window const * pParent )
+const SfxItemSet* FuPage::ExecuteDialog(weld::Window* pParent)
 {
     if (!mpDrawViewShell)
         return nullptr;

@@ -404,7 +404,7 @@ bool SvLinkSource::GetData( css::uno::Any &, const OUString &, bool )
     return false;
 }
 
-void SvLinkSource::Edit( vcl::Window *, SvBaseLink *, const Link<const OUString&, void>& )
+void SvLinkSource::Edit(weld::Window *, SvBaseLink *, const Link<const OUString&, void>&)
 {
 }
 

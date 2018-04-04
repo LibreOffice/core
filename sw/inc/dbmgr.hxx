@@ -68,7 +68,7 @@ struct SwDBFormatData
     css::lang::Locale aLocale;
 };
 
-namespace vcl {
+namespace weld {
     class Window;
 }
 
@@ -402,7 +402,7 @@ public:
      the filename returned by a file picker and additional settings dialog.
      In case of success it returns the registered name, otherwise an empty string.
      */
-    static OUString            LoadAndRegisterDataSource(const vcl::Window* pParent, SwDocShell* pDocShell = nullptr);
+    static OUString            LoadAndRegisterDataSource(weld::Window* pParent, SwDocShell* pDocShell = nullptr);
 
     /**
      Loads a data source from file and registers it.

@@ -234,7 +234,7 @@ namespace frm
                         { "Text (*.txt)", "*.txt", EETextFormat::Text }
                     };
 
-                    ::sfx2::FileDialogHelper aFP( bLoad ? css::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE : css::ui::dialogs::TemplateDescription::FILESAVE_AUTOEXTENSION, FileDialogFlags::NONE, this );
+                    ::sfx2::FileDialogHelper aFP( bLoad ? css::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE : css::ui::dialogs::TemplateDescription::FILESAVE_AUTOEXTENSION, FileDialogFlags::NONE, GetFrameWeld() );
 
                     for (auto & aExportFormat : aExportFormats)
                     {

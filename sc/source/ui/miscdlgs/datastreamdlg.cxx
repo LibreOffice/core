@@ -74,7 +74,7 @@ void DataStreamDlg::dispose()
 
 IMPL_LINK_NOARG(DataStreamDlg, BrowseHdl, Button*, void)
 {
-    sfx2::FileDialogHelper aFileDialog(0, FileDialogFlags::NONE, this);
+    sfx2::FileDialogHelper aFileDialog(0, FileDialogFlags::NONE, GetFrameWeld());
     if ( aFileDialog.Execute() != ERRCODE_NONE )
         return;
 

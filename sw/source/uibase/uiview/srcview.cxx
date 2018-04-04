@@ -291,7 +291,7 @@ void SwSrcView::Execute(SfxRequest& rReq)
             // filesave dialog with autoextension
             FileDialogHelper aDlgHelper(
                 TemplateDescription::FILESAVE_AUTOEXTENSION,
-                FileDialogFlags::NONE, aEditWin);
+                FileDialogFlags::NONE, aEditWin->GetFrameWeld());
             uno::Reference < XFilePicker3 > xFP = aDlgHelper.GetFilePicker();
             uno::Reference<XFilterManager> xFltMgr(xFP, UNO_QUERY);
 

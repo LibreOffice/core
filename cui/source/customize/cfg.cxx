@@ -3052,7 +3052,7 @@ IMPL_LINK_NOARG( SvxIconSelectorDialog, ImportHdl, Button *, void)
 {
     sfx2::FileDialogHelper aImportDialog(
         css::ui::dialogs::TemplateDescription::FILEOPEN_LINK_PREVIEW,
-        FileDialogFlags::Graphic | FileDialogFlags::MultiSelection, this);
+        FileDialogFlags::Graphic | FileDialogFlags::MultiSelection, GetFrameWeld());
 
     // disable the link checkbox in the dialog
     uno::Reference< css::ui::dialogs::XFilePickerControlAccess >
