@@ -922,7 +922,10 @@ IMPL_LINK(SvxBorderTabPage, SelColHdl_Impl, SvxColorListBox&, rColorBox, void)
 {
     Color aColor = rColorBox.GetSelectEntryColor();
     m_pFrameSel->SetColorToSelection(aColor);
-    m_pLbLineStyle->SetColor(aColor);
+    if(aColor == COL_WHITE)
+      m_pLbLineStyle->SetColor(COL_BLACK);
+    else
+      m_pLbLineStyle->SetColor(aColor);
 }
 
 IMPL_LINK_NOARG(SvxBorderTabPage, ModifyWidthHdl_Impl, Edit&, void)
@@ -1123,6 +1126,7 @@ void SvxBorderTabPage::FillLineListBox_Impl()
             SvxBorderLine::getWidthImpl(aLines[i].mnStyle), aLines[i].mnStyle,
             aLines[i].mnMinWidth, aLines[i].mpColor1Fn, aLines[i].mpColor2Fn, aLines[i].mpColorDistFn);
     }
+
 
     sal_Int64 nVal = static_cast<sal_Int64>(MetricField::ConvertDoubleValue(
                 m_pLineWidthMF->GetValue( ),
