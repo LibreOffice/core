@@ -199,6 +199,16 @@ cmd/sc_hscrollbar.png cmd/sc_insertformhscroll.png
 # Annotations
 cmd/sc_insertannotation.png cmd/sc_showannotations.png
 cmd/lc_insertannotation.png cmd/lc_showannotations.png
+cmd/sc_deletenote.png cmd/sc_deleteannotation.png
+cmd/lc_deletenote.png cmd/lc_deleteannotation.png
+cmd/sc_showchanges.png cmd/sc_addwatch.png
+cmd/lc_showchanges.png cmd/lc_addwatch.png
+cmd/sc_acceptchanges.png cmd/sc_trackchangesbar.png
+cmd/lc_acceptchanges.png cmd/lc_trackchangesbar.png
+cmd/sc_commentchange.png cmd/sc_commentchangetracking.png
+cmd/lc_commentchange.png cmd/lc_commentchangetracking.png
+cmd/sc_deleteallnotes.png cmd/sc_deleteallannotation.png
+cmd/lc_deleteallnotes.png cmd/lc_deleteallannotation.png
 
 # Template Menu
 cmd/sc_templatemenu.png cmd/sc_adddirect.png
