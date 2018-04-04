@@ -16,6 +16,24 @@
       "revId": "22837bd800e86f3209d72e80a06f72ee8e4ddf87",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_e72a03e7",
+        "filename": "xmloff/source/core/xmlmultiimagehelper.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1001119
+      },
+      "writtenOn": "2018-04-04T13:11:05Z",
+      "side": 1,
+      "message": "Because rString doesn\u0027t begin with \"vnd.sun.star.GraphicObject\" or with \"vnd.sun.star.Package\".\n\nSee, two if-cases above",
+      "parentUuid": "9a30ddce_67ca9351",
+      "revId": "22837bd800e86f3209d72e80a06f72ee8e4ddf87",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
