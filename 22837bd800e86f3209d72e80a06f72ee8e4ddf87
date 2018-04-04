@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_67ca9351",
+        "filename": "xmloff/source/core/xmlmultiimagehelper.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2018-04-04T12:16:05Z",
+      "side": 1,
+      "message": "GetMimeTypeForExtension (see line 39) maps file extensions to their mimetypes - can you please check why that is not used?",
+      "revId": "22837bd800e86f3209d72e80a06f72ee8e4ddf87",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
