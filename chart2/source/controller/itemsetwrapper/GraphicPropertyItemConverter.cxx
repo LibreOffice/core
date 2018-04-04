@@ -430,9 +430,14 @@ bool GraphicPropertyItemConverter::ApplySpecialItem(
                 bool bStretched = rItemSet.Get( XATTR_FILLBMP_STRETCH ).GetValue();
                 drawing::BitmapMode aMode =
                     (bStretched ? drawing::BitmapMode_STRETCH : drawing::BitmapMode_NO_REPEAT);
+                drawing::BitmapMode aOtherMode = drawing::BitmapMode_NO_REPEAT;
 
                 aValue <<= aMode;
-                if( aValue != GetPropertySet()->getPropertyValue( aModePropName ))
+                GetPropertySet()->getPropertyValue( aModePropName ) >>= aOtherMode;
+
+                // don't overwrite if it has been set to BitmapMode_REPEAT (= tiled) already
+                // XATTR_FILLBMP_STRETCH and XATTR_FILLBMP_TILE often come in pairs, tdf#104658
+                if( aMode != aOtherMode && aOtherMode != drawing::BitmapMode_REPEAT )
                 {
                     GetPropertySet()->setPropertyValue( aModePropName, aValue );
                     bChanged = true;
