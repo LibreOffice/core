@@ -1239,7 +1239,7 @@ private:
 
     SdrModel* m_pDrawModel;
     SdrPage* m_pDrawPg;
-    EditEngine* m_pDrawEditEngine;
+    std::unique_ptr<EditEngine> m_pDrawEditEngine;
     std::unique_ptr<wwZOrderer> m_xWWZOrder;
 
     SwFieldType* m_pNumFieldType;   // for number circle
@@ -1683,6 +1683,7 @@ private:
     SwWW8ImplReader(const SwWW8ImplReader &) = delete;
     SwWW8ImplReader& operator=(const SwWW8ImplReader&) = delete;
 public:     // really private, but can only be done public
+    ~SwWW8ImplReader();
     sal_uInt16 GetToggleAttrFlags() const;
     sal_uInt16 GetToggleBiDiAttrFlags() const;
     void SetToggleAttrFlags(sal_uInt16 nFlags);

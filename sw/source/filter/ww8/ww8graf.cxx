@@ -945,7 +945,9 @@ OutlinerParaObject* SwWW8ImplReader::ImportAsOutliner(OUString &rString, WW8_CP 
     if (nLen > 0)
     {
         if (!m_pDrawEditEngine)
-            m_pDrawEditEngine = new EditEngine(nullptr);
+        {
+            m_pDrawEditEngine.reset(new EditEngine(nullptr));
+        }
 
         //replace dos line endings with editeng ones, replace any extra chars with
         //placeholders to keep the inserted string len in sync with the attribute cps
@@ -1009,7 +1011,9 @@ void SwWW8ImplReader::InsertTxbxText(SdrTextObj* pTextObj,
                         GetRangeAsDrawingString(aString, nStartCp, nEndCp, eType) > 0;
 
     if (!m_pDrawEditEngine)
-        m_pDrawEditEngine = new EditEngine(nullptr);
+    {
+        m_pDrawEditEngine.reset(new EditEngine(nullptr));
+    }
     if( pObjSiz )
         m_pDrawEditEngine->SetPaperSize( *pObjSiz );
 
@@ -3124,7 +3128,7 @@ void SwWW8ImplReader::GrafikCtor()  // For SVDraw and VCControls and Escher
 
 void SwWW8ImplReader::GrafikDtor()
 {
-    DELETEZ(m_pDrawEditEngine); // maybe created by graphic
+    m_pDrawEditEngine.reset(); // maybe created by graphic
     m_xWWZOrder.reset();       // same
 }
 
