@@ -131,7 +131,6 @@ void exportToFile(
 
     FILE * f = ::fopen( fname, "w" );
     ::fwrite( bytes.getConstArray(), 1, bytes.getLength(), f );
-    ::fflush( f );
     ::fclose( f );
 }
 
