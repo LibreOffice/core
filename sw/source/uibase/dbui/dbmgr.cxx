@@ -2832,7 +2832,7 @@ OUString ConstructVndSunStarPkgUrl(const OUString& rMainURL, const OUString& rSt
 }
 }
 
-OUString SwDBManager::LoadAndRegisterDataSource(const vcl::Window* pParent, SwDocShell* pDocShell)
+OUString SwDBManager::LoadAndRegisterDataSource(weld::Window* pParent, SwDocShell* pDocShell)
 {
     sfx2::FileDialogHelper aDlgHelper(ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE, FileDialogFlags::NONE, pParent);
     uno::Reference < ui::dialogs::XFilePicker3 > xFP = aDlgHelper.GetFilePicker();

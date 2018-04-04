@@ -135,7 +135,7 @@ IMPL_LINK(SwMailMergeDocSelectPage, FileSelectHdl, Button*, pButton, void)
     if(!bTemplate)
     {
         sfx2::FileDialogHelper aDlgHelper(TemplateDescription::FILEOPEN_SIMPLE,
-                                          FileDialogFlags::NONE, this);
+                                          FileDialogFlags::NONE, GetFrameWeld());
         Reference < XFilePicker3 > xFP = aDlgHelper.GetFilePicker();
 
         xFP->setDisplayDirectory( SvtPathOptions().GetWorkPath() );

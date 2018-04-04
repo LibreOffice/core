@@ -373,7 +373,7 @@ OUString SwReadOnlyPopup::SaveGraphic(sal_uInt16 nId)
         else
             return OUString();
     }
-    return GraphicHelper::ExportGraphic(m_rView.GetWindow(), m_aGraphic, m_sGrfName);
+    return GraphicHelper::ExportGraphic(m_rView.GetFrameWeld(), m_aGraphic, m_sGrfName);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

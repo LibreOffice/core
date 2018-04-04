@@ -31,8 +31,8 @@ struct  SvxOpenGrf_Impl;
 class SFX2_DLLPUBLIC SvxOpenGraphicDialog
 {
 public:
-    SvxOpenGraphicDialog(const OUString& rTitle, const vcl::Window* pPreferredParent);
-    SvxOpenGraphicDialog(const OUString& rTitle, const vcl::Window* pPreferredParent,
+    SvxOpenGraphicDialog(const OUString& rTitle, weld::Window* pPreferredParent);
+    SvxOpenGraphicDialog(const OUString& rTitle, weld::Window* pPreferredParent,
                          sal_Int16 nDialogType);
     ~SvxOpenGraphicDialog();
 

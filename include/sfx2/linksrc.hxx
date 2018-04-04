@@ -31,7 +31,7 @@ namespace com { namespace sun { namespace star { namespace uno
 {
     class Any;
 }}}}
-namespace vcl { class Window; }
+namespace weld { class Window; }
 namespace rtl {
     class OUString;
 }
@@ -83,7 +83,7 @@ public:
                         // sal_True => data complete loaded
     virtual bool        IsDataComplete() const;
 
-    virtual void        Edit( vcl::Window *, SvBaseLink *, const Link<const OUString&, void>& rEndEditHdl );
+    virtual void        Edit(weld::Window *, SvBaseLink *, const Link<const OUString&, void>& rEndEditHdl);
 
 
     void                AddDataAdvise( SvBaseLink *, const rtl::OUString & rMimeType,
