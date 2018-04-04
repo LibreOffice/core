@@ -1482,7 +1482,8 @@ namespace emfio
                         else
                         {
                             Bitmap aBitmap;
-                            tools::Rectangle aRect( Point( xDest, yDest ), Size( cxDest, cyDest ) );
+                            tools::Rectangle aRect(xDest, yDest);
+                            aRect.SaturatingSetSize(Size(cxDest, cyDest));
 
                             sal_uInt32 nSize = cbBmiSrc + cbBitsSrc + 14;
                             if ( nSize <= ( mnEndPos - mnStartPos ) )
