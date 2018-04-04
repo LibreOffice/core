@@ -317,6 +317,7 @@ void SwHTMLParser::InsertImage()
     bool bIsMap = false;
     bool bPrcWidth = false;
     bool bPrcHeight = false;
+    OUString sWidthAsString, sHeightAsString;
     SvxMacroItem aMacroItem(RES_FRMMACRO);
 
     ScriptType eDfltScriptType;
@@ -360,18 +361,23 @@ void SwHTMLParser::InsertImage()
             case HtmlOptionId::WIDTH:
                 // for now only store as pixel value!
                 nWidth = rOption.GetNumber();
-                bPrcWidth = (rOption.GetString().indexOf('%') != -1);
+                sWidthAsString = rOption.GetString();
+                bPrcWidth = (sWidthAsString.indexOf('%') != -1);
                 if( bPrcWidth && nWidth>100 )
                     nWidth = 100;
-                bWidthProvided = true;
+                // width|height = "auto" means viewing app decides the size
+                // i.e. proceed as if no particular size was provided
+                bWidthProvided = (sWidthAsString != "auto");
                 break;
             case HtmlOptionId::HEIGHT:
                 // for now only store as pixel value!
                 nHeight = rOption.GetNumber();
-                bPrcHeight = (rOption.GetString().indexOf('%') != -1);
+                sHeightAsString = rOption.GetString();
+                bPrcHeight = (sHeightAsString.indexOf('%') != -1);
                 if( bPrcHeight && nHeight>100 )
                     nHeight = 100;
-                bHeightProvided = true;
+                // the same as above w/ HtmlOptionId::WIDTH
+                bHeightProvided = (sHeightAsString != "auto");
                 break;
             case HtmlOptionId::VSPACE:
                 nVSpace = rOption.GetNumber();
