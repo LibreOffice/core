@@ -1,0 +1,3 @@
+sd/uiconfig/simpress/ui/headerfootertab.ui://GtkRadioButton[@id='rb_auto'] missing-label-for
+sd/uiconfig/simpress/ui/prntopts.ui://GtkCheckButton[@id='frontcb'] missing-label-for
+sd/uiconfig/simpress/ui/prntopts.ui://GtkCheckButton[@id='backcb'] missing-label-for

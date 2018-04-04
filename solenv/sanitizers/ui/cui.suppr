@@ -6,3 +6,7 @@ cui/uiconfig/ui/hatchpage.ui://GtkLabel[@id='angleft'] orphan-label
 cui/uiconfig/ui/hatchpage.ui://GtkScale[@id='angleslider'] no-labelled-by
 cui/uiconfig/ui/hatchpage.ui://GtkLabel[@id='linetypeft'] orphan-label
 cui/uiconfig/ui/hatchpage.ui://GtkLabel[@id='linecolorft'] orphan-label
+cui/uiconfig/ui/textflowpage.ui://GtkSpinButton[@id='spinPageNumber'] missing-label-for
+cui/uiconfig/ui/textflowpage.ui://GtkComboBox[@id='comboPageStyle'] missing-label-for
+cui/uiconfig/ui/textflowpage.ui://GtkSpinButton[@id='spinOrphan'] missing-label-for
+cui/uiconfig/ui/textflowpage.ui://GtkSpinButton[@id='spinWidow'] missing-label-for

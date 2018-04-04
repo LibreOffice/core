@@ -161,8 +161,8 @@ gb_UIConfig_gla11y_PARAMETERS += --enable-type orphan-label
 
 # These are definite errors
 gb_UIConfig_gla11y_PARAMETERS += --enable-type undeclared-target
-#gb_UIConfig_gla11y_PARAMETERS += --enable-type missing-label-for
-#gb_UIConfig_gla11y_PARAMETERS += --enable-type missing-labelled-by
+gb_UIConfig_gla11y_PARAMETERS += --enable-type missing-label-for
+gb_UIConfig_gla11y_PARAMETERS += --enable-type missing-labelled-by
 
 # These are often buttons with only an image
 #gb_UIConfig_gla11y_PARAMETERS += --enable-type button-no-label

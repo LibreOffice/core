@@ -1,0 +1,8 @@
+sw/uiconfig/swriter/ui/frmtypepage.ui://GtkCheckButton[@id='relwidth'] missing-labelled-by
+sw/uiconfig/swriter/ui/frmtypepage.ui://GtkCheckButton[@id='relheight'] missing-labelled-by
+sw/uiconfig/swriter/ui/insertbreak.ui://GtkSpinButton[@id='pagenumsb'] missing-label-for
+sw/uiconfig/swriter/ui/insertdbcolumnsdialog.ui://GtkComboBoxText[@id='parastyle'] missing-label-for
+sw/uiconfig/swriter/ui/numparapage.ui://GtkCheckButton[@id='checkCB_NUMBER_NEW_START'] missing-labelled-by
+sw/uiconfig/swriter/ui/tocindexpage.ui://GtkButton[@id='styles'] missing-label-for
+sw/uiconfig/swriter/ui/tabletextflowpage.ui://GtkSpinButton[@id='pagenonf'] missing-label-for
+sw/uiconfig/swriter/ui/titlepage.ui://GtkSpinButton[@id='NF_PAGE_START'] missing-label-for
