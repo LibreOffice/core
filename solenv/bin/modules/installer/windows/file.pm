@@ -570,7 +570,7 @@ sub get_fileversion
         }
         elsif ($ttfdata =~ /$ttfversionU/ms)
         {
-            my $verfound = $2
+            my $verfound = $2;
             my ($version, $subversion, $microversion, $vervariant) = split(/\./,$verfound =~ s/\0//g);
             $fileversion = int($version) . "." . int($subversion) . "." . int($microversion) . "." . int($vervariant);
         }
