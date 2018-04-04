@@ -1222,7 +1222,7 @@ SfxChildAlignment SfxDockingWindow::CalcAlignment(const Point& rPos, tools::Rect
         Point aNewPos(rPos);
         aNewPos.AdjustX( -(aSmallDockingRect.GetWidth()/2) );
         aNewPos.AdjustY( -(aSmallDockingRect.GetHeight()/2) );
-        aSmallDockingRect.SetPos(rPos);
+        aSmallDockingRect.SetPos(aNewPos);
         tools::Rectangle aIntersectRect = aInRect.GetIntersection( aSmallDockingRect );
         if ( aIntersectRect == aSmallDockingRect )
             // docking rectangle completely inside (shrunk) inner area -> floating mode
