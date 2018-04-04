@@ -696,14 +696,11 @@ namespace pcr
                 std::vector< Type > aListeners;
                 impl_getComponentListenerTypes_nothrow( aListeners );
 
-                Property aCurrentProperty;
                 OUString sListenerClassName;
 
                 // loop through all listeners and all methods, and see which we can present at the UI
                 for ( const Type& rListener : aListeners )
                 {
-                    aCurrentProperty = Property();
-
                     // the programmatic name of the listener, to be used as "property" name
                     sListenerClassName = rListener.getTypeName();
                     OSL_ENSURE( !sListenerClassName.isEmpty(), "EventHandler::getSupportedProperties: strange - no listener name ..." );

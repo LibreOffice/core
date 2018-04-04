@@ -543,9 +543,6 @@ void SdDrawDocument::CreateDefaultCellStyles()
 
     Color    aNullCol(COL_BLACK);
 
-    XGradient aNullGrad(aNullCol,COL_WHITE);
-              aNullGrad.SetStartIntens( 100 );
-              aNullGrad.SetEndIntens( 100 );
     XHatch    aNullHatch(aNullCol);
 
     rISet.Put(XFillStyleItem(drawing::FillStyle_SOLID));

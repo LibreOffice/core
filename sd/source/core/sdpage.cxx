@@ -1856,15 +1856,12 @@ void SdPage::ScaleObjects(const Size& rNewPageSize, const ::tools::Rectangle& rN
         nLower = GetLowerBorder();
     }
 
-    Point aBackgroundPos(nLeft, nUpper);
     Size aBackgroundSize(aNewPageSize);
-    ::tools::Rectangle aBorderRect (aBackgroundPos, aBackgroundSize);
 
     if (mbScaleObjects)
     {
         aBackgroundSize.AdjustWidth( -(nLeft  + nRight) );
         aBackgroundSize.AdjustHeight( -(nUpper + nLower) );
-        aBorderRect.SetSize(aBackgroundSize);
         aNewPageSize = aBackgroundSize;
     }
 

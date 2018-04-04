@@ -3216,7 +3216,6 @@ void  DomainMapper_Impl::handleRubyEQField( const FieldContextPtr& pContext)
 {
     const OUString & rCommand(pContext->GetCommand());
     sal_Int32 nIndex = 0, nEnd = 0;
-    OUString aToken ,sFont;
     RubyInfo aInfo ;
     nIndex = rCommand.indexOf("\\* jc" );
     if (nIndex != -1)
@@ -3235,13 +3234,8 @@ void  DomainMapper_Impl::handleRubyEQField( const FieldContextPtr& pContext)
         aInfo.nRubyAlign = aRubyAlignValues[(nJc<SAL_N_ELEMENTS(aRubyAlignValues))?nJc:0];
     }
 
-    nIndex = rCommand.indexOf("\\* \"Font:" );
-    if (nIndex != -1)
-    {
-        nIndex += 9;
-        aToken = rCommand.getToken(0, '"',nIndex);
-        sFont = aToken;
-    }
+    // we don't parse or use the font field in rCommand
+
     nIndex = rCommand.indexOf("\\* hps" );
     if (nIndex != -1)
     {

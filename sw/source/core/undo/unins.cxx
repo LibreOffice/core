@@ -68,9 +68,6 @@ boost::optional<OUString> SwUndoInsert::GetTextFromDoc() const
 
     SwNodeIndex aNd( pDoc->GetNodes(), nNode);
     SwContentNode* pCNd = aNd.GetNode().GetContentNode();
-    SwPaM aPaM( *pCNd, nContent );
-
-    aPaM.SetMark();
 
     if( pCNd->IsTextNode() )
     {

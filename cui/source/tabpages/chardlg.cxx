@@ -527,13 +527,6 @@ void SvxCharNamePage::UpdatePreview_Impl()
     SvxFont& rFont = GetPreviewFont();
     SvxFont& rCJKFont = GetPreviewCJKFont();
     SvxFont& rCTLFont = GetPreviewCTLFont();
-    // Size
-    Size aSize = rFont.GetFontSize();
-    aSize.setWidth( 0 );
-    Size aCJKSize = rCJKFont.GetFontSize();
-    aCJKSize.setWidth( 0 );
-    Size aCTLSize = rCTLFont.GetFontSize();
-    aCTLSize.setWidth( 0 );
     // Font
     const FontList* pFontList = GetFontList();
 

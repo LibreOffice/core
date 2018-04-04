@@ -55,13 +55,8 @@
                 }
 #endif // DEBUG_VIEWOPTIONS
 
-#define SVTVIEWOPTIONS_LOG_UNEXPECTED_EXCEPTION(SVTVIEWOPTIONS_LOG_UNEXPECTED_EXCEPTION_PARAM_EXCEPTION)            \
-    {                                                                                                               \
-        OUStringBuffer sMsg(256);                                                                            \
-        sMsg.append("Unexpected exception caught. Original message was:\n\""      );                          \
-        sMsg.append     (SVTVIEWOPTIONS_LOG_UNEXPECTED_EXCEPTION_PARAM_EXCEPTION.Message);                          \
-        sMsg.append("\""                                                           );                          \
-    }
+#define SVTVIEWOPTIONS_LOG_UNEXPECTED_EXCEPTION(ex)            \
+        SAL_WARN("unotools", "Unexpected exception caught. Original message was: " << ex.Message);
 
 //  initialization!
 

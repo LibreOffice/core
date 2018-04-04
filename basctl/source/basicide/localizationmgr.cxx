@@ -460,9 +460,6 @@ sal_Int32 LocalizationMgr::implHandleControlResourceProperties
                     // Remove Id for all locales
                     else if( eMode == REMOVE_IDS_FROM_RESOURCE )
                     {
-                        Sequence< OUString > aNewPropStrings;
-                        aNewPropStrings.realloc( nPropStringCount );
-
                         const Locale* pLocales = aLocaleSeq.getConstArray();
                         sal_Int32 i;
                         for ( i = 0; i < nPropStringCount; ++i )

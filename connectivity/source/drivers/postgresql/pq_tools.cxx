@@ -1077,18 +1077,10 @@ void extractNameValuePairsFromInsert( String2StringMap & map, const OString & la
         int n = 2;
 
 //         printf( "1a\n" );
-        // extract table name
-        OString tableName;
+        // skip table name
         if( vec[n+1].equalsIgnoreAsciiCase( "." ) )
         {
-            tableName = vec[n];
-            tableName += vec[n+1];
-            tableName += vec[n+2];
             n +=2;
-        }
-        else
-        {
-            tableName = vec[n];
         }
 
         std::vector< OString > names;

@@ -700,10 +700,9 @@ IMPL_LINK( SvxScriptOrgDialog, ButtonHdl, Button *, pButton, void )
                             mspNode->getScript( scriptURL ), UNO_QUERY_THROW );
 
                             const Sequence< Any > args(0);
-                            Any aRet;
                             Sequence< sal_Int16 > outIndex;
                             Sequence< Any > outArgs( 0 );
-                            aRet = xScript->invoke( args, outIndex, outArgs );
+                            xScript->invoke( args, outIndex, outArgs );
                         }
                         catch ( reflection::InvocationTargetException& ite )
                         {
@@ -983,10 +982,8 @@ void SvxScriptOrgDialog::renameEntry( SvTreeListEntry* pEntry )
     {
         OUString aNewName = node->getName();
         sal_Int32 extnPos = aNewName.lastIndexOf( '.' );
-        OUString extn;
         if(extnPos>0)
         {
-            extn = aNewName.copy(extnPos);
             aNewName = aNewName.copy(0,extnPos);
         }
         CuiInputDialog aNewDlg(GetFrameWeld(), InputDialogMode::RENAME);

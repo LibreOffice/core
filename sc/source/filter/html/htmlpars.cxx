@@ -1028,8 +1028,6 @@ void ScHTMLLayoutParser::TableDataOff( const HtmlImportInfo* pInfo )
 
 void ScHTMLLayoutParser::TableOn( HtmlImportInfo* pInfo )
 {
-    OUString aTabName;
-
     if ( ++nTableLevel > 1 )
     {   // Table in Table
         sal_uInt16 nTmpColOffset = nColOffset; // Will be changed in Colonize()
@@ -1060,9 +1058,6 @@ void ScHTMLLayoutParser::TableOn( HtmlImportInfo* pInfo )
                     break;
                     case HtmlOptionId::BORDER:
                         // Border is: ((pOption->GetString().Len() == 0) || (pOption->GetNumber() != 0));
-                    break;
-                    case HtmlOptionId::ID:
-                        aTabName = rOption.GetString();
                     break;
                     default: break;
                 }
@@ -1117,9 +1112,6 @@ void ScHTMLLayoutParser::TableOn( HtmlImportInfo* pInfo )
                     break;
                     case HtmlOptionId::BORDER:
                         //BorderOn is: ((pOption->GetString().Len() == 0) || (pOption->GetNumber() != 0));
-                    break;
-                    case HtmlOptionId::ID:
-                        aTabName = rOption.GetString();
                     break;
                     default: break;
                 }

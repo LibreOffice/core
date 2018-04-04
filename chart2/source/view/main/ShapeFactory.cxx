@@ -2454,14 +2454,12 @@ uno::Reference< drawing::XShape >
         }
         else
         {
-            uno::Sequence< uno::Reference< text::XTextCursor > > aCursorList( xFormattedString.getLength() );
             sal_Int32 nN = 0;
             for( nN=0; nN<xFormattedString.getLength();nN++ )
             {
                 xTextCursor->gotoEnd(false);
                 xText->insertString( xTextRange, xFormattedString[nN]->getString(), false );
                 xTextCursor->gotoEnd(true);
-                aCursorList[nN] = xText->createTextCursorByRange( uno::Reference< text::XTextRange >(xTextCursor,uno::UNO_QUERY) );
             }
             awt::Size aOldRefSize;
             bool bHasRefPageSize =

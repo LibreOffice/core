@@ -50,7 +50,6 @@ OXMLDataSourceInfo::OXMLDataSourceInfo( ODBFilter& rImport
     sal_Int16 nLength = (_xAttrList.is()) ? _xAttrList->getLength() : 0;
     bool bAutoEnabled = false;
     bool bFoundField = false,bFoundThousand = false, bFoundCharset = false;
-    std::vector< sal_uInt16 > aTokens;
     for(sal_Int16 i = 0; i < nLength; ++i)
     {
         OUString sLocalName;
@@ -61,7 +60,6 @@ OXMLDataSourceInfo::OXMLDataSourceInfo( ODBFilter& rImport
         aProperty.Name.clear();
 
         sal_uInt16 nToken = rTokenMap.Get( nPrefix, sLocalName );
-        aTokens.push_back(nToken);
         switch( nToken )
         {
             case XML_TOK_ADDITIONAL_COLUMN_STATEMENT:

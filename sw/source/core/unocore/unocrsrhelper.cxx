@@ -1214,7 +1214,6 @@ void makeRedline( SwPaM const & rPaM,
         if (aRevertProperties.getLength())
         {
             SwDoc *const pDoc = rPaM.GetDoc();
-            OUString aUnknownExMsg, aPropertyVetoExMsg;
 
             // Build set of attributes we want to fetch
             std::vector<sal_uInt16> aWhichPairs;
@@ -1225,15 +1224,13 @@ void makeRedline( SwPaM const & rPaM,
                 const OUString &rPropertyName = aRevertProperties[i].Name;
                 SfxItemPropertySimpleEntry const* pEntry = rPropSet.getPropertyMap().getByName(rPropertyName);
 
-                // Queue up any exceptions until the end ...
                 if (!pEntry)
                 {
-                    aUnknownExMsg += "Unknown property: '" + rPropertyName + "' ";
+                    // unknown property
                     break;
                 }
                 else if (pEntry->nFlags & beans::PropertyAttribute::READONLY)
                 {
-                    aPropertyVetoExMsg += "Property is read-only: '" + rPropertyName + "' ";
                     break;
                 }
                 else

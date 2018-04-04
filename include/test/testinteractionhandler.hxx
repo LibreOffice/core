@@ -102,13 +102,10 @@ public:
         bool bIsRequestPasswordToModify = false;
         css::task::PasswordRequestMode mode{};
 
-        OString sUrl;
-
         css::task::DocumentPasswordRequest2 passwordRequest2;
         if (rRequest >>= passwordRequest2)
         {
             bIsRequestPasswordToModify = passwordRequest2.IsRequestPasswordToModify;
-            sUrl = passwordRequest2.Name.toUtf8();
             mode = passwordRequest2.Mode;
             bPasswordRequestFound = true;
         }
@@ -116,7 +113,6 @@ public:
         if (rRequest >>= passwordMSRequest2)
         {
             bIsRequestPasswordToModify = passwordMSRequest2.IsRequestPasswordToModify;
-            sUrl = passwordMSRequest2.Name.toUtf8();
             mode = passwordMSRequest2.Mode;
             bPasswordRequestFound = true;
         }

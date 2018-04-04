@@ -532,7 +532,7 @@ void Edit::ImplRepaint(vcl::RenderContext& rRenderContext, const tools::Rectangl
     else
         rRenderContext.SetTextFillColor(IsControlBackground() ? GetControlBackground() : rStyleSettings.GetFieldColor());
 
-    ImplPaintBorder(rRenderContext, 0, GetOutputSizePixel().Width());
+    ImplPaintBorder(rRenderContext);
 
     bool bDrawSelection = maSelection.Len() && (HasFocus() || (GetStyle() & WB_NOHIDESELECTION) || mbActivePopup);
 
@@ -1000,15 +1000,11 @@ void Edit::ImplClearBackground(vcl::RenderContext& rRenderContext, const tools::
     }
 }
 
-void Edit::ImplPaintBorder(vcl::RenderContext const & rRenderContext, long nXStart, long nXEnd)
+void Edit::ImplPaintBorder(vcl::RenderContext const & rRenderContext)
 {
     // this is not needed when double-buffering
     if (SupportsDoubleBuffering())
         return;
-
-    tools::Rectangle aRect(Point(), GetOutputSizePixel());
-    aRect.SetLeft( nXStart );
-    aRect.SetRight( nXEnd );
 
     if (ImplUseNativeBorder(rRenderContext, GetStyle()) || IsPaintTransparent())
     {

@@ -89,7 +89,6 @@ void SAL_CALL ComplexToolbarController::execute( sal_Int16 KeyModifier )
 {
     Reference< XDispatch >       xDispatch;
     Reference< XURLTransformer > xURLTransformer;
-    OUString                     aCommandURL;
     css::util::URL  aTargetURL;
     Sequence<PropertyValue> aArgs;
 
@@ -105,7 +104,6 @@ void SAL_CALL ComplexToolbarController::execute( sal_Int16 KeyModifier )
         {
             xURLTransformer = m_xURLTransformer;
             xDispatch = getDispatchFromCommand( m_aCommandURL );
-            aCommandURL = m_aCommandURL;
             aTargetURL = getInitializedURL();
             aArgs = getExecuteArgs(KeyModifier);
         }

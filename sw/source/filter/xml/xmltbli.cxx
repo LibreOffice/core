@@ -610,7 +610,6 @@ SvXMLImportContextRef SwXMLTableCellContext_Impl::CreateChildContext(
 {
     SvXMLImportContext *pContext = nullptr;
 
-    OUString sXmlId;
     bool bSubTable = false;
     if( XML_NAMESPACE_TABLE == nPrefix &&
         IsXMLToken( rLocalName, XML_TABLE ) )
@@ -629,11 +628,6 @@ SvXMLImportContextRef SwXMLTableCellContext_Impl::CreateChildContext(
                  IsXMLToken( xAttrList->getValueByIndex( i ), XML_TRUE ) )
             {
                 bSubTable = true;
-            }
-            else if ( (XML_NAMESPACE_XML == nPrefix2) &&
-                     IsXMLToken( aLocalName, XML_ID ) )
-            {
-                sXmlId = xAttrList->getValueByIndex( i );
             }
         //FIXME: RDFa
         }

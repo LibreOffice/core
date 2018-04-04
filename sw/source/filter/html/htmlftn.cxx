@@ -320,16 +320,14 @@ void SwHTMLWriter::OutFootEndNotes()
     {
         m_pFormatFootnote = &pTextFootnote->GetFootnote();
 
-        OUString sFootnoteName, sClass;
+        OUString sFootnoteName;
         if( m_pFormatFootnote->IsEndNote() )
         {
-            sClass = OOO_STRING_SVTOOLS_HTML_sdendnote;
             sFootnoteName = OOO_STRING_SVTOOLS_HTML_sdendnote;
             sFootnoteName += OUString::number(static_cast<sal_Int32>(++m_nEndNote));
         }
         else
         {
-            sClass = OOO_STRING_SVTOOLS_HTML_sdfootnote;
             sFootnoteName = OOO_STRING_SVTOOLS_HTML_sdfootnote;
             sFootnoteName += OUString::number(static_cast<sal_Int32>(++m_nFootNote));
         }

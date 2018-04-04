@@ -705,7 +705,6 @@ static bool UCBOpenContentSync(
             xListener);
     }
 
-    Any aResult;
     bool bException(false);
     bool bAborted(false);
     bool bResultAchieved(false);
@@ -810,7 +809,6 @@ static bool UCBOpenContentSync(
         case Moderator::ResultType::RESULT:
             {
                 bResultAchieved = true;
-                aResult = res.result;
                 break;
             }
         case Moderator::ResultType::COMMANDABORTED:
@@ -909,13 +907,12 @@ static bool UCBOpenContentSync_(
     if ( xProps.is() )
         xProps->addPropertiesChangeListener( Sequence< OUString >(), xListener );
 
-    Any aResult;
     bool bException = false;
     bool bAborted = false;
 
     try
     {
-        aResult = aContent.executeCommand( rArg.Name, rArg.Argument );
+        aContent.executeCommand( rArg.Name, rArg.Argument );
     }
     catch (const CommandAbortedException&)
     {

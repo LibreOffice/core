@@ -1939,19 +1939,12 @@ void SdrObject::NbcApplyNotPersistAttr(const SfxItemSet& rAttr)
     const tools::Rectangle& rSnap=GetSnapRect();
     const tools::Rectangle& rLogic=GetLogicRect();
     Point aRef1(rSnap.Center());
-    Point aRef2(aRef1); aRef2.AdjustY( 1 );
     const SfxPoolItem *pPoolItem=nullptr;
     if (rAttr.GetItemState(SDRATTR_TRANSFORMREF1X,true,&pPoolItem)==SfxItemState::SET) {
         aRef1.setX(static_cast<const SdrTransformRef1XItem*>(pPoolItem)->GetValue() );
     }
     if (rAttr.GetItemState(SDRATTR_TRANSFORMREF1Y,true,&pPoolItem)==SfxItemState::SET) {
         aRef1.setY(static_cast<const SdrTransformRef1YItem*>(pPoolItem)->GetValue() );
-    }
-    if (rAttr.GetItemState(SDRATTR_TRANSFORMREF2X,true,&pPoolItem)==SfxItemState::SET) {
-        aRef2.setX(static_cast<const SdrTransformRef2XItem*>(pPoolItem)->GetValue() );
-    }
-    if (rAttr.GetItemState(SDRATTR_TRANSFORMREF2Y,true,&pPoolItem)==SfxItemState::SET) {
-        aRef2.setY(static_cast<const SdrTransformRef2YItem*>(pPoolItem)->GetValue() );
     }
 
     tools::Rectangle aNewSnap(rSnap);

@@ -1735,16 +1735,14 @@ bool MathType::HandleRecords(int nLevel, sal_uInt8 nSelector,
                     aFont.nTface = 128-aFont.nTface;
                     pS->ReadUChar( aFont.nStyle );
                     aUserStyles.insert(aFont);
-                    std::vector<sal_Char> aSeq;
+                    // read font name
                     while(true)
                     {
                         sal_Char nChar8(0);
                         pS->ReadChar( nChar8 );
                         if (nChar8 == 0)
                             break;
-                        aSeq.push_back(nChar8);
                     }
-                    // Do nothing to the font name now in aSeq!?
                 }
                 break;
             case SIZE:

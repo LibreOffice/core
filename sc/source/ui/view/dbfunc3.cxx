@@ -2035,8 +2035,6 @@ void ScDBFunc::ShowDataPilotSourceData( ScDPObject& rDPObj, const Sequence<sheet
             double fVal;
             if (rAny >>= aStr)
             {
-                ScSetStringParam aParam;
-                aParam.setTextInput();
                 pInsDoc->SetString(ScAddress(nCol,nRow,nNewTab), aStr);
             }
             else if (rAny >>= fVal)

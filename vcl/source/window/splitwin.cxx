@@ -1390,7 +1390,6 @@ Size SplitWindow::CalcLayoutSizePixel( const Size& aNewSize )
         if ( i == mpMainSet->mvItems.size() )
         {
             long    nDelta = 0;
-            Point   aPos = GetPosPixel();
             long    nCurSize;
 
             if ( mbHorz )
@@ -1410,7 +1409,6 @@ Size SplitWindow::CalcLayoutSizePixel( const Size& aNewSize )
                 aSize.AdjustHeight(nDelta );
                 break;
             case WindowAlign::Bottom:
-                aPos.AdjustY( -nDelta );
                 aSize.AdjustHeight(nDelta );
                 break;
             case WindowAlign::Left:
@@ -1418,7 +1416,6 @@ Size SplitWindow::CalcLayoutSizePixel( const Size& aNewSize )
                 break;
             case WindowAlign::Right:
             default:
-                aPos.AdjustX( -nDelta );
                 aSize.AdjustWidth(nDelta );
                 break;
             }

@@ -426,7 +426,6 @@ void SvxSaveTabPage::Reset( const SfxItemSet* )
                     sCommand = sCommand.replaceFirst("%1", sReplace);
                     Reference< XEnumeration > xList = xQuery->createSubSetEnumerationByQuery(sCommand);
                     std::vector< OUString > lList;
-                    std::vector<bool> lAlienList;
                     std::vector<bool> lODFList;
                     while(xList->hasMoreElements())
                     {
@@ -434,9 +433,7 @@ void SvxSaveTabPage::Reset( const SfxItemSet* )
                         OUString sFilter = aFilter.getUnpackedValueOrDefault("Name",OUString());
                         if (!sFilter.isEmpty())
                         {
-                            SfxFilterFlags nFlags = static_cast<SfxFilterFlags>(aFilter.getUnpackedValueOrDefault("Flags",sal_Int32()));
                             lList.push_back(sFilter);
-                            lAlienList.push_back(bool(nFlags & SfxFilterFlags::ALIEN));
                             lODFList.push_back( isODFFormat( sFilter ) );
                         }
                     }

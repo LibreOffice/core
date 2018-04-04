@@ -560,7 +560,6 @@ namespace emfio
                 sal_uInt16 nLen = 0, nOptions = 0;
                 mpInputStream->ReadUInt16( nLen ).ReadUInt16( nOptions );
 
-                tools::Rectangle aRect;
                 if (nOptions & ETO_CLIPPED)
                 {
                     nNonStringLen += 2 * sizeof(sal_uInt16);
@@ -571,9 +570,9 @@ namespace emfio
                         break;
                     }
 
-                    const Point aPt1( ReadPoint() );
-                    const Point aPt2( ReadPoint() );
-                    aRect = tools::Rectangle( aPt1, aPt2 );
+                    ReadPoint();
+                    ReadPoint();
+                    SAL_WARN("vcl.wmf", "clipping unsupported");
                 }
 
                 ComplexTextLayoutFlags nTextLayoutMode = ComplexTextLayoutFlags::Default;

@@ -1124,10 +1124,6 @@ void SdrTextObj::impDecomposeStretchTextPrimitive(
     double fRotate, fShearX;
     rSdrStretchTextPrimitive.getTextRangeTransform().decompose(aScale, aTranslate, fRotate, fShearX);
 
-    // use non-mirrored B2DRange aAnchorTextRange for calculations
-    basegfx::B2DRange aAnchorTextRange(aTranslate);
-    aAnchorTextRange.expand(aTranslate + aScale);
-
     // prepare outliner
     SolarMutexGuard aSolarGuard;
     SdrOutliner& rOutliner = ImpGetDrawOutliner();
@@ -1174,7 +1170,7 @@ void SdrTextObj::impDecomposeStretchTextPrimitive(
     const double fScaleY(fabs(aScale.getY()) / aOutlinerScale.getY());
     rOutliner.SetGlobalCharStretching(static_cast<sal_Int16>(FRound(fScaleX * 100.0)), static_cast<sal_Int16>(FRound(fScaleY * 100.0)));
 
-    // mirroring. We are now in aAnchorTextRange sizes. When mirroring in X and Y,
+    // When mirroring in X and Y,
     // move the null point which was top left to bottom right.
     const bool bMirrorX(basegfx::fTools::less(aScale.getX(), 0.0));
     const bool bMirrorY(basegfx::fTools::less(aScale.getY(), 0.0));

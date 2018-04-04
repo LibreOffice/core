@@ -643,7 +643,6 @@ void PresenterSlideSorter::UpdateLayout()
     mbIsLayoutPending = false;
 
     const awt::Rectangle aWindowBox (mxWindow->getPosSize());
-    awt::Rectangle aCenterBox (aWindowBox);
     sal_Int32 nLeftBorderWidth (aWindowBox.X);
 
     // Get border width.
@@ -661,7 +660,7 @@ void PresenterSlideSorter::UpdateLayout()
             pPane->mxPane->GetPaneBorderPainter());
         if ( ! xBorderPainter.is())
             break;
-        aCenterBox = xBorderPainter->addBorder (
+        xBorderPainter->addBorder (
             mxViewId->getAnchor()->getResourceURL(),
             awt::Rectangle(0, 0, aWindowBox.Width, aWindowBox.Height),
             drawing::framework::BorderType_INNER_BORDER);

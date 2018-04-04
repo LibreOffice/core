@@ -74,7 +74,6 @@ static Sequence<Any> *lcl_docbasic_convertArgs( SbxArray& rArgs )
 
 void SwDoc::ExecMacro( const SvxMacro& rMacro, OUString* pRet, SbxArray* pArgs )
 {
-    ErrCode eErr = ERRCODE_NONE;
     switch( rMacro.GetScriptType() )
     {
     case STARBASIC:
@@ -82,7 +81,7 @@ void SwDoc::ExecMacro( const SvxMacro& rMacro, OUString* pRet, SbxArray* pArgs )
             SbxBaseRef aRef;
             SbxValue* pRetValue = new SbxValue;
             aRef = pRetValue;
-            eErr = mpDocShell->CallBasic( rMacro.GetMacName(),
+            mpDocShell->CallBasic( rMacro.GetMacName(),
                                          rMacro.GetLibName(),
                                          pArgs, pRet ? pRetValue : nullptr );
 
@@ -119,7 +118,7 @@ void SwDoc::ExecMacro( const SvxMacro& rMacro, OUString* pRet, SbxArray* pArgs )
 
             SAL_INFO("sw", "SwDoc::ExecMacro URL is " << rMacro.GetMacName() );
 
-            eErr = mpDocShell->CallXScript(
+            mpDocShell->CallXScript(
                 rMacro.GetMacName(), *pUnoArgs, aRet, aOutArgsIndex, aOutArgs);
 
             break;

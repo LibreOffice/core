@@ -403,7 +403,6 @@ bool SvxTextAnimationPage::FillItemSet( SfxItemSet* rAttrs)
 
     // quantity
     eState = m_pTsbEndless->GetState();
-    OUString aStr = m_pNumFldCount->GetText();
     if( m_pTsbEndless->IsValueChangedFromSaved() ||
         m_pNumFldCount->IsValueChangedFromSaved() )
     {
@@ -424,7 +423,6 @@ bool SvxTextAnimationPage::FillItemSet( SfxItemSet* rAttrs)
 
     // delay
     eState = m_pTsbAuto->GetState();
-    aStr = m_pMtrFldDelay->GetText();
     if( m_pTsbAuto->IsValueChangedFromSaved() ||
         m_pMtrFldDelay->IsValueChangedFromSaved() )
     {
@@ -445,7 +443,6 @@ bool SvxTextAnimationPage::FillItemSet( SfxItemSet* rAttrs)
 
     // step size
     eState = m_pTsbPixel->GetState();
-    aStr = m_pMtrFldAmount->GetText();
     if( m_pTsbPixel->IsValueChangedFromSaved() ||
         m_pMtrFldAmount->IsValueChangedFromSaved() )
     {

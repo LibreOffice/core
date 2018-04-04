@@ -1030,7 +1030,6 @@ void ScFormatShell::ExecuteNumFormat( SfxRequest& rReq )
     }
 
     SvNumFormatType nType = GetCurrentNumberFormatType();
-    SfxItemSet aSet( GetPool(), {{nSlot, nSlot}} );
     switch ( nSlot )
     {
         case SID_NUMBER_TWODEC:
@@ -1051,7 +1050,6 @@ void ScFormatShell::ExecuteNumFormat( SfxRequest& rReq )
                 pTabViewShell->SetNumberFormat( SvNumFormatType::NUMBER );
             else
                 pTabViewShell->SetNumberFormat( SvNumFormatType::SCIENTIFIC );
-            aSet.Put( SfxBoolItem(nSlot, !(nType & SvNumFormatType::SCIENTIFIC)) );
             rBindings.Invalidate( nSlot );
             rReq.Done();
             break;
@@ -1060,7 +1058,6 @@ void ScFormatShell::ExecuteNumFormat( SfxRequest& rReq )
                 pTabViewShell->SetNumberFormat( SvNumFormatType::NUMBER );
             else
                 pTabViewShell->SetNumberFormat( SvNumFormatType::DATE );
-            aSet.Put( SfxBoolItem(nSlot, !(nType & SvNumFormatType::DATE)) );
             rBindings.Invalidate( nSlot );
             rReq.Done();
             break;
@@ -1069,7 +1066,6 @@ void ScFormatShell::ExecuteNumFormat( SfxRequest& rReq )
                 pTabViewShell->SetNumberFormat( SvNumFormatType::NUMBER );
             else
                 pTabViewShell->SetNumberFormat( SvNumFormatType::TIME );
-            aSet.Put( SfxBoolItem(nSlot, !(nType & SvNumFormatType::TIME)) );
             rBindings.Invalidate( nSlot );
             rReq.Done();
             break;
@@ -1117,7 +1113,6 @@ void ScFormatShell::ExecuteNumFormat( SfxRequest& rReq )
                 pTabViewShell->SetNumberFormat( SvNumFormatType::NUMBER );
             else
                 pTabViewShell->SetNumberFormat( SvNumFormatType::PERCENT );
-            aSet.Put( SfxBoolItem(nSlot, !(nType & SvNumFormatType::PERCENT)) );
             rBindings.Invalidate( nSlot );
             rReq.Done();
             break;
@@ -1161,7 +1156,6 @@ void ScFormatShell::ExecuteNumFormat( SfxRequest& rReq )
                 nLeadZeroes);
             pTabViewShell->SetNumFmtByStr(aCode);
 
-            aSet.Put(SfxBoolItem(nSlot, bThousand));
             rBindings.Invalidate(nSlot);
             rReq.Done();
         }

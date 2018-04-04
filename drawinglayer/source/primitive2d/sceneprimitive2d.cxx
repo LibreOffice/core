@@ -408,7 +408,6 @@ namespace drawinglayer
                             }
                         };
 
-                        std::vector< processor3d::ZBufferProcessor3D* > aProcessors;
                         const sal_uInt32 nLinesPerThread(aBZPixelRaster.getHeight() / nThreadCount);
                         std::shared_ptr<comphelper::ThreadTaskTag> aTag = comphelper::ThreadPool::createThreadTaskTag();
 
@@ -425,7 +424,6 @@ namespace drawinglayer
                                 aBZPixelRaster,
                                 nLinesPerThread * a,
                                 a + 1 == nThreadCount ? aBZPixelRaster.getHeight() : nLinesPerThread * (a + 1));
-                            aProcessors.push_back(pNewZBufferProcessor3D);
                             Executor* pExecutor = new Executor(aTag, pNewZBufferProcessor3D, getChildren3D());
                             rThreadPool.pushTask(pExecutor);
                         }

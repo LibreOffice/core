@@ -4852,7 +4852,6 @@ void SwHTMLParser::NewCharFormat( HtmlTokenId nToken )
 void SwHTMLParser::InsertSpacer()
 {
     // and if applicable change it via the options
-    OUString aId;
     sal_Int16 eVertOri = text::VertOrientation::TOP;
     sal_Int16 eHoriOri = text::HoriOrientation::NONE;
     Size aSize( 0, 0);
@@ -4867,9 +4866,6 @@ void SwHTMLParser::InsertSpacer()
         const HTMLOption& rOption = rHTMLOptions[--i];
         switch( rOption.GetToken() )
         {
-        case HtmlOptionId::ID:
-            aId = rOption.GetString();
-            break;
         case HtmlOptionId::TYPE:
             rOption.GetEnum( nType, aHTMLSpacerTypeTable );
             break;
