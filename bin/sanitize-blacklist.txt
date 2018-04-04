@@ -3,8 +3,9 @@ src:*/sc/source/core/tool/interpr1.cxx
 src:*/sc/source/core/tool/interpr2.cxx
 src:*/scaddins/source/analysis/analysis.cxx
 src:*/scaddins/source/analysis/financial.cxx
-[integer-overflow]
+[signed-integer-overflow]
 src:*/boost/boost/rational.hpp
+src:*/include/tools/gen.hxx
 [vptr]
 fun:_ZN4cppu14throwExceptionERKN3com3sun4star3uno3AnyE
 src:*/include/com/sun/star/uno/Reference.hxx
