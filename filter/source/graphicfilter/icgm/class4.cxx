@@ -408,8 +408,8 @@ void CGM::ImplDoClass4()
 
                     if ( mbFigure )
                     {
-                        tools::Rectangle aBoundingBox( Point( static_cast<long>( aCenterPoint.X - fRadius ), long( aCenterPoint.Y - fRadius ) ),
-                            Size( static_cast< long >( 2 * fRadius ), static_cast<long>( 2 * fRadius) ) );
+                        tools::Rectangle aBoundingBox(aCenterPoint.X - fRadius, aCenterPoint.Y - fRadius);
+                        aBoundingBox.SaturatingSetSize(Size(2 * fRadius, 2 * fRadius));
                         tools::Polygon aPolygon( aBoundingBox, Point( static_cast<long>(aStartingPoint.X), static_cast<long>(aStartingPoint.Y) ) ,Point( static_cast<long>(aEndingPoint.X), static_cast<long>(aEndingPoint.Y) ), PolyStyle::Arc );
                         if ( nSwitch )
                             mpOutAct->RegPolyLine( aPolygon, true );
@@ -526,9 +526,8 @@ void CGM::ImplDoClass4()
 
                 if ( mbFigure )
                 {
-                    tools::Rectangle aBoundingBox(
-                        Point( static_cast<long>( aCenter.X - aRadius.X ), long( aCenter.Y - aRadius.X ) ),
-                        Size( static_cast< long >( 2 * aRadius.X ), static_cast<long>( 2 * aRadius.X ) ) );
+                    tools::Rectangle aBoundingBox(aCenter.X - aRadius.X, aCenter.Y - aRadius.X);
+                    aBoundingBox.SaturatingSetSize(Size(2 * aRadius.X, 2 * aRadius.X));
                     tools::Polygon aPolygon( aBoundingBox,
                         Point( static_cast<long>(vector[ 0 ]), static_cast<long>(vector[ 1 ]) ),
                         Point( static_cast<long>(vector[ 2 ]), static_cast<long>(vector[ 3 ]) ), PolyStyle::Arc );
