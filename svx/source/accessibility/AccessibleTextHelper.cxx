@@ -757,58 +757,28 @@ namespace accessibility
         try
         {
             SvxTextForwarder& rCacheTF = GetTextForwarder();
-            SvxViewForwarder& rCacheVF = GetViewForwarder();
-
-            tools::Rectangle aViewArea = rCacheVF.GetVisArea();
-
-            if( IsActive() )
-            {
-                // maybe the edit view scrolls, adapt aViewArea
-                tools::Rectangle aEditViewArea = GetEditViewForwarder().GetVisArea();
-                aViewArea += aEditViewArea.TopLeft();
-
-                // now determine intersection
-                aViewArea.Intersection( aEditViewArea );
-            }
-
-            tools::Rectangle aTmpBB, aParaBB;
-            bool bFirstChild = true;
-            sal_Int32 nCurrPara;
             sal_Int32 nParas=rCacheTF.GetParagraphCount();
 
-            mnFirstVisibleChild = -1;
+            mnFirstVisibleChild = nParas ? 0 : -1;
             mnLastVisibleChild = -2;
 
-            for( nCurrPara=0; nCurrPara<nParas; ++nCurrPara )
+            if (mxFrontEnd.is() && bBroadcastEvents)
             {
-                DBG_ASSERT(nCurrPara >= 0,
-                           "AccessibleTextHelper_Impl::UpdateVisibleChildren: index value overflow");
-
-                aTmpBB = rCacheTF.GetParaBounds( nCurrPara );
-
-                // convert to screen coordinates
-                aParaBB = ::accessibility::AccessibleEditableTextPara::LogicToPixel( aTmpBB, rCacheTF.GetMapMode(), rCacheVF );
-                // at least partially visible
-                if( bFirstChild )
+                for( sal_Int32 nCurrPara=0; nCurrPara<nParas; ++nCurrPara )
                 {
-                    bFirstChild = false;
-                    mnFirstVisibleChild = nCurrPara;
-                }
-
-                mnLastVisibleChild = nCurrPara;
-
-                // child not yet created?
-                ::accessibility::AccessibleParaManager::WeakChild aChild( maParaManager.GetChild(nCurrPara) );
-                if( aChild.second.Width == 0 &&
-                    aChild.second.Height == 0 &&
-                    mxFrontEnd.is() &&
-                    bBroadcastEvents )
-                {
-                    GotPropertyEvent( uno::makeAny( maParaManager.CreateChild( nCurrPara - mnFirstVisibleChild,
-                                                                               mxFrontEnd, GetEditSource(), nCurrPara ).first ),
-                                      AccessibleEventId::CHILD );
+                    // child not yet created?
+                    ::accessibility::AccessibleParaManager::WeakChild aChild( maParaManager.GetChild(nCurrPara) );
+                    if( aChild.second.Width == 0 &&
+                        aChild.second.Height == 0 )
+                    {
+                        GotPropertyEvent( uno::makeAny( maParaManager.CreateChild( nCurrPara - mnFirstVisibleChild,
+                                                                                   mxFrontEnd, GetEditSource(), nCurrPara ).first ),
+                                          AccessibleEventId::CHILD );
+                    }
                 }
             }
+
+            mnLastVisibleChild = nParas - 1;
         }
         catch( const uno::Exception& )
         {
