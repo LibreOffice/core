@@ -78,7 +78,7 @@ public:
     bool                IsAlpha() const;
     AlphaMask           GetAlpha() const;
 
-    const Size&         GetSizePixel() const { return maBitmapSize; }
+    Size                GetSizePixel() const { return maBitmapSize; }
     void                SetSizePixel(const Size& rNewSize);
 
     const Size&         GetPrefSize() const { return maBitmap.GetPrefSize(); }
