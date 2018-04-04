@@ -46,7 +46,7 @@ connectivity/source/inc/OTypeInfo.hxx:55
     _Bool connectivity::OTypeInfo::operator==(const struct connectivity::OTypeInfo &) const
 connectivity/source/inc/OTypeInfo.hxx:56
     _Bool connectivity::OTypeInfo::operator!=(const struct connectivity::OTypeInfo &) const
-dbaccess/source/ui/browser/genericcontroller.cxx:1215
+dbaccess/source/ui/browser/genericcontroller.cxx:1214
     const type-parameter-?-? & dbaui::(anonymous namespace)::SGI_identity::operator()(const type-parameter-?-? &) const
 dbaccess/source/ui/inc/indexcollection.hxx:54
     class __gnu_debug::_Safe_iterator<class __gnu_cxx::__normal_iterator<const struct dbaui::OIndex *, class std::__cxx1998::vector<struct dbaui::OIndex, class std::allocator<struct dbaui::OIndex> > >, class std::__debug::vector<struct dbaui::OIndex, class std::allocator<struct dbaui::OIndex> > > dbaui::OIndexCollection::begin() const
@@ -56,8 +56,6 @@ dbaccess/source/ui/inc/indexcollection.hxx:63
     class __gnu_debug::_Safe_iterator<class __gnu_cxx::__normal_iterator<const struct dbaui::OIndex *, class std::__cxx1998::vector<struct dbaui::OIndex, class std::allocator<struct dbaui::OIndex> > >, class std::__debug::vector<struct dbaui::OIndex, class std::allocator<struct dbaui::OIndex> > > dbaui::OIndexCollection::find(const class rtl::OUString &) const
 dbaccess/source/ui/inc/indexcollection.hxx:65
     class __gnu_debug::_Safe_iterator<class __gnu_cxx::__normal_iterator<const struct dbaui::OIndex *, class std::__cxx1998::vector<struct dbaui::OIndex, class std::allocator<struct dbaui::OIndex> > >, class std::__debug::vector<struct dbaui::OIndex, class std::allocator<struct dbaui::OIndex> > > dbaui::OIndexCollection::findOriginal(const class rtl::OUString &) const
-dbaccess/source/ui/querydesign/QTableConnectionData.hxx:36
-    class rtl::Reference<class dbaui::OConnectionLineData> dbaui::OQueryTableConnectionData::CreateLineDataObj()
 desktop/inc/lib/init.hxx:40
     void desktop::CallbackFlushHandler::setEventLatch(const _Bool)
 desktop/inc/lib/init.hxx:45
@@ -478,6 +476,16 @@ include/opencl/openclconfig.hxx:55
     _Bool OpenCLConfig::ImplMatcher::operator!=(const struct OpenCLConfig::ImplMatcher &) const
 include/opencl/OpenCLZone.hxx:42
     _Bool OpenCLZone::isInInitialTest()
+include/sfx2/basedlgs.hxx:63
+    void SfxModalDialog::CreateOutputItemSet(class SfxItemPool &)
+include/sfx2/charwin.hxx:66
+    void SvxCharView::connect_focus_in(const class Link<class weld::Widget &, void> &)
+include/sfx2/charwin.hxx:84
+    void SvxCharViewControl::SetHasInsert(_Bool)
+include/sfx2/charwin.hxx:94
+    void SvxCharViewControl::setClearClickHdl(const class Link<class SvxCharViewControl *, void> &)
+include/sfx2/charwin.hxx:95
+    void SvxCharViewControl::setClearAllClickHdl(const class Link<class SvxCharViewControl *, void> &)
 include/sfx2/docfile.hxx:209
     class rtl::OUString SfxMedium::GetConvertImagesFilter()
 include/sfx2/docfilt.hxx:83
@@ -550,9 +558,9 @@ include/tools/fract.hxx:106
     class Fraction operator-(const class Fraction &,double)
 include/tools/fract.hxx:108
     class Fraction operator/(const class Fraction &,double)
-include/tools/gen.hxx:252
+include/tools/gen.hxx:260
     class Pair & Range::toPair()
-include/tools/gen.hxx:319
+include/tools/gen.hxx:327
     class Pair & Selection::toPair()
 include/tools/poly.hxx:164
     _Bool tools::Polygon::operator!=(const class tools::Polygon &) const
@@ -588,7 +596,7 @@ include/vcl/cursor.hxx:96
     _Bool vcl::Cursor::operator!=(const class vcl::Cursor &) const
 include/vcl/edit.hxx:230
     class rtl::OUString Edit::GetPlaceholderText() const
-include/vcl/EnumContext.hxx:133
+include/vcl/EnumContext.hxx:135
     _Bool vcl::EnumContext::operator!=(const class vcl::EnumContext &)
 include/vcl/errcode.hxx:87
     _Bool ErrCode::operator<(const class ErrCode &) const
@@ -602,7 +610,7 @@ include/vcl/gdimtf.hxx:111
     _Bool GDIMetaFile::operator!=(const class GDIMetaFile &) const
 include/vcl/gradient.hxx:104
     _Bool Gradient::operator!=(const class Gradient &) const
-include/vcl/hatch.hxx:56
+include/vcl/hatch.hxx:55
     _Bool Hatch::operator!=(const class Hatch &) const
 include/vcl/inputctx.hxx:63
     _Bool InputContext::operator!=(const class InputContext &) const
@@ -668,101 +676,79 @@ include/vcl/weld.hxx:61
     void weld::Widget::set_grid_left_attach(int)
 include/vcl/weld.hxx:62
     int weld::Widget::get_grid_left_attach() const
-include/vcl/weld.hxx:71
-    void weld::Widget::connect_focus_in(const class Link<class weld::Widget &, void> &)
-include/vcl/weld.hxx:72
-    void weld::Widget::connect_focus_out(const class Link<class weld::Widget &, void> &)
-include/vcl/weld.hxx:90
+include/vcl/weld.hxx:113
     class rtl::OUString weld::Frame::get_label() const
-include/vcl/weld.hxx:103
+include/vcl/weld.hxx:126
     void weld::Notebook::set_current_page(const class rtl::OString &)
-include/vcl/weld.hxx:104
+include/vcl/weld.hxx:127
     int weld::Notebook::get_n_pages() const
-include/vcl/weld.hxx:105
+include/vcl/weld.hxx:128
     class weld::Container * weld::Notebook::get_page(const class rtl::OString &) const
-include/vcl/weld.hxx:107
+include/vcl/weld.hxx:130
     void weld::Notebook::connect_leave_page(const class Link<const class rtl::OString &, _Bool> &)
-include/vcl/weld.hxx:109
+include/vcl/weld.hxx:132
     void weld::Notebook::connect_enter_page(const class Link<const class rtl::OString &, void> &)
-include/vcl/weld.hxx:185
+include/vcl/weld.hxx:208
     class rtl::OUString weld::ComboBoxText::get_id(int) const
-include/vcl/weld.hxx:187
-    void weld::ComboBoxText::append_text(const class rtl::OUString &)
-include/vcl/weld.hxx:200
-    void weld::ComboBoxText::set_active(const class rtl::OUString &)
-include/vcl/weld.hxx:202
-    void weld::ComboBoxText::save_value()
-include/vcl/weld.hxx:204
-    _Bool weld::ComboBoxText::get_value_changed_from_saved() const
 include/vcl/weld.hxx:231
+    void weld::ComboBoxText::save_value()
+include/vcl/weld.hxx:233
+    _Bool weld::ComboBoxText::get_value_changed_from_saved() const
+include/vcl/weld.hxx:260
     void weld::TreeView::set_top_entry(int)
-include/vcl/weld.hxx:236
+include/vcl/weld.hxx:265
     class rtl::OUString weld::TreeView::get(int) const
-include/vcl/weld.hxx:247
+include/vcl/weld.hxx:276
     void weld::TreeView::select(const class rtl::OUString &)
-include/vcl/weld.hxx:249
+include/vcl/weld.hxx:278
     void weld::TreeView::remove(const class rtl::OUString &)
-include/vcl/weld.hxx:312
+include/vcl/weld.hxx:341
     _Bool weld::ToggleButton::get_state_changed_from_saved() const
-include/vcl/weld.hxx:336
+include/vcl/weld.hxx:365
     void weld::Entry::signal_insert_text(class rtl::OUString &)
-include/vcl/weld.hxx:345
-    void weld::Entry::set_editable(_Bool)
-include/vcl/weld.hxx:377
+include/vcl/weld.hxx:373
+    _Bool weld::Entry::get_selection_bounds(int &,int &)
+include/vcl/weld.hxx:407
     void weld::SpinButton::set_min(int)
-include/vcl/weld.hxx:432
+include/vcl/weld.hxx:462
     enum FieldUnit weld::MetricSpinButton::get_unit() const
-include/vcl/weld.hxx:451
-    void weld::MetricSpinButton::set_range(int,int,enum FieldUnit)
-include/vcl/weld.hxx:459
-    void weld::MetricSpinButton::get_range(int &,int &,enum FieldUnit) const
-include/vcl/weld.hxx:466
-    void weld::MetricSpinButton::set_increments(int,int,enum FieldUnit)
-include/vcl/weld.hxx:473
+include/vcl/weld.hxx:517
     void weld::MetricSpinButton::get_increments(int &,int &,enum FieldUnit) const
-include/vcl/weld.hxx:485
-    int weld::MetricSpinButton::normalize(int) const
-include/vcl/weld.hxx:486
-    int weld::MetricSpinButton::denormalize(int) const
-include/vcl/weld.hxx:487
-    void weld::MetricSpinButton::set_sensitive(_Bool)
-include/vcl/weld.hxx:488
+include/vcl/weld.hxx:532
     _Bool weld::MetricSpinButton::get_sensitive() const
-include/vcl/weld.hxx:489
+include/vcl/weld.hxx:533
     _Bool weld::MetricSpinButton::get_visible() const
-include/vcl/weld.hxx:490
-    void weld::MetricSpinButton::grab_focus()
-include/vcl/weld.hxx:491
+include/vcl/weld.hxx:535
     _Bool weld::MetricSpinButton::has_focus() const
-include/vcl/weld.hxx:492
+include/vcl/weld.hxx:536
     void weld::MetricSpinButton::show()
-include/vcl/weld.hxx:493
+include/vcl/weld.hxx:537
     void weld::MetricSpinButton::hide()
-include/vcl/weld.hxx:494
-    void weld::MetricSpinButton::set_digits(unsigned int)
-include/vcl/weld.hxx:495
-    unsigned int weld::MetricSpinButton::get_digits() const
-include/vcl/weld.hxx:496
+include/vcl/weld.hxx:540
     void weld::MetricSpinButton::save_value()
-include/vcl/weld.hxx:497
+include/vcl/weld.hxx:541
     _Bool weld::MetricSpinButton::get_value_changed_from_saved() const
-include/vcl/weld.hxx:501
+include/vcl/weld.hxx:545
     void weld::MetricSpinButton::set_text(const class rtl::OUString &)
-include/vcl/weld.hxx:502
+include/vcl/weld.hxx:546
     class rtl::OUString weld::MetricSpinButton::get_text() const
-include/vcl/weld.hxx:503
+include/vcl/weld.hxx:547
     void weld::MetricSpinButton::set_size_request(int,int)
-include/vcl/weld.hxx:507
+include/vcl/weld.hxx:551
     class Size weld::MetricSpinButton::get_preferred_size() const
-include/vcl/weld.hxx:522
+include/vcl/weld.hxx:566
     class Selection weld::TextView::get_selection() const
-include/vcl/weld.hxx:523
+include/vcl/weld.hxx:567
     void weld::TextView::set_selection(const class Selection &)
-include/vcl/weld.hxx:581
+include/vcl/weld.hxx:614
+    void weld::DrawingArea::connect_key_release(const class Link<const class KeyEvent &, _Bool> &)
+include/vcl/weld.hxx:624
+    void weld::Menu::set_sensitive(const class rtl::OString &,_Bool)
+include/vcl/weld.hxx:645
     class weld::Window * weld::Builder::weld_window(const class rtl::OString &,_Bool)
-include/vcl/weld.hxx:586
+include/vcl/weld.hxx:652
     class weld::Notebook * weld::Builder::weld_notebook(const class rtl::OString &,_Bool)
-include/vcl/weld.hxx:657
+include/vcl/weld.hxx:725
     class rtl::OUString weld::MessageDialogController::get_primary_text() const
 include/vcl/window.hxx:431
     const char * ImplDbgCheckWindow(const void *)
@@ -1029,11 +1015,11 @@ sw/inc/swrect.hxx:99
 sw/inc/swrect.hxx:105
     class SvStream & WriteSwRect(class SvStream &,const class SwRect &)
 sw/inc/swrect.hxx:131
-    void SwRect::SetBottomAndHeight(long,long)
+    void SwRect::SetBottomAndHeight(int,int)
 sw/inc/swrect.hxx:134
     void SwRect::SetLowerLeftCorner(const class Point &)
 sw/inc/swrect.hxx:147
-    _Bool SwRect::OverStepTop(long) const
+    _Bool SwRect::OverStepTop(int) const
 sw/qa/extras/inc/swmodeltestbase.hxx:590
     class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertySet> SwModelTestBase::getParagraphAnchoredObject(const int,const class com::sun::star::uno::Reference<class com::sun::star::text::XTextRange> &) const
 sw/qa/extras/uiwriter/uiwriter.cxx:6140
@@ -1043,29 +1029,37 @@ sw/source/core/inc/frame.hxx:893
 sw/source/core/inc/frame.hxx:1326
     class Size SwRectFnSet::GetSize(const class SwRect &) const
 sw/source/core/inc/frame.hxx:1357
-    long SwRectFnSet::LeftDist(const class SwRect &,long) const
+    int SwRectFnSet::LeftDist(const class SwRect &,int) const
 sw/source/core/inc/frame.hxx:1358
-    long SwRectFnSet::RightDist(const class SwRect &,long) const
+    int SwRectFnSet::RightDist(const class SwRect &,int) const
 sw/source/core/inc/frame.hxx:1366
-    long SwRectFnSet::XInc(long,long) const
+    int SwRectFnSet::XInc(int,int) const
 sw/source/core/inc/mvsave.hxx:162
     _Bool ZSortFly::operator==(const class ZSortFly &) const
 sw/source/core/text/porlin.hxx:119
     _Bool SwLinePortion::IsTabRightPortion() const
 sw/source/core/text/txtpaint.hxx:73
      DbgRect::DbgRect(class OutputDevice *,const class tools::Rectangle &,const _Bool,class Color)
+sw/source/filter/ww8/ww8par.hxx:1916
+    _Bool RTLDrawingsHack(long &,short,short,int,int,int)
 sw/source/filter/ww8/ww8struc.hxx:242
      WW8_BRCVer6::WW8_BRCVer6()
 sw/source/uibase/inc/swcont.hxx:86
     _Bool SwContent::operator==(const class SwContent &) const
+test/inc/unoapi_property_testers.hxx:54
+    void testDoubleReadonlyProperty(class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertySet> &,const class rtl::OUString &,const double &)
+test/inc/unoapi_property_testers.hxx:74
+    void testLongReadonlyProperty(class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertySet> &,const class rtl::OUString &,const int &)
+test/inc/unoapi_property_testers.hxx:94
+    void testShortReadonlyProperty(class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertySet> &,const class rtl::OUString &,const short &)
+test/inc/unoapi_property_testers.hxx:114
+    void testStringReadonlyProperty(class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertySet> &,const class rtl::OUString &,const class rtl::OUString &)
 test/source/sheet/xsubtotalfield.cxx:28
     _Bool CppUnit::assertion_traits::equal(const class com::sun::star::uno::Sequence<struct com::sun::star::sheet::SubTotalColumn> &,const class com::sun::star::uno::Sequence<struct com::sun::star::sheet::SubTotalColumn> &)
 test/source/sheet/xsubtotalfield.cxx:34
     class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char> > CppUnit::assertion_traits::toString(const class com::sun::star::uno::Sequence<struct com::sun::star::sheet::SubTotalColumn> &)
 toolkit/inc/helper/btndlg.hxx:52
      ButtonDialog::ButtonDialog(class vcl::Window *,long)
-toolkit/inc/helper/btndlg.hxx:83
-    struct ImplBtnDlgItem * ButtonDialog::ImplGetItem(unsigned short) const
 ucb/source/inc/regexpmap.hxx:375
     RegexpMapConstIter<type-parameter-?-?> ucb_impl::RegexpMap::begin() const
 ucb/source/inc/regexpmap.hxx:379
@@ -1158,10 +1152,10 @@ vcl/source/fontsubset/xlat.hxx:35
     unsigned short TranslateChar16(unsigned short)
 vcl/source/gdi/pdfwriter_impl.hxx:1270
     void vcl::PDFWriterImpl::setAutoAdvanceTime(unsigned int,int)
+workdir/LexTarget/l10ntools/source/cfglex.cxx:3736
+    void YYWarning(const char *)
 workdir/LexTarget/l10ntools/source/xrmlex.cxx:730
     void YYWarning()
-workdir/LexTarget/l10ntools/source/xrmlex.cxx:2226
-    void YYWarning(const char *)
 writerfilter/source/ooxml/OOXMLPropertySet.hxx:157
     class __gnu_debug::_Safe_iterator<class __gnu_cxx::__normal_iterator<const class std::shared_ptr<class writerfilter::ooxml::OOXMLProperty> *, class std::__cxx1998::vector<class std::shared_ptr<class writerfilter::ooxml::OOXMLProperty>, class std::allocator<class std::shared_ptr<class writerfilter::ooxml::OOXMLProperty> > > >, class std::__debug::vector<class std::shared_ptr<class writerfilter::ooxml::OOXMLProperty>, class std::allocator<class std::shared_ptr<class writerfilter::ooxml::OOXMLProperty> > > > writerfilter::ooxml::OOXMLPropertySet::begin() const
 writerfilter/source/ooxml/OOXMLPropertySet.hxx:158

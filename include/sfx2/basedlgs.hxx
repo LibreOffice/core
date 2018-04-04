@@ -60,7 +60,6 @@ protected:
     SfxModalDialog(vcl::Window *pParent, const OUString& rID, const OUString& rUIXMLDescription);
 
     OUString&           GetExtraData()      { return aExtraData; }
-    void                CreateOutputItemSet( SfxItemPool& rPool );
     void                CreateOutputItemSet( const SfxItemSet& rInput );
     void                SetInputSet( const SfxItemSet* pInSet ) { pInputSet = pInSet; }
     SfxItemSet*         GetOutputSetImpl() { return pOutputSet; }

@@ -81,7 +81,6 @@ public:
 
     void            SetFont( const vcl::Font& rFont );
     void            SetText( const OUString& rText ) override;
-    void            SetHasInsert( bool bInsert );
     void            InsertCharToDoc();
 
     void            createContextMenu();
@@ -91,8 +90,6 @@ public:
     virtual Size    GetOptimalSize() const override;
 
     void setMouseClickHdl(const Link<SvxCharViewControl*,void> &rLink);
-    void setClearClickHdl(const Link<SvxCharViewControl*,void> &rLink);
-    void setClearAllClickHdl(const Link<SvxCharViewControl*,void> &rLink);
 
     DECL_LINK(ContextMenuSelectHdl, Menu*, bool);
 
@@ -111,7 +108,6 @@ private:
 
     Link<SvxCharViewControl*, void> maMouseClickHdl;
     Link<SvxCharViewControl*, void> maClearClickHdl;
-    Link<SvxCharViewControl*, void> maClearAllClickHdl;
 };
 
 #endif

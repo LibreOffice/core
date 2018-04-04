@@ -145,14 +145,6 @@ void SfxModalDialog::dispose()
     ModalDialog::dispose();
 }
 
-void SfxModalDialog::CreateOutputItemSet( SfxItemPool& rPool )
-{
-    DBG_ASSERT( !pOutputSet, "Double creation of OutputSet!" );
-    if (!pOutputSet)
-        pOutputSet = new SfxAllItemSet( rPool );
-}
-
-
 void SfxModalDialog::CreateOutputItemSet( const SfxItemSet& rSet )
 {
     DBG_ASSERT( !pOutputSet, "Double creation of OutputSet!" );
