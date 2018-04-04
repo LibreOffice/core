@@ -185,14 +185,14 @@ void ImplDrawDefault( OutputDevice* pOutDev, const OUString* pText,
 } // end anonymous namespace
 
 Graphic::Graphic()
-    : mxImpGraphic(new ImpGraphic)
+    : mxImpGraphic(vcl::graphic::Manager::get().newInstance())
 {
 }
 
 Graphic::Graphic(const Graphic& rGraphic)
 {
     if( rGraphic.IsAnimated() )
-        mxImpGraphic.reset(new ImpGraphic(*rGraphic.mxImpGraphic));
+        mxImpGraphic = vcl::graphic::Manager::get().copy(rGraphic.mxImpGraphic);
     else
         mxImpGraphic = rGraphic.mxImpGraphic;
 }
@@ -203,27 +203,27 @@ Graphic::Graphic(Graphic&& rGraphic)
 }
 
 Graphic::Graphic(const Bitmap& rBmp)
-    : mxImpGraphic(new ImpGraphic(rBmp))
+    : mxImpGraphic(vcl::graphic::Manager::get().newInstance(rBmp))
 {
 }
 
 Graphic::Graphic(const BitmapEx& rBmpEx)
-    : mxImpGraphic(new ImpGraphic(rBmpEx))
+    : mxImpGraphic(vcl::graphic::Manager::get().newInstance(rBmpEx))
 {
 }
 
 Graphic::Graphic(const SvgDataPtr& rSvgDataPtr)
-    : mxImpGraphic(new ImpGraphic(rSvgDataPtr))
+    : mxImpGraphic(vcl::graphic::Manager::get().newInstance(rSvgDataPtr))
 {
 }
 
 Graphic::Graphic(const Animation& rAnimation)
-    : mxImpGraphic(new ImpGraphic(rAnimation))
+    : mxImpGraphic(vcl::graphic::Manager::get().newInstance(rAnimation))
 {
 }
 
 Graphic::Graphic(const GDIMetaFile& rMtf)
-    : mxImpGraphic(new ImpGraphic(rMtf))
+    : mxImpGraphic(vcl::graphic::Manager::get().newInstance(rMtf))
 {
 }
 
@@ -237,19 +237,19 @@ Graphic::Graphic( const css::uno::Reference< css::graphic::XGraphic >& rxGraphic
     if( pGraphic )
     {
         if (pGraphic->IsAnimated())
-            mxImpGraphic.reset(new ImpGraphic(*pGraphic->mxImpGraphic));
+            mxImpGraphic = vcl::graphic::Manager::get().copy(pGraphic->mxImpGraphic);
         else
             mxImpGraphic = pGraphic->mxImpGraphic;
     }
     else
-        mxImpGraphic.reset(new ImpGraphic);
+        mxImpGraphic = vcl::graphic::Manager::get().newInstance();
 }
 
 void Graphic::ImplTestRefCount()
 {
     if (!mxImpGraphic.unique())
     {
-        mxImpGraphic.reset(new ImpGraphic(*mxImpGraphic));
+        mxImpGraphic = vcl::graphic::Manager::get().copy(mxImpGraphic);
     }
 }
 
@@ -258,13 +258,9 @@ Graphic& Graphic::operator=( const Graphic& rGraphic )
     if( &rGraphic != this )
     {
         if( rGraphic.IsAnimated() )
-        {
-            mxImpGraphic.reset(new ImpGraphic(*rGraphic.mxImpGraphic));
-        }
+            mxImpGraphic = vcl::graphic::Manager::get().copy(rGraphic.mxImpGraphic);
         else
-        {
             mxImpGraphic = rGraphic.mxImpGraphic;
-        }
     }
 
     return *this;

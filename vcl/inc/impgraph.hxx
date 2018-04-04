@@ -21,6 +21,7 @@
 #define INCLUDED_VCL_INC_IMPGRAPH_HXX
 
 #include <vcl/GraphicExternalLink.hxx>
+#include "graphic/Manager.hxx"
 
 struct ImpSwapInfo
 {
@@ -32,10 +33,13 @@ class OutputDevice;
 class GfxLink;
 struct ImpSwapFile;
 class GraphicConversionParameters;
+class ImpGraphic;
 
 class ImpGraphic final
 {
     friend class Graphic;
+    friend class GraphicID;
+    friend class vcl::graphic::Manager;
 
 private:
 
@@ -58,21 +62,25 @@ private:
     std::shared_ptr<css::uno::Sequence<sal_Int8>> mpPdfData;
     GraphicExternalLink          maGraphicExternalLink;
 
+    std::chrono::high_resolution_clock::time_point maLastUsed;
+
     /// Used with GfxLink and/or PdfData when they store original media
     /// which might be multi-page (PDF, f.e.) and we need to re-render
     /// this Graphic (a page) from the source in GfxLink or PdfData.
     sal_Int32                    mnPageNumber;
 
-                        ImpGraphic();
-                        ImpGraphic( const ImpGraphic& rImpGraphic );
-                        ImpGraphic( ImpGraphic&& rImpGraphic );
-                        ImpGraphic( const Bitmap& rBmp );
-                        ImpGraphic( const BitmapEx& rBmpEx );
-                        ImpGraphic(const SvgDataPtr& rSvgDataPtr);
-                        ImpGraphic( const Animation& rAnimation );
-                        ImpGraphic( const GDIMetaFile& rMtf );
 public:
-                        ~ImpGraphic();
+    ImpGraphic();
+    ImpGraphic( const ImpGraphic& rImpGraphic );
+    ImpGraphic( ImpGraphic&& rImpGraphic );
+    ImpGraphic( const GraphicExternalLink& rExternalLink);
+    ImpGraphic( const Bitmap& rBmp );
+    ImpGraphic( const BitmapEx& rBmpEx );
+    ImpGraphic(const SvgDataPtr& rSvgDataPtr);
+    ImpGraphic( const Animation& rAnimation );
+    ImpGraphic( const GDIMetaFile& rMtf );
+    ~ImpGraphic();
+
 private:
 
     ImpGraphic&         operator=( const ImpGraphic& rImpGraphic );
@@ -173,6 +181,8 @@ private:
     const std::shared_ptr<css::uno::Sequence<sal_Int8>>& getPdfData() const;
 
     void setPdfData(const std::shared_ptr<css::uno::Sequence<sal_Int8>>& rPdfData);
+
+    bool ensureAvailable () const;
 };
 
 #endif // INCLUDED_VCL_INC_IMPGRAPH_HXX

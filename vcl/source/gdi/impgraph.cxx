@@ -105,6 +105,7 @@ ImpGraphic::ImpGraphic() :
         mnSizeBytes     ( 0UL ),
         mbSwapOut       ( false ),
         mbDummyContext  ( false ),
+        maLastUsed (std::chrono::high_resolution_clock::now()),
         mnPageNumber(-1)
 {
 }
@@ -122,6 +123,7 @@ ImpGraphic::ImpGraphic(const ImpGraphic& rImpGraphic)
     , maSvgData(rImpGraphic.maSvgData)
     , mpPdfData(rImpGraphic.mpPdfData)
     , maGraphicExternalLink(rImpGraphic.maGraphicExternalLink)
+    , maLastUsed (std::chrono::high_resolution_clock::now())
     , mnPageNumber(rImpGraphic.mnPageNumber)
 {
     if( rImpGraphic.mpGfxLink )
@@ -149,6 +151,7 @@ ImpGraphic::ImpGraphic(ImpGraphic&& rImpGraphic)
     , maSvgData(std::move(rImpGraphic.maSvgData))
     , mpPdfData(std::move(rImpGraphic.mpPdfData))
     , maGraphicExternalLink(rImpGraphic.maGraphicExternalLink)
+    , maLastUsed (std::chrono::high_resolution_clock::now())
     , mnPageNumber(rImpGraphic.mnPageNumber)
 {
     rImpGraphic.ImplClear();
@@ -161,6 +164,7 @@ ImpGraphic::ImpGraphic( const Bitmap& rBitmap ) :
         mnSizeBytes     ( 0UL ),
         mbSwapOut       ( false ),
         mbDummyContext  ( false ),
+        maLastUsed (std::chrono::high_resolution_clock::now()),
         mnPageNumber(-1)
 {
 }
@@ -171,6 +175,7 @@ ImpGraphic::ImpGraphic( const BitmapEx& rBitmapEx ) :
         mnSizeBytes     ( 0UL ),
         mbSwapOut       ( false ),
         mbDummyContext  ( false ),
+        maLastUsed (std::chrono::high_resolution_clock::now()),
         mnPageNumber(-1)
 {
 }
@@ -181,6 +186,7 @@ ImpGraphic::ImpGraphic(const SvgDataPtr& rSvgDataPtr)
     mbSwapOut( false ),
     mbDummyContext  ( false ),
     maSvgData(rSvgDataPtr),
+    maLastUsed (std::chrono::high_resolution_clock::now()),
     mnPageNumber(-1)
 {
 }
@@ -192,6 +198,7 @@ ImpGraphic::ImpGraphic( const Animation& rAnimation ) :
         mnSizeBytes     ( 0UL ),
         mbSwapOut       ( false ),
         mbDummyContext  ( false ),
+        maLastUsed (std::chrono::high_resolution_clock::now()),
         mnPageNumber(-1)
 {
 }
@@ -202,18 +209,22 @@ ImpGraphic::ImpGraphic( const GDIMetaFile& rMtf ) :
         mnSizeBytes     ( 0UL ),
         mbSwapOut       ( false ),
         mbDummyContext  ( false ),
+        maLastUsed (std::chrono::high_resolution_clock::now()),
         mnPageNumber(-1)
 {
 }
 
 ImpGraphic::~ImpGraphic()
 {
+    vcl::graphic::Manager::get().unregisterGraphic(this);
 }
 
 ImpGraphic& ImpGraphic::operator=( const ImpGraphic& rImpGraphic )
 {
     if( &rImpGraphic != this )
     {
+        sal_Int64 aOldSizeBytes = mnSizeBytes;
+
         maMetaFile = rImpGraphic.maMetaFile;
         meType = rImpGraphic.meType;
         mnSizeBytes = rImpGraphic.mnSizeBytes;
@@ -246,6 +257,9 @@ ImpGraphic& ImpGraphic::operator=( const ImpGraphic& rImpGraphic )
 
         maSvgData = rImpGraphic.maSvgData;
         mpPdfData = rImpGraphic.mpPdfData;
+        maLastUsed = std::chrono::high_resolution_clock::now();
+
+        vcl::graphic::Manager::get().changeExisting(this, aOldSizeBytes);
     }
 
     return *this;
@@ -253,6 +267,8 @@ ImpGraphic& ImpGraphic::operator=( const ImpGraphic& rImpGraphic )
 
 ImpGraphic& ImpGraphic::operator=(ImpGraphic&& rImpGraphic)
 {
+    sal_Int64 aOldSizeBytes = mnSizeBytes;
+
     maMetaFile = std::move(rImpGraphic.maMetaFile);
     meType = rImpGraphic.meType;
     mnSizeBytes = rImpGraphic.mnSizeBytes;
@@ -271,6 +287,9 @@ ImpGraphic& ImpGraphic::operator=(ImpGraphic&& rImpGraphic)
 
     rImpGraphic.ImplClear();
     rImpGraphic.mbDummyContext = false;
+    maLastUsed = std::chrono::high_resolution_clock::now();
+
+    vcl::graphic::Manager::get().changeExisting(this, aOldSizeBytes);
 
     rImpGraphic.mnPageNumber = -1;
 
@@ -405,7 +424,9 @@ void ImpGraphic::ImplClear()
     // cleanup
     ImplClearGraphics();
     meType = GraphicType::NONE;
+    sal_Int64 nOldSize = mnSizeBytes;
     mnSizeBytes = 0;
+    vcl::graphic::Manager::get().changeExisting(this, nOldSize);
     maGraphicExternalLink.msURL.clear();
 }
 
@@ -424,6 +445,8 @@ bool ImpGraphic::ImplIsTransparent() const
 {
     bool bRet(true);
 
+    ensureAvailable();
+
     if( meType == GraphicType::Bitmap && !maSvgData.get())
     {
         bRet = ( mpAnimation ? mpAnimation->IsTransparent() : maEx.IsTransparent() );
@@ -435,6 +458,8 @@ bool ImpGraphic::ImplIsTransparent() const
 bool ImpGraphic::ImplIsAlpha() const
 {
     bool bRet(false);
+
+    ensureAvailable();
 
     if(maSvgData.get())
     {
@@ -450,11 +475,14 @@ bool ImpGraphic::ImplIsAlpha() const
 
 bool ImpGraphic::ImplIsAnimated() const
 {
+    ensureAvailable();
     return( mpAnimation != nullptr );
 }
 
 bool ImpGraphic::ImplIsEPS() const
 {
+    ensureAvailable();
+
     return( ( meType == GraphicType::GdiMetafile ) &&
             ( maMetaFile.GetActionSize() > 0 ) &&
             ( maMetaFile.GetAction( 0 )->GetType() == MetaActionType::EPS ) );
@@ -463,6 +491,8 @@ bool ImpGraphic::ImplIsEPS() const
 Bitmap ImpGraphic::ImplGetBitmap(const GraphicConversionParameters& rParameters) const
 {
     Bitmap aRetBmp;
+
+    ensureAvailable();
 
     if( meType == GraphicType::Bitmap )
     {
@@ -572,6 +602,8 @@ BitmapEx ImpGraphic::ImplGetBitmapEx(const GraphicConversionParameters& rParamet
 {
     BitmapEx aRetBmpEx;
 
+    ensureAvailable();
+
     if( meType == GraphicType::Bitmap )
     {
         if(maSvgData.get() && maEx.IsEmpty())
@@ -609,6 +641,7 @@ Animation ImpGraphic::ImplGetAnimation() const
 {
     Animation aAnimation;
 
+    ensureAvailable();
     if( mpAnimation )
         aAnimation = *mpAnimation;
 
@@ -617,6 +650,8 @@ Animation ImpGraphic::ImplGetAnimation() const
 
 const GDIMetaFile& ImpGraphic::ImplGetGDIMetaFile() const
 {
+    ensureAvailable();
+
     if (GraphicType::Bitmap == meType && !maMetaFile.GetActionSize())
     {
         // #i119735#
@@ -850,6 +885,7 @@ sal_uLong ImpGraphic::ImplGetSizeBytes() const
 
 void ImpGraphic::ImplDraw( OutputDevice* pOutDev, const Point& rDestPt ) const
 {
+    ensureAvailable();
     if( ImplIsSupportedGraphic() && !ImplIsSwapOut() )
     {
         switch( meType )
@@ -886,6 +922,7 @@ void ImpGraphic::ImplDraw( OutputDevice* pOutDev, const Point& rDestPt ) const
 void ImpGraphic::ImplDraw( OutputDevice* pOutDev,
                            const Point& rDestPt, const Size& rDestSize ) const
 {
+    ensureAvailable();
     if( ImplIsSupportedGraphic() && !ImplIsSwapOut() )
     {
         switch( meType )
@@ -927,6 +964,8 @@ void ImpGraphic::ImplStartAnimation( OutputDevice* pOutDev, const Point& rDestPt
                                      const Size& rDestSize, long nExtraData,
                                      OutputDevice* pFirstFrameOutDev )
 {
+    ensureAvailable();
+
     if( ImplIsSupportedGraphic() && !ImplIsSwapOut() && mpAnimation )
         mpAnimation->Start( pOutDev, rDestPt, rDestSize, nExtraData, pFirstFrameOutDev );
 }
@@ -955,6 +994,7 @@ Link<Animation*,void> ImpGraphic::ImplGetAnimationNotifyHdl() const
 
 sal_uInt32 ImpGraphic::ImplGetAnimationLoopCount() const
 {
+    ensureAvailable();
     return( mpAnimation ? mpAnimation->GetLoopCount() : 0 );
 }
 
@@ -1099,6 +1139,8 @@ bool ImpGraphic::ImplWriteEmbedded( SvStream& rOStm )
 {
     bool bRet = false;
 
+    ensureAvailable();
+
     if( ( meType != GraphicType::NONE ) && ( meType != GraphicType::Default ) && !ImplIsSwapOut() )
     {
         const MapMode   aMapMode( ImplGetPrefMapMode() );
@@ -1228,6 +1270,8 @@ bool ImpGraphic::ImplSwapOut()
         }
     }
 
+    if (bRet)
+        vcl::graphic::Manager::get().swappedOut(this);
     return bRet;
 }
 
@@ -1266,6 +1310,15 @@ bool ImpGraphic::ImplSwapOut( SvStream* xOStm )
     return bRet;
 }
 
+bool ImpGraphic::ensureAvailable() const
+{
+    auto pThis = const_cast<ImpGraphic*>(this);
+    pThis->maLastUsed = std::chrono::high_resolution_clock::now();
+    if (ImplIsSwapOut())
+        return pThis->ImplSwapIn();
+    return true;
+}
+
 bool ImpGraphic::ImplSwapIn()
 {
     bool bRet = false;
@@ -1300,6 +1353,9 @@ bool ImpGraphic::ImplSwapIn()
             }
         }
     }
+
+    if (bRet)
+        vcl::graphic::Manager::get().swappedIn(this);
 
     return bRet;
 }
@@ -1347,6 +1403,8 @@ bool ImpGraphic::ImplSwapIn( SvStream* xIStm )
 
 void ImpGraphic::ImplSetLink( const GfxLink& rGfxLink )
 {
+    ensureAvailable();
+
     mpGfxLink = o3tl::make_unique<GfxLink>( rGfxLink );
 
     if( mpGfxLink->IsNative() )
@@ -1355,6 +1413,8 @@ void ImpGraphic::ImplSetLink( const GfxLink& rGfxLink )
 
 GfxLink ImpGraphic::ImplGetLink()
 {
+    ensureAvailable();
+
     return( mpGfxLink ? *mpGfxLink : GfxLink() );
 }
 
@@ -1366,6 +1426,8 @@ bool ImpGraphic::ImplIsLink() const
 BitmapChecksum ImpGraphic::ImplGetChecksum() const
 {
     BitmapChecksum nRet = 0;
+
+    ensureAvailable();
 
     if( ImplIsSupportedGraphic() && !ImplIsSwapOut() )
     {
@@ -1410,6 +1472,8 @@ BitmapChecksum ImpGraphic::ImplGetChecksum() const
 bool ImpGraphic::ImplExportNative( SvStream& rOStm ) const
 {
     bool bResult = false;
+
+    ensureAvailable();
 
     if( !rOStm.GetError() )
     {
