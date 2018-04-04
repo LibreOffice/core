@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_276edbc9",
+        "filename": "include/svtools/strings.hrc",
+        "patchSetId": 4
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2018-04-04T08:17:37Z",
+      "side": 1,
+      "message": "This is called \"Rich Text Format (RTF)\"\n\nhttps://en.wikipedia.org/wiki/Rich_Text_Format\n\nI find the original wording good enough.",
+      "revId": "0810222c852938fb87bad1d82113faf42b9124fa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_67aff3e3",
+        "filename": "include/svtools/strings.hrc",
+        "patchSetId": 4
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2018-04-04T08:17:37Z",
+      "side": 1,
+      "message": "Similiar here. \"Formatted text [Richtext]\" is perfectly clear.",
+      "revId": "0810222c852938fb87bad1d82113faf42b9124fa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_8765c7e2",
+        "filename": "include/svtools/strings.hrc",
+        "patchSetId": 4
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2018-04-04T08:17:37Z",
+      "side": 1,
+      "message": "What does native mean here?",
+      "revId": "0810222c852938fb87bad1d82113faf42b9124fa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_07a0f7f3",
+        "filename": "include/svtools/strings.hrc",
+        "patchSetId": 4
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2018-04-04T08:17:37Z",
+      "side": 1,
+      "message": "I would just call this HTML, that\u0027s a common term",
+      "revId": "0810222c852938fb87bad1d82113faf42b9124fa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_27a5fb03",
+        "filename": "include/svtools/strings.hrc",
+        "patchSetId": 4
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2018-04-04T08:17:37Z",
+      "side": 1,
+      "message": "What exactly does this do in comparison to the HTML above?",
+      "revId": "0810222c852938fb87bad1d82113faf42b9124fa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_47aaefd5",
+        "filename": "include/svtools/strings.hrc",
+        "patchSetId": 4
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2018-04-04T08:17:37Z",
+      "side": 1,
+      "message": "This sounds weird. Maybe \"Image (PNG)\"?",
+      "revId": "0810222c852938fb87bad1d82113faf42b9124fa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
