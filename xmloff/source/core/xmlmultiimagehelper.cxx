@@ -41,6 +41,45 @@ namespace
         }
         else
         {
+            if(rString.endsWith(".bmp"))
+            {
+                return 10;
+            }
+            if(rString.endsWith(".gif"))
+            {
+                return 20;
+            }
+            if(rString.endsWith(".jpg"))
+            {
+                return 30;
+            }
+            if(rString.endsWith(".png"))
+            {
+                return 40;
+            }
+
+            // vector formats, prefer always
+            if(rString.endsWith(".svm"))
+            {
+                return 1000;
+            }
+            if(rString.endsWith(".wmf"))
+            {
+                return 1010;
+            }
+            if(rString.endsWith(".emf"))
+            {
+                return 1020;
+            }
+            if(rString.endsWith(".pdf"))
+            {
+                return 1030;
+            }
+            if(rString.endsWith(".svg"))
+            {
+                return 1040;
+            }
+
             SAL_WARN("xmloff", "Unknown image source: " << rString);
             return 0;
         }
