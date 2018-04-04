@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_873ce730",
+        "filename": "vcl/unx/generic/print/glyphset.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 193,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-04-04T13:27:02Z",
+      "side": 1,
+      "message": "this aPoint variable is effectively unused, perhaps you meant to pass to PSMoveTo a few lines below?",
+      "revId": "b157b82a6d924ebed1683b90bc9d59bbe2603451",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
