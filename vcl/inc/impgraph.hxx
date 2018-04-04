@@ -51,7 +51,7 @@ private:
     bool                         mbSwapOut;
     bool                         mbDummyContext;
     VectorGraphicDataPtr         maVectorGraphicData;
-    css::uno::Sequence<sal_Int8> maPdfData;
+    std::shared_ptr<css::uno::Sequence<sal_Int8>> mpPdfData;
     OUString msOriginURL;
     GraphicExternalLink          maGraphicExternalLink;
 
@@ -82,6 +82,11 @@ private:
     void setOriginURL(OUString const & rOriginURL)
     {
         maGraphicExternalLink.msURL = rOriginURL;
+    }
+
+    bool hasPdfData() const
+    {
+        return mpPdfData && mpPdfData->hasElements();
     }
 
     void                ImplCreateSwapInfo();
@@ -160,6 +165,10 @@ private:
     friend void         ReadImpGraphic(SvStream& rIStm, ImpGraphic& rImpGraphic);
 
     const VectorGraphicDataPtr& getVectorGraphicData() const { return maVectorGraphicData; }
+
+    const std::shared_ptr<css::uno::Sequence<sal_Int8>>& getPdfData() const;
+
+    void setPdfData(const std::shared_ptr<css::uno::Sequence<sal_Int8>>& rPdfData);
 };
 
 #endif // INCLUDED_VCL_INC_IMPGRAPH_HXX

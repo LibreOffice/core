@@ -591,15 +591,21 @@ const VectorGraphicDataPtr& Graphic::getVectorGraphicData() const
     return mxImpGraphic->getVectorGraphicData();
 }
 
-void Graphic::setPdfData(const uno::Sequence<sal_Int8>& rPdfData)
+void Graphic::setPdfData(const std::shared_ptr<uno::Sequence<sal_Int8>>& rPdfData)
 {
     ImplTestRefCount();
-    mxImpGraphic->maPdfData = rPdfData;
+    mxImpGraphic->setPdfData(rPdfData);
 }
 
-const uno::Sequence<sal_Int8>& Graphic::getPdfData() const
+std::shared_ptr<uno::Sequence<sal_Int8>> Graphic::getPdfData() const
 {
-    return mxImpGraphic->maPdfData;
+    return mxImpGraphic->getPdfData();
+}
+
+bool Graphic::hasPdfData() const
+{
+    std::shared_ptr<uno::Sequence<sal_Int8>> pPdfData = getPdfData();
+    return pPdfData && pPdfData->hasElements();
 }
 
 OUString Graphic::getOriginURL() const

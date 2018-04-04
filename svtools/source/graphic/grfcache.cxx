@@ -154,7 +154,7 @@ private:
 
     // VectorGraphicData support
     VectorGraphicDataPtr    maVectorGraphicData;
-    uno::Sequence<sal_Int8> maPdfData;
+    std::shared_ptr<uno::Sequence<sal_Int8>> mpPdfData;
 
     bool                ImplInit( const GraphicObject& rObj );
     void                ImplFillSubstitute( Graphic& rSubstitute );
@@ -240,8 +240,8 @@ bool GraphicCacheEntry::ImplInit( const GraphicObject& rObj )
                 else
                 {
                     mpBmpEx = new BitmapEx( rGraphic.GetBitmapEx() );
-                    if (rGraphic.getPdfData().hasElements())
-                        maPdfData = rGraphic.getPdfData();
+                    if (rGraphic.hasPdfData() && rGraphic.getPdfData()->hasElements())
+                        mpPdfData = rGraphic.getPdfData();
                 }
             }
             break;
@@ -287,8 +287,8 @@ void GraphicCacheEntry::ImplFillSubstitute( Graphic& rSubstitute )
     else if( mpBmpEx )
     {
         rSubstitute = *mpBmpEx;
-        if (maPdfData.hasElements())
-            rSubstitute.setPdfData(maPdfData);
+        if (mpPdfData && mpPdfData->hasElements())
+            rSubstitute.setPdfData(mpPdfData);
     }
     else if( mpAnimation )
     {
@@ -384,7 +384,7 @@ void GraphicCacheEntry::GraphicObjectWasSwappedOut()
 
     // #119176# also reset VectorGraphicData
     maVectorGraphicData.reset();
-    maPdfData = uno::Sequence<sal_Int8>();
+    mpPdfData.reset();
 }
 
 void GraphicCacheEntry::GraphicObjectWasSwappedIn( const GraphicObject& rObj )
