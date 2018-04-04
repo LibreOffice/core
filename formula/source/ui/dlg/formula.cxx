@@ -873,7 +873,6 @@ void FormulaDlg_Impl::FillListboxes()
 {
     //  Switch between the "Pages"
     FormEditData* pData = m_pHelper->getFormEditData();
-    OUString aNewTitle;
     //  1. Page: select function
     if ( m_pFuncDesc && m_pFuncDesc->getCategory() )
     {
@@ -893,8 +892,6 @@ void FormulaDlg_Impl::FillListboxes()
     FuncSelHdl(*m_pFuncPage);
 
     m_pHelper->setDispatcherLock( true );   // Activate Modal-Mode
-
-    aNewTitle = m_aTitle1;
 
     //  HelpId for 1. page is the one from the resource
     m_pParent->SetHelpId( m_aOldHelp );

@@ -214,7 +214,7 @@ void SwWrtShell::Insert( const OUString &rStr )
             aTmpStr += rStr;
             aTmpStr += SwResId(STR_END_QUOTE);
 
-            aRewriter.AddRule(UndoArg3, rStr);
+            aRewriter.AddRule(UndoArg3, aTmpStr);
         }
 
         StartUndo(SwUndoId::REPLACE, &aRewriter);

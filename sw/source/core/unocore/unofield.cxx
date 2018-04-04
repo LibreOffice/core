@@ -2341,10 +2341,6 @@ uno::Any SAL_CALL SwXTextField::getPropertyValue(const OUString& rPropertyName)
                     {
                         sal_Int32 nHiddenStart;
                         sal_Int32 nHiddenEnd;
-
-                        SwPosition aPosition( pTextField->GetTextNode() );
-                        aPosition.nContent = pTextField->GetStart();
-
                         bHidden = SwScriptInfo::GetBoundsOfHiddenRange( pTextField->GetTextNode(),
                                         pTextField->GetStart(),
                                         nHiddenStart, nHiddenEnd );
