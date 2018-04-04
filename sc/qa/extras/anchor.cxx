@@ -261,25 +261,49 @@ void ScAnchorTest::testCopyColumnWithImages()
 
     ScDocument aClipDoc(SCDOCMODE_CLIP);
 
-    // 1. Copy source range
-    ScRange aSrcRange;
-    aSrcRange.Parse("A1:A11", pDoc, pDoc->GetAddressConvention());
-    pViewShell->GetViewData().GetMarkData().SetMarkArea(aSrcRange);
-    pViewShell->GetViewData().GetView()->CopyToClip(&aClipDoc, false, false, true, false);
+    // Copy whole column
+    {
+        // 1. Copy source range
+        ScRange aSrcRange;
+        aSrcRange.Parse("A1:A11", pDoc, pDoc->GetAddressConvention());
+        pViewShell->GetViewData().GetMarkData().SetMarkArea(aSrcRange);
+        pViewShell->GetViewData().GetView()->CopyToClip(&aClipDoc, false, false, true, false);
 
-    // 2. Paste to target range
-    ScRange aDstRange;
-    aDstRange.Parse("D1:D11", pDoc, pDoc->GetAddressConvention());
-    pViewShell->GetViewData().GetMarkData().SetMarkArea(aDstRange);
-    pViewShell->GetViewData().GetView()->PasteFromClip(InsertDeleteFlags::ALL, &aClipDoc);
+        // 2. Paste to target range
+        ScRange aDstRange;
+        aDstRange.Parse("D1:D11", pDoc, pDoc->GetAddressConvention());
+        pViewShell->GetViewData().GetMarkData().SetMarkArea(aDstRange);
+        pViewShell->GetViewData().GetView()->PasteFromClip(InsertDeleteFlags::ALL, &aClipDoc);
 
-    // 3. Make sure the images have been copied too
-    std::map<SCROW, std::vector<SdrObject*>> aRowObjects
-        = pDrawLayer->GetObjectsAnchoredToRange(0, 3, 0, 11);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("There should be an image anchored to D:3", 1,
-                                 static_cast<int>(aRowObjects[2].size()));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("There should be an image anchored to D:11", 1,
-                                 static_cast<int>(aRowObjects[10].size()));
+        // 3. Make sure the images have been copied too
+        std::map<SCROW, std::vector<SdrObject*>> aRowObjects
+            = pDrawLayer->GetObjectsAnchoredToRange(0, 3, 0, 11);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("There should be an image anchored to D3", 1,
+                                     static_cast<int>(aRowObjects[2].size()));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("There should be an image anchored to D11", 1,
+                                     static_cast<int>(aRowObjects[10].size()));
+    }
+
+    // Copy individual cells
+    {
+        // 1. Copy source cells
+        ScRange aSrcRange;
+        aSrcRange.Parse("A3:B3", pDoc, pDoc->GetAddressConvention());
+        pViewShell->GetViewData().GetMarkData().SetMarkArea(aSrcRange);
+        pViewShell->GetViewData().GetView()->CopyToClip(&aClipDoc, false, false, true, false);
+
+        // 2. Paste to target cells
+        ScRange aDstRange;
+        aDstRange.Parse("G3:H3", pDoc, pDoc->GetAddressConvention());
+        pViewShell->GetViewData().GetMarkData().SetMarkArea(aDstRange);
+        pViewShell->GetViewData().GetView()->PasteFromClip(InsertDeleteFlags::ALL, &aClipDoc);
+
+        // 3. Make sure the image has been copied too
+        std::map<SCROW, std::vector<SdrObject*>> aRowObjects
+            = pDrawLayer->GetObjectsAnchoredToRange(0, 6, 2, 2);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("There should be an image anchored to G3", 1,
+                                     static_cast<int>(aRowObjects[2].size()));
+    }
 
     pDocSh->DoClose();
 }
