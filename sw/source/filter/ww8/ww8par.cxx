@@ -49,6 +49,7 @@
 #include <editeng/opaqitem.hxx>
 #include <editeng/charhiddenitem.hxx>
 #include <editeng/fontitem.hxx>
+#include <editeng/editeng.hxx>
 #include <svx/unoapi.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/svdoashp.hxx>
@@ -4171,7 +4172,6 @@ SwWW8ImplReader::SwWW8ImplReader(sal_uInt8 nVersionPara, SotStorage* pStorage,
     , m_pStandardFormatColl(nullptr)
     , m_pDrawModel(nullptr)
     , m_pDrawPg(nullptr)
-    , m_pDrawEditEngine(nullptr)
     , m_pNumFieldType(nullptr)
     , m_pAtnNames(nullptr)
     , m_sBaseURL(rBaseURL)
@@ -4257,6 +4257,10 @@ SwWW8ImplReader::SwWW8ImplReader(sal_uInt8 nVersionPara, SotStorage* pStorage,
     m_aApos.push_back(false);
 
     mpCursor = m_rDoc.CreateUnoCursor(rPos);
+}
+
+SwWW8ImplReader::~SwWW8ImplReader()
+{
 }
 
 void SwWW8ImplReader::DeleteStack(SwFltControlStack* pStck)
