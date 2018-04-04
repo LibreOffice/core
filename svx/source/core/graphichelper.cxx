@@ -180,7 +180,7 @@ bool lcl_ExecuteFilterDialog( const Sequence< PropertyValue >& rPropsForDialog,
 }
 } // anonymous ns
 
-OUString GraphicHelper::ExportGraphic(const vcl::Window* pParent, const Graphic& rGraphic, const OUString& rGraphicName)
+OUString GraphicHelper::ExportGraphic(weld::Window* pParent, const Graphic& rGraphic, const OUString& rGraphicName)
 {
     SvtPathOptions aPathOpt;
     OUString sGraphicsPath( aPathOpt.GetGraphicPath() );
@@ -337,7 +337,7 @@ OUString GraphicHelper::ExportGraphic(const vcl::Window* pParent, const Graphic&
     return OUString();
 }
 
-void GraphicHelper::SaveShapeAsGraphic(const vcl::Window* pParent,  const Reference< drawing::XShape >& xShape)
+void GraphicHelper::SaveShapeAsGraphic(weld::Window* pParent,  const Reference< drawing::XShape >& xShape)
 {
     try
     {

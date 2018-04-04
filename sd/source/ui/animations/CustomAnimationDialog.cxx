@@ -1494,7 +1494,7 @@ sal_Int32 CustomAnimationEffectTabPage::getSoundObject( const OUString& rStr )
 
 void CustomAnimationEffectTabPage::openSoundFileDialog()
 {
-    SdOpenSoundFileDialog aFileDialog(this);
+    SdOpenSoundFileDialog aFileDialog(GetFrameWeld());
 
     OUString aFile( SvtPathOptions().GetWorkPath() );
     aFileDialog.SetPath( aFile );

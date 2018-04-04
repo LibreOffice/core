@@ -520,7 +520,7 @@ bool SwMailMergeDlg::ExecQryShell()
             pModOpt->SetNameFromColumn(OUString());
             //start save as dialog
             OUString sFilter;
-            m_sFilename = SwMailMergeHelper::CallSaveAsDialog(this, sFilter);
+            m_sFilename = SwMailMergeHelper::CallSaveAsDialog(GetFrameWeld(), sFilter);
             if (m_sFilename.isEmpty())
                 return false;
             m_sSaveFilter = sFilter;

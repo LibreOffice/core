@@ -1286,7 +1286,6 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 const SdrGrafObj* pObj = dynamic_cast<const SdrGrafObj*>(rMarkList.GetMark(0)->GetMarkedSdrObj());
                 if (pObj && pObj->GetGraphicType() == GraphicType::Bitmap)
                 {
-                    vcl::Window* pWin = GetActiveWindow();
                     weld::Window* pFrame = GetFrameWeld();
                     GraphicAttr aGraphicAttr = pObj->GetGraphicAttr();
                     short nState = RET_CANCEL;
@@ -1304,12 +1303,12 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
                     if (nState == RET_YES)
                     {
-                        GraphicHelper::ExportGraphic(pWin, pObj->GetTransformedGraphic(), "");
+                        GraphicHelper::ExportGraphic(pFrame, pObj->GetTransformedGraphic(), "");
                     }
                     else if (nState == RET_NO)
                     {
                         GraphicObject aGraphicObject(pObj->GetGraphicObject());
-                        GraphicHelper::ExportGraphic(pWin, aGraphicObject.GetGraphic(), "");
+                        GraphicHelper::ExportGraphic(pFrame, aGraphicObject.GetGraphic(), "");
                     }
                 }
             }

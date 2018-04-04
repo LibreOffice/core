@@ -287,7 +287,7 @@ bool SwView::InsertGraphicDlg( SfxRequest& rReq )
     // when in HTML mode insert only as a link
     std::unique_ptr<FileDialogHelper> pFileDlg(new FileDialogHelper(
         ui::dialogs::TemplateDescription::FILEOPEN_LINK_PREVIEW_IMAGE_TEMPLATE,
-        FileDialogFlags::Graphic, GetWindow()));
+        FileDialogFlags::Graphic, GetFrameWeld()));
     pFileDlg->SetTitle(SwResId(STR_INSERT_GRAPHIC ));
     pFileDlg->SetContext( FileDialogHelper::SW_INSERT_GRAPHIC );
     uno::Reference < XFilePicker3 > xFP = pFileDlg->GetFilePicker();

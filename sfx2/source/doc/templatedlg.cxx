@@ -891,7 +891,7 @@ void SfxTemplateManagerDlg::OnTemplateState (const ThumbnailViewItem *pItem)
 void SfxTemplateManagerDlg::OnTemplateImportCategory(const OUString& sCategory)
 {
     sfx2::FileDialogHelper aFileDlg(css::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE,
-                                    FileDialogFlags::MultiSelection, this);
+                                    FileDialogFlags::MultiSelection, GetFrameWeld());
 
     // add "All" filter
     aFileDlg.AddFilter( SfxResId(STR_SFX_FILTERNAME_ALL),

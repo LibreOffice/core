@@ -28,6 +28,7 @@
 #include <vector>
 
 namespace sfx2 { class FileDialogHelper; }
+namespace weld { class Window; }
 class SfxMedium;
 class SfxItemSet;
 enum class FileDialogFlags;
@@ -39,7 +40,7 @@ namespace sfx2 {
 class SFX2_DLLPUBLIC DocumentInserter
 {
 private:
-    VclPtr<vcl::Window>     m_xParent;
+    weld::Window*           m_pParent;
     OUString                m_sDocFactory;
     OUString                m_sFilter;
     Link<sfx2::FileDialogHelper*,void> m_aDialogClosedLink;
@@ -61,7 +62,7 @@ public:
         Compare,
         Merge
     };
-    DocumentInserter(vcl::Window* pParent, const OUString& rFactory, const Mode mode = Mode::Insert);
+    DocumentInserter(weld::Window* pParent, const OUString& rFactory, const Mode mode = Mode::Insert);
     ~DocumentInserter();
 
     void                    StartExecuteModal( const Link<sfx2::FileDialogHelper*,void>& _rDialogClosedLink );
