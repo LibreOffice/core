@@ -16,6 +16,24 @@
       "revId": "b157b82a6d924ebed1683b90bc9d59bbe2603451",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_a7200bf9",
+        "filename": "vcl/unx/generic/print/glyphset.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 193,
+      "author": {
+        "id": 1000381
+      },
+      "writtenOn": "2018-04-04T13:34:34Z",
+      "side": 1,
+      "message": "That was long ago, so I have absolutely no idea what this code is doing, but from a quick look it sounds about right; that should be used instead of rPoint below.",
+      "parentUuid": "9a30ddce_873ce730",
+      "revId": "b157b82a6d924ebed1683b90bc9d59bbe2603451",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
