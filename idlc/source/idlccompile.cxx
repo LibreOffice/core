@@ -202,9 +202,8 @@ bool copyFile(const OString* source, const OString& target)
     if (source != nullptr) {
         fclose(pSource);
     }
-    if ( fflush(pTarget) )
+    if ( fclose(pTarget) )
         bRet = false;
-    fclose(pTarget);
 
     return bRet;
 }
