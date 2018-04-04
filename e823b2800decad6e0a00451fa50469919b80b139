@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_07047713",
+        "filename": "filter/source/msfilter/msdffimp.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4958,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2018-04-04T07:15:17Z",
+      "side": 1,
+      "message": "Would it make sense to move this condition to tools::Rectangle, so here it would only look like \"if (wont_overflow) { Union(); } else { warn(); }\"?",
+      "revId": "e823b2800decad6e0a00451fa50469919b80b139",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
