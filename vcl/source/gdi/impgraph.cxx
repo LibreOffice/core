@@ -1305,13 +1305,6 @@ bool ImpGraphic::ImplSwapOut()
     return bRet;
 }
 
-void ImpGraphic::ImplSwapOutAsLink()
-{
-    ImplCreateSwapInfo();
-    ImplClearGraphics();
-    mbSwapOut = true;
-}
-
 bool ImpGraphic::ImplSwapOut( SvStream* xOStm )
 {
     bool bRet = false;
