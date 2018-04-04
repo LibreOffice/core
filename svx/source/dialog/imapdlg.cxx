@@ -449,7 +449,7 @@ void SvxIMapDlg::DoOpen()
 {
     ::sfx2::FileDialogHelper aDlg(
         css::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE,
-        FileDialogFlags::NONE, this);
+        FileDialogFlags::NONE, GetFrameWeld());
 
     ImageMap        aLoadIMap;
     const OUString  aFilter(SvxResId(RID_SVXSTR_IMAP_ALL_FILTER));
@@ -489,7 +489,7 @@ bool SvxIMapDlg::DoSave()
 {
     ::sfx2::FileDialogHelper aDlg(
         css::ui::dialogs::TemplateDescription::FILESAVE_SIMPLE,
-        FileDialogFlags::NONE, this);
+        FileDialogFlags::NONE, GetFrameWeld());
 
     const OUString    aBinFilter( IMAP_BINARY_FILTER );
     const OUString    aCERNFilter( IMAP_CERN_FILTER );

@@ -509,7 +509,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                     if(RET_TEMPLATE_LOAD == nRet)
                     {
                         FileDialogHelper aDlgHelper(TemplateDescription::FILEOPEN_SIMPLE,
-                                                    FileDialogFlags::NONE, &GetView()->GetViewFrame()->GetWindow());
+                                                    FileDialogFlags::NONE, GetView()->GetViewFrame()->GetWindow().GetFrameWeld());
                         uno::Reference < XFilePicker3 > xFP = aDlgHelper.GetFilePicker();
 
                         xFP->setDisplayDirectory( aPathOpt.GetWorkPath() );
@@ -622,7 +622,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                     {
                         FileDialogHelper aDlgHelper(TemplateDescription::FILESAVE_AUTOEXTENSION,
                                                     FileDialogFlags::NONE,
-                                                    &GetView()->GetViewFrame()->GetWindow());
+                                                    GetView()->GetViewFrame()->GetWindow().GetFrameWeld());
                         aDlgHelper.AddFilter( pHtmlFlt->GetFilterName(), pHtmlFlt->GetDefaultExtension() );
                         aDlgHelper.SetCurrentFilter( pHtmlFlt->GetFilterName() );
                         if( ERRCODE_NONE != aDlgHelper.Execute())
@@ -882,7 +882,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                     bool bError = false;
 
                     FileDialogHelper aDlgHelper(TemplateDescription::FILESAVE_AUTOEXTENSION_TEMPLATE, FileDialogFlags::NONE,
-                                                &GetView()->GetViewFrame()->GetWindow());
+                                                GetView()->GetViewFrame()->GetWindow().GetFrameWeld());
 
                     const sal_Int16 nControlIds[] = {
                         CommonFilePickerElementIds::PUSHBUTTON_OK,

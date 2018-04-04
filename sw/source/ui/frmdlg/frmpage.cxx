@@ -2605,7 +2605,7 @@ IMPL_LINK_NOARG(SwGrfExtPage, BrowseHdl, Button*, void)
     {
         pGrfDlg = new FileDialogHelper(
                 ui::dialogs::TemplateDescription::FILEOPEN_LINK_PREVIEW,
-                FileDialogFlags::Graphic, this);
+                FileDialogFlags::Graphic, GetFrameWeld());
         pGrfDlg->SetTitle(get<VclFrame>("linkframe")->get_label());
     }
     pGrfDlg->SetDisplayDirectory( m_pConnectED->GetText() );
@@ -2874,7 +2874,7 @@ VclPtr<SfxTabPage> SwFrameURLPage::Create(vcl::Window *pParent, const SfxItemSet
 IMPL_LINK_NOARG(SwFrameURLPage, InsertFileHdl, Button*, void)
 {
     FileDialogHelper aDlgHelper(ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE,
-                                FileDialogFlags::NONE, this);
+                                FileDialogFlags::NONE, GetFrameWeld());
     uno::Reference < ui::dialogs::XFilePicker3 > xFP = aDlgHelper.GetFilePicker();
 
     try

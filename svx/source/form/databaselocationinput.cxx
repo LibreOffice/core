@@ -228,7 +228,7 @@ namespace svx
         ::sfx2::FileDialogHelper aFileDlg(
             TemplateDescription::FILESAVE_AUTOEXTENSION,
             FileDialogFlags::NONE,
-            m_rLocationInput.GetSystemWindow()
+            m_rLocationInput.GetFrameWeld()
         );
         aFileDlg.SetDisplayDirectory( impl_getCurrentURL() );
 

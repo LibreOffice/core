@@ -1570,7 +1570,7 @@ void SmViewShell::Execute(SfxRequest& rReq)
         case SID_IMPORT_FORMULA:
         {
             mpImpl->pRequest.reset(new SfxRequest( rReq ));
-            mpImpl->pDocInserter.reset(new ::sfx2::DocumentInserter(pWin,
+            mpImpl->pDocInserter.reset(new ::sfx2::DocumentInserter(pWin ? pWin->GetFrameWeld() : nullptr,
                               GetDoc()->GetFactory().GetFactoryName()));
             mpImpl->pDocInserter->StartExecuteModal( LINK( this, SmViewShell, DialogClosedHdl ) );
             break;

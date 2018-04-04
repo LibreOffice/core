@@ -47,7 +47,7 @@ struct BaseLink_Impl
 {
     Link<SvBaseLink&,void> m_aEndEditLink;
     LinkManager*        m_pLinkMgr;
-    VclPtr<vcl::Window> m_pParentWin;
+    weld::Window*       m_pParentWin;
     std::unique_ptr<FileDialogHelper>
                         m_pFileDlg;
     bool                m_bIsConnect;
@@ -447,7 +447,7 @@ SvBaseLink::UpdateResult SvBaseLink::DataChanged( const OUString &, const css::u
     return SUCCESS;
 }
 
-void SvBaseLink::Edit( vcl::Window* pParent, const Link<SvBaseLink&,void>& rEndEditHdl )
+void SvBaseLink::Edit(weld::Window* pParent, const Link<SvBaseLink&,void>& rEndEditHdl )
 {
     pImpl->m_pParentWin = pParent;
     pImpl->m_aEndEditLink = rEndEditHdl;
@@ -516,7 +516,7 @@ bool SvBaseLink::ExecuteEdit( const OUString& _rNewName )
             else
                 return false;
 
-            std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(pImpl->m_pParentWin->GetFrameWeld(),
+            std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(pImpl->m_pParentWin,
                                                                      VclMessageType::Warning, VclButtonsType::Ok, sError));
             xBox->run();
         }

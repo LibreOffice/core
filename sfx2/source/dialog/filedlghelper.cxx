@@ -851,8 +851,6 @@ css::uno::Reference<css::awt::XWindow> FileDialogHelper_Impl::GetFrameInterface(
 {
     if (mpFrameWeld)
         return mpFrameWeld->GetXWindow();
-    if (mpPreferredParentWindow)
-        return VCLUnoHelper::GetInterface(mpPreferredParentWindow);
     return css::uno::Reference<css::awt::XWindow>();
 }
 
@@ -861,7 +859,6 @@ FileDialogHelper_Impl::FileDialogHelper_Impl(
     sal_Int16 nDialogType,
     FileDialogFlags nFlags,
     sal_Int16 nDialog,
-    const vcl::Window* pPreferredParentWindow,
     weld::Window* pFrameWeld,
     const OUString& sStandardDir,
     const css::uno::Sequence< OUString >& rBlackList
@@ -891,7 +888,6 @@ FileDialogHelper_Impl::FileDialogHelper_Impl(
     // create the file open dialog
     // the flags can be SFXWB_INSERT or SFXWB_MULTISELECTION
 
-    mpPreferredParentWindow = pPreferredParentWindow ? pPreferredParentWindow->GetSystemWindow() : nullptr;
     mpFrameWeld             = pFrameWeld;
     mpAntiImpl              = _pAntiImpl;
     mbHasAutoExt            = false;
@@ -1550,7 +1546,7 @@ ErrCode FileDialogHelper_Impl::execute( std::vector<OUString>& rpURLList,
                         }
                         catch( const IllegalArgumentException& )
                         {
-                            std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetFrameWeld(),
+                            std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(mpFrameWeld,
                                                                                      VclMessageType::Warning, VclButtonsType::Ok,
                                                                                      SfxResId(RID_SVXSTR_GPG_ENCRYPT_FAILURE)));
                             xBox->run();
@@ -2284,25 +2280,9 @@ FileDialogHelper::FileDialogHelper(
     const OUString& rFact,
     SfxFilterFlags nMust,
     SfxFilterFlags nDont,
-    const vcl::Window* pPreferredParent)
-    :   m_nError(0),
-        mpImpl(new FileDialogHelper_Impl(this, nDialogType, nFlags, SFX2_IMPL_DIALOG_CONFIG, pPreferredParent, nullptr))
-{
-
-    // create the list of filters
-    mpImpl->addFilters(
-            SfxObjectShell::GetServiceNameFromFactory(rFact), nMust, nDont );
-}
-
-FileDialogHelper::FileDialogHelper(
-    sal_Int16 nDialogType,
-    FileDialogFlags nFlags,
-    const OUString& rFact,
-    SfxFilterFlags nMust,
-    SfxFilterFlags nDont,
     weld::Window* pPreferredParent)
     :   m_nError(0),
-        mpImpl(new FileDialogHelper_Impl(this, nDialogType, nFlags, SFX2_IMPL_DIALOG_CONFIG, nullptr, pPreferredParent))
+        mpImpl(new FileDialogHelper_Impl(this, nDialogType, nFlags, SFX2_IMPL_DIALOG_CONFIG, pPreferredParent))
 {
 
     // create the list of filters
@@ -2319,27 +2299,18 @@ FileDialogHelper::FileDialogHelper(
     SfxFilterFlags nDont,
     const OUString& rStandardDir,
     const css::uno::Sequence< OUString >& rBlackList,
-    const vcl::Window* pPreferredParent)
+    weld::Window* pPreferredParent)
     :   m_nError(0),
-        mpImpl( new FileDialogHelper_Impl( this, nDialogType, nFlags, nDialog, pPreferredParent, nullptr, rStandardDir, rBlackList ) )
+        mpImpl( new FileDialogHelper_Impl( this, nDialogType, nFlags, nDialog, pPreferredParent, rStandardDir, rBlackList ) )
 {
     // create the list of filters
     mpImpl->addFilters(
             SfxObjectShell::GetServiceNameFromFactory(rFact), nMust, nDont );
 }
 
-FileDialogHelper::FileDialogHelper(
-    sal_Int16 nDialogType,
-    FileDialogFlags nFlags,
-    const vcl::Window* pPreferredParent )
-    :   m_nError(0),
-        mpImpl( new FileDialogHelper_Impl( this, nDialogType, nFlags, SFX2_IMPL_DIALOG_CONFIG, pPreferredParent, nullptr ) )
-{
-}
-
 FileDialogHelper::FileDialogHelper(sal_Int16 nDialogType, FileDialogFlags nFlags, weld::Window* pPreferredParent)
     :   m_nError(0),
-        mpImpl( new FileDialogHelper_Impl( this, nDialogType, nFlags, SFX2_IMPL_DIALOG_CONFIG, nullptr, pPreferredParent ) )
+        mpImpl( new FileDialogHelper_Impl( this, nDialogType, nFlags, SFX2_IMPL_DIALOG_CONFIG, pPreferredParent ) )
 {
 }
 
@@ -2350,9 +2321,9 @@ FileDialogHelper::FileDialogHelper(
     const OUString& aExtName,
     const OUString& rStandardDir,
     const css::uno::Sequence< OUString >& rBlackList,
-    const vcl::Window* pPreferredParent )
+    weld::Window* pPreferredParent )
     :   m_nError(0),
-        mpImpl( new FileDialogHelper_Impl( this, nDialogType, nFlags, SFX2_IMPL_DIALOG_CONFIG, pPreferredParent, nullptr, rStandardDir, rBlackList ) )
+        mpImpl( new FileDialogHelper_Impl( this, nDialogType, nFlags, SFX2_IMPL_DIALOG_CONFIG, pPreferredParent, rStandardDir, rBlackList ) )
 {
     // the wildcard here is expected in form "*.extension"
     OUString aWildcard;
@@ -2661,7 +2632,7 @@ void FileDialogHelper::DialogClosed( const DialogClosedEvent& _rEvent )
     m_aDialogClosedLink.Call( this );
 }
 
-ErrCode FileOpenDialog_Impl( const vcl::Window* pParent,
+ErrCode FileOpenDialog_Impl( weld::Window* pParent,
                              sal_Int16 nDialogType,
                              FileDialogFlags nFlags,
                              std::vector<OUString>& rpURLList,

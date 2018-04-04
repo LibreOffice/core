@@ -98,7 +98,7 @@ void ScChartShell::ExecuteExportAsGraphic( SfxRequest& )
         {
             vcl::Window* pWin = GetViewData()->GetActiveWin();
             Reference< drawing::XShape > xSourceDoc( pObject->getUnoShape(), UNO_QUERY_THROW );
-            GraphicHelper::SaveShapeAsGraphic(pWin, xSourceDoc);
+            GraphicHelper::SaveShapeAsGraphic(pWin ? pWin->GetFrameWeld() : nullptr, xSourceDoc);
         }
     }
 
