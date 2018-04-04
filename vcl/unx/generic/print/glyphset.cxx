@@ -192,7 +192,7 @@ void GlyphSet::DrawGlyph(PrinterGfx& rGfx,
     OString aGlyphSetName = GetGlyphSetName(nGlyphSetID);
 
     rGfx.PSSetFont  (aGlyphSetName, RTL_TEXTENCODING_DONTKNOW);
-    rGfx.PSMoveTo   (rPoint);
+    rGfx.PSMoveTo   (aPoint);
     rGfx.PSShowGlyph(nGlyphID);
 }
 
