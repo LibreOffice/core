@@ -329,7 +329,7 @@ namespace accessibility
                 aParentPath.pop_back();
 
                 // get the entry for this shortened access path
-                SvTreeListEntry* pParentEntry = getListBox()->GetEntryFromPath( m_aEntryPath );
+                SvTreeListEntry* pParentEntry = getListBox()->GetEntryFromPath( aParentPath );
                 OSL_ENSURE( pParentEntry, "AccessibleListBoxEntry::implGetParentAccessible: could not obtain a parent entry!" );
 
                 if ( pParentEntry )
