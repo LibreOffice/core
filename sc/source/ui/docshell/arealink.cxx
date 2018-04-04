@@ -73,14 +73,13 @@ ScAreaLink::~ScAreaLink()
     StopRefreshTimer();
 }
 
-void ScAreaLink::Edit(weld::Window*, const Link<SvBaseLink&,void>& /* rEndEditHdl */ )
+void ScAreaLink::Edit(weld::Window* pParent, const Link<SvBaseLink&,void>& /* rEndEditHdl */ )
 {
     //  use own dialog instead of SvBaseLink::Edit...
     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
     OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
-//TODO    ScopedVclPtr<AbstractScLinkedAreaDlg> pDlg(pFact->CreateScLinkedAreaDlg(pParent));
-    ScopedVclPtr<AbstractScLinkedAreaDlg> pDlg(pFact->CreateScLinkedAreaDlg(nullptr));
+    ScopedVclPtr<AbstractScLinkedAreaDlg> pDlg(pFact->CreateScLinkedAreaDlg(pParent));
     OSL_ENSURE(pDlg, "Dialog create fail!");
     pDlg->InitFromOldLink( aFileName, aFilterName, aOptions, aSourceArea, GetRefreshDelay() );
     if ( pDlg->Execute() == RET_OK )

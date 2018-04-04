@@ -121,6 +121,7 @@ public:
     const Link<ComboBox&,void>&   GetSelectHdl() const;
     void            SetDoubleClickHdl(const Link<ComboBox&,void>& rLink);
     const Link<ComboBox&,void>&   GetDoubleClickHdl() const;
+    void            SetEntryActivateHdl(const Link<Edit&,void>& rLink);
 
     Size            CalcMinimumSize() const override;
     virtual Size    GetOptimalSize() const override;
