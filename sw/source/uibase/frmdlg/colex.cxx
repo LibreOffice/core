@@ -38,6 +38,7 @@
 #include <colex.hxx>
 #include <colmgr.hxx>
 #include <svx/unobrushitemhelper.hxx>
+#include <svx/svxids.hrc>
 
 // Taking the updated values from the set
 void SwPageExample::UpdateExample( const SfxItemSet& rSet )

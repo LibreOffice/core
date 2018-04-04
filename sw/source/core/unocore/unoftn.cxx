@@ -42,6 +42,7 @@
 #include <ndtxt.hxx>
 #include <unocrsr.hxx>
 #include <hints.hxx>
+#include <svl/itemprop.hxx>
 
 using namespace ::com::sun::star;
 

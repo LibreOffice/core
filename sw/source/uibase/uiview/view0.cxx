@@ -68,6 +68,7 @@
 using namespace ::com::sun::star;
 
 #include <unotools/moduleoptions.hxx>
+#include <sfx2/viewfac.hxx>
 
 #include <IDocumentSettingAccess.hxx>
 

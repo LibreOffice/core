@@ -87,6 +87,7 @@
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <svx/colorwindow.hxx>
+#include <editeng/editids.hrc>
 
 #include <reffld.hxx>
 #include <expfld.hxx>

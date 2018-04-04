@@ -31,8 +31,6 @@
 
 #include <cppuhelper/implbase.hxx>
 
-#include <sfx2/objsh.hxx>
-
 #include "flyenum.hxx"
 #include "frmfmt.hxx"
 #include "unotext.hxx"
@@ -42,7 +40,6 @@
 class SdrObject;
 class SwDoc;
 class SwFormat;
-class SwFlyFrameFormat;
 
 class BaseFrameProperties_Impl;
 class SwXFrame : public cppu::WeakImplHelper
@@ -274,7 +271,6 @@ public:
     void operator delete( void * ) throw();
 };
 
-class SwOLENode;
 typedef cppu::ImplInheritanceHelper
 <   SwXFrame,
     css::document::XEmbeddedObjectSupplier2,

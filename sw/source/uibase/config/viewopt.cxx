@@ -33,6 +33,7 @@
 #include <wdocsh.hxx>
 #include <swrect.hxx>
 #include <crstate.hxx>
+#include <authratr.hxx>
 #include <svtools/colorcfg.hxx>
 #include <svtools/accessibilityoptions.hxx>
 #include <unotools/configmgr.hxx>

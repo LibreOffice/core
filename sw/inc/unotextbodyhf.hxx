@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SW_INC_UNOTEXTBODYHF_HXX
 #define INCLUDED_SW_INC_UNOTEXTBODYHF_HXX
 
-#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 

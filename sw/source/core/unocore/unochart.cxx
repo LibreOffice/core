@@ -46,6 +46,7 @@
 #include <docary.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/string.hxx>
+#include <svl/itemprop.hxx>
 
 using namespace ::com::sun::star;
 

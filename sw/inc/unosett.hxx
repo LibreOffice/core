@@ -20,7 +20,6 @@
 #define INCLUDED_SW_INC_UNOSETT_HXX
 
 #include "swtypes.hxx"
-#include "calbck.hxx"
 #include <com/sun/star/text/XTextColumns.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
@@ -32,7 +31,6 @@
 #include <cppuhelper/implbase2.hxx>
 #include <cppuhelper/implbase4.hxx>
 #include <cppuhelper/implbase5.hxx>
-#include <svl/itemprop.hxx>
 #include "unobaseclass.hxx"
 
 class SwDoc;
@@ -40,6 +38,7 @@ class SwFormatCol;
 class SwDocShell;
 class SwNumRule;
 class SwNumFormat;
+class SfxItemPropertySet;
 
 class SwXFootnoteProperties : public cppu::WeakAggImplHelper2
 <

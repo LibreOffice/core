@@ -19,8 +19,6 @@
 #ifndef INCLUDED_SW_INC_VIEWSH_HXX
 #define INCLUDED_SW_INC_VIEWSH_HXX
 
-#include <com/sun/star/embed/XClassifiedObject.hpp>
-#include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include "swdllapi.h"
 #include "swtypes.hxx"
 #include "ring.hxx"
@@ -28,11 +26,8 @@
 #include <memory>
 #include <stack>
 #include <vcl/mapmod.hxx>
-#include <vcl/print.hxx>
 #include <vcl/vclptr.hxx>
 #include <vcl/lazydelete.hxx>
-
-#include <LibreOfficeKit/LibreOfficeKitTypes.h>
 
 namespace com { namespace sun { namespace star { namespace accessibility {
            class XAccessible; } } } }
@@ -44,7 +39,6 @@ class IDocumentMarkAccess;
 class IDocumentDrawModelAccess;
 class IDocumentRedlineAccess;
 class IDocumentLayoutAccess;
-class IDocumentFieldsAccess;
 class IDocumentContentOperations;
 class IDocumentStylePoolAccess;
 class IDocumentStatistics;
@@ -52,7 +46,6 @@ class IDocumentUndoRedo;
 class IDocumentListItems;
 class IDocumentOutlineNodes;
 class SfxPrinter;
-class SfxProgress;
 class SwRootFrame;
 class SwNodes;
 class SdrView;
@@ -61,23 +54,18 @@ class SfxViewShell;
 class SwViewOption;
 class SwViewShellImp;
 class SwPrintData;
-class SwPagePreviewPrtData;
-namespace vcl { class Window; }
-class OutputDevice;
-class SwLayIdle;
 struct ShellResource;
 class SwRegionRects;
-class SwFrame;
 class SvtAccessibilityOptions;
 class SwPagePreviewLayout;
 class SwTextFrame;
-class BitmapEx;
 
 struct SwAccessibilityOptions;
 namespace vcl { class Region; }
 class SwPostItMgr;
 class SdrPaintWindow;
 class SwAccessibleMap;
+enum class Orientation;
 
 namespace vcl
 {

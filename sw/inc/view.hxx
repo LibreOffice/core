@@ -20,25 +20,16 @@
 #define INCLUDED_SW_INC_VIEW_HXX
 
 #include <vcl/timer.hxx>
-#include <vcl/field.hxx>
-#include <vcl/floatwin.hxx>
-#include <svtools/htmlcfg.hxx>
-#include <sfx2/viewfac.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/objsh.hxx>
 #include <editeng/svxenum.hxx>
 #include <sfx2/zoomitem.hxx>
 #include <svx/ruler.hxx>
-#include <svx/svxids.hrc>
 #include <svx/fmshell.hxx>
-#include <editeng/editstat.hxx>
 #include "swdllapi.h"
 #include "swtypes.hxx"
 #include "shellid.hxx"
-#include "IMark.hxx"
 
-class Button;
-class ImageButton;
 class SwTextFormatColl;
 class SwPageDesc;
 class SwFrameFormat;
@@ -46,7 +37,6 @@ class SwCharFormat;
 class SwNumRule;
 class SwGlossaryHdl;
 class SwDrawBase;
-class SvxRuler;
 class SvxLRSpaceItem;
 class SwDocShell;
 class SwScrollbar;
@@ -56,11 +46,7 @@ class SvxSearchItem;
 class SearchAttrItemList;
 class SvxSearchDialog;
 class SdrView;
-class Dialog;
-class SdrObject;
 class SdrPageView;
-class SwHlpImageButton;
-class SwView;
 class SwEditWin;
 class SwWrtShell;
 class SwView_Impl;
@@ -74,18 +60,19 @@ class SwMailMergeConfigItem;
 class SwTextNode; // #i23726#
 class SwFormatClipboard;
 struct SwConversionArgs;
-class Graphic;
 class GraphicFilter;
 class SwPostItMgr;
 enum class SotExchangeDest;
 class SwCursorShell;
 enum class SvxSearchCmd;
 enum class SelectionType : sal_Int32;
+class SfxViewFactory;
 
 namespace com{ namespace sun { namespace star {
     namespace view{ class XSelectionSupplier; }
 }}}
 namespace sfx2 { class FileDialogHelper; }
+namespace sw { namespace mark { class IFieldmark; } }
 
 const long nLeftOfst = -370;
 const long nScrollX  =   30;
