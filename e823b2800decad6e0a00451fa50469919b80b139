@@ -16,6 +16,24 @@
       "revId": "e823b2800decad6e0a00451fa50469919b80b139",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_6713735d",
+        "filename": "filter/source/msfilter/msdffimp.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4958,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-04-04T07:22:40Z",
+      "side": 1,
+      "message": "Yes, probably makes sense to add some\n\n  bool Rectangle::UnionNoOverflow(Rectangle const \u0026);\n\nthat does the operation (and returns true) iff the result doesn\u0027t get too large.",
+      "parentUuid": "9a30ddce_07047713",
+      "revId": "e823b2800decad6e0a00451fa50469919b80b139",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
