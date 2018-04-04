@@ -2720,6 +2720,7 @@ void ImportComment10( SvxMSDffManager const & rMan, SvStream& rStCtrl, SdrPage* 
         xAnnotation->setPosition( geometry::RealPoint2D( aPosition.X() / 100.0, aPosition.Y() / 100.0 ) );
         xAnnotation->setAuthor( sAuthor );
         xAnnotation->setDateTime( aDateTime );
+        xAnnotation->setInitials( sInitials );
         uno::Reference< text::XText > xText( xAnnotation->getTextRange() );
         xText->setString( sText );
     }
