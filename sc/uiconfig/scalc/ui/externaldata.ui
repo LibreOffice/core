@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.18.3 -->
+<!-- Generated with glade 3.20.4 -->
 <interface domain="sc">
   <requires lib="gtk+" version="3.18"/>
-  <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkAdjustment" id="adjustment1">
     <property name="lower">1</property>
     <property name="upper">99999</property>
@@ -10,10 +9,21 @@
     <property name="step_increment">1</property>
     <property name="page_increment">10</property>
   </object>
+  <object class="GtkListStore" id="liststore1">
+    <columns>
+      <!-- column-name text -->
+      <column type="gchararray"/>
+      <!-- column-name id -->
+      <column type="gchararray"/>
+    </columns>
+  </object>
   <object class="GtkDialog" id="ExternalDataDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
     <property name="title" translatable="yes" context="externaldata|ExternalDataDialog">External Data</property>
+    <property name="modal">True</property>
+    <property name="default_width">0</property>
+    <property name="default_height">0</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
@@ -82,6 +92,7 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="hexpand">True</property>
+            <property name="vexpand">True</property>
             <property name="orientation">vertical</property>
             <property name="spacing">12</property>
             <child>
@@ -112,21 +123,20 @@
                             <property name="hexpand">True</property>
                             <property name="spacing">12</property>
                             <child>
-                              <object class="svtlo-SvtURLBox" id="url">
+                              <object class="GtkComboBoxText" id="url">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="tooltip_text" translatable="yes" context="externaldata|url|tooltip_text">Enter the URL of the source document in the local file system or Internet here.</property>
-                                <property name="hexpand">True</property>
                                 <property name="has_entry">True</property>
-                                <property name="max_width_chars">48</property>
                                 <child internal-child="entry">
-                                  <object class="GtkEntry" id="URLBox-entry2">
-                                    <property name="can_focus">False</property>
+                                  <object class="GtkEntry">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
                                   </object>
                                 </child>
                               </object>
                               <packing>
-                                <property name="expand">False</property>
+                                <property name="expand">True</property>
                                 <property name="fill">True</property>
                                 <property name="position">0</property>
                               </packing>
@@ -199,20 +209,34 @@
                         <property name="orientation">vertical</property>
                         <property name="spacing">6</property>
                         <child>
-                          <object class="GtkScrolledWindow" id="scrolledwindow1">
+                          <object class="GtkScrolledWindow">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="hexpand">True</property>
                             <property name="vexpand">True</property>
                             <property name="shadow_type">in</property>
                             <child>
-                              <object class="GtkTreeView" id="ranges:border">
+                              <object class="GtkTreeView" id="ranges">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
-                                <property name="hexpand">True</property>
                                 <property name="vexpand">True</property>
+                                <property name="model">liststore1</property>
+                                <property name="headers_visible">False</property>
+                                <property name="headers_clickable">False</property>
+                                <property name="search_column">0</property>
+                                <property name="show_expanders">False</property>
                                 <child internal-child="selection">
                                   <object class="GtkTreeSelection" id="treeview-selection1"/>
+                                </child>
+                                <child>
+                                  <object class="GtkTreeViewColumn" id="treeviewcolumn1">
+                                    <child>
+                                      <object class="GtkCellRendererText" id="cellrenderertext1"/>
+                                      <attributes>
+                                        <attribute name="text">0</attribute>
+                                      </attributes>
+                                    </child>
+                                  </object>
                                 </child>
                               </object>
                             </child>
@@ -302,9 +326,9 @@
                   <object class="GtkLabel" id="label2">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="xalign">0.47999998927116394</property>
                     <property name="label" translatable="yes" context="externaldata|label2">_Available Tables/Ranges</property>
                     <property name="use_underline">True</property>
+                    <property name="xalign">0.47999998927116394</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
                     </attributes>
@@ -331,5 +355,8 @@
       <action-widget response="-6">cancel</action-widget>
       <action-widget response="-11">help</action-widget>
     </action-widgets>
+    <child>
+      <placeholder/>
+    </child>
   </object>
 </interface>

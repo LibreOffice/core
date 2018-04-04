@@ -240,10 +240,12 @@ class AbstractScSelEntryDlg_Impl : public AbstractScSelEntryDlg
 
 class AbstractScLinkedAreaDlg_Impl : public AbstractScLinkedAreaDlg
 {
-    ScopedVclPtr<ScLinkedAreaDlg> pDlg;
+    std::unique_ptr<ScLinkedAreaDlg> m_xDlg;
 public:
-    explicit                AbstractScLinkedAreaDlg_Impl( ScLinkedAreaDlg* p)
-                              : pDlg(p) {}
+    explicit AbstractScLinkedAreaDlg_Impl(ScLinkedAreaDlg* p)
+        : m_xDlg(p)
+    {
+    }
     virtual                 ~AbstractScLinkedAreaDlg_Impl() override;
     virtual short           Execute() override;
     virtual void            InitFromOldLink( const OUString& rFile, const OUString& rFilter,
@@ -459,7 +461,7 @@ public:
     virtual VclPtr<AbstractScSelEntryDlg> CreateScSelEntryDlg ( vcl::Window* pParent,
                                                           const std::vector<OUString> &rEntryList ) override;
 
-    virtual VclPtr<AbstractScLinkedAreaDlg> CreateScLinkedAreaDlg(vcl::Window* pParent) override;
+    virtual VclPtr<AbstractScLinkedAreaDlg> CreateScLinkedAreaDlg(weld::Window* pParent) override;
 
     virtual VclPtr<AbstractScMetricInputDlg> CreateScMetricInputDlg (  vcl::Window*        pParent,
                                                                 const OString&  sDialogName,

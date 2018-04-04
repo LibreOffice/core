@@ -454,7 +454,7 @@ public:
 
     virtual VclPtr<AbstractScSelEntryDlg > CreateScSelEntryDlg ( vcl::Window* pParent,
                                                           const std::vector<OUString> &rEntryList ) = 0;
-    virtual VclPtr<AbstractScLinkedAreaDlg> CreateScLinkedAreaDlg(vcl::Window* pParent) = 0;
+    virtual VclPtr<AbstractScLinkedAreaDlg> CreateScLinkedAreaDlg(weld::Window* pParent) = 0;
 
     virtual VclPtr<AbstractScMetricInputDlg> CreateScMetricInputDlg ( vcl::Window*        pParent,
                                                                 const OString&  sDialogName,

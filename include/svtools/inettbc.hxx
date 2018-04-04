@@ -26,7 +26,10 @@
 #include <tools/urlobj.hxx>
 
 #include <vcl/combobox.hxx>
+#include <vcl/idle.hxx>
+#include <vcl/weld.hxx>
 
+class MatchContext_Impl;
 class SvtMatchContext_Impl;
 class SvtURLBox_Impl;
 class SVT_DLLPUBLIC SvtURLBox : public ComboBox
@@ -81,6 +84,64 @@ public:
 
     void                            EnableAutocompletion( bool _bEnable )
                                         { bIsAutoCompleteEnabled = _bEnable; }
+    void                            SetPlaceHolder( const OUString& sPlaceHolder )
+                                        { aPlaceHolder = sPlaceHolder; }
+    const OUString&                 GetPlaceHolder() { return aPlaceHolder; }
+    bool                            MatchesPlaceHolder( const OUString& sToMatch ) const
+                                        { return ( !aPlaceHolder.isEmpty() ) && ( aPlaceHolder == sToMatch ); }
+};
+
+class SVT_DLLPUBLIC URLBox
+{
+    friend class MatchContext_Impl;
+    friend class SvtURLBox_Impl;
+
+    Idle                            aChangedIdle;
+    OUString                        aBaseURL;
+    OUString                        aPlaceHolder;
+    rtl::Reference< MatchContext_Impl > pCtx;
+    std::unique_ptr<SvtURLBox_Impl> pImpl;
+    INetProtocol                    eSmartProtocol;
+    bool                            bAutoCompleteMode   : 1;
+    bool                            bOnlyDirectories    : 1;
+    bool                            bHistoryDisabled    : 1;
+
+    std::unique_ptr<weld::ComboBoxText> m_xWidget;
+
+    SVT_DLLPRIVATE bool             ProcessKey( const vcl::KeyCode& rCode );
+    DECL_DLLPRIVATE_LINK(           TryAutoComplete, Timer*, void);
+    SVT_DLLPRIVATE void             UpdatePicklistForSmartProtocol_Impl();
+    DECL_DLLPRIVATE_LINK(           ChangedHdl, weld::ComboBoxText&, void);
+    DECL_DLLPRIVATE_LINK(           FocusInHdl, weld::Widget&, void);
+    DECL_DLLPRIVATE_LINK(           FocusOutHdl, weld::Widget&, void);
+    SVT_DLLPRIVATE void             Init();
+
+public:
+    URLBox(weld::ComboBoxText* pWidget);
+    ~URLBox();
+
+    void                            SetText(const OUString& rStr) { m_xWidget->set_entry_text(rStr); }
+    void                            Clear() { m_xWidget->clear(); }
+    void connect_entry_activate(const Link<weld::ComboBoxText&, void>& rLink) { m_xWidget->connect_entry_activate(rLink); }
+    void                            append_text(const OUString& rStr) { m_xWidget->append_text(rStr); }
+    OUString                        get_text(int nIndex) { return m_xWidget->get_text(nIndex); }
+    void select_entry_region(int nStartPos, int nEndPos) { m_xWidget->select_entry_region(nStartPos, nEndPos); }
+    void                            EnableAutocomplete() { m_xWidget->set_entry_completion(true); }
+
+    void                            SetBaseURL( const OUString& rURL );
+    const OUString&                 GetBaseURL() const { return aBaseURL; }
+    void                            SetOnlyDirectories( bool bDir );
+    INetProtocol                    GetSmartProtocol() const { return eSmartProtocol; }
+    void                            SetSmartProtocol( INetProtocol eProt );
+    OUString                        GetURL();
+    void                            DisableHistory();
+
+    void                            UpdatePickList( );
+
+    static OUString                 ParseSmart( const OUString& aText, const OUString& aBaseURL );
+
+    void                            SetFilter(const OUString& _sFilter);
+
     void                            SetPlaceHolder( const OUString& sPlaceHolder )
                                         { aPlaceHolder = sPlaceHolder; }
     const OUString&                 GetPlaceHolder() { return aPlaceHolder; }

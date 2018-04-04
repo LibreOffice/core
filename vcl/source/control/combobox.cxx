@@ -58,6 +58,7 @@ struct ComboBox::Impl
     sal_Int32           m_nMaxWidthChars;
     Link<ComboBox&,void>               m_SelectHdl;
     Link<ComboBox&,void>               m_DoubleClickHdl;
+    Link<ComboBox&,void>               m_EntryActivateHdl;
 
     explicit Impl(ComboBox & rThis)
         : m_rThis(rThis)
@@ -985,6 +986,8 @@ const Link<ComboBox&,void>& ComboBox::GetSelectHdl() const { return m_pImpl->m_S
 void ComboBox::SetDoubleClickHdl(const Link<ComboBox&,void>& rLink) { m_pImpl->m_DoubleClickHdl = rLink; }
 
 const Link<ComboBox&,void>& ComboBox::GetDoubleClickHdl() const { return m_pImpl->m_DoubleClickHdl; }
+
+void ComboBox::SetEntryActivateHdl(const Link<Edit&,void>& rLink) { m_pImpl->m_pSubEdit->SetActivateHdl(rLink); }
 
 long ComboBox::CalcWindowSizePixel(sal_uInt16 nLines) const
 {

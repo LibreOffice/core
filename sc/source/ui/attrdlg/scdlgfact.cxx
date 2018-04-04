@@ -115,7 +115,7 @@ AbstractScLinkedAreaDlg_Impl::~AbstractScLinkedAreaDlg_Impl()
 }
 short AbstractScLinkedAreaDlg_Impl::Execute()
 {
-    return pDlg->Execute();
+    return m_xDlg->run();
 }
 
 void ScAbstractTabDialog_Impl::SetCurPageId( sal_uInt16 nId )
@@ -393,32 +393,32 @@ void AbstractScLinkedAreaDlg_Impl::InitFromOldLink( const OUString& rFile, const
                                         const OUString& rOptions, const OUString& rSource,
                                         sal_uLong nRefresh )
 {
-    pDlg->InitFromOldLink( rFile, rFilter, rOptions, rSource, nRefresh);
+    m_xDlg->InitFromOldLink( rFile, rFilter, rOptions, rSource, nRefresh);
 }
 
 OUString  AbstractScLinkedAreaDlg_Impl::GetURL()
 {
-    return pDlg->GetURL();
+    return m_xDlg->GetURL();
 }
 
 OUString  AbstractScLinkedAreaDlg_Impl::GetFilter()
 {
-    return pDlg->GetFilter();
+    return m_xDlg->GetFilter();
 }
 
 OUString  AbstractScLinkedAreaDlg_Impl::GetOptions()
 {
-    return pDlg->GetOptions();
+    return m_xDlg->GetOptions();
 }
 
 OUString  AbstractScLinkedAreaDlg_Impl::GetSource()
 {
-    return pDlg->GetSource();
+    return m_xDlg->GetSource();
 }
 
-sal_uLong   AbstractScLinkedAreaDlg_Impl::GetRefresh()
+sal_uLong AbstractScLinkedAreaDlg_Impl::GetRefresh()
 {
-    return pDlg->GetRefresh();
+    return m_xDlg->GetRefresh();
 }
 
 ScConditionalFormatList* AbstractScCondFormatManagerDlg_Impl::GetConditionalFormatList()
@@ -742,10 +742,9 @@ VclPtr<AbstractScSelEntryDlg> ScAbstractDialogFactory_Impl::CreateScSelEntryDlg 
     return VclPtr<AbstractScSelEntryDlg_Impl>::Create( pDlg );
 }
 
-VclPtr<AbstractScLinkedAreaDlg> ScAbstractDialogFactory_Impl::CreateScLinkedAreaDlg(vcl::Window* pParent)
+VclPtr<AbstractScLinkedAreaDlg> ScAbstractDialogFactory_Impl::CreateScLinkedAreaDlg(weld::Window* pParent)
 {
-    VclPtr<ScLinkedAreaDlg> pDlg = VclPtr<ScLinkedAreaDlg>::Create( pParent );
-    return VclPtr<AbstractScLinkedAreaDlg_Impl>::Create( pDlg );
+    return VclPtr<AbstractScLinkedAreaDlg_Impl>::Create(new ScLinkedAreaDlg(pParent));
 }
 
 VclPtr<AbstractScMetricInputDlg> ScAbstractDialogFactory_Impl::CreateScMetricInputDlg (  vcl::Window*      pParent,

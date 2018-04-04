@@ -1981,8 +1981,8 @@ SmSymDefineDialog::SmSymDefineDialog(weld::Window* pParent, OutputDevice *pFntLi
 {
     // auto completion is troublesome since that symbols character also gets automatically selected in the
     // display and if the user previously selected a character to define/redefine that one this is bad
-    m_xOldSymbols->unset_entry_completion();
-    m_xSymbols->unset_entry_completion();
+    m_xOldSymbols->set_entry_completion(false);
+    m_xSymbols->set_entry_completion(false);
 
     FillFonts();
     if (m_xFonts->get_count() > 0)

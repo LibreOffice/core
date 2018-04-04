@@ -1091,6 +1091,16 @@ public:
         return m_xTreeView->GetSelectedEntry();
     }
 
+    virtual std::vector<OUString> get_selected_rows() const override
+    {
+        std::vector<OUString> aRows;
+
+        for (sal_Int32 i = 0; i < m_xTreeView->GetSelectedEntryCount(); ++i)
+            aRows.push_back(m_xTreeView->GetSelectedEntry(i));
+
+        return aRows;
+    }
+
     virtual OUString get(int pos) const override
     {
         return m_xTreeView->GetEntry(pos);
@@ -1125,6 +1135,16 @@ public:
     virtual void thaw() override
     {
         m_xTreeView->SetUpdateMode(true);
+    }
+
+    virtual void set_selection_mode(bool bMultiple) override
+    {
+        m_xTreeView->EnableMultiSelection(bMultiple);
+    }
+
+    virtual int count_selected_rows() const override
+    {
+        return m_xTreeView->GetSelectedEntryCount();
     }
 
     virtual int get_height_rows(int nRows) const override
@@ -1597,7 +1617,7 @@ public:
         return false;
     }
 
-    virtual void unset_entry_completion() override
+    virtual void set_entry_completion(bool) override
     {
         assert(false);
     }
@@ -1617,11 +1637,13 @@ class SalInstanceComboBoxTextWithEdit : public SalInstanceComboBoxText<ComboBox>
 {
 private:
     DECL_LINK(ChangeHdl, Edit&, void);
+    DECL_LINK(EntryActivateHdl, Edit&, void);
 public:
     SalInstanceComboBoxTextWithEdit(ComboBox* pComboBoxText, bool bTakeOwnership)
         : SalInstanceComboBoxText<ComboBox>(pComboBoxText, bTakeOwnership)
     {
         m_xComboBoxText->SetModifyHdl(LINK(this, SalInstanceComboBoxTextWithEdit, ChangeHdl));
+        m_xComboBoxText->SetEntryActivateHdl(LINK(this, SalInstanceComboBoxTextWithEdit, EntryActivateHdl));
     }
 
     virtual void set_entry_error(bool bError) override
@@ -1642,9 +1664,9 @@ public:
         m_xComboBoxText->SetText(rText);
     }
 
-    virtual void unset_entry_completion() override
+    virtual void set_entry_completion(bool bEnable) override
     {
-        m_xComboBoxText->EnableAutocomplete(false);
+        m_xComboBoxText->EnableAutocomplete(bEnable);
     }
 
     virtual void select_entry_region(int nStartPos, int nEndPos) override
@@ -1662,6 +1684,7 @@ public:
 
     virtual ~SalInstanceComboBoxTextWithEdit() override
     {
+        m_xComboBoxText->SetEntryActivateHdl(Link<Edit&, void>());
         m_xComboBoxText->SetModifyHdl(Link<Edit&, void>());
     }
 };
@@ -1669,6 +1692,11 @@ public:
 IMPL_LINK_NOARG(SalInstanceComboBoxTextWithEdit, ChangeHdl, Edit&, void)
 {
     signal_changed();
+}
+
+IMPL_LINK_NOARG(SalInstanceComboBoxTextWithEdit, EntryActivateHdl, Edit&, void)
+{
+    m_aEntryActivateHdl.Call(*this);
 }
 
 class SalInstanceBuilder : public weld::Builder
