@@ -34,6 +34,24 @@
       "revId": "22837bd800e86f3209d72e80a06f72ee8e4ddf87",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_473aef37",
+        "filename": "xmloff/source/core/xmlmultiimagehelper.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2018-04-04T13:14:39Z",
+      "side": 1,
+      "message": "Ah, I see. Then maybe just change the\n\nelse if (rString.startsWith(\"vnd.sun.star.Package\"))\n\nto\n\nelse\n\nand let the GetMimeTypeForExtension try to get a proper mime type?",
+      "parentUuid": "9a30ddce_e72a03e7",
+      "revId": "22837bd800e86f3209d72e80a06f72ee8e4ddf87",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
