@@ -338,24 +338,7 @@ tools::Rectangle SvxOutlinerForwarder::GetCharBounds( sal_Int32 nPara, sal_Int32
 
 tools::Rectangle SvxOutlinerForwarder::GetParaBounds( sal_Int32 nPara ) const
 {
-    Point aPnt = rOutliner.GetDocPosTopLeft( nPara );
-    Size aSize = rOutliner.CalcTextSize();
-
-    if( rOutliner.IsVertical() )
-    {
-        // Hargl. Outliner's 'external' methods return the rotated
-        // dimensions, 'internal' methods like GetTextHeight( n )
-        // don't rotate.
-        sal_uLong nWidth = rOutliner.GetTextHeight( nPara );
-
-        return tools::Rectangle( aSize.Width() - aPnt.Y() - nWidth, 0, aSize.Width() - aPnt.Y(), aSize.Height() );
-    }
-    else
-    {
-        sal_uLong nHeight = rOutliner.GetTextHeight( nPara );
-
-        return tools::Rectangle( 0, aPnt.Y(), aSize.Width(), aPnt.Y() + nHeight );
-    }
+    return rOutliner.GetParaBounds( nPara );
 }
 
 MapMode SvxOutlinerForwarder::GetMapMode() const

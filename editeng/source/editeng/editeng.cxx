@@ -609,14 +609,37 @@ sal_uInt32 EditEngine::GetLineHeight( sal_Int32 nParagraph )
     return pImpEditEngine->GetLineHeight( nParagraph, 0 );
 }
 
+tools::Rectangle EditEngine::GetParaBounds( sal_Int32 nPara )
+{
+    if ( !pImpEditEngine->IsFormatted() )
+        pImpEditEngine->FormatDoc();
+
+    Point aPnt = GetDocPosTopLeft( nPara );
+
+    if( IsVertical() )
+    {
+        sal_Int32 nTextHeight = pImpEditEngine->GetTextHeight();
+        sal_Int32 nParaWidth = pImpEditEngine->CalcParaWidth( nPara, true );
+        sal_uLong nParaHeight = pImpEditEngine->GetParaHeight( nPara );
+
+        return tools::Rectangle( nTextHeight - aPnt.Y() - nParaHeight, 0, nTextHeight - aPnt.Y(), nParaWidth );
+    }
+    else
+    {
+        sal_Int32 nParaWidth = pImpEditEngine->CalcParaWidth( nPara, true );
+        sal_uLong nParaHeight = pImpEditEngine->GetParaHeight( nPara );
+
+        return tools::Rectangle( 0, aPnt.Y(), nParaWidth, aPnt.Y() + nParaHeight );
+    }
+}
+
 sal_uInt32 EditEngine::GetTextHeight( sal_Int32 nParagraph ) const
 {
-
     if ( !pImpEditEngine->IsFormatted() )
         pImpEditEngine->FormatDoc();
 
     sal_uInt32 nHeight = pImpEditEngine->GetParaHeight( nParagraph );
-     return nHeight;
+    return nHeight;
 }
 
 OUString EditEngine::GetWord( sal_Int32 nPara, sal_Int32 nIndex )

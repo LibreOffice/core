@@ -3084,51 +3084,65 @@ sal_uInt32 ImpEditEngine::CalcTextWidth( bool bIgnoreExtraSpace )
     if ( !IsFormatted() && !IsFormatting() )
         FormatDoc();
 
-    long nMaxWidth = 0;
-    long nCurWidth = 0;
-
+    sal_uInt32 nMaxWidth = 0;
 
     // Over all the paragraphs ...
 
     sal_Int32 nParas = GetParaPortions().Count();
     for ( sal_Int32 nPara = 0; nPara < nParas; nPara++ )
     {
-        ParaPortion* pPortion = GetParaPortions()[nPara];
-        if ( pPortion->IsVisible() )
+        nMaxWidth = std::max(nMaxWidth, CalcParaWidth(nPara, bIgnoreExtraSpace));
+    }
+
+    return nMaxWidth;
+}
+
+sal_uInt32 ImpEditEngine::CalcParaWidth( sal_Int32 nPara, bool bIgnoreExtraSpace )
+{
+    // If still not formatted and not in the process.
+    // Will be brought in the formatting for AutoPageSize.
+    if ( !IsFormatted() && !IsFormatting() )
+        FormatDoc();
+
+    long nMaxWidth = 0;
+
+    // Over all the paragraphs ...
+
+    ParaPortion* pPortion = GetParaPortions()[nPara];
+    if ( pPortion->IsVisible() )
+    {
+        const SvxLRSpaceItem& rLRItem = GetLRSpaceItem( pPortion->GetNode() );
+        sal_Int32 nSpaceBeforeAndMinLabelWidth = GetSpaceBeforeAndMinLabelWidth( pPortion->GetNode() );
+
+
+        // On the lines of the paragraph ...
+
+        sal_Int32 nLines = pPortion->GetLines().Count();
+        for ( sal_Int32 nLine = 0; nLine < nLines; nLine++ )
         {
-            const SvxLRSpaceItem& rLRItem = GetLRSpaceItem( pPortion->GetNode() );
-            sal_Int32 nSpaceBeforeAndMinLabelWidth = GetSpaceBeforeAndMinLabelWidth( pPortion->GetNode() );
-
-
-            // On the lines of the paragraph ...
-
-            sal_Int32 nLines = pPortion->GetLines().Count();
-            for ( sal_Int32 nLine = 0; nLine < nLines; nLine++ )
+            EditLine& rLine = pPortion->GetLines()[nLine];
+            // nCurWidth = pLine->GetStartPosX();
+            // For Center- or Right- alignment it depends on the paper
+            // width, here not preferred. I general, it is best not leave it
+            // to StartPosX, also the right indents have to be taken into
+            // account!
+            long nCurWidth = GetXValue( rLRItem.GetTextLeft() + nSpaceBeforeAndMinLabelWidth );
+            if ( nLine == 0 )
             {
-                EditLine& rLine = pPortion->GetLines()[nLine];
-                // nCurWidth = pLine->GetStartPosX();
-                // For Center- or Right- alignment it depends on the paper
-                // width, here not preferred. I general, it is best not leave it
-                // to StartPosX, also the right indents have to be taken into
-                // account!
-                nCurWidth = GetXValue( rLRItem.GetTextLeft() + nSpaceBeforeAndMinLabelWidth );
-                if ( nLine == 0 )
+                long nFI = GetXValue( rLRItem.GetTextFirstLineOfst() );
+                nCurWidth -= nFI;
+                if ( pPortion->GetBulletX() > nCurWidth )
                 {
-                    long nFI = GetXValue( rLRItem.GetTextFirstLineOfst() );
-                    nCurWidth -= nFI;
+                    nCurWidth += nFI;   // LI?
                     if ( pPortion->GetBulletX() > nCurWidth )
-                    {
-                        nCurWidth += nFI;   // LI?
-                        if ( pPortion->GetBulletX() > nCurWidth )
-                            nCurWidth = pPortion->GetBulletX();
-                    }
+                        nCurWidth = pPortion->GetBulletX();
                 }
-                nCurWidth += GetXValue( rLRItem.GetRight() );
-                nCurWidth += CalcLineWidth( pPortion, &rLine, bIgnoreExtraSpace );
-                if ( nCurWidth > nMaxWidth )
-                {
-                    nMaxWidth = nCurWidth;
-                }
+            }
+            nCurWidth += GetXValue( rLRItem.GetRight() );
+            nCurWidth += CalcLineWidth( pPortion, &rLine, bIgnoreExtraSpace );
+            if ( nCurWidth > nMaxWidth )
+            {
+                nMaxWidth = nCurWidth;
             }
         }
     }

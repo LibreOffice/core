@@ -419,6 +419,11 @@ sal_uLong Outliner::GetTextHeight( sal_Int32 nParagraph ) const
     return pEditEngine->GetTextHeight(nParagraph );
 }
 
+tools::Rectangle Outliner::GetParaBounds( sal_Int32 nParagraph ) const
+{
+    return pEditEngine->GetParaBounds(nParagraph );
+}
+
 Point Outliner::GetDocPos( const Point& rPaperPos ) const
 {
     return pEditEngine->GetDocPos( rPaperPos );
