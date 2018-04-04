@@ -1144,9 +1144,9 @@ void SectionPropertyMap::HandleIncreasedAnchoredObjectSpacing(DomainMapper_Impl&
     std::vector<AnchoredObjectInfo>& rAnchoredObjectAnchors = rDM_Impl.m_aAnchoredObjectAnchors;
     for (auto& rAnchor : rAnchoredObjectAnchors)
     {
-        // Ignore the case when there is a single shape only.
+        // Ignore this paragraph when there is a single shape only.
         if (rAnchor.m_aAnchoredObjects.size() < 2)
-            return;
+            continue;
 
         // Analyze the anchored objects of this paragraph, now that we know the
         // page width.
