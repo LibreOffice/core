@@ -57,7 +57,7 @@ double pointToPixel(double fPoint) { return fPoint / 72 * 96; }
 
 /// Does PDF to bitmap conversion using pdfium.
 size_t generatePreview(SvStream& rStream, std::vector<Bitmap>& rBitmaps, sal_uInt64 nPos,
-                       sal_uInt64 nSize, const size_t nFirstPage = 0, int nPages = 1)
+                       sal_uInt64 nSize, const size_t nFirstPage, int nPages)
 {
     FPDF_LIBRARY_CONFIG aConfig;
     aConfig.version = 2;
@@ -192,7 +192,7 @@ bool getCompatibleStream(SvStream& rInStream, SvStream& rOutStream, sal_uInt64 n
     return rOutStream.good();
 }
 #else
-size_t generatePreview(SvStream&, std::vector<Bitmap>&, sal_uInt64, sal_uInt64, size_t = 0, int = 0)
+size_t generatePreview(SvStream&, std::vector<Bitmap>&, sal_uInt64, sal_uInt64, size_t, int)
 {
     return 0;
 }
