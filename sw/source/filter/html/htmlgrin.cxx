@@ -317,6 +317,7 @@ void SwHTMLParser::InsertImage()
     bool bIsMap = false;
     bool bPrcWidth = false;
     bool bPrcHeight = false;
+    OUString sWidthAsString, sHeightAsString;
     SvxMacroItem aMacroItem(RES_FRMMACRO);
 
     ScriptType eDfltScriptType;
@@ -360,18 +361,23 @@ void SwHTMLParser::InsertImage()
             case HtmlOptionId::WIDTH:
                 // for now only store as pixel value!
                 nWidth = rOption.GetNumber();
-                bPrcWidth = (rOption.GetString().indexOf('%') != -1);
+                sWidthAsString = rOption.GetString();
+                bPrcWidth = (sWidthAsString.indexOf('%') != -1);
                 if( bPrcWidth && nWidth>100 )
                     nWidth = 100;
-                bWidthProvided = true;
+                // width|height = "auto" means viewing app decides the size
+                // i.e. proceed as if no particular size was provided
+                bWidthProvided = (sWidthAsString != "auto");
                 break;
             case HtmlOptionId::HEIGHT:
                 // for now only store as pixel value!
                 nHeight = rOption.GetNumber();
-                bPrcHeight = (rOption.GetString().indexOf('%') != -1);
+                sHeightAsString = rOption.GetString();
+                bPrcHeight = (sHeightAsString.indexOf('%') != -1);
                 if( bPrcHeight && nHeight>100 )
                     nHeight = 100;
-                bHeightProvided = true;
+                // the same as above w/ HtmlOptionId::WIDTH
+                bHeightProvided = (sHeightAsString != "auto");
                 break;
             case HtmlOptionId::VSPACE:
                 nVSpace = rOption.GetNumber();
@@ -561,8 +567,18 @@ IMAGE_SETEVENT:
     Size aTwipSz( bPrcWidth ? 0 : nWidth, bPrcHeight ? 0 : nHeight );
     if( (aTwipSz.Width() || aTwipSz.Height()) && Application::GetDefaultDevice() )
     {
-        aTwipSz = Application::GetDefaultDevice()
+        if (bWidthProvided || bHeightProvided || // attributes imply pixel!
+            aGraphic.GetPrefMapMode().GetMapUnit() == MapUnit::MapPixel)
+        {
+            aTwipSz = Application::GetDefaultDevice()
                     ->PixelToLogic( aTwipSz, MapMode( MapUnit::MapTwip ) );
+        }
+        else
+        {   // some bitmaps may have a size in metric units (e.g. PNG); use that
+            assert(aGraphic.GetPrefMapMode().GetMapUnit() < MapUnit::MapPixel);
+            aTwipSz = OutputDevice::LogicToLogic(aGraphic.GetPrefSize(),
+                    aGraphic.GetPrefMapMode(), MapMode(MapUnit::MapTwip));
+        }
     }
 
     // convert CSS1 size to "normal" size
