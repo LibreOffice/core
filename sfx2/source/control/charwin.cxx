@@ -344,9 +344,6 @@ IMPL_LINK(SvxCharViewControl, ContextMenuSelectHdl, Menu*, pMenu, bool)
     case 0:
         maClearClickHdl.Call(this);
         break;
-    case 1:
-        maClearAllClickHdl.Call(this);
-        break;
     default:
         break;
     }
@@ -445,16 +442,6 @@ void SvxCharViewControl::setMouseClickHdl(const Link<SvxCharViewControl*,void> &
     maMouseClickHdl = rLink;
 }
 
-void SvxCharViewControl::setClearClickHdl(const Link<SvxCharViewControl*,void> &rLink)
-{
-    maClearClickHdl = rLink;
-}
-
-void SvxCharViewControl::setClearAllClickHdl(const Link<SvxCharViewControl*,void> &rLink)
-{
-    maClearAllClickHdl = rLink;
-}
-
 void SvxCharViewControl::SetFont( const vcl::Font& rFont )
 {
     long nWinHeight = GetOutputSizePixel().Height();
@@ -489,11 +476,6 @@ void SvxCharViewControl::SetText( const OUString& rText )
 {
     Control::SetText( rText );
     Invalidate();
-}
-
-void SvxCharViewControl::SetHasInsert( bool bInsert )
-{
-    maHasInsert = bInsert;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

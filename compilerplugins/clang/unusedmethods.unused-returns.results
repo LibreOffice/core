@@ -150,6 +150,8 @@ include/oox/helper/binaryoutputstream.hxx:79
     class oox::BinaryOutputStream & oox::BinaryOutputStream::WriteUInt16(unsigned short)
 include/oox/helper/propertyset.hxx:110
     _Bool oox::PropertySet::setProperty(int,class Color)
+include/oox/ole/axbinarywriter.hxx:116
+    _Bool oox::ole::AxBinaryPropertyWriter::ComplexProperty::writeProperty(class oox::ole::AxAlignedOutputStream &)
 include/oox/ole/olehelper.hxx:180
     _Bool oox::ole::MSConvertOCXControls::importControlFromStream(class oox::BinaryInputStream &,class com::sun::star::uno::Reference<class com::sun::star::form::XFormComponent> &,const class rtl::OUString &)
 include/oox/ole/olehelper.hxx:191
@@ -168,6 +170,8 @@ include/svl/macitem.hxx:92
     class SvStream & SvxMacroTableDtor::Write(class SvStream &) const
 include/svl/poolitem.hxx:173
     class SvStream & SfxPoolItem::Store(class SvStream &,unsigned short) const
+include/svx/charmap.hxx:87
+    _Bool SvxShowCharSet::GetFontCharMap(class tools::SvRef<class FontCharMap> &) const
 include/svx/framelink.hxx:195
     class svx::frame::Style & svx::frame::Style::MirrorSelf()
 include/test/sheet/xnamedrange.hxx:22
@@ -202,6 +206,8 @@ include/vcl/textview.hxx:192
     _Bool TextView::SetCursorAtPoint(const class Point &)
 include/vcl/toolbox.hxx:513
     _Bool ToolBox::ChangeHighlightUpDn(_Bool,_Bool)
+include/vcl/weld.hxx:227
+    _Bool weld::ComboBoxText::get_entry_selection_bounds(int &,int &)
 lotuswordpro/inc/lwpsvstream.hxx:76
     class LwpSvStream & LwpSvStream::ReadUInt8(unsigned char &)
 lotuswordpro/inc/lwpsvstream.hxx:77
@@ -256,9 +262,9 @@ sd/source/ui/inc/OutlineViewShell.hxx:114
     class ErrCode sd::OutlineViewShell::ReadRtf(class SvStream &)
 sd/source/ui/remotecontrol/IBluetoothSocket.hxx:37
     int sd::IBluetoothSocket::write(const void *,unsigned int)
-sfx2/source/appl/appserv.cxx:318
+sfx2/source/appl/appserv.cxx:324
     short (anonymous namespace)::LicenseDialog::execute()
-sfx2/source/appl/appserv.cxx:336
+sfx2/source/appl/appserv.cxx:342
     short (anonymous namespace)::SafeModeQueryDialog::execute()
 sw/inc/calc.hxx:112
     class SwSbxValue & SwSbxValue::MakeDouble()
@@ -280,6 +286,8 @@ sw/source/core/inc/laycache.hxx:64
     _Bool SwLayoutCache::CompareLayout(const class SwDoc &) const
 sw/source/filter/ww8/ww8toolbar.hxx:339
     _Bool Tcg::ImportCustomToolBar(class SfxObjectShell &)
+sw/source/ui/frmdlg/cption.cxx:80
+    short SwSequenceOptionDialog::execute()
 sw/source/uibase/inc/fldmgr.hxx:113
     const class com::sun::star::uno::Reference<class com::sun::star::text::XNumberingTypeInfo> & SwFieldMgr::GetNumberingInfo() const
 sw/source/uibase/inc/mailmergewizard.hxx:80
