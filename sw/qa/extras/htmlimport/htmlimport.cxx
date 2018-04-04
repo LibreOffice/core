@@ -25,6 +25,10 @@
 #include <docsh.hxx>
 #include <editsh.hxx>
 #include <ndgrf.hxx>
+#include <ndtxt.hxx>
+#include <txatbase.hxx>
+#include <fmtflcnt.hxx>
+#include <fmtfsize.hxx>
 
 class HtmlImportTest : public SwModelTestBase
 {
@@ -206,6 +210,18 @@ DECLARE_HTMLIMPORT_TEST(testMetaIsoDates, "meta-ISO8601-dates.html")
 
     CPPUNIT_ASSERT_EQUAL(DateTime(Date(7, 5, 2017), tools::Time(12, 34, 3, 921000000)), aCreated);
     CPPUNIT_ASSERT_EQUAL(DateTime(Date(8, 5, 2017), tools::Time(12, 47, 0, 386000000)), aModified);
+}
+
+DECLARE_HTMLIMPORT_TEST(testImageWidthAuto, "image-width-auto.html")
+{
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+    SwTextAttr const*const pAttr(pTextDoc->GetDocShell()->GetDoc()->GetEditShell()->
+        GetCursor()->GetNode().GetTextNode()->GetTextAttrForCharAt(0, RES_TXTATR_FLYCNT));
+    CPPUNIT_ASSERT(pAttr);
+    SwFrameFormat const*const pFmt(pAttr->GetFlyCnt().GetFrameFormat());
+    SwFormatFrameSize const& rSize(pFmt->GetFormatAttr(RES_FRM_SIZE));
+    CPPUNIT_ASSERT_EQUAL(Size(1835, 560), rSize.GetSize());
 }
 
 DECLARE_HTMLIMPORT_TEST(testChangedby, "meta-changedby.html")
