@@ -1019,17 +1019,30 @@ void SvxShape::Notify( SfxBroadcaster&, const SfxHint& rHint ) throw()
 
     if( bClearMe )
     {
-        if( !HasSdrObjectOwnership() ) {
-            if( HasSdrObject() )
+        SdrObject* pSdrObject(GetSdrObject());
+
+        if(!HasSdrObjectOwnership())
+        {
+            if(nullptr != pSdrObject)
             {
-                EndListening(GetSdrObject()->getSdrModelFromSdrObject());
-                GetSdrObject()->setUnoShape( nullptr );
+                EndListening(pSdrObject->getSdrModelFromSdrObject());
+                pSdrObject->setUnoShape(nullptr);
             }
 
-            mpSdrObjectWeakReference.reset( nullptr );
+            mpSdrObjectWeakReference.reset(nullptr);
+
+            // SdrModel *is* going down, try to Free SdrObject even
+            // when !HasSdrObjectOwnership
+            if(nullptr != pSdrObject && !pSdrObject->IsInserted())
+            {
+                SdrObject::Free(pSdrObject);
+            }
         }
-        if ( !mpImpl->mbDisposing )
+
+        if(!mpImpl->mbDisposing)
+        {
             dispose();
+        }
     }
 }
 
