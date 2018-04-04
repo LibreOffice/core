@@ -314,6 +314,7 @@ public:
     void testXDrawPagesSupplier();
     void testTdf116403();
     void testHtmlCopyImages();
+    void testTdf116789();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest);
     CPPUNIT_TEST(testReplaceForward);
@@ -501,6 +502,7 @@ public:
     CPPUNIT_TEST(testXDrawPagesSupplier);
     CPPUNIT_TEST(testTdf116403);
     CPPUNIT_TEST(testHtmlCopyImages);
+    CPPUNIT_TEST(testTdf116789);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -6134,6 +6136,26 @@ void SwUiWriterTest::testHtmlCopyImages()
     // Also make sure that the image is not embedded (e.g. Word doesn't handle
     // embedded images).
     CPPUNIT_ASSERT(aImage.startsWith("file:///"));
+}
+
+void SwUiWriterTest::testTdf116789()
+{
+    createDoc("tdf116789.fodt");
+    uno::Reference<text::XBookmarksSupplier> xBookmarksSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XText> xText1;
+    uno::Reference<text::XText> xText2;
+    {
+        uno::Reference<text::XTextContent> xBookmark(
+            xBookmarksSupplier->getBookmarks()->getByName("Bookmark 1"), uno::UNO_QUERY);
+        xText1 = xBookmark->getAnchor()->getText();
+    }
+    {
+        uno::Reference<text::XTextContent> xBookmark(
+            xBookmarksSupplier->getBookmarks()->getByName("Bookmark 1"), uno::UNO_QUERY);
+        xText2 = xBookmark->getAnchor()->getText();
+    }
+    // This failed, we got two different SwXCell for the same bookmark anchor text.
+    CPPUNIT_ASSERT_EQUAL(xText1, xText2);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest);
