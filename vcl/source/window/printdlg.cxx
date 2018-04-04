@@ -331,7 +331,7 @@ void PrintDialog::PrintPreviewWindow::preparePreviewBitmap()
     const double fPreviewSizeSquare(static_cast<double>(maPreviewBitmap.GetSizePixel().getWidth() * maPreviewBitmap.GetSizePixel().getHeight()));
 
     // test as equal up to 0.1% (0.001)
-    if(fPreviewSizeSquare == 0.0 || fabs((fScaledSizeSquare / fPreviewSizeSquare) - 1.0) < 0.001)
+    if(fPreviewSizeSquare != 0.0 && fabs((fScaledSizeSquare / fPreviewSizeSquare) - 1.0) < 0.001)
     {
         // maximum is reached, avoid bigger scaling
         return;
