@@ -1555,6 +1555,9 @@
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Protect ~Spreadsheet...</value>
         </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
       </node>
       <node oor:name=".uno:ScenarioManager" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
@@ -2022,6 +2025,9 @@
       <node oor:name=".uno:ShareDocument" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">S~hare Spreadsheet...</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
         </prop>
       </node>
       <node oor:name=".uno:ToggleSheetGrid" oor:op="replace">
