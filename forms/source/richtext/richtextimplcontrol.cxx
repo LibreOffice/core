@@ -444,7 +444,7 @@ namespace frm
             // ... is the scroll size for the vertical scrollbar
             m_pVScroll->SetLineSize( nFontHeight );
             // the viewport width, minus one line, is the page scroll size
-            m_pVScroll->SetPageSize( ::std::max( nFontHeight, aViewportPlaygroundLogic.Height() - nFontHeight ) );
+            m_pVScroll->SetPageSize( ::std::max( sal_Int64(nFontHeight), aViewportPlaygroundLogic.Height() - nFontHeight ) );
         }
 
         // the font width
@@ -463,7 +463,7 @@ namespace frm
             // ... is the scroll size for the horizontal scrollbar
             m_pHScroll->SetLineSize( 5 * nFontWidth );
             // the viewport height, minus one character, is the page scroll size
-            m_pHScroll->SetPageSize( ::std::max( nFontWidth, aViewportPlaygroundLogic.Width() - nFontWidth ) );
+            m_pHScroll->SetPageSize( ::std::max( sal_Int64(nFontWidth), aViewportPlaygroundLogic.Width() - nFontWidth ) );
         }
 
         // update range and position of the scrollbars

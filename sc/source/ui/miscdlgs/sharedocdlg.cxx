@@ -59,7 +59,7 @@ public:
             std::max(rBar.GetTextWidth(rBar.GetItemText(2)),
             GetTextWidth(m_sWidestAccessString));
         long nWebSiteWidth = std::max(
-            12 + rBar.GetTextWidth(rBar.GetItemText(1)),
+            sal_Int64(12 + rBar.GetTextWidth(rBar.GetItemText(1))),
             GetSizePixel().Width() - nAccessedWidth);
         long aStaticTabs[]= { 2, 0, 0 };
         aStaticTabs[2] = nWebSiteWidth;
