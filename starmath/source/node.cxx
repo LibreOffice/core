@@ -1471,8 +1471,8 @@ void SmBracebodyNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
     }
 
     // horizontal distance between argument and brackets or separators
-    long  nDist = GetFont().GetFontSize().Height()
-                  * rFormat.GetDistance(DIS_BRACKETSPACE) / 100L;
+    int nDist = GetFont().GetFontSize().Height()
+                  * rFormat.GetDistance(DIS_BRACKETSPACE) / 100;
 
     SmNode *pLeft = GetSubNode(0);
     SmRect::operator = (*pLeft);
