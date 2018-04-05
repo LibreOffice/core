@@ -671,8 +671,7 @@ void SmUnHorNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
 
 namespace {
 
-void lcl_GetHeightVerOffset(const SmRect &rRect,
-                                    long &rHeight, long &rVerOffset)
+void lcl_GetHeightVerOffset(const SmRect &rRect, sal_Int32 &rHeight, sal_Int32 &rVerOffset)
     // calculate height and vertical offset of root sign suitable for 'rRect'
 {
     rVerOffset = (rRect.GetBottom() - rRect.GetAlignB()) / 2;
@@ -721,11 +720,10 @@ void SmRootNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
 
     pBody->Arrange(rDev, rFormat);
 
-    long  nHeight,
-          nVerOffset;
+    sal_Int32 nHeight, nVerOffset;
     lcl_GetHeightVerOffset(*pBody, nHeight, nVerOffset);
     nHeight += rFormat.GetDistance(DIS_ROOT)
-               * GetFont().GetFontSize().Height() / 100L;
+               * GetFont().GetFontSize().Height() / 100;
 
     // font specialist advised to change the width first
     pRootSym->AdaptToY(rDev, nHeight);
@@ -794,8 +792,7 @@ void SmBinHorNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
 
     const SmRect &rOpRect = pOper->GetRect();
 
-    long nDist = (rOpRect.GetWidth() *
-                 rFormat.GetDistance(DIS_HORIZONTAL)) / 100L;
+    sal_Int32 nDist = (rOpRect.GetWidth() * rFormat.GetDistance(DIS_HORIZONTAL)) / 100;
 
     SmRect::operator = (*pLeft);
 
@@ -837,14 +834,14 @@ void SmBinVerNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
     pNum  ->Arrange(rDev, rFormat);
     pDenom->Arrange(rDev, rFormat);
 
-    long  nFontHeight = GetFont().GetFontSize().Height(),
-          nExtLen     = nFontHeight * rFormat.GetDistance(DIS_FRACTION) / 100L,
-          nThick      = nFontHeight * rFormat.GetDistance(DIS_STROKEWIDTH) / 100L,
+    sal_Int32 nFontHeight = GetFont().GetFontSize().Height(),
+          nExtLen     = nFontHeight * rFormat.GetDistance(DIS_FRACTION) / 100,
+          nThick      = nFontHeight * rFormat.GetDistance(DIS_STROKEWIDTH) / 100,
           nWidth      = std::max(pNum->GetItalicWidth(), pDenom->GetItalicWidth()),
           nNumDist    = bIsTextmode ? 0 :
-                            nFontHeight * rFormat.GetDistance(DIS_NUMERATOR)   / 100L,
+                            nFontHeight * rFormat.GetDistance(DIS_NUMERATOR)   / 100,
           nDenomDist  = bIsTextmode ? 0 :
-                            nFontHeight * rFormat.GetDistance(DIS_DENOMINATOR) / 100L;
+                            nFontHeight * rFormat.GetDistance(DIS_DENOMINATOR) / 100;
 
     // font specialist advised to change the width first
     pLine->AdaptToY(rDev, nThick);
