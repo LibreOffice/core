@@ -1966,8 +1966,8 @@ void SmPolyLineNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
     maPoly.SetPoint(aPointA, 0);
     maPoly.SetPoint(aPointB, 1);
 
-    long  nThick       = GetFont().GetFontSize().Height()
-                            * rFormat.GetDistance(DIS_STROKEWIDTH) / 100L;
+    sal_Int32 nThick = GetFont().GetFontSize().Height()
+                            * rFormat.GetDistance(DIS_STROKEWIDTH) / 100;
     mnWidth = nThick + 2 * nBorderwidth;
 
     SmRect::operator = (SmRect(maToSize.Width(), maToSize.Height()));
