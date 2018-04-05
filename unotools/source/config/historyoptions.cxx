@@ -36,6 +36,7 @@
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <comphelper/configurationhelper.hxx>
 #include <comphelper/processfactory.hxx>
+#include <tools/diagnose_ex.h>
 
 using namespace ::std;
 using namespace ::utl;
@@ -112,12 +113,11 @@ SvtHistoryOptions_Impl::SvtHistoryOptions_Impl()
                 ::comphelper::EConfigurationModes::Standard),
             uno::UNO_QUERY);
     }
-    catch(const uno::Exception& ex)
+    catch(const uno::Exception&)
     {
+        DBG_UNHANDLED_EXCEPTION("unotools.config");
         m_xCfg.clear();
         m_xCommonXCU.clear();
-
-        SAL_WARN("unotools.config", "Caught unexpected: " << ex);
     }
 }
 
@@ -146,9 +146,9 @@ sal_uInt32 SvtHistoryOptions_Impl::GetCapacity(EHistoryType eHistory) const
             break;
         }
     }
-    catch (const uno::Exception& ex)
+    catch (const uno::Exception&)
     {
-        SAL_WARN("unotools.config", "Caught unexpected: " << ex);
+        DBG_UNHANDLED_EXCEPTION("unotools.config");
     }
 
     return nSize;
@@ -174,9 +174,9 @@ uno::Reference<container::XNameAccess> SvtHistoryOptions_Impl::GetListAccess(EHi
             break;
         }
     }
-    catch (const uno::Exception& ex)
+    catch (const uno::Exception&)
     {
-        SAL_WARN("unotools.config", "Caught unexpected: " << ex);
+        DBG_UNHANDLED_EXCEPTION("unotools.config");
     }
 
     return xListAccess;
@@ -213,9 +213,9 @@ void SvtHistoryOptions_Impl::impl_truncateList(EHistoryType eHistory, sal_uInt32
             ::comphelper::ConfigurationHelper::flush(m_xCfg);
         }
     }
-    catch(const uno::Exception& ex)
+    catch(const uno::Exception&)
     {
-        SAL_WARN("unotools.config", "Caught unexpected: " << ex);
+        DBG_UNHANDLED_EXCEPTION("unotools.config");
     }
 }
 
@@ -246,9 +246,9 @@ void SvtHistoryOptions_Impl::Clear( EHistoryType eHistory )
 
         ::comphelper::ConfigurationHelper::flush(m_xCfg);
     }
-    catch(const uno::Exception& ex)
+    catch(const uno::Exception&)
     {
-        SAL_WARN("unotools.config", "Caught unexpected: " << ex);
+        DBG_UNHANDLED_EXCEPTION("unotools.config");
     }
 }
 
@@ -274,9 +274,9 @@ Sequence< Sequence<PropertyValue> > SvtHistoryOptions_Impl::GetList(EHistoryType
         xListAccess->getByName(s_sItemList)  >>= xItemList;
         xListAccess->getByName(s_sOrderList) >>= xOrderList;
     }
-    catch(const uno::Exception& ex)
+    catch(const uno::Exception&)
     {
-        SAL_WARN("unotools.config", "Caught unexpected: " << ex);
+        DBG_UNHANDLED_EXCEPTION("unotools.config");
     }
 
     const sal_Int32 nLength = xOrderList->getElementNames().getLength();
@@ -301,7 +301,7 @@ Sequence< Sequence<PropertyValue> > SvtHistoryOptions_Impl::GetList(EHistoryType
             seqProperties[s_nOffsetThumbnail].Value = xSet->getPropertyValue(s_sThumbnail);
             aRet[nCount++] = seqProperties;
         }
-        catch(const uno::Exception& ex)
+        catch(const uno::Exception&)
         {
             // <https://bugs.libreoffice.org/show_bug.cgi?id=46074>
             // "FILEOPEN: No Recent Documents..." discusses a problem
@@ -310,7 +310,7 @@ Sequence< Sequence<PropertyValue> > SvtHistoryOptions_Impl::GetList(EHistoryType
             // ignore such corrupted individual items here, so that at
             // least newly added items are successfully reported back
             // from this function:
-            SAL_WARN("unotools.config", "Caught unexpected: " << ex);
+            DBG_UNHANDLED_EXCEPTION("unotools.config");
         }
     }
     assert(nCount <= nLength);
@@ -442,9 +442,9 @@ void SvtHistoryOptions_Impl::AppendItem(EHistoryType eHistory,
             ::comphelper::ConfigurationHelper::flush(m_xCfg);
         }
     }
-    catch(const uno::Exception& ex)
+    catch(const uno::Exception&)
     {
-        SAL_WARN("unotools.config", "Caught unexpected: " << ex);
+        DBG_UNHANDLED_EXCEPTION("unotools.config");
     }
 }
 
@@ -506,9 +506,9 @@ void SvtHistoryOptions_Impl::DeleteItem(EHistoryType eHistory, const OUString& s
 
         ::comphelper::ConfigurationHelper::flush(m_xCfg);
     }
-    catch (const uno::Exception& ex)
+    catch (const uno::Exception&)
     {
-        SAL_WARN("unotools.config", "Caught unexpected: " << ex);
+        DBG_UNHANDLED_EXCEPTION("unotools.config");
     }
 }
 

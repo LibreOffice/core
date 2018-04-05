@@ -27,6 +27,7 @@
 #include <com/sun/star/chart2/XTitled.hpp>
 #include <com/sun/star/chart2/XTitle.hpp>
 #include <com/sun/star/chart2/XDataSeries.hpp>
+#include <tools/diagnose_ex.h>
 
 #include <vector>
 
@@ -83,9 +84,9 @@ void ReferenceSizeProvider::setValuesAtTitle(
 
         setValuesAtPropertySet( xTitleProp, /* bAdaptFontSizes = */ false );
     }
-    catch (const uno::Exception& ex)
+    catch (const uno::Exception&)
     {
-        SAL_WARN("chart2", "Exception caught. " << ex );
+        DBG_UNHANDLED_EXCEPTION("chart2");
     }
 }
 
@@ -113,9 +114,9 @@ void ReferenceSizeProvider::setValuesAtAllDataSeries()
                             elem->getDataPointByIndex( aPointIndexes[i] ) );
                 }
             }
-            catch (const uno::Exception& ex)
+            catch (const uno::Exception&)
             {
-                SAL_WARN("chart2", "Exception caught. " << ex );
+                DBG_UNHANDLED_EXCEPTION("chart2");
             }
 
             //it is important to correct the datapoint properties first as they do reference the series properties
@@ -156,9 +157,9 @@ void ReferenceSizeProvider::setValuesAtPropertySet(
             }
         }
     }
-    catch (const uno::Exception& ex)
+    catch (const uno::Exception&)
     {
-        SAL_WARN("chart2", "Exception caught. " << ex );
+        DBG_UNHANDLED_EXCEPTION("chart2");
     }
 }
 
@@ -291,9 +292,9 @@ ReferenceSizeProvider::AutoResizeState ReferenceSizeProvider::getAutoResizeState
                     }
                 }
             }
-            catch (const uno::Exception& ex)
+            catch (const uno::Exception&)
             {
-                SAL_WARN("chart2", "Exception caught. " << ex );
+                DBG_UNHANDLED_EXCEPTION("chart2");
             }
         }
     }

@@ -31,6 +31,7 @@
 
 #include <vcl/svapp.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <tools/diagnose_ex.h>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
@@ -104,9 +105,9 @@ void AccessibleChartElement::InitTextEdit()
             aArgs[2] <<= Reference< awt::XWindow >( GetInfo().m_xWindow );
             xInit->initialize( aArgs );
         }
-        catch( const uno::Exception & ex )
+        catch( const uno::Exception & )
         {
-            SAL_WARN("chart2", "Exception caught. " << ex );
+            DBG_UNHANDLED_EXCEPTION("chart2");
         }
 }
 

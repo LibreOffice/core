@@ -22,6 +22,7 @@
 #include <ThreeDHelper.hxx>
 #include <rtl/math.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <tools/diagnose_ex.h>
 
 using namespace ::com::sun::star;
 
@@ -54,9 +55,9 @@ lcl_ModelProperties lcl_getPropertiesFromModel( uno::Reference< frame::XModel > 
         ::chart::ThreeDHelper::getRoundedEdgesAndObjectLines( xDiagram, aProps.m_nRoundedEdges, aProps.m_nObjectLines );
         aProps.m_eScheme = ::chart::ThreeDHelper::detectScheme( xDiagram );
     }
-    catch( const uno::Exception & ex )
+    catch( const uno::Exception & )
     {
-        SAL_WARN("chart2", "Exception caught. " << ex );
+        DBG_UNHANDLED_EXCEPTION("chart2");
     }
     return aProps;
 }
@@ -69,9 +70,9 @@ void lcl_setShadeModeAtModel( uno::Reference< frame::XModel > const & xModel, dr
             ::chart::ChartModelHelper::findDiagram( xModel ), uno::UNO_QUERY_THROW );
         xDiaProp->setPropertyValue( "D3DSceneShadeMode" , uno::Any( aShadeMode ));
     }
-    catch( const uno::Exception & ex )
+    catch( const uno::Exception & )
     {
-        SAL_WARN("chart2", "Exception caught. " << ex );
+        DBG_UNHANDLED_EXCEPTION("chart2");
     }
 }
 

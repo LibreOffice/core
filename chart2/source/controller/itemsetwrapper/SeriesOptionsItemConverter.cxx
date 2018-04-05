@@ -36,6 +36,7 @@
 #include <svl/intitem.hxx>
 #include <svl/ilstitem.hxx>
 #include <rtl/math.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <functional>
 #include <algorithm>
@@ -155,9 +156,9 @@ SeriesOptionsItemConverter::SeriesOptionsItemConverter(
             }
         }
     }
-    catch( const uno::Exception &ex )
+    catch( const uno::Exception & )
     {
-        SAL_WARN("chart2", "Exception caught. " << ex );
+        DBG_UNHANDLED_EXCEPTION("chart2");
     }
 }
 

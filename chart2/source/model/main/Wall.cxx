@@ -31,6 +31,7 @@
 #include <com/sun/star/drawing/LineJoint.hpp>
 #include <rtl/uuid.h>
 #include <cppuhelper/queryinterface.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <vector>
 #include <algorithm>
@@ -163,9 +164,9 @@ void SAL_CALL Wall::addModifyListener( const uno::Reference< util::XModifyListen
         uno::Reference< util::XModifyBroadcaster > xBroadcaster( m_xModifyEventForwarder, uno::UNO_QUERY_THROW );
         xBroadcaster->addModifyListener( aListener );
     }
-    catch( const uno::Exception & ex )
+    catch( const uno::Exception & )
     {
-        SAL_WARN("chart2", "Exception caught. " << ex );
+        DBG_UNHANDLED_EXCEPTION("chart2");
     }
 }
 
@@ -176,9 +177,9 @@ void SAL_CALL Wall::removeModifyListener( const uno::Reference< util::XModifyLis
         uno::Reference< util::XModifyBroadcaster > xBroadcaster( m_xModifyEventForwarder, uno::UNO_QUERY_THROW );
         xBroadcaster->removeModifyListener( aListener );
     }
-    catch( const uno::Exception & ex )
+    catch( const uno::Exception & )
     {
-        SAL_WARN("chart2", "Exception caught. " << ex );
+        DBG_UNHANDLED_EXCEPTION("chart2");
     }
 }
 

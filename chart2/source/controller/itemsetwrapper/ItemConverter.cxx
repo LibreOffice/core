@@ -25,6 +25,7 @@
 #include <svl/itemiter.hxx>
 #include <svl/whiter.hxx>
 #include <svx/svxids.hrc>
+#include <tools/diagnose_ex.h>
 
 using namespace ::com::sun::star;
 
@@ -119,9 +120,9 @@ void ItemConverter::FillItemSet( SfxItemSet & rOutItemSet ) const
                         delete pItem;
                         SAL_WARN( "chart2", ex << " - unknown Property: " << aProperty.first);
                     }
-                    catch( const uno::Exception &ex )
+                    catch( const uno::Exception & )
                     {
-                        SAL_WARN("chart2", "Exception caught. " << ex );
+                        DBG_UNHANDLED_EXCEPTION("chart2");
                     }
                 }
             }
@@ -131,9 +132,9 @@ void ItemConverter::FillItemSet( SfxItemSet & rOutItemSet ) const
                 {
                     FillSpecialItem( nWhich, rOutItemSet );
                 }
-                catch( const uno::Exception &ex )
+                catch( const uno::Exception & )
                 {
-                    SAL_WARN("chart2", "Exception caught. " << ex );
+                    DBG_UNHANDLED_EXCEPTION("chart2");
                 }
             }
         }

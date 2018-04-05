@@ -31,6 +31,7 @@
 #include <svtools/miscopt.hxx>
 
 #include <vcl/layout.hxx>
+#include <tools/diagnose_ex.h>
 
 namespace chart
 {
@@ -827,9 +828,9 @@ void ChartTypeTabPage::stateChanged( ChangingResource* /*pResource*/ )
         uno::Reference<beans::XPropertySet> xPropSet(xDiagram, uno::UNO_QUERY_THROW);
         xPropSet->getPropertyValue(CHART_UNONAME_SORT_BY_XVALUES) >>= aParameter.bSortByXValues;
     }
-    catch ( const uno::Exception& ex )
+    catch ( const uno::Exception& )
     {
-        SAL_WARN("chart2", "Exception caught. " << ex);
+        DBG_UNHANDLED_EXCEPTION("chart2");
     }
     //the controls have to be enabled/disabled accordingly
     fillAllControls( aParameter );
@@ -891,9 +892,9 @@ void ChartTypeTabPage::selectMainType()
             uno::Reference<beans::XPropertySet> xPropSet(xDiagram, uno::UNO_QUERY_THROW);
             xPropSet->getPropertyValue(CHART_UNONAME_SORT_BY_XVALUES) >>= aParameter.bSortByXValues;
         }
-        catch ( const uno::Exception& ex )
+        catch ( const uno::Exception& )
         {
-            SAL_WARN("chart2", "Exception caught. " << ex);
+            DBG_UNHANDLED_EXCEPTION("chart2");
         }
 
         fillAllControls( aParameter );
@@ -975,9 +976,9 @@ void ChartTypeTabPage::initializePage()
                 uno::Reference<beans::XPropertySet> xPropSet(xDiagram, uno::UNO_QUERY_THROW);
                 xPropSet->getPropertyValue(CHART_UNONAME_SORT_BY_XVALUES) >>= aParameter.bSortByXValues;
             }
-            catch (const uno::Exception& ex)
+            catch (const uno::Exception&)
             {
-                SAL_WARN("chart2", "Exception caught. " << ex);
+                DBG_UNHANDLED_EXCEPTION("chart2");
             }
 
             fillAllControls( aParameter );

@@ -42,6 +42,7 @@
 #include <unotools/charclass.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/sequenceashashmap.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <vector>
 #include <algorithm>
@@ -393,9 +394,9 @@ InternalDataProvider::InternalDataProvider(
                 ftor( rxScreen );
         }
     }
-    catch( const uno::Exception & ex )
+    catch( const uno::Exception & )
     {
-        SAL_WARN("chart2", "Exception caught. " << ex );
+        DBG_UNHANDLED_EXCEPTION("chart2");
     }
 }
 

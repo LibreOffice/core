@@ -31,6 +31,7 @@
 #include <com/sun/star/container/NoSuchElementException.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <cppuhelper/supportsservice.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <algorithm>
 
@@ -211,9 +212,9 @@ DataSeries::~DataSeries()
             && xPropertySet.is())
             ModifyListenerHelper::removeListener( xPropertySet, m_xModifyEventForwarder );
     }
-    catch( const uno::Exception & ex )
+    catch( const uno::Exception & )
     {
-        SAL_WARN("chart2", "Exception caught. " << ex );
+        DBG_UNHANDLED_EXCEPTION("chart2");
     }
 }
 
@@ -481,9 +482,9 @@ void SAL_CALL DataSeries::addModifyListener( const Reference< util::XModifyListe
         Reference< util::XModifyBroadcaster > xBroadcaster( m_xModifyEventForwarder, uno::UNO_QUERY_THROW );
         xBroadcaster->addModifyListener( aListener );
     }
-    catch( const uno::Exception & ex )
+    catch( const uno::Exception & )
     {
-        SAL_WARN("chart2", "Exception caught. " << ex );
+        DBG_UNHANDLED_EXCEPTION("chart2");
     }
 }
 
@@ -494,9 +495,9 @@ void SAL_CALL DataSeries::removeModifyListener( const Reference< util::XModifyLi
         Reference< util::XModifyBroadcaster > xBroadcaster( m_xModifyEventForwarder, uno::UNO_QUERY_THROW );
         xBroadcaster->removeModifyListener( aListener );
     }
-    catch( const uno::Exception & ex )
+    catch( const uno::Exception & )
     {
-        SAL_WARN("chart2", "Exception caught. " << ex );
+        DBG_UNHANDLED_EXCEPTION("chart2");
     }
 }
 

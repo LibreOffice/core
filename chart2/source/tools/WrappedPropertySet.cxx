@@ -20,6 +20,7 @@
 #include <WrappedPropertySet.hxx>
 
 #include <tools/solar.h>
+#include <tools/diagnose_ex.h>
 
 namespace chart
 {
@@ -234,9 +235,9 @@ void SAL_CALL WrappedPropertySet::setPropertyValues( const Sequence< OUString >&
         {
             setPropertyValue( aPropertyName, rValueSeq[nN] );
         }
-        catch( const beans::UnknownPropertyException& ex )
+        catch( const beans::UnknownPropertyException& )
         {
-            SAL_WARN("chart2", "Exception caught. " << ex );
+            DBG_UNHANDLED_EXCEPTION("chart2");
             bUnknownProperty = true;
         }
     }
@@ -258,13 +259,13 @@ Sequence< Any > SAL_CALL WrappedPropertySet::getPropertyValues( const Sequence< 
                 OUString aPropertyName( rNameSeq[nN] );
                 aRetSeq[nN] = getPropertyValue( aPropertyName );
             }
-            catch( const beans::UnknownPropertyException& ex )
+            catch( const beans::UnknownPropertyException& )
             {
-                SAL_WARN("chart2", "Exception caught. " << ex );
+                DBG_UNHANDLED_EXCEPTION("chart2");
             }
-            catch( const lang::WrappedTargetException& ex )
+            catch( const lang::WrappedTargetException& )
             {
-                SAL_WARN("chart2", "Exception caught. " << ex );
+                DBG_UNHANDLED_EXCEPTION("chart2");
             }
         }
     }

@@ -28,6 +28,7 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <rtl/math.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <tools/diagnose_ex.h>
 
 using namespace ::com::sun::star;
 
@@ -252,9 +253,9 @@ void SAL_CALL RegressionCurveModel::addModifyListener( const uno::Reference< uti
         uno::Reference< util::XModifyBroadcaster > xBroadcaster( m_xModifyEventForwarder, uno::UNO_QUERY_THROW );
         xBroadcaster->addModifyListener( aListener );
     }
-    catch( const uno::Exception & ex )
+    catch( const uno::Exception & )
     {
-        SAL_WARN("chart2", "Exception caught. " << ex );
+        DBG_UNHANDLED_EXCEPTION("chart2");
     }
 }
 
@@ -265,9 +266,9 @@ void SAL_CALL RegressionCurveModel::removeModifyListener( const uno::Reference< 
         uno::Reference< util::XModifyBroadcaster > xBroadcaster( m_xModifyEventForwarder, uno::UNO_QUERY_THROW );
         xBroadcaster->removeModifyListener( aListener );
     }
-    catch( const uno::Exception & ex )
+    catch( const uno::Exception & )
     {
-        SAL_WARN("chart2", "Exception caught. " << ex );
+        DBG_UNHANDLED_EXCEPTION("chart2");
     }
 }
 
