@@ -680,9 +680,6 @@ public:
                                 const int* pCount );
 
     SAL_DLLPRIVATE bool     ImplMakeGreyscales( sal_uInt16 nGreyscales );
-    SAL_DLLPRIVATE bool     ImplConvertUp( sal_uInt16 nBitCount, Color const * pExtColor = nullptr );
-    SAL_DLLPRIVATE bool     ImplConvertDown( sal_uInt16 nBitCount, Color const * pExtColor = nullptr );
-    SAL_DLLPRIVATE bool     ImplConvertGhosted();
     SAL_DLLPRIVATE bool     ImplDitherMatrix();
     SAL_DLLPRIVATE bool     ImplDitherFloyd();
     SAL_DLLPRIVATE bool     ImplDitherFloyd16();
@@ -727,10 +724,15 @@ public:
     typedef vcl::ScopedBitmapAccess<BitmapInfoAccess, Bitmap, &Bitmap::AcquireInfoAccess> ScopedInfoAccess;
 
 private:
+    SAL_DLLPRIVATE bool ImplConvertUp(sal_uInt16 nBitCount, Color const* pExtColor = nullptr);
+    SAL_DLLPRIVATE bool ImplConvertDown(sal_uInt16 nBitCount, Color const* pExtColor = nullptr);
 
+    SAL_DLLPRIVATE bool ImplConvertGhosted();
+
+private:
     std::shared_ptr<ImpBitmap> mxImpBmp;
-    MapMode                 maPrefMapMode;
-    Size                    maPrefSize;
+    MapMode maPrefMapMode;
+    Size maPrefSize;
 
 };
 
