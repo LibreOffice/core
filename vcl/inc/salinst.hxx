@@ -34,12 +34,20 @@
 #include <com/sun/star/ui/dialogs/XFilePicker2.hpp>
 #include <com/sun/star/ui/dialogs/XFolderPicker2.hpp>
 
+namespace com {
+namespace sun {
+namespace star {
+namespace awt {
+    class XWindow;
+}
+} } }
 namespace comphelper { class SolarMutex; }
 namespace vcl { class Window; }
 namespace weld {
     class Builder;
     class MessageDialog;
     class Widget;
+    class Window;
 }
 struct SystemParentData;
 struct SalPrinterQueueInfo;
@@ -157,6 +165,7 @@ public:
     virtual weld::Builder* CreateBuilder(weld::Widget* pParent, const OUString& rUIRoot, const OUString& rUIFile);
     virtual weld::MessageDialog* CreateMessageDialog(weld::Widget* pParent, VclMessageType eMessageType,
                                                      VclButtonsType eButtonType, const OUString& rPrimaryMessage);
+    virtual weld::Window* GetFrameWeld(const css::uno::Reference<css::awt::XWindow>& rWindow);
 
     // methods for XDisplayConnection
 

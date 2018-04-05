@@ -1612,7 +1612,7 @@ public:
     virtual css::uno::Reference<css::awt::XWindow> GetXWindow() override
     {
         if (!m_xWindow.is())
-            m_xWindow.set(new SalGtkXWindow(m_pWidget));
+            m_xWindow.set(new SalGtkXWindow(this, m_pWidget));
         return css::uno::Reference<css::awt::XWindow>(m_xWindow.get());
     }
 
@@ -4039,6 +4039,13 @@ weld::MessageDialog* GtkInstance::CreateMessageDialog(weld::Widget* pParent, Vcl
                                                           VclToGtk(eMessageType), VclToGtk(eButtonsType), "%s",
                                                           OUStringToOString(rPrimaryMessage, RTL_TEXTENCODING_UTF8).getStr()));
     return new GtkInstanceMessageDialog(pMessageDialog, true);
+}
+
+weld::Window* GtkInstance::GetFrameWeld(const css::uno::Reference<css::awt::XWindow>& rWindow)
+{
+    if (SalGtkXWindow* pGtkXWindow = dynamic_cast<SalGtkXWindow*>(rWindow.get()))
+        return pGtkXWindow->getFrameWeld();
+    return nullptr;
 }
 
 weld::Window* GtkSalFrame::GetFrameWeld() const

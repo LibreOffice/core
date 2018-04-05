@@ -229,6 +229,7 @@ public:
     virtual OpenGLContext* CreateOpenGLContext() override;
     virtual weld::Builder* CreateBuilder(weld::Widget* pParent, const OUString& rUIRoot, const OUString& rUIFile) override;
     virtual weld::MessageDialog* CreateMessageDialog(weld::Widget* pParent, VclMessageType eMessageType, VclButtonsType eButtonType, const OUString &rPrimaryMessage) override;
+    virtual weld::Window* GetFrameWeld(const css::uno::Reference<css::awt::XWindow>& rWindow) override;
 #endif
 
     virtual const cairo_font_options_t* GetCairoFontOptions() override;
@@ -257,23 +258,31 @@ class SalGtkXWindow : public SalGtkXWindow_Base
 {
 private:
     osl::Mutex m_aHelperMtx;
+    weld::Window* m_pWeldWidget;
     GtkWidget* m_pWidget;
 public:
 
-    SalGtkXWindow(GtkWidget* pWidget)
+    SalGtkXWindow(weld::Window* pWeldWidget, GtkWidget* pWidget)
         : SalGtkXWindow_Base(m_aHelperMtx)
+        , m_pWeldWidget(pWeldWidget)
         , m_pWidget(pWidget)
     {
     }
 
     void clear()
     {
+        m_pWeldWidget = nullptr;
         m_pWidget = nullptr;
     }
 
-    GtkWidget * getWidget() const
+    GtkWidget* getWidget() const
     {
         return m_pWidget;
+    }
+
+    weld::Window* getFrameWeld() const
+    {
+        return m_pWeldWidget;
     }
 
     // css::awt::XWindow
