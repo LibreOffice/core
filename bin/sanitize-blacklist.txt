@@ -6,6 +6,7 @@ src:*/scaddins/source/analysis/financial.cxx
 [signed-integer-overflow]
 src:*/boost/boost/rational.hpp
 src:*/include/tools/gen.hxx
+src:*/tools/source/generic/gen.cxx
 [vptr]
 fun:_ZN4cppu14throwExceptionERKN3com3sun4star3uno3AnyE
 src:*/include/com/sun/star/uno/Reference.hxx
