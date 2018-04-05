@@ -2282,31 +2282,31 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     bool bDone = false;
                     ScRangeListRef aRangesRef;
                     pData->GetMultiArea(aRangesRef);
-                    ScRangeList aRanges = *aRangesRef;
-                    size_t nRangeSize = aRanges.size();
+                    const ScRangeList aRanges = *aRangesRef;
 
                     OUString aUndo = ScGlobal::GetRscString( bShowNote ? STR_UNDO_SHOWNOTE : STR_UNDO_HIDENOTE );
                     pData->GetDocShell()->GetUndoManager()->EnterListAction( aUndo, aUndo );
 
-                    for ( size_t i = 0; i < nRangeSize; ++i )
+                    for (auto const& rTab : rMark.GetSelectedTabs())
                     {
-                        const ScRange * pRange = aRanges[i];
-                        const SCROW nRow0 = pRange->aStart.Row();
-                        const SCROW nRow1 = pRange->aEnd.Row();
-                        const SCCOL nCol0 = pRange->aStart.Col();
-                        const SCCOL nCol1 = pRange->aEnd.Col();
-                        const SCTAB nRangeTab = pRange->aStart.Tab();
-                        // Check by each cell
-                        for ( SCROW nRow = nRow0; nRow <= nRow1; ++nRow )
+                        // get notes
+                        std::vector<sc::NoteEntry> aNotes;
+                        pDoc->GetAllNoteEntries(rTab, aNotes);
+
+                        for (const sc::NoteEntry& rNote : aNotes)
                         {
-                            for ( SCCOL nCol = nCol0; nCol <= nCol1; ++nCol )
+                            // check if note is in our selection range
+                            const ScAddress& rAdr = rNote.maPos;
+                            const ScRange* rRange = aRanges.Find(rAdr);
+                            if (! rRange)
+                                continue;
+
+                            // check if cell is editable
+                            const SCTAB nRangeTab = rRange->aStart.Tab();
+                            if (pDoc->IsBlockEditable( nRangeTab, rAdr.Col(), rAdr.Row(), rAdr.Col(), rAdr.Row() ))
                             {
-                                if ( pDoc->HasNote(nCol, nRow, nRangeTab) && pDoc->IsBlockEditable( nRangeTab, nCol,nRow, nCol,nRow ) )
-                                {
-                                    ScAddress aPos( nCol, nRow, nRangeTab );
-                                    pData->GetDocShell()->GetDocFunc().ShowNote( aPos, bShowNote );
-                                    bDone = true;
-                                }
+                                pData->GetDocShell()->GetDocFunc().ShowNote( rAdr, bShowNote );
+                                bDone = true;
                             }
                         }
                     }
