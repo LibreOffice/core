@@ -835,11 +835,6 @@ bool Bitmap::HasFastScale()
 
 void Bitmap::AdaptBitCount(Bitmap& rNew) const
 {
-    ImplAdaptBitCount(rNew);
-}
-
-void Bitmap::ImplAdaptBitCount(Bitmap& rNew) const
-{
     // aNew is the result of some operation; adapt it's BitCount to the original (this)
     if(GetBitCount() != rNew.GetBitCount())
     {
@@ -1130,7 +1125,7 @@ bool Bitmap::ImplScaleInterpolate( const double& rScaleX, const double& rScaleY 
 
                 if( bRet )
                 {
-                    aOriginal.ImplAdaptBitCount(aNewBmp);
+                    aOriginal.AdaptBitCount(aNewBmp);
                     *this = aNewBmp;
                 }
             }

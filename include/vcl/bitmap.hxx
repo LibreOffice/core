@@ -474,7 +474,7 @@ public:
 
     // Adapt the BitCount of rNew to BitCount of total, including grey or color palette
     // Can be used to create alpha/mask bitmaps after their processing in 24bit
-    void                    AdaptBitCount(Bitmap& rNew) const;
+    void AdaptBitCount(Bitmap& rNew) const;
 
     /** Rotate bitmap by the specified angle
 
@@ -668,7 +668,6 @@ public:
     SAL_DLLPRIVATE void     ImplSetImpBitmap( const std::shared_ptr<ImpBitmap>& xImpBmp );
     SAL_DLLPRIVATE void     ImplAssignWithSize( const Bitmap& rBitmap );
 
-    SAL_DLLPRIVATE void     ImplAdaptBitCount(Bitmap& rNew) const;
     SAL_DLLPRIVATE bool     ImplScaleFast( const double& rScaleX, const double& rScaleY );
     SAL_DLLPRIVATE bool     ImplScaleInterpolate( const double& rScaleX, const double& rScaleY );
 

@@ -363,7 +363,7 @@ bool ImplScaleConvolution(Bitmap& rBitmap, const double& rScaleX, const double& 
 
     if(bResult)
     {
-        rBitmap.ImplAdaptBitCount(aResult);
+        rBitmap.AdaptBitCount(aResult);
         rBitmap = aResult;
     }
 
