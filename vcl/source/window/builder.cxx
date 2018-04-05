@@ -1223,18 +1223,23 @@ void VclBuilder::cleanupWidgetOwnScrolling(vcl::Window *pScrollParent, vcl::Wind
 }
 
 #ifndef DISABLE_DYNLOADING
+
 extern "C" { static void thisModule() {} }
-#endif
 
 // We store these forever, closing modules is non-ideal from a performance
 // perspective, code pages will be freed up by the OS anyway if unused for
 // a while in many cases, and this helps us pre-init.
-typedef std::map<OUString, std::unique_ptr<osl::Module>> ModuleMap;
+typedef std::map<OUString, std::shared_ptr<osl::Module>> ModuleMap;
 static ModuleMap g_aModuleMap;
-static osl::Module g_aMergedLib;
+
+#if ENABLE_MERGELIBS
+static std::shared_ptr<osl::Module> g_pMergedLib = std::make_shared<osl::Module>();
+#endif
 
 #ifndef SAL_DLLPREFIX
 #  define SAL_DLLPREFIX ""
+#endif
+
 #endif
 
 void VclBuilder::preload()
@@ -1242,8 +1247,8 @@ void VclBuilder::preload()
 #ifndef DISABLE_DYNLOADING
 
 #if ENABLE_MERGELIBS
-    g_aMergedLib.loadRelative(&thisModule, SVLIBRARY("merged"));
-#endif
+    g_pMergedLib->loadRelative(&thisModule, SVLIBRARY("merged"));
+#else
 // find -name '*ui*' | xargs grep 'class=".*lo-' |
 //     sed 's/.*class="//' | sed 's/-.*$//' | sort | uniq
     static const char *aWidgetLibs[] = {
@@ -1266,6 +1271,7 @@ void VclBuilder::preload()
         else
             delete pModule;
     }
+#endif // ENABLE_MERGELIBS
 #endif // DISABLE_DYNLOADING
 }
 
@@ -1768,6 +1774,7 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
         {
             OUString sFunction(OStringToOUString(OString("make") + name.copy(nDelim+1), RTL_TEXTENCODING_UTF8));
 
+            customMakeWidget pFunction = nullptr;
 #ifndef DISABLE_DYNLOADING
             OUStringBuffer sModuleBuf;
             sModuleBuf.append(SAL_DLLPREFIX);
@@ -1778,21 +1785,26 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
             ModuleMap::iterator aI = g_aModuleMap.find(sModule);
             if (aI == g_aModuleMap.end())
             {
-                osl::Module* pModule = new osl::Module;
-                bool ok = false;
+                std::shared_ptr<osl::Module> pModule;
 #if ENABLE_MERGELIBS
-                if (!g_aMergedLib.is())
-                    g_aMergedLib.loadRelative(&thisModule, SVLIBRARY("merged"));
-                ok = g_aMergedLib.getFunctionSymbol(sFunction);
+                if (!g_pMergedLib->is())
+                    g_pMergedLib->loadRelative(&thisModule, SVLIBRARY("merged"));
+                if ((pFunction = reinterpret_cast<customMakeWidget>(g_pMergedLib->getFunctionSymbol(sFunction))))
+                    pModule = g_pMergedLib;
 #endif
-                if (!ok)
-                    ok = pModule->loadRelative(&thisModule, sModule);
-                assert(ok && "bad module name in .ui");
-                aI = g_aModuleMap.insert(std::make_pair(sModule, std::unique_ptr<osl::Module>(pModule))).first;
+                if (!pFunction)
+                {
+                    pModule.reset(new osl::Module);
+                    bool ok = pModule->loadRelative(&thisModule, sModule);
+                    assert(ok && "bad module name in .ui");
+                    pFunction = reinterpret_cast<customMakeWidget>(pModule->getFunctionSymbol(sFunction));
+                }
+                g_aModuleMap.insert(std::make_pair(sModule, pModule));
             }
-            customMakeWidget pFunction = reinterpret_cast<customMakeWidget>(aI->second->getFunctionSymbol(sFunction));
+            else
+                pFunction = reinterpret_cast<customMakeWidget>(aI->second->getFunctionSymbol(sFunction));
 #else
-            customMakeWidget pFunction = reinterpret_cast<customMakeWidget>(osl_getFunctionSymbol((oslModule) RTLD_DEFAULT, sFunction.pData));
+            pFunction = reinterpret_cast<customMakeWidget>(osl_getFunctionSymbol((oslModule) RTLD_DEFAULT, sFunction.pData));
 #endif
             if (pFunction)
             {
