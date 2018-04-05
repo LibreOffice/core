@@ -1784,7 +1784,7 @@ public:
     virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override
     {
         mrRenderer.SetSizePixel(GetSizePixel());
-        fprintf(stderr, "DemoWin::Paint(%" SAL_PRIdINT32 ",%" SAL_PRIdINT32 ",%" SAL_PRIdINT32 ",%" SAL_PRIdINT32 ")\n", rRect.getX(), rRect.getY(), rRect.getWidth(), rRect.getHeight());
+        fprintf(stderr, "DemoWin::Paint(%" SAL_PRIdINT64 ",%" SAL_PRIdINT64 ",%" SAL_PRIdINT64 ",%" SAL_PRIdINT64 ")\n", rRect.getX(), rRect.getY(), rRect.getWidth(), rRect.getHeight());
         if (mrRenderer.getIterCount() == 0)
             mrRenderer.drawToDevice(rRenderContext, GetSizePixel(), false);
         else

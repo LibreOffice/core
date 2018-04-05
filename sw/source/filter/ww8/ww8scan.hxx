@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SW_SOURCE_FILTER_WW8_WW8SCAN_HXX
 #define INCLUDED_SW_SOURCE_FILTER_WW8_WW8SCAN_HXX
 
-#ifndef SAL_MAX_INT32
+#ifndef LONG_MAX
 #include <limits.h>
 #endif
 #include <algorithm>

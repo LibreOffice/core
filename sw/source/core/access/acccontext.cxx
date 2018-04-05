@@ -1382,7 +1382,7 @@ bool SwAccessibleContext::Select( SwPaM *pPaM, SdrObject *pObj,
         if( pFEShell && (pFEShell->IsFrameSelected() ||
                          pFEShell->IsObjSelected()) )
         {
-            Point aPt( RECT_MIN, RECT_MIN );
+            Point aPt( SAL_MIN_INT64, SAL_MIN_INT64 );
             pFEShell->SelectObj( aPt );
             bCallShowCursor = true;
         }
