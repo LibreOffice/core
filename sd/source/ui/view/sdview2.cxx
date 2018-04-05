@@ -200,14 +200,13 @@ css::uno::Reference< css::datatransfer::XTransferable > View::CreateSelectionDat
     css::uno::Reference< css::datatransfer::XTransferable > xRet( pTransferable );
     std::unique_ptr<TransferableObjectDescriptor> pObjDesc(new TransferableObjectDescriptor);
     const ::tools::Rectangle                 aMarkRect( GetAllMarkedRect() );
-    OUString                        aDisplayName;
 
     SD_MOD()->pTransferSelection = pTransferable;
 
     if( mpDocSh )
     {
-        aDisplayName = mpDocSh->GetMedium()->GetURLObject().GetURLNoPass();
         mpDocSh->FillTransferableObjectDescriptor( *pObjDesc );
+        pObjDesc->maDisplayName = mpDocSh->GetMedium()->GetURLObject().GetURLNoPass();
     }
 
     pObjDesc->maSize = aMarkRect.GetSize();
