@@ -252,8 +252,8 @@ ScOptSolverDlg::ScOptSolverDlg( SfxBindings* pB, SfxChildWindow* pCW, vcl::Windo
     get(m_pBtnDel4, "del4");
     get(m_pScrollBar, "scrollbar");
     get(m_pBtnOpt, "options");
-    get(m_pBtnCancel, "close");
-    get(m_pBtnSolve, "solve");
+    get(m_pBtnCancel, "cancel");
+    get(m_pBtnSolve, "ok");
 
     mpLeftEdit[0]    = m_pEdLeft1;
     mpLeftButton[0]  = m_pRBLeft1;
