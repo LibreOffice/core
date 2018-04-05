@@ -1488,11 +1488,6 @@ public:
         m_xComboBoxText->SelectEntryPos(pos);
     }
 
-    virtual OUString get_active_text() const override
-    {
-        return m_xComboBoxText->GetSelectedEntry();
-    }
-
     virtual OUString get_text(int pos) const override
     {
         return m_xComboBoxText->GetEntry(pos);
@@ -1576,6 +1571,11 @@ public:
         m_xComboBoxText->SetSelectHdl(LINK(this, SalInstanceComboBoxTextWithoutEdit, SelectHdl));
     }
 
+    virtual OUString get_active_text() const override
+    {
+        return m_xComboBoxText->GetSelectedEntry();
+    }
+
     virtual void set_entry_error(bool /*bError*/) override
     {
         assert(false);
@@ -1630,6 +1630,11 @@ public:
             m_xComboBoxText->SetControlForeground(Color(0xf0, 0, 0));
         else
             m_xComboBoxText->SetControlForeground();
+    }
+
+    virtual OUString get_active_text() const override
+    {
+        return m_xComboBoxText->GetText();
     }
 
     virtual void set_entry_text(const OUString& rText) override
