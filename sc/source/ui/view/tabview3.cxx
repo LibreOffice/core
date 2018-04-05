@@ -2817,7 +2817,7 @@ void ScTabView::ActivatePart( ScSplitPos eWhich )
             pColBar[eNewH]->SetIgnoreMove(false);
             pHdrSelEng->SetWindow( pColBar[eNewH] );
             long nWidth = pColBar[eNewH]->GetOutputSizePixel().Width();
-            pHdrSelEng->SetVisibleArea( tools::Rectangle( 0, RECT_MIN, nWidth-1, RECT_MAX ) );
+            pHdrSelEng->SetVisibleArea( tools::Rectangle( 0, SAL_MIN_INT64, nWidth-1, SAL_MAX_INT64 ) );
             pColBar[eNewH]->CaptureMouse();
         }
         if ( bLeftCap && pRowBar[eNewV] )
@@ -2826,7 +2826,7 @@ void ScTabView::ActivatePart( ScSplitPos eWhich )
             pRowBar[eNewV]->SetIgnoreMove(false);
             pHdrSelEng->SetWindow( pRowBar[eNewV] );
             long nHeight = pRowBar[eNewV]->GetOutputSizePixel().Height();
-            pHdrSelEng->SetVisibleArea( tools::Rectangle( RECT_MIN, 0, RECT_MAX, nHeight-1 ) );
+            pHdrSelEng->SetVisibleArea( tools::Rectangle( SAL_MIN_INT64, 0, SAL_MAX_INT64, nHeight-1 ) );
             pRowBar[eNewV]->CaptureMouse();
         }
         aHdrFunc.SetWhich(eWhich);

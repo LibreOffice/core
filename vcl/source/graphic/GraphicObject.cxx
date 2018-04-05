@@ -565,13 +565,13 @@ void GraphicObject::DrawTiled( OutputDevice* pOut, const tools::Rectangle& rArea
     const MapMode   aMapMode( aOutMapMode.GetMapUnit(), Point(), aOutMapMode.GetScaleX(), aOutMapMode.GetScaleY() );
     // #106258# Clamp size to 1 for zero values. This is okay, since
     // logical size of zero is handled above already
-    const Size      aOutTileSize( ::std::max<sal_Int32>( 1, pOut->LogicToPixel( rSize, aOutMapMode ).Width() ),
-                                  ::std::max<sal_Int32>( 1, pOut->LogicToPixel( rSize, aOutMapMode ).Height() ) );
+    const Size      aOutTileSize( ::std::max( sal_Int64(1), pOut->LogicToPixel( rSize, aOutMapMode ).Width() ),
+                                  ::std::max( sal_Int64(1), pOut->LogicToPixel( rSize, aOutMapMode ).Height() ) );
 
     //#i69780 clip final tile size to a sane max size
-    while ((static_cast<sal_Int64>(rSize.Width()) * nTileCacheSize1D) > SAL_MAX_UINT16)
+    while ((rSize.Width() * nTileCacheSize1D) > SAL_MAX_UINT16)
         nTileCacheSize1D /= 2;
-    while ((static_cast<sal_Int64>(rSize.Height()) * nTileCacheSize1D) > SAL_MAX_UINT16)
+    while ((rSize.Height() * nTileCacheSize1D) > SAL_MAX_UINT16)
         nTileCacheSize1D /= 2;
 
     ImplDrawTiled( pOut, rArea, aOutTileSize, rOffset, nullptr, nFlags, nTileCacheSize1D );

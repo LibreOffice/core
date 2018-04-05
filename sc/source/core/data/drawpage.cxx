@@ -27,7 +27,7 @@
 ScDrawPage::ScDrawPage(ScDrawLayer& rNewModel, bool bMasterPage) :
     FmFormPage(rNewModel, bMasterPage)
 {
-    SetSize( Size( RECT_MAX, RECT_MAX ) );
+    SetSize( Size( SAL_MAX_INT64, SAL_MAX_INT64 ) );
 }
 
 ScDrawPage::ScDrawPage(const ScDrawPage& rSrcPage)

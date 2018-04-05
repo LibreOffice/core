@@ -61,7 +61,7 @@ void OutputDevice::ImplInitAboveTextLineSize()
 }
 
 void OutputDevice::ImplDrawWavePixel( long nOriginX, long nOriginY,
-                                      sal_Int32 nCurX, sal_Int32 nCurY,
+                                      sal_Int64 nCurX, sal_Int64 nCurY,
                                       short nOrientation,
                                       SalGraphics* pGraphics,
                                       OutputDevice const * pOutDev,
@@ -94,8 +94,8 @@ void OutputDevice::ImplDrawWaveLine( long nBaseX, long nBaseY,
     if ( !nHeight )
         return;
 
-    sal_Int32 nStartX = nBaseX + nDistX;
-    sal_Int32 nStartY = nBaseY + nDistY;
+    sal_Int64 nStartX = nBaseX + nDistX;
+    sal_Int64 nStartY = nBaseY + nDistY;
 
     // If the height is 1 pixel, it's enough output a line
     if ( (nLineWidth == 1) && (nHeight == 1) )
@@ -103,8 +103,8 @@ void OutputDevice::ImplDrawWaveLine( long nBaseX, long nBaseY,
         mpGraphics->SetLineColor( rColor );
         mbInitLineColor = true;
 
-        sal_Int32 nEndX = nStartX+nWidth;
-        sal_Int32 nEndY = nStartY;
+        sal_Int64 nEndX = nStartX+nWidth;
+        sal_Int64 nEndY = nStartY;
         if ( nOrientation )
         {
             Point aOriginPt( nBaseX, nBaseY );
@@ -579,7 +579,7 @@ void OutputDevice::ImplDrawStrikeoutLine( long nBaseX, long nBaseY,
 }
 
 void OutputDevice::ImplDrawStrikeoutChar( long nBaseX, long nBaseY,
-                                          sal_Int32 nDistX, sal_Int32 nDistY, long nWidth,
+                                          sal_Int64 nDistX, sal_Int64 nDistY, long nWidth,
                                           FontStrikeout eStrikeout,
                                           Color aColor )
 {
@@ -996,8 +996,8 @@ void OutputDevice::DrawWaveLine( const Point& rStartPos, const Point& rEndPos )
     Point   aEndPt = ImplLogicToDevicePixel( rEndPos );
     long    nStartX = aStartPt.X();
     long    nStartY = aStartPt.Y();
-    sal_Int32 nEndX = aEndPt.X();
-    sal_Int32 nEndY = aEndPt.Y();
+    sal_Int64 nEndX = aEndPt.X();
+    sal_Int64 nEndY = aEndPt.Y();
     short   nOrientation = 0;
 
     // when rotated
