@@ -27,6 +27,7 @@
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <comphelper/extract.hxx>
+#include <tools/diagnose_ex.h>
 #include "strings.hxx"
 
 namespace xmloff
@@ -55,9 +56,9 @@ namespace xmloff
         try
         {
             pRet = GetImport().GetFormImport()->createContext( _nPrefix, _rLocalName, xAttrList );
-        } catch (const Exception& rException)
+        } catch (const Exception&)
         {
-            SAL_WARN("xmloff.forms", "OFormsRootImport::CreateChildContext: " << rException);
+            DBG_UNHANDLED_EXCEPTION("xmloff.forms");
         }
         return pRet;
     }

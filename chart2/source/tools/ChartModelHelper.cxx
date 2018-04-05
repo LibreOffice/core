@@ -35,6 +35,7 @@
 #include <com/sun/star/embed/Aspects.hpp>
 #include <com/sun/star/embed/XVisualObject.hpp>
 #include <com/sun/star/view/XSelectionChangeListener.hpp>
+#include <tools/diagnose_ex.h>
 
 namespace chart
 {
@@ -96,9 +97,9 @@ uno::Reference< XDiagram > ChartModelHelper::findDiagram( const uno::Reference< 
         if( xChartDoc.is())
             return xChartDoc->getFirstDiagram();
     }
-    catch( const uno::Exception & ex )
+    catch( const uno::Exception & )
     {
-        SAL_WARN("chart2", "Exception caught. " << ex );
+        DBG_UNHANDLED_EXCEPTION("chart2");
     }
     return nullptr;
 }

@@ -30,6 +30,7 @@
 #include <svx/svx3ditems.hxx>
 #include <svx/svddef.hxx>
 #include <vcl/builderfactory.hxx>
+#include <tools/diagnose_ex.h>
 
 namespace chart
 {
@@ -137,9 +138,9 @@ namespace
                 xSceneProperties->getPropertyValue( "D3DSceneLightDirection" + aIndex ) >>= aResult.aDirection;
                 xSceneProperties->getPropertyValue( "D3DSceneLightOn" + aIndex ) >>= aResult.bIsEnabled;
             }
-            catch( const uno::Exception & ex )
+            catch( const uno::Exception & )
             {
-                SAL_WARN( "chart2", "Property Exception caught. Message: " << ex);
+                DBG_UNHANDLED_EXCEPTION("chart2");
             }
         }
         return aResult;
@@ -163,9 +164,9 @@ namespace
                 xSceneProperties->setPropertyValue( "D3DSceneLightOn" + aIndex,
                                                     uno::Any( rLightSource.bIsEnabled ));
             }
-            catch( const uno::Exception & ex )
+            catch( const uno::Exception & )
             {
-                SAL_WARN( "chart2", "Property Exception caught. Message: " << ex);
+                DBG_UNHANDLED_EXCEPTION("chart2");
             }
         }
     }
@@ -178,9 +179,9 @@ namespace
         {
             xSceneProperties->getPropertyValue("D3DSceneAmbientColor") >>= nResult;
         }
-        catch( const uno::Exception & ex )
+        catch( const uno::Exception & )
         {
-            SAL_WARN( "chart2", "Property Exception caught. Message: " << ex);
+            DBG_UNHANDLED_EXCEPTION("chart2");
         }
         return Color( nResult );
     }
@@ -194,9 +195,9 @@ namespace
             xSceneProperties->setPropertyValue("D3DSceneAmbientColor",
                                                uno::makeAny( rColor ));
         }
-        catch( const uno::Exception & ex )
+        catch( const uno::Exception & )
         {
-            SAL_WARN( "chart2", "Property Exception caught. Message: " << ex);
+            DBG_UNHANDLED_EXCEPTION("chart2");
         }
     }
 }

@@ -42,6 +42,7 @@
 #include <comphelper/processfactory.hxx>
 #include <i18nlangtag/mslangid.hxx>
 #include <o3tl/enumarray.hxx>
+#include <tools/diagnose_ex.h>
 
 using namespace utl;
 using namespace com::sun::star;
@@ -154,10 +155,10 @@ SvtUserOptions::Impl::Impl() :
         {
         }
     }
-    catch (uno::Exception const& ex)
+    catch (uno::Exception const&)
     {
+        DBG_UNHANDLED_EXCEPTION("unotools.config");
         m_xCfg.clear();
-        SAL_WARN("unotools.config", "Caught unexpected: " << ex);
     }
 }
 
@@ -170,9 +171,9 @@ ValueType SvtUserOptions::Impl::GetValue_Impl (UserOptToken nToken) const
         if (m_xData.is())
             m_xData->getPropertyValue(OUString::createFromAscii(vOptionNames[nToken])) >>= sToken;
     }
-    catch (uno::Exception const& ex)
+    catch (uno::Exception const&)
     {
-        SAL_WARN("unotools.config", "Caught unexpected: " << ex);
+        DBG_UNHANDLED_EXCEPTION("unotools.config");
     }
     return sToken;
 }
@@ -186,9 +187,9 @@ void SvtUserOptions::Impl::SetValue_Impl (UserOptToken nToken, ValueType const& 
              m_xData->setPropertyValue(OUString::createFromAscii(vOptionNames[nToken]), uno::makeAny(sToken));
         comphelper::ConfigurationHelper::flush(m_xCfg);
     }
-    catch (uno::Exception const& ex)
+    catch (uno::Exception const&)
     {
-        SAL_WARN("unotools.config", "Caught unexpected: " << ex);
+        DBG_UNHANDLED_EXCEPTION("unotools.config");
     }
 }
 

@@ -28,6 +28,7 @@
 
 #include <svl/intitem.hxx>
 #include <svl/eitem.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <functional>
 #include <algorithm>
@@ -150,9 +151,9 @@ bool LegendItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSe
                         bChanged = true;
                     }
                 }
-                catch( const uno::Exception & ex )
+                catch( const uno::Exception & )
                 {
-                    SAL_WARN("chart2", "Exception caught. " << ex );
+                    DBG_UNHANDLED_EXCEPTION("chart2");
                 }
             }
         }

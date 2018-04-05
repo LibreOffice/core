@@ -26,6 +26,7 @@
 #include <com/sun/star/util/XChangesBatch.hpp>
 #include <comphelper/propertysequence.hxx>
 #include <osl/diagnose.h>
+#include <tools/diagnose_ex.h>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -65,9 +66,9 @@ PresenterConfigurationAccess::PresenterConfigurationAccess (
             maNode <<= mxRoot;
         }
     }
-    catch (const Exception& rException)
+    catch (const Exception&)
     {
-        SAL_WARN("sdext.presenter", "caught exception while opening configuration: " << rException);
+        DBG_UNHANDLED_EXCEPTION("sdext.presenter", "caught exception while opening configuration");
     }
 }
 

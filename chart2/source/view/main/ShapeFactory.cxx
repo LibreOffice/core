@@ -52,6 +52,7 @@
 
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/matrix/b3dhommatrix.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <algorithm>
 
@@ -2068,9 +2069,9 @@ uno::Reference< drawing::XShape > ShapeFactory::createInvisibleRectangle(
         }
         return xShape;
     }
-    catch( const uno::Exception & ex )
+    catch( const uno::Exception & )
     {
-        SAL_WARN("chart2", "Exception caught. " << ex );
+        DBG_UNHANDLED_EXCEPTION("chart2");
     }
     return nullptr;
 }

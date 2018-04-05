@@ -34,6 +34,7 @@
 
 #include <com/sun/star/chart/ChartDataRowSource.hpp>
 #include <com/sun/star/chart/ErrorBarStyle.hpp>
+#include <tools/diagnose_ex.h>
 
 #include <iterator>
 
@@ -107,9 +108,9 @@ void lcl_addErrorBarRanges(
             }
         }
     }
-    catch( const uno::Exception & ex )
+    catch( const uno::Exception & )
     {
-        SAL_WARN("chart2", "Exception caught. " << ex );
+        DBG_UNHANDLED_EXCEPTION("chart2");
     }
 }
 
@@ -371,9 +372,9 @@ bool DataSourceHelper::detectRangeSegmentation(
                     DiagramHelper::getCategoriesFromDiagram( xChartDocument->getFirstDiagram() ));
         rOutHasCategories = xCategories.is();
     }
-    catch( uno::Exception & ex )
+    catch( uno::Exception & )
     {
-        SAL_WARN("chart2", "Exception caught. " << ex );
+        DBG_UNHANDLED_EXCEPTION("chart2");
     }
     return bSomethingDetected;
 }
@@ -414,9 +415,9 @@ bool DataSourceHelper::allArgumentsForRectRangeDetected(
             }
         }
     }
-    catch( const uno::Exception & ex )
+    catch( const uno::Exception & )
     {
-        SAL_WARN("chart2", "Exception caught. " << ex );
+        DBG_UNHANDLED_EXCEPTION("chart2");
     }
 
     return (bHasCellRangeRepresentation && bHasDataRowSource && bHasFirstCellAsLabel);

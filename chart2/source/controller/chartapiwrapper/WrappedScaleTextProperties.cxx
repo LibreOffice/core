@@ -21,6 +21,7 @@
 #include <FastPropertyIdRanges.hxx>
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
+#include <tools/diagnose_ex.h>
 
 using namespace ::com::sun::star;
 using ::com::sun::star::uno::Any;
@@ -74,9 +75,9 @@ void WrappedScaleTextProperty::setPropertyValue( const Any& rOuterValue, const R
             else
                 xInnerPropertySet->setPropertyValue( aRefSizeName, Any() );
         }
-        catch( const uno::Exception & ex )
+        catch( const uno::Exception & )
         {
-            SAL_WARN("chart2", "Exception caught. " << ex );
+            DBG_UNHANDLED_EXCEPTION("chart2");
         }
     }
 }

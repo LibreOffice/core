@@ -21,6 +21,7 @@
 #include <WeakListenerAdapter.hxx>
 
 #include <cppuhelper/interfacecontainer.hxx>
+#include <tools/diagnose_ex.h>
 
 using namespace ::com::sun::star;
 
@@ -113,9 +114,9 @@ void ModifyEventForwarder::AddListener( const Reference< util::XModifyListener >
 
         m_aModifyListeners.addListener( cppu::UnoType<decltype(xListenerToAdd)>::get(), xListenerToAdd );
     }
-    catch( const uno::Exception & ex )
+    catch( const uno::Exception &  )
     {
-        SAL_WARN("chart2", "Exception caught. " << ex );
+        DBG_UNHANDLED_EXCEPTION("chart2");
     }
 }
 
@@ -136,9 +137,9 @@ void ModifyEventForwarder::RemoveListener( const Reference< util::XModifyListene
 
         m_aModifyListeners.removeListener( cppu::UnoType<decltype(aListener)>::get(), xListenerToRemove );
     }
-    catch( const uno::Exception & ex )
+    catch( const uno::Exception & )
     {
-        SAL_WARN("chart2", "Exception caught. " << ex );
+        DBG_UNHANDLED_EXCEPTION("chart2");
     }
 }
 

@@ -18,6 +18,7 @@
  */
 
 #include <RelativeSizeHelper.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <vector>
 #include <algorithm>
@@ -75,9 +76,9 @@ void RelativeSizeHelper::adaptFontSizes(
                                  calculate( fFontHeight, rOldReferenceSize, rNewReferenceSize ))));
             }
         }
-        catch( const Exception & ex )
+        catch( const Exception & )
         {
-            SAL_WARN("chart2", "Exception caught. " << ex );
+            DBG_UNHANDLED_EXCEPTION("chart2");
         }
     }
 }

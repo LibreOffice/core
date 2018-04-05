@@ -105,6 +105,7 @@
 #include <com/sun/star/embed/XVisualObject.hpp>
 #include <com/sun/star/container/XChild.hpp>
 
+#include <tools/diagnose_ex.h>
 #include "MultiPropertySetHandler.hxx"
 #include "PropertyMap.hxx"
 
@@ -344,9 +345,9 @@ Reference< chart2::data::XLabeledDataSequence > lcl_getCategories( const Referen
             }
         }
     }
-    catch( const uno::Exception & ex )
+    catch( const uno::Exception & )
     {
-        SAL_WARN("xmloff.chart", "Exception caught. " << ex);
+        DBG_UNHANDLED_EXCEPTION("xmloff.chart");
     }
 
     return xResult;
@@ -451,9 +452,9 @@ bool lcl_isSeriesAttachedToFirstAxis(
             xProp->getPropertyValue("AttachedAxisIndex") >>= nAxisIndex;
         bResult = (0==nAxisIndex);
     }
-    catch( const uno::Exception & ex )
+    catch( const uno::Exception & )
     {
-        SAL_WARN("xmloff.chart", "Exception caught. Type: " << OUString::createFromAscii( typeid( ex ).name()) << ", Message: " << ex);
+        DBG_UNHANDLED_EXCEPTION("xmloff.chart");
     }
 
     return bResult;
@@ -3665,9 +3666,9 @@ void SchXMLExportHelper_Impl::InitRangeSegmentationProperties( const Reference< 
                 }
             }
         }
-        catch( const uno::Exception & ex )
+        catch( const uno::Exception & )
         {
-            SAL_WARN("xmloff.chart", "Exception caught. Type: " << OUString::createFromAscii( typeid( ex ).name()) << ", Message: " << ex);
+            DBG_UNHANDLED_EXCEPTION("xmloff.chart");
         }
 }
 

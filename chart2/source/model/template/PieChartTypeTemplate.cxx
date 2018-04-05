@@ -31,6 +31,7 @@
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/chart2/XChartTypeContainer.hpp>
 #include <com/sun/star/chart2/XDataSeriesContainer.hpp>
+#include <tools/diagnose_ex.h>
 
 #include <rtl/math.hxx>
 
@@ -194,9 +195,9 @@ sal_Int32 PieChartTypeTemplate::getDimension() const
         const_cast< PieChartTypeTemplate * >( this )->
             getFastPropertyValue( PROP_PIE_TEMPLATE_DIMENSION ) >>= nDim;
     }
-    catch( const beans::UnknownPropertyException & ex )
+    catch( const beans::UnknownPropertyException & )
     {
-        SAL_WARN("chart2", "Exception caught. " << ex );
+        DBG_UNHANDLED_EXCEPTION("chart2");
     }
 
     return nDim;
@@ -247,9 +248,9 @@ void PieChartTypeTemplate::adaptScales(
                 xAxis->setScaleData( aScaleData );
             }
         }
-        catch( const uno::Exception & ex )
+        catch( const uno::Exception & )
         {
-            SAL_WARN("chart2", "Exception caught. " << ex );
+            DBG_UNHANDLED_EXCEPTION("chart2");
         }
     }
 }
@@ -289,9 +290,9 @@ void PieChartTypeTemplate::createChartTypes(
                 aFlatSeriesSeq, rCoordSys[0], getStackMode( 0 ));
         }
     }
-    catch( const uno::Exception & ex )
+    catch( const uno::Exception & )
     {
-        SAL_WARN("chart2", "Exception caught. " << ex );
+        DBG_UNHANDLED_EXCEPTION("chart2");
     }
 }
 
@@ -359,9 +360,9 @@ sal_Bool SAL_CALL PieChartTypeTemplate::matchesTemplate(
 
             bResult = ( eOffsetMode == ePieOffsetMode );
         }
-        catch( const uno::Exception & ex )
+        catch( const uno::Exception & )
         {
-            SAL_WARN("chart2", "Exception caught. " << ex );
+            DBG_UNHANDLED_EXCEPTION("chart2");
             bResult = false;
         }
     }
@@ -399,9 +400,9 @@ Reference< chart2::XChartType > PieChartTypeTemplate::getChartTypeForIndex( sal_
         }
 
     }
-    catch( const uno::Exception & ex )
+    catch( const uno::Exception & )
     {
-        SAL_WARN("chart2", "Exception caught. " << ex );
+        DBG_UNHANDLED_EXCEPTION("chart2");
     }
 
     return xResult;
@@ -427,9 +428,9 @@ Reference< chart2::XChartType > SAL_CALL PieChartTypeTemplate::getChartTypeForNe
         }
 
     }
-    catch( const uno::Exception & ex )
+    catch( const uno::Exception & )
     {
-        SAL_WARN("chart2", "Exception caught. " << ex );
+        DBG_UNHANDLED_EXCEPTION("chart2");
     }
 
     return xResult;
@@ -518,9 +519,9 @@ void SAL_CALL PieChartTypeTemplate::applyStyle(
         // vary colors by point
         xProp->setPropertyValue( "VaryColorsByPoint", uno::Any( true ));
     }
-    catch( const uno::Exception & ex )
+    catch( const uno::Exception & )
     {
-        SAL_WARN("chart2", "Exception caught. " << ex );
+        DBG_UNHANDLED_EXCEPTION("chart2");
     }
 }
 
@@ -555,9 +556,9 @@ void SAL_CALL PieChartTypeTemplate::resetStyles( const Reference< chart2::XDiagr
                     xAxis->setScaleData( aScaleData );
                 }
             }
-            catch( const uno::Exception & ex )
+            catch( const uno::Exception & )
             {
-                SAL_WARN("chart2", "Exception caught. " << ex );
+                DBG_UNHANDLED_EXCEPTION("chart2");
             }
         }
     }

@@ -25,6 +25,7 @@
 #include <tools/svborder.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
+#include <tools/diagnose_ex.h>
 
 using namespace css;
 using namespace css::uno;
@@ -335,9 +336,9 @@ void Theme::UpdateTheme()
             maPropertyIdToNameMap[Rect_ToolBoxBorder],
             Any(awt::Rectangle(1,1,1,1)));
     }
-    catch(beans::UnknownPropertyException& rException)
+    catch(beans::UnknownPropertyException const &)
     {
-        SAL_WARN("sfx", "unknown property: " << rException);
+        DBG_UNHANDLED_EXCEPTION("sfx", "unknown property");
         OSL_ASSERT(false);
     }
 }

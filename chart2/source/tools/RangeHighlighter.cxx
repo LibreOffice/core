@@ -28,6 +28,7 @@
 #include <com/sun/star/chart/ErrorBarStyle.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <comphelper/sequence.hxx>
+#include <tools/diagnose_ex.h>
 
 using namespace ::com::sun::star;
 
@@ -180,9 +181,9 @@ void RangeHighlighter::determineRanges()
                 return;
             }
         }
-        catch( const uno::Exception & ex )
+        catch( const uno::Exception & )
         {
-            SAL_WARN("chart2", "Exception caught. " << ex );
+            DBG_UNHANDLED_EXCEPTION("chart2");
         }
     }
 }
@@ -226,9 +227,9 @@ void RangeHighlighter::fillRangesForErrorBars(
               (xErrorBar->getPropertyValue( "ErrorBarStyle") >>= nStyle) &&
               nStyle == css::chart::ErrorBarStyle::FROM_DATA );
     }
-    catch( const uno::Exception & ex )
+    catch( const uno::Exception & )
     {
-        SAL_WARN("chart2", "Exception caught. " << ex );
+        DBG_UNHANDLED_EXCEPTION("chart2");
     }
 
     if( bUsesRangesAsErrorBars )

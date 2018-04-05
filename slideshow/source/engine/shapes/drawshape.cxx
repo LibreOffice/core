@@ -597,9 +597,9 @@ namespace slideshow
                 if( pActivity )
                     pActivity->dispose();
             }
-            catch (uno::Exception &)
+            catch (uno::Exception const &)
             {
-                SAL_WARN( "slideshow", "" << comphelper::anyToString(cppu::getCaughtException() ) );
+                DBG_UNHANDLED_EXCEPTION("slideshow");
             }
         }
 

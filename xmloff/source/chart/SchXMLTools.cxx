@@ -47,6 +47,7 @@
 #include <com/sun/star/lang/XServiceName.hpp>
 
 #include <comphelper/processfactory.hxx>
+#include <tools/diagnose_ex.h>
 #include <algorithm>
 #include <map>
 
@@ -505,9 +506,9 @@ void CreateCategories(
                                     xLabeledSeq->setValues(xSequence);
 
                                 }
-                                catch( const lang::IllegalArgumentException & ex )
+                                catch( const lang::IllegalArgumentException & )
                                 {
-                                    SAL_WARN("xmloff.chart", "IllegalArgumentException caught, Message: " << ex );
+                                    DBG_UNHANDLED_EXCEPTION("xmloff.chart");
                                 }
                                 aData.Categories.set( xLabeledSeq );
                                 if( pLSequencesPerIndex )
@@ -644,9 +645,9 @@ void setXMLRangePropertyAtDataSequence(
         if( xInfo.is() && xInfo->hasPropertyByName( aXMLRangePropName ))
             xProp->setPropertyValue( aXMLRangePropName, uno::makeAny( rXMLRange ));
     }
-    catch( const uno::Exception & ex )
+    catch( const uno::Exception & )
     {
-        SAL_WARN("xmloff.chart", "Exception caught, Message: " << ex );
+        DBG_UNHANDLED_EXCEPTION("xmloff.chart");
     }
 }
 
@@ -671,9 +672,9 @@ bool getXMLRangePropertyFromDataSequence(
             if( bClearProp && bResult )
                 xProp->setPropertyValue( aXMLRangePropName, uno::Any( OUString()));
         }
-        catch( const uno::Exception & ex )
+        catch( const uno::Exception & )
         {
-            SAL_WARN("xmloff.chart", "Exception caught, Message: " << ex );
+            DBG_UNHANDLED_EXCEPTION("xmloff.chart");
         }
     }
     return bResult;
