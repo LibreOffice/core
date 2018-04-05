@@ -662,11 +662,17 @@ public:
                                 const BmpFilterParam* pFilterParam = nullptr );
 
 public:
+    /** ReassignWithSize and recalculate bitmap.
+
+      ReassignWithSizes the bitmap, and recalculates the bitmap size based on the new bitmap.
+
+      @param rBitmap Bitmap to reassign and use for size calculation
+     */
+    SAL_DLLPRIVATE void     ReassignWithSize(const Bitmap& rBitmap);
 
     SAL_DLLPRIVATE void     ImplMakeUnique();
     const std::shared_ptr<ImpBitmap>& ImplGetImpBitmap() const { return mxImpBmp; }
     SAL_DLLPRIVATE void     ImplSetImpBitmap( const std::shared_ptr<ImpBitmap>& xImpBmp );
-    SAL_DLLPRIVATE void     ImplAssignWithSize( const Bitmap& rBitmap );
 
     SAL_DLLPRIVATE bool     ImplScaleFast( const double& rScaleX, const double& rScaleY );
     SAL_DLLPRIVATE bool     ImplScaleInterpolate( const double& rScaleX, const double& rScaleY );

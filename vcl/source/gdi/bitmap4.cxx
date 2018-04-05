@@ -1176,7 +1176,7 @@ bool Bitmap::ImplSeparableBlurFilter(const double radius)
     }
 
     // Swap current bitmap with new bitmap
-    ImplAssignWithSize( aNewBitmap );
+    ReassignWithSize(aNewBitmap);
 
     // Do vertical filtering
     ImplBlurContributions(nHeight, aNumberOfContributions, pBlurVector, pWeights, pPixels, pCount );
@@ -1196,7 +1196,7 @@ bool Bitmap::ImplSeparableBlurFilter(const double radius)
         return bResult;
 
     // Swap current bitmap with new bitmap
-    ImplAssignWithSize( aNewBitmap );
+    ReassignWithSize(aNewBitmap);
 
     return true;
 }
@@ -1242,7 +1242,7 @@ bool Bitmap::ImplSeparableUnsharpenFilter(const double radius) {
     pWriteAcc.reset();
     pReadAcc.reset();
     pReadAccBlur.reset();
-    ImplAssignWithSize ( aResultBitmap );
+    ReassignWithSize(aResultBitmap);
     return true;
 }
 
@@ -1273,7 +1273,7 @@ bool Bitmap::ImplDuotoneFilter( const sal_uLong nColorOne, const sal_uLong nColo
 
     pWriteAcc.reset();
     pReadAcc.reset();
-    ImplAssignWithSize ( aResultBitmap );
+    ReassignWithSize(aResultBitmap);
     return true;
 }
 
