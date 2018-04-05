@@ -1684,7 +1684,7 @@ void SmAttributNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
 
     // get relative position of attribute
     RectVerAlign  eVerAlign;
-    long          nDist = 0;
+    sal_Int32 nDist = 0;
     switch (GetToken().eType)
     {   case TUNDERLINE :
             eVerAlign = RectVerAlign::AttributeLo;
@@ -1696,7 +1696,7 @@ void SmAttributNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
             eVerAlign = RectVerAlign::AttributeHi;
             if (pBody->GetType() == SmNodeType::Attribut)
                 nDist = GetFont().GetFontSize().Height()
-                        * rFormat.GetDistance(DIS_ORNAMENTSPACE) / 100L;
+                        * rFormat.GetDistance(DIS_ORNAMENTSPACE) / 100;
     }
     Point  aPos = pAttr->AlignTo(*pBody, RectPos::Attribute, RectHorAlign::Center, eVerAlign);
     aPos.AdjustY( -nDist );
