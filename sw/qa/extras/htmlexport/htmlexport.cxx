@@ -397,7 +397,7 @@ DECLARE_HTMLEXPORT_ROUNDTRIP_TEST(testReqIfOleImg, "reqif-ole-img.xhtml")
     Size aLogic(pDevice->PixelToLogic(aPixel, MapMode(MapUnit::Map100thMM)));
     awt::Size aSize = xShape->getSize();
     // This was only 1247, size was not set explicitly.
-    CPPUNIT_ASSERT_EQUAL(aLogic.getWidth(), aSize.Width);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(aLogic.getWidth()), aSize.Width);
 
     // Check mime/media types.
     CPPUNIT_ASSERT_EQUAL(OUString("image/png"), getProperty<OUString>(xGraphic, "MimeType"));

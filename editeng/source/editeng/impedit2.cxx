@@ -87,9 +87,9 @@ static sal_uInt16 lcl_CalcExtraSpace( const SvxLineSpacingItem& rLSItem )
 
 ImpEditEngine::ImpEditEngine( EditEngine* pEE, SfxItemPool* pItemPool ) :
     pSharedVCL(EditDLL::Get().GetSharedVclResources()),
-    aPaperSize( RECT_MAX, RECT_MAX ),
+    aPaperSize( 0x7FFFFFFF, 0x7FFFFFFF ),
     aMinAutoPaperSize( 0x0, 0x0 ),
-    aMaxAutoPaperSize( RECT_MAX, RECT_MAX ),
+    aMaxAutoPaperSize( 0x7FFFFFFF, 0x7FFFFFFF ),
     aEditDoc( pItemPool ),
     aWordDelimiters(" .,;:-`'?!_=\"{}()[]"),
     bKernAsianPunctuation(false),
@@ -4265,9 +4265,9 @@ void ImpEditEngine::SetValidPaperSize( const Size& rNewSz )
     aPaperSize = rNewSz;
 
     long nMinWidth = aStatus.AutoPageWidth() ? aMinAutoPaperSize.Width() : 0;
-    long nMaxWidth = aStatus.AutoPageWidth() ? aMaxAutoPaperSize.Width() : RECT_MAX;
+    long nMaxWidth = aStatus.AutoPageWidth() ? aMaxAutoPaperSize.Width() : 0x7FFFFFFF;
     long nMinHeight = aStatus.AutoPageHeight() ? aMinAutoPaperSize.Height() : 0;
-    long nMaxHeight = aStatus.AutoPageHeight() ? aMaxAutoPaperSize.Height() : RECT_MAX;
+    long nMaxHeight = aStatus.AutoPageHeight() ? aMaxAutoPaperSize.Height() : 0x7FFFFFFF;
 
     // Minimum/Maximum width:
     if ( aPaperSize.Width() < nMinWidth )

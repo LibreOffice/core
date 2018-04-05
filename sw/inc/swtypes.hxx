@@ -46,9 +46,9 @@ class CharClass;
 class CollatorWrapper;
 class LanguageTag;
 
-typedef sal_Int32 SwTwips;
-#define INVALID_TWIPS   RECT_MAX
-#define TWIPS_MAX       (RECT_MAX - 1)
+typedef sal_Int64 SwTwips;
+#define INVALID_TWIPS   SAL_MAX_INT64
+#define TWIPS_MAX       (SAL_MAX_INT64 - 1)
 
 // Converts Millimeters to Twips (1 mm == 56.905479 twips).
 template <typename T = SwTwips>
