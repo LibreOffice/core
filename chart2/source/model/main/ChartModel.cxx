@@ -67,6 +67,7 @@
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
 
 #include <svl/zforlist.hxx>
+#include <tools/diagnose_ex.h>
 
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Reference;
@@ -871,9 +872,9 @@ void SAL_CALL ChartModel::setArguments( const Sequence< beans::PropertyValue >& 
         {
             throw;
         }
-        catch (const uno::Exception& ex)
+        catch (const uno::Exception&)
         {
-            SAL_WARN("chart2", "Exception caught. " << ex );
+            DBG_UNHANDLED_EXCEPTION("chart2");
         }
         unlockControllers();
     }
@@ -980,9 +981,9 @@ uno::Any SAL_CALL ChartModel::queryInterface( const uno::Type& aType )
             if( m_xOldModelAgg.is())
                 aResult = m_xOldModelAgg->queryAggregation( aType );
         }
-        catch (const uno::Exception& ex)
+        catch (const uno::Exception&)
         {
-            SAL_WARN("chart2", "Exception caught. " << ex );
+            DBG_UNHANDLED_EXCEPTION("chart2");
         }
     }
 
@@ -1059,9 +1060,9 @@ embed::VisualRepresentation SAL_CALL ChartModel::getPreferredVisualRepresentatio
 
         aResult.Data <<= aMetafile;
     }
-    catch (const uno::Exception& ex)
+    catch (const uno::Exception&)
     {
-        SAL_WARN("chart2", "Exception caught. " << ex );
+        DBG_UNHANDLED_EXCEPTION("chart2");
     }
 
     return aResult;
@@ -1093,9 +1094,9 @@ uno::Any SAL_CALL ChartModel::getTransferData( const datatransfer::DataFlavor& a
             aResult = xTransferable->getTransferData( aFlavor );
         }
     }
-    catch (const uno::Exception& ex)
+    catch (const uno::Exception&)
     {
-        SAL_WARN("chart2", "Exception caught. " << ex );
+        DBG_UNHANDLED_EXCEPTION("chart2");
     }
 
     return aResult;

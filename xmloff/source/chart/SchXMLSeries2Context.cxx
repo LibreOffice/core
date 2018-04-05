@@ -52,6 +52,7 @@
 #include <SchXMLImport.hxx>
 #include <xmloff/prstylei.hxx>
 #include <xmloff/xmlprmap.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <typeinfo>
 
@@ -467,9 +468,9 @@ void SchXMLSeries2Context::StartElement( const uno::Reference< xml::sax::XAttrib
         Reference< chart2::data::XDataSink > xSink( m_xSeries, uno::UNO_QUERY_THROW );
         xSink->setData( aSeq );
     }
-    catch( const uno::Exception & ex )
+    catch( const uno::Exception &)
     {
-        SAL_WARN("xmloff.chart", "Exception caught. " << ex);
+        DBG_UNHANDLED_EXCEPTION("xmloff.chart");
     }
 
     //init mbSymbolSizeIsMissingInFile:

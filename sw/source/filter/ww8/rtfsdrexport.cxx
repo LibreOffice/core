@@ -32,6 +32,7 @@
 #include <vcl/cvtgrf.hxx>
 #include <textboxhelper.hxx>
 #include <dcontact.hxx>
+#include <tools/diagnose_ex.h>
 #include <algorithm>
 #include "rtfexport.hxx"
 
@@ -508,9 +509,9 @@ void RtfSdrExport::impl_writeGraphic()
     {
         xPropertySet->getPropertyValue("Graphic") >>= xGraphic;
     }
-    catch (beans::UnknownPropertyException& rException)
+    catch (beans::UnknownPropertyException const&)
     {
-        SAL_WARN("sw.rtf", "failed. Message: " << rException);
+        DBG_UNHANDLED_EXCEPTION("sw.rtf");
     }
 
     if (xGraphic.is())

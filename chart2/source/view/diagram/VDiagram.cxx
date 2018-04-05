@@ -38,6 +38,7 @@
 #include <svx/unoshape.hxx>
 #include <svx/scene3d.hxx>
 #include <svx/e3dsceneupdater.hxx>
+#include <tools/diagnose_ex.h>
 
 namespace chart
 {
@@ -605,9 +606,9 @@ void VDiagram::createShapes_3d()
                     uno::Any( BaseGFXHelper::B3DHomMatrixToHomogenMatrix( aEffectiveTranformation ) ) );
         }
     }
-    catch( const uno::Exception & ex )
+    catch( const uno::Exception & )
     {
-        SAL_WARN("chart2", "Exception caught. " << ex );
+        DBG_UNHANDLED_EXCEPTION("chart2" );
     }
 
     //add floor plate

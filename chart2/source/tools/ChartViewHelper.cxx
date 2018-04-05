@@ -23,6 +23,7 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/util/XModifyListener.hpp>
+#include <tools/diagnose_ex.h>
 
 namespace chart
 {
@@ -45,9 +46,9 @@ void ChartViewHelper::setViewToDirtyState( const uno::Reference< frame::XModel >
             }
         }
     }
-    catch( const uno::Exception & ex )
+    catch( const uno::Exception & )
     {
-        SAL_WARN("chart2", "Exception caught. " << ex );
+        DBG_UNHANDLED_EXCEPTION("chart2");
     }
 }
 } //namespace chart

@@ -23,6 +23,7 @@
 #include <CommonConverters.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/chart2/data/XDataSink.hpp>
+#include <tools/diagnose_ex.h>
 
 #include <vector>
 #include <algorithm>
@@ -243,9 +244,9 @@ InterpretedData SAL_CALL StockDataInterpreter::interpretDataSource(
                 xSink->setData( aSequences[nGroupIndex][nSeriesIdx] );
                 aResultSeries[nGroupIndex][nSeriesIdx].set( xSeries );
             }
-            catch( const uno::Exception & ex )
+            catch( const uno::Exception & )
             {
-                SAL_WARN("chart2", "Exception caught. " << ex );
+                DBG_UNHANDLED_EXCEPTION("chart2");
             }
         }
     }
@@ -301,9 +302,9 @@ sal_Bool SAL_CALL StockDataInterpreter::isDataCompatible(
                 if( aSeq.getLength() != nNumberOfNecessarySequences )
                     return false;
             }
-            catch( const uno::Exception & ex )
+            catch( const uno::Exception & )
             {
-                SAL_WARN("chart2", "Exception caught. " << ex );
+                DBG_UNHANDLED_EXCEPTION("chart2");
             }
         }
     }

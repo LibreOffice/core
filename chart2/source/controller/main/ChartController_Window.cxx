@@ -76,6 +76,7 @@
 #include <vcl/weld.hxx>
 #include <rtl/math.hxx>
 #include <svtools/acceleratorexecute.hxx>
+#include <tools/diagnose_ex.h>
 
 #define DRGPIX    2     // Drag MinMove in Pixel
 
@@ -480,9 +481,9 @@ void ChartController::execute_Paint(vcl::RenderContext& rRenderContext, const to
                 pDrawViewWrapper->CompleteRedraw(&rRenderContext, vcl::Region(rRect));
         }
     }
-    catch( const uno::Exception & ex )
+    catch( const uno::Exception & )
     {
-        SAL_WARN("chart2", "Exception caught. " << ex );
+        DBG_UNHANDLED_EXCEPTION("chart2");
     }
     catch( ... )
     {
@@ -859,9 +860,9 @@ void ChartController::execute_MouseButtonUp( const MouseEvent& rMEvt )
                         }
                     }
                 }
-                catch( const uno::Exception & ex )
+                catch( const uno::Exception & )
                 {
-                    SAL_WARN("chart2", "Exception caught. " << ex );
+                    DBG_UNHANDLED_EXCEPTION("chart2");
                 }
                 //all wanted model changes will take effect
                 //and all unwanted view modifications are cleaned
@@ -1088,9 +1089,9 @@ void ChartController::execute_Command( const CommandEvent& rCEvt )
                                 }
                             }
                         }
-                        catch( const uno::Exception & ex )
+                        catch( const uno::Exception & )
                         {
-                            SAL_WARN("chart2", "Exception caught. " << ex );
+                            DBG_UNHANDLED_EXCEPTION("chart2");
                         }
                     }
 
@@ -1823,9 +1824,9 @@ bool ChartController::impl_DragDataPoint( const OUString & rCID, double fAdditio
                 bResult = true;
             }
         }
-        catch( const uno::Exception & ex )
+        catch( const uno::Exception & )
         {
-            SAL_WARN("chart2", "Exception caught. " << ex );
+            DBG_UNHANDLED_EXCEPTION("chart2");
         }
     }
 

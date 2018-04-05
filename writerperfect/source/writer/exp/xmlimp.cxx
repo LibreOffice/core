@@ -23,6 +23,7 @@
 #include <tools/stream.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/streamwrap.hxx>
+#include <tools/diagnose_ex.h>
 
 #include "xmlfmt.hxx"
 #include "xmlictxt.hxx"
@@ -77,9 +78,9 @@ OUString FindMediaDir(const OUString &rDocumentBaseURL, const uno::Sequence<bean
     {
         aMediaDir = rtl::Uri::convertRelToAbs(rDocumentBaseURL, aURL.GetBase()) + "/";
     }
-    catch (const rtl::MalformedUriException &rException)
+    catch (const rtl::MalformedUriException &)
     {
-        SAL_WARN("writerperfect", "FindMediaDir: convertRelToAbs() failed:" << rException.getMessage());
+        DBG_UNHANDLED_EXCEPTION("writerperfect");
     }
     return aMediaDir;
 }
@@ -199,9 +200,9 @@ void FindXMPMetadata(const uno::Reference<uno::XComponentContext> &xContext, con
     {
         xParser->parseStream(aInputSource);
     }
-    catch (const uno::Exception &rException)
+    catch (const uno::Exception &)
     {
-        SAL_WARN("writerperfect", "FindXMPMetadata: parseStream() failed:" << rException.Message);
+        DBG_UNHANDLED_EXCEPTION("writerperfect", "parseStream() failed");
         return;
     }
 }
@@ -399,9 +400,9 @@ PopupState XMLImport::FillPopupData(const OUString &rURL, librevenge::RVNGProper
     {
         xUriRef = mxUriReferenceFactory->parse(rURL);
     }
-    catch (const uno::Exception &rException)
+    catch (const uno::Exception &)
     {
-        SAL_WARN("writerperfect", "XMLImport::FillPopupData: XUriReference::parse() failed:" << rException.Message);
+        DBG_UNHANDLED_EXCEPTION("writerperfect", "XUriReference::parse() failed");
     }
     bool bAbsolute = true;
     if (xUriRef.is())

@@ -19,6 +19,7 @@
 
 #include <WrappedProperty.hxx>
 #include <com/sun/star/drawing/LineStyle.hpp>
+#include <tools/diagnose_ex.h>
 
 using namespace ::com::sun::star;
 using ::com::sun::star::uno::Any;
@@ -110,9 +111,9 @@ beans::PropertyState WrappedProperty::getPropertyState( const Reference< beans::
                     aState = beans::PropertyState_DEFAULT_VALUE;
             }
         }
-        catch( const beans::UnknownPropertyException& ex )
+        catch( const beans::UnknownPropertyException& )
         {
-            SAL_WARN("chart2", "Exception caught. " << ex );
+            DBG_UNHANDLED_EXCEPTION("chart2");
         }
     }
     return aState;

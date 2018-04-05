@@ -20,6 +20,7 @@
 #include <FormattedStringHelper.hxx>
 #include <PropertyHelper.hxx>
 #include <com/sun/star/chart2/FormattedString.hpp>
+#include <tools/diagnose_ex.h>
 
 namespace chart
 {
@@ -49,9 +50,9 @@ Sequence< Reference< chart2::XFormattedString2 > >
                 xTextProperties, Reference< beans::XPropertySet >( xFormStr, uno::UNO_QUERY_THROW ) );
         }
     }
-    catch( const uno::Exception & ex )
+    catch( const uno::Exception & )
     {
-        SAL_WARN("chart2", "Exception caught. " << ex );
+        DBG_UNHANDLED_EXCEPTION("chart2");
     }
 
     return Sequence< Reference< XFormattedString2 > >( & xFormStr, 1 );

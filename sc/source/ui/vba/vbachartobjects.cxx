@@ -31,6 +31,7 @@
 #include <vector>
 #include <basic/sberrors.hxx>
 #include <comphelper/sequence.hxx>
+#include <tools/diagnose_ex.h>
 
 using namespace ::com::sun::star;
 using namespace ::ooo::vba;
@@ -144,9 +145,9 @@ ScVbaChartObjects::Add( double _nX, double _nY, double _nWidth, double _nHeight 
         xChartObject->getChart()->setChartType(excel::XlChartType::xlColumnClustered);
         return uno::makeAny( xChartObject );
     }
-    catch (const uno::Exception& ex)
+    catch (const uno::Exception&)
     {
-        SAL_WARN("sc", "AddItem caught " << ex );
+        DBG_UNHANDLED_EXCEPTION("sc");
     }
     return aNULL();
 }

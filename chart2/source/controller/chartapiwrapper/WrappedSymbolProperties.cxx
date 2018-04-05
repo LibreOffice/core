@@ -34,6 +34,7 @@
 #include <vcl/graph.hxx>
 #include <vcl/GraphicObject.hxx>
 #include <vcl/outdev.hxx>
+#include <tools/diagnose_ex.h>
 
 using namespace ::com::sun::star;
 using ::com::sun::star::uno::Any;
@@ -429,9 +430,9 @@ beans::PropertyState WrappedSymbolSizeProperty::getPropertyState( const Referenc
                 return beans::PropertyState_DIRECT_VALUE;
         }
     }
-    catch( const uno::Exception & ex )
+    catch( const uno::Exception & )
     {
-        SAL_WARN("chart2", "Exception caught. " << ex );
+        DBG_UNHANDLED_EXCEPTION("chart2");
     }
     return beans::PropertyState_DEFAULT_VALUE;
 }

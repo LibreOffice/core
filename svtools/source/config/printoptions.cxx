@@ -35,6 +35,7 @@
 #include "itemholder2.hxx"
 
 #include <sal/macros.h>
+#include <tools/diagnose_ex.h>
 
 static const sal_uInt16 aDPIArray[] = { 72, 96, 150, 200, 300, 600 };
 
@@ -134,11 +135,11 @@ SvtPrintOptions_Impl::SvtPrintOptions_Impl(const OUString& rConfigRoot)
             m_xCfg->getByName(sTok) >>= m_xNode;
         }
     }
-    catch (const css::uno::Exception& ex)
+    catch (const css::uno::Exception&)
     {
+        DBG_UNHANDLED_EXCEPTION("svtools.config");
         m_xNode.clear();
         m_xCfg.clear();
-        SAL_WARN("svtools.config", "Caught unexpected: " << ex);
     }
 }
 
@@ -154,9 +155,9 @@ bool SvtPrintOptions_Impl::IsReduceTransparency() const
                 xSet->getPropertyValue(PROPERTYNAME_REDUCETRANSPARENCY) >>= bRet;
         }
     }
-    catch (const css::uno::Exception& ex)
+    catch (const css::uno::Exception&)
     {
-        SAL_WARN("svtools.config", "Caught unexpected: " << ex);
+        DBG_UNHANDLED_EXCEPTION("svtools.config");
     }
 
     return bRet;
@@ -174,9 +175,9 @@ sal_Int16 SvtPrintOptions_Impl::GetReducedTransparencyMode() const
                 xSet->getPropertyValue(PROPERTYNAME_REDUCEDTRANSPARENCYMODE) >>= nRet;
         }
     }
-    catch (const css::uno::Exception& ex)
+    catch (const css::uno::Exception&)
     {
-        SAL_WARN("svtools.config", "Caught unexpected: " << ex);
+        DBG_UNHANDLED_EXCEPTION("svtools.config");
     }
 
     return  nRet;
@@ -196,9 +197,9 @@ bool SvtPrintOptions_Impl::IsReduceGradients() const
             }
         }
     }
-    catch (const css::uno::Exception& ex)
+    catch (const css::uno::Exception&)
     {
-        SAL_WARN("svtools.config", "Caught unexpected: " << ex);
+        DBG_UNHANDLED_EXCEPTION("svtools.config");
     }
 
     return bRet;
@@ -218,9 +219,9 @@ sal_Int16 SvtPrintOptions_Impl::GetReducedGradientMode() const
             }
         }
     }
-    catch (const css::uno::Exception& ex)
+    catch (const css::uno::Exception&)
     {
-        SAL_WARN("svtools.config", "Caught unexpected: " << ex);
+        DBG_UNHANDLED_EXCEPTION("svtools.config");
     }
 
     return nRet;
@@ -240,9 +241,9 @@ sal_Int16 SvtPrintOptions_Impl::GetReducedGradientStepCount() const
             }
         }
     }
-    catch (const css::uno::Exception& ex)
+    catch (const css::uno::Exception&)
     {
-        SAL_WARN("svtools.config", "Caught unexpected: " << ex);
+        DBG_UNHANDLED_EXCEPTION("svtools.config");
     }
 
     return nRet;
@@ -262,9 +263,9 @@ bool SvtPrintOptions_Impl::IsReduceBitmaps() const
             }
         }
     }
-    catch (const css::uno::Exception& ex)
+    catch (const css::uno::Exception&)
     {
-        SAL_WARN("svtools.config", "Caught unexpected: " << ex);
+        DBG_UNHANDLED_EXCEPTION("svtools.config");
     }
 
     return bRet;
@@ -284,9 +285,9 @@ sal_Int16 SvtPrintOptions_Impl::GetReducedBitmapMode() const
             }
         }
     }
-    catch (const css::uno::Exception& ex)
+    catch (const css::uno::Exception&)
     {
-        SAL_WARN("svtools.config", "Caught unexpected: " << ex);
+        DBG_UNHANDLED_EXCEPTION("svtools.config");
     }
 
     return nRet;
@@ -306,9 +307,9 @@ sal_Int16 SvtPrintOptions_Impl::GetReducedBitmapResolution() const
             }
         }
     }
-    catch (const css::uno::Exception& ex)
+    catch (const css::uno::Exception&)
     {
-        SAL_WARN("svtools.config", "Caught unexpected: " << ex);
+        DBG_UNHANDLED_EXCEPTION("svtools.config");
     }
 
     return  nRet;
@@ -328,9 +329,9 @@ bool SvtPrintOptions_Impl::IsReducedBitmapIncludesTransparency() const
             }
         }
     }
-    catch (const css::uno::Exception& ex)
+    catch (const css::uno::Exception&)
     {
-        SAL_WARN("svtools.config", "Caught unexpected: " << ex);
+        DBG_UNHANDLED_EXCEPTION("svtools.config");
     }
 
     return  bRet;
@@ -350,9 +351,9 @@ bool SvtPrintOptions_Impl::IsConvertToGreyscales() const
             }
         }
     }
-    catch (const css::uno::Exception& ex)
+    catch (const css::uno::Exception&)
     {
-        SAL_WARN("svtools.config", "Caught unexpected: " << ex);
+        DBG_UNHANDLED_EXCEPTION("svtools.config");
     }
 
     return  bRet;
@@ -373,9 +374,9 @@ bool SvtPrintOptions_Impl::IsPDFAsStandardPrintJobFormat() const
             }
         }
     }
-    catch (const css::uno::Exception& ex)
+    catch (const css::uno::Exception&)
     {
-        SAL_WARN("svtools.config", "Caught unexpected: " << ex);
+        DBG_UNHANDLED_EXCEPTION("svtools.config");
     }
 
     return  bRet;
@@ -463,9 +464,9 @@ void SvtPrintOptions_Impl::impl_setValue (const OUString& sProp, bool bNew )
             ::comphelper::ConfigurationHelper::flush(m_xCfg);
         }
     }
-    catch(const css::uno::Exception& ex)
+    catch(const css::uno::Exception&)
     {
-        SAL_WARN("svtools.config", "Caught unexpected: " << ex);
+        DBG_UNHANDLED_EXCEPTION("svtools.config");
     }
 }
 
@@ -491,9 +492,9 @@ void SvtPrintOptions_Impl::impl_setValue (const OUString& sProp,
             ::comphelper::ConfigurationHelper::flush(m_xCfg);
         }
     }
-    catch(const css::uno::Exception& ex)
+    catch(const css::uno::Exception&)
     {
-        SAL_WARN("svtools.config", "Caught unexpected: " << ex);
+        DBG_UNHANDLED_EXCEPTION("svtools.config");
     }
 }
 

@@ -29,6 +29,7 @@
 #include <com/sun/star/text/ReferenceFieldSource.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/view/XFormLayerAccess.hpp>
+#include <tools/diagnose_ex.h>
 
 namespace writerfilter {
 namespace dmapper {
@@ -85,9 +86,9 @@ void ModelEventListener::notifyEvent( const document::EventObject& rEvent )
                 xRefreshable->refresh();
             }
         }
-        catch( const uno::Exception& rEx )
+        catch( const uno::Exception& )
         {
-            SAL_WARN("writerfilter", "exception while updating indexes: " << rEx);
+            DBG_UNHANDLED_EXCEPTION("writerfilter", "exception while updating indexes");
         }
     }
 

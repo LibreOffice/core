@@ -44,6 +44,7 @@
 #include <com/sun/star/util/XCloneable.hpp>
 #include <com/sun/star/lang/XServiceName.hpp>
 #include <comphelper/sequence.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <map>
 
@@ -289,9 +290,9 @@ sal_Int32 AxisHelper::getExplicitNumberFormatKeyForAxis(
                     }
                 }
             }
-            catch( const uno::Exception & ex )
+            catch( const uno::Exception & )
             {
-                SAL_WARN("chart2", "Exception caught. " << ex );
+                DBG_UNHANDLED_EXCEPTION("chart2");
             }
 
             if( ! aKeyMap.empty())
@@ -835,9 +836,9 @@ std::vector< Reference< XAxis > > AxisHelper::getAllAxesOfCoordinateSystem(
                                 aAxisVector.push_back( xAxis );
                         }
                     }
-                    catch( const uno::Exception & ex )
+                    catch( const uno::Exception & )
                     {
-                        SAL_WARN("chart2", "Exception caught. " << ex );
+                        DBG_UNHANDLED_EXCEPTION("chart2");
                     }
                 }
             }
@@ -1112,9 +1113,9 @@ void AxisHelper::setRTLAxisLayout( const Reference< XCoordinateSystem >& xCooSys
                     xVerticalMainAxis->setScaleData(aScale);
                 }
             }
-            catch( const uno::Exception & ex )
+            catch( const uno::Exception & )
             {
-                SAL_WARN("chart2", "Exception caught. " << ex );
+                DBG_UNHANDLED_EXCEPTION("chart2" );
             }
 
             try
@@ -1137,9 +1138,9 @@ void AxisHelper::setRTLAxisLayout( const Reference< XCoordinateSystem >& xCooSys
                     xVerticalSecondaryAxis->setScaleData(aScale);
                 }
             }
-            catch( const uno::Exception & ex )
+            catch( const uno::Exception & )
             {
-                SAL_WARN("chart2", "Exception caught. " << ex );
+                DBG_UNHANDLED_EXCEPTION("chart2");
             }
         }
     }

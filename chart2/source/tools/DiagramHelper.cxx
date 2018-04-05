@@ -58,6 +58,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <comphelper/sequence.hxx>
+#include <tools/diagnose_ex.h>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
@@ -100,9 +101,9 @@ DiagramHelper::tTemplateWithServiceName
                 bTemplateFound = true;
             }
         }
-        catch( const uno::Exception & ex )
+        catch( const uno::Exception & )
         {
-            SAL_WARN("chart2", "Exception caught. " << ex );
+            DBG_UNHANDLED_EXCEPTION("chart2");
         }
     }
 
@@ -181,9 +182,9 @@ void DiagramHelper::setVertical(
             }
         }
     }
-    catch( const uno::Exception & ex )
+    catch( const uno::Exception & )
     {
-        SAL_WARN("chart2", "Exception caught. " << ex );
+        DBG_UNHANDLED_EXCEPTION("chart2");
     }
 }
 
@@ -304,9 +305,9 @@ void DiagramHelper::setStackMode(
             }
         }
     }
-    catch( const uno::Exception & ex )
+    catch( const uno::Exception & )
     {
-        SAL_WARN("chart2", "Exception caught. " << ex );
+        DBG_UNHANDLED_EXCEPTION("chart2");
     }
 }
 
@@ -425,9 +426,9 @@ StackMode DiagramHelper::getStackModeFromChartType(
             }
         }
     }
-    catch( const uno::Exception & ex )
+    catch( const uno::Exception & )
     {
-        SAL_WARN("chart2", "Exception caught. " << ex );
+        DBG_UNHANDLED_EXCEPTION("chart2");
     }
 
     return eStackMode;
@@ -457,9 +458,9 @@ sal_Int32 DiagramHelper::getDimension( const Reference< XDiagram > & xDiagram )
             }
         }
     }
-    catch( const uno::Exception & ex )
+    catch( const uno::Exception & )
     {
-        SAL_WARN("chart2", "Exception caught. " << ex );
+        DBG_UNHANDLED_EXCEPTION("chart2");
     }
 
     return nResult;
@@ -519,9 +520,9 @@ void DiagramHelper::setDimension(
         else if( nNewDimensionCount==2 && eStackMode == StackMode::ZStacked )
             DiagramHelper::setStackMode( xDiagram, StackMode::NONE );
     }
-    catch( const uno::Exception & ex )
+    catch( const uno::Exception & )
     {
-        SAL_WARN("chart2", "Exception caught. " << ex );
+        DBG_UNHANDLED_EXCEPTION("chart2");
     }
 }
 
@@ -553,9 +554,9 @@ void DiagramHelper::replaceCoordinateSystem(
             if( xCategories.is() )
                 DiagramHelper::setCategoriesToDiagram( xCategories, xDiagram );
         }
-        catch( const uno::Exception & ex )
+        catch( const uno::Exception & )
         {
-            SAL_WARN("chart2", "Exception caught. " << ex );
+            DBG_UNHANDLED_EXCEPTION("chart2");
         }
     }
 }
@@ -591,9 +592,9 @@ bool DiagramHelper::attachSeriesToAxis( bool bAttachToMainAxis
             xProp->setPropertyValue( "AttachedAxisIndex", uno::Any( nNewAxisIndex ) );
             bChanged = true;
         }
-        catch( const uno::Exception & ex )
+        catch( const uno::Exception & )
         {
-            SAL_WARN("chart2", "Exception caught. " << ex );
+            DBG_UNHANDLED_EXCEPTION("chart2");
         }
     }
 
@@ -693,9 +694,9 @@ std::vector< Reference< XDataSeries > >
             }
         }
     }
-    catch( const uno::Exception & ex )
+    catch( const uno::Exception & )
     {
-        SAL_WARN("chart2", "Exception caught. " << ex );
+        DBG_UNHANDLED_EXCEPTION("chart2");
     }
 
     return aResult;
@@ -800,9 +801,9 @@ std::vector< Reference< XAxis > > lcl_getAxisHoldingCategoriesFromDiagram(
             }
         }
     }
-    catch( const uno::Exception & ex )
+    catch( const uno::Exception & )
     {
-        SAL_WARN("chart2", "Exception caught. " << ex );
+        DBG_UNHANDLED_EXCEPTION("chart2" );
     }
 
     if( aRet.empty() )
@@ -843,9 +844,9 @@ bool DiagramHelper::isCategoryDiagram(
             }
         }
     }
-    catch( const uno::Exception & ex )
+    catch( const uno::Exception & )
     {
-        SAL_WARN("chart2", "Exception caught. " << ex );
+        DBG_UNHANDLED_EXCEPTION("chart2");
     }
 
     return false;
@@ -906,18 +907,18 @@ Reference< data::XLabeledDataSequence >
                         {
                             xProp->setPropertyValue( "Role", uno::Any( OUString("categories") ) );
                         }
-                        catch( const uno::Exception & ex )
+                        catch( const uno::Exception & )
                         {
-                            SAL_WARN("chart2", "Exception caught. " << ex );
+                            DBG_UNHANDLED_EXCEPTION("chart2");
                         }
                     }
                 }
             }
         }
     }
-    catch( const uno::Exception & ex )
+    catch( const uno::Exception & )
     {
-        SAL_WARN("chart2", "Exception caught. " << ex );
+        DBG_UNHANDLED_EXCEPTION("chart2");
     }
 
     return xResult;
@@ -1032,9 +1033,9 @@ void lcl_switchToDateCategories( const Reference< XChartDocument >& xChartDoc, c
                 {
                     xKeyProps = xNumberFormats->getByKey( nNumberFormat );
                 }
-                catch( const uno::Exception & ex )
+                catch( const uno::Exception & )
                 {
-                    SAL_WARN("chart2", "Exception caught. " << ex );
+                    DBG_UNHANDLED_EXCEPTION("chart2");
                 }
                 sal_Int32 nType = util::NumberFormat::UNDEFINED;
                 if( xKeyProps.is() )
@@ -1225,9 +1226,9 @@ Sequence< Reference< XChartType > >
                              std::back_inserter( aResult ));
             }
         }
-        catch( const uno::Exception & ex )
+        catch( const uno::Exception & )
         {
-            SAL_WARN("chart2", "Exception caught. " << ex );
+            DBG_UNHANDLED_EXCEPTION("chart2");
         }
     }
 
@@ -1522,9 +1523,9 @@ sal_Int32 DiagramHelper::getGeometry3D(
                 }
             }
         }
-        catch( const uno::Exception & ex )
+        catch( const uno::Exception & )
         {
-            SAL_WARN("chart2", "Exception caught. " << ex );
+            DBG_UNHANDLED_EXCEPTION("chart2");
         }
     }
 

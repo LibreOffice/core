@@ -3000,7 +3000,7 @@ namespace cppcanvas
             }
             catch( uno::Exception& )
             {
-                SAL_WARN("cppcanvas.emf", "" << comphelper::anyToString( cppu::getCaughtException() ) );
+                DBG_UNHANDLED_EXCEPTION("cppcanvas.emf");
                 // convert error to return value
                 return false;
             }
@@ -3058,7 +3058,7 @@ namespace cppcanvas
             }
             catch( uno::Exception& )
             {
-                SAL_WARN( "cppcanvas.emf", "" << comphelper::anyToString( cppu::getCaughtException() ) );
+                DBG_UNHANDLED_EXCEPTION( "cppcanvas.emf");
                 return false;
             }
         }

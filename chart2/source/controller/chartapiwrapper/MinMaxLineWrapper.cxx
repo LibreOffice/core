@@ -29,6 +29,7 @@
 
 #include <LinePropertiesHelper.hxx>
 #include <UserDefinedProperties.hxx>
+#include <tools/diagnose_ex.h>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
@@ -258,9 +259,9 @@ void SAL_CALL MinMaxLineWrapper::setPropertyValues( const uno::Sequence< OUStrin
         {
             setPropertyValue( aPropertyName, rValueSeq[nN] );
         }
-        catch( const beans::UnknownPropertyException& ex )
+        catch( const beans::UnknownPropertyException& )
         {
-            SAL_WARN("chart2", "Exception caught. " << ex );
+            DBG_UNHANDLED_EXCEPTION("chart2");
         }
     }
     //todo: store unknown properties elsewhere

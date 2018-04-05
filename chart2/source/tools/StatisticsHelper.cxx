@@ -30,6 +30,7 @@
 #include <com/sun/star/chart2/data/XNumericalDataSequence.hpp>
 #include <com/sun/star/chart2/data/XDataSink.hpp>
 #include <com/sun/star/chart/ErrorBarStyle.hpp>
+#include <tools/diagnose_ex.h>
 
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Reference;
@@ -150,9 +151,9 @@ void lcl_setXMLRangePropertyAtDataSequence(
         if( xInfo.is() && xInfo->hasPropertyByName( aXMLRangePropName ))
             xProp->setPropertyValue( aXMLRangePropName, uno::Any( rXMLRange ));
     }
-    catch( const uno::Exception & ex )
+    catch( const uno::Exception & )
     {
-        SAL_WARN("chart2", "Exception caught. " << ex );
+        DBG_UNHANDLED_EXCEPTION("chart2");
     }
 }
 

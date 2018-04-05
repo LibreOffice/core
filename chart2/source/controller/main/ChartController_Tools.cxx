@@ -71,6 +71,7 @@
 #include <svx/unopage.hxx>
 
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <tools/diagnose_ex.h>
 
 #include <memory>
 
@@ -226,9 +227,9 @@ void ChartController::executeDispatch_NewArrangement()
             aUndoGuard.commit();
         }
     }
-    catch( const uno::RuntimeException & ex )
+    catch( const uno::RuntimeException & )
     {
-        SAL_WARN("chart2", "Exception caught. " << ex );
+        DBG_UNHANDLED_EXCEPTION("chart2");
     }
 }
 
@@ -480,9 +481,9 @@ void ChartController::impl_PasteStringAsTextShape( const OUString& rString, cons
                     impl_switchDiagramPositioningToExcludingPositioning();
                 }
             }
-            catch ( const uno::Exception& ex )
+            catch ( const uno::Exception& )
             {
-                SAL_WARN("chart2", "Exception caught. " << ex );
+                DBG_UNHANDLED_EXCEPTION("chart2");
             }
         }
     }
@@ -846,9 +847,9 @@ void ChartController::executeDispatch_ToggleLegend()
                 bChanged = true;
             }
         }
-        catch( const uno::Exception & ex )
+        catch( const uno::Exception & )
         {
-            SAL_WARN("chart2", "Exception caught. " << ex );
+            DBG_UNHANDLED_EXCEPTION("chart2");
         }
     }
     else

@@ -151,6 +151,7 @@ using namespace nsHdFtFlags;
 #include <oox/ole/olestorage.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <sfx2/DocumentMetadataAccess.hxx>
+#include <tools/diagnose_ex.h>
 
 static SwMacroInfo* GetMacroInfo( SdrObject* pObj )
 {
@@ -4905,9 +4906,9 @@ ErrCode SwWW8ImplReader::CoreLoad(WW8Glossary const *pGloss)
             uno::Reference<task::XInteractionHandler> xHandler;
             xDocumentMetadataAccess->loadMetadataFromStorage(xStorage, xBaseURI, xHandler);
         }
-        catch (const uno::Exception& rException)
+        catch (const uno::Exception&)
         {
-            SAL_WARN("sw.ww8", "SwWW8ImplReader::CoreLoad: failed to initialize RDF metadata: " << rException);
+            DBG_UNHANDLED_EXCEPTION("sw.ww8", "failed to initialize RDF metadata");
         }
         ReadDocInfo();
     }
