@@ -46,7 +46,7 @@
 #include <osl/process.h>
 #include <o3tl/char16_t2wchar_t.hxx>
 
-using namespace ::com::sun::star::uno ;
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang ;
 using ::com::sun::star::lang::XMultiServiceFactory ;
 using ::com::sun::star::lang::XSingleServiceFactory ;
@@ -102,8 +102,9 @@ void traceTrustStatus(DWORD err)
     }
 }
 
-SecurityEnvironment_MSCryptImpl::SecurityEnvironment_MSCryptImpl( const Reference< XMultiServiceFactory >& aFactory ) : m_hProv( NULL ) , m_pszContainer( nullptr ) , m_hKeyStore( nullptr ), m_hCertStore( nullptr ), m_hMySystemStore(nullptr), m_hRootSystemStore(nullptr), m_hTrustSystemStore(nullptr), m_hCaSystemStore(nullptr), m_bEnableDefault( false ), m_xServiceManager( aFactory ){
+SecurityEnvironment_MSCryptImpl::SecurityEnvironment_MSCryptImpl( const uno::Reference< uno::XComponentContext >& xContext ) : m_hProv( NULL ) , m_pszContainer( nullptr ) , m_hKeyStore( nullptr ), m_hCertStore( nullptr ), m_hMySystemStore(nullptr), m_hRootSystemStore(nullptr), m_hTrustSystemStore(nullptr), m_hCaSystemStore(nullptr), m_bEnableDefault( false ){
 
+    m_xServiceManager.set(xContext, uno::UNO_QUERY);
 }
 
 SecurityEnvironment_MSCryptImpl::~SecurityEnvironment_MSCryptImpl() {
@@ -152,12 +153,12 @@ SecurityEnvironment_MSCryptImpl::~SecurityEnvironment_MSCryptImpl() {
 
 /* XServiceInfo */
 OUString SAL_CALL SecurityEnvironment_MSCryptImpl::getImplementationName() {
-    return impl_getImplementationName() ;
+    return OUString("com.sun.star.xml.crypto.SecurityEnvironment");
 }
 
 /* XServiceInfo */
 sal_Bool SAL_CALL SecurityEnvironment_MSCryptImpl::supportsService( const OUString& serviceName) {
-    Sequence< OUString > seqServiceNames = getSupportedServiceNames() ;
+    uno::Sequence< OUString > seqServiceNames = getSupportedServiceNames() ;
     const OUString* pArray = seqServiceNames.getConstArray() ;
     for( sal_Int32 i = 0 ; i < seqServiceNames.getLength() ; i ++ ) {
         if( *( pArray + i ) == serviceName )
@@ -167,32 +168,13 @@ sal_Bool SAL_CALL SecurityEnvironment_MSCryptImpl::supportsService( const OUStri
 }
 
 /* XServiceInfo */
-Sequence< OUString > SAL_CALL SecurityEnvironment_MSCryptImpl::getSupportedServiceNames() {
-    return impl_getSupportedServiceNames() ;
-}
-
-//Helper for XServiceInfo
-Sequence< OUString > SecurityEnvironment_MSCryptImpl::impl_getSupportedServiceNames() {
-    ::osl::Guard< ::osl::Mutex > aGuard( ::osl::Mutex::getGlobalMutex() ) ;
-    Sequence<OUString> seqServiceNames { "com.sun.star.xml.crypto.SecurityEnvironment" };
+uno::Sequence< OUString > SAL_CALL SecurityEnvironment_MSCryptImpl::getSupportedServiceNames() {
+    uno::Sequence<OUString> seqServiceNames { "com.sun.star.xml.crypto.SecurityEnvironment" };
     return seqServiceNames ;
 }
 
-OUString SecurityEnvironment_MSCryptImpl::impl_getImplementationName() {
-    return OUString("com.sun.star.xml.security.bridge.xmlsec.SecurityEnvironment_MSCryptImpl") ;
-}
-
-//Helper for registry
-Reference< XInterface > SAL_CALL SecurityEnvironment_MSCryptImpl::impl_createInstance( const Reference< XMultiServiceFactory >& aServiceManager ) {
-    return Reference< XInterface >( *new SecurityEnvironment_MSCryptImpl( aServiceManager ) ) ;
-}
-
-Reference< XSingleServiceFactory > SecurityEnvironment_MSCryptImpl::impl_createFactory( const Reference< XMultiServiceFactory >& aServiceManager ) {
-    return ::cppu::createSingleFactory( aServiceManager , impl_getImplementationName() , impl_createInstance , impl_getSupportedServiceNames() ) ;
-}
-
 /* XUnoTunnel */
-sal_Int64 SAL_CALL SecurityEnvironment_MSCryptImpl::getSomething( const Sequence< sal_Int8 >& aIdentifier )
+sal_Int64 SAL_CALL SecurityEnvironment_MSCryptImpl::getSomething( const uno::Sequence< sal_Int8 >& aIdentifier )
 {
     if( aIdentifier.getLength() == 16 && 0 == memcmp( getUnoTunnelId().getConstArray(), aIdentifier.getConstArray(), 16 ) ) {
         return reinterpret_cast<sal_Int64>(this);
@@ -208,13 +190,13 @@ namespace
     class theSecurityEnvironment_MSCryptImplUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theSecurityEnvironment_MSCryptImplUnoTunnelId > {};
 }
 
-const Sequence< sal_Int8>& SecurityEnvironment_MSCryptImpl::getUnoTunnelId() {
+const uno::Sequence< sal_Int8>& SecurityEnvironment_MSCryptImpl::getUnoTunnelId() {
     return theSecurityEnvironment_MSCryptImplUnoTunnelId::get().getSeq();
 }
 
 /* XUnoTunnel extension */
-SecurityEnvironment_MSCryptImpl* SecurityEnvironment_MSCryptImpl::getImplementation( const Reference< XInterface >& rObj ) {
-    Reference< XUnoTunnel > xUT( rObj , UNO_QUERY ) ;
+SecurityEnvironment_MSCryptImpl* SecurityEnvironment_MSCryptImpl::getImplementation( const uno::Reference< XInterface >& rObj ) {
+    uno::Reference< XUnoTunnel > xUT( rObj , uno::UNO_QUERY ) ;
     if( xUT.is() ) {
         return reinterpret_cast<SecurityEnvironment_MSCryptImpl*>(xUT->getSomething( getUnoTunnelId() ));
     } else
@@ -338,7 +320,7 @@ extern "C" BOOL WINAPI cert_enum_system_store_callback(const void *pvSystemStore
 #endif
 
 //Methods from XSecurityEnvironment
-Sequence< Reference < XCertificate > > SecurityEnvironment_MSCryptImpl::getPersonalCertificates()
+uno::Sequence< uno::Reference < XCertificate > > SecurityEnvironment_MSCryptImpl::getPersonalCertificates()
 {
     sal_Int32 length ;
     X509Certificate_MSCryptImpl* xcert ;
@@ -400,7 +382,7 @@ Sequence< Reference < XCertificate > > SecurityEnvironment_MSCryptImpl::getPerso
     if( length != 0 ) {
         int i ;
         std::list< X509Certificate_MSCryptImpl* >::iterator xcertIt ;
-        Sequence< Reference< XCertificate > > certSeq( length ) ;
+        uno::Sequence< uno::Reference< XCertificate > > certSeq( length ) ;
 
         for( i = 0, xcertIt = certsList.begin(); xcertIt != certsList.end(); ++xcertIt, ++i ) {
             certSeq[i] = *xcertIt ;
@@ -409,11 +391,11 @@ Sequence< Reference < XCertificate > > SecurityEnvironment_MSCryptImpl::getPerso
         return certSeq ;
     }
 
-    return Sequence< Reference< XCertificate > >() ;
+    return uno::Sequence< uno::Reference< XCertificate > >() ;
 }
 
 
-Reference< XCertificate > SecurityEnvironment_MSCryptImpl::getCertificate( const OUString& issuerName, const Sequence< sal_Int8 >& serialNumber ) {
+uno::Reference< XCertificate > SecurityEnvironment_MSCryptImpl::getCertificate( const OUString& issuerName, const uno::Sequence< sal_Int8 >& serialNumber ) {
     unsigned int i ;
     X509Certificate_MSCryptImpl *xcert = nullptr ;
     PCCERT_CONTEXT pCertContext = nullptr ;
@@ -443,7 +425,7 @@ Reference< XCertificate > SecurityEnvironment_MSCryptImpl::getCertificate( const
 
     certInfo.Issuer.pbData = static_cast<BYTE*>(malloc( certInfo.Issuer.cbData ));
     if(!certInfo.Issuer.pbData)
-        throw RuntimeException() ;
+        throw uno::RuntimeException() ;
 
     if( ! ( CertStrToNameW(
         X509_ASN_ENCODING | PKCS_7_ASN_ENCODING ,
@@ -463,7 +445,7 @@ Reference< XCertificate > SecurityEnvironment_MSCryptImpl::getCertificate( const
     if (!cryptSerialNumber.pbData)
     {
         free( certInfo.Issuer.pbData ) ;
-        throw RuntimeException() ;
+        throw uno::RuntimeException() ;
     }
     for( i = 0; i < cryptSerialNumber.cbData; i ++ )
         cryptSerialNumber.pbData[i] = serialNumber[ cryptSerialNumber.cbData - i - 1 ] ;
@@ -608,12 +590,12 @@ Reference< XCertificate > SecurityEnvironment_MSCryptImpl::getCertificate( const
     return xcert ;
 }
 
-Reference< XCertificate > SecurityEnvironment_MSCryptImpl::getCertificate( const OUString& issuerName, const OUString& serialNumber ) {
-    Sequence< sal_Int8 > serial = xmlsecurity::numericStringToBigInteger( serialNumber ) ;
+uno::Reference< XCertificate > SecurityEnvironment_MSCryptImpl::getCertificate( const OUString& issuerName, const OUString& serialNumber ) {
+    uno::Sequence< sal_Int8 > serial = xmlsecurity::numericStringToBigInteger( serialNumber ) ;
     return getCertificate( issuerName, serial ) ;
 }
 
-Sequence< Reference < XCertificate > > SecurityEnvironment_MSCryptImpl::buildCertificatePath( const Reference< XCertificate >& begin ) {
+uno::Sequence< uno::Reference < XCertificate > > SecurityEnvironment_MSCryptImpl::buildCertificatePath( const uno::Reference< XCertificate >& begin ) {
     PCCERT_CHAIN_CONTEXT pChainContext ;
     PCCERT_CONTEXT pCertContext ;
     const X509Certificate_MSCryptImpl* xcert ;
@@ -629,10 +611,10 @@ Sequence< Reference < XCertificate > > SecurityEnvironment_MSCryptImpl::buildCer
     chainPara.cbSize = sizeof( CERT_CHAIN_PARA ) ;
     chainPara.RequestedUsage = certUsage ;
 
-    Reference< XUnoTunnel > xCertTunnel( begin, UNO_QUERY_THROW ) ;
+    uno::Reference< XUnoTunnel > xCertTunnel( begin, uno::UNO_QUERY_THROW ) ;
     xcert = reinterpret_cast<X509Certificate_MSCryptImpl*>(xCertTunnel->getSomething( X509Certificate_MSCryptImpl::getUnoTunnelId() ));
     if( xcert == nullptr ) {
-        throw RuntimeException() ;
+        throw uno::RuntimeException() ;
     }
 
     pCertContext = xcert->getMswcryCert() ;
@@ -704,7 +686,7 @@ Sequence< Reference < XCertificate > > SecurityEnvironment_MSCryptImpl::buildCer
 
         pCertChain = pChainContext->rgpChain[0] ;
         if( pCertChain->cElement ) {
-            Sequence< Reference< XCertificate > > xCertChain( pCertChain->cElement ) ;
+            uno::Sequence< uno::Reference< XCertificate > > xCertChain( pCertChain->cElement ) ;
 
             for( unsigned int i = 0 ; i < pCertChain->cElement ; i ++ ) {
                 if( pCertChain->rgpElement[i] )
@@ -728,10 +710,10 @@ Sequence< Reference < XCertificate > > SecurityEnvironment_MSCryptImpl::buildCer
     if (pChainContext)
         CertFreeCertificateChain(pChainContext);
 
-    return Sequence< Reference < XCertificate > >();
+    return uno::Sequence< uno::Reference < XCertificate > >();
 }
 
-Reference< XCertificate > SecurityEnvironment_MSCryptImpl::createCertificateFromRaw( const Sequence< sal_Int8 >& rawCertificate ) {
+uno::Reference< XCertificate > SecurityEnvironment_MSCryptImpl::createCertificateFromRaw( const uno::Sequence< sal_Int8 >& rawCertificate ) {
     X509Certificate_MSCryptImpl* xcert ;
 
     if( rawCertificate.getLength() > 0 ) {
@@ -744,7 +726,7 @@ Reference< XCertificate > SecurityEnvironment_MSCryptImpl::createCertificateFrom
     return xcert ;
 }
 
-Reference< XCertificate > SecurityEnvironment_MSCryptImpl::createCertificateFromAscii( const OUString& asciiCertificate ) {
+uno::Reference< XCertificate > SecurityEnvironment_MSCryptImpl::createCertificateFromAscii( const OUString& asciiCertificate ) {
     xmlChar* chCert ;
     xmlSecSize certSize ;
 
@@ -754,7 +736,7 @@ Reference< XCertificate > SecurityEnvironment_MSCryptImpl::createCertificateFrom
 
     certSize = xmlSecBase64Decode( chCert, chCert, xmlStrlen( chCert ) ) ;
 
-    Sequence< sal_Int8 > rawCert( certSize ) ;
+    uno::Sequence< sal_Int8 > rawCert( certSize ) ;
     for( xmlSecSize i = 0 ; i < certSize ; i ++ )
         rawCert[i] = *( chCert + i ) ;
 
@@ -765,7 +747,7 @@ Reference< XCertificate > SecurityEnvironment_MSCryptImpl::createCertificateFrom
 
 
 HCERTSTORE getCertStoreForIntermediatCerts(
-    const Sequence< Reference< css::security::XCertificate > >& seqCerts)
+    const uno::Sequence< uno::Reference< css::security::XCertificate > >& seqCerts)
 {
     HCERTSTORE store = nullptr;
     store = CertOpenStore(
@@ -777,7 +759,7 @@ HCERTSTORE getCertStoreForIntermediatCerts(
     {
         SAL_INFO("xmlsecurity.xmlsec", "Added temporary certificate: " << seqCerts[i]->getSubjectName());
 
-        Sequence<sal_Int8> data = seqCerts[i]->getEncoded();
+        uno::Sequence<sal_Int8> data = seqCerts[i]->getEncoded();
         PCCERT_CONTEXT cert = CertCreateCertificateContext(
             X509_ASN_ENCODING, reinterpret_cast<const BYTE*>(&data[0]), data.getLength());
         //Adding the certificate creates a copy and not just increases the ref count
@@ -793,21 +775,21 @@ HCERTSTORE getCertStoreForIntermediatCerts(
 //errors occur. See also
 //http://wiki.openoffice.org/wiki/Certificate_Path_Validation#Validation_status
 sal_Int32 SecurityEnvironment_MSCryptImpl::verifyCertificate(
-    const Reference< css::security::XCertificate >& aCert,
-    const Sequence< Reference< css::security::XCertificate > >& seqCerts)
+    const uno::Reference< css::security::XCertificate >& aCert,
+    const uno::Sequence< uno::Reference< css::security::XCertificate > >& seqCerts)
 {
     sal_Int32 validity = 0;
     PCCERT_CHAIN_CONTEXT pChainContext = nullptr;
     PCCERT_CONTEXT pCertContext = nullptr;
 
-    Reference< XUnoTunnel > xCertTunnel( aCert, UNO_QUERY_THROW ) ;
+    uno::Reference< XUnoTunnel > xCertTunnel( aCert, uno::UNO_QUERY_THROW ) ;
 
     SAL_INFO("xmlsecurity.xmlsec", "Start verification of certificate: " << aCert->getSubjectName());
 
     auto xcert = reinterpret_cast<const X509Certificate_MSCryptImpl*>
             (xCertTunnel->getSomething( X509Certificate_MSCryptImpl::getUnoTunnelId() ));
     if( xcert == nullptr ) {
-        throw RuntimeException() ;
+        throw uno::RuntimeException() ;
     }
 
     pCertContext = xcert->getMswcryCert() ;
@@ -965,10 +947,10 @@ sal_Int32 SecurityEnvironment_MSCryptImpl::getCertificateCharacters( const css::
     PCCERT_CONTEXT pCertContext ;
     const X509Certificate_MSCryptImpl* xcert ;
 
-    Reference< XUnoTunnel > xCertTunnel( aCert, UNO_QUERY_THROW ) ;
+    uno::Reference< XUnoTunnel > xCertTunnel( aCert, uno::UNO_QUERY_THROW ) ;
     xcert = reinterpret_cast<X509Certificate_MSCryptImpl*>(xCertTunnel->getSomething( X509Certificate_MSCryptImpl::getUnoTunnelId() ));
     if( xcert == nullptr ) {
-        throw RuntimeException() ;
+        throw uno::RuntimeException() ;
     }
 
     pCertContext = xcert->getMswcryCert() ;
@@ -1041,7 +1023,7 @@ xmlSecKeysMngrPtr SecurityEnvironment_MSCryptImpl::createKeysManager() {
      */
     pKeysMngr = xmlSecMSCryptoAppliedKeysMngrCreate() ;
     if( pKeysMngr == nullptr )
-        throw RuntimeException() ;
+        throw uno::RuntimeException() ;
 
     /*-
      * Adopt system default certificate store.
@@ -1053,7 +1035,7 @@ xmlSecKeysMngrPtr SecurityEnvironment_MSCryptImpl::createKeysManager() {
             if( xmlSecMSCryptoAppliedKeysMngrAdoptKeyStore( pKeysMngr, m_hMySystemStore ) < 0 ) {
                 CertCloseStore( m_hMySystemStore, CERT_CLOSE_STORE_CHECK_FLAG ) ;
                 m_hMySystemStore = nullptr;
-                throw RuntimeException() ;
+                throw uno::RuntimeException() ;
             }
         }
 
@@ -1063,7 +1045,7 @@ xmlSecKeysMngrPtr SecurityEnvironment_MSCryptImpl::createKeysManager() {
             if( xmlSecMSCryptoAppliedKeysMngrAdoptTrustedStore( pKeysMngr, m_hRootSystemStore ) < 0 ) {
                 CertCloseStore( m_hRootSystemStore, CERT_CLOSE_STORE_CHECK_FLAG ) ;
                 m_hRootSystemStore = nullptr;
-                throw RuntimeException() ;
+                throw uno::RuntimeException() ;
             }
         }
 
@@ -1073,7 +1055,7 @@ xmlSecKeysMngrPtr SecurityEnvironment_MSCryptImpl::createKeysManager() {
             if( xmlSecMSCryptoAppliedKeysMngrAdoptUntrustedStore( pKeysMngr, m_hTrustSystemStore ) < 0 ) {
                 CertCloseStore( m_hTrustSystemStore, CERT_CLOSE_STORE_CHECK_FLAG ) ;
                 m_hTrustSystemStore = nullptr;
-                throw RuntimeException() ;
+                throw uno::RuntimeException() ;
             }
         }
 
@@ -1083,7 +1065,7 @@ xmlSecKeysMngrPtr SecurityEnvironment_MSCryptImpl::createKeysManager() {
             if( xmlSecMSCryptoAppliedKeysMngrAdoptUntrustedStore( pKeysMngr, m_hCaSystemStore ) < 0 ) {
                 CertCloseStore( m_hCaSystemStore, CERT_CLOSE_STORE_CHECK_FLAG ) ;
                 m_hCaSystemStore = nullptr;
-                throw RuntimeException() ;
+                throw uno::RuntimeException() ;
             }
         }
     }
@@ -1094,6 +1076,13 @@ void SecurityEnvironment_MSCryptImpl::destroyKeysManager(xmlSecKeysMngrPtr pKeys
     if( pKeysMngr != nullptr ) {
         xmlSecKeysMngrDestroy( pKeysMngr ) ;
     }
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
+com_sun_star_xml_crypto_SecurityEnvironment_get_implementation(
+    uno::XComponentContext* pCtx, uno::Sequence<uno::Any> const& /*rSeq*/)
+{
+    return cppu::acquire(new SecurityEnvironment_MSCryptImpl(pCtx));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -76,7 +76,7 @@ class SecurityEnvironment_MSCryptImpl : public ::cppu::WeakImplHelper<
         css::uno::Reference< css::lang::XMultiServiceFactory > m_xServiceManager ;
 
     public:
-        explicit SecurityEnvironment_MSCryptImpl( const css::uno::Reference< css::lang::XMultiServiceFactory >& aFactory ) ;
+        explicit SecurityEnvironment_MSCryptImpl( const css::uno::Reference< css::uno::XComponentContext >& xContext ) ;
         virtual ~SecurityEnvironment_MSCryptImpl() override;
 
         //Methods from XSecurityEnvironment
@@ -122,20 +122,6 @@ class SecurityEnvironment_MSCryptImpl : public ::cppu::WeakImplHelper<
         ) override;
 
         virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
-
-        //Helper for XServiceInfo
-        static css::uno::Sequence< OUString > impl_getSupportedServiceNames() ;
-
-        /// @throws css::uno::RuntimeException
-        static OUString impl_getImplementationName() ;
-
-        //Helper for registry
-        /// @throws css::uno::RuntimeException
-        static css::uno::Reference< css::uno::XInterface > SAL_CALL impl_createInstance(
-            const css::uno::Reference< css::lang::XMultiServiceFactory >& aServiceManager ) ;
-
-        static css::uno::Reference< css::lang::XSingleServiceFactory > impl_createFactory(
-            const css::uno::Reference< css::lang::XMultiServiceFactory >& aServiceManager ) ;
 
         //Methods from XUnoTunnel
         virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) override;
