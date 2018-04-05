@@ -225,9 +225,9 @@ static SwTableRep*  lcl_TableParamToItemSet( SfxItemSet& rSet, SwWrtShell &rSh )
     pRep->SetSpace(aCols.GetRightMax());
 
     sal_uInt16 nPercent = 0;
-    long nWidth = ::GetTableWidth(pFormat, aCols, &nPercent, &rSh );
+    auto nWidth = ::GetTableWidth(pFormat, aCols, &nPercent, &rSh );
     // The table width is wrong for relative values.
-    if(nPercent)
+    if (nPercent)
         nWidth = pRep->GetSpace() * nPercent / 100;
     const sal_uInt16 nAlign = pFormat->GetHoriOrient().GetHoriOrient();
     pRep->SetAlign(nAlign);
