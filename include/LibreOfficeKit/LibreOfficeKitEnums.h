@@ -84,7 +84,13 @@ typedef enum
     /**
      * Enable range based header data
      */
-    LOK_FEATURE_RANGE_HEADERS = (1ULL << 4)
+    LOK_FEATURE_RANGE_HEADERS = (1ULL << 4),
+
+    /**
+     * Request to have the active view's Id as the 1st value in the
+     * LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR payload.
+     */
+    LOK_FEATURE_VIEWID_IN_VISCURSOR_INVALIDATION_CALLBACK = (1ULL << 5)
 }
 LibreOfficeKitOptionalFeatures;
 

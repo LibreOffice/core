@@ -1554,7 +1554,7 @@ void SwCursorShell::UpdateCursor( sal_uInt16 eFlags, bool bIdleEnd )
 
             m_pVisibleCursor->Hide(); // always hide visible Cursor
             // scroll Cursor to visible area
-            if( (eFlags & SwCursorShell::SCROLLWIN) &&
+            if( eFlags & SwCursorShell::SCROLLWIN &&
                 (HasSelection() || eFlags & SwCursorShell::READONLY ||
                  !IsCursorReadonly()) )
             {
