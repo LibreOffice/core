@@ -152,7 +152,7 @@ void SwFntObj::CreatePrtFont( const OutputDevice& rPrt )
     const_cast<OutputDevice&>(rPrt).SetFont( m_aFont );
     const FontMetric aWinMet( rPrt.GetFontMetric() );
     const_cast<OutputDevice&>(rPrt).SetFont( aOldFnt );
-    long nWidth = ( aWinMet.GetFontSize().Width() * m_nPropWidth ) / 100;
+    auto nWidth = ( aWinMet.GetFontSize().Width() * m_nPropWidth ) / 100;
 
     if( !nWidth )
         ++nWidth;
