@@ -30,6 +30,7 @@
 #include <chartview/ChartSfxItemIds.hxx>
 #include <svl/intitem.hxx>
 #include <svl/eitem.hxx>
+#include <tools/diagnose_ex.h>
 
 namespace chart
 {
@@ -114,9 +115,9 @@ void LegendPositionResources::writeToResources( const uno::Reference< frame::XMo
             }
         }
     }
-    catch( const uno::Exception & ex )
+    catch( const uno::Exception & )
     {
-        SAL_WARN("chart2", "Exception caught. " << ex );
+        DBG_UNHANDLED_EXCEPTION("chart2");
     }
 }
 
@@ -158,9 +159,9 @@ void LegendPositionResources::writeToModel( const css::uno::Reference< frame::XM
             xProp->setPropertyValue( "RelativePosition" , uno::Any());
         }
     }
-    catch( const uno::Exception & ex )
+    catch( const uno::Exception & )
     {
-        SAL_WARN("chart2", "Exception caught. " << ex );
+        DBG_UNHANDLED_EXCEPTION("chart2" );
     }
 }
 

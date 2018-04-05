@@ -25,6 +25,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/chart2/data/XDataSink.hpp>
 #include <cppuhelper/supportsservice.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <vector>
 #include <algorithm>
@@ -95,9 +96,9 @@ InterpretedData SAL_CALL DataInterpreter::interpretDataSource(
                     SetRole( aData[i]->getValues(), "values-y");
             }
         }
-        catch( const uno::Exception & ex )
+        catch( const uno::Exception & )
         {
-            SAL_WARN("chart2", "Exception caught. " << ex );
+            DBG_UNHANDLED_EXCEPTION("chart2");
         }
     }
 
@@ -174,9 +175,9 @@ InterpretedData SAL_CALL DataInterpreter::reinterpretDataSeries(
                 xSink->setData( aNewSequences );
             }
         }
-        catch( const uno::Exception & ex )
+        catch( const uno::Exception & )
         {
-            SAL_WARN("chart2", "Exception caught. " << ex );
+            DBG_UNHANDLED_EXCEPTION("chart2");
         }
     }
 
@@ -197,9 +198,9 @@ sal_Bool SAL_CALL DataInterpreter::isDataCompatible(
             if( aSeq.getLength() != 1 )
                 return false;
         }
-        catch( const uno::Exception & ex )
+        catch( const uno::Exception & )
         {
-            SAL_WARN("chart2", "Exception caught. " << ex );
+            DBG_UNHANDLED_EXCEPTION("chart2");
         }
     }
 
@@ -291,9 +292,9 @@ Reference< data::XDataSource > SAL_CALL DataInterpreter::mergeInterpretedData(
                 }
             }
         }
-        catch( const uno::Exception & ex )
+        catch( const uno::Exception & )
         {
-            SAL_WARN("chart2", "Exception caught. " << ex );
+            DBG_UNHANDLED_EXCEPTION("chart2");
         }
     }
 
@@ -313,9 +314,9 @@ OUString DataInterpreter::GetRole( const Reference< data::XDataSequence > & xSeq
         Reference< beans::XPropertySet > xProp( xSeq, uno::UNO_QUERY_THROW );
         xProp->getPropertyValue( "Role") >>= aResult;
     }
-    catch( const uno::Exception & ex )
+    catch( const uno::Exception & )
     {
-        SAL_WARN("chart2", "Exception caught. " << ex );
+        DBG_UNHANDLED_EXCEPTION("chart2");
     }
     return aResult;
 }
@@ -329,9 +330,9 @@ void DataInterpreter::SetRole( const Reference< data::XDataSequence > & xSeq, co
         Reference< beans::XPropertySet > xProp( xSeq, uno::UNO_QUERY_THROW );
         xProp->setPropertyValue( "Role", uno::Any( rRole ));
     }
-    catch( const uno::Exception & ex )
+    catch( const uno::Exception & )
     {
-        SAL_WARN("chart2", "Exception caught. " << ex );
+        DBG_UNHANDLED_EXCEPTION("chart2");
     }
 }
 

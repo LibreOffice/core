@@ -26,6 +26,7 @@
 #include <rtl/math.hxx>
 #include <editeng/unoprnms.hxx>
 #include <com/sun/star/drawing/ProjectionMode.hpp>
+#include <tools/diagnose_ex.h>
 
 namespace chart
 {
@@ -220,9 +221,9 @@ void ThreeD_SceneGeometry_TabPage::applyPerspectiveToModel()
         m_xSceneProperties->setPropertyValue( "D3DScenePerspective" , uno::Any( aMode ));
         m_xSceneProperties->setPropertyValue( "Perspective" , uno::Any( static_cast<sal_Int32>(m_pMFPerspective->GetValue()) ));
     }
-    catch( const uno::Exception & ex )
+    catch( const uno::Exception & )
     {
-        SAL_WARN("chart2", "Exception caught. " << ex );
+        DBG_UNHANDLED_EXCEPTION("chart2");
     }
 
     m_bPerspectiveChangePending = false;

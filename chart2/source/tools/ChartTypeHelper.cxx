@@ -26,6 +26,7 @@
 #include <com/sun/star/chart/DataLabelPlacement.hpp>
 #include <com/sun/star/chart2/XDataSeriesContainer.hpp>
 #include <com/sun/star/chart/MissingValueTreatment.hpp>
+#include <tools/diagnose_ex.h>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
@@ -554,9 +555,9 @@ sal_Int32 ChartTypeHelper::getNumberOfDisplayedSeries(
                 }
             }
         }
-        catch( const uno::Exception & ex )
+        catch( const uno::Exception & )
         {
-            SAL_WARN("chart2", "Exception caught. " << ex );
+            DBG_UNHANDLED_EXCEPTION("chart2");
         }
     }
     return nNumberOfSeries;

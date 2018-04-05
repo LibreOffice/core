@@ -59,6 +59,7 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/util/DateTime.hpp>
+#include <tools/diagnose_ex.h>
 
 #include <vector>
 #include <algorithm>
@@ -469,9 +470,9 @@ void WrappedHasLegendProperty::setPropertyValue( const Any& rOuterValue, const R
                 xLegendProp->setPropertyValue("Show", uno::Any( bNewValue ));
         }
     }
-    catch (const uno::Exception& ex)
+    catch (const uno::Exception&)
     {
-        SAL_WARN("chart2", "Exception caught. " << ex );
+        DBG_UNHANDLED_EXCEPTION("chart2");
     }
 }
 
@@ -487,9 +488,9 @@ Any WrappedHasLegendProperty::getPropertyValue( const Reference< beans::XPropert
         else
             aRet <<= false;
     }
-    catch (const uno::Exception& ex)
+    catch (const uno::Exception&)
     {
-        SAL_WARN("chart2", "Exception caught. " << ex );
+        DBG_UNHANDLED_EXCEPTION("chart2");
     }
     return aRet;
 }
@@ -536,9 +537,9 @@ void WrappedHasMainTitleProperty::setPropertyValue( const Any& rOuterValue, cons
         else
             TitleHelper::removeTitle( TitleHelper::MAIN_TITLE, m_spChart2ModelContact->getChartModel() );
     }
-    catch (const uno::Exception& ex)
+    catch (const uno::Exception&)
     {
-        SAL_WARN("chart2", "Exception caught. " << ex );
+        DBG_UNHANDLED_EXCEPTION("chart2");
     }
 }
 
@@ -549,9 +550,9 @@ Any WrappedHasMainTitleProperty::getPropertyValue( const Reference< beans::XProp
     {
         aRet <<= TitleHelper::getTitle( TitleHelper::MAIN_TITLE, m_spChart2ModelContact->getChartModel() ).is();
     }
-    catch (const uno::Exception& ex)
+    catch (const uno::Exception&)
     {
-        SAL_WARN("chart2", "Exception caught. " << ex );
+        DBG_UNHANDLED_EXCEPTION("chart2");
     }
     return aRet;
 }
@@ -598,9 +599,9 @@ void WrappedHasSubTitleProperty::setPropertyValue( const Any& rOuterValue, const
         else
             TitleHelper::removeTitle( TitleHelper::SUB_TITLE, m_spChart2ModelContact->getChartModel() );
     }
-    catch (const uno::Exception& ex)
+    catch (const uno::Exception&)
     {
-        SAL_WARN("chart2", "Exception caught. " << ex );
+        DBG_UNHANDLED_EXCEPTION("chart2");
     }
 }
 
@@ -611,9 +612,9 @@ Any WrappedHasSubTitleProperty::getPropertyValue( const Reference< beans::XPrope
     {
         aRet <<= TitleHelper::getTitle( TitleHelper::SUB_TITLE, m_spChart2ModelContact->getChartModel() ).is();
     }
-    catch (const uno::Exception& ex)
+    catch (const uno::Exception&)
     {
-        SAL_WARN("chart2", "Exception caught. " << ex );
+        DBG_UNHANDLED_EXCEPTION("chart2");
     }
     return aRet;
 }
@@ -697,9 +698,9 @@ Reference< XDiagram > SAL_CALL ChartDocumentWrapper::getDiagram()
         {
             m_xDiagram = new DiagramWrapper( m_spChart2ModelContact );
         }
-        catch (const uno::Exception& ex)
+        catch (const uno::Exception&)
         {
-            SAL_WARN("chart2", "Exception caught. " << ex );
+            DBG_UNHANDLED_EXCEPTION("chart2");
         }
     }
 
@@ -731,9 +732,9 @@ void SAL_CALL ChartDocumentWrapper::setDiagram( const Reference< XDiagram >& xDi
                 m_xDiagram = xDiagram;
             }
         }
-        catch (const uno::Exception& ex)
+        catch (const uno::Exception&)
         {
-            SAL_WARN("chart2", "Exception caught. " << ex );
+            DBG_UNHANDLED_EXCEPTION("chart2");
         }
     }
 }
@@ -884,9 +885,9 @@ void SAL_CALL ChartDocumentWrapper::dispose()
             // this is ok, don't panic
         }
     }
-    catch (const uno::Exception &ex)
+    catch (const uno::Exception &)
     {
-        SAL_WARN("chart2", "Exception caught. " << ex );
+        DBG_UNHANDLED_EXCEPTION("chart2");
     }
 }
 
@@ -916,13 +917,13 @@ void ChartDocumentWrapper::impl_resetAddIn()
                 }
             }
         }
-        catch (const uno::RuntimeException& ex)
+        catch (const uno::RuntimeException&)
         {
-            SAL_WARN("chart2", "Exception caught. " << ex );
+            DBG_UNHANDLED_EXCEPTION("chart2");
         }
-        catch (const uno::Exception& ex)
+        catch (const uno::Exception&)
         {
-            SAL_WARN("chart2", "Exception caught. " << ex );
+            DBG_UNHANDLED_EXCEPTION("chart2");
         }
     }
 }
@@ -1230,9 +1231,9 @@ uno::Reference< uno::XInterface > SAL_CALL ChartDocumentWrapper::createInstance(
 
                 xResult = static_cast< ::cppu::OWeakObject* >( new DiagramWrapper( m_spChart2ModelContact ));
             }
-            catch (const uno::Exception& ex)
+            catch (const uno::Exception&)
             {
-                SAL_WARN("chart2", "Exception caught. " << ex );
+                DBG_UNHANDLED_EXCEPTION("chart2");
             }
         }
 
@@ -1265,9 +1266,9 @@ uno::Reference< uno::XInterface > SAL_CALL ChartDocumentWrapper::createInstance(
                         aArguments[1] <<= true; // bRefreshAddIn
                         xViewInit->initialize(aArguments);
                     }
-                    catch (const uno::Exception& ex)
+                    catch (const uno::Exception&)
                     {
-                        SAL_WARN("chart2", "Exception caught. " << ex );
+                        DBG_UNHANDLED_EXCEPTION("chart2");
                     }
                 }
             }
@@ -1370,9 +1371,9 @@ void SAL_CALL ChartDocumentWrapper::setDelegator(
         {
             dispose();
         }
-        catch (const uno::Exception& ex)
+        catch (const uno::Exception&)
         {
-            SAL_WARN("chart2", "Exception caught. " << ex );
+            DBG_UNHANDLED_EXCEPTION("chart2");
         }
     }
 }

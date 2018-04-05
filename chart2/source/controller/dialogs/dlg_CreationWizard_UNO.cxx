@@ -32,6 +32,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <comphelper/sequence.hxx>
+#include <tools/diagnose_ex.h>
 
 namespace chart
 {
@@ -249,9 +250,9 @@ void SAL_CALL CreationWizardUnoDlg::disposing()
         uno::Reference< frame::XTerminateListener > xListener( this );
         xDesktop->removeTerminateListener( xListener );
     }
-    catch( const uno::Exception & ex )
+    catch( const uno::Exception & )
     {
-        SAL_WARN("chart2", "Exception caught. " << ex );
+        DBG_UNHANDLED_EXCEPTION("chart2");
     }
 }
 

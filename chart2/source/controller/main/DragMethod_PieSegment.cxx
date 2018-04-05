@@ -26,6 +26,7 @@
 #include <svx/svdpagv.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <basegfx/matrix/b2dhommatrix.hxx>
+#include <tools/diagnose_ex.h>
 
 namespace chart
 {
@@ -118,9 +119,9 @@ bool DragMethod_PieSegment::EndSdrDrag(bool /*bCopy*/)
                 xPointProperties->setPropertyValue( "Offset", uno::Any( m_fAdditionalOffset+m_fInitialOffset ));
         }
     }
-    catch( const uno::Exception & ex )
+    catch( const uno::Exception & )
     {
-        SAL_WARN("chart2", "Exception caught. " << ex );
+        DBG_UNHANDLED_EXCEPTION("chart2");
     }
 
     return true;

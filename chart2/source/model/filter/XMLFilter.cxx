@@ -47,6 +47,7 @@
 #include <com/sun/star/packages/zip/ZipIOException.hpp>
 #include <com/sun/star/document/GraphicObjectResolver.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
+#include <tools/diagnose_ex.h>
 
 using namespace ::com::sun::star;
 
@@ -117,9 +118,9 @@ uno::Reference< embed::XStorage > lcl_getWriteStorage(
             xProp->setPropertyValue( "MediaType", uno::Any( _sMediaType ));
         }
     }
-    catch (const uno::Exception& ex)
+    catch (const uno::Exception&)
     {
-        SAL_WARN("chart2", "Exception caught. " << ex );
+        DBG_UNHANDLED_EXCEPTION("chart2");
     }
     return xStorage;
 }
@@ -170,9 +171,9 @@ uno::Reference< embed::XStorage > lcl_getReadStorage(
 
         OSL_ENSURE( xStorage.is(), "No Storage" );
     }
-    catch (const uno::Exception& ex)
+    catch (const uno::Exception&)
     {
-        SAL_WARN("chart2", "Exception caught. " << ex );
+        DBG_UNHANDLED_EXCEPTION("chart2");
     }
 
     return xStorage;
@@ -390,9 +391,9 @@ ErrCode XMLFilter::impl_Import(
                 xStorage, xSaxParser, xFactory, xGraphicObjectResolver, xImportInfo );
         }
     }
-    catch (const uno::Exception& ex)
+    catch (const uno::Exception&)
     {
-        SAL_WARN("chart2", "Exception caught. " << ex );
+        DBG_UNHANDLED_EXCEPTION("chart2");
 
         // something went awry
         nWarning = ERRCODE_SFX_GENERAL;
@@ -500,9 +501,9 @@ ErrCode XMLFilter::impl_ImportStream(
         catch (const io::IOException&)
         {
         }
-        catch (const uno::Exception& rEx)
+        catch (const uno::Exception&)
         {
-            SAL_WARN("chart2", "Exception caught. " << rEx);
+            DBG_UNHANDLED_EXCEPTION("chart2");
         }
     }
 
@@ -644,9 +645,9 @@ ErrCode XMLFilter::impl_Export(
         if ( xTransact.is() )
             xTransact->commit();
     }
-    catch (const uno::Exception& ex)
+    catch (const uno::Exception&)
     {
-        SAL_WARN("chart2", "Exception caught. " << ex );
+        DBG_UNHANDLED_EXCEPTION("chart2");
 
         // something went awry
         nWarning = ERRCODE_SFX_GENERAL;
@@ -687,9 +688,9 @@ ErrCode XMLFilter::impl_ExportStream(
             xStreamProp->setPropertyValue( "Compressed", uno::Any( true ) );//@todo?
             xStreamProp->setPropertyValue( "UseCommonStoragePasswordEncryption", uno::Any( true ) );
         }
-        catch (const uno::Exception& rEx)
+        catch (const uno::Exception&)
         {
-            SAL_WARN("chart2", "Exception caught. " << rEx );
+            DBG_UNHANDLED_EXCEPTION("chart2");
         }
 
         xActiveDataSource->setOutputStream(xOutputStream);
@@ -717,9 +718,9 @@ ErrCode XMLFilter::impl_ExportStream(
 
         xFilter->filter(m_aMediaDescriptor);
     }
-    catch (const uno::Exception& rEx)
+    catch (const uno::Exception&)
     {
-        SAL_WARN("chart2", "Exception caught. " << rEx );
+        DBG_UNHANDLED_EXCEPTION("chart2");
     }
     return ERRCODE_NONE;
 }

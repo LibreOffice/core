@@ -35,6 +35,7 @@
 #include <com/sun/star/chart2/data/XDataSink.hpp>
 
 #include <rtl/ustrbuf.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <functional>
 #include <algorithm>
@@ -836,10 +837,10 @@ bool DataSourceTabPage::updateModelFromControl( Edit * pField )
                 {
                     xLabeledSeq->setValues( xDataProvider->createDataSequenceByRangeRepresentation( aRange ));
                 }
-                catch( const uno::Exception & ex )
+                catch( const uno::Exception & )
                 {
                     // should work as validation should have happened before
-                    SAL_WARN("chart2", "Exception caught. " << ex );
+                    DBG_UNHANDLED_EXCEPTION("chart2");
                 }
             }
             else if( xLabeledSeq.is())
@@ -897,10 +898,10 @@ bool DataSourceTabPage::updateModelFromControl( Edit * pField )
                                 {
                                     xNewSeq.set( xDataProvider->createDataSequenceByRangeRepresentation( aRange ));
                                 }
-                                catch( const uno::Exception & ex )
+                                catch( const uno::Exception & )
                                 {
                                     // should work as validation should have happened before
-                                    SAL_WARN("chart2", "Exception caught. " << ex );
+                                    DBG_UNHANDLED_EXCEPTION("chart2");
                                 }
                                 if( xNewSeq.is())
                                 {
@@ -928,10 +929,10 @@ bool DataSourceTabPage::updateModelFromControl( Edit * pField )
                             {
                                 xNewSeq.set( xDataProvider->createDataSequenceByRangeRepresentation( aRange ));
                             }
-                            catch( const uno::Exception & ex )
+                            catch( const uno::Exception & )
                             {
                                 // should work as validation should have happened before
-                                SAL_WARN("chart2", "Exception caught. " << ex );
+                                DBG_UNHANDLED_EXCEPTION("chart2");
                             }
                             if( xNewSeq.is())
                             {
@@ -960,10 +961,10 @@ bool DataSourceTabPage::updateModelFromControl( Edit * pField )
 
                 lcl_UpdateCurrentRange( *m_pLB_ROLE, aSelectedRole, aRange );
             }
-            catch( const uno::Exception & ex )
+            catch( const uno::Exception & )
             {
+                DBG_UNHANDLED_EXCEPTION("chart2");
                 bResult = false;
-                SAL_WARN("chart2", "Exception caught. " << ex );
             }
         }
     }
@@ -983,9 +984,9 @@ bool DataSourceTabPage::updateModelFromControl( Edit * pField )
                 m_rDialogModel.setTimeBasedRange(rInfo.bTimeBased, rInfo.nStart, rInfo.nEnd);
             }
         }
-        catch( const uno::Exception & ex )
+        catch( const uno::Exception & )
         {
-            SAL_WARN("chart2", "Exception caught. " << ex );
+            DBG_UNHANDLED_EXCEPTION("chart2");
         }
     }
 

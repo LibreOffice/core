@@ -42,6 +42,7 @@
 #include <rtl/uuid.h>
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <vector>
 #include <algorithm>
@@ -380,9 +381,9 @@ Axis::~Axis()
             m_aScaleData.Categories.set(nullptr);
         }
     }
-    catch( const uno::Exception & ex )
+    catch( const uno::Exception & )
     {
-        SAL_WARN("chart2", "Exception caught. " << ex );
+        DBG_UNHANDLED_EXCEPTION("chart2");
     }
 
     m_aSubGridProperties.realloc(0);
@@ -530,9 +531,9 @@ void SAL_CALL Axis::addModifyListener( const Reference< util::XModifyListener >&
         Reference< util::XModifyBroadcaster > xBroadcaster( m_xModifyEventForwarder, uno::UNO_QUERY_THROW );
         xBroadcaster->addModifyListener( aListener );
     }
-    catch( const uno::Exception & ex )
+    catch( const uno::Exception &)
     {
-        SAL_WARN("chart2", "Exception caught. " << ex );
+        DBG_UNHANDLED_EXCEPTION("chart2");
     }
 }
 
@@ -543,9 +544,9 @@ void SAL_CALL Axis::removeModifyListener( const Reference< util::XModifyListener
         Reference< util::XModifyBroadcaster > xBroadcaster( m_xModifyEventForwarder, uno::UNO_QUERY_THROW );
         xBroadcaster->removeModifyListener( aListener );
     }
-    catch( const uno::Exception & ex )
+    catch( const uno::Exception & )
     {
-        SAL_WARN("chart2", "Exception caught. " << ex );
+        DBG_UNHANDLED_EXCEPTION("chart2");
     }
 }
 

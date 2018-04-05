@@ -22,6 +22,7 @@
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/drawing/LineDash.hpp>
 #include <com/sun/star/drawing/LineJoint.hpp>
+#include <tools/diagnose_ex.h>
 
 using namespace ::com::sun::star;
 
@@ -110,9 +111,9 @@ bool LinePropertiesHelper::IsLineVisible( const css::uno::Reference<
             }
         }
     }
-    catch( const uno::Exception & ex )
+    catch( const uno::Exception & )
     {
-        SAL_WARN("chart2", "Exception caught. " << ex );
+        DBG_UNHANDLED_EXCEPTION("chart2");
     }
     return bRet;
 }
@@ -135,9 +136,9 @@ void LinePropertiesHelper::SetLineVisible( const css::uno::Reference<
                 xLineProperties->setPropertyValue( "LineTransparence", uno::Any( sal_Int16(0) ) );
         }
     }
-    catch( const uno::Exception & ex )
+    catch( const uno::Exception & )
     {
-        SAL_WARN("chart2", "Exception caught. " << ex );
+        DBG_UNHANDLED_EXCEPTION("chart2");
     }
 }
 
@@ -154,9 +155,9 @@ void LinePropertiesHelper::SetLineInvisible( const css::uno::Reference<
                 xLineProperties->setPropertyValue( "LineStyle", uno::Any( drawing::LineStyle_NONE ) );
         }
     }
-    catch( const uno::Exception & ex )
+    catch( const uno::Exception & )
     {
-        SAL_WARN("chart2", "Exception caught. " << ex );
+        DBG_UNHANDLED_EXCEPTION("chart2");
     }
 }
 
@@ -170,9 +171,9 @@ void LinePropertiesHelper::SetLineColor( const css::uno::Reference<
             xLineProperties->setPropertyValue( "LineColor", uno::Any( nColor ) );
         }
     }
-    catch( const uno::Exception & ex )
+    catch( const uno::Exception & )
     {
-        SAL_WARN("chart2", "Exception caught. " << ex );
+        DBG_UNHANDLED_EXCEPTION("chart2");
     }
 }
 

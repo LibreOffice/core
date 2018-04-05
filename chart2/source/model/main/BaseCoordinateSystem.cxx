@@ -26,6 +26,7 @@
 #include <AxisHelper.hxx>
 #include <com/sun/star/chart2/AxisType.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
+#include <tools/diagnose_ex.h>
 
 #include <algorithm>
 #include <iterator>
@@ -179,9 +180,9 @@ BaseCoordinateSystem::~BaseCoordinateSystem()
             ModifyListenerHelper::removeListenerFromAllElements( i, m_xModifyEventForwarder );
         ModifyListenerHelper::removeListenerFromAllElements( m_aChartTypes, m_xModifyEventForwarder );
     }
-    catch( const uno::Exception & ex )
+    catch( const uno::Exception & )
     {
-        SAL_WARN("chart2", "Exception caught. " << ex );
+        DBG_UNHANDLED_EXCEPTION("chart2" );
     }
 }
 
@@ -292,9 +293,9 @@ void SAL_CALL BaseCoordinateSystem::addModifyListener( const Reference< util::XM
         Reference< util::XModifyBroadcaster > xBroadcaster( m_xModifyEventForwarder, uno::UNO_QUERY_THROW );
         xBroadcaster->addModifyListener( aListener );
     }
-    catch( const uno::Exception & ex )
+    catch( const uno::Exception & )
     {
-        SAL_WARN("chart2", "Exception caught. " << ex );
+        DBG_UNHANDLED_EXCEPTION("chart2" );
     }
 }
 
@@ -305,9 +306,9 @@ void SAL_CALL BaseCoordinateSystem::removeModifyListener( const Reference< util:
         Reference< util::XModifyBroadcaster > xBroadcaster( m_xModifyEventForwarder, uno::UNO_QUERY_THROW );
         xBroadcaster->removeModifyListener( aListener );
     }
-    catch( const uno::Exception & ex )
+    catch( const uno::Exception & )
     {
-        SAL_WARN("chart2", "Exception caught. " << ex );
+        DBG_UNHANDLED_EXCEPTION("chart2" );
     }
 }
 

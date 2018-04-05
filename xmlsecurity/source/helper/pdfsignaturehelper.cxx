@@ -20,6 +20,7 @@
 #include <vcl/filter/pdfdocument.hxx>
 
 #include <pdfio/pdfdocument.hxx>
+#include <tools/diagnose_ex.h>
 
 using namespace ::com::sun::star;
 
@@ -90,9 +91,9 @@ PDFSignatureHelper::GetDocumentSignatureInformations(
             {
                 rExternal.CertificateStatus = xSecEnv->verifyCertificate(rExternal.Signer, {});
             }
-            catch (const uno::SecurityException& rException)
+            catch (const uno::SecurityException&)
             {
-                SAL_WARN("xmlsecurity.helper", "failed to verify certificate: " << rException);
+                DBG_UNHANDLED_EXCEPTION("xmlsecurity.helper", "failed to verify certificate");
                 rExternal.CertificateStatus = security::CertificateValidity::INVALID;
             }
         }

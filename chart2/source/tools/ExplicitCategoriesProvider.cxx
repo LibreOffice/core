@@ -30,6 +30,7 @@
 #include <com/sun/star/chart2/AxisType.hpp>
 #include <com/sun/star/util/NumberFormat.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
+#include <tools/diagnose_ex.h>
 
 namespace chart
 {
@@ -120,9 +121,9 @@ ExplicitCategoriesProvider::ExplicitCategoriesProvider( const Reference< chart2:
             }
         }
     }
-    catch( const uno::Exception & ex )
+    catch( const uno::Exception & )
     {
-        SAL_WARN("chart2", "Exception caught. " << ex );
+        DBG_UNHANDLED_EXCEPTION("chart2");
     }
 }
 

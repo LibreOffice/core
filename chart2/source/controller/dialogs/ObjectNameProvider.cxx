@@ -37,6 +37,7 @@
 
 #include <com/sun/star/chart2/XTitle.hpp>
 #include <com/sun/star/chart2/XRegressionCurveContainer.hpp>
+#include <tools/diagnose_ex.h>
 
 namespace chart
 {
@@ -623,9 +624,9 @@ OUString ObjectNameProvider::getHelpText( const OUString& rObjectCID, const Refe
                                     fR*fR, rtl_math_StringFormat_G, 4, cDecSeparator, true ));
                         }
                     }
-                    catch( const uno::Exception & ex )
+                    catch( const uno::Exception & )
                     {
-                        SAL_WARN("chart2", "Exception caught. " << ex );
+                        DBG_UNHANDLED_EXCEPTION("chart2");
                     }
                 }
             }
@@ -692,9 +693,9 @@ OUString ObjectNameProvider::getHelpText( const OUString& rObjectCID, const Refe
                                     fStdDev, rtl_math_StringFormat_G, 4, cDecSeparator, true ));
                         }
                     }
-                    catch( const uno::Exception & ex )
+                    catch( const uno::Exception & )
                     {
-                        SAL_WARN("chart2", "Exception caught. " << ex );
+                        DBG_UNHANDLED_EXCEPTION("chart2");
                     }
                 }
             }
