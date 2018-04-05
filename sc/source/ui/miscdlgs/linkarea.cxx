@@ -136,7 +136,7 @@ void ScLinkedAreaDlg::LoadDocument( const OUString& rFile, const OUString& rFilt
 
         SfxErrorContext aEc( ERRCTX_SFX_OPENDOC, rFile );
 
-        ScDocumentLoader aLoader( rFile, aNewFilter, aNewOptions, 0, true );    // with interaction
+        ScDocumentLoader aLoader( rFile, aNewFilter, aNewOptions, 0, GetFrameWeld() );    // with interaction
         pSourceShell = aLoader.GetDocShell();
         if ( pSourceShell )
         {

@@ -19,6 +19,8 @@
 
 #include <sal/config.h>
 
+#include <com/sun/star/task/InteractionHandler.hpp>
+
 #include <o3tl/make_unique.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <sfx2/app.hxx>
@@ -27,7 +29,9 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
 #include <sfx2/fcontnr.hxx>
+#include <sfx2/frame.hxx>
 #include <sfx2/linkmgr.hxx>
+#include <vcl/weld.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/transliterationwrapper.hxx>
 #include <unotools/configmgr.hxx>
@@ -488,33 +492,41 @@ void ScDocumentLoader::RemoveAppPrefix( OUString& rFilterName )
 }
 
 SfxMedium* ScDocumentLoader::CreateMedium( const OUString& rFileName, std::shared_ptr<const SfxFilter> const & pFilter,
-        const OUString& rOptions )
+        const OUString& rOptions, weld::Window* pInteractionParent )
 {
     // Always create SfxItemSet so ScDocShell can set options.
     SfxItemSet* pSet = new SfxAllItemSet( SfxGetpApp()->GetPool() );
     if ( !rOptions.isEmpty() )
         pSet->Put( SfxStringItem( SID_FILE_FILTEROPTIONS, rOptions ) );
 
-    return new SfxMedium( rFileName, StreamMode::STD_READ, pFilter, pSet );
+    if (pInteractionParent)
+    {
+        css::uno::Reference<css::uno::XComponentContext> xContext = comphelper::getProcessComponentContext();
+        css::uno::Reference<css::task::XInteractionHandler> xIHdl(css::task::InteractionHandler::createWithParent(xContext,
+                    pInteractionParent->GetXWindow()), css::uno::UNO_QUERY_THROW);
+        pSet->Put(SfxUnoAnyItem(SID_INTERACTIONHANDLER, makeAny(xIHdl)));
+    }
+
+    SfxMedium *pRet = new SfxMedium( rFileName, StreamMode::STD_READ, pFilter, pSet );
+    if (pInteractionParent)
+        pRet->UseInteractionHandler(true); // to enable the filter options dialog
+    return pRet;
 }
 
-ScDocumentLoader::ScDocumentLoader( const OUString& rFileName,
-                                    OUString& rFilterName, OUString& rOptions,
-                                    sal_uInt32 nRekCnt, bool bWithInteraction ) :
-        pDocShell(nullptr),
-        pMedium(nullptr)
+ScDocumentLoader::ScDocumentLoader(const OUString& rFileName,
+                                   OUString& rFilterName, OUString& rOptions,
+                                   sal_uInt32 nRekCnt, weld::Window* pInteractionParent)
+    : pDocShell(nullptr)
+    , pMedium(nullptr)
 {
     if ( rFilterName.isEmpty() )
-        GetFilterName( rFileName, rFilterName, rOptions, true, bWithInteraction );
+        GetFilterName(rFileName, rFilterName, rOptions, true, pInteractionParent != nullptr);
 
     std::shared_ptr<const SfxFilter> pFilter = ScDocShell::Factory().GetFilterContainer()->GetFilter4FilterName( rFilterName );
 
-    pMedium = CreateMedium( rFileName, pFilter, rOptions);
+    pMedium = CreateMedium(rFileName, pFilter, rOptions, pInteractionParent);
     if ( pMedium->GetError() != ERRCODE_NONE )
         return ;
-
-    if ( bWithInteraction )
-        pMedium->UseInteractionHandler( true ); // to enable the filter options dialog
 
     pDocShell = new ScDocShell( SfxModelFlags::EMBEDDED_OBJECT | SfxModelFlags::DISABLE_EMBEDDED_SCRIPTS );
     aRef = pDocShell;
