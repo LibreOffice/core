@@ -29,6 +29,8 @@ static bool g_bTiledAnnotations(true);
 
 static bool g_bRangeHeaders(false);
 
+static bool g_bViewIdForVisCursorInvalidation(false);
+
 static bool g_bLocalRendering(false);
 
 static LanguageTag g_aLanguageTag("en-US", true);
@@ -86,6 +88,16 @@ bool isTiledAnnotations()
 void setRangeHeaders(bool bRangeHeaders)
 {
     g_bRangeHeaders = bRangeHeaders;
+}
+
+void setViewIdForVisCursorInvalidation(bool bViewIdForVisCursorInvalidation)
+{
+    g_bViewIdForVisCursorInvalidation = bViewIdForVisCursorInvalidation;
+}
+
+bool isViewIdForVisCursorInvalidation()
+{
+    return g_bViewIdForVisCursorInvalidation;
 }
 
 bool isRangeHeaders()
