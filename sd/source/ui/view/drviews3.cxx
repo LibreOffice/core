@@ -515,8 +515,8 @@ void  DrawViewShell::ExecRuler(SfxRequest& rReq)
                 }
                 else
                 {
-                    long nLeft = std::max(0L, rLRSpace.GetLeft() - aPagePos.X());
-                    long nRight = std::max(0L, rLRSpace.GetRight() + aPagePos.X() +
+                    long nLeft = std::max(sal_Int64(0), rLRSpace.GetLeft() - aPagePos.X());
+                    long nRight = std::max(sal_Int64(0), rLRSpace.GetRight() + aPagePos.X() +
                                           aPageSize.Width() - aViewSize.Width());
 
                     sal_uInt16 nPageCnt = GetDoc()->GetSdPageCount(mePageKind);
@@ -581,8 +581,8 @@ void  DrawViewShell::ExecRuler(SfxRequest& rReq)
                 }
                 else
                 {
-                    long nUpper = std::max(0L, rULSpace.GetUpper() - aPagePos.Y());
-                    long nLower = std::max(0L, rULSpace.GetLower() + aPagePos.Y() +
+                    long nUpper = std::max(sal_Int64(0), rULSpace.GetUpper() - aPagePos.Y());
+                    long nLower = std::max(sal_Int64(0), rULSpace.GetLower() + aPagePos.Y() +
                                           aPageSize.Height() - aViewSize.Height());
 
                     sal_uInt16 nPageCnt = GetDoc()->GetSdPageCount(mePageKind);
@@ -861,7 +861,7 @@ void  DrawViewShell::GetRulerState(SfxItemSet& rSet)
     if( mpDrawView->IsTextEdit() )
     {
         Point aPnt1 = GetActiveWindow()->GetWinViewPos();
-        ::tools::Rectangle aMinMaxRect = ::tools::Rectangle( aPnt1, Size(RECT_MAX, RECT_MAX) );
+        ::tools::Rectangle aMinMaxRect = ::tools::Rectangle( aPnt1, Size(SAL_MAX_INT64, SAL_MAX_INT64) );
         rSet.Put( SfxRectangleItem(SID_RULER_LR_MIN_MAX, aMinMaxRect) );
     }
     else

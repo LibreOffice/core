@@ -189,7 +189,7 @@ bool SwDrawBase::MouseButtonDown(const MouseEvent& rMEvt)
                         {
                             bool bUnlockView = !m_pSh->IsViewLocked();
                             m_pSh->LockView( true ); //lock visible section
-                            m_pSh->SelectObj(Point(SAL_MAX_INT32, SAL_MAX_INT32)); // deselect all
+                            m_pSh->SelectObj(Point(SAL_MAX_INT64, SAL_MAX_INT64)); // deselect all
                             if( bUnlockView )
                                 m_pSh->LockView( false );
                         }
@@ -375,7 +375,7 @@ bool SwDrawBase::MouseButtonUp(const MouseEvent& rMEvt)
                 if (aPnt == m_aStartPos)
                 {
                     if (!m_pSh->IsObjSelectable(aPnt))
-                        m_pSh->SelectObj(Point(SAL_MAX_INT32, SAL_MAX_INT32));
+                        m_pSh->SelectObj(Point(SAL_MAX_INT64, SAL_MAX_INT64));
                     else if (!bReturn)
                     {
                         if (!rMEvt.IsShift())

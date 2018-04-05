@@ -1581,7 +1581,7 @@ void WinSalFrame::GetWorkArea( tools::Rectangle &rRect )
     rRect.SetBottom( aRect.bottom-1 );
 }
 
-void WinSalFrame::GetClientSize( long& rWidth, long& rHeight )
+void WinSalFrame::GetClientSize( sal_Int64& rWidth, sal_Int64& rHeight )
 {
     rWidth  = maGeometry.nWidth;
     rHeight = maGeometry.nHeight;
@@ -4456,7 +4456,7 @@ static LRESULT ImplMeasureItem( HWND hWnd, WPARAM wParam, LPARAM lParam )
         Size checkSize( GetSystemMetrics( SM_CXMENUCHECK ), GetSystemMetrics( SM_CYMENUCHECK ) );
 
         pMI->itemWidth = checkSize.Width() + 3 + bmpSize.Width() + 3 + strSize.cx;
-        pMI->itemHeight = std::max( std::max( checkSize.Height(), bmpSize.Height() ), strSize.cy );
+        pMI->itemHeight = std::max( std::max( checkSize.Height(), bmpSize.Height() ), sal_Int64(strSize.cy) );
         pMI->itemHeight += 4;
 
         DeleteObject( SelectObject(hdc, hfntOld) );

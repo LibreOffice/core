@@ -661,11 +661,11 @@ void ImplListBoxWindow::ImplUpdateEntryMetrics( ImplEntryType& rEntry )
     }
     if ( IsUserDrawEnabled() || aMetrics.bImage )
     {
-        aMetrics.nEntryWidth = std::max<sal_Int32>( aMetrics.nImgWidth, maUserItemSize.Width() );
+        aMetrics.nEntryWidth = std::max( sal_Int64(aMetrics.nImgWidth), maUserItemSize.Width() );
         if ( aMetrics.bText )
             aMetrics.nEntryWidth += aMetrics.nTextWidth + IMG_TXT_DISTANCE;
-        aMetrics.nEntryHeight = std::max<sal_Int32>( std::max<sal_Int32>( mnMaxImgHeight, maUserItemSize.Height() ) + 2,
-                                     aMetrics.nEntryHeight );
+        aMetrics.nEntryHeight = std::max( std::max( sal_Int64(mnMaxImgHeight), maUserItemSize.Height() ) + 2,
+                                     sal_Int64(aMetrics.nEntryHeight) );
     }
 
     if ( !aMetrics.bText && !aMetrics.bImage && !IsUserDrawEnabled() )
@@ -1792,7 +1792,7 @@ void ImplListBoxWindow::DrawEntry(vcl::RenderContext& rRenderContext, sal_Int32 
         OUString aStr(mpEntryList->GetEntryText(nPos));
         if (!aStr.isEmpty())
         {
-            long nMaxWidth = std::max(mnMaxWidth, GetOutputSizePixel().Width() - 2 * mnBorder);
+            long nMaxWidth = std::max(sal_Int64(mnMaxWidth), GetOutputSizePixel().Width() - 2 * mnBorder);
             // a multiline entry should only be as wide a the window
             if (pEntry->mnFlags & ListBoxEntryFlags::MultiLine)
                 nMaxWidth = GetOutputSizePixel().Width() - 2 * mnBorder;
@@ -1802,7 +1802,7 @@ void ImplListBoxWindow::DrawEntry(vcl::RenderContext& rRenderContext, sal_Int32 
 
             if (!bDrawTextAtImagePos && (mpEntryList->HasEntryImage(nPos) || IsUserDrawEnabled()))
             {
-                sal_Int32 nImageWidth = std::max<sal_Int32>(mnMaxImgWidth, maUserItemSize.Width());
+                long nImageWidth = std::max(sal_Int64(mnMaxImgWidth), maUserItemSize.Width());
                 aTextRect.AdjustLeft(nImageWidth + IMG_TXT_DISTANCE );
             }
 

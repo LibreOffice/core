@@ -902,12 +902,12 @@ void SwHTMLWriter::writeFrameFormatOptions(HtmlWriter& aHtml, const SwFrameForma
 
         if (aPixelSpc.Width())
         {
-            aHtml.attribute(OOO_STRING_SVTOOLS_HTML_O_hspace, aPixelSpc.Width());
+            aHtml.attribute(OOO_STRING_SVTOOLS_HTML_O_hspace, static_cast<sal_Int32>(aPixelSpc.Width()));
         }
 
         if (aPixelSpc.Height())
         {
-            aHtml.attribute(OOO_STRING_SVTOOLS_HTML_O_vspace, aPixelSpc.Height());
+            aHtml.attribute(OOO_STRING_SVTOOLS_HTML_O_vspace, static_cast<sal_Int32>(aPixelSpc.Height()));
         }
     }
 

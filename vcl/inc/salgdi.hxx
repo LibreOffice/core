@@ -202,11 +202,11 @@ public:
     SalLayoutFlags              GetLayout() const { return m_nLayout; }
     void                        SetLayout( SalLayoutFlags aLayout ) { m_nLayout = aLayout;}
 
-    void                        mirror( sal_Int32& nX, const OutputDevice *pOutDev ) const;
+    void                        mirror( sal_Int64& nX, const OutputDevice *pOutDev ) const;
     // only called mirror2 to avoid ambiguity
     SAL_WARN_UNUSED_RESULT
-    sal_Int32                   mirror2( sal_Int32 nX, const OutputDevice *pOutDev ) const;
-    void                        mirror( sal_Int32& nX, sal_Int32 nWidth, const OutputDevice *pOutDev, bool bBack = false ) const;
+    sal_Int64                   mirror2( sal_Int64 nX, const OutputDevice *pOutDev ) const;
+    void                        mirror( sal_Int64& nX, sal_Int64 nWidth, const OutputDevice *pOutDev, bool bBack = false ) const;
     bool                        mirror( sal_uInt32 nPoints, const SalPoint *pPtAry, SalPoint *pPtAry2, const OutputDevice *pOutDev ) const;
     void                        mirror( tools::Rectangle& rRect, const OutputDevice*, bool bBack = false ) const;
     void                        mirror( vcl::Region& rRgn, const OutputDevice *pOutDev ) const;
@@ -220,12 +220,12 @@ public:
     bool                        SetClipRegion( const vcl::Region&, const OutputDevice *pOutDev );
 
     // draw --> LineColor and FillColor and RasterOp and ClipRegion
-    void                        DrawPixel( sal_Int32 nX, sal_Int32 nY, const OutputDevice *pOutDev );
-    void                        DrawPixel( sal_Int32 nX, sal_Int32 nY, Color nColor, const OutputDevice *pOutDev );
+    void                        DrawPixel( sal_Int64 nX, sal_Int64 nY, const OutputDevice *pOutDev );
+    void                        DrawPixel( sal_Int64 nX, sal_Int64 nY, Color nColor, const OutputDevice *pOutDev );
 
-    void                        DrawLine( sal_Int32 nX1, sal_Int32 nY1, sal_Int32 nX2, sal_Int32 nY2, const OutputDevice *pOutDev );
+    void                        DrawLine( sal_Int64 nX1, sal_Int64 nY1, sal_Int64 nX2, sal_Int64 nY2, const OutputDevice *pOutDev );
 
-    void                        DrawRect( sal_Int32 nX, sal_Int32 nY, sal_Int32 nWidth, sal_Int32 nHeight, const OutputDevice *pOutDev );
+    void                        DrawRect( sal_Int64 nX, sal_Int64 nY, sal_Int64 nWidth, sal_Int64 nHeight, const OutputDevice *pOutDev );
 
     void                        DrawPolyLine( sal_uInt32 nPoints, SalPoint const * pPtAry, const OutputDevice *pOutDev );
 
@@ -277,9 +277,9 @@ public:
 
     // CopyArea --> No RasterOp, but ClipRegion
     void                        CopyArea(
-                                    sal_Int32 nDestX, sal_Int32 nDestY,
-                                    sal_Int32 nSrcX, sal_Int32 nSrcY,
-                                    sal_Int32 nSrcWidth, sal_Int32 nSrcHeight,
+                                    sal_Int64 nDestX, sal_Int64 nDestY,
+                                    sal_Int64 nSrcX, sal_Int64 nSrcY,
+                                    sal_Int64 nSrcWidth, sal_Int64 nSrcHeight,
                                     const OutputDevice *pOutDev );
 
     // CopyBits and DrawBitmap --> RasterOp and ClipRegion
@@ -308,18 +308,18 @@ public:
                                     const OutputDevice *pOutDev );
 
     SalBitmap*                  GetBitmap(
-                                    sal_Int32 nX, sal_Int32 nY,
-                                    sal_Int32 nWidth, sal_Int32 nHeight,
+                                    sal_Int64 nX, sal_Int64 nY,
+                                    sal_Int64 nWidth, sal_Int64 nHeight,
                                     const OutputDevice *pOutDev );
 
     Color                       GetPixel(
-                                    sal_Int32 nX, sal_Int32 nY,
+                                    sal_Int64 nX, sal_Int64 nY,
                                     const OutputDevice *pOutDev );
 
     // invert --> ClipRegion (only Windows)
     void                        Invert(
-                                    sal_Int32 nX, sal_Int32 nY,
-                                    sal_Int32 nWidth, sal_Int32 nHeight,
+                                    sal_Int64 nX, sal_Int64 nY,
+                                    sal_Int64 nWidth, sal_Int64 nHeight,
                                     SalInvert nFlags,
                                     const OutputDevice *pOutDev );
 
@@ -330,8 +330,8 @@ public:
                                     const OutputDevice *pOutDev );
 
     bool                        DrawEPS(
-                                    sal_Int32 nX, sal_Int32 nY,
-                                    sal_Int32 nWidth, sal_Int32 nHeight,
+                                    sal_Int64 nX, sal_Int64 nY,
+                                    sal_Int64 nWidth, sal_Int64 nHeight,
                                     void* pPtr,
                                     sal_uLong nSize,
                                     const OutputDevice *pOutDev );
@@ -417,8 +417,8 @@ public:
                                     const OutputDevice* pOutDev );
 
     bool                        DrawAlphaRect(
-                                    sal_Int32 nX, sal_Int32 nY,
-                                    sal_Int32 nWidth, sal_Int32 nHeight,
+                                    sal_Int64 nX, sal_Int64 nY,
+                                    sal_Int64 nWidth, sal_Int64 nHeight,
                                     sal_uInt8 nTransparency,
                                     const OutputDevice *pOutDev );
 

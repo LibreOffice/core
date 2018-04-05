@@ -260,9 +260,9 @@ void GetTableSel( const SwLayoutFrame* pStart, const SwLayoutFrame* pEnd,
         SwSelUnions aUnions;
         ::MakeSelUnions( aUnions, pStart, pEnd, eSearchType );
 
-        Point aCurrentTopLeft( RECT_MAX, RECT_MAX );
-        Point aCurrentTopRight( 0, RECT_MAX );
-        Point aCurrentBottomLeft( RECT_MAX, 0 );
+        Point aCurrentTopLeft( SAL_MAX_INT64, SAL_MAX_INT64 );
+        Point aCurrentTopRight( 0, SAL_MAX_INT64 );
+        Point aCurrentBottomLeft( SAL_MAX_INT64, 0 );
         Point aCurrentBottomRight( 0, 0 );
         const SwCellFrame* pCurrentTopLeftFrame     = nullptr;
         const SwCellFrame* pCurrentTopRightFrame    = nullptr;
@@ -573,9 +573,9 @@ bool ChkChartSel( const SwNode& rSttNd, const SwNode& rEndNd )
             // they're all adjacent
             size_t n;
             sal_uInt16 nCellCnt = 0;
-            long nYPos = SAL_MAX_INT32;
-            long nXPos = 0;
-            long nHeight = 0;
+            sal_Int64 nYPos = SAL_MAX_INT64;
+            sal_Int64 nXPos = 0;
+            sal_Int64 nHeight = 0;
 
             for( n = 0 ; n < aCellFrames.size(); ++n )
             {
@@ -1809,7 +1809,7 @@ void MakeSelUnions( SwSelUnions& rUnions, const SwLayoutFrame *pStart,
 
     const long nStSz = pStart->GetFormat()->GetFrameSize().GetWidth();
     const long nEdSz = pEnd->GetFormat()->GetFrameSize().GetWidth();
-    const long nWish = std::max<sal_Int32>( 1, pTable->GetFormat()->GetFrameSize().GetWidth() );
+    const long nWish = std::max( long(1), pTable->GetFormat()->GetFrameSize().GetWidth() );
     while ( pTable )
     {
         SwRectFnSet aRectFnSet(pTable);

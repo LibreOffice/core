@@ -562,11 +562,11 @@ void AssignmentPersistentData::ImplCommit()
         m_pImpl->aFieldLabels.push_back( SvtResId( STR_FIELD_USER3));
         m_pImpl->aFieldLabels.push_back( SvtResId( STR_FIELD_USER4));
 
-        long nLabelWidth = 0;
+        sal_Int64 nLabelWidth = 0;
         long nListBoxWidth = m_pImpl->pFields[0]->approximate_char_width() * 20;
         for (auto const& fieldLabel : m_pImpl->aFieldLabels)
         {
-            nLabelWidth = std::max<sal_Int32>(nLabelWidth, FixedText::getTextDimensions(m_pImpl->pFieldLabels[0], fieldLabel, 0x7FFFFFFF).Width());
+            nLabelWidth = std::max(nLabelWidth, FixedText::getTextDimensions(m_pImpl->pFieldLabels[0], fieldLabel, 0x7FFFFFFF).Width());
         }
         for (sal_Int32 row=0; row<FIELD_PAIRS_VISIBLE; ++row)
         {

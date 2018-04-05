@@ -1843,7 +1843,7 @@ bool GraphicObject::ImplDrawTiled( OutputDevice* pOut, const tools::Rectangle& r
     // #i42643# Casting to Int64, to avoid integer overflow for
     // huge-DPI output devices
     if( GetGraphic().GetType() == GraphicType::Bitmap &&
-        static_cast<sal_Int64>(rSizePixel.Width()) * rSizePixel.Height() <
+        rSizePixel.Width() * rSizePixel.Height() <
         static_cast<sal_Int64>(nTileCacheSize1D)*nTileCacheSize1D )
     {
         // First combine very small bitmaps into a larger tile

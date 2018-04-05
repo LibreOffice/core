@@ -34,7 +34,6 @@
 #include <svx/hdft.hxx>
 #include <svx/svdview.hxx>
 #include <svl/itemiter.hxx>
-#include <tools/bigint.hxx>
 #include <svtools/insdlg.hxx>
 #include <sfx2/frmdescr.hxx>
 #include <sfx2/ipclient.hxx>
@@ -307,20 +306,20 @@ void SwWrtShell::Insert( const OUString &rPath, const OUString &rFilter,
         aGrfSize.AdjustWidth(pFrameMgr->CalcWidthBorder() );
         aGrfSize.AdjustHeight(pFrameMgr->CalcHeightBorder() );
 
-        const BigInt aTempWidth( aGrfSize.Width() );
-        const BigInt aTempHeight( aGrfSize.Height());
+        const sal_Int64 aTempWidth( aGrfSize.Width() );
+        const sal_Int64 aTempHeight( aGrfSize.Height());
 
         // Fit width if necessary, scale down the height proportional thereafter.
         if( aGrfSize.Width() > aBound.Width() )
         {
             aGrfSize.setWidth( aBound.Width() );
-            aGrfSize.setHeight( BigInt(aBound.Width()) * aTempHeight / aTempWidth );
+            aGrfSize.setHeight( aBound.Width() * aTempHeight / aTempWidth );
         }
         // Fit height if necessary, scale down the width proportional thereafter.
         if( aGrfSize.Height() > aBound.Height() )
         {
             aGrfSize.setHeight( aBound.Height() );
-            aGrfSize.setWidth(  BigInt(aBound.Height()) * aTempWidth / aTempHeight );
+            aGrfSize.setWidth(  aBound.Height() * aTempWidth / aTempHeight );
         }
         pFrameMgr->SetSize( aGrfSize );
         pFrameMgr->UpdateFlyFrame();
