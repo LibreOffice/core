@@ -2257,6 +2257,7 @@ class QueryEvaluator
     utl::TransliterationWrapper* mpTransliteration;
     CollatorWrapper* mpCollator;
     const bool mbMatchWholeCell;
+    const bool mbCaseSensitive;
 
     static bool isPartialTextMatchOp(const ScQueryEntry& rEntry)
     {
@@ -2320,7 +2321,8 @@ public:
         mrTab(rTab),
         mrParam(rParam),
         mpTestEqualCondition(pTestEqualCondition),
-        mbMatchWholeCell(rDoc.GetDocOptions().IsMatchWholeCell())
+        mbMatchWholeCell(rDoc.GetDocOptions().IsMatchWholeCell()),
+        mbCaseSensitive( rParam.bCaseSens )
     {
         if (rParam.bCaseSens)
         {
@@ -2583,19 +2585,45 @@ public:
                     // Where do we find a match (if at all)
                     sal_Int32 nStrPos;
 
-                    OUString aQueryStr = rItem.maString.getString();
-                    const LanguageType nLang = ScGlobal::pSysLocale->GetLanguageTag().getLanguageType();
-                    OUString aCell( mpTransliteration->transliterate(
-                        aCellStr.getString(), nLang, 0, aCellStr.getLength(),
-                        nullptr ) );
+                    if (!mbCaseSensitive)
+                    { // Common case for vlookup etc.
+                        const rtl_uString *pQuer = rItem.maString.getDataIgnoreCase();
+                        const rtl_uString *pCellStr = aCellStr.getDataIgnoreCase();
+                        assert(pQuer != nullptr);
+                        assert(pCellStr != nullptr);
 
-                    OUString aQuer( mpTransliteration->transliterate(
-                        aQueryStr, nLang, 0, aQueryStr.getLength(),
-                        nullptr ) );
+                        sal_Int32 nIndex = (rEntry.eOp == SC_ENDS_WITH ||
+                                            rEntry.eOp == SC_DOES_NOT_END_WITH) ?
+                            (pCellStr->length - pQuer->length) : 0;
 
-                    sal_Int32 nIndex = (rEntry.eOp == SC_ENDS_WITH || rEntry.eOp == SC_DOES_NOT_END_WITH) ?
-                        (aCell.getLength() - aQuer.getLength()) : 0;
-                    nStrPos = ((nIndex < 0) ? -1 : aCell.indexOf( aQuer, nIndex ));
+                        if (nIndex < 0)
+                            nStrPos = -1;
+                        else
+                        { // OUString::indexOf
+                            nStrPos = rtl_ustr_indexOfStr_WithLength(
+                                pCellStr->buffer + nIndex, pCellStr->length - nIndex,
+                                pQuer->buffer, pQuer->length );
+
+                            if (nStrPos >= 0)
+                                nStrPos += nIndex;
+                        }
+                    }
+                    else
+                    {
+                        OUString aQueryStr = rItem.maString.getString();
+                        const LanguageType nLang = ScGlobal::pSysLocale->GetLanguageTag().getLanguageType();
+                        OUString aCell( mpTransliteration->transliterate(
+                                            aCellStr.getString(), nLang, 0, aCellStr.getLength(),
+                                            nullptr ) );
+
+                        OUString aQuer( mpTransliteration->transliterate(
+                                            aQueryStr, nLang, 0, aQueryStr.getLength(),
+                                            nullptr ) );
+
+                        sal_Int32 nIndex = (rEntry.eOp == SC_ENDS_WITH || rEntry.eOp == SC_DOES_NOT_END_WITH) ?
+                            (aCell.getLength() - aQuer.getLength()) : 0;
+                        nStrPos = ((nIndex < 0) ? -1 : aCell.indexOf( aQuer, nIndex ));
+                    }
                     switch (rEntry.eOp)
                     {
                     case SC_EQUAL:
