@@ -6185,7 +6185,9 @@ void SwFrame::PaintSwFrameBackground( const SwRect &rRect, const SwPageFrame *pP
     if( IsTextFrame() || IsSctFrame() )
         aPaintRect = UnionFrame( true );
 
-    if ( (!bOnlyTextBackground || IsTextFrame()) && aPaintRect.IsOver( rRect ) )
+    // bOnlyTextBackground means background that's on top of background shapes,
+    // this includes both text and cell frames.
+    if ( (!bOnlyTextBackground || IsTextFrame() || IsCellFrame()) && aPaintRect.IsOver( rRect ) )
     {
         if ( bBack || bPageFrame || !bLowerMode )
         {

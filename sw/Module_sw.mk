@@ -88,6 +88,7 @@ $(eval $(call gb_Module_add_slowcheck_targets,sw,\
     CppunitTest_sw_odfimport \
     CppunitTest_sw_txtexport \
     CppunitTest_sw_uiwriter \
+    CppunitTest_sw_layoutwriter \
     CppunitTest_sw_mailmerge \
     CppunitTest_sw_globalfilter \
 ))
