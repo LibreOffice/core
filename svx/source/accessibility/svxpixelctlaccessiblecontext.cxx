@@ -285,12 +285,11 @@ sal_Bool SvxPixelCtlAccessible::supportsService( const OUString& rServiceName )
 
 uno::Sequence< OUString > SvxPixelCtlAccessible::getSupportedServiceNames(  )
 {
-    uno::Sequence< OUString > aRet(2);
-    OUString* pArray = aRet.getArray();
-    pArray[0] = "Accessible";
-    pArray[1] = "AccessibleContext";
-    pArray[2] = "AccessibleComponent";
-    return aRet;
+    return uno::Sequence< OUString >{
+        "Accessible",
+        "AccessibleContext",
+        "AccessibleComponent"
+    };
 }
 
 
