@@ -22,6 +22,7 @@
 
 #include <com/sun/star/util/XModifyListener.hpp>
 #include <com/sun/star/util/XCloseListener.hpp>
+#include <tools/diagnose_ex.h>
 
 using namespace ::com::sun::star;
 
@@ -344,9 +345,9 @@ void CloseableLifeTimeManager::impl_doClose()
             }
         }
     }
-    catch( const uno::Exception& ex )
+    catch( const uno::Exception& )
     {
-        SAL_WARN("chart2", "Exception caught. " << ex );
+        DBG_UNHANDLED_EXCEPTION("chart2");
     }
 
     if(xCloseable.is())

@@ -38,6 +38,7 @@
 #include <com/sun/star/chart2/XRegressionCurveContainer.hpp>
 
 #include <rtl/ustrbuf.hxx>
+#include <tools/diagnose_ex.h>
 
 namespace chart
 {
@@ -373,9 +374,9 @@ OUString ObjectIdentifier::createClassifiedIdentifierForObject(
         //datapoint?
         //Gridproperties
     }
-    catch(const uno::Exception& ex)
+    catch(const uno::Exception&)
     {
-        SAL_WARN("chart2", "Exception caught. " << ex );
+        DBG_UNHANDLED_EXCEPTION("chart2");
     }
 
     if( eObjectType != OBJECTTYPE_UNKNOWN )
@@ -455,9 +456,9 @@ OUString ObjectIdentifier::createClassifiedIdentifierForObject(
         //datapoint?
         //Gridproperties
     }
-    catch(const uno::Exception& ex)
+    catch(const uno::Exception&)
     {
-        SAL_WARN("chart2", "Exception caught. " << ex );
+        DBG_UNHANDLED_EXCEPTION("chart2");
     }
 
     if( eObjectType != OBJECTTYPE_UNKNOWN )
@@ -1384,9 +1385,9 @@ Reference< beans::XPropertySet > ObjectIdentifier::getObjectPropertySet(
                     break;
         }
     }
-    catch(const uno::Exception& ex)
+    catch(const uno::Exception&)
     {
-        SAL_WARN("chart2", "Exception caught. " << ex );
+        DBG_UNHANDLED_EXCEPTION("chart2");
     }
     return xObjectProperties;
 }

@@ -33,6 +33,7 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/chart2/RelativePosition.hpp>
 #include <com/sun/star/awt/Size.hpp>
+#include <tools/diagnose_ex.h>
 
 #include <algorithm>
 
@@ -237,9 +238,9 @@ void SAL_CALL RegressionEquation::addModifyListener( const uno::Reference< util:
         uno::Reference< util::XModifyBroadcaster > xBroadcaster( m_xModifyEventForwarder, uno::UNO_QUERY_THROW );
         xBroadcaster->addModifyListener( aListener );
     }
-    catch( const uno::Exception & ex )
+    catch( const uno::Exception & )
     {
-        SAL_WARN("chart2", "Exception caught. " << ex );
+        DBG_UNHANDLED_EXCEPTION("chart2");
     }
 }
 
@@ -250,9 +251,9 @@ void SAL_CALL RegressionEquation::removeModifyListener( const uno::Reference< ut
         uno::Reference< util::XModifyBroadcaster > xBroadcaster( m_xModifyEventForwarder, uno::UNO_QUERY_THROW );
         xBroadcaster->removeModifyListener( aListener );
     }
-    catch( const uno::Exception & ex )
+    catch( const uno::Exception & )
     {
-        SAL_WARN("chart2", "Exception caught. " << ex );
+        DBG_UNHANDLED_EXCEPTION("chart2");
     }
 }
 

@@ -24,6 +24,7 @@
 #include <com/sun/star/chart2/FormattedString.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <rtl/ustrbuf.hxx>
+#include <tools/diagnose_ex.h>
 
 namespace chart
 {
@@ -285,9 +286,9 @@ uno::Reference< XTitle > TitleHelper::createTitle(
                         }
                     }
                 }
-                catch( const uno::Exception & ex )
+                catch( const uno::Exception & )
                 {
-                    SAL_WARN("chart2", "Exception caught. " << ex );
+                    DBG_UNHANDLED_EXCEPTION("chart2");
                 }
             }
         }
@@ -371,9 +372,9 @@ void TitleHelper::setCompleteString( const OUString& rNewText
                 xFormattedString->setPropertyValue( "CharHeightAsian", aFontSize );
                 xFormattedString->setPropertyValue( "CharHeightComplex", aFontSize );
             }
-            catch( const uno::Exception & ex )
+            catch( const uno::Exception & )
             {
-                SAL_WARN("chart2", "Exception caught. " << ex );
+                DBG_UNHANDLED_EXCEPTION("chart2");
             }
         }
     }

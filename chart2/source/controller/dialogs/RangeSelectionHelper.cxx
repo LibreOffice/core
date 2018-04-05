@@ -20,6 +20,7 @@
 #include <RangeSelectionHelper.hxx>
 #include <RangeSelectionListener.hxx>
 #include <com/sun/star/awt/XTopWindow.hpp>
+#include <tools/diagnose_ex.h>
 
 using namespace ::com::sun::star;
 
@@ -53,9 +54,9 @@ Reference< sheet::XRangeSelection > const & RangeSelectionHelper::getRangeSelect
             if( xDataProvider.is())
                 m_xRangeSelection.set( xDataProvider->getRangeSelection());
         }
-        catch( const uno::Exception & ex )
+        catch( const uno::Exception & )
         {
-            SAL_WARN("chart2", "Exception caught. " << ex );
+            DBG_UNHANDLED_EXCEPTION("chart2");
 
             m_xRangeSelection.clear();
         }
@@ -84,9 +85,9 @@ void RangeSelectionHelper::raiseRangeSelectionDocument()
                 }
             }
         }
-        catch( const uno::Exception & ex )
+        catch( const uno::Exception & )
         {
-            SAL_WARN("chart2", "Exception caught. " << ex );
+            DBG_UNHANDLED_EXCEPTION("chart2");
         }
     }
 }
@@ -130,10 +131,10 @@ bool RangeSelectionHelper::chooseRange(
             xRangeSel->startRangeSelection( aArgs );
         }
     }
-    catch( const uno::Exception & ex )
+    catch( const uno::Exception & )
     {
+        DBG_UNHANDLED_EXCEPTION("chart2");
         bResult = false;
-        SAL_WARN("chart2", "Exception caught. " << ex );
     }
 
     return bResult;

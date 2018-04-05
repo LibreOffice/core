@@ -41,6 +41,7 @@
 #include <com/sun/star/lang/XServiceName.hpp>
 #include <com/sun/star/chart/ChartSolidType.hpp>
 #include <com/sun/star/chart2/CurveStyle.hpp>
+#include <tools/diagnose_ex.h>
 
 #include <algorithm>
 #include <iterator>
@@ -246,14 +247,14 @@ uno::Reference< uno::XInterface > SAL_CALL ChartTypeManager::createInstance(
                 aServiceSpecifier, m_xContext );
         }
 //         catch( registry::InvalidValueException & ex )
-        catch( const uno::Exception & ex )
+        catch( const uno::Exception & )
         {
             // couldn't create service via factory
 
             // As XMultiServiceFactory does not specify, what to do in case
             // createInstance is called with an unknown service-name, this
             // function will just return an empty XInterface.
-            SAL_WARN("chart2", "Exception caught. " << ex );
+            DBG_UNHANDLED_EXCEPTION("chart2");
             SAL_WARN("chart2", "Couldn't instantiate service: "<< aServiceSpecifier );
             xResult.set( nullptr );
         }

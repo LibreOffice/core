@@ -41,6 +41,7 @@
 #include <com/sun/star/chart2/FillBitmap.hpp>
 #include <com/sun/star/awt/Gradient.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
+#include <tools/diagnose_ex.h>
 
 using namespace ::com::sun::star;
 
@@ -255,9 +256,9 @@ void GraphicPropertyItemConverter::FillSpecialItem(
                     }
                 }
             }
-            catch( const beans::UnknownPropertyException &ex )
+            catch( const beans::UnknownPropertyException & )
             {
-                SAL_WARN("chart2", "Exception caught. " << ex );
+                DBG_UNHANDLED_EXCEPTION("chart2");
             }
         break;
 
@@ -502,9 +503,9 @@ bool GraphicPropertyItemConverter::ApplySpecialItem(
                     }
                 }
             }
-            catch( const beans::UnknownPropertyException &ex )
+            catch( const beans::UnknownPropertyException & )
             {
-                SAL_WARN("chart2", "Exception caught. " << ex );
+                DBG_UNHANDLED_EXCEPTION("chart2");
             }
         break;
 

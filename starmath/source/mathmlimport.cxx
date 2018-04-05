@@ -58,6 +58,7 @@ one go*/
 #include <xmloff/xmlmetai.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/strings.hrc>
+#include <tools/diagnose_ex.h>
 
 #include <memory>
 
@@ -3175,9 +3176,9 @@ void SmXMLImport::SetConfigurationSettings(const Sequence<PropertyValue>& aConfP
                     {
                         // dealing with read-only properties here. Nothing to do...
                     }
-                    catch (const Exception& rEx)
+                    catch (const Exception&)
                     {
-                        SAL_WARN("starmath", "SmXMLImport::SetConfigurationSettings: Exception: " << rEx );
+                        DBG_UNHANDLED_EXCEPTION("starmath");
                     }
                 }
 

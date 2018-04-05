@@ -42,6 +42,7 @@
 
 #include <basegfx/numeric/ftools.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <chrono>
 #include <iostream>
@@ -525,9 +526,9 @@ public:
 
             Application::Execute();
         }
-        catch (const css::uno::Exception& rException)
+        catch (const css::uno::Exception&)
         {
-            SAL_WARN("vcl.app", "Fatal exception: " << rException);
+            DBG_UNHANDLED_EXCEPTION("vcl.app", "Fatal");
             return 1;
         }
         catch (const std::exception& rException)

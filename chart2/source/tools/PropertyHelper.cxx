@@ -22,6 +22,7 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <osl/diagnose.h>
+#include <tools/diagnose_ex.h>
 
 #include <vector>
 #include <algorithm>
@@ -48,9 +49,9 @@ struct lcl_EqualsElement
         {
             return (m_xAccess->getByName( rName ) == m_aValue);
         }
-        catch( const uno::Exception & ex )
+        catch( const uno::Exception & )
         {
-            SAL_WARN("chart2", "Exception caught. " << ex );
+            DBG_UNHANDLED_EXCEPTION("chart2");
         }
         return false;
     }
@@ -161,9 +162,9 @@ OUString lcl_addNamedPropertyUniqueNameToTable(
             // element found => return name
             return *aIt;
     }
-    catch( const uno::Exception & ex )
+    catch( const uno::Exception & )
     {
-        SAL_WARN("chart2", "Exception caught. " << ex );
+        DBG_UNHANDLED_EXCEPTION("chart2");
     }
 
     return rPreferredName;

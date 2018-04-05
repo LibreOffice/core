@@ -40,6 +40,7 @@
 
 #include <com/sun/star/drawing/HomogenMatrix.hpp>
 #include <cppuhelper/supportsservice.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <algorithm>
 #include <iterator>
@@ -327,9 +328,9 @@ Diagram::~Diagram()
         ModifyListenerHelper::removeListener( m_xTitle, m_xModifyEventForwarder );
         ModifyListenerHelper::removeListener( m_xLegend, m_xModifyEventForwarder );
     }
-    catch( const uno::Exception & ex )
+    catch( const uno::Exception & )
     {
-        SAL_WARN("chart2", "Exception caught. " << ex );
+        DBG_UNHANDLED_EXCEPTION("chart2");
     }
 }
 
@@ -553,9 +554,9 @@ void SAL_CALL Diagram::addModifyListener( const Reference< util::XModifyListener
         Reference< util::XModifyBroadcaster > xBroadcaster( m_xModifyEventForwarder, uno::UNO_QUERY_THROW );
         xBroadcaster->addModifyListener( aListener );
     }
-    catch( const uno::Exception & ex )
+    catch( const uno::Exception & )
     {
-        SAL_WARN("chart2", "Exception caught. " << ex );
+        DBG_UNHANDLED_EXCEPTION("chart2");
     }
 }
 
@@ -566,9 +567,9 @@ void SAL_CALL Diagram::removeModifyListener( const Reference< util::XModifyListe
         Reference< util::XModifyBroadcaster > xBroadcaster( m_xModifyEventForwarder, uno::UNO_QUERY_THROW );
         xBroadcaster->removeModifyListener( aListener );
     }
-    catch( const uno::Exception & ex )
+    catch( const uno::Exception & )
     {
-        SAL_WARN("chart2", "Exception caught. " << ex );
+        DBG_UNHANDLED_EXCEPTION("chart2");
     }
 }
 

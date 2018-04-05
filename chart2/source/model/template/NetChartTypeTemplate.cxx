@@ -25,6 +25,7 @@
 #include <com/sun/star/chart2/SymbolStyle.hpp>
 #include <com/sun/star/chart2/Symbol.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
+#include <tools/diagnose_ex.h>
 
 using namespace ::com::sun::star;
 
@@ -72,9 +73,9 @@ void SAL_CALL NetChartTypeTemplate::applyStyle(
         DataSeriesHelper::switchLinesOnOrOff( xProp, m_bHasLines );
         DataSeriesHelper::makeLinesThickOrThin( xProp, true );
     }
-    catch( const uno::Exception & ex )
+    catch( const uno::Exception & )
     {
-        SAL_WARN("chart2", "Exception caught. " << ex );
+        DBG_UNHANDLED_EXCEPTION("chart2");
     }
 }
 
@@ -135,9 +136,9 @@ sal_Bool SAL_CALL NetChartTypeTemplate::matchesTemplate(
                     break;
                 }
             }
-            catch( const uno::Exception & ex )
+            catch( const uno::Exception & )
             {
-                SAL_WARN("chart2", "Exception caught. " << ex );
+                DBG_UNHANDLED_EXCEPTION("chart2");
             }
         }
 
@@ -171,9 +172,9 @@ Reference< chart2::XChartType > NetChartTypeTemplate::getChartTypeForIndex( sal_
             xResult.set( xFact->createInstance(
                              CHART2_SERVICE_NAME_CHARTTYPE_NET ), uno::UNO_QUERY_THROW );
     }
-    catch( const uno::Exception & ex )
+    catch( const uno::Exception & )
     {
-        SAL_WARN("chart2", "Exception caught. " << ex );
+        DBG_UNHANDLED_EXCEPTION("chart2");
     }
 
     return xResult;

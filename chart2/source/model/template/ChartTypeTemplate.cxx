@@ -36,6 +36,7 @@
 #include <com/sun/star/chart2/AxisType.hpp>
 #include <com/sun/star/chart2/XDataSeriesContainer.hpp>
 #include <com/sun/star/chart2/XChartTypeContainer.hpp>
+#include <tools/diagnose_ex.h>
 
 #include <algorithm>
 #include <iterator>
@@ -167,9 +168,9 @@ uno::Reference< XDiagram > SAL_CALL ChartTypeTemplate::createDiagramByDataSource
         Sequence< Reference< XChartType > > aOldChartTypesSeq;
         FillDiagram( xDia, aData.Series, aData.Categories, aOldChartTypesSeq );
     }
-    catch( const uno::Exception & ex )
+    catch( const uno::Exception & )
     {
-        SAL_WARN("chart2", "Exception caught. " << ex );
+        DBG_UNHANDLED_EXCEPTION("chart2");
     }
 
     return xDia;
@@ -248,9 +249,9 @@ void SAL_CALL ChartTypeTemplate::changeDiagram( const uno::Reference< XDiagram >
 
         FillDiagram( xDiagram, aSeriesSeq, aData.Categories, aOldChartTypesSeq );
     }
-    catch( const uno::Exception & ex )
+    catch( const uno::Exception & )
     {
-        SAL_WARN("chart2", "Exception caught. " << ex );
+        DBG_UNHANDLED_EXCEPTION("chart2");
     }
 }
 
@@ -299,9 +300,9 @@ void SAL_CALL ChartTypeTemplate::changeDiagramData(
             xDSCnt->setDataSeries( aSeriesSeq[i] );
         }
     }
-    catch( const uno::Exception & ex )
+    catch( const uno::Exception & )
     {
-        SAL_WARN("chart2", "Exception caught. " << ex );
+        DBG_UNHANDLED_EXCEPTION("chart2");
     }
 }
 
@@ -358,9 +359,9 @@ sal_Bool SAL_CALL ChartTypeTemplate::matchesTemplate(
             }
         }
     }
-    catch( const uno::Exception & ex )
+    catch( const uno::Exception & )
     {
-        SAL_WARN("chart2", "Exception caught. " << ex );
+        DBG_UNHANDLED_EXCEPTION("chart2");
     }
 
     return bResult;
@@ -408,9 +409,9 @@ void SAL_CALL ChartTypeTemplate::applyStyle(
                         lcl_ensureCorrectLabelPlacement( xSeries->getDataPointByIndex(aAttributedDataPointIndexList[nN]), aAvailablePlacements );
             }
         }
-        catch( const uno::Exception & ex )
+        catch( const uno::Exception & )
         {
-            SAL_WARN("chart2", "Exception caught. " << ex );
+            DBG_UNHANDLED_EXCEPTION("chart2");
         }
     }
 }
@@ -665,9 +666,9 @@ void ChartTypeTemplate::adaptScales(
                 }
             }
         }
-        catch( const uno::Exception & ex )
+        catch( const uno::Exception & )
         {
-            SAL_WARN("chart2", "Exception caught. " << ex );
+            DBG_UNHANDLED_EXCEPTION("chart2");
         }
     }
 }
@@ -779,9 +780,9 @@ void ChartTypeTemplate::FillDiagram(
         createChartTypes( aSeriesSeq, aCoordinateSystems, aOldChartTypesSeq );
         applyStyles( xDiagram );
     }
-    catch( const uno::Exception & ex )
+    catch( const uno::Exception & )
     {
-        SAL_WARN("chart2", "Exception caught. " << ex );
+        DBG_UNHANDLED_EXCEPTION("chart2");
     }
 }
 
@@ -849,9 +850,9 @@ void ChartTypeTemplate::createChartTypes(
             }
         }
     }
-    catch( const uno::Exception & ex )
+    catch( const uno::Exception & )
     {
-        SAL_WARN("chart2", "Exception caught. " << ex );
+        DBG_UNHANDLED_EXCEPTION("chart2");
     }
 }
 

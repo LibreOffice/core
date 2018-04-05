@@ -37,6 +37,7 @@
 #include <com/sun/star/chart2/XChartTypeContainer.hpp>
 #include <com/sun/star/chart2/XDataSeriesContainer.hpp>
 #include <rtl/ustrbuf.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <algorithm>
 #include <iterator>
@@ -408,9 +409,9 @@ void setStackModeAtSeries(
                 aAxisIndexSet.insert(nAxisIndex);
             }
         }
-        catch( const uno::Exception & ex )
+        catch( const uno::Exception & )
         {
-            SAL_WARN("chart2", "Exception caught. " << ex );
+            DBG_UNHANDLED_EXCEPTION("chart2");
         }
     }
 
@@ -455,9 +456,9 @@ sal_Int32 getAttachedAxisIndex( const Reference< chart2::XDataSeries > & xSeries
             xProp->getPropertyValue( "AttachedAxisIndex" ) >>= nRet;
         }
     }
-    catch( const uno::Exception & ex )
+    catch( const uno::Exception & )
     {
-        SAL_WARN("chart2", "Exception caught. " << ex );
+        DBG_UNHANDLED_EXCEPTION("chart2");
     }
     return nRet;
 }
@@ -478,9 +479,9 @@ sal_Int32 getNumberFormatKeyFromAxis(
         if( xAxisProp.is())
             xAxisProp->getPropertyValue(CHART_UNONAME_NUMFMT) >>= nResult;
     }
-    catch( const uno::Exception & ex )
+    catch( const uno::Exception & )
     {
-        SAL_WARN("chart2", "Exception caught. " << ex );
+        DBG_UNHANDLED_EXCEPTION("chart2");
     }
 
     return nResult;
@@ -525,9 +526,9 @@ void deleteSeries(
             xSeriesCnt->setDataSeries( comphelper::containerToSequence( aSeries ));
         }
     }
-    catch( const uno::Exception & ex )
+    catch( const uno::Exception & )
     {
-        SAL_WARN("chart2", "Exception caught. " << ex );
+        DBG_UNHANDLED_EXCEPTION("chart2");
     }
 }
 

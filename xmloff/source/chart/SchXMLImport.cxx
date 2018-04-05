@@ -50,6 +50,7 @@
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 
+#include <tools/diagnose_ex.h>
 #include <typeinfo>
 
 using namespace com::sun::star;
@@ -404,9 +405,9 @@ void SchXMLImportHelper::DeleteDataSeries(
             }
         }
     }
-    catch( const uno::Exception & ex )
+    catch( const uno::Exception &)
     {
-       SAL_WARN("xmloff.chart",  "Exception caught. " << ex);
+       DBG_UNHANDLED_EXCEPTION("xmloff.chart");
     }
 }
 
@@ -482,9 +483,9 @@ Reference< chart2::XDataSeries > SchXMLImportHelper::GetNewDataSeries(
             }
         }
     }
-    catch( const uno::Exception & ex )
+    catch( const uno::Exception & )
     {
-        SAL_WARN("xmloff.chart", "Exception caught. Type: " << OUString::createFromAscii( typeid( ex ).name()) << ", Message: " << ex);
+        DBG_UNHANDLED_EXCEPTION("xmloff.chart");
     }
     return xResult;
 }

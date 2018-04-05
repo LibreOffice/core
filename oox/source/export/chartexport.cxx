@@ -99,6 +99,7 @@
 
 #include <svl/zforlist.hxx>
 #include <svl/numuno.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <set>
 #include <unordered_set>
@@ -187,9 +188,9 @@ Reference< chart2::data::XLabeledDataSequence > lcl_getCategories( const Referen
             }
         }
     }
-    catch( const uno::Exception & ex )
+    catch( const uno::Exception & )
     {
-        SAL_WARN( "oox", "Exception caught. " << ex);
+        DBG_UNHANDLED_EXCEPTION("oox");
     }
 
     return xResult;
@@ -234,9 +235,9 @@ bool lcl_isSeriesAttachedToFirstAxis(
             xProp->getPropertyValue("AttachedAxisIndex") >>= nAxisIndex;
         bResult = (0==nAxisIndex);
     }
-    catch( const uno::Exception & ex )
+    catch( const uno::Exception & )
     {
-        SAL_WARN( "oox", "Exception caught. " << ex);
+        DBG_UNHANDLED_EXCEPTION("oox");
     }
 
     return bResult;
@@ -542,9 +543,9 @@ void ChartExport::InitRangeSegmentationProperties( const Reference< chart2::XCha
                 mbHasCategoryLabels = lcl_hasCategoryLabels( xChartDoc );
             }
         }
-        catch( const uno::Exception & ex )
+        catch( const uno::Exception & )
         {
-            SAL_WARN( "oox", "Exception caught. " << ex);
+            DBG_UNHANDLED_EXCEPTION("oox");
         }
 }
 
@@ -3230,9 +3231,9 @@ void ChartExport::exportDataPoints(
                     xPropSet = SchXMLSeriesHelper::createOldAPIDataPointPropertySet(
                             xSeries, nElement, getModel() );
                 }
-                catch( const uno::Exception & rEx )
+                catch( const uno::Exception & )
                 {
-                    SAL_WARN( "oox", "Exception caught during Export of data point: " << rEx );
+                    DBG_UNHANDLED_EXCEPTION( "oox", "Exception caught during Export of data point" );
                 }
             }
             else
