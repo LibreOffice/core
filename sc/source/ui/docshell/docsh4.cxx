@@ -2120,14 +2120,14 @@ tools::Rectangle ScDocShell::GetVisArea( sal_uInt16 nAspect ) const
 namespace {
 
 SAL_WARN_UNUSED_RESULT
-sal_Int32 SnapHorizontal( const ScDocument& rDoc, SCTAB nTab, sal_Int32 nVal, SCCOL& rStartCol )
+sal_Int64 SnapHorizontal( const ScDocument& rDoc, SCTAB nTab, sal_Int64 nVal, SCCOL& rStartCol )
 {
     SCCOL nCol = 0;
-    sal_Int32 nTwips = static_cast<long>(nVal / HMM_PER_TWIPS);
-    sal_Int32 nSnap = 0;
+    sal_Int64 nTwips = static_cast<sal_Int64>(nVal / HMM_PER_TWIPS);
+    sal_Int64 nSnap = 0;
     while ( nCol<MAXCOL )
     {
-        sal_Int32 nAdd = rDoc.GetColWidth(nCol, nTab);
+        sal_Int64 nAdd = rDoc.GetColWidth(nCol, nTab);
         if ( nSnap + nAdd/2 < nTwips || nCol < rStartCol )
         {
             nSnap += nAdd;
@@ -2142,11 +2142,11 @@ sal_Int32 SnapHorizontal( const ScDocument& rDoc, SCTAB nTab, sal_Int32 nVal, SC
 }
 
 SAL_WARN_UNUSED_RESULT
-sal_Int32 SnapVertical( const ScDocument& rDoc, SCTAB nTab, sal_Int32 nVal, SCROW& rStartRow )
+sal_Int64 SnapVertical( const ScDocument& rDoc, SCTAB nTab, sal_Int64 nVal, SCROW& rStartRow )
 {
     SCROW nRow = 0;
-    sal_Int32 nTwips = static_cast<sal_Int32>(nVal / HMM_PER_TWIPS);
-    sal_Int32 nSnap = 0;
+    sal_Int64 nTwips = static_cast<sal_Int64>(nVal / HMM_PER_TWIPS);
+    sal_Int64 nSnap = 0;
 
     bool bFound = false;
     for (SCROW i = nRow; i <= MAXROW; ++i)
@@ -2159,7 +2159,7 @@ sal_Int32 SnapVertical( const ScDocument& rDoc, SCTAB nTab, sal_Int32 nVal, SCRO
         }
 
         nRow = i;
-        sal_Int32 nAdd = rDoc.GetRowHeight(i, nTab);
+        sal_Int64 nAdd = rDoc.GetRowHeight(i, nTab);
         if ( nSnap + nAdd/2 < nTwips || nRow < rStartRow )
         {
             nSnap += nAdd;

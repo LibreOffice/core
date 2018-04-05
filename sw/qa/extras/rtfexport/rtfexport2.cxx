@@ -125,11 +125,11 @@ DECLARE_RTFEXPORT_TEST(testN192129, "n192129.rtf")
     awt::Size aActualSize(xShape->getSize());
     if ((aExpectedSize.Width() - aActualSize.Width) / 2 != 0)
     {
-        CPPUNIT_ASSERT_EQUAL(aExpectedSize.Width(), aActualSize.Width);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(aExpectedSize.Width()), aActualSize.Width);
     }
     if ((aExpectedSize.Height() - aActualSize.Height) / 2 != 0)
     {
-        CPPUNIT_ASSERT_EQUAL(aExpectedSize.Height(), aActualSize.Height);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(aExpectedSize.Height()), aActualSize.Height);
     }
 }
 

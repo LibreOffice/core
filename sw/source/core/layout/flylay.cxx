@@ -485,10 +485,10 @@ void SwFlyFreeFrame::CheckClip( const SwFormatFrameSize &rSz )
     ::CalcClipRect( pObj, aTmpStretch, false );
     aClip.Intersection_( aTmpStretch );
 
-    const sal_Int32 nBot = getFrameArea().Top() + getFrameArea().Height();
-    const sal_Int32 nRig = getFrameArea().Left() + getFrameArea().Width();
-    const sal_Int32 nClipBot = aClip.Top() + aClip.Height();
-    const sal_Int32 nClipRig = aClip.Left() + aClip.Width();
+    const sal_Int64 nBot = getFrameArea().Top() + getFrameArea().Height();
+    const sal_Int64 nRig = getFrameArea().Left() + getFrameArea().Width();
+    const sal_Int64 nClipBot = aClip.Top() + aClip.Height();
+    const sal_Int64 nClipRig = aClip.Left() + aClip.Width();
 
     const bool bBot = nBot > nClipBot;
     const bool bRig = nRig > nClipRig;
@@ -660,7 +660,7 @@ void SwFlyFreeFrame::CheckClip( const SwFormatFrameSize &rSz )
             {
                 SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*this);
                 aFrm.Height( aFrameRect.Height() );
-                aFrm.Width ( std::max<sal_Int32>( MINLAY, aFrameRect.Width() ) );
+                aFrm.Width ( std::max( sal_Int64(MINLAY), aFrameRect.Width() ) );
             }
 
             if ( Lower() && Lower()->IsColumnFrame() )
