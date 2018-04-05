@@ -2485,7 +2485,7 @@ void SwRootFrame::CalcFrameRects(SwShellCursor &rCursor)
                     aTmp.Union( aCRect );
                     if ( (aPrvRect.Height() * aPrvRect.Width() +
                         aCRect.Height()   * aCRect.Width()) ==
-                        (aTmp.Height() * aTmp.Width()) )
+                        (sal_Int64(aTmp.Height()) * sal_Int64(aTmp.Width())) )
                     {
                         aPrvRect.Union( aCRect );
                     }
