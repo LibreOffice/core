@@ -26,6 +26,7 @@
 #include <com/sun/star/util/XJobManager.hpp>
 #include <com/sun/star/frame/XTerminateListener2.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
+#include <o3tl/deleter.hxx>
 #include <osl/mutex.hxx>
 #include <list>
 #include <memory>
@@ -76,7 +77,7 @@ private:
     std::list< css::uno::Reference< css::util::XCancellable > > maThreads;
     std::unique_ptr<CancelJobsThread> mpCancelJobsThread;
     TerminateOfficeThread* mpTerminateOfficeThread;
-    std::unique_ptr<SwPauseThreadStarting> mpPauseThreadStarting;
+    std::unique_ptr<SwPauseThreadStarting, o3tl::default_delete<SwPauseThreadStarting>> mpPauseThreadStarting;
 
     bool mbRegisteredAtDesktop;
 };
