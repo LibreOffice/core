@@ -1797,6 +1797,7 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
                     pModule.reset(new osl::Module);
                     bool ok = pModule->loadRelative(&thisModule, sModule);
                     assert(ok && "bad module name in .ui");
+                    (void) ok;
                     pFunction = reinterpret_cast<customMakeWidget>(pModule->getFunctionSymbol(sFunction));
                 }
                 g_aModuleMap.insert(std::make_pair(sModule, pModule));
