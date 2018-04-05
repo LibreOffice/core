@@ -163,6 +163,11 @@ public:
 
     virtual bool IsReadOnlyAvailable() const override;
 
+    SwShellCursor* GetNext()             { return dynamic_cast<SwShellCursor *>(GetNextInRing()); }
+    const SwShellCursor* GetNext() const { return dynamic_cast<SwShellCursor const *>(GetNextInRing()); }
+    SwShellCursor* GetPrev()             { return dynamic_cast<SwShellCursor *>(GetPrevInRing()); }
+    const SwShellCursor* GetPrev() const { return dynamic_cast<SwShellCursor const *>(GetPrevInRing()); }
+
     DECL_FIXEDMEMPOOL_NEWDEL( SwShellCursor )
 };
 
@@ -199,6 +204,10 @@ public:
     // true: Cursor can be set to this position.
     virtual bool IsAtValidPos( bool bPoint = true ) const override;
 
+    SwShellTableCursor* GetNext()             { return dynamic_cast<SwShellTableCursor *>(GetNextInRing()); }
+    const SwShellTableCursor* GetNext() const { return dynamic_cast<SwShellTableCursor const *>(GetNextInRing()); }
+    SwShellTableCursor* GetPrev()             { return dynamic_cast<SwShellTableCursor *>(GetPrevInRing()); }
+    const SwShellTableCursor* GetPrev() const { return dynamic_cast<SwShellTableCursor const *>(GetPrevInRing()); }
 };
 
 #endif // INCLUDED_SW_INC_VISCRS_HXX

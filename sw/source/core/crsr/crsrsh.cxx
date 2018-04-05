@@ -965,8 +965,7 @@ bool SwCursorShell::TestCurrPam(
         {
             return true;               // return without update
         }
-    } while( m_pCurrentCursor !=
-        ( pCmp = dynamic_cast<SwShellCursor*>(pCmp->GetNext()) ) );
+    } while( m_pCurrentCursor != ( pCmp = pCmp->GetNext() ) );
     return false;
 }
 
@@ -1220,7 +1219,7 @@ bool SwCursorShell::GoNextCursor()
 
     SET_CURR_SHELL( this );
     SwCallLink aLk( *this ); // watch Cursor-Moves; call Link if needed
-    m_pCurrentCursor = dynamic_cast<SwShellCursor*>(m_pCurrentCursor->GetNext());
+    m_pCurrentCursor = m_pCurrentCursor->GetNext();
 
     // #i24086#: show also all others
     if( !ActionPend() )
@@ -1239,7 +1238,7 @@ bool SwCursorShell::GoPrevCursor()
 
     SET_CURR_SHELL( this );
     SwCallLink aLk( *this ); // watch Cursor-Moves; call Link if needed
-    m_pCurrentCursor = dynamic_cast<SwShellCursor*>(m_pCurrentCursor->GetPrev());
+    m_pCurrentCursor = m_pCurrentCursor->GetPrev();
 
     // #i24086#: show also all others
     if( !ActionPend() )
@@ -1840,11 +1839,11 @@ void SwCursorShell::UpdateCursor( sal_uInt16 eFlags, bool bIdleEnd )
             m_pCurrentCursor->SwSelPaintRects::Show();
             if( m_pBlockCursor )
             {
-                SwShellCursor* pNxt = dynamic_cast<SwShellCursor*>(m_pCurrentCursor->GetNext());
+                SwShellCursor* pNxt = m_pCurrentCursor->GetNext();
                 while( pNxt && pNxt != m_pCurrentCursor )
                 {
                     pNxt->SwSelPaintRects::Show();
-                    pNxt = dynamic_cast<SwShellCursor*>(pNxt->GetNext());
+                    pNxt = pNxt->GetNext();
                 }
             }
         }
@@ -2024,7 +2023,7 @@ bool SwCursorShell::Pop(PopMode const eDelete)
     // the successor becomes the current one
     if (m_pStackCursor->GetNext() != m_pStackCursor)
     {
-        pTmp = dynamic_cast<SwShellCursor*>(m_pStackCursor->GetNext());
+        pTmp = m_pStackCursor->GetNext();
     }
 
     if (PopMode::DeleteStack == eDelete)
@@ -2096,7 +2095,7 @@ void SwCursorShell::Combine()
     SwShellCursor * pTmp = nullptr;
     if (m_pStackCursor->GetNext() != m_pStackCursor)
     {
-        pTmp = dynamic_cast<SwShellCursor*>(m_pStackCursor->GetNext());
+        pTmp = m_pStackCursor->GetNext();
     }
     delete m_pCurrentCursor;
     m_pCurrentCursor = m_pStackCursor;

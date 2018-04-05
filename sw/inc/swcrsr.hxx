@@ -218,6 +218,11 @@ public:
 
     long GetCursorRowSpanOffset() const { return m_nRowSpanOffset; }
 
+    SwCursor* GetNext()             { return dynamic_cast<SwCursor *>(GetNextInRing()); }
+    const SwCursor* GetNext() const { return dynamic_cast<SwCursor const *>(GetNextInRing()); }
+    SwCursor* GetPrev()             { return dynamic_cast<SwCursor *>(GetPrevInRing()); }
+    const SwCursor* GetPrev() const { return dynamic_cast<SwCursor const *>(GetPrevInRing()); }
+
     DECL_FIXEDMEMPOOL_NEWDEL( SwCursor )
 };
 
@@ -301,6 +306,11 @@ public:
 
     bool NewTableSelection();
     void ActualizeSelection( const SwSelBoxes &rBoxes );
+
+    SwTableCursor* GetNext()             { return dynamic_cast<SwTableCursor *>(GetNextInRing()); }
+    const SwTableCursor* GetNext() const { return dynamic_cast<SwTableCursor const *>(GetNextInRing()); }
+    SwTableCursor* GetPrev()             { return dynamic_cast<SwTableCursor *>(GetPrevInRing()); }
+    const SwTableCursor* GetPrev() const { return dynamic_cast<SwTableCursor const *>(GetPrevInRing()); }
 };
 
 #endif

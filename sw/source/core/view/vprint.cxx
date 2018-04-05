@@ -346,10 +346,10 @@ void SwViewShell::FillPrtDoc( SwDoc *pPrtDoc, const SfxPrinter* pPrt)
     pPrtDoc->ReplaceStyles( *GetDoc() );
 
     SwShellCursor *pActCursor = pFESh->GetCursor_();
-    SwShellCursor *pFirstCursor = dynamic_cast<SwShellCursor*>(pActCursor->GetNext());
+    SwShellCursor *pFirstCursor = pActCursor->GetNext();
     if( !pActCursor->HasMark() ) // with a multi-selection the current cursor might be empty
     {
-        pActCursor = dynamic_cast<SwShellCursor*>(pActCursor->GetPrev());
+        pActCursor = pActCursor->GetPrev();
     }
 
     // Y-position of the first selection
