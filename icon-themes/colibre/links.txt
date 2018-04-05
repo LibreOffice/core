@@ -590,6 +590,14 @@ cmd/lc_functiondialog.png cmd/lc_dbviewfunctions.png
 cmd/sc_functionbox.png cmd/sc_dbviewfunctions.png
 cmd/sc_sheetcommentmenu.png cmd/sc_showannotations.png
 
+# calc tabs
+cmd/sc_insertcurrentdate.png cmd/sc_datefield.png
+cmd/lc_insertcurrentdate.png cmd/lc_datefield.png
+cmd/sc_insertcurrenttime.png cmd/sc_timefield.png
+cmd/lc_insertcurrenttime.png cmd/lc_timefield.png
+cmd/sc_insertobjectchartfromfile.png cmd/sc_open.png
+cmd/lc_insertobjectchartfromfile.png cmd/lc_open.png
+
 # Shapes
 cmd/lc_basicshapes.png cmd/lc_basicshapes.diamond.png
 cmd/lc_basicshapes.ellipse.png cmd/lc_ellipse.png
