@@ -30,6 +30,8 @@
 class ScDocShell;
 struct TableLink_Impl;
 
+namespace weld { class Window; }
+
 class ScTableLink : public ::sfx2::SvBaseLink, public ScRefreshTimer
 {
 private:
@@ -82,7 +84,7 @@ private:
 public:
                         ScDocumentLoader( const OUString& rFileName,
                                           OUString& rFilterName, OUString& rOptions,
-                                          sal_uInt32 nRekCnt = 0, bool bWithInteraction = false );
+                                          sal_uInt32 nRekCnt = 0, weld::Window* pInteractionParent = nullptr );
                         ~ScDocumentLoader();
     ScDocument*         GetDocument();
     ScDocShell*         GetDocShell()       { return pDocShell; }
@@ -94,7 +96,8 @@ public:
     /** Create SfxMedium for stream read with SfxFilter and filter options set
         at the medium's SfxItemSet.
      */
-    static SfxMedium*   CreateMedium( const OUString& rFileName, std::shared_ptr<const SfxFilter> const & pFilter, const OUString& rOptions );
+    static SfxMedium*   CreateMedium(const OUString& rFileName, std::shared_ptr<const SfxFilter> const & pFilter,
+                                     const OUString& rOptions, weld::Window* pInteractionParent = nullptr);
 
     static OUString     GetOptions( const SfxMedium& rMedium );
 
