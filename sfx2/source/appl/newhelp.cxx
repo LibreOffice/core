@@ -1694,7 +1694,8 @@ void SfxHelpIndexWindow_Impl::SetDoubleClickHdl( const Link<Control*,bool>& rLin
 
 IMPL_LINK(SfxHelpIndexWindow_Impl, ContentTabPageDoubleClickHdl, SvTreeListBox*, p, bool)
 {
-    return aPageDoubleClickLink.Call(p);
+    aPageDoubleClickLink.Call(p);
+    return true;
 }
 
 IMPL_LINK(SfxHelpIndexWindow_Impl, TabPageDoubleClickHdl, ListBox&, r, void)
