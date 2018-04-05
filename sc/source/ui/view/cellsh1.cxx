@@ -2282,31 +2282,39 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     ScRangeListRef aRangesRef;
                     pData->GetMultiArea(aRangesRef);
                     ScRangeList aRanges = *aRangesRef;
-                    size_t nRangeSize = aRanges.size();
+                    const size_t nRangeSize = aRanges.size();
 
                     OUString aUndo = ScGlobal::GetRscString( bShowNote ? STR_UNDO_SHOWNOTE : STR_UNDO_HIDENOTE );
                     pData->GetDocShell()->GetUndoManager()->EnterListAction( aUndo, aUndo, 0, pData->GetViewShell()->GetViewShellId() );
 
-                    for ( size_t i = 0; i < nRangeSize; ++i )
+                    std::vector<sc::NoteEntry> aNotes;
+                    for (auto const& rTab : rMark.GetSelectedTabs())
                     {
-                        const ScRange & rRange = aRanges[i];
-                        const SCROW nRow0 = rRange.aStart.Row();
-                        const SCROW nRow1 = rRange.aEnd.Row();
-                        const SCCOL nCol0 = rRange.aStart.Col();
-                        const SCCOL nCol1 = rRange.aEnd.Col();
-                        const SCTAB nRangeTab = rRange.aStart.Tab();
-                        // Check by each cell
-                        for ( SCROW nRow = nRow0; nRow <= nRow1; ++nRow )
+                        pDoc->GetAllNoteEntries(rTab, aNotes);
+                    }
+
+                    for (const sc::NoteEntry& rNote : aNotes)
+                    {
+                        const ScAddress& rAdr = rNote.maPos;
+
+                        bool inRange = false;
                         {
-                            for ( SCCOL nCol = nCol0; nCol <= nCol1; ++nCol )
+                            for ( size_t i = 0; i < nRangeSize; ++i )
                             {
-                                if ( pDoc->HasNote(nCol, nRow, nRangeTab) && pDoc->IsBlockEditable( nRangeTab, nCol,nRow, nCol,nRow ) )
+                                const ScRange & rRange = aRanges[i];
+
+                                if (rRange.In(rAdr))
                                 {
-                                    ScAddress aPos( nCol, nRow, nRangeTab );
-                                    pData->GetDocShell()->GetDocFunc().ShowNote( aPos, bShowNote );
-                                    bDone = true;
+                                    inRange = true;
+                                    break;
                                 }
                             }
+                        }
+
+                        if (inRange)
+                        {
+                            pData->GetDocShell()->GetDocFunc().ShowNote( rAdr, bShowNote );
+                            bDone = true;
                         }
                     }
 
@@ -2341,10 +2349,9 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                      pDoc->GetAllNoteEntries(rTab, aNotes);
                  }
 
-                 for(std::vector<sc::NoteEntry>::const_iterator itr = aNotes.begin(),
-                     itrEnd = aNotes.end(); itr != itrEnd; ++itr)
+                 for (const sc::NoteEntry& rNote : aNotes)
                  {
-                     const ScAddress& rAdr = itr->maPos;
+                     const ScAddress& rAdr = rNote.maPos;
                      pData->GetDocShell()->GetDocFunc().ShowNote( rAdr, bShowNote );
                  }
 
