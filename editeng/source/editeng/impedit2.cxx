@@ -87,7 +87,7 @@ static sal_uInt16 lcl_CalcExtraSpace( const SvxLineSpacingItem& rLSItem )
 
 ImpEditEngine::ImpEditEngine( EditEngine* pEE, SfxItemPool* pItemPool ) :
     pSharedVCL(EditDLL::Get().GetSharedVclResources()),
-    aPaperSize( RECT_MAX, RECT_MAX ),
+    aPaperSize( RECT_MAX / 2, RECT_MAX / 2 ),
     aMinAutoPaperSize( 0x0, 0x0 ),
     aMaxAutoPaperSize( RECT_MAX, RECT_MAX ),
     aEditDoc( pItemPool ),
