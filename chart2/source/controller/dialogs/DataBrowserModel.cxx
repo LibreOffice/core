@@ -44,6 +44,7 @@
 #include <com/sun/star/chart2/data/XNumericalDataSequence.hpp>
 #include <com/sun/star/chart2/data/XTextualDataSequence.hpp>
 #include <com/sun/star/util/XModifiable.hpp>
+#include <tools/diagnose_ex.h>
 
 #include <rtl/math.hxx>
 
@@ -69,9 +70,9 @@ OUString lcl_getRole(
         {
             xProp->getPropertyValue( "Role" ) >>= aResult;
         }
-        catch( const uno::Exception & ex )
+        catch( const uno::Exception & )
         {
-            SAL_WARN("chart2", "Exception caught. " << ex );
+            DBG_UNHANDLED_EXCEPTION("chart2");
         }
     }
     return aResult;
@@ -117,9 +118,9 @@ bool lcl_SequenceOfSeriesIsShared(
                 break;
             }
     }
-    catch( const uno::Exception & ex )
+    catch( const uno::Exception & )
     {
-        SAL_WARN("chart2", "Exception caught. " << ex );
+        DBG_UNHANDLED_EXCEPTION("chart2");
     }
     return bResult;
 }
@@ -954,9 +955,9 @@ void DataBrowserModel::addErrorBarRanges(
             ++rInOutHeaderEnd;
         }
     }
-    catch( const uno::Exception & ex )
+    catch( const uno::Exception & )
     {
-        SAL_WARN("chart2", "Exception caught. " << ex );
+        DBG_UNHANDLED_EXCEPTION("chart2");
     }
 }
 

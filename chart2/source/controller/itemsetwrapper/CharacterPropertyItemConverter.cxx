@@ -34,6 +34,7 @@
 
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/chart2/XFormattedString.hpp>
+#include <tools/diagnose_ex.h>
 
 using namespace ::com::sun::star;
 
@@ -276,9 +277,9 @@ void CharacterPropertyItemConverter::FillSpecialItem(
                     rOutItemSet.Put( aItem );
                 }
             }
-            catch( const uno::Exception & ex )
+            catch( const uno::Exception & )
             {
-                SAL_WARN("chart2", "Exception caught. " << ex );
+                DBG_UNHANDLED_EXCEPTION("chart2");
             }
         }
         break;
@@ -535,9 +536,9 @@ bool CharacterPropertyItemConverter::ApplySpecialItem(
                     }
                 }
             }
-            catch( const uno::Exception & ex )
+            catch( const uno::Exception & )
             {
-                SAL_WARN("chart2", "Exception caught. " << ex );
+                DBG_UNHANDLED_EXCEPTION("chart2");
             }
         }
         break;

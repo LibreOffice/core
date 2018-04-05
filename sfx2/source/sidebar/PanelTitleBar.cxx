@@ -29,6 +29,7 @@
 #include <vcl/gradient.hxx>
 #include <vcl/image.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
+#include <tools/diagnose_ex.h>
 
 using namespace css;
 using namespace css::uno;
@@ -146,9 +147,9 @@ void PanelTitleBar::HandleToolBoxItemClick (const sal_uInt16 nItemIndex)
                 if (xDispatch.is())
                     xDispatch->dispatch(aURL, Sequence<beans::PropertyValue>());
             }
-            catch(Exception& rException)
+            catch(Exception const &)
             {
-                SAL_WARN("sfx", "caught " << rException);
+                DBG_UNHANDLED_EXCEPTION("sfx");
             }
         }
 }

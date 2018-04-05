@@ -51,6 +51,7 @@
 #include <comphelper/processfactory.hxx>
 #include <tools/urlobj.hxx>
 #include <osl/diagnose.h>
+#include <tools/diagnose_ex.h>
 
 namespace utl {
 
@@ -519,9 +520,9 @@ bool MediaDescriptor::impl_addInputStream( bool bLockFile )
 
         return impl_openStreamWithURL( removeFragment(sURL), bLockFile );
     }
-    catch(const css::uno::Exception& ex)
+    catch(const css::uno::Exception&)
     {
-        SAL_WARN("unotools.misc", "invalid MediaDescriptor detected: " << ex);
+        DBG_UNHANDLED_EXCEPTION("unotools.misc", "invalid MediaDescriptor detected");
         return false;
     }
 }

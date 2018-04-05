@@ -39,6 +39,7 @@
 #include <com/sun/star/chart2/XInternalDataProvider.hpp>
 #include <com/sun/star/chart/ErrorBarStyle.hpp>
 #include <com/sun/star/lang/XServiceName.hpp>
+#include <tools/diagnose_ex.h>
 
 #include <functional>
 #include <algorithm>
@@ -59,9 +60,9 @@ uno::Reference< beans::XPropertySet > lcl_GetErrorBar(
         {
         ( xProp->getPropertyValue( bYError ? OUString(CHART_UNONAME_ERRORBAR_Y) : OUString(CHART_UNONAME_ERRORBAR_X) ) >>= xResult );
         }
-        catch( const uno::Exception & ex )
+        catch( const uno::Exception & )
         {
-            SAL_WARN("chart2", "Exception caught. " << ex );
+            DBG_UNHANDLED_EXCEPTION("chart2");
         }
 
     return xResult;
@@ -83,9 +84,9 @@ void lcl_getErrorValues( const uno::Reference< beans::XPropertySet > & xErrorBar
         xErrorBarProp->getPropertyValue( "PositiveError" ) >>= rOutPosError;
         xErrorBarProp->getPropertyValue( "NegativeError" ) >>= rOutNegError;
     }
-    catch( const uno::Exception & ex )
+    catch( const uno::Exception & )
     {
-        SAL_WARN("chart2", "Exception caught. " << ex );
+        DBG_UNHANDLED_EXCEPTION("chart2");
     }
 }
 
@@ -101,9 +102,9 @@ void lcl_getErrorIndicatorValues(
         xErrorBarProp->getPropertyValue( "ShowPositiveError" ) >>= rOutShowPosError;
         xErrorBarProp->getPropertyValue( "ShowNegativeError" ) >>= rOutShowNegError;
     }
-    catch( const uno::Exception & ex )
+    catch( const uno::Exception & )
     {
-        SAL_WARN("chart2", "Exception caught. " << ex );
+        DBG_UNHANDLED_EXCEPTION("chart2");
     }
 }
 

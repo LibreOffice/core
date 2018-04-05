@@ -66,6 +66,7 @@
 #include <svx/numinf.hxx>
 
 #include <svl/cjkoptions.hxx>
+#include <tools/diagnose_ex.h>
 
 namespace chart
 {
@@ -238,9 +239,9 @@ void ObjectPropertiesDialogParameter::init( const uno::Reference< frame::XModel 
                     }
                 }
             }
-            catch( const Exception & ex )
+            catch( const Exception & )
             {
-                SAL_WARN("chart2", "Exception caught. " << ex );
+                DBG_UNHANDLED_EXCEPTION("chart2");
             }
         }
         if( !bXValuesFound && bYValuesFound )

@@ -42,6 +42,7 @@
 #include <comphelper/solarmutex.hxx>
 #include <rtl/ref.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <tools/diagnose_ex.h>
 
 using namespace utl;
 using namespace com::sun::star::uno;
@@ -1089,9 +1090,9 @@ bool ConfigItem::AddNode(const OUString& rNode, const OUString& rNewNode)
             }
             xBatch->commitChanges();
         }
-        catch (const Exception& rEx)
+        catch (const Exception&)
         {
-            SAL_WARN("unotools.config", "Exception from AddNode(): " << rEx);
+            DBG_UNHANDLED_EXCEPTION("unotools.config");
             bRet = false;
         }
     }

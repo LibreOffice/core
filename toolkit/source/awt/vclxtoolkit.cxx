@@ -121,6 +121,7 @@
 #endif
 #include <toolkit/awt/vclxspinbutton.hxx>
 #include <tools/debug.hxx>
+#include <tools/diagnose_ex.h>
 #include <comphelper/processfactory.hxx>
 #include <toolkit/awt/scrollabledialog.hxx>
 #include <comphelper/profilezone.hxx>
@@ -1689,10 +1690,10 @@ css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::createSystemChild( con
             {
                 pChildWindow.reset( VclPtr<WorkWindow>::Create( &aParentData ) );
             }
-            catch ( const css::uno::RuntimeException & rEx )
+            catch ( const css::uno::RuntimeException & )
             {
                 // system child window could not be created
-                SAL_WARN("toolkit", "caught " << rEx);
+                DBG_UNHANDLED_EXCEPTION("toolkit");
                 pChildWindow.clear();
             }
         }
@@ -2085,9 +2086,9 @@ void VCLXToolkit::callTopWindowListeners(
                 {
                     (xListener.get()->*pFn)(aAwtEvent);
                 }
-                catch (const css::uno::RuntimeException & rEx)
+                catch (const css::uno::RuntimeException &)
                 {
-                    SAL_WARN("toolkit", "caught " << rEx);
+                    DBG_UNHANDLED_EXCEPTION("toolkit");
                 }
             }
         }
@@ -2130,9 +2131,9 @@ bool VCLXToolkit::callKeyHandlers(::VclSimpleEvent const * pEvent,
                              : xHandler->keyReleased(aAwtEvent))
                     return true;
             }
-            catch (const css::uno::RuntimeException & rEx)
+            catch (const css::uno::RuntimeException &)
             {
-                SAL_WARN("toolkit", "caught " << rEx);
+                DBG_UNHANDLED_EXCEPTION("toolkit");
             }
         }
     }
@@ -2176,9 +2177,9 @@ void VCLXToolkit::callFocusListeners(::VclSimpleEvent const * pEvent,
                     bGained ? xListener->focusGained(aAwtEvent)
                         : xListener->focusLost(aAwtEvent);
                 }
-                catch (const css::uno::RuntimeException & rEx)
+                catch (const css::uno::RuntimeException &)
                 {
-                    SAL_WARN("toolkit", "caught " << rEx);
+                    DBG_UNHANDLED_EXCEPTION("toolkit");
                 }
             }
         }

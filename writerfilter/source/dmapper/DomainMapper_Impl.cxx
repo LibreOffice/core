@@ -91,6 +91,7 @@
 #include <comphelper/propertysequence.hxx>
 #include <unotools/configmgr.hxx>
 #include <unotools/mediadescriptor.hxx>
+#include <tools/diagnose_ex.h>
 
 
 using namespace ::com::sun::star;
@@ -1959,9 +1960,9 @@ void DomainMapper_Impl::PushAnnotation()
         m_aTextAppendStack.push(TextAppendContext(uno::Reference< text::XTextAppend >( xAnnotationText, uno::UNO_QUERY_THROW ),
                     m_bIsNewDoc ? uno::Reference<text::XTextCursor>() : xAnnotationText->createTextCursorByRange(xAnnotationText->getStart())));
     }
-    catch( const uno::Exception& rException)
+    catch( const uno::Exception&)
     {
-        SAL_WARN("writerfilter.dmapper", "exception in PushAnnotation: " << rException);
+        DBG_UNHANDLED_EXCEPTION("writerfilter.dmapper");
     }
 }
 
@@ -2851,9 +2852,9 @@ void DomainMapper_Impl::ChainTextFrames()
         }
         m_vTextFramesForChaining.clear(); //clear the vector
     }
-    catch (const uno::Exception& rException)
+    catch (const uno::Exception&)
     {
-        SAL_WARN("writerfilter.dmapper", "failed. message: " << rException);
+        DBG_UNHANDLED_EXCEPTION("writerfilter.dmapper");
     }
 }
 
@@ -5335,9 +5336,9 @@ void DomainMapper_Impl::ExecuteFrameConversion()
                 m_xFrameEndRange,
                 comphelper::containerToSequence(m_aFrameProperties) );
         }
-        catch( const uno::Exception& rEx)
+        catch( const uno::Exception&)
         {
-            SAL_WARN( "writerfilter.dmapper", "Exception caught when converting to frame: " << rEx );
+            DBG_UNHANDLED_EXCEPTION( "writerfilter.dmapper", "Exception caught when converting to frame");
         }
     }
     m_xFrameStartRange = nullptr;

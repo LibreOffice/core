@@ -56,6 +56,7 @@
 #include <comphelper/sequence.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <algorithm>
 
@@ -131,13 +132,13 @@ Reference< embed::XStorage > lcl_createStorage(
             xStorageFact->createInstanceWithArguments( aStorageArgs ), uno::UNO_QUERY_THROW );
         OSL_ENSURE( xStorage.is(), "No Storage" );
     }
-    catch(const css::ucb::ContentCreationException& rEx)
+    catch(const css::ucb::ContentCreationException&)
     {
-        SAL_WARN("chart2", "Exception caught. " << rEx );
+        DBG_UNHANDLED_EXCEPTION("chart2");
     }
-    catch(const css::ucb::CommandFailedException& rEx)
+    catch(const css::ucb::CommandFailedException&)
     {
-        SAL_WARN("chart2", "Exception caught. " << rEx );
+        DBG_UNHANDLED_EXCEPTION("chart2");
     }
 
     return xStorage;
@@ -184,9 +185,9 @@ Reference< document::XFilter > ChartModel::impl_createFilter(
                 }
             }
         }
-        catch( const uno::Exception & ex )
+        catch( const uno::Exception & )
         {
-            SAL_WARN("chart2", "Exception caught. " << ex );
+            DBG_UNHANDLED_EXCEPTION("chart2");
         }
         OSL_ENSURE( xFilter.is(), "Filter not found via factory" );
     }
@@ -315,9 +316,9 @@ void SAL_CALL ChartModel::storeToURL(
                 }
             }
         }
-        catch( const uno::Exception & ex )
+        catch( const uno::Exception & )
         {
-            SAL_WARN("chart2", "Exception caught. " << ex );
+            DBG_UNHANDLED_EXCEPTION("chart2");
         }
     }
     else
@@ -345,9 +346,9 @@ void ChartModel::impl_store(
             xExporter->setSourceDocument( Reference< lang::XComponent >( this ));
             xFilter->filter( aMD );
         }
-        catch( const uno::Exception & ex )
+        catch( const uno::Exception & )
         {
-            SAL_WARN("chart2", "Exception caught. " << ex );
+            DBG_UNHANDLED_EXCEPTION("chart2");
         }
     }
     else
@@ -458,16 +459,16 @@ void ChartModel::insertDefaultChart()
 
                 }
             }
-            catch( const uno::Exception & ex )
+            catch( const uno::Exception & )
             {
-                SAL_WARN("chart2", "Exception caught. " << ex );
+                DBG_UNHANDLED_EXCEPTION("chart2");
             }
         }
         ChartModelHelper::setIncludeHiddenCells( false, *this );
     }
-    catch( const uno::Exception & ex )
+    catch( const uno::Exception & )
     {
-        SAL_WARN("chart2", "Exception caught. " << ex );
+        DBG_UNHANDLED_EXCEPTION("chart2");
     }
     setModified( false );
     unlockControllers();
@@ -533,9 +534,9 @@ void SAL_CALL ChartModel::load(
         if( aMDHelper.ISSET_URL )
             aURL = aMDHelper.URL;
     }
-    catch( const uno::Exception & ex )
+    catch( const uno::Exception & )
     {
-        SAL_WARN("chart2", "Exception caught. " << ex );
+        DBG_UNHANDLED_EXCEPTION("chart2");
     }
 
     if( xStorage.is())
@@ -728,9 +729,9 @@ void SAL_CALL ChartModel::modified( const lang::EventObject& rEvenObject)
             css::uno::Reference<css::chart2::XChartTypeTemplate> xChartTypeTemplate(aTemplateAndService.first);
             xChartTypeTemplate->changeDiagramData(xDiagram, xDataSource, aArguments);
         }
-        catch (const uno::Exception & ex)
+        catch (const uno::Exception &)
         {
-            SAL_WARN("chart2", "Exception caught. " << ex);
+            DBG_UNHANDLED_EXCEPTION("chart2");
         }
         unlockControllers();
     }
