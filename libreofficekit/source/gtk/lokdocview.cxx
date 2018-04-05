@@ -1163,13 +1163,25 @@ callback (gpointer pData)
     break;
     case LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR:
     {
-        priv->m_aVisibleCursor = payloadToRectangle(pDocView, pCallback->m_aPayload.c_str());
+
+        std::stringstream aStream(pCallback->m_aPayload);
+        boost::property_tree::ptree aTree;
+        boost::property_tree::read_json(aStream, aTree);
+        const std::string& rRectangle = aTree.get<std::string>("rectangle");
+        int nViewId = aTree.get<int>("viewId");
+
+        priv->m_aVisibleCursor = payloadToRectangle(pDocView, rRectangle.c_str());
         priv->m_bCursorOverlayVisible = true;
-        g_signal_emit(pDocView, doc_view_signals[CURSOR_CHANGED], 0,
+        std::cerr << nViewId;
+        std::cerr << priv->m_nViewId;
+        if(nViewId == priv->m_nViewId)
+        {
+            g_signal_emit(pDocView, doc_view_signals[CURSOR_CHANGED], 0,
                       priv->m_aVisibleCursor.x,
                       priv->m_aVisibleCursor.y,
                       priv->m_aVisibleCursor.width,
                       priv->m_aVisibleCursor.height);
+        }
         gtk_widget_queue_draw(GTK_WIDGET(pDocView));
     }
     break;
@@ -2701,6 +2713,7 @@ static gboolean lok_doc_view_initable_init (GInitable *initable, GCancellable* /
         return FALSE;
     }
     priv->m_nLOKFeatures |= LOK_FEATURE_PART_IN_INVALIDATION_CALLBACK;
+    priv->m_nLOKFeatures |= LOK_FEATURE_VIEWID_IN_VISCURSOR_INVALIDATION_CALLBACK;
     priv->m_pOffice->pClass->setOptionalFeatures(priv->m_pOffice, priv->m_nLOKFeatures);
 
     return TRUE;

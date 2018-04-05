@@ -17,6 +17,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <comphelper/lok.hxx>
+#include <editeng/outliner.hxx>
 
 #include <shellimpl.hxx>
 
@@ -197,6 +198,21 @@ void SfxLokHelper::notifyInvalidation(SfxViewShell const* pThisView, const OStri
         aBuf.append(static_cast<sal_Int32>(pThisView->getPart()));
     }
     pThisView->libreOfficeKitViewCallback(LOK_CALLBACK_INVALIDATE_TILES, aBuf.makeStringAndClear().getStr());
+}
+
+void SfxLokHelper::notifyVisCursorInvalidation(OutlinerViewShell const* pThisView, const OString& rRectangle)
+{
+    OString sPayload;
+    if (comphelper::LibreOfficeKit::isViewIdForVisCursorInvalidation())
+    {
+        sPayload = OString("{ \"viewId\": \"") + OString::number(SfxLokHelper::getView()) +
+            "\", \"rectangle\": \"" + rRectangle + "\" }";
+    }
+    else
+    {
+        sPayload = rRectangle;
+    }
+    pThisView->libreOfficeKitViewCallback(LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR, sPayload.getStr());
 }
 
 void SfxLokHelper::notifyAllViews(int nType, const OString& rPayload)
