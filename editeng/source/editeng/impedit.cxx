@@ -42,6 +42,7 @@
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <comphelper/string.hxx>
 #include <comphelper/lok.hxx>
+#include <sfx2/lokhelper.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -1112,7 +1113,7 @@ void ImpEditView::ShowCursor( bool bGotoCursor, bool bForceVisCursor )
             }
             else
             {
-                mpViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR, sRect.getStr());
+                SfxLokHelper::notifyVisCursorInvalidation(mpViewShell, sRect);
                 mpViewShell->NotifyOtherViews(LOK_CALLBACK_INVALIDATE_VIEW_CURSOR, "rectangle", sRect);
             }
         }
