@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_660c5495",
+        "filename": "vcl/source/gdi/bitmap3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2018-04-05T09:01:10Z",
+      "side": 1,
+      "message": "is this include still needed?",
+      "range": {
+        "startLine": 39,
+        "startChar": 24,
+        "endLine": 39,
+        "endChar": 25
+      },
+      "revId": "96562522605007a67c80da3a1779a290d353f623",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_c6234004",
+        "filename": "vcl/source/gdi/bitmapex.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2018-04-05T09:01:10Z",
+      "side": 1,
+      "message": "maBitmapSize chanegs are still here",
+      "revId": "96562522605007a67c80da3a1779a290d353f623",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
