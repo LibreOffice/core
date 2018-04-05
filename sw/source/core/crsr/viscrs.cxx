@@ -214,13 +214,15 @@ void SwVisibleCursor::SetPosAndShow(SfxViewShell const * pViewShell)
         if (pViewShell)
         {
             if (pViewShell == m_pCursorShell->GetSfxViewShell())
-                pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR, sRect.getStr());
+            {
+                SfxLokHelper::notifyVisCursorInvalidation(pViewShell, sRect);
+            }
             else
                 SfxLokHelper::notifyOtherView(m_pCursorShell->GetSfxViewShell(), pViewShell, LOK_CALLBACK_INVALIDATE_VIEW_CURSOR, "rectangle", sRect);
         }
         else
         {
-            m_pCursorShell->GetSfxViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR, sRect.getStr());
+            SfxLokHelper::notifyVisCursorInvalidation(m_pCursorShell->GetSfxViewShell(), sRect);
             SfxLokHelper::notifyOtherViews(m_pCursorShell->GetSfxViewShell(), LOK_CALLBACK_INVALIDATE_VIEW_CURSOR, "rectangle", sRect);
         }
     }

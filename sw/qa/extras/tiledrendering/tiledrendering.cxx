@@ -106,6 +106,7 @@ public:
     void testIMESupport();
     void testSplitNodeRedlineCallback();
     void testDeleteNodeRedlineCallback();
+    void testVisCursorInvalidation();
 
     CPPUNIT_TEST_SUITE(SwTiledRenderingTest);
     CPPUNIT_TEST(testRegisterCallback);
@@ -160,6 +161,7 @@ public:
     CPPUNIT_TEST(testIMESupport);
     CPPUNIT_TEST(testSplitNodeRedlineCallback);
     CPPUNIT_TEST(testDeleteNodeRedlineCallback);
+    CPPUNIT_TEST(testVisCursorInvalidation);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -672,6 +674,7 @@ class ViewCallback
 {
 public:
     bool m_bOwnCursorInvalidated;
+    int m_nOwnCursorInvalidatedBy;
     bool m_bOwnCursorAtOrigin;
     tools::Rectangle m_aOwnCursor;
     bool m_bViewCursorInvalidated;
@@ -693,6 +696,7 @@ public:
 
     ViewCallback()
         : m_bOwnCursorInvalidated(false),
+          m_nOwnCursorInvalidatedBy(-1),
           m_bOwnCursorAtOrigin(false),
           m_bViewCursorInvalidated(false),
           m_bOwnSelectionSet(false),
@@ -726,7 +730,18 @@ public:
         {
             m_bOwnCursorInvalidated = true;
 
-            uno::Sequence<OUString> aSeq = comphelper::string::convertCommaSeparated(OUString::fromUtf8(aPayload));
+            OString sRect;
+            if(comphelper::LibreOfficeKit::isViewIdForVisCursorInvalidation())
+            {
+                std::stringstream aStream(pPayload);
+                boost::property_tree::ptree aTree;
+                boost::property_tree::read_json(aStream, aTree);
+                sRect = aTree.get_child("rectangle").get_value<std::string>().c_str();
+                m_nOwnCursorInvalidatedBy = aTree.get_child("viewId").get_value<int>();
+            }
+            else
+                sRect = aPayload;
+            uno::Sequence<OUString> aSeq = comphelper::string::convertCommaSeparated(OUString::fromUtf8(sRect));
             if (OString("EMPTY") == pPayload)
                 return;
             CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(4), aSeq.getLength());
@@ -2273,6 +2288,86 @@ void SwTiledRenderingTest::testDeleteNodeRedlineCallback()
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT_EQUAL(0, m_nRedlineTableEntryModified);
 
+    comphelper::LibreOfficeKit::setActive(false);
+}
+
+
+void SwTiledRenderingTest::testVisCursorInvalidation()
+{
+    comphelper::LibreOfficeKit::setActive();
+
+    SwXTextDocument* pXTextDocument = createDoc("dummy.fodt");
+    ViewCallback aView1;
+    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView1);
+    int nView1 = SfxLokHelper::getView();
+
+    SfxLokHelper::createView();
+    int nView2 = SfxLokHelper::getView();
+    ViewCallback aView2;
+    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView2);
+    Scheduler::ProcessEventsToIdle();
+
+
+    // Move visible cursor in the first view
+    SfxLokHelper::setView(nView1);
+    Scheduler::ProcessEventsToIdle();
+
+    aView1.m_bOwnCursorInvalidated = false;
+    aView1.m_bViewCursorInvalidated = false;
+    aView2.m_bOwnCursorInvalidated = false;
+    aView2.m_bViewCursorInvalidated = false;
+
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_RIGHT);
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_RIGHT);
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT(!aView1.m_bViewCursorInvalidated);
+    CPPUNIT_ASSERT(aView1.m_bOwnCursorInvalidated);
+    CPPUNIT_ASSERT(aView2.m_bViewCursorInvalidated);
+    CPPUNIT_ASSERT(!aView2.m_bOwnCursorInvalidated);
+
+    // Insert text in the second view which moves the other view's cursor too
+    SfxLokHelper::setView(nView2);
+
+    aView1.m_bOwnCursorInvalidated = false;
+    aView1.m_bViewCursorInvalidated = false;
+    aView2.m_bOwnCursorInvalidated = false;
+    aView2.m_bViewCursorInvalidated = false;
+
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'x', 0);
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 'x', 0);
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT(aView1.m_bViewCursorInvalidated);
+    CPPUNIT_ASSERT(aView1.m_bOwnCursorInvalidated);
+    CPPUNIT_ASSERT(aView2.m_bViewCursorInvalidated);
+    CPPUNIT_ASSERT(aView2.m_bOwnCursorInvalidated);
+
+    // Do the same as before, but set the related compatibility flag first
+    SfxLokHelper::setView(nView2);
+
+    comphelper::LibreOfficeKit::setViewIdForVisCursorInvalidation(true);
+
+    aView1.m_bOwnCursorInvalidated = false;
+    aView1.m_bViewCursorInvalidated = false;
+    aView2.m_bOwnCursorInvalidated = false;
+    aView2.m_bViewCursorInvalidated = false;
+
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'x', 0);
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 'x', 0);
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT(aView1.m_bViewCursorInvalidated);
+    CPPUNIT_ASSERT(aView1.m_bOwnCursorInvalidated);
+    CPPUNIT_ASSERT_EQUAL(nView2, aView1.m_nOwnCursorInvalidatedBy);
+    CPPUNIT_ASSERT(aView2.m_bViewCursorInvalidated);
+    CPPUNIT_ASSERT(aView2.m_bOwnCursorInvalidated);
+    CPPUNIT_ASSERT_EQUAL(nView2, aView2.m_nOwnCursorInvalidatedBy);
+
+    comphelper::LibreOfficeKit::setViewIdForVisCursorInvalidation(false);
+
+    mxComponent->dispose();
+    mxComponent.clear();
     comphelper::LibreOfficeKit::setActive(false);
 }
 
