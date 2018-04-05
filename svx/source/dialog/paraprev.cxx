@@ -200,7 +200,7 @@ void SvxParaPrevWindow::DrawParagraph(vcl::RenderContext& rRenderContext)
 
         if (5 == i)
         {
-            long nBottom = nLower * aLineSiz.Height() / aSize.Height();
+            auto nBottom = nLower * aLineSiz.Height() / aSize.Height();
             aPnt.AdjustY(nBottom * 2 );
         }
 
