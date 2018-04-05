@@ -825,8 +825,8 @@ ErrCode SwWriter::Write( WriterRef const & rxWriter, const OUString* pRealFileNa
         //const SwPageDesc& rPgDsc = *pOutDoc->GetPageDescFromPool( RES_POOLPAGE_STANDARD );
         const SwFormatFrameSize& rSz = rPgDsc.GetMaster().GetFrameSize();
         // Clipboard-Document is always created w/o printer; thus the
-        // default PageDesc is always aug SAL_MAX_INT32 !! Set then to DIN A4
-        if( SAL_MAX_INT32 == rSz.GetHeight() || SAL_MAX_INT32 == rSz.GetWidth() )
+        // default PageDesc is always aug SAL_MAX_INT64 !! Set then to DIN A4
+        if( SAL_MAX_INT64 == rSz.GetHeight() || SAL_MAX_INT64 == rSz.GetWidth() )
         {
             SwPageDesc aNew( rPgDsc );
             SwFormatFrameSize aNewSz( rSz );

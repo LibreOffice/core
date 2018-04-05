@@ -3160,7 +3160,7 @@ SwTwips CalcRowRstHeight( SwLayoutFrame *pRow )
     {
         return 0;
     }
-    SwTwips nRstHeight = RECT_MAX;
+    SwTwips nRstHeight = SAL_MAX_INT64;
     while (pLow && pLow->IsLayoutFrame())
     {
         nRstHeight = std::min(nRstHeight, ::lcl_CalcCellRstHeight(static_cast<SwLayoutFrame*>(pLow)));
@@ -3298,7 +3298,7 @@ SwFrame* GetFrameOfModify( const SwRootFrame* pLayout, SwModify const& rMod, SwF
                     // Point not in rectangle. Compare distances:
                     const Point aCalcRectCenter = aCalcRect.Center();
                     const Point aDiff = aCalcRectCenter - *pPoint;
-                    const sal_uInt64 nCurrentDist = sal_Int64(aDiff.getX()) * sal_Int64(aDiff.getX()) + sal_Int64(aDiff.getY()) * sal_Int64(aDiff.getY()); // opt: no sqrt
+                    const sal_uInt64 nCurrentDist = aDiff.getX() * aDiff.getX() + aDiff.getY() * aDiff.getY(); // opt: no sqrt
                     if ( !pMinFrame || nCurrentDist < nMinDist )
                     {
                         pMinFrame = pTmpFrame;

@@ -1813,17 +1813,17 @@ SvxFont EditEngine::GetStandardSvxFont( sal_Int32 nPara )
 void EditEngine::StripPortions()
 {
     ScopedVclPtrInstance< VirtualDevice > aTmpDev;
-    tools::Rectangle aBigRect( Point( 0, 0 ), Size( RECT_MAX, RECT_MAX ) );
+    tools::Rectangle aBigRect( Point( 0, 0 ), Size( 0x7FFFFFFF, 0x7FFFFFFF ) );
     if ( IsVertical() )
     {
         if( IsTopToBottom() )
         {
             aBigRect.SetRight( 0 );
-            aBigRect.SetLeft( RECT_MIN );
+            aBigRect.SetLeft( -0x7FFFFFFF );
         }
         else
         {
-            aBigRect.SetTop( RECT_MIN );
+            aBigRect.SetTop( -0x7FFFFFFF );
             aBigRect.SetBottom( 0 );
         }
     }

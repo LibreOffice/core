@@ -677,7 +677,7 @@ void SdrTextObj::impDecomposePathTextPrimitive(
     SdrOutliner& rOutliner = ImpGetDrawOutliner();
     rOutliner.SetUpdateMode(true);
     rOutliner.Clear();
-    rOutliner.SetPaperSize(Size(RECT_MAX,RECT_MAX));
+    rOutliner.SetPaperSize(Size(SAL_MAX_INT64,SAL_MAX_INT64));
     rOutliner.SetText(rSdrPathTextPrimitive.getOutlinerParaObject());
 
     // set visualizing page at Outliner; needed e.g. for PageNumberField decomposition

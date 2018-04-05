@@ -237,7 +237,7 @@ void SwHeadFootFrame::FormatSize(SwTwips nUL, const SwBorderAttrs * pAttrs)
 
             ColLock();
 
-            SwTwips nMaxHeight = SAL_MAX_INT32;
+            SwTwips nMaxHeight = SAL_MAX_INT64;
             SwTwips nRemaining, nOldHeight;
             // #i64301#
             // use the position of the footer printing area to control invalidation
