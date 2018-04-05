@@ -35,7 +35,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 
-#define EMPTY_PAPER_SIZE    0x7FFFFFFF
+#define EMPTY_PAPER_SIZE    (0x7FFFFFFF / 2)
 
 
 namespace frm
