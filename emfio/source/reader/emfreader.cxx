@@ -750,9 +750,6 @@ namespace emfio
                     case EMR_SETWINDOWEXTEX :
                     {
                         mpInputStream->ReadUInt32( nW ).ReadUInt32( nH );
-                        // clamp to valid range
-                        nW = std::max<sal_Int32>(std::min<sal_Int32>(nW, RECT_MAX), RECT_MIN);
-                        nH = std::max<sal_Int32>(std::min<sal_Int32>(nH, RECT_MAX), RECT_MIN);
                         SetWinExt( Size( nW, nH ), true);
                     }
                     break;
@@ -1930,11 +1927,6 @@ namespace emfio
 
         SetrclFrame(rclFrame);
         SetrclBounds(rclBounds);
-        // clamp to valid range
-        nPixX = std::max<sal_Int32>(std::min<sal_Int32>(nPixX, RECT_MAX), RECT_MIN);
-        nPixY = std::max<sal_Int32>(std::min<sal_Int32>(nPixY, RECT_MAX), RECT_MIN);
-        nMillX = std::max<sal_Int32>(std::min<sal_Int32>(nMillX, RECT_MAX), RECT_MIN);
-        nMillY = std::max<sal_Int32>(std::min<sal_Int32>(nMillY, RECT_MAX), RECT_MIN);
         SetRefPix(Size( nPixX, nPixY ) );
         SetRefMill(Size( nMillX, nMillY ) );
 

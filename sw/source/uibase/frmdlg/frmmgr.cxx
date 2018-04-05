@@ -516,24 +516,24 @@ void SwFlyFrameAttrMgr::DelAttr( sal_uInt16 nId )
 
 void SwFlyFrameAttrMgr::SetLRSpace( long nLeft, long nRight )
 {
-    OSL_ENSURE( SAL_MAX_INT32 != nLeft && SAL_MAX_INT32 != nRight, "Which border to set?" );
+    OSL_ENSURE( SAL_MAX_INT64 != nLeft && SAL_MAX_INT64 != nRight, "Which border to set?" );
 
     SvxLRSpaceItem aTmp( m_aSet.Get( RES_LR_SPACE ) );
-    if( SAL_MAX_INT32 != nLeft )
+    if( SAL_MAX_INT64 != nLeft )
         aTmp.SetLeft( sal_uInt16(nLeft) );
-    if( SAL_MAX_INT32 != nRight )
+    if( SAL_MAX_INT64 != nRight )
         aTmp.SetRight( sal_uInt16(nRight) );
     m_aSet.Put( aTmp );
 }
 
 void SwFlyFrameAttrMgr::SetULSpace( long nTop, long nBottom )
 {
-    OSL_ENSURE(SAL_MAX_INT32 != nTop && SAL_MAX_INT32 != nBottom, "Which border to set?" );
+    OSL_ENSURE(SAL_MAX_INT64 != nTop && SAL_MAX_INT64 != nBottom, "Which border to set?" );
 
     SvxULSpaceItem aTmp( m_aSet.Get( RES_UL_SPACE ) );
-    if( SAL_MAX_INT32 != nTop )
+    if( SAL_MAX_INT64 != nTop )
         aTmp.SetUpper( sal_uInt16(nTop) );
-    if( SAL_MAX_INT32 != nBottom )
+    if( SAL_MAX_INT64 != nBottom )
         aTmp.SetLower( sal_uInt16(nBottom) );
     m_aSet.Put( aTmp );
 }
@@ -591,7 +591,7 @@ void SwFlyFrameAttrMgr::SetRotation(sal_uInt16 nOld, sal_uInt16 nNew, const Size
 void SwFlyFrameAttrMgr::SetSize( const Size& rSize )
 {
     SwFormatFrameSize aSize( GetFrameSize() );
-    aSize.SetSize(Size(std::max<sal_Int32>(rSize.Width(), MINFLY), std::max<sal_Int32>(rSize.Height(), MINFLY)));
+    aSize.SetSize(Size(std::max(rSize.Width(), long(MINFLY)), std::max(rSize.Height(), long(MINFLY))));
     m_aSet.Put( aSize );
 }
 

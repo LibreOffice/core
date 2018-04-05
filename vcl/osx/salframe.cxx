@@ -531,7 +531,7 @@ void AquaSalFrame::SetMaxClientSize( long nWidth, long nHeight )
     }
 }
 
-void AquaSalFrame::GetClientSize( sal_Int32& rWidth, sal_Int32& rHeight )
+void AquaSalFrame::GetClientSize( sal_Int64& rWidth, sal_Int64& rHeight )
 {
     if( mbShown || mbInitShow )
     {

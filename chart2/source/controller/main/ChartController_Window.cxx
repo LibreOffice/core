@@ -2035,10 +2035,10 @@ void ChartController::sendPopupRequest(OUString const & rCID, tools::Rectangle a
     sal_Int32 nDimensionIndex = sDimensionIndex.toInt32();
 
     awt::Rectangle xRectangle {
-        aRectangle.Left(),
-        aRectangle.Top(),
-        aRectangle.GetWidth(),
-        aRectangle.GetHeight()
+        sal_Int32(aRectangle.Left()),
+        sal_Int32(aRectangle.Top()),
+        sal_Int32(aRectangle.GetWidth()),
+        sal_Int32(aRectangle.GetHeight())
     };
 
     uno::Sequence<beans::PropertyValue> aCallbackData = comphelper::InitPropertySequence(
