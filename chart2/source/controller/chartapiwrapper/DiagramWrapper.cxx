@@ -66,6 +66,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <com/sun/star/lang/XServiceName.hpp>
 #include <com/sun/star/util/XRefreshable.hpp>
+#include <tools/diagnose_ex.h>
 
 using namespace ::com::sun::star;
 using namespace ::chart::wrapper;
@@ -1467,9 +1468,9 @@ bool WrappedNumberOfLinesProperty::detectInnerValue( uno::Any& rInnerValue ) con
                     xProp->getPropertyValue( m_aOuterName ) >>= nNumberOfLines;
                     bHasDetectableInnerValue = true;
                 }
-                catch( const uno::Exception & ex )
+                catch( const uno::Exception & )
                 {
-                    SAL_WARN("chart2", "Exception caught. " << ex );
+                    DBG_UNHANDLED_EXCEPTION("chart2");
                 }
             }
         }
@@ -1510,9 +1511,9 @@ void WrappedNumberOfLinesProperty::setPropertyValue( const Any& rOuterValue, con
                     if( nOldValue == nNewValue )
                         return;
                 }
-                catch( const uno::Exception & ex )
+                catch( const uno::Exception & )
                 {
-                    SAL_WARN("chart2", "Exception caught. " << ex );
+                    DBG_UNHANDLED_EXCEPTION("chart2");
                 }
             }
             else
@@ -1537,9 +1538,9 @@ void WrappedNumberOfLinesProperty::setPropertyValue( const Any& rOuterValue, con
                 xProp->setPropertyValue( "NumberOfLines", uno::Any(nNewValue) );
                 xTemplate->changeDiagram( xDiagram );
             }
-            catch( const uno::Exception & ex )
+            catch( const uno::Exception & )
             {
-                SAL_WARN("chart2", "Exception caught. " << ex );
+                DBG_UNHANDLED_EXCEPTION("chart2");
             }
         }
     }
@@ -1758,9 +1759,9 @@ void WrappedAutomaticSizeProperty::setPropertyValue( const Any& rOuterValue, con
                     xInnerPropertySet->setPropertyValue( "RelativeSize", Any() );
             }
         }
-        catch( const uno::Exception & ex )
+        catch( const uno::Exception & )
         {
-            SAL_WARN("chart2", "Exception caught. " << ex );
+            DBG_UNHANDLED_EXCEPTION("chart2");
         }
     }
 }

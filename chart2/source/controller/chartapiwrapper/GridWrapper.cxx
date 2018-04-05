@@ -31,6 +31,7 @@
 #include <algorithm>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/math.hxx>
+#include <tools/diagnose_ex.h>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
@@ -144,9 +145,9 @@ Reference< beans::XPropertySet > GridWrapper::getInnerPropertySet()
         sal_Int32 nSubGridIndex = bSubGrid ? 0 : -1;
         xRet.set( AxisHelper::getGridProperties( xCooSys , nDimensionIndex, MAIN_AXIS_INDEX, nSubGridIndex ) );
     }
-    catch( const uno::Exception & ex )
+    catch( const uno::Exception & )
     {
-        SAL_WARN("chart2", "Exception caught. " << ex );
+        DBG_UNHANDLED_EXCEPTION("chart2");
     }
     return xRet;
 }

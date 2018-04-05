@@ -77,6 +77,7 @@
 #include "SectionColumnHandler.hxx"
 #include "GraphicHelpers.hxx"
 #include <dmapper/GraphicZOrderHelper.hxx>
+#include <tools/diagnose_ex.h>
 
 using namespace ::com::sun::star;
 using namespace oox;
@@ -129,9 +130,9 @@ DomainMapper::DomainMapper( const uno::Reference< uno::XComponentContext >& xCon
         const uno::Reference<task::XInteractionHandler> xHandler;
         xDocumentMetadataAccess->loadMetadataFromStorage(xStorage, xBaseURI, xHandler);
     }
-    catch (const uno::Exception& rException)
+    catch (const uno::Exception&)
     {
-        SAL_WARN("writerfilter", "DomainMapper::DomainMapper: failed to initialize RDF metadata: " << rException);
+        DBG_UNHANDLED_EXCEPTION("writerfilter", "failed to initialize RDF metadata");
     }
 
     if (eDocumentType == SourceDocumentType::OOXML) {
@@ -146,9 +147,9 @@ DomainMapper::DomainMapper( const uno::Reference< uno::XComponentContext >& xCon
             xDefProps->setPropertyValue(getPropertyName(PROP_CHAR_FONT_NAME), css::uno::Any(OUString("Calibri")));
             xDefProps->setPropertyValue(getPropertyName(PROP_CHAR_HEIGHT), css::uno::Any(double(11)));
         }
-        catch (const uno::Exception& rException)
+        catch (const uno::Exception&)
         {
-            SAL_WARN("writerfilter", "DomainMapper::DomainMapper: failed to initialize default font: " << rException);
+            DBG_UNHANDLED_EXCEPTION("writerfilter", "failed to initialize default font");
         }
     }
 

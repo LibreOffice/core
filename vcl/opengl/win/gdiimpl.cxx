@@ -645,7 +645,7 @@ bool WinOpenGLContext::ImplInit()
         GLint nMaxTextureSize;
         glGetIntegerv(GL_MAX_TEXTURE_SIZE, &nMaxTextureSize);
         if (nMaxTextureSize <= 4096)
-            SAL_WARN("vcl.opengl", "Max texture size is " << nMaxTextureSize
+            DBG_UNHANDLED_EXCEPTION("vcl.opengl", "Max texture size is " << nMaxTextureSize
                                     << ". This may not be enough for normal operation.");
         else
             VCL_GL_INFO("Max texture size: " << nMaxTextureSize);
@@ -665,7 +665,7 @@ bool WinOpenGLContext::ImplInit()
             }
             else
             {
-                SAL_WARN("vcl.opengl", "Error when creating a " << nWidthHeight << ", " << nWidthHeight << " test texture.");
+                DBG_UNHANDLED_EXCEPTION("vcl.opengl", "Error when creating a " << nWidthHeight << ", " << nWidthHeight << " test texture.");
             }
         }
     }

@@ -28,6 +28,7 @@
 #include <com/sun/star/chart2/XChartTypeContainer.hpp>
 #include <com/sun/star/chart2/XDataSeriesContainer.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
+#include <tools/diagnose_ex.h>
 
 #include <algorithm>
 
@@ -224,9 +225,9 @@ void ColumnLineChartTypeTemplate::createChartTypes(
             xDSCnt->setDataSeries( aLineSeq );
         }
     }
-    catch( const uno::Exception & ex )
+    catch( const uno::Exception & )
     {
-        SAL_WARN("chart2", "Exception caught. " << ex );
+        DBG_UNHANDLED_EXCEPTION("chart2");
     }
 }
 
@@ -336,9 +337,9 @@ sal_Bool SAL_CALL ColumnLineChartTypeTemplate::matchesTemplate(
             }
         }
     }
-    catch( const uno::Exception & ex )
+    catch( const uno::Exception & )
     {
-        SAL_WARN("chart2", "Exception caught. " << ex );
+        DBG_UNHANDLED_EXCEPTION("chart2");
     }
 
     return bResult;
@@ -372,9 +373,9 @@ Reference< XChartType > SAL_CALL ColumnLineChartTypeTemplate::getChartTypeForNew
                          CHART2_SERVICE_NAME_CHARTTYPE_LINE ), uno::UNO_QUERY_THROW );
         ChartTypeTemplate::copyPropertiesFromOldToNewCoordinateSystem( aFormerlyUsedChartTypes, xResult );
     }
-    catch( const uno::Exception & ex )
+    catch( const uno::Exception & )
     {
-        SAL_WARN("chart2", "Exception caught. " << ex );
+        DBG_UNHANDLED_EXCEPTION("chart2");
     }
 
     return xResult;

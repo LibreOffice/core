@@ -40,7 +40,7 @@
 #include <com/sun/star/chart2/data/PivotTableFieldEntry.hpp>
 #include <rtl/ustrbuf.hxx>
 #include <svl/languageoptions.hxx>
-
+#include <tools/diagnose_ex.h>
 
 #include <vector>
 #include <algorithm>
@@ -78,9 +78,9 @@ double lcl_CalcViewFontSize(
                 fResult = ::chart::RelativeSizeHelper::calculate( fFontHeight, aPropRefSize, rReferenceSize );
             }
         }
-        catch( const uno::Exception & ex )
+        catch( const uno::Exception & )
         {
-            SAL_WARN("chart2", "Exception caught. " << ex );
+            DBG_UNHANDLED_EXCEPTION("chart2");
         }
     }
 
@@ -184,9 +184,9 @@ awt::Size lcl_createTextShapes(
 
             rOutTextShapes.push_back( xEntry );
         }
-        catch( const uno::Exception & ex )
+        catch( const uno::Exception & )
         {
-            SAL_WARN("chart2", "Exception caught. " << ex );
+            DBG_UNHANDLED_EXCEPTION("chart2");
         }
     }
 
@@ -766,9 +766,9 @@ bool lcl_shouldSymbolsBePlacedOnTheLeftSide( const Reference< beans::XPropertySe
             }
         }
     }
-    catch( const uno::Exception & ex )
+    catch( const uno::Exception & )
     {
-        SAL_WARN("chart2", "Exception caught. " << ex );
+        DBG_UNHANDLED_EXCEPTION("chart2");
     }
     return bSymbolsLeftSide;
 }
@@ -857,9 +857,9 @@ bool VLegend::isVisible( const Reference< XLegend > & xLegend )
         Reference< beans::XPropertySet > xLegendProp( xLegend, uno::UNO_QUERY_THROW );
         xLegendProp->getPropertyValue( "Show") >>= bShow;
     }
-    catch( const uno::Exception & ex )
+    catch( const uno::Exception & )
     {
-        SAL_WARN("chart2", "Exception caught. " << ex );
+        DBG_UNHANDLED_EXCEPTION("chart2");
     }
 
     return bShow;
@@ -1002,9 +1002,9 @@ void VLegend::createShapes(
             AbstractShapeFactory::setShapeName( xBorder, "MarkHandles" );
         }
     }
-    catch( const uno::Exception & ex )
+    catch( const uno::Exception & )
     {
-        SAL_WARN("chart2", "Exception caught. " << ex );
+        DBG_UNHANDLED_EXCEPTION("chart2" );
     }
 }
 
@@ -1054,9 +1054,9 @@ void VLegend::changePosition(
             }
         }
     }
-    catch( const uno::Exception & ex )
+    catch( const uno::Exception & )
     {
-        SAL_WARN("chart2", "Exception caught. " << ex );
+        DBG_UNHANDLED_EXCEPTION("chart2" );
     }
 }
 

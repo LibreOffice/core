@@ -49,6 +49,7 @@
 #include <com/sun/star/style/VerticalAlignment.hpp>
 #include <comphelper/sequence.hxx>
 #include <comphelper/propertyvalue.hxx>
+#include <tools/diagnose_ex.h>
 #include "PropertyMapHelper.hxx"
 
 using namespace com::sun::star;
@@ -512,9 +513,9 @@ uno::Reference< beans::XPropertySet > SectionPropertyMap::GetPageStyle( const un
         }
 
     }
-    catch ( const uno::Exception& rException )
+    catch ( const uno::Exception& )
     {
-        SAL_WARN( "writerfilter", "SectionPropertyMap::GetPageStyle() failed: " << rException );
+        DBG_UNHANDLED_EXCEPTION( "writerfilter" );
     }
 
     return xRet;
@@ -1223,9 +1224,9 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
     {
         HandleIncreasedAnchoredObjectSpacing(rDM_Impl);
     }
-    catch (const uno::Exception& rException)
+    catch (const uno::Exception&)
     {
-        SAL_WARN("writerfilter", "HandleIncreasedAnchoredObjectSpacing() failed: " << rException);
+        DBG_UNHANDLED_EXCEPTION("writerfilter", "HandleIncreasedAnchoredObjectSpacing() failed");
     }
 
     if ( m_nLnnMod )

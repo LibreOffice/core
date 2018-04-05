@@ -23,6 +23,7 @@
 #include <ObjectIdentifier.hxx>
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/chart2/Symbol.hpp>
+#include <tools/diagnose_ex.h>
 
 using namespace ::com::sun::star;
 using ::com::sun::star::uno::Reference;
@@ -185,9 +186,9 @@ Reference< drawing::XShape > VLegendSymbolFactory::createSymbol(
                         aPropNames, aPropValues );
         }
     }
-    catch( const uno::Exception & ex )
+    catch( const uno::Exception & )
     {
-        SAL_WARN("chart2", "Exception caught. " << ex );
+        DBG_UNHANDLED_EXCEPTION("chart2");
     }
 
     return xResult;

@@ -39,6 +39,7 @@
 #include <com/sun/star/chart2/XDataSeriesContainer.hpp>
 #include <com/sun/star/chart2/data/XDataSink.hpp>
 #include <comphelper/sequence.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <rtl/ustring.hxx>
 
@@ -155,9 +156,9 @@ struct lcl_DataSeriesContainerAppend
                 }
             }
         }
-        catch( const uno::Exception & ex )
+        catch( const uno::Exception & )
         {
-            SAL_WARN("chart2", "Exception caught. " << ex );
+            DBG_UNHANDLED_EXCEPTION("chart2");
         }
         return *this;
     }
@@ -214,9 +215,9 @@ struct lcl_RolesWithRangeAppend
                 }
             }
         }
-        catch( const uno::Exception & ex )
+        catch( const uno::Exception & )
         {
-            SAL_WARN("chart2", "Exception caught. " << ex );
+            DBG_UNHANDLED_EXCEPTION("chart2");
         }
         return *this;
     }
@@ -443,9 +444,9 @@ std::vector< Reference< XDataSeriesContainer > >
             }
         }
     }
-    catch( const uno::Exception & ex )
+    catch( const uno::Exception & )
     {
-        SAL_WARN("chart2", "Exception caught. " << ex );
+        DBG_UNHANDLED_EXCEPTION("chart2");
     }
 
     return aResult;
@@ -534,9 +535,9 @@ DialogModel::tRolesWithRanges DialogModel::getRolesWithRanges(
             addMissingRoles(aResult, aRoles);
         }
     }
-    catch( const uno::Exception & ex )
+    catch( const uno::Exception & )
     {
-        SAL_WARN("chart2", "Exception caught. " << ex );
+        DBG_UNHANDLED_EXCEPTION("chart2");
     }
     return aResult;
 }
@@ -591,9 +592,9 @@ Reference< chart2::XDataSeries > DialogModel::insertSeriesAfter(
 
         ThreeDHelper::setScheme( xDiagram, e3DScheme );
     }
-    catch( const uno::Exception & ex )
+    catch( const uno::Exception & )
     {
-        SAL_WARN("chart2", "Exception caught. " << ex );
+        DBG_UNHANDLED_EXCEPTION("chart2");
     }
     return xNewSeries;
 }
@@ -619,9 +620,9 @@ Reference< data::XLabeledDataSequence > DialogModel::getCategories() const
             xResult.set( DiagramHelper::getCategoriesFromDiagram( xDiagram ));
         }
     }
-    catch( const uno::Exception & ex )
+    catch( const uno::Exception & )
     {
-        SAL_WARN("chart2", "Exception caught. " << ex );
+        DBG_UNHANDLED_EXCEPTION("chart2");
     }
     return xResult;
 }
@@ -684,9 +685,9 @@ void DialogModel::detectArguments(
                 Reference< frame::XModel >( m_xChartDocument, uno::UNO_QUERY_THROW ),
                 rOutRangeString, aSequenceMapping, rOutUseColumns, rOutFirstCellAsLabel, rOutHasCategories );
     }
-    catch( const uno::Exception & ex )
+    catch( const uno::Exception & )
     {
-        SAL_WARN("chart2", "Exception caught. " << ex );
+        DBG_UNHANDLED_EXCEPTION("chart2");
     }
 }
 
@@ -737,9 +738,9 @@ void DialogModel::setData(
             ThreeDHelper::setScheme( xDiagram, e3DScheme );
         }
     }
-    catch( const uno::Exception & ex )
+    catch( const uno::Exception & )
     {
-        SAL_WARN("chart2", "Exception caught. " << ex );
+        DBG_UNHANDLED_EXCEPTION("chart2");
     }
 }
 
@@ -837,9 +838,9 @@ void DialogModel::applyInterpretedData(
                 OSL_ASSERT( (*aDestIt).is());
                 (*aDestIt)->setDataSeries( *aSrcIt );
             }
-            catch( const uno::Exception & ex )
+            catch( const uno::Exception & )
             {
-                SAL_WARN("chart2", "Exception caught. " << ex );
+                DBG_UNHANDLED_EXCEPTION("chart2");
             }
         }
 

@@ -17,6 +17,7 @@
 
 #include <com/sun/star/beans/Property.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
+#include <tools/diagnose_ex.h>
 
 using namespace com::sun::star;
 
@@ -116,9 +117,9 @@ uno::Reference<chart2::XChartType> GL3DBarChartTypeTemplate::getChartTypeForInde
                 CHART_UNONAME_ROUNDED_EDGE, getFastPropertyValue(PROP_GL3DCHARTTYPE_ROUNDED_EDGE));
         }
     }
-    catch (const uno::Exception & ex)
+    catch (const uno::Exception &)
     {
-        SAL_WARN("chart2", "Exception caught. " << ex );
+        DBG_UNHANDLED_EXCEPTION("chart2");
     }
 
     return xResult;
@@ -157,9 +158,9 @@ GL3DBarChartTypeTemplate::getChartTypeForNewSeries( const uno::Sequence<uno::Ref
         chart->setPropertyValue(CHART_UNONAME_ROUNDED_EDGE, uno::Any(bVal));
         xResult = chart.get();
     }
-    catch (const uno::Exception & ex)
+    catch (const uno::Exception &)
     {
-        SAL_WARN("chart2", "Exception caught. " << ex );
+        DBG_UNHANDLED_EXCEPTION("chart2");
     }
 
     return xResult;

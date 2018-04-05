@@ -28,6 +28,7 @@
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/chart2/XDiagram.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
+#include <tools/diagnose_ex.h>
 
 namespace chart
 {
@@ -970,9 +971,9 @@ void ThreeDHelper::switchRightAngledAxes( const Reference< beans::XPropertySet >
             }
         }
     }
-    catch( const uno::Exception & ex )
+    catch( const uno::Exception & )
     {
-        SAL_WARN("chart2", "Exception caught. " << ex );
+        DBG_UNHANDLED_EXCEPTION("chart2");
     }
 }
 
@@ -1025,9 +1026,9 @@ void ThreeDHelper::setRotationAngleToDiagram(
             lcl_rotateLights( aNewRotation*aInverseOldRotation, xSceneProperties );
         }
     }
-    catch( const uno::Exception & ex )
+    catch( const uno::Exception & )
     {
-        SAL_WARN("chart2", "Exception caught. " << ex );
+        DBG_UNHANDLED_EXCEPTION("chart2");
     }
 }
 
@@ -1102,9 +1103,9 @@ double ThreeDHelper::getCameraDistance(
 
         ensureCameraDistanceRange( fCameraDistance );
     }
-    catch( const uno::Exception & ex )
+    catch( const uno::Exception & )
     {
-        SAL_WARN("chart2", "Exception caught. " << ex );
+        DBG_UNHANDLED_EXCEPTION("chart2");
     }
     return fCameraDistance;
 }
@@ -1130,9 +1131,9 @@ void ThreeDHelper::setCameraDistance(
 
         xSceneProperties->setPropertyValue( "D3DCameraGeometry", uno::Any( aCG ));
     }
-    catch( const uno::Exception & ex )
+    catch( const uno::Exception & )
     {
-        SAL_WARN("chart2", "Exception caught. " << ex );
+        DBG_UNHANDLED_EXCEPTION("chart2");
     }
 }
 
@@ -1180,9 +1181,9 @@ ThreeDLookScheme ThreeDHelper::detectScheme( const uno::Reference< XDiagram >& x
         if( xDiagramProps.is() )
             xDiagramProps->getPropertyValue( "D3DSceneShadeMode" )>>= aShadeMode;
     }
-    catch( const uno::Exception & ex )
+    catch( const uno::Exception & )
     {
-        SAL_WARN("chart2", "Exception caught. " << ex );
+        DBG_UNHANDLED_EXCEPTION("chart2");
     }
 
     if( lcl_isSimpleScheme( aShadeMode, nRoundedEdges, nObjectLines, xDiagram ) )
@@ -1230,9 +1231,9 @@ void ThreeDHelper::setScheme( const uno::Reference< XDiagram >& xDiagram, ThreeD
 
         lcl_setLightsForScheme( xProp, aScheme );
     }
-    catch( const uno::Exception & ex )
+    catch( const uno::Exception & )
     {
-        SAL_WARN("chart2", "Exception caught. " << ex );
+        DBG_UNHANDLED_EXCEPTION("chart2");
     }
 
 }
@@ -1287,9 +1288,9 @@ void ThreeDHelper::setDefaultIllumination( const uno::Reference< beans::XPropert
         xSceneProperties->setPropertyValue( UNO_NAME_3D_SCENE_LIGHTON_7, uno::Any( false ) );
         xSceneProperties->setPropertyValue( UNO_NAME_3D_SCENE_LIGHTON_8, uno::Any( false ) );
     }
-    catch( const uno::Exception & ex )
+    catch( const uno::Exception & )
     {
-        SAL_WARN("chart2", "Exception caught. " << ex );
+        DBG_UNHANDLED_EXCEPTION("chart2");
     }
 
     ThreeDLookScheme aScheme = (aShadeMode==drawing::ShadeMode_FLAT) ? ThreeDLookScheme_Simple : ThreeDLookScheme_Realistic;

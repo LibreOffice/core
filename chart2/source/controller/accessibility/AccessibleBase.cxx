@@ -49,6 +49,7 @@
 #include <vcl/graph.hxx>
 #include <vcl/settings.hxx>
 #include <o3tl/functional.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <algorithm>
 #include <iterator>
@@ -807,9 +808,9 @@ Color AccessibleBase::getColor( eColorType eColType )
                 xObjProp->getPropertyValue( aPropName ) >>= nResult;
             }
         }
-        catch( const uno::Exception & ex )
+        catch( const uno::Exception & )
         {
-            SAL_WARN("chart2", "Exception caught. " << ex );
+            DBG_UNHANDLED_EXCEPTION("chart2");
         }
     }
 
