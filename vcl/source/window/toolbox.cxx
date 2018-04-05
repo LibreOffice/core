@@ -1387,7 +1387,7 @@ ImplToolItem* ToolBox::ImplGetItem( sal_uInt16 nItemId ) const
     return nullptr;
 }
 
-static void ImplAddButtonBorder( sal_Int32 &rWidth, sal_Int32& rHeight, bool bNativeButtons )
+static void ImplAddButtonBorder( sal_Int64 &rWidth, sal_Int64& rHeight, bool bNativeButtons )
 {
     rWidth += SMALLBUTTON_HSIZE;
     rHeight += SMALLBUTTON_VSIZE;
@@ -1411,10 +1411,10 @@ bool ToolBox::ImplCalcItem()
 
     long            nDefWidth;
     long            nDefHeight;
-    sal_Int32       nMaxWidth = 0;
-    sal_Int32       nMaxHeight = 0;
-    long            nMinWidth   = 6;
-    long            nMinHeight  = 6;
+    sal_Int64       nMaxWidth = 0;
+    sal_Int64       nMaxHeight = 0;
+    sal_Int64       nMinWidth   = 6;
+    sal_Int64       nMinHeight  = 6;
     long            nDropDownArrowWidth = TB_DROPDOWNARROWWIDTH;
 
     // set defaults if image or text is needed but empty
@@ -1617,16 +1617,16 @@ bool ToolBox::ImplCalcItem()
             if ( item.meType == ToolBoxItemType::BUTTON || item.meType == ToolBoxItemType::SPACE )
             {
                 // add borders
-                sal_Int32 w = item.maItemSize.Width();
-                sal_Int32 h = item.maItemSize.Height();
+                sal_Int64 w = item.maItemSize.Width();
+                sal_Int64 h = item.maItemSize.Height();
                 ImplAddButtonBorder( w, h, mpData->mbNativeButtons );
                 item.maItemSize.setWidth(w);
                 item.maItemSize.setHeight(h);
 
                 if( item.meType == ToolBoxItemType::BUTTON )
                 {
-                    long nMinW = std::max<sal_Int32>(nMinWidth, item.maMinimalItemSize.Width());
-                    long nMinH = std::max<sal_Int32>(nMinHeight, item.maMinimalItemSize.Height());
+                    sal_Int64 nMinW = std::max(nMinWidth, item.maMinimalItemSize.Width());
+                    sal_Int64 nMinH = std::max(nMinHeight, item.maMinimalItemSize.Height());
 
                     long nGrowContentWidth = 0;
                     long nGrowContentHeight = 0;
@@ -1671,8 +1671,8 @@ bool ToolBox::ImplCalcItem()
         // as this is used for alignment of multiple toolbars
         // it is only required for docked toolbars
 
-        sal_Int32 nFixedWidth = nDefWidth+nDropDownArrowWidth;
-        sal_Int32 nFixedHeight = nDefHeight;
+        sal_Int64 nFixedWidth = nDefWidth+nDropDownArrowWidth;
+        sal_Int64 nFixedHeight = nDefHeight;
         ImplAddButtonBorder( nFixedWidth, nFixedHeight, mpData->mbNativeButtons );
 
         if( mbHorz )

@@ -5028,7 +5028,7 @@ static void ParaTabStopDelAdd( WW8Export& rWrt,
         else
         {
             pTO = nullptr;
-            nOP = SAL_MAX_INT32;
+            nOP = SAL_MAX_INT64;
         }
 
         const SvxTabStop* pTN;
@@ -5046,10 +5046,10 @@ static void ParaTabStopDelAdd( WW8Export& rWrt,
         else
         {
             pTN = nullptr;
-            nNP = SAL_MAX_INT32;
+            nNP = SAL_MAX_INT64;
         }
 
-        if( nOP == SAL_MAX_INT32 && nNP == SAL_MAX_INT32 )
+        if( nOP == SAL_MAX_INT64 && nNP == SAL_MAX_INT64 )
             break;                                  // everything done
 
         if( nOP < nNP )                             // next tab is old
