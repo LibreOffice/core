@@ -949,8 +949,8 @@ bool Bitmap::ImplScaleFast( const double& rScaleX, const double& rScaleY )
             }
             pReadAcc.reset();
 
-            if( bRet )
-                ImplAssignWithSize( aNewBmp );
+            if (bRet)
+                ReassignWithSize(aNewBmp);
         }
     }
 

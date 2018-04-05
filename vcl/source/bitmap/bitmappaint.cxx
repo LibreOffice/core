@@ -403,7 +403,7 @@ bool Bitmap::Rotate(long nAngle10, const Color& rFillColor)
 
         bRet = !!aRotatedBmp;
         if (bRet)
-            ImplAssignWithSize(aRotatedBmp);
+            ReassignWithSize(aRotatedBmp);
     }
 
     return bRet;

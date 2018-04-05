@@ -302,20 +302,22 @@ void Bitmap::ImplMakeUnique()
     }
 }
 
-void Bitmap::ImplAssignWithSize( const Bitmap& rBitmap )
+void Bitmap::ReassignWithSize(const Bitmap& rBitmap)
 {
-    const Size      aOldSizePix( GetSizePixel() );
-    const Size      aNewSizePix( rBitmap.GetSizePixel() );
-    const MapMode   aOldMapMode( maPrefMapMode );
-    Size            aNewPrefSize;
+    const Size aOldSizePix(GetSizePixel());
+    const Size aNewSizePix(rBitmap.GetSizePixel());
+    const MapMode aOldMapMode(maPrefMapMode);
+    Size aNewPrefSize;
 
-    if( ( aOldSizePix != aNewSizePix ) && aOldSizePix.Width() && aOldSizePix.Height() )
+    if ((aOldSizePix != aNewSizePix) && aOldSizePix.Width() && aOldSizePix.Height())
     {
-        aNewPrefSize.setWidth( FRound( maPrefSize.Width() * aNewSizePix.Width() / aOldSizePix.Width() ) );
-        aNewPrefSize.setHeight( FRound( maPrefSize.Height() * aNewSizePix.Height() / aOldSizePix.Height() ) );
+        aNewPrefSize.setWidth(FRound(maPrefSize.Width() * aNewSizePix.Width() / aOldSizePix.Width()));
+        aNewPrefSize.setHeight(FRound(maPrefSize.Height() * aNewSizePix.Height() / aOldSizePix.Height()));
     }
     else
+    {
         aNewPrefSize = maPrefSize;
+    }
 
     *this = rBitmap;
 
@@ -413,7 +415,7 @@ bool Bitmap::Crop( const tools::Rectangle& rRectPixel )
             pReadAcc.reset();
 
             if( bRet )
-                ImplAssignWithSize( aNewBmp );
+                ReassignWithSize( aNewBmp );
         }
     }
 
@@ -810,8 +812,8 @@ bool Bitmap::Expand( sal_uLong nDX, sal_uLong nDY, const Color* pInitColor )
 
             pReadAcc.reset();
 
-            if( bRet )
-                ImplAssignWithSize( aNewBmp );
+            if (bRet)
+                ReassignWithSize(aNewBmp);
         }
     }
 
