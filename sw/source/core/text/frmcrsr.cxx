@@ -530,11 +530,11 @@ struct SwFillData
         nLineWidth( 0 ), bFirstLine( true ), bInner( false ), bColumn( false ),
         bEmpty( true ){}
     SwFillMode Mode() const { return pCMS->m_pFill->eMode; }
-    sal_Int32 X() const { return rPoint.X(); }
-    sal_Int32 Y() const { return rPoint.Y(); }
-    sal_Int32 Left() const { return aFrame.Left(); }
-    sal_Int32 Right() const { return aFrame.Right(); }
-    sal_Int32 Bottom() const { return aFrame.Bottom(); }
+    sal_Int64 X() const { return rPoint.X(); }
+    sal_Int64 Y() const { return rPoint.Y(); }
+    sal_Int64 Left() const { return aFrame.Left(); }
+    sal_Int64 Right() const { return aFrame.Right(); }
+    sal_Int64 Bottom() const { return aFrame.Bottom(); }
     SwFillCursorPos &Fill() const { return *pCMS->m_pFill; }
     void SetTab( sal_uInt16 nNew ) { pCMS->m_pFill->nTabCnt = nNew; }
     void SetSpace( sal_uInt16 nNew ) { pCMS->m_pFill->nSpaceCnt = nNew; }
@@ -1403,7 +1403,7 @@ void SwTextFrame::FillCursorPos( SwFillData& rFill ) const
             nFirst = nFirst - nDist;
         else
             nFirst = 0;
-        nDist = std::max<sal_Int32>( nDist, GetLineSpace() );
+        nDist = std::max( nDist, GetLineSpace() );
         nDist += nLineHeight;
         nDiff -= nFirst;
 

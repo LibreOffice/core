@@ -413,9 +413,9 @@ void LineListBox::ImpGetLine( long nLine1, long nLine2, long nDistance,
     //this calculation and draw a bitmap of height
     //equal to normal text line and center the
     //line within that
-    long nMinWidth = GetTextWidth("----------");
+    sal_Int64 nMinWidth = GetTextWidth("----------");
     Size aSize = CalcSubEditSize();
-    aSize.setWidth( std::max<sal_Int32>(nMinWidth, aSize.Width()) );
+    aSize.setWidth( std::max(nMinWidth, aSize.Width()) );
     aSize.AdjustWidth( -(aTxtSize.Width()) );
     aSize.AdjustWidth( -6 );
     aSize.setHeight( aTxtSize.Height() );

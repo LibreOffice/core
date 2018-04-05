@@ -588,7 +588,7 @@ void SwImplProtocol::Record_( const SwFrame* pFrame, PROT nFunction, DbgAction n
         case PROT::Size:     aOut.append("PROT::Size");
                             lcl_Start( aOut, aLayer, nAct );
                             aOut.append(' ');
-                            aOut.append(static_cast<sal_Int64>(pFrame->getFrameArea().Height()));
+                            aOut.append(pFrame->getFrameArea().Height());
                             break;
         case PROT::Leaf:     aOut.append("SwFrame::GetPrev/NextSctLeaf");
                             lcl_Start( aOut, aLayer, nAct );
@@ -627,29 +627,29 @@ void SwImplProtocol::Record_( const SwFrame* pFrame, PROT nFunction, DbgAction n
                                 if( pFrame->getFrameArea().Pos() != rFrame.Pos() )
                                 {
                                     aOut.append("PosChg: (");
-                                    aOut.append(static_cast<sal_Int64>(rFrame.Left()));
+                                    aOut.append(rFrame.Left());
                                     aOut.append(", ");
-                                    aOut.append(static_cast<sal_Int64>(rFrame.Top()));
+                                    aOut.append(rFrame.Top());
                                     aOut.append(") -> (");
-                                    aOut.append(static_cast<sal_Int64>(pFrame->getFrameArea().Left()));
+                                    aOut.append(pFrame->getFrameArea().Left());
                                     aOut.append(", ");
-                                    aOut.append(static_cast<sal_Int64>(pFrame->getFrameArea().Top()));
+                                    aOut.append(pFrame->getFrameArea().Top());
                                     aOut.append(") ");
                                 }
                                 if( pFrame->getFrameArea().Height() != rFrame.Height() )
                                 {
                                     aOut.append("Height: ");
-                                    aOut.append(static_cast<sal_Int64>(rFrame.Height()));
+                                    aOut.append(rFrame.Height());
                                     aOut.append(" -> ");
-                                    aOut.append(static_cast<sal_Int64>(pFrame->getFrameArea().Height()));
+                                    aOut.append(pFrame->getFrameArea().Height());
                                     aOut.append(" ");
                                 }
                                 if( pFrame->getFrameArea().Width() != rFrame.Width() )
                                 {
                                     aOut.append("Width: ");
-                                    aOut.append(static_cast<sal_Int64>(rFrame.Width()));
+                                    aOut.append(rFrame.Width());
                                     aOut.append(" -> ");
-                                    aOut.append(static_cast<sal_Int64>(pFrame->getFrameArea().Width()));
+                                    aOut.append(pFrame->getFrameArea().Width());
                                     aOut.append(' ');
                                 }
                                 break;
