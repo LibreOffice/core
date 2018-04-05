@@ -422,7 +422,7 @@ void ProgressCmdEnv::handle( uno::Reference< task::XInteractionRequest > const &
         {
             SolarMutexGuard guard;
             std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(m_pDialogHelper ? m_pDialogHelper->getFrameWeld() : nullptr,
-                                                      VclMessageType::Warning, VclButtonsType::Ok, DpResId(id)));
+                                                      VclMessageType::Warning, VclButtonsType::OkCancel, DpResId(id)));
             OUString s;
             if (bEqualNames)
             {
