@@ -228,10 +228,10 @@ namespace toolkit
                             // do not use an image set which doesn't fit into the window
                             continue;
 
-                        const sal_Int64 distance =
-                                ( aWindowSizePixel.Width() - check->Width ) * ( aWindowSizePixel.Width() - check->Width )
-                            +   ( aWindowSizePixel.Height() - check->Height ) * ( aWindowSizePixel.Height() - check->Height );
-                        if ( distance < nMinimalDistance )
+                        const sal_Int64 nWidthDiff = aWindowSizePixel.Width() - check->Width;
+                        const sal_Int64 nHeightDiff = aWindowSizePixel.Height() - check->Height;
+                        const sal_Int64 distance = (nWidthDiff * nWidthDiff) + (nHeightDiff * nHeightDiff);
+                        if (distance < nMinimalDistance)
                         {
                             nMinimalDistance = distance;
                             nPreferredSet = check - aImageSizes.begin();
