@@ -270,10 +270,11 @@ struct lcl_EqualsSoundFileName
     {
         // note: formerly this was a case insensitive search for all
         // platforms. It seems more sensible to do this platform-dependent
+        INetURLObject aURL(rStr);
 #if defined(_WIN32)
-        return maStr.equalsIgnoreAsciiCase( rStr );
+        return maStr.equalsIgnoreAsciiCase( aURL.GetBase() );
 #else
-        return maStr == rStr;
+        return maStr == aURL.GetBase();
 #endif
     }
 
@@ -286,9 +287,10 @@ bool lcl_findSoundInList( const ::std::vector< OUString > & rSoundList,
                           const OUString & rFileName,
                           ::std::vector< OUString >::size_type & rOutPosition )
 {
+    INetURLObject aURL(rFileName);
     ::std::vector< OUString >::const_iterator aIt =
           ::std::find_if( rSoundList.begin(), rSoundList.end(),
-                          lcl_EqualsSoundFileName( rFileName ));
+                          lcl_EqualsSoundFileName( aURL.GetBase()));
     if( aIt != rSoundList.end())
     {
         rOutPosition = ::std::distance( rSoundList.begin(), aIt );
