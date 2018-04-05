@@ -47,7 +47,7 @@ SwUnoCursor::~SwUnoCursor()
     // delete the whole ring
     while( GetNext() != this )
     {
-        Ring* pNxt = GetNext();
+        Ring* pNxt = GetNextInRing();
         pNxt->MoveTo(nullptr); // remove from chain
         delete pNxt;       // and delete
     }
