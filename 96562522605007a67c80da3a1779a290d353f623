@@ -39,6 +39,24 @@
       "revId": "96562522605007a67c80da3a1779a290d353f623",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_665a9485",
+        "filename": "vcl/source/gdi/bitmapex.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2018-04-05T09:27:53Z",
+      "side": 1,
+      "message": "Oh! Sorry, I didn\u0027t notice... will fix.",
+      "parentUuid": "9a30ddce_c6234004",
+      "revId": "96562522605007a67c80da3a1779a290d353f623",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
