@@ -132,9 +132,9 @@ void Throbber::initImages()
                     // do not use an image set which doesn't fit into the window
                     continue;
 
-                const sal_Int64 distance =
-                        ( aWindowSizePixel.Width() - aImageSize.Width() ) * ( aWindowSizePixel.Width() - aImageSize.Width() )
-                    +   ( aWindowSizePixel.Height() - aImageSize.Height() ) * ( aWindowSizePixel.Height() - aImageSize.Height() );
+                const sal_Int64 nWidthDiff = aWindowSizePixel.Width() - aImageSize.Width();
+                const sal_Int64 nHeightDiff = aWindowSizePixel.Height() - aImageSize.Height();
+                const sal_Int64 distance = (nWidthDiff * nWidthDiff) + (nHeightDiff * nHeightDiff);
                 if ( distance < nMinimalDistance )
                 {
                     nMinimalDistance = distance;
