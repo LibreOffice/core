@@ -674,7 +674,6 @@ public:
     const std::shared_ptr<ImpBitmap>& ImplGetImpBitmap() const { return mxImpBmp; }
     SAL_DLLPRIVATE void     ImplSetImpBitmap( const std::shared_ptr<ImpBitmap>& xImpBmp );
 
-    SAL_DLLPRIVATE bool     ImplScaleFast( const double& rScaleX, const double& rScaleY );
     SAL_DLLPRIVATE bool     ImplScaleInterpolate( const double& rScaleX, const double& rScaleY );
 
     SAL_DLLPRIVATE bool     ImplConvolutionPass(
