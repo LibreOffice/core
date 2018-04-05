@@ -193,7 +193,7 @@ bool JPEGReader::CreateBitmap(JPEGCreateBitmapParam const & rParam)
 
     mpBitmap.reset(new Bitmap());
 
-    sal_uInt64 nSize = aSize.Width() * aSize.Height();
+    sal_uInt64 nSize = static_cast<sal_uInt64>(aSize.Width()) * aSize.Height();
 
     if (nSize > SAL_MAX_INT32 / (bGray?1:3))
         return false;
