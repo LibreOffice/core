@@ -39,29 +39,34 @@ CellBorderUpdater::~CellBorderUpdater()
 void CellBorderUpdater::UpdateCellBorder(bool bTop, bool bBot, bool bLeft, bool bRight, Image const & aImg, bool bVer, bool bHor)
 {
     const Size aBmpSize = aImg.GetBitmapEx().GetSizePixel();
-    if(aBmpSize.Width() != 43 || aBmpSize.Height() != 43)
-        return;
 
-    ScopedVclPtr<VirtualDevice> pVirDev(VclPtr<VirtualDevice>::Create());
+    ScopedVclPtr<VirtualDevice> pVirDev(VclPtr<VirtualDevice>::Create(*Application::GetDefaultDevice(),
+            DeviceFormat::DEFAULT, DeviceFormat::DEFAULT));
     pVirDev->SetOutputSizePixel(aBmpSize);
+    pVirDev->SetBackground(COL_TRANSPARENT);
+    pVirDev->Erase();
     pVirDev->SetLineColor( ::Application::GetSettings().GetStyleSettings().GetFieldTextColor() ) ;
     pVirDev->SetFillColor(COL_BLACK);
 
-    Point aTL(2, 1), aTR(42,1), aBL(2, 41), aBR(42, 41), aHL(2,21), aHR(42, 21), aVT(22,1), aVB(22, 41);
-    if(bLeft)
-        pVirDev->DrawLine( aTL,aBL );
-    if(bRight)
-        pVirDev->DrawLine( aTR,aBR );
-    if(bTop)
-        pVirDev->DrawLine( aTL,aTR );
-    if(bBot)
-        pVirDev->DrawLine( aBL,aBR );
-    if(bVer)
-        pVirDev->DrawLine( aVT,aVB );
-    if(bHor)
-        pVirDev->DrawLine( aHL,aHR );
+    if(aBmpSize.Width() == 43 && aBmpSize.Height() == 43)
+    {
+        Point aTL(2, 1), aTR(42,1), aBL(2, 41), aBR(42, 41), aHL(2,21), aHR(42, 21), aVT(22,1), aVB(22, 41);
+        if(bLeft)
+            pVirDev->DrawLine( aTL,aBL );
+        if(bRight)
+            pVirDev->DrawLine( aTR,aBR );
+        if(bTop)
+            pVirDev->DrawLine( aTL,aTR );
+        if(bBot)
+            pVirDev->DrawLine( aBL,aBR );
+        if(bVer)
+            pVirDev->DrawLine( aVT,aVB );
+        if(bHor)
+            pVirDev->DrawLine( aHL,aHR );
+        mrTbx.SetItemOverlayImage( mnBtnId, Image( pVirDev->GetBitmapEx(Point(0,0), aBmpSize) ) );
+    }
 
-    mrTbx.SetItemOverlayImage( mnBtnId, Image( pVirDev->GetBitmapEx(Point(0,0), aBmpSize) ) );
+    mrTbx.SetItemImage( mnBtnId, aImg );
 }
 
 } } // end of namespace svx::sidebar
