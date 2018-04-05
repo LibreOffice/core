@@ -242,7 +242,7 @@
 <!ATTLIST dlg:img %default-attributes;
                   dlg:src CDATA #IMPLIED
                   dlg:scale-image %boolean; #IMPLIED
-                  dlg:scale-mode (none|isotropic|anisotropic); #IMPLIED
+                  dlg:scale-mode (none|isotropic|anisotropic) #IMPLIED
                   dlg:tabstop %boolean; #IMPLIED
                   >
 
