@@ -856,19 +856,29 @@ void SdXMLShapeContext::processAttribute( sal_uInt16 nPrefix, const OUString& rL
         {
             GetImport().GetMM100UnitConverter().convertMeasureToCore(
                     maSize.Width, rValue);
-            if (maSize.Width > 0)
-                maSize.Width = o3tl::saturating_add<sal_Int32>(maSize.Width, 1);
+            // Arbitrarily cap width at 10m to avoid overflow later; a negative value is an error
+            // according to <https://www.w3.org/TR/2003/REC-SVG11-20030114/struct.html#SVGElement>;
+            // TODO: error reporting:
+            if (maSize.Width >= 1000000) // 10m
+                maSize.Width = 1000000;
+            else if (maSize.Width > 0)
+                ++maSize.Width;
             else if (maSize.Width < 0)
-                maSize.Width = o3tl::saturating_add<sal_Int32>(maSize.Width, -1);
+                maSize.Width = 0;
         }
         else if( IsXMLToken( rLocalName, XML_HEIGHT ) )
         {
             GetImport().GetMM100UnitConverter().convertMeasureToCore(
                     maSize.Height, rValue);
-            if (maSize.Height > 0)
-                maSize.Height = o3tl::saturating_add<sal_Int32>(maSize.Height, 1);
+            // Arbitrarily cap height at 10m to avoid overflow later; a negative value is an error
+            // according to <https://www.w3.org/TR/2003/REC-SVG11-20030114/struct.html#SVGElement>;
+            // TODO: error reporting:
+            if (maSize.Height >= 1000000) // 10m
+                maSize.Height = 1000000;
+            else if (maSize.Height > 0)
+                ++maSize.Height;
             else if (maSize.Height < 0)
-                maSize.Height = o3tl::saturating_add<sal_Int32>(maSize.Height, -1);
+                maSize.Height = 0;
         }
         else if( IsXMLToken( rLocalName, XML_TRANSFORM ) )
         {
