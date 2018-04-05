@@ -1263,7 +1263,7 @@ sal_uInt32 WinSalInfoPrinter::GetCapabilities( const ImplJobSetup* pSetupData, P
 }
 
 void WinSalInfoPrinter::GetPageInfo( const ImplJobSetup*,
-                                  long& rOutWidth, long& rOutHeight,
+                                  sal_Int64& rOutWidth, sal_Int64& rOutHeight,
                                   Point& rPageOffset,
                                   Size& rPaperSize )
 {
