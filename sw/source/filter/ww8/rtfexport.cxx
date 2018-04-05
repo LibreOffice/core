@@ -802,8 +802,8 @@ void RtfExport::ExportDocument_Impl()
 
             const SwFormatFrameSize& rSz = rFormatPage.GetFrameSize();
             // Clipboard document is always created without a printer, then
-            // the size will be always SAL_MAX_INT32! Solution then is to use A4
-            if (SAL_MAX_INT32 == rSz.GetHeight() || SAL_MAX_INT32 == rSz.GetWidth())
+            // the size will be always SAL_MAX_INT64! Solution then is to use A4
+            if (SAL_MAX_INT64 == rSz.GetHeight() || SAL_MAX_INT64 == rSz.GetWidth())
             {
                 Strm().WriteCharPtr(OOO_STRING_SVTOOLS_RTF_PAPERH);
                 Size a4 = SvxPaperInfo::GetPaperSize(PAPER_A4);
