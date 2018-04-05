@@ -53,6 +53,7 @@ namespace weld
     class Container;
     class MessageDialog;
     class Widget;
+    class Window;
 }
 class AllSettings;
 class DataChangedEvent;
@@ -85,6 +86,7 @@ namespace ui {
 namespace awt {
     class XToolkit;
     class XDisplayConnection;
+    class XWindow;
 }
 } } }
 
@@ -1397,6 +1399,8 @@ public:
 
     static weld::MessageDialog* CreateMessageDialog(weld::Widget* pParent, VclMessageType eMessageType,
                                                     VclButtonsType eButtonType, const OUString& rPrimaryMessage);
+
+    static weld::Window* GetFrameWeld(const css::uno::Reference<css::awt::XWindow>& rWindow);
 private:
     DECL_STATIC_LINK( Application, PostEventHandler, void*, void );
 };

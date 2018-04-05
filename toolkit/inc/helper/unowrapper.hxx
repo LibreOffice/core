@@ -54,6 +54,7 @@ public:
     // Window
     virtual css::uno::Reference< css::awt::XWindowPeer> GetWindowInterface( vcl::Window* pWindow ) override;
     virtual void        SetWindowInterface( vcl::Window* pWindow, css::uno::Reference< css::awt::XWindowPeer> xIFace ) override;
+    virtual VclPtr<vcl::Window> GetWindow(const css::uno::Reference<css::awt::XWindow>& rxWindow) override;
 
     void                WindowDestroyed( vcl::Window* pWindow ) override;
 

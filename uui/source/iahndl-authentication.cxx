@@ -664,7 +664,7 @@ UUIInteractionHelper::handlePasswordRequest(
     uno::Reference< task::XInteractionRequest > const & rRequest)
 {
     // parameters to be filled for the call to handlePasswordRequest_
-    vcl::Window * pParent = getParentProperty();
+    uno::Reference<awt::XWindow> xParent = getParentXWindow();
     task::PasswordRequestMode nMode = task::PasswordRequestMode_PASSWORD_ENTER;
     uno::Sequence< uno::Reference< task::XInteractionContinuation > > const & rContinuations = rRequest->getContinuations();
     OUString aDocumentName;
@@ -721,7 +721,7 @@ UUIInteractionHelper::handlePasswordRequest(
 
     if (bDoHandleRequest)
     {
-        handlePasswordRequest_( pParent ? pParent->GetFrameWeld() : nullptr, nMode, rContinuations,
+        handlePasswordRequest_( Application::GetFrameWeld(xParent), nMode, rContinuations,
                 aDocumentName, bMSCryptoMode, bIsPasswordToModify );
         return true;
     }
@@ -729,7 +729,7 @@ UUIInteractionHelper::handlePasswordRequest(
     task::PasswordRequest aPasswordRequest;
     if( aAnyRequest >>= aPasswordRequest )
     {
-        handlePasswordRequest_(pParent ? pParent->GetFrameWeld() : nullptr,
+        handlePasswordRequest_(Application::GetFrameWeld(xParent),
                                aPasswordRequest.Mode,
                                rRequest->getContinuations(),
                                OUString(),

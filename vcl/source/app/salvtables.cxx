@@ -37,6 +37,7 @@
 #include <vcl/layout.hxx>
 #include <vcl/tabctrl.hxx>
 #include <vcl/tabpage.hxx>
+#include <vcl/unowrap.hxx>
 #include <vcl/weld.hxx>
 #include <bitmaps.hlst>
 
@@ -1838,6 +1839,17 @@ weld::MessageDialog* SalInstance::CreateMessageDialog(weld::Widget* pParent, Vcl
     SystemWindow* pParentWidget = pParentInstance ? pParentInstance->getSystemWindow() : nullptr;
     VclPtrInstance<MessageDialog> xMessageDialog(pParentWidget, rPrimaryMessage, eMessageType, eButtonsType);
     return new SalInstanceMessageDialog(xMessageDialog, true);
+}
+
+weld::Window* SalInstance::GetFrameWeld(const css::uno::Reference<css::awt::XWindow>& rWindow)
+{
+    UnoWrapperBase* pWrapper = Application::GetUnoWrapper();
+    if (!pWrapper)
+        return nullptr;
+    VclPtr<vcl::Window> xWindow = pWrapper->GetWindow(rWindow);
+    if (!xWindow)
+        return nullptr;
+    return xWindow->GetFrameWeld();
 }
 
 weld::Window* SalFrame::GetFrameWeld() const

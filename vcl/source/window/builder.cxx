@@ -135,6 +135,11 @@ weld::MessageDialog* Application::CreateMessageDialog(weld::Widget* pParent, Vcl
     return ImplGetSVData()->mpDefInst->CreateMessageDialog(pParent, eMessageType, eButtonType, rPrimaryMessage);
 }
 
+weld::Window* Application::GetFrameWeld(const css::uno::Reference<css::awt::XWindow>& rWindow)
+{
+    return ImplGetSVData()->mpDefInst->GetFrameWeld(rWindow);
+}
+
 namespace
 {
     const OUString MetricToString(FieldUnit rUnit)

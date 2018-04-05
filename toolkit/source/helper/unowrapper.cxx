@@ -161,6 +161,11 @@ css::uno::Reference< css::awt::XWindowPeer> UnoWrapper::GetWindowInterface( vcl:
     return xPeer;
 }
 
+VclPtr<vcl::Window> UnoWrapper::GetWindow(const css::uno::Reference<css::awt::XWindow>& rWindow)
+{
+    return VCLUnoHelper::GetWindow(rWindow);
+}
+
 void UnoWrapper::SetWindowInterface( vcl::Window* pWindow, css::uno::Reference< css::awt::XWindowPeer> xIFace )
 {
     VCLXWindow* pVCLXWindow = VCLXWindow::GetImplementation( xIFace );
