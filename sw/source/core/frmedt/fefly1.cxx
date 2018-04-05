@@ -840,7 +840,7 @@ void SwFEShell::Insert( const OUString& rGrfName, const OUString& rFltName,
                                 nullptr, nullptr );
         OSL_ENSURE(pFormat, "IDocumentContentOperations::InsertGraphic failed.");
 
-        pCursor = dynamic_cast<SwShellCursor*>(pCursor->GetNext());
+        pCursor = pCursor->GetNext();
     } while( pCursor != pStartCursor );
 
     EndAllAction();

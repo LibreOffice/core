@@ -270,7 +270,7 @@ SwExtTextInput* SwDoc::GetExtTextInput( const SwNode& rNd,
     if( mpExtInputRing )
     {
         sal_uLong nNdIdx = rNd.GetIndex();
-        SwExtTextInput* pTmp = static_cast<SwExtTextInput*>(mpExtInputRing);
+        SwExtTextInput* pTmp = mpExtInputRing;
         do {
             sal_uLong nPt = pTmp->GetPoint()->nNode.GetIndex(),
                   nMk = pTmp->GetMark()->nNode.GetIndex();
@@ -290,7 +290,7 @@ SwExtTextInput* SwDoc::GetExtTextInput( const SwNode& rNd,
                 pRet = pTmp;
                 break;
             }
-            pTmp = static_cast<SwExtTextInput*>(pTmp->GetNext());
+            pTmp = pTmp->GetNext();
         } while ( pTmp!=mpExtInputRing );
     }
     return pRet;
@@ -300,7 +300,7 @@ SwExtTextInput* SwDoc::GetExtTextInput() const
 {
     OSL_ENSURE( !mpExtInputRing || !mpExtInputRing->IsMultiSelection(),
             "more than one InputEngine available" );
-    return static_cast<SwExtTextInput*>(mpExtInputRing);
+    return mpExtInputRing;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

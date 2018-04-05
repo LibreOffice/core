@@ -748,7 +748,7 @@ void SwXTextCursor::DeleteAndInsert(const OUString& rText,
                 SwUnoCursorHelper::SelectPam(*pUnoCursor, true);
                 pCurrent->Left(rText.getLength());
             }
-            pCurrent = static_cast<SwCursor*>(pCurrent->GetNext());
+            pCurrent = pCurrent->GetNext();
         } while (pCurrent != pUnoCursor);
         pDoc->GetIDocumentUndoRedo().EndUndo(SwUndoId::INSERT, nullptr);
     }
