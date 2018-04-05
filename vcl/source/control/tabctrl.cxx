@@ -520,7 +520,7 @@ bool TabControl::ImplPlaceTabs( long nWidth )
     return true;
 }
 
-tools::Rectangle TabControl::ImplGetTabRect( sal_uInt16 nItemPos, long nWidth, long nHeight )
+tools::Rectangle TabControl::ImplGetTabRect( sal_uInt16 nItemPos, sal_Int64 nWidth, sal_Int64 nHeight )
 {
     Size aWinSize = Control::GetOutputSizePixel();
     if ( nWidth < 0 )
@@ -2136,13 +2136,13 @@ Size TabControl::calculateRequisition() const
         pThis->ActivatePage();
     }
 
-    long nTabLabelsBottom = 0, nTabLabelsRight = 0;
+    sal_Int64 nTabLabelsBottom = 0, nTabLabelsRight = 0;
     for (sal_uInt16 nPos(0), sizeList(static_cast <sal_uInt16> (mpTabCtrlData->maItemList.size()));
             nPos < sizeList; ++nPos)
     {
         TabControl* pThis = const_cast<TabControl*>(this);
 
-        tools::Rectangle aTabRect = pThis->ImplGetTabRect(nPos, aOptimalPageSize.Width(), RECT_MAX);
+        tools::Rectangle aTabRect = pThis->ImplGetTabRect(nPos, aOptimalPageSize.Width(), SAL_MAX_INT64);
         if (aTabRect.Bottom() > nTabLabelsBottom)
             nTabLabelsBottom = aTabRect.Bottom();
         if (aTabRect.Right() > nTabLabelsRight)
@@ -2151,7 +2151,7 @@ Size TabControl::calculateRequisition() const
 
     Size aOptimalSize(aOptimalPageSize);
     aOptimalSize.AdjustHeight(nTabLabelsBottom );
-    aOptimalSize.setWidth( std::max<sal_Int32>(nTabLabelsRight, aOptimalSize.Width()) );
+    aOptimalSize.setWidth( std::max(nTabLabelsRight, aOptimalSize.Width()) );
 
     aOptimalSize.AdjustWidth(TAB_OFFSET * 2 );
     aOptimalSize.AdjustHeight(TAB_OFFSET * 2 );
@@ -2665,13 +2665,13 @@ Size NotebookbarTabControlBase::calculateRequisition() const
         pThis->ActivatePage();
     }
 
-    long nTabLabelsBottom = 0, nTabLabelsRight = 0;
+    sal_Int64 nTabLabelsBottom = 0, nTabLabelsRight = 0;
     for (sal_uInt16 nPos(0), sizeList(static_cast <sal_uInt16> (mpTabCtrlData->maItemList.size()));
             nPos < sizeList; ++nPos)
     {
         NotebookbarTabControlBase* pThis = const_cast<NotebookbarTabControlBase*>(this);
 
-        tools::Rectangle aTabRect = pThis->ImplGetTabRect(nPos, aOptimalPageSize.Width(), RECT_MAX);
+        tools::Rectangle aTabRect = pThis->ImplGetTabRect(nPos, aOptimalPageSize.Width(), SAL_MAX_INT64);
         if (aTabRect.Bottom() > nTabLabelsBottom)
         {
             nTabLabelsBottom = aTabRect.Bottom();
@@ -2683,7 +2683,7 @@ Size NotebookbarTabControlBase::calculateRequisition() const
 
     Size aOptimalSize(aOptimalPageSize);
     aOptimalSize.AdjustHeight(nTabLabelsBottom );
-    aOptimalSize.setWidth( std::max<sal_Int32>(nTabLabelsRight, aOptimalSize.Width()) );
+    aOptimalSize.setWidth( std::max(nTabLabelsRight, aOptimalSize.Width()) );
 
     aOptimalSize.AdjustWidth(TAB_OFFSET * 2 );
     aOptimalSize.AdjustHeight(TAB_OFFSET * 2 );

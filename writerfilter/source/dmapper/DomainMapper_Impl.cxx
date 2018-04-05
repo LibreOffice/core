@@ -1650,9 +1650,9 @@ void DomainMapper_Impl::appendStarMath( const Value& val )
             if( oox::FormulaImportBase* formulaimport = dynamic_cast< oox::FormulaImportBase* >( xInterface.get()))
                 size = formulaimport->getFormulaSize();
             xStarMathProperties->setPropertyValue(getPropertyName( PROP_WIDTH ),
-                uno::makeAny( size.Width() ));
+                uno::makeAny( sal_Int32(size.Width())));
             xStarMathProperties->setPropertyValue(getPropertyName( PROP_HEIGHT ),
-                uno::makeAny( size.Height() ));
+                uno::makeAny( sal_Int32(size.Height())));
             // mimic the treatment of graphics here.. it seems anchoring as character
             // gives a better ( visually ) result
             xStarMathProperties->setPropertyValue(getPropertyName( PROP_ANCHOR_TYPE ),
