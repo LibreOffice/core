@@ -266,7 +266,7 @@ class SW_DLLPUBLIC SwDoc final
     mutable std::unordered_map<OUString, SwNumRule *> maNumRuleMap;
 
     std::unique_ptr<SwPagePreviewPrtData> m_pPgPViewPrtData; //< Indenting / spacing for printing of page view.
-    SwPaM           *mpExtInputRing;
+    SwExtTextInput  *mpExtInputRing;
 
     IStyleAccess    *mpStyleAccess;                //< handling of automatic styles
     SwLayoutCache   *mpLayoutCache;                /**< Layout cache to read and save with the
