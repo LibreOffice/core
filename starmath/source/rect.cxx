@@ -231,7 +231,7 @@ SmRect::SmRect(const OutputDevice &rDev, const SmFormat *pFormat,
     if (nItalicRightSpace < 0  &&  !bAllowSmaller)
         nItalicRightSpace = 0;
 
-    long  nDist = 0;
+    sal_Int32 nDist = 0;
     if (pFormat)
         nDist = (rDev.GetFont().GetFontSize().Height()
                 * pFormat->GetDistance(DIS_ORNAMENTSIZE)) / 100;
