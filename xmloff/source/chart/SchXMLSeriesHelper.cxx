@@ -26,6 +26,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 #include <rtl/ustring.h>
+#include <tools/diagnose_ex.h>
 
 #include <typeinfo>
 
@@ -59,9 +60,9 @@ using ::com::sun::star::uno::Sequence;
             }
         }
     }
-    catch( const uno::Exception & ex )
+    catch( const uno::Exception & )
     {
-        SAL_WARN("xmloff.chart", "Exception caught. Type: " << OUString::createFromAscii( typeid( ex ).name() ) << ", Message: " << ex );
+        DBG_UNHANDLED_EXCEPTION("xmloff.chart");
     }
 
     return aResult;

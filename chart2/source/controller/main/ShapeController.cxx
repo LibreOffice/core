@@ -39,6 +39,7 @@
 #include <editeng/spltitem.hxx>
 #include <svx/svxdlg.hxx>
 #include <editeng/widwitem.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <memory>
 
@@ -614,9 +615,9 @@ SdrObject* ShapeController::getFirstAdditionalShape()
             }
         }
     }
-    catch ( const uno::Exception& ex )
+    catch ( const uno::Exception& )
     {
-        SAL_WARN("chart2", "Exception caught. " << ex );
+        DBG_UNHANDLED_EXCEPTION("chart2");
     }
 
     return pFirstObj;
@@ -654,9 +655,9 @@ SdrObject* ShapeController::getLastAdditionalShape()
             }
         }
     }
-    catch ( const uno::Exception& ex )
+    catch ( const uno::Exception& )
     {
-        SAL_WARN("chart2", "Exception caught. " << ex );
+        DBG_UNHANDLED_EXCEPTION("chart2");
     }
 
     return pLastObj;

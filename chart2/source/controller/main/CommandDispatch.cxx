@@ -20,6 +20,7 @@
 #include "CommandDispatch.hxx"
 #include <CommonFunctors.hxx>
 #include <com/sun/star/util/URLTransformer.hpp>
+#include <tools/diagnose_ex.h>
 
 #include <algorithm>
 #include <functional>
@@ -158,9 +159,9 @@ void CommandDispatch::fireStatusEventForURL(
                         if( xListener.is())
                             xListener->statusChanged( aEventToSend );
                     }
-                    catch( const uno::Exception & ex )
+                    catch( const uno::Exception & )
                     {
-                        SAL_WARN("chart2", "Exception caught. " << ex );
+                        DBG_UNHANDLED_EXCEPTION("chart2");
                     }
                 }
             }

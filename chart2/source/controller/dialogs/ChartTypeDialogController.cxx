@@ -40,6 +40,7 @@
 #include <vcl/settings.hxx>
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <tools/diagnose_ex.h>
 
 namespace chart
 {
@@ -311,9 +312,9 @@ uno::Reference< XChartTypeTemplate > ChartTypeDialogController::getCurrentTempla
                 {
                     setTemplateProperties( xTemplateProps );
                 }
-                catch( const uno::Exception & ex )
+                catch( const uno::Exception & )
                 {
-                    SAL_WARN("chart2", "Exception caught. " << ex );
+                    DBG_UNHANDLED_EXCEPTION("chart2");
                 }
             }
         }
@@ -1201,9 +1202,9 @@ void CombiColumnLineChartDialogController::fillExtraControls( const ChartTypePar
         {
             xTemplateProps->getPropertyValue( "NumberOfLines" ) >>= nNumLines;
         }
-        catch( const uno::Exception & ex )
+        catch( const uno::Exception & )
         {
-            SAL_WARN("chart2", "Exception caught. " << ex );
+            DBG_UNHANDLED_EXCEPTION("chart2");
         }
     }
     if( nNumLines < 0 )

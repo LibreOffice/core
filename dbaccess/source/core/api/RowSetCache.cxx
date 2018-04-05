@@ -127,9 +127,9 @@ ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
             return;
         }
     }
-    catch(const Exception& ex)
+    catch(const Exception&)
     {
-        SAL_WARN("dbaccess.core", "ORowSetCache: " << ex);
+        DBG_UNHANDLED_EXCEPTION("dbaccess.core");
     }
     try
     {

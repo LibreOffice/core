@@ -89,6 +89,7 @@
 #include <fmtmeta.hxx>
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
+#include <tools/diagnose_ex.h>
 
 #define WATERMARK_NAME "PowerPlusWaterMarkObject"
 #define WATERMARK_AUTO_SIZE sal_uInt32(1)
@@ -491,10 +492,10 @@ bool lcl_DoUpdateParagraphSignatureField(SwDoc* pDoc,
             return true;
         }
     }
-    catch (const uno::Exception& ex)
+    catch (const uno::Exception&)
     {
         // We failed; avoid crashing.
-        SAL_WARN("sw.uno", "Failed to update paragraph signature: " << ex);
+        DBG_UNHANDLED_EXCEPTION("sw.uno", "Failed to update paragraph signature");
     }
 
     return false;

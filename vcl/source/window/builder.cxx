@@ -49,6 +49,7 @@
 #include <salinst.hxx>
 #include <strings.hrc>
 #include <tools/svlibrary.h>
+#include <tools/diagnose_ex.h>
 
 #ifdef DISABLE_DYNLOADING
 #include <dlfcn.h>
@@ -268,7 +269,7 @@ VclBuilder::VclBuilder(vcl::Window *pParent, const OUString& sUIDir, const OUStr
     }
     catch (const css::uno::Exception &rExcept)
     {
-        SAL_WARN("vcl.layout", "Unable to read .ui file: " << rExcept);
+        DBG_UNHANDLED_EXCEPTION("vcl.layout", "Unable to read .ui file");
         CrashReporter::AddKeyValue("VclBuilderException", "Unable to read .ui file: " + rExcept.Message);
         throw;
     }

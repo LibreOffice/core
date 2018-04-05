@@ -48,6 +48,7 @@
 #include <xmloff/attrlist.hxx>
 #include <comphelper/genericpropertyset.hxx>
 #include <comphelper/servicehelper.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <memory>
 #include <stack>
@@ -310,9 +311,9 @@ bool SmXMLExportWrapper::WriteThroughComponent(
         xStream = xStorage->openStreamElement( sStreamName,
             embed::ElementModes::READWRITE | embed::ElementModes::TRUNCATE );
     }
-    catch ( const uno::Exception& rEx )
+    catch ( const uno::Exception& )
     {
-        SAL_WARN("starmath", "Can't create output stream in package: " << rEx );
+        DBG_UNHANDLED_EXCEPTION("starmath", "Can't create output stream in package" );
         return false;
     }
 

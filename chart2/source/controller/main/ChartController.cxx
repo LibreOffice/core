@@ -213,9 +213,9 @@ void ChartController::TheModel::tryTermination()
             return;
         }
     }
-    catch(const uno::Exception& ex)
+    catch(const uno::Exception&)
     {
-        SAL_WARN( "chart2", "Termination of model failed: " << ex );
+        DBG_UNHANDLED_EXCEPTION( "chart2", "Termination of model failed" );
     }
 }
 
@@ -487,9 +487,9 @@ void SAL_CALL ChartController::attachFrame(
                         m_xLayoutManagerEventBroadcaster->addLayoutManagerEventListener( this );
                 }
             }
-            catch( const uno::Exception & ex )
+            catch( const uno::Exception & )
             {
-                SAL_WARN("chart2", "Exception caught. " << ex );
+                DBG_UNHANDLED_EXCEPTION("chart2");
             }
         }
     }
@@ -842,9 +842,9 @@ void SAL_CALL ChartController::dispose()
                 if( xMBroadcaster.is())
                     xMBroadcaster->removeModifyListener( this );
             }
-            catch( const uno::Exception & ex )
+            catch( const uno::Exception & )
             {
-                SAL_WARN("chart2", "Exception caught. " << ex );
+                DBG_UNHANDLED_EXCEPTION("chart2");
             }
 #endif
             aModelRef->tryTermination();
@@ -856,10 +856,10 @@ void SAL_CALL ChartController::dispose()
         SolarMutexGuard g;
         m_aDispatchContainer.DisposeAndClear();
     }
-    catch( const uno::Exception & ex )
+    catch( const uno::Exception & )
     {
+        DBG_UNHANDLED_EXCEPTION("chart2");
         assert(!m_xChartView.is());
-        SAL_WARN("chart2", "Exception caught. " << ex );
     }
  }
 

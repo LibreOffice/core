@@ -20,6 +20,7 @@
 #include <o3tl/make_unique.hxx>
 
 #include <tools/debug.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <com/sun/star/text/PositionLayoutDir.hpp>
 #include <com/sun/star/chart/XChartDocument.hpp>
@@ -834,9 +835,9 @@ void XMLShapeImportHelper::popGroupAndSort()
     {
         mpImpl->mpSortContext->popGroupAndSort();
     }
-    catch( const uno::Exception& rException )
+    catch( const uno::Exception& )
     {
-        SAL_WARN("xmloff", "exception while sorting shapes, sorting failed: " << rException);
+        DBG_UNHANDLED_EXCEPTION("xmloff", "exception while sorting shapes, sorting failed");
     }
 
     // put parent on top and drop current context, we are done

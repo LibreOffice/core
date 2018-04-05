@@ -122,6 +122,7 @@
 
 #include <osl/conditn.hxx>
 #include <o3tl/make_unique.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <memory>
 
@@ -479,9 +480,9 @@ void SeriesPlotterContainer::initializeCooSysAndSeriesPlotter(
             xDiaProp->getPropertyValue( "3DRelativeHeight" ) >>= n3DRelativeHeight;
         }
     }
-    catch( const uno::Exception & ex )
+    catch( const uno::Exception & )
     {
-        SAL_WARN("chart2", "Exception caught. " << ex );
+        DBG_UNHANDLED_EXCEPTION("chart2" );
     }
 
     //prepare for autoscaling and shape creation
@@ -1528,9 +1529,9 @@ void lcl_setDefaultWritingMode( const std::shared_ptr< DrawModelWrapper >& pDraw
                     pDrawModelWrapper->GetItemPool().SetPoolDefaultItem(SvxFrameDirectionItem(static_cast<SvxFrameDirection>(nWritingMode), EE_PARA_WRITINGDIR) );
             }
         }
-        catch( const uno::Exception& ex )
+        catch( const uno::Exception& )
         {
-            SAL_WARN("chart2", "Exception caught. " << ex );
+            DBG_UNHANDLED_EXCEPTION("chart2" );
         }
     }
 }
@@ -2513,9 +2514,9 @@ void formatPage(
         pShapeFactory->createRectangle(
             xTarget, rPageSize, awt::Point(0, 0), aNames, aValues);
     }
-    catch( const uno::Exception & ex )
+    catch( const uno::Exception & )
     {
-        SAL_WARN("chart2", "Exception caught. " << ex );
+        DBG_UNHANDLED_EXCEPTION("chart2" );
     }
 }
 
@@ -2744,12 +2745,12 @@ void ChartView::impl_updateView( bool bCheckLockedCtrler )
             m_bViewUpdatePending = false;
             m_bInViewUpdate = false;
         }
-        catch( const uno::Exception& ex)
+        catch( const uno::Exception& )
         {
+            DBG_UNHANDLED_EXCEPTION("chart2" );
             m_bViewDirty = m_bViewUpdatePending;
             m_bViewUpdatePending = false;
             m_bInViewUpdate = false;
-            SAL_WARN("chart2", "Exception caught. " << ex );
         }
 
         {
@@ -2853,9 +2854,9 @@ void ChartView::impl_notifyModeChangeListener( const OUString& rNewMode )
             }
         }
     }
-    catch( const uno::Exception& ex)
+    catch( const uno::Exception& )
     {
-        SAL_WARN("chart2", "Exception caught. " << ex );
+        DBG_UNHANDLED_EXCEPTION("chart2");
     }
 }
 

@@ -18,6 +18,7 @@
  */
 
 #include <WrappedDefaultProperty.hxx>
+#include <tools/diagnose_ex.h>
 
 using namespace ::com::sun::star;
 
@@ -61,9 +62,9 @@ beans::PropertyState WrappedDefaultProperty::getPropertyState(
         if( m_aOuterDefaultValue == convertInnerToOuterValue( aValue ))
             aState = beans::PropertyState_DEFAULT_VALUE;
     }
-    catch( const beans::UnknownPropertyException& ex )
+    catch( const beans::UnknownPropertyException& )
     {
-        SAL_WARN("chart2", "Exception caught. " << ex );
+        DBG_UNHANDLED_EXCEPTION("chart2");
     }
     return aState;
 }

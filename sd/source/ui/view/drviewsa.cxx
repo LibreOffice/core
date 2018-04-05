@@ -67,6 +67,7 @@
 #include <ToolBarManager.hxx>
 #include <annotationmanager.hxx>
 #include <DrawController.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <memory>
 
@@ -326,11 +327,11 @@ void DrawViewShell::Construct(DrawDocShell* pDocSh, PageKind eInitialPageKind)
         mxScannerListener.set( static_cast< ::cppu::OWeakObject* >( new ScannerEventListener( this ) ),
                                uno::UNO_QUERY );
     }
-    catch (Exception& exception)
+    catch (Exception const &)
     {
         // Eat the exception and log it
         // We can still continue if scanner manager is not available.
-        SAL_WARN("sd", "Scanner manager exception: " << exception);
+        DBG_UNHANDLED_EXCEPTION("sd");
     }
 
     mpAnnotationManager.reset( new AnnotationManager( GetViewShellBase() ) );

@@ -24,6 +24,7 @@
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/XLegend.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <tools/diagnose_ex.h>
 
 using namespace ::com::sun::star;
 using ::com::sun::star::uno::Reference;
@@ -97,9 +98,9 @@ uno::Reference< chart2::XLegend > LegendHelper::getLegend(
             OSL_FAIL("need diagram for creation of legend");
         }
     }
-    catch( const uno::Exception & ex )
+    catch( const uno::Exception & )
     {
-        SAL_WARN("chart2", "Exception caught. " << ex );
+        DBG_UNHANDLED_EXCEPTION("chart2");
     }
 
     return xResult;
