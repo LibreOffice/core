@@ -438,6 +438,13 @@ void SdrObject::SetPage(SdrPage* pNewPage)
     // If the page is changing to another page with the same model, we
     // assume they create compatible UNO shape objects so we shouldn't have
     // to invalidate.
+    // TTTT: This causes quite some problems in SvxDrawPage::add when used
+    // e.g. from Writer - the SdrObject may be cloned to target model, and
+    // the xShape was added to it by purpose (see there). Thus it will be
+    // good to think about if this is really needed - it *seems* to be intended
+    // for a xShape being a on-demand-creatable resource - wit hthe argument that
+    // the SdrPage/UnoPage used influences the SvxShape creation. This uses
+    // ressources and would be nice to get rid of anyways.
     if (pOldPage != pPage && !(pOldPage && pPage && pOldModel == &getSdrModelFromSdrObject()))
     {
         SvxShape* const pShape(getSvxShape());
