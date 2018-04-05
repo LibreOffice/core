@@ -5054,11 +5054,13 @@ static void ParaTabStopDelAdd( WW8Export& rWrt,
 
         if( nOP < nNP )                             // next tab is old
         {
+            assert(pTO);
             aTab.Del(*pTO, nLStypeMgn);             // must be deleted
             nO++;
         }
         else if( nNP < nOP )                        // next tab is new
         {
+            assert(pTN);
             aTab.Add(*pTN, nLParaMgn);              // must be inserted
             nN++;
         }
