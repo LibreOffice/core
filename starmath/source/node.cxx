@@ -598,7 +598,7 @@ void SmLineNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
     }
 
     // make distance depend on font size
-    long nDist = (rFormat.GetDistance(DIS_HORIZONTAL) * GetFont().GetFontSize().Height()) / 100L;
+    sal_Int32 nDist = (rFormat.GetDistance(DIS_HORIZONTAL) * GetFont().GetFontSize().Height()) / 100;
     if (!IsUseExtraSpaces())
         nDist = 0;
 
