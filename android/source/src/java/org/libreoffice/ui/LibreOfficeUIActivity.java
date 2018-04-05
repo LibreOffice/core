@@ -444,6 +444,8 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
                         public void run() {
                             Toast.makeText(activity, e.getMessage(),
                                     Toast.LENGTH_SHORT).show();
+                            // switch back to the default provider.
+                            switchToDocumentProvider(documentProviderFactory.getDefaultProvider());
                         }
                     });
                     startActivity(new Intent(activity, DocumentProviderSettingsActivity.class));
