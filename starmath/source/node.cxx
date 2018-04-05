@@ -487,8 +487,8 @@ void SmTableNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
     size_t nSize = GetNumSubNodes();
 
     // make distance depend on font size
-    long  nDist = +(rFormat.GetDistance(DIS_VERTICAL)
-                    * GetFont().GetFontSize().Height()) / 100L;
+    sal_Int32 nDist = +(rFormat.GetDistance(DIS_VERTICAL)
+                    * GetFont().GetFontSize().Height()) / 100;
 
     if (nSize < 1)
         return;
