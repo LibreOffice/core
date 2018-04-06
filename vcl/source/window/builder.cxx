@@ -332,6 +332,56 @@ namespace weld
         const LocaleDataWrapper& rLocaleData = aSysLocale.GetLocaleData();
         return TimeFormatter::FormatTime(ConvertValue(nValue), m_eFormat, TimeFormat::Hour24, true, rLocaleData);
     }
+
+    EntryTreeView::EntryTreeView(std::unique_ptr<Entry> xEntry, std::unique_ptr<TreeView> xTreeView)
+        : m_xEntry(std::move(xEntry))
+        , m_xTreeView(std::move(xTreeView))
+    {
+        m_xTreeView->connect_changed(LINK(this, EntryTreeView, ClickHdl));
+        m_xEntry->connect_changed(LINK(this, EntryTreeView, ModifyHdl));
+    }
+
+    IMPL_LINK(EntryTreeView, ClickHdl, weld::TreeView&, rView, void)
+    {
+        m_xEntry->set_text(rView.get_selected_text());
+    }
+
+    void EntryTreeView::EntryModifyHdl(weld::Entry& rBox)
+    {
+        OUString sText(rBox.get_text());
+        int nExists = m_xTreeView->find_text(sText);
+        if (nExists != -1)
+        {
+            m_xTreeView->select(nExists);
+            return;
+        }
+
+        m_xTreeView->select(-1);
+        if (sText.isEmpty())
+            return;
+
+        int nCount = m_xTreeView->n_children();
+        for (int i = 0; i < nCount; ++i)
+        {
+            if (m_xTreeView->get_text(i).startsWith(sText))
+            {
+                m_xTreeView->select(i);
+                break;
+            }
+        }
+    }
+
+    IMPL_LINK(EntryTreeView, ModifyHdl, weld::Entry&, rBox, void)
+    {
+        EntryModifyHdl(rBox);
+        m_aChangeHdl.Call(rBox);
+    }
+
+    void EntryTreeView::set_size_request_by_digits_rows(int nDigits, int nRows)
+    {
+        m_xTreeView->set_size_request(m_xTreeView->get_approximate_digit_width() * nDigits,
+                                      m_xTreeView->get_height_rows(nRows));
+    }
 }
 
 VclBuilder::VclBuilder(vcl::Window *pParent, const OUString& sUIDir, const OUString& sUIFile, const OString& sID,

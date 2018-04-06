@@ -1472,6 +1472,11 @@ public:
         weld::Entry::connect_cursor_position(rLink);
     }
 
+    void SetAutocompleteHdl(const Link<Edit&,void>& rLink)
+    {
+        m_xEntry->SetAutocompleteHdl(rLink);
+    }
+
     virtual ~SalInstanceEntry() override
     {
         if (m_aCursorPositionHdl.IsSet())
@@ -2308,6 +2313,51 @@ IMPL_LINK_NOARG(SalInstanceComboBoxTextWithEdit, EntryActivateHdl, Edit&, void)
     m_aEntryActivateHdl.Call(*this);
 }
 
+class SalInstanceEntryTreeView : public weld::EntryTreeView
+{
+private:
+    DECL_DLLPRIVATE_LINK(AutocompleteHdl, Edit&, void);
+    SalInstanceEntry* m_pEntry;
+public:
+    SalInstanceEntryTreeView(std::unique_ptr<weld::Entry> xEntry, std::unique_ptr<weld::TreeView> xTreeView)
+        : EntryTreeView(std::move(xEntry), std::move(xTreeView))
+        , m_pEntry(dynamic_cast<SalInstanceEntry*>(m_xEntry.get()))
+    {
+        assert(m_pEntry);
+        m_pEntry->SetAutocompleteHdl(LINK(this, SalInstanceEntryTreeView, AutocompleteHdl));
+    }
+    ~SalInstanceEntryTreeView()
+    {
+        m_pEntry->SetAutocompleteHdl(Link<Edit&, void>());
+    }
+};
+
+IMPL_LINK(SalInstanceEntryTreeView, AutocompleteHdl, Edit&, rEdit, void)
+{
+    Selection aSel = rEdit.GetSelection();
+
+    OUString aFullText = rEdit.GetText();
+    OUString aStartText = aFullText.copy(0, static_cast<sal_Int32>(aSel.Max()));
+
+    int nPos = -1;
+    int nCount = m_xTreeView->n_children();
+    for (int i = 0; i < nCount; ++i)
+    {
+        if (m_xTreeView->get_text(i).startsWithIgnoreAsciiCase(aStartText))
+        {
+            nPos = i;
+            break;
+        }
+    }
+
+    if (nPos != -1)
+    {
+        OUString aText = m_xTreeView->get_text(nPos);
+        Selection aSelection(aText.getLength(), aStartText.getLength());
+        rEdit.SetText(aText, aSelection);
+    }
+}
+
 class SalInstanceBuilder : public weld::Builder
 {
 private:
@@ -2460,6 +2510,12 @@ public:
             return o3tl::make_unique<SalInstanceComboBoxTextWithEdit>(pComboBox, bTakeOwnership);
         ListBox* pListBox = dynamic_cast<ListBox*>(pComboBoxText);
         return pListBox ? o3tl::make_unique<SalInstanceComboBoxTextWithoutEdit>(pListBox, bTakeOwnership) : nullptr;
+    }
+
+    virtual std::unique_ptr<weld::EntryTreeView> weld_entry_tree_view(const OString& entryid, const OString& treeviewid, bool bTakeOwnership) override
+    {
+        return o3tl::make_unique<SalInstanceEntryTreeView>(weld_entry(entryid, bTakeOwnership),
+                                                           weld_tree_view(treeviewid, bTakeOwnership));
     }
 
     virtual std::unique_ptr<weld::TreeView> weld_tree_view(const OString &id, bool bTakeOwnership) override

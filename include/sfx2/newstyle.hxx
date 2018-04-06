@@ -22,34 +22,29 @@
 #include <comphelper/string.hxx>
 #include <sal/config.h>
 #include <sfx2/dllapi.h>
-#include <vcl/button.hxx>
-#include <vcl/layout.hxx>
-#include <vcl/combobox.hxx>
-#include <vcl/dialog.hxx>
-#include <vcl/fixed.hxx>
 #include <vcl/weld.hxx>
 
 class SfxStyleSheetBasePool;
 
-class SFX2_DLLPUBLIC SfxNewStyleDlg : public ModalDialog
+class SFX2_DLLPUBLIC SfxNewStyleDlg : public weld::GenericDialogController
 {
 private:
-    VclPtr<ComboBox> m_pColBox;
-    VclPtr<OKButton> m_pOKBtn;
+    SfxStyleSheetBasePool&  m_rPool;
 
-    std::unique_ptr<weld::MessageDialog> xQueryOverwriteBox;
-    SfxStyleSheetBasePool&  rPool;
+    std::unique_ptr<weld::EntryTreeView> m_xColBox;
+    std::unique_ptr<weld::Button> m_xOKBtn;
 
-    DECL_DLLPRIVATE_LINK( OKHdl, ComboBox&, void );
-    DECL_DLLPRIVATE_LINK( OKClickHdl, Button *, void );
-    DECL_DLLPRIVATE_LINK( ModifyHdl, Edit&, void );
+    std::unique_ptr<weld::MessageDialog> m_xQueryOverwriteBox;
+
+    DECL_DLLPRIVATE_LINK(OKHdl, weld::TreeView&, void);
+    DECL_DLLPRIVATE_LINK(OKClickHdl, weld::Button&, void);
+    DECL_DLLPRIVATE_LINK(ModifyHdl, weld::Entry&, void);
 
 public:
-    SfxNewStyleDlg( vcl::Window* pParent, SfxStyleSheetBasePool& );
+    SfxNewStyleDlg(weld::Window* pParent, SfxStyleSheetBasePool&);
     virtual ~SfxNewStyleDlg() override;
-    virtual void dispose() override;
 
-    OUString                GetName() const { return comphelper::string::stripStart(m_pColBox->GetText(), ' '); }
+    OUString                GetName() const { return comphelper::string::stripStart(m_xColBox->get_text(), ' '); }
 };
 
 #endif
