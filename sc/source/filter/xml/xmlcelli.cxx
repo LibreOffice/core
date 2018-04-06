@@ -124,8 +124,6 @@ ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
     ScXMLImportContext( rImport ),
     mpEditEngine(GetScImport().GetEditEngine()),
     mnCurParagraph(0),
-    pDetectiveObjVec(nullptr),
-    pCellRangeSource(nullptr),
     fValue(0.0),
     nMergedRows(1),
     nMatrixRows(0),
@@ -298,8 +296,6 @@ ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
 
 ScXMLTableRowCellContext::~ScXMLTableRowCellContext()
 {
-    delete pDetectiveObjVec;
-    delete pCellRangeSource;
 }
 
 void ScXMLTableRowCellContext::LockSolarMutex()
@@ -724,18 +720,18 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLTableRowCellContex
         {
             bIsEmpty = false;
             if (!pDetectiveObjVec)
-                pDetectiveObjVec = new ScMyImpDetectiveObjVec;
+                pDetectiveObjVec.reset( new ScMyImpDetectiveObjVec );
             pContext = new ScXMLDetectiveContext(
-                rXMLImport, pDetectiveObjVec );
+                rXMLImport, pDetectiveObjVec.get() );
         }
         break;
         case XML_ELEMENT( TABLE, XML_CELL_RANGE_SOURCE ):
         {
             bIsEmpty = false;
             if (!pCellRangeSource)
-                pCellRangeSource = new ScMyImpCellRangeSource();
+                pCellRangeSource.reset(new ScMyImpCellRangeSource());
             pContext = new ScXMLCellRangeSourceContext(
-                rXMLImport, pAttribList, pCellRangeSource );
+                rXMLImport, pAttribList, pCellRangeSource.get() );
         }
         break;
     }
