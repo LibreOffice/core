@@ -33,6 +33,7 @@
 #include <vcl/virdev.hxx>
 #include "grfcache.hxx"
 #include <vcl/GraphicObject.hxx>
+#include <vcl/BitmapConverter.hxx>
 #include <bitmapwriteaccess.hxx>
 #include <memory>
 
@@ -1416,11 +1417,11 @@ void GraphicManager::ImplAdjust( BitmapEx& rBmpEx, const GraphicAttr& rAttr, Gra
         switch( aAttr.GetDrawMode() )
         {
             case GraphicDrawMode::Mono:
-                rBmpEx.Convert( BmpConversion::N1BitThreshold );
+                BitmapConverter::Convert(rBmpEx, BitmapConverter(BmpConversion::N1BitThreshold));
             break;
 
             case GraphicDrawMode::Greys:
-                rBmpEx.Convert( BmpConversion::N8BitGreys );
+                BitmapConverter::Convert(rBmpEx, BitmapConverter(BmpConversion::N8BitGreys));
             break;
 
             case GraphicDrawMode::Watermark:

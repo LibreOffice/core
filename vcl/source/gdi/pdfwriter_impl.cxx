@@ -75,6 +75,7 @@
 #include <vcl/virdev.hxx>
 #include <vcl/filter/pdfdocument.hxx>
 #include <comphelper/hash.hxx>
+#include <vcl/BitmapConverter.hxx>
 
 #include <fontsubset.hxx>
 #include <outdev.h>
@@ -9835,7 +9836,7 @@ const PDFWriterImpl::BitmapEmit& PDFWriterImpl::createBitmapEmit( const BitmapEx
         if( nDepth <= 4 )
             eConv = BmpConversion::N4BitGreys;
         if( nDepth > 1 )
-            aBitmap.Convert( eConv );
+            BitmapConverter::Convert(aBitmap, BitmapConverter(eConv));
     }
     BitmapID aID;
     aID.m_aPixelSize        = aBitmap.GetSizePixel();
