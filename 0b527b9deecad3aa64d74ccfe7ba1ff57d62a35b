@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_9746d021",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2018-04-06T15:41:16Z",
+      "side": 1,
+      "message": "no need to describe the changes from every single patch set here, just add a generic description what this patch does.\n\nif your commit message changes, one can see that in the diff between the changesets.",
+      "revId": "0b527b9deecad3aa64d74ccfe7ba1ff57d62a35b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
