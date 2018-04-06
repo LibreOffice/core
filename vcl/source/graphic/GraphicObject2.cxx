@@ -19,10 +19,9 @@
 
 #include <sal/config.h>
 
-#include <cstdlib>
+#include <tools/poly.hxx>
 
 #include <vcl/bitmapaccess.hxx>
-#include <tools/poly.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/window.hxx>
 #include <vcl/gdimtf.hxx>
@@ -32,8 +31,12 @@
 #include <vcl/alpha.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/GraphicObject.hxx>
+#include <vcl/BitmapConverter.hxx>
+
 #include <bitmapwriteaccess.hxx>
+
 #include <memory>
+#include <cstdlib>
 
 struct ImplTileInfo
 {
