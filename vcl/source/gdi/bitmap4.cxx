@@ -24,6 +24,7 @@
 #include <vcl/bitmap.hxx>
 #include <impbmp.hxx>
 #include <bitmapwriteaccess.hxx>
+#include <vcl/BitmapConverter.hxx>
 
 #define S2(a,b)             { long t; if( ( t = b - a ) < 0 ) { a += t; b -= t; } }
 #define MN3(a,b,c)          S2(a,b); S2(a,c);
@@ -434,7 +435,9 @@ bool Bitmap::ImplMedianFilter()
 
 bool Bitmap::ImplSobelGrey()
 {
-    bool bRet = ImplMakeGreyscales( 256 );
+    BitmapEx aBmpEx(*this);
+    bool bRet = BitmapConverter::Convert(aBmpEx, BitmapConverter(BmpConversion::N8BitGreys));
+    *this = aBmpEx.GetBitmap();
 
     if( bRet )
     {
@@ -561,7 +564,9 @@ bool Bitmap::ImplSobelGrey()
 
 bool Bitmap::ImplEmbossGrey( const BmpFilterParam* pFilterParam )
 {
-    bool bRet = ImplMakeGreyscales( 256 );
+    BitmapEx aBmpEx(*this);
+    bool bRet = BitmapConverter::Convert(aBmpEx, BitmapConverter(BmpConversion::N8BitGreys));
+    *this = aBmpEx.GetBitmap();
 
     if( bRet )
     {
