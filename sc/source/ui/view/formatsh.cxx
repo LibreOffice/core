@@ -434,10 +434,10 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
                         aStyleName = static_cast<const SfxStringItem*>(pNameItem)->GetValue();
                     else if ( nSlotId == SID_STYLE_NEW_BY_EXAMPLE )
                     {
-                        ScopedVclPtrInstance<SfxNewStyleDlg> pDlg( nullptr, *pStylePool );
-                        if ( RET_OK != pDlg->Execute() )
+                        SfxNewStyleDlg aDlg(pTabViewShell->GetFrameWeld(), *pStylePool);
+                        if (aDlg.run() != RET_OK)
                             return;
-                        aStyleName = pDlg->GetName();
+                        aStyleName = aDlg.GetName();
                     }
 
                     pStyleSheet = pStylePool->Find( aStyleName, eFamily );

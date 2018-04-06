@@ -5352,6 +5352,11 @@ public:
         return o3tl::make_unique<GtkInstanceTreeView>(pTreeView, bTakeOwnership);
     }
 
+    virtual std::unique_ptr<weld::EntryTreeView> weld_entry_tree_view(const OString& entryid, const OString& treeviewid, bool bTakeOwnership) override
+    {
+        return o3tl::make_unique<weld::EntryTreeView>(weld_entry(entryid, bTakeOwnership), weld_tree_view(treeviewid, bTakeOwnership));
+    }
+
     virtual std::unique_ptr<weld::Label> weld_label(const OString &id, bool bTakeOwnership) override
     {
         GtkLabel* pLabel = GTK_LABEL(gtk_builder_get_object(m_pBuilder, id.getStr()));

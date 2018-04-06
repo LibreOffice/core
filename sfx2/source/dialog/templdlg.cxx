@@ -1696,12 +1696,12 @@ void SfxCommonTemplateDialog_Impl::ActionSelect(sal_uInt16 nEntry)
                     nFilter=pStyleSheetPool->GetSearchMask();
                 pStyleSheetPool->SetSearchMask( eFam, SfxStyleSearchBits::UserDefined );
 
-                ScopedVclPtrInstance< SfxNewStyleDlg > pDlg(pWindow, *pStyleSheetPool);
                 // why? : FloatingWindow must not be parent of a modal dialog
-                if(RET_OK == pDlg->Execute())
+                SfxNewStyleDlg aDlg(pWindow ? pWindow->GetFrameWeld() : nullptr, *pStyleSheetPool);
+                if (aDlg.run() ==  RET_OK)
                 {
                     pStyleSheetPool->SetSearchMask(eFam, nFilter);
-                    const OUString aTemplName(pDlg->GetName());
+                    const OUString aTemplName(aDlg.GetName());
                     Execute_Impl(SID_STYLE_NEW_BY_EXAMPLE,
                                  aTemplName, "",
                                  static_cast<sal_uInt16>(GetFamilyItem_Impl()->GetFamily()),
