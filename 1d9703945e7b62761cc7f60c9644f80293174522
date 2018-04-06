@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_8cede78d",
+        "filename": "sc/source/ui/view/cellsh1.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 2303,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2018-04-06T12:58:03Z",
+      "side": 0,
+      "message": "Bleh, in my first comment I didn\u0027t notice this one. \n\nIn theory it can happen that the comment is in a protected range (IsBlockEditable is false) and in that case, we prolly shouldn\u0027t show it\n\nThis bit is somehow missing from your new code",
+      "range": {
+        "startLine": 2303,
+        "startChar": 83,
+        "endLine": 2303,
+        "endChar": 98
+      },
+      "revId": "1d9703945e7b62761cc7f60c9644f80293174522",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
