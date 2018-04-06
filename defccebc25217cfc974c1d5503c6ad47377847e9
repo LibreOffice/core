@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_cc227fb9",
+        "filename": "drawinglayer/source/tools/emfphelperdata.cxx",
+        "patchSetId": 16
+      },
+      "lineNbr": 489,
+      "author": {
+        "id": 1001124
+      },
+      "writtenOn": "2018-04-06T14:05:34Z",
+      "side": 1,
+      "message": "Just...\n\nif (color.GetTransparency() \u003c 255)\n{\n    drawinglayer::primitive2d::Primitive2DReference aPrimitive(\n        new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(\n            polygon,\n            color.getBColor()));\n\n    if (0 !\u003d color.GetTransparency())\n    {\n        aPrimitive \u003d new drawinglayer::primitive2d::UnifiedTransparencePrimitive2D(\n            drawinglayer::primitive2d::Primitive2DContainer { aPrimitive },\n            color.GetTransparency() / 255.0));\n    }\n\n    mrTargetHolders.Current().append(aPrimitive);\n}\n\nThat way you do not copy all the basic geometry constructors, it has advantages to have only one place (more simple to change, less error-prone, ...)\n\nSchema:\n- Create basic geometry once\n- Embed to transparence if needed\n- Add to target",
+      "range": {
+        "startLine": 467,
+        "startChar": 0,
+        "endLine": 489,
+        "endChar": 13
+      },
+      "revId": "defccebc25217cfc974c1d5503c6ad47377847e9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
