@@ -1861,6 +1861,10 @@ void SAL_CALL ScXMLImport::endDocument()
                     pDoc->SetStreamValid( nTab, true );
             }
         }
+        pDoc->UnlockAdjustHeight();
+        aTables.UpdateRowHeights();
+        pDoc->LockAdjustHeight();
+
         aTables.FixupOLEs();
     }
     if (GetModel().is())

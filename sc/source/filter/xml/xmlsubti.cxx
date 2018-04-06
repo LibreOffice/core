@@ -32,6 +32,8 @@
 #include <tokenarray.hxx>
 #include <convuno.hxx>
 #include <documentimport.hxx>
+#include <sizedev.hxx>
+#include <rowheightcontext.hxx>
 
 #include <svx/svdpage.hxx>
 
@@ -173,6 +175,55 @@ void ScMyTables::AddRow()
 {
     maCurrentCellPos.SetRow(maCurrentCellPos.Row() + 1);
     maCurrentCellPos.SetCol(-1); //reset columns for new row
+}
+
+void ScMyTables::UpdateRowHeights()
+{
+    if (rImport.GetModel().is())
+    {
+        ScXMLImport::MutexGuard aGuard(rImport);
+
+        // update automatic row heights
+
+        // For sheets with any kind of shapes (including notes),
+        // update row heights immediately (before setting the positions).
+        // For sheets without shapes, set "pending" flag
+        // and update row heights when a sheet is shown.
+        // The current sheet (from view settings) is always updated immediately.
+
+        ScDocument* pDoc = ScXMLConverter::GetScDocument(rImport.GetModel());
+        if (pDoc)
+        {
+            SCTAB nCount = pDoc->GetTableCount();
+            ScDrawLayer* pDrawLayer = pDoc->GetDrawLayer();
+
+            SCTAB nVisible = GetCurrentSheet();
+
+            ScMarkData aUpdateSheets;
+            for (SCTAB nTab = 0; nTab<nCount; ++nTab)
+            {
+                const SdrPage* pPage = pDrawLayer ? pDrawLayer->GetPage(nTab) : NULL;
+                if (nTab == nVisible || (pPage && pPage->GetObjCount() != 0))
+                    aUpdateSheets.SelectTable(nTab, true);
+                else
+                    pDoc->SetPendingRowHeights(nTab, true);
+            }
+
+            if (aUpdateSheets.GetSelectCount())
+            {
+                pDoc->LockStreamValid(true);      // ignore draw page size (but not formula results)
+                //pDoc->GetDocumentShell()->UpdateAllRowHeights(aUpdateSheets);
+
+                ScSizeDeviceProvider aProv((ScDocShell*)pDoc->GetDocumentShell());
+                Fraction aZoom(1, 1);
+                sc::RowHeightContext aCxt(aProv.GetPPTX(), aProv.GetPPTY(), aZoom, aZoom, aProv.GetDevice());
+                pDoc->UpdateAllRowHeights(aCxt, &aUpdateSheets);
+
+
+                pDoc->LockStreamValid(false);
+            }
+        }
+    }
 }
 
 void ScMyTables::SetRowStyle(const OUString& rCellStyleName)

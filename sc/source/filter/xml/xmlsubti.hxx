@@ -75,6 +75,7 @@ public:
                                                  const ScXMLTabProtectionData& rProtectData);
     void                                AddRow();
     void                                SetRowStyle(const OUString& rCellStyleName);
+    void                                UpdateRowHeights();
     void                                AddColumn(bool bIsCovered);
     void                                FixupOLEs() { aFixupOLEs.FixupOLEs(); }
     static bool                         IsOLE(const css::uno::Reference< css::drawing::XShape >& rShape)
