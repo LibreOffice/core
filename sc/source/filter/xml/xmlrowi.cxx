@@ -27,6 +27,7 @@
 #include <olinetab.hxx>
 #include <sheetdata.hxx>
 #include <documentimport.hxx>
+#include <unonames.hxx>
 
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/nmspmap.hxx>
@@ -198,6 +199,21 @@ void SAL_CALL ScXMLTableRowContext::endFastElement(sal_Int32 /*nElement*/)
                     }
                     if (bFiltered)
                         xRowProperties->setPropertyValue(SC_ISFILTERED, uno::makeAny(bFiltered));
+
+                    uno::Any any = xRowProperties->getPropertyValue(SC_UNONAME_OHEIGHT);
+                    bool bOptionalHeight = false;
+                    any >>= bOptionalHeight;
+                    if (bOptionalHeight)
+                    {
+                        // Save this row for later height update
+                        std::vector<ScDocRowHeightUpdater::TabRanges>& rRecalcRanges = rXMLImport.GetRecalcRowRanges();
+                        while (static_cast<SCTAB>(rRecalcRanges.size()) <= nSheet)
+                        {
+                            rRecalcRanges.emplace_back(0);
+                        }
+                        rRecalcRanges.at(nSheet).mnTab = nSheet;
+                        rRecalcRanges.at(nSheet).mpRanges->setTrue(nFirstRow, nCurrentRow);
+                    }
                 }
             }
         }
