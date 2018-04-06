@@ -99,15 +99,15 @@ private:
     Image                                   maIMGLineStyle9;
 
     // BorderStyle defines
-    sal_uInt16                              mnIn;
-    sal_uInt16                              mnOut;
-    sal_uInt16                              mnDis;
-    sal_uInt16                              mnTLBRIn;
-    sal_uInt16                              mnTLBROut;
-    sal_uInt16                              mnTLBRDis;
-    sal_uInt16                              mnBLTRIn;
-    sal_uInt16                              mnBLTROut;
-    sal_uInt16                              mnBLTRDis;
+    sal_uInt16                              mnInWidth;
+    sal_uInt16                              mnOutWidth;
+    sal_uInt16                              mnDistance;
+    sal_uInt16                              mnDiagTLBRInWidth;
+    sal_uInt16                              mnDiagTLBROutWidth;
+    sal_uInt16                              mnDiagTLBRDistance;
+    sal_uInt16                              mnDiagBLTRInWidth;
+    sal_uInt16                              mnDiagBLTROutWidth;
+    sal_uInt16                              mnDiagBLTRDistance;
 
     bool                                    mbBorderStyleAvailable : 1;
 
@@ -122,8 +122,8 @@ private:
     bool                                    mbOuterBorder : 1; // mbLeft || mbRight || mbTop || mbBottom
     bool                                    mbInnerBorder : 1; // mbVer || mbHor || bLeft || bRight || bTop || bBottom
 
-    bool                                    mbTLBR : 1;
-    bool                                    mbBLTR : 1;
+    bool                                    mbDiagTLBR : 1;
+    bool                                    mbDiagBLTR : 1;
 
     // popups
     VclPtr<CellLineStylePopup>              mxCellLineStylePopup;
