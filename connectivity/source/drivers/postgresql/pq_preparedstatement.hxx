@@ -83,8 +83,8 @@ private:
     OString m_stmt;
     OString m_executedStatement;
     ::rtl::Reference< comphelper::RefCountedMutex > m_xMutex;
-    OStringVector m_vars;
-    OStringVector m_splittedStatement;
+    std::vector< OString > m_vars;
+    std::vector< OString > m_splittedStatement;
     bool  m_multipleResultAvailable;
     sal_Int32 m_multipleResultUpdateCount;
     sal_Int32 m_lastOidInserted;

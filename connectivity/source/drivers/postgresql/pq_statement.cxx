@@ -483,7 +483,7 @@ bool executePostgresCommand( const OString & cmd, struct CommandData *data )
         // otherwise, don't
         OUString table, schema;
         std::vector< OUString > sourceTableKeys;
-        OStringVector vec;
+        std::vector< OString > vec;
         tokenizeSQL( cmd, vec );
         OUString sourceTable =
             OStringToOUString(
