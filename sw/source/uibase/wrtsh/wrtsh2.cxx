@@ -528,8 +528,9 @@ void LoadURL( SwViewShell& rVSh, const OUString& rURL, LoadUrlFlags nFilter,
             sFileURL = aURL.GetMainURL( INetURLObject::DecodeMechanism::Unambiguous );
     }
 
-    // We are doing tiledRendering, let the client handles the URL loading.
-    if (comphelper::LibreOfficeKit::isActive())
+    // We are doing tiledRendering, let the client handles the URL loading,
+    // unless we are jumping to a TOC mark.
+    if (comphelper::LibreOfficeKit::isActive() && !rURL.startsWith("#"))
     {
         rVSh.GetSfxViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_HYPERLINK_CLICKED, sFileURL.toUtf8().getStr());
         return;
@@ -564,7 +565,7 @@ void LoadURL( SwViewShell& rVSh, const OUString& rURL, LoadUrlFlags nFilter,
     //#39076# Silent can be removed accordingly to SFX.
     SfxBoolItem aBrowse( SID_BROWSE, true );
 
-    if( nFilter & LoadUrlFlags::NewView )
+    if ((nFilter & LoadUrlFlags::NewView) && !comphelper::LibreOfficeKit::isActive())
         aTargetFrameName.SetValue( "_blank" );
 
     const SfxPoolItem* aArr[] = {
