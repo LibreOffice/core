@@ -382,10 +382,10 @@ void SwDocShell::ExecStyleSheet( SfxRequest& rReq )
                 {
                     case SID_STYLE_NEW_BY_EXAMPLE:
                     {
-                        VclPtrInstance<SfxNewStyleDlg> pDlg( nullptr, *GetStyleSheetPool());
-                        if(RET_OK == pDlg->Execute())
+                        SfxNewStyleDlg aDlg(GetView()->GetViewFrame()->GetWindow().GetFrameWeld(), *GetStyleSheetPool());
+                        if (aDlg.run() == RET_OK)
                         {
-                            aParam = pDlg->GetName();
+                            aParam = aDlg.GetName();
                             rReq.AppendItem(SfxStringItem(nSlot, aParam));
                         }
                     }
