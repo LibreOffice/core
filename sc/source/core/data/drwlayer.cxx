@@ -729,8 +729,12 @@ void ScDrawLayer::ResizeLastRectFromAnchor(const SdrObject* pObj, ScDrawObjData&
                 // Reduce offset also when shrinking
                 if (!bIsGrowingLarger)
                 {
-                    aRect.setX(rtl::math::round(static_cast<double>(aRect.getX()) * fWidthFactor));
-                    aRect.setY(rtl::math::round(static_cast<double>(aRect.getY()) * fHeightFactor));
+                    Point aAvailableSpaceInCell = Point(aRect.getX() - aLastCellRect.TopLeft().X(),
+                                                        aRect.getY() - aLastCellRect.TopLeft().Y());
+                    aRect.setX(rtl::math::round(static_cast<double>(aRect.getX())
+                                                + aAvailableSpaceInCell.X() * fWidthFactor));
+                    aRect.setY(rtl::math::round(static_cast<double>(aRect.getY())
+                                                + aAvailableSpaceInCell.Y() * fHeightFactor));
                 }
             }
         }
