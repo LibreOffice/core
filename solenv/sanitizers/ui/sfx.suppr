@@ -7,3 +7,4 @@ sfx2/uiconfig/ui/optprintpage.ui://GtkSpinButton[@id='reducegradstep'] no-labell
 sfx2/uiconfig/ui/templatecategorydlg.ui://GtkLabel[@id='select_label'] orphan-label
 sfx2/uiconfig/ui/templatecategorydlg.ui://GtkLabel[@id='create_label'] orphan-label
 sfx2/uiconfig/ui/templatecategorydlg.ui://GtkEntry[@id='category_entry'] no-labelled-by
+sfx2/uiconfig/ui/newstyle.ui://GtkEntry[@id='entry'] no-labelled-by

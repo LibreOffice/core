@@ -29,71 +29,92 @@
 
 // Private methods ------------------------------------------------------
 
-IMPL_LINK_NOARG( SfxNewStyleDlg, OKClickHdl, Button*, void )
+IMPL_LINK_NOARG(SfxNewStyleDlg, OKClickHdl, weld::Button&, void)
 {
-    OKHdl(*m_pColBox);
-}
-IMPL_LINK_NOARG( SfxNewStyleDlg, OKHdl, ComboBox&, void )
-{
-    const OUString aName( m_pColBox->GetText() );
-    SfxStyleSheetBase* pStyle = rPool.Find( aName, rPool.GetSearchFamily() );
+    const OUString aName(m_xEntry->get_text());
+    SfxStyleSheetBase* pStyle = m_rPool.Find(aName, m_rPool.GetSearchFamily());
     if ( pStyle )
     {
         if ( !pStyle->IsUserDefined() )
         {
-            std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetFrameWeld(),
+            std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(m_xDialog.get(),
                                                                      VclMessageType::Info, VclButtonsType::Ok,
                                                                      SfxResId(STR_POOL_STYLE_NAME)));
             xBox->run();
             return;
         }
 
-        if (RET_YES == xQueryOverwriteBox->run())
-            EndDialog( RET_OK );
+        if (RET_YES == m_xQueryOverwriteBox->run())
+            m_xDialog->response(RET_OK);
     }
     else
-        EndDialog( RET_OK );
+        m_xDialog->response(RET_OK);
 }
 
-IMPL_LINK( SfxNewStyleDlg, ModifyHdl, Edit&, rBox, void )
+IMPL_LINK(SfxNewStyleDlg, OKHdl, weld::TreeView&, rView, void)
 {
-    m_pOKBtn->Enable( !rBox.GetText().replaceAll(" ", "").isEmpty() );
+    m_xEntry->set_text(rView.get_selected_text());
+    OKClickHdl(*m_xOKBtn);
 }
 
-SfxNewStyleDlg::SfxNewStyleDlg( vcl::Window* pParent, SfxStyleSheetBasePool& rInPool )
-    : ModalDialog(pParent, "CreateStyleDialog", "sfx/ui/newstyle.ui")
-    , xQueryOverwriteBox(Application::CreateMessageDialog(GetFrameWeld(), VclMessageType::Question, VclButtonsType::YesNo,
-                                                                     SfxResId(STR_QUERY_OVERWRITE)))
-    , rPool(rInPool)
+IMPL_LINK(SfxNewStyleDlg, ClickHdl, weld::TreeView&, rView, void)
 {
-    get(m_pColBox, "stylename");
-    m_pColBox->set_width_request(m_pColBox->approximate_char_width() * 25);
-    m_pColBox->set_height_request(m_pColBox->GetTextHeight() * 10);
-    get(m_pOKBtn, "ok");
+    m_xEntry->set_text(rView.get_selected_text());
+}
 
-    m_pOKBtn->SetClickHdl(LINK(this, SfxNewStyleDlg, OKClickHdl));
-    m_pColBox->SetModifyHdl(LINK(this, SfxNewStyleDlg, ModifyHdl));
-    m_pColBox->SetDoubleClickHdl(LINK(this, SfxNewStyleDlg, OKHdl));
-
-    SfxStyleSheetBase *pStyle = rPool.First();
-    while ( pStyle )
+IMPL_LINK(SfxNewStyleDlg, ModifyHdl, weld::Entry&, rBox, void)
+{
+    OUString sText(rBox.get_text());
+    m_xOKBtn->set_sensitive(!sText.replaceAll(" ", "").isEmpty());
+    int nExists = m_xColBox->find_text(sText);
+    if (nExists != -1)
     {
-        m_pColBox->InsertEntry(pStyle->GetName());
-        pStyle = rPool.Next();
+        m_xColBox->select(nExists);
+        return;
+    }
+
+    m_xColBox->select(-1);
+    if (sText.isEmpty())
+        return;
+
+    int nCount = m_xColBox->n_children();
+    for (int i = 0; i < nCount; ++i)
+    {
+        if (m_xColBox->get_text(i).startsWith(sText))
+        {
+            m_xColBox->select(i);
+            break;
+        }
+    }
+}
+
+SfxNewStyleDlg::SfxNewStyleDlg(weld::Window* pParent, SfxStyleSheetBasePool& rInPool)
+    : GenericDialogController(pParent, "sfx/ui/newstyle.ui", "CreateStyleDialog")
+    , m_rPool(rInPool)
+    , m_xEntry(m_xBuilder->weld_entry("entry"))
+    , m_xColBox(m_xBuilder->weld_tree_view("styles"))
+    , m_xOKBtn(m_xBuilder->weld_button("ok"))
+    , m_xQueryOverwriteBox(Application::CreateMessageDialog(m_xDialog.get(), VclMessageType::Question, VclButtonsType::YesNo,
+                                                                           SfxResId(STR_QUERY_OVERWRITE)))
+{
+    m_xColBox->set_size_request(m_xColBox->get_approximate_digit_width() * 20,
+                                m_xColBox->get_height_rows(8));
+
+    m_xOKBtn->connect_clicked(LINK(this, SfxNewStyleDlg, OKClickHdl));
+    m_xEntry->connect_changed(LINK(this, SfxNewStyleDlg, ModifyHdl));
+    m_xColBox->connect_row_activated(LINK(this, SfxNewStyleDlg, OKHdl));
+    m_xColBox->connect_changed(LINK(this, SfxNewStyleDlg, ClickHdl));
+
+    SfxStyleSheetBase *pStyle = m_rPool.First();
+    while (pStyle)
+    {
+        m_xColBox->append_text(pStyle->GetName());
+        pStyle = m_rPool.Next();
     }
 }
 
 SfxNewStyleDlg::~SfxNewStyleDlg()
 {
-    disposeOnce();
-}
-
-void SfxNewStyleDlg::dispose()
-{
-    xQueryOverwriteBox.reset();
-    m_pColBox.clear();
-    m_pOKBtn.clear();
-    ModalDialog::dispose();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
