@@ -32,6 +32,17 @@ public:
 
     virtual void run() override
     {
+        std::string fn(compiler.getSourceManager()
+                           .getFileEntryForID(compiler.getSourceManager().getMainFileID())
+                           ->getName());
+        loplugin::normalizeDotDotInFilePath(fn);
+        // can't change these because we pass them down to the SfxItemPool stuff
+        if (fn == SRCDIR "/sc/source/core/data/docpool.cxx")
+            return;
+        // this just too clever for me
+        if (fn == SRCDIR "/sc/source/core/tool/chgtrack.cxx")
+            return;
+
         TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());
     }
 

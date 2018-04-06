@@ -75,8 +75,8 @@ class ScXMLTableRowCellContext : public ScXMLImportContext
     FieldsType maFields;
 
     std::unique_ptr< ScXMLAnnotationData > mxAnnotationData;
-    ScMyImpDetectiveObjVec* pDetectiveObjVec;
-    ScMyImpCellRangeSource* pCellRangeSource;
+    std::unique_ptr< ScMyImpDetectiveObjVec > pDetectiveObjVec;
+    std::unique_ptr< ScMyImpCellRangeSource > pCellRangeSource;
     double      fValue;
     SCROW       nMergedRows, nMatrixRows, nRepeatedRows;
     SCCOL       nMergedCols, nMatrixCols, nColsRepeated;
