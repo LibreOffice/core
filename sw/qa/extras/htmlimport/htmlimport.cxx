@@ -17,6 +17,10 @@
 #include <docsh.hxx>
 #include <editsh.hxx>
 #include <ndgrf.hxx>
+#include <ndtxt.hxx>
+#include <txatbase.hxx>
+#include <fmtflcnt.hxx>
+#include <fmtfsize.hxx>
 
 class HtmlImportTest : public SwModelTestBase
 {
@@ -114,6 +118,18 @@ DECLARE_HTMLIMPORT_TEST(testTableBorder1px, "table_border_1px.html")
     CPPUNIT_ASSERT_BORDER_EQUAL(table::BorderLine2(0x808080,0,2,4,3,2), getProperty<table::BorderLine2>(xCellB2,"BottomBorder"));
     CPPUNIT_ASSERT_BORDER_EQUAL(table::BorderLine2(0x808080,0,2,4,3,2), getProperty<table::BorderLine2>(xCellB2,"LeftBorder"));
     CPPUNIT_ASSERT_BORDER_EQUAL(table::BorderLine2(0x808080,9,9,9,3,26), getProperty<table::BorderLine2>(xCellB2,"RightBorder"));
+}
+
+DECLARE_HTMLIMPORT_TEST(testImageWidthAuto, "image-width-auto.html")
+{
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+    SwTextAttr const*const pAttr(pTextDoc->GetDocShell()->GetDoc()->GetEditShell()->
+        GetCrsr()->GetNode().GetTextNode()->GetTextAttrForCharAt(0, RES_TXTATR_FLYCNT));
+    CPPUNIT_ASSERT(pAttr);
+    SwFrameFormat const*const pFmt(pAttr->GetFlyCnt().GetFrameFormat());
+    SwFormatFrmSize const& rSize = static_cast<const SwFormatFrmSize&>(pFmt->GetFormatAttr( RES_FRM_SIZE ));
+    CPPUNIT_ASSERT_EQUAL(Size(1835, 560), rSize.GetSize());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
