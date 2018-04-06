@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_cccb5f71",
+        "filename": "sc/source/ui/view/cellsh1.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2302,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2018-04-06T08:20:50Z",
+      "side": 1,
+      "message": "Can you try to simplify this loop, it is okay but tad too verbose. \nScRangeList provides iterators so perhaps you can use it in combo w/ some find_if, or there is even ScRangeList::Find that could be of use",
+      "revId": "6eff7d63a5920e1a7299710f0fd28d5d37effc37",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
