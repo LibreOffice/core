@@ -264,8 +264,7 @@
           <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
           <value xml:lang="en-US">.uno:Repeat</value>
         </prop>
-      </node>
-      <node oor:name="Z_SHIFT_MOD1" oor:op="replace">
+      </node>      <node oor:name="Z_SHIFT_MOD1" oor:op="replace">
         <prop oor:name="Command">
           <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
           <value xml:lang="en-US">.uno:Redo</value>
@@ -812,6 +811,12 @@
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="en-US">.uno:Navigator</value>
+          </prop>
+        </node>
+        <node oor:name="F5_MOD1" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="en-US">.uno:Sidebar</value>
           </prop>
         </node>
         <node oor:name="F5_SHIFT" oor:op="replace">
@@ -1613,6 +1618,12 @@
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="en-US">.uno:Navigator</value>
+          </prop>
+        </node>
+        <node oor:name="F5_MOD1" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="en-US">.uno:Sidebar</value>
           </prop>
         </node>
         <node oor:name="F7" oor:op="replace">
@@ -2901,6 +2912,12 @@
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="en-US">.uno:Presentation</value>
+          </prop>
+        </node>
+        <node oor:name="F5_MOD1" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="en-US">.uno:Sidebar</value>
           </prop>
         </node>
         <node oor:name="F5_SHIFT" oor:op="replace">
@@ -5997,6 +6014,12 @@
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="en-US">.uno:Navigator</value>
+          </prop>
+        </node>
+        <node oor:name="F5_MOD1" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="en-US">.uno:Sidebar</value>
           </prop>
         </node>
         <node oor:name="F5_SHIFT" oor:op="replace">
