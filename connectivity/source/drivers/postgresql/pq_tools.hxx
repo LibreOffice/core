@@ -98,10 +98,10 @@ void disposeNoThrow( const css::uno::Reference< css::uno::XInterface > & r );
 void disposeObject( const css::uno::Reference< css::uno::XInterface > & r );
 
 OUString extractTableFromInsert( const OUString & sql );
-OString extractSingleTableFromSelect( const OStringVector &vec );
+OString extractSingleTableFromSelect( const std::vector< OString > &vec );
 
-void tokenizeSQL( const OString & sql, OStringVector &vec  );
-void splitSQL( const OString & sql, OStringVector &vec  );
+void tokenizeSQL( const OString & sql, std::vector< OString > &vec  );
+void splitSQL( const OString & sql, std::vector< OString > &vec  );
 std::vector< sal_Int32 > parseIntArray( const OUString & str );
 /// @throws css::sdbc::SQLException
 std::vector< css::uno::Any > parseArray( const OUString & str );

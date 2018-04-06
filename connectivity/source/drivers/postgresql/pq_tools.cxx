@@ -403,7 +403,7 @@ static bool isOperator( char c )
     return ret;
 }
 
-void splitSQL( const OString & sql, OStringVector &vec )
+void splitSQL( const OString & sql, std::vector< OString > &vec )
 {
     int length = sql.getLength();
 
@@ -463,7 +463,7 @@ void splitSQL( const OString & sql, OStringVector &vec )
 
 }
 
-void tokenizeSQL( const OString & sql, OStringVector &vec  )
+void tokenizeSQL( const OString & sql, std::vector< OString > &vec  )
 {
     int length = sql.getLength();
 
@@ -549,7 +549,7 @@ void tokenizeSQL( const OString & sql, OStringVector &vec  )
 
 void splitConcatenatedIdentifier( const OUString & source, OUString *first, OUString *second)
 {
-    OStringVector vec;
+    std::vector< OString > vec;
     tokenizeSQL( OUStringToOString( source, RTL_TEXTENCODING_UTF8 ), vec );
     switch (vec.size())
     {
@@ -731,7 +731,7 @@ void fillAttnum2attnameMap(
     }
 }
 
-OString extractSingleTableFromSelect( const OStringVector &vec )
+OString extractSingleTableFromSelect( const std::vector< OString > &vec )
 {
     OString ret;
 
@@ -1065,7 +1065,7 @@ void bufferKey2TableConstraint(
 
 void extractNameValuePairsFromInsert( String2StringMap & map, const OString & lastQuery )
 {
-    OStringVector vec;
+    std::vector< OString > vec;
     tokenizeSQL( lastQuery, vec  );
 
     int nSize = vec.size();
@@ -1091,7 +1091,7 @@ void extractNameValuePairsFromInsert( String2StringMap & map, const OString & la
             tableName = vec[n];
         }
 
-        OStringVector names;
+        std::vector< OString > names;
         n ++;
         if( vec[n].equalsIgnoreAsciiCase( "(" ) )
         {
@@ -1115,7 +1115,7 @@ void extractNameValuePairsFromInsert( String2StringMap & map, const OString & la
             {
                 n +=2;
 //                 printf( "3\n" );
-                for ( OStringVector::size_type i = 0 ; i < names.size() && nSize > n ; i ++ )
+                for (std::vector< OString >::size_type i = 0 ; i < names.size() && nSize > n ; i ++ )
                 {
                     map[names[i]] = vec[n];
                     if( nSize > n+1 && vec[n+1].equalsIgnoreAsciiCase(",") )

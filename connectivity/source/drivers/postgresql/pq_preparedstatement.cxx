@@ -201,7 +201,7 @@ PreparedStatement::PreparedStatement(
             }
         }
     }
-    m_vars = OStringVector ( elements );
+    m_vars = std::vector< OString >( elements );
 }
 
 PreparedStatement::~PreparedStatement()
@@ -322,7 +322,7 @@ sal_Bool PreparedStatement::execute( )
 
     OStringBuffer buf( m_stmt.getLength() *2 );
 
-    OStringVector::size_type vars = 0;
+    std::vector< OString >::size_type vars = 0;
     for(OString & str : m_splittedStatement)
     {
         // LEM TODO: instead of this manual mucking with SQL
@@ -654,7 +654,7 @@ void PreparedStatement::setArray(
 void PreparedStatement::clearParameters(  )
 {
     MutexGuard guard(m_xMutex->GetMutex() );
-    m_vars = OStringVector ( m_vars.size() );
+    m_vars = std::vector< OString >( m_vars.size() );
 }
 
 Any PreparedStatement::getWarnings(  )
