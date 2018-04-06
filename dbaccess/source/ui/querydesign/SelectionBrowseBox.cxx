@@ -1614,8 +1614,9 @@ OTableFieldDescRef OSelectionBrowseBox::FindFirstFreeCol(sal_uInt16& _rColumnPos
     for (auto const& field : getFields())
     {
         ++_rColumnPosition;
-        if ( field.is() && field->IsEmpty() )
-            return field;
+        OTableFieldDescRef pEntry = field;
+        if ( pEntry.is() && pEntry->IsEmpty() )
+            return pEntry;
     }
 
     return nullptr;
@@ -1645,19 +1646,20 @@ void OSelectionBrowseBox::AddGroupBy( const OTableFieldDescRef& rInfo )
     bool bAllFieldsSearched = true;
     for (auto const& field : getFields())
     {
+        pEntry = field;
         OSL_ENSURE(pEntry.is(),"OTableFieldDescRef was null!");
 
-        const OUString   aField = field->GetField();
-        const OUString   aAlias = field->GetAlias();
+        const OUString   aField = pEntry->GetField();
+        const OUString   aAlias = pEntry->GetAlias();
 
         if (bCase(aField,rInfo->GetField()) &&
             bCase(aAlias,rInfo->GetAlias()) &&
-            field->GetFunctionType() == rInfo->GetFunctionType() &&
-            field->GetFunction() == rInfo->GetFunction())
+            pEntry->GetFunctionType() == rInfo->GetFunctionType() &&
+            pEntry->GetFunction() == rInfo->GetFunction())
         {
-            if ( field->isNumericOrAggreateFunction() && rInfo->IsGroupBy() )
+            if ( pEntry->isNumericOrAggreateFunction() && rInfo->IsGroupBy() )
             {
-                field->SetGroupBy(false);
+                pEntry->SetGroupBy(false);
                 // we do want to consider that bAllFieldsSearched still true here
                 // bAllFieldsSearched = false;
                 break;
@@ -1690,10 +1692,11 @@ void OSelectionBrowseBox::DuplicateConditionLevel( const sal_uInt16 nLevel)
     const sal_uInt16 nNewLevel = nLevel +1;
     for (auto const& field : getFields())
     {
-        OUString sValue = field->GetCriteria(nLevel);
+        OTableFieldDescRef pEntry = field;
+        OUString sValue = pEntry->GetCriteria(nLevel);
         if ( !sValue.isEmpty() )
         {
-            field->SetCriteria( nNewLevel, sValue);
+            pEntry->SetCriteria( nNewLevel, sValue);
             if ( nNewLevel == (m_nVisibleCount-BROW_CRIT1_ROW-1) )
             {
                 RowInserted( GetRowCount()-1 );
@@ -1719,25 +1722,26 @@ void OSelectionBrowseBox::AddCondition( const OTableFieldDescRef& rInfo, const O
     bool bAllFieldsSearched = true;
     for (auto const& field : getFields())
     {
-        const OUString   aField = field->GetField();
-        const OUString   aAlias = field->GetAlias();
+        OTableFieldDescRef pEntry = field;
+        const OUString   aField = pEntry->GetField();
+        const OUString   aAlias = pEntry->GetAlias();
 
         if (bCase(aField,rInfo->GetField()) &&
             bCase(aAlias,rInfo->GetAlias()) &&
-            field->GetFunctionType() == rInfo->GetFunctionType() &&
-            field->GetFunction() == rInfo->GetFunction() &&
-            field->IsGroupBy() == rInfo->IsGroupBy() )
+            pEntry->GetFunctionType() == rInfo->GetFunctionType() &&
+            pEntry->GetFunction() == rInfo->GetFunction() &&
+            pEntry->IsGroupBy() == rInfo->IsGroupBy() )
         {
-            if ( field->isNumericOrAggreateFunction() && rInfo->IsGroupBy() )
-                field->SetGroupBy(false);
+            if ( pEntry->isNumericOrAggreateFunction() && rInfo->IsGroupBy() )
+                pEntry->SetGroupBy(false);
             else
             {
-                if(!m_bGroupByUnRelated && field->IsGroupBy())
-                    field->SetVisible();
+                if(!m_bGroupByUnRelated && pEntry->IsGroupBy())
+                    pEntry->SetVisible();
             }
-            if (field->GetCriteria(nLevel).isEmpty() )
+            if (pEntry->GetCriteria(nLevel).isEmpty() )
             {
-                field->SetCriteria( nLevel, rValue);
+                pEntry->SetCriteria( nLevel, rValue);
                 if(nLevel == (m_nVisibleCount-BROW_CRIT1_ROW-1))
                 {
                     RowInserted( GetRowCount()-1 );
@@ -1750,7 +1754,7 @@ void OSelectionBrowseBox::AddCondition( const OTableFieldDescRef& rInfo, const O
             }
             if ( _bAddOrOnOneLine )
             {
-                pLastEntry = field;
+                pLastEntry = pEntry;
             }
         }
     }
@@ -1807,8 +1811,9 @@ void OSelectionBrowseBox::AddOrder( const OTableFieldDescRef& rInfo, const EOrde
     bool bAllFieldsSearched = true;
     for (auto const& field : getFields())
     {
-        OUString aField = field->GetField();
-        OUString aAlias = field->GetAlias();
+        pEntry = field;
+        OUString aField = pEntry->GetField();
+        OUString aAlias = pEntry->GetAlias();
 
         if (bCase(aField,rInfo->GetField()) &&
             bCase(aAlias,rInfo->GetAlias()))
@@ -1823,8 +1828,8 @@ void OSelectionBrowseBox::AddOrder( const OTableFieldDescRef& rInfo, const EOrde
             else
             {
                 if ( !m_bOrderByUnRelated )
-                    field->SetVisible();
-                field->SetOrderDir( eDir );
+                    pEntry->SetVisible();
+                pEntry->SetOrderDir( eDir );
                 m_nLastSortColumn = nPos;
             }
             bAllFieldsSearched = false;

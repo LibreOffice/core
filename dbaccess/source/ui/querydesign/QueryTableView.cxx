@@ -403,7 +403,8 @@ void OQueryTableView::AddTabWin(const OUString& _rComposedName, const OUString& 
     bool bFoundElem = false;
     for (auto const& elem : rWindowData)
     {
-        if (elem && elem->GetWinName() == strAlias && elem->GetComposedName() == _rComposedName && elem->GetTableName() == _rTableName)
+        pNewTabWinData = elem;
+        if (pNewTabWinData && pNewTabWinData->GetWinName() == strAlias && pNewTabWinData->GetComposedName() == _rComposedName && pNewTabWinData->GetTableName() == _rTableName)
         {
             bFoundElem = true;
             break;
