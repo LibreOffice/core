@@ -598,6 +598,9 @@ cmd/lc_insertcurrenttime.png cmd/lc_timefield.png
 cmd/sc_insertobjectchartfromfile.png cmd/sc_open.png
 cmd/lc_insertobjectchartfromfile.png cmd/lc_open.png
 
+cmd/sc_pageformatdialog.png cmd/sc_pagedialog.png
+cmd/lc_pageformatdialog.png cmd/lc_pagedialog.png
+
 # Shapes
 cmd/lc_basicshapes.png cmd/lc_basicshapes.diamond.png
 cmd/lc_basicshapes.ellipse.png cmd/lc_ellipse.png
