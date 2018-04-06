@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_6c127364",
+        "filename": "basctl/source/basicide/basides1.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 935,
+      "author": {
+        "id": 1001086
+      },
+      "writtenOn": "2018-04-06T14:07:30Z",
+      "side": 1,
+      "message": "I know how it should be corrected",
+      "range": {
+        "startLine": 933,
+        "startChar": 16,
+        "endLine": 935,
+        "endChar": 66
+      },
+      "revId": "5c5aa7b9effd8f91517f561d655d2ac676392785",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
