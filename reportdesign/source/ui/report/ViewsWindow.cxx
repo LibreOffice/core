@@ -1015,11 +1015,9 @@ void OViewsWindow::BegDragObj_createInvisibleObjectAtPosition(const tools::Recta
 
         if ( &rView != &_rSection )
         {
-            SdrObject *pNewObj = new SdrUnoObj(
-                rView.getSdrModelFromSdrView(),
-                "com.sun.star.form.component.FixedText");
-
+            SdrObject *pNewObj = new SdrUnoObj("com.sun.star.form.component.FixedText");
             pNewObj->SetLogicRect(_aRect);
+
             pNewObj->Move(Size(0, aNewPos.Y()));
             bool bChanged = rView.GetModel()->IsChanged();
             rReportSection.getPage()->InsertObject(pNewObj);

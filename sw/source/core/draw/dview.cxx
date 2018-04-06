@@ -94,11 +94,8 @@ static const SwFrame *lcl_FindAnchor( const SdrObject *pObj, bool bAll )
     return nullptr;
 }
 
-SwDrawView::SwDrawView(
-    SwViewShellImp& rI,
-    FmFormModel& rFmFormModel,
-    OutputDevice* pOutDev)
-:   FmFormView(rFmFormModel, pOutDev),
+SwDrawView::SwDrawView( SwViewShellImp &rI, SdrModel *pMd, OutputDevice *pOutDev) :
+    FmFormView( static_cast<FmFormModel*>(pMd), pOutDev ),
     m_rImp( rI )
 {
     SetPageVisible( false );

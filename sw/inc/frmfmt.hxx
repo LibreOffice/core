@@ -38,8 +38,6 @@ class SwContact;
 class SdrObject;
 class SwRootFrame;
 class SwFlyDrawContact;
-class SdrModel;
-
 namespace sw
 {
     class DocumentLayoutManager;

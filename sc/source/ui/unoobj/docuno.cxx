@@ -373,18 +373,6 @@ void ScModelObj::CreateAndSet(ScDocShell* pDocSh)
         pDocSh->SetBaseModel( new ScModelObj(pDocSh) );
 }
 
-SdrModel* ScModelObj::getSdrModelFromUnoModel() const
-{
-    ScDocument& rDoc(pDocShell->GetDocument());
-
-    if(!rDoc.GetDrawLayer())
-    {
-        rDoc.InitDrawLayer();
-    }
-
-    return rDoc.GetDrawLayer();
-}
-
 ScModelObj::ScModelObj( ScDocShell* pDocSh ) :
     SfxBaseModel( pDocSh ),
     aPropSet( lcl_GetDocOptPropertyMap() ),
@@ -1959,9 +1947,7 @@ void SAL_CALL ScModelObj::render( sal_Int32 nSelRenderer, const uno::Any& aSelec
 
     if( pModel )
     {
-        aDrawViewKeeper.mpDrawView = new FmFormView(
-            *pModel,
-            pDev);
+        aDrawViewKeeper.mpDrawView = new FmFormView( pModel, pDev );
         aDrawViewKeeper.mpDrawView->ShowSdrPage(aDrawViewKeeper.mpDrawView->GetModel()->GetPage(nTab));
         aDrawViewKeeper.mpDrawView->SetPrintPreview();
     }

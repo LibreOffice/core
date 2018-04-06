@@ -90,7 +90,7 @@ enum class SdrCrookMode {
 // #114409#-1 Migrate PageOrigin
 class ImplPageOriginOverlay;
 
-class SVX_DLLPUBLIC SdrSnapView : public SdrPaintView
+class SVX_DLLPUBLIC SdrSnapView: public SdrPaintView
 {
 protected:
     // #114409#-1 Migrate PageOrigin
@@ -127,10 +127,7 @@ protected:
 
 protected:
     // #i71538# make constructors of SdrView sub-components protected to avoid incomplete incarnations which may get casted to SdrView
-    SdrSnapView(
-        SdrModel& rSdrModel,
-        OutputDevice* pOut);
-
+    SdrSnapView(SdrModel* pModel1, OutputDevice* pOut);
     virtual ~SdrSnapView() override;
 
 public:

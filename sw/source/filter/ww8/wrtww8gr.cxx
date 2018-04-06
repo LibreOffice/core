@@ -67,8 +67,6 @@
 #include <docsh.hxx>
 #include <cstdio>
 #include <o3tl/enumrange.hxx>
-#include <IDocumentDrawModelAccess.hxx>
-#include <drawdoc.hxx>
 
 using namespace ::com::sun::star;
 
@@ -141,18 +139,7 @@ bool WW8Export::TestOleNeedsGraphic(const SwAttrSet& rSet,
         if ( pOLENd )
             nAspect = pOLENd->GetAspect();
         SdrOle2Obj *pRet = SvxMSDffManager::CreateSdrOLEFromStorage(
-            *m_pDoc->getIDocumentDrawModelAccess().GetOrCreateDrawModel(),
-            rStorageName,
-            xObjStg,
-            m_pDoc->GetDocStorage(),
-            aGraph,
-            aRect,
-            tools::Rectangle(),
-            nullptr,
-            nErr,
-            0,
-            nAspect,
-            m_pWriter->GetBaseURL());
+            rStorageName,xObjStg,m_pDoc->GetDocStorage(),aGraph,aRect,tools::Rectangle(),nullptr,nErr,0,nAspect, m_pWriter->GetBaseURL());
 
         if (pRet)
         {

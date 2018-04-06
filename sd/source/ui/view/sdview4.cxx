@@ -116,10 +116,7 @@ SdrGrafObj* View::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
         }
         else
         {
-            pNewGrafObj = new SdrGrafObj(
-                getSdrModelFromSdrView(),
-                rGraphic,
-                pPickObj->GetLogicRect());
+            pNewGrafObj = new SdrGrafObj( rGraphic, pPickObj->GetLogicRect() );
             pNewGrafObj->SetEmptyPresObj(true);
         }
 
@@ -192,10 +189,7 @@ SdrGrafObj* View::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
                                                 MapMode( MapUnit::Map100thMM ) );
         }
 
-        pNewGrafObj = new SdrGrafObj(
-            getSdrModelFromSdrView(),
-            rGraphic,
-            ::tools::Rectangle(rPos, aSize));
+        pNewGrafObj = new SdrGrafObj( rGraphic, ::tools::Rectangle( rPos, aSize ) );
         SdrPage* pPage = pPV->GetPage();
         Size aPageSize( pPage->GetSize() );
         aPageSize.AdjustWidth( -(pPage->GetLeftBorder() + pPage->GetRightBorder()) );
@@ -335,9 +329,7 @@ SdrMediaObj* View::InsertMediaObj( const OUString& rMediaURL, const OUString& rM
             pUserCall = pPickObj->GetUserCall(); // ReplaceObjectAtView can free pPickObj
         }
 
-        pNewMediaObj = new SdrMediaObj(
-            getSdrModelFromSdrView(),
-            aRect);
+        pNewMediaObj = new SdrMediaObj( aRect );
 
         bool bIsPres = false;
         if( pPickObj )
@@ -537,11 +529,7 @@ IMPL_LINK_NOARG(View, DropInsertFileHdl, Timer *, void)
 
                             aRect = ::tools::Rectangle( maDropPos, aSize );
 
-                            SdrOle2Obj* pOleObj = new SdrOle2Obj(
-                                getSdrModelFromSdrView(),
-                                svt::EmbeddedObjectRef(xObj, nAspect),
-                                aName,
-                                aRect);
+                            SdrOle2Obj* pOleObj = new SdrOle2Obj( svt::EmbeddedObjectRef( xObj, nAspect ), aName, aRect );
                             SdrInsertFlags nOptions = SdrInsertFlags::SETDEFLAYER;
 
                             if (mpViewSh != nullptr)

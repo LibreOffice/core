@@ -66,22 +66,14 @@ public:
      *
      * Constructor of a rectangular drawing object
      */
-    SdrRectObj(SdrModel& rSdrModel);
-    SdrRectObj(
-        SdrModel& rSdrModel,
-        const tools::Rectangle& rRect);
+    SdrRectObj();
+    SdrRectObj(const tools::Rectangle& rRect);
 
     SdrRectObj& operator=(const SdrRectObj& rCopy);
 
     // Constructor of a text frame
-    SdrRectObj(
-        SdrModel& rSdrModel,
-        SdrObjKind eNewTextKind);
-    SdrRectObj(
-        SdrModel& rSdrModel,
-        SdrObjKind eNewTextKind,
-        const tools::Rectangle& rRect);
-
+    SdrRectObj(SdrObjKind eNewTextKind);
+    SdrRectObj(SdrObjKind eNewTextKind, const tools::Rectangle& rRect);
     virtual ~SdrRectObj() override;
 
     virtual void TakeObjInfo(SdrObjTransformInfoRec& rInfo) const override;
@@ -91,7 +83,7 @@ public:
     virtual OUString TakeObjNameSingul() const override;
     virtual OUString TakeObjNamePlural() const override;
 
-    virtual SdrRectObj* Clone(SdrModel* pTargetModel = nullptr) const override;
+    virtual SdrRectObj* Clone() const override;
     virtual void RecalcSnapRect() override;
     virtual void NbcSetSnapRect(const tools::Rectangle& rRect) override;
     virtual void NbcSetLogicRect(const tools::Rectangle& rRect) override;

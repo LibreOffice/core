@@ -29,27 +29,30 @@ E3DModifySceneSnapRectUpdater::E3DModifySceneSnapRectUpdater(const SdrObject* pO
     mpViewInformation3D(nullptr)
 {
     // Secure old 3D transformation stack before modification
-    if(const E3dObject* pE3dObject = dynamic_cast< const E3dObject* >(pObject))
+    if(pObject)
     {
-        mpScene = pE3dObject->GetScene();
+        const E3dObject* pE3dObject = dynamic_cast< const E3dObject* >(pObject);
 
-        if(mpScene && mpScene->GetScene() == mpScene)
+        if(pE3dObject)
         {
-            // if there is a scene and it's the outmost scene, get current 3D range
-            const sdr::contact::ViewContactOfE3dScene& rVCScene = static_cast< sdr::contact::ViewContactOfE3dScene& >(mpScene->GetViewContact());
-            const basegfx::B3DRange aAllContentRange(rVCScene.getAllContentRange3D());
+            mpScene = pE3dObject->GetScene();
 
-            if(aAllContentRange.isEmpty())
+            if(mpScene && mpScene->GetScene() == mpScene)
             {
-                // no content, nothing to do
-                mpScene = nullptr;
-            }
-            else
-            {
-                // secure current 3D transformation stack
-                mpViewInformation3D.reset(
-                    new drawinglayer::geometry::ViewInformation3D(
-                        rVCScene.getViewInformation3D(aAllContentRange)));
+                // if there is a scene and it's the outmost scene, get current 3D range
+                const sdr::contact::ViewContactOfE3dScene& rVCScene = static_cast< sdr::contact::ViewContactOfE3dScene& >(mpScene->GetViewContact());
+                const basegfx::B3DRange aAllContentRange(rVCScene.getAllContentRange3D());
+
+                if(aAllContentRange.isEmpty())
+                {
+                    // no content, nothing to do
+                    mpScene = nullptr;
+                }
+                else
+                {
+                    // secure current 3D transformation stack
+                    mpViewInformation3D.reset( new drawinglayer::geometry::ViewInformation3D(rVCScene.getViewInformation3D(aAllContentRange)) );
+                }
             }
         }
     }

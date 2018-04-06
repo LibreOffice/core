@@ -65,7 +65,7 @@ bool ConstRectangle::MouseButtonDown(const MouseEvent& rMEvt)
             SdrObject* pObj = m_pView->GetDrawView()->GetCreateObj();
             if (pObj)
             {
-                SfxItemSet aAttr(pObj->getSdrModelFromSdrObject().GetItemPool());
+                SfxItemSet aAttr(pObj->GetModel()->GetItemPool());
                 SwFEShell::SetLineEnds(aAttr, pObj, m_nSlotId);
                 pObj->SetMergedItemSet(aAttr);
             }

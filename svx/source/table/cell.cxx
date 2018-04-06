@@ -392,31 +392,21 @@ rtl::Reference< Cell > Cell::create( SdrTableObj& rTableObj )
 }
 
 
-Cell::Cell(
-    SdrTableObj& rTableObj)
-:   SdrText(rTableObj)
-    ,SvxUnoTextBase( ImplGetSvxUnoOutlinerTextCursorSvxPropertySet() )
-    ,mpPropSet( ImplGetSvxCellPropertySet() )
-    ,mpProperties( new sdr::properties::CellProperties( rTableObj, this ) )
-    ,mnCellContentType( CellContentType_EMPTY )
-    ,mfValue( 0.0 )
-    ,mnError( 0 )
-    ,mbMerged( false )
-    ,mnRowSpan( 1 )
-    ,mnColSpan( 1 )
-    ,mxTable( rTableObj.getTable() )
+Cell::Cell( SdrTableObj& rTableObj )
+: SdrText( rTableObj )
+, SvxUnoTextBase( ImplGetSvxUnoOutlinerTextCursorSvxPropertySet() )
+, mpPropSet( ImplGetSvxCellPropertySet() )
+, mpProperties( new sdr::properties::CellProperties( rTableObj, this ) )
+, mnCellContentType( CellContentType_EMPTY )
+, mfValue( 0.0 )
+, mnError( 0 )
+, mbMerged( false )
+, mnRowSpan( 1 )
+, mnColSpan( 1 )
+, mxTable( rTableObj.getTable() )
 {
-    // Caution: Old SetModel() indirectly did a very necessary thing here,
-    // it created a valid SvxTextEditSource which is needed to bind contained
-    // Text to the UNO API and thus to save/load and more. Added version without
-    // model change.
-    // Also done was (not needed, for reference):
-    //         SetStyleSheet( nullptr, true );
-    //         ForceOutlinerParaObject( OutlinerMode::TextObject );
-    if(nullptr == GetEditSource())
-    {
-        SetEditSource(new SvxTextEditSource(&GetObject(), this));
-    }
+    if( rTableObj.GetModel() )
+        SetModel( rTableObj.GetModel() );
 }
 
 
@@ -449,6 +439,37 @@ void Cell::dispose()
     }
     SetOutlinerParaObject( nullptr );
 }
+
+
+void Cell::SetModel(SdrModel* pNewModel)
+{
+    SvxTextEditSource* pTextEditSource = dynamic_cast< SvxTextEditSource* >( GetEditSource() );
+    if( (GetModel() != pNewModel) || ( pNewModel && !pTextEditSource) )
+    {
+        if( mpProperties )
+        {
+            SfxItemPool* pItemPool = mpProperties->GetObjectItemSet().GetPool();
+
+            // test for correct pool in ItemSet; move to new pool if necessary
+            if( pNewModel && pItemPool && pItemPool != &pNewModel->GetItemPool())
+                mpProperties->MoveToItemPool(pItemPool, &pNewModel->GetItemPool(), pNewModel);
+        }
+
+        if( pTextEditSource )
+        {
+            pTextEditSource->ChangeModel( pNewModel );
+        }
+        else
+        {
+            SetEditSource( new SvxTextEditSource( &GetObject(), this ) );
+        }
+
+        SetStyleSheet( nullptr, true );
+        SdrText::SetModel( pNewModel );
+        ForceOutlinerParaObject( OutlinerMode::TextObject );
+    }
+}
+
 
 void Cell::merge( sal_Int32 nColumnSpan, sal_Int32 nRowSpan )
 {
@@ -516,13 +537,12 @@ void Cell::replaceContentAndFormating( const CellRef& xSourceCell )
     {
         mpProperties->SetMergedItemSet( xSourceCell->GetObjectItemSet() );
         SetOutlinerParaObject( new OutlinerParaObject(*xSourceCell->GetOutlinerParaObject()) );
+
         SdrTableObj& rTableObj = dynamic_cast< SdrTableObj& >( GetObject() );
         SdrTableObj& rSourceTableObj = dynamic_cast< SdrTableObj& >( xSourceCell->GetObject() );
 
-        if(&rSourceTableObj.getSdrModelFromSdrObject() != &rTableObj.getSdrModelFromSdrObject())
+        if(rSourceTableObj.GetModel() != rTableObj.GetModel())
         {
-            // TTTT should not happen - if, then a clone may be needed
-            // Maybe add a assertion here later
             SetStyleSheet( nullptr, true );
         }
     }
@@ -544,13 +564,12 @@ void Cell::copyFormatFrom( const CellRef& xSourceCell )
     if( xSourceCell.is() && mpProperties )
     {
         mpProperties->SetMergedItemSet( xSourceCell->GetObjectItemSet() );
+
         SdrTableObj& rTableObj = dynamic_cast< SdrTableObj& >( GetObject() );
         SdrTableObj& rSourceTableObj = dynamic_cast< SdrTableObj& >( xSourceCell->GetObject() );
 
-        if(&rSourceTableObj.getSdrModelFromSdrObject() != &rTableObj.getSdrModelFromSdrObject())
+        if(rSourceTableObj.GetModel() != rTableObj.GetModel())
         {
-            // TTTT should not happen - if, then a clone may be needed
-            // Maybe add a assertion here later
             SetStyleSheet( nullptr, true );
         }
 
@@ -793,11 +812,10 @@ void Cell::SetOutlinerParaObject( OutlinerParaObject* pTextObject )
 void Cell::AddUndo()
 {
     SdrObject& rObj = GetObject();
-
-    if( rObj.IsInserted() && rObj.getSdrModelFromSdrObject().IsUndoEnabled() )
+    if( rObj.IsInserted() && GetModel() && GetModel()->IsUndoEnabled() )
     {
         CellRef xCell( this );
-        rObj.getSdrModelFromSdrObject().AddUndo( new CellUndo( &rObj, xCell ) );
+        GetModel()->AddUndo( new CellUndo( &rObj, xCell ) );
 
         // Undo action for the after-text-edit-ended stack.
         SdrTableObj* pTableObj = dynamic_cast<sdr::table::SdrTableObj*>(&rObj);
@@ -1001,7 +1019,7 @@ void SAL_CALL Cell::setPropertyValue( const OUString& rPropertyName, const Any& 
 {
     ::SolarMutexGuard aGuard;
 
-    if(mpProperties == nullptr)
+    if( (mpProperties == nullptr) || (GetModel() == nullptr) )
         throw DisposedException();
 
     const SfxItemPropertySimpleEntry* pMap = mpPropSet->getPropertyMapEntry(rPropertyName);
@@ -1093,7 +1111,7 @@ void SAL_CALL Cell::setPropertyValue( const OUString& rPropertyName, const Any& 
         }
         default:
         {
-            SfxItemSet aSet(GetObject().getSdrModelFromSdrObject().GetItemPool(), {{pMap->nWID, pMap->nWID}});
+            SfxItemSet aSet( GetModel()->GetItemPool(), {{pMap->nWID, pMap->nWID}});
             aSet.Put(mpProperties->GetItem(pMap->nWID));
 
             bool bSpecial = false;
@@ -1113,7 +1131,7 @@ void SAL_CALL Cell::setPropertyValue( const OUString& rPropertyName, const Any& 
                         OUString aApiName;
                         if( rValue >>= aApiName )
                         {
-                            if(SvxShape::SetFillAttribute(pMap->nWID, aApiName, aSet, &GetObject().getSdrModelFromSdrObject()))
+                            if( SvxShape::SetFillAttribute( pMap->nWID, aApiName, aSet, GetModel() ) )
                                 bSpecial = true;
                         }
                     }
@@ -1130,7 +1148,7 @@ void SAL_CALL Cell::setPropertyValue( const OUString& rPropertyName, const Any& 
                     {
                         // fetch the default from ItemPool
                         if(SfxItemPool::IsWhich(pMap->nWID))
-                            aSet.Put(GetObject().getSdrModelFromSdrObject().GetItemPool().GetDefaultItem(pMap->nWID));
+                            aSet.Put(GetModel()->GetItemPool().GetDefaultItem(pMap->nWID));
                     }
 
                     if( aSet.GetItemState( pMap->nWID ) == SfxItemState::SET )
@@ -1140,7 +1158,7 @@ void SAL_CALL Cell::setPropertyValue( const OUString& rPropertyName, const Any& 
                 }
             }
 
-            GetObject().getSdrModelFromSdrObject().SetChanged();
+            GetModel()->SetChanged();
             mpProperties->SetMergedItemSetAndBroadcast( aSet );
             return;
         }
@@ -1154,7 +1172,7 @@ Any SAL_CALL Cell::getPropertyValue( const OUString& PropertyName )
 {
     ::SolarMutexGuard aGuard;
 
-    if(mpProperties == nullptr)
+    if( (mpProperties == nullptr) || (GetModel() == nullptr) )
         throw DisposedException();
 
     const SfxItemPropertySimpleEntry* pMap = mpPropSet->getPropertyMapEntry(PropertyName);
@@ -1213,7 +1231,7 @@ Any SAL_CALL Cell::getPropertyValue( const OUString& PropertyName )
         }
         default:
         {
-            SfxItemSet aSet(GetObject().getSdrModelFromSdrObject().GetItemPool(), {{pMap->nWID, pMap->nWID}});
+            SfxItemSet aSet( GetModel()->GetItemPool(), {{pMap->nWID, pMap->nWID}});
             aSet.Put(mpProperties->GetItem(pMap->nWID));
 
             Any aAny;
@@ -1223,7 +1241,7 @@ Any SAL_CALL Cell::getPropertyValue( const OUString& PropertyName )
                 {
                     // fetch the default from ItemPool
                     if(SfxItemPool::IsWhich(pMap->nWID))
-                        aSet.Put(GetObject().getSdrModelFromSdrObject().GetItemPool().GetDefaultItem(pMap->nWID));
+                        aSet.Put(GetModel()->GetItemPool().GetDefaultItem(pMap->nWID));
                 }
 
                 if( aSet.Count() )
@@ -1265,7 +1283,7 @@ void SAL_CALL Cell::setPropertyValues( const Sequence< OUString >& aPropertyName
 {
     ::SolarMutexGuard aSolarGuard;
 
-    if(mpProperties == nullptr)
+    if( (mpProperties == nullptr) || (GetModel() == nullptr) )
         throw DisposedException();
 
     const sal_Int32 nCount = aPropertyNames.getLength();
@@ -1295,7 +1313,7 @@ Sequence< Any > SAL_CALL Cell::getPropertyValues( const Sequence< OUString >& aP
 {
     ::SolarMutexGuard aSolarGuard;
 
-    if(mpProperties == nullptr)
+    if( (mpProperties == nullptr) || (GetModel() == nullptr) )
         throw DisposedException();
 
     const sal_Int32 nCount = aPropertyNames.getLength();
@@ -1346,7 +1364,7 @@ PropertyState SAL_CALL Cell::getPropertyState( const OUString& PropertyName )
 {
     ::SolarMutexGuard aGuard;
 
-    if(mpProperties == nullptr)
+    if( (mpProperties == nullptr) || (GetModel() == nullptr) )
         throw DisposedException();
 
     const SfxItemPropertySimpleEntry* pMap = mpPropSet->getPropertyMapEntry(PropertyName);
@@ -1449,7 +1467,7 @@ Sequence< PropertyState > SAL_CALL Cell::getPropertyStates( const Sequence< OUSt
 {
     ::SolarMutexGuard aGuard;
 
-    if(mpProperties == nullptr)
+    if( (mpProperties == nullptr) || (GetModel() == nullptr) )
         throw DisposedException();
 
     const sal_Int32 nCount = aPropertyName.getLength();
@@ -1479,7 +1497,7 @@ void SAL_CALL Cell::setPropertyToDefault( const OUString& PropertyName )
 {
     ::SolarMutexGuard aGuard;
 
-    if(mpProperties == nullptr)
+    if( (mpProperties == nullptr) || (GetModel() == nullptr) )
         throw DisposedException();
 
     const SfxItemPropertySimpleEntry* pMap = mpPropSet->getPropertyMapEntry(PropertyName);
@@ -1509,7 +1527,7 @@ void SAL_CALL Cell::setPropertyToDefault( const OUString& PropertyName )
         }
         }
 
-        GetObject().getSdrModelFromSdrObject().SetChanged();
+        GetModel()->SetChanged();
         return;
     }
     throw UnknownPropertyException( PropertyName, static_cast<cppu::OWeakObject*>(this));
@@ -1520,7 +1538,7 @@ Any SAL_CALL Cell::getPropertyDefault( const OUString& aPropertyName )
 {
     ::SolarMutexGuard aGuard;
 
-    if(mpProperties == nullptr)
+    if( (mpProperties == nullptr) || (GetModel() == nullptr) )
         throw DisposedException();
 
     const SfxItemPropertySimpleEntry* pMap = mpPropSet->getPropertyMapEntry(aPropertyName);
@@ -1547,8 +1565,8 @@ Any SAL_CALL Cell::getPropertyDefault( const OUString& aPropertyName )
         {
             if( SfxItemPool::IsWhich(pMap->nWID) )
             {
-                SfxItemSet aSet(GetObject().getSdrModelFromSdrObject().GetItemPool(), {{pMap->nWID, pMap->nWID}});
-                aSet.Put(GetObject().getSdrModelFromSdrObject().GetItemPool().GetDefaultItem(pMap->nWID));
+                SfxItemSet aSet( GetModel()->GetItemPool(), {{pMap->nWID, pMap->nWID}});
+                aSet.Put(GetModel()->GetItemPool().GetDefaultItem(pMap->nWID));
                 return GetAnyForItem( aSet, pMap );
             }
         }

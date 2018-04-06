@@ -30,7 +30,7 @@
 class E3dDragMethodUnit
 {
 public:
-    E3dObject&                      mr3DObj;
+    E3dObject*                      mp3DObj;
     basegfx::B3DPolyPolygon         maWireframePoly;
     basegfx::B3DHomMatrix           maDisplayTransform;
     basegfx::B3DHomMatrix           maInvDisplayTransform;
@@ -39,8 +39,8 @@ public:
     sal_Int32                       mnStartAngle;
     sal_Int32                       mnLastAngle;
 
-    E3dDragMethodUnit(E3dObject& r3DObj)
-    :   mr3DObj(r3DObj),
+    E3dDragMethodUnit()
+    :   mp3DObj(nullptr),
         maWireframePoly(),
         maDisplayTransform(),
         maInvDisplayTransform(),
@@ -48,8 +48,7 @@ public:
         maTransform(),
         mnStartAngle(0),
         mnLastAngle(0)
-    {
-    }
+    {}
 };
 
 // Derivative of SdrDragMethod for 3D objects

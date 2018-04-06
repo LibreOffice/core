@@ -31,7 +31,6 @@ using namespace ::svxform;
 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >  SAL_CALL SvxFmMSFactory::createInstance(const OUString& rServiceSpecifier)
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >  xRet;
-
     if ( rServiceSpecifier.startsWith( "com.sun.star.form.component." ) )
     {
         css::uno::Reference<css::uno::XComponentContext> xContext = comphelper::getProcessComponentContext();
@@ -39,17 +38,11 @@ using namespace ::svxform;
     }
     else if ( rServiceSpecifier == "com.sun.star.drawing.ControlShape" )
     {
-        SdrModel* pTargetModel = getSdrModelFromUnoModel();
-        OSL_ENSURE(pTargetModel, "Got no SdrModel for SdrShape construction (!)");
-        SdrObject* pObj = new FmFormObj(*pTargetModel);
+        SdrObject* pObj = new FmFormObj();
         xRet = static_cast<cppu::OWeakObject*>(static_cast<SvxShape_UnoImplHelper*>(new SvxShapeControl(pObj)));
     }
-
     if (!xRet.is())
-    {
         xRet = SvxUnoDrawMSFactory::createInstance(rServiceSpecifier);
-    }
-
     return xRet;
 }
 

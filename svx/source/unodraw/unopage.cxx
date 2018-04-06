@@ -61,11 +61,12 @@ using namespace ::com::sun::star::drawing;
 
 UNO3_GETIMPLEMENTATION_IMPL( SvxDrawPage );
 
-SvxDrawPage::SvxDrawPage(SdrPage* pInPage) // TTTT should be reference
-:   mrBHelper(getMutex())
-    ,mpPage(pInPage)
-    ,mpModel(&pInPage->getSdrModelFromSdrPage())  // register at broadcaster
-    ,mpView(new SdrView(pInPage->getSdrModelFromSdrPage())) // create (hidden) view
+SvxDrawPage::SvxDrawPage(SdrPage* pInPage)
+    : mrBHelper(getMutex())
+    , mpPage(pInPage)
+    , mpModel(mpPage->GetModel())  // register at broadcaster
+    , mpView(new SdrView(mpModel)) // create (hidden) view
+
 {
     mpView->SetDesignMode();
 }
@@ -191,24 +192,6 @@ void SAL_CALL SvxDrawPage::add( const uno::Reference< drawing::XShape >& xShape 
         return;
 
     SdrObject *pObj = pShape->GetSdrObject();
-    bool bNeededToClone(false);
-
-    if(nullptr != pObj && &pObj->getSdrModelFromSdrObject() != &mpPage->getSdrModelFromSdrPage())
-    {
-        // TTTT UNO API tries to add an existing SvxShape to this SvxDrawPage,
-        // but these use different SdrModels. It was possible before to completely
-        // 'change' a SdrObject to another SdrModel (including dangerous MigrateItemPool
-        // stuff), but is no longer. We need to Clone the SdrObject to the target model
-        // and ::Create a new SvxShape (set SdrObject there, take obver values, ...)
-        SdrObject* pClonedSdrShape(pObj->Clone(&mpPage->getSdrModelFromSdrPage()));
-        pObj->setUnoShape(nullptr);
-        pClonedSdrShape->setUnoShape(xShape);
-        // pShape->InvalidateSdrObject();
-        // pShape->Create(pClonedSdrShape, this);
-        SdrObject::Free(pObj);
-        pObj = pClonedSdrShape;
-        bNeededToClone = true;
-    }
 
     if(!pObj)
     {
@@ -217,20 +200,8 @@ void SAL_CALL SvxDrawPage::add( const uno::Reference< drawing::XShape >& xShape 
     }
     else if ( !pObj->IsInserted() )
     {
+        pObj->SetModel(mpModel);
         mpPage->InsertObject( pObj );
-
-        if(bNeededToClone)
-        {
-            // TTTT Unfortunately in SdrObject::SetPage (see there) the
-            // xShape/UnoShape at the newly cloned SDrObject is *removed* again,
-            // so re-set it here, the caller *may need it* (e.g. Writer)
-            uno::Reference< uno::XInterface > xShapeCheck(pObj->getWeakUnoShape());
-
-            if( !xShapeCheck.is() )
-            {
-                pObj->setUnoShape(xShape);
-            }
-        }
     }
 
     pShape->Create( pObj, this );
@@ -238,6 +209,7 @@ void SAL_CALL SvxDrawPage::add( const uno::Reference< drawing::XShape >& xShape 
 
     if ( !pObj->IsInserted() )
     {
+        pObj->SetModel(mpModel);
         mpPage->InsertObject( pObj );
     }
 
@@ -270,6 +242,7 @@ void SAL_CALL SvxDrawPage::addBottom( const uno::Reference< drawing::XShape >& x
     }
     else if ( !pObj->IsInserted() )
     {
+        pObj->SetModel(mpModel);
         mpPage->InsertObject( pObj, 0 );
     }
 
@@ -278,6 +251,7 @@ void SAL_CALL SvxDrawPage::addBottom( const uno::Reference< drawing::XShape >& x
 
     if ( !pObj->IsInserted() )
     {
+        pObj->SetModel(mpModel);
         mpPage->InsertObject( pObj, 0 );
     }
 
@@ -491,7 +465,7 @@ void SAL_CALL SvxDrawPage::ungroup( const Reference< drawing::XShapeGroup >& aGr
         mpModel->SetChanged();
 }
 
-SdrObject* SvxDrawPage::CreateSdrObject_(const Reference< drawing::XShape > & xShape)
+SdrObject *SvxDrawPage::CreateSdrObject_(const Reference< drawing::XShape > & xShape)
 {
     sal_uInt16 nType = 0;
     SdrInventor nInventor;
@@ -506,13 +480,7 @@ SdrObject* SvxDrawPage::CreateSdrObject_(const Reference< drawing::XShape > & xS
     awt::Point aPos = xShape->getPosition();
     tools::Rectangle aRect( Point( aPos.X, aPos.Y ), Size( aSize.Width, aSize.Height ) );
 
-    SdrObject* pNewObj = SdrObjFactory::MakeNewObject(
-        *mpModel,
-        nInventor,
-        nType,
-        mpPage,
-        &aRect);
-
+    SdrObject* pNewObj = SdrObjFactory::MakeNewObject(nInventor, nType, aRect, mpPage);
     if (!pNewObj)
         return nullptr;
 
@@ -712,37 +680,39 @@ SvxShape* SvxDrawPage::CreateShapeByTypeAndInventor( sal_uInt16 nType, SdrInvent
                             SdrPage* pSdrPage = mpPage->GetSdrPage();
                             if( pSdrPage )
                             {
-                                SdrModel& rSdrModel(pSdrPage->getSdrModelFromSdrPage());
-                                ::comphelper::IEmbeddedHelper *pPersist = rSdrModel.GetPersist();
-
-                                if( pPersist )
+                                SdrModel* pSdrModel = pSdrPage->GetModel();
+                                if( pSdrModel )
                                 {
-                                    uno::Reference < embed::XEmbeddedObject > xObject = pPersist->getEmbeddedObjectContainer().
-                                            GetEmbeddedObject( static_cast< SdrOle2Obj* >( pObj )->GetPersistName() );
-
-                                    // TODO CL->KA: Why is this not working anymore?
-                                    if( xObject.is() )
+                                    ::comphelper::IEmbeddedHelper *pPersist = pSdrModel->GetPersist();
+                                    if( pPersist )
                                     {
-                                        SvGlobalName aClassId( xObject->getClassID() );
+                                        uno::Reference < embed::XEmbeddedObject > xObject = pPersist->getEmbeddedObjectContainer().
+                                                GetEmbeddedObject( static_cast< SdrOle2Obj* >( pObj )->GetPersistName() );
 
-                                        const SvGlobalName aAppletClassId( SO3_APPLET_CLASSID );
-                                        const SvGlobalName aPluginClassId( SO3_PLUGIN_CLASSID );
-                                        const SvGlobalName aIFrameClassId( SO3_IFRAME_CLASSID );
+                                        // TODO CL->KA: Why is this not working anymore?
+                                        if( xObject.is() )
+                                        {
+                                            SvGlobalName aClassId( xObject->getClassID() );
 
-                                        if( aPluginClassId == aClassId )
-                                        {
-                                            pRet = new SvxPluginShape( pObj );
-                                            nType = OBJ_OLE2_PLUGIN;
-                                        }
-                                        else if( aAppletClassId == aClassId )
-                                        {
-                                            pRet = new SvxAppletShape( pObj );
-                                            nType = OBJ_OLE2_APPLET;
-                                        }
-                                        else if( aIFrameClassId == aClassId )
-                                        {
-                                            pRet = new SvxFrameShape( pObj );
-                                            nType = OBJ_FRAME;
+                                            const SvGlobalName aAppletClassId( SO3_APPLET_CLASSID );
+                                            const SvGlobalName aPluginClassId( SO3_PLUGIN_CLASSID );
+                                            const SvGlobalName aIFrameClassId( SO3_IFRAME_CLASSID );
+
+                                            if( aPluginClassId == aClassId )
+                                            {
+                                                pRet = new SvxPluginShape( pObj );
+                                                nType = OBJ_OLE2_PLUGIN;
+                                            }
+                                            else if( aAppletClassId == aClassId )
+                                            {
+                                                pRet = new SvxAppletShape( pObj );
+                                                nType = OBJ_OLE2_APPLET;
+                                            }
+                                            else if( aIFrameClassId == aClassId )
+                                            {
+                                                pRet = new SvxFrameShape( pObj );
+                                                nType = OBJ_FRAME;
+                                            }
                                         }
                                     }
                                 }
@@ -842,6 +812,7 @@ SdrObject *SvxDrawPage::CreateSdrObject( const Reference< drawing::XShape > & xS
     SdrObject* pObj = CreateSdrObject_( xShape );
     if( pObj)
     {
+        pObj->SetModel(mpModel);
         if ( !pObj->IsInserted() && !pObj->IsDoNotInsertIntoPageAutomatically() )
         {
             if(bBeginning)
@@ -874,6 +845,21 @@ uno::Sequence< OUString > SAL_CALL SvxDrawPage::getSupportedServiceNames()
 SvxShape* CreateSvxShapeByTypeAndInventor(sal_uInt16 nType, SdrInventor nInventor, OUString const & referer)
 {
     return SvxDrawPage::CreateShapeByTypeAndInventor( nType, nInventor, nullptr, nullptr, referer );
+}
+
+void SvxDrawPage::ChangeModel( SdrModel* pNewModel )
+{
+    if( pNewModel != mpModel )
+    {
+        mpModel = pNewModel;
+
+        if( mpView )
+        {
+            delete mpView;
+            mpView = new SdrView( mpModel );
+            mpView->SetDesignMode();
+        }
+    }
 }
 
 /** returns a StarOffice API wrapper for the given SdrPage */

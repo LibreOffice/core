@@ -406,20 +406,23 @@ SdrObject * SdGenericDrawPage::CreateSdrObject_( const Reference< drawing::XShap
         SdrObject* pObj = SvxFmDrawPage::CreateSdrObject_( xShape );
         if( pObj && ( (pObj->GetObjInventor() != SdrInventor::Default) || (pObj->GetObjIdentifier() != OBJ_PAGE) ) )
         {
-            SdDrawDocument& rDoc(static_cast< SdDrawDocument& >(GetPage()->getSdrModelFromSdrPage()));
-            // #i119287# similar to the code in the SdrObject methods the graphic and ole
-            // SdrObjects need another default style than the rest, see task. Adding here, too.
-            // TTTT: Same as for #i119287#: Can be removed in branch aw080 again
-            const bool bIsSdrGrafObj(dynamic_cast< const SdrGrafObj* >(pObj) !=  nullptr);
-            const bool bIsSdrOle2Obj(dynamic_cast< const SdrOle2Obj* >(pObj) !=  nullptr);
+            SdDrawDocument* pDoc = static_cast<SdDrawDocument*>(GetPage()->GetModel());
+            if( pDoc )
+            {
+                // #i119287# similar to the code in the SdrObject methods the graphic and ole
+                // SdrObjects need another default style than the rest, see task. Adding here, too.
+                // TTTT: Same as for #i119287#: Can be removed in branch aw080 again
+                const bool bIsSdrGrafObj(dynamic_cast< const SdrGrafObj* >(pObj) !=  nullptr);
+                const bool bIsSdrOle2Obj(dynamic_cast< const SdrOle2Obj* >(pObj) !=  nullptr);
 
-            if(bIsSdrGrafObj || bIsSdrOle2Obj)
-            {
-                pObj->NbcSetStyleSheet(rDoc.GetDefaultStyleSheetForSdrGrafObjAndSdrOle2Obj(), true);
-            }
-            else
-            {
-                pObj->NbcSetStyleSheet(rDoc.GetDefaultStyleSheet(), true);
+                if(bIsSdrGrafObj || bIsSdrOle2Obj)
+                {
+                    pObj->NbcSetStyleSheet(pDoc->GetDefaultStyleSheetForSdrGrafObjAndSdrOle2Obj(), true);
+                }
+                else
+                {
+                    pObj->NbcSetStyleSheet(pDoc->GetDefaultStyleSheet(), true);
+                }
             }
         }
         return pObj;
@@ -515,8 +518,9 @@ SdrObject * SdGenericDrawPage::CreateSdrObject_( const Reference< drawing::XShap
         pPresObj = SvxFmDrawPage::CreateSdrObject_( xShape );
         if( pPresObj )
         {
-            SdDrawDocument& rDoc(static_cast< SdDrawDocument& >(GetPage()->getSdrModelFromSdrPage()));
-            pPresObj->NbcSetStyleSheet(rDoc.GetDefaultStyleSheet(), true);
+            SdDrawDocument* pDoc = static_cast<SdDrawDocument*>(GetPage()->GetModel());
+            if( pDoc )
+                pPresObj->NbcSetStyleSheet( pDoc->GetDefaultStyleSheet(), true );
             GetPage()->InsertPresObj( pPresObj, eObjKind );
         }
     }
@@ -681,21 +685,21 @@ void SAL_CALL SdGenericDrawPage::setPropertyValue( const OUString& aPropertyName
 
             if( eOri != GetPage()->GetOrientation() )
             {
-                SdDrawDocument& rDoc(static_cast< SdDrawDocument& >(GetPage()->getSdrModelFromSdrPage()));
+                SdDrawDocument* pDoc = static_cast<SdDrawDocument*>(GetPage()->GetModel());
                 const PageKind ePageKind = GetPage()->GetPageKind();
 
-                sal_uInt16 i, nPageCnt = rDoc.GetMasterSdPageCount(ePageKind);
+                sal_uInt16 i, nPageCnt = pDoc->GetMasterSdPageCount(ePageKind);
                 for (i = 0; i < nPageCnt; i++)
                 {
-                    SdPage* pPage = rDoc.GetMasterSdPage(i, ePageKind);
+                    SdPage* pPage = pDoc->GetMasterSdPage(i, ePageKind);
                     pPage->SetOrientation( eOri );
                 }
 
-                nPageCnt = rDoc.GetSdPageCount(ePageKind);
+                nPageCnt = pDoc->GetSdPageCount(ePageKind);
 
                 for (i = 0; i < nPageCnt; i++)
                 {
-                    SdPage* pPage = rDoc.GetSdPage(i, ePageKind);
+                    SdPage* pPage = pDoc->GetSdPage(i, ePageKind);
                     pPage->SetOrientation( eOri );
                 }
             }
@@ -777,10 +781,10 @@ void SAL_CALL SdGenericDrawPage::setPropertyValue( const OUString& aPropertyName
             SdrPage* pPage = GetPage();
             if( pPage )
             {
-                SdDrawDocument& rDoc(static_cast< SdDrawDocument& >(pPage->getSdrModelFromSdrPage()));
-                if( rDoc.GetMasterPageCount() )
+                SdDrawDocument* pDoc = static_cast<SdDrawDocument*>(pPage->GetModel());
+                if( pDoc->GetMasterPageCount() )
                 {
-                    SdrLayerAdmin& rLayerAdmin = rDoc.GetLayerAdmin();
+                    SdrLayerAdmin& rLayerAdmin = pDoc->GetLayerAdmin();
                     SdrLayerIDSet aVisibleLayers = pPage->TRG_GetMasterPageVisibleLayers();
                     aVisibleLayers.Set(rLayerAdmin.GetLayerID(SdResId(STR_LAYER_BCKGRND)), bVisible);
                     pPage->TRG_SetMasterPageVisibleLayers(aVisibleLayers);
@@ -797,10 +801,10 @@ void SAL_CALL SdGenericDrawPage::setPropertyValue( const OUString& aPropertyName
             SdrPage* pPage = GetPage();
             if( pPage )
             {
-                SdDrawDocument& rDoc(static_cast< SdDrawDocument& >(pPage->getSdrModelFromSdrPage()));
-                if( rDoc.GetMasterPageCount() )
+                SdDrawDocument* pDoc = static_cast<SdDrawDocument*>(pPage->GetModel());
+                if( pDoc->GetMasterPageCount() )
                 {
-                    SdrLayerAdmin& rLayerAdmin = rDoc.GetLayerAdmin();
+                    SdrLayerAdmin& rLayerAdmin = pDoc->GetLayerAdmin();
                     SdrLayerIDSet aVisibleLayers = pPage->TRG_GetMasterPageVisibleLayers();
                     aVisibleLayers.Set(rLayerAdmin.GetLayerID(SdResId(STR_LAYER_BCKGRNDOBJ)), bVisible);
                     pPage->TRG_SetMasterPageVisibleLayers(aVisibleLayers);
@@ -1096,36 +1100,39 @@ Any SAL_CALL SdGenericDrawPage::getPropertyValue( const OUString& PropertyName )
     case WID_PAGE_PREVIEW :
     case WID_PAGE_PREVIEWMETAFILE :
         {
-            SdDrawDocument& rDoc(static_cast< SdDrawDocument& >(GetPage()->getSdrModelFromSdrPage()));
-            ::sd::DrawDocShell* pDocShell = rDoc.GetDocSh();
-            if ( pDocShell )
+            SdDrawDocument* pDoc = static_cast<SdDrawDocument*>(GetPage()->GetModel());
+            if ( pDoc )
             {
-                sal_uInt16 nPgNum = 0;
-                sal_uInt16 nPageCount = rDoc.GetSdPageCount( PageKind::Standard );
-                sal_uInt16 nPageNumber = static_cast<sal_uInt16>( ( GetPage()->GetPageNum() - 1 ) >> 1 );
-                while( nPgNum < nPageCount )
+                ::sd::DrawDocShell* pDocShell = pDoc->GetDocSh();
+                if ( pDocShell )
                 {
-                    rDoc.SetSelected( rDoc.GetSdPage( nPgNum, PageKind::Standard ), nPgNum == nPageNumber );
-                    nPgNum++;
-                }
-                std::shared_ptr<GDIMetaFile> xMetaFile = pDocShell->GetPreviewMetaFile();
-                if (xMetaFile)
-                {
-                    Size    aSize( GetPage()->GetSize() );
-                    xMetaFile->AddAction( static_cast<MetaAction*>(new MetaFillColorAction( COL_WHITE, true )), 0 );
-                    xMetaFile->AddAction( static_cast<MetaAction*>(new MetaRectAction( ::tools::Rectangle( Point(), aSize ) )), 1 );
-                    xMetaFile->SetPrefMapMode(MapMode(MapUnit::Map100thMM));
-                    xMetaFile->SetPrefSize( aSize );
+                    sal_uInt16 nPgNum = 0;
+                    sal_uInt16 nPageCount = pDoc->GetSdPageCount( PageKind::Standard );
+                    sal_uInt16 nPageNumber = static_cast<sal_uInt16>( ( GetPage()->GetPageNum() - 1 ) >> 1 );
+                    while( nPgNum < nPageCount )
+                    {
+                        pDoc->SetSelected( pDoc->GetSdPage( nPgNum, PageKind::Standard ), nPgNum == nPageNumber );
+                        nPgNum++;
+                    }
+                    std::shared_ptr<GDIMetaFile> xMetaFile = pDocShell->GetPreviewMetaFile();
+                    if (xMetaFile)
+                    {
+                        Size    aSize( GetPage()->GetSize() );
+                        xMetaFile->AddAction( static_cast<MetaAction*>(new MetaFillColorAction( COL_WHITE, true )), 0 );
+                        xMetaFile->AddAction( static_cast<MetaAction*>(new MetaRectAction( ::tools::Rectangle( Point(), aSize ) )), 1 );
+                        xMetaFile->SetPrefMapMode(MapMode(MapUnit::Map100thMM));
+                        xMetaFile->SetPrefSize( aSize );
 
-                    SvMemoryStream aDestStrm( 65535, 65535 );
-                    if (nEntry == WID_PAGE_PREVIEW)
-                        // Preview: WMF format.
-                        ConvertGDIMetaFileToWMF(*xMetaFile, aDestStrm, nullptr, false);
-                    else
-                        // PreviewMetafile: SVM format.
-                        xMetaFile->Write(aDestStrm);
-                    Sequence<sal_Int8> aSeq( static_cast<sal_Int8 const *>(aDestStrm.GetData()), aDestStrm.Tell() );
-                    aAny <<= aSeq;
+                        SvMemoryStream aDestStrm( 65535, 65535 );
+                        if (nEntry == WID_PAGE_PREVIEW)
+                            // Preview: WMF format.
+                            ConvertGDIMetaFileToWMF(*xMetaFile, aDestStrm, nullptr, false);
+                        else
+                            // PreviewMetafile: SVM format.
+                            xMetaFile->Write(aDestStrm);
+                        Sequence<sal_Int8> aSeq( static_cast<sal_Int8 const *>(aDestStrm.GetData()), aDestStrm.Tell() );
+                        aAny <<= aSeq;
+                    }
                 }
             }
         }
@@ -1133,26 +1140,29 @@ Any SAL_CALL SdGenericDrawPage::getPropertyValue( const OUString& PropertyName )
 
     case WID_PAGE_PREVIEWBITMAP :
         {
-            SdDrawDocument& rDoc(static_cast< SdDrawDocument& >(GetPage()->getSdrModelFromSdrPage()));
-            ::sd::DrawDocShell* pDocShell = rDoc.GetDocSh();
-            if ( pDocShell )
+            SdDrawDocument* pDoc = static_cast<SdDrawDocument*>(GetPage()->GetModel());
+            if ( pDoc )
             {
-                sal_uInt16 nPgNum = 0;
-                sal_uInt16 nPageCount = rDoc.GetSdPageCount( PageKind::Standard );
-                sal_uInt16 nPageNumber = static_cast<sal_uInt16>( ( GetPage()->GetPageNum() - 1 ) >> 1 );
-                while( nPgNum < nPageCount )
+                ::sd::DrawDocShell* pDocShell = pDoc->GetDocSh();
+                if ( pDocShell )
                 {
-                    rDoc.SetSelected( rDoc.GetSdPage( nPgNum, PageKind::Standard ), nPgNum == nPageNumber );
-                    nPgNum++;
-                }
-                std::shared_ptr<GDIMetaFile> xMetaFile = pDocShell->GetPreviewMetaFile();
-                BitmapEx aBitmap;
-                if (xMetaFile && xMetaFile->CreateThumbnail(aBitmap))
-                {
-                    SvMemoryStream aMemStream;
-                    WriteDIB(aBitmap.GetBitmap(), aMemStream, false, false);
-                    uno::Sequence<sal_Int8> aSeq( static_cast<sal_Int8 const *>(aMemStream.GetData()), aMemStream.Tell() );
-                    aAny <<= aSeq;
+                    sal_uInt16 nPgNum = 0;
+                    sal_uInt16 nPageCount = pDoc->GetSdPageCount( PageKind::Standard );
+                    sal_uInt16 nPageNumber = static_cast<sal_uInt16>( ( GetPage()->GetPageNum() - 1 ) >> 1 );
+                    while( nPgNum < nPageCount )
+                    {
+                        pDoc->SetSelected( pDoc->GetSdPage( nPgNum, PageKind::Standard ), nPgNum == nPageNumber );
+                        nPgNum++;
+                    }
+                    std::shared_ptr<GDIMetaFile> xMetaFile = pDocShell->GetPreviewMetaFile();
+                    BitmapEx aBitmap;
+                    if (xMetaFile && xMetaFile->CreateThumbnail(aBitmap))
+                    {
+                        SvMemoryStream aMemStream;
+                        WriteDIB(aBitmap.GetBitmap(), aMemStream, false, false);
+                        uno::Sequence<sal_Int8> aSeq( static_cast<sal_Int8 const *>(aMemStream.GetData()), aMemStream.Tell() );
+                        aAny <<= aSeq;
+                    }
                 }
             }
         }
@@ -1196,10 +1206,10 @@ Any SAL_CALL SdGenericDrawPage::getPropertyValue( const OUString& PropertyName )
         SdrPage* pPage = GetPage();
         if( pPage )
         {
-            SdDrawDocument& rDoc(static_cast< SdDrawDocument& >(pPage->getSdrModelFromSdrPage()));
-            if( rDoc.GetMasterPageCount() )
+            SdDrawDocument* pDoc = static_cast<SdDrawDocument*>(pPage->GetModel());
+            if( pDoc->GetMasterPageCount() )
             {
-                SdrLayerAdmin& rLayerAdmin = rDoc.GetLayerAdmin();
+                SdrLayerAdmin& rLayerAdmin = pDoc->GetLayerAdmin();
                 SdrLayerIDSet aVisibleLayers = pPage->TRG_GetMasterPageVisibleLayers();
                 aAny <<= aVisibleLayers.IsSet(rLayerAdmin.GetLayerID(SdResId(STR_LAYER_BCKGRND)));
             }
@@ -1215,10 +1225,10 @@ Any SAL_CALL SdGenericDrawPage::getPropertyValue( const OUString& PropertyName )
         SdrPage* pPage = GetPage();
         if( pPage )
         {
-            SdDrawDocument& rDoc(static_cast< SdDrawDocument& >(pPage->getSdrModelFromSdrPage()));
-            if( rDoc.GetMasterPageCount() )
+            SdDrawDocument* pDoc = static_cast<SdDrawDocument*>(pPage->GetModel());
+            if( pDoc->GetMasterPageCount() )
             {
-                SdrLayerAdmin& rLayerAdmin = rDoc.GetLayerAdmin();
+                SdrLayerAdmin& rLayerAdmin = pDoc->GetLayerAdmin();
                 SdrLayerIDSet aVisibleLayers = pPage->TRG_GetMasterPageVisibleLayers();
                 aAny <<= aVisibleLayers.IsSet(rLayerAdmin.GetLayerID(SdResId(STR_LAYER_BCKGRNDOBJ)));
             }
@@ -1674,21 +1684,21 @@ void SdGenericDrawPage::SetLeftBorder( sal_Int32 nValue )
 {
     if( nValue != GetPage()->GetLeftBorder() )
     {
-        SdDrawDocument& rDoc(static_cast< SdDrawDocument& >(GetPage()->getSdrModelFromSdrPage()));
+        SdDrawDocument* pDoc = static_cast<SdDrawDocument*>(GetPage()->GetModel());
         const PageKind ePageKind = GetPage()->GetPageKind();
 
-        sal_uInt16 i, nPageCnt = rDoc.GetMasterSdPageCount(ePageKind);
+        sal_uInt16 i, nPageCnt = pDoc->GetMasterSdPageCount(ePageKind);
         for (i = 0; i < nPageCnt; i++)
         {
-            SdPage* pPage = rDoc.GetMasterSdPage(i, ePageKind);
+            SdPage* pPage = pDoc->GetMasterSdPage(i, ePageKind);
             pPage->SetLeftBorder( nValue );
         }
 
-        nPageCnt = rDoc.GetSdPageCount(ePageKind);
+        nPageCnt = pDoc->GetSdPageCount(ePageKind);
 
         for (i = 0; i < nPageCnt; i++)
         {
-            SdPage* pPage = rDoc.GetSdPage(i, ePageKind);
+            SdPage* pPage = pDoc->GetSdPage(i, ePageKind);
             pPage->SetLeftBorder( nValue );
         }
     }
@@ -1698,21 +1708,21 @@ void SdGenericDrawPage::SetRightBorder( sal_Int32 nValue )
 {
     if( nValue != GetPage()->GetRightBorder() )
     {
-        SdDrawDocument& rDoc(static_cast< SdDrawDocument& >(GetPage()->getSdrModelFromSdrPage()));
+        SdDrawDocument* pDoc = static_cast<SdDrawDocument*>(GetPage()->GetModel());
         const PageKind ePageKind = GetPage()->GetPageKind();
 
-        sal_uInt16 i, nPageCnt = rDoc.GetMasterSdPageCount(ePageKind);
+        sal_uInt16 i, nPageCnt = pDoc->GetMasterSdPageCount(ePageKind);
         for (i = 0; i < nPageCnt; i++)
         {
-            SdPage* pPage = rDoc.GetMasterSdPage(i, ePageKind);
+            SdPage* pPage = pDoc->GetMasterSdPage(i, ePageKind);
             pPage->SetRightBorder( nValue );
         }
 
-        nPageCnt = rDoc.GetSdPageCount(ePageKind);
+        nPageCnt = pDoc->GetSdPageCount(ePageKind);
 
         for (i = 0; i < nPageCnt; i++)
         {
-            SdPage* pPage = rDoc.GetSdPage(i, ePageKind);
+            SdPage* pPage = pDoc->GetSdPage(i, ePageKind);
             pPage->SetRightBorder( nValue );
         }
     }
@@ -1722,21 +1732,21 @@ void SdGenericDrawPage::SetUpperBorder( sal_Int32 nValue )
 {
     if( nValue != GetPage()->GetUpperBorder() )
     {
-        SdDrawDocument& rDoc(static_cast< SdDrawDocument& >(GetPage()->getSdrModelFromSdrPage()));
+        SdDrawDocument* pDoc = static_cast<SdDrawDocument*>(GetPage()->GetModel());
         const PageKind ePageKind = GetPage()->GetPageKind();
 
-        sal_uInt16 i, nPageCnt = rDoc.GetMasterSdPageCount(ePageKind);
+        sal_uInt16 i, nPageCnt = pDoc->GetMasterSdPageCount(ePageKind);
         for (i = 0; i < nPageCnt; i++)
         {
-            SdPage* pPage = rDoc.GetMasterSdPage(i, ePageKind);
+            SdPage* pPage = pDoc->GetMasterSdPage(i, ePageKind);
             pPage->SetUpperBorder( nValue );
         }
 
-        nPageCnt = rDoc.GetSdPageCount(ePageKind);
+        nPageCnt = pDoc->GetSdPageCount(ePageKind);
 
         for (i = 0; i < nPageCnt; i++)
         {
-            SdPage* pPage = rDoc.GetSdPage(i, ePageKind);
+            SdPage* pPage = pDoc->GetSdPage(i, ePageKind);
             pPage->SetUpperBorder( nValue );
         }
     }
@@ -1746,21 +1756,21 @@ void SdGenericDrawPage::SetLowerBorder( sal_Int32 nValue )
 {
     if( nValue != GetPage()->GetLowerBorder() )
     {
-        SdDrawDocument& rDoc(static_cast< SdDrawDocument& >(GetPage()->getSdrModelFromSdrPage()));
+        SdDrawDocument* pDoc = static_cast<SdDrawDocument*>(GetPage()->GetModel());
         const PageKind ePageKind = GetPage()->GetPageKind();
 
-        sal_uInt16 i, nPageCnt = rDoc.GetMasterSdPageCount(ePageKind);
+        sal_uInt16 i, nPageCnt = pDoc->GetMasterSdPageCount(ePageKind);
         for (i = 0; i < nPageCnt; i++)
         {
-            SdPage* pPage = rDoc.GetMasterSdPage(i, ePageKind);
+            SdPage* pPage = pDoc->GetMasterSdPage(i, ePageKind);
             pPage->SetLowerBorder( nValue );
         }
 
-        nPageCnt = rDoc.GetSdPageCount(ePageKind);
+        nPageCnt = pDoc->GetSdPageCount(ePageKind);
 
         for (i = 0; i < nPageCnt; i++)
         {
-            SdPage* pPage = rDoc.GetSdPage(i, ePageKind);
+            SdPage* pPage = pDoc->GetSdPage(i, ePageKind);
             pPage->SetLowerBorder( nValue );
         }
     }
@@ -1801,25 +1811,25 @@ void SdGenericDrawPage::SetWidth( sal_Int32 nWidth )
     {
         aSize.setWidth( nWidth );
 
-        SdDrawDocument& rDoc(static_cast< SdDrawDocument& >(GetPage()->getSdrModelFromSdrPage()));
+        SdDrawDocument* pDoc = static_cast<SdDrawDocument*>(GetPage()->GetModel());
         const PageKind ePageKind = GetPage()->GetPageKind();
 
-        sal_uInt16 i, nPageCnt = rDoc.GetMasterSdPageCount(ePageKind);
+        sal_uInt16 i, nPageCnt = pDoc->GetMasterSdPageCount(ePageKind);
         for (i = 0; i < nPageCnt; i++)
         {
-            SdPage* pPage = rDoc.GetMasterSdPage(i, ePageKind);
+            SdPage* pPage = pDoc->GetMasterSdPage(i, ePageKind);
             pPage->SetSize(aSize);
         }
 
-        nPageCnt = rDoc.GetSdPageCount(ePageKind);
+        nPageCnt = pDoc->GetSdPageCount(ePageKind);
 
         for (i = 0; i < nPageCnt; i++)
         {
-            SdPage* pPage = rDoc.GetSdPage(i, ePageKind);
+            SdPage* pPage = pDoc->GetSdPage(i, ePageKind);
             pPage->SetSize(aSize);
         }
 
-        refreshpage( &rDoc, ePageKind );
+        refreshpage( pDoc, ePageKind );
     }
 }
 
@@ -1830,25 +1840,25 @@ void SdGenericDrawPage::SetHeight( sal_Int32 nHeight )
     {
         aSize.setHeight( nHeight );
 
-        SdDrawDocument& rDoc(static_cast< SdDrawDocument& >(GetPage()->getSdrModelFromSdrPage()));
+        SdDrawDocument* pDoc = static_cast<SdDrawDocument*>(GetPage()->GetModel());
         const PageKind ePageKind = GetPage()->GetPageKind();
 
-        sal_uInt16 i, nPageCnt = rDoc.GetMasterSdPageCount(ePageKind);
+        sal_uInt16 i, nPageCnt = pDoc->GetMasterSdPageCount(ePageKind);
         for (i = 0; i < nPageCnt; i++)
         {
-            SdPage* pPage = rDoc.GetMasterSdPage(i, ePageKind);
+            SdPage* pPage = pDoc->GetMasterSdPage(i, ePageKind);
             pPage->SetSize(aSize);
         }
 
-        nPageCnt = rDoc.GetSdPageCount(ePageKind);
+        nPageCnt = pDoc->GetSdPageCount(ePageKind);
 
         for (i = 0; i < nPageCnt; i++)
         {
-            SdPage* pPage = rDoc.GetSdPage(i, ePageKind);
+            SdPage* pPage = pDoc->GetSdPage(i, ePageKind);
             pPage->SetSize(aSize);
         }
 
-        refreshpage( &rDoc, ePageKind );
+        refreshpage( pDoc, ePageKind );
     }
 }
 
@@ -2379,7 +2389,7 @@ void SAL_CALL SdDrawPage::setMasterPage( const Reference< drawing::XDrawPage >& 
 
             pNotesPage->TRG_ClearMasterPage();
             sal_uInt16 nNum = SvxFmDrawPage::mpPage->TRG_GetMasterPage().GetPageNum() + 1;
-            pNotesPage->TRG_SetMasterPage(*SvxFmDrawPage::mpPage->getSdrModelFromSdrPage().GetMasterPage(nNum));
+            pNotesPage->TRG_SetMasterPage(*SvxFmDrawPage::mpPage->GetModel()->GetMasterPage(nNum));
             pNotesPage->SetLayoutName( pSdPage->GetLayoutName() );
 
             GetModel()->SetModified();
@@ -2476,7 +2486,7 @@ void SdDrawPage::setBackground( const Any& rValue )
 
     if( pBack )
     {
-        pBack->fillItemSet( static_cast<SdDrawDocument*>(&GetPage()->getSdrModelFromSdrPage()), aSet );
+        pBack->fillItemSet( static_cast<SdDrawDocument*>(GetPage()->GetModel()), aSet );
     }
     else
     {
@@ -2500,7 +2510,7 @@ void SdDrawPage::setBackground( const Any& rValue )
             pProp++;
         }
 
-        pBackground->fillItemSet( static_cast<SdDrawDocument*>(&GetPage()->getSdrModelFromSdrPage()), aSet );
+        pBackground->fillItemSet( static_cast<SdDrawDocument*>(GetPage()->GetModel()), aSet );
     }
 
     if( aSet.Count() == 0 )
@@ -2862,7 +2872,7 @@ void SdMasterPage::setBackground( const Any& rValue )
 
             if( pBack )
             {
-                pBack->fillItemSet( static_cast<SdDrawDocument*>(&GetPage()->getSdrModelFromSdrPage()), aSet );
+                pBack->fillItemSet( static_cast<SdDrawDocument*>(GetPage()->GetModel()), aSet );
             }
             else
             {
@@ -2885,11 +2895,11 @@ void SdMasterPage::setBackground( const Any& rValue )
                     pProp++;
                 }
 
-                pBackground->fillItemSet( static_cast<SdDrawDocument*>(&SvxFmDrawPage::mpPage->getSdrModelFromSdrPage()), aSet );
+                pBackground->fillItemSet( static_cast<SdDrawDocument*>(SvxFmDrawPage::mpPage->GetModel()), aSet );
             }
 
             // if we find the background style, copy the set to the background
-            SdDrawDocument* pDoc = static_cast<SdDrawDocument*>(&SvxFmDrawPage::mpPage->getSdrModelFromSdrPage());
+            SdDrawDocument* pDoc = static_cast<SdDrawDocument*>(SvxFmDrawPage::mpPage->GetModel());
             SfxStyleSheetBasePool* pSSPool = pDoc->GetStyleSheetPool();
             if(pSSPool)
             {
@@ -2933,7 +2943,7 @@ void SdMasterPage::getBackground( Any& rValue )
         }
         else
         {
-            SdDrawDocument* pDoc = static_cast<SdDrawDocument*>(&SvxFmDrawPage::mpPage->getSdrModelFromSdrPage());
+            SdDrawDocument* pDoc = static_cast<SdDrawDocument*>(SvxFmDrawPage::mpPage->GetModel());
             SfxStyleSheetBasePool* pSSPool = pDoc->GetStyleSheetPool();
             if(pSSPool)
             {
@@ -3082,9 +3092,9 @@ Reference< uno::XInterface > createUnoPageImpl( SdPage* pPage )
 {
     Reference< uno::XInterface > xPage;
 
-    if( pPage )
+    if( pPage && pPage->GetModel() )
     {
-        SdXImpressDocument* pModel = SdXImpressDocument::getImplementation( pPage->getSdrModelFromSdrPage().getUnoModel() );
+        SdXImpressDocument* pModel = SdXImpressDocument::getImplementation( pPage->GetModel()->getUnoModel() );
         if( pModel )
         {
             if( pPage->IsMasterPage() )

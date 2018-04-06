@@ -81,16 +81,16 @@ using namespace com::sun::star;
 
 
 // List for 3D-Objects
+
+
 E3dObjList::E3dObjList()
-:   SdrObjList(nullptr)
+:   SdrObjList(nullptr, nullptr)
 {
 }
 
-E3dObjList* E3dObjList::CloneSdrObjList(SdrModel* pNewModel) const
+E3dObjList::E3dObjList(const E3dObjList&)
+:   SdrObjList()
 {
-    E3dObjList* pObjList = new E3dObjList();
-    pObjList->lateInitSdrObjList(*this, pNewModel);
-    return pObjList;
 }
 
 E3dObjList::~E3dObjList()
@@ -169,9 +169,8 @@ sdr::properties::BaseProperties* E3dObject::CreateObjectSpecificProperties()
 }
 
 
-E3dObject::E3dObject(SdrModel& rSdrModel)
-:   SdrAttrObj(rSdrModel),
-    maSubList(),
+E3dObject::E3dObject()
+:   maSubList(),
     maLocalBoundVol(),
     maTransformation(),
     maFullTransform(),
@@ -304,7 +303,14 @@ void E3dObject::SetPage(SdrPage* pNewPage)
     maSubList.SetPage(pNewPage);
 }
 
+void E3dObject::SetModel(SdrModel* pNewModel)
+{
+    SdrAttrObj::SetModel(pNewModel);
+    maSubList.SetModel(pNewModel);
+}
+
 // resize object, used from old 2d interfaces, e.g. in Move/Scale dialog (F4)
+
 void E3dObject::NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact)
 {
     // Movement in X, Y in the eye coordinate system
@@ -650,9 +656,9 @@ OUString E3dObject::TakeObjNamePlural() const
     return ImpGetResStr(STR_ObjNamePluralObj3d);
 }
 
-E3dObject* E3dObject::Clone(SdrModel* pTargetModel) const
+E3dObject* E3dObject::Clone() const
 {
-    return CloneHelper< E3dObject >(pTargetModel);
+    return CloneHelper< E3dObject >();
 }
 
 E3dObject& E3dObject::operator=(const E3dObject& rObj)
@@ -730,8 +736,9 @@ sdr::properties::BaseProperties* E3dCompoundObject::CreateObjectSpecificProperti
     return new sdr::properties::E3dCompoundProperties(*this);
 }
 
-E3dCompoundObject::E3dCompoundObject(SdrModel& rSdrModel)
-:   E3dObject(rSdrModel),
+
+E3dCompoundObject::E3dCompoundObject()
+:   E3dObject(),
     aMaterialAmbientColor()
 {
     // Set defaults
@@ -874,20 +881,9 @@ void E3dCompoundObject::RecalcSnapRect()
     }
 }
 
-E3dCompoundObject* E3dCompoundObject::Clone(SdrModel* pTargetModel) const
+E3dCompoundObject* E3dCompoundObject::Clone() const
 {
-    return CloneHelper< E3dCompoundObject >(pTargetModel);
-}
-
-E3dCompoundObject& E3dCompoundObject::operator=(const E3dCompoundObject& rObj)
-{
-    if( this == &rObj )
-        return *this;
-    E3dObject::operator=(rObj);
-
-    aMaterialAmbientColor = rObj.aMaterialAmbientColor;
-
-    return *this;
+    return CloneHelper< E3dCompoundObject >();
 }
 
 // convert given basegfx::B3DPolyPolygon to screen coor

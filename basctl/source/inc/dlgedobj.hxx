@@ -57,11 +57,9 @@ private:
     DlgEditor& GetDialogEditor ();
 
 protected:
-    DlgEdObj(SdrModel& rSdrModel);
-    DlgEdObj(
-        SdrModel& rSdrModel,
-        const OUString& rModelName,
-        const css::uno::Reference< css::lang::XMultiServiceFactory >& rxSFac);
+    DlgEdObj();
+    DlgEdObj(const OUString& rModelName,
+             const css::uno::Reference< css::lang::XMultiServiceFactory >& rxSFac);
 
     virtual void NbcMove( const Size& rSize ) override;
     virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact) override;
@@ -96,7 +94,7 @@ public:
     virtual SdrInventor GetObjInventor() const override;
     virtual sal_uInt16 GetObjIdentifier() const override;
 
-    virtual DlgEdObj* Clone(SdrModel* pTargetModel = nullptr) const override;                                          // not working yet
+    virtual DlgEdObj*   Clone() const override;                                          // not working yet
     void clonedFrom(const DlgEdObj* _pSource);                          // not working yet
 
     // FullDrag support
@@ -154,9 +152,7 @@ private:
     mutable ::boost::optional< css::awt::DeviceInfo >   mpDeviceInfo;
 
 private:
-    explicit DlgEdForm(
-        SdrModel& rSdrModel,
-        DlgEditor&);
+    explicit DlgEdForm (DlgEditor&);
 
 protected:
     virtual void NbcMove( const Size& rSize ) override;

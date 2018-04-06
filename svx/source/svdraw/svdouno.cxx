@@ -145,11 +145,9 @@ namespace
     }
 }
 
-SdrUnoObj::SdrUnoObj(
-    SdrModel& rSdrModel,
-    const OUString& rModelName)
-:   SdrRectObj(rSdrModel),
-    m_pImpl( new SdrUnoObjDataHolder )
+
+SdrUnoObj::SdrUnoObj(const OUString& rModelName)
+:   m_pImpl( new SdrUnoObjDataHolder )
 {
     bIsUnoObj = true;
 
@@ -160,12 +158,9 @@ SdrUnoObj::SdrUnoObj(
         CreateUnoControlModel(rModelName);
 }
 
-SdrUnoObj::SdrUnoObj(
-    SdrModel& rSdrModel,
-    const OUString& rModelName,
-    const uno::Reference< lang::XMultiServiceFactory >& rxSFac)
-:   SdrRectObj(rSdrModel),
-    m_pImpl( new SdrUnoObjDataHolder )
+SdrUnoObj::SdrUnoObj(const OUString& rModelName,
+                     const uno::Reference< lang::XMultiServiceFactory >& rxSFac)
+:   m_pImpl( new SdrUnoObjDataHolder )
 {
     bIsUnoObj = true;
 
@@ -255,9 +250,9 @@ OUString SdrUnoObj::TakeObjNamePlural() const
     return ImpGetResStr(STR_ObjNamePluralUno);
 }
 
-SdrUnoObj* SdrUnoObj::Clone(SdrModel* pTargetModel) const
+SdrUnoObj* SdrUnoObj::Clone() const
 {
-    return CloneHelper< SdrUnoObj >(pTargetModel);
+    return CloneHelper< SdrUnoObj >();
 }
 
 SdrUnoObj& SdrUnoObj::operator= (const SdrUnoObj& rObj)
@@ -332,6 +327,38 @@ bool SdrUnoObj::hasSpecialDrag() const
     // do want frame handles
     return false;
 }
+
+bool SdrUnoObj::supportsFullDrag() const
+{
+    // override to have the possibility to enable/disable in debug and
+    // to check some things out. Current solution is working, so default is
+    // enabled
+    static bool bDoSupportFullDrag(true);
+
+    return bDoSupportFullDrag;
+}
+
+SdrObject* SdrUnoObj::getFullDragClone() const
+{
+    SdrObject* pRetval = nullptr;
+    static bool bHandleSpecial(false);
+
+    if(bHandleSpecial)
+    {
+        // special handling for SdrUnoObj (FormControl). Create a SdrGrafObj
+        // for drag containing the graphical representation. This does not work too
+        // well, so the default is to simply clone
+        pRetval = new SdrGrafObj(SdrDragView::GetObjGraphic(GetModel(), this), GetLogicRect());
+    }
+    else
+    {
+        // call parent (simply clone)
+        pRetval = SdrRectObj::getFullDragClone();
+    }
+
+    return pRetval;
+}
+
 
 void SdrUnoObj::NbcSetLayer( SdrLayerID _nLayer )
 {

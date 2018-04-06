@@ -31,7 +31,7 @@ class SdrObjConnection;
 class ImplConnectMarkerOverlay;
 class ImpSdrCreateViewExtraData;
 
-class SVX_DLLPUBLIC SdrCreateView : public SdrDragView
+class SVX_DLLPUBLIC SdrCreateView: public SdrDragView
 {
     friend class                SdrPageView;
 
@@ -69,10 +69,7 @@ protected:
 
 protected:
     // #i71538# make constructors of SdrView sub-components protected to avoid incomplete incarnations which may get casted to SdrView
-    SdrCreateView(
-        SdrModel& rSdrModel,
-        OutputDevice* pOut);
-
+    SdrCreateView(SdrModel* pModel1, OutputDevice* pOut);
     virtual ~SdrCreateView() override;
 
 public:

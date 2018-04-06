@@ -109,10 +109,7 @@ void FuConstructRectangle::DoExecute( SfxRequest& rReq )
                                            pCenterY->GetValue () - pAxisY->GetValue () / 2,
                                            pCenterX->GetValue () + pAxisX->GetValue () / 2,
                                            pCenterY->GetValue () + pAxisY->GetValue () / 2);
-                SdrCircObj  *pNewCircle = new SdrCircObj(
-                    mpView->getSdrModelFromSdrView(),
-                    OBJ_CIRC,
-                    aNewRectangle);
+                SdrCircObj  *pNewCircle = new SdrCircObj (OBJ_CIRC, aNewRectangle);
                 SdrPageView *pPV = mpView->GetSdrPageView();
 
                 mpView->InsertObjectAtView(pNewCircle, *pPV, SdrInsertFlags::SETDEFLAYER | SdrInsertFlags::SETDEFATTR);
@@ -130,9 +127,7 @@ void FuConstructRectangle::DoExecute( SfxRequest& rReq )
                                            pMouseStartY->GetValue (),
                                            pMouseEndX->GetValue (),
                                            pMouseEndY->GetValue ());
-                SdrRectObj  *pNewRect = new SdrRectObj(
-                    mpView->getSdrModelFromSdrView(),
-                    aNewRectangle);
+                SdrRectObj  *pNewRect = new SdrRectObj (aNewRectangle);
                 SdrPageView *pPV = mpView->GetSdrPageView();
 
                 mpView->InsertObjectAtView(pNewRect, *pPV, SdrInsertFlags::SETDEFLAYER | SdrInsertFlags::SETDEFATTR);
@@ -482,9 +477,9 @@ void FuConstructRectangle::SetAttributes(SfxItemSet& rAttr, SdrObject* pObj)
         // dimension line
         SdPage* pPage = static_cast<SdPage*>( mpView->GetSdrPageView()->GetPage() );
         OUString aName(SdResId(STR_POOLSHEET_MEASURE));
-        SfxStyleSheet* pSheet(
-            static_cast< SfxStyleSheet* >(
-                pPage->getSdrModelFromSdrPage().GetStyleSheetPool()->Find(aName, SfxStyleFamily::Para)));
+        SfxStyleSheet* pSheet = static_cast<SfxStyleSheet*>( pPage->GetModel()->
+                                     GetStyleSheetPool()->
+                                     Find(aName, SfxStyleFamily::Para));
         DBG_ASSERT(pSheet, "StyleSheet missing");
 
         if (pSheet)
@@ -501,10 +496,10 @@ void FuConstructRectangle::SetAttributes(SfxItemSet& rAttr, SdrObject* pObj)
 /**
  * set line starts and ends for the object to be created
  */
-::basegfx::B2DPolyPolygon getPolygon(const char* pResId, const SdrModel& rModel)
+::basegfx::B2DPolyPolygon getPolygon(const char* pResId, SdrModel const * pDoc)
 {
     ::basegfx::B2DPolyPolygon aRetval;
-    XLineEndListRef pLineEndList(rModel.GetLineEndList());
+    XLineEndListRef pLineEndList = pDoc->GetLineEndList();
 
     if( pLineEndList.is() )
     {
@@ -541,10 +536,9 @@ void FuConstructRectangle::SetLineEnds(SfxItemSet& rAttr, SdrObject const * pObj
           nSlotId == SID_LINE_SQUARE_ARROW )
     {
         // set attributes of line start and ends
-        SdrModel& rModel(pObj->getSdrModelFromSdrObject()); // TTTT pObj should be reference
 
         // arrowhead
-        ::basegfx::B2DPolyPolygon aArrow( getPolygon( RID_SVXSTR_ARROW, rModel ) );
+        ::basegfx::B2DPolyPolygon aArrow( getPolygon( RID_SVXSTR_ARROW, mpDoc ) );
         if( !aArrow.count() )
         {
             ::basegfx::B2DPolygon aNewArrow;
@@ -556,7 +550,7 @@ void FuConstructRectangle::SetLineEnds(SfxItemSet& rAttr, SdrObject const * pObj
         }
 
         // Circles
-        ::basegfx::B2DPolyPolygon aCircle( getPolygon( RID_SVXSTR_CIRCLE, rModel ) );
+        ::basegfx::B2DPolyPolygon aCircle( getPolygon( RID_SVXSTR_CIRCLE, mpDoc ) );
         if( !aCircle.count() )
         {
             ::basegfx::B2DPolygon aNewCircle;
@@ -566,7 +560,7 @@ void FuConstructRectangle::SetLineEnds(SfxItemSet& rAttr, SdrObject const * pObj
         }
 
         // Square
-        ::basegfx::B2DPolyPolygon aSquare( getPolygon( RID_SVXSTR_SQUARE, rModel ) );
+        ::basegfx::B2DPolyPolygon aSquare( getPolygon( RID_SVXSTR_SQUARE, mpDoc ) );
         if( !aSquare.count() )
         {
             ::basegfx::B2DPolygon aNewSquare;
@@ -770,9 +764,8 @@ SdrObject* FuConstructRectangle::CreateDefaultObject(const sal_uInt16 nID, const
     // case SID_CONNECTOR_LINES_CIRCLES:
 
     SdrObject* pObj = SdrObjFactory::MakeNewObject(
-        mpView->getSdrModelFromSdrView(),
-        mpView->GetCurrentObjInventor(),
-        mpView->GetCurrentObjIdentifier());
+        mpView->GetCurrentObjInventor(), mpView->GetCurrentObjIdentifier(),
+        nullptr, mpDoc);
 
     if(pObj)
     {

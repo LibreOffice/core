@@ -72,7 +72,8 @@ drawinglayer::primitive2d::Primitive2DContainer ViewContactOfSdrRectObj::createV
     drawinglayer::primitive2d::calculateRelativeCornerRadius(nCornerRadius, aObjectRange, fCornerRadiusX, fCornerRadiusY);
 
     // #i105856# use knowledge about pickthrough from the model
-    const bool bPickThroughTransparentTextFrames(GetRectObj().getSdrModelFromSdrObject().IsPickThroughTransparentTextFrames());
+    const bool bPickThroughTransparentTextFrames(
+        GetRectObj().GetModel() && GetRectObj().GetModel()->IsPickThroughTransparentTextFrames());
 
     // create primitive. Always create primitives to allow the decomposition of
     // SdrRectanglePrimitive2D to create needed invisible elements for HitTest and/or BoundRect

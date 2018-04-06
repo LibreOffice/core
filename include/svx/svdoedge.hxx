@@ -187,7 +187,8 @@ protected:
     void ImpSetEdgeInfoToAttr(); // copying values from the aEdgeInfo to the pool
 
 public:
-    SdrEdgeObj(SdrModel& rSdrModel);
+
+    SdrEdgeObj();
     virtual ~SdrEdgeObj() override;
 
     SdrObjConnection& GetConnection(bool bTail1) { return *(bTail1 ? &aCon1 : &aCon2); }
@@ -213,7 +214,7 @@ public:
 
     virtual void RecalcSnapRect() override;
     virtual void TakeUnrotatedSnapRect(tools::Rectangle& rRect) const override;
-    virtual SdrEdgeObj* Clone(SdrModel* pTargetModel = nullptr) const override;
+    virtual SdrEdgeObj* Clone() const override;
     SdrEdgeObj& operator=(const SdrEdgeObj& rObj);
     virtual OUString TakeObjNameSingul() const override;
     virtual OUString TakeObjNamePlural() const override;

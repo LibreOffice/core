@@ -124,9 +124,6 @@ private:
 protected:
     const SfxItemPropertySet&   GetPropertySet() const { return aPropSet; }
 
-    /** abstract SdrModel provider */
-    virtual SdrModel* getSdrModelFromUnoModel() const override;
-
 public:
                             ScModelObj(ScDocShell* pDocSh);
     virtual                 ~ScModelObj() override;

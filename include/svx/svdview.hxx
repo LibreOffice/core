@@ -144,7 +144,7 @@ public:
 };
 
 
-class SVX_DLLPUBLIC SdrView : public SdrCreateView, public virtual tools::WeakBase
+class SVX_DLLPUBLIC SdrView: public SdrCreateView, public virtual tools::WeakBase
 {
     friend class                SdrPageView;
 
@@ -156,10 +156,7 @@ protected:
     SvtAccessibilityOptions maAccessibilityOptions;
 
 public:
-    explicit SdrView(
-        SdrModel& rSdrModel,
-        OutputDevice* pOut = nullptr);
-
+    explicit SdrView(SdrModel* pModel1, OutputDevice* pOut = nullptr);
     virtual ~SdrView() override;
 
     // The default value for all dispatchers is activated. If the app for example

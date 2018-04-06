@@ -37,22 +37,23 @@
 
 
 // DrawContact section
+
 sdr::contact::ViewContact* E3dLatheObj::CreateObjectSpecificViewContact()
 {
     return new sdr::contact::ViewContactOfE3dLathe(*this);
 }
+
 
 sdr::properties::BaseProperties* E3dLatheObj::CreateObjectSpecificProperties()
 {
     return new sdr::properties::E3dLatheProperties(*this);
 }
 
+
 // Constructor from 3D polygon, scale is the conversion factor for the coordinates
-E3dLatheObj::E3dLatheObj(
-    SdrModel& rSdrModel,
-    const E3dDefaultAttributes& rDefault,
-    const basegfx::B2DPolyPolygon& rPoly2D)
-:   E3dCompoundObject(rSdrModel),
+
+E3dLatheObj::E3dLatheObj(E3dDefaultAttributes const & rDefault, const basegfx::B2DPolyPolygon& rPoly2D)
+:   E3dCompoundObject(),
     maPolyPoly2D(rPoly2D)
 {
     // since the old class PolyPolygon3D did mirror the given PolyPolygons in Y, do the same here
@@ -81,16 +82,15 @@ E3dLatheObj::E3dLatheObj(
     }
 }
 
-E3dLatheObj::E3dLatheObj(SdrModel& rSdrModel)
-:    E3dCompoundObject(rSdrModel)
+E3dLatheObj::E3dLatheObj()
+:    E3dCompoundObject()
 {
     // Set Defaults
-    const E3dDefaultAttributes aDefault;
-
+    E3dDefaultAttributes aDefault;
     SetDefaultAttributes(aDefault);
 }
 
-void E3dLatheObj::SetDefaultAttributes(const E3dDefaultAttributes& rDefault)
+void E3dLatheObj::SetDefaultAttributes(E3dDefaultAttributes const & rDefault)
 {
     GetProperties().SetObjectItemDirect(Svx3DSmoothNormalsItem(rDefault.GetDefaultLatheSmoothed()));
     GetProperties().SetObjectItemDirect(Svx3DSmoothLidsItem(rDefault.GetDefaultLatheSmoothFrontBack()));
@@ -104,20 +104,9 @@ sal_uInt16 E3dLatheObj::GetObjIdentifier() const
     return E3D_LATHEOBJ_ID;
 }
 
-E3dLatheObj* E3dLatheObj::Clone(SdrModel* pTargetModel) const
+E3dLatheObj* E3dLatheObj::Clone() const
 {
-    return CloneHelper< E3dLatheObj >(pTargetModel);
-}
-
-E3dLatheObj& E3dLatheObj::operator=(const E3dLatheObj& rObj)
-{
-    if( this == &rObj )
-        return *this;
-    E3dCompoundObject::operator=(rObj);
-
-    maPolyPoly2D = rObj.maPolyPoly2D;
-
-    return *this;
+    return CloneHelper< E3dLatheObj >();
 }
 
 // Convert the object to group object consisting of n polygons
@@ -187,7 +176,7 @@ SdrAttrObj* E3dLatheObj::GetBreakObj()
     // create PathObj
     basegfx::B3DPolyPolygon aLathePoly3D(basegfx::utils::createB3DPolyPolygonFromB2DPolyPolygon(maPolyPoly2D));
     basegfx::B2DPolyPolygon aTransPoly(TransformToScreenCoor(aLathePoly3D));
-    SdrPathObj* pPathObj = new SdrPathObj(getSdrModelFromSdrObject(), OBJ_PLIN, aTransPoly);
+    SdrPathObj* pPathObj = new SdrPathObj(OBJ_PLIN, aTransPoly);
 
     // Set Attribute
     SfxItemSet aSet(GetObjectItemSet());

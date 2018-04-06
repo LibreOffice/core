@@ -42,11 +42,7 @@ private:
     void operator =(const OSectionView&) = delete;
 public:
 
-    OSectionView(
-        SdrModel& rSdrModel,
-        OReportSection* _pSectionWindow,
-        OReportWindow* pEditor);
-
+    OSectionView( SdrModel* pModel, OReportSection* _pSectionWindow, OReportWindow* pEditor );
     virtual ~OSectionView() override;
 
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;

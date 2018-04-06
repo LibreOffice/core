@@ -106,10 +106,10 @@ namespace
     }
 }
 
-IMPL_STATIC_LINK(FmFormObjFactory, MakeObject, SdrObjCreatorParams, aParams, SdrObject*)
+IMPL_STATIC_LINK(
+    FmFormObjFactory, MakeObject, SdrObjCreatorParams, aParams, SdrObject*)
 {
     SdrObject* pNewObj = nullptr;
-
     if (aParams.nInventor == SdrInventor::FmForm)
     {
         OUString sServiceSpecifier;
@@ -213,9 +213,9 @@ IMPL_STATIC_LINK(FmFormObjFactory, MakeObject, SdrObjCreatorParams, aParams, Sdr
 
         // create the actual object
         if ( !sServiceSpecifier.isEmpty() )
-            pNewObj = new FmFormObj(aParams.rSdrModel, sServiceSpecifier);
+            pNewObj = new FmFormObj(sServiceSpecifier);
         else
-            pNewObj = new FmFormObj(aParams.rSdrModel);
+            pNewObj = new FmFormObj();
 
         // initialize some properties which we want to differ from the defaults
         for (   PropertyValueArray::const_iterator aInitProp = aInitialProperties.begin();

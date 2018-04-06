@@ -506,9 +506,7 @@ void FuInsertFile::InsTextOrRTFinDrMode(SfxMedium* pMedium)
             }
             else
             {
-                SdrRectObj* pTO = new SdrRectObj(
-                    mpView->getSdrModelFromSdrView(),
-                    OBJ_TEXT);
+                SdrRectObj* pTO = new SdrRectObj(OBJ_TEXT);
                 pTO->SetOutlinerParaObject(pOPO);
 
                 const bool bUndo = mpView->IsUndoEnabled();

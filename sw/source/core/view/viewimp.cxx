@@ -228,10 +228,7 @@ void SwViewShellImp::MakeDrawView()
                 pOutDevForDrawView = GetShell()->GetOut();
             }
 
-            m_pDrawView = new SwDrawView(
-                *this,
-                *rIDDMA.GetOrCreateDrawModel(),
-                pOutDevForDrawView);
+            m_pDrawView = new SwDrawView( *this, rIDDMA.GetDrawModel(), pOutDevForDrawView);
         }
 
         GetDrawView()->SetActiveLayer("Heaven");

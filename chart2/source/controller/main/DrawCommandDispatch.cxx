@@ -74,7 +74,7 @@ bool DrawCommandDispatch::isFeatureSupported( const OUString& rCommandURL )
     return parseCommandURL( rCommandURL, &nFeatureId, &aBaseCommand, &aCustomShapeType );
 }
 
-::basegfx::B2DPolyPolygon getPolygon(const char* pResId, const SdrModel& rModel)
+::basegfx::B2DPolyPolygon getPolygon(const char* pResId, SdrModel const & rModel)
 {
     ::basegfx::B2DPolyPolygon aReturn;
     XLineEndListRef pLineEndList = rModel.GetLineEndList();
@@ -123,7 +123,7 @@ void DrawCommandDispatch::setAttributes( SdrObject* pObj )
                                 {
                                     const SfxItemSet& rSource = pSourceObj->GetMergedItemSet();
                                     SfxItemSet aDest(
-                                        pObj->getSdrModelFromSdrObject().GetItemPool(),
+                                        pObj->GetModel()->GetItemPool(),
                                         svl::Items<
                                             // Ranges from SdrAttrObj:
                                             SDRATTR_START, SDRATTR_SHADOW_LAST,
@@ -425,13 +425,8 @@ SdrObject* DrawCommandDispatch::createDefaultObject( const sal_uInt16 nID )
         if ( pPage )
         {
             SolarMutexGuard aGuard;
-
-            pObj = SdrObjFactory::MakeNewObject(
-                pDrawModelWrapper->getSdrModel(),
-                pDrawViewWrapper->GetCurrentObjInventor(),
-                pDrawViewWrapper->GetCurrentObjIdentifier(),
-                pPage);
-
+            pObj = SdrObjFactory::MakeNewObject( pDrawViewWrapper->GetCurrentObjInventor(),
+                pDrawViewWrapper->GetCurrentObjIdentifier(), pPage );
             if ( pObj )
             {
                 Size aObjectSize( 4000, 2500 );

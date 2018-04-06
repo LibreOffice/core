@@ -111,10 +111,10 @@ using namespace com::sun::star;
 
 namespace {
 
-::basegfx::B2DPolyPolygon getPolygon(const char* pResId, const SdrModel& rModel)
+::basegfx::B2DPolyPolygon getPolygon(const char* pResId, SdrModel const * pDoc)
 {
     ::basegfx::B2DPolyPolygon aRetval;
-    XLineEndListRef pLineEndList(rModel.GetLineEndList());
+    XLineEndListRef pLineEndList = pDoc->GetLineEndList();
 
     if( pLineEndList.is() )
     {
@@ -894,7 +894,7 @@ static void lcl_NotifyNeighbours( const SdrMarkList *pLst )
 
 void SwFEShell::SetLineEnds(SfxItemSet& rAttr, SdrObject const * pObj, sal_uInt16 nSlotId)
 {
-    SdrModel& rModel(pObj->getSdrModelFromSdrObject());
+    SdrModel *pDoc = pObj->GetModel();
 
     if ( !(nSlotId == SID_LINE_ARROW_START      ||
           nSlotId == SID_LINE_ARROW_END        ||
@@ -908,7 +908,7 @@ void SwFEShell::SetLineEnds(SfxItemSet& rAttr, SdrObject const * pObj, sal_uInt1
     // set attributes of line start and ends
 
     // arrowhead
-    ::basegfx::B2DPolyPolygon aArrow( getPolygon( RID_SVXSTR_ARROW, rModel ) );
+    ::basegfx::B2DPolyPolygon aArrow( getPolygon( RID_SVXSTR_ARROW, pDoc ) );
     if( !aArrow.count() )
     {
         ::basegfx::B2DPolygon aNewArrow;
@@ -920,7 +920,7 @@ void SwFEShell::SetLineEnds(SfxItemSet& rAttr, SdrObject const * pObj, sal_uInt1
     }
 
     // Circles
-    ::basegfx::B2DPolyPolygon aCircle( getPolygon( RID_SVXSTR_CIRCLE, rModel ) );
+    ::basegfx::B2DPolyPolygon aCircle( getPolygon( RID_SVXSTR_CIRCLE, pDoc ) );
     if( !aCircle.count() )
     {
         ::basegfx::B2DPolygon aNewCircle;
@@ -930,7 +930,7 @@ void SwFEShell::SetLineEnds(SfxItemSet& rAttr, SdrObject const * pObj, sal_uInt1
     }
 
     // Square
-    ::basegfx::B2DPolyPolygon aSquare( getPolygon( RID_SVXSTR_SQUARE, rModel ) );
+    ::basegfx::B2DPolyPolygon aSquare( getPolygon( RID_SVXSTR_SQUARE, pDoc ) );
     if( !aSquare.count() )
     {
         ::basegfx::B2DPolygon aNewSquare;
@@ -942,7 +942,7 @@ void SwFEShell::SetLineEnds(SfxItemSet& rAttr, SdrObject const * pObj, sal_uInt1
         aSquare.append(aNewSquare);
     }
 
-    SfxItemSet aSet( rModel.GetItemPool() );
+    SfxItemSet aSet( pDoc->GetItemPool() );
     long nWidth = 100; // (1/100th mm)
 
     // determine line width and calculate with it the line end width
@@ -2919,9 +2919,8 @@ long SwFEShell::GetSectionWidth( SwFormat const & rFormat ) const
     SdrView* pDrawView = GetDrawView();
     SdrModel* pDrawModel = pDrawView->GetModel();
     SdrObject* pObj = SdrObjFactory::MakeNewObject(
-        *pDrawModel,
-        SdrInventor::Default,
-        eSdrObjectKind);
+        SdrInventor::Default, eSdrObjectKind,
+        nullptr, pDrawModel);
 
     if(pObj)
     {
@@ -3041,7 +3040,7 @@ long SwFEShell::GetSectionWidth( SwFormat const & rFormat ) const
                     aTempPoly.append(basegfx::B2DPoint(aRect.BottomRight().getX(), nYMiddle));
                     aPoly.append(aTempPoly);
 
-                    SfxItemSet aAttr(pObj->getSdrModelFromSdrObject().GetItemPool());
+                    SfxItemSet aAttr(pObj->GetModel()->GetItemPool());
                     SetLineEnds(aAttr, pObj, nSlotId);
                     pObj->SetMergedItemSet(aAttr);
                 }

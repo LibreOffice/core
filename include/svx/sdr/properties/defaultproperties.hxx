@@ -54,9 +54,6 @@ namespace sdr
             // react on ItemSet changes
             virtual void ItemSetChanged(const SfxItemSet& rSet) override;
 
-            // check if SfxItemSet exists
-            bool HasSfxItemSet() const { return bool(mpItemSet); }
-
         public:
             // basic constructor
             explicit DefaultProperties(SdrObject& rObj);

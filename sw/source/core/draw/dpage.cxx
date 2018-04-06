@@ -49,21 +49,17 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::frame;
 
-SwDPage::SwDPage(SwDrawModel& rNewModel, bool bMasterPage)
-:   FmFormPage(rNewModel, bMasterPage),
+SwDPage::SwDPage(SwDrawModel& rNewModel, bool bMasterPage) :
+    FmFormPage(rNewModel, bMasterPage),
     pGridLst( nullptr ),
     pDoc(&rNewModel.GetDoc())
 {
 }
 
-SwDPage::~SwDPage()
+SwDPage::SwDPage(const SwDPage& rSrcPage) :
+    FmFormPage( rSrcPage ),
+    pDoc( nullptr )
 {
-}
-
-void SwDPage::lateInit(const SwDPage& rSrcPage)
-{
-    FmFormPage::lateInit( rSrcPage );
-
     if ( rSrcPage.pGridLst )
     {
         pGridLst.reset( new SdrPageGridFrameList );
@@ -72,15 +68,39 @@ void SwDPage::lateInit(const SwDPage& rSrcPage)
     }
 }
 
+SwDPage::~SwDPage()
+{
+}
+
+void SwDPage::lateInit(const SwDPage& rPage, SwDrawModel* const pNewModel)
+{
+    FmFormPage::lateInit( rPage, pNewModel );
+
+    SwDrawModel* pSwDrawModel = pNewModel;
+    if (!pSwDrawModel)
+    {
+        pSwDrawModel = &dynamic_cast<SwDrawModel&>(*GetModel());
+        assert( pSwDrawModel );
+    }
+    pDoc = &pSwDrawModel->GetDoc();
+}
+
+SwDPage* SwDPage::Clone() const
+{
+    return Clone( nullptr );
+}
+
 SwDPage* SwDPage::Clone(SdrModel* const pNewModel) const
 {
-    SwDrawModel& rSwDrawModel(static_cast< SwDrawModel& >(nullptr == pNewModel ? getSdrModelFromSdrPage() : *pNewModel));
-    SwDPage* pClonedSwDPage(
-        new SwDPage(
-            rSwDrawModel,
-            IsMasterPage()));
-    pClonedSwDPage->lateInit(*this);
-    return pClonedSwDPage;
+    SwDPage* const pNewPage = new SwDPage( *this );
+    SwDrawModel* pSwDrawModel = nullptr;
+    if ( pNewModel )
+    {
+        pSwDrawModel = &dynamic_cast<SwDrawModel&>(*pNewModel);
+        assert( pSwDrawModel );
+    }
+    pNewPage->lateInit( *this, pSwDrawModel );
+    return pNewPage;
 }
 
 SdrObject*  SwDPage::ReplaceObject( SdrObject* pNewObj, size_t nObjNum )
@@ -106,7 +126,7 @@ void InsertGridFrame( SdrPageGridFrameList *pLst, const SwFrame *pPg )
 const SdrPageGridFrameList*  SwDPage::GetGridFrameList(
                         const SdrPageView* pPV, const tools::Rectangle *pRect ) const
 {
-    SwViewShell* pSh = static_cast< SwDrawModel& >(getSdrModelFromSdrPage()).GetDoc().getIDocumentLayoutAccess().GetCurrentViewShell();
+    SwViewShell* pSh = static_cast< SwDrawModel* >(GetModel())->GetDoc().getIDocumentLayoutAccess().GetCurrentViewShell();
     if(pSh)
     {
         for(SwViewShell& rShell : pSh->GetRingContainer())

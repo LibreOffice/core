@@ -64,16 +64,16 @@ namespace
         sal_Int16 nRetval(0);
         SdrPage* pPage = GetSdrPageFromXDrawPage(rxDrawPage);
 
-        if(pPage)
+        if(pPage && pPage->GetModel())
         {
             if( (pPage->GetPageNum() == 0) && !pPage->IsMasterPage() )
             {
                 // handout page!
-                return pPage->getSdrModelFromSdrPage().getHandoutPageCount();
+                return pPage->GetModel()->getHandoutPageCount();
             }
             else
             {
-                const sal_uInt16 nPageCount(pPage->getSdrModelFromSdrPage().GetPageCount());
+                const sal_uInt16 nPageCount(pPage->GetModel()->GetPageCount());
                 nRetval = (static_cast<sal_Int16>(nPageCount) - 1) / 2;
             }
         }
@@ -188,9 +188,9 @@ namespace drawinglayer
                 }
 
                 // #i101443#  check change of TextBackgroundolor
-                if(!bDoDelete && getSdrText())
+                if(!bDoDelete && getSdrText() && getSdrText()->GetModel())
                 {
-                    SdrOutliner& rDrawOutliner = getSdrText()->GetObject().getSdrModelFromSdrObject().GetDrawOutliner();
+                    SdrOutliner& rDrawOutliner = getSdrText()->GetModel()->GetDrawOutliner();
                     aNewTextBackgroundColor = rDrawOutliner.GetBackgroundColor();
                     bNewTextBackgroundColorIsSet = true;
 
@@ -223,9 +223,9 @@ namespace drawinglayer
                     nCurrentlyValidPageCount = getPageCount(xCurrentlyVisualizingPage);
                 }
 
-                if(!bNewTextBackgroundColorIsSet && getSdrText())
+                if(!bNewTextBackgroundColorIsSet && getSdrText() && getSdrText()->GetModel())
                 {
-                    SdrOutliner& rDrawOutliner = getSdrText()->GetObject().getSdrModelFromSdrObject().GetDrawOutliner();
+                    SdrOutliner& rDrawOutliner = getSdrText()->GetModel()->GetDrawOutliner();
                     aNewTextBackgroundColor = rDrawOutliner.GetBackgroundColor();
                 }
 

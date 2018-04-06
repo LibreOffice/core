@@ -25,16 +25,17 @@
 #include <basegfx/polygon/b3dpolygon.hxx>
 #include <basegfx/polygon/b3dpolygontools.hxx>
 
+
 // DrawContact section
+
 sdr::contact::ViewContact* E3dPolygonObj::CreateObjectSpecificViewContact()
 {
     return new sdr::contact::ViewContactOfE3dPolygon(*this);
 }
 
 E3dPolygonObj::E3dPolygonObj(
-    SdrModel& rSdrModel,
     const basegfx::B3DPolyPolygon& rPolyPoly3D)
-:   E3dCompoundObject(rSdrModel),
+:   E3dCompoundObject(),
     bLineOnly(true)
 {
     // Set geometry
@@ -47,9 +48,9 @@ E3dPolygonObj::E3dPolygonObj(
     CreateDefaultTexture();
 }
 
-E3dPolygonObj::E3dPolygonObj(SdrModel& rSdrModel)
-:   E3dCompoundObject(rSdrModel),
-    bLineOnly(false)
+E3dPolygonObj::E3dPolygonObj()
+:   E3dCompoundObject(),
+    bLineOnly(false) // added missing initialisation
 {
     // Create no geometry
 }
@@ -218,23 +219,9 @@ SdrObject *E3dPolygonObj::DoConvertToPolyObj(bool /*bBezier*/, bool /*bAddText*/
     return nullptr;
 }
 
-E3dPolygonObj* E3dPolygonObj::Clone(SdrModel* pTargetModel) const
+E3dPolygonObj* E3dPolygonObj::Clone() const
 {
-    return CloneHelper< E3dPolygonObj >(pTargetModel);
-}
-
-E3dPolygonObj& E3dPolygonObj::operator=(const E3dPolygonObj& rObj)
-{
-    if( this == &rObj )
-        return *this;
-    E3dCompoundObject::operator=(rObj);
-
-    aPolyPoly3D = rObj.aPolyPoly3D;
-    aPolyNormals3D = rObj.aPolyNormals3D;
-    aPolyTexture2D = rObj.aPolyTexture2D;
-    bLineOnly = rObj.bLineOnly;
-
-    return *this;
+    return CloneHelper< E3dPolygonObj >();
 }
 
 void E3dPolygonObj::SetLineOnly(bool bNew)

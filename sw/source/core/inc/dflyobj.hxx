@@ -42,7 +42,7 @@ protected:
 
 public:
 
-    SwFlyDrawObj(SdrModel& rSdrModel);
+    SwFlyDrawObj();
     virtual ~SwFlyDrawObj() override;
 
     // for instantiation of this class while loading (via factory)
@@ -80,10 +80,7 @@ public:
     // RotGrfFlyFrame: Check if this is a SwGrfNode
     bool ContainsSwGrfNode() const;
 
-    SwVirtFlyDrawObj(
-        SdrModel& rSdrModel,
-        SdrObject& rNew,
-        SwFlyFrame* pFly);
+    SwVirtFlyDrawObj(SdrObject& rNew, SwFlyFrame* pFly);
     virtual ~SwVirtFlyDrawObj() override;
 
     // override method of base class SdrVirtObj

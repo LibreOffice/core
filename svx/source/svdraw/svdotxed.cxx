@@ -49,7 +49,7 @@ bool SdrTextObj::BegTextEdit(SdrOutliner& rOutl)
     if ( !IsOutlText() )
         nOutlinerMode = OutlinerMode::TextObject;
     rOutl.Init( nOutlinerMode );
-    rOutl.SetRefDevice(getSdrModelFromSdrObject().GetRefDevice());
+    rOutl.SetRefDevice( pModel->GetRefDevice() );
 
     bool bFitToSize(IsFitToSize());
     bool bContourFrame=IsContourTextFrame();
@@ -146,9 +146,11 @@ void SdrTextObj::TakeTextEditArea(Size* pPaperMin, Size* pPaperMax, tools::Recta
     Size aAnkSiz(aViewInit.GetSize());
     aAnkSiz.AdjustWidth( -1 ); aAnkSiz.AdjustHeight( -1 ); // because GetSize() adds 1
     Size aMaxSiz(1000000,1000000);
-    Size aTmpSiz(getSdrModelFromSdrObject().GetMaxObjSize());
-    if (aTmpSiz.Width()!=0) aMaxSiz.setWidth(aTmpSiz.Width() );
-    if (aTmpSiz.Height()!=0) aMaxSiz.setHeight(aTmpSiz.Height() );
+    if (pModel!=nullptr) {
+        Size aTmpSiz(pModel->GetMaxObjSize());
+        if (aTmpSiz.Width()!=0) aMaxSiz.setWidth(aTmpSiz.Width() );
+        if (aTmpSiz.Height()!=0) aMaxSiz.setHeight(aTmpSiz.Height() );
+    }
 
     // Done earlier since used in else tree below
     SdrTextHorzAdjust eHAdj(GetTextHorizontalAdjust());

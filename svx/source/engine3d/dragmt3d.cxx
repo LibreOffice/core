@@ -73,7 +73,8 @@ E3dDragMethod::E3dDragMethod (
         if(pE3dObj)
         {
             // fill new interaction unit
-            E3dDragMethodUnit aNewUnit(*pE3dObj);
+            E3dDragMethodUnit aNewUnit;
+            aNewUnit.mp3DObj = pE3dObj;
 
             // get transformations
             aNewUnit.maInitTransform = aNewUnit.maTransform = pE3dObj->GetTransform();
@@ -156,15 +157,13 @@ bool E3dDragMethod::EndSdrDrag(bool /*bCopy*/)
         for(nOb=0;nOb<nCnt;nOb++)
         {
             E3dDragMethodUnit& rCandidate = maGrp[nOb];
-            E3DModifySceneSnapRectUpdater aUpdater(&rCandidate.mr3DObj);
-            rCandidate.mr3DObj.SetTransform(rCandidate.maTransform);
+            E3DModifySceneSnapRectUpdater aUpdater(rCandidate.mp3DObj);
+            rCandidate.mp3DObj->SetTransform(rCandidate.maTransform);
             if( bUndo )
             {
-                getSdrDragView().AddUndo(
-                    new E3dRotateUndoAction(
-                        rCandidate.mr3DObj,
-                        rCandidate.maInitTransform,
-                        rCandidate.maTransform));
+                getSdrDragView().AddUndo(new E3dRotateUndoAction(rCandidate.mp3DObj->GetModel(),
+                    rCandidate.mp3DObj, rCandidate.maInitTransform,
+                    rCandidate.maTransform));
             }
         }
         if( bUndo )
@@ -186,8 +185,8 @@ void E3dDragMethod::CancelSdrDrag()
             {
                 // Restore transformation
                 E3dDragMethodUnit& rCandidate = maGrp[nOb];
-                E3DModifySceneSnapRectUpdater aUpdater(&rCandidate.mr3DObj);
-                rCandidate.mr3DObj.SetTransform(rCandidate.maInitTransform);
+                E3DModifySceneSnapRectUpdater aUpdater(rCandidate.mp3DObj);
+                rCandidate.mp3DObj->SetTransform(rCandidate.maInitTransform);
             }
         }
     }
@@ -225,7 +224,7 @@ void E3dDragMethod::CreateOverlayGeometry(sdr::overlay::OverlayManager& rOverlay
 
             if(nPlyCnt)
             {
-                const sdr::contact::ViewContactOfE3dScene& rVCScene = static_cast< sdr::contact::ViewContactOfE3dScene& >(rCandidate.mr3DObj.GetScene()->GetViewContact());
+                const sdr::contact::ViewContactOfE3dScene& rVCScene = static_cast< sdr::contact::ViewContactOfE3dScene& >(rCandidate.mp3DObj->GetScene()->GetViewContact());
                 const drawinglayer::geometry::ViewInformation3D& aViewInfo3D(rVCScene.getViewInformation3D());
                 const basegfx::B3DHomMatrix aWorldToView(aViewInfo3D.getDeviceToView() * aViewInfo3D.getProjection() * aViewInfo3D.getOrientation());
                 const basegfx::B3DHomMatrix aTransform(aWorldToView * rCandidate.maDisplayTransform);
@@ -262,7 +261,7 @@ E3dDragRotate::E3dDragRotate(SdrDragView &_rView,
 
     if(nCnt)
     {
-        const E3dScene *pScene = maGrp[0].mr3DObj.GetScene();
+        const E3dScene *pScene = maGrp[0].mp3DObj->GetScene();
 
         if(pScene)
         {
@@ -272,7 +271,7 @@ E3dDragRotate::E3dDragRotate(SdrDragView &_rView,
             for(sal_uInt32 nOb(0); nOb < nCnt; nOb++)
             {
                 E3dDragMethodUnit& rCandidate = maGrp[nOb];
-                basegfx::B3DPoint aObjCenter = rCandidate.mr3DObj.GetBoundVolume().getCenter();
+                basegfx::B3DPoint aObjCenter = rCandidate.mp3DObj->GetBoundVolume().getCenter();
                 const basegfx::B3DHomMatrix aTransform(aViewInfo3D.getOrientation() * rCandidate.maDisplayTransform * rCandidate.maInitTransform);
 
                 aObjCenter = aTransform * aObjCenter;
@@ -388,7 +387,7 @@ void E3dDragRotate::MoveSdrDrag(const Point& rPnt)
             }
 
             // Transformation in eye coordinates, there rotate then and back
-            const sdr::contact::ViewContactOfE3dScene& rVCScene = static_cast< sdr::contact::ViewContactOfE3dScene& >(rCandidate.mr3DObj.GetScene()->GetViewContact());
+            const sdr::contact::ViewContactOfE3dScene& rVCScene = static_cast< sdr::contact::ViewContactOfE3dScene& >(rCandidate.mp3DObj->GetScene()->GetViewContact());
             const drawinglayer::geometry::ViewInformation3D& aViewInfo3D(rVCScene.getViewInformation3D());
             basegfx::B3DHomMatrix aInverseOrientation(aViewInfo3D.getOrientation());
             aInverseOrientation.invert();
@@ -406,8 +405,8 @@ void E3dDragRotate::MoveSdrDrag(const Point& rPnt)
 
             if(mbMoveFull)
             {
-                E3DModifySceneSnapRectUpdater aUpdater(&rCandidate.mr3DObj);
-                rCandidate.mr3DObj.SetTransform(rCandidate.maTransform);
+                E3DModifySceneSnapRectUpdater aUpdater(rCandidate.mp3DObj);
+                rCandidate.mp3DObj->SetTransform(rCandidate.maTransform);
             }
             else
             {
@@ -505,7 +504,7 @@ void E3dDragMove::MoveSdrDrag(const Point& rPnt)
             for(sal_uInt32 nOb(0); nOb < nCnt; nOb++)
             {
                 E3dDragMethodUnit& rCandidate = maGrp[nOb];
-                const sdr::contact::ViewContactOfE3dScene& rVCScene = static_cast< sdr::contact::ViewContactOfE3dScene& >(rCandidate.mr3DObj.GetScene()->GetViewContact());
+                const sdr::contact::ViewContactOfE3dScene& rVCScene = static_cast< sdr::contact::ViewContactOfE3dScene& >(rCandidate.mp3DObj->GetScene()->GetViewContact());
                 const drawinglayer::geometry::ViewInformation3D& aViewInfo3D(rVCScene.getViewInformation3D());
 
                 // move coor from 2d world to 3d Eye
@@ -555,8 +554,8 @@ void E3dDragMove::MoveSdrDrag(const Point& rPnt)
 
                 if(mbMoveFull)
                 {
-                    E3DModifySceneSnapRectUpdater aUpdater(&rCandidate.mr3DObj);
-                    rCandidate.mr3DObj.SetTransform(rCandidate.maTransform);
+                    E3DModifySceneSnapRectUpdater aUpdater(rCandidate.mp3DObj);
+                    rCandidate.mp3DObj->SetTransform(rCandidate.maTransform);
                 }
                 else
                 {
@@ -576,10 +575,10 @@ void E3dDragMove::MoveSdrDrag(const Point& rPnt)
             for(sal_uInt32 nOb(0); nOb < nCnt; nOb++)
             {
                 E3dDragMethodUnit& rCandidate = maGrp[nOb];
-                const basegfx::B3DPoint aObjectCenter(rCandidate.mr3DObj.GetBoundVolume().getCenter());
+                const basegfx::B3DPoint aObjectCenter(rCandidate.mp3DObj->GetBoundVolume().getCenter());
 
                 // transform from 2D world view to 3D eye
-                const sdr::contact::ViewContactOfE3dScene& rVCScene = static_cast< sdr::contact::ViewContactOfE3dScene& >(rCandidate.mr3DObj.GetScene()->GetViewContact());
+                const sdr::contact::ViewContactOfE3dScene& rVCScene = static_cast< sdr::contact::ViewContactOfE3dScene& >(rCandidate.mp3DObj->GetScene()->GetViewContact());
                 const drawinglayer::geometry::ViewInformation3D& aViewInfo3D(rVCScene.getViewInformation3D());
 
                 basegfx::B2DPoint aGlobalScaleStart2D(static_cast<double>(aStartPos.X()), static_cast<double>(aStartPos.Y()));
@@ -674,14 +673,14 @@ void E3dDragMove::MoveSdrDrag(const Point& rPnt)
 
                 if(mbMoveFull)
                 {
-                    E3DModifySceneSnapRectUpdater aUpdater(&rCandidate.mr3DObj);
-                    rCandidate.mr3DObj.SetTransform(rCandidate.maTransform);
+                    E3DModifySceneSnapRectUpdater aUpdater(rCandidate.mp3DObj);
+                    rCandidate.mp3DObj->SetTransform(rCandidate.maTransform);
                 }
                 else
                 {
                     Hide();
                     rCandidate.maWireframePoly.clear();
-                    rCandidate.maWireframePoly = rCandidate.mr3DObj.CreateWireframe();
+                    rCandidate.maWireframePoly = rCandidate.mp3DObj->CreateWireframe();
                     rCandidate.maWireframePoly.transform(rCandidate.maTransform);
                     Show();
                 }

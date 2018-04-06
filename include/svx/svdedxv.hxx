@@ -58,7 +58,7 @@ enum class SdrEndTextEditKind
 // - macromod
 
 
-class SVX_DLLPUBLIC SdrObjEditView : public SdrGlueEditView, public EditViewCallbacks
+class SVX_DLLPUBLIC SdrObjEditView: public SdrGlueEditView, public EditViewCallbacks
 {
     friend class                SdrPageView;
     friend class                ImpSdrEditPara;
@@ -150,10 +150,7 @@ protected:
 
 protected:
     // #i71538# make constructors of SdrView sub-components protected to avoid incomplete incarnations which may get casted to SdrView
-    SdrObjEditView(
-        SdrModel& rSdrModel,
-        OutputDevice* pOut);
-
+    SdrObjEditView(SdrModel* pModel1, OutputDevice* pOut);
     virtual ~SdrObjEditView() override;
 
 public:

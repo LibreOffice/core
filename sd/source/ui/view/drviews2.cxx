@@ -520,9 +520,7 @@ public:
             if (!pMasterPage)
                 continue;
 
-            SdrRectObj* pObject = new SdrRectObj(
-                *m_rDrawViewShell.GetDoc(), // TTTT should be reference
-                OBJ_TEXT);
+            SdrRectObj* pObject = new SdrRectObj(OBJ_TEXT);
             pObject->SetMergedItem(makeSdrTextAutoGrowWidthItem(true));
             pObject->SetOutlinerParaObject(pOutliner->CreateParaObject());
             pMasterPage->InsertObject(pObject);
@@ -1087,9 +1085,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 }
 
                 // create new object
-                SdrGrafObj* pGraphicObj = new SdrGrafObj(
-                    *GetDoc(),
-                    aGraphic);
+                SdrGrafObj* pGraphicObj = new SdrGrafObj (aGraphic);
 
                 // get some necessary info and ensure it
                 const SdrMarkList& rMarkList(mpDrawView->GetMarkedObjectList());
@@ -2343,9 +2339,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 pOutl->QuickInsertField( *pFieldItem, ESelection() );
                 OutlinerParaObject* pOutlParaObject = pOutl->CreateParaObject();
 
-                SdrRectObj* pRectObj = new SdrRectObj(
-                    *GetDoc(),
-                    OBJ_TEXT);
+                SdrRectObj* pRectObj = new SdrRectObj( OBJ_TEXT );
                 pRectObj->SetMergedItem(makeSdrTextAutoGrowWidthItem(true));
 
                 pOutl->UpdateFields();

@@ -196,7 +196,7 @@ private:
 public:
 
     /// Creates DrawObject and registers it with the Model.
-    SwFlyDrawContact(SwFlyFrameFormat* pToRegisterIn, SdrModel& rTargetModel);
+    SwFlyDrawContact( SwFlyFrameFormat* pToRegisterIn );
     static SwVirtFlyDrawObj* CreateNewRef(SwFlyFrame* pFly, SwFlyFrameFormat* pFormat);
     virtual ~SwFlyDrawContact() override;
 
@@ -240,17 +240,15 @@ class SwDrawVirtObj : public SdrVirtObj
         virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact() override;
 
     public:
-        SwDrawVirtObj(
-            SdrModel& rSdrModel,
-            SdrObject& _rNewObj,
-            SwDrawContact& _rDrawContact);
 
+        SwDrawVirtObj( SdrObject&       _rNewObj,
+                       SwDrawContact&   _rDrawContact );
         virtual ~SwDrawVirtObj() override;
 
         /// access to offset
         virtual const Point GetOffset() const override;
 
-        virtual SwDrawVirtObj* Clone(SdrModel* pTargetModel = nullptr) const override;
+        virtual SwDrawVirtObj* Clone() const override;
         SwDrawVirtObj& operator= (const SwDrawVirtObj& rObj);
 
         /// connection to writer layout

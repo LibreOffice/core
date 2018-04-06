@@ -560,9 +560,9 @@ bool SVGFilter::implExport( const Sequence< PropertyValue >& rDescriptor )
                         if( pSvxDrawPage )
                         {
                             mpDefaultSdrPage = pSvxDrawPage->GetSdrPage();
-                            mpSdrModel = &mpDefaultSdrPage->getSdrModelFromSdrPage();
+                            mpSdrModel = mpDefaultSdrPage->GetModel();
 
-                            if( mpSdrModel ) // TTTT should be reference
+                            if( mpSdrModel )
                             {
                                 SdrOutliner& rOutl = mpSdrModel->GetDrawOutliner();
 
@@ -921,8 +921,8 @@ void SVGFilter::implGenerateMetaData()
         if( pSvxDrawPage )
         {
             SdrPage* pSdrPage = pSvxDrawPage->GetSdrPage();
-            SdrModel& rSdrModel(pSdrPage->getSdrModelFromSdrPage());
-            nPageNumberingType = rSdrModel.GetPageNumType();
+            SdrModel* pSdrModel = pSdrPage->GetModel();
+            nPageNumberingType = pSdrModel->GetPageNumType();
 
             // That is used by CalcFieldHdl method.
             mVisiblePagePropSet.nPageNumberingType = nPageNumberingType;
@@ -1384,8 +1384,8 @@ void SVGFilter::implGetPagePropSet( const Reference< css::drawing::XDrawPage > &
                 if( pSvxDrawPage )
                 {
                     SdrPage* pSdrPage = pSvxDrawPage->GetSdrPage();
-                    SdrModel& rSdrModel(pSdrPage->getSdrModelFromSdrPage());
-                    mVisiblePagePropSet.nPageNumberingType = rSdrModel.GetPageNumType();
+                    SdrModel* pSdrModel = pSdrPage->GetModel();
+                    mVisiblePagePropSet.nPageNumberingType = pSdrModel->GetPageNumType();
                 }
             }
         }
@@ -1931,7 +1931,7 @@ bool SVGFilter::implCreateObjectsFromShape( const Reference< css::drawing::XDraw
 
         if( pObj )
         {
-            const Graphic aGraphic(SdrExchangeView::GetObjGraphic(*pObj));
+            Graphic aGraphic( SdrExchangeView::GetObjGraphic( pObj->GetModel(), pObj ) );
 
             if( aGraphic.GetType() != GraphicType::NONE )
             {

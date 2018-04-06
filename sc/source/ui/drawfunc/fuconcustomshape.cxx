@@ -132,10 +132,8 @@ void FuConstCustomShape::Deactivate()
 SdrObject* FuConstCustomShape::CreateDefaultObject(const sal_uInt16 /* nID */, const tools::Rectangle& rRectangle)
 {
     SdrObject* pObj = SdrObjFactory::MakeNewObject(
-        *pDrDoc,
-        pView->GetCurrentObjInventor(),
-        pView->GetCurrentObjIdentifier());
-
+        pView->GetCurrentObjInventor(), pView->GetCurrentObjIdentifier(),
+        nullptr, pDrDoc);
     if( pObj )
     {
         tools::Rectangle aRectangle( rRectangle );
@@ -144,7 +142,6 @@ SdrObject* FuConstCustomShape::CreateDefaultObject(const sal_uInt16 /* nID */, c
             ImpForceQuadratic( aRectangle );
         pObj->SetLogicRect( aRectangle );
     }
-
     return pObj;
 }
 
@@ -171,7 +168,7 @@ void FuConstCustomShape::SetAttributes( SdrObject* pObj )
                         {
                             const SfxItemSet& rSource = pSourceObj->GetMergedItemSet();
                             SfxItemSet aDest(
-                                pObj->getSdrModelFromSdrObject().GetItemPool(),
+                                pObj->GetModel()->GetItemPool(),
                                 svl::Items<
                                     // Ranges from SdrAttrObj:
                                     SDRATTR_START, SDRATTR_SHADOW_LAST,

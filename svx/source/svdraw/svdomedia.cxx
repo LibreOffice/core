@@ -65,17 +65,16 @@ struct SdrMediaObj::Impl
     OUString m_LastFailedPkgURL;
 };
 
-SdrMediaObj::SdrMediaObj(SdrModel& rSdrModel)
-:   SdrRectObj(rSdrModel)
-    ,m_xImpl( new Impl )
+
+SdrMediaObj::SdrMediaObj()
+    : SdrRectObj()
+    , m_xImpl( new Impl )
 {
 }
 
-SdrMediaObj::SdrMediaObj(
-    SdrModel& rSdrModel,
-    const tools::Rectangle& rRect)
-:   SdrRectObj(rSdrModel, rRect)
-    ,m_xImpl( new Impl )
+SdrMediaObj::SdrMediaObj( const tools::Rectangle& rRect )
+    : SdrRectObj( rRect )
+    , m_xImpl( new Impl )
 {
 }
 
@@ -142,9 +141,9 @@ OUString SdrMediaObj::TakeObjNamePlural() const
     return ImpGetResStr(STR_ObjNamePluralMEDIA);
 }
 
-SdrMediaObj* SdrMediaObj::Clone(SdrModel* pTargetModel) const
+SdrMediaObj* SdrMediaObj::Clone() const
 {
-    return CloneHelper< SdrMediaObj >(pTargetModel);
+    return CloneHelper< SdrMediaObj >();
 }
 
 SdrMediaObj& SdrMediaObj::operator=(const SdrMediaObj& rObj)
@@ -316,14 +315,8 @@ void SdrMediaObj::SetInputStream(uno::Reference<io::XInputStream> const& xStream
         SAL_WARN("svx", "this is only intended for embedded media");
         return;
     }
-
     OUString tempFileURL;
-    const bool bSuccess(
-        lcl_CopyToTempFile(
-            xStream,
-            tempFileURL,
-            ""));
-
+    bool const bSuccess = lcl_CopyToTempFile(xStream, tempFileURL, "");
     if (bSuccess)
     {
         m_xImpl->m_pTempFile.reset(new MediaTempFile(tempFileURL));
@@ -338,14 +331,19 @@ void SdrMediaObj::SetInputStream(uno::Reference<io::XInputStream> const& xStream
 /// copy a stream from XStorage to temp file
 #if HAVE_FEATURE_AVMEDIA
 static bool lcl_HandlePackageURL(
-    OUString const & rURL,
-    const SdrModel& rModel,
-    OUString & o_rTempFileURL)
+        OUString const & rURL,
+        SdrModel const *const pModel,
+        OUString & o_rTempFileURL)
 {
+    if (!pModel)
+    {
+        SAL_WARN("svx", "no model");
+        return false;
+    }
     ::comphelper::LifecycleProxy sourceProxy;
     uno::Reference<io::XInputStream> xInStream;
     try {
-        xInStream = rModel.GetDocumentStream(rURL, sourceProxy);
+        xInStream = pModel->GetDocumentStream(rURL, sourceProxy);
     }
     catch (container::NoSuchElementException const&)
     {
@@ -396,12 +394,8 @@ void SdrMediaObj::mediaPropertiesChanged( const ::avmedia::MediaItem& rNewProper
                                 rNewProperties.getTempURL()))
             {
                 OUString tempFileURL;
-                const bool bSuccess(
-                    lcl_HandlePackageURL(
-                        url,
-                        getSdrModelFromSdrObject(),
-                        tempFileURL));
-
+                bool bSuccess;
+                    bSuccess = lcl_HandlePackageURL(url, GetModel(), tempFileURL);
                 if (bSuccess)
                 {
                     m_xImpl->m_pTempFile.reset(

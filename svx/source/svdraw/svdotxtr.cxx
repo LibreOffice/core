@@ -175,7 +175,7 @@ void SdrTextObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fract
 
     AdaptTextMinSize();
 
-    if(bTextFrame && !getSdrModelFromSdrObject().IsPasteResize())
+    if(bTextFrame && (!pModel || !pModel->IsPasteResize()))
     {
         NbcAdjustTextFrameWidthAndHeight();
     }
@@ -313,7 +313,7 @@ SdrObject* SdrTextObj::ImpConvertContainedTextToSdrPathObjs(bool bToPoly) const
         if(nResultCount)
         {
             // prepare own target
-            SdrObjGroup* pGroup = new SdrObjGroup(getSdrModelFromSdrObject());
+            SdrObjGroup* pGroup = new SdrObjGroup();
             SdrObjList* pObjectList = pGroup->GetSubList();
 
             // process results
@@ -355,10 +355,7 @@ SdrObject* SdrTextObj::ImpConvertContainedTextToSdrPathObjs(bool bToPoly) const
                         aAttributeSet.Put(XFillStyleItem(drawing::FillStyle_SOLID));
 
                         // create filled SdrPathObj
-                        pPathObj = new SdrPathObj(
-                            getSdrModelFromSdrObject(),
-                            OBJ_PATHFILL,
-                            aPolyPolygon);
+                        pPathObj = new SdrPathObj(OBJ_PATHFILL, aPolyPolygon);
                     }
                     else
                     {
@@ -369,16 +366,18 @@ SdrObject* SdrTextObj::ImpConvertContainedTextToSdrPathObjs(bool bToPoly) const
                         aAttributeSet.Put(XFillStyleItem(drawing::FillStyle_NONE));
 
                         // create line SdrPathObj
-                        pPathObj = new SdrPathObj(
-                            getSdrModelFromSdrObject(),
-                            OBJ_PATHLINE,
-                            aPolyPolygon);
+                        pPathObj = new SdrPathObj(OBJ_PATHLINE, aPolyPolygon);
                     }
 
                     // copy basic information from original
                     pPathObj->ImpSetAnchorPos(GetAnchorPos());
                     pPathObj->NbcSetLayer(GetLayer());
-                    pPathObj->NbcSetStyleSheet(GetStyleSheet(), true);
+
+                    if(GetModel())
+                    {
+                        pPathObj->SetModel(GetModel());
+                        pPathObj->NbcSetStyleSheet(GetStyleSheet(), true);
+                    }
 
                     // apply prepared ItemSet and add to target
                     pPathObj->SetMergedItemSet(aAttributeSet);
@@ -434,10 +433,7 @@ SdrObject* SdrTextObj::ImpConvertMakeObj(const basegfx::B2DPolyPolygon& rPolyPol
         ePathKind = bClosed ? OBJ_POLY : OBJ_PLIN;
     }
 
-    SdrPathObj* pPathObj = new SdrPathObj(
-        getSdrModelFromSdrObject(),
-        ePathKind,
-        aB2DPolyPolygon);
+    SdrPathObj* pPathObj = new SdrPathObj(ePathKind, aB2DPolyPolygon);
 
     if(bBezier)
     {
@@ -447,11 +443,18 @@ SdrObject* SdrTextObj::ImpConvertMakeObj(const basegfx::B2DPolyPolygon& rPolyPol
 
     pPathObj->ImpSetAnchorPos(aAnchor);
     pPathObj->NbcSetLayer(GetLayer());
-    sdr::properties::ItemChangeBroadcaster aC(*pPathObj);
-    pPathObj->ClearMergedItem();
-    pPathObj->SetMergedItemSet(GetObjectItemSet());
-    pPathObj->GetProperties().BroadcastItemChange(aC);
-    pPathObj->NbcSetStyleSheet(GetStyleSheet(), true);
+
+    if(pModel)
+    {
+        pPathObj->SetModel(pModel);
+
+        sdr::properties::ItemChangeBroadcaster aC(*pPathObj);
+
+        pPathObj->ClearMergedItem();
+        pPathObj->SetMergedItemSet(GetObjectItemSet());
+        pPathObj->GetProperties().BroadcastItemChange(aC);
+        pPathObj->NbcSetStyleSheet(GetStyleSheet(), true);
+    }
 
     return pPathObj;
 }
@@ -486,7 +489,7 @@ SdrObject* SdrTextObj::ImpConvertAddText(SdrObject* pObj, bool bBezier) const
     else
     {
         // not yet a group, create one and add partial and new shapes
-        SdrObjGroup* pGrp=new SdrObjGroup(getSdrModelFromSdrObject());
+        SdrObjGroup* pGrp=new SdrObjGroup;
         SdrObjList* pOL=pGrp->GetSubList();
         pOL->InsertObject(pObj);
         pOL->InsertObject(pText);

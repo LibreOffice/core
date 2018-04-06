@@ -309,9 +309,8 @@ SdrObject* FuConstructBezierPolygon::CreateDefaultObject(const sal_uInt16 nID, c
     // case SID_DRAW_BEZIER_NOFILL:        // BASIC
 
     SdrObject* pObj = SdrObjFactory::MakeNewObject(
-        mpView->getSdrModelFromSdrView(),
-        mpView->GetCurrentObjInventor(),
-        mpView->GetCurrentObjIdentifier());
+        mpView->GetCurrentObjInventor(), mpView->GetCurrentObjIdentifier(),
+        nullptr, mpDoc);
 
     if(pObj)
     {

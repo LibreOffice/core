@@ -460,11 +460,9 @@ void SwContact::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
 }
 
 
-SwFlyDrawContact::SwFlyDrawContact(
-    SwFlyFrameFormat *pToRegisterIn,
-    SdrModel& rTargetModel)
-:   SwContact(pToRegisterIn),
-    mpMasterObj(new SwFlyDrawObj(rTargetModel))
+SwFlyDrawContact::SwFlyDrawContact( SwFlyFrameFormat *pToRegisterIn )
+    : SwContact( pToRegisterIn )
+    , mpMasterObj(new SwFlyDrawObj)
 {
     // #i26791# - class <SwFlyDrawContact> contains the 'master'
     // drawing object of type <SwFlyDrawObj> on its own.
@@ -512,11 +510,8 @@ SwVirtFlyDrawObj* SwFlyDrawContact::CreateNewRef(SwFlyFrame* pFly, SwFlyFrameFor
 
     IDocumentDrawModelAccess& rIDDMA = pFormat->getIDocumentDrawModelAccess();
     SwFlyDrawContact* pContact = pFormat->GetOrCreateContact();
-    SwVirtFlyDrawObj* pDrawObj(
-        new SwVirtFlyDrawObj(
-            pContact->GetMaster()->getSdrModelFromSdrObject(),
-            *pContact->GetMaster(),
-            pFly));
+    SwVirtFlyDrawObj* pDrawObj(new SwVirtFlyDrawObj(*pContact->GetMaster(), pFly));
+    pDrawObj->SetModel(pContact->GetMaster()->GetModel());
     pDrawObj->SetUserCall(pContact);
 
     // The Reader creates the Masters and inserts them into the Page in
@@ -812,12 +807,7 @@ SwFrame* SwDrawContact::GetAnchorFrame(SdrObject const *const pDrawObj)
  */
 SwDrawVirtObj* SwDrawContact::AddVirtObj()
 {
-    maDrawVirtObjs.push_back(
-        std::unique_ptr<SwDrawVirtObj>(
-            new SwDrawVirtObj(
-                GetMaster()->getSdrModelFromSdrObject(),
-                *GetMaster(),
-                *this)));
+    maDrawVirtObjs.push_back(std::unique_ptr<SwDrawVirtObj>(new SwDrawVirtObj(*GetMaster(), *this)));
     maDrawVirtObjs.back()->AddToDrawingPage();
     return maDrawVirtObjs.back().get();
 }
@@ -2148,29 +2138,27 @@ namespace sdr
 } // end of namespace sdr
 
 /// implementation of class <SwDrawVirtObj>
+
 sdr::contact::ViewContact* SwDrawVirtObj::CreateObjectSpecificViewContact()
 {
     return new sdr::contact::VCOfDrawVirtObj(*this);
 }
 
-SwDrawVirtObj::SwDrawVirtObj(
-    SdrModel& rSdrModel,
-    SdrObject& _rNewObj,
-    SwDrawContact& _rDrawContact)
-:   SdrVirtObj(rSdrModel, _rNewObj ),
-    maAnchoredDrawObj(),
-    mrDrawContact(_rDrawContact)
+SwDrawVirtObj::SwDrawVirtObj( SdrObject&        _rNewObj,
+                              SwDrawContact&    _rDrawContact )
+    : SdrVirtObj( _rNewObj ),
+      // #i26791# - init new member <maAnchoredDrawObj>
+      maAnchoredDrawObj(),
+      mrDrawContact( _rDrawContact )
 {
     // #i26791#
     maAnchoredDrawObj.SetDrawObj( *this );
-
     // #i35635# - set initial position out of sight
     NbcMove( Size( -16000, -16000 ) );
 }
 
 SwDrawVirtObj::~SwDrawVirtObj()
-{
-}
+{}
 
 SwDrawVirtObj& SwDrawVirtObj::operator=( const SwDrawVirtObj& rObj )
 {
@@ -2180,12 +2168,9 @@ SwDrawVirtObj& SwDrawVirtObj::operator=( const SwDrawVirtObj& rObj )
     return *this;
 }
 
-SwDrawVirtObj* SwDrawVirtObj::Clone(SdrModel* pTargetModel) const
+SwDrawVirtObj* SwDrawVirtObj::Clone() const
 {
-    SwDrawVirtObj* pObj = new SwDrawVirtObj(
-        nullptr == pTargetModel ? getSdrModelFromSdrObject() : *pTargetModel,
-        rRefObj,
-        mrDrawContact);
+    SwDrawVirtObj* pObj = new SwDrawVirtObj( rRefObj, mrDrawContact );
 
     pObj->operator=( *this );
     // Note: Member <maAnchoredDrawObj> hasn't to be considered.

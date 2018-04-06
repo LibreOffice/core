@@ -88,10 +88,8 @@ void SdrObjEditView::ImpClearVars()
     bTextEditOnlyOneView=false;
 }
 
-SdrObjEditView::SdrObjEditView(
-    SdrModel& rSdrModel,
-    OutputDevice* pOut)
-:   SdrGlueEditView(rSdrModel, pOut),
+SdrObjEditView::SdrObjEditView(SdrModel* pModel1, OutputDevice* pOut):
+    SdrGlueEditView(pModel1,pOut),
     mpOldTextEditUndoManager(nullptr)
 {
     ImpClearVars();
@@ -1091,7 +1089,7 @@ bool SdrObjEditView::SdrBeginTextEdit(
         mxTextEditObj.reset( pObj );
         pTextEditOutliner=pGivenOutliner;
         if (pTextEditOutliner==nullptr)
-            pTextEditOutliner = SdrMakeOutliner( OutlinerMode::TextObject, mxTextEditObj->getSdrModelFromSdrObject() );
+            pTextEditOutliner = SdrMakeOutliner( OutlinerMode::TextObject, *mxTextEditObj->GetModel() );
 
         {
             SvtAccessibilityOptions aOptions;
@@ -1590,7 +1588,8 @@ SdrEndTextEditKind SdrObjEditView::SdrEndTextEdit(bool bDontDeleteReally)
     }
 
     if( pTEObj &&
-        !pTEObj->getSdrModelFromSdrObject().isLocked() &&
+        pTEObj->GetModel() &&
+        !pTEObj->GetModel()->isLocked() &&
         pTEObj->GetBroadcaster())
     {
         SdrHint aHint(SdrHintKind::EndEdit, *pTEObj);
@@ -2409,17 +2408,11 @@ void SdrObjEditView::MarkListHasChanged()
     const SdrMarkList& rMarkList=GetMarkedObjectList();
     if( rMarkList.GetMarkCount() == 1 )
     {
-        const SdrObject* pObj(rMarkList.GetMark(0)->GetMarkedSdrObj());
-        SdrView* pView(dynamic_cast< SdrView* >(this));
-
+        const SdrObject* pObj= rMarkList.GetMark(0)->GetMarkedSdrObj();
         // check for table
-        if(pObj && pView && (pObj->GetObjInventor() == SdrInventor::Default ) && (pObj->GetObjIdentifier() == OBJ_TABLE))
+        if( pObj && (pObj->GetObjInventor() == SdrInventor::Default ) && (pObj->GetObjIdentifier() == OBJ_TABLE) )
         {
-            mxSelectionController = sdr::table::CreateTableController(
-                *pView,
-                static_cast<const sdr::table::SdrTableObj&>(*pObj),
-                mxLastSelectionController);
-
+            mxSelectionController = sdr::table::CreateTableController( this, static_cast<sdr::table::SdrTableObj const *>(pObj), mxLastSelectionController );
             if( mxSelectionController.is() )
             {
                 mxLastSelectionController.clear();

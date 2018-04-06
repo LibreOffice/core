@@ -104,10 +104,8 @@ sdr::contact::ViewContact* SdrCircObj::CreateObjectSpecificViewContact()
     return new sdr::contact::ViewContactOfSdrCircObj(*this);
 }
 
-SdrCircObj::SdrCircObj(
-    SdrModel& rSdrModel,
-    SdrObjKind eNewKind)
-:   SdrRectObj(rSdrModel)
+
+SdrCircObj::SdrCircObj(SdrObjKind eNewKind)
 {
     nStartAngle=0;
     nEndAngle=36000;
@@ -115,11 +113,8 @@ SdrCircObj::SdrCircObj(
     bClosedObj=eNewKind!=OBJ_CARC;
 }
 
-SdrCircObj::SdrCircObj(
-    SdrModel& rSdrModel,
-    SdrObjKind eNewKind,
-    const tools::Rectangle& rRect)
-:   SdrRectObj(rSdrModel, rRect)
+SdrCircObj::SdrCircObj(SdrObjKind eNewKind, const tools::Rectangle& rRect):
+    SdrRectObj(rRect)
 {
     nStartAngle=0;
     nEndAngle=36000;
@@ -127,13 +122,8 @@ SdrCircObj::SdrCircObj(
     bClosedObj=eNewKind!=OBJ_CARC;
 }
 
-SdrCircObj::SdrCircObj(
-    SdrModel& rSdrModel,
-    SdrObjKind eNewKind,
-    const tools::Rectangle& rRect,
-    long nNewStartWink,
-    long nNewEndWink)
-:   SdrRectObj(rSdrModel, rRect)
+SdrCircObj::SdrCircObj(SdrObjKind eNewKind, const tools::Rectangle& rRect, long nNewStartWink, long nNewEndWink):
+    SdrRectObj(rRect)
 {
     long nAngleDif=nNewEndWink-nNewStartWink;
     nStartAngle=NormAngle360(nNewStartWink);
@@ -348,22 +338,9 @@ OUString SdrCircObj::TakeObjNamePlural() const
     return ImpGetResStr(pID);
 }
 
-SdrCircObj* SdrCircObj::Clone(SdrModel* pTargetModel) const
+SdrCircObj* SdrCircObj::Clone() const
 {
-    return CloneHelper< SdrCircObj >(pTargetModel);
-}
-
-SdrCircObj& SdrCircObj::operator=(const SdrCircObj& rObj)
-{
-    if( this == &rObj )
-        return *this;
-    SdrRectObj::operator=(rObj);
-
-    meCircleKind = rObj.meCircleKind;
-    nStartAngle = rObj.nStartAngle;
-    nEndAngle = rObj.nEndAngle;
-
-    return *this;
+    return CloneHelper< SdrCircObj >();
 }
 
 basegfx::B2DPolyPolygon SdrCircObj::TakeXorPoly() const
@@ -599,7 +576,7 @@ OUString SdrCircObj::getSpecialDragComment(const SdrDragStat& rDrag) const
                 nAngle = pU->nEnd;
             }
 
-            aBuf.append(SdrModel::GetAngleString(nAngle));
+            aBuf.append(GetAngleStr(nAngle));
             aBuf.append(')');
         }
 
@@ -617,7 +594,7 @@ OUString SdrCircObj::getSpecialDragComment(const SdrDragStat& rDrag) const
             ImpTakeDescriptionStr(STR_DragCircAngle, aStr);
             OUStringBuffer aBuf(aStr);
             aBuf.append(" (");
-            aBuf.append(SdrModel::GetAngleString(nAngle));
+            aBuf.append(GetAngleStr(nAngle));
             aBuf.append(')');
 
             return aBuf.makeStringAndClear();

@@ -80,11 +80,11 @@ class SvxTextEditSourceImpl : public SfxListener, public SfxBroadcaster, public 
 private:
     oslInterlockedCount maRefCount;
 
-    SdrObject*                      mpObject;           // TTTT could be reference (?)
+    SdrObject*                      mpObject;
     SdrText*                        mpText;
     SdrView*                        mpView;
     VclPtr<const vcl::Window>       mpWindow;
-    SdrModel*                       mpModel;            // TTTT probably not needed -> use SdrModel from SdrObject (?)
+    SdrModel*                       mpModel;
     SdrOutliner*                    mpOutliner;
     SvxOutlinerForwarder*           mpTextForwarder;
     SvxDrawOutlinerViewForwarder*   mpViewForwarder;    // if non-NULL, use GetViewModeTextForwarder text forwarder
@@ -147,6 +147,8 @@ public:
 
     virtual void ObjectInDestruction(const SdrObject& rObject) override;
 
+    void ChangeModel( SdrModel* pNewModel );
+
     void                    UpdateOutliner();
 };
 
@@ -157,7 +159,7 @@ SvxTextEditSourceImpl::SvxTextEditSourceImpl( SdrObject* pObject, SdrText* pText
     mpText          ( pText ),
     mpView          ( nullptr ),
     mpWindow        ( nullptr ),
-    mpModel         ( pObject ? &pObject->getSdrModelFromSdrObject() : nullptr ), // TTTT should be reference
+    mpModel         ( pObject ? pObject->GetModel() : nullptr ),
     mpOutliner      ( nullptr ),
     mpTextForwarder ( nullptr ),
     mpViewForwarder ( nullptr ),
@@ -193,7 +195,7 @@ SvxTextEditSourceImpl::SvxTextEditSourceImpl( SdrObject& rObject, SdrText* pText
     mpText          ( pText ),
     mpView          ( &rView ),
     mpWindow        ( &rWindow ),
-    mpModel         ( &rObject.getSdrModelFromSdrObject() ), // TTTT should be reference
+    mpModel         ( rObject.GetModel() ),
     mpOutliner      ( nullptr ),
     mpTextForwarder ( nullptr ),
     mpViewForwarder ( nullptr ),
@@ -261,6 +263,51 @@ void SvxTextEditSourceImpl::release()
     if( ! osl_atomic_decrement( &maRefCount ) )
         delete this;
 }
+
+void SvxTextEditSourceImpl::ChangeModel( SdrModel* pNewModel )
+{
+    if( mpModel != pNewModel )
+    {
+        if( mpModel )
+            EndListening( *mpModel );
+
+        if( mpOutliner )
+        {
+            if( mpModel )
+                mpModel->disposeOutliner( mpOutliner );
+            else
+                delete mpOutliner;
+            mpOutliner = nullptr;
+        }
+
+        if( mpView )
+        {
+            EndListening( *mpView );
+            mpView = nullptr;
+        }
+
+        mpWindow = nullptr;
+        m_xLinguServiceManager.clear();
+
+        mpModel = pNewModel;
+
+        if( mpTextForwarder )
+        {
+            delete mpTextForwarder;
+            mpTextForwarder = nullptr;
+        }
+
+        if( mpViewForwarder )
+        {
+            delete mpViewForwarder;
+            mpViewForwarder = nullptr;
+        }
+
+        if( mpModel )
+            StartListening( *mpModel );
+    }
+}
+
 
 void SvxTextEditSourceImpl::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
 {
@@ -591,7 +638,7 @@ SvxTextForwarder* SvxTextEditSourceImpl::GetBackgroundTextForwarder()
             bool bVertical = pOutlinerParaObject && pOutlinerParaObject->IsVertical();
 
             // set objects style sheet on empty outliner
-            SfxStyleSheetPool* pPool = static_cast<SfxStyleSheetPool*>(mpObject->getSdrModelFromSdrObject().GetStyleSheetPool());
+            SfxStyleSheetPool* pPool = static_cast<SfxStyleSheetPool*>(mpObject->GetModel()->GetStyleSheetPool());
             if( pPool )
                 mpOutliner->SetStyleSheetPool( pPool );
 
@@ -662,7 +709,10 @@ SvxTextForwarder* SvxTextEditSourceImpl::GetTextForwarder()
         return nullptr;
 
     if( mpModel == nullptr )
-        mpModel = &mpObject->getSdrModelFromSdrObject();
+        mpModel = mpObject->GetModel();
+
+    if( mpModel == nullptr )
+        return nullptr;
 
     // distinguish the cases
     // a) connected to view, maybe edit mode is active, can work directly on the EditOutliner
@@ -713,7 +763,10 @@ SvxEditViewForwarder* SvxTextEditSourceImpl::GetEditViewForwarder( bool bCreate 
         return nullptr;
 
     if( mpModel == nullptr )
-        mpModel = &mpObject->getSdrModelFromSdrObject();
+        mpModel = mpObject->GetModel();
+
+    if( mpModel == nullptr )
+        return nullptr;
 
     // shall we delete?
     if( mpViewForwarder )
@@ -1053,6 +1106,11 @@ void SvxTextEditSource::removeRange( SvxUnoTextRangeBase* pOldRange )
 const SvxUnoTextRangeBaseList& SvxTextEditSource::getRanges() const
 {
     return mpImpl->getRanges();
+}
+
+void SvxTextEditSource::ChangeModel( SdrModel* pNewModel )
+{
+    mpImpl->ChangeModel( pNewModel );
 }
 
 void SvxTextEditSource::UpdateOutliner()

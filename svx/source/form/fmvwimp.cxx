@@ -1350,7 +1350,7 @@ SdrObject* FmXFormView::implCreateFieldControl( const svx::ODataAccessDescriptor
         if ( bCheckbox )
             return pControl;
 
-        SdrObjGroup* pGroup  = new SdrObjGroup(getView()->getSdrModelFromSdrView());
+        SdrObjGroup* pGroup  = new SdrObjGroup();
         SdrObjList* pObjList = pGroup->GetSubList();
         pObjList->InsertObject( pLabel );
         pObjList->InsertObject( pControl );
@@ -1462,7 +1462,7 @@ SdrObject* FmXFormView::implCreateXFormsControl( const svx::OXFormsDescriptor &_
 
 
             // group objects
-            SdrObjGroup* pGroup  = new SdrObjGroup(getView()->getSdrModelFromSdrView());
+            SdrObjGroup* pGroup  = new SdrObjGroup();
             SdrObjList* pObjList = pGroup->GetSubList();
             pObjList->InsertObject(pLabel);
             pObjList->InsertObject(pControl);
@@ -1476,11 +1476,7 @@ SdrObject* FmXFormView::implCreateXFormsControl( const svx::OXFormsDescriptor &_
             const MapMode eSourceMode(MapUnit::Map100thMM);
             const sal_uInt16 nObjID = OBJ_FM_BUTTON;
             ::Size controlSize(4000, 500);
-            FmFormObj *pControl = static_cast<FmFormObj*>(
-                SdrObjFactory::MakeNewObject(
-                    getView()->getSdrModelFromSdrView(),
-                    SdrInventor::FmForm,
-                    nObjID));
+            FmFormObj *pControl = static_cast<FmFormObj*>(SdrObjFactory::MakeNewObject( SdrInventor::FmForm, nObjID, nullptr ));
             controlSize.setWidth( long(controlSize.Width() * eTargetMode.GetScaleX()) );
             controlSize.setHeight( long(controlSize.Height() * eTargetMode.GetScaleY()) );
             ::Point controlPos( OutputDevice::LogicToLogic( ::Point( controlSize.Width(), 0 ), eSourceMode, eTargetMode ) );
@@ -1580,18 +1576,11 @@ bool FmXFormView::createControlLabelPair( OutputDevice const & _rOutDev, sal_Int
     // the label
     ::std::unique_ptr< SdrUnoObj > pLabel;
     Reference< XPropertySet > xLabelModel;
-
     if ( bNeedLabel )
     {
         pLabel.reset( dynamic_cast< SdrUnoObj* >(
-            SdrObjFactory::MakeNewObject(
-                *_pModel,
-                _nInventor,
-                _nLabelObjectID,
-                _pLabelPage)));
-
+            SdrObjFactory::MakeNewObject( _nInventor, _nLabelObjectID, _pLabelPage, _pModel ) ) );
         OSL_ENSURE( pLabel.get(), "FmXFormView::createControlLabelPair: could not create the label!" );
-
         if ( !pLabel.get() )
             return false;
 
@@ -1617,14 +1606,8 @@ bool FmXFormView::createControlLabelPair( OutputDevice const & _rOutDev, sal_Int
 
     // the control
     ::std::unique_ptr< SdrUnoObj > pControl( dynamic_cast< SdrUnoObj* >(
-        SdrObjFactory::MakeNewObject(
-            *_pModel,
-             _nInventor,
-             _nControlObjectID,
-             _pControlPage)));
-
+        SdrObjFactory::MakeNewObject( _nInventor, _nControlObjectID, _pControlPage, _pModel ) ) );
     OSL_ENSURE( pControl.get(), "FmXFormView::createControlLabelPair: could not create the control!" );
-
     if ( !pControl.get() )
         return false;
 

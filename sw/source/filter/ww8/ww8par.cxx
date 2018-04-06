@@ -497,19 +497,9 @@ SdrObject* SwMSDffManager::ImportOLE( sal_uInt32 nOLEId,
         else
         {
             ErrCode nError = ERRCODE_NONE;
-            pRet = CreateSdrOLEFromStorage(
-                *pSdrModel,
-                sStorageName,
-                xSrcStg,
-                xDstStg,
-                rGrf,
-                rBoundRect,
-                rVisArea,
-                pStData,
-                nError,
-                nSvxMSDffOLEConvFlags,
-                css::embed::Aspects::MSOLE_CONTENT,
-                rReader.GetBaseURL());
+            pRet = CreateSdrOLEFromStorage( sStorageName, xSrcStg, xDstStg,
+                rGrf, rBoundRect, rVisArea, pStData, nError,
+                nSvxMSDffOLEConvFlags, css::embed::Aspects::MSOLE_CONTENT, rReader.GetBaseURL());
         }
     }
     return pRet;
@@ -743,10 +733,7 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
             if (bIsSimpleDrawingTextBox)
             {
                 SdrObject::Free( pObj );
-                pObj = new SdrRectObj(
-                    *pSdrModel,
-                    OBJ_TEXT,
-                    rTextRect);
+                pObj = new SdrRectObj(OBJ_TEXT, rTextRect);
             }
 
             // The vertical paragraph justification are contained within the
@@ -870,6 +857,7 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
             if (pObj != nullptr)
             {
                 pObj->SetMergedItemSet(aSet);
+                pObj->SetModel(pSdrModel);
 
                 if (bVerticalText)
                 {
@@ -935,10 +923,8 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
             // simple rectangular objects are ignored by ImportObj()  :-(
             // this is OK for Draw but not for Calc and Writer
             // cause here these objects have a default border
-            pObj = new SdrRectObj(
-                *pSdrModel,
-                rTextRect);
-
+            pObj = new SdrRectObj(rTextRect);
+            pObj->SetModel( pSdrModel );
             SfxItemSet aSet( pSdrModel->GetItemPool() );
             ApplyAttributes( rSt, aSet, rObjData );
 

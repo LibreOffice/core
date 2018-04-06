@@ -46,10 +46,7 @@ protected:
 class DrawViewWrapper : public E3dView
 {
 public:
-    DrawViewWrapper(
-        SdrModel& rSdrModel,
-        OutputDevice* pOut);
-
+    DrawViewWrapper(SdrModel* pModel, OutputDevice* pOut);
     virtual ~DrawViewWrapper() override;
 
     //triggers the use of an updated first page

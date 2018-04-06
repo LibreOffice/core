@@ -188,7 +188,7 @@ void FuConstructCustomShape::SetAttributes( SdrObject* pObj )
                             {
                                 const SfxItemSet& rSource = pSourceObj->GetMergedItemSet();
                                 SfxItemSet aDest(
-                                    pObj->getSdrModelFromSdrObject().GetItemPool(),
+                                    pObj->GetModel()->GetItemPool(),
                                     svl::Items<
                                         // Ranges from SdrAttrObj:
                                         SDRATTR_START, SDRATTR_SHADOW_LAST,
@@ -236,9 +236,8 @@ const OUString& FuConstructCustomShape::GetShapeType() const
 SdrObject* FuConstructCustomShape::CreateDefaultObject(const sal_uInt16, const ::tools::Rectangle& rRectangle)
 {
     SdrObject* pObj = SdrObjFactory::MakeNewObject(
-        mpView->getSdrModelFromSdrView(),
-        mpView->GetCurrentObjInventor(),
-        mpView->GetCurrentObjIdentifier());
+        mpView->GetCurrentObjInventor(), mpView->GetCurrentObjIdentifier(),
+        nullptr, mpDoc);
 
     if( pObj )
     {

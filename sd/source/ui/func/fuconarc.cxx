@@ -91,12 +91,10 @@ void FuConstructArc::DoExecute( SfxRequest& rReq )
 
         Activate();  // sets aObjKind
         SdrCircObj* pNewCircle =
-        new SdrCircObj(
-            mpView->getSdrModelFromSdrView(),
-            static_cast<SdrObjKind>(mpView->GetCurrentObjIdentifier()),
-            aNewRectangle,
-            static_cast<long>(pPhiStart->GetValue () * 10.0),
-            static_cast<long>(pPhiEnd->GetValue () * 10.0));
+        new SdrCircObj(static_cast<SdrObjKind>(mpView->GetCurrentObjIdentifier()),
+                       aNewRectangle,
+                       static_cast<long>(pPhiStart->GetValue () * 10.0),
+                       static_cast<long>(pPhiEnd->GetValue () * 10.0));
         SdrPageView *pPV = mpView->GetSdrPageView();
 
         mpView->InsertObjectAtView(pNewCircle, *pPV, SdrInsertFlags::SETDEFLAYER);
@@ -204,9 +202,8 @@ SdrObject* FuConstructArc::CreateDefaultObject(const sal_uInt16 nID, const ::too
 {
 
     SdrObject* pObj = SdrObjFactory::MakeNewObject(
-        mpView->getSdrModelFromSdrView(),
-        mpView->GetCurrentObjInventor(),
-        mpView->GetCurrentObjIdentifier());
+        mpView->GetCurrentObjInventor(), mpView->GetCurrentObjIdentifier(),
+        nullptr, mpDoc);
 
     if(pObj)
     {

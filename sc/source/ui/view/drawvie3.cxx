@@ -34,10 +34,8 @@
 #include <tabvwsh.hxx>
 #include <docsh.hxx>
 
-ScDrawView::ScDrawView(
-    OutputDevice* pOut,
-    ScViewData* pData )
-:   FmFormView(*pData->GetDocument()->GetDrawLayer(), pOut),
+ScDrawView::ScDrawView( OutputDevice* pOut, ScViewData* pData ) :
+    FmFormView( pData->GetDocument()->GetDrawLayer(), pOut ),
     pViewData( pData ),
     pDev( pOut ),
     pDoc( pData->GetDocument() ),

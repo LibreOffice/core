@@ -195,10 +195,7 @@ SdrObject* IMapWindow::CreateObj( const IMapObject* pIMapObj )
             // clipped on CanvasPane
             aDrawRect.Intersection( aClipRect );
 
-            pSdrObj = static_cast<SdrObject*>(
-                new SdrRectObj(
-                    *pModel,
-                    aDrawRect));
+            pSdrObj = static_cast<SdrObject*>(new SdrRectObj( aDrawRect ));
             pCloneIMapObj.reset(static_cast<IMapObject*>(new IMapRectangleObject( *pIMapRectObj )));
         }
         break;
@@ -214,13 +211,7 @@ SdrObject* IMapWindow::CreateObj( const IMapObject* pIMapObj )
             // limited to CanvasPane
             aCircle.Intersection( aClipRect );
 
-            pSdrObj = static_cast<SdrObject*>(
-                new SdrCircObj(
-                    *pModel,
-                    OBJ_CIRC,
-                    aCircle,
-                    0,
-                    36000));
+            pSdrObj = static_cast<SdrObject*>(new SdrCircObj( OBJ_CIRC, aCircle, 0, 36000 ));
             pCloneIMapObj.reset(static_cast<IMapObject*>(new IMapCircleObject( *pIMapCircleObj )));
         }
         break;
@@ -237,13 +228,7 @@ SdrObject* IMapWindow::CreateObj( const IMapObject* pIMapObj )
                 // clipped on CanvasPane
                 aDrawRect.Intersection( aClipRect );
 
-                pSdrObj = static_cast<SdrObject*>(
-                    new SdrCircObj(
-                        *pModel,
-                        OBJ_CIRC,
-                        aDrawRect,
-                        0,
-                        36000));
+                pSdrObj = static_cast<SdrObject*>(new SdrCircObj( OBJ_CIRC, aDrawRect, 0, 36000 ));
             }
             else
             {
@@ -255,11 +240,7 @@ SdrObject* IMapWindow::CreateObj( const IMapObject* pIMapObj )
 
                 basegfx::B2DPolygon aPolygon;
                 aPolygon.append(aDrawPoly.getB2DPolygon());
-                pSdrObj = static_cast<SdrObject*>(
-                    new SdrPathObj(
-                        *pModel,
-                        OBJ_POLY,
-                        basegfx::B2DPolyPolygon(aPolygon)));
+                pSdrObj = static_cast<SdrObject*>(new SdrPathObj(OBJ_POLY, basegfx::B2DPolyPolygon(aPolygon)));
             }
 
             pCloneIMapObj.reset(static_cast<IMapObject*>(new IMapPolygonObject( *pIMapPolyObj )));
@@ -764,10 +745,7 @@ void IMapWindow::CreateDefaultObject()
     aPagePos.AdjustY((aPageSize.Height() / 2) - (nDefaultObjectSizeHeight / 2) );
     tools::Rectangle aNewObjectRectangle(aPagePos, Size(nDefaultObjectSizeWidth, nDefaultObjectSizeHeight));
 
-    SdrObject* pObj = SdrObjFactory::MakeNewObject(
-        *pModel,
-        pView->GetCurrentObjInventor(),
-        pView->GetCurrentObjIdentifier());
+    SdrObject* pObj = SdrObjFactory::MakeNewObject( pView->GetCurrentObjInventor(), pView->GetCurrentObjIdentifier(), nullptr, pModel);
     pObj->SetLogicRect(aNewObjectRectangle);
 
     switch( pObj->GetObjIdentifier() )

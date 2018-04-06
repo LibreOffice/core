@@ -169,10 +169,7 @@ void DrawViewShell::ExecGallery(SfxRequest const & rReq)
 
         if( bInsertNewObject )
         {
-            pGrafObj = new SdrGrafObj(
-                GetView()->getSdrModelFromSdrView(),
-                aGraphic,
-                aRect);
+            pGrafObj = new SdrGrafObj(aGraphic, aRect);
             SdrPageView* pPV = mpDrawView->GetSdrPageView();
             mpDrawView->InsertObjectAtView(pGrafObj, *pPV, SdrInsertFlags::SETDEFLAYER);
         }

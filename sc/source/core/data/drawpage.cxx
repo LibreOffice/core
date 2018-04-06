@@ -24,25 +24,37 @@
 #include <document.hxx>
 #include <pageuno.hxx>
 
-ScDrawPage::ScDrawPage(ScDrawLayer& rNewModel, bool bMasterPage)
-:   FmFormPage(rNewModel, bMasterPage)
+ScDrawPage::ScDrawPage(ScDrawLayer& rNewModel, bool bMasterPage) :
+    FmFormPage(rNewModel, bMasterPage)
 {
     SetSize( Size( RECT_MAX, RECT_MAX ) );
+}
+
+ScDrawPage::ScDrawPage(const ScDrawPage& rSrcPage)
+    : FmFormPage(rSrcPage)
+{
 }
 
 ScDrawPage::~ScDrawPage()
 {
 }
 
+ScDrawPage* ScDrawPage::Clone() const
+{
+    return Clone(nullptr);
+}
+
 ScDrawPage* ScDrawPage::Clone(SdrModel* const pNewModel) const
 {
-    ScDrawLayer& rScDrawLayer(static_cast< ScDrawLayer& >(nullptr == pNewModel ? getSdrModelFromSdrPage() : *pNewModel));
-    ScDrawPage* pClonedScDrawPage(
-        new ScDrawPage(
-            rScDrawLayer,
-            IsMasterPage()));
-    pClonedScDrawPage->FmFormPage::lateInit(*this);
-    return pClonedScDrawPage;
+    ScDrawPage* const pNewPage = new ScDrawPage(*this);
+    FmFormModel* pScDrawModel = nullptr;
+    if (pNewModel)
+    {
+        pScDrawModel = dynamic_cast<FmFormModel*>(pNewModel);
+        assert(pScDrawModel);
+    }
+    pNewPage->lateInit(*this, pScDrawModel);
+    return pNewPage;
 }
 
 css::uno::Reference< css::uno::XInterface > ScDrawPage::createUnoPage()

@@ -29,9 +29,9 @@
 #include <svx/svdmodel.hxx>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/embed/Aspects.hpp>
+
 #include <tools/diagnose_ex.h>
 #include <svx/unoshape.hxx>
-#include <svx/svdpage.hxx>
 
 namespace reportdesign
 {
@@ -49,12 +49,7 @@ SdrObject* OReportDrawPage::CreateSdrObject_(const uno::Reference< drawing::XSha
 {
     uno::Reference< report::XReportComponent> xReportComponent(xDescr,uno::UNO_QUERY);
     if ( xReportComponent.is() )
-    {
-        return OObjectBase::createObject(
-            GetSdrPage()->getSdrModelFromSdrPage(),
-            xReportComponent);
-    }
-
+        return OObjectBase::createObject(xReportComponent);
     return SvxDrawPage::CreateSdrObject_( xDescr );
 }
 
@@ -106,7 +101,7 @@ uno::Reference< drawing::XShape >  OReportDrawPage::CreateShape( SdrObject *pObj
                 sal_Int64 nAspect = embed::Aspects::MSOLE_CONTENT;
                 uno::Reference < embed::XEmbeddedObject > xObj;
                 OUString sName;
-                xObj = pObj->getSdrModelFromSdrObject().GetPersist()->getEmbeddedObjectContainer().CreateEmbeddedObject(
+                xObj = pObj->GetModel()->GetPersist()->getEmbeddedObjectContainer().CreateEmbeddedObject(
                     ::comphelper::MimeConfigurationHelper::GetSequenceClassIDRepresentation(
                     "80243D39-6741-46C5-926E-069164FF87BB"), sName );
                 OSL_ENSURE(xObj.is(),"Embedded Object could not be created!");
@@ -136,8 +131,8 @@ uno::Reference< drawing::XShape >  OReportDrawPage::CreateShape( SdrObject *pObj
 
         try
         {
-            OReportModel& rRptModel(static_cast< OReportModel& >(pObj->getSdrModelFromSdrObject()));
-            xRet.set( rRptModel.createShape(sServiceName,xShape,bChangeOrientation ? 0 : 1), uno::UNO_QUERY_THROW );
+            OReportModel* pRptModel = static_cast<OReportModel*>(pObj->GetModel());
+            xRet.set( pRptModel->createShape(sServiceName,xShape,bChangeOrientation ? 0 : 1), uno::UNO_QUERY_THROW );
         }
         catch( const uno::Exception& )
         {

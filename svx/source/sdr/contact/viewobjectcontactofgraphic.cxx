@@ -242,7 +242,7 @@ namespace sdr
         {
             // prepare primitive generation with evtl. loading the graphic when it's swapped out
             SdrGrafObj& rGrafObj = const_cast< ViewObjectContactOfGraphic* >(this)->getSdrGrafObj();
-            bool bDoAsynchronGraphicLoading(rGrafObj.getSdrModelFromSdrObject().IsSwapGraphics());
+            bool bDoAsynchronGraphicLoading(rGrafObj.GetModel() && rGrafObj.GetModel()->IsSwapGraphics());
 
             if( bDoAsynchronGraphicLoading && rGrafObj.IsSwappedOut() )
             {

@@ -161,8 +161,8 @@ sdr::contact::ViewContact* SdrEdgeObj::CreateObjectSpecificViewContact()
 }
 
 
-SdrEdgeObj::SdrEdgeObj(SdrModel& rSdrModel)
-:   SdrTextObj(rSdrModel),
+SdrEdgeObj::SdrEdgeObj()
+:   SdrTextObj(),
     nNotifyingCount(0),
     bEdgeTrackDirty(false),
     bEdgeTrackUserDefined(false),
@@ -520,14 +520,13 @@ void SdrEdgeObj::ImpSetTailPoint(bool bTail1, const Point& rPt)
 
 void SdrEdgeObj::ImpDirtyEdgeTrack()
 {
-    if ( !bEdgeTrackUserDefined || !getSdrModelFromSdrObject().isLocked() )
+    if ( !bEdgeTrackUserDefined || !(GetModel() && GetModel()->isLocked()) )
         bEdgeTrackDirty = true;
 }
 
 void SdrEdgeObj::ImpUndirtyEdgeTrack()
 {
-    if (bEdgeTrackDirty && getSdrModelFromSdrObject().isLocked())
-    {
+    if (bEdgeTrackDirty && (GetModel() && GetModel()->isLocked()) ) {
         ImpRecalcEdgeTrack();
     }
 }
@@ -541,7 +540,7 @@ void SdrEdgeObj::ImpRecalcEdgeTrack()
     }
 
     // #i120437# also not when model locked during import, but remember
-    if(getSdrModelFromSdrObject().isLocked())
+    if(!GetModel() || GetModel()->isLocked())
     {
         mbSuppressed = true;
         return;
@@ -1616,9 +1615,9 @@ void SdrEdgeObj::Reformat()
     }
 }
 
-SdrEdgeObj* SdrEdgeObj::Clone(SdrModel* pTargetModel) const
+SdrEdgeObj* SdrEdgeObj::Clone() const
 {
-    return CloneHelper< SdrEdgeObj >(pTargetModel);
+    return CloneHelper< SdrEdgeObj >();
 }
 
 SdrEdgeObj& SdrEdgeObj::operator=(const SdrEdgeObj& rObj)
@@ -2248,7 +2247,7 @@ void SdrEdgeObj::NbcResize(const Point& rRefPnt, const Fraction& aXFact, const F
     ResizeXPoly(*pEdgeTrack,rRefPnt,aXFact,aYFact);
 
     // if resize is not from paste, forget user distances
-    if (!getSdrModelFromSdrObject().IsPasteResize())
+    if (!GetModel() || !GetModel()->IsPasteResize())
     {
         aEdgeInfo.aObj1Line2 = Point();
         aEdgeInfo.aObj1Line3 = Point();

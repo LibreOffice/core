@@ -96,13 +96,11 @@ OutputDevice * lcl_GetParentRefDevice( const uno::Reference< frame::XModel > & x
 
 }
 
-DrawViewWrapper::DrawViewWrapper(
-    SdrModel& rSdrModel,
-    OutputDevice* pOut)
-:   E3dView(rSdrModel, pOut)
-    ,m_pMarkHandleProvider(nullptr)
-    ,m_apOutliner(SdrMakeOutliner(OutlinerMode::TextObject, rSdrModel))
-    ,m_bRestoreMapMode( false )
+DrawViewWrapper::DrawViewWrapper( SdrModel* pSdrModel, OutputDevice* pOut)
+            : E3dView(pSdrModel, pOut)
+            , m_pMarkHandleProvider(nullptr)
+            , m_apOutliner(SdrMakeOutliner(OutlinerMode::TextObject, *pSdrModel))
+            , m_bRestoreMapMode( false )
 {
     SetBufferedOutputAllowed(true);
     SetBufferedOverlayAllowed(true);

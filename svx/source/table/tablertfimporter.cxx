@@ -132,8 +132,8 @@ private:
 
 SdrTableRTFParser::SdrTableRTFParser( SdrTableObj& rTableObj )
 : mrTableObj( rTableObj )
-, mpOutliner( SdrMakeOutliner( OutlinerMode::TextObject, rTableObj.getSdrModelFromSdrObject() ) )
-, mrItemPool( rTableObj.getSdrModelFromSdrObject().GetItemPool() )
+, mpOutliner( SdrMakeOutliner( OutlinerMode::TextObject, *rTableObj.GetModel() ) )
+, mrItemPool( rTableObj.GetModel()->GetItemPool() )
 , mnLastToken( 0 )
 , mbNewDef( false )
 , mnStartPara( 0 )

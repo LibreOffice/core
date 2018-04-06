@@ -49,17 +49,22 @@ using com::sun::star::uno::UNO_QUERY;
 
 
 FmFormPage::FmFormPage(FmFormModel& rModel, bool bMasterPage)
-:   SdrPage(rModel, bMasterPage)
-    ,m_pImpl( new FmFormPageImpl( *this ) )
+           :SdrPage(rModel, bMasterPage)
+           ,m_pImpl( new FmFormPageImpl( *this ) )
 {
 }
 
-void FmFormPage::lateInit(const FmFormPage& rPage)
-{
-    // call parent
-    SdrPage::lateInit( rPage );
 
-    // copy local variables (former stuff from copy constructor)
+FmFormPage::FmFormPage(const FmFormPage& rPage)
+           :SdrPage(rPage)
+           ,m_pImpl(new FmFormPageImpl( *this ) )
+{
+}
+
+void FmFormPage::lateInit(const FmFormPage& rPage, FmFormModel* const pNewModel)
+{
+    SdrPage::lateInit( rPage, pNewModel );
+
     m_pImpl->initFrom( rPage.GetImpl() );
     m_sPageName = rPage.m_sPageName;
 }
@@ -69,22 +74,65 @@ FmFormPage::~FmFormPage()
 {
 }
 
-SdrPage* FmFormPage::Clone(SdrModel* pNewModel) const
+
+void FmFormPage::SetModel(SdrModel* pNewModel)
 {
-    FmFormModel& rFmFormModel(static_cast< FmFormModel& >(nullptr == pNewModel ? getSdrModelFromSdrPage() : *pNewModel));
-    FmFormPage* pClonedFmFormPage(
-        new FmFormPage(
-            rFmFormModel,
-            IsMasterPage()));
-    pClonedFmFormPage->lateInit(*this);
-    return pClonedFmFormPage;
+    /* #35055# */
+    // we want to call the super's "SetModel" method even if the model is the
+    // same, in case code somewhere in the system depends on it.  But our code
+    // doesn't, so get the old model to do a check.
+    SdrModel *pOldModel = GetModel();
+
+    SdrPage::SetModel( pNewModel );
+
+    /* #35055# */
+    if ( ( pOldModel != pNewModel ) && m_pImpl )
+    {
+        try
+        {
+            Reference< css::form::XForms > xForms( m_pImpl->getForms( false ) );
+            if ( xForms.is() )
+            {
+                // we want to keep the current collection, just reset the model
+                // with which it's associated.
+                FmFormModel* pDrawModel = static_cast<FmFormModel*>( GetModel() );
+                SfxObjectShell* pObjShell = pDrawModel->GetObjectShell();
+                if ( pObjShell )
+                    xForms->setParent( pObjShell->GetModel() );
+            }
+        }
+        catch( css::uno::Exception const& )
+        {
+            OSL_FAIL( "UNO Exception caught resetting model for m_pImpl (FmFormPageImpl) in FmFormPage::SetModel" );
+        }
+    }
+}
+
+
+SdrPage* FmFormPage::Clone() const
+{
+    return Clone(nullptr);
+}
+
+SdrPage* FmFormPage::Clone(SdrModel* const pNewModel) const
+{
+    FmFormPage* const pNewPage = new FmFormPage(*this);
+    FmFormModel* pFormModel = nullptr;
+    if (pNewModel)
+    {
+        pFormModel = dynamic_cast<FmFormModel*>(pNewModel);
+        assert(pFormModel);
+    }
+    pNewPage->lateInit(*this, pFormModel);
+    return pNewPage;
 }
 
 
 void FmFormPage::InsertObject(SdrObject* pObj, size_t nPos)
 {
     SdrPage::InsertObject( pObj, nPos );
-    static_cast< FmFormModel& >(getSdrModelFromSdrPage()).GetUndoEnv().Inserted(pObj);
+    if (GetModel())
+        static_cast<FmFormModel*>(GetModel())->GetUndoEnv().Inserted(pObj);
 }
 
 
@@ -169,8 +217,8 @@ bool FmFormPage::RequestHelp( vcl::Window* pWindow, SdrView const * pView,
 SdrObject* FmFormPage::RemoveObject(size_t nObjNum)
 {
     SdrObject* pObj = SdrPage::RemoveObject(nObjNum);
-    if (pObj)
-        static_cast< FmFormModel& >(getSdrModelFromSdrPage()).GetUndoEnv().Removed(pObj);
+    if (pObj && GetModel())
+        static_cast<FmFormModel*>(GetModel())->GetUndoEnv().Removed(pObj);
     return pObj;
 }
 

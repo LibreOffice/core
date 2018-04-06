@@ -108,21 +108,24 @@ namespace {
         Fraction    maScaleX;
         Fraction    maScaleY;
 
-        explicit ExportSettings(const SdrModel& rSdrModel);
+        explicit ExportSettings( SdrModel const * pDoc );
     };
 
-    ExportSettings::ExportSettings(const SdrModel& rSdrModel)
-    :   mnWidth( 0 )
-        ,mnHeight( 0 )
-        ,mbExportOnlyBackground( false )
-        ,mbScrollText( false )
-        ,mbUseHighContrast( false )
-        ,mbTranslucent( false )
-        ,maScaleX( 1, 1 )
-        ,maScaleY( 1, 1 )
+    ExportSettings::ExportSettings( SdrModel const * pDoc )
+    : mnWidth( 0 )
+    , mnHeight( 0 )
+    , mbExportOnlyBackground( false )
+    , mbScrollText( false )
+    , mbUseHighContrast( false )
+    , mbTranslucent( false )
+    , maScaleX( 1, 1 )
+    , maScaleY( 1, 1 )
     {
-        maScaleX = rSdrModel.GetScaleFraction();
-        maScaleY = rSdrModel.GetScaleFraction();
+        if( pDoc )
+        {
+            maScaleX = pDoc->GetScaleFraction();
+            maScaleY = pDoc->GetScaleFraction();
+        }
     }
 
     /** implements a component to export shapes or pages to external graphic formats.
@@ -418,15 +421,13 @@ VclPtr<VirtualDevice> GraphicExporter::CreatePageVDev( SdrPage* pPage, sal_uIntP
 
     if(bSuccess)
     {
-        std::unique_ptr<SdrView> pView(new SdrView(*mpDoc, pVDev));
-
+        std::unique_ptr<SdrView> pView(new SdrView(mpDoc, pVDev));
         pView->SetPageVisible( false );
         pView->SetBordVisible( false );
         pView->SetGridVisible( false );
         pView->SetHlplVisible( false );
         pView->SetGlueVisible( false );
         pView->ShowSdrPage(pPage);
-
         vcl::Region aRegion (tools::Rectangle( aPoint, aPageSize ) );
 
         ImplExportCheckVisisbilityRedirector aRedirector( mpCurrentPage );
@@ -630,9 +631,7 @@ bool GraphicExporter::GetGraphic( ExportSettings const & rSettings, Graphic& aGr
 
             if(pCorrectProperties)
             {
-                pTempBackgroundShape = new SdrRectObj(
-                    *mpDoc,
-                    tools::Rectangle(Point(0,0), pPage->GetSize()));
+                pTempBackgroundShape = new SdrRectObj(tools::Rectangle(Point(0,0), pPage->GetSize()));
                 pTempBackgroundShape->SetMergedItemSet(pCorrectProperties->GetItemSet());
                 pTempBackgroundShape->SetMergedItem(XLineStyleItem(drawing::LineStyle_NONE));
                 pTempBackgroundShape->NbcSetStyleSheet(pCorrectProperties->GetStyleSheet(), true);
@@ -684,14 +683,13 @@ bool GraphicExporter::GetGraphic( ExportSettings const & rSettings, Graphic& aGr
                 }
 
                 std::unique_ptr<SdrView> xLocalView;
-
                 if (FmFormModel* pFormModel = dynamic_cast<FmFormModel*>(mpDoc))
                 {
-                    xLocalView.reset(new FmFormView(*pFormModel, aVDev));
+                    xLocalView.reset(new FmFormView(pFormModel, aVDev) );
                 }
                 else
                 {
-                    xLocalView.reset(new SdrView(*mpDoc, aVDev));
+                    xLocalView.reset(new SdrView(mpDoc, aVDev));
                 }
 
                 ScopedVclPtr<VirtualDevice> pVDev(CreatePageVDev( pPage, nWidthPix, nHeightPix ));
@@ -717,14 +715,13 @@ bool GraphicExporter::GetGraphic( ExportSettings const & rSettings, Graphic& aGr
 
                 // create a view
                 std::unique_ptr< SdrView > pView;
-
                 if (FmFormModel *pFormModel = dynamic_cast<FmFormModel*>(mpDoc))
                 {
-                    pView.reset(new FmFormView(*pFormModel, aVDev));
+                    pView.reset(new FmFormView(pFormModel, aVDev));
                 }
                 else
                 {
-                    pView.reset(new SdrView(*mpDoc, aVDev));
+                    pView.reset(new SdrView( mpDoc, aVDev ));
                 }
 
                 pView->SetBordVisible( false );
@@ -1000,8 +997,8 @@ sal_Bool SAL_CALL GraphicExporter::filter( const Sequence< PropertyValue >& aDes
     GraphicFilter &rFilter = GraphicFilter::GetGraphicFilter();
 
     // get the arguments from the descriptor
-    ExportSettings aSettings(*mpDoc);
-    ParseSettings(aDescriptor, aSettings);
+    ExportSettings aSettings( mpDoc );
+    ParseSettings( aDescriptor, aSettings );
 
     const sal_uInt16    nFilter = !aSettings.maMediaType.isEmpty()
                             ? rFilter.GetExportFormatNumberForMediaType( aSettings.maMediaType )
@@ -1139,7 +1136,7 @@ void SAL_CALL GraphicExporter::setSourceDocument( const Reference< lang::XCompon
         if( nullptr == mpUnoPage || nullptr == mpUnoPage->GetSdrPage() )
             break;
 
-        mpDoc = &mpUnoPage->GetSdrPage()->getSdrModelFromSdrPage();
+        mpDoc = mpUnoPage->GetSdrPage()->GetModel();
 
         // Step 4:  If we got a generic XShapes test all contained shapes
         //          if they belong to the same XDrawPage
@@ -1249,7 +1246,7 @@ Graphic SvxGetGraphicForShape( SdrObject& rShape )
         rtl::Reference< GraphicExporter > xExporter( new GraphicExporter() );
         Reference< XComponent > xComp( rShape.getUnoShape(), UNO_QUERY_THROW );
         xExporter->setSourceDocument( xComp );
-        ExportSettings aSettings(rShape.getSdrModelFromSdrObject());
+        ExportSettings aSettings( rShape.GetModel() );
         xExporter->GetGraphic( aSettings, aGraphic, true/*bVector*/ );
     }
     catch( Exception& )

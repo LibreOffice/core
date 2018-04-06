@@ -52,19 +52,24 @@ IMPL_STATIC_LINK( E3dObjFactory, MakeObject, SdrObjCreatorParams, aParams, SdrOb
         switch ( aParams.nObjIdentifier )
         {
             case E3D_SCENE_ID:
-                return new E3dScene(aParams.rSdrModel);
+                return new E3dScene();
             case E3D_POLYGONOBJ_ID  :
-                return new E3dPolygonObj(aParams.rSdrModel);
+                return new E3dPolygonObj();
             case E3D_CUBEOBJ_ID :
-                return new E3dCubeObj(aParams.rSdrModel);
+                return new E3dCubeObj();
             case E3D_SPHEREOBJ_ID:
-                return new E3dSphereObj(aParams.rSdrModel);
+                // Gets the dummy constructor, as this is only called when
+                // loading documents. The actual number of segments is however
+                // determined only after loading the members. This will result
+                // in that the first sphere will be immediately destroyed,
+                // although it was never used.
+                return new E3dSphereObj(E3dSphereObj::DUMMY);
             case E3D_EXTRUDEOBJ_ID:
-                return new E3dExtrudeObj(aParams.rSdrModel);
+                return new E3dExtrudeObj();
             case E3D_LATHEOBJ_ID:
-                return new E3dLatheObj(aParams.rSdrModel);
+                return new E3dLatheObj();
             case E3D_COMPOUNDOBJ_ID:
-                return new E3dCompoundObject(aParams.rSdrModel);
+                return new E3dCompoundObject();
         }
     }
     return nullptr;

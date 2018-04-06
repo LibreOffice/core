@@ -64,20 +64,25 @@
 
 using namespace com::sun::star;
 
+
 // BaseProperties section
+
 sdr::properties::BaseProperties* SdrTextObj::CreateObjectSpecificProperties()
 {
     return new sdr::properties::TextProperties(*this);
 }
 
+
 // DrawContact section
+
 sdr::contact::ViewContact* SdrTextObj::CreateObjectSpecificViewContact()
 {
     return new sdr::contact::ViewContactOfTextObj(*this);
 }
 
-SdrTextObj::SdrTextObj(SdrModel& rSdrModel)
-:   SdrAttrObj(rSdrModel),
+
+SdrTextObj::SdrTextObj()
+:   SdrAttrObj(),
     mpText(nullptr),
     pEdtOutl(nullptr),
     eTextKind(OBJ_TEXT)
@@ -97,10 +102,8 @@ SdrTextObj::SdrTextObj(SdrModel& rSdrModel)
     mbInDownScale = false;
 }
 
-SdrTextObj::SdrTextObj(
-    SdrModel& rSdrModel,
-    const tools::Rectangle& rNewRect)
-:   SdrAttrObj(rSdrModel),
+SdrTextObj::SdrTextObj(const tools::Rectangle& rNewRect)
+:   SdrAttrObj(),
     maRect(rNewRect),
     mpText(nullptr),
     pEdtOutl(nullptr),
@@ -122,10 +125,8 @@ SdrTextObj::SdrTextObj(
     mbSupportTextIndentingOnLineWidthChange = true;
 }
 
-SdrTextObj::SdrTextObj(
-    SdrModel& rSdrModel,
-    SdrObjKind eNewTextKind)
-:   SdrAttrObj(rSdrModel),
+SdrTextObj::SdrTextObj(SdrObjKind eNewTextKind)
+:   SdrAttrObj(),
     mpText(nullptr),
     pEdtOutl(nullptr),
     eTextKind(eNewTextKind)
@@ -145,11 +146,8 @@ SdrTextObj::SdrTextObj(
     mbSupportTextIndentingOnLineWidthChange = true;
 }
 
-SdrTextObj::SdrTextObj(
-    SdrModel& rSdrModel,
-    SdrObjKind eNewTextKind,
-    const tools::Rectangle& rNewRect)
-:   SdrAttrObj(rSdrModel),
+SdrTextObj::SdrTextObj(SdrObjKind eNewTextKind, const tools::Rectangle& rNewRect)
+:   SdrAttrObj(),
     maRect(rNewRect),
     mpText(nullptr),
     pEdtOutl(nullptr),
@@ -173,19 +171,25 @@ SdrTextObj::SdrTextObj(
 
 SdrTextObj::~SdrTextObj()
 {
-    SdrOutliner& rOutl(getSdrModelFromSdrObject().GetHitTestOutliner());
-    if( rOutl.GetTextObj() == this )
-        rOutl.SetTextObj( nullptr );
+    if( pModel )
+    {
+        SdrOutliner& rOutl = pModel->GetHitTestOutliner();
+        if( rOutl.GetTextObj() == this )
+            rOutl.SetTextObj( nullptr );
+    }
+
     mpText.reset();
+
     ImpDeregisterLink();
 }
 
 void SdrTextObj::FitFrameToTextSize()
 {
+    DBG_ASSERT(pModel!=nullptr,"SdrTextObj::FitFrameToTextSize(): pModel=NULL!");
     ImpJustifyRect(maRect);
 
     SdrText* pText = getActiveText();
-    if(pText==nullptr || !pText->GetOutlinerParaObject())
+    if( pText==nullptr || !pText->GetOutlinerParaObject() || pModel==nullptr)
         return;
 
     SdrOutliner& rOutliner=ImpGetDrawOutliner();
@@ -474,6 +478,39 @@ void SdrTextObj::SetPage(SdrPage* pNewPage)
     }
 }
 
+void SdrTextObj::SetModel(SdrModel* pNewModel)
+{
+    SdrModel* pOldModel=pModel;
+    bool bLinked=IsLinkedText();
+    bool bChg=pNewModel!=pModel;
+
+    if (bLinked && bChg)
+    {
+        ImpDeregisterLink();
+    }
+
+    SdrAttrObj::SetModel(pNewModel);
+
+    if( bChg )
+    {
+        if( pNewModel != nullptr && pOldModel != nullptr )
+            SetTextSizeDirty();
+
+        sal_Int32 nCount = getTextCount();
+        for( sal_Int32 nText = 0; nText < nCount; nText++ )
+        {
+            SdrText* pText = getText( nText );
+            if( pText )
+                pText->SetModel( pNewModel );
+        }
+    }
+
+    if (bLinked && bChg)
+    {
+        ImpRegisterLink();
+    }
+}
+
 void SdrTextObj::NbcSetEckenradius(long nRad)
 {
     SetObjectItem(makeSdrEckenradiusItem(nRad));
@@ -487,7 +524,7 @@ void SdrTextObj::AdaptTextMinSize()
         // Only do this for text frame.
         return;
 
-    if (getSdrModelFromSdrObject().IsPasteResize())
+    if (pModel && pModel->IsPasteResize())
         // Don't do this during paste resize.
         return;
 
@@ -717,9 +754,11 @@ void SdrTextObj::TakeTextRect( SdrOutliner& rOutliner, tools::Rectangle& rTextRe
 
     if (pPara)
     {
-        const bool bHitTest(&getSdrModelFromSdrObject().GetHitTestOutliner() == &rOutliner);
-        const SdrTextObj* pTestObj = rOutliner.GetTextObj();
+        bool bHitTest = false;
+        if( pModel )
+            bHitTest = &pModel->GetHitTestOutliner() == &rOutliner;
 
+        const SdrTextObj* pTestObj = rOutliner.GetTextObj();
         if( !pTestObj || !bHitTest || pTestObj != this ||
             pTestObj->GetOutlinerParaObject() != pOutlinerParaObject )
         {
@@ -1010,9 +1049,9 @@ OUString SdrTextObj::TakeObjNamePlural() const
     return sName;
 }
 
-SdrTextObj* SdrTextObj::Clone(SdrModel* pTargetModel) const
+SdrTextObj* SdrTextObj::Clone() const
 {
-    return CloneHelper< SdrTextObj >(pTargetModel);
+    return CloneHelper< SdrTextObj >();
 }
 
 SdrTextObj& SdrTextObj::operator=(const SdrTextObj& rObj)
@@ -1072,7 +1111,7 @@ basegfx::B2DPolyPolygon SdrTextObj::TakeContour() const
     basegfx::B2DPolyPolygon aRetval(SdrAttrObj::TakeContour());
 
     // and now add the BoundRect of the text, if necessary
-    if ( GetOutlinerParaObject() && !IsFontwork() && !IsContourTextFrame() )
+    if ( pModel && GetOutlinerParaObject() && !IsFontwork() && !IsContourTextFrame() )
     {
         // using Clone()-Paint() strategy inside TakeContour() leaves a destroyed
         // SdrObject as pointer in DrawOutliner. Set *this again in fetching the outliner
@@ -1174,7 +1213,7 @@ void SdrTextObj::ImpInitDrawOutliner( SdrOutliner& rOutl ) const
 
 SdrOutliner& SdrTextObj::ImpGetDrawOutliner() const
 {
-    SdrOutliner& rOutl(getSdrModelFromSdrObject().GetDrawOutliner(this));
+    SdrOutliner& rOutl=pModel->GetDrawOutliner(this);
 
     // Code extracted to ImpInitDrawOutliner()
     ImpInitDrawOutliner( rOutl );
@@ -1222,7 +1261,7 @@ void SdrTextObj::ImpSetupDrawOutlinerForPaint( bool             bContourFrame,
 double SdrTextObj::GetFontScaleY() const
 {
     SdrText* pText = getActiveText();
-    if (pText == nullptr || !pText->GetOutlinerParaObject())
+    if (pText == nullptr || !pText->GetOutlinerParaObject() || pModel == nullptr)
         return 1.0;
 
     SdrOutliner& rOutliner = ImpGetDrawOutliner();
@@ -1364,21 +1403,17 @@ void SdrTextObj::UpdateOutlinerFormatting( SdrOutliner& rOutl, tools::Rectangle&
     tools::Rectangle aAnchorRect;
     Fraction aFitXCorrection(1,1);
 
-    const bool bContourFrame(IsContourTextFrame());
-    const MapMode aMapMode(
-        getSdrModelFromSdrObject().GetScaleUnit(),
-        Point(0,0),
-        getSdrModelFromSdrObject().GetScaleFraction(),
-        getSdrModelFromSdrObject().GetScaleFraction());
+    bool bContourFrame=IsContourTextFrame();
 
-    rOutl.SetRefMapMode(aMapMode);
-    ImpSetupDrawOutlinerForPaint(
-        bContourFrame,
-        rOutl,
-        aTextRect,
-        aAnchorRect,
-        rPaintRect,
-        aFitXCorrection);
+    if( GetModel() )
+    {
+        MapMode aMapMode(GetModel()->GetScaleUnit(), Point(0,0),
+                         GetModel()->GetScaleFraction(),
+                         GetModel()->GetScaleFraction());
+        rOutl.SetRefMapMode(aMapMode);
+    }
+
+    ImpSetupDrawOutlinerForPaint( bContourFrame, rOutl, aTextRect, aAnchorRect, rPaintRect, aFitXCorrection );
 }
 
 
@@ -1526,7 +1561,7 @@ TextChain *SdrTextObj::GetTextChain() const
     //if (!IsChainable())
     //    return NULL;
 
-    return getSdrModelFromSdrObject().GetTextChain();
+    return pModel->GetTextChain();
 }
 
 bool SdrTextObj::IsVerticalWriting() const
@@ -1635,7 +1670,7 @@ bool SdrTextObj::TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegfx::B2DP
     basegfx::B2DTuple aTranslate(aRectangle.Left(), aRectangle.Top());
 
     // position maybe relative to anchorpos, convert
-    if( getSdrModelFromSdrObject().IsWriter() )
+    if( pModel && pModel->IsWriter() )
     {
         if(GetAnchorPos().X() || GetAnchorPos().Y())
         {
@@ -1734,7 +1769,7 @@ void SdrTextObj::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const b
     }
 
     // if anchor is used, make position relative to it
-    if( getSdrModelFromSdrObject().IsWriter() )
+    if( pModel && pModel->IsWriter() )
     {
         if(GetAnchorPos().X() || GetAnchorPos().Y())
         {

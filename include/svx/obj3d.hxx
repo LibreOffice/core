@@ -81,8 +81,6 @@ public:
     E3dObjList();
     SVX_DLLPUBLIC virtual ~E3dObjList() override;
 
-    virtual E3dObjList* CloneSdrObjList(SdrModel* pNewModel = nullptr) const override;
-
     virtual void NbcInsertObject(SdrObject* pObj, size_t nPos=SAL_MAX_SIZE) override;
     virtual void InsertObject(SdrObject* pObj, size_t nPos=SAL_MAX_SIZE) override;
     virtual SdrObject* NbcRemoveObject(size_t nObjNum) override;
@@ -90,7 +88,8 @@ public:
 
 private:
     E3dObjList &operator=(const E3dObjList& rSrcList) = delete;
-    E3dObjList(const E3dObjList& rSrcList) = delete;
+
+    SVX_DLLPUBLIC E3dObjList(const E3dObjList& rSrcList);
 };
 
 /*************************************************************************
@@ -132,7 +131,7 @@ protected:
     // E3dObject is only a helper class (for E3DScene and E3DCompoundObject)
     // and no instances should be created from anyone, so i move the constructors
     // to protected area
-    E3dObject(SdrModel& rSdrModel);
+    E3dObject();
 
 public:
     virtual void RecalcSnapRect() override;
@@ -149,6 +148,7 @@ public:
 
     virtual void        SetObjList(SdrObjList* pNewObjList) override;
     virtual void        SetPage(SdrPage* pNewPage) override;
+    virtual void        SetModel(SdrModel* pNewModel) override;
     virtual void        NbcMove(const Size& rSize) override;
     virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact) override;
     virtual SdrObjList* GetSubList() const override;
@@ -183,7 +183,7 @@ public:
     // TakeObjName...() is for the display in the UI, for example "3 frames selected".
     virtual OUString TakeObjNameSingul() const override;
     virtual OUString TakeObjNamePlural() const override;
-    virtual E3dObject* Clone(SdrModel* pTargetModel = nullptr) const override;
+    virtual E3dObject* Clone() const override;
     E3dObject& operator=( const E3dObject& rObj );
 
     virtual SdrObjGeoData *NewGeoData() const override;
@@ -232,7 +232,7 @@ protected:
 
 public:
 
-    E3dCompoundObject(SdrModel& rSdrModel);
+    E3dCompoundObject();
     virtual ~E3dCompoundObject() override;
 
     virtual basegfx::B2DPolyPolygon TakeXorPoly() const override;
@@ -242,10 +242,7 @@ public:
     virtual sal_uInt16 GetObjIdentifier() const override;
     virtual void RecalcSnapRect() override;
 
-    virtual E3dCompoundObject* Clone(SdrModel* pTargetModel = nullptr) const override;
-
-    // implemented mainly for the purposes of Clone()
-    E3dCompoundObject& operator=(const E3dCompoundObject& rObj);
+    virtual E3dCompoundObject* Clone() const override;
 
     bool IsAOrdNumRemapCandidate(E3dScene*& prScene) const;
 };

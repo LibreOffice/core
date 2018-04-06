@@ -88,10 +88,8 @@ void SdrEditView::ImpClearVars()
     bPossibilitiesDirty=true;   // << Purify didn't like this
 }
 
-SdrEditView::SdrEditView(
-    SdrModel& rSdrModel,
-    OutputDevice* pOut)
-:   SdrMarkView(rSdrModel, pOut)
+SdrEditView::SdrEditView(SdrModel* pModel1, OutputDevice* pOut):
+    SdrMarkView(pModel1,pOut)
 {
     ImpClearVars();
 }
@@ -99,6 +97,7 @@ SdrEditView::SdrEditView(
 SdrEditView::~SdrEditView()
 {
 }
+
 
 void SdrEditView::InsertNewLayer(const OUString& rName, sal_uInt16 nPos)
 {

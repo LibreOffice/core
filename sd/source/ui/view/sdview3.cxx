@@ -797,11 +797,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                                 aNewSet.Put( pObj->GetMergedItemSet() );
 
                                 if( bUndo )
-                                    AddUndo(
-                                        new E3dAttributesUndoAction(
-                                            *static_cast< E3dObject* >(pPickObj),
-                                            aNewSet,
-                                            aOldSet));
+                                    AddUndo( new E3dAttributesUndoAction( mrDoc, static_cast<E3dObject*>(pPickObj), aNewSet, aOldSet ) );
                                 pPickObj->SetMergedItemSetAndBroadcast( aNewSet );
                             }
 
@@ -999,11 +995,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                     maDropPos.AdjustY( -(std::min( aSize.Height(), aMaxSize.Height() ) >> 1) );
 
                     ::tools::Rectangle       aRect( maDropPos, aSize );
-                    SdrOle2Obj*     pObj = new SdrOle2Obj(
-                        getSdrModelFromSdrView(),
-                        aObjRef,
-                        aName,
-                        aRect);
+                    SdrOle2Obj*     pObj = new SdrOle2Obj( aObjRef, aName, aRect );
                     SdrPageView*    pPV = GetSdrPageView();
                     SdrInsertFlags  nOptions = SdrInsertFlags::SETDEFLAYER;
 
@@ -1173,11 +1165,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                     maDropPos.AdjustY( -(std::min( aSize.Height(), aMaxSize.Height() ) >> 1) );
 
                     ::tools::Rectangle       aRect( maDropPos, aSize );
-                    SdrOle2Obj*     pObj = new SdrOle2Obj(
-                        getSdrModelFromSdrView(),
-                        aObjRef,
-                        aName,
-                        aRect);
+                    SdrOle2Obj*     pObj = new SdrOle2Obj( aObjRef, aName, aRect );
                     SdrPageView*    pPV = GetSdrPageView();
                     SdrInsertFlags  nOptions = SdrInsertFlags::SETDEFLAYER;
 

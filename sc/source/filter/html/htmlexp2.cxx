@@ -165,7 +165,8 @@ void ScHTMLExport::WriteGraphEntry( ScHTMLGraphEntry* pE )
         break;
         default:
         {
-            Graphic aGraph(SdrExchangeView::GetObjGraphic(*pObject));
+            Graphic aGraph( SdrExchangeView::GetObjGraphic(
+                pDoc->GetDrawLayer(), pObject ) );
             OUString aLinkName;
             WriteImage( aLinkName, aGraph, aOpt );
             pE->bWritten = true;

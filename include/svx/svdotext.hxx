@@ -136,12 +136,15 @@ class SVX_DLLPUBLIC SdrTextObj : public SdrAttrObj, public svx::ITextProvider
 {
 private:
     // Cell needs access to ImpGetDrawOutliner();
+
     friend class                sdr::table::Cell;
     friend class                sdr::table::SdrTableRtfExporter;
     friend class                sdr::table::SdrTableRTFParser;
+
     friend class                TextChain;
     friend class                TextChainFlow;
     friend class                EditingTextChainFlow;
+
 
     // CustomShapeproperties need to access the "bTextFrame" member:
     friend class sdr::properties::CustomShapeProperties;
@@ -269,6 +272,7 @@ private:
     SVX_DLLPRIVATE void ImpRegisterLink();
     SVX_DLLPRIVATE void ImpDeregisterLink();
     SVX_DLLPRIVATE ImpSdrObjTextLinkUserData* GetLinkUserData() const;
+//  void ImpCheckItemSetChanges(const SfxItemSet& rAttr);
 
     /** Appends the style family to a provided style name */
     static void AppendFamilyToStyleName(OUString& styleName, SfxStyleFamily family);
@@ -302,19 +306,12 @@ protected:
     virtual void AdaptTextMinSize();
 
     // constructors for labeled graphical objects
-    SdrTextObj(SdrModel& rSdrModel);
-    SdrTextObj(
-        SdrModel& rSdrModel,
-        const tools::Rectangle& rNewRect);
+    SdrTextObj();
+    SdrTextObj(const tools::Rectangle& rNewRect);
 
     // constructors for text frames
-    SdrTextObj(
-        SdrModel& rSdrModel,
-        SdrObjKind eNewTextKind);
-    SdrTextObj(
-        SdrModel& rSdrModel,
-        SdrObjKind eNewTextKind,
-        const tools::Rectangle& rNewRect);
+    SdrTextObj(SdrObjKind eNewTextKind);
+    SdrTextObj(SdrObjKind eNewTextKind, const tools::Rectangle& rNewRect);
 
     virtual ~SdrTextObj() override;
 
@@ -437,6 +434,7 @@ public:
     SdrTextAniDirection GetTextAniDirection() const;
 
     virtual void SetPage(SdrPage* pNewPage) override;
+    virtual void SetModel(SdrModel* pNewModel) override;
     virtual void TakeObjInfo(SdrObjTransformInfoRec& rInfo) const override;
     virtual sal_uInt16 GetObjIdentifier() const override;
 
@@ -444,7 +442,7 @@ public:
     virtual void TakeUnrotatedSnapRect(tools::Rectangle& rRect) const;
     virtual OUString TakeObjNameSingul() const override;
     virtual OUString TakeObjNamePlural() const override;
-    virtual SdrTextObj* Clone(SdrModel* pTargetModel = nullptr) const override;
+    virtual SdrTextObj* Clone() const override;
     SdrTextObj& operator=(const SdrTextObj& rObj);
     virtual basegfx::B2DPolyPolygon TakeXorPoly() const override;
     virtual basegfx::B2DPolyPolygon TakeContour() const override;

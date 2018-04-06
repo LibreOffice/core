@@ -242,11 +242,11 @@ void SAL_CALL CellCursor::merge(  )
     if( !mxTable.is() || (mxTable->getSdrTableObj() == nullptr) )
         throw DisposedException();
 
-    SdrModel& rModel(mxTable->getSdrTableObj()->getSdrModelFromSdrObject());
-    const bool bUndo(mxTable->getSdrTableObj()->IsInserted() && rModel.IsUndoEnabled());
+    SdrModel* pModel = mxTable->getSdrTableObj()->GetModel();
+    const bool bUndo = pModel && mxTable->getSdrTableObj()->IsInserted() && pModel->IsUndoEnabled();
 
     if( bUndo )
-        rModel.BegUndo( ImpGetResStr(STR_TABLE_MERGE) );
+        pModel->BegUndo( ImpGetResStr(STR_TABLE_MERGE) );
 
     try
     {
@@ -260,9 +260,10 @@ void SAL_CALL CellCursor::merge(  )
     }
 
     if( bUndo )
-        rModel.EndUndo();
+        pModel->EndUndo();
 
-    rModel.SetChanged();
+    if( pModel )
+        pModel->SetChanged();
 }
 
 
@@ -502,11 +503,10 @@ void SAL_CALL CellCursor::split( sal_Int32 nColumns, sal_Int32 nRows )
     if( !mxTable.is() || (mxTable->getSdrTableObj() == nullptr) )
         throw DisposedException();
 
-    SdrModel& rModel(mxTable->getSdrTableObj()->getSdrModelFromSdrObject());
-    const bool bUndo(mxTable->getSdrTableObj()->IsInserted() && rModel.IsUndoEnabled());
-
+    SdrModel* pModel = mxTable->getSdrTableObj()->GetModel();
+    const bool bUndo = pModel && mxTable->getSdrTableObj()->IsInserted() && pModel->IsUndoEnabled();
     if( bUndo )
-        rModel.BegUndo( ImpGetResStr(STR_TABLE_SPLIT) );
+        pModel->BegUndo( ImpGetResStr(STR_TABLE_SPLIT) );
 
     try
     {
@@ -526,9 +526,10 @@ void SAL_CALL CellCursor::split( sal_Int32 nColumns, sal_Int32 nRows )
     }
 
     if( bUndo )
-        rModel.EndUndo();
+        pModel->EndUndo();
 
-    rModel.SetChanged();
+    if( pModel )
+        pModel->SetChanged();
 }
 
 

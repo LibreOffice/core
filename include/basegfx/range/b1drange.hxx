@@ -141,11 +141,6 @@ namespace basegfx
             maRange.intersect(rRange.maRange);
         }
 
-        /// clamp value on range
-        double clamp(double fValue) const
-        {
-            return maRange.clamp(fValue);
-        }
     };
 
 } // end of namespace basegfx

@@ -31,15 +31,17 @@
 \************************************************************************/
 class SAL_WARN_UNUSED E3dUndoAction : public SdrUndoAction
 {
+
     protected:
-        E3dObject&      mrMy3DObj;
+        E3dObject *pMy3DObj;
 
     public:
-        E3dUndoAction(E3dObject &r3DObj)
-        :   SdrUndoAction(r3DObj.getSdrModelFromSdrObject()),
-            mrMy3DObj(r3DObj)
-        {
-        }
+        E3dUndoAction (SdrModel  *pModel,
+                       E3dObject *p3DObj) :
+            SdrUndoAction (*pModel),
+            pMy3DObj (p3DObj)
+            {
+            }
 
         virtual ~E3dUndoAction () override;
 
@@ -53,25 +55,25 @@ class SAL_WARN_UNUSED E3dUndoAction : public SdrUndoAction
 \************************************************************************/
 class SAL_WARN_UNUSED E3dRotateUndoAction : public E3dUndoAction
 {
-private:
-    basegfx::B3DHomMatrix   maMyOldRotation;
-    basegfx::B3DHomMatrix   maMyNewRotation;
+        basegfx::B3DHomMatrix aMyOldRotation;
+        basegfx::B3DHomMatrix aMyNewRotation;
 
-public:
-    E3dRotateUndoAction(
-        E3dObject& r3DObj,
-        const basegfx::B3DHomMatrix &aOldRotation,
-        const basegfx::B3DHomMatrix &aNewRotation)
-    :   E3dUndoAction(r3DObj),
-        maMyOldRotation(aOldRotation),
-        maMyNewRotation(aNewRotation)
-    {
-    }
+    public:
+        E3dRotateUndoAction (SdrModel       *pModel,
+                             E3dObject      *p3DObj,
+                             const basegfx::B3DHomMatrix &aOldRotation,
+                             const basegfx::B3DHomMatrix &aNewRotation) :
+            E3dUndoAction (pModel, p3DObj),
+            aMyOldRotation (aOldRotation),
+            aMyNewRotation (aNewRotation)
+            {
+            }
 
-    virtual ~E3dRotateUndoAction () override;
+        virtual ~E3dRotateUndoAction () override;
 
-    virtual void Undo() override;
-    virtual void Redo() override;
+        virtual void Undo() override;
+        virtual void Redo() override;
+
 };
 
 /************************************************************************\
@@ -81,16 +83,16 @@ public:
 \************************************************************************/
 class SAL_WARN_UNUSED SVX_DLLPUBLIC E3dAttributesUndoAction : public SdrUndoAction
 {
-private:
     using SdrUndoAction::Repeat;
 
-    SdrObject&          mrObject;
-    const SfxItemSet    maNewSet;
-    const SfxItemSet    maOldSet;
+    SdrObject*  pObject;
+
+    const SfxItemSet aNewSet;
+    const SfxItemSet aOldSet;
 
  public:
-        E3dAttributesUndoAction(
-            E3dObject& rInObject,
+        E3dAttributesUndoAction( SdrModel &rModel,
+            E3dObject* pInObject,
             const SfxItemSet& rNewSet,
             const SfxItemSet& rOldSet);
 

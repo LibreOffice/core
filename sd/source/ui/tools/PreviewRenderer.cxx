@@ -202,9 +202,15 @@ bool PreviewRenderer::Initialize (
     if (pPage == nullptr)
         return false;
 
+    SdrModel* pModel = pPage->GetModel();
+    if (pModel == nullptr)
+        return false;
+
     SetupOutputSize(*pPage, rPixelSize);
-    SdDrawDocument& rDocument(static_cast< SdDrawDocument& >(pPage->getSdrModelFromSdrPage()));
-    DrawDocShell* pDocShell = rDocument.GetDocSh();
+
+    SdDrawDocument* pDocument
+        = static_cast<SdDrawDocument*>(pPage->GetModel());
+    DrawDocShell* pDocShell = pDocument->GetDocSh();
 
     // Create view
     ProvideView (pDocShell);
@@ -254,9 +260,9 @@ bool PreviewRenderer::Initialize (
     }
 
     pPageView->SetApplicationDocumentColor(aApplicationDocumentColor);
-    SdrOutliner& rOutliner(rDocument.GetDrawOutliner());
+    SdrOutliner& rOutliner(pDocument->GetDrawOutliner());
     rOutliner.SetBackgroundColor(aApplicationDocumentColor);
-    rOutliner.SetDefaultLanguage(rDocument.GetLanguage(EE_CHAR_LANGUAGE));
+    rOutliner.SetDefaultLanguage(pDocument->GetLanguage(EE_CHAR_LANGUAGE));
     mpPreviewDevice->SetBackground(Wallpaper(aApplicationDocumentColor));
     mpPreviewDevice->Erase();
 

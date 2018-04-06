@@ -395,12 +395,11 @@ void ChartController::impl_PasteShapes( SdrModel* pModel )
                 SdrObjListIter aIter( *pPage, SdrIterMode::DeepNoGroups );
                 while ( aIter.IsMore() )
                 {
-                    SdrObject* pObj(aIter.Next());
-                    // Clone to new SdrModel
-                    SdrObject* pNewObj(pObj ? pObj->Clone(&pDrawModelWrapper->getSdrModel()) : nullptr);
-
+                    SdrObject* pObj = aIter.Next();
+                    SdrObject* pNewObj = ( pObj ? pObj->Clone() : nullptr );
                     if ( pNewObj )
                     {
+                        pNewObj->SetModel( &pDrawModelWrapper->getSdrModel() );
                         pNewObj->SetPage( pDestPage );
 
                         // set position
@@ -517,9 +516,7 @@ void ChartController::executeDispatch_Copy()
                     if ( pSelectedObj )
                     {
                         xTransferable.set( new ChartTransferable(
-                                m_pDrawModelWrapper->getSdrModel(),
-                                pSelectedObj,
-                                aSelOID.isAdditionalShape() ) );
+                                &m_pDrawModelWrapper->getSdrModel(), pSelectedObj, aSelOID.isAdditionalShape() ) );
                     }
                 }
             }

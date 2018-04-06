@@ -186,14 +186,7 @@ namespace reportdesign
 
         css::uno::Reference< css::uno::XComponentContext > getContext();
 
-    protected:
-        /** abstract SdrModel provider */
-        virtual SdrModel* getSdrModelFromUnoModel() const override;
-
-    public:
-        //TTTT Needed? Or same as above?
         static std::shared_ptr<rptui::OReportModel> getSdrModel(const css::uno::Reference< css::report::XReportDefinition >& _xReportDefinition);
-
     private:
         DECLARE_XINTERFACE( )
         DECLARE_XTYPEPROVIDER( )

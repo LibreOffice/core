@@ -554,7 +554,7 @@ void TableModel::unlockBroadcasts()
 void TableModel::notifyModification()
 {
     ::osl::MutexGuard guard( m_aMutex );
-    if( (mnNotifyLock == 0) && mpTableObj )
+    if( (mnNotifyLock == 0) && mpTableObj && mpTableObj->GetModel() )
     {
         mbNotifyPending = false;
 
@@ -602,7 +602,8 @@ void TableModel::insertColumns( sal_Int32 nIndex, sal_Int32 nCount )
     {
         try
         {
-            SdrModel& rModel(mpTableObj->getSdrModelFromSdrObject());
+            SdrModel* pModel = mpTableObj->GetModel();
+
             TableModelNotifyGuard aGuard( this );
             nIndex = insert_range<ColumnVector,ColumnVector::iterator,TableColumnRef>( maColumns, nIndex, nCount );
 
@@ -618,12 +619,11 @@ void TableModel::insertColumns( sal_Int32 nIndex, sal_Int32 nCount )
                 aNewColumns[nOffset] = xNewCol;
             }
 
-            const bool bUndo(mpTableObj->IsInserted() && rModel.IsUndoEnabled());
-
+            const bool bUndo = pModel && mpTableObj->IsInserted() && pModel->IsUndoEnabled();
             if( bUndo )
             {
-                rModel.BegUndo( ImpGetResStr(STR_TABLE_INSCOL) );
-                rModel.AddUndo( rModel.GetSdrUndoFactory().CreateUndoGeoObject(*mpTableObj) );
+                pModel->BegUndo( ImpGetResStr(STR_TABLE_INSCOL) );
+                pModel->AddUndo( pModel->GetSdrUndoFactory().CreateUndoGeoObject(*mpTableObj) );
 
                 TableModelRef xThis( this );
 
@@ -638,7 +638,7 @@ void TableModel::insertColumns( sal_Int32 nIndex, sal_Int32 nCount )
                         (*aCellIter++) = getCell( nIndex + nOffset, nRow );
                 }
 
-                rModel.AddUndo( new InsertColUndo( xThis, nIndex, aNewColumns, aNewCells ) );
+                pModel->AddUndo( new InsertColUndo( xThis, nIndex, aNewColumns, aNewCells ) );
             }
 
             const sal_Int32 nRowCount = getRowCountImpl();
@@ -660,9 +660,11 @@ void TableModel::insertColumns( sal_Int32 nIndex, sal_Int32 nCount )
             }
 
             if( bUndo )
-                rModel.EndUndo();
+                pModel->EndUndo();
 
-            rModel.SetChanged();
+            if( pModel )
+                pModel->SetChanged();
+
         }
         catch( Exception& )
         {
@@ -689,13 +691,14 @@ void TableModel::removeColumns( sal_Int32 nIndex, sal_Int32 nCount )
                 nCount = nColCount - nIndex;
 
             sal_Int32 nRows = getRowCountImpl();
-            SdrModel& rModel(mpTableObj->getSdrModelFromSdrObject());
-            const bool bUndo(mpTableObj->IsInserted() && rModel.IsUndoEnabled());
 
+            SdrModel* pModel = mpTableObj->GetModel();
+
+            const bool bUndo = pModel && mpTableObj->IsInserted() && pModel->IsUndoEnabled();
             if( bUndo  )
             {
-                rModel.BegUndo( ImpGetResStr(STR_UNDO_COL_DELETE) );
-                rModel.AddUndo( rModel.GetSdrUndoFactory().CreateUndoGeoObject(*mpTableObj) );
+                pModel->BegUndo( ImpGetResStr(STR_UNDO_COL_DELETE) );
+                pModel->AddUndo( pModel->GetSdrUndoFactory().CreateUndoGeoObject(*mpTableObj) );
 
                 TableModelRef xThis( this );
                 ColumnVector aRemovedCols( nCount );
@@ -713,7 +716,7 @@ void TableModel::removeColumns( sal_Int32 nIndex, sal_Int32 nCount )
                         (*aCellIter++) = getCell( nIndex + nOffset, nRow );
                 }
 
-                rModel.AddUndo( new RemoveColUndo( xThis, nIndex, aRemovedCols, aRemovedCells ) );
+                pModel->AddUndo( new RemoveColUndo( xThis, nIndex, aRemovedCols, aRemovedCells ) );
             }
 
             // only rows before and inside the removed rows are considered
@@ -766,9 +769,10 @@ void TableModel::removeColumns( sal_Int32 nIndex, sal_Int32 nCount )
                 maRows[nRows]->removeColumns( nIndex, nCount );
 
             if( bUndo )
-                rModel.EndUndo();
+                pModel->EndUndo();
 
-            rModel.SetChanged();
+            if( pModel )
+                pModel->SetChanged();
         }
         catch( Exception& )
         {
@@ -785,9 +789,8 @@ void TableModel::insertRows( sal_Int32 nIndex, sal_Int32 nCount )
 {
     if( nCount && mpTableObj )
     {
-        SdrModel& rModel(mpTableObj->getSdrModelFromSdrObject());
-        const bool bUndo(mpTableObj->IsInserted() && rModel.IsUndoEnabled());
-
+        SdrModel* pModel = mpTableObj->GetModel();
+        const bool bUndo = pModel && mpTableObj->IsInserted() && pModel->IsUndoEnabled();
         try
         {
             TableModelNotifyGuard aGuard( this );
@@ -805,10 +808,10 @@ void TableModel::insertRows( sal_Int32 nIndex, sal_Int32 nCount )
 
             if( bUndo )
             {
-                rModel.BegUndo( ImpGetResStr(STR_TABLE_INSROW) );
-                rModel.AddUndo( rModel.GetSdrUndoFactory().CreateUndoGeoObject(*mpTableObj) );
+                pModel->BegUndo( ImpGetResStr(STR_TABLE_INSROW) );
+                pModel->AddUndo( pModel->GetSdrUndoFactory().CreateUndoGeoObject(*mpTableObj) );
                 TableModelRef xThis( this );
-                rModel.AddUndo( new InsertRowUndo( xThis, nIndex, aNewRows ) );
+                pModel->AddUndo( new InsertRowUndo( xThis, nIndex, aNewRows ) );
             }
 
             // check if cells merge over new columns
@@ -833,9 +836,10 @@ void TableModel::insertRows( sal_Int32 nIndex, sal_Int32 nCount )
             OSL_FAIL("sdr::table::TableModel::insertRows(), exception caught!");
         }
         if( bUndo )
-            rModel.EndUndo();
+            pModel->EndUndo();
 
-        rModel.SetChanged();
+        if( pModel )
+            pModel->SetChanged();
 
         updateRows();
         setModified(true);
@@ -849,8 +853,8 @@ void TableModel::removeRows( sal_Int32 nIndex, sal_Int32 nCount )
 
     if( mpTableObj && nCount && (nIndex >= 0) && (nIndex < nRowCount) )
     {
-        SdrModel& rModel(mpTableObj->getSdrModelFromSdrObject());
-        const bool bUndo(mpTableObj->IsInserted() && rModel.IsUndoEnabled());
+        SdrModel* pModel = mpTableObj->GetModel();
+        const bool bUndo = pModel && mpTableObj->IsInserted()&& pModel->IsUndoEnabled();
 
         try
         {
@@ -862,8 +866,8 @@ void TableModel::removeRows( sal_Int32 nIndex, sal_Int32 nCount )
 
             if( bUndo )
             {
-                rModel.BegUndo( ImpGetResStr(STR_UNDO_ROW_DELETE) );
-                rModel.AddUndo( rModel.GetSdrUndoFactory().CreateUndoGeoObject(*mpTableObj) );
+                pModel->BegUndo( ImpGetResStr(STR_UNDO_ROW_DELETE) );
+                pModel->AddUndo( pModel->GetSdrUndoFactory().CreateUndoGeoObject(*mpTableObj) );
 
                 TableModelRef xThis( this );
 
@@ -871,7 +875,7 @@ void TableModel::removeRows( sal_Int32 nIndex, sal_Int32 nCount )
                 for( sal_Int32 nOffset = 0; nOffset < nCount; ++nOffset )
                     aRemovedRows[nOffset] = maRows[nIndex+nOffset];
 
-                rModel.AddUndo( new RemoveRowUndo( xThis, nIndex, aRemovedRows ) );
+                pModel->AddUndo( new RemoveRowUndo( xThis, nIndex, aRemovedRows ) );
             }
 
             // only rows before and inside the removed rows are considered
@@ -922,9 +926,10 @@ void TableModel::removeRows( sal_Int32 nIndex, sal_Int32 nCount )
             remove_range<RowVector,RowVector::iterator>( maRows, nIndex, nCount );
 
             if( bUndo )
-                rModel.EndUndo();
+                pModel->EndUndo();
 
-            rModel.SetChanged();
+            if( pModel )
+                pModel->SetChanged();
         }
         catch( Exception& )
         {
@@ -1045,11 +1050,10 @@ void TableModel::optimize()
 
 void TableModel::merge( sal_Int32 nCol, sal_Int32 nRow, sal_Int32 nColSpan, sal_Int32 nRowSpan )
 {
-    if(nullptr == mpTableObj)
-        return;
+    SdrModel* pModel = mpTableObj->GetModel();
 
-    SdrModel& rModel(mpTableObj->getSdrModelFromSdrObject());
-    const bool bUndo(mpTableObj->IsInserted() && rModel.IsUndoEnabled());
+    const bool bUndo = pModel && mpTableObj->IsInserted() && pModel->IsUndoEnabled();
+
     const sal_Int32 nLastRow = nRow + nRowSpan;
     const sal_Int32 nLastCol = nCol + nColSpan;
 

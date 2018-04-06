@@ -3845,8 +3845,10 @@ void FmXFormShell::loadForms_Lock(FmFormPage* _pPage, const LoadFormsFlags _nBeh
     {
         // lock the undo env so the forms can change non-transient properties while loading
         // (without this my doc's modified flag would be set)
-        FmFormModel& rFmFormModel(dynamic_cast< FmFormModel& >(_pPage->getSdrModelFromSdrPage()));
-        rFmFormModel.GetUndoEnv().Lock();
+        FmFormModel* pModel = dynamic_cast<FmFormModel*>( _pPage->GetModel()  );
+        DBG_ASSERT( pModel, "FmXFormShell::loadForms: invalid model!" );
+        if ( pModel )
+            pModel->GetUndoEnv().Lock();
 
         // load all forms
         Reference< XIndexAccess >  xForms;
@@ -3892,8 +3894,9 @@ void FmXFormShell::loadForms_Lock(FmFormPage* _pPage, const LoadFormsFlags _nBeh
             }
         }
 
-        // unlock the environment
-        rFmFormModel.GetUndoEnv().UnLock();
+        if ( pModel )
+            // unlock the environment
+            pModel->GetUndoEnv().UnLock();
     }
 }
 

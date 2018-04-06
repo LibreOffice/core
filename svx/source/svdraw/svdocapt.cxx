@@ -189,19 +189,16 @@ sdr::contact::ViewContact* SdrCaptionObj::CreateObjectSpecificViewContact()
 }
 
 
-SdrCaptionObj::SdrCaptionObj(SdrModel& rSdrModel)
-:   SdrRectObj(rSdrModel, OBJ_TEXT),
+SdrCaptionObj::SdrCaptionObj():
+    SdrRectObj(OBJ_TEXT),
     aTailPoly(3),  // default size: 3 points = 2 lines
     mbSpecialTextBoxShadow(false),
     mbFixedTail(false)
 {
 }
 
-SdrCaptionObj::SdrCaptionObj(
-    SdrModel& rSdrModel,
-    const tools::Rectangle& rRect,
-    const Point& rTail)
-:   SdrRectObj(rSdrModel, OBJ_TEXT,rRect),
+SdrCaptionObj::SdrCaptionObj(const tools::Rectangle& rRect, const Point& rTail):
+    SdrRectObj(OBJ_TEXT,rRect),
     aTailPoly(3),  // default size: 3 points = 2 lines
     mbSpecialTextBoxShadow(false),
     mbFixedTail(false)
@@ -235,23 +232,9 @@ sal_uInt16 SdrCaptionObj::GetObjIdentifier() const
     return sal_uInt16(OBJ_CAPTION);
 }
 
-SdrCaptionObj* SdrCaptionObj::Clone(SdrModel* pTargetModel) const
+SdrCaptionObj* SdrCaptionObj::Clone() const
 {
-    return CloneHelper< SdrCaptionObj >(pTargetModel);
-}
-
-SdrCaptionObj& SdrCaptionObj::operator=(const SdrCaptionObj& rObj)
-{
-    if( this == &rObj )
-        return *this;
-    SdrRectObj::operator=(rObj);
-
-    aTailPoly = rObj.aTailPoly;
-    mbSpecialTextBoxShadow = rObj.mbSpecialTextBoxShadow;
-    mbFixedTail = rObj.mbFixedTail;
-    maFixedTailPos = rObj.maFixedTailPos;
-
-    return *this;
+    return CloneHelper< SdrCaptionObj >();
 }
 
 OUString SdrCaptionObj::TakeObjNameSingul() const
@@ -680,6 +663,12 @@ Point SdrCaptionObj::GetSnapPoint(sal_uInt32 /*i*/) const
     return Point(0,0);
 }
 
+void SdrCaptionObj::SetModel(SdrModel* pNewModel)
+{
+    SdrRectObj::SetModel(pNewModel);
+    ImpRecalcTail();
+}
+
 void SdrCaptionObj::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
 {
     SdrRectObj::Notify(rBC,rHint);
@@ -717,9 +706,8 @@ SdrObject* SdrCaptionObj::DoConvertToPolyObj(bool bBezier, bool bAddText) const
         if (pOL!=nullptr) { pRet=pRect; bInsTail = false; }
         if (pOL==nullptr) pOL=pRect->GetSubList();
         if (pOL!=nullptr) { pRet=pRect; bInsRect = false; }
-        if (pOL==nullptr)
-        {
-            SdrObjGroup* pGrp = new SdrObjGroup(getSdrModelFromSdrObject());
+        if (pOL==nullptr) {
+            SdrObjGroup* pGrp=new SdrObjGroup;
             pOL=pGrp->GetSubList();
             pRet=pGrp;
         }
@@ -759,8 +747,7 @@ void SdrCaptionObj::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, cons
     handleNegativeScale(aScale, &fRotate);
 
     // force metric to pool metric
-    MapUnit eMapUnit(getSdrModelFromSdrObject().GetItemPool().GetMetric(0));
-
+    MapUnit eMapUnit = pModel->GetItemPool().GetMetric(0);
     if(eMapUnit != MapUnit::Map100thMM)
     {
         switch(eMapUnit)
@@ -785,7 +772,7 @@ void SdrCaptionObj::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, cons
     }
 
     // if anchor is used, make position relative to it
-    if(getSdrModelFromSdrObject().IsWriter())
+    if( pModel->IsWriter() )
     {
         if(GetAnchorPos().X() || GetAnchorPos().Y())
         {

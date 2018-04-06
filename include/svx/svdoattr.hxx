@@ -28,14 +28,20 @@
 #include <svx/svdattr.hxx>
 #include <svx/svxdllapi.h>
 
+
 //   Initial Declarations
+
+
 class SfxPoolItem;
 class SfxSetItem;
 class SdrOutliner;
 class SfxItemSet;
 class SfxItemPool;
 
+
 //   SdrAttrObj
+
+
 class SVX_DLLPUBLIC SdrAttrObj : public SdrObject
 {
 private:
@@ -53,7 +59,7 @@ protected:
     /// Detects when a stylesheet is changed
     virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) override;
 
-    SdrAttrObj(SdrModel& rSdrModel);
+    SdrAttrObj();
     virtual ~SdrAttrObj() override;
 
 public:
@@ -65,6 +71,8 @@ public:
     bool HasLine() const;
 
     virtual const tools::Rectangle& GetSnapRect() const override;
+
+    virtual void SetModel(SdrModel* pNewModel) override;
 };
 
 

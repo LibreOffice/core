@@ -77,13 +77,13 @@ using namespace ::com::sun::star::util;
 using namespace ::svxform;
 using namespace ::svx;
 
-FmFormView::FmFormView(
-    SdrModel& rSdrModel,
-    OutputDevice* pOut)
-:   E3dView(rSdrModel, pOut)
+
+FmFormView::FmFormView( FmFormModel* pModel, OutputDevice* pOut )
+    :E3dView(pModel,pOut)
 {
     Init();
 }
+
 
 void FmFormView::Init()
 {

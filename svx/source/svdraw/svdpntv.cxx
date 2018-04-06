@@ -181,12 +181,9 @@ void SdrPaintView::ImpClearVars()
     maGridColor = COL_BLACK;
 }
 
-SdrPaintView::SdrPaintView(
-    SdrModel& rSdrModel,
-    OutputDevice* pOut)
-:   mrSdrModelFromSdrView(rSdrModel),
-    mpPageView(nullptr),
-    maDefaultAttr(rSdrModel.GetItemPool()),
+SdrPaintView::SdrPaintView(SdrModel* pModel, OutputDevice* pOut)
+:   mpPageView(nullptr),
+    maDefaultAttr(pModel->GetItemPool()),
     mbBufferedOutputAllowed(false),
     mbBufferedOverlayAllowed(false),
     mbPagePaintingAllowed(true),
@@ -195,7 +192,7 @@ SdrPaintView::SdrPaintView(
     mbHideDraw(false),
     mbHideFormControl(false)
 {
-    mpModel=&rSdrModel;
+    mpModel=pModel;
     ImpClearVars();
 
     if(pOut)

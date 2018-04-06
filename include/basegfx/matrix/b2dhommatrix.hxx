@@ -74,10 +74,8 @@ namespace basegfx
         void rotate(double fRadiant);
 
         void translate(double fX, double fY);
-        void translate(const B2DTuple& rTuple);
 
         void scale(double fX, double fY);
-        void scale(const B2DTuple& rTuple);
 
         // Shearing-Matrices
         void shearX(double fSx);

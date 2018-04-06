@@ -31,11 +31,9 @@
 namespace basctl
 {
 
-DlgEdView::DlgEdView(
-    SdrModel& rSdrModel,
-    OutputDevice& rOut,
-    DlgEditor& rEditor)
-:   SdrView(rSdrModel, &rOut),
+
+DlgEdView::DlgEdView (SdrModel& rModel, OutputDevice& rOut, DlgEditor& rEditor) :
+    SdrView(&rModel, &rOut),
     rDlgEditor(rEditor)
 {
     SetBufferedOutputAllowed(true);

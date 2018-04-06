@@ -208,13 +208,6 @@ namespace basegfx
             maRangeY.intersect(rRange.maRangeY);
         }
 
-        B2ITuple clamp(const B2ITuple& rTuple) const
-        {
-            return B2ITuple(
-                maRangeX.clamp(rTuple.getX()),
-                maRangeY.clamp(rTuple.getY()));
-        }
-
     private:
         typedef ::basegfx::BasicRange< ValueType, TraitsType >  MyBasicRange;
 
