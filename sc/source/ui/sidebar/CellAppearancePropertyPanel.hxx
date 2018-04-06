@@ -78,7 +78,6 @@ private:
     VclPtr<ToolBox>                                mpTBCellBorder;
     VclPtr<ToolBox>                                mpTBLineStyle;
     VclPtr<ToolBox>                                mpTBLineColor;
-    std::unique_ptr< CellBorderUpdater > mpCellBorderUpdater;
 
     ::sfx2::sidebar::ControllerItem         maLineStyleControl;
     ::sfx2::sidebar::ControllerItem         maBorderOuterControl;
@@ -139,6 +138,7 @@ private:
     void Initialize();
     void SetStyleIcon();
     void UpdateControlState();
+    void UpdateCellBorder(bool bTop, bool bBot, bool bLeft, bool bRight, bool bVer, bool bHor);
 };
 
 } } // end of namespace ::sc::sidebar

@@ -34,7 +34,6 @@
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include "CellLineStyleControl.hxx"
-#include "CellBorderUpdater.hxx"
 #include "CellBorderStyleControl.hxx"
 
 using namespace css;
@@ -99,9 +98,6 @@ CellAppearancePropertyPanel::CellAppearancePropertyPanel(
     get(mpTBCellBorder, "cellbordertype");
     get(mpTBLineStyle,  "borderlinestyle");
     get(mpTBLineColor,  "borderlinecolor");
-
-    mpCellBorderUpdater.reset( new CellBorderUpdater(
-        mpTBCellBorder->GetItemId( UNO_SETBORDERSTYLE ), *mpTBCellBorder) );
 
     Initialize();
 }
@@ -273,9 +269,9 @@ void CellAppearancePropertyPanel::NotifyItemUpdate(
                     mbBottom = true;
 
                 if(!AllSettings::GetLayoutRTL())
-                    mpCellBorderUpdater->UpdateCellBorder(mbTop, mbBottom, mbLeft, mbRight, maIMGCellBorder, mbVer, mbHor);
+                    UpdateCellBorder(mbTop, mbBottom, mbLeft, mbRight, mbVer, mbHor);
                 else
-                    mpCellBorderUpdater->UpdateCellBorder(mbTop, mbBottom, mbRight, mbLeft, maIMGCellBorder, mbVer, mbHor);
+                    UpdateCellBorder(mbTop, mbBottom, mbRight, mbLeft, mbVer, mbHor);
 
                 if(mbLeft || mbRight || mbTop || mbBottom)
                     mbOuterBorder = true;
@@ -317,9 +313,9 @@ void CellAppearancePropertyPanel::NotifyItemUpdate(
                     bBottom = true;
 
                 if(!AllSettings::GetLayoutRTL())
-                    mpCellBorderUpdater->UpdateCellBorder(bTop, bBottom, bLeft, bRight, maIMGCellBorder, mbVer, mbHor);
+                    UpdateCellBorder(bTop, bBottom, bLeft, bRight, mbVer, mbHor);
                 else
-                    mpCellBorderUpdater->UpdateCellBorder(bTop, bBottom, bRight, bLeft, maIMGCellBorder, mbVer, mbHor);
+                    UpdateCellBorder(bTop, bBottom, bRight, bLeft, mbVer, mbHor);
 
                 if(mbVer || mbHor || bLeft || bRight || bTop || bBottom)
                     mbInnerBorder = true;
@@ -511,6 +507,40 @@ void CellAppearancePropertyPanel::UpdateControlState()
     }
 }
 
+void CellAppearancePropertyPanel::UpdateCellBorder(bool bTop, bool bBot, bool bLeft, bool bRight, bool bVer, bool bHor)
+{
+    const Size aBmpSize = maIMGCellBorder.GetBitmapEx().GetSizePixel();
+
+    ScopedVclPtr<VirtualDevice> pVirDev(VclPtr<VirtualDevice>::Create(*Application::GetDefaultDevice(),
+            DeviceFormat::DEFAULT, DeviceFormat::DEFAULT));
+    pVirDev->SetOutputSizePixel(aBmpSize);
+    pVirDev->SetBackground(COL_TRANSPARENT);
+    pVirDev->Erase();
+    pVirDev->SetLineColor( ::Application::GetSettings().GetStyleSettings().GetFieldTextColor() ) ;
+    pVirDev->SetFillColor(COL_BLACK);
+
+    const int btnId = mpTBCellBorder->GetItemId( UNO_SETBORDERSTYLE );
+
+    if(aBmpSize.Width() == 43 && aBmpSize.Height() == 43)
+    {
+        Point aTL(2, 1), aTR(42,1), aBL(2, 41), aBR(42, 41), aHL(2,21), aHR(42, 21), aVT(22,1), aVB(22, 41);
+        if(bLeft)
+            pVirDev->DrawLine( aTL,aBL );
+        if(bRight)
+            pVirDev->DrawLine( aTR,aBR );
+        if(bTop)
+            pVirDev->DrawLine( aTL,aTR );
+        if(bBot)
+            pVirDev->DrawLine( aBL,aBR );
+        if(bVer)
+            pVirDev->DrawLine( aVT,aVB );
+        if(bHor)
+            pVirDev->DrawLine( aHL,aHR );
+        mpTBCellBorder->SetItemOverlayImage( btnId, Image( pVirDev->GetBitmapEx(Point(0,0), aBmpSize) ) );
+    }
+
+    mpTBCellBorder->SetItemImage( btnId, maIMGCellBorder );
+}
 // namespace close
 
 }} // end of namespace ::sc::sidebar
