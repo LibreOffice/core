@@ -35,6 +35,7 @@
 #include <vcl/virdev.hxx>
 #include <vcl/GraphicObject.hxx>
 #include <vcl/GraphicLoader.hxx>
+#include <vcl/BitmapConverter.hxx>
 
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -146,11 +147,11 @@ void lclImplAdjust( BitmapEx& rBmpEx, const GraphicAttr& rAttr, GraphicAdjustmen
         switch( aAttr.GetDrawMode() )
         {
             case GraphicDrawMode::Mono:
-                rBmpEx.Convert( BmpConversion::N1BitThreshold );
+                BitmapConverter::Convert(rBmpEx, BitmapConverter(BmpConversion::N1BitThreshold));
             break;
 
             case GraphicDrawMode::Greys:
-                rBmpEx.Convert( BmpConversion::N8BitGreys );
+                BitmapConverter::Convert(rBmpEx, BitmapConverter(BmpConversion::N8BitGreys));
             break;
 
             case GraphicDrawMode::Watermark:
