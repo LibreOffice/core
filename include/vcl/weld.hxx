@@ -901,6 +901,33 @@ public:
     virtual Point get_accessible_location() = 0;
 };
 
+// an entry + treeview pair, where the entry autocompletes from the
+// treeview list, and selecting something in the list sets the
+// entry to that text
+class VCL_DLLPUBLIC EntryTreeView
+{
+private:
+    DECL_DLLPRIVATE_LINK(ClickHdl, weld::TreeView&, void);
+    DECL_DLLPRIVATE_LINK(ModifyHdl, weld::Entry&, void);
+    void EntryModifyHdl(weld::Entry& rEntry);
+
+protected:
+    Link<Entry&, void> m_aChangeHdl;
+    std::unique_ptr<Entry> m_xEntry;
+    std::unique_ptr<TreeView> m_xTreeView;
+
+public:
+    EntryTreeView(std::unique_ptr<Entry> xEntry, std::unique_ptr<TreeView> xTreeView);
+    OUString get_text() const { return m_xEntry->get_text(); }
+    void append_text(const OUString& rText) { m_xTreeView->append_text(rText); }
+    void connect_row_activated(const Link<TreeView&, void>& rLink)
+    {
+        m_xTreeView->connect_row_activated(rLink);
+    }
+    void connect_changed(const Link<Entry&, void>& rLink) { m_aChangeHdl = rLink; }
+    void set_size_request_by_digits_rows(int nDigits, int nRows);
+};
+
 class VCL_DLLPUBLIC Menu
 {
 public:
@@ -991,6 +1018,10 @@ public:
     weld_drawing_area(const OString& id, const a11yref& rA11yImpl = nullptr,
                       FactoryFunction pUITestFactoryFunction = nullptr, void* pUserData = nullptr,
                       bool bTakeOwnership = false)
+        = 0;
+    virtual std::unique_ptr<EntryTreeView> weld_entry_tree_view(const OString& entryid,
+                                                                const OString& treeviewid,
+                                                                bool bTakeOwnership = false)
         = 0;
     virtual std::unique_ptr<Menu> weld_menu(const OString& id, bool bTakeOwnership = true) = 0;
     virtual std::unique_ptr<SizeGroup> create_size_group() = 0;
