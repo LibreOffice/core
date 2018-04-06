@@ -376,7 +376,7 @@ ErrCode DictionaryNeo::loadEntries(const OUString &rMainURL)
         // remaining lines - stock strings (a [==] b)
         while (pStream->ReadLine(aLine))
         {
-            if (aLine[0] == '#') // skip comments
+            if (aLine.isEmpty() || aLine[0] == '#') // skip comments
                 continue;
             OUString aText = OStringToOUString(aLine, RTL_TEXTENCODING_UTF8);
             uno::Reference< XDictionaryEntry > xEntry =
