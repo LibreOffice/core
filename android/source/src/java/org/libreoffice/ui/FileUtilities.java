@@ -13,6 +13,7 @@ import org.libreoffice.storage.IFile;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.FilenameFilter;
+import java.text.Collator;
 import java.util.Map;
 import java.util.Collections;
 import java.util.List;
@@ -204,18 +205,20 @@ public class FileUtilities {
     static void sortFiles(List<IFile> files, int sortMode) {
         if (files == null)
             return;
+        // Compare filenames in the default locale
+        final Collator mCollator = Collator.getInstance();
         switch (sortMode) {
             case SORT_AZ:
                 Collections.sort(files , new Comparator<IFile>() {
                     public int compare(IFile lhs, IFile rhs) {
-                        return lhs.getName().compareTo(rhs.getName());
+                        return mCollator.compare(lhs.getName(), rhs.getName());
                     }
                 });
                 break;
             case SORT_ZA:
                 Collections.sort(files , new Comparator<IFile>() {
                     public int compare(IFile lhs, IFile rhs) {
-                        return rhs.getName().compareTo(lhs.getName());
+                        return mCollator.compare(rhs.getName(), lhs.getName());
                     }
                 });
                 break;
