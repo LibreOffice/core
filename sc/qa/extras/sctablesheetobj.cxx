@@ -15,6 +15,7 @@
 #include <test/sheet/xcellformatrangessupplier.hxx>
 #include <test/sheet/xcellrangeaddressable.hxx>
 #include <test/sheet/xcellrangeformula.hxx>
+#include <test/sheet/xcellrangemovement.hxx>
 #include <test/sheet/xcellseries.hxx>
 #include <test/sheet/xdatapilottablessupplier.hxx>
 #include <test/sheet/xmultipleoperation.hxx>
@@ -53,6 +54,7 @@ class ScTableSheetObj : public CalcUnoApiTest, public apitest::Scenario,
                                                public apitest::XCellFormatRangesSupplier,
                                                public apitest::XCellRangeAddressable,
                                                public apitest::XCellRangeFormula,
+                                               public apitest::XCellRangeMovement,
                                                public apitest::XCellSeries,
                                                public apitest::XDataPilotTablesSupplier,
                                                public apitest::XMultipleOperation,
@@ -112,6 +114,12 @@ public:
 #if 0 // disable, because it makes no sense to set an FormulaArray over the whole sheet
     CPPUNIT_TEST(testGetSetFormulaArray);
 #endif
+
+    // XCellRangeMovement
+    CPPUNIT_TEST(testInsertCells);
+    CPPUNIT_TEST(testCopyRange);
+    CPPUNIT_TEST(testMoveRange);
+    CPPUNIT_TEST(testRemoveRange);
 
     // XCellSeries
     CPPUNIT_TEST(testFillAuto);
