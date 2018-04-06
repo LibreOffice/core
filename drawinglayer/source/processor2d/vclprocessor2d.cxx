@@ -50,6 +50,7 @@
 #include <basegfx/color/bcolor.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <vcl/graph.hxx>
+#include <vcl/BitmapConverter.hxx>
 
 #include "getdigitlanguage.hxx"
 
@@ -444,7 +445,7 @@ namespace drawinglayer
                                     // a bitmap in gray or Black/White (!)
                                     if(aBitmapEx.GetBitCount() < 24)
                                     {
-                                        aBitmapEx.Convert(BmpConversion::N24Bit);
+                                        BitmapConverter::Convert(aBitmapEx, BitmapConverter(BmpConversion::N24Bit));
                                     }
 
                                     aBitmapEx.Scale(aNeededBitmapSizePixel, BmpScaleFlag::Interpolate);
