@@ -31,7 +31,7 @@ namespace emfplushelper
         sal_Int32 width;
         sal_Int32 height;
         sal_Int32 stride;
-        sal_Int32 pixelFormat;
+        sal_uInt32 pixelFormat;
         Graphic graphic;
 
         void Read(SvMemoryStream &s, sal_uInt32 dataSize, bool bUseWholeStream);

@@ -49,8 +49,8 @@ namespace emfplushelper
         if (1 == type)
         {
             // bitmap
-            s.ReadInt32(width).ReadInt32(height).ReadInt32(stride).ReadInt32(pixelFormat).ReadUInt32(bitmapType);
-            SAL_INFO("drawinglayer", "EMF+\tbitmap width: " << width << " height: " << height << " stride: " << stride << " pixelFormat: 0x" << std::hex << pixelFormat << std::dec);
+            s.ReadInt32(width).ReadInt32(height).ReadInt32(stride).ReadUInt32(pixelFormat).ReadUInt32(bitmapType);
+            SAL_INFO("drawinglayer", "EMF+\tbitmap width: " << width << " height: " << height << " stride: " << stride << " pixelFormat: 0x" << std::hex << pixelFormat << " bitmapType: 0x" << bitmapType << std::dec);
 
             if ((bitmapType != 0) || (width == 0))
             {
@@ -63,8 +63,8 @@ namespace emfplushelper
         else if (2 == type)
         {
             // metafile
-            sal_Int32 mfType, mfSize;
-            s.ReadInt32(mfType).ReadInt32(mfSize);
+            sal_uInt32 mfType, mfSize;
+            s.ReadUInt32(mfType).ReadUInt32(mfSize);
 
             if (bUseWholeStream)
                 dataSize = s.remainingSize();
