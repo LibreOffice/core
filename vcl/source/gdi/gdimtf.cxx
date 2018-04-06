@@ -34,6 +34,7 @@
 #include <comphelper/fileformat.h>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <vcl/canvastools.hxx>
+#include <vcl/BitmapConverter.hxx>
 
 #include <svmconverter.hxx>
 
@@ -1740,7 +1741,7 @@ BitmapEx GDIMetaFile::ImplBmpConvertFnc( const BitmapEx& rBmpEx, const void* pBm
 {
     BitmapEx aRet( rBmpEx );
 
-    aRet.Convert( static_cast<const ImplBmpConvertParam*>(pBmpParam)->eConversion );
+    BitmapConverter::Convert(aRet, BitmapConverter(static_cast<const ImplBmpConvertParam*>(pBmpParam)->eConversion));
 
     return aRet;
 }
