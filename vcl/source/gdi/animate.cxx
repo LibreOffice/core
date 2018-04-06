@@ -23,6 +23,7 @@
 #include <vcl/virdev.hxx>
 #include <vcl/window.hxx>
 #include <vcl/dibtools.hxx>
+#include <vcl/BitmapConverter.hxx>
 
 #include <impanmvw.hxx>
 
@@ -511,9 +512,9 @@ void Animation::Convert( BmpConversion eConversion )
         bRet = true;
 
         for( size_t i = 0, n = maList.size(); ( i < n ) && bRet; ++i )
-            bRet = maList[ i ]->aBmpEx.Convert( eConversion );
+            bRet = BitmapConverter::Convert(maList[i]->aBmpEx, BitmapConverter(eConversion));
 
-        maBitmapEx.Convert( eConversion );
+        BitmapConverter::Convert(maBitmapEx, BitmapConverter(eConversion));
     }
 }
 

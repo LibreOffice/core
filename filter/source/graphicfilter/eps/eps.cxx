@@ -40,6 +40,7 @@
 #include <vcl/graphictools.hxx>
 #include <vcl/weld.hxx>
 #include <strings.hrc>
+#include <vcl/BitmapConverter.hxx>
 
 #include <math.h>
 #include <memory>
@@ -349,7 +350,7 @@ bool PSWriter::WritePS( const Graphic& rGraphic, SvStream& rTargetStream, Filter
         if ( mbGrayScale )
         {
             BitmapEx aTempBitmapEx( rGraphic.GetBitmapEx() );
-            aTempBitmapEx.Convert( BmpConversion::N8BitGreys );
+            BitmapConverter::Convert(aTempBitmapEx, BitmapConverter(BmpConversion::N8BitGreys));
             nErrCode = GraphicConverter::Export( rTargetStream, aTempBitmapEx, ConvertDataFormat::TIF ) ;
         }
         else
