@@ -1137,54 +1137,44 @@ void SbRtl_Mid(StarBASIC *, SbxArray & rPar, bool bWrite)
             }
             if ( bWrite )
             {
-                OUStringBuffer aResultStr;
-                SbiInstance* pInst = GetSbData()->pInst;
-                bool bCompatibility = ( pInst && pInst->IsCompatibility() );
-                if( bCompatibility )
+                sal_Int32 nArgLen = aArgStr.getLength();
+                if( nStartPos > nArgLen )
                 {
-                    sal_Int32 nArgLen = aArgStr.getLength();
-                    if( nStartPos + 1 > nArgLen )
+                    SbiInstance* pInst = GetSbData()->pInst;
+                    bool bCompatibility = ( pInst && pInst->IsCompatibility() );
+                    if( bCompatibility )
                     {
                         StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
                         return;
                     }
+                    nStartPos = nArgLen;
+                }
 
-                    OUString aReplaceStr = rPar.Get(4)->GetOUString();
-                    sal_Int32 nReplaceStrLen = aReplaceStr.getLength();
-                    sal_Int32 nReplaceLen;
-                    if( bWriteNoLenParam )
-                    {
-                        nReplaceLen = nReplaceStrLen;
-                    }
-                    else
-                    {
-                        nReplaceLen = nLen;
-                        if( nReplaceLen < 0 || nReplaceLen > nReplaceStrLen )
-                        {
-                            nReplaceLen = nReplaceStrLen;
-                        }
-                    }
-
-                    sal_Int32 nReplaceEndPos = nStartPos + nReplaceLen;
-                    if( nReplaceEndPos > nArgLen )
-                    {
-                        nReplaceLen -= (nReplaceEndPos - nArgLen);
-                    }
-                    aResultStr = aArgStr;
-                    sal_Int32 nErase = nReplaceLen;
-                    aResultStr.remove( nStartPos, nErase );
-                    aResultStr.insert( nStartPos, aReplaceStr.getStr(), nReplaceLen);
+                OUString aReplaceStr = rPar.Get(4)->GetOUString();
+                sal_Int32 nReplaceStrLen = aReplaceStr.getLength();
+                sal_Int32 nReplaceLen;
+                if( bWriteNoLenParam )
+                {
+                    nReplaceLen = nReplaceStrLen;
                 }
                 else
                 {
-                    aResultStr = aArgStr;
-                    sal_Int32 nTmpStartPos = nStartPos;
-                    if ( nTmpStartPos > aArgStr.getLength() )
-                        nTmpStartPos =  aArgStr.getLength();
-                    else
-                        aResultStr.remove( nTmpStartPos, nLen );
-                    aResultStr.insert( nTmpStartPos, rPar.Get(4)->GetOUString().getStr(), std::min(nLen, rPar.Get(4)->GetOUString().getLength()));
+                    nReplaceLen = nLen;
+                    if( nReplaceLen < 0 || nReplaceLen > nReplaceStrLen )
+                    {
+                        nReplaceLen = nReplaceStrLen;
+                    }
                 }
+
+                sal_Int32 nReplaceEndPos = nStartPos + nReplaceLen;
+                if( nReplaceEndPos > nArgLen )
+                {
+                    nReplaceLen -= (nReplaceEndPos - nArgLen);
+                }
+                OUStringBuffer aResultStr = aArgStr;
+                sal_Int32 nErase = nReplaceLen;
+                aResultStr.remove( nStartPos, nErase );
+                aResultStr.insert( nStartPos, aReplaceStr.getStr(), nReplaceLen);
 
                 rPar.Get(1)->PutString( aResultStr.makeStringAndClear() );
             }
