@@ -9,6 +9,7 @@
 
 from __future__ import print_function
 
+import pathlib
 import subprocess
 import time
 import uuid
@@ -217,11 +218,7 @@ class UnoInProcess:
         return self.openDocFromAbsolutePath(path, asTemplate)
 
     def openDocFromAbsolutePath(self, file, asTemplate = False):
-        if os.name == "nt":
-            url = "file:///" + file
-        else:
-            url = "file://" + file
-        return self.openDocFromURL(url, asTemplate)
+        return self.openDocFromURL(pathlib.Path(file).as_uri(), asTemplate)
 
     def openDocFromURL(self, url, asTemplate = False):
         props = [("Hidden", True), ("ReadOnly", False), ("AsTemplate", asTemplate)]
