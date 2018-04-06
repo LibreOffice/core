@@ -32,6 +32,7 @@
 #include "global.hxx"
 #include <formula/grammar.hxx>
 #include "compiler.hxx"
+#include "dociter.hxx"
 
 #include "xmlstyle.hxx"
 #include <com/sun/star/sheet/ValidationAlertStyle.hpp>
@@ -936,6 +937,8 @@ class ScXMLImport: public SvXMLImport
 
     ScMyTables              aTables;
 
+    std::vector<ScDocRowHeightUpdater::TabRanges> maRecalcRowRanges;
+
     ScMyNamedExpressions*   m_pMyNamedExpressions;
     SheetNamedExpMap m_SheetNamedExpressions;
 
@@ -1009,6 +1012,8 @@ public:
     inline const ScDocument*    GetDocument() const     { return pDoc; }
 
     ScMyTables& GetTables() { return aTables; }
+
+    std::vector<ScDocRowHeightUpdater::TabRanges>& GetRecalcRowRanges() { return maRecalcRowRanges; }
 
     bool IsStylesOnlyMode() const { return !bLoadDoc; }
 
