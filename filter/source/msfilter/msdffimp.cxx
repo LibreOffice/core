@@ -141,6 +141,7 @@
 #include <svtools/embedhlp.hxx>
 #include <memory>
 #include <o3tl/make_unique.hxx>
+#include <vcl/BitmapConverter.hxx>
 
 using namespace ::com::sun::star    ;
 using namespace ::com::sun::star::drawing;
@@ -3920,9 +3921,9 @@ SdrObject* SvxMSDffManager::ImportGraphic( SvStream& rSt, SfxItemSet& rSet, cons
                             if ( nBrightness || nContrast || ( nGamma != 0x10000 ) )
                                 aBitmapEx.Adjust( nBrightness, static_cast<sal_Int16>(nContrast), 0, 0, 0, static_cast<double>(nGamma) / 0x10000, false, true );
                             if ( eDrawMode == GraphicDrawMode::Greys )
-                                aBitmapEx.Convert( BmpConversion::N8BitGreys );
+                                BitmapConverter::Convert(aBitmapEx, BitmapConverter(BmpConversion::N8BitGreys));
                             else if ( eDrawMode == GraphicDrawMode::Mono )
-                                aBitmapEx.Convert( BmpConversion::N1BitThreshold );
+                                BitmapConverter::Convert(aBitmapEx, BitmapConverter(BmpConversion::N1BitThreshold));
                             aGraf = aBitmapEx;
 
                         }

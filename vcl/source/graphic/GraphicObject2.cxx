@@ -32,7 +32,12 @@
 #include <vcl/alpha.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/GraphicObject.hxx>
+#include <vcl/BitmapConverter.hxx>
+
 #include <bitmapwriteaccess.hxx>
+
+#include "grfcache.hxx"
+
 #include <memory>
 
 struct ImplTileInfo

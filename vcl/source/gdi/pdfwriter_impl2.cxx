@@ -43,6 +43,7 @@
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
 
 #include <cppuhelper/implbase.hxx>
+#include <vcl/BitmapConverter.hxx>
 
 #include <rtl/digest.h>
 #include <memory>
@@ -160,7 +161,7 @@ void PDFWriterImpl::implWriteBitmapEx( const Point& i_rPoint, const Size& i_rSiz
             if( nDepth <= 4 )
                 eConv = BmpConversion::N4BitGreys;
             if( nDepth > 1 )
-                aBitmapEx.Convert( eConv );
+                BitmapConverter::Convert(aBitmapEx, BitmapConverter(eConv));
         }
         bool bUseJPGCompression = !i_rContext.m_bOnlyLosslessCompression;
         if ( bIsPng || ( aSizePixel.Width() < 32 ) || ( aSizePixel.Height() < 32 ) )
