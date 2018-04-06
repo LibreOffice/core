@@ -678,8 +678,10 @@ void ScInterpreter::IterateParameters( ScIterFunc eFunc, bool bTextAsZero )
                         ++nCount;
                     break;
                 }
-                if ( ( mnSubTotalFlags & SubtotalFlags::IgnoreFiltered ) &&
-                     pDok->RowFiltered( aAdr.Row(), aAdr.Tab() ) )
+                if ( ( ( mnSubTotalFlags & SubtotalFlags::IgnoreFiltered ) &&
+                     pDok->RowFiltered( aAdr.Row(), aAdr.Tab() ) ) ||
+                     ( ( mnSubTotalFlags & SubtotalFlags::IgnoreHidden ) &&
+                       pDok->RowHidden( aAdr.Row(), aAdr.Tab() ) ) )
                 {
                     break;
                 }
