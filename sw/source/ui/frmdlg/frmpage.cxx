@@ -1361,12 +1361,12 @@ void SwFramePage::InitPos(RndStdIds eId,
     if (!bEnable)
     {
         m_pAtHorzPosED->SetValue( 0, FUNIT_TWIP );
-        if (nX != SAL_MAX_INT32 && m_bHtmlMode)
+        if (nX != LONG_MAX && m_bHtmlMode)
             m_pAtHorzPosED->SetModifyFlag();
     }
     else
     {
-        if (nX != SAL_MAX_INT32)
+        if (nX != LONG_MAX)
             m_pAtHorzPosED->SetValue( m_pAtHorzPosED->Normalize(nX), FUNIT_TWIP );
     }
     m_pAtHorzPosFT->Enable( bEnable );
@@ -1376,19 +1376,19 @@ void SwFramePage::InitPos(RndStdIds eId,
     if ( !bEnable )
     {
         m_pAtVertPosED->SetValue( 0, FUNIT_TWIP );
-        if(nY != SAL_MAX_INT32 && m_bHtmlMode)
+        if(nY != LONG_MAX && m_bHtmlMode)
             m_pAtVertPosED->SetModifyFlag();
     }
     else
     {
         if ( eId == RndStdIds::FLY_AS_CHAR )
         {
-            if ( nY == SAL_MAX_INT32 )
+            if ( nY == LONG_MAX )
                 nY = 0;
             else
                 nY *= -1;
         }
-        if ( nY != SAL_MAX_INT32 )
+        if ( nY != LONG_MAX )
             m_pAtVertPosED->SetValue( m_pAtVertPosED->Normalize(nY), FUNIT_TWIP );
     }
     m_pAtVertPosFT->Enable( bEnable && m_bAllowVertPositioning );
@@ -1766,7 +1766,7 @@ DeactivateRC SwFramePage::DeactivatePage(SfxItemSet * _pSet)
 IMPL_LINK_NOARG(SwFramePage, MirrorHdl, Button*, void)
 {
     RndStdIds eId = GetAnchor();
-    InitPos( eId, -1, 0, -1, 0, SAL_MAX_INT32, SAL_MAX_INT32);
+    InitPos( eId, -1, 0, -1, 0, LONG_MAX, LONG_MAX);
 }
 
 IMPL_LINK( SwFramePage, RelSizeClickHdl, Button *, p, void )
@@ -1891,10 +1891,10 @@ void SwFramePage::RangeModifyHdl()
 
     if (aVal.bAutoHeight && (m_sDlgType == "PictureDialog" || m_sDlgType == "ObjectDialog"))
     {
-        SwTwips nTmp = std::min(nWidth * nMaxHeight / std::max<sal_Int32>(nHeight, 1), nMaxHeight);
+        SwTwips nTmp = std::min(nWidth * nMaxHeight / std::max(nHeight, 1L), nMaxHeight);
         m_aWidthED.SetMax(m_aWidthED.NormalizePercent(nTmp), FUNIT_TWIP);
 
-        nTmp = std::min(nHeight * nMaxWidth / std::max<sal_Int32>(nWidth, 1), nMaxWidth);
+        nTmp = std::min(nHeight * nMaxWidth / std::max(nWidth, 1L), nMaxWidth);
         m_aHeightED.SetMax(m_aWidthED.NormalizePercent(nTmp), FUNIT_TWIP);
     }
     else
@@ -1936,7 +1936,7 @@ IMPL_LINK_NOARG(SwFramePage, AnchorTypeHdl, Button*, void)
 
     RndStdIds eId = GetAnchor();
 
-    InitPos( eId, -1, 0, -1, 0, SAL_MAX_INT32, SAL_MAX_INT32);
+    InitPos( eId, -1, 0, -1, 0, LONG_MAX, LONG_MAX);
     RangeModifyHdl();
 
     if(m_bHtmlMode)
@@ -2272,7 +2272,7 @@ void SwFramePage::Init(const SfxItemSet& rSet, bool bReset)
     RndStdIds eAnchorId = GetAnchor();
 
     if ( m_bNew && !m_bFormat )
-        InitPos(eAnchorId, -1, 0, -1, 0, SAL_MAX_INT32, SAL_MAX_INT32);
+        InitPos(eAnchorId, -1, 0, -1, 0, LONG_MAX, LONG_MAX);
     else
     {
         const SwFormatHoriOrient& rHori = rSet.Get(RES_HORI_ORIENT);

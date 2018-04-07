@@ -184,7 +184,7 @@ SwPageFrame::SwPageFrame( SwFrameFormat *pFormat, SwFrame* pSib, SwPageDesc *pPg
     else
         m_bHasGrid = false;
     SetMaxFootnoteHeight( pPgDsc->GetFootnoteInfo().GetHeight() ?
-                     pPgDsc->GetFootnoteInfo().GetHeight() : SAL_MAX_INT32 );
+                     pPgDsc->GetFootnoteInfo().GetHeight() : LONG_MAX );
     mnFrameType = SwFrameType::Page;
     m_bInvalidLayout = m_bInvalidContent = m_bInvalidSpelling = m_bInvalidSmartTags = m_bInvalidAutoCmplWrds = m_bInvalidWordCount = true;
     m_bInvalidFlyLayout = m_bInvalidFlyContent = m_bInvalidFlyInCnt = m_bFootnotePage = m_bEndNotePage = false;
@@ -551,7 +551,7 @@ void SwPageFrame::SwClientNotify(const SwModify& rModify, const SfxHint& rHint)
         static_cast<SwRootFrame*>(GetUpper())->SetSuperfluous();
         SetMaxFootnoteHeight(m_pDesc->GetFootnoteInfo().GetHeight());
         if(!GetMaxFootnoteHeight())
-            SetMaxFootnoteHeight(SAL_MAX_INT32);
+            SetMaxFootnoteHeight(LONG_MAX);
         SetColMaxFootnoteHeight();
         // here, the page might be destroyed:
         static_cast<SwRootFrame*>(GetUpper())->RemoveFootnotes(nullptr, false, true);
@@ -648,8 +648,8 @@ void SwPageFrame::UpdateAttr_( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
 
                 {
                     SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*this);
-                    aFrm.Height( std::max<sal_Int32>( rSz.GetHeight(), MINLAY ) );
-                    aFrm.Width ( std::max<sal_Int32>( rSz.GetWidth(),  MINLAY ) );
+                    aFrm.Height( std::max( rSz.GetHeight(), long(MINLAY) ) );
+                    aFrm.Width ( std::max( rSz.GetWidth(),  long(MINLAY) ) );
                 }
 
                 if ( GetUpper() )
@@ -1018,7 +1018,7 @@ void SwFrame::CheckPageDescs( SwPageFrame *pStart, bool bNotifyFields, SwPageFra
 
     // For the update of page numbering fields, nDocPos provides
     // the page position from where invalidation should start.
-    SwTwips nDocPos  = SAL_MAX_INT32;
+    SwTwips nDocPos  = LONG_MAX;
 
     SwRootFrame *pRoot = static_cast<SwRootFrame*>(pStart->GetUpper());
     SwDoc* pDoc      = pStart->GetFormat()->GetDoc();
@@ -1052,7 +1052,7 @@ void SwFrame::CheckPageDescs( SwPageFrame *pStart, bool bNotifyFields, SwPageFra
                 pImp->CheckWaitCursor();
 
             // invalidate the field, starting from here
-            if ( nDocPos == SAL_MAX_INT32 )
+            if ( nDocPos == LONG_MAX )
                 nDocPos = pPrevPage ? pPrevPage->getFrameArea().Top() : pPage->getFrameArea().Top();
 
             // Cases:
@@ -1422,7 +1422,7 @@ void SwRootFrame::RemoveSuperfluous()
     mbCheckSuperfluous = false;
 
     SwPageFrame *pPage = GetLastPage();
-    long nDocPos = SAL_MAX_INT32;
+    long nDocPos = LONG_MAX;
 
     // Check the corresponding last page if it is empty and stop loop at the last non-empty page.
     do
@@ -1488,7 +1488,7 @@ void SwRootFrame::RemoveSuperfluous()
     } while ( pPage );
 
     SwViewShell *pSh = getRootFrame()->GetCurrShell();
-    if ( nDocPos != SAL_MAX_INT32 &&
+    if ( nDocPos != LONG_MAX &&
          (!pSh || !pSh->Imp()->IsUpdateExpFields()) )
     {
         SwDocPosUpdate aMsgHint( nDocPos );
@@ -2291,7 +2291,7 @@ void SwRootFrame::CheckViewLayout( const SwViewOption* pViewOpt, const SwRect* p
                 const bool bLastColumn = pPageToAdjust->GetNext() == pEndOfRow;
                 const bool bLastRow = !pEndOfRow;
 
-                nMinPageLeft  = std::min<sal_Int32>( nMinPageLeft, aNewPagePos.getX() );
+                nMinPageLeft  = std::min( nMinPageLeft, aNewPagePos.getX() );
                 nMaxPageRight = std::max( nMaxPageRight, aNewPagePos.getX() + nCurrentPageWidth);
 
                 // border of nGapBetweenPages around the current page:

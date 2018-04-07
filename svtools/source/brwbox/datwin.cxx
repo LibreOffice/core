@@ -153,7 +153,7 @@ void BrowserColumn::Draw( BrowseBox const & rBox, OutputDevice& rDev, const Poin
     else
     {
         // paint data column
-        long nWidth = Width() == RECT_MAX ? rBox.GetDataWindow().GetSizePixel().Width() : Width();
+        long nWidth = Width() == LONG_MAX ? rBox.GetDataWindow().GetSizePixel().Width() : Width();
 
         rBox.DoPaintField( rDev,
             tools::Rectangle(

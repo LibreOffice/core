@@ -530,8 +530,10 @@ void RtfSdrExport::impl_writeGraphic()
     // Add it to the properties.
     RtfStringBuffer aBuf;
     aBuf->append('{').append(OOO_STRING_SVTOOLS_RTF_PICT).append(OOO_STRING_SVTOOLS_RTF_PNGBLIP);
-    aBuf->append(OOO_STRING_SVTOOLS_RTF_PICW).append(aMapped.Width());
-    aBuf->append(OOO_STRING_SVTOOLS_RTF_PICH).append(aMapped.Height()).append(SAL_NEWLINE_STRING);
+    aBuf->append(OOO_STRING_SVTOOLS_RTF_PICW).append(sal_Int32(aMapped.Width()));
+    aBuf->append(OOO_STRING_SVTOOLS_RTF_PICH)
+        .append(sal_Int32(aMapped.Height()))
+        .append(SAL_NEWLINE_STRING);
     aBuf->append(msfilter::rtfutil::WriteHex(pGraphicAry, nSize));
     aBuf->append('}');
     m_aShapeProps.insert(std::pair<OString, OString>("pib", aBuf.makeStringAndClear()));

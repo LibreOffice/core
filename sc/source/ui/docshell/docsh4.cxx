@@ -2120,14 +2120,14 @@ tools::Rectangle ScDocShell::GetVisArea( sal_uInt16 nAspect ) const
 namespace {
 
 SAL_WARN_UNUSED_RESULT
-sal_Int32 SnapHorizontal( const ScDocument& rDoc, SCTAB nTab, sal_Int32 nVal, SCCOL& rStartCol )
+long SnapHorizontal( const ScDocument& rDoc, SCTAB nTab, long nVal, SCCOL& rStartCol )
 {
     SCCOL nCol = 0;
-    sal_Int32 nTwips = static_cast<long>(nVal / HMM_PER_TWIPS);
-    sal_Int32 nSnap = 0;
+    long nTwips = static_cast<long>(nVal / HMM_PER_TWIPS);
+    long nSnap = 0;
     while ( nCol<MAXCOL )
     {
-        sal_Int32 nAdd = rDoc.GetColWidth(nCol, nTab);
+        long nAdd = rDoc.GetColWidth(nCol, nTab);
         if ( nSnap + nAdd/2 < nTwips || nCol < rStartCol )
         {
             nSnap += nAdd;
@@ -2136,17 +2136,17 @@ sal_Int32 SnapHorizontal( const ScDocument& rDoc, SCTAB nTab, sal_Int32 nVal, SC
         else
             break;
     }
-    nVal = nSnap * HMM_PER_TWIPS;
+    nVal = static_cast<long>( nSnap * HMM_PER_TWIPS );
     rStartCol = nCol;
     return nVal;
 }
 
 SAL_WARN_UNUSED_RESULT
-sal_Int32 SnapVertical( const ScDocument& rDoc, SCTAB nTab, sal_Int32 nVal, SCROW& rStartRow )
+long SnapVertical( const ScDocument& rDoc, SCTAB nTab, long nVal, SCROW& rStartRow )
 {
     SCROW nRow = 0;
-    sal_Int32 nTwips = static_cast<sal_Int32>(nVal / HMM_PER_TWIPS);
-    sal_Int32 nSnap = 0;
+    long nTwips = static_cast<long>(nVal / HMM_PER_TWIPS);
+    long nSnap = 0;
 
     bool bFound = false;
     for (SCROW i = nRow; i <= MAXROW; ++i)
@@ -2159,7 +2159,7 @@ sal_Int32 SnapVertical( const ScDocument& rDoc, SCTAB nTab, sal_Int32 nVal, SCRO
         }
 
         nRow = i;
-        sal_Int32 nAdd = rDoc.GetRowHeight(i, nTab);
+        long nAdd = rDoc.GetRowHeight(i, nTab);
         if ( nSnap + nAdd/2 < nTwips || nRow < rStartRow )
         {
             nSnap += nAdd;
@@ -2174,7 +2174,7 @@ sal_Int32 SnapVertical( const ScDocument& rDoc, SCTAB nTab, sal_Int32 nVal, SCRO
     if (!bFound)
         nRow = MAXROW;  // all hidden down to the bottom
 
-    nVal = nSnap * HMM_PER_TWIPS;
+    nVal = static_cast<long>( nSnap * HMM_PER_TWIPS );
     rStartRow = nRow;
     return nVal;
 }

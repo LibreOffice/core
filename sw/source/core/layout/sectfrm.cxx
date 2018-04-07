@@ -782,7 +782,7 @@ void SwSectionFrame::MakeAll(vcl::RenderContext* pRenderContext)
         bCanContainSplitSection = CanContainSplitSection(GetUpper());
 
     if( pSh && (pSh->GetViewOptions()->getBrowseMode() || bCanContainSplitSection) &&
-         ( Grow( SAL_MAX_INT32, true ) > 0 ) )
+         ( Grow( LONG_MAX, true ) > 0 ) )
     {
         while( GetFollow() )
         {
@@ -2103,7 +2103,7 @@ bool SwSectionFrame::Growable() const
         aRectFnSet.GetBottom(getFrameArea()) ) > 0 )
         return true;
 
-    return ( GetUpper() && const_cast<SwFrame*>(static_cast<SwFrame const *>(GetUpper()))->Grow( SAL_MAX_INT32, true ) );
+    return ( GetUpper() && const_cast<SwFrame*>(static_cast<SwFrame const *>(GetUpper()))->Grow( LONG_MAX, true ) );
 }
 
 SwTwips SwSectionFrame::Grow_( SwTwips nDist, bool bTst )
@@ -2112,8 +2112,8 @@ SwTwips SwSectionFrame::Grow_( SwTwips nDist, bool bTst )
     {
         SwRectFnSet aRectFnSet(this);
         long nFrameHeight = aRectFnSet.GetHeight(getFrameArea());
-        if( nFrameHeight > 0 && nDist > (SAL_MAX_INT32 - nFrameHeight) )
-            nDist = SAL_MAX_INT32 - nFrameHeight;
+        if( nFrameHeight > 0 && nDist > (LONG_MAX - nFrameHeight) )
+            nDist = LONG_MAX - nFrameHeight;
 
         if ( nDist <= 0 )
             return 0;
@@ -2140,7 +2140,7 @@ SwTwips SwSectionFrame::Grow_( SwTwips nDist, bool bTst )
             SwTwips nSpace = nGrow;
             if( !bInCalcContent && nGrow < nDist && GetUpper() )
                 nGrow = o3tl::saturating_add(
-                    nGrow, GetUpper()->Grow( SAL_MAX_INT32, true ));
+                    nGrow, GetUpper()->Grow( LONG_MAX, true ));
 
             if( nGrow > nDist )
                 nGrow = nDist;

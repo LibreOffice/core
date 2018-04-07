@@ -236,11 +236,11 @@ BitmapBuffer* X11SalBitmap::ImplCreateDIB(
 BitmapBuffer* X11SalBitmap::ImplCreateDIB(
     Drawable aDrawable,
     SalX11Screen nScreen,
-    sal_Int32 nDrawableDepth,
-    sal_Int32 nX,
-    sal_Int32 nY,
-    sal_Int32 nWidth,
-    sal_Int32 nHeight,
+    long nDrawableDepth,
+    long nX,
+    long nY,
+    long nWidth,
+    long nHeight,
     bool bGrey
 ) {
     BitmapBuffer* pDIB = nullptr;
