@@ -17,7 +17,7 @@ $(eval $(call gb_Library_use_externals,mysqlc,\
 ifeq ($(SYSTEM_MYSQL_CONNECTOR_CPP),)
 $(eval $(call gb_Library_add_libs,mysqlc,\
 	$(if $(filter-out WNT,$(OS)),$(if $(filter MACOSX SOLARIS,$(OS)),-lz -lm,\
-	-rdynamic -lz -lcrypt -lnsl -lm)) \
+	-rdynamic -lz -lcrypt -lm)) \
 ))
 endif
 
