@@ -26,7 +26,7 @@
 #include <osl/mutex.hxx>
 #include <rtl/ref.hxx>
 #include <com/sun/star/uno/Reference.hxx>
-#include <list>
+#include <vector>
 
 namespace vcl {
 
@@ -34,10 +34,8 @@ class DisplayConnectionDispatch :
     public cppu::WeakImplHelper< css::awt::XDisplayConnection >
 {
     ::osl::Mutex                    m_aMutex;
-    ::std::list< css::uno::Reference< css::awt::XEventHandler > >
+    ::std::vector< css::uno::Reference< css::awt::XEventHandler > >
                                     m_aHandlers;
-    ::std::list< css::uno::Reference< css::awt::XEventHandler > >
-                                    m_aErrorHandlers;
     OUString                        m_ConnectionIdentifier;
 public:
     DisplayConnectionDispatch();

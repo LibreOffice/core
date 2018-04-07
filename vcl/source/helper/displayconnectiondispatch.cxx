@@ -57,7 +57,7 @@ void DisplayConnectionDispatch::terminate()
 
     MutexGuard aGuard( m_aMutex );
     Any aEvent;
-    std::list< css::uno::Reference< XEventHandler > > aLocalList( m_aHandlers );
+    std::vector< css::uno::Reference< XEventHandler > > aLocalList( m_aHandlers );
     for (auto const& elem : aLocalList)
         elem->handleEvent( aEvent );
 }
@@ -73,21 +73,15 @@ void SAL_CALL DisplayConnectionDispatch::removeEventHandler( const Any& /*window
 {
     MutexGuard aGuard( m_aMutex );
 
-    m_aHandlers.remove( handler );
+    m_aHandlers.erase( std::remove(m_aHandlers.begin(), m_aHandlers.end(), handler), m_aHandlers.end() );
 }
 
-void SAL_CALL DisplayConnectionDispatch::addErrorHandler( const css::uno::Reference< XEventHandler >& handler )
+void SAL_CALL DisplayConnectionDispatch::addErrorHandler( const css::uno::Reference< XEventHandler >& )
 {
-    MutexGuard aGuard( m_aMutex );
-
-    m_aErrorHandlers.push_back( handler );
 }
 
-void SAL_CALL DisplayConnectionDispatch::removeErrorHandler( const css::uno::Reference< XEventHandler >& handler )
+void SAL_CALL DisplayConnectionDispatch::removeErrorHandler( const css::uno::Reference< XEventHandler >& )
 {
-    MutexGuard aGuard( m_aMutex );
-
-    m_aErrorHandlers.remove( handler );
 }
 
 Any SAL_CALL DisplayConnectionDispatch::getIdentifier()
@@ -102,7 +96,7 @@ bool DisplayConnectionDispatch::dispatchEvent( void const * pData, int nBytes )
     Sequence< sal_Int8 > aSeq( static_cast<const sal_Int8*>(pData), nBytes );
     Any aEvent;
     aEvent <<= aSeq;
-    ::std::list< css::uno::Reference< XEventHandler > > handlers;
+    ::std::vector< css::uno::Reference< XEventHandler > > handlers;
     {
         MutexGuard aGuard( m_aMutex );
         handlers = m_aHandlers;
