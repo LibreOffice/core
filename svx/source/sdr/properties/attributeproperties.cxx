@@ -115,7 +115,7 @@ namespace sdr
                 if(HasSfxItemSet())
                 {
                     // register as listener
-                    StartListening(pNewStyleSheet->GetPool());
+                    StartListening(*pNewStyleSheet->GetPool());
                     StartListening(*pNewStyleSheet);
 
                     // only apply the following when we have an SfxItemSet already, else
@@ -133,7 +133,9 @@ namespace sdr
             if(GetStyleSheet() && dynamic_cast<const SfxStyleSheet *>(mpStyleSheet) != nullptr)
             {
                 EndListening(*mpStyleSheet);
-                EndListening(mpStyleSheet->GetPool());
+                if (auto const pool = mpStyleSheet->GetPool()) { // TTTT
+                    EndListening(*pool);
+                }
 
                 // reset parent of ItemSet
                 if(HasSfxItemSet())
@@ -391,7 +393,7 @@ namespace sdr
 
             // prepare forgetting the current stylesheet like in RemoveStyleSheet()
             EndListening(*mpStyleSheet);
-            EndListening(mpStyleSheet->GetPool());
+            EndListening(*mpStyleSheet->GetPool());
 
             // prepare the iter; use the mpObjectItemSet which may have less
             // WhichIDs than the style.

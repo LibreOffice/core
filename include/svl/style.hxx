@@ -139,7 +139,7 @@ public:
     virtual bool IsUsed() const;                // Default true
     virtual OUString GetDescription( MapUnit eMetric );
 
-    SfxStyleSheetBasePool& GetPool() { return *m_pPool; }
+    SfxStyleSheetBasePool* GetPool() { return m_pPool; }
     SfxStyleFamily GetFamily() const     { return nFamily; }
     sal_uInt16   GetMask() const     { return nMask; }
     void     SetMask( sal_uInt16 mask) { nMask = mask; }

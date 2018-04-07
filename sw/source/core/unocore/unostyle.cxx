@@ -947,7 +947,7 @@ void XStyleFamily::insertByName(const OUString& rName, const uno::Any& rElement)
             m_pBasePool->SetSearchMask(m_rEntry.m_eFamily);
             SfxStyleSheetBase* pParentBase = m_pBasePool->Find(sParentStyleName);
             if(pParentBase && pParentBase->GetFamily() == m_rEntry.m_eFamily &&
-                &pParentBase->GetPool() == m_pBasePool)
+                pParentBase->GetPool() == m_pBasePool)
                 m_pBasePool->SetParent(m_rEntry.m_eFamily, sStyleName, sParentStyleName);
         }
         // after all, we still need to apply the properties of the descriptor
