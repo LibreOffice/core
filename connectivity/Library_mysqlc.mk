@@ -27,7 +27,7 @@ $(eval $(call gb_Library_set_include,mysqlc,\
 
 $(eval $(call gb_Library_add_libs,mysqlc,\
 	$(if $(filter-out WNT,$(OS)),$(if $(filter MACOSX SOLARIS,$(OS)),-lz -lm,\
-	-rdynamic -lz -lcrypt -lnsl -lm)) \
+	-rdynamic -lz -lcrypt -lm)) \
 	$(if $(filter LINUX,$(OS)),-lpthread -ldl,) \
 ))
 
