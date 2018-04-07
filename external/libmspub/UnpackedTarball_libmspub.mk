@@ -20,6 +20,12 @@ $(eval $(call gb_UnpackedTarball_add_patches,libmspub,\
 
 $(eval $(call gb_UnpackedTarball_update_autoconf_configs,libmspub))
 
+ifeq ($(ANDROID_APP_ABI),armeabi-v7a)
+$(eval $(call gb_UnpackedTarball_add_patches,libmspub, \
+    external/libmspub/libmspub_android_arm.patch.1 \
+))
+endif
+
 ifeq ($(COM_IS_CLANG),TRUE)
 ifneq ($(filter -fsanitize=%,$(CC)),)
 $(eval $(call gb_UnpackedTarball_add_patches,libmspub, \
