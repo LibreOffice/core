@@ -36,6 +36,7 @@
 
 #include <list>
 #include <unordered_map>
+#include <vector>
 
 #include <X11/Xlib.h>
 
@@ -77,7 +78,7 @@ namespace x11 {
         ::Window                    m_aTargetWindow;
         rtl::Reference<SelectionManager>
                                     m_xSelectionManager;
-        ::std::list< css::uno::Reference< css::datatransfer::dnd::XDropTargetListener > >
+        ::std::vector< css::uno::Reference< css::datatransfer::dnd::XDropTargetListener > >
                                     m_aListeners;
 
         DropTarget();

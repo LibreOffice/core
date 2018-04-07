@@ -83,7 +83,7 @@ void DropTarget::removeDropTargetListener( const Reference< XDropTargetListener 
 {
     ::osl::Guard< ::osl::Mutex > aGuard( m_aMutex );
 
-    m_aListeners.remove( xListener );
+    m_aListeners.erase( std::remove(m_aListeners.begin(), m_aListeners.end(), xListener), m_aListeners.end() );
 }
 
 sal_Bool DropTarget::isActive()
@@ -113,7 +113,7 @@ void DropTarget::setDefaultActions( sal_Int8 actions )
 void DropTarget::drop( const DropTargetDropEvent& dtde ) throw()
 {
     osl::ClearableGuard< ::osl::Mutex > aGuard( m_aMutex );
-    std::list< Reference< XDropTargetListener > > aListeners( m_aListeners );
+    std::vector< Reference< XDropTargetListener > > aListeners( m_aListeners );
     aGuard.clear();
 
     for (auto const& listener : aListeners)
@@ -125,7 +125,7 @@ void DropTarget::drop( const DropTargetDropEvent& dtde ) throw()
 void DropTarget::dragEnter( const DropTargetDragEnterEvent& dtde ) throw()
 {
     osl::ClearableGuard< ::osl::Mutex > aGuard( m_aMutex );
-    std::list< Reference< XDropTargetListener > > aListeners( m_aListeners );
+    std::vector< Reference< XDropTargetListener > > aListeners( m_aListeners );
     aGuard.clear();
 
     for (auto const& listener : aListeners)
@@ -137,7 +137,7 @@ void DropTarget::dragEnter( const DropTargetDragEnterEvent& dtde ) throw()
 void DropTarget::dragExit( const DropTargetEvent& dte ) throw()
 {
     osl::ClearableGuard< ::osl::Mutex > aGuard( m_aMutex );
-    std::list< Reference< XDropTargetListener > > aListeners( m_aListeners );
+    std::vector< Reference< XDropTargetListener > > aListeners( m_aListeners );
     aGuard.clear();
 
     for (auto const& listener : aListeners)
@@ -149,7 +149,7 @@ void DropTarget::dragExit( const DropTargetEvent& dte ) throw()
 void DropTarget::dragOver( const DropTargetDragEvent& dtde ) throw()
 {
     osl::ClearableGuard< ::osl::Mutex > aGuard( m_aMutex );
-    std::list< Reference< XDropTargetListener > > aListeners( m_aListeners );
+    std::vector< Reference< XDropTargetListener > > aListeners( m_aListeners );
     aGuard.clear();
 
     for (auto const& listener : aListeners)
