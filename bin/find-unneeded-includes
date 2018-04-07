@@ -117,7 +117,7 @@ def processIWYUOutput(iwyuOutput, moduleRules):
 
         match = re.match("(.*) should add these lines:$", line)
         if match:
-            currrentFileName = match.group(1)
+            currentFileName = match.group(1)
             inAdd = True
             continue
 
