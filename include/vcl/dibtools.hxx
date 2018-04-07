@@ -23,6 +23,7 @@
 #include <vcl/mapmod.hxx>
 #include <vcl/region.hxx>
 #include <vcl/alpha.hxx>
+#include <vcl/salbtype.hxx>
 
 // predefines
 
@@ -52,6 +53,13 @@ bool VCL_DLLPUBLIC ReadDIBV5(
     Bitmap& rTarget,
     AlphaMask& rTargetAlpha,
     SvStream& rIStm);
+
+bool VCL_DLLPUBLIC ReadRawDIB(
+    Bitmap& rTarget,
+    const unsigned char* pBuf,
+    const ScanlineFormat nFormat,
+    const int nHeight,
+    const int nStride);
 
 
 bool VCL_DLLPUBLIC WriteDIB( // WriteDIB(rBitmap, rOStm, false, true);
