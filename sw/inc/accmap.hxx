@@ -29,7 +29,6 @@
 #include <svx/AccessibleControlShape.hxx>
 #include <o3tl/typed_flags_set.hxx>
 
-#include <list>
 #include <vector>
 #include <memory>
 #include <set>
@@ -67,7 +66,7 @@ namespace vcl { class Window; }
 // the XShape at the same time (indirectly by destroying the accessible
 // shape) leads to an assert, because a client of the Modify is destroyed
 // within a Modify call.
-using SwShapeList_Impl = std::list<css::uno::Reference<css::drawing::XShape>>;
+using SwShapeList_Impl = std::vector<css::uno::Reference<css::drawing::XShape>>;
 
 enum class AccessibleStates
 {
@@ -95,7 +94,7 @@ class SwAccessibleMap : public ::accessibility::IAccessibleViewForwarder,
     ::osl::Mutex maEventMutex;
     SwAccessibleContextMap_Impl *mpFrameMap;
     SwAccessibleShapeMap_Impl *mpShapeMap;
-    SwShapeList_Impl *mpShapes;
+    SwShapeList_Impl mvShapes;
     SwAccessibleEventList_Impl *mpEvents;
     SwAccessibleEventMap_Impl *mpEventMap;
     // #i27301 data structure to keep information about
