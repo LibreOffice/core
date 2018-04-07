@@ -3305,6 +3305,7 @@ namespace xmloff { namespace token {
 
         // for optional language-dependent reference formats
         TOKEN( "reference-language",              XML_REFERENCE_LANGUAGE ),
+        TOKEN( "newline",                         XML_NEWLINE ),
 #if OSL_DEBUG_LEVEL > 0
         { 0, nullptr, nullptr,                       XML_TOKEN_END }
 #else

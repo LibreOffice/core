@@ -3312,6 +3312,8 @@ namespace xmloff { namespace token {
         // tdf#115319
         XML_REFERENCE_LANGUAGE,
 
+        XML_NEWLINE,
+
         XML_TOKEN_END
     };
 

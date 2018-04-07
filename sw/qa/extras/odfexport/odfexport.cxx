@@ -1964,6 +1964,17 @@ DECLARE_ODFEXPORT_TEST(testSignatureLineProperties, "signatureline-properties.fo
     CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xShape, "SignatureLineShowSignDate"));
 }
 
+DECLARE_ODFEXPORT_TEST(testChapterNumberingNewLine, "chapter-number-new-line.odt")
+{
+    uno::Reference<text::XChapterNumberingSupplier> xNumberingSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xNumberingRules = xNumberingSupplier->getChapterNumberingRules();
+    comphelper::SequenceAsHashMap hashMap(xNumberingRules->getByIndex(0));
+
+    //This failed Actual Value was LISTTAB instead of NEWLINE
+    CPPUNIT_ASSERT_EQUAL(
+        sal_Int16(SvxNumberFormat::NEWLINE), hashMap["LabelFollowedBy"].get<sal_Int16>());
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
