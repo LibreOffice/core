@@ -1636,7 +1636,6 @@ void SwAccessibleMap::DoInvalidateShapeFocus()
 SwAccessibleMap::SwAccessibleMap( SwViewShell *pSh ) :
     mpFrameMap( nullptr ),
     mpShapeMap( nullptr ),
-    mpShapes( nullptr ),
     mpEvents( nullptr ),
     mpEventMap( nullptr ),
     mpSelectedParas( nullptr ),
@@ -1699,8 +1698,7 @@ SwAccessibleMap::~SwAccessibleMap()
         mpFrameMap = nullptr;
         delete mpShapeMap;
         mpShapeMap = nullptr;
-        delete mpShapes;
-        mpShapes = nullptr;
+        mvShapes.clear();
         delete mpSelectedParas;
         mpSelectedParas = nullptr;
     }
@@ -2237,9 +2235,7 @@ void SwAccessibleMap::A11yDispose( const SwFrame *pFrame,
                     uno::UNO_QUERY );
                 if( xShape.is() )
                 {
-                    if( !mpShapes )
-                        mpShapes = new SwShapeList_Impl;
-                    mpShapes->push_back( xShape );
+                    mvShapes.push_back( xShape );
                 }
             }
         }
@@ -3024,11 +3020,7 @@ void SwAccessibleMap::FireEvents()
     }
     {
         osl::MutexGuard aGuard( maMutex );
-        if( mpShapes )
-        {
-            delete mpShapes;
-            mpShapes = nullptr;
-        }
+        mvShapes.clear();
     }
 
 }
