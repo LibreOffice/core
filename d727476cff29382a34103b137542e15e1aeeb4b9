@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_b2f8427e",
+        "filename": "sw/source/uibase/uno/unodispatch.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 265,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2018-04-07T14:37:08Z",
+      "side": 1,
+      "message": "here too",
+      "revId": "d727476cff29382a34103b137542e15e1aeeb4b9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_72feca6c",
+        "filename": "sw/source/uibase/uno/unodispatch.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 356,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2018-04-07T14:37:08Z",
+      "side": 1,
+      "message": "there is a bit of a problem here, in that statusChanged calls some arbitrary listener that could call addStatusListener or removeStatusListener, which modifies m_aStatusListener.\n\nthe best thing to do in this case is to create a copy of m_aStatusListener on the stack and use it for iteration here.\n\nusually also the mutex would be released before calling the listener, but this class uses SolarMutex and that one cannot effectively be released.\n\nbut with a local copy on the stack it\u0027s consistent with other code that would then release the mutex after doing the copying :)",
+      "revId": "d727476cff29382a34103b137542e15e1aeeb4b9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_92033e73",
+        "filename": "sw/source/uibase/uno/unodispatch.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 372,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2018-04-07T14:37:08Z",
+      "side": 1,
+      "message": "same problem here",
+      "revId": "d727476cff29382a34103b137542e15e1aeeb4b9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
