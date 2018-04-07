@@ -1,0 +1,12 @@
+diff -ur libmspub.org/src/lib/libmspub_utils.cpp libmspub/src/lib/libmspub_utils.cpp
+--- libmspub.org/src/lib/libmspub_utils.cpp	2018-04-07 15:13:32.041792236 +0200
++++ libmspub/src/lib/libmspub_utils.cpp	2018-04-07 15:14:08.547790739 +0200
+@@ -29,7 +29,7 @@
+ {
+   va_list args;
+   va_start(args, format);
+-  std::vfprintf(stderr, format, args);
++  vfprintf(stderr, format, args);
+   va_end(args);
+ }
+ 
