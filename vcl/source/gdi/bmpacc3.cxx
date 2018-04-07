@@ -23,9 +23,9 @@
 #include <vcl/bitmap.hxx>
 #include <vcl/region.hxx>
 #include <vcl/bitmapaccess.hxx>
+#include <vcl/bitmapwriteaccess.hxx>
 
 #include <bmpfast.hxx>
-#include <bitmapwriteaccess.hxx>
 
 void BitmapWriteAccess::SetLineColor( const Color& rColor )
 {

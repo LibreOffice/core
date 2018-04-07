@@ -20,10 +20,10 @@
 #include <tools/poly.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmapaccess.hxx>
+#include <vcl/bitmapwriteaccess.hxx>
 #include <vcl/alpha.hxx>
 
 #include <impbmp.hxx>
-#include <bitmapwriteaccess.hxx>
 
 #include <algorithm>
 #include <memory>

@@ -22,6 +22,7 @@
 #include <cstdlib>
 
 #include <vcl/bitmapaccess.hxx>
+#include <vcl/bitmapwriteaccess.hxx>
 #include <tools/poly.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/window.hxx>
@@ -33,7 +34,6 @@
 #include <vcl/virdev.hxx>
 #include "grfcache.hxx"
 #include <vcl/GraphicObject.hxx>
-#include <bitmapwriteaccess.hxx>
 #include <memory>
 
 

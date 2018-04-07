@@ -20,9 +20,9 @@
 #include <vcl/salbtype.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmapaccess.hxx>
+#include <vcl/bitmapwriteaccess.hxx>
 
 #include <impbmp.hxx>
-#include <bitmapwriteaccess.hxx>
 
 #include <string.h>
 

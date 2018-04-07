@@ -19,9 +19,9 @@
 
 #include <BitmapScaleConvolution.hxx>
 #include <ResampleKernel.hxx>
-#include <bitmapwriteaccess.hxx>
 
 #include <vcl/bitmapaccess.hxx>
+#include <vcl/bitmapwriteaccess.hxx>
 #include <osl/diagnose.h>
 
 #include <algorithm>

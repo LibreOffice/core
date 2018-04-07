@@ -18,7 +18,7 @@
  */
 
 #include <vcl/bitmapaccess.hxx>
-#include <bitmapwriteaccess.hxx>
+#include <vcl/bitmapwriteaccess.hxx>
 #include <vcl/graph.hxx>
 #include "rgbtable.hxx"
 #include "xpmread.hxx"

@@ -18,9 +18,9 @@
  */
 
 #include <vcl/bitmapaccess.hxx>
+#include <vcl/bitmapwriteaccess.hxx>
 #include <tools/color.hxx>
 #include <vcl/alpha.hxx>
-#include <bitmapwriteaccess.hxx>
 
 AlphaMask::AlphaMask() = default;
 

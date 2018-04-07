@@ -9,7 +9,7 @@
  */
 
 #include <test/outputdevice.hxx>
-#include <bitmapwriteaccess.hxx>
+#include <vcl/bitmapwriteaccess.hxx>
 
 namespace vcl {
 namespace test {

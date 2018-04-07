@@ -32,6 +32,7 @@
 #include <vcl/dibtools.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/bitmapaccess.hxx>
+#include <vcl/bitmapwriteaccess.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/settings.hxx>
 
@@ -44,7 +45,6 @@
 #include <svdata.hxx>
 #include <com/sun/star/beans/XFastPropertySet.hpp>
 #include <memory>
-#include <bitmapwriteaccess.hxx>
 
 using namespace ::com::sun::star;
 

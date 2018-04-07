@@ -65,6 +65,7 @@
 #include <svl/cryptosign.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/bitmapaccess.hxx>
+#include <vcl/bitmapwriteaccess.hxx>
 #include <vcl/cvtgrf.hxx>
 #include <vcl/image.hxx>
 #include <vcl/lineinfo.hxx>
@@ -83,7 +84,6 @@
 #include <sallayout.hxx>
 #include <textlayout.hxx>
 #include <textlineinfo.hxx>
-#include <bitmapwriteaccess.hxx>
 
 #include "pdfwriter_impl.hxx"
 

@@ -20,11 +20,11 @@
 #include <osl/diagnose.h>
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmapaccess.hxx>
+#include <vcl/bitmapwriteaccess.hxx>
 #include <vcl/outdev.hxx>
 
 #include <impbmp.hxx>
 #include <salbmp.hxx>
-#include <bitmapwriteaccess.hxx>
 
 #include <algorithm>
 #include <memory>

@@ -22,6 +22,7 @@
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/bitmapaccess.hxx>
+#include <vcl/bitmapwriteaccess.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/metaact.hxx>
 #include <config_features.h>
@@ -41,7 +42,6 @@
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <memory>
 #include <comphelper/lok.hxx>
-#include <bitmapwriteaccess.hxx>
 
 void OutputDevice::DrawBitmap( const Point& rDestPt, const Bitmap& rBitmap )
 {

@@ -22,7 +22,7 @@
 
 #include <comphelper/string.hxx>
 #include <rtl/character.hxx>
-#include <bitmapwriteaccess.hxx>
+#include <vcl/bitmapwriteaccess.hxx>
 
 #include "xbmread.hxx"
 

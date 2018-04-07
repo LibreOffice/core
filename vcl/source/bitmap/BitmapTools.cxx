@@ -27,13 +27,13 @@
 #include <vcl/svapp.hxx>
 #include <vcl/salbtype.hxx>
 #include <vcl/bitmapaccess.hxx>
+#include <vcl/bitmapwriteaccess.hxx>
 #include <vcl/virdev.hxx>
 #if ENABLE_CAIRO_CANVAS
 #include <cairo.h>
 #endif
 #include <tools/diagnose_ex.h>
 #include <tools/fract.hxx>
-#include <bitmapwriteaccess.hxx>
 
 using namespace css;
 

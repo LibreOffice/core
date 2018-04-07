@@ -21,9 +21,9 @@
 #include <stdlib.h>
 #include <osl/diagnose.h>
 #include <vcl/bitmapaccess.hxx>
+#include <vcl/bitmapwriteaccess.hxx>
 #include <vcl/bitmap.hxx>
 #include <impbmp.hxx>
-#include <bitmapwriteaccess.hxx>
 
 #define S2(a,b)             { long t; if( ( t = b - a ) < 0 ) { a += t; b -= t; } }
 #define MN3(a,b,c)          S2(a,b); S2(a,c);

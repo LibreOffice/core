@@ -33,9 +33,9 @@
 #include <vcl/lineinfo.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmapaccess.hxx>
+#include <vcl/bitmapwriteaccess.hxx>
 #include <vcl/metric.hxx>
 #include <vcl/vclptr.hxx>
-#include <bitmapwriteaccess.hxx>
 
 #include <rtl/ustrbuf.hxx>
 

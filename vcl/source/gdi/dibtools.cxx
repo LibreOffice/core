@@ -29,8 +29,8 @@
 #include <tools/fract.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/bitmapaccess.hxx>
+#include <vcl/bitmapwriteaccess.hxx>
 #include <vcl/outdev.hxx>
-#include <bitmapwriteaccess.hxx>
 #include <memory>
 
 

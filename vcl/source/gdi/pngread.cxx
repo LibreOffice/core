@@ -29,11 +29,11 @@
 #include <tools/zcodec.hxx>
 #include <tools/stream.hxx>
 #include <vcl/bitmapaccess.hxx>
+#include <vcl/bitmapwriteaccess.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/alpha.hxx>
 #include <osl/endian.h>
 #include <o3tl/make_unique.hxx>
-#include <bitmapwriteaccess.hxx>
 
 namespace vcl
 {

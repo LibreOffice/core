@@ -25,6 +25,7 @@
 #include <memory>
 
 #include <vcl/bitmapaccess.hxx>
+#include <vcl/bitmapwriteaccess.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/outdev.hxx>
@@ -34,7 +35,6 @@
 
 #include <outdata.hxx>
 #include <salgdi.hxx>
-#include <bitmapwriteaccess.hxx>
 
 namespace
 {

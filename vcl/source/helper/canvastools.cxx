@@ -54,11 +54,11 @@
 
 #include <vcl/salbtype.hxx>
 #include <vcl/bitmapaccess.hxx>
+#include <vcl/bitmapwriteaccess.hxx>
 #include <vcl/bitmapex.hxx>
 
 #include <canvasbitmap.hxx>
 #include <vcl/canvastools.hxx>
-#include <bitmapwriteaccess.hxx>
 
 using namespace ::com::sun::star;
 
