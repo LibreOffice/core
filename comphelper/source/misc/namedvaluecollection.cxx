@@ -299,31 +299,12 @@ namespace comphelper
     }
 
 
-    namespace
-    {
-        struct Value2PropertyValue
-        {
-            PropertyValue operator()( const NamedValueRepository::value_type& _rValue )
-            {
-                return PropertyValue(
-                    _rValue.first, 0, _rValue.second, PropertyState_DIRECT_VALUE );
-            }
-        };
-
-        struct Value2NamedValue
-        {
-            NamedValue operator()( const NamedValueRepository::value_type& _rValue )
-            {
-                return NamedValue( _rValue.first, _rValue.second );
-            }
-        };
-    }
-
-
     sal_Int32 NamedValueCollection::operator >>= ( Sequence< PropertyValue >& _out_rValues ) const
     {
         _out_rValues.realloc( m_pImpl->aValues.size() );
-        std::transform( m_pImpl->aValues.begin(), m_pImpl->aValues.end(), _out_rValues.getArray(), Value2PropertyValue() );
+        std::transform( m_pImpl->aValues.begin(), m_pImpl->aValues.end(), _out_rValues.getArray(),
+                [](const NamedValueRepository::value_type& _rValue)
+                    { return PropertyValue( _rValue.first, 0, _rValue.second, PropertyState_DIRECT_VALUE ); } );
         return _out_rValues.getLength();
     }
 
@@ -331,7 +312,9 @@ namespace comphelper
     sal_Int32 NamedValueCollection::operator >>= ( Sequence< NamedValue >& _out_rValues ) const
     {
         _out_rValues.realloc( m_pImpl->aValues.size() );
-        std::transform( m_pImpl->aValues.begin(), m_pImpl->aValues.end(), _out_rValues.getArray(), Value2NamedValue() );
+        std::transform( m_pImpl->aValues.begin(), m_pImpl->aValues.end(), _out_rValues.getArray(),
+                [](const NamedValueRepository::value_type& _rValue)
+                    { return NamedValue( _rValue.first, _rValue.second ); } );
         return _out_rValues.getLength();
     }
 
