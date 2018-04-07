@@ -43,7 +43,7 @@ public:
     SqlStatementVector parseSchema();
 
     /**
-     * Returns the colmn types of a table. It should not be called before
+     * Returns the column types of a table. It should not be called before
      * calling parseSchema().
      *
      * @param sTableName name of the table.
