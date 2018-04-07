@@ -119,15 +119,15 @@ void ScHTMLExport::WriteGraphEntry( ScHTMLGraphEntry* pE )
     SdrObject* pObject = pE->pObject;
     OStringBuffer aBuf;
     aBuf.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_width).append('=').
-        append(pE->aSize.Width());
+        append(static_cast<sal_Int32>(pE->aSize.Width()));
     aBuf.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_height).append('=').
-        append(pE->aSize.Height());
+        append(static_cast<sal_Int32>(pE->aSize.Height()));
     if ( pE->bInCell )
     {
         aBuf.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_hspace).append('=').
-            append(pE->aSpace.Width());
+            append(static_cast<sal_Int32>(pE->aSpace.Width()));
         aBuf.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_vspace).append('=').
-            append(pE->aSpace.Height());
+            append(static_cast<sal_Int32>(pE->aSpace.Height()));
     }
     OString aOpt = aBuf.makeStringAndClear();
     switch ( pObject->GetObjIdentifier() )

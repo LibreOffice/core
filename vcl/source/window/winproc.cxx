@@ -2415,8 +2415,8 @@ bool ImplWindowFrameProc( vcl::Window* _pWindow, SalEvent nEvent, const void* pE
 
         case SalEvent::Resize:
             {
-            sal_Int32 nNewWidth;
-            sal_Int32 nNewHeight;
+            long nNewWidth;
+            long nNewHeight;
             pWindow->ImplGetWindowImpl()->mpFrame->GetClientSize( nNewWidth, nNewHeight );
             ImplHandleResize( pWindow, nNewWidth, nNewHeight );
             }

@@ -789,7 +789,7 @@ Writer& OutHTML_DrawFrameFormatAsControl( Writer& rWrt,
                 if( aSz.Height() )
                 {
                     sOptions += " " OOO_STRING_SVTOOLS_HTML_O_size "=\"" +
-                        OString::number(aSz.Height()) + "\"";
+                        OString::number(static_cast<sal_Int32>(aSz.Height())) + "\"";
                 }
 
                 auto aTmp2 = xPropSet->getPropertyValue( "MultiSelection" );
@@ -827,12 +827,12 @@ Writer& OutHTML_DrawFrameFormatAsControl( Writer& rWrt,
                 if( aSz.Height() )
                 {
                     sOptions += " " OOO_STRING_SVTOOLS_HTML_O_rows "=\"" +
-                        OString::number(aSz.Height()) + "\"";
+                        OString::number(static_cast<sal_Int32>(aSz.Height())) + "\"";
                 }
                 if( aSz.Width() )
                 {
                     sOptions += " " OOO_STRING_SVTOOLS_HTML_O_cols "=\"" +
-                        OString::number(aSz.Width()) + "\"";
+                        OString::number(static_cast<sal_Int32>(aSz.Width())) + "\"";
                 }
 
                 aTmp = xPropSet->getPropertyValue( "HScroll" );
@@ -866,7 +866,7 @@ Writer& OutHTML_DrawFrameFormatAsControl( Writer& rWrt,
                 if( aSz.Width() )
                 {
                     sOptions += " " OOO_STRING_SVTOOLS_HTML_O_size "=\"" +
-                        OString::number(aSz.Width()) + "\"";
+                        OString::number(static_cast<sal_Int32>(aSz.Width())) + "\"";
                 }
 
                 aTmp = xPropSet->getPropertyValue( "MaxTextLen" );
@@ -903,7 +903,7 @@ Writer& OutHTML_DrawFrameFormatAsControl( Writer& rWrt,
             if( aSz.Width() )
             {
                 sOptions += " " OOO_STRING_SVTOOLS_HTML_O_size "=\"" +
-                    OString::number(aSz.Width()) + "\"";
+                    OString::number(static_cast<sal_Int32>(aSz.Width())) + "\"";
             }
 
             // VALUE vim form: don't export because of security reasons
@@ -996,13 +996,13 @@ Writer& OutHTML_DrawFrameFormatAsControl( Writer& rWrt,
         if( aPixelSz.Width() )
         {
             sOut += " " OOO_STRING_SVTOOLS_HTML_O_width "=\"" +
-                OString::number(aPixelSz.Width()) + "\"";
+                OString::number(static_cast<sal_Int32>(aPixelSz.Width())) + "\"";
         }
 
         if( aPixelSz.Height() )
         {
             sOut += " " OOO_STRING_SVTOOLS_HTML_O_height "=\"" +
-                OString::number(aPixelSz.Height()) + "\"";
+                OString::number(static_cast<sal_Int32>(aPixelSz.Height())) + "\"";
         }
     }
 

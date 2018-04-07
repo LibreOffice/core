@@ -39,7 +39,7 @@ SwColumnFrame::SwColumnFrame( SwFrameFormat *pFormat, SwFrame* pSib ):
     mnFrameType = SwFrameType::Column;
     SwBodyFrame* pColBody = new SwBodyFrame( pFormat->GetDoc()->GetDfltFrameFormat(), pSib );
     pColBody->InsertBehind( this, nullptr ); // ColumnFrames now with BodyFrame
-    SetMaxFootnoteHeight( SAL_MAX_INT32 );
+    SetMaxFootnoteHeight( LONG_MAX );
 }
 
 void SwColumnFrame::DestroyImpl()
@@ -132,7 +132,7 @@ static bool lcl_AddColumns( SwLayoutFrame *pCont, sal_uInt16 nCount )
 
     bool bRet;
     SwTwips nMax = pCont->IsPageBodyFrame() ?
-                   pCont->FindPageFrame()->GetMaxFootnoteHeight() : SAL_MAX_INT32;
+                   pCont->FindPageFrame()->GetMaxFootnoteHeight() : LONG_MAX;
     if ( pNeighbourCol )
     {
         bRet = false;

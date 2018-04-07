@@ -371,7 +371,7 @@ void I18NStatus::setStatusText( const OUString& rText )
         bool bVisible = true;
         if( m_pParent )
         {
-            sal_Int32 w, h;
+            long w, h;
             m_pParent->GetClientSize( w, h );
             if( w == 0 || h == 0 )
             {

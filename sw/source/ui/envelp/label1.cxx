@@ -439,7 +439,7 @@ void SwLabPage::DisplayFormat()
     SetMetric(*aField.get(), aMetric);
     aField->SetDecimalDigits(2);
     aField->SetMin         (0);
-    aField->SetMax         (SAL_MAX_INT32);
+    aField->SetMax         (LONG_MAX);
 
     SwLabRec* pRec = GetSelectedEntryPos();
     aItem.m_aLstType = pRec->m_aType;

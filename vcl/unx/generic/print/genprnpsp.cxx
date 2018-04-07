@@ -697,7 +697,7 @@ bool PspSalInfoPrinter::SetData(
 
 void PspSalInfoPrinter::GetPageInfo(
     const ImplJobSetup* pJobSetup,
-    sal_Int32& rOutWidth, sal_Int32& rOutHeight,
+    long& rOutWidth, long& rOutHeight,
     Point& rPageOffset,
     Size& rPaperSize )
 {

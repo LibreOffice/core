@@ -25,18 +25,18 @@
 void Point::RotateAround( Point& rPoint,
                           short nOrientation ) const
 {
-    sal_Int32 nX = rPoint.X();
-    sal_Int32 nY = rPoint.Y();
+    long nX = rPoint.X();
+    long nY = rPoint.Y();
     RotateAround(nX, nY, nOrientation);
     rPoint.setX(nX);
     rPoint.setY(nY);
 }
 
-void Point::RotateAround( sal_Int32& rX, sal_Int32& rY,
+void Point::RotateAround( long& rX, long& rY,
                           short nOrientation ) const
 {
-    const sal_Int32 nOriginX = X();
-    const sal_Int32 nOriginY = Y();
+    const long nOriginX = X();
+    const long nOriginY = Y();
 
     if ( (nOrientation >= 0) && !(nOrientation % 900) )
     {
@@ -50,7 +50,7 @@ void Point::RotateAround( sal_Int32& rX, sal_Int32& rY,
 
             if ( nOrientation == 900 )
             {
-                sal_Int32 nTemp = rX;
+                long nTemp = rX;
                 rX = rY;
                 rY = -nTemp;
             }
@@ -61,7 +61,7 @@ void Point::RotateAround( sal_Int32& rX, sal_Int32& rY,
             }
             else /* ( nOrientation == 2700 ) */
             {
-                sal_Int32 nTemp = rX;
+                long nTemp = rX;
                 rX = -rY;
                 rY = nTemp;
             }
@@ -77,12 +77,12 @@ void Point::RotateAround( sal_Int32& rX, sal_Int32& rY,
         double nSin = sin( nRealOrientation );
 
         // Translation...
-        sal_Int32 nX = rX-nOriginX;
-        sal_Int32 nY = rY-nOriginY;
+        long nX = rX-nOriginX;
+        long nY = rY-nOriginY;
 
         // Rotation...
-        rX = + static_cast<sal_Int32>(nCos*nX + nSin*nY) + nOriginX;
-        rY = - static_cast<sal_Int32>(nSin*nX - nCos*nY) + nOriginY;
+        rX = + static_cast<long>(nCos*nX + nSin*nY) + nOriginX;
+        rY = - static_cast<long>(nSin*nX - nCos*nY) + nOriginY;
     }
 }
 

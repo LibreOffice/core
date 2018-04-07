@@ -33,24 +33,24 @@
 #include <hints.hxx>
 
     // No inline cause we need the function pointers
-sal_Int32 SwFrame::GetTopMargin() const
+long SwFrame::GetTopMargin() const
     { return getFramePrintArea().Top(); }
-sal_Int32 SwFrame::GetBottomMargin() const
+long SwFrame::GetBottomMargin() const
     { return getFrameArea().Height() -getFramePrintArea().Height() -getFramePrintArea().Top(); }
-sal_Int32 SwFrame::GetLeftMargin() const
+long SwFrame::GetLeftMargin() const
     { return getFramePrintArea().Left(); }
-sal_Int32 SwFrame::GetRightMargin() const
+long SwFrame::GetRightMargin() const
     { return getFrameArea().Width() - getFramePrintArea().Width() - getFramePrintArea().Left(); }
-sal_Int32 SwFrame::GetPrtLeft() const
+long SwFrame::GetPrtLeft() const
     { return getFrameArea().Left() + getFramePrintArea().Left(); }
-sal_Int32 SwFrame::GetPrtBottom() const
+long SwFrame::GetPrtBottom() const
     { return getFrameArea().Top() + getFramePrintArea().Height() + getFramePrintArea().Top(); }
-sal_Int32 SwFrame::GetPrtRight() const
+long SwFrame::GetPrtRight() const
     { return getFrameArea().Left() + getFramePrintArea().Width() + getFramePrintArea().Left(); }
-sal_Int32 SwFrame::GetPrtTop() const
+long SwFrame::GetPrtTop() const
     { return getFrameArea().Top() + getFramePrintArea().Top(); }
 
-bool SwFrame::SetMinLeft( sal_Int32 nDeadline )
+bool SwFrame::SetMinLeft( long nDeadline )
 {
     SwTwips nDiff = nDeadline - getFrameArea().Left();
     if( nDiff > 0 )
@@ -66,7 +66,7 @@ bool SwFrame::SetMinLeft( sal_Int32 nDeadline )
     return false;
 }
 
-bool SwFrame::SetMaxBottom( sal_Int32 nDeadline )
+bool SwFrame::SetMaxBottom( long nDeadline )
 {
     SwTwips nDiff = getFrameArea().Top() + getFrameArea().Height() - nDeadline;
     if( nDiff > 0 )
@@ -82,7 +82,7 @@ bool SwFrame::SetMaxBottom( sal_Int32 nDeadline )
     return false;
 }
 
-bool SwFrame::SetMaxRight( sal_Int32 nDeadline )
+bool SwFrame::SetMaxRight( long nDeadline )
 {
     SwTwips nDiff = getFrameArea().Left() + getFrameArea().Width() - nDeadline;
     if( nDiff > 0 )
@@ -162,21 +162,21 @@ void SwFrame::MakeRightPos( const SwFrame* pUp, const SwFrame* pPrv, bool bNotif
     }
 }
 
-void SwFrame::SetTopBottomMargins( sal_Int32 nTop, sal_Int32 nBot )
+void SwFrame::SetTopBottomMargins( long nTop, long nBot )
 {
     SwFrameAreaDefinition::FramePrintAreaWriteAccess aPrt(*this);
     aPrt.Top( nTop );
     aPrt.Height( getFrameArea().Height() - nTop - nBot );
 }
 
-void SwFrame::SetLeftRightMargins( sal_Int32 nLeft, sal_Int32 nRight)
+void SwFrame::SetLeftRightMargins( long nLeft, long nRight)
 {
     SwFrameAreaDefinition::FramePrintAreaWriteAccess aPrt(*this);
     aPrt.Left( nLeft );
     aPrt.Width( getFrameArea().Width() - nLeft - nRight );
 }
 
-void SwFrame::SetRightLeftMargins( sal_Int32 nRight, sal_Int32 nLeft)
+void SwFrame::SetRightLeftMargins( long nRight, long nLeft)
 {
     SwFrameAreaDefinition::FramePrintAreaWriteAccess aPrt(*this);
     aPrt.Left( nLeft );

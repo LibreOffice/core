@@ -1442,7 +1442,7 @@ void X11SalFrame::GetWorkArea( tools::Rectangle& rWorkArea )
     rWorkArea = pDisplay_->getWMAdaptor()->getWorkArea( 0 );
 }
 
-void X11SalFrame::GetClientSize( sal_Int32 &rWidth, sal_Int32 &rHeight )
+void X11SalFrame::GetClientSize( long &rWidth, long &rHeight )
 {
     if( ! bViewable_  )
     {
