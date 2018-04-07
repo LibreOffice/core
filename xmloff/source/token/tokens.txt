@@ -3077,4 +3077,6 @@ max-numerator-digits
 zeros-numerator-digits
 zeros-denominator-digits
 integer-fraction-delimiter
+reference-language
+newline
 TOKEN_END_DUMMY

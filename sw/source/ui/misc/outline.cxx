@@ -1035,6 +1035,7 @@ void NumberingPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Re
                         break;
                         case SvxNumberFormat::SPACE:
                         case SvxNumberFormat::NOTHING:
+                        case SvxNumberFormat::NEWLINE:
                         {
                             nTextXPos = nNumberXPos + nBulletWidth;
                         }
