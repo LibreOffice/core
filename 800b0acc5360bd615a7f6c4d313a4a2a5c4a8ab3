@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_b2ce8281",
+        "filename": "xmloff/source/style/xmlprmap.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2018-04-07T12:27:39Z",
+      "side": 1,
+      "message": "if you delete in the destructor, this copy ctor will now do a double-delete?",
+      "revId": "800b0acc5360bd615a7f6c4d313a4a2a5c4a8ab3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_f2c8fa76",
+        "filename": "xmloff/source/style/xmlprmap.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2018-04-07T12:27:39Z",
+      "side": 1,
+      "message": "i don\u0027t like this at all... it\u0027s very confusing that the pHdl is *sometimes* a owning pointer and *sometimes* not.\n\nthis will also break as soon as somebody changes the \"new\" in controlpropertyhdl.cxx without updating this function which is in a completely different file.\n\nthis \"new\" was added in commit 56d069fd47a5938ef2aa611f855d41fee30f3538 and i think it should just be converted to a \"unique_ptr\" member like all the other handlers created by that function, that would make things consistent and fix the leak.",
+      "revId": "800b0acc5360bd615a7f6c4d313a4a2a5c4a8ab3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
