@@ -659,8 +659,6 @@ void ScEditViewForwarder::SetInvalid()
 ScAccessibleCellTextData::ScAccessibleCellTextData(ScTabViewShell* pViewShell,
         const ScAddress& rP, ScSplitPos eSplitPos, ScAccessibleCell* pAccCell)
     : ScAccessibleCellBaseTextData(GetDocShell(pViewShell), rP),
-    mpViewForwarder(nullptr),
-    mpEditViewForwarder(nullptr),
     mpViewShell(pViewShell),
     meSplitPos(eSplitPos),
     mpAccessibleCell( pAccCell )
@@ -671,8 +669,7 @@ ScAccessibleCellTextData::~ScAccessibleCellTextData()
 {
     if (pEditEngine)
         pEditEngine->SetNotifyHdl(Link<EENotify&,void>());
-    delete mpViewForwarder;
-    delete mpEditViewForwarder;
+    mpViewForwarder.reset();
 }
 
 void ScAccessibleCellTextData::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
@@ -682,8 +679,6 @@ void ScAccessibleCellTextData::Notify( SfxBroadcaster& rBC, const SfxHint& rHint
         mpViewShell = nullptr;                     // invalid now
         if (mpViewForwarder)
             mpViewForwarder->SetInvalid();
-        if (mpEditViewForwarder)
-            mpEditViewForwarder->SetInvalid();
     }
     ScAccessibleCellBaseTextData::Notify(rBC, rHint);
 }
@@ -842,8 +837,8 @@ SvxTextForwarder* ScAccessibleCellTextData::GetTextForwarder()
 SvxViewForwarder* ScAccessibleCellTextData::GetViewForwarder()
 {
     if (!mpViewForwarder)
-        mpViewForwarder = new ScViewForwarder(mpViewShell, meSplitPos, aCellPos);
-    return mpViewForwarder;
+        mpViewForwarder.reset(new ScViewForwarder(mpViewShell, meSplitPos, aCellPos));
+    return mpViewForwarder.get();
 }
 
 SvxEditViewForwarder* ScAccessibleCellTextData::GetEditViewForwarder( bool /* bCreate */ )

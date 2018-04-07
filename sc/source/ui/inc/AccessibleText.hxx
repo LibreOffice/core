@@ -90,8 +90,7 @@ public:
     virtual SvxEditViewForwarder* GetEditViewForwarder( bool bCreate ) override;
 
 private:
-    ScViewForwarder* mpViewForwarder;
-    ScEditViewForwarder* mpEditViewForwarder;
+    std::unique_ptr<ScViewForwarder> mpViewForwarder;
     ScTabViewShell* mpViewShell;
     ScSplitPos meSplitPos;
     ScAccessibleCell* mpAccessibleCell;
