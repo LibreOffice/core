@@ -95,7 +95,8 @@ public:
     {
         LISTTAB,
         SPACE,
-        NOTHING
+        NOTHING,
+        NEWLINE
     };
 
 private:

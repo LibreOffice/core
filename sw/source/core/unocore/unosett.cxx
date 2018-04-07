@@ -1368,6 +1368,10 @@ uno::Sequence<beans::PropertyValue> SwXNumberingRules::GetPropertiesForNumFormat
         {
             nINT16 = LabelFollow::NOTHING;
         }
+        else if ( rFormat.GetLabelFollowedBy() == SvxNumberFormat::NEWLINE )
+        {
+            nINT16 = LabelFollow::NEWLINE;
+        }
         aPropertyValues.push_back(comphelper::makePropertyValue(UNO_NAME_LABEL_FOLLOWED_BY, nINT16));
 
         // ListtabStopPosition
@@ -1756,17 +1760,21 @@ void SwXNumberingRules::SetPropertiesToNumFormat(
                 {
                     sal_Int16 nValue = 0;
                     pProp->Value >>= nValue;
-                    if ( nValue == 0 )
+                    if ( nValue == LabelFollow::LISTTAB )
                     {
                         aFormat.SetLabelFollowedBy( SvxNumberFormat::LISTTAB );
                     }
-                    else if ( nValue == 1 )
+                    else if ( nValue == LabelFollow::SPACE )
                     {
                         aFormat.SetLabelFollowedBy( SvxNumberFormat::SPACE );
                     }
-                    else if ( nValue == 2 )
+                    else if ( nValue == LabelFollow::NOTHING )
                     {
                         aFormat.SetLabelFollowedBy( SvxNumberFormat::NOTHING );
+                    }
+                    else if ( nValue == LabelFollow::NEWLINE )
+                    {
+                        aFormat.SetLabelFollowedBy( SvxNumberFormat::NEWLINE );
                     }
                     else
                     {
