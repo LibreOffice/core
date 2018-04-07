@@ -38,6 +38,13 @@ void ScSortKeyItem::EnableField()
     m_pFrame->Enable();
 }
 
+void ScSortKeyItem::set_id_base(const OUString& rIDBase)
+{
+    m_pLbSort->set_id(rIDBase + m_pLbSort->get_id());
+    m_pBtnUp->set_id(rIDBase + m_pBtnUp->get_id());
+    m_pBtnDown->set_id(rIDBase + m_pBtnDown->get_id());
+}
+
 ScSortKeyWindow::ScSortKeyWindow(SfxTabPage* pParent, ScSortKeyItems& rSortKeyItems)
     : mrSortKeyItems(rSortKeyItems)
 {
@@ -70,6 +77,7 @@ void ScSortKeyWindow::AddSortKey( sal_uInt16 nItemNumber )
     OUString aLine = pSortKeyItem->m_pFlSort->GetText() +
                      OUString::number( nItemNumber );
     pSortKeyItem->m_pFlSort->SetText( aLine );
+    pSortKeyItem->set_id_base("key_" + OUString::number(nItemNumber) + "_");
 
     mrSortKeyItems.push_back(std::unique_ptr<ScSortKeyItem>(pSortKeyItem));
 }
