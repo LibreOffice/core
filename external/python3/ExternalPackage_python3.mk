@@ -87,7 +87,6 @@ $(eval $(call gb_ExternalPackage_add_files,python3,$(LIBO_BIN_FOLDER)/python-cor
 	LO_lib/mmap.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)m.so \
 	LO_lib/_multibytecodec.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)m.so \
 	LO_lib/_multiprocessing.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)m.so \
-	LO_lib/nis.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)m.so \
 	LO_lib/_opcode.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)m.so \
 	LO_lib/ossaudiodev.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)m.so \
 	LO_lib/parser.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)m.so \
