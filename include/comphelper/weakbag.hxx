@@ -22,7 +22,7 @@
 
 #include <sal/config.h>
 
-#include <list>
+#include <vector>
 #include <com/sun/star/uno/Reference.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <osl/diagnose.h>
@@ -46,7 +46,7 @@ public:
     */
     void add(css::uno::Reference< T > const & e) {
         OSL_ASSERT(e.is());
-        for (typename WeakReferenceList::iterator i(m_list.begin()); i != m_list.end();) {
+        for (auto i = m_list.begin(); i != m_list.end();) {
             if (css::uno::Reference< T >(*i).is()) {
                 ++i;
             } else {
@@ -64,8 +64,8 @@ public:
     */
     css::uno::Reference< T > remove() {
         while (!m_list.empty()) {
-            css::uno::Reference< T > r(m_list.front());
-            m_list.pop_front();
+            css::uno::Reference< T > r(m_list.back());
+            m_list.pop_back();
             if (r.is()) {
                 return r;
             }
@@ -74,9 +74,7 @@ public:
     }
 
 private:
-    typedef std::list< css::uno::WeakReference< T > > WeakReferenceList;
-
-    WeakReferenceList m_list;
+    std::vector< css::uno::WeakReference< T > > m_list;
 };
 
 }
