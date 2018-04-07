@@ -220,7 +220,7 @@ bool SdrExchangeView::Paste(SvStream& rInput, EETextFormat eFormat, const Point&
 
             if(pCandidate)
             {
-                if(pObj->getSdrModelFromSdrObject().GetStyleSheetPool() == &pCandidate->GetPool())
+                if(pObj->getSdrModelFromSdrObject().GetStyleSheetPool() == pCandidate->GetPool())
                 {
                     pObj->NbcSetStyleSheet(pCandidate, true);
                 }

@@ -122,7 +122,7 @@ SdStyleSheet* SdStyleFamily::GetValidNewSheet( const Any& rElement )
     Reference< XStyle > xStyle( rElement, UNO_QUERY );
     SdStyleSheet* pStyle = static_cast< SdStyleSheet* >( xStyle.get() );
 
-    if( pStyle == nullptr || (pStyle->GetFamily() != mnFamily) || (&pStyle->GetPool() != mxPool.get()) || (mxPool->Find( pStyle->GetName(), mnFamily) != nullptr) )
+    if( pStyle == nullptr || (pStyle->GetFamily() != mnFamily) || (pStyle->GetPool() != mxPool.get()) || (mxPool->Find( pStyle->GetName(), mnFamily) != nullptr) )
         throw IllegalArgumentException();
 
     return pStyle;

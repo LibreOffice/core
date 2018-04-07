@@ -113,7 +113,7 @@ bool ScStyleSheet::SetParent( const OUString& rParentName )
             // #i113491# Drag&Drop in the stylist's hierarchical view doesn't execute a slot,
             // so the repaint has to come from here (after modifying the ItemSet).
             // RepaintRange checks the document's IsVisible flag and locked repaints.
-            ScDocument* pDoc = static_cast<ScStyleSheetPool&>(GetPool()).GetDocument();
+            ScDocument* pDoc = static_cast<ScStyleSheetPool*>(GetPool())->GetDocument();
             if (pDoc)
                 pDoc->RepaintRange( ScRange( 0,0,0, MAXCOL,MAXROW,MAXTAB ) );
         }
@@ -139,7 +139,7 @@ SfxItemSet& ScStyleSheet::GetItemSet()
                     // therefore suitable values are set at this point.
                     // (== Standard page template)
 
-                    SfxItemPool& rItemPool = GetPool().GetPool();
+                    SfxItemPool& rItemPool = GetPool()->GetPool();
                     pSet = new SfxItemSet(
                         rItemPool,
                         svl::Items<
@@ -154,7 +154,7 @@ SfxItemSet& ScStyleSheet::GetItemSet()
                     //  GetPrinter would then also create a new printer,
                     //  because the stored Printer is not loaded yet!
 
-                    ScDocument* pDoc = static_cast<ScStyleSheetPool&>(GetPool()).GetDocument();
+                    ScDocument* pDoc = static_cast<ScStyleSheetPool*>(GetPool())->GetDocument();
                     if ( pDoc )
                     {
                         // Setting reasonable default values:
@@ -224,7 +224,7 @@ SfxItemSet& ScStyleSheet::GetItemSet()
 
             case SfxStyleFamily::Para:
             default:
-                pSet = new SfxItemSet( GetPool().GetPool(), svl::Items<ATTR_PATTERN_START, ATTR_PATTERN_END>{} );
+                pSet = new SfxItemSet( GetPool()->GetPool(), svl::Items<ATTR_PATTERN_START, ATTR_PATTERN_END>{} );
                 break;
         }
         bMySet = true;
@@ -237,7 +237,7 @@ SfxItemSet& ScStyleSheet::GetItemSet()
             // ~ScStyleSheetPool -> ~SfxStyleSheetPool, GetPool() is no longer
             // an ScStyleSheetPool:
             ScStyleSheetPool * pool = dynamic_cast<ScStyleSheetPool *>(
-                &GetPool());
+                GetPool());
             if (pool != nullptr) {
                 ScDocument* pDoc = pool->GetDocument();
                 if ( pDoc )

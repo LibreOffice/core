@@ -214,7 +214,7 @@ SfxItemSet& SdStyleSheet::GetItemSet()
         if (!pSet)
         {
             pSet = new SfxItemSet(
-                GetPool().GetPool(),
+                GetPool()->GetPool(),
                 svl::Items<
                     XATTR_LINE_FIRST, XATTR_LINE_LAST,
                     XATTR_FILL_FIRST, XATTR_FILL_LAST,
@@ -234,7 +234,7 @@ SfxItemSet& SdStyleSheet::GetItemSet()
         if (!pSet)
         {
             pSet = new SfxItemSet(
-                GetPool().GetPool(),
+                GetPool()->GetPool(),
                 svl::Items<
                     XATTR_LINE_FIRST, XATTR_LINE_LAST,
                     XATTR_FILL_FIRST, XATTR_FILL_LAST,
@@ -265,7 +265,7 @@ SfxItemSet& SdStyleSheet::GetItemSet()
             if (!pSet)
             {
                 pSet = new SfxItemSet(
-                    GetPool().GetPool(),
+                    GetPool()->GetPool(),
                     svl::Items<
                         XATTR_LINE_FIRST, XATTR_LINE_LAST,
                         XATTR_FILL_FIRST, XATTR_FILL_LAST,
@@ -974,7 +974,7 @@ void SAL_CALL SdStyleSheet::setPropertyValue( const OUString& aPropertyName, con
         throw IllegalArgumentException();
     }
 
-    SfxItemSet aSet( GetPool().GetPool(),   {{pEntry->nWID, pEntry->nWID}});
+    SfxItemSet aSet( GetPool()->GetPool(),   {{pEntry->nWID, pEntry->nWID}});
     aSet.Put( rStyleSet );
 
     if( !aSet.Count() )
@@ -987,7 +987,7 @@ void SAL_CALL SdStyleSheet::setPropertyValue( const OUString& aPropertyName, con
         }
         else
         {
-            aSet.Put( GetPool().GetPool().GetDefaultItem( pEntry->nWID ) );
+            aSet.Put( GetPool()->GetPool().GetDefaultItem( pEntry->nWID ) );
         }
     }
 
@@ -1080,7 +1080,7 @@ Any SAL_CALL SdStyleSheet::getPropertyValue( const OUString& PropertyName )
     }
     else
     {
-        SfxItemSet aSet( GetPool().GetPool(),   {{pEntry->nWID, pEntry->nWID}});
+        SfxItemSet aSet( GetPool()->GetPool(),   {{pEntry->nWID, pEntry->nWID}});
 
         const SfxPoolItem* pItem;
         SfxItemSet& rStyleSet = GetItemSet();
@@ -1089,7 +1089,7 @@ Any SAL_CALL SdStyleSheet::getPropertyValue( const OUString& PropertyName )
             aSet.Put(  *pItem );
 
         if( !aSet.Count() )
-            aSet.Put( GetPool().GetPool().GetDefaultItem( pEntry->nWID ) );
+            aSet.Put( GetPool()->GetPool().GetDefaultItem( pEntry->nWID ) );
 
         if(SvxUnoTextRangeBase::GetPropertyValueHelper( aSet, pEntry, aAny ))
             return aAny;
@@ -1267,7 +1267,7 @@ Any SAL_CALL SdStyleSheet::getPropertyDefault( const OUString& aPropertyName )
     }
     else
     {
-        SfxItemPool& rMyPool = GetPool().GetPool();
+        SfxItemPool& rMyPool = GetPool()->GetPool();
         SfxItemSet aSet( rMyPool,   {{pEntry->nWID, pEntry->nWID}});
         aSet.Put( rMyPool.GetDefaultItem( pEntry->nWID ) );
         aRet = SvxItemPropertySet_getPropertyValue( pEntry, aSet );
