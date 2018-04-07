@@ -47,11 +47,11 @@ class ScMySharedData
 {
     std::vector<sal_Int32>      nLastColumns;
     std::vector<sal_Int32>      nLastRows;
-    ScMyTableShapes*            pTableShapes;
-    ScMyDrawPages*              pDrawPages;
-    ScMyShapesContainer*        pShapesContainer;
-    ScMyDetectiveObjContainer*  pDetectiveObjContainer;
-    ScMyNoteShapesContainer*    pNoteShapes;
+    std::unique_ptr<ScMyTableShapes>            pTableShapes;
+    std::unique_ptr<ScMyDrawPages>              pDrawPages;
+    std::unique_ptr<ScMyShapesContainer>        pShapesContainer;
+    std::unique_ptr<ScMyDetectiveObjContainer>  pDetectiveObjContainer;
+    std::unique_ptr<ScMyNoteShapesContainer>    pNoteShapes;
     sal_Int32                   nTableCount;
 public:
     explicit ScMySharedData(const sal_Int32 nTableCount);
@@ -68,14 +68,14 @@ public:
     bool HasForm(const sal_Int32 nTable, css::uno::Reference<css::drawing::XDrawPage>& xDrawPage);
     void AddNewShape(const ScMyShape& aMyShape);
     void SortShapesContainer();
-    ScMyShapesContainer* GetShapesContainer() { return pShapesContainer; }
+    ScMyShapesContainer* GetShapesContainer() { return pShapesContainer.get(); }
     bool HasShapes();
     void AddTableShape(const sal_Int32 nTable, const css::uno::Reference<css::drawing::XShape>& xShape);
-    ScMyTableShapes* GetTableShapes() { return pTableShapes; }
-    ScMyDetectiveObjContainer* GetDetectiveObjContainer() { return pDetectiveObjContainer; }
+    ScMyTableShapes* GetTableShapes() { return pTableShapes.get(); }
+    ScMyDetectiveObjContainer* GetDetectiveObjContainer() { return pDetectiveObjContainer.get(); }
     void AddNoteObj(const css::uno::Reference<css::drawing::XShape>& xShape, const ScAddress& rPos);
     void SortNoteShapes();
-    ScMyNoteShapesContainer* GetNoteShapes() { return pNoteShapes; }
+    ScMyNoteShapesContainer* GetNoteShapes() { return pNoteShapes.get(); }
 };
 
 #endif
