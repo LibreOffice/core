@@ -347,9 +347,9 @@ TaskManager::TaskManager( const uno::Reference< uno::XComponentContext >& rxCont
     m_sCommandInfo[7].Handle = -1;
     m_sCommandInfo[7].ArgType = cppu::UnoType<InsertCommandArgument>::get();
 
-    m_sCommandInfo[7].Name = "createNewContent";
-    m_sCommandInfo[7].Handle = -1;
-    m_sCommandInfo[7].ArgType = cppu::UnoType<ucb::ContentInfo>::get();
+    m_sCommandInfo[8].Name = "createNewContent";
+    m_sCommandInfo[8].Handle = -1;
+    m_sCommandInfo[8].ArgType = cppu::UnoType<ucb::ContentInfo>::get();
 
     if(m_bWithConfig)
     {
