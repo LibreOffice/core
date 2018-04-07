@@ -615,14 +615,18 @@ void SdrEditView::CheckPossibilities()
                 if (!bImportMtfPossible)
                 {
                     const SdrGrafObj* pSdrGrafObj = dynamic_cast< const SdrGrafObj* >(pObj);
-                    const SdrOle2Obj* pSdrOle2Obj = dynamic_cast< const SdrOle2Obj* >(pObj);
-
-                    if(pSdrGrafObj && ((pSdrGrafObj->HasGDIMetaFile() && !pSdrGrafObj->IsEPS()) || pSdrGrafObj->isEmbeddedSvg()))
+                    if (pSdrGrafObj != nullptr)
                     {
-                        bImportMtfPossible = true;
+                        if ((pSdrGrafObj->HasGDIMetaFile() && !pSdrGrafObj->IsEPS()) ||
+                            pSdrGrafObj->isEmbeddedSvg() ||
+                            pSdrGrafObj->isEmbeddedPdfData())
+                        {
+                            bImportMtfPossible = true;
+                        }
                     }
 
-                    if(pSdrOle2Obj)
+                    const SdrOle2Obj* pSdrOle2Obj = dynamic_cast< const SdrOle2Obj* >(pObj);
+                    if (pSdrOle2Obj)
                     {
                         bImportMtfPossible = pSdrOle2Obj->GetObjRef().is();
                     }
