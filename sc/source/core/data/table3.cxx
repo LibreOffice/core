@@ -2467,6 +2467,7 @@ public:
         bool bTestEqual = false;
         bool bMatchWholeCell = mbMatchWholeCell;
         svl::SharedString aCellStr;
+        const svl::SharedString* pCellSharedStr = &aCellStr;
         if (isPartialTextMatchOp(rEntry))
             // may have to do partial textural comparison.
             bMatchWholeCell = false;
@@ -2479,7 +2480,7 @@ public:
                 aCellStr = mrStrPool.intern(ScGlobal::GetErrorString(rCell.mpFormula->GetErrCode()));
             }
             else if (rCell.meType == CELLTYPE_STRING)
-                aCellStr = *rCell.mpString;
+                pCellSharedStr = rCell.mpString;
             else
             {
                 sal_uInt32 nFormat = pContext ? mrTab.GetNumberFormat( *pContext, ScAddress(static_cast<SCCOL>(rEntry.nField), nRow, mrTab.GetTab()) ) :
@@ -2497,30 +2498,31 @@ public:
             aCellStr = mrStrPool.intern(aStr);
         }
 
+        const svl::SharedString& rCellStr(*pCellSharedStr);
         bool bRealWildOrRegExp = isRealWildOrRegExp(rEntry);
         bool bTestWildOrRegExp = isTestWildOrRegExp(rEntry);
 
         if ( bRealWildOrRegExp || bTestWildOrRegExp )
         {
             sal_Int32 nStart = 0;
-            sal_Int32 nEnd   = aCellStr.getLength();
+            sal_Int32 nEnd   = rCellStr.getLength();
 
             // from 614 on, nEnd is behind the found text
             bool bMatch = false;
             if ( rEntry.eOp == SC_ENDS_WITH || rEntry.eOp == SC_DOES_NOT_END_WITH )
             {
                 nEnd = 0;
-                nStart = aCellStr.getLength();
+                nStart = rCellStr.getLength();
                 bMatch = rEntry.GetSearchTextPtr( mrParam.eSearchType, mrParam.bCaseSens, bMatchWholeCell )
-                    ->SearchBackward(aCellStr.getString(), &nStart, &nEnd);
+                    ->SearchBackward(rCellStr.getString(), &nStart, &nEnd);
             }
             else
             {
                 bMatch = rEntry.GetSearchTextPtr( mrParam.eSearchType, mrParam.bCaseSens, bMatchWholeCell )
-                    ->SearchForward(aCellStr.getString(), &nStart, &nEnd);
+                    ->SearchForward(rCellStr.getString(), &nStart, &nEnd);
             }
             if ( bMatch && bMatchWholeCell
-                    && (nStart != 0 || nEnd != aCellStr.getLength()) )
+                    && (nStart != 0 || nEnd != rCellStr.getLength()) )
                 bMatch = false;    // RegExp must match entire cell string
             if ( bRealWildOrRegExp )
             {
@@ -2541,10 +2543,10 @@ public:
                         bOk = !( bMatch && (nStart == 0) );
                         break;
                     case SC_ENDS_WITH:
-                        bOk = ( bMatch && (nEnd == aCellStr.getLength()) );
+                        bOk = ( bMatch && (nEnd == rCellStr.getLength()) );
                         break;
                     case SC_DOES_NOT_END_WITH:
-                        bOk = !( bMatch && (nEnd == aCellStr.getLength()) );
+                        bOk = !( bMatch && (nEnd == rCellStr.getLength()) );
                         break;
                     default:
                         {
@@ -2573,9 +2575,9 @@ public:
                 {
                     // Fast string equality check by comparing string identifiers.
                     if (mrParam.bCaseSens)
-                        bOk = aCellStr.getData() == rItem.maString.getData();
+                        bOk = rCellStr.getData() == rItem.maString.getData();
                     else
-                        bOk = aCellStr.getDataIgnoreCase() == rItem.maString.getDataIgnoreCase();
+                        bOk = rCellStr.getDataIgnoreCase() == rItem.maString.getDataIgnoreCase();
 
                     if ( rEntry.eOp == SC_NOT_EQUAL )
                         bOk = !bOk;
@@ -2588,7 +2590,7 @@ public:
                     if (!mbCaseSensitive)
                     { // Common case for vlookup etc.
                         const rtl_uString *pQuer = rItem.maString.getDataIgnoreCase();
-                        const rtl_uString *pCellStr = aCellStr.getDataIgnoreCase();
+                        const rtl_uString *pCellStr = rCellStr.getDataIgnoreCase();
                         assert(pQuer != nullptr);
                         assert(pCellStr != nullptr);
 
@@ -2613,7 +2615,7 @@ public:
                         OUString aQueryStr = rItem.maString.getString();
                         const LanguageType nLang = ScGlobal::pSysLocale->GetLanguageTag().getLanguageType();
                         OUString aCell( mpTransliteration->transliterate(
-                                            aCellStr.getString(), nLang, 0, aCellStr.getLength(),
+                                            rCellStr.getString(), nLang, 0, rCellStr.getLength(),
                                             nullptr ) );
 
                         OUString aQuer( mpTransliteration->transliterate(
@@ -2656,7 +2658,7 @@ public:
             else
             {   // use collator here because data was probably sorted
                 sal_Int32 nCompare = mpCollator->compareString(
-                    aCellStr.getString(), rItem.maString.getString());
+                    rCellStr.getString(), rItem.maString.getString());
                 switch (rEntry.eOp)
                 {
                     case SC_LESS :
