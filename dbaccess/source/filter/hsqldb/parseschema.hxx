@@ -35,10 +35,30 @@ private:
 public:
     explicit SchemaParser(css::uno::Reference<css::embed::XStorage>& rStorage);
 
+    /**
+     * Parses table definitions contained by a file called "script" in storage.
+     *
+     * @return A vector of schema definition SQL strings in Firebird dialect.
+     */
     SqlStatementVector parseSchema();
 
+    /**
+     * Returns the colmn types of a table. It should not be called before
+     * calling parseSchema().
+     *
+     * @param sTableName name of the table.
+     *
+     * @return A vector of column descriptors.
+     */
     std::vector<ColumnDefinition> getTableColumnTypes(const OUString& sTableName) const;
 
+    /**
+     * Returns a vector of indexes for each table. These indexes are used for
+     * locating the data related to the actual table in the binary file.
+     *
+     * The indexes point to root elements of AVL trees. Each node of the tree
+     * contains one row.
+     */
     const std::map<OUString, std::vector<sal_Int32>>& getTableIndexes() const;
 };
 }

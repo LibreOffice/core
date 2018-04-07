@@ -29,13 +29,22 @@ protected:
     OUString readString();
     bool checkNull();
 
-    // reimplement reading of an UTF string with a given length
     OUString readUTF(sal_Int32 nLen);
 
 public:
     HsqlRowInputStream();
+
+    /**
+     * Reads one row from the actual position.
+     * @param colTypes Field types of the row, in a strict order.
+     */
     std::vector<css::uno::Any> readOneRow(const std::vector<ColumnDefinition>& colTypes);
+
+    /**
+     * Sets the file-pointer offset, measured from the beginning of the file
+     */
     void seek(sal_Int32 nPos);
+
     void setInputStream(css::uno::Reference<css::io::XInputStream>& rStream);
     SvStream* getInputStream() const;
 };

@@ -17,7 +17,15 @@ namespace dbahsql
 class SAL_DLLPUBLIC_EXPORT FbCreateStmtParser : public CreateStmtParser
 {
 public:
+    /**
+     * Create statement parser, which can compose the result to statements of
+     * Firebird dialect.
+     */
     FbCreateStmtParser() {}
+
+    /**
+     * Compose the result of the parser to statements of Firebird dialect
+     */
     virtual OUString compose() const override;
 };
 
