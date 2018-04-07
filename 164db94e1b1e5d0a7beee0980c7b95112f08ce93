@@ -1,0 +1,280 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_d2105651",
+        "filename": "basctl/sdi/baside.sdi",
+        "patchSetId": 8
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-04-07T09:00:16Z",
+      "side": 1,
+      "message": "A nitpick",
+      "range": {
+        "startLine": 137,
+        "startChar": 34,
+        "endLine": 137,
+        "endChar": 35
+      },
+      "revId": "164db94e1b1e5d0a7beee0980c7b95112f08ce93",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_d23776e1",
+        "filename": "basctl/source/basicide/baside2.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 1211,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-04-07T09:00:16Z",
+      "side": 1,
+      "message": "No need for this change: the item is guaranteed to exist inside the method, so just dereference the argument when calling the function",
+      "range": {
+        "startLine": 1211,
+        "startChar": 66,
+        "endLine": 1211,
+        "endChar": 69
+      },
+      "revId": "164db94e1b1e5d0a7beee0980c7b95112f08ce93",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_b23a02cc",
+        "filename": "basctl/source/basicide/baside2.hxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 376,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-04-07T09:00:16Z",
+      "side": 1,
+      "message": "No need for this change: the item is guaranteed to exist inside the method, so just dereference the argument when calling the function",
+      "range": {
+        "startLine": 376,
+        "startChar": 66,
+        "endLine": 376,
+        "endChar": 67
+      },
+      "revId": "164db94e1b1e5d0a7beee0980c7b95112f08ce93",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_322612bb",
+        "filename": "basctl/source/basicide/basides1.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-04-07T09:00:16Z",
+      "side": 1,
+      "message": "no need if you use unique_ptr (it will be properly deleted in the next line when you do mpSearchItem.reset(....Clone()) )",
+      "range": {
+        "startLine": 80,
+        "startChar": 12,
+        "endLine": 80,
+        "endChar": 32
+      },
+      "revId": "164db94e1b1e5d0a7beee0980c7b95112f08ce93",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_f2347adf",
+        "filename": "basctl/source/basicide/basides1.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 936,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-04-07T09:00:16Z",
+      "side": 1,
+      "message": "Why not using GetExtraData()-\u003eGetSearchItem().Clone()?",
+      "range": {
+        "startLine": 936,
+        "startChar": 35,
+        "endLine": 936,
+        "endChar": 72
+      },
+      "revId": "164db94e1b1e5d0a7beee0980c7b95112f08ce93",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_121bce73",
+        "filename": "basctl/source/basicide/basidesh.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 163,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-04-07T09:00:16Z",
+      "side": 1,
+      "message": "No need, if you use unique_ptr (it will be default-constructed with nullptr)",
+      "range": {
+        "startLine": 162,
+        "startChar": 24,
+        "endLine": 163,
+        "endChar": 27
+      },
+      "revId": "164db94e1b1e5d0a7beee0980c7b95112f08ce93",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_1232eef1",
+        "filename": "basctl/source/basicide/bastypes.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 208,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-04-07T09:00:16Z",
+      "side": 1,
+      "message": "No need for this change...",
+      "range": {
+        "startLine": 208,
+        "startChar": 65,
+        "endLine": 208,
+        "endChar": 66
+      },
+      "revId": "164db94e1b1e5d0a7beee0980c7b95112f08ce93",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_324d3273",
+        "filename": "basctl/source/basicide/iderdll.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-04-07T09:00:16Z",
+      "side": 1,
+      "message": "No need for this change...",
+      "range": {
+        "startLine": 166,
+        "startChar": 50,
+        "endLine": 166,
+        "endChar": 51
+      },
+      "revId": "164db94e1b1e5d0a7beee0980c7b95112f08ce93",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_5252a614",
+        "filename": "basctl/source/basicide/iderdll2.hxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-04-07T09:00:16Z",
+      "side": 1,
+      "message": "No need...",
+      "range": {
+        "startLine": 64,
+        "startChar": 56,
+        "endLine": 64,
+        "endChar": 57
+      },
+      "revId": "164db94e1b1e5d0a7beee0980c7b95112f08ce93",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_f21d5a67",
+        "filename": "basctl/source/inc/basidesh.hxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-04-07T09:00:16Z",
+      "side": 1,
+      "message": "std::unique_ptr\u003cSvxSearchItem\u003e mpSearchItem",
+      "range": {
+        "startLine": 92,
+        "startChar": 20,
+        "endLine": 92,
+        "endChar": 21
+      },
+      "revId": "164db94e1b1e5d0a7beee0980c7b95112f08ce93",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_9225feac",
+        "filename": "basctl/source/inc/bastypes.hxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-04-07T09:00:16Z",
+      "side": 1,
+      "message": "No need for this change: the item is guaranteed to exist inside the method, so just dereference the argument when calling the function",
+      "range": {
+        "startLine": 221,
+        "startChar": 66,
+        "endLine": 221,
+        "endChar": 67
+      },
+      "revId": "164db94e1b1e5d0a7beee0980c7b95112f08ce93",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_522b8682",
+        "filename": "include/sfx2/sfxsids.hrc",
+        "patchSetId": 8
+      },
+      "lineNbr": 557,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-04-07T09:00:16Z",
+      "side": 1,
+      "message": "It\u0027s a mess all around the place how the ids are numbered; so - just to make sure: have you checked that this will not conflict with another ID? (please note that you use *S*ID_SVX_START here, unlike *F*ID_SVX_START in the line above, so quite possibly you will have a number from quite different pool). I\u0027d possibly better use something like SID_SVX_START + 1065 (to match the line 553) - and possibly move this line there as well, to keep SIDs adjacent.",
+      "range": {
+        "startLine": 557,
+        "startChar": 45,
+        "endLine": 557,
+        "endChar": 62
+      },
+      "revId": "164db94e1b1e5d0a7beee0980c7b95112f08ce93",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
