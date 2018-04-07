@@ -26,7 +26,7 @@
 #include "ring.hxx"
 #include "hintids.hxx"
 #include <type_traits>
-#include <list>
+#include <vector>
 #include <memory>
 
 
@@ -265,7 +265,7 @@ namespace sw
             typedef std::unique_ptr<SwDepend> pointer_t;
         #endif
         SwClient& m_rToTell;
-        std::list<pointer_t> m_vDepends;
+        std::vector<pointer_t> m_vDepends;
         public:
             WriterMultiListener(SwClient& rToTell)
                 : m_rToTell(rToTell) {}

@@ -314,10 +314,13 @@ bool sw::WriterMultiListener::IsListeningTo(const SwModify* const pBroadcaster)
 
 void sw::WriterMultiListener::EndListening(SwModify* pBroadcaster)
 {
-    m_vDepends.remove_if( [&pBroadcaster](const pointer_t& pListener)
-        {
-            return pListener->GetRegisteredIn() == nullptr || pListener->GetRegisteredIn() == pBroadcaster;
-        });
+    m_vDepends.erase(
+        std::remove_if( m_vDepends.begin(), m_vDepends.end(),
+            [&pBroadcaster](const pointer_t& pListener)
+            {
+                return pListener->GetRegisteredIn() == nullptr || pListener->GetRegisteredIn() == pBroadcaster;
+            }),
+        m_vDepends.end());
 }
 
 void sw::WriterMultiListener::EndListeningAll()
