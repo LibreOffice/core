@@ -44,6 +44,10 @@ published constants LabelFollow
         /** nothing
          */
         const short NOTHING = 2;
+
+        /** new line
+         */
+        const short NEWLINE = 3;
 };
 
 

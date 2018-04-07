@@ -4138,6 +4138,11 @@ OUString SwTextNode::GetLabelFollowedBy() const
                     return OUString(" ");
                 }
                 break;
+                case SvxNumberFormat::NEWLINE:
+                {
+                    return OUString("\n");
+                }
+                break;
                 case SvxNumberFormat::NOTHING:
                 {
                     // intentionally left blank.

@@ -46,6 +46,9 @@
       <row>
         <col id="0" translatable="yes" context="outlinepositionpage|liststore2">Nothing</col>
       </row>
+      <row>
+        <col id="0" translatable="yes" context="outlinepositionpage|liststore2">New Line</col>
+      </row>
     </data>
   </object>
   <object class="GtkBox" id="OutlinePositionPage">

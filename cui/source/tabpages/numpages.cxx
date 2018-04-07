@@ -2861,6 +2861,10 @@ void SvxNumPositionTabPage::InitControls()
         {
             nPos = 2;
         }
+        else if ( aNumFmtArr[nLvl]->GetLabelFollowedBy() == SvxNumberFormat::NEWLINE )
+        {
+            nPos = 3;
+        }
         m_pLabelFollowedByLB->SelectEntryPos( nPos );
     }
     else
@@ -3322,6 +3326,10 @@ IMPL_LINK_NOARG(SvxNumPositionTabPage, LabelFollowedByHdl_Impl, ListBox&, void)
         else if ( nPos == 2 )
         {
             eLabelFollowedBy = SvxNumberFormat::NOTHING;
+        }
+        else if ( nPos == 3 )
+        {
+            eLabelFollowedBy = SvxNumberFormat::NEWLINE;
         }
     }
 

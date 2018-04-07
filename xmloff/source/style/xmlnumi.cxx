@@ -928,6 +928,8 @@ static const SvXMLTokenMapEntry* lcl_getStyleAlignmentAttributesAttrTokenMap()
     {
         { XML_NAMESPACE_TEXT, XML_LABEL_FOLLOWED_BY,
                 XML_TOK_STYLE_ATTRIBUTES_ATTR_LABEL_FOLLOWED_BY },
+        { XML_NAMESPACE_LO_EXT, XML_LABEL_FOLLOWED_BY,
+                XML_TOK_STYLE_ATTRIBUTES_ATTR_LABEL_FOLLOWED_BY },
         { XML_NAMESPACE_TEXT, XML_LIST_TAB_STOP_POSITION,
                 XML_TOK_STYLE_ATTRIBUTES_ATTR_LISTTAB_STOP_POSITION },
         { XML_NAMESPACE_FO, XML_TEXT_INDENT,
@@ -951,6 +953,7 @@ SvxXMLListLevelStyleLabelAlignmentAttrContext_Impl::SvxXMLListLevelStyleLabelAli
     SvXMLUnitConverter& rUnitConv = GetImport().GetMM100UnitConverter();
 
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
+    sal_Int16 eLabelFollowedBy = LabelFollow::LISTTAB;
     for( sal_Int16 i=0; i < nAttrCount; i++ )
     {
         const OUString& rAttrName = xAttrList->getNameByIndex( i );
@@ -965,12 +968,15 @@ SvxXMLListLevelStyleLabelAlignmentAttrContext_Impl::SvxXMLListLevelStyleLabelAli
         {
         case XML_TOK_STYLE_ATTRIBUTES_ATTR_LABEL_FOLLOWED_BY:
             {
-                sal_Int16 eLabelFollowedBy = LabelFollow::LISTTAB;
+                if( eLabelFollowedBy == LabelFollow::NEWLINE)
+                    //NewLine from LO_EXT has precedence over other values of the Non LO_EXT namespace
+                    break;
                 if( IsXMLToken( rValue, XML_SPACE ) )
                     eLabelFollowedBy = LabelFollow::SPACE;
                 else if( IsXMLToken( rValue, XML_NOTHING ) )
                     eLabelFollowedBy = LabelFollow::NOTHING;
-                rListLevel.SetLabelFollowedBy( eLabelFollowedBy );
+                else if( IsXMLToken( rValue, XML_NEWLINE ) )
+                    eLabelFollowedBy = LabelFollow::NEWLINE;
             }
             break;
         case XML_TOK_STYLE_ATTRIBUTES_ATTR_LISTTAB_STOP_POSITION:
@@ -987,6 +993,7 @@ SvxXMLListLevelStyleLabelAlignmentAttrContext_Impl::SvxXMLListLevelStyleLabelAli
             break;
         }
     }
+    rListLevel.SetLabelFollowedBy( eLabelFollowedBy );
 }
 
 void SvxXMLListStyleContext::SetAttribute( sal_uInt16 nPrefixKey,

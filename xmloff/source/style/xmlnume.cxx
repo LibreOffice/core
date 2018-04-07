@@ -485,6 +485,13 @@ void SvxXMLNumRuleExport::exportLevelStyle( sal_Int32 nLevel,
                 GetExport().AddAttribute( XML_NAMESPACE_TEXT,
                                           XML_LABEL_FOLLOWED_BY, eValue );
 
+                if (eLabelFollowedBy == LabelFollow::NEWLINE)
+                {
+                    eValue = XML_NEWLINE;
+                    GetExport().AddAttribute( XML_NAMESPACE_LO_EXT,
+                                          XML_LABEL_FOLLOWED_BY, eValue );
+                }
+
                 if ( eLabelFollowedBy == LabelFollow::LISTTAB &&
                      nListtabStopPosition > 0 )
                 {
