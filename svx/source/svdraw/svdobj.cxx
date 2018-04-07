@@ -227,7 +227,7 @@ sdr::properties::BaseProperties& SdrObject::GetProperties() const
     if(!mpProperties)
     {
         // CAUTION(!) Do *not* call this during SdrObject construction,
-        // that will lead to wrong type-casts (dependent on costructor-level)
+        // that will lead to wrong type-casts (dependent on constructor-level)
         // and thus eventually create the wrong sdr::properties (!). Is there
         // a way to check if on the stack is a SdrObject-constructor (?)
         const_cast< SdrObject* >(this)->mpProperties.reset(
@@ -444,7 +444,7 @@ void SdrObject::SetPage(SdrPage* pNewPage)
     // good to think about if this is really needed - it *seems* to be intended
     // for a xShape being a on-demand-creatable resource - wit hthe argument that
     // the SdrPage/UnoPage used influences the SvxShape creation. This uses
-    // ressources and would be nice to get rid of anyways.
+    // resources and would be nice to get rid of anyways.
     if (pOldPage != pPage && !(pOldPage && pPage && pOldModel == &getSdrModelFromSdrObject()))
     {
         SvxShape* const pShape(getSvxShape());

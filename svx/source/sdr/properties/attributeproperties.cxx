@@ -236,7 +236,7 @@ namespace sdr
             const bool bHadSfxItemSet(HasSfxItemSet());
 
             // call parent - this will then guarantee
-            // SfxItemSet existance
+            // SfxItemSet existence
             DefaultProperties::GetObjectItemSet();
 
             if(!bHadSfxItemSet)
@@ -247,7 +247,7 @@ namespace sdr
                     // it's creation. See copy-constructor and how it remembers
                     // the SfxStyleSheet there.
                     // It is necessary to reset mpStyleSheet to nullptr to
-                    // not trigger alarm insde ImpAddStyleSheet (!)
+                    // not trigger alarm inside ImpAddStyleSheet (!)
                     SfxStyleSheet* pNew(mpStyleSheet);
                     const_cast< AttributeProperties* >(this)->mpStyleSheet = nullptr;
                     const_cast< AttributeProperties* >(this)->ImpAddStyleSheet(
@@ -355,7 +355,7 @@ namespace sdr
 
         void AttributeProperties::SetStyleSheet(SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHardAttr)
         {
-            // guarantee SfxItemSet existance here
+            // guarantee SfxItemSet existence here
             if(!HasSfxItemSet())
             {
                 GetObjectItemSet();
