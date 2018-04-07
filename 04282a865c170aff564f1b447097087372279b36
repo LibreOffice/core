@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_fd344bdf",
+        "filename": "sw/qa/extras/accessibility/accessible_relation_set.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 191,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2018-04-07T20:29:02Z",
+      "side": 1,
+      "message": "the actual problem is that here you\u0027re using the wrong variable \"set\" instead of \"set2\" - the \"set\" only has 1 relation... unfortunately i didn\u0027t see this back in the day :-/",
+      "revId": "04282a865c170aff564f1b447097087372279b36",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
