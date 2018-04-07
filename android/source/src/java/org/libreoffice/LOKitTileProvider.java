@@ -24,8 +24,6 @@ import org.mozilla.gecko.gfx.CairoImage;
 import org.mozilla.gecko.gfx.IntSize;
 
 import java.io.File;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.nio.ByteBuffer;
 
 /**
@@ -71,12 +69,8 @@ class LOKitTileProvider implements TileProvider {
 
         Log.i(LOGTAG, "====> Loading file '" + input + "'");
         File fileToBeEncoded = new File(input);
-        String encodedFileName = "";
-        try {
-            encodedFileName = URLEncoder.encode(fileToBeEncoded.getName(),"UTF-8").replaceAll("\\+", "%20");
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
+        String encodedFileName = android.net.Uri.encode(fileToBeEncoded.getName());
+
         mDocument = mOffice.documentLoad(
                 (new File(fileToBeEncoded.getParent(),encodedFileName)).getPath()
         );
