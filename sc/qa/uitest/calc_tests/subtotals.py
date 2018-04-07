@@ -147,12 +147,12 @@ class Subtotals(UITestCase):
         self.ui_test.execute_dialog_through_command(".uno:DataSort")
         xDialog = self.xUITest.getTopFocusWindow()
         # 11. Sort key 1->Post Date.
-        sortkey1 = xDialog.getChild("sortlb")
+        sortkey1 = xDialog.getChild("key_1_sortlb")
         props = {"TEXT": "Post Date"}
         actionProps = mkPropertyValues(props)
         sortkey1.executeAction("SELECT", actionProps)
         # 12. Sort key 2->-undefined-
-        sortkey2 = xDialog.getChild("sortuserlb")
+        sortkey2 = xDialog.getChild("key_2_sortuserlb")
         props = {"TEXT": "- undefined -"}
         actionProps = mkPropertyValues(props)
         sortkey2.executeAction("SELECT", actionProps)

@@ -37,6 +37,8 @@ struct ScSortKeyItem : public VclBuilderContainer
     void EnableField();
 
     long getItemHeight() const;
+
+    void set_id_base(const OUString& rIDBase);
 };
 
 typedef std::vector<std::unique_ptr<ScSortKeyItem> > ScSortKeyItems;

@@ -1,0 +1,38 @@
+# -*- tab-width: 4; indent-tabs-mode: nil; py-indent-offset: 4 -*-
+#
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+#
+
+from uitest.framework import UITestCase
+from uitest.uihelper.common import get_state_as_dict
+from libreoffice.uno.propertyvalue import mkPropertyValues
+import time
+
+class tdf114228(UITestCase):
+
+    def test_tdf114228_insert_and_delete_sheet(self):
+
+        self.ui_test.create_doc_in_start_center("calc")
+
+        xCalcDoc = self.xUITest.getTopFocusWindow()
+        xGridWindow = xCalcDoc.getChild("grid_window")
+
+        xGridWindow.executeAction("SELECT", mkPropertyValues({"CELL": "L12"}))
+
+        self.ui_test.execute_dialog_through_command(".uno:Insert")  #insert sheet
+        xDialog = self.xUITest.getTopFocusWindow()
+
+        xOKButton = xDialog.getChild("ok")
+        xOKButton.executeAction("CLICK", tuple())
+
+        self.ui_test.execute_dialog_through_command(".uno:Remove")  #delete sheet
+        xDialog = self.xUITest.getTopFocusWindow()
+        print(xDialog.getChildren())
+        xOKButton = xDialog.getChild("ok")
+        xOKButton.executeAction("CLICK", tuple())
+
+        self.ui_test.close_doc()
+
+# vim: set shiftwidth=4 softtabstop=4 expandtab:
