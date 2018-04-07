@@ -50,6 +50,7 @@
 #include <svx/xflbmtit.hxx>
 #include <svx/svdundo.hxx>
 #include "svdfmtf.hxx"
+#include "svdpdf.hxx"
 #include <svx/sdgcpitm.hxx>
 #include <editeng/eeitem.hxx>
 #include <sdr/properties/graphicproperties.hxx>
