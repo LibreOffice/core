@@ -98,7 +98,7 @@ void X11Clipboard::fireChangedContentsEvent()
     fprintf( stderr, "X11Clipboard::fireChangedContentsEvent for %s (%" SAL_PRI_SIZET "u listeners)\n",
              OUStringToOString( m_xSelectionManager->getString( m_aSelection ), RTL_TEXTENCODING_ISO_8859_1 ).getStr(), m_aListeners.size() );
 #endif
-    ::std::list< Reference< XClipboardListener > > listeners( m_aListeners );
+    ::std::vector< Reference< XClipboardListener > > listeners( m_aListeners );
     aGuard.clear();
 
     ClipboardEvent aEvent( static_cast<OWeakObject*>(this), m_aContents);
@@ -190,7 +190,7 @@ void SAL_CALL X11Clipboard::addClipboardListener( const Reference< XClipboardLis
 void SAL_CALL X11Clipboard::removeClipboardListener( const Reference< XClipboardListener >& listener )
 {
     MutexGuard aGuard( m_xSelectionManager->getMutex() );
-    m_aListeners.remove( listener );
+    m_aListeners.erase( std::remove(m_aListeners.begin(), m_aListeners.end(), listener), m_aListeners.end() );
 }
 
 Reference< XTransferable > X11Clipboard::getTransferable()
