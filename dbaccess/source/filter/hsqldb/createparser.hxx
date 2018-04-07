@@ -28,10 +28,33 @@ protected:
 public:
     CreateStmtParser();
     virtual ~CreateStmtParser() {}
+
+    /**
+     * @return name of the table which is to be created.
+     */
     OUString getTableName() const { return m_sTableName; }
+
+    /**
+     * @return a vector of column descriptors, representing the columns of the
+     * parsed statement.
+     */
     const std::vector<ColumnDefinition>& getColumnDef() const { return m_aColumns; }
+
+    /**
+     * @return a vector of words.
+     */
     const std::vector<OUString>& getForeignParts() const { return m_aForeignParts; }
+
+    /**
+     * Parses a create statement.
+     *
+     * @param SQL "CREATE" statement
+     */
     void parse(const OUString& sSql);
+
+    /**
+     * Recreate the sql statement.
+     */
     virtual OUString compose() const = 0;
 };
 }

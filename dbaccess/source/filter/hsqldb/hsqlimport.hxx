@@ -34,9 +34,20 @@ protected:
                         const std::vector<ColumnDefinition>& rColTypes, const OUString& sTableName);
 
 public:
+    /**
+     * @param rConnection reference to an sdbc connection. The migration will
+     * perform to this connection.
+     *
+     * @param rStorage Storage where the HSQL database can be found. The schema
+     * definition should be in file "script" in form of DDL SQL statements. The
+     * data should be found in file "data". These are HSQLDB's own format.
+     */
     HsqlImporter(css::uno::Reference<css::sdbc::XConnection>& rConnection,
                  const css::uno::Reference<css::embed::XStorage>& rStorage);
 
+    /**
+     * Migrate a HSQL database to another.
+     */
     void importHsqlDatabase();
 };
 }

@@ -26,10 +26,36 @@ private:
     sal_Int32 m_nPos = -1;
 
 public:
+    /**
+     * Represents one element of an AVL tree in the binary file which contains
+     * the data.
+     */
     HsqlBinaryNode(sal_Int32 nPos);
-    void readChildren(HsqlRowInputStream& input);
+
+    /**
+     * Read position of children from data file.
+     *
+     * @param rInput input stream where the positions should be read from.
+     */
+    void readChildren(HsqlRowInputStream& rInput);
+
+    /**
+     * Get Position of left children. It should be called only after position of
+     * children is read.
+     */
     sal_Int32 getLeft() const;
+
+    /**
+     * Get Position of right children. It should be called only after position of
+     * children is read.
+     */
     sal_Int32 getRight() const;
+
+    /**
+     * Read the row represented by this node.
+     *
+     * @param rInput input stream where the row should be read from.
+     */
     std::vector<css::uno::Any> readRow(HsqlRowInputStream& rInput,
                                        const std::vector<ColumnDefinition>& aColTypes);
 };
