@@ -3384,7 +3384,7 @@ private:
         if (m_bPopupActive != bIsShown)
         {
             m_bPopupActive = bIsShown;
-            //restore focus to the entry wieh the popup is gone, which
+            //restore focus to the entry view the popup is gone, which
             //is what the vcl case does, to ease the transition a little
             gtk_widget_grab_focus(m_pWidget);
         }
