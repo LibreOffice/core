@@ -544,8 +544,8 @@ void SwDocStyleSheet::SetGrabBagItem(const uno::Any& rVal)
 
     if (bChg)
     {
-        dynamic_cast<SwDocStyleSheetPool&>(*pPool).InvalidateIterator();
-        pPool->Broadcast(SfxStyleSheetHint(SfxHintId::StyleSheetModified, *this));
+        dynamic_cast<SwDocStyleSheetPool&>(*m_pPool).InvalidateIterator();
+        m_pPool->Broadcast(SfxStyleSheetHint(SfxHintId::StyleSheetModified, *this));
         SwEditShell* pSh = rDoc.GetEditShell();
         if (pSh)
             pSh->CallChgLnk();
@@ -655,8 +655,8 @@ void SwDocStyleSheet::SetHidden( bool bValue )
     if( bChg )
     {
         // calling pPool->First() here would be quite slow...
-        dynamic_cast<SwDocStyleSheetPool&>(*pPool).InvalidateIterator(); // internal list has to be updated
-        pPool->Broadcast( SfxStyleSheetHint( SfxHintId::StyleSheetModified, *this ) );
+        dynamic_cast<SwDocStyleSheetPool&>(*m_pPool).InvalidateIterator(); // internal list has to be updated
+        m_pPool->Broadcast( SfxStyleSheetHint( SfxHintId::StyleSheetModified, *this ) );
         SwEditShell* pSh = rDoc.GetEditShell();
         if( pSh )
             pSh->CallChgLnk();
@@ -846,7 +846,7 @@ OUString  SwDocStyleSheet::GetDescription(MapUnit eUnit)
                     {
                         OUString aItemPresentation;
                         if ( !IsInvalidItem( pItem ) &&
-                             pPool->GetPool().GetPresentation(
+                             m_pPool->GetPool().GetPresentation(
                                 *pItem, eUnit, aItemPresentation, aIntlWrapper ) )
                         {
                             if ( !aDesc.isEmpty() && !aItemPresentation.isEmpty() )
@@ -894,7 +894,7 @@ OUString  SwDocStyleSheet::GetDescription(MapUnit eUnit)
                     {
                         OUString aItemPresentation;
                         if ( !IsInvalidItem( pItem ) &&
-                             pPool->GetPool().GetPresentation(
+                             m_pPool->GetPool().GetPresentation(
                                 *pItem, eUnit, aItemPresentation, aIntlWrapper ) )
                         {
                             bool bIsDefault = false;
@@ -1141,8 +1141,8 @@ bool  SwDocStyleSheet::SetName(const OUString& rStr, bool bReindexNow)
 
     if( bChg )
     {
-        pPool->First();  // internal list has to be updated
-        pPool->Broadcast( SfxStyleSheetHint( SfxHintId::StyleSheetModified, *this ) );
+        m_pPool->First();  // internal list has to be updated
+        m_pPool->Broadcast( SfxStyleSheetHint( SfxHintId::StyleSheetModified, *this ) );
         SwEditShell* pSh = rDoc.GetEditShell();
         if( pSh )
             pSh->CallChgLnk();
@@ -1193,7 +1193,7 @@ bool   SwDocStyleSheet::SetParent( const OUString& rStr)
         if( bRet )
         {
             aParent = rStr;
-            pPool->Broadcast( SfxStyleSheetHint( SfxHintId::StyleSheetModified,
+            m_pPool->Broadcast( SfxStyleSheetHint( SfxHintId::StyleSheetModified,
                             *this ) );
         }
     }
