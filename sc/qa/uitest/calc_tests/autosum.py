@@ -135,6 +135,7 @@ class calcAutosum(UITestCase):
         self.assertEqual(get_cell_by_position(document, 0, 4, 79).getFormula(), "=SUM(B80:D80)")
 
         self.ui_test.close_doc()
+
     def test_autosum_test6(self):
         #6.Subtotal on column with selected empty cell for result
         calc_doc = self.ui_test.load_file(get_url_for_data_file("autosum.ods"))
@@ -149,6 +150,7 @@ class calcAutosum(UITestCase):
         self.assertEqual(get_cell_by_position(document, 0, 2, 100).getFormula(), "=SUBTOTAL(9;C92:C100)")
 
         self.ui_test.close_doc()
+
     def test_autosum_test7(self):
         #7.Autosum on column without selected empty cell for result
         calc_doc = self.ui_test.load_file(get_url_for_data_file("autosum.ods"))
@@ -163,27 +165,28 @@ class calcAutosum(UITestCase):
         self.assertEqual(get_cell_by_position(document, 0, 1, 113).getFormula(), "=SUM(B109:B113)")
 
         self.ui_test.close_doc()
-#multiselect not allowed in uitesting
-#    def test_autosum_test8(self):
-#        #8.Autosum on rows without selected empty cell for result
-#        calc_doc = self.ui_test.load_file(get_url_for_data_file("autosum.ods"))
-#        xCalcDoc = self.xUITest.getTopFocusWindow()
-#        gridwin = xCalcDoc.getChild("grid_window")
-#        document = self.ui_test.get_component()
 
-#        gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "B126:D126"}))
-#        gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "B128:D128"}))
-#        gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "B130:D130"}))
-#        self.xUITest.executeCommand(".uno:AutoSum")
+    def test_autosum_test8(self):
+        #8.Autosum on rows without selected empty cell for result
+        calc_doc = self.ui_test.load_file(get_url_for_data_file("autosum.ods"))
+        xCalcDoc = self.xUITest.getTopFocusWindow()
+        gridwin = xCalcDoc.getChild("grid_window")
+        document = self.ui_test.get_component()
 
-#        self.assertEqual(get_cell_by_position(document, 0, 4, 125).getValue(), 30)
-#        self.assertEqual(get_cell_by_position(document, 0, 4, 125).getFormula(), "=SUM(B126:D126)")
-#        self.assertEqual(get_cell_by_position(document, 0, 4, 127).getValue(), 90)
-#        self.assertEqual(get_cell_by_position(document, 0, 4, 127).getFormula(), "=SUM(B128:D128)")
-#        self.assertEqual(get_cell_by_position(document, 0, 4, 129).getValue(), 150)
-#        self.assertEqual(get_cell_by_position(document, 0, 4, 129).getFormula(), "=SUM(B130:D130)")
+        gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "B126:D126"}))
+        gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "B128:D128", "EXTEND":"1"}))
+        gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "B130:D130", "EXTEND":"1"}))
+        self.xUITest.executeCommand(".uno:AutoSum")
 
-#        self.ui_test.close_doc()
+        self.assertEqual(get_cell_by_position(document, 0, 4, 125).getValue(), 30)
+        self.assertEqual(get_cell_by_position(document, 0, 4, 125).getFormula(), "=SUM(B126:D126)")
+        self.assertEqual(get_cell_by_position(document, 0, 4, 127).getValue(), 90)
+        self.assertEqual(get_cell_by_position(document, 0, 4, 127).getFormula(), "=SUM(B128:D128)")
+        self.assertEqual(get_cell_by_position(document, 0, 4, 129).getValue(), 150)
+        self.assertEqual(get_cell_by_position(document, 0, 4, 129).getFormula(), "=SUM(B130:D130)")
+
+        self.ui_test.close_doc()
+
     def test_autosum_test9(self):
         #9.Subtotal on column without selected empty cell for result
         calc_doc = self.ui_test.load_file(get_url_for_data_file("autosum.ods"))
@@ -198,6 +201,7 @@ class calcAutosum(UITestCase):
         self.assertEqual(get_cell_by_position(document, 0, 2, 150).getFormula(), "=SUBTOTAL(9;C142:C149)")
 
         self.ui_test.close_doc()
+
     def test_autosum_test10(self):
         #10.Autosum on multiselected columns without selected empty cell for result
         calc_doc = self.ui_test.load_file(get_url_for_data_file("autosum.ods"))
@@ -215,6 +219,7 @@ class calcAutosum(UITestCase):
         self.assertEqual(get_cell_by_position(document, 0, 3, 164).getValue(), 150)
         self.assertEqual(get_cell_by_position(document, 0, 3, 164).getFormula(), "=SUM(D160:D164)")
         self.ui_test.close_doc()
+
     def test_autosum_test11(self):
         #11.Autosum on columns with formula results without selected empty cell for result
         calc_doc = self.ui_test.load_file(get_url_for_data_file("autosum.ods"))
@@ -232,6 +237,7 @@ class calcAutosum(UITestCase):
         self.assertEqual(get_cell_by_position(document, 0, 3, 177).getValue(), 5500)
         self.assertEqual(get_cell_by_position(document, 0, 3, 177).getFormula(), "=SUM(D173:D177)")
         self.ui_test.close_doc()
+
     def test_autosum_test12(self):
         #12.Autosum on column with filled cell under selected area
         calc_doc = self.ui_test.load_file(get_url_for_data_file("autosum.ods"))
@@ -249,6 +255,7 @@ class calcAutosum(UITestCase):
         self.assertEqual(get_cell_by_position(document, 0, 3, 191).getValue(), 150)
         self.assertEqual(get_cell_by_position(document, 0, 3, 191).getFormula(), "=SUM(D186:D190)")
         self.ui_test.close_doc()
+
     def test_autosum_test13(self):
         #13.Autosum on column and rows with empty cells selected for row and column
         calc_doc = self.ui_test.load_file(get_url_for_data_file("autosum.ods"))
@@ -278,4 +285,5 @@ class calcAutosum(UITestCase):
         self.assertEqual(get_cell_by_position(document, 0, 4, 206).getValue(), 150)
         self.assertEqual(get_cell_by_position(document, 0, 4, 206).getFormula(), "=SUM(B207:D207)")
         self.ui_test.close_doc()
+
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
