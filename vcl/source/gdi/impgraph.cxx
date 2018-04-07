@@ -121,8 +121,8 @@ ImpGraphic::ImpGraphic(const ImpGraphic& rImpGraphic)
     , mbDummyContext(rImpGraphic.mbDummyContext)
     , maVectorGraphicData(rImpGraphic.maVectorGraphicData)
     , mpPdfData(rImpGraphic.mpPdfData)
-    , mnPageNumber(-1)
     , maGraphicExternalLink(rImpGraphic.maGraphicExternalLink)
+    , mnPageNumber(rImpGraphic.mnPageNumber)
 {
     if( rImpGraphic.mpGfxLink )
         mpGfxLink = o3tl::make_unique<GfxLink>( *rImpGraphic.mpGfxLink );
@@ -148,8 +148,8 @@ ImpGraphic::ImpGraphic(ImpGraphic&& rImpGraphic)
     , mbDummyContext(rImpGraphic.mbDummyContext)
     , maVectorGraphicData(std::move(rImpGraphic.maVectorGraphicData))
     , mpPdfData(std::move(rImpGraphic.mpPdfData))
-    , mnPageNumber(-1)
     , maGraphicExternalLink(rImpGraphic.maGraphicExternalLink)
+    , mnPageNumber(rImpGraphic.mnPageNumber)
 {
     rImpGraphic.ImplClear();
     rImpGraphic.mbDummyContext = false;
@@ -180,7 +180,7 @@ ImpGraphic::ImpGraphic(const VectorGraphicDataPtr& rVectorGraphicDataPtr)
     mnSizeBytes( 0 ),
     mbSwapOut( false ),
     mbDummyContext  ( false ),
-    maVectorGraphicData(rVectorGraphicDataPtr)
+    maVectorGraphicData(rVectorGraphicDataPtr),
     mnPageNumber(-1)
 {
 }
@@ -1612,7 +1612,8 @@ void ReadImpGraphic( SvStream& rIStm, ImpGraphic& rImpGraphic )
                     if (!rImpGraphic.mpPdfData)
                         rImpGraphic.mpPdfData.reset(new uno::Sequence<sal_Int8>());
 
-                    if (vcl::ImportPDF(rIStm, aBitmap, *rImpGraphic.mpPdfData,
+                    if (vcl::ImportPDF(rIStm, aBitmap, rImpGraphic.mnPageNumber,
+                                       *rImpGraphic.mpPdfData,
                                        rIStm.Tell(), nPdfDataLength))
                     {
                         rImpGraphic.maEx = aBitmap;

@@ -30,6 +30,7 @@
 #include <svx/svdoole2.hxx>
 #include <svdglob.hxx>
 #include "svdfmtf.hxx"
+#include "svdpdf.hxx"
 #include <svx/svdetc.hxx>
 #include <sfx2/basedlgs.hxx>
 #include <vcl/msgbox.hxx>
@@ -2033,22 +2034,35 @@ void SdrEditView::DoImportMarkedMtf(SvdProgressInfo *pProgrInfo)
         SdrPageView* pPV=pM->GetPageView();
         SdrObjList*  pOL=pObj->GetObjList();
         const size_t nInsPos=pObj->GetOrdNum()+1;
-        SdrGrafObj*  pGraf= dynamic_cast<SdrGrafObj*>( pObj );
-        SdrOle2Obj*  pOle2= dynamic_cast<SdrOle2Obj*>( pObj );
         sal_uIntPtr        nInsAnz=0;
         tools::Rectangle aLogicRect;
 
-        if (pGraf && (pGraf->HasGDIMetaFile() || pGraf->isEmbeddedVectorGraphicData()))
+        SdrGrafObj*  pGraf = dynamic_cast<SdrGrafObj*>( pObj );
+        if (pGraf != nullptr)
         {
-            GDIMetaFile aMetaFile(GetMetaFile(pGraf));
-            if (aMetaFile.GetActionSize())
+            if (pGraf->HasGDIMetaFile() || pGraf->isEmbeddedVectorGraphicData())
+            {
+                GDIMetaFile aMetaFile(GetMetaFile(pGraf));
+                if (aMetaFile.GetActionSize())
+                {
+                    aLogicRect = pGraf->GetLogicRect();
+                    ImpSdrGDIMetaFileImport aFilter(*mpModel, pObj->GetLayer(), aLogicRect);
+                    nInsAnz = aFilter.DoImport(aMetaFile, *pOL, nInsPos, pProgrInfo);
+                }
+            }
+            else if (pGraf->isEmbeddedPdfData())
             {
                 aLogicRect = pGraf->GetLogicRect();
-                ImpSdrGDIMetaFileImport aFilter(*mpModel, pObj->GetLayer(), aLogicRect);
-                nInsAnz = aFilter.DoImport(aMetaFile, *pOL, nInsPos, pProgrInfo);
+                ImpSdrPdfImport aFilter(*mpModel, pObj->GetLayer(), aLogicRect, pGraf->getEmbeddedPdfData());
+                if (pGraf->getEmbeddedPageNumber() < aFilter.GetPageCount())
+                {
+                    nInsAnz = aFilter.DoImport(*pOL, nInsPos, pGraf->getEmbeddedPageNumber(), pProgrInfo);
+                }
+
             }
         }
 
+        SdrOle2Obj* pOle2 = dynamic_cast<SdrOle2Obj*>(pObj);
         if (pOle2 != nullptr && pOle2->GetGraphic())
         {
             aLogicRect = pOle2->GetLogicRect();
