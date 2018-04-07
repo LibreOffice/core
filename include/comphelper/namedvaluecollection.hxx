@@ -57,7 +57,7 @@ namespace comphelper
 
         /** constructs a collection
             @param  _rElements
-                the wrapped elements of the collection. The <code>Any</code> might contain a sequence of
+                the wrapped elements of the collection. The @c Any might contain a sequence of
                 property values, a sequence of named values, or directly a property value or named value.
                 All other cases are worth an assertion in non-product builds.
         */
@@ -96,8 +96,8 @@ namespace comphelper
         /** determines whether or not named values can be extracted from the given value
 
             @return
-                <TRUE/> if and only if the given <code>Any</code> contains a <code>NamedValue</code>, a
-                <code>PropertyValue</code>, or a sequence thereof.
+                true if and only if the given @c Any contains a @c NamedValue, a
+                @c PropertyValue, or a sequence thereof.
         */
         static bool canExtractFrom( css::uno::Any const & i_value );
 
@@ -112,13 +112,13 @@ namespace comphelper
         ::std::vector< OUString >
                 getNames() const;
 
-        /** merges the content of another collection into |this|
+        /** merges the content of another collection into @c this
             @param _rAdditionalValues
                 the collection whose values are to be merged
             @param _bOverwriteExisting
-                defines whether or not elements which are already present in |this|
-                should be overwritten (<TRUE/>) or preserved (<FALSE/>).
-            @return |*this|
+                defines whether or not elements which are already present in @c this
+                should be overwritten (true) or preserved (false).
+            @return @c *this
         */
         NamedValueCollection&
                 merge(
@@ -136,11 +136,13 @@ namespace comphelper
                 a value with the given name is not present in the collection, or if a wrong-typed
                 value is present, then this parameter will not be touched.
 
-            @return
-                <TRUE/> if there is a value with the given name, which could successfully
-                be extraced. In this case, <arg>_out_rValue</arg> will contain the requested
-                value.<br/>
-                <FALSE/>, if there is no value with the given name.
+            @retval
+                true if there is a value with the given name, which could successfully
+                be extraced. In this case, @c _out_rValue will contain the requested
+                value.
+            @retval
+                false, if there is no value with the given name.
+
             @throws IllegalArgumentException
                 in case there is a value with the given name, but it cannot legally assigned to
                 _out_rValue.
@@ -208,7 +210,7 @@ namespace comphelper
 
         /** puts a value into the collection
 
-            @return <TRUE/> if and only if a value was already present previously, in
+            @return true if and only if a value was already present previously, in
                 which case it has been overwritten.
         */
         template < typename VALUE_TYPE >
@@ -219,7 +221,7 @@ namespace comphelper
 
         /** puts a value into the collection
 
-            @return <TRUE/> if and only if a value was already present previously, in
+            @return true if and only if a value was already present previously, in
                 which case it has been overwritten.
         */
         template < typename VALUE_TYPE >
@@ -240,7 +242,7 @@ namespace comphelper
 
         /** removes the value with the given name from the collection
 
-            @return <TRUE/> if and only if a value with the given name existed in the collection.
+            @return true if and only if a value with the given name existed in the collection.
         */
         bool remove( const sal_Char* _pAsciiValueName )
         {
@@ -249,7 +251,7 @@ namespace comphelper
 
         /** removes the value with the given name from the collection
 
-            @return <TRUE/> if and only if a value with the given name existed in the collection.
+            @return true if and only if a value with the given name existed in the collection.
         */
         bool remove( const OUString& _rValueName )
         {
@@ -259,14 +261,14 @@ namespace comphelper
         /** transforms the collection to a sequence of PropertyValues
 
             @return
-                the  number of elements in the sequence
+                the number of elements in the sequence
         */
         sal_Int32 operator >>= ( css::uno::Sequence< css::beans::PropertyValue >& _out_rValues ) const;
 
         /** transforms the collection to a sequence of NamedValues
 
             @return
-                the  number of elements in the sequence
+                the number of elements in the sequence
         */
         sal_Int32 operator >>= ( css::uno::Sequence< css::beans::NamedValue >& _out_rValues ) const;
 
