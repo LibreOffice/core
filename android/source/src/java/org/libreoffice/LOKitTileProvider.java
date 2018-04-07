@@ -467,8 +467,13 @@ class LOKitTileProvider implements TileProvider {
         if (mDocument != null)
             mDocument.paintTile(buffer, widthPixel, heightPixel, 0, 0, (int) mWidthTwip, (int) mHeightTwip);
 
-        Bitmap bitmap = Bitmap.createBitmap(widthPixel, heightPixel, Bitmap.Config.ARGB_8888);
-        bitmap.copyPixelsFromBuffer(buffer);
+        Bitmap bitmap = null;
+        try {
+            bitmap = Bitmap.createBitmap(widthPixel, heightPixel, Bitmap.Config.ARGB_8888);
+            bitmap.copyPixelsFromBuffer(buffer);
+        } catch (IllegalArgumentException e) {
+            Log.e(LOGTAG, "width (" + widthPixel + ") and height (" + heightPixel + ") must not be 0! (ToDo: likely timing issue)");
+        }
         if (bitmap == null) {
             Log.w(LOGTAG, "Thumbnail not created!");
         }
