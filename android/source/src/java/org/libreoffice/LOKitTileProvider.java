@@ -73,7 +73,7 @@ class LOKitTileProvider implements TileProvider {
         File fileToBeEncoded = new File(input);
         String encodedFileName = "";
         try {
-            encodedFileName = URLEncoder.encode(fileToBeEncoded.getName(),"UTF-8");
+            encodedFileName = URLEncoder.encode(fileToBeEncoded.getName(),"UTF-8").replaceAll("\\+", "%20");
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
