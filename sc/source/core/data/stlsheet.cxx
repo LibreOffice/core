@@ -93,10 +93,10 @@ bool ScStyleSheet::SetParent( const OUString& rParentName )
 {
     bool bResult = false;
     OUString aEffName = rParentName;
-    SfxStyleSheetBase* pStyle = pPool->Find( aEffName, nFamily );
+    SfxStyleSheetBase* pStyle = m_pPool->Find( aEffName, nFamily );
     if (!pStyle)
     {
-        std::shared_ptr<SfxStyleSheetIterator> pIter = pPool->CreateIterator( nFamily, SFXSTYLEBIT_ALL );
+        std::shared_ptr<SfxStyleSheetIterator> pIter = m_pPool->CreateIterator( nFamily, SFXSTYLEBIT_ALL );
         pStyle = pIter->First();
         if (pStyle)
             aEffName = pStyle->GetName();
@@ -258,7 +258,7 @@ bool ScStyleSheet::IsUsed() const
     {
         // Always query the document to let it decide if a rescan is necessary,
         // and store the state.
-        ScDocument* pDoc = static_cast<ScStyleSheetPool*>(pPool)->GetDocument();
+        ScDocument* pDoc = static_cast<ScStyleSheetPool*>(m_pPool)->GetDocument();
         if ( pDoc && pDoc->IsStyleSheetUsed( *this ) )
             eUsage = USED;
         else
