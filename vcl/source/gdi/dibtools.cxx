@@ -1795,6 +1795,22 @@ bool ReadDIBV5(
     return ImplReadDIB(rTarget, &rTargetAlpha, rIStm, true);
 }
 
+bool ReadRawDIB(
+    Bitmap& rTarget,
+    const unsigned char* pBuf,
+    const ScanlineFormat nFormat,
+    const int nHeight,
+    const int nStride)
+{
+    Bitmap::ScopedWriteAccess pWriteAccess(rTarget.AcquireWriteAccess(), rTarget);
+    for (int nRow = 0; nRow < nHeight; ++nRow)
+    {
+        pWriteAccess->CopyScanline(nRow, pBuf + (nStride * nRow), nFormat, nStride);
+    }
+
+    return true;
+}
+
 bool WriteDIB(
     const Bitmap& rSource,
     SvStream& rOStm,

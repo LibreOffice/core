@@ -77,7 +77,6 @@
 #include <basegfx/polygon/b2dpolygonclipper.hxx>
 #include <svx/xbtmpit.hxx>
 #include <svx/xfltrit.hxx>
-#include <vcl/bitmapaccess.hxx>
 #include <svx/xflbmtit.hxx>
 #include <svx/xflbstit.hxx>
 #include <svx/svdpntv.hxx>
@@ -85,7 +84,13 @@
 #include <svx/svditer.hxx>
 #include <svx/svdogrp.hxx>
 #include <vcl/BitmapTools.hxx>
+#include <vcl/dibtools.hxx>
 #include <com/sun/star/geometry/Matrix2D.hpp>
+
+struct FPDFBitmapDeleter
+{
+    inline void operator()(FPDF_BITMAP bitmap) { FPDFBitmap_Destroy(bitmap); }
+};
 
 using namespace com::sun::star;
 
@@ -210,8 +215,82 @@ void ImpSdrPdfImport::DoLoopActions(SvdProgressInfo* pProgrInfo, sal_uInt32* pAc
                     SAL_WARN("sd.filter", "Got page object PATH");
                     break;
                 case FPDF_PAGEOBJ_IMAGE:
+                {
                     SAL_WARN("sd.filter", "Got page object IMAGE");
-                    break;
+                    std::unique_ptr<void, FPDFBitmapDeleter> bitmap(
+                        FPDFImageObj_GetBitmap(pPageObject));
+                    if (!bitmap)
+                    {
+                        SAL_WARN("sd.filter", "Failed to get IMAGE");
+                        continue;
+                    }
+
+                    const int format = FPDFBitmap_GetFormat(bitmap.get());
+                    if (format == FPDFBitmap_Unknown)
+                    {
+                        SAL_WARN("sd.filter", "Failed to get IMAGE format");
+                        continue;
+                    }
+
+                    const unsigned char* pBuf
+                        = static_cast<const unsigned char*>(FPDFBitmap_GetBuffer(bitmap.get()));
+                    const int nWidth = FPDFBitmap_GetWidth(bitmap.get());
+                    const int nHeight = FPDFBitmap_GetHeight(bitmap.get());
+                    const int nStride = FPDFBitmap_GetStride(bitmap.get());
+                    Bitmap aBitmap(Size(nWidth, nHeight), 24);
+
+                    switch (format)
+                    {
+                        case FPDFBitmap_Gray:
+                            SAL_WARN("sd.filter", "Got IMAGE width: " << nWidth
+                                                                      << ", height: " << nHeight
+                                                                      << ", stride: " << nStride
+                                                                      << ", format: Gray");
+                            ReadRawDIB(aBitmap, pBuf, ScanlineFormat::N8BitTcMask, nHeight,
+                                       nStride);
+                            break;
+                        case FPDFBitmap_BGR:
+                            SAL_WARN("sd.filter", "Got IMAGE width: " << nWidth
+                                                                      << ", height: " << nHeight
+                                                                      << ", stride: " << nStride
+                                                                      << ", format: BGR");
+                            ReadRawDIB(aBitmap, pBuf, ScanlineFormat::N24BitTcBgr, nHeight,
+                                       nStride);
+                            break;
+                        case FPDFBitmap_BGRx:
+                            SAL_WARN("sd.filter", "Got IMAGE width: " << nWidth
+                                                                      << ", height: " << nHeight
+                                                                      << ", stride: " << nStride
+                                                                      << ", format: BGRx");
+                            ReadRawDIB(aBitmap, pBuf, ScanlineFormat::N32BitTcBgra, nHeight,
+                                       nStride);
+                            break;
+                        case FPDFBitmap_BGRA:
+                            SAL_WARN("sd.filter", "Got IMAGE width: " << nWidth
+                                                                      << ", height: " << nHeight
+                                                                      << ", stride: " << nStride
+                                                                      << ", format: BGRA");
+                            ReadRawDIB(aBitmap, pBuf, ScanlineFormat::N32BitTcBgra, nHeight,
+                                       nStride);
+                            break;
+                        default:
+                            SAL_WARN("sd.filter", "Got IMAGE width: " << nWidth
+                                                                      << ", height: " << nHeight
+                                                                      << ", stride: " << nStride
+                                                                      << ", format: " << format);
+                            break;
+                    }
+
+                    Rectangle aRect(Point(0, 0), Size(nWidth, nHeight));
+                    // aRect.AdjustRight( 1 ); aRect.AdjustBottom( 1 );
+                    SdrGrafObj* pGraf = new SdrGrafObj(Graphic(aBitmap), aRect);
+
+                    // This action is not creating line and fill, set directly, do not use SetAttributes(..)
+                    pGraf->SetMergedItem(XLineStyleItem(drawing::LineStyle_NONE));
+                    pGraf->SetMergedItem(XFillStyleItem(drawing::FillStyle_NONE));
+                    InsertObj(pGraf);
+                }
+                break;
                 case FPDF_PAGEOBJ_SHADING:
                     SAL_WARN("sd.filter", "Got page object SHADING");
                     break;
