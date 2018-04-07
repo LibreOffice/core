@@ -179,7 +179,7 @@ bool SdStyleSheet::SetParent(const OUString& rParentName)
         {
             if( !rParentName.isEmpty() )
             {
-                SfxStyleSheetBase* pStyle = pPool->Find(rParentName, nFamily);
+                SfxStyleSheetBase* pStyle = m_pPool->Find(rParentName, nFamily);
                 if (pStyle)
                 {
                     bResult = true;
@@ -333,7 +333,7 @@ SdStyleSheet* SdStyleSheet::GetRealStyleSheet() const
     OUString aRealStyle;
     OUString aSep( SD_LT_SEPARATOR );
     SdStyleSheet* pRealStyle = nullptr;
-    SdDrawDocument* pDoc = static_cast<SdStyleSheetPool*>(pPool)->GetDoc();
+    SdDrawDocument* pDoc = static_cast<SdStyleSheetPool*>(m_pPool)->GetDoc();
 
     ::sd::DrawViewShell* pDrawViewShell = nullptr;
 
@@ -367,7 +367,7 @@ SdStyleSheet* SdStyleSheet::GetRealStyleSheet() const
         {
             /* no page available yet. This can happen when actualizing the
                document templates.  */
-            SfxStyleSheetIterator aIter(pPool, SfxStyleFamily::Page);
+            SfxStyleSheetIterator aIter(m_pPool, SfxStyleFamily::Page);
             SfxStyleSheetBase* pSheet = aIter.First();
             if( pSheet )
                 aRealStyle = pSheet->GetName();
@@ -417,12 +417,12 @@ SdStyleSheet* SdStyleSheet::GetRealStyleSheet() const
     }
 
     aRealStyle += aInternalName;
-    pRealStyle = static_cast< SdStyleSheet* >( pPool->Find(aRealStyle, SfxStyleFamily::Page) );
+    pRealStyle = static_cast< SdStyleSheet* >( m_pPool->Find(aRealStyle, SfxStyleFamily::Page) );
 
 #ifdef DBG_UTIL
     if( !pRealStyle )
     {
-        SfxStyleSheetIterator aIter(pPool, SfxStyleFamily::Page);
+        SfxStyleSheetIterator aIter(m_pPool, SfxStyleFamily::Page);
         if( aIter.Count() > 0 )
             // StyleSheet not found, but pool already loaded
             DBG_ASSERT(pRealStyle, "Internal StyleSheet not found");
@@ -479,7 +479,7 @@ SdStyleSheet* SdStyleSheet::GetPseudoStyleSheet() const
         }
     }
 
-    pPseudoStyle = static_cast<SdStyleSheet*>(pPool->Find(aStyleName, SfxStyleFamily::Pseudo));
+    pPseudoStyle = static_cast<SdStyleSheet*>(m_pPool->Find(aStyleName, SfxStyleFamily::Pseudo));
     DBG_ASSERT(pPseudoStyle, "PseudoStyleSheet missing");
 
     return pPseudoStyle;
@@ -735,7 +735,7 @@ void SdStyleSheet::disposing()
         delete pSet;
     }
     pSet = nullptr;
-    pPool = nullptr;
+    m_pPool = nullptr;
     mxPool.clear();
 }
 
