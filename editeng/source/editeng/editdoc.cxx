@@ -2278,7 +2278,7 @@ EditPaM EditDoc::InsertParaBreak( EditPaM aPaM, bool bKeepEndingAttribs )
         OUString aFollow( pStyle->GetFollow() );
         if ( !aFollow.isEmpty() && ( aFollow != pStyle->GetName() ) )
         {
-            SfxStyleSheetBase* pNext = pStyle->GetPool().Find( aFollow, pStyle->GetFamily() );
+            SfxStyleSheetBase* pNext = pStyle->GetPool()->Find( aFollow, pStyle->GetFamily() );
             pNode->SetStyleSheet( static_cast<SfxStyleSheet*>(pNext) );
         }
     }

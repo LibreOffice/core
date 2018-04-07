@@ -464,7 +464,7 @@ SwDocStyleSheet::SwDocStyleSheet(   SwDoc&                rDocument,
     pBoxFormat(nullptr),
     rDoc(rDocument),
     aCoreSet(
-        GetPool().GetPool(),
+        GetPool()->GetPool(),
         svl::Items<
             RES_CHRATR_BEGIN, RES_CHRATR_END - 1,
             RES_PARATR_BEGIN, RES_FRMATR_END - 1,
@@ -2651,7 +2651,7 @@ SwStyleSheetIterator::SwStyleSheetIterator( SwDocStyleSheetPool* pBase,
 
 SwStyleSheetIterator::~SwStyleSheetIterator()
 {
-    EndListening( mxIterSheet->GetPool() );
+    EndListening( *mxIterSheet->GetPool() );
 }
 
 sal_uInt16  SwStyleSheetIterator::Count()

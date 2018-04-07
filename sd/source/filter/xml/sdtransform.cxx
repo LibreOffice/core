@@ -146,7 +146,7 @@ void SdTransformOOo2xDocument::transformStyle( SfxStyleSheetBase& rSheet )
     SfxItemSet& rSet = rSheet.GetItemSet();
 
     bool bState = false;
-    getBulletState( rSheet.GetItemSet(), rSheet.GetPool().Find( rSheet.GetParent(), rSheet.GetFamily() ), bState );
+    getBulletState( rSheet.GetItemSet(), rSheet.GetPool()->Find( rSheet.GetParent(), rSheet.GetFamily() ), bState );
 
     transformItemSet( rSet, bState );
     removeAlienAttributes( rSet );
@@ -266,7 +266,7 @@ bool SdTransformOOo2xDocument::getBulletState( const SfxItemSet& rSet, SfxStyleS
     if( getBulletState( rSet, SDRATTR_XMLATTRIBUTES, rState ) )
         return true;
 
-    if( pSheet && getBulletState( pSheet->GetItemSet(), pSheet->GetPool().Find( pSheet->GetParent(), pSheet->GetFamily() ), rState ) )
+    if( pSheet && getBulletState( pSheet->GetItemSet(), pSheet->GetPool()->Find( pSheet->GetParent(), pSheet->GetFamily() ), rState ) )
         return true;
 
     return false;
