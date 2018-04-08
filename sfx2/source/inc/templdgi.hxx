@@ -183,12 +183,12 @@ protected:
     std::unique_ptr<SfxStyleFamilies> pStyleFamilies;
     std::array<std::unique_ptr<SfxTemplateItem>, MAX_FAMILIES> pFamilyState;
     SfxStyleSheetBasePool* pStyleSheetPool;
-    VclPtr<StyleTreeListBox_Impl> pTreeBox;
     SfxObjectShell* pCurObjShell;
     css::uno::Reference<css::frame::XModuleManager2> xModuleManager;
     DeletionWatcher* m_pDeletionWatcher;
 
     VclPtr<SfxActionListBox> aFmtLb;
+    VclPtr<StyleTreeListBox_Impl> pTreeBox;
     VclPtr<CheckBox> aPreviewCheckbox;
     VclPtr<ListBox> aFilterLb;
 
