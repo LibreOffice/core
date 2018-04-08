@@ -39,7 +39,7 @@ public:
     */
     static void ShowPanel (
         const OUString& rsPanelId,
-        const css::uno::Reference<css::frame::XFrame>& rxFrame);
+        const css::uno::Reference<css::frame::XFrame>& rxFrame, bool bFocus = false);
 
     /** Switch to the deck that contains the specified panel and toggle
         the visibility of the panel (expanded and scrolled into the
