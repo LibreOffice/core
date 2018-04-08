@@ -142,7 +142,7 @@ public class UrlResolver {
     {
         XSingleServiceFactory xSingleServiceFactory = null;
 
-          if (implName.equals(UrlResolver.class.getName()) )
+        if (implName.equals(UrlResolver.class.getName()) )
             xSingleServiceFactory = FactoryHelper.getServiceFactory(_UrlResolver.class,
                                                                     _UrlResolver.__serviceName,
                                                                     multiFactory,

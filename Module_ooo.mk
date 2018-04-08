@@ -54,6 +54,7 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
     idl \
     io \
     javaunohelper \
+    jurt \
     jvmaccess \
     lingucomponent \
     linguistic \

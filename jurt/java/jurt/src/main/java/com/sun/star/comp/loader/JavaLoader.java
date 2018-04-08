@@ -320,7 +320,7 @@ public class JavaLoader implements XImplementationLoader,
         Method compfac_method = null;
         try
         {
-             compfac_method = clazz.getMethod(
+            compfac_method = clazz.getMethod(
                 "__getComponentFactory", new Class [] { String.class } );
         }
         catch ( NoSuchMethodException noSuchMethodEx) {}
@@ -429,7 +429,7 @@ public class JavaLoader implements XImplementationLoader,
         }
         catch (Exception e) {
             throw new CannotRegisterImplementationException( e.getMessage());
-         }
+        }
 
         return success;
     }

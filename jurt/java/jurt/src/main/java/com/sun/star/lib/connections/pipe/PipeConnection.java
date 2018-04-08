@@ -90,7 +90,7 @@ public class PipeConnection implements XConnection, XConnectionBroadcaster {
             if ( !aPipeNameParam.substring( 0, 5 ).equals( "name=" ) )
                 throw new RuntimeException( "invalid pipe descriptor: no 'name=' parameter found" );
             aPipeName = aPipeNameParam.substring( 5 );
-             }
+            }
         else
             throw new RuntimeException( "invalid or empty pipe descriptor" );
 
@@ -218,7 +218,7 @@ public class PipeConnection implements XConnection, XConnectionBroadcaster {
      * Gives a description of the connection.
      * <p>
      * @return  the description
-      * @see       com.sun.star.connections.XConnection#getDescription
+     * @see       com.sun.star.connections.XConnection#getDescription
      */
     public String getDescription() throws com.sun.star.uno.RuntimeException {
         return _aDescription;

@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--***********************************************************
+ *
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ *
+ ***********************************************************-->
+
+
+<project name="aoo-ant" default="main" xmlns:if="ant:if" xmlns:unless="ant:unless">
+
+    <!-- ================================================================= -->
+    <!-- settings                                                          -->
+    <!-- ================================================================= -->
+
+    <dirname property="aoo-ant.basedir" file="${ant.file.aoo-ant}"/>
+
+    <!-- global properties -->
+    <property file="${aoo-ant.basedir}/../../ant.properties"/>
+    <!-- RSCREVISION: -->
+    <property file="${aoo-ant.basedir}/../inc/minor.mk"/>
+
+    <property name="build.base.dir" location="${WORKDIR}/Ant/${ant.project.name}"/>
+    <property name="main.src.dir" location="src/main/java"/>
+    <property name="main.build.dir" location="${build.base.dir}/main"/>
+    <property name="test.src.dir" location="src/test/java"/>
+    <property name="test.build.dir" location="${build.base.dir}/test"/>
+    <property name="test.reports.dir" location="${build.base.dir}/test-reports"/>
+    <property name="jar.dir" location="${WORKDIR}/Ant"/>
+
+    <property name="main.debug" value="true"/>
+    <property name="main.deprecation" value="false"/>
+    <property name="test.debug" value="true"/>
+    <property name="test.deprecation" value="false"/>
+
+    <import file="${aoo-ant.basedir}/externals.xml"/>
+    <import file="${aoo-ant.basedir}/idl.xml"/>
+
+    <target name="init-project"/>
+
+    <target name="prepare" depends="init-project">
+        <property name="jar.enabled" value="true"/>
+        <property name="jar.name" value="${ant.project.name}"/>
+        <property name="jar.classpath" value=""/>
+        <property name="jar.manifest" value ="${aoo-ant.basedir}/manifest.empty"/>
+
+        <local name="has.main.classpath"/>
+        <condition property="has.main.classpath">
+            <isreference refid="main.classpath"/>
+        </condition>
+        <path id="main.classpath" unless:set="has.main.classpath"/>
+
+        <local name="has.test.classpath"/>
+        <condition property="has.test.classpath">
+            <isreference refid="test.classpath"/>
+        </condition>
+        <path id="internal.test.classpath">
+            <pathelement location="${main.build.dir}"/>
+            <pathelement location="${test.build.dir}"/>
+            <path refid="main.classpath"/>
+            <path refid="test.classpath" if:set="has.test.classpath"/>
+            <pathelement location="${idl.classes.build.dir}"/>
+            <pathelement location="${OOO_JUNIT_JAR}"/>
+        </path>
+
+        <local name="has.idl.files"/>
+        <condition property="has.idl.files">
+            <isreference refid="idl.files"/>
+        </condition>
+        <filelist id="idl.files" unless:set="has.idl.files">
+            <filelist refid="idl.files"/>
+        </filelist>
+    </target>
+
+    <target name="res" depends="prepare">
+        <mkdir dir="${main.build.dir}"/>
+        <copy todir="${main.build.dir}">
+             <fileset dir="${main.src.dir}">
+                 <include name="**/*.properties"/>
+                 <include name="**/*.css"/>
+                 <include name="**/*.dtd"/>
+                 <include name="**/*.form"/>
+                 <include name="**/*.gif "/>
+                 <include name="**/*.htm"/>
+                 <include name="**/*.html"/>
+                 <include name="**/*.js"/>
+                 <include name="**/*.mod"/>
+                 <include name="**/*.sql"/>
+                 <include name="**/*.xml"/>
+                 <include name="**/*.xsl"/>
+                 <include name="**/*.map"/>
+             </fileset>
+        </copy>
+    </target>
+
+    <target name="compile" depends="prepare,res">
+        <mkdir dir="${main.build.dir}"/>
+        <javac srcdir="${main.src.dir}"
+               destdir="${main.build.dir}"
+               debug="${main.debug}"
+               debuglevel="lines,vars,source"
+               deprecation="${main.deprecation}"
+               classpathref="main.classpath"
+               includeantruntime="false"/>
+    </target>
+
+    <target name="test-compile" depends="compile,idl">
+        <property property="test.skip" value="true" if:blank="${OOO_JUNIT_JAR}"/>
+        <echo message="No junit, skipping tests" if:blank="${OOO_JUNIT_JAR}"/>
+
+        <mkdir dir="${test.build.dir}" unless:blank="${OOO_JUNIT_JAR}"/>
+        <javac srcdir="${test.src.dir}"
+               destdir="${test.build.dir}"
+               debug="${test.debug}"
+               debuglevel="lines,vars,source"
+               deprecation="${test.deprecation}"
+               classpathref="internal.test.classpath"
+               includeantruntime="false"
+               unless:blank="${OOO_JUNIT_JAR}"/>
+    </target>
+
+    <!-- fork="true" is sadly necessary on Ubuntu due to multiple versions of junit confusing Ant,
+         see https://github.com/real-logic/simple-binary-encoding/issues/96 -->
+    <target name="test" depends="test-compile" unless:set="${test.skip}">
+        <mkdir dir="${test.reports.dir}"/>
+        <junit printsummary="yes" haltonfailure="yes" showoutput="true" filtertrace="false" fork="true">
+            <classpath refid="internal.test.classpath"/>
+            <formatter type="plain"/>
+            <batchtest todir="${test.reports.dir}">
+                <fileset dir="${test.src.dir}">
+                    <include name="**/*_Test.java"/>
+                </fileset>
+            </batchtest>
+        </junit>
+    </target>
+
+    <target name="jar" depends="compile" if="${jar.enabled}">
+        <jar destfile="${jar.dir}/${jar.name}.jar"
+             basedir="${main.build.dir}"
+             manifest="${jar.manifest}">
+            <manifest>
+                <attribute name="Class-Path" value="${jar.classpath}" unless:blank="${jar.classpath}"/>
+                <attribute name="Solar-Version" value="${RSCREVISION}"/>
+            </manifest>
+            <include name="**/*.class"/>
+            <include name="**/*.properties"/>
+            <include name="**/*.css"/>
+            <include name="**/*.dtd"/>
+            <include name="**/*.form"/>
+            <include name="**/*.gif "/>
+            <include name="**/*.htm"/>
+            <include name="**/*.html"/>
+            <include name="**/*.js"/>
+            <include name="**/*.mod"/>
+            <include name="**/*.sql"/>
+            <include name="**/*.xml"/>
+            <include name="**/*.xsl"/>
+            <include name="**/*.map"/>
+        </jar>
+    </target>
+
+    <target name="clean" depends="prepare">
+        <delete dir="${build.base.dir}"/>
+        <delete file="${jar.dir}/${jar.name}.jar"/>
+    </target>
+
+    <target name="main" depends="test,jar"/>
+
+</project>
+

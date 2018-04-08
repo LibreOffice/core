@@ -254,6 +254,7 @@ include $(foreach class, \
 	CustomTarget \
 	PrecompiledHeaders \
 	GoogleTest \
+	Ant \
 	Jar \
 	JavaClassSet \
 	JunitTest \

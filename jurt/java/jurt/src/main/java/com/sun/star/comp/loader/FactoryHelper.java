@@ -340,7 +340,7 @@ public class FactoryHelper {
             return createInstanceWithContext( null );
         }
 
-         /**
+        /**
          * Creates an instance of the desired service.
          * <p>
          * @return  returns an instance of the desired service
@@ -354,7 +354,7 @@ public class FactoryHelper {
             return createInstanceWithArgumentsAndContext( args, null );
         }
 
-         /**
+        /**
          * Gives the supported services
          * <p>
          * @return  returns an array of supported services
@@ -364,7 +364,7 @@ public class FactoryHelper {
             return new String[]{_serviceName};
         }
 
-         /**
+        /**
          * Gives the implementation name
          * <p>
          * @return  returns the implementation name
@@ -374,7 +374,7 @@ public class FactoryHelper {
             return _implName;
         }
 
-         /**
+        /**
          * Indicates if the given service is supported.
          * <p>
          * @return  returns true if the given service is supported
@@ -507,16 +507,16 @@ public class FactoryHelper {
     static public boolean writeRegistryServiceInfo(String implName, String serviceName, XRegistryKey regKey) {
         boolean result = false;
 
-          try {
+        try {
             XRegistryKey newKey = regKey.createKey("/" + implName + "/UNO/SERVICES");
 
             newKey.createKey(serviceName);
 
             result = true;
-          }
-          catch (Exception ex) {
-              System.err.println(">>>Connection_Impl.writeRegistryServiceInfo " + ex);
-          }
+        }
+        catch (Exception ex) {
+            System.err.println(">>>Connection_Impl.writeRegistryServiceInfo " + ex);
+        }
 
         return result;
     }
@@ -532,7 +532,7 @@ public class FactoryHelper {
     public static boolean writeRegistryServiceInfo(
         String impl_name, String supported_services [], XRegistryKey xKey )
     {
-          try
+        try
         {
             XRegistryKey xNewKey = xKey.createKey( "/" + impl_name + "/UNO/SERVICES" );
             for ( int nPos = 0; nPos < supported_services.length; ++nPos )
@@ -540,8 +540,8 @@ public class FactoryHelper {
                 xNewKey.createKey( supported_services[ nPos ] );
             }
             return true;
-          }
-          catch (com.sun.star.registry.InvalidRegistryException exc)
+        }
+        catch (com.sun.star.registry.InvalidRegistryException exc)
         {
             if (DEBUG)
             {
@@ -549,7 +549,7 @@ public class FactoryHelper {
                     "##### " + Factory.class.getName() + ".writeRegistryServiceInfo -- exc: " +
                     exc.toString() );
             }
-          }
+        }
         return false;
     }
 

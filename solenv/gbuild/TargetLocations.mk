@@ -45,6 +45,7 @@ endef
 # workdir target patterns
 
 gb_AllLangResTarget_get_target = $(WORKDIR)/AllLangRes/$(1)
+gb_Ant_get_target = $(WORKDIR)/Ant/$(1).jar
 gb_CObject_get_target = $(WORKDIR)/CObject/$(1).o
 gb_ComponentTarget_get_target = $(WORKDIR)/ComponentTarget/$(1).component
 gb_ComponentTarget_get_inbuild_target = $(WORKDIR)/ComponentTarget/$(1).inbuild.component
@@ -109,6 +110,7 @@ endef
 
 $(eval $(call gb_Helper_make_clean_targets,\
 	AllLangResTarget \
+	Ant \
 	ComponentTarget \
 	JavaClassSet \
 	Jar \

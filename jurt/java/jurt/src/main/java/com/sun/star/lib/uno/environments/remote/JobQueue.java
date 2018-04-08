@@ -87,7 +87,7 @@ public class JobQueue {
             if(DEBUG) System.err.println("ThreadPool$JobDispatcher.run: " + Thread.currentThread());
 
             try {
-                  enter(2000, _disposeId);
+                enter(2000, _disposeId);
             }
             catch(Throwable throwable) {
                 if(_head != null || _active) { // there was a job in progress, so give a stack
@@ -219,7 +219,7 @@ public class JobQueue {
                     wait(waitTime);
                 }
                 catch(InterruptedException interruptedException) {
-                      throw new com.sun.star.uno.RuntimeException(getClass().getName() + ".removeJob - unexpected:" + interruptedException);
+                    throw new com.sun.star.uno.RuntimeException(getClass().getName() + ".removeJob - unexpected:" + interruptedException);
                 }
 
                 // signal that we have already waited once

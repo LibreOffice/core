@@ -177,6 +177,8 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
 ))
 
 $(eval $(call gb_Helper_register_libraries,PLAINLIBS_URE, \
+    jpipe \
+    jpipx \
     xmlreader \
 ))
 
