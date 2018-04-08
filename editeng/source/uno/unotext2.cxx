@@ -51,7 +51,7 @@ SvxUnoTextContentEnumeration::SvxUnoTextContentEnumeration( const SvxUnoTextBase
     {
         if( currentPara>=maSelection.nStartPara && currentPara<=maSelection.nEndPara )
         {
-            const SvxUnoTextRangeBaseList& rRanges( mpEditSource->getRanges() );
+            const SvxUnoTextRangeBaseVec& rRanges( mpEditSource->getRanges() );
             SvxUnoTextContent* pContent = nullptr;
             sal_Int32 nStartPos = 0;
             sal_Int32 nEndPos = mrText.GetEditSource()->GetTextForwarder()->GetTextLen( currentPara );
@@ -405,7 +405,7 @@ SvxUnoTextRangeEnumeration::SvxUnoTextRangeEnumeration(const SvxUnoTextBase& rTe
             nEndPos = std::min<sal_uInt16>(nEndPos, mnSel.nEndPos);
             ESelection aSel( mnParagraph, nStartPos, mnParagraph, nEndPos );
 
-            const SvxUnoTextRangeBaseList& rRanges( mpEditSource->getRanges() );
+            const SvxUnoTextRangeBaseVec& rRanges( mpEditSource->getRanges() );
             SvxUnoTextRange* pRange = nullptr;
             for (auto const& elemRange : rRanges)
             {

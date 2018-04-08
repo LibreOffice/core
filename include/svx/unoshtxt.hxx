@@ -64,7 +64,7 @@ public:
 
     virtual void addRange( SvxUnoTextRangeBase* pNewRange ) override;
     virtual void removeRange( SvxUnoTextRangeBase* pOldRange ) override;
-    virtual const SvxUnoTextRangeBaseList& getRanges() const override;
+    virtual const SvxUnoTextRangeBaseVec& getRanges() const override;
 
     virtual SfxBroadcaster&         GetBroadcaster() const override;
 

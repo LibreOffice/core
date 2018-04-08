@@ -34,9 +34,9 @@ void SvxEditSource::removeRange( SvxUnoTextRangeBase* )
 }
 
 
-const SvxUnoTextRangeBaseList& SvxEditSource::getRanges() const
+const SvxUnoTextRangeBaseVec& SvxEditSource::getRanges() const
 {
-    static SvxUnoTextRangeBaseList gList;
+    static SvxUnoTextRangeBaseVec gList;
     return gList;
 }
 
