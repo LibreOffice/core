@@ -80,6 +80,7 @@
 #include <tools/fract.hxx>
 #include <svtools/ctrltool.hxx>
 #include <svtools/langtab.hxx>
+#include <vcl/floatwin.hxx>
 #include <vcl/fontcharmap.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <vcl/ptrstyle.hxx>
@@ -3437,10 +3438,12 @@ static void doc_postWindow(LibreOfficeKitDocument* /*pThis*/, unsigned nLOKWindo
         return;
     }
 
-    if (Dialog* pDialog = dynamic_cast<Dialog*>(pWindow.get()))
+    if (nAction == LOK_WINDOW_CLOSE)
     {
-        if (nAction == LOK_WINDOW_CLOSE)
+        if (Dialog* pDialog = dynamic_cast<Dialog*>(pWindow.get()))
             pDialog->Close();
+        else if (FloatingWindow* pFloatWin = dynamic_cast<FloatingWindow*>(pWindow.get()))
+            pFloatWin->EndPopupMode(FloatWinPopupEndFlags::Cancel | FloatWinPopupEndFlags::CloseAll);
     }
 }
 
