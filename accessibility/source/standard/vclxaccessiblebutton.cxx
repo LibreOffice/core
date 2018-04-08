@@ -128,8 +128,6 @@ Sequence< OUString > VCLXAccessibleButton::getSupportedServiceNames()
 
 OUString VCLXAccessibleButton::getAccessibleName(  )
 {
-    OExternalLockGuard aGuard( this );
-
     OUString aName( VCLXAccessibleTextComponent::getAccessibleName() );
     sal_Int32 nLength = aName.getLength();
 
