@@ -1106,7 +1106,12 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             break;
         case RTF_EDMINS:
             if (m_xDocumentProperties.is())
+            {
+                // tdf#116851 some RTF may be malformed
+                if (nParam < 0)
+                    nParam = -nParam;
                 m_xDocumentProperties->setEditingDuration(nParam);
+            }
             break;
         case RTF_NOFPAGES:
         case RTF_NOFWORDS:
