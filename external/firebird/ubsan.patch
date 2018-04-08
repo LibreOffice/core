@@ -74,6 +74,18 @@
  				memcpy(newdata, data, sizeof(T) * count);
  			freeData();
  			data = newdata;
+--- src/common/classes/fb_string.h
++++ src/common/classes/fb_string.h
+@@ -674,7 +674,8 @@
+ 		}
+ 		StringType& assign(const void* s, size_type n)
+ 		{
+-			memcpy(baseAssign(n), s, n);
++			auto const p = baseAssign(n);
++			if (n != 0) memcpy(p, s, n);
+ 			return *this;
+ 		}
+ 		StringType& assign(const_pointer s)
 --- src/dsql/StmtNodes.cpp
 +++ src/dsql/StmtNodes.cpp
 @@ -6643,7 +6643,7 @@
