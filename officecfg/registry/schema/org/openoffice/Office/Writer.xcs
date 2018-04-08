@@ -1046,6 +1046,14 @@
           </info>
           <value>true</value>
         </prop>
+        <prop oor:name="ShowInlineTooltips" oor:type="xs:boolean" oor:nillable="false">
+          <!-- UIHints: Tools - Options - Text document - Contents - [Section] Display -->
+          <info>
+            <desc>Specifies whether tooltips for tracked changes are shown in the document.</desc>
+            <label>_Tooltips on changes</label>
+          </info>
+          <value>true</value>
+        </prop>
         <prop oor:name="ShowContentTips" oor:type="xs:boolean">
           <!-- OldPath: Writer/Content/Display/PreventTips -->
           <!-- UIHints: Not accessible via user interface -->
@@ -2650,14 +2658,6 @@
           <value>0</value>
         </prop>
       </group>
-      <prop oor:name="ShowInlineTooltip" oor:type="xs:boolean" oor:nillable="false">
-        <!-- UIHints: Tools - Options - Text document - Changes - Show tooltips on changes -->
-        <info>
-          <desc>Specifies whether tooltips for track changes are shown in the document.</desc>
-          <label>Show _tooltips on changes</label>
-        </info>
-        <value>true</value>
-      </prop>
     </group>
     <group oor:name="Comparison">
       <info>

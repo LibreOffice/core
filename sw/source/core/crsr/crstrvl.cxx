@@ -1137,11 +1137,6 @@ bool SwCursorShell::GetContentAtPos( const Point& rPt,
     SET_CURR_SHELL( this );
     bool bRet = false;
 
-    const bool bHideInlineTooltips = GetDoc()->getIDocumentRedlineAccess().IsHideInlineTooltips();
-    const bool bShowTrackChanges = IDocumentRedlineAccess::IsShowChanges( GetDoc()->getIDocumentRedlineAccess().GetRedlineFlags() );
-
-    if (bHideInlineTooltips || !bShowTrackChanges) return bRet;
-
     if( !IsTableMode() )
     {
         Point aPt( rPt );
@@ -1487,29 +1482,35 @@ bool SwCursorShell::GetContentAtPos( const Point& rPt,
 
                 if( !bRet && IsAttrAtPos::Redline & rContentAtPos.eContentAtPos )
                 {
-                    const SwRangeRedline* pRedl = GetDoc()->getIDocumentRedlineAccess().GetRedline(aPos, nullptr);
-                    if( pRedl )
-                    {
-                        rContentAtPos.aFnd.pRedl = pRedl;
-                        rContentAtPos.eContentAtPos = IsAttrAtPos::Redline;
-                        rContentAtPos.pFndTextAttr = nullptr;
-                        bRet = true;
+/*                    const bool bShowTrackChanges = IDocumentRedlineAccess::IsShowChanges( GetDoc()->getIDocumentRedlineAccess().GetRedlineFlags() );
+                    const bool bShowInlineTooltips = GetViewOptions()->IsShowInlineTooltips();
+                    if ( bShowTrackChanges && bShowInlineTooltips )
+*/                    {
+                        const SwRangeRedline* pRedl = GetDoc()->getIDocumentRedlineAccess().GetRedline(aPos, nullptr);
 
-                        if( pFieldRect && nullptr != ( pFrame = pTextNd->getLayoutFrame( GetLayout(), &aPt ) ) )
+                        if( pRedl )
                         {
-                            //get bounding box of range
-                            SwRect aStart;
-                            pFrame->GetCharRect(aStart, *pRedl->Start(), &aTmpState);
-                            SwRect aEnd;
-                            pFrame->GetCharRect(aEnd, *pRedl->End(), &aTmpState);
-                            if (aStart.Top() != aEnd.Top() || aStart.Bottom() != aEnd.Bottom())
+                            rContentAtPos.aFnd.pRedl = pRedl;
+                            rContentAtPos.eContentAtPos = IsAttrAtPos::Redline;
+                            rContentAtPos.pFndTextAttr = nullptr;
+                            bRet = true;
+
+                            if( pFieldRect && nullptr != ( pFrame = pTextNd->getLayoutFrame( GetLayout(), &aPt ) ) )
                             {
-                                aStart.Left(pFrame->getFrameArea().Left());
-                                aEnd.Right(pFrame->getFrameArea().Right());
+                                //get bounding box of range
+                                SwRect aStart;
+                                pFrame->GetCharRect(aStart, *pRedl->Start(), &aTmpState);
+                                SwRect aEnd;
+                                pFrame->GetCharRect(aEnd, *pRedl->End(), &aTmpState);
+                                if (aStart.Top() != aEnd.Top() || aStart.Bottom() != aEnd.Bottom())
+                                {
+                                    aStart.Left(pFrame->getFrameArea().Left());
+                                    aEnd.Right(pFrame->getFrameArea().Right());
+                                }
+                                *pFieldRect = aStart.Union(aEnd);
                             }
-                            *pFieldRect = aStart.Union(aEnd);
-                        }
-                    }
+                        } //pRedl
+                    } //bShowTrackChanges
                 }
             }
 
