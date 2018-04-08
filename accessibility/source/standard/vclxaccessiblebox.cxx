@@ -263,7 +263,7 @@ Reference< XAccessibleContext > SAL_CALL VCLXAccessibleBox::getAccessibleContext
 
 //=====  XAccessibleContext  ==================================================
 
-sal_Int32 SAL_CALL VCLXAccessibleBox::getAccessibleChildCount()
+sal_Int32 VCLXAccessibleBox::getAccessibleChildCount()
 {
     SolarMutexGuard aSolarGuard;
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
