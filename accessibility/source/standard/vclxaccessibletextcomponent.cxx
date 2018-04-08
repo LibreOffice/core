@@ -144,8 +144,6 @@ sal_Int32 VCLXAccessibleTextComponent::getCaretPosition()
 
 sal_Bool VCLXAccessibleTextComponent::setCaretPosition( sal_Int32 nIndex )
 {
-    OExternalLockGuard aGuard( this );
-
     return setSelection( nIndex, nIndex );
 }
 
@@ -357,7 +355,7 @@ sal_Bool VCLXAccessibleTextComponent::copyText( sal_Int32 nStartIndex, sal_Int32
         Reference< datatransfer::clipboard::XClipboard > xClipboard = pWindow->GetClipboard();
         if ( xClipboard.is() )
         {
-            OUString sText( getTextRange( nStartIndex, nEndIndex ) );
+            OUString sText( OCommonAccessibleText::implGetTextRange( implGetText(), nStartIndex, nEndIndex ) );
 
             vcl::unohelper::TextDataObject* pDataObj = new vcl::unohelper::TextDataObject( sText );
 

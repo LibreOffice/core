@@ -46,6 +46,7 @@ private:
 
     virtual void                ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent ) override;
     virtual void                FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet ) override;
+    sal_Int16                   implGetAccessibleRole();
 
     // OCommonAccessibleText
     virtual OUString            implGetText() override;

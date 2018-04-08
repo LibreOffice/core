@@ -55,6 +55,8 @@ private:
     bool                    m_bSelected;
     OUString                m_sPageText;
 
+    sal_Int32               implGetAccessibleChildCount();
+
     bool                    IsFocused();
     bool                    IsSelected();
 
