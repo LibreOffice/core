@@ -85,12 +85,19 @@ class ImpSdrPdfImport final
 
     FPDF_DOCUMENT mpPdfDocument;
     int mnPageCount;
+    double mdPageWidthPts;
+    double mdPageHeightPts;
+
+    /// Correct the vertical coordinate to start at the top.
+    /// PDF coordinate system has orign at the bottom right.
+    double correctVertOrigin(double offsetPts) const { return mdPageHeightPts - offsetPts; }
 
     // check for clip and evtl. fill maClip
     void checkClip();
     bool isClip() const;
 
     void ImportImage(FPDF_PAGEOBJECT pPageObject);
+    void SetupPageScale(const double dPageWidth, const double dPageHeight);
 
     void ImportText(const Point& rPos, const OUString& rStr);
     void SetAttributes(SdrObject* pObj, bool bForceTextAttr = false);
