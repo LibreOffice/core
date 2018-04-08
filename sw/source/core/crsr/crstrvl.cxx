@@ -1137,11 +1137,6 @@ bool SwCursorShell::GetContentAtPos( const Point& rPt,
     SET_CURR_SHELL( this );
     bool bRet = false;
 
-    const bool bHideInlineTooltips = GetDoc()->getIDocumentRedlineAccess().IsHideInlineTooltips();
-    const bool bShowTrackChanges = IDocumentRedlineAccess::IsShowChanges( GetDoc()->getIDocumentRedlineAccess().GetRedlineFlags() );
-
-    if (bHideInlineTooltips || !bShowTrackChanges) return bRet;
-
     if( !IsTableMode() )
     {
         Point aPt( rPt );
@@ -1488,6 +1483,7 @@ bool SwCursorShell::GetContentAtPos( const Point& rPt,
                 if( !bRet && IsAttrAtPos::Redline & rContentAtPos.eContentAtPos )
                 {
                     const SwRangeRedline* pRedl = GetDoc()->getIDocumentRedlineAccess().GetRedline(aPos, nullptr);
+
                     if( pRedl )
                     {
                         rContentAtPos.aFnd.pRedl = pRedl;

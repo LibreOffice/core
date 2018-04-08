@@ -324,6 +324,8 @@ void SwView::StateViewOptions(SfxItemSet &rSet)
                 else
                     aBool.SetValue( pOpt->IsShadowCursor() );
             break;
+            case FN_SHOW_INLINETOOLTIPS:
+              aBool.SetValue( pOpt->IsShowInlineTooltips() );
 
         }
 
@@ -538,6 +540,13 @@ void SwView::ExecViewOptions(SfxRequest &rReq)
         }
 
         pOpt->SetShadowCursor(bSet);
+        break;
+
+    case FN_SHOW_INLINETOOLTIPS:
+        if( STATE_TOGGLE == eState )
+            bFlag = !pOpt->IsShowInlineTooltips();
+
+        pOpt->SetShowInlineTooltips( bFlag );
         break;
 
     default:

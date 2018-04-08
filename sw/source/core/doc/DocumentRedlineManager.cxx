@@ -616,7 +616,6 @@ DocumentRedlineManager::DocumentRedlineManager(SwDoc& i_rSwdoc)
     , mbIsRedlineMove(false)
     , mbReadlineChecked(false)
     , mnAutoFormatRedlnCommentNo(0)
-    , m_bHideInlineTooltips(false)
 {
 }
 
@@ -2719,16 +2718,6 @@ void DocumentRedlineManager::checkRedlining(RedlineFlags& _rReadlineMode)
             _rReadlineMode |= RedlineFlags::ShowInsert | RedlineFlags::ShowDelete;
         }
     }
-}
-
-bool DocumentRedlineManager::IsHideInlineTooltips()
-{
-    return m_bHideInlineTooltips;
-}
-
-void DocumentRedlineManager::SetHideInlineTooltips(bool bSet)
-{
-    m_bHideInlineTooltips = bSet;
 }
 
 DocumentRedlineManager::~DocumentRedlineManager()
