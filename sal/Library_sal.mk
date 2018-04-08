@@ -20,13 +20,13 @@ $(eval $(call gb_Library_set_include,sal,\
 ))
 
 $(eval $(call gb_Library_add_defs,sal,\
-	$(if $(filter $(BUILD_TYPE),FUZZERS), \
+	$(if $(filter FUZZERS,$(BUILD_TYPE)), \
 		-DFORCE_DEFAULT_SIGNAL \
 	) \
-	$(if $(filter $(ALLOC),SYS_ALLOC)$(filter-out X$(ENABLE_RUNTIME_OPTIMIZATIONS),XTRUE), \
+	$(if $(filter SYS_ALLOC,$(ALLOC))$(filter-out XTRUE,X$(ENABLE_RUNTIME_OPTIMIZATIONS)), \
 		-DFORCE_SYSALLOC \
 	) \
-	$(if $(filter $(OS),IOS), \
+	$(if $(filter IOS,$(OS)), \
 		-DNO_CHILD_PROCESSES \
 	) \
 	-DSAL_DLLIMPLEMENTATION \
@@ -36,7 +36,7 @@ $(eval $(call gb_Library_add_defs,sal,\
 ))
 
 $(eval $(call gb_Library_use_libraries,sal,\
-	$(if $(filter $(OS),ANDROID), \
+	$(if $(filter ANDROID,$(OS)), \
 		lo-bootstrap \
 	) \
 ))
@@ -60,15 +60,15 @@ $(eval $(call gb_Library_add_libs,sal,\
 	$(if $(filter-out ANDROID HAIKU WNT,$(OS)), \
 		-lpthread \
 	) \
-	$(if $(filter $(OS),LINUX), \
+	$(if $(filter LINUX,$(OS)), \
 		-ldl \
 		-lrt \
 	) \
-	$(if $(filter $(OS),SOLARIS), \
+	$(if $(filter SOLARIS,$(OS)), \
 		-lnsl \
 		-lsocket \
 	) \
-	$(if $(filter $(OS),HAIKU), \
+	$(if $(filter HAIKU,$(OS)), \
 		-lnetwork \
 	) \
 ))
@@ -197,7 +197,7 @@ $(eval $(call gb_Library_add_exception_objects,sal,\
 ))
 endif
 
-ifneq ($(filter $(OS),MACOSX IOS),)
+ifneq ($(filter MACOSX IOS,$(OS)),)
 $(eval $(call gb_Library_add_exception_objects,sal,\
 	sal/osl/unx/osxlocale \
 ))
@@ -207,7 +207,7 @@ $(eval $(call gb_Library_add_cobjects,sal,\
 	sal/osl/unx/backtrace \
 ))
 endif
-ifneq ($(filter $(CPUNAME),SPARC64 SPARC),)
+ifneq ($(filter SPARC64 SPARC,$(CPUNAME)),)
 $(eval $(call gb_Library_add_asmobjects,sal,\
 	sal/osl/unx/asm/interlck_sparc \
 ))
