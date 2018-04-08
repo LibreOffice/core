@@ -257,7 +257,10 @@ void SwXDispatch::dispatch(const util::URL& aURL,
         aEvent.State <<= aDescriptor.createPropertyValueSequence();
         aEvent.IsEnabled = !rData.sDataSource.isEmpty();
 
-        for ( auto & status : m_aStatusListenerVector )
+        // calls to statusChanged may call addStatusListener or removeStatusListener
+        // so copy m_aStatusListenerVector on stack
+        auto copyStatusListenerVector = m_aStatusListenerVector;
+        for (auto & status : copyStatusListenerVector)
         {
             if(status.aURL.Complete == cURLDocumentDataSource)
             {
@@ -348,7 +351,10 @@ void SwXDispatch::selectionChanged( const lang::EventObject&  )
         aEvent.IsEnabled = bEnable;
         aEvent.Source = *static_cast<cppu::OWeakObject*>(this);
 
-        for ( auto & status : m_aStatusListenerVector )
+        // calls to statusChanged may call addStatusListener or removeStatusListener
+        // so copy m_aStatusListenerVector on stack
+        auto copyStatusListenerVector = m_aStatusListenerVector;
+        for (auto & status : copyStatusListenerVector)
         {
             aEvent.FeatureURL = status.aURL;
             if (status.aURL.Complete != cURLDocumentDataSource)
@@ -367,7 +373,10 @@ void SwXDispatch::disposing( const lang::EventObject& rSource )
 
     lang::EventObject aObject;
     aObject.Source = static_cast<cppu::OWeakObject*>(this);
-    for ( auto & status : m_aStatusListenerVector )
+    // calls to statusChanged may call addStatusListener or removeStatusListener
+    // so copy m_aStatusListenerVector on stack
+    auto copyStatusListenerVector = m_aStatusListenerVector;
+    for (auto & status : copyStatusListenerVector)
     {
         status.xListener->disposing(aObject);
     }
