@@ -87,6 +87,24 @@
 #include <vcl/dibtools.hxx>
 #include <com/sun/star/geometry/Matrix2D.hpp>
 
+namespace
+{
+/// Convert from DPI to pixels.
+/// PDFs don't have resolution, rather,
+/// dimensions are in inches, with 72 points / inch.
+/// Here we effectively render at 96 DPI (to match
+/// the image rendered in vcl::ImportPDF in pdfread.cxx).
+static inline double lcl_PointToPixel(double fPoint) { return fPoint * 96. / 72.; }
+/// Convert from pixels to logic (twips).
+static inline long lcl_ToLogic(double value)
+{
+    // Convert to integral preserving two dp.
+    const long in = static_cast<long>(value * 100.);
+    const long out = OutputDevice::LogicToLogic(in, MapUnit::MapPixel, MapUnit::Map100thMM);
+    return out / 100;
+}
+}
+
 struct FPDFBitmapDeleter
 {
     inline void operator()(FPDF_BITMAP bitmap) { FPDFBitmap_Destroy(bitmap); }
@@ -124,6 +142,10 @@ ImpSdrPdfImport::ImpSdrPdfImport(SdrModel& rModel, SdrLayerID nLay, const Rectan
     , mbNoFill(false)
     , mbLastObjWasLine(false)
     , maClip()
+    , mpPdfDocument(nullptr)
+    , mnPageCount(0)
+    , mdPageWidthPts(0)
+    , mdPageHeightPts(0)
 {
     mpVD->EnableOutput(false);
     mpVD->SetLineColor();
@@ -188,7 +210,6 @@ void ImpSdrPdfImport::DoLoopActions(SvdProgressInfo* pProgrInfo, sal_uInt32* pAc
     {
         // Render next page.
         FPDF_PAGE pPdfPage = FPDF_LoadPage(mpPdfDocument, nPageIndex);
-
         if (pPdfPage == nullptr)
             break;
 
@@ -196,7 +217,7 @@ void ImpSdrPdfImport::DoLoopActions(SvdProgressInfo* pProgrInfo, sal_uInt32* pAc
         const double dPageHeight = FPDF_GetPageHeight(pPdfPage);
         SAL_WARN("sd.filter", "Loaded page: " << nPageIndex << ", width: " << dPageWidth
                                               << ", height: " << dPageHeight);
-        SAL_WARN("sd.filter", "Scale Rect: " << maScaleRect);
+        SetupPageScale(dPageWidth, dPageHeight);
 
         const int nPageObjectCount = FPDFPage_CountObject(pPdfPage);
         for (int nPageObjectIndex = 0; nPageObjectIndex < nPageObjectCount; ++nPageObjectIndex)
@@ -350,7 +371,7 @@ void ImpSdrPdfImport::DoLoopActions(SvdProgressInfo* pProgrInfo, sal_uInt32* pAc
 
     // const sal_uLong nCount(rMtf.GetActionSize());
 
-    for (sal_uLong a(0); a < 0; a++)
+    for (sal_uLong a(0); a < 0UL; a++)
     {
         if (pProgrInfo && pActionsToReport)
         {
@@ -367,30 +388,33 @@ void ImpSdrPdfImport::DoLoopActions(SvdProgressInfo* pProgrInfo, sal_uInt32* pAc
     }
 }
 
-size_t ImpSdrPdfImport::DoImport(SdrObjList& rOL, size_t nInsPos, size_t nPageNumber,
-                                 SvdProgressInfo* pProgrInfo)
+void ImpSdrPdfImport::SetupPageScale(const double dPageWidth, const double dPageHeight)
 {
-    // setup some global scale parameter
-    // mfScaleX, mfScaleY, maScaleX, maScaleY, mbMov, mbSize
-    mfScaleX = mfScaleY = 10;
-    /*
     mfScaleX = mfScaleY = 1.0;
-    const Size aMtfSize(rMtf.GetPrefSize());
 
-    if (aMtfSize.Width() & aMtfSize.Height() && (!maScaleRect.IsEmpty()))
+    // Store the page dimensions in Points.
+    mdPageWidthPts = dPageWidth;
+    mdPageHeightPts = dPageHeight;
+
+    Size aPageSize(lcl_ToLogic(lcl_PointToPixel(dPageWidth)),
+                   lcl_ToLogic(lcl_PointToPixel(dPageHeight)));
+    SAL_WARN("sd.filter", "Logical Page Size: " << aPageSize);
+    SAL_WARN("sd.filter", "Scale Rect: " << maScaleRect);
+
+    if (aPageSize.Width() && aPageSize.Height() && (!maScaleRect.IsEmpty()))
     {
         maOfs = maScaleRect.TopLeft();
 
-        if (aMtfSize.Width() != (maScaleRect.GetWidth() - 1))
+        if (aPageSize.Width() != (maScaleRect.GetWidth() - 1))
         {
             mfScaleX = static_cast<double>(maScaleRect.GetWidth() - 1)
-                       / static_cast<double>(aMtfSize.Width());
+                       / static_cast<double>(aPageSize.Width());
         }
 
-        if (aMtfSize.Height() != (maScaleRect.GetHeight() - 1))
+        if (aPageSize.Height() != (maScaleRect.GetHeight() - 1))
         {
             mfScaleY = static_cast<double>(maScaleRect.GetHeight() - 1)
-                       / static_cast<double>(aMtfSize.Height());
+                       / static_cast<double>(aPageSize.Height());
         }
     }
 
@@ -399,19 +423,25 @@ size_t ImpSdrPdfImport::DoImport(SdrObjList& rOL, size_t nInsPos, size_t nPageNu
     maScaleX = Fraction(1, 1);
     maScaleY = Fraction(1, 1);
 
-    if (aMtfSize.Width() != (maScaleRect.GetWidth() - 1))
+    if (aPageSize.Width() != (maScaleRect.GetWidth() - 1))
     {
-        maScaleX = Fraction(maScaleRect.GetWidth() - 1, aMtfSize.Width());
+        maScaleX = Fraction(maScaleRect.GetWidth() - 1, aPageSize.Width());
         mbSize = true;
     }
 
-    if (aMtfSize.Height() != (maScaleRect.GetHeight() - 1))
+    if (aPageSize.Height() != (maScaleRect.GetHeight() - 1))
     {
-        maScaleY = Fraction(maScaleRect.GetHeight() - 1, aMtfSize.Height());
+        maScaleY = Fraction(maScaleRect.GetHeight() - 1, aPageSize.Height());
         mbSize = true;
     }
-    */
 
+    //SAL_WARN("sd.filter", "ScaleX: " << maScaleX << "(" << mfScaleX << "), ScaleY: " << maScaleY
+    //                                 << "(" << mfScaleY << ")");
+}
+
+size_t ImpSdrPdfImport::DoImport(SdrObjList& rOL, size_t nInsPos, size_t nPageNumber,
+                                 SvdProgressInfo* pProgrInfo)
+{
     if (pProgrInfo)
     {
         // pProgrInfo->SetActionCount(rMtf.GetActionSize());
@@ -1102,17 +1132,44 @@ void ImpSdrPdfImport::ImportImage(FPDF_PAGEOBJECT pPageObject)
         SAL_WARN("sd.filter", "FAILED to get image bounds");
     }
 
-    SAL_WARN("sd.filter", "Got IMAGE left: " << left << ", bottom: " << bottom << ", right; "
-                                             << right << ", top: " << top);
-    Rectangle aRect1(Point(left, top), Size(right - left, top - bottom));
-    SAL_WARN("sd.filter", "Got IMAGE BBox: " << aRect1);
-    Rectangle aLogRect(
-        OutputDevice::LogicToLogic(aRect1, aBitmap.GetPrefMapMode(), MapMode(MapUnit::Map100thMM)));
-    SAL_WARN("sd.filter", "Logical Rect: " << aLogRect);
-    aLogRect.Move(maScaleRect.Left(), maScaleRect.Top() - aLogRect.Top());
+    SAL_WARN("sd.filter", "Got IMAGE bounds left: " << left << ", right: " << right
+                                                    << ", top: " << top << ", bottom: " << bottom);
+    top = correctVertOrigin(top);
+    bottom = correctVertOrigin(bottom);
+    SAL_WARN("sd.filter", "IMAGE corrected bounds left: " << left << ", right: " << right
+                                                          << ", top: " << top
+                                                          << ", bottom: " << bottom);
+    left = lcl_PointToPixel(left);
+    right = lcl_PointToPixel(right);
+    top = lcl_PointToPixel(top);
+    bottom = lcl_PointToPixel(bottom);
+    // if (top > bottom)
+    //     std::swap(top, bottom);
+    // if (left > right)
+    //     std::swap(left, right);
 
-    // SAL_WARN("sd.filter", "Bitmap Size: " << aBitmap.GetPrefSize());
-    // SAL_WARN("sd.filter", "Bitmap MapMpde: " << aBitmap.GetPrefMapMode());
+    SAL_WARN("sd.filter", "IMAGE pixel bounds left: " << left << ", right: " << right << ", top: "
+                                                      << top << ", bottom: " << bottom);
+
+    Point aPos(lcl_ToLogic(left), lcl_ToLogic(top));
+    Size aSize(lcl_ToLogic(right - left), lcl_ToLogic(bottom - top));
+    Rectangle aRect(aPos, aSize);
+    SAL_WARN("sd.filter", "IMAGE Logical BBox: " << aRect);
+
+    // aRect.SetLeft(aRect.Left() * mfScaleX);
+    // aRect.SetRight(aRect.Right() * mfScaleX);
+    // aRect.SetTop(aRect.Top() * mfScaleY);
+    // aRect.SetBottom(aRect.Bottom() * mfScaleY);
+    // SAL_WARN("sd.filter", "Logical Rect Scaled: " << aRect);
+
+    // aLogRect.Move(maScaleRect.Left(), maScaleRect.Top() - aLogRect.Top());
+    // aRect.Move(maScaleRect.Left(), maScaleRect.Top());
+    // SAL_WARN("sd.filter", "Logical Rect Absolute: " << aRect);
+    aRect.MoveRight(1);
+    aRect.MoveBottom(1);
+    SAL_WARN("sd.filter", "IMAGE Logical Rect FINAL: " << aRect);
+
+    /*
     Size aGrfSize(OutputDevice::LogicToLogic(Size(nWidth, nHeight), aBitmap.GetPrefMapMode(),
                                              MapMode(MapUnit::Map100thMM)));
     SAL_WARN("sd.filter", "Logical Size: " << aGrfSize);
@@ -1129,9 +1186,8 @@ void ImpSdrPdfImport::ImportImage(FPDF_PAGEOBJECT pPageObject)
 
     Rectangle aRect(aGrfPos, aGrfSize);
     SAL_WARN("sd.filter", "Got IMAGE Logical BBox: " << aRect);
-
-    // aRect.AdjustRight( 1 ); aRect.AdjustBottom( 1 );
-    SdrGrafObj* pGraf = new SdrGrafObj(Graphic(aBitmap), aLogRect);
+*/
+    SdrGrafObj* pGraf = new SdrGrafObj(Graphic(aBitmap), aRect);
 
     // This action is not creating line and fill, set directly, do not use SetAttributes(..)
     pGraf->SetMergedItem(XLineStyleItem(drawing::LineStyle_NONE));
