@@ -2653,7 +2653,7 @@
       <prop oor:name="ShowInlineTooltip" oor:type="xs:boolean" oor:nillable="false">
         <!-- UIHints: Tools - Options - Text document - Changes - Show tooltips on changes -->
         <info>
-          <desc>Specifies whether tooltips for track changes are shown in the document.</desc>
+          <desc>Specifies whether tooltips for tracked changes are shown in the document.</desc>
           <label>Show _tooltips on changes</label>
         </info>
         <value>true</value>
