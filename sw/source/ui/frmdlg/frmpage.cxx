@@ -783,7 +783,7 @@ void SwFramePage::setOptimalFrameWidth()
         { aHFrameMap, SAL_N_ELEMENTS(aHFrameMap) },
         { aHFlyHtmlMap, SAL_N_ELEMENTS(aHFlyHtmlMap) },
         { aVFrameMap, SAL_N_ELEMENTS(aVFrameMap) },
-        { aVFlyHtmlMap, SAL_N_ELEMENTS(aVFrameMap) },
+        { aVFlyHtmlMap, SAL_N_ELEMENTS(aVFlyHtmlMap) },
         { aHParaMap, SAL_N_ELEMENTS(aHParaMap) },
         { aHParaHtmlMap, SAL_N_ELEMENTS(aHParaHtmlMap) },
         { aHParaHtmlAbsMap, SAL_N_ELEMENTS(aHParaHtmlAbsMap) },
