@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.18.3 -->
+<!-- Generated with glade 3.20.4 -->
 <interface domain="sw">
   <requires lib="gtk+" version="3.18"/>
-  <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkAdjustment" id="intervaladjustment">
     <property name="lower">1</property>
     <property name="upper">1000</property>
@@ -16,26 +15,6 @@
     <property name="step_increment">1</property>
     <property name="page_increment">10</property>
   </object>
-  <object class="GtkListStore" id="positionstore">
-    <columns>
-      <!-- column-name positions -->
-      <column type="gchararray"/>
-    </columns>
-    <data>
-      <row>
-        <col id="0" translatable="yes" context="linenumbering|positionstore">Left</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes" context="linenumbering|positionstore">Right</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes" context="linenumbering|positionstore">Inner</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes" context="linenumbering|positionstore">Outer</col>
-      </row>
-    </data>
-  </object>
   <object class="GtkAdjustment" id="spacingadjustment">
     <property name="upper">9999</property>
     <property name="value">0.5</property>
@@ -46,6 +25,9 @@
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
     <property name="title" translatable="yes" context="linenumbering|LineNumberingDialog">Line Numbering</property>
+    <property name="modal">True</property>
+    <property name="default_width">0</property>
+    <property name="default_height">0</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
@@ -61,6 +43,7 @@
                 <property name="label">gtk-ok</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
+                <property name="can_default">True</property>
                 <property name="has_default">True</property>
                 <property name="receives_default">True</property>
                 <property name="use_stock">True</property>
@@ -158,10 +141,10 @@
                               <object class="GtkLabel" id="characterstyle">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="xalign">0</property>
                                 <property name="label" translatable="yes" context="linenumbering|characterstyle">Character style:</property>
                                 <property name="use_underline">True</property>
                                 <property name="mnemonic_widget">styledropdown</property>
+                                <property name="xalign">0</property>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -172,8 +155,8 @@
                               <object class="GtkLabel" id="format">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="xalign">0</property>
                                 <property name="label" translatable="yes" context="linenumbering|format">Format:</property>
+                                <property name="xalign">0</property>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -184,10 +167,10 @@
                               <object class="GtkLabel" id="position">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="xalign">0</property>
                                 <property name="label" translatable="yes" context="linenumbering|position">Position:</property>
                                 <property name="use_underline">True</property>
                                 <property name="mnemonic_widget">positiondropdown</property>
+                                <property name="xalign">0</property>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -198,10 +181,10 @@
                               <object class="GtkLabel" id="spacing">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="xalign">0</property>
                                 <property name="label" translatable="yes" context="linenumbering|spacing">Spacing:</property>
                                 <property name="use_underline">True</property>
-                                <property name="mnemonic_widget">spacingspin:0.00cm</property>
+                                <property name="mnemonic_widget">spacingspin</property>
+                                <property name="xalign">0</property>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -212,10 +195,10 @@
                               <object class="GtkLabel" id="interval">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="xalign">0</property>
                                 <property name="label" translatable="yes" context="linenumbering|interval">Interval:</property>
                                 <property name="use_underline">True</property>
                                 <property name="mnemonic_widget">intervalspin</property>
+                                <property name="xalign">0</property>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -223,7 +206,7 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkComboBox" id="styledropdown">
+                              <object class="GtkComboBoxText" id="styledropdown">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="hexpand">True</property>
@@ -235,11 +218,10 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="swlo-SwNumberingTypeListBox" id="formatdropdown">
+                              <object class="GtkComboBoxText" id="formatdropdown">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="hexpand">True</property>
-                                <property name="type">16</property>
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
@@ -248,11 +230,16 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkComboBox" id="positiondropdown">
+                              <object class="GtkComboBoxText" id="positiondropdown">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="hexpand">True</property>
-                                <property name="model">positionstore</property>
+                                <items>
+                                  <item translatable="yes" context="linenumbering|positionstore">Left</item>
+                                  <item translatable="yes" context="linenumbering|positionstore">Right</item>
+                                  <item translatable="yes" context="linenumbering|positionstore">Inner</item>
+                                  <item translatable="yes" context="linenumbering|positionstore">Outer</item>
+                                </items>
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
@@ -261,7 +248,7 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkSpinButton" id="spacingspin:0.00cm">
+                              <object class="GtkSpinButton" id="spacingspin">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="halign">start</property>
@@ -295,8 +282,8 @@
                                   <object class="GtkLabel" id="intervallines">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="xalign">0</property>
                                     <property name="label" translatable="yes" context="linenumbering|intervallines">lines</property>
+                                    <property name="xalign">0</property>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
@@ -359,10 +346,10 @@
                                   <object class="GtkLabel" id="text">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="xalign">0</property>
                                     <property name="label" translatable="yes" context="linenumbering|text">Text:</property>
                                     <property name="use_underline">True</property>
                                     <property name="mnemonic_widget">textentry</property>
+                                    <property name="xalign">0</property>
                                   </object>
                                   <packing>
                                     <property name="left_attach">0</property>
@@ -373,10 +360,10 @@
                                   <object class="GtkLabel" id="every">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="xalign">0</property>
                                     <property name="label" translatable="yes" context="linenumbering|every">Every:</property>
                                     <property name="use_underline">True</property>
                                     <property name="mnemonic_widget">linesspin</property>
+                                    <property name="xalign">0</property>
                                   </object>
                                   <packing>
                                     <property name="left_attach">0</property>
@@ -387,6 +374,7 @@
                                   <object class="GtkEntry" id="textentry">
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
+                                    <property name="activates_default">True</property>
                                     <property name="width_chars">3</property>
                                   </object>
                                   <packing>
@@ -399,8 +387,8 @@
                                   <object class="GtkLabel" id="lines">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="xalign">0</property>
                                     <property name="label" translatable="yes" context="linenumbering|lines">lines</property>
+                                    <property name="xalign">0</property>
                                   </object>
                                   <packing>
                                     <property name="left_attach">2</property>
@@ -568,5 +556,8 @@
       <action-widget response="-6">cancel</action-widget>
       <action-widget response="-11">help</action-widget>
     </action-widgets>
+    <child>
+      <placeholder/>
+    </child>
   </object>
 </interface>

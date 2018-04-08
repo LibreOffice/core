@@ -106,6 +106,18 @@ class VclAbstractDialog_Impl : public VclAbstractDialog
     DECL_ABSTDLG_BASE(VclAbstractDialog_Impl,Dialog)
 };
 
+class AbstractGenericDialog_Impl : public VclAbstractDialog
+{
+protected:
+    std::unique_ptr<weld::GenericDialogController> m_xDlg;
+public:
+    explicit AbstractGenericDialog_Impl(weld::GenericDialogController* p)
+        : m_xDlg(p)
+    {
+    }
+    virtual short Execute() override;
+};
+
 class AbstractSwSortDlg_Impl : public VclAbstractDialog
 {
 protected:

@@ -19,6 +19,7 @@
 
 #include <sfx2/viewfrm.hxx>
 #include <svl/style.hxx>
+#include <svtools/unitconv.hxx>
 #include <view.hxx>
 #include <wrtsh.hxx>
 #include <docsh.hxx>
@@ -29,7 +30,10 @@
 #include <fldbas.hxx>
 #include <lineinfo.hxx>
 #include <linenum.hxx>
+#include <swmodule.hxx>
 #include <uitool.hxx>
+#include <usrpref.hxx>
+#include <wdocsh.hxx>
 #include <fmtline.hxx>
 #include <strings.hrc>
 
@@ -58,150 +62,133 @@ static void lcl_setLineNumbering(const OUString& rName, SwWrtShell* pSh, bool bL
     xStyleSheet->SetItemSet(rSet);
 }
 
-SwLineNumberingDlg::SwLineNumberingDlg(SwView const *pVw)
-    : SfxModalDialog( &pVw->GetViewFrame()->GetWindow(), "LineNumberingDialog",
-        "modules/swriter/ui/linenumbering.ui" )
-    , pSh(pVw->GetWrtShellPtr())
+SwLineNumberingDlg::SwLineNumberingDlg(const SwView& rVw)
+    : GenericDialogController(rVw.GetViewFrame()->GetWindow().GetFrameWeld(),
+            "modules/swriter/ui/linenumbering.ui", "LineNumberingDialog")
+    , m_pSh(rVw.GetWrtShellPtr())
+    , m_xBodyContent(m_xBuilder->weld_widget("content"))
+    , m_xDivIntervalFT(m_xBuilder->weld_widget("every"))
+    , m_xDivIntervalNF(m_xBuilder->weld_spin_button("linesspin"))
+    , m_xDivRowsFT(m_xBuilder->weld_widget("lines"))
+    , m_xNumIntervalNF(m_xBuilder->weld_spin_button("intervalspin"))
+    , m_xCharStyleLB(m_xBuilder->weld_combo_box_text("styledropdown"))
+    , m_xFormatLB(new NumberingTypeListBox(m_xBuilder->weld_combo_box_text("formatdropdown")))
+    , m_xPosLB(m_xBuilder->weld_combo_box_text("positiondropdown"))
+    , m_xOffsetMF(m_xBuilder->weld_metric_spin_button("spacingspin"))
+    , m_xDivisorED(m_xBuilder->weld_entry("textentry"))
+    , m_xCountEmptyLinesCB(m_xBuilder->weld_check_button("blanklines"))
+    , m_xCountFrameLinesCB(m_xBuilder->weld_check_button("linesintextframes"))
+    , m_xRestartEachPageCB(m_xBuilder->weld_check_button("restarteverynewpage"))
+    , m_xNumberingOnCB(m_xBuilder->weld_check_button("shownumbering"))
+    , m_xNumberingOnFooterHeader(m_xBuilder->weld_check_button("showfooterheadernumbering"))
+    , m_xOKButton(m_xBuilder->weld_button("ok"))
+    , m_xNumIntervalFT(m_xBuilder->weld_widget("interval"))
+    , m_xNumRowsFT(m_xBuilder->weld_widget("intervallines"))
 {
-    get(m_pBodyContent, "content");
-    get(m_pDivIntervalFT, "every");
-    get(m_pDivIntervalNF, "linesspin");
-    get(m_pDivRowsFT, "lines");
-    get(m_pNumIntervalNF, "intervalspin");
-    get(m_pCharStyleLB, "styledropdown");
-    get(m_pFormatLB, "formatdropdown");
-    get(m_pPosLB, "positiondropdown");
-    get(m_pOffsetMF, "spacingspin");
-    get(m_pDivisorED, "textentry");
-    get(m_pCountEmptyLinesCB, "blanklines");
-    get(m_pCountFrameLinesCB, "linesintextframes");
-    get(m_pRestartEachPageCB, "restarteverynewpage");
-    get(m_pNumberingOnCB, "shownumbering");
-    get(m_pNumberingOnFooterHeader, "showfooterheadernumbering");
+    m_xFormatLB->Reload(SwInsertNumTypes::Extended);
 
-    OUString sIntervalName = m_pDivIntervalFT->GetAccessibleName()
+    OUString sIntervalName = m_xDivIntervalFT->get_accessible_name()
                              + "("
-                             + m_pDivRowsFT->GetAccessibleName()
+                             + m_xDivRowsFT->get_accessible_name()
                              + ")";
-    m_pDivIntervalNF->SetAccessibleName(sIntervalName);
+    m_xDivIntervalNF->set_accessible_name(sIntervalName);
 
-    vcl::Window *pNumIntervalFT = get<vcl::Window>("interval");
-    vcl::Window *pNumRowsFT = get<vcl::Window>("intervallines");
-    sIntervalName = pNumIntervalFT->GetAccessibleName()
+    sIntervalName = m_xNumIntervalFT->get_accessible_name()
                     + "("
-                    + pNumRowsFT->GetAccessibleName()
+                    + m_xNumRowsFT->get_accessible_name()
                     + ")";
-    m_pNumIntervalNF->SetAccessibleName(sIntervalName);
+    m_xNumIntervalNF->set_accessible_name(sIntervalName);
 
     // char styles
-    ::FillCharStyleListBox(*m_pCharStyleLB, pSh->GetView().GetDocShell());
+    ::FillCharStyleListBox(*m_xCharStyleLB, m_pSh->GetView().GetDocShell());
 
-    const SwLineNumberInfo &rInf = pSh->GetLineNumberInfo();
-    IDocumentStylePoolAccess& rIDSPA = pSh->getIDocumentStylePoolAccess();
+    const SwLineNumberInfo &rInf = m_pSh->GetLineNumberInfo();
+    IDocumentStylePoolAccess& rIDSPA = m_pSh->getIDocumentStylePoolAccess();
 
     OUString sStyleName(rInf.GetCharFormat( rIDSPA )->GetName());
-    const sal_Int32 nPos = m_pCharStyleLB->GetEntryPos(sStyleName);
+    const int nPos = m_xCharStyleLB->find_text(sStyleName);
 
-    if (nPos != LISTBOX_ENTRY_NOTFOUND)
-        m_pCharStyleLB->SelectEntryPos(nPos);
+    if (nPos != -1)
+        m_xCharStyleLB->set_active(nPos);
     else
     {
         if (!sStyleName.isEmpty())
         {
-            m_pCharStyleLB->InsertEntry(sStyleName);
-            m_pCharStyleLB->SelectEntry(sStyleName);
+            m_xCharStyleLB->append_text(sStyleName);
+            m_xCharStyleLB->set_active(sStyleName);
         }
     }
 
     // format
     SvxNumType nSelFormat = rInf.GetNumType().GetNumberingType();
 
-    m_pFormatLB->SelectNumberingType(nSelFormat);
+    m_xFormatLB->SelectNumberingType(nSelFormat);
 
     // position
-    m_pPosLB->SelectEntryPos(static_cast<sal_Int32>(rInf.GetPos()));
+    m_xPosLB->set_active(rInf.GetPos());
 
     // offset
     sal_uInt16 nOffset = rInf.GetPosFromLeft();
     if (nOffset == USHRT_MAX)
         nOffset = 0;
 
-    m_pOffsetMF->SetValue(m_pOffsetMF->Normalize(nOffset), FUNIT_TWIP);
+    FieldUnit eFieldUnit = SW_MOD()->GetUsrPref(dynamic_cast< const SwWebDocShell*>(
+                                rVw.GetDocShell()) != nullptr)->GetMetric();
+    ::SetFieldUnit(*m_xOffsetMF, eFieldUnit);
+    m_xOffsetMF->set_value(m_xOffsetMF->normalize(nOffset), FUNIT_TWIP);
 
     // numbering offset
-    m_pNumIntervalNF->SetValue(rInf.GetCountBy());
+    m_xNumIntervalNF->set_value(rInf.GetCountBy());
 
     // divider
-    m_pDivisorED->SetText(rInf.GetDivider());
+    m_xDivisorED->set_text(rInf.GetDivider());
 
     // divider offset
-    m_pDivIntervalNF->SetValue(rInf.GetDividerCountBy());
+    m_xDivIntervalNF->set_value(rInf.GetDividerCountBy());
 
     // count
-    m_pCountEmptyLinesCB->Check(rInf.IsCountBlankLines());
-    m_pCountFrameLinesCB->Check(rInf.IsCountInFlys());
-    m_pRestartEachPageCB->Check(rInf.IsRestartEachPage());
+    m_xCountEmptyLinesCB->set_active(rInf.IsCountBlankLines());
+    m_xCountFrameLinesCB->set_active(rInf.IsCountInFlys());
+    m_xRestartEachPageCB->set_active(rInf.IsRestartEachPage());
 
-    m_pNumberingOnCB->Check(rInf.IsPaintLineNumbers());
+    m_xNumberingOnCB->set_active(rInf.IsPaintLineNumbers());
 
     // Header/Footer Line Numbering
-    rtl::Reference< SwDocStyleSheet > xStyleSheet = lcl_getDocStyleSheet(SwResId(STR_POOLCOLL_FOOTER), pSh);
+    rtl::Reference< SwDocStyleSheet > xStyleSheet = lcl_getDocStyleSheet(SwResId(STR_POOLCOLL_FOOTER), m_pSh);
     if(xStyleSheet.is())
     {
         SfxItemSet& rSet = xStyleSheet->GetItemSet();
         const SwFormatLineNumber &aFormat = rSet.Get(RES_LINENUMBER);
-        if(aFormat.IsCount())
-            m_pNumberingOnFooterHeader->SetState(TRISTATE_TRUE);
+        if (aFormat.IsCount())
+            m_xNumberingOnFooterHeader->set_state(TRISTATE_TRUE);
         else
-            m_pNumberingOnFooterHeader->SetState(TRISTATE_FALSE);
+            m_xNumberingOnFooterHeader->set_state(TRISTATE_FALSE);
     }
 
     // Line Numbering
-    m_pNumberingOnCB->SetClickHdl(LINK(this, SwLineNumberingDlg, LineOnOffHdl));
-    m_pDivisorED->SetModifyHdl(LINK(this, SwLineNumberingDlg, ModifyHdl));
-    ModifyHdl(*m_pDivisorED);
-    LineOnOffHdl(nullptr);
+    m_xNumberingOnCB->connect_clicked(LINK(this, SwLineNumberingDlg, LineOnOffHdl));
+    m_xDivisorED->connect_changed(LINK(this, SwLineNumberingDlg, ModifyHdl));
+    ModifyHdl(*m_xDivisorED);
+    LineOnOffHdl(*m_xNumberingOnCB);
 
-    get<PushButton>("ok")->SetClickHdl(LINK(this, SwLineNumberingDlg, OKHdl));
+    m_xOKButton->connect_clicked(LINK(this, SwLineNumberingDlg, OKHdl));
 }
 
 SwLineNumberingDlg::~SwLineNumberingDlg()
 {
-    disposeOnce();
 }
 
-void SwLineNumberingDlg::dispose()
+IMPL_LINK_NOARG(SwLineNumberingDlg, OKHdl, weld::Button&, void)
 {
-    m_pBodyContent.clear();
-    m_pDivIntervalFT.clear();
-    m_pDivIntervalNF.clear();
-    m_pDivRowsFT.clear();
-    m_pNumIntervalNF.clear();
-    m_pCharStyleLB.clear();
-    m_pFormatLB.clear();
-    m_pPosLB.clear();
-    m_pOffsetMF.clear();
-    m_pDivisorED.clear();
-    m_pCountEmptyLinesCB.clear();
-    m_pCountFrameLinesCB.clear();
-    m_pRestartEachPageCB.clear();
-    m_pNumberingOnCB.clear();
-    m_pNumberingOnFooterHeader.clear();
-    SfxModalDialog::dispose();
-}
-
-
-IMPL_LINK_NOARG(SwLineNumberingDlg, OKHdl, Button*, void)
-{
-    SwLineNumberInfo aInf(pSh->GetLineNumberInfo());
+    SwLineNumberInfo aInf(m_pSh->GetLineNumberInfo());
 
     // char styles
-    OUString sCharFormatName(m_pCharStyleLB->GetSelectedEntry());
-    SwCharFormat *pCharFormat = pSh->FindCharFormatByName(sCharFormatName);
+    OUString sCharFormatName(m_xCharStyleLB->get_active_text());
+    SwCharFormat *pCharFormat = m_pSh->FindCharFormatByName(sCharFormatName);
 
     if (!pCharFormat)
     {
-        SfxStyleSheetBasePool* pPool = pSh->GetView().GetDocShell()->GetStyleSheetPool();
+        SfxStyleSheetBasePool* pPool = m_pSh->GetView().GetDocShell()->GetStyleSheetPool();
         SfxStyleSheetBase* pBase;
         pBase = pPool->Find(sCharFormatName, SfxStyleFamily::Char);
         if(!pBase)
@@ -214,60 +201,60 @@ IMPL_LINK_NOARG(SwLineNumberingDlg, OKHdl, Button*, void)
 
     // format
     SvxNumberType aType;
-    aType.SetNumberingType(m_pFormatLB->GetSelectedNumberingType());
+    aType.SetNumberingType(m_xFormatLB->GetSelectedNumberingType());
     aInf.SetNumType(aType);
 
     // position
-    aInf.SetPos(static_cast<LineNumberPosition>(m_pPosLB->GetSelectedEntryPos()));
+    aInf.SetPos(static_cast<LineNumberPosition>(m_xPosLB->get_active()));
 
     // offset
-    aInf.SetPosFromLeft(static_cast<sal_uInt16>(m_pOffsetMF->Denormalize(m_pOffsetMF->GetValue(FUNIT_TWIP))));
+    aInf.SetPosFromLeft(static_cast<sal_uInt16>(m_xOffsetMF->denormalize(m_xOffsetMF->get_value(FUNIT_TWIP))));
 
     // numbering offset
-    aInf.SetCountBy(static_cast<sal_uInt16>(m_pNumIntervalNF->GetValue()));
+    aInf.SetCountBy(static_cast<sal_uInt16>(m_xNumIntervalNF->get_value()));
 
     // divider
-    aInf.SetDivider(m_pDivisorED->GetText());
+    aInf.SetDivider(m_xDivisorED->get_text());
 
     // divider offset
-    aInf.SetDividerCountBy(static_cast<sal_uInt16>(m_pDivIntervalNF->GetValue()));
+    aInf.SetDividerCountBy(static_cast<sal_uInt16>(m_xDivIntervalNF->get_value()));
 
     // count
-    aInf.SetCountBlankLines(m_pCountEmptyLinesCB->IsChecked());
-    aInf.SetCountInFlys(m_pCountFrameLinesCB->IsChecked());
-    aInf.SetRestartEachPage(m_pRestartEachPageCB->IsChecked());
+    aInf.SetCountBlankLines(m_xCountEmptyLinesCB->get_active());
+    aInf.SetCountInFlys(m_xCountFrameLinesCB->get_active());
+    aInf.SetRestartEachPage(m_xRestartEachPageCB->get_active());
 
-    aInf.SetPaintLineNumbers(m_pNumberingOnCB->IsChecked());
+    aInf.SetPaintLineNumbers(m_xNumberingOnCB->get_active());
 
-    pSh->SetLineNumberInfo(aInf);
+    m_pSh->SetLineNumberInfo(aInf);
 
     // Set LineNumber explicitly for Header and Footer
-    lcl_setLineNumbering(SwResId(STR_POOLCOLL_FOOTER), pSh, m_pNumberingOnFooterHeader->IsChecked());
-    lcl_setLineNumbering(SwResId(STR_POOLCOLL_HEADER), pSh, m_pNumberingOnFooterHeader->IsChecked());
-    if( m_pNumberingOnFooterHeader->IsChecked())
-       m_pNumberingOnFooterHeader->SetState(TRISTATE_TRUE);
+    lcl_setLineNumbering(SwResId(STR_POOLCOLL_FOOTER), m_pSh, m_xNumberingOnFooterHeader->get_active());
+    lcl_setLineNumbering(SwResId(STR_POOLCOLL_HEADER), m_pSh, m_xNumberingOnFooterHeader->get_active());
+    if( m_xNumberingOnFooterHeader->get_active())
+       m_xNumberingOnFooterHeader->set_state(TRISTATE_TRUE);
     else
-       m_pNumberingOnFooterHeader->SetState(TRISTATE_FALSE);
+       m_xNumberingOnFooterHeader->set_state(TRISTATE_FALSE);
 
-    EndDialog( RET_OK );
+    m_xDialog->response(RET_OK);
 }
 
 // modify
-IMPL_LINK_NOARG(SwLineNumberingDlg, ModifyHdl, Edit&, void)
+IMPL_LINK_NOARG(SwLineNumberingDlg, ModifyHdl, weld::Entry&, void)
 {
-    bool bEnable = m_pNumberingOnCB->IsChecked() && !m_pDivisorED->GetText().isEmpty();
+    bool bEnable = m_xNumberingOnCB->get_active() && !m_xDivisorED->get_text().isEmpty();
 
-    m_pDivIntervalFT->Enable(bEnable);
-    m_pDivIntervalNF->Enable(bEnable);
-    m_pDivRowsFT->Enable(bEnable);
+    m_xDivIntervalFT->set_sensitive(bEnable);
+    m_xDivIntervalNF->set_sensitive(bEnable);
+    m_xDivRowsFT->set_sensitive(bEnable);
 }
 
 // On/Off
-IMPL_LINK_NOARG(SwLineNumberingDlg, LineOnOffHdl, Button*, void)
+IMPL_LINK_NOARG(SwLineNumberingDlg, LineOnOffHdl, weld::Button&, void)
 {
-    bool bEnable = m_pNumberingOnCB->IsChecked();
-    m_pBodyContent->Enable(bEnable);
-    ModifyHdl(*m_pDivisorED);
+    bool bEnable = m_xNumberingOnCB->get_active();
+    m_xBodyContent->set_sensitive(bEnable);
+    ModifyHdl(*m_xDivisorED);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
