@@ -92,7 +92,7 @@ public:
         getAccessibleContext() override;
 
     // XAccessibleContext
-    virtual sal_Int32 SAL_CALL getAccessibleChildCount() override;
+    virtual sal_Int32 SAL_CALL getAccessibleChildCount() override final;
     css::uno::Reference< css::accessibility::XAccessible> SAL_CALL
         getAccessibleChild (sal_Int32 i) override;
     virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL
@@ -143,6 +143,8 @@ private:
 
 
     virtual ~VCLXAccessibleList() override = default;
+
+    sal_Int32 implGetAccessibleChildCount();
 
     /** This function is called from the implementation helper during a
         XComponent::dispose call.  Free the list of items and the items themselves.

@@ -355,9 +355,14 @@ Reference< XAccessible > VCLXAccessibleTabControl::getAccessibleChild( sal_Int32
 {
     OExternalLockGuard aGuard( this );
 
-    if ( i < 0 || i >= getAccessibleChildCount() )
+    if ( i < 0 || static_cast<std::size_t>(i) >= m_aAccessibleChildren.size() )
         throw IndexOutOfBoundsException();
 
+    return implGetAccessibleChild( i );
+}
+
+Reference< XAccessible > VCLXAccessibleTabControl::implGetAccessibleChild( sal_Int32 i )
+{
     Reference< XAccessible > xChild = m_aAccessibleChildren[i];
     if ( !xChild.is() )
     {
@@ -398,7 +403,7 @@ void VCLXAccessibleTabControl::selectAccessibleChild( sal_Int32 nChildIndex )
 {
     OExternalLockGuard aGuard( this );
 
-    if ( nChildIndex < 0 || nChildIndex >= getAccessibleChildCount() )
+    if ( nChildIndex < 0 || static_cast<std::size_t>(nChildIndex) >= m_aAccessibleChildren.size() )
         throw IndexOutOfBoundsException();
 
     if ( m_pTabControl )
@@ -410,9 +415,14 @@ sal_Bool VCLXAccessibleTabControl::isAccessibleChildSelected( sal_Int32 nChildIn
 {
     OExternalLockGuard aGuard( this );
 
-    if ( nChildIndex < 0 || nChildIndex >= getAccessibleChildCount() )
+    if ( nChildIndex < 0 || static_cast<std::size_t>(nChildIndex) >= m_aAccessibleChildren.size() )
         throw IndexOutOfBoundsException();
 
+    return implIsAccessibleChildSelected( nChildIndex );
+}
+
+bool VCLXAccessibleTabControl::implIsAccessibleChildSelected( sal_Int32 nChildIndex )
+{
     bool bSelected = false;
     if ( m_pTabControl && m_pTabControl->GetCurPageId() == m_pTabControl->GetPageId( static_cast<sal_uInt16>(nChildIndex) ) )
         bSelected = true;
@@ -429,8 +439,6 @@ void VCLXAccessibleTabControl::clearAccessibleSelection(  )
 
 void VCLXAccessibleTabControl::selectAllAccessibleChildren(  )
 {
-    OExternalLockGuard aGuard( this );
-
     selectAccessibleChild( 0 );
 }
 
@@ -447,16 +455,16 @@ Reference< XAccessible > VCLXAccessibleTabControl::getSelectedAccessibleChild( s
 {
     OExternalLockGuard aGuard( this );
 
-    if ( nSelectedChildIndex < 0 || nSelectedChildIndex >= getSelectedAccessibleChildCount() )
+    if ( nSelectedChildIndex != 0 )
         throw IndexOutOfBoundsException();
 
     Reference< XAccessible > xChild;
 
-    for ( sal_Int32 i = 0, j = 0, nCount = getAccessibleChildCount(); i < nCount; i++ )
+    for ( std::size_t i = 0, nCount = m_aAccessibleChildren.size(); i < nCount; i++ )
     {
-        if ( isAccessibleChildSelected( i ) && ( j++ == nSelectedChildIndex ) )
+        if ( implIsAccessibleChildSelected( i ) )
         {
-            xChild = getAccessibleChild( i );
+            xChild = implGetAccessibleChild( i );
             break;
         }
     }
@@ -469,7 +477,7 @@ void VCLXAccessibleTabControl::deselectAccessibleChild( sal_Int32 nChildIndex )
 {
     OExternalLockGuard aGuard( this );
 
-    if ( nChildIndex < 0 || nChildIndex >= getAccessibleChildCount() )
+    if ( nChildIndex < 0 || static_cast<std::size_t>(nChildIndex) >= m_aAccessibleChildren.size() )
         throw IndexOutOfBoundsException();
 
     // This method makes no sense in a tab control, and so does nothing.
