@@ -221,7 +221,7 @@ const Sequence<OUString>& SwRevisionConfig::GetPropertyNames()
     static Sequence<OUString> aNames;
     if(!aNames.getLength())
     {
-        const int nCount = 9;
+        const int nCount = 8;
         aNames.realloc(nCount);
         static const char* aPropNames[] =
         {
@@ -232,8 +232,7 @@ const Sequence<OUString>& SwRevisionConfig::GetPropertyNames()
             "TextDisplay/ChangedAttribute/Attribute",   // 4
             "TextDisplay/ChangedAttribute/Color",       // 5
             "LinesChanged/Mark",                        // 6
-            "LinesChanged/Color",                       // 7
-            "ShowInlineTooltip"                         // 8
+            "LinesChanged/Color"                        // 7
         };
         OUString* pNames = aNames.getArray();
         for(int i = 0; i < nCount; i++)
@@ -255,7 +254,6 @@ SwRevisionConfig::SwRevisionConfig() :
     aFormatAttr.m_nItemId = SID_ATTR_CHAR_WEIGHT;
     aFormatAttr.m_nAttr = WEIGHT_BOLD;
     aFormatAttr.m_nColor = COL_BLACK;
-    bShowInlineTooltip = true;
     Load();
 }
 
@@ -309,7 +307,6 @@ void SwRevisionConfig::ImplCommit()
             case 5 : pValues[nProp] <<= aFormatAttr.m_nColor;   break;
             case 6 : pValues[nProp] <<= nMarkAlign;             break;
             case 7 : pValues[nProp] <<= aMarkColor;             break;
-            case 8 : pValues[nProp] <<= bShowInlineTooltip;     break;
         }
     }
     PutProperties(aNames, aValues);
@@ -363,7 +360,6 @@ void SwRevisionConfig::Load()
                 case 5 : aFormatAttr.m_nColor     = Color(nVal); break;
                 case 6 : nMarkAlign = sal::static_int_cast< sal_uInt16, sal_Int32>(nVal); break;
                 case 7 : aMarkColor = Color(nVal); break;
-                case 8 : bShowInlineTooltip = *o3tl::doAccess<bool>(pValues[nProp]);
             }
         }
     }

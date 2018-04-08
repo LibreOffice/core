@@ -70,7 +70,6 @@ class SwRevisionConfig : public utl::ConfigItem
                                         //Revision/TextDisplay/ChangeAttribute/Color
     sal_uInt16      nMarkAlign;         //Revision/LinesChanged/Mark
     Color           aMarkColor;         //Revision/LinesChanged/Color
-    bool            bShowInlineTooltip; //ShowInlineTooltip
 
     static const css::uno::Sequence<OUString>& GetPropertyNames();
 
@@ -251,10 +250,6 @@ public:
     const AuthorCharAttr    &GetFormatAuthorAttr() const { return aRevisionConfig.aFormatAttr; }
     void        SetFormatAuthorAttr( AuthorCharAttr const &rAttr ) {  aRevisionConfig.aFormatAttr = rAttr;
                                                                       aRevisionConfig.SetModified();}
-
-    bool        IsShowInlineTooltip() const { return aRevisionConfig.bShowInlineTooltip; }
-    void        SetShowInlineTooltip( bool bSet ) {  aRevisionConfig.bShowInlineTooltip = bSet;
-                                                      aRevisionConfig.SetModified(); }
 
     sal_uInt16          GetMarkAlignMode()  const               { return aRevisionConfig.nMarkAlign; }
     void            SetMarkAlignMode(sal_uInt16 nMode)          { aRevisionConfig.nMarkAlign = nMode;

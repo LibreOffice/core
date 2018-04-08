@@ -7633,3 +7633,20 @@ SfxVoidItem NavElement FN_NAV_ELEMENT
     ToolBoxConfig = TRUE,
     GroupId = SfxGroupId::Navigator;
 ]
+
+SfxBoolItem ShowInlineTooltips FN_SHOW_INLINETOOLTIPS
+()
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = TRUE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::View;
+]
