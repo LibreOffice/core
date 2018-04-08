@@ -382,7 +382,7 @@ ODatabaseModelImpl::ODatabaseModelImpl( const Reference< XComponentContext >& _r
             ,m_nControllerLockCount(0)
 {
     // some kind of default
-    m_sConnectURL = "jdbc:";
+    m_sConnectURL = "sdbc:embedded:firebird";
     m_aTableFilter.realloc(1);
     m_aTableFilter[0] = "%";
     impl_construct_nothrow();

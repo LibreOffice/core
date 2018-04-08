@@ -50,7 +50,6 @@ $(eval $(call gb_CppunitTest_use_components,dbaccess_hsqldb_test,\
     configmgr/source/configmgr \
     connectivity/source/cpool/dbpool2 \
     connectivity/source/drivers/firebird/firebird_sdbc \
-    connectivity/source/drivers/hsqldb/hsqldb \
     connectivity/source/drivers/jdbc/jdbc \
     connectivity/source/manager/sdbc2 \
     dbaccess/util/dba \
@@ -72,10 +71,6 @@ $(eval $(call gb_CppunitTest_use_components,dbaccess_hsqldb_test,\
     unotools/util/utl \
     uui/util/uui \
     xmloff/util/xo \
-))
-
-$(eval $(call gb_CppunitTest_use_jars,dbaccess_hsqldb_test,\
-	sdbc_hsqldb \
 ))
 
 $(eval $(call gb_CppunitTest_use_configuration,dbaccess_hsqldb_test))

@@ -45,8 +45,6 @@ gb_Library_FILENAMES := \
     $(subst jpipe:libjpipe.dylib,jpipe:libjpipe.jnilib,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := \
     $(subst juh:libjuh.dylib,juh:libjuh.jnilib,$(gb_Library_FILENAMES))
-gb_Library_FILENAMES := \
-    $(subst hsqldb:libhsqldb.dylib,hsqldb:libhsqldb.jnilib,$(gb_Library_FILENAMES))
 endif
 
 # fixes for all the libraries that are named with too much creativity and do

@@ -261,7 +261,6 @@ $(eval $(call gb_Rdb_add_components,services,\
 		connectivity/source/drivers/macab/macab1 \
 	) \
 	$(if $(ENABLE_JAVA), \
-		connectivity/source/drivers/hsqldb/hsqldb \
 		connectivity/source/drivers/jdbc/jdbc \
 	) \
 	connectivity/source/manager/sdbc2 \

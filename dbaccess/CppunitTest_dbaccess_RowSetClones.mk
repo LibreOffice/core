@@ -17,10 +17,6 @@ $(eval $(call gb_CppunitTest_use_externals,dbaccess_RowSetClones,\
     boost_headers \
 ))
 
-$(eval $(call gb_CppunitTest_use_jars,dbaccess_RowSetClones, \
-    sdbc_hsqldb \
-))
-
 $(eval $(call gb_CppunitTest_use_libraries,dbaccess_RowSetClones, \
     basegfx \
     comphelper \
@@ -72,7 +68,6 @@ $(eval $(call gb_CppunitTest_use_components,dbaccess_RowSetClones,\
     comphelper/util/comphelp \
     configmgr/source/configmgr \
     connectivity/source/drivers/firebird/firebird_sdbc \
-    connectivity/source/drivers/hsqldb/hsqldb \
     connectivity/source/drivers/jdbc/jdbc \
     connectivity/source/manager/sdbc2 \
     dbaccess/util/dba \

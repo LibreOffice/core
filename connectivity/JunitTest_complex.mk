@@ -22,10 +22,6 @@ $(eval $(call gb_JunitTest_use_jars,connectivity_complex,\
 	unoil \
 ))
 
-$(eval $(call gb_JunitTest_use_externals,connectivity_complex,\
-	hsqldb \
-))
-
 $(eval $(call gb_JunitTest_add_classes,connectivity_complex,\
 	org.openoffice.test.UnoApiTest \
 ))
