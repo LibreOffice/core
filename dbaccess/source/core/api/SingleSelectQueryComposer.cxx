@@ -1195,7 +1195,6 @@ bool OSingleSelectQueryComposer::setComparsionPredicate(OSQLParseNode const * pC
 
         // Criterion
         aItem.Handle = getPredicateType(pCondition->getChild(1));
-        aValue       = pCondition->getChild(1)->getTokenValue();
         for(size_t i=0;i< pRhs->count();i++)
             pRhs->getChild(i)->parseNodeToPredicateStr(aValue, m_xConnection, xFormatter, m_aLocale, static_cast<sal_Char>( m_sDecimalSep.toChar() ) );
 
