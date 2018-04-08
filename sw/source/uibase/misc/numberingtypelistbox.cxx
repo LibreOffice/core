@@ -184,4 +184,122 @@ bool    SwNumberingTypeListBox::SelectNumberingType(SvxNumType nType)
     return LISTBOX_ENTRY_NOTFOUND != nPos;
 }
 
+NumberingTypeListBox::NumberingTypeListBox(weld::ComboBoxText* pWidget)
+    : m_xWidget(pWidget)
+    , m_xImpl(new SwNumberingTypeListBox_Impl)
+{
+    uno::Reference<uno::XComponentContext>          xContext( ::comphelper::getProcessComponentContext() );
+    uno::Reference<text::XDefaultNumberingProvider> xDefNum = text::DefaultNumberingProvider::create(xContext);
+    m_xImpl->xInfo.set(xDefNum, uno::UNO_QUERY);
+}
+
+NumberingTypeListBox::~NumberingTypeListBox()
+{
+}
+
+void NumberingTypeListBox::Reload(SwInsertNumTypes nTypeFlags)
+{
+    m_xWidget->clear();
+    uno::Sequence<sal_Int16> aTypes;
+    const sal_Int16* pTypes = nullptr;
+    if (nTypeFlags & SwInsertNumTypes::Extended)
+    {
+        if (m_xImpl->xInfo.is())
+        {
+            aTypes = m_xImpl->xInfo->getSupportedNumberingTypes();
+            pTypes = aTypes.getConstArray();
+        }
+    }
+
+    for(size_t i = 0; i < SvxNumberingTypeTable::Count(); i++)
+    {
+        sal_IntPtr nValue = SvxNumberingTypeTable::GetValue(i);
+        bool bInsert = true;
+        int nPos = -1;
+        switch(nValue)
+        {
+            case  style::NumberingType::NUMBER_NONE:
+                bInsert = bool(nTypeFlags & SwInsertNumTypes::NoNumbering);
+                nPos = 0;
+
+                break;
+            case  style::NumberingType::CHAR_SPECIAL:
+                bInsert = bool(nTypeFlags & SwInsertNumTypes::Bullet);
+
+                break;
+            case  style::NumberingType::PAGE_DESCRIPTOR:
+                bInsert = bool(nTypeFlags & SwInsertNumTypes::PageStyleNumbering);
+
+                break;
+            case  style::NumberingType::BITMAP:
+                bInsert = bool(nTypeFlags & SwInsertNumTypes::Bitmap );
+
+                break;
+            case  style::NumberingType::BITMAP | LINK_TOKEN:
+                bInsert = false;
+
+                break;
+            default:
+                if (nValue >  style::NumberingType::CHARS_LOWER_LETTER_N)
+                {
+                    // Insert only if offered by i18n framework per configuration.
+                    bInsert = false;
+                    if (pTypes)
+                    {
+                        for(sal_Int32 nType = 0; nType < aTypes.getLength(); nType++)
+                        {
+                            if (pTypes[nType] == nValue)
+                            {
+                                bInsert = true;
+                                break;  // for
+                            }
+                        }
+                    }
+                }
+        }
+        if (bInsert)
+        {
+            m_xWidget->insert(nPos, OUString::number(nValue), SvxNumberingTypeTable::GetString(i));
+        }
+    }
+    if (nTypeFlags & SwInsertNumTypes::Extended)
+    {
+        if (pTypes)
+        {
+            for (sal_Int32 nType = 0; nType < aTypes.getLength(); nType++)
+            {
+                sal_Int16 nCurrent = pTypes[nType];
+                if (nCurrent > style::NumberingType::CHARS_LOWER_LETTER_N)
+                {
+                    if (m_xWidget->find_id(OUString::number(nCurrent)) == -1)
+                    {
+                        m_xWidget->insert(-1, OUString::number(nCurrent), m_xImpl->xInfo->getNumberingIdentifier(nCurrent));
+                    }
+                }
+            }
+        }
+        m_xWidget->set_active(0);
+    }
+}
+
+SvxNumType NumberingTypeListBox::GetSelectedNumberingType()
+{
+    SvxNumType nRet = SVX_NUM_CHARS_UPPER_LETTER;
+    int nSelPos = m_xWidget->get_active();
+    if (nSelPos != -1)
+        nRet = static_cast<SvxNumType>(m_xWidget->get_id(nSelPos).toInt32());
+#if OSL_DEBUG_LEVEL > 0
+    else
+        OSL_FAIL("NumberingTypeListBox not selected");
+#endif
+    return nRet;
+}
+
+bool NumberingTypeListBox::SelectNumberingType(SvxNumType nType)
+{
+    int nPos = m_xWidget->find_id(OUString::number(nType));
+    m_xWidget->set_active(nPos);
+    return nPos != -1;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

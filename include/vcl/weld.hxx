@@ -67,6 +67,7 @@ public:
     virtual void set_margin_bottom(int nMargin) = 0;
 
     virtual void set_accessible_name(const OUString& rName) = 0;
+    virtual OUString get_accessible_name() const = 0;
 
     virtual void connect_focus_in(const Link<Widget&, void>& rLink) = 0;
     virtual void connect_focus_out(const Link<Widget&, void>& rLink) = 0;

@@ -87,7 +87,7 @@ class WriterLineNumbering(UITestCase):
         self.assertEqual(get_state_as_dict(xstyledropdown)["SelectEntryText"], "Bullets")
         self.assertEqual(get_state_as_dict(xformatdropdown)["SelectEntryText"], "A, B, C, ...")
         self.assertEqual(get_state_as_dict(xpositiondropdown)["SelectEntryText"], "Right")
-        self.assertEqual(get_state_as_dict(xspacingspin)["Text"], "1.00 cm")
+        self.assertEqual(get_state_as_dict(xspacingspin)["Text"], "0.60 cm")
         self.assertEqual(get_state_as_dict(xintervalspin)["Text"], "6")
         self.assertEqual(get_state_as_dict(xtextentry)["Text"], ";")
         self.assertEqual(get_state_as_dict(xlinesspin)["Text"], "4")
