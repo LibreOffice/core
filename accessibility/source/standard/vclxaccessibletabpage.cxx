@@ -280,7 +280,11 @@ Reference< XAccessibleContext > VCLXAccessibleTabPage::getAccessibleContext(  )
 sal_Int32 VCLXAccessibleTabPage::getAccessibleChildCount()
 {
     OExternalLockGuard aGuard( this );
+    return implGetAccessibleChildCount();
+}
 
+sal_Int32 VCLXAccessibleTabPage::implGetAccessibleChildCount()
+{
     sal_Int32 nCount = 0;
     if ( m_pTabControl )
     {
@@ -297,7 +301,7 @@ Reference< XAccessible > VCLXAccessibleTabPage::getAccessibleChild( sal_Int32 i 
 {
     OExternalLockGuard aGuard( this );
 
-    if ( i < 0 || i >= getAccessibleChildCount() )
+    if ( i < 0 || i >= implGetAccessibleChildCount() )
         throw IndexOutOfBoundsException();
 
     Reference< XAccessible > xChild;
