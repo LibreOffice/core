@@ -22,7 +22,6 @@
 #include "scdllapi.h"
 #include <sfx2/tbxctrl.hxx>
 
-#include <functional>
 
 namespace sc {
 
