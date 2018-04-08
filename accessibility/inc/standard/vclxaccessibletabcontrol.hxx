@@ -44,6 +44,10 @@ private:
     AccessibleChildren      m_aAccessibleChildren;
     VclPtr<TabControl>      m_pTabControl;
 
+    css::uno::Reference< css::accessibility::XAccessible > implGetAccessibleChild( sal_Int32 i );
+    bool implIsAccessibleChildSelected( sal_Int32 nChildIndex );
+
+
     void                    UpdateFocused();
     void                    UpdateSelected( sal_Int32 i, bool bSelected );
     void                    UpdatePageText( sal_Int32 i );

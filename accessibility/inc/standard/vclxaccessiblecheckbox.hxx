@@ -44,6 +44,8 @@ private:
 
     virtual ~VCLXAccessibleCheckBox() override = default;
 
+    sal_Int32 implGetMaximumValue();
+
     bool    IsChecked();
     bool    IsIndeterminate();
 

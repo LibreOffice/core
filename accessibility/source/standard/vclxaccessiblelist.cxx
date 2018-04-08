@@ -525,7 +525,11 @@ sal_Int32 SAL_CALL VCLXAccessibleList::getAccessibleChildCount()
 {
     SolarMutexGuard aSolarGuard;
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+    return implGetAccessibleChildCount();
+}
 
+sal_Int32 VCLXAccessibleList::implGetAccessibleChildCount()
+{
     sal_Int32 nCount = 0;
     if ( m_pListBoxHelper )
         nCount = m_pListBoxHelper->GetEntryCount();
