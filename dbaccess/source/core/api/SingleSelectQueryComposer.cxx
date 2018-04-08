@@ -26,6 +26,7 @@
 #include <SingleSelectQueryComposer.hxx>
 #include <sqlbison.hxx>
 #include <sdbcoretools.hxx>
+#include "dsntypes.hxx"
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/container/XChild.hpp>
@@ -1467,6 +1468,26 @@ OUString SAL_CALL OSingleSelectQueryComposer::getQueryWithSubstitution(  )
         SQLException aError;
         if ( !pStatementNode->parseNodeToExecutableStatement( sSqlStatement, m_xConnection, m_aSqlParser, &aError ) )
             throw aError;
+
+        OSQLParseNode* pTableExp = pStatementNode->getChild(3);
+        Reference< XDatabaseMetaData > xMeta( m_xConnection->getMetaData() );
+        ::dbaccess::ODsnTypeCollection typeColl{m_aContext};
+        auto eType = typeColl.determineType(xMeta->getURL());
+        if( pTableExp->getChild(6)->count() >= 2 && pTableExp->getChild(6)->getChild(1)
+         && (eType == ::dbaccess::DST_FIREBIRD ||
+                eType == ::dbaccess::DST_EMBEDDED_FIREBIRD))
+        {
+            OUString sLimitValue = pTableExp->getChild(6)->getChild(1)->getTokenValue();
+            pTableExp->removeAt(6);
+            OUString fbStatement;
+            pStatementNode->parseNodeToStr(fbStatement, m_xConnection);
+
+            OUStringBuffer sBuff{fbStatement};
+            constexpr char SELECT_KEYWORD[] = "SELECT";
+            sBuff.insert(fbStatement.indexOf(SELECT_KEYWORD) + strlen(SELECT_KEYWORD),
+                    " FIRST " + sLimitValue);
+            sSqlStatement = sBuff.makeStringAndClear();
+        }
     }
 
     return sSqlStatement;
