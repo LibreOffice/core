@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_7820699c",
+        "filename": "cui/source/tabpages/numpages.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 2454,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2018-04-08T14:57:17Z",
+      "side": 1,
+      "message": "Handling the new enumerator in the preview painting would be a useful follow-up change.",
+      "revId": "76e9b2daef2cb629ced140b6bbcf1bbdb2437682",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_98251dad",
+        "filename": "sw/source/ui/misc/outline.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1038,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2018-04-08T14:57:17Z",
+      "side": 1,
+      "message": "Same here, I guess this is the one that actually has the relevant preview widget.",
+      "revId": "76e9b2daef2cb629ced140b6bbcf1bbdb2437682",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
