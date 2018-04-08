@@ -56,6 +56,11 @@ void FocusManager::GrabFocus()
     FocusDeckTitle();
 }
 
+void FocusManager::GrabFocusPanel()
+{
+    FocusPanel(0, false);
+}
+
 void FocusManager::Clear()
 {
     SetDeckTitle(nullptr);

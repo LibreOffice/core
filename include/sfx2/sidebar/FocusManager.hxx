@@ -62,6 +62,7 @@ public:
         pressing the F6 key.
     */
     void GrabFocus();
+    void GrabFocusPanel();
 
     void SetDeckTitle(DeckTitleBar* pDeckTitleBar);
     void SetPanels(const SharedPanelContainer& rPanels);
