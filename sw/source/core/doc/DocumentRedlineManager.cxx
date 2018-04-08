@@ -2717,16 +2717,6 @@ void DocumentRedlineManager::checkRedlining(RedlineFlags& _rReadlineMode)
     }
 }
 
-bool DocumentRedlineManager::IsHideInlineTooltips()
-{
-    return bHideInlineTooltips;
-}
-
-void DocumentRedlineManager::SetHideInlineTooltips(bool bSet)
-{
-    bHideInlineTooltips = bSet;
-}
-
 DocumentRedlineManager::~DocumentRedlineManager()
 {
 }

@@ -328,8 +328,6 @@ class SwRedlineOptionsTabPage : public SfxTabPage
     VclPtr<SvxColorListBox>     m_pMarkColorLB;
     VclPtr<SwMarkPreview>       m_pMarkPreviewWN;
 
-    VclPtr<CheckBox>            m_pShowChangesTooltip;
-
     DECL_LINK(AttribHdl, ListBox&, void);
     void ChangedMaskPrev();
     DECL_LINK(ChangedMaskPrevHdl, ListBox&, void);
