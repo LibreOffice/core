@@ -246,9 +246,10 @@ uno::Sequence< OUString > SvxUnoDrawMSFactory::concatServiceNames( uno::Sequence
     return aSeq;
 }
 
-SdrModel* SvxUnoDrawingModel::getSdrModelFromUnoModel() const
+SdrModel& SvxUnoDrawingModel::getSdrModelFromUnoModel() const
 {
-    return mpDoc;
+    OSL_ENSURE(mpDoc, "No SdrModel in UnoDrawingModel, should not happen");
+    return *mpDoc;
 }
 
 SvxUnoDrawingModel::SvxUnoDrawingModel(SdrModel* pDoc) throw()

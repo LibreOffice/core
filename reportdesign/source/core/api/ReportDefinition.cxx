@@ -2020,9 +2020,10 @@ std::shared_ptr<rptui::OReportModel> OReportDefinition::getSdrModel(const uno::R
     return pReportModel;
 }
 
-SdrModel* OReportDefinition::getSdrModelFromUnoModel() const
+SdrModel& OReportDefinition::getSdrModelFromUnoModel() const
 {
-    return m_pImpl->m_pReportModel.get();
+    OSL_ENSURE(m_pImpl->m_pReportModel.get(), "No SdrModel in ReportDesign, should not happen");
+    return *m_pImpl->m_pReportModel.get();
 }
 
 uno::Reference< uno::XInterface > SAL_CALL OReportDefinition::createInstanceWithArguments( const OUString& aServiceSpecifier, const uno::Sequence< uno::Any >& _aArgs)

@@ -2714,9 +2714,10 @@ void SdXImpressDocument::initializeDocument()
     }
 }
 
-SdrModel* SdXImpressDocument::getSdrModelFromUnoModel() const
+SdrModel& SdXImpressDocument::getSdrModelFromUnoModel() const
 {
-    return GetDoc();
+    OSL_ENSURE(GetDoc(), "No SdrModel in draw/Impress, should not happen");
+    return *GetDoc(); // TTTT should be reference
 }
 
 void SAL_CALL SdXImpressDocument::dispose()
