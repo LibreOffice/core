@@ -61,6 +61,8 @@ class SwContentOptPage : public SfxTabPage
     VclPtr<FixedText>  m_pMetricLabel;
     VclPtr<ListBox>    m_pMetricLB;
 
+    VclPtr<CheckBox>   m_pShowInlineTooltips;
+
     DECL_LINK(VertRulerHdl, Button*, void);
 public:
     SwContentOptPage( vcl::Window* pParent, const SfxItemSet& rSet);
@@ -327,8 +329,6 @@ class SwRedlineOptionsTabPage : public SfxTabPage
     VclPtr<ListBox>             m_pMarkPosLB;
     VclPtr<SvxColorListBox>     m_pMarkColorLB;
     VclPtr<SwMarkPreview>       m_pMarkPreviewWN;
-
-    VclPtr<CheckBox>            m_pShowChangesTooltip;
 
     DECL_LINK(AttribHdl, ListBox&, void);
     void ChangedMaskPrev();
