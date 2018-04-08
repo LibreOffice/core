@@ -99,7 +99,7 @@ private:
     bool                            mbNotificationsDisabled;    // prevent EditEngine/Outliner notifications (e.g. when setting up forwarder)
     bool                            mbNotifyEditOutlinerSet;
 
-    SvxUnoTextRangeBaseList         maTextRanges;
+    SvxUnoTextRangeBaseVec          mvTextRanges;
 
     SvxTextForwarder*               GetBackgroundTextForwarder();
     SvxTextForwarder*               GetEditModeTextForwarder();
@@ -132,7 +132,7 @@ public:
 
     void addRange( SvxUnoTextRangeBase* pNewRange );
     void removeRange( SvxUnoTextRangeBase* pOldRange );
-    const SvxUnoTextRangeBaseList& getRanges() const { return maTextRanges;}
+    const SvxUnoTextRangeBaseVec& getRanges() const { return mvTextRanges;}
 
     void                    lock();
     void                    unlock();
@@ -238,15 +238,15 @@ SvxTextEditSourceImpl::~SvxTextEditSourceImpl()
 void SvxTextEditSourceImpl::addRange( SvxUnoTextRangeBase* pNewRange )
 {
     if( pNewRange )
-        if( std::find( maTextRanges.begin(), maTextRanges.end(), pNewRange ) == maTextRanges.end() )
-            maTextRanges.push_back( pNewRange );
+        if( std::find( mvTextRanges.begin(), mvTextRanges.end(), pNewRange ) == mvTextRanges.end() )
+            mvTextRanges.push_back( pNewRange );
 }
 
 
 void SvxTextEditSourceImpl::removeRange( SvxUnoTextRangeBase* pOldRange )
 {
     if( pOldRange )
-        maTextRanges.remove( pOldRange );
+        mvTextRanges.erase( std::remove(mvTextRanges.begin(), mvTextRanges.end(), pOldRange), mvTextRanges.end() );
 }
 
 
@@ -1050,7 +1050,7 @@ void SvxTextEditSource::removeRange( SvxUnoTextRangeBase* pOldRange )
     mpImpl->removeRange( pOldRange );
 }
 
-const SvxUnoTextRangeBaseList& SvxTextEditSource::getRanges() const
+const SvxUnoTextRangeBaseVec& SvxTextEditSource::getRanges() const
 {
     return mpImpl->getRanges();
 }

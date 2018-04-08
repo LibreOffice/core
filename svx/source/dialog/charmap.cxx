@@ -865,7 +865,7 @@ SubsetMap::SubsetMap( const FontCharMapRef& rxFontCharMap )
     ApplyCharMap(rxFontCharMap);
 }
 
-const SubsetList& SubsetMap::GetSubsetMap() const
+const SubsetVec& SubsetMap::GetSubsetMap() const
 {
     return maSubsets;
 }
@@ -885,7 +885,7 @@ inline Subset::Subset(sal_UCS4 nMin, sal_UCS4 nMax, const OUString& rName)
 
 void SubsetMap::InitList()
 {
-    static SubsetList aAllSubsets;
+    static SubsetVec aAllSubsets;
     static bool bInit = true;
     if( bInit )
     {
@@ -1769,7 +1769,7 @@ void SubsetMap::InitList()
 #endif
         }
 
-        aAllSubsets.sort();
+        std::stable_sort(aAllSubsets.begin(), aAllSubsets.end());
     }
 
     maSubsets = aAllSubsets;
@@ -1781,7 +1781,7 @@ void SubsetMap::ApplyCharMap( const FontCharMapRef& rxFontCharMap )
         return;
 
     // remove subsets that are not matched in any range
-    SubsetList::iterator it = maSubsets.begin();
+    auto it = maSubsets.begin();
     while(it != maSubsets.end())
     {
         const Subset& rSubset = *it;
