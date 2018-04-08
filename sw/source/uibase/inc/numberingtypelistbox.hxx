@@ -21,6 +21,7 @@
 
 #include <memory>
 #include <vcl/lstbox.hxx>
+#include <vcl/weld.hxx>
 #include <swdllapi.h>
 #include <o3tl/typed_flags_set.hxx>
 #include <editeng/svxenum.hxx>
@@ -53,6 +54,20 @@ public:
 
     void          Reload(SwInsertNumTypes nTypeFlags);
 
+    SvxNumType    GetSelectedNumberingType();
+    bool          SelectNumberingType(SvxNumType nType);
+};
+
+class SW_DLLPUBLIC NumberingTypeListBox
+{
+    std::unique_ptr<weld::ComboBoxText> m_xWidget;
+    std::unique_ptr<SwNumberingTypeListBox_Impl> m_xImpl;
+
+public:
+    NumberingTypeListBox(weld::ComboBoxText* pWidget);
+    ~NumberingTypeListBox();
+
+    void          Reload(SwInsertNumTypes nTypeFlags);
     SvxNumType    GetSelectedNumberingType();
     bool          SelectNumberingType(SvxNumType nType);
 };

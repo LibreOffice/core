@@ -1332,7 +1332,14 @@ public:
         AtkObject* pAtkObject = gtk_widget_get_accessible(m_pWidget);
         if (!pAtkObject)
             return;
-        atk_object_set_description(pAtkObject, OUStringToOString(rName, RTL_TEXTENCODING_UTF8).getStr());
+        atk_object_set_name(pAtkObject, OUStringToOString(rName, RTL_TEXTENCODING_UTF8).getStr());
+    }
+
+    virtual OUString get_accessible_name() const override
+    {
+        AtkObject* pAtkObject = gtk_widget_get_accessible(m_pWidget);
+        const char* pStr = pAtkObject ? atk_object_get_name(pAtkObject) : nullptr;
+        return OUString(pStr, pStr ? strlen(pStr) : 0, RTL_TEXTENCODING_UTF8);
     }
 
     virtual weld::Container* weld_parent() const override;

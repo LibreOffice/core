@@ -115,6 +115,10 @@ short AbstractSwMergeTableDlg_Impl::Execute()
 {
     return m_xDlg->execute();
 }
+short AbstractGenericDialog_Impl::Execute()
+{
+    return m_xDlg->run();
+}
 short AbstractSwSortDlg_Impl::Execute()
 {
     return m_xDlg->execute();
@@ -950,8 +954,7 @@ VclPtr<VclAbstractDialog> SwAbstractDialogFactory_Impl::CreateTitlePageDlg ( vcl
 
 VclPtr<VclAbstractDialog> SwAbstractDialogFactory_Impl::CreateVclSwViewDialog(SwView& rView)
 {
-    VclPtr<Dialog> pDlg = VclPtr<SwLineNumberingDlg>::Create( &rView );
-    return VclPtr<VclAbstractDialog_Impl>::Create( pDlg );
+    return VclPtr<AbstractGenericDialog_Impl>::Create(new SwLineNumberingDlg(rView));
 }
 
 VclPtr<AbstractInsTableDlg> SwAbstractDialogFactory_Impl::CreateInsTableDlg(SwView& rView)

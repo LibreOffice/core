@@ -310,6 +310,11 @@ public:
         m_xWidget->SetAccessibleName(rName);
     }
 
+    virtual OUString get_accessible_name() const override
+    {
+        return m_xWidget->GetAccessibleName();
+    }
+
     virtual void connect_focus_in(const Link<Widget&, void>& rLink) override
     {
         assert(!m_aFocusInHdl.IsSet());
