@@ -116,6 +116,8 @@ SwContentOptPage::SwContentOptPage( vcl::Window* pParent,
     get (m_pMetricLabel, "measureunitlabel");
     get (m_pMetricLB, "measureunit");
 
+    get (m_pShowInlineTooltips,"changestooltip");
+
     /* This part is visible only with Writer/Web->View dialogue. */
     const SfxPoolItem* pItem;
     if (! (SfxItemState::SET == rCoreSet.GetItemState(SID_HTML_MODE, false, &pItem )
@@ -192,6 +194,7 @@ void SwContentOptPage::dispose()
     m_pSettingsLabel.clear();
     m_pMetricLabel.clear();
     m_pMetricLB.clear();
+    m_pShowInlineTooltips.clear();
     SfxTabPage::dispose();
 }
 
@@ -237,6 +240,7 @@ void SwContentOptPage::Reset(const SfxItemSet* rSet)
         m_pVRulerCBox->Check (pElemAttr->bVertRuler);
         m_pVRulerRightCBox->Check (pElemAttr->bVertRulerRight);
         m_pSmoothCBox->Check (pElemAttr->bSmoothScroll);
+        m_pShowInlineTooltips->Check (pElemAttr->bShowInlineTooltips);
     }
     m_pMetricLB->SetNoSelection();
     lcl_SelectMetricLB(m_pMetricLB, SID_ATTR_METRIC, *rSet);
@@ -259,6 +263,7 @@ bool SwContentOptPage::FillItemSet(SfxItemSet* rSet)
     aElem.bVertRuler            = m_pVRulerCBox->IsChecked();
     aElem.bVertRulerRight       = m_pVRulerRightCBox->IsChecked();
     aElem.bSmoothScroll         = m_pSmoothCBox->IsChecked();
+    aElem.bShowInlineTooltips   = m_pShowInlineTooltips->IsChecked();
 
     bool bRet = !pOldAttr || aElem != *pOldAttr;
     if(bRet)
@@ -290,6 +295,7 @@ bool SwContentOptPage::FillItemSet(SfxItemSet* rSet)
         rSet->Put( SfxUInt16Item( FN_VSCROLL_METRIC, nFieldUnit ) );
         bRet = true;
     }
+
     return bRet;
 }
 
@@ -1754,7 +1760,6 @@ SwRedlineOptionsTabPage::SwRedlineOptionsTabPage( vcl::Window* pParent,
     get(m_pMarkPosLB,"markpos");
     get(m_pMarkColorLB,"markcolor");
     get(m_pMarkPreviewWN,"markpreview");
-    get(m_pShowChangesTooltip,"changestooltip");
 
     m_pInsertedPreviewWN->set_height_request(aPreviewSize.Height());
     m_pDeletedPreviewWN->set_height_request(aPreviewSize.Height());
@@ -1813,7 +1818,6 @@ void SwRedlineOptionsTabPage::dispose()
     m_pMarkPosLB.clear();
     m_pMarkColorLB.clear();
     m_pMarkPreviewWN.clear();
-    m_pShowChangesTooltip.clear();
     SfxTabPage::dispose();
 }
 
@@ -1834,8 +1838,6 @@ bool SwRedlineOptionsTabPage::FillItemSet( SfxItemSet* )
     AuthorCharAttr aOldInsertAttr(pOpt->GetInsertAuthorAttr());
     AuthorCharAttr aOldDeletedAttr(pOpt->GetDeletedAuthorAttr());
     AuthorCharAttr aOldChangedAttr(pOpt->GetFormatAuthorAttr());
-
-    const bool bOldShowInlineTooltips = pOpt->IsShowInlineTooltip();
 
     Color nOldMarkColor = pOpt->GetMarkAlignColor();
     sal_uInt16 nOldMarkMode = pOpt->GetMarkAlignMode();
@@ -1881,14 +1883,12 @@ bool SwRedlineOptionsTabPage::FillItemSet( SfxItemSet* )
     }
     pOpt->SetMarkAlignMode(nPos);
     pOpt->SetMarkAlignColor(m_pMarkColorLB->GetSelectEntryColor());
-    pOpt->SetShowInlineTooltip( m_pShowChangesTooltip->IsChecked() );
 
     if (!(aInsertedAttr == aOldInsertAttr) ||
         !(aDeletedAttr == aOldDeletedAttr) ||
         !(aChangedAttr == aOldChangedAttr) ||
        nOldMarkColor != pOpt->GetMarkAlignColor() ||
-       nOldMarkMode != pOpt->GetMarkAlignMode() ||
-       bOldShowInlineTooltips != pOpt->IsShowInlineTooltip() )
+       nOldMarkMode != pOpt->GetMarkAlignMode() )
     {
         // update all documents
         SwDocShell* pDocShell = static_cast<SwDocShell*>(SfxObjectShell::GetFirst(checkSfxObjectShell<SwDocShell>));
@@ -1926,8 +1926,6 @@ void SwRedlineOptionsTabPage::Reset( const SfxItemSet*  )
     m_pChangedColorLB->SelectEntry(nColor);
 
     m_pMarkColorLB->SelectEntry(pOpt->GetMarkAlignColor());
-
-    m_pShowChangesTooltip->Check( pOpt->IsShowInlineTooltip() );
 
     m_pInsertLB->SelectEntryPos(0);
     m_pDeletedLB->SelectEntryPos(0);

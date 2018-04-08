@@ -260,8 +260,13 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                 break;
 
             case IsAttrAtPos::Redline:
-                sText = lcl_GetRedlineHelp(*aContentAtPos.aFnd.pRedl, bBalloon);
-                break;
+            {
+                const bool bShowTrackChanges = IDocumentRedlineAccess::IsShowChanges( m_rView.GetDocShell()->GetDoc()->getIDocumentRedlineAccess().GetRedlineFlags() );
+                const bool bShowInlineTooltips = rSh.GetViewOptions()->IsShowInlineTooltips();
+                if ( bShowTrackChanges && bShowInlineTooltips )
+                     sText = lcl_GetRedlineHelp(*aContentAtPos.aFnd.pRedl, bBalloon);
+            }
+            break;
 
             case IsAttrAtPos::ToxMark:
                 sText = aContentAtPos.sStr;

@@ -89,6 +89,7 @@ enum SwViewSettingsPropertyHandles
     HANDLE_VIEWSET_HORI_RULER_METRIC,
     HANDLE_VIEWSET_VERT_RULER_METRIC,
     HANDLE_VIEWSET_SCROLLBAR_TIPS,
+    HANDLE_VIEWSET_INLINECHANGES_TIPS,
     HANDLE_VIEWSET_HIDE_WHITESPACE
 };
 
@@ -124,6 +125,7 @@ static ChainablePropertySetInfo * lcl_createViewSettingsInfo()
         { OUString( "IsSnapToRaster"),       HANDLE_VIEWSET_IS_SNAP_TO_RASTER,       cppu::UnoType<bool>::get(),   PROPERTY_NONE},
         { OUString( "IsVertRulerRightAligned"),HANDLE_VIEWSET_VRULER_RIGHT         , cppu::UnoType<bool>::get(), PROPERTY_NONE},
         { OUString( "ShowContentTips" ),     HANDLE_VIEWSET_SHOW_CONTENT_TIPS      , cppu::UnoType<bool>::get(), PROPERTY_NONE},
+        { OUString( "ShowInlineTooltips" ),  HANDLE_VIEWSET_INLINECHANGES_TIPS      , cppu::UnoType<bool>::get(), PROPERTY_NONE},
         { OUString( "RasterResolutionX"),    HANDLE_VIEWSET_RASTER_RESOLUTION_X,     cppu::UnoType<sal_Int32>::get(),     PROPERTY_NONE},
         { OUString( "RasterResolutionY"),    HANDLE_VIEWSET_RASTER_RESOLUTION_Y,     cppu::UnoType<sal_Int32>::get(),     PROPERTY_NONE},
         { OUString( "RasterSubdivisionX"),   HANDLE_VIEWSET_RASTER_SUBDIVISION_X,    cppu::UnoType<sal_Int32>::get(),     PROPERTY_NONE},
@@ -592,6 +594,7 @@ void SwXViewSettings::_setSingleValue( const comphelper::PropertyInfo & rInfo, c
         case  HANDLE_VIEWSET_IS_RASTER_VISIBLE     : mpViewOption->SetGridVisible(*o3tl::doAccess<bool>(rValue)); break;
         case  HANDLE_VIEWSET_IS_SNAP_TO_RASTER     : mpViewOption->SetSnap(*o3tl::doAccess<bool>(rValue)); break;
         case  HANDLE_VIEWSET_SCROLLBAR_TIPS        : mpViewOption->SetShowScrollBarTips(*o3tl::doAccess<bool>(rValue)); break;
+        case  HANDLE_VIEWSET_INLINECHANGES_TIPS    : mpViewOption->SetShowInlineTooltips(*o3tl::doAccess<bool>(rValue)); break;
         case  HANDLE_VIEWSET_RASTER_RESOLUTION_X   :
         {
             sal_Int32 nTmp = 0;
