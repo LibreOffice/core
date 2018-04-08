@@ -107,6 +107,7 @@ SwElemItem::SwElemItem() :
     bDrawing            =
     bFieldName          =
     bNotes              = false;
+    bShowInlineTooltips = true;
 }
 
 SwElemItem::SwElemItem(const SwViewOption& rVOpt) :
@@ -121,6 +122,7 @@ SwElemItem::SwElemItem(const SwViewOption& rVOpt) :
     bDrawing            = rVOpt.IsDraw() && rVOpt.IsControl();
     bFieldName          = rVOpt.IsFieldName();
     bNotes              = rVOpt.IsPostIts();
+    bShowInlineTooltips = rVOpt.IsShowInlineTooltips();
 
 }
 
@@ -143,7 +145,8 @@ bool SwElemItem::operator==( const SfxPoolItem& rAttr ) const
                 bGraphic              == rItem.bGraphic            &&
                 bDrawing              == rItem.bDrawing            &&
                 bFieldName            == rItem.bFieldName          &&
-                bNotes                == rItem.bNotes             );
+                bNotes                == rItem.bNotes              &&
+                bShowInlineTooltips   == rItem.bShowInlineTooltips );
 }
 
 void SwElemItem::FillViewOptions( SwViewOption& rVOpt) const
@@ -156,8 +159,9 @@ void SwElemItem::FillViewOptions( SwViewOption& rVOpt) const
     rVOpt.SetGraphic    (bGraphic           );
     rVOpt.SetDraw       (bDrawing           );
     rVOpt.SetControl    (bDrawing           );
-    rVOpt.SetFieldName    (bFieldName         );
+    rVOpt.SetFieldName  (bFieldName         );
     rVOpt.SetPostIts    (bNotes             );
+    rVOpt.SetShowInlineTooltips( bShowInlineTooltips );
 }
 
 // CTOR for empty Item

@@ -906,5 +906,14 @@ interface BaseTextEditView
         ExecMethod = ExecViewOptions ;
         StateMethod = StateViewOptions ;
     ]
+
+    FN_SHOW_INLINETOOLTIPS
+    [
+        ExecMethod = ExecViewOptions ;
+        StateMethod = StateViewOptions ;
+        Export = FALSE;
+        MenuConfig , AccelConfig , ToolBoxConfig ;
+    ]
+
 }
 

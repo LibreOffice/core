@@ -57,11 +57,12 @@ enum class ViewOptFlags1 {
     Synchronize   = 0x01000000,
     GridVisible   = 0x02000000,
     OnlineSpell   = 0x04000000,
+    ShowInlineTooltips = 0x10000000, //tooltips on tracked changes
     ViewMetachars = 0x20000000,
     Pageback      = 0x40000000
 };
 namespace o3tl {
-    template<> struct typed_flags<ViewOptFlags1> : is_typed_flags<ViewOptFlags1, 0x67dfcdfe> {};
+    template<> struct typed_flags<ViewOptFlags1> : is_typed_flags<ViewOptFlags1, 0x77dfcdfe> {};
 }
 
 enum class ViewOptCoreFlags2 {
@@ -259,6 +260,12 @@ public:
     static void PaintPostIts( OutputDevice *pOut, const SwRect &rRect,
                               bool bIsScript );
     static sal_uInt16 GetPostItsWidth( const OutputDevice *pOut );
+
+    //show/hide tooltips on tracked changes
+    bool IsShowInlineTooltips() const
+        { return bool(m_nCoreOptions & ViewOptFlags1::ShowInlineTooltips); }
+    void SetShowInlineTooltips( bool b )
+        { b ? (m_nCoreOptions |= ViewOptFlags1::ShowInlineTooltips ) : ( m_nCoreOptions &= ~ViewOptFlags1::ShowInlineTooltips); }
 
     bool IsShowHiddenChar(bool bHard = false) const
         { return !m_bReadonly && (m_nCoreOptions & ViewOptFlags1::CharHidden) &&
