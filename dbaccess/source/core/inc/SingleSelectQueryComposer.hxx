@@ -114,6 +114,8 @@ namespace dbaccess
             std::vector< std::vector < css::beans::PropertyValue > >& rFilters, const css::uno::Reference< css::util::XNumberFormatter > & xFormatter) const;
         bool setANDCriteria(::connectivity::OSQLParseNode const * pCondition, ::connectivity::OSQLParseTreeIterator& _rIterator,
             std::vector < css::beans::PropertyValue > & rFilters, const css::uno::Reference< css::util::XNumberFormatter > & xFormatter) const;
+        bool setLikePredicate(::connectivity::OSQLParseNode const * pCondition, ::connectivity::OSQLParseTreeIterator const & _rIterator,
+            std::vector < css::beans::PropertyValue > & rFilters, const css::uno::Reference< css::util::XNumberFormatter > & xFormatter) const;
         bool setComparsionPredicate(::connectivity::OSQLParseNode const * pCondition, ::connectivity::OSQLParseTreeIterator const & _rIterator,
             std::vector < css::beans::PropertyValue > & rFilters, const css::uno::Reference< css::util::XNumberFormatter > & xFormatter) const;
 

@@ -1003,8 +1003,11 @@ bool OSingleSelectQueryComposer::setANDCriteria( OSQLParseNode const * pConditio
     {
         return setComparsionPredicate(pCondition,_rIterator,rFilter,xFormatter);
     }
-    else if (SQL_ISRULE(pCondition,like_predicate) ||
-             SQL_ISRULE(pCondition,test_for_null) ||
+    else if (SQL_ISRULE(pCondition,like_predicate))
+    {
+        return setLikePredicate(pCondition,_rIterator,rFilter,xFormatter);
+    }
+    else if (SQL_ISRULE(pCondition,test_for_null) ||
              SQL_ISRULE(pCondition,in_predicate) ||
              SQL_ISRULE(pCondition,all_or_any_predicate) ||
              SQL_ISRULE(pCondition,between_predicate))
@@ -1097,6 +1100,72 @@ sal_Int32 OSingleSelectQueryComposer::getPredicateType(OSQLParseNode const * _pP
             SAL_WARN("dbaccess","Wrong NodeType!");
     }
     return nPredicate;
+}
+
+bool OSingleSelectQueryComposer::setLikePredicate(OSQLParseNode const * pCondition, OSQLParseTreeIterator const & _rIterator,
+                                            std::vector < PropertyValue >& rFilter, const Reference< css::util::XNumberFormatter > & xFormatter) const
+{
+    OSL_ENSURE(SQL_ISRULE(pCondition, like_predicate),"setLikePredicate: pCondition is not a LikePredicate");
+
+    assert(pCondition->count() == 2);
+    OSQLParseNode const *pRowValue = pCondition->getChild(0);
+    OSQLParseNode const *pPart2 = pCondition->getChild(1);
+
+    PropertyValue aItem;
+    if ( SQL_ISTOKEN(pPart2->getChild(0),NOT) )
+        aItem.Handle = SQLFilterOperator::NOT_LIKE;
+    else
+        aItem.Handle = SQLFilterOperator::LIKE;
+
+    if (SQL_ISRULE(pRowValue, column_ref))
+    {
+        OUString aValue;
+
+        // skip (optional "NOT") and "LIKE"
+        for (size_t i=2; i < pPart2->count(); i++)
+        {
+            pPart2->getChild(i)->parseNodeToPredicateStr(
+                aValue, m_xConnection, xFormatter, m_aLocale, static_cast<sal_Char>(m_sDecimalSep.toChar() ) );
+        }
+
+        aItem.Name = getColumnName(pRowValue,_rIterator);
+        aItem.Value <<= aValue;
+        rFilter.push_back(aItem);
+    }
+    else if (SQL_ISRULE(pRowValue, set_fct_spec ) ||
+             SQL_ISRULE(pRowValue, general_set_fct))
+    {
+        OUString aValue;
+        OUString aColumnName;
+
+        pPart2->getChild(2)->parseNodeToPredicateStr(aValue, m_xConnection, xFormatter, m_aLocale, static_cast<sal_Char>( m_sDecimalSep.toChar() ) );
+        pPart2->getChild(3)->parseNodeToPredicateStr(aValue, m_xConnection, xFormatter, m_aLocale, static_cast<sal_Char>( m_sDecimalSep.toChar() ) );
+        pRowValue->parseNodeToPredicateStr( aColumnName, m_xConnection, xFormatter, m_aLocale, static_cast<sal_Char>( m_sDecimalSep .toChar() ) );
+
+        aItem.Name = getColumnName(pRowValue,_rIterator);
+        aItem.Value <<= aValue;
+        rFilter.push_back(aItem);
+    }
+    else // Can only be an expression
+    {
+        OUString aName, aValue;
+
+        OSQLParseNode const *pValue = pPart2->getChild(2);
+
+        // Field names
+        for (size_t i=0;i< pRowValue->count();i++)
+             pRowValue->getChild(i)->parseNodeToPredicateStr( aName, m_xConnection, xFormatter, m_aLocale, static_cast<sal_Char>( m_sDecimalSep.toChar() ) );
+
+        // Criterion
+        for(size_t i=0;i< pValue->count();i++)
+            pValue->getChild(i)->parseNodeToPredicateStr(aValue, m_xConnection, xFormatter, m_aLocale, static_cast<sal_Char>( m_sDecimalSep.toChar() ) );
+        pPart2->getChild(3)->parseNodeToPredicateStr(aValue, m_xConnection, xFormatter, m_aLocale, static_cast<sal_Char>( m_sDecimalSep.toChar() ) );
+
+        aItem.Name = aName;
+        aItem.Value <<= aValue;
+        rFilter.push_back(aItem);
+    }
+    return true;
 }
 
 bool OSingleSelectQueryComposer::setComparsionPredicate(OSQLParseNode const * pCondition, OSQLParseTreeIterator const & _rIterator,
