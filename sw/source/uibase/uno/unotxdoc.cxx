@@ -450,10 +450,10 @@ SwXTextDocument::SwXTextDocument(SwDocShell* pShell)
 {
 }
 
-SdrModel* SwXTextDocument::getSdrModelFromUnoModel() const
+SdrModel& SwXTextDocument::getSdrModelFromUnoModel() const
 {
     OSL_ENSURE(pDocShell->GetDoc()->getIDocumentDrawModelAccess().GetOrCreateDrawModel(), "No SdrModel in SwDoc, should not happen");
-    return pDocShell->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel();
+    return *pDocShell->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel();
 }
 
 SwXTextDocument::~SwXTextDocument()

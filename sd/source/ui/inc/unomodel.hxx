@@ -130,7 +130,7 @@ private:
 
 protected:
     /** abstract SdrModel provider */
-    virtual SdrModel* getSdrModelFromUnoModel() const override;
+    virtual SdrModel& getSdrModelFromUnoModel() const override;
 
 public:
     SdXImpressDocument(::sd::DrawDocShell* pShell, bool bClipBoard);

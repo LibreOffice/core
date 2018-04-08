@@ -39,9 +39,8 @@ using namespace ::svxform;
     }
     else if ( rServiceSpecifier == "com.sun.star.drawing.ControlShape" )
     {
-        SdrModel* pTargetModel = getSdrModelFromUnoModel();
-        OSL_ENSURE(pTargetModel, "Got no SdrModel for SdrShape construction (!)");
-        SdrObject* pObj = new FmFormObj(*pTargetModel);
+        SdrModel& rTargetModel(getSdrModelFromUnoModel());
+        SdrObject* pObj = new FmFormObj(rTargetModel);
         xRet = static_cast<cppu::OWeakObject*>(static_cast<SvxShape_UnoImplHelper*>(new SvxShapeControl(pObj)));
     }
 

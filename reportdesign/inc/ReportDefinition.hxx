@@ -188,7 +188,7 @@ namespace reportdesign
 
     protected:
         /** abstract SdrModel provider */
-        virtual SdrModel* getSdrModelFromUnoModel() const override;
+        virtual SdrModel& getSdrModelFromUnoModel() const override;
 
     public:
         //TTTT Needed? Or same as above?

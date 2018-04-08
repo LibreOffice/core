@@ -373,7 +373,7 @@ void ScModelObj::CreateAndSet(ScDocShell* pDocSh)
         pDocSh->SetBaseModel( new ScModelObj(pDocSh) );
 }
 
-SdrModel* ScModelObj::getSdrModelFromUnoModel() const
+SdrModel& ScModelObj::getSdrModelFromUnoModel() const
 {
     ScDocument& rDoc(pDocShell->GetDocument());
 
@@ -382,7 +382,7 @@ SdrModel* ScModelObj::getSdrModelFromUnoModel() const
         rDoc.InitDrawLayer();
     }
 
-    return rDoc.GetDrawLayer();
+    return *rDoc.GetDrawLayer(); // TTTT should be reference
 }
 
 ScModelObj::ScModelObj( ScDocShell* pDocSh ) :
