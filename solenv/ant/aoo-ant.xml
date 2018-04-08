@@ -119,10 +119,10 @@
     </target>
 
     <target name="test-compile" depends="compile,idl">
-        <property property="test.skip" value="true" if:blank="${OOO_JUNIT_JAR}"/>
-        <echo message="No junit, skipping tests" if:blank="${OOO_JUNIT_JAR}"/>
+        <property name="test.skip" value="true" unless:set="OOO_JUNIT_JAR"/>
+        <echo message="No junit, skipping tests" unless:set="OOO_JUNIT_JAR"/>
 
-        <mkdir dir="${test.build.dir}" unless:blank="${OOO_JUNIT_JAR}"/>
+        <mkdir dir="${test.build.dir}" if:set="OOO_JUNIT_JAR"/>
         <javac srcdir="${test.src.dir}"
                destdir="${test.build.dir}"
                debug="${test.debug}"
@@ -130,12 +130,12 @@
                deprecation="${test.deprecation}"
                classpathref="internal.test.classpath"
                includeantruntime="false"
-               unless:blank="${OOO_JUNIT_JAR}"/>
+               if:set="OOO_JUNIT_JAR"/>
     </target>
 
     <!-- fork="true" is sadly necessary on Ubuntu due to multiple versions of junit confusing Ant,
          see https://github.com/real-logic/simple-binary-encoding/issues/96 -->
-    <target name="test" depends="test-compile" unless:set="${test.skip}">
+    <target name="test" depends="test-compile" unless="${test.skip}">
         <mkdir dir="${test.reports.dir}"/>
         <junit printsummary="yes" haltonfailure="yes" showoutput="true" filtertrace="false" fork="true">
             <classpath refid="internal.test.classpath"/>

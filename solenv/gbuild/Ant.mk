@@ -50,8 +50,13 @@ FORCE:
 # adds jar files to DeliverLogTarget
 # adds dependency for outdir target to workdir target (pattern rule for delivery is in Package.mk)
 define gb_Ant_Ant
+ifeq ($(OS),WNT)
+$(call gb_Ant_get_target,$(1)) : ANTBUILDFILE := `cygpath -m $(2)`
+$(call gb_Ant_get_clean_target,$(1)) : ANTBUILDFILE := `cygpath -m $(2)`
+else
 $(call gb_Ant_get_target,$(1)) : ANTBUILDFILE := $(2)
 $(call gb_Ant_get_clean_target,$(1)) : ANTBUILDFILE := $(2)
+endif
 $(eval $(call gb_Module_register_target,$(call gb_Jar_get_outdir_target,$(1)),$(call gb_Ant_get_clean_target,$(1))))
 $(call gb_Deliver_add_deliverable,$(call gb_Jar_get_outdir_target,$(1)),$(call gb_Ant_get_target,$(1)),$(1))
 $(call gb_Jar_get_outdir_target,$(1)) : $(call gb_Ant_get_target,$(1))
