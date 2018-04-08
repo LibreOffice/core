@@ -285,8 +285,7 @@ sal_Bool VCLXAccessibleCheckBox::setCurrentValue( const Any& aNumber )
     {
         sal_Int32 nValue = 0, nValueMin = 0, nValueMax = 0;
         OSL_VERIFY( aNumber >>= nValue );
-        OSL_VERIFY( getMinimumValue() >>= nValueMin );
-        OSL_VERIFY( getMaximumValue() >>= nValueMax );
+        nValueMax=implGetMaximumValue();
 
         if ( nValue < nValueMin )
             nValue = nValueMin;
@@ -306,16 +305,19 @@ Any VCLXAccessibleCheckBox::getMaximumValue(  )
     OExternalLockGuard aGuard( this );
 
     Any aValue;
-
-    VclPtr< CheckBox > pCheckBox = GetAs< CheckBox >();
-    if ( pCheckBox && pCheckBox->IsTriStateEnabled() )
-        aValue <<= sal_Int32(2);
-    else
-        aValue <<= sal_Int32(1);
+    aValue <<= implGetMaximumValue();
 
     return aValue;
 }
 
+sal_Int32 VCLXAccessibleCheckBox::implGetMaximumValue(  )
+{
+    VclPtr< CheckBox > pCheckBox = GetAs< CheckBox >();
+    if ( pCheckBox && pCheckBox->IsTriStateEnabled() )
+        return 2;
+
+    return 1;
+}
 
 Any VCLXAccessibleCheckBox::getMinimumValue(  )
 {
