@@ -198,7 +198,6 @@ private:
     SVGFontExport*                      mpSVGFontExport;
     SVGActionWriter*                    mpSVGWriter;
     SdrPage*                            mpDefaultSdrPage;
-    SdrModel*                           mpSdrModel;
     bool                            mbPresentation;
     bool                            mbSinglePage;
     sal_Int32                           mnVisiblePage;

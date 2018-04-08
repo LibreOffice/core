@@ -549,6 +549,8 @@ bool SVGFilter::implExport( const Sequence< PropertyValue >& rDescriptor )
                 for(uno::Reference<drawing::XDrawPage> & mMasterPageTarget : mMasterPageTargets)
                     implRegisterInterface( mMasterPageTarget );
 
+                SdrModel* pSdrModel(nullptr);
+
                 try
                 {
                     mxDefaultPage = mSelectedPages[0];
@@ -560,17 +562,14 @@ bool SVGFilter::implExport( const Sequence< PropertyValue >& rDescriptor )
                         if( pSvxDrawPage )
                         {
                             mpDefaultSdrPage = pSvxDrawPage->GetSdrPage();
-                            mpSdrModel = &mpDefaultSdrPage->getSdrModelFromSdrPage();
+                            pSdrModel = &mpDefaultSdrPage->getSdrModelFromSdrPage();
+                            SdrOutliner& rOutl = pSdrModel->GetDrawOutliner();
 
-                            if( mpSdrModel ) // TTTT should be reference
-                            {
-                                SdrOutliner& rOutl = mpSdrModel->GetDrawOutliner();
-
-                                maOldFieldHdl = rOutl.GetCalcFieldValueHdl();
-                                maNewFieldHdl = LINK(this, SVGFilter, CalcFieldHdl);
-                                rOutl.SetCalcFieldValueHdl(maNewFieldHdl);
-                            }
+                            maOldFieldHdl = rOutl.GetCalcFieldValueHdl();
+                            maNewFieldHdl = LINK(this, SVGFilter, CalcFieldHdl);
+                            rOutl.SetCalcFieldValueHdl(maNewFieldHdl);
                         }
+
                         bRet = implExportDocument();
                     }
                 }
@@ -581,14 +580,14 @@ bool SVGFilter::implExport( const Sequence< PropertyValue >& rDescriptor )
                     OSL_FAIL( "Exception caught" );
                 }
 
-                if( mpSdrModel )
+                if( nullptr != pSdrModel )
                 {
                     // fdo#62682 The maNewFieldHdl can end up getting copied
                     // into various other outliners which live past this
                     // method, so get the full list of outliners and restore
                     // the maOldFieldHdl for all that have ended up using
                     // maNewFieldHdl
-                    std::vector<SdrOutliner*> aOutliners(mpSdrModel->GetActiveOutliners());
+                    std::vector<SdrOutliner*> aOutliners(pSdrModel->GetActiveOutliners());
                     for (auto const& outliner : aOutliners)
                     {
                         if (maNewFieldHdl == outliner->GetCalcFieldValueHdl())

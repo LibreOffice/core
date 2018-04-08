@@ -68,7 +68,6 @@ SVGFilter::SVGFilter( const Reference< XComponentContext >& rxCtx ) :
     mpSVGFontExport( nullptr ),
     mpSVGWriter( nullptr ),
     mpDefaultSdrPage( nullptr ),
-    mpSdrModel( nullptr ),
     mbPresentation( false ),
     mbSinglePage( false ),
     mnVisiblePage( -1 ),
