@@ -24,9 +24,6 @@
 #include <cppuhelper/implbase1.hxx>
 
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
-#include <com/sun/star/accessibility/XAccessibleText.hpp>
-#include <com/sun/star/accessibility/XAccessibleTextAttributes.hpp>
-#include <com/sun/star/accessibility/TextSegment.hpp>
 #include <vcl/vclptr.hxx>
 
 #include <vector>
