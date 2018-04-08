@@ -41,6 +41,7 @@ class SdrPage;
 class SdrObject;
 class SvdProgressInfo;
 typedef void* FPDF_DOCUMENT;
+typedef void* FPDF_PAGEOBJECT;
 
 // Helper Class to import PDF
 class ImpSdrPdfImport final
@@ -88,6 +89,8 @@ class ImpSdrPdfImport final
     // check for clip and evtl. fill maClip
     void checkClip();
     bool isClip() const;
+
+    void ImportImage(FPDF_PAGEOBJECT pPageObject);
 
     void ImportText(const Point& rPos, const OUString& rStr);
     void SetAttributes(SdrObject* pObj, bool bForceTextAttr = false);

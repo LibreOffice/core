@@ -171,6 +171,7 @@ ImpSdrPdfImport::ImpSdrPdfImport(SdrModel& rModel, SdrLayerID nLay, const Rectan
     }
 
     mnPageCount = FPDF_GetPageCount(mpPdfDocument);
+    SAL_WARN("sd.filter", "Scale Rect: " << maScaleRect);
 }
 
 ImpSdrPdfImport::~ImpSdrPdfImport()
@@ -187,13 +188,15 @@ void ImpSdrPdfImport::DoLoopActions(SvdProgressInfo* pProgrInfo, sal_uInt32* pAc
     {
         // Render next page.
         FPDF_PAGE pPdfPage = FPDF_LoadPage(mpPdfDocument, nPageIndex);
+
         if (pPdfPage == nullptr)
             break;
 
         const double dPageWidth = FPDF_GetPageWidth(pPdfPage);
-        const double dPageHeight = FPDF_GetPageWidth(pPdfPage);
+        const double dPageHeight = FPDF_GetPageHeight(pPdfPage);
         SAL_WARN("sd.filter", "Loaded page: " << nPageIndex << ", width: " << dPageWidth
                                               << ", height: " << dPageHeight);
+        SAL_WARN("sd.filter", "Scale Rect: " << maScaleRect);
 
         const int nPageObjectCount = FPDFPage_CountObject(pPdfPage);
         for (int nPageObjectIndex = 0; nPageObjectIndex < nPageObjectCount; ++nPageObjectIndex)
@@ -215,82 +218,8 @@ void ImpSdrPdfImport::DoLoopActions(SvdProgressInfo* pProgrInfo, sal_uInt32* pAc
                     SAL_WARN("sd.filter", "Got page object PATH");
                     break;
                 case FPDF_PAGEOBJ_IMAGE:
-                {
-                    SAL_WARN("sd.filter", "Got page object IMAGE");
-                    std::unique_ptr<void, FPDFBitmapDeleter> bitmap(
-                        FPDFImageObj_GetBitmap(pPageObject));
-                    if (!bitmap)
-                    {
-                        SAL_WARN("sd.filter", "Failed to get IMAGE");
-                        continue;
-                    }
-
-                    const int format = FPDFBitmap_GetFormat(bitmap.get());
-                    if (format == FPDFBitmap_Unknown)
-                    {
-                        SAL_WARN("sd.filter", "Failed to get IMAGE format");
-                        continue;
-                    }
-
-                    const unsigned char* pBuf
-                        = static_cast<const unsigned char*>(FPDFBitmap_GetBuffer(bitmap.get()));
-                    const int nWidth = FPDFBitmap_GetWidth(bitmap.get());
-                    const int nHeight = FPDFBitmap_GetHeight(bitmap.get());
-                    const int nStride = FPDFBitmap_GetStride(bitmap.get());
-                    Bitmap aBitmap(Size(nWidth, nHeight), 24);
-
-                    switch (format)
-                    {
-                        case FPDFBitmap_Gray:
-                            SAL_WARN("sd.filter", "Got IMAGE width: " << nWidth
-                                                                      << ", height: " << nHeight
-                                                                      << ", stride: " << nStride
-                                                                      << ", format: Gray");
-                            ReadRawDIB(aBitmap, pBuf, ScanlineFormat::N8BitTcMask, nHeight,
-                                       nStride);
-                            break;
-                        case FPDFBitmap_BGR:
-                            SAL_WARN("sd.filter", "Got IMAGE width: " << nWidth
-                                                                      << ", height: " << nHeight
-                                                                      << ", stride: " << nStride
-                                                                      << ", format: BGR");
-                            ReadRawDIB(aBitmap, pBuf, ScanlineFormat::N24BitTcBgr, nHeight,
-                                       nStride);
-                            break;
-                        case FPDFBitmap_BGRx:
-                            SAL_WARN("sd.filter", "Got IMAGE width: " << nWidth
-                                                                      << ", height: " << nHeight
-                                                                      << ", stride: " << nStride
-                                                                      << ", format: BGRx");
-                            ReadRawDIB(aBitmap, pBuf, ScanlineFormat::N32BitTcBgra, nHeight,
-                                       nStride);
-                            break;
-                        case FPDFBitmap_BGRA:
-                            SAL_WARN("sd.filter", "Got IMAGE width: " << nWidth
-                                                                      << ", height: " << nHeight
-                                                                      << ", stride: " << nStride
-                                                                      << ", format: BGRA");
-                            ReadRawDIB(aBitmap, pBuf, ScanlineFormat::N32BitTcBgra, nHeight,
-                                       nStride);
-                            break;
-                        default:
-                            SAL_WARN("sd.filter", "Got IMAGE width: " << nWidth
-                                                                      << ", height: " << nHeight
-                                                                      << ", stride: " << nStride
-                                                                      << ", format: " << format);
-                            break;
-                    }
-
-                    Rectangle aRect(Point(0, 0), Size(nWidth, nHeight));
-                    // aRect.AdjustRight( 1 ); aRect.AdjustBottom( 1 );
-                    SdrGrafObj* pGraf = new SdrGrafObj(Graphic(aBitmap), aRect);
-
-                    // This action is not creating line and fill, set directly, do not use SetAttributes(..)
-                    pGraf->SetMergedItem(XLineStyleItem(drawing::LineStyle_NONE));
-                    pGraf->SetMergedItem(XFillStyleItem(drawing::FillStyle_NONE));
-                    InsertObj(pGraf);
-                }
-                break;
+                    ImportImage(pPageObject);
+                    break;
                 case FPDF_PAGEOBJ_SHADING:
                     SAL_WARN("sd.filter", "Got page object SHADING");
                     break;
@@ -303,6 +232,7 @@ void ImpSdrPdfImport::DoLoopActions(SvdProgressInfo* pProgrInfo, sal_uInt32* pAc
             }
         }
 
+        /*
         // Now do the text.
         FPDF_TEXTPAGE pTextPage = FPDFText_LoadPage(pPdfPage);
         if (pTextPage != nullptr)
@@ -415,6 +345,7 @@ void ImpSdrPdfImport::DoLoopActions(SvdProgressInfo* pProgrInfo, sal_uInt32* pAc
         }
 
         FPDF_ClosePage(pPdfPage);
+*/
     }
 
     // const sal_uLong nCount(rMtf.GetActionSize());
@@ -1092,6 +1023,120 @@ void ImpSdrPdfImport::MapScaling()
     }
 
     mnMapScalingOfs = nCount;
+}
+
+void ImpSdrPdfImport::ImportImage(FPDF_PAGEOBJECT pPageObject)
+{
+    SAL_WARN("sd.filter", "Got page object IMAGE");
+    std::unique_ptr<void, FPDFBitmapDeleter> bitmap(FPDFImageObj_GetBitmap(pPageObject));
+    if (!bitmap)
+    {
+        SAL_WARN("sd.filter", "Failed to get IMAGE");
+        return;
+    }
+
+    const int format = FPDFBitmap_GetFormat(bitmap.get());
+    if (format == FPDFBitmap_Unknown)
+    {
+        SAL_WARN("sd.filter", "Failed to get IMAGE format");
+        return;
+    }
+
+    const unsigned char* pBuf
+        = static_cast<const unsigned char*>(FPDFBitmap_GetBuffer(bitmap.get()));
+    const int nWidth = FPDFBitmap_GetWidth(bitmap.get());
+    const int nHeight = FPDFBitmap_GetHeight(bitmap.get());
+    const int nStride = FPDFBitmap_GetStride(bitmap.get());
+    Bitmap aBitmap(Size(nWidth, nHeight), 24);
+
+    switch (format)
+    {
+        case FPDFBitmap_Gray:
+            SAL_WARN("sd.filter", "Got IMAGE width: " << nWidth << ", height: " << nHeight
+                                                      << ", stride: " << nStride
+                                                      << ", format: Gray");
+            break;
+        case FPDFBitmap_BGR:
+            SAL_WARN("sd.filter", "Got IMAGE width: " << nWidth << ", height: " << nHeight
+                                                      << ", stride: " << nStride
+                                                      << ", format: BGR");
+            ReadRawDIB(aBitmap, pBuf, ScanlineFormat::N24BitTcBgr, nHeight, nStride);
+            break;
+        case FPDFBitmap_BGRx:
+            SAL_WARN("sd.filter", "Got IMAGE width: " << nWidth << ", height: " << nHeight
+                                                      << ", stride: " << nStride
+                                                      << ", format: BGRx");
+            ReadRawDIB(aBitmap, pBuf, ScanlineFormat::N32BitTcBgra, nHeight, nStride);
+            break;
+        case FPDFBitmap_BGRA:
+            SAL_WARN("sd.filter", "Got IMAGE width: " << nWidth << ", height: " << nHeight
+                                                      << ", stride: " << nStride
+                                                      << ", format: BGRA");
+            ReadRawDIB(aBitmap, pBuf, ScanlineFormat::N32BitTcBgra, nHeight, nStride);
+            break;
+        default:
+            SAL_WARN("sd.filter", "Got IMAGE width: " << nWidth << ", height: " << nHeight
+                                                      << ", stride: " << nStride
+                                                      << ", format: " << format);
+            break;
+    }
+
+    // double a, b, c, d, e, f;
+    // if (!FPDFImageObj_GetMatrix(pPageObject, &a, &b, &c, &d, &e, &f))
+    // {
+    //     SAL_WARN("sd.filter", "FAILED to get image Matrix");
+    // }
+    // SAL_WARN("sd.filter", "Got image Matrix: " << a << ", " << b << ", " << c << ", " << d << ", " << e << ", " << f);
+
+    // if (!FPDFImageObj_SetMatrix(pPageObject, a, b, c, d, e, f))
+    // {
+    //     SAL_WARN("sd.filter", "FAILED to set image Matrix");
+    // }
+
+    float left;
+    float bottom;
+    float right;
+    float top;
+    if (!FPDFPageObj_GetBounds(pPageObject, &left, &bottom, &right, &top))
+    {
+        SAL_WARN("sd.filter", "FAILED to get image bounds");
+    }
+
+    SAL_WARN("sd.filter", "Got IMAGE left: " << left << ", bottom: " << bottom << ", right; "
+                                             << right << ", top: " << top);
+    Rectangle aRect1(Point(left, top), Size(right - left, top - bottom));
+    SAL_WARN("sd.filter", "Got IMAGE BBox: " << aRect1);
+    Rectangle aLogRect(
+        OutputDevice::LogicToLogic(aRect1, aBitmap.GetPrefMapMode(), MapMode(MapUnit::Map100thMM)));
+    SAL_WARN("sd.filter", "Logical Rect: " << aLogRect);
+    aLogRect.Move(maScaleRect.Left(), maScaleRect.Top() - aLogRect.Top());
+
+    // SAL_WARN("sd.filter", "Bitmap Size: " << aBitmap.GetPrefSize());
+    // SAL_WARN("sd.filter", "Bitmap MapMpde: " << aBitmap.GetPrefMapMode());
+    Size aGrfSize(OutputDevice::LogicToLogic(Size(nWidth, nHeight), aBitmap.GetPrefMapMode(),
+                                             MapMode(MapUnit::Map100thMM)));
+    SAL_WARN("sd.filter", "Logical Size: " << aGrfSize);
+    // SAL_WARN("sd.filter", "Scaled Logical Size: " << aGrfSize);
+    Point aGrfPos(OutputDevice::LogicToLogic(Point(left, top), aBitmap.GetPrefMapMode(),
+                                             MapMode(MapUnit::Map100thMM)));
+    SAL_WARN("sd.filter", "Logical Pos: " << aGrfPos);
+
+    SAL_WARN("sd.filter", "Page Logical Height: " << maScaleRect.GetHeight());
+    const auto realTop = maScaleRect.GetHeight() - aGrfPos.Y();
+    SAL_WARN("sd.filter", "Real Logical Top Offset: " << realTop);
+    aGrfPos.Move(maScaleRect.Left(), maScaleRect.Top() - aGrfPos.Y());
+    SAL_WARN("sd.filter", "Adjusted Logical Pos: " << aGrfPos);
+
+    Rectangle aRect(aGrfPos, aGrfSize);
+    SAL_WARN("sd.filter", "Got IMAGE Logical BBox: " << aRect);
+
+    // aRect.AdjustRight( 1 ); aRect.AdjustBottom( 1 );
+    SdrGrafObj* pGraf = new SdrGrafObj(Graphic(aBitmap), aLogRect);
+
+    // This action is not creating line and fill, set directly, do not use SetAttributes(..)
+    pGraf->SetMergedItem(XLineStyleItem(drawing::LineStyle_NONE));
+    pGraf->SetMergedItem(XFillStyleItem(drawing::FillStyle_NONE));
+    InsertObj(pGraf);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
