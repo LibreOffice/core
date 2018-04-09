@@ -16,6 +16,24 @@
       "revId": "7560e5daebd333661fbea8136811d9401f1ffd0d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_ec73be4b",
+        "filename": "sc/source/core/tool/interpr6.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 684,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2018-04-09T12:02:00Z",
+      "side": 1,
+      "message": "Having found the cause of the problem, I simply added an extra expression to the if statement. \nI will look at it again, this time more thorough, but that won\u0027t be this afternoon.\n\n\n (I don\u0027t quite follow patch 3 and 4, or was that to trigger Jenkins?",
+      "parentUuid": "9a30ddce_ace4660d",
+      "revId": "7560e5daebd333661fbea8136811d9401f1ffd0d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
