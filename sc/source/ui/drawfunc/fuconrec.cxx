@@ -117,7 +117,7 @@ bool FuConstRectangle::MouseButtonDown(const MouseEvent& rMEvt)
         if (pObj)
         {
             SfxItemSet aAttr(pObj->getSdrModelFromSdrObject().GetItemPool());
-            SetLineEnds(aAttr, pObj, aSfxRequest.GetSlot());
+            SetLineEnds(aAttr, *pObj, aSfxRequest.GetSlot());
             pObj->SetMergedItemSet(aAttr);
         }
 
@@ -214,9 +214,9 @@ void FuConstRectangle::Activate()
     FuConstruct::Activate();
 }
 
-void FuConstRectangle::SetLineEnds(SfxItemSet& rAttr, const SdrObject* pObj, sal_uInt16 nSlotId)
+void FuConstRectangle::SetLineEnds(SfxItemSet& rAttr, const SdrObject& rObj, sal_uInt16 nSlotId)
 {
-    SdrModel& rModel(pObj->getSdrModelFromSdrObject()); // TTTT pObj should be reference
+    SdrModel& rModel(rObj.getSdrModelFromSdrObject());
 
     if ( nSlotId == SID_LINE_ARROW_START      ||
          nSlotId == SID_LINE_ARROW_END        ||
@@ -448,7 +448,7 @@ SdrObject* FuConstRectangle::CreateDefaultObject(const sal_uInt16 nID, const too
         }
 
         SfxItemSet aAttr(pDrDoc->GetItemPool());
-        SetLineEnds(aAttr, pObj, nID);
+        SetLineEnds(aAttr, *pObj, nID);
         pObj->SetMergedItemSet(aAttr);
     }
 

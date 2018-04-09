@@ -810,7 +810,7 @@ public:
                                    const Point& _rDocPos );
 
     void ToggleHeaderFooterEdit( );
-    static void SetLineEnds(SfxItemSet& rAttr, SdrObject const * pObj, sal_uInt16 nSlotId);
+    static void SetLineEnds(SfxItemSet& rAttr, SdrObject& rObj, sal_uInt16 nSlotId);
 
     SAL_DLLPRIVATE void ClearColumnRowCache(SwTabFrame const*);
 };

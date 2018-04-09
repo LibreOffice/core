@@ -210,7 +210,7 @@ bool FuConstructRectangle::MouseButtonDown(const MouseEvent& rMEvt)
             SfxItemSet aAttr(mpDoc->GetPool());
             SetStyleSheet(aAttr, pObj);
             SetAttributes(aAttr, pObj);
-            SetLineEnds(aAttr, pObj);
+            SetLineEnds(aAttr, *pObj);
             pObj->SetMergedItemSet(aAttr);
 
             if( nSlotId == SID_DRAW_CAPTION_VERTICAL )
@@ -525,9 +525,9 @@ void FuConstructRectangle::SetAttributes(SfxItemSet& rAttr, SdrObject* pObj)
     return aRetval;
 }
 
-void FuConstructRectangle::SetLineEnds(SfxItemSet& rAttr, SdrObject const * pObj)
+void FuConstructRectangle::SetLineEnds(SfxItemSet& rAttr, SdrObject& rObj)
 {
-    if ( (pObj->GetObjIdentifier() == OBJ_EDGE &&
+    if ( (rObj.GetObjIdentifier() == OBJ_EDGE &&
           nSlotId != SID_TOOL_CONNECTOR        &&
           nSlotId != SID_CONNECTOR_LINE        &&
           nSlotId != SID_CONNECTOR_LINES       &&
@@ -541,7 +541,7 @@ void FuConstructRectangle::SetLineEnds(SfxItemSet& rAttr, SdrObject const * pObj
           nSlotId == SID_LINE_SQUARE_ARROW )
     {
         // set attributes of line start and ends
-        SdrModel& rModel(pObj->getSdrModelFromSdrObject()); // TTTT pObj should be reference
+        SdrModel& rModel(rObj.getSdrModelFromSdrObject());
 
         // arrowhead
         ::basegfx::B2DPolyPolygon aArrow( getPolygon( RID_SVXSTR_ARROW, rModel ) );
@@ -920,7 +920,7 @@ SdrObject* FuConstructRectangle::CreateDefaultObject(const sal_uInt16 nID, const
         SfxItemSet aAttr(mpDoc->GetPool());
         SetStyleSheet(aAttr, pObj);
         SetAttributes(aAttr, pObj);
-        SetLineEnds(aAttr, pObj);
+        SetLineEnds(aAttr, *pObj);
         pObj->SetMergedItemSet(aAttr);
     }
 
