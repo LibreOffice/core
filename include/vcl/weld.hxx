@@ -308,6 +308,19 @@ public:
     void connect_clicked(const Link<Button&, void>& rLink) { m_aClickHdl = rLink; }
 };
 
+class VCL_DLLPUBLIC MenuButton : virtual public Button
+{
+protected:
+    Link<const OString&, void> m_aSelectHdl;
+
+    void signal_selected(const OString& rIdent) { m_aSelectHdl.Call(rIdent); }
+
+public:
+    void connect_selected(const Link<const OString&, void>& rLink) { m_aSelectHdl = rLink; }
+
+    virtual void set_active(const OString& rIdent, bool bActive) = 0;
+};
+
 class VCL_DLLPUBLIC ToggleButton : virtual public Button
 {
 protected:
@@ -549,7 +562,7 @@ public:
     bool get_visible() const { return m_xSpinButton->get_visible(); }
     void grab_focus() { m_xSpinButton->grab_focus(); }
     bool has_focus() const { return m_xSpinButton->has_focus(); }
-    void show() { m_xSpinButton->show(); }
+    void show(bool bShow = true) { m_xSpinButton->show(bShow); }
     void hide() { m_xSpinButton->hide(); }
     void set_digits(unsigned int digits) { m_xSpinButton->set_digits(digits); }
     unsigned int get_digits() const { return m_xSpinButton->get_digits(); }
@@ -565,6 +578,16 @@ public:
         m_xSpinButton->set_size_request(nWidth, nHeight);
     }
     Size get_preferred_size() const { return m_xSpinButton->get_preferred_size(); }
+    void connect_focus_in(const Link<Widget&, void>& rLink)
+    {
+        m_xSpinButton->connect_focus_in(rLink);
+    }
+    void connect_focus_out(const Link<Widget&, void>& rLink)
+    {
+        m_xSpinButton->connect_focus_out(rLink);
+    }
+    void set_help_id(const OString& rName) { m_xSpinButton->set_help_id(rName); }
+    const weld::SpinButton* get_widget() const { return m_xSpinButton.get(); }
 };
 
 class VCL_DLLPUBLIC Label : virtual public Widget
@@ -639,6 +662,7 @@ class VCL_DLLPUBLIC Menu
 public:
     virtual OString popup_at_rect(weld::Widget* pParent, const tools::Rectangle& rRect) = 0;
     virtual void set_sensitive(const OString& rIdent, bool bSensitive) = 0;
+    virtual void set_active(const OString& rIdent, bool bActive) = 0;
     virtual void show(const OString& rIdent, bool bShow) = 0;
     virtual ~Menu() {}
 };
@@ -663,6 +687,7 @@ public:
     virtual Widget* weld_widget(const OString& id, bool bTakeOwnership = false) = 0;
     virtual Container* weld_container(const OString& id, bool bTakeOwnership = false) = 0;
     virtual Button* weld_button(const OString& id, bool bTakeOwnership = false) = 0;
+    virtual MenuButton* weld_menu_button(const OString& id, bool bTakeOwnership = false) = 0;
     virtual Frame* weld_frame(const OString& id, bool bTakeOwnership = false) = 0;
     virtual ScrolledWindow* weld_scrolled_window(const OString& id, bool bTakeOwnership = false)
         = 0;
