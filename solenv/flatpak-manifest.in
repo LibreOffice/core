@@ -1,21 +1,20 @@
 {
     "id": "org.libreoffice.LibreOffice",
-    "runtime": "org.gnome.Platform",
-    "runtime-version": "3.26",
-    "sdk": "org.gnome.Sdk",
+    "runtime": "org.freedesktop.Platform",
+    "runtime-version": "1.6",
+    "sdk": "org.freedesktop.Sdk",
     "sdk-extensions": [
         "org.freedesktop.Sdk.Extension.gcc7",
         "org.freedesktop.Sdk.Extension.openjdk9"
     ],
     "build-options": {
+        "append-ld-library-path": "/usr/lib/sdk/gcc7/lib",
         "env": {
             "CC": "/usr/lib/sdk/gcc7/bin/gcc",
-            "CXX": "/usr/lib/sdk/gcc7/bin/g++",
-            "LD_LIBRARY_PATH": "/usr/lib/sdk/gcc7/lib"
+            "CXX": "/usr/lib/sdk/gcc7/bin/g++"
         }
     },
     "command": "/app/libreoffice/program/soffice",
-    "separate-locales": false,
     "modules": [
         {
             "name": "gcc7",
@@ -34,14 +33,28 @@
         },
         {
             "name": "gst-libav",
-            "buildsystem": "meson",
-            "builddir": true,
-            "config-opts": ["-Ddisable_gtkdoc=true"],
+            "config-opts": [ "--disable-gtk-doc", "--with-system-libav" ],
+            "cleanup": [ "*.la", "/share/gtk-doc" ],
+            "sources": [
+                {
+                    "type" : "archive",
+                    "url" : "https://gstreamer.freedesktop.org/src/gst-libav/gst-libav-1.10.5.tar.xz",
+                    "sha256" : "e4d2f315f478d47281fbfdfbd590a63d23704ca37911d7142d5992616f4b28d3"
+                }
+            ]
+        },
+        {
+            "name": "dbus-glib",
+            "cleanup": [ "*.la", "/bin", "/etc", "/include", "/libexec", "/share/gtk-doc", "/share/man" ],
+            "config-opts": [
+                "--disable-static",
+                "--disable-gtk-doc"
+            ],
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://gstreamer.freedesktop.org/src/gst-libav/gst-libav-1.12.4.tar.xz",
-                    "sha256": "2a56aa5d2d8cd912f2bce17f174713d2c417ca298f1f9c28ee66d4aa1e1d9e62"
+                    "url": "https://dbus.freedesktop.org/releases/dbus-glib/dbus-glib-0.108.tar.gz",
+                    "sha256": "9f340c7e2352e9cdf113893ca77ca9075d9f8d5e81476bf2bf361099383c602c"
                 }
             ]
         },
