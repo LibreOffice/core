@@ -931,12 +931,6 @@ void SdrOle2Obj::CheckFileLink_Impl()
     }
 }
 
-void SdrOle2Obj::Reconnect_Impl()
-{
-    DBG_ASSERT( mpImpl->mbConnected, "Assigned unconnected object?!" );
-    Connect_Impl();
-}
-
 void SdrOle2Obj::Connect_Impl()
 {
     if(!mpImpl->aPersistName.isEmpty() )

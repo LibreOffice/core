@@ -67,8 +67,6 @@ public:
 
     virtual void dispose() = 0;
 
-    virtual void modelChanged( SdrModel* pNewModel ) = 0;
-
 protected:
     ~SvxShapeMaster() {}
 };

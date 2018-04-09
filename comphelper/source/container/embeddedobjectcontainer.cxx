@@ -833,66 +833,6 @@ uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::CopyAndGetEmb
     return xResult;
 }
 
-void EmbeddedObjectContainer::MoveEmbeddedObject( EmbeddedObjectContainer& rSrc, const uno::Reference < embed::XEmbeddedObject >& xObj, OUString& rName )
-{
-    // get the object name before(!) it is assigned to a new storage
-    uno::Reference < embed::XEmbedPersist > xPersist( xObj, uno::UNO_QUERY );
-    OUString aName;
-    if ( xPersist.is() )
-        aName = xPersist->getEntryName();
-
-    // now move the object to the new container; the returned name is the new persist name in this container
-    bool bRet;
-
-    try
-    {
-        bRet = InsertEmbeddedObject( xObj, rName );
-        if ( bRet )
-            TryToCopyGraphReplacement( rSrc, aName, rName );
-    }
-    catch (const uno::Exception&)
-    {
-        SAL_WARN( "comphelper.container", "Failed to insert embedded object into storage!" );
-        bRet = false;
-    }
-
-    if ( bRet )
-    {
-        // now remove the object from the former container
-        bRet = false;
-        EmbeddedObjectContainerNameMap::iterator aEnd = rSrc.pImpl->maObjectContainer.end();
-        for( EmbeddedObjectContainerNameMap::iterator aIter = rSrc.pImpl->maObjectContainer.begin();
-             aIter != aEnd;
-             ++aIter )
-        {
-            if ( aIter->second == xObj )
-            {
-                rSrc.pImpl->maObjectContainer.erase( aIter );
-                bRet = true;
-                break;
-            }
-        }
-
-        SAL_WARN_IF( !bRet, "comphelper.container", "Object not found for removal!" );
-        if ( xPersist.is() )
-        {
-            // now it's time to remove the storage from the container storage
-            try
-            {
-                if ( xPersist.is() )
-                    rSrc.pImpl->mxStorage->removeElement( aName );
-            }
-            catch (const uno::Exception&)
-            {
-                SAL_WARN( "comphelper.container", "Failed to remove object from storage!" );
-                bRet = false;
-            }
-        }
-
-        // rSrc.RemoveGraphicStream( aName );
-    }
-}
-
 // #i119941, bKeepToTempStorage: use to specify whether store the removed object to temporary storage+
 void EmbeddedObjectContainer::RemoveEmbeddedObject( const OUString& rName, bool bKeepToTempStorage )
 {

@@ -2056,31 +2056,6 @@ URLBox::~URLBox()
     }
 }
 
-void URLBox::UpdatePickList( )
-{
-    if (pCtx.is())
-    {
-        pCtx->Stop();
-        pCtx->join();
-        pCtx.clear();
-    }
-    OUString sText = m_xWidget->get_active_text();
-    if (!sText.isEmpty())
-    {
-        pCtx = new MatchContext_Impl( this, sText );
-        pCtx->launch();
-    }
-}
-
-void URLBox::SetSmartProtocol( INetProtocol eProt )
-{
-    if ( eSmartProtocol != eProt )
-    {
-        eSmartProtocol = eProt;
-        UpdatePicklistForSmartProtocol_Impl();
-    }
-}
-
 void URLBox::UpdatePicklistForSmartProtocol_Impl()
 {
     m_xWidget->clear();
@@ -2165,13 +2140,6 @@ IMPL_LINK_NOARG(URLBox, FocusOutHdl, weld::Widget&, void)
     }
 }
 
-void URLBox::SetOnlyDirectories( bool bDir )
-{
-    bOnlyDirectories = bDir;
-    if (bOnlyDirectories)
-        m_xWidget->clear();
-}
-
 OUString URLBox::GetURL()
 {
     // wait for end of autocompletion
@@ -2249,29 +2217,5 @@ OUString URLBox::GetURL()
 
     return aObj.GetMainURL( INetURLObject::DecodeMechanism::NONE );
 }
-
-void URLBox::DisableHistory()
-{
-    bHistoryDisabled = true;
-    UpdatePicklistForSmartProtocol_Impl();
-}
-
-void URLBox::SetBaseURL( const OUString& rURL )
-{
-    ::osl::MutexGuard aGuard( theSvtMatchContextMutex::get() );
-
-    // Reset match lists
-    pImpl->aCompletions.clear();
-    pImpl->aURLs.clear();
-
-    aBaseURL = rURL;
-}
-
-void URLBox::SetFilter(const OUString& _sFilter)
-{
-    pImpl->m_aFilters.clear();
-    FilterMatch::createWildCardFilterList(_sFilter,pImpl->m_aFilters);
-}
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
