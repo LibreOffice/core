@@ -1383,7 +1383,7 @@ void SwDocShell::RegisterAutomationDocumentEventsCaller(css::uno::Reference< ooo
     mxAutomationDocumentEventsCaller = xCaller;
 }
 
-void SwDocShell::CallAutomationDocumentEventSinks(const OUString& Method, const css::uno::Sequence< css::uno::Any >& Arguments)
+void SwDocShell::CallAutomationDocumentEventSinks(const OUString& Method, css::uno::Sequence< css::uno::Any >& Arguments)
 {
     if (mxAutomationDocumentEventsCaller.is())
         mxAutomationDocumentEventsCaller->CallSinks(Method, Arguments);

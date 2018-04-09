@@ -267,7 +267,7 @@ SwVbaApplicationOutgoingConnectionPoint::SwVbaApplicationOutgoingConnectionPoint
 // XSinkCaller
 
 void SAL_CALL
-SwVbaApplication::CallSinks( const OUString& Method, const uno::Sequence< uno::Any >& Arguments )
+SwVbaApplication::CallSinks( const OUString& Method, uno::Sequence< uno::Any >& Arguments )
 {
     for (auto& i : mvSinks)
     {
