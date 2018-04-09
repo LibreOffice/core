@@ -3469,7 +3469,7 @@ bool SwTokenWindow::CreateQuickHelp(Control const * pCtrl,
                                 static_cast<ToxAuthorityField>(rToken.nAuthorityField));
         }
 
-        Point aPos = OutputToScreenPixel(pCtrl->GetPosPixel());
+        Point aPos = m_pCtrlParentWin->OutputToScreenPixel(pCtrl->GetPosPixel());
         tools::Rectangle aItemRect( aPos, pCtrl->GetSizePixel() );
         if ( rToken.eTokenType != TOKEN_TAB_STOP )
         {
