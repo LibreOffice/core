@@ -802,25 +802,16 @@ ColorPickerDialog::ColorPickerDialog(weld::Window* pParent, Color nColor, sal_In
     , m_xMFGreen(m_xBuilder->weld_spin_button("greenSpinbutton"))
     , m_xMFBlue(m_xBuilder->weld_spin_button("blueSpinbutton"))
     , m_xEDHex(new weld::HexColorControl(m_xBuilder->weld_entry("hexEntry")))
-    , m_xMFHue(m_xBuilder->weld_metric_spin_button("hueSpinbutton"))
-    , m_xMFSaturation(m_xBuilder->weld_metric_spin_button("satSpinbutton"))
-    , m_xMFBrightness(m_xBuilder->weld_metric_spin_button("brightSpinbutton"))
-    , m_xMFCyan(m_xBuilder->weld_metric_spin_button("cyanSpinbutton"))
-    , m_xMFMagenta(m_xBuilder->weld_metric_spin_button("magSpinbutton"))
-    , m_xMFYellow(m_xBuilder->weld_metric_spin_button("yellowSpinbutton"))
-    , m_xMFKey(m_xBuilder->weld_metric_spin_button("keySpinbutton"))
+    , m_xMFHue(m_xBuilder->weld_metric_spin_button("hueSpinbutton", FUNIT_DEGREE))
+    , m_xMFSaturation(m_xBuilder->weld_metric_spin_button("satSpinbutton", FUNIT_PERCENT))
+    , m_xMFBrightness(m_xBuilder->weld_metric_spin_button("brightSpinbutton", FUNIT_PERCENT))
+    , m_xMFCyan(m_xBuilder->weld_metric_spin_button("cyanSpinbutton", FUNIT_PERCENT))
+    , m_xMFMagenta(m_xBuilder->weld_metric_spin_button("magSpinbutton", FUNIT_PERCENT))
+    , m_xMFYellow(m_xBuilder->weld_metric_spin_button("yellowSpinbutton", FUNIT_PERCENT))
+    , m_xMFKey(m_xBuilder->weld_metric_spin_button("keySpinbutton", FUNIT_PERCENT))
     , mnDialogMode( nMode )
     , meMode( DefaultMode )
 {
-    m_xMFHue->set_unit(FUNIT_DEGREE);
-    m_xMFSaturation->set_unit(FUNIT_PERCENT);
-    m_xMFBrightness->set_unit(FUNIT_PERCENT);
-
-    m_xMFCyan->set_unit(FUNIT_PERCENT);
-    m_xMFMagenta->set_unit(FUNIT_PERCENT);
-    m_xMFYellow->set_unit(FUNIT_PERCENT);
-    m_xMFKey->set_unit(FUNIT_PERCENT);
-
     m_xColorField->SetModifyHdl( LINK( this, ColorPickerDialog, ColorFieldControlModifydl ) );
     m_xColorSlider->SetModifyHdl( LINK( this, ColorPickerDialog, ColorSliderControlModifyHdl ) );
 

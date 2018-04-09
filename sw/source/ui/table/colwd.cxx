@@ -42,7 +42,7 @@ SwTableWidthDlg::SwTableWidthDlg(weld::Window *pParent, SwTableFUNC &rTableFnc)
     : GenericDialogController(pParent, "modules/swriter/ui/columnwidth.ui", "ColumnWidthDialog")
     , m_rFnc(rTableFnc)
     , m_xColNF(m_xBuilder->weld_spin_button("column"))
-    , m_xWidthMF(m_xBuilder->weld_metric_spin_button("width"))
+    , m_xWidthMF(m_xBuilder->weld_metric_spin_button("width", FUNIT_CM))
 {
     bool bIsWeb = rTableFnc.GetShell()
                   && (dynamic_cast< const SwWebDocShell* >(

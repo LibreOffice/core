@@ -50,7 +50,7 @@ void SwTableHeightDlg::Apply()
 SwTableHeightDlg::SwTableHeightDlg(weld::Window *pParent, SwWrtShell &rS)
     : GenericDialogController(pParent, "modules/swriter/ui/rowheight.ui", "RowHeightDialog")
     , m_rSh(rS)
-    , m_xHeightEdit(m_xBuilder->weld_metric_spin_button("heightmf"))
+    , m_xHeightEdit(m_xBuilder->weld_metric_spin_button("heightmf", FUNIT_CM))
     , m_xAutoHeightCB(m_xBuilder->weld_check_button("fit"))
 {
     FieldUnit eFieldUnit = SW_MOD()->GetUsrPref( dynamic_cast< const SwWebDocShell*>(
