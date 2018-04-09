@@ -93,24 +93,15 @@ public:
 
 namespace datastreams {
 
-void emptyLineQueue( std::queue<DataStream::LinesType*>& rQueue )
-{
-    while (!rQueue.empty())
-    {
-        delete rQueue.front();
-        rQueue.pop();
-    }
-}
-
 class ReaderThread : public salhelper::Thread
 {
-    SvStream *mpStream;
+    std::unique_ptr<SvStream> mpStream;
     size_t mnColCount;
     bool mbTerminate;
     osl::Mutex maMtxTerminate;
 
-    std::queue<DataStream::LinesType*> maPendingLines;
-    std::queue<DataStream::LinesType*> maUsedLines;
+    std::queue<std::unique_ptr<DataStream::LinesType>> maPendingLines;
+    std::queue<std::unique_ptr<DataStream::LinesType>> maUsedLines;
     osl::Mutex maMtxLines;
 
     osl::Condition maCondReadStream;
@@ -120,21 +111,14 @@ class ReaderThread : public salhelper::Thread
 
 public:
 
-    ReaderThread(SvStream *pData, size_t nColCount):
+    ReaderThread(std::unique_ptr<SvStream> pData, size_t nColCount):
         Thread("ReaderThread"),
-        mpStream(pData),
+        mpStream(std::move(pData)),
         mnColCount(nColCount),
         mbTerminate(false)
     {
         maConfig.delimiters.push_back(',');
         maConfig.text_qualifier = '"';
-    }
-
-    virtual ~ReaderThread() override
-    {
-        delete mpStream;
-        emptyLineQueue(maPendingLines);
-        emptyLineQueue(maUsedLines);
     }
 
     bool isTerminateRequested()
@@ -161,9 +145,9 @@ public:
         maCondConsume.reset();
     }
 
-    DataStream::LinesType* popNewLines()
+    std::unique_ptr<DataStream::LinesType> popNewLines()
     {
-        DataStream::LinesType* pLines = maPendingLines.front();
+        auto pLines = std::move(maPendingLines.front());
         maPendingLines.pop();
         return pLines;
     }
@@ -179,9 +163,9 @@ public:
         return !maPendingLines.empty();
     }
 
-    void pushUsedLines( DataStream::LinesType* pLines )
+    void pushUsedLines( std::unique_ptr<DataStream::LinesType> pLines )
     {
-        maUsedLines.push(pLines);
+        maUsedLines.push(std::move(pLines));
     }
 
     osl::Mutex& getLinesMutex()
@@ -194,20 +178,20 @@ private:
     {
         while (!isTerminateRequested())
         {
-            DataStream::LinesType* pLines = nullptr;
+            std::unique_ptr<DataStream::LinesType> pLines;
             osl::ResettableMutexGuard aGuard(maMtxLines);
 
             if (!maUsedLines.empty())
             {
                 // Re-use lines from previous runs.
-                pLines = maUsedLines.front();
+                pLines = std::move(maUsedLines.front());
                 maUsedLines.pop();
                 aGuard.clear(); // unlock
             }
             else
             {
                 aGuard.clear(); // unlock
-                pLines = new DataStream::LinesType(10);
+                pLines.reset(new DataStream::LinesType(10));
             }
 
             // Read & store new lines from stream.
@@ -229,7 +213,7 @@ private:
                 maCondReadStream.reset();
                 aGuard.reset(); // lock
             }
-            maPendingLines.push(pLines);
+            maPendingLines.push(std::move(pLines));
             maCondConsume.set();
             if (!mpStream->good())
                 requestTerminate();
@@ -320,7 +304,7 @@ DataStream::~DataStream()
         mxReaderThread->endThread();
         mxReaderThread->join();
     }
-    delete mpLines;
+    mpLines.reset();
 }
 
 DataStream::Line DataStream::ConsumeLine()
@@ -333,7 +317,7 @@ DataStream::Line DataStream::ConsumeLine()
 
         osl::ResettableMutexGuard aGuard(mxReaderThread->getLinesMutex());
         if (mpLines)
-            mxReaderThread->pushUsedLines(mpLines);
+            mxReaderThread->pushUsedLines(std::move(mpLines));
 
         while (!mxReaderThread->hasNewLines())
         {
@@ -397,8 +381,8 @@ void DataStream::StartImport()
 
     if (!mxReaderThread.is())
     {
-        SvStream *pStream = new SvFileStream(msURL, StreamMode::READ);
-        mxReaderThread = new datastreams::ReaderThread(pStream, maStartRange.aEnd.Col() - maStartRange.aStart.Col() + 1);
+        std::unique_ptr<SvStream> pStream(new SvFileStream(msURL, StreamMode::READ));
+        mxReaderThread = new datastreams::ReaderThread(std::move(pStream), maStartRange.aEnd.Col() - maStartRange.aStart.Col() + 1);
         mxReaderThread->launch();
     }
     mbRunning = true;

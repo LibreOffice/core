@@ -111,7 +111,7 @@ private:
     bool mbRunning;
     bool mbValuesInLine;
     bool mbRefreshOnEmptyLine;
-    LinesType* mpLines;
+    std::unique_ptr<LinesType> mpLines;
     size_t mnLinesCount;
     size_t mnLinesSinceRefresh;
     double mfLastRefreshTime;
