@@ -28,6 +28,7 @@
 #include <svsys.h>
 #include <vector>
 
+#include <o3tl/lru_map.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <i18nlangtag/mslangid.hxx>
@@ -56,6 +57,9 @@
 
 using namespace vcl;
 
+// GetGlyphOutlineW() seems to be a little slow, and doesn't seem to do it's own caching (tested on Windows10).
+// The cache limit is set by the rough number of characters needed to read your average Asian newspaper.
+static o3tl::lru_map<sal_GlyphId, tools::Rectangle> g_BoundRectCache(3000);
 
 inline FIXED FixedFromDouble( double d )
 {
@@ -835,6 +839,9 @@ void ImplGetLogFontFromFontSelect( HDC hDC,
 
 HFONT WinSalGraphics::ImplDoSetFont(FontSelectPattern const * i_pFont, HFONT& o_rOldFont)
 {
+    // clear the cache on font change
+    g_BoundRectCache.clear();
+
     HFONT hNewFont = nullptr;
 
     HDC hdcScreen = nullptr;
@@ -1326,6 +1333,13 @@ void WinSalGraphics::ClearDevFontCache()
 
 bool WinSalGraphics::GetGlyphBoundRect(const GlyphItem& rGlyph, tools::Rectangle& rRect)
 {
+    auto it = g_BoundRectCache.find(rGlyph.maGlyphId);
+    if (it != g_BoundRectCache.end())
+    {
+        rRect = it->second;
+        return true;
+    }
+
     HDC hDC = getHDC();
 
     // use unity matrix
@@ -1347,6 +1361,8 @@ bool WinSalGraphics::GetGlyphBoundRect(const GlyphItem& rGlyph, tools::Rectangle
         Size( aGM.gmBlackBoxX, aGM.gmBlackBoxY ) );
     rRect.AdjustRight(1);
     rRect.AdjustBottom(1);
+
+    g_BoundRectCache.insert({rGlyph.maGlyphId, rRect});
     return true;
 }
 
