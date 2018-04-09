@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.0 -->
+<!-- Generated with glade 3.20.4 -->
 <interface domain="sm">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkAdjustment" id="adjustmentBaseSize">
@@ -8,7 +8,31 @@
     <property name="step_increment">1</property>
     <property name="page_increment">10</property>
   </object>
-  <object class="GtkAdjustment" id="adjustmentRelativeSizes">
+  <object class="GtkAdjustment" id="adjustmentRelativeSizes1">
+    <property name="lower">5</property>
+    <property name="upper">200</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustmentRelativeSizes2">
+    <property name="lower">5</property>
+    <property name="upper">200</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustmentRelativeSizes3">
+    <property name="lower">5</property>
+    <property name="upper">200</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustmentRelativeSizes4">
+    <property name="lower">5</property>
+    <property name="upper">200</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustmentRelativeSizes5">
     <property name="lower">5</property>
     <property name="upper">200</property>
     <property name="step_increment">1</property>
@@ -20,6 +44,8 @@
     <property name="title" translatable="yes" context="fontsizedialog|FontSizeDialog">Font Sizes</property>
     <property name="resizable">False</property>
     <property name="modal">True</property>
+    <property name="default_width">0</property>
+    <property name="default_height">0</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox4">
@@ -121,7 +147,7 @@
                         <property name="can_focus">False</property>
                         <property name="label" translatable="yes" context="fontsizedialog|label4">Base _size:</property>
                         <property name="use_underline">True</property>
-                        <property name="mnemonic_widget">spinB_baseSize:0pt</property>
+                        <property name="mnemonic_widget">spinB_baseSize</property>
                         <property name="xalign">0</property>
                       </object>
                       <packing>
@@ -131,10 +157,11 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkSpinButton" id="spinB_baseSize:0pt">
+                      <object class="GtkSpinButton" id="spinB_baseSize">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="hexpand">True</property>
+                        <property name="activates_default">True</property>
                         <property name="adjustment">adjustmentBaseSize</property>
                       </object>
                       <packing>
@@ -174,11 +201,12 @@
                         <property name="row_spacing">6</property>
                         <property name="column_spacing">12</property>
                         <child>
-                          <object class="GtkSpinButton" id="spinB_function:0%">
+                          <object class="GtkSpinButton" id="spinB_function">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="hexpand">True</property>
-                            <property name="adjustment">adjustmentRelativeSizes</property>
+                            <property name="activates_default">True</property>
+                            <property name="adjustment">adjustmentRelativeSizes1</property>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -191,7 +219,7 @@
                             <property name="can_focus">False</property>
                             <property name="label" translatable="yes" context="fontsizedialog|label2">_Operators:</property>
                             <property name="use_underline">True</property>
-                            <property name="mnemonic_widget">spinB_function:0%</property>
+                            <property name="mnemonic_widget">spinB_function</property>
                             <property name="xalign">0</property>
                           </object>
                           <packing>
@@ -205,7 +233,7 @@
                             <property name="can_focus">False</property>
                             <property name="label" translatable="yes" context="fontsizedialog|label3">_Limits:</property>
                             <property name="use_underline">True</property>
-                            <property name="mnemonic_widget">spinB_limit:0%</property>
+                            <property name="mnemonic_widget">spinB_limit</property>
                             <property name="xalign">0</property>
                           </object>
                           <packing>
@@ -214,11 +242,12 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkSpinButton" id="spinB_operator:0%">
+                          <object class="GtkSpinButton" id="spinB_operator">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="hexpand">True</property>
-                            <property name="adjustment">adjustmentRelativeSizes</property>
+                            <property name="activates_default">True</property>
+                            <property name="adjustment">adjustmentRelativeSizes2</property>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -226,11 +255,12 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkSpinButton" id="spinB_limit:0%">
+                          <object class="GtkSpinButton" id="spinB_limit">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="hexpand">True</property>
-                            <property name="adjustment">adjustmentRelativeSizes</property>
+                            <property name="activates_default">True</property>
+                            <property name="adjustment">adjustmentRelativeSizes3</property>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -243,7 +273,7 @@
                             <property name="can_focus">False</property>
                             <property name="label" translatable="yes" context="fontsizedialog|label5">_Text:</property>
                             <property name="use_underline">True</property>
-                            <property name="mnemonic_widget">spinB_text:0%</property>
+                            <property name="mnemonic_widget">spinB_text</property>
                             <property name="xalign">0</property>
                           </object>
                           <packing>
@@ -257,7 +287,7 @@
                             <property name="can_focus">False</property>
                             <property name="label" translatable="yes" context="fontsizedialog|label7">_Functions:</property>
                             <property name="use_underline">True</property>
-                            <property name="mnemonic_widget">spinB_function:0%</property>
+                            <property name="mnemonic_widget">spinB_function</property>
                             <property name="xalign">0</property>
                           </object>
                           <packing>
@@ -271,7 +301,7 @@
                             <property name="can_focus">False</property>
                             <property name="label" translatable="yes" context="fontsizedialog|label6">_Indexes:</property>
                             <property name="use_underline">True</property>
-                            <property name="mnemonic_widget">spinB_index:0%</property>
+                            <property name="mnemonic_widget">spinB_index</property>
                             <property name="xalign">0</property>
                           </object>
                           <packing>
@@ -280,11 +310,12 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkSpinButton" id="spinB_text:0%">
+                          <object class="GtkSpinButton" id="spinB_text">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="hexpand">True</property>
-                            <property name="adjustment">adjustmentRelativeSizes</property>
+                            <property name="activates_default">True</property>
+                            <property name="adjustment">adjustmentRelativeSizes4</property>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -292,11 +323,12 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkSpinButton" id="spinB_index:0%">
+                          <object class="GtkSpinButton" id="spinB_index">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="hexpand">True</property>
-                            <property name="adjustment">adjustmentRelativeSizes</property>
+                            <property name="activates_default">True</property>
+                            <property name="adjustment">adjustmentRelativeSizes5</property>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -334,7 +366,9 @@
       </object>
     </child>
     <action-widgets>
-      <action-widget response="0">default</action-widget>
+      <action-widget response="-5">ok</action-widget>
+      <action-widget response="-6">cancel</action-widget>
+      <action-widget response="-11">help</action-widget>
     </action-widgets>
     <child>
       <placeholder/>

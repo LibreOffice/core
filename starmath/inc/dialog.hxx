@@ -123,22 +123,21 @@ public:
 
 /**************************************************************************/
 
-class SmFontSizeDialog : public ModalDialog
+class SmFontSizeDialog : public weld::GenericDialogController
 {
-    VclPtr<MetricField> m_pBaseSize;
-    VclPtr<MetricField> m_pTextSize;
-    VclPtr<MetricField> m_pIndexSize;
-    VclPtr<MetricField> m_pFunctionSize;
-    VclPtr<MetricField> m_pOperatorSize;
-    VclPtr<MetricField> m_pBorderSize;
-    VclPtr<PushButton> m_pDefaultButton;
+    std::unique_ptr<weld::MetricSpinButton> m_xBaseSize;
+    std::unique_ptr<weld::MetricSpinButton> m_xTextSize;
+    std::unique_ptr<weld::MetricSpinButton> m_xIndexSize;
+    std::unique_ptr<weld::MetricSpinButton> m_xFunctionSize;
+    std::unique_ptr<weld::MetricSpinButton> m_xOperatorSize;
+    std::unique_ptr<weld::MetricSpinButton> m_xBorderSize;
+    std::unique_ptr<weld::Button> m_xDefaultButton;
 
-    DECL_LINK(DefaultButtonClickHdl, Button *, void);
+    DECL_LINK(DefaultButtonClickHdl, weld::Button&, void);
 
 public:
-    SmFontSizeDialog(vcl::Window *pParent);
+    SmFontSizeDialog(weld::Window *pParent);
     virtual ~SmFontSizeDialog() override;
-    virtual void dispose() override;
 
     void ReadFrom(const SmFormat &rFormat);
     void WriteTo (SmFormat &rFormat) const;

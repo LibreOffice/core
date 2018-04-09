@@ -132,7 +132,7 @@ SvxZoomDialog::SvxZoomDialog(weld::Window* pParent, const SfxItemSet& rCoreSet)
     , m_xPageWidthBtn(m_xBuilder->weld_radio_button("fitw"))
     , m_x100Btn(m_xBuilder->weld_radio_button("100pc"))
     , m_xUserBtn(m_xBuilder->weld_radio_button("variable"))
-    , m_xUserEdit(m_xBuilder->weld_metric_spin_button("zoomsb"))
+    , m_xUserEdit(m_xBuilder->weld_metric_spin_button("zoomsb", FUNIT_PERCENT))
     , m_xViewFrame(m_xBuilder->weld_widget("viewframe"))
     , m_xAutomaticBtn(m_xBuilder->weld_radio_button("automatic"))
     , m_xSingleBtn(m_xBuilder->weld_radio_button("singlepage"))
@@ -141,8 +141,6 @@ SvxZoomDialog::SvxZoomDialog(weld::Window* pParent, const SfxItemSet& rCoreSet)
     , m_xBookModeChk(m_xBuilder->weld_check_button("bookmode"))
     , m_xOKBtn(m_xBuilder->weld_button("ok"))
 {
-    m_xUserEdit->set_unit(FUNIT_PERCENT);
-
     Link<weld::ToggleButton&,void> aLink = LINK(this, SvxZoomDialog, UserHdl);
     m_x100Btn->connect_toggled(aLink);
     m_xOptimalBtn->connect_toggled(aLink);

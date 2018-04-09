@@ -950,15 +950,15 @@ void SmDocShell::Execute(SfxRequest& rReq)
 
         case SID_FONTSIZE:
         {
-            VclPtrInstance< SmFontSizeDialog > xFontSizeDialog(nullptr);
+            SmFontSizeDialog aFontSizeDialog(rReq.GetFrameWeld());
 
             SmFormat aOldFormat  = GetFormat();
-            xFontSizeDialog->ReadFrom( aOldFormat );
-            if (xFontSizeDialog->Execute() == RET_OK)
+            aFontSizeDialog.ReadFrom( aOldFormat );
+            if (aFontSizeDialog.run() == RET_OK)
             {
                 SmFormat aNewFormat( aOldFormat );
 
-                xFontSizeDialog->WriteTo(aNewFormat);
+                aFontSizeDialog.WriteTo(aNewFormat);
 
                 ::svl::IUndoManager *pTmpUndoMgr = GetUndoManager();
                 if (pTmpUndoMgr)

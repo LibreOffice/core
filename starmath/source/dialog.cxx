@@ -404,9 +404,9 @@ public:
     }
 };
 
-IMPL_LINK_NOARG( SmFontSizeDialog, DefaultButtonClickHdl, Button *, void )
+IMPL_LINK_NOARG( SmFontSizeDialog, DefaultButtonClickHdl, weld::Button&, void )
 {
-    SaveDefaultsQuery aQuery(GetFrameWeld());
+    SaveDefaultsQuery aQuery(m_xDialog.get());
     if (aQuery.run() == RET_YES)
     {
         SmModule *pp = SM_MOD();
@@ -416,61 +416,45 @@ IMPL_LINK_NOARG( SmFontSizeDialog, DefaultButtonClickHdl, Button *, void )
     }
 }
 
-SmFontSizeDialog::SmFontSizeDialog(vcl::Window * pParent)
-    : ModalDialog(pParent, "FontSizeDialog", "modules/smath/ui/fontsizedialog.ui")
+SmFontSizeDialog::SmFontSizeDialog(weld::Window* pParent)
+    : GenericDialogController(pParent, "modules/smath/ui/fontsizedialog.ui", "FontSizeDialog")
+    , m_xBaseSize(m_xBuilder->weld_metric_spin_button("spinB_baseSize", FUNIT_POINT))
+    , m_xTextSize(m_xBuilder->weld_metric_spin_button("spinB_text", FUNIT_PERCENT))
+    , m_xIndexSize(m_xBuilder->weld_metric_spin_button("spinB_index", FUNIT_PERCENT))
+    , m_xFunctionSize(m_xBuilder->weld_metric_spin_button("spinB_function", FUNIT_PERCENT))
+    , m_xOperatorSize(m_xBuilder->weld_metric_spin_button("spinB_operator", FUNIT_PERCENT))
+    , m_xBorderSize(m_xBuilder->weld_metric_spin_button("spinB_limit", FUNIT_PERCENT))
+    , m_xDefaultButton(m_xBuilder->weld_button("default"))
 {
-    get(m_pTextSize, "spinB_text");
-    get(m_pIndexSize, "spinB_index");
-    get(m_pFunctionSize, "spinB_function");
-    get(m_pOperatorSize, "spinB_operator");
-    get(m_pBorderSize, "spinB_limit");
-    get(m_pBaseSize, "spinB_baseSize");
-    get(m_pDefaultButton, "default");
-
-    m_pDefaultButton->SetClickHdl(LINK(this, SmFontSizeDialog, DefaultButtonClickHdl));
+    m_xDefaultButton->connect_clicked(LINK(this, SmFontSizeDialog, DefaultButtonClickHdl));
 }
 
 SmFontSizeDialog::~SmFontSizeDialog()
 {
-    disposeOnce();
 }
-
-void SmFontSizeDialog::dispose()
-{
-    m_pBaseSize.clear();
-    m_pTextSize.clear();
-    m_pIndexSize.clear();
-    m_pFunctionSize.clear();
-    m_pOperatorSize.clear();
-    m_pBorderSize.clear();
-    m_pDefaultButton.clear();
-    ModalDialog::dispose();
-}
-
 
 void SmFontSizeDialog::ReadFrom(const SmFormat &rFormat)
 {
     //! watch out: round properly!
-    m_pBaseSize->SetValue( SmRoundFraction(
-        Sm100th_mmToPts( rFormat.GetBaseSize().Height() ) ) );
+    m_xBaseSize->set_value( SmRoundFraction(
+        Sm100th_mmToPts( rFormat.GetBaseSize().Height() ) ), FUNIT_NONE );
 
-    m_pTextSize->SetValue( rFormat.GetRelSize(SIZ_TEXT) );
-    m_pIndexSize->SetValue( rFormat.GetRelSize(SIZ_INDEX) );
-    m_pFunctionSize->SetValue( rFormat.GetRelSize(SIZ_FUNCTION) );
-    m_pOperatorSize->SetValue( rFormat.GetRelSize(SIZ_OPERATOR) );
-    m_pBorderSize->SetValue( rFormat.GetRelSize(SIZ_LIMITS) );
+    m_xTextSize->set_value( rFormat.GetRelSize(SIZ_TEXT), FUNIT_NONE );
+    m_xIndexSize->set_value( rFormat.GetRelSize(SIZ_INDEX), FUNIT_NONE );
+    m_xFunctionSize->set_value( rFormat.GetRelSize(SIZ_FUNCTION), FUNIT_NONE );
+    m_xOperatorSize->set_value( rFormat.GetRelSize(SIZ_OPERATOR), FUNIT_NONE );
+    m_xBorderSize->set_value( rFormat.GetRelSize(SIZ_LIMITS), FUNIT_NONE );
 }
-
 
 void SmFontSizeDialog::WriteTo(SmFormat &rFormat) const
 {
-    rFormat.SetBaseSize( Size(0, SmPtsTo100th_mm( static_cast< long >(m_pBaseSize->GetValue()))) );
+    rFormat.SetBaseSize( Size(0, SmPtsTo100th_mm( static_cast< long >(m_xBaseSize->get_value(FUNIT_NONE)))) );
 
-    rFormat.SetRelSize(SIZ_TEXT,     sal::static_int_cast<sal_uInt16>(m_pTextSize->GetValue()));
-    rFormat.SetRelSize(SIZ_INDEX,    sal::static_int_cast<sal_uInt16>(m_pIndexSize->GetValue()));
-    rFormat.SetRelSize(SIZ_FUNCTION, sal::static_int_cast<sal_uInt16>(m_pFunctionSize->GetValue()));
-    rFormat.SetRelSize(SIZ_OPERATOR, sal::static_int_cast<sal_uInt16>(m_pOperatorSize->GetValue()));
-    rFormat.SetRelSize(SIZ_LIMITS,   sal::static_int_cast<sal_uInt16>(m_pBorderSize->GetValue()));
+    rFormat.SetRelSize(SIZ_TEXT,     sal::static_int_cast<sal_uInt16>(m_xTextSize->get_value(FUNIT_NONE)));
+    rFormat.SetRelSize(SIZ_INDEX,    sal::static_int_cast<sal_uInt16>(m_xIndexSize->get_value(FUNIT_NONE)));
+    rFormat.SetRelSize(SIZ_FUNCTION, sal::static_int_cast<sal_uInt16>(m_xFunctionSize->get_value(FUNIT_NONE)));
+    rFormat.SetRelSize(SIZ_OPERATOR, sal::static_int_cast<sal_uInt16>(m_xOperatorSize->get_value(FUNIT_NONE)));
+    rFormat.SetRelSize(SIZ_LIMITS,   sal::static_int_cast<sal_uInt16>(m_xBorderSize->get_value(FUNIT_NONE)));
 
     const Size aTmp (rFormat.GetBaseSize());
     for (sal_uInt16  i = FNT_BEGIN;  i <= FNT_END;  i++)
