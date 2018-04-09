@@ -28,6 +28,7 @@
 #include <svsys.h>
 #include <vector>
 
+#include <o3tl/lru_map.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <i18nlangtag/mslangid.hxx>
@@ -1324,8 +1325,19 @@ void WinSalGraphics::ClearDevFontCache()
     //anything to do here ?
 }
 
+// GetGlyphOutlineW() seems to be a little slow, and doesn't seem to do it's own caching (tested on Windows10).
+// The cache limit is currently a complete thumb-suck, might need to be tweaked for non-Latin languages.
+static o3tl::lru_map<sal_GlyphId, tools::Rectangle> g_BoundRectCache(1024);
+
 bool WinSalGraphics::GetGlyphBoundRect(const GlyphItem& rGlyph, tools::Rectangle& rRect)
 {
+    auto it = g_BoundRectCache.find(rGlyph.maGlyphId);
+    if (g_BoundRectCache.find(rGlyph.maGlyphId) != g_BoundRectCache.end())
+    {
+        rRect = it->second;
+        return true;
+    }
+
     HDC hDC = getHDC();
 
     // use unity matrix
@@ -1347,6 +1359,8 @@ bool WinSalGraphics::GetGlyphBoundRect(const GlyphItem& rGlyph, tools::Rectangle
         Size( aGM.gmBlackBoxX, aGM.gmBlackBoxY ) );
     rRect.AdjustRight(1);
     rRect.AdjustBottom(1);
+
+    g_BoundRectCache.insert({rGlyph.maGlyphId, rRect});
     return true;
 }
 
