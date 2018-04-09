@@ -24,6 +24,7 @@
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/uno/Sequence.h>
 #include <ooo/vba/XSinkCaller.hpp>
+#include <ooo/vba/word/XDocument.hpp>
 #include <sfx2/docfac.hxx>
 #include <sfx2/objsh.hxx>
 #include "swdllapi.h"
@@ -89,6 +90,7 @@ class SW_DLLPUBLIC SwDocShell
         ///< SID_MAIL_EXPORT_FINISHED needs to restore
 
     css::uno::Reference< ooo::vba::XSinkCaller > mxAutomationDocumentEventsCaller;
+    css::uno::Reference< ooo::vba::word::XDocument> mxAutomationDocumentObject;
 
     /// Methods for access to doc.
     SAL_DLLPRIVATE void                  AddLink();
@@ -316,6 +318,7 @@ public:
 
     void RegisterAutomationDocumentEventsCaller(css::uno::Reference< ooo::vba::XSinkCaller > const& xCaller);
     void CallAutomationDocumentEventSinks(const OUString& Method, css::uno::Sequence< css::uno::Any >& Arguments);
+    void RegisterAutomationDocumentObject(css::uno::Reference< ooo::vba::word::XDocument > const& xDocument);
 };
 
 /** Find the right DocShell and create a new one:

@@ -1380,4 +1380,9 @@ void SwDocShell::CallAutomationDocumentEventSinks(const OUString& Method, css::u
         mxAutomationDocumentEventsCaller->CallSinks(Method, Arguments);
 }
 
+void SwDocShell::RegisterAutomationDocumentObject(css::uno::Reference< ooo::vba::word::XDocument > const& xDocument)
+{
+    mxAutomationDocumentObject = xDocument;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
