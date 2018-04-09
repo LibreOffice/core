@@ -1,0 +1,159 @@
+diff --git a/core/fpdfapi/page/cpdf_imageobject.cpp b/core/fpdfapi/page/cpdf_imageobject.cpp
+index 3b5a740..58ef90a 100644
+--- a/core/fpdfapi/page/cpdf_imageobject.cpp
++++ b/core/fpdfapi/page/cpdf_imageobject.cpp
+@@ -43,6 +43,7 @@ const CPDF_ImageObject* CPDF_ImageObject::AsImage() const {
+ void CPDF_ImageObject::CalcBoundingBox() {
+   std::tie(m_Left, m_Right, m_Top, m_Bottom) =
+       m_Matrix.TransformRect(0.f, 1.f, 1.f, 0.f);
++    fprintf(stderr, "Image BB: %f, %f, %f, %f\n", m_Left, m_Right, m_Top, m_Bottom);
+ }
+ 
+ void CPDF_ImageObject::SetImage(const RetainPtr<CPDF_Image>& pImage) {
+diff --git a/core/fpdfapi/page/cpdf_pageobject.cpp b/core/fpdfapi/page/cpdf_pageobject.cpp
+index 8bb5bf5..9b5e2ce 100644
+--- a/core/fpdfapi/page/cpdf_pageobject.cpp
++++ b/core/fpdfapi/page/cpdf_pageobject.cpp
+@@ -98,5 +98,7 @@ FX_RECT CPDF_PageObject::GetBBox(const CFX_Matrix* pMatrix) const {
+   if (pMatrix)
+     rect = pMatrix->TransformRect(rect);
+ 
++  FX_RECT rc = rect.GetOuterRect();
++  fprintf(stderr, "PageObject BB: %f, %f, %f, %f\n", rc.left, rc.right, rc.top, rc.bottom);
+   return rect.GetOuterRect();
+ }
+diff --git a/core/fpdfapi/render/cpdf_renderstatus.cpp b/core/fpdfapi/render/cpdf_renderstatus.cpp
+index 0a01ae0..fad2920 100644
+--- a/core/fpdfapi/render/cpdf_renderstatus.cpp
++++ b/core/fpdfapi/render/cpdf_renderstatus.cpp
+@@ -1793,6 +1793,7 @@ bool CPDF_RenderStatus::ProcessText(CPDF_TextObject* textobj,
+     return true;
+ 
+   float font_size = textobj->m_TextState.GetFontSize();
++  fprintf(stderr, "Font size: %f, matrix a: %f, b: %f, c: %f, d: %f, e: %f, f: %f\n", font_size, text_matrix.a, text_matrix.b, text_matrix.c, text_matrix.d, text_matrix.e, text_matrix.f);
+   if (bPattern) {
+     DrawTextPathWithPattern(textobj, pObj2Device, pFont, font_size,
+                             &text_matrix, bFill, bStroke);
+diff --git a/fpdfsdk/fpdfeditpage.cpp b/fpdfsdk/fpdfeditpage.cpp
+index ca2cf3f..ef4b958 100644
+--- a/fpdfsdk/fpdfeditpage.cpp
++++ b/fpdfsdk/fpdfeditpage.cpp
+@@ -17,6 +17,7 @@
+ #include "core/fpdfapi/page/cpdf_page.h"
+ #include "core/fpdfapi/page/cpdf_pageobject.h"
+ #include "core/fpdfapi/page/cpdf_pathobject.h"
++#include "core/fpdfapi/page/cpdf_textobject.h"
+ #include "core/fpdfapi/page/cpdf_shadingobject.h"
+ #include "core/fpdfapi/parser/cpdf_array.h"
+ #include "core/fpdfapi/parser/cpdf_document.h"
+@@ -363,3 +364,20 @@ FPDFPageObj_GetBounds(FPDF_PAGEOBJECT pageObject,
+   *top = bbox.top;
+   return true;
+ }
++
++FPDF_EXPORT void FPDF_CALLCONV
++FPDFTextObj_GetMatrix(FPDF_PAGEOBJECT text_object,
++                      double* a,
++                      double* b,
++                      double* c,
++                      double* d) {
++  if (!text_object)
++    return;
++
++  CPDF_TextObject* pTxtObj = static_cast<CPDF_TextObject*>(text_object);
++  const CFX_Matrix& matrix = pTxtObj->GetTextMatrix();
++  *a = matrix.a;
++  *b = matrix.b;
++  *c = matrix.c;
++  *d = matrix.d;
++}
+diff --git a/fpdfsdk/fpdftext.cpp b/fpdfsdk/fpdftext.cpp
+index 68bf4f8..e073b20 100644
+--- a/fpdfsdk/fpdftext.cpp
++++ b/fpdfsdk/fpdftext.cpp
+@@ -105,6 +105,28 @@ FPDF_EXPORT double FPDF_CALLCONV FPDFText_GetFontSize(FPDF_TEXTPAGE text_page,
+   return charinfo.m_FontSize;
+ }
+ 
++FPDF_EXPORT FPDF_BOOL FPDF_CALLCONV FPDFText_GetMatrix(FPDF_TEXTPAGE text_page,
++                                                  int index,
++                                                  double* a,
++                                                  double* b,
++                                                  double* c,
++                                                  double* d) {
++  if (!text_page || index < 0)
++    return false;
++
++  CPDF_TextPage* textpage = CPDFTextPageFromFPDFTextPage(text_page);
++  if (index >= textpage->CountChars())
++    return false;
++
++  FPDF_CHAR_INFO charinfo;
++  textpage->GetCharInfo(index, &charinfo);
++  *a = charinfo.m_Matrix.a;
++  *b = charinfo.m_Matrix.b;
++  *c = charinfo.m_Matrix.c;
++  *d = charinfo.m_Matrix.d;
++  return true;
++}
++
+ FPDF_EXPORT FPDF_BOOL FPDF_CALLCONV FPDFText_GetCharBox(FPDF_TEXTPAGE text_page,
+                                                         int index,
+                                                         double* left,
+diff --git a/public/fpdf_edit.h b/public/fpdf_edit.h
+index 54735a3..3642a2a 100644
+--- a/public/fpdf_edit.h
++++ b/public/fpdf_edit.h
+@@ -761,6 +761,21 @@ FPDFPageObj_CreateTextObj(FPDF_DOCUMENT document,
+                           FPDF_FONT font,
+                           float font_size);
+ 
++// Get the matrix of a particular text object.
++//
++// text_object - Handle of text object returned by FPDFPageObj_NewTextObj
++//               or FPDFPageObj_NewTextObjEx.
++//   a            - Pointer to a double value receiving coefficient "a" of the matrix.
++//   b            - Pointer to a double value receiving coefficient "b" of the matrix.
++//   c            - Pointer to a double value receiving coefficient "c" of the matrix.
++//   d            - Pointer to a double value receiving coefficient "d" of the matrix.
++FPDF_EXPORT void FPDF_CALLCONV
++FPDFTextObj_GetMatrix(FPDF_PAGEOBJECT text_object,
++                      double* a,
++                      double* b,
++                      double* c,
++                      double* d);
++
+ #ifdef __cplusplus
+ }  // extern "C"
+ #endif  // __cplusplus
+diff --git a/public/fpdf_text.h b/public/fpdf_text.h
+index 043dc16..fe3b971 100644
+--- a/public/fpdf_text.h
++++ b/public/fpdf_text.h
+@@ -342,6 +342,26 @@ FPDF_EXPORT int FPDF_CALLCONV FPDFText_GetSchCount(FPDF_SCHHANDLE handle);
+ //
+ FPDF_EXPORT void FPDF_CALLCONV FPDFText_FindClose(FPDF_SCHHANDLE handle);
+ 
++// Get the matrix of a particular character.
++//
++// text_page - Handle to a text page information structure.
++//             Returned by FPDFText_LoadPage function.
++// index - Zero-based index of the character
++//   a            - Pointer to a double value receiving coefficient "a" of the matrix.
++//   b            - Pointer to a double value receiving coefficient "b" of the matrix.
++//   c            - Pointer to a double value receiving coefficient "c" of the matrix.
++//   d            - Pointer to a double value receiving coefficient "d" of the matrix.
++//
++// Return Value:
++//          On success, return TRUE and fill in |a|, |b|, |c|, and |d|
++FPDF_EXPORT FPDF_BOOL FPDF_CALLCONV
++FPDFText_GetMatrix(FPDF_TEXTPAGE text_page,
++                   int index,
++                   double* a,
++                   double* b,
++                   double* c,
++                   double* d);
++
+ // Function: FPDFLink_LoadWebLinks
+ //          Prepare information about weblinks in a page.
+ // Parameters:

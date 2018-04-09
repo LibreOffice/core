@@ -92,6 +92,10 @@ class ImpSdrPdfImport final
     /// PDF coordinate system has orign at the bottom right.
     double correctVertOrigin(double offsetPts) const { return mdPageHeightPts - offsetPts; }
 
+    /// Convert PDF points to logic (twips).
+    Rectangle PointsToLogic(double left, double right, double top, double bottom) const;
+    Point PointsToLogic(double x, double y) const;
+
     // check for clip and evtl. fill maClip
     void checkClip();
     bool isClip() const;
