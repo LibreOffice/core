@@ -748,22 +748,31 @@ void SvXMLGraphicHelper::ImplInsertGraphicURL( const OUString& rURLStr, sal_uInt
 
                 aStreamName += aExtension;
 
-                if( mbDirect && !aStreamName.isEmpty() )
-                    ImplWriteGraphic( aPictureStorageName, aStreamName, aPictureStreamName, bUseGfxLink );
-
-                rURLPair.second = sPictures;
-                rURLPair.second += aStreamName;
-            }
-#if OSL_DEBUG_LEVEL > 0
-            else
+            std::unique_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream(aStream.xStream));
+            if (bUseGfxLink && aGfxLink.GetDataSize() && aGfxLink.GetData())
             {
-                OStringBuffer sMessage("graphic object with ID '");
-                sMessage.append(aAsciiObjectID).
-                    append("' has an unknown type");
-                OSL_ENSURE( false, sMessage.getStr() );
-            }
-#endif
-        }
+                if (aGraphic.hasPdfData())
+                {
+                    // See if we have this PDF already, and avoid duplicate storage.
+                    auto aIt = maExportPdf.find(aGraphic.getPdfData().get());
+                    if (aIt != maExportPdf.end())
+                    {
+                        auto const& aURLAndMimePair = aIt->second;
+                        rOutSavedMimeType = aURLAndMimePair.second;
+                        return aURLAndMimePair.first;
+                    }
+
+                    // The graphic has PDF data attached to it, use that.
+                    // vcl::ImportPDF() possibly downgraded the PDF data from a
+                    // higher PDF version, while aGfxLink still contains the
+                    // original data provided by the user.
+                    std::shared_ptr<uno::Sequence<sal_Int8>> pPdfData = aGraphic.getPdfData();
+                    pStream->WriteBytes(pPdfData->getConstArray(), pPdfData->getLength());
+                }
+                else
+                {
+                    pStream->WriteBytes(aGfxLink.GetData(), aGfxLink.GetDataSize());
+                }
 
         maURLSet.insert( rURLStr );
     }
@@ -839,12 +848,13 @@ OUString SAL_CALL SvXMLGraphicHelper::resolveGraphicObjectURL( const OUString& r
                 OUString aParam( aToken.copy( 0, n ) );
                 OUString aValue( aToken.copy( n + 1, aToken.getLength() - ( n + 1 ) ) );
 
-                const OUString sRequestedName( "requestedName" );
-                if ( aParam.match( sRequestedName ) )
-                    aRequestedFileName = aValue;
-            }
+            // put into cache
+            maExportGraphics[aGraphic] = std::make_pair(aStoragePath, rOutSavedMimeType);
+            if (aGraphic.hasPdfData())
+                maExportPdf[aGraphic.getPdfData().get()] = std::make_pair(aStoragePath, rOutSavedMimeType);
+
+            return aStoragePath;
         }
-        while ( nIndex2 >= 0 );
     }
 
     maGrfURLs.push_back( ::std::make_pair( aURL, OUString() ) );

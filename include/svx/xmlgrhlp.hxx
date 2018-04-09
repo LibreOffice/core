@@ -60,6 +60,7 @@ private:
     GraphicObjectVector         maGrfObjs;
     GraphicOutputStreamVector   maGrfStms;
     URLSet                      maURLSet;
+    std::unordered_map<void*, std::pair<OUString, OUString>> maExportPdf;
     SvXMLGraphicHelperMode      meCreateMode;
     bool                        mbDirect;
 
