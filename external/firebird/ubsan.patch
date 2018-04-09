@@ -86,6 +86,17 @@
  			return *this;
  		}
  		StringType& assign(const_pointer s)
+--- src/common/unicode_util.cpp
++++ src/common/unicode_util.cpp
+@@ -187,7 +187,7 @@
+ 	Mutex ciAiTransCacheMutex;
+ 	Array<UTransliterator*> ciAiTransCache;
+ 
+-	void (U_EXPORT2 *uVersionToString)(UVersionInfo versionArray, char* versionString);
++	void (U_EXPORT2 *uVersionToString)(UVersionInfo const versionArray, char* versionString);
+ 
+ 	int32_t (U_EXPORT2 *ulocCountAvailable)();
+ 	const char* (U_EXPORT2 *ulocGetAvailable)(int32_t n);
 --- src/dsql/StmtNodes.cpp
 +++ src/dsql/StmtNodes.cpp
 @@ -6643,7 +6643,7 @@
