@@ -739,14 +739,13 @@ bool SwSpellDialogChildWindow::FindNextDrawTextError_Impl(SwWrtShell& rSh)
     if(!m_pSpellState->m_bTextObjectsCollected )
     {
         m_pSpellState->m_bTextObjectsCollected = true;
-        std::list<SdrTextObj*> aTextObjs;
-        SwDrawContact::GetTextObjectsFromFormat( aTextObjs, pDoc );
+        SwDrawContact::GetTextObjectsFromFormat( m_pSpellState->m_aTextObjects, pDoc );
         if(pCurrentTextObj)
         {
             m_pSpellState->m_aTextObjects.remove(pCurrentTextObj);
             m_pSpellState->m_aTextObjects.push_back(pCurrentTextObj);
-                                }
-                            }
+        }
+    }
     if(!m_pSpellState->m_aTextObjects.empty())
     {
         Reference< XSpellChecker1 >  xSpell( GetSpellChecker() );
