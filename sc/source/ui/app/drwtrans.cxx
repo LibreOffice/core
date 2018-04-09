@@ -638,13 +638,13 @@ void ScDrawTransferObj::SetDragSource( const ScDrawView* pView )
     //! add as listener with document, delete pDragSourceView if document gone
 }
 
-void ScDrawTransferObj::SetDragSourceObj( SdrObject* pObj, SCTAB nTab )
+void ScDrawTransferObj::SetDragSourceObj( SdrObject& rObj, SCTAB nTab )
 {
     DELETEZ( pDragSourceView );
-    pDragSourceView = new SdrView(pObj->getSdrModelFromSdrObject()); // TTTT pObj should be reference
+    pDragSourceView = new SdrView(rObj.getSdrModelFromSdrObject());
     pDragSourceView->ShowSdrPage(pDragSourceView->GetModel()->GetPage(nTab));
     SdrPageView* pPV = pDragSourceView->GetSdrPageView();
-    pDragSourceView->MarkObj(pObj, pPV);
+    pDragSourceView->MarkObj(&rObj, pPV); // TTTT MarkObj should take SdrObject&
 
     //! add as listener with document, delete pDragSourceView if document gone
 }

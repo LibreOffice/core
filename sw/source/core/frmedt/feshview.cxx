@@ -892,9 +892,9 @@ static void lcl_NotifyNeighbours( const SdrMarkList *pLst )
     }
 }
 
-void SwFEShell::SetLineEnds(SfxItemSet& rAttr, SdrObject const * pObj, sal_uInt16 nSlotId)
+void SwFEShell::SetLineEnds(SfxItemSet& rAttr, SdrObject& rObj, sal_uInt16 nSlotId)
 {
-    SdrModel& rModel(pObj->getSdrModelFromSdrObject());
+    SdrModel& rModel(rObj.getSdrModelFromSdrObject());
 
     if ( !(nSlotId == SID_LINE_ARROW_START      ||
           nSlotId == SID_LINE_ARROW_END        ||
@@ -3042,7 +3042,7 @@ long SwFEShell::GetSectionWidth( SwFormat const & rFormat ) const
                     aPoly.append(aTempPoly);
 
                     SfxItemSet aAttr(pObj->getSdrModelFromSdrObject().GetItemPool());
-                    SetLineEnds(aAttr, pObj, nSlotId);
+                    SetLineEnds(aAttr, *pObj, nSlotId);
                     pObj->SetMergedItemSet(aAttr);
                 }
                 break;

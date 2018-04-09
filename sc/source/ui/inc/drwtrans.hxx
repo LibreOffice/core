@@ -83,7 +83,7 @@ public:
 
     void                SetDrawPersist( const SfxObjectShellRef& rRef );
     void                SetDragSource( const ScDrawView* pView );
-    void                SetDragSourceObj( SdrObject* pObj, SCTAB nTab );
+    void                SetDragSourceObj( SdrObject& rObj, SCTAB nTab );
     void                SetDragSourceFlags( ScDragSrc nFlags );
     void                SetDragWasInternal();
 
