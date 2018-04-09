@@ -70,7 +70,6 @@ $(call gb_ExternalProject_get_state_target,firebird,build):
 				-I$(call gb_UnpackedTarball_get_dir,icu)/source/i18n \
 				-I$(call gb_UnpackedTarball_get_dir,icu)/source/common \
 			) \
-			$(ICU_UCHAR_TYPE) \
 			$(if $(SYSTEM_LIBTOMMATH),$(LIBTOMMATH_CFLAGS), \
 				-L$(call gb_UnpackedTarball_get_dir,libtommath) \
 			) \
