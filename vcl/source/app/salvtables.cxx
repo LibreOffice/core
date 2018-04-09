@@ -35,6 +35,7 @@
 #include <vcl/lstbox.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/layout.hxx>
+#include <vcl/menubtn.hxx>
 #include <vcl/tabctrl.hxx>
 #include <vcl/tabpage.hxx>
 #include <vcl/unowrap.hxx>
@@ -395,6 +396,10 @@ public:
     virtual void set_sensitive(const OString& rIdent, bool bSensitive) override
     {
         m_xMenu->EnableItem(rIdent, bSensitive);
+    }
+    virtual void set_active(const OString& rIdent, bool bActive) override
+    {
+        m_xMenu->CheckItem(m_xMenu->GetItemId(rIdent), bActive);
     }
     virtual void show(const OString& rIdent, bool bShow) override
     {
@@ -818,6 +823,38 @@ weld::Button* SalInstanceDialog::get_widget_for_response(int nResponse)
 {
     PushButton* pButton = dynamic_cast<PushButton*>(m_xDialog->get_widget_for_response(nResponse));
     return pButton ? new SalInstanceButton(pButton, false) : nullptr;
+}
+
+class SalInstanceMenuButton : public SalInstanceButton, public virtual weld::MenuButton
+{
+private:
+    VclPtr<::MenuButton> m_xMenuButton;
+
+    DECL_LINK(MenuSelectHdl, ::MenuButton*, void);
+
+public:
+    SalInstanceMenuButton(::MenuButton* pButton, bool bTakeOwnership)
+        : SalInstanceButton(pButton, bTakeOwnership)
+        , m_xMenuButton(pButton)
+    {
+        m_xMenuButton->SetSelectHdl(LINK(this, SalInstanceMenuButton, MenuSelectHdl));
+    }
+
+    virtual void set_active(const OString& rIdent, bool bActive) override
+    {
+        PopupMenu* pMenu = m_xMenuButton->GetPopupMenu();
+        pMenu->CheckItem(pMenu->GetItemId(rIdent), bActive);
+    }
+
+    virtual ~SalInstanceMenuButton() override
+    {
+        m_xMenuButton->SetSelectHdl(Link<::MenuButton*, void>());
+    }
+};
+
+IMPL_LINK_NOARG(SalInstanceMenuButton, MenuSelectHdl, ::MenuButton*, void)
+{
+    signal_selected(m_xMenuButton->GetCurItemIdent());
 }
 
 class SalInstanceRadioButton : public SalInstanceButton, public virtual weld::RadioButton
@@ -1810,6 +1847,12 @@ public:
     {
         Button* pButton = m_xBuilder->get<Button>(id);
         return pButton ? new SalInstanceButton(pButton, bTakeOwnership) : nullptr;
+    }
+
+    virtual weld::MenuButton* weld_menu_button(const OString &id, bool bTakeOwnership) override
+    {
+        MenuButton* pButton = m_xBuilder->get<MenuButton>(id);
+        return pButton ? new SalInstanceMenuButton(pButton, bTakeOwnership) : nullptr;
     }
 
     virtual weld::RadioButton* weld_radio_button(const OString &id, bool bTakeOwnership) override

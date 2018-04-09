@@ -973,15 +973,15 @@ void SmDocShell::Execute(SfxRequest& rReq)
 
         case SID_DISTANCE:
         {
-            VclPtrInstance< SmDistanceDialog > xDistanceDialog(nullptr);
+            SmDistanceDialog aDistanceDialog(rReq.GetFrameWeld());
 
             SmFormat aOldFormat  = GetFormat();
-            xDistanceDialog->ReadFrom( aOldFormat );
-            if (xDistanceDialog->Execute() == RET_OK)
+            aDistanceDialog.ReadFrom( aOldFormat );
+            if (aDistanceDialog.run() == RET_OK)
             {
                 SmFormat aNewFormat( aOldFormat );
 
-                xDistanceDialog->WriteTo(aNewFormat);
+                aDistanceDialog.WriteTo(aNewFormat);
 
                 ::svl::IUndoManager *pTmpUndoMgr = GetUndoManager();
                 if (pTmpUndoMgr)

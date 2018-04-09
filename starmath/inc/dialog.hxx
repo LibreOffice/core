@@ -179,13 +179,13 @@ class SmCategoryDesc
 {
     OUString Name;
     OUString Strings[4];
-    std::unique_ptr<Image> Graphics[4];    /* regular bitmaps */
+    std::unique_ptr<weld::Widget> Graphics[4];    /* regular bitmaps */
     sal_uInt16 Minimum[4];
     sal_uInt16 Maximum[4];
     sal_uInt16 Value[4];
 
 public:
-    SmCategoryDesc(VclBuilderContainer& rBuilder, sal_uInt16 nCategoryIdx);
+    SmCategoryDesc(weld::Builder& rBuilder, sal_uInt16 nCategoryIdx);
     ~SmCategoryDesc();
 
     const OUString& GetName() const                 { return Name; }
@@ -195,51 +195,48 @@ public:
     sal_uInt16          GetValue(sal_uInt16 Index) const    { return Value[Index]; }
     void            SetValue(sal_uInt16 Index, sal_uInt16 nVal) { Value[Index] = nVal;}
 
-    const Image *  GetGraphic(sal_uInt16 Index) const
+    weld::Widget* GetGraphic(sal_uInt16 Index) const
     {
         return Graphics[Index].get();
     }
 };
 
-
-class SmDistanceDialog : public ModalDialog
+class SmDistanceDialog : public weld::GenericDialogController
 {
-    VclPtr<VclFrame>       m_pFrame;
-    VclPtr<FixedText>      m_pFixedText1;
-    VclPtr<MetricField>    m_pMetricField1;
-    VclPtr<FixedText>      m_pFixedText2;
-    VclPtr<MetricField>    m_pMetricField2;
-    VclPtr<FixedText>      m_pFixedText3;
-    VclPtr<MetricField>    m_pMetricField3;
-    VclPtr<CheckBox>       m_pCheckBox1;
-    VclPtr<FixedText>      m_pFixedText4;
-    VclPtr<MetricField>    m_pMetricField4;
-    VclPtr<MenuButton>     m_pMenuButton;
-    VclPtr<PushButton>     m_pDefaultButton;
-    VclPtr<FixedImage>     m_pBitmap;
+    std::unique_ptr<weld::Frame> m_xFrame;
+    std::unique_ptr<weld::Label> m_xFixedText1;
+    std::unique_ptr<weld::MetricSpinButton>    m_xMetricField1;
+    std::unique_ptr<weld::Label> m_xFixedText2;
+    std::unique_ptr<weld::MetricSpinButton>    m_xMetricField2;
+    std::unique_ptr<weld::Label> m_xFixedText3;
+    std::unique_ptr<weld::MetricSpinButton>    m_xMetricField3;
+    std::unique_ptr<weld::CheckButton> m_xCheckBox1;
+    std::unique_ptr<weld::Label> m_xFixedText4;
+    std::unique_ptr<weld::MetricSpinButton> m_xMetricField4;
+    std::unique_ptr<weld::MenuButton> m_xMenuButton;
+    std::unique_ptr<weld::Button> m_xDefaultButton;
+    std::unique_ptr<weld::Widget> m_xBitmap;
+
+    weld::Widget* m_pCurrentImage;
 
     SmCategoryDesc *Categories[NOCATEGORIES];
     sal_uInt16          nActiveCategory;
     bool            bScaleAllBrackets;
 
-    DECL_LINK(GetFocusHdl, Control&, void);
-    DECL_LINK(MenuSelectHdl, Menu *, bool);
-    DECL_LINK(DefaultButtonClickHdl, Button *, void);
-    DECL_LINK(CheckBoxClickHdl, Button *, void);
+    DECL_LINK(GetFocusHdl, weld::Widget&, void);
+    DECL_LINK(MenuSelectHdl, const OString&, void);
+    DECL_LINK(DefaultButtonClickHdl, weld::Button&, void);
+    DECL_LINK(CheckBoxClickHdl, weld::ToggleButton&, void);
 
-    using   Window::SetHelpId;
-    static void SetHelpId(MetricField &rField, const OString& sHelpId);
     void    SetCategory(sal_uInt16 Category);
 
 public:
-    SmDistanceDialog(vcl::Window *pParent);
+    SmDistanceDialog(weld::Window *pParent);
     virtual ~SmDistanceDialog() override;
-    virtual void dispose() override;
 
     void ReadFrom(const SmFormat &rFormat);
     void WriteTo (SmFormat &rFormat);
 };
-
 
 /**************************************************************************/
 
