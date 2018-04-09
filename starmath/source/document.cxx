@@ -996,19 +996,19 @@ void SmDocShell::Execute(SfxRequest& rReq)
 
         case SID_ALIGN:
         {
-            VclPtrInstance< SmAlignDialog > xAlignDialog(nullptr);
+            SmAlignDialog aAlignDialog(rReq.GetFrameWeld());
 
             SmFormat aOldFormat  = GetFormat();
-            xAlignDialog->ReadFrom( aOldFormat );
-            if (xAlignDialog->Execute() == RET_OK)
+            aAlignDialog.ReadFrom( aOldFormat );
+            if (aAlignDialog.run() == RET_OK)
             {
                 SmFormat aNewFormat( aOldFormat );
 
-                xAlignDialog->WriteTo(aNewFormat);
+                aAlignDialog.WriteTo(aNewFormat);
 
                 SmModule *pp = SM_MOD();
                 SmFormat aFmt( pp->GetConfig()->GetStandardFormat() );
-                xAlignDialog->WriteTo( aFmt );
+                aAlignDialog.WriteTo( aFmt );
                 pp->GetConfig()->SetStandardFormat( aFmt );
 
                 ::svl::IUndoManager *pTmpUndoMgr = GetUndoManager();
