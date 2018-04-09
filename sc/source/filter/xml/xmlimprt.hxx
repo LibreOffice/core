@@ -242,8 +242,8 @@ class ScXMLImport: public SvXMLImport
     std::unique_ptr<sc::PivotTableSources> mpPivotSources;
 
     mutable std::unique_ptr<ScXMLEditAttributeMap> mpEditAttrMap;
-    ScXMLChangeTrackingImportHelper*    pChangeTrackingImportHelper;
-    ScMyStylesImportHelper*        pStylesImportHelper;
+    std::unique_ptr<ScXMLChangeTrackingImportHelper>    pChangeTrackingImportHelper;
+    std::unique_ptr<ScMyStylesImportHelper>        pStylesImportHelper;
     OUString                       sNumberFormat;
     OUString                       sLocale;
     OUString                       sCellStyle;
@@ -254,32 +254,32 @@ class ScXMLImport: public SvXMLImport
     rtl::Reference < XMLPropertySetMapper >       xRowStylesPropertySetMapper;
     rtl::Reference < XMLPropertySetMapper >       xTableStylesPropertySetMapper;
 
-    SvXMLTokenMap           *pDocElemTokenMap;
-    SvXMLTokenMap           *pContentValidationElemTokenMap;
-    SvXMLTokenMap           *pContentValidationMessageElemTokenMap;
-    SvXMLTokenMap           *pTableElemTokenMap;
-    SvXMLTokenMap           *pTableRowsElemTokenMap;
-    SvXMLTokenMap           *pTableRowElemTokenMap;
-    SvXMLTokenMap           *pTableRowAttrTokenMap;
-    SvXMLTokenMap           *pTableRowCellElemTokenMap;
-    SvXMLTokenMap           *pTableRowCellAttrTokenMap;
-    SvXMLTokenMap           *pTableAnnotationAttrTokenMap;
+    std::unique_ptr<SvXMLTokenMap>           pDocElemTokenMap;
+    std::unique_ptr<SvXMLTokenMap>           pContentValidationElemTokenMap;
+    std::unique_ptr<SvXMLTokenMap>           pContentValidationMessageElemTokenMap;
+    std::unique_ptr<SvXMLTokenMap>           pTableElemTokenMap;
+    std::unique_ptr<SvXMLTokenMap>           pTableRowsElemTokenMap;
+    std::unique_ptr<SvXMLTokenMap>           pTableRowElemTokenMap;
+    std::unique_ptr<SvXMLTokenMap>           pTableRowAttrTokenMap;
+    std::unique_ptr<SvXMLTokenMap>           pTableRowCellElemTokenMap;
+    std::unique_ptr<SvXMLTokenMap>           pTableRowCellAttrTokenMap;
+    std::unique_ptr<SvXMLTokenMap>           pTableAnnotationAttrTokenMap;
 
     sc::ImportPostProcessData* mpPostProcessData; /// Lift cycle managed elsewhere, no need to delete.
 
     ScMyTables              aTables;
 
-    ScMyNamedExpressions*   m_pMyNamedExpressions;
+    std::unique_ptr<ScMyNamedExpressions>   m_pMyNamedExpressions;
     SheetNamedExpMap m_SheetNamedExpressions;
 
-    ScMyLabelRanges*        pMyLabelRanges;
-    ScMyImportValidations*  pValidations;
-    ScMyImpDetectiveOpArray*    pDetectiveOpArray;
-    SolarMutexGuard*        pSolarMutexGuard;
+    std::unique_ptr<ScMyLabelRanges>            pMyLabelRanges;
+    std::unique_ptr<ScMyImportValidations>  pValidations;
+    std::unique_ptr<ScMyImpDetectiveOpArray>    pDetectiveOpArray;
+    std::unique_ptr<SolarMutexGuard>        pSolarMutexGuard;
 
     std::vector<OUString>          aTableStyles;
-    XMLNumberFormatAttributesExportHelper* pNumberFormatAttributesExportHelper;
-    ScMyStyleNumberFormats* pStyleNumberFormats;
+    std::unique_ptr<XMLNumberFormatAttributesExportHelper> pNumberFormatAttributesExportHelper;
+    std::unique_ptr<ScMyStyleNumberFormats> pStyleNumberFormats;
     css::uno::Reference <css::util::XNumberFormats> xNumberFormats;
     css::uno::Reference <css::util::XNumberFormatTypes> xNumberFormatTypes;
 
@@ -369,7 +369,7 @@ public:
     void AddNamedExpression(ScMyNamedExpression* pMyNamedExpression)
     {
         if (!m_pMyNamedExpressions)
-            m_pMyNamedExpressions = new ScMyNamedExpressions;
+            m_pMyNamedExpressions.reset(new ScMyNamedExpressions);
         m_pMyNamedExpressions->push_back(std::unique_ptr<ScMyNamedExpression>(pMyNamedExpression));
     }
 
@@ -377,12 +377,12 @@ public:
 
     void AddLabelRange(std::unique_ptr<const ScMyLabelRange> pMyLabelRange) {
         if (!pMyLabelRanges)
-            pMyLabelRanges = new ScMyLabelRanges;
+            pMyLabelRanges.reset(new ScMyLabelRanges);
         pMyLabelRanges->push_back(std::move(pMyLabelRange)); }
 
     void AddValidation(const ScMyImportValidation& rValidation) {
         if (!pValidations)
-            pValidations = new ScMyImportValidations;
+            pValidations.reset(new ScMyImportValidations);
         pValidations->push_back(rValidation); }
     bool GetValidation(const OUString& sName, ScMyImportValidation& aValidation);
 
@@ -396,7 +396,7 @@ public:
     virtual void SetConfigurationSettings(const css::uno::Sequence<css::beans::PropertyValue>& aConfigProps) override;
 
     void SetTableStyle(const OUString& rValue) { aTableStyles.push_back(rValue); }
-    ScMyStylesImportHelper* GetStylesImportHelper() { return pStylesImportHelper; }
+    ScMyStylesImportHelper* GetStylesImportHelper() { return pStylesImportHelper.get(); }
     sal_Int32 SetCurrencySymbol(const sal_Int32 nKey, const OUString& rCurrency);
     bool IsCurrencySymbol(const sal_Int32 nNumberFormat, const OUString& sCurrencySymbol, const OUString& sBankSymbol);
     void SetType(const css::uno::Reference <css::beans::XPropertySet>& rProperties,
