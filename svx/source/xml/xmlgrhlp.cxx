@@ -766,6 +766,15 @@ OUString SvXMLGraphicHelper::implSaveGraphic(css::uno::Reference<css::graphic::X
             {
                 if (aGraphic.hasPdfData())
                 {
+                    // See if we have this PDF already, and avoid duplicate storage.
+                    auto aIt = maExportPdf.find(aGraphic.getPdfData().get());
+                    if (aIt != maExportPdf.end())
+                    {
+                        auto const& aURLAndMimePair = aIt->second;
+                        rOutSavedMimeType = aURLAndMimePair.second;
+                        return aURLAndMimePair.first;
+                    }
+
                     // The graphic has PDF data attached to it, use that.
                     // vcl::ImportPDF() possibly downgraded the PDF data from a
                     // higher PDF version, while aGfxLink still contains the
@@ -844,6 +853,8 @@ OUString SvXMLGraphicHelper::implSaveGraphic(css::uno::Reference<css::graphic::X
 
             // put into cache
             maExportGraphics[aGraphic] = std::make_pair(aStoragePath, rOutSavedMimeType);
+            if (aGraphic.hasPdfData())
+                maExportPdf[aGraphic.getPdfData().get()] = std::make_pair(aStoragePath, rOutSavedMimeType);
 
             return aStoragePath;
         }
