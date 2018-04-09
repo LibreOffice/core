@@ -2067,7 +2067,8 @@ class Sink : public cppu::WeakImplHelper<ooo::vba::XSink>
 public:
     Sink(IUnknown* pUnkSink,
          Reference<XMultiServiceFactory> xMSF,
-         ooo::vba::TypeAndIID aTypeAndIID);
+         ooo::vba::TypeAndIID aTypeAndIID,
+         InterfaceOleWrapper* pInterfaceOleWrapper);
 
     // XSink
     void SAL_CALL Call( const OUString& Method, Sequence< Any >& Arguments ) override;
@@ -2076,14 +2077,17 @@ private:
     IUnknown* mpUnkSink;
     Reference<XMultiServiceFactory> mxMSF;
     ooo::vba::TypeAndIID maTypeAndIID;
+    InterfaceOleWrapper* mpInterfaceOleWrapper;
 };
 
 Sink::Sink(IUnknown* pUnkSink,
            Reference<XMultiServiceFactory> xMSF,
-           ooo::vba::TypeAndIID aTypeAndIID) :
+           ooo::vba::TypeAndIID aTypeAndIID,
+           InterfaceOleWrapper* pInterfaceOleWrapper) :
     mpUnkSink(pUnkSink),
     mxMSF(xMSF),
-    maTypeAndIID(aTypeAndIID)
+    maTypeAndIID(aTypeAndIID),
+    mpInterfaceOleWrapper(pInterfaceOleWrapper)
 {
     mpUnkSink->AddRef();
 }
@@ -2117,16 +2121,126 @@ Sink::Call( const OUString& Method, Sequence< Any >& Arguments )
     {
         if (aMethods[i]->getName() == Method)
         {
+            // FIXME: Handle mismatch in type of actual argument and parameter of the method.
+
+            // FIXME: Handle mismatch in number of arguments passed and actual number of parameters
+            // of the method.
+
+            auto aParamInfos = aMethods[i]->getParameterInfos();
+
+            assert(Arguments.getLength() == aParamInfos.getLength());
+
             DISPPARAMS aDispParams;
-            aDispParams.rgvarg = NULL;
             aDispParams.rgdispidNamedArgs = NULL;
-            aDispParams.cArgs = 0;
+            aDispParams.cArgs = Arguments.getLength();
             aDispParams.cNamedArgs = 0;
+            aDispParams.rgvarg = new VARIANT[aDispParams.cArgs];
+            for (unsigned i = 0; i < aDispParams.cArgs; i++)
+            {
+                VariantInit(aDispParams.rgvarg+i);
+                // Note: Reverse order of arguments in Arguments and aDispParams.rgvarg!
+                const unsigned nIncomingArgIndex = aDispParams.cArgs - i - 1;
+                mpInterfaceOleWrapper->anyToVariant(aDispParams.rgvarg+i, Arguments[nIncomingArgIndex]);
+
+                // Handle OUT and INOUT arguments. For instance, the second ('Cancel') parameter to
+                // DocumentBeforeClose() should be a VT_BYREF|VT_BOOL parameter. Need to handle that
+                // here.
+
+                if (aParamInfos[nIncomingArgIndex].aMode == ParamMode_OUT ||
+                    aParamInfos[nIncomingArgIndex].aMode == ParamMode_INOUT)
+                {
+                    switch (aDispParams.rgvarg[i].vt)
+                    {
+                    case VT_I2:
+                        aDispParams.rgvarg[i].byref = new SHORT(aDispParams.rgvarg[i].iVal);
+                        aDispParams.rgvarg[i].vt |= VT_BYREF;
+                        break;
+                    case VT_I4:
+                        aDispParams.rgvarg[i].byref = new LONG(aDispParams.rgvarg[i].lVal);
+                        aDispParams.rgvarg[i].vt |= VT_BYREF;
+                        break;
+                    case VT_BSTR:
+                        aDispParams.rgvarg[i].byref = new BSTR(aDispParams.rgvarg[i].bstrVal);
+                        aDispParams.rgvarg[i].vt |= VT_BYREF;
+                        break;
+                    case VT_BOOL:
+                        // SAL_ DEBUG("===> VT_BOOL is initially " << (int)aDispParams.rgvarg[i].boolVal);
+                        aDispParams.rgvarg[i].byref = new VARIANT_BOOL(aDispParams.rgvarg[i].boolVal);
+                        // SAL_ DEBUG("     byref=" << aDispParams.rgvarg[i].byref);
+                        aDispParams.rgvarg[i].vt |= VT_BYREF;
+                        break;
+                    default:
+                        assert(false && "Not handled yet");
+                        break;
+                    }
+                }
+            }
+
             VARIANT aVarResult;
             VariantInit(&aVarResult);
             UINT uArgErr;
+
             nResult = pDispatch->Invoke(nMemId, IID_NULL, LOCALE_USER_DEFAULT, DISPATCH_METHOD, &aDispParams, &aVarResult, NULL, &uArgErr);
             SAL_WARN_IF(!SUCCEEDED(nResult), "extensions.olebridge", "Call to " << Method << " failed: " << WindowsErrorStringFromHRESULT(nResult));
+
+            // Undo VT_BYREF magic done above. Copy out parameters back to the Anys in Arguments
+            for (unsigned i = 0; i < aDispParams.cArgs; i++)
+            {
+                const unsigned nIncomingArgIndex = aDispParams.cArgs - i - 1;
+                if (aParamInfos[nIncomingArgIndex].aMode == ParamMode_OUT ||
+                    aParamInfos[nIncomingArgIndex].aMode == ParamMode_INOUT)
+                {
+                    switch (aDispParams.rgvarg[i].vt)
+                    {
+                    case VT_BYREF|VT_I2:
+                        {
+                            SHORT *pI = (SHORT*)aDispParams.rgvarg[i].byref;
+                            Arguments[i] <<= (sal_Int16)*pI;
+                            delete pI;
+                        }
+                        break;
+                    case VT_BYREF|VT_I4:
+                        {
+                            LONG *pL = (LONG*)aDispParams.rgvarg[i].byref;
+                            Arguments[i] <<= (sal_Int32)*pL;
+                            delete pL;
+                        }
+                        break;
+                    case VT_BYREF|VT_BSTR:
+                        {
+                            BSTR *pBstr = (BSTR*)aDispParams.rgvarg[i].byref;
+                            Arguments[i] <<= OUString(o3tl::toU(*pBstr));
+                            // Undo SysAllocString() done in anyToVariant()
+                            SysFreeString(*pBstr);
+                            delete pBstr;
+                        }
+                        break;
+                    case VT_BYREF|VT_BOOL:
+                        {
+                            VARIANT_BOOL *pBool = (VARIANT_BOOL*)aDispParams.rgvarg[i].byref;
+                            // SAL_ DEBUG("===> VT_BOOL: byref is now " << aDispParams.rgvarg[i].byref << ", " << (int)*pBool);
+                            Arguments[i] <<= (sal_Bool)(*pBool != VARIANT_FALSE ? sal_True : sal_False);
+                            delete pBool;
+                        }
+                        break;
+                    default:
+                        assert(false && "Not handled yet");
+                        break;
+                    }
+                }
+                else
+                {
+                    switch (aDispParams.rgvarg[i].vt)
+                    {
+                    case VT_BSTR:
+                        // Undo SysAllocString() done in anyToVariant()
+                        SysFreeString(aDispParams.rgvarg[i].bstrVal);
+                        break;
+                    }
+                }
+            }
+
+            delete[] aDispParams.rgvarg;
             return;
         }
         nMemId++;
@@ -2191,7 +2305,7 @@ public:
         if (!pdwCookie)
             return E_POINTER;
 
-        Reference<ooo::vba::XSink> xSink(new Sink(pUnkSink, mxMSF, maTypeAndIID));
+        Reference<ooo::vba::XSink> xSink(new Sink(pUnkSink, mxMSF, maTypeAndIID, mpInterfaceOleWrapper));
 
         mvISinks.push_back(pUnkSink);
         *pdwCookie = mvISinks.size();
