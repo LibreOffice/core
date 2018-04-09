@@ -883,9 +883,9 @@ ScAccessibleEditObjectTextData::~ScAccessibleEditObjectTextData()
     // If the object is cloned, do NOT set notify hdl.
     if (mpEditEngine && !mbIsCloned)
         mpEditEngine->SetNotifyHdl(Link<EENotify&,void>());
-    delete mpViewForwarder;
-    delete mpEditViewForwarder;
-    delete mpForwarder;
+    mpViewForwarder.reset();
+    mpEditViewForwarder.reset();
+    mpForwarder.reset();
 }
 
 void ScAccessibleEditObjectTextData::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
@@ -895,7 +895,7 @@ void ScAccessibleEditObjectTextData::Notify( SfxBroadcaster& rBC, const SfxHint&
         mpWindow = nullptr;
         mpEditView = nullptr;
         mpEditEngine = nullptr;
-        DELETEZ(mpForwarder);
+        mpForwarder.reset();
         if (mpViewForwarder)
             mpViewForwarder->SetInvalid();
         if (mpEditViewForwarder)
@@ -920,9 +920,9 @@ SvxTextForwarder* ScAccessibleEditObjectTextData::GetTextForwarder()
         if (mpEditEngine && !mpEditEngine->GetNotifyHdl().IsSet()&&!mbIsCloned)
             mpEditEngine->SetNotifyHdl( LINK(this, ScAccessibleEditObjectTextData, NotifyHdl) );
         if(!mpForwarder)
-            mpForwarder = new SvxEditEngineForwarder(*mpEditEngine);
+            mpForwarder.reset(new SvxEditEngineForwarder(*mpEditEngine));
     }
-    return mpForwarder;
+    return mpForwarder.get();
 }
 
 SvxViewForwarder* ScAccessibleEditObjectTextData::GetViewForwarder()
@@ -930,23 +930,23 @@ SvxViewForwarder* ScAccessibleEditObjectTextData::GetViewForwarder()
     if (!mpViewForwarder)
     {
         // i#49561 Get right-aligned cell content to be read by screenreader.
-        mpViewForwarder = new ScEditObjectViewForwarder( mpWindow, mpEditView );
+        mpViewForwarder.reset(new ScEditObjectViewForwarder( mpWindow, mpEditView ));
     }
-    return mpViewForwarder;
+    return mpViewForwarder.get();
 }
 
 SvxEditViewForwarder* ScAccessibleEditObjectTextData::GetEditViewForwarder( bool bCreate )
 {
     if (!mpEditViewForwarder && mpEditView)
-        mpEditViewForwarder = new ScEditViewForwarder(mpEditView, mpWindow);
+        mpEditViewForwarder.reset(new ScEditViewForwarder(mpEditView, mpWindow));
     if (bCreate)
     {
         if (!mpEditView && mpEditViewForwarder)
         {
-            DELETEZ(mpEditViewForwarder);
+            mpEditViewForwarder.reset();
         }
     }
-    return mpEditViewForwarder;
+    return mpEditViewForwarder.get();
 }
 
 IMPL_LINK(ScAccessibleEditObjectTextData, NotifyHdl, EENotify&, rNotify, void)
@@ -1043,7 +1043,7 @@ SvxTextForwarder* ScAccessibleEditLineTextData::GetTextForwarder()
                 mbEditEngineCreated = true;
                 mpEditEngine->EnableUndo( false );
                 mpEditEngine->SetRefMapMode(MapMode(MapUnit::Map100thMM));
-                mpForwarder = new SvxEditEngineForwarder(*mpEditEngine);
+                mpForwarder.reset(new SvxEditEngineForwarder(*mpEditEngine));
 
                 mpEditEngine->SetText(pTxtWnd->GetTextString());
 
@@ -1057,7 +1057,7 @@ SvxTextForwarder* ScAccessibleEditLineTextData::GetTextForwarder()
             }
         }
     }
-    return mpForwarder;
+    return mpForwarder.get();
 }
 
 SvxEditViewForwarder* ScAccessibleEditLineTextData::GetEditViewForwarder( bool bCreate )
@@ -1091,9 +1091,9 @@ void ScAccessibleEditLineTextData::ResetEditMode()
         pTxtWnd->GetEditView()->GetEditEngine()->SetNotifyHdl(Link<EENotify&,void>());
     mpEditEngine = nullptr;
 
-    DELETEZ(mpForwarder);
-    DELETEZ(mpEditViewForwarder);
-    DELETEZ(mpViewForwarder);
+    mpForwarder.reset();
+    mpEditViewForwarder.reset();
+    mpViewForwarder.reset();
     mbEditEngineCreated = false;
 }
 
