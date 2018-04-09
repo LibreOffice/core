@@ -557,7 +557,9 @@ void SAL_CALL SlideshowImpl::disposing()
     RemoteServer::presentationStopped();
 #endif
     if( mxShow.is() && mpDoc )
-        NotifyDocumentEvent( mpDoc, "OnEndPresentation" );
+        NotifyDocumentEvent(
+            *mpDoc,
+            "OnEndPresentation" );
 
     if( mbAutoSaveWasOn )
         setAutoSaveState( true );
@@ -1077,7 +1079,9 @@ bool SlideshowImpl::startShowImpl( const Sequence< beans::PropertyValue >& aProp
         mxListenerProxy.set( new SlideShowListenerProxy( this, mxShow ) );
         mxListenerProxy->addAsSlideShowListener();
 
-        NotifyDocumentEvent( mpDoc, "OnStartPresentation");
+        NotifyDocumentEvent(
+            *mpDoc,
+            "OnStartPresentation");
         displaySlideIndex( mpSlideController->getStartSlideIndex() );
 
         return true;

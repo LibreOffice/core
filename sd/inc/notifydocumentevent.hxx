@@ -24,9 +24,9 @@
 
 class SdDrawDocument;
 
-void NotifyDocumentEvent( SdDrawDocument const * pDocument, const OUString& rEventName );
+void NotifyDocumentEvent( SdDrawDocument& rDocument, const OUString& rEventName );
 
-void NotifyDocumentEvent( SdDrawDocument const * pDocument, const OUString& rEventName, const css::uno::Reference< css::uno::XInterface >& xSource );
+void NotifyDocumentEvent( SdDrawDocument& rDocument, const OUString& rEventName, const css::uno::Reference< css::uno::XInterface >& xSource );
 
 #endif
 

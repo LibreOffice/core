@@ -349,7 +349,7 @@ void SAL_CALL Annotation::setDateTime(const util::DateTime & the_value)
 
 void Annotation::createChangeUndo()
 {
-    SdrModel* pModel = GetModel();
+    SdrModel* pModel = GetModel(); // TTTT should use reference
     if( pModel && pModel->IsUndoEnabled() )
         pModel->AddUndo( new UndoAnnotation( *this ) );
 
@@ -357,7 +357,10 @@ void Annotation::createChangeUndo()
     {
         pModel->SetChanged();
         Reference< XInterface > xSource( static_cast<uno::XWeak*>( this ) );
-        NotifyDocumentEvent( static_cast< SdDrawDocument* >( pModel ), "OnAnnotationChanged" , xSource );
+        NotifyDocumentEvent(
+            static_cast< SdDrawDocument& >( *pModel ),
+            "OnAnnotationChanged" ,
+            xSource );
     }
 }
 

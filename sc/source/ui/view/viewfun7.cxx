@@ -194,8 +194,6 @@ void ScViewFunc::PasteDraw( const Point& rLogicPos, SdrModel* pModel,
     else
     {
         bPasteIsMove = false;       // no internal move happened
-        // TTTT hide all non-direct SdrView constr to disable construct
-        // in-between classes in one of the next steps (!)
         SdrView aView(*pModel);     // #i71529# never create a base class of SdrView directly!
         SdrPageView* pPv = aView.ShowSdrPage(aView.GetModel()->GetPage(0));
         aView.MarkAllObj(pPv);
