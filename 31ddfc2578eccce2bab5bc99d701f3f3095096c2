@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_ac48e62e",
+        "filename": "sw/source/core/crsr/crstrvl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1464,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2018-04-09T10:33:21Z",
+      "side": 1,
+      "message": "this is better than before but i still don\u0027t like it :)\n\nthe GetContentAtPos has the responsibility to deliver the content that is requested, there is not currently any check of a configuration setting in it.\n\nbetter check the setting on the outside; there are just 3 callers of GetContentAtPos that use IsAttrAtPos::Redline so it\u0027s very little extra work.\n\ncurrently all of them appear to be for displaying tooltips, but maybe tomorrow somebody wants to call GetContentAtPos with IsAttrAtPos::Redline for some other purpose...\n\none caller is searching for a lot of things, something like \"| ((bShowTrackedChanges \u0026\u0026 bShowInlineTooltips) ? IsAttrAtPos::Redline : IsAttrAtPos::NONE)\" should work in that place",
+      "revId": "31ddfc2578eccce2bab5bc99d701f3f3095096c2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
