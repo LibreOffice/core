@@ -125,7 +125,6 @@ bool SdPdfFilter::Import()
         aGraphic.setPdfData(std::make_shared<uno::Sequence<sal_Int8>>(aPdfData));
         aGraphic.setPageNumber(nPageNumber);
         aGraphic.SetLink(aGfxLink);
-        aGraphic.setOriginURL(aFileName);
 
         // Create the page and insert the Graphic.
         SdPage* pPage = mrDocument.GetSdPage(nPageNumber++, PageKind::Standard);
