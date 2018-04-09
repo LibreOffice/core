@@ -992,9 +992,9 @@ void SmDistanceDialog::WriteTo(SmFormat &rFormat) /*const*/
     rFormat.RequestApplyChanges();
 }
 
-IMPL_LINK_NOARG( SmAlignDialog, DefaultButtonClickHdl, Button *, void )
+IMPL_LINK_NOARG( SmAlignDialog, DefaultButtonClickHdl, weld::Button&, void )
 {
-    SaveDefaultsQuery aQuery(GetFrameWeld());
+    SaveDefaultsQuery aQuery(m_xDialog.get());
     if (aQuery.run() == RET_YES)
     {
         SmModule *pp = SM_MOD();
@@ -1004,29 +1004,18 @@ IMPL_LINK_NOARG( SmAlignDialog, DefaultButtonClickHdl, Button *, void )
     }
 }
 
-SmAlignDialog::SmAlignDialog(vcl::Window * pParent)
-    : ModalDialog(pParent, "AlignmentDialog",
-        "modules/smath/ui/alignmentdialog.ui")
+SmAlignDialog::SmAlignDialog(weld::Window* pParent)
+    : GenericDialogController(pParent, "modules/smath/ui/alignmentdialog.ui", "AlignmentDialog")
+    , m_xLeft(m_xBuilder->weld_radio_button("left"))
+    , m_xCenter(m_xBuilder->weld_radio_button("center"))
+    , m_xRight(m_xBuilder->weld_radio_button("right"))
+    , m_xDefaultButton(m_xBuilder->weld_button("default"))
 {
-    get(m_pLeft, "left");
-    get(m_pCenter, "center");
-    get(m_pRight, "right");
-    get(m_pDefaultButton, "default");
-    m_pDefaultButton->SetClickHdl(LINK(this, SmAlignDialog, DefaultButtonClickHdl));
+    m_xDefaultButton->connect_clicked(LINK(this, SmAlignDialog, DefaultButtonClickHdl));
 }
 
 SmAlignDialog::~SmAlignDialog()
 {
-    disposeOnce();
-}
-
-void SmAlignDialog::dispose()
-{
-    m_pLeft.clear();
-    m_pCenter.clear();
-    m_pRight.clear();
-    m_pDefaultButton.clear();
-    ModalDialog::dispose();
 }
 
 void SmAlignDialog::ReadFrom(const SmFormat &rFormat)
@@ -1034,38 +1023,28 @@ void SmAlignDialog::ReadFrom(const SmFormat &rFormat)
     switch (rFormat.GetHorAlign())
     {
         case SmHorAlign::Left:
-            m_pLeft->Check();
-            m_pCenter->Check(false);
-            m_pRight->Check(false);
+            m_xLeft->set_active(true);
             break;
-
         case SmHorAlign::Center:
-            m_pLeft->Check(false);
-            m_pCenter->Check();
-            m_pRight->Check(false);
+            m_xCenter->set_active(true);
             break;
-
         case SmHorAlign::Right:
-            m_pLeft->Check(false);
-            m_pCenter->Check(false);
-            m_pRight->Check();
+            m_xRight->set_active(true);
             break;
     }
 }
 
-
 void SmAlignDialog::WriteTo(SmFormat &rFormat) const
 {
-    if (m_pLeft->IsChecked())
+    if (m_xLeft->get_active())
         rFormat.SetHorAlign(SmHorAlign::Left);
-    else if (m_pRight->IsChecked())
+    else if (m_xRight->get_active())
         rFormat.SetHorAlign(SmHorAlign::Right);
     else
         rFormat.SetHorAlign(SmHorAlign::Center);
 
     rFormat.RequestApplyChanges();
 }
-
 
 SmShowSymbolSetWindow::SmShowSymbolSetWindow(vcl::Window *pParent, WinBits nStyle)
     : Control(pParent, nStyle)

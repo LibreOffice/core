@@ -245,19 +245,18 @@ public:
 /**************************************************************************/
 
 
-class SmAlignDialog : public ModalDialog
+class SmAlignDialog : public weld::GenericDialogController
 {
-    VclPtr<RadioButton> m_pLeft;
-    VclPtr<RadioButton> m_pCenter;
-    VclPtr<RadioButton> m_pRight;
-    VclPtr<PushButton>  m_pDefaultButton;
+    std::unique_ptr<weld::RadioButton> m_xLeft;
+    std::unique_ptr<weld::RadioButton> m_xCenter;
+    std::unique_ptr<weld::RadioButton> m_xRight;
+    std::unique_ptr<weld::Button> m_xDefaultButton;
 
-    DECL_LINK(DefaultButtonClickHdl, Button *, void);
+    DECL_LINK(DefaultButtonClickHdl, weld::Button&, void);
 
 public:
-    SmAlignDialog(vcl::Window *pParent);
+    SmAlignDialog(weld::Window *pParent);
     virtual ~SmAlignDialog() override;
-    virtual void dispose() override;
 
     void ReadFrom(const SmFormat &rFormat);
     void WriteTo (SmFormat &rFormat) const;
