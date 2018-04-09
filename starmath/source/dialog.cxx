@@ -620,23 +620,22 @@ static const FieldMinMax pMinMaxData[10][4] =
     {{ 0, 10000 },  { 0, 10000 },   { 0, 10000 },   { 0, 10000 }}
 };
 
-SmCategoryDesc::SmCategoryDesc(VclBuilderContainer& rBuilder, sal_uInt16 nCategoryIdx)
+SmCategoryDesc::SmCategoryDesc(weld::Builder& rBuilder, sal_uInt16 nCategoryIdx)
 {
     ++nCategoryIdx;
-    FixedText* pTitle = rBuilder.get<FixedText>(OString::number(nCategoryIdx)+"title");
-    if (pTitle)
+    std::unique_ptr<weld::Label> xTitle(rBuilder.weld_label(OString::number(nCategoryIdx)+"title"));
+    if (xTitle)
     {
-        Name = pTitle->GetText();
+        Name = xTitle->get_label();
     }
     for (int i = 0; i < 4; ++i)
     {
-        FixedText* pLabel = rBuilder.get<FixedText>(OString::number(nCategoryIdx)+"label"+OString::number(i+1));
+        std::unique_ptr<weld::Label> xLabel(rBuilder.weld_label(OString::number(nCategoryIdx)+"label"+OString::number(i+1)));
 
-        if (pLabel)
+        if (xLabel)
         {
-            Strings[i] = pLabel->GetText();
-            FixedImage* pImage = rBuilder.get<FixedImage>(OString::number(nCategoryIdx)+"image"+OString::number(i+1));
-            Graphics[i].reset(new Image(pImage->GetImage()));
+            Strings[i] = xLabel->get_label();
+            Graphics[i].reset(rBuilder.weld_widget(OString::number(nCategoryIdx)+"image"+OString::number(i+1)));
         }
         else
         {
@@ -656,36 +655,38 @@ SmCategoryDesc::~SmCategoryDesc()
 
 /**************************************************************************/
 
-IMPL_LINK( SmDistanceDialog, GetFocusHdl, Control&, rControl, void )
+IMPL_LINK( SmDistanceDialog, GetFocusHdl, weld::Widget&, rControl, void )
 {
     if (Categories[nActiveCategory])
     {
         sal_uInt16  i;
 
-        if (&rControl == m_pMetricField1)
+        if (&rControl == m_xMetricField1->get_widget())
             i = 0;
-        else if (&rControl == m_pMetricField2)
+        else if (&rControl == m_xMetricField2->get_widget())
             i = 1;
-        else if (&rControl == m_pMetricField3)
+        else if (&rControl == m_xMetricField3->get_widget())
             i = 2;
-        else if (&rControl == m_pMetricField4)
+        else if (&rControl == m_xMetricField4->get_widget())
             i = 3;
         else
             return;
-        m_pBitmap->SetImage(*(Categories[nActiveCategory]->GetGraphic(i)));
+        if (m_pCurrentImage)
+            m_pCurrentImage->hide();
+        m_pCurrentImage = Categories[nActiveCategory]->GetGraphic(i);
+        m_pCurrentImage->show();
     }
 }
 
-IMPL_LINK( SmDistanceDialog, MenuSelectHdl, Menu *, pMenu, bool )
+IMPL_LINK(SmDistanceDialog, MenuSelectHdl, const OString&, rId, void)
 {
-    SetCategory(pMenu->GetCurItemId() - 1);
-    return false;
+    assert(rId.startsWith("menuitem"));
+    SetCategory(rId.replaceFirst("menuitem", "").toInt32() - 1);
 }
 
-
-IMPL_LINK_NOARG( SmDistanceDialog, DefaultButtonClickHdl, Button *, void )
+IMPL_LINK_NOARG( SmDistanceDialog, DefaultButtonClickHdl, weld::Button&, void )
 {
-    SaveDefaultsQuery aQuery(GetFrameWeld());
+    SaveDefaultsQuery aQuery(m_xDialog.get());
     if (aQuery.run() == RET_YES)
     {
         SmModule *pp = SM_MOD();
@@ -695,35 +696,15 @@ IMPL_LINK_NOARG( SmDistanceDialog, DefaultButtonClickHdl, Button *, void )
     }
 }
 
-IMPL_LINK( SmDistanceDialog, CheckBoxClickHdl, Button *, pCheckBox, void )
+IMPL_LINK( SmDistanceDialog, CheckBoxClickHdl, weld::ToggleButton&, rCheckBox, void )
 {
-    if (pCheckBox == m_pCheckBox1)
+    if (&rCheckBox == m_xCheckBox1.get())
     {
-        m_pCheckBox1->Toggle();
-
-        bool bChecked = m_pCheckBox1->IsChecked();
-        m_pFixedText4->Enable( bChecked );
-        m_pMetricField4->Enable( bChecked );
+        bool bChecked = m_xCheckBox1->get_active();
+        m_xFixedText4->set_sensitive( bChecked );
+        m_xMetricField4->set_sensitive( bChecked );
     }
 }
-
-
-void SmDistanceDialog::SetHelpId(MetricField &rField, const OString& sHelpId)
-{
-    rField.SetHelpId(sHelpId);
-    rField.SetHelpText("");
-
-    // since MetricField inherits from SpinField which has a sub Edit field
-    // (which is actually the one we modify) we have to set the help-id
-    // for it too.
-    Edit *pSubEdit = rField.GetSubEdit();
-    if (pSubEdit)
-    {
-        pSubEdit->SetHelpId(sHelpId);
-        pSubEdit->SetHelpText("");
-    }
-}
-
 
 void SmDistanceDialog::SetCategory(sal_uInt16 nCategory)
 {
@@ -747,12 +728,12 @@ void SmDistanceDialog::SetCategory(sal_uInt16 nCategory)
     };
 
     // array to help iterate over the controls
-    vcl::Window * const  aWin[4][2] =
+    std::pair<weld::Label*, weld::MetricSpinButton*> const aWin[4] =
     {
-        { m_pFixedText1, m_pMetricField1 },
-        { m_pFixedText2, m_pMetricField2 },
-        { m_pFixedText3, m_pMetricField3 },
-        { m_pFixedText4, m_pMetricField4 }
+        { m_xFixedText1.get(), m_xMetricField1.get() },
+        { m_xFixedText2.get(), m_xMetricField2.get() },
+        { m_xFixedText3.get(), m_xMetricField3.get() },
+        { m_xFixedText4.get(), m_xMetricField4.get() }
     };
 
     SmCategoryDesc *pCat;
@@ -762,32 +743,32 @@ void SmDistanceDialog::SetCategory(sal_uInt16 nCategory)
     if (nActiveCategory != CATEGORY_NONE)
     {
         pCat = Categories[nActiveCategory];
-        pCat->SetValue(0, sal::static_int_cast<sal_uInt16>(m_pMetricField1->GetValue()));
-        pCat->SetValue(1, sal::static_int_cast<sal_uInt16>(m_pMetricField2->GetValue()));
-        pCat->SetValue(2, sal::static_int_cast<sal_uInt16>(m_pMetricField3->GetValue()));
-        pCat->SetValue(3, sal::static_int_cast<sal_uInt16>(m_pMetricField4->GetValue()));
+        pCat->SetValue(0, sal::static_int_cast<sal_uInt16>(m_xMetricField1->get_value(FUNIT_NONE)));
+        pCat->SetValue(1, sal::static_int_cast<sal_uInt16>(m_xMetricField2->get_value(FUNIT_NONE)));
+        pCat->SetValue(2, sal::static_int_cast<sal_uInt16>(m_xMetricField3->get_value(FUNIT_NONE)));
+        pCat->SetValue(3, sal::static_int_cast<sal_uInt16>(m_xMetricField4->get_value(FUNIT_NONE)));
 
         if (nActiveCategory == 5)
-            bScaleAllBrackets = m_pCheckBox1->IsChecked();
+            bScaleAllBrackets = m_xCheckBox1->get_active();
 
-        m_pMenuButton->GetPopupMenu()->CheckItem(nActiveCategory + 1, false);
+        m_xMenuButton->set_active("menuitem" + OString::number(nActiveCategory + 1), false);
     }
 
     // activation/deactivation of the associated controls depending on the chosen category
     bool  bActive;
     for (sal_uInt16 i = 0;  i < 4;  i++)
     {
-        FixedText   *pFT = static_cast<FixedText *>  ( aWin[i][0] );
-        MetricField *pMF = static_cast<MetricField *>( aWin[i][1] );
+        weld::Label *pFT = aWin[i].first;
+        weld::MetricSpinButton *pMF = aWin[i].second;
 
         // To determine which Controls should be active, the existence
         // of an associated HelpID is checked
         bActive = aCatMf2Hid[nCategory][i] != nullptr;
 
-        pFT->Show(bActive);
-        pFT->Enable(bActive);
-        pMF->Show(bActive);
-        pMF->Enable(bActive);
+        pFT->show(bActive);
+        pFT->set_sensitive(bActive);
+        pMF->show(bActive);
+        pMF->set_sensitive(bActive);
 
         // set measurement unit and number of decimal places
         FieldUnit  eUnit;
@@ -802,106 +783,79 @@ void SmDistanceDialog::SetCategory(sal_uInt16 nCategory)
             eUnit   = FUNIT_100TH_MM;
             nDigits = 2;
         }
-        pMF->SetUnit(eUnit);            // changes the value
-        pMF->SetDecimalDigits(nDigits);
+        pMF->set_unit(eUnit);            // changes the value
+        pMF->set_digits(nDigits);
 
         if (bActive)
         {
             pCat = Categories[nCategory];
-            pFT->SetText(pCat->GetString(i));
+            pFT->set_label(pCat->GetString(i));
 
-            pMF->SetMin(pCat->GetMinimum(i));
-            pMF->SetMax(pCat->GetMaximum(i));
-            pMF->SetValue(pCat->GetValue(i));
+            pMF->set_range(pCat->GetMinimum(i), pCat->GetMaximum(i), FUNIT_NONE);
+            pMF->set_value(pCat->GetValue(i), FUNIT_NONE);
 
-            SetHelpId(*pMF, aCatMf2Hid[nCategory][i]);
+            pMF->set_help_id(aCatMf2Hid[nCategory][i]);
         }
     }
     // activate the CheckBox and the associated MetricField if we're dealing with the brackets menu
     bActive = nCategory == 5;
-    m_pCheckBox1->Show(bActive);
-    m_pCheckBox1->Enable(bActive);
+    m_xCheckBox1->set_visible(bActive);
+    m_xCheckBox1->set_sensitive(bActive);
     if (bActive)
     {
-        m_pCheckBox1->Check( bScaleAllBrackets );
+        m_xCheckBox1->set_active(bScaleAllBrackets);
 
-        bool bChecked = m_pCheckBox1->IsChecked();
-        m_pFixedText4->Enable( bChecked );
-        m_pMetricField4->Enable( bChecked );
+        bool bChecked = m_xCheckBox1->get_active();
+        m_xFixedText4->set_sensitive( bChecked );
+        m_xMetricField4->set_sensitive( bChecked );
     }
 
-    m_pMenuButton->GetPopupMenu()->CheckItem(nCategory + 1);
-    m_pFrame->set_label(Categories[nCategory]->GetName());
+    m_xMenuButton->set_active("menuitem" + OString::number(nCategory + 1), true);
+    m_xFrame->set_label(Categories[nCategory]->GetName());
 
     nActiveCategory = nCategory;
 
-    m_pMetricField1->GrabFocus();
-    Invalidate();
-    Update();
+    m_xMetricField1->grab_focus();
 }
 
-
-SmDistanceDialog::SmDistanceDialog(vcl::Window *pParent)
-    : ModalDialog(pParent, "SpacingDialog",
-        "modules/smath/ui/spacingdialog.ui")
+SmDistanceDialog::SmDistanceDialog(weld::Window *pParent)
+    : GenericDialogController(pParent, "modules/smath/ui/spacingdialog.ui", "SpacingDialog")
+    , m_xFrame(m_xBuilder->weld_frame("template"))
+    , m_xFixedText1(m_xBuilder->weld_label("label1"))
+    , m_xMetricField1(m_xBuilder->weld_metric_spin_button("spinbutton1", FUNIT_CM))
+    , m_xFixedText2(m_xBuilder->weld_label("label2"))
+    , m_xMetricField2(m_xBuilder->weld_metric_spin_button("spinbutton2", FUNIT_CM))
+    , m_xFixedText3(m_xBuilder->weld_label("label3"))
+    , m_xMetricField3(m_xBuilder->weld_metric_spin_button("spinbutton3", FUNIT_CM))
+    , m_xCheckBox1(m_xBuilder->weld_check_button("checkbutton"))
+    , m_xFixedText4(m_xBuilder->weld_label("label4"))
+    , m_xMetricField4(m_xBuilder->weld_metric_spin_button("spinbutton4", FUNIT_CM))
+    , m_xMenuButton(m_xBuilder->weld_menu_button("category"))
+    , m_xDefaultButton(m_xBuilder->weld_button("default"))
+    , m_xBitmap(m_xBuilder->weld_widget("image"))
+    , m_pCurrentImage(m_xBitmap.get())
 {
-    get(m_pFrame, "template");
-    get(m_pFixedText1, "label1");
-    get(m_pMetricField1, "spinbutton1");
-    get(m_pFixedText2, "label2");
-    get(m_pMetricField2, "spinbutton2");
-    get(m_pFixedText3, "label3");
-    get(m_pMetricField3, "spinbutton3");
-    get(m_pCheckBox1, "checkbutton");
-    get(m_pFixedText4, "label4");
-    get(m_pMetricField4, "spinbutton4");
-    get(m_pMenuButton, "category");
-    get(m_pDefaultButton, "default");
-    get(m_pBitmap, "image");
-
     for (sal_uInt16 i = 0; i < NOCATEGORIES; ++i)
-        Categories[i] = new SmCategoryDesc(*this, i);
+        Categories[i] = new SmCategoryDesc(*m_xBuilder, i);
     nActiveCategory   = CATEGORY_NONE;
     bScaleAllBrackets = false;
 
-    // preview like controls should have a 2D look
-    m_pBitmap->SetBorderStyle( WindowBorderStyle::MONO );
+    m_xMetricField1->connect_focus_in(LINK(this, SmDistanceDialog, GetFocusHdl));
+    m_xMetricField2->connect_focus_in(LINK(this, SmDistanceDialog, GetFocusHdl));
+    m_xMetricField3->connect_focus_in(LINK(this, SmDistanceDialog, GetFocusHdl));
+    m_xMetricField4->connect_focus_in(LINK(this, SmDistanceDialog, GetFocusHdl));
+    m_xCheckBox1->connect_toggled(LINK(this, SmDistanceDialog, CheckBoxClickHdl));
+    m_xMenuButton->connect_selected(LINK(this, SmDistanceDialog, MenuSelectHdl));
+    m_xDefaultButton->connect_clicked(LINK(this, SmDistanceDialog, DefaultButtonClickHdl));
 
-    m_pMetricField1->SetGetFocusHdl(LINK(this, SmDistanceDialog, GetFocusHdl));
-    m_pMetricField2->SetGetFocusHdl(LINK(this, SmDistanceDialog, GetFocusHdl));
-    m_pMetricField3->SetGetFocusHdl(LINK(this, SmDistanceDialog, GetFocusHdl));
-    m_pMetricField4->SetGetFocusHdl(LINK(this, SmDistanceDialog, GetFocusHdl));
-    m_pCheckBox1->SetClickHdl(LINK(this, SmDistanceDialog, CheckBoxClickHdl));
-
-    m_pMenuButton->GetPopupMenu()->SetSelectHdl(LINK(this, SmDistanceDialog, MenuSelectHdl));
-
-    m_pDefaultButton->SetClickHdl(LINK(this, SmDistanceDialog, DefaultButtonClickHdl));
+    //set the initial size, with max visible widgets visible, as preferred size
+    m_xDialog->set_size_request(-1, m_xDialog->get_preferred_size().Height());
 }
-
 
 SmDistanceDialog::~SmDistanceDialog()
 {
-    disposeOnce();
-}
-
-void SmDistanceDialog::dispose()
-{
     for (SmCategoryDesc* & rpDesc : Categories)
         DELETEZ(rpDesc);
-    m_pFrame.clear();
-    m_pFixedText1.clear();
-    m_pMetricField1.clear();
-    m_pFixedText2.clear();
-    m_pMetricField2.clear();
-    m_pFixedText3.clear();
-    m_pMetricField3.clear();
-    m_pCheckBox1.clear();
-    m_pFixedText4.clear();
-    m_pMetricField4.clear();
-    m_pMenuButton.clear();
-    m_pDefaultButton.clear();
-    m_pBitmap.clear();
-    ModalDialog::dispose();
 }
 
 void SmDistanceDialog::ReadFrom(const SmFormat &rFormat)

@@ -1424,14 +1424,13 @@ public:
     }
 };
 
-class GtkInstanceMenu : public weld::Menu
+class MenuHelper
 {
 protected:
     GtkMenu* m_pMenu;
-    OString m_sActivated;
+    bool m_bTakeOwnership;
     std::map<OString, GtkMenuItem*> m_aMap;
 private:
-    bool m_bTakeOwnership;
 
     static void collect(GtkWidget* pItem, gpointer widget)
     {
@@ -1440,7 +1439,7 @@ private:
             gtk_container_foreach(GTK_CONTAINER(pSubMenu), collect, widget);
         else
         {
-            GtkInstanceMenu* pThis = static_cast<GtkInstanceMenu*>(widget);
+            MenuHelper* pThis = static_cast<MenuHelper*>(widget);
             pThis->add_to_map(pMenuItem);
         }
     }
@@ -1454,19 +1453,15 @@ private:
 
     static void signalActivate(GtkMenuItem* pItem, gpointer widget)
     {
-        GtkInstanceMenu* pThis = static_cast<GtkInstanceMenu*>(widget);
+        MenuHelper* pThis = static_cast<MenuHelper*>(widget);
         SolarMutexGuard aGuard;
         pThis->signal_activate(pItem);
     }
 
-    void signal_activate(GtkMenuItem* pItem)
-    {
-        const gchar* pStr = gtk_buildable_get_name(GTK_BUILDABLE(pItem));
-        m_sActivated = OString(pStr, pStr ? strlen(pStr) : 0);
-    }
+    virtual void signal_activate(GtkMenuItem* pItem) = 0;
 
 public:
-    GtkInstanceMenu(GtkMenu* pMenu, bool bTakeOwnership)
+    MenuHelper(GtkMenu* pMenu, bool bTakeOwnership)
         : m_pMenu(pMenu)
         , m_bTakeOwnership(bTakeOwnership)
     {
@@ -1474,6 +1469,67 @@ public:
         for (auto& a : m_aMap)
             g_signal_connect(a.second, "activate", G_CALLBACK(signalActivate), this);
     }
+
+    void disable_item_notify_events()
+    {
+        for (auto& a : m_aMap)
+            g_signal_handlers_block_by_func(a.second, reinterpret_cast<void*>(signalActivate), this);
+    }
+
+    void enable_item_notify_events()
+    {
+        for (auto& a : m_aMap)
+            g_signal_handlers_unblock_by_func(a.second, reinterpret_cast<void*>(signalActivate), this);
+    }
+
+    void set_item_sensitive(const OString& rIdent, bool bSensitive)
+    {
+        gtk_widget_set_sensitive(GTK_WIDGET(m_aMap[rIdent]), bSensitive);
+    }
+
+    void set_item_active(const OString& rIdent, bool bActive)
+    {
+        disable_item_notify_events();
+        gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(m_aMap[rIdent]), bActive);
+        enable_item_notify_events();
+    }
+
+    void show_item(const OString& rIdent, bool bShow)
+    {
+        GtkWidget* pWidget = GTK_WIDGET(m_aMap[rIdent]);
+        if (bShow)
+            gtk_widget_show(pWidget);
+        else
+            gtk_widget_hide(pWidget);
+    }
+
+    virtual ~MenuHelper()
+    {
+        for (auto& a : m_aMap)
+            g_signal_handlers_disconnect_by_data(a.second, this);
+        if (m_bTakeOwnership)
+            gtk_widget_destroy(GTK_WIDGET(m_pMenu));
+    }
+};
+
+class GtkInstanceMenu : public MenuHelper, public virtual weld::Menu
+{
+protected:
+    OString m_sActivated;
+
+private:
+    virtual void signal_activate(GtkMenuItem* pItem) override
+    {
+        const gchar* pStr = gtk_buildable_get_name(GTK_BUILDABLE(pItem));
+        m_sActivated = OString(pStr, pStr ? strlen(pStr) : 0);
+    }
+
+public:
+    GtkInstanceMenu(GtkMenu* pMenu, bool bTakeOwnership)
+        : MenuHelper(pMenu, bTakeOwnership)
+    {
+    }
+
     virtual OString popup_at_rect(weld::Widget* pParent, const tools::Rectangle &rRect) override
     {
         m_sActivated.clear();
@@ -1530,24 +1586,20 @@ public:
 
         return m_sActivated;
     }
+
     virtual void set_sensitive(const OString& rIdent, bool bSensitive) override
     {
-        gtk_widget_set_sensitive(GTK_WIDGET(m_aMap[rIdent]), bSensitive);
+        set_item_sensitive(rIdent, bSensitive);
     }
+
+    virtual void set_active(const OString& rIdent, bool bActive) override
+    {
+        set_item_active(rIdent, bActive);
+    }
+
     virtual void show(const OString& rIdent, bool bShow) override
     {
-        GtkWidget* pWidget = GTK_WIDGET(m_aMap[rIdent]);
-        if (bShow)
-            gtk_widget_show(pWidget);
-        else
-            gtk_widget_hide(pWidget);
-    }
-    virtual ~GtkInstanceMenu() override
-    {
-        for (auto& a : m_aMap)
-            g_signal_handlers_disconnect_by_data(a.second, this);
-        if (m_bTakeOwnership)
-            gtk_widget_destroy(GTK_WIDGET(m_pMenu));
+        show_item(rIdent, bShow);
     }
 };
 
@@ -2364,6 +2416,27 @@ bool GtkInstanceDialog::has_click_handler(int nResponse)
     return false;
 }
 
+class GtkInstanceMenuButton : public GtkInstanceButton, public MenuHelper, public virtual weld::MenuButton
+{
+public:
+    GtkInstanceMenuButton(GtkMenuButton* pMenuButton, bool bTakeOwnership)
+        : GtkInstanceButton(GTK_BUTTON(pMenuButton), bTakeOwnership)
+        , MenuHelper(gtk_menu_button_get_popup(pMenuButton), false)
+    {
+    }
+
+    virtual void set_active(const OString& rIdent, bool bActive) override
+    {
+        set_item_active(rIdent, bActive);
+    }
+
+    virtual void signal_activate(GtkMenuItem* pItem) override
+    {
+        const gchar* pStr = gtk_buildable_get_name(GTK_BUILDABLE(pItem));
+        signal_selected(OString(pStr, pStr ? strlen(pStr) : 0));
+    }
+};
+
 class GtkInstanceToggleButton : public GtkInstanceButton, public virtual weld::ToggleButton
 {
 private:
@@ -2547,7 +2620,7 @@ public:
 
     virtual void enable_notify_events() override
     {
-        GtkInstanceWidget::disable_notify_events();
+        GtkInstanceWidget::enable_notify_events();
         g_signal_handler_unblock(m_pEntry, m_nChangedSignalId);
         g_signal_handler_unblock(m_pEntry, m_nInsertTextSignalId);
     }
@@ -2874,7 +2947,7 @@ public:
 
     virtual void enable_notify_events() override
     {
-        GtkInstanceContainer::disable_notify_events();
+        GtkInstanceContainer::enable_notify_events();
         g_signal_handler_unblock(m_pTreeView, m_nRowActivatedSignalId);
         g_signal_handler_unblock(gtk_tree_view_get_selection(m_pTreeView), m_nChangedSignalId);
     }
@@ -3665,7 +3738,7 @@ public:
 
     virtual void enable_notify_events() override
     {
-        GtkInstanceContainer::disable_notify_events();
+        GtkInstanceContainer::enable_notify_events();
         g_signal_handler_unblock(m_pComboBoxText, m_nPopupShownSignalId);
         g_signal_handler_unblock(m_pComboBoxText, m_nChangedSignalId);
         if (GtkEntry* pEntry = get_entry())
@@ -3991,6 +4064,15 @@ public:
             return nullptr;
         auto_add_parentless_widgets_to_container(GTK_WIDGET(pButton));
         return new GtkInstanceButton(pButton, bTakeOwnership);
+    }
+
+    virtual weld::MenuButton* weld_menu_button(const OString &id, bool bTakeOwnership) override
+    {
+        GtkMenuButton* pButton = GTK_MENU_BUTTON(gtk_builder_get_object(m_pBuilder, id.getStr()));
+        if (!pButton)
+            return nullptr;
+        auto_add_parentless_widgets_to_container(GTK_WIDGET(pButton));
+        return new GtkInstanceMenuButton(pButton, bTakeOwnership);
     }
 
     virtual weld::RadioButton* weld_radio_button(const OString &id, bool bTakeOwnership) override
