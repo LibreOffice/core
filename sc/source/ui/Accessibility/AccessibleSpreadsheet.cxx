@@ -269,7 +269,7 @@ ScAccessibleSpreadsheet::ScAccessibleSpreadsheet(
 
 ScAccessibleSpreadsheet::~ScAccessibleSpreadsheet()
 {
-    delete mpMarkedRanges;
+    mpMarkedRanges.reset();
     if (mpViewShell)
         mpViewShell->RemoveAccessibilityObject(*this);
 }
@@ -323,8 +323,7 @@ void ScAccessibleSpreadsheet::CompleteSelectionChanged(bool bNewState)
     {
         return ;
     }
-    if (mpMarkedRanges)
-        DELETEZ(mpMarkedRanges);
+    mpMarkedRanges.reset();
 
     AccessibleEventObject aEvent;
     aEvent.EventId = AccessibleEventId::STATE_CHANGED;
@@ -534,9 +533,9 @@ void ScAccessibleSpreadsheet::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
                 }
                 if (!mpMarkedRanges)
                 {
-                    mpMarkedRanges = new ScRangeList();
+                    mpMarkedRanges.reset(new ScRangeList());
                 }
-                refScMarkData.FillRangeListWithMarks(mpMarkedRanges, true);
+                refScMarkData.FillRangeListWithMarks(mpMarkedRanges.get(), true);
 
                 //For Whole Col Row
                 bool bWholeRow = ::labs(aMarkRange.aStart.Row() - aMarkRange.aEnd.Row()) == MAXROW ;
@@ -615,7 +614,7 @@ void ScAccessibleSpreadsheet::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
                             CommitFocusCell(aNewCell);
                         }
                         VEC_MYADDR vecNew;
-                        if(CalcScRangeListDifferenceMax(mpMarkedRanges,&m_LastMarkedRanges,10,vecNew))
+                        if(CalcScRangeListDifferenceMax(mpMarkedRanges.get(), &m_LastMarkedRanges,10,vecNew))
                         {
                             aEvent.EventId = AccessibleEventId::SELECTION_CHANGED_WITHIN;
                             aEvent.NewValue.clear();
@@ -1113,9 +1112,9 @@ sal_Int32 SAL_CALL
         {
             if (!mpMarkedRanges)
             {
-                mpMarkedRanges = new ScRangeList();
+                mpMarkedRanges.reset(new ScRangeList());
                 ScMarkData aMarkData(mpViewShell->GetViewData().GetMarkData());
-                aMarkData.FillRangeListWithMarks(mpMarkedRanges, false);
+                aMarkData.FillRangeListWithMarks(mpMarkedRanges.get(), false);
             }
             // is possible, because there shouldn't be overlapped ranges in it
             if (mpMarkedRanges)
@@ -1144,8 +1143,8 @@ uno::Reference<XAccessible > SAL_CALL
     {
         if (!mpMarkedRanges)
         {
-            mpMarkedRanges = new ScRangeList();
-            mpViewShell->GetViewData().GetMarkData().FillRangeListWithMarks(mpMarkedRanges, false);
+            mpMarkedRanges.reset(new ScRangeList());
+            mpViewShell->GetViewData().GetMarkData().FillRangeListWithMarks(mpMarkedRanges.get(), false);
         }
         if (mpMarkedRanges)
         {
@@ -1154,7 +1153,7 @@ uno::Reference<XAccessible > SAL_CALL
             {
                 throw lang::IndexOutOfBoundsException();
             }
-            ScMyAddress addr = CalcScAddressFromRangeList(mpMarkedRanges,nSelectedChildIndex);
+            ScMyAddress addr = CalcScAddressFromRangeList(mpMarkedRanges.get(),nSelectedChildIndex);
             if( m_mapSelectionSend.find(addr) != m_mapSelectionSend.end() )
                 xAccessible = m_mapSelectionSend[addr];
             else
