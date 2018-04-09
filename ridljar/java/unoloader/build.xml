@@ -1,4 +1,5 @@
-/**************************************************************
+<?xml version="1.0" encoding="UTF-8"?>
+<!--***********************************************************
  *
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -17,35 +18,17 @@
  * specific language governing permissions and limitations
  * under the License.
  *
- *************************************************************/
+ ***********************************************************-->
 
 
+<project name="unoloader" default="main">
 
-package com.sun.star.uno;
+    <property file="../../../ant.properties"/>
+    <import file="${SRC_ROOT}/solenv/ant/aoo-ant.xml"/>
 
+    <target name="init-project">
+        <property name="jar.manifest" location="${main.src.dir}/com/sun/star/lib/unoloader/manifest"/>
+    </target>
 
-import java.lang.reflect.Field;
+</project>
 
-/**
- * The <code>IFieldDescription</code> describes non
- * method members.
- *
- * @deprecated This interface does not cover all the features supported by the
- * corresponding (unpublished) implementation.  But no client code should need
- * to access this functionality, anyway.
- */
-public interface IFieldDescription extends IMemberDescription {
-    /**
-     * Gives the name of this member.
-     * <p>
-     * @return  the name
-     */
-    ITypeDescription getTypeDescription();
-
-    /**
-     * Gives native java field of this member.
-     * <p>
-     * @return  the java field
-     */
-      Field getField();
-}

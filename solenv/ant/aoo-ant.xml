@@ -81,9 +81,7 @@
         <condition property="has.idl.files">
             <isreference refid="idl.files"/>
         </condition>
-        <filelist id="idl.files" unless:set="has.idl.files">
-            <filelist refid="idl.files"/>
-        </filelist>
+        <filelist id="idl.files" unless:set="has.idl.files"/>
     </target>
 
     <target name="res" depends="prepare">
@@ -107,7 +105,9 @@
         </copy>
     </target>
 
-    <target name="compile" depends="prepare,res">
+    <extension-point name="pre-compile" depends="prepare,res"/>
+
+    <target name="compile" depends="pre-compile">
         <mkdir dir="${main.build.dir}"/>
         <javac srcdir="${main.src.dir}"
                destdir="${main.build.dir}"

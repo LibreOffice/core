@@ -54,17 +54,34 @@
         <property name="idl.uptodate" value="true" unless:set="idl.files.exist"/>
     </target>
 
+    <macrodef name="javamaker">
+        <attribute name="input-rdb"/>
+        <attribute name="output-directory"/>
+        <attribute name="no-dependent-types" default="false"/>
+        <attribute name="excludes" default=""/>
+        <sequential>
+            <mkdir dir="@{output-directory}"/>
+            <exec executable="${OUTDIR}/bin/javamaker" failonerror="true">
+                <env key="LD_LIBRARY_PATH" value="${OUTDIR}/lib"/>
+                <env key="DYLD_LIBRARY_PATH" value="${OUTDIR}/lib"/>
+                <arg value="-O@{output-directory}"/>
+                <arg value="-BUCR"/>
+                <arg value="-nD"
+                    if:true="@{no-dependent-types}"/>
+                <arg value="@{input-rdb}"/>
+                <arg value="-X@{excludes}"
+                    unless:blank="@{excludes}"/>
+            </exec>
+        </sequential>
+    </macrodef>
+
     <target name="idl-javamaker" depends="idl-regmerge" unless="idl.uptodate">
         <mkdir dir="${idl.classes.build.dir}"/>
-        <exec executable="${OUTDIR}/bin/javamaker" failonerror="true">
-            <env key="LD_LIBRARY_PATH" value="${OUTDIR}/lib"/>
-            <env key="DYLD_LIBRARY_PATH" value="${OUTDIR}/lib"/>
-            <arg value="-O${idl.classes.build.dir}"/>
-            <arg value="-BUCR"/>
-            <arg value="-nD"/>
-            <arg value="${idl.rdb.build.dir}/registry.rdb"/>
-            <arg value="-X${OUTDIR}/bin/types.rdb"/>
-        </exec>
+        <javamaker
+            input-rdb="${idl.rdb.build.dir}/registry.rdb"
+            output-directory="${idl.classes.build.dir}"
+            no-dependent-types="true"
+            excludes="${OUTDIR}/bin/types.rdb"/>
         <touch file="${idl.javamaker.flag}"/>
     </target>
 

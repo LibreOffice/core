@@ -1,4 +1,4 @@
-#**************************************************************
+###############################################################
 #  
 #  Licensed to the Apache Software Foundation (ASF) under one
 #  or more contributor license agreements.  See the NOTICE file
@@ -17,19 +17,15 @@
 #  specific language governing permissions and limitations
 #  under the License.
 #  
-#**************************************************************
+###############################################################
 
 
 
-PRJ := ..$/..
-PRJNAME := ridljar
+$(eval $(call gb_Zip_Zip,unoloader_src,$(SRCDIR)/ridljar/java/unoloader/src/main/java))
 
-TARGET := unoloader
+$(eval $(call gb_Zip_add_files,unoloader_src,\
+        com/sun/star/lib/unoloader/UnoClassLoader.java \
+        com/sun/star/lib/unoloader/UnoLoader.java \
+))
 
-.INCLUDE: settings.mk
-
-ZIP1TARGET = $(TARGET)_src
-ZIP1FLAGS = -r
-ZIP1LIST = com -x '*makefile.mk' -x '*manifest'
-
-.INCLUDE: target.mk
+# vim: set noet sw=4 ts=4:

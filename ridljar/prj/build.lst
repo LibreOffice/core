@@ -1,6 +1,2 @@
 ri ridljar : codemaker solenv udkapi NULL
-ri ridljar\javamaker nmake - all javamaker NULL
-ri ridljar\com nmake - all com javamaker NULL
-ri ridljar\util nmake - all util javamaker com NULL
-ri ridljar\source\unoloader nmake - all unoloader NULL
-ri ridljar\source\unoloader\com\sun\star\lib\unoloader nmake - all unoloader_cssl_unoloader NULL
+ri ridljar\prj nmake - all ri_prj NULL

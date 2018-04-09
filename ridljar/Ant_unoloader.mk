@@ -21,28 +21,7 @@
 
 
 
-PRJ		= ..
-PRJNAME	= ridljar
-TARGET	= ridl
+$(eval $(call gb_Ant_Ant,unoloader,$(SRCDIR)/ridljar/java/unoloader/build.xml))
 
-# --- Settings -----------------------------------------------------
+# vim: set noet sw=4 ts=4:
 
-.INCLUDE :  settings.mk
-
-MAXLINELENGTH = 100000
-
-JARCLASSDIRS	= com
-JARTARGET		= $(TARGET).jar
-JARCOMPRESS 	= TRUE
-
-# Special work necessary for building java reference with javadoc.
-# The source of puplic APIs must be delivered and used later in the
-# odk module.
-ZIP1TARGET=$(TARGET)_src
-ZIP1FLAGS=-u -r
-ZIP1DIR=$(PRJ)
-ZIP1LIST=com -x "*makefile.mk"
-
-# --- Targets ------------------------------------------------------
-
-.INCLUDE :  target.mk

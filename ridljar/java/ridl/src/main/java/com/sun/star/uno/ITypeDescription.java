@@ -74,7 +74,7 @@ public interface ITypeDescription {
      * <p>
      * @return  the <code>IFieldDescription[]</code>.
      */
-      IFieldDescription []getFieldDescriptions();
+    IFieldDescription []getFieldDescriptions();
 
     /**
      * Gets the <code>IFieldDescription</code> for the
@@ -83,7 +83,7 @@ public interface ITypeDescription {
      * <p>
      * @return  the <code>IFieldDescription</code>.
      */
-      IFieldDescription getFieldDescription(String name);
+    IFieldDescription getFieldDescription(String name);
 
     /**
      * Gets the IDL <code>TypeClass</code> of the type.
