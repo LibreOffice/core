@@ -3468,26 +3468,23 @@ uno::Sequence< OUString > SAL_CALL SdDocLinkTargets::getSupportedServiceNames()
     return aSeq;
 }
 
-rtl::Reference< SdXImpressDocument > SdXImpressDocument::GetModel( SdDrawDocument const * pDocument )
+rtl::Reference< SdXImpressDocument > SdXImpressDocument::GetModel( SdDrawDocument& rDocument )
 {
     rtl::Reference< SdXImpressDocument > xRet;
-    if( pDocument )
+    ::sd::DrawDocShell* pDocShell(rDocument.GetDocSh());
+    if( pDocShell )
     {
-        ::sd::DrawDocShell* pDocShell = pDocument->GetDocSh();
-        if( pDocShell )
-        {
-            uno::Reference<frame::XModel> xModel(pDocShell->GetModel());
+        uno::Reference<frame::XModel> xModel(pDocShell->GetModel());
 
-            xRet.set( dynamic_cast< SdXImpressDocument* >( xModel.get() ) );
-        }
+        xRet.set( dynamic_cast< SdXImpressDocument* >( xModel.get() ) );
     }
 
     return xRet;
 }
 
-void NotifyDocumentEvent( SdDrawDocument const * pDocument, const OUString& rEventName )
+void NotifyDocumentEvent( SdDrawDocument& rDocument, const OUString& rEventName )
 {
-    rtl::Reference< SdXImpressDocument > xModel( SdXImpressDocument::GetModel( pDocument ) );
+    rtl::Reference< SdXImpressDocument > xModel( SdXImpressDocument::GetModel( rDocument ) );
 
     if( xModel.is() )
     {
@@ -3497,9 +3494,9 @@ void NotifyDocumentEvent( SdDrawDocument const * pDocument, const OUString& rEve
     }
 }
 
-void NotifyDocumentEvent( SdDrawDocument const * pDocument, const OUString& rEventName, const uno::Reference< uno::XInterface >& xSource )
+void NotifyDocumentEvent( SdDrawDocument& rDocument, const OUString& rEventName, const uno::Reference< uno::XInterface >& xSource )
 {
-    rtl::Reference< SdXImpressDocument > xModel( SdXImpressDocument::GetModel( pDocument ) );
+    rtl::Reference< SdXImpressDocument > xModel( SdXImpressDocument::GetModel( rDocument ) );
 
     if( xModel.is() )
     {
