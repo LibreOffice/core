@@ -49,24 +49,17 @@ executeFilterDialog(
     uui::FilterNameList const & rFilters,
     OUString             & rFilter )
 {
-    try
+    SolarMutexGuard aGuard;
+
+    ScopedVclPtrInstance< uui::FilterDialog > xDialog(pParent);
+
+    xDialog->SetURL(rURL);
+    xDialog->ChangeFilters(&rFilters);
+
+    uui::FilterNameListPtr pSelected = rFilters.end();
+    if( xDialog->AskForFilter( pSelected ) )
     {
-        SolarMutexGuard aGuard;
-
-        ScopedVclPtrInstance< uui::FilterDialog > xDialog(pParent);
-
-        xDialog->SetURL(rURL);
-        xDialog->ChangeFilters(&rFilters);
-
-        uui::FilterNameListPtr pSelected = rFilters.end();
-        if( xDialog->AskForFilter( pSelected ) )
-        {
-            rFilter = pSelected->sInternal;
-        }
-    }
-    catch (std::bad_alloc const &)
-    {
-        throw uno::RuntimeException("out of memory");
+        rFilter = pSelected->sInternal;
     }
 }
 

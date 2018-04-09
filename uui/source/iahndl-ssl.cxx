@@ -140,32 +140,25 @@ executeUnknownAuthDialog(
     uno::Reference< uno::XComponentContext > const & xContext,
     const uno::Reference< security::XCertificate >& rXCert)
 {
-    try
-    {
-        SolarMutexGuard aGuard;
+    SolarMutexGuard aGuard;
 
-        UnknownAuthDialog aDialog(pParent, rXCert, xContext);
+    UnknownAuthDialog aDialog(pParent, rXCert, xContext);
 
-        // Get correct resource string
-        OUString aMessage;
+    // Get correct resource string
+    OUString aMessage;
 
-        std::vector< OUString > aArguments;
-        aArguments.push_back( getContentPart( rXCert->getSubjectName()) );
+    std::vector< OUString > aArguments;
+    aArguments.push_back( getContentPart( rXCert->getSubjectName()) );
 
-        std::locale aResLocale(Translate::Create("uui"));
-        ErrorResource aErrorResource(RID_UUI_ERRHDL, aResLocale);
+    std::locale aResLocale(Translate::Create("uui"));
+    ErrorResource aErrorResource(RID_UUI_ERRHDL, aResLocale);
 
-        aMessage = Translate::get(STR_UUI_UNKNOWNAUTH_UNTRUSTED, aResLocale);
-        aMessage = UUIInteractionHelper::replaceMessageWithArguments(
-                aMessage, aArguments );
-        aDialog.setDescriptionText( aMessage );
+    aMessage = Translate::get(STR_UUI_UNKNOWNAUTH_UNTRUSTED, aResLocale);
+    aMessage = UUIInteractionHelper::replaceMessageWithArguments(
+            aMessage, aArguments );
+    aDialog.setDescriptionText( aMessage );
 
-        return static_cast<bool>(aDialog.run());
-    }
-    catch (std::bad_alloc const &)
-    {
-        throw uno::RuntimeException("out of memory");
-    }
+    return static_cast<bool>(aDialog.run());
 }
 
 enum class SslWarnType {
@@ -180,62 +173,55 @@ executeSSLWarnDialog(
     SslWarnType failure,
     const OUString & hostName )
 {
-    try
+    SolarMutexGuard aGuard;
+
+    SSLWarnDialog aDialog(pParent, rXCert, xContext);
+
+    // Get correct resource string
+    std::vector< OUString > aArguments_1;
+    char const * pMessageKey = nullptr;
+    char const * pTitleKey = nullptr;
+
+    switch( failure )
     {
-        SolarMutexGuard aGuard;
-
-        SSLWarnDialog aDialog(pParent, rXCert, xContext);
-
-        // Get correct resource string
-        std::vector< OUString > aArguments_1;
-        char const * pMessageKey = nullptr;
-        char const * pTitleKey = nullptr;
-
-        switch( failure )
-        {
-            case SslWarnType::DOMAINMISMATCH:
-                pMessageKey = STR_UUI_SSLWARN_DOMAINMISMATCH;
-                pTitleKey = STR_UUI_SSLWARN_DOMAINMISMATCH_TITLE;
-                aArguments_1.push_back( hostName );
-                aArguments_1.push_back(
-                    getContentPart( rXCert->getSubjectName()) );
-                aArguments_1.push_back( hostName );
-                break;
-            case SslWarnType::EXPIRED:
-                pMessageKey = STR_UUI_SSLWARN_EXPIRED;
-                pTitleKey = STR_UUI_SSLWARN_EXPIRED_TITLE;
-                aArguments_1.push_back(
-                    getContentPart( rXCert->getSubjectName()) );
-                aArguments_1.push_back(
-                    getLocalizedDatTimeStr( xContext,
-                                            rXCert->getNotValidAfter() ) );
-                aArguments_1.push_back(
-                    getLocalizedDatTimeStr( xContext,
-                                            rXCert->getNotValidAfter() ) );
-                break;
-            case SslWarnType::INVALID:
-                pMessageKey = STR_UUI_SSLWARN_INVALID;
-                pTitleKey = STR_UUI_SSLWARN_INVALID_TITLE;
-                break;
-            default: assert(false);
-        }
-
-        std::locale aResLocale(Translate::Create("uui"));
-
-        OUString aMessage_1 = Translate::get(pMessageKey, aResLocale);
-        aMessage_1 = UUIInteractionHelper::replaceMessageWithArguments(
-                aMessage_1, aArguments_1 );
-        aDialog.setDescription1Text( aMessage_1 );
-
-        OUString aTitle = Translate::get(pTitleKey, aResLocale);
-        aDialog.set_title(aTitle);
-
-        return static_cast<bool>(aDialog.run());
+        case SslWarnType::DOMAINMISMATCH:
+            pMessageKey = STR_UUI_SSLWARN_DOMAINMISMATCH;
+            pTitleKey = STR_UUI_SSLWARN_DOMAINMISMATCH_TITLE;
+            aArguments_1.push_back( hostName );
+            aArguments_1.push_back(
+                getContentPart( rXCert->getSubjectName()) );
+            aArguments_1.push_back( hostName );
+            break;
+        case SslWarnType::EXPIRED:
+            pMessageKey = STR_UUI_SSLWARN_EXPIRED;
+            pTitleKey = STR_UUI_SSLWARN_EXPIRED_TITLE;
+            aArguments_1.push_back(
+                getContentPart( rXCert->getSubjectName()) );
+            aArguments_1.push_back(
+                getLocalizedDatTimeStr( xContext,
+                                        rXCert->getNotValidAfter() ) );
+            aArguments_1.push_back(
+                getLocalizedDatTimeStr( xContext,
+                                        rXCert->getNotValidAfter() ) );
+            break;
+        case SslWarnType::INVALID:
+            pMessageKey = STR_UUI_SSLWARN_INVALID;
+            pTitleKey = STR_UUI_SSLWARN_INVALID_TITLE;
+            break;
+        default: assert(false);
     }
-    catch (std::bad_alloc const &)
-    {
-        throw uno::RuntimeException("out of memory");
-    }
+
+    std::locale aResLocale(Translate::Create("uui"));
+
+    OUString aMessage_1 = Translate::get(pMessageKey, aResLocale);
+    aMessage_1 = UUIInteractionHelper::replaceMessageWithArguments(
+            aMessage_1, aArguments_1 );
+    aDialog.setDescription1Text( aMessage_1 );
+
+    OUString aTitle = Translate::get(pTitleKey, aResLocale);
+    aDialog.set_title(aTitle);
+
+    return static_cast<bool>(aDialog.run());
 }
 
 void

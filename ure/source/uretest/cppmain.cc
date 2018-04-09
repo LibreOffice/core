@@ -21,7 +21,6 @@
 
 #include <cstddef>
 #include <memory>
-#include <new>
 
 #include "com/sun/star/beans/Introspection.hpp"
 #include "com/sun/star/beans/theIntrospection.hpp"
@@ -205,11 +204,7 @@ namespace CppMain {
 css::uno::Reference< css::uno::XInterface > create(
     css::uno::Reference< css::uno::XComponentContext > const & context)
 {
-    try {
-        return static_cast< ::cppu::OWeakObject * >(new Service(context));
-    } catch (::std::bad_alloc &) {
-        throw css::uno::RuntimeException("std::bad_alloc");
-    }
+    return static_cast< ::cppu::OWeakObject * >(new Service(context));
 }
 
 rtl::OUString getImplementationName() {

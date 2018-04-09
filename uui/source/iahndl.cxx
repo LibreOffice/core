@@ -861,10 +861,6 @@ UUIInteractionHelper::handleRequest_impl(
         // Not handled.
         return false;
     }
-    catch (std::bad_alloc const &)
-    {
-        throw uno::RuntimeException("out of memory");
-    }
     catch( const uno::RuntimeException& )
     {
         throw;  // allowed to leave here
