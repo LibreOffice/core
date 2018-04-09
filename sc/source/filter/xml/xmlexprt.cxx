@@ -360,17 +360,17 @@ ScXMLExport::ScXMLExport(
 {
     if (getExportFlags() & SvXMLExportFlags::CONTENT)
     {
-        pGroupColumns = new ScMyOpenCloseColumnRowGroup(*this, XML_TABLE_COLUMN_GROUP);
-        pGroupRows = new ScMyOpenCloseColumnRowGroup(*this, XML_TABLE_ROW_GROUP);
-        pColumnStyles = new ScColumnStyles();
-        pRowStyles = new ScRowStyles();
-        pRowFormatRanges = new ScRowFormatRanges();
-        pMergedRangesContainer = new ScMyMergedRangesContainer();
-        pValidationsContainer = new ScMyValidationsContainer();
+        pGroupColumns.reset( new ScMyOpenCloseColumnRowGroup(*this, XML_TABLE_COLUMN_GROUP) );
+        pGroupRows.reset( new ScMyOpenCloseColumnRowGroup(*this, XML_TABLE_ROW_GROUP) );
+        pColumnStyles.reset( new ScColumnStyles() );
+        pRowStyles.reset( new ScRowStyles() );
+        pRowFormatRanges.reset( new ScRowFormatRanges() );
+        pMergedRangesContainer.reset( new ScMyMergedRangesContainer() );
+        pValidationsContainer.reset( new ScMyValidationsContainer() );
         mpCellsItr.reset(new ScMyNotEmptyCellsIterator(*this));
-        pDefaults = new ScMyDefaultStyles;
+        pDefaults.reset( new ScMyDefaultStyles );
     }
-    pCellStyles = new ScFormatRangeStyles();
+    pCellStyles.reset( new ScFormatRangeStyles() );
 
     // document is not set here - create ScChangeTrackingExportHelper later
 
@@ -419,17 +419,17 @@ ScXMLExport::ScXMLExport(
 
 ScXMLExport::~ScXMLExport()
 {
-        delete pGroupColumns;
-        delete pGroupRows;
-        delete pColumnStyles;
-        delete pRowStyles;
-        delete pCellStyles;
-        delete pRowFormatRanges;
-        delete pMergedRangesContainer;
-        delete pValidationsContainer;
-        delete pChangeTrackingExportHelper;
-        delete pDefaults;
-        delete pNumberFormatAttributesExportHelper;
+    pGroupColumns.reset();
+    pGroupRows.reset();
+    pColumnStyles.reset();
+    pRowStyles.reset();
+    pCellStyles.reset();
+    pRowFormatRanges.reset();
+    pMergedRangesContainer.reset();
+    pValidationsContainer.reset();
+    pChangeTrackingExportHelper.reset();
+    pDefaults.reset();
+    pNumberFormatAttributesExportHelper.reset();
 }
 
 void ScXMLExport::SetSourceStream( const uno::Reference<io::XInputStream>& xNewStream )
@@ -1487,10 +1487,9 @@ void ScXMLExport::OpenRow(const sal_Int32 nTable, const sal_Int32 nStartRow, con
                 {
                     if (nRow < nEndRow)
                     {
-                        ScRowFormatRanges* pTempRowFormatRanges = new ScRowFormatRanges(pRowFormatRanges);
+                        ScRowFormatRanges* pTempRowFormatRanges = new ScRowFormatRanges(pRowFormatRanges.get());
                         OpenAndCloseRow(nPrevIndex, nRow - nEqualRows, nEqualRows, bPrevHidden, bPrevFiltered);
-                        delete pRowFormatRanges;
-                        pRowFormatRanges = pTempRowFormatRanges;
+                        pRowFormatRanges.reset(pTempRowFormatRanges);
                     }
                     else
                         OpenAndCloseRow(nPrevIndex, nRow - nEqualRows, nEqualRows, bPrevHidden, bPrevFiltered);
@@ -1549,7 +1548,7 @@ void ScXMLExport::ExportFormatRanges(const sal_Int32 nStartCol, const sal_Int32 
     ScXMLCachedRowAttrAccess aRowAttr(pDoc);
     if (nStartRow == nEndRow)
     {
-        pCellStyles->GetFormatRanges(nStartCol, nEndCol, nStartRow, nSheet, pRowFormatRanges);
+        pCellStyles->GetFormatRanges(nStartCol, nEndCol, nStartRow, nSheet, pRowFormatRanges.get());
         if (nOpenRow == - 1)
             OpenRow(nSheet, nStartRow, 1, aRowAttr);
         WriteRowContent();
@@ -1559,7 +1558,7 @@ void ScXMLExport::ExportFormatRanges(const sal_Int32 nStartCol, const sal_Int32 
     {
         if (nOpenRow > -1)
         {
-            pCellStyles->GetFormatRanges(nStartCol, pSharedData->GetLastColumn(nSheet), nStartRow, nSheet, pRowFormatRanges);
+            pCellStyles->GetFormatRanges(nStartCol, pSharedData->GetLastColumn(nSheet), nStartRow, nSheet, pRowFormatRanges.get());
             WriteRowContent();
             CloseRow(nStartRow);
             sal_Int32 nRows(1);
@@ -1567,7 +1566,7 @@ void ScXMLExport::ExportFormatRanges(const sal_Int32 nStartCol, const sal_Int32 
             while (nRows < nTotalRows)
             {
                 pRowFormatRanges->Clear();
-                pCellStyles->GetFormatRanges(0, pSharedData->GetLastColumn(nSheet), nStartRow + nRows, nSheet, pRowFormatRanges);
+                pCellStyles->GetFormatRanges(0, pSharedData->GetLastColumn(nSheet), nStartRow + nRows, nSheet, pRowFormatRanges.get());
                 sal_Int32 nMaxRows = pRowFormatRanges->GetMaxRows();
                 OSL_ENSURE(nMaxRows, "something wents wrong");
                 if (nMaxRows >= nTotalRows - nRows)
@@ -1581,7 +1580,7 @@ void ScXMLExport::ExportFormatRanges(const sal_Int32 nStartCol, const sal_Int32 
                     nRows += nMaxRows;
                 }
                 if (!pRowFormatRanges->GetSize())
-                    pCellStyles->GetFormatRanges(0, pSharedData->GetLastColumn(nSheet), nStartRow + nRows, nSheet, pRowFormatRanges);
+                    pCellStyles->GetFormatRanges(0, pSharedData->GetLastColumn(nSheet), nStartRow + nRows, nSheet, pRowFormatRanges.get());
                 WriteRowContent();
                 CloseRow(nStartRow + nRows - 1);
             }
@@ -1589,7 +1588,7 @@ void ScXMLExport::ExportFormatRanges(const sal_Int32 nStartCol, const sal_Int32 
                 CloseRow(nStartRow);
             OpenRow(nSheet, nEndRow, 1, aRowAttr);
             pRowFormatRanges->Clear();
-            pCellStyles->GetFormatRanges(0, nEndCol, nEndRow, nSheet, pRowFormatRanges);
+            pCellStyles->GetFormatRanges(0, nEndCol, nEndRow, nSheet, pRowFormatRanges.get());
             WriteRowContent();
         }
         else
@@ -1598,7 +1597,7 @@ void ScXMLExport::ExportFormatRanges(const sal_Int32 nStartCol, const sal_Int32 
             sal_Int32 nTotalRows(nEndRow - nStartRow + 1 - 1);
             while (nRows < nTotalRows)
             {
-                pCellStyles->GetFormatRanges(0, pSharedData->GetLastColumn(nSheet), nStartRow + nRows, nSheet, pRowFormatRanges);
+                pCellStyles->GetFormatRanges(0, pSharedData->GetLastColumn(nSheet), nStartRow + nRows, nSheet, pRowFormatRanges.get());
                 sal_Int32 nMaxRows = pRowFormatRanges->GetMaxRows();
                 if (nMaxRows >= nTotalRows - nRows)
                 {
@@ -1611,13 +1610,13 @@ void ScXMLExport::ExportFormatRanges(const sal_Int32 nStartCol, const sal_Int32 
                     nRows += nMaxRows;
                 }
                 if (!pRowFormatRanges->GetSize())
-                    pCellStyles->GetFormatRanges(0, pSharedData->GetLastColumn(nSheet), nStartRow + nRows, nSheet, pRowFormatRanges);
+                    pCellStyles->GetFormatRanges(0, pSharedData->GetLastColumn(nSheet), nStartRow + nRows, nSheet, pRowFormatRanges.get());
                 WriteRowContent();
                 CloseRow(nStartRow + nRows - 1);
             }
             OpenRow(nSheet, nEndRow, 1, aRowAttr);
             pRowFormatRanges->Clear();
-            pCellStyles->GetFormatRanges(0, nEndCol, nEndRow, nSheet, pRowFormatRanges);
+            pCellStyles->GetFormatRanges(0, nEndCol, nEndRow, nSheet, pRowFormatRanges.get());
             WriteRowContent();
         }
     }
@@ -1680,8 +1679,8 @@ void ScXMLExport::FillColumnRowGroups()
         {
             ScOutlineArray& rCols(pOutlineTable->GetColArray());
             ScOutlineArray& rRows(pOutlineTable->GetRowArray());
-            FillFieldGroup(&rCols, pGroupColumns);
-            FillFieldGroup(&rRows, pGroupRows);
+            FillFieldGroup(&rCols, pGroupColumns.get());
+            FillFieldGroup(&rRows, pGroupRows.get());
             pSharedData->SetLastColumn(nCurrentTable, pGroupColumns->GetLast());
             pSharedData->SetLastRow(nCurrentTable, pGroupRows->GetLast());
         }
@@ -1914,7 +1913,7 @@ void ScXMLExport::ExportContent_()
         mpCellsItr->Clear();
         mpCellsItr->SetShapes( pSharedData->GetShapesContainer() );
         mpCellsItr->SetNoteShapes( pSharedData->GetNoteShapes() );
-        mpCellsItr->SetMergedRanges( pMergedRangesContainer );
+        mpCellsItr->SetMergedRanges( pMergedRangesContainer.get() );
         mpCellsItr->SetAreaLinks( &aAreaLinks );
         mpCellsItr->SetEmptyDatabaseRanges( &aEmptyRanges );
         mpCellsItr->SetDetectiveObj( pSharedData->GetDetectiveObjContainer() );
@@ -2967,7 +2966,7 @@ void ScXMLExport::WriteTable(sal_Int32 nTable, const uno::Reference<sheet::XSpre
     if (bHasRowHeader)
         pSharedData->SetLastRow(nTable, aRowHeaderRange.aEnd.Row());
     pDefaults->FillDefaultStyles(nTable, pSharedData->GetLastRow(nTable),
-        pSharedData->GetLastColumn(nTable), pCellStyles, pDoc);
+        pSharedData->GetLastColumn(nTable), pCellStyles.get(), pDoc);
     pRowFormatRanges->SetColDefaults(&pDefaults->GetColDefaults());
     pCellStyles->SetColDefaults(&pDefaults->GetColDefaults());
     ExportColumns(nTable, aColumnHeaderRange, bHasColumnHeader);
@@ -2975,7 +2974,7 @@ void ScXMLExport::WriteTable(sal_Int32 nTable, const uno::Reference<sheet::XSpre
     sal_Int32 nEqualCells(0);
     ScMyCell aCell;
     ScMyCell aPrevCell;
-    while (mpCellsItr->GetNext(aCell, pCellStyles))
+    while (mpCellsItr->GetNext(aCell, pCellStyles.get()))
     {
         if (bIsFirst)
         {
@@ -4968,8 +4967,8 @@ XMLShapeExport* ScXMLExport::CreateShapeExport()
 XMLNumberFormatAttributesExportHelper* ScXMLExport::GetNumberFormatAttributesExportHelper()
 {
     if (!pNumberFormatAttributesExportHelper)
-        pNumberFormatAttributesExportHelper = new XMLNumberFormatAttributesExportHelper(GetNumberFormatsSupplier(), *this );
-    return pNumberFormatAttributesExportHelper;
+        pNumberFormatAttributesExportHelper.reset(new XMLNumberFormatAttributesExportHelper(GetNumberFormatsSupplier(), *this ));
+    return pNumberFormatAttributesExportHelper.get();
 }
 
 void ScXMLExport::CollectUserDefinedNamespaces(const SfxItemPool* pPool, sal_uInt16 nAttrib)
@@ -5082,7 +5081,7 @@ void SAL_CALL ScXMLExport::setSourceDocument( const uno::Reference<lang::XCompon
         throw lang::IllegalArgumentException();
 
     // create ScChangeTrackingExportHelper after document is known
-    pChangeTrackingExportHelper = new ScChangeTrackingExportHelper(*this);
+    pChangeTrackingExportHelper.reset(new ScChangeTrackingExportHelper(*this));
 
     // Set the document's storage grammar corresponding to the ODF version that
     // is to be written.
