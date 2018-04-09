@@ -465,8 +465,8 @@ protected:
     void update_width_chars();
 
 public:
-    MetricSpinButton(SpinButton* pSpinButton)
-        : m_eSrcUnit(FUNIT_CM)
+    MetricSpinButton(SpinButton* pSpinButton, FieldUnit eSrcUnit)
+        : m_eSrcUnit(eSrcUnit)
         , m_xSpinButton(pSpinButton)
     {
         update_width_chars();
@@ -670,9 +670,10 @@ public:
     virtual RadioButton* weld_radio_button(const OString& id, bool bTakeOwnership = false) = 0;
     virtual CheckButton* weld_check_button(const OString& id, bool bTakeOwnership = false) = 0;
     virtual SpinButton* weld_spin_button(const OString& id, bool bTakeOwnership = false) = 0;
-    MetricSpinButton* weld_metric_spin_button(const OString& id, bool bTakeOwnership = false)
+    MetricSpinButton* weld_metric_spin_button(const OString& id, FieldUnit eUnit,
+                                              bool bTakeOwnership = false)
     {
-        return new MetricSpinButton(weld_spin_button(id, bTakeOwnership));
+        return new MetricSpinButton(weld_spin_button(id, bTakeOwnership), eUnit);
     }
     virtual ComboBoxText* weld_combo_box_text(const OString& id, bool bTakeOwnership = false) = 0;
     virtual TreeView* weld_tree_view(const OString& id, bool bTakeOwnership = false) = 0;
