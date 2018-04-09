@@ -88,6 +88,7 @@ SwVbaDocument::~SwVbaDocument()
 void SwVbaDocument::Initialize()
 {
     mxTextDocument.set( getModel(), uno::UNO_QUERY_THROW );
+    word::getDocShell( mxModel )->RegisterAutomationDocumentObject( this );
 }
 
 sal_uInt32

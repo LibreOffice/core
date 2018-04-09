@@ -335,13 +335,25 @@ bool SwDocShell::PrepareClose( bool bUI )
 
     if (m_xDoc && IsInPrepareClose())
     {
+        uno::Any aDocument;
+        aDocument <<= mxAutomationDocumentObject;
+
+        uno::Sequence< uno::Any > aArgs(2);
+        aArgs[0] = aDocument;
+        // FIXME: This should be an out argument, hmm?
+        aArgs[1] <<= false;
+
+        SW_MOD()->CallAutomationApplicationEventSinks( "DocumentBeforeClose", aArgs );
+
+        // FIXME: Do something based on what value the callback set the second argument to
+
         uno::Reference< script::vba::XVBAEventProcessor > const xVbaEvents =
             m_xDoc->GetVbaEventProcessor();
         if( xVbaEvents.is() )
         {
             using namespace com::sun::star::script::vba::VBAEventId;
-            uno::Sequence< uno::Any > aArgs;
-            xVbaEvents->processVbaEvent( DOCUMENT_CLOSE, aArgs );
+            uno::Sequence< uno::Any > aNoArgs;
+            xVbaEvents->processVbaEvent( DOCUMENT_CLOSE, aNoArgs );
         }
     }
     return bRet;
