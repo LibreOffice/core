@@ -96,13 +96,6 @@ namespace emfplushelper
         return "";
     }
 
-    typedef enum
-    {
-      ImageDataTypeUnknown = 0x00000000,
-      ImageDataTypeBitmap = 0x00000001,
-      ImageDataTypeMetafile = 0x00000002
-    } ImageDataType;
-
     EMFPObject::~EMFPObject()
     {
     }
@@ -1145,10 +1138,10 @@ namespace emfplushelper
                     case EmfPlusRecordTypeDrawImage:
                     case EmfPlusRecordTypeDrawImagePoints:
                     {
-                        sal_uInt32 attrIndex;
+                        sal_uInt32 imageAttributesId;
                         sal_Int32 sourceUnit;
-                        rMS.ReadUInt32(attrIndex).ReadInt32(sourceUnit);
-                        SAL_INFO("drawinglayer", "EMF+ " << (type == EmfPlusRecordTypeDrawImagePoints ? "DrawImagePoints" : "DrawImage") << "attributes index: " << attrIndex << "source unit: " << sourceUnit);
+                        rMS.ReadUInt32(imageAttributesId).ReadInt32(sourceUnit);
+                        SAL_INFO("drawinglayer", "EMF+ " << (type == EmfPlusRecordTypeDrawImagePoints ? "DrawImagePoints" : "DrawImage") << " image attributes Id: " << imageAttributesId << " source unit: " << sourceUnit);
                         SAL_INFO("drawinglayer", "EMF+\tTODO: use image attributes");
 
                         // For DrawImage and DrawImagePoints, source unit of measurement type must be 1 pixel
@@ -1164,8 +1157,8 @@ namespace emfplushelper
 
                             if (type == EmfPlusRecordTypeDrawImagePoints)
                             {
-                                sal_Int32 aCount;
-                                rMS.ReadInt32(aCount);
+                                sal_uInt32 aCount;
+                                rMS.ReadUInt32(aCount);
 
                                 // Number of points used by DrawImagePoints. Exactly 3 points must be specified.
                                 if(aCount == 3)
@@ -1176,15 +1169,15 @@ namespace emfplushelper
                                     ReadPoint(rMS, x2, y2, flags);
                                     ReadPoint(rMS, x3, y3, flags);
 
-                                    SAL_INFO("drawinglayer", "EMF+ destination points: " << x1 << "," << y1 << " " << x2 << "," << y2 << " " << x3 << "," << y3);
-                                    SAL_INFO("drawinglayer", "EMF+ destination rectangle: " << x1 << "," << y1 << " " << x2 - x1 << "x" << y3 - y1);
+                                    SAL_INFO("drawinglayer", "EMF+\t destination points: " << x1 << "," << y1 << " " << x2 << "," << y2 << " " << x3 << "," << y3);
+                                    SAL_INFO("drawinglayer", "EMF+\t destination rectangle: " << x1 << "," << y1 << " " << x2 - x1 << "x" << y3 - y1);
 
                                     aDstPoint = Map(x1, y1);
                                     aDstSize = MapSize(x2 - x1, y3 - y1);
                                 }
                                 else
                                 {
-                                    SAL_WARN("drawinglayer", "EMF+ DrawImagePoints Wrong EMF+ file. Expected 3 points, received: "<< aCount);
+                                    SAL_WARN("drawinglayer", "EMF+\t DrawImagePoints Wrong EMF+ file. Expected 3 points, received: "<< aCount);
                                     break;
                                 }
                             }
@@ -1192,7 +1185,7 @@ namespace emfplushelper
                             {
                                 float dx, dy, dw, dh;
                                 ReadRectangle(rMS, dx, dy, dw, dh, bool(flags & 0x4000));
-                                SAL_INFO("drawinglayer", "EMF+ destination rectangle: " << dx << "," << dy << " " << dw << "x" << dh);
+                                SAL_INFO("drawinglayer", "EMF+\t destination rectangle: " << dx << "," << dy << " " << dw << "x" << dh);
                                 aDstPoint = Map(dx, dy);
                                 aDstSize = MapSize(dw, dh);
                             }
@@ -1209,7 +1202,7 @@ namespace emfplushelper
                                 BitmapEx aBmp(image.graphic.GetBitmapEx());
                                 aBmp.Crop(aSource);
                                 Size aSize(aBmp.GetSizePixel());
-                                SAL_INFO("drawinglayer", "EMF+ bitmap size: " << aSize.Width() << "x" << aSize.Height());
+                                SAL_INFO("drawinglayer", "EMF+\t bitmap size: " << aSize.Width() << "x" << aSize.Height());
                                 if (aSize.Width() > 0 && aSize.Height() > 0)
                                 {
                                     mrTargetHolders.Current().append(
@@ -1217,7 +1210,7 @@ namespace emfplushelper
                                 }
                                 else
                                 {
-                                    SAL_INFO("drawinglayer", "EMF+ warning: empty bitmap");
+                                    SAL_INFO("drawinglayer", "EMF+\t warning: empty bitmap");
                                 }
                             }
                             else if (image.type == ImageDataTypeMetafile)

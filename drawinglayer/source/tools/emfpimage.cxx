@@ -16,25 +16,6 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-
-#include <com/sun/star/rendering/PathCapType.hpp>
-#include <com/sun/star/rendering/PathJoinType.hpp>
-#include <com/sun/star/rendering/TexturingMode.hpp>
-#include <com/sun/star/rendering/XCanvas.hpp>
-#include <basegfx/utils/canvastools.hxx>
-#include <basegfx/utils/gradienttools.hxx>
-#include <basegfx/utils/tools.hxx>
-#include <basegfx/numeric/ftools.hxx>
-#include <basegfx/point/b2dpoint.hxx>
-#include <basegfx/vector/b2dsize.hxx>
-#include <basegfx/range/b2drange.hxx>
-#include <basegfx/range/b2drectangle.hxx>
-#include <basegfx/polygon/b2dlinegeometry.hxx>
-#include <basegfx/polygon/b2dpolygon.hxx>
-#include <basegfx/polygon/b2dpolygontools.hxx>
-#include <basegfx/polygon/b2dpolypolygon.hxx>
-#include <basegfx/polygon/b2dpolypolygontools.hxx>
-#include <vcl/canvastools.hxx>
 #include <vcl/graphicfilter.hxx>
 #include "emfpimage.hxx"
 
@@ -46,11 +27,11 @@ namespace emfplushelper
         s.ReadUInt32(header).ReadUInt32(type);
         SAL_INFO("drawinglayer", "EMF+\timage\nEMF+\theader: 0x" << std::hex << header << " type: " << type << std::dec);
 
-        if (1 == type)
+        if (ImageDataTypeBitmap == type)
         {
             // bitmap
-            s.ReadInt32(width).ReadInt32(height).ReadInt32(stride).ReadInt32(pixelFormat).ReadUInt32(bitmapType);
-            SAL_INFO("drawinglayer", "EMF+\tbitmap width: " << width << " height: " << height << " stride: " << stride << " pixelFormat: 0x" << std::hex << pixelFormat << std::dec);
+            s.ReadInt32(width).ReadInt32(height).ReadInt32(stride).ReadUInt32(pixelFormat).ReadUInt32(bitmapType);
+            SAL_INFO("drawinglayer", "EMF+\tbitmap width: " << width << " height: " << height << " stride: " << stride << " pixelFormat: 0x" << std::hex << pixelFormat << " bitmapType: 0x" << bitmapType << std::dec);
 
             if ((bitmapType != 0) || (width == 0))
             {
@@ -60,11 +41,11 @@ namespace emfplushelper
                 SAL_INFO("drawinglayer", "EMF+\tbitmap width: " << graphic.GetBitmap().GetSizePixel().Width() << " height: " << graphic.GetBitmap().GetSizePixel().Height());
             }
         }
-        else if (2 == type)
+        else if (ImageDataTypeMetafile == type)
         {
             // metafile
-            sal_Int32 mfType, mfSize;
-            s.ReadInt32(mfType).ReadInt32(mfSize);
+            sal_uInt32 mfType, mfSize;
+            s.ReadUInt32(mfType).ReadUInt32(mfSize);
 
             if (bUseWholeStream)
                 dataSize = s.remainingSize();
