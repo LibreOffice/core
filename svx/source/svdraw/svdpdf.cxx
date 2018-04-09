@@ -253,35 +253,45 @@ void ImpSdrPdfImport::DoLoopActions(SvdProgressInfo* pProgrInfo, sal_uInt32* pAc
             }
         }
 
-        /*
         // Now do the text.
         FPDF_TEXTPAGE pTextPage = FPDFText_LoadPage(pPdfPage);
         if (pTextPage != nullptr)
         {
+            SAL_WARN("sd.filter", "TEXT TEXT TEXT");
+
             const int nChars = FPDFText_CountChars(pTextPage);
             SAL_WARN("sd.filter", "Got page chars: " << nChars);
 
             const int nRects = FPDFText_CountRects(pTextPage, 0, nChars);
             SAL_WARN("sd.filter", "Got Rects: " << nRects);
 
-            std::unique_ptr<sal_Unicode[]> pText(new sal_Unicode[nChars]);
+            std::unique_ptr<sal_Unicode[]> pText(new sal_Unicode[nChars + 1]); // + terminating null
             for (int nRectIndex = 0; nRectIndex < nRects; ++nRectIndex)
             {
+                SAL_WARN("sd.filter",
+                         "Processing Text Rect #" << nRectIndex + 1 << " of " << nRects);
+
                 double left = 0;
                 double top = 0;
                 double right = 0;
                 double bottom = 0;
                 FPDFText_GetRect(pTextPage, nRectIndex, &left, &top, &right, &bottom);
+                SAL_WARN("sd.filter", "Got Text Rect: " << left << ", " << right << ", " << top
+                                                        << ", " << bottom);
+                Rectangle aRect = PointsToLogic(left, right, top, bottom);
+
                 if (right < left)
                     std::swap(right, left);
                 if (bottom < top)
                     std::swap(bottom, top);
 
-                SAL_WARN("sd.filter", "Got Text Rect: " << left << ", " << top << ", " << right
+                SAL_WARN("sd.filter", "Got Text Rect: " << left << ", " << right << ", " << top
                                                         << ", " << bottom);
-                const int nBoundedChars = FPDFText_GetBoundedText(
-                    pTextPage, left, top, right, bottom,
-                    reinterpret_cast<unsigned short*>(pText.get()), nChars);
+                SAL_WARN("sd.filter", "Logic Text Rect: " << aRect);
+
+                unsigned short* pShortText = reinterpret_cast<unsigned short*>(pText.get());
+                const int nBoundedChars = FPDFText_GetBoundedText(pTextPage, left, top, right,
+                                                                  bottom, pShortText, nChars);
                 OUString sText(pText.get(), nBoundedChars);
                 SAL_WARN("sd.filter", "Got Text #" << nRectIndex + 1 << " (" << nBoundedChars
                                                    << "): [" << sText << "].");
@@ -304,8 +314,34 @@ void ImpSdrPdfImport::DoLoopActions(SvdProgressInfo* pProgrInfo, sal_uInt32* pAc
                 // aFontMetric.SetAscent(nFontAscent);
                 // aFontMetric.SetDescent(nFontDescent);
 
-                const double dFontSize = FPDFText_GetFontSize(pTextPage, nCharIndex) * 140;
+                double dFontScale = 1.0;
+                geometry::Matrix2D aMatrix;
+                if (!FPDFText_GetMatrix(pTextPage, nCharIndex, &aMatrix.m00, &aMatrix.m01,
+                                        &aMatrix.m10, &aMatrix.m11))
+                {
+                    SAL_WARN("sd.filter", "No font scale matrix, will use heuristic height of "
+                                              << aRect.GetHeight() << ".");
+                    dFontScale = aRect.GetHeight();
+                }
+                else if (aMatrix.m00 != aMatrix.m11 || aMatrix.m00 <= 0)
+                {
+                    SAL_WARN("sd.filter", "Bogus font scale matrix ("
+                                              << aMatrix.m00 << ',' << aMatrix.m11
+                                              << "), will use heuristic height of "
+                                              << aRect.GetHeight() << ".");
+                    dFontScale = aRect.GetHeight();
+                }
+                else
+                    dFontScale = aMatrix.m00;
+
+                double dFontSize = FPDFText_GetFontSize(pTextPage, nCharIndex);
                 SAL_WARN("sd.filter", "Got Font Size: " << dFontSize);
+                dFontSize *= dFontScale;
+                SAL_WARN("sd.filter", "Got Font Size Scaled: " << dFontSize);
+                dFontSize = lcl_PointToPixel(dFontSize);
+                SAL_WARN("sd.filter", "Got Font Pixel Size: " << dFontSize);
+                dFontSize = lcl_ToLogic(dFontSize);
+                SAL_WARN("sd.filter", "Got Font Logic Size: " << dFontSize);
                 vcl::Font aFnt = mpVD->GetFont();
                 aFnt.SetFontSize(Size(dFontSize, dFontSize));
                 mpVD->SetFont(aFnt);
@@ -314,6 +350,9 @@ void ImpSdrPdfImport::DoLoopActions(SvdProgressInfo* pProgrInfo, sal_uInt32* pAc
                 double y = 0;
                 FPDFText_GetCharOrigin(pTextPage, nCharIndex, &x, &y);
                 SAL_WARN("sd.filter", "Got Char Origin: " << x << ", " << y);
+                Point aPos = PointsToLogic(x, y);
+                SAL_WARN("sd.filter", "Got Char Origin Logic: " << aPos);
+                // aRect.Move(aPos.X(), aPos.Y());
 
                 // geometry::RealRectangle2D aRect;
                 // aRect.X1 = left;
@@ -359,14 +398,13 @@ void ImpSdrPdfImport::DoLoopActions(SvdProgressInfo* pProgrInfo, sal_uInt32* pAc
                 // double charWidth = offsetMatrix2.get(0, 2);
                 // double prevSpaceWidth = offsetMatrix1.get(0, 2) - prevCharWidth;
 
-                ImportText(Point(x, y), sText);
+                ImportText(aRect.TopLeft(), sText);
             }
 
             FPDFText_ClosePage(pTextPage);
         }
 
         FPDF_ClosePage(pPdfPage);
-*/
     }
 
     // const sal_uLong nCount(rMtf.GetActionSize());
@@ -985,6 +1023,7 @@ void ImpSdrPdfImport::ImportText(const Point& rPos, const OUString& rStr)
 
     Point aPos(FRound(rPos.X() * mfScaleX + maOfs.X()), FRound(rPos.Y() * mfScaleY + maOfs.Y()));
     Size aSize(nTextWidth, nTextHeight);
+    SAL_WARN("sd.filter", "Text Pos: " << aPos << ", Size: " << aSize);
 
     if (eAlg == ALIGN_BASELINE)
         aPos.Y() -= FRound(aFontMetric.GetAscent() * mfScaleY);
@@ -992,6 +1031,7 @@ void ImpSdrPdfImport::ImportText(const Point& rPos, const OUString& rStr)
         aPos.Y() -= nTextHeight;
 
     Rectangle aTextRect(aPos, aSize);
+    SAL_WARN("sd.filter", "Text Rect: " << aTextRect);
     SdrRectObj* pText = new SdrRectObj(OBJ_TEXT, aTextRect);
 
     pText->SetMergedItem(makeSdrTextUpperDistItem(0));
@@ -1134,11 +1174,41 @@ void ImpSdrPdfImport::ImportImage(FPDF_PAGEOBJECT pPageObject)
 
     SAL_WARN("sd.filter", "Got IMAGE bounds left: " << left << ", right: " << right
                                                     << ", top: " << top << ", bottom: " << bottom);
+    Rectangle aRect = PointsToLogic(left, right, top, bottom);
+    aRect.MoveRight(1);
+    aRect.MoveBottom(1);
+    SAL_WARN("sd.filter", "IMAGE Logical Rect FINAL: " << aRect);
+
+    SdrGrafObj* pGraf = new SdrGrafObj(Graphic(aBitmap), aRect);
+
+    // This action is not creating line and fill, set directly, do not use SetAttributes(..)
+    pGraf->SetMergedItem(XLineStyleItem(drawing::LineStyle_NONE));
+    pGraf->SetMergedItem(XFillStyleItem(drawing::FillStyle_NONE));
+    InsertObj(pGraf);
+}
+
+Point ImpSdrPdfImport::PointsToLogic(double x, double y) const
+{
+    y = correctVertOrigin(y);
+    SAL_WARN("sd.filter", "Corrected point x: " << x << ", y: " << y);
+    x = lcl_PointToPixel(x);
+    y = lcl_PointToPixel(y);
+
+    SAL_WARN("sd.filter", "Pixel point x: " << x << ", y: " << y);
+
+    Point aPos(lcl_ToLogic(x), lcl_ToLogic(y));
+    SAL_WARN("sd.filter", "Logical Pos: " << aPos);
+
+    return aPos;
+}
+
+Rectangle ImpSdrPdfImport::PointsToLogic(double left, double right, double top,
+                                                double bottom) const
+{
     top = correctVertOrigin(top);
     bottom = correctVertOrigin(bottom);
-    SAL_WARN("sd.filter", "IMAGE corrected bounds left: " << left << ", right: " << right
-                                                          << ", top: " << top
-                                                          << ", bottom: " << bottom);
+    SAL_WARN("sd.filter", "Corrected bounds left: " << left << ", right: " << right
+                                                    << ", top: " << top << ", bottom: " << bottom);
     left = lcl_PointToPixel(left);
     right = lcl_PointToPixel(right);
     top = lcl_PointToPixel(top);
@@ -1148,51 +1218,15 @@ void ImpSdrPdfImport::ImportImage(FPDF_PAGEOBJECT pPageObject)
     // if (left > right)
     //     std::swap(left, right);
 
-    SAL_WARN("sd.filter", "IMAGE pixel bounds left: " << left << ", right: " << right << ", top: "
-                                                      << top << ", bottom: " << bottom);
+    SAL_WARN("sd.filter", "Pixel bounds left: " << left << ", right: " << right << ", top: " << top
+                                                << ", bottom: " << bottom);
 
     Point aPos(lcl_ToLogic(left), lcl_ToLogic(top));
     Size aSize(lcl_ToLogic(right - left), lcl_ToLogic(bottom - top));
     Rectangle aRect(aPos, aSize);
-    SAL_WARN("sd.filter", "IMAGE Logical BBox: " << aRect);
+    SAL_WARN("sd.filter", "Logical BBox: " << aRect);
 
-    // aRect.SetLeft(aRect.Left() * mfScaleX);
-    // aRect.SetRight(aRect.Right() * mfScaleX);
-    // aRect.SetTop(aRect.Top() * mfScaleY);
-    // aRect.SetBottom(aRect.Bottom() * mfScaleY);
-    // SAL_WARN("sd.filter", "Logical Rect Scaled: " << aRect);
-
-    // aLogRect.Move(maScaleRect.Left(), maScaleRect.Top() - aLogRect.Top());
-    // aRect.Move(maScaleRect.Left(), maScaleRect.Top());
-    // SAL_WARN("sd.filter", "Logical Rect Absolute: " << aRect);
-    aRect.MoveRight(1);
-    aRect.MoveBottom(1);
-    SAL_WARN("sd.filter", "IMAGE Logical Rect FINAL: " << aRect);
-
-    /*
-    Size aGrfSize(OutputDevice::LogicToLogic(Size(nWidth, nHeight), aBitmap.GetPrefMapMode(),
-                                             MapMode(MapUnit::Map100thMM)));
-    SAL_WARN("sd.filter", "Logical Size: " << aGrfSize);
-    // SAL_WARN("sd.filter", "Scaled Logical Size: " << aGrfSize);
-    Point aGrfPos(OutputDevice::LogicToLogic(Point(left, top), aBitmap.GetPrefMapMode(),
-                                             MapMode(MapUnit::Map100thMM)));
-    SAL_WARN("sd.filter", "Logical Pos: " << aGrfPos);
-
-    SAL_WARN("sd.filter", "Page Logical Height: " << maScaleRect.GetHeight());
-    const auto realTop = maScaleRect.GetHeight() - aGrfPos.Y();
-    SAL_WARN("sd.filter", "Real Logical Top Offset: " << realTop);
-    aGrfPos.Move(maScaleRect.Left(), maScaleRect.Top() - aGrfPos.Y());
-    SAL_WARN("sd.filter", "Adjusted Logical Pos: " << aGrfPos);
-
-    Rectangle aRect(aGrfPos, aGrfSize);
-    SAL_WARN("sd.filter", "Got IMAGE Logical BBox: " << aRect);
-*/
-    SdrGrafObj* pGraf = new SdrGrafObj(Graphic(aBitmap), aRect);
-
-    // This action is not creating line and fill, set directly, do not use SetAttributes(..)
-    pGraf->SetMergedItem(XLineStyleItem(drawing::LineStyle_NONE));
-    pGraf->SetMergedItem(XFillStyleItem(drawing::FillStyle_NONE));
-    InsertObj(pGraf);
+    return aRect;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
