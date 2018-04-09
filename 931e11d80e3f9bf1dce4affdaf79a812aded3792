@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_d86a351a",
+        "filename": "instsetoo_native/inc_openoffice/windows/msi_languages/Property.ulf",
+        "patchSetId": 2
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-04-09T05:08:14Z",
+      "side": 1,
+      "message": "This is the same as the OOO_ARPHELPLINKTEMPLATE above; does having two identical links help user?",
+      "range": {
+        "startLine": 26,
+        "startChar": 20,
+        "endLine": 26,
+        "endChar": 44
+      },
+      "revId": "931e11d80e3f9bf1dce4affdaf79a812aded3792",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

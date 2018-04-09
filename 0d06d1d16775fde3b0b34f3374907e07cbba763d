@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_f877f9ff",
+        "filename": "instsetoo_native/inc_openoffice/windows/msi_languages/Property.ulf",
+        "patchSetId": 2
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-04-09T05:08:14Z",
+      "side": 0,
+      "message": "IIUC (from the discussion at AOO mailing list), we have two options: removing this entirely, and having it empty. Have you checked if some MSI tests marks absent as error?",
+      "range": {
+        "startLine": 25,
+        "startChar": 0,
+        "endLine": 26,
+        "endChar": 23
+      },
+      "revId": "0d06d1d16775fde3b0b34f3374907e07cbba763d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
