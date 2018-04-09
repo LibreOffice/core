@@ -27,185 +27,146 @@
 
 using namespace psp;
 
-void RTSDialog::insertAllPPDValues( ListBox& rBox, const PPDParser* pParser, const PPDKey* pKey )
+void RTSDialog::insertAllPPDValues(weld::ComboBoxText& rBox, const PPDParser* pParser, const PPDKey* pKey )
 {
     if( ! pKey || ! pParser )
         return;
 
     const PPDValue* pValue = nullptr;
-    sal_Int32 nPos = 0;
     OUString aOptionText;
 
-    for( int i = 0; i < pKey->countValues(); i++ )
+    for (int i = 0; i < pKey->countValues(); ++i)
     {
         pValue = pKey->getValue( i );
         if (pValue->m_bCustomOption)
             continue;
         aOptionText = pParser->translateOption( pKey->getKey(), pValue->m_aOption) ;
 
+        OUString sId(OUString::number(reinterpret_cast<sal_Int64>(pValue)));
+        int nCurrentPos = rBox.find_id(sId);
         if( m_aJobData.m_aContext.checkConstraints( pKey, pValue ) )
         {
-            if( rBox.GetEntryPos( static_cast<void const *>(pValue) ) == LISTBOX_ENTRY_NOTFOUND )
-            {
-                nPos = rBox.InsertEntry( aOptionText );
-                    rBox.SetEntryData( nPos, const_cast<PPDValue *>(pValue) );
-            }
+            if (nCurrentPos == -1)
+                rBox.insert(-1, sId, aOptionText);
         }
         else
         {
-            if( ( nPos = rBox.GetEntryPos( static_cast<void const *>(pValue) ) ) != LISTBOX_ENTRY_NOTFOUND )
-                rBox.RemoveEntry( nPos );
+            if (nCurrentPos != -1)
+                rBox.remove(nCurrentPos);
         }
     }
     pValue = m_aJobData.m_aContext.getValue( pKey );
     if (pValue && !pValue->m_bCustomOption)
     {
-        if( ( nPos = rBox.GetEntryPos( static_cast<void const *>(pValue) ) ) != LISTBOX_ENTRY_NOTFOUND )
-            rBox.SelectEntryPos( nPos );
+        OUString sId(OUString::number(reinterpret_cast<sal_IntPtr>(pValue)));
+        int nPos = rBox.find_id(sId);
+        if (nPos != -1)
+            rBox.set_active(nPos);
     }
     else
-        rBox.SelectEntry( m_aInvalidString );
+        rBox.set_active(m_aInvalidString);
 }
 
 /*
  * RTSDialog
  */
 
-RTSDialog::RTSDialog(const PrinterInfo& rJobData, vcl::Window* pParent)
-    : TabDialog(pParent, "PrinterPropertiesDialog", "vcl/ui/printerpropertiesdialog.ui")
+RTSDialog::RTSDialog(const PrinterInfo& rJobData, weld::Window* pParent)
+    : GenericDialogController(pParent, "vcl/ui/printerpropertiesdialog.ui", "PrinterPropertiesDialog")
     , m_aJobData(rJobData)
-    , m_pPaperPage(nullptr)
-    , m_pDevicePage(nullptr)
     , m_aInvalidString(VclResId(SV_PRINT_INVALID_TXT))
-    , mbDataModified(false)
+    , m_bDataModified(false)
+    , m_xTabControl(m_xBuilder->weld_notebook("notebook"))
+    , m_xOKButton(m_xBuilder->weld_button("ok"))
+    , m_xCancelButton(m_xBuilder->weld_button("cancel"))
+    , m_xPaperPage(new RTSPaperPage(m_xTabControl->get_page("paper"), this))
+    , m_xDevicePage(new RTSDevicePage(m_xTabControl->get_page("device"), this))
 {
-    get(m_pOKButton, "ok");
-    get(m_pCancelButton, "cancel");
-    get(m_pTabControl, "notebook");
+    OUString aTitle(m_xDialog->get_title());
+    m_xDialog->set_title(aTitle.replaceAll("%s", m_aJobData.m_aPrinterName));
 
-    m_pPaperPage = VclPtr<RTSPaperPage>::Create( this );
-    m_pDevicePage = VclPtr<RTSDevicePage>::Create( this );
-    m_pTabControl->SetTabPage(m_pTabControl->GetPageId("paper"), m_pPaperPage);
-    m_pTabControl->SetTabPage(m_pTabControl->GetPageId("device"), m_pDevicePage);
-
-    OUString aTitle(GetText());
-    SetText(aTitle.replaceAll("%s", m_aJobData.m_aPrinterName));
-
-    m_pTabControl->SetActivatePageHdl( LINK( this, RTSDialog, ActivatePage ) );
-    m_pOKButton->SetClickHdl( LINK( this, RTSDialog, ClickButton ) );
-    m_pCancelButton->SetClickHdl( LINK( this, RTSDialog, ClickButton ) );
-    ActivatePage(m_pTabControl);
+    m_xTabControl->connect_enter_page( LINK( this, RTSDialog, ActivatePage ) );
+    m_xOKButton->connect_clicked( LINK( this, RTSDialog, ClickButton ) );
+    m_xCancelButton->connect_clicked( LINK( this, RTSDialog, ClickButton ) );
+    ActivatePage(m_xTabControl->get_current_page_ident());
 }
 
 RTSDialog::~RTSDialog()
 {
-    disposeOnce();
 }
 
-void RTSDialog::dispose()
+IMPL_LINK(RTSDialog, ActivatePage, const OString&, rPage, void)
 {
-    m_pTabControl.clear();
-    m_pOKButton.clear();
-    m_pCancelButton.clear();
-    m_pPaperPage.disposeAndClear();
-    m_pDevicePage.disposeAndClear();
-    TabDialog::dispose();
+    if (rPage == "paper")
+        m_xPaperPage->update();
 }
 
-IMPL_LINK_NOARG(RTSDialog, ActivatePage, TabControl*, void)
+IMPL_LINK( RTSDialog, ClickButton, weld::Button&, rButton, void )
 {
-    sal_uInt16 nId = m_pTabControl->GetCurPageId();
-    OString sPage = m_pTabControl->GetPageName(nId);
-    if (sPage == "paper")
-        m_pPaperPage->update();
-}
-
-IMPL_LINK( RTSDialog, ClickButton, Button*, pButton, void )
-{
-    if( pButton == m_pOKButton )
+    if (&rButton == m_xOKButton.get())
     {
         // refresh the changed values
-        if( m_pPaperPage )
+        if (m_xPaperPage)
         {
             // orientation
-            m_aJobData.m_eOrientation = m_pPaperPage->getOrientation() == 0 ?
+            m_aJobData.m_eOrientation = m_xPaperPage->getOrientation() == 0 ?
                 orientation::Portrait : orientation::Landscape;
             // assume use of paper size from printer setup if the user
             // got here via File > Printer Settings ...
             if ( m_aJobData.meSetupMode == PrinterSetupMode::DocumentGlobal )
                m_aJobData.m_bPapersizeFromSetup = true;
         }
-        if( m_pDevicePage )
+        if( m_xDevicePage )
         {
-            m_aJobData.m_nColorDepth    = m_pDevicePage->getDepth();
-            m_aJobData.m_nColorDevice   = m_pDevicePage->getColorDevice();
-            m_aJobData.m_nPSLevel       = m_pDevicePage->getLevel();
-            m_aJobData.m_nPDFDevice     = m_pDevicePage->getPDFDevice();
+            m_aJobData.m_nColorDepth    = m_xDevicePage->getDepth();
+            m_aJobData.m_nColorDevice   = m_xDevicePage->getColorDevice();
+            m_aJobData.m_nPSLevel       = m_xDevicePage->getLevel();
+            m_aJobData.m_nPDFDevice     = m_xDevicePage->getPDFDevice();
         }
-        EndDialog( 1 );
+        m_xDialog->response(RET_OK);
     }
-    else if( pButton == m_pCancelButton )
-        EndDialog();
+    else if (&rButton == m_xCancelButton.get())
+        m_xDialog->response(RET_CANCEL);
 }
 
 /*
  * RTSPaperPage
  */
 
-RTSPaperPage::RTSPaperPage(RTSDialog* pParent)
-    : TabPage(pParent->m_pTabControl, "PrinterPaperPage", "vcl/ui/printerpaperpage.ui")
-    , m_pParent( pParent )
+RTSPaperPage::RTSPaperPage(weld::Widget* pPage, RTSDialog* pDialog)
+    : m_xBuilder(Application::CreateBuilder(pPage, "vcl/ui/printerpaperpage.ui"))
+    , m_pParent(pDialog)
+    , m_xContainer(m_xBuilder->weld_widget("PrinterPaperPage"))
+    , m_xCbFromSetup(m_xBuilder->weld_check_button("papersizefromsetup"))
+    , m_xPaperText(m_xBuilder->weld_label("paperft"))
+    , m_xPaperBox(m_xBuilder->weld_combo_box_text("paperlb"))
+    , m_xOrientText(m_xBuilder->weld_label("orientft"))
+    , m_xOrientBox(m_xBuilder->weld_combo_box_text("orientlb"))
+    , m_xDuplexText(m_xBuilder->weld_label("duplexft"))
+    , m_xDuplexBox(m_xBuilder->weld_combo_box_text("duplexlb"))
+    , m_xSlotText(m_xBuilder->weld_label("slotft"))
+    , m_xSlotBox(m_xBuilder->weld_combo_box_text("slotlb"))
 {
-    get(m_pCbFromSetup, "papersizefromsetup");
-    get(m_pPaperText, "paperft");
-    get(m_pPaperBox, "paperlb");
-    get(m_pOrientText, "orientft");
-    get(m_pOrientBox, "orientlb");
-    get(m_pDuplexText, "duplexft");
-    get(m_pDuplexBox, "duplexlb");
-    get(m_pSlotText, "slotft");
-    get(m_pSlotBox, "slotlb");
-
-    m_pPaperBox->SetSelectHdl( LINK( this, RTSPaperPage, SelectHdl ) );
-    m_pOrientBox->SetSelectHdl( LINK( this, RTSPaperPage, SelectHdl ) );
-    m_pDuplexBox->SetSelectHdl( LINK( this, RTSPaperPage, SelectHdl ) );
-    m_pSlotBox->SetSelectHdl( LINK( this, RTSPaperPage, SelectHdl ) );
-    m_pCbFromSetup->SetToggleHdl( LINK( this, RTSPaperPage, CheckBoxHdl ) );
-
-
-    sal_Int32 nPos = 0;
+    //PrinterPaperPage
+    m_xPaperBox->connect_changed( LINK( this, RTSPaperPage, SelectHdl ) );
+    m_xOrientBox->connect_changed( LINK( this, RTSPaperPage, SelectHdl ) );
+    m_xDuplexBox->connect_changed( LINK( this, RTSPaperPage, SelectHdl ) );
+    m_xSlotBox->connect_changed( LINK( this, RTSPaperPage, SelectHdl ) );
+    m_xCbFromSetup->connect_toggled( LINK( this, RTSPaperPage, CheckBoxHdl ) );
 
     // duplex
-    nPos = m_pDuplexBox->InsertEntry( m_pParent->m_aInvalidString );
-    m_pDuplexBox->SetEntryData( nPos, nullptr );
+    m_xDuplexBox->append_text(m_pParent->m_aInvalidString);
 
     // paper does not have an invalid entry
 
     // input slots
-    nPos = m_pSlotBox->InsertEntry( m_pParent->m_aInvalidString );
-    m_pSlotBox->SetEntryData( nPos, nullptr );
+    m_xSlotBox->append_text(m_pParent->m_aInvalidString);
 
     update();
 }
 
 RTSPaperPage::~RTSPaperPage()
 {
-    disposeOnce();
-}
-
-void RTSPaperPage::dispose()
-{
-    m_pParent.clear();
-    m_pCbFromSetup.clear();
-    m_pPaperText.clear();
-    m_pPaperBox.clear();
-    m_pOrientText.clear();
-    m_pOrientBox.clear();
-    m_pDuplexText.clear();
-    m_pDuplexBox.clear();
-    m_pSlotText.clear();
-    m_pSlotBox.clear();
-    TabPage::dispose();
 }
 
 void RTSPaperPage::update()
@@ -213,88 +174,87 @@ void RTSPaperPage::update()
     const PPDKey* pKey      = nullptr;
 
     // orientation
-    m_pOrientBox->SelectEntryPos(
-        m_pParent->m_aJobData.m_eOrientation == orientation::Portrait ? 0 : 1);
+    m_xOrientBox->set_active(m_pParent->m_aJobData.m_eOrientation == orientation::Portrait ? 0 : 1);
 
     // duplex
     if( m_pParent->m_aJobData.m_pParser &&
         (pKey = m_pParent->m_aJobData.m_pParser->getKey( OUString( "Duplex" ) )) )
     {
-        m_pParent->insertAllPPDValues( *m_pDuplexBox, m_pParent->m_aJobData.m_pParser, pKey );
+        m_pParent->insertAllPPDValues( *m_xDuplexBox, m_pParent->m_aJobData.m_pParser, pKey );
     }
     else
     {
-        m_pDuplexText->Enable( false );
-        m_pDuplexBox->Enable( false );
+        m_xDuplexText->set_sensitive( false );
+        m_xDuplexBox->set_sensitive( false );
     }
 
     // paper
     if( m_pParent->m_aJobData.m_pParser &&
         (pKey = m_pParent->m_aJobData.m_pParser->getKey( OUString( "PageSize" ) )) )
     {
-        m_pParent->insertAllPPDValues( *m_pPaperBox, m_pParent->m_aJobData.m_pParser, pKey );
+        m_pParent->insertAllPPDValues( *m_xPaperBox, m_pParent->m_aJobData.m_pParser, pKey );
     }
     else
     {
-        m_pPaperText->Enable( false );
-        m_pPaperBox->Enable( false );
+        m_xPaperText->set_sensitive( false );
+        m_xPaperBox->set_sensitive( false );
     }
 
     // input slots
     if( m_pParent->m_aJobData.m_pParser &&
         (pKey = m_pParent->m_aJobData.m_pParser->getKey( OUString("InputSlot") )) )
     {
-        m_pParent->insertAllPPDValues( *m_pSlotBox, m_pParent->m_aJobData.m_pParser, pKey );
+        m_pParent->insertAllPPDValues( *m_xSlotBox, m_pParent->m_aJobData.m_pParser, pKey );
     }
     else
     {
-        m_pSlotText->Enable( false );
-        m_pSlotBox->Enable( false );
+        m_xSlotText->set_sensitive( false );
+        m_xSlotBox->set_sensitive( false );
     }
 
     if ( m_pParent->m_aJobData.meSetupMode == PrinterSetupMode::SingleJob )
     {
-        m_pCbFromSetup->Show();
+        m_xCbFromSetup->show();
 
         if ( m_pParent->m_aJobData.m_bPapersizeFromSetup )
-            m_pCbFromSetup->Check( m_pParent->m_aJobData.m_bPapersizeFromSetup );
+            m_xCbFromSetup->set_active(m_pParent->m_aJobData.m_bPapersizeFromSetup);
         // disable those, unless user wants to use papersize from printer prefs
         // as they have no influence on what's going to be printed anyway
         else
         {
-            m_pPaperText->Enable( false );
-            m_pPaperBox->Enable( false );
-            m_pOrientText->Enable( false );
-            m_pOrientBox->Enable( false );
+            m_xPaperText->set_sensitive( false );
+            m_xPaperBox->set_sensitive( false );
+            m_xOrientText->set_sensitive( false );
+            m_xOrientBox->set_sensitive( false );
         }
     }
 }
 
-IMPL_LINK( RTSPaperPage, SelectHdl, ListBox&, rBox, void )
+IMPL_LINK( RTSPaperPage, SelectHdl, weld::ComboBoxText&, rBox, void )
 {
     const PPDKey* pKey = nullptr;
-    if( &rBox == m_pPaperBox )
+    if( &rBox == m_xPaperBox.get() )
     {
         if( m_pParent->m_aJobData.m_pParser )
             pKey = m_pParent->m_aJobData.m_pParser->getKey( OUString( "PageSize" ) );
     }
-    else if( &rBox == m_pDuplexBox )
+    else if( &rBox == m_xDuplexBox.get() )
     {
         if( m_pParent->m_aJobData.m_pParser )
             pKey = m_pParent->m_aJobData.m_pParser->getKey( OUString( "Duplex" ) );
     }
-    else if( &rBox == m_pSlotBox )
+    else if( &rBox == m_xSlotBox.get() )
     {
         if( m_pParent->m_aJobData.m_pParser )
             pKey = m_pParent->m_aJobData.m_pParser->getKey( OUString( "InputSlot" ) );
     }
-    else if( &rBox == m_pOrientBox )
+    else if( &rBox == m_xOrientBox.get() )
     {
-        m_pParent->m_aJobData.m_eOrientation = m_pOrientBox->GetSelectedEntryPos() == 0 ? orientation::Portrait : orientation::Landscape;
+        m_pParent->m_aJobData.m_eOrientation = m_xOrientBox->get_active() == 0 ? orientation::Portrait : orientation::Landscape;
     }
     if( pKey )
     {
-        PPDValue* pValue = static_cast<PPDValue*>(rBox.GetSelectedEntryData());
+        PPDValue* pValue = reinterpret_cast<PPDValue*>(rBox.get_active_id().toInt64());
         m_pParent->m_aJobData.m_aContext.setValue( pKey, pValue );
         update();
     }
@@ -302,49 +262,54 @@ IMPL_LINK( RTSPaperPage, SelectHdl, ListBox&, rBox, void )
     m_pParent->SetDataModified( true );
 }
 
-IMPL_LINK( RTSPaperPage, CheckBoxHdl, CheckBox&, /*cBox*/, void )
+IMPL_LINK( RTSPaperPage, CheckBoxHdl, weld::ToggleButton&, /*cBox*/, void )
 {
-    bool bFromSetup = m_pCbFromSetup->IsChecked();
+    bool bFromSetup = m_xCbFromSetup->get_active();
     m_pParent->m_aJobData.m_bPapersizeFromSetup = bFromSetup;
-    m_pPaperText->Enable( bFromSetup );
-    m_pPaperBox->Enable( bFromSetup );
-    m_pOrientText->Enable( bFromSetup );
-    m_pOrientBox->Enable( bFromSetup );
-    m_pParent->SetDataModified( true );
+    m_xPaperText->set_sensitive(bFromSetup);
+    m_xPaperBox->set_sensitive(bFromSetup);
+    m_xOrientText->set_sensitive(bFromSetup);
+    m_xOrientBox->set_sensitive(bFromSetup);
+    m_pParent->SetDataModified(true);
 }
 /*
  * RTSDevicePage
  */
 
-RTSDevicePage::RTSDevicePage( RTSDialog* pParent )
-    : TabPage(pParent->m_pTabControl, "PrinterDevicePage", "vcl/ui/printerdevicepage.ui")
-    , m_pParent(pParent)
+RTSDevicePage::RTSDevicePage(weld::Widget* pPage, RTSDialog* pParent)
+    : m_xBuilder(Application::CreateBuilder(pPage, "vcl/ui/printerdevicepage.ui"))
     , m_pCustomValue(nullptr)
+    , m_pParent(pParent)
+    , m_xContainer(m_xBuilder->weld_widget("PrinterDevicePage"))
+    , m_xPPDKeyBox(m_xBuilder->weld_tree_view("options"))
+    , m_xPPDValueBox(m_xBuilder->weld_tree_view("values"))
+    , m_xCustomEdit(m_xBuilder->weld_entry("custom"))
+    , m_xLevelBox(m_xBuilder->weld_combo_box_text("level"))
+    , m_xSpaceBox(m_xBuilder->weld_combo_box_text("colorspace"))
+    , m_xDepthBox(m_xBuilder->weld_combo_box_text("colordepth"))
 {
-    get(m_pPPDKeyBox, "options");
-    get(m_pPPDValueBox, "values");
+    m_xPPDKeyBox->set_size_request(m_xPPDKeyBox->get_approximate_digit_width() * 32,
+                                   m_xPPDKeyBox->get_height_rows(12));
 
-    m_pPPDKeyBox->SetDropDownLineCount(12);
-    m_pPPDValueBox->SetDropDownLineCount(12);
+    m_xCustomEdit->connect_changed(LINK(this, RTSDevicePage, ModifyHdl));
 
-    get(m_pCustomEdit, "custom");
-    m_pCustomEdit->SetModifyHdl(LINK(this, RTSDevicePage, ModifyHdl));
-
-    get(m_pLevelBox, "level");
-    get(m_pSpaceBox, "colorspace");
-    get(m_pDepthBox, "colordepth");
-
-    m_pPPDKeyBox->SetSelectHdl( LINK( this, RTSDevicePage, SelectHdl ) );
-    m_pPPDValueBox->SetSelectHdl( LINK( this, RTSDevicePage, SelectHdl ) );
+    m_xPPDKeyBox->connect_changed( LINK( this, RTSDevicePage, SelectHdl ) );
+    m_xPPDValueBox->connect_changed( LINK( this, RTSDevicePage, SelectHdl ) );
 
     switch( m_pParent->m_aJobData.m_nColorDevice )
     {
-        case  0: m_pSpaceBox->SelectEntryPos(0);break;
-        case  1: m_pSpaceBox->SelectEntryPos(1);break;
-        case -1: m_pSpaceBox->SelectEntryPos(2);break;
+        case 0:
+            m_xSpaceBox->set_active(0);
+            break;
+        case 1:
+            m_xSpaceBox->set_active(1);
+            break;
+        case -1:
+            m_xSpaceBox->set_active(2);
+            break;
     }
 
-    sal_uLong nLevelEntryData = 0; //automatic
+    sal_Int32 nLevelEntryData = 0; //automatic
     if( m_pParent->m_aJobData.m_nPDFDevice == 2 ) //explicit PDF
         nLevelEntryData = 10;
     else if (m_pParent->m_aJobData.m_nPSLevel > 0) //explicit PS Level
@@ -360,24 +325,23 @@ RTSDevicePage::RTSDevicePage( RTSDialog* pParent )
             || "Generic Printer" == m_pParent->m_aJobData.m_aPrinterName
             || int(bAutoIsPDF) == m_pParent->m_aJobData.m_nPDFDevice);
 
-    OUString sStr = m_pLevelBox->GetEntry(0);
-    m_pLevelBox->InsertEntry(sStr.replaceAll("%s", bAutoIsPDF ? m_pLevelBox->GetEntry(5) : m_pLevelBox->GetEntry(1)), 0);
-    m_pLevelBox->SetEntryData(0, m_pLevelBox->GetEntryData(1));
-    m_pLevelBox->RemoveEntry(1);
+    OUString sStr = m_xLevelBox->get_text(0);
+    m_xLevelBox->insert(0, m_xLevelBox->get_id(0), sStr.replaceAll("%s", bAutoIsPDF ? m_xLevelBox->get_text(5) : m_xLevelBox->get_text(1)));
+    m_xLevelBox->remove(1);
 
-    for( sal_Int32 i = 0; i < m_pLevelBox->GetEntryCount(); i++ )
+    for (int i = 0; i < m_xLevelBox->get_count(); ++i)
     {
-        if( reinterpret_cast<sal_uLong>(m_pLevelBox->GetEntryData( i )) == nLevelEntryData )
+        if (m_xLevelBox->get_id(i).toInt32() == nLevelEntryData)
         {
-            m_pLevelBox->SelectEntryPos( i );
+            m_xLevelBox->set_active(i);
             break;
         }
     }
 
     if (m_pParent->m_aJobData.m_nColorDepth == 8)
-        m_pDepthBox->SelectEntryPos(0);
+        m_xDepthBox->set_active(0);
     else if (m_pParent->m_aJobData.m_nColorDepth == 24)
-        m_pDepthBox->SelectEntryPos(1);
+        m_xDepthBox->set_active(1);
 
     // fill ppd boxes
     if( m_pParent->m_aJobData.m_pParser )
@@ -400,8 +364,7 @@ RTSDevicePage::RTSDevicePage( RTSDialog* pParent )
                 pKey->getGroup() != "InstallableOptions")
             {
                 OUString aEntry( m_pParent->m_aJobData.m_pParser->translateKey( pKey->getKey() ) );
-                sal_uInt16 nPos = m_pPPDKeyBox->InsertEntry( aEntry );
-                m_pPPDKeyBox->SetEntryData( nPos, const_cast<PPDKey *>(pKey) );
+                m_xPPDKeyBox->append(OUString::number(reinterpret_cast<sal_Int64>(pKey)), aEntry, "");
             }
         }
     }
@@ -409,24 +372,11 @@ RTSDevicePage::RTSDevicePage( RTSDialog* pParent )
 
 RTSDevicePage::~RTSDevicePage()
 {
-    disposeOnce();
-}
-
-void RTSDevicePage::dispose()
-{
-    m_pParent.clear();
-    m_pPPDKeyBox.clear();
-    m_pPPDValueBox.clear();
-    m_pCustomEdit.clear();
-    m_pLevelBox.clear();
-    m_pSpaceBox.clear();
-    m_pDepthBox.clear();
-    TabPage::dispose();
 }
 
 sal_uLong RTSDevicePage::getDepth()
 {
-    sal_uInt16 nSelectPos = m_pDepthBox->GetSelectedEntryPos();
+    sal_uInt16 nSelectPos = m_xDepthBox->get_active();
     if (nSelectPos == 0)
         return 8;
     else
@@ -435,7 +385,7 @@ sal_uLong RTSDevicePage::getDepth()
 
 sal_uLong RTSDevicePage::getColorDevice()
 {
-    sal_uInt16 nSelectPos = m_pSpaceBox->GetSelectedEntryPos();
+    sal_uInt16 nSelectPos = m_xSpaceBox->get_active();
     switch (nSelectPos)
     {
         case 0:
@@ -450,7 +400,7 @@ sal_uLong RTSDevicePage::getColorDevice()
 
 sal_uLong RTSDevicePage::getLevel()
 {
-    sal_uLong nLevel = reinterpret_cast<sal_uLong>(m_pLevelBox->GetSelectedEntryData());
+    auto nLevel = m_xLevelBox->get_active_id().toInt32();
     if (nLevel == 0)
         return 0;   //automatic
     return nLevel < 10 ? nLevel-1 : 0;
@@ -458,7 +408,7 @@ sal_uLong RTSDevicePage::getLevel()
 
 sal_uLong RTSDevicePage::getPDFDevice()
 {
-    sal_uLong nLevel = reinterpret_cast<sal_uLong>(m_pLevelBox->GetSelectedEntryData());
+    auto nLevel = m_xLevelBox->get_active_id().toInt32();
     if (nLevel > 9)
         return 2;   //explicitly PDF
     else if (nLevel == 0)
@@ -466,25 +416,25 @@ sal_uLong RTSDevicePage::getPDFDevice()
     return -1;      //explicitly PS
 }
 
-IMPL_LINK(RTSDevicePage, ModifyHdl, Edit&, rEdit, void)
+IMPL_LINK(RTSDevicePage, ModifyHdl, weld::Entry&, rEdit, void)
 {
     if (m_pCustomValue)
     {
-        m_pCustomValue->m_aCustomOption = rEdit.GetText();
+        m_pCustomValue->m_aCustomOption = rEdit.get_text();
     }
 }
 
-IMPL_LINK( RTSDevicePage, SelectHdl, ListBox&, rBox, void )
+IMPL_LINK( RTSDevicePage, SelectHdl, weld::TreeView&, rBox, void )
 {
-    if( &rBox == m_pPPDKeyBox )
+    if (&rBox == m_xPPDKeyBox.get())
     {
-        const PPDKey* pKey = static_cast<PPDKey*>(m_pPPDKeyBox->GetSelectedEntryData());
+        const PPDKey* pKey = reinterpret_cast<PPDKey*>(m_xPPDKeyBox->get_selected_id().toInt64());
         FillValueBox( pKey );
     }
-    else if( &rBox == m_pPPDValueBox )
+    else if (&rBox == m_xPPDValueBox.get())
     {
-        const PPDKey* pKey = static_cast<PPDKey*>(m_pPPDKeyBox->GetSelectedEntryData());
-        const PPDValue* pValue = static_cast<PPDValue*>(m_pPPDValueBox->GetSelectedEntryData());
+        const PPDKey* pKey = reinterpret_cast<PPDKey*>(m_xPPDKeyBox->get_selected_id().toInt64());
+        const PPDValue* pValue = reinterpret_cast<PPDValue*>(m_xPPDValueBox->get_selected_id().toInt64());
         if (pKey && pValue)
         {
             m_pParent->m_aJobData.m_aContext.setValue( pKey, pValue );
@@ -496,8 +446,8 @@ IMPL_LINK( RTSDevicePage, SelectHdl, ListBox&, rBox, void )
 
 void RTSDevicePage::FillValueBox( const PPDKey* pKey )
 {
-    m_pPPDValueBox->Clear();
-    m_pCustomEdit->Hide();
+    m_xPPDValueBox->clear();
+    m_xCustomEdit->hide();
 
     if( ! pKey )
         return;
@@ -514,32 +464,31 @@ void RTSDevicePage::FillValueBox( const PPDKey* pKey )
                 aEntry = VclResId(SV_PRINT_CUSTOM_TXT);
             else
                 aEntry = m_pParent->m_aJobData.m_pParser->translateOption( pKey->getKey(), pValue->m_aOption);
-            sal_uInt16 nPos = m_pPPDValueBox->InsertEntry( aEntry );
-            m_pPPDValueBox->SetEntryData( nPos, const_cast<PPDValue *>(pValue) );
+            m_xPPDValueBox->append(OUString::number(reinterpret_cast<sal_Int64>(pValue)), aEntry, "");
         }
     }
     pValue = m_pParent->m_aJobData.m_aContext.getValue( pKey );
-    m_pPPDValueBox->SelectEntryPos( m_pPPDValueBox->GetEntryPos( static_cast<void const *>(pValue) ) );
+    m_xPPDValueBox->select_id(OUString::number(reinterpret_cast<sal_Int64>(pValue)));
     if (pValue->m_bCustomOption)
     {
         m_pCustomValue = pValue;
         m_pParent->m_aJobData.m_aContext.setValue(pKey, pValue);
-        m_pCustomEdit->SetText(m_pCustomValue->m_aCustomOption);
-        m_pCustomEdit->Show();
+        m_xCustomEdit->set_text(m_pCustomValue->m_aCustomOption);
+        m_xCustomEdit->show();
     }
 }
 
-int SetupPrinterDriver(::psp::PrinterInfo& rJobData)
+int SetupPrinterDriver(weld::Window* pParent, ::psp::PrinterInfo& rJobData)
 {
     int nRet = 0;
-    ScopedVclPtrInstance< RTSDialog > aDialog(  rJobData, nullptr  );
+    RTSDialog aDialog(rJobData, pParent);
 
     // return 0 if cancel was pressed or if the data
     // weren't modified, 1 otherwise
-    if( aDialog->Execute() )
+    if (aDialog.run() != RET_CANCEL)
     {
-        rJobData = aDialog->getSetup();
-        nRet = aDialog->GetDataModified() ? 1 : 0;
+        rJobData = aDialog.getSetup();
+        nRet = aDialog.GetDataModified() ? 1 : 0;
     }
 
     return nRet;

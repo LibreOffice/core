@@ -56,6 +56,7 @@
 #include <jobset.h>
 #include <print.h>
 #include "prtsetup.hxx"
+#include <salframe.hxx>
 #include <salptype.hxx>
 
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -550,7 +551,7 @@ bool PspSalInfoPrinter::Setup( SalFrame* pFrame, ImplJobSetup* pJobSetup )
     aInfo.m_bPapersizeFromSetup = pJobSetup->GetPapersizeFromSetup();
     aInfo.meSetupMode = pJobSetup->GetPrinterSetupMode();
 
-    if (SetupPrinterDriver(aInfo))
+    if (SetupPrinterDriver(pFrame->GetFrameWeld(), aInfo))
     {
         aInfo.resolveDefaultBackend();
         rtl_freeMemory( const_cast<sal_uInt8*>(pJobSetup->GetDriverData()) );

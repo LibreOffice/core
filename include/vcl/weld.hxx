@@ -214,6 +214,8 @@ public:
     void append_text(const OUString& rStr) { insert_text(-1, rStr); }
     virtual void insert(int pos, const OUString& rId, const OUString& rStr) = 0;
     void append(const OUString& rId, const OUString& rStr) { insert(-1, rId, rStr); }
+    using Container::remove;
+    virtual void remove(int pos) = 0;
     virtual int find_text(const OUString& rStr) const = 0;
     virtual int find_id(const OUString& rId) const = 0;
     virtual int get_count() const = 0;
@@ -265,6 +267,7 @@ public:
     using Container::remove;
     virtual void remove(int pos) = 0;
     virtual int find(const OUString& rText) const = 0;
+    virtual int find_id(const OUString& rId) const = 0;
     virtual void set_top_entry(int pos) = 0;
     virtual void clear() = 0;
     virtual OUString get_selected() const = 0;
@@ -286,6 +289,7 @@ public:
     void connect_row_activated(const Link<TreeView&, void>& rLink) { m_aRowActivatedHdl = rLink; }
 
     void select(const OUString& rText) { select(find(rText)); }
+    void select_id(const OUString& rId) { select(find_id(rId)); }
 
     void remove(const OUString& rText) { remove(find(rText)); }
 };

@@ -2198,7 +2198,7 @@ private:
 
     void signal_switch_page(guint nNewPage)
     {
-        bool bAllow = m_aLeavePageHdl.Call(get_current_page_ident());
+        bool bAllow = !m_aLeavePageHdl.IsSet() || m_aLeavePageHdl.Call(get_current_page_ident());
         if (!bAllow)
         {
             g_signal_stop_emission_by_name(m_pNotebook, "switch-page");
@@ -2564,10 +2564,12 @@ namespace
     struct Search
     {
         OString str;
-        int index = -1;
-        Search(const OUString& rText)
+        int index;
+        int col;
+        Search(const OUString& rText, int nCol)
             : str(OUStringToOString(rText, RTL_TEXTENCODING_UTF8))
             , index(-1)
+            , col(nCol)
         {
         }
     };
@@ -2576,7 +2578,7 @@ namespace
     {
         Search* search = static_cast<Search*>(data);
         gchar *pStr = nullptr;
-        gtk_tree_model_get(model, iter, 0, &pStr, -1);
+        gtk_tree_model_get(model, iter, search->col, &pStr, -1);
         bool found = strcmp(pStr, search->str.getStr()) == 0;
         if (found)
             search->index = gtk_tree_path_get_indices(path)[0];
@@ -2680,7 +2682,14 @@ public:
 
     virtual int find(const OUString& rText) const override
     {
-        Search aSearch(rText);
+        Search aSearch(rText, 0);
+        gtk_tree_model_foreach(GTK_TREE_MODEL(m_pListStore), foreach_find, &aSearch);
+        return aSearch.index;
+    }
+
+    virtual int find_id(const OUString& rId) const override
+    {
+        Search aSearch(rId, 1);
         gtk_tree_model_foreach(GTK_TREE_MODEL(m_pListStore), foreach_find, &aSearch);
         return aSearch.index;
     }
@@ -3441,7 +3450,7 @@ private:
         {
             gchar* pStr;
             gtk_tree_model_get(pModel, &iter, col, &pStr, -1);
-            const bool bEqual = strcmp(pStr, aStr.getStr()) == 0;
+            const bool bEqual = g_strcmp0(pStr, aStr.getStr()) == 0;
             g_free(pStr);
             if (bEqual)
                 return nRet;
@@ -3539,6 +3548,15 @@ public:
     {
         disable_notify_events();
         gtk_combo_box_text_insert_text(m_pComboBoxText, pos, OUStringToOString(rStr, RTL_TEXTENCODING_UTF8).getStr());
+        enable_notify_events();
+    }
+
+    using GtkInstanceContainer::remove;
+
+    virtual void remove(int pos) override
+    {
+        disable_notify_events();
+        gtk_combo_box_text_remove(m_pComboBoxText, pos);
         enable_notify_events();
     }
 
