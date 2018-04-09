@@ -118,11 +118,11 @@ public:
 
     DECL_LINK( NotifyHdl, EENotify&, void );
 protected:
-    ScEditObjectViewForwarder* mpViewForwarder;
-    ScEditViewForwarder*       mpEditViewForwarder;
+    std::unique_ptr<ScEditObjectViewForwarder> mpViewForwarder;
+    std::unique_ptr<ScEditViewForwarder>       mpEditViewForwarder;
     EditView*                  mpEditView;
     EditEngine*                mpEditEngine;
-    SvxEditEngineForwarder*    mpForwarder;
+    std::unique_ptr<SvxEditEngineForwarder>    mpForwarder;
     VclPtr<vcl::Window>        mpWindow;
     bool                       mbIsCloned;
 };
