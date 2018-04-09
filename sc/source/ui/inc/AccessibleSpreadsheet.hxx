@@ -214,7 +214,7 @@ private:
     virtual tools::Rectangle GetBoundingBox() const override;
 
     ScTabViewShell* mpViewShell;
-    ScRangeList*    mpMarkedRanges;
+    std::unique_ptr<ScRangeList>  mpMarkedRanges;
     ScAccessibleDocument* mpAccDoc;
     rtl::Reference<ScAccessibleCell> mpAccCell;
     tools::Rectangle       maVisCells;
