@@ -73,73 +73,66 @@ handleLockedDocumentRequest_(
     if ( !xApprove.is() || !xDisapprove.is() || !xAbort.is() )
         return;
 
-    try
+    SolarMutexGuard aGuard;
+    std::locale aResLocale = Translate::Create("uui");
+
+    OUString aMessage;
+    std::vector< OUString > aArguments;
+    aArguments.push_back( aDocumentURL );
+
+    sal_Int32 nResult = RET_CANCEL;
+    if ( nMode == UUI_DOC_LOAD_LOCK )
     {
-        SolarMutexGuard aGuard;
-        std::locale aResLocale = Translate::Create("uui");
+        aArguments.push_back( !aInfo.isEmpty()
+                              ? aInfo
+                              : Translate::get( STR_UNKNOWNUSER, aResLocale) );
+        aArguments.push_back( xRetry.is()
+                              ? Translate::get( STR_OPENLOCKED_ALLOWIGNORE_MSG, aResLocale )
+                              : "" );
+        aMessage = Translate::get(STR_OPENLOCKED_MSG, aResLocale);
+        aMessage = UUIInteractionHelper::replaceMessageWithArguments(
+            aMessage, aArguments );
 
-        OUString aMessage;
-        std::vector< OUString > aArguments;
-        aArguments.push_back( aDocumentURL );
-
-        sal_Int32 nResult = RET_CANCEL;
-        if ( nMode == UUI_DOC_LOAD_LOCK )
-        {
-            aArguments.push_back( !aInfo.isEmpty()
-                                  ? aInfo
-                                  : Translate::get( STR_UNKNOWNUSER, aResLocale) );
-            aArguments.push_back( xRetry.is()
-                                  ? Translate::get( STR_OPENLOCKED_ALLOWIGNORE_MSG, aResLocale )
-                                  : "" );
-            aMessage = Translate::get(STR_OPENLOCKED_MSG, aResLocale);
-            aMessage = UUIInteractionHelper::replaceMessageWithArguments(
-                aMessage, aArguments );
-
-            OpenLockedQueryBox aDialog(pParent, aResLocale, aMessage, xRetry.is());
-            nResult = aDialog.run();
-        }
-        else if ( nMode == UUI_DOC_SAVE_LOCK )
-        {
-            aArguments.push_back( !aInfo.isEmpty()
-                                  ? aInfo
-                                  : Translate::get( STR_UNKNOWNUSER,
-                                               aResLocale ) );
-            aMessage = Translate::get(xRetry.is() ? STR_OVERWRITE_IGNORELOCK_MSG : STR_TRYLATER_MSG,
-                aResLocale);
-            aMessage = UUIInteractionHelper::replaceMessageWithArguments(
-                aMessage, aArguments );
-
-            TryLaterQueryBox aDialog(pParent, aResLocale, aMessage, xRetry.is());
-            nResult = aDialog.run();
-        }
-        else if ( nMode == UUI_DOC_OWN_LOAD_LOCK ||
-                  nMode == UUI_DOC_OWN_SAVE_LOCK )
-        {
-            aArguments.push_back( aInfo );
-            aMessage = Translate::get(nMode == UUI_DOC_OWN_SAVE_LOCK
-                                          ? STR_ALREADYOPEN_SAVE_MSG
-                                          : STR_ALREADYOPEN_MSG,
-                                      aResLocale );
-            aMessage = UUIInteractionHelper::replaceMessageWithArguments(
-                aMessage, aArguments );
-
-            AlreadyOpenQueryBox aDialog(pParent, aResLocale, aMessage, nMode == UUI_DOC_OWN_SAVE_LOCK);
-            nResult = aDialog.run();
-        }
-
-        if ( nResult == RET_YES )
-            xApprove->select();
-        else if ( nResult == RET_NO )
-            xDisapprove->select();
-        else if ( nResult == RET_IGNORE && xRetry.is() )
-            xRetry->select();
-        else
-            xAbort->select();
+        OpenLockedQueryBox aDialog(pParent, aResLocale, aMessage, xRetry.is());
+        nResult = aDialog.run();
     }
-    catch (std::bad_alloc const &)
+    else if ( nMode == UUI_DOC_SAVE_LOCK )
     {
-        throw uno::RuntimeException("out of memory");
+        aArguments.push_back( !aInfo.isEmpty()
+                              ? aInfo
+                              : Translate::get( STR_UNKNOWNUSER,
+                                           aResLocale ) );
+        aMessage = Translate::get(xRetry.is() ? STR_OVERWRITE_IGNORELOCK_MSG : STR_TRYLATER_MSG,
+            aResLocale);
+        aMessage = UUIInteractionHelper::replaceMessageWithArguments(
+            aMessage, aArguments );
+
+        TryLaterQueryBox aDialog(pParent, aResLocale, aMessage, xRetry.is());
+        nResult = aDialog.run();
     }
+    else if ( nMode == UUI_DOC_OWN_LOAD_LOCK ||
+              nMode == UUI_DOC_OWN_SAVE_LOCK )
+    {
+        aArguments.push_back( aInfo );
+        aMessage = Translate::get(nMode == UUI_DOC_OWN_SAVE_LOCK
+                                      ? STR_ALREADYOPEN_SAVE_MSG
+                                      : STR_ALREADYOPEN_MSG,
+                                  aResLocale );
+        aMessage = UUIInteractionHelper::replaceMessageWithArguments(
+            aMessage, aArguments );
+
+        AlreadyOpenQueryBox aDialog(pParent, aResLocale, aMessage, nMode == UUI_DOC_OWN_SAVE_LOCK);
+        nResult = aDialog.run();
+    }
+
+    if ( nResult == RET_YES )
+        xApprove->select();
+    else if ( nResult == RET_NO )
+        xDisapprove->select();
+    else if ( nResult == RET_IGNORE && xRetry.is() )
+        xRetry->select();
+    else
+        xAbort->select();
 }
 
 void
@@ -155,22 +148,15 @@ handleChangedByOthersRequest_(
     if ( !xApprove.is() || !xAbort.is() )
         return;
 
-    try
-    {
-        SolarMutexGuard aGuard;
-        std::locale aResLocale = Translate::Create("uui");
-        FileChangedQueryBox aDialog(pParent, aResLocale);
-        sal_Int32 nResult = aDialog.run();
+    SolarMutexGuard aGuard;
+    std::locale aResLocale = Translate::Create("uui");
+    FileChangedQueryBox aDialog(pParent, aResLocale);
+    sal_Int32 nResult = aDialog.run();
 
-        if ( nResult == RET_YES )
-            xApprove->select();
-        else
-            xAbort->select();
-    }
-    catch (std::bad_alloc const &)
-    {
-        throw uno::RuntimeException("out of memory");
-    }
+    if ( nResult == RET_YES )
+        xApprove->select();
+    else
+        xAbort->select();
 }
 
 const sal_uInt16  UUI_DOC_CreateErrDlg  = 0;
@@ -191,33 +177,26 @@ handleLockFileProblemRequest_(
     if ( !xApprove.is() || !xAbort.is() )
         return;
 
-    try
+    SolarMutexGuard aGuard;
+    std::locale aResLocale = Translate::Create("uui");
+
+    sal_Int32 nResult;
+
+    if (nWhichDlg == UUI_DOC_CreateErrDlg)
     {
-        SolarMutexGuard aGuard;
-        std::locale aResLocale = Translate::Create("uui");
-
-        sal_Int32 nResult;
-
-        if (nWhichDlg == UUI_DOC_CreateErrDlg)
-        {
-            LockFailedQueryBox aDialog(pParent, aResLocale);
-            nResult = aDialog.run();
-        }
-        else
-        {
-            LockCorruptQueryBox aDialog(pParent, aResLocale);
-            nResult = aDialog.run();
-        }
-
-        if ( nResult == RET_OK )
-            xApprove->select();
-        else
-            xAbort->select();
+        LockFailedQueryBox aDialog(pParent, aResLocale);
+        nResult = aDialog.run();
     }
-    catch (std::bad_alloc const &)
+    else
     {
-        throw uno::RuntimeException("out of memory");
+        LockCorruptQueryBox aDialog(pParent, aResLocale);
+        nResult = aDialog.run();
     }
+
+    if ( nResult == RET_OK )
+        xApprove->select();
+    else
+        xAbort->select();
 }
 
 } // namespace
