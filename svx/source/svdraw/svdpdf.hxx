@@ -40,8 +40,8 @@ class SdrModel;
 class SdrPage;
 class SdrObject;
 class SvdProgressInfo;
-typedef struct fpdf_document_t__* FPDF_DOCUMENT;
-typedef struct fpdf_pageobject_t__* FPDF_PAGEOBJECT;  // (text, path, etc.)
+typedef void* FPDF_DOCUMENT;
+typedef void* FPDF_PAGEOBJECT;  // (text, path, etc.)
 // Helper Class to import PDF
 class ImpSdrPdfImport final
 {
@@ -90,6 +90,10 @@ class ImpSdrPdfImport final
     /// Correct the vertical coordinate to start at the top.
     /// PDF coordinate system has orign at the bottom right.
     double correctVertOrigin(double offsetPts) const { return mdPageHeightPts - offsetPts; }
+
+    /// Convert PDF points to logic (twips).
+    tools::Rectangle PointsToLogic(double left, double right, double top, double bottom) const;
+    Point PointsToLogic(double x, double y) const;
 
     // check for clip and evtl. fill maClip
     void checkClip();
