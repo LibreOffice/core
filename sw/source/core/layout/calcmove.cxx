@@ -100,8 +100,7 @@ bool SwContentFrame::ShouldBwdMoved( SwLayoutFrame *pNewUpper, bool, bool & )
             nMoveAnyway = 2;
         }
 
-        // OD 2004-05-26 #i25904# - do *not* move backward,
-        // if <nMoveAnyway> equals 3 and no space is left in new upper.
+        // Do *not* move backward, if <nMoveAnyway> equals 3 and no space is left in new upper.
         nMoveAnyway |= BwdMoveNecessary( pOldPage, getFrameArea() );
         {
             const IDocumentSettingAccess& rIDSA = pNewPage->GetFormat()->getIDocumentSettingAccess();
@@ -112,11 +111,9 @@ bool SwContentFrame::ShouldBwdMoved( SwLayoutFrame *pNewUpper, bool, bool & )
             while ( pPrevFrame )
             {
                 SwTwips nNewTop = fnRectX.GetBottom(pPrevFrame->getFrameArea());
-                // OD 2004-03-01 #106629#:
-                // consider lower spacing of last frame in a table cell
+                // Consider lower spacing of last frame in a table cell
                 {
-                    // check, if last frame is inside table and if it includes
-                    // its lower spacing.
+                    // Check if last frame is inside table and if it includes its lower spacing.
                     if ( !pPrevFrame->GetNext() && pPrevFrame->IsInTab() &&
                          rIDSA.get(DocumentSettingId::ADD_PARA_SPACING_TO_TABLE_CELLS) )
                     {
@@ -192,7 +189,7 @@ bool SwContentFrame::ShouldBwdMoved( SwLayoutFrame *pNewUpper, bool, bool & )
                          pNewUpper->GetUpper()->GetNext() );
             }
 
-            // OD 2004-05-26 #i25904# - check for space left in new upper
+            // Check for space left in new upper
             return nSpace != 0;
         }
     }
@@ -217,7 +214,7 @@ static bool lcl_IsCalcUpperAllowed( const SwFrame& rFrame )
 {
     return !rFrame.GetUpper()->IsSctFrame() &&
            !rFrame.GetUpper()->IsFooterFrame() &&
-           // #i23129#, #i36347# - no format of upper Writer fly frame
+           // No format of upper Writer fly frame
            !rFrame.GetUpper()->IsFlyFrame() &&
            !( rFrame.GetUpper()->IsTabFrame() && rFrame.GetUpper()->GetUpper()->IsInTab() ) &&
            !( rFrame.IsTabFrame() && rFrame.GetUpper()->IsInTab() );
@@ -275,7 +272,7 @@ void SwFrame::PrepareMake(vcl::RenderContext* pRenderContext)
             bFoll = pThis->IsFollow();
             if ( bFoll && GetPrev() )
             {
-                //Do not follow the chain when we need only one instance
+                // Do not follow the chain when we need only one instance
                 const SwTextFrame* pMaster = static_cast<SwContentFrame*>(this)->FindMaster();
                 if ( pMaster && pMaster->IsLocked() )
                 {
@@ -285,8 +282,8 @@ void SwFrame::PrepareMake(vcl::RenderContext* pRenderContext)
             }
         }
 
-        // #i44049# - no format of previous frame, if current
-        // frame is a table frame and its previous frame wants to keep with it.
+        // There is noo format of previous frame, if current frame is a table
+        // frame and its previous frame wants to keep with it.
         const bool bFormatPrev = !bTab ||
                                  !GetPrev() ||
                                  !GetPrev()->GetAttrSet()->GetKeep().GetValue();
@@ -542,7 +539,6 @@ void SwFrame::MakePos()
         }
         else if ( GetUpper() )
         {
-            // OD 15.10.2002 #103517# - add safeguard for <SwFooterFrame::Calc()>
             // If parent frame is a footer frame and its <ColLocked()>, then
             // do *not* calculate it.
             // NOTE: Footer frame is <ColLocked()> during its
@@ -706,7 +702,7 @@ size_t SwPageFrame::GetContentHeight(const long nTop, const long nBottom) const
 
             pCnt = pCnt->FindNext();
         }
-        // OD 29.10.2002 #97265# - consider invalid body frame properties
+        // Consider invalid body frame properties
         if (pFrame->IsBodyFrame() &&
             (!pFrame->isFrameAreaSizeValid() ||
             !pFrame->isFramePrintAreaValid()) &&
@@ -717,7 +713,7 @@ size_t SwPageFrame::GetContentHeight(const long nTop, const long nBottom) const
         }
         else
         {
-            // OD 30.10.2002 #97265# - assert invalid lower property
+            // Assert invalid lower property
             OSL_ENSURE(!(pFrame->getFrameArea().Height() < pFrame->getFramePrintArea().Height()),
                 "SwPageFrame::GetContentHeight(): Lower with frame height < printing height");
             nTmp += pFrame->getFrameArea().Height() - pFrame->getFramePrintArea().Height();
@@ -1213,7 +1209,6 @@ void SwContentFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
     SwBorderAttrAccess aAccess( SwFrame::GetCache(), this );
     const SwBorderAttrs &rAttrs = *aAccess.Get();
 
-    // OD 2004-02-26 #i25029#
     if ( !IsFollow() && rAttrs.JoinedWithPrev( *(this) ) )
     {
         pNotify->SetBordersJoinedWithPrev();
@@ -1272,9 +1267,8 @@ void SwContentFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
     if ( lcl_Prev( this ) && static_cast<SwTextFrame*>(this)->IsFollow() && IsMoveable() )
     {
         bMovedFwd = true;
-        // OD 2004-03-02 #106629# - If follow frame is in table, it's master
-        // will be the last in the current table cell. Thus, invalidate the
-        // printing area of the master,
+        // If follow frame is in table, its master will be the last in the
+        // current table cell. Thus, invalidate the printing area of the master.
         if ( IsInTab() )
         {
             lcl_Prev( this )->InvalidatePrt();
@@ -1282,7 +1276,7 @@ void SwContentFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
         MoveFwd( bMakePage, false );
     }
 
-    // OD 08.11.2002 #104840# - check footnote content for forward move.
+    // Check footnote content for forward move.
     // If a content of a footnote is on a prior page/column as its invalid
     // reference, it can be moved forward.
     if ( bFootnote && !isFrameAreaPositionValid() )
@@ -1845,7 +1839,6 @@ void SwContentFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
         AllowDelete();
     if ( bMovedFwd || bMovedBwd )
         pNotify->SetInvaKeep();
-    // OD 2004-02-26 #i25029#
     if ( bMovedFwd )
     {
         pNotify->SetInvalidatePrevPrtArea();
@@ -2088,7 +2081,7 @@ bool SwContentFrame::WouldFit_( SwTwips nSpace,
             }
         }
 
-        // OD 2004-03-01 #106629# - also consider lower spacing in table cells
+        // Also consider lower spacing in table cells
         if ( bRet && IsInTab() &&
              pNewUpper->GetFormat()->getIDocumentSettingAccess().get(DocumentSettingId::ADD_PARA_SPACING_TO_TABLE_CELLS) )
         {
@@ -2107,9 +2100,9 @@ bool SwContentFrame::WouldFit_( SwTwips nSpace,
                 {
                     pFrame = static_cast<SwTextFrame*>(pFrame)->GetFollow();
                 }
-                // OD 11.04.2003 #108824# - If last follow frame of <this> text
-                // frame isn't valid, a formatting of the next content frame
-                // doesn't makes sense. Thus, return true.
+                // If last follow frame of <this> text frame isn't valid,
+                // a formatting of the next content frame doesn't makes sense.
+                // Thus, return true.
                 if ( IsAnFollow( pFrame ) && !pFrame->isFrameAreaDefinitionValid() )
                 {
                     OSL_FAIL( "Only a warning for task 108824:/n<SwContentFrame::WouldFit_(..) - follow not valid!" );
