@@ -792,7 +792,7 @@ HRESULT STDMETHODCALLTYPE CXTypeInfo::GetNames(MEMBERID memid,
                                                UINT cMaxNames,
                                                UINT *pcNames)
 {
-    SAL_WARN("extensions.olebridge", "CXTypeInfo@" << this << "::GetNames(" << memid << ")");
+    SAL_INFO("extensions.olebridge", "CXTypeInfo@" << this << "::GetNames(" << memid << ")");
     assert(meKind != Kind::COCLASS);
 
     if (!rgBstrNames)
@@ -827,6 +827,7 @@ HRESULT STDMETHODCALLTYPE CXTypeInfo::GetNames(MEMBERID memid,
     if (memid > aMethods.getLength() - 3)
         return E_INVALIDARG;
 
+    SAL_INFO("extensions.olebridge", "...CXTypeInfo@" << this << "::GetNames(" << memid << "): " << aMethods[memid + 2]->getName());
     rgBstrNames[0] = SysAllocString((LPOLESTR) aMethods[memid + 2]->getName().pData->buffer);
     *pcNames = 1;
 
