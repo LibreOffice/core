@@ -26,23 +26,14 @@
 struct DocShell_Impl
 {
     bool                    bIgnoreLostRedliningWarning;
-    FontList*               pFontList;
-    sfx2::DocumentInserter* pDocInserter;
-    SfxRequest*             pRequest;
+    std::unique_ptr<FontList>               pFontList;
+    std::unique_ptr<sfx2::DocumentInserter> pDocInserter;
+    std::unique_ptr<SfxRequest>             pRequest;
 
     DocShell_Impl() :
           bIgnoreLostRedliningWarning( false )
-        , pFontList( nullptr )
-        , pDocInserter( nullptr )
-        , pRequest( nullptr )
     {}
 
-    ~DocShell_Impl()
-    {
-        delete pFontList;
-        delete pDocInserter;
-        delete pRequest;
-    }
 };
 
 #endif
