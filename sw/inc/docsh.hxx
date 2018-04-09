@@ -315,7 +315,7 @@ public:
     virtual bool    GetProtectionHash( /*out*/ css::uno::Sequence< sal_Int8 > &rPasswordHash ) override;
 
     void RegisterAutomationDocumentEventsCaller(css::uno::Reference< ooo::vba::XSinkCaller > const& xCaller);
-    void CallAutomationDocumentEventSinks(const OUString& Method, const css::uno::Sequence< css::uno::Any >& Arguments);
+    void CallAutomationDocumentEventSinks(const OUString& Method, css::uno::Sequence< css::uno::Any >& Arguments);
 };
 
 /** Find the right DocShell and create a new one:

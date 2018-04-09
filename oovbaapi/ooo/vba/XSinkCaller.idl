@@ -19,7 +19,7 @@ module ooo {  module vba {
 
 interface XSinkCaller
 {
-    void CallSinks([in] string Method, [in] sequence<any> Arguments);
+    void CallSinks([in] string Method, [inout] sequence<any> Arguments);
 };
 
 }; };

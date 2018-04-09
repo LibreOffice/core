@@ -106,7 +106,7 @@ public:
     virtual css::uno::Sequence<OUString> getServiceNames() override;
 
     // XSinkCaller
-    virtual void SAL_CALL CallSinks( const OUString& Method, const css::uno::Sequence< css::uno::Any >& Arguments ) override;
+    virtual void SAL_CALL CallSinks( const OUString& Method, css::uno::Sequence< css::uno::Any >& Arguments ) override;
 };
 #endif // INCLUDED_SW_SOURCE_UI_VBA_VBADOCUMENT_HXX
 

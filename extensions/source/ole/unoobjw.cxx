@@ -1977,7 +1977,7 @@ public:
          ooo::vba::TypeAndIID aTypeAndIID);
 
     // XSink
-    void SAL_CALL Call( const OUString& Method, const Sequence< Any >& Arguments ) override;
+    void SAL_CALL Call( const OUString& Method, Sequence< Any >& Arguments ) override;
 
 private:
     IUnknown* mpUnkSink;
@@ -1996,7 +1996,7 @@ Sink::Sink(IUnknown* pUnkSink,
 }
 
 void SAL_CALL
-Sink::Call( const OUString& Method, const Sequence< Any >& Arguments )
+Sink::Call( const OUString& Method, Sequence< Any >& Arguments )
 {
     SAL_INFO("extensions.olebridge", "Sink::Call(" << Method << ", " << Arguments.getLength() << " arguments)");
 

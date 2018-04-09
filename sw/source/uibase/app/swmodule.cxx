@@ -221,7 +221,8 @@ uno::Reference< linguistic2::XLanguageGuessing > const & SwModule::GetLanguageGu
 
 SwModule::~SwModule()
 {
-    CallAutomationApplicationEventSinks( "Quit", css::uno::Sequence< css::uno::Any >() );
+    css::uno::Sequence< css::uno::Any > aArgs;
+    CallAutomationApplicationEventSinks( "Quit", aArgs );
     delete m_pErrorHandler;
     EndListening( *SfxGetpApp() );
 }
@@ -439,7 +440,7 @@ void SwModule::RegisterAutomationApplicationEventsCaller(css::uno::Reference< oo
     mxAutomationApplicationEventsCaller = xCaller;
 }
 
-void SwModule::CallAutomationApplicationEventSinks(const OUString& Method, const css::uno::Sequence< css::uno::Any >& Arguments)
+void SwModule::CallAutomationApplicationEventSinks(const OUString& Method, css::uno::Sequence< css::uno::Any >& Arguments)
 {
     if (mxAutomationApplicationEventsCaller.is())
         mxAutomationApplicationEventsCaller->CallSinks(Method, Arguments);

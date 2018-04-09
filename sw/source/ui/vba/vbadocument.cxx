@@ -561,7 +561,7 @@ SwVbaDocument::GetConnectionPoint()
 // XSinkCaller
 
 void SAL_CALL
-SwVbaDocument::CallSinks( const OUString& Method, const uno::Sequence< uno::Any >& Arguments )
+SwVbaDocument::CallSinks( const OUString& Method, uno::Sequence< uno::Any >& Arguments )
 {
     for (auto& i : mvSinks)
     {

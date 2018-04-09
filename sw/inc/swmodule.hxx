@@ -248,7 +248,7 @@ public:
             GetLanguageGuesser();
 
     void RegisterAutomationApplicationEventsCaller(css::uno::Reference< ooo::vba::XSinkCaller > const& xCaller);
-    void CallAutomationApplicationEventSinks(const OUString& Method, const css::uno::Sequence< css::uno::Any >& Arguments);
+    void CallAutomationApplicationEventSinks(const OUString& Method, css::uno::Sequence< css::uno::Any >& Arguments);
 };
 
 inline const css::uno::Reference< css::linguistic2::XLinguServiceEventListener >&
