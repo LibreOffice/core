@@ -56,6 +56,11 @@
 
 using namespace vcl;
 
+// GetGlyphOutlineW() seems to be a little slow, and doesn't seem to do it's own caching (tested on Windows10).
+// TODO use something a little smarter here like an LRU cache, and include the font as part of the cache key
+// The cache limit is set by the rough number of characters needed to read your average Asian newspaper.
+constexpr size_t BOUND_RECT_CACHE_SIZE = 3000;
+static std::unordered_map<sal_GlyphId, tools::Rectangle> g_BoundRectCache;
 
 inline FIXED FixedFromDouble( double d )
 {
@@ -835,6 +840,9 @@ void ImplGetLogFontFromFontSelect( HDC hDC,
 
 HFONT WinSalGraphics::ImplDoSetFont(FontSelectPattern const * i_pFont, HFONT& o_rOldFont)
 {
+    // clear the cache on font change
+    g_BoundRectCache.clear();
+
     HFONT hNewFont = nullptr;
 
     HDC hdcScreen = nullptr;
@@ -1326,6 +1334,15 @@ void WinSalGraphics::ClearDevFontCache()
 
 bool WinSalGraphics::GetGlyphBoundRect(const GlyphItem& rGlyph, tools::Rectangle& rRect)
 {
+    auto it = g_BoundRectCache.find(rGlyph.maGlyphId);
+    if (it != g_BoundRectCache.end())
+    {
+        rRect = it->second;
+        return true;
+    }
+    if (g_BoundRectCache.size() > BOUND_RECT_CACHE_SIZE)
+        g_BoundRectCache.clear();
+
     HDC hDC = getHDC();
 
     // use unity matrix
@@ -1347,6 +1364,8 @@ bool WinSalGraphics::GetGlyphBoundRect(const GlyphItem& rGlyph, tools::Rectangle
         Size( aGM.gmBlackBoxX, aGM.gmBlackBoxY ) );
     rRect.AdjustRight(1);
     rRect.AdjustBottom(1);
+
+    g_BoundRectCache.insert({rGlyph.maGlyphId, rRect});
     return true;
 }
 
