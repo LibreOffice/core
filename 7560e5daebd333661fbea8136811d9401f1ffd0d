@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_ace4660d",
+        "filename": "sc/source/core/tool/interpr6.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 684,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-04-09T11:16:28Z",
+      "side": 1,
+      "message": "Looks correct and I\u0027ll push this change after the Jenkins build.\n\nHowever, seeing this now, shouldn\u0027t this \"is filtered or hidden\" be moved before the \"if ( nGlobalError !\u003d FormulaError::NONE \u0026\u0026 ...\" above at line 673, so if a filtered or hidden row is to be ignored that nCount isn\u0027t incremented?\n\nWhat you like to follow-up with that?",
+      "revId": "7560e5daebd333661fbea8136811d9401f1ffd0d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
