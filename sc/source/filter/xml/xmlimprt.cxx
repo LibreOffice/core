@@ -222,7 +222,7 @@ const SvXMLTokenMap& ScXMLImport::GetTableRowCellAttrTokenMap()
     };
 
     if ( !pTableRowCellAttrTokenMap )
-        pTableRowCellAttrTokenMap = new SvXMLTokenMap( aTableRowCellAttrTokenMap );
+        pTableRowCellAttrTokenMap.reset(new SvXMLTokenMap( aTableRowCellAttrTokenMap ));
     return *pTableRowCellAttrTokenMap;
 }
 
@@ -435,7 +435,7 @@ const SvXMLTokenMap& ScXMLImport::GetDocElemTokenMap()
             XML_TOKEN_MAP_END
         };
 
-        pDocElemTokenMap = new SvXMLTokenMap( aDocTokenMap );
+        pDocElemTokenMap.reset(new SvXMLTokenMap( aDocTokenMap ));
 
     } // if( !pDocElemTokenMap )
 
@@ -455,7 +455,7 @@ const SvXMLTokenMap& ScXMLImport::GetContentValidationElemTokenMap()
             XML_TOKEN_MAP_END
         };
 
-        pContentValidationElemTokenMap = new SvXMLTokenMap( aContentValidationElemTokenMap );
+        pContentValidationElemTokenMap.reset(new SvXMLTokenMap( aContentValidationElemTokenMap ));
     } // if( !pContentValidationElemTokenMap )
 
     return *pContentValidationElemTokenMap;
@@ -471,7 +471,7 @@ const SvXMLTokenMap& ScXMLImport::GetContentValidationMessageElemTokenMap()
             XML_TOKEN_MAP_END
         };
 
-        pContentValidationMessageElemTokenMap = new SvXMLTokenMap( aContentValidationMessageElemTokenMap );
+        pContentValidationMessageElemTokenMap.reset(new SvXMLTokenMap( aContentValidationMessageElemTokenMap ));
     } // if( !pContentValidationMessageElemTokenMap )
 
     return *pContentValidationMessageElemTokenMap;
@@ -506,7 +506,7 @@ const SvXMLTokenMap& ScXMLImport::GetTableElemTokenMap()
             XML_TOKEN_MAP_END
         };
 
-        pTableElemTokenMap = new SvXMLTokenMap( aTableTokenMap );
+        pTableElemTokenMap.reset(new SvXMLTokenMap( aTableTokenMap ));
     } // if( !pTableElemTokenMap )
 
     return *pTableElemTokenMap;
@@ -525,7 +525,7 @@ const SvXMLTokenMap& ScXMLImport::GetTableRowsElemTokenMap()
             XML_TOKEN_MAP_END
         };
 
-        pTableRowsElemTokenMap = new SvXMLTokenMap( aTableRowsElemTokenMap );
+        pTableRowsElemTokenMap.reset(new SvXMLTokenMap( aTableRowsElemTokenMap ));
     } // if( !pTableRowsElemTokenMap )
 
     return *pTableRowsElemTokenMap;
@@ -542,7 +542,7 @@ const SvXMLTokenMap& ScXMLImport::GetTableRowElemTokenMap()
             XML_TOKEN_MAP_END
         };
 
-        pTableRowElemTokenMap = new SvXMLTokenMap( aTableRowTokenMap );
+        pTableRowElemTokenMap.reset(new SvXMLTokenMap( aTableRowTokenMap ));
     } // if( !pTableRowElemTokenMap )
 
     return *pTableRowElemTokenMap;
@@ -562,7 +562,7 @@ const SvXMLTokenMap& ScXMLImport::GetTableRowAttrTokenMap()
             XML_TOKEN_MAP_END
         };
 
-        pTableRowAttrTokenMap = new SvXMLTokenMap( aTableRowAttrTokenMap );
+        pTableRowAttrTokenMap.reset(new SvXMLTokenMap( aTableRowAttrTokenMap ));
     } // if( !pTableRowAttrTokenMap )
 
     return *pTableRowAttrTokenMap;
@@ -582,7 +582,7 @@ const SvXMLTokenMap& ScXMLImport::GetTableRowCellElemTokenMap()
             XML_TOKEN_MAP_END
         };
 
-        pTableRowCellElemTokenMap = new SvXMLTokenMap( aTableRowCellTokenMap );
+        pTableRowCellElemTokenMap.reset(new SvXMLTokenMap( aTableRowCellTokenMap ));
     } // if( !pTableRowCellElemTokenMap )
 
     return *pTableRowCellElemTokenMap;
@@ -603,7 +603,7 @@ const SvXMLTokenMap& ScXMLImport::GetTableAnnotationAttrTokenMap()
             XML_TOKEN_MAP_END
         };
 
-        pTableAnnotationAttrTokenMap = new SvXMLTokenMap( aTableAnnotationAttrTokenMap );
+        pTableAnnotationAttrTokenMap.reset(new SvXMLTokenMap( aTableAnnotationAttrTokenMap ));
     } // if( !pTableAnnotationAttrTokenMap )
 
     return *pTableAnnotationAttrTokenMap;
@@ -698,7 +698,7 @@ ScXMLImport::ScXMLImport(
     mbImportStyles(true),
     mbHasNewCondFormatData(false)
 {
-    pStylesImportHelper = new ScMyStylesImportHelper(*this);
+    pStylesImportHelper.reset(new ScMyStylesImportHelper(*this));
 
     xScPropHdlFactory = new XMLScPropHdlFactory;
     xCellStylesPropertySetMapper = new XMLPropertySetMapper(aXMLScCellStylesProperties, xScPropHdlFactory, false);
@@ -716,31 +716,31 @@ ScXMLImport::ScXMLImport(
 ScXMLImport::~ScXMLImport() throw()
 {
     //  delete pI18NMap;
-    delete pDocElemTokenMap;
-    delete pContentValidationElemTokenMap;
-    delete pContentValidationMessageElemTokenMap;
-    delete pTableElemTokenMap;
-    delete pTableRowsElemTokenMap;
-    delete pTableRowElemTokenMap;
-    delete pTableRowAttrTokenMap;
-    delete pTableRowCellElemTokenMap;
-    delete pTableRowCellAttrTokenMap;
-    delete pTableAnnotationAttrTokenMap;
+    pDocElemTokenMap.reset();
+    pContentValidationElemTokenMap.reset();
+    pContentValidationMessageElemTokenMap.reset();
+    pTableElemTokenMap.reset();
+    pTableRowsElemTokenMap.reset();
+    pTableRowElemTokenMap.reset();
+    pTableRowAttrTokenMap.reset();
+    pTableRowCellElemTokenMap.reset();
+    pTableRowCellAttrTokenMap.reset();
+    pTableAnnotationAttrTokenMap.reset();
 
-    delete pChangeTrackingImportHelper;
-    delete pNumberFormatAttributesExportHelper;
-    delete pStyleNumberFormats;
-    delete pStylesImportHelper;
+    pChangeTrackingImportHelper.reset();
+    pNumberFormatAttributesExportHelper.reset();
+    pStyleNumberFormats.reset();
+    pStylesImportHelper.reset();
 
-    delete m_pMyNamedExpressions;
-    delete pMyLabelRanges;
-    delete pValidations;
-    delete pDetectiveOpArray;
+    m_pMyNamedExpressions.reset();
+    pMyLabelRanges.reset();
+    pValidations.reset();
+    pDetectiveOpArray.reset();
 
     //call SvXMLImport dtor contents before deleting pSolarMutexGuard
     cleanup();
 
-    delete pSolarMutexGuard;
+    pSolarMutexGuard.reset();
 }
 
 void ScXMLImport::initialize( const css::uno::Sequence<css::uno::Any>& aArguments )
@@ -956,8 +956,8 @@ void ScXMLImport::AddNamedExpression(SCTAB nTab, ScMyNamedExpression* pNamedExp)
 ScXMLChangeTrackingImportHelper* ScXMLImport::GetChangeTrackingImportHelper()
 {
     if (!pChangeTrackingImportHelper)
-        pChangeTrackingImportHelper = new ScXMLChangeTrackingImportHelper();
-    return pChangeTrackingImportHelper;
+        pChangeTrackingImportHelper.reset(new ScXMLChangeTrackingImportHelper());
+    return pChangeTrackingImportHelper.get();
 }
 
 void ScXMLImport::InsertStyles()
@@ -1482,15 +1482,15 @@ bool ScXMLImport::SetNullDateOnUnitConverter()
 XMLNumberFormatAttributesExportHelper* ScXMLImport::GetNumberFormatAttributesExportHelper()
 {
     if (!pNumberFormatAttributesExportHelper)
-        pNumberFormatAttributesExportHelper = new XMLNumberFormatAttributesExportHelper(GetNumberFormatsSupplier());
-    return pNumberFormatAttributesExportHelper;
+        pNumberFormatAttributesExportHelper.reset(new XMLNumberFormatAttributesExportHelper(GetNumberFormatsSupplier()));
+    return pNumberFormatAttributesExportHelper.get();
 }
 
 ScMyStyleNumberFormats* ScXMLImport::GetStyleNumberFormats()
 {
     if (!pStyleNumberFormats)
-        pStyleNumberFormats = new ScMyStyleNumberFormats;
-    return pStyleNumberFormats;
+        pStyleNumberFormats.reset(new ScMyStyleNumberFormats);
+    return pStyleNumberFormats.get();
 }
 
 void ScXMLImport::SetStylesToRangesFinished()
@@ -1853,7 +1853,7 @@ void ScXMLImport::LockSolarMutex()
     if (nSolarMutexLocked == 0)
     {
         OSL_ENSURE(!pSolarMutexGuard, "Solar Mutex is locked");
-        pSolarMutexGuard = new SolarMutexGuard();
+        pSolarMutexGuard.reset(new SolarMutexGuard());
     }
     ++nSolarMutexLocked;
 }
@@ -1866,8 +1866,7 @@ void ScXMLImport::UnlockSolarMutex()
         if (nSolarMutexLocked == 0)
         {
             OSL_ENSURE(pSolarMutexGuard, "Solar Mutex is always unlocked");
-            delete pSolarMutexGuard;
-            pSolarMutexGuard = nullptr;
+            pSolarMutexGuard.reset();
         }
     }
 }
@@ -1999,8 +1998,8 @@ void ScXMLImport::NotifyEmbeddedFontRead()
 ScMyImpDetectiveOpArray* ScXMLImport::GetDetectiveOpArray()
 {
     if (!pDetectiveOpArray)
-        pDetectiveOpArray = new ScMyImpDetectiveOpArray();
-    return pDetectiveOpArray;
+        pDetectiveOpArray.reset(new ScMyImpDetectiveOpArray());
+    return pDetectiveOpArray.get();
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportFODS(SvStream &rStream)
