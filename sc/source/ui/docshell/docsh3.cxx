@@ -451,10 +451,9 @@ SfxPrinter* ScDocShell::GetPrinter(bool bCreateIfNotExist)
 
 void ScDocShell::UpdateFontList()
 {
-    delete pImpl->pFontList;
     // pImpl->pFontList = new FontList( GetPrinter(), Application::GetDefaultDevice() );
-    pImpl->pFontList = new FontList(GetRefDevice(), nullptr);
-    SvxFontListItem aFontListItem( pImpl->pFontList, SID_ATTR_CHAR_FONTLIST );
+    pImpl->pFontList.reset(new FontList(GetRefDevice(), nullptr));
+    SvxFontListItem aFontListItem( pImpl->pFontList.get(), SID_ATTR_CHAR_FONTLIST );
     PutItem( aFontListItem );
 
     CalcOutputFactor();

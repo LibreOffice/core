@@ -763,15 +763,14 @@ void ScDocShell::Execute( SfxRequest& rReq )
                         : sfx2::DocumentInserter::Mode::Merge};
                     // start file dialog asynchronous
                     pImpl->bIgnoreLostRedliningWarning = true;
-                    delete pImpl->pRequest;
-                    pImpl->pRequest = new SfxRequest( rReq );
-                    delete pImpl->pDocInserter;
+                    pImpl->pRequest.reset(new SfxRequest( rReq ));
+                    pImpl->pDocInserter.reset();
 
                     ScTabViewShell* pViewSh = ScTabViewShell::GetActiveViewShell();
                     vcl::Window* pParent = pViewSh ? pViewSh->GetDialogParent() : nullptr;
 
-                    pImpl->pDocInserter = new ::sfx2::DocumentInserter(pParent ? pParent->GetFrameWeld() : nullptr,
-                        ScDocShell::Factory().GetFactoryName(), mode );
+                    pImpl->pDocInserter.reset( new ::sfx2::DocumentInserter(pParent ? pParent->GetFrameWeld() : nullptr,
+                        ScDocShell::Factory().GetFactoryName(), mode ) );
                     pImpl->pDocInserter->StartExecuteModal( LINK( this, ScDocShell, DialogClosedHdl ) );
                     return ;
                 }
@@ -1990,7 +1989,7 @@ void ScDocShell::GetState( SfxItemSet &rSet )
                 break;
 
             case SID_ATTR_CHAR_FONTLIST:
-                rSet.Put( SvxFontListItem( pImpl->pFontList, nWhich ) );
+                rSet.Put( SvxFontListItem( pImpl->pFontList.get(), nWhich ) );
                 break;
 
             case SID_NOTEBOOKBAR:
