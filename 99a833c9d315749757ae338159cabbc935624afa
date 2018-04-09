@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_581d6572",
+        "filename": "include/test/sheet/functiondescription.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-04-09T07:34:02Z",
+      "side": 1,
+      "message": "This test functionality is likely only needed in this one test, so there should be no reason to not spell it out directly in the test\u0027s .cxx file.",
+      "revId": "99a833c9d315749757ae338159cabbc935624afa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_9817dd50",
+        "filename": "sc/CppunitTest_sc_functiondescriptionobj.mk",
+        "patchSetId": 3
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-04-09T07:34:02Z",
+      "side": 1,
+      "message": "are all these dependencies etc. really needed, or is this all cargo-cult--copied from another makefile?",
+      "revId": "99a833c9d315749757ae338159cabbc935624afa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_b80ca143",
+        "filename": "sc/qa/extras/scfunctiondescriptionobj.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-04-09T07:34:02Z",
+      "side": 1,
+      "message": "is a random number a good idea here?  (I guess it generally isn\u0027t, in a test, even if the poor old qadevOOo code used one, too)",
+      "revId": "99a833c9d315749757ae338159cabbc935624afa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_d8095533",
+        "filename": "test/source/sheet/functiondescription.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-04-09T07:34:02Z",
+      "side": 1,
+      "message": "if you\u0027d had individual if branches for all the expected value.Name, you\u0027d not need to create those ugly OString msg\n\nalso, I\u0027d expect a check that aFunctionDescription contains exactly the expected set of five values",
+      "revId": "99a833c9d315749757ae338159cabbc935624afa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
