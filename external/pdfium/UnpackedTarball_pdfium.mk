@@ -13,6 +13,8 @@ pdfium_patches += ubsan.patch
 pdfium_patches += icu.patch.1
 # Fixes build on our baseline.
 pdfium_patches += build.patch.1
+# Adds missing editing API
+pdfium_patches += 0001-svx-import-PDF-text-using-PDFium.patch.2
 
 $(eval $(call gb_UnpackedTarball_UnpackedTarball,pdfium))
 
