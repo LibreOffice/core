@@ -16,8 +16,7 @@ set -e
 cp -r "${PREFIXDIR?}"/lib/libreoffice /app/
 
 ## libreoffice-*.desktop -> org.libreoffice.LibreOffice-*.desktop:
-mkdir /app/share
-mkdir /app/share/applications
+mkdir -p /app/share/applications
 for i in "${PREFIXDIR?}"/share/applications/libreoffice-*.desktop
 do
  sed -e 's,^Exec=libreoffice,Exec=/app/libreoffice/program/soffice,' \
@@ -29,7 +28,7 @@ mv /app/share/applications/org.libreoffice.LibreOffice-startcenter.desktop \
 
 ## icons/hicolor/*/apps/libreoffice-* ->
 ## icons/hicolor/*/apps/org.libreoffice.LibreOffice-*:
-mkdir /app/share/icons
+mkdir -p /app/share/icons
 for i in "${PREFIXDIR?}"/share/icons/hicolor/*/apps/libreoffice-*
 do
  mkdir -p \
@@ -38,11 +37,39 @@ do
   "$(dirname /app/share/icons/hicolor/"${i#"${PREFIXDIR?}"/share/icons/hicolor/}")"/org.libreoffice.LibreOffice-"${i##*/apps/libreoffice-}"
 done
 
+mkdir -p /app/share/runtime/locale
+for i in $(ls /app/libreoffice/program/resource)
+do
+  lang="${i%[_@]*}"
+  mkdir -p /app/share/runtime/locale/"${lang}"/resource
+  mv /app/libreoffice/program/resource/"${i}" /app/share/runtime/locale/"${lang}"/resource
+  ln -s ../../../share/runtime/locale/"${lang}"/resource/"${i}" /app/libreoffice/program/resource
+done
+
+for i in /app/libreoffice/share/registry/Langpack-*.xcd /app/libreoffice/share/registry/res/{fcfg_langpack,registry}_*.xcd
+do
+  basename="$(basename "${i}" .xcd)"
+  lang="${basename#Langpack-}"
+  lang="${lang#fcfg_langpack_}"
+  lang="${lang#registry_}"
+
+  # ship the base app with at least one Langpack/fcfg_langpack
+  if [ "${lang}" = "en-US" ]
+  then
+    continue
+  fi
+
+  lang="${lang%-*}"
+  mkdir -p /app/share/runtime/locale/"${lang}"/registry
+  mv "${i}" /app/share/runtime/locale/"${lang}"/registry
+  ln -rs /app/share/runtime/locale/"${lang}"/registry/"${basename}".xcd "${i}"
+done
+
 ## org.libreoffice.LibreOffice.appdata.xml is manually derived from the various
 ## inst/share/appdata/libreoffice-*.appdata.xml (at least recent GNOME Software
 ## doesn't show more than five screenshots anyway, so restrict to one each from
 ## the five libreoffice-*.appdata.xml: Writer, Calc, Impress, Draw, Base):
-mkdir /app/share/appdata
+mkdir -p /app/share/appdata
 cat <<EOF >/app/share/appdata/org.libreoffice.LibreOffice.appdata.xml
 <?xml version="1.0" encoding="UTF-8"?>
 <component type="desktop">
