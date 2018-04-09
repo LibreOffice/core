@@ -174,7 +174,7 @@ ScDrawTransferObj::ScDrawTransferObj( SdrModel* pClipModel, ScDocShell* pContain
                                             aLabel = sTmp;
                                         }
                                     }
-                                    pBookmark = new INetBookmark( aAbs, aLabel );
+                                    pBookmark.reset( new INetBookmark( aAbs, aLabel ) );
                                 }
                             }
                         }
@@ -229,11 +229,11 @@ ScDrawTransferObj::~ScDrawTransferObj()
     aOleData = TransferableDataHelper();        // clear before releasing the mutex
     aDocShellRef.clear();
 
-    delete pModel;
+    pModel.reset();
     aDrawPersistRef.clear();                    // after the model
 
-    delete pBookmark;
-    delete pDragSourceView;
+    pBookmark.reset();
+    pDragSourceView.reset();
 }
 
 ScDrawTransferObj* ScDrawTransferObj::GetOwnClipboard( vcl::Window* pWin )
@@ -339,7 +339,7 @@ void ScDrawTransferObj::AddSupportedFormats()
         AddFormat( SotClipboardFormatId::DRAWING );
 
         // leave out bitmap and metafile if there are only controls
-        if ( !lcl_HasOnlyControls( pModel ) )
+        if ( !lcl_HasOnlyControls( pModel.get() ) )
         {
             AddFormat( SotClipboardFormatId::PNG );
             AddFormat( SotClipboardFormatId::BITMAP );
@@ -387,7 +387,7 @@ bool ScDrawTransferObj::GetData( const css::datatransfer::DataFlavor& rFlavor, c
         }
         else if ( nFormat == SotClipboardFormatId::DRAWING )
         {
-            bOK = SetObject( pModel, SCDRAWTRANS_TYPE_DRAWMODEL, rFlavor );
+            bOK = SetObject( pModel.get(), SCDRAWTRANS_TYPE_DRAWMODEL, rFlavor );
         }
         else if ( nFormat == SotClipboardFormatId::BITMAP
             || nFormat == SotClipboardFormatId::PNG
@@ -602,7 +602,7 @@ void ScDrawTransferObj::DragFinished( sal_Int8 nDropAction )
     if ( pScMod->GetDragData().pDrawTransfer == this )
         pScMod->ResetDragObject();
 
-    DELETEZ( pDragSourceView );
+    pDragSourceView.reset();
 
     TransferableHelper::DragFinished( nDropAction );
 }
@@ -631,8 +631,7 @@ static void lcl_InitMarks( SdrMarkView& rDest, const SdrMarkView& rSource, SCTAB
 
 void ScDrawTransferObj::SetDragSource( const ScDrawView* pView )
 {
-    DELETEZ( pDragSourceView );
-    pDragSourceView = new SdrView(pView->getSdrModelFromSdrView()); // TTTT pView should be reference
+    pDragSourceView.reset(new SdrView(pView->getSdrModelFromSdrView())); // TTTT pView should be reference
     lcl_InitMarks( *pDragSourceView, *pView, pView->GetTab() );
 
     //! add as listener with document, delete pDragSourceView if document gone
@@ -640,8 +639,7 @@ void ScDrawTransferObj::SetDragSource( const ScDrawView* pView )
 
 void ScDrawTransferObj::SetDragSourceObj( SdrObject& rObj, SCTAB nTab )
 {
-    DELETEZ( pDragSourceView );
-    pDragSourceView = new SdrView(rObj.getSdrModelFromSdrObject());
+    pDragSourceView.reset(new SdrView(rObj.getSdrModelFromSdrObject()));
     pDragSourceView->ShowSdrPage(pDragSourceView->GetModel()->GetPage(nTab));
     SdrPageView* pPV = pDragSourceView->GetSdrPageView();
     pDragSourceView->MarkObj(&rObj, pPV); // TTTT MarkObj should take SdrObject&
