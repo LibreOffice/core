@@ -129,9 +129,6 @@ public:
         EmbeddedObjectContainer& rSrc, const css::uno::Reference <css::embed::XEmbeddedObject>& xObj, OUString& rName,
         const OUString& rSrcShellID, const OUString& rDestShellID );
 
-    // move an embedded object from one container to another one
-    void MoveEmbeddedObject( EmbeddedObjectContainer& rSrc, const css::uno::Reference < css::embed::XEmbeddedObject >&, OUString& );
-
     // remove an embedded object from the container and from the storage; if object can't be closed
     // #i119941, bKeepToTempStorage: use to specify whether store the removed object to temporary storage+
     void            RemoveEmbeddedObject( const OUString& rName, bool bKeepToTempStorage = true);

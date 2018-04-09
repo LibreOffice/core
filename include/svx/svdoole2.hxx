@@ -51,7 +51,6 @@ private:
 private:
     SVX_DLLPRIVATE void Connect_Impl();
     SVX_DLLPRIVATE void Disconnect_Impl();
-    SVX_DLLPRIVATE void Reconnect_Impl();
     SVX_DLLPRIVATE void AddListeners_Impl();
     SVX_DLLPRIVATE void RemoveListeners_Impl();
     SVX_DLLPRIVATE void GetObjRef_Impl();
