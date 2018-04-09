@@ -235,39 +235,22 @@ IMPL_LINK_NOARG(SvxSearchAttributeDialog, OKHdl, Button*, void)
 
 // class SvxSearchSimilarityDialog ---------------------------------------
 
-SvxSearchSimilarityDialog::SvxSearchSimilarityDialog
-(
-    vcl::Window* pParent,
-    bool bRelax,
-    sal_uInt16 nOther,
-    sal_uInt16 nShorter,
-    sal_uInt16 nLonger
-) :
-    ModalDialog( pParent, "SimilaritySearchDialog", "cui/ui/similaritysearchdialog.ui" )
+SvxSearchSimilarityDialog::SvxSearchSimilarityDialog(weld::Window* pParent, bool bRelax,
+    sal_uInt16 nOther, sal_uInt16 nShorter, sal_uInt16 nLonger)
+    : GenericDialogController(pParent, "cui/ui/similaritysearchdialog.ui", "SimilaritySearchDialog")
+    , m_xOtherFld(m_xBuilder->weld_spin_button("otherfld"))
+    , m_xLongerFld(m_xBuilder->weld_spin_button("longerfld"))
+    , m_xShorterFld(m_xBuilder->weld_spin_button("shorterfld"))
+    , m_xRelaxBox(m_xBuilder->weld_check_button("relaxbox"))
 {
-    get( m_pOtherFld, "otherfld");
-    get( m_pLongerFld, "longerfld");
-    get( m_pShorterFld, "shorterfld");
-    get( m_pRelaxBox, "relaxbox");
-
-    m_pOtherFld->SetValue( nOther );
-    m_pShorterFld->SetValue( nShorter );
-    m_pLongerFld->SetValue( nLonger );
-    m_pRelaxBox->Check( bRelax );
+    m_xOtherFld->set_value(nOther);
+    m_xShorterFld->set_value(nShorter);
+    m_xLongerFld->set_value(nLonger);
+    m_xRelaxBox->set_active(bRelax);
 }
 
 SvxSearchSimilarityDialog::~SvxSearchSimilarityDialog()
 {
-    disposeOnce();
-}
-
-void SvxSearchSimilarityDialog::dispose()
-{
-    m_pOtherFld.clear();
-    m_pLongerFld.clear();
-    m_pShorterFld.clear();
-    m_pRelaxBox.clear();
-    ModalDialog::dispose();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

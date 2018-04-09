@@ -356,7 +356,7 @@ IMPL_LINK(FmSearchDialog, OnClickedSpecialSettings, Button*, pButton, void )
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
         if (pFact)
         {
-            ScopedVclPtr<AbstractSvxSearchSimilarityDialog> pDlg(pFact->CreateSvxSearchSimilarityDialog( this, m_pSearchEngine->GetLevRelaxed(), m_pSearchEngine->GetLevOther(),
+            ScopedVclPtr<AbstractSvxSearchSimilarityDialog> pDlg(pFact->CreateSvxSearchSimilarityDialog(GetFrameWeld(), m_pSearchEngine->GetLevRelaxed(), m_pSearchEngine->GetLevOther(),
                         m_pSearchEngine->GetLevShorter(), m_pSearchEngine->GetLevLonger() ));
             DBG_ASSERT( pDlg, "FmSearchDialog, OnClickedSpecialSettings: could not load the dialog!" );
             if (pDlg && pDlg->Execute() == RET_OK)

@@ -20,6 +20,7 @@
 #define INCLUDED_CUI_SOURCE_INC_SRCHXTRA_HXX
 
 #include <vcl/field.hxx>
+#include <vcl/weld.hxx>
 #include <svtools/ctrltool.hxx>
 #include <sfx2/tabdlg.hxx>
 
@@ -65,29 +66,27 @@ private:
 
 // class SvxSearchSimilarityDialog ---------------------------------------
 
-class SvxSearchSimilarityDialog : public ModalDialog
+class SvxSearchSimilarityDialog : public weld::GenericDialogController
 {
 private:
-    VclPtr<NumericField>        m_pOtherFld;
-    VclPtr<NumericField>        m_pLongerFld;
-    VclPtr<NumericField>        m_pShorterFld;
-    VclPtr<CheckBox>            m_pRelaxBox;
+    std::unique_ptr<weld::SpinButton> m_xOtherFld;
+    std::unique_ptr<weld::SpinButton> m_xLongerFld;
+    std::unique_ptr<weld::SpinButton> m_xShorterFld;
+    std::unique_ptr<weld::CheckButton> m_xRelaxBox;
 
 public:
-    SvxSearchSimilarityDialog(  vcl::Window* pParent,
-                                bool bRelax,
-                                sal_uInt16 nOther,
-                                sal_uInt16 nShorter,
-                                sal_uInt16 nLonger );
+    SvxSearchSimilarityDialog(weld::Window* pParent,
+                              bool bRelax,
+                              sal_uInt16 nOther,
+                              sal_uInt16 nShorter,
+                              sal_uInt16 nLonger);
     virtual ~SvxSearchSimilarityDialog() override;
-    virtual void dispose() override;
 
-    sal_uInt16  GetOther()      { return static_cast<sal_uInt16>(m_pOtherFld->GetValue()); }
-    sal_uInt16  GetShorter()    { return static_cast<sal_uInt16>(m_pShorterFld->GetValue()); }
-    sal_uInt16  GetLonger()     { return static_cast<sal_uInt16>(m_pLongerFld->GetValue()); }
-    bool    IsRelaxed()     { return m_pRelaxBox->IsChecked(); }
+    sal_uInt16  GetOther()      { return static_cast<sal_uInt16>(m_xOtherFld->get_value()); }
+    sal_uInt16  GetShorter()    { return static_cast<sal_uInt16>(m_xShorterFld->get_value()); }
+    sal_uInt16  GetLonger()     { return static_cast<sal_uInt16>(m_xLongerFld->get_value()); }
+    bool    IsRelaxed()     { return m_xRelaxBox->get_active(); }
 };
-
 
 #endif
 

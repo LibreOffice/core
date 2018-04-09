@@ -251,7 +251,14 @@ class AbstractURLDlg_Impl :public AbstractURLDlg
 class SvxSearchSimilarityDialog;
 class AbstractSvxSearchSimilarityDialog_Impl :public AbstractSvxSearchSimilarityDialog
 {
-    DECL_ABSTDLG_BASE(AbstractSvxSearchSimilarityDialog_Impl,SvxSearchSimilarityDialog)
+protected:
+    std::unique_ptr<SvxSearchSimilarityDialog> m_xDlg;
+public:
+    explicit AbstractSvxSearchSimilarityDialog_Impl(SvxSearchSimilarityDialog* p)
+        : m_xDlg(p)
+    {
+    }
+    virtual short Execute() override;
     virtual sal_uInt16              GetOther() override;
     virtual sal_uInt16              GetShorter() override;
     virtual sal_uInt16              GetLonger() override;
@@ -618,7 +625,7 @@ public:
     virtual VclPtr<VclAbstractDialog>      CreateSvxSearchAttributeDialog( vcl::Window* pParent,
                                             SearchAttrItemList& rLst,
                                             const sal_uInt16* pWhRanges) override;
-    virtual VclPtr<AbstractSvxSearchSimilarityDialog> CreateSvxSearchSimilarityDialog( vcl::Window* pParent,
+    virtual VclPtr<AbstractSvxSearchSimilarityDialog> CreateSvxSearchSimilarityDialog( weld::Window* pParent,
                                                             bool bRelax,
                                                             sal_uInt16 nOther,
                                                             sal_uInt16 nShorter,

@@ -113,7 +113,12 @@ IMPL_ABSTDLG_BASE(AbstractTitleDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractScriptSelectorDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractGalleryIdDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractURLDlg_Impl);
-IMPL_ABSTDLG_BASE(AbstractSvxSearchSimilarityDialog_Impl);
+
+short AbstractSvxSearchSimilarityDialog_Impl::Execute()
+{
+    return m_xDlg->run();
+}
+
 IMPL_ABSTDLG_BASE(AbstractSvxTransformTabDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractSvxCaptionDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractSvxJSearchOptionsDialog_Impl);
@@ -498,22 +503,22 @@ OUString AbstractURLDlg_Impl::GetName() const
 
 sal_uInt16 AbstractSvxSearchSimilarityDialog_Impl::GetOther()
 {
-    return pDlg->GetOther();
+    return m_xDlg->GetOther();
 }
 
 sal_uInt16 AbstractSvxSearchSimilarityDialog_Impl::GetShorter()
 {
-    return pDlg->GetShorter();
+    return m_xDlg->GetShorter();
 }
 
 sal_uInt16 AbstractSvxSearchSimilarityDialog_Impl::GetLonger()
 {
-    return pDlg->GetLonger();
+    return m_xDlg->GetLonger();
 }
 
 bool AbstractSvxSearchSimilarityDialog_Impl::IsRelaxed()
 {
-    return pDlg->IsRelaxed();
+    return m_xDlg->IsRelaxed();
 }
 
 // AbstractSvxTransformTabDialog implementations just forwards everything to the dialog
@@ -1074,14 +1079,13 @@ VclPtr<VclAbstractDialog> AbstractDialogFactory_Impl::CreateSvxSearchAttributeDi
     return VclPtr<CuiVclAbstractDialog_Impl>::Create( pDlg );
 }
 
-VclPtr<AbstractSvxSearchSimilarityDialog> AbstractDialogFactory_Impl::CreateSvxSearchSimilarityDialog( vcl::Window* pParent,
+VclPtr<AbstractSvxSearchSimilarityDialog> AbstractDialogFactory_Impl::CreateSvxSearchSimilarityDialog(weld::Window* pParent,
                                                             bool bRelax,
                                                             sal_uInt16 nOther,
                                                             sal_uInt16 nShorter,
                                                             sal_uInt16 nLonger)
 {
-    VclPtrInstance<SvxSearchSimilarityDialog> pDlg( pParent, bRelax, nOther, nShorter, nLonger );
-    return VclPtr<AbstractSvxSearchSimilarityDialog_Impl>::Create( pDlg );
+    return VclPtr<AbstractSvxSearchSimilarityDialog_Impl>::Create(new SvxSearchSimilarityDialog(pParent, bRelax, nOther, nShorter, nLonger));
 }
 
 VclPtr<SfxAbstractTabDialog> AbstractDialogFactory_Impl::CreateSvxBorderBackgroundDlg(
