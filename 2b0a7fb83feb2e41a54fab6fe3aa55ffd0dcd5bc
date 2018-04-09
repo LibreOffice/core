@@ -1,0 +1,78 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_38c7d113",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2018-04-09T05:41:04Z",
+      "side": 1,
+      "message": "is the bug number correct?",
+      "range": {
+        "startLine": 7,
+        "startChar": 4,
+        "endLine": 7,
+        "endChar": 10
+      },
+      "revId": "2b0a7fb83feb2e41a54fab6fe3aa55ffd0dcd5bc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_184ccdc6",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2018-04-09T05:41:04Z",
+      "side": 1,
+      "message": "same as in other patch, no need to list individual patch set changes.",
+      "revId": "2b0a7fb83feb2e41a54fab6fe3aa55ffd0dcd5bc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_f84e19c0",
+        "filename": "cui/source/inc/backgrnd.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2018-04-09T05:41:04Z",
+      "side": 1,
+      "message": "Please move includes to the top.",
+      "revId": "2b0a7fb83feb2e41a54fab6fe3aa55ffd0dcd5bc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_d8515564",
+        "filename": "cui/source/tabpages/backgrnd.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1444,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2018-04-09T05:41:04Z",
+      "side": 1,
+      "message": "Please move includes to the top",
+      "revId": "2b0a7fb83feb2e41a54fab6fe3aa55ffd0dcd5bc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
