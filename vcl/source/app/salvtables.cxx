@@ -759,7 +759,7 @@ public:
 
 IMPL_LINK_NOARG(SalInstanceNotebook, DeactivatePageHdl, TabControl*, bool)
 {
-    return m_aLeavePageHdl.Call(get_current_page_ident());
+    return !m_aLeavePageHdl.IsSet() || m_aLeavePageHdl.Call(get_current_page_ident());
 }
 
 IMPL_LINK_NOARG(SalInstanceNotebook, ActivatePageHdl, TabControl*, void)
@@ -1065,6 +1065,20 @@ public:
         if (nRet == LISTBOX_ENTRY_NOTFOUND)
             return -1;
         return nRet;
+    }
+
+    virtual int find_id(const OUString& rId) const override
+    {
+        sal_Int32 nCount = m_xTreeView->GetEntryCount();
+        for (sal_Int32 nPos = 0; nPos < nCount; ++nPos)
+        {
+            OUString* pId = static_cast<OUString*>(m_xTreeView->GetEntryData(nPos));
+            if (!pId)
+                continue;
+            if (rId == *pId)
+                return nPos;
+        }
+        return -1;
     }
 
     virtual void set_top_entry(int pos) override
@@ -1601,6 +1615,13 @@ public:
         return m_xComboBoxText->GetSelectedEntry();
     }
 
+    using SalInstanceContainer::remove;
+
+    virtual void remove(int pos) override
+    {
+        m_xComboBoxText->RemoveEntry(pos);
+    }
+
     virtual void set_entry_error(bool /*bError*/) override
     {
         assert(false);
@@ -1662,6 +1683,13 @@ public:
     virtual OUString get_active_text() const override
     {
         return m_xComboBoxText->GetText();
+    }
+
+    using SalInstanceContainer::remove;
+
+    virtual void remove(int pos) override
+    {
+        m_xComboBoxText->RemoveEntryAt(pos);
     }
 
     virtual void set_entry_text(const OUString& rText) override
