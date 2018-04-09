@@ -1679,17 +1679,4 @@ uno::Sequence< OUString > SAL_CALL SdUnoEventsAccess::getSupportedServiceNames( 
     return aStr;
 }
 
-void SdXShape::modelChanged( SdrModel* pNewModel )
-{
-    if( pNewModel )
-    {
-        uno::Reference< uno::XInterface > xModel( pNewModel->getUnoModel() );
-        mpModel = SdXImpressDocument::getImplementation( xModel );
-    }
-    else
-    {
-        mpModel = nullptr;
-    }
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -930,9 +930,7 @@ public:
     OutputDevice*   GetRefDevice() const;
 
     sal_uLong       GetTextHeight() const;
-    sal_uLong       GetTextHeight( sal_Int32 nParagraph ) const;
     tools::Rectangle GetParaBounds( sal_Int32 nParagraph ) const;
-    Point           GetDocPosTopLeft( sal_Int32 nParagraph );
     Point           GetDocPos( const Point& rPaperPos ) const;
     bool            IsTextPos( const Point& rPaperPos, sal_uInt16 nBorder );
     bool            IsTextPos( const Point& rPaperPos, sal_uInt16 nBorder, bool* pbBulletPos );

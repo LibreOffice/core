@@ -72,7 +72,6 @@ public:
 
     virtual bool queryAggregation( const css::uno::Type & rType, css::uno::Any& aAny ) override;
     virtual void dispose() override;
-    virtual void modelChanged( SdrModel* pNewModel ) override;
 
     // XInterface
     virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
