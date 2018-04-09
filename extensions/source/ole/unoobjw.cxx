@@ -681,10 +681,101 @@ HRESULT STDMETHODCALLTYPE CXTypeInfo::GetTypeComp(ITypeComp **ppTComp)
 HRESULT STDMETHODCALLTYPE CXTypeInfo::GetFuncDesc(UINT index,
                                                   FUNCDESC **ppFuncDesc)
 {
-    (void) index;
-    (void) ppFuncDesc;
-    SAL_WARN("extensions.olebridge", "CXTypeInfo@" << this << "::GetFuncDesc: NOTIMPL");
-    return E_NOTIMPL;
+    if (!ppFuncDesc)
+        return E_POINTER;
+
+    if (meKind != Kind::OUTGOING)
+        return E_NOTIMPL;
+
+    if (index <= 6)
+    {
+        *ppFuncDesc = new FUNCDESC;
+        (*ppFuncDesc)->memid = 0x60000000 + index;
+        (*ppFuncDesc)->lprgscode = NULL;
+        (*ppFuncDesc)->lprgelemdescParam = NULL;
+        (*ppFuncDesc)->funckind = FUNC_DISPATCH;
+        (*ppFuncDesc)->invkind = INVOKE_FUNC;
+        (*ppFuncDesc)->callconv = CC_STDCALL;
+        switch (index)
+        {
+        case 0: // QueryInterface
+            (*ppFuncDesc)->cParams = 2;
+            (*ppFuncDesc)->elemdescFunc.tdesc.lptdesc = NULL;
+            (*ppFuncDesc)->elemdescFunc.tdesc.vt = VT_VOID;
+            break;
+        case 1: // AddRef
+            (*ppFuncDesc)->cParams = 0;
+            (*ppFuncDesc)->elemdescFunc.tdesc.lptdesc = NULL;
+            (*ppFuncDesc)->elemdescFunc.tdesc.vt = VT_UI4;
+            break;
+        case 2: // Release
+            (*ppFuncDesc)->cParams = 1;
+            (*ppFuncDesc)->elemdescFunc.tdesc.lptdesc = NULL;
+            (*ppFuncDesc)->elemdescFunc.tdesc.vt = VT_UI4;
+            break;
+        case 3: // GetTypeInfoCount
+            (*ppFuncDesc)->cParams = 1;
+            (*ppFuncDesc)->elemdescFunc.tdesc.lptdesc = NULL;
+            (*ppFuncDesc)->elemdescFunc.tdesc.vt = VT_VOID;
+            break;
+        case 4: // GetTypeInfo
+            (*ppFuncDesc)->cParams = 3;
+            (*ppFuncDesc)->elemdescFunc.tdesc.lptdesc = NULL;
+            (*ppFuncDesc)->elemdescFunc.tdesc.vt = VT_VOID;
+            break;
+        case 5: // GetIDsOfNames
+            (*ppFuncDesc)->cParams = 5;
+            (*ppFuncDesc)->elemdescFunc.tdesc.lptdesc = NULL;
+            (*ppFuncDesc)->elemdescFunc.tdesc.vt = VT_VOID;
+            break;
+        case 6: // Invoke
+            (*ppFuncDesc)->cParams = 8;
+            (*ppFuncDesc)->elemdescFunc.tdesc.lptdesc = NULL;
+            (*ppFuncDesc)->elemdescFunc.tdesc.vt = VT_VOID;
+            break;
+        }
+        (*ppFuncDesc)->cParamsOpt = 0;
+        (*ppFuncDesc)->oVft = index * sizeof(void*);
+        (*ppFuncDesc)->cScodes = 0;
+        (*ppFuncDesc)->wFuncFlags = FUNCFLAG_FRESTRICTED;
+
+        SAL_INFO("extensions.olebridge", "CXTypeInfo@" << this << "::GetFuncDesc(" << index << "): S_OK: " << *ppFuncDesc);
+
+        return S_OK;
+    }
+
+    Reference<XIdlReflection> xRefl = theCoreReflection::get(comphelper::getComponentContext(mxMSF));
+    assert(xRefl.is());
+
+    Reference<XIdlClass> xClass = xRefl->forName(maType.getTypeName());
+    assert(xClass.is());
+
+    auto aMethods = xClass->getMethods();
+    assert(xClass->getTypeClass() == TypeClass_INTERFACE &&
+           aMethods.getLength() > 0);
+
+    if (index > (UINT)(aMethods.getLength() - 3 + 3 + 4))
+        return E_INVALIDARG;
+
+    *ppFuncDesc = new FUNCDESC;
+
+    (*ppFuncDesc)->memid = index - 6;
+    (*ppFuncDesc)->lprgscode = NULL;
+    (*ppFuncDesc)->lprgelemdescParam = NULL;
+    (*ppFuncDesc)->funckind = FUNC_DISPATCH;
+    (*ppFuncDesc)->invkind = INVOKE_FUNC;
+    (*ppFuncDesc)->callconv = CC_STDCALL;
+    (*ppFuncDesc)->cParams = aMethods[index - 4]->getParameterInfos().getLength();
+    (*ppFuncDesc)->cParamsOpt = 0;
+    (*ppFuncDesc)->oVft = index * sizeof(void*);
+    (*ppFuncDesc)->cScodes = 0;
+    (*ppFuncDesc)->elemdescFunc.tdesc.lptdesc = NULL; // ???
+    (*ppFuncDesc)->elemdescFunc.tdesc.vt = VT_VOID; // ???
+    (*ppFuncDesc)->wFuncFlags = 0;
+
+    SAL_INFO("extensions.olebridge", "CXTypeInfo@" << this << "::GetFuncDesc(" << index << "): S_OK: " << *ppFuncDesc);
+
+    return S_OK;
 }
 
 HRESULT STDMETHODCALLTYPE CXTypeInfo::GetVarDesc(UINT index,
@@ -960,8 +1051,9 @@ void STDMETHODCALLTYPE CXTypeInfo::ReleaseTypeAttr(TYPEATTR *pTypeAttr)
 
 void STDMETHODCALLTYPE CXTypeInfo::ReleaseFuncDesc(FUNCDESC *pFuncDesc)
 {
-    (void) pFuncDesc;
-    SAL_WARN("extensions.olebridge", "CXTypeInfo@" << this << "::ReleaseFuncDesc: NOTIMPL");
+    SAL_WARN("extensions.olebridge", "CXTypeInfo@" << this << "::ReleaseFuncDesc(" << pFuncDesc << ")");
+
+    delete pFuncDesc;
 }
 
 void STDMETHODCALLTYPE CXTypeInfo::ReleaseVarDesc(VARDESC *pVarDesc)
