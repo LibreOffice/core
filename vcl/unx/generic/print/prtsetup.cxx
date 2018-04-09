@@ -288,6 +288,9 @@ RTSDevicePage::RTSDevicePage(weld::Widget* pPage, RTSDialog* pParent)
     , m_xSpaceBox(m_xBuilder->weld_combo_box_text("colorspace"))
     , m_xDepthBox(m_xBuilder->weld_combo_box_text("colordepth"))
 {
+    m_aReselectCustomIdle.SetInvokeHandler(LINK(this, RTSDevicePage, ImplHandleReselectHdl));
+    m_aReselectCustomIdle.SetDebugName("RTSDevicePage m_aReselectCustomIdle");
+
     m_xPPDKeyBox->set_size_request(m_xPPDKeyBox->get_approximate_digit_width() * 32,
                                    m_xPPDKeyBox->get_height_rows(12));
 
@@ -438,7 +441,7 @@ IMPL_LINK( RTSDevicePage, SelectHdl, weld::TreeView&, rBox, void )
         if (pKey && pValue)
         {
             m_pParent->m_aJobData.m_aContext.setValue( pKey, pValue );
-            FillValueBox( pKey );
+            ValueBoxChanged(pKey);
         }
     }
     m_pParent->SetDataModified( true );
@@ -469,13 +472,29 @@ void RTSDevicePage::FillValueBox( const PPDKey* pKey )
     }
     pValue = m_pParent->m_aJobData.m_aContext.getValue( pKey );
     m_xPPDValueBox->select_id(OUString::number(reinterpret_cast<sal_Int64>(pValue)));
+
+    ValueBoxChanged(pKey);
+}
+
+IMPL_LINK_NOARG(RTSDevicePage, ImplHandleReselectHdl, Timer*, void)
+{
+    //in case selected entry is now not visible select it again to scroll it into view
+    m_xPPDValueBox->select(m_xPPDValueBox->get_selected_index());
+}
+
+void RTSDevicePage::ValueBoxChanged( const PPDKey* pKey )
+{
+    const PPDValue* pValue = m_pParent->m_aJobData.m_aContext.getValue(pKey);
     if (pValue->m_bCustomOption)
     {
         m_pCustomValue = pValue;
         m_pParent->m_aJobData.m_aContext.setValue(pKey, pValue);
         m_xCustomEdit->set_text(m_pCustomValue->m_aCustomOption);
         m_xCustomEdit->show();
+        m_aReselectCustomIdle.Start();
     }
+    else
+        m_xCustomEdit->hide();
 }
 
 int SetupPrinterDriver(weld::Window* pParent, ::psp::PrinterInfo& rJobData)

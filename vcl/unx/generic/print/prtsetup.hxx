@@ -20,6 +20,7 @@
 #ifndef INCLUDED_VCL_GENERIC_PRINT_PRTSETUP_HXX
 #define INCLUDED_VCL_GENERIC_PRINT_PRTSETUP_HXX
 
+#include <vcl/idle.hxx>
 #include <vcl/ppdparser.hxx>
 #include <vcl/weld.hxx>
 #include <printerinfomanager.hxx>
@@ -114,9 +115,13 @@ private:
     std::unique_ptr<weld::ComboBoxText> m_xDepthBox;
 
     void FillValueBox( const ::psp::PPDKey* );
+    void ValueBoxChanged( const ::psp::PPDKey* );
+
+    Idle m_aReselectCustomIdle;
 
     DECL_LINK(SelectHdl, weld::TreeView&, void);
     DECL_LINK(ModifyHdl, weld::Entry&, void);
+    DECL_LINK(ImplHandleReselectHdl, Timer*, void);
 public:
     RTSDevicePage(weld::Widget* pPage, RTSDialog* pDialog);
     ~RTSDevicePage();
