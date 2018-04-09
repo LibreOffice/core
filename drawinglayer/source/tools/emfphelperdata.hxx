@@ -132,58 +132,6 @@ namespace emfplushelper
         virtual ~EMFPObject();
     };
 
-//    struct OutDevState
-//    {
-//        OutDevState();
-//
-//        ::basegfx::B2DPolyPolygon                                                clip;
-//        ::tools::Rectangle                                                              clipRect;
-//        css::uno::Reference< css::rendering::XPolyPolygon2D >                    xClipPoly;
-//
-//        css::uno::Sequence< double >                                             lineColor;
-//        css::uno::Sequence< double >                                             fillColor;
-//        css::uno::Sequence< double >                                             textColor;
-//        css::uno::Sequence< double >                                             textFillColor;
-//        css::uno::Sequence< double >                                             textLineColor;
-//
-//        /** Current font.
-//
-//        @attention Beware, this member can be NULL, and
-//        nevertheless text output is generated.
-//        */
-//        css::uno::Reference< css::rendering::XCanvasFont >                       xFont;
-//        ::basegfx::B2DHomMatrix                                                  transform;
-//        ::basegfx::B2DHomMatrix                                                  mapModeTransform;
-//        double                                                                   fontRotation;
-//
-//        FontEmphasisMark                                                         textEmphasisMarkStyle;
-//        PushFlags                                                                pushFlags;
-//        sal_Int8                                                                 textDirection;
-//        sal_Int8                                                                 textAlignment;
-//        FontRelief                                                               textReliefStyle;
-//        sal_Int8                                                                 textOverlineStyle;
-//        sal_Int8                                                                 textUnderlineStyle;
-//        sal_Int8                                                                 textStrikeoutStyle;
-//        TextAlign                                                                textReferencePoint;
-//
-//        bool                                                                     isTextOutlineModeSet;
-//        bool                                                                     isTextEffectShadowSet;
-//        bool                                                                     isTextWordUnderlineSet;
-//
-//        bool                                                                     isLineColorSet;
-//        bool                                                                     isFillColorSet;
-//        bool                                                                     isTextFillColorSet;
-//        bool                                                                     isTextLineColorSet;
-//    };
-
-//    typedef struct
-//    {
-//        basegfx::B2DHomMatrix   maWorldTransform;
-//        OutDevState             aDevState;
-//    } EmfPlusGraphicState;
-//
-//    typedef std::map<int, EmfPlusGraphicState> GraphicStateMap;
-
     typedef std::map<int, wmfemfhelper::PropertyHolder> GraphicStateMap;
 
     struct EmfPlusHelperData
@@ -264,6 +212,6 @@ namespace emfplushelper
     };
 }
 
-#endif // INCLUDED_CPPCANVAS_SOURCE_MTFRENDERER_EMFPBRUSH_HXX
+#endif // INCLUDED_DRAWINGLAYER_SOURCE_TOOLS_EMFPHELPERDATA_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
