@@ -41,7 +41,7 @@ enum class ScDragSrc;
 class ScDrawTransferObj : public TransferableHelper
 {
 private:
-    SdrModel*                       pModel;
+    std::unique_ptr<SdrModel>       pModel;
     TransferableDataHelper          aOleData;
     TransferableObjectDescriptor    aObjDesc;
     SfxObjectShellRef               aDocShellRef;
@@ -49,13 +49,13 @@ private:
 
                                     // extracted from model in ctor:
     Size                            aSrcSize;
-    INetBookmark*                   pBookmark;
+    std::unique_ptr<INetBookmark>   pBookmark;
     bool                            bGraphic;
     bool                            bGrIsBit;
     bool                            bOleObj;
                                     // source information for drag&drop:
                                     // (view is needed to handle drawing obejcts)
-    SdrView*                        pDragSourceView;
+    std::unique_ptr<SdrView>        pDragSourceView;
     ScDragSrc                       nDragSourceFlags;
     bool                            bDragWasInternal;
 
@@ -79,7 +79,7 @@ public:
                                         const css::datatransfer::DataFlavor& rFlavor ) override;
     virtual void        DragFinished( sal_Int8 nDropAction ) override;
 
-    SdrModel*           GetModel()  { return pModel; }
+    SdrModel*           GetModel()  { return pModel.get(); }
 
     void                SetDrawPersist( const SfxObjectShellRef& rRef );
     void                SetDragSource( const ScDrawView* pView );
@@ -89,7 +89,7 @@ public:
 
     const OUString& GetShellID() const;
 
-    SdrView*            GetDragSourceView()             { return pDragSourceView; }
+    SdrView*            GetDragSourceView()             { return pDragSourceView.get(); }
     ScDragSrc           GetDragSourceFlags() const      { return nDragSourceFlags; }
 
     static ScDrawTransferObj* GetOwnClipboard( vcl::Window* );
