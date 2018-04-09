@@ -34,6 +34,24 @@
       "revId": "9b9e5cfd2fa629b2e1dc4a193e48a4a4e8d34126",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_4c9f6a03",
+        "filename": "sdext/source/pdfimport/wrapper/wrapper.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 475,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-04-09T16:17:32Z",
+      "side": 1,
+      "message": "I see.  But then drop the second part,\n\n  \u0026\u0026 rtl::toAsciiUpperCase(pCopy[i]) !\u003d rtl::toAsciiLowerCase(pAttrib[i])\n\nIt is enough to check the toAsciiLowerCase versions of pCopy[i] and pAttrib[i] for inequality.",
+      "parentUuid": "ba84c18e_d44ebc95",
+      "revId": "9b9e5cfd2fa629b2e1dc4a193e48a4a4e8d34126",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
