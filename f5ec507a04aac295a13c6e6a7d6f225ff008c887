@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "9a30ddce_2cccf634",
+        "filename": "sw/source/core/crsr/crstrvl.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 987,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2018-04-09T15:10:50Z",
+      "side": 1,
+      "message": "ah sorry, they were different between revision 2 and 3, but now i see that\u0027s because of a rebase, not because of changes from you",
+      "parentUuid": "9a30ddce_8c540255",
+      "revId": "f5ec507a04aac295a13c6e6a7d6f225ff008c887",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a30ddce_ecaade6f",
         "filename": "sw/source/core/crsr/crstrvl.cxx",
         "patchSetId": 3
