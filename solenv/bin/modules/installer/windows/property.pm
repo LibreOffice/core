@@ -413,8 +413,9 @@ sub update_property_table
     my $productname = get_productname_for_property_table($language, $allvariables);
     my $productversion = get_productversion_for_property_table();
     my $quickstarterlinkname = get_quickstarterlinkname_for_property_table($language, $allvariables);
-    my $windowsminversiontext = "Windows 7";
+    my $windowsminversiontext = "Windows 7 SP1";
     my $windowsminversionnumber = "601";
+    my $windowsminspnumber = "1";
 
     # Updating the values
 
@@ -430,6 +431,7 @@ sub update_property_table
         ${$propertyfile}[$i] =~ s/\bQUICKSTARTERLINKNAMETEMPLATE\b/$quickstarterlinkname/;
         ${$propertyfile}[$i] =~ s/\bWINDOWSMINVERSIONTEXTTEMPLATE\b/$windowsminversiontext/;
         ${$propertyfile}[$i] =~ s/\bWINDOWSMINVERSIONNUMBERTEMPLATE\b/$windowsminversionnumber/;
+        ${$propertyfile}[$i] =~ s/\bWINDOWSMINSPNUMBERTEMPLATE\b/$windowsminspnumber/;
         if ( ${$propertyfile}[$i] =~ m/\bARPNOMODIFY\b/ ) { $hasarpnomodify = 1; }
     }
 
