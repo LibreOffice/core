@@ -34,6 +34,7 @@ $(call gb_ExternalProject_get_state_target,lxml,build): \
 		$(lxml_PYTHON) setup.py build \
 			$(if $(SYSTEM_LIBXML),,--with-xml2-config=$(call gb_UnpackedTarball_get_dir,libxml2)/xml2-config) \
 			$(if $(SYSTEM_LIBXSLT),,--with-xslt-config=$(call gb_UnpackedTarball_get_dir,libxslt)/xslt-config) && \
+		rm -fr install && \
 		mkdir install && \
 		$(lxml_PYTHON) setup.py install \
 			--install-lib install \
