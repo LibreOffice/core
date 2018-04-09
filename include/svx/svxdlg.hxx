@@ -370,7 +370,7 @@ public:
     virtual VclPtr<VclAbstractDialog>      CreateSvxSearchAttributeDialog( vcl::Window* pParent,
                                             SearchAttrItemList& rLst,
                                             const sal_uInt16* pWhRanges)=0;
-    virtual VclPtr<AbstractSvxSearchSimilarityDialog> CreateSvxSearchSimilarityDialog( vcl::Window* pParent,
+    virtual VclPtr<AbstractSvxSearchSimilarityDialog> CreateSvxSearchSimilarityDialog( weld::Window* pParent,
                                                             bool bRelax,
                                                             sal_uInt16 nOther,
                                                             sal_uInt16 nShorter,

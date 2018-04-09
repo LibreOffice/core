@@ -1396,7 +1396,7 @@ IMPL_LINK( SvxSearchDialog, CommandHdl_Impl, Button *, pBtn, void )
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
         if(pFact)
         {
-            ScopedVclPtr<AbstractSvxSearchSimilarityDialog> pDlg(pFact->CreateSvxSearchSimilarityDialog( this,
+            ScopedVclPtr<AbstractSvxSearchSimilarityDialog> pDlg(pFact->CreateSvxSearchSimilarityDialog(GetFrameWeld(),
                                                                         pSearchItem->IsLEVRelaxed(),
                                                                         pSearchItem->GetLEVOther(),
                                                                         pSearchItem->GetLEVShorter(),
