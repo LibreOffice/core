@@ -20,111 +20,106 @@
 #ifndef INCLUDED_VCL_GENERIC_PRINT_PRTSETUP_HXX
 #define INCLUDED_VCL_GENERIC_PRINT_PRTSETUP_HXX
 
-#include <tools/link.hxx>
-
-#include <vcl/tabdlg.hxx>
-#include <vcl/tabpage.hxx>
-#include <vcl/tabctrl.hxx>
-#include <vcl/button.hxx>
-#include <vcl/edit.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/lstbox.hxx>
-#include <vcl/field.hxx>
-#include <vcl/combobox.hxx>
 #include <vcl/ppdparser.hxx>
+#include <vcl/weld.hxx>
 #include <printerinfomanager.hxx>
 
 class RTSPaperPage;
 class RTSDevicePage;
 
-class RTSDialog : public TabDialog
+class RTSDialog : public weld::GenericDialogController
 {
     friend class RTSPaperPage;
     friend class RTSDevicePage;
 
     ::psp::PrinterInfo      m_aJobData;
 
-    // controls
-    VclPtr<TabControl>      m_pTabControl;
-    VclPtr<OKButton>        m_pOKButton;
-    VclPtr<CancelButton>    m_pCancelButton;
-
-    // pages
-    VclPtr<RTSPaperPage>    m_pPaperPage;
-    VclPtr<RTSDevicePage>   m_pDevicePage;
-
     // some resources
     OUString                m_aInvalidString;
+    bool m_bDataModified;
 
-    bool mbDataModified;
+    // controls
+    std::unique_ptr<weld::Notebook> m_xTabControl;
+    std::unique_ptr<weld::Button> m_xOKButton;
+    std::unique_ptr<weld::Button> m_xCancelButton;
 
-    DECL_LINK( ActivatePage, TabControl*, void );
-    DECL_LINK( ClickButton, Button*, void );
+    // pages
+    std::unique_ptr<RTSPaperPage>  m_xPaperPage;
+    std::unique_ptr<RTSDevicePage> m_xDevicePage;
+
+    DECL_LINK(ActivatePage, const OString&, void );
+    DECL_LINK(ClickButton, weld::Button&, void );
 
     // helper functions
-    void insertAllPPDValues( ListBox&, const psp::PPDParser*, const psp::PPDKey* );
+    void insertAllPPDValues(weld::ComboBoxText&, const psp::PPDParser*, const psp::PPDKey*);
 public:
-    RTSDialog(const ::psp::PrinterInfo& rJobData, vcl::Window* pParent);
+    RTSDialog(const ::psp::PrinterInfo& rJobData, weld::Window* pParent);
     virtual ~RTSDialog() override;
-    virtual void dispose() override;
 
     const ::psp::PrinterInfo& getSetup() const { return m_aJobData; }
 
-    void SetDataModified( bool bModified ) { mbDataModified = bModified; }
-    bool GetDataModified() const { return mbDataModified; }
+    void SetDataModified( bool bModified ) { m_bDataModified = bModified; }
+    bool GetDataModified() const { return m_bDataModified; }
 };
 
-class RTSPaperPage : public TabPage
+class RTSPaperPage
 {
-    VclPtr<RTSDialog>          m_pParent;
+private:
+    std::unique_ptr<weld::Builder> m_xBuilder;
 
-    VclPtr<CheckBox>           m_pCbFromSetup;
+    RTSDialog*                 m_pParent;
 
-    VclPtr<FixedText>          m_pPaperText;
-    VclPtr<ListBox>            m_pPaperBox;
+    std::unique_ptr<weld::Widget> m_xContainer;
 
-    VclPtr<FixedText>          m_pOrientText;
-    VclPtr<ListBox>            m_pOrientBox;
+    std::unique_ptr<weld::CheckButton> m_xCbFromSetup;
 
-    VclPtr<FixedText>          m_pDuplexText;
-    VclPtr<ListBox>            m_pDuplexBox;
+    std::unique_ptr<weld::Label> m_xPaperText;
+    std::unique_ptr<weld::ComboBoxText> m_xPaperBox;
 
-    VclPtr<FixedText>          m_pSlotText;
-    VclPtr<ListBox>            m_pSlotBox;
+    std::unique_ptr<weld::Label> m_xOrientText;
+    std::unique_ptr<weld::ComboBoxText> m_xOrientBox;
 
-    DECL_LINK( SelectHdl, ListBox&, void );
-    DECL_LINK( CheckBoxHdl, CheckBox&, void );
+    std::unique_ptr<weld::Label> m_xDuplexText;
+    std::unique_ptr<weld::ComboBoxText> m_xDuplexBox;
+
+    std::unique_ptr<weld::Label> m_xSlotText;
+    std::unique_ptr<weld::ComboBoxText> m_xSlotBox;
+
+    DECL_LINK(SelectHdl, weld::ComboBoxText&, void);
+    DECL_LINK(CheckBoxHdl, weld::ToggleButton&, void);
 public:
-    explicit RTSPaperPage( RTSDialog* );
-    virtual ~RTSPaperPage() override;
-    virtual void dispose() override;
+    RTSPaperPage(weld::Widget* pPage, RTSDialog* pDialog);
+    ~RTSPaperPage();
 
     void update();
 
-    sal_Int32 getOrientation() const { return m_pOrientBox->GetSelectedEntryPos(); }
+    sal_Int32 getOrientation() const { return m_xOrientBox->get_active(); }
 };
 
-class RTSDevicePage : public TabPage
+class RTSDevicePage
 {
-    VclPtr<RTSDialog>          m_pParent;
+private:
+    std::unique_ptr<weld::Builder> m_xBuilder;
 
-    VclPtr<ListBox>            m_pPPDKeyBox;
-    VclPtr<ListBox>            m_pPPDValueBox;
     const psp::PPDValue* m_pCustomValue;
-    VclPtr<Edit>               m_pCustomEdit;
+    RTSDialog*                 m_pParent;
 
-    VclPtr<ListBox>            m_pLevelBox;
-    VclPtr<ListBox>            m_pSpaceBox;
-    VclPtr<ListBox>            m_pDepthBox;
+    std::unique_ptr<weld::Widget> m_xContainer;
+    std::unique_ptr<weld::TreeView> m_xPPDKeyBox;
+    std::unique_ptr<weld::TreeView> m_xPPDValueBox;
+    std::unique_ptr<weld::Entry> m_xCustomEdit;
+
+    std::unique_ptr<weld::ComboBoxText> m_xLevelBox;
+    std::unique_ptr<weld::ComboBoxText> m_xSpaceBox;
+    std::unique_ptr<weld::ComboBoxText> m_xDepthBox;
 
     void FillValueBox( const ::psp::PPDKey* );
 
-    DECL_LINK( SelectHdl, ListBox&, void );
-    DECL_LINK( ModifyHdl, Edit&, void );
+    DECL_LINK(SelectHdl, weld::TreeView&, void);
+    DECL_LINK(ModifyHdl, weld::Entry&, void);
 public:
-    explicit RTSDevicePage( RTSDialog* );
-    virtual ~RTSDevicePage() override;
-    virtual void dispose() override;
+    RTSDevicePage(weld::Widget* pPage, RTSDialog* pDialog);
+    ~RTSDevicePage();
 
     sal_uLong getLevel();
     sal_uLong getPDFDevice();
@@ -132,7 +127,7 @@ public:
     sal_uLong getColorDevice();
 };
 
-int SetupPrinterDriver(::psp::PrinterInfo& rJobData);
+int SetupPrinterDriver(weld::Window* pParent, ::psp::PrinterInfo& rJobData);
 
 #endif // _PAD_PRTSETUP_HXX
 
