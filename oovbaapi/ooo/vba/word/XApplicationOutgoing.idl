@@ -27,6 +27,7 @@ interface XApplicationOutgoing : XInterfaceWithIID
 {
     void DocumentChange();
     void Quit();
+    void DocumentBeforeClose([in] any Document, [out] any Cancel);
 };
 
 }; }; };
