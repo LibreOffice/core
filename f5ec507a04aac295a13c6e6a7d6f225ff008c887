@@ -104,6 +104,24 @@
       "revId": "f5ec507a04aac295a13c6e6a7d6f225ff008c887",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_6cd6eec6",
+        "filename": "sw/source/core/crsr/crstrvl.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1485,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2018-04-09T15:11:43Z",
+      "side": 1,
+      "message": "...and except for this block of commented out code :)",
+      "parentUuid": "9a30ddce_ac51c664",
+      "revId": "f5ec507a04aac295a13c6e6a7d6f225ff008c887",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
