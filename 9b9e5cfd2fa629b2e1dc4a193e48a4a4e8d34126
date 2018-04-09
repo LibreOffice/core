@@ -16,6 +16,24 @@
       "revId": "9b9e5cfd2fa629b2e1dc4a193e48a4a4e8d34126",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba84c18e_d44ebc95",
+        "filename": "sdext/source/pdfimport/wrapper/wrapper.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 475,
+      "author": {
+        "id": 1001305
+      },
+      "writtenOn": "2018-04-09T15:37:56Z",
+      "side": 1,
+      "message": "It causes a type mismatch for comparisons. I used the function instead of casting in this context.",
+      "parentUuid": "ba84c18e_f4b5807e",
+      "revId": "9b9e5cfd2fa629b2e1dc4a193e48a4a4e8d34126",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
