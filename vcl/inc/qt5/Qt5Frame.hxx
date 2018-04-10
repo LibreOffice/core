@@ -20,6 +20,7 @@
 #pragma once
 
 #include <salframe.hxx>
+#include <vclpluginapi.h>
 
 #include "Qt5Tools.hxx"
 
@@ -33,7 +34,7 @@ class QPaintDevice;
 class QImage;
 class SvpSalGraphics;
 
-class Qt5Frame : public SalFrame
+class VCLPLUG_QT5_PUBLIC Qt5Frame : public SalFrame
 {
     friend class Qt5Widget;
 
