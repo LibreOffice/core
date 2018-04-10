@@ -208,6 +208,27 @@ index ca2cf3f..8073a18 100644
 +      (pTxtObj->m_GeneralState.GetStrokeAlpha() * 255.f) + 0.5f);
 +  return true;
 +}
+diff --git a/fpdfsdk/fpdfeditpath.cpp b/fpdfsdk/fpdfeditpath.cpp
+index a291987..d3b0bc1 100644
+--- a/fpdfsdk/fpdfeditpath.cpp
++++ b/fpdfsdk/fpdfeditpath.cpp
+@@ -101,6 +101,16 @@ FPDFPath_SetStrokeWidth(FPDF_PAGEOBJECT path, float width) {
+   return true;
+ }
+ 
++FPDF_EXPORT FPDF_BOOL FPDF_CALLCONV
++FPDFPath_GetStrokeWidth(FPDF_PAGEOBJECT path, float* width) {
++  auto* pPathObj = CPDFPathObjectFromFPDFPageObject(path);
++  if (!pPathObj || !width)
++    return false;
++
++  *width = pPathObj->m_GraphState.GetLineWidth();
++  return true;
++}
++
+ FPDF_EXPORT FPDF_BOOL FPDF_CALLCONV FPDFPath_SetFillColor(FPDF_PAGEOBJECT path,
+                                                           unsigned int R,
+                                                           unsigned int G,
 diff --git a/fpdfsdk/fpdftext.cpp b/fpdfsdk/fpdftext.cpp
 index 68bf4f8..e073b20 100644
 --- a/fpdfsdk/fpdftext.cpp
@@ -279,10 +300,26 @@ index 77c2315..db3e734 100644
  
  CPDF_PageObject* CPDFPageObjectFromFPDFPageObject(FPDF_PAGEOBJECT page_object);
 diff --git a/public/fpdf_edit.h b/public/fpdf_edit.h
-index 54735a3..15292f5 100644
+index 54735a3..282bcdb 100644
 --- a/public/fpdf_edit.h
 +++ b/public/fpdf_edit.h
-@@ -761,6 +761,73 @@ FPDFPageObj_CreateTextObj(FPDF_DOCUMENT document,
+@@ -520,6 +520,15 @@ FPDFPath_GetStrokeColor(FPDF_PAGEOBJECT path,
+ FPDF_EXPORT FPDF_BOOL FPDF_CALLCONV
+ FPDFPath_SetStrokeWidth(FPDF_PAGEOBJECT path, float width);
+ 
++// Get the stroke width of a path.
++//
++// path   - the handle to the path object.
++// width  - the width of the stroke.
++//
++// Returns TRUE on success
++FPDF_EXPORT FPDF_BOOL FPDF_CALLCONV
++FPDFPath_GetStrokeWidth(FPDF_PAGEOBJECT path, float* width);
++
+ // Set the line join of |page_object|.
+ //
+ // page_object  - handle to a page object.
+@@ -761,6 +770,73 @@ FPDFPageObj_CreateTextObj(FPDF_DOCUMENT document,
                            FPDF_FONT font,
                            float font_size);
  
