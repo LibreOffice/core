@@ -17,9 +17,11 @@ class SwLayoutWriter : public SwModelTestBase
 {
 public:
     void testTdf116830();
+    void testTdf116925();
 
     CPPUNIT_TEST_SUITE(SwLayoutWriter);
     CPPUNIT_TEST(testTdf116830);
+    CPPUNIT_TEST(testTdf116925);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -60,6 +62,26 @@ void SwLayoutWriter::testTdf116830()
     assertXPath(pXmlDoc,
                 "/metafile/push[1]/push[1]/push[1]/push[3]/push[1]/fillcolor[@color='#ffff00']", 1);
     assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[1]/push[3]/push[1]/rect", 1);
+}
+
+void SwLayoutWriter::testTdf116925()
+{
+    SwDoc* pDoc = createDoc("tdf116925.docx");
+    SwDocShell* pShell = pDoc->GetDocShell();
+
+    // Dump the rendering of the first page as an XML file.
+    std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
+    MetafileXmlDump dumper;
+    xmlDocPtr pXmlDoc = dumper.dumpAndParse(*xMetaFile);
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    assertXPathContent(pXmlDoc,
+                       "/metafile/push[1]/push[1]/push[1]/push[4]/push[1]/push[3]/textarray/text",
+                       "hello");
+    // This failed, text color was #000000.
+    assertXPath(
+        pXmlDoc,
+        "/metafile/push[1]/push[1]/push[1]/push[4]/push[1]/push[3]/textcolor[@color='#ffffff']", 1);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwLayoutWriter);
