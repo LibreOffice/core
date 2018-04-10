@@ -118,6 +118,7 @@ class SdrLightEmbeddedClient_Impl : public ::cppu::WeakImplHelper
 
 public:
     explicit SdrLightEmbeddedClient_Impl( SdrOle2Obj* pObj );
+    virtual ~SdrLightEmbeddedClient_Impl() override;
 
     void SetSizeScale( const Fraction& aScaleWidth, const Fraction& aScaleHeight )
     {
@@ -130,7 +131,9 @@ public:
 
     void setWindow(const uno::Reference< awt::XWindow >& _xWindow);
 
+    void disconnect();
 private:
+
     tools::Rectangle impl_getScaledRect_nothrow() const;
     // XStateChangeListener
     virtual void SAL_CALL changingState( const css::lang::EventObject& aEvent, ::sal_Int32 nOldState, ::sal_Int32 nNewState ) override;
@@ -169,6 +172,10 @@ SdrLightEmbeddedClient_Impl::SdrLightEmbeddedClient_Impl( SdrOle2Obj* pObj )
 : mpObj( pObj )
 {
 }
+SdrLightEmbeddedClient_Impl::~SdrLightEmbeddedClient_Impl()
+{
+    assert(!mpObj);
+}
 tools::Rectangle SdrLightEmbeddedClient_Impl::impl_getScaledRect_nothrow() const
 {
     tools::Rectangle aLogicRect( mpObj->GetLogicRect() );
@@ -197,11 +204,18 @@ void SAL_CALL SdrLightEmbeddedClient_Impl::stateChanged( const css::lang::EventO
     }
 }
 
-void SAL_CALL SdrLightEmbeddedClient_Impl::disposing( const css::lang::EventObject& /*aEvent*/ )
+void SdrLightEmbeddedClient_Impl::disconnect()
 {
     SolarMutexGuard aGuard;
-
+    if (!mpObj)
+        return;
     GetSdrGlobalData().GetOLEObjCache().RemoveObj(mpObj);
+    mpObj = nullptr;
+}
+
+void SAL_CALL SdrLightEmbeddedClient_Impl::disposing( const css::lang::EventObject& /*aEvent*/ )
+{
+    disconnect();
 }
 
 void SAL_CALL SdrLightEmbeddedClient_Impl::notifyEvent( const document::EventObject& aEvent )
@@ -729,7 +743,11 @@ SdrOle2Obj::~SdrOle2Obj()
 
     DisconnectFileLink_Impl();
 
-    mpImpl->mxLightClient.clear();
+    if (mpImpl->mxLightClient)
+    {
+        mpImpl->mxLightClient->disconnect();
+        mpImpl->mxLightClient.clear();
+    }
 }
 
 void SdrOle2Obj::SetAspect( sal_Int64 nAspect )
@@ -1808,8 +1826,10 @@ void SdrOle2Obj::GetObjRef_Impl()
     }
 
     if ( mpImpl->mbConnected )
+    {
         // move object to first position in cache
         GetSdrGlobalData().GetOLEObjCache().InsertObj(this);
+    }
 }
 
 uno::Reference < embed::XEmbeddedObject > const & SdrOle2Obj::GetObjRef() const
