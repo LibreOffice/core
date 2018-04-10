@@ -20,13 +20,14 @@
 #pragma once
 
 #include <headless/svpinst.hxx>
+#include <qt5/Qt5Instance.hxx>
 #include "KDE5SalFrame.hxx"
 
 class SalYieldMutex;
 class SalFrame;
 class KDE5XLib;
 
-class KDE5SalInstance : public SvpSalInstance
+class KDE5SalInstance : public Qt5Instance
 {
 
 protected:

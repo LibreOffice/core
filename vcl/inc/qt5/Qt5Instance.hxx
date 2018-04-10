@@ -19,6 +19,7 @@
 
 #pragma once
 
+#include <vclpluginapi.h>
 #include <unx/geninst.h>
 #include <salusereventlist.hxx>
 
@@ -30,7 +31,7 @@ class QApplication;
 class SalYieldMutex;
 class SalFrame;
 
-class Qt5Instance : public QObject, public SalGenericInstance, public SalUserEventList
+class VCLPLUG_QT5_PUBLIC Qt5Instance : public QObject, public SalGenericInstance, public SalUserEventList
 {
     Q_OBJECT
 

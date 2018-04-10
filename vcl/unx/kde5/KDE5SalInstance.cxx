@@ -34,7 +34,7 @@
 using namespace com::sun::star;
 
 KDE5SalInstance::KDE5SalInstance(SalYieldMutex* pMutex)
-    :SvpSalInstance( pMutex )
+    :Qt5Instance( pMutex, true )
 {
     ImplSVData* pSVData = ImplGetSVData();
     delete pSVData->maAppData.mpToolkitName;
