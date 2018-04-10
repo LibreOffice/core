@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_a2f54f84",
+        "filename": "dbaccess/source/core/api/preparedstatement.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2018-04-10T19:38:15Z",
+      "side": 1,
+      "message": "Since the call to ::dbtools::createUniqueName is with namespace qualifier, this \"using namespace\" addition seems completely unnecessary.",
+      "revId": "78fa761b77f81dd4921996acfdcf95a6c42524d1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
