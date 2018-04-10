@@ -102,6 +102,7 @@
 #include <edtwin.hxx>
 #include <view.hxx>
 #include <paintfrm.hxx>
+#include <textboxhelper.hxx>
 #include <o3tl/typed_flags_set.hxx>
 
 #include <vcl/BitmapTools.hxx>
@@ -7129,7 +7130,30 @@ bool SwFrame::GetBackgroundBrush(
             return false;
 
         if (pFrame->supportsFullDrawingLayerFillAttributeSet())
-            rFillAttributes = pFrame->getSdrAllFillAttributesHelper();
+        {
+            bool bTextBox = false;
+            if (pFrame->IsFlyFrame())
+            {
+                const SwFlyFrame* pFlyFrame = static_cast<const SwFlyFrame*>(pFrame);
+                SwFrameFormat* pShape
+                    = SwTextBoxHelper::getOtherTextBoxFormat(pFlyFrame->GetFormat(), RES_FLYFRMFMT);
+                if (pShape)
+                {
+                    SdrObject* pObject = pShape->FindRealSdrObject();
+                    if (pObject)
+                    {
+                        // Work with the fill attributes of the shape of the fly frame.
+                        rFillAttributes.reset(
+                            new drawinglayer::attribute::SdrAllFillAttributesHelper(
+                                pObject->GetMergedItemSet()));
+                        bTextBox = true;
+                    }
+                }
+            }
+
+            if (!bTextBox)
+                rFillAttributes = pFrame->getSdrAllFillAttributesHelper();
+        }
         const SvxBrushItem &rBack = pFrame->GetAttrSet()->GetBackground();
 
         if( pFrame->IsSctFrame() )
