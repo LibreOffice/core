@@ -1214,7 +1214,7 @@ ScAccessiblePreviewHeaderCellTextData::~ScAccessiblePreviewHeaderCellTextData()
 {
     if (pEditEngine)
         pEditEngine->SetNotifyHdl(Link<EENotify&,void>());
-    delete mpViewForwarder;
+    mpViewForwarder.reset();
 }
 
 void ScAccessiblePreviewHeaderCellTextData::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
@@ -1286,8 +1286,8 @@ SvxTextForwarder* ScAccessiblePreviewHeaderCellTextData::GetTextForwarder()
 SvxViewForwarder* ScAccessiblePreviewHeaderCellTextData::GetViewForwarder()
 {
     if (!mpViewForwarder)
-        mpViewForwarder = new ScPreviewHeaderCellViewForwarder(mpViewShell, aCellPos, mbColHeader);
-    return mpViewForwarder;
+        mpViewForwarder.reset(new ScPreviewHeaderCellViewForwarder(mpViewShell, aCellPos, mbColHeader));
+    return mpViewForwarder.get();
 }
 
 ScDocShell* ScAccessiblePreviewHeaderCellTextData::GetDocShell(ScPreviewShell* pViewShell)
