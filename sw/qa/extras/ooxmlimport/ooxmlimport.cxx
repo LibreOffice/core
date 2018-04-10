@@ -1586,6 +1586,12 @@ DECLARE_OOXMLIMPORT_TEST(testTdf114217, "tdf114217.docx")
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), xDrawPage->getCount());
 }
 
+DECLARE_OOXMLIMPORT_TEST(testTdf116486, "tdf116486.docx")
+{
+    OUString aTop = parseDump("/root/page/body/txt/Special", "nHeight");
+    CPPUNIT_ASSERT_EQUAL( OUString("4006"), aTop );
+}
+
 // tests should only be added to ooxmlIMPORT *if* they fail round-tripping in ooxmlEXPORT
 
 CPPUNIT_PLUGIN_IMPLEMENT();

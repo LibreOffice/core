@@ -2278,12 +2278,24 @@ void SwTextFormatter::CalcFlyWidth( SwTextFormatInfo &rInf )
     SwRect aLine( rInf.X() + nLeftMin, nTop, rInf.RealWidth() - rInf.X()
                   + nLeftMar - nLeftMin , nHeight );
 
+    // tdf#116486: consider also the upper margin from getFramePrintArea because intersections
+    //             with this additional space should lead to repositioning of paragraphs
+    //             For compatibility we grab a related compat flag:
+    if ( GetTextFrame()->GetTextNode()->getIDocumentSettingAccess()->get(DocumentSettingId::ADD_VERTICAL_FLY_OFFSETS) )
+    {
+        const long nUpper = m_pFrame->getFramePrintArea().Top();
+        // Increase the rectangle
+        if( nUpper > 0 && nTop >= nUpper  )
+            aLine.SubTop( nUpper );
+    }
     SwRect aLineVert( aLine );
     if ( m_pFrame->IsRightToLeft() )
         m_pFrame->SwitchLTRtoRTL( aLineVert );
 
     if ( m_pFrame->IsVertical() )
         m_pFrame->SwitchHorizontalToVertical( aLineVert );
+
+    // GetFrame(...) determines and returns the intersection rectangle
     SwRect aInter( rTextFly.GetFrame( aLineVert ) );
 
     if ( m_pFrame->IsRightToLeft() )
