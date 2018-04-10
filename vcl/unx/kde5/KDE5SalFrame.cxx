@@ -47,7 +47,8 @@
 #include <boost/optional.hpp>
 
 
-KDE5SalFrame::KDE5SalFrame( SalFrame* pParent, SalFrameStyleFlags nState )
+KDE5SalFrame::KDE5SalFrame( KDE5SalFrame* pParent, SalFrameStyleFlags nState, bool bUseCairo )
+    :Qt5Frame( pParent, nState, bUseCairo )
 {
 }
 

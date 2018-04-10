@@ -22,8 +22,10 @@
 #include <memory>
 #include <cairo.h>
 
+#undef Status
+
 #include <unx/saldisp.hxx>
-#include <unx/salframe.h>
+#include <qt5/Qt5Frame.hxx>
 #include <unx/salgdi.h>
 
 #include "KDE5SalGraphics.hxx"
@@ -31,7 +33,7 @@
 class QWidget;
 class KDE5SalGraphics;
 
-class KDE5SalFrame : public SalFrame
+class KDE5SalFrame : public Qt5Frame
 {
     private:
         static const int nMaxGraphics = 2;
@@ -50,7 +52,7 @@ class KDE5SalFrame : public SalFrame
         QWidget* m_pWindow;
 
     public:
-        KDE5SalFrame( SalFrame* pParent, SalFrameStyleFlags nStyle );
+        KDE5SalFrame( KDE5SalFrame* pParent, SalFrameStyleFlags nStyle, bool bUseCairo );
 
         virtual SalGraphics* AcquireGraphics() override;
         virtual void ReleaseGraphics( SalGraphics *pGraphics ) override;
