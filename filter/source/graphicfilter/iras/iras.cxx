@@ -391,9 +391,18 @@ sal_uInt8 RASReader::ImplGetByte()
 extern "C" SAL_DLLPUBLIC_EXPORT bool
 iraGraphicImport( SvStream & rStream, Graphic & rGraphic, FilterConfigItem* )
 {
-    RASReader aRASReader(rStream);
+    bool bRet = false;
 
-    return aRASReader.ReadRAS(rGraphic );
+    try
+    {
+        RASReader aRASReader(rStream);
+        bRet = aRASReader.ReadRAS(rGraphic );
+    }
+    catch (...)
+    {
+    }
+
+    return bRet;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
