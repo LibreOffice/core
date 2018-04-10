@@ -21,7 +21,9 @@
 #include <rtl/alloc.h>
 
 #include <com/sun/star/uno/genfunc.hxx>
+#include <com/sun/star/uno/Exception.hpp>
 #include "com/sun/star/uno/RuntimeException.hpp"
+#include <o3tl/runtimetooustring.hxx>
 #include <uno/data.h>
 
 #include <bridge.hxx>
@@ -31,8 +33,10 @@
 
 #include "share.hxx"
 
+#include <exception>
 #include <stdio.h>
 #include <string.h>
+#include <typeinfo>
 
 using namespace ::com::sun::star::uno;
 
@@ -285,11 +289,21 @@ static void cpp_call(
 
     try
     {
-        callVirtualMethod(
-            pAdjustedThisPtr, aVtableSlot.index,
-            pCppReturn, pReturnTypeDescr->eTypeClass,
-            pStackStart,
-            (pStack - pStackStart));
+        try {
+            callVirtualMethod(
+                pAdjustedThisPtr, aVtableSlot.index,
+                pCppReturn, pReturnTypeDescr->eTypeClass,
+                pStackStart,
+                (pStack - pStackStart));
+        } catch (css::uno::Exception &) {
+            throw;
+        } catch (std::exception & e) {
+            throw css::uno::RuntimeException(
+                "C++ code threw " + o3tl::runtimeToOUString(typeid(e).name()) + ": "
+                + o3tl::runtimeToOUString(e.what()));
+        } catch (...) {
+            throw css::uno::RuntimeException("C++ code threw unknown exception");
+        }
 
         // NO exception occurred...
         *ppUnoExc = 0;

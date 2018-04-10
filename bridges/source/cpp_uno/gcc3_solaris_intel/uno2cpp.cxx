@@ -17,12 +17,18 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <exception>
+#include <typeinfo>
 
 #include <malloc.h>
 #include <sal/alloca.h>
 
 #include <com/sun/star/uno/genfunc.hxx>
+#include <com/sun/star/uno/Exception.hpp>
 #include "com/sun/star/uno/RuntimeException.hpp"
+#include <o3tl/runtimetooustring.hxx>
 #include <uno/data.h>
 
 #include "bridge.hxx"
@@ -152,10 +158,20 @@ static void cpp_call(
     try
     {
         assert( !( (pCppStack - pCppStackStart ) & 3) && "UNALIGNED STACK !!! (Please DO panic)");
-        CPPU_CURRENT_NAMESPACE::callVirtualMethod(
-            pAdjustedThisPtr, aVtableSlot.index,
-            pCppReturn, pReturnTypeDescr->eTypeClass,
-            (sal_Int32 *)pCppStackStart, (pCppStack - pCppStackStart) / sizeof(sal_Int32) );
+        try {
+            CPPU_CURRENT_NAMESPACE::callVirtualMethod(
+                pAdjustedThisPtr, aVtableSlot.index,
+                pCppReturn, pReturnTypeDescr->eTypeClass,
+                (sal_Int32 *)pCppStackStart, (pCppStack - pCppStackStart) / sizeof(sal_Int32) );
+        } catch (css::uno::Exception &) {
+            throw;
+        } catch (std::exception & e) {
+            throw css::uno::RuntimeException(
+                "C++ code threw " + o3tl::runtimeToOUString(typeid(e).name()) + ": "
+                + o3tl::runtimeToOUString(e.what()));
+        } catch (...) {
+            throw css::uno::RuntimeException("C++ code threw unknown exception");
+        }
         // NO exception occurred...
         *ppUnoExc = 0;
 

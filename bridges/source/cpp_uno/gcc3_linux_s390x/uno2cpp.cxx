@@ -17,10 +17,16 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
 
+#include <exception>
 #include <malloc.h>
+#include <typeinfo>
 
+#include <com/sun/star/uno/Exception.hpp>
+#include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/uno/genfunc.hxx>
+#include <o3tl/runtimetooustring.hxx>
 #include <uno/data.h>
 
 #include "bridge.hxx"
@@ -328,12 +334,22 @@ static void cpp_call(
 
     try
     {
-        callVirtualMethod(
-            pAdjustedThisPtr, aVtableSlot.index,
-            pCppReturn, pReturnTypeDescr,
-            pStackStart, (pStack - pStackStart),
-            pGPR, nGPR,
-            pFPR, nFPR );
+        try {
+            callVirtualMethod(
+                pAdjustedThisPtr, aVtableSlot.index,
+                pCppReturn, pReturnTypeDescr,
+                pStackStart, (pStack - pStackStart),
+                pGPR, nGPR,
+                pFPR, nFPR );
+        } catch (css::uno::Exception &) {
+            throw;
+        } catch (std::exception & e) {
+            throw css::uno::RuntimeException(
+                "C++ code threw " + o3tl::runtimeToOUString(typeid(e).name()) + ": "
+                + o3tl::runtimeToOUString(e.what()));
+        } catch (...) {
+            throw css::uno::RuntimeException("C++ code threw unknown exception");
+        }
         // NO exception occurred...
         *ppUnoExc = 0;
 

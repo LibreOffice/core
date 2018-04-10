@@ -19,7 +19,14 @@
 
 #ifdef __arm64
 
+#include <sal/config.h>
+
+#include <exception>
+#include <typeinfo>
+
+#include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/uno/RuntimeException.hpp>
+#include <o3tl/runtimetooustring.hxx>
 
 #include "bridge.hxx"
 #include "types.hxx"
@@ -348,13 +355,23 @@ static void cpp_call(
 
     try
     {
-        callVirtualMethod(
-            pAdjustedThisPtr, aVtableSlot.index,
-            pCppReturn, pReturnTypeRef,
-            pStackStart,
-            (pStack - pStackStart),
-            pGPR,
-            pFPR);
+        try {
+            callVirtualMethod(
+                pAdjustedThisPtr, aVtableSlot.index,
+                pCppReturn, pReturnTypeRef,
+                pStackStart,
+                (pStack - pStackStart),
+                pGPR,
+                pFPR);
+        } catch (css::uno::Exception &) {
+            throw;
+        } catch (std::exception & e) {
+            throw css::uno::RuntimeException(
+                "C++ code threw " + o3tl::runtimeToOUString(typeid(e).name()) + ": "
+                + o3tl::runtimeToOUString(e.what()));
+        } catch (...) {
+            throw css::uno::RuntimeException("C++ code threw unknown exception");
+        }
 
         // NO exception occurred...
         *ppUnoExc = 0;
