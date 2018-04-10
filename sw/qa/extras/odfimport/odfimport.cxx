@@ -902,5 +902,13 @@ DECLARE_ODFIMPORT_TEST(testTdf108482, "tdf108482.odt")
     );
 }
 
+DECLARE_ODFIMPORT_TEST(testTdf116195, "tdf116195.odt")
+{
+    // The image was set to zero height due to a regression
+    CPPUNIT_ASSERT_EQUAL(
+        sal_Int32(12960), parseDump("/root/page/anchored/fly/notxt/infos/bounds", "height").toInt32()
+    );
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
