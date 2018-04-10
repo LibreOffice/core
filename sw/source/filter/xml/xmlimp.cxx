@@ -1399,7 +1399,7 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
     if (!bSubtractFlysAnchoredAtFlys)
         xProps->setPropertyValue("SubtractFlysAnchoredAtFlys", makeAny(true));
 
-    if ( !bDisableOffPagePositioning )
+    if ( bDisableOffPagePositioning )
         xProps->setPropertyValue("DisableOffPagePositioning", makeAny(true));
 
     SwDoc *pDoc = getDoc();
