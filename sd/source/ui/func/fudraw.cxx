@@ -902,7 +902,30 @@ bool FuDraw::SetHelpText(SdrObject* pObj, const Point& rPosPixel, const SdrViewE
         /**************************************************************
         * URL-Field
         **************************************************************/
-        aHelpText = INetURLObject::decode( rVEvt.pURLField->GetURL(), INetURLObject::DecodeMechanism::WithCharset );
+        OUString aURL = INetURLObject::decode( rVEvt.pURLField->GetURL(), INetURLObject::DecodeMechanism::WithCharset );
+
+        SvtSecurityOptions aSecOpt;
+        if (aSecOpt.IsOptionSet(SvtSecurityOptions::EOption::CtrlClickHyperlink))
+        {
+            // Hint about Ctrl-click to open hyperlink
+            // But need to detect "Ctrl" key for MacOs
+            vcl::KeyCode aCode(KEY_SPACE);
+            vcl::KeyCode aModifiedCode(KEY_SPACE, KEY_MOD1);
+            OUString aModStr(aModifiedCode.GetName());
+            aModStr = aModStr.replaceFirst(aCode.GetName(), "");
+            aModStr = aModStr.replaceAll("+", "");
+
+            OUString aCtrlClickHlinkStr = SdResId(STR_CTRLCLICKHYPERLINK);
+
+            aCtrlClickHlinkStr = aCtrlClickHlinkStr.replaceAll("%s", aModStr);
+
+            aHelpText = aCtrlClickHlinkStr + aURL;
+        }
+        else
+        {
+            // Hint about just clicking hyperlink
+            aHelpText = SdResId(STR_CLICKHYPERLINK) + aURL;
+        }
     }
 
     if (!aHelpText.isEmpty())
