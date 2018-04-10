@@ -34,6 +34,37 @@ index 0a01ae0..fad2920 100644
    if (bPattern) {
      DrawTextPathWithPattern(textobj, pObj2Device, pFont, font_size,
                              &text_matrix, bFill, bStroke);
+diff --git a/fpdfsdk/fpdfeditimg.cpp b/fpdfsdk/fpdfeditimg.cpp
+index 0d7ba56..37bdf99 100644
+--- a/fpdfsdk/fpdfeditimg.cpp
++++ b/fpdfsdk/fpdfeditimg.cpp
+@@ -167,6 +167,26 @@ FPDFImageObj_GetBitmap(FPDF_PAGEOBJECT image_object) {
+   return pBitmap.Leak();
+ }
+ 
++FPDF_EXPORT FPDF_BITMAP FPDF_CALLCONV
++FPDFImageObj_GetBitmapBgra(FPDF_PAGEOBJECT image_object) {
++  CPDF_PageObject* pObj = CPDFPageObjectFromFPDFPageObject(image_object);
++  if (!pObj || !pObj->IsImage())
++    return nullptr;
++
++  RetainPtr<CPDF_Image> pImg = pObj->AsImage()->GetImage();
++  if (!pImg)
++    return nullptr;
++
++  RetainPtr<CFX_DIBSource> pSource = pImg->LoadDIBSource();
++  if (!pSource)
++    return nullptr;
++
++  RetainPtr<CFX_DIBitmap> pBitmap;
++  pBitmap = pSource->CloneConvert(FXDIB_Argb);
++
++  return pBitmap.Leak();
++}
++
+ FPDF_EXPORT unsigned long FPDF_CALLCONV
+ FPDFImageObj_GetImageDataDecoded(FPDF_PAGEOBJECT image_object,
+                                  void* buffer,
 diff --git a/fpdfsdk/fpdfeditpage.cpp b/fpdfsdk/fpdfeditpage.cpp
 index ca2cf3f..ac36788 100644
 --- a/fpdfsdk/fpdfeditpage.cpp
@@ -282,4 +313,18 @@ index 043dc16..fe3b971 100644
 +
  // Function: FPDFLink_LoadWebLinks
  //          Prepare information about weblinks in a page.
+ // Parameters:
+diff --git a/public/fpdfview.h b/public/fpdfview.h
+index 35e87ae..80ab0ad 100644
+--- a/public/fpdfview.h
++++ b/public/fpdfview.h
+@@ -908,6 +908,9 @@ FPDF_EXPORT FPDF_BITMAP FPDF_CALLCONV FPDFBitmap_CreateEx(int width,
+ //          function; see the list of such formats above.
+ FPDF_EXPORT int FPDF_CALLCONV FPDFBitmap_GetFormat(FPDF_BITMAP bitmap);
+ 
++FPDF_EXPORT FPDF_BITMAP FPDF_CALLCONV
++FPDFImageObj_GetBitmapBgra(FPDF_PAGEOBJECT image_object);
++
+ // Function: FPDFBitmap_FillRect
+ //          Fill a rectangle in a bitmap.
  // Parameters:
