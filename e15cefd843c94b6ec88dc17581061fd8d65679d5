@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_e2bbc70c",
+        "filename": "sw/source/core/crsr/crsrsh.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1435,
+      "author": {
+        "id": 1000068
+      },
+      "writtenOn": "2018-04-10T14:22:10Z",
+      "side": 1,
+      "message": "Please is it intentional that we ignore the original bScrollWin value here?\n\nI mean, if the bScrollWin was false, it might become true if the view is the same?  Shouldn\u0027t we do\n\nif (comphelper::LibreOfficeKit::isActive() \u0026\u0026 bScrollView)\n{\n   bScrollView \u003d ...\n}\n\n?",
+      "range": {
+        "startLine": 1435,
+        "startChar": 21,
+        "endLine": 1435,
+        "endChar": 89
+      },
+      "revId": "e15cefd843c94b6ec88dc17581061fd8d65679d5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
