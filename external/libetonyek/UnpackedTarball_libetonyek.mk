@@ -19,8 +19,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,libetonyek,\
 	external/libetonyek/win_build.patch.1 \
 	external/libetonyek/ubsan.patch \
 	external/libetonyek/rpath.patch \
-	external/libetonyek/0001-add-missing-include-for-std-min.patch.1 \
-	external/libetonyek/c++17.patch \
+	external/libetonyek/warnings.patch \
 ))
 
 ifneq ($(OS),MACOSX)

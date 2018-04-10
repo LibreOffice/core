@@ -43,6 +43,7 @@ $(eval $(call gb_Library_add_generated_exception_objects,etonyek,\
 	UnpackedTarball/libetonyek/src/lib/EtonyekDocument \
 	UnpackedTarball/libetonyek/src/lib/IWAField \
 	UnpackedTarball/libetonyek/src/lib/IWAMessage \
+	UnpackedTarball/libetonyek/src/lib/IWAObjectIndex \
 	UnpackedTarball/libetonyek/src/lib/IWAParser \
 	UnpackedTarball/libetonyek/src/lib/IWAReader \
 	UnpackedTarball/libetonyek/src/lib/IWASnappyStream \
@@ -84,15 +85,17 @@ $(eval $(call gb_Library_add_generated_exception_objects,etonyek,\
 	UnpackedTarball/libetonyek/src/lib/IWORKXMLContextBase \
 	UnpackedTarball/libetonyek/src/lib/IWORKXMLParserState \
 	UnpackedTarball/libetonyek/src/lib/IWORKZlibStream \
+	UnpackedTarball/libetonyek/src/lib/KEY1Dictionary \
 	UnpackedTarball/libetonyek/src/lib/KEY1Parser \
+	UnpackedTarball/libetonyek/src/lib/KEY1ParserState \
 	UnpackedTarball/libetonyek/src/lib/KEY1Token \
-	UnpackedTarball/libetonyek/src/lib/KEY2Collector \
 	UnpackedTarball/libetonyek/src/lib/KEY2Dictionary \
 	UnpackedTarball/libetonyek/src/lib/KEY2Parser \
 	UnpackedTarball/libetonyek/src/lib/KEY2ParserState \
 	UnpackedTarball/libetonyek/src/lib/KEY2Token \
 	UnpackedTarball/libetonyek/src/lib/KEY6Parser \
 	UnpackedTarball/libetonyek/src/lib/KEYCollector \
+	UnpackedTarball/libetonyek/src/lib/KEYProperties \
 	UnpackedTarball/libetonyek/src/lib/KEYTypes \
 	UnpackedTarball/libetonyek/src/lib/NUM1Dictionary \
 	UnpackedTarball/libetonyek/src/lib/NUM1Parser \
@@ -111,12 +114,16 @@ $(eval $(call gb_Library_add_generated_exception_objects,etonyek,\
 	UnpackedTarball/libetonyek/src/lib/contexts/IWORKBezierElement \
 	UnpackedTarball/libetonyek/src/lib/contexts/IWORKBinaryElement \
 	UnpackedTarball/libetonyek/src/lib/contexts/IWORKBrContext \
+	UnpackedTarball/libetonyek/src/lib/contexts/IWORKCalcEngineContext \
 	UnpackedTarball/libetonyek/src/lib/contexts/IWORKChartInfoElement \
 	UnpackedTarball/libetonyek/src/lib/contexts/IWORKColorElement \
 	UnpackedTarball/libetonyek/src/lib/contexts/IWORKCoreImageFilterDescriptorElement \
 	UnpackedTarball/libetonyek/src/lib/contexts/IWORKDataElement \
+	UnpackedTarball/libetonyek/src/lib/contexts/IWORKFieldElement \
+	UnpackedTarball/libetonyek/src/lib/contexts/IWORKFillElement \
 	UnpackedTarball/libetonyek/src/lib/contexts/IWORKFilteredImageElement \
-	UnpackedTarball/libetonyek/src/lib/contexts/IWORKFoElement \
+	UnpackedTarball/libetonyek/src/lib/contexts/IWORKFormatElement \
+	UnpackedTarball/libetonyek/src/lib/contexts/IWORKFormulaElement \
 	UnpackedTarball/libetonyek/src/lib/contexts/IWORKGeometryElement \
 	UnpackedTarball/libetonyek/src/lib/contexts/IWORKGroupElement \
 	UnpackedTarball/libetonyek/src/lib/contexts/IWORKHeaderFooterContext \
@@ -124,6 +131,7 @@ $(eval $(call gb_Library_add_generated_exception_objects,etonyek,\
 	UnpackedTarball/libetonyek/src/lib/contexts/IWORKImageElement \
 	UnpackedTarball/libetonyek/src/lib/contexts/IWORKLayoutElement \
 	UnpackedTarball/libetonyek/src/lib/contexts/IWORKLineElement \
+	UnpackedTarball/libetonyek/src/lib/contexts/IWORKLineEndElement \
 	UnpackedTarball/libetonyek/src/lib/contexts/IWORKLinkElement \
 	UnpackedTarball/libetonyek/src/lib/contexts/IWORKListLabelGeometriesProperty \
 	UnpackedTarball/libetonyek/src/lib/contexts/IWORKListLabelGeometryElement \
@@ -131,7 +139,6 @@ $(eval $(call gb_Library_add_generated_exception_objects,etonyek,\
 	UnpackedTarball/libetonyek/src/lib/contexts/IWORKListLabelTypeinfoElement \
 	UnpackedTarball/libetonyek/src/lib/contexts/IWORKListLabelTypesProperty \
 	UnpackedTarball/libetonyek/src/lib/contexts/IWORKListTextIndentsProperty \
-	UnpackedTarball/libetonyek/src/lib/contexts/IWORKListstyleElement \
 	UnpackedTarball/libetonyek/src/lib/contexts/IWORKMediaElement \
 	UnpackedTarball/libetonyek/src/lib/contexts/IWORKMetadataElement \
 	UnpackedTarball/libetonyek/src/lib/contexts/IWORKNumberConverter \
@@ -145,20 +152,34 @@ $(eval $(call gb_Library_add_generated_exception_objects,etonyek,\
 	UnpackedTarball/libetonyek/src/lib/contexts/IWORKSizeElement \
 	UnpackedTarball/libetonyek/src/lib/contexts/IWORKSpanElement \
 	UnpackedTarball/libetonyek/src/lib/contexts/IWORKStringElement \
+	UnpackedTarball/libetonyek/src/lib/contexts/IWORKStrokeContext \
 	UnpackedTarball/libetonyek/src/lib/contexts/IWORKStyleContext \
 	UnpackedTarball/libetonyek/src/lib/contexts/IWORKStyleRefContext \
 	UnpackedTarball/libetonyek/src/lib/contexts/IWORKStylesContext \
 	UnpackedTarball/libetonyek/src/lib/contexts/IWORKStylesheetBase \
 	UnpackedTarball/libetonyek/src/lib/contexts/IWORKTabElement \
+	UnpackedTarball/libetonyek/src/lib/contexts/IWORKTableInfoElement \
 	UnpackedTarball/libetonyek/src/lib/contexts/IWORKTabsElement \
 	UnpackedTarball/libetonyek/src/lib/contexts/IWORKTabularInfoElement \
+	UnpackedTarball/libetonyek/src/lib/contexts/IWORKTabularModelElement \
 	UnpackedTarball/libetonyek/src/lib/contexts/IWORKTextBodyElement \
 	UnpackedTarball/libetonyek/src/lib/contexts/IWORKTextElement \
 	UnpackedTarball/libetonyek/src/lib/contexts/IWORKTextLabelElement \
 	UnpackedTarball/libetonyek/src/lib/contexts/IWORKTextStorageElement \
 	UnpackedTarball/libetonyek/src/lib/contexts/IWORKUnfilteredElement \
+	UnpackedTarball/libetonyek/src/lib/contexts/IWORKWrapElement \
+	UnpackedTarball/libetonyek/src/lib/contexts/KEY1ContentElement \
+	UnpackedTarball/libetonyek/src/lib/contexts/KEY1DivElement \
+	UnpackedTarball/libetonyek/src/lib/contexts/KEY1FillElement \
+	UnpackedTarball/libetonyek/src/lib/contexts/KEY1SpanElement \
+	UnpackedTarball/libetonyek/src/lib/contexts/KEY1StringConverter \
+	UnpackedTarball/libetonyek/src/lib/contexts/KEY1StylesContext \
+	UnpackedTarball/libetonyek/src/lib/contexts/KEY1TableElement \
 	UnpackedTarball/libetonyek/src/lib/contexts/KEY2StyleContext \
+	UnpackedTarball/libetonyek/src/lib/contexts/PAG1AnnotationContext \
+	UnpackedTarball/libetonyek/src/lib/contexts/PAG1AnnotationElement \
 	UnpackedTarball/libetonyek/src/lib/contexts/PAG1FootnotesElement \
+	UnpackedTarball/libetonyek/src/lib/contexts/PAG1ShapeContext \
 	UnpackedTarball/libetonyek/src/lib/contexts/PAG1StyleContext \
 	UnpackedTarball/libetonyek/src/lib/contexts/PAG1TextStorageElement \
 	UnpackedTarball/libetonyek/src/lib/libetonyek_utils \
