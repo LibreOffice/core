@@ -92,7 +92,6 @@ $(eval $(call gb_Library_add_exception_objects,vclplug_kde5,\
     vcl/unx/kde5/KDE5SalInstance \
     vcl/unx/kde5/KDE5XLib \
     vcl/unx/kde5/VCLKDE5Application \
-    vcl/unx/kde5/main \
 ))
 
 ifeq ($(OS),LINUX)
