@@ -392,39 +392,30 @@ NewObjectDialog::NewObjectDialog(weld::Window * pParent, ObjectMode eMode, bool 
 }
 
 // GotoLineDialog
-GotoLineDialog::GotoLineDialog(vcl::Window * pParent )
-    : ModalDialog(pParent, "GotoLineDialog",
-        "modules/BasicIDE/ui/gotolinedialog.ui")
+GotoLineDialog::GotoLineDialog(weld::Window* pParent )
+    : GenericDialogController(pParent, "modules/BasicIDE/ui/gotolinedialog.ui", "GotoLineDialog")
+    , m_xEdit(m_xBuilder->weld_entry("entry"))
+    , m_xOKButton(m_xBuilder->weld_button("ok"))
 {
-    get(m_pEdit, "entry");
-    get(m_pOKButton, "ok");
-    m_pEdit->GrabFocus();
-    m_pOKButton->SetClickHdl(LINK(this, GotoLineDialog, OkButtonHandler));
+    m_xEdit->grab_focus();
+    m_xOKButton->connect_clicked(LINK(this, GotoLineDialog, OkButtonHandler));
 }
 
 GotoLineDialog::~GotoLineDialog()
 {
-    disposeOnce();
-}
-
-void GotoLineDialog::dispose()
-{
-    m_pEdit.clear();
-    m_pOKButton.clear();
-    ModalDialog::dispose();
 }
 
 sal_Int32 GotoLineDialog::GetLineNumber() const
 {
-    return m_pEdit->GetText().toInt32();
+    return m_xEdit->get_text().toInt32();
 }
 
-IMPL_LINK_NOARG(GotoLineDialog, OkButtonHandler, Button*, void)
+IMPL_LINK_NOARG(GotoLineDialog, OkButtonHandler, weld::Button&, void)
 {
-    if ( GetLineNumber() )
-        EndDialog(1);
+    if (GetLineNumber())
+        m_xDialog->response(RET_OK);
     else
-        m_pEdit->SetText(m_pEdit->GetText(), Selection(0, m_pEdit->GetText().getLength()));
+        m_xEdit->select_region(0, -1);
 }
 
 // ExportDialog
