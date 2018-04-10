@@ -1325,8 +1325,8 @@ ScAccessibleHeaderTextData::~ScAccessibleHeaderTextData()
         mpDocSh->GetDocument().RemoveUnoObject(*this);
     if (mpEditEngine)
         mpEditEngine->SetNotifyHdl(Link<EENotify&,void>());
-    delete mpEditEngine;
-    delete mpForwarder;
+    mpEditEngine.reset();
+    mpForwarder.reset();
 }
 
 ScAccessibleTextData* ScAccessibleHeaderTextData::Clone() const
@@ -1351,7 +1351,7 @@ SvxTextForwarder* ScAccessibleHeaderTextData::GetTextForwarder()
     {
         SfxItemPool* pEnginePool = EditEngine::CreatePool();
         pEnginePool->FreezeIdRanges();
-        ScHeaderEditEngine* pHdrEngine = new ScHeaderEditEngine( pEnginePool );
+        std::unique_ptr<ScHeaderEditEngine> pHdrEngine(new ScHeaderEditEngine( pEnginePool ));
 
         pHdrEngine->EnableUndo( false );
         pHdrEngine->SetRefMapMode(MapMode(MapUnit::MapTwip));
@@ -1380,12 +1380,12 @@ SvxTextForwarder* ScAccessibleHeaderTextData::GetTextForwarder()
             ScHeaderFooterTextObj::FillDummyFieldData( aData );
         pHdrEngine->SetData( aData );
 
-        mpEditEngine = pHdrEngine;
-        mpForwarder = new SvxEditEngineForwarder(*mpEditEngine);
+        mpEditEngine = std::move(pHdrEngine);
+        mpForwarder.reset(new SvxEditEngineForwarder(*mpEditEngine));
     }
 
     if (mbDataValid)
-        return mpForwarder;
+        return mpForwarder.get();
 
     if ( mpViewShell  )
     {
@@ -1401,7 +1401,7 @@ SvxTextForwarder* ScAccessibleHeaderTextData::GetTextForwarder()
         mpEditEngine->SetText(*mpEditObj);
 
     mbDataValid = true;
-    return mpForwarder;
+    return mpForwarder.get();
 }
 
 SvxViewForwarder* ScAccessibleHeaderTextData::GetViewForwarder()
