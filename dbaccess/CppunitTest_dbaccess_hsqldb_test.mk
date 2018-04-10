@@ -23,7 +23,6 @@ $(eval $(call gb_CppunitTest_use_libraries,dbaccess_hsqldb_test, \
     dbaxml \
     dbtools \
     firebird_sdbc \
-    jvmfwk \
     sal \
     subsequenttest \
     utl \
@@ -42,15 +41,12 @@ $(eval $(call gb_CppunitTest_use_api,dbaccess_hsqldb_test,\
 $(eval $(call gb_CppunitTest_use_ure,dbaccess_hsqldb_test))
 $(eval $(call gb_CppunitTest_use_vcl,dbaccess_hsqldb_test))
 
-$(eval $(call gb_CppunitTest_use_java_ure,dbaccess_hsqldb_test))
-
 $(eval $(call gb_CppunitTest_use_components,dbaccess_hsqldb_test,\
     basic/util/sb \
     comphelper/util/comphelp \
     configmgr/source/configmgr \
     connectivity/source/cpool/dbpool2 \
     connectivity/source/drivers/firebird/firebird_sdbc \
-    connectivity/source/drivers/jdbc/jdbc \
     connectivity/source/manager/sdbc2 \
     dbaccess/util/dba \
     dbaccess/source/filter/xml/dbaxml \
