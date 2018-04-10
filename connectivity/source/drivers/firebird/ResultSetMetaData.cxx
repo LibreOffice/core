@@ -128,8 +128,8 @@ OUString SAL_CALL OResultSetMetaData::getSchemaName(sal_Int32)
 OUString SAL_CALL OResultSetMetaData::getColumnName(sal_Int32 column)
 {
     verifyValidColumn(column);
-    OUString sRet(m_pSqlda->sqlvar[column-1].sqlname,
-                    m_pSqlda->sqlvar[column-1].sqlname_length,
+    OUString sRet(m_pSqlda->sqlvar[column-1].aliasname,
+                    m_pSqlda->sqlvar[column-1].aliasname_length,
                     RTL_TEXTENCODING_UTF8);
     sanitizeIdentifier(sRet);
     return sRet;
