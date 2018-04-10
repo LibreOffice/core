@@ -1012,7 +1012,7 @@ llvm::Optional<CalleeWrapper> UnusedFields::getCallee(CallExpr const * callExpr)
     return llvm::Optional<CalleeWrapper>();
 }
 
-loplugin::Plugin::Registration< UnusedFields > X("unusedfields", true);
+loplugin::Plugin::Registration< UnusedFields > X("unusedfields", false);
 
 }
 
