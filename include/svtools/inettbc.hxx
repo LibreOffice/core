@@ -97,14 +97,8 @@ class SVT_DLLPUBLIC URLBox
     friend class SvtURLBox_Impl;
 
     Idle                            aChangedIdle;
-    OUString                        aBaseURL;
-    OUString                        aPlaceHolder;
     rtl::Reference< MatchContext_Impl > pCtx;
     std::unique_ptr<SvtURLBox_Impl> pImpl;
-    INetProtocol                    eSmartProtocol;
-    bool                            bAutoCompleteMode   : 1;
-    bool                            bOnlyDirectories    : 1;
-    bool                            bHistoryDisabled    : 1;
 
     std::unique_ptr<weld::ComboBoxText> m_xWidget;
 
@@ -125,13 +119,9 @@ public:
     void                            append_text(const OUString& rStr) { m_xWidget->append_text(rStr); }
     void                            EnableAutocomplete() { m_xWidget->set_entry_completion(true); }
 
-    INetProtocol                    GetSmartProtocol() const { return eSmartProtocol; }
     OUString                        GetURL();
 
     static OUString                 ParseSmart( const OUString& aText, const OUString& aBaseURL );
-
-    bool                            MatchesPlaceHolder( const OUString& sToMatch ) const
-                                        { return ( !aPlaceHolder.isEmpty() ) && ( aPlaceHolder == sToMatch ); }
 };
 
 #endif

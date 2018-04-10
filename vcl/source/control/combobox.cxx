@@ -58,7 +58,6 @@ struct ComboBox::Impl
     sal_Int32           m_nMaxWidthChars;
     Link<ComboBox&,void>               m_SelectHdl;
     Link<ComboBox&,void>               m_DoubleClickHdl;
-    Link<ComboBox&,void>               m_EntryActivateHdl;
 
     explicit Impl(ComboBox & rThis)
         : m_rThis(rThis)

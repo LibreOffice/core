@@ -98,8 +98,7 @@ ScChartListener::ScChartListener( const OUString& rName, ScDocument* pDocP,
     maName(rName),
     mpDoc( pDocP ),
     bUsed( false ),
-    bDirty( false ),
-    bSeriesRangesScheduled( false )
+    bDirty( false )
 {
     ScRefTokenHelper::getTokensFromRangeList(*mpTokens, *rRangeList);
 }
@@ -111,8 +110,7 @@ ScChartListener::ScChartListener( const OUString& rName, ScDocument* pDocP, vect
     maName(rName),
     mpDoc( pDocP ),
     bUsed( false ),
-    bDirty( false ),
-    bSeriesRangesScheduled( false )
+    bDirty( false )
 {
 }
 
@@ -123,8 +121,7 @@ ScChartListener::ScChartListener( const ScChartListener& r ) :
     maName(r.maName),
     mpDoc( r.mpDoc ),
     bUsed( false ),
-    bDirty( r.bDirty ),
-    bSeriesRangesScheduled( r.bSeriesRangesScheduled )
+    bDirty( r.bDirty )
 {
     if ( r.pUnoData )
         pUnoData.reset( new ScChartUnoData( *r.pUnoData ) );
@@ -322,15 +319,6 @@ void ScChartListener::ChangeListening( const ScRangeListRef& rRangeListRef,
         SetDirty( true );
 }
 
-void ScChartListener::UpdateScheduledSeriesRanges()
-{
-    if ( bSeriesRangesScheduled )
-    {
-        bSeriesRangesScheduled = false;
-        UpdateSeriesRanges();
-    }
-}
-
 void ScChartListener::UpdateChartIntersecting( const ScRange& rRange )
 {
     ScTokenRef pToken;
@@ -370,7 +358,6 @@ bool ScChartListener::operator==( const ScChartListener& r ) const
     bool b2 = (r.mpTokens.get() && !r.mpTokens->empty());
 
     if (mpDoc != r.mpDoc || bUsed != r.bUsed || bDirty != r.bDirty ||
-        bSeriesRangesScheduled != r.bSeriesRangesScheduled ||
         GetName() != r.GetName() || b1 != b2)
         return false;
 
@@ -690,14 +677,6 @@ void ScChartListenerCollection::SetRangeDirty( const ScRange& rRange )
         {
             itr->first->notify();
         }
-    }
-}
-
-void ScChartListenerCollection::UpdateScheduledSeriesRanges()
-{
-    for (auto const& it : m_Listeners)
-    {
-        it.second->UpdateScheduledSeriesRanges();
     }
 }
 

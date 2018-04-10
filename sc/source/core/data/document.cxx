@@ -567,10 +567,6 @@ bool ScDocument::InsertTab(
                     pValidationList->UpdateInsertTab(aCxt);
                 }
 
-                // sheet names of references are not valid until sheet is inserted
-                if ( pChartListenerCollection )
-                    pChartListenerCollection->UpdateScheduledSeriesRanges();
-
                 bValid = true;
             }
             else
@@ -667,10 +663,6 @@ bool ScDocument::InsertTabs( SCTAB nPos, const std::vector<OUString>& rNames,
                     pValidationList->UpdateInsertTab(aCxt);
                 }
 
-                // sheet names of references are not valid until sheet is inserted
-                if ( pChartListenerCollection )
-                    pChartListenerCollection->UpdateScheduledSeriesRanges();
-
                 bValid = true;
             }
             else
@@ -762,9 +754,6 @@ bool ScDocument::DeleteTab( SCTAB nTab )
                     sc::SetFormulaDirtyContext aFormulaDirtyCxt;
                     SetAllFormulasDirty(aFormulaDirtyCxt);
                 }
-                // sheet names of references are not valid until sheet is deleted
-                if (pChartListenerCollection)
-                    pChartListenerCollection->UpdateScheduledSeriesRanges();
 
                 if (comphelper::LibreOfficeKit::isActive())
                 {
@@ -863,9 +852,6 @@ bool ScDocument::DeleteTabs( SCTAB nTab, SCTAB nSheets )
                     sc::SetFormulaDirtyContext aFormulaDirtyCxt;
                     SetAllFormulasDirty(aFormulaDirtyCxt);
                 }
-                // sheet names of references are not valid until sheet is deleted
-                if (pChartListenerCollection)
-                    pChartListenerCollection->UpdateScheduledSeriesRanges();
 
                 if (comphelper::LibreOfficeKit::isActive())
                 {

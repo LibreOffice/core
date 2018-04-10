@@ -1177,7 +1177,7 @@ public:
     ParallelReductionVectorRef( const ScCalcConfig& config, const std::string& s,
         FormulaTreeNodeRef ft, std::shared_ptr<SlidingFunctionBase>& CodeGen,
         int index ) :
-        Base(config, s, ft, index), mpCodeGen(CodeGen), mpClmem2(nullptr)
+        Base(config, s, ft, index), mpCodeGen(CodeGen)
     {
         FormulaToken* t = ft->GetFormulaToken();
         if (t->GetType() != formula::svDoubleVectorRef)
@@ -1211,17 +1211,6 @@ public:
         return nCurWindowSize;
     }
 
-    ~ParallelReductionVectorRef()
-    {
-        if (mpClmem2)
-        {
-            cl_int err;
-            err = clReleaseMemObject(mpClmem2);
-            SAL_WARN_IF(err != CL_SUCCESS, "sc.opencl", "clReleaseMemObject failed: " << openclwrapper::errorString(err));
-            mpClmem2 = nullptr;
-        }
-    }
-
     size_t GetArrayLength() const { return mpDVR->GetArrayLength(); }
 
     size_t GetWindowSize() const { return mpDVR->GetRefRowSize(); }
@@ -1235,8 +1224,6 @@ protected:
     const formula::DoubleVectorRefToken* mpDVR;
     // from parent nodes
     std::shared_ptr<SlidingFunctionBase> mpCodeGen;
-    // controls whether to invoke the reduction kernel during marshaling or not
-    cl_mem mpClmem2;
 };
 
 class Reduction : public SlidingFunctionBase

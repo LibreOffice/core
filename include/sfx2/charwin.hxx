@@ -91,8 +91,6 @@ public:
 
     void setMouseClickHdl(const Link<SvxCharViewControl*,void> &rLink);
 
-    DECL_LINK(ContextMenuSelectHdl, Menu*, bool);
-
 protected:
     virtual void    Paint(vcl::RenderContext& rRenderContext, const ::tools::Rectangle&) override;
 
@@ -107,7 +105,6 @@ private:
     bool            maHasInsert;
 
     Link<SvxCharViewControl*, void> maMouseClickHdl;
-    Link<SvxCharViewControl*, void> maClearClickHdl;
 };
 
 #endif

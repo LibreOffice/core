@@ -536,10 +536,6 @@ private:
     Size                       rBitmapSize;
     Size                       rFilledSize;
     Size                       rZoomedSize;
-    sal_Int64                  nFilledWidthPercent;
-    sal_Int64                  nFilledHeightPercent;
-    sal_Int64                  nZoomedWidthPercent;
-    sal_Int64                  nZoomedHeightPercent;
     DECL_LINK( ModifyBitmapHdl, ValueSet*, void );
     DECL_LINK( ClickScaleHdl, Button*, void );
     DECL_LINK( ModifyBitmapStyleHdl, ListBox&, void );

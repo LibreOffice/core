@@ -159,8 +159,6 @@ SwHTMLTableLayout::SwHTMLTableLayout( const SwTable * pTable,
     : m_aColumns( nCls )
     , m_aCells( static_cast<size_t>(nRws)*nCls )
     , m_pSwTable( pTable )
-    , m_pLeftFillerBox( nullptr )
-    , m_pRightFillerBox( nullptr )
     , m_nMin( 0 )
     , m_nMax( 0 )
     , m_nRows( nRws )
@@ -1109,15 +1107,6 @@ void SwHTMLTableLayout::AutoLayoutPass2( sal_uInt16 nAbsAvail, sal_uInt16 nRelAv
         }
     }
 
-    // Filler cells
-    if( !IsTopTable() )
-    {
-        if( m_pLeftFillerBox && nAbsLeftFill<MINLAY+m_nInhLeftBorderWidth )
-            nAbsLeftFill = MINLAY+m_nInhLeftBorderWidth;
-        if( m_pRightFillerBox && nAbsRightFill<MINLAY+m_nInhRightBorderWidth )
-            nAbsRightFill = MINLAY+m_nInhRightBorderWidth;
-    }
-
     // Read just the available space
     m_nRelLeftFill = 0;
     m_nRelRightFill = 0;
@@ -1507,17 +1496,12 @@ void SwHTMLTableLayout::AutoLayoutPass2( sal_uInt16 nAbsAvail, sal_uInt16 nRelAv
             break;
         }
 
-        OSL_ENSURE( !m_pLeftFillerBox || m_nRelLeftFill>0,
-                "We don't have a width for the left filler box!" );
-        OSL_ENSURE( !m_pRightFillerBox || m_nRelRightFill>0,
-                "We don't have a width for the right filler box!" );
-
         // Filler widths are added to the outer columns, if there are no boxes
         // for them after the first pass (nWidth>0) or their width would become
         // too small or if there are COL tags and the filler width corresponds
         // to the border width.
         // In the last case we probably exported the table ourselves.
-        if( m_nRelLeftFill && !m_pLeftFillerBox &&
+        if( m_nRelLeftFill &&
             ( m_nWidthSet>0 || nAbsLeftFill<MINLAY+m_nInhLeftBorderWidth ||
               (HasColTags() && nAbsLeftFill < nAbsLeftSpace+nParentInhAbsLeftSpace+20) ) )
         {
@@ -1527,7 +1511,7 @@ void SwHTMLTableLayout::AutoLayoutPass2( sal_uInt16 nAbsAvail, sal_uInt16 nRelAv
             m_nRelLeftFill = 0;
             m_nInhAbsLeftSpace = nAbsLeftSpace + nParentInhAbsLeftSpace;
         }
-        if( m_nRelRightFill && !m_pRightFillerBox &&
+        if( m_nRelRightFill &&
             ( m_nWidthSet>0 || nAbsRightFill<MINLAY+m_nInhRightBorderWidth ||
               (HasColTags() && nAbsRightFill < nAbsRightSpace+nParentInhAbsRightSpace+20) ) )
         {
@@ -1683,19 +1667,6 @@ void SwHTMLTableLayout::SetWidths( bool bCallPass2, sal_uInt16 nAbsAvail,
         }
 #endif
 
-    }
-    else
-    {
-        if( m_pLeftFillerBox )
-        {
-            m_pLeftFillerBox->GetFrameFormat()->SetFormatAttr(
-                SwFormatFrameSize( ATT_VAR_SIZE, m_nRelLeftFill, 0 ));
-        }
-        if( m_pRightFillerBox )
-        {
-            m_pRightFillerBox->GetFrameFormat()->SetFormatAttr(
-                SwFormatFrameSize( ATT_VAR_SIZE, m_nRelRightFill, 0 ));
-        }
     }
 }
 
