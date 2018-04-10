@@ -1076,8 +1076,7 @@ bool SwFlowFrame::IsPrevObjMove() const
                      pPreUp->GetUpper()->GetUpper()->IsSctFrame() )
                 pPreUp = pPreUp->GetUpper()->GetUpper()->GetUpper();
         }
-        // #i26945# - re-factoring
-        // use <GetVertPosOrientFrame()> to determine, if object has followed the
+        // Use <GetVertPosOrientFrame()> to determine, if object has followed the
         // text flow to the next layout frame
         for (SwAnchoredObject* pObj : *pPre->GetDrawObjs())
         {
@@ -1260,8 +1259,6 @@ bool SwFlowFrame::HasParaSpaceAtPages( bool bSct ) const
 
 /** helper method to determine previous frame for calculation of the
     upper space
-
-    OD 2004-03-10 #i11860#
 */
 const SwFrame* SwFlowFrame::GetPrevFrameForUpperSpaceCalc_( const SwFrame* _pProposedPrevFrame ) const
 {
@@ -1366,12 +1363,10 @@ static bool lcl_getContextualSpacing(const SwFrame* pPrevFrame)
     return bRet;
 }
 
-// OD 2004-03-12 #i11860# - add 3rd parameter <_bConsiderGrid>
 SwTwips SwFlowFrame::CalcUpperSpace( const SwBorderAttrs *pAttrs,
                                    const SwFrame* pPr,
                                    const bool _bConsiderGrid ) const
 {
-    // OD 2004-03-10 #i11860# - use new method <GetPrevFrameForUpperSpaceCalc(..)>
     const SwFrame* pPrevFrame = GetPrevFrameForUpperSpaceCalc_( pPr );
 
     std::unique_ptr<SwBorderAttrAccess> pAccess;
@@ -1397,7 +1392,6 @@ SwTwips SwFlowFrame::CalcUpperSpace( const SwBorderAttrs *pAttrs,
         pOwn = &m_rThis;
     }
     SwTwips nUpper = 0;
-    // OD 06.01.2004 #i11859#
     {
         const IDocumentSettingAccess& rIDSA = m_rThis.GetUpper()->GetFormat()->getIDocumentSettingAccess();
         const bool bUseFormerLineSpacing = rIDSA.get(DocumentSettingId::OLD_LINE_SPACING);
@@ -1407,11 +1401,9 @@ SwTwips SwFlowFrame::CalcUpperSpace( const SwBorderAttrs *pAttrs,
                                          && lcl_getContextualSpacing(pPrevFrame)
                                          && lcl_IdenticalStyles(pPrevFrame, &m_rThis);
 
-            // OD 2004-03-10 #i11860# - use new method to determine needed spacing
-            // values of found previous frame and use these values.
+            // Determine needed spacing values of found previous frame and use these values.
             SwTwips nPrevLowerSpace = 0;
             SwTwips nPrevLineSpacing = 0;
-            // #i102458#
             bool bPrevLineSpacingPorportional = false;
             GetSpacingValuesOfFrame( (*pPrevFrame),
                                    nPrevLowerSpace, nPrevLineSpacing,
@@ -1420,11 +1412,9 @@ SwTwips SwFlowFrame::CalcUpperSpace( const SwBorderAttrs *pAttrs,
             {
                 nUpper = bContextualSpacing ? 0 : nPrevLowerSpace + pAttrs->GetULSpace().GetUpper();
                 SwTwips nAdd = nPrevLineSpacing;
-                // OD 07.01.2004 #i11859# - consideration of the line spacing
-                //      for the upper spacing of a text frame
+                // Consider the line spacing for the upper spacing of a text frame
                 if ( bUseFormerLineSpacing )
                 {
-                    // former consideration
                     if ( pOwn->IsTextFrame() )
                     {
                         nAdd = std::max( nAdd, static_cast<SwTextFrame*>(pOwn)->GetLineSpace() );
@@ -1433,15 +1423,12 @@ SwTwips SwFlowFrame::CalcUpperSpace( const SwBorderAttrs *pAttrs,
                 }
                 else
                 {
-                    // new consideration:
-                    //      Only the proportional line spacing of the previous
-                    //      text frame is considered for the upper spacing and
-                    //      the line spacing values are add up instead of
-                    //      building its maximum.
+                    // Only the proportional line spacing of the previous
+                    // text frame is considered for the upper spacing and
+                    // the line spacing values are add up instead of
+                    // building its maximum.
                     if ( pOwn->IsTextFrame() )
                     {
-                        // #i102458#
-                        // Correction:
                         // A proportional line spacing of the previous text frame
                         // is added up to a own leading line spacing.
                         // Otherwise, the maximum of the leading line spacing
@@ -1463,11 +1450,9 @@ SwTwips SwFlowFrame::CalcUpperSpace( const SwBorderAttrs *pAttrs,
             {
                 nUpper = bContextualSpacing ? 0 : std::max(static_cast<long>(nPrevLowerSpace),
                                                            static_cast<long>(pAttrs->GetULSpace().GetUpper()) );
-                // OD 07.01.2004 #i11859# - consideration of the line spacing
-                //      for the upper spacing of a text frame
+                // Consider the line spacing for the upper spacing of a text frame
                 if ( bUseFormerLineSpacing )
                 {
-                    // former consideration
                     if ( pOwn->IsTextFrame() )
                         nUpper = std::max( nUpper, static_cast<SwTextFrame*>(pOwn)->GetLineSpace() );
                     if ( nPrevLineSpacing != 0 )
@@ -1477,17 +1462,14 @@ SwTwips SwFlowFrame::CalcUpperSpace( const SwBorderAttrs *pAttrs,
                 }
                 else
                 {
-                    // new consideration:
-                    //      Only the proportional line spacing of the previous
-                    //      text frame is considered for the upper spacing and
-                    //      the line spacing values are add up and added to
-                    //      the paragraph spacing instead of building the
-                    //      maximum of the line spacings and the paragraph spacing.
+                    // Only the proportional line spacing of the previous
+                    // text frame is considered for the upper spacing and
+                    // the line spacing values are add up and added to
+                    // the paragraph spacing instead of building the
+                    // maximum of the line spacings and the paragraph spacing.
                     SwTwips nAdd = nPrevLineSpacing;
                     if ( pOwn->IsTextFrame() )
                     {
-                        // #i102458#
-                        // Correction:
                         // A proportional line spacing of the previous text frame
                         // is added up to a own leading line spacing.
                         // Otherwise, the maximum of the leading line spacing
@@ -1513,13 +1495,13 @@ SwTwips SwFlowFrame::CalcUpperSpace( const SwBorderAttrs *pAttrs,
         }
     }
 
-    // OD 2004-02-26 #i25029# - pass previous frame <pPrevFrame>
-    // to method <GetTopLine(..)>, if parameter <pPr> is set.
+    // Pass previous frame <pPrevFrame> to method <GetTopLine(..)>,
+    // if parameter <pPr> is set.
     // Note: parameter <pPr> is set, if method is called from <SwTextFrame::WouldFit(..)>
     nUpper += pAttrs->GetTopLine( m_rThis, (pPr ? pPrevFrame : nullptr) );
 
-    // OD 2004-03-12 #i11860# - consider value of new parameter <_bConsiderGrid>
-    // and use new method <GetUpperSpaceAmountConsideredForPageGrid(..)>
+    // Consider value of new parameter <_bConsiderGrid> and use
+    // new method <GetUpperSpaceAmountConsideredForPageGrid(..)>
 
     //consider grid in square page mode
     if ( _bConsiderGrid && m_rThis.GetUpper()->GetFormat()->GetDoc()->IsSquaredPageMode() )
@@ -1532,7 +1514,6 @@ SwTwips SwFlowFrame::CalcUpperSpace( const SwBorderAttrs *pAttrs,
 /** method to determine the upper space amount, which is considered for
     the page grid
 
-    OD 2004-03-12 #i11860#
     Precondition: Position of frame is valid.
 */
 SwTwips SwFlowFrame::GetUpperSpaceAmountConsideredForPageGrid_(
@@ -1586,8 +1567,6 @@ SwTwips SwFlowFrame::GetUpperSpaceAmountConsideredForPageGrid_(
 
 /** method to determine the upper space amount, which is considered for
     the previous frame
-
-    OD 2004-03-11 #i11860#
 */
 SwTwips SwFlowFrame::GetUpperSpaceAmountConsideredForPrevFrame() const
 {
@@ -1598,7 +1577,6 @@ SwTwips SwFlowFrame::GetUpperSpaceAmountConsideredForPrevFrame() const
     {
         SwTwips nPrevLowerSpace = 0;
         SwTwips nPrevLineSpacing = 0;
-        // #i102458#
         bool bDummy = false;
         GetSpacingValuesOfFrame( (*pPrevFrame), nPrevLowerSpace, nPrevLineSpacing, bDummy );
         if ( nPrevLowerSpace > 0 || nPrevLineSpacing > 0 )
@@ -1622,8 +1600,6 @@ SwTwips SwFlowFrame::GetUpperSpaceAmountConsideredForPrevFrame() const
 /** method to determine the upper space amount, which is considered for
     the previous frame and the page grid, if option 'Use former object
     positioning' is OFF
-
-    OD 2004-03-18 #i11860#
 */
 SwTwips SwFlowFrame::GetUpperSpaceAmountConsideredForPrevFrameAndPageGrid() const
 {
@@ -1666,11 +1642,8 @@ SwTwips SwFlowFrame::CalcLowerSpace( const SwBorderAttrs* _pAttrs ) const
                   _pAttrs->GetBottomLine( m_rThis ) :
                   _pAttrs->CalcBottomLine();
 
-    // #i26250#
-    // - correct consideration of table frames
-    // - use new method <CalcAddLowerSpaceAsLastInTableCell(..)>
     if ( ( ( m_rThis.IsTabFrame() && m_rThis.GetUpper()->IsInTab() ) ||
-           // #115759# - no lower spacing, if frame has a follow
+           // No lower spacing, if frame has a follow
            ( m_rThis.IsInTab() && !GetFollow() ) ) &&
          !m_rThis.GetIndNext() )
     {
@@ -1682,8 +1655,6 @@ SwTwips SwFlowFrame::CalcLowerSpace( const SwBorderAttrs* _pAttrs ) const
 
 /** calculation of the additional space to be considered, if flow frame
     is the last inside a table cell
-
-    OD 2004-07-16 #i26250#
 */
 SwTwips SwFlowFrame::CalcAddLowerSpaceAsLastInTableCell(
                                             const SwBorderAttrs* _pAttrs ) const
@@ -1897,7 +1868,6 @@ bool SwFlowFrame::MoveFwd( bool bMakePage, bool bPageBreak, bool bMoveAlways )
         // First, we move the footnotes.
         bool bFootnoteMoved = false;
 
-        // #i26831#
         // If pSect has just been created, the printing area of pSect has
         // been calculated based on the first content of its follow.
         // In this case we prefer to call a SimpleFormat for this new
@@ -1932,7 +1902,6 @@ bool SwFlowFrame::MoveFwd( bool bMakePage, bool bPageBreak, bool bMoveAlways )
         // situation.
         if( pNewUpper != m_rThis.GetUpper() )
         {
-            // #i27145#
             SwSectionFrame* pOldSct = nullptr;
             if ( m_rThis.GetUpper()->IsSctFrame() )
             {
@@ -1941,7 +1910,6 @@ bool SwFlowFrame::MoveFwd( bool bMakePage, bool bPageBreak, bool bMoveAlways )
 
             MoveSubTree( pNewUpper, pNewUpper->Lower() );
 
-            // #i27145#
             if ( pOldSct && pOldSct->GetSection() )
             {
                 // Prevent loops by setting the new height at
@@ -1956,7 +1924,6 @@ bool SwFlowFrame::MoveFwd( bool bMakePage, bool bPageBreak, bool bMoveAlways )
                 pOldSct->SimpleFormat();
             }
 
-            // #i26831#
             if ( bForceSimpleFormat )
             {
                 pSect->SimpleFormat();
@@ -1984,12 +1951,11 @@ bool SwFlowFrame::MoveFwd( bool bMakePage, bool bPageBreak, bool bMoveAlways )
                 }
             }
         }
-        // OD 30.10.2002 #97265# - no <CheckPageDesc(..)> in online layout
+        // No <CheckPageDesc(..)> in online layout
         const SwViewShell *pSh = m_rThis.getRootFrame()->GetCurrShell();
 
         if ( !( pSh && pSh->GetViewOptions()->getBrowseMode() ) )
         {
-            // #i106452#
             // check page description not only in situation with sections.
             if ( !bSamePage &&
                  ( m_rThis.GetAttrSet()->GetPageDesc().GetPageDesc() ||
@@ -2056,8 +2022,7 @@ bool SwFlowFrame::MoveBwd( bool &rbReformat )
         // If the footnote already sits on the same page/column as the reference,
         // we can't flow back. The breaks don't need to be checked for footnotes.
 
-        // #i37084# FindLastContent does not necessarily
-        // have to have a result != 0
+        // FindLastContent does not necessarily have to have a result != 0
         SwFrame* pRef = nullptr;
         const bool bEndnote = pFootnote->GetAttr()->GetFootnote().IsEndNote();
         if( bEndnote && pFootnote->IsInSct() )
@@ -2104,22 +2069,6 @@ bool SwFlowFrame::MoveBwd( bool &rbReformat )
                 if ( nDiff > 1 )
                 {
                     pNewUpper = m_rThis.GetLeaf( MAKEPAGE_NONE, false );
-                    // #i53139#
-                    // Now <pNewUpper> is a previous layout frame, which contains
-                    // content. But the new upper layout frame has to be the next one.
-                    // Thus, hack for issue i14206 no longer needed, but fix for issue 114442
-                    // #136024# - correct fix for i53139
-                    // Check for wrong page description before using next new upper.
-                    // #i66051# - further correction of fix for i53139
-                    // Check for correct type of new next upper layout frame
-                    // #136538# - another correction of fix for i53139
-                    // Assumption, that in all cases <pNewUpper> is a previous
-                    // layout frame, which contains content, is wrong.
-                    // #136538# - another correction of fix for i53139
-                    // Beside type check, check also, if proposed new next upper
-                    // frame is inside the same frame types.
-                    // #i73194# - and yet another correction
-                    // of fix for i53139:
                     // Assure that the new next upper layout frame doesn't
                     // equal the current one.
                     // E.g.: content is on page 3, on page 2 is only a 'ghost'
@@ -2164,19 +2113,9 @@ bool SwFlowFrame::MoveBwd( bool &rbReformat )
             {
                 pNewUpper = nullptr;
             }
-            // #i53139#
-            // #i69409# - check <pNewUpper>
-            // #i71065# - check <SwFlowFrame::IsMoveBwdJump()>
             else if ( pNewUpper && !SwFlowFrame::IsMoveBwdJump() )
             {
-                // Now <pNewUpper> is a previous layout frame, which
-                // contains content. But the new upper layout frame
-                // has to be the next one.
-                // #136024# - correct fix for i53139
-                // Check for wrong page description before using next new upper.
-                // #i66051# - further correction of fix for i53139
-                // Check for correct type of new next upper layout frame
-                // #136538# - another correction of fix for i53139
+                // Check for correct type of new next upper layout frame.
                 // Beside type check, check also, if proposed new next upper
                 // frame is inside the same frame types.
                 SwLayoutFrame* pNewNextUpper = pNewUpper->GetLeaf( MAKEPAGE_NOSECTION, true );
@@ -2368,15 +2307,13 @@ bool SwFlowFrame::MoveBwd( bool &rbReformat )
         pNewUpper = nullptr;
     }
 
-    // OD 2004-05-26 #i21478# - don't move backward, if flow frame wants to
-    // keep with next frame and next frame is locked.
-    // #i38232# - If next frame is a table, do *not* check,
-    // if it's locked.
+    // Don't move backward, if flow frame wants to keep with next frame and
+    // next frame is locked.
+    // If next frame is a table, do *not* check, if it's locked.
     if ( pNewUpper && !IsFollow() &&
          m_rThis.GetAttrSet()->GetKeep().GetValue() && m_rThis.GetIndNext() )
     {
         SwFrame* pIndNext = m_rThis.GetIndNext();
-        // #i38232#
         if ( !pIndNext->IsTabFrame() )
         {
             // get first content of section, while empty sections are skipped
@@ -2529,7 +2466,7 @@ bool SwFlowFrame::MoveBwd( bool &rbReformat )
             pNewPage->InvalidateAutoCompleteWords();
             pNewPage->InvalidateWordCount();
 
-            // OD 30.10.2002 #97265# - no <CheckPageDesc(..)> in online layout
+            // No <CheckPageDesc(..)> in online layout
             if ( !( pSh && pSh->GetViewOptions()->getBrowseMode() ) )
             {
                 if ( bCheckPageDescs && pNewPage->GetNext() )
