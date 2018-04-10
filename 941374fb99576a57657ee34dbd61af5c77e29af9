@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_a2c70f44",
+        "filename": "sw/source/core/frmedt/fecopy.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1491,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-04-10T18:25:00Z",
+      "side": 1,
+      "message": "this can just be \n   *pModel\ninstead of\n  *pModel.get()",
+      "revId": "941374fb99576a57657ee34dbd61af5c77e29af9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
