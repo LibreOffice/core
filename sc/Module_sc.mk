@@ -159,6 +159,7 @@ $(eval $(call gb_Module_add_subsequentcheck_targets,sc,\
 	CppunitTest_sc_spreadsheetsettingsobj \
 	CppunitTest_sc_ddelinkobj \
 	CppunitTest_sc_functiondescriptionobj \
+	CppunitTest_sc_sortdescriptorbaseobj \
 ))
 
 $(eval $(call gb_Module_add_perfcheck_targets,sc,\
