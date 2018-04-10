@@ -5,9 +5,9 @@ avmedia/source/vlc/wrapper/Types.hxx:44
 avmedia/source/vlc/wrapper/Types.hxx:45
     libvlc_event_t::(anonymous union)::(anonymous) dummy2 const char *
 avmedia/source/vlc/wrapper/Types.hxx:46
-    libvlc_event_t::(anonymous) padding struct (anonymous struct at /media/noel/disk2/libo4/avmedia/source/vlc/wrapper/Types.hxx:43:7)
+    libvlc_event_t::(anonymous) padding struct (anonymous struct at /home/noel/libo3/avmedia/source/vlc/wrapper/Types.hxx:43:7)
 avmedia/source/vlc/wrapper/Types.hxx:47
-    libvlc_event_t u union (anonymous union at /media/noel/disk2/libo4/avmedia/source/vlc/wrapper/Types.hxx:41:5)
+    libvlc_event_t u union (anonymous union at /home/noel/libo3/avmedia/source/vlc/wrapper/Types.hxx:41:5)
 avmedia/source/vlc/wrapper/Types.hxx:53
     libvlc_track_description_t psz_name char *
 basctl/source/inc/dlged.hxx:122
@@ -76,12 +76,6 @@ include/svtools/unoevent.hxx:162
     SvEventDescriptor xParentRef css::uno::Reference<css::uno::XInterface>
 include/svx/ClassificationDialog.hxx:63
     svx::ClassificationDialog m_nInsertMarkings sal_Int16
-include/svx/xmlgrhlp.hxx:60
-    SvXMLGraphicHelper maGrfURLs SvXMLGraphicHelper::URLPairVector
-include/svx/xmlgrhlp.hxx:61
-    SvXMLGraphicHelper maGrfObjs SvXMLGraphicHelper::GraphicObjectVector
-include/svx/xmlgrhlp.hxx:63
-    SvXMLGraphicHelper maURLSet ::std::set<OUString>
 include/vcl/pdfwriter.hxx:548
     vcl::PDFWriter::PDFSignContext m_pDerEncoded sal_Int8 *
 include/vcl/pdfwriter.hxx:550
@@ -180,15 +174,15 @@ sd/source/ui/table/TableDesignPane.hxx:113
     sd::TableDesignPane aImpl class sd::TableDesignWidget
 sd/source/ui/view/DocumentRenderer.cxx:1319
     sd::DocumentRenderer::Implementation mxObjectShell SfxObjectShellRef
-sd/source/ui/view/viewshel.cxx:1217
+sd/source/ui/view/viewshel.cxx:1215
     sd::KeepSlideSorterInSyncWithPageChanges m_aDrawLock sd::slidesorter::view::class SlideSorterView::DrawLock
-sd/source/ui/view/viewshel.cxx:1218
+sd/source/ui/view/viewshel.cxx:1216
     sd::KeepSlideSorterInSyncWithPageChanges m_aModelLock sd::slidesorter::controller::class SlideSorterController::ModelChangeLock
-sd/source/ui/view/viewshel.cxx:1219
+sd/source/ui/view/viewshel.cxx:1217
     sd::KeepSlideSorterInSyncWithPageChanges m_aUpdateLock sd::slidesorter::controller::class PageSelector::UpdateLock
-sd/source/ui/view/viewshel.cxx:1220
+sd/source/ui/view/viewshel.cxx:1218
     sd::KeepSlideSorterInSyncWithPageChanges m_aContext sd::slidesorter::controller::class SelectionObserver::Context
-sd/source/ui/view/ViewShellBase.cxx:193
+sd/source/ui/view/ViewShellBase.cxx:191
     sd::ViewShellBase::Implementation mpPageCacheManager std::shared_ptr<slidesorter::cache::PageCacheManager>
 sfx2/source/doc/doctempl.cxx:115
     DocTempl::DocTempl_EntryData_Impl mxObjShell class SfxObjectShellLock
@@ -202,24 +196,22 @@ starmath/inc/view.hxx:218
     SmViewShell maGraphicController class SmGraphicController
 starmath/source/accessibility.hxx:273
     SmEditSource rEditAcc class SmEditAccessible &
-svl/source/crypto/cryptosign.cxx:121
+svl/source/crypto/cryptosign.cxx:120
     (anonymous namespace)::(anonymous) extnID SECItem
-svl/source/crypto/cryptosign.cxx:122
+svl/source/crypto/cryptosign.cxx:121
     (anonymous namespace)::(anonymous) critical SECItem
-svl/source/crypto/cryptosign.cxx:123
+svl/source/crypto/cryptosign.cxx:122
     (anonymous namespace)::(anonymous) extnValue SECItem
-svl/source/crypto/cryptosign.cxx:281
+svl/source/crypto/cryptosign.cxx:280
     (anonymous namespace)::(anonymous) statusString SECItem
-svl/source/crypto/cryptosign.cxx:282
+svl/source/crypto/cryptosign.cxx:281
     (anonymous namespace)::(anonymous) failInfo SECItem
 svtools/source/svhtml/htmlkywd.cxx:558
-    HTML_OptionEntry  union HTML_OptionEntry::(anonymous at /media/noel/disk2/libo4/svtools/source/svhtml/htmlkywd.cxx:558:5)
+    HTML_OptionEntry  union HTML_OptionEntry::(anonymous at /home/noel/libo3/svtools/source/svhtml/htmlkywd.cxx:558:5)
 svtools/source/svhtml/htmlkywd.cxx:560
     HTML_OptionEntry::(anonymous) sToken const sal_Char *
 svtools/source/svhtml/htmlkywd.cxx:561
     HTML_OptionEntry::(anonymous) pUToken const class rtl::OUString *
-sw/inc/ddefld.hxx:42
-    sw::InRangeSearchHint m_rNodes class SwNodes &
 sw/source/core/crsr/crbm.cxx:64
     (anonymous namespace)::CursorStateHelper m_aSaveState class SwCursorSaveState
 sw/source/core/frmedt/fetab.cxx:77
@@ -230,10 +222,6 @@ sw/source/uibase/inc/splittbl.hxx:30
     SwSplitTableDlg m_xHorzBox std::unique_ptr<weld::RadioButton>
 sw/source/uibase/inc/splittbl.hxx:31
     SwSplitTableDlg m_xContentCopyRB std::unique_ptr<weld::RadioButton>
-sw/source/uibase/inc/srtdlg.hxx:32
-    SwSortDlg m_xTypLbl std::unique_ptr<weld::Label>
-sw/source/uibase/inc/tautofmt.hxx:41
-    SwAutoFormatDlg m_xFormatting std::unique_ptr<weld::Container>
 sw/source/uibase/inc/uivwimp.hxx:95
     SwView_Impl xTmpSelDocSh class SfxObjectShellLock
 sw/source/uibase/inc/unodispatch.hxx:46
@@ -262,5 +250,7 @@ vcl/source/gdi/jobset.cxx:35
     ImplOldJobSetupData cPortName char [32]
 vcl/source/uitest/uno/uitest_uno.cxx:35
     UITestUnoObj mpUITest std::unique_ptr<UITest>
+vcl/unx/gtk3/gtk3gtkinst.cxx:1937
+    CrippledViewport viewport GtkViewport
 vcl/unx/gtk/a11y/atkhypertext.cxx:29
     (anonymous) atk_hyper_link AtkHyperlink

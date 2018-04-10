@@ -803,9 +803,6 @@ bool ScDocument::MoveTab( SCTAB nOldPos, SCTAB nNewPos, ScProgress* pProgress )
             SetNoListening( false );
             StartAllListeners();
 
-            // sheet names of references may not be valid until sheet is moved
-            pChartListenerCollection->UpdateScheduledSeriesRanges();
-
             sc::SetFormulaDirtyContext aFormulaDirtyCxt;
             SetAllFormulasDirty(aFormulaDirtyCxt);
 
@@ -893,10 +890,7 @@ bool ScDocument::CopyTab( SCTAB nOldPos, SCTAB nNewPos, const ScMarkData* pOnlyM
 
                 if (pValidationList)
                     pValidationList->UpdateInsertTab(aCxt);
-
-                // sheet names of references may not be valid until sheet is copied
-                pChartListenerCollection->UpdateScheduledSeriesRanges();
-            }
+           }
             else
                 bValid = false;
         }

@@ -492,10 +492,9 @@ void SvtMatchContext_Impl::ReadFolder( const OUString& rURL,
 MatchContext_Impl::MatchContext_Impl(URLBox* pBoxP, const OUString& rText)
     : Thread( "MatchContext_Impl" )
     , aLink( LINK( this, MatchContext_Impl, Select_Impl ) )
-    , aBaseURL( pBoxP->aBaseURL )
     , aText( rText )
     , pBox( pBoxP )
-    , bOnlyDirectories( pBoxP->bOnlyDirectories )
+    , bOnlyDirectories( false )
     , stopped_(false)
     , commandId_(0)
 {
@@ -578,8 +577,6 @@ IMPL_LINK_NOARG( MatchContext_Impl, Select_Impl, void*, void )
             return;
         }
     }
-
-    pBox->bAutoCompleteMode = true;
 
     // insert all completed strings into the listbox
     pBox->Clear();
@@ -1155,7 +1152,7 @@ void MatchContext_Impl::doExecute()
     INetProtocol eBaseProt = INetURLObject::CompareProtocolScheme( aBaseURL );
     if ( aBaseURL.isEmpty() )
         eBaseProt = INetURLObject::CompareProtocolScheme( SvtPathOptions().GetWorkPath() );
-    INetProtocol eSmartProt = pBox->GetSmartProtocol();
+    INetProtocol eSmartProt = INetProtocol::NotValid;
 
     // if the user input is a valid URL, go on with it
     // otherwise it could be parsed smart with a predefined smart protocol
@@ -2022,11 +2019,7 @@ IMPL_LINK_NOARG(URLBox, TryAutoComplete, Timer *, void)
 }
 
 URLBox::URLBox(weld::ComboBoxText* pWidget)
-    : eSmartProtocol(INetProtocol::NotValid)
-    , bAutoCompleteMode(false)
-    , bOnlyDirectories(false)
-    , bHistoryDisabled(false)
-    , m_xWidget(pWidget)
+    : m_xWidget(pWidget)
 {
     Init();
 
@@ -2059,8 +2052,6 @@ URLBox::~URLBox()
 void URLBox::UpdatePicklistForSmartProtocol_Impl()
 {
     m_xWidget->clear();
-    if ( bHistoryDisabled )
-        return;
 
     // read history pick list
     Sequence< Sequence< PropertyValue > > seqPicklist = SvtHistoryOptions().GetList( ePICKLIST );
@@ -2081,12 +2072,6 @@ void URLBox::UpdatePicklistForSmartProtocol_Impl()
             {
                 seqPropertySet[nProperty].Value >>= sURL;
                 aCurObj.SetURL( sURL );
-
-                if ( !sURL.isEmpty() && ( eSmartProtocol != INetProtocol::NotValid ) )
-                {
-                    if( aCurObj.GetProtocol() != eSmartProtocol )
-                        break;
-                }
 
                 OUString aURL( aCurObj.GetMainURL( INetURLObject::DecodeMechanism::WithCharset ) );
 
@@ -2146,8 +2131,6 @@ OUString URLBox::GetURL()
     ::osl::MutexGuard aGuard( theSvtMatchContextMutex::get() );
 
     OUString aText(m_xWidget->get_active_text());
-    if ( MatchesPlaceHolder( aText ) )
-        return aPlaceHolder;
 
     // try to get the right case preserving URL from the list of URLs
     for(std::vector<OUString>::iterator i = pImpl->aCompletions.begin(), j = pImpl->aURLs.begin(); i != pImpl->aCompletions.end() && j != pImpl->aURLs.end(); ++i, ++j)
@@ -2170,8 +2153,6 @@ OUString URLBox::GetURL()
     {
         // no autocompletion for wildcards
         INetURLObject aTempObj;
-        if ( eSmartProtocol != INetProtocol::NotValid )
-            aTempObj.SetSmartProtocol( eSmartProtocol );
         if ( aTempObj.SetSmartURL( aText ) )
             return aTempObj.GetMainURL( INetURLObject::DecodeMechanism::NONE );
         else
@@ -2180,7 +2161,7 @@ OUString URLBox::GetURL()
 
     if ( aObj.GetProtocol() == INetProtocol::NotValid )
     {
-        OUString aName = ParseSmart( aText, aBaseURL );
+        OUString aName = ParseSmart( aText, OUString() );
         aObj.SetURL(aName);
         OUString aURL( aObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
         if ( aURL.isEmpty() )

@@ -330,24 +330,8 @@ void SvxCharViewControl::createContextMenu()
     ScopedVclPtrInstance<PopupMenu> pItemMenu;
     pItemMenu->InsertItem(0,SfxResId(STR_CLEAR_CHAR));
     pItemMenu->InsertItem(1,SfxResId(STR_CLEAR_ALL_CHAR));
-    pItemMenu->SetSelectHdl(LINK(this, SvxCharViewControl, ContextMenuSelectHdl));
     pItemMenu->Execute(this, tools::Rectangle(maPosition,Size(1,1)), PopupMenuFlags::ExecuteDown);
     Invalidate();
-}
-
-IMPL_LINK(SvxCharViewControl, ContextMenuSelectHdl, Menu*, pMenu, bool)
-{
-    sal_uInt16 nMenuId = pMenu->GetCurItemId();
-
-    switch(nMenuId)
-    {
-    case 0:
-        maClearClickHdl.Call(this);
-        break;
-    default:
-        break;
-    }
-    return false;
 }
 
 void SvxCharViewControl::Paint(vcl::RenderContext& rRenderContext, const ::tools::Rectangle&)

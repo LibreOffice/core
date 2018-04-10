@@ -83,11 +83,7 @@ SvxBitmapTabPage::SvxBitmapTabPage( vcl::Window* pParent, const SfxItemSet& rInA
     m_bLogicalSize(false),
     m_aXFillAttr          ( rInAttrs.GetPool() ),
     m_rXFSet              ( m_aXFillAttr.GetItemSet() ),
-    mpView(nullptr),
-    nFilledWidthPercent(0),
-    nFilledHeightPercent(0),
-    nZoomedWidthPercent(0),
-    nZoomedHeightPercent(0)
+    mpView(nullptr)
 {
     get(m_pBitmapLB,"BITMAP");
     get(m_pBitmapStyleLB, "bitmapstyle");
@@ -479,11 +475,6 @@ void SvxBitmapTabPage::CalculateBitmapPresetSize()
             rZoomedSize.setWidth( nObjectWidth );
             rZoomedSize.setHeight( rBitmapSize.Height()*nObjectWidth/rBitmapSize.Width() );
         }
-
-        nFilledWidthPercent = static_cast<sal_Int64>(rFilledSize.Width()*100/rBitmapSize.Width());
-        nFilledHeightPercent = static_cast<sal_Int64>(rFilledSize.Width()*100/rBitmapSize.Height());
-        nZoomedWidthPercent = static_cast<sal_Int64>(rZoomedSize.Width()*100/rBitmapSize.Width());
-        nZoomedHeightPercent = static_cast<sal_Int64>(rZoomedSize.Height()*100/rBitmapSize.Height());
     }
 }
 

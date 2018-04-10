@@ -31,8 +31,7 @@ struct Bar
 // expected-error@-11 {{write m_bar3b [loplugin:unusedfields]}}
 // expected-error@-12 {{write m_bar4 [loplugin:unusedfields]}}
 // expected-error@-13 {{write m_bar7 [loplugin:unusedfields]}}
-// expected-error@-14 {{write m_barfunctionpointer [loplugin:unusedfields]}}
-// expected-error@-15 {{write m_bar9 [loplugin:unusedfields]}}
+// expected-error@-14 {{write m_bar9 [loplugin:unusedfields]}}
 {
     int  m_bar1;
     int  m_bar2 = 1;
@@ -160,5 +159,17 @@ struct ReadOnlyAnalysis2
 };
 
 ReadOnlyAnalysis2 global { 1 };
+
+struct ReadOnlyAnalysis3
+// expected-error@-1 {{read m_f1 [loplugin:unusedfields]}}
+{
+    int m_f1;
+
+    void func1()
+    {
+        if (m_f1)
+            m_f1 = 1;
+    }
+};
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

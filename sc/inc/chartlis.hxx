@@ -69,7 +69,6 @@ private:
     ScDocument*     mpDoc;
     bool            bUsed:1;  // for ScChartListenerCollection::FreeUnused
     bool            bDirty:1;
-    bool            bSeriesRangesScheduled:1;
 
     ScChartListener& operator=( const ScChartListener& ) = delete;
 
@@ -105,8 +104,6 @@ public:
 
     void            UpdateChartIntersecting( const ScRange& rRange );
 
-    // if chart series ranges are to be updated later on (e.g. DeleteTab, InsertTab)
-    void            UpdateScheduledSeriesRanges();
     void            UpdateSeriesRanges();
 
     ExternalRefListener* GetExtRefListener();
@@ -190,7 +187,6 @@ public:
 
     void            SetRangeDirty( const ScRange& rRange );     // for example rows/columns
 
-    void            UpdateScheduledSeriesRanges();
     void            UpdateChartsContainingTab( SCTAB nTab );
 
     bool operator==( const ScChartListenerCollection& r ) const;

@@ -216,7 +216,7 @@ framework/inc/services/layoutmanager.hxx:258
     framework::LayoutManager m_bGlobalSettings _Bool
 framework/source/layoutmanager/toolbarlayoutmanager.hxx:285
     framework::ToolbarLayoutManager m_bGlobalSettings _Bool
-framework/source/services/frame.cxx:422
+framework/source/services/frame.cxx:421
     (anonymous namespace)::Frame m_pWindowCommandDispatch class framework::WindowCommandDispatch *
 include/basic/basmgr.hxx:52
     BasicError nReason enum BasicErrorReason
@@ -236,6 +236,8 @@ include/editeng/adjustitem.hxx:39
     SvxAdjustItem bLeft _Bool
 include/LibreOfficeKit/LibreOfficeKit.h:108
     _LibreOfficeKitDocumentClass nSize size_t
+include/LibreOfficeKit/LibreOfficeKit.h:310
+    _LibreOfficeKitDocumentClass getPartInfo char *(*)(LibreOfficeKitDocument *, int)
 include/opencl/openclwrapper.hxx:36
     openclwrapper::KernelEnv mpkProgram cl_program
 include/opencl/openclwrapper.hxx:52
@@ -252,14 +254,10 @@ include/svx/float3d.hxx:177
     Svx3DWin pControllerItem class Svx3DCtrlItem *
 include/svx/imapdlg.hxx:118
     SvxIMapDlg aIMapItem class SvxIMapDlgItem
-include/svx/langbox.hxx:158
-    LanguageBox m_bWithCheckmark _Bool
-include/svx/srchdlg.hxx:232
+include/svx/srchdlg.hxx:234
     SvxSearchDialog pSearchController class SvxSearchController *
-include/svx/srchdlg.hxx:233
+include/svx/srchdlg.hxx:235
     SvxSearchDialog pOptionsController class SvxSearchController *
-include/svx/xmlgrhlp.hxx:70
-    SvXMLGraphicHelper mbDirect _Bool
 include/vcl/opengl/OpenGLContext.hxx:41
     GLWindow bMultiSampleSupported _Bool
 include/vcl/salnativewidgets.hxx:415
@@ -388,7 +386,7 @@ sc/source/filter/xml/xmldrani.hxx:75
     ScXMLDatabaseRangeContext bIsSelection _Bool
 sc/source/filter/xml/xmlexternaltabi.hxx:113
     ScXMLExternalRefCellContext mnCellType sal_Int16
-sc/source/ui/inc/AccessibleText.hxx:195
+sc/source/ui/inc/AccessibleText.hxx:194
     ScAccessiblePreviewHeaderCellTextData mbRowHeader _Bool
 sc/source/ui/inc/datastream.hxx:108
     sc::DataStream mnSettings sal_uInt32
@@ -408,7 +406,7 @@ sd/source/filter/ppt/ppt97animations.hxx:51
     Ppt97AnimationInfoAtom nUnknown1 sal_uInt8
 sd/source/filter/ppt/ppt97animations.hxx:52
     Ppt97AnimationInfoAtom nUnknown2 sal_uInt8
-sd/source/ui/inc/animobjs.hxx:129
+sd/source/ui/inc/animobjs.hxx:128
     sd::AnimationWindow pControllerItem class sd::AnimationControllerItem *
 sd/source/ui/inc/navigatr.hxx:123
     SdNavigatorWin mpNavigatorCtrlItem class SdNavigatorControllerItem *
@@ -440,17 +438,17 @@ starmath/inc/view.hxx:158
     SmCmdBoxWindow aController class SmEditController
 store/source/storbase.hxx:248
     store::PageData m_aMarked store::PageData::L
-svl/source/crypto/cryptosign.cxx:145
+svl/source/crypto/cryptosign.cxx:144
     (anonymous namespace)::(anonymous) version SECItem
-svl/source/crypto/cryptosign.cxx:147
+svl/source/crypto/cryptosign.cxx:146
     (anonymous namespace)::(anonymous) reqPolicy SECItem
-svl/source/crypto/cryptosign.cxx:148
+svl/source/crypto/cryptosign.cxx:147
     (anonymous namespace)::(anonymous) nonce SECItem
-svl/source/crypto/cryptosign.cxx:149
+svl/source/crypto/cryptosign.cxx:148
     (anonymous namespace)::(anonymous) certReq SECItem
-svl/source/crypto/cryptosign.cxx:150
+svl/source/crypto/cryptosign.cxx:149
     (anonymous namespace)::(anonymous) extensions (anonymous namespace)::Extension *
-svl/source/crypto/cryptosign.cxx:194
+svl/source/crypto/cryptosign.cxx:193
     (anonymous namespace)::SigningCertificateV2 certs struct (anonymous namespace)::ESSCertIDv2 **
 svl/source/misc/inethist.cxx:48
     INetURLHistory_Impl::head_entry m_nMagic sal_uInt32
@@ -499,7 +497,7 @@ sw/source/filter/inc/rtf.hxx:29
 sw/source/filter/inc/rtf.hxx:30
     RTFSurround::(anonymous union)::(anonymous) nJunk sal_uInt8
 sw/source/filter/inc/rtf.hxx:31
-    RTFSurround::(anonymous) Flags struct (anonymous struct at /media/noel/disk2/libo4/sw/source/filter/inc/rtf.hxx:27:9)
+    RTFSurround::(anonymous) Flags struct (anonymous struct at /home/noel/libo3/sw/source/filter/inc/rtf.hxx:27:9)
 ucb/source/ucp/gio/gio_mount.hxx:46
     OOoMountOperationClass parent_class GMountOperationClass
 ucb/source/ucp/gio/gio_mount.hxx:49
@@ -576,5 +574,5 @@ vcl/unx/gtk/hudawareness.cxx:20
     (anonymous) connection GDBusConnection *
 vcl/unx/gtk/hudawareness.cxx:23
     (anonymous) notify GDestroyNotify
-writerfilter/source/dmapper/PropertyMap.hxx:199
+writerfilter/source/dmapper/PropertyMap.hxx:198
     writerfilter::dmapper::SectionPropertyMap m_nDebugSectionNumber sal_Int32

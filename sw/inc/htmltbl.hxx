@@ -174,8 +174,6 @@ class SwHTMLTableLayout
     std::vector<std::unique_ptr<SwHTMLTableLayoutCell>>   m_aCells;
 
     const SwTable *m_pSwTable;            ///< SwTable (Top-Table only).
-    SwTableBox *m_pLeftFillerBox;         ///< Left filler-box (table in table only).
-    SwTableBox *m_pRightFillerBox;        ///< Right filler-box (table in Table only).
 
     sal_uLong m_nMin;                     ///< Minimal width of table (Twips).
     sal_uLong m_nMax;                     ///< Maximal width of table (Twips).

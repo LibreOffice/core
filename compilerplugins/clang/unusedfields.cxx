@@ -13,7 +13,8 @@
 #include <string>
 #include <iostream>
 #include <fstream>
-#include <set>
+#include <unordered_set>
+#include <vector>
 #include <algorithm>
 #include <sys/file.h>
 #include <unistd.h>
@@ -152,6 +153,7 @@ public:
     bool TraverseCXXConstructorDecl( CXXConstructorDecl* );
     bool TraverseCXXMethodDecl( CXXMethodDecl* );
     bool TraverseFunctionDecl( FunctionDecl* );
+    bool TraverseIfStmt( IfStmt* );
 
 private:
     MyFieldInfo niceName(const FieldDecl*);
@@ -168,6 +170,7 @@ private:
     // For reasons I do not understand, parentFunctionDecl() is not reliable, so
     // we store the parent function on the way down the AST.
     FunctionDecl * insideFunctionDecl = nullptr;
+    std::vector<FieldDecl const *> insideConditionalCheckOfMemberSet;
 };
 
 void UnusedFields::run()
@@ -414,6 +417,21 @@ bool UnusedFields::TraverseFunctionDecl(FunctionDecl* functionDecl)
     return ret;
 }
 
+bool UnusedFields::TraverseIfStmt(IfStmt* ifStmt)
+{
+    FieldDecl const * memberFieldDecl = nullptr;
+    Expr const * cond = ifStmt->getCond()->IgnoreParenImpCasts();
+    if (auto memberExpr = dyn_cast<MemberExpr>(cond))
+    {
+        if ((memberFieldDecl = dyn_cast<FieldDecl>(memberExpr->getMemberDecl())))
+            insideConditionalCheckOfMemberSet.push_back(memberFieldDecl);
+    }
+    bool ret = RecursiveASTVisitor::TraverseIfStmt(ifStmt);
+    if (memberFieldDecl)
+        insideConditionalCheckOfMemberSet.pop_back();
+    return ret;
+}
+
 bool UnusedFields::VisitMemberExpr( const MemberExpr* memberExpr )
 {
     const ValueDecl* decl = memberExpr->getMemberDecl();
@@ -642,6 +660,13 @@ void UnusedFields::checkReadOnly(const FieldDecl* fieldDecl, const Expr* memberE
         if (cxxRecordDecl1 && (cxxRecordDecl1 == insideMoveOrCopyOrCloneDeclParent))
             return;
     }
+
+    // if we're inside a block that looks like
+    //   if (fieldDecl)
+    //       ....
+    // then writes to this field don't matter, because unless we find another write to this field, this field is dead
+    if (std::find(insideConditionalCheckOfMemberSet.begin(), insideConditionalCheckOfMemberSet.end(), fieldDecl) != insideConditionalCheckOfMemberSet.end())
+        return;
 
     auto parentsRange = compiler.getASTContext().getParents(*memberExpr);
     const Stmt* child = memberExpr;
@@ -987,7 +1012,7 @@ llvm::Optional<CalleeWrapper> UnusedFields::getCallee(CallExpr const * callExpr)
     return llvm::Optional<CalleeWrapper>();
 }
 
-loplugin::Plugin::Registration< UnusedFields > X("unusedfields", false);
+loplugin::Plugin::Registration< UnusedFields > X("unusedfields", true);
 
 }
 
