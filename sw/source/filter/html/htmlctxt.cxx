@@ -109,16 +109,16 @@ std::shared_ptr<HTMLAttrTable> const & HTMLAttrContext_SaveDoc::GetAttrTab( bool
 
 HTMLAttrContext_SaveDoc *HTMLAttrContext::GetSaveDocContext( bool bCreate )
 {
-    if( !pSaveDocContext && bCreate )
-        pSaveDocContext = new HTMLAttrContext_SaveDoc;
+    if( !m_pSaveDocContext && bCreate )
+        m_pSaveDocContext = new HTMLAttrContext_SaveDoc;
 
-    return pSaveDocContext;
+    return m_pSaveDocContext;
 }
 
 void HTMLAttrContext::ClearSaveDocContext()
 {
-    delete pSaveDocContext;
-    pSaveDocContext = nullptr;
+    delete m_pSaveDocContext;
+    m_pSaveDocContext = nullptr;
 }
 
 void SwHTMLParser::SplitAttrTab( const SwPosition& rNewPos )
@@ -722,10 +722,10 @@ void SwHTMLParser::SplitPREListingXMP( HTMLAttrContext *pCntxt )
 
 SfxItemSet *HTMLAttrContext::GetFrameItemSet( SwDoc *pCreateDoc )
 {
-    if( !pFrameItemSet && pCreateDoc )
-        pFrameItemSet = o3tl::make_unique<SfxItemSet>( pCreateDoc->GetAttrPool(),
+    if( !m_pFrameItemSet && pCreateDoc )
+        m_pFrameItemSet = o3tl::make_unique<SfxItemSet>( pCreateDoc->GetAttrPool(),
                         svl::Items<RES_FRMATR_BEGIN, RES_FRMATR_END-1>{} );
-    return pFrameItemSet.get();
+    return m_pFrameItemSet.get();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

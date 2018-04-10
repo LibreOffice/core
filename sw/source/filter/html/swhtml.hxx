@@ -203,138 +203,138 @@ enum SwHTMLAppendMode {
 
 class HTMLAttrContext
 {
-    HTMLAttrs aAttrs;      // the attributes created in the context
+    HTMLAttrs m_aAttrs;      // the attributes created in the context
 
-    OUString    aClass;          // context class
+    OUString    m_aClass;          // context class
 
-    HTMLAttrContext_SaveDoc *pSaveDocContext;
-    std::unique_ptr<SfxItemSet> pFrameItemSet;
+    HTMLAttrContext_SaveDoc *m_pSaveDocContext;
+    std::unique_ptr<SfxItemSet> m_pFrameItemSet;
 
-    HtmlTokenId nToken;         // the token of the context
+    HtmlTokenId m_nToken;         // the token of the context
 
-    sal_uInt16  nTextFormatColl;    // a style created in the context or zero
+    sal_uInt16  m_nTextFormatColl;    // a style created in the context or zero
 
-    sal_uInt16  nLeftMargin;        // a changed left border
-    sal_uInt16  nRightMargin;       // a changed right border
-    sal_uInt16  nFirstLineIndent;   // a changed first line indent
+    sal_uInt16  m_nLeftMargin;        // a changed left border
+    sal_uInt16  m_nRightMargin;       // a changed right border
+    sal_uInt16  m_nFirstLineIndent;   // a changed first line indent
 
-    sal_uInt16  nUpperSpace;
-    sal_uInt16  nLowerSpace;
+    sal_uInt16  m_nUpperSpace;
+    sal_uInt16  m_nLowerSpace;
 
-    SwHTMLAppendMode eAppend;
+    SwHTMLAppendMode m_eAppend;
 
-    bool    bLRSpaceChanged : 1;    // left/right border, changed indent?
-    bool    bULSpaceChanged : 1;    // top/bottom border changed?
-    bool    bDfltTextFormatColl : 1;// nTextFormatColl is only default
-    bool    bSpansSection : 1;      // the context opens a SwSection
-    bool    bPopStack : 1;          // delete above stack elements
-    bool    bFinishPREListingXMP : 1;
-    bool    bRestartPRE : 1;
-    bool    bRestartXMP : 1;
-    bool    bRestartListing : 1;
-    bool    bHeaderOrFooter : 1;
+    bool    m_bLRSpaceChanged : 1;    // left/right border, changed indent?
+    bool    m_bULSpaceChanged : 1;    // top/bottom border changed?
+    bool    m_bDefaultTextFormatColl : 1;// nTextFormatColl is only default
+    bool    m_bSpansSection : 1;      // the context opens a SwSection
+    bool    m_bPopStack : 1;          // delete above stack elements
+    bool    m_bFinishPREListingXMP : 1;
+    bool    m_bRestartPRE : 1;
+    bool    m_bRestartXMP : 1;
+    bool    m_bRestartListing : 1;
+    bool    m_bHeaderOrFooter : 1;
 
 public:
     void ClearSaveDocContext();
 
     HTMLAttrContext( HtmlTokenId nTokn, sal_uInt16 nPoolId, const OUString& rClass,
                       bool bDfltColl=false ) :
-        aClass( rClass ),
-        pSaveDocContext( nullptr ),
-        nToken( nTokn ),
-        nTextFormatColl( nPoolId ),
-        nLeftMargin( 0 ),
-        nRightMargin( 0 ),
-        nFirstLineIndent( 0 ),
-        nUpperSpace( 0 ),
-        nLowerSpace( 0 ),
-        eAppend( AM_NONE ),
-        bLRSpaceChanged( false ),
-        bULSpaceChanged( false ),
-        bDfltTextFormatColl( bDfltColl ),
-        bSpansSection( false ),
-        bPopStack( false ),
-        bFinishPREListingXMP( false ),
-        bRestartPRE( false ),
-        bRestartXMP( false ),
-        bRestartListing( false ),
-        bHeaderOrFooter( false )
+        m_aClass( rClass ),
+        m_pSaveDocContext( nullptr ),
+        m_nToken( nTokn ),
+        m_nTextFormatColl( nPoolId ),
+        m_nLeftMargin( 0 ),
+        m_nRightMargin( 0 ),
+        m_nFirstLineIndent( 0 ),
+        m_nUpperSpace( 0 ),
+        m_nLowerSpace( 0 ),
+        m_eAppend( AM_NONE ),
+        m_bLRSpaceChanged( false ),
+        m_bULSpaceChanged( false ),
+        m_bDefaultTextFormatColl( bDfltColl ),
+        m_bSpansSection( false ),
+        m_bPopStack( false ),
+        m_bFinishPREListingXMP( false ),
+        m_bRestartPRE( false ),
+        m_bRestartXMP( false ),
+        m_bRestartListing( false ),
+        m_bHeaderOrFooter( false )
     {}
 
     explicit HTMLAttrContext( HtmlTokenId nTokn ) :
-        pSaveDocContext( nullptr ),
-        nToken( nTokn ),
-        nTextFormatColl( 0 ),
-        nLeftMargin( 0 ),
-        nRightMargin( 0 ),
-        nFirstLineIndent( 0 ),
-        nUpperSpace( 0 ),
-        nLowerSpace( 0 ),
-        eAppend( AM_NONE ),
-        bLRSpaceChanged( false ),
-        bULSpaceChanged( false ),
-        bDfltTextFormatColl( false ),
-        bSpansSection( false ),
-        bPopStack( false ),
-        bFinishPREListingXMP( false ),
-        bRestartPRE( false ),
-        bRestartXMP( false ),
-        bRestartListing( false ),
-        bHeaderOrFooter( false )
+        m_pSaveDocContext( nullptr ),
+        m_nToken( nTokn ),
+        m_nTextFormatColl( 0 ),
+        m_nLeftMargin( 0 ),
+        m_nRightMargin( 0 ),
+        m_nFirstLineIndent( 0 ),
+        m_nUpperSpace( 0 ),
+        m_nLowerSpace( 0 ),
+        m_eAppend( AM_NONE ),
+        m_bLRSpaceChanged( false ),
+        m_bULSpaceChanged( false ),
+        m_bDefaultTextFormatColl( false ),
+        m_bSpansSection( false ),
+        m_bPopStack( false ),
+        m_bFinishPREListingXMP( false ),
+        m_bRestartPRE( false ),
+        m_bRestartXMP( false ),
+        m_bRestartListing( false ),
+        m_bHeaderOrFooter( false )
     {}
 
     ~HTMLAttrContext() { ClearSaveDocContext(); }
 
-    HtmlTokenId GetToken() const { return nToken; }
+    HtmlTokenId GetToken() const { return m_nToken; }
 
-    sal_uInt16 GetTextFormatColl() const { return bDfltTextFormatColl ? 0 : nTextFormatColl; }
-    sal_uInt16 GetDfltTextFormatColl() const { return bDfltTextFormatColl ? nTextFormatColl : 0; }
+    sal_uInt16 GetTextFormatColl() const { return m_bDefaultTextFormatColl ? 0 : m_nTextFormatColl; }
+    sal_uInt16 GetDfltTextFormatColl() const { return m_bDefaultTextFormatColl ? m_nTextFormatColl : 0; }
 
-    const OUString& GetClass() const { return aClass; }
+    const OUString& GetClass() const { return m_aClass; }
 
     inline void SetMargins( sal_uInt16 nLeft, sal_uInt16 nRight, short nIndent );
 
-    bool IsLRSpaceChanged() const { return bLRSpaceChanged; }
+    bool IsLRSpaceChanged() const { return m_bLRSpaceChanged; }
     inline void GetMargins( sal_uInt16& nLeft, sal_uInt16& nRight,
                             short &nIndent ) const;
 
     inline void SetULSpace( sal_uInt16 nUpper, sal_uInt16 nLower );
-    bool IsULSpaceChanged() const { return bULSpaceChanged; }
+    bool IsULSpaceChanged() const { return m_bULSpaceChanged; }
     inline void GetULSpace( sal_uInt16& rUpper, sal_uInt16& rLower ) const;
 
-    bool HasAttrs() const { return !aAttrs.empty(); }
-    const HTMLAttrs& GetAttrs() const { return aAttrs; }
-    HTMLAttrs& GetAttrs() { return aAttrs; }
+    bool HasAttrs() const { return !m_aAttrs.empty(); }
+    const HTMLAttrs& GetAttrs() const { return m_aAttrs; }
+    HTMLAttrs& GetAttrs() { return m_aAttrs; }
 
-    void SetSpansSection( bool bSet ) { bSpansSection = bSet; }
-    bool GetSpansSection() const { return bSpansSection; }
+    void SetSpansSection( bool bSet ) { m_bSpansSection = bSet; }
+    bool GetSpansSection() const { return m_bSpansSection; }
 
-    void SetPopStack( bool bSet ) { bPopStack = bSet; }
-    bool GetPopStack() const { return bPopStack; }
+    void SetPopStack( bool bSet ) { m_bPopStack = bSet; }
+    bool GetPopStack() const { return m_bPopStack; }
 
-    bool HasSaveDocContext() const { return pSaveDocContext!=nullptr; }
+    bool HasSaveDocContext() const { return m_pSaveDocContext!=nullptr; }
     HTMLAttrContext_SaveDoc *GetSaveDocContext( bool bCreate=false );
 
-    const SfxItemSet *GetFrameItemSet() const { return pFrameItemSet.get(); }
+    const SfxItemSet *GetFrameItemSet() const { return m_pFrameItemSet.get(); }
     SfxItemSet *GetFrameItemSet( SwDoc *pCreateDoc );
 
-    void SetFinishPREListingXMP( bool bSet ) { bFinishPREListingXMP = bSet; }
-    bool IsFinishPREListingXMP() const { return bFinishPREListingXMP; }
+    void SetFinishPREListingXMP( bool bSet ) { m_bFinishPREListingXMP = bSet; }
+    bool IsFinishPREListingXMP() const { return m_bFinishPREListingXMP; }
 
-    void SetRestartPRE( bool bSet ) { bRestartPRE = bSet; }
-    bool IsRestartPRE() const { return bRestartPRE; }
+    void SetRestartPRE( bool bSet ) { m_bRestartPRE = bSet; }
+    bool IsRestartPRE() const { return m_bRestartPRE; }
 
-    void SetRestartXMP( bool bSet ) { bRestartXMP = bSet; }
-    bool IsRestartXMP() const { return bRestartXMP; }
+    void SetRestartXMP( bool bSet ) { m_bRestartXMP = bSet; }
+    bool IsRestartXMP() const { return m_bRestartXMP; }
 
-    void SetRestartListing( bool bSet ) { bRestartListing = bSet; }
-    bool IsRestartListing() const { return bRestartListing; }
+    void SetRestartListing( bool bSet ) { m_bRestartListing = bSet; }
+    bool IsRestartListing() const { return m_bRestartListing; }
 
-    void SetHeaderOrFooter( bool bSet ) { bHeaderOrFooter = bSet; }
-    bool IsHeaderOrFooter() const { return bHeaderOrFooter; }
+    void SetHeaderOrFooter( bool bSet ) { m_bHeaderOrFooter = bSet; }
+    bool IsHeaderOrFooter() const { return m_bHeaderOrFooter; }
 
-    void SetAppendMode( SwHTMLAppendMode eMode ) { eAppend = eMode; }
-    SwHTMLAppendMode GetAppendMode() const { return eAppend; }
+    void SetAppendMode( SwHTMLAppendMode eMode ) { m_eAppend = eMode; }
+    SwHTMLAppendMode GetAppendMode() const { return m_eAppend; }
 };
 
 typedef std::vector<std::unique_ptr<HTMLAttrContext>> HTMLAttrContexts;
@@ -992,38 +992,38 @@ inline void HTMLAttr::SetStart( const SwPosition& rPos )
 inline void HTMLAttrContext::SetMargins( sal_uInt16 nLeft, sal_uInt16 nRight,
                                           short nIndent )
 {
-    nLeftMargin = nLeft;
-    nRightMargin = nRight;
-    nFirstLineIndent = nIndent;
-    bLRSpaceChanged = true;
+    m_nLeftMargin = nLeft;
+    m_nRightMargin = nRight;
+    m_nFirstLineIndent = nIndent;
+    m_bLRSpaceChanged = true;
 }
 
 inline void HTMLAttrContext::GetMargins( sal_uInt16& nLeft,
                                           sal_uInt16& nRight,
                                           short& nIndent ) const
 {
-    if( bLRSpaceChanged )
+    if( m_bLRSpaceChanged )
     {
-        nLeft = nLeftMargin;
-        nRight = nRightMargin;
-        nIndent = nFirstLineIndent;
+        nLeft = m_nLeftMargin;
+        nRight = m_nRightMargin;
+        nIndent = m_nFirstLineIndent;
     }
 }
 
 inline void HTMLAttrContext::SetULSpace( sal_uInt16 nUpper, sal_uInt16 nLower )
 {
-    nUpperSpace = nUpper;
-    nLowerSpace = nLower;
-    bULSpaceChanged = true;
+    m_nUpperSpace = nUpper;
+    m_nLowerSpace = nLower;
+    m_bULSpaceChanged = true;
 }
 
 inline void HTMLAttrContext::GetULSpace( sal_uInt16& rUpper,
                                           sal_uInt16& rLower ) const
 {
-    if( bULSpaceChanged )
+    if( m_bULSpaceChanged )
     {
-        rUpper = nUpperSpace;
-        rLower = nLowerSpace;
+        rUpper = m_nUpperSpace;
+        rLower = m_nLowerSpace;
     }
 }
 
