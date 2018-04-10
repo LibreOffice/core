@@ -22,7 +22,8 @@ $(eval $(call gb_CppunitTest_use_libraries,dbaccess_embeddeddb_performancetest, 
     dbaxml \
     dbtools \
     firebird_sdbc \
-    jvmfwk \
+    $(if $(ENABLE_JAVA), \
+        jvmfwk) \
     sal \
     subsequenttest \
     utl \
