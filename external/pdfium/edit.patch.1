@@ -66,7 +66,7 @@ index 0d7ba56..37bdf99 100644
  FPDFImageObj_GetImageDataDecoded(FPDF_PAGEOBJECT image_object,
                                   void* buffer,
 diff --git a/fpdfsdk/fpdfeditpage.cpp b/fpdfsdk/fpdfeditpage.cpp
-index ca2cf3f..ac36788 100644
+index ca2cf3f..8073a18 100644
 --- a/fpdfsdk/fpdfeditpage.cpp
 +++ b/fpdfsdk/fpdfeditpage.cpp
 @@ -11,12 +11,14 @@
@@ -84,7 +84,7 @@ index ca2cf3f..ac36788 100644
  #include "core/fpdfapi/page/cpdf_shadingobject.h"
  #include "core/fpdfapi/parser/cpdf_array.h"
  #include "core/fpdfapi/parser/cpdf_document.h"
-@@ -363,3 +365,103 @@ FPDFPageObj_GetBounds(FPDF_PAGEOBJECT pageObject,
+@@ -363,3 +365,123 @@ FPDFPageObj_GetBounds(FPDF_PAGEOBJECT pageObject,
    *top = bbox.top;
    return true;
  }
@@ -95,7 +95,7 @@ index ca2cf3f..ac36788 100644
 +  if (!text_object)
 +    return 0;
 +
-+  CPDF_TextObject* pTxtObj = static_cast<CPDF_TextObject*>(text_object);
++  CPDF_TextObject* pTxtObj = CPDFTextObjectFromFPDFPageObject(text_object);
 +  return pTxtObj->CountChars();
 +}
 +
@@ -105,7 +105,7 @@ index ca2cf3f..ac36788 100644
 +  if (!text_object)
 +    return 0;
 +
-+  CPDF_TextObject* pTxtObj = static_cast<CPDF_TextObject*>(text_object);
++  CPDF_TextObject* pTxtObj = CPDFTextObjectFromFPDFPageObject(text_object);
 +  return pTxtObj->GetFontSize();
 +}
 +
@@ -118,7 +118,7 @@ index ca2cf3f..ac36788 100644
 +  if (!text_object)
 +    return;
 +
-+  CPDF_TextObject* pTxtObj = static_cast<CPDF_TextObject*>(text_object);
++  CPDF_TextObject* pTxtObj = CPDFTextObjectFromFPDFPageObject(text_object);
 +  const CFX_Matrix& matrix = pTxtObj->GetTextMatrix();
 +  *a = matrix.a;
 +  *b = matrix.b;
@@ -132,7 +132,7 @@ index ca2cf3f..ac36788 100644
 +  if (!text_object || index < 0)
 +    return 0;
 +
-+  CPDF_TextObject* pTxtObj = static_cast<CPDF_TextObject*>(text_object);
++  CPDF_TextObject* pTxtObj = CPDFTextObjectFromFPDFPageObject(text_object);
 +  if (index > pTxtObj->CountChars())
 +    return 0;
 +
@@ -148,7 +148,7 @@ index ca2cf3f..ac36788 100644
 +  if (!text_object || char_start < 0 || char_count < 0 || !result)
 +    return 0;
 +
-+  CPDF_TextObject* pTxtObj = static_cast<CPDF_TextObject*>(text_object);
++  CPDF_TextObject* pTxtObj = CPDFTextObjectFromFPDFPageObject(text_object);
 +  int char_available = pTxtObj->CountChars() - char_start;
 +  if (char_available <= 0)
 +    return 0;
@@ -188,6 +188,26 @@ index ca2cf3f..ac36788 100644
 +  memcpy(result, byte_str.GetBuffer(byte_str_len), byte_str_len);
 +  return ret_count;
 +}
++
++FPDF_EXPORT FPDF_BOOL FPDF_CALLCONV
++FPDFTextObj_GetStrokeColor(FPDF_PAGEOBJECT text_object,
++                           unsigned int* R,
++                           unsigned int* G,
++                           unsigned int* B,
++                           unsigned int* A)
++{
++  CPDF_TextObject* pTxtObj = CPDFTextObjectFromFPDFPageObject(text_object);
++  if (!pTxtObj || !R || !G || !B || !A)
++    return false;
++
++  const uint32_t strokeRGB = pTxtObj->m_ColorState.GetStrokeRGB();
++  *R = FXSYS_GetRValue(strokeRGB);
++  *G = FXSYS_GetGValue(strokeRGB);
++  *B = FXSYS_GetBValue(strokeRGB);
++  *A = static_cast<unsigned int>(
++      (pTxtObj->m_GeneralState.GetStrokeAlpha() * 255.f) + 0.5f);
++  return true;
++}
 diff --git a/fpdfsdk/fpdftext.cpp b/fpdfsdk/fpdftext.cpp
 index 68bf4f8..e073b20 100644
 --- a/fpdfsdk/fpdftext.cpp
@@ -221,11 +241,48 @@ index 68bf4f8..e073b20 100644
  FPDF_EXPORT FPDF_BOOL FPDF_CALLCONV FPDFText_GetCharBox(FPDF_TEXTPAGE text_page,
                                                          int index,
                                                          double* left,
+diff --git a/fpdfsdk/fpdfview.cpp b/fpdfsdk/fpdfview.cpp
+index e890aa0..709bea3 100644
+--- a/fpdfsdk/fpdfview.cpp
++++ b/fpdfsdk/fpdfview.cpp
+@@ -336,6 +336,11 @@ CPDF_Page* CPDFPageFromFPDFPage(FPDF_PAGE page) {
+ #endif  // PDF_ENABLE_XFA
+ }
+ 
++CPDF_TextObject* CPDFTextObjectFromFPDFPageObject(FPDF_PAGEOBJECT page_object) {
++  auto* obj = CPDFPageObjectFromFPDFPageObject(page_object);
++  return obj ? obj->AsText() : nullptr;
++}
++
+ CPDF_PathObject* CPDFPathObjectFromFPDFPageObject(FPDF_PAGEOBJECT page_object) {
+   auto* obj = CPDFPageObjectFromFPDFPageObject(page_object);
+   return obj ? obj->AsPath() : nullptr;
+diff --git a/fpdfsdk/fsdk_define.h b/fpdfsdk/fsdk_define.h
+index 77c2315..db3e734 100644
+--- a/fpdfsdk/fsdk_define.h
++++ b/fpdfsdk/fsdk_define.h
+@@ -25,6 +25,7 @@ class CPDF_Annot;
+ class CPDF_Page;
+ class CPDF_PageObject;
+ class CPDF_PageRenderContext;
++class CPDF_TextObject;
+ class CPDF_PathObject;
+ class CPDF_Stream;
+ class IFSDK_PAUSE_Adapter;
+@@ -65,6 +66,8 @@ FPDF_DOCUMENT FPDFDocumentFromCPDFDocument(CPDF_Document* doc);
+ 
+ CPDF_Page* CPDFPageFromFPDFPage(FPDF_PAGE page);
+ 
++CPDF_TextObject* CPDFTextObjectFromFPDFPageObject(FPDF_PAGEOBJECT page_object);
++
+ CPDF_PathObject* CPDFPathObjectFromFPDFPageObject(FPDF_PAGEOBJECT page_object);
+ 
+ CPDF_PageObject* CPDFPageObjectFromFPDFPageObject(FPDF_PAGEOBJECT page_object);
 diff --git a/public/fpdf_edit.h b/public/fpdf_edit.h
-index 54735a3..a9c1a25 100644
+index 54735a3..15292f5 100644
 --- a/public/fpdf_edit.h
 +++ b/public/fpdf_edit.h
-@@ -761,6 +761,57 @@ FPDFPageObj_CreateTextObj(FPDF_DOCUMENT document,
+@@ -761,6 +761,73 @@ FPDFPageObj_CreateTextObj(FPDF_DOCUMENT document,
                            FPDF_FONT font,
                            float font_size);
  
@@ -279,6 +336,22 @@ index 54735a3..a9c1a25 100644
 +                    int char_start,
 +                    int char_count,
 +                    unsigned short* result);
++
++// Get the stroke RGBA of a text. Range of values: 0 - 255.
++//
++// path   - the handle to the path object.
++// R      - the red component of the path stroke color.
++// G      - the green component of the path stroke color.
++// B      - the blue component of the path stroke color.
++// A      - the stroke alpha of the path.
++//
++// Returns TRUE on success.
++FPDF_EXPORT FPDF_BOOL FPDF_CALLCONV
++FPDFTextObj_GetStrokeColor(FPDF_PAGEOBJECT text_object,
++                           unsigned int* R,
++                           unsigned int* G,
++                           unsigned int* B,
++                           unsigned int* A);
 +
  #ifdef __cplusplus
  }  // extern "C"
