@@ -469,6 +469,9 @@
 
 #define STR_SD_NONE                                     NC_("STR_SD_NONE", "- None -")
 
+#define STR_CTRLCLICKHYPERLINK                          NC_("STR_CTRLCLICKHYPERLINK", "%s-click to follow hyperlink: ")
+#define STR_CLICKHYPERLINK                              NC_("STR_CLICKHYPERLINK", "Click to open hyperlink: ")
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
