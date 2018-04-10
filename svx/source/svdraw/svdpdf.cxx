@@ -233,7 +233,7 @@ void ImpSdrPdfImport::DoLoopActions(SvdProgressInfo* pProgrInfo, sal_uInt32* pAc
                     ImportText(pPageObject, nPageObjectIndex);
                     break;
                 case FPDF_PAGEOBJ_PATH:
-                    SAL_WARN("sd.filter", "Got page object PATH: " << nPageObjectIndex);
+                    ImportPath(pPageObject, nPageObjectIndex);
                     break;
                 case FPDF_PAGEOBJ_IMAGE:
                     ImportImage(pPageObject, nPageObjectIndex);
@@ -1245,6 +1245,95 @@ void ImpSdrPdfImport::ImportImage(FPDF_PAGEOBJECT pPageObject, int nPageObjectIn
     pGraf->SetMergedItem(XLineStyleItem(drawing::LineStyle_NONE));
     pGraf->SetMergedItem(XFillStyleItem(drawing::FillStyle_NONE));
     InsertObj(pGraf);
+}
+
+void ImpSdrPdfImport::ImportPath(FPDF_PAGEOBJECT pPageObject, int nPageObjectIndex)
+{
+    SAL_WARN("sd.filter", "Got page object PATH: " << nPageObjectIndex);
+    basegfx::B2DPolygon aPoly;
+    std::vector<basegfx::B2DPoint> aBezier;
+
+    const int nSegments = FPDFPath_CountSegments(pPageObject);
+    for (int nSegmentIndex = 0; nSegmentIndex < nSegments; ++nSegmentIndex)
+    {
+        FPDF_PATHSEGMENT pPathSegment = FPDFPath_GetPathSegment(pPageObject, nSegmentIndex);
+        if (pPathSegment != nullptr)
+        {
+            float x, y;
+            if (!FPDFPathSegment_GetPoint(pPathSegment, &x, &y))
+            {
+                SAL_WARN("sd.filter", "Failed to get PDF path segement point");
+                continue;
+            }
+
+            const bool bClose = FPDFPathSegment_GetClose(pPathSegment);
+            SAL_WARN("sd.filter",
+                     "Got (" << x << ", " << y << "): " << (bClose ? "CLOSE" : "OPEN"));
+            Point aPoint = PointsToLogic(x, y);
+            x = aPoint.X();
+            y = aPoint.Y();
+
+            const int nSegmentType = FPDFPathSegment_GetType(pPathSegment);
+            switch (nSegmentType)
+            {
+                case FPDF_SEGMENT_LINETO:
+                    SAL_WARN("sd.filter", "Got LineTo Segment.");
+                    aPoly.append(basegfx::B2DPoint(x, y));
+                    break;
+
+                case FPDF_SEGMENT_BEZIERTO:
+                    SAL_WARN("sd.filter", "Got BezierTo Segment.");
+                    aBezier.emplace_back(x, y);
+                    if (aBezier.size() == 3)
+                    {
+                        aPoly.appendBezierSegment(aBezier[0], aBezier[1], aBezier[2]);
+                        aBezier.clear();
+                    }
+                    break;
+
+                case FPDF_SEGMENT_MOVETO:
+                    SAL_WARN("sd.filter", "Got MoveTo Segment.");
+                    aPoly.append(basegfx::B2DPoint(x, y));
+                    break;
+
+                case FPDF_SEGMENT_UNKNOWN:
+                default:
+                    SAL_WARN("sd.filter", "Unknown path segment type in PDF: " << nSegmentType);
+                    break;
+            }
+        }
+    }
+
+    if (aBezier.size() == 3)
+    {
+        aPoly.appendBezierSegment(aBezier[0], aBezier[1], aBezier[2]);
+        aBezier.clear();
+    }
+
+    const basegfx::B2DHomMatrix aTransform(
+        basegfx::tools::createScaleTranslateB2DHomMatrix(mfScaleX, mfScaleY, maOfs.X(), maOfs.Y()));
+    aPoly.transform(aTransform);
+
+    float fWidth = 1;
+    FPDFPath_GetStrokeWidth(pPageObject, &fWidth);
+    mnLineWidth = lcl_ToLogic(lcl_PointToPixel(fWidth));
+
+    unsigned int r;
+    unsigned int g;
+    unsigned int b;
+    unsigned int a;
+    FPDFPath_GetFillColor(pPageObject, &r, &g, &b, &a);
+    mpVD->SetFillColor(Color(r, g, b));
+
+    FPDFPath_GetStrokeColor(pPageObject, &r, &g, &b, &a);
+    mpVD->SetLineColor(Color(r, g, b));
+
+    // if(!mbLastObjWasPolyWithoutLine || !CheckLastPolyLineAndFillMerge(basegfx::B2DPolyPolygon(aSource)))
+
+    aPoly.setClosed(true); // TODO: Review
+    SdrPathObj* pPath = new SdrPathObj(OBJ_POLY, basegfx::B2DPolyPolygon(aPoly));
+    SetAttributes(pPath);
+    InsertObj(pPath, false);
 }
 
 Point ImpSdrPdfImport::PointsToLogic(double x, double y) const
