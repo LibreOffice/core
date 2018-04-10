@@ -100,6 +100,13 @@ namespace emfplushelper
     {
     }
 
+    typedef enum
+    {
+        StringAlignmentNear = 0x00000000,
+        StringAlignmentCenter = 0x00000001,
+        StringAlignmentFar = 0x00000002
+    } StringAlignment;
+
     void EmfPlusHelperData::processObjectRecord(SvMemoryStream& rObjectStream, sal_uInt16 flags, sal_uInt32 dataSize, bool bUseWholeStream)
     {
         sal_uInt32 index;
@@ -1244,12 +1251,12 @@ namespace emfplushelper
 
                             SAL_INFO("drawinglayer", "EMF+ DrawString layoutRect: " << lx << "," << ly << " - " << lw << "x" << lh);
                             // parse the string
-                            OUString text = read_uInt16s_ToOUString(rMS, stringLength);
+                            const OUString text = read_uInt16s_ToOUString(rMS, stringLength);
                             SAL_INFO("drawinglayer", "EMF+ DrawString string: " << text);
                             // get the stringFormat from the Object table ( this is OPTIONAL and may be nullptr )
-                            EMFPStringFormat *stringFormat = static_cast< EMFPStringFormat* >(maEMFPObjects[formatId & 0xff].get());
+                            const EMFPStringFormat *stringFormat = static_cast< EMFPStringFormat* >(maEMFPObjects[formatId & 0xff].get());
                             // get the font from the flags
-                            EMFPFont *font = static_cast< EMFPFont* >( maEMFPObjects[flags & 0xff].get() );
+                            const EMFPFont *font = static_cast< EMFPFont* >( maEMFPObjects[flags & 0xff].get() );
                             if (!font)
                             {
                                 break;
@@ -1275,8 +1282,24 @@ namespace emfplushelper
                                 false);                                                // BiDiStrong
 
                             css::lang::Locale locale;
+                            double stringAlignmentHorizontalOffset = 0.0;
                             if (stringFormat)
                             {
+                                SAL_WARN_IF(stringFormat && stringFormat->DirectionRightToLeft(), "drawinglayer", "EMF+ DrawString Alignment TODO For a right-to-left layout rectangle, the origin should be at the upper right.");
+                                if (stringFormat->stringAlignment == StringAlignmentNear)
+                                // Alignment is to the left side of the layout rectangle (lx, ly, lw, lh)
+                                {
+                                    stringAlignmentHorizontalOffset = stringFormat->leadingMargin * font->emSize;
+                                } else if (stringFormat->stringAlignment == StringAlignmentCenter)
+                                // Alignment is centered between the origin and extent of the layout rectangle
+                                {
+                                    stringAlignmentHorizontalOffset = 0.5 * lw + stringFormat->leadingMargin * font->emSize - 0.3 * font->emSize * stringLength;
+                                } else if (stringFormat->stringAlignment == StringAlignmentFar)
+                                // Alignment is to the right side of the layout rectangle
+                                {
+                                    stringAlignmentHorizontalOffset = lw - stringFormat->trailingMargin * font->emSize - 0.6 * font->emSize * stringLength;
+                                }
+
                                 LanguageTag aLanguageTag(static_cast< LanguageType >(stringFormat->language));
                                 locale = aLanguageTag.getLocale();
                             }
@@ -1286,10 +1309,10 @@ namespace emfplushelper
                                 locale = Application::GetSettings().GetLanguageTag().getLocale();
                             }
 
-                            basegfx::B2DHomMatrix transformMatrix = basegfx::utils::createScaleTranslateB2DHomMatrix(MapSize(font->emSize,font->emSize),Map(lx,ly+font->emSize));
+                            const basegfx::B2DHomMatrix transformMatrix = basegfx::utils::createScaleTranslateB2DHomMatrix(
+                                        MapSize(font->emSize, font->emSize), Map(lx + stringAlignmentHorizontalOffset, ly + font->emSize));
 
                             const Color color = EMFPGetBrushColorOrARGBColor(flags, brushId);
-
                             mrPropertyHolders.Current().setTextColor(color.getBColor());
                             mrPropertyHolders.Current().setTextColorActive(true);
 
