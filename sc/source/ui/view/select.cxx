@@ -329,8 +329,8 @@ void ScViewFunctionSet::SetCursorAtPoint( const Point& rPointPixel, bool /* bDon
     // above a neighbour cell
     if (bFillingSelection)
     {
-        bBottomScroll = aEffPos.X() >= aWinSize.Height();
-        bRightScroll  = aEffPos.Y() >= aWinSize.Width();
+        bBottomScroll = aEffPos.Y() >= aWinSize.Height();
+        bRightScroll  = aEffPos.X() >= aWinSize.Width();
     }
     else
     {
