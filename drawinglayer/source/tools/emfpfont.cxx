@@ -49,6 +49,9 @@ namespace emfplushelper
         SAL_INFO("drawinglayer", "EMF+\tfont\nEMF+\theader: 0x" << std::hex << (header >> 12) << " version: 0x" << (header & 0x1fff) << " size: " << std::dec << emSize << " unit: 0x" << std::hex << sizeUnit << std::dec);
         SAL_INFO("drawinglayer", "EMF+\tflags: 0x" << std::hex << fontFlags << " reserved: 0x" << reserved << " length: 0x" << std::hex << length << std::dec);
 
+        //tdf#113624 Convert unit to Pixels
+        emSize = emSize * EmfPlusHelperData::getUnitToPixelMultiplier(static_cast<UnitType>(sizeUnit));
+
         if (length > 0 && length < 0x4000)
         {
             rtl_uString *pStr = rtl_uString_alloc(length);

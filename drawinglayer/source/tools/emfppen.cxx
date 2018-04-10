@@ -169,6 +169,8 @@ namespace emfplushelper
         SAL_INFO("drawinglayer", "EMF+\t graphics version: 0x" << std::hex << graphicsVersion << " type (must be set to zero): " << penType <<
             " pen data flags: 0x" << penDataFlags << " unit: " << penUnit << " width: " << std::dec << penWidth);
 
+        penWidth = penWidth * EmfPlusHelperData::getUnitToPixelMultiplier(static_cast<UnitType>(penUnit));
+
         if (penDataFlags & PenDataTransform)
         {
             EmfPlusHelperData::readXForm(s, pen_transformation);
