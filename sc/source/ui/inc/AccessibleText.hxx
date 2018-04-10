@@ -187,7 +187,7 @@ public:
     virtual SvxEditViewForwarder* GetEditViewForwarder( bool /* bCreate */ ) override { return nullptr; }
 
 private:
-    ScPreviewViewForwarder* mpViewForwarder;
+    std::unique_ptr<ScPreviewViewForwarder> mpViewForwarder;
     ScPreviewShell* mpViewShell;
     OUString        maText;
     bool            mbColHeader;
