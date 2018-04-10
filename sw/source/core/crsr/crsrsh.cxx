@@ -1428,13 +1428,6 @@ void SwCursorShell::UpdateCursor( sal_uInt16 eFlags, bool bIdleEnd )
     SET_CURR_SHELL( this );
     ClearUpCursors();
 
-    bool bScrollWin = eFlags & SwCursorShell::SCROLLWIN;
-    // Don't scroll to the cursor if it's moved by an other view
-    if(comphelper::LibreOfficeKit::isActive() && bScrollWin)
-    {
-        bScrollWin = SfxLokHelper::getView() != SfxLokHelper::getView(GetSfxViewShell());
-    }
-
     // In a BasicAction the cursor must be updated, e.g. to create the
     // TableCursor. EndAction now calls UpdateCursor!
     if( ActionPend() && BasicActionPend() )
@@ -1577,7 +1570,7 @@ void SwCursorShell::UpdateCursor( sal_uInt16 eFlags, bool bIdleEnd )
 
             m_pVisibleCursor->Hide(); // always hide visible Cursor
             // scroll Cursor to visible area
-            if( bScrollWin &&
+            if( eFlags & SwCursorShell::SCROLLWIN &&
                 (HasSelection() || eFlags & SwCursorShell::READONLY ||
                  !IsCursorReadonly()) )
             {
@@ -1832,7 +1825,7 @@ void SwCursorShell::UpdateCursor( sal_uInt16 eFlags, bool bIdleEnd )
         }
 
         // scroll Cursor to visible area
-        if( m_bHasFocus && bScrollWin&&
+        if( m_bHasFocus && eFlags & SwCursorShell::SCROLLWIN &&
             (HasSelection() || eFlags & SwCursorShell::READONLY ||
              !IsCursorReadonly() || GetViewOptions()->IsSelectionInReadonly()) )
         {
@@ -1844,7 +1837,7 @@ void SwCursorShell::UpdateCursor( sal_uInt16 eFlags, bool bIdleEnd )
             m_bSVCursorVis = bSav;
         }
 
-    } while( bScrollWin );
+    } while( eFlags & SwCursorShell::SCROLLWIN );
 
     if( m_pBlockCursor )
         RefreshBlockCursor();
