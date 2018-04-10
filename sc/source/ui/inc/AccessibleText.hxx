@@ -216,8 +216,8 @@ public:
 private:
     ScPreviewViewForwarder* mpViewForwarder;
     ScPreviewShell*         mpViewShell;
-    ScEditEngineDefaulter*  mpEditEngine;
-    SvxEditEngineForwarder* mpForwarder;
+    std::unique_ptr<ScEditEngineDefaulter>  mpEditEngine;
+    std::unique_ptr<SvxEditEngineForwarder> mpForwarder;
     ScDocShell*             mpDocSh;
     const EditTextObject*   mpEditObj;
     bool                    mbHeader;
