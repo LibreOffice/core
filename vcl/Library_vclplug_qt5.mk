@@ -24,6 +24,7 @@ $(eval $(call gb_Library_use_custom_headers,vclplug_qt5,vcl/qt5))
 $(eval $(call gb_Library_set_include,vclplug_qt5,\
     $$(INCLUDE) \
     -I$(SRCDIR)/vcl/inc \
+    -I$(SRCDIR)/vcl/inc/qt5 \
 ))
 
 $(eval $(call gb_Library_add_defs,vclplug_qt5,\
