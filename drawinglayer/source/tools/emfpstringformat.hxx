@@ -29,14 +29,14 @@ namespace emfplushelper
         sal_uInt32 header;
         sal_uInt32 stringFormatFlags;
         sal_uInt32 language;
-        sal_uInt32 stringAlignment;
-        sal_uInt32 lineAlign;
+        sal_uInt32 stringAlignment; // Horizontal alignment
+        sal_uInt32 lineAlign;       // Vertical alignment
         sal_uInt32 digitSubstitution;
         sal_uInt32 digitLanguage;
         float firstTabOffset;
         sal_Int32 hotkeyPrefix;
-        float leadingMargin;
-        float trailingMargin;
+        float leadingMargin;        // Length of the space to add to the starting position of a string.
+        float trailingMargin;       // Length of the space to leave following a string.
         float tracking;
         sal_Int32 trimming;
         sal_Int32 tabStopCount;
