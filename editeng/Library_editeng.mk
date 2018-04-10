@@ -136,6 +136,7 @@ $(eval $(call gb_Library_use_libraries,editeng,\
     vcl \
     svl \
     sot \
+    sfx \
     utl \
     tl \
     comphelper \
