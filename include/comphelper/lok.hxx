@@ -67,6 +67,12 @@ COMPHELPER_DLLPUBLIC void setRangeHeaders(bool bTiledAnnotations);
 /// Check if range based header data is enabled
 COMPHELPER_DLLPUBLIC bool isRangeHeaders();
 
+
+/// Check whether clients want viewId in visible cursor invalidation payload.
+COMPHELPER_DLLPUBLIC bool isViewIdForVisCursorInvalidation();
+/// Set whether clients want viewId in visible cursor invalidation payload.
+COMPHELPER_DLLPUBLIC void setViewIdForVisCursorInvalidation(bool bViewIdForVisCursorInvalidation);
+
 /// Update the current LOK's language.
 COMPHELPER_DLLPUBLIC void setLanguageTag(const LanguageTag& languageTag);
 /// Get the current LOK's language.
