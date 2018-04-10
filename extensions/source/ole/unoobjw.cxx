@@ -311,7 +311,8 @@ public:
                         Reference<XMultiServiceFactory> xMSF);
     void InitForClassItself(Reference<XInterface> xOrigin,
                             const OUString& sImplementationName,
-                            const IID& rIID);
+                            const IID& rIID,
+                            Reference<XMultiServiceFactory> xMSF);
     void InitForOutgoing(Reference<XInterface> xOrigin,
                          const OUString& sInterfaceName,
                          const IID& rIID,
@@ -567,13 +568,15 @@ void CXTypeInfo::InitForCoclass(Reference<XInterface> xOrigin,
 
 void CXTypeInfo::InitForClassItself(Reference<XInterface> xOrigin,
                                     const OUString& sImplementationName,
-                                    const IID& rIID)
+                                    const IID& rIID,
+                                    Reference<XMultiServiceFactory> xMSF)
 {
     SAL_INFO("extensions.olebridge", "CXTypeInfo::InitForClassItself() this=" << this << " for " << rIID << " (" << sImplementationName << ")");
     meKind = Kind::MAIN;
     mxOrigin = xOrigin;
     msImplementationName = sImplementationName;
     maIID = rIID;
+    mxMSF = xMSF;
 }
 
 void CXTypeInfo::InitForOutgoing(Reference<XInterface> xOrigin,
@@ -1092,7 +1095,7 @@ STDMETHODIMP InterfaceOleWrapper::GetTypeInfo(unsigned int iTInfo, LCID, ITypeIn
 
     pTypeInfo->AddRef();
 
-    pTypeInfo->InitForClassItself(m_xOrigin, m_sImplementationName, aIID);
+    pTypeInfo->InitForClassItself(m_xOrigin, m_sImplementationName, aIID, m_smgr);
 
     *ppTInfo = pTypeInfo;
 
