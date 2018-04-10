@@ -48,7 +48,7 @@ class ScImportExport
 {
     ScDocShell* pDocSh;
     ScDocument* pDoc;
-    ScDocument* pUndoDoc;
+    std::unique_ptr<ScDocument> pUndoDoc;
     ScRange     aRange;
     OUString    aStreamPath;
     OUString    aNonConvertibleChars;
@@ -72,7 +72,7 @@ class ScImportExport
                                 // do not need to broadcast after the import.
     ScExportTextOptions mExportTextOptions;
 
-    ScAsciiOptions* pExtOptions;        // extended options
+    std::unique_ptr<ScAsciiOptions> pExtOptions;        // extended options
 
     bool StartPaste();                  // Protect check, set up Undo
     void EndPaste(bool bAutoRowHeight = true);                    // Undo/Redo actions, Repaint
