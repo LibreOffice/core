@@ -602,6 +602,18 @@ namespace
         return bDrawValue;
     }
 
+    OUString extractPopupMenu(VclBuilder::stringmap& rMap)
+    {
+        OUString sRet;
+        VclBuilder::stringmap::iterator aFind = rMap.find(OString("popup"));
+        if (aFind != rMap.end())
+        {
+            sRet = aFind->second;
+            rMap.erase(aFind);
+        }
+        return sRet;
+    }
+
     OUString extractValuePos(VclBuilder::stringmap& rMap)
     {
         OUString sRet("top");
@@ -1393,9 +1405,21 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
             xButton = extractStockAndBuildPushButton(pParent, rMap, m_bLegacy);
         else
         {
+            assert(m_bLegacy && "use GtkMenuButton");
             xButton = extractStockAndBuildMenuButton(pParent, rMap);
             m_pParserState->m_aButtonMenuMaps.emplace_back(id, sMenu);
         }
+        xButton->SetImageAlign(ImageAlign::Left); //default to left
+        setupFromActionName(xButton, rMap, m_xFrame);
+        xWindow = xButton;
+    }
+    else if (name == "GtkMenuButton")
+    {
+        VclPtr<Button> xButton;
+        xButton = extractStockAndBuildMenuButton(pParent, rMap);
+        OUString sMenu = extractPopupMenu(rMap);
+        assert(!sMenu.isEmpty());
+        m_pParserState->m_aButtonMenuMaps.emplace_back(id, sMenu);
         xButton->SetImageAlign(ImageAlign::Left); //default to left
         setupFromActionName(xButton, rMap, m_xFrame);
         xWindow = xButton;
