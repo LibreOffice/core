@@ -1,0 +1,11 @@
+--- src/lib/IWORKXMLContext.cpp
++++ src/lib/IWORKXMLContext.cpp
+@@ -18,7 +18,7 @@
+ {
+ }
+ 
+-void IWORKXMLContext::CDATA(const char */*value*/)
++void IWORKXMLContext::CDATA(const char * /*value*/)
+ {
+   ETONYEK_DEBUG_MSG(("IWORKXMLContext::cData: find unexpected CDATA block\n"));
+ }
