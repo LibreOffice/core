@@ -26,7 +26,7 @@ def parseFieldInfo( tokens ):
     else:
         return (normalizeTypeParams(tokens[1]), "")
 
-with io.open("loplugin.unusedfields.log", "rb", buffering=1024*1024) as txt:
+with io.open("workdir/loplugin.unusedfields.log", "rb", buffering=1024*1024) as txt:
     for line in txt:
         tokens = line.strip().split("\t")
         if tokens[0] == "definition:":

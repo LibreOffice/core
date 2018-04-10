@@ -14,7 +14,7 @@ def normalizeTypeParams( line ):
     return normalizeTypeParamsRegex.sub("type-parameter-?-?", line)
 
 # reading as binary (since we known it is pure ascii) is much faster than reading as unicode
-with io.open("loplugin.singlevalfields.log", "rb", buffering=1024*1024) as txt:
+with io.open("workdir/loplugin.singlevalfields.log", "rb", buffering=1024*1024) as txt:
     for line in txt:
         tokens = line.strip().split("\t")
         if tokens[0] == "defn:":

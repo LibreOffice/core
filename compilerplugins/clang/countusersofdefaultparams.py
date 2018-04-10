@@ -15,7 +15,7 @@ def normalizeTypeParams( line ):
     line = normalizeTypeParamsRegex1.sub("type-parameter-?-?", line)
     return normalizeTypeParamsRegex2.sub("type-parameter-?-?", line)
 
-with io.open("loplugin.countusersofdefaultparams.log", "rb", buffering=1024*1024) as txt:
+with io.open("workdir/loplugin.countusersofdefaultparams.log", "rb", buffering=1024*1024) as txt:
     for line in txt:
         tokens = line.strip().split("\t")
         if tokens[0] == "defn:":

@@ -7,7 +7,7 @@ definitionSet = set()
 inheritFromSet = set()
 definitionToFileDict = {}
 
-with open("loplugin.finalclasses.log") as txt:
+with open("workdir/loplugin.finalclasses.log") as txt:
     for line in txt:
         tokens = line.strip().split("\t")
     

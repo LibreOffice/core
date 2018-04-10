@@ -67,7 +67,7 @@ public:
         for (const std::string & s : overridingSet)
             output += "overriding:\t" + s + "\n";
         std::ofstream myfile;
-        myfile.open( SRCDIR "/loplugin.unnecessaryvirtual.log", std::ios::app | std::ios::out);
+        myfile.open( WORKDIR "/loplugin.unnecessaryvirtual.log", std::ios::app | std::ios::out);
         myfile << output;
         myfile.close();
     }

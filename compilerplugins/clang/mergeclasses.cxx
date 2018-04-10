@@ -67,7 +67,7 @@ public:
         for (const std::pair<std::string,std::string> & s : definitionMap)
             output += "definition:\t" + s.first + "\t" + s.second + "\n";
         std::ofstream myfile;
-        myfile.open( SRCDIR "/loplugin.mergeclasses.log", std::ios::app | std::ios::out);
+        myfile.open( WORKDIR "/loplugin.mergeclasses.log", std::ios::app | std::ios::out);
         myfile << output;
         myfile.close();
     }

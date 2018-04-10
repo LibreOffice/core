@@ -82,7 +82,7 @@ public:
         for (const MyFuncInfo & s : addressOfSet)
             output += "addrof:\t" + s.returnType + "\t" + s.nameAndParams + "\n";
         std::ofstream myfile;
-        myfile.open( SRCDIR "/loplugin.expandablemethods.log", std::ios::app | std::ios::out);
+        myfile.open( WORKDIR "/loplugin.expandablemethods.log", std::ios::app | std::ios::out);
         myfile << output;
         myfile.close();
     }

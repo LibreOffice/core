@@ -25,7 +25,7 @@ def normalizeTypeParams( line ):
 # primary input loop
 # --------------------------------------------------------------------------------------------
 
-with io.open("loplugin.expandablemethods.log", "rb", buffering=1024*1024) as txt:
+with io.open("workdir/loplugin.expandablemethods.log", "rb", buffering=1024*1024) as txt:
     for line in txt:
         tokens = line.strip().split("\t")
         if tokens[0] == "definition:":

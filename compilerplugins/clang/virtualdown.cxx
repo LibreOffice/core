@@ -62,7 +62,7 @@ public:
         for (const std::string& s : callSet)
             output += "call:\t" + s + "\n";
         std::ofstream myfile;
-        myfile.open(SRCDIR "/loplugin.virtualdown.log", std::ios::app | std::ios::out);
+        myfile.open(WORKDIR "/loplugin.virtualdown.log", std::ios::app | std::ios::out);
         myfile << output;
         myfile.close();
     }

@@ -193,7 +193,7 @@ void UnusedFields::run()
         for (const MyFieldInfo & s : definitionSet)
             output += "definition:\t" + s.access + "\t" + s.parentClass + "\t" + s.fieldName + "\t" + s.fieldType + "\t" + s.sourceLocation + "\n";
         std::ofstream myfile;
-        myfile.open( SRCDIR "/loplugin.unusedfields.log", std::ios::app | std::ios::out);
+        myfile.open( WORKDIR "/loplugin.unusedfields.log", std::ios::app | std::ios::out);
         myfile << output;
         myfile.close();
     }

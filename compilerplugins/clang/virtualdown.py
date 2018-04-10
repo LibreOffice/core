@@ -9,7 +9,7 @@ definitionToSourceLocationMap = dict()
 callSet = set()
 
 
-with io.open("loplugin.virtualdown.log", "rb", buffering=1024*1024) as txt:
+with io.open("workdir/loplugin.virtualdown.log", "rb", buffering=1024*1024) as txt:
     for line in txt:
         tokens = line.strip().split("\t")
         if tokens[0] == "definition:":

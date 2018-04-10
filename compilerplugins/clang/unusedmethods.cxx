@@ -102,7 +102,7 @@ public:
         for (const MyFuncInfo & s : calledFromOutsideSet)
             output += "outside:\t" + s.returnType + "\t" + s.nameAndParams + "\n";
         std::ofstream myfile;
-        myfile.open( SRCDIR "/loplugin.unusedmethods.log", std::ios::app | std::ios::out);
+        myfile.open( WORKDIR "/loplugin.unusedmethods.log", std::ios::app | std::ios::out);
         myfile << output;
         myfile.close();
     }

@@ -74,7 +74,7 @@ public:
         for (const MyCallInfo & s : callSet)
             output += "call:\t" + s.returnType + "\t" + s.nameAndParams + "\t" + s.sourceLocationOfCall + "\n";
         std::ofstream myfile;
-        myfile.open( SRCDIR "/loplugin.countusersofdefaultparams.log", std::ios::app | std::ios::out);
+        myfile.open( WORKDIR "/loplugin.countusersofdefaultparams.log", std::ios::app | std::ios::out);
         myfile << output;
         myfile.close();
     }

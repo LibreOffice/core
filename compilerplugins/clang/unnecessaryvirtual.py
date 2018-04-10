@@ -9,7 +9,7 @@ definitionToSourceLocationMap = dict()
 overridingSet = set()
 
 
-with io.open("loplugin.unnecessaryvirtual.log", "rb", buffering=1024*1024) as txt:
+with io.open("workdir/loplugin.unnecessaryvirtual.log", "rb", buffering=1024*1024) as txt:
     for line in txt:
         tokens = line.strip().split("\t")
         if tokens[0] == "definition:":

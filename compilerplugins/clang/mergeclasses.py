@@ -7,7 +7,7 @@ definitionSet = set()
 parentChildDict = {}
 definitionToFileDict = {}
 
-with open("loplugin.mergeclasses.log") as txt:
+with open("workdir/loplugin.mergeclasses.log") as txt:
     for line in txt:
         tokens = line.strip().split("\t")
     
