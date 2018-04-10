@@ -20,6 +20,7 @@
 #pragma once
 
 #include <headless/svpinst.hxx>
+#include "KDE5SalFrame.hxx"
 
 class SalYieldMutex;
 class SalFrame;
@@ -33,7 +34,7 @@ protected:
 
 public:
     explicit KDE5SalInstance(SalYieldMutex* pMutex);
-    virtual SalFrame* CreateFrame( SalFrame* pParent, SalFrameStyleFlags nStyle ) override;
+    virtual KDE5SalFrame* CreateFrame( KDE5SalFrame* pParent, SalFrameStyleFlags nStyle );
 
     virtual bool hasNativeFileSelection() const override { return true; }
 
