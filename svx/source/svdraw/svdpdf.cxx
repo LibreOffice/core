@@ -226,8 +226,6 @@ void ImpSdrPdfImport::DoLoopActions(SvdProgressInfo* pProgrInfo, sal_uInt32* pAc
             if (pPageObject == nullptr)
                 continue;
 
-            SAL_WARN("sd.filter", "Got page object number: ");
-
             const int nPageObjectType = FPDFPageObj_GetType(pPageObject);
             switch (nPageObjectType)
             {
@@ -1047,6 +1045,11 @@ void ImpSdrPdfImport::ImportText(FPDF_PAGEOBJECT pPageObject, int nPageObjectInd
     SAL_WARN("sd.filter", "Got Font Pixel Size: " << dFontSize);
     dFontSize = lcl_ToLogic(dFontSize);
     SAL_WARN("sd.filter", "Got Font Logic Size: " << dFontSize);
+
+    unsigned int nR, nG, nB, nA;
+    if (FPDFTextObj_GetStrokeColor(pPageObject, &nR, &nG, &nB, &nA))
+        mpVD->SetTextColor(Color(nR, nG, nB));
+
     vcl::Font aFnt = mpVD->GetFont();
     aFnt.SetFontSize(Size(dFontSize, dFontSize));
     mpVD->SetFont(aFnt);
