@@ -118,11 +118,30 @@
                includeantruntime="false"/>
     </target>
 
-    <target name="test-compile" depends="compile,idl">
-        <property name="test.skip" value="true" unless:set="OOO_JUNIT_JAR"/>
-        <echo message="No junit, skipping tests" unless:set="OOO_JUNIT_JAR"/>
+    <target name="test-check">
+        <local name="tests.present"/>
+        <available type="dir" file="${test.src.dir}" property="tests.present"/>
+        <echo message="No tests" unless:set="tests.present"/>
 
-        <mkdir dir="${test.build.dir}" if:set="OOO_JUNIT_JAR"/>
+        <local name="only.junit.absent"/>
+        <condition property="only.junit.absent">
+            <and>
+                <isset property="tests.present"/>
+                <not><isset property="OOO_JUNIT_JAR"/></not>
+            </and>
+        </condition>
+        <echo message="No junit, skipping tests" if:set="only.junit.absent"/>
+
+        <condition property="test.skip">
+            <or>
+                <not><isset property="test.present"/></not>
+                <not><isset property="OOO_JUNIT_JAR"/></not>
+            </or>
+        </condition>
+    </target>
+
+    <target name="test-compile" depends="compile,idl,test-check">
+        <mkdir dir="${test.build.dir}" unless:set="test.skip"/>
         <javac srcdir="${test.src.dir}"
                destdir="${test.build.dir}"
                debug="${test.debug}"
@@ -130,7 +149,7 @@
                deprecation="${test.deprecation}"
                classpathref="internal.test.classpath"
                includeantruntime="false"
-               if:set="OOO_JUNIT_JAR"/>
+               unless:set="test.skip"/>
     </target>
 
     <!-- fork="true" is sadly necessary on Ubuntu due to multiple versions of junit confusing Ant,
