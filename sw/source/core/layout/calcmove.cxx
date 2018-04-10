@@ -282,7 +282,7 @@ void SwFrame::PrepareMake(vcl::RenderContext* pRenderContext)
             }
         }
 
-        // There is noo format of previous frame, if current frame is a table
+        // There is no format of previous frame, if current frame is a table
         // frame and its previous frame wants to keep with it.
         const bool bFormatPrev = !bTab ||
                                  !GetPrev() ||
