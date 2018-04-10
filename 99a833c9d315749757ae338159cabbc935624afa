@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "9a30ddce_afe4580d",
+        "filename": "include/test/sheet/functiondescription.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000723
+      },
+      "writtenOn": "2018-04-10T03:11:59Z",
+      "side": 1,
+      "message": "Every other test is done the same way, so I will stick with this approach for the time being.",
+      "parentUuid": "9a30ddce_581d6572",
+      "revId": "99a833c9d315749757ae338159cabbc935624afa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a30ddce_9817dd50",
         "filename": "sc/CppunitTest_sc_functiondescriptionobj.mk",
         "patchSetId": 3
@@ -30,6 +48,24 @@
       "writtenOn": "2018-04-09T07:34:02Z",
       "side": 1,
       "message": "are all these dependencies etc. really needed, or is this all cargo-cult--copied from another makefile?",
+      "revId": "99a833c9d315749757ae338159cabbc935624afa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_8fe79411",
+        "filename": "sc/CppunitTest_sc_functiondescriptionobj.mk",
+        "patchSetId": 3
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000723
+      },
+      "writtenOn": "2018-04-10T03:11:59Z",
+      "side": 1,
+      "message": "I never looked at that closely, but we I finished converting the ones for sheet/sc, I have a look to clean up some stuff.",
+      "parentUuid": "9a30ddce_9817dd50",
       "revId": "99a833c9d315749757ae338159cabbc935624afa",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
