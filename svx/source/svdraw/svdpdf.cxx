@@ -1160,7 +1160,7 @@ void ImpSdrPdfImport::MapScaling()
 void ImpSdrPdfImport::ImportImage(FPDF_PAGEOBJECT pPageObject)
 {
     SAL_WARN("sd.filter", "Got page object IMAGE");
-    std::unique_ptr<void, FPDFBitmapDeleter> bitmap(FPDFImageObj_GetBitmap(pPageObject));
+    std::unique_ptr<void, FPDFBitmapDeleter> bitmap(FPDFImageObj_GetBitmapBgra(pPageObject));
     if (!bitmap)
     {
         SAL_WARN("sd.filter", "Failed to get IMAGE");
@@ -1222,7 +1222,7 @@ void ImpSdrPdfImport::ImportImage(FPDF_PAGEOBJECT pPageObject)
             for (int nRow = 0; nRow < nHeight; ++nRow)
             {
                 pWriteAccess->CopyScanline(nRow, pBuf + (nStride * nRow),
-                                           ScanlineFormat::N32BitTcBgra, nStride);
+                                           ScanlineFormat::N32BitTcRgba, nStride);
             }
             break;
         case FPDFBitmap_BGRA:
