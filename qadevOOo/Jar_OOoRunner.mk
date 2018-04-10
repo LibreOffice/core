@@ -562,7 +562,6 @@ $(eval $(call gb_Jar_add_sourcefiles,OOoRunner,\
     qadevOOo/tests/java/ifc/sdb/_XSingleSelectQueryAnalyzer \
     qadevOOo/tests/java/ifc/sdb/_XSingleSelectQueryComposer \
     qadevOOo/tests/java/ifc/sdb/_XSQLErrorBroadcaster \
-    qadevOOo/tests/java/ifc/sheet/_SheetSortDescriptor \
     qadevOOo/tests/java/ifc/sheet/_SpreadsheetDocument \
     qadevOOo/tests/java/ifc/sheet/_TableAutoFormatField \
     qadevOOo/tests/java/ifc/sheet/_XCellRangeData \
@@ -1037,7 +1036,6 @@ $(eval $(call gb_Jar_add_sourcefiles,OOoRunner,\
     qadevOOo/tests/java/mod/_sc/ScShapeObj \
     qadevOOo/tests/java/mod/_sc/ScSheetLinkObj \
     qadevOOo/tests/java/mod/_sc/ScSheetLinksObj \
-    qadevOOo/tests/java/mod/_sc/ScSortDescriptorBase \
     qadevOOo/tests/java/mod/_sc/ScSpreadsheetSettings \
     qadevOOo/tests/java/mod/_sc/ScSpreadsheetSettingsObj \
     qadevOOo/tests/java/mod/_sc/ScStyleFamiliesObj \
