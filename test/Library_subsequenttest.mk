@@ -67,6 +67,7 @@ $(eval $(call gb_Library_add_exception_objects,subsequenttest,\
 	test/source/sheet/sheetcellranges \
 	test/source/sheet/sheetfilterdescriptor \
 	test/source/sheet/sheetlink \
+	test/source/sheet/sheetsortdescriptor2 \
 	test/source/sheet/spreadsheet \
 	test/source/sheet/tableautoformat \
 	test/source/sheet/tablevalidation \
