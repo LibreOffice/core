@@ -1413,7 +1413,7 @@ void SwCursorShell::UpdateCursor( sal_uInt16 eFlags, bool bIdleEnd )
 
     bool bScrollWin = eFlags & SwCursorShell::SCROLLWIN;
     // Don't scroll to the cursor if it's moved by an other view
-    if(comphelper::LibreOfficeKit::isActive())
+    if(comphelper::LibreOfficeKit::isActive() && bScrollWin)
     {
         bScrollWin = SfxLokHelper::getView() != SfxLokHelper::getView(GetSfxViewShell());
     }
