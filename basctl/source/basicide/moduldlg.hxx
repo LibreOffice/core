@@ -60,15 +60,14 @@ public:
     }
 };
 
-class GotoLineDialog : public ModalDialog
+class GotoLineDialog : public weld::GenericDialogController
 {
-    VclPtr<Edit>           m_pEdit;
-    VclPtr<OKButton>       m_pOKButton;
-    DECL_LINK(OkButtonHandler, Button*, void);
+    std::unique_ptr<weld::Entry> m_xEdit;
+    std::unique_ptr<weld::Button> m_xOKButton;
+    DECL_LINK(OkButtonHandler, weld::Button&, void);
 public:
-    explicit GotoLineDialog(vcl::Window * pParent);
+    explicit GotoLineDialog(weld::Window* pParent);
     virtual ~GotoLineDialog() override;
-    virtual void dispose() override;
     sal_Int32 GetLineNumber() const;
 };
 

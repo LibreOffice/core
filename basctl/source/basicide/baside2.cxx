@@ -1010,13 +1010,15 @@ void ModulWindow::ExecuteCommand (SfxRequest& rReq)
             break;
         case SID_GOTOLINE:
         {
-            ScopedVclPtrInstance< GotoLineDialog > aGotoDlg(this);
-            if (aGotoDlg->Execute())
-                if (sal_Int32 const nLine = aGotoDlg->GetLineNumber())
+            GotoLineDialog aGotoDlg(GetFrameWeld());
+            if (aGotoDlg.run() == RET_OK)
+            {
+                if (sal_Int32 const nLine = aGotoDlg.GetLineNumber())
                 {
                     TextSelection const aSel(TextPaM(nLine - 1, 0), TextPaM(nLine - 1, 0));
                     GetEditView()->SetSelection(aSel);
                 }
+            }
             break;
         }
     }
