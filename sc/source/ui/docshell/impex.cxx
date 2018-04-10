@@ -188,8 +188,8 @@ ScImportExport::ScImportExport( ScDocument* p, const OUString& rPos )
 
 ScImportExport::~ScImportExport() COVERITY_NOEXCEPT_FALSE
 {
-    delete pUndoDoc;
-    delete pExtOptions;
+    pUndoDoc.reset();
+    pExtOptions.reset();
 }
 
 void ScImportExport::SetExtOptions( const ScAsciiOptions& rOpt )
@@ -197,7 +197,7 @@ void ScImportExport::SetExtOptions( const ScAsciiOptions& rOpt )
     if ( pExtOptions )
         *pExtOptions = rOpt;
     else
-        pExtOptions = new ScAsciiOptions( rOpt );
+        pExtOptions.reset(new ScAsciiOptions( rOpt ));
 
     //  "normal" Options
 
@@ -239,7 +239,7 @@ bool ScImportExport::StartPaste()
     }
     if( bUndo && pDocSh && pDoc->IsUndoEnabled())
     {
-        pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
+        pUndoDoc.reset(new ScDocument( SCDOCMODE_UNDO ));
         pUndoDoc->InitUndo( pDoc, aRange.aStart.Tab(), aRange.aEnd.Tab() );
         pDoc->CopyToDocument(aRange, InsertDeleteFlags::ALL | InsertDeleteFlags::NOCAPTIONS, false, *pUndoDoc);
     }
@@ -260,9 +260,9 @@ void ScImportExport::EndPaste(bool bAutoRowHeight)
         ScMarkData aDestMark;
         aDestMark.SetMarkArea(aRange);
         pDocSh->GetUndoManager()->AddUndoAction(
-            new ScUndoPaste(pDocSh, aRange, aDestMark, pUndoDoc, pRedoDoc, InsertDeleteFlags::ALL, nullptr));
+            new ScUndoPaste(pDocSh, aRange, aDestMark, pUndoDoc.release(), pRedoDoc, InsertDeleteFlags::ALL, nullptr));
     }
-    pUndoDoc = nullptr;
+    pUndoDoc.reset();
     if( pDocSh )
     {
         if (!bHeight)
