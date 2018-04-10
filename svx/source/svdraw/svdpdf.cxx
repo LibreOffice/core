@@ -229,29 +229,29 @@ void ImpSdrPdfImport::DoLoopActions(SvdProgressInfo* pProgrInfo, sal_uInt32* pAc
             if (pPageObject == nullptr)
                 continue;
 
-            SAL_WARN("sd.filter", "Got page object number: " << nPageObjectIndex);
+            SAL_WARN("sd.filter", "Got page object number: ");
 
-            // Process everything but text, which is done separately below.
             const int nPageObjectType = FPDFPageObj_GetType(pPageObject);
             switch (nPageObjectType)
             {
                 case FPDF_PAGEOBJ_TEXT:
-                    ImportText(pPageObject);
+                    ImportText(pPageObject, nPageObjectIndex);
                     break;
                 case FPDF_PAGEOBJ_PATH:
-                    SAL_WARN("sd.filter", "Got page object PATH");
+                    SAL_WARN("sd.filter", "Got page object PATH: " << nPageObjectIndex);
                     break;
                 case FPDF_PAGEOBJ_IMAGE:
-                    ImportImage(pPageObject);
+                    ImportImage(pPageObject, nPageObjectIndex);
                     break;
                 case FPDF_PAGEOBJ_SHADING:
-                    SAL_WARN("sd.filter", "Got page object SHADING");
+                    SAL_WARN("sd.filter", "Got page object SHADING: " << nPageObjectIndex);
                     break;
                 case FPDF_PAGEOBJ_FORM:
-                    SAL_WARN("sd.filter", "Got page object FORM");
+                    SAL_WARN("sd.filter", "Got page object FORM: " << nPageObjectIndex);
                     break;
                 default:
-                    SAL_WARN("sd.filter", "Unknown PDF page object type: " << nPageObjectType);
+                    SAL_WARN("sd.filter", "Unknown PDF page object type: "
+                                              << nPageObjectType << ": " << nPageObjectIndex);
                     break;
             }
         }
@@ -1013,10 +1013,9 @@ void ImpSdrPdfImport::checkClip()
 }
 
 bool ImpSdrPdfImport::isClip() const { return !maClip.getB2DRange().isEmpty(); }
-
-void ImpSdrPdfImport::ImportText(FPDF_PAGEOBJECT pPageObject)
+void ImpSdrPdfImport::ImportText(FPDF_PAGEOBJECT pPageObject, int nPageObjectIndex)
 {
-    SAL_WARN("sd.filter", "Got page object TEXT");
+    SAL_WARN("sd.filter", "Got page object TEXT: " << nPageObjectIndex);
     float left;
     float bottom;
     float right;
@@ -1156,9 +1155,9 @@ void ImpSdrPdfImport::MapScaling()
     mnMapScalingOfs = nCount;
 }
 
-void ImpSdrPdfImport::ImportImage(FPDF_PAGEOBJECT pPageObject)
+void ImpSdrPdfImport::ImportImage(FPDF_PAGEOBJECT pPageObject, int nPageObjectIndex)
 {
-    SAL_WARN("sd.filter", "Got page object IMAGE");
+    SAL_WARN("sd.filter", "Got page object IMAGE: " << nPageObjectIndex);
     std::unique_ptr<void, FPDFBitmapDeleter> bitmap(FPDFImageObj_GetBitmapBgra(pPageObject));
     if (!bitmap)
     {
