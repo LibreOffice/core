@@ -30,6 +30,7 @@
 #include <rtl/ustring.hxx>
 #include <xmloff/xmlexppr.hxx>
 #include <xmloff/XMLConstantsPropertyHandler.hxx>
+#include <xmloff/NamedBoolPropertyHdl.hxx>
 
 template<typename EnumT> struct SvXMLEnumMapEntry;
 class Color;
@@ -119,6 +120,7 @@ namespace xmloff
         mutable std::unique_ptr<OFontWidthHandler>              m_pFontWidthHandler;
         mutable std::unique_ptr<XMLConstantsPropertyHandler>    m_pFontEmphasisHandler;
         mutable std::unique_ptr<XMLConstantsPropertyHandler>    m_pFontReliefHandler;
+        mutable std::unique_ptr<XMLNamedBoolPropertyHdl>        m_pTextLineModeHandler;
 
     public:
         OControlPropertyHandlerFactory();

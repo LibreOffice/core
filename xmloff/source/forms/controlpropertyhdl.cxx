@@ -99,9 +99,13 @@ namespace xmloff
                 pHandler = m_pFontReliefHandler.get();
                 break;
             case XML_TYPE_TEXT_LINE_MODE:
-                pHandler = new XMLNamedBoolPropertyHdl(
-                                            ::xmloff::token::XML_SKIP_WHITE_SPACE,
-                                            ::xmloff::token::XML_CONTINUOUS);
+                if (!m_pTextLineModeHandler)
+                {
+                    m_pTextLineModeHandler = o3tl::make_unique<XMLNamedBoolPropertyHdl>(
+                            ::xmloff::token::XML_SKIP_WHITE_SPACE,
+                            ::xmloff::token::XML_CONTINUOUS);
+                }
+                pHandler = m_pTextLineModeHandler.get();
                 break;
         }
 
