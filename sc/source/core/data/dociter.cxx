@@ -987,7 +987,7 @@ ScCellValue ScCellIterator::getCellValue() const
             aRet.mpString = new svl::SharedString(*maCurCell.mpString);
         break;
         case CELLTYPE_EDIT:
-            aRet.mpEditText = maCurCell.mpEditText->Clone();
+            aRet.mpEditText = maCurCell.mpEditText->Clone().release();
         break;
         case CELLTYPE_VALUE:
             aRet.mfValue = maCurCell.mfValue;

@@ -398,7 +398,7 @@ public:
     void SetResultError( FormulaError n );
 
     bool IsHyperLinkCell() const;
-    EditTextObject* CreateURLObject();
+    std::unique_ptr<EditTextObject> CreateURLObject();
     void GetURLResult( OUString& rURL, OUString& rCellText );
 
     /** Determines whether or not the result string contains more than one paragraph */

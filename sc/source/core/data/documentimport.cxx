@@ -258,7 +258,7 @@ void ScDocumentImport::setStringCell(const ScAddress& rPos, const OUString& rStr
     pBlockPos->miCellPos = rCells.set(pBlockPos->miCellPos, rPos.Row(), aSS);
 }
 
-void ScDocumentImport::setEditCell(const ScAddress& rPos, EditTextObject* pEditText)
+void ScDocumentImport::setEditCell(const ScAddress& rPos, std::unique_ptr<EditTextObject> pEditText)
 {
     ScTable* pTab = mpImpl->mrDoc.FetchTable(rPos.Tab());
     if (!pTab)
@@ -271,7 +271,7 @@ void ScDocumentImport::setEditCell(const ScAddress& rPos, EditTextObject* pEditT
 
     pEditText->NormalizeString(mpImpl->mrDoc.GetSharedStringPool());
     sc::CellStoreType& rCells = pTab->aCol[rPos.Col()].maCells;
-    pBlockPos->miCellPos = rCells.set(pBlockPos->miCellPos, rPos.Row(), pEditText);
+    pBlockPos->miCellPos = rCells.set(pBlockPos->miCellPos, rPos.Row(), pEditText.release());
 }
 
 void ScDocumentImport::setFormulaCell(

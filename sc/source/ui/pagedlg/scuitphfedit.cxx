@@ -216,16 +216,13 @@ void ScHFEditPage::Reset( const SfxItemSet* rCoreSet )
 bool ScHFEditPage::FillItemSet( SfxItemSet* rCoreSet )
 {
     ScPageHFItem    aItem( nWhich );
-    EditTextObject* pLeft   = m_pWndLeft->CreateTextObject();
-    EditTextObject* pCenter = m_pWndCenter->CreateTextObject();
-    EditTextObject* pRight  = m_pWndRight->CreateTextObject();
+    std::unique_ptr<EditTextObject> pLeft   = m_pWndLeft->CreateTextObject();
+    std::unique_ptr<EditTextObject> pCenter = m_pWndCenter->CreateTextObject();
+    std::unique_ptr<EditTextObject> pRight  = m_pWndRight->CreateTextObject();
 
     aItem.SetLeftArea  ( *pLeft );
     aItem.SetCenterArea( *pCenter );
     aItem.SetRightArea ( *pRight );
-    delete pLeft;
-    delete pCenter;
-    delete pRight;
 
     rCoreSet->Put( aItem );
 
@@ -316,9 +313,9 @@ void ScHFEditPage::SetSelectDefinedList()
     OUString aCenterEntry;
     OUString aRightEntry;
 
-    pLeftObj.reset(m_pWndLeft->GetEditEngine()->CreateTextObject());
-    pCenterObj.reset(m_pWndCenter->GetEditEngine()->CreateTextObject());
-    pRightObj.reset(m_pWndRight->GetEditEngine()->CreateTextObject());
+    pLeftObj = m_pWndLeft->GetEditEngine()->CreateTextObject();
+    pCenterObj = m_pWndCenter->GetEditEngine()->CreateTextObject();
+    pRightObj = m_pWndRight->GetEditEngine()->CreateTextObject();
 
     bool bFound = false;
 
@@ -505,8 +502,7 @@ bool ScHFEditPage::IsPageEntry(EditEngine*pEngine, const EditTextObject* pTextOb
             {
                 aSel.nStartPos = aSel.nEndPos;
                 aSel.nEndPos++;
-                std::unique_ptr< EditTextObject > pPageObj;
-                pPageObj.reset(pEngine->CreateTextObject(aSel));
+                std::unique_ptr< EditTextObject > pPageObj = pEngine->CreateTextObject(aSel);
                 if(pPageObj.get() && pPageObj->IsFieldObject() )
                 {
                     const SvxFieldItem* pFieldItem = pPageObj->GetField();
@@ -598,7 +594,7 @@ void ScHFEditPage::ProcessDefinedListSel(ScHFEntryId eSel, bool bTravelling)
             m_pWndCenter->GetEditEngine()->QuickInsertText(aPageOfEntry,ESelection(aSel.nEndPara,aSel.nEndPos, aSel.nEndPara, aSel.nEndPos));
             aSel.nEndPos = aSel.nEndPos + aPageOfEntry.getLength();
             m_pWndCenter->GetEditEngine()->QuickInsertField(SvxFieldItem(SvxPagesField(), EE_FEATURE_FIELD), ESelection(aSel.nEndPara,aSel.nEndPos, aSel.nEndPara, aSel.nEndPos));
-            pTextObj.reset(m_pWndCenter->GetEditEngine()->CreateTextObject());
+            pTextObj = m_pWndCenter->GetEditEngine()->CreateTextObject();
             m_pWndCenter->SetText(*pTextObj);
             if(!bTravelling)
                 m_pWndCenter->GrabFocus();
@@ -638,7 +634,7 @@ void ScHFEditPage::ProcessDefinedListSel(ScHFEntryId eSel, bool bTravelling)
             aSel.nStartPos = aSel.nEndPos;
             aSel.nEndPos = aSel.nEndPos + aPageEntry.getLength();
             m_pWndCenter->GetEditEngine()->QuickInsertField(SvxFieldItem(SvxPageField(), EE_FEATURE_FIELD), ESelection(aSel.nEndPara,aSel.nEndPos, aSel.nEndPara, aSel.nEndPos));
-            pTextObj.reset(m_pWndCenter->GetEditEngine()->CreateTextObject());
+            pTextObj = m_pWndCenter->GetEditEngine()->CreateTextObject();
             m_pWndCenter->SetText(*pTextObj);
             if(!bTravelling)
                 m_pWndCenter->GrabFocus();
@@ -667,7 +663,7 @@ void ScHFEditPage::ProcessDefinedListSel(ScHFEntryId eSel, bool bTravelling)
             m_pWndCenter->GetEditEngine()->QuickInsertText(aCommaSpace,ESelection(aSel.nEndPara, aSel.nEndPos, aSel.nEndPara, aSel.nEndPos));
             aSel.nEndPos = aSel.nEndPos + aCommaSpace.getLength();
             m_pWndCenter->GetEditEngine()->QuickInsertField( SvxFieldItem(SvxTableField(), EE_FEATURE_FIELD), ESelection(aSel.nEndPara, aSel.nEndPos, aSel.nEndPara, aSel.nEndPos));
-            pTextObj.reset(m_pWndCenter->GetEditEngine()->CreateTextObject());
+            pTextObj = m_pWndCenter->GetEditEngine()->CreateTextObject();
             m_pWndCenter->SetText(*pTextObj);
             if(!bTravelling)
                 m_pWndCenter->GrabFocus();
@@ -687,7 +683,7 @@ void ScHFEditPage::ProcessDefinedListSel(ScHFEntryId eSel, bool bTravelling)
             m_pWndCenter->GetEditEngine()->QuickInsertText(aCommaSpace,ESelection(aSel.nEndPara, aSel.nEndPos, aSel.nEndPara, aSel.nEndPos));
             aSel.nEndPos = aSel.nEndPos + aCommaSpace.getLength();
             m_pWndCenter->GetEditEngine()->QuickInsertField( SvxFieldItem(SvxFileField(), EE_FEATURE_FIELD), ESelection(aSel.nEndPara, aSel.nEndPos, aSel.nEndPara, aSel.nEndPos));
-            pTextObj.reset(m_pWndCenter->GetEditEngine()->CreateTextObject());
+            pTextObj = m_pWndCenter->GetEditEngine()->CreateTextObject();
             m_pWndCenter->SetText(*pTextObj);
             if(!bTravelling)
                 m_pWndCenter->GrabFocus();

@@ -389,11 +389,11 @@ ScPageHFItem::ScPageHFItem( const ScPageHFItem& rItem )
         pRightArea  ( nullptr )
 {
     if ( rItem.pLeftArea )
-        pLeftArea.reset(rItem.pLeftArea->Clone());
+        pLeftArea = rItem.pLeftArea->Clone();
     if ( rItem.pCenterArea )
-        pCenterArea.reset(rItem.pCenterArea->Clone());
+        pCenterArea = rItem.pCenterArea->Clone();
     if ( rItem.pRightArea )
-        pRightArea.reset(rItem.pRightArea->Clone());
+        pRightArea = rItem.pRightArea->Clone();
 }
 
 ScPageHFItem::~ScPageHFItem()
@@ -425,24 +425,30 @@ bool ScPageHFItem::PutValue( const uno::Any& rVal, sal_uInt8 /* nMemberId */ )
             if (pImp.is())
             {
                 const EditTextObject* pImpLeft = pImp->GetLeftEditObject();
-                pLeftArea.reset( pImpLeft ? pImpLeft->Clone() : nullptr );
+                pLeftArea.reset();
+                if (pImpLeft)
+                    pLeftArea = pImpLeft->Clone();
 
                 const EditTextObject* pImpCenter = pImp->GetCenterEditObject();
-                pCenterArea.reset( pImpCenter ? pImpCenter->Clone() : nullptr );
+                pCenterArea.reset();
+                if (pImpCenter)
+                    pCenterArea = pImpCenter->Clone();
 
                 const EditTextObject* pImpRight = pImp->GetRightEditObject();
-                pRightArea.reset( pImpRight ? pImpRight->Clone() : nullptr );
+                pRightArea.reset();
+                if (pImpRight)
+                    pRightArea = pImpRight->Clone();
 
                 if ( !pLeftArea || !pCenterArea || !pRightArea )
                 {
                     // no Text with Null are left
                     ScEditEngineDefaulter aEngine( EditEngine::CreatePool(), true );
                     if (!pLeftArea)
-                        pLeftArea.reset( aEngine.CreateTextObject() );
+                        pLeftArea = aEngine.CreateTextObject();
                     if (!pCenterArea)
-                        pCenterArea.reset( aEngine.CreateTextObject() );
+                        pCenterArea = aEngine.CreateTextObject();
                     if (!pRightArea)
-                        pRightArea.reset( aEngine.CreateTextObject() );
+                        pRightArea = aEngine.CreateTextObject();
                 }
 
                 bRet = true;
@@ -476,17 +482,17 @@ SfxPoolItem* ScPageHFItem::Clone( SfxItemPool* ) const
 
 void ScPageHFItem::SetLeftArea( const EditTextObject& rNew )
 {
-    pLeftArea.reset( rNew.Clone() );
+    pLeftArea = rNew.Clone();
 }
 
 void ScPageHFItem::SetCenterArea( const EditTextObject& rNew )
 {
-    pCenterArea.reset( rNew.Clone() );
+    pCenterArea = rNew.Clone();
 }
 
 void ScPageHFItem::SetRightArea( const EditTextObject& rNew )
 {
-    pRightArea.reset( rNew.Clone() );
+    pRightArea = rNew.Clone();
 }
 
 /**

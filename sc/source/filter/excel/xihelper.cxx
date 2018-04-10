@@ -139,10 +139,10 @@ void XclImpAddressConverter::ConvertRangeList( ScRangeList& rScRanges,
 
 namespace {
 
-EditTextObject* lclCreateTextObject( const XclImpRoot& rRoot,
+std::unique_ptr<EditTextObject> lclCreateTextObject( const XclImpRoot& rRoot,
         const XclImpString& rString, XclFontItemType eType, sal_uInt16 nXFIndex )
 {
-    EditTextObject* pTextObj = nullptr;
+    std::unique_ptr<EditTextObject> pTextObj;
 
     const XclImpXFBuffer& rXFBuffer = rRoot.GetXFBuffer();
     const XclImpFont* pFirstFont = rXFBuffer.GetFont( nXFIndex );
@@ -215,7 +215,7 @@ EditTextObject* lclCreateTextObject( const XclImpRoot& rRoot,
 
 } // namespace
 
-EditTextObject* XclImpStringHelper::CreateTextObject(
+std::unique_ptr<EditTextObject> XclImpStringHelper::CreateTextObject(
         const XclImpRoot& rRoot, const XclImpString& rString )
 {
     return lclCreateTextObject( rRoot, rString, XclFontItemType::Editeng, 0 );
@@ -232,7 +232,7 @@ void XclImpStringHelper::SetToDocument(
 
     if (pTextObj.get())
     {
-        rDoc.setEditCell(rPos, pTextObj.release());
+        rDoc.setEditCell(rPos, std::move(pTextObj));
     }
     else
     {
@@ -567,7 +567,7 @@ void XclImpHFConverter::CreateCurrObject()
 {
     InsertText();
     SetAttribs();
-    GetCurrObj().reset( mrEE.CreateTextObject() );
+    GetCurrObj() = mrEE.CreateTextObject();
 }
 
 void XclImpHFConverter::SetNewPortion( XclImpHFPortion eNew )

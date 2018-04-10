@@ -389,7 +389,7 @@ void ScAttrArray::RemoveCellCharAttribs( SCROW nStartRow, SCROW nEndRow,
         if (aCell.meType != CELLTYPE_EDIT || !aCell.mpEditText)
             continue;
 
-        EditTextObject* pOldData = nullptr;
+        std::unique_ptr<EditTextObject> pOldData;
         if (pDataArray)
             pOldData = aCell.mpEditText->Clone();
 
@@ -399,8 +399,8 @@ void ScAttrArray::RemoveCellCharAttribs( SCROW nStartRow, SCROW nEndRow,
 
         if (pDataArray)
         {
-            EditTextObject* pNewData = aCell.mpEditText->Clone();
-            pDataArray->AddItem(nTab, nCol, nRow, pOldData, pNewData);
+            std::unique_ptr<EditTextObject> pNewData = aCell.mpEditText->Clone();
+            pDataArray->AddItem(nTab, nCol, nRow, std::move(pOldData), std::move(pNewData));
         }
     }
 }

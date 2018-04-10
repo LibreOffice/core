@@ -36,7 +36,9 @@ public:
     public:
         Item() = delete;
         explicit Item(SCTAB nTab, SCCOL nCol, SCROW nRow,
-                      EditTextObject* pOldData, EditTextObject* pNewData);
+                      std::unique_ptr<EditTextObject> pOldData, std::unique_ptr<EditTextObject> pNewData);
+        Item(Item const &) = default;
+        Item(Item&&) = default;
         ~Item();
 
         const EditTextObject* GetOldData() const;
@@ -46,8 +48,8 @@ public:
         SCROW GetRow() const { return mnRow;}
 
     private:
-        std::shared_ptr<EditTextObject> mpOldData;
-        std::shared_ptr<EditTextObject> mpNewData;
+        std::unique_ptr<EditTextObject> mpOldData;
+        std::unique_ptr<EditTextObject> mpNewData;
         SCTAB mnTab;
         SCCOL mnCol;
         SCROW mnRow;
@@ -58,7 +60,7 @@ public:
     ~ScEditDataArray();
 
     void AddItem(SCTAB nTab, SCCOL nCol, SCROW nRow,
-                 EditTextObject* pOldData, EditTextObject* pNewData);
+                 std::unique_ptr<EditTextObject> pOldData, std::unique_ptr<EditTextObject> pNewData);
 
     const Item* First();
     const Item* Next();

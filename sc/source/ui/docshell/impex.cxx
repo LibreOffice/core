@@ -58,6 +58,7 @@
 #include <unotools/configmgr.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
+#include <editeng/editobj.hxx>
 
 #include <memory>
 #include <osl/endian.h>

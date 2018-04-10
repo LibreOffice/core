@@ -61,7 +61,7 @@ public:
     /** once the objects are passed to this class, their life-cycle is
         managed by this class; the calling function must pass new'ed
         objects to this method. */
-    void            SetEditData( EditTextObject* pOld, EditTextObject* pNew );
+    void            SetEditData( std::unique_ptr<EditTextObject> pOld, std::unique_ptr<EditTextObject> pNew );
 
 private:
     SCCOL           nCol;
@@ -70,10 +70,10 @@ private:
     ScPatternAttr*  pOldPattern;
     ScPatternAttr*  pNewPattern;
     ScPatternAttr*  pApplyPattern;
-    std::shared_ptr<EditTextObject> pOldEditData;
-    std::shared_ptr<EditTextObject> pNewEditData;
+    std::unique_ptr<EditTextObject> pOldEditData;
+    std::unique_ptr<EditTextObject> pNewEditData;
 
-    void            DoChange( const ScPatternAttr* pWhichPattern, const std::shared_ptr<EditTextObject>& pEditData ) const;
+    void            DoChange( const ScPatternAttr* pWhichPattern, const std::unique_ptr<EditTextObject>& pEditData ) const;
 };
 
 class ScUndoEnterData: public ScSimpleUndo
@@ -94,7 +94,7 @@ public:
 
     ScUndoEnterData(
         ScDocShell* pNewDocShell, const ScAddress& rPos,
-        ValuesType& rOldValues, const OUString& rNewStr, EditTextObject* pObj );
+        ValuesType& rOldValues, const OUString& rNewStr, std::unique_ptr<EditTextObject> pObj );
 
     virtual void    Undo() override;
     virtual void    Redo() override;

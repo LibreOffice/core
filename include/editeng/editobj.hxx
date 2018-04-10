@@ -90,7 +90,7 @@ public:
 
     SvtScriptType GetScriptType() const;
 
-    EditTextObject* Clone() const;
+    std::unique_ptr<EditTextObject> Clone() const;
 
     sal_Int32 GetParagraphCount() const;
 

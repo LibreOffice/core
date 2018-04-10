@@ -253,13 +253,13 @@ void ScHeaderFooterTextData::UpdateData()
 {
     if (pEditEngine)
     {
-        mpTextObj.reset(pEditEngine->CreateTextObject());
+        mpTextObj = pEditEngine->CreateTextObject();
     }
 }
 
 void ScHeaderFooterTextData::UpdateData(EditEngine& rEditEngine)
 {
-    mpTextObj.reset(rEditEngine.CreateTextObject());
+    mpTextObj = rEditEngine.CreateTextObject();
     bDataValid = false;
 }
 
@@ -859,7 +859,7 @@ void ScEditEngineTextObj::SetText( const EditTextObject& rTextObject )
     SetSelection( aSel );
 }
 
-EditTextObject* ScEditEngineTextObj::CreateTextObject()
+std::unique_ptr<EditTextObject> ScEditEngineTextObj::CreateTextObject()
 {
     return GetEditEngine()->CreateTextObject();
 }

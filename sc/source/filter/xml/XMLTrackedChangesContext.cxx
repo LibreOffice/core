@@ -26,6 +26,7 @@
 #include <textuno.hxx>
 #include <editutil.hxx>
 #include <document.hxx>
+#include <editeng/editobj.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/nmspmap.hxx>
@@ -930,7 +931,7 @@ void SAL_CALL ScXMLChangeCellContext::endFastElement( sal_Int32 /*nElement*/ )
 
             // The cell will own the text object instance.
             mrOldCell.meType = CELLTYPE_EDIT;
-            mrOldCell.mpEditText = mpEditTextObj->CreateTextObject();
+            mrOldCell.mpEditText = mpEditTextObj->CreateTextObject().release();
             GetScImport().GetTextImport()->ResetCursor();
             mpEditTextObj.clear();
         }

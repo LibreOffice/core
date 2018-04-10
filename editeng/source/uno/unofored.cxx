@@ -498,9 +498,8 @@ void SvxEditEngineForwarder::CopyText(const SvxTextForwarder& rSource)
     const SvxEditEngineForwarder* pSourceForwarder = dynamic_cast< const SvxEditEngineForwarder* >( &rSource );
     if( !pSourceForwarder )
         return;
-    EditTextObject* pNewTextObject = pSourceForwarder->rEditEngine.CreateTextObject();
+    std::unique_ptr<EditTextObject> pNewTextObject = pSourceForwarder->rEditEngine.CreateTextObject();
     rEditEngine.SetText( *pNewTextObject );
-    delete pNewTextObject;
 }
 
 

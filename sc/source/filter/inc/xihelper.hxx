@@ -116,7 +116,7 @@ public:
     XclImpStringHelper() = delete;
     /** Returns a new edit engine text object.
         @param nXFIndex  Index to XF for first text portion (for escapement). */
-    static EditTextObject* CreateTextObject(
+    static std::unique_ptr<EditTextObject> CreateTextObject(
                             const XclImpRoot& rRoot,
                             const XclImpString& rString );
 

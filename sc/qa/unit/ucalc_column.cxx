@@ -10,6 +10,7 @@
 #include "ucalc.hxx"
 #include <editutil.hxx>
 #include <cellvalue.hxx>
+#include <editeng/editobj.hxx>
 #include <svl/languageoptions.hxx>
 
 void Test::testColumnFindEditCells()

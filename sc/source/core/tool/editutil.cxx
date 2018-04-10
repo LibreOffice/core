@@ -131,7 +131,7 @@ OUString ScEditUtil::GetString( const EditTextObject& rEditText, const ScDocumen
     }
 }
 
-EditTextObject* ScEditUtil::CreateURLObjectFromURL( ScDocument& rDoc, const OUString& rURL, const OUString& rText )
+std::unique_ptr<EditTextObject> ScEditUtil::CreateURLObjectFromURL( ScDocument& rDoc, const OUString& rURL, const OUString& rText )
 {
     SvxURLField aUrlField( rURL, rText, SvxURLFormat::AppDefault);
     EditEngine& rEE = rDoc.GetEditEngine();
@@ -163,9 +163,9 @@ void ScEditUtil::RemoveCharAttribs( EditTextObject& rEditText, const ScPatternAt
     }
 }
 
-EditTextObject* ScEditUtil::Clone( const EditTextObject& rObj, ScDocument& rDestDoc )
+std::unique_ptr<EditTextObject> ScEditUtil::Clone( const EditTextObject& rObj, ScDocument& rDestDoc )
 {
-    EditTextObject* pNew = nullptr;
+    std::unique_ptr<EditTextObject> pNew;
 
     EditEngine& rEngine = rDestDoc.GetEditEngine();
     if (rObj.HasOnlineSpellErrors())

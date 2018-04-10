@@ -984,10 +984,10 @@ OutlinerParaObject* SwWW8ImplReader::ImportAsOutliner(OUString &rString, WW8_CP 
                 m_pDrawEditEngine->QuickDelete(aFirstChar);
         }
 
-        EditTextObject* pTemporaryText = m_pDrawEditEngine->CreateTextObject();
+        std::unique_ptr<EditTextObject> pTemporaryText = m_pDrawEditEngine->CreateTextObject();
         pRet = new OutlinerParaObject(*pTemporaryText);
         pRet->SetOutlinerMode( OutlinerMode::TextObject );
-        delete pTemporaryText;
+        pTemporaryText.reset();
 
         m_pDrawEditEngine->SetText( OUString() );
         m_pDrawEditEngine->SetParaAttribs(0, m_pDrawEditEngine->GetEmptyItemSet());
@@ -1193,11 +1193,11 @@ void SwWW8ImplReader::InsertTxbxText(SdrTextObj* pTextObj,
         }
 
         bool bVertical = pTextObj->IsVerticalWriting();
-        EditTextObject* pTemporaryText = m_pDrawEditEngine->CreateTextObject();
+        std::unique_ptr<EditTextObject> pTemporaryText = m_pDrawEditEngine->CreateTextObject();
         OutlinerParaObject* pOp = new OutlinerParaObject(*pTemporaryText);
         pOp->SetOutlinerMode( OutlinerMode::TextObject );
         pOp->SetVertical( bVertical );
-        delete pTemporaryText;
+        pTemporaryText.reset();
         pTextObj->NbcSetOutlinerParaObject( pOp );
         pTextObj->SetVerticalWriting(bVertical);
 

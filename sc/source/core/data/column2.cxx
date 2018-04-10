@@ -1107,7 +1107,7 @@ public:
 
             // Overwrite the existing object.
             delete pObj;
-            pObj = mpEngine->CreateTextObject();
+            pObj = mpEngine->CreateTextObject().release();
         }
         else                                            // create String
         {

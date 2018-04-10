@@ -385,7 +385,7 @@ OutlinerParaObject* Outliner::CreateParaObject( sal_Int32 nStartPara, sal_Int32 
     if (nCount <= 0)
         return nullptr;
 
-    EditTextObject* pText = pEditEngine->CreateTextObject( nStartPara, nCount );
+    std::unique_ptr<EditTextObject> pText = pEditEngine->CreateTextObject( nStartPara, nCount );
     const bool bIsEditDoc(OutlinerMode::TextObject == ImplGetOutlinerMode());
     ParagraphDataVector aParagraphDataVector(nCount);
     const sal_Int32 nLastPara(nStartPara + nCount - 1);
@@ -397,7 +397,6 @@ OutlinerParaObject* Outliner::CreateParaObject( sal_Int32 nStartPara, sal_Int32 
 
     OutlinerParaObject* pPObj = new OutlinerParaObject(*pText, aParagraphDataVector, bIsEditDoc);
     pPObj->SetOutlinerMode(GetMode());
-    delete pText;
 
     return pPObj;
 }
@@ -2119,11 +2118,9 @@ NonOverflowingText *Outliner::GetNonOverflowingText() const
 
 OutlinerParaObject *Outliner::GetEmptyParaObject() const
 {
-    EditTextObject *pEmptyText = pEditEngine->GetEmptyTextObject();
+    std::unique_ptr<EditTextObject> pEmptyText = pEditEngine->GetEmptyTextObject();
     OutlinerParaObject* pPObj = new OutlinerParaObject( *pEmptyText );
     pPObj->SetOutlinerMode(GetMode());
-
-    delete pEmptyText;
     return pPObj;
 }
 

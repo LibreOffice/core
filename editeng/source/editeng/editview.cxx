@@ -685,7 +685,7 @@ EVControlBits EditView::GetControlWord() const
     return pImpEditView->nControl;
 }
 
-EditTextObject* EditView::CreateTextObject()
+std::unique_ptr<EditTextObject> EditView::CreateTextObject()
 {
     return pImpEditView->pEditEngine->pImpEditEngine->CreateTextObject( pImpEditView->GetEditSelection() );
 }

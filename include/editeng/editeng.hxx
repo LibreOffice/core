@@ -299,10 +299,10 @@ public:
     void            Clear();
     void            SetText( const OUString& rStr );
 
-    EditTextObject* CreateTextObject();
-    EditTextObject* GetEmptyTextObject() const;
-    EditTextObject* CreateTextObject( sal_Int32 nPara, sal_Int32 nParas = 1 );
-    EditTextObject* CreateTextObject( const ESelection& rESelection );
+    std::unique_ptr<EditTextObject> CreateTextObject();
+    std::unique_ptr<EditTextObject> GetEmptyTextObject() const;
+    std::unique_ptr<EditTextObject> CreateTextObject( sal_Int32 nPara, sal_Int32 nParas = 1 );
+    std::unique_ptr<EditTextObject> CreateTextObject( const ESelection& rESelection );
     void            SetText( const EditTextObject& rTextObject );
 
     void            RemoveParagraph(sal_Int32 nPara);

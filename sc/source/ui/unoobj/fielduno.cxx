@@ -197,9 +197,8 @@ ScUnoEditEngine::ScUnoEditEngine(ScEditEngineDefaulter* pSource)
     , nFieldPos(0)
     , nFieldIndex(0)
 {
-    EditTextObject* pData = pSource->CreateTextObject();
+    std::unique_ptr<EditTextObject> pData = pSource->CreateTextObject();
     SetText( *pData );
-    delete pData;
 }
 
 OUString ScUnoEditEngine::CalcFieldValue( const SvxFieldItem& rField,

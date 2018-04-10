@@ -412,9 +412,10 @@ void ScViewFunc::DoThesaurus()
         if (aOldText.meType == CELLTYPE_EDIT)
         {
             // The cell will own the text object instance.
-            EditTextObject* pText = pThesaurusEngine->CreateTextObject();
-            if (rDoc.SetEditText(ScAddress(nCol,nRow,nTab), pText))
-                aNewText.set(*pText);
+            std::unique_ptr<EditTextObject> pText = pThesaurusEngine->CreateTextObject();
+            auto tmp = pText.get();
+            if (rDoc.SetEditText(ScAddress(nCol,nRow,nTab), std::move(pText)))
+                aNewText.set(*tmp);
         }
         else
         {

@@ -28,9 +28,9 @@ ScEditDataArray::~ScEditDataArray()
 }
 
 void ScEditDataArray::AddItem(SCTAB nTab, SCCOL nCol, SCROW nRow,
-                              EditTextObject* pOldData, EditTextObject* pNewData)
+                              std::unique_ptr<EditTextObject> pOldData, std::unique_ptr<EditTextObject> pNewData)
 {
-    maArray.emplace_back(nTab, nCol, nRow, pOldData, pNewData);
+    maArray.emplace_back(nTab, nCol, nRow, std::move(pOldData), std::move(pNewData));
 }
 
 const ScEditDataArray::Item* ScEditDataArray::First()
@@ -49,13 +49,13 @@ const ScEditDataArray::Item* ScEditDataArray::Next()
 }
 
 ScEditDataArray::Item::Item(SCTAB nTab, SCCOL nCol, SCROW nRow,
-                            EditTextObject* pOldData, EditTextObject* pNewData) :
+                            std::unique_ptr<EditTextObject> pOldData, std::unique_ptr<EditTextObject> pNewData) :
+    mpOldData(std::move(pOldData)),
+    mpNewData(std::move(pNewData)),
     mnTab(nTab),
     mnCol(nCol),
     mnRow(nRow)
 {
-    mpOldData.reset(pOldData);
-    mpNewData.reset(pNewData);
 }
 
 ScEditDataArray::Item::~Item()

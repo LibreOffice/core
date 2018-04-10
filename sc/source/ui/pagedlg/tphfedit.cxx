@@ -141,7 +141,7 @@ void ScEditWindow::SetNumType(SvxNumType eNumType)
     pEdEngine->UpdateFields();
 }
 
-EditTextObject* ScEditWindow::CreateTextObject()
+std::unique_ptr<EditTextObject> ScEditWindow::CreateTextObject()
 {
     //  reset paragraph attributes
     //  (GetAttribs at creation of format dialog always returns the set items)

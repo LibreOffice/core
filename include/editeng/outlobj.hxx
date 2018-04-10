@@ -42,7 +42,7 @@ struct OutlinerParaObjData
     bool                             mbIsEditDoc;
 
     // constructor
-    OutlinerParaObjData( EditTextObject* pEditTextObject, const ParagraphDataVector& rParagraphDataVector, bool bIsEditDoc );
+    OutlinerParaObjData( std::unique_ptr<EditTextObject> pEditTextObject, const ParagraphDataVector& rParagraphDataVector, bool bIsEditDoc );
 
     OutlinerParaObjData( const OutlinerParaObjData& r );
 

@@ -1512,18 +1512,18 @@ void EditEngine::Write( SvStream& rOutput, EETextFormat eFormat )
     pImpEditEngine->Write( rOutput, eFormat, EditSelection( aStartPaM, aEndPaM ) );
 }
 
-EditTextObject* EditEngine::CreateTextObject()
+std::unique_ptr<EditTextObject> EditEngine::CreateTextObject()
 {
     return pImpEditEngine->CreateTextObject();
 }
 
-EditTextObject* EditEngine::CreateTextObject( const ESelection& rESelection )
+std::unique_ptr<EditTextObject> EditEngine::CreateTextObject( const ESelection& rESelection )
 {
     EditSelection aSel( pImpEditEngine->CreateSel( rESelection ) );
     return pImpEditEngine->CreateTextObject( aSel );
 }
 
-EditTextObject* EditEngine::GetEmptyTextObject() const
+std::unique_ptr<EditTextObject> EditEngine::GetEmptyTextObject() const
 {
     return pImpEditEngine->GetEmptyTextObject();
 }
@@ -1603,7 +1603,7 @@ void EditEngine::SetEndPasteOrDropHdl( const Link<PasteOrDropInfos&,void>& rLink
     pImpEditEngine->aEndPasteOrDropHdl = rLink;
 }
 
-EditTextObject* EditEngine::CreateTextObject( sal_Int32 nPara, sal_Int32 nParas )
+std::unique_ptr<EditTextObject> EditEngine::CreateTextObject( sal_Int32 nPara, sal_Int32 nParas )
 {
     DBG_ASSERT( 0 <= nPara && nPara < pImpEditEngine->GetEditDoc().Count(), "CreateTextObject: Startpara out of Range" );
     DBG_ASSERT( nParas <= pImpEditEngine->GetEditDoc().Count() - nPara, "CreateTextObject: Endpara out of Range" );

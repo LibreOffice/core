@@ -59,7 +59,7 @@ public:
     void            SetFont( const ScPatternAttr& rPattern );
     using Control::SetText;
     void            SetText( const EditTextObject& rTextObject );
-    EditTextObject* CreateTextObject();
+    std::unique_ptr<EditTextObject> CreateTextObject();
     void            SetCharAttributes();
 
     void            InsertField( const SvxFieldItem& rFld );
