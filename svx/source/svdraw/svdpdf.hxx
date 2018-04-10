@@ -100,10 +100,10 @@ class ImpSdrPdfImport final
     void checkClip();
     bool isClip() const;
 
-    void ImportImage(FPDF_PAGEOBJECT pPageObject);
+    void ImportImage(FPDF_PAGEOBJECT pPageObject, int nPageObjectIndex);
     void SetupPageScale(const double dPageWidth, const double dPageHeight);
 
-    void ImportText(FPDF_PAGEOBJECT pPageObject);
+    void ImportText(FPDF_PAGEOBJECT pPageObject, int nPageObjectIndex);
     void ImportText(const Point& rPos, const OUString& rStr);
     void SetAttributes(SdrObject* pObj, bool bForceTextAttr = false);
     void InsertObj(SdrObject* pObj, bool bScale = true);
