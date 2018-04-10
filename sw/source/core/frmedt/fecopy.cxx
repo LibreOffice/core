@@ -1263,13 +1263,13 @@ bool SwFEShell::GetDrawObjGraphic( SotClipboardFormatId nFormat, Graphic& rGrf )
 
 // #i50824#
 // replace method <lcl_RemoveOleObjsFromSdrModel> by <lcl_ConvertSdrOle2ObjsToSdrGrafObjs>
-static void lcl_ConvertSdrOle2ObjsToSdrGrafObjs( SdrModel* _pModel )
+static void lcl_ConvertSdrOle2ObjsToSdrGrafObjs( SdrModel& _rModel )
 {
-    for ( sal_uInt16 nPgNum = 0; nPgNum < _pModel->GetPageCount(); ++nPgNum )
+    for ( sal_uInt16 nPgNum = 0; nPgNum < _rModel.GetPageCount(); ++nPgNum )
     {
         // setup object iterator in order to iterate through all objects
         // including objects in group objects, but exclusive group objects.
-        SdrObjListIter aIter(*(_pModel->GetPage( nPgNum )));
+        SdrObjListIter aIter(*(_rModel.GetPage( nPgNum )));
         while( aIter.IsMore() )
         {
             SdrOle2Obj* pOle2Obj = dynamic_cast< SdrOle2Obj* >( aIter.Next() );
@@ -1288,7 +1288,7 @@ static void lcl_ConvertSdrOle2ObjsToSdrGrafObjs( SdrModel* _pModel )
 
                 // create new graphic shape with the ole graphic and shape size
                 SdrGrafObj* pGraphicObj = new SdrGrafObj(
-                    *_pModel, // TTTT should be reference
+                    _rModel,
                     aGraphic,
                     pOle2Obj->GetCurrentBoundRect());
                 // apply layer of ole2 shape at graphic shape
@@ -1488,7 +1488,7 @@ void SwFEShell::Paste( SvStream& rStrm, SwPasteSdr nAction, const Point* pPt )
 
         // #i50824#
         // method <lcl_RemoveOleObjsFromSdrModel> replaced by <lcl_ConvertSdrOle2ObjsToSdrGrafObjs>
-        lcl_ConvertSdrOle2ObjsToSdrGrafObjs( pModel.get() );
+        lcl_ConvertSdrOle2ObjsToSdrGrafObjs( *pModel.get() );
         pView->Paste(*pModel, aPos, nullptr, SdrInsertFlags::NONE);
 
         const size_t nCnt = pView->GetMarkedObjectList().GetMarkCount();
