@@ -2180,6 +2180,16 @@ Sink::Call( const OUString& Method, Sequence< Any >& Arguments )
             VariantInit(&aVarResult);
             UINT uArgErr;
 
+            // In the case of a VBScript client, which uses "late binding", calling Invoke on the
+            // sink it provides will cause a callback to our CXTypeInfo::GetNames for the given
+            // member id, and in that we will tell it the name of the corresponding method, and the
+            // client will know what event handler to invoke based on that name.
+            //
+            // As the outgoing interfaces used (ooo::vba::word::XApplicationOutgoing and others) are
+            // totally not stable and not published in any way, there can be no client that would
+            // have done "compile-time binding" and where the sink would actually be an object with
+            // a vtbl corresponding to the outgoing interface. Late binding clients that work like
+            // VBScript is all we support.
             nResult = pDispatch->Invoke(nMemId, IID_NULL, LOCALE_USER_DEFAULT, DISPATCH_METHOD, &aDispParams, &aVarResult, NULL, &uArgErr);
             SAL_WARN_IF(!SUCCEEDED(nResult), "extensions.olebridge", "Call to " << Method << " failed: " << WindowsErrorStringFromHRESULT(nResult));
 
