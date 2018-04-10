@@ -389,9 +389,9 @@ SvtScriptType EditTextObject::GetScriptType() const
 }
 
 
-EditTextObject* EditTextObject::Clone() const
+std::unique_ptr<EditTextObject> EditTextObject::Clone() const
 {
-    return new EditTextObject(*this);
+    return std::unique_ptr<EditTextObject>(new EditTextObject(*this));
 }
 
 bool EditTextObject::operator==( const EditTextObject& rCompare ) const

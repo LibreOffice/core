@@ -49,6 +49,7 @@
 #include <tokenarray.hxx>
 
 #include <comphelper/threadpool.hxx>
+#include <editeng/editobj.hxx>
 #include <tools/cpuid.hxx>
 #include <formula/errorcodes.hxx>
 #include <formula/vectortoken.hxx>
@@ -2589,7 +2590,7 @@ bool ScFormulaCell::IsHyperLinkCell() const
     return pCode && pCode->IsHyperLink();
 }
 
-EditTextObject* ScFormulaCell::CreateURLObject()
+std::unique_ptr<EditTextObject> ScFormulaCell::CreateURLObject()
 {
     OUString aCellText;
     OUString aURL;

@@ -684,7 +684,7 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
 
         //      undo
 
-        EditTextObject* pUndoData = nullptr;
+        std::unique_ptr<EditTextObject> pUndoData;
         ScUndoEnterData::ValuesType aOldValues;
 
         if (bRecord && !bSimple)
@@ -725,7 +725,7 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
             if ( bRecord )
             {   //  because of ChangeTrack current first
                 pDocSh->GetUndoManager()->AddUndoAction(
-                    new ScUndoEnterData(pDocSh, ScAddress(nCol,nRow,nTab), aOldValues, aString, pUndoData));
+                    new ScUndoEnterData(pDocSh, ScAddress(nCol,nRow,nTab), aOldValues, aString, std::move(pUndoData)));
             }
 
             HideAllCursors();
@@ -1212,8 +1212,8 @@ void ScViewFunc::ApplySelectionPattern( const ScPatternAttr& rAttr, bool bCursor
         SCROW nRow = rViewData.GetCurY();
         SCTAB nTab = rViewData.GetTabNo();
 
-        EditTextObject* pOldEditData = nullptr;
-        EditTextObject* pNewEditData = nullptr;
+        std::unique_ptr<EditTextObject> pOldEditData;
+        std::unique_ptr<EditTextObject> pNewEditData;
         ScAddress aPos(nCol, nRow, nTab);
         ScRefCellValue aCell(rDoc, aPos);
         if (aCell.meType == CELLTYPE_EDIT)
@@ -1236,7 +1236,7 @@ void ScViewFunc::ApplySelectionPattern( const ScPatternAttr& rAttr, bool bCursor
         {
             ScUndoCursorAttr* pUndo = new ScUndoCursorAttr(
                 pDocSh, nCol, nRow, nTab, pOldPat.get(), pNewPat, &rAttr );
-            pUndo->SetEditData(pOldEditData, pNewEditData);
+            pUndo->SetEditData(std::move(pOldEditData), std::move(pNewEditData));
             pDocSh->GetUndoManager()->AddUndoAction(pUndo);
         }
         pOldPat.reset();     // is copied in undo (Pool)

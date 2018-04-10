@@ -936,7 +936,7 @@ public:
                 std::vector<EditTextObject*> aCloned;
                 aCloned.reserve(nDataSize);
                 for (; it != itEnd; ++it)
-                    aCloned.push_back(ScEditUtil::Clone(**it, *mrDestCol.GetDoc()));
+                    aCloned.push_back(ScEditUtil::Clone(**it, *mrDestCol.GetDoc()).release());
 
                 maDestPos.miCellPos = mrDestCol.GetCellStore().set(
                     maDestPos.miCellPos, nTopRow, aCloned.begin(), aCloned.end());
@@ -1182,9 +1182,9 @@ void ScColumn::CopyCellToDocument( SCROW nSrcRow, SCROW nDestRow, ScColumn& rDes
         {
             EditTextObject* p = sc::edittext_block::at(*it->data, aPos.second);
             if (pDocument == rDestCol.GetDoc())
-                rDestCol.maCells.set(nDestRow, p->Clone());
+                rDestCol.maCells.set(nDestRow, p->Clone().release());
             else
-                rDestCol.maCells.set(nDestRow, ScEditUtil::Clone(*p, *rDestCol.GetDoc()));
+                rDestCol.maCells.set(nDestRow, ScEditUtil::Clone(*p, *rDestCol.GetDoc()).release());
         }
         break;
         case sc::element_type_formula:
@@ -1483,7 +1483,7 @@ class CopyByCloneHandler
                 EditEngine& rEngine = mrDestCol.GetDoc()->GetEditEngine();
                 rEngine.SetText(aStr.getString());
                 maDestPos.miCellPos =
-                    mrDestCol.GetCellStore().set(maDestPos.miCellPos, nRow, rEngine.CreateTextObject());
+                    mrDestCol.GetCellStore().set(maDestPos.miCellPos, nRow, rEngine.CreateTextObject().release());
             }
             else
             {
@@ -1627,7 +1627,7 @@ public:
                 std::vector<EditTextObject*> aCloned;
                 aCloned.reserve(nDataSize);
                 for (; it != itEnd; ++it)
-                    aCloned.push_back(ScEditUtil::Clone(**it, *mrDestCol.GetDoc()));
+                    aCloned.push_back(ScEditUtil::Clone(**it, *mrDestCol.GetDoc()).release());
 
                 maDestPos.miCellPos = mrDestCol.GetCellStore().set(
                     maDestPos.miCellPos, nRow, aCloned.begin(), aCloned.end());

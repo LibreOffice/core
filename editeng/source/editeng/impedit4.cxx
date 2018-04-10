@@ -967,7 +967,7 @@ void ImpEditEngine::WriteItemAsRTF( const SfxPoolItem& rItem, SvStream& rOutput,
     }
 }
 
-EditTextObject* ImpEditEngine::GetEmptyTextObject()
+std::unique_ptr<EditTextObject> ImpEditEngine::GetEmptyTextObject()
 {
     EditSelection aEmptySel;
     aEmptySel.Min() = aEditDoc.GetStartPaM();
@@ -976,7 +976,7 @@ EditTextObject* ImpEditEngine::GetEmptyTextObject()
     return CreateTextObject( aEmptySel );
 }
 
-EditTextObject* ImpEditEngine::CreateTextObject()
+std::unique_ptr<EditTextObject> ImpEditEngine::CreateTextObject()
 {
     EditSelection aCompleteSelection;
     aCompleteSelection.Min() = aEditDoc.GetStartPaM();
@@ -985,14 +985,14 @@ EditTextObject* ImpEditEngine::CreateTextObject()
     return CreateTextObject( aCompleteSelection );
 }
 
-EditTextObject* ImpEditEngine::CreateTextObject(const EditSelection& rSel)
+std::unique_ptr<EditTextObject> ImpEditEngine::CreateTextObject(const EditSelection& rSel)
 {
     return CreateTextObject(rSel, GetEditTextObjectPool(), aStatus.AllowBigObjects(), nBigTextObjectStart);
 }
 
-EditTextObject* ImpEditEngine::CreateTextObject( EditSelection aSel, SfxItemPool* pPool, bool bAllowBigObjects, sal_Int32 nBigObjectStart )
+std::unique_ptr<EditTextObject> ImpEditEngine::CreateTextObject( EditSelection aSel, SfxItemPool* pPool, bool bAllowBigObjects, sal_Int32 nBigObjectStart )
 {
-    EditTextObject* pTxtObj = new EditTextObject(pPool);
+    std::unique_ptr<EditTextObject> pTxtObj(new EditTextObject(pPool));
     pTxtObj->SetVertical( IsVertical(), IsTopToBottom());
     MapUnit eMapUnit = aEditDoc.GetItemPool().GetMetric( DEF_METRIC );
     pTxtObj->mpImpl->SetMetric( static_cast<sal_uInt16>(eMapUnit) );

@@ -222,8 +222,8 @@ void ScStyleSheetPool::CreateStandardStyles()
     SvxSetItem*     pHFSetItem      = nullptr;
     std::unique_ptr<ScEditEngineDefaulter> pEdEngine(new ScEditEngineDefaulter( EditEngine::CreatePool(), true ));
     pEdEngine->SetUpdateMode( false );
-    EditTextObject* pEmptyTxtObj    = pEdEngine->CreateTextObject();
-    EditTextObject* pTxtObj         = nullptr;
+    std::unique_ptr<EditTextObject> pEmptyTxtObj = pEdEngine->CreateTextObject();
+    std::unique_ptr<EditTextObject> pTxtObj;
     std::unique_ptr<ScPageHFItem> pHeaderItem(new ScPageHFItem( ATTR_PAGE_HEADERRIGHT ));
     std::unique_ptr<ScPageHFItem> pFooterItem(new ScPageHFItem( ATTR_PAGE_FOOTERRIGHT ));
     ScStyleSheet*   pSheet          = nullptr;
@@ -296,7 +296,6 @@ void ScStyleSheetPool::CreateStandardStyles()
     pHeaderItem->SetCenterArea( *pTxtObj );
     pHeaderItem->SetRightArea ( *pEmptyTxtObj );
     pSet->Put( *pHeaderItem );
-    delete pTxtObj;
 
     // Footer:
     // [empty][Page \STR_PAGE\][empty]
@@ -310,7 +309,6 @@ void ScStyleSheetPool::CreateStandardStyles()
     pFooterItem->SetCenterArea( *pTxtObj );
     pFooterItem->SetRightArea ( *pEmptyTxtObj );
     pSet->Put( *pFooterItem );
-    delete pTxtObj;
 
     // 2. Report
 
@@ -356,7 +354,6 @@ void ScStyleSheetPool::CreateStandardStyles()
     pTxtObj = pEdEngine->CreateTextObject();
     pHeaderItem->SetLeftArea( *pTxtObj );
     pHeaderItem->SetCenterArea( *pEmptyTxtObj );
-    delete pTxtObj;
     aStr = ", ";
     pEdEngine->SetText( aStr );
     pEdEngine->QuickInsertField( SvxFieldItem(SvxTimeField(), EE_FEATURE_FIELD), ESelection(0,2,0,2) );
@@ -364,7 +361,6 @@ void ScStyleSheetPool::CreateStandardStyles()
                                     ESelection() );
     pTxtObj = pEdEngine->CreateTextObject();
     pHeaderItem->SetRightArea( *pTxtObj );
-    delete pTxtObj;
     pSet->Put( *pHeaderItem );
 
     // Footer:
@@ -382,9 +378,6 @@ void ScStyleSheetPool::CreateStandardStyles()
     pFooterItem->SetCenterArea( *pTxtObj );
     pFooterItem->SetRightArea ( *pEmptyTxtObj );
     pSet->Put( *pFooterItem );
-    delete pTxtObj;
-
-    delete pEmptyTxtObj;
 
     bHasStandardStyles = true;
 }

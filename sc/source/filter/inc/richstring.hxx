@@ -235,7 +235,7 @@ public:
         @param rxText  The XText interface of the target object.
      */
     void                convert( const css::uno::Reference< css::text::XText >& rxText ) const;
-    ::EditTextObject*   convert( ScEditEngineDefaulter& rEE, const oox::xls::Font* pFont ) const;
+    std::unique_ptr<EditTextObject> convert( ScEditEngineDefaulter& rEE, const oox::xls::Font* pFont ) const;
 
 private:
     /** Creates, appends, and returns a new empty string portion. */

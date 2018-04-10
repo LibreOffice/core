@@ -1409,15 +1409,14 @@ bool ScTable::SetString( SCCOL nCol, SCROW nRow, SCTAB nTabP, const OUString& rS
         return false;
 }
 
-bool ScTable::SetEditText( SCCOL nCol, SCROW nRow, EditTextObject* pEditText )
+bool ScTable::SetEditText( SCCOL nCol, SCROW nRow, std::unique_ptr<EditTextObject> pEditText )
 {
     if (!ValidColRow(nCol, nRow))
     {
-        delete pEditText;
         return false;
     }
 
-    aCol[nCol].SetEditText(nRow, pEditText);
+    aCol[nCol].SetEditText(nRow, std::move(pEditText));
     return true;
 }
 

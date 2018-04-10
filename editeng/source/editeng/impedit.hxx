@@ -555,7 +555,7 @@ private:
 
     EditUndoSetAttribs* CreateAttribUndo( EditSelection aSel, const SfxItemSet& rSet );
 
-    EditTextObject* GetEmptyTextObject();
+    std::unique_ptr<EditTextObject> GetEmptyTextObject();
 
     EditPaM             GetPaM( Point aDocPos, bool bSmart = true );
     EditPaM             GetPaM( ParaPortion* pPortion, Point aPos, bool bSmart );
@@ -568,7 +568,8 @@ private:
     void                ParaAttribsToCharAttribs( ContentNode* pNode );
     void                GetCharAttribs( sal_Int32 nPara, std::vector<EECharAttrib>& rLst ) const;
 
-    EditTextObject*     CreateTextObject(EditSelection aSelection, SfxItemPool*, bool bAllowBigObjects = false, sal_Int32 nBigObjStart = 0);
+    std::unique_ptr<EditTextObject>
+                        CreateTextObject(EditSelection aSelection, SfxItemPool*, bool bAllowBigObjects = false, sal_Int32 nBigObjStart = 0);
     EditSelection       InsertTextObject( const EditTextObject&, EditPaM aPaM );
     EditSelection       PasteText( css::uno::Reference< css::datatransfer::XTransferable > const & rxDataObj, const OUString& rBaseURL, const EditPaM& rPaM, bool bUseSpecial );
 
@@ -821,8 +822,8 @@ public:
     EditPaM         Read(SvStream& rInput, const OUString& rBaseURL, EETextFormat eFormat, const EditSelection& rSel, SvKeyValueIterator* pHTTPHeaderAttrs = nullptr);
     void            Write(SvStream& rOutput, EETextFormat eFormat, const EditSelection& rSel);
 
-    EditTextObject* CreateTextObject();
-    EditTextObject* CreateTextObject(const EditSelection& rSel);
+    std::unique_ptr<EditTextObject> CreateTextObject();
+    std::unique_ptr<EditTextObject> CreateTextObject(const EditSelection& rSel);
     void            SetText( const EditTextObject& rTextObject );
     EditSelection   InsertText( const EditTextObject& rTextObject, EditSelection aSel );
 

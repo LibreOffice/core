@@ -194,7 +194,7 @@ void CellValues::copyCellsTo( ScColumn& rCol, SCROW nRow ) const
                 for (; it != itEnd; ++it)
                 {
                     const EditTextObject* p = *it;
-                    aVals.push_back(p->Clone());
+                    aVals.push_back(p->Clone().release());
                 }
                 itPos = rDest.set(itPos, nCurRow, aVals.begin(), aVals.end());
             }

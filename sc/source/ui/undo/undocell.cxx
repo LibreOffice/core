@@ -100,13 +100,13 @@ OUString ScUndoCursorAttr::GetComment() const
     return ScGlobal::GetRscString( STR_UNDO_CURSORATTR ); // "Attribute"
 }
 
-void ScUndoCursorAttr::SetEditData( EditTextObject* pOld, EditTextObject* pNew )
+void ScUndoCursorAttr::SetEditData( std::unique_ptr<EditTextObject> pOld, std::unique_ptr<EditTextObject> pNew )
 {
-    pOldEditData.reset(pOld);
-    pNewEditData.reset(pNew);
+    pOldEditData = std::move(pOld);
+    pNewEditData = std::move(pNew);
 }
 
-void ScUndoCursorAttr::DoChange( const ScPatternAttr* pWhichPattern, const shared_ptr<EditTextObject>& pEditData ) const
+void ScUndoCursorAttr::DoChange( const ScPatternAttr* pWhichPattern, const std::unique_ptr<EditTextObject>& pEditData ) const
 {
     ScDocument& rDoc = pDocShell->GetDocument();
     ScAddress aPos(nCol, nRow, nTab);
@@ -165,10 +165,10 @@ ScUndoEnterData::Value::Value() : mnTab(-1), mbHasFormat(false), mnFormat(0) {}
 
 ScUndoEnterData::ScUndoEnterData(
     ScDocShell* pNewDocShell, const ScAddress& rPos, ValuesType& rOldValues,
-    const OUString& rNewStr, EditTextObject* pObj ) :
+    const OUString& rNewStr, std::unique_ptr<EditTextObject> pObj ) :
     ScSimpleUndo( pNewDocShell ),
     maNewString(rNewStr),
-    mpNewEditData(pObj),
+    mpNewEditData(std::move(pObj)),
     mnEndChangeAction(0),
     maPos(rPos)
 {

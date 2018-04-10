@@ -141,12 +141,12 @@ protected:
                 {
                     // The value is a rich text string.
                     ScDocument& rDoc = getScDocument();
-                    EditTextObject* pTextObj = mxRichString->convert(rDoc.GetEditEngine(), nullptr);
+                    std::unique_ptr<EditTextObject> pTextObj = mxRichString->convert(rDoc.GetEditEngine(), nullptr);
                     if (pTextObj)
                     {
                         svl::SharedStringPool& rPool = rDoc.GetSharedStringPool();
                         pTextObj->NormalizeString(rPool);
-                        mrCellValue.set(pTextObj);
+                        mrCellValue.set(pTextObj.release());
                     }
                 }
             }

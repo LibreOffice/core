@@ -391,7 +391,7 @@ void RichString::convert( const Reference< XText >& rxText ) const
     }
 }
 
-::EditTextObject* RichString::convert( ScEditEngineDefaulter& rEE, const oox::xls::Font* pFirstPortionFont ) const
+std::unique_ptr<EditTextObject> RichString::convert( ScEditEngineDefaulter& rEE, const oox::xls::Font* pFirstPortionFont ) const
 {
     ESelection aSelection;
 

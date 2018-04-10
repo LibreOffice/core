@@ -1389,9 +1389,8 @@ void SmTextForwarder::CopyText(const SvxTextForwarder& rSource)
     EditEngine *pEditEngine = rEditAcc.GetEditEngine();
     if (pEditEngine && pSourceEditEngine )
     {
-        EditTextObject* pNewTextObject = pSourceEditEngine->CreateTextObject();
+        std::unique_ptr<EditTextObject> pNewTextObject = pSourceEditEngine->CreateTextObject();
         pEditEngine->SetText( *pNewTextObject );
-        delete pNewTextObject;
     }
 }
 

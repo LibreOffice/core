@@ -1359,7 +1359,7 @@ public:
 
     void operator() (size_t nRow, const EditTextObject* p)
     {
-        miNewCellsPos = maNewCells.set(miNewCellsPos, nRow-mnRowOffset, p->Clone());
+        miNewCellsPos = maNewCells.set(miNewCellsPos, nRow-mnRowOffset, p->Clone().release());
     }
 
     void operator() (size_t nRow, const ScFormulaCell* p)
@@ -1475,7 +1475,7 @@ public:
                 {
                     EditTextObject* pObj = sc::edittext_block::at(*aPos.first->data, aPos.second);
                     miNewCellsPos = maNewCells.set(
-                            miNewCellsPos, nDestRow-mnRowOffset, pObj->Clone());
+                            miNewCellsPos, nDestRow-mnRowOffset, pObj->Clone().release());
                 }
                 break;
                 case sc::element_type_formula:
@@ -1877,22 +1877,22 @@ bool ScColumn::SetString( SCROW nRow, SCTAB nTabP, const OUString& rString,
     return bNumFmtSet;
 }
 
-void ScColumn::SetEditText( SCROW nRow, EditTextObject* pEditText )
+void ScColumn::SetEditText( SCROW nRow, std::unique_ptr<EditTextObject> pEditText )
 {
     pEditText->NormalizeString(GetDoc()->GetSharedStringPool());
     sc::CellStoreType::iterator it = GetPositionToInsert(nRow);
-    maCells.set(it, nRow, pEditText);
+    maCells.set(it, nRow, pEditText.release());
     maCellTextAttrs.set(nRow, sc::CellTextAttr());
     CellStorageModified();
 
     BroadcastNewCell(nRow);
 }
 
-void ScColumn::SetEditText( sc::ColumnBlockPosition& rBlockPos, SCROW nRow, EditTextObject* pEditText )
+void ScColumn::SetEditText( sc::ColumnBlockPosition& rBlockPos, SCROW nRow, std::unique_ptr<EditTextObject> pEditText )
 {
     pEditText->NormalizeString(GetDoc()->GetSharedStringPool());
     rBlockPos.miCellPos = GetPositionToInsert(rBlockPos.miCellPos, nRow);
-    rBlockPos.miCellPos = maCells.set(rBlockPos.miCellPos, nRow, pEditText);
+    rBlockPos.miCellPos = maCells.set(rBlockPos.miCellPos, nRow, pEditText.release());
     rBlockPos.miCellTextAttrPos = maCellTextAttrs.set(
         rBlockPos.miCellTextAttrPos, nRow, sc::CellTextAttr());
 

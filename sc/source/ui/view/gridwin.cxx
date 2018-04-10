@@ -5180,9 +5180,9 @@ bool ScGridWindow::GetEditUrl( const Point& rPos,
           // cell ( or other type ? ) with a hyperlink associated with it.
     {
         if (sURL.isEmpty())
-            pTextObj.reset(aCell.mpFormula->CreateURLObject());
+            pTextObj = aCell.mpFormula->CreateURLObject();
         else
-            pTextObj.reset(ScEditUtil::CreateURLObjectFromURL(rDoc, sURL, sURL));
+            pTextObj = ScEditUtil::CreateURLObjectFromURL(rDoc, sURL, sURL);
 
         if (pTextObj.get())
             pEngine->SetText(*pTextObj);

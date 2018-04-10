@@ -2821,7 +2821,7 @@ void ScInputHandler::EnterHandler( ScEnterMode nBlockMode )
         if (bAttrib)
         {
             mpEditEngine->ClearSpellErrors();
-            pObject.reset(mpEditEngine->CreateTextObject());
+            pObject = mpEditEngine->CreateTextObject();
         }
         else if (bAutoComplete) // Adjust Upper/Lower case
         {
@@ -3890,9 +3890,9 @@ bool ScInputHandler::GetTextAndFields( ScEditEngineDefaulter& rDestEngine )
         if ( eFieldState == SfxItemState::DONTCARE || eFieldState == SfxItemState::SET )
         {
             // Copy content
-            EditTextObject* pObj = mpEditEngine->CreateTextObject();
+            std::unique_ptr<EditTextObject> pObj = mpEditEngine->CreateTextObject();
             rDestEngine.SetText(*pObj);
-            delete pObj;
+            pObj.reset();
 
             // Delete attributes
             for (sal_Int32 i=0; i<nParCnt; i++)
@@ -4055,7 +4055,9 @@ ScInputHdlState& ScInputHdlState::operator=( const ScInputHdlState& r )
     aStartPos   = r.aStartPos;
     aEndPos     = r.aEndPos;
     aString     = r.aString;
-    pEditData.reset( r.pEditData ? r.pEditData->Clone() : nullptr );
+    pEditData.reset();
+    if (r.pEditData)
+        pEditData = r.pEditData->Clone();
 
     return *this;
 }

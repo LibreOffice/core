@@ -230,7 +230,7 @@ public:
     void            SetControlWord( EVControlBits nWord );
     EVControlBits   GetControlWord() const;
 
-    EditTextObject* CreateTextObject();
+    std::unique_ptr<EditTextObject> CreateTextObject();
     void            InsertText( const EditTextObject& rTextObject );
     void            InsertText( css::uno::Reference< css::datatransfer::XTransferable > const & xDataObj, const OUString& rBaseURL, bool bUseSpecial );
 

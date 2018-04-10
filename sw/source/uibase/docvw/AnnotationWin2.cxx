@@ -39,6 +39,7 @@
 #include <viewopt.hxx>
 #include <cmdid.h>
 
+#include <editeng/editobj.hxx>
 #include <editeng/fontitem.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <editeng/langitem.hxx>

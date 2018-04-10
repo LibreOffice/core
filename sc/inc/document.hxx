@@ -1053,7 +1053,7 @@ public:
      * SfxItemPool instance returned from ScDocument::GetEditPool()</i>.
      * This is very important.</p>
      */
-    SC_DLLPUBLIC bool  SetEditText( const ScAddress& rPos, EditTextObject* pEditText );
+    SC_DLLPUBLIC bool  SetEditText( const ScAddress& rPos, std::unique_ptr<EditTextObject> pEditText );
     void               SetEditText( const ScAddress& rPos, const EditTextObject& rEditText, const SfxItemPool* pEditPool );
     SC_DLLPUBLIC void  SetEditText( const ScAddress& rPos, const OUString& rStr );
     SC_DLLPUBLIC SCROW GetFirstEditTextRow( const ScRange& rRange ) const;
