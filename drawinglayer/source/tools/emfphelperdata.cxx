@@ -1244,12 +1244,12 @@ namespace emfplushelper
 
                             SAL_INFO("drawinglayer", "EMF+ DrawString layoutRect: " << lx << "," << ly << " - " << lw << "x" << lh);
                             // parse the string
-                            OUString text = read_uInt16s_ToOUString(rMS, stringLength);
+                            const OUString text = read_uInt16s_ToOUString(rMS, stringLength);
                             SAL_INFO("drawinglayer", "EMF+ DrawString string: " << text);
                             // get the stringFormat from the Object table ( this is OPTIONAL and may be nullptr )
-                            EMFPStringFormat *stringFormat = static_cast< EMFPStringFormat* >(maEMFPObjects[formatId & 0xff].get());
+                            const EMFPStringFormat *stringFormat = static_cast< EMFPStringFormat* >(maEMFPObjects[formatId & 0xff].get());
                             // get the font from the flags
-                            EMFPFont *font = static_cast< EMFPFont* >( maEMFPObjects[flags & 0xff].get() );
+                            const EMFPFont *font = static_cast< EMFPFont* >( maEMFPObjects[flags & 0xff].get() );
                             if (!font)
                             {
                                 break;
@@ -1285,11 +1285,13 @@ namespace emfplushelper
                                 // use system default
                                 locale = Application::GetSettings().GetLanguageTag().getLocale();
                             }
-
-                            basegfx::B2DHomMatrix transformMatrix = basegfx::utils::createScaleTranslateB2DHomMatrix(MapSize(font->emSize,font->emSize),Map(lx,ly+font->emSize));
+                            const double leadingMarginOffset = stringFormat ? (stringFormat->leadingMargin * font->emSize) : 0;
+                            // Alignment is centered between the origin and extent of the layout rectangle
+                            const double stringAlignmentCenterOffset = (stringFormat && stringFormat->stringAlignment == 0x00000001) ? (0.3 * font->emSize * stringLength) : 0;
+                            const basegfx::B2DHomMatrix transformMatrix = basegfx::utils::createScaleTranslateB2DHomMatrix(
+                                        MapSize(font->emSize, font->emSize), Map(lx + leadingMarginOffset - stringAlignmentCenterOffset, ly + font->emSize));
 
                             const Color color = EMFPGetBrushColorOrARGBColor(flags, brushId);
-
                             mrPropertyHolders.Current().setTextColor(color.getBColor());
                             mrPropertyHolders.Current().setTextColorActive(true);
 
