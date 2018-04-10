@@ -17,7 +17,7 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 
-# shell script as a workaraound since it is hard to impossible to store compiled
+# shell script as a workaround since it is hard to impossible to store compiled
 # applescript in CVS and running osacompile would require a GUI session while
 # building (or root privileges)
 # using osascript only works when the shell script is camouflaged as application
