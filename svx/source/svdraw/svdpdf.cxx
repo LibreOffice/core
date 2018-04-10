@@ -1156,7 +1156,7 @@ void ImpSdrPdfImport::MapScaling()
 void ImpSdrPdfImport::ImportImage(FPDF_PAGEOBJECT pPageObject)
 {
     SAL_WARN("sd.filter", "Got page object IMAGE");
-    std::unique_ptr<void, FPDFBitmapDeleter> bitmap(FPDFImageObj_GetBitmap(pPageObject));
+    std::unique_ptr<void, FPDFBitmapDeleter> bitmap(FPDFImageObj_GetBitmapBgra(pPageObject));
     if (!bitmap)
     {
         SAL_WARN("sd.filter", "Failed to get IMAGE");
@@ -1194,7 +1194,7 @@ void ImpSdrPdfImport::ImportImage(FPDF_PAGEOBJECT pPageObject)
             SAL_WARN("sd.filter", "Got IMAGE width: " << nWidth << ", height: " << nHeight
                                                       << ", stride: " << nStride
                                                       << ", format: BGRx");
-            ReadRawDIB(aBitmap, pBuf, ScanlineFormat::N32BitTcBgra, nHeight, nStride);
+            ReadRawDIB(aBitmap, pBuf, ScanlineFormat::N32BitTcRgba, nHeight, nStride);
             break;
         case FPDFBitmap_BGRA:
             SAL_WARN("sd.filter", "Got IMAGE width: " << nWidth << ", height: " << nHeight
