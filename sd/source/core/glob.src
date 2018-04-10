@@ -400,4 +400,14 @@ String STR_GROW_FONT_SIZE
     Text [ en-US ] = "Grow font size";
 };
 
+
+String STR_CTRLCLICKHYPERLINK
+{
+    Text [ en-US ] = "%s-click to follow hyperlink: ";
+};
+String STR_CLICKHYPERLINK
+{
+    Text [ en-US ] = "Click to open hyperlink: ";
+};
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

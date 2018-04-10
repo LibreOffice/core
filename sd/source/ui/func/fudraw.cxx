@@ -62,6 +62,7 @@
 #include <vcl/msgbox.hxx>
 #include "slideshow.hxx"
 #include <svx/sdrhittesthelper.hxx>
+#include <unotools/securityoptions.hxx>
 
 using namespace ::com::sun::star;
 
@@ -914,7 +915,30 @@ bool FuDraw::SetHelpText(SdrObject* pObj, const Point& rPosPixel, const SdrViewE
         /**************************************************************
         * URL-Field
         **************************************************************/
-        aHelpText = INetURLObject::decode( rVEvt.pURLField->GetURL(), INetURLObject::DECODE_WITH_CHARSET );
+        OUString aURL = INetURLObject::decode( rVEvt.pURLField->GetURL(), INetURLObject::DECODE_WITH_CHARSET );
+
+        SvtSecurityOptions aSecOpt;
+        if (aSecOpt.IsOptionSet(SvtSecurityOptions::E_CTRLCLICK_HYPERLINK))
+        {
+            // Hint about Ctrl-click to open hyperlink
+            // But need to detect "Ctrl" key for MacOs
+            vcl::KeyCode aCode(KEY_SPACE);
+            vcl::KeyCode aModifiedCode(KEY_SPACE, KEY_MOD1);
+            OUString aModStr(aModifiedCode.GetName());
+            aModStr = aModStr.replaceFirst(aCode.GetName(), "");
+            aModStr = aModStr.replaceAll("+", "");
+
+            OUString aCtrlClickHlinkStr = SD_RESSTR(STR_CTRLCLICKHYPERLINK);
+
+            aCtrlClickHlinkStr = aCtrlClickHlinkStr.replaceAll("%s", aModStr);
+
+            aHelpText = aCtrlClickHlinkStr + aURL;
+        }
+        else
+        {
+            // Hint about just clicking hyperlink
+            aHelpText = SD_RESSTR(STR_CLICKHYPERLINK) + aURL;
+        }
     }
 
     if (!aHelpText.isEmpty())
