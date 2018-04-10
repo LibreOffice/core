@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "9a30ddce_cff26c9a",
+        "filename": "include/test/sheet/functiondescription.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-04-10T06:52:29Z",
+      "side": 1,
+      "message": "I don\u0027t think that\u0027s a good rationale.  Tests are meant to eventually fail (when somebody introduces a regression), and need to be easily debuggable, by everybody.  To that end, tests should be spelled out in the most trivial, non-DRY way.  Abstracting out test code is already detrimental to that.  But needlessly abstracting out test code is IMO no good idea at all.",
+      "parentUuid": "9a30ddce_afe4580d",
+      "revId": "99a833c9d315749757ae338159cabbc935624afa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a30ddce_9817dd50",
         "filename": "sc/CppunitTest_sc_functiondescriptionobj.mk",
         "patchSetId": 3
@@ -66,6 +84,24 @@
       "side": 1,
       "message": "I never looked at that closely, but we I finished converting the ones for sheet/sc, I have a look to clean up some stuff.",
       "parentUuid": "9a30ddce_9817dd50",
+      "revId": "99a833c9d315749757ae338159cabbc935624afa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_efef30ae",
+        "filename": "sc/CppunitTest_sc_functiondescriptionobj.mk",
+        "patchSetId": 3
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-04-10T06:52:29Z",
+      "side": 1,
+      "message": "why not have a look now, before this hits master?",
+      "parentUuid": "9a30ddce_8fe79411",
       "revId": "99a833c9d315749757ae338159cabbc935624afa",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
