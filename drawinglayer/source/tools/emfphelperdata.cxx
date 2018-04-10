@@ -107,6 +107,44 @@ namespace emfplushelper
         StringAlignmentFar = 0x00000002
     } StringAlignment;
 
+    float EmfPlusHelperData::getUnitToPixelMultiplier(const UnitType aUnitType)
+    {
+        switch (aUnitType)
+        {
+            case UnitTypePixel:
+            {
+                return 1.0f;
+            }
+            case UnitTypePoint:
+            {
+                SAL_INFO("drawinglayer", "EMF+\t Converting Points to Pixels.");
+                return 1.333333f;
+            }
+            case UnitTypeInch:
+            {
+                SAL_INFO("drawinglayer", "EMF+\t TODO Test Converting Inches to Pixels, if it is working correctly.");
+                return 96.0f;
+            }
+            case UnitTypeMillimeter:
+            {
+                SAL_INFO("drawinglayer", "EMF+\t TODO Test Converting Milimeters to Pixels, if it is working correctly.");
+                return 3.779528f;
+            }
+            case UnitTypeDocument:
+            {
+                SAL_INFO("drawinglayer", "EMF+\t TODO Test Converting Documents to Pixels, if it is working correctly.");
+                return 0.32f;
+            }
+            case UnitTypeWorld:
+            case UnitTypeDisplay:
+            default:
+            {
+                SAL_WARN("drawinglayer", "EMF+\tTODO Unimplemented support of Unit Type: 0x" << std::hex << aUnitType);
+            }
+        }
+        return 1.0f;
+    }
+
     void EmfPlusHelperData::processObjectRecord(SvMemoryStream& rObjectStream, sal_uInt16 flags, sal_uInt32 dataSize, bool bUseWholeStream)
     {
         sal_uInt32 index;
@@ -1230,7 +1268,7 @@ namespace emfplushelper
                         }
                         else
                         {
-                            SAL_WARN("drawinglayer", "EMF+ DrawImage(Points) Wrong EMF+ file. Only Unit Type Pixel is support by EMF+ standard in DrawImage(Points)");
+                            SAL_WARN("drawinglayer", "EMF+ DrawImage(Points) Wrong EMF+ file. Only Unit Type Pixel is support by EMF+ specification for DrawImage(Points)");
                         }
                         break;
                     }
@@ -1365,14 +1403,15 @@ namespace emfplushelper
                         SAL_INFO("drawinglayer", "EMF+ SetPageTransform");
                         SAL_INFO("drawinglayer", "EMF+\tscale: " << mfPageScale << " unit: " << flags);
 
-                        if (flags != UnitTypePixel)
+                        if ((flags == UnitTypeDisplay) || (flags == UnitTypeWorld))
                         {
-                            SAL_WARN("drawinglayer", "EMF+\t TODO Only UnitTypePixel is supported. ");
+                            SAL_WARN("drawinglayer", "EMF+ file error. UnitTypeDisplay and UnitTypeWorld are not supported by SetPageTransform in EMF+ specification.");
                         }
                         else
                         {
-                            mnMmX *= mfPageScale;
-                            mnMmY *= mfPageScale;
+                            const float aPageScaleMul = mfPageScale * getUnitToPixelMultiplier(static_cast<UnitType>(flags));
+                            mnMmX *= aPageScaleMul;
+                            mnMmY *= aPageScaleMul;
                             mappingChanged();
                         }
                         break;
