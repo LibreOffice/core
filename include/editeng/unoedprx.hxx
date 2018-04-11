@@ -142,7 +142,7 @@ public:
     SvxEditSourceAdapter();
     virtual ~SvxEditSourceAdapter() override;
 
-    virtual SvxEditSource*                      Clone() const override;
+    virtual std::unique_ptr<SvxEditSource>      Clone() const override;
     virtual SvxTextForwarder*                   GetTextForwarder() override;
     SvxAccessibleTextAdapter*                   GetTextForwarderAdapter(); // covariant return types don't work on MSVC
     virtual SvxViewForwarder*                   GetViewForwarder() override;

@@ -59,7 +59,7 @@ public:
     //  GetEditEngine is needed because the forwarder doesn't have field functions
     virtual ScEditEngineDefaulter* GetEditEngine() override;
 
-    virtual SvxEditSource*      Clone() const override;
+    virtual std::unique_ptr<SvxEditSource> Clone() const override;
     virtual SvxTextForwarder*   GetTextForwarder() override;
     virtual void                UpdateData() override;
 };
@@ -83,7 +83,7 @@ public:
     //  GetEditEngine is needed because the forwarder doesn't have field functions
     virtual ScEditEngineDefaulter* GetEditEngine() override;
 
-    virtual SvxEditSource* Clone() const override;
+    virtual std::unique_ptr<SvxEditSource> Clone() const override;
     virtual SvxTextForwarder* GetTextForwarder() override;
 
     virtual void UpdateData() override;
@@ -106,7 +106,7 @@ public:
                                 ScAnnotationEditSource(ScDocShell* pDocSh, const ScAddress& rP);
     virtual                     ~ScAnnotationEditSource() override;
 
-    virtual SvxEditSource*      Clone() const override ;
+    virtual std::unique_ptr<SvxEditSource> Clone() const override ;
     virtual SvxTextForwarder*   GetTextForwarder() override;
     virtual void                UpdateData() override;
 
@@ -124,7 +124,7 @@ public:
                         ScSimpleEditSource( SvxTextForwarder* pForw );
     virtual             ~ScSimpleEditSource() override;
 
-    virtual SvxEditSource*      Clone() const override ;
+    virtual std::unique_ptr<SvxEditSource> Clone() const override ;
     virtual SvxTextForwarder*   GetTextForwarder() override;
     virtual void                UpdateData() override;
 
@@ -139,7 +139,7 @@ public:
                         ScAccessibilityEditSource( ::std::unique_ptr < ScAccessibleTextData > && pAccessibleCellTextData );
     virtual             ~ScAccessibilityEditSource() override;
 
-    virtual SvxEditSource*      Clone() const override;
+    virtual std::unique_ptr<SvxEditSource> Clone() const override;
     virtual SvxTextForwarder*   GetTextForwarder() override;
     virtual SvxViewForwarder*   GetViewForwarder() override;
     virtual SvxEditViewForwarder*   GetEditViewForwarder( bool bCreate = false ) override;

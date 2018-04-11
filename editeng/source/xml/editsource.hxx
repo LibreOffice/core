@@ -31,7 +31,7 @@ public:
     explicit SvxEditEngineSource( EditEngine* pEditEngine );
     virtual ~SvxEditEngineSource() override;
 
-    virtual SvxEditSource*      Clone() const override;
+    virtual std::unique_ptr<SvxEditSource> Clone() const override;
     virtual SvxTextForwarder*   GetTextForwarder() override;
     virtual void                UpdateData() override;
 

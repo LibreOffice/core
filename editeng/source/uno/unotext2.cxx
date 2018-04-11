@@ -45,7 +45,7 @@ SvxUnoTextContentEnumeration::SvxUnoTextContentEnumeration( const SvxUnoTextBase
 {
     mxParentText = const_cast<SvxUnoTextBase*>(&_rText);
     if( mrText.GetEditSource() )
-        mpEditSource.reset( mrText.GetEditSource()->Clone() );
+        mpEditSource = mrText.GetEditSource()->Clone();
     mnNextParagraph = 0;
     for( sal_Int32 currentPara = 0; currentPara < mrText.GetEditSource()->GetTextForwarder()->GetParagraphCount(); currentPara++ )
     {
@@ -384,7 +384,8 @@ SvxUnoTextRangeEnumeration::SvxUnoTextRangeEnumeration(const SvxUnoTextBase& rTe
     mnNextPortion( 0 ),
     mnSel( rSel )
 {
-    mpEditSource.reset( rText.GetEditSource() ? rText.GetEditSource()->Clone() : nullptr );
+    if (rText.GetEditSource())
+        mpEditSource = rText.GetEditSource()->Clone();
 
     if( mpEditSource && mpEditSource->GetTextForwarder() && (mnParagraph == mnSel.nStartPara && mnParagraph == mnSel.nEndPara) )
     {
