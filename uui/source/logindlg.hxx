@@ -20,10 +20,7 @@
 #ifndef INCLUDED_UUI_SOURCE_LOGINDLG_HXX
 #define INCLUDED_UUI_SOURCE_LOGINDLG_HXX
 
-#include <vcl/button.hxx>
-#include <vcl/dialog.hxx>
-#include <vcl/edit.hxx>
-#include <vcl/fixed.hxx>
+#include <vcl/weld.hxx>
 #include <o3tl/typed_flags_set.hxx>
 
 
@@ -42,20 +39,20 @@ namespace o3tl {
 }
 
 
-class LoginDialog : public ModalDialog
+class LoginDialog : public weld::GenericDialogController
 {
-    VclPtr<FixedText>      m_pErrorFT;
-    VclPtr<FixedText>      m_pErrorInfo;
-    VclPtr<FixedText>      m_pRequestInfo;
-    VclPtr<FixedText>      m_pNameFT;
-    VclPtr<Edit>           m_pNameED;
-    VclPtr<FixedText>      m_pPasswordFT;
-    VclPtr<Edit>           m_pPasswordED;
-    VclPtr<FixedText>      m_pAccountFT;
-    VclPtr<Edit>           m_pAccountED;
-    VclPtr<CheckBox>       m_pSavePasswdBtn;
-    VclPtr<CheckBox>       m_pUseSysCredsCB;
-    VclPtr<OKButton>       m_pOKBtn;
+    std::unique_ptr<weld::Label> m_xErrorFT;
+    std::unique_ptr<weld::Label> m_xErrorInfo;
+    std::unique_ptr<weld::Label> m_xRequestInfo;
+    std::unique_ptr<weld::Label> m_xNameFT;
+    std::unique_ptr<weld::Entry> m_xNameED;
+    std::unique_ptr<weld::Label> m_xPasswordFT;
+    std::unique_ptr<weld::Entry> m_xPasswordED;
+    std::unique_ptr<weld::Label> m_xAccountFT;
+    std::unique_ptr<weld::Entry> m_xAccountED;
+    std::unique_ptr<weld::CheckButton> m_xSavePasswdBtn;
+    std::unique_ptr<weld::CheckButton> m_xUseSysCredsCB;
+    std::unique_ptr<weld::Button> m_xOKBtn;
     OUString m_server;
     OUString m_realm;
 
@@ -63,26 +60,25 @@ class LoginDialog : public ModalDialog
     void            EnableUseSysCredsControls_Impl( bool bUseSysCredsEnabled );
     void            SetRequest();
 
-    DECL_LINK(OKHdl_Impl, Button*, void);
-    DECL_LINK(UseSysCredsHdl_Impl, Button*, void);
+    DECL_LINK(OKHdl_Impl, weld::Button&, void);
+    DECL_LINK(UseSysCredsHdl_Impl, weld::Button&, void);
 
 public:
-    LoginDialog(vcl::Window* pParent, LoginFlags nFlags,
+    LoginDialog(weld::Window* pParent, LoginFlags nFlags,
         const OUString& rServer, const OUString &rRealm);
     virtual ~LoginDialog() override;
-    virtual void    dispose() override;
 
-    OUString        GetName() const                             { return m_pNameED->GetText(); }
-    void            SetName( const OUString& rNewName )           { m_pNameED->SetText( rNewName ); }
-    OUString        GetPassword() const                         { return m_pPasswordED->GetText(); }
+    OUString        GetName() const                             { return m_xNameED->get_text(); }
+    void            SetName( const OUString& rNewName )           { m_xNameED->set_text( rNewName ); }
+    OUString        GetPassword() const                         { return m_xPasswordED->get_text(); }
     void            SetPassword( const OUString& rNew );
-    OUString        GetAccount() const                          { return m_pAccountED->GetText(); }
-    bool            IsSavePassword() const                      { return m_pSavePasswdBtn->IsChecked(); }
-    void            SetSavePassword( bool bSave )               { m_pSavePasswdBtn->Check( bSave ); }
-    void            SetSavePasswordText( const OUString& rTxt )   { m_pSavePasswdBtn->SetText( rTxt ); }
-    bool            IsUseSystemCredentials() const              { return m_pUseSysCredsCB->IsChecked(); }
+    OUString        GetAccount() const                          { return m_xAccountED->get_text(); }
+    bool            IsSavePassword() const                      { return m_xSavePasswdBtn->get_active(); }
+    void            SetSavePassword( bool bSave )               { m_xSavePasswdBtn->set_active( bSave ); }
+    void            SetSavePasswordText( const OUString& rTxt )   { m_xSavePasswdBtn->set_label( rTxt ); }
+    bool            IsUseSystemCredentials() const              { return m_xUseSysCredsCB->get_active(); }
     void            SetUseSystemCredentials( bool bUse );
-    void            SetErrorText( const OUString& rTxt )          { m_pErrorInfo->SetText( rTxt ); }
+    void            SetErrorText( const OUString& rTxt )          { m_xErrorInfo->set_label( rTxt ); }
     void            ClearPassword();
     void            ClearAccount();
 };
