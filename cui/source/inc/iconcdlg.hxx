@@ -111,7 +111,7 @@ private:
 
     VclPtr<VclVBox>                 m_pTabContainer;
     const SfxItemSet*       pSet;
-    SfxItemSet*             pOutSet;
+    std::unique_ptr<SfxItemSet>     pOutSet;
     SfxItemSet*             pExampleSet;
     sal_uInt16*                 pRanges;
 

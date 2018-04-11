@@ -380,7 +380,7 @@ void SfxPrinterController::jobFinished( css::view::PrintableState nState )
                     pDocPrt->SetJobSetup( getPrinter()->GetJobSetup() );
                 else
                 {
-                    VclPtr<SfxPrinter> pNewPrt = VclPtr<SfxPrinter>::Create( std::unique_ptr<SfxItemSet>(pDocPrt->GetOptions().Clone()), getPrinter()->GetName() );
+                    VclPtr<SfxPrinter> pNewPrt = VclPtr<SfxPrinter>::Create( pDocPrt->GetOptions().Clone(), getPrinter()->GetName() );
                     pNewPrt->SetJobSetup( getPrinter()->GetJobSetup() );
                     mpViewShell->SetPrinter( pNewPrt, SfxPrinterChangeFlags::PRINTER | SfxPrinterChangeFlags::JOBSETUP );
                 }
@@ -438,7 +438,7 @@ IMPL_LINK_NOARG(SfxDialogExecutor_Impl, Execute, Button*, void)
     {
         DBG_ASSERT( _pSetupParent, "no dialog parent" );
         if( _pSetupParent )
-            _pOptions.reset( static_cast<SfxPrinter*>( _pSetupParent->GetPrinter() )->GetOptions().Clone() );
+            _pOptions = static_cast<SfxPrinter*>( _pSetupParent->GetPrinter() )->GetOptions().Clone();
     }
 
     assert(_pOptions);
@@ -452,7 +452,7 @@ IMPL_LINK_NOARG(SfxDialogExecutor_Impl, Execute, Button*, void)
         pDlg->DisableHelp();
     if ( pDlg->Execute() == RET_OK )
     {
-        _pOptions.reset( pDlg->GetOptions().Clone() );
+        _pOptions = pDlg->GetOptions().Clone();
     }
 }
 
@@ -765,7 +765,7 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
             if ( pPrinterItem )
             {
                 // use PrinterName parameter to create a printer
-                pPrinter = VclPtr<SfxPrinter>::Create( std::unique_ptr<SfxItemSet>(pDocPrinter->GetOptions().Clone()), pPrinterItem->GetValue() );
+                pPrinter = VclPtr<SfxPrinter>::Create( pDocPrinter->GetOptions().Clone(), pPrinterItem->GetValue() );
 
                 // if printer is unknown, it can't be used - now printer from document will be used
                 if ( !pPrinter->IsKnown() )

@@ -148,17 +148,17 @@ SwAttrSet::SwAttrSet( const SwAttrSet& rSet )
 {
 }
 
-SfxItemSet* SwAttrSet::Clone( bool bItems, SfxItemPool *pToPool ) const
+std::unique_ptr<SfxItemSet> SwAttrSet::Clone( bool bItems, SfxItemPool *pToPool ) const
 {
     if ( pToPool && pToPool != GetPool() )
     {
         SwAttrPool* pAttrPool = dynamic_cast< SwAttrPool* >(pToPool);
-        SfxItemSet* pTmpSet = nullptr;
+        std::unique_ptr<SfxItemSet> pTmpSet;
         if ( !pAttrPool )
             pTmpSet = SfxItemSet::Clone( bItems, pToPool );
         else
         {
-            pTmpSet = new SwAttrSet( *pAttrPool, GetRanges() );
+            pTmpSet.reset(new SwAttrSet( *pAttrPool, GetRanges() ));
             if ( bItems )
             {
                 SfxWhichIter aIter(*pTmpSet);
@@ -175,9 +175,10 @@ SfxItemSet* SwAttrSet::Clone( bool bItems, SfxItemPool *pToPool ) const
         return pTmpSet;
     }
     else
-        return bItems
+        return std::unique_ptr<SfxItemSet>(
+                bItems
                 ? new SwAttrSet( *this )
-                : new SwAttrSet( *GetPool(), GetRanges() );
+                : new SwAttrSet( *GetPool(), GetRanges() ));
 }
 
 bool SwAttrSet::Put_BC( const SfxPoolItem& rAttr,

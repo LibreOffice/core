@@ -112,7 +112,7 @@ class GDIMetaFile;
 struct SvxShapeImpl
 {
     SvxShape&       mrAntiImpl;
-    SfxItemSet*     mpItemSet;
+    std::unique_ptr<SfxItemSet> mpItemSet;
     sal_uInt32      mnObjId;
     SvxShapeMaster* mpMaster;
     bool            mbHasSdrObjectOwnership;
@@ -131,7 +131,6 @@ struct SvxShapeImpl
 
     SvxShapeImpl( SvxShape& _rAntiImpl, ::osl::Mutex& _rMutex )
         :mrAntiImpl( _rAntiImpl )
-        ,mpItemSet( nullptr )
         ,mnObjId( 0 )
         ,mpMaster( nullptr )
         ,mbHasSdrObjectOwnership( false )
@@ -1631,12 +1630,9 @@ void SvxShape::_setPropertyValue( const OUString& rPropertyName, const uno::Any&
     {
         if( mpImpl->mpItemSet == nullptr )
         {
-            pSet = mpImpl->mpItemSet = GetSdrObject()->GetMergedItemSet().Clone();
+            mpImpl->mpItemSet = GetSdrObject()->GetMergedItemSet().Clone();
         }
-        else
-        {
-            pSet = mpImpl->mpItemSet;
-        }
+        pSet = mpImpl->mpItemSet.get();
     }
     else
     {
@@ -1808,11 +1804,7 @@ void SAL_CALL SvxShape::setPropertyValues( const css::uno::Sequence< OUString >&
 void SvxShape::endSetPropertyValues()
 {
     mbIsMultiPropertyCall = false;
-    if( mpImpl->mpItemSet )
-    {
-        delete mpImpl->mpItemSet;
-        mpImpl->mpItemSet = nullptr;
-    }
+    mpImpl->mpItemSet.reset();
 }
 
 

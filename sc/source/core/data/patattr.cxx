@@ -104,7 +104,7 @@ ScPatternAttr::~ScPatternAttr()
 
 SfxPoolItem* ScPatternAttr::Clone( SfxItemPool *pPool ) const
 {
-    ScPatternAttr* pPattern = new ScPatternAttr( std::unique_ptr<SfxItemSet>(GetItemSet().Clone(true, pPool)) );
+    ScPatternAttr* pPattern = new ScPatternAttr( GetItemSet().Clone(true, pPool) );
 
     pPattern->pStyle = pStyle;
     pPattern->pName = pName;
