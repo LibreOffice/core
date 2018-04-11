@@ -1023,7 +1023,8 @@ IMPL_STATIC_LINK(ExtMgrDialog, Restart, void*, pParent, void)
 {
     SolarMutexGuard aGuard;
     ::svtools::executeRestartDialog(comphelper::getProcessComponentContext(),
-                                    static_cast<vcl::Window*>(pParent), svtools::RESTART_REASON_EXTENSION_INSTALL);
+                                    pParent ? static_cast<vcl::Window*>(pParent)->GetFrameWeld() : nullptr,
+                                    svtools::RESTART_REASON_EXTENSION_INSTALL);
 }
 
 bool ExtMgrDialog::Close()

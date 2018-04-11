@@ -712,7 +712,7 @@ IMPL_LINK_NOARG(OfaTreeOptionsDialog, OKHdl_Impl, Button*, void)
     {
         SolarMutexGuard aGuard;
         ::svtools::executeRestartDialog(comphelper::getProcessComponentContext(),
-                                    static_cast<vcl::Window*>(m_pParent), eRestartReason);
+                                        m_pParent->GetFrameWeld(), eRestartReason);
     }
 }
 
