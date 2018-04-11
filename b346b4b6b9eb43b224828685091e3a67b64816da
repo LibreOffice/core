@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_e53111ee",
+        "filename": "sd/source/ui/func/fudraw.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 921,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2018-04-11T07:27:25Z",
+      "side": 1,
+      "message": "This code seems to be duplicated on a number of places. maybe (if it makes sense) you could move this to a method in the KeyCode class?",
+      "range": {
+        "startLine": 913,
+        "startChar": 12,
+        "endLine": 921,
+        "endChar": 78
+      },
+      "revId": "b346b4b6b9eb43b224828685091e3a67b64816da",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
