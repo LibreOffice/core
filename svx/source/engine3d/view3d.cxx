@@ -581,7 +581,7 @@ bool E3dView::ImpCloneAll3DObjectsToDestScene(E3dScene const * pSrcScene, E3dSce
                     pNewCompoundObj->SetTransform(aModifyingTransform * aNewObjectTrans);
 
                     // fill and insert new object
-                    pNewCompoundObj->SetPage(pDstScene->GetPage());
+                    pNewCompoundObj->SetPage(pDstScene->E3dObject::GetPage());
                     pNewCompoundObj->NbcSetLayer(pCompoundObj->GetLayer());
                     pNewCompoundObj->NbcSetStyleSheet(pCompoundObj->GetStyleSheet(), true);
                     pDstScene->Insert3DObj(pNewCompoundObj);

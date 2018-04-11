@@ -383,8 +383,8 @@ public:
     // this method is only for access from Property objects
     virtual void SetBoundRectDirty();
 
-    virtual void SetObjList(SdrObjList* pNewObjList);
-    SdrObjList* GetObjList() const { return pObjList;}
+    virtual void setParentOfSdrObject(SdrObjList* pNewObjList);
+    SdrObjList* getParentOfSdrObject() const { return mpParentOfSdrObject;}
 
     virtual void SetPage(SdrPage* pNewPage);
     SdrPage* GetPage() const { return pPage;}
@@ -992,7 +992,7 @@ private:
     struct Impl;
     std::unique_ptr<Impl>             mpImpl;
     Point                             aGridOffset;  // hack (Calc)
-    SdrObjList*                       pObjList;     // list that includes this object
+    SdrObjList*                       mpParentOfSdrObject;     // list that includes this object
     sal_uInt32                        nOrdNum;      // order number of the object in the list
     std::unique_ptr<SfxGrabBagItem>   pGrabBagItem; // holds the GrabBagItem property
     // Position in the navigation order. SAL_MAX_UINT32 when not used.

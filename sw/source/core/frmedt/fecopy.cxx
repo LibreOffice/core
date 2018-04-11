@@ -928,7 +928,7 @@ bool SwFEShell::Paste( SwDoc* pClpDoc )
                             Imp()->GetDrawView()->InsertObjectAtView( pNew, *Imp()->GetPageView() );
 
                             Point aGrpAnchor( 0, 0 );
-                            SdrObjList* pList = pNew->GetObjList();
+                            SdrObjList* pList = pNew->getParentOfSdrObject();
                             if ( pList )
                             {
                                 SdrObject* pOwner = pList->GetOwnerObj();
@@ -1276,7 +1276,7 @@ static void lcl_ConvertSdrOle2ObjsToSdrGrafObjs( SdrModel& _rModel )
             if( pOle2Obj )
             {
                 // found an ole2 shape
-                SdrObjList* pObjList = pOle2Obj->GetObjList();
+                SdrObjList* pObjList = pOle2Obj->getParentOfSdrObject();
 
                 // get its graphic
                 Graphic aGraphic;

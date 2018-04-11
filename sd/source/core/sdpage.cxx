@@ -663,7 +663,7 @@ SfxStyleSheet* SdPage::GetStyleSheetForPresObj(PresObjKind eObjKind) const
     slides masterpage */
 SdStyleSheet* SdPage::getPresentationStyle( sal_uInt32 nHelpId ) const
 {
-    OUString aStyleName( pPage->GetLayoutName() );
+    OUString aStyleName( mpPage->GetLayoutName() );
     const OUString aSep( SD_LT_SEPARATOR );
     sal_Int32 nIndex = aStyleName.indexOf(aSep);
     if( nIndex != -1 )
@@ -1054,7 +1054,7 @@ void SdPage::DestroyDefaultPresObj(PresObjKind eObjKind)
         const bool bUndo = pDoc->IsUndoEnabled();
         if( bUndo )
             pDoc->AddUndo(pDoc->GetSdrUndoFactory().CreateUndoDeleteObject(*pObject));
-        SdrObjList* pOL = pObject->GetObjList();
+        SdrObjList* pOL = pObject->getParentOfSdrObject();
         pOL->RemoveObject(pObject->GetOrdNumDirect());
 
         if( !bUndo )

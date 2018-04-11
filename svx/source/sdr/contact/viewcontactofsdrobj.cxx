@@ -87,7 +87,7 @@ ViewContact& ViewContactOfSdrObj::GetViewContact(sal_uInt32 nIndex) const
 ViewContact* ViewContactOfSdrObj::GetParentContact() const
 {
     ViewContact* pRetval = nullptr;
-    SdrObjList* pObjList = GetSdrObject().GetObjList();
+    SdrObjList* pObjList = GetSdrObject().getParentOfSdrObject();
 
     if(pObjList)
     {

@@ -73,9 +73,9 @@ protected:
 friend class SdrObjListIter;
 friend class SdrEditView;
     SdrObjList* pUpList;   /// parent list
-    SdrPage*    pPage;     /// Page containing the list, may be "this".
+    SdrPage*    mpPage;     /// Page containing the list, may be "this".
     SdrObject*  pOwnerObj; /// OwnerObject, if it's list of a Group object.
-    tools::Rectangle   aOutRect;
+    tools::Rectangle   maOutRect;
     tools::Rectangle   aSnapRect;
     SdrObjListKind eListKind;
     bool        bObjOrdNumsDirty;
@@ -83,7 +83,7 @@ friend class SdrEditView;
 
 protected:
     void RecalcRects();
-    void lateInitSdrObjList(const SdrObjList& rSrcList, SdrModel* pNewModel = nullptr);
+    void copyDataFromSdrObjList(const SdrObjList& rSrcList, SdrModel* pNewModel = nullptr);
 
 private:
     /// simple ActionChildInserted forwarder to have it on a central place

@@ -447,7 +447,7 @@ void SAL_CALL SdXShape::setPropertyValue( const OUString& aPropertyName, const c
                     if(!(aValue >>= nNavOrder))
                         throw lang::IllegalArgumentException();
 
-                    SdrObjList* pObjList = pObj->GetObjList();
+                    SdrObjList* pObjList = pObj->getParentOfSdrObject();
                     if( pObjList )
                         pObjList->SetObjectNavigationPosition( *pObj, (nNavOrder < 0) ? SAL_MAX_UINT32 : static_cast< sal_uInt32 >( nNavOrder ) );
                     break;

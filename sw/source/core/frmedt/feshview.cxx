@@ -1502,7 +1502,7 @@ const SdrObject* SwFEShell::GetBestObject( bool bNext, GotoObjFlags eType, bool 
             // If an object inside a group is selected, we want to
             // iterate over the group members.
             if ( ! pStartObj->GetUserCall() )
-                pList = pStartObj->GetObjList();
+                pList = pStartObj->getParentOfSdrObject();
         }
         else
         {

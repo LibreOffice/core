@@ -47,7 +47,7 @@ public:
     virtual void TakeObjInfo(SdrObjTransformInfoRec& rInfo) const override;
     virtual SdrLayerID GetLayer() const override;
     virtual void NbcSetLayer(SdrLayerID nLayer) override;
-    virtual void SetObjList(SdrObjList* pNewObjList) override;
+    virtual void setParentOfSdrObject(SdrObjList* pNewObjList) override;
     virtual void SetPage(SdrPage* pNewPage) override;
     virtual SdrObjList* GetSubList() const override;
 

@@ -1512,7 +1512,7 @@ bool SdrMarkView::MarkNextObj(const Point& rPnt, short nTol, bool bPrev)
     if (pTopMarkHit==nullptr) return MarkObj(rPnt,sal_uInt16(nTol));
 
     SdrObject* pTopObjHit=pTopMarkHit->GetMarkedSdrObj();
-    SdrObjList* pObjList=pTopObjHit->GetObjList();
+    SdrObjList* pObjList=pTopObjHit->getParentOfSdrObject();
     SdrPageView* pPV=pTopMarkHit->GetPageView();
     // find lowermost of the selected objects that is hit by rPnt
     // and is placed on the same PageView as pTopMarkHit
