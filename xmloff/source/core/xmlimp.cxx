@@ -2037,12 +2037,20 @@ const OUString SvXMLImport::getNameFromToken( sal_Int32 nToken )
                     aSeq.getConstArray() ), aSeq.getLength(), RTL_TEXTENCODING_UTF8 );
 }
 
-const OUString SvXMLImport::getNamespacePrefixFromToken( sal_Int32 nToken )
+const OUString SvXMLImport::getNamespacePrefixFromToken(sal_Int32 nToken, const SvXMLNamespaceMap* pMap)
 {
     sal_Int32 nNamespaceToken = ( nToken & NMSP_MASK ) >> NMSP_SHIFT;
     auto aIter( aNamespaceMap.find( nNamespaceToken ) );
     if( aIter != aNamespaceMap.end() )
+    {
+        if (pMap)
+        {
+            OUString sRet = pMap->GetPrefixByKey(pMap->GetKeyByName((*aIter).second.second));
+            if (!sRet.isEmpty())
+                return sRet;
+        }
         return (*aIter).second.first;
+    }
     else
         return OUString();
 }

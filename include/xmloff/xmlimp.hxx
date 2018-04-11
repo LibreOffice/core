@@ -376,7 +376,7 @@ public:
     XMLEventImportHelper& GetEventImport();
 
     static const OUString getNameFromToken( sal_Int32 nToken );
-    static const OUString getNamespacePrefixFromToken( sal_Int32 nToken );
+    static const OUString getNamespacePrefixFromToken(sal_Int32 nToken, const SvXMLNamespaceMap* pMap);
 
     SvXMLNamespaceMap& GetNamespaceMap() { return *mpNamespaceMap; }
     const SvXMLNamespaceMap& GetNamespaceMap() const { return *mpNamespaceMap; }
