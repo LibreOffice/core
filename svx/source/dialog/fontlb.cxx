@@ -46,9 +46,9 @@ SvLBoxFontString::~SvLBoxFontString()
 {
 }
 
-SvLBoxItem* SvLBoxFontString::Create() const
+std::unique_ptr<SvLBoxItem> SvLBoxFontString::Clone(SvLBoxItem const *) const
 {
-    return new SvLBoxFontString;
+    return std::unique_ptr<SvLBoxItem>(new SvLBoxFontString);
 }
 
 void SvLBoxFontString::Paint(const Point& rPos, SvTreeListBox& rDev, vcl::RenderContext& rRenderContext,
