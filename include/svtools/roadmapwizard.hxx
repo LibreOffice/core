@@ -67,10 +67,6 @@ namespace svt
 
     public:
         RoadmapWizard(
-            vcl::Window* _pParent,
-            const WinBits i_nStyle
-        );
-        RoadmapWizard(
             vcl::Window* _pParent
         );
         virtual ~RoadmapWizard( ) override;

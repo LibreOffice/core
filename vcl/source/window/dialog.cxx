@@ -1446,12 +1446,6 @@ ModelessDialog::ModelessDialog(vcl::Window* pParent, const OUString& rID, const 
 {
 }
 
-ModalDialog::ModalDialog( vcl::Window* pParent, WinBits nStyle ) :
-    Dialog( WindowType::MODALDIALOG )
-{
-    ImplInit( pParent, nStyle );
-}
-
 ModalDialog::ModalDialog( vcl::Window* pParent, const OUString& rID, const OUString& rUIXMLDescription, bool bBorder ) :
     Dialog(pParent, rID, rUIXMLDescription, WindowType::MODALDIALOG, InitFlag::Default, bBorder)
 {

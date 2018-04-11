@@ -331,13 +331,6 @@ TabPage* WizardDialog::ImplGetPage( sal_uInt16 nLevel ) const
     return nullptr;
 }
 
-WizardDialog::WizardDialog( vcl::Window* pParent, WinBits nStyle ) :
-    ModalDialog( pParent, nStyle )
-{
-    ImplInitData();
-}
-
-
 WizardDialog::WizardDialog( vcl::Window* pParent, const OUString& rID, const OUString& rUIXMLDescription ) :
     ModalDialog( pParent, rID, rUIXMLDescription )
 {
