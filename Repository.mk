@@ -604,6 +604,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,ooo, \
 	dict_ja \
 	dict_zh \
 	embobj \
+	$(if $(ENABLE_JAVA),hsqldb) \
 	i18nutil \
 	index_data \
 	$(if $(and $(ENABLE_GTK3), $(filter LINUX %BSD SOLARIS,$(OS))), libreofficekitgtk) \
@@ -738,6 +739,7 @@ $(eval $(call gb_Helper_register_jars_for_install,OOO,ooo, \
 	$(if $(filter-out MACOSX,$(OS)),officebean) \
 	query \
 	report \
+	sdbc_hsqldb \
 	smoketest \
 	table \
 	unoil \
