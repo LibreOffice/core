@@ -30,6 +30,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,firebird,\
 		external/firebird/0002-Backported-fix-for-CORE-5452-Segfault-when-engine-s-.patch.1 \
 		external/firebird/c++17.patch \
 		external/firebird/ubsan.patch \
+		external/firebird/asan.patch \
 ))
 
 ifeq ($(OS),WNT)
