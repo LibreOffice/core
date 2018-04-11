@@ -135,7 +135,7 @@ enum SdDocumentSettingsPropertyHandles
     HANDLE_SCALE_DOM, HANDLE_TABSTOP, HANDLE_PRINTPAGENAME, HANDLE_PRINTDATE, HANDLE_PRINTTIME,
     HANDLE_PRINTHIDENPAGES, HANDLE_PRINTFITPAGE, HANDLE_PRINTTILEPAGE, HANDLE_PRINTBOOKLET, HANDLE_PRINTBOOKLETFRONT,
     HANDLE_PRINTBOOKLETBACK, HANDLE_PRINTQUALITY, HANDLE_COLORTABLEURL, HANDLE_DASHTABLEURL, HANDLE_LINEENDTABLEURL, HANDLE_HATCHTABLEURL,
-    HANDLE_GRADIENTTABLEURL, HANDLE_BITMAPTABLEURL, HANDLE_FORBIDDENCHARS, HANDLE_APPLYUSERDATA, HANDLE_PAGENUMFMT,
+    HANDLE_GRADIENTTABLEURL, HANDLE_BITMAPTABLEURL, HANDLE_FORBIDDENCHARS, HANDLE_APPLYUSERDATA, HANDLE_SAVETHUMBNAIL, HANDLE_PAGENUMFMT,
     HANDLE_PRINTERNAME, HANDLE_PRINTERJOB, HANDLE_PRINTERPAPERSIZE, HANDLE_PARAGRAPHSUMMATION, HANDLE_CHARCOMPRESS, HANDLE_ASIANPUNCT,
     HANDLE_UPDATEFROMTEMPLATE, HANDLE_PRINTER_INDEPENDENT_LAYOUT
     // #i33095#
@@ -192,6 +192,7 @@ enum SdDocumentSettingsPropertyHandles
 
             { OUString("ForbiddenCharacters"),   HANDLE_FORBIDDENCHARS,      cppu::UnoType<XForbiddenCharacters>::get(),    0, 0 },
             { OUString("ApplyUserData"),         HANDLE_APPLYUSERDATA,       cppu::UnoType<bool>::get(),                0,  0 },
+            { OUString("SaveThumbnail"),         HANDLE_SAVETHUMBNAIL,       cppu::UnoType<bool>::get(),                0,  0 },
 
             { OUString("PageNumberFormat"),      HANDLE_PAGENUMFMT,          ::cppu::UnoType<sal_Int32>::get(),    0,  0 },
             { OUString("ParagraphSummation"),    HANDLE_PARAGRAPHSUMMATION,  cppu::UnoType<bool>::get(),                0,  0 },
@@ -467,6 +468,18 @@ DocumentSettings::_setPropertyValues(const PropertyMapEntry** ppEntries,
                     }
                 }
                 break;
+            case HANDLE_SAVETHUMBNAIL:
+                {
+                    bool bSaveThumbnail = false;
+                    if (*pValues >>= bSaveThumbnail)
+                    {
+                         bChanged = (bSaveThumbnail != pDocSh->IsUseThumbnailSave());
+                         pDocSh->SetUseThumbnailSave(bSaveThumbnail);
+                         bOk = true;
+                    }
+                }
+                break;
+
             case HANDLE_PRINTDRAWING:
                 if( *pValues >>= bValue )
                 {
@@ -1046,6 +1059,9 @@ DocumentSettings::_getPropertyValues(
                 break;
             case HANDLE_APPLYUSERDATA:
                 *pValue <<= pDocSh->IsUseUserData();
+                break;
+            case HANDLE_SAVETHUMBNAIL:
+                *pValue <<= pDocSh->IsUseThumbnailSave();
                 break;
             case HANDLE_PRINTDRAWING:
                 *pValue <<= aPrintOpts.IsDraw();
