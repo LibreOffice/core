@@ -602,7 +602,7 @@ uno::Any SvxUnoTextRangeBase::_getPropertyValue(const OUString& PropertyName, sa
         const SfxItemPropertySimpleEntry* pMap = mpPropSet->getPropertyMapEntry(PropertyName );
         if( pMap )
         {
-            SfxItemSet* pAttribs = nullptr;
+            std::unique_ptr<SfxItemSet> pAttribs;
             if( nPara != -1 )
                 pAttribs = pForwarder->GetParaAttribs( nPara ).Clone();
             else
@@ -613,7 +613,6 @@ uno::Any SvxUnoTextRangeBase::_getPropertyValue(const OUString& PropertyName, sa
 
             getPropertyValue( pMap, aAny, *pAttribs );
 
-            delete pAttribs;
             return aAny;
         }
     }
@@ -886,7 +885,7 @@ uno::Sequence< uno::Any > SvxUnoTextRangeBase::_getPropertyValues( const uno::Se
     SvxTextForwarder* pForwarder = mpEditSource ? mpEditSource->GetTextForwarder() : nullptr;
     if( pForwarder )
     {
-        SfxItemSet* pAttribs = nullptr;
+        std::unique_ptr<SfxItemSet> pAttribs;
         if( nPara != -1 )
             pAttribs = pForwarder->GetParaAttribs( nPara ).Clone();
         else
@@ -905,9 +904,6 @@ uno::Sequence< uno::Any > SvxUnoTextRangeBase::_getPropertyValues( const uno::Se
                 getPropertyValue( pMap, *pValues, *pAttribs );
             }
         }
-
-        delete pAttribs;
-
     }
 
     return aValues;

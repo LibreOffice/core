@@ -37,7 +37,7 @@ class SfxPrintOptionsDialog : public ModalDialog
 private:
     std::unique_ptr<SfxPrintOptDlg_Impl>   pDlgImpl;
     SfxViewShell*           pViewSh;
-    SfxItemSet*             pOptions;
+    std::unique_ptr<SfxItemSet>            pOptions;
     VclPtr<SfxTabPage>      pPage;
 
 public:

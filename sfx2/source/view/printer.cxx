@@ -157,7 +157,7 @@ VclPtr<SfxPrinter> SfxPrinter::Clone() const
 {
     if ( IsDefPrinter() )
     {
-        VclPtr<SfxPrinter> pNewPrinter = VclPtr<SfxPrinter>::Create( std::unique_ptr<SfxItemSet>(GetOptions().Clone()) );
+        VclPtr<SfxPrinter> pNewPrinter = VclPtr<SfxPrinter>::Create( GetOptions().Clone() );
         pNewPrinter->SetJobSetup( GetJobSetup() );
         pNewPrinter->SetPrinterProps( this );
         pNewPrinter->SetMapMode( GetMapMode() );
@@ -208,7 +208,7 @@ SfxPrintOptionsDialog::SfxPrintOptionsDialog(vcl::Window *pParent,
     DBG_ASSERT( pPage, "CreatePrintOptions != SFX_VIEW_HAS_PRINTOPTIONS" );
     if( pPage )
     {
-        pPage->Reset( pOptions );
+        pPage->Reset( pOptions.get() );
         SetHelpId( pPage->GetHelpId() );
         pPage->Show();
     }
@@ -224,7 +224,7 @@ void SfxPrintOptionsDialog::dispose()
 {
     pDlgImpl.reset();
     pPage.disposeAndClear();
-    delete pOptions;
+    pOptions.reset();
     ModalDialog::dispose();
 }
 
@@ -236,9 +236,9 @@ short SfxPrintOptionsDialog::Execute()
 
     short nRet = ModalDialog::Execute();
     if ( nRet == RET_OK )
-        pPage->FillItemSet( pOptions );
+        pPage->FillItemSet( pOptions.get() );
     else
-        pPage->Reset( pOptions );
+        pPage->Reset( pOptions.get() );
     return nRet;
 }
 

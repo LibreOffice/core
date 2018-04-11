@@ -372,8 +372,7 @@ void SfxTabDialog::dispose()
     m_pImpl.reset();
     delete m_pSet;
     m_pSet = nullptr;
-    delete m_pOutSet;
-    m_pOutSet = nullptr;
+    m_pOutSet.reset();
     delete m_pExampleSet;
     m_pExampleSet = nullptr;
     delete [] m_pRanges;
@@ -487,7 +486,7 @@ void SfxTabDialog::Init_Impl(bool bFmtFlag)
     if ( m_pSet )
     {
         m_pExampleSet = new SfxItemSet( *m_pSet );
-        m_pOutSet = new SfxItemSet( *m_pSet->GetPool(), m_pSet->GetRanges() );
+        m_pOutSet.reset(new SfxItemSet( *m_pSet->GetPool(), m_pSet->GetRanges() ));
     }
 }
 
@@ -776,7 +775,7 @@ short SfxTabDialog::Ok()
     if ( !m_pOutSet )
     {
         if ( m_pExampleSet )
-            m_pOutSet = new SfxItemSet( *m_pExampleSet );
+            m_pOutSet.reset(new SfxItemSet( *m_pExampleSet ));
         else if ( m_pSet )
             m_pOutSet = m_pSet->Clone( false );  // without Items
     }
@@ -1338,7 +1337,7 @@ void SfxTabDialog::SetInputSet( const SfxItemSet* pInSet )
     if (!bSet && !m_pExampleSet && !m_pOutSet && m_pSet)
     {
         m_pExampleSet = new SfxItemSet( *m_pSet );
-        m_pOutSet = new SfxItemSet( *m_pSet->GetPool(), m_pSet->GetRanges() );
+        m_pOutSet.reset(new SfxItemSet( *m_pSet->GetPool(), m_pSet->GetRanges() ));
     }
 }
 

@@ -1240,7 +1240,7 @@ ScPostIt* ScNoteUtil::CreateNoteFromCaption(
 }
 
 ScPostIt* ScNoteUtil::CreateNoteFromObjectData(
-        ScDocument& rDoc, const ScAddress& rPos, SfxItemSet* pItemSet,
+        ScDocument& rDoc, const ScAddress& rPos, std::unique_ptr<SfxItemSet> pItemSet,
         OutlinerParaObject* pOutlinerObj, const tools::Rectangle& rCaptionRect,
         bool bShown, bool bAlwaysCreateCaption )
 {
@@ -1248,7 +1248,7 @@ ScPostIt* ScNoteUtil::CreateNoteFromObjectData(
     ScNoteData aNoteData( bShown );
     aNoteData.mxInitData.reset( new ScCaptionInitData );
     ScCaptionInitData& rInitData = *aNoteData.mxInitData;
-    rInitData.mxItemSet.reset( pItemSet );
+    rInitData.mxItemSet = std::move(pItemSet);
     rInitData.mxOutlinerObj.reset( pOutlinerObj );
 
     // convert absolute caption position to relative position

@@ -1940,9 +1940,9 @@ SwUnoCursorHelper::GetPropertyStates(
                 //try again to find out if a value has been inherited
                 if( beans::PropertyState_DIRECT_VALUE == pStates[i] )
                 {
-                    if (!pSetParent.get())
+                    if (!pSetParent)
                     {
-                        pSetParent.reset( pSet->Clone( false ) );
+                        pSetParent = pSet->Clone( false );
                         // #i63870#
                         SwUnoCursorHelper::GetCursorAttr(
                                 rPaM, *pSetParent, true, false );

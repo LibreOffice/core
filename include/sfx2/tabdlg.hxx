@@ -82,7 +82,7 @@ friend class SfxTabDialogUIObject;
     bool m_bOwnsBaseFmtBtn;
 
     SfxItemSet*         m_pSet;
-    SfxItemSet*         m_pOutSet;
+    std::unique_ptr<SfxItemSet>           m_pOutSet;
     std::unique_ptr< TabDlg_Impl >        m_pImpl;
     sal_uInt16*         m_pRanges;
     sal_uInt16          m_nAppPageId;
@@ -176,7 +176,7 @@ public:
     // may provide local slots converted by Map
     const sal_uInt16*       GetInputRanges( const SfxItemPool& );
     void                SetInputSet( const SfxItemSet* pInSet );
-    const SfxItemSet*   GetOutputItemSet() const { return m_pOutSet; }
+    const SfxItemSet*   GetOutputItemSet() const { return m_pOutSet.get(); }
 
     const PushButton&   GetOKButton() const { return *m_pOKBtn; }
     PushButton&         GetOKButton() { return *m_pOKBtn; }
