@@ -129,8 +129,7 @@ public:
                        const SvViewDataEntry* pView,
                        const SvTreeListEntry& rEntry) override;
 
-    virtual SvLBoxItem* Create() const override;
-    virtual void Clone(SvLBoxItem* pSource) override;
+    virtual std::unique_ptr<SvLBoxItem> Clone(SvLBoxItem const * pSource) const override;
 };
 
 class SVT_DLLPUBLIC SvLBoxButton : public SvLBoxItem
@@ -163,9 +162,8 @@ public:
                        const SvViewDataEntry* pView,
                        const SvTreeListEntry& rEntry) override;
 
-    virtual SvLBoxItem* Create() const override;
+    virtual std::unique_ptr<SvLBoxItem> Clone(SvLBoxItem const * pSource) const override;
 
-    virtual void Clone(SvLBoxItem* pSource) override;
     SvItemStateFlags GetButtonFlags() const
     {
         return nItemFlags;
@@ -244,9 +242,7 @@ public:
                        const SvViewDataEntry* pView,
                        const SvTreeListEntry& rEntry) override;
 
-    virtual SvLBoxItem* Create() const override;
-    virtual void Clone(SvLBoxItem* pSource) override;
-
+    virtual std::unique_ptr<SvLBoxItem> Clone(SvLBoxItem const * pSource) const override;
 
     void SetModeImages(const Image& rBitmap1, const Image& rBitmap2);
 

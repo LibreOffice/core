@@ -104,7 +104,7 @@ public:
     virtual void Paint(const Point& rPos, SvTreeListBox& rOutDev, vcl::RenderContext& rRenderContext,
                        const SvViewDataEntry* pView, const SvTreeListEntry& rEntry) override;
 
-    SvLBoxItem*     Create() const override;
+    virtual std::unique_ptr<SvLBoxItem> Clone(SvLBoxItem const * pSource) const override;
 };
 
 class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxRedlinTable : public SvSimpleTable
