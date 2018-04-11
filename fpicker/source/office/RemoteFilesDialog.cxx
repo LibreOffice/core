@@ -746,22 +746,22 @@ IMPL_LINK_NOARG ( RemoteFilesDialog, ListViewHdl, Button*, void )
 
 IMPL_LINK_NOARG ( RemoteFilesDialog, AddServiceHdl, Button*, void )
 {
-    ScopedVclPtrInstance< PlaceEditDialog > aDlg( this );
-    aDlg->ShowPasswordControl();
-    short aRetCode = aDlg->Execute();
+    PlaceEditDialog aDlg(GetFrameWeld());
+    aDlg.ShowPasswordControl();
+    short aRetCode = aDlg.run();
 
     switch( aRetCode )
     {
         case RET_OK :
         {
-            ServicePtr newService = aDlg->GetPlace();
+            ServicePtr newService = aDlg.GetPlace();
             m_aServices.push_back( newService );
 
-            OUString sPassword = aDlg->GetPassword();
-            OUString sUser = aDlg->GetUser();
+            OUString sPassword = aDlg.GetPassword();
+            OUString sUser = aDlg.GetUser();
             if( !sUser.isEmpty() && !sPassword.isEmpty() )
             {
-                bool bPersistent = aDlg->IsRememberChecked();
+                bool bPersistent = aDlg.IsRememberChecked();
                 SavePassword( newService->GetUrl(), sUser, sPassword, bPersistent );
             }
 
@@ -811,14 +811,14 @@ IMPL_LINK ( RemoteFilesDialog, EditServiceMenuHdl, MenuButton *, pButton, void )
 
         if( nPos >= 0 )
         {
-            ScopedVclPtrInstance< PlaceEditDialog > aDlg( this, m_aServices[nPos] );
-            short aRetCode = aDlg->Execute();
+            PlaceEditDialog aDlg(GetFrameWeld(), m_aServices[nPos]);
+            short aRetCode = aDlg.run();
 
             switch( aRetCode )
             {
                 case RET_OK :
                 {
-                    ServicePtr pEditedService = aDlg->GetPlace();
+                    ServicePtr pEditedService = aDlg.GetPlace();
 
                     m_aServices[nPos] = pEditedService;
                     m_pServices_lb->RemoveEntry( nSelected );

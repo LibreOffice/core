@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.18.3 -->
+<!-- Generated with glade 3.20.4 -->
 <interface domain="svt">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkAdjustment" id="adjustment1">
@@ -12,31 +12,13 @@
     <property name="can_focus">False</property>
     <property name="stock">gtk-refresh</property>
   </object>
-  <object class="GtkListStore" id="liststore1">
-    <columns>
-      <!-- column-name type -->
-      <column type="gchararray"/>
-    </columns>
-    <data>
-      <row>
-        <col id="0" translatable="yes" context="placeedit|liststore1">WebDAV</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes" context="placeedit|liststore1">FTP</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes" context="placeedit|liststore1">SSH</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes" context="placeedit|liststore1">Windows Share</col>
-      </row>
-    </data>
-  </object>
   <object class="GtkDialog" id="PlaceEditDialog">
-    <property name="width_request">400</property>
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
     <property name="title" translatable="yes" context="placeedit|PlaceEditDialog">File Services</property>
+    <property name="modal">True</property>
+    <property name="default_width">0</property>
+    <property name="default_height">0</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
@@ -126,10 +108,10 @@
               <object class="GtkLabel" id="typeLabel">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="xalign">1</property>
                 <property name="label" translatable="yes" context="placeedit|typeLabel">Type:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">type</property>
+                <property name="xalign">1</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -137,17 +119,16 @@
               </packing>
             </child>
             <child>
-              <object class="GtkComboBox" id="type">
+              <object class="GtkComboBoxText" id="type">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="hexpand">True</property>
-                <property name="model">liststore1</property>
-                <child>
-                  <object class="GtkCellRendererText" id="cellrenderertext1"/>
-                  <attributes>
-                    <attribute name="text">0</attribute>
-                  </attributes>
-                </child>
+                <items>
+                  <item translatable="yes" context="placeedit|liststore1">WebDAV</item>
+                  <item translatable="yes" context="placeedit|liststore1">FTP</item>
+                  <item translatable="yes" context="placeedit|liststore1">SSH</item>
+                  <item translatable="yes" context="placeedit|liststore1">Windows Share</item>
+                </items>
               </object>
               <packing>
                 <property name="left_attach">1</property>
@@ -171,10 +152,10 @@
               <object class="GtkLabel" id="hostLabel">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="xalign">0</property>
                 <property name="label" translatable="yes" context="placeedit|hostLabel">Host:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">host</property>
+                <property name="xalign">0</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -185,10 +166,10 @@
               <object class="GtkLabel" id="pathLabel">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="xalign">0</property>
                 <property name="label" translatable="yes" context="placeedit|pathLabel">Root:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">path</property>
+                <property name="xalign">0</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -200,6 +181,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="hexpand">True</property>
+                <property name="activates_default">True</property>
               </object>
               <packing>
                 <property name="left_attach">1</property>
@@ -210,10 +192,10 @@
               <object class="GtkLabel" id="shareLabel">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="xalign">0</property>
                 <property name="label" translatable="yes" context="placeedit|shareLabel">Share:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">share</property>
+                <property name="xalign">0</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -225,6 +207,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="hexpand">True</property>
+                <property name="activates_default">True</property>
               </object>
               <packing>
                 <property name="left_attach">1</property>
@@ -235,10 +218,10 @@
               <object class="GtkLabel" id="repositoryLabel">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="xalign">0</property>
                 <property name="label" translatable="yes" context="placeedit|repositoryLabel">Repository:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">repositories</property>
+                <property name="xalign">0</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -263,10 +246,10 @@
               <object class="GtkLabel" id="loginLabel">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="xalign">0</property>
                 <property name="label" translatable="yes" context="placeedit|loginLabel">User:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">login</property>
+                <property name="xalign">0</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -278,6 +261,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="hexpand">True</property>
+                <property name="activates_default">True</property>
               </object>
               <packing>
                 <property name="left_attach">1</property>
@@ -288,10 +272,10 @@
               <object class="GtkLabel" id="nameLabel">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="xalign">0</property>
                 <property name="label" translatable="yes" context="placeedit|nameLabel">Label:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">name</property>
+                <property name="xalign">0</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -303,6 +287,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="hexpand">True</property>
+                <property name="activates_default">True</property>
               </object>
               <packing>
                 <property name="left_attach">1</property>
@@ -319,6 +304,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="hexpand">True</property>
+                    <property name="activates_default">True</property>
                   </object>
                   <packing>
                     <property name="expand">True</property>
@@ -330,10 +316,10 @@
                   <object class="GtkLabel" id="portLabel">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="xalign">0</property>
                     <property name="label" translatable="yes" context="placeedit|portLabel">Port:</property>
                     <property name="use_underline">True</property>
-                    <property name="mnemonic_widget">port-nospin</property>
+                    <property name="mnemonic_widget">port</property>
+                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -342,13 +328,11 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkSpinButton" id="port-nospin">
-                    <property name="width_request">50</property>
+                  <object class="GtkSpinButton" id="port">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="max_length">5</property>
-                    <property name="max_width_chars">5</property>
-                    <property name="text" translatable="no">0</property>
+                    <property name="activates_default">True</property>
+                    <property name="text">0</property>
                     <property name="adjustment">adjustment1</property>
                     <property name="numeric">True</property>
                   </object>
@@ -370,7 +354,7 @@
                 <property name="can_focus">False</property>
                 <property name="spacing">6</property>
                 <child>
-                  <object class="GtkComboBox" id="repositories">
+                  <object class="GtkComboBoxText" id="repositories">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
@@ -404,9 +388,9 @@
               <object class="GtkLabel" id="passwordLabel">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="xalign">0</property>
                 <property name="label" translatable="yes" context="placeedit|passwordLabel">Password:</property>
                 <property name="mnemonic_widget">password</property>
+                <property name="xalign">0</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -418,6 +402,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="visibility">False</property>
+                <property name="activates_default">True</property>
               </object>
               <packing>
                 <property name="left_attach">1</property>
@@ -454,10 +439,13 @@
       </object>
     </child>
     <action-widgets>
+      <action-widget response="-11">help</action-widget>
       <action-widget response="0">delete</action-widget>
       <action-widget response="-5">ok</action-widget>
       <action-widget response="-6">cancel</action-widget>
-      <action-widget response="-11">help</action-widget>
     </action-widgets>
+    <child>
+      <placeholder/>
+    </child>
   </object>
 </interface>
