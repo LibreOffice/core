@@ -52,7 +52,7 @@ namespace svt { namespace uno
     //= WizardShell
     WizardShell::WizardShell( vcl::Window* i_pParent, const Reference< XWizardController >& i_rController,
             const Sequence< Sequence< sal_Int16 > >& i_rPaths )
-        :WizardShell_Base( i_pParent, WB_MOVEABLE | WB_CLOSEABLE )
+        :WizardShell_Base( i_pParent )
         ,m_xController( i_rController )
         ,m_nFirstPageID( lcl_determineFirstPageID( i_rPaths ) )
     {
