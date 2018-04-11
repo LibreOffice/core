@@ -468,12 +468,9 @@ DECLARE_HTMLEXPORT_TEST(testReqIfTable, "reqif-table.xhtml")
     // <div> was missing, so the XHTML fragment wasn't a valid
     // xhtml.BlkStruct.class type anymore.
     assertXPath(pDoc, "/html/body/div/table/tr/th", 1);
-    OUString aStyle = getXPath(pDoc, "/html/body/div/table/tr/th", "style");
-    CPPUNIT_ASSERT(aStyle.indexOf("background") != -1);
-    // This failed, there were 2 style attributes, so as a best effort the
-    // parser took the value of the first.
-    CPPUNIT_ASSERT(aStyle.indexOf("border") != -1);
-
+    // The attribute was present to contain "background" and "border", which is
+    // ignored in reqif-xhtml.
+    assertXPathNoAttribute(pDoc, "/html/body/div/table/tr/th", "style");
     // The attribute was present, which is not valid in reqif-xhtml.
     assertXPathNoAttribute(pDoc, "/html/body/div/table/tr/th", "bgcolor");
 }
@@ -488,6 +485,10 @@ DECLARE_HTMLEXPORT_TEST(testReqIfList, "reqif-list.xhtml")
     OString aStream(read_uInt8s_ToOString(*pStream, nLength));
     // This failed, <ul> was written.
     CPPUNIT_ASSERT(aStream.indexOf("<reqif-xhtml:ul>") != -1);
+
+    // This failed, the 'style' attribute was written, even if the input did
+    // not had one.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(-1), aStream.indexOf(" style=\""));
 }
 
 DECLARE_HTMLEXPORT_ROUNDTRIP_TEST(testReqIfOle2, "reqif-ole2.xhtml")
