@@ -2097,7 +2097,7 @@ bool SvxShape::setPropertyValueImpl( const OUString&, const SfxItemPropertySimpl
         sal_Int32 nNewOrdNum = 0;
         if(rValue >>= nNewOrdNum)
         {
-            SdrObjList* pObjList = GetSdrObject()->GetObjList();
+            SdrObjList* pObjList = GetSdrObject()->getParentOfSdrObject();
             if( pObjList )
             {
                 SdrObject* pCheck =
@@ -3680,9 +3680,9 @@ uno::Reference<uno::XInterface> SAL_CALL SvxShape::getParent()
 {
     ::SolarMutexGuard aGuard;
 
-    if( HasSdrObject() && GetSdrObject()->GetObjList() )
+    if( HasSdrObject() && GetSdrObject()->getParentOfSdrObject() )
     {
-        SdrObjList* pObjList = GetSdrObject()->GetObjList();
+        SdrObjList* pObjList = GetSdrObject()->getParentOfSdrObject();
 
         switch (pObjList->GetListKind())
         {
