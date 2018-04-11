@@ -30,11 +30,10 @@
 
 using namespace basegfx;
 
-SvpSalVirtualDevice::SvpSalVirtualDevice(DeviceFormat eFormat, double fScale, cairo_surface_t* pRefSurface)
+SvpSalVirtualDevice::SvpSalVirtualDevice(DeviceFormat eFormat, cairo_surface_t* pRefSurface)
     : m_eFormat(eFormat)
     , m_pRefSurface(pRefSurface)
     , m_pSurface(nullptr)
-    , m_fScale(fScale)
 {
     cairo_surface_reference(m_pRefSurface);
 }
@@ -77,9 +76,6 @@ bool SvpSalVirtualDevice::SetSizeUsingBuffer( long nNewDX, long nNewDY,
     {
         m_aFrameSize = basegfx::B2IVector(nNewDX, nNewDY);
 
-        nNewDX *= m_fScale;
-        nNewDY *= m_fScale;
-
         if (m_pSurface)
         {
             cairo_surface_destroy(m_pSurface);
@@ -87,23 +83,29 @@ bool SvpSalVirtualDevice::SetSizeUsingBuffer( long nNewDX, long nNewDY,
 
         if (m_eFormat == DeviceFormat::BITMASK)
         {
-            m_pSurface = cairo_surface_create_similar_image(m_pRefSurface, CAIRO_FORMAT_A1,
+            m_pSurface = cairo_surface_create_similar(m_pRefSurface, CAIRO_CONTENT_ALPHA,
                                 nNewDX, nNewDY);
+        }
+        else if (pBuffer)
+        {
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 14, 0)
+            double fXScale, fYScale;
+            cairo_surface_get_device_scale(m_pRefSurface, &fXScale, &fYScale);
+            nNewDX *= fXScale;
+            nNewDY *= fYScale;
+#endif
+
+            m_pSurface = cairo_image_surface_create_for_data(pBuffer, CAIRO_FORMAT_ARGB32,
+                                nNewDX, nNewDY, cairo_format_stride_for_width(CAIRO_FORMAT_ARGB32, nNewDX));
+
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 14, 0)
+            cairo_surface_set_device_scale(m_pSurface, fXScale, fYScale);
+#endif
         }
         else
         {
-            m_pSurface = pBuffer ?
-                             cairo_image_surface_create_for_data(pBuffer, CAIRO_FORMAT_ARGB32,
-                                   nNewDX, nNewDY,
-                                   cairo_format_stride_for_width(CAIRO_FORMAT_ARGB32, nNewDX))
-                                 :
-                             cairo_surface_create_similar_image(m_pRefSurface, CAIRO_FORMAT_ARGB32,
-                                   nNewDX, nNewDY);
+            m_pSurface = cairo_surface_create_similar(m_pRefSurface, CAIRO_CONTENT_COLOR_ALPHA, nNewDX, nNewDY);
         }
-
-#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 14, 0)
-        cairo_surface_set_device_scale(m_pSurface, m_fScale, m_fScale);
-#endif
 
         // update device in existing graphics
         for (auto const& graphic : m_aGraphics)

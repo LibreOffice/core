@@ -243,7 +243,7 @@ SalVirtualDevice* SvpSalInstance::CreateVirtualDevice( SalGraphics* pGraphics,
 {
     SvpSalGraphics *pSvpSalGraphics = dynamic_cast<SvpSalGraphics*>(pGraphics);
     assert(pSvpSalGraphics);
-    SvpSalVirtualDevice* pNew = new SvpSalVirtualDevice(eFormat, pSvpSalGraphics->getScale(), pSvpSalGraphics->getSurface());
+    SvpSalVirtualDevice* pNew = new SvpSalVirtualDevice(eFormat, pSvpSalGraphics->getSurface());
     pNew->SetSize( nDX, nDY );
     return pNew;
 }

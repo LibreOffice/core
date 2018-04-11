@@ -92,8 +92,7 @@ SalVirtualDevice* Qt5Instance::CreateVirtualDevice(SalGraphics* pGraphics, long&
     {
         SvpSalGraphics* pSvpSalGraphics = dynamic_cast<SvpSalGraphics*>(pGraphics);
         assert(pSvpSalGraphics);
-        SvpSalVirtualDevice* pVD = new SvpSalVirtualDevice(eFormat, pSvpSalGraphics->getScale(),
-                                                           pSvpSalGraphics->getSurface());
+        SvpSalVirtualDevice* pVD = new SvpSalVirtualDevice(eFormat, pSvpSalGraphics->getSurface());
         pVD->SetSize(nDX, nDY);
         return pVD;
     }
