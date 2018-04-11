@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_e255871d",
+        "filename": "drawinglayer/source/tools/emfphelperdata.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1001502
+      },
+      "writtenOn": "2018-04-11T06:15:38Z",
+      "side": 1,
+      "message": "Maybe put \"0x\" in front of the output, it looks better.\n\n\"std::dec\" is not needed here, isn\u0027t it?\n\nAnd put the \"return 1.0\" in the default case.",
+      "revId": "56e2acc59f25c1342d07428c3f3437599a3de602",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
