@@ -36,7 +36,7 @@ XMLStylesContext::XMLStylesContext(XMLImport &rImport, StyleType eType)
 
 rtl::Reference<XMLImportContext> XMLStylesContext::CreateChildContext(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &/*xAttribs*/)
 {
-    if (rName == "style:style" || rName == "style:page-layout" || rName == "style:master-page" )
+    if (rName == "style:style" || rName == "style:page-layout" || rName == "style:master-page")
         return new XMLStyleContext(mrImport, *this);
     return nullptr;
 }
