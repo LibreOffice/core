@@ -39,9 +39,9 @@ void TextAttribFontColor::SetFont( vcl::Font& rFont ) const
     rFont.SetColor( maColor );
 }
 
-TextAttrib* TextAttribFontColor::Clone() const
+std::unique_ptr<TextAttrib> TextAttribFontColor::Clone() const
 {
-    return new TextAttribFontColor( *this );
+    return std::unique_ptr<TextAttrib>(new TextAttribFontColor( *this ));
 }
 
 bool TextAttribFontColor::operator==( const TextAttrib& rAttr ) const
@@ -60,9 +60,9 @@ void TextAttribFontWeight::SetFont( vcl::Font& rFont ) const
     rFont.SetWeight( meWeight );
 }
 
-TextAttrib* TextAttribFontWeight::Clone() const
+std::unique_ptr<TextAttrib> TextAttribFontWeight::Clone() const
 {
-    return new TextAttribFontWeight( *this );
+    return std::unique_ptr<TextAttrib>(new TextAttribFontWeight( *this ));
 }
 
 bool TextAttribFontWeight::operator==( const TextAttrib& rAttr ) const
@@ -80,9 +80,9 @@ void TextAttribProtect::SetFont( vcl::Font& ) const
 {
 }
 
-TextAttrib*     TextAttribProtect::Clone() const
+std::unique_ptr<TextAttrib> TextAttribProtect::Clone() const
 {
-    return new TextAttribProtect();
+    return std::unique_ptr<TextAttrib>(new TextAttribProtect());
 }
 
 bool TextAttribProtect::operator==( const TextAttrib& rAttr ) const

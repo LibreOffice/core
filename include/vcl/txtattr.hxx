@@ -51,7 +51,7 @@ public:
 
     sal_uInt16              Which() const   { return mnWhich; }
     virtual void            SetFont( vcl::Font& rFont ) const = 0;
-    virtual TextAttrib*     Clone() const = 0;
+    virtual std::unique_ptr<TextAttrib> Clone() const = 0;
 
     virtual bool            operator==( const TextAttrib& rAttr ) const = 0;
     bool                    operator!=( const TextAttrib& rAttr ) const
@@ -70,7 +70,7 @@ public:
     const Color&            GetColor() const { return maColor; }
 
     virtual void            SetFont( vcl::Font& rFont ) const override;
-    virtual TextAttrib*     Clone() const override;
+    virtual std::unique_ptr<TextAttrib> Clone() const override;
     virtual bool            operator==( const TextAttrib& rAttr ) const override;
 
 };
@@ -84,7 +84,7 @@ public:
                             TextAttribFontWeight( FontWeight eWeight );
 
     virtual void            SetFont( vcl::Font& rFont ) const override;
-    virtual TextAttrib*     Clone() const override;
+    virtual std::unique_ptr<TextAttrib> Clone() const override;
     virtual bool            operator==( const TextAttrib& rAttr ) const override;
 
     FontWeight getFontWeight() const { return meWeight; }
@@ -96,7 +96,7 @@ public:
                             TextAttribProtect();
 
     virtual void            SetFont( vcl::Font& rFont ) const override;
-    virtual TextAttrib*     Clone() const override;
+    virtual std::unique_ptr<TextAttrib> Clone() const override;
     virtual bool            operator==( const TextAttrib& rAttr ) const override;
 
 };

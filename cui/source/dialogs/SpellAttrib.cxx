@@ -38,9 +38,9 @@ void SpellErrorAttrib::SetFont( vcl::Font&  ) const
 }
 
 
-TextAttrib*     SpellErrorAttrib::Clone() const
+std::unique_ptr<TextAttrib> SpellErrorAttrib::Clone() const
 {
-    return new SpellErrorAttrib(*this);
+    return std::unique_ptr<TextAttrib>(new SpellErrorAttrib(*this));
 }
 
 
@@ -64,9 +64,9 @@ void SpellLanguageAttrib::SetFont( vcl::Font&  ) const
 }
 
 
-TextAttrib* SpellLanguageAttrib::Clone() const
+std::unique_ptr<TextAttrib> SpellLanguageAttrib::Clone() const
 {
-    return new SpellLanguageAttrib(*this);
+    return std::unique_ptr<TextAttrib>(new SpellLanguageAttrib(*this));
 }
 
 
@@ -90,9 +90,9 @@ void SpellBackgroundAttrib::SetFont( vcl::Font& rFont ) const
 }
 
 
-TextAttrib* SpellBackgroundAttrib::Clone() const
+std::unique_ptr<TextAttrib> SpellBackgroundAttrib::Clone() const
 {
-    return new SpellBackgroundAttrib(*this);
+    return std::unique_ptr<TextAttrib>(new SpellBackgroundAttrib(*this));
 }
 
 
