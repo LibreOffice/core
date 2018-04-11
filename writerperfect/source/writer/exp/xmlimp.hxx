@@ -114,8 +114,14 @@ public:
     const std::vector<FixedLayoutPage> &GetPageMetafiles() const;
     const css::uno::Reference<css::uno::XComponentContext> &GetComponentContext() const;
 
-    bool GetIsInPageSpan() const { return mbIsInPageSpan; }
-    void SetIsInPageSpan(bool bSet) { mbIsInPageSpan = bSet; }
+    bool GetIsInPageSpan() const
+    {
+        return mbIsInPageSpan;
+    }
+    void SetIsInPageSpan(bool bSet)
+    {
+        mbIsInPageSpan = bSet;
+    }
     void HandlePageSpan(const librevenge::RVNGPropertyList &rPropertyList);
 
     // XDocumentHandler
