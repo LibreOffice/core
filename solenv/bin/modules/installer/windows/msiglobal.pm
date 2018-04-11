@@ -772,7 +772,7 @@ sub create_transforms
 
         if ( $result == 0 )
         {
-            $infoline = "ERROR: Could not remove file $$referencedbname !\n";
+            $infoline = "ERROR while processing language $onelanguage: Could not remove file $referencedbname!\n";
             push( @installer::globals::logfileinfo, $infoline);
             installer::exiter::exit_program($infoline, "create_transforms");
         }
