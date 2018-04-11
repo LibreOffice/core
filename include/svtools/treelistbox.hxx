@@ -153,9 +153,8 @@ public:
                             // If != 0: this Pointer must be used!
                             // If == 0: it needs to be retrieved via the View
                             SvViewDataItem* pViewData = nullptr) = 0;
-    virtual SvLBoxItem* Create() const = 0;
     // View-dependent data is not cloned
-    virtual void        Clone(SvLBoxItem* pSource) = 0;
+    virtual std::unique_ptr<SvLBoxItem> Clone(SvLBoxItem const * pSource) const = 0;
 };
 
 enum class DragDropMode

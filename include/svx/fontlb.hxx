@@ -42,8 +42,7 @@ public:
 
     virtual                     ~SvLBoxFontString() override;
 
-    /** Creates a new empty list box item. */
-    virtual SvLBoxItem*         Create() const override;
+    virtual std::unique_ptr<SvLBoxItem> Clone(SvLBoxItem const * pSource) const override;
 
     void            InitViewData( SvTreeListBox*, SvTreeListEntry*, SvViewDataItem* = nullptr ) override;
 

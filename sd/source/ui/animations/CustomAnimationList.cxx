@@ -202,8 +202,7 @@ public:
     CustomAnimationListEntryItem(const OUString& aDescription,
                                  const CustomAnimationEffectPtr& pEffect, CustomAnimationList* pParent);
     void InitViewData(SvTreeListBox*,SvTreeListEntry*,SvViewDataItem* = nullptr) override;
-    SvLBoxItem* Create() const override;
-    void Clone(SvLBoxItem* pSource) override;
+    virtual std::unique_ptr<SvLBoxItem> Clone(SvLBoxItem const * pSource) const override;
 
     virtual void Paint(const Point&, SvTreeListBox& rDev, vcl::RenderContext& rRenderContext,
                        const SvViewDataEntry* pView,const SvTreeListEntry& rEntry) override;
@@ -328,13 +327,9 @@ void CustomAnimationListEntryItem::Paint(const Point& rPos, SvTreeListBox& rDev,
     rRenderContext.DrawText(aPos, rRenderContext.GetEllipsisString(msEffectName, rDev.GetOutputSizePixel().Width() - aPos.X()));
 }
 
-SvLBoxItem* CustomAnimationListEntryItem::Create() const
+std::unique_ptr<SvLBoxItem> CustomAnimationListEntryItem::Clone(SvLBoxItem const *) const
 {
     return nullptr;
-}
-
-void CustomAnimationListEntryItem::Clone( SvLBoxItem* )
-{
 }
 
 class CustomAnimationListEntry : public SvTreeListEntry
@@ -364,8 +359,7 @@ public:
     explicit        CustomAnimationTriggerEntryItem( const OUString& aDescription );
 
     void            InitViewData( SvTreeListBox*,SvTreeListEntry*,SvViewDataItem* = nullptr ) override;
-    SvLBoxItem*     Create() const override;
-    void            Clone( SvLBoxItem* pSource ) override;
+    virtual std::unique_ptr<SvLBoxItem> Clone(SvLBoxItem const * pSource) const override;
     virtual void Paint(const Point& rPos, SvTreeListBox& rOutDev, vcl::RenderContext& rRenderContext,
                        const SvViewDataEntry* pView, const SvTreeListEntry& rEntry) override;
 
@@ -428,13 +422,9 @@ void CustomAnimationTriggerEntryItem::Paint(const Point& rPos, SvTreeListBox& rD
     rRenderContext.Pop();
 }
 
-SvLBoxItem* CustomAnimationTriggerEntryItem::Create() const
+std::unique_ptr<SvLBoxItem> CustomAnimationTriggerEntryItem::Clone(SvLBoxItem const *) const
 {
     return nullptr;
-}
-
-void CustomAnimationTriggerEntryItem::Clone( SvLBoxItem* )
-{
 }
 
 CustomAnimationList::CustomAnimationList( vcl::Window* pParent )

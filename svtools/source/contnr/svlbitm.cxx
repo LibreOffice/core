@@ -199,14 +199,11 @@ void SvLBoxString::Paint(
     rRenderContext.DrawText(tools::Rectangle(rPos, aSize), maText, nStyle);
 }
 
-SvLBoxItem* SvLBoxString::Create() const
+std::unique_ptr<SvLBoxItem> SvLBoxString::Clone(SvLBoxItem const * pSource) const
 {
-    return new SvLBoxString;
-}
-
-void SvLBoxString::Clone( SvLBoxItem* pSource )
-{
-    maText = static_cast<SvLBoxString*>(pSource)->maText;
+    std::unique_ptr<SvLBoxString> pNew(new SvLBoxString);
+    pNew->maText = static_cast<SvLBoxString const *>(pSource)->maText;
+    return std::unique_ptr<SvLBoxItem>(pNew.release());
 }
 
 void SvLBoxString::InitViewData(
@@ -305,14 +302,11 @@ void SvLBoxButton::Paint(
         rRenderContext.DrawImage(rPos, pData->GetImage(nIndex), nStyle);
 }
 
-SvLBoxItem* SvLBoxButton::Create() const
+std::unique_ptr<SvLBoxItem> SvLBoxButton::Clone(SvLBoxItem const * pSource) const
 {
-    return new SvLBoxButton;
-}
-
-void SvLBoxButton::Clone( SvLBoxItem* pSource )
-{
-    pData = static_cast<SvLBoxButton*>(pSource)->pData;
+    std::unique_ptr<SvLBoxButton> pNew(new SvLBoxButton);
+    pNew->pData = static_cast<SvLBoxButton const *>(pSource)->pData;
+    return std::unique_ptr<SvLBoxItem>(pNew.release());
 }
 
 void SvLBoxButton::ImplAdjustBoxSize(Size& io_rSize, ControlType i_eType, vcl::RenderContext const & rRenderContext)
@@ -442,16 +436,13 @@ void SvLBoxContextBmp::Paint(
     rRenderContext.DrawImage(_rPos, rImage, nStyle);
 }
 
-SvLBoxItem* SvLBoxContextBmp::Create() const
+std::unique_ptr<SvLBoxItem> SvLBoxContextBmp::Clone(SvLBoxItem const * pSource) const
 {
-    return new SvLBoxContextBmp;
-}
-
-void SvLBoxContextBmp::Clone( SvLBoxItem* pSource )
-{
-    m_pImpl->m_aImage1 = static_cast< SvLBoxContextBmp* >( pSource )->m_pImpl->m_aImage1;
-    m_pImpl->m_aImage2 = static_cast< SvLBoxContextBmp* >( pSource )->m_pImpl->m_aImage2;
-    m_pImpl->m_bExpanded = static_cast<SvLBoxContextBmp*>(pSource)->m_pImpl->m_bExpanded;
+    std::unique_ptr<SvLBoxContextBmp> pNew(new SvLBoxContextBmp);
+    pNew->m_pImpl->m_aImage1 = static_cast< SvLBoxContextBmp const * >( pSource )->m_pImpl->m_aImage1;
+    pNew->m_pImpl->m_aImage2 = static_cast< SvLBoxContextBmp const * >( pSource )->m_pImpl->m_aImage2;
+    pNew->m_pImpl->m_bExpanded = static_cast<SvLBoxContextBmp const *>(pSource)->m_pImpl->m_bExpanded;
+    return std::unique_ptr<SvLBoxItem>(pNew.release());
 }
 
 long SvLBoxButtonData::Width()
