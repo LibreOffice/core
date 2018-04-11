@@ -162,7 +162,7 @@ namespace sdr
             CellProperties(const CellProperties& rProps, SdrObject& rObj, sdr::table::Cell* pCell);
 
             // Clone() operator, normally just calls the local copy constructor
-            BaseProperties& Clone(SdrObject& rObj) const override;
+            std::unique_ptr<BaseProperties> Clone(SdrObject& rObj) const override;
 
             void ForceDefaultAttributes() override;
 
@@ -212,10 +212,10 @@ namespace sdr
         {
         }
 
-        BaseProperties& CellProperties::Clone(SdrObject& rObj) const
+        std::unique_ptr<BaseProperties> CellProperties::Clone(SdrObject& rObj) const
         {
             OSL_FAIL("CellProperties::Clone(), does not work yet!");
-            return *(new CellProperties(*this, rObj,nullptr));
+            return std::unique_ptr<BaseProperties>(new CellProperties(*this, rObj,nullptr));
         }
 
         void CellProperties::ForceDefaultAttributes()

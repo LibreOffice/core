@@ -227,9 +227,9 @@ namespace sdr
             ImpRemoveStyleSheet();
         }
 
-        BaseProperties& AttributeProperties::Clone(SdrObject& rObj) const
+        std::unique_ptr<BaseProperties> AttributeProperties::Clone(SdrObject& rObj) const
         {
-            return *(new AttributeProperties(*this, rObj));
+            return std::unique_ptr<BaseProperties>(new AttributeProperties(*this, rObj));
         }
 
         const SfxItemSet& AttributeProperties::GetObjectItemSet() const

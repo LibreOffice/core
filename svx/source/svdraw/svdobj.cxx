@@ -950,7 +950,7 @@ SdrObject& SdrObject::operator=(const SdrObject& rObj)
     // The Clone() method uses the local copy constructor from the individual
     // sdr::properties::BaseProperties class. Since the target class maybe for another
     // draw object, an SdrObject needs to be provided, as in the normal constructor.
-    mpProperties.reset( &rObj.GetProperties().Clone(*this) );
+    mpProperties = rObj.GetProperties().Clone(*this);
 
     pPage = rObj.pPage;
     aOutRect=rObj.aOutRect;

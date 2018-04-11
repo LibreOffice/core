@@ -50,7 +50,7 @@ namespace sdr
             virtual ~PageProperties() override;
 
             // Clone() operator, normally just calls the local copy constructor
-            virtual BaseProperties& Clone(SdrObject& rObj) const override;
+            virtual std::unique_ptr<BaseProperties> Clone(SdrObject& rObj) const override;
 
             // get itemset. Override here to allow creating the empty itemset
             // without asserting

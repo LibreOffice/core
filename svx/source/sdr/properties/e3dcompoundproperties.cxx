@@ -41,9 +41,9 @@ namespace sdr
         {
         }
 
-        BaseProperties& E3dCompoundProperties::Clone(SdrObject& rObj) const
+        std::unique_ptr<BaseProperties> E3dCompoundProperties::Clone(SdrObject& rObj) const
         {
-            return *(new E3dCompoundProperties(*this, rObj));
+            return std::unique_ptr<BaseProperties>(new E3dCompoundProperties(*this, rObj));
         }
 
         const SfxItemSet& E3dCompoundProperties::GetMergedItemSet() const

@@ -44,9 +44,9 @@ namespace sdr
         {
         }
 
-        BaseProperties& E3dSceneProperties::Clone(SdrObject& rObj) const
+        std::unique_ptr<BaseProperties> E3dSceneProperties::Clone(SdrObject& rObj) const
         {
-            return *(new E3dSceneProperties(*this, rObj));
+            return std::unique_ptr<BaseProperties>(new E3dSceneProperties(*this, rObj));
         }
 
         const SfxItemSet& E3dSceneProperties::GetMergedItemSet() const

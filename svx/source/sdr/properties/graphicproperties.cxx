@@ -64,9 +64,9 @@ namespace sdr
         {
         }
 
-        BaseProperties& GraphicProperties::Clone(SdrObject& rObj) const
+        std::unique_ptr<BaseProperties> GraphicProperties::Clone(SdrObject& rObj) const
         {
-            return *(new GraphicProperties(*this, rObj));
+            return std::unique_ptr<BaseProperties>(new GraphicProperties(*this, rObj));
         }
 
         void GraphicProperties::ItemSetChanged(const SfxItemSet& rSet)
