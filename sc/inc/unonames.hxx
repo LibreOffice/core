@@ -559,6 +559,7 @@
 #define SC_UNO_PRINTERSETUP         "PrinterSetup"
 #define SC_UNO_PRINTERPAPER         "PrinterPaperFromSetup"
 #define SC_UNO_APPLYDOCINF          "ApplyUserData"
+#define SC_UNO_SAVE_THUMBNAIL       "SaveThumbnail"
 #define SC_UNO_CHARCOMP             "CharacterCompressionType"
 #define SC_UNO_ASIANKERN            "IsKernAsianPunctuation"
 #define SC_UNO_VISAREA              "VisibleArea"

@@ -214,6 +214,7 @@ enum SmModelPropertyHandles
     HANDLE_PRINTER_NAME,
     HANDLE_PRINTER_SETUP,
     HANDLE_SYMBOLS,
+    HANDLE_SAVE_THUMBNAIL,
     HANDLE_USED_SYMBOLS,
     HANDLE_BASIC_LIBRARIES,
     HANDLE_RUNTIME_UID,
@@ -286,15 +287,16 @@ static rtl::Reference<PropertySetInfo> lcl_createModelPropertyInfo ()
         { OUString("RelativeSymbolPrimaryHeight")      , HANDLE_RELATIVE_SYMBOL_PRIMARY_HEIGHT     ,  ::cppu::UnoType<sal_Int16>::get(),                                     PROPERTY_NONE,  DIS_ORNAMENTSIZE      },
         { OUString("RelativeUpperLimitDistance")       , HANDLE_RELATIVE_UPPER_LIMIT_DISTANCE      ,  ::cppu::UnoType<sal_Int16>::get(),                                     PROPERTY_NONE,  DIS_UPPERLIMIT        },
         { OUString("RightMargin")                      , HANDLE_RIGHT_MARGIN                       ,  ::cppu::UnoType<sal_Int16>::get(),                                     PROPERTY_NONE,  DIS_RIGHTSPACE        },
-        { OUString("RuntimeUID")                       , HANDLE_RUNTIME_UID                        ,  cppu::UnoType<OUString>::get(),                      PropertyAttribute::READONLY,  0       },
-        { OUString("Symbols")                          , HANDLE_SYMBOLS                            ,  cppu::UnoType<Sequence < SymbolDescriptor >>::get(),                PROPERTY_NONE,  0                     },
-        { OUString("UserDefinedSymbolsInUse")          , HANDLE_USED_SYMBOLS                       ,  cppu::UnoType<Sequence < SymbolDescriptor >>::get(),                PropertyAttribute::READONLY,  0       },
+        { OUString("RuntimeUID")                       , HANDLE_RUNTIME_UID                        ,  cppu::UnoType<OUString>::get(),                                        PropertyAttribute::READONLY,  0       },
+        { OUString("SaveThumbnail")                    , HANDLE_SAVE_THUMBNAIL                     ,  cppu::UnoType<bool>::get(),                                            PROPERTY_NONE,  0                     },
+        { OUString("Symbols")                          , HANDLE_SYMBOLS                            ,  cppu::UnoType<Sequence < SymbolDescriptor >>::get(),                   PROPERTY_NONE,  0                     },
+        { OUString("UserDefinedSymbolsInUse")          , HANDLE_USED_SYMBOLS                       ,  cppu::UnoType<Sequence < SymbolDescriptor >>::get(),                   PropertyAttribute::READONLY,  0       },
         { OUString("TopMargin")                        , HANDLE_TOP_MARGIN                         ,  ::cppu::UnoType<sal_Int16>::get(),                                     PROPERTY_NONE,  DIS_TOPSPACE          },
         // #i33095# Security Options
-        { OUString("LoadReadonly")                     , HANDLE_LOAD_READONLY                      ,  cppu::UnoType<bool>::get(),                                                 PROPERTY_NONE,  0                     },
+        { OUString("LoadReadonly")                     , HANDLE_LOAD_READONLY                      ,  cppu::UnoType<bool>::get(),                                            PROPERTY_NONE,  0                     },
         // #i972#
         { OUString("BaseLine")                         , HANDLE_BASELINE                           ,  ::cppu::UnoType<sal_Int16>::get(),                                     PROPERTY_NONE,  0                     },
-        { OUString("InteropGrabBag")                   , HANDLE_INTEROP_GRAB_BAG                   ,  cppu::UnoType<uno::Sequence< beans::PropertyValue >>::get(),       PROPERTY_NONE,  0                     },
+        { OUString("InteropGrabBag")                   , HANDLE_INTEROP_GRAB_BAG                   ,  cppu::UnoType<uno::Sequence< beans::PropertyValue >>::get(),           PROPERTY_NONE,  0                     },
         { OUString(), 0, css::uno::Type(), 0, 0 }
     };
     return rtl::Reference<PropertySetInfo>( new PropertySetInfo ( aModelPropertyInfoMap ) );
@@ -668,6 +670,15 @@ void SmModel::_setPropertyValues(const PropertyMapEntry** ppEntries, const Any* 
             case HANDLE_INTEROP_GRAB_BAG:
                 setGrabBagItem(*pValues);
             break;
+            case HANDLE_SAVE_THUMBNAIL:
+            {
+                if ((*pValues).getValueType() != cppu::UnoType<bool>::get())
+                    throw IllegalArgumentException();
+                bool bThumbnail = false;
+                if (*pValues >>= bThumbnail)
+                    pDocSh->SetUseThumbnailSave(bThumbnail);
+            }
+            break;
         }
     }
 
@@ -881,6 +892,11 @@ void SmModel::_getPropertyValues( const PropertyMapEntry **ppEntries, Any *pValu
             }
             case HANDLE_INTEROP_GRAB_BAG:
                 getGrabBagItem(*pValue);
+            break;
+            case HANDLE_SAVE_THUMBNAIL:
+            {
+                *pValue <<= pDocSh->IsUseThumbnailSave();
+            }
             break;
         }
     }

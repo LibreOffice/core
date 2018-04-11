@@ -71,7 +71,8 @@ static const SfxItemPropertyMapEntry* lcl_GetConfigPropertyMap()
         {OUString(SC_UNO_PRINTERNAME),  0,  cppu::UnoType<OUString>::get(),    0, 0},
         {OUString(SC_UNO_PRINTERSETUP), 0,  cppu::UnoType<uno::Sequence<sal_Int8>>::get(), 0, 0},
         {OUString(SC_UNO_PRINTERPAPER), 0,  cppu::UnoType<bool>::get(),              0, 0},
-        {OUString(SC_UNO_APPLYDOCINF),  0,  cppu::UnoType<bool>::get(),              0, 0},
+        {OUString(SC_UNO_APPLYDOCINF),  0,  cppu::UnoType<bool>::get(),              0, 0 },
+        {OUString(SC_UNO_SAVE_THUMBNAIL),  0,  cppu::UnoType<bool>::get(),              0, 0 },
         {OUString(SC_UNO_FORBIDDEN),    0,  cppu::UnoType<i18n::XForbiddenCharacters>::get(), beans::PropertyAttribute::READONLY, 0},
         {OUString(SC_UNO_CHARCOMP),     0,  cppu::UnoType<sal_Int16>::get(),        0, 0},
         {OUString(SC_UNO_ASIANKERN),    0,  cppu::UnoType<bool>::get(),              0, 0},
@@ -271,6 +272,12 @@ void SAL_CALL ScDocumentConfiguration::setPropertyValue(
         bool bTmp=true;
         if ( aValue >>= bTmp )
             pDocShell->SetUseUserData( bTmp );
+    }
+    else if ( aPropertyName == SC_UNO_SAVE_THUMBNAIL)
+    {
+        bool bTmp = true;
+        if (aValue >>= bTmp)
+            pDocShell->SetUseThumbnailSave( bTmp );
     }
     else if ( aPropertyName == SC_UNO_FORBIDDEN )
     {
@@ -492,6 +499,8 @@ uno::Any SAL_CALL ScDocumentConfiguration::getPropertyValue( const OUString& aPr
     }
     else if ( aPropertyName == SC_UNO_APPLYDOCINF )
         aRet <<= pDocShell->IsUseUserData();
+    else if ( aPropertyName == SC_UNO_SAVE_THUMBNAIL )
+        aRet <<= pDocShell->IsUseThumbnailSave();
     else if ( aPropertyName == SC_UNO_FORBIDDEN )
     {
         aRet <<= uno::Reference<i18n::XForbiddenCharacters>(new ScForbiddenCharsObj( pDocShell ));
