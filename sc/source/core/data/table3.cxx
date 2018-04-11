@@ -2313,6 +2313,18 @@ class QueryEvaluator
         return (rEntry.eOp == SC_LESS_EQUAL || rEntry.eOp == SC_GREATER_EQUAL);
     }
 
+    void setupTransliteratorIfNeeded()
+    {
+        if (!mpTransliteration)
+            mpTransliteration = mrParam.bCaseSens ? ScGlobal::GetCaseTransliteration() : ScGlobal::GetpTransliteration();
+    }
+
+    void setupCollatorIfNeeded()
+    {
+        if (!mpCollator)
+            mpCollator = mrParam.bCaseSens ? ScGlobal::GetCaseCollator() : ScGlobal::GetCollator();
+    }
+
 public:
     QueryEvaluator(ScDocument& rDoc, const ScTable& rTab, const ScQueryParam& rParam,
                    const bool* pTestEqualCondition) :
@@ -2321,19 +2333,11 @@ public:
         mrTab(rTab),
         mrParam(rParam),
         mpTestEqualCondition(pTestEqualCondition),
+        mpTransliteration(nullptr),
+        mpCollator(nullptr),
         mbMatchWholeCell(rDoc.GetDocOptions().IsMatchWholeCell()),
         mbCaseSensitive( rParam.bCaseSens )
     {
-        if (rParam.bCaseSens)
-        {
-            mpTransliteration = ScGlobal::GetCaseTransliteration();
-            mpCollator = ScGlobal::GetCaseCollator();
-        }
-        else
-        {
-            mpTransliteration = ScGlobal::GetpTransliteration();
-            mpCollator = ScGlobal::GetCollator();
-        }
     }
 
     bool isQueryByValue(
@@ -2619,6 +2623,7 @@ public:
                     {
                         OUString aQueryStr = rItem.maString.getString();
                         const LanguageType nLang = ScGlobal::pSysLocale->GetLanguageTag().getLanguageType();
+                        setupTransliteratorIfNeeded();
                         OUString aCell( mpTransliteration->transliterate(
                                             rCellStr.getString(), nLang, 0, rCellStr.getLength(),
                                             nullptr ) );
@@ -2666,6 +2671,7 @@ public:
             }
             else
             {   // use collator here because data was probably sorted
+                setupCollatorIfNeeded();
                 sal_Int32 nCompare = mpCollator->compareString(
                     rCellStr.getString(), rItem.maString.getString());
                 switch (rEntry.eOp)
