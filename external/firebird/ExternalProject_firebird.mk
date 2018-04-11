@@ -30,7 +30,7 @@ ifeq ($(COM_IS_CLANG),TRUE)
 firebird_NO_CXX11_NARROWING := -Wno-c++11-narrowing
 endif
 
-MAKE_PRE=$(call gb_Helper_extend_ld_path,$(call gb_UnpackedTarball_get_dir,icu)/source/lib) LC_ALL=C
+MAKE_PRE=LC_ALL=C
 
 MAKE_POST=$(if $(filter MACOSX,$(OS)),&& $(PERL) \
 			$(SRCDIR)/solenv/bin/macosx-change-install-names.pl shl OOO \
@@ -97,9 +97,9 @@ $(call gb_ExternalProject_get_state_target,firebird,build):
 							'<' 101200)), \
 					ac_cv_func_clock_gettime=no)) \
 		&& if [ -n "$${FB_CPU_ARG}" ]; then \
-			   $(MAKE_PRE) $(MAKE) $(if $(ENABLE_DEBUG),Debug) $(INVOKE_FPA) SHELL='$(SHELL)' $(MAKE_POST); \
+			   $(MAKE_PRE) $(MAKE) $(if $(ENABLE_DEBUG),Debug) $(INVOKE_FPA) SHELL='$(SHELL)' LIBO_TUNNEL_LIBRARY_PATH='$(subst ','\'',$(subst $$,$$$$,$(call gb_Helper_extend_ld_path,$(call gb_UnpackedTarball_get_dir,icu)/source/lib)))' $(MAKE_POST); \
 			else \
-			   $(MAKE_PRE) $(MAKE) $(if $(ENABLE_DEBUG),Debug) SHELL='$(SHELL)' $(MAKE_POST); \
+			   $(MAKE_PRE) $(MAKE) $(if $(ENABLE_DEBUG),Debug) SHELL='$(SHELL)' LIBO_TUNNEL_LIBRARY_PATH='$(subst ','\'',$(subst $$,$$$$,$(call gb_Helper_extend_ld_path,$(call gb_UnpackedTarball_get_dir,icu)/source/lib)))' $(MAKE_POST); \
 			fi \
 	)
 # vim: set noet sw=4 ts=4:
