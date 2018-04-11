@@ -183,6 +183,15 @@
  			jumpLength = jumpNode.length + jumpNode.prefix;
  
  			// Check if this could be our split point (if we need to split)
+@@ -5391,7 +5391,7 @@
+ 	// First, store needed data for beforeInsertNode into tempData.
+ 	HalfStaticArray<UCHAR, MAX_KEY> tempBuf;
+ 	UCHAR* tempData = tempBuf.getBuffer(newLength);
+-	memcpy(tempData, beforeInsertNode.data + newPrefix - beforeInsertNode.prefix, newLength);
++	if (newLength != 0) memcpy(tempData, beforeInsertNode.data + newPrefix - beforeInsertNode.prefix, newLength);
+ 
+ 	beforeInsertNode.prefix = newPrefix;
+ 	beforeInsertNode.length = newLength;
 @@ -5611,7 +5611,7 @@
  			for (size_t i = 0; i < jumpNodes->getCount(); i++, index++)
  			{
