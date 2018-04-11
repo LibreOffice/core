@@ -410,7 +410,6 @@ void SwHTMLWrtTable::OutTableCell( SwHTMLWriter& rWrt,
     if( !pBrushItem )
         pBrushItem = pCell->GetBackground();
 
-    // Start writing the style attribute.
     if( pBrushItem )
     {
         // output background
@@ -419,14 +418,10 @@ void SwHTMLWrtTable::OutTableCell( SwHTMLWriter& rWrt,
             rWrt.OutBackground( pBrushItem, false );
 
         if( rWrt.m_bCfgOutStyles )
-            OutCSS1_TableBGStyleOpt( rWrt, *pBrushItem, /*bClose=*/false );
+            OutCSS1_TableBGStyleOpt( rWrt, *pBrushItem );
     }
 
-    rWrt.OutCSS1_TableCellBorderHack(*pBox->GetFrameFormat(), /*bClose=*/false);
-
-    // Now is the time to end the style attribute.
-    if (!rWrt.m_bFirstCSS1Property)
-        rWrt.Strm().WriteChar('\"');
+    rWrt.OutCSS1_TableCellBorderHack(*pBox->GetFrameFormat());
 
     sal_uInt32 nNumFormat = 0;
     double nValue = 0.0;
@@ -530,7 +525,7 @@ void SwHTMLWrtTable::OutTableCells( SwHTMLWriter& rWrt,
         rWrt.m_bTextAttr = false;
         rWrt.m_bOutOpts = true;
         if( rWrt.m_bCfgOutStyles )
-            OutCSS1_TableBGStyleOpt( rWrt, *pBrushItem, /*bClose=*/true );
+            OutCSS1_TableBGStyleOpt( rWrt, *pBrushItem );
     }
 
     if( text::VertOrientation::TOP==eRowVertOri || text::VertOrientation::BOTTOM==eRowVertOri )
