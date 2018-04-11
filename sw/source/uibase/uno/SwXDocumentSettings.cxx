@@ -78,6 +78,7 @@ enum SwDocumentSettingsPropertyHandles
     HANDLE_IS_KERN_ASIAN_PUNCTUATION,
     HANDLE_CHARACTER_COMPRESSION_TYPE,
     HANDLE_APPLY_USER_DATA,
+    HANDLE_SAVE_THUMBNAIL,
     HANDLE_SAVE_GLOBAL_DOCUMENT_LINKS,
     HANDLE_CURRENT_DATABASE_DATA_SOURCE,
     HANDLE_CURRENT_DATABASE_COMMAND,
@@ -154,7 +155,8 @@ static MasterPropertySetInfo * lcl_createSettingsInfo()
         { OUString("PrinterPaperFromSetup"),      HANDLE_PRINTER_PAPER,                   cppu::UnoType<bool>::get(),           0},
         { OUString("IsKernAsianPunctuation"),     HANDLE_IS_KERN_ASIAN_PUNCTUATION,       cppu::UnoType<bool>::get(),           0},
         { OUString("CharacterCompressionType"),   HANDLE_CHARACTER_COMPRESSION_TYPE,      cppu::UnoType<sal_Int16>::get(),             0},
-        { OUString("ApplyUserData"),              HANDLE_APPLY_USER_DATA,                 cppu::UnoType<bool>::get(),           0},
+        { OUString("ApplyUserData"),              HANDLE_APPLY_USER_DATA,                 cppu::UnoType<bool>::get(),           0 },
+        { OUString("SaveThumbnail"),              HANDLE_SAVE_THUMBNAIL,                  cppu::UnoType<bool>::get(),           0 },
         { OUString("SaveGlobalDocumentLinks"),    HANDLE_SAVE_GLOBAL_DOCUMENT_LINKS,      cppu::UnoType<bool>::get(),           0},
         { OUString("CurrentDatabaseDataSource"),  HANDLE_CURRENT_DATABASE_DATA_SOURCE,    cppu::UnoType<OUString>::get(),          0},
         { OUString("CurrentDatabaseCommand"),     HANDLE_CURRENT_DATABASE_COMMAND,        cppu::UnoType<OUString>::get(),          0},
@@ -479,7 +481,12 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
         break;
         case HANDLE_APPLY_USER_DATA:
         {
-            mpDocSh->SetUseUserData( *o3tl::doAccess<bool>(rValue) );
+            mpDocSh->SetUseUserData(*o3tl::doAccess<bool>(rValue));
+        }
+        break;
+        case HANDLE_SAVE_THUMBNAIL:
+        {
+            mpDocSh->SetUseThumbnailSave(*o3tl::doAccess<bool>(rValue));
         }
         break;
         case HANDLE_SAVE_GLOBAL_DOCUMENT_LINKS:
@@ -998,6 +1005,11 @@ void SwXDocumentSettings::_getSingleValue( const comphelper::PropertyInfo & rInf
         case HANDLE_APPLY_USER_DATA:
         {
             rValue <<= mpDocSh->IsUseUserData();
+        }
+        break;
+        case HANDLE_SAVE_THUMBNAIL:
+        {
+            rValue <<= mpDocSh->IsUseThumbnailSave();
         }
         break;
         case HANDLE_CHARACTER_COMPRESSION_TYPE:
