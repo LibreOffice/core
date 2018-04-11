@@ -88,7 +88,7 @@ class TextAPIEditSource : public SvxEditSource
     // refcounted
     std::shared_ptr<TextAPIEditSource_Impl> m_xImpl;
 
-    virtual SvxEditSource*      Clone() const override;
+    virtual std::unique_ptr<SvxEditSource> Clone() const override;
     virtual SvxTextForwarder*   GetTextForwarder() override;
     virtual void                UpdateData() override;
     explicit            TextAPIEditSource( const TextAPIEditSource& rSource );
@@ -186,9 +186,9 @@ TextAPIEditSource::TextAPIEditSource(const TextAPIEditSource& rSource)
 {
 }
 
-SvxEditSource* TextAPIEditSource::Clone() const
+std::unique_ptr<SvxEditSource> TextAPIEditSource::Clone() const
 {
-    return new TextAPIEditSource( *this );
+    return std::unique_ptr<SvxEditSource>(new TextAPIEditSource( *this ));
 }
 
 void TextAPIEditSource::UpdateData()

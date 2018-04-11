@@ -59,7 +59,7 @@ public:
     virtual                 ~SvxEditSource();
 
     /// Returns a new reference to the same object. This is a shallow copy
-    virtual SvxEditSource*      Clone() const = 0;
+    virtual std::unique_ptr<SvxEditSource> Clone() const = 0;
 
     /** Query the text forwarder
 

@@ -56,7 +56,7 @@ namespace accessibility
         virtual ~AccessibleOutlineEditSource() override;
 
         /// This method is disabled and always returns NULL
-        virtual SvxEditSource*          Clone() const override;
+        virtual std::unique_ptr<SvxEditSource> Clone() const override;
         virtual SvxTextForwarder*       GetTextForwarder() override;
         virtual SvxViewForwarder*       GetViewForwarder() override;
         virtual SvxEditViewForwarder*   GetEditViewForwarder( bool bCreate = false ) override;
