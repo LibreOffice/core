@@ -93,6 +93,7 @@ class VCL_DLLPUBLIC SvpSalGraphics : public SalGraphics
 public:
     static GlyphCache& getPlatformGlyphCache();
     void setSurface(cairo_surface_t* pSurface, const basegfx::B2IVector& rSize);
+    cairo_surface_t* getSurface() const { return m_pSurface; }
     static cairo_user_data_key_t* getDamageKey();
 
 private:

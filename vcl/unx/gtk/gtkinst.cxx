@@ -331,7 +331,7 @@ SalVirtualDevice* GtkInstance::CreateVirtualDevice( SalGraphics *pG,
     (void) pGd;
     SvpSalGraphics *pSvpSalGraphics = dynamic_cast<SvpSalGraphics*>(pG);
     assert(pSvpSalGraphics);
-    SvpSalVirtualDevice* pNew = new SvpSalVirtualDevice(eFormat, pSvpSalGraphics->getScale());
+    SvpSalVirtualDevice* pNew = new SvpSalVirtualDevice(eFormat, pSvpSalGraphics->getScale(), pSvpSalGraphics->getSurface());
     pNew->SetSize( nDX, nDY );
     return pNew;
 #else

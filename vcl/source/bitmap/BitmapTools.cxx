@@ -235,8 +235,8 @@ BitmapEx* CreateFromCairoSurface(Size aSize, cairo_surface_t * pSurface)
 {
     // FIXME: if we could teach VCL/ about cairo handles, life could
     // be significantly better here perhaps.
-    cairo_surface_t *pPixels = cairo_image_surface_create( CAIRO_FORMAT_ARGB32,
-                                              aSize.Width(), aSize.Height() );
+    cairo_surface_t *pPixels = cairo_surface_create_similar_image(pSurface, CAIRO_FORMAT_ARGB32,
+                                              aSize.Width(), aSize.Height());
     cairo_t *pCairo = cairo_create( pPixels );
     if( !pPixels || !pCairo || cairo_status(pCairo) != CAIRO_STATUS_SUCCESS )
         return nullptr;
