@@ -295,7 +295,7 @@ SdrObject::SdrObject(SdrModel& rSdrModel)
     ,pUserCall(nullptr)
     ,pPlusData(nullptr)
     ,mpImpl(new Impl)
-    ,pObjList(nullptr)
+    ,mpParentOfSdrObject(nullptr)
     ,nOrdNum(0)
     ,pGrabBagItem(nullptr)
     ,mnNavigationPosition(SAL_MAX_UINT32)
@@ -401,14 +401,19 @@ void SdrObject::SetRectsDirty(bool bNotMyself)
         SetBoundRectDirty();
         bSnapRectDirty=true;
     }
-    if (pObjList!=nullptr) {
-        pObjList->SetRectsDirty();
+
+    if (nullptr != getParentOfSdrObject())
+    {
+        getParentOfSdrObject()->SetRectsDirty();
     }
 }
 
-void SdrObject::SetObjList(SdrObjList* pNewObjList)
+void SdrObject::setParentOfSdrObject(SdrObjList* pNewObjList)
 {
-    pObjList=pNewObjList;
+    if(getParentOfSdrObject() != pNewObjList)
+    {
+        mpParentOfSdrObject = pNewObjList;
+    }
 }
 
 
@@ -623,7 +628,7 @@ SdrObjList* SdrObject::GetSubList() const
 
 SdrObject* SdrObject::GetUpGroup() const
 {
-    return pObjList!=nullptr ? pObjList->GetOwnerObj() : nullptr;
+    return nullptr != getParentOfSdrObject() ? getParentOfSdrObject()->GetOwnerObj() : nullptr;
 }
 
 void SdrObject::SetName(const OUString& rStr)
@@ -760,9 +765,11 @@ OUString SdrObject::GetDescription() const
 
 sal_uInt32 SdrObject::GetOrdNum() const
 {
-    if (pObjList!=nullptr) {
-        if (pObjList->IsObjOrdNumsDirty()) {
-            pObjList->RecalcObjOrdNums();
+    if (nullptr != getParentOfSdrObject())
+    {
+        if (getParentOfSdrObject()->IsObjOrdNumsDirty())
+        {
+            getParentOfSdrObject()->RecalcObjOrdNums();
         }
     } else const_cast<SdrObject*>(this)->nOrdNum=0;
     return nOrdNum;
@@ -795,7 +802,7 @@ void SdrObject::SetGrabBagItem(const css::uno::Any& rVal)
 
 sal_uInt32 SdrObject::GetNavigationPosition()
 {
-    if (pObjList!=nullptr && pObjList->RecalcNavigationPositions())
+    if (nullptr != getParentOfSdrObject() && getParentOfSdrObject()->RecalcNavigationPositions())
     {
         return mnNavigationPosition;
     }
@@ -2652,8 +2659,10 @@ void SdrObject::SendUserCall(SdrUserCallType eUserCall, const tools::Rectangle& 
 {
     SdrObject* pGroup = nullptr;
 
-    if( pObjList && pObjList->GetListKind() == SdrObjListKind::GroupObj )
-        pGroup = pObjList->GetOwnerObj();
+    if(nullptr != getParentOfSdrObject() && SdrObjListKind::GroupObj == getParentOfSdrObject()->GetListKind())
+    {
+        pGroup = getParentOfSdrObject()->GetOwnerObj();
+    }
 
     if ( pUserCall )
     {
@@ -2699,12 +2708,16 @@ void SdrObject::SendUserCall(SdrUserCallType eUserCall, const tools::Rectangle& 
             pGroup->GetUserCall()->Changed( *this, eChildUserType, rBoundRect );
         }
 
-        if( pGroup->GetObjList()                                       &&
-            pGroup->GetObjList()->GetListKind() == SdrObjListKind::GroupObj &&
-            pGroup != pObjList->GetOwnerObj() )
-            pGroup = pObjList->GetOwnerObj();
+        if( pGroup->getParentOfSdrObject()                                       &&
+            pGroup->getParentOfSdrObject()->GetListKind() == SdrObjListKind::GroupObj &&
+            pGroup != getParentOfSdrObject()->GetOwnerObj() )
+        {
+            pGroup = getParentOfSdrObject()->GetOwnerObj();
+        }
         else
+        {
             pGroup = nullptr;
+        }
     }
 
     // notify our UNO shape listeners
