@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:meta="urn:oasis:names:tc:opendocument:xmlns:meta:1.0" xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" xmlns:chart="urn:oasis:names:tc:opendocument:xmlns:chart:1.0" xmlns:dr3d="urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0" xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:form="urn:oasis:names:tc:opendocument:xmlns:form:1.0" xmlns:script="urn:oasis:names:tc:opendocument:xmlns:script:1.0" xmlns:config="urn:oasis:names:tc:opendocument:xmlns:config:1.0" xmlns:ooo="http://openoffice.org/2004/office" xmlns:ooow="http://openoffice.org/2004/writer" xmlns:oooc="http://openoffice.org/2004/calc" xmlns:dom="http://www.w3.org/2001/xml-events" xmlns:xforms="http://www.w3.org/2002/xforms" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:rpt="http://openoffice.org/2005/report" xmlns:of="urn:oasis:names:tc:opendocument:xmlns:of:1.2" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:grddl="http://www.w3.org/2003/g/data-view#" xmlns:officeooo="http://openoffice.org/2009/office" xmlns:tableooo="http://openoffice.org/2009/table" xmlns:drawooo="http://openoffice.org/2010/draw" xmlns:calcext="urn:org:documentfoundation:names:experimental:calc:xmlns:calcext:1.0" xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0" xmlns:field="urn:openoffice:names:experimental:ooo-ms-interop:xmlns:field:1.0" xmlns:formx="urn:openoffice:names:experimental:ooxml-odf-interop:xmlns:form:1.0" xmlns:css3t="http://www.w3.org/TR/css3-text/" office:version="1.2" office:mimetype="application/vnd.oasis.opendocument.text">
+ <office:font-face-decls>
+  <style:font-face style:name="Wingdings" svg:font-family="Wingdings" style:font-pitch="variable" style:font-charset="x-symbol"/>
+  <style:font-face style:name="Symbol" svg:font-family="Symbol" style:font-family-generic="roman" style:font-pitch="variable" style:font-charset="x-symbol"/>
+  <style:font-face style:name="Arial" svg:font-family="Arial"/>
+  <style:font-face style:name="Scala-Regular" svg:font-family="Scala-Regular"/>
+  <style:font-face style:name="ScalaPro-Regular" svg:font-family="ScalaPro-Regular"/>
+  <style:font-face style:name="StarSymbol" svg:font-family="StarSymbol"/>
+  <style:font-face style:name="Courier New" svg:font-family="&apos;Courier New&apos;" style:font-family-generic="modern"/>
+  <style:font-face style:name="ScalaPro-Bold" svg:font-family="ScalaPro-Bold" style:font-family-generic="roman"/>
+  <style:font-face style:name="Arial4" svg:font-family="Arial, Arial" style:font-family-generic="swiss"/>
+  <style:font-face style:name="Arial1" svg:font-family="Arial" style:font-family-generic="swiss" style:font-pitch="variable"/>
+  <style:font-face style:name="Arial2" svg:font-family="Arial" style:font-adornments="Fett" style:font-family-generic="swiss" style:font-pitch="variable"/>
+  <style:font-face style:name="Arial3" svg:font-family="Arial" style:font-adornments="Standard" style:font-family-generic="swiss" style:font-pitch="variable"/>
+  <style:font-face style:name="Arial Unicode MS" svg:font-family="&apos;Arial Unicode MS&apos;" style:font-family-generic="swiss" style:font-pitch="variable"/>
+  <style:font-face style:name="DejaVu Sans" svg:font-family="&apos;DejaVu Sans&apos;" style:font-family-generic="system" style:font-pitch="variable"/>
+ </office:font-face-decls>
+ <office:styles>
+  <style:default-style style:family="graphic">
+   <style:graphic-properties svg:stroke-color="#000000" draw:fill-color="#99ccff" fo:wrap-option="no-wrap" draw:shadow-offset-x="0.3cm" draw:shadow-offset-y="0.3cm" draw:start-line-spacing-horizontal="0.283cm" draw:start-line-spacing-vertical="0.283cm" draw:end-line-spacing-horizontal="0.283cm" draw:end-line-spacing-vertical="0.283cm" style:flow-with-text="false"/>
+   <style:paragraph-properties style:text-autospace="ideograph-alpha" style:line-break="strict" style:font-independent-line-spacing="false">
+    <style:tab-stops/>
+   </style:paragraph-properties>
+   <style:text-properties style:use-window-font-color="true" style:font-name="Arial" fo:font-size="11pt" fo:language="de" fo:country="DE" style:letter-kerning="true" style:font-name-asian="DejaVu Sans" style:font-size-asian="12pt" style:language-asian="zh" style:country-asian="CN" style:font-name-complex="DejaVu Sans" style:font-size-complex="12pt" style:language-complex="hi" style:country-complex="IN"/>
+  </style:default-style>
+  <style:default-style style:family="paragraph">
+   <style:paragraph-properties fo:hyphenation-ladder-count="no-limit" style:text-autospace="ideograph-alpha" style:punctuation-wrap="hanging" style:line-break="strict" style:tab-stop-distance="1.251cm" style:writing-mode="page"/>
+   <style:text-properties style:use-window-font-color="true" style:font-name="Arial" fo:font-size="11pt" fo:language="de" fo:country="DE" style:letter-kerning="true" style:font-name-asian="DejaVu Sans" style:font-size-asian="12pt" style:language-asian="zh" style:country-asian="CN" style:font-name-complex="DejaVu Sans" style:font-size-complex="12pt" style:language-complex="hi" style:country-complex="IN" fo:hyphenate="false" fo:hyphenation-remain-char-count="2" fo:hyphenation-push-char-count="2"/>
+  </style:default-style>
+  <style:default-style style:family="table">
+   <style:table-properties table:border-model="collapsing"/>
+  </style:default-style>
+  <style:default-style style:family="table-row">
+   <style:table-row-properties fo:keep-together="auto"/>
+  </style:default-style>
+  <style:style style:name="Standard" style:family="paragraph" style:class="text"/>
+  <style:style style:name="Text_20_body" style:display-name="Text body" style:family="paragraph" style:parent-style-name="Standard" style:class="text">
+   <style:paragraph-properties fo:margin-top="0cm" fo:margin-bottom="0.212cm" loext:contextual-spacing="false"/>
+  </style:style>
+  <style:style style:name="RGUgliederung" style:family="paragraph" style:parent-style-name="Standard" style:list-style-name="WW8Num6">
+   <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.529cm" loext:contextual-spacing="false" style:line-height-at-least="0.529cm" fo:text-indent="0cm" style:auto-text-indent="false" style:text-autospace="none" style:punctuation-wrap="simple" style:vertical-align="baseline">
+    <style:tab-stops>
+     <style:tab-stop style:position="0.751cm"/>
+     <style:tab-stop style:position="16.277cm"/>
+    </style:tab-stops>
+   </style:paragraph-properties>
+   <style:text-properties style:font-size-complex="10pt"/>
+  </style:style>
+  <style:style style:name="Bullet_20_Symbols" style:display-name="Bullet Symbols" style:family="text">
+   <style:text-properties style:font-name="StarSymbol" fo:font-family="StarSymbol" fo:font-size="9pt" style:font-name-asian="StarSymbol" style:font-family-asian="StarSymbol" style:font-size-asian="9pt" style:font-name-complex="StarSymbol" style:font-family-complex="StarSymbol" style:font-size-complex="9pt"/>
+  </style:style>
+  <style:style style:name="WW8Num6z1" style:family="text">
+   <style:text-properties style:font-name="Courier New" fo:font-family="&apos;Courier New&apos;" style:font-family-generic="modern"/>
+  </style:style>
+  <style:style style:name="WW8Num6z0" style:family="text">
+   <style:text-properties style:font-name="Wingdings" fo:font-family="Wingdings" style:font-pitch="variable" style:font-charset="x-symbol"/>
+  </style:style>
+  <style:style style:name="WW8Num6z3" style:family="text">
+   <style:text-properties style:font-name="Symbol" fo:font-family="Symbol" style:font-family-generic="roman" style:font-pitch="variable" style:font-charset="x-symbol"/>
+  </style:style>
+  <style:style style:name="Graphics" style:family="graphic">
+   <style:graphic-properties text:anchor-type="paragraph" svg:x="0cm" svg:y="0cm" style:wrap="none" style:vertical-pos="top" style:vertical-rel="paragraph" style:horizontal-pos="center" style:horizontal-rel="paragraph"/>
+  </style:style>
+  <text:list-style style:name="WW8Num6" text:consecutive-numbering="true">
+   <text:list-level-style-bullet text:level="1" text:style-name="Bullet_20_Symbols" text:bullet-char="•">
+    <style:list-level-properties text:space-before="0.635cm" text:min-label-width="0.635cm"/>
+    <style:text-properties fo:font-family="StarSymbol" style:font-charset="x-symbol"/>
+   </text:list-level-style-bullet>
+   <text:list-level-style-bullet text:level="2" text:style-name="WW8Num6z1" text:bullet-char="o">
+    <style:list-level-properties text:space-before="1.905cm" text:min-label-width="0.635cm"/>
+    <style:text-properties fo:font-family="&apos;Courier New&apos;" style:font-family-generic="modern" style:font-pitch="fixed"/>
+   </text:list-level-style-bullet>
+   <text:list-level-style-bullet text:level="3" text:style-name="WW8Num6z0" text:bullet-char="">
+    <style:list-level-properties text:space-before="3.175cm" text:min-label-width="0.635cm"/>
+    <style:text-properties style:font-name="Wingdings"/>
+   </text:list-level-style-bullet>
+   <text:list-level-style-bullet text:level="4" text:style-name="WW8Num6z3" text:bullet-char="">
+    <style:list-level-properties text:space-before="4.445cm" text:min-label-width="0.635cm"/>
+    <style:text-properties style:font-name="Symbol"/>
+   </text:list-level-style-bullet>
+   <text:list-level-style-bullet text:level="5" text:style-name="WW8Num6z1" text:bullet-char="o">
+    <style:list-level-properties text:space-before="5.715cm" text:min-label-width="0.635cm"/>
+    <style:text-properties fo:font-family="&apos;Courier New&apos;" style:font-family-generic="modern" style:font-pitch="fixed"/>
+   </text:list-level-style-bullet>
+   <text:list-level-style-bullet text:level="6" text:style-name="WW8Num6z0" text:bullet-char="">
+    <style:list-level-properties text:space-before="6.985cm" text:min-label-width="0.635cm"/>
+    <style:text-properties style:font-name="Wingdings"/>
+   </text:list-level-style-bullet>
+   <text:list-level-style-bullet text:level="7" text:style-name="WW8Num6z3" text:bullet-char="">
+    <style:list-level-properties text:space-before="8.255cm" text:min-label-width="0.635cm"/>
+    <style:text-properties style:font-name="Symbol"/>
+   </text:list-level-style-bullet>
+   <text:list-level-style-bullet text:level="8" text:style-name="WW8Num6z1" text:bullet-char="o">
+    <style:list-level-properties text:space-before="9.525cm" text:min-label-width="0.635cm"/>
+    <style:text-properties fo:font-family="&apos;Courier New&apos;" style:font-family-generic="modern" style:font-pitch="fixed"/>
+   </text:list-level-style-bullet>
+   <text:list-level-style-bullet text:level="9" text:style-name="WW8Num6z0" text:bullet-char="">
+    <style:list-level-properties text:space-before="10.795cm" text:min-label-width="0.635cm"/>
+    <style:text-properties style:font-name="Wingdings"/>
+   </text:list-level-style-bullet>
+   <text:list-level-style-number text:level="10" style:num-suffix="." style:num-format="1">
+    <style:list-level-properties text:space-before="6.35cm" text:min-label-width="0.635cm"/>
+   </text:list-level-style-number>
+  </text:list-style>
+ </office:styles>
+ <office:automatic-styles>
+  <style:style style:name="P1" style:family="paragraph" style:parent-style-name="RGUgliederung" style:list-style-name="WW8Num6">
+   <style:paragraph-properties fo:margin-top="0cm" fo:margin-bottom="0.229cm" loext:contextual-spacing="false"/>
+   <style:text-properties fo:color="#000000"/>
+  </style:style>
+  <style:style style:name="P2" style:family="paragraph" style:parent-style-name="RGUgliederung" style:list-style-name="">
+   <style:paragraph-properties fo:margin-top="0cm" fo:margin-bottom="0.229cm" loext:contextual-spacing="false"/>
+   <style:text-properties fo:color="#000000"/>
+  </style:style>
+  <style:style style:name="P3" style:family="paragraph" style:parent-style-name="RGUgliederung" style:list-style-name="">
+   <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:text-indent="0cm" style:auto-text-indent="false"/>
+   <style:text-properties fo:color="#000000" style:font-name="Arial1" fo:font-size="11pt" fo:font-weight="normal" officeooo:rsid="0036e634" officeooo:paragraph-rsid="002d5bb4" style:font-name-asian="Scala-Regular" style:font-size-asian="11pt" style:font-weight-asian="normal" style:font-name-complex="Scala-Regular" style:font-size-complex="11pt" style:font-weight-complex="normal"/>
+  </style:style>
+  <style:style style:name="P5" style:family="paragraph" style:parent-style-name="RGUgliederung" style:list-style-name="">
+   <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:text-indent="0cm" style:auto-text-indent="false"/>
+   <style:text-properties fo:color="#000000" style:font-name="Arial2" fo:font-size="11pt" fo:font-weight="normal" officeooo:rsid="0036e634" officeooo:paragraph-rsid="002d5bb4" style:font-name-asian="Scala-Regular" style:font-size-asian="11pt" style:font-weight-asian="normal" style:font-name-complex="Scala-Regular" style:font-size-complex="11pt" style:font-weight-complex="normal"/>
+  </style:style>
+  <style:style style:name="P6" style:family="paragraph" style:parent-style-name="RGUgliederung" style:list-style-name="">
+   <style:paragraph-properties fo:margin-top="0cm" fo:margin-bottom="0.229cm" loext:contextual-spacing="false"/>
+   <style:text-properties fo:color="#000000"/>
+  </style:style>
+  <style:style style:name="T1" style:family="text">
+   <style:text-properties fo:color="#231f20" style:font-name="Arial3" fo:font-size="10pt" fo:font-style="normal" fo:font-weight="normal" style:font-name-asian="ScalaPro-Regular" style:font-size-asian="10pt" style:font-name-complex="ScalaPro-Regular" style:font-size-complex="10pt"/>
+  </style:style>
+  <style:style style:name="T2" style:family="text">
+   <style:text-properties fo:color="#231f20" style:font-name="Arial3" fo:font-size="10pt" fo:font-style="normal" fo:font-weight="normal" style:font-name-asian="ScalaPro-Bold" style:font-size-asian="10pt" style:font-name-complex="ScalaPro-Bold" style:font-size-complex="10pt"/>
+  </style:style>
+  <style:style style:name="T3" style:family="text">
+   <style:text-properties style:font-name="Arial1" fo:font-size="11pt" style:text-underline-style="none" fo:font-weight="bold" style:font-name-asian="ScalaPro-Regular" style:font-size-asian="11pt" style:font-weight-asian="bold" style:font-name-complex="ScalaPro-Regular" style:font-size-complex="11pt" style:font-weight-complex="bold"/>
+  </style:style>
+  <style:style style:name="T4" style:family="text">
+   <style:text-properties style:font-name="Arial1" fo:font-size="11pt" style:text-underline-style="none" fo:font-weight="bold" style:font-name-asian="Arial4" style:font-size-asian="11pt" style:font-weight-asian="bold" style:font-name-complex="Arial1" style:font-size-complex="11pt" style:font-weight-complex="bold"/>
+  </style:style>
+  <style:style style:name="T5" style:family="text">
+   <style:text-properties style:font-name="Arial2" style:font-name-asian="ScalaPro-Regular" style:font-name-complex="ScalaPro-Regular"/>
+  </style:style>
+  <style:style style:name="fr1" style:family="graphic" style:parent-style-name="Graphics">
+   <style:graphic-properties style:vertical-pos="top" style:vertical-rel="paragraph" style:horizontal-pos="center" style:horizontal-rel="paragraph" style:mirror="none" fo:clip="rect(0cm, 0cm, 0cm, 0cm)" draw:luminance="0%" draw:contrast="0%" draw:red="0%" draw:green="0%" draw:blue="0%" draw:gamma="100%" draw:color-inversion="false" draw:image-opacity="100%" draw:color-mode="standard"/>
+  </style:style>
+  <style:page-layout style:name="pm1">
+   <style:page-layout-properties fo:page-width="21.001cm" fo:page-height="29.7cm" style:num-format="1" style:print-orientation="portrait" fo:margin-top="2cm" fo:margin-bottom="2cm" fo:margin-left="2cm" fo:margin-right="2cm" style:writing-mode="lr-tb" style:layout-grid-color="#c0c0c0" style:layout-grid-lines="20" style:layout-grid-base-height="0.706cm" style:layout-grid-ruby-height="0.353cm" style:layout-grid-mode="none" style:layout-grid-ruby-below="false" style:layout-grid-print="false" style:layout-grid-display="false" style:footnote-max-height="0cm">
+    <style:footnote-sep style:width="0.018cm" style:distance-before-sep="0.101cm" style:distance-after-sep="0.101cm" style:line-style="none" style:adjustment="left" style:rel-width="25%" style:color="#000000"/>
+   </style:page-layout-properties>
+   <style:header-style/>
+   <style:footer-style/>
+  </style:page-layout>
+ </office:automatic-styles>
+ <office:master-styles>
+  <style:master-page style:name="Standard" style:page-layout-name="pm1"/>
+ </office:master-styles>
+ <office:body>
+  <office:text>
+   <text:tracked-changes text:track-changes="false">
+    <text:changed-region xml:id="ct59910784" text:id="ct59910784">
+     <text:deletion>
+      <office:change-info>
+       <dc:creator>Unbekannter Autor</dc:creator>
+       <dc:date>2017-01-25T11:43:00</dc:date>
+      </office:change-info>
+      <text:list xml:id="list3808086239" text:style-name="WW8Num6">
+       <text:list-item>
+        <text:p text:style-name="P1"><text:span text:style-name="T1">:</text:span></text:p>
+       </text:list-item>
+       <text:list-item>
+        <text:p text:style-name="P1"><text:span text:style-name="T2">Gem</text:span><text:span text:style-name="T3"> </text:span></text:p>
+       </text:list-item>
+      </text:list>
+      <text:p text:style-name="P2">In</text:p>
+     </text:deletion>
+    </text:changed-region>
+   </text:tracked-changes>
+   <text:sequence-decls>
+    <text:sequence-decl text:display-outline-level="0" text:name="Illustration"/>
+    <text:sequence-decl text:display-outline-level="0" text:name="Table"/>
+    <text:sequence-decl text:display-outline-level="0" text:name="Text"/>
+    <text:sequence-decl text:display-outline-level="0" text:name="Drawing"/>
+    <text:sequence-decl text:display-outline-level="0" text:name="Figure"/>
+   </text:sequence-decls>
+   <text:p text:style-name="P5">k</text:p>
+   <text:p text:style-name="P6"><draw:frame draw:style-name="fr1" draw:name="Grafik1" text:anchor-type="paragraph" svg:width="16.032cm" svg:height="8.865cm" draw:z-index="1">
+       <draw:image loext:mime-type="image/png">
+         <office:binary-data>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
+          SUVORK5CYII=
+         </office:binary-data>
+        </draw:image>
+       </draw:frame><text:s text:c="2"/><text:span text:style-name="T1">D</text:span> <text:change text:change-id="ct59910784"/></text:p>
+  </office:text>
+ </office:body>
+</office:document>
