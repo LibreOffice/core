@@ -252,7 +252,7 @@ SvxFieldData::~SvxFieldData()
 }
 
 
-SvxFieldData* SvxFieldData::Clone() const
+tools::SvRef<SvxFieldData> SvxFieldData::Clone() const
 {
     return new SvxFieldData;
 }
@@ -338,7 +338,7 @@ SvxDateField::SvxDateField( const Date& rDate, SvxDateType eT, SvxDateFormat eF 
 }
 
 
-SvxFieldData* SvxDateField::Clone() const
+tools::SvRef<SvxFieldData> SvxDateField::Clone() const
 {
     return new SvxDateField( *this );
 }
@@ -449,7 +449,7 @@ SvxURLField::SvxURLField( const OUString& rURL, const OUString& rRepres, SvxURLF
 }
 
 
-SvxFieldData* SvxURLField::Clone() const
+tools::SvRef<SvxFieldData> SvxURLField::Clone() const
 {
     return new SvxURLField( *this );
 }
@@ -485,7 +485,7 @@ SV_IMPL_PERSIST1( SvxPageTitleField );
 
 SvxPageTitleField::SvxPageTitleField() {}
 
-SvxFieldData* SvxPageTitleField::Clone() const
+tools::SvRef<SvxFieldData> SvxPageTitleField::Clone() const
 {
     return new SvxPageTitleField();
 }
@@ -510,7 +510,7 @@ SV_IMPL_PERSIST1( SvxPageField );
 
 SvxPageField::SvxPageField() {}
 
-SvxFieldData* SvxPageField::Clone() const
+tools::SvRef<SvxFieldData> SvxPageField::Clone() const
 {
     return new SvxPageField;        // empty
 }
@@ -530,7 +530,7 @@ SV_IMPL_PERSIST1( SvxPagesField );
 
 SvxPagesField::SvxPagesField() {}
 
-SvxFieldData* SvxPagesField::Clone() const
+tools::SvRef<SvxFieldData> SvxPagesField::Clone() const
 {
     return new SvxPagesField;   // empty
 }
@@ -544,7 +544,7 @@ SV_IMPL_PERSIST1( SvxTimeField );
 
 SvxTimeField::SvxTimeField() {}
 
-SvxFieldData* SvxTimeField::Clone() const
+tools::SvRef<SvxFieldData> SvxTimeField::Clone() const
 {
     return new SvxTimeField;    // empty
 }
@@ -563,7 +563,7 @@ SV_IMPL_PERSIST1( SvxFileField );
 
 SvxFileField::SvxFileField() {}
 
-SvxFieldData* SvxFileField::Clone() const
+tools::SvRef<SvxFieldData> SvxFileField::Clone() const
 {
     return new SvxFileField;    // empty
 }
@@ -585,7 +585,7 @@ void SvxTableField::SetTab(int nTab)
 }
 
 
-SvxFieldData* SvxTableField::Clone() const
+tools::SvRef<SvxFieldData> SvxTableField::Clone() const
 {
     return new SvxTableField(mnTab);
 }
@@ -620,7 +620,7 @@ SvxExtTimeField::SvxExtTimeField( const tools::Time& rTime, SvxTimeType eT, SvxT
 }
 
 
-SvxFieldData* SvxExtTimeField::Clone() const
+tools::SvRef<SvxFieldData> SvxExtTimeField::Clone() const
 {
     return new SvxExtTimeField( *this );
 }
@@ -736,7 +736,7 @@ SvxExtFileField::SvxExtFileField( const OUString& rStr, SvxFileType eT, SvxFileF
 }
 
 
-SvxFieldData* SvxExtFileField::Clone() const
+tools::SvRef<SvxFieldData> SvxExtFileField::Clone() const
 {
     return new SvxExtFileField( *this );
 }
@@ -849,7 +849,7 @@ SvxAuthorField::SvxAuthorField( const OUString& rFirstName,
 }
 
 
-SvxFieldData* SvxAuthorField::Clone() const
+tools::SvRef<SvxFieldData> SvxAuthorField::Clone() const
 {
     return new SvxAuthorField( *this );
 }
@@ -898,7 +898,7 @@ SV_IMPL_PERSIST1( SvxHeaderField );
 
 SvxHeaderField::SvxHeaderField() {}
 
-SvxFieldData* SvxHeaderField::Clone() const
+tools::SvRef<SvxFieldData> SvxHeaderField::Clone() const
 {
     return new SvxHeaderField;      // empty
 }
@@ -912,7 +912,7 @@ SV_IMPL_PERSIST1( SvxFooterField );
 
 SvxFooterField::SvxFooterField() {}
 
-SvxFieldData* SvxFooterField::Clone() const
+tools::SvRef<SvxFieldData> SvxFooterField::Clone() const
 {
     return new SvxFooterField;      // empty
 }
@@ -924,7 +924,7 @@ bool SvxFooterField::operator==( const SvxFieldData& rCmp ) const
 
 SV_IMPL_PERSIST1( SvxDateTimeField );
 
-SvxFieldData* SvxDateTimeField::Clone() const
+tools::SvRef<SvxFieldData> SvxDateTimeField::Clone() const
 {
     return new SvxDateTimeField;        // empty
 }
