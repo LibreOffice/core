@@ -81,7 +81,7 @@ public:
     sal_Int32   GetCntIdx() const;
 
     // clone
-    EditPosition* Clone() const;
+    std::unique_ptr<EditPosition> Clone() const;
 
     // clone NodeIndex
     EditNodeIdx* MakeNodeIdx() const;
