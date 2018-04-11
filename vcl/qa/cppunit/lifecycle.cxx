@@ -299,10 +299,8 @@ void LifecycleTest::testLeakage()
         aObjects.push_back(LeakTestObject::Create<VclVButtonBox>(xVBox));
     }
 
-#if 0 // FIXME - would be good to get internal paths working.
     aObjects.push_back(LeakTestObject::Create<ModelessDialog>(xParent, "PrintProgressDialog", "vcl/ui/printprogressdialog.ui"));
-#endif
-    aObjects.push_back(LeakTestObject::Create<ModalDialog>(xParent));
+    aObjects.push_back(LeakTestObject::Create<ModalDialog>(xParent, "PrintProgressDialog", "vcl/ui/printprogressdialog.ui"));
     xParent.clear();
 
     for (auto i = aObjects.rbegin(); i != aObjects.rend(); ++i)

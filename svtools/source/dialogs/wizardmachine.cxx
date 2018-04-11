@@ -90,18 +90,6 @@ namespace svt
         }
     };
 
-    OWizardMachine::OWizardMachine(vcl::Window* _pParent, const WinBits i_nStyle, WizardButtonFlags _nButtonFlags )
-        :WizardDialog( _pParent, i_nStyle )
-        ,m_pFinish(nullptr)
-        ,m_pCancel(nullptr)
-        ,m_pNextPage(nullptr)
-        ,m_pPrevPage(nullptr)
-        ,m_pHelp(nullptr)
-        ,m_pImpl( new WizardMachineImplData )
-    {
-        implConstruct( _nButtonFlags );
-    }
-
     OWizardMachine::OWizardMachine(vcl::Window* _pParent, WizardButtonFlags _nButtonFlags )
         :WizardDialog( _pParent, "WizardDialog", "svt/ui/wizarddialog.ui" )
         ,m_pFinish(nullptr)
