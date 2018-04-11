@@ -1320,7 +1320,13 @@ SalBitmap* SvpSalGraphics::getBitmap( long nX, long nY, long nWidth, long nHeigh
 
 Color SvpSalGraphics::getPixel( long nX, long nY )
 {
-    cairo_surface_t *target = cairo_surface_create_similar_image(m_pSurface, CAIRO_FORMAT_ARGB32, 1, 1);
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 12, 0)
+    cairo_surface_t *target = cairo_surface_create_similar_image(m_pSurface,
+#else
+    cairo_surface_t *target = cairo_image_surface_create(
+#endif
+            CAIRO_FORMAT_ARGB32, 1, 1);
+
     cairo_t* cr = cairo_create(target);
 
     cairo_rectangle(cr, 0, 0, 1, 1);
@@ -1484,9 +1490,15 @@ cairo_surface_t* SvpSalGraphics::createCairoSurface(const BitmapBuffer *pBuffer)
 
 cairo_t* SvpSalGraphics::createTmpCompatibleCairoContext() const
 {
-    cairo_surface_t *target = cairo_surface_create_similar_image(m_pSurface, CAIRO_FORMAT_ARGB32,
-                                                         m_aFrameSize.getX() * m_fScale,
-                                                         m_aFrameSize.getY() * m_fScale);
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 12, 0)
+    cairo_surface_t *target = cairo_surface_create_similar_image(m_pSurface,
+#else
+    cairo_surface_t *target = cairo_image_surface_create(
+#endif
+            CAIRO_FORMAT_ARGB32,
+            m_aFrameSize.getX() * m_fScale,
+            m_aFrameSize.getY() * m_fScale);
+
 #if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 14, 0)
     cairo_surface_set_device_scale(target, m_fScale, m_fScale);
 #endif
