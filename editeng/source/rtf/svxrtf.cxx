@@ -87,7 +87,7 @@ SvxRTFParser::~SvxRTFParser()
 
 void SvxRTFParser::SetInsPos( const EditPosition& rNew )
 {
-    pInsPos.reset( rNew.Clone() );
+    pInsPos = rNew.Clone();
 }
 
 SvParserState SvxRTFParser::CallParser()
