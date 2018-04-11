@@ -85,9 +85,9 @@ namespace frm
     }
 
 
-    SvxEditSource* RichTextEditSource::Clone() const
+    std::unique_ptr<SvxEditSource> RichTextEditSource::Clone() const
     {
-        return new RichTextEditSource( m_rEngine, m_pTextChangeListener );
+        return std::unique_ptr<SvxEditSource>(new RichTextEditSource( m_rEngine, m_pTextChangeListener ));
     }
 
 

@@ -85,9 +85,9 @@ SwTextAPIEditSource::SwTextAPIEditSource( const SwTextAPIEditSource& rSource )
     pImpl->mnRef++;
 }
 
-SvxEditSource* SwTextAPIEditSource::Clone() const
+std::unique_ptr<SvxEditSource> SwTextAPIEditSource::Clone() const
 {
-    return new SwTextAPIEditSource( *this );
+    return std::unique_ptr<SvxEditSource>(new SwTextAPIEditSource( *this ));
 }
 
 void SwTextAPIEditSource::UpdateData()

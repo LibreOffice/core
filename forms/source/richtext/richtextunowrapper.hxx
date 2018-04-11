@@ -63,7 +63,7 @@ namespace frm
         RichTextEditSource( EditEngine& _rEngine, IEngineTextChangeListener* _pTextChangeListener );
 
         // SvxEditSource
-        virtual SvxEditSource*      Clone() const override;
+        virtual std::unique_ptr<SvxEditSource> Clone() const override;
         virtual SvxTextForwarder*   GetTextForwarder() override;
         virtual void                UpdateData() override;
 

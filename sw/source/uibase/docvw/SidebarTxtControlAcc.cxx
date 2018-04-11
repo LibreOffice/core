@@ -46,7 +46,7 @@ class SidebarTextEditSource : public SvxEditSource,
         explicit SidebarTextEditSource(SidebarTextControl& rSidebarTextControl);
         virtual ~SidebarTextEditSource() override;
 
-        virtual SvxEditSource* Clone() const override;
+        virtual std::unique_ptr<SvxEditSource> Clone() const override;
 
         virtual SvxTextForwarder* GetTextForwarder() override;
         virtual SvxViewForwarder* GetViewForwarder() override;
@@ -83,9 +83,9 @@ SidebarTextEditSource::~SidebarTextEditSource()
     }
 }
 
-SvxEditSource* SidebarTextEditSource::Clone() const
+std::unique_ptr<SvxEditSource> SidebarTextEditSource::Clone() const
 {
-    return new SidebarTextEditSource( mrSidebarTextControl );
+    return std::unique_ptr<SvxEditSource>(new SidebarTextEditSource( mrSidebarTextControl ));
 }
 
 SvxTextForwarder* SidebarTextEditSource::GetTextForwarder()

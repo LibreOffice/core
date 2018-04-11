@@ -53,9 +53,9 @@ namespace accessibility
         Broadcast( TextHint( SfxHintId::Dying ) );
     }
 
-    SvxEditSource* AccessibleOutlineEditSource::Clone() const
+    std::unique_ptr<SvxEditSource> AccessibleOutlineEditSource::Clone() const
     {
-        return new AccessibleOutlineEditSource(*mpOutliner, mrView, *mpOutlinerView, mrWindow);
+        return std::unique_ptr<SvxEditSource>(new AccessibleOutlineEditSource(*mpOutliner, mrView, *mpOutlinerView, mrWindow));
     }
 
     SvxTextForwarder* AccessibleOutlineEditSource::GetTextForwarder()
