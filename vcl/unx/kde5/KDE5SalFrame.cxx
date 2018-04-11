@@ -52,17 +52,6 @@ KDE5SalFrame::KDE5SalFrame( KDE5SalFrame* pParent, SalFrameStyleFlags nState, bo
 {
 }
 
-void KDE5SalFrame::Show( bool bVisible, bool bNoActivate )
-{
-    if ( !GetParent() /*&& ! (GetStyle() & SalFrameStyleFlags::INTRO)*/ )
-    {
-        KDE5XLib* pXLib = new KDE5XLib();//static_cast<KDE5XLib*>(GetDisplay()->GetXLib());
-        pXLib->doStartup();
-    }
-
-    //X11SalFrame::Show( bVisible, bNoActivate );
-}
-
 /** Helper function to convert colors.
 */
 static Color toColor( const QColor &rColor )
