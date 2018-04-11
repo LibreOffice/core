@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_825e8b43",
+        "filename": "drawinglayer/source/tools/emfphelperdata.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1290,
+      "author": {
+        "id": 1001502
+      },
+      "writtenOn": "2018-04-11T05:40:30Z",
+      "side": 1,
+      "message": "where is the 0.3 from?",
+      "revId": "5b385618a68cfeffd61577cde9621041808db072",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
