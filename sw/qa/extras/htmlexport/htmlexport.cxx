@@ -489,6 +489,9 @@ DECLARE_HTMLEXPORT_TEST(testReqIfList, "reqif-list.xhtml")
     // This failed, the 'style' attribute was written, even if the input did
     // not had one.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(-1), aStream.indexOf(" style=\""));
+
+    // This failed <li> was only opened, not closed.
+    CPPUNIT_ASSERT(aStream.indexOf("</reqif-xhtml:li>") != -1);
 }
 
 DECLARE_HTMLEXPORT_ROUNDTRIP_TEST(testReqIfOle2, "reqif-ole2.xhtml")
