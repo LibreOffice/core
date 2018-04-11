@@ -1,3 +1,7 @@
 Signature	FileName	MinVersion	MaxVersion	MinSize	MaxSize	MinDate	MaxDate	Languages
 s72	s255	S20	S20	I4	I4	I4	I4	S255
 Signature	Signature
+# Since it's impossible to match minimal version in Signature table independent of
+# language, and we need language-independent comparison, we use a value that is at
+# least 1 less (see note at https://msdn.microsoft.com/en-us/library/aa371853).
+win81s14	kernel32.dll	6.3.9600.17030						

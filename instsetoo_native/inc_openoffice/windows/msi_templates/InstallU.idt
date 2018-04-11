@@ -28,4 +28,3 @@ SetupProgress		800
 SetupResume	Installed And (RESUME Or Preselected) And Not PATCH	700
 setUserProfile		510
 ValidateProductID		350
-WrongWindowsVersion	(VersionNT < WindowsMinVersionNumber) OR ((VersionNT = WindowsMinVersionNumber) AND (ServicePackLevel < WindowsMinSPNumber))	10

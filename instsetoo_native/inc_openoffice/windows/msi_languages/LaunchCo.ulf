@@ -1,2 +1,6 @@
 [OOO_LAUNCH_1]
 en-US = "The Installation Wizard cannot be run properly because you are logged in as a user without sufficient administrator rights for this system."
+[OOO_LAUNCH_2]
+en-US = "[ProductName] cannot be installed on this Windows version. [WindowsMinVersionText] or newer is required."
+[OOO_LAUNCH_3]
+en-US = "To install [ProductName] on Windows 8.1, at least April 2014 update rollup (MS KB 2919355) must be installed."
