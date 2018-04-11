@@ -22,6 +22,30 @@
       "revId": "1ec687b6cecd5a010d666ad83e0de03bd0a3b6af",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a30ddce_c5c88d77",
+        "filename": "svx/source/dialog/graphicinfodialog.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1001124
+      },
+      "writtenOn": "2018-04-11T10:59:19Z",
+      "side": 1,
+      "message": "Just extract from SdrGrafObj::getOriginalSize what you need, it ionternally uses \u0027Graphic\u0027, too. You can ignore the crop stuff from there, just the two if/else lines and what GetGrafPrefSize does. To replace \u0027GetScaleUnit()\u0027 you have to figure out in which Unit you currently are. Your call above to \u0027PixelToLogic\u0027 implies Pixels, but using what GetGrafPrefMapMode().GetMapUnit() does is safer. A Graphic always has a PrefMapMode and a PrefSize in that MapMode.\nHTH!",
+      "parentUuid": "3a98d1f4_43dd956f",
+      "range": {
+        "startLine": 138,
+        "startChar": 4,
+        "endLine": 138,
+        "endChar": 84
+      },
+      "revId": "1ec687b6cecd5a010d666ad83e0de03bd0a3b6af",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
