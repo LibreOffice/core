@@ -33,11 +33,10 @@ class VCL_DLLPUBLIC SvpSalVirtualDevice : public SalVirtualDevice
     cairo_surface_t*                    m_pRefSurface;
     cairo_surface_t*                    m_pSurface;
     basegfx::B2IVector                  m_aFrameSize;
-    double                              m_fScale;
     std::vector< SvpSalGraphics* >      m_aGraphics;
 
 public:
-    SvpSalVirtualDevice(DeviceFormat eFormat, double fScale, cairo_surface_t* pRefSurface);
+    SvpSalVirtualDevice(DeviceFormat eFormat, cairo_surface_t* pRefSurface);
     virtual ~SvpSalVirtualDevice() override;
 
     // SalVirtualDevice
