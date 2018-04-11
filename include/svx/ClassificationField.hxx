@@ -74,7 +74,7 @@ public:
         , msIdentifier(sIdentifier)
     {}
 
-    ClassificationField* Clone() const override
+    tools::SvRef<SvxFieldData> Clone() const override
     {
         return new ClassificationField(meType, msDescription, msFullClassName, msIdentifier);
     }

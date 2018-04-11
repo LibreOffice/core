@@ -29,7 +29,7 @@ CustomPropertyField::~CustomPropertyField()
 
 SV_IMPL_PERSIST1(CustomPropertyField);
 
-SvxFieldData* CustomPropertyField::Clone() const
+tools::SvRef<SvxFieldData> CustomPropertyField::Clone() const
 {
     return new CustomPropertyField(msName, msCurrentPresentation);
 }
