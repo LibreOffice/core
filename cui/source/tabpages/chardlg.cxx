@@ -223,26 +223,16 @@ struct SvxCharNamePage_Impl
 {
     Idle            m_aUpdateIdle;
     OUString        m_aNoStyleText;
-    const FontList* m_pFontList;
+    std::unique_ptr<FontList> m_pFontList;
     sal_Int32           m_nExtraEntryPos;
-    bool            m_bMustDelete;
     bool            m_bInSearchMode;
 
     SvxCharNamePage_Impl() :
-
-        m_pFontList     ( nullptr ),
         m_nExtraEntryPos( COMBOBOX_ENTRY_NOTFOUND ),
-        m_bMustDelete   ( false ),
         m_bInSearchMode ( false )
 
     {
         m_aUpdateIdle.SetPriority( TaskPriority::LOWEST );
-    }
-
-    ~SvxCharNamePage_Impl()
-    {
-        if ( m_bMustDelete )
-            delete m_pFontList;
     }
 };
 
@@ -435,19 +425,16 @@ const FontList* SvxCharNamePage::GetFontList() const
             {
                 DBG_ASSERT(nullptr != static_cast<const SvxFontListItem*>(pItem)->GetFontList(),
                            "Where is the font list?");
-                    m_pImpl->m_pFontList =  static_cast<const SvxFontListItem*>(pItem )->GetFontList()->Clone();
-                m_pImpl->m_bMustDelete = true;
+                    m_pImpl->m_pFontList = static_cast<const SvxFontListItem*>(pItem )->GetFontList()->Clone();
             }
         }
         if(!m_pImpl->m_pFontList)
         {
-            m_pImpl->m_pFontList =
-                new FontList( Application::GetDefaultDevice() );
-            m_pImpl->m_bMustDelete = true;
+            m_pImpl->m_pFontList.reset(new FontList( Application::GetDefaultDevice() ));
         }
     }
 
-    return m_pImpl->m_pFontList;
+    return m_pImpl->m_pFontList.get();
 }
 
 
@@ -1228,12 +1215,7 @@ bool SvxCharNamePage::FillItemSet( SfxItemSet* rSet )
 
 void SvxCharNamePage::SetFontList( const SvxFontListItem& rItem )
 {
-    if ( m_pImpl->m_bMustDelete )
-    {
-        delete m_pImpl->m_pFontList;
-    }
     m_pImpl->m_pFontList = rItem.GetFontList()->Clone();
-    m_pImpl->m_bMustDelete = true;
 }
 
 

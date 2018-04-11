@@ -159,7 +159,7 @@ public:
                                       OutputDevice* pDevice2 = nullptr);
                             ~FontList();
 
-    FontList*               Clone() const;
+    std::unique_ptr<FontList> Clone() const;
 
     OUString                GetFontMapText( const FontMetric& rFontMetric ) const;
 
