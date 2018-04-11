@@ -518,6 +518,11 @@ public:
         return xWindow;
     }
 
+    virtual void resize_to_request() override
+    {
+        m_xWindow->setOptimalLayoutSize();
+    }
+
     virtual ~SalInstanceWindow() override
     {
         clear_child_help(m_xWindow);
@@ -796,6 +801,11 @@ public:
     virtual OUString get_label() const override
     {
         return m_xButton->GetText();
+    }
+
+    virtual void clicked() override
+    {
+        m_xButton->Click();
     }
 
     virtual ~SalInstanceButton() override

@@ -146,6 +146,8 @@ public:
     virtual css::uno::Reference<css::awt::XWindow> GetXWindow() = 0;
 
     void connect_help(const Link<Widget&, bool>& rLink) { m_aHelpRequestHdl = rLink; }
+
+    virtual void resize_to_request() = 0;
 };
 
 class VCL_DLLPUBLIC WaitObject
@@ -304,6 +306,7 @@ protected:
 public:
     virtual void set_label(const OUString& rText) = 0;
     virtual OUString get_label() const = 0;
+    virtual void clicked() = 0;
 
     void connect_clicked(const Link<Button&, void>& rLink) { m_aClickHdl = rLink; }
 };
