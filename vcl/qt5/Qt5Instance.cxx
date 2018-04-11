@@ -47,6 +47,10 @@ Qt5Instance::Qt5Instance(SalYieldMutex* pMutex, bool bUseCairo)
     , m_postUserEventId(-1)
     , m_bUseCairo(bUseCairo)
 {
+    ImplSVData* pSVData = ImplGetSVData();
+    delete pSVData->maAppData.mpToolkitName;
+    pSVData->maAppData.mpToolkitName = new OUString("qt5");
+
     m_postUserEventId = QEvent::registerEventType();
 
     // this one needs to be blocking, so that the handling in main thread
