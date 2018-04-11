@@ -142,6 +142,7 @@ public:
     virtual void set_title(const OUString& rTitle) = 0;
     virtual OUString get_title() const = 0;
     virtual void set_busy_cursor(bool bBusy) = 0;
+    virtual void window_move(int x, int y) = 0;
 
     virtual css::uno::Reference<css::awt::XWindow> GetXWindow() = 0;
 
