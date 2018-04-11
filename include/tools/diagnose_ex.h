@@ -33,6 +33,24 @@ TOOLS_DLLPUBLIC void DbgUnhandledException(const css::uno::Any& caughtException,
         const char* currentFunction, const char* fileAndLineNo,
         const char* area = nullptr, const char* explanatory = nullptr);
 
+//getCaughtException throws exceptions in never-going-to-happen situations which
+//floods coverity with warnings
+inline css::uno::Any DbgGetCaughtException()
+{
+#if defined(__COVERITY__)
+    try
+    {
+        return ::cppu::getCaughtException();
+    }
+    catch (...)
+    {
+        std::abort();
+    }
+#else
+    return ::cppu::getCaughtException();
+#endif
+}
+
 /** reports a caught UNO exception via OSL diagnostics
 
     Note that whenever you use this, it might be an indicator that your error
@@ -40,11 +58,11 @@ TOOLS_DLLPUBLIC void DbgUnhandledException(const css::uno::Any& caughtException,
     This takes two optional parameters: area and explanatory
 */
 #define DBG_UNHANDLED_EXCEPTION_0_ARGS() \
-    DbgUnhandledException( ::cppu::getCaughtException(), OSL_THIS_FUNC, SAL_DETAIL_WHERE );
+    DbgUnhandledException( DbgGetCaughtException(), OSL_THIS_FUNC, SAL_DETAIL_WHERE );
 #define DBG_UNHANDLED_EXCEPTION_1_ARGS(area) \
-    DbgUnhandledException( ::cppu::getCaughtException(), OSL_THIS_FUNC, SAL_DETAIL_WHERE, area );
+    DbgUnhandledException( DbgGetCaughtException(), OSL_THIS_FUNC, SAL_DETAIL_WHERE, area );
 #define DBG_UNHANDLED_EXCEPTION_2_ARGS(area, explanatory) \
-    DbgUnhandledException( ::cppu::getCaughtException(), OSL_THIS_FUNC, SAL_DETAIL_WHERE, area, explanatory );
+    DbgUnhandledException( DbgGetCaughtException(), OSL_THIS_FUNC, SAL_DETAIL_WHERE, area, explanatory );
 
 #define DBG_UNHANDLED_FUNC_CHOOSER(_f1, _f2, _f3, ...) _f3
 #define DBG_UNHANDLED_FUNC_RECOMPOSER(argsWithParentheses) DBG_UNHANDLED_FUNC_CHOOSER argsWithParentheses
