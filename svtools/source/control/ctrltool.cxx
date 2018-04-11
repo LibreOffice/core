@@ -381,10 +381,9 @@ FontList::~FontList()
     }
 }
 
-FontList* FontList::Clone() const
+std::unique_ptr<FontList> FontList::Clone() const
 {
-    FontList* pReturn = new FontList(mpDev, mpDev2);
-    return pReturn;
+    return std::unique_ptr<FontList>(new FontList(mpDev, mpDev2));
 }
 
 const OUString& FontList::GetStyleName(FontWeight eWeight, FontItalic eItalic) const
