@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a30ddce_60b0afde",
+        "filename": "desktop/source/app/app.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2246,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2018-04-11T21:59:02Z",
+      "side": 1,
+      "message": "It would be “its” in any case, but I think “there” was meant indeed; just the word order is broken: “handle URLs there”.",
+      "range": {
+        "startLine": 2246,
+        "startChar": 37,
+        "endLine": 2246,
+        "endChar": 42
+      },
+      "revId": "7198ffef6813fd110f984174d51456bed80e5307",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
