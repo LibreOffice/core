@@ -115,7 +115,7 @@ namespace sdr
 
             // Clone() operator, normally just calls the local copy constructor,
             // see above.
-            virtual BaseProperties& Clone(SdrObject& rObj) const = 0;
+            virtual std::unique_ptr<BaseProperties> Clone(SdrObject& rObj) const = 0;
 
             // Get the local ItemSet. This directly returns the local ItemSet of the object. No
             // merging of ItemSets is done for e.g. Group objects.

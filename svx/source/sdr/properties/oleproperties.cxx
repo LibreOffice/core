@@ -42,9 +42,9 @@ namespace sdr
         {
         }
 
-        BaseProperties& OleProperties::Clone(SdrObject& rObj) const
+        std::unique_ptr<BaseProperties> OleProperties::Clone(SdrObject& rObj) const
         {
-            return *(new OleProperties(*this, rObj));
+            return std::unique_ptr<BaseProperties>(new OleProperties(*this, rObj));
         }
 
         void OleProperties::ForceDefaultAttributes()

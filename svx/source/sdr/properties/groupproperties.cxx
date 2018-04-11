@@ -57,9 +57,9 @@ namespace sdr
         {
         }
 
-        BaseProperties& GroupProperties::Clone(SdrObject& rObj) const
+        std::unique_ptr<BaseProperties> GroupProperties::Clone(SdrObject& rObj) const
         {
-            return *(new GroupProperties(*this, rObj));
+            return std::unique_ptr<BaseProperties>(new GroupProperties(*this, rObj));
         }
 
         const SfxItemSet& GroupProperties::GetObjectItemSet() const

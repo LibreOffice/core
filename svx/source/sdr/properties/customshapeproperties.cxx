@@ -195,9 +195,9 @@ namespace sdr
         {
         }
 
-        BaseProperties& CustomShapeProperties::Clone(SdrObject& rObj) const
+        std::unique_ptr<BaseProperties> CustomShapeProperties::Clone(SdrObject& rObj) const
         {
-            return *(new CustomShapeProperties(*this, rObj));
+            return std::unique_ptr<BaseProperties>(new CustomShapeProperties(*this, rObj));
         }
 
         void CustomShapeProperties::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )

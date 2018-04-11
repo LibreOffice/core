@@ -40,9 +40,9 @@ namespace sdr
         {
         }
 
-        BaseProperties& E3dSphereProperties::Clone(SdrObject& rObj) const
+        std::unique_ptr<BaseProperties> E3dSphereProperties::Clone(SdrObject& rObj) const
         {
-            return *(new E3dSphereProperties(*this, rObj));
+            return std::unique_ptr<BaseProperties>(new E3dSphereProperties(*this, rObj));
         }
 
         void E3dSphereProperties::PostItemChange(const sal_uInt16 nWhich)

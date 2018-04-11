@@ -46,9 +46,9 @@ namespace sdr
         {
         }
 
-        BaseProperties& EmptyProperties::Clone(SdrObject& rObj) const
+        std::unique_ptr<BaseProperties> EmptyProperties::Clone(SdrObject& rObj) const
         {
-            return *(new EmptyProperties(rObj));
+            return std::unique_ptr<BaseProperties>(new EmptyProperties(rObj));
         }
 
         const SfxItemSet& EmptyProperties::GetObjectItemSet() const

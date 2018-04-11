@@ -59,9 +59,9 @@ namespace sdr
         {
         }
 
-        BaseProperties& CaptionProperties::Clone(SdrObject& rObj) const
+        std::unique_ptr<BaseProperties> CaptionProperties::Clone(SdrObject& rObj) const
         {
-            return *(new CaptionProperties(*this, rObj));
+            return std::unique_ptr<BaseProperties>(new CaptionProperties(*this, rObj));
         }
 
         void CaptionProperties::ItemSetChanged(const SfxItemSet& rSet)

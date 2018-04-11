@@ -67,9 +67,9 @@ namespace sdr
         {
         }
 
-        BaseProperties& MeasureProperties::Clone(SdrObject& rObj) const
+        std::unique_ptr<BaseProperties> MeasureProperties::Clone(SdrObject& rObj) const
         {
-            return *(new MeasureProperties(*this, rObj));
+            return std::unique_ptr<BaseProperties>(new MeasureProperties(*this, rObj));
         }
 
         void MeasureProperties::ItemSetChanged(const SfxItemSet& rSet)

@@ -39,9 +39,9 @@ namespace sdr
         {
         }
 
-        BaseProperties& RectangleProperties::Clone(SdrObject& rObj) const
+        std::unique_ptr<BaseProperties> RectangleProperties::Clone(SdrObject& rObj) const
         {
-            return *(new RectangleProperties(*this, rObj));
+            return std::unique_ptr<BaseProperties>(new RectangleProperties(*this, rObj));
         }
 
         void RectangleProperties::ItemSetChanged(const SfxItemSet& rSet)

@@ -88,9 +88,9 @@ namespace sdr
             }
         }
 
-        BaseProperties& DefaultProperties::Clone(SdrObject& rObj) const
+        std::unique_ptr<BaseProperties> DefaultProperties::Clone(SdrObject& rObj) const
         {
-            return *(new DefaultProperties(*this, rObj));
+            return std::unique_ptr<BaseProperties>(new DefaultProperties(*this, rObj));
         }
 
         DefaultProperties::~DefaultProperties() {}
