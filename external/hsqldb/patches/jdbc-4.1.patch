@@ -1,0 +1,320 @@
+--- misc/hsqldb/build/build.xml	2012-07-12 10:58:11.000000000 +0200
++++ misc/build/hsqldb/build/build.xml	2012-07-12 10:49:28.000000000 +0200
+@@ -98,16 +98,24 @@
+       <echo message="ant.java.hasjsse=${ant.java.hasjsse}" />
+    </target>
+ 
+-   <target name="javaversion6">
++   <target name="javaversion7" unless="ant.java.iscjavaset">
++      <available classname="java.util.Objects" property="ant.java.iscjava17"/>
++      <available classname="java.util.Objects" property="ant.java.iscjavaset"/>
++   </target>
++
++   <target name="javaversion6" depends="javaversion7" unless="ant.java.iscjavaset">
+       <available classname="java.net.IDN" property="ant.java.iscjava16"/>
++      <available classname="java.net.IDN" property="ant.java.iscjavaset"/>
+    </target>
+ 
+-   <target name="javaversion4" depends="javaversion6" unless="ant.java.iscjava16">
++   <target name="javaversion4" depends="javaversion6" unless="ant.java.iscjavaset">
+       <available classname="java.nio.Buffer" property="ant.java.iscjava14"/>
++      <available classname="java.nio.Buffer" property="ant.java.iscjavaset"/>
+    </target>
+ 
+-   <target name="javaversion2" depends="javaversion4" unless="ant.java.iscjava14">
++   <target name="javaversion2" depends="javaversion4" unless="ant.java.iscjavaset">
+       <available classname="java.lang.ref.Reference" property="ant.java.iscjava12"/>
++      <available classname="java.lang.ref.Reference" property="ant.java.iscjavaset"/>
+    </target>
+ 
+    <target name="-prepare" depends="init,javaversion2">
+@@ -166,6 +177,7 @@
+       <java classname="org.hsqldb.util.CodeSwitcher" classpath="classes" >
+         <arg file="${src}/org/hsqldb/lib/java/JavaSystem.java"/>
+         <arg file="${src}/org/hsqldb/lib/HsqlTimer.java"/>
++        <arg file="${src}/org/hsqldb/jdbcDriver.java"/>
+         <arg file="${src}/org/hsqldb/jdbc/jdbcStatement.java"/>
+         <arg file="${src}/org/hsqldb/persist/LockFile.java"/>
+         <arg file="${src}/org/hsqldb/persist/Logger.java"/>
+@@ -183,6 +195,7 @@
+       <java classname="org.hsqldb.util.CodeSwitcher" classpath="classes" >
+         <arg file="${src}/org/hsqldb/lib/java/JavaSystem.java"/>
+         <arg file="${src}/org/hsqldb/lib/HsqlTimer.java"/>
++        <arg file="${src}/org/hsqldb/jdbcDriver.java"/>
+         <arg file="${src}/org/hsqldb/jdbc/jdbcBlob.java"/>
+         <arg file="${src}/org/hsqldb/jdbc/jdbcDatabaseMetaData.java"/>
+         <arg file="${src}/org/hsqldb/jdbc/jdbcDataSource.java"/>
+@@ -210,6 +223,7 @@
+         <arg value="+JAVA2FULL"/>
+         <arg value="-JAVA4"/>
+         <arg value="-JAVA6"/>
++        <arg value="-JAVA7"/>
+        </java>
+     </target>
+ 
+@@ -218,6 +232,7 @@
+       <java classname="org.hsqldb.util.CodeSwitcher" classpath="classes" >
+         <arg file="${src}/org/hsqldb/lib/java/JavaSystem.java"/>
+         <arg file="${src}/org/hsqldb/lib/HsqlTimer.java"/>
++        <arg file="${src}/org/hsqldb/jdbcDriver.java"/>
+         <arg file="${src}/org/hsqldb/jdbc/jdbcBlob.java"/>
+         <arg file="${src}/org/hsqldb/jdbc/jdbcDatabaseMetaData.java"/>
+         <arg file="${src}/org/hsqldb/jdbc/jdbcDataSource.java"/>
+@@ -244,6 +259,7 @@
+         <arg value="+JAVA2FULL"/>
+         <arg value="+JAVA4"/>
+         <arg value="-JAVA6"/>
++        <arg value="-JAVA7"/>
+        </java>
+     </target>
+ 
+@@ -253,6 +269,43 @@
+       <java classname="org.hsqldb.util.CodeSwitcher" classpath="classes" >
+         <arg file="${src}/org/hsqldb/lib/java/JavaSystem.java"/>
+         <arg file="${src}/org/hsqldb/lib/HsqlTimer.java"/>
++        <arg file="${src}/org/hsqldb/jdbcDriver.java"/>
++        <arg file="${src}/org/hsqldb/jdbc/jdbcBlob.java"/>
++        <arg file="${src}/org/hsqldb/jdbc/jdbcDatabaseMetaData.java"/>
++        <arg file="${src}/org/hsqldb/jdbc/jdbcDataSource.java"/>
++        <arg file="${src}/org/hsqldb/jdbc/jdbcCallableStatement.java"/>
++        <arg file="${src}/org/hsqldb/jdbc/jdbcClob.java"/>
++        <arg file="${src}/org/hsqldb/jdbc/jdbcConnection.java"/>
++        <arg file="${src}/org/hsqldb/jdbc/jdbcParameterMetaData.java"/>
++        <arg file="${src}/org/hsqldb/jdbc/jdbcPreparedStatement.java"/>
++        <arg file="${src}/org/hsqldb/jdbc/jdbcResultSet.java"/>
++        <arg file="${src}/org/hsqldb/jdbc/jdbcResultSetMetaData.java"/>
++        <arg file="${src}/org/hsqldb/jdbc/jdbcStatement.java"/>
++        <arg file="${src}/org/hsqldb/persist/LockFile.java"/>
++        <arg file="${src}/org/hsqldb/persist/Logger.java"/>
++        <arg file="${src}/org/hsqldb/persist/ScaledRAFile.java"/>
++        <arg file="${src}/org/hsqldb/rowio/RowInputTextLog.java"/>
++        <arg file="${src}/org/hsqldb/util/DatabaseManager.java"/>
++        <arg file="${src}/org/hsqldb/util/ConnectionDialogCommon.java"/>
++        <arg file="${src}/org/hsqldb/lib/SimpleLog.java"/>
++        <arg file="${src}/org/hsqldb/rowio/RowInputTextLog.java"/>
++        <arg file="${src}/org/hsqldb/lib/SimpleLog.java"/>
++        <arg file="${src}/org/hsqldb/rowio/RowInputTextLog.java"/>
++        <arg file="${src}/org/hsqldb/HsqlDateTime.java"/>
++        <arg value="+JAVA2"/>
++        <arg value="+JAVA2FULL"/>
++        <arg value="+JAVA4"/>
++        <arg value="+JAVA6"/>
++        <arg value="-JAVA7"/>
++      </java>
++    </target>
++
++    <target name="switchtojdk17" depends="switchtojdk16"
++            description="self explanatory" if="ant.java.iscjava17">
++      <java classname="org.hsqldb.util.CodeSwitcher" classpath="classes" >
++        <arg file="${src}/org/hsqldb/lib/java/JavaSystem.java"/>
++        <arg file="${src}/org/hsqldb/lib/HsqlTimer.java"/>
++        <arg file="${src}/org/hsqldb/jdbcDriver.java"/>
+         <arg file="${src}/org/hsqldb/jdbc/jdbcBlob.java"/>
+         <arg file="${src}/org/hsqldb/jdbc/jdbcDatabaseMetaData.java"/>
+         <arg file="${src}/org/hsqldb/jdbc/jdbcDataSource.java"/>
+@@ -279,10 +332,11 @@
+         <arg value="+JAVA2FULL"/>
+         <arg value="+JAVA4"/>
+         <arg value="+JAVA6"/>
++        <arg value="+JAVA7"/>
+       </java>
+     </target>
+ 
+-    <target name="store" depends="switchtojdk16"
++    <target name="store" depends="switchtojdk17"
+             description="compiles the /store folder">
+       <javac srcdir="${src}"
+              destdir="classes"
+--- misc/hsqldb/src/org/hsqldb/jdbc/jdbcCallableStatement.java	2012-02-08 15:14:42.802123563 +0000
++++ misc/build/hsqldb/src/org/hsqldb/jdbc/jdbcCallableStatement.java	2012-02-08 15:47:35.842635642 +0000
+@@ -3375,4 +3375,18 @@
+ */
+ 
+ //#endif JAVA6
++
++//#ifdef JAVA7
++    public <T> T getObject(String columnLabel, Class<T> type) throws SQLException
++    {
++        throw new UnsupportedOperationException("Not supported yet.");
++    }
++
++    public <T> T getObject(int ColumnIndex, Class<T> type) throws SQLException
++    {
++        throw new UnsupportedOperationException("Not supported yet.");
++    }
++
++
++//#endif JAVA7
+ }
+--- misc/hsqldb/src/org/hsqldb/jdbc/jdbcConnection.java	2012-02-08 15:14:42.802123563 +0000
++++ misc/build/hsqldb/src/org/hsqldb/jdbc/jdbcConnection.java	2012-02-08 15:47:35.851635628 +0000
+@@ -48,6 +48,12 @@
+ */
+ 
+ //#endif JAVA6
++
++//#ifdef JAVA7
++import java.util.concurrent.Executor;
++
++//#endif JAVA7
++
+ import java.sql.PreparedStatement;
+ import java.sql.SQLException;
+ import java.sql.SQLWarning;
+@@ -2793,4 +2799,31 @@
+ */
+ 
+ //#endif JAVA6
++
++//#ifdef JAVA7
++    public int getNetworkTimeout() throws SQLException
++    {
++        throw new UnsupportedOperationException("Not supported yet.");
++    }
++
++    public void setNetworkTimeout(Executor executor, int millis) throws SQLException
++    {
++        throw new UnsupportedOperationException("Not supported yet.");
++    }
++
++    public void abort(Executor executor) throws SQLException
++    {
++        throw new UnsupportedOperationException("Not supported yet.");
++    }
++    
++    public String getSchema() throws SQLException
++    {
++        throw new UnsupportedOperationException("Not supported yet.");
++    }
++
++    public void setSchema(String schema) throws SQLException
++    {
++        throw new UnsupportedOperationException("Not supported yet.");
++    }
++//#endif JAVA7
+ }
+--- misc/hsqldb/src/org/hsqldb/jdbc/jdbcDatabaseMetaData.java	2012-02-08 15:14:42.802123563 +0000
++++ misc/build/hsqldb/src/org/hsqldb/jdbc/jdbcDatabaseMetaData.java	2012-02-08 15:47:35.835635654 +0000
+@@ -5693,4 +5693,21 @@
+ */
+ 
+ //#endif JAVA6
++
++
++//#ifdef JAVA7
++    public boolean generatedKeyAlwaysReturned() throws SQLException
++    {
++        throw new UnsupportedOperationException("Not supported yet.");
++    }
++
++    public ResultSet getPseudoColumns(String catalog, String schemaPattern,
++                                      String tableNamePattern, String columnNamePattern) throws SQLException
++    {
++        throw new UnsupportedOperationException("Not supported yet.");
++    }
++
++
++//#endif JAVA7
++
+ }
+--- misc/hsqldb/src/org/hsqldb/jdbc/jdbcDataSource.java	2012-02-08 15:14:42.802123563 +0000
++++ misc/build/hsqldb/src/org/hsqldb/jdbc/jdbcDataSource.java	2012-02-08 15:47:35.836635653 +0000
+@@ -47,6 +47,11 @@
+ //#endif JAVA4
+ import org.hsqldb.jdbcDriver;
+ 
++//#ifdef JAVA7
++import java.sql.SQLFeatureNotSupportedException;
++import java.util.logging.Logger;
++//#endif JAVA7
++
+ // boucherb@users 20040411 - doc 1.7.2 - javadoc updates toward 1.7.2 final
+ 
+ /**
+@@ -323,4 +328,15 @@
+ */
+ 
+ //#endif JAVA6
++
++//#ifdef JAVA7
++    public Logger getParentLogger() throws SQLFeatureNotSupportedException
++    {
++        throw new AbstractMethodError(
++            "org.hsqldb.jdbc.jdbcDataSource.getParentLogger should throw" +
++            " SQLFeatureNotSupportedException, but that is not yet available" +
++            " in Java 5");
++    }
++
++//#endif JAVA7
+ }
+--- misc/hsqldb/src/org/hsqldb/jdbc/jdbcResultSet.java	2012-02-08 15:14:42.802123563 +0000
++++ misc/build/hsqldb/src/org/hsqldb/jdbc/jdbcResultSet.java	2012-02-08 15:47:35.866635606 +0000
+@@ -5324,4 +5324,19 @@
+ */
+ 
+ //#endif JAVA6
++
++//#ifdef JAVA7
++
++    public <T> T getObject(String columnLabel, Class<T> type) throws SQLException
++    {
++        throw new UnsupportedOperationException("Not supported yet.");
++    }
++
++    public <T> T getObject(int columnNum, Class<T> type) throws SQLException
++    {
++        throw new UnsupportedOperationException("Not supported yet.");
++    }
++
++//#endif JAVA7
++
+ }
+--- misc/hsqldb/src/org/hsqldb/jdbc/jdbcStatement.java	2012-02-08 15:14:42.802123563 +0000
++++ misc/build/hsqldb/src/org/hsqldb/jdbc/jdbcStatement.java	2012-02-08 15:47:35.872635595 +0000
+@@ -1608,4 +1608,16 @@
+     }
+ */
+ //#endif JAVA6
++
++//#ifdef JAVA7
++    public boolean isCloseOnCompletion() throws SQLException
++    {
++        throw new UnsupportedOperationException("Not supported yet.");
++    }
++
++    public void closeOnCompletion() throws SQLException
++    {
++        throw new UnsupportedOperationException("Not supported yet.");
++    }
++//#endif JAVA7
+ }
+--- misc/hsqldb/src/org/hsqldb/jdbcDriver.java	2012-02-08 15:14:42.800123566 +0000
++++ misc/build/hsqldb/src/org/hsqldb/jdbcDriver.java	2012-02-08 15:47:35.826635667 +0000
+@@ -42,6 +42,11 @@
+ import org.hsqldb.persist.HsqlDatabaseProperties;
+ import org.hsqldb.persist.HsqlProperties;
+ 
++//#ifdef JAVA7
++import java.sql.SQLFeatureNotSupportedException;
++import java.util.logging.Logger;
++//#endif JAVA7
++
+ // fredt@users 20011220 - patch 1.7.0 by fredt
+ // new version numbering scheme
+ // fredt@users 20020320 - patch 1.7.0 - JDBC 2 support and error trapping
+@@ -321,4 +326,15 @@
+             DriverManager.registerDriver(new jdbcDriver());
+         } catch (Exception e) {}
+     }
++
++//#ifdef JAVA7
++    public Logger getParentLogger() throws SQLFeatureNotSupportedException
++    {
++        throw new AbstractMethodError(
++            "org.hsqldb.jdbcDriver.getParentLogger should throw" +
++            " SQLFeatureNotSupportedException, but that is not yet available" +
++            " in Java 5");
++    }
++
++//#endif JAVA7
+ }

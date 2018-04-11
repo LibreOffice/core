@@ -40,7 +40,10 @@ $(eval $(call gb_Module_add_l10n_targets,connectivity,\
 
 ifneq ($(ENABLE_JAVA),)
 $(eval $(call gb_Module_add_targets,connectivity,\
+	Configuration_hsqldb \
 	Configuration_jdbc \
+	Jar_sdbc_hsqldb \
+	Library_hsqldb \
 	Library_jdbc \
 ))
 endif

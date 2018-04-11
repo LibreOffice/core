@@ -1739,6 +1739,15 @@ AC_ARG_WITH(system-libtommath,
                            [Use libtommath already on system]),,
             [with_system_libtommath="$with_system_libs"])
 
+AC_ARG_WITH(system-hsqldb,
+    AS_HELP_STRING([--with-system-hsqldb],
+        [Use hsqldb already on system.]))
+
+AC_ARG_WITH(hsqldb-jar,
+    AS_HELP_STRING([--with-hsqldb-jar=JARFILE],
+        [Specify path to jarfile manually.]),
+    HSQLDB_JAR=$withval)
+
 libo_FUZZ_ARG_ENABLE(scripting-beanshell,
     AS_HELP_STRING([--disable-scripting-beanshell],
         [Disable support for scripts in BeanShell.]),
@@ -8417,6 +8426,75 @@ int main(int argc, char **argv) {
     AC_LANG_POP([C++])
 fi
 AC_SUBST(SYSTEM_MYSQL_CONNECTOR_CPP)
+
+dnl ===================================================================
+dnl Check for system hsqldb
+dnl ===================================================================
+if test "$with_java" != "no"; then
+    HSQLDB_USE_JDBC_4_1=
+    AC_MSG_CHECKING([which hsqldb to use])
+    if test "$with_system_hsqldb" = "yes"; then
+        AC_MSG_RESULT([external])
+        SYSTEM_HSQLDB=TRUE
+        if test -z $HSQLDB_JAR; then
+            HSQLDB_JAR=/usr/share/java/hsqldb.jar
+        fi
+        if ! test -f $HSQLDB_JAR; then
+               AC_MSG_ERROR(hsqldb.jar not found.)
+        fi
+        AC_MSG_CHECKING([whether hsqldb is 1.8.0.x])
+        export HSQLDB_JAR
+        if $PERL -e \
+           'use Archive::Zip;
+            my $file = "$ENV{'HSQLDB_JAR'}";
+            my $zip = Archive::Zip->new( $file );
+            my $mf = $zip->contents ( "META-INF/MANIFEST.MF" );
+            if ( $mf =~ m/Specification-Version: 1.8.*/ )
+            {
+                push @l, split(/\n/, $mf);
+                foreach my $line (@l)
+                {
+                    if ($line =~ m/Specification-Version:/)
+                    {
+                        ($t, $version) = split (/:/,$line);
+                        $version =~ s/^\s//;
+                        ($a, $b, $c, $d) = split (/\./,$version);
+                        if ($c == "0" && $d > "8")
+                        {
+                            exit 0;
+                        }
+                        else
+                        {
+                            exit 1;
+                        }
+                    }
+                }
+            }
+            else
+            {
+                exit 1;
+            }'; then
+            AC_MSG_RESULT([yes])
+        else
+            AC_MSG_ERROR([no, you need hsqldb >= 1.8.0.9 but < 1.8.1])
+        fi
+    else
+        AC_MSG_RESULT([internal])
+        SYSTEM_HSQLDB=
+        BUILD_TYPE="$BUILD_TYPE HSQLDB"
+        AC_MSG_CHECKING([whether hsqldb should be built with JDBC 4.1])
+        javanumver=`$JAVAINTERPRETER -version 2>&1 | $AWK -v num=true -f $SRC_ROOT/solenv/bin/getcompver.awk`
+        if expr "$javanumver" '>=' 000100060000 > /dev/null; then
+            AC_MSG_RESULT([yes])
+            HSQLDB_USE_JDBC_4_1=TRUE
+        else
+            AC_MSG_RESULT([no])
+        fi
+    fi
+    AC_SUBST(SYSTEM_HSQLDB)
+    AC_SUBST(HSQLDB_JAR)
+    AC_SUBST([HSQLDB_USE_JDBC_4_1])
+fi
 
 dnl ===================================================================
 dnl Check for PostgreSQL stuff
