@@ -210,7 +210,7 @@ namespace DOM
         }
 
         Reference< XElement > aElement;
-        const OUString& aPrefix( SvXMLImport::getNamespacePrefixFromToken( nElement ) );
+        const OUString& aPrefix(SvXMLImport::getNamespacePrefixFromToken(nElement, nullptr));
         const OUString& aURI( SvXMLImport::getNamespaceURIFromToken( nElement ) );
         OUString aQualifiedName( SvXMLImport::getNameFromToken( nElement ) );
         if( !aPrefix.isEmpty() )
@@ -280,7 +280,7 @@ namespace DOM
         for (auto &it : *pAttribList)
         {
             sal_Int32 nAttrToken = it.getToken();
-            const OUString& aAttrPrefix( SvXMLImport::getNamespacePrefixFromToken( nAttrToken ) );
+            const OUString& aAttrPrefix(SvXMLImport::getNamespacePrefixFromToken(nAttrToken, nullptr));
             const OUString& aAttrURI( SvXMLImport::getNamespaceURIFromToken( nAttrToken ) );
             OUString aAttrQualifiedName( SvXMLImport::getNameFromToken( nAttrToken ) );
             if( !aAttrPrefix.isEmpty() )
@@ -307,7 +307,7 @@ namespace DOM
             throw SAXException();
 
         Reference< XElement > aElement(aNode, UNO_QUERY);
-        if( aElement->getPrefix() != SvXMLImport::getNamespacePrefixFromToken( nElement ) ||
+        if( aElement->getPrefix() != SvXMLImport::getNamespacePrefixFromToken(nElement, nullptr) ||
             aElement->getTagName() != SvXMLImport::getNameFromToken( nElement ) ) // consistency check
             throw SAXException();
 
