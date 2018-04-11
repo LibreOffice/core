@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.0 -->
+<!-- Generated with glade 3.20.4 -->
 <interface domain="svt">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkDialog" id="RestartDialog">
@@ -7,6 +7,9 @@
     <property name="border_width">6</property>
     <property name="title" translatable="yes" context="restartdialog|RestartDialog">Restart %PRODUCTNAME</property>
     <property name="resizable">False</property>
+    <property name="modal">True</property>
+    <property name="default_width">0</property>
+    <property name="default_height">0</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
@@ -252,5 +255,8 @@
       <action-widget response="-8">yes</action-widget>
       <action-widget response="-9">no</action-widget>
     </action-widgets>
+    <child>
+      <placeholder/>
+    </child>
   </object>
 </interface>
