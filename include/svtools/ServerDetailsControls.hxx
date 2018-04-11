@@ -23,22 +23,23 @@
 #include <vcl/field.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/layout.hxx>
+#include <vcl/weld.hxx>
 
 class DetailsContainer
 {
     protected:
         Link<DetailsContainer*,void> m_aChangeHdl;
-        VclPtr<VclGrid>        m_pDetailsGrid;
-        VclPtr<VclHBox>        m_pHostBox;
-        VclPtr<Edit>           m_pEDHost;
-        VclPtr<FixedText>      m_pFTHost;
-        VclPtr<NumericField>   m_pEDPort;
-        VclPtr<FixedText>      m_pFTPort;
-        VclPtr<Edit>           m_pEDRoot;
-        VclPtr<FixedText>      m_pFTRoot;
+        std::unique_ptr<weld::Widget> m_xDetailsGrid;
+        std::unique_ptr<weld::Widget> m_xHostBox;
+        std::unique_ptr<weld::Entry> m_xEDHost;
+        std::unique_ptr<weld::Label> m_xFTHost;
+        std::unique_ptr<weld::SpinButton> m_xEDPort;
+        std::unique_ptr<weld::Label> m_xFTPort;
+        std::unique_ptr<weld::Entry> m_xEDRoot;
+        std::unique_ptr<weld::Label> m_xFTRoot;
 
     public:
-        DetailsContainer( VclBuilderContainer* pBuilder );
+        DetailsContainer( weld::Builder* pBuilder );
         virtual ~DetailsContainer( );
 
         void setChangeHdl( const Link<DetailsContainer*,void>& rLink ) { m_aChangeHdl = rLink; }
@@ -60,7 +61,8 @@ class DetailsContainer
 
     protected:
         void notifyChange( );
-        DECL_LINK ( ValueChangeHdl, Edit&, void );
+        DECL_LINK(ValueChangeHdl, weld::Entry&, void);
+        DECL_LINK(FormatPortHdl, weld::SpinButton&, void);
 };
 
 class HostDetailsContainer : public DetailsContainer
@@ -71,7 +73,7 @@ class HostDetailsContainer : public DetailsContainer
         OUString m_sHost;
 
     public:
-        HostDetailsContainer( VclBuilderContainer* pBuilder, sal_uInt16 nPort, const OUString& sScheme );
+        HostDetailsContainer( weld::Builder* pBuilder, sal_uInt16 nPort, const OUString& sScheme );
 
         virtual void show( bool bShow = true ) override;
         virtual INetURLObject getUrl( ) override;
@@ -89,29 +91,29 @@ class HostDetailsContainer : public DetailsContainer
 class DavDetailsContainer : public HostDetailsContainer
 {
     private:
-        VclPtr<CheckBox>   m_pCBDavs;
+        std::unique_ptr<weld::CheckButton> m_xCBDavs;
 
     public:
-        DavDetailsContainer( VclBuilderContainer* pBuilder );
+        DavDetailsContainer(weld::Builder* pBuilder);
 
         virtual void show( bool bShow = true ) override;
-    virtual bool enableUserCredentials( ) override { return false; };
+        virtual bool enableUserCredentials( ) override { return false; };
 
     protected:
         virtual bool verifyScheme( const OUString& rScheme ) override;
 
     private:
-        DECL_LINK( ToggledDavsHdl, CheckBox&, void );
+        DECL_LINK(ToggledDavsHdl, weld::ToggleButton&, void);
 };
 
 class SmbDetailsContainer : public DetailsContainer
 {
     private:
-        VclPtr<Edit>           m_pEDShare;
-        VclPtr<FixedText>      m_pFTShare;
+        std::unique_ptr<weld::Entry> m_xEDShare;
+        std::unique_ptr<weld::Label> m_xFTShare;
 
     public:
-        SmbDetailsContainer( VclBuilderContainer* pBuilder );
+        SmbDetailsContainer(weld::Builder* pBuilder);
 
         virtual INetURLObject getUrl( ) override;
         virtual bool setUrl( const INetURLObject& rUrl ) override;
@@ -127,15 +129,15 @@ class CmisDetailsContainer : public DetailsContainer
         std::vector< OUString > m_aRepoIds;
         OUString m_sRepoId;
         OUString m_sBinding;
-
-        VclPtr<VclHBox>    m_pRepositoryBox;
-        VclPtr<FixedText>  m_pFTRepository;
-        VclPtr<ListBox>    m_pLBRepository;
-        VclPtr<Button>     m_pBTRepoRefresh;
         css::uno::Reference< css::awt::XWindow > m_xParentDialog;
 
+        std::unique_ptr<weld::Widget> m_xRepositoryBox;
+        std::unique_ptr<weld::Label> m_xFTRepository;
+        std::unique_ptr<weld::ComboBoxText> m_xLBRepository;
+        std::unique_ptr<weld::Button> m_xBTRepoRefresh;
+
     public:
-        CmisDetailsContainer(VclBuilderContainer* pBuilder, Dialog* pParentDialog, OUString const & sBinding);
+        CmisDetailsContainer(weld::Builder* pBuilder, weld::Dialog* pParentDialog, OUString const & sBinding);
 
         virtual void show( bool bShow = true ) override;
         virtual INetURLObject getUrl( ) override;
@@ -145,8 +147,8 @@ class CmisDetailsContainer : public DetailsContainer
 
     private:
         void selectRepository( );
-        DECL_LINK ( RefreshReposHdl, Button*, void );
-        DECL_LINK ( SelectRepoHdl, ListBox&, void );
+        DECL_LINK ( RefreshReposHdl, weld::Button&, void );
+        DECL_LINK ( SelectRepoHdl, weld::ComboBoxText&, void );
 };
 
 #endif

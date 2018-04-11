@@ -1689,6 +1689,11 @@ public:
             g_object_unref(pCursor);
     }
 
+    virtual void resize_to_request() override
+    {
+        gtk_window_resize(m_pWindow, 1, 1);
+    }
+
     virtual ~GtkInstanceWindow() override
     {
         if (m_xWindow.is())
@@ -2364,6 +2369,11 @@ public:
     {
         const gchar* pStr = gtk_button_get_label(m_pButton);
         return OUString(pStr, pStr ? strlen(pStr) : 0, RTL_TEXTENCODING_UTF8);
+    }
+
+    virtual void clicked() override
+    {
+        gtk_button_clicked(m_pButton);
     }
 
     // allow us to block buttons with click handlers making dialogs return a response

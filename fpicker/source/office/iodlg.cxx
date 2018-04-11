@@ -1247,13 +1247,13 @@ IMPL_LINK_NOARG( SvtFileDialog, ConnectToServerPressed_Hdl, Button*, void )
 {
     _pFileView->EndInplaceEditing();
 
-    ScopedVclPtrInstance< PlaceEditDialog > aDlg(this);
-    short aRetCode = aDlg->Execute();
+    PlaceEditDialog aDlg(GetFrameWeld());
+    short aRetCode = aDlg.run();
 
     switch (aRetCode) {
         case RET_OK :
         {
-            PlacePtr newPlace = aDlg->GetPlace();
+            PlacePtr newPlace = aDlg.GetPlace();
             pImpl->_pPlaces->AppendPlace(newPlace);
 
       break;

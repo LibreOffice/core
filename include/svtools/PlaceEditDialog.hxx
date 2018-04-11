@@ -12,11 +12,7 @@
 
 #include <svtools/ServerDetailsControls.hxx>
 
-#include <vcl/button.hxx>
-#include <vcl/dialog.hxx>
-#include <vcl/edit.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/lstbox.hxx>
+#include <vcl/weld.hxx>
 
 #include <svtools/inettbc.hxx>
 #include <svtools/place.hxx>
@@ -26,27 +22,10 @@
 #include <memory>
 #include <vector>
 
-class SVT_DLLPUBLIC PlaceEditDialog : public ModalDialog
+class SVT_DLLPUBLIC PlaceEditDialog : public weld::GenericDialogController
 {
 private:
-    VclPtr<Edit>         m_pEDServerName;
-    VclPtr<ListBox>      m_pLBServerType;
     std::shared_ptr< DetailsContainer > m_xCurrentDetails;
-
-    VclPtr<Edit>         m_pEDUsername;
-    VclPtr<FixedText>    m_pFTUsernameLabel;
-    VclPtr<CheckBox>     m_pCBPassword;
-    VclPtr<Edit>         m_pEDPassword;
-    VclPtr<FixedText>    m_pFTPasswordLabel;
-    VclPtr<OKButton>     m_pBTOk;
-    VclPtr<CancelButton> m_pBTCancel;
-
-    VclPtr<PushButton>   m_pBTDelete;
-
-    VclPtr<Button>       m_pBTRepoRefresh;
-
-    VclPtr<VclGrid>      m_pTypeGrid;
-
     /** Vector holding the details UI control for each server type.
 
         The elements in this vector need to match the order in the type listbox, e.g.
@@ -57,24 +36,35 @@ private:
 
     sal_Int32 m_nCurrentType;
 
-    bool bLabelChanged;
+    bool m_bLabelChanged;
     bool m_bShowPassword;
 
-public :
+    std::unique_ptr<weld::Entry> m_xEDServerName;
+    std::unique_ptr<weld::ComboBoxText> m_xLBServerType;
+    std::unique_ptr<weld::Entry> m_xEDUsername;
+    std::unique_ptr<weld::Label> m_xFTUsernameLabel;
+    std::unique_ptr<weld::Button> m_xBTOk;
+    std::unique_ptr<weld::Button> m_xBTCancel;
+    std::unique_ptr<weld::Button> m_xBTDelete;
+    std::unique_ptr<weld::Button> m_xBTRepoRefresh;
+    std::unique_ptr<weld::CheckButton> m_xCBPassword;
+    std::unique_ptr<weld::Entry> m_xEDPassword;
+    std::unique_ptr<weld::Label> m_xFTPasswordLabel;
+    std::unique_ptr<weld::Widget> m_xTypeGrid;
 
-     PlaceEditDialog( vcl::Window* pParent);
-     PlaceEditDialog(vcl::Window* pParent, const std::shared_ptr<Place> &rPlace );
+public:
+     PlaceEditDialog(weld::Window* pParent);
+     PlaceEditDialog(weld::Window* pParent, const std::shared_ptr<Place> &rPlace );
      virtual ~PlaceEditDialog() override;
-     virtual void dispose() override;
 
      // Returns a place instance with given information
      std::shared_ptr<Place> GetPlace();
 
-     OUString GetServerName() { return m_pEDServerName->GetText(); }
+     OUString GetServerName() { return m_xEDServerName->get_text(); }
      OUString GetServerUrl();
-     OUString GetPassword() { return m_pEDPassword->GetText(); };
-     OUString GetUser() { return m_pEDUsername->GetText(); };
-     bool     IsRememberChecked() { return m_pCBPassword->IsChecked(); }
+     OUString GetPassword() { return m_xEDPassword->get_text(); };
+     OUString GetUser() { return m_xEDUsername->get_text(); };
+     bool     IsRememberChecked() { return m_xCBPassword->get_active(); }
 
      void ShowPasswordControl() { m_bShowPassword = true; }
 
@@ -82,13 +72,14 @@ private:
 
     void InitDetails( );
 
-    DECL_LINK ( OKHdl, Button *, void );
-    DECL_LINK ( DelHdl, Button *, void );
+    DECL_LINK ( OKHdl, weld::Button&, void );
+    DECL_LINK ( DelHdl, weld::Button&, void );
     DECL_LINK ( EditHdl, DetailsContainer*, void );
-    DECL_LINK ( ModifyHdl, Edit&, void );
-    DECL_LINK ( SelectTypeHdl, ListBox&, void );
-    DECL_LINK ( EditLabelHdl, Edit&, void );
-    DECL_LINK ( EditUsernameHdl, Edit&, void );
+    DECL_LINK ( ModifyHdl, weld::Entry&, void );
+    void SelectType(bool bSkipSeparator);
+    DECL_LINK ( SelectTypeHdl, weld::ComboBoxText&, void );
+    DECL_LINK ( EditLabelHdl, weld::Entry&, void );
+    DECL_LINK ( EditUsernameHdl, weld::Entry&, void );
 
 };
 

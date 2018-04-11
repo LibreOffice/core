@@ -308,6 +308,8 @@ SdrObject::SdrObject(SdrModel& rSdrModel)
     ,maWeakUnoShape()
     ,mbDoNotInsertIntoPageAutomatically(false)
 {
+    fprintf(stderr, "sdr ctor %p\n", this);
+
     bVirtObj         =false;
     bSnapRectDirty   =true;
     bInserted        =false;
@@ -334,6 +336,9 @@ SdrObject::SdrObject(SdrModel& rSdrModel)
 
 SdrObject::~SdrObject()
 {
+    static int foo;
+    fprintf(stderr, "sdr dtor %p %d\n", this, foo);
+    ++foo;
     // tell all the registered ObjectUsers that the page is in destruction
     sdr::ObjectUserVector aListCopy(mpImpl->maObjectUsers.begin(), mpImpl->maObjectUsers.end());
     for(sdr::ObjectUserVector::iterator aIterator = aListCopy.begin(); aIterator != aListCopy.end(); ++aIterator)

@@ -210,13 +210,13 @@ IMPL_LINK_NOARG( PlacesListBox, DoubleClick, SvTreeListBox*, bool )
     PlacePtr pPlace = maPlaces[nSelected];
     if ( pPlace->IsEditable() && !pPlace->IsLocal( ) )
     {
-        ScopedVclPtrInstance< PlaceEditDialog > aDlg(mpDlg, pPlace);
-        short aRetCode = aDlg->Execute();
+        PlaceEditDialog aDlg(mpDlg->GetFrameWeld(), pPlace);
+        short aRetCode = aDlg.run();
         switch(aRetCode) {
             case RET_OK :
             {
-                pPlace->SetName ( aDlg->GetServerName() );
-                pPlace->SetUrl( aDlg->GetServerUrl() );
+                pPlace->SetName ( aDlg.GetServerName() );
+                pPlace->SetUrl( aDlg.GetServerUrl() );
                 mbUpdated = true;
                 break;
             }
