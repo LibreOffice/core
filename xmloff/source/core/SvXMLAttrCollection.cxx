@@ -31,7 +31,7 @@ bool SvXMLAttrCollection::AddAttr( const OUString& rPrefix,
                                        const OUString& rValue )
 {
     assert(!rPrefix.isEmpty());
-    assert(!rNamespace.isEmpty());
+    SAL_WARN_IF(rNamespace.isEmpty(), "xmloff", "missing/wrong namespace");
     assert(!rLName.isEmpty());
     sal_uInt16 nPos = aNamespaceMap.Add( rPrefix, rNamespace );
     aAttrs.emplace_back(nPos, rLName, rValue );
