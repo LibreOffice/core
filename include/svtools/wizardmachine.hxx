@@ -169,7 +169,6 @@ namespace svt
         std::unique_ptr<WizardMachineImplData>  m_pImpl;
 
     public:
-        OWizardMachine(vcl::Window* _pParent, const WinBits i_nStyle, WizardButtonFlags _nButtonFlags );
         OWizardMachine(vcl::Window* _pParent, WizardButtonFlags _nButtonFlags );
         virtual ~OWizardMachine() override;
         virtual void dispose() override;

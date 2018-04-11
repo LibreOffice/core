@@ -218,7 +218,6 @@ private:
     SVT_DLLPRIVATE TabPage*         ImplGetPage( sal_uInt16 nLevel ) const;
 
 public:
-    WizardDialog( vcl::Window* pParent, WinBits nStyle );
     WizardDialog( vcl::Window* pParent, const OUString& rID, const OUString& rUIXMLDescription );
     virtual ~WizardDialog() override;
     virtual void dispose() override;
