@@ -145,7 +145,7 @@ public:
     explicit UnoControlDialogModel( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
     UnoControlDialogModel( const UnoControlDialogModel& rModel );
 
-    UnoControlModel*    Clone() const override;
+    rtl::Reference<UnoControlModel> Clone() const override;
     // css::beans::XMultiPropertySet
     css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;
 
@@ -216,7 +216,7 @@ UnoControlDialogModel::UnoControlDialogModel( const UnoControlDialogModel& rMode
     setFastPropertyValue_NoBroadcast( BASEPROPERTY_USERFORMCONTAINEES, makeAny( xNameCont ) );
 }
 
-UnoControlModel* UnoControlDialogModel::Clone() const
+rtl::Reference<UnoControlModel> UnoControlDialogModel::Clone() const
 {
     // clone the container itself
     UnoControlDialogModel* pClone = new UnoControlDialogModel( *this );
@@ -860,8 +860,7 @@ UnoMultiPageModel::~UnoMultiPageModel()
 {
 }
 
-UnoControlModel*
-UnoMultiPageModel::Clone() const
+rtl::Reference<UnoControlModel> UnoMultiPageModel::Clone() const
 {
     // clone the container itself
     UnoMultiPageModel* pClone = new UnoMultiPageModel( *this );
@@ -973,8 +972,7 @@ UnoPageModel::~UnoPageModel()
 {
 }
 
-UnoControlModel*
-UnoPageModel::Clone() const
+rtl::Reference<UnoControlModel> UnoPageModel::Clone() const
 {
     // clone the container itself
     UnoPageModel* pClone = new UnoPageModel( *this );
@@ -1127,8 +1125,7 @@ UnoFrameModel::~UnoFrameModel()
 {
 }
 
-UnoControlModel*
-UnoFrameModel::Clone() const
+rtl::Reference<UnoControlModel> UnoFrameModel::Clone() const
 {
     // clone the container itself
     UnoFrameModel* pClone = new UnoFrameModel( *this );

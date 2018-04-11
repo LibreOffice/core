@@ -42,7 +42,7 @@ namespace toolkit
                                         AnimatedImagesControlModel( css::uno::Reference< css::uno::XComponentContext > const & i_factory );
                                         AnimatedImagesControlModel( const AnimatedImagesControlModel& i_copySource );
 
-        virtual UnoControlModel*        Clone() const override;
+        virtual rtl::Reference<UnoControlModel> Clone() const override;
 
         // XPropertySet
         css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;

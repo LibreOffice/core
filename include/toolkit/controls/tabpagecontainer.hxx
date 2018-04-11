@@ -54,7 +54,7 @@ public:
     UnoControlTabPageContainerModel( const css::uno::Reference< css::uno::XComponentContext >& i_factory );
     UnoControlTabPageContainerModel( const UnoControlTabPageContainerModel& rModel ) : UnoControlTabPageContainerModel_Base( rModel ),maContainerListeners( *this ) {}
 
-    UnoControlModel*    Clone() const override { return new UnoControlTabPageContainerModel( *this ); }
+    rtl::Reference<UnoControlModel> Clone() const override { return new UnoControlTabPageContainerModel( *this ); }
 
     // css::io::XPersistObject
     OUString SAL_CALL getServiceName() override;

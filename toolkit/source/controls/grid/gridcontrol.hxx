@@ -50,7 +50,7 @@ public:
     explicit UnoGridModel( const css::uno::Reference< css::uno::XComponentContext >& i_factory );
     UnoGridModel( const UnoGridModel& rModel );
 
-    UnoControlModel* Clone() const override;
+    rtl::Reference<UnoControlModel> Clone() const override;
 
     // css::lang::XComponent
     void SAL_CALL dispose(  ) override;

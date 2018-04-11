@@ -34,7 +34,7 @@ class SpinningProgressControlModel : public SpinningProgressControlModel_Base
 public:
     explicit SpinningProgressControlModel( css::uno::Reference< css::uno::XComponentContext > const & i_factory );
 
-    virtual UnoControlModel* Clone() const override;
+    virtual rtl::Reference<UnoControlModel> Clone() const override;
 
     // XPropertySet
     css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;
@@ -83,7 +83,7 @@ protected:
     }
 
 
-    UnoControlModel* SpinningProgressControlModel::Clone() const
+    rtl::Reference<UnoControlModel> SpinningProgressControlModel::Clone() const
     {
         return new SpinningProgressControlModel( *this );
     }

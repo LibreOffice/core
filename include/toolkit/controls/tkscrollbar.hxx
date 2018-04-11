@@ -44,7 +44,7 @@ namespace toolkit
                             UnoControlScrollBarModel( const css::uno::Reference< css::uno::XComponentContext >& i_factory );
                             UnoControlScrollBarModel( const UnoControlScrollBarModel& rModel ) : UnoControlModel( rModel ) {}
 
-        UnoControlModel*    Clone() const override { return new UnoControlScrollBarModel( *this ); }
+        rtl::Reference<UnoControlModel> Clone() const override { return new UnoControlScrollBarModel( *this ); }
 
         // css::beans::XMultiPropertySet
         css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;
