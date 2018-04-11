@@ -63,9 +63,9 @@ namespace sdr
         {
         }
 
-        BaseProperties& CircleProperties::Clone(SdrObject& rObj) const
+        std::unique_ptr<BaseProperties> CircleProperties::Clone(SdrObject& rObj) const
         {
-            return *(new CircleProperties(*this, rObj));
+            return std::unique_ptr<BaseProperties>(new CircleProperties(*this, rObj));
         }
 
         void CircleProperties::ItemSetChanged(const SfxItemSet& rSet)

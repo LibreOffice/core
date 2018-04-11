@@ -40,9 +40,9 @@ namespace sdr
         {
         }
 
-        BaseProperties& E3dExtrudeProperties::Clone(SdrObject& rObj) const
+        std::unique_ptr<BaseProperties> E3dExtrudeProperties::Clone(SdrObject& rObj) const
         {
-            return *(new E3dExtrudeProperties(*this, rObj));
+            return std::unique_ptr<BaseProperties>(new E3dExtrudeProperties(*this, rObj));
         }
 
         void E3dExtrudeProperties::PostItemChange(const sal_uInt16 nWhich)

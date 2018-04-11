@@ -52,9 +52,9 @@ namespace sdr
         {
         }
 
-        BaseProperties& PageProperties::Clone(SdrObject& rObj) const
+        std::unique_ptr<BaseProperties> PageProperties::Clone(SdrObject& rObj) const
         {
-            return *(new PageProperties(*this, rObj));
+            return std::unique_ptr<BaseProperties>(new PageProperties(*this, rObj));
         }
 
         // get itemset. Override here to allow creating the empty itemset

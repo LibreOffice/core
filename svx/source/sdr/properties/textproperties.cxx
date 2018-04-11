@@ -74,9 +74,9 @@ namespace sdr
         {
         }
 
-        BaseProperties& TextProperties::Clone(SdrObject& rObj) const
+        std::unique_ptr<BaseProperties> TextProperties::Clone(SdrObject& rObj) const
         {
-            return *(new TextProperties(*this, rObj));
+            return std::unique_ptr<BaseProperties>(new TextProperties(*this, rObj));
         }
 
         void TextProperties::ItemSetChanged(const SfxItemSet& rSet)

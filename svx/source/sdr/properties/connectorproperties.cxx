@@ -60,9 +60,9 @@ namespace sdr
         {
         }
 
-        BaseProperties& ConnectorProperties::Clone(SdrObject& rObj) const
+        std::unique_ptr<BaseProperties> ConnectorProperties::Clone(SdrObject& rObj) const
         {
-            return *(new ConnectorProperties(*this, rObj));
+            return std::unique_ptr<BaseProperties>(new ConnectorProperties(*this, rObj));
         }
 
         void ConnectorProperties::ItemSetChanged(const SfxItemSet& rSet)
